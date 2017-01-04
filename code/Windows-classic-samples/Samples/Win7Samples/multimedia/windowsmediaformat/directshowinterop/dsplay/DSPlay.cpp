@@ -1,4 +1,4 @@
-//*****************************************************************************
+﻿//*****************************************************************************
 //
 // Microsoft Windows Media
 // Copyright (C) Microsoft Corporation. All rights reserved.
@@ -7,7 +7,7 @@
 //
 // Abstract:            Windows Media / DirectShow sample code
 //                      A simple DirectShow-based player application
-//                      for Windows Media content (ASF, WMV, WMA).  
+//                      for Windows Media content (ASF, WMV, WMA).
 //
 //*****************************************************************************
 
@@ -22,7 +22,7 @@
 #include <stdio.h>
 #include <tchar.h>
 #include <crtdbg.h>
-#include <stddef.h> 
+#include <stddef.h>
 #include <strsafe.h>
 #include <atlconv.h>
 
@@ -32,11 +32,11 @@
 #include "resource.h"
 #include "nserror.h"
 
-// 
+//
 // Constants and macros
 //
 #ifndef NUMELMS
-   #define NUMELMS(aa) (sizeof(aa)/sizeof((aa)[0]))
+#define NUMELMS(aa) (sizeof(aa)/sizeof((aa)[0]))
 #endif
 
 const int AUDIO=1, VIDEO=2; // Used for enabling playback menu items
@@ -49,7 +49,7 @@ const int AUDIO=1, VIDEO=2; // Used for enabling playback menu items
 HWND      ghApp=0;
 HMENU     ghMenu=0;
 HINSTANCE ghInst=0;
-TCHAR     g_szFileName[MAX_PATH]={0};
+TCHAR     g_szFileName[MAX_PATH]= {0};
 BOOL      g_bAudioOnly=FALSE, g_bFullscreen=FALSE;
 LONG      g_lVolume=VOLUME_FULL;
 PLAYSTATE g_psCurrent=Stopped;
@@ -91,7 +91,7 @@ HRESULT PlayMovieInWindow(__in_ecount(MAX_PATH) LPTSTR szFile)
     (void)StringCchCopyW(wFile, NUMELMS(wFile), pszFile);
 
     // Get the interface for DirectShow's GraphBuilder
-    JIF(CoCreateInstance(CLSID_FilterGraph, NULL, CLSCTX_INPROC_SERVER, 
+    JIF(CoCreateInstance(CLSID_FilterGraph, NULL, CLSCTX_INPROC_SERVER,
                          IID_IGraphBuilder, (void **)&pGB));
 
     // Get the media event interface before building the graph
@@ -187,8 +187,8 @@ HRESULT InitVideoWindow(int nMultiplier, int nDivider)
     // Account for size of title bar and borders for exact match
     // of window client area to default video size
     SetWindowPos(ghApp, NULL, 0, 0, lWidth + 2*nBorderWidth,
-            lHeight + nTitleHeight + 2*nBorderHeight,
-            SWP_NOMOVE | SWP_NOOWNERZORDER);
+                 lHeight + nTitleHeight + 2*nBorderHeight,
+                 SWP_NOMOVE | SWP_NOOWNERZORDER);
 
     // Move the video size/position to within the application window
     GetClientRect(ghApp, &rect);
@@ -225,14 +225,14 @@ HRESULT InitPlayerWindow(void)
 void MoveVideoWindow(void)
 {
     HRESULT hr;
-    
-    
+
+
     if(pVW)
     {
         RECT client;
         GetClientRect(ghApp, &client);
 
-        hr = pVW->SetWindowPosition(client.left, client.top, 
+        hr = pVW->SetWindowPosition(client.left, client.top,
                                     client.right, client.bottom);
     }
 }
@@ -304,7 +304,7 @@ void PauseClip(void)
 void StopClip(void)
 {
     HRESULT hr;
-    
+
     if ((!pMC) || (!pMS))
         return;
 
@@ -376,7 +376,7 @@ void OpenClip()
     // Reset status variables
     g_psCurrent = Stopped;
     g_lVolume = VOLUME_FULL;
-    
+
     // Start playing the media file
     hr = PlayMovieInWindow(g_szFileName);
 
@@ -384,7 +384,7 @@ void OpenClip()
     if (FAILED(hr))
     {
         CloseClip();
-        
+
         if (hr == NS_E_LICENSE_REQUIRED)
             Msg(TEXT("This media file requires a license."));
     }
@@ -397,7 +397,7 @@ void OpenClip()
 //------------------------------------------------------------------------------
 BOOL GetClipFileName(__out_ecount(MAX_PATH) LPTSTR szName)
 {
-    static OPENFILENAME ofn={0};
+    static OPENFILENAME ofn= {0};
     static BOOL bSetInitialDir = FALSE;
 
     // Reset filename
@@ -416,14 +416,14 @@ BOOL GetClipFileName(__out_ecount(MAX_PATH) LPTSTR szName)
     ofn.lpstrFileTitle    = NULL;
     ofn.lpstrDefExt       = TEXT("*\0");
     ofn.Flags             = OFN_FILEMUSTEXIST | OFN_READONLY | OFN_PATHMUSTEXIST;
-    
+
     // Remember the path of the first selected file
     if (bSetInitialDir == FALSE)
     {
         ofn.lpstrInitialDir = DEFAULT_MEDIA_PATH;
         bSetInitialDir = TRUE;
     }
-    else 
+    else
         ofn.lpstrInitialDir = NULL;
 
     // Create the standard file open dialog and return its result
@@ -472,7 +472,7 @@ void CloseClip()
 void CloseInterfaces(void)
 {
     HRESULT hr;
-    
+
     // Relinquish ownership (IMPORTANT!) after hiding video window
     if(pVW)
     {
@@ -501,7 +501,7 @@ void CloseInterfaces(void)
 void Msg(__in LPCTSTR szFormat, ...)
 {
     TCHAR szBuffer[1024];  // Large buffer for long filenames or URLs
-    
+
     // Format the input string
     va_list pArgs;
     va_start(pArgs, szFormat);
@@ -509,7 +509,7 @@ void Msg(__in LPCTSTR szFormat, ...)
     // Use a bounded buffer size to prevent buffer overruns.  Limit count to
     // character size minus one to allow for a NULL terminating character.
     (void)StringCchVPrintf(szBuffer, NUMELMS(szBuffer), szFormat, pArgs);
-            
+
     va_end(pArgs);
 
     // Display a message box with the formatted string
@@ -575,7 +575,7 @@ void UpdateMainTitle(void)
         GetFilename(g_szFileName, szFile);
 
         // Update the window title to show filename and play state
-        (void)StringCchPrintf(szTitle, 
+        (void)StringCchPrintf(szTitle,
                               NUMELMS(szTitle),
                               TEXT("%s [%s] %s%s"),
                               szFile,
@@ -594,12 +594,12 @@ void UpdateMainTitle(void)
 void GetFilename(__in LPCTSTR pszFull, __out_ecount(MAX_PATH) LPTSTR pszFile)
 {
     int nLength;
-    TCHAR szPath[MAX_PATH]={0};
+    TCHAR szPath[MAX_PATH]= {0};
     BOOL bSetFilename=FALSE;
 
     // Strip path and return just the file's name
     (void)StringCchCopy(szPath, NUMELMS(szPath), pszFull);
-    
+
     nLength = (int) _tcslen(szPath);
 
     for (int i=nLength-1; i>=0; i--)
@@ -617,7 +617,7 @@ void GetFilename(__in LPCTSTR pszFull, __out_ecount(MAX_PATH) LPTSTR pszFile)
     // just copy the full path to the target path.
     if (!bSetFilename)
         (void)StringCchCopy(pszFile, MAX_PATH, pszFull);
-        
+
     pszFile[MAX_PATH-1] = 0;        // Ensure null-termination
 }
 
@@ -689,7 +689,7 @@ HRESULT HandleGraphEvent(void)
 
     // Process all queued events
     while(SUCCEEDED(pME->GetEvent(&evCode, (LONG_PTR *) &evParam1,
-                    (LONG_PTR *) &evParam2, 0)))
+                                  (LONG_PTR *) &evParam2, 0)))
     {
         // If this is the end of the clip, reset to beginning
         if(EC_COMPLETE == evCode)
@@ -697,7 +697,7 @@ HRESULT HandleGraphEvent(void)
             LONGLONG pos=0;
 
             // Reset to first frame of movie
-            hr = pMS->SetPositions(&pos, AM_SEEKING_AbsolutePositioning ,
+            hr = pMS->SetPositions(&pos, AM_SEEKING_AbsolutePositioning,
                                    NULL, AM_SEEKING_NoPositioning);
             if (FAILED(hr))
             {
@@ -743,15 +743,16 @@ HRESULT HandleGraphEvent(void)
 
 void CheckSizeMenu(WPARAM wParam)
 {
-    WPARAM nItems[4] = {ID_FILE_SIZE_HALF,    ID_FILE_SIZE_DOUBLE, 
-                        ID_FILE_SIZE_NORMAL,  ID_FILE_SIZE_THREEQUARTER};
+    WPARAM nItems[4] = {ID_FILE_SIZE_HALF,    ID_FILE_SIZE_DOUBLE,
+                        ID_FILE_SIZE_NORMAL,  ID_FILE_SIZE_THREEQUARTER
+                       };
 
     // Set/clear checkboxes that indicate the size of the video clip
     for (int i=0; i<4; i++)
     {
         // Check the selected item
         CheckMenuItem(ghMenu, (UINT) nItems[i],
-                     (UINT) (wParam == nItems[i]) ? MF_CHECKED : MF_UNCHECKED);
+                      (UINT) (wParam == nItems[i]) ? MF_CHECKED : MF_UNCHECKED);
     }
 }
 
@@ -762,24 +763,25 @@ void CheckSizeMenu(WPARAM wParam)
 void EnablePlaybackMenu(BOOL bEnable, int nMediaType)
 {
     WPARAM nItems[8] = {ID_FILE_PAUSE,        ID_FILE_STOP,         ID_FILE_MUTE,
-                        ID_FILE_SIZE_HALF,    ID_FILE_SIZE_DOUBLE,  
-                        ID_FILE_SIZE_NORMAL,  ID_FILE_SIZE_THREEQUARTER, 
-                        ID_FILE_FULLSCREEN};
+                        ID_FILE_SIZE_HALF,    ID_FILE_SIZE_DOUBLE,
+                        ID_FILE_SIZE_NORMAL,  ID_FILE_SIZE_THREEQUARTER,
+                        ID_FILE_FULLSCREEN
+                       };
 
     // Enable/disable menu items related to playback
-    EnableMenuItem(ghMenu, (UINT) ID_FILE_PAUSE, 
-                  (UINT) (bEnable) ? MF_ENABLED : MF_GRAYED);
-    EnableMenuItem(ghMenu, (UINT) ID_FILE_STOP, 
-                  (UINT) (bEnable) ? MF_ENABLED : MF_GRAYED);
-    EnableMenuItem(ghMenu, (UINT) ID_FILE_MUTE, 
-                  (UINT) (bEnable) ? MF_ENABLED : MF_GRAYED);
+    EnableMenuItem(ghMenu, (UINT) ID_FILE_PAUSE,
+                   (UINT) (bEnable) ? MF_ENABLED : MF_GRAYED);
+    EnableMenuItem(ghMenu, (UINT) ID_FILE_STOP,
+                   (UINT) (bEnable) ? MF_ENABLED : MF_GRAYED);
+    EnableMenuItem(ghMenu, (UINT) ID_FILE_MUTE,
+                   (UINT) (bEnable) ? MF_ENABLED : MF_GRAYED);
 
     // Enable/disable menu items related to video size
     for (int i=3; i<8; i++)
     {
         // Check the selected item
         EnableMenuItem(ghMenu, (UINT) nItems[i],
-                     (UINT) (nMediaType == VIDEO) ? MF_ENABLED : MF_GRAYED);
+                       (UINT) (nMediaType == VIDEO) ? MF_ENABLED : MF_GRAYED);
     }
 }
 
@@ -792,16 +794,16 @@ LRESULT CALLBACK AboutDlgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPa
 {
     switch (message)
     {
-        case WM_INITDIALOG:
-            return TRUE;
+    case WM_INITDIALOG:
+        return TRUE;
 
-        case WM_COMMAND:
-            if (wParam == IDOK)
-            {   
-                EndDialog(hWnd, TRUE);
-                return TRUE;
-            }
-            break;
+    case WM_COMMAND:
+        if (wParam == IDOK)
+        {
+            EndDialog(hWnd, TRUE);
+            return TRUE;
+        }
+        break;
     }
     return FALSE;
 }
@@ -814,154 +816,155 @@ LRESULT CALLBACK WndMainProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
 {
     switch(message)
     {
-        // Resize the video when the window changes
-        case WM_MOVE:
-        case WM_SIZE:
-            if ((hWnd == ghApp) && (!g_bAudioOnly))
-                MoveVideoWindow();
+    // Resize the video when the window changes
+    case WM_MOVE:
+    case WM_SIZE:
+        if ((hWnd == ghApp) && (!g_bAudioOnly))
+            MoveVideoWindow();
+        break;
+
+    // Enforce a minimum window size
+    case WM_GETMINMAXINFO:
+    {
+        LPMINMAXINFO lpmm = (LPMINMAXINFO) lParam;
+        lpmm->ptMinTrackSize.x = MINIMUM_VIDEO_WIDTH;
+        lpmm->ptMinTrackSize.y = MINIMUM_VIDEO_HEIGHT;
+    }
+    break;
+
+    case WM_KEYDOWN:
+
+        switch(toupper((int) wParam))
+        {
+        case 'P':
+            PauseClip();
             break;
 
-        // Enforce a minimum window size
-        case WM_GETMINMAXINFO:
-            {
-                LPMINMAXINFO lpmm = (LPMINMAXINFO) lParam;
-                lpmm->ptMinTrackSize.x = MINIMUM_VIDEO_WIDTH;
-                lpmm->ptMinTrackSize.y = MINIMUM_VIDEO_HEIGHT;
-            }
+        case 'S':
+            StopClip();
             break;
 
-        case WM_KEYDOWN:
-
-            switch(toupper((int) wParam))
-            {
-                case 'P':
-                    PauseClip();
-                    break;
-
-                case 'S':
-                    StopClip();
-                    break;
-
-                case 'M':
-                    ToggleMute();
-                    break;
-
-                case 'F':
-                case VK_RETURN:
-                    ToggleFullScreen();
-                    break;
-
-               case 'H':
-                    InitVideoWindow(1,2);
-                    CheckSizeMenu(wParam);
-                    break;
-                case 'N':
-                    InitVideoWindow(1,1);
-                    CheckSizeMenu(wParam);
-                    break;
-                case 'D':
-                    InitVideoWindow(2,1);
-                    CheckSizeMenu(wParam);
-                    break;
-                case 'T':
-                    InitVideoWindow(3,4);
-                    CheckSizeMenu(wParam);
-                    break;
-
-                case VK_ESCAPE:
-                    if (g_bFullscreen)
-                        ToggleFullScreen();
-                    else
-                        CloseClip();
-                    break;
-
-                case VK_F12:
-                case 'Q':
-                case 'X':
-                    CloseClip();
-                    break;
-            }
+        case 'M':
+            ToggleMute();
             break;
 
-        case WM_COMMAND:
-
-            switch(wParam)
-            { // Menus
-
-                case ID_FILE_OPENCLIP:
-                    // If we have ANY file open, close it and shut down DirectShow
-                    if (g_psCurrent != Init)
-                        CloseClip();
-
-                    // Open the new clip
-                    OpenClip();
-                    break;
-
-                case ID_FILE_EXIT:
-                    CloseClip();
-                    PostQuitMessage(0);
-                    break;
-
-                case ID_FILE_PAUSE:
-                    PauseClip();
-                    break;
-
-                case ID_FILE_STOP:
-                    StopClip();
-                    break;
-
-                case ID_FILE_CLOSE:
-                    CloseClip();
-                    break;
-
-                case ID_FILE_MUTE:
-                    ToggleMute();
-                    break;
-
-                case ID_FILE_FULLSCREEN:
-                    ToggleFullScreen();
-                    break;
-
-                case ID_HELP_ABOUT:
-                    DialogBox(ghInst, MAKEINTRESOURCE(IDD_ABOUTBOX), 
-                              ghApp,  (DLGPROC) AboutDlgProc);
-                    break;
-
-                case ID_FILE_SIZE_HALF:
-                    InitVideoWindow(1,2);
-                    CheckSizeMenu(wParam);
-                    break;
-                case ID_FILE_SIZE_NORMAL:
-                    InitVideoWindow(1,1);
-                    CheckSizeMenu(wParam);
-                    break;
-                case ID_FILE_SIZE_DOUBLE:
-                    InitVideoWindow(2,1);
-                    CheckSizeMenu(wParam);
-                    break;
-                case ID_FILE_SIZE_THREEQUARTER:
-                    InitVideoWindow(3,4);
-                    CheckSizeMenu(wParam);
-                    break;
-
-            } // Menus
+        case 'F':
+        case VK_RETURN:
+            ToggleFullScreen();
             break;
 
-
-        case WM_GRAPHNOTIFY:
-            HandleGraphEvent();
+        case 'H':
+            InitVideoWindow(1,2);
+            CheckSizeMenu(wParam);
+            break;
+        case 'N':
+            InitVideoWindow(1,1);
+            CheckSizeMenu(wParam);
+            break;
+        case 'D':
+            InitVideoWindow(2,1);
+            CheckSizeMenu(wParam);
+            break;
+        case 'T':
+            InitVideoWindow(3,4);
+            CheckSizeMenu(wParam);
             break;
 
-        case WM_CLOSE:
-            SendMessage(ghApp, WM_COMMAND, ID_FILE_EXIT, 0);
+        case VK_ESCAPE:
+            if (g_bFullscreen)
+                ToggleFullScreen();
+            else
+                CloseClip();
             break;
 
-        case WM_DESTROY:
+        case VK_F12:
+        case 'Q':
+        case 'X':
+            CloseClip();
+            break;
+        }
+        break;
+
+    case WM_COMMAND:
+
+        switch(wParam)
+        {
+        // Menus
+
+        case ID_FILE_OPENCLIP:
+            // If we have ANY file open, close it and shut down DirectShow
+            if (g_psCurrent != Init)
+                CloseClip();
+
+            // Open the new clip
+            OpenClip();
+            break;
+
+        case ID_FILE_EXIT:
+            CloseClip();
             PostQuitMessage(0);
             break;
 
-        default:
-            return DefWindowProc(hWnd, message, wParam, lParam);
+        case ID_FILE_PAUSE:
+            PauseClip();
+            break;
+
+        case ID_FILE_STOP:
+            StopClip();
+            break;
+
+        case ID_FILE_CLOSE:
+            CloseClip();
+            break;
+
+        case ID_FILE_MUTE:
+            ToggleMute();
+            break;
+
+        case ID_FILE_FULLSCREEN:
+            ToggleFullScreen();
+            break;
+
+        case ID_HELP_ABOUT:
+            DialogBox(ghInst, MAKEINTRESOURCE(IDD_ABOUTBOX),
+                      ghApp,  (DLGPROC) AboutDlgProc);
+            break;
+
+        case ID_FILE_SIZE_HALF:
+            InitVideoWindow(1,2);
+            CheckSizeMenu(wParam);
+            break;
+        case ID_FILE_SIZE_NORMAL:
+            InitVideoWindow(1,1);
+            CheckSizeMenu(wParam);
+            break;
+        case ID_FILE_SIZE_DOUBLE:
+            InitVideoWindow(2,1);
+            CheckSizeMenu(wParam);
+            break;
+        case ID_FILE_SIZE_THREEQUARTER:
+            InitVideoWindow(3,4);
+            CheckSizeMenu(wParam);
+            break;
+
+        } // Menus
+        break;
+
+
+    case WM_GRAPHNOTIFY:
+        HandleGraphEvent();
+        break;
+
+    case WM_CLOSE:
+        SendMessage(ghApp, WM_COMMAND, ID_FILE_EXIT, 0);
+        break;
+
+    case WM_DESTROY:
+        PostQuitMessage(0);
+        break;
+
+    default:
+        return DefWindowProc(hWnd, message, wParam, lParam);
 
     } // Window msgs handling
 
@@ -978,7 +981,7 @@ LRESULT CALLBACK WndMainProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
 //------------------------------------------------------------------------------
 int PASCAL WinMain(__in HINSTANCE hInstC, __in_opt HINSTANCE hInstP, __in_opt LPSTR lpCmdLine, __in int nCmdShow)
 {
-    MSG msg={0};
+    MSG msg= {0};
     WNDCLASS wc;
 
     // Initialize COM
@@ -992,12 +995,12 @@ int PASCAL WinMain(__in HINSTANCE hInstC, __in_opt HINSTANCE hInstP, __in_opt LP
     if((NULL != lpCmdLine) && (lpCmdLine[0] != '\0'))
     {
         USES_CONVERSION;
-        (void)StringCchCopy(g_szFileName, NUMELMS(g_szFileName), A2T(lpCmdLine) );        
+        (void)StringCchCopy(g_szFileName, NUMELMS(g_szFileName), A2T(lpCmdLine) );
     }
-    g_szFileName[MAX_PATH-1] = 0;       // Ensure null-termination    
+    g_szFileName[MAX_PATH-1] = 0;       // Ensure null-termination
 
 
-    // Set initial media state.  This value will update when playing, 
+    // Set initial media state.  This value will update when playing,
     // paused, or stopped.
     g_psCurrent = Init;
 
@@ -1022,10 +1025,10 @@ int PASCAL WinMain(__in HINSTANCE hInstC, __in_opt HINSTANCE hInstP, __in_opt LP
     // that is specified on the command line, don't make the window visible.
     // It will be resized and made visible once a media file is rendered.
     ghApp = CreateWindow(CLASSNAME, APPLICATIONNAME,
-                    WS_OVERLAPPEDWINDOW | WS_CAPTION | WS_CLIPCHILDREN,
-                    CW_USEDEFAULT, CW_USEDEFAULT,
-                    CW_USEDEFAULT, CW_USEDEFAULT,
-                    0, 0, ghInst, 0);
+                         WS_OVERLAPPEDWINDOW | WS_CAPTION | WS_CLIPCHILDREN,
+                         CW_USEDEFAULT, CW_USEDEFAULT,
+                         CW_USEDEFAULT, CW_USEDEFAULT,
+                         0, 0, ghInst, 0);
 
     if(ghApp)
     {

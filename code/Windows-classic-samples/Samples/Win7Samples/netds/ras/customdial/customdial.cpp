@@ -1,25 +1,25 @@
-//
+﻿//
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
 //
-// Copyright � 2002  Microsoft Corporation.  All Rights Reserved.
+// Copyright © 2002  Microsoft Corporation.  All Rights Reserved.
 //
 // Abstract:
-//    This code demonstrates how to build a customdial DLL for 
+//    This code demonstrates how to build a customdial DLL for
 //    Windows 2000  and Windows XP RAS. The code shows how to export and provide a
 //    rudimentary implementation for each of the exports required
 //    by the DLL.
 //
 //    You must create an appropriate RAS Entry in the phonebook that inlcudes a path to this
-//    custom DLL. See the CustomEntry sample on how to create a phonebook entry with a path to 
+//    custom DLL. See the CustomEntry sample on how to create a phonebook entry with a path to
 //    your custom DLL.
 //
-//    The DLL provides debug tracing facilities through the use of 
+//    The DLL provides debug tracing facilities through the use of
 //    OutputDebugString. In this manner one can use programs that intercept
 //    this output to view the DLL state while it is running such as DBMon
-//    in the Platform SDK, an attached debugger, or other 3rd party 
+//    in the Platform SDK, an attached debugger, or other 3rd party
 //    programs.
 //
 
@@ -79,30 +79,30 @@ typedef struct _CUSTOM_DIAL_DLG_SAMPLE_
 //
 void OutputTraceString(LPTSTR lpszFormatString, ...)
 {
-  const DWORD MAX_DEBUGSTR = 256;      // max string for ouput
-  va_list arglist;                     // variable argument list
-  TCHAR szOutputString[MAX_DEBUGSTR];  // the string to print - limited
+    const DWORD MAX_DEBUGSTR = 256;      // max string for ouput
+    va_list arglist;                     // variable argument list
+    TCHAR szOutputString[MAX_DEBUGSTR];  // the string to print - limited
 
-  // create the new string limited to the char count as indicated
-  va_start(arglist, lpszFormatString);
-  StringCchVPrintf(szOutputString, CELEMS( szOutputString ), lpszFormatString, arglist);
-  va_end(arglist);
+    // create the new string limited to the char count as indicated
+    va_start(arglist, lpszFormatString);
+    StringCchVPrintf(szOutputString, CELEMS( szOutputString ), lpszFormatString, arglist);
+    va_end(arglist);
 
-  // send it out
-  OutputDebugString(szOutputString);
+    // send it out
+    OutputDebugString(szOutputString);
 }
 
 //
-// DllMain 
+// DllMain
 //
 // this is the main entry point into the DLL and is called when
 // the DLL is loaded
 //
-extern "C" BOOL APIENTRY DllMain( HINSTANCE hInstance, 
-                       DWORD  ul_reason_for_call, 
-                       LPVOID lpReserved
-					 )
-{  
+extern "C" BOOL APIENTRY DllMain( HINSTANCE hInstance,
+                                  DWORD  ul_reason_for_call,
+                                  LPVOID lpReserved
+                                )
+{
     // save instance handle for register/unregister functionality
     g_hInstance = hInstance;
 
@@ -137,20 +137,20 @@ extern "C" BOOL APIENTRY DllMain( HINSTANCE hInstance,
 // recursively get called.
 //
 extern "C" DWORD WINAPI RasCustomDial (
-  HINSTANCE hInstDll,                      // handle to DLL instance
-  LPRASDIALEXTENSIONS lpRasDialExtensions, // pointer to function extensions data
-  LPCTSTR lpszPhonebook,                   // pointer to full path and file name of phone-book file 
-  LPRASDIALPARAMS lpRasDialParams,         // pointer to calling parameters data
-  DWORD dwNotifierType,                    // specifies type of RasDial event handler
-  LPVOID lpvNotifier,                      // specifies a handler for RasDial events
-  LPHRASCONN lphRasConn                    // pointer to variable to receive connection handle
+    HINSTANCE hInstDll,                      // handle to DLL instance
+    LPRASDIALEXTENSIONS lpRasDialExtensions, // pointer to function extensions data
+    LPCTSTR lpszPhonebook,                   // pointer to full path and file name of phone-book file
+    LPRASDIALPARAMS lpRasDialParams,         // pointer to calling parameters data
+    DWORD dwNotifierType,                    // specifies type of RasDial event handler
+    LPVOID lpvNotifier,                      // specifies a handler for RasDial events
+    LPHRASCONN lphRasConn                    // pointer to variable to receive connection handle
 )
 {
     DWORD rc = ERROR_SUCCESS;             // return code from RasDial
     RASDIALEXTENSIONS RasDialExtensions;  // used as a copy of the RasDialExtensions structure
 
     OutputTraceString(L"RasCustomDial called in customdial.dll\n");
-  
+
     if (NULL == lpRasDialParams)
     {
         return ERROR_UNKNOWN;
@@ -158,10 +158,10 @@ extern "C" DWORD WINAPI RasCustomDial (
 
     // set up the RasDialExtensions structure appropriately
     if (NULL == lpRasDialExtensions)
-    {        
+    {
         ZeroMemory(&RasDialExtensions, sizeof(RASDIALEXTENSIONS));
         RasDialExtensions.dwSize = sizeof(RASDIALEXTENSIONS);
-    } 
+    }
     else
     {
         CopyMemory(&RasDialExtensions, lpRasDialExtensions, sizeof(RASDIALEXTENSIONS));
@@ -170,14 +170,14 @@ extern "C" DWORD WINAPI RasCustomDial (
 
     RasDialExtensions.dwfOptions |= RDEOPT_CustomDial; // added cause we are calling RasDial
 
-    OutputTraceString(L"--- RasCustomDial RasDialParams: E: '%s' UN: '%s' D: '%s'\n", 
-        lpRasDialParams->szEntryName,
-        lpRasDialParams->szUserName,
-        lpRasDialParams->szDomain);
+    OutputTraceString(L"--- RasCustomDial RasDialParams: E: '%s' UN: '%s' D: '%s'\n",
+                      lpRasDialParams->szEntryName,
+                      lpRasDialParams->szUserName,
+                      lpRasDialParams->szDomain);
 
     // Simply call RasDial with the modified RasDialExtensions structure
     // and the original parameters passed in.
-    // We are passing  lpvNotifier & lphRasConn directly into RasDial. Since we don't use these variable 
+    // We are passing  lpvNotifier & lphRasConn directly into RasDial. Since we don't use these variable
     // locally we skip checking for NULLs.
     rc = RasDial(&RasDialExtensions, lpszPhonebook, lpRasDialParams, dwNotifierType, lpvNotifier, lphRasConn);
 
@@ -196,13 +196,13 @@ extern "C" DWORD WINAPI RasCustomDial (
 // forwards the request back to RasHangUp.
 //
 extern "C" DWORD WINAPI RasCustomHangUp (
-  HRASCONN hRasConn    // handle to a RAS connection
+    HRASCONN hRasConn    // handle to a RAS connection
 )
 {
     DWORD rc = SUCCESS;     // return code
 
 
-    OutputTraceString(L"RasCustomHangUp called in customdial.dll\n");  
+    OutputTraceString(L"RasCustomHangUp called in customdial.dll\n");
     OutputTraceString(L"--- RasCustomHangUp on handle 0x%08x\n", hRasConn);
 
     // simply call RasHangUp on the handle
@@ -220,12 +220,12 @@ extern "C" DWORD WINAPI RasCustomHangUp (
 // the basic events that happen within that dialog
 //
 INT_PTR CALLBACK CustomEntryDlgProc(
-  HWND hwndDlg,  // handle to dialog box
-  UINT uMsg,     // message
-  WPARAM wParam, // first message parameter
-  LPARAM lParam  // second message parameter
+    HWND hwndDlg,  // handle to dialog box
+    UINT uMsg,     // message
+    WPARAM wParam, // first message parameter
+    LPARAM lParam  // second message parameter
 )
-{  
+{
     HWND hEditBox = NULL;                           // handle to an edit box
     HWND hComboBox = NULL;                          // handle to the combo box
     LPRASENTRYDLG lpInfo = NULL;                    // pointer to the RASENTRYDLG structure
@@ -234,153 +234,153 @@ INT_PTR CALLBACK CustomEntryDlgProc(
 
     switch (uMsg)
     {
-    case WM_INITDIALOG:    
+    case WM_INITDIALOG:
+    {
+        // set up the dialog and the parameters
+        pData = (PSAMPLE_CUSTOM_ENTRY_DATA) lParam;
+        if (!pData)
         {
-            // set up the dialog and the parameters
-            pData = (PSAMPLE_CUSTOM_ENTRY_DATA) lParam;
-            if (!pData) 
+            return FALSE;
+        }
+
+        lpInfo = &(pData->tEntryDlg);
+        lpRasEntry = pData->ptEntry;
+
+        hComboBox = GetDlgItem(hwndDlg, IDC_LIST_MODEMS);
+
+        hEditBox = GetDlgItem(hwndDlg, IDC_EDIT_ENTRYNAME);
+        if (hEditBox)
+        {
+            Edit_LimitText(hEditBox, RAS_MaxEntryName); // Count doesn't include NULL
+            Edit_SetText(hEditBox, (LPTSTR)pData->szEntryName);
+        }
+
+        hEditBox = GetDlgItem(hwndDlg, IDC_EDIT_PHONENO);
+        if (hEditBox)
+        {
+            Edit_LimitText(hEditBox, CELEMS(lpRasEntry->szLocalPhoneNumber) - 1); // Count doesn't include NULL
+            Edit_SetText(hEditBox, lpRasEntry->szLocalPhoneNumber);
+        }
+
+        //
+        // enumerate to get the device name to use - we'll just do modems
+        //
+
+        // first get the size of the buffer required
+        LPRASDEVINFO lpRasDevInfo = NULL;   // RASDEVINFO structure pointer
+        DWORD dwNumEntries = 0;             // number of entries returned
+        DWORD dwSize = sizeof(RASDEVINFO);  // size of buffer
+        DWORD rc = 0;                       // return code
+
+
+        // Allocate buffer with space for at least one structure
+        lpRasDevInfo = (LPRASDEVINFO)HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, dwSize);
+        if (NULL == lpRasDevInfo)
+        {
+            return FALSE;
+        }
+
+        lpRasDevInfo->dwSize = sizeof(RASDEVINFO);
+
+        rc = RasEnumDevices(lpRasDevInfo, &dwSize, &dwNumEntries);
+        if (ERROR_BUFFER_TOO_SMALL == rc)
+        {
+            // If the buffer is too small, free the allocated memory and allocate a bigger buffer.
+            if (HeapFree(GetProcessHeap(), 0, (LPVOID)lpRasDevInfo))
             {
-                return FALSE;
-            }
-
-            lpInfo = &(pData->tEntryDlg);
-            lpRasEntry = pData->ptEntry;                
-          
-            hComboBox = GetDlgItem(hwndDlg, IDC_LIST_MODEMS);
-
-            hEditBox = GetDlgItem(hwndDlg, IDC_EDIT_ENTRYNAME);
-            if (hEditBox)
-            {
-                Edit_LimitText(hEditBox, RAS_MaxEntryName); // Count doesn't include NULL
-                Edit_SetText(hEditBox, (LPTSTR)pData->szEntryName);
-            }
-
-            hEditBox = GetDlgItem(hwndDlg, IDC_EDIT_PHONENO);
-            if (hEditBox)
-            {
-                Edit_LimitText(hEditBox, CELEMS(lpRasEntry->szLocalPhoneNumber) - 1); // Count doesn't include NULL
-                Edit_SetText(hEditBox, lpRasEntry->szLocalPhoneNumber);
-            }
-            
-            //
-            // enumerate to get the device name to use - we'll just do modems
-            //
-              
-            // first get the size of the buffer required
-            LPRASDEVINFO lpRasDevInfo = NULL;   // RASDEVINFO structure pointer
-            DWORD dwNumEntries = 0;             // number of entries returned
-            DWORD dwSize = sizeof(RASDEVINFO);  // size of buffer
-            DWORD rc = 0;                       // return code
-
-
-            // Allocate buffer with space for at least one structure
-            lpRasDevInfo = (LPRASDEVINFO)HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, dwSize);
-            if (NULL == lpRasDevInfo)
-            {
-                return FALSE;
-            }
-
-            lpRasDevInfo->dwSize = sizeof(RASDEVINFO);
-
-            rc = RasEnumDevices(lpRasDevInfo, &dwSize, &dwNumEntries);
-            if (ERROR_BUFFER_TOO_SMALL == rc)
-            {
-                // If the buffer is too small, free the allocated memory and allocate a bigger buffer.
-                if (HeapFree(GetProcessHeap(), 0, (LPVOID)lpRasDevInfo))
-                {
-                    lpRasDevInfo = (LPRASDEVINFO)HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, dwSize);
-                    if (NULL == lpRasDevInfo)
-                    {
-                        OutputTraceString(L"--- Error allocating memory (HeapAlloc) for RASDEVINFO structures for RasEnumDevices(): %d\n", GetLastError());
-                        return FALSE;
-                    }
-
-                    lpRasDevInfo->dwSize = sizeof(RASDEVINFO);
-
-                    rc = RasEnumDevices(lpRasDevInfo, &dwSize, &dwNumEntries);
-                }
-                else
-                {
-                    // Couldn't free the memory
-                    return FALSE;
-                }
-            }
-
-            // Check whether RasEnumDevices succeeded
-            if (ERROR_SUCCESS == rc)
-            {
-                lpRasDevInfo = (LPRASDEVINFO) HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, dwSize);
-                if (NULL != lpRasDevInfo)
-                {
-                    lpRasDevInfo->dwSize = sizeof(RASDEVINFO);
-
-                    rc = RasEnumDevices(lpRasDevInfo, &dwSize, &dwNumEntries);
-                    if (ERROR_SUCCESS == rc)
-                    {
-                        for (UINT i = 0; i < dwNumEntries; i++, lpRasDevInfo++)
-                        {        
-                            if (lstrcmpi(lpRasDevInfo->szDeviceType, RASDT_Modem) == 0)
-                            {
-                                if (hComboBox)
-                                {
-                                    // add to the list
-                                    ComboBox_AddString(hComboBox, lpRasDevInfo->szDeviceName);         
-                                }
-                            }          
-                        }
-                    }
-
-                    HeapFree(GetProcessHeap(), 0, (LPVOID)lpRasDevInfo);
-                    lpRasDevInfo = NULL;
-                }
-                else
+                lpRasDevInfo = (LPRASDEVINFO)HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, dwSize);
+                if (NULL == lpRasDevInfo)
                 {
                     OutputTraceString(L"--- Error allocating memory (HeapAlloc) for RASDEVINFO structures for RasEnumDevices(): %d\n", GetLastError());
+                    return FALSE;
                 }
-            }
-        
-            
 
-            if (hComboBox)
-            {
-                // select the item we have in the entry
-                ComboBox_SelectString(hComboBox, -1, lpRasEntry->szDeviceName);
-            }
+                lpRasDevInfo->dwSize = sizeof(RASDEVINFO);
 
-            // move dialog and position according to structure paramters
-            // NOTE: we don't take into account multiple monitors or extreme
-            // cases here as this is only a quick sample
-            
-            DWORD xPos = 0;         // x coordinate position for centering
-            DWORD yPos = 0;         // y coordinate position for centering
-
-            if (lpInfo->dwFlags & RASDDFLAG_PositionDlg)
-            {
-                xPos = lpInfo->xDlg;
-                yPos = lpInfo->yDlg;
+                rc = RasEnumDevices(lpRasDevInfo, &dwSize, &dwNumEntries);
             }
             else
             {
-                RECT rectTop;         // parent rectangle used for centering
-                RECT rectDlg;         // dialog rectangle used for centering
-
-                // center window within the owner or desktop
-                GetWindowRect(lpInfo->hwndOwner != NULL ? lpInfo->hwndOwner : GetDesktopWindow(), &rectTop);
-                GetWindowRect(hwndDlg, &rectDlg);
-                         
-                xPos = ((rectTop.left + rectTop.right) / 2) - ((rectDlg.right - rectDlg.left) / 2);
-                yPos = ((rectTop.top + rectTop.bottom) / 2) - ((rectDlg.bottom - rectDlg.top) / 2);
+                // Couldn't free the memory
+                return FALSE;
             }
-
-            SetWindowPos(hwndDlg, NULL, xPos, yPos, 0, 0, SWP_NOSIZE | SWP_NOZORDER | SWP_NOACTIVATE);
-
-            return TRUE;
         }
+
+        // Check whether RasEnumDevices succeeded
+        if (ERROR_SUCCESS == rc)
+        {
+            lpRasDevInfo = (LPRASDEVINFO) HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, dwSize);
+            if (NULL != lpRasDevInfo)
+            {
+                lpRasDevInfo->dwSize = sizeof(RASDEVINFO);
+
+                rc = RasEnumDevices(lpRasDevInfo, &dwSize, &dwNumEntries);
+                if (ERROR_SUCCESS == rc)
+                {
+                    for (UINT i = 0; i < dwNumEntries; i++, lpRasDevInfo++)
+                    {
+                        if (lstrcmpi(lpRasDevInfo->szDeviceType, RASDT_Modem) == 0)
+                        {
+                            if (hComboBox)
+                            {
+                                // add to the list
+                                ComboBox_AddString(hComboBox, lpRasDevInfo->szDeviceName);
+                            }
+                        }
+                    }
+                }
+
+                HeapFree(GetProcessHeap(), 0, (LPVOID)lpRasDevInfo);
+                lpRasDevInfo = NULL;
+            }
+            else
+            {
+                OutputTraceString(L"--- Error allocating memory (HeapAlloc) for RASDEVINFO structures for RasEnumDevices(): %d\n", GetLastError());
+            }
+        }
+
+
+
+        if (hComboBox)
+        {
+            // select the item we have in the entry
+            ComboBox_SelectString(hComboBox, -1, lpRasEntry->szDeviceName);
+        }
+
+        // move dialog and position according to structure paramters
+        // NOTE: we don't take into account multiple monitors or extreme
+        // cases here as this is only a quick sample
+
+        DWORD xPos = 0;         // x coordinate position for centering
+        DWORD yPos = 0;         // y coordinate position for centering
+
+        if (lpInfo->dwFlags & RASDDFLAG_PositionDlg)
+        {
+            xPos = lpInfo->xDlg;
+            yPos = lpInfo->yDlg;
+        }
+        else
+        {
+            RECT rectTop;         // parent rectangle used for centering
+            RECT rectDlg;         // dialog rectangle used for centering
+
+            // center window within the owner or desktop
+            GetWindowRect(lpInfo->hwndOwner != NULL ? lpInfo->hwndOwner : GetDesktopWindow(), &rectTop);
+            GetWindowRect(hwndDlg, &rectDlg);
+
+            xPos = ((rectTop.left + rectTop.right) / 2) - ((rectDlg.right - rectDlg.left) / 2);
+            yPos = ((rectTop.top + rectTop.bottom) / 2) - ((rectDlg.bottom - rectDlg.top) / 2);
+        }
+
+        SetWindowPos(hwndDlg, NULL, xPos, yPos, 0, 0, SWP_NOSIZE | SWP_NOZORDER | SWP_NOACTIVATE);
+
+        return TRUE;
+    }
     case WM_COMMAND:
         switch (LOWORD(wParam))
         {
-        case IDOK:          
-            {
+        case IDOK:
+        {
             TCHAR szEntryName[RAS_MaxEntryName + 1] = {0};  // Entry name
             TCHAR szPhoneBook[MAX_PATH + 1] = {0};          // Phonebook path
             TCHAR szPhoneNumber[RAS_MaxPhoneNumber + 1] = {0};
@@ -391,48 +391,48 @@ INT_PTR CALLBACK CustomEntryDlgProc(
             {
                 Edit_GetText(hEditBox, lpRasEntry->szLocalPhoneNumber, CELEMS(lpRasEntry->szLocalPhoneNumber));
             }
-          
-            hEditBox = GetDlgItem(hwndDlg, IDC_EDIT_ENTRYNAME);          
+
+            hEditBox = GetDlgItem(hwndDlg, IDC_EDIT_ENTRYNAME);
             if (hEditBox)
             {
                 Edit_GetText(hEditBox, szEntryName, CELEMS(szEntryName));
             }
-              
+
             hEditBox = GetDlgItem(hwndDlg, IDC_EDIT_PHONENO);
             if (hEditBox)
             {
                 Edit_GetText(hEditBox, szPhoneNumber, CELEMS(szPhoneNumber));
             }
 
-            hComboBox = GetDlgItem(hwndDlg, IDC_LIST_MODEMS);          
+            hComboBox = GetDlgItem(hwndDlg, IDC_LIST_MODEMS);
             if (hComboBox)
             {
                 ComboBox_GetLBText(hComboBox, ComboBox_GetCurSel(hComboBox), lpRasEntry->szDeviceName);
             }
-            
+
             if (!pData) return FALSE;
 
             // Check entry name for validity
-            StringCchCopy(szPhoneBook, CELEMS(szPhoneBook), (LPTSTR)pData->szPhoneBookPath);          
+            StringCchCopy(szPhoneBook, CELEMS(szPhoneBook), (LPTSTR)pData->szPhoneBookPath);
             if (RasValidateEntryName(szPhoneBook, szEntryName) == ERROR_INVALID_NAME)
             {
                 MessageBox(hwndDlg, L"The Entry Name is Invalid.", L"Entry name error", MB_OK);
             }
-            else          
+            else
             {
                 StringCchCopy(pData->szEntryName, CELEMS(pData->szEntryName), szEntryName);
                 StringCchCopy(lpRasEntry->szLocalPhoneNumber, CELEMS(lpRasEntry->szLocalPhoneNumber), szPhoneNumber);
-                
+
                 EndDialog(hwndDlg, TRUE);
             }
-            
+
             return TRUE;
-            }
+        }
         case IDCANCEL:
             EndDialog(hwndDlg, FALSE);
             return TRUE;
         }
-        break;      
+        break;
     }
 
     return FALSE;
@@ -448,14 +448,14 @@ INT_PTR CALLBACK CustomEntryDlgProc(
 // being modified through its own dialog or other means
 //
 extern "C" BOOL WINAPI  RasCustomEntryDlg (
-  HINSTANCE hInstDll,       // handle to DLL instance
-  LPTSTR lpszPhonebook,     // pointer to the full path and 
-                            //  file name of the phone-book file
-  LPTSTR lpszEntry,         // pointer to the name of the
-                            //  phone-book entry to edit,
-                            //  copy, or create
-  LPRASENTRYDLG lpInfo      // pointer to a structure that
-                            //  contains additional parameters
+    HINSTANCE hInstDll,       // handle to DLL instance
+    LPTSTR lpszPhonebook,     // pointer to the full path and
+    //  file name of the phone-book file
+    LPTSTR lpszEntry,         // pointer to the name of the
+    //  phone-book entry to edit,
+    //  copy, or create
+    LPRASENTRYDLG lpInfo      // pointer to a structure that
+    //  contains additional parameters
 )
 {
     DWORD rc = 0;           // return code
@@ -490,9 +490,9 @@ extern "C" BOOL WINAPI  RasCustomEntryDlg (
         }
 
         // get the other parameters for the entry (phone and Device Name)
-        
+
         pLocalRE->dwSize = dwSize;
-        
+
         rc = RasGetEntryProperties(lpszPhonebook, lpszEntry, pLocalRE, &dwSize, NULL, NULL);
         if (ERROR_BUFFER_TOO_SMALL == rc)
         {
@@ -511,7 +511,7 @@ extern "C" BOOL WINAPI  RasCustomEntryDlg (
             }
 
             // get the other parameters for the entry (phone and Device Name)
-            
+
             pLocalRE->dwSize = dwSize;
             rc = RasGetEntryProperties(lpszPhonebook, lpszEntry, pLocalRE, &dwSize, NULL, NULL);
         }
@@ -531,24 +531,24 @@ extern "C" BOOL WINAPI  RasCustomEntryDlg (
 
         if (ERROR_SUCCESS == rc)
         {
-            CopyMemory(pEntryData->ptEntry, pLocalRE , pEntryData->ptEntry->dwSize);
+            CopyMemory(pEntryData->ptEntry, pLocalRE, pEntryData->ptEntry->dwSize);
         }
         else
         {
             MessageBox(NULL, L"Copy Memory failed", L"Error", MB_OK);
-        }    
-        
+        }
+
         StringCchCopy(pEntryData->szEntryName, CELEMS(pEntryData->szEntryName), lpszEntry);
         StringCchCopy(pEntryData->szPhoneBookPath, CELEMS(pEntryData->szPhoneBookPath), lpszPhonebook);
 
-        OutputTraceString(L"--- Call Custom Entry Dialog\n");      
-        
+        OutputTraceString(L"--- Call Custom Entry Dialog\n");
+
         INT_PTR ret = DialogBoxParam(hInstDll, MAKEINTRESOURCE(IDD_CUSTOMENTRYDLG), lpInfo->hwndOwner, CustomEntryDlgProc, (LPARAM) pEntryData);
 
-        OutputTraceString(L"--- Return from Custom Entry Dialog: %d\n", rc);      
+        OutputTraceString(L"--- Return from Custom Entry Dialog: %d\n", rc);
 
         if (ret > 0)   // dialog succeeded
-        {      
+        {
             // copy entry name into lpInfo structure for return
             StringCchCopy(lpInfo->szEntry, CELEMS(lpInfo->szEntry), (LPTSTR) pEntryData->szEntryName);
 
@@ -556,9 +556,9 @@ extern "C" BOOL WINAPI  RasCustomEntryDlg (
             LPRASENTRY lpRasEntry = pEntryData->ptEntry;
 
             if ((lstrcmpi(pLocalRE->szLocalPhoneNumber, lpRasEntry->szLocalPhoneNumber) != 0) ||
-                (lstrcmpi(pLocalRE->szDeviceName, lpRasEntry->szDeviceName) != 0) ||
-                (lstrcmpi(lpInfo->szEntry, lpszEntry) != 0))
-            {        
+                    (lstrcmpi(pLocalRE->szDeviceName, lpRasEntry->szDeviceName) != 0) ||
+                    (lstrcmpi(lpInfo->szEntry, lpszEntry) != 0))
+            {
                 OutputTraceString(L"--- Calling RasSetEntryProperties to make changes\n");
                 if (rc = RasSetEntryProperties(lpszPhonebook, lpInfo->szEntry, lpRasEntry, lpRasEntry->dwSize, NULL, 0) != SUCCESS)
                 {
@@ -566,7 +566,7 @@ extern "C" BOOL WINAPI  RasCustomEntryDlg (
                     lpInfo->dwError = rc;
                     rc = FALSE;
                 }
-                else 
+                else
                 {
                     OutputTraceString(L"--- RasSetEntryProperties() succeeded.\n", rc);
                     rc = TRUE;
@@ -574,7 +574,7 @@ extern "C" BOOL WINAPI  RasCustomEntryDlg (
             }
             else
             {
-                rc = TRUE;      
+                rc = TRUE;
             }
         }
         else
@@ -604,7 +604,7 @@ extern "C" BOOL WINAPI  RasCustomEntryDlg (
     {
         OutputTraceString(L"--- Memory allocation failed (HeapAlloc) in RasCustomEntryDlg (GetLastError = %d)\n", GetLastError());
     }
- 
+
     OutputTraceString(L"RasCustomEntryDlg exiting customdial.dll with return code: %d\n", rc);
 
     return rc;
@@ -617,12 +617,12 @@ extern "C" BOOL WINAPI  RasCustomEntryDlg (
 // the basic events that happen within that dialog
 //
 INT_PTR CALLBACK CustomDialDlgProc(
-  HWND hwndDlg,  // handle to dialog box
-  UINT uMsg,     // message
-  WPARAM wParam, // first message parameter
-  LPARAM lParam  // second message parameter
+    HWND hwndDlg,  // handle to dialog box
+    UINT uMsg,     // message
+    WPARAM wParam, // first message parameter
+    LPARAM lParam  // second message parameter
 )
-{  
+{
     LPRASDIALDLG lpInfo = NULL;                     // pointer to RASDIALDLG structure
     static LPRASDIALPARAMS lpRasDialParams = NULL;  // pointer to RASDIALPARAMS structure
     static PSAMPLE_CUSTOM_DIAL_DLG pDialData = NULL;// pointer to SAMPLE_CUSTOM_DIAL_DLG structure
@@ -631,60 +631,60 @@ INT_PTR CALLBACK CustomDialDlgProc(
 
     switch (uMsg)
     {
-    case WM_INITDIALOG:            
-        {  
-            pDialData = (PSAMPLE_CUSTOM_DIAL_DLG)lParam;
-            if (!pDialData) return FALSE;
+    case WM_INITDIALOG:
+    {
+        pDialData = (PSAMPLE_CUSTOM_DIAL_DLG)lParam;
+        if (!pDialData) return FALSE;
 
-            lpInfo = &(pDialData->tDialDlg);
-            lpRasDialParams = &(pDialData->tDialParams);
+        lpInfo = &(pDialData->tDialDlg);
+        lpRasDialParams = &(pDialData->tDialParams);
 
-            // set known items
-            hEditBox = GetDlgItem(hwndDlg, IDC_EDIT_USERNAME);
-            if (hEditBox)
-            {
-                Edit_LimitText(hEditBox, CELEMS(lpRasDialParams->szUserName) - 1); // Count doesn't include NULL
-                Edit_SetText(hEditBox, lpRasDialParams->szUserName);
-            }
-
-            hEditBox = GetDlgItem(hwndDlg, IDC_EDIT_DOMAIN);
-            if (hEditBox)
-            {
-                Edit_LimitText(hEditBox, CELEMS(lpRasDialParams->szDomain) - 1); // Count doesn't include NULL
-                Edit_SetText(hEditBox, lpRasDialParams->szDomain);
-            }
-              
-            // Move dialog and position according to structure
-            // we don't take into account multiple monitors or extreme
-            // cases here as this is only a quick sample
-              
-            DWORD xPos = 0;         // x coordinate position for centering
-            DWORD yPos = 0;         // y coordinate position for centering
-
-            if (lpInfo->dwFlags & RASDDFLAG_PositionDlg)
-            {
-                xPos = lpInfo->xDlg;
-                yPos = lpInfo->yDlg;
-            }
-            else
-            {
-                RECT rectTop;         // parent rectangle used for centering
-                RECT rectDlg;         // dialog rectangle used for centering
-
-                // center window within the owner or desktop
-                GetWindowRect(lpInfo->hwndOwner != NULL ? lpInfo->hwndOwner : GetDesktopWindow(), &rectTop);
-                GetWindowRect(hwndDlg, &rectDlg);
-                         
-                xPos = ((rectTop.left + rectTop.right) / 2) - ((rectDlg.right - rectDlg.left) / 2);
-                yPos = ((rectTop.top + rectTop.bottom) / 2) - ((rectDlg.bottom - rectDlg.top) / 2);
-            }
-
-            SetWindowPos(hwndDlg, NULL, xPos, yPos, 0, 0, SWP_NOSIZE | SWP_NOZORDER | SWP_NOACTIVATE);
-      
-            return TRUE;
+        // set known items
+        hEditBox = GetDlgItem(hwndDlg, IDC_EDIT_USERNAME);
+        if (hEditBox)
+        {
+            Edit_LimitText(hEditBox, CELEMS(lpRasDialParams->szUserName) - 1); // Count doesn't include NULL
+            Edit_SetText(hEditBox, lpRasDialParams->szUserName);
         }
+
+        hEditBox = GetDlgItem(hwndDlg, IDC_EDIT_DOMAIN);
+        if (hEditBox)
+        {
+            Edit_LimitText(hEditBox, CELEMS(lpRasDialParams->szDomain) - 1); // Count doesn't include NULL
+            Edit_SetText(hEditBox, lpRasDialParams->szDomain);
+        }
+
+        // Move dialog and position according to structure
+        // we don't take into account multiple monitors or extreme
+        // cases here as this is only a quick sample
+
+        DWORD xPos = 0;         // x coordinate position for centering
+        DWORD yPos = 0;         // y coordinate position for centering
+
+        if (lpInfo->dwFlags & RASDDFLAG_PositionDlg)
+        {
+            xPos = lpInfo->xDlg;
+            yPos = lpInfo->yDlg;
+        }
+        else
+        {
+            RECT rectTop;         // parent rectangle used for centering
+            RECT rectDlg;         // dialog rectangle used for centering
+
+            // center window within the owner or desktop
+            GetWindowRect(lpInfo->hwndOwner != NULL ? lpInfo->hwndOwner : GetDesktopWindow(), &rectTop);
+            GetWindowRect(hwndDlg, &rectDlg);
+
+            xPos = ((rectTop.left + rectTop.right) / 2) - ((rectDlg.right - rectDlg.left) / 2);
+            yPos = ((rectTop.top + rectTop.bottom) / 2) - ((rectDlg.bottom - rectDlg.top) / 2);
+        }
+
+        SetWindowPos(hwndDlg, NULL, xPos, yPos, 0, 0, SWP_NOSIZE | SWP_NOZORDER | SWP_NOACTIVATE);
+
+        return TRUE;
+    }
     case WM_COMMAND:
-      switch (LOWORD(wParam))
+        switch (LOWORD(wParam))
         {
         case IDOK:
             hEditBox = GetDlgItem(hwndDlg, IDC_EDIT_USERNAME);
@@ -692,7 +692,7 @@ INT_PTR CALLBACK CustomDialDlgProc(
             {
                 Edit_GetText(hEditBox, lpRasDialParams->szUserName, CELEMS(lpRasDialParams->szUserName));
             }
-            
+
             hEditBox = GetDlgItem(hwndDlg, IDC_EDIT_PASSWORD);
             if (hEditBox)
             {
@@ -707,12 +707,12 @@ INT_PTR CALLBACK CustomDialDlgProc(
 
             EndDialog(hwndDlg, TRUE);
             return TRUE;
- 
+
         case IDCANCEL:
             EndDialog(hwndDlg, FALSE);
             return TRUE;
         }
-      break;      
+        break;
     }
 
     return FALSE;
@@ -727,19 +727,19 @@ INT_PTR CALLBACK CustomDialDlgProc(
 // specified
 //
 extern "C" BOOL WINAPI  RasCustomDialDlg (
-  HINSTANCE hInstDll,      // handle to DLL instance
-  DWORD dwFlags,           // reserved
-  LPTSTR lpszPhonebook,    // pointer to the full path and 
-                           //  file name of the phone-book file
-  LPTSTR lpszEntry,        // pointer to the name of the 
-                           //  phone-book entry to dial
-  LPTSTR lpszPhoneNumber,  // pointer to replacement phone 
-                           //  number to dial
-  LPRASDIALDLG lpInfo,     // pointer to a structure that 
-                           //  contains additional parameters
-  PVOID pvInfo
+    HINSTANCE hInstDll,      // handle to DLL instance
+    DWORD dwFlags,           // reserved
+    LPTSTR lpszPhonebook,    // pointer to the full path and
+    //  file name of the phone-book file
+    LPTSTR lpszEntry,        // pointer to the name of the
+    //  phone-book entry to dial
+    LPTSTR lpszPhoneNumber,  // pointer to replacement phone
+    //  number to dial
+    LPRASDIALDLG lpInfo,     // pointer to a structure that
+    //  contains additional parameters
+    PVOID pvInfo
 )
-{  
+{
     DWORD rc = 0;               // return code
     HRASCONN hRasConn = NULL;
     DWORD dwSize = 0;
@@ -757,7 +757,7 @@ extern "C" BOOL WINAPI  RasCustomDialDlg (
     ZeroMemory(&RasDialParams, sizeof(RASDIALPARAMS));
     RasDialParams.dwSize = sizeof(RASDIALPARAMS);
     StringCchCopy(RasDialParams.szEntryName, CELEMS(RasDialParams.szEntryName), lpszEntry);
-    
+
     if (lpszPhoneNumber != NULL)
     {
         StringCchCopy(RasDialParams.szPhoneNumber, CELEMS(RasDialParams.szPhoneNumber), lpszPhoneNumber);
@@ -774,12 +774,12 @@ extern "C" BOOL WINAPI  RasCustomDialDlg (
         }
         else
         {
-            OutputTraceString(L"--- RasGetEntryDialParams: UN: '%s' D: '%s'\n", 
+            OutputTraceString(L"--- RasGetEntryDialParams: UN: '%s' D: '%s'\n",
                               RasDialParams.szUserName,
                               RasDialParams.szDomain);
         }
     }
-  
+
     // display dialog - passing in structure of data that the dialog needs
     // so we can get the username, password and domain information
 
@@ -790,18 +790,18 @@ extern "C" BOOL WINAPI  RasCustomDialDlg (
     {
         CopyMemory(&(pDialData->tDialParams), &RasDialParams, sizeof(pDialData->tDialParams));
         CopyMemory(&(pDialData->tDialDlg), lpInfo, sizeof(pDialData->tDialDlg));
-      
+
         INT_PTR ret = DialogBoxParam(hInstDll, MAKEINTRESOURCE(IDD_CUSTOMDIALDLG), lpInfo->hwndOwner, CustomDialDlgProc, (LPARAM) pDialData);
         if (ret > 0)   // dialog succeeded
-        { 
+        {
             // copy the results back of dialog entry back into stack variable
             CopyMemory(&RasDialParams, &(pDialData->tDialParams), sizeof(RASDIALPARAMS));
 
-            // call the RasCustomDial since we just need it to do the same thing anyway but 
+            // call the RasCustomDial since we just need it to do the same thing anyway but
             // one would probably call their own custom dialer here or forward to RasDial using
             // another window for connection status.
-            rc = RasCustomDial(hInstDll, NULL, lpszPhonebook, &RasDialParams, 0, 0, &hRasConn);    
-   
+            rc = RasCustomDial(hInstDll, NULL, lpszPhonebook, &RasDialParams, 0, 0, &hRasConn);
+
             if (rc != 0)
             {
                 // hang-up on error
@@ -823,7 +823,7 @@ extern "C" BOOL WINAPI  RasCustomDialDlg (
         else
         {
             lpInfo->dwError = GetLastError();
-            OutputTraceString(L"--- DialogBox Failed (or cancelled) in RasCustomDialDlg (GetLastError = %d)\n", lpInfo->dwError);      
+            OutputTraceString(L"--- DialogBox Failed (or cancelled) in RasCustomDialDlg (GetLastError = %d)\n", lpInfo->dwError);
             rc = 0;
         }
 
@@ -838,7 +838,7 @@ extern "C" BOOL WINAPI  RasCustomDialDlg (
         OutputTraceString(L"--- Memory allocation failed (HeapAlloc) in RasCustomDialDlg (GetLastError = %d)\n", GetLastError());
         rc = ERROR_OUTOFMEMORY;
     }
-  
+
     // Clear out structures in order to clear up the password from memory
     ZeroMemory(&RasDialParams, sizeof(RASDIALPARAMS));
 
@@ -855,9 +855,9 @@ extern "C" BOOL WINAPI  RasCustomDialDlg (
 // function then to handle the phonebook entry that is specified
 //
 extern "C" DWORD WINAPI RasCustomDeleteEntryNotify(
-  LPCTSTR lpszPhonebook,
-  LPCTSTR lpszEntry,
-  DWORD dwFlags
+    LPCTSTR lpszPhonebook,
+    LPCTSTR lpszEntry,
+    DWORD dwFlags
 )
 {
     DWORD rc = NO_ERROR;     // return code

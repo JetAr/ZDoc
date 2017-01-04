@@ -1,4 +1,4 @@
-/*******************************************************************************
+﻿/*******************************************************************************
 /* ODBCSQL: a sample program that implements an ODBC command line intrepreter.
 /*
 /* USAGE:	ODBCSQL DSN=<dsn name>   or
@@ -7,7 +7,7 @@
 /*
 /*
 /* Copyright(c) 1991 - 1999 by Microsoft Corporation.   This is an MDAC sample program and
-/* is not suitable for use in production environments.   
+/* is not suitable for use in production environments.
 /*
 /******************************************************************************/
 /* Modules:
@@ -54,12 +54,13 @@
 /* a column.
 /******************************************/
 
-typedef struct STR_BINDING {
-	SQLSMALLINT	siDisplaySize;			/* size to display  */
-	TCHAR		*szBuffer;				/* display buffer   */
-	SQLLEN		indPtr;					/* size or null     */
-	BOOL		fChar;					/* character col?   */
-	struct STR_BINDING	*sNext;	/* linked list		*/
+typedef struct STR_BINDING
+{
+    SQLSMALLINT	siDisplaySize;			/* size to display  */
+    TCHAR		*szBuffer;				/* display buffer   */
+    SQLLEN		indPtr;					/* size or null     */
+    BOOL		fChar;					/* character col?   */
+    struct STR_BINDING	*sNext;	/* linked list		*/
 } BINDING;
 
 
@@ -68,25 +69,25 @@ typedef struct STR_BINDING {
 /* Forward references                     */
 /******************************************/
 
-void HandleError(SQLHANDLE	hHandle,	
-				SQLSMALLINT	hType,	
-			    RETCODE	RetCode);
-		
+void HandleError(SQLHANDLE	hHandle,
+                 SQLSMALLINT	hType,
+                 RETCODE	RetCode);
+
 void DisplayResults(HSTMT		lpStmt,
-			   SQLSMALLINT	cCols);
+                    SQLSMALLINT	cCols);
 
 void AllocateBindings(HSTMT	lpStmt,
-					  SQLSMALLINT	cCols,
-					  BINDING		**lppBinding,
-					  SQLSMALLINT	*lpDisplay);
+                      SQLSMALLINT	cCols,
+                      BINDING		**lppBinding,
+                      SQLSMALLINT	*lpDisplay);
 
 
 void DisplayTitles(HSTMT		lpStmt,
-					  DWORD		siDisplaySize,
-					  BINDING	*pBinding);
-	
+                   DWORD		siDisplaySize,
+                   BINDING	*pBinding);
+
 void SetConsole(	DWORD      		siDisplaySize,
-					BOOL			fInvert);
+                    BOOL			fInvert);
 
 /*****************************************/
 /* Some constants                        */
@@ -114,160 +115,162 @@ SHORT	gHeight = 80;		// Users screen height
 /* Copyright (C) 1991 - 1999 by Microsoft Corporation
 /*
 /* This is a sample program, Microsoft assumes no liabilities for any
-/* use of this program. 
+/* use of this program.
 /***********************************************************************
 */
 
 
 int _tmain(int argc, TCHAR **argv)
 {
-	SQLHENV		lpEnv = NULL;
-	SQLHDBC		lpDbc = NULL;
-	SQLHSTMT	lpStmt = NULL;
-	TCHAR		*pszConnStr;
-	TCHAR		szInput[SQL_QUERY_SIZE];
+    SQLHENV		lpEnv = NULL;
+    SQLHDBC		lpDbc = NULL;
+    SQLHSTMT	lpStmt = NULL;
+    TCHAR		*pszConnStr;
+    TCHAR		szInput[SQL_QUERY_SIZE];
 
-	// Allocate an environment
+    // Allocate an environment
 
-	if (SQLAllocHandle(SQL_HANDLE_ENV,SQL_NULL_HANDLE,&lpEnv) == SQL_ERROR)
-	{
-		fprintf(stderr,"Unable to allocate an environment handle\n");
-		exit(-1);
-	}
+    if (SQLAllocHandle(SQL_HANDLE_ENV,SQL_NULL_HANDLE,&lpEnv) == SQL_ERROR)
+    {
+        fprintf(stderr,"Unable to allocate an environment handle\n");
+        exit(-1);
+    }
 
-	// Register this as an application that expects 2.x behavior,
-	// you must register something if you use AllocHandle
+    // Register this as an application that expects 2.x behavior,
+    // you must register something if you use AllocHandle
 
-	TRYODBC(lpEnv,
-			SQL_HANDLE_ENV,
-			SQLSetEnvAttr(lpEnv,
-						  SQL_ATTR_ODBC_VERSION,
-						  (SQLPOINTER)SQL_OV_ODBC2,
-						  0));
+    TRYODBC(lpEnv,
+            SQL_HANDLE_ENV,
+            SQLSetEnvAttr(lpEnv,
+                          SQL_ATTR_ODBC_VERSION,
+                          (SQLPOINTER)SQL_OV_ODBC2,
+                          0));
 
-	// Allocate a connection
+    // Allocate a connection
 
-	TRYODBC(lpEnv,
-			SQL_HANDLE_ENV,
-			SQLAllocHandle(SQL_HANDLE_DBC,lpEnv,&lpDbc));
-
-	
-
-	if (argc > 1)
-	{
-		pszConnStr = *++argv;
-	} else
-	{
-		pszConnStr = NULL;
-	}
-
-	// Connect to the driver.  Use the connection string if supplied
-	// on the input, otherwise let the driver manager prompt for input.
-
-	TRYODBC(lpDbc,
-			SQL_HANDLE_DBC,
-			SQLDriverConnect(lpDbc,
-							 GetDesktopWindow(),
-							 pszConnStr,
-							 SQL_NTS,
-							 NULL,
-							 0,
-							 NULL,
-							 SQL_DRIVER_COMPLETE));
-
-	fprintf(stderr,"Connected!\n");
-
-	TRYODBC(lpDbc,
-			SQL_HANDLE_DBC,
-			SQLAllocHandle(SQL_HANDLE_STMT,lpDbc,&lpStmt));
+    TRYODBC(lpEnv,
+            SQL_HANDLE_ENV,
+            SQLAllocHandle(SQL_HANDLE_DBC,lpEnv,&lpDbc));
 
 
-	printf("Enter SQL commands, type (control)Z to exit\nSQL COMMAND>");
 
-	// Loop to get input and execute queries
+    if (argc > 1)
+    {
+        pszConnStr = *++argv;
+    }
+    else
+    {
+        pszConnStr = NULL;
+    }
 
-	while(_fgetts(szInput, SQL_QUERY_SIZE-1, stdin))
-	{
-		RETCODE		RetCode;
-		SQLSMALLINT	sNumResults;
+    // Connect to the driver.  Use the connection string if supplied
+    // on the input, otherwise let the driver manager prompt for input.
 
-		// Execute the query
+    TRYODBC(lpDbc,
+            SQL_HANDLE_DBC,
+            SQLDriverConnect(lpDbc,
+                             GetDesktopWindow(),
+                             pszConnStr,
+                             SQL_NTS,
+                             NULL,
+                             0,
+                             NULL,
+                             SQL_DRIVER_COMPLETE));
 
-		if (!(*szInput))
-		{
-			printf("SQL COMMAND>");
-			continue;
-		}
-		RetCode = SQLExecDirect(lpStmt,szInput,SQL_NTS);
+    fprintf(stderr,"Connected!\n");
 
-		switch(RetCode)
-		{
-			case	SQL_SUCCESS_WITH_INFO:
-			{
-				HandleError(lpStmt,SQL_HANDLE_STMT,RetCode);
-				// fall through
-			}
-			case	SQL_SUCCESS:
-			{
-				// If this is a row-returning query, display
-				// results
-				TRYODBC(lpStmt,
-						SQL_HANDLE_STMT,
-						SQLNumResultCols(lpStmt,&sNumResults));
+    TRYODBC(lpDbc,
+            SQL_HANDLE_DBC,
+            SQLAllocHandle(SQL_HANDLE_STMT,lpDbc,&lpStmt));
 
-				if (sNumResults > 0)
-				{
-					DisplayResults(lpStmt,sNumResults);
-				} else
-				{
-					SQLLEN		siRowCount;
 
-					TRYODBC(lpStmt,
-							SQL_HANDLE_STMT,
-							SQLRowCount(lpStmt,&siRowCount));
+    printf("Enter SQL commands, type (control)Z to exit\nSQL COMMAND>");
 
-					if (siRowCount >= 0)
-					{
-						_tprintf(TEXT("%d %s affected\n"),
-								siRowCount,
-								siRowCount == 1 ? TEXT("row") : TEXT("rows"));
-					}
-				}
-				break;
-			}
+    // Loop to get input and execute queries
 
-			case	SQL_ERROR:
-			{
-				HandleError(lpStmt,SQL_HANDLE_STMT,RetCode);
-				break;
-			}
+    while(_fgetts(szInput, SQL_QUERY_SIZE-1, stdin))
+    {
+        RETCODE		RetCode;
+        SQLSMALLINT	sNumResults;
 
-			default:
-					fprintf(stderr,"Unexpected return code %d!\n",RetCode);
+        // Execute the query
 
-		}
-		TRYODBC(lpStmt,
-				SQL_HANDLE_STMT,
-				SQLFreeStmt(lpStmt,SQL_CLOSE));
+        if (!(*szInput))
+        {
+            printf("SQL COMMAND>");
+            continue;
+        }
+        RetCode = SQLExecDirect(lpStmt,szInput,SQL_NTS);
 
-		printf("SQL COMMAND>");
-	}
+        switch(RetCode)
+        {
+        case	SQL_SUCCESS_WITH_INFO:
+        {
+            HandleError(lpStmt,SQL_HANDLE_STMT,RetCode);
+            // fall through
+        }
+        case	SQL_SUCCESS:
+        {
+            // If this is a row-returning query, display
+            // results
+            TRYODBC(lpStmt,
+                    SQL_HANDLE_STMT,
+                    SQLNumResultCols(lpStmt,&sNumResults));
+
+            if (sNumResults > 0)
+            {
+                DisplayResults(lpStmt,sNumResults);
+            }
+            else
+            {
+                SQLLEN		siRowCount;
+
+                TRYODBC(lpStmt,
+                        SQL_HANDLE_STMT,
+                        SQLRowCount(lpStmt,&siRowCount));
+
+                if (siRowCount >= 0)
+                {
+                    _tprintf(TEXT("%d %s affected\n"),
+                             siRowCount,
+                             siRowCount == 1 ? TEXT("row") : TEXT("rows"));
+                }
+            }
+            break;
+        }
+
+        case	SQL_ERROR:
+        {
+            HandleError(lpStmt,SQL_HANDLE_STMT,RetCode);
+            break;
+        }
+
+        default:
+            fprintf(stderr,"Unexpected return code %d!\n",RetCode);
+
+        }
+        TRYODBC(lpStmt,
+                SQL_HANDLE_STMT,
+                SQLFreeStmt(lpStmt,SQL_CLOSE));
+
+        printf("SQL COMMAND>");
+    }
 
 Exit:
 
-	// Free ODBC handles and exit
+    // Free ODBC handles and exit
 
-	if (lpDbc)
-	{
-		SQLDisconnect(lpDbc);
-		SQLFreeConnect(lpDbc);
-	}
-	if (lpEnv)
-		SQLFreeEnv(lpEnv);
+    if (lpDbc)
+    {
+        SQLDisconnect(lpDbc);
+        SQLFreeConnect(lpDbc);
+    }
+    if (lpEnv)
+        SQLFreeEnv(lpEnv);
 
-	printf("\nDisconnected.");
+    printf("\nDisconnected.");
 
-	return 0;
+    return 0;
 
 }
 
@@ -280,110 +283,113 @@ Exit:
 /************************************************************************/
 
 void DisplayResults(HSTMT		lpStmt,
-			   		SQLSMALLINT	cCols)
+                    SQLSMALLINT	cCols)
 {
-	BINDING			*pFirstBinding, *pThisBinding;			
-	SQLSMALLINT		siDisplaySize;
-	RETCODE			RetCode;
-	int				iCount = 0;
+    BINDING			*pFirstBinding, *pThisBinding;
+    SQLSMALLINT		siDisplaySize;
+    RETCODE			RetCode;
+    int				iCount = 0;
 
-	// Allocate memory for each column 
+    // Allocate memory for each column
 
-	AllocateBindings(lpStmt,cCols,&pFirstBinding, &siDisplaySize);
+    AllocateBindings(lpStmt,cCols,&pFirstBinding, &siDisplaySize);
 
-	// Set the display mode and write the titles
+    // Set the display mode and write the titles
 
-	DisplayTitles(lpStmt,siDisplaySize+1, pFirstBinding);
-
-
-	// Fetch and display the data
-
-	do {
-		// Fetch a row
-
-		if (iCount++ >= gHeight - 2)
-		{
-			int 	nInputChar;
-
-			while(1)
-			{	
-				printf("              ");
-				SetConsole(siDisplaySize+2,TRUE);
-				printf("   Press ENTER to continue, Q to quit (height:%d)", gHeight);
-				SetConsole(siDisplaySize+2,FALSE);
-
-				nInputChar = _getch();
-				printf("\n");
-				if ((nInputChar == 'Q') || (nInputChar == 'q'))
-				{
-					goto Exit;
-				}
-				else if ('\r' == nInputChar)
-				{
-					break;
-				}
-				// else loop back to display prompt again
-			}
-
-			iCount = 1;
-			DisplayTitles(lpStmt,siDisplaySize+1, pFirstBinding);
-		}
-
-		TRYODBC(lpStmt,SQL_HANDLE_STMT, RetCode = SQLFetch(lpStmt));
-
-		if (RetCode == SQL_NO_DATA_FOUND)
-			break;
-			
-
-		// Display the data.   Ignore truncations
-
-		for (pThisBinding = pFirstBinding;
-			 pThisBinding;
-			 pThisBinding = pThisBinding->sNext)
-		{
-			if (pThisBinding->indPtr != SQL_NULL_DATA)
-			{
-				_tprintf(pThisBinding->fChar ? TEXT(DISPLAY_FORMAT_C):
-											   TEXT(DISPLAY_FORMAT),
-						PIPE,
-						pThisBinding->siDisplaySize,
-						pThisBinding->siDisplaySize,
-						pThisBinding->szBuffer);
-			} else
-			{
-				_tprintf(TEXT(DISPLAY_FORMAT_C),
-						PIPE,
-						pThisBinding->siDisplaySize,
-						pThisBinding->siDisplaySize,
-						"<NULL>");
-			}
-		}
-		_tprintf(TEXT(" %c\n"),PIPE);
+    DisplayTitles(lpStmt,siDisplaySize+1, pFirstBinding);
 
 
-	} while ( 1);
+    // Fetch and display the data
 
-	SetConsole(siDisplaySize+2,TRUE);
-	printf("%*.*s",siDisplaySize+2,siDisplaySize+2," ");
-	SetConsole(siDisplaySize+2,FALSE);
-	printf("\n");
+    do
+    {
+        // Fetch a row
+
+        if (iCount++ >= gHeight - 2)
+        {
+            int 	nInputChar;
+
+            while(1)
+            {
+                printf("              ");
+                SetConsole(siDisplaySize+2,TRUE);
+                printf("   Press ENTER to continue, Q to quit (height:%d)", gHeight);
+                SetConsole(siDisplaySize+2,FALSE);
+
+                nInputChar = _getch();
+                printf("\n");
+                if ((nInputChar == 'Q') || (nInputChar == 'q'))
+                {
+                    goto Exit;
+                }
+                else if ('\r' == nInputChar)
+                {
+                    break;
+                }
+                // else loop back to display prompt again
+            }
+
+            iCount = 1;
+            DisplayTitles(lpStmt,siDisplaySize+1, pFirstBinding);
+        }
+
+        TRYODBC(lpStmt,SQL_HANDLE_STMT, RetCode = SQLFetch(lpStmt));
+
+        if (RetCode == SQL_NO_DATA_FOUND)
+            break;
+
+
+        // Display the data.   Ignore truncations
+
+        for (pThisBinding = pFirstBinding;
+                pThisBinding;
+                pThisBinding = pThisBinding->sNext)
+        {
+            if (pThisBinding->indPtr != SQL_NULL_DATA)
+            {
+                _tprintf(pThisBinding->fChar ? TEXT(DISPLAY_FORMAT_C):
+                         TEXT(DISPLAY_FORMAT),
+                         PIPE,
+                         pThisBinding->siDisplaySize,
+                         pThisBinding->siDisplaySize,
+                         pThisBinding->szBuffer);
+            }
+            else
+            {
+                _tprintf(TEXT(DISPLAY_FORMAT_C),
+                         PIPE,
+                         pThisBinding->siDisplaySize,
+                         pThisBinding->siDisplaySize,
+                         "<NULL>");
+            }
+        }
+        _tprintf(TEXT(" %c\n"),PIPE);
+
+
+    }
+    while ( 1);
+
+    SetConsole(siDisplaySize+2,TRUE);
+    printf("%*.*s",siDisplaySize+2,siDisplaySize+2," ");
+    SetConsole(siDisplaySize+2,FALSE);
+    printf("\n");
 
 Exit:
-	// Clean up the allocated buffers
+    // Clean up the allocated buffers
 
-	while (pFirstBinding)
-	{
-		pThisBinding=pFirstBinding->sNext;
-		free(pFirstBinding->szBuffer);
-		free(pFirstBinding);
-		pFirstBinding=pThisBinding;
-	}
+    while (pFirstBinding)
+    {
+        pThisBinding=pFirstBinding->sNext;
+        free(pFirstBinding->szBuffer);
+        free(pFirstBinding);
+        pFirstBinding=pThisBinding;
+    }
 
 }
 
 /************************************************************************
 /* AllocateBindings:  Get column information and allocate bindings
-/* for each column.  
+/* for each column.
 /*
 /* Parameters:
 /*		lpStmt		Statement handle
@@ -393,143 +399,143 @@ Exit:
 /************************************************************************/
 
 void AllocateBindings(HSTMT			lpStmt,
-					  SQLSMALLINT	cCols,
-					  BINDING		**lppBinding,
-					  SQLSMALLINT	*lpDisplay)
+                      SQLSMALLINT	cCols,
+                      BINDING		**lppBinding,
+                      SQLSMALLINT	*lpDisplay)
 {
-	SQLSMALLINT		iCol;
-	BINDING			*lpThisBinding, *lpLastBinding;
-	SQLLEN			cchDisplay, ssType;
-	SQLSMALLINT		cchColumnNameLength;
+    SQLSMALLINT		iCol;
+    BINDING			*lpThisBinding, *lpLastBinding;
+    SQLLEN			cchDisplay, ssType;
+    SQLSMALLINT		cchColumnNameLength;
 
-	*lpDisplay = 0;
+    *lpDisplay = 0;
 
-	for (iCol = 1; iCol <= cCols; iCol++)
-	{
-		lpThisBinding = (BINDING *)(malloc(sizeof(BINDING)));
-		if (!(lpThisBinding))
-		{
-			fprintf(stderr,"Out of memory!\n");
-			exit(-100);
-		}
+    for (iCol = 1; iCol <= cCols; iCol++)
+    {
+        lpThisBinding = (BINDING *)(malloc(sizeof(BINDING)));
+        if (!(lpThisBinding))
+        {
+            fprintf(stderr,"Out of memory!\n");
+            exit(-100);
+        }
 
-		if (iCol == 1)
-		{
-			*lppBinding = lpThisBinding;
-		}
-		else
-		{
-			lpLastBinding->sNext = lpThisBinding;
-		}
-		lpLastBinding=lpThisBinding;
-
-
-		// Figure out the display length of the column (we will
-		// bind to char since we are only displaying data, in general
-		// you should bind to the appropriate C type if you are going
-		// to manipulate data since it is much faster...)
-		
-		TRYODBC(lpStmt,
-				SQL_HANDLE_STMT,
-				SQLColAttribute(lpStmt,
-							   iCol,
-							   SQL_DESC_DISPLAY_SIZE,
-							   NULL,
-							   0,
-							   NULL,
-							   &cchDisplay));
+        if (iCol == 1)
+        {
+            *lppBinding = lpThisBinding;
+        }
+        else
+        {
+            lpLastBinding->sNext = lpThisBinding;
+        }
+        lpLastBinding=lpThisBinding;
 
 
-		// Figure out if this is a character or numeric column; this is
-		// used to determine if we want to display the data left- or right-
-		// aligned.
+        // Figure out the display length of the column (we will
+        // bind to char since we are only displaying data, in general
+        // you should bind to the appropriate C type if you are going
+        // to manipulate data since it is much faster...)
 
-		// !! Note a bug in the 3.x documentation.  We claim that 
-		// SQL_DESC_TYPE is a 1.x feature.   That is not true, SQL_DESC_TYPE
-		// is a 3.x feature.   SQL_DESC_CONCISE_TYPE maps to the 1.x 
-		// SQL_COLUMN_TYPE.   This is what you must use if you want to work
-		// against a 2.x driver.  Sorry for the inconvenience...
-
-		TRYODBC(lpStmt,
-				SQL_HANDLE_STMT,
-				SQLColAttribute(lpStmt,
-								iCol,
-								SQL_DESC_CONCISE_TYPE,
-								NULL,
-								0,
-								NULL,
-								&ssType));
+        TRYODBC(lpStmt,
+                SQL_HANDLE_STMT,
+                SQLColAttribute(lpStmt,
+                                iCol,
+                                SQL_DESC_DISPLAY_SIZE,
+                                NULL,
+                                0,
+                                NULL,
+                                &cchDisplay));
 
 
-		lpThisBinding->fChar = (ssType == SQL_CHAR ||
-								ssType == SQL_VARCHAR ||
-								ssType == SQL_LONGVARCHAR);
+        // Figure out if this is a character or numeric column; this is
+        // used to determine if we want to display the data left- or right-
+        // aligned.
 
-		lpThisBinding->sNext = NULL;
+        // !! Note a bug in the 3.x documentation.  We claim that
+        // SQL_DESC_TYPE is a 1.x feature.   That is not true, SQL_DESC_TYPE
+        // is a 3.x feature.   SQL_DESC_CONCISE_TYPE maps to the 1.x
+        // SQL_COLUMN_TYPE.   This is what you must use if you want to work
+        // against a 2.x driver.  Sorry for the inconvenience...
 
-		// Arbitrary limit on display size
-		if (cchDisplay > DISPLAY_MAX)
-			cchDisplay = DISPLAY_MAX;
-
-		// Allocate a buffer big enough to hold the text representation
-		// of the data.  Add one character for the null terminator
-
-		lpThisBinding->szBuffer = (TCHAR *)malloc((cchDisplay+1) * sizeof(TCHAR));
-
-		if (!(lpThisBinding->szBuffer))
-		{
-			fprintf(stderr,"Out of memory!\n");
-			exit(-100);
-		}
-
-		// Map this buffer to the driver's buffer.   At Fetch time,
-		// the driver will fill in this data.  Note that the size is 
-		// count of bytes (for Unicode).  All ODBC functions that take
-		// SQLPOINTER use count of bytes; all functions that take only
-		// strings use count of characters.
+        TRYODBC(lpStmt,
+                SQL_HANDLE_STMT,
+                SQLColAttribute(lpStmt,
+                                iCol,
+                                SQL_DESC_CONCISE_TYPE,
+                                NULL,
+                                0,
+                                NULL,
+                                &ssType));
 
 
-		TRYODBC(lpStmt,
-				SQL_HANDLE_STMT,
-				SQLBindCol(lpStmt,
-						   iCol,
-						   SQL_C_TCHAR,
-						   (SQLPOINTER) lpThisBinding->szBuffer,
-						   (cchDisplay + 1) * sizeof(TCHAR),
-						   &lpThisBinding->indPtr));
+        lpThisBinding->fChar = (ssType == SQL_CHAR ||
+                                ssType == SQL_VARCHAR ||
+                                ssType == SQL_LONGVARCHAR);
+
+        lpThisBinding->sNext = NULL;
+
+        // Arbitrary limit on display size
+        if (cchDisplay > DISPLAY_MAX)
+            cchDisplay = DISPLAY_MAX;
+
+        // Allocate a buffer big enough to hold the text representation
+        // of the data.  Add one character for the null terminator
+
+        lpThisBinding->szBuffer = (TCHAR *)malloc((cchDisplay+1) * sizeof(TCHAR));
+
+        if (!(lpThisBinding->szBuffer))
+        {
+            fprintf(stderr,"Out of memory!\n");
+            exit(-100);
+        }
+
+        // Map this buffer to the driver's buffer.   At Fetch time,
+        // the driver will fill in this data.  Note that the size is
+        // count of bytes (for Unicode).  All ODBC functions that take
+        // SQLPOINTER use count of bytes; all functions that take only
+        // strings use count of characters.
 
 
-		// Now set the display size that we will use to display
-		// the data.   Figure out the length of the column name
+        TRYODBC(lpStmt,
+                SQL_HANDLE_STMT,
+                SQLBindCol(lpStmt,
+                           iCol,
+                           SQL_C_TCHAR,
+                           (SQLPOINTER) lpThisBinding->szBuffer,
+                           (cchDisplay + 1) * sizeof(TCHAR),
+                           &lpThisBinding->indPtr));
 
-		TRYODBC(lpStmt,
-				SQL_HANDLE_STMT,
-				SQLColAttribute(lpStmt,
-								iCol,
-								SQL_DESC_NAME,
-								NULL,
-								0,
-								&cchColumnNameLength,
-								NULL));
 
-		lpThisBinding->siDisplaySize = max((SQLSMALLINT)cchDisplay, cchColumnNameLength);
-		if (lpThisBinding->siDisplaySize < NULL_SIZE)
-			lpThisBinding->siDisplaySize = NULL_SIZE;
+        // Now set the display size that we will use to display
+        // the data.   Figure out the length of the column name
 
-		*lpDisplay += lpThisBinding->siDisplaySize + DISPLAY_FORMAT_EXTRA;
-		
-	}
+        TRYODBC(lpStmt,
+                SQL_HANDLE_STMT,
+                SQLColAttribute(lpStmt,
+                                iCol,
+                                SQL_DESC_NAME,
+                                NULL,
+                                0,
+                                &cchColumnNameLength,
+                                NULL));
 
-	Exit:
-		// Not really a good error exit handler, we should free
-		// up any memory that we allocated.   But this is a sample...
+        lpThisBinding->siDisplaySize = max((SQLSMALLINT)cchDisplay, cchColumnNameLength);
+        if (lpThisBinding->siDisplaySize < NULL_SIZE)
+            lpThisBinding->siDisplaySize = NULL_SIZE;
 
-		return;
+        *lpDisplay += lpThisBinding->siDisplaySize + DISPLAY_FORMAT_EXTRA;
+
+    }
+
+Exit:
+    // Not really a good error exit handler, we should free
+    // up any memory that we allocated.   But this is a sample...
+
+    return;
 }
 
 
 /************************************************************************
-/* DisplayTitles: print the titles of all the columns and set the 
+/* DisplayTitles: print the titles of all the columns and set the
 /*			      shell window's width
 /*
 /* Parameters:
@@ -539,39 +545,39 @@ void AllocateBindings(HSTMT			lpStmt,
 /************************************************************************/
 
 void	DisplayTitles(HSTMT		lpStmt,
-					  DWORD		siDisplaySize,
-					  BINDING	*pBinding)
+                      DWORD		siDisplaySize,
+                      BINDING	*pBinding)
 {
-	TCHAR			szTitle[DISPLAY_MAX];
-	SQLSMALLINT		iCol = 1;
+    TCHAR			szTitle[DISPLAY_MAX];
+    SQLSMALLINT		iCol = 1;
 
-	SetConsole(siDisplaySize+2,TRUE);
+    SetConsole(siDisplaySize+2,TRUE);
 
 
-	for (;pBinding;pBinding=pBinding->sNext)
-	{
-		TRYODBC(lpStmt,
-				SQL_HANDLE_STMT,
-				SQLColAttribute(lpStmt,
-								iCol++,
-								SQL_DESC_NAME,
-								szTitle,
-								sizeof(szTitle),	// Note count of bytes!
-								NULL,
-								NULL));
+    for (; pBinding; pBinding=pBinding->sNext)
+    {
+        TRYODBC(lpStmt,
+                SQL_HANDLE_STMT,
+                SQLColAttribute(lpStmt,
+                                iCol++,
+                                SQL_DESC_NAME,
+                                szTitle,
+                                sizeof(szTitle),	// Note count of bytes!
+                                NULL,
+                                NULL));
 
-		_tprintf(TEXT(DISPLAY_FORMAT_C), PIPE,
-				 pBinding->siDisplaySize,
-				 pBinding->siDisplaySize,
-				 szTitle);
+        _tprintf(TEXT(DISPLAY_FORMAT_C), PIPE,
+                 pBinding->siDisplaySize,
+                 pBinding->siDisplaySize,
+                 szTitle);
 
-	}
+    }
 
 Exit:
 
-	_tprintf(TEXT(" %c"),PIPE);
-	SetConsole(siDisplaySize+2,FALSE);
-	_tprintf(TEXT("\n"));
+    _tprintf(TEXT(" %c"),PIPE);
+    SetConsole(siDisplaySize+2,FALSE);
+    _tprintf(TEXT("\n"));
 
 }
 
@@ -585,10 +591,10 @@ Exit:
 /************************************************************************/
 
 void	SetConsole(	DWORD      		siDisplaySize,
-					BOOL			fInvert)
+                    BOOL			fInvert)
 {
-	HANDLE							hConsole;
-	CONSOLE_SCREEN_BUFFER_INFO		csbInfo;
+    HANDLE							hConsole;
+    CONSOLE_SCREEN_BUFFER_INFO		csbInfo;
 
 
     // A little bit of fun here -- reset the console screen
@@ -599,24 +605,24 @@ void	SetConsole(	DWORD      		siDisplaySize,
 
     if (hConsole != INVALID_HANDLE_VALUE)
     {
-		if (GetConsoleScreenBufferInfo(hConsole, &csbInfo))
-		{
-			if (csbInfo.dwSize.X <  (SHORT) siDisplaySize)
-			{
-				csbInfo.dwSize.X =  (SHORT) siDisplaySize;
+        if (GetConsoleScreenBufferInfo(hConsole, &csbInfo))
+        {
+            if (csbInfo.dwSize.X <  (SHORT) siDisplaySize)
+            {
+                csbInfo.dwSize.X =  (SHORT) siDisplaySize;
                 SetConsoleScreenBufferSize(hConsole,csbInfo.dwSize);
-			}
+            }
 
-			gHeight = csbInfo.dwSize.Y;
-		}
+            gHeight = csbInfo.dwSize.Y;
+        }
 
-		if (fInvert)
-			SetConsoleTextAttribute(hConsole, (WORD)(csbInfo.wAttributes |
-												BACKGROUND_BLUE));
-		else
-			SetConsoleTextAttribute(hConsole,(WORD)(csbInfo.wAttributes & ~(
-												BACKGROUND_BLUE)));
-	}
+        if (fInvert)
+            SetConsoleTextAttribute(hConsole, (WORD)(csbInfo.wAttributes |
+                                    BACKGROUND_BLUE));
+        else
+            SetConsoleTextAttribute(hConsole,(WORD)(csbInfo.wAttributes & ~(
+                    BACKGROUND_BLUE)));
+    }
 }
 
 
@@ -629,36 +635,36 @@ void	SetConsole(	DWORD      		siDisplaySize,
 /*		RetCode		Return code of failing command
 /************************************************************************/
 
-void HandleError(SQLHANDLE	hHandle,	
-				SQLSMALLINT	hType,	
-			    RETCODE	RetCode)
+void HandleError(SQLHANDLE	hHandle,
+                 SQLSMALLINT	hType,
+                 RETCODE	RetCode)
 {
-	SQLSMALLINT	iRec = 0;
-	SQLINTEGER	iError;
-	TCHAR		szMessage[1000];
-	TCHAR		szState[SQL_SQLSTATE_SIZE+1];
+    SQLSMALLINT	iRec = 0;
+    SQLINTEGER	iError;
+    TCHAR		szMessage[1000];
+    TCHAR		szState[SQL_SQLSTATE_SIZE+1];
 
 
-	if (RetCode == SQL_INVALID_HANDLE)
-	{
-		fprintf(stderr,"Invalid handle!\n");
-		return;
-	}
+    if (RetCode == SQL_INVALID_HANDLE)
+    {
+        fprintf(stderr,"Invalid handle!\n");
+        return;
+    }
 
 
-	while (SQLGetDiagRec(hType,
-						 hHandle,
-						 ++iRec,
-						 szState,
-						 &iError,
-						 szMessage,
-						 (SQLSMALLINT)(sizeof(szMessage) / sizeof(TCHAR)),
-						 (SQLSMALLINT *)NULL) == SQL_SUCCESS)
-	{
-		
-		// Hide data truncated..
-		if (_tcsncmp(szState,TEXT("01004"),5))
-			_ftprintf(stderr,TEXT("[%5.5s] %s (%d)\n"),szState,szMessage,iError);
-	}
+    while (SQLGetDiagRec(hType,
+                         hHandle,
+                         ++iRec,
+                         szState,
+                         &iError,
+                         szMessage,
+                         (SQLSMALLINT)(sizeof(szMessage) / sizeof(TCHAR)),
+                         (SQLSMALLINT *)NULL) == SQL_SUCCESS)
+    {
+
+        // Hide data truncated..
+        if (_tcsncmp(szState,TEXT("01004"),5))
+            _ftprintf(stderr,TEXT("[%5.5s] %s (%d)\n"),szState,szMessage,iError);
+    }
 
 }

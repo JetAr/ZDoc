@@ -1,4 +1,4 @@
-/******************************************************************************\
+﻿/******************************************************************************\
 *       This is a part of the Microsoft Source Code Samples.
 *       Copyright 1996 - 2000 Microsoft Corporation.
 *       All rights reserved.
@@ -15,7 +15,7 @@ Module Name:
 
 Abstract:
 
-    This module illustrates how to programmatically change an IP address for 
+    This module illustrates how to programmatically change an IP address for
     a specific network adapter on your machine.  This program also demonstrates how
     to retrieve existing network adapter IP configuration information.
 
@@ -53,21 +53,23 @@ Revision History:
 #include <stdio.h>
 #include <iphlpapi.h>
 
-void Usage(void) {
+void Usage(void)
+{
     printf("Usage: Ipchange [ -l ] [ -a -n<index id> -i<ip address> -m<subnet mask> ] "
-        "[ -d -c<context id>]\n\n"
-        "\t -l List adapter index IDs and IP Address context ID information\n"
-        "\t -a Add IP Address option\n"
-        "\t -d Delete IP Address option\n"
-        "\t -i IP Address to specify with -a option\n"
-        "\t -m Subnet Mask to specify with -a option\n"
-        "\t -c IP context ID for an existing IP address\n"
-        "\t -n Index ID of an existing network adapter\n");
+           "[ -d -c<context id>]\n\n"
+           "\t -l List adapter index IDs and IP Address context ID information\n"
+           "\t -a Add IP Address option\n"
+           "\t -d Delete IP Address option\n"
+           "\t -i IP Address to specify with -a option\n"
+           "\t -m Subnet Mask to specify with -a option\n"
+           "\t -c IP context ID for an existing IP address\n"
+           "\t -n Index ID of an existing network adapter\n");
 }
 
 #define IPADDR_BUF_SIZE 128
 
-void main(int argc, char *argv[]) {
+void main(int argc, char *argv[])
+{
     ULONG NTEContext = 0;
     ULONG NTEInstance;
     IPAddr NewIP;
@@ -90,40 +92,40 @@ void main(int argc, char *argv[]) {
     Context = Index = (DWORD)-1;
     for (int i = 1; i < argc; i++)
     {
-        if ((argv[i][0] == '-') || (argv[i][0] == '/')) 
+        if ((argv[i][0] == '-') || (argv[i][0] == '/'))
         {
-            switch(tolower(argv[i][1])) 
+            switch(tolower(argv[i][1]))
             {
-                case 'l':
-                    OptList = TRUE;
-                    break;
-                case 'a':
-                    OptAdd = TRUE;
-                    break;
-                case 'c':
-                    if (strlen(argv[i]) > 2)
-                        Context = atoi(&argv[i][2]);
-                    break; 
-                case 'd':
-                    OptDel = TRUE;
-                    break;
-                case 'i':
-                    if (strlen(argv[i]) > 2)
-                        strcpy_s(NewIPStr, IPADDR_BUF_SIZE, &argv[i][2]);
-                    break;
-                case 'm':
-                    if (strlen(argv[i]) > 2)
-                        strcpy_s(NewMaskStr, IPADDR_BUF_SIZE, &argv[i][2]);
-                    break;
-                case 'n':
-                    if (strlen(argv[i]) > 2)
-                        Index = atoi(&argv[i][2]);
-                    break;
-                default:
-                    printf("default\n");
-                    Usage();
-                    return;
-                }
+            case 'l':
+                OptList = TRUE;
+                break;
+            case 'a':
+                OptAdd = TRUE;
+                break;
+            case 'c':
+                if (strlen(argv[i]) > 2)
+                    Context = atoi(&argv[i][2]);
+                break;
+            case 'd':
+                OptDel = TRUE;
+                break;
+            case 'i':
+                if (strlen(argv[i]) > 2)
+                    strcpy_s(NewIPStr, IPADDR_BUF_SIZE, &argv[i][2]);
+                break;
+            case 'm':
+                if (strlen(argv[i]) > 2)
+                    strcpy_s(NewMaskStr, IPADDR_BUF_SIZE, &argv[i][2]);
+                break;
+            case 'n':
+                if (strlen(argv[i]) > 2)
+                    Index = atoi(&argv[i][2]);
+                break;
+            default:
+                printf("default\n");
+                Usage();
+                return;
+            }
         }
         else
         {
@@ -135,7 +137,7 @@ void main(int argc, char *argv[]) {
 
     // Check options
     if ((OptAdd && (Index == -1 || NewIPStr[0] == '\0' || NewMaskStr[0] == '\0'))
-        || (OptDel && Context == -1))
+            || (OptDel && Context == -1))
     {
         Usage();
         return;
@@ -169,8 +171,8 @@ void main(int argc, char *argv[]) {
     if (OptList)
     {
         printf("MAC Address - Adapter\n"
-            "Index     Context   Ip Address          Subnet Mask\n"
-            "--------------------------------------------------------------\n");
+               "Index     Context   Ip Address          Subnet Mask\n"
+               "--------------------------------------------------------------\n");
 
         pAdapt = pAdapterInfo;
 

@@ -1,11 +1,11 @@
-//--------------------------------------------------------------------
+﻿//--------------------------------------------------------------------
 // Microsoft OLE DB Test
 //
 // Copyright (C) 1998-2000 Microsoft Corporation
 //
 // @doc
 //
-// @module IScOps.h | This module contains header information for 
+// @module IScOps.h | This module contains header information for
 //	    				OLE DB IScopedOperations interface Test
 //
 // @rev 01 | 10-08-98 | Microsoft | Created
@@ -13,7 +13,7 @@
 
 #ifndef _ISCOPS_H_
 #define _ISCOPS_H_
-						  
+
 
 #include "oledb.h" 			// OLE DB Header Files
 #include "oledberr.h"

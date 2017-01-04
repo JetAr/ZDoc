@@ -1,5 +1,5 @@
-//////////////////////////////////////////////////////////////////////////
-// 
+﻿//////////////////////////////////////////////////////////////////////////
+//
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -27,14 +27,14 @@ class BaseVideoRenderer
 public:
     virtual ~BaseVideoRenderer() { }
 
-	virtual BOOL    HasVideo() const = 0;
+    virtual BOOL    HasVideo() const = 0;
 
     virtual HRESULT AddToGraph(IGraphBuilder *pGraph, HWND hwnd) = 0;
     virtual HRESULT FinalizeGraph(IGraphBuilder *pGraph) = 0;
 
     virtual HRESULT UpdateVideoWindow(HWND hwnd, const LPRECT prc) = 0;
-	virtual HRESULT Repaint(HWND hwnd, HDC hdc) = 0;
-	virtual HRESULT DisplayModeChanged() = 0;
+    virtual HRESULT Repaint(HWND hwnd, HDC hdc) = 0;
+    virtual HRESULT DisplayModeChanged() = 0;
 };
 
 
@@ -46,21 +46,24 @@ public:
 
 class VMR7 : public BaseVideoRenderer
 {
-	IVMRWindowlessControl	*m_pWindowless;
+    IVMRWindowlessControl	*m_pWindowless;
 
 public:
 
     VMR7();
     ~VMR7();
 
-    BOOL    HasVideo() const { return (m_pWindowless != NULL); }
+    BOOL    HasVideo() const
+    {
+        return (m_pWindowless != NULL);
+    }
 
     HRESULT AddToGraph(IGraphBuilder *pGraph, HWND hwnd);
     HRESULT FinalizeGraph(IGraphBuilder *pGraph);
 
-	HRESULT UpdateVideoWindow(HWND hwnd, const LPRECT prc);
-	HRESULT Repaint(HWND hwnd, HDC hdc);
-	HRESULT DisplayModeChanged();
+    HRESULT UpdateVideoWindow(HWND hwnd, const LPRECT prc);
+    HRESULT Repaint(HWND hwnd, HDC hdc);
+    HRESULT DisplayModeChanged();
 };
 
 
@@ -72,21 +75,24 @@ public:
 
 class VMR9 : public BaseVideoRenderer
 {
-	IVMRWindowlessControl9 *m_pWindowless;
+    IVMRWindowlessControl9 *m_pWindowless;
 
 public:
 
     VMR9();
     ~VMR9();
 
-    BOOL    HasVideo() const { return (m_pWindowless != NULL); }
+    BOOL    HasVideo() const
+    {
+        return (m_pWindowless != NULL);
+    }
 
     HRESULT AddToGraph(IGraphBuilder *pGraph, HWND hwnd);
     HRESULT FinalizeGraph(IGraphBuilder *pGraph);
 
-	HRESULT UpdateVideoWindow(HWND hwnd, const LPRECT prc);
-	HRESULT Repaint(HWND hwnd, HDC hdc);
-	HRESULT DisplayModeChanged();
+    HRESULT UpdateVideoWindow(HWND hwnd, const LPRECT prc);
+    HRESULT Repaint(HWND hwnd, HDC hdc);
+    HRESULT DisplayModeChanged();
 };
 
 
@@ -99,19 +105,22 @@ public:
 class EVR : public BaseVideoRenderer
 {
     IBaseFilter            *m_pEVR;
-	IMFVideoDisplayControl *m_pVideoDisplay;
+    IMFVideoDisplayControl *m_pVideoDisplay;
 
 public:
 
     EVR();
     ~EVR();
 
-    BOOL    HasVideo() const { return (m_pVideoDisplay != NULL); }
+    BOOL    HasVideo() const
+    {
+        return (m_pVideoDisplay != NULL);
+    }
 
     HRESULT AddToGraph(IGraphBuilder *pGraph, HWND hwnd);
     HRESULT FinalizeGraph(IGraphBuilder *pGraph);
 
-	HRESULT UpdateVideoWindow(HWND hwnd, const LPRECT prc);
-	HRESULT Repaint(HWND hwnd, HDC hdc);
-	HRESULT DisplayModeChanged();
+    HRESULT UpdateVideoWindow(HWND hwnd, const LPRECT prc);
+    HRESULT Repaint(HWND hwnd, HDC hdc);
+    HRESULT DisplayModeChanged();
 };

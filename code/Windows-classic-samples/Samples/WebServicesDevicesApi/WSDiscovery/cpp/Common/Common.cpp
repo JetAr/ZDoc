@@ -1,4 +1,4 @@
-//////////////////////////////////////////////////////////////////////////////
+﻿//////////////////////////////////////////////////////////////////////////////
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -31,14 +31,14 @@
 _Success_( return == S_OK )
 static HRESULT _DeepCopyStringHelper
 (   _In_ BOOL isLinked
-,   _In_ LPCWSTR source
-,   _In_opt_ void *parent
-,   _Outptr_ LPWSTR *dest
+    ,   _In_ LPCWSTR source
+    ,   _In_opt_ void *parent
+    ,   _Outptr_ LPWSTR *dest
 );
 
 HRESULT DeepCopyString
 (   _In_ LPCWSTR source
-,   _Outptr_ LPWSTR *dest
+    ,   _Outptr_ LPWSTR *dest
 )
 {
     return _DeepCopyStringHelper( FALSE, source, NULL, dest );
@@ -46,8 +46,8 @@ HRESULT DeepCopyString
 
 HRESULT DeepCopyStringLinked
 (   _In_ LPCWSTR source
-,   _In_opt_ void *parent
-,   _Outptr_ LPWSTR *dest
+    ,   _In_opt_ void *parent
+    ,   _Outptr_ LPWSTR *dest
 )
 {
     return _DeepCopyStringHelper( TRUE, source, parent, dest );
@@ -56,9 +56,9 @@ HRESULT DeepCopyStringLinked
 _Success_( return == S_OK )
 HRESULT _DeepCopyStringHelper
 (   _In_ BOOL isLinked
-,   _In_ LPCWSTR source
-,   _In_opt_ void *parent
-,   _Outptr_ LPWSTR *dest
+    ,   _In_ LPCWSTR source
+    ,   _In_opt_ void *parent
+    ,   _Outptr_ LPWSTR *dest
 )
 {
     HRESULT hr = S_OK;
@@ -89,8 +89,8 @@ HRESULT _DeepCopyStringHelper
         // num char = stringLength + 1 (for NULL char)
         if ( isLinked )
         {
-            tempDest = (WCHAR *)WSDAllocateLinkedMemory( 
-                parent, sizeof( WCHAR ) * ( stringLength + 1 ) );
+            tempDest = (WCHAR *)WSDAllocateLinkedMemory(
+                           parent, sizeof( WCHAR ) * ( stringLength + 1 ) );
         }
         else
         {
@@ -230,7 +230,7 @@ HRESULT GetWideStringHostName
 _Success_( return == S_OK )
 HRESULT DeepCopyWsdUriList
 (   _In_ const WSD_URI_LIST *srcList
-,   _Outptr_ WSD_URI_LIST **destList
+    ,   _Outptr_ WSD_URI_LIST **destList
 )
 {
     HRESULT hr = S_OK;
@@ -256,7 +256,7 @@ HRESULT DeepCopyWsdUriList
         {
             // first node to be duplicated - create the first node in the list
             duplicatedList = (WSD_URI_LIST *)WSDAllocateLinkedMemory( NULL, sizeof( WSD_URI_LIST ) );
-            
+
             if ( NULL == duplicatedList )
             {
                 hr = E_OUTOFMEMORY;
@@ -270,9 +270,9 @@ HRESULT DeepCopyWsdUriList
         else
         {
             // subsequent nodes - create the next node
-            tempList->Next = (WSD_URI_LIST *)WSDAllocateLinkedMemory( 
-                tempList, // parent
-                sizeof( WSD_URI_LIST ) ); // child
+            tempList->Next = (WSD_URI_LIST *)WSDAllocateLinkedMemory(
+                                 tempList, // parent
+                                 sizeof( WSD_URI_LIST ) ); // child
 
             if ( NULL == tempList->Next )
             {
@@ -283,20 +283,20 @@ HRESULT DeepCopyWsdUriList
                 tempList = tempList->Next;
             }
         }
-        
+
         if ( S_OK == hr )
         {
             // initialize the node
             tempList->Element = NULL;
             tempList->Next = NULL;
-            
+
             // copy the uri string
-            hr = DeepCopyStringLinked( 
-                    srcList->Element, 
-                    tempList, // parent
-                    const_cast<LPWSTR*>( &(tempList->Element) ) ); // child
+            hr = DeepCopyStringLinked(
+                     srcList->Element,
+                     tempList, // parent
+                     const_cast<LPWSTR*>( &(tempList->Element) ) ); // child
         }
-        
+
         if ( S_OK == hr )
         {
             // move to next node
@@ -328,13 +328,13 @@ HRESULT DeepCopyWsdUriList
 _Success_( return == S_OK )
 HRESULT ParseScopes
 (   _In_ int argc
-,   _In_reads_( argc ) LPWSTR *argv
-,   _In_ int startIndex
-,   _Outptr_result_maybenull_ WSD_URI_LIST **scopesList
+    ,   _In_reads_( argc ) LPWSTR *argv
+    ,   _In_ int startIndex
+    ,   _Outptr_result_maybenull_ WSD_URI_LIST **scopesList
 )
 {
     // Create linked list of scopes.
-    // 
+    //
     // Here is a quick overview of how we use linked memory here,
     // and how we useWSDAttachLinkedMemory and WSDFreeLinkedMemory
     // to accomplish this.
@@ -347,12 +347,12 @@ HRESULT ParseScopes
     //           --> Next: tempScopeList3 (parent: tempScopeList2)
     //                     --> Element: string3 (parent: tempScopeList3)
     //                     --> Next: NULL
-    // 
+    //
     // If all of the above elements and nodes are allocated using
     // WSDAttachLinkedMemory, you can use WSDFreeLinkedMemory to
     // deallocate all of the above memory allocations in one function call
     // rather than to have a for loop and delete them one by one.
-    
+
     HRESULT hr = S_OK;
     WSD_URI_LIST *tempScopesList = NULL;
     WSD_URI_LIST *parentNode = NULL; // do not deallocate
@@ -360,7 +360,7 @@ HRESULT ParseScopes
     int i = 0; // for loop
 
     if ( 1 > argc || NULL == argv ||
-        0 > startIndex || argc <= startIndex )
+            0 > startIndex || argc <= startIndex )
     {
         // Required conditions to pass:
         // argc >= 1
@@ -384,21 +384,21 @@ HRESULT ParseScopes
     {
         // create the node in the memory of previous_node->next
         *nextNode = (WSD_URI_LIST *)WSDAllocateLinkedMemory(
-            parentNode, sizeof( WSD_URI_LIST ) );
+                        parentNode, sizeof( WSD_URI_LIST ) );
 
         if ( NULL == *nextNode )
         {
             hr = E_OUTOFMEMORY;
         }
-        
+
         if ( S_OK == hr )
         {
             (*nextNode)->Next = NULL;
 
             // copy string to the node
             _Analysis_assume_(NULL != *nextNode);
-            hr = DeepCopyStringLinked( argv[i], *nextNode, 
-                const_cast<LPWSTR *>( &((*nextNode)->Element) ) );
+            hr = DeepCopyStringLinked( argv[i], *nextNode,
+                                       const_cast<LPWSTR *>( &((*nextNode)->Element) ) );
         }
 
         if ( S_OK == hr )
@@ -433,7 +433,7 @@ HRESULT ParseScopes
 _Success_( return == S_OK )
 HRESULT GetGuidString
 (   _In_ GUID guidToConvert
-,   _Outptr_ LPWSTR *guidString
+    ,   _Outptr_ LPWSTR *guidString
 )
 {
     HRESULT hr = S_OK;
@@ -460,12 +460,12 @@ HRESULT GetGuidString
 
     if ( S_OK == hr )
     {
-        hr = StringCchPrintfW( tempGuidString, TEMP_GUID_STRING_LENGTH, 
-            L"%08X-%04X-%04X-%02X%02X-%02X%02X%02X%02X%02X%02X",
-            guidToConvert.Data1, guidToConvert.Data2, guidToConvert.Data3,
-            guidToConvert.Data4[0], guidToConvert.Data4[1], guidToConvert.Data4[2],
-            guidToConvert.Data4[3], guidToConvert.Data4[4], guidToConvert.Data4[5],
-            guidToConvert.Data4[6], guidToConvert.Data4[7] );
+        hr = StringCchPrintfW( tempGuidString, TEMP_GUID_STRING_LENGTH,
+                               L"%08X-%04X-%04X-%02X%02X-%02X%02X%02X%02X%02X%02X",
+                               guidToConvert.Data1, guidToConvert.Data2, guidToConvert.Data3,
+                               guidToConvert.Data4[0], guidToConvert.Data4[1], guidToConvert.Data4[2],
+                               guidToConvert.Data4[3], guidToConvert.Data4[4], guidToConvert.Data4[5],
+                               guidToConvert.Data4[6], guidToConvert.Data4[7] );
     }
 
     if ( S_OK == hr )
@@ -512,7 +512,7 @@ void PrintGuid
 
 void PrintErrorMessage
 (   _In_opt_ LPCWSTR message
-,   _In_ HRESULT hr
+    ,   _In_ HRESULT hr
 )
 {
     wprintf( L"%s: [0x%08X]\r\n", message, hr );
@@ -520,7 +520,7 @@ void PrintErrorMessage
 
 HRESULT PrintDiscoveredService
 (   _In_ IWSDiscoveredService *service
-,   _In_ BOOL isByeMessage
+    ,   _In_ BOOL isByeMessage
 )
 {
     HRESULT hr = S_OK;
@@ -541,7 +541,7 @@ HRESULT PrintDiscoveredService
     {
         hr = E_INVALIDARG;
     }
-    
+
     if ( S_OK == hr )
     {
         hr = service->GetEndpointReference( &wsdEpr );
@@ -551,12 +551,12 @@ HRESULT PrintDiscoveredService
             PrintErrorMessage( L"Failed to obtain EPR", hr );
         }
     }
-    
+
     if ( !isByeMessage )
     {
         // If this is not a Bye message, we shall attempt to retrieve
         // all fields that are available in the discovered service.
-        
+
         if ( S_OK == hr )
         {
             hr = service->GetProbeResolveTag( &probeResolveTag );
@@ -650,16 +650,16 @@ HRESULT PrintDiscoveredService
         if ( S_OK == hr )
         {
             hr = service->GetExtendedDiscoXML(
-                &extendedXmlHeader, &extendedXmlBody );
+                     &extendedXmlHeader, &extendedXmlBody );
 
             if ( S_OK != hr )
             {
                 PrintErrorMessage( L"Failed to extended discovery XML", hr );
             }
         }
-    
+
     }
-    
+
     if ( S_OK == hr )
     {
         if ( isByeMessage )
@@ -670,9 +670,9 @@ HRESULT PrintDiscoveredService
         else
         {
             // print everything if this is not a Bye message
-            
+
             wprintf( L"Tag: %s\r\n", probeResolveTag );
-        
+
             wprintf( L"EndpointReference: %s\r\n", wsdEpr->Address );
 
             wprintf( L"EndpointReference Properties:\r\n" );
@@ -698,10 +698,10 @@ HRESULT PrintDiscoveredService
             }
 
             wprintf( L"InstanceId: %llu\r\n", instanceId );
-            
+
             wprintf( L"Types:\r\n" );
             PrintNameList( typesList );
-            
+
             wprintf( L"Scopes:\r\n" );
             PrintUriList( scopesList );
 
@@ -718,7 +718,7 @@ HRESULT PrintDiscoveredService
 
             wprintf( L"Extended XML Header:\r\n" );
             PrintXmlElement( extendedXmlHeader, 1 );
-            
+
             wprintf( L"Extended XML Body:\r\n" );
             PrintXmlElement( extendedXmlBody, 1 );
         }
@@ -742,7 +742,7 @@ void PrintNameList
             wprintf( L"  " );
 
             if ( NULL == typesList->Element ||
-                 NULL == typesList->Element->Space )
+                    NULL == typesList->Element->Space )
             {
                 // Chances of this happening is rare, but we
                 // handle it anyway.
@@ -754,7 +754,7 @@ void PrintNameList
                 // have it printed here.  However, you may access that information
                 // through typesList->Element->Space->Uri.
                 wprintf( L"%s:%s", typesList->Element->Space->PreferredPrefix,
-                    typesList->Element->LocalName );
+                         typesList->Element->LocalName );
             }
 
             wprintf( L"\r\n" );
@@ -784,7 +784,7 @@ void PrintUriList
 
 void PrintXmlElement
 (   _In_opt_ WSDXML_ELEMENT *element
-,   UINT indentLevel
+    ,   UINT indentLevel
 )
 {
     WSDXML_ATTRIBUTE *tempAttribute = NULL; // iteration - do not delete
@@ -798,16 +798,16 @@ void PrintXmlElement
     else
     {
         if ( NULL == element->Name ||
-             NULL == element->Name->Space )
+                NULL == element->Name->Space )
         {
             // This is rare, but we still handle it.
             wprintf( L"ERROR: Malformed name" );
         }
         else
         {
-            wprintf( L"%s:%s", 
-                element->Name->Space->PreferredPrefix, 
-                element->Name->LocalName );
+            wprintf( L"%s:%s",
+                     element->Name->Space->PreferredPrefix,
+                     element->Name->LocalName );
         }
 
         wprintf( L" " );
@@ -836,7 +836,7 @@ void PrintXmlElement
                     // have it printed here. However, you may access that information
                     // through typesList->Element->Space->Uri.
                     wprintf( L"%s:%s: %s", tempAttribute->Name->Space->PreferredPrefix,
-                        tempAttribute->Name->LocalName, tempAttribute->Value );
+                             tempAttribute->Name->LocalName, tempAttribute->Value );
                 }
 
                 wprintf( L"] " );
@@ -846,7 +846,7 @@ void PrintXmlElement
         }
 
         wprintf( L"\r\n" );
-        
+
         // We limit recursion level to 255 to avoid stack overflow problems
         // which can be a security risk.  In addition, we only print when a
         // child is present.
@@ -861,7 +861,7 @@ void PrintXmlElement
 
 void PrintXmlNode
 (   _In_opt_ WSDXML_NODE *node
-,   UINT indentLevel
+    ,   UINT indentLevel
 )
 {
     PrintIndentTabs( indentLevel );

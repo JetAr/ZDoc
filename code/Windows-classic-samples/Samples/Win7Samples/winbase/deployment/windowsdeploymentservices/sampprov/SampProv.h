@@ -1,4 +1,4 @@
-/*++
+﻿/*++
 
     Copyright (c) 2005 Microsoft Corporation
 
@@ -42,7 +42,7 @@ Environment:
 #define DHCP_REPLY_PACKET_SIZE              300
 
 //
-// This string is appended to DLL name to get the file name of configuration 
+// This string is appended to DLL name to get the file name of configuration
 // file.
 //
 #define CONFIG_FILE_SUFFIX                  L".sampprov.ini"

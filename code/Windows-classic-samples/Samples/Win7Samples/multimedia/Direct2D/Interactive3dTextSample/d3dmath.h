@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -18,9 +18,9 @@
 inline D3DXMATRIX* D3DMatrixIdentity(D3DXMATRIX *pOut)
 {
     pOut->m[0][1] = pOut->m[0][2] = pOut->m[0][3] =
-    pOut->m[1][0] = pOut->m[1][2] = pOut->m[1][3] =
-    pOut->m[2][0] = pOut->m[2][1] = pOut->m[2][3] =
-    pOut->m[3][0] = pOut->m[3][1] = pOut->m[3][2] = 0.0f;
+                                        pOut->m[1][0] = pOut->m[1][2] = pOut->m[1][3] =
+                                                pOut->m[2][0] = pOut->m[2][1] = pOut->m[2][3] =
+                                                        pOut->m[3][0] = pOut->m[3][1] = pOut->m[3][2] = 0.0f;
 
     pOut->m[0][0] = pOut->m[1][1] = pOut->m[2][2] = pOut->m[3][3] = 1.0f;
     return pOut;
@@ -37,10 +37,22 @@ inline D3DXMATRIX* D3DMatrixRotationY(D3DXMATRIX* pOut, float angle)
     float s, c;
     sincosf(angle, &s, &c);
 
-    pOut->_11 =    c; pOut->_12 = 0.0f; pOut->_13 =   -s; pOut->_14 = 0.0f;
-    pOut->_21 = 0.0f; pOut->_22 = 1.0f; pOut->_23 = 0.0f; pOut->_24 = 0.0f;
-    pOut->_31 =    s; pOut->_32 = 0.0f; pOut->_33 =    c; pOut->_34 = 0.0f;
-    pOut->_41 = 0.0f; pOut->_42 = 0.0f; pOut->_43 = 0.0f; pOut->_44 = 1.0f;
+    pOut->_11 =    c;
+    pOut->_12 = 0.0f;
+    pOut->_13 =   -s;
+    pOut->_14 = 0.0f;
+    pOut->_21 = 0.0f;
+    pOut->_22 = 1.0f;
+    pOut->_23 = 0.0f;
+    pOut->_24 = 0.0f;
+    pOut->_31 =    s;
+    pOut->_32 = 0.0f;
+    pOut->_33 =    c;
+    pOut->_34 = 0.0f;
+    pOut->_41 = 0.0f;
+    pOut->_42 = 0.0f;
+    pOut->_43 = 0.0f;
+    pOut->_44 = 1.0f;
 
     return pOut;
 }

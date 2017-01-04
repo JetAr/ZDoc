@@ -1,15 +1,15 @@
-/*
- 
+﻿/*
+
 Copyright (c) 1999 - 2000  Microsoft Corporation
 
 
 Module Name:
 
-    Processing.h 
+    Processing.h
 
 
-Abstract: 
-    
+Abstract:
+
     Declaration of the CTAPIEventNotification object
 
 */
@@ -48,14 +48,14 @@ public:
 
     HRESULT STDMETHODCALLTYPE Event(IN TAPI_EVENT TapiEvent,
                                     IN IDispatch *pEvent);
-    
+
 
     //
     // IUnknown
     //
 
     HRESULT STDMETHODCALLTYPE QueryInterface(IN REFIID iid,
-                                             OUT void **ppvObject)
+            OUT void **ppvObject)
     {
         if (iid == IID_ITTAPIEventNotification)
         {
@@ -74,7 +74,7 @@ public:
         return E_NOINTERFACE;
     }
 
-    
+
     //
     // reference counting needs to be thread safe
     //
@@ -85,8 +85,8 @@ public:
 
         return l;
     }
-    
-	ULONG STDMETHODCALLTYPE Release()
+
+    ULONG STDMETHODCALLTYPE Release()
     {
         ULONG l = InterlockedDecrement(&m_dwRefCount);
 
@@ -94,7 +94,7 @@ public:
         {
             delete this;
         }
-        
+
         return l;
     }
 
@@ -103,12 +103,12 @@ public:
 public:
 
 
-    CTAPIEventNotification() 
-    { 
+    CTAPIEventNotification()
+    {
 
         //
         // freshly created object has an outstanding reference count
-        // 
+        //
 
         m_dwRefCount = 1;
     }

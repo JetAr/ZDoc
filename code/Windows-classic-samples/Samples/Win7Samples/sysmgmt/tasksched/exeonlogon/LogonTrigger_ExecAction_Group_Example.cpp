@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -6,7 +6,7 @@
 // Copyright (c) Microsoft Corporation. All rights reserved
 
 /**********************************************************************
- This sample schedules a task to start notepad.exe when a user logs on. 
+ This sample schedules a task to start notepad.exe when a user logs on.
 **********************************************************************/
 
 #define _WIN32_DCOM
@@ -37,15 +37,15 @@ int __cdecl wmain()
 
     //  Set general COM security levels.
     hr = CoInitializeSecurity(
-        NULL,
-        -1,
-        NULL,
-        NULL,
-        RPC_C_AUTHN_LEVEL_PKT_PRIVACY,
-        RPC_C_IMP_LEVEL_IMPERSONATE,
-        NULL,
-        0,
-        NULL);
+             NULL,
+             -1,
+             NULL,
+             NULL,
+             RPC_C_AUTHN_LEVEL_PKT_PRIVACY,
+             RPC_C_IMP_LEVEL_IMPERSONATE,
+             NULL,
+             0,
+             NULL);
 
     if( FAILED(hr) )
     {
@@ -63,23 +63,23 @@ int __cdecl wmain()
 
 
     //  ------------------------------------------------------
-    //  Create an instance of the Task Service. 
+    //  Create an instance of the Task Service.
     ITaskService *pService = NULL;
     hr = CoCreateInstance( CLSID_TaskScheduler,
                            NULL,
                            CLSCTX_INPROC_SERVER,
                            IID_ITaskService,
-                           (void**)&pService );  
+                           (void**)&pService );
     if (FAILED(hr))
     {
-          printf("Failed to create an instance of ITaskService: %x", hr);
-          CoUninitialize();
-          return 1;
+        printf("Failed to create an instance of ITaskService: %x", hr);
+        CoUninitialize();
+        return 1;
     }
-        
+
     //  Connect to the task service.
     hr = pService->Connect(_variant_t(), _variant_t(),
-        _variant_t(), _variant_t());
+                           _variant_t(), _variant_t());
     if( FAILED(hr) )
     {
         printf("ITaskService::Connect failed: %x", hr );
@@ -92,7 +92,7 @@ int __cdecl wmain()
     //  Get the pointer to the root task folder.  This folder will hold the
     //  new task that is registered.
     ITaskFolder *pRootFolder = NULL;
-    hr = pService->GetFolder( _bstr_t( L"\\") , &pRootFolder );
+    hr = pService->GetFolder( _bstr_t( L"\\"), &pRootFolder );
     if( FAILED(hr) )
     {
         printf("Cannot get Root Folder pointer: %x", hr );
@@ -100,10 +100,10 @@ int __cdecl wmain()
         CoUninitialize();
         return 1;
     }
-    
+
     //  If the same task exists, remove it.
     pRootFolder->DeleteTask( _bstr_t( wszTaskName), 0  );
-    
+
     //  Create the task builder object to create the task.
     ITaskDefinition *pTask = NULL;
     hr = pService->NewTask( 0, &pTask );
@@ -116,7 +116,7 @@ int __cdecl wmain()
         CoUninitialize();
         return 1;
     }
-        
+
     //  ------------------------------------------------------
     //  Get the registration info for setting the identification.
     IRegistrationInfo *pRegInfo= NULL;
@@ -129,9 +129,9 @@ int __cdecl wmain()
         CoUninitialize();
         return 1;
     }
-    
+
     hr = pRegInfo->put_Author(L"Author Name");
-    pRegInfo->Release();  
+    pRegInfo->Release();
     if( FAILED(hr) )
     {
         printf("\nCannot put identification info: %x", hr );
@@ -153,7 +153,7 @@ int __cdecl wmain()
         CoUninitialize();
         return 1;
     }
-    
+
     //  ------------------------------------------------------
     //  Get the trigger collection to insert the logon trigger.
     ITriggerCollection *pTriggerCollection = NULL;
@@ -180,9 +180,9 @@ int __cdecl wmain()
         return 1;
     }
 
-    ILogonTrigger *pLogonTrigger = NULL;       
-    hr = pTrigger->QueryInterface( 
-            IID_ILogonTrigger, (void**) &pLogonTrigger );
+    ILogonTrigger *pLogonTrigger = NULL;
+    hr = pTrigger->QueryInterface(
+             IID_ILogonTrigger, (void**) &pLogonTrigger );
     pTrigger->Release();
     if( FAILED(hr) )
     {
@@ -192,22 +192,22 @@ int __cdecl wmain()
         CoUninitialize();
         return 1;
     }
-    
+
     hr = pLogonTrigger->put_Id( _bstr_t( L"Trigger1" ) );
     if( FAILED(hr) )
-       printf("\nCannot put the trigger ID: %x", hr);
-    
-    //  Set the task to start at a certain time. The time 
+        printf("\nCannot put the trigger ID: %x", hr);
+
+    //  Set the task to start at a certain time. The time
     //  format should be YYYY-MM-DDTHH:MM:SS(+-)(timezone).
     //  For example, the start boundary below
     //  is January 1st 2005 at 12:05
-	//  The task does not have an end boundary.
+    //  The task does not have an end boundary.
     hr = pLogonTrigger->put_StartBoundary( _bstr_t(L"2005-01-01T12:05:00") );
     if( FAILED(hr) )
-       printf("\nCannot put the start boundary: %x", hr);
+        printf("\nCannot put the start boundary: %x", hr);
 
-	//  ------------------------------------------------------
-    //  Add an Action to the task. This task will run notepad.exe.     
+    //  ------------------------------------------------------
+    //  Add an Action to the task. This task will run notepad.exe.
     IActionCollection *pActionCollection = NULL;
 
     //  Get the task action collection pointer.
@@ -220,7 +220,7 @@ int __cdecl wmain()
         CoUninitialize();
         return 1;
     }
-        
+
     //  Create the action, specifying that it is an executable action.
     IAction *pAction = NULL;
     hr = pActionCollection->Create( TASK_ACTION_EXEC, &pAction );
@@ -236,8 +236,8 @@ int __cdecl wmain()
 
     IExecAction *pExecAction = NULL;
     //  QI for the executable task pointer.
-    hr = pAction->QueryInterface( 
-        IID_IExecAction, (void**) &pExecAction );
+    hr = pAction->QueryInterface(
+             IID_IExecAction, (void**) &pExecAction );
     pAction->Release();
     if( FAILED(hr) )
     {
@@ -259,20 +259,20 @@ int __cdecl wmain()
         CoUninitialize();
         return 1;
     }
-    
+
     //  ------------------------------------------------------
     //  Save the task in the root folder.
     IRegisteredTask *pRegisteredTask = NULL;
-    
+
     hr = pRootFolder->RegisterTaskDefinition(
-            _bstr_t( wszTaskName ),
-            pTask,
-            TASK_CREATE_OR_UPDATE, 
-            _variant_t(L"Builtin\\Users"), 
-            _variant_t(), 
-            TASK_LOGON_GROUP,
-            _variant_t(L""),
-            &pRegisteredTask);
+             _bstr_t( wszTaskName ),
+             pTask,
+             TASK_CREATE_OR_UPDATE,
+             _variant_t(L"Builtin\\Users"),
+             _variant_t(),
+             TASK_LOGON_GROUP,
+             _variant_t(L""),
+             &pRegisteredTask);
     if( FAILED(hr) )
     {
         printf("\nError saving the Task : %x", hr );
@@ -281,7 +281,7 @@ int __cdecl wmain()
         CoUninitialize();
         return 1;
     }
-    
+
     printf("\n Success! Task successfully registered. " );
 
     // Clean up

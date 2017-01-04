@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -31,41 +31,45 @@ BOOL SetAccessPermissions(HKEY, PSECURITY_DESCRIPTOR);
 class RegistrationClass : public IClassFactory
 {
 public:
-	RegistrationClass(void);
-	~RegistrationClass(void);
+    RegistrationClass(void);
+    ~RegistrationClass(void);
 
-	//IUnkown
-	STDMETHODIMP QueryInterface(REFIID riid, void **ppv);
-	STDMETHODIMP_(ULONG) AddRef(void);
-	STDMETHODIMP_(ULONG) Release(void);
-	
-	//IClassFactory
-	STDMETHODIMP  CreateInstance(IUnknown *pUnkOuter, REFIID riid, void **ppv);
-	STDMETHODIMP LockServer(BOOL bLock) { return S_FALSE; }
+    //IUnkown
+    STDMETHODIMP QueryInterface(REFIID riid, void **ppv);
+    STDMETHODIMP_(ULONG) AddRef(void);
+    STDMETHODIMP_(ULONG) Release(void);
+
+    //IClassFactory
+    STDMETHODIMP  CreateInstance(IUnknown *pUnkOuter, REFIID riid, void **ppv);
+    STDMETHODIMP LockServer(BOOL bLock)
+    {
+        return S_FALSE;
+    }
 
 };
 
-class RegisterImpl :	
-	public IDllRegister,
-	public IExeRegister{
-	LONG m_ref;
+class RegisterImpl :
+    public IDllRegister,
+    public IExeRegister
+{
+    LONG m_ref;
 public:
-	RegisterImpl(void);
-	~RegisterImpl(void);
+    RegisterImpl(void);
+    ~RegisterImpl(void);
 
-	//IUnknown
-	STDMETHODIMP QueryInterface(REFIID, void **);
-	STDMETHODIMP_(ULONG) AddRef(void);
-	STDMETHODIMP_(ULONG) Release(void);
+    //IUnknown
+    STDMETHODIMP QueryInterface(REFIID, void **);
+    STDMETHODIMP_(ULONG) AddRef(void);
+    STDMETHODIMP_(ULONG) Release(void);
 
-	//IDllRegister
-	//RequiresElevation
-	STDMETHODIMP RegisterDll(BSTR);
-	STDMETHODIMP UnRegisterDll(BSTR);
-	//IExeRegister
-	STDMETHODIMP RegisterExe(BSTR, HWND);
-	STDMETHODIMP UnregisterExe(BSTR, HWND);
+    //IDllRegister
+    //RequiresElevation
+    STDMETHODIMP RegisterDll(BSTR);
+    STDMETHODIMP UnRegisterDll(BSTR);
+    //IExeRegister
+    STDMETHODIMP RegisterExe(BSTR, HWND);
+    STDMETHODIMP UnregisterExe(BSTR, HWND);
 private:
-	STDMETHODIMP OpenAndExecuteDll(BSTR, LPCSTR);
-	STDMETHODIMP VerifyAndExecuteExe(BSTR, HWND, const LPCTSTR);
+    STDMETHODIMP OpenAndExecuteDll(BSTR, LPCSTR);
+    STDMETHODIMP VerifyAndExecuteExe(BSTR, HWND, const LPCTSTR);
 };

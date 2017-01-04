@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -72,7 +72,7 @@ private:
     CAtlArray<IMFAttributes*> m_arrNodeAttributes;
 };
 
-class CTedSourceMemo : public CTedNodeMemo 
+class CTedSourceMemo : public CTedNodeMemo
 {
     friend class CTedSourceNode;
 public:
@@ -81,12 +81,12 @@ public:
     HRESULT Deserialize(ITedDataLoader* pLoader);
 
 protected:
-     CTedSourceMemo(double x, double y, const CAtlStringW& strLabel, int nID, const CAtlStringW& strSourceURL);
+    CTedSourceMemo(double x, double y, const CAtlStringW& strLabel, int nID, const CAtlStringW& strSourceURL);
 private:
     CAtlStringW m_strSourceURL;
 };
 
-class CTedOutputMemo : public CTedNodeMemo 
+class CTedOutputMemo : public CTedNodeMemo
 {
     friend class CTedOutputNode;
 public:
@@ -99,7 +99,7 @@ protected:
     CTedOutputMemo(double x, double y, const CAtlStringW& strLabel, int nID);
 };
 
-class CTedAudioOutputMemo : public CTedOutputMemo 
+class CTedAudioOutputMemo : public CTedOutputMemo
 {
     friend class CTedAudioOutputNode;
 public:
@@ -111,10 +111,10 @@ public:
 protected:
     CTedAudioOutputMemo(double x, double y, const CAtlStringW& strLabel, int nID);
 private:
-    
+
 };
 
-class CTedVideoOutputMemo : public CTedOutputMemo 
+class CTedVideoOutputMemo : public CTedOutputMemo
 {
     friend class CTedVideoOutputNode;
 public:
@@ -126,10 +126,10 @@ public:
 protected:
     CTedVideoOutputMemo(double x, double y, const CAtlStringW& strLabel, int nID);
 private:
-    
+
 };
 
-class CTedCustomOutputMemo : public CTedOutputMemo 
+class CTedCustomOutputMemo : public CTedOutputMemo
 {
     friend class CTedCustomOutputNode;
 public:
@@ -141,13 +141,13 @@ public:
 protected:
     CTedCustomOutputMemo(double x, double y, const CAtlStringW& strLabel, int nID, GUID gidCustomSinkID);
 private:
-        GUID m_gidCustomSinkID;
+    GUID m_gidCustomSinkID;
 };
 
-class CTedTransformMemo : public CTedNodeMemo 
+class CTedTransformMemo : public CTedNodeMemo
 {
     friend class CTedTransformNode;
- public:
+public:
     CTedTransformMemo();
 
     HRESULT Serialize(ITedDataSaver* pSaver);
@@ -159,7 +159,7 @@ private:
     CLSID m_clsid;
 };
 
-class CTedTeeMemo : public CTedNodeMemo 
+class CTedTeeMemo : public CTedNodeMemo
 {
     friend class CTedTeeNode;
 public:
@@ -174,7 +174,7 @@ private:
     int m_nNextOutputIndex;
 };
 
-class CTedConnectionMemo 
+class CTedConnectionMemo
 {
     friend class CTedTopologyConnection;
 public:
@@ -182,7 +182,7 @@ public:
 
     HRESULT Serialize(ITedDataSaver* pSaver);
     HRESULT Deserialize(ITedDataLoader* pLoader);
-    
+
 protected:
     CTedConnectionMemo(int nOutputNodeID, int nOutputPinID, int nInputNodeID, int nInputPinID);
 private:

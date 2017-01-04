@@ -1,4 +1,4 @@
-//------------------------------------------------------------
+﻿//------------------------------------------------------------
 // Copyright (c) Microsoft Corporation.  All rights reserved.
 //------------------------------------------------------------
 
@@ -11,16 +11,16 @@
 #include "string.h"
 #include <intsafe.h>
 #include "SessionBasedCalculatorService.wsdl.h"
-HANDLE closeServer = NULL;  
-class SessionfulCalculator 
+HANDLE closeServer = NULL;
+class SessionfulCalculator
 {
     int total;
 
 public:
     static HRESULT CALLBACK Add(
-        __in const WS_OPERATION_CONTEXT* context, 
-        __in int a, 
-        __in_opt const WS_ASYNC_CONTEXT* asyncContext, 
+        __in const WS_OPERATION_CONTEXT* context,
+        __in int a,
+        __in_opt const WS_ASYNC_CONTEXT* asyncContext,
         __in_opt WS_ERROR* error)
     {
         UNREFERENCED_PARAMETER(asyncContext);
@@ -28,24 +28,24 @@ public:
         HRESULT hr = S_OK;
         SessionfulCalculator* calculator = NULL;
         hr = WsGetOperationContextProperty(
-                context, 
-                WS_OPERATION_CONTEXT_PROPERTY_CHANNEL_USER_STATE, 
-                &calculator, 
-                sizeof(SessionfulCalculator*), 
-                error);
-if (FAILED(hr))
-{
-    goto Exit;
-}
+                 context,
+                 WS_OPERATION_CONTEXT_PROPERTY_CHANNEL_USER_STATE,
+                 &calculator,
+                 sizeof(SessionfulCalculator*),
+                 error);
+        if (FAILED(hr))
+        {
+            goto Exit;
+        }
         hr = calculator->Add(a);
-    Exit:
+Exit:
         return hr;
     }
 
     static HRESULT CALLBACK Subtract(
-        __in const WS_OPERATION_CONTEXT* context, 
-        __in int a, 
-        __in_opt const WS_ASYNC_CONTEXT* asyncContext, 
+        __in const WS_OPERATION_CONTEXT* context,
+        __in int a,
+        __in_opt const WS_ASYNC_CONTEXT* asyncContext,
         __in_opt WS_ERROR* error)
     {
         UNREFERENCED_PARAMETER(asyncContext);
@@ -53,23 +53,23 @@ if (FAILED(hr))
         HRESULT hr = S_OK;
         SessionfulCalculator* calculator = NULL;
         hr = WsGetOperationContextProperty(
-                context, 
-                WS_OPERATION_CONTEXT_PROPERTY_CHANNEL_USER_STATE, 
-                &calculator, 
-                sizeof(SessionfulCalculator*), 
-                error);
-if (FAILED(hr))
-{
-    goto Exit;
-}
+                 context,
+                 WS_OPERATION_CONTEXT_PROPERTY_CHANNEL_USER_STATE,
+                 &calculator,
+                 sizeof(SessionfulCalculator*),
+                 error);
+        if (FAILED(hr))
+        {
+            goto Exit;
+        }
         hr = calculator->Subtract(a);
-    Exit:
+Exit:
         return hr;
     }
 
     static HRESULT CALLBACK Clear(
-        __in const WS_OPERATION_CONTEXT* context, 
-        __in const WS_ASYNC_CONTEXT* asyncContext, 
+        __in const WS_OPERATION_CONTEXT* context,
+        __in const WS_ASYNC_CONTEXT* asyncContext,
         __in_opt WS_ERROR* error)
     {
         UNREFERENCED_PARAMETER(asyncContext);
@@ -77,24 +77,24 @@ if (FAILED(hr))
         HRESULT hr = S_OK;
         SessionfulCalculator* calculator = NULL;
         hr = WsGetOperationContextProperty(
-                context, 
-                WS_OPERATION_CONTEXT_PROPERTY_CHANNEL_USER_STATE, 
-                &calculator, 
-                sizeof(SessionfulCalculator*), 
-                error);
-if (FAILED(hr))
-{
-    goto Exit;
-}
+                 context,
+                 WS_OPERATION_CONTEXT_PROPERTY_CHANNEL_USER_STATE,
+                 &calculator,
+                 sizeof(SessionfulCalculator*),
+                 error);
+        if (FAILED(hr))
+        {
+            goto Exit;
+        }
         hr = calculator->Clear();
-    Exit:
+Exit:
         return hr;
     }
 
     static HRESULT CALLBACK Total(
-        __in const WS_OPERATION_CONTEXT* context, 
-        __out int* total, 
-        __in_opt const WS_ASYNC_CONTEXT* asyncContext, 
+        __in const WS_OPERATION_CONTEXT* context,
+        __out int* total,
+        __in_opt const WS_ASYNC_CONTEXT* asyncContext,
         __in_opt WS_ERROR* error)
     {
         UNREFERENCED_PARAMETER(asyncContext);
@@ -102,17 +102,17 @@ if (FAILED(hr))
         HRESULT hr = S_OK;
         SessionfulCalculator* calculator = NULL;
         hr = WsGetOperationContextProperty(
-                context, 
-                WS_OPERATION_CONTEXT_PROPERTY_CHANNEL_USER_STATE, 
-                &calculator, 
-                sizeof(SessionfulCalculator*), 
-                error);
-if (FAILED(hr))
-{
-    goto Exit;
-}
+                 context,
+                 WS_OPERATION_CONTEXT_PROPERTY_CHANNEL_USER_STATE,
+                 &calculator,
+                 sizeof(SessionfulCalculator*),
+                 error);
+        if (FAILED(hr))
+        {
+            goto Exit;
+        }
         hr = calculator->Total(total);
-    Exit:
+Exit:
         return hr;
     }
 
@@ -121,9 +121,9 @@ private:
         __in int a)
     {
         wprintf(L"Adding %d to a total of %d\n", a, total);
-        
+
         total += a;
-        
+
         fflush(stdout);
         return S_OK;
     }
@@ -132,9 +132,9 @@ private:
         __in int a)
     {
         wprintf(L"Subtracting %d from a total of %d\n", a, total);
-        
+
         total -= a;
-        
+
         fflush(stdout);
         return S_OK;
     }
@@ -143,7 +143,7 @@ private:
     {
         total = 0;
         wprintf(L"Cleared!\n");
-        
+
         fflush(stdout);
         return S_OK;
     }
@@ -156,11 +156,11 @@ private:
         fflush(stdout);
         return S_OK;
     }
-};      
+};
 
 // Print out rich error info
 void PrintError(
-    __in HRESULT errorCode, 
+    __in HRESULT errorCode,
     __in_opt WS_ERROR* error)
 {
     wprintf(L"Failure: errorCode=0x%lx\n", errorCode);
@@ -200,9 +200,9 @@ Exit:
 }
 
 HRESULT CALLBACK CreateSessionCalculator(
-    __in const WS_OPERATION_CONTEXT* context, 
-    __deref_out void** channelState, 
-    __in_opt const WS_ASYNC_CONTEXT* asyncContext, 
+    __in const WS_OPERATION_CONTEXT* context,
+    __deref_out void** channelState,
+    __in_opt const WS_ASYNC_CONTEXT* asyncContext,
     __in_opt WS_ERROR* error)
 {
     UNREFERENCED_PARAMETER(context);
@@ -224,39 +224,40 @@ HRESULT CALLBACK CreateSessionCalculator(
 }
 
 HRESULT CALLBACK FreeSessionCalculator(
-    __in const WS_OPERATION_CONTEXT* context, 
+    __in const WS_OPERATION_CONTEXT* context,
     __in const WS_ASYNC_CONTEXT* asyncContext)
 {
     UNREFERENCED_PARAMETER(asyncContext);
 
     SessionfulCalculator* calculator = NULL;
     WsGetOperationContextProperty(
-        context, 
-        WS_OPERATION_CONTEXT_PROPERTY_CHANNEL_USER_STATE, 
-        &calculator, 
-        sizeof(SessionfulCalculator*), 
+        context,
+        WS_OPERATION_CONTEXT_PROPERTY_CHANNEL_USER_STATE,
+        &calculator,
+        sizeof(SessionfulCalculator*),
         NULL);
     if (calculator != NULL)
-    {    
+    {
         wprintf(L"Deleting Calculator instance\n");
         delete calculator;
     }
-    
+
     SetEvent(closeServer);
     return S_OK;
 }
 
-static const 
-CalculatorBindingFunctionTable 
-calculatorFunctions = {
-    SessionfulCalculator::Add, 
-    SessionfulCalculator::Subtract, 
+static const
+CalculatorBindingFunctionTable
+calculatorFunctions =
+{
+    SessionfulCalculator::Add,
+    SessionfulCalculator::Subtract,
     SessionfulCalculator::Total,
-    SessionfulCalculator::Clear 
+    SessionfulCalculator::Clear
 };
 
 // Method contract for the service
-static const WS_SERVICE_CONTRACT calculatorServiceContract = 
+static const WS_SERVICE_CONTRACT calculatorServiceContract =
 {
     &SessionBasedCalculatorService_wsdl.contracts.CalculatorBinding, // comes from the generated header.
     NULL, // for not specifying the default contract
@@ -267,7 +268,7 @@ static const WS_SERVICE_CONTRACT calculatorServiceContract =
 // Main entry point
 int __cdecl wmain()
 {
-    
+
     HRESULT hr = S_OK;
     WS_SERVICE_HOST* host = NULL;
     WS_SERVICE_ENDPOINT serviceEndpoint = {};
@@ -277,15 +278,15 @@ int __cdecl wmain()
     WS_SERVICE_ENDPOINT_PROPERTY serviceProperties[2];
     WS_SERVICE_PROPERTY_ACCEPT_CALLBACK acceptCallbackProperty = {CreateSessionCalculator};
     WS_SERVICE_PROPERTY_CLOSE_CALLBACK closeCallbackProperty = {FreeSessionCalculator};
-    
+
     serviceProperties[0].id = WS_SERVICE_ENDPOINT_PROPERTY_ACCEPT_CHANNEL_CALLBACK;
     serviceProperties[0].value = &acceptCallbackProperty;
     serviceProperties[0].valueSize = sizeof(acceptCallbackProperty);
     serviceProperties[1].id = WS_SERVICE_ENDPOINT_PROPERTY_CLOSE_CHANNEL_CALLBACK;
     serviceProperties[1].value = &closeCallbackProperty;
     serviceProperties[1].valueSize = sizeof(closeCallbackProperty);
-    
-    
+
+
     // Initialize service endpoint
     serviceEndpoint.address.url.chars = L"net.tcp://+/example"; // address given as uri
     serviceEndpoint.address.url.length = (ULONG)wcslen(serviceEndpoint.address.url.chars);
@@ -296,41 +297,41 @@ int __cdecl wmain()
     serviceEndpoint.propertyCount = WsCountOf(serviceProperties);
     // Create an error object for storing rich error information
     hr = WsCreateError(
-        NULL, 
-        0, 
-        &error);
+             NULL,
+             0,
+             &error);
     if (FAILED(hr))
     {
         goto Exit;
     }
     // Create Event object for closing the server
     closeServer = CreateEvent(
-        NULL, 
-        TRUE, 
-        FALSE, 
-        NULL);
+                      NULL,
+                      TRUE,
+                      FALSE,
+                      NULL);
     if (closeServer == NULL)
     {
         hr = HRESULT_FROM_WIN32(GetLastError());
         goto Exit;
-    }   
+    }
     // Creating a service host
     hr = WsCreateServiceHost(
-        serviceEndpoints, 
-        1, 
-        NULL, 
-        0, 
-        &host, 
-        error);
+             serviceEndpoints,
+             1,
+             NULL,
+             0,
+             &host,
+             error);
     if (FAILED(hr))
     {
         goto Exit;
     }
-    // WsOpenServiceHost to start the listeners in the service host 
+    // WsOpenServiceHost to start the listeners in the service host
     hr = WsOpenServiceHost(
-        host, 
-        NULL, 
-        error);
+             host,
+             NULL,
+             error);
     if (FAILED(hr))
     {
         goto Exit;
@@ -342,7 +343,7 @@ int __cdecl wmain()
     {
         goto Exit;
     }
-    
+
 Exit:
     if (FAILED(hr))
     {
@@ -353,8 +354,8 @@ Exit:
     {
         WsFreeServiceHost(host);
     }
-    
-    
+
+
     if (error != NULL)
     {
         WsFreeError(error);

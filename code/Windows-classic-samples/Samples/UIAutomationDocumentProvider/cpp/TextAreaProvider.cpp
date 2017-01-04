@@ -1,4 +1,4 @@
-// Copyright (c) Microsoft Corporation
+﻿// Copyright (c) Microsoft Corporation
 //
 #include <windows.h>
 #include <ole2.h>
@@ -136,20 +136,20 @@ HRESULT STDMETHODCALLTYPE TextAreaProvider::GetPropertyValue(PROPERTYID idProp, 
     }
     else if (idProp == UIA_NamePropertyId)
     {
-         // In a production application, this would be localized text.
-         retVal->bstrVal = SysAllocString(L"Text Area");
-         if (retVal->bstrVal != NULL)
-         {
+        // In a production application, this would be localized text.
+        retVal->bstrVal = SysAllocString(L"Text Area");
+        if (retVal->bstrVal != NULL)
+        {
             retVal->vt = VT_BSTR;
-         } 
+        }
     }
     else if (idProp == UIA_AutomationIdPropertyId)
     {
-         retVal->bstrVal = SysAllocString(L"Text Area");
-         if (retVal->bstrVal != NULL)
-         {
+        retVal->bstrVal = SysAllocString(L"Text Area");
+        if (retVal->bstrVal != NULL)
+        {
             retVal->vt = VT_BSTR;
-         } 
+        }
     }
     else if (idProp == UIA_IsControlElementPropertyId)
     {
@@ -193,7 +193,7 @@ HRESULT STDMETHODCALLTYPE TextAreaProvider::get_HostRawElementProvider(_Outptr_r
 
     *retVal = NULL;
 
-    return S_OK; 
+    return S_OK;
 }
 
 HRESULT STDMETHODCALLTYPE TextAreaProvider::Navigate(NavigateDirection direction, _Outptr_result_maybenull_ IRawElementProviderFragment ** retVal)
@@ -362,7 +362,7 @@ HRESULT STDMETHODCALLTYPE TextAreaProvider::RangeFromChild(_In_opt_ IRawElementP
     {
         return UIA_E_ELEMENTNOTAVAILABLE;
     }
-    
+
     // There are no children of this text control
     *retVal = NULL;
     return S_OK;
@@ -447,7 +447,7 @@ HRESULT STDMETHODCALLTYPE TextAreaProvider::RangeFromAnnotation(_In_opt_ IRawEle
     {
         annotation = _control->GetAnnotation(annotationId);
 
-        // Points to a non-existant annotation 
+        // Points to a non-existant annotation
         if (annotation == NULL)
         {
             hr = E_INVALIDARG;
@@ -463,7 +463,7 @@ HRESULT STDMETHODCALLTYPE TextAreaProvider::RangeFromAnnotation(_In_opt_ IRawEle
         {
             annotationRange.end.character = lineLength;
         }
-    
+
         *retVal = new TextAreaTextRange(_hwnd, _control, annotationRange);
         hr = (*retVal == NULL) ? E_OUTOFMEMORY : S_OK;
     }
@@ -550,8 +550,8 @@ HRESULT STDMETHODCALLTYPE TextAreaTextRange::Compare(_In_opt_ ITextRangeProvider
         if (SUCCEEDED(range->QueryInterface(IID_PPV_ARGS(&rangeInternal))))
         {
             if (_hwnd == rangeInternal->_hwnd &&
-                QuickCompareEndpoints(rangeInternal->_range.begin, _range.begin) == 0 &&
-                QuickCompareEndpoints(rangeInternal->_range.end, _range.end) == 0)
+                    QuickCompareEndpoints(rangeInternal->_range.begin, _range.begin) == 0 &&
+                    QuickCompareEndpoints(rangeInternal->_range.end, _range.end) == 0)
             {
                 *retVal = TRUE;
             }
@@ -605,7 +605,7 @@ HRESULT STDMETHODCALLTYPE TextAreaTextRange::ExpandToEnclosingUnit(_In_ TextUnit
     {
         _range.end = _range.begin;
         _range.end.character++;
-        
+
         if (_range.end.character > _control->GetLineLength(_range.begin.line))
         {
             if (_range.end.line + 1 >= _control->GetLineCount())
@@ -754,7 +754,7 @@ HRESULT STDMETHODCALLTYPE TextAreaTextRange::GetAttributeValue(_In_ TEXTATTRIBUT
     else
     {
         if ( textAttributeId == UIA_AnnotationTypesAttributeId ||
-             textAttributeId == UIA_AnnotationObjectsAttributeId )
+                textAttributeId == UIA_AnnotationObjectsAttributeId )
         {
             int *annotationIds;
             int annotationCount;
@@ -807,7 +807,7 @@ HRESULT STDMETHODCALLTYPE TextAreaTextRange::GetAttributeValue(_In_ TEXTATTRIBUT
                                 retVal->parray = NULL;
                                 hr = E_OUTOFMEMORY;
                             }
-                            
+
                             if (provider != NULL)
                             {
                                 provider->Release();
@@ -843,7 +843,8 @@ HRESULT TextAreaTextRange::SafeArrayInsertRect(_In_ SAFEARRAY * sa, _In_ RectF r
     RECT rc = {static_cast<int>(rect.X),
                static_cast<int>(rect.Y),
                static_cast<int>(rect.GetRight()),
-               static_cast<int>(rect.GetBottom())};
+               static_cast<int>(rect.GetBottom())
+              };
 
     // Convert from Client coordinates to desktop coordinates
     MapWindowPoints(_hwnd, NULL, reinterpret_cast<POINT *>(&rc), 2);
@@ -896,7 +897,7 @@ HRESULT STDMETHODCALLTYPE TextAreaTextRange::GetBoundingRectangles(_Outptr_resul
             {
                 break;
             }
-    
+
             if (current.line < _range.end.line)
             {
                 int length = _control->GetLineLength(current.line);
@@ -1087,7 +1088,7 @@ HRESULT STDMETHODCALLTYPE TextAreaTextRange::GetText(_In_ int maxLength, _Out_ B
     {
         hr = E_OUTOFMEMORY;
     }
-        
+
     return hr;
 }
 
@@ -1261,7 +1262,7 @@ bool TextAreaTextRange::CheckEndPointIsUnitEndpoint(_In_ EndPoint check, _In_ Te
     EndPoint next;
     EndPoint prev;
     if (!_control->StepCharacter(check, true, &next) ||
-        !_control->StepCharacter(check, false, &prev))
+            !_control->StepCharacter(check, false, &prev))
     {
         // If we're at the beginning or end, we're at an endpoint
         return true;
@@ -1291,7 +1292,7 @@ bool TextAreaTextRange::CheckEndPointIsUnitEndpoint(_In_ EndPoint check, _In_ Te
     {
         bool matching = true;
         bool checkedLineBoundary = false;
-        
+
         // There are limited attributes that vary in this control
         // If its not one of those attributes, then it is not an Endpoint
         // unless it's the document start or end, which is checked above
@@ -1454,7 +1455,7 @@ EndPoint TextAreaTextRange::Walk(_In_ EndPoint start, _In_ bool forward, _In_ Te
     {
         *walked = -*walked;
     }
-    
+
     return current;
 }
 
@@ -1471,9 +1472,9 @@ bool TextAreaTextRange::GetAnnotationsAtPoint(_In_ EndPoint endPoint, _Outptr_re
         if (annotation != NULL)
         {
             if (annotation->line == endPoint.line &&
-                endPoint.character >= annotation->start_char &&
-                (endPoint.character < annotation->start_char + annotation->length ||
-                 annotation->length == -1))
+                    endPoint.character >= annotation->start_char &&
+                    (endPoint.character < annotation->start_char + annotation->length ||
+                     annotation->length == -1))
             {
                 atPointCount++;
             }
@@ -1492,9 +1493,9 @@ bool TextAreaTextRange::GetAnnotationsAtPoint(_In_ EndPoint endPoint, _Outptr_re
         if (annotation != NULL)
         {
             if (annotation->line == endPoint.line &&
-                endPoint.character >= annotation->start_char &&
-                (endPoint.character < annotation->start_char + annotation->length ||
-                 annotation->length == -1))
+                    endPoint.character >= annotation->start_char &&
+                    (endPoint.character < annotation->start_char + annotation->length ||
+                     annotation->length == -1))
             {
                 (*annotationIds)[*annotationCount] = i;
                 (*annotationCount)++;

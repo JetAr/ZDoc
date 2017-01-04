@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -311,7 +311,7 @@ inline HRESULT PrintSpellingOptions(_In_ ISpellChecker* spellChecker)
     wprintf(L"Options:\n");
     IEnumString* enumOptionIds = nullptr;
     HRESULT hr = spellChecker->get_OptionIds(&enumOptionIds);
-    
+
     while (S_OK == hr)
     {
         LPOLESTR optionId = nullptr;

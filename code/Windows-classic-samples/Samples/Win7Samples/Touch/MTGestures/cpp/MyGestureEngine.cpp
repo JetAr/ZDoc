@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -13,8 +13,8 @@
 // in:
 //      pcRect - pointer to the CDrawingObject class (rectangle)
 CMyGestureEngine::CMyGestureEngine(CDrawingObject* pcRect)
-:    CGestureEngine(),
-    _pcRect(pcRect)
+    :    CGestureEngine(),
+         _pcRect(pcRect)
 {
 }
 
@@ -42,7 +42,7 @@ void CMyGestureEngine::ProcessTwoFingerTap()
 }
 
 // Zoom command
-// in: 
+// in:
 //      dZoomFactor - scaling factor of zoom in/out
 //      lZx         - x-coordinate of zoom center
 //      lZy         - y-coordinate of zoom center

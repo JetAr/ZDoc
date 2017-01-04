@@ -1,4 +1,4 @@
-//////////////////////////////////////////////////////////////////////////////
+﻿//////////////////////////////////////////////////////////////////////////////
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -12,7 +12,7 @@
 // A simple command line tool for creating a security descriptor with
 // resource attribute ACEs and a CAP ID ACE, then calling AuthzAccessCheck
 // on that security descriptor to display the resulting access rights granted.
-// 
+//
 // The caller can specify the resource attributes to use by either:
 //     1. Supplying resource attributes through the command line, in the form
 //        (Name,ValueType,Flags,Value1,Value2...)
@@ -41,19 +41,19 @@
 #include "ResourceAttributesSample.h"
 
 
-_Success_(return == TRUE) 
+_Success_(return == TRUE)
 BOOL
 CreateSecurityDescriptor(
-    _In_        PSID                          CapIDSid, 
+    _In_        PSID                          CapIDSid,
     _In_reads_(ResourceAttributeCt) PCLAIM_SECURITY_ATTRIBUTE_V1* ResourceAttributes,
     _In_        DWORD                         ResourceAttributeCt,
     _Outptr_    PSECURITY_DESCRIPTOR*         SecurityDescriptorResult
-    )
+)
 /*++
 
 Routine Description:
 
-    Creates a self-relative security descriptor (SD) with System as the 
+    Creates a self-relative security descriptor (SD) with System as the
     owner and group. The DACL of the SD grants everyone full control, and
     a SACL is created with a CAPID ACE and resource attribute ACEs and added
     to the SD.
@@ -89,8 +89,8 @@ Return Value:
     CLAIM_SECURITY_ATTRIBUTES_INFORMATION ClaimInfo   = {0};
 
     if (SecurityDescriptorResult == NULL ||
-        CapIDSid                 == NULL ||
-        ResourceAttributes       == NULL)
+            CapIDSid                 == NULL ||
+            ResourceAttributes       == NULL)
     {
         wprintf(L"ERROR: Invalid argument\n");
         goto Cleanup;
@@ -104,36 +104,36 @@ Return Value:
 
     // Initialize the security descriptor
     if (!InitializeSecurityDescriptor(
-                &SecurityDescriptor, 
+                &SecurityDescriptor,
                 SECURITY_DESCRIPTOR_REVISION))
     {
-        PrintErrorMessage(L"ERROR: InitializeSecurityDescriptor Error", 
+        PrintErrorMessage(L"ERROR: InitializeSecurityDescriptor Error",
                           GetLastError());
         goto Cleanup;
     }
 
     // Create the sytem SID for the security descriptor owner/group
     if(!AllocateAndInitializeSid(
-            &SIDAuthNt,
-            1,
-            SECURITY_LOCAL_SYSTEM_RID,
-            0, 0, 0, 0, 0, 0, 0,
-            &SystemSID))
+                &SIDAuthNt,
+                1,
+                SECURITY_LOCAL_SYSTEM_RID,
+                0, 0, 0, 0, 0, 0, 0,
+                &SystemSID))
     {
-        PrintErrorMessage(L"ERROR: AllocateAndInitializeSid Error", 
+        PrintErrorMessage(L"ERROR: AllocateAndInitializeSid Error",
                           GetLastError());
         goto Cleanup;
     }
 
     // Create the everyone SID
     if(!AllocateAndInitializeSid(
-            &SIDAuthWorld,
-            1,
-            SECURITY_WORLD_RID,
-            0, 0, 0, 0, 0, 0, 0,
-            &EveryoneSID))
+                &SIDAuthWorld,
+                1,
+                SECURITY_WORLD_RID,
+                0, 0, 0, 0, 0, 0, 0,
+                &EveryoneSID))
     {
-        PrintErrorMessage(L"ERROR: AllocateAndInitializeSid Error", 
+        PrintErrorMessage(L"ERROR: AllocateAndInitializeSid Error",
                           GetLastError());
         goto Cleanup;
     }
@@ -141,7 +141,7 @@ Return Value:
     // Set the owner of the security descriptor to System.
     if (!SetSecurityDescriptorOwner(&SecurityDescriptor, SystemSID, TRUE))
     {
-        PrintErrorMessage(L"ERROR: SetSecurityDescriptorOwner Error", 
+        PrintErrorMessage(L"ERROR: SetSecurityDescriptorOwner Error",
                           GetLastError());
         goto Cleanup;
     }
@@ -149,7 +149,7 @@ Return Value:
     // Set the primary group to System.
     if (!SetSecurityDescriptorGroup(&SecurityDescriptor, SystemSID, TRUE))
     {
-        PrintErrorMessage(L"ERROR: SetSecurityDescriptorGroup Error", 
+        PrintErrorMessage(L"ERROR: SetSecurityDescriptorGroup Error",
                           GetLastError());
         goto Cleanup;
     }
@@ -158,7 +158,7 @@ Return Value:
     Dacl = (PACL)DaclBuffer;
     if (!InitializeAcl(Dacl, ARRAYSIZE(DaclBuffer), ACL_REVISION))
     {
-        PrintErrorMessage(L"ERROR: InitializeAcl Error", 
+        PrintErrorMessage(L"ERROR: InitializeAcl Error",
                           GetLastError());
         goto Cleanup;
     }
@@ -166,7 +166,7 @@ Return Value:
     // Add an ACE to the DACL to grant everyone full control
     if (!AddAccessAllowedAce(Dacl, ACL_REVISION, KEY_ALL_ACCESS, EveryoneSID))
     {
-        PrintErrorMessage(L"ERROR: AddAccessAllowedAce Error", 
+        PrintErrorMessage(L"ERROR: AddAccessAllowedAce Error",
                           GetLastError());
         goto Cleanup;
     }
@@ -174,29 +174,29 @@ Return Value:
     // Now add the dACL to the security descriptor.
     if (!SetSecurityDescriptorDacl(&SecurityDescriptor, TRUE, Dacl, FALSE))
     {
-        PrintErrorMessage(L"ERROR: SetSecurityDescriptorDacl Error", 
+        PrintErrorMessage(L"ERROR: SetSecurityDescriptorDacl Error",
                           GetLastError());
         goto Cleanup;
     }
 
     // Initialize the SACL.
-    // Note: The ACL buffer is a static 1K buffer, so adding a large number of 
-    // resource attribute ACEs will cause AddResourceAttributeAce to fail if 
-    // the size exceeds the 1K limit.  If you have a need for a large number 
+    // Note: The ACL buffer is a static 1K buffer, so adding a large number of
+    // resource attribute ACEs will cause AddResourceAttributeAce to fail if
+    // the size exceeds the 1K limit.  If you have a need for a large number
     // of ACEs, consider increasing the buffer size or using dynamic memory
     // allocation.
     Sacl = (PACL)SaclBuffer;
     if (!InitializeAcl(Sacl, ARRAYSIZE(SaclBuffer), ACL_REVISION))
     {
-        PrintErrorMessage(L"ERROR: InitializeAcl Error", 
+        PrintErrorMessage(L"ERROR: InitializeAcl Error",
                           GetLastError());
         goto Cleanup;
     }
 
-    // Add a CAPID Ace to the ACL 
+    // Add a CAPID Ace to the ACL
     if (!AddScopedPolicyIDAce(Sacl, ACL_REVISION, 0, 0, CapIDSid))
     {
-        PrintErrorMessage(L"ERROR: AddScopedPolicyIDAce Error", 
+        PrintErrorMessage(L"ERROR: AddScopedPolicyIDAce Error",
                           GetLastError());
         goto Cleanup;
     }
@@ -210,15 +210,15 @@ Return Value:
     {
         ClaimInfo.Attribute.pAttributeV1 = ResourceAttributes[i];
         if (!AddResourceAttributeAce(
-                Sacl,
-                ACL_REVISION,
-                0,
-                0,
-                EveryoneSID,
-                &ClaimInfo,
-                &Bytes))
+                    Sacl,
+                    ACL_REVISION,
+                    0,
+                    0,
+                    EveryoneSID,
+                    &ClaimInfo,
+                    &Bytes))
         {
-            PrintErrorMessage(L"ERROR: AddResourceAttributeAce Error", 
+            PrintErrorMessage(L"ERROR: AddResourceAttributeAce Error",
                               GetLastError());
             wprintf(L"    -Attribute = %ws\n", ResourceAttributes[i]->Name);
             goto Cleanup;
@@ -228,7 +228,7 @@ Return Value:
     // Now add the SACL to the security descriptor.
     if (!SetSecurityDescriptorSacl(&SecurityDescriptor, TRUE, Sacl, FALSE))
     {
-        PrintErrorMessage(L"ERROR: SetSecurityDescriptorSacl Error", 
+        PrintErrorMessage(L"ERROR: SetSecurityDescriptorSacl Error",
                           GetLastError());
         goto Cleanup;
     }
@@ -236,7 +236,7 @@ Return Value:
     // Convert to a self relative security descriptor
     if (!MakeSelfRelativeSD(&SecurityDescriptor, NULL, &Size))
     {
-        // First call to MakeSelfRelativeSD should return 
+        // First call to MakeSelfRelativeSD should return
         // ERROR_INSUFFICIENT_BUFFER and set Size to the necessary buffer
         // length
         assert(GetLastError() == ERROR_INSUFFICIENT_BUFFER);
@@ -249,18 +249,18 @@ Return Value:
         }
 
         if (!MakeSelfRelativeSD(
-                &SecurityDescriptor, 
-                *SecurityDescriptorResult, 
-                &Size))
+                    &SecurityDescriptor,
+                    *SecurityDescriptorResult,
+                    &Size))
         {
-            PrintErrorMessage(L"ERROR: MakeSelfRelativeSD Error", 
+            PrintErrorMessage(L"ERROR: MakeSelfRelativeSD Error",
                               GetLastError());
-            LocalFree(*SecurityDescriptorResult); 
+            LocalFree(*SecurityDescriptorResult);
             *SecurityDescriptorResult = NULL;
             goto Cleanup;
         }
 
-        // We have successfully created a self-relative security descriptor 
+        // We have successfully created a self-relative security descriptor
         // with the Central Access Policy and resource attributes
         Succeeded = TRUE;
     }
@@ -270,7 +270,7 @@ Return Value:
     }
 
 Cleanup:
-    if (EveryoneSID) 
+    if (EveryoneSID)
     {
         FreeSid(EveryoneSID);
     }
@@ -282,10 +282,10 @@ Cleanup:
 }
 
 
-BOOL 
+BOOL
 PerformAccessCheck(
     _In_ PSECURITY_DESCRIPTOR SecurityDescriptor
-    )
+)
 /*++
 
 Routine Description:
@@ -321,40 +321,40 @@ Return Value:
 
     // Open the process token
     if (!OpenProcessToken(
-            GetCurrentProcess(),
-            TOKEN_QUERY,
-            &Token))
+                GetCurrentProcess(),
+                TOKEN_QUERY,
+                &Token))
     {
-        PrintErrorMessage(L"ERROR: OpenProcessToken Error", 
+        PrintErrorMessage(L"ERROR: OpenProcessToken Error",
                           GetLastError());
         goto Cleanup;
     }
 
     // Initialize the resource manager for AuthzAccessCheck
     if (!AuthzInitializeResourceManager(
-            AUTHZ_RM_FLAG_NO_AUDIT,
-            NULL,
-            NULL,
-            NULL,
-            NULL,
-            &AuthzResMgrHandle))
+                AUTHZ_RM_FLAG_NO_AUDIT,
+                NULL,
+                NULL,
+                NULL,
+                NULL,
+                &AuthzResMgrHandle))
     {
-        PrintErrorMessage(L"ERROR: AuthzInitializeResourceManager Error", 
+        PrintErrorMessage(L"ERROR: AuthzInitializeResourceManager Error",
                           GetLastError());
         goto Cleanup;
     }
 
     //  Get the authorization context from the token to use for access check
     if (!AuthzInitializeContextFromToken(
-            0,
-            Token,
-            AuthzResMgrHandle,
-            NULL,
-            ZeroLuid,
-            NULL,
-            &AuthzClientHandle))
+                0,
+                Token,
+                AuthzResMgrHandle,
+                NULL,
+                ZeroLuid,
+                NULL,
+                &AuthzClientHandle))
     {
-        PrintErrorMessage(L"ERROR: AuthzInitializeContextFromToken Error", 
+        PrintErrorMessage(L"ERROR: AuthzInitializeContextFromToken Error",
                           GetLastError());
         goto Cleanup;
     }
@@ -372,17 +372,17 @@ Return Value:
 
     // Perform the actual access check
     if (!AuthzAccessCheck(
-            0,
-            AuthzClientHandle,
-            &AccessRequest,
-            NULL,
-            SecurityDescriptor,
-            NULL,
-            0,
-            &AccessReply,
-            NULL))
+                0,
+                AuthzClientHandle,
+                &AccessRequest,
+                NULL,
+                SecurityDescriptor,
+                NULL,
+                0,
+                &AccessReply,
+                NULL))
     {
-        PrintErrorMessage(L"ERROR: AuthzAccessCheck Error", 
+        PrintErrorMessage(L"ERROR: AuthzAccessCheck Error",
                           GetLastError());
         goto Cleanup;
     }
@@ -410,34 +410,34 @@ Cleanup:
 }
 
 
-_Success_(return == TRUE) 
+_Success_(return == TRUE)
 BOOL
 IsValidCapID(
     _In_      LPCWSTR CapID,
     _Outptr_  PSID*   CapIDSidResult
-    )
+)
 {
-/*++
+    /*++
 
-Routine Description:
+    Routine Description:
 
-    Checks if the requested CAP ID is present on the machine.  If it is not,
-    then the applied CAPs are printed out to the console.  If it is present,
-    then the string SID is converted to a binary SID and returned to the 
-    caller.
+        Checks if the requested CAP ID is present on the machine.  If it is not,
+        then the applied CAPs are printed out to the console.  If it is present,
+        then the string SID is converted to a binary SID and returned to the
+        caller.
 
-Arguments:
+    Arguments:
 
-     CapID             : The CAP ID requested
+         CapID             : The CAP ID requested
 
-     CapIDSidResult    : The SID form of the requested CAP ID returned if the
-                         CAP is present on the machine, otherwise NULL
+         CapIDSidResult    : The SID form of the requested CAP ID returned if the
+                             CAP is present on the machine, otherwise NULL
 
-Return Value:
+    Return Value:
 
-     TRUE/FALSE - If the CAP is present, TRUE is returned, otherwise FALSE.
+         TRUE/FALSE - If the CAP is present, TRUE is returned, otherwise FALSE.
 
---*/
+    --*/
     NTSTATUS        Status;
     BOOL            IsValidCapID    = FALSE;
     PSID            CapIDSid        = NULL;
@@ -456,7 +456,7 @@ Return Value:
     // Convert the CAPID string to a SID
     if (!ConvertStringSidToSid(CapID, &CapIDSid))
     {
-        PrintErrorMessage(L"ERROR: ConvertStringSidToSid Error", 
+        PrintErrorMessage(L"ERROR: ConvertStringSidToSid Error",
                           GetLastError());
         goto Cleanup;
     }
@@ -470,9 +470,9 @@ Return Value:
 
     // Check that the SID is a valid CAP ID
     if (!RtlEqualMemory(
-            &((PISID)CapIDSid)->IdentifierAuthority, 
-            &SIDAuthCap, 
-            sizeof(SID_IDENTIFIER_AUTHORITY)))
+                &((PISID)CapIDSid)->IdentifierAuthority,
+                &SIDAuthCap,
+                sizeof(SID_IDENTIFIER_AUTHORITY)))
     {
         wprintf(L"ERROR: The CAPID doesn't have the correct authority S-1-17\n");
         goto Cleanup;
@@ -510,7 +510,7 @@ Return Value:
         {
             if (!ConvertSidToStringSid(AppliedCaps[i], &CapIDString))
             {
-                PrintErrorMessage(L"ERROR: ConvertSidToStringSid Error", 
+                PrintErrorMessage(L"ERROR: ConvertSidToStringSid Error",
                                   GetLastError());
                 goto Cleanup;
             }
@@ -522,7 +522,7 @@ Return Value:
     }
 
 Cleanup:
-    if (AppliedCaps != NULL) 
+    if (AppliedCaps != NULL)
     {
         for (ULONG i = 0; i < CapCount; i++)
         {
@@ -540,13 +540,13 @@ Cleanup:
 }
 
 
-_Success_(return == TRUE) 
+_Success_(return == TRUE)
 BOOL
 GetFileResourceAttributes(
     _In_                           LPCWSTR FileName,
     _Outptr_result_buffer_(*Count) PCLAIM_SECURITY_ATTRIBUTE_V1* FileResourceAttributes[],
     _Out_                          DWORD*  Count
-    )
+)
 /*++
 
 Routine Description:
@@ -554,14 +554,14 @@ Routine Description:
     Gets the resource attribute ACEs from a file, parses the SDDL for the
     resource attributes ACEs to print them in a friendly format to the console.
     Then it interprets the resource attributes SDDL and populates a resource
-    claim structure that can be used to add a resouce attribute ACE to a 
+    claim structure that can be used to add a resouce attribute ACE to a
     security descriptor.
 
 Arguments:
 
     FileName               : The file to get the resource properties from.
 
-    FileResourceAttributes : The resulting array of resource attribute 
+    FileResourceAttributes : The resulting array of resource attribute
                              structures.
 
     Count                  : The number of claims in the array.
@@ -585,9 +585,9 @@ Return Value:
     DWORD                           CurrentAttribute    = 0;
     DWORD                           ByteCount           = 0;
 
-    if (NULL == FileName               || 
-        NULL == FileResourceAttributes || 
-        NULL == Count)
+    if (NULL == FileName               ||
+            NULL == FileResourceAttributes ||
+            NULL == Count)
     {
         wprintf(L"ERROR: Invalid argument\n");
         goto Cleanup;
@@ -601,32 +601,32 @@ Return Value:
     // also pointing to the attribute ACEs.
     //
     Success = GetNamedSecurityInfo(
-                    FileName, 
-                    SE_FILE_OBJECT, 
-                    ATTRIBUTE_SECURITY_INFORMATION, 
-                    NULL, 
-                    NULL, 
-                    NULL, 
-                    &Sacl, 
-                    &SecurityDescriptor);
+                  FileName,
+                  SE_FILE_OBJECT,
+                  ATTRIBUTE_SECURITY_INFORMATION,
+                  NULL,
+                  NULL,
+                  NULL,
+                  &Sacl,
+                  &SecurityDescriptor);
     if (ERROR_SUCCESS != Success)
     {
-        PrintErrorMessage(L"ERROR: GetNamedSecurityInfo Error", 
+        PrintErrorMessage(L"ERROR: GetNamedSecurityInfo Error",
                           Success);
         goto Cleanup;
     }
 
     // Convert the binary security descriptor to SDDL.
     if (!ConvertSecurityDescriptorToStringSecurityDescriptor(
-                    SecurityDescriptor,
-                    SDDL_REVISION_1,
-                    ATTRIBUTE_SECURITY_INFORMATION, // attribute ACEs only
-                    &SDDL,
-                    NULL))
+                SecurityDescriptor,
+                SDDL_REVISION_1,
+                ATTRIBUTE_SECURITY_INFORMATION, // attribute ACEs only
+                &SDDL,
+                NULL))
     {
         PrintErrorMessage(L"ERROR: "
                           L"ConvertSecurityDescriptorToStringSecurityDescriptor "
-                          L"Error", 
+                          L"Error",
                           GetLastError());
         goto Cleanup;
     }
@@ -646,7 +646,7 @@ Return Value:
     if (AttributeCount < 1)
     {
         wprintf(L"\nThe file %ws does not have resource attributes\n",
-               FileName);
+                FileName);
         goto Cleanup;
     }
 
@@ -740,8 +740,8 @@ Return Value:
 
             // Parse the resource attribute string into its tokens
             if (!ParseResourceAttributeString(
-                    NextAttribute, 
-                    AttributeTokens[CurrentAttribute]))
+                        NextAttribute,
+                        AttributeTokens[CurrentAttribute]))
             {
                 goto Cleanup;
             }
@@ -754,7 +754,7 @@ Return Value:
     // Allocate an array of resource claim structures to fill and return
     ByteCount = sizeof(PCLAIM_SECURITY_ATTRIBUTE_V1) * AttributeCount;
     ResourceAttributes = static_cast<PCLAIM_SECURITY_ATTRIBUTE_V1*>(
-            LocalAlloc(LPTR, ByteCount));
+                             LocalAlloc(LPTR, ByteCount));
     if (NULL == ResourceAttributes)
     {
         wprintf(L"ERROR: Out of memory\n");
@@ -765,13 +765,13 @@ Return Value:
     // Loop over the parsed resource attributes to print the values to the
     // console, and fill the claim structures to return to the caller.
     wprintf(L"\nResource attributes for file %ws:\n\n", FileName);
-    for (CurrentAttribute = 0; 
-         CurrentAttribute < AttributeCount; 
-         CurrentAttribute++)
+    for (CurrentAttribute = 0;
+            CurrentAttribute < AttributeCount;
+            CurrentAttribute++)
     {
         PrintResourceAttribute(AttributeTokens[CurrentAttribute]);
         if (!InterpretResourceAttribute(
-                    AttributeTokens[CurrentAttribute], 
+                    AttributeTokens[CurrentAttribute],
                     &ResourceAttributes[CurrentAttribute]))
         {
             goto Cleanup;
@@ -808,12 +808,12 @@ BOOL
 ParseResourceAttributeString(
     _In_    LPWSTR              AttributeString,
     _Inout_ RESOURCE_ATTRIBUTE& Attribute
-    )
+)
 /*++
 
 Routine Description:
 
-    Given a resource attribute in the SDDL format: 
+    Given a resource attribute in the SDDL format:
         (Name, ValueType, Flags, Value1, Value2,...)
     The string is validated and parsed to extract the name, type, flags, and
     values strings.
@@ -893,12 +893,12 @@ Cleanup:
 }
 
 
-_Success_(return == TRUE) 
+_Success_(return == TRUE)
 BOOL
 InterpretResourceAttribute(
     _In_     RESOURCE_ATTRIBUTE            AttributeTokens,
     _Outptr_ PCLAIM_SECURITY_ATTRIBUTE_V1* ResourceClaimResult
-    )
+)
 /*++
 
 Routine Description:
@@ -942,7 +942,7 @@ Return Value:
     ValueType = GetValueType(AttributeTokens.Type);
     if (ValueType == CLAIM_SECURITY_ATTRIBUTE_TYPE_INVALID)
     {
-        wprintf(L"Claim %ws has an unknown type (%ws)", 
+        wprintf(L"Claim %ws has an unknown type (%ws)",
                 AttributeTokens.Name,
                 AttributeTokens.Type);
         goto Cleanup;
@@ -1041,9 +1041,9 @@ Return Value:
         for (DWORD i = 0; i < ValueCount; ++i)
         {
             EndPtr = Values[i] + wcslen(Values[i]);
-            ResourceAttribute->Values.pInt64[i] = _wcstoi64(Values[i], 
-                                                            &EndPtr, 
-                                                            0);
+            ResourceAttribute->Values.pInt64[i] = _wcstoi64(Values[i],
+                                                  &EndPtr,
+                                                  0);
         }
         break;
     case CLAIM_SECURITY_ATTRIBUTE_TYPE_UINT64:
@@ -1052,9 +1052,9 @@ Return Value:
         for (DWORD i = 0; i < ValueCount; ++i)
         {
             EndPtr = Values[i] + wcslen(Values[i]);
-            ResourceAttribute->Values.pUint64[i] = _wcstoui64(Values[i], 
-                                                              &EndPtr, 
-                                                              0);
+            ResourceAttribute->Values.pUint64[i] = _wcstoui64(Values[i],
+                                                   &EndPtr,
+                                                   0);
         }
         break;
     case CLAIM_SECURITY_ATTRIBUTE_TYPE_STRING:
@@ -1093,13 +1093,13 @@ Cleanup:
 }
 
 
-_Success_(return == TRUE) 
+_Success_(return == TRUE)
 BOOL
 ParseResourceAttributesArguments(
     _In_                           LPCWSTR ResourceAttributesArgs,
     _Outptr_result_buffer_(*Count) PCLAIM_SECURITY_ATTRIBUTE_V1* ResourceAttributesResult[],
     _Out_                          DWORD*  Count
-    )
+)
 /*++
 
 Routine Description:
@@ -1133,9 +1133,9 @@ Return Value:
     RESOURCE_ATTRIBUTE              Attribute           = {0};
     DWORD                           CurrentAttribute    = 0;
 
-    if (NULL == ResourceAttributesArgs   || 
-        NULL == ResourceAttributesResult || 
-        NULL == Count)
+    if (NULL == ResourceAttributesArgs   ||
+            NULL == ResourceAttributesResult ||
+            NULL == Count)
     {
         wprintf(L"ERROR: Invalid argument\n");
         goto Cleanup;
@@ -1171,7 +1171,7 @@ Return Value:
     // Allocate an array of claim structures
     ByteCount = AttributeCount * sizeof(PCLAIM_SECURITY_ATTRIBUTE_V1);
     ResourceAttributes = static_cast<PCLAIM_SECURITY_ATTRIBUTE_V1*>(
-                            LocalAlloc(LPTR, ByteCount));
+                             LocalAlloc(LPTR, ByteCount));
     if (NULL == ResourceAttributes)
     {
         wprintf(L"ERROR: Out of memory\n");
@@ -1180,7 +1180,7 @@ Return Value:
     }
 
     // Iterate over the resource attributes argument, parsing each attribute,
-    // then convert the string resource attribute into a claim structure 
+    // then convert the string resource attribute into a claim structure
     // required for adding the resource claims to an ACE
     wprintf(L"\nThe requested resource attributes are:\n\n");
     NextToken = (LPWSTR)ResourceAttributesArgs;
@@ -1206,10 +1206,10 @@ Return Value:
             }
             PrintResourceAttribute(Attribute);
 
-            // Convert the string resource structure into an actual claim 
+            // Convert the string resource structure into an actual claim
             // structure
             if (!InterpretResourceAttribute(
-                        Attribute, 
+                        Attribute,
                         &ResourceAttributes[CurrentAttribute]))
             {
                 goto Cleanup;
@@ -1241,7 +1241,7 @@ Cleanup:
 VOID
 PrintResourceAttribute(
     _In_ RESOURCE_ATTRIBUTE Attribute
-    )
+)
 /*++
 
 Routine Description:
@@ -1259,23 +1259,23 @@ Return Value:
     LPWSTR Type              = Attribute.Type;;
     LPWSTR FriendlyValueType = NULL;
 
-    if(0 == _wcsnicmp(Type, SDDL_INT, SDDL_LEN_TAG(SDDL_INT))) 
+    if(0 == _wcsnicmp(Type, SDDL_INT, SDDL_LEN_TAG(SDDL_INT)))
     {
         FriendlyValueType = L"Integer";
     }
-    else if(0 == _wcsnicmp(Type, SDDL_UINT, SDDL_LEN_TAG(SDDL_UINT))) 
+    else if(0 == _wcsnicmp(Type, SDDL_UINT, SDDL_LEN_TAG(SDDL_UINT)))
     {
         FriendlyValueType = L"Unsigned Integer";
     }
-    else if(0 == _wcsnicmp(Type, SDDL_WSTRING, SDDL_LEN_TAG(SDDL_WSTRING))) 
+    else if(0 == _wcsnicmp(Type, SDDL_WSTRING, SDDL_LEN_TAG(SDDL_WSTRING)))
     {
         FriendlyValueType = L"String";
     }
-    else if(0 == _wcsnicmp(Type, SDDL_BOOLEAN, SDDL_LEN_TAG(SDDL_BOOLEAN))) 
+    else if(0 == _wcsnicmp(Type, SDDL_BOOLEAN, SDDL_LEN_TAG(SDDL_BOOLEAN)))
     {
         FriendlyValueType = L"Boolean";
     }
-    else 
+    else
     {
         FriendlyValueType = L"Unknown";
     }
@@ -1289,12 +1289,12 @@ Return Value:
 }
 
 
-int 
-__cdecl 
+int
+__cdecl
 wmain(
-    _In_              DWORD     argc, 
+    _In_              DWORD     argc,
     _In_reads_(argc)  LPCWSTR   argv[]
-    )
+)
 {
     BOOL                            Succeeded               = FALSE;
     LPWSTR                          FileName                = NULL;
@@ -1332,26 +1332,26 @@ wmain(
         }
     }
 
-    if ((CapID == NULL)                          || 
-        (Attributes == NULL && FileName == NULL) ||
-        (Attributes != NULL && FileName != NULL))
+    if ((CapID == NULL)                          ||
+            (Attributes == NULL && FileName == NULL) ||
+            (Attributes != NULL && FileName != NULL))
     {
         PrintUsage();
         goto Cleanup;
     }
 
-     if (Attributes && !ParseResourceAttributesArguments(
-                            (LPCWSTR)Attributes, 
-                            &ResourceAttributes, 
-                            &ResourceAttributeCt))
+    if (Attributes && !ParseResourceAttributesArguments(
+                (LPCWSTR)Attributes,
+                &ResourceAttributes,
+                &ResourceAttributeCt))
     {
         goto Cleanup;
     }
 
     if (FileName && !GetFileResourceAttributes(
-                            FileName, 
-                            &ResourceAttributes, 
-                            &ResourceAttributeCt))
+                FileName,
+                &ResourceAttributes,
+                &ResourceAttributeCt))
     {
         goto Cleanup;
     }
@@ -1362,10 +1362,10 @@ wmain(
     }
 
     if (!CreateSecurityDescriptor(
-            CapIDSid, 
-            ResourceAttributes, 
-            ResourceAttributeCt,
-            &SecurityDescriptor))
+                CapIDSid,
+                ResourceAttributes,
+                ResourceAttributeCt,
+                &SecurityDescriptor))
     {
         goto Cleanup;
     }
@@ -1398,19 +1398,19 @@ VOID
 PrintErrorMessage(
     _In_ LPWSTR ErrorMessage,
     _In_ DWORD  ErrorCode
-    )
+)
 {
     LPWSTR SystemMsg = NULL;
 
     if (FormatMessage(
-                FORMAT_MESSAGE_ALLOCATE_BUFFER    | 
-                    FORMAT_MESSAGE_MAX_WIDTH_MASK | 
-                    FORMAT_MESSAGE_FROM_SYSTEM, 
-                NULL, 
-                ErrorCode, 
-                MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), 
-                (LPWSTR)&SystemMsg, 
-                0, 
+                FORMAT_MESSAGE_ALLOCATE_BUFFER    |
+                FORMAT_MESSAGE_MAX_WIDTH_MASK |
+                FORMAT_MESSAGE_FROM_SYSTEM,
+                NULL,
+                ErrorCode,
+                MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
+                (LPWSTR)&SystemMsg,
+                0,
                 NULL))
     {
         wprintf(L"%ws '%ws'(%u)\n", ErrorMessage, SystemMsg, ErrorCode);
@@ -1423,38 +1423,38 @@ PrintErrorMessage(
     LocalFree(SystemMsg);
 }
 
-VOID 
+VOID
 PrintUsage()
 {
     printf(
-"                                                                           \n"
-"    A command line tool for creating a security descriptor with resource   \n"
-"    property claim ACEs and a Central Access Policy ACE, and displaying    \n"
-"    the results of AuthzAccessCheck on that security descriptor.           \n"
-"                                                                           \n"
-"    Usage:                                                                 \n"
-"                                                                           \n"
-"    ResourceAttributesSample [-cap <ID>] [-file <PATH> | -ra <ATTRIBUTES>] \n"
-"           -cap  : A Central Access Policy SID (CAP ID). CAP IDs are of the\n"
-"                   form: S-1-17-...                                        \n"
-"           -file : A file path used to get resource properties from a file \n"
-"                   to use in the security descriptor. The file's resource  \n"
-"                   properties are also printed to the console.             \n"
-"           -ra   : Resource properties to add to the security descriptor.  \n"
-"                   Resource properties should be specified in the following\n"
-"                   form:                                                   \n"
-"                   (Name, ValueType, Flags, Value1, Value2...)             \n"
-"                       -Name      = Resource Property Name                 \n"
-"                       -ValueType = TI (Integer)                           \n"
-"                                  = TU (Unsigned Integer)                  \n"
-"                                  = TB (Boolean)                           \n"
-"                                  = TS (String)                            \n"
-"                       -Flags     = Hexadecimal Flag Value                 \n"
-"                       -Value     = Comma separated values                 \n"
-"    Examples:                                                              \n"
-"                                                                           \n"
-"    ResourceAttributesSample -cap S-1-17-11 -file C:\\test.txt             \n"
-"    ResourceAttributesSample -cap S-1-17-22 -ra (\"Int\",TI,0x0,123)       \n"
-"                                                                           \n"
-           );
+        "                                                                           \n"
+        "    A command line tool for creating a security descriptor with resource   \n"
+        "    property claim ACEs and a Central Access Policy ACE, and displaying    \n"
+        "    the results of AuthzAccessCheck on that security descriptor.           \n"
+        "                                                                           \n"
+        "    Usage:                                                                 \n"
+        "                                                                           \n"
+        "    ResourceAttributesSample [-cap <ID>] [-file <PATH> | -ra <ATTRIBUTES>] \n"
+        "           -cap  : A Central Access Policy SID (CAP ID). CAP IDs are of the\n"
+        "                   form: S-1-17-...                                        \n"
+        "           -file : A file path used to get resource properties from a file \n"
+        "                   to use in the security descriptor. The file's resource  \n"
+        "                   properties are also printed to the console.             \n"
+        "           -ra   : Resource properties to add to the security descriptor.  \n"
+        "                   Resource properties should be specified in the following\n"
+        "                   form:                                                   \n"
+        "                   (Name, ValueType, Flags, Value1, Value2...)             \n"
+        "                       -Name      = Resource Property Name                 \n"
+        "                       -ValueType = TI (Integer)                           \n"
+        "                                  = TU (Unsigned Integer)                  \n"
+        "                                  = TB (Boolean)                           \n"
+        "                                  = TS (String)                            \n"
+        "                       -Flags     = Hexadecimal Flag Value                 \n"
+        "                       -Value     = Comma separated values                 \n"
+        "    Examples:                                                              \n"
+        "                                                                           \n"
+        "    ResourceAttributesSample -cap S-1-17-11 -file C:\\test.txt             \n"
+        "    ResourceAttributesSample -cap S-1-17-22 -ra (\"Int\",TI,0x0,123)       \n"
+        "                                                                           \n"
+    );
 }

@@ -1,9 +1,9 @@
-//---------------------------------------------------------------------------
+﻿//---------------------------------------------------------------------------
 // Microsoft OLE DB Test
 //
-// Copyright 1995-1998 Microsoft Corporation.  
+// Copyright 1995-1998 Microsoft Corporation.
 //
-// @doc 
+// @doc
 //
 // @module Version Header for Modules | Version numbers included by ALL components.
 //
@@ -14,11 +14,11 @@
 //
 // <nl><nl>
 // Revision History:<nl>
-//	
+//
 //	[00] MM-DD-YY	EMAIL_NAME	ACTION PERFORMED... <nl>
 //  [01] 08-12-94   Microsoft   Created file.
 //	[02] 12-01-96	Microsoft	Updated for release <nl>
-//	
+//
 //---------------------------------------------------------------------------
 
 #ifndef VERSION_DEFS
@@ -35,9 +35,9 @@
 #define VER_FILEFLAGSMASK		(VS_FF_DEBUG | VS_FF_PRERELEASE)
 
 #ifdef DEBUG
-	#define VER_FILEFLAGS			(VS_FF_DEBUG)
+#define VER_FILEFLAGS			(VS_FF_DEBUG)
 #else
-	#define VER_FILEFLAGS			(0)
+#define VER_FILEFLAGS			(0)
 #endif
 
 #define VER_FILEOS				VOS_NT_WINDOWS32

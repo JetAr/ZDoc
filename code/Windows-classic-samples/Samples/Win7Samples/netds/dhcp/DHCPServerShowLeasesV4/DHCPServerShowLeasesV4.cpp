@@ -1,11 +1,11 @@
-/*
+﻿/*
  * THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
  * ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
  * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
  * PARTICULAR PURPOSE.
  *
- * Copyright �  Microsoft Corporation.  All Rights Reserved.
- *  
+ * Copyright ©  Microsoft Corporation.  All Rights Reserved.
+ *
  * Author: Yashlaxmi Gupta
  * Abstract:
  *    Dump IPv4 leases across all the scopes configured on a DHCP server.
@@ -15,8 +15,8 @@
 /*
  * Includes
  */
-#include <stdio.h> 
-#include <tchar.h> 
+#include <stdio.h>
+#include <tchar.h>
 #include <windows.h>
 #include <strsafe.h>
 #include <intsafe.h>
@@ -46,23 +46,24 @@ DWORD __cdecl main(int argc, char* argv[])
     DHCP_RESUME_HANDLE ResumeHandleScope = 0;
     LPDHCP_IP_ARRAY EnumScopes = NULL;
     DWORD nRead = 0;
-    DWORD nTotal = 0; 
-    
+    DWORD nTotal = 0;
+
     DHCP_RESUME_HANDLE ResumeHandleClient = 0;
     LPDHCP_CLIENT_INFO_ARRAY_V5 Clients = NULL;
     DWORD nClientsRead = 0;
     DWORD nClientsTotal = 0;
 
-	DWORD error1 = ERROR_SUCCESS, error2 = ERROR_SUCCESS;
-	WCHAR *szDateTimeStr = NULL, *szClientIp = NULL, *szSubnetMask = NULL, *szHardwareAdd = NULL, *szScopeIp = NULL;
-    WCHAR szServer[SERVERNAME_BUF_SIZE]={0};
+    DWORD error1 = ERROR_SUCCESS, error2 = ERROR_SUCCESS;
+    WCHAR *szDateTimeStr = NULL, *szClientIp = NULL, *szSubnetMask = NULL, *szHardwareAdd = NULL, *szScopeIp = NULL;
+    WCHAR szServer[SERVERNAME_BUF_SIZE]= {0};
     if (2 != argc)
     {
         wprintf(L"Usage: DhcpServerShowLeasesV4.exe <Server IpAdd/Name>");
         return ERROR_INVALID_PARAMETER;
     }
-    MultiByteToWideChar(0, 0, argv[1], (int)strlen(argv[1]), szServer, SERVERNAME_BUF_SIZE);      
-	do {
+    MultiByteToWideChar(0, 0, argv[1], (int)strlen(argv[1]), szServer, SERVERNAME_BUF_SIZE);
+    do
+    {
         // enumerate all the IpV4 scopes on the server.
         error1 = DhcpEnumSubnets(szServer, &ResumeHandleScope, (DWORD)~0, &EnumScopes, &nRead, &nTotal);
         if (0 == nTotal)
@@ -73,19 +74,20 @@ DWORD __cdecl main(int argc, char* argv[])
         {
             break;
         }
-	    if (ERROR_SUCCESS != error1 && ERROR_MORE_DATA != error1)
-	    {
-            wprintf(L"DhcpServerShowLeasesV4 returned with error:  %d\n",error1); 
+        if (ERROR_SUCCESS != error1 && ERROR_MORE_DATA != error1)
+        {
+            wprintf(L"DhcpServerShowLeasesV4 returned with error:  %d\n",error1);
             return error1;
-	    }
+        }
         // iterating over all the scopes one by one to get the clients for each scope.
         for (unsigned int count=0; count < EnumScopes->NumElements; count++)
-	    {
+        {
             // converting scope IP address from DWORD to LPWSTR
             szScopeIp = ConvertIpAddtoWstr(EnumScopes->Elements[count]);
             wprintf(L"\nScope : %s\n\n",szScopeIp ? szScopeIp : L" ");
-		    do {
-                // enumerating the clients on a specific IpV4 scope 
+            do
+            {
+                // enumerating the clients on a specific IpV4 scope
                 error2 = DhcpEnumSubnetClientsV5(szServer, EnumScopes->Elements[count], &ResumeHandleClient, (DWORD)~0, &Clients, &nClientsRead, &nClientsTotal);
                 if (0 == nClientsTotal)
                 {
@@ -96,14 +98,14 @@ DWORD __cdecl main(int argc, char* argv[])
                     break;
                 }
                 if (ERROR_SUCCESS != error2 && ERROR_MORE_DATA != error2)
-		        {
-			        wprintf(L"DhcpServerShowLeasesV4 returned with error:  %d\n",error2); 
+                {
+                    wprintf(L"DhcpServerShowLeasesV4 returned with error:  %d\n",error2);
                     return error2;
-		        }
+                }
                 //iterating over all the clients leases on a specified scope.
                 //the leases shown include all the leases present and can be filtered out on the basic of Address State attribute of client.
                 for (unsigned int count = 0; count < Clients->NumElements; count++)
-  	            {
+                {
                     //converting client Ip from DWORD to LPWSTR
                     szClientIp = ConvertIpAddtoWstr(Clients->Clients[count]->ClientIpAddress);
                     wprintf(L"Client Address   : %s\n",szClientIp ? szClientIp : L" ");
@@ -114,13 +116,13 @@ DWORD __cdecl main(int argc, char* argv[])
                     szHardwareAdd = GetHardwareAddress(Clients->Clients[count]->ClientHardwareAddress);
                     wprintf(L"Hardware Address : %s\n",szHardwareAdd ? szHardwareAdd : L" ");
                     // if lease duration is infinite then lease never expires.
-                    if (DHCP_DATE_TIME_INFINITE_LOW == Clients->Clients[count]->ClientLeaseExpires.dwLowDateTime && 
-                        DHCP_DATE_TIME_INFINITE_HIGH == Clients->Clients[count]->ClientLeaseExpires.dwHighDateTime)
+                    if (DHCP_DATE_TIME_INFINITE_LOW == Clients->Clients[count]->ClientLeaseExpires.dwLowDateTime &&
+                            DHCP_DATE_TIME_INFINITE_HIGH == Clients->Clients[count]->ClientLeaseExpires.dwHighDateTime)
                     {
                         wprintf(L"Lease Expires    : Never\n");
                     }
                     // if lease duration is 0 the client is inactive.
-                    else if (DHCP_DATE_TIME_ZERO_LOW == Clients->Clients[count]->ClientLeaseExpires.dwLowDateTime && 
+                    else if (DHCP_DATE_TIME_ZERO_LOW == Clients->Clients[count]->ClientLeaseExpires.dwLowDateTime &&
                              DHCP_DATE_TIME_ZERO_HIGH == Clients->Clients[count]->ClientLeaseExpires.dwHighDateTime)
                     {
                         wprintf(L"Lease Expires    : Inactive\n");
@@ -153,17 +155,18 @@ DWORD __cdecl main(int argc, char* argv[])
                         free(szDateTimeStr);
                         szDateTimeStr = NULL;
                     }
-   	            }
+                }
                 if (NULL != Clients)
                 {
                     DhcpRpcFreeMemory(Clients);
                     Clients = NULL;
                 }
                 nClientsRead = 0;
-		        nClientsTotal = 0;
+                nClientsTotal = 0;
                 ResumeHandleClient = 0;
 
-            } while (ERROR_MORE_DATA == error2);
+            }
+            while (ERROR_MORE_DATA == error2);
             if (NULL != szScopeIp)
             {
                 free(szScopeIp);
@@ -178,15 +181,16 @@ DWORD __cdecl main(int argc, char* argv[])
         nRead = 0;
         nTotal = 0;
         ResumeHandleScope = 0;
-        
-    } while (ERROR_MORE_DATA == error1);
-	return 0;
+
+    }
+    while (ERROR_MORE_DATA == error1);
+    return 0;
 }
 
 WCHAR *ConvertIpAddtoWstr(
     __in DHCP_IP_ADDRESS addr
 )
-{   
+{
     // getting the individual bytes of the IP Address.
     PUCHAR pAddress = (PUCHAR)&addr;
     // allocating memory to IP Address string.
@@ -218,7 +222,7 @@ WCHAR *GetHardwareAddress(
         // corressponding to each byte in the original string, there would be a hyphen and a '\0' character for the last one.
         HRes = DWordMult(3, phyAdd.DataLength, &Size);
         if (FAILED(HRes))
-        {    
+        {
             return NULL;
         }
         // calculating the bcount of the hardware address string.
@@ -227,7 +231,7 @@ WCHAR *GetHardwareAddress(
         {
             return NULL;
         }
-        // allocating the memory for the hardware address string. 
+        // allocating the memory for the hardware address string.
         szPhysicalAddress = (WCHAR *)malloc(Size);
         if (NULL == szPhysicalAddress)
         {
@@ -244,7 +248,7 @@ WCHAR *GetHardwareAddress(
             szPhysicalAddress[j++] = "0123456789ABCDEF"[num1];
             szPhysicalAddress[j++] = "0123456789ABCDEF"[num2];
             if (i < phyAdd.DataLength - 1)
-            { 
+            {
                 // adding the separator hyphen.
                 szPhysicalAddress[j++] = L'-';
             }

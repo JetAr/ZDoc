@@ -1,4 +1,4 @@
-//------------------------------------------------------------------------------
+﻿//------------------------------------------------------------------------------
 // File: PushSourceDesktop.cpp
 //
 // Desc: DirectShow sample code - In-memory push mode source filter
@@ -17,26 +17,26 @@
 /**********************************************
  *
  *  CPushPinDesktop Class
- *  
+ *
  *
  **********************************************/
 
 CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CSource *pFilter)
-        : CSourceStream(NAME("Push Source Desktop"), phr, pFilter, L"Out"),
-        m_FramesWritten(0),
-        m_bZeroMemory(0),
-        m_iFrameNumber(0),
-        m_rtFrameLength(FPS_5), // Capture and display desktop 5 times per second
-        m_nCurrentBitDepth(32)
+    : CSourceStream(NAME("Push Source Desktop"), phr, pFilter, L"Out"),
+      m_FramesWritten(0),
+      m_bZeroMemory(0),
+      m_iFrameNumber(0),
+      m_rtFrameLength(FPS_5), // Capture and display desktop 5 times per second
+      m_nCurrentBitDepth(32)
 {
-	// The main point of this sample is to demonstrate how to take a DIB
-	// in host memory and insert it into a video stream. 
+    // The main point of this sample is to demonstrate how to take a DIB
+    // in host memory and insert it into a video stream.
 
-	// To keep this sample as simple as possible, we just read the desktop image
-	// from a file and copy it into every frame that we send downstream.
+    // To keep this sample as simple as possible, we just read the desktop image
+    // from a file and copy it into every frame that we send downstream.
     //
-	// In the filter graph, we connect this filter to the AVI Mux, which creates 
-    // the AVI file with the video frames we pass to it. In this case, 
+    // In the filter graph, we connect this filter to the AVI Mux, which creates
+    // the AVI file with the video frames we pass to it. In this case,
     // the end result is a screen capture video (GDI images only, with no
     // support for overlay surfaces).
 
@@ -58,7 +58,7 @@ CPushPinDesktop::CPushPinDesktop(HRESULT *phr, CSource *pFilter)
 }
 
 CPushPinDesktop::~CPushPinDesktop()
-{   
+{
     DbgLog((LOG_TRACE, 3, TEXT("Frames written %d"), m_iFrameNumber));
 }
 
@@ -98,58 +98,61 @@ HRESULT CPushPinDesktop::GetMediaType(int iPosition, CMediaType *pmt)
 
     switch(iPosition)
     {
-        case 0:
-        {    
-            // Return our highest quality 32bit format
+    case 0:
+    {
+        // Return our highest quality 32bit format
 
-            // Since we use RGB888 (the default for 32 bit), there is
-            // no reason to use BI_BITFIELDS to specify the RGB
-            // masks. Also, not everything supports BI_BITFIELDS
-            pvi->bmiHeader.biCompression = BI_RGB;
-            pvi->bmiHeader.biBitCount    = 32;
-            break;
-        }
+        // Since we use RGB888 (the default for 32 bit), there is
+        // no reason to use BI_BITFIELDS to specify the RGB
+        // masks. Also, not everything supports BI_BITFIELDS
+        pvi->bmiHeader.biCompression = BI_RGB;
+        pvi->bmiHeader.biBitCount    = 32;
+        break;
+    }
 
-        case 1:
-        {   // Return our 24bit format
-            pvi->bmiHeader.biCompression = BI_RGB;
-            pvi->bmiHeader.biBitCount    = 24;
-            break;
-        }
+    case 1:
+    {
+        // Return our 24bit format
+        pvi->bmiHeader.biCompression = BI_RGB;
+        pvi->bmiHeader.biBitCount    = 24;
+        break;
+    }
 
-        case 2:
-        {       
-            // 16 bit per pixel RGB565
+    case 2:
+    {
+        // 16 bit per pixel RGB565
 
-            // Place the RGB masks as the first 3 doublewords in the palette area
-            for(int i = 0; i < 3; i++)
-                pvi->TrueColorInfo.dwBitMasks[i] = bits565[i];
+        // Place the RGB masks as the first 3 doublewords in the palette area
+        for(int i = 0; i < 3; i++)
+            pvi->TrueColorInfo.dwBitMasks[i] = bits565[i];
 
-            pvi->bmiHeader.biCompression = BI_BITFIELDS;
-            pvi->bmiHeader.biBitCount    = 16;
-            break;
-        }
+        pvi->bmiHeader.biCompression = BI_BITFIELDS;
+        pvi->bmiHeader.biBitCount    = 16;
+        break;
+    }
 
-        case 3:
-        {   // 16 bits per pixel RGB555
+    case 3:
+    {
+        // 16 bits per pixel RGB555
 
-            // Place the RGB masks as the first 3 doublewords in the palette area
-            for(int i = 0; i < 3; i++)
-                pvi->TrueColorInfo.dwBitMasks[i] = bits555[i];
+        // Place the RGB masks as the first 3 doublewords in the palette area
+        for(int i = 0; i < 3; i++)
+            pvi->TrueColorInfo.dwBitMasks[i] = bits555[i];
 
-            pvi->bmiHeader.biCompression = BI_BITFIELDS;
-            pvi->bmiHeader.biBitCount    = 16;
-            break;
-        }
+        pvi->bmiHeader.biCompression = BI_BITFIELDS;
+        pvi->bmiHeader.biBitCount    = 16;
+        break;
+    }
 
-        case 4:
-        {   // 8 bit palettised
+    case 4:
+    {
+        // 8 bit palettised
 
-            pvi->bmiHeader.biCompression = BI_RGB;
-            pvi->bmiHeader.biBitCount    = 8;
-            pvi->bmiHeader.biClrUsed     = iPALETTE_COLORS;
-            break;
-        }
+        pvi->bmiHeader.biCompression = BI_RGB;
+        pvi->bmiHeader.biBitCount    = 8;
+        pvi->bmiHeader.biClrUsed     = iPALETTE_COLORS;
+        break;
+    }
     }
 
     // Adjust the parameters common to all formats
@@ -189,8 +192,8 @@ HRESULT CPushPinDesktop::CheckMediaType(const CMediaType *pMediaType)
     CheckPointer(pMediaType,E_POINTER);
 
     if((*(pMediaType->Type()) != MEDIATYPE_Video) ||   // we only output video
-        !(pMediaType->IsFixedSize()))                  // in fixed size samples
-    {                                                  
+            !(pMediaType->IsFixedSize()))                  // in fixed size samples
+    {
         return E_INVALIDARG;
     }
 
@@ -200,10 +203,10 @@ HRESULT CPushPinDesktop::CheckMediaType(const CMediaType *pMediaType)
         return E_INVALIDARG;
 
     if(    (*SubType != MEDIASUBTYPE_RGB8)
-        && (*SubType != MEDIASUBTYPE_RGB565)
-        && (*SubType != MEDIASUBTYPE_RGB555)
-        && (*SubType != MEDIASUBTYPE_RGB24)
-        && (*SubType != MEDIASUBTYPE_RGB32))
+            && (*SubType != MEDIASUBTYPE_RGB565)
+            && (*SubType != MEDIASUBTYPE_RGB555)
+            && (*SubType != MEDIASUBTYPE_RGB24)
+            && (*SubType != MEDIASUBTYPE_RGB32))
     {
         return E_INVALIDARG;
     }
@@ -215,8 +218,8 @@ HRESULT CPushPinDesktop::CheckMediaType(const CMediaType *pMediaType)
         return E_INVALIDARG;
 
     // Check if the image width & height have changed
-    if(    pvi->bmiHeader.biWidth   != m_iImageWidth || 
-       abs(pvi->bmiHeader.biHeight) != m_iImageHeight)
+    if(    pvi->bmiHeader.biWidth   != m_iImageWidth ||
+            abs(pvi->bmiHeader.biHeight) != m_iImageHeight)
     {
         // If the image width/height is changed, fail CheckMediaType() to force
         // the renderer to resize the image.
@@ -241,7 +244,7 @@ HRESULT CPushPinDesktop::CheckMediaType(const CMediaType *pMediaType)
 // Then we can ask for buffers of the correct size to contain them.
 //
 HRESULT CPushPinDesktop::DecideBufferSize(IMemAllocator *pAlloc,
-                                      ALLOCATOR_PROPERTIES *pProperties)
+        ALLOCATOR_PROPERTIES *pProperties)
 {
     CheckPointer(pAlloc,E_POINTER);
     CheckPointer(pProperties,E_POINTER);
@@ -300,23 +303,23 @@ HRESULT CPushPinDesktop::SetMediaType(const CMediaType *pMediaType)
 
         switch(pvi->bmiHeader.biBitCount)
         {
-            case 8:     // 8-bit palettized
-            case 16:    // RGB565, RGB555
-            case 24:    // RGB24
-            case 32:    // RGB32
-                // Save the current media type and bit depth
-                m_MediaType = *pMediaType;
-                m_nCurrentBitDepth = pvi->bmiHeader.biBitCount;
-                hr = S_OK;
-                break;
+        case 8:     // 8-bit palettized
+        case 16:    // RGB565, RGB555
+        case 24:    // RGB24
+        case 32:    // RGB32
+            // Save the current media type and bit depth
+            m_MediaType = *pMediaType;
+            m_nCurrentBitDepth = pvi->bmiHeader.biBitCount;
+            hr = S_OK;
+            break;
 
-            default:
-                // We should never agree any other media types
-                ASSERT(FALSE);
-                hr = E_INVALIDARG;
-                break;
+        default:
+            // We should never agree any other media types
+            ASSERT(FALSE);
+            hr = E_INVALIDARG;
+            break;
         }
-    } 
+    }
 
     return hr;
 
@@ -327,7 +330,7 @@ HRESULT CPushPinDesktop::SetMediaType(const CMediaType *pMediaType)
 // FillBuffer is called once for every sample in the stream.
 HRESULT CPushPinDesktop::FillBuffer(IMediaSample *pSample)
 {
-	BYTE *pData;
+    BYTE *pData;
     long cbData;
 
     CheckPointer(pSample, E_POINTER);
@@ -343,7 +346,7 @@ HRESULT CPushPinDesktop::FillBuffer(IMediaSample *pSample)
 
     VIDEOINFOHEADER *pVih = (VIDEOINFOHEADER*)m_mt.pbFormat;
 
-	// Copy the DIB bits over into our filter's output buffer.
+    // Copy the DIB bits over into our filter's output buffer.
     // Since sample size may be larger than the image size, bound the copy size.
     int nSize = min(pVih->bmiHeader.biSizeImage, (DWORD) cbData);
     HDIB hDib = CopyScreenToBitmap(&m_rScreen, pData, (BITMAPINFO *) &(pVih->bmiHeader));
@@ -351,10 +354,10 @@ HRESULT CPushPinDesktop::FillBuffer(IMediaSample *pSample)
     if (hDib)
         DeleteObject(hDib);
 
-	// Set the timestamps that will govern playback frame rate.
-	// If this file is getting written out as an AVI,
-	// then you'll also need to configure the AVI Mux filter to 
-	// set the Average Time Per Frame for the AVI Header.
+    // Set the timestamps that will govern playback frame rate.
+    // If this file is getting written out as an AVI,
+    // then you'll also need to configure the AVI Mux filter to
+    // set the Average Time Per Frame for the AVI Header.
     // The current time is the sample's start.
     REFERENCE_TIME rtStart = m_iFrameNumber * m_rtFrameLength;
     REFERENCE_TIME rtStop  = rtStart + m_rtFrameLength;
@@ -362,7 +365,7 @@ HRESULT CPushPinDesktop::FillBuffer(IMediaSample *pSample)
     pSample->SetTime(&rtStart, &rtStop);
     m_iFrameNumber++;
 
-	// Set TRUE on every sample for uncompressed frames
+    // Set TRUE on every sample for uncompressed frames
     pSample->SetSyncPoint(TRUE);
 
     return S_OK;
@@ -377,18 +380,18 @@ HRESULT CPushPinDesktop::FillBuffer(IMediaSample *pSample)
  **********************************************/
 
 CPushSourceDesktop::CPushSourceDesktop(IUnknown *pUnk, HRESULT *phr)
-           : CSource(NAME("PushSourceDesktop"), pUnk, CLSID_PushSourceDesktop)
+    : CSource(NAME("PushSourceDesktop"), pUnk, CLSID_PushSourceDesktop)
 {
     // The pin magically adds itself to our pin array.
     m_pPin = new CPushPinDesktop(phr, this);
 
-	if (phr)
-	{
-		if (m_pPin == NULL)
-			*phr = E_OUTOFMEMORY;
-		else
-			*phr = S_OK;
-	}  
+    if (phr)
+    {
+        if (m_pPin == NULL)
+            *phr = E_OUTOFMEMORY;
+        else
+            *phr = S_OK;
+    }
 }
 
 
@@ -402,13 +405,13 @@ CUnknown * WINAPI CPushSourceDesktop::CreateInstance(IUnknown *pUnk, HRESULT *ph
 {
     CPushSourceDesktop *pNewFilter = new CPushSourceDesktop(pUnk, phr );
 
-	if (phr)
-	{
-		if (pNewFilter == NULL) 
-			*phr = E_OUTOFMEMORY;
-		else
-			*phr = S_OK;
-	}
+    if (phr)
+    {
+        if (pNewFilter == NULL)
+            *phr = E_OUTOFMEMORY;
+        else
+            *phr = S_OK;
+    }
     return pNewFilter;
 
 }

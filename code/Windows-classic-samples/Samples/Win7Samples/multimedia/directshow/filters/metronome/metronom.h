@@ -1,4 +1,4 @@
-//==========================================================================;
+﻿//==========================================================================;
 //
 //  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
 //  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
@@ -24,8 +24,10 @@ public:
     static void CALLBACK Callback(HDRVR hdrvr, UINT uMsg, DWORD_PTR dwUser,
                                   DWORD_PTR dw1, DWORD_PTR dw2);
 
-    IUnknown * pUnk() 
-    { return static_cast<IUnknown*>(static_cast<IReferenceClock*>(this)); }
+    IUnknown * pUnk()
+    {
+        return static_cast<IUnknown*>(static_cast<IReferenceClock*>(this));
+    }
 
 private:
 
@@ -97,4 +99,4 @@ private:
 // Our class id
 // Metronome filter object
 DEFINE_GUID(CLSID_MetronomeFilter,
-0x08d5ec80, 0xb00b, 0x11cf, 0xb3, 0xf0, 0x0, 0xaa, 0x0, 0x37, 0x61, 0xc5);
+            0x08d5ec80, 0xb00b, 0x11cf, 0xb3, 0xf0, 0x0, 0xaa, 0x0, 0x37, 0x61, 0xc5);

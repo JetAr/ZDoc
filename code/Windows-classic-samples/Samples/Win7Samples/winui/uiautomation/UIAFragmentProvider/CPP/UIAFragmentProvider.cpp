@@ -1,35 +1,35 @@
-/*************************************************************************************************
-* Description: Entry point for a sample application that implements a custom control with a 
+﻿/*************************************************************************************************
+* Description: Entry point for a sample application that implements a custom control with a
 * UI Automation provider.
 *
-* The sample is aimed at demonstrating how to implement UI Automation providers for the elements 
+* The sample is aimed at demonstrating how to implement UI Automation providers for the elements
 * of a fragment that is hosted in an HWND. The control itself has been kept simple. It does not
 * support scrolling and therefore an arbitrary limit has been set on the number of items it
 * can contain. For convenience, list items are stored in a deque (from the Standard Template Library).
-* 
+*
 * The fragment consists of the root element (a list box) and its children (the list items).
-* The UI Automation provider for the list box supports only one control pattern, the Selection 
+* The UI Automation provider for the list box supports only one control pattern, the Selection
 * pattern. The provider for the list items implements the SelectionItem pattern.
 *
 * To see the UI Automation provider at work, run the application and then open UI Spy. You can
 * see the application and its controls in the Control View. Clicking on the control or on the
-* list items in the UI Spy tree causes the provider's methods to be called, and the values 
+* list items in the UI Spy tree causes the provider's methods to be called, and the values
 * returned are displayed in the Properties pane. (Note that some values are retrieved from the
 * default HWND provider, not this custom implementation.) You can also select an item in the
 * list by using the SelectionItem control pattern in UI Spy.
 *
 *
 *  Copyright (C) Microsoft Corporation.  All rights reserved.
-* 
+*
 * This source code is intended only as a supplement to Microsoft
 * Development Tools and/or on-line documentation.  See these other
 * materials for detailed information regarding Microsoft code samples.
-* 
+*
 * THIS CODE AND INFORMATION ARE PROVIDED AS IS WITHOUT WARRANTY OF ANY
 * KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
 * IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 * PARTICULAR PURPOSE.
-* 
+*
 *************************************************************************************************/
 
 #pragma once
@@ -89,12 +89,12 @@ INT_PTR CALLBACK DlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM /*lParam
             name[0] = ARRAYSIZE(name);
             // Get the new name from the edit control.
             LRESULT charCount = SendDlgItemMessage(hDlg, IDC_EDIT1, EM_GETLINE, 0, (LPARAM)name);
-            if (charCount == 0) 
+            if (charCount == 0)
             {
                 return FALSE;
             }
             // Get the status
-            ContactStatus status; 
+            ContactStatus status;
             if (BST_CHECKED == SendDlgItemMessage(hDlg, IDC_ONLINE, BM_GETCHECK, 0, 0))
             {
                 status = Status_Online;

@@ -1,11 +1,11 @@
-//*****************************************************************************
+﻿//*****************************************************************************
 //
 // Microsoft Windows Media
 // Copyright (C) Microsoft Corporation. All rights reserved.
 //
 // FileName:            Resource.h
 //
-// Abstract:            
+// Abstract:
 //
 //*****************************************************************************
 
@@ -18,7 +18,7 @@
 #define IDR_PROXYPLUGIN                 101
 
 // Next default values for new objects
-// 
+//
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        201

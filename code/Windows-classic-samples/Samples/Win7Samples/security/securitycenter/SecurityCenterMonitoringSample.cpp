@@ -1,4 +1,4 @@
-// SecurityCenterMonitoringSample.cpp : Defines the entry point for the console application.
+﻿// SecurityCenterMonitoringSample.cpp : Defines the entry point for the console application.
 //
 #include "stdafx.h"
 #include "wscapi.h"
@@ -13,7 +13,7 @@ DWORD WINAPI OnSecurityCenterHealthChange(LPVOID lpParameter)
         hr = WscGetSecurityProviderHealth(WSC_SECURITY_PROVIDER_INTERNET_SETTINGS, &health);
         if (SUCCEEDED(hr))
         {
-            wprintf(L"Internet Settings are %s, The Security Center service is %s\n", 
+            wprintf(L"Internet Settings are %s, The Security Center service is %s\n",
                     (WSC_SECURITY_PROVIDER_HEALTH_GOOD == health)?L"OK":L"Not OK",
                     (S_FALSE == hr)?L"Not Running":L"Running");
         }
@@ -23,7 +23,7 @@ DWORD WINAPI OnSecurityCenterHealthChange(LPVOID lpParameter)
         hr = WscGetSecurityProviderHealth(WSC_SECURITY_PROVIDER_ALL, &health);
         if (SUCCEEDED(hr))
         {
-            wprintf(L"Security Center says the machines security health is %s, The Security Center service is %s\n", 
+            wprintf(L"Security Center says the machines security health is %s, The Security Center service is %s\n",
                     (WSC_SECURITY_PROVIDER_HEALTH_GOOD == health)?L"OK":L"Not OK",
                     (S_FALSE == hr)?L"Not Running":L"Running");
         }
@@ -40,7 +40,7 @@ int _tmain(int argc, _TCHAR* argv[])
 {
     HANDLE hWscCallbackRegistration = NULL;
     HRESULT hr = S_OK;
-    
+
     if (SUCCEEDED(hr))
     {
         hr = WscRegisterForChanges(NULL, &hWscCallbackRegistration, OnSecurityCenterHealthChange, NULL);
@@ -49,7 +49,7 @@ int _tmain(int argc, _TCHAR* argv[])
             wprintf(L"Failed to Register for Security Center change notifications: Error 0x%X\n", hr);
         }
     }
- 
+
     if (SUCCEEDED(hr))
     {
         wprintf(L"Monitoring Security Center for health changes.  Press Enter to stop...\n");

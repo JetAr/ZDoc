@@ -1,4 +1,4 @@
-/**************************************************************************
+﻿/**************************************************************************
    THIS CODE AND INFORMATION IS PROVIDED 'AS IS' WITHOUT WARRANTY OF
    ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
    THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -61,11 +61,11 @@ CTSFMainWnd::~CTSFMainWnd()
     {
         DestroyWindow(m_hWnd);
     }
-    
+
     if(g_pThreadMgr)
     {
         g_pThreadMgr->Deactivate();
-        
+
         g_pThreadMgr->Release();
         g_pThreadMgr = NULL;
     }
@@ -81,10 +81,10 @@ BOOL CTSFMainWnd::Initialize(int nCmdShow)
 {
     HRESULT hr;
 #if 1
-    hr = CoCreateInstance(  CLSID_TF_ThreadMgr, 
-                            NULL, 
-                            CLSCTX_INPROC_SERVER, 
-                            IID_ITfThreadMgr, 
+    hr = CoCreateInstance(  CLSID_TF_ThreadMgr,
+                            NULL,
+                            CLSCTX_INPROC_SERVER,
+                            IID_ITfThreadMgr,
                             (void**)&g_pThreadMgr);
 #else
     hr = TF_CreateThreadMgr(&g_pThreadMgr);
@@ -98,7 +98,7 @@ BOOL CTSFMainWnd::Initialize(int nCmdShow)
             WNDCLASS  wc;
 
             ZeroMemory(&wc, sizeof(wc));
-   
+
             wc.style          = CS_HREDRAW | CS_VREDRAW;
             wc.lpfnWndProc    = CTSFMainWnd::_WndProc;
             wc.cbClsExtra     = 0;
@@ -130,7 +130,7 @@ BOOL CTSFMainWnd::Initialize(int nCmdShow)
                 {
                     ShowWindow(m_hWnd, nCmdShow);
                     UpdateWindow(m_hWnd);
-            
+
                     return TRUE;
                 }
             }
@@ -159,7 +159,7 @@ void CTSFMainWnd::_CleanupEditWnd(BOOL fNuke)
         {
             m_pTSFEditWnd->Release();
         }
-    
+
         m_pTSFEditWnd = NULL;
     }
 }
@@ -167,12 +167,12 @@ void CTSFMainWnd::_CleanupEditWnd(BOOL fNuke)
 /**************************************************************************
 
    CTSFMainWnd::_WndProc()
-   
+
 **************************************************************************/
 
-LRESULT CALLBACK CTSFMainWnd::_WndProc( HWND hWnd, 
-                                        UINT uMessage, 
-                                        WPARAM wParam, 
+LRESULT CALLBACK CTSFMainWnd::_WndProc( HWND hWnd,
+                                        UINT uMessage,
+                                        WPARAM wParam,
                                         LPARAM lParam)
 {
     CTSFMainWnd *pThis = (CTSFMainWnd*)GetWindowLongPtr(hWnd, THIS_POINTER_OFFSET);
@@ -181,19 +181,19 @@ LRESULT CALLBACK CTSFMainWnd::_WndProc( HWND hWnd,
     {
         return DefWindowProc(hWnd, uMessage, wParam, lParam);
     }
-    
+
     switch (uMessage)
     {
     case WM_NCCREATE:
-        {
-            LPCREATESTRUCT lpcs = (LPCREATESTRUCT)lParam;
-            pThis = (CTSFMainWnd*)(lpcs->lpCreateParams);
-            SetWindowLongPtr(hWnd, THIS_POINTER_OFFSET, (LONG_PTR)pThis);
+    {
+        LPCREATESTRUCT lpcs = (LPCREATESTRUCT)lParam;
+        pThis = (CTSFMainWnd*)(lpcs->lpCreateParams);
+        SetWindowLongPtr(hWnd, THIS_POINTER_OFFSET, (LONG_PTR)pThis);
 
-            //set the window handle
-            pThis->m_hWnd = hWnd;
-        }
-        break;
+        //set the window handle
+        pThis->m_hWnd = hWnd;
+    }
+    break;
 
     case WM_CREATE:
         return pThis->_OnCreate();
@@ -217,8 +217,8 @@ LRESULT CALLBACK CTSFMainWnd::_WndProc( HWND hWnd,
         return pThis->_OnInitMenuPopup(wParam, lParam);
 
     case WM_COMMAND:
-        return pThis->_OnCommand(   GET_WM_COMMAND_ID(wParam, lParam), 
-                                    GET_WM_COMMAND_CMD(wParam, lParam), 
+        return pThis->_OnCommand(   GET_WM_COMMAND_ID(wParam, lParam),
+                                    GET_WM_COMMAND_CMD(wParam, lParam),
                                     GET_WM_COMMAND_HWND(wParam, lParam));
 
     case WM_NCDESTROY:
@@ -248,7 +248,7 @@ LRESULT CTSFMainWnd::_OnCreate(VOID)
     if(!m_pTSFEditWnd->_Initialize(g_pThreadMgr, m_tfClientID))
     {
         _CleanupEditWnd(TRUE);
-        
+
         return -1;
     }
 
@@ -266,7 +266,7 @@ LRESULT CTSFMainWnd::_OnDestroy(VOID)
     _CleanupEditWnd(FALSE);
 
     PostQuitMessage(0);
-    
+
     return 0;
 }
 
@@ -283,11 +283,11 @@ LRESULT CTSFMainWnd::_OnCommand(WORD wID, WORD wCmd, HWND hWnd)
     case IDM_EXIT:
         PostMessage(m_hWnd, WM_CLOSE, 0, 0);
         break;
-    
+
     case IDM_ABOUT:
         MessageBox(m_hWnd, TEXT(""), g_szTSFAppTitle, MB_OK | MB_ICONINFORMATION);
         break;
-    
+
     case IDM_GETPRESERVEDKEY:
         m_pTSFEditWnd->_OnGetPreservedKey();
         break;
@@ -299,7 +299,7 @@ LRESULT CTSFMainWnd::_OnCommand(WORD wID, WORD wCmd, HWND hWnd)
     case IDM_GET_TEXTOWNER:
         m_pTSFEditWnd->_GetTextOwner();
         break;
-    
+
     case IDM_GET_READING:
         m_pTSFEditWnd->_GetReadingText();
         break;
@@ -307,11 +307,11 @@ LRESULT CTSFMainWnd::_OnCommand(WORD wID, WORD wCmd, HWND hWnd)
     case IDM_GET_COMPOSING:
         m_pTSFEditWnd->_GetComposing();
         break;
-    
+
     case IDM_TERMINATE_COMPOSITION:
         m_pTSFEditWnd->_TerminateAllCompositions();
         break;
-    
+
     case IDM_RECONVERT:
         m_pTSFEditWnd->_Reconvert();
         break;
@@ -319,34 +319,34 @@ LRESULT CTSFMainWnd::_OnCommand(WORD wID, WORD wCmd, HWND hWnd)
     case IDM_PLAYBACK:
         m_pTSFEditWnd->_Playback();
         break;
-    
-    case IDM_LOAD:
-        {
-            TCHAR   szFile[MAX_PATH];
 
-            if(_GetFileName(m_hWnd, szFile, MAX_PATH, TRUE))
-            {
-                m_pTSFEditWnd->_LoadFromFile(szFile);
-            }
+    case IDM_LOAD:
+    {
+        TCHAR   szFile[MAX_PATH];
+
+        if(_GetFileName(m_hWnd, szFile, MAX_PATH, TRUE))
+        {
+            m_pTSFEditWnd->_LoadFromFile(szFile);
         }
-        break;
+    }
+    break;
 
     case IDM_SAVE:
-        {
-            TCHAR   szFile[MAX_PATH];
+    {
+        TCHAR   szFile[MAX_PATH];
 
-            if(_GetFileName(m_hWnd, szFile, MAX_PATH, FALSE))
-            {
-                m_pTSFEditWnd->_SaveToFile(szFile);
-            }
+        if(_GetFileName(m_hWnd, szFile, MAX_PATH, FALSE))
+        {
+            m_pTSFEditWnd->_SaveToFile(szFile);
         }
-        break;
-    
+    }
+    break;
+
     case IDM_TEST:
         m_pTSFEditWnd->_OnTest();
         break;
     }
-    
+
     return 0;
 }
 
@@ -359,7 +359,7 @@ LRESULT CTSFMainWnd::_OnCommand(WORD wID, WORD wCmd, HWND hWnd)
 LRESULT CTSFMainWnd::_OnSetFocus(VOID)
 {
     SetFocus(m_pTSFEditWnd->_GetWindow());
-    
+
     return 0;
 }
 
@@ -395,7 +395,7 @@ LRESULT CTSFMainWnd::_OnSize(WORD wWidth, WORD wHeight)
 {
     //position the edit window to fill the client area
     MoveWindow(m_pTSFEditWnd->_GetWindow(), 0, 0, wWidth, wHeight, TRUE);
-    
+
     return 0;
 }
 

@@ -1,4 +1,4 @@
-//+-------------------------------------------------------------------------
+﻿//+-------------------------------------------------------------------------
 //
 //  Copyright (c) Microsoft Corporation.  All rights reserved.
 //
@@ -30,30 +30,30 @@ DWORD VerifyFileSignature (LPCSTR lpszModule, __in_opt LPSTR lpszCmdLine)
     LPCSTR  pszFileName;
     LPCSTR  pszEnd;
     DWORD   Status;
-    
+
     //
     // When this function is called, the first argument has already
     // been verified. So skip the first argument.
     //
     GetNextArgument (lpszCmdLine, NULL, &pszFirstArgEnd, NULL);
-    
+
     // Now get the name of the file whose signature needs to be verified.
     Status = GetNextArgument (CharNextA(pszFirstArgEnd), &pszFileName, &pszEnd, NULL);
-    
+
     // Must supply a filename
     if (ERROR_NO_MORE_ITEMS == Status)
         return ERROR_BAD_ARGUMENTS;
-    
+
     // Should not have any more arguments
     if ('\0' != *(CharNextA(pszEnd)) &&
-        ERROR_NO_MORE_ITEMS != GetNextArgument (CharNextA(CharNextA(pszEnd)), NULL, NULL, NULL))
+            ERROR_NO_MORE_ITEMS != GetNextArgument (CharNextA(CharNextA(pszEnd)), NULL, NULL, NULL))
     {
         return ERROR_BAD_ARGUMENTS;
     }
-    
+
     // We have the right arguments. Null terminate the filename.
     *(CharNextA(pszEnd)) = '\0';
-    
+
     switch (IsPackageTrusted(lpszModule, pszFileName, NULL))
     {
     case itvWintrustNotOnMachine:
@@ -84,17 +84,17 @@ emEnum GetExecutionMode (LPCSTR lpszCmdLine)
     // usage must be displayed.
     //
     dwStatus = GetNextArgument (lpszCmdLine, &pszStart, &pszEnd, &fQuoted);
-    
+
     if (ERROR_NO_MORE_ITEMS == dwStatus)
         return emPreset;
-    
+
     // The only allowed values in the first argument are /a, /v and /?
     if (pszEnd != CharNextA(pszStart) || fQuoted)
         return emHelp;
-    
+
     if ('/' != (*pszStart) && '-' != (*pszStart))
         return emHelp;
-    
+
     switch (*pszEnd)
     {
     case 'a':
@@ -118,56 +118,56 @@ DWORD GetNextArgument (LPCSTR pszCmdLine, LPCSTR *ppszArgStart, LPCSTR *ppszArgE
     LPCSTR  pszChar = pszCmdLine;
     LPCSTR  pszFirst = NULL;
     LPCSTR  pszLast = NULL;
-    
+
     if (NULL == pszChar)
         return ERROR_NO_MORE_ITEMS;
-    
+
     // Skip leading spaces.
     while (' ' == *pszChar || '\t' == *pszChar)
         pszChar = CharNextA(pszChar);
-    
+
     // Check if we have run out of arguments.
     if ('\0' == (*pszChar))
         return ERROR_NO_MORE_ITEMS;
-    
+
     // Check if we this argument has been enclosed in quotes
     if ('\"' == (*pszChar))
     {
         fInQuotes = true;
         pszChar = CharNextA (pszChar);
     }
-        
+
     pszFirst = pszChar;
-    
+
     // Now look for the end of the argument
     while (! fFoundArgEnd)
     {
         pszChar = CharNextA(pszChar);
-        
+
         if ('\0' == (*pszChar))
             fFoundArgEnd = true;
-        
+
         if (fInQuotes && '\"' == (*pszChar))
             fFoundArgEnd = true;
-        
+
         if (!fInQuotes && ' ' == (*pszChar))
             fFoundArgEnd = true;
-        
+
         if (!fInQuotes && '\t' == (*pszChar))
             fFoundArgEnd = true;
     }
-    
+
     pszLast = CharPrevA (pszFirst, pszChar);
-    
+
     if (ppszArgStart)
         *ppszArgStart = pszFirst;
-    
+
     if (ppszArgEnd)
         *ppszArgEnd = pszLast;
-    
+
     if (pfQuoted)
         *pfQuoted = fInQuotes;
-    
+
     return ERROR_SUCCESS;
 }
 
@@ -180,45 +180,45 @@ DWORD GetAdminInstallInfo (bool fPatch, __in_opt LPSTR lpszCmdLine, LPCSTR * pps
     LPCSTR  pszFileName;
     LPCSTR  pszEnd;
     DWORD   Status;
-    
+
     //
     // When this function is called, the first argument has already been
     // verified. So skip the first argument.
     //
     GetNextArgument (lpszCmdLine, NULL, &pszFirstArgEnd, NULL);
-    
+
     // See if there is another argument
     Status = GetNextArgument (CharNextA(pszFirstArgEnd), &pszFileName, &pszEnd, NULL);
-    
+
     // If it is not a patch, there should not be any more arguments.
     if (!fPatch)
     {
         if (ERROR_NO_MORE_ITEMS != Status)
             return ERROR_BAD_ARGUMENTS;
-        
+
         // If we are here, then we are done, because we have all the information we need.
         if (ppszAdminImagePath)
             *ppszAdminImagePath = NULL;
         return ERROR_SUCCESS;
     }
-    
+
     // If we are here, this is a patch. Get the path to the admin. install.
     if (ERROR_NO_MORE_ITEMS == Status)
         return ERROR_BAD_ARGUMENTS;     // No path was supplied.
-    
+
     // Should not have any more arguments.
     if ('\0' != *(CharNextA(pszEnd)) &&
-        ERROR_NO_MORE_ITEMS != GetNextArgument (CharNextA(CharNextA(pszEnd)), NULL, NULL, NULL))
+            ERROR_NO_MORE_ITEMS != GetNextArgument (CharNextA(CharNextA(pszEnd)), NULL, NULL, NULL))
     {
         return ERROR_BAD_ARGUMENTS;
     }
-    
+
     // We have the right arguments. Null terminate the pathname.
     *(CharNextA(pszEnd)) = '\0';
-    
+
     if (ppszAdminImagePath)
         *ppszAdminImagePath = pszFileName;
-    
+
     return ERROR_SUCCESS;
 }
 
@@ -232,7 +232,7 @@ UINT LoadResourceString(HINSTANCE hInst, LPCSTR lpType, LPCSTR lpName, __out_eco
     WCHAR   *pch    = 0;
 
     if ((hRsrc = WIN::FindResource(hInst, lpName, lpType)) != 0
-        && (hGlobal = WIN::LoadResource(hInst, hRsrc)) != 0)
+            && (hGlobal = WIN::LoadResource(hInst, hRsrc)) != 0)
     {
         // resource exists
         if ((pch = (WCHAR*)LockResource(hGlobal)) != 0)
@@ -260,7 +260,7 @@ UINT LoadResourceString(HINSTANCE hInst, LPCSTR lpType, LPCSTR lpName, __out_eco
             *pdwBufSize = 1;
             *lpBuf = 0;
         }
-        
+
         DebugMsg("[Resource] lpName = %s, lpBuf = %s\n", lpName, lpBuf);
 
         return ERROR_SUCCESS;
@@ -425,19 +425,19 @@ void PostMsiError(HINSTANCE hInst, HINSTANCE hMsi, HWND hwndOwner, LPCSTR szTitl
     case ERROR_PATH_NOT_FOUND:
         uiErrorId = ERROR_INSTALL_PACKAGE_OPEN_FAILED;
     default:
+    {
+        char szError[MAX_STR_LENGTH] = {0};
+        if (0 == WIN::LoadString(hMsi, uiErrorId, szError, sizeof(szError)/sizeof(char)))
         {
-            char szError[MAX_STR_LENGTH] = {0};
-            if (0 == WIN::LoadString(hMsi, uiErrorId, szError, sizeof(szError)/sizeof(char)))
-            {
-                // error string does not exist, use default
-                PostError(hInst, hwndOwner, szTitle, IDS_INSTALL_ERROR, uiErrorId);
-            }
-            else
-            {
-                MessageBox(hwndOwner, szError, szTitle, MB_OK | MB_ICONERROR);
-            }
-            return;
+            // error string does not exist, use default
+            PostError(hInst, hwndOwner, szTitle, IDS_INSTALL_ERROR, uiErrorId);
         }
+        else
+        {
+            MessageBox(hwndOwner, szError, szTitle, MB_OK | MB_ICONERROR);
+        }
+        return;
+    }
     }
 }
 
@@ -555,31 +555,31 @@ Finish:
 //
 bool MimimumWindowsPlatform(DWORD dwMajorVersion, DWORD dwMinorVersion, WORD wServicePackMajor)
 {
-   OSVERSIONINFOEX osvi;
-   DWORDLONG dwlConditionMask = 0;
+    OSVERSIONINFOEX osvi;
+    DWORDLONG dwlConditionMask = 0;
 
-   // Initialize the OSVERSIONINFOEX structure.
-   ZeroMemory(&osvi, sizeof(OSVERSIONINFOEX));
-   osvi.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEX);
-   osvi.dwMajorVersion = dwMajorVersion;
-   osvi.dwMinorVersion = dwMinorVersion;
-   osvi.wServicePackMajor = wServicePackMajor;
-   
-   // Initialize the condition mask.
-   VER_SET_CONDITION(dwlConditionMask, VER_MAJORVERSION, VER_GREATER_EQUAL);
-   VER_SET_CONDITION(dwlConditionMask, VER_MINORVERSION, VER_GREATER_EQUAL);
-   VER_SET_CONDITION(dwlConditionMask, VER_SERVICEPACKMAJOR, VER_GREATER_EQUAL);
- 
-   // Perform the test.
-   return VerifyVersionInfo(&osvi, 
-                            VER_MAJORVERSION | VER_MINORVERSION | VER_SERVICEPACKMAJOR,
-                            dwlConditionMask) ? true : false;
+    // Initialize the OSVERSIONINFOEX structure.
+    ZeroMemory(&osvi, sizeof(OSVERSIONINFOEX));
+    osvi.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEX);
+    osvi.dwMajorVersion = dwMajorVersion;
+    osvi.dwMinorVersion = dwMinorVersion;
+    osvi.wServicePackMajor = wServicePackMajor;
+
+    // Initialize the condition mask.
+    VER_SET_CONDITION(dwlConditionMask, VER_MAJORVERSION, VER_GREATER_EQUAL);
+    VER_SET_CONDITION(dwlConditionMask, VER_MINORVERSION, VER_GREATER_EQUAL);
+    VER_SET_CONDITION(dwlConditionMask, VER_SERVICEPACKMAJOR, VER_GREATER_EQUAL);
+
+    // Perform the test.
+    return VerifyVersionInfo(&osvi,
+                             VER_MAJORVERSION | VER_MINORVERSION | VER_SERVICEPACKMAJOR,
+                             dwlConditionMask) ? true : false;
 }
 
 /////////////////////////////////////////////////////////////////////////////
 // IsOSSupported
 //
-//  Returns true if running on Windows 2003, Windows XP or 
+//  Returns true if running on Windows 2003, Windows XP or
 //  Windows 2000 SP3 and above. Else returns false
 //
 bool IsOSSupported()
@@ -596,8 +596,8 @@ bool IsOSSupported()
 
     // We support:
     if(MimimumWindowsPlatform(5, 2, 0) ||   // Windows 2003 and above
-       MimimumWindowsPlatform(5, 1, 0) ||   // Windows XP and above
-       MimimumWindowsPlatform(5, 0, 3))     // Windows 2000 SP3 and above
+            MimimumWindowsPlatform(5, 1, 0) ||   // Windows XP and above
+            MimimumWindowsPlatform(5, 0, 3))     // Windows 2000 SP3 and above
         return true;
     else
         return false;
@@ -639,7 +639,7 @@ bool IsAdmin()
         return false;
 
     // on NT5, use the CheckTokenMembershipAPI to correctly handle cases where
-    // the Adiminstrators group might be disabled. bIsAdmin is BOOL for 
+    // the Adiminstrators group might be disabled. bIsAdmin is BOOL for
     BOOL bIsAdmin = FALSE;
     // CheckTokenMembership checks if the SID is enabled in the token. NULL for
     // the token means the token of the current thread. Disabled groups, restricted
@@ -657,7 +657,7 @@ bool IsAdmin()
     }
     FreeLibrary(hAdvapi32);
     hAdvapi32 = 0;
-    
+
     WIN::FreeSid(psidAdministrators);
     return bIsAdmin ? true : false;
 
@@ -728,7 +728,7 @@ void SetDiagnosticMode()
 
     char rgchBuf[64] = {0};
     if (0 != WIN::GetEnvironmentVariable(szDebugEnvVar, rgchBuf, sizeof(rgchBuf)/sizeof(char))
-        && rgchBuf[0] == '1')
+            && rgchBuf[0] == '1')
     {
         g_dmDiagnosticMode = 1; // enable DebugMsg output
     }
@@ -817,7 +817,7 @@ void DebugMsg(LPCSTR szFormat, LPCSTR szArg1, LPCSTR szArg2)
         if (!szDebug)
             return ; // out of memory
         if (0 == cchArg2)
-        {            
+        {
             if (FAILED(StringCchPrintf(szDebug, cchDebug, szFormat, szArg1)))
             {
                 delete[] szDebug;

@@ -1,4 +1,4 @@
-/**************************************************************************
+﻿/**************************************************************************
    THIS CODE AND INFORMATION IS PROVIDED 'AS IS' WITHOUT WARRANTY OF
    ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
    THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -50,13 +50,13 @@ STDMETHODIMP CTSFEditWnd::AdviseSink(REFIID riid, IUnknown *pUnknown, DWORD dwMa
     }
 
     hr = E_INVALIDARG;
-    
+
     //see if this advise sink already exists
     if(punkID == m_AdviseSink.punkID)
     {
         //this is the same advise sink, so just update the advise mask
         m_AdviseSink.dwMask = dwMask;
-        
+
         hr = S_OK;
     }
     else if(NULL != m_AdviseSink.punkID)
@@ -70,7 +70,7 @@ STDMETHODIMP CTSFEditWnd::AdviseSink(REFIID riid, IUnknown *pUnknown, DWORD dwMa
         m_AdviseSink.dwMask = dwMask;
 
         /*
-        Set the IUnknown pointer. This is used for comparison in 
+        Set the IUnknown pointer. This is used for comparison in
         UnadviseSink and future calls to this method.
         */
         m_AdviseSink.punkID = punkID;
@@ -86,7 +86,7 @@ STDMETHODIMP CTSFEditWnd::AdviseSink(REFIID riid, IUnknown *pUnknown, DWORD dwMa
 
         hr = S_OK;
     }
-    
+
     //this isn't needed anymore
     punkID->Release();
 
@@ -107,7 +107,7 @@ STDMETHODIMP CTSFEditWnd::UnadviseSink(IUnknown *pUnknown)
     IUnknown    *punkID;
 
     /*
-    Get the "real" IUnknown pointer. This needs to be done for comparison 
+    Get the "real" IUnknown pointer. This needs to be done for comparison
     purposes.
     */
     hr = pUnknown->QueryInterface(IID_IUnknown, (LPVOID*)&punkID);
@@ -136,7 +136,7 @@ STDMETHODIMP CTSFEditWnd::UnadviseSink(IUnknown *pUnknown)
     }
 
     punkID->Release();
-    
+
     return hr;
 }
 
@@ -154,7 +154,7 @@ STDMETHODIMP CTSFEditWnd::RequestLock(DWORD dwLockFlags, HRESULT *phrSession)
     {
         return E_UNEXPECTED;
     }
-    
+
     if(NULL == phrSession)
     {
         return E_INVALIDARG;
@@ -169,24 +169,24 @@ STDMETHODIMP CTSFEditWnd::RequestLock(DWORD dwLockFlags, HRESULT *phrSession)
         if(dwLockFlags & TS_LF_SYNC)
         {
             /*
-            The caller wants an immediate lock, but this cannot be granted because 
+            The caller wants an immediate lock, but this cannot be granted because
             the document is already locked.
             */
             *phrSession = TS_E_SYNCHRONOUS;
             return S_OK;
         }
-        else    
+        else
         {
-            //the request is asynchronous 
+            //the request is asynchronous
 
             /*
-            The only type of asynchronous lock request this application 
-            supports while the document is locked is to upgrade from a read 
-            lock to a read/write lock. This scenario is referred to as a lock 
-            upgrade request. 
+            The only type of asynchronous lock request this application
+            supports while the document is locked is to upgrade from a read
+            lock to a read/write lock. This scenario is referred to as a lock
+            upgrade request.
             */
-            if(((m_dwLockType & TS_LF_READWRITE) == TS_LF_READ) && 
-                ((dwLockFlags & TS_LF_READWRITE) == TS_LF_READWRITE))
+            if(((m_dwLockType & TS_LF_READWRITE) == TS_LF_READ) &&
+                    ((dwLockFlags & TS_LF_READWRITE) == TS_LF_READWRITE))
             {
                 m_fPendingLockUpgrade = TRUE;
 
@@ -201,7 +201,7 @@ STDMETHODIMP CTSFEditWnd::RequestLock(DWORD dwLockFlags, HRESULT *phrSession)
 
     //lock the document
     _LockDocument(dwLockFlags);
-    
+
     //call OnLockGranted
     *phrSession = m_AdviseSink.pTextStoreACPSink->OnLockGranted(dwLockFlags);
 
@@ -251,10 +251,10 @@ STDMETHODIMP CTSFEditWnd::GetStatus(TS_STATUS *pdcs)
 
 **************************************************************************/
 
-STDMETHODIMP CTSFEditWnd::QueryInsert(  LONG acpTestStart, 
-                                        LONG acpTestEnd, 
-                                        ULONG cch, 
-                                        LONG *pacpResultStart, 
+STDMETHODIMP CTSFEditWnd::QueryInsert(  LONG acpTestStart,
+                                        LONG acpTestEnd,
+                                        ULONG cch,
+                                        LONG *pacpResultStart,
                                         LONG *pacpResultEnd)
 {
     OutputDebugString(TEXT("CTSFEditWnd::QueryInsert\n"));
@@ -264,8 +264,8 @@ STDMETHODIMP CTSFEditWnd::QueryInsert(  LONG acpTestStart,
     lTextLength = GetWindowTextLength(m_hwndEdit);
 
     //make sure the parameters are within range of the document
-    if( (acpTestStart > acpTestEnd) || 
-        (acpTestEnd > lTextLength))
+    if( (acpTestStart > acpTestEnd) ||
+            (acpTestEnd > lTextLength))
     {
         return E_INVALIDARG;
     }
@@ -283,17 +283,17 @@ STDMETHODIMP CTSFEditWnd::QueryInsert(  LONG acpTestStart,
 
     CTSFEditWnd::_TestInsert()
 
-    This method is similar to QueryInsert except this method assumes the 
-    insertion will actually happen, so the document length would get 
-    expanded to fit the inserted text. QueryInsert doesn't allow the ranges 
+    This method is similar to QueryInsert except this method assumes the
+    insertion will actually happen, so the document length would get
+    expanded to fit the inserted text. QueryInsert doesn't allow the ranges
     to go outside of the existing text.
 
 **************************************************************************/
 
-STDMETHODIMP CTSFEditWnd::_TestInsert(  LONG acpTestStart, 
-                                        LONG acpTestEnd, 
-                                        ULONG cch, 
-                                        LONG *pacpResultStart, 
+STDMETHODIMP CTSFEditWnd::_TestInsert(  LONG acpTestStart,
+                                        LONG acpTestEnd,
+                                        ULONG cch,
+                                        LONG *pacpResultStart,
                                         LONG *pacpResultEnd)
 {
     //make sure the parameters are within range of the document
@@ -307,7 +307,7 @@ STDMETHODIMP CTSFEditWnd::_TestInsert(  LONG acpTestStart,
 
     //set the end point after the insertion
     *pacpResultEnd = acpTestStart + cch;
-    
+
     return S_OK;
 }
 
@@ -317,9 +317,9 @@ STDMETHODIMP CTSFEditWnd::_TestInsert(  LONG acpTestStart,
 
 **************************************************************************/
 
-STDMETHODIMP CTSFEditWnd::GetSelection( ULONG ulIndex, 
-                                        ULONG ulCount, 
-                                        TS_SELECTION_ACP *pSelection, 
+STDMETHODIMP CTSFEditWnd::GetSelection( ULONG ulIndex,
+                                        ULONG ulCount,
+                                        TS_SELECTION_ACP *pSelection,
                                         ULONG *pcFetched)
 {
     OutputDebugString(TEXT("CTSFEditWnd::GetSelection \n"));
@@ -359,7 +359,7 @@ STDMETHODIMP CTSFEditWnd::GetSelection( ULONG ulIndex,
     }
 
     _GetCurrentSelection();
-    
+
     //find out which end of the selection the caret (insertion point) is
     POINT   pt;
     LRESULT lPos;
@@ -375,9 +375,9 @@ STDMETHODIMP CTSFEditWnd::GetSelection( ULONG ulIndex,
     if(m_fInterimChar)
     {
         /*
-        fInterimChar will be set when an intermediate character has been 
-        set. One example of when this will happen is when an IME is being 
-        used to enter characters and a character has been set, but the IME 
+        fInterimChar will be set when an intermediate character has been
+        set. One example of when this will happen is when an IME is being
+        used to enter characters and a character has been set, but the IME
         is still active.
         */
         pSelection[0].style.ase = TS_AE_NONE;
@@ -398,7 +398,7 @@ STDMETHODIMP CTSFEditWnd::GetSelection( ULONG ulIndex,
 
 **************************************************************************/
 
-STDMETHODIMP CTSFEditWnd::SetSelection( ULONG ulCount, 
+STDMETHODIMP CTSFEditWnd::SetSelection( ULONG ulCount,
                                         const TS_SELECTION_ACP *pSelection)
 {
     OutputDebugString(TEXT("CTSFEditWnd::SetSelection \n"));
@@ -414,7 +414,7 @@ STDMETHODIMP CTSFEditWnd::SetSelection( ULONG ulCount,
         //this implementaiton only supports a single selection
         return E_INVALIDARG;
     }
-    
+
     //does the caller have a lock
     if(!_IsLocked(TS_LF_READWRITE))
     {
@@ -428,9 +428,9 @@ STDMETHODIMP CTSFEditWnd::SetSelection( ULONG ulCount,
     if(m_fInterimChar)
     {
         /*
-        fInterimChar will be set when an intermediate character has been 
-        set. One example of when this will happen is when an IME is being 
-        used to enter characters and a character has been set, but the IME 
+        fInterimChar will be set when an intermediate character has been
+        set. One example of when this will happen is when an IME is being
+        used to enter characters and a character has been set, but the IME
         is still active.
         */
         m_ActiveSelEnd = TS_AE_NONE;
@@ -451,11 +451,11 @@ STDMETHODIMP CTSFEditWnd::SetSelection( ULONG ulCount,
     }
 
     m_fNotify = FALSE;
-    
+
     ::SendMessage(m_hwndEdit, EM_SETSEL, lStart, lEnd);
 
     m_fNotify = TRUE;
-    
+
     return S_OK;
 }
 
@@ -465,14 +465,14 @@ STDMETHODIMP CTSFEditWnd::SetSelection( ULONG ulCount,
 
 **************************************************************************/
 
-STDMETHODIMP CTSFEditWnd::GetText(  LONG acpStart, 
-                                    LONG acpEnd, 
-                                    WCHAR *pchPlain, 
-                                    ULONG cchPlainReq, 
-                                    ULONG *pcchPlainOut, 
-                                    TS_RUNINFO *prgRunInfo, 
-                                    ULONG ulRunInfoReq, 
-                                    ULONG *pulRunInfoOut, 
+STDMETHODIMP CTSFEditWnd::GetText(  LONG acpStart,
+                                    LONG acpEnd,
+                                    WCHAR *pchPlain,
+                                    ULONG cchPlainReq,
+                                    ULONG *pcchPlainOut,
+                                    TS_RUNINFO *prgRunInfo,
+                                    ULONG ulRunInfoReq,
+                                    ULONG *pulRunInfoOut,
                                     LONG *pacpNext)
 {
     OutputDebugString(TEXT("CTSFEditWnd::GetText\n"));
@@ -511,7 +511,7 @@ STDMETHODIMP CTSFEditWnd::GetText(  LONG acpStart,
     {
         return hr;
     }
-    
+
     //validate the start pos
     if((acpStart < 0) || (acpStart > cchTotal))
     {
@@ -529,7 +529,7 @@ STDMETHODIMP CTSFEditWnd::GetText(  LONG acpStart,
             ULONG    cchReq;
 
             /*
-            acpEnd will be -1 if all of the text up to the end is being requested. 
+            acpEnd will be -1 if all of the text up to the end is being requested.
             */
 
             if(acpEnd >= acpStart)
@@ -550,7 +550,7 @@ STDMETHODIMP CTSFEditWnd::GetText(  LONG acpStart,
 
                 //extract the specified text range
                 LPWSTR  pwszStart = pwszText + acpStart;
-    
+
                 if(pchPlain && cchPlainReq)
                 {
                     //the text output is not NULL terminated
@@ -567,14 +567,14 @@ STDMETHODIMP CTSFEditWnd::GetText(  LONG acpStart,
             if(fDoRunInfo)
             {
                 /*
-                Runs are used to separate text characters from formatting characters. 
-        
-                In this example, sequences inside and including the <> are treated as 
-                control sequences and are not displayed.  
+                Runs are used to separate text characters from formatting characters.
+
+                In this example, sequences inside and including the <> are treated as
+                control sequences and are not displayed.
 
                 Plain text = "Text formatting."
-                Actual text = "Text <B><I>formatting</I></B>." 
-        
+                Actual text = "Text <B><I>formatting</I></B>."
+
                 If all of this text were requested, the run sequence would look like this:
 
                 prgRunInfo[0].type = TS_RT_PLAIN;   //"Text "
@@ -585,19 +585,19 @@ STDMETHODIMP CTSFEditWnd::GetText(  LONG acpStart,
 
                 prgRunInfo[2].type = TS_RT_PLAIN;   //"formatting"
                 prgRunInfo[2].uCount = 10;
-        
+
                 prgRunInfo[3].type = TS_RT_HIDDEN;  //</B></I>
                 prgRunInfo[3].uCount = 8;
 
                 prgRunInfo[4].type = TS_RT_PLAIN;   //"."
                 prgRunInfo[4].uCount = 1;
 
-                TS_RT_OPAQUE is used to indicate characters or character sequences 
+                TS_RT_OPAQUE is used to indicate characters or character sequences
                 that are in the document, but are used privately by the application
                 and do not map to text.  Runs of text tagged with TS_RT_OPAQUE should
                 NOT be included in the pchPlain or cchPlainOut [out] parameters.
                 */
-        
+
                 /*
                 This implementation is plain text, so the text only consists of one run.
                 If there were multiple runs, it would be an error to have consecuative runs
@@ -628,11 +628,11 @@ STDMETHODIMP CTSFEditWnd::GetText(  LONG acpStart,
 
 **************************************************************************/
 
-STDMETHODIMP CTSFEditWnd::SetText(  DWORD dwFlags, 
-                                    LONG acpStart, 
-                                    LONG acpEnd, 
-                                    const WCHAR *pchText, 
-                                    ULONG cch, 
+STDMETHODIMP CTSFEditWnd::SetText(  DWORD dwFlags,
+                                    LONG acpStart,
+                                    LONG acpEnd,
+                                    const WCHAR *pchText,
+                                    ULONG cch,
                                     TS_TEXTCHANGE *pChange)
 {
     OutputDebugString(TEXT("CTSFEditWnd::SetText \n"));
@@ -643,7 +643,7 @@ STDMETHODIMP CTSFEditWnd::SetText(  DWORD dwFlags,
     dwFlags can be:
     TS_ST_CORRECTION
     */
-    
+
     if(dwFlags & TS_ST_CORRECTION)
     {
         OutputDebugString(TEXT("\tTS_ST_CORRECTION\n"));
@@ -673,9 +673,9 @@ STDMETHODIMP CTSFEditWnd::SetText(  DWORD dwFlags,
 
 **************************************************************************/
 
-STDMETHODIMP CTSFEditWnd::GetFormattedText( LONG acpStart, 
-                                            LONG acpEnd, 
-                                            IDataObject **ppDataObject)
+STDMETHODIMP CTSFEditWnd::GetFormattedText( LONG acpStart,
+        LONG acpEnd,
+        IDataObject **ppDataObject)
 {
     OutputDebugString(TEXT("CTSFEditWnd::GetFormattedText \n"));
 
@@ -683,9 +683,9 @@ STDMETHODIMP CTSFEditWnd::GetFormattedText( LONG acpStart,
     {
         return E_INVALIDARG;
     }
-    
+
     *ppDataObject = NULL;
-    
+
     //does the caller have a lock
     if(!_IsLocked(TS_LF_READ))
     {
@@ -754,8 +754,8 @@ STDMETHODIMP CTSFEditWnd::GetFormattedText( LONG acpStart,
 
 **************************************************************************/
 
-STDMETHODIMP CTSFEditWnd::GetEmbedded(  LONG acpPos, 
-                                        REFGUID rguidService, 
+STDMETHODIMP CTSFEditWnd::GetEmbedded(  LONG acpPos,
+                                        REFGUID rguidService,
                                         REFIID riid, IUnknown **ppunk)
 {
     OutputDebugString(TEXT("CTSFEditWnd::GetEmbedded \n"));
@@ -770,9 +770,9 @@ STDMETHODIMP CTSFEditWnd::GetEmbedded(  LONG acpPos,
 
 **************************************************************************/
 
-STDMETHODIMP CTSFEditWnd::QueryInsertEmbedded(  const GUID *pguidService, 
-                                                const FORMATETC *pFormatEtc, 
-                                                BOOL *pfInsertable)
+STDMETHODIMP CTSFEditWnd::QueryInsertEmbedded(  const GUID *pguidService,
+        const FORMATETC *pFormatEtc,
+        BOOL *pfInsertable)
 {
     OutputDebugString(TEXT("CTSFEditWnd::QueryInsertEmbedded \n"));
 
@@ -788,11 +788,11 @@ STDMETHODIMP CTSFEditWnd::QueryInsertEmbedded(  const GUID *pguidService,
 
 **************************************************************************/
 
-STDMETHODIMP CTSFEditWnd::InsertEmbedded(   DWORD dwFlags, 
-                                            LONG acpStart, 
-                                            LONG acpEnd, 
-                                            IDataObject *pDataObject, 
-                                            TS_TEXTCHANGE *pChange)
+STDMETHODIMP CTSFEditWnd::InsertEmbedded(   DWORD dwFlags,
+        LONG acpStart,
+        LONG acpEnd,
+        IDataObject *pDataObject,
+        TS_TEXTCHANGE *pChange)
 {
     OutputDebugString(TEXT("CTSFEditWnd::InsertEmbedded \n"));
 
@@ -806,9 +806,9 @@ STDMETHODIMP CTSFEditWnd::InsertEmbedded(   DWORD dwFlags,
 
 **************************************************************************/
 
-STDMETHODIMP CTSFEditWnd::RequestSupportedAttrs(    DWORD dwFlags, 
-                                                    ULONG cFilterAttrs, 
-                                                    const TS_ATTRID *paFilterAttrs)
+STDMETHODIMP CTSFEditWnd::RequestSupportedAttrs(    DWORD dwFlags,
+        ULONG cFilterAttrs,
+        const TS_ATTRID *paFilterAttrs)
 {
     OutputDebugString(TEXT("CTSFEditWnd::RequestSupportedAttrs \n"));
 
@@ -847,10 +847,10 @@ STDMETHODIMP CTSFEditWnd::RequestSupportedAttrs(    DWORD dwFlags,
 
 **************************************************************************/
 
-STDMETHODIMP CTSFEditWnd::RequestAttrsAtPosition(   LONG acpPos, 
-                                                    ULONG cFilterAttrs, 
-                                                    const TS_ATTRID *paFilterAttrs, 
-                                                    DWORD dwFlags)
+STDMETHODIMP CTSFEditWnd::RequestAttrsAtPosition(   LONG acpPos,
+        ULONG cFilterAttrs,
+        const TS_ATTRID *paFilterAttrs,
+        DWORD dwFlags)
 {
     OutputDebugString(TEXT("CTSFEditWnd::RequestAttrsAtPosition \n"));
 
@@ -899,10 +899,10 @@ STDMETHODIMP CTSFEditWnd::RequestAttrsAtPosition(   LONG acpPos,
 
 **************************************************************************/
 
-STDMETHODIMP CTSFEditWnd::RequestAttrsTransitioningAtPosition(  LONG acpPos, 
-                                                                ULONG cFilterAttrs, 
-                                                                const TS_ATTRID *paFilterAttrs, 
-                                                                DWORD dwFlags)
+STDMETHODIMP CTSFEditWnd::RequestAttrsTransitioningAtPosition(  LONG acpPos,
+        ULONG cFilterAttrs,
+        const TS_ATTRID *paFilterAttrs,
+        DWORD dwFlags)
 {
     OutputDebugString(TEXT("CTSFEditWnd::RequestAttrsTransitioningAtPosition \n"));
 
@@ -915,14 +915,14 @@ STDMETHODIMP CTSFEditWnd::RequestAttrsTransitioningAtPosition(  LONG acpPos,
 
 **************************************************************************/
 
-STDMETHODIMP CTSFEditWnd::FindNextAttrTransition(   LONG acpStart, 
-                                                    LONG acpHalt, 
-                                                    ULONG cFilterAttrs, 
-                                                    const TS_ATTRID *paFilterAttrs, 
-                                                    DWORD dwFlags, 
-                                                    LONG *pacpNext, 
-                                                    BOOL *pfFound, 
-                                                    LONG *plFoundOffset)
+STDMETHODIMP CTSFEditWnd::FindNextAttrTransition(   LONG acpStart,
+        LONG acpHalt,
+        ULONG cFilterAttrs,
+        const TS_ATTRID *paFilterAttrs,
+        DWORD dwFlags,
+        LONG *pacpNext,
+        BOOL *pfFound,
+        LONG *plFoundOffset)
 {
     OutputDebugString(TEXT("CTSFEditWnd::FindNextAttrTransition \n"));
 
@@ -935,9 +935,9 @@ STDMETHODIMP CTSFEditWnd::FindNextAttrTransition(   LONG acpStart,
 
 **************************************************************************/
 
-STDMETHODIMP CTSFEditWnd::RetrieveRequestedAttrs(   ULONG ulCount, 
-                                                    TS_ATTRVAL *paAttrVals, 
-                                                    ULONG *pcFetched)
+STDMETHODIMP CTSFEditWnd::RetrieveRequestedAttrs(   ULONG ulCount,
+        TS_ATTRVAL *paAttrVals,
+        ULONG *pcFetched)
 {
     OutputDebugString(TEXT("CTSFEditWnd::RetrieveRequestedAttrs \n"));
 
@@ -949,12 +949,12 @@ STDMETHODIMP CTSFEditWnd::RetrieveRequestedAttrs(   ULONG ulCount,
         if(m_rgAttributes[i].dwFlags & ATTR_FLAG_REQUESTED)
         {
             paAttrVals->varValue.vt = VT_EMPTY;
-            
+
             //copy the attribute ID
             CopyMemory(&paAttrVals->idAttr, m_rgAttributes[i].attrid, sizeof(GUID));
-            
+
             //this app doesn't support overlapped attributes
-            paAttrVals->dwOverlapId = 0; 
+            paAttrVals->dwOverlapId = 0;
 
             if (m_rgAttributes[i].dwFlags & ATTR_FLAG_DEFAULT)
             {
@@ -1003,9 +1003,9 @@ STDMETHODIMP CTSFEditWnd::GetEndACP(LONG *pacp)
     }
 
     _GetCurrentSelection();
-    
+
     *pacp = m_acpEnd;
-    
+
     return S_OK;
 }
 
@@ -1031,10 +1031,10 @@ STDMETHODIMP CTSFEditWnd::GetActiveView(TsViewCookie *pvcView)
 
 **************************************************************************/
 
-STDMETHODIMP CTSFEditWnd::GetACPFromPoint(  TsViewCookie vcView, 
-                                            const POINT *pt, 
-                                            DWORD dwFlags, 
-                                            LONG *pacp)
+STDMETHODIMP CTSFEditWnd::GetACPFromPoint(  TsViewCookie vcView,
+        const POINT *pt,
+        DWORD dwFlags,
+        LONG *pacp)
 {
     OutputDebugString(TEXT("CTSFEditWnd::GetACPFromPoint \n"));
 
@@ -1045,15 +1045,15 @@ STDMETHODIMP CTSFEditWnd::GetACPFromPoint(  TsViewCookie vcView,
 
     CTSFEditWnd::GetTextExt()
 
-    If the text spans multiple lines, the result is the rectangle that 
+    If the text spans multiple lines, the result is the rectangle that
     contains all of the requested characters.
 
 **************************************************************************/
 
-STDMETHODIMP CTSFEditWnd::GetTextExt(   TsViewCookie vcView, 
-                                        LONG acpStart, 
-                                        LONG acpEnd, 
-                                        RECT *prc, 
+STDMETHODIMP CTSFEditWnd::GetTextExt(   TsViewCookie vcView,
+                                        LONG acpStart,
+                                        LONG acpEnd,
+                                        RECT *prc,
                                         BOOL *pfClipped)
 {
     OutputDebugString(TEXT("CTSFEditWnd::GetTextExt \n"));
@@ -1101,7 +1101,7 @@ STDMETHODIMP CTSFEditWnd::GetTextExt(   TsViewCookie vcView,
     {
         return hr;
     }
-    
+
     lTextLength = (LONG)SendMessage(m_hwndEdit, WM_GETTEXTLENGTH, 0, 0);
 
     //are the start and end reversed?
@@ -1111,7 +1111,7 @@ STDMETHODIMP CTSFEditWnd::GetTextExt(   TsViewCookie vcView,
         acpStart = acpEnd;
         acpEnd = lTemp;
     }
-    
+
     //request to the end of the text?
     if(-1 == acpEnd)
     {
@@ -1129,17 +1129,17 @@ STDMETHODIMP CTSFEditWnd::GetTextExt(   TsViewCookie vcView,
 
     //get the position of the last character
     /*
-    The character offset passed to this method is inclusive. For example, if 
-    the first character is being requested, acpStart will be 0 and acpEnd will 
-    be 1. If the last character is requested, acpEnd will not equal a valid 
-    character, so EM_POSFROMCHAR fails. If the next character is on another 
-    line, EM_POSFROMCHAR won't return a valid value. To work around this, get 
-    the position of the beginning of the end character, calculate the width of 
+    The character offset passed to this method is inclusive. For example, if
+    the first character is being requested, acpStart will be 0 and acpEnd will
+    be 1. If the last character is requested, acpEnd will not equal a valid
+    character, so EM_POSFROMCHAR fails. If the next character is on another
+    line, EM_POSFROMCHAR won't return a valid value. To work around this, get
+    the position of the beginning of the end character, calculate the width of
     the end character and add the width to the rectangle.
     */
     acpEnd--;
     dwEnd = (DWORD)SendMessage(m_hwndEdit, EM_POSFROMCHAR, acpEnd, 0);
-    
+
     //calculate the width of the last character
     SIZE    size;
     GetTextExtentPoint32(hdc, pwszText + acpEnd, 1, &size);
@@ -1154,8 +1154,8 @@ STDMETHODIMP CTSFEditWnd::GetTextExt(   TsViewCookie vcView,
     ReleaseDC(m_hwndEdit, hdc);
 
     /*
-    If the text range spans multiple lines, expand the rectangle to include all 
-    of the requested text. 
+    If the text range spans multiple lines, expand the rectangle to include all
+    of the requested text.
     */
     if(rc.bottom > rc.top)
     {
@@ -1163,9 +1163,9 @@ STDMETHODIMP CTSFEditWnd::GetTextExt(   TsViewCookie vcView,
         RECT    rcEdit;
 
         GetClientRect(m_hwndEdit, &rcEdit);
-        
+
         dwMargins = (DWORD)SendMessage(m_hwndEdit, EM_GETMARGINS, 0, 0);
-        
+
         //set the left point of the rectangle to the left margin of the edit control
         rc.left = LOWORD(dwMargins);
 
@@ -1177,14 +1177,14 @@ STDMETHODIMP CTSFEditWnd::GetTextExt(   TsViewCookie vcView,
     rc.bottom += lLineHeight;
 
     *prc = rc;
-    
+
     //if any part of the text rectangle is not visible, set *pfClipped to TRUE
     GetClientRect(m_hwndEdit, &rc);
 
     if( (prc->left < rc.left) ||
-        (prc->top < rc.top) ||
-        (prc->right > rc.right) ||
-        (prc->bottom > rc.bottom))
+            (prc->top < rc.top) ||
+            (prc->right > rc.right) ||
+            (prc->bottom > rc.bottom))
     {
         *pfClipped = TRUE;
     }
@@ -1253,17 +1253,17 @@ STDMETHODIMP CTSFEditWnd::GetWnd(TsViewCookie vcView, HWND *phwnd)
 
 **************************************************************************/
 
-STDMETHODIMP CTSFEditWnd::InsertTextAtSelection(    DWORD dwFlags, 
-                                                    const WCHAR *pwszText, 
-                                                    ULONG cch, 
-                                                    LONG *pacpStart, 
-                                                    LONG *pacpEnd, 
-                                                    TS_TEXTCHANGE *pChange)
+STDMETHODIMP CTSFEditWnd::InsertTextAtSelection(    DWORD dwFlags,
+        const WCHAR *pwszText,
+        ULONG cch,
+        LONG *pacpStart,
+        LONG *pacpEnd,
+        TS_TEXTCHANGE *pChange)
 {
     OutputDebugString(TEXT("CTSFEditWnd::InsertTextAtSelection \n"));
 
     LONG    lTemp;
-    
+
     //does the caller have a lock
     if(!_IsLocked(TS_LF_READWRITE))
     {
@@ -1292,7 +1292,7 @@ STDMETHODIMP CTSFEditWnd::InsertTextAtSelection(    DWORD dwFlags,
     LONG    acpStart;
     LONG    acpOldEnd;
     LONG    acpNewEnd;
-    
+
     _GetCurrentSelection();
 
     acpOldEnd = m_acpEnd;
@@ -1319,7 +1319,7 @@ STDMETHODIMP CTSFEditWnd::InsertTextAtSelection(    DWORD dwFlags,
 
     //don't notify TSF of text and selection changes when in response to a TSF action
     m_fNotify = FALSE;
-    
+
     //insert the text
     ::SendMessage(m_hwndEdit, EM_REPLACESEL, TRUE, (LPARAM)pwszCopy);
 
@@ -1355,11 +1355,11 @@ STDMETHODIMP CTSFEditWnd::InsertTextAtSelection(    DWORD dwFlags,
 
 **************************************************************************/
 
-STDMETHODIMP CTSFEditWnd::InsertEmbeddedAtSelection(    DWORD dwFlags, 
-                                                        IDataObject *pDataObject, 
-                                                        LONG *pacpStart, 
-                                                        LONG *pacpEnd, 
-                                                        TS_TEXTCHANGE *pChange)
+STDMETHODIMP CTSFEditWnd::InsertEmbeddedAtSelection(    DWORD dwFlags,
+        IDataObject *pDataObject,
+        LONG *pacpStart,
+        LONG *pacpEnd,
+        TS_TEXTCHANGE *pChange)
 {
     OutputDebugString(TEXT("CTSFEditWnd::InsertEmbeddedAtSelection \n"));
 

@@ -1,4 +1,4 @@
-//
+﻿//
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -50,7 +50,7 @@ public:
         };
         return QISearch(this, qit, riid, ppv);
     }
-    
+
     // ICredentialProviderCredentialEvents
     IFACEMETHODIMP SetFieldState(__in ICredentialProviderCredential *pcpc, __in DWORD dwFieldID, __in CREDENTIAL_PROVIDER_FIELD_STATE cpfs);
     IFACEMETHODIMP SetFieldInteractiveState(__in ICredentialProviderCredential *pcpc, __in DWORD dwFieldID, __in CREDENTIAL_PROVIDER_FIELD_INTERACTIVE_STATE cpfis);

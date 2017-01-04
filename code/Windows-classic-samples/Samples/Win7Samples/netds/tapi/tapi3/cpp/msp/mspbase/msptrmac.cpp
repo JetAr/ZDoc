@@ -1,4 +1,4 @@
-/*++
+﻿/*++
 
 Copyright (c) 1998-1999 Microsoft Corporation
 
@@ -43,7 +43,7 @@ HRESULT CAudioCaptureTerminal::CreateTerminal(
     IN  CComPtr<IMoniker>   pMoniker,
     IN  MSP_HANDLE          htAddress,
     OUT ITTerminal        **ppTerm
-    )
+)
 {
     // Enable ATL string conversion macros.
     USES_CONVERSION;
@@ -57,14 +57,14 @@ HRESULT CAudioCaptureTerminal::CreateTerminal(
     if ( !ppTerm)
     {
         LOG((MSP_ERROR, "CAudioCaptureTerminal::CreateTerminal : "
-            "bad terminal pointer; returning E_POINTER"));
+             "bad terminal pointer; returning E_POINTER"));
         return E_POINTER;
     }
 
     if ( !pMoniker)
     {
         LOG((MSP_ERROR, "CAudioCaptureTerminal::CreateTerminal : "
-            "bad moniker pointer; returning E_POINTER"));
+             "bad moniker pointer; returning E_POINTER"));
         return E_POINTER;
     }
 
@@ -81,7 +81,7 @@ HRESULT CAudioCaptureTerminal::CreateTerminal(
 
     CComPtr<IPropertyBag> pBag;
     hr = pMoniker->BindToStorage(0, 0, IID_IPropertyBag, (void **)&pBag);
-    if (FAILED(hr)) 
+    if (FAILED(hr))
     {
         LOG((MSP_ERROR, "CAudioCaptureTerminal::CreateTerminal (IMoniker::BindToStorage) - returning  %8x", hr));
         return hr;
@@ -99,12 +99,12 @@ HRESULT CAudioCaptureTerminal::CreateTerminal(
     var.vt = VT_I4;
     hr = pBag->Read(L"WaveInId", &var, 0);
 
-    if (FAILED(hr)) 
+    if (FAILED(hr))
     {
         LOG((MSP_INFO, "CAudioCaptureTerminal::CreateTerminal - "
-            "IPropertyBag::Read failed on WaveID - "
-            "skipping terminal (not cause for alarm) - "
-            "returning  0x%08x", hr));
+             "IPropertyBag::Read failed on WaveID - "
+             "skipping terminal (not cause for alarm) - "
+             "returning  0x%08x", hr));
 
         return hr;
     }
@@ -117,12 +117,12 @@ HRESULT CAudioCaptureTerminal::CreateTerminal(
     var.vt = VT_BSTR;
     hr = pBag->Read(L"FriendlyName", &var, 0);
 
-    if (FAILED(hr)) 
+    if (FAILED(hr))
     {
         LOG((MSP_INFO, "CAudioCaptureTerminal::CreateTerminal - "
-            "IPropertyBag::Read failed on FriendlyName - "
-            "skipping terminal (not cause for alarm) - "
-            "returning  0x%08x", hr));
+             "IPropertyBag::Read failed on FriendlyName - "
+             "skipping terminal (not cause for alarm) - "
+             "returning  0x%08x", hr));
 
         return hr;
     }
@@ -133,7 +133,7 @@ HRESULT CAudioCaptureTerminal::CreateTerminal(
 
     CMSPComObject<CAudioCaptureTerminal> *pLclTerm = new CMSPComObject<CAudioCaptureTerminal>;
 
-    if (pLclTerm == NULL) 
+    if (pLclTerm == NULL)
     {
         LOG((MSP_ERROR, "CAudioCaptureTerminal::CreateTerminal - returning E_OUTOFMEMORY"));
         return E_OUTOFMEMORY;
@@ -144,7 +144,7 @@ HRESULT CAudioCaptureTerminal::CreateTerminal(
     //
 
     pLclTerm->m_pMoniker = pMoniker;
-    
+
     wcsncpy_s(pLclTerm->m_szName,MAX_PATH, OLE2T(var.bstrVal), MAX_PATH);
 
     SysFreeString(var.bstrVal);
@@ -157,11 +157,11 @@ HRESULT CAudioCaptureTerminal::CreateTerminal(
     if ( FAILED(hr) )
     {
         LOG((MSP_ERROR, "CAudioCaptureTerminal::CreateTerminal - "
-            "Internal QI failed; returning 0x%08x", hr));
+             "Internal QI failed; returning 0x%08x", hr));
 
         delete pLclTerm;
-        *ppTerm = NULL; // just in case        
-        
+        *ppTerm = NULL; // just in case
+
         return hr;
     }
 
@@ -177,7 +177,7 @@ HRESULT CAudioCaptureTerminal::CreateTerminal(
     if ( FAILED(hr) )
     {
         LOG((MSP_ERROR, "CAudioCaptureTerminal::CreateTerminal - "
-            "Initialize failed; returning 0x%08x", hr));
+             "Initialize failed; returning 0x%08x", hr));
 
         (*ppTerm)->Release();
         *ppTerm = NULL;
@@ -203,10 +203,10 @@ HRESULT CAudioCaptureTerminal::CreateFilters(void)
     //
 
     if ( (m_pIFilter            != NULL) ||
-         (m_pIPin               != NULL) ||
-         (m_pIAMAudioInputMixer != NULL) )
+            (m_pIPin               != NULL) ||
+            (m_pIAMAudioInputMixer != NULL) )
     {
-        LOG((MSP_ERROR, "CAudioCaptureTerminal::CreateFilters() : we've already been called; returning E_FAIL"));  
+        LOG((MSP_ERROR, "CAudioCaptureTerminal::CreateFilters() : we've already been called; returning E_FAIL"));
         return E_FAIL;
     }
 
@@ -218,7 +218,7 @@ HRESULT CAudioCaptureTerminal::CreateFilters(void)
 
     if ( FAILED(hr) || (m_pIFilter == NULL) )
     {
-        LOG((MSP_ERROR, "CAudioCaptureTerminal::CreateFilters() : BindToObject failed 0x%08x", hr));  
+        LOG((MSP_ERROR, "CAudioCaptureTerminal::CreateFilters() : BindToObject failed 0x%08x", hr));
 
         m_pIFilter = NULL; // we are being extra careful...
         return hr;
@@ -229,7 +229,7 @@ HRESULT CAudioCaptureTerminal::CreateFilters(void)
     //
 
     hr = m_pIFilter->QueryInterface(IID_IAMAudioInputMixer,
-                                       (void **) &m_pIAMAudioInputMixer);
+                                    (void **) &m_pIAMAudioInputMixer);
 
     if ( FAILED(hr) || (m_pIAMAudioInputMixer == NULL) )
     {
@@ -238,7 +238,7 @@ HRESULT CAudioCaptureTerminal::CreateFilters(void)
         // all it means is that subsequent mixer operations on the terminal will fail.
         //
 
-        LOG((MSP_WARN, "CAudioCaptureTerminal::CreateFilters() : mixer QI failed 0x%08x", hr));  
+        LOG((MSP_WARN, "CAudioCaptureTerminal::CreateFilters() : mixer QI failed 0x%08x", hr));
         m_pIAMAudioInputMixer = NULL;
     }
 
@@ -250,7 +250,7 @@ HRESULT CAudioCaptureTerminal::CreateFilters(void)
 
     if ( FAILED(hr) || (m_pIPin == NULL) )
     {
-        LOG((MSP_ERROR, "CAudioCaptureTerminal::CreateFilters() : FindTerminalPin failed 0x%08x", hr));  
+        LOG((MSP_ERROR, "CAudioCaptureTerminal::CreateFilters() : FindTerminalPin failed 0x%08x", hr));
 
         //
         // Clean up our mess.
@@ -262,7 +262,7 @@ HRESULT CAudioCaptureTerminal::CreateFilters(void)
         }
 
         m_pIFilter = NULL; // implicit release
-        
+
         return hr;
     }
 
@@ -273,19 +273,19 @@ HRESULT CAudioCaptureTerminal::CreateFilters(void)
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-HRESULT 
+HRESULT
 CAudioCaptureTerminal::FindTerminalPin(
-    )
+)
 {
     LOG((MSP_TRACE, "CAudioCaptureTerminal::FindTerminalPin - enter"));
-    
+
     // We must not do CreateFiltersIfRequired here because that would
     // result in a recursive call to us again.
 
     if (m_pIPin != NULL)
     {
         LOG((MSP_ERROR, "CAudioCaptureTerminal::FindTerminalPin - "
-            "we've alread got a pin; returning E_UNEXPECTED"));
+             "we've alread got a pin; returning E_UNEXPECTED"));
         return E_UNEXPECTED;
     }
 
@@ -299,23 +299,23 @@ CAudioCaptureTerminal::FindTerminalPin(
 
     if (FAILED(hr = m_pIFilter->EnumPins(&pIEnumPins)))
     {
-        LOG((MSP_ERROR, 
-            "CAudioCaptureTerminal::FindTerminalPin - can't enum pins %8x",
-            hr));
+        LOG((MSP_ERROR,
+             "CAudioCaptureTerminal::FindTerminalPin - can't enum pins %8x",
+             hr));
         return hr;
     }
 
     IPin * pIPin;
 
-    // Enumerate all the pins and break on the 
+    // Enumerate all the pins and break on the
     // first pin that meets requirement.
     for (;;)
     {
         if (pIEnumPins->Next(1, &pIPin, &cFetched) != S_OK)
         {
-            LOG((MSP_ERROR, 
-                "CAudioCaptureTerminal::FindTerminalPin - can't get a pin %8x",
-                hr));
+            LOG((MSP_ERROR,
+                 "CAudioCaptureTerminal::FindTerminalPin - can't get a pin %8x",
+                 hr));
             return (hr == S_FALSE) ? E_FAIL : hr;
         }
 
@@ -329,9 +329,9 @@ CAudioCaptureTerminal::FindTerminalPin(
 
         if (FAILED(hr = pIPin->QueryDirection(&dir)))
         {
-            LOG((MSP_ERROR, 
-                "CAudioCaptureTerminal::FindTerminalPin - can't query pin direction %8x",
-                hr));
+            LOG((MSP_ERROR,
+                 "CAudioCaptureTerminal::FindTerminalPin - can't query pin direction %8x",
+                 hr));
             pIPin->Release();
             return hr;
         }
@@ -347,7 +347,7 @@ CAudioCaptureTerminal::FindTerminalPin(
     m_pIPin = pIPin;
 
     LOG((MSP_TRACE, "CAudioCaptureTerminal::FindTerminalPin - exit S_OK"));
-  
+
     return S_OK;
 }
 
@@ -356,30 +356,30 @@ CAudioCaptureTerminal::FindTerminalPin(
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 HRESULT CAudioCaptureTerminal::AddFiltersToGraph(
-    )
+)
 {
     LOG((MSP_TRACE, "CAudioCaptureTerminal::AddFiltersToGraph - enter"));
 
     if (m_pGraph == NULL)
     {
         LOG((MSP_ERROR, "CAudioCaptureTerminal::AddFiltersToGraph - "
-            "we don't have a filter graph; returning E_UNEXPECTED"));
+             "we don't have a filter graph; returning E_UNEXPECTED"));
         return E_UNEXPECTED;
     }
 
     HRESULT hr = CreateFiltersIfRequired();
-    
+
     if ( FAILED(hr) )
     {
         LOG((MSP_ERROR, "CAudioCaptureTerminal::AddFiltersToGraph - "
-            "CreateFiltersIfRequired failed; returning hr = 0x%08x", hr));
+             "CreateFiltersIfRequired failed; returning hr = 0x%08x", hr));
         return hr;
     }
 
     if (m_pIFilter == NULL)
     {
         LOG((MSP_ERROR, "CAudioCaptureTerminal::AddFiltersToGraph - "
-            "we don't have a filter; returning E_UNEXPECTED"));
+             "we don't have a filter; returning E_UNEXPECTED"));
         return E_UNEXPECTED;
     }
 
@@ -398,7 +398,7 @@ HRESULT CAudioCaptureTerminal::AddFiltersToGraph(
     if ( FAILED(hr) )
     {
         LOG((MSP_ERROR, "CAudioCaptureTerminal::AddFiltersToGraph - "
-            "AddFilter failed; returning hr = 0x%08x", hr));
+             "AddFilter failed; returning hr = 0x%08x", hr));
         return hr;
     }
 
@@ -411,7 +411,7 @@ HRESULT CAudioCaptureTerminal::AddFiltersToGraph(
 HRESULT CAudioCaptureTerminal::CompleteConnectTerminal(void)
 {
     CLock lock(m_CritSec);
-    
+
     LOG((MSP_TRACE, "CAudioCaptureTerminal::CompleteConnectTerminal - enter"));
 
     // By default, we need not unreserve later.
@@ -421,7 +421,7 @@ HRESULT CAudioCaptureTerminal::CompleteConnectTerminal(void)
     if (FAILED(hr))
     {
         LOG((MSP_ERROR, "CAudioCaptureTerminal::CompleteConnectTerminal: "
-                "CSingleFilterTerminal method failed"));
+             "CSingleFilterTerminal method failed"));
         return hr;
     }
 
@@ -435,12 +435,12 @@ HRESULT CAudioCaptureTerminal::CompleteConnectTerminal(void)
     // media type before it can open a wave device.
 
     CComPtr <IAMResourceControl> pIResource;
- 
+
     hr = m_pIFilter->QueryInterface(IID_IAMResourceControl, (void **) &pIResource);
-    if (FAILED(hr)) 
+    if (FAILED(hr))
     {
-        LOG((MSP_WARN, "CAudioCaptureTerminal::CompleteConnectTerminal - QI failed: %8x", hr)); 
-        
+        LOG((MSP_WARN, "CAudioCaptureTerminal::CompleteConnectTerminal - QI failed: %8x", hr));
+
         // This is a nonesential operation so we do not "return hr;" here.
     }
     else // QueryInterface didn't fail
@@ -450,7 +450,7 @@ HRESULT CAudioCaptureTerminal::CompleteConnectTerminal(void)
         if (hr != S_OK)
         {
             LOG((MSP_ERROR, "CAudioCaptureTerminal::CompleteConnectTerminal - "
-                    "device reservation failed: %8x", hr));
+                 "device reservation failed: %8x", hr));
             return hr;
         }
 
@@ -469,9 +469,9 @@ HRESULT CAudioCaptureTerminal::CompleteConnectTerminal(void)
 // if CompleteConnect fails)
 
 STDMETHODIMP CAudioCaptureTerminal::DisconnectTerminal(
-            IN      IGraphBuilder  * pGraph,
-            IN      DWORD            dwReserved
-            )
+    IN      IGraphBuilder  * pGraph,
+    IN      DWORD            dwReserved
+)
 {
     LOG((MSP_TRACE, "CAudioCaptureTerminal::DisconnectTerminal - enter"));
 
@@ -488,7 +488,7 @@ STDMETHODIMP CAudioCaptureTerminal::DisconnectTerminal(
     if (FAILED(hr))
     {
         LOG((MSP_TRACE, "CAudioCaptureTerminal::DisconnectTerminal : "
-                "CSingleFilterTerminal method failed; hr = %d", hr));
+             "CSingleFilterTerminal method failed; hr = %d", hr));
         return hr;
     }
 
@@ -499,11 +499,11 @@ STDMETHODIMP CAudioCaptureTerminal::DisconnectTerminal(
 
         hr = m_pIFilter->QueryInterface(IID_IAMResourceControl,
                                         (void **) &pIResource);
-        if (FAILED(hr)) 
+        if (FAILED(hr))
         {
             LOG((MSP_WARN, "CAudioCaptureTerminal::DisconnectTerminal - "
-                                 "QI failed: %8x", hr)); 
-        
+                 "QI failed: %8x", hr));
+
             // This is a nonesential operation so we do not "return hr;" here.
         }
         else
@@ -514,7 +514,7 @@ STDMETHODIMP CAudioCaptureTerminal::DisconnectTerminal(
             if (hr != S_OK)
             {
                 LOG((MSP_WARN, "CAudioCaptureTerminal::DisconnectTerminal - "
-                                     "device unreservation failed: %8x", hr));
+                     "device unreservation failed: %8x", hr));
                 // no reason to completely die at this point, so we just continue
             }
 
@@ -537,7 +537,7 @@ STDMETHODIMP CAudioCaptureTerminal::DisconnectTerminal(
 //* NOTE: The input filter does not support IBasicAudio so we need to masage*//
 //*       the parameters for the basic audio methods so that the will work  *//
 //*       for IAMAudioInputMixer.                                           *//
-//*                                                                         *//    
+//*                                                                         *//
 //*****************************************************************************
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -559,7 +559,7 @@ STDMETHODIMP CAudioCaptureTerminal::get_Volume(long * plVolume)
     if ( !plVolume)
     {
         LOG((MSP_ERROR, "CAudioCaptureTerminal::get_Volume - "
-            "invalid pointer passed in - returning E_POINTER"));
+             "invalid pointer passed in - returning E_POINTER"));
         return E_POINTER;
     }
 
@@ -568,11 +568,11 @@ STDMETHODIMP CAudioCaptureTerminal::get_Volume(long * plVolume)
     //
 
     HRESULT hr = CreateFiltersIfRequired();
-    
+
     if ( FAILED(hr) )
     {
         LOG((MSP_ERROR, "CAudioCaptureTerminal::get_Volume - "
-            "CreateFiltersIfRequired failed; returning hr = 0x%08x", hr));
+             "CreateFiltersIfRequired failed; returning hr = 0x%08x", hr));
         return hr;
     }
 
@@ -584,7 +584,7 @@ STDMETHODIMP CAudioCaptureTerminal::get_Volume(long * plVolume)
     if (m_pIAMAudioInputMixer == NULL)
     {
         LOG((MSP_ERROR, "CAudioCaptureTerminal::get_Volume - "
-            "filter does not support mixer interface - returning E_FAIL"));
+             "filter does not support mixer interface - returning E_FAIL"));
         return E_FAIL;
     }
 
@@ -594,10 +594,10 @@ STDMETHODIMP CAudioCaptureTerminal::get_Volume(long * plVolume)
 
     double dVolume;
     hr = m_pIAMAudioInputMixer->get_MixLevel(&dVolume);
-    if (FAILED(hr)) 
+    if (FAILED(hr))
     {
         LOG((MSP_ERROR, "CAudioCaptureTerminal::get_Volume "
-            "(get_MixLevel) - returning  %8x", hr));
+             "(get_MixLevel) - returning  %8x", hr));
         return hr;
     }
 
@@ -606,15 +606,15 @@ STDMETHODIMP CAudioCaptureTerminal::get_Volume(long * plVolume)
     // Massage ranges to convert between disparate semantics.
     //
 
-    
+
     // Our argument is a pointer to a long in the range 0 - 0xFFFF.
     // We need to output that based on a double ranging from 0.0 to 1.0.
 
     if (dVolume < TMGR_MIN_CAPTURE_VOLUME)
     {
         LOG((MSP_ERROR, "CAudioCaptureTerminal::get_Volume - observed "
-            "volume %d < %d; returning E_INVALIDARG",
-            dVolume, TMGR_MIN_CAPTURE_VOLUME));
+             "volume %d < %d; returning E_INVALIDARG",
+             dVolume, TMGR_MIN_CAPTURE_VOLUME));
 
         return E_INVALIDARG;
     }
@@ -622,8 +622,8 @@ STDMETHODIMP CAudioCaptureTerminal::get_Volume(long * plVolume)
     if (dVolume > TMGR_MAX_CAPTURE_VOLUME)
     {
         LOG((MSP_ERROR, "CAudioCaptureTerminal::get_Volume - observed "
-            "volume %d > %d; returning E_INVALIDARG",
-            dVolume, TMGR_MAX_CAPTURE_VOLUME));
+             "volume %d > %d; returning E_INVALIDARG",
+             dVolume, TMGR_MAX_CAPTURE_VOLUME));
 
         return E_INVALIDARG;
     }
@@ -631,11 +631,11 @@ STDMETHODIMP CAudioCaptureTerminal::get_Volume(long * plVolume)
     // Convert the volume from whatever range of doubles the filter uses
     // to the range 0 - 1. Right now this does nothing but makes the code more general.
     dVolume = ( dVolume                 - TMGR_MIN_CAPTURE_VOLUME )
-            / ( TMGR_MAX_CAPTURE_VOLUME - TMGR_MIN_CAPTURE_VOLUME );
+              / ( TMGR_MAX_CAPTURE_VOLUME - TMGR_MIN_CAPTURE_VOLUME );
 
     // Convert the volume from the range 0 - 1 to the API's range.
     *plVolume = TMGR_MIN_API_VOLUME +
-        (long) (( TMGR_MAX_API_VOLUME - TMGR_MIN_API_VOLUME ) * dVolume);
+                (long) (( TMGR_MAX_API_VOLUME - TMGR_MIN_API_VOLUME ) * dVolume);
 
     LOG((MSP_TRACE, "CAudioCaptureTerminal::get_Volume - exit S_OK"));
     return S_OK;
@@ -649,17 +649,17 @@ STDMETHODIMP CAudioCaptureTerminal::put_Volume(long lVolume)
     CLock lock(m_CritSec);
 
     LOG((MSP_TRACE, "CAudioCaptureTerminal::put_Volume - enter"));
-    
+
     //
     // Create the filters if required. This protects us if the creation fails.
     //
 
     HRESULT hr = CreateFiltersIfRequired();
-    
+
     if ( FAILED(hr) )
     {
         LOG((MSP_ERROR, "CAudioCaptureTerminal::put_Volume - "
-            "CreateFiltersIfRequired failed; returning hr = 0x%08x", hr));
+             "CreateFiltersIfRequired failed; returning hr = 0x%08x", hr));
         return hr;
     }
 
@@ -671,7 +671,7 @@ STDMETHODIMP CAudioCaptureTerminal::put_Volume(long lVolume)
     if (m_pIAMAudioInputMixer == NULL)
     {
         LOG((MSP_ERROR, "CAudioCaptureTerminal::put_Volume - "
-            "filter does not support mixer interface - returning E_FAIL"));
+             "filter does not support mixer interface - returning E_FAIL"));
         return E_FAIL;
     }
 
@@ -685,8 +685,8 @@ STDMETHODIMP CAudioCaptureTerminal::put_Volume(long lVolume)
     if (lVolume < TMGR_MIN_API_VOLUME)
     {
         LOG((MSP_ERROR, "CAudioCaptureTerminal::put_Volume - requested "
-            "volume %d < %d; returning E_INVALIDARG",
-            lVolume, TMGR_MIN_API_VOLUME));
+             "volume %d < %d; returning E_INVALIDARG",
+             lVolume, TMGR_MIN_API_VOLUME));
 
         return E_INVALIDARG;
     }
@@ -694,23 +694,23 @@ STDMETHODIMP CAudioCaptureTerminal::put_Volume(long lVolume)
     if (lVolume > TMGR_MAX_API_VOLUME)
     {
         LOG((MSP_ERROR, "CAudioCaptureTerminal::put_Volume - requested "
-            "volume %d > %d; returning E_INVALIDARG",
-            lVolume, TMGR_MAX_API_VOLUME));
+             "volume %d > %d; returning E_INVALIDARG",
+             lVolume, TMGR_MAX_API_VOLUME));
 
         return E_INVALIDARG;
     }
 
     // Convert to the range 0 to 1.
     double dVolume =
-               ( (double) ( lVolume             - TMGR_MIN_API_VOLUME ) )
-             / ( (double) ( TMGR_MAX_API_VOLUME - TMGR_MIN_API_VOLUME ) );
+        ( (double) ( lVolume             - TMGR_MIN_API_VOLUME ) )
+        / ( (double) ( TMGR_MAX_API_VOLUME - TMGR_MIN_API_VOLUME ) );
 
     // Convert the volume to whatever range of doubles the filter uses
     // from the range 0 - 1. Right now this does nothing but makes the code
     // more general.
 
     dVolume = TMGR_MIN_CAPTURE_VOLUME +
-        ( TMGR_MAX_CAPTURE_VOLUME - TMGR_MIN_CAPTURE_VOLUME ) * dVolume;
+              ( TMGR_MAX_CAPTURE_VOLUME - TMGR_MIN_CAPTURE_VOLUME ) * dVolume;
 
     hr = m_pIAMAudioInputMixer->put_MixLevel(dVolume);
 
@@ -723,7 +723,7 @@ STDMETHODIMP CAudioCaptureTerminal::put_Volume(long lVolume)
 
 STDMETHODIMP CAudioCaptureTerminal::get_Balance(long * plBalance)
 {
-    
+
     HRESULT hr = E_NOTIMPL;
 
     LOG((MSP_TRACE, "CAudioCaptureTerminal::get_Balance - enter"));
@@ -751,7 +751,7 @@ STDMETHODIMP CAudioCaptureTerminal::put_Balance(long lBalance)
 STDMETHODIMP
 CAudioCaptureTerminal::get_WaveId(
     OUT long * plWaveId
-    )
+)
 {
     LOG((MSP_TRACE, "CAudioCaptureTerminal::get_WaveId - enter"));
 
@@ -764,7 +764,7 @@ CAudioCaptureTerminal::get_WaveId(
     if ( !plWaveId)
     {
         LOG((MSP_ERROR, "CAudioCaptureTerminal::get_WaveId - "
-            "bad pointer argument"));
+             "bad pointer argument"));
 
         return E_POINTER;
     }
@@ -776,7 +776,7 @@ CAudioCaptureTerminal::get_WaveId(
     if ( ! m_pMoniker)
     {
         LOG((MSP_ERROR, "CAudioCaptureTerminal::get_WaveId - "
-            "bad moniker pointer - exit E_UNEXPECTED"));
+             "bad moniker pointer - exit E_UNEXPECTED"));
 
         return E_UNEXPECTED;
     }
@@ -791,11 +791,11 @@ CAudioCaptureTerminal::get_WaveId(
                                            0,
                                            IID_IPropertyBag,
                                            (void **) &pBag);
-    
-    if ( FAILED(hr) ) 
+
+    if ( FAILED(hr) )
     {
         LOG((MSP_ERROR, "CAudioCaptureTerminal::get_WaveId - "
-            "can't get property bag - exit 0x%08x", hr));
+             "can't get property bag - exit 0x%08x", hr));
 
         return hr;
     }
@@ -809,16 +809,16 @@ CAudioCaptureTerminal::get_WaveId(
     var.vt = VT_I4;
 
     hr = pBag->Read(
-        L"WaveInId",
-        &var,
-        0);
+             L"WaveInId",
+             &var,
+             0);
 
     pBag->Release();
 
-    if ( FAILED(hr) ) 
+    if ( FAILED(hr) )
     {
         LOG((MSP_ERROR, "CAudioCaptureTerminal::get_WaveId - "
-            "can't read wave ID - exit 0x%08x", hr));
+             "can't read wave ID - exit 0x%08x", hr));
 
         return hr;
     }

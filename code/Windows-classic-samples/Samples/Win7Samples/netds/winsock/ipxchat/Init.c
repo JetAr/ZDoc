@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -106,7 +106,7 @@ BOOL InitApplication(HINSTANCE hInstance, int nCmdShow)
                         NULL,                // Use the window class menu
                         hInstance,           // This instance owns this window
                         NULL                 // Don't need data in WM_CREATE
-    );
+                       );
 
     // If window could not be created, return "failure"
     if (!hwnd)

@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+Ôªø// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -11,10 +11,10 @@ int main()
 
 {
 #ifdef JAPAN
-        printf ("ÇvÇâÇéÇRÇQÅAÇ±ÇÍÇÕéñåèÇæÅI");
+    printf ("Ôº∑ÔΩâÔΩéÔºìÔºí„ÄÅ„Åì„Çå„ÅØ‰∫ã‰ª∂„Å†ÔºÅ");
 #else
-        printf ("Win32, it's happenin'!");
+    printf ("Win32, it's happenin'!");
 #endif
 
-        return(0);
+    return(0);
 }

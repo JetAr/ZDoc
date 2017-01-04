@@ -1,4 +1,4 @@
-//// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿//// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 //// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 //// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 //// PARTICULAR PURPOSE.
@@ -26,9 +26,9 @@ void DisplayPackageInfo(Windows::ApplicationModel::Package^ package)
 {
     wcout << L"Name: " << package->Id->Name->Data() << endl;
     wcout << L"FullName: " << package->Id->FullName->Data() << endl;
-    wcout << L"Version: " << package->Id->Version.Major << "." << 
-        package->Id->Version.Minor << "." << package->Id->Version.Build << 
-        "." << package->Id->Version.Revision << endl;
+    wcout << L"Version: " << package->Id->Version.Major << "." <<
+          package->Id->Version.Minor << "." << package->Id->Version.Build <<
+          "." << package->Id->Version.Revision << endl;
     wcout << L"Publisher: " << package->Id->Publisher->Data() << endl;
     wcout << L"PublisherId: " << package->Id->PublisherId->Data() << endl;
     wcout << L"Installed Location: " << package->InstalledLocation->Path->Data() << endl;
@@ -50,11 +50,11 @@ int __cdecl main(Platform::Array<String^>^ args)
 
         int packageCount = 0;
         std::for_each(begin(packages), end(packages),
-            [&packageManager, &packageCount](Package^ package) 
-        { 
+                      [&packageManager, &packageCount](Package^ package)
+        {
             DisplayPackageInfo(package);
             wcout << endl;
-            packageCount += 1; 
+            packageCount += 1;
         });
     }
     catch (AccessDeniedException^)

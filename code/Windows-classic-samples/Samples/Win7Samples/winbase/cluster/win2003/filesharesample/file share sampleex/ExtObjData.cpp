@@ -1,4 +1,4 @@
-/////////////////////////////////////////////////////////////////////////////
+﻿/////////////////////////////////////////////////////////////////////////////
 //
 //  Copyright (c) 2003 <company name>
 //
@@ -82,9 +82,9 @@ static char THIS_FILE[] = __FILE__;
 /////////////////////////////////////////////////////////////////////////////
 HRESULT
 CObjData::S_HrCreateObject(
-      IUnknown *    piDataIn
+    IUnknown *    piDataIn
     , CObjData **   ppodOut
-    )
+)
 {
     HRESULT                 hr = S_OK;
     CObjData *              podData = NULL;
@@ -106,18 +106,18 @@ CObjData::S_HrCreateObject(
 
     switch ( cot )
     {
-        case CLUADMEX_OT_RESOURCE:
-            podData = new CResData();
-            break;
+    case CLUADMEX_OT_RESOURCE:
+        podData = new CResData();
+        break;
 
-        case CLUADMEX_OT_RESOURCETYPE:
-            podData = new CResTypeData();
-            break;
+    case CLUADMEX_OT_RESOURCETYPE:
+        podData = new CResTypeData();
+        break;
 
-        default:
-            hr = E_NOTIMPL;
-            goto Cleanup;
-            break;
+    default:
+        hr = E_NOTIMPL;
+        goto Cleanup;
+        break;
     } // switch: object type
 
     if ( podData == NULL )
@@ -173,12 +173,12 @@ Cleanup:
 /////////////////////////////////////////////////////////////////////////////
 HRESULT
 CObjData::AddContextMenuItem(
-      IWCContextMenuCallback *  piCallbackIn
+    IWCContextMenuCallback *  piCallbackIn
     , UINT                      nMenuItem
     , UINT                      nMenuItemDesc
     , UINT                      nBaseID
     , ULONG                     uFlags
-    )
+)
 {
     HRESULT hr = S_OK;
     CString strMenuItem;
@@ -202,12 +202,12 @@ CObjData::AddContextMenuItem(
     //
 
     hr = piCallbackIn->AddExtensionMenuItem(
-                              pwszMenuItem            // lpszName
-                            , pwszStatusBarText       // lpszStatusBarText
-                            , nBaseID                 // lCommandID
-                            , 0                       // lSubCommandID - reserved, must be 0
-                            , uFlags                  // uFlags
-                            );
+             pwszMenuItem            // lpszName
+             , pwszStatusBarText       // lpszStatusBarText
+             , nBaseID                 // lCommandID
+             , 0                       // lSubCommandID - reserved, must be 0
+             , uFlags                  // uFlags
+         );
 
     //
     //  Release strings.
@@ -238,8 +238,8 @@ CObjData::AddContextMenuItem(
 /////////////////////////////////////////////////////////////////////////////
 HRESULT
 CObjData::HrInitialize(
-      IUnknown *    piDataIn
-    )
+    IUnknown *    piDataIn
+)
 {
     HRESULT                 hr = S_OK;
     BSTR                    bstrName = NULL;
@@ -325,7 +325,7 @@ Cleanup:
 HRESULT
 CClusterData::HrInitialize(
     IUnknown * piDataIn
-    )
+)
 {
     HRESULT                 hr = S_OK;
     IGetClusterDataInfo *   piClusInfo = NULL;
@@ -445,20 +445,20 @@ Cleanup:
 /////////////////////////////////////////////////////////////////////////////
 HRESULT
 CClusterData::AddContextMenuItems(
-      IWCContextMenuCallback * piCallbackIn
-    )
+    IWCContextMenuCallback * piCallbackIn
+)
 {
     HRESULT hr = S_OK;
 
     ASSERT( piCallbackIn != NULL );
 
     hr = AddContextMenuItem(
-                  piCallbackIn
-                , IDS_CLUSTER_MENU_ITEM_1
-                , IDS_CLUSTER_MENU_ITEM_1_DESC
-                , CLUSTER_MENU_ID_1
-                , MF_ENABLED
-                );
+             piCallbackIn
+             , IDS_CLUSTER_MENU_ITEM_1
+             , IDS_CLUSTER_MENU_ITEM_1_DESC
+             , CLUSTER_MENU_ID_1
+             , MF_ENABLED
+         );
 
     return hr;
 
@@ -485,24 +485,24 @@ CClusterData::AddContextMenuItems(
 HRESULT
 CClusterData::InvokeCommand(
     ULONG nCommandIDIn
-    )
+)
 {
     HRESULT hr = S_OK;
 
     switch ( nCommandIDIn )
     {
-        case CLUSTER_MENU_ID_1:
+    case CLUSTER_MENU_ID_1:
 
-            //
-            //  TODO:  Implement your menu item here.
-            //
+        //
+        //  TODO:  Implement your menu item here.
+        //
 
-            hr = S_OK;
-            break;
+        hr = S_OK;
+        break;
 
-        default:
-            hr = E_NOTIMPL;
-            break;
+    default:
+        hr = E_NOTIMPL;
+        break;
     } // switch: nCommandIDIn
 
     return hr;
@@ -530,7 +530,7 @@ CClusterData::InvokeCommand(
 HRESULT
 CNodeData::HrInitialize(
     IUnknown * piDataIn
-    )
+)
 {
     HRESULT                 hr = S_OK;
     IGetClusterNodeInfo *   piNodeInfo = NULL;
@@ -618,19 +618,19 @@ Cleanup:
 HRESULT
 CNodeData::AddContextMenuItems(
     IWCContextMenuCallback * piCallbackIn
-    )
+)
 {
     HRESULT hr = S_OK;
 
     ASSERT( piCallbackIn != NULL );
 
     hr = AddContextMenuItem(
-              piCallbackIn
-            , IDS_NODE_MENU_ITEM_1
-            , IDS_NODE_MENU_ITEM_1_DESC
-            , NODE_MENU_ID_1
-            , MF_ENABLED
-            );
+             piCallbackIn
+             , IDS_NODE_MENU_ITEM_1
+             , IDS_NODE_MENU_ITEM_1_DESC
+             , NODE_MENU_ID_1
+             , MF_ENABLED
+         );
 
     return hr;
 
@@ -658,24 +658,24 @@ CNodeData::AddContextMenuItems(
 HRESULT
 CNodeData::InvokeCommand(
     ULONG nCommandIDIn
-    )
+)
 {
     HRESULT hr = S_OK;
 
     switch ( nCommandIDIn )
     {
-        case NODE_MENU_ID_1:
+    case NODE_MENU_ID_1:
 
-            //
-            //  TODO:  Implement your menu item here
-            //
+        //
+        //  TODO:  Implement your menu item here
+        //
 
-            hr = S_OK;
-            break;
+        hr = S_OK;
+        break;
 
-        default:
-            hr = E_NOTIMPL;
-            break;
+    default:
+        hr = E_NOTIMPL;
+        break;
     } // switch: nCommandIDIn
 
     return hr;
@@ -703,7 +703,7 @@ CNodeData::InvokeCommand(
 HRESULT
 CGroupData::HrInitialize(
     IUnknown * piDataIn
-    )
+)
 {
     HRESULT                 hr = S_OK;
     IGetClusterGroupInfo *  piGroupInfo = NULL;
@@ -789,20 +789,20 @@ Cleanup:
 //--
 /////////////////////////////////////////////////////////////////////////////
 HRESULT CGroupData::AddContextMenuItems(
-      IWCContextMenuCallback * piCallbackIn
-      )
+    IWCContextMenuCallback * piCallbackIn
+)
 {
     HRESULT hr = S_OK;
 
     ASSERT( piCallbackIn != NULL );
 
     hr = AddContextMenuItem(
-              piCallbackIn
-            , IDS_GROUP_MENU_ITEM_1
-            , IDS_GROUP_MENU_ITEM_1_DESC
-            , GROUP_MENU_ID_1
-            , MF_ENABLED
-            );
+             piCallbackIn
+             , IDS_GROUP_MENU_ITEM_1
+             , IDS_GROUP_MENU_ITEM_1_DESC
+             , GROUP_MENU_ID_1
+             , MF_ENABLED
+         );
 
     return hr;
 
@@ -833,18 +833,18 @@ HRESULT CGroupData::InvokeCommand( ULONG nCommandIDIn )
 
     switch ( nCommandIDIn )
     {
-        case GROUP_MENU_ID_1:
+    case GROUP_MENU_ID_1:
 
-            //
-            //  TODO:  Implement your menu item here
-            //
+        //
+        //  TODO:  Implement your menu item here
+        //
 
-            hr = S_OK;
-            break;
+        hr = S_OK;
+        break;
 
-        default:
-            hr = E_NOTIMPL;
-            break;
+    default:
+        hr = E_NOTIMPL;
+        break;
     } // switch: nCommandIDIn
 
     return hr;
@@ -855,10 +855,11 @@ HRESULT CGroupData::InvokeCommand( ULONG nCommandIDIn )
 // CResData implementation
 /////////////////////////////////////////////////////////////////////////////
 
-static CRuntimeClass * g_rgprtcResPSPages[] = {
+static CRuntimeClass * g_rgprtcResPSPages[] =
+{
     RUNTIME_CLASS( CFileShareSampleParamsPage ),
     NULL
-    };
+};
 
 /////////////////////////////////////////////////////////////////////////////
 //++
@@ -877,7 +878,7 @@ static CRuntimeClass * g_rgprtcResPSPages[] = {
 HRESULT
 CResData::HrInitialize(
     IUnknown * piDataIn
-    )
+)
 {
     HRESULT                     hr = S_OK;
     IGetClusterResourceInfo *   piResInfo = NULL;
@@ -1023,7 +1024,7 @@ Cleanup:
 HRESULT
 CResData::AddContextMenuItems(
     IWCContextMenuCallback * piCallbackIn
-    )
+)
 {
     HRESULT hr = S_OK;
     CLUSTER_RESOURCE_STATE  crs = ClusterResourceStateUnknown;
@@ -1037,12 +1038,12 @@ CResData::AddContextMenuItems(
     } // if:
 
     hr = AddContextMenuItem(
-              piCallbackIn
-            , IDS_RESOURCE_MENU_ITEM_CALL_ISALIVE
-            , IDS_RESOURCE_MENU_ITEM_CALL_ISALIVE_DESC
-            , RESOURCE_MENU_ID_1
-            , uFlags
-            );
+             piCallbackIn
+             , IDS_RESOURCE_MENU_ITEM_CALL_ISALIVE
+             , IDS_RESOURCE_MENU_ITEM_CALL_ISALIVE_DESC
+             , RESOURCE_MENU_ID_1
+             , uFlags
+         );
 
     return hr;
 
@@ -1070,7 +1071,7 @@ CResData::AddContextMenuItems(
 HRESULT
 CResData::InvokeCommand(
     ULONG nCommandIDIn
-    )
+)
 {
     HRESULT hr = S_OK;
     DWORD   sc = ERROR_SUCCESS;
@@ -1078,50 +1079,50 @@ CResData::InvokeCommand(
 
     switch ( nCommandIDIn )
     {
-        case RESOURCE_MENU_ID_1:
-            sc = ClusterResourceControl(
-                      m_hResource
-                    , NULL
-                    , CLUSCTL_RESOURCE_FILESHARESAMPLE_CALL_ISALIVE
-                    , NULL
-                    , 0
-                    , NULL
-                    , 0
-                    , NULL
-                    );
-            if ( sc == ERROR_SUCCESS )
+    case RESOURCE_MENU_ID_1:
+        sc = ClusterResourceControl(
+                 m_hResource
+                 , NULL
+                 , CLUSCTL_RESOURCE_FILESHARESAMPLE_CALL_ISALIVE
+                 , NULL
+                 , 0
+                 , NULL
+                 , 0
+                 , NULL
+             );
+        if ( sc == ERROR_SUCCESS )
+        {
+            AfxMessageBox( L"Success", MB_OK );
+        } // if: success
+        else
+        {
+            if ( sc == ERROR_RESOURCE_FAILED )
             {
-                AfxMessageBox( L"Success", MB_OK );
-            } // if: success
+                str.Format( L"The health check detected a failure!" );
+                AfxMessageBox( str, MB_ICONEXCLAMATION );
+            } // if:
+            else if ( sc == ERROR_CLUSTER_INVALID_REQUEST )
+            {
+                str.Format( L"Invalid request - the resource is not online." );
+                AfxMessageBox( str, MB_ICONEXCLAMATION );
+            } // else if: ERROR_CLUSTER_INVALID_REQUEST
             else
             {
-                if ( sc == ERROR_RESOURCE_FAILED )
-                {
-                    str.Format( L"The health check detected a failure!" );
-                    AfxMessageBox( str, MB_ICONEXCLAMATION );
-                } // if:
-                else if ( sc == ERROR_CLUSTER_INVALID_REQUEST )
-                {
-                    str.Format( L"Invalid request - the resource is not online." );
-                    AfxMessageBox( str, MB_ICONEXCLAMATION );
-                } // else if: ERROR_CLUSTER_INVALID_REQUEST
-                else
-                {
-                    str.Format( L"Unknown return value: %d", sc );
-                    AfxMessageBox( str, MB_ICONEXCLAMATION );
-                }
-            } // else: failure
+                str.Format( L"Unknown return value: %d", sc );
+                AfxMessageBox( str, MB_ICONEXCLAMATION );
+            }
+        } // else: failure
 
-            hr = S_OK;
-            break;
+        hr = S_OK;
+        break;
 
-        case ALL_RESOURCES_MENU_ID_1:
-            hr = S_OK;
-            break;
+    case ALL_RESOURCES_MENU_ID_1:
+        hr = S_OK;
+        break;
 
-        default:
-            hr = E_NOTIMPL;
-            break;
+    default:
+        hr = E_NOTIMPL;
+        break;
     } // switch: nCommandIDIn
 
     return hr;
@@ -1146,7 +1147,7 @@ CResData::InvokeCommand(
 HRESULT
 CResData::GetPropertySheetPages(
     CRuntimeClass *** ppaPropSheetsOut
-    )
+)
 {
     HRESULT hr = E_NOTIMPL;
 
@@ -1191,7 +1192,7 @@ Cleanup:
 HRESULT
 CResData::GetWizardPages(
     CRuntimeClass *** ppaWizardPagesOut
-    )
+)
 {
     HRESULT hr = E_NOTIMPL;
 
@@ -1239,7 +1240,7 @@ Cleanup:
 HRESULT
 CResTypeData::HrInitialize(
     IUnknown * piDataIn
-    )
+)
 {
     HRESULT hr = S_OK;
     LPCWSTR pwszResTypes = g_wszResourceTypeNames;
@@ -1306,7 +1307,7 @@ Cleanup:
 HRESULT
 CResTypeData::AddContextMenuItems(
     IWCContextMenuCallback * piCallbackIn
-    )
+)
 {
     HRESULT hr = S_OK;
 
@@ -1338,28 +1339,28 @@ CResTypeData::AddContextMenuItems(
 HRESULT
 CResTypeData::InvokeCommand(
     ULONG nCommandIDIn
-    )
+)
 {
     HRESULT hr = S_OK;
 
     switch ( nCommandIDIn )
     {
-        case RESTYPE_MENU_ID_1:
+    case RESTYPE_MENU_ID_1:
 
-            //
-            //  TODO:  Implement your menu item here
-            //
+        //
+        //  TODO:  Implement your menu item here
+        //
 
-            hr = S_OK;
-            break;
+        hr = S_OK;
+        break;
 
-        case ALL_RESTYPES_MENU_ID_1:
-            hr = S_OK;
-            break;
+    case ALL_RESTYPES_MENU_ID_1:
+        hr = S_OK;
+        break;
 
-        default:
-            hr = E_NOTIMPL;
-            break;
+    default:
+        hr = E_NOTIMPL;
+        break;
     } // switch: nCommandIDIn
 
     return hr;
@@ -1387,7 +1388,7 @@ CResTypeData::InvokeCommand(
 HRESULT
 CNetworkData::HrInitialize(
     IUnknown * piDataIn
-    )
+)
 {
     HRESULT                     hr = S_OK;
     IGetClusterNetworkInfo *    piNetInfo = NULL;
@@ -1473,20 +1474,20 @@ Cleanup:
 //--
 /////////////////////////////////////////////////////////////////////////////
 HRESULT CNetworkData::AddContextMenuItems(
-      IWCContextMenuCallback * piCallbackIn
-    )
+    IWCContextMenuCallback * piCallbackIn
+)
 {
     HRESULT     hr = S_OK;
 
     ASSERT( piCallbackIn != NULL );
 
     hr = AddContextMenuItem(
-              piCallbackIn
-            , IDS_NETWORK_MENU_ITEM_1
-            , IDS_NETWORK_MENU_ITEM_1_DESC
-            , NETWORK_MENU_ID_1
-            , MF_ENABLED
-            );
+             piCallbackIn
+             , IDS_NETWORK_MENU_ITEM_1
+             , IDS_NETWORK_MENU_ITEM_1_DESC
+             , NETWORK_MENU_ID_1
+             , MF_ENABLED
+         );
 
     return hr;
 
@@ -1514,24 +1515,24 @@ HRESULT CNetworkData::AddContextMenuItems(
 HRESULT
 CNetworkData::InvokeCommand(
     ULONG nCommandIDIn
-    )
+)
 {
     HRESULT hr = S_OK;
 
     switch ( nCommandIDIn )
     {
-        case NETWORK_MENU_ID_1:
+    case NETWORK_MENU_ID_1:
 
-            //
-            //  TODO:  Implement your menu item here
-            //
+        //
+        //  TODO:  Implement your menu item here
+        //
 
-            hr = S_OK;
-            break;
+        hr = S_OK;
+        break;
 
-        default:
-            hr = E_NOTIMPL;
-            break;
+    default:
+        hr = E_NOTIMPL;
+        break;
     } // switch: nCommandIDIn
 
     return hr;
@@ -1559,7 +1560,7 @@ CNetworkData::InvokeCommand(
 HRESULT
 CNetInterfaceData::HrInitialize(
     IUnknown * piDataIn
-    )
+)
 {
     HRESULT                         hr = S_OK;
     IGetClusterNetInterfaceInfo *   piNetInterfaceInfo = NULL;
@@ -1647,19 +1648,19 @@ Cleanup:
 HRESULT
 CNetInterfaceData::AddContextMenuItems(
     IWCContextMenuCallback * piCallbackIn
-    )
+)
 {
     HRESULT hr = S_OK;
 
     ASSERT( piCallbackIn != NULL );
 
     hr = AddContextMenuItem(
-              piCallbackIn
-            , IDS_NETINTERFACE_MENU_ITEM_1
-            , IDS_NETINTERFACE_MENU_ITEM_1_DESC
-            , NETINTERFACE_MENU_ID_1
-            , MF_ENABLED
-            );
+             piCallbackIn
+             , IDS_NETINTERFACE_MENU_ITEM_1
+             , IDS_NETINTERFACE_MENU_ITEM_1_DESC
+             , NETINTERFACE_MENU_ID_1
+             , MF_ENABLED
+         );
 
     return hr;
 
@@ -1687,24 +1688,24 @@ CNetInterfaceData::AddContextMenuItems(
 HRESULT
 CNetInterfaceData::InvokeCommand(
     ULONG nCommandIDIn
-    )
+)
 {
     HRESULT hr = S_OK;
 
     switch ( nCommandIDIn )
     {
-        case NETINTERFACE_MENU_ID_1:
+    case NETINTERFACE_MENU_ID_1:
 
-            //
-            //  TODO:  Implement your menu item here
-            //
+        //
+        //  TODO:  Implement your menu item here
+        //
 
-            hr = S_OK;
-            break;
+        hr = S_OK;
+        break;
 
-        default:
-            hr = E_NOTIMPL;
-            break;
+    default:
+        hr = E_NOTIMPL;
+        break;
     } // switch: nCommandIDIn
 
     return hr;

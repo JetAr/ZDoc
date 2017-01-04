@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -61,14 +61,14 @@ void CButtonWindow::_OnLButtonDown(POINT pt)
 // _WindowProcCallback
 //
 //----------------------------------------------------------------------------
-LRESULT CALLBACK CButtonWindow::_WindowProcCallback(_In_ HWND wndHandle, UINT uMsg, _In_ WPARAM wParam, _In_ LPARAM lParam) 
-{ 
+LRESULT CALLBACK CButtonWindow::_WindowProcCallback(_In_ HWND wndHandle, UINT uMsg, _In_ WPARAM wParam, _In_ LPARAM lParam)
+{
     wndHandle;
     uMsg;
     wParam;
     lParam;
 
-    return 0; 
+    return 0;
 }
 
 //+---------------------------------------------------------------------------

@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -514,12 +514,12 @@ INT_PTR CFileInUseApp::_DlgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
         break;
 
     case WM_INITMENUPOPUP:
-        {
-            // Disable the Close File menu item if it is not open
-            UINT const uState = (INVALID_HANDLE_VALUE == _hFile) ? MF_GRAYED : MF_ENABLED;
-            EnableMenuItem(GetMenu(_hwnd), IDM_FILE_CLOSEFILE, MF_BYCOMMAND | uState);
-        }
-        break;
+    {
+        // Disable the Close File menu item if it is not open
+        UINT const uState = (INVALID_HANDLE_VALUE == _hFile) ? MF_GRAYED : MF_ENABLED;
+        EnableMenuItem(GetMenu(_hwnd), IDM_FILE_CLOSEFILE, MF_BYCOMMAND | uState);
+    }
+    break;
 
     case WM_FILEINUSE_CLOSEFILE:
         // We have been notified from the IFileIsInUse object

@@ -1,7 +1,7 @@
-//--------------------------------------------------------------------
+﻿//--------------------------------------------------------------------
 // Microsoft OLE DB Test
 //
-// Copyright 1995-2000 Microsoft Corporation.  
+// Copyright 1995-2000 Microsoft Corporation.
 //
 // @doc
 //
@@ -20,7 +20,7 @@
 #include "msdasql.h"		//ODBC Provider specific header file
 
 #include "privlib.h"		//Include private library, which includes
-							//the "transact.h"
+//the "transact.h"
 #include "process.h"		//For multithreading
 
 //-----------------------------------------------------------------------------

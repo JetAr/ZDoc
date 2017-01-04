@@ -1,4 +1,4 @@
-//////////////////////////////////////////////////////////////////////////////
+﻿//////////////////////////////////////////////////////////////////////////////
 //
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
@@ -48,7 +48,10 @@ public:
 
     // IUnknown
     IFACEMETHODIMP QueryInterface(__in REFIID riid, __deref_out void **ppv);
-    IFACEMETHODIMP_(ULONG) AddRef()     { return InterlockedIncrement(&_cRef); }
+    IFACEMETHODIMP_(ULONG) AddRef()
+    {
+        return InterlockedIncrement(&_cRef);
+    }
     IFACEMETHODIMP_(ULONG) Release();
 
     // ISyncMgrUIOperation

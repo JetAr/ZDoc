@@ -1,4 +1,4 @@
-/********************************************************************++
+﻿/********************************************************************++
 THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED
 TO THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -34,7 +34,7 @@ Note:
 //-----------------------------------------------------------------------------
 // Function:    DisplayWatchListChanged
 // Purpose:     Called to display a PPEER_EVENT_WATCHLIST_CHANGED_DATA structure
-// Parameters:  
+// Parameters:
 //   pWatchlistChangedData    [in] : pointer to a PPEER_EVENT_WATCHLIST_CHANGED_DATA structure
 //
 void DisplayWatchListChanged(const PEER_EVENT_WATCHLIST_CHANGED_DATA *pWatchlistChangedData)
@@ -49,13 +49,13 @@ void DisplayWatchListChanged(const PEER_EVENT_WATCHLIST_CHANGED_DATA *pWatchlist
 //-----------------------------------------------------------------------------
 // Function:    DisplayPresenceChanged
 // Purpose:     Called to display a PPEER_EVENT_PRESENCE_CHANGED_DATA structure
-// Parameters:  
+// Parameters:
 //   pPresenceChangedData    [in] : pointer to a PPEER_EVENT_PRESENCE_CHANGED_DATA structure
 //
 void DisplayPresenceChanged(const PEER_EVENT_PRESENCE_CHANGED_DATA *pPresenceChangedData)
 {
     if (pPresenceChangedData)
-    { 
+    {
         PrintContact(pPresenceChangedData->pContact);
         PrintEndpoint(pPresenceChangedData->pEndpoint);
         wprintf(L"\tChange Type: %s\n", ChangeType(pPresenceChangedData->changeType));
@@ -67,13 +67,13 @@ void DisplayPresenceChanged(const PEER_EVENT_PRESENCE_CHANGED_DATA *pPresenceCha
 //-----------------------------------------------------------------------------
 // Function:    DisplayApplicationChanged
 // Purpose:     Called to display a PPEER_EVENT_APPLICATION_CHANGED_DATA structure
-// Parameters:  
+// Parameters:
 //   pApplicationChangedData    [in] : pointer to a PPEER_EVENT_APPLICATION_CHANGED_DATA structure
 //
 void DisplayApplicationChanged(const PEER_EVENT_APPLICATION_CHANGED_DATA *pApplicationChangedData)
 {
     if (pApplicationChangedData)
-    { 
+    {
         PrintContact(pApplicationChangedData->pContact);
         PrintEndpoint(pApplicationChangedData->pEndpoint);
         wprintf(L"\tChange Type: %s\n", ChangeType(pApplicationChangedData->changeType));
@@ -84,13 +84,13 @@ void DisplayApplicationChanged(const PEER_EVENT_APPLICATION_CHANGED_DATA *pAppli
 //-----------------------------------------------------------------------------
 // Function:    DisplayObjectChanged
 // Purpose:     Called to display a PPEER_EVENT_OBJECT_CHANGED_DATA structure
-// Parameters:  
+// Parameters:
 //   pObjectChangedData    [in] : pointer to a PPEER_EVENT_OBJECT_CHANGED_DATA structure
 //
 void DisplayObjectChanged(const PEER_EVENT_OBJECT_CHANGED_DATA *pObjectChangedData)
 {
     if (pObjectChangedData)
-    { 
+    {
         PrintContact(pObjectChangedData->pContact);
         PrintEndpoint(pObjectChangedData->pEndpoint);
         wprintf(L"\tChange Type: %s\n", ChangeType(pObjectChangedData->changeType));
@@ -102,13 +102,13 @@ void DisplayObjectChanged(const PEER_EVENT_OBJECT_CHANGED_DATA *pObjectChangedDa
 //-----------------------------------------------------------------------------
 // Function:    DisplayEndpointChanged
 // Purpose:     Called to display a PPEER_EVENT_ENDPOINT_CHANGED_DATA structure
-// Parameters:  
+// Parameters:
 //   pEndpointChangedData    [in] : pointer to a PPEER_EVENT_ENDPOINT_CHANGED_DATA structure
 //
 VOID DisplayEndpointChanged(const PEER_EVENT_ENDPOINT_CHANGED_DATA *pEndpointChangedData)
 {
     if (pEndpointChangedData)
-    {        
+    {
         PrintContact(pEndpointChangedData->pContact);
         PrintEndpoint(pEndpointChangedData->pEndpoint);
     }
@@ -118,13 +118,13 @@ VOID DisplayEndpointChanged(const PEER_EVENT_ENDPOINT_CHANGED_DATA *pEndpointCha
 //-----------------------------------------------------------------------------
 // Function:    DisplayPeopleNearMeChanged
 // Purpose:     Called to display a PPEER_EVENT_PEOPLE_NEAR_ME_CHANGED_DATA structure
-// Parameters:  
+// Parameters:
 //   pPNMChangedData    [in] : pointer to a PPEER_EVENT_PEOPLE_NEAR_ME_CHANGED_DATA structure
 //
 VOID CALLBACK DisplayPeopleNearMeChanged(const PEER_EVENT_PEOPLE_NEAR_ME_CHANGED_DATA *pPNMChangedData)
 {
     if (pPNMChangedData)
-    {       
+    {
         wprintf(L"\tChange Type: %s\n", ChangeType(pPNMChangedData->changeType));
         if (pPNMChangedData->pPeopleNearMe == NULL)
         {
@@ -141,13 +141,13 @@ VOID CALLBACK DisplayPeopleNearMeChanged(const PEER_EVENT_PEOPLE_NEAR_ME_CHANGED
 //-----------------------------------------------------------------------------
 // Function:    DisplayRequestStatusChanged
 // Purpose:     Called to display a PPEER_EVENT_REQUEST_STATUS_CHANGED_DATA structure
-// Parameters:  
+// Parameters:
 //   pRequestStatusChangedData    [in] : pointer to a PPEER_EVENT_REQUEST_STATUS_CHANGED_DATA structure
 //
 VOID CALLBACK DisplayRequestStatusChanged(const PEER_EVENT_REQUEST_STATUS_CHANGED_DATA  *pRequestStatusChangedData)
 {
     if (pRequestStatusChangedData)
-    {     
+    {
         PrintFullEndpoint(pRequestStatusChangedData->pEndpoint, TRUE);
         if (SUCCEEDED(pRequestStatusChangedData->hrChange))
         {
@@ -199,8 +199,8 @@ HRESULT EventHandler()
     eventReg[9].eventType = PEER_EVENT_PEOPLE_NEAR_ME_CHANGED;
     eventReg[10].eventType = PEER_EVENT_REQUEST_STATUS_CHANGED;
 
-    // Register to be notified when the request finishes  
-    hr = PeerCollabRegisterEvent(hEvent[0], celems(eventReg), eventReg, &hPeerEvent);  
+    // Register to be notified when the request finishes
+    hr = PeerCollabRegisterEvent(hEvent[0], celems(eventReg), eventReg, &hPeerEvent);
 
     if (SUCCEEDED(hr))
     {
@@ -208,85 +208,85 @@ HRESULT EventHandler()
         {
             PEER_COLLAB_EVENT_DATA *pEventData = NULL;
 
-            // retrieve all event data 
+            // retrieve all event data
             while (PeerCollabGetEventData(hPeerEvent, &pEventData) == S_OK)
             {
                 switch(pEventData->eventType)
                 {
-                    case PEER_EVENT_WATCHLIST_CHANGED:
-                        wprintf(L"PEER_EVENT_WATCHLIST_CHANGED event signalled\n");
-                        break;
+                case PEER_EVENT_WATCHLIST_CHANGED:
+                    wprintf(L"PEER_EVENT_WATCHLIST_CHANGED event signalled\n");
+                    break;
 
-                    case PEER_EVENT_ENDPOINT_CHANGED:
-                        wprintf(L"PEER_EVENT_ENDPOINT_CHANGED\n");
-                        break;
+                case PEER_EVENT_ENDPOINT_CHANGED:
+                    wprintf(L"PEER_EVENT_ENDPOINT_CHANGED\n");
+                    break;
 
-                    case PEER_EVENT_ENDPOINT_PRESENCE_CHANGED:
-                        wprintf(L"PEER_EVENT_ENDPOINT_PRESENCE_CHANGED event signalled\n");
-                        break;
+                case PEER_EVENT_ENDPOINT_PRESENCE_CHANGED:
+                    wprintf(L"PEER_EVENT_ENDPOINT_PRESENCE_CHANGED event signalled\n");
+                    break;
 
-                    case PEER_EVENT_ENDPOINT_APPLICATION_CHANGED:
-                        wprintf(L"PEER_EVENT_ENDPOINT_APPLICATION_CHANGED event signalled\n");
-                        break;
+                case PEER_EVENT_ENDPOINT_APPLICATION_CHANGED:
+                    wprintf(L"PEER_EVENT_ENDPOINT_APPLICATION_CHANGED event signalled\n");
+                    break;
 
-                    case PEER_EVENT_ENDPOINT_OBJECT_CHANGED:
-                        wprintf(L"PEER_EVENT_ENDPOINT_OBJECT_CHANGED event signalled\n");
-                        break;
+                case PEER_EVENT_ENDPOINT_OBJECT_CHANGED:
+                    wprintf(L"PEER_EVENT_ENDPOINT_OBJECT_CHANGED event signalled\n");
+                    break;
 
-                    case PEER_EVENT_MY_ENDPOINT_CHANGED:
-                        wprintf(L"PEER_EVENT_MY_ENDPOINT_CHANGED event signalled\n");
-                        break;
+                case PEER_EVENT_MY_ENDPOINT_CHANGED:
+                    wprintf(L"PEER_EVENT_MY_ENDPOINT_CHANGED event signalled\n");
+                    break;
 
-                    case PEER_EVENT_MY_PRESENCE_CHANGED:
-                        wprintf(L"PEER_EVENT_MY_PRESENCE_CHANGED event signalled\n");
-                        break;
+                case PEER_EVENT_MY_PRESENCE_CHANGED:
+                    wprintf(L"PEER_EVENT_MY_PRESENCE_CHANGED event signalled\n");
+                    break;
 
-                    case PEER_EVENT_MY_APPLICATION_CHANGED:
-                        wprintf(L"PEER_EVENT_MY_APPLICATION_CHANGED event signalled\n");
-                        break;
+                case PEER_EVENT_MY_APPLICATION_CHANGED:
+                    wprintf(L"PEER_EVENT_MY_APPLICATION_CHANGED event signalled\n");
+                    break;
 
-                    case PEER_EVENT_MY_OBJECT_CHANGED:
-                        wprintf(L"PEER_EVENT_MY_OBJECT_CHANGED event signalled\n");
-                        break;
+                case PEER_EVENT_MY_OBJECT_CHANGED:
+                    wprintf(L"PEER_EVENT_MY_OBJECT_CHANGED event signalled\n");
+                    break;
 
-                    case PEER_EVENT_PEOPLE_NEAR_ME_CHANGED:
-                        wprintf(L"PEER_EVENT_PEOPLE_NEAR_ME_CHANGED event signalled\n");
-                        break;
+                case PEER_EVENT_PEOPLE_NEAR_ME_CHANGED:
+                    wprintf(L"PEER_EVENT_PEOPLE_NEAR_ME_CHANGED event signalled\n");
+                    break;
 
-                    case PEER_EVENT_REQUEST_STATUS_CHANGED:
-                        wprintf(L"PEER_EVENT_REQUEST_STATUS_CHANGED event signalled\n");
-                        break;
+                case PEER_EVENT_REQUEST_STATUS_CHANGED:
+                    wprintf(L"PEER_EVENT_REQUEST_STATUS_CHANGED event signalled\n");
+                    break;
                 }
 
                 switch (pEventData->eventType)
                 {
-                    case PEER_EVENT_WATCHLIST_CHANGED:
-                              DisplayWatchListChanged(&pEventData->watchListChangedData);
-                              break;
-                    case PEER_EVENT_ENDPOINT_PRESENCE_CHANGED:  //intentional fallthrough
-                        case PEER_EVENT_MY_PRESENCE_CHANGED:
-                              DisplayPresenceChanged(&pEventData->presenceChangedData);
-                              break;
-                    case PEER_EVENT_ENDPOINT_APPLICATION_CHANGED:  //intentional fallthrough
-                    case PEER_EVENT_MY_APPLICATION_CHANGED:
-                              DisplayApplicationChanged(&pEventData->applicationChangedData);
-                              break;
-                    case PEER_EVENT_ENDPOINT_OBJECT_CHANGED:  //intentional fallthrough
-                    case PEER_EVENT_MY_OBJECT_CHANGED:
-                              DisplayObjectChanged(&pEventData->objectChangedData);
-                              break;
-                    case PEER_EVENT_ENDPOINT_CHANGED:  //intentional fallthrough
-                    case PEER_EVENT_MY_ENDPOINT_CHANGED:
-                              DisplayEndpointChanged(&pEventData->endpointChangedData);
-                              break;
-                    case PEER_EVENT_PEOPLE_NEAR_ME_CHANGED:
-                              DisplayPeopleNearMeChanged(&pEventData->peopleNearMeChangedData);
-                              break;
-                    case PEER_EVENT_REQUEST_STATUS_CHANGED:
-                        DisplayRequestStatusChanged(&pEventData->requestStatusChangedData);
-                        break;
-                    default: //do nothing
-                        break;
+                case PEER_EVENT_WATCHLIST_CHANGED:
+                    DisplayWatchListChanged(&pEventData->watchListChangedData);
+                    break;
+                case PEER_EVENT_ENDPOINT_PRESENCE_CHANGED:  //intentional fallthrough
+                case PEER_EVENT_MY_PRESENCE_CHANGED:
+                    DisplayPresenceChanged(&pEventData->presenceChangedData);
+                    break;
+                case PEER_EVENT_ENDPOINT_APPLICATION_CHANGED:  //intentional fallthrough
+                case PEER_EVENT_MY_APPLICATION_CHANGED:
+                    DisplayApplicationChanged(&pEventData->applicationChangedData);
+                    break;
+                case PEER_EVENT_ENDPOINT_OBJECT_CHANGED:  //intentional fallthrough
+                case PEER_EVENT_MY_OBJECT_CHANGED:
+                    DisplayObjectChanged(&pEventData->objectChangedData);
+                    break;
+                case PEER_EVENT_ENDPOINT_CHANGED:  //intentional fallthrough
+                case PEER_EVENT_MY_ENDPOINT_CHANGED:
+                    DisplayEndpointChanged(&pEventData->endpointChangedData);
+                    break;
+                case PEER_EVENT_PEOPLE_NEAR_ME_CHANGED:
+                    DisplayPeopleNearMeChanged(&pEventData->peopleNearMeChangedData);
+                    break;
+                case PEER_EVENT_REQUEST_STATUS_CHANGED:
+                    DisplayRequestStatusChanged(&pEventData->requestStatusChangedData);
+                    break;
+                default: //do nothing
+                    break;
                 }
 
                 //Print a seperator line
@@ -324,5 +324,5 @@ exit:
         hEvent[1] = NULL;
     }
 
-    return hr; 
+    return hr;
 }

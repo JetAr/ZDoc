@@ -1,4 +1,4 @@
-/*++
+﻿/*++
 
 Copyright (c) Microsoft Corporation. All rights reserved.
 
@@ -9,7 +9,7 @@ Copyright (c) Microsoft Corporation. All rights reserved.
 
 #include "BitmapUtil.h"
 
-namespace BitmapUtil 
+namespace BitmapUtil
 {
 
 //////////////////////////////////////////////////////////////////////////
@@ -22,14 +22,14 @@ ULONG GetBitmapHeaderSize(LPCVOID pDib)
     ULONG nHeaderSize = *(PDWORD) pDib;
 
     switch (nHeaderSize)
-	{
-		case sizeof(BITMAPCOREHEADER):
-        case sizeof(BITMAPINFOHEADER):
-		case sizeof(BITMAPV4HEADER):
-		case sizeof(BITMAPV5HEADER):
-		{
-			return nHeaderSize;
-		}
+    {
+    case sizeof(BITMAPCOREHEADER):
+    case sizeof(BITMAPINFOHEADER):
+    case sizeof(BITMAPV4HEADER):
+    case sizeof(BITMAPV5HEADER):
+    {
+        return nHeaderSize;
+    }
     }
 
     return 0;
@@ -159,7 +159,7 @@ ULONG GetBitmapSize(LPCVOID pDib)
             // biSizeImage must be specified for compressed bitmaps
 
             if (pbmih->biCompression != BI_RGB &&
-                pbmih->biCompression != BI_BITFIELDS)
+                    pbmih->biCompression != BI_BITFIELDS)
             {
                 return 0;
             }
@@ -172,8 +172,8 @@ ULONG GetBitmapSize(LPCVOID pDib)
         // Consider special cases
 
         if (nHeaderSize == sizeof(BITMAPINFOHEADER))
-        {     
-            // If this is a 16 or 32 bit bitmap and BI_BITFIELDS is used, 
+        {
+            // If this is a 16 or 32 bit bitmap and BI_BITFIELDS is used,
             // bmiColors member contains three DWORD color masks.
             // For V4 or V5 headers, this info is included the header
 
@@ -186,7 +186,7 @@ ULONG GetBitmapSize(LPCVOID pDib)
         {
             // If this is a V5 header and an ICM profile is specified,
             // we need to consider the profile data size
-            
+
             PBITMAPV5HEADER pbV5h = (PBITMAPV5HEADER) pDib;
 
             // if there is some padding before the profile data, add it
@@ -257,8 +257,8 @@ ULONG GetBitmapOffsetBits(LPCVOID pDib)
         // Consider special cases
 
         if (nHeaderSize == sizeof(BITMAPINFOHEADER))
-        {     
-            // If this is a 16 or 32 bit bitmap and BI_BITFIELDS is used, 
+        {
+            // If this is a 16 or 32 bit bitmap and BI_BITFIELDS is used,
             // bmiColors member contains three DWORD color masks.
             // For V4 or V5 headers, this info is included in the header
 
@@ -271,7 +271,7 @@ ULONG GetBitmapOffsetBits(LPCVOID pDib)
         {
             // If this is a V5 header and an ICM profile is specified,
             // we need to consider the profile data size
-            
+
             PBITMAPV5HEADER pbV5h = (PBITMAPV5HEADER) pDib;
 
             // if the profile data comes before the pixel data, add it
@@ -376,8 +376,8 @@ BOOL FixBitmapHeight(PVOID pDib, ULONG nSize, BOOL bTopDown)
                 // Consider special cases
 
                 if (nHeaderSize == sizeof(BITMAPINFOHEADER))
-                {     
-                    // If this is a 16 or 32 bit bitmap and BI_BITFIELDS is used, 
+                {
+                    // If this is a 16 or 32 bit bitmap and BI_BITFIELDS is used,
                     // bmiColors member contains three DWORD color masks.
                     // For V4 or V5 headers, this info is included the header
 
@@ -390,7 +390,7 @@ BOOL FixBitmapHeight(PVOID pDib, ULONG nSize, BOOL bTopDown)
                 {
                     // If this is a V5 header and an ICM profile is specified,
                     // we need to consider the profile data size
-            
+
                     PBITMAPV5HEADER pbV5h = (PBITMAPV5HEADER) pDib;
 
                     // add the profile data size
@@ -412,13 +412,13 @@ BOOL FixBitmapHeight(PVOID pDib, ULONG nSize, BOOL bTopDown)
                 return FALSE;
             }
 
-			LONG nHeight = nSizeImage / nWidth;
+            LONG nHeight = nSizeImage / nWidth;
 
             pbmih->biHeight = bTopDown ? -nHeight : nHeight;
         }
     }
 
-	return TRUE;
+    return TRUE;
 }
 
 

@@ -1,7 +1,7 @@
-//////////////////////////////////////////////////////////////////////////
+﻿//////////////////////////////////////////////////////////////////////////
 //
 // Common.h : Global header.
-// 
+//
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -22,7 +22,7 @@
 
 #ifndef _WIN32_WINNT        // Allow use of features specific to Windows NT 4 or later.
 #define _WIN32_WINNT 0x0400     // Change this to the appropriate value to target Windows 98 and Windows 2000 or later.
-#endif                      
+#endif
 
 #ifndef _WIN32_WINDOWS      // Allow use of features specific to Windows 98 or later.
 #define _WIN32_WINDOWS 0x0410 // Change this to the appropriate value to target Windows Me or later.
@@ -59,7 +59,7 @@
 #include <gdiplus.h>
 using namespace Gdiplus;
 
-//WAV play through 
+//WAV play through
 #include <mmsystem.h>
 
 #define USE_LOGGING
@@ -86,12 +86,12 @@ struct SAMPLE_INFO
 
 
     SAMPLE_INFO()
-        : 
-    wStreamNumber(0),
-    cBufferCount(0),
-    hnsSampleTime(0),
-    cbTotalLength(0),
-    fSeekedKeyFrame(0)
+        :
+        wStreamNumber(0),
+        cBufferCount(0),
+        hnsSampleTime(0),
+        cbTotalLength(0),
+        fSeekedKeyFrame(0)
     {}
 
 };
@@ -111,16 +111,16 @@ struct FILE_PROPERTIES_OBJECT
     UINT64 cbPresentationDuration;
 
     FILE_PROPERTIES_OBJECT()
-        : 
-    cbMaxBitRate (0),
-    cbMaxPacketSize (0),
-    cbMinPacketSize (0),
-    cbPackets (0),
-    cbPlayDuration (0),
-    cbSendDuration (0),
-    cbPreroll (0),
-    cbPresentationDuration (0),
-    cbFlags (0)
+        :
+        cbMaxBitRate (0),
+        cbMaxPacketSize (0),
+        cbMinPacketSize (0),
+        cbPackets (0),
+        cbPlayDuration (0),
+        cbSendDuration (0),
+        cbPreroll (0),
+        cbPresentationDuration (0),
+        cbFlags (0)
     {}
 
 };

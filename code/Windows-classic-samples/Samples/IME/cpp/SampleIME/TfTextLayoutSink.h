@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -27,7 +27,10 @@ public:
     VOID _EndLayout();
 
     HRESULT _GetTextExt(_Out_ RECT *lpRect);
-    ITfContext* _GetContextDocument() { return _pContextDocument; };
+    ITfContext* _GetContextDocument()
+    {
+        return _pContextDocument;
+    };
 
     virtual VOID _LayoutChangeNotification(_In_ RECT *lpRect) = 0;
     virtual VOID _LayoutDestroyNotification() = 0;

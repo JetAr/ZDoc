@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -18,7 +18,7 @@ GUID CTedInputGuidDialog::GetInputGuid() const
 LRESULT CTedInputGuidDialog::OnOK(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
     USES_CONVERSION;
-    
+
     HWND m_hEdit = GetDlgItem(IDC_INPUTGUID);
 
     LPTSTR strGuid = new TCHAR[m_dwGUIDLength];
@@ -41,11 +41,11 @@ LRESULT CTedInputGuidDialog::OnOK(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL
             m_fIsValidGuid = false;
         }
     }
-    
+
     delete[] strGuid;
 
     EndDialog(IDOK);
-    
+
     return 0;
 }
 

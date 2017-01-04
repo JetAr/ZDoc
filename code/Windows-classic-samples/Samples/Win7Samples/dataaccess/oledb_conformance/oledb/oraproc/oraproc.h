@@ -1,7 +1,7 @@
-//--------------------------------------------------------------------
+﻿//--------------------------------------------------------------------
 // Microsoft OLE DB Test
 //
-// Copyright 1995-2000 Microsoft Corporation.  
+// Copyright 1995-2000 Microsoft Corporation.
 //
 // @doc
 //
@@ -19,7 +19,7 @@
 #include "oledberr.h"
 
 #include "privlib.h"		//include private library, which includes
-							//the "transact.h"
+//the "transact.h"
 
 //
 // Definitions
@@ -49,9 +49,9 @@
 
 struct ValueInfo
 {
-	DBSTATUS		dbsStatus;
-	ULONG			cbLength;
-	void			*pValue;
+    DBSTATUS		dbsStatus;
+    ULONG			cbLength;
+    void			*pValue;
 };
 
 

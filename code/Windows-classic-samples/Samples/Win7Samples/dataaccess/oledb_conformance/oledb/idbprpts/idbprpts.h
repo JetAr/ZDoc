@@ -1,7 +1,7 @@
-//--------------------------------------------------------------------
+﻿//--------------------------------------------------------------------
 // Microsoft OLE DB Test
 //
-// Copyright 1995-2000 Microsoft Corporation.  
+// Copyright 1995-2000 Microsoft Corporation.
 //
 // @doc
 //
@@ -18,7 +18,7 @@
 #include "oledberr.h"
 #include "msdasql.h"
 #include "privlib.h"		//Include private library, which includes
-							//the "transact.h"
+//the "transact.h"
 
 //-----------------------------------------------------------------------------
 // String constants
@@ -53,7 +53,8 @@ const WCHAR	wszIndexNotValid[]				 = L"Test module error: The index for the glob
 // ENUM
 //-----------------------------------------------------------------------------
 enum EPROPERTYATTR	{PROPERTY_NOT_SUPPORTED, PROPERTY_NOT_SETTABLE, PROPERTY_SETTABLE,
-					 PROPERTY_INVALID};
+                     PROPERTY_INVALID
+                   };
 
 
 #endif 	//_IDBPRPTS_H_

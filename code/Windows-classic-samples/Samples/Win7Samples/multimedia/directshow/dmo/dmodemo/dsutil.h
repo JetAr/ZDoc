@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -8,7 +8,7 @@
 //-----------------------------------------------------------------------------
 // File: DSUtil.h
 //
-// Desc: 
+// Desc:
 //-----------------------------------------------------------------------------
 #ifndef DSUTIL_H
 #define DSUTIL_H
@@ -26,7 +26,7 @@ class CWaveFile;
 
 
 //-----------------------------------------------------------------------------
-// Typing macros 
+// Typing macros
 //-----------------------------------------------------------------------------
 #define WAVEFILE_READ   1
 #define WAVEFILE_WRITE  2
@@ -40,7 +40,7 @@ class CWaveFile;
 
 //-----------------------------------------------------------------------------
 // Name: class CSoundManager
-// Desc: 
+// Desc:
 //-----------------------------------------------------------------------------
 class CSoundManager
 {
@@ -52,7 +52,10 @@ public:
     ~CSoundManager();
 
     HRESULT Initialize( HWND hWnd, DWORD dwCoopLevel );
-    inline  LPDIRECTSOUND8 GetDirectSound() { return m_pDS; }
+    inline  LPDIRECTSOUND8 GetDirectSound()
+    {
+        return m_pDS;
+    }
     HRESULT SetPrimaryBufferFormat( DWORD dwPrimaryChannels, DWORD dwPrimaryFreq, DWORD dwPrimaryBitRate );
     HRESULT Get3DListenerInterface( LPDIRECTSOUND3DLISTENER* ppDSListener );
 
@@ -100,9 +103,9 @@ public:
 
 //-----------------------------------------------------------------------------
 // Name: class CStreamingSound
-// Desc: Encapsulates functionality to play a wave file with DirectSound.  
-//       The Create() method loads a chunk of wave file into the buffer, 
-//       and as sound plays more is written to the buffer by calling 
+// Desc: Encapsulates functionality to play a wave file with DirectSound.
+//       The Create() method loads a chunk of wave file into the buffer,
+//       and as sound plays more is written to the buffer by calling
 //       HandleWaveStreamNotification() whenever hNotifyEvent is signaled.
 //-----------------------------------------------------------------------------
 class CStreamingSound : public CSound
@@ -162,7 +165,10 @@ public:
 
     DWORD   GetSize();
     HRESULT ResetFile();
-    WAVEFORMATEX* GetFormat() { return m_pwfx; };
+    WAVEFORMATEX* GetFormat()
+    {
+        return m_pwfx;
+    };
 };
 
 

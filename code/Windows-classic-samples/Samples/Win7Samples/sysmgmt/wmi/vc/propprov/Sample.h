@@ -1,4 +1,4 @@
-//***************************************************************************
+﻿//***************************************************************************
 
 //
 
@@ -27,63 +27,63 @@
 typedef LPVOID * PPVOID;
 
 // Provider interfaces are provided by objects of this class
- 
+
 class CPropPro : public IWbemPropertyProvider
-    {
-    protected:
-        ULONG           m_cRef;         //Object reference count
-   
-    public:
-        CPropPro();
-        ~CPropPro(void);
+{
+protected:
+    ULONG           m_cRef;         //Object reference count
+
+public:
+    CPropPro();
+    ~CPropPro(void);
 
     //Non-delegating object IUnknown
-        STDMETHODIMP         QueryInterface(REFIID, PPVOID);
-        STDMETHODIMP_(ULONG) AddRef(void);
-        STDMETHODIMP_(ULONG) Release(void);
+    STDMETHODIMP         QueryInterface(REFIID, PPVOID);
+    STDMETHODIMP_(ULONG) AddRef(void);
+    STDMETHODIMP_(ULONG) Release(void);
 
-    
+
     /* IWbemPropertyProvider methods */
 
-       virtual HRESULT STDMETHODCALLTYPE GetProperty( 
-           	/* [in] */ long lFlags,
-            /* [in] */ const BSTR Locale,						   
-            /* [in] */ const BSTR ClassMapping,
-            /* [in] */ const BSTR InstMapping,
-            /* [in] */ const BSTR PropMapping,
-            /* [out] */ VARIANT *pvValue);
-        
-        virtual HRESULT STDMETHODCALLTYPE PutProperty( 
-            /* [in] */ long lFlags,
-            /* [in] */ const BSTR Locale,						   
-            /* [in] */ const BSTR ClassMapping,
-            /* [in] */ const BSTR InstMapping,
-            /* [in] */ const BSTR PropMapping,
-            /* [in] */ const VARIANT __RPC_FAR *pvValue);
+    virtual HRESULT STDMETHODCALLTYPE GetProperty(
+        /* [in] */ long lFlags,
+        /* [in] */ const BSTR Locale,
+        /* [in] */ const BSTR ClassMapping,
+        /* [in] */ const BSTR InstMapping,
+        /* [in] */ const BSTR PropMapping,
+        /* [out] */ VARIANT *pvValue);
 
-    };
+    virtual HRESULT STDMETHODCALLTYPE PutProperty(
+        /* [in] */ long lFlags,
+        /* [in] */ const BSTR Locale,
+        /* [in] */ const BSTR ClassMapping,
+        /* [in] */ const BSTR InstMapping,
+        /* [in] */ const BSTR PropMapping,
+        /* [in] */ const VARIANT __RPC_FAR *pvValue);
+
+};
 
 // This class is the class factory for CPropPro objects.
 
 class CProvFactory : public IClassFactory
-    {
-    protected:
-        ULONG           m_cRef;
+{
+protected:
+    ULONG           m_cRef;
 
-    public:
-        CProvFactory(void);
-        ~CProvFactory(void);
+public:
+    CProvFactory(void);
+    ~CProvFactory(void);
 
-        //IUnknown members
-        STDMETHODIMP         QueryInterface(REFIID, PPVOID);
-        STDMETHODIMP_(ULONG) AddRef(void);
-        STDMETHODIMP_(ULONG) Release(void);
+    //IUnknown members
+    STDMETHODIMP         QueryInterface(REFIID, PPVOID);
+    STDMETHODIMP_(ULONG) AddRef(void);
+    STDMETHODIMP_(ULONG) Release(void);
 
-        //IClassFactory members
-        STDMETHODIMP         CreateInstance(LPUNKNOWN, REFIID
-                                 , PPVOID);
-        STDMETHODIMP         LockServer(BOOL);
-    };
+    //IClassFactory members
+    STDMETHODIMP         CreateInstance(LPUNKNOWN, REFIID
+                                        , PPVOID);
+    STDMETHODIMP         LockServer(BOOL);
+};
 
 typedef CProvFactory *PCProvFactory;
 
@@ -92,7 +92,7 @@ typedef CProvFactory *PCProvFactory;
 extern long       g_cObj;
 extern long       g_cLock;
 
-// General purpose utilities.  
+// General purpose utilities.
 
 #endif //_SAMPLE_H_
 

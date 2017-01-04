@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 
@@ -30,7 +30,7 @@ static const wchar_t SDK_SHV_description[] = L"System Health Validator(SHV)";
 static const wchar_t SDK_SHV_vendorName[] = L"Microsoft";
 
 // SHV_CLSID_INFO is assigned a dummy value since INapComponentInfo interface
-// is not implemented for the SDK SHV sample 
+// is not implemented for the SDK SHV sample
 static const GUID SHV_CLSID_INFO =
 { 0x00000000, 0x0000, 0x0000, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01 };
 

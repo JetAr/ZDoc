@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -45,11 +45,23 @@ public:
         // Public member functions
     public:
         TIterator():m_pEntry(NULL) {}
-        inline T& operator*() const { return *(T*)m_pEntry; } 
-        inline T* operator->()  const { return (T*) m_pEntry; }
-        inline bool operator==(const TIterator& iter) const { return (m_pEntry == iter.m_pEntry); }
-        inline bool operator!=(const TIterator& iter) const { return (m_pEntry != iter.m_pEntry); }
-        inline TIterator operator++() 
+        inline T& operator*() const
+        {
+            return *(T*)m_pEntry;
+        }
+        inline T* operator->()  const
+        {
+            return (T*) m_pEntry;
+        }
+        inline bool operator==(const TIterator& iter) const
+        {
+            return (m_pEntry == iter.m_pEntry);
+        }
+        inline bool operator!=(const TIterator& iter) const
+        {
+            return (m_pEntry != iter.m_pEntry);
+        }
+        inline TIterator operator++()
         {
             m_pEntry = m_pEntry->m_pNextListEntry;
             return TIterator(m_pEntry);
@@ -58,7 +70,7 @@ public:
         {
             TListEntry* pEntry = m_pEntry;
             m_pEntry = m_pEntry->m_pNextListEntry
-            return TIterator(pEntry);
+                       return TIterator(pEntry);
         }
 
         // Protected member functions
@@ -75,7 +87,7 @@ public:
     TList();
     inline bool IsEmpty() const;
     inline size_t GetCount() const;
-    
+
     inline T* GetHead();
     inline T* GetTail();
     inline void RemoveEntry(T* pEntry);

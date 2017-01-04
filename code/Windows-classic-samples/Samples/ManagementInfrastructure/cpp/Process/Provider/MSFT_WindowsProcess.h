@@ -1,4 +1,4 @@
-//
+﻿//
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -138,7 +138,7 @@ MI_INLINE MI_Result MI_CALL MSFT_WindowsProcess_Construct(
     _In_ MI_Context* context)
 {
     return MI_Context_ConstructInstance(context, &MSFT_WindowsProcess_rtti,
-        (MI_Instance*)&self->__instance);
+                                        (MI_Instance*)&self->__instance);
 }
 
 MI_INLINE MI_Result MI_CALL MSFT_WindowsProcess_Clone(
@@ -146,7 +146,7 @@ MI_INLINE MI_Result MI_CALL MSFT_WindowsProcess_Clone(
     _Outptr_ MSFT_WindowsProcess** newInstance)
 {
     return MI_Instance_Clone(
-        &self->__instance, (MI_Instance**)newInstance);
+               &self->__instance, (MI_Instance**)newInstance);
 }
 
 MI_INLINE MI_Boolean MI_CALL MSFT_WindowsProcess_IsA(
@@ -178,11 +178,11 @@ MI_INLINE MI_Result MI_CALL MSFT_WindowsProcess_Set_InstanceID(
     _In_z_ const MI_Char* str)
 {
     return self->__instance.ft->SetElementAt(
-        (MI_Instance*)&self->__instance,
-        0,
-        (MI_Value*)&str,
-        MI_STRING,
-        0);
+               (MI_Instance*)&self->__instance,
+               0,
+               (MI_Value*)&str,
+               MI_STRING,
+               0);
 }
 
 MI_INLINE MI_Result MI_CALL MSFT_WindowsProcess_SetPtr_InstanceID(
@@ -190,19 +190,19 @@ MI_INLINE MI_Result MI_CALL MSFT_WindowsProcess_SetPtr_InstanceID(
     _In_z_ const MI_Char* str)
 {
     return self->__instance.ft->SetElementAt(
-        (MI_Instance*)&self->__instance,
-        0,
-        (MI_Value*)&str,
-        MI_STRING,
-        MI_FLAG_BORROW);
+               (MI_Instance*)&self->__instance,
+               0,
+               (MI_Value*)&str,
+               MI_STRING,
+               MI_FLAG_BORROW);
 }
 
 MI_INLINE MI_Result MI_CALL MSFT_WindowsProcess_Clear_InstanceID(
     _Inout_ MSFT_WindowsProcess* self)
 {
     return self->__instance.ft->ClearElementAt(
-        (MI_Instance*)&self->__instance,
-        0);
+               (MI_Instance*)&self->__instance,
+               0);
 }
 
 MI_INLINE MI_Result MI_CALL MSFT_WindowsProcess_Set_Caption(
@@ -210,11 +210,11 @@ MI_INLINE MI_Result MI_CALL MSFT_WindowsProcess_Set_Caption(
     _In_z_ const MI_Char* str)
 {
     return self->__instance.ft->SetElementAt(
-        (MI_Instance*)&self->__instance,
-        1,
-        (MI_Value*)&str,
-        MI_STRING,
-        0);
+               (MI_Instance*)&self->__instance,
+               1,
+               (MI_Value*)&str,
+               MI_STRING,
+               0);
 }
 
 MI_INLINE MI_Result MI_CALL MSFT_WindowsProcess_SetPtr_Caption(
@@ -222,19 +222,19 @@ MI_INLINE MI_Result MI_CALL MSFT_WindowsProcess_SetPtr_Caption(
     _In_z_ const MI_Char* str)
 {
     return self->__instance.ft->SetElementAt(
-        (MI_Instance*)&self->__instance,
-        1,
-        (MI_Value*)&str,
-        MI_STRING,
-        MI_FLAG_BORROW);
+               (MI_Instance*)&self->__instance,
+               1,
+               (MI_Value*)&str,
+               MI_STRING,
+               MI_FLAG_BORROW);
 }
 
 MI_INLINE MI_Result MI_CALL MSFT_WindowsProcess_Clear_Caption(
     _Inout_ MSFT_WindowsProcess* self)
 {
     return self->__instance.ft->ClearElementAt(
-        (MI_Instance*)&self->__instance,
-        1);
+               (MI_Instance*)&self->__instance,
+               1);
 }
 
 MI_INLINE MI_Result MI_CALL MSFT_WindowsProcess_Set_Description(
@@ -242,11 +242,11 @@ MI_INLINE MI_Result MI_CALL MSFT_WindowsProcess_Set_Description(
     _In_z_ const MI_Char* str)
 {
     return self->__instance.ft->SetElementAt(
-        (MI_Instance*)&self->__instance,
-        2,
-        (MI_Value*)&str,
-        MI_STRING,
-        0);
+               (MI_Instance*)&self->__instance,
+               2,
+               (MI_Value*)&str,
+               MI_STRING,
+               0);
 }
 
 MI_INLINE MI_Result MI_CALL MSFT_WindowsProcess_SetPtr_Description(
@@ -254,19 +254,19 @@ MI_INLINE MI_Result MI_CALL MSFT_WindowsProcess_SetPtr_Description(
     _In_z_ const MI_Char* str)
 {
     return self->__instance.ft->SetElementAt(
-        (MI_Instance*)&self->__instance,
-        2,
-        (MI_Value*)&str,
-        MI_STRING,
-        MI_FLAG_BORROW);
+               (MI_Instance*)&self->__instance,
+               2,
+               (MI_Value*)&str,
+               MI_STRING,
+               MI_FLAG_BORROW);
 }
 
 MI_INLINE MI_Result MI_CALL MSFT_WindowsProcess_Clear_Description(
     _Inout_ MSFT_WindowsProcess* self)
 {
     return self->__instance.ft->ClearElementAt(
-        (MI_Instance*)&self->__instance,
-        2);
+               (MI_Instance*)&self->__instance,
+               2);
 }
 
 MI_INLINE MI_Result MI_CALL MSFT_WindowsProcess_Set_ElementName(
@@ -274,11 +274,11 @@ MI_INLINE MI_Result MI_CALL MSFT_WindowsProcess_Set_ElementName(
     _In_z_ const MI_Char* str)
 {
     return self->__instance.ft->SetElementAt(
-        (MI_Instance*)&self->__instance,
-        3,
-        (MI_Value*)&str,
-        MI_STRING,
-        0);
+               (MI_Instance*)&self->__instance,
+               3,
+               (MI_Value*)&str,
+               MI_STRING,
+               0);
 }
 
 MI_INLINE MI_Result MI_CALL MSFT_WindowsProcess_SetPtr_ElementName(
@@ -286,19 +286,19 @@ MI_INLINE MI_Result MI_CALL MSFT_WindowsProcess_SetPtr_ElementName(
     _In_z_ const MI_Char* str)
 {
     return self->__instance.ft->SetElementAt(
-        (MI_Instance*)&self->__instance,
-        3,
-        (MI_Value*)&str,
-        MI_STRING,
-        MI_FLAG_BORROW);
+               (MI_Instance*)&self->__instance,
+               3,
+               (MI_Value*)&str,
+               MI_STRING,
+               MI_FLAG_BORROW);
 }
 
 MI_INLINE MI_Result MI_CALL MSFT_WindowsProcess_Clear_ElementName(
     _Inout_ MSFT_WindowsProcess* self)
 {
     return self->__instance.ft->ClearElementAt(
-        (MI_Instance*)&self->__instance,
-        3);
+               (MI_Instance*)&self->__instance,
+               3);
 }
 
 MI_INLINE MI_Result MI_CALL MSFT_WindowsProcess_Set_InstallDate(
@@ -322,11 +322,11 @@ MI_INLINE MI_Result MI_CALL MSFT_WindowsProcess_Set_Name(
     _In_z_ const MI_Char* str)
 {
     return self->__instance.ft->SetElementAt(
-        (MI_Instance*)&self->__instance,
-        5,
-        (MI_Value*)&str,
-        MI_STRING,
-        0);
+               (MI_Instance*)&self->__instance,
+               5,
+               (MI_Value*)&str,
+               MI_STRING,
+               0);
 }
 
 MI_INLINE MI_Result MI_CALL MSFT_WindowsProcess_SetPtr_Name(
@@ -334,19 +334,19 @@ MI_INLINE MI_Result MI_CALL MSFT_WindowsProcess_SetPtr_Name(
     _In_z_ const MI_Char* str)
 {
     return self->__instance.ft->SetElementAt(
-        (MI_Instance*)&self->__instance,
-        5,
-        (MI_Value*)&str,
-        MI_STRING,
-        MI_FLAG_BORROW);
+               (MI_Instance*)&self->__instance,
+               5,
+               (MI_Value*)&str,
+               MI_STRING,
+               MI_FLAG_BORROW);
 }
 
 MI_INLINE MI_Result MI_CALL MSFT_WindowsProcess_Clear_Name(
     _Inout_ MSFT_WindowsProcess* self)
 {
     return self->__instance.ft->ClearElementAt(
-        (MI_Instance*)&self->__instance,
-        5);
+               (MI_Instance*)&self->__instance,
+               5);
 }
 
 MI_INLINE MI_Result MI_CALL MSFT_WindowsProcess_Set_OperationalStatus(
@@ -358,11 +358,11 @@ MI_INLINE MI_Result MI_CALL MSFT_WindowsProcess_Set_OperationalStatus(
     arr.data = (void*)data;
     arr.size = size;
     return self->__instance.ft->SetElementAt(
-        (MI_Instance*)&self->__instance,
-        6,
-        (MI_Value*)&arr,
-        MI_UINT16A,
-        0);
+               (MI_Instance*)&self->__instance,
+               6,
+               (MI_Value*)&arr,
+               MI_UINT16A,
+               0);
 }
 
 MI_INLINE MI_Result MI_CALL MSFT_WindowsProcess_SetPtr_OperationalStatus(
@@ -374,19 +374,19 @@ MI_INLINE MI_Result MI_CALL MSFT_WindowsProcess_SetPtr_OperationalStatus(
     arr.data = (void*)data;
     arr.size = size;
     return self->__instance.ft->SetElementAt(
-        (MI_Instance*)&self->__instance,
-        6,
-        (MI_Value*)&arr,
-        MI_UINT16A,
-        MI_FLAG_BORROW);
+               (MI_Instance*)&self->__instance,
+               6,
+               (MI_Value*)&arr,
+               MI_UINT16A,
+               MI_FLAG_BORROW);
 }
 
 MI_INLINE MI_Result MI_CALL MSFT_WindowsProcess_Clear_OperationalStatus(
     _Inout_ MSFT_WindowsProcess* self)
 {
     return self->__instance.ft->ClearElementAt(
-        (MI_Instance*)&self->__instance,
-        6);
+               (MI_Instance*)&self->__instance,
+               6);
 }
 
 MI_INLINE MI_Result MI_CALL MSFT_WindowsProcess_Set_StatusDescriptions(
@@ -398,11 +398,11 @@ MI_INLINE MI_Result MI_CALL MSFT_WindowsProcess_Set_StatusDescriptions(
     arr.data = (void*)data;
     arr.size = size;
     return self->__instance.ft->SetElementAt(
-        (MI_Instance*)&self->__instance,
-        7,
-        (MI_Value*)&arr,
-        MI_STRINGA,
-        0);
+               (MI_Instance*)&self->__instance,
+               7,
+               (MI_Value*)&arr,
+               MI_STRINGA,
+               0);
 }
 
 MI_INLINE MI_Result MI_CALL MSFT_WindowsProcess_SetPtr_StatusDescriptions(
@@ -414,19 +414,19 @@ MI_INLINE MI_Result MI_CALL MSFT_WindowsProcess_SetPtr_StatusDescriptions(
     arr.data = (void*)data;
     arr.size = size;
     return self->__instance.ft->SetElementAt(
-        (MI_Instance*)&self->__instance,
-        7,
-        (MI_Value*)&arr,
-        MI_STRINGA,
-        MI_FLAG_BORROW);
+               (MI_Instance*)&self->__instance,
+               7,
+               (MI_Value*)&arr,
+               MI_STRINGA,
+               MI_FLAG_BORROW);
 }
 
 MI_INLINE MI_Result MI_CALL MSFT_WindowsProcess_Clear_StatusDescriptions(
     _Inout_ MSFT_WindowsProcess* self)
 {
     return self->__instance.ft->ClearElementAt(
-        (MI_Instance*)&self->__instance,
-        7);
+               (MI_Instance*)&self->__instance,
+               7);
 }
 
 MI_INLINE MI_Result MI_CALL MSFT_WindowsProcess_Set_Status(
@@ -434,11 +434,11 @@ MI_INLINE MI_Result MI_CALL MSFT_WindowsProcess_Set_Status(
     _In_z_ const MI_Char* str)
 {
     return self->__instance.ft->SetElementAt(
-        (MI_Instance*)&self->__instance,
-        8,
-        (MI_Value*)&str,
-        MI_STRING,
-        0);
+               (MI_Instance*)&self->__instance,
+               8,
+               (MI_Value*)&str,
+               MI_STRING,
+               0);
 }
 
 MI_INLINE MI_Result MI_CALL MSFT_WindowsProcess_SetPtr_Status(
@@ -446,19 +446,19 @@ MI_INLINE MI_Result MI_CALL MSFT_WindowsProcess_SetPtr_Status(
     _In_z_ const MI_Char* str)
 {
     return self->__instance.ft->SetElementAt(
-        (MI_Instance*)&self->__instance,
-        8,
-        (MI_Value*)&str,
-        MI_STRING,
-        MI_FLAG_BORROW);
+               (MI_Instance*)&self->__instance,
+               8,
+               (MI_Value*)&str,
+               MI_STRING,
+               MI_FLAG_BORROW);
 }
 
 MI_INLINE MI_Result MI_CALL MSFT_WindowsProcess_Clear_Status(
     _Inout_ MSFT_WindowsProcess* self)
 {
     return self->__instance.ft->ClearElementAt(
-        (MI_Instance*)&self->__instance,
-        8);
+               (MI_Instance*)&self->__instance,
+               8);
 }
 
 MI_INLINE MI_Result MI_CALL MSFT_WindowsProcess_Set_HealthState(
@@ -562,11 +562,11 @@ MI_INLINE MI_Result MI_CALL MSFT_WindowsProcess_Set_OtherEnabledState(
     _In_z_ const MI_Char* str)
 {
     return self->__instance.ft->SetElementAt(
-        (MI_Instance*)&self->__instance,
-        15,
-        (MI_Value*)&str,
-        MI_STRING,
-        0);
+               (MI_Instance*)&self->__instance,
+               15,
+               (MI_Value*)&str,
+               MI_STRING,
+               0);
 }
 
 MI_INLINE MI_Result MI_CALL MSFT_WindowsProcess_SetPtr_OtherEnabledState(
@@ -574,19 +574,19 @@ MI_INLINE MI_Result MI_CALL MSFT_WindowsProcess_SetPtr_OtherEnabledState(
     _In_z_ const MI_Char* str)
 {
     return self->__instance.ft->SetElementAt(
-        (MI_Instance*)&self->__instance,
-        15,
-        (MI_Value*)&str,
-        MI_STRING,
-        MI_FLAG_BORROW);
+               (MI_Instance*)&self->__instance,
+               15,
+               (MI_Value*)&str,
+               MI_STRING,
+               MI_FLAG_BORROW);
 }
 
 MI_INLINE MI_Result MI_CALL MSFT_WindowsProcess_Clear_OtherEnabledState(
     _Inout_ MSFT_WindowsProcess* self)
 {
     return self->__instance.ft->ClearElementAt(
-        (MI_Instance*)&self->__instance,
-        15);
+               (MI_Instance*)&self->__instance,
+               15);
 }
 
 MI_INLINE MI_Result MI_CALL MSFT_WindowsProcess_Set_RequestedState(
@@ -646,11 +646,11 @@ MI_INLINE MI_Result MI_CALL MSFT_WindowsProcess_Set_AvailableRequestedStates(
     arr.data = (void*)data;
     arr.size = size;
     return self->__instance.ft->SetElementAt(
-        (MI_Instance*)&self->__instance,
-        19,
-        (MI_Value*)&arr,
-        MI_UINT16A,
-        0);
+               (MI_Instance*)&self->__instance,
+               19,
+               (MI_Value*)&arr,
+               MI_UINT16A,
+               0);
 }
 
 MI_INLINE MI_Result MI_CALL MSFT_WindowsProcess_SetPtr_AvailableRequestedStates(
@@ -662,19 +662,19 @@ MI_INLINE MI_Result MI_CALL MSFT_WindowsProcess_SetPtr_AvailableRequestedStates(
     arr.data = (void*)data;
     arr.size = size;
     return self->__instance.ft->SetElementAt(
-        (MI_Instance*)&self->__instance,
-        19,
-        (MI_Value*)&arr,
-        MI_UINT16A,
-        MI_FLAG_BORROW);
+               (MI_Instance*)&self->__instance,
+               19,
+               (MI_Value*)&arr,
+               MI_UINT16A,
+               MI_FLAG_BORROW);
 }
 
 MI_INLINE MI_Result MI_CALL MSFT_WindowsProcess_Clear_AvailableRequestedStates(
     _Inout_ MSFT_WindowsProcess* self)
 {
     return self->__instance.ft->ClearElementAt(
-        (MI_Instance*)&self->__instance,
-        19);
+               (MI_Instance*)&self->__instance,
+               19);
 }
 
 MI_INLINE MI_Result MI_CALL MSFT_WindowsProcess_Set_TransitioningToState(
@@ -698,11 +698,11 @@ MI_INLINE MI_Result MI_CALL MSFT_WindowsProcess_Set_CSCreationClassName(
     _In_z_ const MI_Char* str)
 {
     return self->__instance.ft->SetElementAt(
-        (MI_Instance*)&self->__instance,
-        21,
-        (MI_Value*)&str,
-        MI_STRING,
-        0);
+               (MI_Instance*)&self->__instance,
+               21,
+               (MI_Value*)&str,
+               MI_STRING,
+               0);
 }
 
 MI_INLINE MI_Result MI_CALL MSFT_WindowsProcess_SetPtr_CSCreationClassName(
@@ -710,19 +710,19 @@ MI_INLINE MI_Result MI_CALL MSFT_WindowsProcess_SetPtr_CSCreationClassName(
     _In_z_ const MI_Char* str)
 {
     return self->__instance.ft->SetElementAt(
-        (MI_Instance*)&self->__instance,
-        21,
-        (MI_Value*)&str,
-        MI_STRING,
-        MI_FLAG_BORROW);
+               (MI_Instance*)&self->__instance,
+               21,
+               (MI_Value*)&str,
+               MI_STRING,
+               MI_FLAG_BORROW);
 }
 
 MI_INLINE MI_Result MI_CALL MSFT_WindowsProcess_Clear_CSCreationClassName(
     _Inout_ MSFT_WindowsProcess* self)
 {
     return self->__instance.ft->ClearElementAt(
-        (MI_Instance*)&self->__instance,
-        21);
+               (MI_Instance*)&self->__instance,
+               21);
 }
 
 MI_INLINE MI_Result MI_CALL MSFT_WindowsProcess_Set_CSName(
@@ -730,11 +730,11 @@ MI_INLINE MI_Result MI_CALL MSFT_WindowsProcess_Set_CSName(
     _In_z_ const MI_Char* str)
 {
     return self->__instance.ft->SetElementAt(
-        (MI_Instance*)&self->__instance,
-        22,
-        (MI_Value*)&str,
-        MI_STRING,
-        0);
+               (MI_Instance*)&self->__instance,
+               22,
+               (MI_Value*)&str,
+               MI_STRING,
+               0);
 }
 
 MI_INLINE MI_Result MI_CALL MSFT_WindowsProcess_SetPtr_CSName(
@@ -742,19 +742,19 @@ MI_INLINE MI_Result MI_CALL MSFT_WindowsProcess_SetPtr_CSName(
     _In_z_ const MI_Char* str)
 {
     return self->__instance.ft->SetElementAt(
-        (MI_Instance*)&self->__instance,
-        22,
-        (MI_Value*)&str,
-        MI_STRING,
-        MI_FLAG_BORROW);
+               (MI_Instance*)&self->__instance,
+               22,
+               (MI_Value*)&str,
+               MI_STRING,
+               MI_FLAG_BORROW);
 }
 
 MI_INLINE MI_Result MI_CALL MSFT_WindowsProcess_Clear_CSName(
     _Inout_ MSFT_WindowsProcess* self)
 {
     return self->__instance.ft->ClearElementAt(
-        (MI_Instance*)&self->__instance,
-        22);
+               (MI_Instance*)&self->__instance,
+               22);
 }
 
 MI_INLINE MI_Result MI_CALL MSFT_WindowsProcess_Set_OSCreationClassName(
@@ -762,11 +762,11 @@ MI_INLINE MI_Result MI_CALL MSFT_WindowsProcess_Set_OSCreationClassName(
     _In_z_ const MI_Char* str)
 {
     return self->__instance.ft->SetElementAt(
-        (MI_Instance*)&self->__instance,
-        23,
-        (MI_Value*)&str,
-        MI_STRING,
-        0);
+               (MI_Instance*)&self->__instance,
+               23,
+               (MI_Value*)&str,
+               MI_STRING,
+               0);
 }
 
 MI_INLINE MI_Result MI_CALL MSFT_WindowsProcess_SetPtr_OSCreationClassName(
@@ -774,19 +774,19 @@ MI_INLINE MI_Result MI_CALL MSFT_WindowsProcess_SetPtr_OSCreationClassName(
     _In_z_ const MI_Char* str)
 {
     return self->__instance.ft->SetElementAt(
-        (MI_Instance*)&self->__instance,
-        23,
-        (MI_Value*)&str,
-        MI_STRING,
-        MI_FLAG_BORROW);
+               (MI_Instance*)&self->__instance,
+               23,
+               (MI_Value*)&str,
+               MI_STRING,
+               MI_FLAG_BORROW);
 }
 
 MI_INLINE MI_Result MI_CALL MSFT_WindowsProcess_Clear_OSCreationClassName(
     _Inout_ MSFT_WindowsProcess* self)
 {
     return self->__instance.ft->ClearElementAt(
-        (MI_Instance*)&self->__instance,
-        23);
+               (MI_Instance*)&self->__instance,
+               23);
 }
 
 MI_INLINE MI_Result MI_CALL MSFT_WindowsProcess_Set_OSName(
@@ -794,11 +794,11 @@ MI_INLINE MI_Result MI_CALL MSFT_WindowsProcess_Set_OSName(
     _In_z_ const MI_Char* str)
 {
     return self->__instance.ft->SetElementAt(
-        (MI_Instance*)&self->__instance,
-        24,
-        (MI_Value*)&str,
-        MI_STRING,
-        0);
+               (MI_Instance*)&self->__instance,
+               24,
+               (MI_Value*)&str,
+               MI_STRING,
+               0);
 }
 
 MI_INLINE MI_Result MI_CALL MSFT_WindowsProcess_SetPtr_OSName(
@@ -806,19 +806,19 @@ MI_INLINE MI_Result MI_CALL MSFT_WindowsProcess_SetPtr_OSName(
     _In_z_ const MI_Char* str)
 {
     return self->__instance.ft->SetElementAt(
-        (MI_Instance*)&self->__instance,
-        24,
-        (MI_Value*)&str,
-        MI_STRING,
-        MI_FLAG_BORROW);
+               (MI_Instance*)&self->__instance,
+               24,
+               (MI_Value*)&str,
+               MI_STRING,
+               MI_FLAG_BORROW);
 }
 
 MI_INLINE MI_Result MI_CALL MSFT_WindowsProcess_Clear_OSName(
     _Inout_ MSFT_WindowsProcess* self)
 {
     return self->__instance.ft->ClearElementAt(
-        (MI_Instance*)&self->__instance,
-        24);
+               (MI_Instance*)&self->__instance,
+               24);
 }
 
 MI_INLINE MI_Result MI_CALL MSFT_WindowsProcess_Set_CreationClassName(
@@ -826,11 +826,11 @@ MI_INLINE MI_Result MI_CALL MSFT_WindowsProcess_Set_CreationClassName(
     _In_z_ const MI_Char* str)
 {
     return self->__instance.ft->SetElementAt(
-        (MI_Instance*)&self->__instance,
-        25,
-        (MI_Value*)&str,
-        MI_STRING,
-        0);
+               (MI_Instance*)&self->__instance,
+               25,
+               (MI_Value*)&str,
+               MI_STRING,
+               0);
 }
 
 MI_INLINE MI_Result MI_CALL MSFT_WindowsProcess_SetPtr_CreationClassName(
@@ -838,19 +838,19 @@ MI_INLINE MI_Result MI_CALL MSFT_WindowsProcess_SetPtr_CreationClassName(
     _In_z_ const MI_Char* str)
 {
     return self->__instance.ft->SetElementAt(
-        (MI_Instance*)&self->__instance,
-        25,
-        (MI_Value*)&str,
-        MI_STRING,
-        MI_FLAG_BORROW);
+               (MI_Instance*)&self->__instance,
+               25,
+               (MI_Value*)&str,
+               MI_STRING,
+               MI_FLAG_BORROW);
 }
 
 MI_INLINE MI_Result MI_CALL MSFT_WindowsProcess_Clear_CreationClassName(
     _Inout_ MSFT_WindowsProcess* self)
 {
     return self->__instance.ft->ClearElementAt(
-        (MI_Instance*)&self->__instance,
-        25);
+               (MI_Instance*)&self->__instance,
+               25);
 }
 
 MI_INLINE MI_Result MI_CALL MSFT_WindowsProcess_Set_Handle(
@@ -858,11 +858,11 @@ MI_INLINE MI_Result MI_CALL MSFT_WindowsProcess_Set_Handle(
     _In_z_ const MI_Char* str)
 {
     return self->__instance.ft->SetElementAt(
-        (MI_Instance*)&self->__instance,
-        26,
-        (MI_Value*)&str,
-        MI_STRING,
-        0);
+               (MI_Instance*)&self->__instance,
+               26,
+               (MI_Value*)&str,
+               MI_STRING,
+               0);
 }
 
 MI_INLINE MI_Result MI_CALL MSFT_WindowsProcess_SetPtr_Handle(
@@ -870,19 +870,19 @@ MI_INLINE MI_Result MI_CALL MSFT_WindowsProcess_SetPtr_Handle(
     _In_z_ const MI_Char* str)
 {
     return self->__instance.ft->SetElementAt(
-        (MI_Instance*)&self->__instance,
-        26,
-        (MI_Value*)&str,
-        MI_STRING,
-        MI_FLAG_BORROW);
+               (MI_Instance*)&self->__instance,
+               26,
+               (MI_Value*)&str,
+               MI_STRING,
+               MI_FLAG_BORROW);
 }
 
 MI_INLINE MI_Result MI_CALL MSFT_WindowsProcess_Clear_Handle(
     _Inout_ MSFT_WindowsProcess* self)
 {
     return self->__instance.ft->ClearElementAt(
-        (MI_Instance*)&self->__instance,
-        26);
+               (MI_Instance*)&self->__instance,
+               26);
 }
 
 MI_INLINE MI_Result MI_CALL MSFT_WindowsProcess_Set_Priority(
@@ -922,11 +922,11 @@ MI_INLINE MI_Result MI_CALL MSFT_WindowsProcess_Set_OtherExecutionDescription(
     _In_z_ const MI_Char* str)
 {
     return self->__instance.ft->SetElementAt(
-        (MI_Instance*)&self->__instance,
-        29,
-        (MI_Value*)&str,
-        MI_STRING,
-        0);
+               (MI_Instance*)&self->__instance,
+               29,
+               (MI_Value*)&str,
+               MI_STRING,
+               0);
 }
 
 MI_INLINE MI_Result MI_CALL MSFT_WindowsProcess_SetPtr_OtherExecutionDescription(
@@ -934,19 +934,19 @@ MI_INLINE MI_Result MI_CALL MSFT_WindowsProcess_SetPtr_OtherExecutionDescription
     _In_z_ const MI_Char* str)
 {
     return self->__instance.ft->SetElementAt(
-        (MI_Instance*)&self->__instance,
-        29,
-        (MI_Value*)&str,
-        MI_STRING,
-        MI_FLAG_BORROW);
+               (MI_Instance*)&self->__instance,
+               29,
+               (MI_Value*)&str,
+               MI_STRING,
+               MI_FLAG_BORROW);
 }
 
 MI_INLINE MI_Result MI_CALL MSFT_WindowsProcess_Clear_OtherExecutionDescription(
     _Inout_ MSFT_WindowsProcess* self)
 {
     return self->__instance.ft->ClearElementAt(
-        (MI_Instance*)&self->__instance,
-        29);
+               (MI_Instance*)&self->__instance,
+               29);
 }
 
 MI_INLINE MI_Result MI_CALL MSFT_WindowsProcess_Set_CreationDate(
@@ -1034,11 +1034,11 @@ MI_INLINE MI_Result MI_CALL MSFT_WindowsProcess_Set_CommandLine(
     _In_z_ const MI_Char* str)
 {
     return self->__instance.ft->SetElementAt(
-        (MI_Instance*)&self->__instance,
-        35,
-        (MI_Value*)&str,
-        MI_STRING,
-        0);
+               (MI_Instance*)&self->__instance,
+               35,
+               (MI_Value*)&str,
+               MI_STRING,
+               0);
 }
 
 MI_INLINE MI_Result MI_CALL MSFT_WindowsProcess_SetPtr_CommandLine(
@@ -1046,19 +1046,19 @@ MI_INLINE MI_Result MI_CALL MSFT_WindowsProcess_SetPtr_CommandLine(
     _In_z_ const MI_Char* str)
 {
     return self->__instance.ft->SetElementAt(
-        (MI_Instance*)&self->__instance,
-        35,
-        (MI_Value*)&str,
-        MI_STRING,
-        MI_FLAG_BORROW);
+               (MI_Instance*)&self->__instance,
+               35,
+               (MI_Value*)&str,
+               MI_STRING,
+               MI_FLAG_BORROW);
 }
 
 MI_INLINE MI_Result MI_CALL MSFT_WindowsProcess_Clear_CommandLine(
     _Inout_ MSFT_WindowsProcess* self)
 {
     return self->__instance.ft->ClearElementAt(
-        (MI_Instance*)&self->__instance,
-        35);
+               (MI_Instance*)&self->__instance,
+               35);
 }
 
 /*
@@ -1086,7 +1086,7 @@ MI_INLINE MI_Result MI_CALL MSFT_WindowsProcess_RequestStateChange_Construct(
     _In_ MI_Context* context)
 {
     return MI_Context_ConstructParameters(context, &MSFT_WindowsProcess_RequestStateChange_rtti,
-        (MI_Instance*)&self->__instance);
+                                          (MI_Instance*)&self->__instance);
 }
 
 MI_INLINE MI_Result MI_CALL MSFT_WindowsProcess_RequestStateChange_Clone(
@@ -1094,7 +1094,7 @@ MI_INLINE MI_Result MI_CALL MSFT_WindowsProcess_RequestStateChange_Clone(
     _Outptr_ MSFT_WindowsProcess_RequestStateChange** newInstance)
 {
     return MI_Instance_Clone(
-        &self->__instance, (MI_Instance**)newInstance);
+               &self->__instance, (MI_Instance**)newInstance);
 }
 
 MI_INLINE MI_Result MI_CALL MSFT_WindowsProcess_RequestStateChange_Destruct(
@@ -1153,11 +1153,11 @@ MI_INLINE MI_Result MI_CALL MSFT_WindowsProcess_RequestStateChange_Set_Job(
     _In_ const CIM_ConcreteJob* x)
 {
     return self->__instance.ft->SetElementAt(
-        (MI_Instance*)&self->__instance,
-        2,
-        (MI_Value*)&x,
-        MI_REFERENCE,
-        0);
+               (MI_Instance*)&self->__instance,
+               2,
+               (MI_Value*)&x,
+               MI_REFERENCE,
+               0);
 }
 
 MI_INLINE MI_Result MI_CALL MSFT_WindowsProcess_RequestStateChange_SetPtr_Job(
@@ -1165,19 +1165,19 @@ MI_INLINE MI_Result MI_CALL MSFT_WindowsProcess_RequestStateChange_SetPtr_Job(
     _In_ const CIM_ConcreteJob* x)
 {
     return self->__instance.ft->SetElementAt(
-        (MI_Instance*)&self->__instance,
-        2,
-        (MI_Value*)&x,
-        MI_REFERENCE,
-        MI_FLAG_BORROW);
+               (MI_Instance*)&self->__instance,
+               2,
+               (MI_Value*)&x,
+               MI_REFERENCE,
+               MI_FLAG_BORROW);
 }
 
 MI_INLINE MI_Result MI_CALL MSFT_WindowsProcess_RequestStateChange_Clear_Job(
     _Inout_ MSFT_WindowsProcess_RequestStateChange* self)
 {
     return self->__instance.ft->ClearElementAt(
-        (MI_Instance*)&self->__instance,
-        2);
+               (MI_Instance*)&self->__instance,
+               2);
 }
 
 MI_INLINE MI_Result MI_CALL MSFT_WindowsProcess_RequestStateChange_Set_TimeoutPeriod(
@@ -1219,7 +1219,7 @@ MI_INLINE MI_Result MI_CALL MSFT_WindowsProcess_SetPriority_Construct(
     _In_ MI_Context* context)
 {
     return MI_Context_ConstructParameters(context, &MSFT_WindowsProcess_SetPriority_rtti,
-        (MI_Instance*)&self->__instance);
+                                          (MI_Instance*)&self->__instance);
 }
 
 MI_INLINE MI_Result MI_CALL MSFT_WindowsProcess_SetPriority_Clone(
@@ -1227,7 +1227,7 @@ MI_INLINE MI_Result MI_CALL MSFT_WindowsProcess_SetPriority_Clone(
     _Outptr_ MSFT_WindowsProcess_SetPriority** newInstance)
 {
     return MI_Instance_Clone(
-        &self->__instance, (MI_Instance**)newInstance);
+               &self->__instance, (MI_Instance**)newInstance);
 }
 
 MI_INLINE MI_Result MI_CALL MSFT_WindowsProcess_SetPriority_Destruct(
@@ -1305,7 +1305,7 @@ MI_INLINE MI_Result MI_CALL MSFT_WindowsProcess_Create_Construct(
     _In_ MI_Context* context)
 {
     return MI_Context_ConstructParameters(context, &MSFT_WindowsProcess_Create_rtti,
-        (MI_Instance*)&self->__instance);
+                                          (MI_Instance*)&self->__instance);
 }
 
 MI_INLINE MI_Result MI_CALL MSFT_WindowsProcess_Create_Clone(
@@ -1313,7 +1313,7 @@ MI_INLINE MI_Result MI_CALL MSFT_WindowsProcess_Create_Clone(
     _Outptr_ MSFT_WindowsProcess_Create** newInstance)
 {
     return MI_Instance_Clone(
-        &self->__instance, (MI_Instance**)newInstance);
+               &self->__instance, (MI_Instance**)newInstance);
 }
 
 MI_INLINE MI_Result MI_CALL MSFT_WindowsProcess_Create_Destruct(
@@ -1356,11 +1356,11 @@ MI_INLINE MI_Result MI_CALL MSFT_WindowsProcess_Create_Set_CommandLine(
     _In_z_ const MI_Char* str)
 {
     return self->__instance.ft->SetElementAt(
-        (MI_Instance*)&self->__instance,
-        1,
-        (MI_Value*)&str,
-        MI_STRING,
-        0);
+               (MI_Instance*)&self->__instance,
+               1,
+               (MI_Value*)&str,
+               MI_STRING,
+               0);
 }
 
 MI_INLINE MI_Result MI_CALL MSFT_WindowsProcess_Create_SetPtr_CommandLine(
@@ -1368,19 +1368,19 @@ MI_INLINE MI_Result MI_CALL MSFT_WindowsProcess_Create_SetPtr_CommandLine(
     _In_z_ const MI_Char* str)
 {
     return self->__instance.ft->SetElementAt(
-        (MI_Instance*)&self->__instance,
-        1,
-        (MI_Value*)&str,
-        MI_STRING,
-        MI_FLAG_BORROW);
+               (MI_Instance*)&self->__instance,
+               1,
+               (MI_Value*)&str,
+               MI_STRING,
+               MI_FLAG_BORROW);
 }
 
 MI_INLINE MI_Result MI_CALL MSFT_WindowsProcess_Create_Clear_CommandLine(
     _Inout_ MSFT_WindowsProcess_Create* self)
 {
     return self->__instance.ft->ClearElementAt(
-        (MI_Instance*)&self->__instance,
-        1);
+               (MI_Instance*)&self->__instance,
+               1);
 }
 
 MI_INLINE MI_Result MI_CALL MSFT_WindowsProcess_Create_Set_Process(
@@ -1388,11 +1388,11 @@ MI_INLINE MI_Result MI_CALL MSFT_WindowsProcess_Create_Set_Process(
     _In_ const CIM_Process* x)
 {
     return self->__instance.ft->SetElementAt(
-        (MI_Instance*)&self->__instance,
-        2,
-        (MI_Value*)&x,
-        MI_REFERENCE,
-        0);
+               (MI_Instance*)&self->__instance,
+               2,
+               (MI_Value*)&x,
+               MI_REFERENCE,
+               0);
 }
 
 MI_INLINE MI_Result MI_CALL MSFT_WindowsProcess_Create_SetPtr_Process(
@@ -1400,19 +1400,19 @@ MI_INLINE MI_Result MI_CALL MSFT_WindowsProcess_Create_SetPtr_Process(
     _In_ const CIM_Process* x)
 {
     return self->__instance.ft->SetElementAt(
-        (MI_Instance*)&self->__instance,
-        2,
-        (MI_Value*)&x,
-        MI_REFERENCE,
-        MI_FLAG_BORROW);
+               (MI_Instance*)&self->__instance,
+               2,
+               (MI_Value*)&x,
+               MI_REFERENCE,
+               MI_FLAG_BORROW);
 }
 
 MI_INLINE MI_Result MI_CALL MSFT_WindowsProcess_Create_Clear_Process(
     _Inout_ MSFT_WindowsProcess_Create* self)
 {
     return self->__instance.ft->ClearElementAt(
-        (MI_Instance*)&self->__instance,
-        2);
+               (MI_Instance*)&self->__instance,
+               2);
 }
 
 /*

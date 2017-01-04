@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -80,20 +80,20 @@ INT_PTR CALLBACK OptionsPageProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPa
 {
     switch (uMsg)
     {
-        case WM_INITDIALOG:
-            return HANDLE_WM_INITDIALOG(hwnd, wParam, lParam, Options_OnInitDialog);
+    case WM_INITDIALOG:
+        return HANDLE_WM_INITDIALOG(hwnd, wParam, lParam, Options_OnInitDialog);
 
-        case WM_COMMAND:
-            HANDLE_WM_COMMAND(hwnd, wParam, lParam, Options_OnCommand);
-            return TRUE;
+    case WM_COMMAND:
+        HANDLE_WM_COMMAND(hwnd, wParam, lParam, Options_OnCommand);
+        return TRUE;
 
-        case WM_DESTROY:
-            HANDLE_WM_DESTROY(hwnd, wParam, lParam, Options_OnDestroy);
-            return TRUE;
+    case WM_DESTROY:
+        HANDLE_WM_DESTROY(hwnd, wParam, lParam, Options_OnDestroy);
+        return TRUE;
 
-        case WM_NOTIFY:
-            HANDLE_WM_NOTIFY(hwnd, wParam, lParam, Options_OnNotify);
-            return TRUE;
+    case WM_NOTIFY:
+        HANDLE_WM_NOTIFY(hwnd, wParam, lParam, Options_OnNotify);
+        return TRUE;
     }
 
     return FALSE;
@@ -202,35 +202,35 @@ void Options_OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT /* codeNotify */)
 {
     switch (id)
     {
-        case IDC_AUTOHIDE:
-            // First let the property sheet know somethings changed
-            PropSheet_Changed(GetParent(hwnd), hwnd);
+    case IDC_AUTOHIDE:
+        // First let the property sheet know somethings changed
+        PropSheet_Changed(GetParent(hwnd), hwnd);
 
-            // Now update the picture
-            if (Button_GetCheck(hwndCtl))
-            {
-                ShowWindow(GetDlgItem(hwnd, IDC_APPBAR), SW_HIDE);
-            }
-            else
-            {
-                ShowWindow(GetDlgItem(hwnd, IDC_APPBAR), SW_SHOW);
-            }
-            break;
+        // Now update the picture
+        if (Button_GetCheck(hwndCtl))
+        {
+            ShowWindow(GetDlgItem(hwnd, IDC_APPBAR), SW_HIDE);
+        }
+        else
+        {
+            ShowWindow(GetDlgItem(hwnd, IDC_APPBAR), SW_SHOW);
+        }
+        break;
 
-        case IDC_ONTOP:
-            // First let the property sheet know somethings changed
-            PropSheet_Changed(GetParent(hwnd), hwnd);
+    case IDC_ONTOP:
+        // First let the property sheet know somethings changed
+        PropSheet_Changed(GetParent(hwnd), hwnd);
 
-            // Now update the picture
-            if (Button_GetCheck(hwndCtl))
-            {
-                ShowWindow(GetDlgItem(hwnd, IDC_WINDOW), SW_HIDE);
-            }
-            else
-            {
-                ShowWindow(GetDlgItem(hwnd, IDC_WINDOW), SW_SHOW);
-            }
-            break;
+        // Now update the picture
+        if (Button_GetCheck(hwndCtl))
+        {
+            ShowWindow(GetDlgItem(hwnd, IDC_WINDOW), SW_HIDE);
+        }
+        else
+        {
+            ShowWindow(GetDlgItem(hwnd, IDC_WINDOW), SW_SHOW);
+        }
+        break;
     }
 }
 
@@ -286,30 +286,30 @@ LRESULT Options_OnNotify(HWND hwnd, int /* idFrom */, LPNMHDR pnmhdr)
 {
     switch (pnmhdr->code)
     {
-        case PSN_APPLY:
+    case PSN_APPLY:
+    {
+        // Check to see if the options have changed.  If so, send
+        // the appropriate command to the appbar
+        BOOL fCheck = (BOOL) Button_GetCheck(GetDlgItem(hwnd, IDC_AUTOHIDE));
+        if (s_pOptions->fAutoHide != fCheck)
         {
-            // Check to see if the options have changed.  If so, send
-            // the appropriate command to the appbar
-            BOOL fCheck = (BOOL) Button_GetCheck(GetDlgItem(hwnd, IDC_AUTOHIDE));
-            if (s_pOptions->fAutoHide != fCheck)
+            if (AppBar_SetAutoHide(s_hwndAppbar, fCheck))
             {
-                if (AppBar_SetAutoHide(s_hwndAppbar, fCheck))
-                {
-                    s_pOptions->fAutoHide = fCheck;
-                }
+                s_pOptions->fAutoHide = fCheck;
             }
-
-            // If the Always-On-Top setting has changed update the appbar state
-            fCheck = (BOOL) Button_GetCheck(GetDlgItem(hwnd, IDC_ONTOP));
-            if (s_pOptions->fOnTop != fCheck)
-            {
-                s_pOptions->fOnTop = fCheck;
-                AppBar_SetAlwaysOnTop(s_hwndAppbar, fCheck);
-            }
-
-            SetDlgMsgResult(hwnd, WM_NOTIFY, PSNRET_NOERROR);
-            break;
         }
+
+        // If the Always-On-Top setting has changed update the appbar state
+        fCheck = (BOOL) Button_GetCheck(GetDlgItem(hwnd, IDC_ONTOP));
+        if (s_pOptions->fOnTop != fCheck)
+        {
+            s_pOptions->fOnTop = fCheck;
+            AppBar_SetAlwaysOnTop(s_hwndAppbar, fCheck);
+        }
+
+        SetDlgMsgResult(hwnd, WM_NOTIFY, PSNRET_NOERROR);
+        break;
+    }
     }
 
     return 0;

@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 
@@ -100,7 +100,7 @@ DWORD MakeIdentityRequestMessage(BYTE **pIdentityReq, DWORD *pIdentityReqLen);
 // Do logon user and then impersonate the user.
 //
 DWORD Impersonate(HANDLE &pToken, LPCWSTR user,
-                                      LPCWSTR domain, LPCWSTR pswd);
+                  LPCWSTR domain, LPCWSTR pswd);
 
 //
 // Stores the BLOB (either UserData or ConnectionData) into registry. The supplicant does not care about the
@@ -160,9 +160,9 @@ CommandProc(
 // needs to re-authenticate due to change in state of health. (related to NAP)
 //
 typedef void (CALLBACK *NOTIFICATIONHANDLER) (
-                 IN GUID connectionId,
-                 IN void* pContextData
-                 );
+    IN GUID connectionId,
+    IN void* pContextData
+);
 
 //
 // Function Pointers Declaration of EAP Host Peer APIs.
@@ -173,111 +173,111 @@ typedef DWORD (APIENTRY* EapHostPeerInitialize)();
 typedef void (APIENTRY* EapHostPeerUninitialize)();
 
 typedef DWORD (APIENTRY* EapHostPeerBeginSession)(
-   IN DWORD dwFlags,
-   IN EAP_METHOD_TYPE eapType,
-   IN const EapAttributes* const pAttributeArray,
-   IN HANDLE hTokenImpersonateUser,
-   IN DWORD dwSizeofConnectionData,
-   IN const BYTE* const pConnectionData,
-   IN DWORD dwSizeofUserData,
-   IN const BYTE* const pUserData,
-   IN DWORD dwMaxSendPacketSize,
-   // If the supplicant is intrested in re-auth caused by SoH chagne,
-   // it should provide a unique GUID.
-   // When this function is called by PEAP inner method, it will be NULL.
-   //
-   // When pConnectionId is NULL, func and pContextData will be ignored.
-   IN const GUID* const pConnectionId,
-   // if the function handler is NULL, pContextData will be ignored,
-   // and it means the caller is not interested in SoH change notification
-   // from EapQec.
-   IN NOTIFICATIONHANDLER func,
-   // a pointer to some data that the supplicant want to associate with
-   // the connection when NotificationHandler call back is called.
-   // When NotificationHandler is called, it will be called as:
-   // func(*pCOnnectionId, pContextData).
-   IN void* pContextData,
-   OUT EAP_SESSIONID* pSessionId,
-   OUT EAP_ERROR** ppEapError
-   );
+    IN DWORD dwFlags,
+    IN EAP_METHOD_TYPE eapType,
+    IN const EapAttributes* const pAttributeArray,
+    IN HANDLE hTokenImpersonateUser,
+    IN DWORD dwSizeofConnectionData,
+    IN const BYTE* const pConnectionData,
+    IN DWORD dwSizeofUserData,
+    IN const BYTE* const pUserData,
+    IN DWORD dwMaxSendPacketSize,
+    // If the supplicant is intrested in re-auth caused by SoH chagne,
+    // it should provide a unique GUID.
+    // When this function is called by PEAP inner method, it will be NULL.
+    //
+    // When pConnectionId is NULL, func and pContextData will be ignored.
+    IN const GUID* const pConnectionId,
+    // if the function handler is NULL, pContextData will be ignored,
+    // and it means the caller is not interested in SoH change notification
+    // from EapQec.
+    IN NOTIFICATIONHANDLER func,
+    // a pointer to some data that the supplicant want to associate with
+    // the connection when NotificationHandler call back is called.
+    // When NotificationHandler is called, it will be called as:
+    // func(*pCOnnectionId, pContextData).
+    IN void* pContextData,
+    OUT EAP_SESSIONID* pSessionId,
+    OUT EAP_ERROR** ppEapError
+);
 
 
 typedef DWORD (APIENTRY* EapHostPeerProcessReceivedPacket)(
-   IN EAP_SESSIONID sessionHandle,
-   IN DWORD cbReceivePacket,
-   IN const BYTE* const pReceivePacket,
-   OUT EapHostPeerResponseAction* pEapOutput,
-   OUT EAP_ERROR** ppEapError
-   );
+    IN EAP_SESSIONID sessionHandle,
+    IN DWORD cbReceivePacket,
+    IN const BYTE* const pReceivePacket,
+    OUT EapHostPeerResponseAction* pEapOutput,
+    OUT EAP_ERROR** ppEapError
+);
 
 
 typedef DWORD (APIENTRY* EapHostPeerGetSendPacket)(
-   IN EAP_SESSIONID sessionHandle,
+    IN EAP_SESSIONID sessionHandle,
     OUT DWORD* pcbSendPacket,
     OUT BYTE** ppSendPacket,
     OUT EAP_ERROR** ppEapError
-    );
+);
 
 
 typedef DWORD (APIENTRY* EapHostPeerGetResult)(
-   IN EAP_SESSIONID sessionHandle,
+    IN EAP_SESSIONID sessionHandle,
     IN EapHostPeerMethodResultReason reason,
     OUT EapHostPeerMethodResult* ppResult,
     OUT EAP_ERROR** ppEapError
-       );
+);
 
 
 typedef DWORD (APIENTRY* EapHostPeerGetUIContext)(
-   IN EAP_SESSIONID sessionHandle,
-   OUT DWORD* pdwSizeOfUIContextData,
-   OUT BYTE** ppUIContextData,
+    IN EAP_SESSIONID sessionHandle,
+    OUT DWORD* pdwSizeOfUIContextData,
+    OUT BYTE** ppUIContextData,
     OUT EAP_ERROR** ppEapError
-   );
+);
 
 
 typedef DWORD (APIENTRY* EapHostPeerSetUIContext)(
-   IN EAP_SESSIONID sessionHandle,
-   IN DWORD dwSizeOfUIContextData,
-   IN const BYTE* const pUIContextData,
-   OUT EapHostPeerResponseAction* pEapOutput,
+    IN EAP_SESSIONID sessionHandle,
+    IN DWORD dwSizeOfUIContextData,
+    IN const BYTE* const pUIContextData,
+    OUT EapHostPeerResponseAction* pEapOutput,
     OUT EAP_ERROR** ppEapError
-    );
+);
 
 
 typedef DWORD (APIENTRY* EapHostPeerGetResponseAttributes)(
-   IN EAP_SESSIONID sessionHandle,
-   OUT EapAttributes* pAttribs,
+    IN EAP_SESSIONID sessionHandle,
+    OUT EapAttributes* pAttribs,
     OUT EAP_ERROR** ppEapError
-   );
+);
 
 
 typedef DWORD (APIENTRY* EapHostPeerSetResponseAttributes)(
-   IN EAP_SESSIONID sessionHandle,
-   IN const EapAttributes* const pAttribs,
-   OUT EapHostPeerResponseAction* pEapOutput,
+    IN EAP_SESSIONID sessionHandle,
+    IN const EapAttributes* const pAttribs,
+    OUT EapHostPeerResponseAction* pEapOutput,
     OUT EAP_ERROR** ppEapError
-   );
+);
 
 
 typedef DWORD (APIENTRY* EapHostPeerGetAuthStatus)(
-   IN EAP_SESSIONID sessionHandle,
-   IN EapHostPeerAuthParams authParam,
-   OUT DWORD* pcbAuthData,
-   OUT BYTE** ppAuthData,
-   OUT EAP_ERROR** ppEapError
-   );
+    IN EAP_SESSIONID sessionHandle,
+    IN EapHostPeerAuthParams authParam,
+    OUT DWORD* pcbAuthData,
+    OUT BYTE** ppAuthData,
+    OUT EAP_ERROR** ppEapError
+);
 
 
 typedef DWORD (APIENTRY* EapHostPeerEndSession)(
-   IN EAP_SESSIONID sessionHandle,
-   OUT EAP_ERROR** ppEapError
-   );
+    IN EAP_SESSIONID sessionHandle,
+    OUT EAP_ERROR** ppEapError
+);
 
 
 typedef DWORD (APIENTRY* EapHostPeerClearConnection)(
-   IN GUID *connectionId,
-   OUT EAP_ERROR** ppEapError
-   );
+    IN GUID *connectionId,
+    OUT EAP_ERROR** ppEapError
+);
 
 typedef void (APIENTRY* EapHostPeerFreeEapError)(IN EAP_ERROR* pEapError);
 

@@ -1,4 +1,4 @@
-//-----------------------------------------------------------------------------
+﻿//-----------------------------------------------------------------------------
 // Microsoft OLE DB TABLECOPY Sample
 // Copyright (C) 1995-2000 Microsoft Corporation
 //
@@ -100,253 +100,253 @@ BOOL WINAPI CS1Dialog::DlgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam
 {
     static WCHAR	wszBuffer[MAX_NAME_LEN+1];
 
-    switch(msg) 
+    switch(msg)
     {
-        case WM_INITDIALOG:
+    case WM_INITDIALOG:
+    {
+        Busy();
+        CS1Dialog* pThis = (CS1Dialog*)lParam;
+        SetWindowLongPtrA(hWnd, GWLP_USERDATA, (LONG_PTR)pThis);
+
+        //On INIT we know we have a valid hWnd to store
+        CenterDialog(hWnd);
+        pThis->m_hWnd = hWnd;
+        CTable* pCFromTable = pThis->m_pCTableCopy->m_pCFromTable;
+
+        //Init all controls to the default values
+        pThis->InitControls();
+
+        // If there is a source to look at, Display the table list
+        if(pCFromTable->IsConnected())
+            pThis->ResetTableList(GetDlgItem(hWnd, IDL_TABLES), GetDlgItem(hWnd, IDL_COLUMNS));
+
+        pThis->RefreshControls();
+        pThis->m_pCTableCopy->m_pCWizard->DestroyPrevStep(WIZ_STEP1);
+        return HANDLED_MSG;
+    }//case WM_INITDIALOG
+
+    case WM_COMMAND:
+    {
+        //Obtain the "this" pointer
+        CS1Dialog	*pThis = (CS1Dialog*)GetWindowLongPtrA(hWnd, GWLP_USERDATA);
+
+        CTable		*pCFromTable		= pThis->m_pCTableCopy->m_pCFromTable;
+        CTable		*pCToTable			= pThis->m_pCTableCopy->m_pCToTable;
+        CDataSource	*pCToDataSource		= pCToTable->m_pCDataSource;
+        CDataSource	*pCFromDataSource	= pCFromTable->m_pCDataSource;
+
+        //Filter out any Control Notification codes
+        if(GET_WM_COMMAND_CMD(wParam, lParam) > 1)
+        {
+            return UNHANDLED_MSG;
+        }
+
+        //LBN_SELCHANGE ListBox Selection change
+        if(GET_WM_COMMAND_CMD(wParam, lParam) == LBN_SELCHANGE
+                && IDC_PROVIDER_NAME == GET_WM_COMMAND_ID(wParam, lParam))
         {
             Busy();
-            CS1Dialog* pThis = (CS1Dialog*)lParam;
-            SetWindowLongPtrA(hWnd, GWLP_USERDATA, (LONG_PTR)pThis);
-            
-            //On INIT we know we have a valid hWnd to store
-            CenterDialog(hWnd);
-            pThis->m_hWnd = hWnd;
-            CTable* pCFromTable = pThis->m_pCTableCopy->m_pCFromTable;
+            /*
+                            //Get new selection
+                            LONG iSel = 0;
+                            if((iSel = SendMessage(GetDlgItem(pThis->m_hWnd, IDC_PROVIDER_NAME), CB_GETCURSEL, 0, 0L)) != CB_ERR)
+                            {
+                                //Since we have the CBS_SORT turned on, the order in the Combo Box does
+                                //not match our array, so we pass the array index (lParam) as the item data
+                                LONG lParam = SendMessage(GetDlgItem(pThis->m_hWnd, IDC_PROVIDER_NAME), CB_GETITEMDATA, iSel, 0L);
+                                if((lParam < (LONG)pCFromDataSource->m_cProviderInfo) && (wcscmp(pCFromDataSource->m_rgProviderInfo[lParam].wszName, pCFromDataSource->m_pwszProviderName)!=0))
+                                {
+                                    //Clear Table/Column List Views
+                                    SendMessage(GetDlgItem(hWnd, IDL_TABLES), TVM_DELETEITEM, (WPARAM)0, (LPARAM)TVI_ROOT);
+                                    SendMessage(GetDlgItem(hWnd, IDL_COLUMNS), LVM_DELETEALLITEMS, (WPARAM)0, (LPARAM)0);
 
-            //Init all controls to the default values
-            pThis->InitControls();
+                                    //Clear Table info
+                                    memset(&pCFromTable->m_TableInfo, 0, sizeof(TABLEINFO));
+                                    pCFromTable->m_wszQualTableName[0] = EOL;
 
-            // If there is a source to look at, Display the table list
-            if(pCFromTable->IsConnected()) 
-                pThis->ResetTableList(GetDlgItem(hWnd, IDL_TABLES), GetDlgItem(hWnd, IDL_COLUMNS));
-
-            pThis->RefreshControls();
-            pThis->m_pCTableCopy->m_pCWizard->DestroyPrevStep(WIZ_STEP1);
-            return HANDLED_MSG;
-        }//case WM_INITDIALOG
-
-        case WM_COMMAND:
+                                    //Disconnect from the DataSource and Update controls
+                                    pCFromTable->m_pCDataSource->Disconnect();
+                                    pThis->RefreshControls();
+                                }
+                            }
+                            else
+                            {
+                                //The user must have typed in a Provider Name directly
+                                //This may not map to a provider in the list, so assume the name is a ProgID/CLSID
+                                LONG lParam = wSendMessage(GetDlgItem(pThis->m_hWnd, IDC_PROVIDER_NAME), CB_GETLBTEXT, 0, wszBuffer);
+                            }
+                            return HANDLED_MSG;
+            */
+        }
+        if(pThis->m_fEditing)
         {
-            //Obtain the "this" pointer
-            CS1Dialog	*pThis = (CS1Dialog*)GetWindowLongPtrA(hWnd, GWLP_USERDATA);
+            //There is a bug in the TreeView control for editing here is KB article
+            //Article ID: Q130691 BUG: ESC/ENTER Keys Don't Work When Editing Labels in TreeView
+            //So one way to work around this is to just have a flag (m_fEditing)
+            //to indicate we were in editing mode.
+            SendDlgItemMessage(hWnd, IDL_TABLES, TVM_ENDEDITLABELNOW, (WPARAM) (wParam==IDCANCEL ? TRUE : FALSE), (LPARAM)0);
+            return HANDLED_MSG;
+        }
 
-            CTable		*pCFromTable		= pThis->m_pCTableCopy->m_pCFromTable;		
-            CTable		*pCToTable			= pThis->m_pCTableCopy->m_pCToTable;		
-            CDataSource	*pCToDataSource		= pCToTable->m_pCDataSource;		
-            CDataSource	*pCFromDataSource	= pCFromTable->m_pCDataSource;		
-            
-            //Filter out any Control Notification codes
-            if(GET_WM_COMMAND_CMD(wParam, lParam) > 1)
+        // Now check for regular command ids
+        switch(GET_WM_COMMAND_ID(wParam, lParam))
+        {
+        case IDB_FROM_CONNECT:
+        {
+            //on connect get whatever is now listed in the drop down
+            LRESULT iSel = 0;
+            if((iSel = SendMessage(GetDlgItem(pThis->m_hWnd, IDC_PROVIDER_NAME), CB_GETCURSEL, 0, 0L)) != CB_ERR)
             {
-                return UNHANDLED_MSG;
+                //Since we have the CBS_SORT turned on, the order in the Combo Box does
+                //not match our array, so we pass the array index (lParam) as the item data
+                LRESULT lParam = SendMessage(GetDlgItem(pThis->m_hWnd, IDC_PROVIDER_NAME), CB_GETITEMDATA, iSel, 0L);
+                pCFromTable->m_pCDataSource->m_pwszProviderName = pCFromDataSource->m_rgProviderInfo[lParam].wszName;
+                if((lParam < (LONG)pCFromDataSource->m_cProviderInfo) && (wcscmp(pCFromDataSource->m_rgProviderInfo[lParam].wszName, pCFromDataSource->m_pwszProviderName)!=0))
+                {
+                    //Clear Table/Column List Views
+                    SendMessage(GetDlgItem(hWnd, IDL_TABLES), TVM_DELETEITEM, (WPARAM)0, (LPARAM)TVI_ROOT);
+                    SendMessage(GetDlgItem(hWnd, IDL_COLUMNS), LVM_DELETEALLITEMS, (WPARAM)0, (LPARAM)0);
+
+                    //Clear Table info
+                    memset(&pCFromTable->m_TableInfo, 0, sizeof(TABLEINFO));
+                    pCFromTable->m_wszQualTableName[0] = EOL;
+
+                    //Disconnect from the DataSource and Update controls
+                    pCFromTable->m_pCDataSource->Disconnect();
+                }
+            }
+            else
+            {
+                //The user must have typed in a Provider Name directly
+                //This may not map to a provider in the list, so assume the name is a ProgID/CLSID
+                wSendMessage(GetDlgItem(pThis->m_hWnd, IDC_PROVIDER_NAME), WM_GETTEXT, MAX_NAME_LEN, wszBuffer);
+                pCFromTable->m_pCDataSource->m_pwszProviderName = wszBuffer;
             }
 
-            //LBN_SELCHANGE ListBox Selection change
-            if(GET_WM_COMMAND_CMD(wParam, lParam) == LBN_SELCHANGE
-                && IDC_PROVIDER_NAME == GET_WM_COMMAND_ID(wParam, lParam)) 
+            //Try to connect to the DataSource
+            Busy();
+            if(pCFromTable->Connect(hWnd))
             {
                 Busy();
-/*
-                //Get new selection
-                LONG iSel = 0;
-                if((iSel = SendMessage(GetDlgItem(pThis->m_hWnd, IDC_PROVIDER_NAME), CB_GETCURSEL, 0, 0L)) != CB_ERR)
-                {
-                    //Since we have the CBS_SORT turned on, the order in the Combo Box does
-                    //not match our array, so we pass the array index (lParam) as the item data
-                    LONG lParam = SendMessage(GetDlgItem(pThis->m_hWnd, IDC_PROVIDER_NAME), CB_GETITEMDATA, iSel, 0L);
-                    if((lParam < (LONG)pCFromDataSource->m_cProviderInfo) && (wcscmp(pCFromDataSource->m_rgProviderInfo[lParam].wszName, pCFromDataSource->m_pwszProviderName)!=0))
-                    {
-                        //Clear Table/Column List Views
-                        SendMessage(GetDlgItem(hWnd, IDL_TABLES), TVM_DELETEITEM, (WPARAM)0, (LPARAM)TVI_ROOT);
-                        SendMessage(GetDlgItem(hWnd, IDL_COLUMNS), LVM_DELETEALLITEMS, (WPARAM)0, (LPARAM)0);
+                //Clear Table info
+                memset(&pCFromTable->m_TableInfo, 0, sizeof(TABLEINFO));
+                pCFromTable->m_wszQualTableName[0] = EOL;
 
-                        //Clear Table info
-                        memset(&pCFromTable->m_TableInfo, 0, sizeof(TABLEINFO));
-                        pCFromTable->m_wszQualTableName[0] = EOL;
-
-                        //Disconnect from the DataSource and Update controls
-                        pCFromTable->m_pCDataSource->Disconnect();
-                        pThis->RefreshControls();
-                    }
-                }
-                else
-                {
-                    //The user must have typed in a Provider Name directly
-                    //This may not map to a provider in the list, so assume the name is a ProgID/CLSID
-                    LONG lParam = wSendMessage(GetDlgItem(pThis->m_hWnd, IDC_PROVIDER_NAME), CB_GETLBTEXT, 0, wszBuffer);
-                }
-                return HANDLED_MSG;
-*/
-            }
-            if(pThis->m_fEditing)
-            {
-                //There is a bug in the TreeView control for editing here is KB article
-                //Article ID: Q130691 BUG: ESC/ENTER Keys Don't Work When Editing Labels in TreeView
-                //So one way to work around this is to just have a flag (m_fEditing)
-                //to indicate we were in editing mode.
-                SendDlgItemMessage(hWnd, IDL_TABLES, TVM_ENDEDITLABELNOW, (WPARAM) (wParam==IDCANCEL ? TRUE : FALSE), (LPARAM)0);
-                return HANDLED_MSG;
+                //ResetTableList
+                pThis->ResetTableList(GetDlgItem(hWnd, IDL_TABLES), GetDlgItem(hWnd, IDL_COLUMNS));
             }
 
-            // Now check for regular command ids
-            switch(GET_WM_COMMAND_ID(wParam, lParam)) 
-            {
-                case IDB_FROM_CONNECT:
-                {
-                    //on connect get whatever is now listed in the drop down
-                    LRESULT iSel = 0;
-                    if((iSel = SendMessage(GetDlgItem(pThis->m_hWnd, IDC_PROVIDER_NAME), CB_GETCURSEL, 0, 0L)) != CB_ERR)
-                    {
-                        //Since we have the CBS_SORT turned on, the order in the Combo Box does
-                        //not match our array, so we pass the array index (lParam) as the item data
-                        LRESULT lParam = SendMessage(GetDlgItem(pThis->m_hWnd, IDC_PROVIDER_NAME), CB_GETITEMDATA, iSel, 0L);
-                        pCFromTable->m_pCDataSource->m_pwszProviderName = pCFromDataSource->m_rgProviderInfo[lParam].wszName;
-                        if((lParam < (LONG)pCFromDataSource->m_cProviderInfo) && (wcscmp(pCFromDataSource->m_rgProviderInfo[lParam].wszName, pCFromDataSource->m_pwszProviderName)!=0))
-                        {
-                            //Clear Table/Column List Views
-                            SendMessage(GetDlgItem(hWnd, IDL_TABLES), TVM_DELETEITEM, (WPARAM)0, (LPARAM)TVI_ROOT);
-                            SendMessage(GetDlgItem(hWnd, IDL_COLUMNS), LVM_DELETEALLITEMS, (WPARAM)0, (LPARAM)0);
+            pThis->RefreshControls();
+            return HANDLED_MSG;
+        }//case IDB_FROM_CONNECT
 
-                            //Clear Table info
-                            memset(&pCFromTable->m_TableInfo, 0, sizeof(TABLEINFO));
-                            pCFromTable->m_wszQualTableName[0] = EOL;
+        case IDOK:
+            Busy();
+            pThis->GetTableColInfo(GetDlgItem(hWnd, IDL_COLUMNS));
+            pThis->m_pCTableCopy->m_pCWizard->DisplayStep(WIZ_STEP2);
+            return HANDLED_MSG;
 
-                            //Disconnect from the DataSource and Update controls
-                            pCFromTable->m_pCDataSource->Disconnect();
-                        }
-                    }
-                    else
-                    {
-                        //The user must have typed in a Provider Name directly
-                        //This may not map to a provider in the list, so assume the name is a ProgID/CLSID
-                        wSendMessage(GetDlgItem(pThis->m_hWnd, IDC_PROVIDER_NAME), WM_GETTEXT, MAX_NAME_LEN, wszBuffer);
-                        pCFromTable->m_pCDataSource->m_pwszProviderName = wszBuffer;
-                    }
-    
-                    //Try to connect to the DataSource
-                    Busy();
-                    if(pCFromTable->Connect(hWnd))
-                    {
-                        Busy();
-                        //Clear Table info
-                        memset(&pCFromTable->m_TableInfo, 0, sizeof(TABLEINFO));
-                        pCFromTable->m_wszQualTableName[0] = EOL;
+        case IDCANCEL:
+            Busy();
+            EndDialog(hWnd, GET_WM_COMMAND_ID(wParam, lParam));
+            return HANDLED_MSG;
+        }//switch GET_WM_COMMAND_ID
 
-                        //ResetTableList
-                        pThis->ResetTableList(GetDlgItem(hWnd, IDL_TABLES), GetDlgItem(hWnd, IDL_COLUMNS));
-                    }
-                    
-                    pThis->RefreshControls();
-                    return HANDLED_MSG;
-                }//case IDB_FROM_CONNECT
+        return UNHANDLED_MSG;
+    }//case WM_COMMAND
 
-                case IDOK:
-                    Busy();
-                    pThis->GetTableColInfo(GetDlgItem(hWnd, IDL_COLUMNS));
-                    pThis->m_pCTableCopy->m_pCWizard->DisplayStep(WIZ_STEP2);
-                    return HANDLED_MSG;
-                
-                case IDCANCEL:
-                    Busy();
-                    EndDialog(hWnd, GET_WM_COMMAND_ID(wParam, lParam));
-                    return HANDLED_MSG;
-            }//switch GET_WM_COMMAND_ID
 
-            return UNHANDLED_MSG;
-        }//case WM_COMMAND
-
-        
-        // Now look for WM_NOTIFY messages
-        case WM_NOTIFY:
+    // Now look for WM_NOTIFY messages
+    case WM_NOTIFY:
+    {
+        if(wParam == IDL_COLUMNS)
         {
-            if(wParam == IDL_COLUMNS)
+            //Obtain the "this" pointer
+            CS1Dialog* pThis = (CS1Dialog*)GetWindowLongPtrA(hWnd, GWLP_USERDATA);
+            NM_LISTVIEW* pListView = (NM_LISTVIEW*)lParam;
+
+            switch(pListView->hdr.code)
             {
-                //Obtain the "this" pointer
-                CS1Dialog* pThis = (CS1Dialog*)GetWindowLongPtrA(hWnd, GWLP_USERDATA);
-                NM_LISTVIEW* pListView = (NM_LISTVIEW*)lParam;
-            
-                switch(pListView->hdr.code)
-                {
-                    case LVN_ITEMCHANGED:
-                    {
-                        //Refresh Controls, ("Next" button)
-                        pThis->RefreshControls();
-                        return UNHANDLED_MSG;
-                    }
-                }
+            case LVN_ITEMCHANGED:
+            {
+                //Refresh Controls, ("Next" button)
+                pThis->RefreshControls();
                 return UNHANDLED_MSG;
             }
-
-            if(wParam == IDL_TABLES)
-            {
-                //Obtain the "this" pointer
-                CS1Dialog* pThis = (CS1Dialog*)GetWindowLongPtrA(hWnd, GWLP_USERDATA);
-                CTable* pCFromTable = pThis->m_pCTableCopy->m_pCFromTable;
-                NM_TREEVIEW* pTreeView = (NM_TREEVIEW*)lParam;
-            
-                switch(pTreeView->hdr.code)
-                {								 
-                    case TVN_BEGINLABELEDIT:
-                    {
-                        //Idicate we have started to edit
-                        pThis->m_fEditing = TRUE;
-                        return FALSE; //Allow the edited change
-                    }
-
-                    case TVN_ENDLABELEDIT:
-                    {
-                        Busy();
-                        pThis->m_fEditing = FALSE;
-                        TV_DISPINFO* pDispInfo = (TV_DISPINFO*)lParam;
-
-                        //If Schemas are available - don't allow the change
-                        if(pCFromTable->m_pCDataSource->m_pIDBSchemaRowset)
-                            return FALSE;
-
-                        //Just need to obtain the new tablename...
-                        if(pDispInfo->item.pszText)
-                        {
-                            //Now update the window TableName myself
-                            TV_ITEM tvItem = { TVIF_TEXT | TVIF_STATE, pDispInfo->item.hItem, TVIS_SELECTED, TVIS_SELECTED, pDispInfo->item.pszText, 0, 0, 0, 0, 0};
-                            SendDlgItemMessage(hWnd, IDL_TABLES, TVM_SETITEM, (WPARAM)0, (LPARAM)&tvItem);
-
-                            //Change the TableName (if different)
-                            memset(&pThis->m_rgTableInfo[0], 0, sizeof(TABLEINFO));
-                            ConvertToWCHAR(pDispInfo->item.pszText, pThis->m_rgTableInfo[0].wszTableName, MAX_NAME_LEN);
-                            pThis->ChangeTableName(0); 
-                        }
-                                                
-                        //Refresh Controls ("Next" button);
-                        pThis->RefreshControls();
-                        return TRUE; //Allow the edited change
-                    }
-                        
-                    case TVN_SELCHANGED:
-                    {
-                        //There is a problem with the SELCHANGED notification
-                        //It can be sent when either a item is selected or
-                        //DELETED, since when an item deleted the selection moves
-                        //to a different selection.
-                        if((pTreeView->itemNew.state == TVIS_SELECTED && pTreeView->action)
-                            || (pTreeView->itemNew.state & TVIS_SELECTED && pTreeView->itemNew.state != TVIS_SELECTED)) 
-                        {
-                            Busy();
-                            //We assume it sends us the Param of the item
-                            ASSERT(pTreeView->itemNew.mask & TVIF_PARAM);
-                
-                            //Change the TableName (if different)
-                            pThis->ChangeTableName((LONG)pTreeView->itemNew.lParam); 
-                        }
-
-                        //Refresh Controls ("Next" button);
-                        pThis->RefreshControls();
-                        return UNHANDLED_MSG;
-                    }
-                }
-                return UNHANDLED_MSG;
-            }//IDL_TABLES
+            }
             return UNHANDLED_MSG;
-        }//WM_NOTIFY
+        }
+
+        if(wParam == IDL_TABLES)
+        {
+            //Obtain the "this" pointer
+            CS1Dialog* pThis = (CS1Dialog*)GetWindowLongPtrA(hWnd, GWLP_USERDATA);
+            CTable* pCFromTable = pThis->m_pCTableCopy->m_pCFromTable;
+            NM_TREEVIEW* pTreeView = (NM_TREEVIEW*)lParam;
+
+            switch(pTreeView->hdr.code)
+            {
+            case TVN_BEGINLABELEDIT:
+            {
+                //Idicate we have started to edit
+                pThis->m_fEditing = TRUE;
+                return FALSE; //Allow the edited change
+            }
+
+            case TVN_ENDLABELEDIT:
+            {
+                Busy();
+                pThis->m_fEditing = FALSE;
+                TV_DISPINFO* pDispInfo = (TV_DISPINFO*)lParam;
+
+                //If Schemas are available - don't allow the change
+                if(pCFromTable->m_pCDataSource->m_pIDBSchemaRowset)
+                    return FALSE;
+
+                //Just need to obtain the new tablename...
+                if(pDispInfo->item.pszText)
+                {
+                    //Now update the window TableName myself
+                    TV_ITEM tvItem = { TVIF_TEXT | TVIF_STATE, pDispInfo->item.hItem, TVIS_SELECTED, TVIS_SELECTED, pDispInfo->item.pszText, 0, 0, 0, 0, 0};
+                    SendDlgItemMessage(hWnd, IDL_TABLES, TVM_SETITEM, (WPARAM)0, (LPARAM)&tvItem);
+
+                    //Change the TableName (if different)
+                    memset(&pThis->m_rgTableInfo[0], 0, sizeof(TABLEINFO));
+                    ConvertToWCHAR(pDispInfo->item.pszText, pThis->m_rgTableInfo[0].wszTableName, MAX_NAME_LEN);
+                    pThis->ChangeTableName(0);
+                }
+
+                //Refresh Controls ("Next" button);
+                pThis->RefreshControls();
+                return TRUE; //Allow the edited change
+            }
+
+            case TVN_SELCHANGED:
+            {
+                //There is a problem with the SELCHANGED notification
+                //It can be sent when either a item is selected or
+                //DELETED, since when an item deleted the selection moves
+                //to a different selection.
+                if((pTreeView->itemNew.state == TVIS_SELECTED && pTreeView->action)
+                        || (pTreeView->itemNew.state & TVIS_SELECTED && pTreeView->itemNew.state != TVIS_SELECTED))
+                {
+                    Busy();
+                    //We assume it sends us the Param of the item
+                    ASSERT(pTreeView->itemNew.mask & TVIF_PARAM);
+
+                    //Change the TableName (if different)
+                    pThis->ChangeTableName((LONG)pTreeView->itemNew.lParam);
+                }
+
+                //Refresh Controls ("Next" button);
+                pThis->RefreshControls();
+                return UNHANDLED_MSG;
+            }
+            }
+            return UNHANDLED_MSG;
+        }//IDL_TABLES
+        return UNHANDLED_MSG;
+    }//WM_NOTIFY
     }//msg
 
     return UNHANDLED_MSG;
@@ -363,7 +363,7 @@ BOOL CS1Dialog::InitControls()
     HWND		hWndCol			= GetDlgItem(m_hWnd, IDL_COLUMNS);
     HWND		hWndProv		= GetDlgItem(m_hWnd, IDC_PROVIDER_NAME);
     CDataSource	*pCDataSource	= m_pCTableCopy->m_pCFromTable->m_pCDataSource;
-    HRESULT		hr;	
+    HRESULT		hr;
 
     //Create the Table ImageList
     HIMAGELIST hTableImageList = ImageList_Create(16, 16, ILC_MASK, 1, 0 );
@@ -390,9 +390,9 @@ BOOL CS1Dialog::InitControls()
     hIcon = LoadIcon(m_hInst, MAKEINTRESOURCE(IDI_SYNONYM));
     ImageList_AddIcon(hTableImageList, hIcon);
 
-    //Set image list to the Table Window 
+    //Set image list to the Table Window
     TreeView_SetImageList(hWndTable, hTableImageList, TVSIL_NORMAL);
-    
+
     //Create the Col ImageList
     HIMAGELIST hColImageList = ImageList_Create(16, 16, ILC_MASK, 1, 0 );
 
@@ -406,7 +406,7 @@ BOOL CS1Dialog::InitControls()
     hIcon = LoadIcon(m_hInst, MAKEINTRESOURCE(IDI_COLUMNLONG));
     ImageList_AddIcon(hColImageList, hIcon);
 
-    //Set image list to the Table Window 
+    //Set image list to the Table Window
     ListView_SetImageList(hWndCol, hColImageList, LVSIL_SMALL);
 
     //ListView COLUMNS
@@ -436,7 +436,7 @@ BOOL CS1Dialog::InitControls()
     {
         hr =	pCDataSource->GetProviders();
     }
-    
+
     WCHAR wszBuffer[MAX_NAME_LEN*2];
 
     //Fill out the provider name combo box.
@@ -465,7 +465,7 @@ BOOL CS1Dialog::InitControls()
 
     //Indicate were not in the middle of an TreeView editing command
     m_fEditing = FALSE;
-    
+
     // Enable Connect button only if there are providers installed.
     EnableWindow(GetDlgItem(m_hWnd, IDB_FROM_CONNECT), SendMessage(hWndProv, CB_GETCURSEL, 0, 0L) != CB_ERR);
     return TRUE;
@@ -489,7 +489,7 @@ BOOL CS1Dialog::RefreshControls()
     EnableWindow(GetDlgItem(m_hWnd, IDL_TABLES),		fConnected);
     EnableWindow(GetDlgItem(m_hWnd, IDL_COLUMNS),		fConnected);
     EnableWindow(GetDlgItem(m_hWnd, IDT_FROMTABLEHELP),	fConnected);
-     
+
     //Enable OK/Next if there is a table and at least 1 column selected
     EnableWindow(GetDlgItem(m_hWnd, IDOK),	fConnected && cSelColumns);
 
@@ -509,19 +509,19 @@ BOOL CS1Dialog::RefreshControls()
     if(fConnected)
     {
         //CONNECT_STRING
-        wSetDlgItemText(m_hWnd, IDT_CONNECT, wsz_CONNECT_STRING_, 
-            pCDataSource->m_pwszProviderName,
-            pCDataSource->m_pwszDataSource, 
-            pCDataSource->m_pwszDBMS,
-            pCDataSource->m_pwszDBMSVer,
-            pCDataSource->m_pwszProviderFileName,
-            pCDataSource->m_pwszProviderVer);
-            
+        wSetDlgItemText(m_hWnd, IDT_CONNECT, wsz_CONNECT_STRING_,
+                        pCDataSource->m_pwszProviderName,
+                        pCDataSource->m_pwszDataSource,
+                        pCDataSource->m_pwszDBMS,
+                        pCDataSource->m_pwszDBMSVer,
+                        pCDataSource->m_pwszProviderFileName,
+                        pCDataSource->m_pwszProviderVer);
+
         //TABLEHELPMSG
         //Display the Qualified TableName
         if(pCFromTable->m_TableInfo.wszTableName[0])
             wSetDlgItemText(m_hWnd, IDT_FROMTABLEHELP, wsz_FROMQUALTABLE_, pCFromTable->m_wszQualTableName, cSelColumns);
-        else 
+        else
             wSetDlgItemText(m_hWnd, IDT_FROMTABLEHELP, wsz_FROMTABLEHELP_, pCDataSource->m_pwszTableTerm);
     }
     else
@@ -529,7 +529,7 @@ BOOL CS1Dialog::RefreshControls()
         //NO CONNECT_STRING
         wSetDlgItemText(m_hWnd, IDT_CONNECT, wsz_NOT_CONNECTED);
     }
-        
+
     return TRUE;
 }
 
@@ -549,10 +549,10 @@ BOOL CS1Dialog::GetTableColInfo(HWND hWndCol)
 
     //Loop over all the selected columns in the list
     pCFromTable->m_cColumns = (ULONG)cSelColumns;
-    for(LRESULT i=0; i<cSelColumns; i++) 
+    for(LRESULT i=0; i<cSelColumns; i++)
     {
         iIndex = SendMessage(hWndCol, LVM_GETNEXTITEM, (WPARAM)iIndex, (LPARAM)LVNI_SELECTED);
-        
+
         //"compact" the m_rgColDesc array to only the selected items
         if(iIndex != LVM_ERR)
             memmove(&pCFromTable->m_rgColDesc[i], &pCFromTable->m_rgColDesc[iIndex], sizeof(COLDESC));
@@ -570,14 +570,14 @@ BOOL CS1Dialog::CreateTableNode(TREEINFO* rgTreeInfo, ULONG ulNameOffset, LONG i
     //ulNameOffset is the offset into TABELEINFO indicating
     //Catalog / Schema / Type name were interested in comparing
     ASSERT(ulNameOffset == offsetof(TABLEINFO, wszCatalogName)
-        || ulNameOffset == offsetof(TABLEINFO, wszSchemaName)
-        || ulNameOffset == offsetof(TABLEINFO, wszType));
-    
+           || ulNameOffset == offsetof(TABLEINFO, wszSchemaName)
+           || ulNameOffset == offsetof(TABLEINFO, wszType));
+
     //Create the specified node in the tree.
-    //Basically this is a fairly complex function that builds the nodes to the 
+    //Basically this is a fairly complex function that builds the nodes to the
     //TreeView control, listing Catalog/Schema/TableType/TableName heieracrcy.
 
-    //This is an extremly simple algortym that loops over the specified column 
+    //This is an extremly simple algortym that loops over the specified column
     //(Catalog/Schema/Type) and adds only unique names as a node to the TreeView.
     //It then updates "rgTreeInfo" hParents and hItems accordingly.
 
@@ -596,16 +596,16 @@ BOOL CS1Dialog::CreateTableNode(TREEINFO* rgTreeInfo, ULONG ulNameOffset, LONG i
         {
             ULONG ulFoundIndex = rgTreeInfo[j].ulIndex;
             WCHAR* pwszFoundName = (WCHAR*)((BYTE*)&m_rgTableInfo[ulFoundIndex] + ulNameOffset);
-            
+
             if(wcscmp(pwszName, pwszFoundName)==0
-                && rgTreeInfo[i].hParent == rgTreeInfo[ulFoundIndex].hParent)
+                    && rgTreeInfo[i].hParent == rgTreeInfo[ulFoundIndex].hParent)
             {
                 bFound = TRUE;
                 rgTreeInfo[i].hItem = rgTreeInfo[ulFoundIndex].hItem;
                 break;
             }
-        }	
-        
+        }
+
         if(!bFound && pwszName[0])
         {
             //Add it to the list
@@ -636,7 +636,7 @@ BOOL CS1Dialog::ResetTableList(HWND hWndTable, HWND hWndCol)
 
     IRowset* pIRowset = NULL;
     IAccessor* pIAccessor = NULL;
-    
+
     //get the data
     HROW*		rghRows = NULL;
     DBCOUNTITEM	i,cRowsObtained = 0;
@@ -657,19 +657,19 @@ BOOL CS1Dialog::ResetTableList(HWND hWndTable, HWND hWndCol)
 
     // Bind the user and table name for the list
     const static ULONG cBindings = 4;
-    const static DBBINDING rgBindings[cBindings] = 
+    const static DBBINDING rgBindings[cBindings] =
     {
         //TABLE_CATALOG
-        1,	 			
+        1,
         offsetof(TABLEINFO, wszCatalogName),	// offset of value in consumers buffer
         0,									// offset of length
         0,									// offset of status
         NULL,								// reserved
         NULL,								// for ole object
         NULL,								// reserved
-        DBPART_VALUE,						// specifies Value is bound only										
+        DBPART_VALUE,						// specifies Value is bound only
         DBMEMOWNER_CLIENTOWNED,				// memory is client owned
-        DBPARAMIO_NOTPARAM,					// 
+        DBPARAMIO_NOTPARAM,					//
         MAX_NAME_LEN,						// size in bytes of the value part in the consumers buffer
         0, 									// reserved
         DBTYPE_WSTR, 						// data type indicator
@@ -677,16 +677,16 @@ BOOL CS1Dialog::ResetTableList(HWND hWndTable, HWND hWndCol)
         0, 									// scale
 
         //TABLE_SCHEMA
-        2,	 			
+        2,
         offsetof(TABLEINFO, wszSchemaName),	// offset of value in consumers buffer
         0,									// offset of length
         0,									// offset of status
         NULL,								// reserved
         NULL,								// for ole object
         NULL,								// reserved
-        DBPART_VALUE,						// specifies Value is bound only										
+        DBPART_VALUE,						// specifies Value is bound only
         DBMEMOWNER_CLIENTOWNED,				// memory is client owned
-        DBPARAMIO_NOTPARAM,					// 
+        DBPARAMIO_NOTPARAM,					//
         MAX_NAME_LEN,						// size in bytes of the value part in the consumers buffer
         0, 									// reserved
         DBTYPE_WSTR, 						// data type indicator
@@ -747,17 +747,17 @@ BOOL CS1Dialog::ResetTableList(HWND hWndTable, HWND hWndCol)
         while(TRUE)
         {
             XTESTC(hr = pIRowset->GetNextRows(NULL, 0, MAX_BLOCK_SIZE, &cRowsObtained, &rghRows));
-            
+
             //ENDOFROWSET
             if(cRowsObtained==0)
                 break;
-        
+
             //Realloc Table struct for Table
             SAFE_REALLOC(m_rgTableInfo, TABLEINFO, m_cTables + cRowsObtained);
             memset(&m_rgTableInfo[m_cTables], 0, cRowsObtained*sizeof(TABLEINFO));
 
             //Loop over the rows retrived
-            for(i=0; i<cRowsObtained; i++) 
+            for(i=0; i<cRowsObtained; i++)
             {
                 //Get the Data
                 XTESTC(hr = pIRowset->GetData(rghRows[i], hAccessor, &m_rgTableInfo[m_cTables]));
@@ -780,29 +780,29 @@ BOOL CS1Dialog::ResetTableList(HWND hWndTable, HWND hWndCol)
         if(pCFromTable->m_TableInfo.wszTableName[0])
         {
             //Just Display the TableName in the EditBox
-            StringCchCopyW(m_rgTableInfo[0].wszTableName, 
+            StringCchCopyW(m_rgTableInfo[0].wszTableName,
                            sizeof(m_rgTableInfo[0].wszTableName)/sizeof(WCHAR),
                            pCFromTable->m_TableInfo.wszTableName);
         }
         else
         {
             //Just Display "Enter - <TableTerm>"
-            StringCchPrintfW(m_rgTableInfo[0].wszTableName, 
+            StringCchPrintfW(m_rgTableInfo[0].wszTableName,
                              sizeof(m_rgTableInfo[0].wszTableName)/sizeof(WCHAR),
                              L"Enter - %s",
                              pCFromDataSource->m_pwszTableTerm);
         }
     }
-    
+
 
     //Create rgTreeInfo array
     SAFE_ALLOC(rgTreeInfo, TREEINFO, m_cTables);
     memset(rgTreeInfo, 0, m_cTables*sizeof(TREEINFO));
 
     //Create Tree Nodes for the TreeView control
-    CreateTableNode(rgTreeInfo, offsetof(TABLEINFO, wszCatalogName), -1, ICON_CATALOG, ICON_CATALOG); 
-    CreateTableNode(rgTreeInfo, offsetof(TABLEINFO, wszSchemaName),	 -1, ICON_SCHEMA, ICON_SCHEMA); 
-    CreateTableNode(rgTreeInfo, offsetof(TABLEINFO, wszType),		 -1, ICON_TYPE, ICON_TYPE); 
+    CreateTableNode(rgTreeInfo, offsetof(TABLEINFO, wszCatalogName), -1, ICON_CATALOG, ICON_CATALOG);
+    CreateTableNode(rgTreeInfo, offsetof(TABLEINFO, wszSchemaName),	 -1, ICON_SCHEMA, ICON_SCHEMA);
+    CreateTableNode(rgTreeInfo, offsetof(TABLEINFO, wszType),		 -1, ICON_TYPE, ICON_TYPE);
 
     //Now display all the tables
     for(i=0; i<m_cTables; i++)
@@ -844,7 +844,7 @@ BOOL CS1Dialog::ResetTableList(HWND hWndTable, HWND hWndCol)
     {
         //Reset TableInfo
         memset(&pCFromTable->m_TableInfo, 0, sizeof(TABLEINFO));
-    
+
         //Otheriwse if there was no previous selection, default to auto expand
         //the "TABLE" type, or the first type in the tree
         bFound = FALSE;
@@ -893,10 +893,10 @@ BOOL CS1Dialog::ResetColInfo(HWND hWndCol)
     //Save the currently selected columns
     ULONG cSelColumns = pCFromTable->m_cColumns;
     COLDESC* rgSelColDesc = pCFromTable->m_rgColDesc;
-    
+
     //Reset current Window Column ListView
     SendMessage(hWndCol, LVM_DELETEALLITEMS, (WPARAM)0, (LPARAM)0L);
-    
+
     // Get a list of columns based on the selected table
     pCFromTable->m_cColumns = 0;
     pCFromTable->m_rgColDesc = NULL;
@@ -904,7 +904,7 @@ BOOL CS1Dialog::ResetColInfo(HWND hWndCol)
 
     //Loop through all columns and update window
     for(i=0; i<pCFromTable->m_cColumns; i++)
-    {	
+    {
         COLDESC* pColDesc = &pCFromTable->m_rgColDesc[i];
 
         //COLNAME (item)
@@ -940,16 +940,16 @@ BOOL CS1Dialog::ResetColInfo(HWND hWndCol)
         LV_InsertItem(hWndCol, i, COL_COLISROWVER, pColDesc->dwFlags & DBCOLUMNFLAGS_ISROWVER ? "TRUE" : "FALSE");
 
     }
-    
+
     // If there is an existing columns list (only on Back or error), then
     // the user already has a list so use it.
     lFoundColumn = -1;
-    for(i=0; i<cSelColumns; i++) 
+    for(i=0; i<cSelColumns; i++)
     {
         //Find the Column Name in the Window List
         ConvertToMBCS(rgSelColDesc[i].wszColName, szBuffer, MAX_NAME_LEN);
         lFoundColumn = LV_FindItem(hWndCol, szBuffer, lFoundColumn);
-            
+
         //Select the Column Name if found in the list, and bring into view
         if(lFoundColumn != LVM_ERR)
         {
@@ -958,9 +958,9 @@ BOOL CS1Dialog::ResetColInfo(HWND hWndCol)
             //Ensure that the first item is Visible
             if(i==0)
                 SendMessage(hWndCol, LVM_ENSUREVISIBLE, (WPARAM)lFoundColumn, (LPARAM)FALSE);
-        }	
+        }
     }
-    
+
     //Otherwise, just select all as default
     if(cSelColumns == 0)
     {
@@ -982,7 +982,7 @@ BOOL CS1Dialog::ChangeTableName(LONG iIndex)
 {
     CTable* pCFromTable = m_pCTableCopy->m_pCFromTable;
     CTable* pCToTable = m_pCTableCopy->m_pCToTable;
-    
+
     //Index must fall with the m_rgTableInfo array range
     //Otherwise we have selected a "tree-folder" and need to free the column list
     if(iIndex < 0 || iIndex >= (LONG)m_cTables)
@@ -1001,7 +1001,7 @@ BOOL CS1Dialog::ChangeTableName(LONG iIndex)
 
     //TableInfo
     memcpy(&pCFromTable->m_TableInfo, &m_rgTableInfo[iIndex], sizeof(TABLEINFO));
-    
+
     //QualifiedTableName syntax
     // #1.  TableName
     // #2.  Owner.TableName (always a ".")
@@ -1009,24 +1009,24 @@ BOOL CS1Dialog::ChangeTableName(LONG iIndex)
     // #4.  Catalog[CatalogSeperator]Owner.TableName
     if(pCFromTable->m_TableInfo.wszSchemaName[0])
     {
-        StringCchPrintfW(pCFromTable->m_wszQualTableName, 
+        StringCchPrintfW(pCFromTable->m_wszQualTableName,
                          sizeof(pCFromTable->m_wszQualTableName)/sizeof(WCHAR),
-                         L"%s.%s", 
-                         pCFromTable->m_TableInfo.wszSchemaName, 
+                         L"%s.%s",
+                         pCFromTable->m_TableInfo.wszSchemaName,
                          pCFromTable->m_TableInfo.wszTableName);
     }
     else
     {
-        StringCchCopyW(pCFromTable->m_wszQualTableName, 
+        StringCchCopyW(pCFromTable->m_wszQualTableName,
                        sizeof(pCFromTable->m_wszQualTableName)/sizeof(WCHAR),
                        pCFromTable->m_TableInfo.wszTableName);
     }
 
-    //Free the current columns list, since the new 
+    //Free the current columns list, since the new
     //table will have diffent columns
     pCFromTable->m_cColumns = 0;
     SAFE_FREE(pCFromTable->m_rgColDesc);
-    
+
     //Reset the column list, since we have a new table
     ResetColInfo(GetDlgItem(m_hWnd, IDL_COLUMNS));
 

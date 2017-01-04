@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -18,7 +18,7 @@ Assumptions:
 // This routine frees  LPDHCP_POLICY and its internal elements.
 VOID FreeDhcpPolicyMemory(LPDHCP_POLICY pDhcpPolicy)
 {
-    if (NULL != pDhcpPolicy) 
+    if (NULL != pDhcpPolicy)
     {
         // Frees the policy name
         if (NULL != pDhcpPolicy->PolicyName)
@@ -77,12 +77,12 @@ int __cdecl main(void)
     LPWSTR        pwszName   = L"testPolicy"; // Name of the policy
 
     dwError = DhcpV4GetPolicy(
-                        pwszServer,     // Server IP Address, NULL signifies the current server (where the program is executed)
-                        (dwScope == 0), // fGlobalPolicy, TRUE means a global policy, for a global policy SubnetAddress is 0.
-                        dwScope,        // Subnet address, if it is a global policy, its value is 0
-                        pwszName,       // Name of the policy
-                        &pPolicy        // Policy structure obtained from the server
-                        );
+                  pwszServer,     // Server IP Address, NULL signifies the current server (where the program is executed)
+                  (dwScope == 0), // fGlobalPolicy, TRUE means a global policy, for a global policy SubnetAddress is 0.
+                  dwScope,        // Subnet address, if it is a global policy, its value is 0
+                  pwszName,       // Name of the policy
+                  &pPolicy        // Policy structure obtained from the server
+              );
     if(ERROR_SUCCESS != dwError)
     {
         //DhcpV4GetPolicy returned error.

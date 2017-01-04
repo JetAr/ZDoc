@@ -1,8 +1,8 @@
-//////////////////////////////////////////////////////////////////////////
+﻿//////////////////////////////////////////////////////////////////////////
 //
 // decoder.cpp
 // Implements the MPEG-1 decoder.
-// 
+//
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -47,7 +47,7 @@ HRESULT Decoder_CreateInstance(REFIID riid, void **ppv)
 // This method is used by the class factory.
 //
 // pUnkOuter: Aggregating IUnknown.
-// 
+//
 //-------------------------------------------------------------------
 
 HRESULT CDecoder::CreateInstance(REFIID riid, void **ppv)
@@ -69,7 +69,7 @@ HRESULT CDecoder::CreateInstance(REFIID riid, void **ppv)
     *ppv = NULL;
 
     hr = pObj->QueryInterface(riid, ppv);
-    
+
     SafeRelease(&pObj);
 
     return hr;
@@ -130,7 +130,7 @@ ULONG CDecoder::Release()
 
 HRESULT CDecoder::QueryInterface(REFIID riid, void **ppv)
 {
-    static const QITAB qit[] = 
+    static const QITAB qit[] =
     {
         QITABENT(CDecoder, IMFTransform),
         { 0 }
@@ -145,7 +145,7 @@ HRESULT CDecoder::QueryInterface(REFIID riid, void **ppv)
 // Returns the minimum and maximum number of streams.
 //-------------------------------------------------------------------
 
-HRESULT CDecoder::GetStreamLimits( 
+HRESULT CDecoder::GetStreamLimits(
     DWORD   *pdwInputMinimum,
     DWORD   *pdwInputMaximum,
     DWORD   *pdwOutputMinimum,
@@ -154,9 +154,9 @@ HRESULT CDecoder::GetStreamLimits(
 {
 
     if ((pdwInputMinimum == NULL) ||
-        (pdwInputMaximum == NULL) ||
-        (pdwOutputMinimum == NULL) ||
-        (pdwOutputMaximum == NULL))
+            (pdwInputMaximum == NULL) ||
+            (pdwOutputMinimum == NULL) ||
+            (pdwOutputMaximum == NULL))
     {
         return E_POINTER;
     }
@@ -183,7 +183,7 @@ HRESULT CDecoder::GetStreamCount(
 )
 {
     if ((pcInputStreams == NULL) || (pcOutputStreams == NULL))
-        
+
     {
         return E_POINTER;
     }
@@ -209,15 +209,15 @@ HRESULT CDecoder::GetStreamIDs(
     DWORD   * /*pdwOutputIDs*/
 )
 {
-    // Do not need to implement, because this MFT has a fixed number of 
+    // Do not need to implement, because this MFT has a fixed number of
     // streams and the stream IDs match the stream indexes.
-    return E_NOTIMPL;   
+    return E_NOTIMPL;
 }
 
 
 //-------------------------------------------------------------------
 // Name: GetInputStreamInfo
-// Returns information about an input stream. 
+// Returns information about an input stream.
 //-------------------------------------------------------------------
 
 HRESULT CDecoder::GetInputStreamInfo(
@@ -229,7 +229,7 @@ HRESULT CDecoder::GetInputStreamInfo(
     {
         return E_POINTER;
     }
-    
+
     if (!IsValidInputStream(dwInputStreamID))
     {
         return MF_E_INVALIDSTREAMNUMBER;
@@ -251,12 +251,12 @@ HRESULT CDecoder::GetInputStreamInfo(
 
 //-------------------------------------------------------------------
 // Name: GetOutputStreamInfo
-// Returns information about an output stream. 
+// Returns information about an output stream.
 //-------------------------------------------------------------------
 
 HRESULT CDecoder::GetOutputStreamInfo(
-    DWORD                     dwOutputStreamID, 
-    MFT_OUTPUT_STREAM_INFO *  pStreamInfo      
+    DWORD                     dwOutputStreamID,
+    MFT_OUTPUT_STREAM_INFO *  pStreamInfo
 )
 {
     if (pStreamInfo == NULL)
@@ -272,12 +272,12 @@ HRESULT CDecoder::GetOutputStreamInfo(
     EnterCriticalSection(&m_critSec);
 
     // NOTE: This method should succeed even when there is no media type on the
-    //       stream. If there is no media type, we only need to fill in the dwFlags 
+    //       stream. If there is no media type, we only need to fill in the dwFlags
     //       member of MFT_OUTPUT_STREAM_INFO. The other members depend on having a
     //       a valid media type.
 
-    pStreamInfo->dwFlags = 
-        MFT_OUTPUT_STREAM_WHOLE_SAMPLES | 
+    pStreamInfo->dwFlags =
+        MFT_OUTPUT_STREAM_WHOLE_SAMPLES |
         MFT_OUTPUT_STREAM_SINGLE_SAMPLE_PER_BUFFER |
         MFT_OUTPUT_STREAM_FIXED_SAMPLE_SIZE ;
 
@@ -291,7 +291,7 @@ HRESULT CDecoder::GetOutputStreamInfo(
         pStreamInfo->cbSize = m_cbImageSize;
         pStreamInfo->cbAlignment = 1;
     }
-    
+
     LeaveCriticalSection(&m_critSec);
 
     return S_OK;
@@ -307,7 +307,7 @@ HRESULT CDecoder::GetOutputStreamInfo(
 HRESULT CDecoder::GetAttributes(IMFAttributes** /*pAttributes*/)
 {
     // This MFT does not support any attributes, so the method is not implemented.
-    return E_NOTIMPL;   
+    return E_NOTIMPL;
 }
 
 
@@ -351,7 +351,7 @@ HRESULT CDecoder::GetOutputStreamAttributes(
 HRESULT CDecoder::DeleteInputStream(DWORD /*dwStreamID*/)
 {
     // This MFT has a fixed number of input streams, so the method is not implemented.
-    return E_NOTIMPL; 
+    return E_NOTIMPL;
 }
 
 
@@ -360,13 +360,13 @@ HRESULT CDecoder::DeleteInputStream(DWORD /*dwStreamID*/)
 // Name: AddInputStreams
 //-------------------------------------------------------------------
 
-HRESULT CDecoder::AddInputStreams( 
+HRESULT CDecoder::AddInputStreams(
     DWORD   /*cStreams*/,
     DWORD   * /*adwStreamIDs*/
 )
 {
     // This MFT has a fixed number of output streams, so the method is not implemented.
-    return E_NOTIMPL; 
+    return E_NOTIMPL;
 }
 
 
@@ -378,7 +378,7 @@ HRESULT CDecoder::AddInputStreams(
 
 HRESULT CDecoder::GetInputAvailableType(
     DWORD           /*dwInputStreamID*/,
-    DWORD           /*dwTypeIndex*/, 
+    DWORD           /*dwTypeIndex*/,
     IMFMediaType    ** /*ppType*/
 )
 {
@@ -494,7 +494,7 @@ HRESULT CDecoder::GetOutputAvailableType(
 HRESULT CDecoder::SetInputType(
     DWORD           dwInputStreamID,
     IMFMediaType    *pType, // Can be NULL to clear the input type.
-    DWORD           dwFlags 
+    DWORD           dwFlags
 )
 {
     if (!IsValidInputStream(dwInputStreamID))
@@ -532,14 +532,14 @@ HRESULT CDecoder::SetInputType(
 
     if (SUCCEEDED(hr))
     {
-        // The type is OK. 
+        // The type is OK.
         // Set the type, unless the caller was just testing.
         if (bReallySet)
         {
             hr = OnSetInputType(pType);
         }
     }
-            
+
     LeaveCriticalSection(&m_critSec);
     return hr;
 }
@@ -553,7 +553,7 @@ HRESULT CDecoder::SetInputType(
 HRESULT CDecoder::SetOutputType(
     DWORD           dwOutputStreamID,
     IMFMediaType    *pType, // Can be NULL to clear the output type.
-    DWORD           dwFlags 
+    DWORD           dwFlags
 )
 {
     if (!IsValidOutputStream(dwOutputStreamID))
@@ -572,7 +572,7 @@ HRESULT CDecoder::SetOutputType(
     EnterCriticalSection(&m_critSec);
 
     // Does the caller want us to set the type, or just test it?
-     BOOL bReallySet = ((dwFlags & MFT_SET_TYPE_TEST_ONLY) == 0);
+    BOOL bReallySet = ((dwFlags & MFT_SET_TYPE_TEST_ONLY) == 0);
 
     // If we have an input sample, the client cannot change the type now.
     if (HasPendingOutput())
@@ -593,7 +593,7 @@ HRESULT CDecoder::SetOutputType(
     {
         if (bReallySet)
         {
-            // The type is OK. 
+            // The type is OK.
             // Set the type, unless the caller was just testing.
             hr = OnSetOutputType(pType);
         }
@@ -694,7 +694,7 @@ HRESULT CDecoder::GetOutputCurrentType(
 
 HRESULT CDecoder::GetInputStatus(
     DWORD           dwInputStreamID,
-    DWORD           *pdwFlags 
+    DWORD           *pdwFlags
 )
 {
     if (pdwFlags == NULL)
@@ -767,7 +767,7 @@ HRESULT CDecoder::SetOutputBounds(
     LONGLONG        /*hnsUpperBound*/
 )
 {
-    // Implementation of this method is optional. 
+    // Implementation of this method is optional.
     return E_NOTIMPL;
 }
 
@@ -783,8 +783,8 @@ HRESULT CDecoder::ProcessEvent(
     IMFMediaEvent      * /*pEvent */
 )
 {
-    // This MFT does not handle any stream events, so the method can 
-    // return E_NOTIMPL. This tells the pipeline that it can stop 
+    // This MFT does not handle any stream events, so the method can
+    // return E_NOTIMPL. This tells the pipeline that it can stop
     // sending any more events to this MFT.
     return E_NOTIMPL;
 }
@@ -833,16 +833,16 @@ HRESULT CDecoder::ProcessMessage(
         break;
 
     // These messages do not require a response.
-    case MFT_MESSAGE_NOTIFY_START_OF_STREAM: 
+    case MFT_MESSAGE_NOTIFY_START_OF_STREAM:
     case MFT_MESSAGE_NOTIFY_END_OF_STREAM:
-        break;        
+        break;
 
     }
 
     LeaveCriticalSection(&m_critSec);
     return hr;
 }
-    
+
 
 
 //-------------------------------------------------------------------
@@ -852,8 +852,8 @@ HRESULT CDecoder::ProcessMessage(
 
 HRESULT CDecoder::ProcessInput(
     DWORD               dwInputStreamID,
-    IMFSample           *pSample, 
-    DWORD               dwFlags 
+    IMFSample           *pSample,
+    DWORD               dwFlags
 )
 {
     if (pSample == NULL)
@@ -887,13 +887,13 @@ HRESULT CDecoder::ProcessInput(
 
     // Convert to a single contiguous buffer.
     if (SUCCEEDED(hr))
-    {   
+    {
         // NOTE: This does not cause a copy unless there are multiple buffers
         hr = pSample->ConvertToContiguousBuffer(&m_pBuffer);
     }
 
     if (SUCCEEDED(hr))
-    {   
+    {
         hr = m_pBuffer->Lock(&m_pbData, NULL, &m_cbData);
     }
 
@@ -922,16 +922,16 @@ HRESULT CDecoder::ProcessInput(
 //-------------------------------------------------------------------
 
 HRESULT CDecoder::ProcessOutput(
-    DWORD                   dwFlags, 
+    DWORD                   dwFlags,
     DWORD                   cOutputBufferCount,
     MFT_OUTPUT_DATA_BUFFER  *pOutputSamples, // one per stream
-    DWORD                   *pdwStatus  
+    DWORD                   *pdwStatus
 )
 {
     // Check input parameters...
 
     // There are no flags that we accept in this MFT.
-    // The only defined flag is MFT_PROCESS_OUTPUT_DISCARD_WHEN_NO_BUFFER. This 
+    // The only defined flag is MFT_PROCESS_OUTPUT_DISCARD_WHEN_NO_BUFFER. This
     // flag only applies when the MFT marks an output stream as lazy or optional.
     // However there are no lazy or optional streams on this MFT, so the flag is
     // not valid.
@@ -1002,11 +1002,11 @@ HRESULT CDecoder::ProcessOutput(
         m_bPicture = false;
 
         //  Is there any more data to output at this point?
-        if (S_OK == Process()) 
+        if (S_OK == Process())
         {
             pOutputSamples[0].dwStatus |= MFT_OUTPUT_DATA_BUFFER_INCOMPLETE;
         }
-    }    
+    }
 
     SafeRelease(&pOutput);
     LeaveCriticalSection(&m_critSec);
@@ -1041,14 +1041,14 @@ HRESULT CDecoder::InternalProcessOutput(IMFSample *pSample, IMFMediaBuffer *pOut
     if (SUCCEEDED(hr))
     {
         rt = m_StreamState.PictureTime(&dwTimeCode);
-        
+
         hr = StringCchPrintf(szBuffer, ARRAYSIZE(szBuffer),
-            TEXT("%2.2d:%2.2d:%2.2d:%2.2d\0"),
-             (dwTimeCode >> 19) & 0x1F,
-             (dwTimeCode >> 13) & 0x3F,
-             (dwTimeCode >> 6) & 0x3F,
-              dwTimeCode & 0x3F
-              );
+                             TEXT("%2.2d:%2.2d:%2.2d:%2.2d\0"),
+                             (dwTimeCode >> 19) & 0x1F,
+                             (dwTimeCode >> 13) & 0x3F,
+                             (dwTimeCode >> 6) & 0x3F,
+                             dwTimeCode & 0x3F
+                            );
     }
 
     if (SUCCEEDED(hr))
@@ -1077,7 +1077,7 @@ HRESULT CDecoder::InternalProcessOutput(IMFSample *pSample, IMFMediaBuffer *pOut
     if (SUCCEEDED(hr))
     {
         rt = m_StreamState.PictureTime(&dwTimeCode);
-        if (rt == INVALID_TIME) 
+        if (rt == INVALID_TIME)
         {
             rt = m_rtFrame;
         }
@@ -1165,17 +1165,17 @@ HRESULT CDecoder::OnCheckInputType(IMFMediaType *pmt)
         }
     }
 
-    // Make sure there is a frame rate. 
-    // *** A real decoder would also validate this. *** 
+    // Make sure there is a frame rate.
+    // *** A real decoder would also validate this. ***
 
     if (SUCCEEDED(hr))
     {
         hr = MFGetAttributeRatio(pmt, MF_MT_FRAME_RATE, (UINT32*)&fps.Numerator, (UINT32*)&fps.Denominator);
     }
 
-    // Check for a sequence header. 
+    // Check for a sequence header.
     // We don't actually look at it for this sample.
-    // *** A real decoder would validate the sequence header. *** 
+    // *** A real decoder would validate the sequence header. ***
 
     if (SUCCEEDED(hr))
     {
@@ -1201,17 +1201,17 @@ HRESULT CDecoder::OnSetInputType(IMFMediaType *pmt)
 
     if (SUCCEEDED(hr))
     {
-       hr = MFGetAttributeRatio(pmt, MF_MT_FRAME_RATE, (UINT32*)&m_frameRate.Numerator, (UINT32*)&m_frameRate.Denominator);
+        hr = MFGetAttributeRatio(pmt, MF_MT_FRAME_RATE, (UINT32*)&m_frameRate.Numerator, (UINT32*)&m_frameRate.Denominator);
     }
 
     // Also store the frame duration, derived from the frame rate.
     if (SUCCEEDED(hr))
     {
         hr = MFFrameRateToAverageTimePerFrame(
-            m_frameRate.Numerator, 
-            m_frameRate.Denominator, 
-            &m_rtLength
-            );
+                 m_frameRate.Numerator,
+                 m_frameRate.Denominator,
+                 &m_rtLength
+             );
     }
 
     if (SUCCEEDED(hr))
@@ -1303,11 +1303,11 @@ HRESULT CDecoder::OnDiscontinuity()
     m_rtFrame = 0;
 
     //  No pictures yet
-   m_bPicture   = false;
+    m_bPicture   = false;
 
-   //  Reset state machine
-   m_StreamState.Reset();
-   return S_OK;
+    //  Reset state machine
+    m_StreamState.Reset();
+    return S_OK;
 }
 
 HRESULT CDecoder::OnFlush()
@@ -1329,7 +1329,7 @@ HRESULT CDecoder::OnFlush()
 HRESULT CDecoder::Process()
 {
     //  Process bytes and update our state machine
-    while (m_cbData && !m_bPicture) 
+    while (m_cbData && !m_bPicture)
     {
         m_bPicture = m_StreamState.NextByte(*m_pbData);
         m_cbData--;
@@ -1337,7 +1337,7 @@ HRESULT CDecoder::Process()
     }
 
     //  Release buffer if we're done with it
-    if (m_cbData == 0) 
+    if (m_cbData == 0)
     {
         m_pBuffer->Unlock();
 
@@ -1372,7 +1372,8 @@ void CStreamState::Reset()
     m_cbBytes = 0;
     m_dwNextTimeCode = 0;
 
-    for (int i = 0; i < 4; i++) {
+    for (int i = 0; i < 4; i++)
+    {
         m_arTS[i].bValid = false;
     }
 }
@@ -1381,110 +1382,135 @@ bool CStreamState::NextByte(BYTE bData)
 {
     assert(m_arTS[0].bValid);
 
-    switch (m_cbBytes) 
+    switch (m_cbBytes)
     {
-        case 0:
-            if (bData == 0) {
-                m_cbBytes++;
+    case 0:
+        if (bData == 0)
+        {
+            m_cbBytes++;
+        }
+        return false;
+
+    case 1:
+        if (bData == 0)
+        {
+            m_cbBytes++;
+        }
+        else
+        {
+            m_cbBytes = 0;
+
+            //  Pick up new timestamp if there was one
+            if (m_arTS[1].bValid)
+            {
+                m_arTS[0].rt = m_arTS[1].rt;
+                m_arTS[1].bValid = false;
             }
-            return false;
+        }
+        return false;
 
-        case 1:
-            if (bData == 0) {
-                m_cbBytes++;
-            } else {
-                m_cbBytes = 0;
-
-                //  Pick up new timestamp if there was one
-                if (m_arTS[1].bValid) {
+    case 2:
+        if (bData == 1)
+        {
+            m_cbBytes++;
+        }
+        else
+        {
+            if (bData == 0)
+            {
+                if (m_arTS[1].bValid)
+                {
                     m_arTS[0].rt = m_arTS[1].rt;
                     m_arTS[1].bValid = false;
                 }
-            }
-            return false;
-
-        case 2:
-            if (bData == 1) {
-                m_cbBytes++;
-            } else {
-                if (bData == 0) {
-                   if (m_arTS[1].bValid) {
-                       m_arTS[0].rt = m_arTS[1].rt;
-                       m_arTS[1].bValid = false;
-                   }
-                   if (m_arTS[2].bValid) {
-                       m_arTS[1] = m_arTS[2];
-                       m_arTS[2].bValid = false;
-                   }
-                } else {
-                    //  Not 0 or 1, revert
-                    m_cbBytes = 0;
-
-                    //  and pick up latest timestamp
-                    if (m_arTS[1].bValid) {
-                        m_arTS[0].rt = m_arTS[1].rt;
-                        m_arTS[1].bValid = false;
-                    }
-                    if (m_arTS[2].bValid) {
-                        m_arTS[0].rt = m_arTS[2].rt;
-                        m_arTS[2].bValid = false;
-                    }
+                if (m_arTS[2].bValid)
+                {
+                    m_arTS[1] = m_arTS[2];
+                    m_arTS[2].bValid = false;
                 }
             }
-            return false;
+            else
+            {
+                //  Not 0 or 1, revert
+                m_cbBytes = 0;
 
-        case 3:
+                //  and pick up latest timestamp
+                if (m_arTS[1].bValid)
+                {
+                    m_arTS[0].rt = m_arTS[1].rt;
+                    m_arTS[1].bValid = false;
+                }
+                if (m_arTS[2].bValid)
+                {
+                    m_arTS[0].rt = m_arTS[2].rt;
+                    m_arTS[2].bValid = false;
+                }
+            }
+        }
+        return false;
+
+    case 3:
+    {
+        //  It's a start code
+        //  Return the timestamp and reset everything
+        m_rt = m_arTS[0].rt;
+
+        //  If it's a picture start code can't use this timestamp again.
+        if (0 == bData)
         {
-            //  It's a start code
-            //  Return the timestamp and reset everything
-            m_rt = m_arTS[0].rt;
+            m_arTS[0].rt = INVALID_TIME;
+            m_cbBytes = 0;
+        }
 
-            //  If it's a picture start code can't use this timestamp again.
-            if (0 == bData) {
-                m_arTS[0].rt = INVALID_TIME;
-                m_cbBytes = 0;
-            }
-
-            //  Catch up and clean out timestamps
-            for (int i = 1; i < 4; i++) {
-                if (m_arTS[i].bValid) {
-                    m_arTS[0].rt = m_arTS[i].rt;
-                    m_arTS[i].bValid = false;
-                }
-            }
-
-            // Picture start code?
-            if (0 == bData) {
-                m_cbBytes = 0;
-                m_dwTimeCode = m_dwNextTimeCode;
-                m_dwNextTimeCode++;
-                return true;
-            } else {
-                //  Is it a GOP start code?
-                if (bData == 0xb8) {
-                    m_cbBytes++;
-                } else {
-                    m_cbBytes = 0;
-                }
-                return false;
+        //  Catch up and clean out timestamps
+        for (int i = 1; i < 4; i++)
+        {
+            if (m_arTS[i].bValid)
+            {
+                m_arTS[0].rt = m_arTS[i].rt;
+                m_arTS[i].bValid = false;
             }
         }
 
-        case 4:
-        case 5:
-        case 6:
-        case 7:
-            m_bGOPData[m_cbBytes - 4] = bData;
-            m_cbBytes++;
-
-            if (m_cbBytes == 8) {
+        // Picture start code?
+        if (0 == bData)
+        {
+            m_cbBytes = 0;
+            m_dwTimeCode = m_dwNextTimeCode;
+            m_dwNextTimeCode++;
+            return true;
+        }
+        else
+        {
+            //  Is it a GOP start code?
+            if (bData == 0xb8)
+            {
+                m_cbBytes++;
+            }
+            else
+            {
                 m_cbBytes = 0;
-                m_dwNextTimeCode = ((DWORD)m_bGOPData[0] << 17) +
-                                   ((DWORD)m_bGOPData[1] << 9) +
-                                   ((DWORD)m_bGOPData[2] << 1) +
-                                   ((DWORD)m_bGOPData[3] >> 7);
             }
             return false;
+        }
+    }
+
+    case 4:
+    case 5:
+    case 6:
+    case 7:
+        m_bGOPData[m_cbBytes - 4] = bData;
+        m_cbBytes++;
+
+        if (m_cbBytes == 8)
+        {
+            m_cbBytes = 0;
+            m_dwNextTimeCode = ((DWORD)m_bGOPData[0] << 17) +
+                               ((DWORD)m_bGOPData[1] << 9) +
+                               ((DWORD)m_bGOPData[2] << 1) +
+                               ((DWORD)m_bGOPData[3] >> 7);
+        }
+        return false;
     }
 
     // Should never reach here
@@ -1500,25 +1526,28 @@ bool CStreamState::NextByte(BYTE bData)
 //-------------------------------------------------------------------
 // TextBitmap
 //
-// Draws a string onto a monochrome bitmap and returns a pointer to 
-// the bitmap. The caller must free the bitmap by calling 
+// Draws a string onto a monochrome bitmap and returns a pointer to
+// the bitmap. The caller must free the bitmap by calling
 // CoTaskMemFree.
 //
 // If the function fails, the return value is NULL.
 //-------------------------------------------------------------------
 
-PBYTE TextBitmap(LPCTSTR lpsz, SIZE *pSize) 
+PBYTE TextBitmap(LPCTSTR lpsz, SIZE *pSize)
 {
     HDC hdc = CreateCompatibleDC(NULL);
-    if(NULL == hdc) {
+    if(NULL == hdc)
+    {
         return NULL;
     }
-    if(!GetTextExtentPoint32(hdc, lpsz, lstrlen(lpsz), pSize)) {
+    if(!GetTextExtentPoint32(hdc, lpsz, lstrlen(lpsz), pSize))
+    {
         return NULL;
     }
 
     // Create our bitmap
-    struct {
+    struct
+    {
         BITMAPINFOHEADER bmiHeader;
         DWORD rgbEntries[2];
     } bmi =
@@ -1541,13 +1570,15 @@ PBYTE TextBitmap(LPCTSTR lpsz, SIZE *pSize)
     };
 
     HBITMAP hbm = CreateDIBitmap(hdc, &bmi.bmiHeader, 0, NULL, NULL, 0);
-    if(NULL == hbm) {
+    if(NULL == hbm)
+    {
         DeleteDC(hdc);
         return NULL;
     }
 
     HGDIOBJ hobj = SelectObject(hdc, hbm);
-    if(NULL == hobj) {
+    if(NULL == hobj)
+    {
         DeleteObject(hbm);
         DeleteDC(hdc);
         return NULL;
@@ -1555,15 +1586,17 @@ PBYTE TextBitmap(LPCTSTR lpsz, SIZE *pSize)
 
     PBYTE pbReturn = NULL;
     BOOL bResult = ExtTextOut(hdc, 0, 0, ETO_OPAQUE | ETO_CLIPPED, NULL, lpsz,
-        lstrlen(lpsz), NULL);
+                              lstrlen(lpsz), NULL);
     SelectObject(hdc, hobj);
 
     LONG lLines;
-    if(bResult) {
+    if(bResult)
+    {
         LONG lWidthInBytes = ((pSize->cx + 31) >> 3) & ~3;
         pbReturn = (BYTE*)CoTaskMemAlloc(lWidthInBytes * pSize->cy);
 
-        if(pbReturn) {
+        if(pbReturn)
+        {
             ZeroMemory(pbReturn, lWidthInBytes * pSize->cy);
             lLines = GetDIBits(hdc, hbm, 0, pSize->cy, (PVOID)pbReturn, (BITMAPINFO *)&bmi, DIB_RGB_COLORS);
         }
@@ -1580,7 +1613,7 @@ PBYTE TextBitmap(LPCTSTR lpsz, SIZE *pSize)
 //
 // Fills a bitmap with a specified color.
 //
-// pvih: Pointer to a VIDEOINFOHEADER structure that describes the 
+// pvih: Pointer to a VIDEOINFOHEADER structure that describes the
 //       bitmap.
 // pbData: Pointer to the start of the bitmap.
 // color: Fill color.
@@ -1590,13 +1623,15 @@ void OurFillRect(PBYTE pbScanline0, DWORD dwWidth, DWORD dwHeight, LONG lStrideI
 {
     PBYTE pbPixels = pbScanline0;
 
-    // For just filling we don't care which way up the bitmap is - 
+    // For just filling we don't care which way up the bitmap is -
     // we just start at pbData
-    for(DWORD dwCount = 0; dwCount < dwHeight; dwCount++) {
+    for(DWORD dwCount = 0; dwCount < dwHeight; dwCount++)
+    {
         DWORD *pWord = (DWORD *)pbPixels;
 
-        for(DWORD dwPixel = 0; dwPixel < dwWidth; dwPixel++) {
-            pWord[dwPixel] = (DWORD)color;  
+        for(DWORD dwPixel = 0; dwPixel < dwWidth; dwPixel++)
+        {
+            pWord[dwPixel] = (DWORD)color;
         }
 
         //  biWidth is the stride
@@ -1617,31 +1652,35 @@ void DrawOurText(PBYTE pbTarget, DWORD dwWidthTarget, DWORD dwHeightTarget, LONG
 
     //  Get a bit map representing our bits
     PBYTE pbBits = TextBitmap(szBuffer, &size);
-    if(NULL == pbBits) 
+    if(NULL == pbBits)
     {
         return;
     }
 
     //  Now copy the data from the DIB section (which is bottom up)
     //  but first check if it's too big
-    if(dwWidthTarget >= (DWORD)size.cx && 
-        dwHeightTarget > (DWORD)size.cy && 
-        size.cx > 0 && size.cy > 0) {
+    if(dwWidthTarget >= (DWORD)size.cx &&
+            dwHeightTarget > (DWORD)size.cy &&
+            size.cx > 0 && size.cy > 0)
+    {
         DWORD dwSourceStride = ((size.cx + 31) >> 3) & ~3;
 
-        for(DWORD dwY = 0; dwY < (DWORD)size.cy; dwY++) {
+        for(DWORD dwY = 0; dwY < (DWORD)size.cy; dwY++)
+        {
             DWORD *pwTarget = (DWORD *)pbTarget;
             PBYTE pbSource = pbBits + dwSourceStride * ((DWORD)size.cy - dwY - 1);
 
-            for(DWORD dwX = 0; dwX < (DWORD)size.cx; dwX++) {
-                if(!((0x80 >> (dwX & 7)) & pbSource[dwX >> 3])) {
+            for(DWORD dwX = 0; dwX < (DWORD)size.cx; dwX++)
+            {
+                if(!((0x80 >> (dwX & 7)) & pbSource[dwX >> 3]))
+                {
                     pwTarget[dwX] = 0x0000; // Black
                 }
             }
             pbTarget += lStrideInBytesTarget;
         }
     }
-    
+
     CoTaskMemFree(pbBits);
 }
 

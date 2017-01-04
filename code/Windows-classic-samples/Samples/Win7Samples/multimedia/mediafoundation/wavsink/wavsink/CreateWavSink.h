@@ -1,4 +1,4 @@
-//-----------------------------------------------------------------------------
+﻿//-----------------------------------------------------------------------------
 // File: CreateWavSink.h
 //
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
@@ -13,8 +13,8 @@
 
 
 //-------------------------------------------------------------------
-// Name: CreateWavSink 
-// Description: Creates an instance of the WavSink object. 
+// Name: CreateWavSink
+// Description: Creates an instance of the WavSink object.
 //
 // To use the WavSink, include this header file in an application
 // and link to the library file created by this project.

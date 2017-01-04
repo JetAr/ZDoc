@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -10,8 +10,8 @@
 #define MAX_RESOURCE_LENGTH     256
 #include <uiribbon.h>
 
-// The implementation of IUISimplePropertySet. This handles all of the properties used for the 
-// ItemsSource and Categories PKEYs and provides functions to set only the properties required 
+// The implementation of IUISimplePropertySet. This handles all of the properties used for the
+// ItemsSource and Categories PKEYs and provides functions to set only the properties required
 // for each type of gallery contents.
 class CPropertySet
     : public IUISimplePropertySet
@@ -34,11 +34,11 @@ public:
     STDMETHOD(QueryInterface)(REFIID iid, void **ppv);
 private:
     CPropertySet()
-        : m_pimgItem(NULL), 
-        m_categoryId(UI_COLLECTION_INVALIDINDEX),
-        m_commandId(-1),
-        m_commandType(UI_COMMANDTYPE_UNKNOWN),
-        m_cRef(1)
+        : m_pimgItem(NULL),
+          m_categoryId(UI_COLLECTION_INVALIDINDEX),
+          m_commandId(-1),
+          m_commandType(UI_COMMANDTYPE_UNKNOWN),
+          m_cRef(1)
     {
         m_wszLabel[0] = L'\0';
     }

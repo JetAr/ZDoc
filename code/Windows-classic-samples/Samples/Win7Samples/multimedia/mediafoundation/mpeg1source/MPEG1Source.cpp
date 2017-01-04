@@ -1,8 +1,8 @@
-//////////////////////////////////////////////////////////////////////////
+﻿//////////////////////////////////////////////////////////////////////////
 //
 // MPEG1Source.h
 // Implements the MPEG-1 media source object.
-// 
+//
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -18,11 +18,11 @@
 //-------------------------------------------------------------------
 //
 // Notes:
-// This sample contains an MPEG-1 source. 
+// This sample contains an MPEG-1 source.
 //
-// - The source parses MPEG-1 systems-layer streams and generates 
+// - The source parses MPEG-1 systems-layer streams and generates
 //   samples that contain MPEG-1 payloads.
-// - The source does not support files that contain a raw MPEG-1 
+// - The source does not support files that contain a raw MPEG-1
 //   video or audio stream.
 // - The source does not support seeking.
 //
@@ -74,7 +74,7 @@ HRESULT MPEG1Source::CreateInstance(MPEG1Source **ppSource)
 
 HRESULT MPEG1Source::QueryInterface(REFIID riid, void** ppv)
 {
-    static const QITAB qit[] = 
+    static const QITAB qit[] =
     {
         QITABENT(MPEG1Source, IMFMediaEventGenerator),
         QITABENT(MPEG1Source, IMFMediaSource),
@@ -119,17 +119,18 @@ done:
 
 HRESULT MPEG1Source::GetEvent(DWORD dwFlags, IMFMediaEvent** ppEvent)
 {
-    // NOTE: 
-    // GetEvent can block indefinitely, so we don't hold the critical 
-    // section. Therefore we need to use a local copy of the event queue 
+    // NOTE:
+    // GetEvent can block indefinitely, so we don't hold the critical
+    // section. Therefore we need to use a local copy of the event queue
     // pointer, to make sure the pointer remains valid.
 
     HRESULT hr = S_OK;
 
     IMFMediaEventQueue *pQueue = NULL;
 
-    { // scope for lock
-      
+    {
+        // scope for lock
+
         AutoLock lock(m_critSec);
 
         // Check shutdown
@@ -174,7 +175,7 @@ done:
 
 HRESULT MPEG1Source::CreatePresentationDescriptor(
     IMFPresentationDescriptor** ppPresentationDescriptor
-    )
+)
 {
     AutoLock lock(m_critSec);
 
@@ -184,7 +185,7 @@ HRESULT MPEG1Source::CreatePresentationDescriptor(
     }
 
     HRESULT hr = S_OK;
-    
+
     // Fail if the source is shut down.
     CHECK_HR(hr = CheckShutdown());
 
@@ -220,12 +221,12 @@ HRESULT MPEG1Source::GetCharacteristics(DWORD* pdwCharacteristics)
     }
 
     HRESULT hr = S_OK;
-    
+
     CHECK_HR(hr = CheckShutdown());
 
     *pdwCharacteristics =  MFMEDIASOURCE_CAN_PAUSE;
 
-    // NOTE: This sample does not implement seeking, so we do not 
+    // NOTE: This sample does not implement seeking, so we do not
     // include the MFMEDIASOURCE_CAN_SEEK flag.
 
 done:
@@ -281,7 +282,7 @@ HRESULT MPEG1Source::Shutdown()
         (void)m_pEventQueue->Shutdown();
     }
 
-    // Release objects. 
+    // Release objects.
     for (DWORD i = 0; i < m_streams.GetCount(); i++)
     {
         SAFE_RELEASE(m_streams[i]);
@@ -314,17 +315,17 @@ done:
 //-------------------------------------------------------------------
 
 HRESULT MPEG1Source::Start(
-        IMFPresentationDescriptor* pPresentationDescriptor,
-        const GUID* pguidTimeFormat,
-        const PROPVARIANT* pvarStartPosition
-    )
+    IMFPresentationDescriptor* pPresentationDescriptor,
+    const GUID* pguidTimeFormat,
+    const PROPVARIANT* pvarStartPosition
+)
 {
     AutoLock lock(m_critSec);
 
     HRESULT hr = S_OK;
     SourceOp *pAsyncOp = NULL;
 
-    // Check parameters. 
+    // Check parameters.
     // Start position and presentation descriptor cannot be NULL.
     if (pvarStartPosition == NULL || pPresentationDescriptor == NULL)
     {
@@ -345,14 +346,14 @@ HRESULT MPEG1Source::Start(
         return MF_E_UNSUPPORTED_TIME_FORMAT;
     }
 
-    // Check if this is a seek request. 
+    // Check if this is a seek request.
     // Currently, this sample does not support seeking.
 
     if (pvarStartPosition->vt == VT_I8)
     {
         // If the current state is STOPPED, then position 0 is valid.
 
-        // If the current state is anything else, then the 
+        // If the current state is anything else, then the
         // start position must be VT_EMPTY (current position).
 
         if ((m_state != STATE_STOPPED) || (pvarStartPosition->hVal.QuadPart != 0))
@@ -373,7 +374,7 @@ HRESULT MPEG1Source::Start(
 
     // The operation looks OK. Complete the operation asynchronously.
 
-    // Create the state object for the async operation. 
+    // Create the state object for the async operation.
     CHECK_HR(hr = SourceOp::CreateStartOp(pPresentationDescriptor, &pAsyncOp));
 
     CHECK_HR(hr = pAsyncOp->SetData(*pvarStartPosition));
@@ -423,17 +424,17 @@ done:
 //
 // This method is asynchronous. When the operation completes,
 // the callback is invoked and the byte-stream handler calls
-// EndOpen. 
+// EndOpen.
 //
 // pStream: Pointer to the byte stream for the MPEG-1 stream.
 // pCB: Pointer to the byte-stream handler's callback.
 // pState: State object for the async callback. (Can be NULL.)
 //
 // Note: The source reads enough data to find one packet header
-// for each audio or video stream. This enables the source to 
+// for each audio or video stream. This enables the source to
 // create a presentation descriptor that describes the format of
 // each stream. The source queues the packets that it reads during
-// BeginOpen. 
+// BeginOpen.
 //-------------------------------------------------------------------
 
 HRESULT MPEG1Source::BeginOpen(IMFByteStream *pStream, IMFAsyncCallback *pCB, IUnknown *pState)
@@ -457,7 +458,7 @@ HRESULT MPEG1Source::BeginOpen(IMFByteStream *pStream, IMFAsyncCallback *pCB, IU
     m_pByteStream = pStream;
     m_pByteStream->AddRef();
 
-    // Validate the capabilities of the byte stream. 
+    // Validate the capabilities of the byte stream.
     // The byte stream must be readable and seekable.
     CHECK_HR(hr = pStream->GetCapabilities(&dwCaps));
 
@@ -496,7 +497,7 @@ done:
 
 //-------------------------------------------------------------------
 // EndOpen
-// Completes the BeginOpen operation. 
+// Completes the BeginOpen operation.
 // Called by the byte-stream handler when it creates the source.
 //-------------------------------------------------------------------
 
@@ -505,7 +506,7 @@ HRESULT MPEG1Source::EndOpen(IMFAsyncResult *pResult)
     AutoLock lock(m_critSec);
 
     HRESULT hr = S_OK;
-    
+
     hr = pResult->GetStatus();
 
     if (FAILED(hr))
@@ -521,8 +522,8 @@ HRESULT MPEG1Source::EndOpen(IMFAsyncResult *pResult)
 
 //-------------------------------------------------------------------
 // OnByteStreamRead
-// Called when an asynchronous read completes. 
-// 
+// Called when an asynchronous read completes.
+//
 // Read requests are issued in the RequestData() method.
 //-------------------------------------------------------------------
 
@@ -537,13 +538,13 @@ HRESULT MPEG1Source::OnByteStreamRead(IMFAsyncResult *pResult)
 
     if (m_state == STATE_SHUTDOWN)
     {
-        // If we are shut down, then we've already released the 
+        // If we are shut down, then we've already released the
         // byte stream. Nothing to do.
         return S_OK;
     }
 
     // Get the state object. This is either NULL or the most
-    // recent OP_REQUEST_DATA operation. 
+    // recent OP_REQUEST_DATA operation.
     (void)pResult->GetState(&pState);
 
     // Complete the read opertation.
@@ -551,8 +552,8 @@ HRESULT MPEG1Source::OnByteStreamRead(IMFAsyncResult *pResult)
 
     // If the source stops and restarts in rapid succession, there is
     // a chance this is a "stale" read request, initiated before the
-    // stop/restart. 
-    
+    // stop/restart.
+
     // To ensure that we don't deliver stale data, we store the
     // OP_REQUEST_DATA operation as a state object in pResult, and compare
     // this against the current value of m_cRestartCounter.
@@ -561,7 +562,7 @@ HRESULT MPEG1Source::OnByteStreamRead(IMFAsyncResult *pResult)
 
     // NOTE: During BeginOpen, pState is NULL
 
-    if ((pState == NULL) || ( ((SourceOp*)pState)->Data().ulVal == m_cRestartCounter) )    
+    if ((pState == NULL) || ( ((SourceOp*)pState)->Data().ulVal == m_cRestartCounter) )
     {
         // This data is OK to parse.
 
@@ -576,7 +577,7 @@ HRESULT MPEG1Source::OnByteStreamRead(IMFAsyncResult *pResult)
             CHECK_HR(hr = m_ReadBuffer.MoveEnd(cbRead));
 
             // Parse the new data.
-            CHECK_HR(hr = ParseData());  
+            CHECK_HR(hr = ParseData());
         }
     }
 
@@ -593,10 +594,10 @@ done:
 
 /* Private methods */
 
-MPEG1Source::MPEG1Source(HRESULT& hr) : 
+MPEG1Source::MPEG1Source(HRESULT& hr) :
     OpQueue(m_critSec),
-    m_pEventQueue(NULL), 
-    m_pPresentationDescriptor(NULL), 
+    m_pEventQueue(NULL),
+    m_pPresentationDescriptor(NULL),
     m_pBeginOpenResult(NULL),
     m_pParser(NULL),
     m_pByteStream(NULL),
@@ -622,7 +623,7 @@ MPEG1Source::~MPEG1Source()
 
 //-------------------------------------------------------------------
 // CompleteOpen
-// 
+//
 // Completes the asynchronous BeginOpen operation.
 //
 // hrStatus: Status of the BeginOpen operation.
@@ -646,7 +647,7 @@ done:
 
 //-------------------------------------------------------------------
 // IsInitialized:
-// Returns S_OK if the source is correctly initialized with an 
+// Returns S_OK if the source is correctly initialized with an
 // MPEG-1 byte stream. Otherwise, returns MF_E_NOT_INITIALIZED.
 //-------------------------------------------------------------------
 
@@ -671,8 +672,8 @@ HRESULT MPEG1Source::IsInitialized() const
 
 BOOL MPEG1Source::IsStreamTypeSupported(StreamType type) const
 {
-    // We support audio and video streams. 
-    return (type == StreamType_Video || type == StreamType_Audio); 
+    // We support audio and video streams.
+    return (type == StreamType_Video || type == StreamType_Audio);
 }
 
 //-------------------------------------------------------------------
@@ -681,16 +682,16 @@ BOOL MPEG1Source::IsStreamTypeSupported(StreamType type) const
 // is indicated by the specified packet header.
 //
 // Note: This method does not test the started/paused/stopped state
-//       of the source. 
+//       of the source.
 //-------------------------------------------------------------------
 
 BOOL MPEG1Source::IsStreamActive(const MPEG1PacketHeader& packetHdr)
 {
     if (m_state == STATE_OPENING)
     {
-        // The source is still opening. 
-        // Deliver payloads for every supported stream type. 
-        return IsStreamTypeSupported(packetHdr.type); 
+        // The source is still opening.
+        // Deliver payloads for every supported stream type.
+        return IsStreamTypeSupported(packetHdr.type);
     }
     else
     {
@@ -714,12 +715,12 @@ BOOL MPEG1Source::IsStreamActive(const MPEG1PacketHeader& packetHdr)
 // Create the source's presentation descriptor, if possible.
 //
 // During the BeginOpen operation, the source reads packets looking
-// for headers for each stream. This enables the source to create the 
-// presentation descriptor, which describes the stream formats. 
+// for headers for each stream. This enables the source to create the
+// presentation descriptor, which describes the stream formats.
 //
 // This method tests whether the source has seen enough packets
 // to create the PD. If so, it invokes the callback to complete
-// the BeginOpen operation. 
+// the BeginOpen operation.
 //-------------------------------------------------------------------
 
 HRESULT MPEG1Source::InitPresentationDescriptor()
@@ -744,7 +745,7 @@ HRESULT MPEG1Source::InitPresentationDescriptor()
         }
     }
 
-    // How many streams do we actually have? 
+    // How many streams do we actually have?
     if (cStreams > m_streams.GetCount())
     {
         // Not enough streams. Keep reading data until we have seen a packet for each stream.
@@ -763,7 +764,7 @@ HRESULT MPEG1Source::InitPresentationDescriptor()
     }
     ZeroMemory(ppSD, cStreams * sizeof(IMFStreamDescriptor*));
 
-    // Fill the array by getting the stream descriptors from the MPEG1Stream objects. 
+    // Fill the array by getting the stream descriptors from the MPEG1Stream objects.
     // (We have already initialized these.)
     for (DWORD i = 0; i < cStreams; i++)
     {
@@ -810,7 +811,7 @@ done:
 // QueueAsyncOperation
 // Queue an asynchronous operation.
 //
-// OpType: Type of operation to queue. 
+// OpType: Type of operation to queue.
 //
 // Note: If the SourceOp object requires additional information, call
 // OpQueue<SourceOp>::QueueOperation, which takes a SourceOp pointer.
@@ -832,7 +833,7 @@ done:
 //-------------------------------------------------------------------
 // BeginAsyncOp
 //
-// Starts an asynchronous operation. Called by the source at the 
+// Starts an asynchronous operation. Called by the source at the
 // begining of any asynchronous operation.
 //-------------------------------------------------------------------
 
@@ -859,7 +860,7 @@ HRESULT MPEG1Source::BeginAsyncOp(SourceOp *pOp)
 //-------------------------------------------------------------------
 // CompleteAsyncOp
 //
-// Completes an asynchronous operation. Called by the source at the 
+// Completes an asynchronous operation. Called by the source at the
 // end of any asynchronous operation.
 //-------------------------------------------------------------------
 
@@ -868,7 +869,7 @@ HRESULT MPEG1Source::CompleteAsyncOp(SourceOp *pOp)
     HRESULT hr = S_OK;
 
     // At this point, the current operation (m_pCurrentOp)
-    // must match the operation that is ending (pOp). 
+    // must match the operation that is ending (pOp).
 
     if (pOp == NULL || m_pCurrentOp == NULL)
     {
@@ -898,7 +899,7 @@ done:
 //
 // Performs the asynchronous operation indicated by pOp.
 //
-// NOTE: 
+// NOTE:
 // This method implements the pure-virtual OpQueue::DispatchOperation
 // method. It is always called from a work-queue thread.
 //-------------------------------------------------------------------
@@ -962,8 +963,8 @@ HRESULT MPEG1Source::DispatchOperation(SourceOp *pOp)
 // If the source cannot perform the operation now, the method
 // returns MF_E_NOTACCEPTING.
 //
-// NOTE: 
-// Implements the pure-virtual OpQueue::ValidateOperation method. 
+// NOTE:
+// Implements the pure-virtual OpQueue::ValidateOperation method.
 //-------------------------------------------------------------------
 
 HRESULT MPEG1Source::ValidateOperation(SourceOp *pOp)
@@ -981,10 +982,10 @@ HRESULT MPEG1Source::ValidateOperation(SourceOp *pOp)
 // DoStart
 // Perform an async start operation (IMFMediaSource::Start)
 //
-// pOp: Contains the start parameters. 
+// pOp: Contains the start parameters.
 //
-// Note: This sample currently does not implement seeking, and the 
-// Start() method fails if the caller requests a seek. 
+// Note: This sample currently does not implement seeking, and the
+// Start() method fails if the caller requests a seek.
 //-------------------------------------------------------------------
 
 HRESULT MPEG1Source::DoStart(StartOp *pOp)
@@ -1025,7 +1026,7 @@ HRESULT MPEG1Source::DoStart(StartOp *pOp)
 done:
     if (FAILED(hr))
     {
-        // Failure. Send the MESourceStarted or MESourceSeeked event with the error code. 
+        // Failure. Send the MESourceStarted or MESourceSeeked event with the error code.
 
         // Note: It's possible that QueueEvent itself failed, in which case it is likely
         // to fail again. But there is no good way to recover in that case.
@@ -1042,7 +1043,7 @@ done:
 
 
 //-------------------------------------------------------------------
-// DoStop 
+// DoStop
 // Perform an async stop operation (IMFMediaSource::Stop)
 //-------------------------------------------------------------------
 
@@ -1065,11 +1066,11 @@ HRESULT MPEG1Source::DoStop(SourceOp *pOp)
     // Seek to the start of the file. If we restart after stopping,
     // we will start from the beginning of the file again.
     CHECK_HR(hr = m_pByteStream->Seek(
-        msoBegin, 
-        0, 
-        MFBYTESTREAM_SEEK_FLAG_CANCEL_PENDING_IO, 
-        &qwCurrentPosition
-        ));
+                      msoBegin,
+                      0,
+                      MFBYTESTREAM_SEEK_FLAG_CANCEL_PENDING_IO,
+                      &qwCurrentPosition
+                  ));
 
     // Increment the counter that tracks "stale" read requests.
     ++m_cRestartCounter; // This counter is allowed to overflow.
@@ -1090,7 +1091,7 @@ done:
 
 
 //-------------------------------------------------------------------
-// DoPause 
+// DoPause
 // Perform an async pause operation (IMFMediaSource::Pause)
 //-------------------------------------------------------------------
 
@@ -1131,7 +1132,7 @@ done:
 
 
 //-------------------------------------------------------------------
-// StreamRequestSample 
+// StreamRequestSample
 // Called by streams when they need more data.
 //
 // Note: This is an async operation. The stream requests more data
@@ -1174,7 +1175,7 @@ done:
 
 
 //-------------------------------------------------------------------
-// OnEndOfStream 
+// OnEndOfStream
 // Called by each stream when it sends the last sample in the stream.
 //
 // Note: When the media source reaches the end of the MPEG-1 stream,
@@ -1182,7 +1183,7 @@ done:
 // data still in their queues. As each stream empties its queue, it
 // notifies the source through an async OP_END_OF_STREAM operation.
 //
-// When every stream notifies the source, the source can send the 
+// When every stream notifies the source, the source can send the
 // "end-of-presentation" event.
 //-------------------------------------------------------------------
 
@@ -1192,7 +1193,7 @@ HRESULT MPEG1Source::OnEndOfStream(SourceOp *pOp)
 
     CHECK_HR(hr = BeginAsyncOp(pOp));
 
-    // Decrement the count of end-of-stream notifications. 
+    // Decrement the count of end-of-stream notifications.
     --m_cPendingEOS;
     if (m_cPendingEOS == 0)
     {
@@ -1216,7 +1217,7 @@ done:
 HRESULT MPEG1Source::SelectStreams(
     IMFPresentationDescriptor *pPD,   // Presentation descriptor.
     const PROPVARIANT varStart        // New start position.
-    )
+)
 {
     HRESULT hr = S_OK;
     BOOL    fSelected = FALSE;
@@ -1227,7 +1228,7 @@ HRESULT MPEG1Source::SelectStreams(
 
     MPEG1Stream *pStream = NULL; // Not add-ref'd
 
-    // Reset the pending EOS count.  
+    // Reset the pending EOS count.
     m_cPendingEOS = 0;
 
     // Loop throught the stream descriptors to find which streams are active.
@@ -1280,7 +1281,7 @@ done:
 //-------------------------------------------------------------------
 // RequestData
 // Request the next batch of data.
-// 
+//
 // cbRequest: Amount of data to read, in bytes.
 //-------------------------------------------------------------------
 
@@ -1295,11 +1296,11 @@ HRESULT MPEG1Source::RequestData(DWORD cbRequest)
     // When it completes, our OnByteStreamRead method will be invoked.
 
     CHECK_HR(hr = m_pByteStream->BeginRead(
-        m_ReadBuffer.DataPtr() + m_ReadBuffer.DataSize(), 
-        cbRequest,
-        &m_OnByteStreamRead, 
-        m_pSampleRequest
-        ));
+                      m_ReadBuffer.DataPtr() + m_ReadBuffer.DataSize(),
+                      cbRequest,
+                      &m_OnByteStreamRead,
+                      m_pSampleRequest
+                  ));
 
 done:
     return hr;
@@ -1315,11 +1316,11 @@ HRESULT MPEG1Source::ParseData()
 {
     HRESULT hr = S_OK;
 
-    DWORD cbNextRequest = 0; 
+    DWORD cbNextRequest = 0;
     BOOL  bNeedMoreData = FALSE;
 
     // Keep processing data until
-    // (a) All streams have enough samples, or 
+    // (a) All streams have enough samples, or
     // (b) The parser needs more data in the buffer.
 
     while ( StreamsNeedData() )
@@ -1341,7 +1342,7 @@ HRESULT MPEG1Source::ParseData()
             CHECK_HR(hr = EndOfMPEGStream());
         }
         else if (m_pParser->HasPacket())
-        {   
+        {
             // The parser reached the start of a new packet.
             CHECK_HR(hr = ReadPayload(&cbAte, &cbNextRequest));
         }
@@ -1366,12 +1367,12 @@ HRESULT MPEG1Source::ParseData()
             CHECK_HR(hr = RequestData( max(READ_SIZE, cbNextRequest) ));
 
             // Break from the loop because we need to wait for the async read to complete.
-            break; 
+            break;
         }
     }
 
-    // Flag our state. If a stream requests more data while we are waiting for an async 
-    // read to complete, we can ignore the stream's request, because the request will be 
+    // Flag our state. If a stream requests more data while we are waiting for an async
+    // read to complete, we can ignore the stream's request, because the request will be
     // dispatched as soon as we get more data.
     if (!bNeedMoreData)
     {
@@ -1417,11 +1418,11 @@ HRESULT MPEG1Source::ReadPayload(DWORD *pcbAte, DWORD *pcbNextRequest)
 
         // Skip this payload. Seek past the unread portion of the payload.
         CHECK_HR(hr = m_pByteStream->Seek(
-            msoCurrent, 
-            cbPayloadUnread, 
-            MFBYTESTREAM_SEEK_FLAG_CANCEL_PENDING_IO, 
-            &qwCurrentPosition
-            ));
+                          msoCurrent,
+                          cbPayloadUnread,
+                          MFBYTESTREAM_SEEK_FLAG_CANCEL_PENDING_IO,
+                          &qwCurrentPosition
+                      ));
 
         // Advance the data buffer to the end of payload, or the portion
         // that has been read.
@@ -1465,7 +1466,7 @@ HRESULT MPEG1Source::EndOfMPEGStream()
 {
     // Notify the streams. The streams might have pending samples.
     // When each stream delivers the last sample, it will send the
-    // end-of-stream event to the pipeline and then notify the 
+    // end-of-stream event to the pipeline and then notify the
     // source.
 
     // When every stream is done, the source sends the end-of-
@@ -1599,7 +1600,7 @@ done:
     return hr;
 }
 
-    
+
 
 //-------------------------------------------------------------------
 // CreateStream:
@@ -1616,7 +1617,7 @@ HRESULT MPEG1Source::CreateStream(const MPEG1PacketHeader& packetHdr)
     if ( GetStream(packetHdr.stream_id) != NULL )
     {
         // The stream already exists. Nothing to do.
-        return S_OK; 
+        return S_OK;
     }
 
     HRESULT hr = S_OK;
@@ -1648,7 +1649,7 @@ HRESULT MPEG1Source::CreateStream(const MPEG1PacketHeader& packetHdr)
 
     case StreamType_Audio:
         // Audio: Read the frame header and use it to create a media type.
-        CHECK_HR(hr = ReadAudioFrameHeader(pPayload, packetHdr.cbPayload, audioFrameHeader, &cbAte));   
+        CHECK_HR(hr = ReadAudioFrameHeader(pPayload, packetHdr.cbPayload, audioFrameHeader, &cbAte));
         CHECK_HR(hr = CreateAudioMediaType(audioFrameHeader, &pType));
         break;
 
@@ -1697,8 +1698,8 @@ done:
 // Validates the presentation descriptor that the caller specifies
 // in IMFMediaSource::Start().
 //
-// Note: This method performs a basic sanity check on the PD. It is 
-// not intended to be a thorough validation. 
+// Note: This method performs a basic sanity check on the PD. It is
+// not intended to be a thorough validation.
 //-------------------------------------------------------------------
 
 HRESULT MPEG1Source::ValidatePresentationDescriptor(IMFPresentationDescriptor *pPD)
@@ -1755,7 +1756,7 @@ void MPEG1Source::StreamingError(HRESULT hr)
 {
     if (m_state == STATE_OPENING)
     {
-        // An error happened during BeginOpen. 
+        // An error happened during BeginOpen.
         // Invoke the callback with the status code.
 
         CompleteOpen(hr);
@@ -1775,7 +1776,7 @@ void MPEG1Source::StreamingError(HRESULT hr)
 //
 // This method can return NULL if the source did not create a
 // stream for this ID. In particular, this can happen if:
-// 
+//
 // 1) The stream type is not supported. See IsStreamTypeSupported().
 // 2) The source is still opening.
 //
@@ -1830,7 +1831,7 @@ HRESULT SourceOp::CreateOp(SourceOp::Operation op, SourceOp **ppOp)
 
 //-------------------------------------------------------------------
 // CreateStartOp:
-// Static method to create a SourceOp instance for the Start() 
+// Static method to create a SourceOp instance for the Start()
 // operation.
 //
 // pPD: Presentation descriptor from the caller.
@@ -1857,7 +1858,7 @@ HRESULT SourceOp::CreateStartOp(IMFPresentationDescriptor *pPD, SourceOp **ppOp)
 
 HRESULT SourceOp::QueryInterface(REFIID riid, void** ppv)
 {
-    static const QITAB qit[] = 
+    static const QITAB qit[] =
     {
         QITABENT(SourceOp, IUnknown),
         { 0 }
@@ -1870,10 +1871,10 @@ SourceOp::SourceOp(Operation op) : m_op(op)
     PropVariantInit(&m_data);
 }
 
-SourceOp::~SourceOp() 
+SourceOp::~SourceOp()
 {
     PropVariantClear(&m_data);
-} 
+}
 
 HRESULT SourceOp::SetData(const PROPVARIANT& var)
 {
@@ -1925,7 +1926,7 @@ HRESULT CreateVideoMediaType(const MPEG1VideoSeqHeader& videoSeqHdr, IMFMediaTyp
 
     // Create the helper object for generating video media types.
     MPEGVideoType video_type;
-    
+
     CHECK_HR(hr = video_type.CreateEmptyType());
 
     // Subtype = MPEG-1 payload
@@ -1954,14 +1955,14 @@ done:
 // Create a media type from an MPEG-1 audio frame header.
 //
 // Note: This function fills in an MPEG1WAVEFORMAT structure and then
-// converts the structure to a Media Foundation media type 
+// converts the structure to a Media Foundation media type
 // (IMFMediaType). This is somewhat roundabout but it guarantees
 // that the type can be converted back to an MPEG1WAVEFORMAT by the
-// decoder if need be. 
+// decoder if need be.
 //
 // The WAVEFORMATEX portion of the MPEG1WAVEFORMAT structure is
 // converted into attributes on the IMFMediaType object. The rest of
-// the struct is stored in the MF_MT_USER_DATA attribute. 
+// the struct is stored in the MF_MT_USER_DATA attribute.
 //-------------------------------------------------------------------
 
 HRESULT CreateAudioMediaType(const MPEG1AudioFrameHeader& audioHeader, IMFMediaType **ppType)
@@ -2063,7 +2064,7 @@ BOOL SampleRequestMatch(SourceOp *pOp1, SourceOp *pOp2)
     {
         return FALSE;
     }
-    else 
+    else
     {
         return (pOp1->Data().ulVal == pOp2->Data().ulVal);
     }

@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -177,7 +177,7 @@ HRESULT GetStreamFromBase64String(PCWSTR pszBase64, IStream **ppStream)
 
     // Base64-decode the string
     HRESULT hr = CryptStringToBinary(pszBase64, NULL, CRYPT_STRING_BASE64, NULL,
-        &dwDecodedImageSize, &dwSkipChars, &dwActualFormat) ? S_OK : E_FAIL;
+                                     &dwDecodedImageSize, &dwSkipChars, &dwActualFormat) ? S_OK : E_FAIL;
     if (SUCCEEDED(hr))
     {
         BYTE *pbDecodedImage = (BYTE*)LocalAlloc(LPTR, dwDecodedImageSize);
@@ -185,7 +185,7 @@ HRESULT GetStreamFromBase64String(PCWSTR pszBase64, IStream **ppStream)
         if (SUCCEEDED(hr))
         {
             hr = CryptStringToBinary(pszBase64, lstrlen(pszBase64), CRYPT_STRING_BASE64,
-                pbDecodedImage, &dwDecodedImageSize, &dwSkipChars, &dwActualFormat) ? S_OK : E_FAIL;
+                                     pbDecodedImage, &dwDecodedImageSize, &dwSkipChars, &dwActualFormat) ? S_OK : E_FAIL;
             if (SUCCEEDED(hr))
             {
                 *ppStream = SHCreateMemStream(pbDecodedImage, dwDecodedImageSize);

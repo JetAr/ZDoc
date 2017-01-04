@@ -1,11 +1,11 @@
-//--------------------------------------------------------------------
+﻿//--------------------------------------------------------------------
 // Microsoft OLE DB Test
 //
 // Copyright (C) 1995-2000 Microsoft Corporation
 //
 // @doc
 //
-// @module ICmdStream.h | This module contains header information for 
+// @module ICmdStream.h | This module contains header information for
 //	    				OLE DB ICommandStream interface Test
 //
 // @rev 01 | 10-26-99 | Microsoft | Created
@@ -13,7 +13,7 @@
 
 #ifndef _ICMDSTREAM_H_
 #define _ICMDSTREAM_H_
-						  
+
 #include "oledb.h" 			// OLE DB Header Files
 #include "oledberr.h"
 #include "privlib.h"		// Private Library
@@ -24,8 +24,8 @@
 ///////////////////////////////////////////////////////////
 enum ENCODING
 {
-	UTF8	= 1,
-	UTF16	= 2
+    UTF8	= 1,
+    UTF16	= 2
 };
 
 ///////////////////////////////////////////////////////////

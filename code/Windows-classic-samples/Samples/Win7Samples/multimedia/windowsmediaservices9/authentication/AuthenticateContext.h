@@ -1,4 +1,4 @@
-//+-------------------------------------------------------------------------
+﻿//+-------------------------------------------------------------------------
 //
 //  Microsoft Windows Media Technologies
 //  Copyright (C) Microsoft Corporation. All rights reserved.
@@ -10,43 +10,43 @@
 //--------------------------------------------------------------------------
 
 
-#if !defined(AFX_AUTHENTICATECONTEXT_H__D5FB96E8_39EB_4691_B4CA_6340014B116B__INCLUDED_) 
+#if !defined(AFX_AUTHENTICATECONTEXT_H__D5FB96E8_39EB_4691_B4CA_6340014B116B__INCLUDED_)
 #define AFX_AUTHENTICATECONTEXT_H__D5FB96E8_39EB_4691_B4CA_6340014B116B__INCLUDED_
 
 #include "resource.h"       // main symbols
 
 /////////////////////////////////////////////////////////////////////////////
 // CAuthenticateContext
-class ATL_NO_VTABLE CAuthenticateContext : 
-        public CComObjectRootEx<CComMultiThreadModel>,
-        public CComCoClass<CAuthenticateContext, &CLSID_AuthenticateContext>,
-        public IWMSAuthenticationContext
+class ATL_NO_VTABLE CAuthenticateContext :
+    public CComObjectRootEx<CComMultiThreadModel>,
+    public CComCoClass<CAuthenticateContext, &CLSID_AuthenticateContext>,
+    public IWMSAuthenticationContext
 {
 public:
     CAuthenticateContext();
     ~CAuthenticateContext();
 
-DECLARE_REGISTRY_RESOURCEID(IDR_AUTHENTICATECONTEXT)
+    DECLARE_REGISTRY_RESOURCEID(IDR_AUTHENTICATECONTEXT)
 
-DECLARE_PROTECT_FINAL_CONSTRUCT()
+    DECLARE_PROTECT_FINAL_CONSTRUCT()
 
-BEGIN_COM_MAP(CAuthenticateContext)
+    BEGIN_COM_MAP(CAuthenticateContext)
     COM_INTERFACE_ENTRY(IWMSAuthenticationContext)
-END_COM_MAP()
+    END_COM_MAP()
 
 
 public:
     STDMETHOD( Initialize )( IWMSAuthenticationPlugin* pAuthenticator );
-    
+
     // IWMSAuthenticationContext methods
     STDMETHOD( GetAuthenticationPlugin )( IWMSAuthenticationPlugin **ppAuthenPlugin );
     STDMETHOD( Authenticate )(
-                    VARIANT ResponseBlob,
-                    IWMSContext *pUserCtx,
-                    IWMSContext *pPresentationCtx,
-                    IWMSCommandContext *pCommandContext,
-                    IWMSAuthenticationCallback *pCallback,
-                    VARIANT Context );
+        VARIANT ResponseBlob,
+        IWMSContext *pUserCtx,
+        IWMSContext *pPresentationCtx,
+        IWMSCommandContext *pCommandContext,
+        IWMSAuthenticationCallback *pCallback,
+        VARIANT Context );
     STDMETHOD( GetLogicalUserID )( BSTR* bstrUserID );
     STDMETHOD( GetImpersonationAccountName )( BSTR* bstrAccountName );
     STDMETHOD( GetImpersonationToken )( long* Token );
@@ -61,7 +61,8 @@ private:
     CComBSTR                            m_bstrUsername;
 };
 
-class CSafeArrayOfBytes {
+class CSafeArrayOfBytes
+{
 public:
     CSafeArrayOfBytes(VARIANT* pVariant);
 

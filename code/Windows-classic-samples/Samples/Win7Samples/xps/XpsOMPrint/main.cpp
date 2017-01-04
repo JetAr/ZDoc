@@ -1,4 +1,4 @@
-//+----------------------------------------------------------------------------
+﻿//+----------------------------------------------------------------------------
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -21,14 +21,14 @@
 // The font to use for the page text.  Needs to be a TrueType font.
 const wchar_t g_fontName[] = L"Arial";
 
-// This function creates a font resource for the given font name with the 
+// This function creates a font resource for the given font name with the
 // embedding type set appropriately for the licensing intent of the font.
 HRESULT
 CreateFontResourceForFont(
     IXpsOMObjectFactory* xpsFactory,
     LPCWSTR fontName,
     IXpsOMFontResource **fontResource
-    )
+)
 {
     HRESULT hr = S_OK;
     HDC hDC = NULL;
@@ -100,26 +100,26 @@ CreateFontResourceForFont(
     {
         switch (privStatus)
         {
-            case EMBED_PREVIEWPRINT:
-                // Restricted font
-                embedding = XPS_FONT_EMBEDDING_RESTRICTED;
-                break;
-            case EMBED_EDITABLE:
-                // Editable font - MUST obfuscate
-                embedding = XPS_FONT_EMBEDDING_OBFUSCATED;
-                break;
-            case EMBED_INSTALLABLE:
-                // Installable font - SHOULD obfuscate
-                embedding = XPS_FONT_EMBEDDING_OBFUSCATED;
-                break;
-            case EMBED_NOEMBEDDING:
-                fwprintf(stderr, L"ERROR: %s may not be embedded\n", fontName);
-                hr = E_UNEXPECTED;
-                break;
-            default:
-                fwprintf(stderr, L"ERROR: Unrecognized embedding privileges: %08X\n", privStatus);
-                hr =  E_UNEXPECTED;
-                break;
+        case EMBED_PREVIEWPRINT:
+            // Restricted font
+            embedding = XPS_FONT_EMBEDDING_RESTRICTED;
+            break;
+        case EMBED_EDITABLE:
+            // Editable font - MUST obfuscate
+            embedding = XPS_FONT_EMBEDDING_OBFUSCATED;
+            break;
+        case EMBED_INSTALLABLE:
+            // Installable font - SHOULD obfuscate
+            embedding = XPS_FONT_EMBEDDING_OBFUSCATED;
+            break;
+        case EMBED_NOEMBEDDING:
+            fwprintf(stderr, L"ERROR: %s may not be embedded\n", fontName);
+            hr = E_UNEXPECTED;
+            break;
+        default:
+            fwprintf(stderr, L"ERROR: Unrecognized embedding privileges: %08X\n", privStatus);
+            hr =  E_UNEXPECTED;
+            break;
         }
     }
 
@@ -190,20 +190,20 @@ CreateFontResourceForFont(
     if (SUCCEEDED(hr))
     {
         if (swprintf_s(
-                fontPartName,
-                sizeof(fontPartName)/sizeof(wchar_t),
-                L"/Resources/Fonts/%08lX-%04X-%04X-%02X%02X-%02X%02X%02X%02X%02X%02X.odttf",
-                fontObfuscationGuid.Data1,
-                fontObfuscationGuid.Data2,
-                fontObfuscationGuid.Data3,
-                fontObfuscationGuid.Data4[0],
-                fontObfuscationGuid.Data4[1],
-                fontObfuscationGuid.Data4[2],
-                fontObfuscationGuid.Data4[3],
-                fontObfuscationGuid.Data4[4],
-                fontObfuscationGuid.Data4[5],
-                fontObfuscationGuid.Data4[6],
-                fontObfuscationGuid.Data4[7]
+                    fontPartName,
+                    sizeof(fontPartName)/sizeof(wchar_t),
+                    L"/Resources/Fonts/%08lX-%04X-%04X-%02X%02X-%02X%02X%02X%02X%02X%02X.odttf",
+                    fontObfuscationGuid.Data1,
+                    fontObfuscationGuid.Data2,
+                    fontObfuscationGuid.Data3,
+                    fontObfuscationGuid.Data4[0],
+                    fontObfuscationGuid.Data4[1],
+                    fontObfuscationGuid.Data4[2],
+                    fontObfuscationGuid.Data4[3],
+                    fontObfuscationGuid.Data4[4],
+                    fontObfuscationGuid.Data4[5],
+                    fontObfuscationGuid.Data4[6],
+                    fontObfuscationGuid.Data4[7]
                 ) == -1)
         {
             fwprintf(stderr, L"ERROR: Could not format GUID into part name\n");
@@ -214,8 +214,8 @@ CreateFontResourceForFont(
     if (SUCCEEDED(hr))
     {
         if (FAILED(hr = xpsFactory->CreatePartUri(
-                    fontPartName,
-                    &partUri)))
+                            fontPartName,
+                            &partUri)))
         {
             fwprintf(stderr, L"ERROR: Could not create part URI: %08X\n", hr);
         }
@@ -224,12 +224,12 @@ CreateFontResourceForFont(
     if (SUCCEEDED(hr))
     {
         if (FAILED(hr = xpsFactory->CreateFontResource(
-                    fontStream,
-                    embedding,
-                    partUri,
-                    FALSE,
-                    fontResource
-                    )))
+                            fontStream,
+                            embedding,
+                            partUri,
+                            FALSE,
+                            fontResource
+                        )))
         {
             fwprintf(stderr, L"ERROR: Could not create font resource: %08X\n", hr);
         }
@@ -274,7 +274,7 @@ AddGlyphs(
     XPS_POINT *origin,
     FLOAT fontSize,
     XPS_STYLE_SIMULATION sims
-    )
+)
 {
     HRESULT hr = S_OK;
 
@@ -284,9 +284,9 @@ AddGlyphs(
     IXpsOMVisualCollection* visuals = NULL;
 
     if (FAILED(hr = xpsFactory->CreateGlyphs(
-                font,
-                &glyphs
-                )))
+                        font,
+                        &glyphs
+                    )))
     {
         fwprintf(stderr, L"ERROR: Could not create glyphs: %08X\n", hr);
     }
@@ -302,8 +302,8 @@ AddGlyphs(
     if (SUCCEEDED(hr))
     {
         if (FAILED(hr = glyphsEditor->SetUnicodeString(
-                    text
-                    )))
+                            text
+                        )))
         {
             fwprintf(stderr, L"ERROR: Could not set UnicodeString: %08X\n", hr);
         }
@@ -327,10 +327,10 @@ AddGlyphs(
         color.value.sRGB.blue = 0;
 
         if (FAILED(hr = xpsFactory->CreateSolidColorBrush(
-                    &color,
-                    NULL,
-                    &solidColorBrush
-                    )))
+                            &color,
+                            NULL,
+                            &solidColorBrush
+                        )))
         {
             fwprintf(stderr, L"ERROR: Could not create solid color brush: %08X\n", hr);
         }
@@ -457,17 +457,17 @@ int wmain(int argc, wchar_t* argv[])
     if (SUCCEEDED(hr))
     {
         if (FAILED(hr = StartXpsPrintJob(
-                    argv[1],
-                    NULL,
-                    argc == 3 ? argv[2] : NULL,
-                    NULL,
-                    completionEvent,
-                    NULL,
-                    0,
-                    &job,
-                    &jobStream,
-                    NULL
-                    )))
+                            argv[1],
+                            NULL,
+                            argc == 3 ? argv[2] : NULL,
+                            NULL,
+                            completionEvent,
+                            NULL,
+                            0,
+                            &job,
+                            &jobStream,
+                            NULL
+                        )))
         {
             fwprintf(stderr, L"ERROR: Could not start XPS print job: %08X\n", hr);
         }
@@ -476,14 +476,14 @@ int wmain(int argc, wchar_t* argv[])
     if (SUCCEEDED(hr))
     {
         if (FAILED(hr = CoCreateInstance(
-                    __uuidof(XpsOMObjectFactory),
-                    NULL,
-                    CLSCTX_INPROC_SERVER,
-                    __uuidof(IXpsOMObjectFactory),
-                    reinterpret_cast<void**>(&xpsFactory)
-                    )
-                )
-            )
+                            __uuidof(XpsOMObjectFactory),
+                            NULL,
+                            CLSCTX_INPROC_SERVER,
+                            __uuidof(IXpsOMObjectFactory),
+                            reinterpret_cast<void**>(&xpsFactory)
+                        )
+                  )
+           )
         {
             fwprintf(stderr, L"ERROR: Could not create XPS OM Object Factory: %08X\n", hr);
         }
@@ -500,17 +500,17 @@ int wmain(int argc, wchar_t* argv[])
     if (SUCCEEDED(hr))
     {
         if (FAILED(hr = xpsFactory->CreatePackageWriterOnStream(
-                    jobStream,
-                    TRUE,
-                    XPS_INTERLEAVING_ON,
-                    partUri,
-                    NULL,
-                    NULL,
-                    NULL,
-                    NULL,
-                    &packageWriter
-                    )
-                )
+                            jobStream,
+                            TRUE,
+                            XPS_INTERLEAVING_ON,
+                            partUri,
+                            NULL,
+                            NULL,
+                            NULL,
+                            NULL,
+                            &packageWriter
+                        )
+                  )
            )
         {
             fwprintf(stderr, L"ERROR: Could not create package writer: 0x%X\n", hr);
@@ -572,13 +572,13 @@ int wmain(int argc, wchar_t* argv[])
     if (SUCCEEDED(hr))
     {
         if (FAILED(hr = AddGlyphs(
-                    xpsFactory,
-                    xpsPage,
-                    fontResource,
-                    L"XPS",
-                    &origin,
-                    72.0f,
-                    XPS_STYLE_SIMULATION_NONE)))
+                            xpsFactory,
+                            xpsPage,
+                            fontResource,
+                            L"XPS",
+                            &origin,
+                            72.0f,
+                            XPS_STYLE_SIMULATION_NONE)))
         {
             // Error already reported.
         }
@@ -590,13 +590,13 @@ int wmain(int argc, wchar_t* argv[])
         origin.y = 300.0f;
 
         if (FAILED(hr = AddGlyphs(
-                    xpsFactory,
-                    xpsPage,
-                    fontResource,
-                    L"Print with Confidence",
-                    &origin,
-                    36.0f,
-                    XPS_STYLE_SIMULATION_ITALIC)))
+                            xpsFactory,
+                            xpsPage,
+                            fontResource,
+                            L"Print with Confidence",
+                            &origin,
+                            36.0f,
+                            XPS_STYLE_SIMULATION_ITALIC)))
         {
             // Error already reported.
         }
@@ -605,13 +605,13 @@ int wmain(int argc, wchar_t* argv[])
     if (SUCCEEDED(hr))
     {
         if (FAILED(hr = packageWriter->AddPage(
-                    xpsPage,
-                    &pageSize,
-                    NULL,
-                    NULL,
-                    NULL,
-                    NULL
-                    )))
+                            xpsPage,
+                            &pageSize,
+                            NULL,
+                            NULL,
+                            NULL,
+                            NULL
+                        )))
         {
             fwprintf(stderr, L"ERROR: Could not add page to document: %08X\n", hr);
         }
@@ -667,20 +667,20 @@ int wmain(int argc, wchar_t* argv[])
     {
         switch (jobStatus.completion)
         {
-            case XPS_JOB_COMPLETED:
-                break;
-            case XPS_JOB_CANCELLED:
-                fwprintf(stderr, L"ERROR: job was cancelled\n");
-                hr = E_FAIL;
-                break;
-            case XPS_JOB_FAILED:
-                fwprintf(stderr, L"ERROR: Print job failed: %08X\n", jobStatus.jobStatus);
-                hr = E_FAIL;
-                break;
-            default:
-                fwprintf(stderr, L"ERROR: unexpected failure\n");
-                hr = E_UNEXPECTED;
-                break;
+        case XPS_JOB_COMPLETED:
+            break;
+        case XPS_JOB_CANCELLED:
+            fwprintf(stderr, L"ERROR: job was cancelled\n");
+            hr = E_FAIL;
+            break;
+        case XPS_JOB_FAILED:
+            fwprintf(stderr, L"ERROR: Print job failed: %08X\n", jobStatus.jobStatus);
+            hr = E_FAIL;
+            break;
+        default:
+            fwprintf(stderr, L"ERROR: unexpected failure\n");
+            hr = E_UNEXPECTED;
+            break;
         }
     }
 

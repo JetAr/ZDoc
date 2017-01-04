@@ -1,4 +1,4 @@
-// MainDlg.h : Declaration of the CMainDlg
+﻿// MainDlg.h : Declaration of the CMainDlg
 //
 // Copyright (c) Microsoft Corporation. All rights reserved.
 //
@@ -25,7 +25,7 @@ struct NODEPARAM
 
 /////////////////////////////////////////////////////////////////////////////
 // CMainDlg
-class CMainDlg : 
+class CMainDlg :
     public CAxDialogImpl<CMainDlg>
 {
 public:
@@ -34,7 +34,7 @@ public:
 
     enum { IDD = IDD_MAINDLG };
 
-BEGIN_MSG_MAP(CMainDlg)
+    BEGIN_MSG_MAP(CMainDlg)
     MESSAGE_HANDLER     (WM_INITDIALOG,                     OnInitDialog)
     MESSAGE_HANDLER     (WM_DESTROY,                        OnDestroy)
     COMMAND_ID_HANDLER  (IDOK,                              OnOK)
@@ -42,7 +42,7 @@ BEGIN_MSG_MAP(CMainDlg)
     COMMAND_HANDLER     (IDC_MEDIATYPELIST, CBN_SELCHANGE,  OnChangeMediaType)
     COMMAND_HANDLER     (IDC_LIBLIST,       CBN_SELCHANGE,  OnChangeLib)
     NOTIFY_HANDLER      (IDC_TREE,          NM_CLICK,       OnClickTree)
-END_MSG_MAP()
+    END_MSG_MAP()
 
     LRESULT OnInitDialog(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/);
     LRESULT OnDestroy(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/);
@@ -53,7 +53,7 @@ END_MSG_MAP()
     LRESULT OnClickTree(int /*idCtrl*/, LPNMHDR /*pnmh*/, BOOL& bHandled);
 
 private:
-    CAxWindow                       *m_pView; 
+    CAxWindow                       *m_pView;
     CComPtr<IWMPPlayer4>            m_spPlayer;
     CComPtr<IWMPMediaCollection2>   m_spMC;
     HWND                            m_hLibTree;
@@ -63,7 +63,7 @@ private:
     int                             m_cSchemaCount;
     NODEPARAM*                      m_pnpNodeParams;
     HTREEITEM                       m_hPreNode;
-    
+
 private:
     HRESULT CreateWmpOcx();
     void BuildLibTree();
@@ -75,21 +75,21 @@ private:
 
 // CWMPRemoteHost: implement IServiceProvider and IWMPRemoteMediaServices
 // to provide a remote host
-class CWMPRemoteHost : 
+class CWMPRemoteHost :
     public CComObjectRootEx<CComSingleThreadModel>,
     public IServiceProvider,
     public IWMPRemoteMediaServices
 {
 public:
-    CWMPRemoteHost(){}
-    ~CWMPRemoteHost(){}
+    CWMPRemoteHost() {}
+    ~CWMPRemoteHost() {}
 
     DECLARE_PROTECT_FINAL_CONSTRUCT()
 
-BEGIN_COM_MAP(CWMPRemoteHost)
+    BEGIN_COM_MAP(CWMPRemoteHost)
     COM_INTERFACE_ENTRY(IServiceProvider)
     COM_INTERFACE_ENTRY(IWMPRemoteMediaServices)
-END_COM_MAP()
+    END_COM_MAP()
 
     // IServiceProvider
     STDMETHOD(QueryService)(REFGUID /*guidService*/, REFIID riid, void **ppv)

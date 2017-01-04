@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -11,7 +11,7 @@
 //             This file contains the functions for a client that tests
 // the accept implementation.
 
-#pragma warning (disable: 4267)  
+#pragma warning (disable: 4267)
 #pragma warning (disable: 4127)
 
 
@@ -29,7 +29,7 @@
 #define DEFAULT_SERVER                  "localhost"
 #define DEFAULT_PORT                    "7243"
 #define DEFAULT_SEND_BUFFER_SIZE        1024
-#define DEFAULT_RECV_BUFFER_SIZE        10240 
+#define DEFAULT_RECV_BUFFER_SIZE        10240
 #define DEFAULT_LOOP_COUNT              1
 #define DEFAULT_DELAY                   5000
 #define DEFAULT_SCENARIO                5
@@ -39,7 +39,7 @@
 // the Accept server implementation. The ideal send receive is the
 // recommended scenario for real world use. The other scenarios
 // are meant to understand the various problems that would be
-// caused in the server if the client behaves (or misbehaves) in a 
+// caused in the server if the client behaves (or misbehaves) in a
 // particular way.
 enum
 {
@@ -60,16 +60,16 @@ typedef struct _ClientContext
     char    *szServer;
     char    *szPort;
     LONG    sendBufSize;
-    LONG    recvBufSize;    
+    LONG    recvBufSize;
     LONG    loopCount;
     LONG    delay;
-    BYTE    scenario;    
+    BYTE    scenario;
     char    *pSendBuf;
-    char    *pRecvBuf;    
+    char    *pRecvBuf;
     int     nBytesRemainingToBeSent;
     int     nBytesRecd;
     SOCKET  sock;
-    
+
 } ClientContext;
 
 ClientContext g_ClientContext;
@@ -85,23 +85,27 @@ const char *AFImage(BYTE addressFamily)
     // return the corresponding string for the given address family.
     switch (addressFamily)
     {
-        case AF_UNSPEC : szRetVal = "AF_UNSPEC";
-                         break;
-        case AF_INET   : szRetVal = "AF_INET";
-                         break;
-        case AF_INET6  : szRetVal = "AF_INET6";
-                         break;
-        default        : szRetVal = "Unrecognized";
-                         break;
+    case AF_UNSPEC :
+        szRetVal = "AF_UNSPEC";
+        break;
+    case AF_INET   :
+        szRetVal = "AF_INET";
+        break;
+    case AF_INET6  :
+        szRetVal = "AF_INET6";
+        break;
+    default        :
+        szRetVal = "Unrecognized";
+        break;
     }
-    
+
     return szRetVal;
 }
 
 
 /*
     This function prints the available command-line options, the arguments
-    expected by each of them and the valid input values and the default 
+    expected by each of them and the valid input values and the default
     values for each them.
 */
 void PrintUsage(char *szProgramName)
@@ -141,7 +145,7 @@ void PrintUsage(char *szProgramName)
            DEFAULT_LOOP_COUNT,
            DEFAULT_DELAY,
            DEFAULT_SCENARIO
-           );
+          );
 
     return;
 }
@@ -153,13 +157,13 @@ void PrintUsage(char *szProgramName)
 BOOL ParseArguments(int argc, char *argv[])
 {
     // holds the return value from this function.
-    // TRUE indicates that all the supplied arguments are valid. 
+    // TRUE indicates that all the supplied arguments are valid.
     // FALSE indicates incorrect or insufficient number of arguments.
     BOOL retVal = FALSE;
 
     // loop index to go over the command-line arguments one by one.
     int i;
-    
+
     printf("Entering ParseArguments()\n");
 
     // fill up the default arguments and let the user options override these.
@@ -167,10 +171,10 @@ BOOL ParseArguments(int argc, char *argv[])
     g_ClientContext.szServer = DEFAULT_SERVER;
     g_ClientContext.szPort = DEFAULT_PORT;
     g_ClientContext.sendBufSize = DEFAULT_SEND_BUFFER_SIZE;
-    g_ClientContext.recvBufSize = DEFAULT_RECV_BUFFER_SIZE;    
+    g_ClientContext.recvBufSize = DEFAULT_RECV_BUFFER_SIZE;
     g_ClientContext.loopCount = DEFAULT_LOOP_COUNT;
     g_ClientContext.delay = DEFAULT_DELAY;
-    g_ClientContext.scenario = DEFAULT_SCENARIO;        
+    g_ClientContext.scenario = DEFAULT_SCENARIO;
 
     // process each argument in the argv list.
     for (i = 1; i < argc ; i++)
@@ -188,239 +192,239 @@ BOOL ParseArguments(int argc, char *argv[])
         // process the option.
         switch(argv[i][1])
         {
-            case 'a' :
-            
-                // Address Family. 
-                // should be -a 0 or -a 4 or -a 6
-                
-                // first check if there's one more argument.
-                if (i + 1 >= argc)
-                {
-                    printf("ERROR: Argument 0/4/6 needed for -a option\n");
-                    PrintUsage(argv[0]);
-                    goto CLEANUP;
-                }
+        case 'a' :
 
-                // extract and validate the AF number.
-                switch(atoi(argv[i+1]))
-                {
-                    // Unspecified. 
-                    case 0:
-                      g_ClientContext.addressFamily = AF_UNSPEC;
-                      break;
+            // Address Family.
+            // should be -a 0 or -a 4 or -a 6
 
-                    // IPv4.
-                    case 4:
-                      g_ClientContext.addressFamily = AF_INET;
-                      break;                      
+            // first check if there's one more argument.
+            if (i + 1 >= argc)
+            {
+                printf("ERROR: Argument 0/4/6 needed for -a option\n");
+                PrintUsage(argv[0]);
+                goto CLEANUP;
+            }
 
-                    // IPv6.
-                    case 6:
-                      g_ClientContext.addressFamily = AF_INET6;
-                      break;                      
-
-                    // Invalid value.
-                    default:
-                      printf("ERROR: Invalid address family. Must be 0/4/6\n");
-                      PrintUsage(argv[0]);
-                      goto CLEANUP;
-                }
-
-                // indicate that we have processed the next argument as well.
-                i++; 
-
-                // AF was fine. continue.
+            // extract and validate the AF number.
+            switch(atoi(argv[i+1]))
+            {
+            // Unspecified.
+            case 0:
+                g_ClientContext.addressFamily = AF_UNSPEC;
                 break;
 
-            case 'n' :
-
-                // Interface to listen on.
-                // should be -n <server Name>
-                
-                // first check if there's one more argument.
-                if (i + 1 >= argc)
-                {
-                    printf("ERROR: Server name needed for -n option\n");
-                    PrintUsage(argv[0]);
-                    goto CLEANUP;
-                }
-
-                // make sure the input string length is less than
-                // the INET6_ADDRSTRLEN, the maximum valid IP address length.
-                if (FAILED(StringCchLength(argv[i+1],INET6_ADDRSTRLEN, NULL)))
-                {
-                    printf("ERROR: Server name string too long. "
-                           "can't exceed %d characters\n", 
-                           INET6_ADDRSTRLEN);
-                    PrintUsage(argv[0]);
-                    goto CLEANUP;
-                }
-
-                // remember the interface string.
-                g_ClientContext.szServer = argv[i+1];
-
-                // indicate that we have processed the next argument as well.
-                i++; 
-
-                // continue.            
+            // IPv4.
+            case 4:
+                g_ClientContext.addressFamily = AF_INET;
                 break;
 
-            case 'e' :
-            
-                // Endpoint or Port.
-                // should be -e <port number>
-                
-                // first check if there's one more argument.
-                if (i + 1 >= argc)
-                {
-                    printf("ERROR: Port number needed for -e option\n");
-                    PrintUsage(argv[0]);
-                    goto CLEANUP;
-                }
-
-                // make sure the input string length is less than
-                // the maximum length for a service name.
-                if (FAILED(StringCchLength(argv[i+1], NI_MAXSERV, NULL)))
-                {
-                    printf("ERROR: Port number too long. "
-                           "can't exceed %d characters\n", 
-                           NI_MAXSERV);
-
-                    PrintUsage(argv[0]);
-                    goto CLEANUP;
-                }
-
-                // remember the port number string.
-                g_ClientContext.szPort = argv[i+1];
-
-                // indicate that we have processed the next argument as well.
-                i++; 
-
-                // continue.            
-                break;
-                
-            case 'b' :
-           
-                // Bytes to Send
-                // should be -b <bytes>.
-                
-                // first check if there's one more argument.
-                if (i + 1 >= argc)
-                {
-                    printf("ERROR: Number of bytes needed for -b option\n");
-                    PrintUsage(argv[0]);
-                    goto CLEANUP;
-                }
-
-                // extract the bytes value
-                g_ClientContext.sendBufSize = atol(argv[i+1]);
-
-                // indicate that we have processed the next argument as well.
-                i++; 
-
-                // validate the buffer size.
-                if (g_ClientContext.sendBufSize < 0)
-                {
-                    printf("ERROR: Number of bytes must be > 0 \n");
-                    PrintUsage(argv[0]);
-                    goto CLEANUP;
-                }
-
-                // Continue.
-                break;
-                
-            case 'l' :
-           
-                // Loop Count
-                // should be -l or -l <count>.
-                
-                // if there's one more argument, parse it.
-                if (i + 1 < argc)
-                {
-                    g_ClientContext.loopCount = atol(argv[i+1]);
-
-                    // make sure loop count is 1 or more, if specified.
-                    if (g_ClientContext.loopCount < 1)
-                    {
-                        printf("ERROR: Loop Count must be > 0 : %d\n", 
-                                g_ClientContext.loopCount);
-                        PrintUsage(argv[0]);
-                        goto CLEANUP;
-                    }
-
-                    // indicate that we have processed the next argument 
-                    // as well.                    
-                    i++;
-                }
-
-
-                // Continue.
+            // IPv6.
+            case 6:
+                g_ClientContext.addressFamily = AF_INET6;
                 break;
 
-            case 'd' :
-           
-                // Delay in milliseconds.
-                // should be -d <millisecs>.
-                
-                // first check if there's one more argument.
-                if (i + 1 >= argc)
+            // Invalid value.
+            default:
+                printf("ERROR: Invalid address family. Must be 0/4/6\n");
+                PrintUsage(argv[0]);
+                goto CLEANUP;
+            }
+
+            // indicate that we have processed the next argument as well.
+            i++;
+
+            // AF was fine. continue.
+            break;
+
+        case 'n' :
+
+            // Interface to listen on.
+            // should be -n <server Name>
+
+            // first check if there's one more argument.
+            if (i + 1 >= argc)
+            {
+                printf("ERROR: Server name needed for -n option\n");
+                PrintUsage(argv[0]);
+                goto CLEANUP;
+            }
+
+            // make sure the input string length is less than
+            // the INET6_ADDRSTRLEN, the maximum valid IP address length.
+            if (FAILED(StringCchLength(argv[i+1],INET6_ADDRSTRLEN, NULL)))
+            {
+                printf("ERROR: Server name string too long. "
+                       "can't exceed %d characters\n",
+                       INET6_ADDRSTRLEN);
+                PrintUsage(argv[0]);
+                goto CLEANUP;
+            }
+
+            // remember the interface string.
+            g_ClientContext.szServer = argv[i+1];
+
+            // indicate that we have processed the next argument as well.
+            i++;
+
+            // continue.
+            break;
+
+        case 'e' :
+
+            // Endpoint or Port.
+            // should be -e <port number>
+
+            // first check if there's one more argument.
+            if (i + 1 >= argc)
+            {
+                printf("ERROR: Port number needed for -e option\n");
+                PrintUsage(argv[0]);
+                goto CLEANUP;
+            }
+
+            // make sure the input string length is less than
+            // the maximum length for a service name.
+            if (FAILED(StringCchLength(argv[i+1], NI_MAXSERV, NULL)))
+            {
+                printf("ERROR: Port number too long. "
+                       "can't exceed %d characters\n",
+                       NI_MAXSERV);
+
+                PrintUsage(argv[0]);
+                goto CLEANUP;
+            }
+
+            // remember the port number string.
+            g_ClientContext.szPort = argv[i+1];
+
+            // indicate that we have processed the next argument as well.
+            i++;
+
+            // continue.
+            break;
+
+        case 'b' :
+
+            // Bytes to Send
+            // should be -b <bytes>.
+
+            // first check if there's one more argument.
+            if (i + 1 >= argc)
+            {
+                printf("ERROR: Number of bytes needed for -b option\n");
+                PrintUsage(argv[0]);
+                goto CLEANUP;
+            }
+
+            // extract the bytes value
+            g_ClientContext.sendBufSize = atol(argv[i+1]);
+
+            // indicate that we have processed the next argument as well.
+            i++;
+
+            // validate the buffer size.
+            if (g_ClientContext.sendBufSize < 0)
+            {
+                printf("ERROR: Number of bytes must be > 0 \n");
+                PrintUsage(argv[0]);
+                goto CLEANUP;
+            }
+
+            // Continue.
+            break;
+
+        case 'l' :
+
+            // Loop Count
+            // should be -l or -l <count>.
+
+            // if there's one more argument, parse it.
+            if (i + 1 < argc)
+            {
+                g_ClientContext.loopCount = atol(argv[i+1]);
+
+                // make sure loop count is 1 or more, if specified.
+                if (g_ClientContext.loopCount < 1)
                 {
-                    printf("ERROR: Number of milliseconds needed "
-                           "for -d option\n");
+                    printf("ERROR: Loop Count must be > 0 : %d\n",
+                           g_ClientContext.loopCount);
                     PrintUsage(argv[0]);
                     goto CLEANUP;
                 }
 
-                // extract the delay value
-                g_ClientContext.delay = atol(argv[i+1]);
+                // indicate that we have processed the next argument
+                // as well.
+                i++;
+            }
 
-                // indicate that we have processed the next argument as well.
-                i++; 
 
-                // Continue.
-                break;                
+            // Continue.
+            break;
 
-            case 's' :
-           
-                // Scenario Number.
-                // should be -s <scenario number>.
-                
-                // first check if there's one more argument.
-                if (i + 1 >= argc)
-                {
-                    printf("ERROR: Scenario Number needed for -s option\n");
-                    PrintUsage(argv[0]);
-                    goto CLEANUP;
-                }
+        case 'd' :
 
-                // extract the scenario value
-                g_ClientContext.scenario = (BYTE) atoi(argv[i+1]);
+            // Delay in milliseconds.
+            // should be -d <millisecs>.
 
-                // indicate that we have processed the next argument as well.
-                i++; 
+            // first check if there's one more argument.
+            if (i + 1 >= argc)
+            {
+                printf("ERROR: Number of milliseconds needed "
+                       "for -d option\n");
+                PrintUsage(argv[0]);
+                goto CLEANUP;
+            }
 
-                // validate the scenario type.
-                if (g_ClientContext.scenario < 1 ||
+            // extract the delay value
+            g_ClientContext.delay = atol(argv[i+1]);
+
+            // indicate that we have processed the next argument as well.
+            i++;
+
+            // Continue.
+            break;
+
+        case 's' :
+
+            // Scenario Number.
+            // should be -s <scenario number>.
+
+            // first check if there's one more argument.
+            if (i + 1 >= argc)
+            {
+                printf("ERROR: Scenario Number needed for -s option\n");
+                PrintUsage(argv[0]);
+                goto CLEANUP;
+            }
+
+            // extract the scenario value
+            g_ClientContext.scenario = (BYTE) atoi(argv[i+1]);
+
+            // indicate that we have processed the next argument as well.
+            i++;
+
+            // validate the scenario type.
+            if (g_ClientContext.scenario < 1 ||
                     g_ClientContext.scenario > SC_NUM_SCENARIOS)
-                {
-                    printf("ERROR: Invalid scenario type: %d. Must be between "
-                           "1 to %d\n",g_ClientContext.scenario, 
-                           SC_NUM_SCENARIOS);
-                    PrintUsage(argv[0]);
-                    goto CLEANUP;
-                }
+            {
+                printf("ERROR: Invalid scenario type: %d. Must be between "
+                       "1 to %d\n",g_ClientContext.scenario,
+                       SC_NUM_SCENARIOS);
+                PrintUsage(argv[0]);
+                goto CLEANUP;
+            }
 
-                // Continue.
-                break;                
-                
-            case 'h' : // help
-            case '?' : // help
-                        PrintUsage(argv[0]);
-                        goto CLEANUP;                        
-            default  : 
-                        printf("ERROR: Unrecognized option: %s\n", argv[i]);
-                        PrintUsage(argv[0]);
-                        goto CLEANUP;                        
+            // Continue.
+            break;
+
+        case 'h' : // help
+        case '?' : // help
+            PrintUsage(argv[0]);
+            goto CLEANUP;
+        default  :
+            printf("ERROR: Unrecognized option: %s\n", argv[i]);
+            PrintUsage(argv[0]);
+            goto CLEANUP;
         }
     }
 
@@ -431,8 +435,8 @@ BOOL ParseArguments(int argc, char *argv[])
     printf("\tAddress Family = %s\n", AFImage(g_ClientContext.addressFamily));
     printf("\tServer = %s\n",g_ClientContext.szServer);
     printf("\tPort = %s\n", g_ClientContext.szPort);
-    printf("\tBytes to Send = %ld\n", g_ClientContext.sendBufSize);  
-    printf("\tReceive buffer size = %ld\n", g_ClientContext.recvBufSize);      
+    printf("\tBytes to Send = %ld\n", g_ClientContext.sendBufSize);
+    printf("\tReceive buffer size = %ld\n", g_ClientContext.recvBufSize);
     printf("\tIterations  = %ld\n", g_ClientContext.loopCount);
     printf("\tDelay = %ld\n", g_ClientContext.delay);
     printf("\tScenario = %d\n", g_ClientContext.scenario);
@@ -440,7 +444,7 @@ BOOL ParseArguments(int argc, char *argv[])
     // all went well, signal that we can proceed.
     retVal = TRUE;
 
-CLEANUP:    
+CLEANUP:
 
     printf("Exiting ParseArguments()\n");
     return retVal;
@@ -452,19 +456,19 @@ CLEANUP:
 */
 void PrintAddressString(LPSOCKADDR pSockAddr, DWORD dwSockAddrLen)
 {
-    // INET6_ADDRSTRLEN is the maximum size of a valid IPv6 address 
+    // INET6_ADDRSTRLEN is the maximum size of a valid IPv6 address
     // including port,colons,NULL,etc.
     char buf[INET6_ADDRSTRLEN];
-    DWORD dwBufSize = 0;    
+    DWORD dwBufSize = 0;
 
     memset(buf,0,sizeof(buf));
     dwBufSize = sizeof(buf);
 
-    // This function converts the pSockAddr to a printable format into buf.   
-    if (WSAAddressToString(pSockAddr, 
-                           dwSockAddrLen, 
-                           NULL, 
-                           buf, 
+    // This function converts the pSockAddr to a printable format into buf.
+    if (WSAAddressToString(pSockAddr,
+                           dwSockAddrLen,
+                           NULL,
+                           buf,
                            &dwBufSize) == SOCKET_ERROR)
     {
         printf("ERROR: WSAAddressToString failed %d \n", WSAGetLastError());
@@ -494,17 +498,17 @@ SOCKET CreateClientSocket()
     printf("Entering CreateClientSocket()\n");
 
     memset(&hints, 0, sizeof(hints));
-    
+
     hints.ai_family = g_ClientContext.addressFamily;
     hints.ai_protocol = IPPROTO_TCP;
     hints.ai_socktype = SOCK_STREAM;
 
     // get the local addresses that are suitable for connecting to the
     // given server address.
-    if (getaddrinfo(g_ClientContext.szServer, 
-                g_ClientContext.szPort,
-                &hints, 
-                &res) != NO_ERROR)
+    if (getaddrinfo(g_ClientContext.szServer,
+                    g_ClientContext.szPort,
+                    &hints,
+                    &res) != NO_ERROR)
     {
         printf("getaddrinfo failed. Error = %d\n", WSAGetLastError());
         goto CLEANUP;
@@ -522,17 +526,17 @@ SOCKET CreateClientSocket()
     {
         printf("Processing Address %d returned by getaddrinfo : ", i);
         PrintAddressString(pAddr->ai_addr, pAddr->ai_addrlen);
-        clientSock = WSASocket(pAddr->ai_family, 
-                            pAddr->ai_socktype,
-                            pAddr->ai_protocol,
-                            NULL,
-                            NULL,
-                            0);
+        clientSock = WSASocket(pAddr->ai_family,
+                               pAddr->ai_socktype,
+                               pAddr->ai_protocol,
+                               NULL,
+                               NULL,
+                               0);
         if (clientSock == INVALID_SOCKET)
         {
             printf("WSASocket failed. Error = %d\n", WSAGetLastError());
             printf("Ignoring this address and continuing with the next. \n\n");
-            
+
             // anyway, let's continue with other addresses.
             continue;
         }
@@ -552,7 +556,7 @@ SOCKET CreateClientSocket()
         break;
     }
 
-   
+
 CLEANUP:
 
     // if getaddrinfo succeeded, it would have allocated memory for the
@@ -575,27 +579,27 @@ CLEANUP:
 BOOL PrepareSendBuffer()
 {
     BOOL bSuccess = FALSE;
-    
+
     printf("Entering PrepareSendBuffer()\n");
-    
+
     g_ClientContext.pSendBuf = (char *) malloc(g_ClientContext.sendBufSize + 1);
     if (g_ClientContext.pSendBuf == NULL)
     {
         printf("malloc failed.\n");
         goto CLEANUP;
     }
-    
+
     printf("Allocated Send Buffer: %p\n", g_ClientContext.pSendBuf);
 
     // fill up with some info. here we are just sending 1 character.
-    memset(g_ClientContext.pSendBuf, 'H', g_ClientContext.sendBufSize);   
+    memset(g_ClientContext.pSendBuf, 'H', g_ClientContext.sendBufSize);
     g_ClientContext.pSendBuf[g_ClientContext.sendBufSize] = '\0';
     g_ClientContext.nBytesRemainingToBeSent = g_ClientContext.sendBufSize;
-    
+
     bSuccess = TRUE;
 
-CLEANUP:    
-    printf("Exiting PrepareSendBuffer()\n");    
+CLEANUP:
+    printf("Exiting PrepareSendBuffer()\n");
     return bSuccess;
 }
 
@@ -624,25 +628,25 @@ void FreeSendBuffer()
 BOOL PrepareRecvBuffer()
 {
     BOOL bSuccess = FALSE;
-    
+
     printf("Entering PrepareRecvBuffer()\n");
-    
+
     g_ClientContext.pRecvBuf = (char *) malloc(g_ClientContext.recvBufSize + 1);
     if (g_ClientContext.pRecvBuf == NULL)
     {
         printf("malloc failed.\n");
         goto CLEANUP;
     }
-    
+
     printf("Allocated Recv Buffer: %p\n", g_ClientContext.pRecvBuf);
-    
-    memset(g_ClientContext.pRecvBuf, 0, g_ClientContext.recvBufSize + 1);   
+
+    memset(g_ClientContext.pRecvBuf, 0, g_ClientContext.recvBufSize + 1);
     g_ClientContext.nBytesRecd = 0;
-    
+
     bSuccess = TRUE;
 
-CLEANUP:    
-    printf("Exiting PrepareRecvBuffer()\n");    
+CLEANUP:
+    printf("Exiting PrepareRecvBuffer()\n");
     return bSuccess;
 }
 
@@ -665,20 +669,20 @@ void FreeRecvBuffer()
 */
 int DoSendOnce()
 {
-    int nBytesSent;    
+    int nBytesSent;
     int startPosition;
     int err = 0;
-    
+
     printf("Entering DoSendOnce()\n");
 
     // send from the position where we left off last.
-    startPosition = g_ClientContext.sendBufSize - 
+    startPosition = g_ClientContext.sendBufSize -
                     g_ClientContext.nBytesRemainingToBeSent;
-    nBytesSent = send(g_ClientContext.sock, 
-                      g_ClientContext.pSendBuf + startPosition, 
+    nBytesSent = send(g_ClientContext.sock,
+                      g_ClientContext.pSendBuf + startPosition,
                       g_ClientContext.nBytesRemainingToBeSent,
                       0);
-    
+
     if (nBytesSent == SOCKET_ERROR)
     {
         err = WSAGetLastError();
@@ -690,7 +694,7 @@ int DoSendOnce()
     printf("Sent %d bytes so far\n", startPosition + nBytesSent);
 
 CLEANUP:
-  
+
     printf("Exiting DoSendOnce()\n");
     return err;
 }
@@ -702,18 +706,18 @@ CLEANUP:
 */
 int DoRecvOnce()
 {
-    int nBytesRecd;    
-    
+    int nBytesRecd;
+
     printf("Entering DoRecvOnce()\n");
 
     // receive into the same global receive buffer, overwriting the previous
     // contents, as we are only interested in the number of bytes received
     // for verification.
-    nBytesRecd = recv(g_ClientContext.sock, 
-                      g_ClientContext.pRecvBuf, 
+    nBytesRecd = recv(g_ClientContext.sock,
+                      g_ClientContext.pRecvBuf,
                       g_ClientContext.recvBufSize,
                       0);
-    
+
     if (nBytesRecd == SOCKET_ERROR)
     {
         printf("recv returned: %d\n", WSAGetLastError());
@@ -725,7 +729,7 @@ int DoRecvOnce()
     printf("Recd %d bytes so far\n", g_ClientContext.nBytesRecd);
 
 CLEANUP:
-  
+
     printf("Exiting DoRecvOnce()\n");
     return nBytesRecd;
 }
@@ -739,8 +743,8 @@ void DoSendUntilDone()
 {
     int err;
 
-    printf("Entering DoSendUntilDone()\n");    
-    
+    printf("Entering DoSendUntilDone()\n");
+
     do
     {
         // Get the job done by callnig DoSendOnce.
@@ -749,26 +753,27 @@ void DoSendUntilDone()
         // handle error cases as appropriate.
         switch(err)
         {
-            case 0:
-                if (g_ClientContext.nBytesRemainingToBeSent == 0)
-                {
-                    printf("Send completed\n");
-                    goto CLEANUP;
-                }
-                break;
-               
-            case WSAEWOULDBLOCK:
-                printf("Got WSAEWOULDBLOCK from send.\n");
-                printf("Waiting for 1 second before retrying send ...\n");
-                Sleep(1000);
-                break;
-
-            default:
-                // other errors.
-                printf("ERROR: send failed: Error = %d\n", err);
+        case 0:
+            if (g_ClientContext.nBytesRemainingToBeSent == 0)
+            {
+                printf("Send completed\n");
                 goto CLEANUP;
+            }
+            break;
+
+        case WSAEWOULDBLOCK:
+            printf("Got WSAEWOULDBLOCK from send.\n");
+            printf("Waiting for 1 second before retrying send ...\n");
+            Sleep(1000);
+            break;
+
+        default:
+            // other errors.
+            printf("ERROR: send failed: Error = %d\n", err);
+            goto CLEANUP;
         }
-    } while (TRUE);
+    }
+    while (TRUE);
 
 CLEANUP:
     printf("Exiting DoSendUntilDone()\n");
@@ -789,31 +794,32 @@ void DoRecvUntilDone()
         // get the job done by calling DoRecvOnce.
         switch(DoRecvOnce())
         {
-            case 0:
-                printf("Recv returned 0. Remote socket must have been "
-                       "gracefully closed.\n");
-                goto CLEANUP;
-              
-            case SOCKET_ERROR:
-                err = WSAGetLastError();
-                if (err == WSAEWOULDBLOCK)
-                {
-                    printf("Got WSAEWOULDBLOCK from recv.\n");
-                    printf("Waiting for 1 second before retrying send ...\n");
-                    Sleep(1000);
-                }
-                else
-                {
-                    printf("ERROR: recv returned : %d\n", err);
-                    goto CLEANUP;
-                }
-                break;
+        case 0:
+            printf("Recv returned 0. Remote socket must have been "
+                   "gracefully closed.\n");
+            goto CLEANUP;
 
-            default:
-                // > 0 bytes read. let's continue.
-                break;
+        case SOCKET_ERROR:
+            err = WSAGetLastError();
+            if (err == WSAEWOULDBLOCK)
+            {
+                printf("Got WSAEWOULDBLOCK from recv.\n");
+                printf("Waiting for 1 second before retrying send ...\n");
+                Sleep(1000);
+            }
+            else
+            {
+                printf("ERROR: recv returned : %d\n", err);
+                goto CLEANUP;
+            }
+            break;
+
+        default:
+            // > 0 bytes read. let's continue.
+            break;
         }
-    } while (1);
+    }
+    while (1);
 
 CLEANUP:
     printf("Exiting DoRecvUntilDone()\n");
@@ -855,7 +861,7 @@ void DoSendThenRecv()
 void DoSendNoRecv()
 {
     DoSendUntilDone();
-    DoShutDown();    
+    DoShutDown();
 }
 
 /*
@@ -866,7 +872,7 @@ void DoSendNoRecv()
 void DoSendWaitRecv()
 {
     DoSendUntilDone();
-    DoShutDown();      
+    DoShutDown();
     printf("Waiting before doing recv ...\n");
     Sleep(g_ClientContext.delay);
     DoRecvUntilDone();
@@ -881,14 +887,14 @@ void DoWaitSendRecv()
     printf("Waiting before doing initial send ...\n");
     Sleep(g_ClientContext.delay);
     DoSendUntilDone();
-    DoShutDown();        
+    DoShutDown();
     DoRecvUntilDone();
 }
 
 /*
     This function is supplied as the call back function for CreateThread.
     Although it is doing nothing other than calling DoRecvUntilDone, it
-    needs to have this particular signature to be passed as a valid 
+    needs to have this particular signature to be passed as a valid
     call back function for CreateThread.
 */
 DWORD WINAPI ReceiverThread(LPVOID pv)
@@ -933,7 +939,7 @@ void DoIdealSendRecv()
     printf("Recv Thread done.\n");
 
 CLEANUP:
-    
+
     return;
 }
 
@@ -967,17 +973,17 @@ int _cdecl main(int argc, char *argv[])
     if (retVal != 0)
     {
         printf("WSAStartup failed. Error = %d\n", retVal);
-        goto CLEANUP;        
+        goto CLEANUP;
     }
 
-    // remember that the WSAStartup was successful so as to call WSACleanup 
+    // remember that the WSAStartup was successful so as to call WSACleanup
     // once, correspondingly.
     bStartupSuccessful = TRUE;
 
     for(i = 1; i <= g_ClientContext.loopCount; i++)
     {
         printf("\n\nPerforming Iteration : %d\n"
-                   "-------------------------\n",i);
+               "-------------------------\n",i);
 
         // create a socket that's connected to the server.
         g_ClientContext.sock = CreateClientSocket();
@@ -991,43 +997,49 @@ int _cdecl main(int argc, char *argv[])
         // allocate and initialize a buffer for receiving.
         if (PrepareRecvBuffer() == FALSE)
             goto CLOSE_SOCKET;
-        
-        // perform the sends/recv according to the requested scenario.      
+
+        // perform the sends/recv according to the requested scenario.
         switch(g_ClientContext.scenario)
         {
-            case SC_SEND_THEN_RECV :    DoSendThenRecv();
-                                        break;
-            case SC_SEND_NO_RECV :      DoSendNoRecv();
-                                        break;
-            case SC_SEND_WAIT_RECV :    DoSendWaitRecv();
-                                        break;
-            case SC_WAIT_SEND_RECV :    DoWaitSendRecv();
-                                        break;
-            case SC_IDEAL_SEND_RECV:    DoIdealSendRecv();
-                                        break;                                    
-            default:                    printf("Unrecognized scenario\n");
-                                        break;
+        case SC_SEND_THEN_RECV :
+            DoSendThenRecv();
+            break;
+        case SC_SEND_NO_RECV :
+            DoSendNoRecv();
+            break;
+        case SC_SEND_WAIT_RECV :
+            DoSendWaitRecv();
+            break;
+        case SC_WAIT_SEND_RECV :
+            DoWaitSendRecv();
+            break;
+        case SC_IDEAL_SEND_RECV:
+            DoIdealSendRecv();
+            break;
+        default:
+            printf("Unrecognized scenario\n");
+            break;
         }
 
 CLOSE_SOCKET:
 
         // free the send and recv buffers.
-        FreeSendBuffer();    
+        FreeSendBuffer();
         FreeRecvBuffer();
 
-        // close the client socket.    
-        closesocket(g_ClientContext.sock);  
+        // close the client socket.
+        closesocket(g_ClientContext.sock);
         printf("Closed socket %d. "
-           "Total Bytes Recd = %d, "
-           "Total Bytes Sent = %d\n",
-            g_ClientContext.sock, 
-            g_ClientContext.nBytesRecd,
-            g_ClientContext.sendBufSize - 
-            g_ClientContext.nBytesRemainingToBeSent);
+               "Total Bytes Recd = %d, "
+               "Total Bytes Sent = %d\n",
+               g_ClientContext.sock,
+               g_ClientContext.nBytesRecd,
+               g_ClientContext.sendBufSize -
+               g_ClientContext.nBytesRemainingToBeSent);
 
     }
 
- 
+
 CLEANUP:
 
     // call WSACleanup only if WSAStartup was successful.

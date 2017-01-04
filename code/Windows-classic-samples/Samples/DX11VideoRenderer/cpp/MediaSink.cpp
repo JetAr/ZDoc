@@ -1,4 +1,4 @@
-#include "MediaSink.h"
+﻿#include "MediaSink.h"
 
 /////////////////////////////////////////////////////////////////////////////////////////////
 //
@@ -540,7 +540,7 @@ STDMETHODIMP DX11VideoRenderer::CMediaSink::GetFastestRate(
     MFRATE_DIRECTION eDirection,
     BOOL fThin,
     _Out_ float *pflRate
-    )
+)
 {
     HRESULT hr = S_OK;
 
@@ -591,7 +591,7 @@ STDMETHODIMP DX11VideoRenderer::CMediaSink::GetSlowestRate(
     MFRATE_DIRECTION eDirection,
     BOOL fThin,
     _Out_ float* pflRate
-    )
+)
 {
     HRESULT hr = S_OK;
 
@@ -655,7 +655,7 @@ STDMETHODIMP DX11VideoRenderer::CMediaSink::IsRateSupported(BOOL fThin, float fl
             }
 
             if ( (flRate > 0 && flRate > (float)rate) ||
-                (flRate < 0 && flRate < -(float)rate) )
+                    (flRate < 0 && flRate < -(float)rate) )
             {
                 hr = MF_E_UNSUPPORTED_RATE;
                 flNearestSupportedRate = ( flRate >= 0.0f ) ? rate : -rate;

@@ -1,11 +1,11 @@
-//--------------------------------------------------------------------
+﻿//--------------------------------------------------------------------
 // Microsoft OLE DB Test
 //
 // Copyright (C) 1995-2000 Microsoft Corporation
 //
 // @doc
 //
-// @module ICPOINT.H | This module contains header information for 
+// @module ICPOINT.H | This module contains header information for
 //	    				OLE DB IConnectionPoint interface Test
 //
 // @rev 01 | 02-04-96 | Microsoft | Created

@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -19,10 +19,10 @@ INT_PTR CALLBACK CertDefDialogProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARA
     case WM_COMMAND:
         switch(LOWORD(wParam))
         {
-            case IDCANCEL:
-            case IDOK:
-                EndDialog(hwndDlg, LOWORD(wParam));
-                return TRUE;
+        case IDCANCEL:
+        case IDOK:
+            EndDialog(hwndDlg, LOWORD(wParam));
+            return TRUE;
         }
         break;
     }
@@ -54,7 +54,8 @@ void OnQueryCertDialogInit(HWND hwndDlg)
 
     // execute commands to query info
     EXEC_CHECKHR(device.CertGetSiloFriendlyName(szStringBuffer, _countof(szStringBuffer)));
-    if (SUCCEEDED(hr)) {
+    if (SUCCEEDED(hr))
+    {
         SetDlgItemText(hwndDlg, IDC_FRIENDLY_NAME, szStringBuffer);
     }
 
@@ -73,7 +74,8 @@ void OnQueryCertDialogInit(HWND hwndDlg)
     }
 
     EXEC_CHECKHR(device.CertGetCertificatesCount(nStoredCertCount, nMaxCertCount));
-    if (SUCCEEDED(hr)) {
+    if (SUCCEEDED(hr))
+    {
         StringCchPrintf(szStringBuffer, _countof(szStringBuffer), _T("Stored: %d, Max: %d"), nStoredCertCount, nMaxCertCount);
         SetDlgItemText(hwndDlg, IDC_CERT_COUNT, szStringBuffer);
     }
@@ -84,7 +86,8 @@ void OnQueryCertDialogInit(HWND hwndDlg)
     }
 
     EXEC_CHECKHR(device.CertGetState(nState, szStringBuffer, _countof(szStringBuffer)));
-    if (SUCCEEDED(hr)) {
+    if (SUCCEEDED(hr))
+    {
         SetDlgItemText(hwndDlg, IDC_AUTHN_STATE, szStringBuffer);
     }
 
@@ -151,7 +154,7 @@ INT_PTR CALLBACK CertQueryDialogProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPA
 void OnCertificateQueryinformation(HWND hwndDlg)
 {
     DialogBox(GetModuleHandle(NULL),
-        MAKEINTRESOURCE(IDD_CERT_SILO_INFO), hwndDlg, CertQueryDialogProc);
+              MAKEINTRESOURCE(IDD_CERT_SILO_INFO), hwndDlg, CertQueryDialogProc);
 }
 
 void OnCertificateHostauthentication(HWND hwndDlg)
@@ -302,12 +305,14 @@ void FillDeviceList(HWND hwndDlg)
             StringCbPrintf(szFormatString, _countof(szFormatString), _T("%d"), certProperties.nIndex);
             LVITEM item = {LVIF_TEXT, 0, 0, 0, 0, (LPWSTR)szFormatString};
             nItemIdx = ListView_InsertItem(hCertList, &item);
-            
-            if (certProperties.get_CertType(szStringBuffer, _countof(szStringBuffer))) {
+
+            if (certProperties.get_CertType(szStringBuffer, _countof(szStringBuffer)))
+            {
                 ListView_SetItemText(hCertList, nItemIdx, 1, szStringBuffer);
             }
-            
-            if (certProperties.get_ValidationPolicy(szStringBuffer, _countof(szStringBuffer))) {
+
+            if (certProperties.get_ValidationPolicy(szStringBuffer, _countof(szStringBuffer)))
+            {
                 ListView_SetItemText(hCertList, nItemIdx, 2, szStringBuffer);
             }
 
@@ -392,7 +397,7 @@ int GetSelectedCertificate(HWND hwndDlg, ULONG &nIndex)
         return -1;
     }
 
-    nSelectedIDX = ListView_GetNextItem(hCertList, -1 , LVNI_SELECTED);
+    nSelectedIDX = ListView_GetNextItem(hCertList, -1, LVNI_SELECTED);
     ListView_GetItemText(hCertList, nSelectedIDX, 0, szBuffer, _countof(szBuffer));
     nIndex = _ttol(szBuffer);
 
@@ -411,7 +416,7 @@ int GetSelectedCertificate(HWND hwndDlg, CCertificate &certificate)
         return -1;
     }
 
-    nSelectedIDX = ListView_GetNextItem(hCertList, -1 , LVNI_SELECTED);
+    nSelectedIDX = ListView_GetNextItem(hCertList, -1, LVNI_SELECTED);
 
     item.iItem = nSelectedIDX;
     item.mask = LVIF_PARAM;
@@ -438,19 +443,24 @@ void OnCertDialogInit(HWND hwndDlg)
 {
     TCITEM item = {0};
 
-    item.mask = TCIF_TEXT; item.pszText = _T("Device");
+    item.mask = TCIF_TEXT;
+    item.pszText = _T("Device");
     TabCtrl_InsertItem(GetDlgItem(hwndDlg, IDC_CERTTAB), 0, &item);
 
-    item.mask = TCIF_TEXT; item.pszText = _T("Store CA");
+    item.mask = TCIF_TEXT;
+    item.pszText = _T("Store CA");
     TabCtrl_InsertItem(GetDlgItem(hwndDlg, IDC_CERTTAB), 1, &item);
 
-    item.mask = TCIF_TEXT; item.pszText = _T("Store MY");
+    item.mask = TCIF_TEXT;
+    item.pszText = _T("Store MY");
     TabCtrl_InsertItem(GetDlgItem(hwndDlg, IDC_CERTTAB), 2, &item);
 
-    item.mask = TCIF_TEXT; item.pszText = _T("Store ROOT");
+    item.mask = TCIF_TEXT;
+    item.pszText = _T("Store ROOT");
     TabCtrl_InsertItem(GetDlgItem(hwndDlg, IDC_CERTTAB), 3, &item);
 
-    item.mask = TCIF_TEXT; item.pszText = _T("Store SPC");
+    item.mask = TCIF_TEXT;
+    item.pszText = _T("Store SPC");
     TabCtrl_InsertItem(GetDlgItem(hwndDlg, IDC_CERTTAB), 4, &item);
 
     ListView_SetExtendedListViewStyle(GetDlgItem(hwndDlg, IDC_CERT_LIST), LVS_EX_FULLROWSELECT | LVS_EX_GRIDLINES);
@@ -516,7 +526,8 @@ void OnBnClickedDelete(HWND hwndDlg)
     HRESULT hr = S_OK;
     TCHAR szMessage[512];
 
-    if (GetSelectedCertificate(hwndDlg, nCertIndex) < 0) {
+    if (GetSelectedCertificate(hwndDlg, nCertIndex) < 0)
+    {
         return;
     }
 
@@ -534,19 +545,19 @@ void OnBnClickedDelete(HWND hwndDlg)
         if (errBuf)
         {
             StringCbPrintf(szMessage, _countof(szMessage),
-                _T("Certificate delete error:\nhr = 0x%08X\n%s"), hr, errBuf);
+                           _T("Certificate delete error:\nhr = 0x%08X\n%s"), hr, errBuf);
             LocalFree(errBuf);
         }
         else
         {
             StringCbPrintf(szMessage, _countof(szMessage),
-                _T("Certificate delete error:\nhr = 0x%08X"), hr);
+                           _T("Certificate delete error:\nhr = 0x%08X"), hr);
         }
     }
     else
     {
         StringCbPrintf(szMessage, _countof(szMessage),
-            _T("Certificate has been deleted."));
+                       _T("Certificate has been deleted."));
     }
 
     MessageBox(hwndDlg, szMessage, _T("Delete Certificate"), MB_OK | (FAILED(hr) ? MB_ICONERROR : MB_ICONINFORMATION));
@@ -594,14 +605,14 @@ INT_PTR CALLBACK CertificatesDialogProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, 
     case WM_COMMAND:
         switch(LOWORD(wParam))
         {
-            case IDC_ADD_TO_DEVICE:
-                OnBnClickedAddToDevice(hwndDlg);
-                break;
-            case IDC_DELETE:
-                OnBnClickedDelete(hwndDlg);
-                break;
-            default:
-                return CertDefDialogProc(hwndDlg, uMsg, wParam, lParam);
+        case IDC_ADD_TO_DEVICE:
+            OnBnClickedAddToDevice(hwndDlg);
+            break;
+        case IDC_DELETE:
+            OnBnClickedDelete(hwndDlg);
+            break;
+        default:
+            return CertDefDialogProc(hwndDlg, uMsg, wParam, lParam);
         }
         break;
     default:
@@ -622,5 +633,5 @@ void OnCertificateCertificates(HWND hwndDlg)
     }
 
     DialogBox(GetModuleHandle(NULL),
-        MAKEINTRESOURCE(IDD_CERTIFICATES), hwndDlg, CertificatesDialogProc);
+              MAKEINTRESOURCE(IDD_CERTIFICATES), hwndDlg, CertificatesDialogProc);
 }

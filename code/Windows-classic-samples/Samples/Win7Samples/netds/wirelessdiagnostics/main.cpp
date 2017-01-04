@@ -1,9 +1,9 @@
-// Main.cpp : Implementation of helper class extension.
+﻿// Main.cpp : Implementation of helper class extension.
 //
-// 
+//
 // Copyright (c) Microsoft Corporation.  All rights reserved.
 //
-// 
+//
 #include "precomp.h"
 #pragma hdrstop
 
@@ -12,7 +12,7 @@
 class CWirelessHelperExtensionModule : public CAtlExeModuleT< CWirelessHelperExtensionModule >
 {
 public :
-	DECLARE_LIBID(LIBID_WirelessHelperExtensionLib)
+    DECLARE_LIBID(LIBID_WirelessHelperExtensionLib)
     DECLARE_REGISTRY_APPID_RESOURCEID(IDR_HELPER_EXTENSION, "{1b4031f0-979f-444c-b08e-2c244996eab3}")
 };
 
@@ -29,11 +29,11 @@ OBJECT_ENTRY_AUTO(CLSID_WirelessHelperExtension, CWirelessHelperExtension)
 // -------------------------------------------------------------------
 DWORD
 WlExtOpenRegKey(
-            HKEY    hHive,
+    HKEY    hHive,
     __in    LPWSTR  pwszRegKey,
-            BOOL    bCreate,
+    BOOL    bCreate,
     __out   HKEY    *phKey
-    )
+)
 //
 // Opens the registry key in the hive specified
 // if key not found and bCreate is present we attempt to create the key
@@ -83,14 +83,14 @@ WlExtOpenRegKey(
 
 DWORD
 WlExtSetRegistryValue(
-                                HKEY    hHive,
+    HKEY    hHive,
     __in                const   LPWSTR  pwszKey,
     __in_opt            const   LPWSTR  pwszSubKey,
     __in_opt            const   LPWSTR  pwszValueName,
-                                DWORD   dwType,
+    DWORD   dwType,
     __in_bcount(cbData) const   BYTE    *pData,
-                                DWORD   cbData
-    )
+    DWORD   cbData
+)
 //
 // Sets value pData of type dwType to registry key
 // hHive\pwszKey\pwszSubkey
@@ -104,8 +104,8 @@ WlExtSetRegistryValue(
     HKEY        hSubKey = NULL;             // handle to the reg key
 
     if ((!hHive) ||
-        (!pwszKey) ||
-        (!pData))
+            (!pwszKey) ||
+            (!pData))
     {
         return ERROR_INVALID_PARAMETER;
     }
@@ -113,7 +113,7 @@ WlExtSetRegistryValue(
     // Try to open or create the registry key
     dwError = WlExtOpenRegKey (hHive, pwszKey, TRUE, &hKey);
     if ((dwError != ERROR_SUCCESS) ||
-        (!hKey))
+            (!hKey))
     {
         return (dwError);
     }
@@ -123,7 +123,7 @@ WlExtSetRegistryValue(
         // Need to open this key as well
         dwError = WlExtOpenRegKey (hKey, pwszSubKey, TRUE, &hSubKey);
         if ((dwError != ERROR_SUCCESS) ||
-            (!hSubKey))
+                (!hSubKey))
         {
             RegCloseKey(hKey);
             return (dwError);
@@ -150,19 +150,19 @@ WlExtSetRegistryValue(
 
 DWORD
 WlExtDeleteRegistryKey(
-                    HKEY    hHive,
+    HKEY    hHive,
     __in    const   LPWSTR  pwszSubKey
-    )
+)
 //
 //  Delete an entry in the registry of the form:
 //          HKEY_CLASSES_ROOT\wszKey\wszSubkey = wszValue
 //
 
 {
-   DWORD dwError = ERROR_SUCCESS;
+    DWORD dwError = ERROR_SUCCESS;
 
     if ((!hHive) ||
-        (!pwszSubKey))
+            (!pwszSubKey))
     {
         return (ERROR_INVALID_PARAMETER);
     }
@@ -185,30 +185,30 @@ WlExtRegisterServer()
 {
     HRESULT hr = S_OK;
 
-/*
-    WCHAR  wszModule[MAX_PATH];                     // path name of server
-    WCHAR wszCLSIDKey[MAX_LENGTH];                  // CLSID\\wszCLSID.
+    /*
+        WCHAR  wszModule[MAX_PATH];                     // path name of server
+        WCHAR wszCLSIDKey[MAX_LENGTH];                  // CLSID\\wszCLSID.
 
-    if (0 == (GetModuleFileName (NULL, wszModule, ARRAY_SIZE(wszModule))))
-    {
-        // Trace error message
-        return (HRESULT_FROM_WIN32 (GetLastError()));
-    }
+        if (0 == (GetModuleFileName (NULL, wszModule, ARRAY_SIZE(wszModule))))
+        {
+            // Trace error message
+            return (HRESULT_FROM_WIN32 (GetLastError()));
+        }
 
-    // create entries under CLSID.
-    // Description
-    hr = WlExtSetRegistryValue (HKEY_CLASSES_ROOT,
-                                L"CLSID",
-                                CLSIDSTR_WL_HC_EXT,
-                                NULL,
-                                REG_SZ,
-                                (PBYTE) CLSID_WL_EXT_FRIENDLY_NAME,
-                                (((DWORD) wcslen (CLSID_WL_EXT_FRIENDLY_NAME)+1)*sizeof (wchar_t)));
-    if (S_OK != hr)
-    {
-        return hr;
-    }
-*/
+        // create entries under CLSID.
+        // Description
+        hr = WlExtSetRegistryValue (HKEY_CLASSES_ROOT,
+                                    L"CLSID",
+                                    CLSIDSTR_WL_HC_EXT,
+                                    NULL,
+                                    REG_SZ,
+                                    (PBYTE) CLSID_WL_EXT_FRIENDLY_NAME,
+                                    (((DWORD) wcslen (CLSID_WL_EXT_FRIENDLY_NAME)+1)*sizeof (wchar_t)));
+        if (S_OK != hr)
+        {
+            return hr;
+        }
+    */
 
     hr = WlExtSetRegistryValue (HKEY_CLASSES_ROOT,
                                 L"CLSID",
@@ -222,27 +222,27 @@ WlExtRegisterServer()
         return hr;
     }
 
-/*
-    // get the class ID strings.
-    hr = StringCchPrintf (wszCLSIDKey,
-                          MAX_LENGTH-1,
-                          L"%ws\\%ws",
-                          L"CLSID",
-                          CLSIDSTR_WL_HC_EXT);
-    if (S_OK != hr)
-    {
-        return hr;
-    }
+    /*
+        // get the class ID strings.
+        hr = StringCchPrintf (wszCLSIDKey,
+                              MAX_LENGTH-1,
+                              L"%ws\\%ws",
+                              L"CLSID",
+                              CLSIDSTR_WL_HC_EXT);
+        if (S_OK != hr)
+        {
+            return hr;
+        }
 
-    // set the server path.
-    hr = WlExtSetRegistryValue (HKEY_CLASSES_ROOT,
-                                wszCLSIDKey,
-                                L"LocalServer32",
-                                NULL,
-                                REG_SZ,
-                                (PBYTE) wszModule,
-                                (((DWORD) wcslen (wszModule)+1)*sizeof (wchar_t)));
-*/
+        // set the server path.
+        hr = WlExtSetRegistryValue (HKEY_CLASSES_ROOT,
+                                    wszCLSIDKey,
+                                    L"LocalServer32",
+                                    NULL,
+                                    REG_SZ,
+                                    (PBYTE) wszModule,
+                                    (((DWORD) wcslen (wszModule)+1)*sizeof (wchar_t)));
+    */
 
     return hr;
 }
@@ -250,7 +250,7 @@ WlExtRegisterServer()
 
 HRESULT
 WlExtUnRegisterServer(
-    )
+)
 {
     HRESULT     hr = S_OK;
     wchar_t     wszCLSIDKey[MAX_LENGTH];                      // CLSID\\wszCLSID.
@@ -284,7 +284,7 @@ _tWinMain(
     __in    HINSTANCE   hPrevInst,  // hPrevInstance
     __in    LPTSTR      lpCmdLine,  // lpCmdLine
     __in    int         nCmdShow
-    )
+)
 {
     INT         RetCode;
     TCHAR       szTokens[] = _T("-/");

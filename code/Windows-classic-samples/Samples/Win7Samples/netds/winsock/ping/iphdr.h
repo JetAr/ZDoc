@@ -1,14 +1,14 @@
-// From Network Programming for Microsoft Windows, Second Edition by 
-// Anthony Jones and James Ohlund.  
-// Copyright 2002.   Reproduced by permission of Microsoft Press.  
+﻿// From Network Programming for Microsoft Windows, Second Edition by
+// Anthony Jones and James Ohlund.
+// Copyright 2002.   Reproduced by permission of Microsoft Press.
 // All rights reserved.
 //
 //
 // Sample: Protocol header definitions used by ping (raw sockets)
-// 
+//
 // Files:
 //      iphdr.h     - this file
-//      
+//
 // Description:
 //      This file contains various protocol header definitions used by
 //      the raw socket ping sample.
@@ -27,10 +27,10 @@
 typedef struct ip_hdr
 {
     unsigned char  ip_verlen;        // 4-bit IPv4 version
-                                     // 4-bit header length (in 32-bit words)
+    // 4-bit header length (in 32-bit words)
     unsigned char  ip_tos;           // IP type of service
     unsigned short ip_totallength;   // Total length
-    unsigned short ip_id;            // Unique identifier 
+    unsigned short ip_id;            // Unique identifier
     unsigned short ip_offset;        // Fragment offset field
     unsigned char  ip_ttl;           // Time to live
     unsigned char  ip_protocol;      // Protocol(TCP,UDP etc)
@@ -62,11 +62,11 @@ typedef struct icmp_hdr
 typedef struct ipv6_hdr
 {
     unsigned long   ipv6_vertcflow;        // 4-bit IPv6 version
-                                           // 8-bit traffic class
-                                           // 20-bit flow label
+    // 8-bit traffic class
+    // 20-bit flow label
     unsigned short  ipv6_payloadlen;       // payload length
     unsigned char   ipv6_nexthdr;          // next header protocol value
-    unsigned char   ipv6_hoplimit;         // TTL 
+    unsigned char   ipv6_hoplimit;         // TTL
     struct in6_addr ipv6_srcaddr;          // Source address
     struct in6_addr ipv6_destaddr;         // Destination address
 } IPV6_HDR, *PIPV6_HDR, FAR * LPIPV6_HDR;
@@ -81,7 +81,8 @@ typedef struct ipv6_fragment_hdr
 } IPV6_FRAGMENT_HDR, *PIPV6_FRAGMENT_HDR, FAR * LPIPV6_FRAGMENT_HDR;
 
 // ICMPv6 header
-typedef struct icmpv6_hdr {
+typedef struct icmpv6_hdr
+{
     unsigned char   icmp6_type;
     unsigned char   icmp6_code;
     unsigned short  icmp6_checksum;
@@ -94,7 +95,7 @@ typedef struct icmpv6_echo_request
     unsigned short  icmp6_echo_sequence;
 } ICMPV6_ECHO_REQUEST;
 
-// Define the UDP header 
+// Define the UDP header
 typedef struct udp_hdr
 {
     unsigned short src_portno;       // Source port no.

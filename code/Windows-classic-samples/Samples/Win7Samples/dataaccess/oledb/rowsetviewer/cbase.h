@@ -1,4 +1,4 @@
-//-----------------------------------------------------------------------------
+﻿//-----------------------------------------------------------------------------
 // Microsoft OLE DB RowsetViewer
 // Copyright (C) 1994 - 1999 By Microsoft Corporation.
 //
@@ -29,38 +29,38 @@ class COptionsSheet;
 ///////////////////////////////////////////////////////////////
 enum SOURCE
 {
-	eInvalid				= 0,
+    eInvalid				= 0,
 
-	//Object Source
-	eCUnknown				= 1,
-	eCDataSource			= 2,
-	eCSession				= 3,
-	eCCommand				= 4,
-	eCMultipleResults		= 5,
-	eCRowset				= 6,
-	eCRow					= 7,
-	eCStream				= 8,	
-	eCEnumerator			= 9,		
-	eCBinder				=10,
-	eCServiceComp			=11,
-	eCDataLinks				=12,
-	eCDataset				=13,	
-	eCTransaction			=14,
-	eCTransactionOptions	=15,
-	eCError					=16,
-	eCCustomError			=17,
-	eCRowPosition			=18, 
-	eCConnectionPoint		=19,
+    //Object Source
+    eCUnknown				= 1,
+    eCDataSource			= 2,
+    eCSession				= 3,
+    eCCommand				= 4,
+    eCMultipleResults		= 5,
+    eCRowset				= 6,
+    eCRow					= 7,
+    eCStream				= 8,
+    eCEnumerator			= 9,
+    eCBinder				=10,
+    eCServiceComp			=11,
+    eCDataLinks				=12,
+    eCDataset				=13,
+    eCTransaction			=14,
+    eCTransactionOptions	=15,
+    eCError					=16,
+    eCCustomError			=17,
+    eCRowPosition			=18,
+    eCConnectionPoint		=19,
 };
 
 
 enum BASE_CLASS
 {
-	eCBase				= 0x0001000,
-	eCContainerBase		= 0x0002000,
-	eCAsynchBase		= 0x0004000,
-	eCPropertiesBase	= 0x0008000,
-	eCDataAccess		= 0x0010000
+    eCBase				= 0x0001000,
+    eCContainerBase		= 0x0002000,
+    eCAsynchBase		= 0x0004000,
+    eCPropertiesBase	= 0x0008000,
+    eCDataAccess		= 0x0010000
 };
 
 
@@ -106,7 +106,8 @@ SOURCE		DetermineObjectType(IUnknown* pIUnknown, SOURCE eSource);
 //
 ///////////////////////////////////////////////////////////////
 extern const IID IID_IAggregate;
-interface IAggregate : public IUnknown
+interface IAggregate :
+public IUnknown
 {
 };
 
@@ -118,79 +119,88 @@ interface IAggregate : public IUnknown
 class CBase : public IUnknown
 {
 public:
-	//Constructors
-	CBase(SOURCE eObjectType, CMainWindow* pCMainWindow, CMDIChild* pCMDIChild = NULL);
-	virtual ~CBase();
+    //Constructors
+    CBase(SOURCE eObjectType, CMainWindow* pCMainWindow, CMDIChild* pCMDIChild = NULL);
+    virtual ~CBase();
 
-	//IUnknown
-	//So we can get referening counting on parent objects...
-	STDMETHODIMP			QueryInterface(REFIID riid, void** ppvObject);
+    //IUnknown
+    //So we can get referening counting on parent objects...
+    STDMETHODIMP			QueryInterface(REFIID riid, void** ppvObject);
     STDMETHODIMP_(ULONG)	AddRef();
     STDMETHODIMP_(ULONG)	Release();
 
-	//Base impemented helpers
-	virtual ULONG			ObjectAddRef();
-	virtual ULONG			ObjectRelease();
-	virtual HRESULT			ObjectQI(REFIID riid, IUnknown** ppIUnknown);
-	virtual HRESULT			CreateObject(CBase* pCSource, REFIID riid, IUnknown* pIUnknown, DWORD dwCreateOpts = -1 /*Default*/);
-	virtual HRESULT			ReleaseObject(ULONG ulExpectedRefCount = 0);
-	virtual HRESULT			ReleaseChildren();
+    //Base impemented helpers
+    virtual ULONG			ObjectAddRef();
+    virtual ULONG			ObjectRelease();
+    virtual HRESULT			ObjectQI(REFIID riid, IUnknown** ppIUnknown);
+    virtual HRESULT			CreateObject(CBase* pCSource, REFIID riid, IUnknown* pIUnknown, DWORD dwCreateOpts = -1 /*Default*/);
+    virtual HRESULT			ReleaseObject(ULONG ulExpectedRefCount = 0);
+    virtual HRESULT			ReleaseChildren();
 
-	virtual HRESULT			SetInterface(REFIID riid, IUnknown* pIUnknown);
-	virtual IUnknown*		GetInterface(REFIID riid);
+    virtual HRESULT			SetInterface(REFIID riid, IUnknown* pIUnknown);
+    virtual IUnknown*		GetInterface(REFIID riid);
 
-	virtual BOOL			IsSameObject(IUnknown* pIUnkObject);
-	virtual CBase*			GetParent(SOURCE eSource);
+    virtual BOOL			IsSameObject(IUnknown* pIUnkObject);
+    virtual CBase*			GetParent(SOURCE eSource);
 
-	//Derived Object helpers (Devired Class implements this)
-	virtual HRESULT			AutoQI(DWORD dwCreateOpts)			= 0;
-	virtual HRESULT			AutoRelease()						= 0;
-	virtual IUnknown**		GetInterfaceAddress(REFIID riid)	= 0;
+    //Derived Object helpers (Devired Class implements this)
+    virtual HRESULT			AutoQI(DWORD dwCreateOpts)			= 0;
+    virtual HRESULT			AutoRelease()						= 0;
+    virtual IUnknown**		GetInterfaceAddress(REFIID riid)	= 0;
 
-	virtual WCHAR*			GetObjectName()			= 0;
-	virtual UINT			GetObjectMenu()			= 0;
-	virtual LONG			GetObjectImage()		= 0;
-	virtual REFIID			GetDefaultInterface()	= 0;
-	virtual	void			OnDefOperation();
+    virtual WCHAR*			GetObjectName()			= 0;
+    virtual UINT			GetObjectMenu()			= 0;
+    virtual LONG			GetObjectImage()		= 0;
+    virtual REFIID			GetDefaultInterface()	= 0;
+    virtual	void			OnDefOperation();
 
-	//UI - Helpers
-	virtual HRESULT			DisplayObject();
-	virtual WCHAR*			GetObjectDesc()			{ return m_strObjectDesc;				}
-	virtual void			SetObjectDesc(WCHAR* pwszDescription, BOOL fCopy = TRUE);
-	
-	//Inlines
-	inline	SOURCE			GetObjectType()			{ return m_eObjectType;					}
-	inline	BASE_CLASS		GetBaseType()			{ return m_eBaseClass;					}
-	
-	//Interface
-	virtual COptionsSheet*	GetOptions();
+    //UI - Helpers
+    virtual HRESULT			DisplayObject();
+    virtual WCHAR*			GetObjectDesc()
+    {
+        return m_strObjectDesc;
+    }
+    virtual void			SetObjectDesc(WCHAR* pwszDescription, BOOL fCopy = TRUE);
 
-	//Common OLE DB Interfaces
-	IUnknown*				m_pIUnknown;
-	ISupportErrorInfo*		m_pISupportErrorInfo;
-	IAggregate*				m_pIAggregate;
-	IService*				m_pIService;
+    //Inlines
+    inline	SOURCE			GetObjectType()
+    {
+        return m_eObjectType;
+    }
+    inline	BASE_CLASS		GetBaseType()
+    {
+        return m_eBaseClass;
+    }
 
-	//Data
-	HTREEITEM				m_hTreeItem;
-	DWORD					m_dwCLSCTX;
+    //Interface
+    virtual COptionsSheet*	GetOptions();
 
-	//Parent Info
-	CBase*					m_pCParent;
-	GUID					m_guidSource;
+    //Common OLE DB Interfaces
+    IUnknown*				m_pIUnknown;
+    ISupportErrorInfo*		m_pISupportErrorInfo;
+    IAggregate*				m_pIAggregate;
+    IService*				m_pIService;
 
-	//BackPointers
-	CMainWindow*			m_pCMainWindow;
-	CMDIChild*				m_pCMDIChild;
+    //Data
+    HTREEITEM				m_hTreeItem;
+    DWORD					m_dwCLSCTX;
+
+    //Parent Info
+    CBase*					m_pCParent;
+    GUID					m_guidSource;
+
+    //BackPointers
+    CMainWindow*			m_pCMainWindow;
+    CMDIChild*				m_pCMDIChild;
 
 protected:
-	//Type
-	SOURCE					m_eObjectType;
-	BASE_CLASS				m_eBaseClass;
-	CComWSTR				m_strObjectDesc;
+    //Type
+    SOURCE					m_eObjectType;
+    BASE_CLASS				m_eBaseClass;
+    CComWSTR				m_strObjectDesc;
 
-	//IUnknown
-	ULONG					m_cRef;
+    //IUnknown
+    ULONG					m_cRef;
 };
 
 
@@ -202,27 +212,48 @@ protected:
 class CUnknown : public CBase
 {
 public:
-	//Constructors
-	CUnknown(CMainWindow* pCMainWindow, CMDIChild* pCMDIChild = NULL)
-		: CBase(eCUnknown, pCMainWindow, pCMDIChild)
-	{
-	}
+    //Constructors
+    CUnknown(CMainWindow* pCMainWindow, CMDIChild* pCMDIChild = NULL)
+        : CBase(eCUnknown, pCMainWindow, pCMDIChild)
+    {
+    }
 
-	virtual ~CUnknown()
-	{
-		ReleaseObject(0);
-	}
+    virtual ~CUnknown()
+    {
+        ReleaseObject(0);
+    }
 
-	//Derived Object helpers
-	//Devired Class implements this...
-	virtual HRESULT			AutoQI(DWORD dwCreateOpts)						{ return CBase::AutoQI(dwCreateOpts);	}
-	virtual HRESULT			AutoRelease()									{ return CBase::AutoRelease();			}
-	virtual IUnknown**		GetInterfaceAddress(REFIID riid)						{ return CBase::GetInterfaceAddress(riid);		}
+    //Derived Object helpers
+    //Devired Class implements this...
+    virtual HRESULT			AutoQI(DWORD dwCreateOpts)
+    {
+        return CBase::AutoQI(dwCreateOpts);
+    }
+    virtual HRESULT			AutoRelease()
+    {
+        return CBase::AutoRelease();
+    }
+    virtual IUnknown**		GetInterfaceAddress(REFIID riid)
+    {
+        return CBase::GetInterfaceAddress(riid);
+    }
 
-	virtual WCHAR*			GetObjectName()									{ return L"Unknown";					} 
-	virtual UINT			GetObjectMenu()									{ return IDM_UNKNOWNMENU;				}
-	virtual LONG			GetObjectImage()								{ return IMAGE_QUESTION;				}
-	virtual REFIID			GetDefaultInterface()							{ return IID_IUnknown;					}
+    virtual WCHAR*			GetObjectName()
+    {
+        return L"Unknown";
+    }
+    virtual UINT			GetObjectMenu()
+    {
+        return IDM_UNKNOWNMENU;
+    }
+    virtual LONG			GetObjectImage()
+    {
+        return IMAGE_QUESTION;
+    }
+    virtual REFIID			GetDefaultInterface()
+    {
+        return IID_IUnknown;
+    }
 };
 
 
@@ -233,28 +264,28 @@ public:
 class CContainerBase : public CBase
 {
 public:
-	//Constructors
-	CContainerBase(SOURCE eObjectType, CMainWindow* pCMainWindow, CMDIChild* pCMDIChild = NULL);
-	virtual ~CContainerBase();
+    //Constructors
+    CContainerBase(SOURCE eObjectType, CMainWindow* pCMainWindow, CMDIChild* pCMDIChild = NULL);
+    virtual ~CContainerBase();
 
-	//IUnknown Helpers
-	virtual HRESULT			AutoQI(DWORD dwCreateOpts);
-	virtual HRESULT			AutoRelease();
-	virtual IUnknown**		GetInterfaceAddress(REFIID riid);
+    //IUnknown Helpers
+    virtual HRESULT			AutoQI(DWORD dwCreateOpts);
+    virtual HRESULT			AutoRelease();
+    virtual IUnknown**		GetInterfaceAddress(REFIID riid);
 
-	//Members
-	virtual HRESULT			FindConnectionPoint(REFIID riid, IConnectionPoint** ppIConnectionPoint);
-	virtual HRESULT			AdviseListener(REFIID riid, DWORD* pdwCookie);
-	virtual HRESULT			UnadviseListener(REFIID riid, DWORD* pdwCookie);
+    //Members
+    virtual HRESULT			FindConnectionPoint(REFIID riid, IConnectionPoint** ppIConnectionPoint);
+    virtual HRESULT			AdviseListener(REFIID riid, DWORD* pdwCookie);
+    virtual HRESULT			UnadviseListener(REFIID riid, DWORD* pdwCookie);
 
-	//OLE DB Interfaces
-	//[MANADATORY]
+    //OLE DB Interfaces
+    //[MANADATORY]
 
-	//[OPTIONAL]
-	IConnectionPointContainer*	m_pIConnectionPointContainer;
+    //[OPTIONAL]
+    IConnectionPointContainer*	m_pIConnectionPointContainer;
 
 //protected:
-	//Data
+    //Data
 };
 
 
@@ -265,34 +296,46 @@ public:
 class CConnectionPoint : public CBase
 {
 public:
-	//Constructors
-	CConnectionPoint(CMainWindow* pCMainWindow, CMDIChild* pCMDIChild = NULL);
-	virtual ~CConnectionPoint();
+    //Constructors
+    CConnectionPoint(CMainWindow* pCMainWindow, CMDIChild* pCMDIChild = NULL);
+    virtual ~CConnectionPoint();
 
-	//IUnknown Helpers
-	virtual HRESULT			AutoQI(DWORD dwCreateOpts);
-	virtual HRESULT			AutoRelease();
-	virtual IUnknown**		GetInterfaceAddress(REFIID riid);
+    //IUnknown Helpers
+    virtual HRESULT			AutoQI(DWORD dwCreateOpts);
+    virtual HRESULT			AutoRelease();
+    virtual IUnknown**		GetInterfaceAddress(REFIID riid);
 
-	//Derived Class
-	virtual WCHAR*			GetObjectName()					{ return L"ConnectionPoint";			} 
-	virtual UINT			GetObjectMenu()					{ return IDM_CONNECTIONPOINTMENU;		}
-	virtual LONG			GetObjectImage()				{ return IMAGE_FORM;					}
-	virtual REFIID			GetDefaultInterface()			{ return IID_IConnectionPoint;			}
-	virtual WCHAR*			GetObjectDesc();
+    //Derived Class
+    virtual WCHAR*			GetObjectName()
+    {
+        return L"ConnectionPoint";
+    }
+    virtual UINT			GetObjectMenu()
+    {
+        return IDM_CONNECTIONPOINTMENU;
+    }
+    virtual LONG			GetObjectImage()
+    {
+        return IMAGE_FORM;
+    }
+    virtual REFIID			GetDefaultInterface()
+    {
+        return IID_IConnectionPoint;
+    }
+    virtual WCHAR*			GetObjectDesc();
 
-	//Members
-	virtual HRESULT			GetConnectionInterface(IID* pIID);
+    //Members
+    virtual HRESULT			GetConnectionInterface(IID* pIID);
 
-	//OLE DB Interfaces
-	//[MANADATORY]
-	IConnectionPoint*		m_pIConnectionPoint;
+    //OLE DB Interfaces
+    //[MANADATORY]
+    IConnectionPoint*		m_pIConnectionPoint;
 
-	//[OPTIONAL]
+    //[OPTIONAL]
 
 //protected:
-	//Data
-	DWORD					m_dwCookie;
+    //Data
+    DWORD					m_dwCookie;
 };
 
 
@@ -303,36 +346,39 @@ public:
 class CAsynchBase : public CContainerBase
 {
 public:
-	//Constructors
-	CAsynchBase(SOURCE eObjectType, CMainWindow* pCMainWindow, CMDIChild* pCMDIChild = NULL);
-	virtual ~CAsynchBase();
+    //Constructors
+    CAsynchBase(SOURCE eObjectType, CMainWindow* pCMainWindow, CMDIChild* pCMDIChild = NULL);
+    virtual ~CAsynchBase();
 
-	//IUnknown Helpers
-	virtual HRESULT			AutoQI(DWORD dwCreateOpts);
-	virtual HRESULT			AutoRelease();
-	virtual IUnknown**		GetInterfaceAddress(REFIID riid);
+    //IUnknown Helpers
+    virtual HRESULT			AutoQI(DWORD dwCreateOpts);
+    virtual HRESULT			AutoRelease();
+    virtual IUnknown**		GetInterfaceAddress(REFIID riid);
 
-	//Members
-	virtual BOOL			IsInitialized()		{ return m_fInitialized;			}
-	virtual HRESULT			Initialize();
-	virtual HRESULT			Uninitialize();
+    //Members
+    virtual BOOL			IsInitialized()
+    {
+        return m_fInitialized;
+    }
+    virtual HRESULT			Initialize();
+    virtual HRESULT			Uninitialize();
 
-	virtual HRESULT			Abort(HCHAPTER hChapter, DBASYNCHOP eOperation);
-	virtual HRESULT			GetStatus(HCHAPTER hChapter, DBASYNCHOP eOperation, DBCOUNTITEM* pulProgress, DBCOUNTITEM* pulProgressMax, DBASYNCHPHASE* peAsynchPhase, LPOLESTR* ppwszStatusText);
+    virtual HRESULT			Abort(HCHAPTER hChapter, DBASYNCHOP eOperation);
+    virtual HRESULT			GetStatus(HCHAPTER hChapter, DBASYNCHOP eOperation, DBCOUNTITEM* pulProgress, DBCOUNTITEM* pulProgressMax, DBASYNCHPHASE* peAsynchPhase, LPOLESTR* ppwszStatusText);
 
-	//OLE DB Interfaces
-	//[MANADATORY]
+    //OLE DB Interfaces
+    //[MANADATORY]
 
-	//[OPTIONAL]
-	IDBInitialize*			m_pIDBInitialize;				//OLE DB interface
-	IDBAsynchStatus*		m_pIDBAsynchStatus;				//OLE DB interface
+    //[OPTIONAL]
+    IDBInitialize*			m_pIDBInitialize;				//OLE DB interface
+    IDBAsynchStatus*		m_pIDBAsynchStatus;				//OLE DB interface
 
-	//Extra interfaces
+    //Extra interfaces
 
 //protected:
-	//Data
-	DWORD					m_dwCookieAsynchNotify;
-	BOOL					m_fInitialized;
+    //Data
+    DWORD					m_dwCookieAsynchNotify;
+    BOOL					m_fInitialized;
 };
 
 
@@ -343,53 +389,53 @@ public:
 class CPropertiesBase : public CAsynchBase
 {
 public:
-	//Constructors
-	CPropertiesBase(SOURCE eObjectType, CMainWindow* pCMainWindow, CMDIChild* pCMDIChild = NULL);
-	virtual ~CPropertiesBase();
+    //Constructors
+    CPropertiesBase(SOURCE eObjectType, CMainWindow* pCMainWindow, CMDIChild* pCMDIChild = NULL);
+    virtual ~CPropertiesBase();
 
-	//IUnknown Helpers
-	virtual HRESULT			AutoQI(DWORD dwCreateOpts);
-	virtual HRESULT			AutoRelease();
-	virtual IUnknown**		GetInterfaceAddress(REFIID riid);
+    //IUnknown Helpers
+    virtual HRESULT			AutoQI(DWORD dwCreateOpts);
+    virtual HRESULT			AutoRelease();
+    virtual IUnknown**		GetInterfaceAddress(REFIID riid);
 
-	//Members
-	virtual HRESULT			SetProperties(ULONG cPropSets, DBPROPSET* rgPropSets);
+    //Members
+    virtual HRESULT			SetProperties(ULONG cPropSets, DBPROPSET* rgPropSets);
 
-	//OLE DB Interfaces
-	//[MANADATORY]
-	IDBProperties*			m_pIDBProperties;				//OLE DB interface
+    //OLE DB Interfaces
+    //[MANADATORY]
+    IDBProperties*			m_pIDBProperties;				//OLE DB interface
 
-	//[OPTIONAL]
+    //[OPTIONAL]
 
 protected:
-	//Data
+    //Data
 };
 
 
 ///////////////////////////////////////////////////////////////////////////////
 // Class CAggregate
-// 
+//
 ///////////////////////////////////////////////////////////////////////////////
 class CAggregate : public IAggregate
 {
 public:
-	CAggregate();
-	virtual ~CAggregate();
+    CAggregate();
+    virtual ~CAggregate();
 
-	//IUnknown
-	virtual STDMETHODIMP_(ULONG)	AddRef(void);
-	virtual STDMETHODIMP_(ULONG)	Release(void);
-	virtual STDMETHODIMP QueryInterface(REFIID riid, LPVOID *ppv);
+    //IUnknown
+    virtual STDMETHODIMP_(ULONG)	AddRef(void);
+    virtual STDMETHODIMP_(ULONG)	Release(void);
+    virtual STDMETHODIMP QueryInterface(REFIID riid, LPVOID *ppv);
 
-	//Helpers
-	virtual HRESULT		HandleAggregation(REFIID riid, IUnknown** ppIUnknown);
-			HRESULT		SetInner(IUnknown* pIUnkInner);
-			HRESULT		ReleaseInner();
+    //Helpers
+    virtual HRESULT		HandleAggregation(REFIID riid, IUnknown** ppIUnknown);
+    HRESULT		SetInner(IUnknown* pIUnkInner);
+    HRESULT		ReleaseInner();
 
 protected:
-	//Data
-	ULONG				m_cRef;
-	CComPtr<IUnknown>	m_spUnkInner;
+    //Data
+    ULONG				m_cRef;
+    CComPtr<IUnknown>	m_spUnkInner;
 };
 
 

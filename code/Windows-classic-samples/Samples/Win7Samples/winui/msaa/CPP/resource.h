@@ -1,4 +1,4 @@
-#define IDM_EXIT                        105
+﻿#define IDM_EXIT                        105
 #define IDI_ACCSERVER                   108
 #define IDR_MAINFRAME                   128
 #define IDD_MAINDLG                     129

@@ -1,17 +1,17 @@
-/*++
-  
+﻿/*++
+
   Copyright (c) 1995 Intel Corp
   Copyright (c) 1996 - 2000 Microsoft Corporation
-  
+
   Module Name:
-  
+
     dt.h
-  
+
   Abstract:
-  
+
     Header file containing definitions, function prototypes, and other
     stuff for internal use of the debug/trace dll.
-  
+
 --*/
 
 
@@ -25,11 +25,12 @@
 #define MAX_FP   128
 
 // structure to hold init data
-typedef struct _INITDATA {
+typedef struct _INITDATA
+{
 
-    SYSTEMTIME LocalTime; 
+    SYSTEMTIME LocalTime;
     DWORD      TID;
-    DWORD      PID;   
+    DWORD      PID;
 
 } INITDATA, *PINITDATA;
 
@@ -39,6 +40,6 @@ DTTextOut(
     IN char   *String,
     IN DWORD  Style);
 
-extern HANDLE LogFileHandle;             
+extern HANDLE LogFileHandle;
 extern DWORD  OutputStyle;
 extern char   Buffer[TEXT_LEN];

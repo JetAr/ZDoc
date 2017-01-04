@@ -1,4 +1,4 @@
-//
+﻿//
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -98,7 +98,7 @@ MI_INLINE MI_Result MI_CALL MSFT_WindowsServiceProcess_Construct(
     _In_ MI_Context* context)
 {
     return MI_Context_ConstructInstance(context, &MSFT_WindowsServiceProcess_rtti,
-        (MI_Instance*)&self->__instance);
+                                        (MI_Instance*)&self->__instance);
 }
 
 MI_INLINE MI_Result MI_CALL MSFT_WindowsServiceProcess_Clone(
@@ -106,7 +106,7 @@ MI_INLINE MI_Result MI_CALL MSFT_WindowsServiceProcess_Clone(
     _Outptr_ MSFT_WindowsServiceProcess** newInstance)
 {
     return MI_Instance_Clone(
-        &self->__instance, (MI_Instance**)newInstance);
+               &self->__instance, (MI_Instance**)newInstance);
 }
 
 MI_INLINE MI_Boolean MI_CALL MSFT_WindowsServiceProcess_IsA(
@@ -138,11 +138,11 @@ MI_INLINE MI_Result MI_CALL MSFT_WindowsServiceProcess_Set_Service(
     _In_ const CIM_Service* x)
 {
     return self->__instance.ft->SetElementAt(
-        (MI_Instance*)&self->__instance,
-        0,
-        (MI_Value*)&x,
-        MI_REFERENCE,
-        0);
+               (MI_Instance*)&self->__instance,
+               0,
+               (MI_Value*)&x,
+               MI_REFERENCE,
+               0);
 }
 
 MI_INLINE MI_Result MI_CALL MSFT_WindowsServiceProcess_SetPtr_Service(
@@ -150,19 +150,19 @@ MI_INLINE MI_Result MI_CALL MSFT_WindowsServiceProcess_SetPtr_Service(
     _In_ const CIM_Service* x)
 {
     return self->__instance.ft->SetElementAt(
-        (MI_Instance*)&self->__instance,
-        0,
-        (MI_Value*)&x,
-        MI_REFERENCE,
-        MI_FLAG_BORROW);
+               (MI_Instance*)&self->__instance,
+               0,
+               (MI_Value*)&x,
+               MI_REFERENCE,
+               MI_FLAG_BORROW);
 }
 
 MI_INLINE MI_Result MI_CALL MSFT_WindowsServiceProcess_Clear_Service(
     _Inout_ MSFT_WindowsServiceProcess* self)
 {
     return self->__instance.ft->ClearElementAt(
-        (MI_Instance*)&self->__instance,
-        0);
+               (MI_Instance*)&self->__instance,
+               0);
 }
 
 MI_INLINE MI_Result MI_CALL MSFT_WindowsServiceProcess_Set_Process(
@@ -170,11 +170,11 @@ MI_INLINE MI_Result MI_CALL MSFT_WindowsServiceProcess_Set_Process(
     _In_ const CIM_Process* x)
 {
     return self->__instance.ft->SetElementAt(
-        (MI_Instance*)&self->__instance,
-        1,
-        (MI_Value*)&x,
-        MI_REFERENCE,
-        0);
+               (MI_Instance*)&self->__instance,
+               1,
+               (MI_Value*)&x,
+               MI_REFERENCE,
+               0);
 }
 
 MI_INLINE MI_Result MI_CALL MSFT_WindowsServiceProcess_SetPtr_Process(
@@ -182,19 +182,19 @@ MI_INLINE MI_Result MI_CALL MSFT_WindowsServiceProcess_SetPtr_Process(
     _In_ const CIM_Process* x)
 {
     return self->__instance.ft->SetElementAt(
-        (MI_Instance*)&self->__instance,
-        1,
-        (MI_Value*)&x,
-        MI_REFERENCE,
-        MI_FLAG_BORROW);
+               (MI_Instance*)&self->__instance,
+               1,
+               (MI_Value*)&x,
+               MI_REFERENCE,
+               MI_FLAG_BORROW);
 }
 
 MI_INLINE MI_Result MI_CALL MSFT_WindowsServiceProcess_Clear_Process(
     _Inout_ MSFT_WindowsServiceProcess* self)
 {
     return self->__instance.ft->ClearElementAt(
-        (MI_Instance*)&self->__instance,
-        1);
+               (MI_Instance*)&self->__instance,
+               1);
 }
 
 MI_INLINE MI_Result MI_CALL MSFT_WindowsServiceProcess_Set_ExecutionType(

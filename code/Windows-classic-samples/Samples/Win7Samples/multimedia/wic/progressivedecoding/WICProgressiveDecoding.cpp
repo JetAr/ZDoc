@@ -1,4 +1,4 @@
-#ifndef WINVER                  // Allow use of features specific to Windows XP or later.
+﻿#ifndef WINVER                  // Allow use of features specific to Windows XP or later.
 #define WINVER 0x0501           // Change this to the appropriate value to target other versions of Windows.
 #endif
 
@@ -71,7 +71,7 @@ int WINAPI wWinMain(
 
                 // Load accelerator table
                 HACCEL haccel = LoadAccelerators(hInstance, MAKEINTRESOURCE(IDA_ACCEL_TABLE));
-                if (haccel == NULL) 
+                if (haccel == NULL)
                 {
                     hr = E_FAIL;
                 }
@@ -140,11 +140,11 @@ HWND DemoApp::Initialize(HINSTANCE hInstance)
 
     // Create WIC factory
     hr = CoCreateInstance(
-        CLSID_WICImagingFactory,
-        NULL,
-        CLSCTX_INPROC_SERVER,
-        IID_PPV_ARGS(&m_pIWICFactory)
-        );
+             CLSID_WICImagingFactory,
+             NULL,
+             CLSCTX_INPROC_SERVER,
+             IID_PPV_ARGS(&m_pIWICFactory)
+         );
 
     if (SUCCEEDED(hr))
     {
@@ -180,18 +180,18 @@ HWND DemoApp::Initialize(HINSTANCE hInstance)
     {
         // Create main window
         hWnd = CreateWindow(
-            L"WICProgressiveDecoding",
-            L"WIC Progressive Decoding Sample",
-            WS_OVERLAPPEDWINDOW | WS_VISIBLE,
-            CW_USEDEFAULT,
-            CW_USEDEFAULT,
-            640,
-            480,
-            NULL,
-            NULL,
-            hInstance,
-            this
-            );
+                   L"WICProgressiveDecoding",
+                   L"WIC Progressive Decoding Sample",
+                   WS_OVERLAPPEDWINDOW | WS_VISIBLE,
+                   CW_USEDEFAULT,
+                   CW_USEDEFAULT,
+                   640,
+                   480,
+                   NULL,
+                   NULL,
+                   hInstance,
+                   this
+               );
     }
 
     // Create Status Bar window
@@ -220,12 +220,12 @@ HRESULT DemoApp::CreateProgressiveCtrlFromFile(HWND hWnd)
         IWICBitmapDecoder *pDecoder = NULL;
 
         hr = m_pIWICFactory->CreateDecoderFromFilename(
-            szFileName,                      // Image to be decoded
-            NULL,                            // Do not prefer a particular vendor
-            GENERIC_READ,                    // Desired read access to the file
-            WICDecodeMetadataCacheOnDemand,  // Cache metadata when needed
-            &pDecoder                        // Pointer to the decoder
-            );
+                 szFileName,                      // Image to be decoded
+                 NULL,                            // Do not prefer a particular vendor
+                 GENERIC_READ,                    // Desired read access to the file
+                 WICDecodeMetadataCacheOnDemand,  // Cache metadata when needed
+                 &pDecoder                        // Pointer to the decoder
+             );
 
         // Retrieve the first frame of the image from the decoder
         if (SUCCEEDED(hr))
@@ -251,14 +251,14 @@ HRESULT DemoApp::CreateProgressiveCtrlFromFile(HWND hWnd)
             }
             else
             {
-                MessageBox(hWnd, L"Image has no progressive encoding, select another one.", L"Application Error", 
-                    MB_ICONEXCLAMATION | MB_OK);
+                MessageBox(hWnd, L"Image has no progressive encoding, select another one.", L"Application Error",
+                           MB_ICONEXCLAMATION | MB_OK);
             }
         }
         else
         {
-            MessageBox(hWnd, L"Failed to load image, select another one.", L"Application Error", 
-                MB_ICONEXCLAMATION | MB_OK);
+            MessageBox(hWnd, L"Failed to load image, select another one.", L"Application Error",
+                       MB_ICONEXCLAMATION | MB_OK);
         }
 
         SafeRelease(pDecoder);
@@ -274,13 +274,13 @@ HRESULT DemoApp::CreateProgressiveCtrlFromFile(HWND hWnd)
 HRESULT DemoApp::CreateD2DBitmapFromProgressiveCtrl(HWND hWnd, UINT uLevel)
 {
     HRESULT hr = E_FAIL;
-    
+
     // Make sure source frame has been decoded successfully
     if (m_pSourceFrame)
     {
         // Query for Progressive Interface Control
         IWICProgressiveLevelControl *pProgressive = NULL;
-        
+
         hr = m_pSourceFrame->QueryInterface(IID_PPV_ARGS(&pProgressive));
 
         // Set the progessive level before converting the format
@@ -297,15 +297,15 @@ HRESULT DemoApp::CreateD2DBitmapFromProgressiveCtrl(HWND hWnd, UINT uLevel)
 
         if (SUCCEEDED(hr) && m_pConvertedSourceBitmap)
         {
-            // Format convert the current progressive level frame to 32bppPBGRA 
+            // Format convert the current progressive level frame to 32bppPBGRA
             hr = m_pConvertedSourceBitmap->Initialize(
-                m_pSourceFrame,                  // Source bitmap to convert
-                GUID_WICPixelFormat32bppPBGRA,   // Destination pixel format
-                WICBitmapDitherTypeNone,         // Specified dither pattern
-                NULL,                            // Specify a particular palette 
-                0.f,                             // Alpha threshold
-                WICBitmapPaletteTypeCustom       // Palette translation type
-                );
+                     m_pSourceFrame,                  // Source bitmap to convert
+                     GUID_WICPixelFormat32bppPBGRA,   // Destination pixel format
+                     WICBitmapDitherTypeNone,         // Specified dither pattern
+                     NULL,                            // Specify a particular palette
+                     0.f,                             // Alpha threshold
+                     WICBitmapPaletteTypeCustom       // Palette translation type
+                 );
         }
 
         if (SUCCEEDED(hr))
@@ -367,7 +367,7 @@ BOOL DemoApp::LocateImageFile(HWND hWnd, LPWSTR pszFileName, DWORD cchFileName)
     ofn.lpstrTitle      = L"Open Image";
     ofn.Flags           = OFN_FILEMUSTEXIST | OFN_PATHMUSTEXIST;
 
-    // Display the Open dialog box. 
+    // Display the Open dialog box.
     return GetOpenFileName(&ofn);
 }
 
@@ -403,10 +403,10 @@ HRESULT DemoApp::CreateDeviceResources(HWND hWnd)
             D2D1_SIZE_U size = D2D1::SizeU(rc.right - rc.left, rc.bottom - rc.top);
 
             hr = m_pD2DFactory->CreateHwndRenderTarget(
-                renderTargetProperties,
-                D2D1::HwndRenderTargetProperties(hWnd, size),
-                &m_pRT
-                );
+                     renderTargetProperties,
+                     D2D1::HwndRenderTargetProperties(hWnd, size),
+                     &m_pRT
+                 );
         }
     }
 
@@ -417,7 +417,7 @@ HRESULT DemoApp::CreateDeviceResources(HWND hWnd)
 *  This method creates a status bar of nParts                     *
 ******************************************************************/
 
-HWND DemoApp::CreateStatusBar(HWND hWndParent, UINT nStatusID, UINT nParts) 
+HWND DemoApp::CreateStatusBar(HWND hWndParent, UINT nStatusID, UINT nParts)
 {
     HWND hWndStatus = NULL;
 
@@ -431,7 +431,7 @@ HWND DemoApp::CreateStatusBar(HWND hWndParent, UINT nStatusID, UINT nParts)
     {
         LPINT lpParts = NULL;
 
-        lpParts = new INT[nParts]; 
+        lpParts = new INT[nParts];
 
         if (lpParts)
         {
@@ -441,21 +441,21 @@ HWND DemoApp::CreateStatusBar(HWND hWndParent, UINT nStatusID, UINT nParts)
 
             if (GetClientRect(hWndParent, &rcClient))
             {
-                nWidth = rcClient.right / nParts; 
+                nWidth = rcClient.right / nParts;
 
-                for (UINT i = 0; i < nParts; i++) 
-                { 
-                    lpParts[i] = nWidth; 
-                    nWidth += nWidth; 
-                } 
-                // Divide the status bar to multiple parts 
+                for (UINT i = 0; i < nParts; i++)
+                {
+                    lpParts[i] = nWidth;
+                    nWidth += nWidth;
+                }
+                // Divide the status bar to multiple parts
                 SendMessage(hWndStatus, SB_SETPARTS, (WPARAM) nParts, (LPARAM) lpParts);
             }
             delete[] lpParts;
         }
     }
 
-    return hWndStatus; 
+    return hWndStatus;
 }
 
 /******************************************************************
@@ -538,58 +538,58 @@ LRESULT DemoApp::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
     switch (uMsg)
     {
-        case WM_COMMAND:
+    case WM_COMMAND:
+    {
+        // Parse the menu selections:
+        switch (LOWORD(wParam))
         {
-            // Parse the menu selections:
-            switch (LOWORD(wParam))
-            {
-                case IDM_FILE:
-                {
-                    // Load the new image file
-                    hr = CreateProgressiveCtrlFromFile(hWnd);
+        case IDM_FILE:
+        {
+            // Load the new image file
+            hr = CreateProgressiveCtrlFromFile(hWnd);
 
-                    if (SUCCEEDED(hr))
-                    {
-                        // Create D2DBitmap for rendering at default progessive level
-                        hr = CreateD2DBitmapFromProgressiveCtrl(hWnd, 0);
-                    }
-                    break;
-                }
-                case IDM_NEXT:
-                case IDA_ACTION_INCRE:
-                {
-                    hr = IncreaseProgressiveLevel(hWnd);
-                    break;
-                }
-                case IDM_PRE:
-                case IDA_ACTION_DECRE:
-                {
-                    hr = DecreaseProgressiveLevel(hWnd);
-                    break;
-                }
-                case IDM_EXIT:
-                {
-                    PostMessage(hWnd, WM_CLOSE, 0, 0);
-                    break;
-                }
+            if (SUCCEEDED(hr))
+            {
+                // Create D2DBitmap for rendering at default progessive level
+                hr = CreateD2DBitmapFromProgressiveCtrl(hWnd, 0);
             }
             break;
         }
-        case WM_SIZE:
+        case IDM_NEXT:
+        case IDA_ACTION_INCRE:
         {
-            return OnSize(lParam);
+            hr = IncreaseProgressiveLevel(hWnd);
+            break;
         }
-        case WM_PAINT:
+        case IDM_PRE:
+        case IDA_ACTION_DECRE:
         {
-            return OnPaint(hWnd);
+            hr = DecreaseProgressiveLevel(hWnd);
+            break;
         }
-        case WM_DESTROY:
+        case IDM_EXIT:
         {
-            PostQuitMessage(0);
-            return 0;
+            PostMessage(hWnd, WM_CLOSE, 0, 0);
+            break;
         }
-        default:
-            return DefWindowProc(hWnd, uMsg, wParam, lParam);
+        }
+        break;
+    }
+    case WM_SIZE:
+    {
+        return OnSize(lParam);
+    }
+    case WM_PAINT:
+    {
+        return OnPaint(hWnd);
+    }
+    case WM_DESTROY:
+    {
+        PostQuitMessage(0);
+        return 0;
+    }
+    default:
+        return DefWindowProc(hWnd, uMsg, wParam, lParam);
     }
 
     return SUCCEEDED(hr)? 0 : 1;
@@ -625,7 +625,7 @@ LRESULT DemoApp::OnPaint(HWND hWnd)
             // Create a rectangle same size of current window
             D2D1_RECT_F rectangle = D2D1::RectF(0.0f, 0.0f, rtSize.width, rtSize.height);
 
-            // D2DBitmap may have been released due to device loss. 
+            // D2DBitmap may have been released due to device loss.
             // If so, re-create it from the source bitmap
             if (m_pConvertedSourceBitmap && !m_pD2DBitmap)
             {
@@ -655,7 +655,7 @@ LRESULT DemoApp::OnPaint(HWND hWnd)
     }
 
     return SUCCEEDED(hr) ? 0 : 1;
-}  
+}
 
 /******************************************************************
 * Resizing callback                                               *

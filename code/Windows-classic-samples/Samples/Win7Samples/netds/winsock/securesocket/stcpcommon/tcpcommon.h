@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -15,7 +15,7 @@ Abstract:
 
     This file defines common shared routines between the sample secure TCP
     client and secure TCP server. These routines mainly contain sample code for
-    managing custom IPsec policy and querying IPsec SA information using the 
+    managing custom IPsec policy and querying IPsec SA information using the
     FWP API.
 
 --*/
@@ -31,19 +31,19 @@ Abstract:
 
 DWORD
 AddCustomIPsecPolicy(
-   OUT HANDLE* fwpHandle,
-   OUT GUID* qmPolicyKey
+    OUT HANDLE* fwpHandle,
+    OUT GUID* qmPolicyKey
 );
 
 VOID
 RemoveCustomIPsecPolicy(
-   IN HANDLE fwpHandle,
-   IN const GUID* qmPolicyKey
+    IN HANDLE fwpHandle,
+    IN const GUID* qmPolicyKey
 );
 
 DWORD
 MatchIPsecSAsForConnectedSocket(
-   IN SOCKET sock
+    IN SOCKET sock
 );
 
 #define RECV_DATA_BUF_SIZE 256

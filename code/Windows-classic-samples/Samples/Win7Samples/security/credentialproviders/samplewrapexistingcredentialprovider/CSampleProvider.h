@@ -1,4 +1,4 @@
-//
+﻿//
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -18,13 +18,13 @@
 
 class CSampleProvider : public ICredentialProvider
 {
-  public:
+public:
     // IUnknown
     IFACEMETHODIMP_(ULONG) AddRef()
     {
         return ++_cRef;
     }
-    
+
     IFACEMETHODIMP_(ULONG) Release()
     {
         LONG cRef = --_cRef;
@@ -45,7 +45,7 @@ class CSampleProvider : public ICredentialProvider
         return QISearch(this, qit, riid, ppv);
     }
 
-  public:
+public:
     IFACEMETHODIMP SetUsageScenario(__in CREDENTIAL_PROVIDER_USAGE_SCENARIO cpus, __in DWORD dwFlags);
     IFACEMETHODIMP SetSerialization(__in const CREDENTIAL_PROVIDER_CREDENTIAL_SERIALIZATION* pcpcs);
 
@@ -58,26 +58,26 @@ class CSampleProvider : public ICredentialProvider
     IFACEMETHODIMP GetCredentialCount(__out DWORD* pdwCount,
                                       __out_range(<,*pdwCount) DWORD* pdwDefault,
                                       __out BOOL* pbAutoLogonWithDefault);
-    IFACEMETHODIMP GetCredentialAt(__in DWORD dwIndex, 
+    IFACEMETHODIMP GetCredentialAt(__in DWORD dwIndex,
                                    __deref_out ICredentialProviderCredential** ppcpc);
 
     friend HRESULT CSample_CreateInstance(__in REFIID riid, __deref_out void** ppv);
 
-  protected:
+protected:
     CSampleProvider();
     __override ~CSampleProvider();
-    
-  private:
-      void _CleanUpAllCredentials();
-    
+
+private:
+    void _CleanUpAllCredentials();
+
 private:
     LONG                _cRef;
-    CSampleCredential   **_rgpCredentials;          // Pointers to the credentials which will be enumerated by this 
-                                                    // Provider.
+    CSampleCredential   **_rgpCredentials;          // Pointers to the credentials which will be enumerated by this
+    // Provider.
 
     ICredentialProvider *_pWrappedProvider;         // Our wrapped provider.
     DWORD               _dwCredentialCount;         // The number of credentials provided by our wrapped provider.
-    DWORD               _dwWrappedDescriptorCount;  // The number of fields on each tile of our wrapped provider's 
-                                                    // credentials.
+    DWORD               _dwWrappedDescriptorCount;  // The number of fields on each tile of our wrapped provider's
+    // credentials.
     bool                _bEnumeratedSetSerialization;
 };

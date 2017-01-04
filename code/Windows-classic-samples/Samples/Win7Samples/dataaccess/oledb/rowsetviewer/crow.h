@@ -1,4 +1,4 @@
-//-----------------------------------------------------------------------------
+﻿//-----------------------------------------------------------------------------
 // Microsoft OLE DB RowsetViewer
 // Copyright (C) 1994 - 1999 By Microsoft Corporation.
 //
@@ -20,59 +20,71 @@
 
 
 /////////////////////////////////////////////////////////////////
-// CRow 
+// CRow
 //
 /////////////////////////////////////////////////////////////////
 class CRow : public CDataAccess
 {
 public:
-	//Constructors
-	CRow(CMainWindow* pCMainWindow, CMDIChild* pCMDIChild = NULL);
-	virtual ~CRow();
-	
-	//IUnknown Helpers
-	virtual HRESULT			AutoQI(DWORD dwCreateOpts);
-	virtual HRESULT			AutoRelease();
-	virtual IUnknown**		GetInterfaceAddress(REFIID riid);
+    //Constructors
+    CRow(CMainWindow* pCMainWindow, CMDIChild* pCMDIChild = NULL);
+    virtual ~CRow();
 
-	//Pure Virtual
-	virtual WCHAR*			GetObjectName()			{ return L"Row";			} 
-	virtual UINT			GetObjectMenu()			{ return IDM_ROWMENU;		}
-	virtual LONG			GetObjectImage()		{ return IMAGE_FORM;		}
-	virtual REFIID			GetDefaultInterface()	{ return IID_IRow;			}
+    //IUnknown Helpers
+    virtual HRESULT			AutoQI(DWORD dwCreateOpts);
+    virtual HRESULT			AutoRelease();
+    virtual IUnknown**		GetInterfaceAddress(REFIID riid);
 
-	virtual HRESULT			DisplayObject();
-	virtual WCHAR*			GetObjectDesc();
+    //Pure Virtual
+    virtual WCHAR*			GetObjectName()
+    {
+        return L"Row";
+    }
+    virtual UINT			GetObjectMenu()
+    {
+        return IDM_ROWMENU;
+    }
+    virtual LONG			GetObjectImage()
+    {
+        return IMAGE_FORM;
+    }
+    virtual REFIID			GetDefaultInterface()
+    {
+        return IID_IRow;
+    }
 
-	//Members
-	virtual HRESULT			SetupColAccess(BINDCOLS eBindCols = BIND_ALLCOLS);
+    virtual HRESULT			DisplayObject();
+    virtual WCHAR*			GetObjectDesc();
 
-	virtual HRESULT			CreateCommand(CAggregate* pCAggregate, REFIID riid, IUnknown** ppIUnknown);
-	virtual HRESULT			GetColumns(ULONG cColAccess, DBCOLUMNACCESS* rgColAccess);
-	virtual HRESULT			Open(CAggregate* pCAggregate, DBID* pColumnID, REFGUID rguidObjectType, REFIID riid, IUnknown** ppIUnknown);
-	virtual HRESULT			Bind(CAggregate* pCAggregate, WCHAR* pwszURL, DBBINDURLFLAG dwBindFlags, REFGUID rguidObjectType, REFIID riid, IUnknown** ppIUnknown);
-	virtual HRESULT			OpenRowset(CAggregate* pCAggregate, DBID* pTableID, DBID* pIndexID, REFIID riid, ULONG cPropSets, DBPROPSET* rgPropSets, IUnknown** ppIUnknown);
+    //Members
+    virtual HRESULT			SetupColAccess(BINDCOLS eBindCols = BIND_ALLCOLS);
 
-	//Row
-	//[MANADATORY]
-	IRow*						m_pIRow;
-	IGetSession*				m_pIGetSession;
+    virtual HRESULT			CreateCommand(CAggregate* pCAggregate, REFIID riid, IUnknown** ppIUnknown);
+    virtual HRESULT			GetColumns(ULONG cColAccess, DBCOLUMNACCESS* rgColAccess);
+    virtual HRESULT			Open(CAggregate* pCAggregate, DBID* pColumnID, REFGUID rguidObjectType, REFIID riid, IUnknown** ppIUnknown);
+    virtual HRESULT			Bind(CAggregate* pCAggregate, WCHAR* pwszURL, DBBINDURLFLAG dwBindFlags, REFGUID rguidObjectType, REFIID riid, IUnknown** ppIUnknown);
+    virtual HRESULT			OpenRowset(CAggregate* pCAggregate, DBID* pTableID, DBID* pIndexID, REFIID riid, ULONG cPropSets, DBPROPSET* rgPropSets, IUnknown** ppIUnknown);
 
-	//[OPTIONAL]
-	IColumnsInfo2*				m_pIColumnsInfo2;
-	ICreateRow*					m_pICreateRow;
-	IDBCreateCommand*			m_pIDBCreateCommand;
-	IRowChange*					m_pIRowChange;
-	IRowSchemaChange*			m_pIRowSchemaChange;
-	IBindResource*				m_pIBindResource;
-	IScopedOperations*			m_pIScopedOperations;
+    //Row
+    //[MANADATORY]
+    IRow*						m_pIRow;
+    IGetSession*				m_pIGetSession;
 
-	//ColAccess
-	ULONG						m_cColAccess;
-	DBCOLUMNACCESS*				m_rgColAccess;
+    //[OPTIONAL]
+    IColumnsInfo2*				m_pIColumnsInfo2;
+    ICreateRow*					m_pICreateRow;
+    IDBCreateCommand*			m_pIDBCreateCommand;
+    IRowChange*					m_pIRowChange;
+    IRowSchemaChange*			m_pIRowSchemaChange;
+    IBindResource*				m_pIBindResource;
+    IScopedOperations*			m_pIScopedOperations;
 
-	//Data
-	HROW						m_hSourceRow;
+    //ColAccess
+    ULONG						m_cColAccess;
+    DBCOLUMNACCESS*				m_rgColAccess;
+
+    //Data
+    HROW						m_hSourceRow;
 };
 
 

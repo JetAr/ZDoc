@@ -1,7 +1,7 @@
-/******************************************************************************
+﻿/******************************************************************************
  * <copyright file="PluginContext.cpp" company="Microsoft">
  *     Copyright (c) Microsoft Corporation.  All rights reserved.
- * </copyright>                                                                
+ * </copyright>
  *****************************************************************************/
 
 #include "PluginContext.h"
@@ -28,11 +28,11 @@ DWORD CShellContext::Initialize(__in PVOID pluginContext,
     shellPluginRequest = requestDetails;
     DWORD dwRet = NO_ERROR;
 
-    if ((RegisterWaitForSingleObject(&shellShutdownRegisterWait, 
-                                     requestDetails->shutdownNotificationHandle, 
-                                     _ShellCancellationCallback, 
-                                     this, 
-                                     INFINITE, 
+    if ((RegisterWaitForSingleObject(&shellShutdownRegisterWait,
+                                     requestDetails->shutdownNotificationHandle,
+                                     _ShellCancellationCallback,
+                                     this,
+                                     INFINITE,
                                      WT_EXECUTELONGFUNCTION | WT_EXECUTEONLYONCE) == 0))
     {
         dwRet = GetLastError();
@@ -61,9 +61,9 @@ VOID CShellContext::Command(__in WSMAN_PLUGIN_REQUEST * requestDetails,
     CCommandContext * command = new CCommandContext;
     if (command == NULL)
     {
-        WSManPluginOperationComplete(requestDetails, 
-                                     0, 
-                                     ERROR_OUTOFMEMORY, 
+        WSManPluginOperationComplete(requestDetails,
+                                     0,
+                                     ERROR_OUTOFMEMORY,
                                      L"Not enough memory to carry out the operation");
         return;
     }
@@ -75,9 +75,9 @@ VOID CShellContext::Command(__in WSMAN_PLUGIN_REQUEST * requestDetails,
                                       arguments);
     if (dwRet != NO_ERROR)
     {
-        WSManPluginOperationComplete(requestDetails, 
-                                     0, 
-                                     dwRet, 
+        WSManPluginOperationComplete(requestDetails,
+                                     0,
+                                     dwRet,
                                      L"Command::Initialize failed");
         delete command;
         command = NULL;
@@ -92,9 +92,9 @@ VOID CShellContext::Send(__in WSMAN_PLUGIN_REQUEST * requestDetails,
                          __in PCWSTR stream,
                          __in WSMAN_DATA * inboundData)
 {
-    WSManPluginOperationComplete(requestDetails, 
-                                 0, 
-                                 ERROR_INVALID_OPERATION, 
+    WSManPluginOperationComplete(requestDetails,
+                                 0,
+                                 ERROR_INVALID_OPERATION,
                                  L"Inbound data not accepted for shells");
 }
 
@@ -104,9 +104,9 @@ VOID CShellContext::Receive(__in WSMAN_PLUGIN_REQUEST * requestDetails,
                             __in WSMAN_STREAM_ID_SET * streamSet)
 
 {
-    WSManPluginOperationComplete(requestDetails, 
-                                 0, 
-                                 ERROR_INVALID_OPERATION, 
+    WSManPluginOperationComplete(requestDetails,
+                                 0,
+                                 ERROR_INVALID_OPERATION,
                                  L"Outbound data not available for shells");
 }
 
@@ -115,15 +115,15 @@ VOID CShellContext::Signal(__in WSMAN_PLUGIN_REQUEST * requestDetails,
                            __in DWORD flags,
                            __in PCWSTR code)
 {
-    WSManPluginOperationComplete(requestDetails, 
-                                 0, 
-                                 ERROR_INVALID_OPERATION, 
+    WSManPluginOperationComplete(requestDetails,
+                                 0,
+                                 ERROR_INVALID_OPERATION,
                                  L"Signal not available for shells");
 }
 
 // Registered callback for shell shutdown notification.
 VOID CALLBACK CShellContext::_ShellCancellationCallback(PVOID context,
-                                                        BOOLEAN TimerOrWaitFired)
+        BOOLEAN TimerOrWaitFired)
 {
     CShellContext *shell = (CShellContext*) context;
     shell->ShellCancellationCallback();
@@ -138,9 +138,9 @@ VOID CShellContext::ShellCancellationCallback()
         shellShutdownRegisterWait = NULL;
     }
 
-    WSManPluginOperationComplete(shellPluginRequest, 
-                                 0, 
-                                 ERROR_CANCELLED, 
+    WSManPluginOperationComplete(shellPluginRequest,
+                                 0,
+                                 ERROR_CANCELLED,
                                  L"Shell was cancelled by WSMAN");
 }
 
@@ -180,11 +180,11 @@ DWORD CCommandContext::Initialize(__in WSMAN_PLUGIN_REQUEST * requestDetails,
 
     // Command ready for further operations
     DWORD dwRet = 0;
-    if (RegisterWaitForSingleObject(&commandShutdownRegisterWait, 
-                                    requestDetails->shutdownNotificationHandle, 
-                                    _CommandCancellationCallback, 
-                                    this, 
-                                    INFINITE, 
+    if (RegisterWaitForSingleObject(&commandShutdownRegisterWait,
+                                    requestDetails->shutdownNotificationHandle,
+                                    _CommandCancellationCallback,
+                                    this,
+                                    INFINITE,
                                     WT_EXECUTELONGFUNCTION | WT_EXECUTEONLYONCE) == 0)
     {
         dwRet = GetLastError();
@@ -213,29 +213,29 @@ VOID CCommandContext::Send(__in WSMAN_PLUGIN_REQUEST * requestDetails,
     if (wcscmp(stream, WSMAN_STREAM_ID_STDIN) != 0)
     {
         // only accept inbound data to be retrieved from stdin
-        WSManPluginOperationComplete(requestDetails, 
-                                     0, 
-                                     ERROR_INVALID_OPERATION, 
+        WSManPluginOperationComplete(requestDetails,
+                                     0,
+                                     ERROR_INVALID_OPERATION,
                                      L"Inbound data only accepted for stdin stream");
         return;
     }
 
     //Send data back
-    HANDLE waitHandles[] = 
-    { 
-        receiveAvailable, 
-        requestDetails->shutdownNotificationHandle 
+    HANDLE waitHandles[] =
+    {
+        receiveAvailable,
+        requestDetails->shutdownNotificationHandle
     };
-    DWORD waitResult = WaitForMultipleObjects(2, 
-                                              waitHandles, 
-                                              FALSE, 
-                                              INFINITE);
+    DWORD waitResult = WaitForMultipleObjects(2,
+                       waitHandles,
+                       FALSE,
+                       INFINITE);
     if (waitResult == WAIT_OBJECT_0+1)
     {
         //Need to fail the operation
-        WSManPluginOperationComplete(requestDetails, 
-                                     0, 
-                                     ERROR_CANCELLED, 
+        WSManPluginOperationComplete(requestDetails,
+                                     0,
+                                     ERROR_CANCELLED,
                                      L"Operation was cancelled");
         return;
     }
@@ -252,14 +252,14 @@ VOID CCommandContext::Send(__in WSMAN_PLUGIN_REQUEST * requestDetails,
     }
     receiveFlags |= WSMAN_FLAG_RECEIVE_FLUSH;
 
-    DWORD result = WSManPluginReceiveResult(receivePluginRequest, 
-                                            receiveFlags, 
-                                            WSMAN_STREAM_ID_STDOUT, 
-                                            inboundData, 
-                                            commandState, 
+    DWORD result = WSManPluginReceiveResult(receivePluginRequest,
+                                            receiveFlags,
+                                            WSMAN_STREAM_ID_STDOUT,
+                                            inboundData,
+                                            commandState,
                                             NO_ERROR);
     if ((result != NO_ERROR) ||
-        (flags == WSMAN_FLAG_SEND_NO_MORE_DATA))
+            (flags == WSMAN_FLAG_SEND_NO_MORE_DATA))
     {
         HANDLE h = (HANDLE)InterlockedExchangePointer((PVOID*)&receiveShutdownRegisterWait, NULL);
         if (h)
@@ -281,42 +281,42 @@ VOID CCommandContext::Send(__in WSMAN_PLUGIN_REQUEST * requestDetails,
     // done with this send
     WSManPluginOperationComplete(requestDetails, 0, NO_ERROR, NULL);
 }
- 
+
 // Receive output data from command.
 VOID CCommandContext::Receive(__in WSMAN_PLUGIN_REQUEST * requestDetails,
                               __in DWORD flags,
                               __in WSMAN_STREAM_ID_SET * streamSet)
 {
     // support only to receive from stdout and stderr
-    if (streamSet == NULL || 
-        streamSet->streamIDsCount != 2)
+    if (streamSet == NULL ||
+            streamSet->streamIDsCount != 2)
     {
-        WSManPluginOperationComplete(requestDetails, 
-                                     0, 
-                                     ERROR_INVALID_PARAMETER, 
+        WSManPluginOperationComplete(requestDetails,
+                                     0,
+                                     ERROR_INVALID_PARAMETER,
                                      L"Expecting 2 streams for receive of stdout and stderr");
         return;
     }
-    if (wcscmp(streamSet->streamIDs[0], L"stdout") != 0 || 
-        wcscmp(streamSet->streamIDs[1], L"stderr") != 0)
+    if (wcscmp(streamSet->streamIDs[0], L"stdout") != 0 ||
+            wcscmp(streamSet->streamIDs[1], L"stderr") != 0)
     {
-        WSManPluginOperationComplete(requestDetails, 
-                                     0, 
-                                     ERROR_INVALID_PARAMETER, 
+        WSManPluginOperationComplete(requestDetails,
+                                     0,
+                                     ERROR_INVALID_PARAMETER,
                                      L"Expecting 2 streams for receive of stdout and stderr");
         return;
     }
 
-    if (RegisterWaitForSingleObject(&receiveShutdownRegisterWait, 
-                                    requestDetails->shutdownNotificationHandle, 
-                                    _ReceiveCancellationCallback, 
-                                    this, 
-                                    INFINITE, 
+    if (RegisterWaitForSingleObject(&receiveShutdownRegisterWait,
+                                    requestDetails->shutdownNotificationHandle,
+                                    _ReceiveCancellationCallback,
+                                    this,
+                                    INFINITE,
                                     WT_EXECUTELONGFUNCTION | WT_EXECUTEONLYONCE) == 0)
     {
-        WSManPluginOperationComplete(requestDetails, 
-                                     0, 
-                                     GetLastError(), 
+        WSManPluginOperationComplete(requestDetails,
+                                     0,
+                                     GetLastError(),
                                      L"RegisterWaitForSingleObject failed");
         return;
     }
@@ -349,14 +349,14 @@ VOID CCommandContext::Signal(__in WSMAN_PLUGIN_REQUEST * requestDetails,
     else
     {
         // Signal operation is done
-        WSManPluginOperationComplete(requestDetails, 0, ERROR_INVALID_OPERATION, 
+        WSManPluginOperationComplete(requestDetails, 0, ERROR_INVALID_OPERATION,
                                      L"Unsupported signal");
     }
 }
 
 // Registered callback for command shutdown notification.
 VOID CALLBACK CCommandContext::_CommandCancellationCallback(PVOID context,
-                                                            BOOLEAN TimerOrWaitFired)
+        BOOLEAN TimerOrWaitFired)
 {
     CCommandContext *command = (CCommandContext*) context;
     command->CommandCancellationCallback();
@@ -374,16 +374,16 @@ VOID CCommandContext::CommandCancellationCallback()
             h = NULL;
         }
 
-        WSManPluginOperationComplete(commandPluginRequest, 
-                                     0, 
-                                     ERROR_CANCELLED, 
+        WSManPluginOperationComplete(commandPluginRequest,
+                                     0,
+                                     ERROR_CANCELLED,
                                      L"Command was shutdown by wsman service");
     }
 }
 
 // Registered callback for receive shutdown notification.
 VOID CALLBACK CCommandContext::_ReceiveCancellationCallback(PVOID context,
-                                                        BOOLEAN TimerOrWaitFired)
+        BOOLEAN TimerOrWaitFired)
 {
     CCommandContext * command = (CCommandContext *) context;
     command->ReceiveCancellationCallback();
@@ -402,9 +402,9 @@ VOID CCommandContext::ReceiveCancellationCallback()
         WSMAN_PLUGIN_REQUEST * receiveRequest = receivePluginRequest;
         receivePluginRequest = NULL;
 
-        WSManPluginOperationComplete(receiveRequest, 
-                                     0, 
-                                     ERROR_CANCELLED, 
+        WSManPluginOperationComplete(receiveRequest,
+                                     0,
+                                     ERROR_CANCELLED,
                                      L"Receive Shutdown");
     }
 }

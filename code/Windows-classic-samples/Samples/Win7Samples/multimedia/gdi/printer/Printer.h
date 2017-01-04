@@ -1,11 +1,11 @@
-
+﻿
 /******************************************************************************\
-*       This is a part of the Microsoft Source Code Samples. 
+*       This is a part of the Microsoft Source Code Samples.
 *       Copyright 1993 - 2000 Microsoft Corporation.
-*       All rights reserved. 
-*       This source code is only intended as a supplement to 
+*       All rights reserved.
+*       This source code is only intended as a supplement to
 *       Microsoft Development Tools and/or WinHelp documentation.
-*       See these sources for detailed information regarding the 
+*       See these sources for detailed information regarding the
 *       Microsoft samples programs.
 \******************************************************************************/
 
@@ -28,43 +28,43 @@
 
 typedef struct tagMAPMODELOOKUP
 {
-  WORD   wMenuItem;
-  int    iMapMode;
+    WORD   wMenuItem;
+    int    iMapMode;
 
 } MAPMODELOOKUP;
 
 typedef struct tagGRAPHICLOOKUP
 {
-  WORD   wMenuItem;
-  DWORD  dwGraphic;
+    WORD   wMenuItem;
+    DWORD  dwGraphic;
 
 } GRAPHICLOOKUP;
 
 typedef struct tagPENWIDTHLOOKUP
 {
-  WORD   wMenuItem;
-  int    iPenWidth;
+    WORD   wMenuItem;
+    int    iPenWidth;
 
 } PENWIDTHLOOKUP;
 
 typedef struct tagPENSTYLELOOKUP
 {
-  WORD   wMenuItem;
-  int    iPenStyle;
+    WORD   wMenuItem;
+    int    iPenStyle;
 
 } PENSTYLELOOKUP;
 
 typedef struct tagBRUSHSTYLELOOKUP
 {
-  WORD   wMenuItem;
-  int    iBrushStyle;
+    WORD   wMenuItem;
+    int    iBrushStyle;
 
 } BRUSHSTYLELOOKUP;
 
 typedef struct tagSTATUSBARLOOKUP
 {
-  WORD   wMenuItem;
-  LPCSTR szText;
+    WORD   wMenuItem;
+    LPCSTR szText;
 
 } STATUSBARLOOKUP;
 
@@ -97,59 +97,69 @@ int     giBrushStyle = HS_HORIZONTAL;    // current brush style
 
 MAPMODELOOKUP gaMMLookup[] =
 
-    { { IDM_HIENGLISH  , MM_HIENGLISH   },
-      { IDM_HIMETRIC   , MM_HIMETRIC    },
-      { IDM_LOENGLISH  , MM_LOENGLISH   },
-      { IDM_LOMETRIC   , MM_LOMETRIC    },
-      { IDM_TWIPS      , MM_TWIPS       },
-      { IDM_ISOTROPIC  , MM_ISOTROPIC   },
-      { IDM_ANISOTROPIC, MM_ANISOTROPIC },
-      { IDM_TEXT       , MM_TEXT        } };
+{
+    { IDM_HIENGLISH, MM_HIENGLISH   },
+    { IDM_HIMETRIC, MM_HIMETRIC    },
+    { IDM_LOENGLISH, MM_LOENGLISH   },
+    { IDM_LOMETRIC, MM_LOMETRIC    },
+    { IDM_TWIPS, MM_TWIPS       },
+    { IDM_ISOTROPIC, MM_ISOTROPIC   },
+    { IDM_ANISOTROPIC, MM_ANISOTROPIC },
+    { IDM_TEXT, MM_TEXT        }
+};
 
 GRAPHICLOOKUP gaGraphicLookup[] =
 
-    { { IDM_ARC        , ARC         },
-      { IDM_ELLIPSE    , ELLIPSE     },
-      { IDM_LINETO     , LINETO      },
-      { IDM_PIE        , PIE         },
-      { IDM_PLGBLT     , PLG_BLT     },
-      { IDM_POLYBEZIER , POLYBEZIER  },
-      { IDM_POLYGON    , POLYGON     },
-      { IDM_POLYLINE   , POLYLINE    },
-      { IDM_POLYPOLYGON, POLYPOLYGON },
-      { IDM_RECTANGLE  , RECTANGLE   },
-      { IDM_ROUNDRECT  , ROUNDRECT   },
-      { IDM_STRETCHBLT , STRETCH_BLT } };
+{
+    { IDM_ARC, ARC         },
+    { IDM_ELLIPSE, ELLIPSE     },
+    { IDM_LINETO, LINETO      },
+    { IDM_PIE, PIE         },
+    { IDM_PLGBLT, PLG_BLT     },
+    { IDM_POLYBEZIER, POLYBEZIER  },
+    { IDM_POLYGON, POLYGON     },
+    { IDM_POLYLINE, POLYLINE    },
+    { IDM_POLYPOLYGON, POLYPOLYGON },
+    { IDM_RECTANGLE, RECTANGLE   },
+    { IDM_ROUNDRECT, ROUNDRECT   },
+    { IDM_STRETCHBLT, STRETCH_BLT }
+};
 
 PENWIDTHLOOKUP gaPenWidths[] =
 
-    { { IDM_PENWIDTH_1, 1 },
-      { IDM_PENWIDTH_2, 2 },
-      { IDM_PENWIDTH_3, 3 },
-      { IDM_PENWIDTH_4, 4 },
-      { IDM_PENWIDTH_5, 5 },
-      { IDM_PENWIDTH_6, 6 },
-      { IDM_PENWIDTH_7, 7 },
-      { IDM_PENWIDTH_8, 8 } };
+{
+    { IDM_PENWIDTH_1, 1 },
+    { IDM_PENWIDTH_2, 2 },
+    { IDM_PENWIDTH_3, 3 },
+    { IDM_PENWIDTH_4, 4 },
+    { IDM_PENWIDTH_5, 5 },
+    { IDM_PENWIDTH_6, 6 },
+    { IDM_PENWIDTH_7, 7 },
+    { IDM_PENWIDTH_8, 8 }
+};
 
 PENSTYLELOOKUP gaPenStyles[] =
 
-    { { IDM_PENCOLOR_SOLID      , PS_SOLID      },
-      { IDM_PENCOLOR_DASH       , PS_DASH       },
-      { IDM_PENCOLOR_DOT        , PS_DOT        },
-      { IDM_PENCOLOR_DASHDOT    , PS_DASHDOT    },
-      { IDM_PENCOLOR_DASHDOTDOT , PS_DASHDOTDOT },
-      { IDM_PENCOLOR_NULL       , PS_NULL       },
-      { IDM_PENCOLOR_INSIDEFRAME, PS_INSIDEFRAME} };
+{
+    { IDM_PENCOLOR_SOLID, PS_SOLID      },
+    { IDM_PENCOLOR_DASH, PS_DASH       },
+    { IDM_PENCOLOR_DOT, PS_DOT        },
+    { IDM_PENCOLOR_DASHDOT, PS_DASHDOT    },
+    { IDM_PENCOLOR_DASHDOTDOT, PS_DASHDOTDOT },
+    { IDM_PENCOLOR_NULL, PS_NULL       },
+    { IDM_PENCOLOR_INSIDEFRAME, PS_INSIDEFRAME}
+};
 
 BRUSHSTYLELOOKUP gaBrushStyles[] =
 
-    { { IDM_BRUSHSTYLE_HORIZONTAL     , HS_HORIZONTAL     },
-      { IDM_BRUSHSTYLE_VERTICAL       , HS_VERTICAL       },
-      { IDM_BRUSHSTYLE_FDIAGONAL      , HS_FDIAGONAL      },
-      { IDM_BRUSHSTYLE_BDIAGONAL      , HS_BDIAGONAL      },
-      { IDM_BRUSHSTYLE_CROSS          , HS_CROSS          },
-      { IDM_BRUSHSTYLE_DIAGCROSS      , HS_DIAGCROSS      } };
+{
+    { IDM_BRUSHSTYLE_HORIZONTAL, HS_HORIZONTAL     },
+    { IDM_BRUSHSTYLE_VERTICAL, HS_VERTICAL       },
+    { IDM_BRUSHSTYLE_FDIAGONAL, HS_FDIAGONAL      },
+    { IDM_BRUSHSTYLE_BDIAGONAL, HS_BDIAGONAL      },
+    { IDM_BRUSHSTYLE_CROSS, HS_CROSS          },
+    { IDM_BRUSHSTYLE_DIAGCROSS, HS_DIAGCROSS      }
+};
 
 
 

@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -36,7 +36,7 @@ Routine Name:
 Routine Description:
 
     Before calling into PT APIs, we need to have a PrintTicket Provider. This routine calls
-    the PTOpenProvider API to obtain the provider and caches the provider in psi. 
+    the PTOpenProvider API to obtain the provider and caches the provider in psi.
     If the provider is already cached, then that cached provider is returned.
 
 Arguments:
@@ -47,10 +47,10 @@ Return Value:
     E_* otherwise.
 
 --*/
-HRESULT 
+HRESULT
 GetProviderWrapper(
     __inout PPTPC_STATE_INFO psi
-    )
+)
 {
     HRESULT hr = S_OK;
 
@@ -60,13 +60,13 @@ GetProviderWrapper(
     }
     else if ( NULL == psi->hProvider )
     {
-        hr = PTOpenProvider( 
-                            psi->szPrinterName,
-                            gdwVersion,
-                            &(psi->hProvider)
-                            );        
+        hr = PTOpenProvider(
+                 psi->szPrinterName,
+                 gdwVersion,
+                 &(psi->hProvider)
+             );
     }
-    
+
     return hr;
 }
 
@@ -89,7 +89,7 @@ Return Value:
 HRESULT
 OpenPrinterWrapper(
     __inout PPTPC_STATE_INFO psi
-    )
+)
 {
     HRESULT hr = S_OK;
 
@@ -113,7 +113,7 @@ Routine Name:
 
 Routine Description:
 
-    DocumentProperties is the best way to get the User Devmode 
+    DocumentProperties is the best way to get the User Devmode
 
 Arguments:
 
@@ -131,15 +131,15 @@ HRESULT
 GetDevmodeFromDocProperty(
     __inout     PPTPC_STATE_INFO psi,
     __deref_out LPDEVMODE       *ppDevMode
-    )
+)
 {
     HRESULT  hr      = S_OK;
     PDEVMODE pdm     = NULL;
     LONG     lRetVal = -1;
 
     if ( NULL == psi ||
-         NULL == ppDevMode ||
-         NULL == psi->hPrinter )
+            NULL == ppDevMode ||
+            NULL == psi->hPrinter )
     {
         hr = E_INVALIDARG;
     }
@@ -147,15 +147,15 @@ GetDevmodeFromDocProperty(
     if ( SUCCEEDED(hr) )
     {
         *ppDevMode = NULL;
-        lRetVal = DocumentProperties(NULL,                 // handle to parent window 
-                                      psi->hPrinter,        // handle to printer object
-                                      psi->szPrinterName,   // device name
-                                      NULL,                 // modified device mode
-                                      NULL,                 // original device mode
-                                      0                     // mode options
-                       );
+        lRetVal = DocumentProperties(NULL,                 // handle to parent window
+                                     psi->hPrinter,        // handle to printer object
+                                     psi->szPrinterName,   // device name
+                                     NULL,                 // modified device mode
+                                     NULL,                 // original device mode
+                                     0                     // mode options
+                                    );
 
-        if ( lRetVal > 0 )   
+        if ( lRetVal > 0 )
         {
             pdm = (PDEVMODE)MemAlloc(lRetVal);
 
@@ -176,19 +176,19 @@ GetDevmodeFromDocProperty(
 
     if ( SUCCEEDED(hr) )
     {
-        lRetVal = DocumentProperties(NULL,          
-                                     psi->hPrinter, 
+        lRetVal = DocumentProperties(NULL,
+                                     psi->hPrinter,
                                      psi->szPrinterName,
                                      pdm,
                                      NULL,
                                      DM_OUT_BUFFER
-                                     );
-                
+                                    );
+
         if ( IDOK == lRetVal )
         {
             *ppDevMode = pdm;
         }
-        else if ( IDCANCEL == lRetVal ) 
+        else if ( IDCANCEL == lRetVal )
         {
             // Shouldn't happen since we are not throwing UI
             hr = E_FAIL;
@@ -235,7 +235,7 @@ GetUserDevmode(
     LPDEVMODE        pDevMode   = NULL;
 
     if ( NULL == psi ||
-         NULL == ppDevMode )
+            NULL == ppDevMode )
     {
         hr = E_INVALIDARG;
     }
@@ -276,14 +276,14 @@ ConvertDevmodeToPrintTicketStream(
     __inout     PPTPC_STATE_INFO    psi,
     __in        LPDEVMODE          pDevMode,
     __deref_out IStream          **ppPrintTicketStream
-    )
+)
 {
     HRESULT     hr         = S_OK;
     DWORD       cbDevmode  = 0;
 
     if ( NULL == psi                ||
-         NULL == pDevMode           ||
-         NULL == ppPrintTicketStream)
+            NULL == pDevMode           ||
+            NULL == ppPrintTicketStream)
     {
         hr = E_INVALIDARG;
     }
@@ -301,17 +301,17 @@ ConvertDevmodeToPrintTicketStream(
     }
 
     if ( SUCCEEDED(hr))
-    {    
+    {
         cbDevmode = pDevMode->dmSize + pDevMode->dmDriverExtra;
-        hr = PTConvertDevModeToPrintTicket( 
-                    psi->hProvider,
-                    cbDevmode,
-                    pDevMode,
-                    kPTJobScope,
-                    *ppPrintTicketStream
-                    );   
+        hr = PTConvertDevModeToPrintTicket(
+                 psi->hProvider,
+                 cbDevmode,
+                 pDevMode,
+                 kPTJobScope,
+                 *ppPrintTicketStream
+             );
     }
-    
+
     return hr;
 }
 
@@ -321,9 +321,9 @@ Routine Name:
 
 Routine Description:
 
-    Gets User Default PrintTicket in form of a stream. The routine first obtains default 
+    Gets User Default PrintTicket in form of a stream. The routine first obtains default
     devmode by calling GetPrinter with PRINTER_INFO_9. It then calls the PT/PC APIs
-    to convert the devmode into a PrintTicket. The API returns the PrintTicket in 
+    to convert the devmode into a PrintTicket. The API returns the PrintTicket in
     the form of a stream.
 
 
@@ -340,11 +340,11 @@ HRESULT
 GetUserPrintTicketStream(
     __in        PPTPC_STATE_INFO psi,
     __deref_out IStream          **ppPrintTicketStream
-   )
+)
 {
     HRESULT     hr       = S_OK;
     LPDEVMODE   pDevMode = NULL;
-  
+
     if ( SUCCEEDED(hr) )
     {
         hr = GetUserDevmode(psi, &pDevMode);
@@ -387,15 +387,15 @@ GetPrintCapabilitiesBasedOnPrintTicket(
     __inout     PPTPC_STATE_INFO   psi,
     __in        IStream           *pPrintTicketStream,
     __deref_out IStream          **ppPrintCapsStream
-   )
+)
 {
     HRESULT         hr                  = S_OK;
     HPTPROVIDER     hProvider           = NULL;
 
 
     if ( NULL == psi                ||
-         NULL == pPrintTicketStream ||
-         NULL == ppPrintCapsStream 
+            NULL == pPrintTicketStream ||
+            NULL == ppPrintCapsStream
        )
     {
         hr = E_INVALIDARG;
@@ -414,14 +414,14 @@ GetPrintCapabilitiesBasedOnPrintTicket(
     }
 
     if ( SUCCEEDED(hr))
-    {    
-   
+    {
+
         hr = PTGetPrintCapabilities(
-                            psi->hProvider,
-                            pPrintTicketStream,
-                            *ppPrintCapsStream,
-                            NULL
-            );
+                 psi->hProvider,
+                 pPrintTicketStream,
+                 *ppPrintCapsStream,
+                 NULL
+             );
 
     }
 
@@ -449,12 +449,12 @@ HRESULT
 ConvertPTPCStreamToDOM(
     __in        IStream           *pPTPCStream,
     __deref_out IXMLDOMDocument2 **ppXMLDOM
-    )
+)
 {
     HRESULT hr = S_OK;
 
     if ( NULL == pPTPCStream ||
-         NULL == ppXMLDOM )
+            NULL == ppXMLDOM )
     {
         hr = E_INVALIDARG;
     }
@@ -480,7 +480,7 @@ Routine Description:
 Arguments:
     pPTPCStream : Incoming Stream.
     ppbPTBuf    : On exit, points the buffer pointer.
-    pcbPTBuf    : On exit, it points to a DWORD which specifies the size of the above buffer 
+    pcbPTBuf    : On exit, it points to a DWORD which specifies the size of the above buffer
 
 Return Value:
     S_OK if successful.
@@ -492,7 +492,7 @@ ConvertPTStreamToBuffer(
     __in                             IStream *pStream,
     __deref_out_bcount(*pcbPTBuf)    PBYTE   *ppbPTBuf,
     __out                            PDWORD   pcbPTBuf
-    )
+)
 {
     HRESULT     hr       = S_OK;
     UINT        cbBuf    = 0;
@@ -500,9 +500,9 @@ ConvertPTStreamToBuffer(
     STATSTG     stats;
 
     if( NULL == pStream  ||
-        NULL == ppbPTBuf ||
-        NULL == pcbPTBuf
-       )
+            NULL == ppbPTBuf ||
+            NULL == pcbPTBuf
+      )
     {
         hr = E_INVALIDARG;
     }
@@ -522,7 +522,7 @@ ConvertPTStreamToBuffer(
         // actually cause any bad stuff.
         //
         cbBuf = stats.cbSize.LowPart;
-    
+
         pBuffer = (PBYTE)CoTaskMemAlloc(cbBuf);
 
         if( NULL == pBuffer )
@@ -547,7 +547,8 @@ ConvertPTStreamToBuffer(
             hr         = pStream->Read( pos, bytesLeft, &bytesRead );
             pos       += bytesRead;
             bytesLeft -= bytesRead;
-        } while( SUCCEEDED(hr) && bytesRead > 0 );
+        }
+        while( SUCCEEDED(hr) && bytesRead > 0 );
     }
 
     if( SUCCEEDED(hr) )
@@ -572,7 +573,7 @@ Routine Name:
 Routine Description:
 
     The routine converts a full input print ticket into a minimal print ticket.
-    PrintTicket consists of a header (namespaces etc) and a collection of feature-option 
+    PrintTicket consists of a header (namespaces etc) and a collection of feature-option
     pairs. The minimal (but still valid, well formed) print ticket will not have any of
     the feature-option pairs.
 
@@ -584,17 +585,17 @@ Return Value:
     E_* otherwise.
 
 --*/
-HRESULT 
+HRESULT
 ConvertFullPrintTicketToMinimalPrintTicket(
     __inout  IXMLDOMDocument2  *pPrintTicketDOM
-    )
+)
 {
     HRESULT         hr                  = S_OK;
     IXMLDOMElement  *pXMLDOMElement     = NULL;
     IXMLDOMNodeList *pXMLDOMNodeList    = NULL;
 
     hr = pPrintTicketDOM->get_documentElement(&pXMLDOMElement);
-    
+
     if ( SUCCEEDED(hr) )
     {
         hr = pXMLDOMElement->get_childNodes(&pXMLDOMNodeList);
@@ -605,7 +606,7 @@ ConvertFullPrintTicketToMinimalPrintTicket(
         IXMLDOMNode     *pXMLChild      = NULL;
         while ( SUCCEEDED(hr) &&
                 (S_OK == (hr = pXMLDOMNodeList->nextNode(&pXMLChild)) )
-               )           
+              )
         {
             hr = pXMLDOMElement->removeChild(pXMLChild, NULL);
             pXMLChild->Release();
@@ -671,7 +672,7 @@ RemoveAllAttributesExceptNameFromOptionNode(
     HRESULT             hr               = S_OK;
     LONG                cAttributes      = 0;
     IXMLDOMNamedNodeMap *pAttrMap        = NULL;
-    
+
     hr = pNode->get_attributes(&pAttrMap);
 
     if ( SUCCEEDED(hr) )
@@ -680,7 +681,7 @@ RemoveAllAttributesExceptNameFromOptionNode(
     }
 
     for( INT i = 0; SUCCEEDED(hr) && i < cAttributes; i++ )
-    {    
+    {
         BSTR                bstrAttrName     = NULL;
         IXMLDOMNode        *pCurrentAttrNode = NULL;
         IXMLDOMAttribute   *pCurrentAttr     = NULL;
@@ -689,15 +690,15 @@ RemoveAllAttributesExceptNameFromOptionNode(
         if (SUCCEEDED(hr))
         {
             hr = pCurrentAttrNode->QueryInterface(
-                            IID_IXMLDOMAttribute,
-                            (void**)&pCurrentAttr );
+                     IID_IXMLDOMAttribute,
+                     (void**)&pCurrentAttr );
         }
 
         if (SUCCEEDED(hr))
         {
             hr = pCurrentAttr->get_baseName( &bstrAttrName );
         }
-        
+
         if ( SUCCEEDED(hr) )
         {
             // If an attribute is not named "name", remove it
@@ -724,7 +725,7 @@ RemoveAllAttributesExceptNameFromOptionNode(
         }
 
     }
-    
+
     if ( NULL != pAttrMap )
     {
         pAttrMap->Release();
@@ -780,7 +781,7 @@ RemoveAllChildrenWithProperty(
         IXMLDOMNode     *pXMLChild      = NULL;
         while ( SUCCEEDED(hr) &&
                 (S_OK == (hr = pXMLDOMNodeList->nextNode(&pXMLChild)) )
-               )           
+              )
         {
             BSTR bstrName = NULL;
             pXMLChild->get_baseName(&bstrName);
@@ -816,7 +817,7 @@ Routine Name:
 
 Routine Desription
 
-The PrintCap Option Node looks like 
+The PrintCap Option Node looks like
 
     <psf:Option name="psk:ISOA4" constrained="psk:None">
         <psf:ScoredProperty name="psk:MediaSizeWidth">
@@ -841,20 +842,20 @@ We change it to
     </psf:Option>
 
     i.e. Remove the "constrained" attribute
-         Remove the psf:Property 
+         Remove the psf:Property
 
 --*/
 HRESULT
 ConvertPrintCapOptionNodeToPrintTicketOptionNode(
     __inout    IXMLDOMNode       *pOptionNode
-    )
+)
 {
- 
+
     HRESULT hr = S_OK;
 
     // Remove the "constrained" attribute.
     hr = RemoveAllAttributesExceptNameFromOptionNode(pOptionNode);
-    
+
 
     if ( SUCCEEDED(hr) )
     {
@@ -894,7 +895,7 @@ CreatePTFeatureOptionNodeFromPrintCapOptionNode(
     __in        PPTPC_STATE_INFO   psi,
     __in        IXMLDOMNode       *pPrintCapsOptionNode,
     __deref_out IXMLDOMNode      **ppPrintTicketFeatureNode
-    )
+)
 {
     HRESULT     hr                  = S_OK;
     IXMLDOMNode *pParentNode        = NULL;
@@ -902,7 +903,7 @@ CreatePTFeatureOptionNodeFromPrintCapOptionNode(
     VARIANT_BOOL varDeep            = VARIANT_TRUE;
 
     if ( NULL == pPrintCapsOptionNode ||
-         NULL == ppPrintTicketFeatureNode )
+            NULL == ppPrintTicketFeatureNode )
     {
         hr = E_INVALIDARG;
     }
@@ -915,8 +916,8 @@ CreatePTFeatureOptionNodeFromPrintCapOptionNode(
     // 3. From the option node, remove the Property "DisplayName"
     // 4. Since the pPrintCapabilitiesNode only indicates the option, but doesn't indicate which feature
     //    we have to go to the parent to get the feature Node.
-    // 5. Clone the feauture node and then add the cloned option node as a child.  
-    
+    // 5. Clone the feauture node and then add the cloned option node as a child.
+
     if ( SUCCEEDED(hr) )
     {
         *ppPrintTicketFeatureNode = NULL;
@@ -977,7 +978,7 @@ Return Value:
 --*/
 HRESULT
 MergeNodeIntoMinimalPrintTicket(
-    __in  IXMLDOMDocument2  *pPrintTicketMinimal, 
+    __in  IXMLDOMDocument2  *pPrintTicketMinimal,
     __in  IXMLDOMNode       *pNode)
 {
     HRESULT hr = S_OK;

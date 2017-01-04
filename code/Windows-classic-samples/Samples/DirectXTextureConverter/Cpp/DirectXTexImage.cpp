@@ -1,6 +1,6 @@
-//-------------------------------------------------------------------------------------
+﻿//-------------------------------------------------------------------------------------
 // DirectXTexImage.cpp
-//  
+//
 // DirectX Texture Library - Image container
 //
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
@@ -63,33 +63,33 @@ void _DetermineImageArray( const TexMetadata& metadata, DWORD cpFlags,
         break;
 
     case TEX_DIMENSION_TEXTURE3D:
+    {
+        size_t w = metadata.width;
+        size_t h = metadata.height;
+        size_t d = metadata.depth;
+
+        for( size_t level=0; level < metadata.mipLevels; ++level )
         {
-            size_t w = metadata.width;
-            size_t h = metadata.height;
-            size_t d = metadata.depth;
+            size_t rowPitch, slicePitch;
+            ComputePitch( metadata.format, w, h, rowPitch, slicePitch, cpFlags );
 
-            for( size_t level=0; level < metadata.mipLevels; ++level )
+            for( size_t slice=0; slice < d; ++slice )
             {
-                size_t rowPitch, slicePitch;
-                ComputePitch( metadata.format, w, h, rowPitch, slicePitch, cpFlags );
-
-                for( size_t slice=0; slice < d; ++slice )
-                {
-                    _pixelSize += slicePitch;
-                    ++_nimages;
-                }
-
-                if ( h > 1 )
-                    h >>= 1;
-
-                if ( w > 1 )
-                    w >>= 1;
-
-                if ( d > 1 )
-                    d >>= 1;
+                _pixelSize += slicePitch;
+                ++_nimages;
             }
+
+            if ( h > 1 )
+                h >>= 1;
+
+            if ( w > 1 )
+                w >>= 1;
+
+            if ( d > 1 )
+                d >>= 1;
         }
-        break;
+    }
+    break;
 
     default:
         assert( false );
@@ -157,7 +157,7 @@ bool _SetupImageArray( uint8_t *pMemory, size_t pixelSize,
                 {
                     return false;
                 }
-            
+
                 if ( h > 1 )
                     h >>= 1;
 
@@ -168,56 +168,56 @@ bool _SetupImageArray( uint8_t *pMemory, size_t pixelSize,
         return true;
 
     case TEX_DIMENSION_TEXTURE3D:
+    {
+        if (metadata.mipLevels == 0 || metadata.depth == 0)
         {
-            if (metadata.mipLevels == 0 || metadata.depth == 0)
-            {
-                return false;
-            }
-
-            size_t w = metadata.width;
-            size_t h = metadata.height;
-            size_t d = metadata.depth;
-
-            for( size_t level=0; level < metadata.mipLevels; ++level )
-            {
-                size_t rowPitch, slicePitch;
-                ComputePitch( metadata.format, w, h, rowPitch, slicePitch, cpFlags );
-
-                for( size_t slice=0; slice < d; ++slice )
-                {
-                    if ( index >= nImages )
-                    {
-                        return false;
-                    }
-
-                    // We use the same memory organization that Direct3D 11 needs for D3D11_SUBRESOURCE_DATA
-                    // with all slices of a given miplevel being continuous in memory
-                    images[index].width = w;
-                    images[index].height = h;
-                    images[index].format = metadata.format;
-                    images[index].rowPitch = rowPitch;
-                    images[index].slicePitch = slicePitch;
-                    images[index].pixels = pixels;
-                    ++index;
-
-                    pixels += slicePitch;
-                    if ( pixels > pEndBits )
-                    {
-                        return false;
-                    }
-                }
-            
-                if ( h > 1 )
-                    h >>= 1;
-
-                if ( w > 1 )
-                    w >>= 1;
-
-                if ( d > 1 )
-                    d >>= 1;
-            }
+            return false;
         }
-        return true;
+
+        size_t w = metadata.width;
+        size_t h = metadata.height;
+        size_t d = metadata.depth;
+
+        for( size_t level=0; level < metadata.mipLevels; ++level )
+        {
+            size_t rowPitch, slicePitch;
+            ComputePitch( metadata.format, w, h, rowPitch, slicePitch, cpFlags );
+
+            for( size_t slice=0; slice < d; ++slice )
+            {
+                if ( index >= nImages )
+                {
+                    return false;
+                }
+
+                // We use the same memory organization that Direct3D 11 needs for D3D11_SUBRESOURCE_DATA
+                // with all slices of a given miplevel being continuous in memory
+                images[index].width = w;
+                images[index].height = h;
+                images[index].format = metadata.format;
+                images[index].rowPitch = rowPitch;
+                images[index].slicePitch = slicePitch;
+                images[index].pixels = pixels;
+                ++index;
+
+                pixels += slicePitch;
+                if ( pixels > pEndBits )
+                {
+                    return false;
+                }
+            }
+
+            if ( h > 1 )
+                h >>= 1;
+
+            if ( w > 1 )
+                w >>= 1;
+
+            if ( d > 1 )
+                d >>= 1;
+        }
+    }
+    return true;
 
     default:
         return false;
@@ -432,7 +432,7 @@ HRESULT ScratchImage::InitializeCube( DXGI_FORMAT fmt, size_t width, size_t heig
 {
     if ( !IsValid(fmt) || IsVideo(fmt)  || !width || !height || !nCubes )
         return E_INVALIDARG;
-    
+
     // A DirectX11 cubemap is just a 2D texture array that is a multiple of 6 for each cube
     HRESULT hr = Initialize2D( fmt, width, height, nCubes * 6, mipLevels );
     if ( FAILED(hr) )
@@ -605,7 +605,7 @@ void ScratchImage::Release()
         _aligned_free( _memory );
         _memory = 0;
     }
-    
+
     memset(&_metadata, 0, sizeof(_metadata));
 }
 
@@ -619,11 +619,11 @@ bool ScratchImage::OverrideFormat( DXGI_FORMAT f )
         return false;
 
     if ( ( BitsPerPixel( f ) != BitsPerPixel( _metadata.format ) )
-         || ( IsCompressed( f ) != IsCompressed( _metadata.format ) )
-         || ( IsPacked( f ) != IsPacked( _metadata.format ) ) )
+            || ( IsCompressed( f ) != IsCompressed( _metadata.format ) )
+            || ( IsPacked( f ) != IsPacked( _metadata.format ) ) )
     {
-         // Can't change the effective pitch of the format this way
-         return false;
+        // Can't change the effective pitch of the format this way
+        return false;
     }
 
     for( size_t index = 0; index < _nimages; ++index )
@@ -684,7 +684,7 @@ const Image* ScratchImage::GetImage(size_t mip, size_t item, size_t slice) const
     default:
         return nullptr;
     }
- 
+
     return &_image[index];
 }
 

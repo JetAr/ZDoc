@@ -1,4 +1,4 @@
-/****************************************************************************
+﻿/****************************************************************************
                    Microsoft RPC Version 2.0
            Copyright Microsoft Corp. 1992 - 2000
                          xmit Example
@@ -52,20 +52,23 @@ void ModifyListProc(DOUBLE_LINK_TYPE * pFirst)
     short newNumber;
 
     printf("ModifyListProc: Display contents of doubly linked list:\n");
-    while (pList != NULL) {
-         printf("pList @0x%p = %d, Next = 0x%p\n",
-                pList, pList->sNumber, pList->pNext);
-         pList = pList->pNext;
+    while (pList != NULL)
+    {
+        printf("pList @0x%p = %d, Next = 0x%p\n",
+               pList, pList->sNumber, pList->pNext);
+        pList = pList->pNext;
     }
 
     printf("ModifyListProc: Add one node for every node in tree\n");
-    for (pList = pFirst; pList != NULL; pList = pList->pNext) {
+    for (pList = pFirst; pList != NULL; pList = pList->pNext)
+    {
         newNumber = pList->sNumber + 1;
         pList = InsertNewNode(newNumber, pList);
     }
 
     printf("ModifyListProc: Display modified contents of doubly linked list:\n");
-    for (pList = pFirst; pList != NULL; pList = pList->pNext) {
+    for (pList = pFirst; pList != NULL; pList = pList->pNext)
+    {
         printf("pList @0x%p = %d, Next = 0x%p\n",
                pList, pList->sNumber, pList->pNext);
     }
@@ -96,14 +99,16 @@ void Shutdown(void)
     printf("Calling RpcMgmtStopServerListening\n");
     status = RpcMgmtStopServerListening(NULL);
     printf("RpcMgmtStopServerListening returned: 0x%x\n", status);
-    if (status) {
+    if (status)
+    {
         exit(status);
     }
 
     printf("Calling RpcServerUnregisterIf\n");
     status = RpcServerUnregisterIf(NULL, NULL, FALSE);
     printf("RpcServerUnregisterIf returned 0x%x\n", status);
-    if (status) {
+    if (status)
+    {
         exit(status);
     }
 }

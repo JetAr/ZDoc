@@ -1,4 +1,4 @@
-//// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿//// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 //// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 //// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 //// PARTICULAR PURPOSE.
@@ -13,12 +13,12 @@
 // <summary>
 // Based on the screen dimensions, decide the size of the application window.
 // </summary>
-HRESULT 
+HRESULT
 CalcInitialWindowBounds(
     _In_    float logicalDefaultWidth,
     _In_    float logicalDefaultHeight,
     _Out_   RECT *bounds
-    )
+)
 {
     // Retrieve the screen height and width in logical pixels.
     HDC hDC = GetDC(NULL);
@@ -63,13 +63,13 @@ WINAPI WinMain(
     if (SUCCEEDED(hr))
     {
         InitCommonControls();
-		hr = interactionContextWindow->Initialize(initialBounds, L"Interaction Context Sample Window");
+        hr = interactionContextWindow->Initialize(initialBounds, L"Interaction Context Sample Window");
     }
 
     // Process application messages.
     if (SUCCEEDED(hr))
     {
-		hr = interactionContextWindow->Run();
+        hr = interactionContextWindow->Run();
     }
 
     return hr;

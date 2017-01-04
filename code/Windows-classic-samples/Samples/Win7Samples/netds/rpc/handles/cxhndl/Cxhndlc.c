@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -8,7 +8,7 @@
 
 /****************************************************************************
 						Microsoft RPC
-          
+
                       cxhndl Example
 
     FILE:       cxhndlc.c
@@ -48,7 +48,7 @@ void Usage(char * pszProgramName)
     fprintf_s(stderr, " -p protocol_sequence\n");
     fprintf_s(stderr, " -n network_address\n");
     fprintf_s(stderr, " -e endpoint\n");
-    fprintf_s(stderr, " -a server principal name\n");	
+    fprintf_s(stderr, " -a server principal name\n");
     fprintf_s(stderr, " -o options\n");
     fprintf_s(stderr, " -f filename\n");
     exit(1);
@@ -66,17 +66,20 @@ void __cdecl main(int argc, char **argv)
     unsigned char * pszProtocolSequence = "ncacn_ip_tcp";
     unsigned char * pszNetworkAddress   = NULL;
     unsigned char * pszEndpoint         = "8765";
-    unsigned char * pszSpn              = NULL;	
+    unsigned char * pszSpn              = NULL;
     unsigned char * pszOptions          = NULL;
     unsigned char * pszStringBinding    = NULL;
     unsigned char * pszFileName         = "readme.txt";
-	RPC_SECURITY_QOS SecQos;
+    RPC_SECURITY_QOS SecQos;
     int i;
 
     /* allow the user to override settings with command line switches */
-    for (i = 1; i < argc; i++) {
-        if ((*argv[i] == '-') || (*argv[i] == '/')) {
-            switch (tolower(*(argv[i]+1))) {
+    for (i = 1; i < argc; i++)
+    {
+        if ((*argv[i] == '-') || (*argv[i] == '/'))
+        {
+            switch (tolower(*(argv[i]+1)))
+            {
             case 'p':  // protocol sequence
                 pszProtocolSequence = argv[++i];
                 break;
@@ -86,7 +89,7 @@ void __cdecl main(int argc, char **argv)
             case 'e':
                 pszEndpoint = argv[++i];
                 break;
-            case 'a':  
+            case 'a':
                 pszSpn = argv[++i];
                 break;
             case 'o':
@@ -118,7 +121,8 @@ void __cdecl main(int argc, char **argv)
                                      &pszStringBinding);
     printf_s("RpcStringBindingCompose returned 0x%x\n", status);
     printf_s("pszStringBinding = %s\n", pszStringBinding);
-    if (status) {
+    if (status)
+    {
         exit(status);
     }
 
@@ -126,85 +130,95 @@ void __cdecl main(int argc, char **argv)
     status = RpcBindingFromStringBinding(pszStringBinding,
                                          &hStarter);
     printf_s("RpcBindingFromStringBinding returned 0x%x\n", status);
-    if (status) {
-	        exit(status);
+    if (status)
+    {
+        exit(status);
     }
 
-   /* User did not specify spn, construct one. */
-   if (pszSpn == NULL) {
-	   MakeSpn(&pszSpn);
-   }
-   
-   /* Set the quality of service on the binding handle */
-   SecQos.Version = RPC_C_SECURITY_QOS_VERSION_1;
-   SecQos.Capabilities = RPC_C_QOS_CAPABILITIES_MUTUAL_AUTH;
-   SecQos.IdentityTracking = RPC_C_QOS_IDENTITY_DYNAMIC;
-   SecQos.ImpersonationType = RPC_C_IMP_LEVEL_IDENTIFY;
-   
-   /* Set the security provider on binding handle */
-   status = RpcBindingSetAuthInfoEx(hStarter,
-									pszSpn,
-									RPC_C_AUTHN_LEVEL_PKT_PRIVACY,
-									RPC_C_AUTHN_GSS_NEGOTIATE,
-									NULL,
-									RPC_C_AUTHZ_NONE,
-									&SecQos);
-   
-   printf_s("RpcBindingSetAuthInfoEx returned 0x%x\n", status);
-   if (status) {
-	   exit(status);
-   }
-    
-   RpcTryExcept{
-    printf_s("Calling the remote procedure RemoteOpen\n");
-    if (RemoteOpen(&phContext, pszFileName) < 0) {
-        printf_s("Unable to open %s\n", pszFileName);
-        Shutdown();
-        exit(2);
+    /* User did not specify spn, construct one. */
+    if (pszSpn == NULL)
+    {
+        MakeSpn(&pszSpn);
     }
-  }
-   RpcExcept(( ( (RpcExceptionCode() != STATUS_ACCESS_VIOLATION) &&
-                   (RpcExceptionCode() != STATUS_DATATYPE_MISALIGNMENT) &&
-                   (RpcExceptionCode() != STATUS_PRIVILEGED_INSTRUCTION) &&
-                   (RpcExceptionCode() != STATUS_BREAKPOINT) &&
-                   (RpcExceptionCode() != STATUS_STACK_OVERFLOW) &&
-                   (RpcExceptionCode() != STATUS_IN_PAGE_ERROR) &&
-                   (RpcExceptionCode() != STATUS_GUARD_PAGE_VIOLATION)
-                    )
-                    ? EXCEPTION_EXECUTE_HANDLER : EXCEPTION_CONTINUE_SEARCH )){
-	printf_s("Runtime reported exception \n");
 
-	
-	exit(1);
-  }
-  RpcEndExcept
+    /* Set the quality of service on the binding handle */
+    SecQos.Version = RPC_C_SECURITY_QOS_VERSION_1;
+    SecQos.Capabilities = RPC_C_QOS_CAPABILITIES_MUTUAL_AUTH;
+    SecQos.IdentityTracking = RPC_C_QOS_IDENTITY_DYNAMIC;
+    SecQos.ImpersonationType = RPC_C_IMP_LEVEL_IDENTIFY;
+
+    /* Set the security provider on binding handle */
+    status = RpcBindingSetAuthInfoEx(hStarter,
+                                     pszSpn,
+                                     RPC_C_AUTHN_LEVEL_PKT_PRIVACY,
+                                     RPC_C_AUTHN_GSS_NEGOTIATE,
+                                     NULL,
+                                     RPC_C_AUTHZ_NONE,
+                                     &SecQos);
+
+    printf_s("RpcBindingSetAuthInfoEx returned 0x%x\n", status);
+    if (status)
+    {
+        exit(status);
+    }
+
+    RpcTryExcept
+    {
+        printf_s("Calling the remote procedure RemoteOpen\n");
+        if (RemoteOpen(&phContext, pszFileName) < 0)
+        {
+            printf_s("Unable to open %s\n", pszFileName);
+            Shutdown();
+            exit(2);
+        }
+    }
+    RpcExcept(( ( (RpcExceptionCode() != STATUS_ACCESS_VIOLATION) &&
+                  (RpcExceptionCode() != STATUS_DATATYPE_MISALIGNMENT) &&
+                  (RpcExceptionCode() != STATUS_PRIVILEGED_INSTRUCTION) &&
+                  (RpcExceptionCode() != STATUS_BREAKPOINT) &&
+                  (RpcExceptionCode() != STATUS_STACK_OVERFLOW) &&
+                  (RpcExceptionCode() != STATUS_IN_PAGE_ERROR) &&
+                  (RpcExceptionCode() != STATUS_GUARD_PAGE_VIOLATION)
+                )
+                ? EXCEPTION_EXECUTE_HANDLER : EXCEPTION_CONTINUE_SEARCH ))
+    {
+        printf_s("Runtime reported exception \n");
+
+
+        exit(1);
+    }
+    RpcEndExcept
 
     /* Now the context handle also manages the binding. */
     status = RpcBindingFree(&hStarter);
     printf_s("RpcBindingFree returned 0x%x\n", status);
-    if (status) {
+    if (status)
+    {
         exit(status);
     }
 
     /*  Free the string binding */
     status = RpcStringFree(&pszStringBinding);
     printf_s("RpcStringFree returned 0x%x\n", status);
-    if (status) {
+    if (status)
+    {
         exit(status);
     }
 
     printf_s("Calling the remote procedure RemoteRead\n");
-    while (RemoteRead(phContext, pbBuf, &cbRead) > 0) {
+    while (RemoteRead(phContext, pbBuf, &cbRead) > 0)
+    {
         for (i = 0; i < cbRead; i++)
             putchar(*(pbBuf+i));
     }
 
     printf_s("Calling the remote procedure RemoteClose\n");
-    if (RemoteClose(&phContext) < 0 ) {
+    if (RemoteClose(&phContext) < 0 )
+    {
         printf_s("Close failed on %s\n", pszFileName);
         exit(2);
     }
-    
+
     exit(0);
 
 }  // end main()

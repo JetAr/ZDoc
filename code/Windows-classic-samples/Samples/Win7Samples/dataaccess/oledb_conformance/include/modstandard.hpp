@@ -1,4 +1,4 @@
-#ifndef _MODSTANDARD_HPP_
+﻿#ifndef _MODSTANDARD_HPP_
 #define _MODSTANDARD_HPP_
 
 //suppress warnings about calling "unsecure" string functions
@@ -32,27 +32,27 @@
 /////////////////////////////////////////////////////////////////////////////
 //These inlines are to output the filename and line number before every allocation...
 inline	void* CoTaskMemAlloc_Trace(SIZE_T cbSize, CHAR* pszFileName, ULONG ulLine)
-{		
+{
 #ifdef _DEBUG
-	_CrtDbgReport(_CRT_WARN, NULL, 0, NULL, "CoTaskMemAlloc(%d) - File: %s, Line: %Iu\n", cbSize, pszFileName, ulLine);
+    _CrtDbgReport(_CRT_WARN, NULL, 0, NULL, "CoTaskMemAlloc(%d) - File: %s, Line: %Iu\n", cbSize, pszFileName, ulLine);
 #endif	//_DEBUG
-	return CoTaskMemAlloc(cbSize);
+    return CoTaskMemAlloc(cbSize);
 }
 
 inline	void* CoTaskMemRealloc_Trace(void* pv, SIZE_T cbSize, CHAR* pszFileName, ULONG ulLine)
 {
 #ifdef _DEBUG
-	_CrtDbgReport(_CRT_WARN, NULL, 0, NULL, "CoTaskMemRealloc(0x%08x, %Iu) - File: %s, Line: %d\n", pv, cbSize, pszFileName, ulLine);
+    _CrtDbgReport(_CRT_WARN, NULL, 0, NULL, "CoTaskMemRealloc(0x%08x, %Iu) - File: %s, Line: %d\n", pv, cbSize, pszFileName, ulLine);
 #endif	//_DEBUG
-	return CoTaskMemRealloc(pv, cbSize);
+    return CoTaskMemRealloc(pv, cbSize);
 }
 
 inline	void CoTaskMemFree_Trace(void* pv, CHAR* pszFileName, ULONG ulLine)
 {
 #ifdef _DEBUG
-	_CrtDbgReport(_CRT_WARN, NULL, 0, NULL, "CoTaskMemFree(0x%08x) - File: %s, Line: %u\n", pv, pszFileName, ulLine);
+    _CrtDbgReport(_CRT_WARN, NULL, 0, NULL, "CoTaskMemFree(0x%08x) - File: %s, Line: %u\n", pv, pszFileName, ulLine);
 #endif	//_DEBUG
-	CoTaskMemFree(pv);
+    CoTaskMemFree(pv);
 }
 
 //Macros

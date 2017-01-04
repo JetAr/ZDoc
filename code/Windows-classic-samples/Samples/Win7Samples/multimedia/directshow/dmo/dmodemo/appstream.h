@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -26,17 +26,17 @@
 // the application is being compiled with the headers from Visual C++ 6.0.
 ///////////////////////////////////////////////////////////////////////////
 #ifndef GetWindowLongPtr
-  #define GetWindowLongPtrA   GetWindowLongA
-  #define GetWindowLongPtrW   GetWindowLongW
-  #ifdef UNICODE
-    #define GetWindowLongPtr  GetWindowLongPtrW
-  #else
-    #define GetWindowLongPtr  GetWindowLongPtrA
-  #endif // !UNICODE
+#define GetWindowLongPtrA   GetWindowLongA
+#define GetWindowLongPtrW   GetWindowLongW
+#ifdef UNICODE
+#define GetWindowLongPtr  GetWindowLongPtrW
+#else
+#define GetWindowLongPtr  GetWindowLongPtrA
+#endif // !UNICODE
 #endif // !GetWindowLongPtr
 
 #ifndef GWLP_HINSTANCE
-  #define GWLP_HINSTANCE      (-6)
+#define GWLP_HINSTANCE      (-6)
 #endif
 ///////////////////////////////////////////////////////////////////////////
 // End Platform SDK definitions
@@ -47,20 +47,20 @@
 class CMediaBuffer;
 
 //
-// CAppStream - reads audio data out of a WAV file, transforms the data using 
-//              a user specified DMO and then returns the data to the user in 
+// CAppStream - reads audio data out of a WAV file, transforms the data using
+//              a user specified DMO and then returns the data to the user in
 //              a memory buffer
-class CAppStream  
+class CAppStream
 {
 public:
     CAppStream();
     ~CAppStream();
 
-    HRESULT StreamData( LPTSTR lpszFileInput, 
-                        REFGUID rclsid, 
+    HRESULT StreamData( LPTSTR lpszFileInput,
+                        REFGUID rclsid,
                         HWND hDlg,
-                        BYTE **pbOutData, 
-                        ULONG *cbDataSize, 
+                        BYTE **pbOutData,
+                        ULONG *cbDataSize,
                         LPWAVEFORMATEX *pwfx );
 
 private:
@@ -92,17 +92,20 @@ public:
 
     ~CMediaBuffer()
     {
-        if (m_pbData) {
+        if (m_pbData)
+        {
             delete [] m_pbData;
         }
     }
 
     STDMETHODIMP QueryInterface(REFIID riid, void **ppv)
     {
-        if (ppv == NULL) {
+        if (ppv == NULL)
+        {
             return E_POINTER;
         }
-        if (riid == IID_IMediaBuffer || riid == IID_IUnknown) {
+        if (riid == IID_IMediaBuffer || riid == IID_IUnknown)
+        {
             *ppv = static_cast<IMediaBuffer *>(this);
             AddRef();
             return S_OK;
@@ -119,7 +122,8 @@ public:
     STDMETHODIMP_(ULONG) Release()
     {
         LONG lRef = InterlockedDecrement(&m_cRef);
-        if (lRef == 0) {
+        if (lRef == 0)
+        {
             delete this;
         }
         return lRef;
@@ -127,9 +131,12 @@ public:
 
     STDMETHODIMP SetLength(DWORD cbLength)
     {
-        if (cbLength > m_cbMaxLength) {
+        if (cbLength > m_cbMaxLength)
+        {
             return E_INVALIDARG;
-        } else {
+        }
+        else
+        {
             m_cbLength = cbLength;
             return S_OK;
         }
@@ -137,7 +144,8 @@ public:
 
     STDMETHODIMP GetMaxLength(DWORD *pcbMaxLength)
     {
-        if (pcbMaxLength == NULL) {
+        if (pcbMaxLength == NULL)
+        {
             return E_POINTER;
         }
         *pcbMaxLength = m_cbMaxLength;
@@ -146,7 +154,8 @@ public:
 
     STDMETHODIMP GetBufferAndLength(BYTE **ppbBuffer, DWORD *pcbLength)
     {
-        if (ppbBuffer == NULL || pcbLength == NULL) {
+        if (ppbBuffer == NULL || pcbLength == NULL)
+        {
             return E_POINTER;
         }
         *ppbBuffer = m_pbData;
@@ -157,9 +166,12 @@ public:
     HRESULT Init()
     {
         m_pbData = new BYTE[m_cbMaxLength];
-        if (NULL == m_pbData) {
+        if (NULL == m_pbData)
+        {
             return E_OUTOFMEMORY;
-        } else {
+        }
+        else
+        {
             return S_OK;
         }
     }

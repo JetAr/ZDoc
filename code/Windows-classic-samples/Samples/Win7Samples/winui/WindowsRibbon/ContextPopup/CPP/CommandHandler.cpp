@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -119,9 +119,9 @@ __checkReturn HRESULT CCommandHandler::CreateInstance(__deref_out CCommandHandle
 //  COMMENTS:
 //
 //    This function is used to provide new command property values, such as labels, icons, or
-//    tooltip information, when requested by the Ribbon framework.  
-//    
-//    In this sample, this updates the toggle state of the toggle buttons in the ribbon.  
+//    tooltip information, when requested by the Ribbon framework.
+//
+//    In this sample, this updates the toggle state of the toggle buttons in the ribbon.
 //
 //
 STDMETHODIMP CCommandHandler::UpdateProperty(
@@ -153,11 +153,11 @@ STDMETHODIMP CCommandHandler::UpdateProperty(
 //
 //
 STDMETHODIMP CCommandHandler::Execute(
-                                      UINT nCmdID,
-                                      UI_EXECUTIONVERB verb,
-                                      __in_opt const PROPERTYKEY* key,
-                                      __in_opt const PROPVARIANT* ppropvarValue,
-                                      __in_opt IUISimplePropertySet* pCommandExecutionProperties)
+    UINT nCmdID,
+    UI_EXECUTIONVERB verb,
+    __in_opt const PROPERTYKEY* key,
+    __in_opt const PROPVARIANT* ppropvarValue,
+    __in_opt IUISimplePropertySet* pCommandExecutionProperties)
 {
     UNREFERENCED_PARAMETER(verb);
     UNREFERENCED_PARAMETER(ppropvarValue);

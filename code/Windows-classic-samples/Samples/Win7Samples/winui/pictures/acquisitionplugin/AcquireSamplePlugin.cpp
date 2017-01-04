@@ -1,19 +1,19 @@
-////////////////////////////////////////////////////////////////////////
+﻿////////////////////////////////////////////////////////////////////////
 //
 // Sample acquisition plugin
 //
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
-// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A 
+// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
-// 
+//
 // Copyright (c) Microsoft Corporation. All rights reserved.
 ////////////////////////////////////////////////////////////////////////
 //
-//  This file contains the implementation of a sample plugin for the 
+//  This file contains the implementation of a sample plugin for the
 //  photo acquisition process.  This sample plugin demonstrates methods
 //  of IPhotoAcquirePlugin and IUserInputString.
-//  To enable the plugin, either run regsvr32.exe with the built DLL as the 
+//  To enable the plugin, either run regsvr32.exe with the built DLL as the
 //	argument or run AcquireSamplePlugin.reg
 //
 //////////////////////////////////////////////////////////////////////////
@@ -26,23 +26,23 @@
 #include "resource.h"
 //////////////////////////////////////////////////////////////////////////
 // Forward declarations for helper functions
-HRESULT SetRegistryString(HKEY hKeyRoot, 
-						  PCWSTR pszValueName, 
-						  PCWSTR pszString, 
-						  PCWSTR pszSubKeyFormat, 
-						  ...);
-HRESULT SetRegistryValueFormatV(HKEY hKeyRoot, 
-								PCWSTR pszValueName, 
-								DWORD dwType, 
-								const void* pValue, 
-								DWORD dwSize, 
-								PCWSTR pszSubKeyFormat, 
-								va_list pArgs);
-HRESULT SetRegistryDWord(HKEY hKeyRoot, 
-						 PCWSTR pszValueName, 
-						 DWORD dwValue, 
-						 PCWSTR pszSubKeyFormat,
-						 ...);
+HRESULT SetRegistryString(HKEY hKeyRoot,
+                          PCWSTR pszValueName,
+                          PCWSTR pszString,
+                          PCWSTR pszSubKeyFormat,
+                          ...);
+HRESULT SetRegistryValueFormatV(HKEY hKeyRoot,
+                                PCWSTR pszValueName,
+                                DWORD dwType,
+                                const void* pValue,
+                                DWORD dwSize,
+                                PCWSTR pszSubKeyFormat,
+                                va_list pArgs);
+HRESULT SetRegistryDWord(HKEY hKeyRoot,
+                         PCWSTR pszValueName,
+                         DWORD dwValue,
+                         PCWSTR pszSubKeyFormat,
+                         ...);
 //////////////////////////////////////////////////////////////////////////
 //  Global static variables
 //////////////////////////////////////////////////////////////////////////
@@ -52,7 +52,7 @@ CLSID CLSID_AcquireSamplePlugin = {0x9e683e3f, 0x9a8e, 0x4109, {0xb0, 0x67, 0x0c
 
 static LONG g_nComponents = 0;
 static LONG g_nServerLocks = 0;
-// TODO: Change this name for your own plugin. 
+// TODO: Change this name for your own plugin.
 // It appears only in the registry, but serves to help identify the plugin.
 static PCWSTR g_pszPluginRegistryName = L"Read-Only Photo Acquire Plugin";
 static HINSTANCE g_hInstance = NULL;
@@ -61,7 +61,7 @@ static HINSTANCE g_hInstance = NULL;
 //////////////////////////////////////////////////////////////////////////
 //  ThisPhotoAcquirePluginClassFactory
 //  Description: A class that provides an implementation of IUnknown and
-//  IClassFactory methods.  
+//  IClassFactory methods.
 //////////////////////////////////////////////////////////////////////////
 class AcquireSamplePluginClassFactory : public IClassFactory
 {
@@ -137,8 +137,8 @@ private:
 ///////////////////////////////////////////////////////////////////////
 //
 //  Description:  Entry point for the DLL.
-//  Arguments:  hinst - Handle to the DLL module. 
-//              dwReason - Indicates why the DLL entry-point function 
+//  Arguments:  hinst - Handle to the DLL module.
+//              dwReason - Indicates why the DLL entry-point function
 //					is being called.
 //				lpReserved - Not used in this implementation.
 //
@@ -150,8 +150,8 @@ void DllAddRef()
 ///////////////////////////////////////////////////////////////////////
 //
 //  Description:  Entry point for the DLL.
-//  Arguments:  hinst - Handle to the DLL module. 
-//              dwReason - Indicates why the DLL entry-point function 
+//  Arguments:  hinst - Handle to the DLL module.
+//              dwReason - Indicates why the DLL entry-point function
 //					is being called.
 //				lpReserved - Not used in this implementation.
 //
@@ -163,8 +163,8 @@ void DllRelease()
 ///////////////////////////////////////////////////////////////////////
 //
 //  Description:  Entry point for the DLL.
-//  Arguments:  hinst - Handle to the DLL module. 
-//              dwReason - Indicates why the DLL entry-point function 
+//  Arguments:  hinst - Handle to the DLL module.
+//              dwReason - Indicates why the DLL entry-point function
 //					is being called.
 //				lpReserved - Not used in this implementation.
 //
@@ -185,7 +185,7 @@ extern "C" BOOL WINAPI DllMain(HINSTANCE hinst, DWORD dwReason, LPVOID lpReserve
 //
 //  Description:  Enters required information into the registry and
 //	registers the plugin.
-//	The module description is entered at 
+//	The module description is entered at
 //	[HKEY_CLASSES_ROOT\CLSID\{CLSID}]
 //	(where {CLSID} is the GUID for the plugin).
 //	""=[Module description]
@@ -274,9 +274,9 @@ extern "C" STDMETHODIMP DllRegisterServer()
 
 ///////////////////////////////////////////////////////////////////////
 //
-//  Description:  Default implementation simply returns, since in this 
+//  Description:  Default implementation simply returns, since in this
 //  sample we don't need to remove information from the registry or
-//  unregister the plugin.  
+//  unregister the plugin.
 ///////////////////////////////////////////////////////////////////////
 extern "C" STDMETHODIMP DllUnregisterServer()
 {
@@ -530,13 +530,13 @@ ULONG AcquireSamplePlugin::Release()
 //		In this implementation, IPhotoAcquireProgressCB::GetUserInput
 //		is called to prompt the user for a property value when import
 //		begins.
-//  Arguments:  pPhotoAcquireSource - Specifies the source from 
+//  Arguments:  pPhotoAcquireSource - Specifies the source from
 //					which photos are being acquired. Not used in this sample.
-//				pPhotoAcquireProgressCB - Specifies the callback used 
+//				pPhotoAcquireProgressCB - Specifies the callback used
 //					to provide additional processing during acquisition.
 ///////////////////////////////////////////////////////////////////////
-HRESULT AcquireSamplePlugin::Initialize(IPhotoAcquireSource* pPhotoAcquireSource, 
-										IPhotoAcquireProgressCB* pPhotoAcquireProgressCB)
+HRESULT AcquireSamplePlugin::Initialize(IPhotoAcquireSource* pPhotoAcquireSource,
+                                        IPhotoAcquireProgressCB* pPhotoAcquireProgressCB)
 {
     UNREFERENCED_PARAMETER(pPhotoAcquireSource);
     IUserInputString* pUserInputString;
@@ -562,24 +562,24 @@ HRESULT AcquireSamplePlugin::Initialize(IPhotoAcquireSource* pPhotoAcquireSource
 //		both before and after the item is saved.  In this implementation
 //		the item's Comment property is set before saving, and
 //		a backup copy of the file is made after saving.
-//  Arguments:  dwAcquireStage - Specifies whether the item has been 
+//  Arguments:  dwAcquireStage - Specifies whether the item has been
 //					saved yet.
-//				pPhotoAcquireItem - The item being acquired. 
+//				pPhotoAcquireItem - The item being acquired.
 //					Not used in this sample
-//				pStream - Pointer to an IStream object 
-//					for the original item.  NULL if dwAcquireStage is 
+//				pStream - Pointer to an IStream object
+//					for the original item.  NULL if dwAcquireStage is
 //					PAPS_POSTSAVE.  Not used in this sample.
-//				pszFinalFilename - The file name of the destination of 
+//				pszFinalFilename - The file name of the destination of
 //					the item.  NULL if dwAcquireStage is PAPS_PRESAVE.
-//				pPropertyStore - The item's property store.  NULL if 
-//					dwAcquireStage is PAPS_POSTSAVE. 
-//				
+//				pPropertyStore - The item's property store.  NULL if
+//					dwAcquireStage is PAPS_POSTSAVE.
+//
 ///////////////////////////////////////////////////////////////////////
-HRESULT AcquireSamplePlugin::ProcessItem(DWORD dwAcquireStage, 
-										 IPhotoAcquireItem* pPhotoAcquireItem, 
-										 IStream* pStream, 
-										 LPCWSTR pszFinalFilename, 
-										 IPropertyStore* pPropertyStore)
+HRESULT AcquireSamplePlugin::ProcessItem(DWORD dwAcquireStage,
+        IPhotoAcquireItem* pPhotoAcquireItem,
+        IStream* pStream,
+        LPCWSTR pszFinalFilename,
+        IPropertyStore* pPropertyStore)
 {
     UNREFERENCED_PARAMETER(pPhotoAcquireItem);
     UNREFERENCED_PARAMETER(pStream);
@@ -607,53 +607,53 @@ HRESULT AcquireSamplePlugin::ProcessItem(DWORD dwAcquireStage,
 
 ///////////////////////////////////////////////////////////////////////
 //
-//  Description:  
+//  Description:
 //		Implementation of IPhotoAcquirePlugin::TransferComplete.
 //		This callback is invoked when the acquisition session ends.
 //		This implementation displays a message box on successful transfer.
 //  Arguments:  hrTransfer - HRESULT indicated the result of the
-//					transfer session.  
+//					transfer session.
 ///////////////////////////////////////////////////////////////////////
 HRESULT AcquireSamplePlugin::TransferComplete(HRESULT hrTransfer)
 {
     if (SUCCEEDED(hrTransfer))
     {
-        MessageBox(NULL, 
-					L"Transfer Completed Successfully!", 
-					L"Sample Acquire Plugin", 
-					MB_ICONINFORMATION|MB_TASKMODAL);
+        MessageBox(NULL,
+                   L"Transfer Completed Successfully!",
+                   L"Sample Acquire Plugin",
+                   MB_ICONINFORMATION|MB_TASKMODAL);
     }
     return S_OK;
 }
 
 ///////////////////////////////////////////////////////////////////////
 //
-//  Description:  
+//  Description:
 //		Implementation of IPhotoAcquirePlugin::DisplayConfigureDialog,
 //		invoked when the acquisition configuration dialog is displayed.
 //
 //	Arguments: hWndParent - Handle to the configuration dialog window.
-//					
+//
 ///////////////////////////////////////////////////////////////////////
 HRESULT AcquireSamplePlugin::DisplayConfigureDialog(HWND hWndParent)
 {
-    MessageBox(hWndParent, 
-		L"AcquireSamplePlugin::DisplayConfigureDialog", 
-		L"Sample Acquire Plugin", 
-		MB_ICONINFORMATION|MB_TASKMODAL);
+    MessageBox(hWndParent,
+               L"AcquireSamplePlugin::DisplayConfigureDialog",
+               L"Sample Acquire Plugin",
+               MB_ICONINFORMATION|MB_TASKMODAL);
     return S_OK;
 }
 
 
 ///////////////////////////////////////////////////////////////////////
 //
-//  Description:  
+//  Description:
 //		Implementation of IUserInputString::GetSubmitButtonText.
 //		This function specifies the string to display in the submit button
-//		when IPhotoAcquireProgressCB::GetUserInput is called to prompt the 
+//		when IPhotoAcquireProgressCB::GetUserInput is called to prompt the
 //		user for string input.
 //  Arguments:  pbstrSubmitButtonText -- pointer to a BSTR containing the
-//		submit button text.  
+//		submit button text.
 ///////////////////////////////////////////////////////////////////////
 HRESULT AcquireSamplePlugin::GetSubmitButtonText(BSTR* pbstrSubmitButtonText)
 {
@@ -662,12 +662,12 @@ HRESULT AcquireSamplePlugin::GetSubmitButtonText(BSTR* pbstrSubmitButtonText)
 
 ///////////////////////////////////////////////////////////////////////
 //
-//  Description:  
+//  Description:
 //		Implementation of IUserInputString::GetPrompt.
 //		This function specifies the string to display in the prompt
-//		when IPhotoAcquireProgressCB::GetUserInput is called to prompt the 
+//		when IPhotoAcquireProgressCB::GetUserInput is called to prompt the
 //		user for string input.
-//  Arguments:  pbstrPromptTitle - pointer to a BSTR to contain the prompt.  
+//  Arguments:  pbstrPromptTitle - pointer to a BSTR to contain the prompt.
 ///////////////////////////////////////////////////////////////////////
 HRESULT AcquireSamplePlugin::GetPrompt(BSTR* pbstrPromptTitle)
 {
@@ -676,12 +676,12 @@ HRESULT AcquireSamplePlugin::GetPrompt(BSTR* pbstrPromptTitle)
 
 ///////////////////////////////////////////////////////////////////////
 //
-//  Description:  
+//  Description:
 //		Implementation of IUserInputString::GetStringID.
 //		This function specifies the canonical name for the string requested
-//		when IPhotoAcquireProgressCB::GetUserInput is called to prompt the 
+//		when IPhotoAcquireProgressCB::GetUserInput is called to prompt the
 //		user for string input.
-//  Arguments:  pbstrStringId - pointer to a BSTR to contain the canonical name.    
+//  Arguments:  pbstrStringId - pointer to a BSTR to contain the canonical name.
 ///////////////////////////////////////////////////////////////////////
 HRESULT AcquireSamplePlugin::GetStringId(BSTR* pbstrStringId)
 {
@@ -690,12 +690,12 @@ HRESULT AcquireSamplePlugin::GetStringId(BSTR* pbstrStringId)
 
 ///////////////////////////////////////////////////////////////////////
 //
-//  Description:  
+//  Description:
 //		Implementation of IUserInputString::GetStringType.
 //		This function specifies the format string requested
-//		when IPhotoAcquireProgressCB::GetUserInput is called to prompt the 
+//		when IPhotoAcquireProgressCB::GetUserInput is called to prompt the
 //		user for string input.
-//  Arguments:  pnStringType -- may be USER_INPUT_DEFAULT or 
+//  Arguments:  pnStringType -- may be USER_INPUT_DEFAULT or
 //	USER_INPUT_PATH_ELEMENT
 ///////////////////////////////////////////////////////////////////////
 HRESULT AcquireSamplePlugin::GetStringType(USER_INPUT_STRING_TYPE* pnStringType)
@@ -705,12 +705,12 @@ HRESULT AcquireSamplePlugin::GetStringType(USER_INPUT_STRING_TYPE* pnStringType)
 }
 ///////////////////////////////////////////////////////////////////////
 //
-//  Description:  
+//  Description:
 //		Implementation of IUserInputString::GetTooltipText.
-//		This function specifies the tooltip text to display for the input box 
-//		when IPhotoAcquireProgressCB::GetUserInput is called to prompt the 
+//		This function specifies the tooltip text to display for the input box
+//		when IPhotoAcquireProgressCB::GetUserInput is called to prompt the
 //		user for string input.
-//  Arguments:  pbstrTooltipText - pointer to a BSTR to contain the tooltip.    
+//  Arguments:  pbstrTooltipText - pointer to a BSTR to contain the tooltip.
 ///////////////////////////////////////////////////////////////////////
 HRESULT AcquireSamplePlugin::GetTooltipText(__out BSTR* pbstrTooltipText)
 {
@@ -718,10 +718,10 @@ HRESULT AcquireSamplePlugin::GetTooltipText(__out BSTR* pbstrTooltipText)
 }
 ///////////////////////////////////////////////////////////////////////
 //
-//  Description:  
+//  Description:
 //		Implementation of IUserInputString::GetMaxLength.
 //		Specifies the value of the maximum length allowed for the input string.
-//  Arguments:  pcchMaxLength - UINT indicating the length.  
+//  Arguments:  pcchMaxLength - UINT indicating the length.
 ///////////////////////////////////////////////////////////////////////
 HRESULT AcquireSamplePlugin::GetMaxLength(UINT* pcchMaxLength)
 {
@@ -731,12 +731,12 @@ HRESULT AcquireSamplePlugin::GetMaxLength(UINT* pcchMaxLength)
 
 ///////////////////////////////////////////////////////////////////////
 //
-//  Description:  
+//  Description:
 //		Implementation of IUserInputString::GetDefault.
 //		Specifies the default text to display in the input box when
-//		IPhotoAcquireProgressCB::GetUserInput is called to prompt the 
+//		IPhotoAcquireProgressCB::GetUserInput is called to prompt the
 //		user for string input.
-//  Arguments:  pbstrDefault - pointer to a BSTR to contain the default string.  
+//  Arguments:  pbstrDefault - pointer to a BSTR to contain the default string.
 ///////////////////////////////////////////////////////////////////////
 HRESULT AcquireSamplePlugin::GetDefault(BSTR* pbstrDefault)
 {
@@ -745,12 +745,12 @@ HRESULT AcquireSamplePlugin::GetDefault(BSTR* pbstrDefault)
 
 ///////////////////////////////////////////////////////////////////////
 //
-//  Description:  
+//  Description:
 //		Implementation of IUserInputString::GetMruCount.
 //		Specifies the number of items in the list of most recently used items to
-//		display in the input box when IPhotoAcquireProgressCB::GetUserInput 
+//		display in the input box when IPhotoAcquireProgressCB::GetUserInput
 //		is called to prompt the user for string input.
-//  Arguments:  pnMruCount - pointer to UINT to receive the number of items.  
+//  Arguments:  pnMruCount - pointer to UINT to receive the number of items.
 ///////////////////////////////////////////////////////////////////////
 HRESULT AcquireSamplePlugin::GetMruCount(UINT* pnMruCount)
 {
@@ -760,14 +760,14 @@ HRESULT AcquireSamplePlugin::GetMruCount(UINT* pnMruCount)
 
 ///////////////////////////////////////////////////////////////////////
 //
-//  Description:  
+//  Description:
 //		Implementation of IUserInputString::GetMruEntryAt.
-//		Specifies the entry at the given index in the list of most recently 
-//		used items to display in the input box when 
-//		IPhotoAcquireProgressCB::GetUserInput is called to prompt the 
+//		Specifies the entry at the given index in the list of most recently
+//		used items to display in the input box when
+//		IPhotoAcquireProgressCB::GetUserInput is called to prompt the
 //		user for string input.
 //  Arguments:  nIndex - Integer containing the index of the entry
-//				pbstrMruEntry - Pointer to the string at the given index.  
+//				pbstrMruEntry - Pointer to the string at the given index.
 ///////////////////////////////////////////////////////////////////////
 HRESULT AcquireSamplePlugin::GetMruEntryAt(UINT nIndex, BSTR *pbstrMruEntry)
 {
@@ -776,47 +776,47 @@ HRESULT AcquireSamplePlugin::GetMruEntryAt(UINT nIndex, BSTR *pbstrMruEntry)
 }
 ///////////////////////////////////////////////////////////////////////
 //
-//  Description:  
+//  Description:
 //		Implementation of IUserInputString::GetImage.
-//		Specifies the image to display in the dialog box when 
-//		IPhotoAcquireProgressCB::GetUserInput is called to prompt the 
+//		Specifies the image to display in the dialog box when
+//		IPhotoAcquireProgressCB::GetUserInput is called to prompt the
 //		user for string input.  The image may be either a bitmap or an icon
-//  Arguments:  nSize - UINT indicating the size of the image.  
+//  Arguments:  nSize - UINT indicating the size of the image.
 //				phBitmap - pointer to the handle to a bitmap image
 //				phIcon - pointer to a handle to an icon
 ///////////////////////////////////////////////////////////////////////
 HRESULT AcquireSamplePlugin::GetImage(UINT /* nSize */, HBITMAP* phBitmap, HICON* phIcon)
 {
-	HRESULT hr = S_OK;
+    HRESULT hr = S_OK;
 
     if (NULL != phBitmap)
     {
         *phBitmap = NULL;
     }
-	else
-	{
-		hr = E_INVALIDARG;
-	}
+    else
+    {
+        hr = E_INVALIDARG;
+    }
 
 
     if (NULL != phIcon)
     {
-        *phIcon = 
-			reinterpret_cast<HICON>(LoadImage(
-			g_hInstance, 
-			MAKEINTRESOURCE(IDI_SAMPLEPLUGIN), //string indicating icon to load
-			IMAGE_ICON,
-			0, 0, // cx and cy = 0, so the actual size of the icon will be used.
-			0));
+        *phIcon =
+            reinterpret_cast<HICON>(LoadImage(
+                                        g_hInstance,
+                                        MAKEINTRESOURCE(IDI_SAMPLEPLUGIN), //string indicating icon to load
+                                        IMAGE_ICON,
+                                        0, 0, // cx and cy = 0, so the actual size of the icon will be used.
+                                        0));
         if (*phIcon == NULL)
         {
             hr = E_FAIL;
         }
     }
-	else
-	{
-		hr = E_INVALIDARG;
-	}
+    else
+    {
+        hr = E_INVALIDARG;
+    }
     return hr;
 }
 
@@ -826,11 +826,11 @@ HRESULT AcquireSamplePlugin::GetImage(UINT /* nSize */, HBITMAP* phBitmap, HICON
 //
 ///////////////////////////////////////////////////////////////////////
 //
-//  Description:  Helper function that creates a registry key and writes 
+//  Description:  Helper function that creates a registry key and writes
 //					a formatted value to the key.
-//					Called by the functions SetRegistryDWORD and 
+//					Called by the functions SetRegistryDWORD and
 //					SetRegistryString, below.
-//  Arguments:  hKeyRoot - Root of the registry key. 
+//  Arguments:  hKeyRoot - Root of the registry key.
 //					Typically one of the following predefined values:
 //					HKEY_CLASSES_ROOT
 //					HKEY_CURRENT_CONFIG
@@ -838,27 +838,27 @@ HRESULT AcquireSamplePlugin::GetImage(UINT /* nSize */, HBITMAP* phBitmap, HICON
 //					HKEY_LOCAL_MACHINE
 //					HKEY_PERFORMANCE_DATA
 //					HKEY_USERS
-//              pszValueName - Pointer to a string containing the 
-//					name of the value to set. 
+//              pszValueName - Pointer to a string containing the
+//					name of the value to set.
 //				dwType - Type of registry key value.
-//				pValue - Pointer to a buffer containing the data 
-//					to be stored with the specified value name. 
+//				pValue - Pointer to a buffer containing the data
+//					to be stored with the specified value name.
 //				dwSize - Size of value.
-//				pszSubKeyFormat - Pointer to a buffer containing a 
-//					printf-style format string that indicates the 
-//					format for the registry subkey to create. 
+//				pszSubKeyFormat - Pointer to a buffer containing a
+//					printf-style format string that indicates the
+//					format for the registry subkey to create.
 //					This string must be null-terminated.
-//				pArgs - A va_list containing the arguments to be 
+//				pArgs - A va_list containing the arguments to be
 //					inserted into pszSubKeyFormat.
 //
 /////////////////////////////////////////////////////////////////////////
-HRESULT SetRegistryValueFormatV(HKEY hKeyRoot, 
-								PCWSTR pszValueName, 
-								DWORD dwType, 
-								const void* pValue, 
-								DWORD dwSize, 
-								PCWSTR pszSubKeyFormat, 
-								va_list pArgs)
+HRESULT SetRegistryValueFormatV(HKEY hKeyRoot,
+                                PCWSTR pszValueName,
+                                DWORD dwType,
+                                const void* pValue,
+                                DWORD dwSize,
+                                PCWSTR pszSubKeyFormat,
+                                va_list pArgs)
 {
     WCHAR szSubKey[MAX_PATH];
     HRESULT hr = StringCchVPrintfW(szSubKey, ARRAYSIZE(szSubKey), pszSubKeyFormat, pArgs);
@@ -880,9 +880,9 @@ HRESULT SetRegistryValueFormatV(HKEY hKeyRoot,
 }
 ///////////////////////////////////////////////////////////////////////
 //
-//  Description:  Helper function that creates a string type registry 
+//  Description:  Helper function that creates a string type registry
 //					key and writes a formatted string value to the key.
-//  Arguments:  hKeyRoot - Root of the registry key. 
+//  Arguments:  hKeyRoot - Root of the registry key.
 //					Typically one of the following predefined values:
 //					HKEY_CLASSES_ROOT
 //					HKEY_CURRENT_CONFIG
@@ -890,15 +890,15 @@ HRESULT SetRegistryValueFormatV(HKEY hKeyRoot,
 //					HKEY_LOCAL_MACHINE
 //					HKEY_PERFORMANCE_DATA
 //					HKEY_USERS
-//              pszValueName - Pointer to a string containing the 
-//					name of the value to set. 
-//				pszString - Pointer to a string containing the 
+//              pszValueName - Pointer to a string containing the
+//					name of the value to set.
+//				pszString - Pointer to a string containing the
 //					string value.
-//				pszSubKeyFormat - Pointer to a buffer containing a 
-//					printf-style format string that indicates the 
-//					format for the registry subkey to create. 
+//				pszSubKeyFormat - Pointer to a buffer containing a
+//					printf-style format string that indicates the
+//					format for the registry subkey to create.
 //					This string must be null-terminated.
-//				... - A va_list containing the arguments to be 
+//				... - A va_list containing the arguments to be
 //					inserted into pszSubKeyFormat.
 //
 /////////////////////////////////////////////////////////////////////////
@@ -906,19 +906,19 @@ HRESULT SetRegistryString(HKEY hKeyRoot, PCWSTR pszValueName, PCWSTR pszString, 
 {
     va_list pArgs;
     va_start(pArgs, pszSubKeyFormat);
-    HRESULT hr = SetRegistryValueFormatV(hKeyRoot, 
-											pszValueName, 
-											REG_SZ, 
-											pszString, 
-											(lstrlenW(pszString) + 1) * sizeof(WCHAR), 
-											pszSubKeyFormat, 
-											pArgs);
+    HRESULT hr = SetRegistryValueFormatV(hKeyRoot,
+                                         pszValueName,
+                                         REG_SZ,
+                                         pszString,
+                                         (lstrlenW(pszString) + 1) * sizeof(WCHAR),
+                                         pszSubKeyFormat,
+                                         pArgs);
     va_end(pArgs);
     return hr;
 }
 ///////////////////////////////////////////////////////////////////////
 //
-//  Description:  Helper function that creates a DWORD type registry 
+//  Description:  Helper function that creates a DWORD type registry
 //					key and writes a formatted DWORD value to the key.
 //  Arguments:  hKeyRoot - Root of the registry key to create.
 //					Typically one of the following predefined values:
@@ -928,15 +928,15 @@ HRESULT SetRegistryString(HKEY hKeyRoot, PCWSTR pszValueName, PCWSTR pszString, 
 //					HKEY_LOCAL_MACHINE
 //					HKEY_PERFORMANCE_DATA
 //					HKEY_USERS
-//              pszValueName - Pointer to a string containing the 
-//					name of the value to set. 
-//				pszString - Pointer to a string containing the 
+//              pszValueName - Pointer to a string containing the
+//					name of the value to set.
+//				pszString - Pointer to a string containing the
 //					string value.
-//				pszSubKeyFormat - Pointer to a buffer containing a 
-//					printf-style format string that indicates the 
-//					format for the registry subkey to create. 
+//				pszSubKeyFormat - Pointer to a buffer containing a
+//					printf-style format string that indicates the
+//					format for the registry subkey to create.
 //					This string must be null-terminated.
-//				... - A va_list containing the arguments to be 
+//				... - A va_list containing the arguments to be
 //					inserted into pszSubKeyFormat.
 //
 /////////////////////////////////////////////////////////////////////////
@@ -944,13 +944,13 @@ HRESULT SetRegistryDWord(HKEY hKeyRoot, PCWSTR pszValueName, DWORD dwValue, PCWS
 {
     va_list pArgs;
     va_start(pArgs, pszSubKeyFormat);
-    HRESULT hr = SetRegistryValueFormatV(hKeyRoot, 
-											pszValueName, 
-											REG_DWORD, 
-											&dwValue, 
-											sizeof(DWORD), 
-											pszSubKeyFormat, 
-											pArgs);
+    HRESULT hr = SetRegistryValueFormatV(hKeyRoot,
+                                         pszValueName,
+                                         REG_DWORD,
+                                         &dwValue,
+                                         sizeof(DWORD),
+                                         pszSubKeyFormat,
+                                         pArgs);
     va_end(pArgs);
     return hr;
 }

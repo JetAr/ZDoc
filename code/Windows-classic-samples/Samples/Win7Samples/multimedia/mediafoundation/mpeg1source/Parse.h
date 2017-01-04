@@ -1,8 +1,8 @@
-//////////////////////////////////////////////////////////////////////////
+﻿//////////////////////////////////////////////////////////////////////////
 //
 // Parse.h
 // MPEG-1 parsing code.
-// 
+//
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -17,8 +17,8 @@
 
 
 // Note: The structs, enums, and constants defined in this header are not taken from
-// Media Foundation or DirectShow headers. The parser code is written to be API-agnostic. 
-// The only exceptions are: 
+// Media Foundation or DirectShow headers. The parser code is written to be API-agnostic.
+// The only exceptions are:
 //    - Use of the MFRatio structure to describe ratios.
 //    - The MPEG1AudioFlags enum defined here maps directly to the equivalent DirectShow flags.
 
@@ -112,7 +112,7 @@ struct MPEG1PacketHeader
     LONGLONG    PTS;            // Presentation Time Stamp (in 90 kHz clock)
 };
 
-// Video 
+// Video
 
 struct MPEG1VideoSeqHeader
 {
@@ -185,7 +185,7 @@ public:
     // The reserved bytes start at DataPtr() + DataSize().
     HRESULT Reserve(DWORD cb);
 
-    // MoveStart: Moves the front of the buffer. 
+    // MoveStart: Moves the front of the buffer.
     // Call this method after consuming data from the buffer.
     HRESULT MoveStart(DWORD cb);
 
@@ -213,16 +213,36 @@ public:
 
     HRESULT ParseBytes(const BYTE *pData, DWORD cbLen, DWORD *pAte);
 
-    BOOL    HasSystemHeader() const { return m_pHeader != NULL; }
+    BOOL    HasSystemHeader() const
+    {
+        return m_pHeader != NULL;
+    }
     HRESULT GetSystemHeader(MPEG1SystemHeader **ppHeader);
 
-    BOOL    HasPacket() const { return m_bHasPacketHeader; }
-    const MPEG1PacketHeader& PacketHeader() { assert(m_bHasPacketHeader); return m_curPacketHeader; }
+    BOOL    HasPacket() const
+    {
+        return m_bHasPacketHeader;
+    }
+    const MPEG1PacketHeader& PacketHeader()
+    {
+        assert(m_bHasPacketHeader);
+        return m_curPacketHeader;
+    }
 
-    DWORD   PayloadSize() const { assert(m_bHasPacketHeader); return m_curPacketHeader.cbPayload; }
-    void    ClearPacket() { m_bHasPacketHeader = FALSE; }
+    DWORD   PayloadSize() const
+    {
+        assert(m_bHasPacketHeader);
+        return m_curPacketHeader.cbPayload;
+    }
+    void    ClearPacket()
+    {
+        m_bHasPacketHeader = FALSE;
+    }
 
-    BOOL    IsEndOfStream() const { return m_bEOS; }
+    BOOL    IsEndOfStream() const
+    {
+        return m_bEOS;
+    }
 
 private:
 
@@ -237,12 +257,12 @@ private:
     LONGLONG            m_SCR;
     DWORD               m_muxRate;
 
-    MPEG1SystemHeader   *m_pHeader; 
+    MPEG1SystemHeader   *m_pHeader;
     // Note: Size of header = sizeof(MPEG1SystemHeader) + (sizeof(MPEG1StreamHeader) * (cStreams - 1))
 
     BOOL                m_bHasPacketHeader;
     MPEG1PacketHeader   m_curPacketHeader;  // Most recent packet header.
-    
+
     BOOL                m_bEOS;
 };
 

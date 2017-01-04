@@ -1,4 +1,4 @@
-///////////////////////////////////////////////////////////////////////////////
+﻿///////////////////////////////////////////////////////////////////////////////
 //
 // ClipboardChainImprovementAPIs.cpp
 //
@@ -20,16 +20,16 @@
 
 VOID ClipboardSample(
     __in HWND hWindow)
-{    
+{
     //
     // Call GetUpdatedClipboardFormats to get the number of clipboard formats,
     // without getting the clipboard formats themselves
     //
     UINT numberOfClipboardFormats = 0;
     GetUpdatedClipboardFormats(NULL, 0, &numberOfClipboardFormats);
-    _tprintf(_T("GetUpdatedClipboardFormats: initial number of clipboard formats: %d\n\n"), 
-        numberOfClipboardFormats);
-    
+    _tprintf(_T("GetUpdatedClipboardFormats: initial number of clipboard formats: %d\n\n"),
+             numberOfClipboardFormats);
+
     //
     // Add the sample window to the list of clipboard format listeners
     //
@@ -42,7 +42,7 @@ VOID ClipboardSample(
     // Add bitmap data to the clipboard, which will generate a WM_CLIPBOARDUPDATE message
     //
     AddBitmapDataToClipboard(hWindow);
-    
+
     //
     // Peek for a WM_CLIPBOARDUPDATE message
     //
@@ -58,12 +58,12 @@ VOID ClipboardSample(
     //
     UINT* clipboardFormats = new UINT[numberOfClipboardFormats + 10];
     if (GetUpdatedClipboardFormats(
-        clipboardFormats, 
-        numberOfClipboardFormats + 10, 
-        &numberOfClipboardFormats))
+                clipboardFormats,
+                numberOfClipboardFormats + 10,
+                &numberOfClipboardFormats))
     {
         _tprintf(_T("GetUpdatedClipboardFormats: number of clipboard formats written: %d\n\n"),
-            numberOfClipboardFormats);
+                 numberOfClipboardFormats);
     }
 
     //
@@ -90,7 +90,7 @@ VOID ClipboardSample(
     }
 
     DestroyWindow(hWindow);
-	delete [] clipboardFormats;
+    delete [] clipboardFormats;
 }
 
 INT _cdecl _tmain(INT argc, __in_ecount(argc) TCHAR* argv[])
@@ -99,17 +99,17 @@ INT _cdecl _tmain(INT argc, __in_ecount(argc) TCHAR* argv[])
     // Create the sample window to use with the clipboard functions
     //
     HWND hWindow = CreateWindow(
-        _T("Edit"),
-        _T("Sample Window"),
-        WS_VISIBLE | WS_OVERLAPPED,
-        100,
-        100,
-        100,
-        100,
-        NULL,
-        NULL,
-        NULL,
-        NULL);
+                       _T("Edit"),
+                       _T("Sample Window"),
+                       WS_VISIBLE | WS_OVERLAPPED,
+                       100,
+                       100,
+                       100,
+                       100,
+                       NULL,
+                       NULL,
+                       NULL,
+                       NULL);
 
     if (!hWindow)
     {
@@ -129,7 +129,7 @@ BOOL AddBitmapDataToClipboard(
     BOOL result = TRUE;
 
     HBITMAP hBitmap = NULL;
-    
+
     if (!OpenClipboard(hWindow))
     {
         _tprintf(_T("Cannot open clipboard\n"));
@@ -139,8 +139,8 @@ BOOL AddBitmapDataToClipboard(
     if (result)
     {
         hBitmap = LoadBitmap(
-            NULL,
-            MAKEINTRESOURCE(OBM_CHECK));
+                      NULL,
+                      MAKEINTRESOURCE(OBM_CHECK));
 
         if (!hBitmap)
         {

@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -8,15 +8,15 @@
 // CGestureEngine.h
 //
 // Definition of helper classes for processing of gestures. During this process
-// driver sends subsequent finger position information (reference point) and 
+// driver sends subsequent finger position information (reference point) and
 // in the some cases other information.
 
 #pragma once
 #include <windows.h>
 
-// CGestureEngine class is abstract class that is responsible for 
+// CGestureEngine class is abstract class that is responsible for
 // properly decoding information from multi-touch driver. There are
-// few pure virtual functions that are responsible for manipulation 
+// few pure virtual functions that are responsible for manipulation
 // of the object.
 class CGestureEngine
 {

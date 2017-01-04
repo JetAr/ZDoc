@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -233,7 +233,7 @@ void ReadHintsResults(
 
     // Get the collection
     if (S_OK == results->GetIPortableDevicePropVariantCollectionValue(WPD_PROPERTY_DEVICE_HINTS_CONTENT_LOCATIONS,
-                                                                      &folderIDs))
+            &folderIDs))
     {
         // Get the count of folders
         DWORD numFolderIDs = 0;
@@ -257,7 +257,7 @@ void ReadHintsResults(
                             // Get the persistent unique object id
                             PWSTR folderPersistentUniqueID = nullptr;
                             if (SUCCEEDED(folderProperties->GetStringValue(WPD_OBJECT_PERSISTENT_UNIQUE_ID,
-                                                                           &folderPersistentUniqueID)))
+                                          &folderPersistentUniqueID)))
                             {
                                 wprintf(L" '%ws' (%ws)\n", folderID.pwszVal, folderPersistentUniqueID);
 

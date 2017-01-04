@@ -1,4 +1,4 @@
-//***************************************************************************
+﻿//***************************************************************************
 
 //
 
@@ -11,7 +11,7 @@
 //
 //	Part of :	WMI Tutorial.
 //
-//  History:	
+//  History:
 //
 //***************************************************************************
 
@@ -21,8 +21,8 @@
 
 CProviderFactory::CProviderFactory(CListBox	*pOutputList)
 {
-	m_cRef = 0L;
-	m_pOutputList = pOutputList;
+    m_cRef = 0L;
+    m_pOutputList = pOutputList;
 }
 
 CProviderFactory::~CProviderFactory()
@@ -83,7 +83,7 @@ STDMETHODIMP_(ULONG) CProviderFactory::Release(void)
 STDMETHODIMP
 CProviderFactory::CreateInstance(IUnknown *pUnkOuter, REFIID riid, LPVOID *ppv)
 {
-	HRESULT hr;
+    HRESULT hr;
     CProvider *pProvider = NULL;
 
     if (pUnkOuter)

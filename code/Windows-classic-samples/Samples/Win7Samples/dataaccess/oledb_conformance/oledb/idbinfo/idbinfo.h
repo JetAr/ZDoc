@@ -1,7 +1,7 @@
-//--------------------------------------------------------------------
+﻿//--------------------------------------------------------------------
 // Microsoft OLE DB Test
 //
-// Copyright 1995-2000 Microsoft Corporation.  
+// Copyright 1995-2000 Microsoft Corporation.
 //
 // @doc
 //
@@ -19,7 +19,7 @@
 #include "privlib.h"		// Include private library
 
 // Enum's used in the test
-enum ARRANGELITERAL{ZERO,ONE,HALF,ALL,ALLSUPPORTED,ALLREVERSE,INVALID1,INVALIDALL};
+enum ARRANGELITERAL {ZERO,ONE,HALF,ALL,ALLSUPPORTED,ALLREVERSE,INVALID1,INVALIDALL};
 enum ETXN {ETXN_COMMIT,ETXN_ABORT};
 
 // According to 2.0 Spec

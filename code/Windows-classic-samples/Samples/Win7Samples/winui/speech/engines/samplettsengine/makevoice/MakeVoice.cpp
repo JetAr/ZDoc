@@ -1,9 +1,9 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
 //
-// Copyright � Microsoft Corporation. All rights reserved
+// Copyright © Microsoft Corporation. All rights reserved
 
 /******************************************************************************
 * MakeVoice.cpp *
@@ -40,7 +40,7 @@ int wmain(int argc, __in_ecount(argc) WCHAR* argv[])
             hWordList = NULL;
             hr = E_FAIL;
         }
-        
+
         if ( SUCCEEDED( hr ) && fopen_s( &hVoiceFile, CW2A(argv[2]), "wb" ) != 0 )
         {
             hVoiceFile = NULL;
@@ -51,7 +51,7 @@ int wmain(int argc, __in_ecount(argc) WCHAR* argv[])
         {
             //--- Write file version and leave space for word count
             if( !fwrite( &dwVersion, sizeof(dwVersion), 1, hVoiceFile ) ||
-                 fseek( hVoiceFile, 4, SEEK_CUR ) )
+                    fseek( hVoiceFile, 4, SEEK_CUR ) )
             {
                 hr = E_FAIL;
             }
@@ -69,7 +69,7 @@ int wmain(int argc, __in_ecount(argc) WCHAR* argv[])
                 ulTextLen = (ulTextLen+1) * sizeof(WCHAR);
 
                 if( fwrite( &ulTextLen, sizeof(ulTextLen), 1, hVoiceFile ) &&
-                    fwrite( WordFileName, ulTextLen, 1, hVoiceFile ) )
+                        fwrite( WordFileName, ulTextLen, 1, hVoiceFile ) )
                 {
                     ++ulNumWords;
                     //--- Open the wav data
@@ -85,7 +85,7 @@ int wmain(int argc, __in_ecount(argc) WCHAR* argv[])
                             STATSTG Stat;
                             hr = pStream->Stat( &Stat, STATFLAG_NONAME );
                             ULONG ulNumBytes = Stat.cbSize.LowPart;
-                            
+
                             if( ulNumBytes > MAXLONG )
                             {
                                 hr = E_OUTOFMEMORY;
@@ -93,7 +93,7 @@ int wmain(int argc, __in_ecount(argc) WCHAR* argv[])
 
                             //--- Write the number of audio bytes
                             if( SUCCEEDED( hr ) &&
-                                fwrite( &ulNumBytes, sizeof(ulNumBytes), 1, hVoiceFile ) )
+                                    fwrite( &ulNumBytes, sizeof(ulNumBytes), 1, hVoiceFile ) )
                             {
                                 BYTE* Buff = (BYTE*)_malloca( ulNumBytes );
                                 if( SUCCEEDED( hr = pStream->Read( Buff, ulNumBytes, NULL ) ) )
@@ -133,7 +133,7 @@ int wmain(int argc, __in_ecount(argc) WCHAR* argv[])
         if( SUCCEEDED( hr ) )
         {
             if( fseek( hVoiceFile, sizeof(dwVersion), SEEK_SET ) ||
-                !fwrite( &ulNumWords, sizeof(ulNumWords), 1, hVoiceFile ) )
+                    !fwrite( &ulNumWords, sizeof(ulNumWords), 1, hVoiceFile ) )
             {
                 hr = E_FAIL;
             }
@@ -147,14 +147,14 @@ int wmain(int argc, __in_ecount(argc) WCHAR* argv[])
             CComPtr<ISpObjectToken> cpToken;
             CComPtr<ISpDataKey> cpDataKeyAttribs;
             hr = SpCreateNewTokenEx(
-                    SPCAT_VOICES, 
-                    argv[3], 
-                    &CLSID_SampleTTSEngine, 
-                    L"Sample TTS Voice", 
-                    0x409, 
-                    L"Sample TTS Voice", 
-                    &cpToken,
-                    &cpDataKeyAttribs);
+                     SPCAT_VOICES,
+                     argv[3],
+                     &CLSID_SampleTTSEngine,
+                     L"Sample TTS Voice",
+                     0x409,
+                     L"Sample TTS Voice",
+                     &cpToken,
+                     &cpDataKeyAttribs);
 
             //--- Set additional attributes for searching and the path to the
             //    voice data file we just created.

@@ -1,6 +1,6 @@
-//////////////////////////////////////////////////////////////////////////
+﻿//////////////////////////////////////////////////////////////////////////
 // ContentEnabler.cpp: Manages content enabler action.
-// 
+//
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -21,7 +21,7 @@ void LogTrustStatus(MF_URL_TRUST_STATUS status);
 ///////////////////////////////////////////////////////////////////////
 //  Name: CreateInstance
 //  Description:  Static class method to create the object.
-//  
+//
 //  hNotify:   Handle to the application window to receive notifications.
 //  ppManager: Receives an AddRef's pointer to the ContentProtectionManager
 //             object. The caller must release the pointer.
@@ -146,7 +146,7 @@ HRESULT ContentProtectionManager::BeginEnableContent(
     IMFTopology *pTopo,
     IMFAsyncCallback *pCallback,
     IUnknown *punkState
-    )
+)
 {
     TRACE((L"ContentProtectionManager::BeginEnableContent"));
 
@@ -208,7 +208,7 @@ HRESULT ContentProtectionManager::EndEnableContent(IMFAsyncResult *pResult)
 ///////////////////////////////////////////////////////////////////////
 //  Name: Invoke
 //  Description:  Callback for asynchronous BeginGetEvent method.
-//  
+//
 //  pAsyncResult: Pointer to the result.
 /////////////////////////////////////////////////////////////////////////
 
@@ -254,19 +254,19 @@ HRESULT ContentProtectionManager::Invoke(IMFAsyncResult *pAsyncResult)
         {
             PostMessage(m_hwnd, WM_APP_CONTENT_ENABLER, 0, 0);
         }
-        else 
+        else
         {
             if (meType == MEEnablerProgress)
             {
                 if (varEventData.vt == VT_LPWSTR)
                 {
-                    TRACE((L"Progress: %s", varEventData.pwszVal)); 
+                    TRACE((L"Progress: %s", varEventData.pwszVal));
                 }
             }
             m_pMEG->BeginGetEvent(this, NULL);
         }
     }
-    
+
 
     // Clean up.
     PropVariantClear(&varEventData);
@@ -316,7 +316,7 @@ HRESULT ContentProtectionManager::DoEnable(EnablerFlags flags)
     }
 
     // Decide whether to use silent or non-silent enabling. If flags is ForceNonSilent,
-    // then we use non-silent. Otherwise, we query whether the enabler object supports 
+    // then we use non-silent. Otherwise, we query whether the enabler object supports
     // silent enabling (also called "automatic" enabling).
     if (SUCCEEDED(hr))
     {
@@ -331,7 +331,7 @@ HRESULT ContentProtectionManager::DoEnable(EnablerFlags flags)
             TRACE((L"IsAutomatic: auto = %d", bAutomatic));
         }
     }
-    
+
     // Start automatic or non-silent, depending.
     if (SUCCEEDED(hr))
     {
@@ -361,7 +361,7 @@ HRESULT ContentProtectionManager::DoEnable(EnablerFlags flags)
 ///////////////////////////////////////////////////////////////////////
 //  Name: CancelEnable
 //  Description:  Cancels the current action.
-//  
+//
 //  During silent enable, this cancels the enable action in progress.
 //  During non-silent enable, this cancels the MonitorEnable thread.
 /////////////////////////////////////////////////////////////////////////
@@ -387,8 +387,8 @@ HRESULT ContentProtectionManager::CancelEnable()
 ///////////////////////////////////////////////////////////////////////
 //  Name: CompleteEnable
 //  Description:  Completes the current action.
-//  
-//  This method invokes the PMP session's callback. 
+//
+//  This method invokes the PMP session's callback.
 /////////////////////////////////////////////////////////////////////////
 
 HRESULT ContentProtectionManager::CompleteEnable()
@@ -396,11 +396,11 @@ HRESULT ContentProtectionManager::CompleteEnable()
     m_state = Enabler_Complete;
 
     // m_pResult can be NULL if the BeginEnableContent was not called.
-    // This is the case when the application initiates the enable action, eg 
+    // This is the case when the application initiates the enable action, eg
     // when MFCreatePMPMediaSession fails and returns an IMFActivate pointer.
     if (m_pResult)
     {
-        TRACE((L"ContentProtectionManager: Invoking the pipeline's callback. (status = 0x%X)", m_hrStatus)); 
+        TRACE((L"ContentProtectionManager: Invoking the pipeline's callback. (status = 0x%X)", m_hrStatus));
         m_pResult->SetStatus(m_hrStatus);
         MFInvokeCallback(m_pResult);
     }
@@ -438,11 +438,11 @@ HRESULT ContentProtectionManager::DoNonSilentEnable()
 
     if (trustStatus != MF_LICENSE_URL_TRUSTED)
     {
-        TRACE((L"The enabler URL is not trusted. Failing.")); 
+        TRACE((L"The enabler URL is not trusted. Failing."));
         hr = E_FAIL;
     }
 
-    // Start the thread that monitors the non-silent enable action. 
+    // Start the thread that monitors the non-silent enable action.
     if (SUCCEEDED(hr))
     {
         hr = m_pEnabler->MonitorEnable();

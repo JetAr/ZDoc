@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -9,7 +9,7 @@
 
 CIcsConnectionInfo::CIcsConnectionInfo(
     const CIcsConnection & Connection
-    )
+)
 {
     Connection.GetConnectionGuid(m_Guid);
     Connection.GetConnectionName(m_Name);
@@ -41,7 +41,7 @@ CIcsManager::~CIcsManager( )
     SAFE_RELEASE(m_pNSMgr);
 }
 
-// 
+//
 // The ICS manager initialization takes 3 steps --
 // 1. Make sure that ICS is supported in the current version of Windows
 // 2. Retrieve all the ICS connections
@@ -71,22 +71,22 @@ CIcsManager::InitIcsManager
     }
 
     hr =
-    CoCreateInstance
-    (
-        __uuidof(NetSharingManager),
-        NULL,
-        CLSCTX_ALL,
-        __uuidof(INetSharingManager),
-        (void**) &m_pNSMgr
-    );
+        CoCreateInstance
+        (
+            __uuidof(NetSharingManager),
+            NULL,
+            CLSCTX_ALL,
+            __uuidof(INetSharingManager),
+            (void**) &m_pNSMgr
+        );
     BAIL_ON_HRESULT_ERROR(hr);
     ASSERT(m_pNSMgr);
 
 
     hr =
-    RefreshInstalled
-    (
-    );
+        RefreshInstalled
+        (
+        );
     BAIL_ON_HRESULT_ERROR(hr);
 
     if (!m_bInstalled)
@@ -96,27 +96,27 @@ CIcsManager::InitIcsManager
     }
 
     hr =
-    m_pNSMgr->get_EnumEveryConnection
-    (
-        &pConnectionsList
-    );
+        m_pNSMgr->get_EnumEveryConnection
+        (
+            &pConnectionsList
+        );
     BAIL_ON_HRESULT_ERROR(hr);
     ASSERT(pConnectionsList);
 
     hr =
-    pConnectionsList->get__NewEnum
-    (
-        &pUnkEnum
-    );
+        pConnectionsList->get__NewEnum
+        (
+            &pUnkEnum
+        );
     BAIL_ON_HRESULT_ERROR(hr);
     ASSERT(pUnkEnum);
 
     hr =
-    pUnkEnum->QueryInterface
-    (
-        __uuidof(IEnumNetSharingEveryConnection),
-        (void**) &pNSEConn
-    );
+        pUnkEnum->QueryInterface
+        (
+            __uuidof(IEnumNetSharingEveryConnection),
+            (void**) &pNSEConn
+        );
     BAIL_ON_HRESULT_ERROR(hr);
     ASSERT(pNSEConn);
 
@@ -127,12 +127,12 @@ CIcsManager::InitIcsManager
         VariantClear(&varItem);
 
         hr =
-        pNSEConn->Next
-        (
-            1,
-            &varItem,
-            &pceltFetched    
-        );
+            pNSEConn->Next
+            (
+                1,
+                &varItem,
+                &pceltFetched
+            );
         BAIL_ON_HRESULT_ERROR(hr);
 
         if (S_FALSE == hr)
@@ -170,12 +170,12 @@ CIcsManager::InitIcsManager
         VariantClear(&varItem);
 
         hr =
-        pNSEConn->Next
-        (
-            1,
-            &varItem,
-            &pceltFetched
-        );
+            pNSEConn->Next
+            (
+                1,
+                &varItem,
+                &pceltFetched
+            );
         BAIL_ON_HRESULT_ERROR(hr);
 
         if (S_FALSE == hr)
@@ -195,21 +195,21 @@ CIcsManager::InitIcsManager
         ASSERT( (V_VT(&varItem) == VT_UNKNOWN) && V_UNKNOWN(&varItem) );
 
         hr =
-        V_UNKNOWN(&varItem)->QueryInterface
-        (
-            __uuidof(INetConnection),
-            (void**) &pNetConnection
-        );
+            V_UNKNOWN(&varItem)->QueryInterface
+            (
+                __uuidof(INetConnection),
+                (void**) &pNetConnection
+            );
         BAIL_ON_HRESULT_ERROR(hr);
         ASSERT(pNetConnection);
 
         hr =
-        m_pList[lIndex-1].InitIcsConnection
-        (
-            this,
-            pNetConnection,
-            lIndex-1
-        );
+            m_pList[lIndex-1].InitIcsConnection
+            (
+                this,
+                pNetConnection,
+                lIndex-1
+            );
         BAIL_ON_HRESULT_ERROR(hr);
 
     }
@@ -251,10 +251,10 @@ CIcsManager::RefreshInstalled
     VARIANT_BOOL    bInstalled  =   VARIANT_FALSE;
 
     hr =
-    m_pNSMgr->get_SharingInstalled
-    (
-        &bInstalled
-    );
+        m_pNSMgr->get_SharingInstalled
+        (
+            &bInstalled
+        );
     BAIL_ON_HRESULT_ERROR(hr);
 
     m_bInstalled = (bInstalled == VARIANT_TRUE);
@@ -354,9 +354,9 @@ CIcsManager::EnableIcs
     m_pList[lPrivateIndex].RefreshSharingEnabled();
 
     if (m_pList[lPublicIndex].IsSharingEnabled() &&
-        m_pList[lPublicIndex].IsPublic() &&
-        m_pList[lPrivateIndex].IsSharingEnabled() &&
-        m_pList[lPrivateIndex].IsPrivate())
+            m_pList[lPublicIndex].IsPublic() &&
+            m_pList[lPrivateIndex].IsSharingEnabled() &&
+            m_pList[lPrivateIndex].IsPrivate())
     {
         BAIL();
     }
@@ -385,7 +385,7 @@ error:
 void
 CIcsManager::GetIcsConnections(
     CRefObjList<CIcsConnectionInfo *> & ConnectionList
-    )
+)
 {
     // remove all old entries
     ConnectionList.RemoveAllEntries();
@@ -410,7 +410,7 @@ CIcsManager::GetIcsConnections(
 
 //
 // Cache the current ICS-enabled interfaces
-// this step is taken before enabling ICS/softAP. 
+// this step is taken before enabling ICS/softAP.
 // Used for recovery in case the ICS/softAP enabling
 // fails
 //
@@ -420,7 +420,7 @@ CIcsManager::CacheICSIntfIndex
 )
 {
     long lIndex = 0;
-    
+
     ASSERT(m_pList);
 
     m_lPublicICSIntfIndex = -1;
@@ -448,7 +448,7 @@ CIcsManager::CacheICSIntfIndex
 }
 
 //
-// This is a best-effort recovery step that restores 
+// This is a best-effort recovery step that restores
 // the previously enabled ICS, taken when
 // starting softAP or enabling ICS on new interface
 // fails
@@ -456,7 +456,7 @@ CIcsManager::CacheICSIntfIndex
 void
 CIcsManager::EnableICSonCache
 (
- )
+)
 {
     DisableIcsOnAll();
 

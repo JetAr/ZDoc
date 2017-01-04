@@ -1,4 +1,4 @@
-/*
+﻿/*
 
 Copyright (c) 1997, Microsoft Corporation, all rights reserved
 
@@ -46,13 +46,13 @@ History:
 
 Notes:
     RasEapGetInfo entry point called by the EAP-PPP engine by name.
-    
+
 */
 
 DWORD APIENTRY
 RasEapGetInfo(
     IN  DWORD         dwEapTypeId,
-    OUT PPP_EAP_INFO* pInfo 
+    OUT PPP_EAP_INFO* pInfo
 )
 {
     EapTrace("RasEapGetInfo");
@@ -86,13 +86,13 @@ RasEapGetInfo(
 
 Notes:
     EapBegin entry point called by the EAP PPP engine thru the passed address.
-    
+
 */
 
 DWORD APIENTRY
 EapBegin(
     OUT VOID** ppWorkBuf,
-    IN  VOID*  pInfo 
+    IN  VOID*  pInfo
 )
 {
     PPP_EAP_INPUT* pInput = (PPP_EAP_INPUT*)pInfo;
@@ -121,16 +121,16 @@ EapBegin(
 
     if (pInput->pDataFromInteractiveUI != NULL)
     {
-        pwb->dwSizeOfDataFromInteractiveUI = 
+        pwb->dwSizeOfDataFromInteractiveUI =
             pInput->dwSizeOfDataFromInteractiveUI;
         pwb->pDataFromInteractiveUI =
             LocalAlloc(LPTR, pwb->dwSizeOfDataFromInteractiveUI);
 
         if (NULL != pwb->pDataFromInteractiveUI)
         {
-            CopyMemory(pwb->pDataFromInteractiveUI, 
-                pInput->pDataFromInteractiveUI,
-                pwb->dwSizeOfDataFromInteractiveUI);
+            CopyMemory(pwb->pDataFromInteractiveUI,
+                       pInput->pDataFromInteractiveUI,
+                       pwb->dwSizeOfDataFromInteractiveUI);
         }
     }
 
@@ -157,7 +157,7 @@ EapBegin(
     if (!pwb->fAuthenticator)
     {
         if (   (NULL != pInput->pUserData)
-            && (sizeof(EAP_NAME_DIALOG) == pInput->dwSizeOfUserData))
+                && (sizeof(EAP_NAME_DIALOG) == pInput->dwSizeOfUserData))
         {
             WideCharToMultiByte(
                 CP_ACP,
@@ -185,12 +185,12 @@ EapBegin(
 Notes:
     EapEnd entry point called by the PPP engine thru the passed address.
     See EAP interface documentation.
-    
+
 */
 
 DWORD APIENTRY
 EapEnd(
-    IN VOID* pWorkBuf 
+    IN VOID* pWorkBuf
 )
 {
     EAPCB* pwb = (EAPCB *)pWorkBuf;
@@ -242,7 +242,7 @@ EapEnd(
 Notes:
     RasEapMakeMessage entry point called by the PPP engine thru the passed
     address.
-    
+
 */
 
 DWORD APIENTRY
@@ -252,7 +252,7 @@ EapMakeMessage(
     OUT PPP_EAP_PACKET*     pSendBuf,
     IN  DWORD               cbSendBuf,
     OUT PPP_EAP_OUTPUT*     pResult,
-    IN  PPP_EAP_INPUT*      pInput 
+    IN  PPP_EAP_INPUT*      pInput
 )
 {
     EAPCB*  pwb = (EAPCB*)pWorkBuf;
@@ -265,20 +265,20 @@ EapMakeMessage(
 
     if (pwb->fAuthenticator)
     {
-        return(AuthenticatorMakeMessage(pwb, 
+        return(AuthenticatorMakeMessage(pwb,
                                         pReceiveBuf,
-                                        pSendBuf, 
-                                        cbSendBuf, 
-                                        pInput, 
+                                        pSendBuf,
+                                        cbSendBuf,
+                                        pInput,
                                         pResult));
     }
     else
     {
-        return(AuthenticateeMakeMessage(pwb, 
-                                        pReceiveBuf, 
-                                        pSendBuf, 
-                                        cbSendBuf, 
-                                        pInput, 
+        return(AuthenticateeMakeMessage(pwb,
+                                        pReceiveBuf,
+                                        pSendBuf,
+                                        cbSendBuf,
+                                        pInput,
                                         pResult));
     }
 }
@@ -327,7 +327,7 @@ RasEapGetIdentity(
         //
 
         if (   (NULL == pUserDataIn)
-            || (sizeof(EAP_NAME_DIALOG) != dwSizeOfUserDataIn))
+                || (sizeof(EAP_NAME_DIALOG) != dwSizeOfUserDataIn))
         {
             //
             // Bad saved credentials
@@ -348,12 +348,12 @@ RasEapGetIdentity(
     }
 
     dwErr = GetIdentity(
-                    hwndParent,
-                    pUserDataIn,
-                    dwSizeOfUserDataIn,
-                    ppUserDataOut,
-                    pdwSizeOfUserDataOut,
-                    ppwszIdentity);
+                hwndParent,
+                pUserDataIn,
+                dwSizeOfUserDataIn,
+                ppUserDataOut,
+                pdwSizeOfUserDataOut,
+                ppwszIdentity);
 
 LDone:
 
@@ -386,7 +386,7 @@ RasEapInvokeConfigUI(
     *pdwSizeOfConnectionDataOut = 0;
 
     if (   (NULL == pConnectionDataIn)
-        || (0 == dwSizeOfConnectionDataIn))
+            || (0 == dwSizeOfConnectionDataIn))
     {
         //
         // We are configuring for the first time
@@ -406,7 +406,7 @@ RasEapInvokeConfigUI(
     StringCchPrintf((LPTSTR)awszMessage, sizeof(awszMessage),(LPTSTR)L"%5d times",dwDisplayedNumber);
 
     MessageBox(hwndParent, awszMessage,
-        L"You have configured this interface...", MB_OK | MB_ICONINFORMATION);
+               L"You have configured this interface...", MB_OK | MB_ICONINFORMATION);
 
     //
     // Allocate memory for the OUT parameter
@@ -431,7 +431,7 @@ RasEapInvokeConfigUI(
     //
 
     CopyMemory(*ppConnectionDataOut, (BYTE*)&dwDisplayedNumber,
-        sizeof(DWORD));
+               sizeof(DWORD));
     *pdwSizeOfConnectionDataOut = sizeof(DWORD);
 
 LDone:
@@ -458,14 +458,14 @@ RasEapInvokeInteractiveUI(
 {
     EapTrace("RasEapInvokeInteractiveUI");
 
-    if (MessageBox(hWndParent, 
-                      (WCHAR*)pUIContextData, 
-                      L"EAP sample", 
-                      MB_OKCANCEL) == IDOK)
+    if (MessageBox(hWndParent,
+                   (WCHAR*)pUIContextData,
+                   L"EAP sample",
+                   MB_OKCANCEL) == IDOK)
     {
         *lpdwSizeOfDataFromInteractiveUI = (wcslen(L"OK") + 1) * sizeof(WCHAR);
 
-        if ((*ppDataFromInteractiveUI = 
+        if ((*ppDataFromInteractiveUI =
                     LocalAlloc(LPTR, *lpdwSizeOfDataFromInteractiveUI)) == NULL)
         {
             return(ERROR_NOT_ENOUGH_MEMORY);
@@ -478,7 +478,7 @@ RasEapInvokeInteractiveUI(
         *ppDataFromInteractiveUI         = NULL;
         *lpdwSizeOfDataFromInteractiveUI = 0;
     }
-    
+
     return(NO_ERROR);
 }
 
@@ -500,30 +500,30 @@ RasEapFreeMemory(
 }
 
 /*---------------------------------------------------------------------------
-    Internal routines 
+    Internal routines
 ---------------------------------------------------------------------------*/
 
 /*
 
 Notes:
     Print debug information.
-    
+
 */
 
-VOID   
+VOID
 EapTrace(
-    IN  CHAR*   Format, 
-    ... 
-) 
+    IN  CHAR*   Format,
+    ...
+)
 {
     va_list arglist;
 
     va_start(arglist, Format);
 
-    TraceVprintfExA(g_dwEapTraceId, 
-        0x00010000 | TRACE_USE_MASK | TRACE_USE_MSEC,
-        Format,
-        arglist);
+    TraceVprintfExA(g_dwEapTraceId,
+                    0x00010000 | TRACE_USE_MASK | TRACE_USE_MSEC,
+                    Format,
+                    arglist);
 
     va_end(arglist);
 }
@@ -532,7 +532,7 @@ EapTrace(
 
 Notes:
     Will convert a 32 bit integer from host format to wire format.
-    
+
 */
 
 VOID
@@ -551,7 +551,7 @@ HostToWireFormat32(
 
 Notes:
     Will convert a 16 bit integer from host format to wire format.
-    
+
 */
 
 VOID
@@ -568,7 +568,7 @@ HostToWireFormat16(
 
 Notes:
     Will convert a 16 bit integer from wire format to host format.
-    
+
 */
 
 WORD
@@ -586,7 +586,7 @@ WireToHostFormat16(
 
 Notes:
     Authenticatee side event handler.
-    
+
 */
 
 DWORD
@@ -607,131 +607,161 @@ AuthenticateeMakeMessage(
 
     switch(pwb->EapState)
     {
-        case MYSTATE_Initial:
+    case MYSTATE_Initial:
 
-            if (pwb->fFlags & RAS_EAP_FLAG_ROUTER)
+        if (pwb->fFlags & RAS_EAP_FLAG_ROUTER)
+        {
+            pwb->EapState = MYSTATE_WaitForRequest;
+
+            break;
+        }
+        pwb->bRecvPacketId = pReceiveBuf->Id;
+        if (NULL == pwb->pDataFromInteractiveUI)
+        {
+            WCHAR * pUIContextData = L"You are being authenticated by a Sample EAP";
+            //
+            // Bring up interactive UI to notify user that he/she is being
+            // authenticated via the sample EAP
+            //
+
+            pResult->fInvokeInteractiveUI = TRUE;
+
+            pResult->dwSizeOfUIContextData =
+                (wcslen(pUIContextData)+1) *
+                sizeof(WCHAR);
+
+            pResult->pUIContextData = LocalAlloc(
+                                          LPTR,
+                                          pResult->dwSizeOfUIContextData);
+
+            if (pResult->pUIContextData == NULL)
             {
-                pwb->EapState = MYSTATE_WaitForRequest;
-
-                break;
-            }
-            pwb->bRecvPacketId = pReceiveBuf->Id;
-            if (NULL == pwb->pDataFromInteractiveUI)
-            {
-                WCHAR * pUIContextData = L"You are being authenticated by a Sample EAP";
-                //
-                // Bring up interactive UI to notify user that he/she is being
-                // authenticated via the sample EAP
-                //
-
-                pResult->fInvokeInteractiveUI = TRUE;
-
-                pResult->dwSizeOfUIContextData =
-                   (wcslen(pUIContextData)+1) *
-                       sizeof(WCHAR);
-
-                pResult->pUIContextData = LocalAlloc(
-                                              LPTR,
-                                              pResult->dwSizeOfUIContextData);
-
-                if (pResult->pUIContextData == NULL)
-                {
-                    EapTrace("OUt of memory");
-                    return(ERROR_NOT_ENOUGH_MEMORY);
-                }
-
-                StringCchCopy((LPTSTR)pResult->pUIContextData,
-                             wcslen(pUIContextData) + 1,
-                             (LPTSTR)pUIContextData);
-
-                pwb->pUIContext = pResult->pUIContextData;
-
-                pwb->EapState = MYSTATE_WaitForUserOK;
-
-                break;
+                EapTrace("OUt of memory");
+                return(ERROR_NOT_ENOUGH_MEMORY);
             }
 
-            //
-            // Else, fall through
-            //
+            StringCchCopy((LPTSTR)pResult->pUIContextData,
+                          wcslen(pUIContextData) + 1,
+                          (LPTSTR)pUIContextData);
 
-        case MYSTATE_WaitForUserOK:
+            pwb->pUIContext = pResult->pUIContextData;
 
-            //
-            // Wait for response from user
-            //
+            pwb->EapState = MYSTATE_WaitForUserOK;
 
-            if (   pInput->fDataReceivedFromInteractiveUI
+            break;
+        }
+
+    //
+    // Else, fall through
+    //
+
+    case MYSTATE_WaitForUserOK:
+
+        //
+        // Wait for response from user
+        //
+
+        if (   pInput->fDataReceivedFromInteractiveUI
                 || (NULL != pwb->pDataFromInteractiveUI))
+        {
+            if (pInput->fDataReceivedFromInteractiveUI)
             {
-                if (pInput->fDataReceivedFromInteractiveUI)
-                {
-                    pDataFromInteractiveUI =
-                            pInput->pDataFromInteractiveUI;
-                    dwSizeOfDataFromInteractiveUI =
-                            pInput->dwSizeOfDataFromInteractiveUI;
-                }
-                else
-                {
-                    pDataFromInteractiveUI =
-                            pwb->pDataFromInteractiveUI;
-                    dwSizeOfDataFromInteractiveUI =
-                            pwb->dwSizeOfDataFromInteractiveUI;
-                }
-
-                LocalFree(pwb->pUIContext);
-                pwb->pUIContext = NULL;
-
-                //
-                // If user doesn't like this, then we hangup the line
-                //
-
-                if (dwSizeOfDataFromInteractiveUI !=
-                            (wcslen(L"OK")+1) * sizeof(WCHAR))
-                {
-                    EapTrace("User chose to cancel");
-                    dwRetCode = ERROR_ACCESS_DENIED;
-                    break;
-                }
-
-                if (wcscmp((WCHAR*)pDataFromInteractiveUI, L"OK") != 0)
-                {
-                    EapTrace("User chose to cancel");
-                    dwRetCode = ERROR_ACCESS_DENIED;
-                    break;
-                }
-
-                
-                pwb->EapState = MYSTATE_WaitForRequest;
+                pDataFromInteractiveUI =
+                    pInput->pDataFromInteractiveUI;
+                dwSizeOfDataFromInteractiveUI =
+                    pInput->dwSizeOfDataFromInteractiveUI;
             }
             else
             {
-                //
-                // Ignore all other events.
-                //
-
-                pResult->Action = EAPACTION_NoAction;
+                pDataFromInteractiveUI =
+                    pwb->pDataFromInteractiveUI;
+                dwSizeOfDataFromInteractiveUI =
+                    pwb->dwSizeOfDataFromInteractiveUI;
             }
 
-            if ( !(pwb->fFlags & RAS_EAP_FLAG_8021X_AUTH ) )
+            LocalFree(pwb->pUIContext);
+            pwb->pUIContext = NULL;
+
+            //
+            // If user doesn't like this, then we hangup the line
+            //
+
+            if (dwSizeOfDataFromInteractiveUI !=
+                    (wcslen(L"OK")+1) * sizeof(WCHAR))
             {
-                //
-                // if this is a VPN client, we can rely on 
-                // retransmission.  But with wireless client
-                // we cannot do that.
-                //
+                EapTrace("User chose to cancel");
+                dwRetCode = ERROR_ACCESS_DENIED;
                 break;
             }
-            //fall thru
 
-        case MYSTATE_WaitForRequest:
+            if (wcscmp((WCHAR*)pDataFromInteractiveUI, L"OK") != 0)
+            {
+                EapTrace("User chose to cancel");
+                dwRetCode = ERROR_ACCESS_DENIED;
+                break;
+            }
 
-            if ( (pwb->fFlags & RAS_EAP_FLAG_8021X_AUTH ) )
+
+            pwb->EapState = MYSTATE_WaitForRequest;
+        }
+        else
+        {
+            //
+            // Ignore all other events.
+            //
+
+            pResult->Action = EAPACTION_NoAction;
+        }
+
+        if ( !(pwb->fFlags & RAS_EAP_FLAG_8021X_AUTH ) )
+        {
+            //
+            // if this is a VPN client, we can rely on
+            // retransmission.  But with wireless client
+            // we cannot do that.
+            //
+            break;
+        }
+    //fall thru
+
+    case MYSTATE_WaitForRequest:
+
+        if ( (pwb->fFlags & RAS_EAP_FLAG_8021X_AUTH ) )
+        {
+            //
+            // Build the response packet
+            //
+            MakeResponseMessage1(pwb, pSendBuf, cbSendBuf);
+
+            //
+            // Response packets should not be sent with any timeout
+            //
+
+            pResult->Action = EAPACTION_Send;
+
+            //
+            // We are done so we change to MYSTATE_Done
+            //
+
+            pwb->EapState = MYSTATE_Done;
+
+            break;
+
+        }
+        else if (pReceiveBuf != NULL )
+        {
+            //
+            // If we received a request packet from the server then we
+            // process it.
+            //
+
+            if (pReceiveBuf->Code == EAPCODE_Request)
             {
                 //
                 // Build the response packet
                 //
-                MakeResponseMessage1(pwb, pSendBuf, cbSendBuf);
+
+                MakeResponseMessage(pwb, pReceiveBuf, pSendBuf, cbSendBuf);
 
                 //
                 // Response packets should not be sent with any timeout
@@ -746,156 +776,126 @@ AuthenticateeMakeMessage(
                 pwb->EapState = MYSTATE_Done;
 
                 break;
-
-            }
-            else if (pReceiveBuf != NULL )
-            {
-                //
-                // If we received a request packet from the server then we
-                // process it.
-                //
-
-                if (pReceiveBuf->Code == EAPCODE_Request)
-                {
-                    //
-                    // Build the response packet
-                    //
-
-                    MakeResponseMessage(pwb, pReceiveBuf, pSendBuf, cbSendBuf);
-
-                    //
-                    // Response packets should not be sent with any timeout
-                    //
-
-                    pResult->Action = EAPACTION_Send;
-
-                    //
-                    // We are done so we change to MYSTATE_Done
-                    //
-
-                    pwb->EapState = MYSTATE_Done;
-
-                    break;
-                }
-                else
-                {
-                    //
-                    // We shouldn't get any other packet in this state so
-                    // we simply drop this invalid packet
-                    //
-
-                    pResult->Action = EAPACTION_NoAction;
-                    dwRetCode = ERROR_PPP_INVALID_PACKET;
-                    break;
-                }
-            }
-
-            break;
-
-        case MYSTATE_Done:
-        {
-            if (pReceiveBuf == NULL)
-            {
-                //
-                // If we did not receive a packet then we check to see if
-                // the fSuccessPacketReceived flag is set
-                //
-
-                if ((pInput != NULL) && (pInput->fSuccessPacketReceived))
-                {
-                    //
-                    // We are done
-                    //
-
-                    //
-                    // Create the MPPE Key Attribute and give it to the EAP-PPP 
-                    // engine.
-                    //
-
-                    dwRetCode = MakeMPPEKeyAttributes(pwb);
-
-                    if (NO_ERROR == dwRetCode)
-                    {
-                        pResult->pUserAttributes = pwb->pMPPEKeyAttributes;
-                    }
-                    
-                    pResult->Action = EAPACTION_Done;
-                    pwb->EapState   = MYSTATE_Done;
-                }
-                else
-                {
-                    //
-                    // Otherwise we ignore this event
-                    //
-
-                    pResult->Action = EAPACTION_NoAction;
-                }
-
-                break;
-            }
-
-            if ((pReceiveBuf->Code == EAPCODE_Success) ||
-                (pReceiveBuf->Code == EAPCODE_Failure))
-            {
-                if (pReceiveBuf->Code == EAPCODE_Success)
-                {
-                    //
-                    // If we received success or failure, we are done, but first
-                    // make sure the ID's match
-                    //
-
-                    //
-                    // Create the MPPE Key Attribute and give it to the EAP-PPP 
-                    // engine.
-                    //
-
-                    dwRetCode = MakeMPPEKeyAttributes(pwb);
-
-                    if (NO_ERROR == dwRetCode)
-                    {
-                        pResult->pUserAttributes = pwb->pMPPEKeyAttributes;
-                    }
-
-                    pResult->Action = EAPACTION_Done;
-                    pwb->EapState   = MYSTATE_Done;
-                }
-                else
-                {
-                    //
-                    // Otherwise drop the packet
-                    //
-
-                    pResult->Action = EAPACTION_NoAction;
-                    dwRetCode       = ERROR_PPP_INVALID_PACKET;
-                }
-
-                break;
-            }
-            else if (pReceiveBuf->Code == EAPCODE_Request)  
-            {
-                //
-                // We must always respond to requests
-                //
-
-                MakeResponseMessage(pwb, pReceiveBuf, pSendBuf, cbSendBuf);
-
-                //
-                // Response packets should not be sent with any timeout
-                //
-
-                pResult->Action = EAPACTION_Send;
             }
             else
             {
                 //
-                // Otherwise we received an illegal packet, wrong code set
-                // So simply drop the packet.
+                // We shouldn't get any other packet in this state so
+                // we simply drop this invalid packet
+                //
+
+                pResult->Action = EAPACTION_NoAction;
+                dwRetCode = ERROR_PPP_INVALID_PACKET;
+                break;
+            }
+        }
+
+        break;
+
+    case MYSTATE_Done:
+    {
+        if (pReceiveBuf == NULL)
+        {
+            //
+            // If we did not receive a packet then we check to see if
+            // the fSuccessPacketReceived flag is set
+            //
+
+            if ((pInput != NULL) && (pInput->fSuccessPacketReceived))
+            {
+                //
+                // We are done
+                //
+
+                //
+                // Create the MPPE Key Attribute and give it to the EAP-PPP
+                // engine.
+                //
+
+                dwRetCode = MakeMPPEKeyAttributes(pwb);
+
+                if (NO_ERROR == dwRetCode)
+                {
+                    pResult->pUserAttributes = pwb->pMPPEKeyAttributes;
+                }
+
+                pResult->Action = EAPACTION_Done;
+                pwb->EapState   = MYSTATE_Done;
+            }
+            else
+            {
+                //
+                // Otherwise we ignore this event
+                //
+
+                pResult->Action = EAPACTION_NoAction;
+            }
+
+            break;
+        }
+
+        if ((pReceiveBuf->Code == EAPCODE_Success) ||
+                (pReceiveBuf->Code == EAPCODE_Failure))
+        {
+            if (pReceiveBuf->Code == EAPCODE_Success)
+            {
+                //
+                // If we received success or failure, we are done, but first
+                // make sure the ID's match
+                //
+
+                //
+                // Create the MPPE Key Attribute and give it to the EAP-PPP
+                // engine.
+                //
+
+                dwRetCode = MakeMPPEKeyAttributes(pwb);
+
+                if (NO_ERROR == dwRetCode)
+                {
+                    pResult->pUserAttributes = pwb->pMPPEKeyAttributes;
+                }
+
+                pResult->Action = EAPACTION_Done;
+                pwb->EapState   = MYSTATE_Done;
+            }
+            else
+            {
+                //
+                // Otherwise drop the packet
                 //
 
                 pResult->Action = EAPACTION_NoAction;
                 dwRetCode       = ERROR_PPP_INVALID_PACKET;
             }
+
+            break;
         }
+        else if (pReceiveBuf->Code == EAPCODE_Request)
+        {
+            //
+            // We must always respond to requests
+            //
+
+            MakeResponseMessage(pwb, pReceiveBuf, pSendBuf, cbSendBuf);
+
+            //
+            // Response packets should not be sent with any timeout
+            //
+
+            pResult->Action = EAPACTION_Send;
+        }
+        else
+        {
+            //
+            // Otherwise we received an illegal packet, wrong code set
+            // So simply drop the packet.
+            //
+
+            pResult->Action = EAPACTION_NoAction;
+            dwRetCode       = ERROR_PPP_INVALID_PACKET;
+        }
+    }
     }
 
     return(dwRetCode);
@@ -904,7 +904,7 @@ AuthenticateeMakeMessage(
 
 VOID
 MakeResponseMessage1(
-    IN  EAPCB*           pwb,    
+    IN  EAPCB*           pwb,
     OUT PPP_EAP_PACKET * pSendBuf,
     IN  DWORD            cbSendBuf
 )
@@ -920,7 +920,7 @@ MakeResponseMessage1(
     // Fill in the password.
     //
 
-    pcbPassword = pSendBuf->Data + 1; 
+    pcbPassword = pSendBuf->Data + 1;
 
     *pcbPassword = (BYTE)strlen(pwb->aszPassword);
 
@@ -941,7 +941,7 @@ MakeResponseMessage1(
     pSendBuf->Id = pwb->bRecvPacketId;
 
     //
-    // The Success/Failure packet that we get must match the ID of the last 
+    // The Success/Failure packet that we get must match the ID of the last
     // response sent
     //
 
@@ -965,7 +965,7 @@ MakeResponseMessage1(
 Notes:
     Builds a response packet. 'pwb' is the address of the work
     buffer associated with the port.
-    
+
 */
 
 VOID
@@ -987,7 +987,7 @@ MakeResponseMessage(
     // Fill in the password.
     //
 
-    pcbPassword = pSendBuf->Data + 1; 
+    pcbPassword = pSendBuf->Data + 1;
 
     *pcbPassword = (BYTE)strlen(pwb->aszPassword);
 
@@ -1008,7 +1008,7 @@ MakeResponseMessage(
     pSendBuf->Id = pReceiveBuf->Id;
 
     //
-    // The Success/Failure packet that we get must match the ID of the last 
+    // The Success/Failure packet that we get must match the ID of the last
     // response sent
     //
 
@@ -1031,11 +1031,11 @@ MakeResponseMessage(
 /*
 
 Notes:
-    Builds a result packet (Success or Failure) in caller's 'pSendBuf' 
-    buffer. 'cbSendBuf' is the length of caller's buffer.  
-    'dwError' indicates whether an Success or Failure should be generated, 
+    Builds a result packet (Success or Failure) in caller's 'pSendBuf'
+    buffer. 'cbSendBuf' is the length of caller's buffer.
+    'dwError' indicates whether an Success or Failure should be generated,
     'bId' is the Id of the Success of Failure packet.
-    
+
 */
 
 VOID
@@ -1043,7 +1043,7 @@ MakeResultMessage(
     IN  EAPCB *         pwb,
     IN  DWORD           dwError,
     OUT PPP_EAP_PACKET* pSendBuf,
-    IN  DWORD           cbSendBuf 
+    IN  DWORD           cbSendBuf
 )
 {
     EapTrace("MakeResultMessage");
@@ -1082,7 +1082,7 @@ MakeResultMessage(
 
 Notes:
     Will build a request packet.
-    
+
 */
 
 VOID
@@ -1107,7 +1107,7 @@ MakeRequestMessage(
 
     //
     // Set the Request Code
-    // 
+    //
 
     pSendBuf->Code = EAPCODE_Request;
 
@@ -1121,8 +1121,8 @@ MakeRequestMessage(
     // Set the length
     //
 
-    HostToWireFormat16((WORD)(PPP_EAP_PACKET_HDR_LEN+1+*pcbPeerMessage+1),  
-                              pSendBuf->Length);
+    HostToWireFormat16((WORD)(PPP_EAP_PACKET_HDR_LEN+1+*pcbPeerMessage+1),
+                       pSendBuf->Length);
 
     //
     // Set the EAP Type Id
@@ -1136,7 +1136,7 @@ MakeRequestMessage(
 
 Notes:
     Authenticator side event handler.
-    
+
 */
 
 DWORD
@@ -1146,7 +1146,7 @@ AuthenticatorMakeMessage(
     OUT PPP_EAP_PACKET*     pSendBuf,
     IN  DWORD               cbSendBuf,
     IN  PPP_EAP_INPUT*      pInput,
-    OUT PPP_EAP_OUTPUT*     pResult 
+    OUT PPP_EAP_OUTPUT*     pResult
 )
 {
     DWORD dwRetCode = NO_ERROR;
@@ -1155,199 +1155,199 @@ AuthenticatorMakeMessage(
 
     switch(pwb->EapState)
     {
-        case MYSTATE_ReqSent:
+    case MYSTATE_ReqSent:
 
-            if (pReceiveBuf != NULL)
+        if (pReceiveBuf != NULL)
+        {
+            //
+            // If we received a packet
+            //
+
+            if (pReceiveBuf->Code == EAPCODE_Response)
             {
                 //
-                // If we received a packet
+                // If we received a response to our identity request,
+                // then process it. There is no need to check the Id
+                // here since the PPP engine will only pass on packets
+                // whose Id matches those set with the
+                // EAPACTION_SendWithTimeout action.
                 //
 
-                if (pReceiveBuf->Code == EAPCODE_Response)
+                dwRetCode = GetPasswordFromResponse(pReceiveBuf,
+                                                    pwb->aszPassword);
+
+                if (dwRetCode != NO_ERROR)
                 {
-                    //
-                    // If we received a response to our identity request, 
-                    // then process it. There is no need to check the Id    
-                    // here since the PPP engine will only pass on packets
-                    // whose Id matches those set with the 
-                    // EAPACTION_SendWithTimeout action.
-                    //
-
-                    dwRetCode = GetPasswordFromResponse(pReceiveBuf, 
-                                                         pwb->aszPassword);
-
-                    if (dwRetCode != NO_ERROR)
-                    {    
-                        if (dwRetCode != ERROR_PPP_INVALID_PACKET)
-                        {
-                            //
-                            // Fatal error, we fail the connection. 
-                            //
-
-                            return(dwRetCode);
-                        }
-                    }
-                    else
+                    if (dwRetCode != ERROR_PPP_INVALID_PACKET)
                     {
                         //
-                        // Request authentication provider to authenticate 
-                        // this user.
+                        // Fatal error, we fail the connection.
                         //
-            
-                        dwRetCode = MakeAuthenticationAttributes(
-                                                            pwb->aszIdentity, 
-                                                            pwb->aszPassword,   
-                                                            pwb);
 
-                        if (dwRetCode != NO_ERROR)
-                        {
-                            return(dwRetCode);
-                        }
-                        else
-                        {
-                            //
-                            // Authentication request completed successfully.
-                            // This is an asynchronous call so we change state
-                            // and wait for the provider to complete the 
-                            // authentication.  
-                            //
-
-                            pResult->pUserAttributes = pwb->pUserAttributes;
-
-                            pResult->Action = EAPACTION_Authenticate;
-
-                            // 
-                            // Save Id so that we can send the correct one
-                            // in the success/failure packet
-                            //
-
-                            pwb->dwIdExpected = pReceiveBuf->Id; 
-
-                            pwb->EapState = 
-                                    MYSTATE_WaitForAuthenticationToComplete;
-                        }        
+                        return(dwRetCode);
                     }
-
-                    break;
                 }
                 else
                 {
                     //
-                    // Otherwise silently drop the packet. 
-                    // We should only get requests
+                    // Request authentication provider to authenticate
+                    // this user.
                     //
 
-                    pResult->Action = EAPACTION_NoAction;
+                    dwRetCode = MakeAuthenticationAttributes(
+                                    pwb->aszIdentity,
+                                    pwb->aszPassword,
+                                    pwb);
 
-                    break;
-                }
-            }
-
-            break;
-
-        case MYSTATE_Initial:
-
-            //
-            // Create Request packet
-            //
-
-            MakeRequestMessage(pwb, pSendBuf, cbSendBuf);
-
-            //
-            // Request messages must be sent with a timeout
-            //
-
-            pResult->Action = EAPACTION_SendWithTimeoutInteractive;
-
-            //
-            // Since we have sent a request we change to the ReqSent state
-            // where we will wait for a response.
-            //
-
-            pwb->EapState = MYSTATE_ReqSent;
-
-            break;
-
-        case MYSTATE_WaitForAuthenticationToComplete:
-        {
-            if (pInput != NULL)
-            {
-                //
-                // Did the authentication provider complete the authentication?
-                //
-
-                if (pInput->fAuthenticationComplete)
-                {
-                    //
-                    // If the user failed to authenticate, save the failure 
-                    // code.
-                    //
-
-                    if (pInput->dwAuthResultCode != NO_ERROR)
+                    if (dwRetCode != NO_ERROR)
                     {
-                        pwb->dwResult = pInput->dwAuthResultCode;
+                        return(dwRetCode);
                     }
+                    else
+                    {
+                        //
+                        // Authentication request completed successfully.
+                        // This is an asynchronous call so we change state
+                        // and wait for the provider to complete the
+                        // authentication.
+                        //
 
-                    pResult->Action = EAPACTION_SendAndDone;
-                    pwb->EapState   = MYSTATE_Done;
+                        pResult->pUserAttributes = pwb->pUserAttributes;
 
-                    //
-                    // fall thru to the MYSTATE_Done state where we will
-                    // send a Success or Failure packet
-                    //
+                        pResult->Action = EAPACTION_Authenticate;
+
+                        //
+                        // Save Id so that we can send the correct one
+                        // in the success/failure packet
+                        //
+
+                        pwb->dwIdExpected = pReceiveBuf->Id;
+
+                        pwb->EapState =
+                            MYSTATE_WaitForAuthenticationToComplete;
+                    }
                 }
-            }
 
-            if ((pInput == NULL) || (!pInput->fAuthenticationComplete))
+                break;
+            }
+            else
             {
                 //
-                // Ignore everything if authentication is not complete
+                // Otherwise silently drop the packet.
+                // We should only get requests
                 //
 
                 pResult->Action = EAPACTION_NoAction;
 
                 break;
             }
-
-            //
-            // ...fall thru to the MYSTATE_Done state where we will
-            // send a Success or Failure packet
-            //
         }
 
-        case MYSTATE_Done:
+        break;
+
+    case MYSTATE_Initial:
+
+        //
+        // Create Request packet
+        //
+
+        MakeRequestMessage(pwb, pSendBuf, cbSendBuf);
+
+        //
+        // Request messages must be sent with a timeout
+        //
+
+        pResult->Action = EAPACTION_SendWithTimeoutInteractive;
+
+        //
+        // Since we have sent a request we change to the ReqSent state
+        // where we will wait for a response.
+        //
+
+        pwb->EapState = MYSTATE_ReqSent;
+
+        break;
+
+    case MYSTATE_WaitForAuthenticationToComplete:
+    {
+        if (pInput != NULL)
         {
             //
-            // Make Success or Failure packet.  
+            // Did the authentication provider complete the authentication?
             //
 
-            MakeResultMessage(pwb, pwb->dwResult, pSendBuf, cbSendBuf);
-
-            if (NO_ERROR == pwb->dwResult)
+            if (pInput->fAuthenticationComplete)
             {
                 //
-                // If we made a Success packet, create the MPPE Key Attribute
-                // and give it to the EAP-PPP engine.
+                // If the user failed to authenticate, save the failure
+                // code.
                 //
 
-                dwRetCode = MakeMPPEKeyAttributes(pwb);
-
-                if (NO_ERROR == dwRetCode)
+                if (pInput->dwAuthResultCode != NO_ERROR)
                 {
-                    pResult->pUserAttributes = pwb->pMPPEKeyAttributes;
+                    pwb->dwResult = pInput->dwAuthResultCode;
                 }
+
+                pResult->Action = EAPACTION_SendAndDone;
+                pwb->EapState   = MYSTATE_Done;
+
+                //
+                // fall thru to the MYSTATE_Done state where we will
+                // send a Success or Failure packet
+                //
             }
+        }
 
-            pResult->Action = EAPACTION_SendAndDone;
+        if ((pInput == NULL) || (!pInput->fAuthenticationComplete))
+        {
+            //
+            // Ignore everything if authentication is not complete
+            //
 
-            pResult->dwAuthResultCode = pwb->dwResult;
+            pResult->Action = EAPACTION_NoAction;
 
             break;
         }
 
-        default:
+        //
+        // ...fall thru to the MYSTATE_Done state where we will
+        // send a Success or Failure packet
+        //
+    }
 
-            break;
+    case MYSTATE_Done:
+    {
+        //
+        // Make Success or Failure packet.
+        //
+
+        MakeResultMessage(pwb, pwb->dwResult, pSendBuf, cbSendBuf);
+
+        if (NO_ERROR == pwb->dwResult)
+        {
+            //
+            // If we made a Success packet, create the MPPE Key Attribute
+            // and give it to the EAP-PPP engine.
+            //
+
+            dwRetCode = MakeMPPEKeyAttributes(pwb);
+
+            if (NO_ERROR == dwRetCode)
+            {
+                pResult->pUserAttributes = pwb->pMPPEKeyAttributes;
+            }
+        }
+
+        pResult->Action = EAPACTION_SendAndDone;
+
+        pResult->dwAuthResultCode = pwb->dwResult;
+
+        break;
+    }
+
+    default:
+
+        break;
     }
 
     return(dwRetCode);
@@ -1357,10 +1357,10 @@ AuthenticatorMakeMessage(
 /*
 
 Notes:
-    Fill caller's pszPassword' buffer with the password, in the request 
+    Fill caller's pszPassword' buffer with the password, in the request
     packet.
 
-    Returns NO_ERROR if successful., or ERROR_PPP_INVALID_PACKET if the 
+    Returns NO_ERROR if successful., or ERROR_PPP_INVALID_PACKET if the
     packet is misformatted in any way.
 
 */
@@ -1424,10 +1424,10 @@ Notes:
 
 */
 
-DWORD 
+DWORD
 MakeAuthenticationAttributes(
-    IN CHAR *   szUserName,    
-    IN CHAR *   szPassword,    
+    IN CHAR *   szUserName,
+    IN CHAR *   szPassword,
     IN EAPCB *  pwb
 )
 {
@@ -1445,7 +1445,7 @@ MakeAuthenticationAttributes(
     pwb->pUserAttributes = (RAS_AUTH_ATTRIBUTE *)
                            LocalAlloc(LPTR, sizeof (RAS_AUTH_ATTRIBUTE) * 3);
 
-    if (pwb->pUserAttributes == NULL) 
+    if (pwb->pUserAttributes == NULL)
     {
         return(GetLastError());
     }
@@ -1459,8 +1459,8 @@ MakeAuthenticationAttributes(
     pwb->pUserAttributes[0].Value    = LocalAlloc(LPTR, (strlen(szUserName)+1));
 
     if (pwb->pUserAttributes[0].Value == NULL)
-    { 
-        LocalFree(pwb->pUserAttributes); 
+    {
+        LocalFree(pwb->pUserAttributes);
 
         pwb->pUserAttributes = NULL;
 
@@ -1477,11 +1477,11 @@ MakeAuthenticationAttributes(
     pwb->pUserAttributes[1].dwLength = strlen(szPassword);
     pwb->pUserAttributes[1].Value    = LocalAlloc(LPTR, (strlen(szPassword)+1));
 
-    if (pwb->pUserAttributes[1].Value == NULL) 
+    if (pwb->pUserAttributes[1].Value == NULL)
     {
         LocalFree(pwb->pUserAttributes[0].Value);
 
-        LocalFree(pwb->pUserAttributes); 
+        LocalFree(pwb->pUserAttributes);
 
         pwb->pUserAttributes = NULL;
 
@@ -1489,7 +1489,7 @@ MakeAuthenticationAttributes(
     }
 
     CopyMemory(pwb->pUserAttributes[1].Value,szPassword, strlen(szPassword));
-  
+
     //
     // For Termination
     //
@@ -1533,12 +1533,12 @@ MakeMPPEKeyAttributes(
     }
 
     //
-    // We need 3 RAS_AUTH_ATTRIBUTE structs: for MS-MPPE-Send-Key, 
+    // We need 3 RAS_AUTH_ATTRIBUTE structs: for MS-MPPE-Send-Key,
     // MS-MPPE-Recv-Key, and termination
     //
 
     pwb->pMPPEKeyAttributes = (RAS_AUTH_ATTRIBUTE *) LocalAlloc(
-                LPTR, sizeof(RAS_AUTH_ATTRIBUTE) * 3);
+                                  LPTR, sizeof(RAS_AUTH_ATTRIBUTE) * 3);
 
     if (NULL == pwb->pMPPEKeyAttributes)
     {
@@ -1760,13 +1760,13 @@ LDone:
 }
 
 /*---------------------------------------------------------------------------
-    Dialog routines 
+    Dialog routines
 ---------------------------------------------------------------------------*/
 
 /*
 
 Notes:
-    Displays the IDD_DIALOG dialog, and fills up pEapNameDialog with the 
+    Displays the IDD_DIALOG dialog, and fills up pEapNameDialog with the
     username and password.
 
 */
@@ -1788,7 +1788,7 @@ GetUsernameAndPassword(
 /*
 
 Notes:
-    Callback function used with the DialogBoxParam function. It processes 
+    Callback function used with the DialogBoxParam function. It processes
     messages sent to the dialog box. See the DialogProc documentation in MSDN.
 
 */
@@ -1806,7 +1806,7 @@ UsernameDialogProc(
     switch (unMsg)
     {
     case WM_INITDIALOG:
-        
+
         return(InitUsernameDialog(hWnd, lParam));
 
     case WM_COMMAND:
@@ -1880,7 +1880,7 @@ UsernameCommand(
         hWnd = GetDlgItem(hWndDlg, IDC_EDIT_PASSWD);
         GetWindowText(hWnd, pEapNameDialog->awszPassword, PWLEN + 1);
 
-        // Fall through
+    // Fall through
 
     case IDCANCEL:
 

@@ -1,12 +1,12 @@
-//+---------------------------------------------------------------------------
+﻿//+---------------------------------------------------------------------------
 //
-//  Copyright (c) Microsoft Corporation. All rights reserved. 
+//  Copyright (c) Microsoft Corporation. All rights reserved.
 //
 //
 //  BITS Upload sample
 //  ==================
 //
-//  Module name: 
+//  Module name:
 //  main.cpp
 //
 //  Purpose:
@@ -48,7 +48,7 @@ int APIENTRY WinMain(HINSTANCE hInstance,
 
     //
     // Instantiate the main BITS object, the Job Manager
-    // 
+    //
     hr = CoCreateInstance(CLSID_BackgroundCopyManager, NULL, CLSCTX_LOCAL_SERVER, __uuidof(IBackgroundCopyManager), reinterpret_cast<LPVOID *>(g_JobManager.GrabOutPtr()));
     if (FAILED(hr))
     {
@@ -84,7 +84,7 @@ int APIENTRY WinMain(HINSTANCE hInstance,
 
     iRet = GetMessage(&msg, NULL, 0, 0);
     while (iRet != 0)
-    { 
+    {
         if (iRet == -1)
         {
             hr = HRESULT_FROM_WIN32(GetLastError());
@@ -93,15 +93,15 @@ int APIENTRY WinMain(HINSTANCE hInstance,
         }
         else
         {
-            if (!IsWindow(g_pDialog->GetHwnd()) || !IsDialogMessage(g_pDialog->GetHwnd(), &msg)) 
-            { 
-                TranslateMessage(&msg); 
-                DispatchMessage(&msg); 
+            if (!IsWindow(g_pDialog->GetHwnd()) || !IsDialogMessage(g_pDialog->GetHwnd(), &msg))
+            {
+                TranslateMessage(&msg);
+                DispatchMessage(&msg);
             }
-        } 
+        }
 
         iRet = GetMessage(&msg, NULL, 0, 0);
-    } 
+    }
 
 cleanup:
 
@@ -115,7 +115,7 @@ cleanup:
         //
         // We need to wait here because there's chances that COM isn't yet done with
         // releasing our callback interface. The app needs to be around in case any pending reference
-        // is executed. 
+        // is executed.
         // The the last reference is released, the g_hSafeToExitEvent is going to be signaled
         // and we will unblock from this wait.
         //

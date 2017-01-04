@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -8,7 +8,7 @@
 
 /**
  * This sample demonstrates how to use the GetProperty method on the new
- * IBackgroundCopyFile5 interface to obtain the last set HTTP headers 
+ * IBackgroundCopyFile5 interface to obtain the last set HTTP headers
  * received for each file in a download job.
  *
  * The information in the HTTP headers could be used, fo example, to
@@ -48,12 +48,12 @@ typedef struct
  */
 DOWNLOAD_FILE FileList[] =
 {
-    { 
-        L"http://download.microsoft.com/download/8/5/5/8551E67C-3D6E-4EAA-891B-6B46A97F179F/Live_Meeting_2007_Getting_Started_Guide_Service.doc", 
+    {
+        L"http://download.microsoft.com/download/8/5/5/8551E67C-3D6E-4EAA-891B-6B46A97F179F/Live_Meeting_2007_Getting_Started_Guide_Service.doc",
         L"c:\\temp\\data\\Getting started with Microsoft Office Live Meeting.doc"
     },
-    { 
-        L"http://download.microsoft.com/download/3/0/9/309778fd-659e-4853-b556-a14931cc3a2a/Live_Meeting_2007_Service_Quick_Reference_Card.doc", 
+    {
+        L"http://download.microsoft.com/download/3/0/9/309778fd-659e-4853-b556-a14931cc3a2a/Live_Meeting_2007_Service_Quick_Reference_Card.doc",
         L"c:\\temp\\data\\Live_Meeting_2007_Service_Quick_Reference_Card.doc"
     },
     {
@@ -85,7 +85,7 @@ int _tmain(int argc, _TCHAR* argv[])
     HRESULT hr;
     IBackgroundCopyManager *Manager;
 
-    // Get the BITS Background Copy Manager 
+    // Get the BITS Background Copy Manager
     hr = GetBackgroundCopyManager(&Manager);
     if( SUCCEEDED( hr ) )
     {
@@ -99,9 +99,9 @@ int _tmain(int argc, _TCHAR* argv[])
             for( int i=0; i<ARRAY_LENGTH(FileList); ++i)
             {
                 hr = Job->AddFile(
-                            FileList[i].RemoteFile,
-                            FileList[i].LocalFile
-                            );
+                         FileList[i].RemoteFile,
+                         FileList[i].LocalFile
+                     );
 
                 if( FAILED(hr) )
                 {
@@ -109,15 +109,15 @@ int _tmain(int argc, _TCHAR* argv[])
                         "Error: Unable to add remote file '%ws' to the download job (error %08X).\n",
                         FileList[i].RemoteFile,
                         hr
-                        );
+                    );
                 }
                 else
                 {
-                    printf( 
+                    printf(
                         "Downloading remote file '%ws' to local file '%ws'\n",
                         FileList[i].RemoteFile,
                         FileList[i].LocalFile
-                        );
+                    );
                 }
             }
 
@@ -166,12 +166,12 @@ GetBackgroundCopyManager(_Out_ IBackgroundCopyManager **Manager)
     if (SUCCEEDED(hr))
     {
         hr = CoCreateInstance(
-                    __uuidof(BackgroundCopyManager), 
-                    NULL,
-                    CLSCTX_LOCAL_SERVER,
-                    __uuidof(IBackgroundCopyManager),
-                    (void**) Manager
-                    );
+                 __uuidof(BackgroundCopyManager),
+                 NULL,
+                 CLSCTX_LOCAL_SERVER,
+                 __uuidof(IBackgroundCopyManager),
+                 (void**) Manager
+             );
     }
     else
     {
@@ -193,11 +193,11 @@ CreateDownloadJob(_In_ LPCWSTR Name, _In_ IBackgroundCopyManager *Manager, _Out_
     GUID guid;
 
     hr = Manager->CreateJob(
-                        Name,
-                        BG_JOB_TYPE_DOWNLOAD,
-                        &guid,
-                        Job
-                        );
+             Name,
+             BG_JOB_TYPE_DOWNLOAD,
+             &guid,
+             Job
+         );
 
     return hr;
 }
@@ -374,9 +374,9 @@ DisplayFileHeaders( _In_ IBackgroundCopyJob *Job )
 
                         BITS_FILE_PROPERTY_VALUE Value;
                         hr = File->GetProperty(
-                                        BITS_FILE_PROPERTY_ID_HTTP_RESPONSE_HEADERS,
-                                        &Value
-                                        );
+                                 BITS_FILE_PROPERTY_ID_HTTP_RESPONSE_HEADERS,
+                                 &Value
+                             );
                         if( FAILED(hr) )
                         {
                             printf("WARNING: Unable to obtain the HTTP headers for this file.\n" );
@@ -384,11 +384,11 @@ DisplayFileHeaders( _In_ IBackgroundCopyJob *Job )
                         else
                         {
                             if(Value.String)
-							{
-								DisplayHeaders( Value.String );
-								CoTaskMemFree( Value.String );
-								Value.String = NULL;
-							}
+                            {
+                                DisplayHeaders( Value.String );
+                                CoTaskMemFree( Value.String );
+                                Value.String = NULL;
+                            }
                         }
 
                         File->Release();
@@ -426,7 +426,7 @@ DisplayProgress( _In_ IBackgroundCopyJob *Job )
             "%llu of %llu bytes transferred (%lu of %lu files).\n",
             Progress.BytesTransferred, Progress.BytesTotal,
             Progress.FilesTransferred, Progress.FilesTotal
-            );
+        );
     }
     else
     {
@@ -447,7 +447,7 @@ DisplayHeaders( _In_ LPWSTR Headers )
 }
 
 
-VOID 
+VOID
 DisplayError( _In_ IBackgroundCopyJob *Job )
 {
     HRESULT hr;

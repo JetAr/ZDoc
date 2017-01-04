@@ -1,9 +1,9 @@
-//--------------------------------------------------------------------
+﻿//--------------------------------------------------------------------
 // Microsoft OLE DB Test
 //
-// Copyright 1995-2000 Microsoft Corporation.  
+// Copyright 1995-2000 Microsoft Corporation.
 //
-// @doc 
+// @doc
 //
 // @module Error Header file Module | This module contains definition information
 // for OLE DB strings
@@ -13,7 +13,7 @@
 //
 // <nl><nl>
 // Revision History:<nl>
-//	
+//
 //
 // @head3 OLE DB strings Elements|
 //
@@ -32,22 +32,22 @@ class CString
 public:
 
 //Constructors
-	CString();
-	CString(LPCSTR lpsz);
-	virtual ~CString();
+    CString();
+    CString(LPCSTR lpsz);
+    virtual ~CString();
 
-	//methods
-	operator LPCTSTR() const;           // as a C string
-	const CString& operator=(LPCSTR lpsz);
-	BOOL operator==(LPCSTR lpsz);
-	BOOL operator==(CString& rCString);
+    //methods
+    operator LPCTSTR() const;           // as a C string
+    const CString& operator=(LPCSTR lpsz);
+    BOOL operator==(LPCSTR lpsz);
+    BOOL operator==(CString& rCString);
 
-	// concatentation operator
-	const CString& operator + (LPCSTR lpsz);
+    // concatentation operator
+    const CString& operator + (LPCSTR lpsz);
 
 //Implementation
 protected:
-	CHAR* m_pszString;
+    CHAR* m_pszString;
 };
 
 
@@ -62,24 +62,24 @@ class CWString
 public:
 
 //Constructors
-	CWString();
-	CWString(LPCWSTR lpwsz);
-	CWString(CWString &String);
-	virtual ~CWString();
+    CWString();
+    CWString(LPCWSTR lpwsz);
+    CWString(CWString &String);
+    virtual ~CWString();
 
-	//methods
-	operator LPCWSTR() const;           // as a C string
-	const CWString& operator=(LPCWSTR lpwsz);
-	const CWString& operator=(CWString wszString);
-	BOOL operator==(LPCWSTR lpsz);
-	BOOL operator==(CWString& rCWString);
+    //methods
+    operator LPCWSTR() const;           // as a C string
+    const CWString& operator=(LPCWSTR lpwsz);
+    const CWString& operator=(CWString wszString);
+    BOOL operator==(LPCWSTR lpsz);
+    BOOL operator==(CWString& rCWString);
 
-	// concatentation operator
-	const CWString& operator + (LPCWSTR lpwsz);
+    // concatentation operator
+    const CWString& operator + (LPCWSTR lpwsz);
 
 //Implementation
 protected:
-	WCHAR* m_pwszString;
+    WCHAR* m_pwszString;
 };
 
 
@@ -94,47 +94,47 @@ protected:
 
 typedef struct _WIDENAMEMAP
 {
-	LONG		lItem;		// Item
-	WCHAR*		pwszName;	// Name
+    LONG		lItem;		// Item
+    WCHAR*		pwszName;	// Name
 } WIDENAMEMAP;
 
 
 typedef struct _NAMEMAP
 {
-	LONG		lItem;		// Item
-	CHAR*		pszName;	// Name
+    LONG		lItem;		// Item
+    CHAR*		pszName;	// Name
 } NAMEMAP;
 
 
 typedef struct _WIDEGUIDMAP
 {
-	const GUID*		pGuid;		// Guid
-	WCHAR*			pwszName;	// Name
+    const GUID*		pGuid;		// Guid
+    WCHAR*			pwszName;	// Name
 } WIDEGUIDMAP;
 
 
 typedef struct _GUIDMAP
 {
-	const GUID*		pGuid;		// Guid
-	CHAR*			pszName;	// Name
+    const GUID*		pGuid;		// Guid
+    CHAR*			pszName;	// Name
 } GUIDMAP;
 
 
 typedef struct _WIDEDBIDMAP
 {
-	const DBID*		pDBID;		// DBID
-	WCHAR*			pqszName;	// Name
+    const DBID*		pDBID;		// DBID
+    WCHAR*			pqszName;	// Name
 } WIDEDBIDMAP;
 
 
 typedef struct _INITPROPINFOMAP
 {
-	DBPROPID	dwPropertyID;
-	VARTYPE		vt;
-	WCHAR*		pwszName;
-	WCHAR*		pwszDesc;
+    DBPROPID	dwPropertyID;
+    VARTYPE		vt;
+    WCHAR*		pwszName;
+    WCHAR*		pwszDesc;
 } INITPROPINFOMAP;
-	
+
 
 extern const ULONG g_cInitPropInfoMap;
 extern const INITPROPINFOMAP g_rgInitPropInfoMap[];

@@ -1,14 +1,14 @@
-/////////////////////////////////////////////////////////////////////////
-// Copyright © 2008 Microsoft Corporation. All rights reserved.
-// 
-//  This file may contain preliminary information or inaccuracies, 
-//  and may not correctly represent any associated Microsoft 
-//  Product as commercially released. All Materials are provided entirely 
-//  “AS IS.” To the extent permitted by law, MICROSOFT MAKES NO 
-//  WARRANTY OF ANY KIND, DISCLAIMS ALL EXPRESS, IMPLIED AND STATUTORY 
-//  WARRANTIES, AND ASSUMES NO LIABILITY TO YOU FOR ANY DAMAGES OF 
-//  ANY TYPE IN CONNECTION WITH THESE MATERIALS OR ANY INTELLECTUAL PROPERTY IN THEM. 
-// 
+ï»¿/////////////////////////////////////////////////////////////////////////
+// Copyright Â© 2008 Microsoft Corporation. All rights reserved.
+//
+//  This file may contain preliminary information or inaccuracies,
+//  and may not correctly represent any associated Microsoft
+//  Product as commercially released. All Materials are provided entirely
+//  â€œAS IS.â€ To the extent permitted by law, MICROSOFT MAKES NO
+//  WARRANTY OF ANY KIND, DISCLAIMS ALL EXPRESS, IMPLIED AND STATUTORY
+//  WARRANTIES, AND ASSUMES NO LIABILITY TO YOU FOR ANY DAMAGES OF
+//  ANY TYPE IN CONNECTION WITH THESE MATERIALS OR ANY INTELLECTUAL PROPERTY IN THEM.
+//
 
 
 // Main header
@@ -17,7 +17,7 @@
 
 
 ////////////////////////////////////////////////////////////////////////////////////
-//  Main routines forwriter metadata/status gathering. 
+//  Main routines forwriter metadata/status gathering.
 //
 
 
@@ -57,7 +57,7 @@ void VssClient::GatherWriterMetadataToScreen()
     // Waits for the async operation to finish and checks the result
     WaitAndCheckForAsyncOperation(pAsync);
 
-    // Get the list of writers in the metadata  
+    // Get the list of writers in the metadata
     unsigned cWriters = 0;
     CHECK_COM(m_pVssObject->GetWriterMetadataCount(&cWriters));
 
@@ -96,7 +96,7 @@ void VssClient::InitializeWriterMetadata()
 {
     FunctionTracer ft(DBG_INFO);
 
-    // Get the list of writers in the metadata  
+    // Get the list of writers in the metadata
     unsigned cWriters = 0;
     CHECK_COM(m_pVssObject->GetWriterMetadataCount (&cWriters));
 
@@ -111,7 +111,7 @@ void VssClient::InitializeWriterMetadata()
         VssWriter   writer;
         writer.Initialize(pMetadata);
 
-        // Add this writer to the list 
+        // Add this writer to the list
         m_writerList.push_back(writer);
     }
 }
@@ -124,7 +124,7 @@ void VssClient::InitializeWriterComponentsForRestore()
 
     ft.WriteLine(L"Initializing writer components for restore ...");
 
-    // Get the list of writers in the metadata  
+    // Get the list of writers in the metadata
     unsigned cWriters = 0;
     CHECK_COM(m_pVssObject->GetWriterComponentsCount(&cWriters));
 
@@ -134,15 +134,15 @@ void VssClient::InitializeWriterComponentsForRestore()
         // Get the selected components for this particular writer
         CComPtr<IVssWriterComponentsExt> pWriterComponents;
         CHECK_COM(m_pVssObject->GetWriterComponents(iWriter, &pWriterComponents));
-        
-        // Get writer identity. 
+
+        // Get writer identity.
         // Ignore this writer if the real writer is not present in the system
         VSS_ID idInstance = GUID_NULL;
         VSS_ID idWriter = GUID_NULL;
         CHECK_COM(pWriterComponents->GetWriterInfo(
-            &idInstance, 
-            &idWriter
-            ));
+                      &idInstance,
+                      &idWriter
+                  ));
 
         wstring id = Guid2WString(idWriter);
         wstring instanceId = Guid2WString(idInstance);
@@ -152,20 +152,20 @@ void VssClient::InitializeWriterComponentsForRestore()
         bool bFound = false;
         for (unsigned i = 0; i < m_writerList.size(); i++)
         {
-            // Do Not check for instance ID ... 
+            // Do Not check for instance ID ...
             if (id != m_writerList[i].id)
-                continue; 
+                continue;
 
             // Copy the information from the existing writer in the system
             VssWriter   writer = m_writerList[i];
 
             ft.WriteLine(L"- Writer %s is present in the Backup Components document and on the system. Considering for restore ...",
-                writer.name.c_str());
+                         writer.name.c_str());
 
             // Adding components
             writer.InitializeComponentsForRestore(pWriterComponents);
 
-            // Add this writer object to the writer components list 
+            // Add this writer object to the writer components list
             m_writerComponentsForRestore.push_back(writer);
 
             // We found the writer!
@@ -185,8 +185,8 @@ void VssClient::ListWriterMetadata(bool bListDetailedInfo)
 {
     FunctionTracer ft(DBG_INFO);
 
-    ft.WriteLine(L"Listing writer metadata ...");   
-    
+    ft.WriteLine(L"Listing writer metadata ...");
+
     // Enumerate writers
     for (unsigned iWriter = 0; iWriter < m_writerList.size(); iWriter++)
         m_writerList[iWriter].Print(bListDetailedInfo);
@@ -199,13 +199,13 @@ void VssClient::ListWriterStatus()
 {
     FunctionTracer ft(DBG_INFO);
 
-    ft.WriteLine(L"Listing writer status ..."); 
-    
+    ft.WriteLine(L"Listing writer status ...");
+
     // Gets the number of writers in the gathered status info
     // (WARNING: GatherWriterStatus must be called before)
     unsigned cWriters = 0;
     CHECK_COM(m_pVssObject->GetWriterStatusCount(&cWriters));
-    ft.WriteLine(L"- Number of writers that responded: %u", cWriters);  
+    ft.WriteLine(L"- Number of writers that responded: %u", cWriters);
 
     // Enumerate each writer
     for(unsigned iWriter = 0; iWriter < cWriters; iWriter++)
@@ -218,30 +218,30 @@ void VssClient::ListWriterStatus()
 
         // Get writer status
         CHECK_COM(m_pVssObject->GetWriterStatus(iWriter,
-                             &idInstance,
-                             &idWriter,
-                             &bstrWriterName,
-                             &eWriterStatus,
-                             &hrWriterFailure));
+                                                &idInstance,
+                                                &idWriter,
+                                                &bstrWriterName,
+                                                &eWriterStatus,
+                                                &hrWriterFailure));
 
         // Print writer status
         ft.WriteLine(L"\n"
-            L"* WRITER \"%s\"\n"
-            L"   - Status: %d (%s)\n" 
-            L"   - Writer Failure code: 0x%08lx (%s)\n" 
-            L"   - Writer ID: " WSTR_GUID_FMT L"\n"
-            L"   - Instance ID: " WSTR_GUID_FMT L"\n",
-            (PWCHAR)bstrWriterName,
-            eWriterStatus, GetStringFromWriterStatus(eWriterStatus).c_str(), 
-            hrWriterFailure, FunctionTracer::HResult2String(hrWriterFailure).c_str(),
-            GUID_PRINTF_ARG(idWriter),
-            GUID_PRINTF_ARG(idInstance)
-            );
+                     L"* WRITER \"%s\"\n"
+                     L"   - Status: %d (%s)\n"
+                     L"   - Writer Failure code: 0x%08lx (%s)\n"
+                     L"   - Writer ID: " WSTR_GUID_FMT L"\n"
+                     L"   - Instance ID: " WSTR_GUID_FMT L"\n",
+                     (PWCHAR)bstrWriterName,
+                     eWriterStatus, GetStringFromWriterStatus(eWriterStatus).c_str(),
+                     hrWriterFailure, FunctionTracer::HResult2String(hrWriterFailure).c_str(),
+                     GUID_PRINTF_ARG(idWriter),
+                     GUID_PRINTF_ARG(idInstance)
+                    );
     }
 }
-    
 
-// Pre-restore 
+
+// Pre-restore
 void VssClient::PreRestore()
 {
     FunctionTracer ft(DBG_INFO);
@@ -259,7 +259,7 @@ void VssClient::PreRestore()
 
 
 
-// Post-restore 
+// Post-restore
 void VssClient::PostRestore()
 {
     FunctionTracer ft(DBG_INFO);
@@ -285,20 +285,20 @@ wstring VssClient::GetStringFromWriterStatus(VSS_WRITER_STATE eWriterStatus)
     ft.Trace(DBG_INFO, L"Interpreting constant %d", (int)eWriterStatus);
     switch (eWriterStatus)
     {
-    CHECK_CASE_FOR_CONSTANT(VSS_WS_STABLE);
-    CHECK_CASE_FOR_CONSTANT(VSS_WS_WAITING_FOR_FREEZE);
-    CHECK_CASE_FOR_CONSTANT(VSS_WS_WAITING_FOR_THAW);
-    CHECK_CASE_FOR_CONSTANT(VSS_WS_WAITING_FOR_POST_SNAPSHOT);
-    CHECK_CASE_FOR_CONSTANT(VSS_WS_WAITING_FOR_BACKUP_COMPLETE);
-    CHECK_CASE_FOR_CONSTANT(VSS_WS_FAILED_AT_IDENTIFY);
-    CHECK_CASE_FOR_CONSTANT(VSS_WS_FAILED_AT_PREPARE_BACKUP);
-    CHECK_CASE_FOR_CONSTANT(VSS_WS_FAILED_AT_PREPARE_SNAPSHOT);
-    CHECK_CASE_FOR_CONSTANT(VSS_WS_FAILED_AT_FREEZE);
-    CHECK_CASE_FOR_CONSTANT(VSS_WS_FAILED_AT_THAW);
-    CHECK_CASE_FOR_CONSTANT(VSS_WS_FAILED_AT_POST_SNAPSHOT);
-    CHECK_CASE_FOR_CONSTANT(VSS_WS_FAILED_AT_BACKUP_COMPLETE);
-    CHECK_CASE_FOR_CONSTANT(VSS_WS_FAILED_AT_PRE_RESTORE);
-    CHECK_CASE_FOR_CONSTANT(VSS_WS_FAILED_AT_POST_RESTORE);
+        CHECK_CASE_FOR_CONSTANT(VSS_WS_STABLE);
+        CHECK_CASE_FOR_CONSTANT(VSS_WS_WAITING_FOR_FREEZE);
+        CHECK_CASE_FOR_CONSTANT(VSS_WS_WAITING_FOR_THAW);
+        CHECK_CASE_FOR_CONSTANT(VSS_WS_WAITING_FOR_POST_SNAPSHOT);
+        CHECK_CASE_FOR_CONSTANT(VSS_WS_WAITING_FOR_BACKUP_COMPLETE);
+        CHECK_CASE_FOR_CONSTANT(VSS_WS_FAILED_AT_IDENTIFY);
+        CHECK_CASE_FOR_CONSTANT(VSS_WS_FAILED_AT_PREPARE_BACKUP);
+        CHECK_CASE_FOR_CONSTANT(VSS_WS_FAILED_AT_PREPARE_SNAPSHOT);
+        CHECK_CASE_FOR_CONSTANT(VSS_WS_FAILED_AT_FREEZE);
+        CHECK_CASE_FOR_CONSTANT(VSS_WS_FAILED_AT_THAW);
+        CHECK_CASE_FOR_CONSTANT(VSS_WS_FAILED_AT_POST_SNAPSHOT);
+        CHECK_CASE_FOR_CONSTANT(VSS_WS_FAILED_AT_BACKUP_COMPLETE);
+        CHECK_CASE_FOR_CONSTANT(VSS_WS_FAILED_AT_PRE_RESTORE);
+        CHECK_CASE_FOR_CONSTANT(VSS_WS_FAILED_AT_POST_RESTORE);
 
     default:
         ft.WriteLine(L"Unknown constant: %d",eWriterStatus);
@@ -338,22 +338,22 @@ void VssWriter::Initialize(IVssExamineWriterMetadata * pMetadata)
 
     // Get writer identity
     CHECK_COM(pMetadata->GetIdentity (
-        &idInstance,
-        &idWriter,
-        &bstrWriterName,
-        &usage,
-        &source
-        ));
+                  &idInstance,
+                  &idWriter,
+                  &bstrWriterName,
+                  &usage,
+                  &source
+              ));
 
-    // Get the restore method 
+    // Get the restore method
     CHECK_COM(pMetadata->GetRestoreMethod(
-        &restoreMethod,
-        &bstrService,
-        &bstrUserProcedure,
-        &writerRestoreConditions,
-        &rebootRequiredAfterRestore,
-        &iMappings
-        ));
+                  &restoreMethod,
+                  &bstrService,
+                  &bstrUserProcedure,
+                  &writerRestoreConditions,
+                  &rebootRequiredAfterRestore,
+                  &iMappings
+              ));
 
     // Initialize local members
     name = (LPWSTR)bstrWriterName;
@@ -440,21 +440,21 @@ void VssWriter::Print(bool bListDetailedInfo)
 
     // Print writer identity information
     ft.WriteLine(L"\n"
-        L"* WRITER \"%s\"\n"
-        L"    - WriterId   = %s\n"
-        L"    - InstanceId = %s\n"
-        L"    - Supports restore events = %s\n"
-        L"    - Writer restore conditions = %s\n"
-        L"    - Restore method = %s\n"
-        L"    - Requires reboot after restore = %s\n",
-        name.c_str(),
-        id.c_str(),
-        instanceId.c_str(),
-        BOOL2TXT(supportsRestore),
-        GetStringFromRestoreConditions(writerRestoreConditions).c_str(),
-        GetStringFromRestoreMethod(restoreMethod).c_str(),
-        BOOL2TXT(rebootRequiredAfterRestore)
-        );
+                 L"* WRITER \"%s\"\n"
+                 L"    - WriterId   = %s\n"
+                 L"    - InstanceId = %s\n"
+                 L"    - Supports restore events = %s\n"
+                 L"    - Writer restore conditions = %s\n"
+                 L"    - Restore method = %s\n"
+                 L"    - Requires reboot after restore = %s\n",
+                 name.c_str(),
+                 id.c_str(),
+                 instanceId.c_str(),
+                 BOOL2TXT(supportsRestore),
+                 GetStringFromRestoreConditions(writerRestoreConditions).c_str(),
+                 GetStringFromRestoreMethod(restoreMethod).c_str(),
+                 BOOL2TXT(rebootRequiredAfterRestore)
+                );
 
     // Print exclude files
     ft.WriteLine(L"    - Excluded files:");
@@ -475,18 +475,18 @@ inline wstring VssWriter::GetStringFromRestoreMethod(VSS_RESTOREMETHOD_ENUM eRes
     ft.Trace(DBG_INFO, L"Interpreting constant %d", (int)eRestoreMethod);
     switch (eRestoreMethod)
     {
-    CHECK_CASE_FOR_CONSTANT(VSS_RME_UNDEFINED);
-    CHECK_CASE_FOR_CONSTANT(VSS_RME_RESTORE_IF_NOT_THERE);
-    CHECK_CASE_FOR_CONSTANT(VSS_RME_RESTORE_IF_CAN_REPLACE);
-    CHECK_CASE_FOR_CONSTANT(VSS_RME_STOP_RESTORE_START);
-    CHECK_CASE_FOR_CONSTANT(VSS_RME_RESTORE_TO_ALTERNATE_LOCATION);
-    CHECK_CASE_FOR_CONSTANT(VSS_RME_RESTORE_AT_REBOOT);
+        CHECK_CASE_FOR_CONSTANT(VSS_RME_UNDEFINED);
+        CHECK_CASE_FOR_CONSTANT(VSS_RME_RESTORE_IF_NOT_THERE);
+        CHECK_CASE_FOR_CONSTANT(VSS_RME_RESTORE_IF_CAN_REPLACE);
+        CHECK_CASE_FOR_CONSTANT(VSS_RME_STOP_RESTORE_START);
+        CHECK_CASE_FOR_CONSTANT(VSS_RME_RESTORE_TO_ALTERNATE_LOCATION);
+        CHECK_CASE_FOR_CONSTANT(VSS_RME_RESTORE_AT_REBOOT);
 #ifdef VSS_SERVER
-    CHECK_CASE_FOR_CONSTANT(VSS_RME_RESTORE_AT_REBOOT_IF_CANNOT_REPLACE);
+        CHECK_CASE_FOR_CONSTANT(VSS_RME_RESTORE_AT_REBOOT_IF_CANNOT_REPLACE);
 #endif
-    CHECK_CASE_FOR_CONSTANT(VSS_RME_CUSTOM);
-    CHECK_CASE_FOR_CONSTANT(VSS_RME_RESTORE_STOP_START);
-                    
+        CHECK_CASE_FOR_CONSTANT(VSS_RME_CUSTOM);
+        CHECK_CASE_FOR_CONSTANT(VSS_RME_RESTORE_STOP_START);
+
     default:
         ft.WriteLine(L"Unknown constant: %d",eRestoreMethod);
         _ASSERTE(false);
@@ -503,11 +503,11 @@ inline wstring VssWriter::GetStringFromRestoreConditions(VSS_WRITERRESTORE_ENUM 
     ft.Trace(DBG_INFO, L"Interpreting constant %d", (int)eRestoreEnum);
     switch (eRestoreEnum)
     {
-    CHECK_CASE_FOR_CONSTANT(VSS_WRE_UNDEFINED);
-    CHECK_CASE_FOR_CONSTANT(VSS_WRE_NEVER);
-    CHECK_CASE_FOR_CONSTANT(VSS_WRE_IF_REPLACE_FAILS);
-    CHECK_CASE_FOR_CONSTANT(VSS_WRE_ALWAYS);
-                    
+        CHECK_CASE_FOR_CONSTANT(VSS_WRE_UNDEFINED);
+        CHECK_CASE_FOR_CONSTANT(VSS_WRE_NEVER);
+        CHECK_CASE_FOR_CONSTANT(VSS_WRE_IF_REPLACE_FAILS);
+        CHECK_CASE_FOR_CONSTANT(VSS_WRE_ALWAYS);
+
     default:
         ft.WriteLine(L"Unknown constant: %d",eRestoreEnum);
         _ASSERTE(false);
@@ -555,7 +555,7 @@ void VssComponent::Initialize(wstring writerNameParam, IVssWMComponent * pCompon
         desc.Initialize(pFileDesc, VSS_FDT_FILELIST);
         descriptors.push_back(desc);
     }
-    
+
     // Get database descriptors
     for(unsigned i = 0; i < pInfo->cDatabases; i++)
     {
@@ -566,7 +566,7 @@ void VssComponent::Initialize(wstring writerNameParam, IVssWMComponent * pCompon
         desc.Initialize(pFileDesc, VSS_FDT_DATABASE);
         descriptors.push_back(desc);
     }
-    
+
     // Get log descriptors
     for(unsigned i = 0; i < pInfo->cLogFiles; i++)
     {
@@ -577,7 +577,7 @@ void VssComponent::Initialize(wstring writerNameParam, IVssWMComponent * pCompon
         desc.Initialize(pFileDesc, VSS_FDT_DATABASE_LOG);
         descriptors.push_back(desc);
     }
-    
+
 
 #ifdef VSS_SERVER
     // Get dependencies
@@ -644,24 +644,24 @@ void VssComponent::Print(bool bListDetailedInfo)
 
     // Print writer identity information
     ft.WriteLine(L"    - Component \"%s\"\n"
-        L"       - Name: '%s'\n"
-        L"       - Logical Path: '%s'\n"
-        L"       - Full Path: '%s'\n"
-        L"       - Caption: '%s'\n"
-        L"       - Type: %s [%d]\n"
-        L"       - Is Selectable: '%s'\n"
-        L"       - Is top level: '%s'\n"
-        L"       - Notify on backup complete: '%s'",
-        (writerName + L":" + fullPath).c_str(),
-        name.c_str(),
-        logicalPath.c_str(),
-        fullPath.c_str(),
-        caption.c_str(),
-        GetStringFromComponentType(type).c_str(), type,
-        BOOL2TXT(isSelectable),
-        BOOL2TXT(isTopLevel),
-        BOOL2TXT(notifyOnBackupComplete)
-        );
+                 L"       - Name: '%s'\n"
+                 L"       - Logical Path: '%s'\n"
+                 L"       - Full Path: '%s'\n"
+                 L"       - Caption: '%s'\n"
+                 L"       - Type: %s [%d]\n"
+                 L"       - Is Selectable: '%s'\n"
+                 L"       - Is top level: '%s'\n"
+                 L"       - Notify on backup complete: '%s'",
+                 (writerName + L":" + fullPath).c_str(),
+                 name.c_str(),
+                 logicalPath.c_str(),
+                 fullPath.c_str(),
+                 caption.c_str(),
+                 GetStringFromComponentType(type).c_str(), type,
+                 BOOL2TXT(isSelectable),
+                 BOOL2TXT(isTopLevel),
+                 BOOL2TXT(notifyOnBackupComplete)
+                );
 
     // Compute the affected paths and volumes
     if (bListDetailedInfo)
@@ -696,7 +696,7 @@ void VssComponent::Print(bool bListDetailedInfo)
     for(unsigned i = 0; i < dependencies.size(); i++)
         dependencies[i].Print();
 
-#endif 
+#endif
 }
 
 
@@ -708,9 +708,9 @@ inline wstring VssComponent::GetStringFromComponentType(VSS_COMPONENT_TYPE eComp
     ft.Trace(DBG_INFO, L"Interpreting constant %d", (int)eComponentType);
     switch (eComponentType)
     {
-    CHECK_CASE_FOR_CONSTANT(VSS_CT_DATABASE);
-    CHECK_CASE_FOR_CONSTANT(VSS_CT_FILEGROUP);
-                    
+        CHECK_CASE_FOR_CONSTANT(VSS_CT_DATABASE);
+        CHECK_CASE_FOR_CONSTANT(VSS_CT_FILEGROUP);
+
     default:
         ft.WriteLine(L"Unknown constant: %d",eComponentType);
         _ASSERTE(false);
@@ -730,9 +730,9 @@ bool VssComponent::IsAncestorOf(VssComponent & descendent)
     wstring descendentPathAppendedWithBackslash = AppendBackslash(descendent.fullPath);
 
     // Return TRUE if the current full path is a prefix of the child full path
-    return IsEqual(fullPathAppendedWithBackslash, 
-        descendentPathAppendedWithBackslash.substr(0, 
-            fullPathAppendedWithBackslash.length()));
+    return IsEqual(fullPathAppendedWithBackslash,
+                   descendentPathAppendedWithBackslash.substr(0,
+                           fullPathAppendedWithBackslash.length()));
 }
 
 
@@ -743,7 +743,7 @@ bool VssComponent::CanBeExplicitlyIncluded()
         return false;
 
     // selectable can be explictly included
-    if (isSelectable) 
+    if (isSelectable)
         return true;
 
     // Non-selectable top level can be explictly included
@@ -765,11 +765,11 @@ bool VssComponent::CanBeExplicitlyIncluded()
 
 
 
-// Initialize a file descriptor from a 
+// Initialize a file descriptor from a
 void VssFileDescriptor::Initialize(
-        IVssWMFiledesc * pFileDesc, 
-        VSS_DESCRIPTOR_TYPE typeParam
-        )
+    IVssWMFiledesc * pFileDesc,
+    VSS_DESCRIPTOR_TYPE typeParam
+)
 {
     FunctionTracer ft(DBG_INFO);
 
@@ -800,7 +800,7 @@ void VssFileDescriptor::Initialize(
     CHECK_WIN32(ExpandEnvironmentStringsW(bstrPath, (PWCHAR)expandedPath.c_str(), (DWORD)expandedPath.length()));
     expandedPath = AppendBackslash(expandedPath);
 
-    // Get the affected volume 
+    // Get the affected volume
     if (!GetUniqueVolumeNameForPathNoThrow(expandedPath, affectedVolume))
     {
         affectedVolume = expandedPath;
@@ -817,13 +817,13 @@ inline void VssFileDescriptor::Print()
     wstring alternateDisplayPath;
     if (alternatePath.length() > 0)
         alternateDisplayPath = wstring(L", Alternate Location = ") + alternatePath;
-     
+
     ft.WriteLine(L"       - %s: Path = %s, Filespec = %s%s%s",
-        GetStringFromFileDescriptorType(type).c_str(),
-        path.c_str(),
-        filespec.c_str(),
-        isRecursive? L", Recursive": L"",
-        alternateDisplayPath.c_str());
+                 GetStringFromFileDescriptorType(type).c_str(),
+                 path.c_str(),
+                 filespec.c_str(),
+                 isRecursive? L", Recursive": L"",
+                 alternateDisplayPath.c_str());
 }
 
 
@@ -835,12 +835,17 @@ wstring VssFileDescriptor::GetStringFromFileDescriptorType(VSS_DESCRIPTOR_TYPE e
     ft.Trace(DBG_INFO, L"Interpreting constant %d", (int)eType);
     switch (eType)
     {
-    case VSS_FDT_UNDEFINED:     return L"Undefined";
-    case VSS_FDT_EXCLUDE_FILES: return L"Exclude";
-    case VSS_FDT_FILELIST:      return L"File List";
-    case VSS_FDT_DATABASE:      return L"Database";
-    case VSS_FDT_DATABASE_LOG:  return L"Database Log";
-                    
+    case VSS_FDT_UNDEFINED:
+        return L"Undefined";
+    case VSS_FDT_EXCLUDE_FILES:
+        return L"Exclude";
+    case VSS_FDT_FILELIST:
+        return L"File List";
+    case VSS_FDT_DATABASE:
+        return L"Database";
+    case VSS_FDT_DATABASE_LOG:
+        return L"Database Log";
+
     default:
         ft.WriteLine(L"Unknown constant: %d",eType);
         _ASSERTE(false);
@@ -856,10 +861,10 @@ wstring VssFileDescriptor::GetStringFromFileDescriptorType(VSS_DESCRIPTOR_TYPE e
 #ifdef VSS_SERVER
 
 
-// Initialize a file descriptor from a 
+// Initialize a file descriptor from a
 void VssDependency::Initialize(
-        IVssWMDependency * pDependency
-        )
+    IVssWMDependency * pDependency
+)
 {
     FunctionTracer ft(DBG_INFO);
 
@@ -890,8 +895,8 @@ inline void VssDependency::Print()
     FunctionTracer ft(DBG_INFO);
 
     ft.WriteLine(L"       - Dependency to \"%s:%s%s\"",
-        writerId.c_str(), 
-        fullPath.c_str());
+                 writerId.c_str(),
+                 fullPath.c_str());
 }
 
 #endif

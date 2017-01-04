@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -16,7 +16,7 @@
 
 #include "GestureEngine.h" // contains definition of this class
 #ifndef GID_PRESSANDTAP
-    #define GID_PRESSANDTAP GID_ROLLOVER
+#define GID_PRESSANDTAP GID_ROLLOVER
 #endif
 
 // One of the fields in GESTUREINFO structure is type of ULONGLONG (8 bytes).
@@ -26,7 +26,7 @@
 
 // Default constructor of the class.
 CGestureEngine::CGestureEngine()
-:   _dwArguments(0)
+    :   _dwArguments(0)
 {
 }
 
@@ -63,7 +63,7 @@ LRESULT CGestureEngine::WndProc(HWND hWnd, WPARAM /* wParam */, LPARAM lParam)
 
     case GID_END:
         break;
-    
+
     case GID_ZOOM:
         switch (gi.dwFlags)
         {
@@ -75,18 +75,18 @@ LRESULT CGestureEngine::WndProc(HWND hWnd, WPARAM /* wParam */, LPARAM lParam)
             break;
 
         default:
-            // We read here the second point of the gesture. This is middle point between 
+            // We read here the second point of the gesture. This is middle point between
             // fingers in this new position.
             _ptSecond.x = gi.ptsLocation.x;
             _ptSecond.y = gi.ptsLocation.y;
             ScreenToClient(hWnd,&_ptSecond);
 
-            // We have to calculate zoom center point 
+            // We have to calculate zoom center point
             ptZoomCenter.x = (_ptFirst.x + _ptSecond.x)/2;
-            ptZoomCenter.y = (_ptFirst.y + _ptSecond.y)/2;           
-            
-            // The zoom factor is the ratio between the new and the old distance. 
-            // The new distance between two fingers is stored in gi.ullArguments 
+            ptZoomCenter.y = (_ptFirst.y + _ptSecond.y)/2;
+
+            // The zoom factor is the ratio between the new and the old distance.
+            // The new distance between two fingers is stored in gi.ullArguments
             // (lower DWORD) and the old distance is stored in _dwArguments.
             k = (double)(LODWORD(gi.ullArguments))/(double)(_dwArguments);
 
@@ -95,14 +95,14 @@ LRESULT CGestureEngine::WndProc(HWND hWnd, WPARAM /* wParam */, LPARAM lParam)
 
             InvalidateRect(hWnd, NULL, TRUE);
 
-            // Now we have to store new information as a starting information 
+            // Now we have to store new information as a starting information
             // for the next step in this gesture.
             _ptFirst = _ptSecond;
             _dwArguments = LODWORD(gi.ullArguments);
             break;
         }
         break;
-    
+
     case GID_PAN:
         switch (gi.dwFlags)
         {
@@ -141,12 +141,12 @@ LRESULT CGestureEngine::WndProc(HWND hWnd, WPARAM /* wParam */, LPARAM lParam)
         default:
             _ptFirst.x = gi.ptsLocation.x;
             _ptFirst.y = gi.ptsLocation.y;
-            ScreenToClient(hWnd, &_ptFirst);           
+            ScreenToClient(hWnd, &_ptFirst);
             // Gesture handler returns cumulative rotation angle. However we
-            // have to pass the delta angle to our function responsible 
+            // have to pass the delta angle to our function responsible
             // to process the rotation gesture.
             ProcessRotate(
-                GID_ROTATE_ANGLE_FROM_ARGUMENT(LODWORD(gi.ullArguments)) 
+                GID_ROTATE_ANGLE_FROM_ARGUMENT(LODWORD(gi.ullArguments))
                 - GID_ROTATE_ANGLE_FROM_ARGUMENT(_dwArguments),
                 _ptFirst.x,_ptFirst.y
             );

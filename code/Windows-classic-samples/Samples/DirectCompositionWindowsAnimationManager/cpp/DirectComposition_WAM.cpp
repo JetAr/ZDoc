@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -9,8 +9,8 @@
 Sample name:    WAMManagingDComp
 
 Description:
-This sample demonstrates how to use the curve generation feature of 
-Windows Animation Manager (WAM) with DirectComposition (DComp). 
+This sample demonstrates how to use the curve generation feature of
+Windows Animation Manager (WAM) with DirectComposition (DComp).
 Specifically, the application shows how to:
 
     - create DirectComposition device and visuals
@@ -49,46 +49,46 @@ LRESULT CALLBACK CApplication::WindowProc(HWND hwnd, UINT msg, WPARAM wParam, LP
 
     switch (msg)
     {
-        case WM_CREATE:
-            _application->OnCreate();
-            break;
+    case WM_CREATE:
+        _application->OnCreate();
+        break;
 
-        case WM_PAINT:
-            result = _application->OnPaint(hwnd);
-            break;
+    case WM_PAINT:
+        result = _application->OnPaint(hwnd);
+        break;
 
-        case WM_LBUTTONDOWN:
-            result = _application->Move(forward);
-            break;
+    case WM_LBUTTONDOWN:
+        result = _application->Move(forward);
+        break;
 
-        case WM_RBUTTONDOWN:
-            result = _application->Move(backward);
-            break;
+    case WM_RBUTTONDOWN:
+        result = _application->Move(backward);
+        break;
 
-        case WM_LBUTTONUP:
-            result = _application->Move(stopForward);
-            break;
+    case WM_LBUTTONUP:
+        result = _application->Move(stopForward);
+        break;
 
-        case WM_RBUTTONUP:
-            result = _application->Move(stopBackward);
-            break;
+    case WM_RBUTTONUP:
+        result = _application->Move(stopBackward);
+        break;
 
-        case WM_CLOSE:
-            result = _application->OnClose();
-            break;
+    case WM_CLOSE:
+        result = _application->OnClose();
+        break;
 
-        case WM_DESTROY:
-            result = _application->OnDestroy();
-            break;
+    case WM_DESTROY:
+        result = _application->OnDestroy();
+        break;
 
-        default:
-            result = DefWindowProc(hwnd, msg, wParam, lParam);
+    default:
+        result = DefWindowProc(hwnd, msg, wParam, lParam);
     }
 
     return result;
 }
 
-CApplication::CApplication(HINSTANCE instance) : 
+CApplication::CApplication(HINSTANCE instance) :
     _hinstance(instance),
     _hwnd(NULL),
     _hbrush(NULL)
@@ -195,35 +195,35 @@ HRESULT CApplication::BeforeEnteringMessageLoop()
     return hr;
 }
 //----------------------------------------------------------
-// Create an instance of WAM Manager Object which manages storyboards, 
+// Create an instance of WAM Manager Object which manages storyboards,
 // transitions, and variables
 //----------------------------------------------------------
 HRESULT CApplication::CreateAnimationManager()
 {
     return ::CoCreateInstance(
-        CLSID_UIAnimationManager2, 
-        nullptr, 
-        CLSCTX_INPROC_SERVER, 
-        IID_IUIAnimationManager2, 
-        reinterpret_cast<LPVOID *>(&_manager));
+               CLSID_UIAnimationManager2,
+               nullptr,
+               CLSCTX_INPROC_SERVER,
+               IID_IUIAnimationManager2,
+               reinterpret_cast<LPVOID *>(&_manager));
 }
 
 //-----------------------------------------------------------
-// Creates an WAM transition library which enables us to schedule 
+// Creates an WAM transition library which enables us to schedule
 // transitions
 //-----------------------------------------------------------
 HRESULT CApplication::CreateAnimationTransitionLibrary()
 {
     return ::CoCreateInstance(
-        CLSID_UIAnimationTransitionLibrary2, 
-        nullptr, 
-        CLSCTX_INPROC_SERVER, 
-        IID_IUIAnimationTransitionLibrary2, 
-        reinterpret_cast<LPVOID *>(&_transitionLibrary));
+               CLSID_UIAnimationTransitionLibrary2,
+               nullptr,
+               CLSCTX_INPROC_SERVER,
+               IID_IUIAnimationTransitionLibrary2,
+               reinterpret_cast<LPVOID *>(&_transitionLibrary));
 }
 
 //-----------------------------------------------------------
-// Creates an WAM animation variable  which we will use to animate 
+// Creates an WAM animation variable  which we will use to animate
 // the tiles
 //-----------------------------------------------------------
 HRESULT CApplication::CreateAnimationVariables()
@@ -242,7 +242,7 @@ HRESULT CApplication::CreateD3D11Device()
 {
     HRESULT hr = S_OK;
 
-    D3D_DRIVER_TYPE driverTypes[] = 
+    D3D_DRIVER_TYPE driverTypes[] =
     {
         D3D_DRIVER_TYPE_HARDWARE,
         D3D_DRIVER_TYPE_WARP,
@@ -256,16 +256,16 @@ HRESULT CApplication::CreateD3D11Device()
         CComPtr<ID3D11DeviceContext> d3d11DeviceContext;
 
         hr = D3D11CreateDevice(
-            nullptr,
-            driverTypes[i], 
-            NULL, 
-            D3D11_CREATE_DEVICE_BGRA_SUPPORT,  
-            NULL, 
-            0, 
-            D3D11_SDK_VERSION,
-            &d3d11Device,
-            &featureLevelSupported,
-            &d3d11DeviceContext);
+                 nullptr,
+                 driverTypes[i],
+                 NULL,
+                 D3D11_CREATE_DEVICE_BGRA_SUPPORT,
+                 NULL,
+                 0,
+                 D3D11_SDK_VERSION,
+                 &d3d11Device,
+                 &featureLevelSupported,
+                 &d3d11DeviceContext);
 
         if (SUCCEEDED(hr))
         {
@@ -311,10 +311,10 @@ HRESULT CApplication::CreateD2D1Device()
 HRESULT CApplication::CreateWICFactory()
 {
     return CoCreateInstance(
-        CLSID_WICImagingFactory,
-        nullptr,
-        CLSCTX_INPROC_SERVER,
-        IID_PPV_ARGS(&_wicFactory));
+               CLSID_WICImagingFactory,
+               nullptr,
+               CLSCTX_INPROC_SERVER,
+               IID_PPV_ARGS(&_wicFactory));
 }
 
 int CApplication::EnterMessageLoop()
@@ -422,18 +422,18 @@ HRESULT CApplication::CreateApplicationWindow()
         AdjustWindowRect(&rect, WS_OVERLAPPEDWINDOW, FALSE);
 
         _hwnd = CreateWindowExW(
-           0,
-           L"MainWindowClass",
-           L"Windows Animation Manager (WAM) Sample",
-           WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX,
-           CW_USEDEFAULT,
-           CW_USEDEFAULT,
-           rect.right - rect.left,
-           rect.bottom - rect.top,
-           NULL,
-           NULL,
-           _hinstance,
-           nullptr);
+                    0,
+                    L"MainWindowClass",
+                    L"Windows Animation Manager (WAM) Sample",
+                    WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX,
+                    CW_USEDEFAULT,
+                    CW_USEDEFAULT,
+                    rect.right - rect.left,
+                    rect.bottom - rect.top,
+                    NULL,
+                    NULL,
+                    _hinstance,
+                    nullptr);
 
         if (_hwnd == NULL)
         {
@@ -511,7 +511,7 @@ void CApplication::DestroyApplicationWindow()
     if (_hwnd != NULL)
     {
         DestroyWindow(_hwnd);
-       _hwnd = NULL;
+        _hwnd = NULL;
     }
 }
 
@@ -521,7 +521,7 @@ void CApplication::DestroyApplicationWindow()
 HRESULT CApplication::CreateDCompositionDevice()
 {
     HRESULT hr = (_d3d11Device == nullptr) ? E_UNEXPECTED : S_OK;
-    
+
     CComPtr<IDXGIDevice> dxgiDevice;
 
     if (SUCCEEDED(hr))
@@ -553,7 +553,7 @@ HRESULT CApplication::CreateDCompositionRenderTarget()
     return hr;
 }
 //---------------------------------------------------------------------
-// Creates a DirectComposition visual tree and places each visual 
+// Creates a DirectComposition visual tree and places each visual
 // inside the application window
 //---------------------------------------------------------------------
 HRESULT CApplication::CreateDCompositionVisualTree()
@@ -603,7 +603,7 @@ HRESULT CApplication::CreateDCompositionVisualTree()
         }
     }
 
-    // Using DirectComposition transforms to scale and place each visual such that the tiles 
+    // Using DirectComposition transforms to scale and place each visual such that the tiles
     // are side by side within the application window
     if (SUCCEEDED(hr))
     {
@@ -616,7 +616,7 @@ HRESULT CApplication::CreateDCompositionVisualTree()
             {
                 hr = _device->CreateScaleTransform(&scaleTransform);
             }
-            
+
             float sx = tileSize / bitmapWidth;
 
             if (SUCCEEDED(hr))
@@ -652,10 +652,10 @@ HRESULT CApplication::CreateDCompositionVisualTree()
                 hr = translateTransform->SetOffsetY(y);
             }
 
-            // Creating a transform group to group the two transforms together such that 
+            // Creating a transform group to group the two transforms together such that
             // they can be applied at once.
-            IDCompositionTransform *transforms[] = 
-            { 
+            IDCompositionTransform *transforms[] =
+            {
                 scaleTransform,
                 translateTransform,
             };
@@ -676,11 +676,11 @@ HRESULT CApplication::CreateDCompositionVisualTree()
 }
 
 //-------------------------------------------------------------------------------
-// Use WAM to generate and propagate the appropriate animation curves to DirectComposition when 
+// Use WAM to generate and propagate the appropriate animation curves to DirectComposition when
 // keypress is detected
 //-------------------------------------------------------------------------------
 HRESULT CApplication::CreateSlideAnimation(DIRECTION dir, IDCompositionAnimation **slideAnimation)
-{    
+{
     HRESULT hr = (slideAnimation == nullptr) ? E_POINTER : S_OK;
 
     float rightMargin = 27 * TILE_SPACING * -1;  //where the tiles end. Note forward direction is represented by a negative value.
@@ -708,7 +708,7 @@ HRESULT CApplication::CreateSlideAnimation(DIRECTION dir, IDCompositionAnimation
         hr = _manager->CreateStoryboard(&storyboard);
     }
 
-    // Synchronizing WAM and DirectComposition time such that when WAM Update is called, 
+    // Synchronizing WAM and DirectComposition time such that when WAM Update is called,
     // the value reflects the DirectComposition value at the given time.
     DCOMPOSITION_FRAME_STATISTICS frameStatistics = { 0 };
 
@@ -724,7 +724,7 @@ HRESULT CApplication::CreateSlideAnimation(DIRECTION dir, IDCompositionAnimation
         nextEstimatedFrameTime = static_cast<double>(frameStatistics.nextEstimatedFrameTime.QuadPart) / static_cast<double>(frameStatistics.timeFrequency.QuadPart);
     }
 
-    //Upating the WAM time 
+    //Upating the WAM time
     if (SUCCEEDED(hr))
     {
         hr = _manager->Update(nextEstimatedFrameTime);
@@ -733,28 +733,28 @@ HRESULT CApplication::CreateSlideAnimation(DIRECTION dir, IDCompositionAnimation
     CComPtr<IUIAnimationTransition2> transition;
     double curValue = 0;    //current value of the animation variable
     int velocity = 500;     //arbitrary fix velocity for the slide animation
-    
+
     if (SUCCEEDED(hr))
     {
         hr = _animationVariable->GetValue(&curValue);
 
         switch (dir)
         {
-            case stopForward:
-            case stopBackward:
-                // Stopping the animation smoothly when key is let go
-                if (curValue != leftMargin && curValue != rightMargin)
-                    hr = _transitionLibrary->CreateSmoothStopTransition(0.5, curValue + dir * 50, &transition);
-                break;
-            case forward:
-                // slide the tiles forward using a linear curve upon left button press
-                hr = _transitionLibrary->CreateLinearTransition(-1 * (rightMargin - curValue)/velocity, rightMargin, &transition);
-                break;
-            case backward:
-                // slide the tiles backward using a linear cruve upon right button press
-                hr = _transitionLibrary->CreateLinearTransition(-1 * curValue/velocity, leftMargin, &transition);
-                break;
-         }
+        case stopForward:
+        case stopBackward:
+            // Stopping the animation smoothly when key is let go
+            if (curValue != leftMargin && curValue != rightMargin)
+                hr = _transitionLibrary->CreateSmoothStopTransition(0.5, curValue + dir * 50, &transition);
+            break;
+        case forward:
+            // slide the tiles forward using a linear curve upon left button press
+            hr = _transitionLibrary->CreateLinearTransition(-1 * (rightMargin - curValue)/velocity, rightMargin, &transition);
+            break;
+        case backward:
+            // slide the tiles backward using a linear cruve upon right button press
+            hr = _transitionLibrary->CreateLinearTransition(-1 * curValue/velocity, leftMargin, &transition);
+            break;
+        }
     }
 
     //Add above transition to storyboard
@@ -834,12 +834,12 @@ void CApplication::OnCreate()
 
 LRESULT CApplication::OnPaint(HWND hwnd)
 {
-    RECT rcClient; 
+    RECT rcClient;
     PAINTSTRUCT ps;
     HDC hdc = BeginPaint(hwnd, &ps);
     FillRect(hdc, &ps.rcPaint, _hbrush);
 
-    // get the dimensions of the main window.   
+    // get the dimensions of the main window.
     GetClientRect(_hwnd, &rcClient);
 
     // Logo
@@ -867,10 +867,10 @@ LRESULT CApplication::OnPaint(HWND hwnd)
         HFONT hOldFont = static_cast<HFONT>(SelectObject(hdc, htitle));
 
         SetTextColor(hdc, GetSysColor(COLOR_WINDOWTEXT));
-        
+
         rcClient.top = 25;
         rcClient.left = 30;
-        
+
         DrawTextW(hdc, L"WAM Sample", -1, &rcClient, DT_WORDBREAK);
 
         SelectObject(hdc, hOldFont);
@@ -886,20 +886,20 @@ LRESULT CApplication::OnPaint(HWND hwnd)
 
         rcClient.top = 90;
         rcClient.left = 30;
-        
+
         DrawTextW(hdc, L"This sample shows how DirectComposition and Windows Animation Manager (WAM) can be used together as an independent animation platform.", -1, &rcClient, DT_WORDBREAK);
 
         rcClient.top = 400;
         rcClient.left = 220;
-        
+
         DrawTextW(hdc, L"Left/Right click to control the animation.", -1, &rcClient, DT_WORDBREAK);
-        
+
         SelectObject(hdc, hOldFont);
 
         DeleteObject(hdescription);
     }
 
-    EndPaint(hwnd, &ps); 
+    EndPaint(hwnd, &ps);
 
     return 0;
 }
@@ -909,7 +909,7 @@ LRESULT CApplication::OnClose()
     if (_hwnd != NULL)
     {
         DestroyWindow(_hwnd);
-       _hwnd = NULL;
+        _hwnd = NULL;
     }
 
     return 0;
@@ -955,11 +955,11 @@ HRESULT CApplication::CreateSurfaceFromFile(const WCHAR *filename, int *bitmapWi
         bitmapSize = d2d1Bitmap->GetSize();
 
         hr = _device->CreateSurface(
-            static_cast<UINT>(bitmapSize.width), 
-            static_cast<UINT>(bitmapSize.height), 
-            DXGI_FORMAT_R8G8B8A8_UNORM, 
-            DXGI_ALPHA_MODE_IGNORE, 
-            &surfaceTile);
+                 static_cast<UINT>(bitmapSize.width),
+                 static_cast<UINT>(bitmapSize.height),
+                 DXGI_FORMAT_R8G8B8A8_UNORM,
+                 DXGI_ALPHA_MODE_IGNORE,
+                 &surfaceTile);
     }
 
     CComPtr<IDXGISurface> dxgiSurface;
@@ -968,7 +968,7 @@ HRESULT CApplication::CreateSurfaceFromFile(const WCHAR *filename, int *bitmapWi
     if (SUCCEEDED(hr))
     {
         RECT rect = { 0, 0, static_cast<LONG>(bitmapSize.width), static_cast<LONG>(bitmapSize.height) };
-        
+
         hr = surfaceTile->BeginDraw(&rect, __uuidof(IDXGISurface), reinterpret_cast<void **>(&dxgiSurface), &offset);
     }
 
@@ -982,10 +982,10 @@ HRESULT CApplication::CreateSurfaceFromFile(const WCHAR *filename, int *bitmapWi
         _d2d1Factory->GetDesktopDpi(&dpiX, &dpiY);
 
         D2D1_BITMAP_PROPERTIES1 bitmapProperties = D2D1::BitmapProperties1(
-            D2D1_BITMAP_OPTIONS_TARGET | D2D1_BITMAP_OPTIONS_CANNOT_DRAW,
-            D2D1::PixelFormat(DXGI_FORMAT_R8G8B8A8_UNORM, D2D1_ALPHA_MODE_IGNORE),
-            dpiX,
-            dpiY);
+                    D2D1_BITMAP_OPTIONS_TARGET | D2D1_BITMAP_OPTIONS_CANNOT_DRAW,
+                    D2D1::PixelFormat(DXGI_FORMAT_R8G8B8A8_UNORM, D2D1_ALPHA_MODE_IGNORE),
+                    dpiX,
+                    dpiY);
 
         hr = _d2d1DeviceContext->CreateBitmapFromDxgiSurface(dxgiSurface, &bitmapProperties, &d2d1Target);
 
@@ -998,9 +998,9 @@ HRESULT CApplication::CreateSurfaceFromFile(const WCHAR *filename, int *bitmapWi
             _d2d1DeviceContext->DrawBitmap(
                 d2d1Bitmap,
                 D2D1::RectF(
-                    offset.x + 0.0f, 
-                    offset.y + 0.0f, 
-                    offset.x + bitmapSize.width, 
+                    offset.x + 0.0f,
+                    offset.y + 0.0f,
+                    offset.x + bitmapSize.width,
                     offset.y + bitmapSize.height));
 
             hr = _d2d1DeviceContext->EndDraw();
@@ -1035,11 +1035,11 @@ HRESULT CApplication::CreateD2D1BitmapFromFile(LPCWSTR filename, ID2D1Bitmap **b
     if (SUCCEEDED(hr))
     {
         hr = _wicFactory->CreateDecoderFromFilename(
-            filename,
-            nullptr,
-            GENERIC_READ,
-            WICDecodeMetadataCacheOnLoad,
-            &wicBitmapDecoder);
+                 filename,
+                 nullptr,
+                 GENERIC_READ,
+                 WICDecodeMetadataCacheOnLoad,
+                 &wicBitmapDecoder);
     }
 
     CComPtr<IWICBitmapFrameDecode> wicBitmapFrame;
@@ -1059,12 +1059,12 @@ HRESULT CApplication::CreateD2D1BitmapFromFile(LPCWSTR filename, ID2D1Bitmap **b
     if (SUCCEEDED(hr))
     {
         hr = wicFormatConverter->Initialize(
-            wicBitmapFrame,
-            GUID_WICPixelFormat32bppPBGRA,
-            WICBitmapDitherTypeNone,
-            nullptr,
-            0.0f,
-            WICBitmapPaletteTypeMedianCut);
+                 wicBitmapFrame,
+                 GUID_WICPixelFormat32bppPBGRA,
+                 WICBitmapDitherTypeNone,
+                 nullptr,
+                 0.0f,
+                 WICBitmapPaletteTypeMedianCut);
     }
 
     CComPtr<IWICBitmap> wicBitmap;
@@ -1076,14 +1076,14 @@ HRESULT CApplication::CreateD2D1BitmapFromFile(LPCWSTR filename, ID2D1Bitmap **b
 
     if (SUCCEEDED(hr))
     {
-        hr = _d2d1DeviceContext->CreateBitmapFromWicBitmap(wicBitmap, bitmap); 
+        hr = _d2d1DeviceContext->CreateBitmapFromWicBitmap(wicBitmap, bitmap);
     }
 
     return hr;
 }
 
 //---------------------------------------------------------------------
-// Slides the tiles in the direction of the button press. WAM is 
+// Slides the tiles in the direction of the button press. WAM is
 // used to generate the animation curves while DirectComposition translates the visuals
 // using those curves
 //--------------------------------------------------------------------
@@ -1091,7 +1091,7 @@ HRESULT CApplication::Move(DIRECTION dir)
 {
     HRESULT hr = ((_device == nullptr) || (_hwnd == NULL)) ? E_UNEXPECTED : S_OK;
 
-    CComPtr<IDCompositionAnimation> spAnimation;    
+    CComPtr<IDCompositionAnimation> spAnimation;
     CComPtr<IDCompositionAnimation> slideAnimation;
     CComPtr<IDCompositionTranslateTransform> translateTransform;
 
@@ -1122,7 +1122,7 @@ HRESULT CApplication::Move(DIRECTION dir)
     {
         _device->Commit();
     }
-    
+
     return hr;
 }
 

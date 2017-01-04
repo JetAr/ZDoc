@@ -1,4 +1,4 @@
-//////////////////////////////////////////////////////////////////////
+﻿//////////////////////////////////////////////////////////////////////
 //
 //  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 //  ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED
@@ -57,7 +57,7 @@ STDAPI CEnumDisplayAttributeInfo::QueryInterface(REFIID riid, void **ppvObj)
     *ppvObj = NULL;
 
     if (IsEqualIID(riid, IID_IUnknown) ||
-        IsEqualIID(riid, IID_IEnumTfDisplayAttributeInfo))
+            IsEqualIID(riid, IID_IEnumTfDisplayAttributeInfo))
     {
         *ppvObj = (IEnumTfDisplayAttributeInfo *)this;
     }
@@ -161,9 +161,9 @@ STDAPI CEnumDisplayAttributeInfo::Next(ULONG ulCount, ITfDisplayAttributeInfo **
         {
             if ((pDisplayAttributeInfo = new CDisplayAttributeInfoConverted()) == NULL)
                 return E_OUTOFMEMORY;
- 
+
         }
-        
+
 
         *rgInfo = pDisplayAttributeInfo;
         cFetched++;

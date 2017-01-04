@@ -1,7 +1,7 @@
-//--------------------------------------------------------------------
+﻿//--------------------------------------------------------------------
 // Microsoft OLE DB Test
 //
-// Copyright 1995-2000 Microsoft Corporation.  
+// Copyright 1995-2000 Microsoft Corporation.
 //
 // @doc
 //
@@ -13,12 +13,12 @@
 
 #ifndef _COMMAND_H_
 #define _COMMAND_H_
-						  
+
 #include "oledb.h" 			// OLE DB Header Files
 #include "oledberr.h"
 
 #include "privlib.h"		//include private library, which includes
-							//the "transact.h"
+//the "transact.h"
 #include <process.h>		// for multi-threading routines
 
 //-----------------------------------------------------------------------------
@@ -96,23 +96,23 @@ const WCHAR	wszInvalidDateTime[]		= L"0000-00-00 00:60:60";
 //-----------------------------------------------------------------------------
 enum ACCESSOR
 {
-	READWRITE,
-	READ
+    READWRITE,
+    READ
 };
 
 enum SET_OPTION_ENUM
 {
-	SINGLE_PROP,
-	PAIRED_PROP
+    SINGLE_PROP,
+    PAIRED_PROP
 };
 
-//This enumeration represents various objects that can be 
-//obtained from Execute. For e.g., TC_Row represents the Test 
+//This enumeration represents various objects that can be
+//obtained from Execute. For e.g., TC_Row represents the Test
 //Case which will test getting a ROW object from Execute.
 enum ETESTCASE
 {
-	TC_Rowset = 1,				//Getting Rowset from Execute
-	TC_Row,						//Getting Row from Execute (singleton)
+    TC_Rowset = 1,				//Getting Rowset from Execute
+    TC_Row,						//Getting Row from Execute (singleton)
 };
 
 #endif 	//_COMMAND_H_

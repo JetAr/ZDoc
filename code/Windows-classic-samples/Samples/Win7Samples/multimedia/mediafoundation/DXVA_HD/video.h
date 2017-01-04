@@ -1,5 +1,5 @@
-//////////////////////////////////////////////////////////////////////
-// 
+﻿//////////////////////////////////////////////////////////////////////
+//
 // video.h
 //
 // Contains the following:
@@ -85,7 +85,7 @@ void FillRectangle(
     const UINT ex,
     const UINT ey,
     const DWORD color
-    );
+);
 
 HRESULT DrawColorBars(IDirect3DSurface9 *pSurf, UINT width, UINT height);
 HRESULT LoadBitmapResourceToAYUVSurface(IDirect3DSurface9 *pSurf, LONG width, LONG height, INT nIDBitmap, BYTE PixelAlphaValue);

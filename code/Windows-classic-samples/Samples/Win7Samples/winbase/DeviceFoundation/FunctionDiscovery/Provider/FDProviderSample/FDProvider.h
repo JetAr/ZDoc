@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -12,7 +12,7 @@
 
 #pragma once
 
-class TFunctionDiscoveryProvider: 
+class TFunctionDiscoveryProvider:
     public TList<TFunctionDiscoveryProvider>::TListEntry,
     public IFunctionDiscoveryProvider
 {
@@ -26,48 +26,48 @@ public:
     STDMETHODIMP_(ULONG) Release();
 
     STDMETHODIMP QueryInterface(
-        REFIID riid, 
+        REFIID riid,
         __deref_out_opt void** ppv);
 
     //
     // IFunctionDiscoveryProvider
     //
 
-    STDMETHODIMP Initialize( 
+    STDMETHODIMP Initialize(
         /* [in] */ __RPC__in_opt IFunctionDiscoveryProviderFactory *pIFunctionDiscoveryProviderFactory,
         /* [in] */ __RPC__in_opt IFunctionDiscoveryNotification *pIFunctionDiscoveryNotification,
         /* [in] */ LCID lcidUserDefault,
         /* [out] */ __RPC__out DWORD *pdwStgAccessCapabilities);
-        
-    STDMETHODIMP Query( 
+
+    STDMETHODIMP Query(
         /* [in] */ __RPC__in_opt IFunctionDiscoveryProviderQuery *pIFunctionDiscoveryProviderQuery,
         /* [out] */ __RPC__deref_out_opt IFunctionInstanceCollection **ppIFunctionInstanceCollection);
-    
+
     STDMETHODIMP EndQuery();
-    
-    STDMETHODIMP InstancePropertyStoreValidateAccess( 
+
+    STDMETHODIMP InstancePropertyStoreValidateAccess(
         /* [in] */ __RPC__in_opt IFunctionInstance *pIFunctionInstance,
         /* [in] */ INT_PTR iProviderInstanceContext,
         /* [in] */ const DWORD dwStgAccess);
-    
-    STDMETHODIMP InstancePropertyStoreOpen( 
+
+    STDMETHODIMP InstancePropertyStoreOpen(
         /* [in] */ __RPC__in_opt IFunctionInstance *pIFunctionInstance,
         /* [in] */ INT_PTR iProviderInstanceContext,
         /* [in] */ const DWORD dwStgAccess,
         /* [out] */ __RPC__deref_out_opt IPropertyStore **ppPropertyStore);
-    
-    STDMETHODIMP InstancePropertyStoreFlush( 
+
+    STDMETHODIMP InstancePropertyStoreFlush(
         /* [in] */ __RPC__in_opt IFunctionInstance *pIFunctionInstance,
         /* [in] */ INT_PTR iProviderInstanceContext);
-    
-    STDMETHODIMP InstanceQueryService( 
+
+    STDMETHODIMP InstanceQueryService(
         /* [in] */ __RPC__in_opt IFunctionInstance *pIFunctionInstance,
         /* [in] */ INT_PTR iProviderInstanceContext,
         /* [in] */ __RPC__in REFGUID guidService,
         /* [in] */ __RPC__in REFIID riid,
         /* [out] */ __RPC__deref_out_opt IUnknown **ppIUnknown);
-    
-    STDMETHODIMP InstanceReleased( 
+
+    STDMETHODIMP InstanceReleased(
         /* [in] */ __RPC__in_opt IFunctionInstance *pIFunctionInstance,
         /* [in] */ INT_PTR iProviderInstanceContext);
 
@@ -80,7 +80,7 @@ public:
     // Logoff notification handler
     static VOID LogoffNotification(
         DWORD hSessionId);
-    
+
     //
     // Functions to submit client notifications
     //
@@ -95,7 +95,7 @@ public:
         __in TFunctionInstanceInfo* pFunctionInstanceInfo);
 
 protected:
-    ~TFunctionDiscoveryProvider();  
+    ~TFunctionDiscoveryProvider();
     VOID ReleaseCachedInterfaces();
     VOID StopDiscoveryProtocolQuery();
 
@@ -128,7 +128,7 @@ protected:
 
     LONG m_cRef;
     PFNProviderLifetimeNotificationCallback m_pfnProviderLifetimeNotificationCallback;
-     TLock m_CachedInterfaceLock;
+    TLock m_CachedInterfaceLock;
     IFunctionDiscoveryProviderFactory* m_pIFunctionDiscoveryProviderFactory;
     IFunctionDiscoveryNotification* m_pIFunctionDiscoveryNotification;
     LCID m_lcidUserDefault;

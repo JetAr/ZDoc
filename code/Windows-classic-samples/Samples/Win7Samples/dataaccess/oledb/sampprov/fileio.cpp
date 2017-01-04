@@ -1,5 +1,5 @@
-//--------------------------------------------------------------------
-// Microsoft OLE DB 
+﻿//--------------------------------------------------------------------
+// Microsoft OLE DB
 // (C) Copyright 1991 - 1999 Microsoft Corporation. All Rights Reserved.
 //
 // @doc
@@ -31,17 +31,17 @@ static const int SLONG_STRING_SIZE = 5;
 //
 CFileIO::CFileIO()
 {
-	memset(&m_rgpColumnData, 0, sizeof(PCOLUMNDATA) * MAX_COLUMNS);
+    memset(&m_rgpColumnData, 0, sizeof(PCOLUMNDATA) * MAX_COLUMNS);
 
     m_pColNames        = NULL;
     m_pvInput          = NULL;
     m_ulDataTypeOffset = 0;
     m_cColumns         = 0;
     m_cRows            = 0;
-	m_FileReadOnly	   = FALSE;			
-	m_pbHeap	       = NULL;
-	m_cbHeapUsed       = 0;
-	m_cbRowSize		   = 0;
+    m_FileReadOnly	   = FALSE;
+    m_pbHeap	       = NULL;
+    m_cbHeapUsed       = 0;
+    m_cbRowSize		   = 0;
 }
 
 
@@ -52,7 +52,7 @@ CFileIO::CFileIO()
 //
 CFileIO:: ~CFileIO()
 {
-	// Release buffer for column names (pointed to by m_rgdbcolinfo).
+    // Release buffer for column names (pointed to by m_rgdbcolinfo).
     if (m_pbHeap)
         VirtualFree((VOID *) m_pbHeap, 0, MEM_RELEASE );
 
@@ -76,9 +76,9 @@ CFileIO:: ~CFileIO()
 //		@flag DB_E_NOTABLE | File marked as read only or didn't exist
 //
 HRESULT CFileIO::fInit
-    (
+(
     LPSTR ptstrFileName         //@parm IN | File Name to Open
-    )
+)
 {
     // Allocate Stream Buffer
     m_pvInput = new char[MAX_INPUT_BUFFER ];
@@ -86,14 +86,15 @@ HRESULT CFileIO::fInit
         return ResultFromScode( E_FAIL );
 
     // Open the File
-	open( ptstrFileName, ios::in | ios::out | ios::_Nocreate);//, filebuf::sh_read || filebuf::sh_write );
-    if( !is_open() ) {
-		open( ptstrFileName, ios::in | ios::_Nocreate);//, filebuf::sh_read );
-		if (!is_open())
-			return ResultFromScode( DB_E_NOTABLE );
+    open( ptstrFileName, ios::in | ios::out | ios::_Nocreate);//, filebuf::sh_read || filebuf::sh_write );
+    if( !is_open() )
+    {
+        open( ptstrFileName, ios::in | ios::_Nocreate);//, filebuf::sh_read );
+        if (!is_open())
+            return ResultFromScode( DB_E_NOTABLE );
 
-		m_FileReadOnly = TRUE;
-	}
+        m_FileReadOnly = TRUE;
+    }
 
     // Obtain the Column Names, Data Types, and Indexes
     // for each of the rows
@@ -114,10 +115,10 @@ HRESULT CFileIO::fInit
 //      @flag E_FAIL | Invalid Column Number
 //
 HRESULT CFileIO::GetColumnName
-    (
+(
     DBORDINAL cCols,         //@parm IN | Column Number
     LPSTR*    pptstrName     //@parm OUT | Pointer to Column Name
-    )
+)
 {
     // Column number greater than MAX
     if (cCols > MAX_COLUMNS)
@@ -126,7 +127,7 @@ HRESULT CFileIO::GetColumnName
     // If Column Names have not been retrieved,
     // then retrieve them into the internal array
     if (!m_pColNames)
-        {
+    {
         // Save Current Position and move to beginning of file
         seekg( 0L );
         clear();
@@ -135,20 +136,20 @@ HRESULT CFileIO::GetColumnName
         getline( m_pvInput, MAX_INPUT_BUFFER );
         if (good() && 0 < gcount())
         {
-			m_pColNames = new char[gcount() ];
-			memcpy( m_pColNames, m_pvInput, gcount());
+            m_pColNames = new char[gcount() ];
+            memcpy( m_pColNames, m_pvInput, gcount());
         }
-		else
-		{
-			//Invalid Table, first line does not contain 
-			//column metadata.
-			return ResultFromScode( E_FAIL );
-		}
-        
-		ParseColumnNames( m_pColNames );
+        else
+        {
+            //Invalid Table, first line does not contain
+            //column metadata.
+            return ResultFromScode( E_FAIL );
+        }
+
+        ParseColumnNames( m_pColNames );
 
         return ResultFromScode( S_FALSE );
-        }
+    }
 
     ASSERT( pptstrName );
 
@@ -157,10 +158,10 @@ HRESULT CFileIO::GetColumnName
     if ((0 == cCols) || (m_cColumns < cCols))
         return ResultFromScode( E_FAIL );
     else
-        {
+    {
         *pptstrName = m_rgpColNames[cCols];
         return ResultFromScode( S_OK );
-        }
+    }
 }
 
 
@@ -171,9 +172,9 @@ HRESULT CFileIO::GetColumnName
 //      @flag S_OK | Parsing yielded no Error
 //
 HRESULT CFileIO::ParseColumnNames
-    (
+(
     LPTSTR ptstrInput
-    )
+)
 {
     LPTSTR  pvInput = ptstrInput;
 
@@ -181,26 +182,26 @@ HRESULT CFileIO::ParseColumnNames
 
     // Set first column pointer
     if ('\0' != *pvInput)
-        {
+    {
         m_rgpColNames[++m_cColumns] = pvInput;
-        }
+    }
 
     // Null Terminate each column
     while ('\0' != *pvInput)
-        {
+    {
         // Check for Comma
         if (0 == strncmp( ",", pvInput, sizeof(char)))
-            {
+        {
             memcpy( pvInput, "", sizeof(char));
 
             if (0 != strncmp( "", (pvInput+1), sizeof(char)))
-                {
+            {
                 m_rgpColNames[++m_cColumns] = (pvInput+1);
-                }
             }
+        }
 
         pvInput++;
-        }
+    }
 
     return ResultFromScode( S_OK );
 }
@@ -214,12 +215,12 @@ HRESULT CFileIO::ParseColumnNames
 //      @flag E_FAIL | Invalid Column Number
 //
 HRESULT CFileIO::GetDataTypes
-    (
+(
     DBORDINAL cCols,    //@parm IN | Column number
     SWORD* pswType,     //@parm OUT | Data Type
     UDWORD* pudwColDef, //@parm OUT | Precision of the column
     BOOL* pfSigned      //@parm OUT | Is the columns signed
-    )
+)
 {
     HRESULT hr;
 
@@ -230,7 +231,7 @@ HRESULT CFileIO::GetDataTypes
     // If Data Types have not been retrieved,
     // then retrieve them into the internal array
     if (0 == m_ulDataTypeOffset)
-        {
+    {
         seekg( 0L );
         clear();
 
@@ -250,7 +251,7 @@ HRESULT CFileIO::GetDataTypes
             return hr;
 
         return ResultFromScode( S_FALSE );
-        }
+    }
 
     assert( pswType || pudwColDef || pfSigned );
 
@@ -259,12 +260,12 @@ HRESULT CFileIO::GetDataTypes
     if ((0 == cCols) || (m_cColumns < cCols))
         return ResultFromScode( E_FAIL );
     else
-        {
+    {
         *pswType = m_rgswColType[cCols];
         *pudwColDef = m_rgudwColSize[cCols];
         *pfSigned = m_rgfSigned[cCols];
         return ResultFromScode( S_OK );
-        }
+    }
 }
 
 
@@ -281,7 +282,7 @@ HRESULT CFileIO::ParseDataTypes()
 {
     DBORDINAL cColumn = 0;
     LPSTR     pVal, pOpen;
-	LPSTR	  pchNextToken;
+    LPSTR	  pchNextToken;
 
     assert( m_pvInput );
 
@@ -290,27 +291,27 @@ HRESULT CFileIO::ParseDataTypes()
         return ResultFromScode( E_FAIL );
 
     while (NULL != pVal)
-        {
+    {
         cColumn++;
 
         if (0 == _strnicmp( pVal, CHAR_STRING, CHAR_STRING_SIZE ))
-            {
+        {
             m_rgswColType[cColumn] = TYPE_CHAR;
             pOpen = strstr( pVal, "(" );
             m_rgudwColSize[cColumn] = atol( ++pOpen );
             m_rgfSigned[cColumn] = FALSE;
-            }
+        }
         else if (0 == _strnicmp( pVal, SLONG_STRING, SLONG_STRING_SIZE ))
-            {
+        {
             m_rgswColType[cColumn] = TYPE_SLONG;
             m_rgudwColSize[cColumn] = 4;
             m_rgfSigned[cColumn] = TRUE;
-            }
+        }
         else
             return ResultFromScode( E_FAIL );
 
         pVal = strtok_s( NULL, ",\0", &pchNextToken);
-        }
+    }
 
     // should have exactly the same number of types as we have columns
     if (cColumn != m_cColumns)
@@ -347,26 +348,26 @@ HRESULT CFileIO::GenerateFileInfo()
     if (FALSE == m_FileIdx.fInit())
         return ResultFromScode( E_FAIL );
 
-	// Cache essentail column metadata
-	if (FAILED(GatherColumnInfo()))
-		return ResultFromScode( E_FAIL );
+    // Cache essentail column metadata
+    if (FAILED(GatherColumnInfo()))
+        return ResultFromScode( E_FAIL );
 
     // Obtain the starting offset for each row
     seekg( m_ulDataTypeOffset );
     ulSavePos = tellg();
     getline( m_pvInput, MAX_INPUT_BUFFER );
     while (good() && !eof())
-        {
+    {
         //Ignore Deleted Lines
         if ('@' != *m_pvInput && '\0' != *m_pvInput)
             m_FileIdx.SetIndex( ulDex++, ulSavePos );
         ulSavePos = tellg();
         getline( m_pvInput, MAX_INPUT_BUFFER );
-        }
+    }
 
     // Store the number of rows
     m_cRows = ulDex - 1;
-	clear();
+    clear();
     return ResultFromScode( S_OK );
 }
 
@@ -379,9 +380,9 @@ HRESULT CFileIO::GenerateFileInfo()
 //      @flag S_FALSE | Row not deleted
 //
 HRESULT CFileIO::IsDeleted
-    (
+(
     DBCOUNTITEM ulRow                 //@parm IN | Row to Check
-    )
+)
 {
     // Already deleted
     if (TRUE == m_FileIdx.IsDeleted( ulRow ))
@@ -400,9 +401,9 @@ HRESULT CFileIO::IsDeleted
 //      @flag E_FAIL | Row Number was invalid or problem deleting.
 //
 HRESULT CFileIO::DeleteRow
-    (
+(
     DBCOUNTITEM ulRow                 //@parm IN | Row to Delete
-    )
+)
 {
     assert( is_open());
     assert( m_pvInput );
@@ -423,7 +424,7 @@ HRESULT CFileIO::DeleteRow
     // as deleted in the index Array
     getline( m_pvInput, MAX_INPUT_BUFFER );
     if (good())
-        {
+    {
         // Set the number bytes in the stream minus
         // the null terminator to this pattern
         memset( m_pvInput, '@', gcount() - 1 );
@@ -434,7 +435,7 @@ HRESULT CFileIO::DeleteRow
             return ResultFromScode( E_FAIL );
         else
             flush();
-        }
+    }
     else
         return ResultFromScode( E_FAIL );
 
@@ -452,10 +453,10 @@ HRESULT CFileIO::DeleteRow
 //      @flag E_FAIL | Problem setting the binding
 //
 HRESULT CFileIO::SetColumnBind
-    (
+(
     DBORDINAL   cCols,      //@parm IN | Column Number
     PCOLUMNDATA pColumn		//@parm IN | Pointer to the Data Area
-    )
+)
 {
     assert( is_open());
     assert( m_rgpColumnData );
@@ -484,9 +485,9 @@ HRESULT CFileIO::SetColumnBind
 //      @flag E_FAIL  | Row could not be retrieved
 //
 HRESULT CFileIO::Fetch
-    (
+(
     DBCOUNTITEM ulRow           //@parm IN | Row to retrieve
-    )
+)
 {
     assert( is_open());
     assert( m_rgpColumnData );
@@ -512,17 +513,17 @@ HRESULT CFileIO::Fetch
     getline( m_pvInput, MAX_INPUT_BUFFER );
 
     if (good() && 0 < gcount())
-	{
+    {
         //Flag a Delete from another user
         if ( strncmp(m_pvInput, "@", sizeof(char)) == 0 )
-		{
-			DeleteRow( ulRow );
-			return ResultFromScode( S_OK );
-		}
+        {
+            DeleteRow( ulRow );
+            return ResultFromScode( S_OK );
+        }
 
-		// Parse the row
+        // Parse the row
         return ParseRowValues();
-	}
+    }
 
     return ResultFromScode( E_FAIL );
 }
@@ -537,9 +538,9 @@ HRESULT CFileIO::Fetch
 //      @flag E_FAIL | Data value could not be parsed or stored
 //
 HRESULT CFileIO::ParseRowValues
-    (
+(
     void
-    )
+)
 {
     DBORDINAL cColumns = 0;
     DWORD     cQuotes = 0;
@@ -555,21 +556,21 @@ HRESULT CFileIO::ParseRowValues
     assert( m_cColumns > 0 );
 
     while ('\0' != *pvInput)
-        {
+    {
 
         // Check for Quotes
         if (0 == strncmp( "\"", pvInput, sizeof( char )))
-            {
+        {
             pLastQuote = pvInput;
             cQuotes++;
             goto TermCheck;
-            }
+        }
 
         // Check for Comma
         // NOTE: THIS won't handle """
         if (0 == strncmp( ",", pvInput, sizeof( char )) &&
-             0 == cQuotes % 2)
-            {
+                0 == cQuotes % 2)
+        {
             if (pLastQuote)
                 memcpy( pLastQuote, "", sizeof( char ));
             else
@@ -586,16 +587,16 @@ HRESULT CFileIO::ParseRowValues
             pvCopy = NULL;
             cQuotes = 0;
             goto TermCheck;
-            }
+        }
 
         //Valid First character for next column
         if (NULL == pvCopy)
             pvCopy = pvInput;
 
-        TermCheck:
+TermCheck:
         // Check for Final Null Terminator
         if (0 == strncmp( "", (pvInput+1), sizeof(char)))
-            {
+        {
             //If we are to the null terminator and have unbalanced "'s
             //then we fail
             if (0 != cQuotes % 2)
@@ -610,10 +611,10 @@ HRESULT CFileIO::ParseRowValues
             //          TRACE(pvCopy ? pvCopy : "<NULL>");
             if (FAILED( FillBinding( cColumns, pvCopy )))
                 return ResultFromScode( E_FAIL );
-            }
+        }
 
         pvInput++;
-        }
+    }
 
     // Check that we returned the correct number of columns
     if (cColumns < m_cColumns)
@@ -630,10 +631,10 @@ HRESULT CFileIO::ParseRowValues
 //      @flag S_OK | Data copied to the specified location
 //
 HRESULT CFileIO::FillBinding
-    (
+(
     DBORDINAL cColumn, //@parm IN | Column that value is for
     LPTSTR    pvCopy   //@parm IN | Pointer to data value to transfer
-    )
+)
 {
     assert( m_rgswColType );
     assert( m_rgpColumnData );
@@ -641,13 +642,13 @@ HRESULT CFileIO::FillBinding
 
     // Null Value
     if (!pvCopy)
-        {
+    {
         m_rgpColumnData[cColumn]->dwStatus = DBSTATUS_S_ISNULL;
         return ResultFromScode( S_OK );
-        }
+    }
 
     switch (m_rgswColType[cColumn])
-        {
+    {
     case TYPE_CHAR:
         lstrcpyn((LPTSTR) m_rgpColumnData[cColumn]->bData, pvCopy, m_rgsdwMaxLen[cColumn] + sizeof( char ) );
         m_rgpColumnData[cColumn]->uLength = lstrlen( (LPTSTR) m_rgpColumnData[cColumn]->bData );
@@ -663,7 +664,7 @@ HRESULT CFileIO::FillBinding
     default:
         assert( !"Unknown Data Type" );
         break;
-        }
+    }
 
     return ResultFromScode( S_OK );
 }
@@ -678,33 +679,33 @@ HRESULT CFileIO::FillBinding
 //      @flag E_FAIL | Problems updating record
 //
 HRESULT CFileIO::UpdateRow
-    (
+(
     DBCOUNTITEM ulRow,      //@parm IN | Row to update
     BYTE*      pbProvRow,  //@parm IN | Data to update row with.
-	UPDTYPE		eUpdateType	//@parm IN | What type of update
-    )
+    UPDTYPE		eUpdateType	//@parm IN | What type of update
+)
 {
     LPSTR       pvInput = m_pvInput;
-	CHAR		szTmpBuff[MAX_BIND_LEN+1];
+    CHAR		szTmpBuff[MAX_BIND_LEN+1];
     PCOLUMNDATA pColData;
     DBORDINAL   cCols;
     size_t      nCnt;
-    
-	assert( is_open());
+
+    assert( is_open());
     assert( m_rgdwDataOffsets );
 
-	// Fix up Row count
-	if(	eUpdateType == INSERT )
-		m_cRows++;
+    // Fix up Row count
+    if(	eUpdateType == INSERT )
+        m_cRows++;
 
-	// Delete old Row
-	if( (eUpdateType == UPDATE) && 
-		(FAILED( DeleteRow( ulRow ))) )
-			return ResultFromScode( E_FAIL );
+    // Delete old Row
+    if( (eUpdateType == UPDATE) &&
+            (FAILED( DeleteRow( ulRow ))) )
+        return ResultFromScode( E_FAIL );
 
-	// Fix up Row offset value
-	seekg( 0, ios::end );
-	m_FileIdx.SetIndex( ulRow, tellg() );
+    // Fix up Row offset value
+    seekg( 0, ios::end );
+    m_FileIdx.SetIndex( ulRow, tellg() );
 
     // Check the Row Number
     if ((ulRow < 0) || (ulRow > m_cRows))
@@ -721,10 +722,10 @@ HRESULT CFileIO::UpdateRow
         if (pColData->dwStatus != DBSTATUS_S_ISNULL)
         {
             switch (m_rgswColType[cCols])
-			{
+            {
             case TYPE_CHAR:
-				StringCchCopyNA( szTmpBuff, sizeof(szTmpBuff), (LPSTR)pColData->bData, pColData->uLength );
-				StringCchPrintfExA( pvInput, MAX_INPUT_BUFFER, &pvInput, &nCnt, 0, "\"%s\"", szTmpBuff );
+                StringCchCopyNA( szTmpBuff, sizeof(szTmpBuff), (LPSTR)pColData->bData, pColData->uLength );
+                StringCchPrintfExA( pvInput, MAX_INPUT_BUFFER, &pvInput, &nCnt, 0, "\"%s\"", szTmpBuff );
                 break;
 
             case TYPE_SLONG:
@@ -751,8 +752,8 @@ HRESULT CFileIO::UpdateRow
     }
 
     // Write Stream to File
-	// If Update change in place or InsertRow add to the end
-	seekg( m_FileIdx.GetRowOffset( ulRow ) );
+    // If Update change in place or InsertRow add to the end
+    seekg( m_FileIdx.GetRowOffset( ulRow ) );
 
     clear();
     write( m_pvInput, lstrlen( m_pvInput ));
@@ -784,22 +785,22 @@ HRESULT CFileIO::GatherColumnInfo()
     SWORD           swCSVType;
     UDWORD          cbColDef;
     DWORD           dwdbtype;
-	BOOL			fSigned;
-	SDWORD *		rgcbLen = NULL;
-	DBLENGTH *		rgdwOffsets = NULL;
+    BOOL			fSigned;
+    SDWORD *		rgcbLen = NULL;
+    DBLENGTH *		rgdwOffsets = NULL;
 
-	// Heap for column names.
+    // Heap for column names.
     // Commit it all, then de-commit and release once we know size.
     m_pbHeap = (BYTE *) VirtualAlloc( NULL,
                                       MAX_HEAP_SIZE,
                                       MEM_RESERVE | MEM_COMMIT,
                                       PAGE_READWRITE );
 
-	if( !m_pbHeap )
-	{
-		hr = ResultFromScode(E_OUTOFMEMORY);
-		goto EXIT;
-	}
+    if( !m_pbHeap )
+    {
+        hr = ResultFromScode(E_OUTOFMEMORY);
+        goto EXIT;
+    }
 
     //----------------------------------
     // Gather column info
@@ -809,26 +810,26 @@ HRESULT CFileIO::GatherColumnInfo()
     cchFree = MAX_HEAP_SIZE / 2;
 
     pcolinfo	= &(m_rgdbcolinfo[1]);
-	rgcbLen		= m_rgsdwMaxLen;
-	rgdwOffsets = m_rgdwDataOffsets;
+    rgcbLen		= m_rgsdwMaxLen;
+    rgdwOffsets = m_rgdwDataOffsets;
 
     dwOffset = offsetof( ROWBUFF, cdData );
 
     for (cCols=1; cCols <= m_cColumns; cCols++, pcolinfo++)
-        {
+    {
         LPTSTR ptstrName;
 
         // Get Column Names and Lengths
         hr = GetColumnName(cCols, &ptstrName);
         if (FAILED( hr ))
-			{
+        {
             hr = ResultFromScode( E_FAIL );
-			goto EXIT;
-			}
+            goto EXIT;
+        }
 
         // Store the Column Name in the Heap
         if (cchFree)
-            {
+        {
             cbName = lstrlen( ptstrName );
             if (cbName)
                 cchWide = MultiByteToWideChar( CP_ACP, MB_PRECOMPOSED, ptstrName, (int) cbName, lpwstr, cchFree );
@@ -839,22 +840,22 @@ HRESULT CFileIO::GatherColumnInfo()
 
             cchFree -= cchWide;
             if (cchFree)
-                {
+            {
                 *lpwstr++ = 0;
                 cchFree--;
-                }
+            }
             else
                 *(lpwstr - 1) = 0;
-            }
+        }
         else
             pcolinfo->pwszName = NULL;
 
         // Get DataTypes and Precision
         hr = GetDataTypes(cCols,
-                        &swCSVType, // CSV data type
-                        &cbColDef,  // Precision
-                        &fSigned	// Signed or Unsigned
-                        );
+                          &swCSVType, // CSV data type
+                          &cbColDef,  // Precision
+                          &fSigned	// Signed or Unsigned
+                         );
         if (FAILED( hr ))
             return ResultFromScode( E_FAIL );
 
@@ -868,10 +869,10 @@ HRESULT CFileIO::GatherColumnInfo()
                                          fSigned,					// in
                                          &dwdbtype );				// out, DBTYPE to show client
         if (FAILED( hr ))
-			{
+        {
             hr = ResultFromScode( E_FAIL );
-			goto EXIT;
-			}
+            goto EXIT;
+        }
 
         // Check for overflow of size.
         rgcbLen[cCols] = cbColDef;
@@ -881,17 +882,17 @@ HRESULT CFileIO::GatherColumnInfo()
         pcolinfo->wType			= (DBTYPE) dwdbtype;
         pcolinfo->pTypeInfo     = NULL;
         pcolinfo->ulColumnSize  = rgcbLen[cCols];
-		pcolinfo->bPrecision	= (BYTE) ~0;
-		pcolinfo->bScale		= (BYTE) ~0;
+        pcolinfo->bPrecision	= (BYTE) ~0;
+        pcolinfo->bScale		= (BYTE) ~0;
         pcolinfo->dwFlags       = 0;
 
         // Is it a string datatype
-		if(pcolinfo->wType != DBTYPE_STR)
-			pcolinfo->bPrecision = (BYTE)cbColDef;
+        if(pcolinfo->wType != DBTYPE_STR)
+            pcolinfo->bPrecision = (BYTE)cbColDef;
 
         // Is it a fixed length datatype
         if(pcolinfo->wType != DBTYPE_STR)
-	        pcolinfo->dwFlags |= DBCOLUMNFLAGS_ISFIXEDLENGTH;
+            pcolinfo->dwFlags |= DBCOLUMNFLAGS_ISFIXEDLENGTH;
 
         // We do support nulls
         pcolinfo->dwFlags |= DBCOLUMNFLAGS_ISNULLABLE;
@@ -905,7 +906,7 @@ HRESULT CFileIO::GatherColumnInfo()
         dwOffset = ROUND_UP( dwOffset, COLUMN_ALIGNVAL );
         rgdwOffsets[cCols] = dwOffset;
         dwOffset += offsetof( COLUMNDATA, bData ) + rgcbLen[cCols];
-        }
+    }
 
     m_cbRowSize = ROUND_UP( dwOffset, COLUMN_ALIGNVAL );
     m_cbHeapUsed = MAX_HEAP_SIZE - 2*cchFree;
@@ -922,28 +923,28 @@ HRESULT CFileIO::GatherColumnInfo()
     assert( '\0' == (*lpwstr = '\0'));  // We shouldn't generate a mem fault.
 
 EXIT:
-	if( FAILED(hr) )
-	{
-		if( m_pbHeap )
-		{
-			VirtualFree((VOID *) m_pbHeap, 0, MEM_RELEASE );
-		}
-		m_cbRowSize = m_cbHeapUsed = 0;
-		return hr;	
-	}
-	else
-		return ResultFromScode( S_OK );
+    if( FAILED(hr) )
+    {
+        if( m_pbHeap )
+        {
+            VirtualFree((VOID *) m_pbHeap, 0, MEM_RELEASE );
+        }
+        m_cbRowSize = m_cbHeapUsed = 0;
+        return hr;
+    }
+    else
+        return ResultFromScode( S_OK );
 }
 
 //--------------------------------------------------------------------
-// @mfunc Given a ROWBUFF and a column ordinal, this function 
+// @mfunc Given a ROWBUFF and a column ordinal, this function
 // returns a ptr to a particular column's COLUMNDATA
 //
 //
 COLUMNDATA * CFileIO::GetColumnData
 (
-	DBORDINAL	cCols,
-	ROWBUFF *	pRowBuff
+    DBORDINAL	cCols,
+    ROWBUFF *	pRowBuff
 )
 {
     assert( is_open());

@@ -1,21 +1,21 @@
-/////////////////////////////////////////////////////////////////////////
-// Copyright © 2006 Microsoft Corporation. All rights reserved.
-// 
-//  This file may contain preliminary information or inaccuracies, 
-//  and may not correctly represent any associated Microsoft 
-//  Product as commercially released. All Materials are provided entirely 
-//  ìAS IS.î To the extent permitted by law, MICROSOFT MAKES NO 
-//  WARRANTY OF ANY KIND, DISCLAIMS ALL EXPRESS, IMPLIED AND STATUTORY 
-//  WARRANTIES, AND ASSUMES NO LIABILITY TO YOU FOR ANY DAMAGES OF 
-//  ANY TYPE IN CONNECTION WITH THESE MATERIALS OR ANY INTELLECTUAL PROPERTY IN THEM. 
-// 
+Ôªø/////////////////////////////////////////////////////////////////////////
+// Copyright ¬© 2006 Microsoft Corporation. All rights reserved.
+//
+//  This file may contain preliminary information or inaccuracies,
+//  and may not correctly represent any associated Microsoft
+//  Product as commercially released. All Materials are provided entirely
+//  ‚ÄúAS IS.‚Äù To the extent permitted by law, MICROSOFT MAKES NO
+//  WARRANTY OF ANY KIND, DISCLAIMS ALL EXPRESS, IMPLIED AND STATUTORY
+//  WARRANTIES, AND ASSUMES NO LIABILITY TO YOU FOR ANY DAMAGES OF
+//  ANY TYPE IN CONNECTION WITH THESE MATERIALS OR ANY INTELLECTUAL PROPERTY IN THEM.
+//
 
 
 #pragma once
 
 
 // The type of a file descriptor
-typedef enum 
+typedef enum
 {
     VSS_FDT_UNDEFINED = 0,
     VSS_FDT_EXCLUDE_FILES,
@@ -31,18 +31,18 @@ typedef enum
 
 struct VssFileDescriptor
 {
-    VssFileDescriptor(): 
-        isRecursive(false), 
+    VssFileDescriptor():
+        isRecursive(false),
         type(VSS_FDT_UNDEFINED)
-        {};
+    {};
 
     // Initialize from a IVssWMFiledesc
     void Initialize(
-        IVssWMFiledesc * pFileDesc, 
+        IVssWMFiledesc * pFileDesc,
         VSS_DESCRIPTOR_TYPE typeParam
-        );
+    );
 
-    // Print this file descriptor 
+    // Print this file descriptor
     void Print();
 
     // Get the string representation of the type
@@ -77,7 +77,7 @@ struct VssDependency
     // Initialize from a IVssWMDependency
     void Initialize(
         IVssWMDependency * pDependency
-        );
+    );
 
     // Print this dependency
     void Print();
@@ -101,14 +101,14 @@ struct VssDependency
 
 struct VssComponent
 {
-    VssComponent(): 
+    VssComponent():
         type(VSS_CT_UNDEFINED),
         isSelectable(false),
         notifyOnBackupComplete(false),
         isTopLevel(false),
         isExcluded(false),
         isExplicitlyIncluded(false)
-        {};
+    {};
 
     // Initialize from a IVssWMComponent
     void Initialize(wstring writerNameParam, IVssWMComponent * pComponent);
@@ -160,13 +160,13 @@ struct VssComponent
 
 struct VssWriter
 {
-    VssWriter(): 
+    VssWriter():
         isExcluded(false),
         supportsRestore(false),
         restoreMethod(VSS_RME_UNDEFINED),
         writerRestoreConditions(VSS_WRE_UNDEFINED),
         rebootRequiredAfterRestore(false)
-        {};
+    {};
 
     // Initialize from a IVssWMFiledesc
     void Initialize(IVssExamineWriterMetadata * pMetadata);

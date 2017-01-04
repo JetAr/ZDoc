@@ -1,4 +1,4 @@
-/********************************************************************
+﻿/********************************************************************
 THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED
 TO THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -46,29 +46,29 @@ Note:
 void PrintMenu()
 {
     wprintf(L"\n"
-           L"Sign In and Endpoint Info                 Presence\n"
-           L"  1.  Sign In                               16. Get presence information\n"
-           L"  2.  Sign Out                              17. Set presence information\n"                         
-           L"  3.  Display Sign In Options\n"
-           L"  4.  Set our endpoint name               Publication\n"
-           L"  5.  Get our endpoint name                 18. Subscribe to a PNM endpoint\n"
-           L"  6.  Display endpoint info                 19. Unsubscribe from a PNM endpoint\n"
-           L"                                            20. Publish an object\n"
-           L"People Near Me                              21. Delete a published object\n"
-           L"  7.  Enumerate PNM\n"                  
-           L"  8.  Add a PNM endpoint to contacts      Invitations\n"
-           L"                                            22. Register this Application\n"
-           L"Contacts                                    23. Unregister this Application\n"
-           L"  9.  Export \"Me\" Contact                   24. Display Registered Applications\n"
-           L"  10. Parse Contact                         25. Send Invitation\n"
-           L"  11. Import Contact\n"
-           L"  12. Delete Contact\n"
-           L"  13. Display Contacts\n"
-           L"  14. Set contact watch state\n"
-           L"  15. Set watch permissions\n"
-           L"\n"
-           L"  Q. Quit\n"
-           L"> ");
+            L"Sign In and Endpoint Info                 Presence\n"
+            L"  1.  Sign In                               16. Get presence information\n"
+            L"  2.  Sign Out                              17. Set presence information\n"
+            L"  3.  Display Sign In Options\n"
+            L"  4.  Set our endpoint name               Publication\n"
+            L"  5.  Get our endpoint name                 18. Subscribe to a PNM endpoint\n"
+            L"  6.  Display endpoint info                 19. Unsubscribe from a PNM endpoint\n"
+            L"                                            20. Publish an object\n"
+            L"People Near Me                              21. Delete a published object\n"
+            L"  7.  Enumerate PNM\n"
+            L"  8.  Add a PNM endpoint to contacts      Invitations\n"
+            L"                                            22. Register this Application\n"
+            L"Contacts                                    23. Unregister this Application\n"
+            L"  9.  Export \"Me\" Contact                   24. Display Registered Applications\n"
+            L"  10. Parse Contact                         25. Send Invitation\n"
+            L"  11. Import Contact\n"
+            L"  12. Delete Contact\n"
+            L"  13. Display Contacts\n"
+            L"  14. Set contact watch state\n"
+            L"  15. Set watch permissions\n"
+            L"\n"
+            L"  Q. Quit\n"
+            L"> ");
 
 
 }
@@ -107,7 +107,7 @@ void RunMenu()
             break;
         }
 
-        // since wtoi can't distinguish between 0 and an error, note that valid values start at 1, not 0    
+        // since wtoi can't distinguish between 0 and an error, note that valid values start at 1, not 0
         nInput = _wtoi(wzBuff);
         if (nInput < 1  || nInput > 25)
         {
@@ -117,116 +117,116 @@ void RunMenu()
 
         switch (nInput)
         {
-            case 1:
-                SignIn();
-                break;
+        case 1:
+            SignIn();
+            break;
 
-            case 2:
-                SignOut();
-                break;
+        case 2:
+            SignOut();
+            break;
 
-            case 3:
-                SignInOptions();
-                break;
+        case 3:
+            SignInOptions();
+            break;
 
-            case 4:
-                SetEndpointName();
-                break;
+        case 4:
+            SetEndpointName();
+            break;
 
-            case 5:
-                GetEndpointName();
-                break;
+        case 5:
+            GetEndpointName();
+            break;
 
-            case 6:
-                DisplayEndpointInformation();
-                break;
+        case 6:
+            DisplayEndpointInformation();
+            break;
 
-            case 7:
-                EnumeratePeopleNearMe();
-                break;
+        case 7:
+            EnumeratePeopleNearMe();
+            break;
 
-            case 8:
-                AddEndpointAsContact();
-                break;
+        case 8:
+            AddEndpointAsContact();
+            break;
 
-            case 9:
-                ExportContact();
-                break;
+        case 9:
+            ExportContact();
+            break;
 
-            case 10:
-                ParseContact();
-                break;
-            
-            case 11:
-                ImportContact();
-                break;
-            
-            case 12:
-                DeleteContact();
-                break;
+        case 10:
+            ParseContact();
+            break;
 
-            case 13:
-                EnumContacts();
-                break;
-            
-            case 14:
-                SetWatching();
-                break;
+        case 11:
+            ImportContact();
+            break;
 
-            case 15:
-                SetWatchPermissions();
-                break;
+        case 12:
+            DeleteContact();
+            break;
 
-            case 16:
-                GetPresenceInformation();
-                break;
-                    
-            case 17:
-                SetPresenceInformation();
-                break;
+        case 13:
+            EnumContacts();
+            break;
 
-            case 18:
-                SubscribeEndpointData();
-                break;
+        case 14:
+            SetWatching();
+            break;
 
-            case 19:
-                UnsubscribeEndpointData();
-                break;
+        case 15:
+            SetWatchPermissions();
+            break;
 
-            case 20:
-                PublishEndpointObject();
-                break;
+        case 16:
+            GetPresenceInformation();
+            break;
 
-            case 21:
-                DeleteEndpointObject();
-                break;
-                                    
-            case 22:
-                RegisterApplication();
-                break;
+        case 17:
+            SetPresenceInformation();
+            break;
 
-            case 23:
-                UnregisterApplication();
-                break;
+        case 18:
+            SubscribeEndpointData();
+            break;
 
-            case 24:
-                DisplayApplicationRegistrations();
-                break;
+        case 19:
+            UnsubscribeEndpointData();
+            break;
 
-            case 25:
-                SendInvite();
-                break;
+        case 20:
+            PublishEndpointObject();
+            break;
 
-            default:
-                wprintf(L"Invalid selection.\n");
-                break;
+        case 21:
+            DeleteEndpointObject();
+            break;
+
+        case 22:
+            RegisterApplication();
+            break;
+
+        case 23:
+            UnregisterApplication();
+            break;
+
+        case 24:
+            DisplayApplicationRegistrations();
+            break;
+
+        case 25:
+            SendInvite();
+            break;
+
+        default:
+            wprintf(L"Invalid selection.\n");
+            break;
 
         }
 
         //Pause so that our output doesn't scroll
         //off the screen before the user gets a change to
         //read it.
-         wprintf(L"\n\nPress <ENTER> to continue.\n");
+        wprintf(L"\n\nPress <ENTER> to continue.\n");
         fflush(stdin);
         (void)StringCbGets(wzBuff, sizeof(wzBuff));
     }
@@ -252,13 +252,13 @@ int __cdecl wmain(int argc, __in_ecount(argc) wchar_t *argv[])
     {
         if (wcscmp(argv[1], L"/invite") == 0)
         {
-            // When we regsiter ourselves to be launched in response to an 
+            // When we regsiter ourselves to be launched in response to an
             // invite we specify that the command line argument "/invite"
             // should be used
             //
             DisplayAppLauchInfo();
         }
-        else if (wcscmp(argv[1], L"/showevents") == 0) 
+        else if (wcscmp(argv[1], L"/showevents") == 0)
         {
             //Run the event handler.  This will return once the
             //process running the interactive menu exits

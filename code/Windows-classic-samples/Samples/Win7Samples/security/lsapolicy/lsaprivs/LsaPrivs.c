@@ -1,4 +1,4 @@
-/*---------------------------------------------------------------
+﻿/*---------------------------------------------------------------
 
 THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED
@@ -39,14 +39,14 @@ OpenPolicy(
     LPWSTR ServerName,          // machine to open policy on (Unicode)
     DWORD DesiredAccess,        // desired access to policy
     PLSA_HANDLE PolicyHandle    // resultant policy handle
-    );
+);
 
 BOOL
 GetAccountSid(
     LPTSTR SystemName,          // where to lookup account
     LPTSTR AccountName,         // account of interest
     PSID *Sid                   // resultant buffer containing SID
-    );
+);
 
 NTSTATUS
 SetPrivilegeOnAccount(
@@ -54,25 +54,25 @@ SetPrivilegeOnAccount(
     PSID AccountSid,            // SID to grant privilege to
     LPWSTR PrivilegeName,       // privilege to grant (Unicode)
     BOOL bEnable                // enable or disable
-    );
+);
 
 void
 InitLsaString(
     PLSA_UNICODE_STRING LsaString, // destination
     LPWSTR String                  // source (Unicode)
-    );
+);
 
 void
 DisplayNtStatus(
     LPSTR szAPI,                // pointer to function name (ANSI)
     NTSTATUS Status             // NTSTATUS error value
-    );
+);
 
 void
 DisplayWinError(
     LPSTR szAPI,                // pointer to function name (ANSI)
     DWORD WinError              // DWORD WinError
-    );
+);
 
 #define RTN_OK 0
 #define RTN_USAGE 1
@@ -90,7 +90,7 @@ __cdecl
 main(
     int argc,
     char *argv[]
-    )
+)
 {
     LSA_HANDLE PolicyHandle;
     WCHAR wComputerName[256]=L"";   // static machine name buffer
@@ -99,7 +99,8 @@ main(
     NTSTATUS Status;
     int iRetVal=RTN_ERROR;          // assume error from main
 
-    if(argc == 1) {
+    if(argc == 1)
+    {
         fprintf(stderr,"Usage: %s <Account> [TargetMachine]\n", argv[0]);
         return RTN_USAGE;
     }
@@ -117,15 +118,16 @@ main(
     if(argc == 3) _snwprintf_s(wComputerName, 256, 255, L"%hS", argv[2]);
 
     //
-    // Open the policy on the target machine. 
+    // Open the policy on the target machine.
     //
     Status = OpenPolicy(
-                wComputerName,      // target machine
-                POLICY_CREATE_ACCOUNT | POLICY_LOOKUP_NAMES,
-                &PolicyHandle       // resultant policy handle
-                );
+                 wComputerName,      // target machine
+                 POLICY_CREATE_ACCOUNT | POLICY_LOOKUP_NAMES,
+                 &PolicyHandle       // resultant policy handle
+             );
 
-    if(Status != STATUS_SUCCESS) {
+    if(Status != STATUS_SUCCESS)
+    {
         DisplayNtStatus("OpenPolicy", Status);
         return RTN_ERROR;
     }
@@ -138,10 +140,11 @@ main(
     // trusted domains.
     //
     if(GetAccountSid(
-            NULL,       // default lookup logic
-            AccountName,// account to obtain SID
-            &pSid       // buffer to allocate to contain resultant SID
-            )) {
+                NULL,       // default lookup logic
+                AccountName,// account to obtain SID
+                &pSid       // buffer to allocate to contain resultant SID
+            ))
+    {
         //
         // We only grant the privilege if we succeeded in obtaining the
         // SID. We can actually add SIDs which cannot be looked up, but
@@ -152,18 +155,19 @@ main(
         // Grant the SeServiceLogonRight to users represented by pSid.
         //
         Status = SetPrivilegeOnAccount(
-                    PolicyHandle,           // policy handle
-                    pSid,                   // SID to grant privilege
-                    L"SeServiceLogonRight", // Unicode privilege
-                    TRUE                    // enable the privilege
-                    );
+                     PolicyHandle,           // policy handle
+                     pSid,                   // SID to grant privilege
+                     L"SeServiceLogonRight", // Unicode privilege
+                     TRUE                    // enable the privilege
+                 );
 
         if(Status == STATUS_SUCCESS)
             iRetVal=RTN_OK;
         else
             DisplayNtStatus("SetPrivilegeOnAccount", Status);
     }
-    else {
+    else
+    {
         //
         // Error obtaining SID.
         //
@@ -202,7 +206,7 @@ GetAccountSid(
     LPTSTR SystemName,
     LPTSTR AccountName,
     PSID *Sid
-    )
+)
 {
     LPTSTR ReferencedDomain=NULL;
     LPTSTR TempReferencedDomain = NULL;
@@ -212,27 +216,28 @@ GetAccountSid(
     SID_NAME_USE peUse;
     BOOL bSuccess=FALSE; // assume this function will fail
 
-    __try {
+    __try
+    {
 
-    //
-    // initial memory allocations
-    //
-    *Sid = (PSID)HeapAlloc(GetProcessHeap(), 0, cbSid);
+        //
+        // initial memory allocations
+        //
+        *Sid = (PSID)HeapAlloc(GetProcessHeap(), 0, cbSid);
 
-    if(*Sid == NULL) __leave;
+        if(*Sid == NULL) __leave;
 
-    ReferencedDomain = (LPTSTR)HeapAlloc(
-                    GetProcessHeap(),
-                    0,
-                    cchReferencedDomain * sizeof(TCHAR)
-                    );
+        ReferencedDomain = (LPTSTR)HeapAlloc(
+                               GetProcessHeap(),
+                               0,
+                               cchReferencedDomain * sizeof(TCHAR)
+                           );
 
-    if(ReferencedDomain == NULL) __leave;
+        if(ReferencedDomain == NULL) __leave;
 
-    //
-    // Obtain the SID of the specified account on the specified system.
-    //
-    while(!LookupAccountName(
+        //
+        // Obtain the SID of the specified account on the specified system.
+        //
+        while(!LookupAccountName(
                     SystemName,         // machine to lookup account on
                     AccountName,        // account to lookup
                     *Sid,               // SID of interest
@@ -240,55 +245,60 @@ GetAccountSid(
                     ReferencedDomain,   // domain account was found on
                     &cchReferencedDomain,
                     &peUse
-                    )) {
-        if (GetLastError() == ERROR_INSUFFICIENT_BUFFER) {
-            //
-            // reallocate memory
-            //
-            TempSid  = (PSID)HeapReAlloc(
-                        GetProcessHeap(),
-                        0,
-                        *Sid,
-                        cbSid
-                        );
+                ))
+        {
+            if (GetLastError() == ERROR_INSUFFICIENT_BUFFER)
+            {
+                //
+                // reallocate memory
+                //
+                TempSid  = (PSID)HeapReAlloc(
+                               GetProcessHeap(),
+                               0,
+                               *Sid,
+                               cbSid
+                           );
 
-            if(TempSid  == NULL) __leave;
-            *Sid = TempSid;
+                if(TempSid  == NULL) __leave;
+                *Sid = TempSid;
 
-            TempReferencedDomain = (LPTSTR)HeapReAlloc(
-                        GetProcessHeap(),
-                        0,
-                        ReferencedDomain,
-                        cchReferencedDomain * sizeof(TCHAR)
-                        );
+                TempReferencedDomain = (LPTSTR)HeapReAlloc(
+                                           GetProcessHeap(),
+                                           0,
+                                           ReferencedDomain,
+                                           cchReferencedDomain * sizeof(TCHAR)
+                                       );
 
-            if(TempReferencedDomain == NULL) __leave;
-            ReferencedDomain = TempReferencedDomain;
-              
+                if(TempReferencedDomain == NULL) __leave;
+                ReferencedDomain = TempReferencedDomain;
+
+            }
+            else __leave;
         }
-        else __leave;
-    }
 
-    //
-    // Indicate success.
-    //
-    bSuccess=TRUE;
+        //
+        // Indicate success.
+        //
+        bSuccess=TRUE;
 
     } // try
-    __finally {
+    __finally
+    {
 
-    //
-    // Cleanup and indicate failure, if appropriate.
-    //
+        //
+        // Cleanup and indicate failure, if appropriate.
+        //
 
-    HeapFree(GetProcessHeap(), 0, ReferencedDomain);
+        HeapFree(GetProcessHeap(), 0, ReferencedDomain);
 
-    if(!bSuccess) {
-        if(*Sid != NULL) {
-            HeapFree(GetProcessHeap(), 0, *Sid);
-            *Sid = NULL;
+        if(!bSuccess)
+        {
+            if(*Sid != NULL)
+            {
+                HeapFree(GetProcessHeap(), 0, *Sid);
+                *Sid = NULL;
+            }
         }
-    }
 
     } // finally
 
@@ -301,7 +311,7 @@ SetPrivilegeOnAccount(
     PSID AccountSid,            // SID to grant privilege to
     LPWSTR PrivilegeName,       // privilege to grant (Unicode)
     BOOL bEnable                // enable or disable
-    )
+)
 {
     LSA_UNICODE_STRING PrivilegeString;
 
@@ -313,22 +323,24 @@ SetPrivilegeOnAccount(
     //
     // grant or revoke the privilege, accordingly
     //
-    if(bEnable) {
+    if(bEnable)
+    {
         return LsaAddAccountRights(
-                PolicyHandle,       // open policy handle
-                AccountSid,         // target SID
-                &PrivilegeString,   // privileges
-                1                   // privilege count
-                );
+                   PolicyHandle,       // open policy handle
+                   AccountSid,         // target SID
+                   &PrivilegeString,   // privileges
+                   1                   // privilege count
+               );
     }
-    else {
+    else
+    {
         return LsaRemoveAccountRights(
-                PolicyHandle,       // open policy handle
-                AccountSid,         // target SID
-                FALSE,              // do not disable all rights
-                &PrivilegeString,   // privileges
-                1                   // privilege count
-                );
+                   PolicyHandle,       // open policy handle
+                   AccountSid,         // target SID
+                   FALSE,              // do not disable all rights
+                   &PrivilegeString,   // privileges
+                   1                   // privilege count
+               );
     }
 }
 
@@ -336,11 +348,12 @@ void
 InitLsaString(
     PLSA_UNICODE_STRING LsaString,
     LPWSTR String
-    )
+)
 {
     DWORD StringLength;
 
-    if(String == NULL) {
+    if(String == NULL)
+    {
         LsaString->Buffer = NULL;
         LsaString->Length = 0;
         LsaString->MaximumLength = 0;
@@ -358,7 +371,7 @@ OpenPolicy(
     LPWSTR ServerName,
     DWORD DesiredAccess,
     PLSA_HANDLE PolicyHandle
-    )
+)
 {
     LSA_OBJECT_ATTRIBUTES ObjectAttributes;
     LSA_UNICODE_STRING ServerString;
@@ -369,13 +382,16 @@ OpenPolicy(
     //
     ZeroMemory(&ObjectAttributes, sizeof(ObjectAttributes));
 
-    if (ServerName != NULL) {
+    if (ServerName != NULL)
+    {
         //
         // Make a LSA_UNICODE_STRING out of the LPWSTR passed in
         //
         InitLsaString(&ServerString, ServerName);
         Server = &ServerString;
-    } else {
+    }
+    else
+    {
         Server = NULL;
     }
 
@@ -383,18 +399,18 @@ OpenPolicy(
     // Attempt to open the policy.
     //
     return LsaOpenPolicy(
-                Server,
-                &ObjectAttributes,
-                DesiredAccess,
-                PolicyHandle
-                );
+               Server,
+               &ObjectAttributes,
+               DesiredAccess,
+               PolicyHandle
+           );
 }
 
 void
 DisplayNtStatus(
     LPSTR szAPI,
     NTSTATUS Status
-    )
+)
 {
     //
     // Convert the NTSTATUS to Winerror. Then call DisplayWinError().
@@ -406,7 +422,7 @@ void
 DisplayWinError(
     LPSTR szAPI,
     DWORD WinError
-    )
+)
 {
     LPSTR MessageBuffer;
     DWORD dwBufferLength;
@@ -417,15 +433,15 @@ DisplayWinError(
     fprintf(stderr,"%s error!\n", szAPI);
 
     if(dwBufferLength=FormatMessageA(
-                        FORMAT_MESSAGE_ALLOCATE_BUFFER |
-                        FORMAT_MESSAGE_FROM_SYSTEM,
-                        NULL,
-                        WinError,
-                        MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
-                        (LPSTR) &MessageBuffer,
-                        0,
-                        NULL
-                        ))
+                          FORMAT_MESSAGE_ALLOCATE_BUFFER |
+                          FORMAT_MESSAGE_FROM_SYSTEM,
+                          NULL,
+                          WinError,
+                          MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
+                          (LPSTR) &MessageBuffer,
+                          0,
+                          NULL
+                      ))
     {
         DWORD dwBytesWritten; // unused
 
@@ -438,7 +454,7 @@ DisplayWinError(
             dwBufferLength,
             &dwBytesWritten,
             NULL
-            );
+        );
 
         //
         // Free the buffer allocated by the system.

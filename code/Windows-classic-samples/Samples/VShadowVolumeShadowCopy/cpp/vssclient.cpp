@@ -1,14 +1,14 @@
-/////////////////////////////////////////////////////////////////////////
-// Copyright © Microsoft Corporation. All rights reserved.
-// 
-//  This file may contain preliminary information or inaccuracies, 
-//  and may not correctly represent any associated Microsoft 
-//  Product as commercially released. All Materials are provided entirely 
-//  “AS IS.” To the extent permitted by law, MICROSOFT MAKES NO 
-//  WARRANTY OF ANY KIND, DISCLAIMS ALL EXPRESS, IMPLIED AND STATUTORY 
-//  WARRANTIES, AND ASSUMES NO LIABILITY TO YOU FOR ANY DAMAGES OF 
-//  ANY TYPE IN CONNECTION WITH THESE MATERIALS OR ANY INTELLECTUAL PROPERTY IN THEM. 
-// 
+ï»¿/////////////////////////////////////////////////////////////////////////
+// Copyright Â© Microsoft Corporation. All rights reserved.
+//
+//  This file may contain preliminary information or inaccuracies,
+//  and may not correctly represent any associated Microsoft
+//  Product as commercially released. All Materials are provided entirely
+//  â€œAS IS.â€ To the extent permitted by law, MICROSOFT MAKES NO
+//  WARRANTY OF ANY KIND, DISCLAIMS ALL EXPRESS, IMPLIED AND STATUTORY
+//  WARRANTIES, AND ASSUMES NO LIABILITY TO YOU FOR ANY DAMAGES OF
+//  ANY TYPE IN CONNECTION WITH THESE MATERIALS OR ANY INTELLECTUAL PROPERTY IN THEM.
+//
 
 
 // Main header
@@ -29,10 +29,10 @@ VssClient::VssClient()
 // Destructor
 VssClient::~VssClient()
 {
-    // Release the IVssBackupComponents interface 
+    // Release the IVssBackupComponents interface
     // WARNING: this must be done BEFORE calling CoUninitialize()
     m_pVssObject = NULL;
-    
+
     // Call CoUninitialize if the CoInitialize was performed sucesfully
     if (m_bCoInitializeCalled)
         CoUninitialize();
@@ -44,27 +44,27 @@ void VssClient::Initialize(DWORD dwContext, wstring xmlDoc, bool bDuringRestore)
 {
     FunctionTracer ft(DBG_INFO);
 
-    // Initialize COM 
+    // Initialize COM
     CHECK_COM( CoInitialize(NULL) );
     m_bCoInitializeCalled = true;
 
     // Initialize COM security
-    CHECK_COM( 
+    CHECK_COM(
         CoInitializeSecurity(
             NULL,                           //  Allow *all* VSS writers to communicate back!
             -1,                             //  Default COM authentication service
             NULL,                           //  Default COM authorization service
             NULL,                           //  reserved parameter
             RPC_C_AUTHN_LEVEL_PKT_PRIVACY,  //  Strongest COM authentication level
-            RPC_C_IMP_LEVEL_IMPERSONATE,    //  Minimal impersonation abilities 
+            RPC_C_IMP_LEVEL_IMPERSONATE,    //  Minimal impersonation abilities
             NULL,                           //  Default COM authentication settings
             EOAC_DYNAMIC_CLOAKING,          //  Cloaking
             NULL                            //  Reserved parameter
-            ) );
+        ) );
 
     // Create the internal backup components object
     CHECK_COM( CreateVssBackupComponents(&m_pVssObject) );
-    
+
     // We are during restore now?
     m_bDuringRestore = bDuringRestore;
 
@@ -78,17 +78,17 @@ void VssClient::Initialize(DWORD dwContext, wstring xmlDoc, bool bDuringRestore)
         // Initialize for backup
         if (xmlDoc.length() == 0)
             CHECK_COM(m_pVssObject->InitializeForBackup())
-        else
-            CHECK_COM(m_pVssObject->InitializeForBackup(CComBSTR(xmlDoc.c_str())))
+            else
+                CHECK_COM(m_pVssObject->InitializeForBackup(CComBSTR(xmlDoc.c_str())))
 
 #ifdef VSS_SERVER
 
-        // Set the context, if different than the default context
-        if (dwContext != VSS_CTX_BACKUP)
-        {
-            ft.WriteLine(L"- Setting the VSS context to: 0x%08lx", dwContext);
-            CHECK_COM(m_pVssObject->SetContext(dwContext) );
-        }
+                // Set the context, if different than the default context
+                if (dwContext != VSS_CTX_BACKUP)
+                {
+                    ft.WriteLine(L"- Setting the VSS context to: 0x%08lx", dwContext);
+                    CHECK_COM(m_pVssObject->SetContext(dwContext) );
+                }
 
 #endif
 

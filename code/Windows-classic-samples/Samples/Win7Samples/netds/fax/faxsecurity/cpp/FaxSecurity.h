@@ -1,4 +1,4 @@
-#ifndef __FAXSECURITY_SAMPLE
+﻿#ifndef __FAXSECURITY_SAMPLE
 //==========================================================================
 //
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF

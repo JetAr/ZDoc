@@ -1,4 +1,4 @@
-//////////////////////////////////////////////////////////////////////////////
+﻿//////////////////////////////////////////////////////////////////////////////
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -34,19 +34,19 @@ class CClientNotificationSink : public IWSDiscoveryProviderNotify
 public:
     //////////////////////////////////////////////////////////////////////////
     // IWSDiscoveryProviderNotify methods for the client-side callback
-    // routines.  
+    // routines.
     //////////////////////////////////////////////////////////////////////////
 
     // Add is called when a Hello, ResolveMatches, or ProbeMatches message is processed.
     HRESULT STDMETHODCALLTYPE Add
     (   _In_ IWSDiscoveredService *service
     );
-    
+
     // Remove is called when a Bye is processed.
     HRESULT STDMETHODCALLTYPE Remove
     (   _In_ IWSDiscoveredService *service
     );
-    
+
     // SearchFailed is called when the search request initiated by
     // IWSDiscoveryProvider failed, which includes the case when
     // no target services matches the Probe or Resolve messages.
@@ -54,9 +54,9 @@ public:
     // query.  See MSDN documentation for details.
     HRESULT STDMETHODCALLTYPE SearchFailed
     (   _In_ HRESULT hr
-    ,   _In_opt_ LPCWSTR tag
+        ,   _In_opt_ LPCWSTR tag
     );
-    
+
     // SearchComplete is called when the search request initiated by
     // IWSDiscoveryProvider has successfully been processed.
     // This method is typically called after 10 seconds of the initial
@@ -75,7 +75,7 @@ public:
 
     HRESULT STDMETHODCALLTYPE QueryInterface
     (   _In_ REFIID riid
-    ,   _Outptr_ __RPC__deref_out void __RPC_FAR *__RPC_FAR *object
+        ,   _Outptr_ __RPC__deref_out void __RPC_FAR *__RPC_FAR *object
     );
 
     ULONG STDMETHODCALLTYPE AddRef();

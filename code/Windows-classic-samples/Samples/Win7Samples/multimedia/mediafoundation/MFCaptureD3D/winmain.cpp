@@ -1,7 +1,7 @@
-//////////////////////////////////////////////////////////////////////////
+﻿//////////////////////////////////////////////////////////////////////////
 //
 // winmain.cpp : Application entry-point
-// 
+//
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -60,7 +60,7 @@ void    OnDeviceChange(HWND hwnd, DEV_BROADCAST_HDR *pHdr);
 void    OnChooseDevice(HWND hwnd, BOOL bPrompt);
 
 
-// Constants 
+// Constants
 const WCHAR CLASS_NAME[]  = L"MFCapture Window Class";
 const WCHAR WINDOW_NAME[] = L"MFCapture Sample Application";
 
@@ -74,7 +74,7 @@ HDEVNOTIFY  g_hdevnotify = NULL;
 //-------------------------------------------------------------------
 // WinMain
 //
-// Application entry-point. 
+// Application entry-point.
 //-------------------------------------------------------------------
 
 INT WINAPI wWinMain(HINSTANCE,HINSTANCE,LPWSTR,INT)
@@ -191,18 +191,18 @@ BOOL InitializeWindow(HWND *pHwnd)
     }
 
     HWND hwnd = CreateWindow(
-        CLASS_NAME,
-        WINDOW_NAME,
-        WS_OVERLAPPEDWINDOW,
-        CW_USEDEFAULT,
-        CW_USEDEFAULT,
-        CW_USEDEFAULT,
-        CW_USEDEFAULT,
-        NULL,
-        NULL,
-        GetModuleHandle(NULL),
-        NULL
-        );
+                    CLASS_NAME,
+                    WINDOW_NAME,
+                    WS_OVERLAPPEDWINDOW,
+                    CW_USEDEFAULT,
+                    CW_USEDEFAULT,
+                    CW_USEDEFAULT,
+                    CW_USEDEFAULT,
+                    NULL,
+                    NULL,
+                    GetModuleHandle(NULL),
+                    NULL
+                );
 
     if (!hwnd)
     {
@@ -219,7 +219,7 @@ BOOL InitializeWindow(HWND *pHwnd)
 
 
 //-------------------------------------------------------------------
-// MessageLoop 
+// MessageLoop
 //
 // Implements the window message loop.
 //-------------------------------------------------------------------
@@ -255,13 +255,13 @@ BOOL OnCreate(HWND hwnd, LPCREATESTRUCT)
     DEV_BROADCAST_DEVICEINTERFACE di = { 0 };
     di.dbcc_size = sizeof(di);
     di.dbcc_devicetype  = DBT_DEVTYP_DEVICEINTERFACE;
-    di.dbcc_classguid  = KSCATEGORY_CAPTURE; 
+    di.dbcc_classguid  = KSCATEGORY_CAPTURE;
 
     g_hdevnotify = RegisterDeviceNotification(
-        hwnd,
-        &di,
-        DEVICE_NOTIFY_WINDOW_HANDLE
-        );
+                       hwnd,
+                       &di,
+                       DEVICE_NOTIFY_WINDOW_HANDLE
+                   );
 
     if (g_hdevnotify == NULL)
     {
@@ -269,7 +269,7 @@ BOOL OnCreate(HWND hwnd, LPCREATESTRUCT)
         return FALSE;
     }
 
-    // Create the object that manages video preview. 
+    // Create the object that manages video preview.
     hr = CPreview::CreateInstance(hwnd, hwnd, &g_pPreview);
 
     if (FAILED(hr))
@@ -317,7 +317,7 @@ void OnSize(HWND hwnd, UINT /*state */, int cx, int cy)
 
 
 //-------------------------------------------------------------------
-// OnCommand 
+// OnCommand
 //
 // Handles WM_COMMAND messages
 //-------------------------------------------------------------------
@@ -326,9 +326,9 @@ void OnCommand(HWND hwnd, int id, HWND /*hwndCtl*/, UINT /*codeNotify*/)
 {
     switch (id)
     {
-        case ID_FILE_CHOOSEDEVICE:
-            OnChooseDevice(hwnd, TRUE);
-            break;
+    case ID_FILE_CHOOSEDEVICE:
+        OnChooseDevice(hwnd, TRUE);
+        break;
     }
 }
 
@@ -355,22 +355,31 @@ void OnChooseDevice(HWND hwnd, BOOL bPrompt)
     // Initialize an attribute store to specify enumeration parameters.
 
     hr = MFCreateAttributes(&pAttributes, 1);
-    
-    if (FAILED(hr)) { goto done; }
+
+    if (FAILED(hr))
+    {
+        goto done;
+    }
 
     // Ask for source type = video capture devices.
-    
-    hr = pAttributes->SetGUID(
-        MF_DEVSOURCE_ATTRIBUTE_SOURCE_TYPE, 
-        MF_DEVSOURCE_ATTRIBUTE_SOURCE_TYPE_VIDCAP_GUID
-        );
 
-    if (FAILED(hr)) { goto done; }
-    
+    hr = pAttributes->SetGUID(
+             MF_DEVSOURCE_ATTRIBUTE_SOURCE_TYPE,
+             MF_DEVSOURCE_ATTRIBUTE_SOURCE_TYPE_VIDCAP_GUID
+         );
+
+    if (FAILED(hr))
+    {
+        goto done;
+    }
+
     // Enumerate devices.
     hr = MFEnumDeviceSources(pAttributes, &param.ppDevices, &param.count);
 
-    if (FAILED(hr)) { goto done; }
+    if (FAILED(hr))
+    {
+        goto done;
+    }
 
     // NOTE: param.count might be zero.
 
@@ -379,12 +388,12 @@ void OnChooseDevice(HWND hwnd, BOOL bPrompt)
         // Ask the user to select a device.
 
         INT_PTR result = DialogBoxParam(
-            GetModuleHandle(NULL),
-            MAKEINTRESOURCE(IDD_CHOOSE_DEVICE),
-            hwnd,
-            DlgProc,
-            (LPARAM)&param
-            );
+                             GetModuleHandle(NULL),
+                             MAKEINTRESOURCE(IDD_CHOOSE_DEVICE),
+                             hwnd,
+                             DlgProc,
+                             (LPARAM)&param
+                         );
 
         if (result == IDOK)
         {
@@ -511,14 +520,14 @@ void OnInitDialog(HWND hwnd, ChooseDeviceParam *pParam)
         WCHAR *szFriendlyName = NULL;
 
         hr = pParam->ppDevices[i]->GetAllocatedString(
-            MF_DEVSOURCE_ATTRIBUTE_FRIENDLY_NAME, 
-            &szFriendlyName, 
-            NULL
-            );
+                 MF_DEVSOURCE_ATTRIBUTE_FRIENDLY_NAME,
+                 &szFriendlyName,
+                 NULL
+             );
 
-        if (FAILED(hr)) 
-        { 
-            break; 
+        if (FAILED(hr))
+        {
+            break;
         }
 
 

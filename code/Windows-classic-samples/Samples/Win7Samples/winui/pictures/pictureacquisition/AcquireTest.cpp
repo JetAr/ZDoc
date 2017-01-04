@@ -1,7 +1,7 @@
-/*
+﻿/*
  * Copyright (c) Microsoft Corporation. All rights reserved.
  *
- * Sample application that demonstrates photo acquisitions 
+ * Sample application that demonstrates photo acquisitions
  * using methods of IPhotoAcquire
  *
  */
@@ -121,7 +121,7 @@ public:
         OutputFormattedDebugString(L"DirectoryCreated(pszDirectory: %ws)\n", pszDirectory);
         return E_NOTIMPL;
     }
-    
+
     STDMETHODIMP UpdateTransferPercent(BOOL fOverall, UINT nPercent)
     {
         OutputFormattedDebugString(L"UpdateTransferPercent(fOverall: %d, nPercent: %u)\n", fOverall, nPercent);
@@ -198,8 +198,8 @@ public:
         PhotoAcquireProgressCB* pPhotoAcquireProgressCB = new PhotoAcquireProgressCB;
         if (pPhotoAcquireProgressCB != NULL)
         {
-             hr = pPhotoAcquireProgressCB->QueryInterface(riid, ppv);
-             pPhotoAcquireProgressCB->Release();
+            hr = pPhotoAcquireProgressCB->QueryInterface(riid, ppv);
+            pPhotoAcquireProgressCB->Release();
         }
         else
         {
@@ -795,41 +795,41 @@ INT_PTR CALLBACK PhotoAcquireTestDialogProc(HWND hWnd, UINT uMsg, WPARAM wParam,
     switch (uMsg)
     {
     case WM_INITDIALOG:
-        {
-            fResult = PhotoAcquireTest_InitDialog(hWnd);
-        }
-        break;
+    {
+        fResult = PhotoAcquireTest_InitDialog(hWnd);
+    }
+    break;
 
     case WM_COMMAND:
+    {
+        switch (LOWORD(wParam))
         {
-            switch (LOWORD(wParam))
-            {
-            case IDOK:
-                PhotoAcquireTest_OnOK(hWnd);
-                break;
+        case IDOK:
+            PhotoAcquireTest_OnOK(hWnd);
+            break;
 
-            case IDCANCEL:
-                PhotoAcquireTest_OnCancel(hWnd);
-                break;
+        case IDCANCEL:
+            PhotoAcquireTest_OnCancel(hWnd);
+            break;
 
-            case IDC_ACQUISITION_RADIO:
-                PhotoAcquireTest_OnRadioButton(hWnd);
-                break;
+        case IDC_ACQUISITION_RADIO:
+            PhotoAcquireTest_OnRadioButton(hWnd);
+            break;
 
-            case IDC_DEVSEL_RADIO:
-                PhotoAcquireTest_OnRadioButton(hWnd);
-                break;
+        case IDC_DEVSEL_RADIO:
+            PhotoAcquireTest_OnRadioButton(hWnd);
+            break;
 
-            case IDC_SETTINGS_RADIO:
-                PhotoAcquireTest_OnRadioButton(hWnd);
-                break;
+        case IDC_SETTINGS_RADIO:
+            PhotoAcquireTest_OnRadioButton(hWnd);
+            break;
 
-            case IDC_ACQUIRE_USE_CUSTOM_TEMPLATE:
-                PhotoAcquireTest_OnCustomTemplate(hWnd);
-                break;
-            }
+        case IDC_ACQUIRE_USE_CUSTOM_TEMPLATE:
+            PhotoAcquireTest_OnCustomTemplate(hWnd);
+            break;
         }
-        break;
+    }
+    break;
     }
     return fResult;
 }

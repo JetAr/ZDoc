@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -27,7 +27,7 @@ CXMLDataSaver::~CXMLDataSaver()
 {
 }
 
-HRESULT CXMLDataSaver::Init(LPCWSTR docName) 
+HRESULT CXMLDataSaver::Init(LPCWSTR docName)
 {
     HRESULT hr = S_OK;
     CComPtr<IXMLDOMNode> pXDN;
@@ -112,7 +112,7 @@ HRESULT CXMLDataSaver::SaveData(LPCWSTR strName, LPCWSTR strValue)
     IFC( propertyElement->setAttribute(CComBSTR(L"Value"), CComVariant(strValue)) );
 
 Cleanup:
-     assert(!FAILED(hr));
+    assert(!FAILED(hr));
     return hr;
 }
 
@@ -132,7 +132,7 @@ Cleanup:
 //
 
 // We will not be saving any files with 1000+ character strings, so we will treat any files that have such strings as corrupt
-const UINT CXMLDataLoader::MAX_STRING_LENGTH = 1000; 
+const UINT CXMLDataLoader::MAX_STRING_LENGTH = 1000;
 
 CXMLDataLoader::CXMLDataLoader()
 {
@@ -148,7 +148,7 @@ HRESULT CXMLDataLoader::HasNextObject(BOOL* pfHasNextObject)
     {
         return E_POINTER;
     }
-    
+
     *pfHasNextObject =  (m_spNextObjNode.p != NULL);
 
     return S_OK;
@@ -157,7 +157,7 @@ HRESULT CXMLDataLoader::HasNextObject(BOOL* pfHasNextObject)
 HRESULT CXMLDataLoader::GetNextObject(__out LPWSTR* strName)
 {
     USES_CONVERSION;
-    
+
     HRESULT hr = S_OK;
     CComBSTR nodeName;
 
@@ -176,22 +176,22 @@ HRESULT CXMLDataLoader::GetNextObject(__out LPWSTR* strName)
     {
         IFC( STRSAFE_E_INVALID_PARAMETER );
     }
-    
+
     if(nodeName.Length() + 1 < nodeName.Length())
     {
         return E_INVALIDARG;
     }
-    
+
     DWORD cbAlloc = 0;
     IFC( DWordMult(nodeName.Length() + 1, sizeof(WCHAR), &cbAlloc) );
-    
+
     *strName = (LPWSTR) CoTaskMemAlloc(cbAlloc);
     if(!*strName) IFC( E_OUTOFMEMORY );
 
     IFC( StringCchCopyN(*strName, nodeName.Length() + 1, nodeName, nodeName.Length()) );
     (*strName)[nodeName.Length()] = 0;
-  
-    
+
+
 Cleanup:
     return hr;
 }
@@ -200,12 +200,12 @@ HRESULT CXMLDataLoader::HasChildObjects(BOOL* pfHasChildObjects)
 {
     HRESULT hr = S_OK;
     CComPtr<IXMLDOMNodeList> spChildList;
-    
+
     if(NULL == pfHasChildObjects)
     {
         IFC(hr = E_POINTER);
     }
-    
+
     IFC( m_spCurrObjNode->get_childNodes(&spChildList) );
 
     long length;
@@ -238,7 +238,7 @@ HRESULT CXMLDataLoader::BeginLoadChildObjects()
 {
     HRESULT hr = S_OK;
     LoadContext LCtx;
-    
+
     BOOL fHasChildObjects;
     IFC( HasChildObjects(&fHasChildObjects) );
 
@@ -253,7 +253,7 @@ HRESULT CXMLDataLoader::BeginLoadChildObjects()
     IFC( m_spCurrObjNode->get_childNodes(&m_spObjectList) );
 
     IFC( LoadNextObject() );
-    
+
 Cleanup:
     return hr;
 }
@@ -270,7 +270,7 @@ HRESULT CXMLDataLoader::EndLoadChildObjects()
     m_spObjectList = LCtx.m_spObjectList;
     m_spCurrObjNode = LCtx.m_spCurrObjNode;
     m_spNextObjNode = LCtx.m_spNextObjNode;
-    
+
     return hr;
 }
 
@@ -286,11 +286,11 @@ HRESULT CXMLDataLoader::LoadData(LPCWSTR strName, __out LPWSTR* strValue, long n
     long nCurrentIndex = 0;
 
     IFC( m_spCurrObjNode->get_childNodes(&spChildList) );
-    
+
     long length;
     IFC(spChildList->get_length(&length));
 
-    for(long i = 0; i < length; i++) 
+    for(long i = 0; i < length; i++)
     {
         CComPtr<IXMLDOMNode> childNode;
         CComBSTR nodeName;
@@ -299,7 +299,7 @@ HRESULT CXMLDataLoader::LoadData(LPCWSTR strName, __out LPWSTR* strValue, long n
 
         IFC( childNode->get_nodeName(&nodeName) );
 
-        if(nodeName == CAtlStringW::PCXSTR(strName)) 
+        if(nodeName == CAtlStringW::PCXSTR(strName))
         {
             if(nIndex == nCurrentIndex)
             {
@@ -313,7 +313,7 @@ HRESULT CXMLDataLoader::LoadData(LPCWSTR strName, __out LPWSTR* strValue, long n
         }
     }
 
-    if(spFoundNode == NULL) 
+    if(spFoundNode == NULL)
     {
         hr = MF_E_NOT_FOUND;
         goto Cleanup;
@@ -326,31 +326,31 @@ HRESULT CXMLDataLoader::LoadData(LPCWSTR strName, __out LPWSTR* strValue, long n
     IFC( spAttributeNode->get_nodeValue(&nodeValue) );
 
     bstrValue = nodeValue.bstrVal;
-    
+
     if(bstrValue.Length() > MAX_STRING_LENGTH)
     {
         IFC( STRSAFE_E_INVALID_PARAMETER );
     }
-    
+
     if(bstrValue.Length() + 1 < bstrValue.Length())
     {
         IFC( E_INVALIDARG );
     }
-    
+
     DWORD cbAlloc = 0;
     IFC( DWordMult(bstrValue.Length() + 1, sizeof(WCHAR), &cbAlloc) );
-    
+
     *strValue = (LPWSTR) CoTaskMemAlloc(cbAlloc);
     if(!*strValue) IFC( E_OUTOFMEMORY );
 
     StringCchCopyN(*strValue, bstrValue.Length() + 1, bstrValue,  bstrValue.Length());
     (*strValue)[bstrValue.Length()] = 0;
-    
+
 Cleanup:
     return hr;
 }
 
-HRESULT CXMLDataLoader::LoadFromFile(LPCWSTR fileName, LPCWSTR docName) 
+HRESULT CXMLDataLoader::LoadFromFile(LPCWSTR fileName, LPCWSTR docName)
 {
     HRESULT hr = S_OK;
     CComPtr<IXMLDOMNodeList> spChildList;
@@ -366,7 +366,7 @@ HRESULT CXMLDataLoader::LoadFromFile(LPCWSTR fileName, LPCWSTR docName)
 
     long length;
     IFC(spChildList->get_length(&length));
-    if(length != 1) 
+    if(length != 1)
     {
         hr = MF_E_INVALID_FILE_FORMAT;
         goto Cleanup;
@@ -377,7 +377,7 @@ HRESULT CXMLDataLoader::LoadFromFile(LPCWSTR fileName, LPCWSTR docName)
 
     IFC( m_spRootNode->get_nodeName(&nodeName) );
 
-    if(nodeName != CAtlStringW::PCXSTR(docName)) 
+    if(nodeName != CAtlStringW::PCXSTR(docName))
     {
         hr = MF_E_INVALID_FILE_FORMAT;
         goto Cleanup;
@@ -411,7 +411,8 @@ HRESULT CXMLDataLoader::LoadNextObject()
         IFC( m_spNextObjNode->QueryInterface(IID_IXMLDOMElement, (void**) &spElement) );
         VARIANT var;
         hrAttribute = spElement->getAttribute(CComBSTR(L"Value"), &var);
-    } while(hrAttribute != S_FALSE);
+    }
+    while(hrAttribute != S_FALSE);
 
 Cleanup:
     return hr;

@@ -1,16 +1,16 @@
-//---------------------------------------------------------------------------
+﻿//---------------------------------------------------------------------------
 // Microsoft OLE DB Programmer's Reference Sample
 // Copyright (C) 1998 By Microsoft Corporation.
-//	  
+//
 // @doc
-//												  
+//
 // @module COMMAND.CPP
-//			
+//
 //---------------------------------------------------------------------------
-						  
+
 
 /////////////////////////////////////////////////////////////////
-// Includes					 
+// Includes
 //
 /////////////////////////////////////////////////////////////////
 #include "prsample.h"		// Programmer's Reference Sample includes
@@ -27,27 +27,27 @@
 //
 /////////////////////////////////////////////////////////////////
 HRESULT	myCreateCommand
-	(
-	IUnknown *				pUnkSession,
-	IUnknown **				ppUnkCommand
-	)
+(
+    IUnknown *				pUnkSession,
+    IUnknown **				ppUnkCommand
+)
 {
-	HRESULT					hr;
-	IDBCreateCommand *		pIDBCreateCommand			= NULL;
-	
-	// Attempt to create a Command object from the Session object
-	XCHECK_HR(hr = pUnkSession->QueryInterface(
-				IID_IDBCreateCommand, (void**)&pIDBCreateCommand));
-	XCHECK_HR(hr = pIDBCreateCommand->CreateCommand(
-				NULL,				//pUnkOuter
-				IID_ICommand,		//riid
-				ppUnkCommand		//ppCommand
-				));
+    HRESULT					hr;
+    IDBCreateCommand *		pIDBCreateCommand			= NULL;
+
+    // Attempt to create a Command object from the Session object
+    XCHECK_HR(hr = pUnkSession->QueryInterface(
+                       IID_IDBCreateCommand, (void**)&pIDBCreateCommand));
+    XCHECK_HR(hr = pIDBCreateCommand->CreateCommand(
+                       NULL,				//pUnkOuter
+                       IID_ICommand,		//riid
+                       ppUnkCommand		//ppCommand
+                   ));
 
 CLEANUP:
-	if( pIDBCreateCommand )
-		pIDBCreateCommand->Release();
-	return hr;
+    if( pIDBCreateCommand )
+        pIDBCreateCommand->Release();
+    return hr;
 }
 
 
@@ -67,58 +67,58 @@ CLEANUP:
 //
 /////////////////////////////////////////////////////////////////
 HRESULT	myExecuteCommand
-	(
-	IUnknown *				pUnkCommand,
-	WCHAR *					pwszCommandText,
-	ULONG					cPropSets,
-	DBPROPSET*				rgPropSets,
-	IUnknown **				ppUnkRowset
-	)
+(
+    IUnknown *				pUnkCommand,
+    WCHAR *					pwszCommandText,
+    ULONG					cPropSets,
+    DBPROPSET*				rgPropSets,
+    IUnknown **				ppUnkRowset
+)
 {
-	HRESULT					hr;
-	ICommandText *			pICommandText				= NULL;
-	ICommandProperties *	pICommandProperties			= NULL;
+    HRESULT					hr;
+    ICommandText *			pICommandText				= NULL;
+    ICommandProperties *	pICommandProperties			= NULL;
 
-	// Set the properties on the Command object
-	XCHECK_HR(hr = pUnkCommand->QueryInterface(
-				IID_ICommandProperties, (void**)&pICommandProperties));
-	XCHECK_HR(hr = pICommandProperties->SetProperties(cPropSets, rgPropSets));
+    // Set the properties on the Command object
+    XCHECK_HR(hr = pUnkCommand->QueryInterface(
+                       IID_ICommandProperties, (void**)&pICommandProperties));
+    XCHECK_HR(hr = pICommandProperties->SetProperties(cPropSets, rgPropSets));
 
-	// Set the text for this Command, using the default command text
-	// dialect. All providers that support commands must support this
-	// dialect and providers that support SQL must be able to recognize
-	// an SQL command as SQL when this dialect is specified
-	XCHECK_HR(hr = pUnkCommand->QueryInterface(
-				IID_ICommandText, (void**)&pICommandText));
-	XCHECK_HR(hr = pICommandText->SetCommandText(
-				DBGUID_DEFAULT,		//guidDialect
-				pwszCommandText		//pwszCommandText
-				));
+    // Set the text for this Command, using the default command text
+    // dialect. All providers that support commands must support this
+    // dialect and providers that support SQL must be able to recognize
+    // an SQL command as SQL when this dialect is specified
+    XCHECK_HR(hr = pUnkCommand->QueryInterface(
+                       IID_ICommandText, (void**)&pICommandText));
+    XCHECK_HR(hr = pICommandText->SetCommandText(
+                       DBGUID_DEFAULT,		//guidDialect
+                       pwszCommandText		//pwszCommandText
+                   ));
 
-	// And execute the Command. Note that the user could have
-	// entered a non-row returning command, so we will check for
-	// that and return failure to prevent the display of the
-	// non-existant rowset by the caller
-	XCHECK_HR(hr = pICommandText->Execute(	
-				NULL,			//pUnkOuter
-				IID_IRowset,	//riid
-				NULL,			//pParams
-				NULL,			//pcRowsAffected
-				ppUnkRowset		//ppRowset
-				));
-		
-	if( !*ppUnkRowset )
-	{
-		printf("\nThe command executed successfully, but did not " \
-			   "return a rowset.\nNo rowset will be displayed.\n");
-		hr = E_FAIL;
-	}
+    // And execute the Command. Note that the user could have
+    // entered a non-row returning command, so we will check for
+    // that and return failure to prevent the display of the
+    // non-existant rowset by the caller
+    XCHECK_HR(hr = pICommandText->Execute(
+                       NULL,			//pUnkOuter
+                       IID_IRowset,	//riid
+                       NULL,			//pParams
+                       NULL,			//pcRowsAffected
+                       ppUnkRowset		//ppRowset
+                   ));
+
+    if( !*ppUnkRowset )
+    {
+        printf("\nThe command executed successfully, but did not " \
+               "return a rowset.\nNo rowset will be displayed.\n");
+        hr = E_FAIL;
+    }
 
 
 CLEANUP:
-	if( pICommandText )
-		pICommandText->Release();
-	if( pICommandProperties )
-		pICommandProperties->Release();
-	return hr;
+    if( pICommandText )
+        pICommandText->Release();
+    if( pICommandProperties )
+        pICommandProperties->Release();
+    return hr;
 }

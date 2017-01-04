@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -18,7 +18,7 @@ public:
         UINT height,
         IDWriteTextFormat* textFormat,
         wchar_t const* text
-        );
+    );
 
     ~DWriteRenderer()
     {
@@ -43,10 +43,10 @@ public:
 private:
 
     // IUnknown methods
-    IFACEMETHOD(QueryInterface)( 
+    IFACEMETHOD(QueryInterface)(
         REFIID riid,
         void** ppvObject
-        );
+    );
     IFACEMETHOD_(ULONG, AddRef)();
     IFACEMETHOD_(ULONG, Release)();
 
@@ -54,15 +54,15 @@ private:
     IFACEMETHOD(IsPixelSnappingDisabled)(
         void* clientDrawingContext,
         OUT BOOL* isDisabled
-        );
+    );
     IFACEMETHOD(GetCurrentTransform)(
         void* clientDrawingContext,
         OUT DWRITE_MATRIX* transform
-        );
+    );
     IFACEMETHOD(GetPixelsPerDip)(
         void* clientDrawingContext,
         OUT FLOAT* pixelsPerDip
-        );
+    );
 
     // IDWriteTextRenderer methods
     IFACEMETHOD(DrawGlyphRun)(
@@ -73,7 +73,7 @@ private:
         DWRITE_GLYPH_RUN const* glyphRun,
         DWRITE_GLYPH_RUN_DESCRIPTION const* glyphRunDescription,
         IUnknown* clientDrawingEffect
-        );
+    );
 
     IFACEMETHOD(DrawUnderline)(
         void* clientDrawingContext,
@@ -81,7 +81,7 @@ private:
         FLOAT baselineOriginY,
         DWRITE_UNDERLINE const* underline,
         IUnknown* clientDrawingEffect
-        );
+    );
 
     IFACEMETHOD(DrawStrikethrough)(
         void* clientDrawingContext,
@@ -89,7 +89,7 @@ private:
         FLOAT baselineOriginY,
         DWRITE_STRIKETHROUGH const* strikethrough,
         IUnknown* clientDrawingEffect
-        );
+    );
 
     IFACEMETHOD(DrawInlineObject)(
         void* clientDrawingContext,
@@ -99,7 +99,7 @@ private:
         BOOL isSideways,
         BOOL isRightToLeft,
         IUnknown* clientDrawingEffect
-        );
+    );
 
 private:
     HRESULT PrepareMagnifier(HDC hdc);

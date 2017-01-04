@@ -1,4 +1,4 @@
-//// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿//// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 //// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 //// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 //// PARTICULAR PURPOSE.
@@ -37,7 +37,7 @@
 // SafeRelease inline function.
 template <class Interface> inline void SafeRelease(
     Interface** interfaceToRelease
-    )
+)
 {
     if (*interfaceToRelease != nullptr)
     {
@@ -84,7 +84,7 @@ private:
 
     HRESULT CreateGridPatternBrush(
         _Outptr_ ID2D1ImageBrush** imageBrush
-        );
+    );
 
     HRESULT OnRender();
 
@@ -97,7 +97,7 @@ private:
         _In_reads_bytes_(devModeSize) PDEVMODE devMode,
         WORD devModeSize,
         _Out_ LPSTREAM* printTicketStream
-        );
+    );
 
     HRESULT FinalizePrintJob();
 
@@ -105,11 +105,11 @@ private:
         _In_ ID2D1DeviceContext* d2dContext,
         UINT pageNumber, // 1-based page number
         BOOL printing
-        );
+    );
 
     void OnChar(
         SHORT key
-        );
+    );
 
     void ToggleMultiPageMode();
 
@@ -118,14 +118,14 @@ private:
     void OnVScroll(
         WPARAM wParam,
         LPARAM lParam
-        );
+    );
 
     void ResetScrollBar();
 
     void OnMouseWheel(
         WPARAM wParam,
         LPARAM lParam
-        );
+    );
 
     D2D1_SIZE_U CalculateD2DWindowSize();
 
@@ -134,14 +134,14 @@ private:
         UINT message,
         WPARAM wParam,
         LPARAM lParam
-        );
+    );
 
     static LRESULT CALLBACK ChildWndProc(
         HWND hWnd,
         UINT message,
         WPARAM wParam,
         LPARAM lParam
-        );
+    );
 
     static HRESULT LoadBitmapFromFile(
         _In_ ID2D1DeviceContext* d2dContext,
@@ -150,7 +150,7 @@ private:
         UINT destinationWidth,
         UINT destinationHeight,
         _Outptr_ ID2D1Bitmap** bitmap
-        );
+    );
 
     LRESULT OnClose();
 

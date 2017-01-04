@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -23,14 +23,14 @@
 
 class CGenericUCPDlg;
 
-// DeviceFinder Callback 
-class CDeviceFinderCallback : 
+// DeviceFinder Callback
+class CDeviceFinderCallback :
     public IUPnPDeviceFinderCallback
 {
-    private: 
-        CGenericUCPDlg* m_pGenericUCPDlg;
-        ULONG m_cRef;
-    public:
+private:
+    CGenericUCPDlg* m_pGenericUCPDlg;
+    ULONG m_cRef;
+public:
     CDeviceFinderCallback();
     ~CDeviceFinderCallback();
 
@@ -42,20 +42,20 @@ class CDeviceFinderCallback :
     STDMETHOD(DeviceAdded)(_In_ LONG lFindData, _In_ IUPnPDevice * pDevice);
     STDMETHOD(DeviceRemoved)(_In_ LONG lFindData, _In_ BSTR bstrUDN);
     STDMETHOD(SearchComplete)(_In_ LONG lFindData);
-    
+
     // Other functions
     static CDeviceFinderCallback * Create();
     void SetDialogPointer(CGenericUCPDlg* pDialog);
 
 };
 
-// Service Callback 
-class CServiceCallback : 
+// Service Callback
+class CServiceCallback :
     public IUPnPServiceCallback
 {
-private: 
-        CGenericUCPDlg* m_pGenericUCPDlg;
-        ULONG m_cRef;
+private:
+    CGenericUCPDlg* m_pGenericUCPDlg;
+    ULONG m_cRef;
 public:
 
     CServiceCallback();
@@ -79,7 +79,7 @@ public:
 ////////////////////////////////////////////////////////////////////////////
 // CGenericUCPDlg dialog
 
-class CGenericUCPDlg : 
+class CGenericUCPDlg :
     public CDialog
 {
 // Construction
@@ -118,7 +118,7 @@ public:
 
     // ClassWizard generated virtual function overrides
     //{{AFX_VIRTUAL(CGenericUCPDlg)
-    protected:
+protected:
     virtual void DoDataExchange(CDataExchange* pDX);	// DDX/DDV support
     //}}AFX_VIRTUAL
 
@@ -126,7 +126,7 @@ public:
 // Implementation
 protected:
     HICON m_hIcon;
-    	
+
     // Generated message map functions
     //{{AFX_MSG(CGenericUCPDlg)
     virtual BOOL OnInitDialog();

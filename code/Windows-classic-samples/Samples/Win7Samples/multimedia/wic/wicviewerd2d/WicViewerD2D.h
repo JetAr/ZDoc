@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -36,10 +36,10 @@ private:
     static LRESULT CALLBACK s_WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
 private:
-    
+
     HINSTANCE               m_hInst;
     IWICImagingFactory     *m_pIWICFactory;
-    
+
     ID2D1Factory           *m_pD2DFactory;
     ID2D1HwndRenderTarget  *m_pRT;
     ID2D1Bitmap            *m_pD2DBitmap;

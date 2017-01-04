@@ -1,4 +1,4 @@
-//------------------------------------------------------------------------------
+﻿//------------------------------------------------------------------------------
 // File: EZRGB24.h
 //
 // Desc: DirectShow sample code - special effects filter header file.
@@ -8,9 +8,9 @@
 
 
 class CEZrgb24 : public CTransformFilter,
-         public IIPEffect,
-         public ISpecifyPropertyPages,
-         public CPersistStream
+    public IIPEffect,
+    public ISpecifyPropertyPages,
+    public CPersistStream
 {
 
 public:

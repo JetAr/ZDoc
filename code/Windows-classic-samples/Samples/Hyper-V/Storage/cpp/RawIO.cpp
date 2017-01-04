@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -87,12 +87,12 @@ SampleRawIO(
     //
 
     opStatus = OpenVirtualDisk(
-        &storageType,
-        SourceVirtualDiskPath,
-        VIRTUAL_DISK_ACCESS_NONE,
-        OPEN_VIRTUAL_DISK_FLAG_NONE,
-        &openParameters,
-        &sourceVhdHandle);
+                   &storageType,
+                   SourceVirtualDiskPath,
+                   VIRTUAL_DISK_ACCESS_NONE,
+                   OPEN_VIRTUAL_DISK_FLAG_NONE,
+                   &openParameters,
+                   &sourceVhdHandle);
 
     if (opStatus != ERROR_SUCCESS)
     {
@@ -107,10 +107,10 @@ SampleRawIO(
     diskInfoSize = sizeof(diskInfo);
 
     opStatus = GetVirtualDiskInformation(
-        sourceVhdHandle,
-        &diskInfoSize,
-        &diskInfo,
-        NULL);
+                   sourceVhdHandle,
+                   &diskInfoSize,
+                   &diskInfo,
+                   NULL);
 
     if (opStatus != ERROR_SUCCESS)
     {
@@ -122,17 +122,17 @@ SampleRawIO(
     //
     // ATTACH_VIRTUAL_DISK_FLAG_NO_LOCAL_HOST is required for RawIO.
     //
-    
+
     attachFlags = ATTACH_VIRTUAL_DISK_FLAG_NO_LOCAL_HOST |
                   ATTACH_VIRTUAL_DISK_FLAG_READ_ONLY;
 
     opStatus = AttachVirtualDisk(
-        sourceVhdHandle,
-        NULL,
-        attachFlags,
-        0,
-        &attachParameters,
-        NULL);
+                   sourceVhdHandle,
+                   NULL,
+                   attachFlags,
+                   0,
+                   &attachParameters,
+                   NULL);
 
     if (opStatus != ERROR_SUCCESS)
     {
@@ -148,12 +148,12 @@ SampleRawIO(
     //
 
     opStatus = OpenVirtualDisk(
-        &storageType,
-        DestinationVirtualDiskPath,
-        VIRTUAL_DISK_ACCESS_NONE,
-        OPEN_VIRTUAL_DISK_FLAG_NONE,
-        &openParameters,
-        &destinationVhdHandle);
+                   &storageType,
+                   DestinationVirtualDiskPath,
+                   VIRTUAL_DISK_ACCESS_NONE,
+                   OPEN_VIRTUAL_DISK_FLAG_NONE,
+                   &openParameters,
+                   &destinationVhdHandle);
 
     if (opStatus != ERROR_SUCCESS)
     {
@@ -163,16 +163,16 @@ SampleRawIO(
     //
     // ATTACH_VIRTUAL_DISK_FLAG_NO_LOCAL_HOST is required for RawIO.
     //
-    
+
     attachFlags = ATTACH_VIRTUAL_DISK_FLAG_NO_LOCAL_HOST;
-     
+
     opStatus = AttachVirtualDisk(
-        destinationVhdHandle,
-        NULL,
-        attachFlags,
-        0,
-        &attachParameters,
-        NULL);
+                   destinationVhdHandle,
+                   NULL,
+                   attachFlags,
+                   0,
+                   &attachParameters,
+                   NULL);
 
     if (opStatus != ERROR_SUCCESS)
     {
@@ -188,11 +188,11 @@ SampleRawIO(
         overlapped.OffsetHigh = offset.HighPart;
 
         if (!ReadFile(
-                sourceVhdHandle,
-                buffer,
-                SAMPLE_BUFFER_SIZE,
-                &bytesRead,
-                &overlapped))
+                    sourceVhdHandle,
+                    buffer,
+                    SAMPLE_BUFFER_SIZE,
+                    &bytesRead,
+                    &overlapped))
         {
             if (GetLastError() == ERROR_IO_PENDING)
             {
@@ -215,11 +215,11 @@ SampleRawIO(
         overlapped.OffsetHigh = offset.HighPart;
 
         if (!WriteFile(
-                destinationVhdHandle,
-                buffer,
-                bytesRead,
-                &bytesWritten,
-                &overlapped))
+                    destinationVhdHandle,
+                    buffer,
+                    bytesRead,
+                    &bytesWritten,
+                    &overlapped))
         {
             if (GetLastError() == ERROR_IO_PENDING)
             {
@@ -254,12 +254,12 @@ Cleanup:
     {
         wprintf(L"error = %u\n", opStatus);
     }
-    
+
     if (sourceVhdHandle != INVALID_HANDLE_VALUE)
     {
         CloseHandle(sourceVhdHandle);
     }
-    
+
     if (destinationVhdHandle != INVALID_HANDLE_VALUE)
     {
         CloseHandle(destinationVhdHandle);
@@ -269,6 +269,6 @@ Cleanup:
     {
         free(buffer);
     }
-    
+
     return opStatus;
 }

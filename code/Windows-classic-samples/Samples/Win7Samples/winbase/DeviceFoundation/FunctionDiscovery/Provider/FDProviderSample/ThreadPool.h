@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -9,8 +9,8 @@
 //
 //      Define and Implement the TThreadpool template class.
 //      This class is implemented as a singleton to allow different objects
-//      to share the same thread pool.  The underlying Threadpool is 
-//      destroyed if there are no references to it.  
+//      to share the same thread pool.  The underlying Threadpool is
+//      destroyed if there are no references to it.
 //
 //      The class ThreadpoolId template parameter is used to allow creation
 //      of multiple Threadpools.
@@ -93,7 +93,7 @@ TThreadpool<ThreadpoolId>* TThreadpool<ThreadpoolId>::GetThreadpool()
 }
 
 template<ULONG ThreadpoolId>
-TThreadpool<ThreadpoolId>::TThreadpool(): 
+TThreadpool<ThreadpoolId>::TThreadpool():
     m_cRef(1)
 {
 }  // TThreadpool:TThreadpool
@@ -111,7 +111,7 @@ template<ULONG ThreadpoolId>
 VOID TThreadpool<ThreadpoolId>::AddRef()
 {
     sm_SingletonLock.AcquireExclusive();
-    
+
     ++m_cRef;
 
     sm_SingletonLock.ReleaseExclusive();
@@ -142,22 +142,22 @@ BOOL TThreadpool<ThreadpoolId>::Init()
     GetSystemInfo(&SystemInfo);
 
     m_pThreadpool = CreateThreadpool(NULL);
-    fRetVal = (NULL != m_pThreadpool); 
+    fRetVal = (NULL != m_pThreadpool);
 
     if (fRetVal)
     {
         fRetVal = SetThreadpoolThreadMinimum(
-            m_pThreadpool, 
-            0);
+                      m_pThreadpool,
+                      0);
     }
 
     if (fRetVal)
     {
         SetThreadpoolThreadMaximum(
-            m_pThreadpool, 
+            m_pThreadpool,
             SystemInfo.dwNumberOfProcessors * 2);
     }
-    
+
     return fRetVal;
 }  // TThreadpool::Init()
 

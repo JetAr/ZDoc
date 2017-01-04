@@ -1,5 +1,5 @@
-//////////////////////////////////////////////////////////////////////
-// 
+﻿//////////////////////////////////////////////////////////////////////
+//
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -94,7 +94,7 @@ BOOL Application::ProcessVideoFrame()
         return TRUE;
     }
 
-    // Check the current status of D3D9 device.  
+    // Check the current status of D3D9 device.
     hr = m_D3D.TestCooperativeLevel();
 
     switch (hr)
@@ -127,9 +127,12 @@ BOOL Application::ProcessVideoFrame()
 
     hr = m_D3D.m_pDevice->GetBackBuffer(0, 0, D3DBACKBUFFER_TYPE_MONO, &pRT);
 
-    if (FAILED(hr)) { goto done; }
+    if (FAILED(hr))
+    {
+        goto done;
+    }
 
-    // Initialize the stream data structures for the primary video stream 
+    // Initialize the stream data structures for the primary video stream
     // and the substream.
 
     stream_data[0].Enable = TRUE;
@@ -141,7 +144,7 @@ BOOL Application::ProcessVideoFrame()
     stream_data[1].OutputIndex = 0;
     stream_data[1].InputFrameOrField = frame;
     stream_data[1].pInputSurface = m_ppSubStream[0];
- 
+
     AdjustTargetRect(0, 0);
 
     // Apply the destination rectangle for the main video stream.
@@ -150,13 +153,16 @@ BOOL Application::ProcessVideoFrame()
     dest = ScaleRectangle(m_rcMainVideoDestRect, VIDEO_MAIN_RECT, client);
 
     hr = DXVAHD_SetDestinationRect(
-        m_pDXVAVP,
-        0,
-        TRUE,
-        dest
-        );
+             m_pDXVAVP,
+             0,
+             TRUE,
+             dest
+         );
 
-    if (FAILED(hr)) { goto done; }
+    if (FAILED(hr))
+    {
+        goto done;
+    }
 
 
     // Calculate the substream destination rectangle from the frame number.
@@ -164,16 +170,19 @@ BOOL Application::ProcessVideoFrame()
     CalculateSubstreamRect(frame, &ssdest);
 
     // Scale to the window client area.
-    ssdest = ScaleRectangle(ssdest, VIDEO_MAIN_RECT, client); 
+    ssdest = ScaleRectangle(ssdest, VIDEO_MAIN_RECT, client);
 
     hr = DXVAHD_SetDestinationRect(
-        m_pDXVAVP,
-        1,
-        TRUE,
-        ssdest
-        );
+             m_pDXVAVP,
+             1,
+             TRUE,
+             ssdest
+         );
 
-    if (FAILED(hr)) { goto done; }
+    if (FAILED(hr))
+    {
+        goto done;
+    }
 
     // Color-fill the render target if the target rectangle is less
     // than the entire render target.
@@ -182,23 +191,32 @@ BOOL Application::ProcessVideoFrame()
     {
         hr = m_D3D.m_pDevice->ColorFill(pRT, NULL, D3DCOLOR_XRGB(0, 0, 0));
 
-        if (FAILED(hr)) { goto done; }
+        if (FAILED(hr))
+        {
+            goto done;
+        }
     }
 
     // Perform the blit.
     hr = m_pDXVAVP->VideoProcessBltHD(
-        pRT,
-        frame,
-        2,
-        stream_data
-        );
+             pRT,
+             frame,
+             2,
+             stream_data
+         );
 
-    if (FAILED(hr)) { goto done; }
+    if (FAILED(hr))
+    {
+        goto done;
+    }
 
     // Enable DWM queuing.
     hr = m_DWM.EnableDwmQueuing(m_Hwnd);
 
-    if (FAILED(hr)) { goto done; }
+    if (FAILED(hr))
+    {
+        goto done;
+    }
 
 
     // Present the frame.
@@ -243,8 +261,8 @@ BOOL Application::ResetDevice(BOOL bChangeWindowMode)
     }
 
 
-    // Still failed. 
-    
+    // Still failed.
+
     // If we failed to initialize in fullscreen mode, try falling
     // back to windowed mode.
 
@@ -317,14 +335,17 @@ BOOL Application::InitializeDXVAHD()
     // Create the DXVA-HD device.
 
     hr = DXVAHD_CreateDevice(
-        m_D3D.m_pDevice,
-        &desc,
-        m_usage,
-        pSWPlugin,
-        &m_pDXVAHD
-        );
+             m_D3D.m_pDevice,
+             &desc,
+             m_usage,
+             pSWPlugin,
+             &m_pDXVAHD
+         );
 
-    if (FAILED(hr)) { goto done; }
+    if (FAILED(hr))
+    {
+        goto done;
+    }
 
     // Get the DXVA-HD device caps.
 
@@ -333,7 +354,10 @@ BOOL Application::InitializeDXVAHD()
 
     hr = m_pDXVAHD->GetVideoProcessorDeviceCaps(&caps);
 
-    if (FAILED(hr)) { goto done; }
+    if (FAILED(hr))
+    {
+        goto done;
+    }
 
     if (caps.MaxInputStreams < 1 + SUB_STREAM_COUNT)
     {
@@ -353,7 +377,10 @@ BOOL Application::InitializeDXVAHD()
 
     hr = m_pDXVAHD->GetVideoProcessorOutputFormats(caps.OutputFormatCount, pFormats);
 
-    if (FAILED(hr)) { goto done; }
+    if (FAILED(hr))
+    {
+        goto done;
+    }
 
     for (index = 0; index < caps.OutputFormatCount; index++)
     {
@@ -382,7 +409,10 @@ BOOL Application::InitializeDXVAHD()
 
     hr = m_pDXVAHD->GetVideoProcessorInputFormats(caps.InputFormatCount, pFormats);
 
-    if (FAILED(hr)) { goto done; }
+    if (FAILED(hr))
+    {
+        goto done;
+    }
 
     D3DFORMAT inputFormats[] = { VIDEO_MAIN_FORMAT, VIDEO_SUB_FORMAT };
 
@@ -416,53 +446,71 @@ BOOL Application::InitializeDXVAHD()
 
     hr = m_pDXVAHD->GetVideoProcessorCaps(caps.VideoProcessorCount, pVPCaps);
 
-    if (FAILED(hr)) { goto done; }
+    if (FAILED(hr))
+    {
+        goto done;
+    }
 
     hr = m_pDXVAHD->CreateVideoProcessor(&pVPCaps[0].VPGuid, &m_pDXVAVP);
 
-    if (FAILED(hr)) { goto done; }
+    if (FAILED(hr))
+    {
+        goto done;
+    }
 
 
     // Create the video surface for the primary video stream.
     hr = m_pDXVAHD->CreateVideoSurface(
-        VIDEO_MAIN_WIDTH,
-        VIDEO_MAIN_HEIGHT,
-        VIDEO_MAIN_FORMAT,
-        caps.InputPool,
-        0,
-        DXVAHD_SURFACE_TYPE_VIDEO_INPUT,
-        1,
-        &m_pMainStream,
-        NULL
-        );
+             VIDEO_MAIN_WIDTH,
+             VIDEO_MAIN_HEIGHT,
+             VIDEO_MAIN_FORMAT,
+             caps.InputPool,
+             0,
+             DXVAHD_SURFACE_TYPE_VIDEO_INPUT,
+             1,
+             &m_pMainStream,
+             NULL
+         );
 
-    if (FAILED(hr)) { goto done; }
+    if (FAILED(hr))
+    {
+        goto done;
+    }
 
 
     // Set the initial stream states for the primary stream.
     hr = DXVAHD_SetStreamFormat(m_pDXVAVP, 0, VIDEO_MAIN_FORMAT);
 
-    if (FAILED(hr)) { goto done; }
+    if (FAILED(hr))
+    {
+        goto done;
+    }
 
     hr = DXVAHD_SetFrameFormat(m_pDXVAVP, 0, DXVAHD_FRAME_FORMAT_PROGRESSIVE);
 
-    if (FAILED(hr)) { goto done; }
+    if (FAILED(hr))
+    {
+        goto done;
+    }
 
     // Create substream surfaces.
 
     hr = m_pDXVAHD->CreateVideoSurface(
-        VIDEO_SUB_SURF_WIDTH,
-        VIDEO_SUB_SURF_HEIGHT,
-        VIDEO_SUB_FORMAT,
-        caps.InputPool,
-        0,
-        DXVAHD_SURFACE_TYPE_VIDEO_INPUT,
-        SUB_STREAM_COUNT,
-        m_ppSubStream,
-        NULL
-        );
+             VIDEO_SUB_SURF_WIDTH,
+             VIDEO_SUB_SURF_HEIGHT,
+             VIDEO_SUB_FORMAT,
+             caps.InputPool,
+             0,
+             DXVAHD_SURFACE_TYPE_VIDEO_INPUT,
+             SUB_STREAM_COUNT,
+             m_ppSubStream,
+             NULL
+         );
 
-    if (FAILED(hr)) { goto done; }
+    if (FAILED(hr))
+    {
+        goto done;
+    }
 
 
     // Set the initial stream states for the substream.
@@ -470,36 +518,51 @@ BOOL Application::InitializeDXVAHD()
     // Video format
     hr = DXVAHD_SetStreamFormat(m_pDXVAVP, 1, VIDEO_SUB_FORMAT);
 
-    if (FAILED(hr)) { goto done; }
+    if (FAILED(hr))
+    {
+        goto done;
+    }
 
     // Frame format (progressive)
     hr = DXVAHD_SetFrameFormat(m_pDXVAVP, 1, DXVAHD_FRAME_FORMAT_PROGRESSIVE);
 
-    if (FAILED(hr)) { goto done; }
+    if (FAILED(hr))
+    {
+        goto done;
+    }
 
     // Luma key
     hr = DXVAHD_SetLumaKey(m_pDXVAVP, 1, TRUE, 0.9f, 1.0f);
 
-    if (FAILED(hr)) { goto done; }
+    if (FAILED(hr))
+    {
+        goto done;
+    }
 
-    // Draw the video frame for the primary video stream. 
+    // Draw the video frame for the primary video stream.
     // This frame does not change.
 
     hr = DrawColorBars(m_pMainStream, VIDEO_MAIN_WIDTH, VIDEO_MAIN_HEIGHT);
 
-    if (FAILED(hr)) { goto done; }
+    if (FAILED(hr))
+    {
+        goto done;
+    }
 
     // Load the bitmap onto the substream surface.
 
     hr = LoadBitmapResourceToAYUVSurface(
-        m_ppSubStream[0],
-        VIDEO_SUB_SURF_WIDTH,
-        VIDEO_SUB_SURF_HEIGHT,
-        IDB_BITMAP1,
-        m_PixelAlphaValue
-        );
+             m_ppSubStream[0],
+             VIDEO_SUB_SURF_WIDTH,
+             VIDEO_SUB_SURF_HEIGHT,
+             IDB_BITMAP1,
+             m_PixelAlphaValue
+         );
 
-    if (FAILED(hr)) { goto done; }
+    if (FAILED(hr))
+    {
+        goto done;
+    }
 
     // Get the image filtering capabilities.
 
@@ -527,7 +590,10 @@ BOOL Application::InitializeDXVAHD()
 
     hr = ApplySettings();
 
-    if (FAILED(hr)) { goto done; }
+    if (FAILED(hr))
+    {
+        goto done;
+    }
 
 
     hr = UpdateVideoSubRect();
@@ -589,11 +655,11 @@ INT Application::MessageLoop()
         // Wait until the timer expires or any message is posted.
 
         if (WAIT_OBJECT_0 == MsgWaitForMultipleObjects(
-                1,
-                &m_timer.Handle(),
-                FALSE,
-                INFINITE,
-                QS_ALLINPUT
+                    1,
+                    &m_timer.Handle(),
+                    FALSE,
+                    INFINITE,
+                    QS_ALLINPUT
                 ))
         {
             // Draw the next video frame.
@@ -625,7 +691,7 @@ LRESULT Application::HandleMessage(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM l
     case WM_SIZE:
         OnSize();
         return 0L;
-    }        
+    }
     return DefWindowProc(hwnd, uMsg, wParam, lParam);
 }
 
@@ -680,7 +746,7 @@ void  Application::OnKeyDown(UINT vk, BOOL /* fDown */, int /* cRepeat */, UINT 
         DestroyWindow(m_Hwnd);
         return;
     }
-    
+
     switch (vk)
     {
     case VK_F1:
@@ -696,7 +762,7 @@ void  Application::OnKeyDown(UINT vk, BOOL /* fDown */, int /* cRepeat */, UINT 
         UpdateVideoSubRect();
         break;
 
-    case VK_UP: 
+    case VK_UP:
         AdjustSetting(0, 1);
         break;
 
@@ -721,7 +787,7 @@ void  Application::OnKeyDown(UINT vk, BOOL /* fDown */, int /* cRepeat */, UINT 
 //-------------------------------------------------------------------
 // PreTranslateMessage
 //
-// Handles window messages before they are sent to TranslateMessage. 
+// Handles window messages before they are sent to TranslateMessage.
 //-------------------------------------------------------------------
 
 BOOL Application::PreTranslateMessage(const MSG& msg)
@@ -764,7 +830,7 @@ BOOL Application::PreTranslateMessage(const MSG& msg)
 // surface. The substream rectangle is calculated from the current
 // mode. (The user can switch modes using the function keys.)
 //
-// As a result, each mode displays a different portion of the 
+// As a result, each mode displays a different portion of the
 // substream bitmap.
 //-------------------------------------------------------------------
 
@@ -774,44 +840,44 @@ HRESULT Application::UpdateVideoSubRect()
 
     switch (m_mode)
     {
-        case Mode1: 
-            break;
+    case Mode1:
+        break;
 
-        case Mode2:
-            dx = VIDEO_SUB_WIDTH;
-            break;
+    case Mode2:
+        dx = VIDEO_SUB_WIDTH;
+        break;
 
-        case Mode3:
-            dx = VIDEO_SUB_WIDTH * 2;
-            break;
+    case Mode3:
+        dx = VIDEO_SUB_WIDTH * 2;
+        break;
 
-        case Mode4:
-            dy = VIDEO_SUB_HEIGHT;
-            break;
+    case Mode4:
+        dy = VIDEO_SUB_HEIGHT;
+        break;
 
-        case Mode5:
-            dy = VIDEO_SUB_HEIGHT;
-            dx = VIDEO_SUB_WIDTH;
-            break;
+    case Mode5:
+        dy = VIDEO_SUB_HEIGHT;
+        dx = VIDEO_SUB_WIDTH;
+        break;
 
-        case Mode6:
-            dy = VIDEO_SUB_HEIGHT;
-            dx = VIDEO_SUB_WIDTH * 2;
-            break;
+    case Mode6:
+        dy = VIDEO_SUB_HEIGHT;
+        dx = VIDEO_SUB_WIDTH * 2;
+        break;
 
-        case Mode7:
-            dy = VIDEO_SUB_HEIGHT * 2;
-            break;
+    case Mode7:
+        dy = VIDEO_SUB_HEIGHT * 2;
+        break;
 
-        case Mode8:
-            dy = VIDEO_SUB_HEIGHT * 2;
-            dx = VIDEO_SUB_WIDTH;
-            break;
+    case Mode8:
+        dy = VIDEO_SUB_HEIGHT * 2;
+        dx = VIDEO_SUB_WIDTH;
+        break;
 
-        case Mode9:
-            dy = VIDEO_SUB_HEIGHT * 2;
-            dx = VIDEO_SUB_WIDTH * 2;
-            break;
+    case Mode9:
+        dy = VIDEO_SUB_HEIGHT * 2;
+        dx = VIDEO_SUB_WIDTH * 2;
+        break;
     }
 
     SetRect(&m_rcVideoSubRect, 0, 0, VIDEO_SUB_HEIGHT, VIDEO_SUB_WIDTH);
@@ -824,11 +890,11 @@ HRESULT Application::UpdateVideoSubRect()
     if (m_pDXVAVP)
     {
         hr = DXVAHD_SetSourceRect(
-            m_pDXVAVP,
-            1,
-            TRUE,
-            m_rcVideoSubRect
-            );
+                 m_pDXVAVP,
+                 1,
+                 TRUE,
+                 m_rcVideoSubRect
+             );
     }
 
     return hr;
@@ -844,13 +910,16 @@ HRESULT Application::ApplySettings()
     if (m_ppSubStream[0])
     {
         hr = SetAYUVSurfacePixelAlpha(
-            m_ppSubStream[0],
-            VIDEO_SUB_SURF_WIDTH,
-            VIDEO_SUB_SURF_HEIGHT,
-            m_PixelAlphaValue
-            );
+                 m_ppSubStream[0],
+                 VIDEO_SUB_SURF_WIDTH,
+                 VIDEO_SUB_SURF_HEIGHT,
+                 m_PixelAlphaValue
+             );
 
-        if (FAILED(hr)) { goto done; }
+        if (FAILED(hr))
+        {
+            goto done;
+        }
     }
 
     if (m_pDXVAVP)
@@ -859,39 +928,54 @@ HRESULT Application::ApplySettings()
 
         hr = DXVAHD_SetPlanarAlpha(m_pDXVAVP, 0, TRUE, float(m_PlanarAlphaValue) / 0xFF);
 
-        if (FAILED(hr)) { goto done; }
+        if (FAILED(hr))
+        {
+            goto done;
+        }
 
         // Main video source rectangle.
 
         hr = DXVAHD_SetSourceRect(
-            m_pDXVAVP,
-            0,
-            TRUE,
-            m_rcMainVideoSourceRect
-            );
+                 m_pDXVAVP,
+                 0,
+                 TRUE,
+                 m_rcMainVideoSourceRect
+             );
 
-        if (FAILED(hr)) { goto done; }
+        if (FAILED(hr))
+        {
+            goto done;
+        }
 
         // Main video destination rectangle.
 
         hr = DXVAHD_SetDestinationRect(
-            m_pDXVAVP,
-            0,
-            TRUE,
-            m_rcMainVideoDestRect
-            );
+                 m_pDXVAVP,
+                 0,
+                 TRUE,
+                 m_rcMainVideoDestRect
+             );
 
-        if (FAILED(hr)) { goto done; }
+        if (FAILED(hr))
+        {
+            goto done;
+        }
 
         // Target rectangle.
         hr = AdjustTargetRect(0, 0);
 
-        if (FAILED(hr)) { goto done; }
+        if (FAILED(hr))
+        {
+            goto done;
+        }
 
         // Extended color info.
         hr = AdjustExtendedColor(0);
 
-        if (FAILED(hr)) { goto done; }
+        if (FAILED(hr))
+        {
+            goto done;
+        }
 
         // Image filters
 
@@ -899,7 +983,10 @@ HRESULT Application::ApplySettings()
         {
             hr = AdjustFilter((DXVAHD_FILTER)i, 0);
 
-            if (FAILED(hr)) { goto done; }
+            if (FAILED(hr))
+            {
+                goto done;
+            }
         }
 
         // Background color.
@@ -946,18 +1033,24 @@ HRESULT Application::ResetSettings()
     if (m_ppSubStream[0])
     {
         hr = SetAYUVSurfacePixelAlpha(
-            m_ppSubStream[0],
-            VIDEO_SUB_SURF_WIDTH,
-            VIDEO_SUB_SURF_HEIGHT,
-            m_PixelAlphaValue
-            );
+                 m_ppSubStream[0],
+                 VIDEO_SUB_SURF_WIDTH,
+                 VIDEO_SUB_SURF_HEIGHT,
+                 m_PixelAlphaValue
+             );
 
-        if (FAILED(hr)) { goto done; }
+        if (FAILED(hr))
+        {
+            goto done;
+        }
     }
 
     hr = ApplySettings();
 
-    if (FAILED(hr)) { goto done; }
+    if (FAILED(hr))
+    {
+        goto done;
+    }
 
     if (m_pDXVAVP)
     {
@@ -990,111 +1083,111 @@ HRESULT Application::AdjustSetting(int dx, int dy)
 
     switch (m_mode)
     {
-        case Mode1: 
-            // Increment and decrement alpha values.    
-            hr = AdjustAlphaSetting(dx, dy);
-            break;
+    case Mode1:
+        // Increment and decrement alpha values.
+        hr = AdjustAlphaSetting(dx, dy);
+        break;
 
-        case Mode2:
-            // Scale the main video source rectangle.
-            InflateRectBounded(
-                &m_rcMainVideoSourceRect, 
-                -dx * 8, -dy * 8, 
-                VIDEO_MAIN_RECT
-                );
+    case Mode2:
+        // Scale the main video source rectangle.
+        InflateRectBounded(
+            &m_rcMainVideoSourceRect,
+            -dx * 8, -dy * 8,
+            VIDEO_MAIN_RECT
+        );
 
-            hr = DXVAHD_SetSourceRect(
-                m_pDXVAVP,
-                0,
-                TRUE,
-                m_rcMainVideoSourceRect
-                );
-            break;
+        hr = DXVAHD_SetSourceRect(
+                 m_pDXVAVP,
+                 0,
+                 TRUE,
+                 m_rcMainVideoSourceRect
+             );
+        break;
 
-        case Mode3:
-            // Move the main video source rectangle.
-            MoveRectBounded(
-                &m_rcMainVideoSourceRect, 
-                dx * 8, -dy * 8, 
-                VIDEO_MAIN_RECT
-                );
+    case Mode3:
+        // Move the main video source rectangle.
+        MoveRectBounded(
+            &m_rcMainVideoSourceRect,
+            dx * 8, -dy * 8,
+            VIDEO_MAIN_RECT
+        );
 
-            hr = DXVAHD_SetSourceRect(
-                m_pDXVAVP,
-                0,
-                TRUE,
-                m_rcMainVideoSourceRect
-                );
-            break;
+        hr = DXVAHD_SetSourceRect(
+                 m_pDXVAVP,
+                 0,
+                 TRUE,
+                 m_rcMainVideoSourceRect
+             );
+        break;
 
-        case Mode4:
-            // Scale the main video destination rectangle
-            InflateRectBounded(
-                &m_rcMainVideoDestRect, 
-                dx * 8, dy * 8, 
-                VIDEO_MAIN_RECT
-                );
+    case Mode4:
+        // Scale the main video destination rectangle
+        InflateRectBounded(
+            &m_rcMainVideoDestRect,
+            dx * 8, dy * 8,
+            VIDEO_MAIN_RECT
+        );
 
-            hr = DXVAHD_SetDestinationRect(
-                m_pDXVAVP,
-                0,
-                TRUE,
-                m_rcMainVideoDestRect
-                );
-            break;
+        hr = DXVAHD_SetDestinationRect(
+                 m_pDXVAVP,
+                 0,
+                 TRUE,
+                 m_rcMainVideoDestRect
+             );
+        break;
 
-        case Mode5:
-            // Move the main video destination rectangle
-            MoveRectBounded(
-                &m_rcMainVideoDestRect, 
-                dx * 8, -dy * 8, 
-                VIDEO_MAIN_RECT
-                );
+    case Mode5:
+        // Move the main video destination rectangle
+        MoveRectBounded(
+            &m_rcMainVideoDestRect,
+            dx * 8, -dy * 8,
+            VIDEO_MAIN_RECT
+        );
 
-            hr = DXVAHD_SetDestinationRect(
-                m_pDXVAVP,
-                0,
-                TRUE,
-                m_rcMainVideoDestRect
-                );            
-            break;
+        hr = DXVAHD_SetDestinationRect(
+                 m_pDXVAVP,
+                 0,
+                 TRUE,
+                 m_rcMainVideoDestRect
+             );
+        break;
 
-        case Mode6:
-            if (dy != 0)
-            {
-                hr = AdjustExtendedColor(dy);
-            }
-            if (dx != 0)
-            {
-                hr = AdjustBackgroundColor(dx);
-            }
-            break;
+    case Mode6:
+        if (dy != 0)
+        {
+            hr = AdjustExtendedColor(dy);
+        }
+        if (dx != 0)
+        {
+            hr = AdjustBackgroundColor(dx);
+        }
+        break;
 
-        case Mode7:
-            if (dy != 0)
-            {
-                hr = AdjustFilter(DXVAHD_FILTER_BRIGHTNESS, dy);
-            }
-            if (dx != 0)
-            {
-                hr = AdjustFilter(DXVAHD_FILTER_CONTRAST, dx);
-            }
-            break;
+    case Mode7:
+        if (dy != 0)
+        {
+            hr = AdjustFilter(DXVAHD_FILTER_BRIGHTNESS, dy);
+        }
+        if (dx != 0)
+        {
+            hr = AdjustFilter(DXVAHD_FILTER_CONTRAST, dx);
+        }
+        break;
 
-        case Mode8:
-            if (dy != 0)
-            {
-                hr = AdjustFilter(DXVAHD_FILTER_HUE, dy);
-            }
-            if (dx != 0)
-            {
-                hr = AdjustFilter(DXVAHD_FILTER_SATURATION, dx);
-            }
-            break;
+    case Mode8:
+        if (dy != 0)
+        {
+            hr = AdjustFilter(DXVAHD_FILTER_HUE, dy);
+        }
+        if (dx != 0)
+        {
+            hr = AdjustFilter(DXVAHD_FILTER_SATURATION, dx);
+        }
+        break;
 
-        case Mode9:
-            hr = AdjustTargetRect(dx, dy);
-            break;
+    case Mode9:
+        hr = AdjustTargetRect(dx, dy);
+        break;
 
     }
 
@@ -1127,30 +1220,33 @@ HRESULT Application::AdjustAlphaSetting(int dx, int dy)
         }
         hr = DXVAHD_SetPlanarAlpha(m_pDXVAVP, 0, TRUE, float(m_PlanarAlphaValue) / 0xFF);
 
-        if (FAILED(hr)) { goto done; }
+        if (FAILED(hr))
+        {
+            goto done;
+        }
 
     }
 
     if (dx != 0)
     {
-        // Adjust per-pixel alpha. This is done by writing new values to 
+        // Adjust per-pixel alpha. This is done by writing new values to
         // the video surface.
 
         if (dx > 0)
         {
             m_PixelAlphaValue = min(m_PixelAlphaValue + 8, 0xFF);
         }
-        else 
+        else
         {
-            m_PixelAlphaValue = m_PixelAlphaValue < 8 ? 0 : m_PixelAlphaValue - 8;      
+            m_PixelAlphaValue = m_PixelAlphaValue < 8 ? 0 : m_PixelAlphaValue - 8;
         }
-        
+
         hr = SetAYUVSurfacePixelAlpha(
-            m_ppSubStream[0],
-            VIDEO_SUB_SURF_WIDTH,
-            VIDEO_SUB_SURF_HEIGHT,
-            m_PixelAlphaValue
-            );
+                 m_ppSubStream[0],
+                 VIDEO_SUB_SURF_WIDTH,
+                 VIDEO_SUB_SURF_HEIGHT,
+                 m_PixelAlphaValue
+             );
     }
 done:
     return hr;
@@ -1183,33 +1279,36 @@ HRESULT Application::AdjustExtendedColor(int dy)
             m_iExtendedColor = NUM_EX_COLORS - 1;
         }
     }
-    
+
     // Output color space.
     hr = DXVAHD_SetOutputColorSpace(
-        m_pDXVAVP,
-        TRUE,       // Playback
-        EX_COLOR_INFO[m_iExtendedColor].bRgbRange16_235,
-        EX_COLOR_INFO[m_iExtendedColor].bBT709,
-        0
-        );
+             m_pDXVAVP,
+             TRUE,       // Playback
+             EX_COLOR_INFO[m_iExtendedColor].bRgbRange16_235,
+             EX_COLOR_INFO[m_iExtendedColor].bBT709,
+             0
+         );
 
-    if (FAILED(hr)) { goto done; }
+    if (FAILED(hr))
+    {
+        goto done;
+    }
 
     // Input color space
     for (DWORD i = 0; i < 1 + SUB_STREAM_COUNT; i++)
     {
         hr = DXVAHD_SetInputColorSpace(
-            m_pDXVAVP,
-            i,
-            TRUE,       // Playback
-            EX_COLOR_INFO[m_iExtendedColor].bRgbRange16_235,
-            EX_COLOR_INFO[m_iExtendedColor].bBT709,
-            0
-            );
+                 m_pDXVAVP,
+                 i,
+                 TRUE,       // Playback
+                 EX_COLOR_INFO[m_iExtendedColor].bRgbRange16_235,
+                 EX_COLOR_INFO[m_iExtendedColor].bBT709,
+                 0
+             );
 
-        if (FAILED(hr)) 
-        { 
-            break; 
+        if (FAILED(hr))
+        {
+            break;
         }
     }
 
@@ -1248,12 +1347,12 @@ HRESULT Application::AdjustBackgroundColor(int dx)
     DXVAHD_COLOR clr;
 
     clr.RGB = BACKGROUND_COLORS[ m_iBackgroundColor ];
-    
+
     hr = DXVAHD_SetBackgroundColor(
-        m_pDXVAVP,
-        FALSE,       // YCbCr?
-        clr
-        );
+             m_pDXVAVP,
+             FALSE,       // YCbCr?
+             clr
+         );
 
     return hr;
 }
@@ -1288,12 +1387,12 @@ HRESULT Application::AdjustFilter(DXVAHD_FILTER filter, int dy)
     if (val >= minimum && val <= maximum)
     {
         hr = DXVAHD_SetFilterValue(
-            m_pDXVAVP,
-            0, 
-            filter,
-            TRUE,
-            val
-        );
+                 m_pDXVAVP,
+                 0,
+                 filter,
+                 TRUE,
+                 val
+             );
 
         if (FAILED(hr))
         {
@@ -1302,12 +1401,12 @@ HRESULT Application::AdjustFilter(DXVAHD_FILTER filter, int dy)
             val = m_Filters[ filter ].Range.Default;
 
             hr = DXVAHD_SetFilterValue(
-                m_pDXVAVP,
-                0, 
-                filter,
-                TRUE,
-                val
-                );
+                     m_pDXVAVP,
+                     0,
+                     filter,
+                     TRUE,
+                     val
+                 );
 
         }
 
@@ -1315,7 +1414,7 @@ HRESULT Application::AdjustFilter(DXVAHD_FILTER filter, int dy)
         {
             m_Filters[ filter ].CurrentValue = val;
         }
-    
+
     }
 
     return hr;
@@ -1325,7 +1424,7 @@ HRESULT Application::AdjustFilter(DXVAHD_FILTER filter, int dy)
 //-------------------------------------------------------------------
 // AdjustTargetRect
 //
-// Changes the target rectangle. 
+// Changes the target rectangle.
 //-------------------------------------------------------------------
 
 HRESULT Application::AdjustTargetRect(int dx, int dy)
@@ -1445,7 +1544,7 @@ BOOL Application::ParseCommandLine()
     if (!bValid)
     {
         MessageBox(
-            NULL, 
+            NULL,
             L"Usage:\n"
             L"-hh : Hardware Direct3D device; DXVA-HD\n"
             L"-hs : Hardware Direct3D device; software DXVA-HD\n"
@@ -1453,13 +1552,13 @@ BOOL Application::ParseCommandLine()
             L"-u [0 | 1 | 2]: DXVA-HD device usage",
             L"Invalid Command Line",
             MB_OK | MB_ICONERROR
-            );
+        );
     }
 
     // Free memory allocated for CommandLineToArgvW arguments.
     LocalFree(szArglist);
 
-   return bValid;
+    return bValid;
 }
 
 

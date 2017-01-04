@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -41,11 +41,11 @@ DWORD VerifyEmbeddedSignatures(_In_ PCWSTR FileName,
                                _In_ HANDLE FileHandle,
                                _In_ bool UseStrongSigPolicy)
 {
-    DWORD Error = ERROR_SUCCESS;    
+    DWORD Error = ERROR_SUCCESS;
     bool WintrustCalled = false;
     GUID GenericActionId = WINTRUST_ACTION_GENERIC_VERIFY_V2;
     WINTRUST_DATA WintrustData = {};
-    WINTRUST_FILE_INFO FileInfo = {};    
+    WINTRUST_FILE_INFO FileInfo = {};
     WINTRUST_SIGNATURE_SETTINGS SignatureSettings = {};
     CERT_STRONG_SIGN_PARA StrongSigPolicy = {};
 
@@ -55,22 +55,22 @@ DWORD VerifyEmbeddedSignatures(_In_ PCWSTR FileName,
     WintrustData.dwUIChoice = WTD_UI_NONE;
     WintrustData.fdwRevocationChecks = WTD_REVOKE_NONE;
     WintrustData.dwUnionChoice = WTD_CHOICE_FILE;
-    
+
     FileInfo.cbStruct = sizeof(WINTRUST_FILE_INFO_);
     FileInfo.hFile = FileHandle;
     FileInfo.pcwszFilePath = FileName;
     WintrustData.pFile = &FileInfo;
-    
+
     //
     // First verify the primary signature (index 0) to determine how many secondary signatures
-    // are present. We use WSS_VERIFY_SPECIFIC and dwIndex to do this, also setting 
+    // are present. We use WSS_VERIFY_SPECIFIC and dwIndex to do this, also setting
     // WSS_GET_SECONDARY_SIG_COUNT to have the number of secondary signatures returned.
     //
     SignatureSettings.cbStruct = sizeof(WINTRUST_SIGNATURE_SETTINGS);
     SignatureSettings.dwFlags = WSS_GET_SECONDARY_SIG_COUNT | WSS_VERIFY_SPECIFIC;
     SignatureSettings.dwIndex = 0;
     WintrustData.pSignatureSettings = &SignatureSettings;
-    
+
     if (UseStrongSigPolicy != false)
     {
         StrongSigPolicy.cbSize = sizeof(CERT_STRONG_SIGN_PARA);
@@ -78,13 +78,13 @@ DWORD VerifyEmbeddedSignatures(_In_ PCWSTR FileName,
         StrongSigPolicy.pszOID = szOID_CERT_STRONG_SIGN_OS_CURRENT;
         WintrustData.pSignatureSettings->pCryptoPolicy = &StrongSigPolicy;
     }
-    
+
     wprintf(L"Verifying primary signature... ");
     Error = WinVerifyTrust(NULL, &GenericActionId, &WintrustData);
     WintrustCalled = true;
-    if (Error != ERROR_SUCCESS) 
+    if (Error != ERROR_SUCCESS)
     {
-        PrintError(Error);        
+        PrintError(Error);
         goto Cleanup;
     }
 
@@ -100,11 +100,11 @@ DWORD VerifyEmbeddedSignatures(_In_ PCWSTR FileName,
         // Need to clear the previous state data from the last call to WinVerifyTrust
         WintrustData.dwStateAction = WTD_STATEACTION_CLOSE;
         Error = WinVerifyTrust(NULL, &GenericActionId, &WintrustData);
-        if (Error != ERROR_SUCCESS) 
+        if (Error != ERROR_SUCCESS)
         {
             //No need to call WinVerifyTrust again
             WintrustCalled = false;
-            PrintError(Error);            
+            PrintError(Error);
             goto Cleanup;
         }
 
@@ -114,9 +114,9 @@ DWORD VerifyEmbeddedSignatures(_In_ PCWSTR FileName,
         WintrustData.dwStateAction = WTD_STATEACTION_VERIFY;
         WintrustData.pSignatureSettings->dwIndex = x;
         Error = WinVerifyTrust(NULL, &GenericActionId, &WintrustData);
-        if (Error != ERROR_SUCCESS) 
+        if (Error != ERROR_SUCCESS)
         {
-            PrintError(Error);            
+            PrintError(Error);
             goto Cleanup;
         }
 
@@ -135,14 +135,14 @@ Cleanup:
         WinVerifyTrust(NULL, &GenericActionId, &WintrustData);
     }
 
-    return Error;     
+    return Error;
 }
 
 
 //----------------------------------------------------------------------------
 //
 //  VerifyCatalogSignature
-//  Looks up a file by hash in the system catalogs. 
+//  Looks up a file by hash in the system catalogs.
 //
 //----------------------------------------------------------------------------
 DWORD VerifyCatalogSignature(_In_ HANDLE FileHandle,
@@ -220,11 +220,11 @@ DWORD VerifyCatalogSignature(_In_ HANDLE FileHandle,
     // Find the first catalog containing this hash
     CatInfoHandle = NULL;
     CatInfoHandle = CryptCATAdminEnumCatalogFromHash(
-                CatAdminHandle,
-                HashData,
-                HashLength,
-                0,
-                &CatInfoHandle);
+                        CatAdminHandle,
+                        HashData,
+                        HashLength,
+                        0,
+                        &CatInfoHandle);
 
     while (CatInfoHandle != NULL)
     {
@@ -245,11 +245,11 @@ DWORD VerifyCatalogSignature(_In_ HANDLE FileHandle,
 
         // Look for the next catalog containing the file's hash
         CatInfoHandle = CryptCATAdminEnumCatalogFromHash(
-                    CatAdminHandle,
-                    HashData,
-                    HashLength,
-                    0,
-                    &CatInfoHandle);
+                            CatAdminHandle,
+                            HashData,
+                            HashLength,
+                            0,
+                            &CatInfoHandle);
     }
 
     if (Found != true)
@@ -273,7 +273,7 @@ Cleanup:
         HeapFree(GetProcessHeap(), 0, HashData);
     }
 
-     return Error;
+    return Error;
 }
 
 int __cdecl wmain(_In_ unsigned int argc, _In_reads_(argc) PCWSTR wargv[])
@@ -299,16 +299,16 @@ int __cdecl wmain(_In_ unsigned int argc, _In_reads_(argc) PCWSTR wargv[])
     if (ArgStart + 1 >= argc)
     {
         PrintUsage(wargv[0]);
-        Error = ERROR_INVALID_PARAMETER;        
+        Error = ERROR_INVALID_PARAMETER;
         goto Cleanup;
     }
-    
+
     if ((wcslen(wargv[ArgStart]) != 2) ||
-        ((_wcsicmp(wargv[ArgStart], L"-c") != 0) &&
-         (_wcsicmp(wargv[ArgStart], L"-e") != 0)))
-    {   
+            ((_wcsicmp(wargv[ArgStart], L"-c") != 0) &&
+             (_wcsicmp(wargv[ArgStart], L"-e") != 0)))
+    {
         PrintUsage(wargv[0]);
-        Error = ERROR_INVALID_PARAMETER;        
+        Error = ERROR_INVALID_PARAMETER;
         goto Cleanup;
     }
 
@@ -322,17 +322,19 @@ int __cdecl wmain(_In_ unsigned int argc, _In_reads_(argc) PCWSTR wargv[])
     if (FileHandle == INVALID_HANDLE_VALUE)
     {
         Error = GetLastError();
-        PrintError(Error);        
+        PrintError(Error);
         goto Cleanup;
     }
 
     if (_wcsicmp(wargv[ArgStart], L"-c") == 0)
     {
         Error = VerifyCatalogSignature(FileHandle, UseStrongSigPolicy);
-    }else if (_wcsicmp(wargv[ArgStart], L"-e") == 0)
+    }
+    else if (_wcsicmp(wargv[ArgStart], L"-e") == 0)
     {
         Error = VerifyEmbeddedSignatures(wargv[ArgStart+1], FileHandle, UseStrongSigPolicy);
-    }else
+    }
+    else
     {
         PrintUsage(wargv[0]);
         Error = ERROR_INVALID_PARAMETER;

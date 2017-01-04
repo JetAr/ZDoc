@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -12,74 +12,74 @@ void DisplayVarType(
 {
     switch(vartype)
     {
-        case VT_BOOL:
-            wprintf(L"VT_BOOL");
-            break;
-        case VT_UI4:
-            wprintf(L"VT_UI4");
-            break;
-        case VT_R4:
-            wprintf(L"VT_R4");
-            break;
-        case VT_UI8:
-            wprintf(L"VT_UI8");
-            break;
-        case VT_UI1|VT_VECTOR:
-            wprintf(L"VT_UI1|VT_VECTOR");
-            break;
-        case VT_DATE:
-            wprintf(L"VT_DATE");
-            break;
-        case VT_FILETIME:
-            wprintf(L"VT_FILETIME");
-            break;
-        case VT_LPWSTR:
-            wprintf(L"VT_LPWSTR");
-            break;
-        case VT_CLSID:
-            wprintf(L"VT_CLSID");
-            break;
-        case VT_ERROR:
-            wprintf(L"VT_ERROR");
-            break;
-        case VT_UNKNOWN:
-            wprintf(L"VT_UNKNOWN");
-            break;
-        case VT_NULL:
-            wprintf(L"VT_NULL");
-            break;
-        // add more VARTYPEs as needed
-        default:
-            wprintf(L"%u", vartype);
-            break;
+    case VT_BOOL:
+        wprintf(L"VT_BOOL");
+        break;
+    case VT_UI4:
+        wprintf(L"VT_UI4");
+        break;
+    case VT_R4:
+        wprintf(L"VT_R4");
+        break;
+    case VT_UI8:
+        wprintf(L"VT_UI8");
+        break;
+    case VT_UI1|VT_VECTOR:
+        wprintf(L"VT_UI1|VT_VECTOR");
+        break;
+    case VT_DATE:
+        wprintf(L"VT_DATE");
+        break;
+    case VT_FILETIME:
+        wprintf(L"VT_FILETIME");
+        break;
+    case VT_LPWSTR:
+        wprintf(L"VT_LPWSTR");
+        break;
+    case VT_CLSID:
+        wprintf(L"VT_CLSID");
+        break;
+    case VT_ERROR:
+        wprintf(L"VT_ERROR");
+        break;
+    case VT_UNKNOWN:
+        wprintf(L"VT_UNKNOWN");
+        break;
+    case VT_NULL:
+        wprintf(L"VT_NULL");
+        break;
+    // add more VARTYPEs as needed
+    default:
+        wprintf(L"%u", vartype);
+        break;
     }
 }
 
 void DisplayParameterForm(
-    DWORD   form) 
+    DWORD   form)
 {
     switch(static_cast<WpdParameterAttributeForm>(form))
     {
-        case WPD_PARAMETER_ATTRIBUTE_FORM_RANGE:
-            wprintf(L"Range");
-            break;
-            
-        case WPD_PARAMETER_ATTRIBUTE_FORM_ENUMERATION:
-            wprintf(L"Enumeration");
-            break;
+    case WPD_PARAMETER_ATTRIBUTE_FORM_RANGE:
+        wprintf(L"Range");
+        break;
 
-        case WPD_PARAMETER_ATTRIBUTE_FORM_REGULAR_EXPRESSION:
-            wprintf(L"Regular Expression");
-            break;
+    case WPD_PARAMETER_ATTRIBUTE_FORM_ENUMERATION:
+        wprintf(L"Enumeration");
+        break;
 
-        case WPD_PARAMETER_ATTRIBUTE_FORM_OBJECT_IDENTIFIER:
-            wprintf(L"Object Identifier");
-            break;
+    case WPD_PARAMETER_ATTRIBUTE_FORM_REGULAR_EXPRESSION:
+        wprintf(L"Regular Expression");
+        break;
 
-        case WPD_PARAMETER_ATTRIBUTE_FORM_UNSPECIFIED:
-        default:
-            wprintf(L"Unspecified");
-            break;
+    case WPD_PARAMETER_ATTRIBUTE_FORM_OBJECT_IDENTIFIER:
+        wprintf(L"Object Identifier");
+        break;
+
+    case WPD_PARAMETER_ATTRIBUTE_FORM_UNSPECIFIED:
+    default:
+        wprintf(L"Unspecified");
+        break;
     }
 }
 
@@ -158,7 +158,7 @@ void DisplayEventParameters(
                         wprintf(L"\n");
                     }
                 }
-                
+
                 wprintf(L"\n");
             }
         }
@@ -304,8 +304,8 @@ void ListSupportedFormats(
             {
                 // We have a format.  It is assumed that
                 // formats are returned as VT_CLSID VarTypes.
-                if (format.vt    == VT_CLSID && 
-                    format.puuid != nullptr)
+                if (format.vt    == VT_CLSID &&
+                        format.puuid != nullptr)
                 {
                     DisplayFormat(capabilities.Get(), *format.puuid);
                     wprintf(L"\n");
@@ -368,8 +368,8 @@ void ListSupportedEvents(
             {
                 // We have an event.  It is assumed that
                 // events are returned as VT_CLSID VarTypes.
-                if (event.vt    == VT_CLSID && 
-                    event.puuid != nullptr)
+                if (event.vt    == VT_CLSID &&
+                        event.puuid != nullptr)
                 {
                     DisplayEvent(capabilities.Get(), *event.puuid);
                     wprintf(L"\n");
@@ -386,7 +386,7 @@ void ListSupportedEvents(
 // List the abstract services implemented by the current service.
 // Abstract services represent functionality that a service supports, and are used by applications to discover
 // that a service supports formats, properties and methods associated with that functionality.
-// For example, a Contacts service may implement an abstract service that represents the synchronization models supported 
+// For example, a Contacts service may implement an abstract service that represents the synchronization models supported
 // on that device, such as the FullEnumerationSync or AnchorSync Device Services
 void ListAbstractServices(
     _In_ IPortableDeviceService* service)

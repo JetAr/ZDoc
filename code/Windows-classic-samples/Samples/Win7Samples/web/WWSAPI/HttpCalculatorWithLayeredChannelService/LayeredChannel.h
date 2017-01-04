@@ -1,8 +1,8 @@
-//------------------------------------------------------------
+﻿//------------------------------------------------------------
 // Copyright (c) Microsoft Corporation.  All rights reserved.
 //------------------------------------------------------------
 
-// A structure containing parameters passed to the custom channel 
+// A structure containing parameters passed to the custom channel
 // using WS_CHANNEL_PROPERTY_CUSTOM_CHANNEL_PARAMETERS.
 struct LayeredChannelParameters
 {

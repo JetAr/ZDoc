@@ -1,4 +1,4 @@
-/*++
+﻿/*++
 
 Copyright (c) 1995 - 2000  Microsoft Corporation
 
@@ -37,7 +37,7 @@ __cdecl
 wmain(
     int argc,
     wchar_t *argv[]
-    )
+)
 {
     LPWSTR DirectoryToShare;
     LPWSTR Sharename;
@@ -60,7 +60,8 @@ wmain(
 
     BOOL bSuccess = FALSE; // assume this function fails
 
-    if(argc < 4) {
+    if(argc < 4)
+    {
         printf("Usage: %ls <directory> <sharename> <user/group> [\\\\Server]\n", argv[0]);
         printf(" directory is fullpath of directory to share\n");
         printf(" sharename is name of share on server\n");
@@ -83,9 +84,12 @@ wmain(
     Sharename = argv[2];
     Username = argv[3];
 
-    if( argc > 4 ) {
+    if( argc > 4 )
+    {
         Server = argv[4];
-    } else {
+    }
+    else
+    {
         Server = NULL; // local machine
     }
 
@@ -96,7 +100,8 @@ wmain(
     cbSid = SID_SIZE;
 
     pSid = (PSID)HeapAlloc(GetProcessHeap(), 0, cbSid);
-    if(pSid == NULL) {
+    if(pSid == NULL)
+    {
         printf("HeapAlloc error!\n");
         return RTN_ERROR;
     }
@@ -107,26 +112,29 @@ wmain(
     //
 
     if(!LookupAccountNameW(
-        NULL,       // default lookup logic
-        Username,   // user/group of interest from commandline
-        pSid,       // Sid buffer
-        &cbSid,     // size of Sid
-        RefDomain,  // Domain account found on (unused)
-        &cchDomain, // size of domain in chars
-        &peUse
-        )) {
+                NULL,       // default lookup logic
+                Username,   // user/group of interest from commandline
+                pSid,       // Sid buffer
+                &cbSid,     // size of Sid
+                RefDomain,  // Domain account found on (unused)
+                &cchDomain, // size of domain in chars
+                &peUse
+            ))
+    {
 
         //
         // if the buffer wasn't large enough, try again
         //
 
-        if(GetLastError() == ERROR_INSUFFICIENT_BUFFER) {
+        if(GetLastError() == ERROR_INSUFFICIENT_BUFFER)
+        {
 
             PSID psidTemp;
 
             psidTemp = (PSID)HeapReAlloc(GetProcessHeap(), 0, pSid, cbSid);
 
-            if(psidTemp == NULL) {
+            if(psidTemp == NULL)
+            {
                 printf("HeapReAlloc error!\n");
                 goto cleanup;
             }
@@ -138,19 +146,22 @@ wmain(
             cchDomain = DNLEN + 1;
 
             if(!LookupAccountNameW(
-                NULL,       // default lookup logic
-                Username,   // user/group of interest from commandline
-                pSid,       // Sid buffer
-                &cbSid,     // size of Sid
-                RefDomain,  // Domain account found on (unused)
-                &cchDomain, // size of domain in chars
-                &peUse
-                )) {
-                    printf("LookupAccountName error! (rc=%lu)\n", GetLastError());
-                    goto cleanup;
-                }
+                        NULL,       // default lookup logic
+                        Username,   // user/group of interest from commandline
+                        pSid,       // Sid buffer
+                        &cbSid,     // size of Sid
+                        RefDomain,  // Domain account found on (unused)
+                        &cchDomain, // size of domain in chars
+                        &peUse
+                    ))
+            {
+                printf("LookupAccountName error! (rc=%lu)\n", GetLastError());
+                goto cleanup;
+            }
 
-        } else {
+        }
+        else
+        {
             printf("LookupAccountName error! (rc=%lu)\n", GetLastError());
             goto cleanup;
         }
@@ -161,8 +172,8 @@ wmain(
     //
 
     dwAclSize = sizeof(ACL) +
-        1 * ( sizeof(ACCESS_ALLOWED_ACE) - sizeof(DWORD) ) +
-        GetLengthSid(pSid) ;
+                1 * ( sizeof(ACCESS_ALLOWED_ACE) - sizeof(DWORD) ) +
+                GetLengthSid(pSid) ;
 
     //
     // allocate storage for Acl
@@ -179,18 +190,19 @@ wmain(
     //
 
     if(!AddAccessAllowedAce(
-        pDacl,
-        ACL_REVISION,
-        GENERIC_ALL,
-        pSid
-        )) goto cleanup;
+                pDacl,
+                ACL_REVISION,
+                GENERIC_ALL,
+                pSid
+            )) goto cleanup;
 
     if(!InitializeSecurityDescriptor(&sd, SECURITY_DESCRIPTOR_REVISION))
         goto cleanup;
 
-    if(!SetSecurityDescriptorDacl(&sd, TRUE, pDacl, FALSE)) {
+    if(!SetSecurityDescriptorDacl(&sd, TRUE, pDacl, FALSE))
+    {
         fprintf(stderr, "SetSecurityDescriptorDacl error! (rc=%lu)\n",
-            GetLastError());
+                GetLastError());
         goto cleanup;
     }
 
@@ -210,13 +222,14 @@ wmain(
     si502.shi502_security_descriptor = &sd;
 
     nas = NetShareAdd(
-        (LMSTR) Server,         // share is on local machine
-        502,            // info-level
-        (LPBYTE)&si502, // info-buffer
-        NULL            // don't bother with parm
-        );
+              (LMSTR) Server,         // share is on local machine
+              502,            // info-level
+              (LPBYTE)&si502, // info-buffer
+              NULL            // don't bother with parm
+          );
 
-    if(nas != NO_ERROR) {
+    if(nas != NO_ERROR)
+    {
         printf("NetShareAdd error! (rc=%lu)\n", nas);
         goto cleanup;
     }
@@ -234,7 +247,8 @@ cleanup:
     if(pSid != NULL)
         HeapFree(GetProcessHeap(), 0, pSid);
 
-    if(!bSuccess) {
+    if(!bSuccess)
+    {
         return RTN_ERROR;
     }
 

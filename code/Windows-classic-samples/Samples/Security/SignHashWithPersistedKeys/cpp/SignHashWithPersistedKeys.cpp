@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -9,7 +9,7 @@
 //
 //  File:             SignHashWithPersistedKeys.cpp
 //
-//  Contents:         Sample program for ECDSA 256 signing using CNG. 
+//  Contents:         Sample program for ECDSA 256 signing using CNG.
 //                    A persisted key is used for signing and an ephemeral key is used for verification
 //
 
@@ -43,10 +43,10 @@ BYTE Message[] =
 //  Prints error information to the console
 //
 //----------------------------------------------------------------------------
-void 
-ReportError( 
-    _In_    DWORD       dwErrCode 
-    )
+void
+ReportError(
+    _In_    DWORD       dwErrCode
+)
 {
     wprintf( L"Error: 0x%08x (%d)\n", dwErrCode, dwErrCode );
 }
@@ -61,23 +61,23 @@ ReportError(
 NTSTATUS
 ComputeHash(
     _In_reads_bytes_(DataLength)
-                PBYTE           Data,
+    PBYTE           Data,
     _In_        DWORD           DataLength,
     _Outptr_result_bytebuffer_maybenull_(*DataDigestLengthPointer)
-                PBYTE           *DataDigestPointer,
+    PBYTE           *DataDigestPointer,
     _Out_       DWORD           *DataDigestLengthPointer
-    )
+)
 {
     NTSTATUS                Status;
-    
+
     BCRYPT_ALG_HANDLE       HashAlgHandle   = NULL;
     BCRYPT_HASH_HANDLE      HashHandle      = NULL;
-    
+
     PBYTE                   HashDigest       = NULL;
     DWORD                   HashDigestLength = 0;
 
     DWORD                   ResultLength     = 0;
-    
+
     *DataDigestPointer = NULL;
     *DataDigestLengthPointer = 0;
 
@@ -86,28 +86,28 @@ ComputeHash(
     //
 
     Status = BCryptOpenAlgorithmProvider(
-                                        &HashAlgHandle,
-                                        BCRYPT_SHA1_ALGORITHM,
-                                        NULL,
-                                        0);
+                 &HashAlgHandle,
+                 BCRYPT_SHA1_ALGORITHM,
+                 NULL,
+                 0);
     if( !NT_SUCCESS(Status) )
     {
         ReportError(Status);
         goto cleanup;
     }
 
-    
+
     //
     // Calculate the length of the Hash
     //
-    
+
     Status= BCryptGetProperty(
-                                        HashAlgHandle, 
-                                        BCRYPT_HASH_LENGTH, 
-                                        (PBYTE)&HashDigestLength, 
-                                        sizeof(HashDigestLength), 
-                                        &ResultLength, 
-                                        0);
+                HashAlgHandle,
+                BCRYPT_HASH_LENGTH,
+                (PBYTE)&HashDigestLength,
+                sizeof(HashDigestLength),
+                &ResultLength,
+                0);
     if( !NT_SUCCESS(Status) )
     {
         ReportError(Status);
@@ -122,48 +122,48 @@ ComputeHash(
         ReportError(Status);
         goto cleanup;
     }
-    
+
     //
     // Create a Hash
     //
 
     Status = BCryptCreateHash(
-                                        HashAlgHandle, 
-                                        &HashHandle, 
-                                        NULL, 
-                                        0, 
-                                        NULL, 
-                                        0, 
-                                        0);
+                 HashAlgHandle,
+                 &HashHandle,
+                 NULL,
+                 0,
+                 NULL,
+                 0,
+                 0);
     if( !NT_SUCCESS(Status) )
     {
         ReportError(Status);
         goto cleanup;
     }
-    
+
     //
     // Hash Data(s)
     //
     Status = BCryptHashData(
-                                        HashHandle,
-                                        (PBYTE)Data,
-                                        DataLength,
-                                        0);
+                 HashHandle,
+                 (PBYTE)Data,
+                 DataLength,
+                 0);
     if( !NT_SUCCESS(Status) )
     {
         ReportError(Status);
         goto cleanup;
     }
-    
+
     //
     // Close the Hash
     //
-    
+
     Status = BCryptFinishHash(
-                                        HashHandle, 
-                                        HashDigest, 
-                                        HashDigestLength, 
-                                        0);
+                 HashHandle,
+                 HashDigest,
+                 HashDigestLength,
+                 0);
     if( !NT_SUCCESS(Status) )
     {
         ReportError(Status);
@@ -172,7 +172,7 @@ ComputeHash(
 
     *DataDigestPointer = HashDigest;
     HashDigest = NULL;
-    *DataDigestLengthPointer = HashDigestLength; 
+    *DataDigestLengthPointer = HashDigestLength;
 
     Status = STATUS_SUCCESS;
 
@@ -208,21 +208,21 @@ cleanup:
 SECURITY_STATUS
 SignHash(
     _In_reads_bytes_(MessageLength)
-                PBYTE           MessageToSign,
+    PBYTE           MessageToSign,
     _In_        DWORD           MessageLength,
-    _Outptr_result_bytebuffer_maybenull_(*SignatureBlobLengthPointer) 
-                PBYTE               *SignatureBlobPointer,
+    _Outptr_result_bytebuffer_maybenull_(*SignatureBlobLengthPointer)
+    PBYTE               *SignatureBlobPointer,
     _Out_       DWORD               *SignatureBlobLengthPointer,
-    _Outptr_result_bytebuffer_maybenull_(*KeyBlobLengthPointer) 
-                PBYTE               *KeyBlobPointer,
+    _Outptr_result_bytebuffer_maybenull_(*KeyBlobLengthPointer)
+    PBYTE               *KeyBlobPointer,
     _Out_       DWORD               *KeyBlobLengthPointer
-    )
+)
 {
     NTSTATUS                Status;
     SECURITY_STATUS         secStatus = S_OK;
     NCRYPT_PROV_HANDLE      ProviderHandle = 0;
     NCRYPT_KEY_HANDLE       KeyHandle = 0;
-    
+
     PBYTE                   MessageDigest   = NULL;
     DWORD                   MessageDigestLength = 0;
     PBYTE                   KeyBlob         = NULL;
@@ -230,7 +230,7 @@ SignHash(
     PBYTE                   SignatureBlob   = NULL;
     DWORD                   SignatureBlobLength = 0;
     DWORD                   ResultLength    = 0;
-    
+
     *SignatureBlobPointer = NULL;
     *SignatureBlobLengthPointer = 0;
     *KeyBlobPointer = NULL;
@@ -241,10 +241,10 @@ SignHash(
     //
 
     Status = ComputeHash(
-                                        MessageToSign,
-                                        MessageLength,
-                                        &MessageDigest,
-                                        &MessageDigestLength);
+                 MessageToSign,
+                 MessageLength,
+                 &MessageDigest,
+                 &MessageDigestLength);
     if( !NT_SUCCESS(Status) )
     {
         ReportError(Status);
@@ -252,7 +252,7 @@ SignHash(
         goto cleanup;
     }
 
-    
+
     if( MessageDigest == NULL )
     {
         Status = NTE_INTERNAL_ERROR;
@@ -265,9 +265,9 @@ SignHash(
     //
 
     secStatus = NCryptOpenStorageProvider(
-                                        &ProviderHandle, 
-                                        MS_KEY_STORAGE_PROVIDER, 
-                                        0);
+                    &ProviderHandle,
+                    MS_KEY_STORAGE_PROVIDER,
+                    0);
     if( FAILED(secStatus) )
     {
         ReportError(secStatus);
@@ -279,12 +279,12 @@ SignHash(
     //
 
     secStatus = NCryptCreatePersistedKey(
-                                        ProviderHandle,
-                                        &KeyHandle,
-                                        NCRYPT_ECDSA_P256_ALGORITHM,
-                                        L"Sample ECC key",
-                                        0,
-                                        0);
+                    ProviderHandle,
+                    &KeyHandle,
+                    NCRYPT_ECDSA_P256_ALGORITHM,
+                    L"Sample ECC key",
+                    0,
+                    0);
     if( FAILED(secStatus) )
     {
         ReportError(secStatus);
@@ -294,35 +294,35 @@ SignHash(
     //
     // Finalize the key - create it on the disk
     //
-    
+
     secStatus = NCryptFinalizeKey(
-                                        KeyHandle,
-                                        0);
+                    KeyHandle,
+                    0);
     if( FAILED(secStatus) )
     {
         ReportError(secStatus);
         goto cleanup;
-    }   
+    }
 
     //
     // Sign the Hash
     //
 
     secStatus = NCryptSignHash(
-                                        KeyHandle,                  // Key handle used to sign the hash
-                                        NULL,                       // Padding information
-                                        MessageDigest,              // Hash of the message
-                                        MessageDigestLength,        // Length of the hash
-                                        NULL,                       // Signed hash buffer
-                                        0,                          // Length of the signature(signed hash value)
-                                        &SignatureBlobLength,       // Number of bytes copied to the signature buffer
-                                        0);                         // Flags
+                    KeyHandle,                  // Key handle used to sign the hash
+                    NULL,                       // Padding information
+                    MessageDigest,              // Hash of the message
+                    MessageDigestLength,        // Length of the hash
+                    NULL,                       // Signed hash buffer
+                    0,                          // Length of the signature(signed hash value)
+                    &SignatureBlobLength,       // Number of bytes copied to the signature buffer
+                    0);                         // Flags
     if( FAILED(secStatus) )
     {
         ReportError(secStatus);
         goto cleanup;
     }
-                
+
     //allocate the signature buffer
     SignatureBlob = (PBYTE)HeapAlloc (GetProcessHeap (), 0, SignatureBlobLength);
     if( NULL == SignatureBlob )
@@ -334,20 +334,20 @@ SignHash(
 
 
     secStatus = NCryptSignHash(
-                                        KeyHandle,                  // Key handle used to sign the hash      
-                                        NULL,                       // Padding information
-                                        MessageDigest,              // Hash of the message
-                                        MessageDigestLength,        // Length of the hash
-                                        SignatureBlob,              // Signed hash buffer
-                                        SignatureBlobLength,        // Length of the signature(signed hash value)
-                                        &ResultLength,              // Number of bytes copied to the signature buffer
-                                        0);                         // Flags
+                    KeyHandle,                  // Key handle used to sign the hash
+                    NULL,                       // Padding information
+                    MessageDigest,              // Hash of the message
+                    MessageDigestLength,        // Length of the hash
+                    SignatureBlob,              // Signed hash buffer
+                    SignatureBlobLength,        // Length of the signature(signed hash value)
+                    &ResultLength,              // Number of bytes copied to the signature buffer
+                    0);                         // Flags
     if( FAILED(secStatus) )
     {
         ReportError(secStatus);
         goto cleanup;
-    } 
-    
+    }
+
     *SignatureBlobPointer = SignatureBlob;
     SignatureBlob = NULL;
     *SignatureBlobLengthPointer = SignatureBlobLength;
@@ -357,14 +357,14 @@ SignHash(
     //
 
     secStatus = NCryptExportKey(
-                                        KeyHandle,                  // Handle of the key to export
-                                        NULL,                       // Handle of the key used to wrap the exported key
-                                        BCRYPT_ECCPUBLIC_BLOB,      // Blob type (null terminated unicode string)
-                                        NULL,                       // Parameter list
-                                        NULL,                       // Buffer that recieves the key blob
-                                        0,                          // Buffer length (in bytes)
-                                        &KeyBlobLength,             // Number of bytes copied to the buffer 
-                                        0);                         // Flags
+                    KeyHandle,                  // Handle of the key to export
+                    NULL,                       // Handle of the key used to wrap the exported key
+                    BCRYPT_ECCPUBLIC_BLOB,      // Blob type (null terminated unicode string)
+                    NULL,                       // Parameter list
+                    NULL,                       // Buffer that recieves the key blob
+                    0,                          // Buffer length (in bytes)
+                    &KeyBlobLength,             // Number of bytes copied to the buffer
+                    0);                         // Flags
     if( FAILED(secStatus) )
     {
         ReportError(secStatus);
@@ -380,14 +380,14 @@ SignHash(
     }
 
     secStatus = NCryptExportKey(
-                                        KeyHandle,                  // Handle of the key to export
-                                        NULL,                       // Handle of the key used to wrap the exported key
-                                        BCRYPT_ECCPUBLIC_BLOB,      // Blob type (null terminated unicode string)
-                                        NULL,                       // Parameter list
-                                        KeyBlob,                    // Buffer that recieves the key blob
-                                        KeyBlobLength,              // Buffer length (in bytes)
-                                        &ResultLength,              // Number of bytes copied to the buffer
-                                        0);                         // Flags
+                    KeyHandle,                  // Handle of the key to export
+                    NULL,                       // Handle of the key used to wrap the exported key
+                    BCRYPT_ECCPUBLIC_BLOB,      // Blob type (null terminated unicode string)
+                    NULL,                       // Parameter list
+                    KeyBlob,                    // Buffer that recieves the key blob
+                    KeyBlobLength,              // Buffer length (in bytes)
+                    &ResultLength,              // Number of bytes copied to the buffer
+                    0);                         // Flags
     if( FAILED(secStatus) )
     {
         ReportError(secStatus);
@@ -397,7 +397,7 @@ SignHash(
     *KeyBlobPointer = KeyBlob;
     KeyBlob = NULL;
     *KeyBlobLengthPointer = KeyBlobLength;
-    
+
     secStatus = S_OK;
 
 cleanup:
@@ -439,38 +439,38 @@ cleanup:
 //  VerifySignature
 //  Verifies the signature given the signature blob, key blob, and hash of the message
 //  using BCryptVerifySignature(..) , ECDSA_P256
-//      
+//
 //-----------------------------------------------------------------------------
 SECURITY_STATUS
 VerifySignature(
     _In_reads_bytes_(MessageLength)
-               PBYTE           MessageToVerify,
+    PBYTE           MessageToVerify,
     _In_       DWORD           MessageLength,
-    _In_reads_bytes_(SignatureBlobLength) 
-               PBYTE           SignatureBlob,
+    _In_reads_bytes_(SignatureBlobLength)
+    PBYTE           SignatureBlob,
     _In_       DWORD           SignatureBlobLength,
-    _In_reads_bytes_(KeyBlobLength) 
-               PBYTE           KeyBlob,
+    _In_reads_bytes_(KeyBlobLength)
+    PBYTE           KeyBlob,
     _In_       DWORD           KeyBlobLength
-    )
+)
 {
     NTSTATUS                Status;
     SECURITY_STATUS         secStatus = S_OK;
     BCRYPT_KEY_HANDLE       KeyHandle       = NULL;
     BCRYPT_ALG_HANDLE       DsaAlgHandle    = NULL;
-    
+
     PBYTE                   MessageDigest   = NULL;
     DWORD                   MessageDigestLength = 0;
-    
+
     //
     // Compute hash of the message
     //
 
     Status = ComputeHash(
-                                        MessageToVerify,
-                                        MessageLength,
-                                        &MessageDigest,
-                                        &MessageDigestLength);
+                 MessageToVerify,
+                 MessageLength,
+                 &MessageDigest,
+                 &MessageDigestLength);
     if( !NT_SUCCESS(Status) )
     {
         ReportError(Status);
@@ -490,10 +490,10 @@ VerifySignature(
     //
 
     Status = BCryptOpenAlgorithmProvider(
-                                        &DsaAlgHandle,
-                                        BCRYPT_ECDSA_P256_ALGORITHM,
-                                        NULL,
-                                        0);
+                 &DsaAlgHandle,
+                 BCRYPT_ECDSA_P256_ALGORITHM,
+                 NULL,
+                 0);
     if( !NT_SUCCESS(Status) )
     {
         ReportError(Status);
@@ -504,15 +504,15 @@ VerifySignature(
     //
     // Import the public key
     //
-    
+
     Status = BCryptImportKeyPair(
-                                        DsaAlgHandle,               // Alg handle
-                                        NULL,                       // Parameter not used
-                                        BCRYPT_ECCPUBLIC_BLOB,      // Blob type (Null terminated unicode string)
-                                        &KeyHandle,                 // Key handle that will be recieved
-                                        KeyBlob,                    // Buffer than points to the key blob
-                                        KeyBlobLength,              // Buffer length in bytes
-                                        0);                         // Flags
+                 DsaAlgHandle,               // Alg handle
+                 NULL,                       // Parameter not used
+                 BCRYPT_ECCPUBLIC_BLOB,      // Blob type (Null terminated unicode string)
+                 &KeyHandle,                 // Key handle that will be recieved
+                 KeyBlob,                    // Buffer than points to the key blob
+                 KeyBlobLength,              // Buffer length in bytes
+                 0);                         // Flags
     if( !NT_SUCCESS(Status) )
     {
         ReportError(Status);
@@ -523,15 +523,15 @@ VerifySignature(
     //
     // Verify the signature
     //
-    
+
     Status = BCryptVerifySignature(
-                                        KeyHandle,                  // Handle of the key used to decrypt the signature
-                                        NULL,                       // Padding information
-                                        MessageDigest,              // Hash of the message
-                                        MessageDigestLength,        // Hash's length
-                                        SignatureBlob,              // Signature - signed hash data
-                                        SignatureBlobLength,        // Signature's length
-                                        0);                         // Flags
+                 KeyHandle,                  // Handle of the key used to decrypt the signature
+                 NULL,                       // Padding information
+                 MessageDigest,              // Hash of the message
+                 MessageDigestLength,        // Hash's length
+                 SignatureBlob,              // Signature - signed hash data
+                 SignatureBlobLength,        // Signature's length
+                 0);                         // Flags
     if( !NT_SUCCESS(Status) )
     {
         ReportError(Status);
@@ -574,10 +574,10 @@ __cdecl
 wmain(
     _In_               int     argc,
     _In_reads_(argc)   LPWSTR  argv[]
-    )
+)
 {
     SECURITY_STATUS         secStatus;
-    
+
     DWORD                   KeyBlobLength   = 0;
     DWORD                   SignatureBlobLength = 0;
 
@@ -587,18 +587,18 @@ wmain(
     UNREFERENCED_PARAMETER(argc);
     UNREFERENCED_PARAMETER(argv);
 
-     
+
     //
     // Sign the message
     //
 
     secStatus = SignHash(
-                                        (PBYTE)Message,
-                                        sizeof(Message),
-                                        &SignatureBlob,
-                                        &SignatureBlobLength,
-                                        &KeyBlob,
-                                        &KeyBlobLength);
+                    (PBYTE)Message,
+                    sizeof(Message),
+                    &SignatureBlob,
+                    &SignatureBlobLength,
+                    &KeyBlob,
+                    &KeyBlobLength);
     if( FAILED(secStatus) )
     {
         ReportError(secStatus);
@@ -606,7 +606,7 @@ wmain(
     }
 
     if( NULL == SignatureBlob ||
-        NULL == KeyBlob)
+            NULL == KeyBlob)
     {
         secStatus = NTE_INTERNAL_ERROR;
         ReportError(secStatus);
@@ -618,12 +618,12 @@ wmain(
     //
 
     secStatus = VerifySignature(
-                                        (PBYTE)Message,
-                                        sizeof(Message),
-                                        SignatureBlob,
-                                        SignatureBlobLength,
-                                        KeyBlob,
-                                        KeyBlobLength);
+                    (PBYTE)Message,
+                    sizeof(Message),
+                    SignatureBlob,
+                    SignatureBlobLength,
+                    KeyBlob,
+                    KeyBlobLength);
     if( FAILED(secStatus) )
     {
         ReportError(secStatus);

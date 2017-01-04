@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -46,7 +46,7 @@ int WINAPI WinMain(
     HINSTANCE /* hPrevInstance */,
     LPSTR /* lpCmdLine */,
     int /* nCmdShow */
-    )
+)
 {
     // Ignoring the return value because we want to continue running even in the
     // unlikely event that HeapSetInformation fails.
@@ -171,18 +171,18 @@ HRESULT MSAASampleApp::Initialize()
         m_pD2DFactory->GetDesktopDpi(&dpiX, &dpiY);
 
         m_hwnd = CreateWindow(
-            L"D2DMSAASampleApp",
-            L"D2D Demo App",
-            WS_OVERLAPPEDWINDOW & ~(WS_MAXIMIZEBOX | WS_SIZEBOX),
-            CW_USEDEFAULT,
-            CW_USEDEFAULT,
-            static_cast<UINT>(ceil(1024.f * dpiX / 96.f)),
-            static_cast<UINT>(ceil(768.f * dpiY / 96.f)),
-            NULL,
-            NULL,
-            HINST_THISCOMPONENT,
-            this
-            );
+                     L"D2DMSAASampleApp",
+                     L"D2D Demo App",
+                     WS_OVERLAPPEDWINDOW & ~(WS_MAXIMIZEBOX | WS_SIZEBOX),
+                     CW_USEDEFAULT,
+                     CW_USEDEFAULT,
+                     static_cast<UINT>(ceil(1024.f * dpiX / 96.f)),
+                     static_cast<UINT>(ceil(768.f * dpiY / 96.f)),
+                     NULL,
+                     NULL,
+                     HINST_THISCOMPONENT,
+                     this
+                 );
 
         hr = m_hwnd ? S_OK : E_FAIL;
         if (SUCCEEDED(hr))
@@ -221,24 +221,24 @@ HRESULT MSAASampleApp::CreateDeviceIndependentResources()
     if (SUCCEEDED(hr))
     {
         hr = DWriteCreateFactory(
-            DWRITE_FACTORY_TYPE_SHARED,
-            __uuidof(m_pDWriteFactory),
-            reinterpret_cast<IUnknown **>(&m_pDWriteFactory)
-            );
+                 DWRITE_FACTORY_TYPE_SHARED,
+                 __uuidof(m_pDWriteFactory),
+                 reinterpret_cast<IUnknown **>(&m_pDWriteFactory)
+             );
     }
 
     if (SUCCEEDED(hr))
     {
-         hr = m_pDWriteFactory->CreateTextFormat(
-            sc_fontName,
-            NULL,
-            DWRITE_FONT_WEIGHT_NORMAL,
-            DWRITE_FONT_STYLE_NORMAL,
-            DWRITE_FONT_STRETCH_NORMAL,
-            static_cast<FLOAT>(sc_fontSize),
-            L"", // locale
-            &m_pTextFormat
-            );
+        hr = m_pDWriteFactory->CreateTextFormat(
+                 sc_fontName,
+                 NULL,
+                 DWRITE_FONT_WEIGHT_NORMAL,
+                 DWRITE_FONT_STYLE_NORMAL,
+                 DWRITE_FONT_STRETCH_NORMAL,
+                 static_cast<FLOAT>(sc_fontSize),
+                 L"", // locale
+                 &m_pTextFormat
+             );
     }
 
     return hr;
@@ -305,11 +305,11 @@ HRESULT MSAASampleApp::CreateDeviceResources()
 
         // Create device
         hr = CreateD3DDevice(
-            NULL,
-            D3D10_DRIVER_TYPE_HARDWARE,
-            nDeviceFlags,
-            &pDevice
-            );
+                 NULL,
+                 D3D10_DRIVER_TYPE_HARDWARE,
+                 nDeviceFlags,
+                 &pDevice
+             );
         if (SUCCEEDED(hr))
         {
             UINT msaaQuality = 0;
@@ -325,11 +325,11 @@ HRESULT MSAASampleApp::CreateDeviceResources()
         if (FAILED(hr))
         {
             hr = CreateD3DDevice(
-                NULL,
-                D3D10_DRIVER_TYPE_WARP,
-                nDeviceFlags,
-                &pDevice
-                );
+                     NULL,
+                     D3D10_DRIVER_TYPE_WARP,
+                     nDeviceFlags,
+                     &pDevice
+                 );
         }
         if (SUCCEEDED(hr))
         {
@@ -422,9 +422,9 @@ HRESULT MSAASampleApp::CreateDeviceResources()
         {
             // Create views on the RT buffers and set them on the device
             hr = m_pSwapChain->GetBuffer(
-                0,
-                IID_PPV_ARGS(&pBackBufferResource)
-                );
+                     0,
+                     IID_PPV_ARGS(&pBackBufferResource)
+                 );
         }
         if (SUCCEEDED(hr))
         {
@@ -469,9 +469,9 @@ HRESULT MSAASampleApp::CreateDeviceResources()
         {
             // Get a surface in the swap chain
             hr = m_pSwapChain->GetBuffer(
-                0,
-                IID_PPV_ARGS(&pBackBuffer)
-                );
+                     0,
+                     IID_PPV_ARGS(&pBackBuffer)
+                 );
         }
         if (SUCCEEDED(hr))
         {
@@ -486,34 +486,34 @@ HRESULT MSAASampleApp::CreateDeviceResources()
                     D2D1::PixelFormat(DXGI_FORMAT_UNKNOWN, D2D1_ALPHA_MODE_PREMULTIPLIED),
                     dpiX,
                     dpiY
-                    );
+                );
 
             hr = m_pD2DFactory->CreateDxgiSurfaceRenderTarget(
-                pBackBuffer,
-                &props,
-                &m_pBackBufferRT
-                );
+                     pBackBuffer,
+                     &props,
+                     &m_pBackBufferRT
+                 );
         }
         if (SUCCEEDED(hr))
         {
             // create brushes
             hr = m_pBackBufferRT->CreateSolidColorBrush(
-                D2D1::ColorF(D2D1::ColorF::White),
-                &m_pTextBrush
-                );
+                     D2D1::ColorF(D2D1::ColorF::White),
+                     &m_pTextBrush
+                 );
         }
         if (SUCCEEDED(hr))
         {
             hr = m_pBackBufferRT->CreateSolidColorBrush(
-                D2D1::ColorF(D2D1::ColorF::Red),
-                &m_pLoupeBrush
-                );
+                     D2D1::ColorF(D2D1::ColorF::Red),
+                     &m_pLoupeBrush
+                 );
         }
         if (SUCCEEDED(hr))
         {
             hr = m_pLoupeTexture->QueryInterface(
-                IID_PPV_ARGS(&pResolveSurface)
-                );
+                     IID_PPV_ARGS(&pResolveSurface)
+                 );
         }
         if (SUCCEEDED(hr))
         {
@@ -526,14 +526,14 @@ HRESULT MSAASampleApp::CreateDeviceResources()
                     D2D1::PixelFormat(DXGI_FORMAT_UNKNOWN, D2D1_ALPHA_MODE_PREMULTIPLIED),
                     dpiX,
                     dpiY
-                    );
+                );
 
             hr = m_pBackBufferRT->CreateSharedBitmap(
-                __uuidof(pResolveSurface),
-                pResolveSurface,
-                &bp,
-                &m_pLoupeBitmap
-                );
+                     __uuidof(pResolveSurface),
+                     pResolveSurface,
+                     &bp,
+                     &m_pLoupeBitmap
+                 );
         }
     }
 
@@ -665,8 +665,8 @@ HRESULT MSAASampleApp::OnRender()
 
     // If the device is lost for any reason, we need to recreate it
     if (hr == DXGI_ERROR_DEVICE_RESET ||
-        hr == DXGI_ERROR_DEVICE_REMOVED ||
-        hr == D2DERR_RECREATE_TARGET)
+            hr == DXGI_ERROR_DEVICE_REMOVED ||
+            hr == D2DERR_RECREATE_TARGET)
     {
         hr = S_OK;
 
@@ -727,9 +727,9 @@ HRESULT MSAASampleApp::RenderD2DContentIntoSurface(float time)
 
     m_pBackBufferRT->SetAntialiasMode(
         m_antialiasMode == MyAntialiasMode::PerPrimitive ?
-            D2D1_ANTIALIAS_MODE_PER_PRIMITIVE :
-            D2D1_ANTIALIAS_MODE_ALIASED
-        );
+        D2D1_ANTIALIAS_MODE_PER_PRIMITIVE :
+        D2D1_ANTIALIAS_MODE_ALIASED
+    );
 
     m_pBackBufferRT->BeginDraw();
 
@@ -739,18 +739,18 @@ HRESULT MSAASampleApp::RenderD2DContentIntoSurface(float time)
         D2D1::Matrix3x2F::Translation(
             0.5f * (rtSize.width - squareWidth * m_numSquares),
             0.5f * (rtSize.height - squareWidth * m_numSquares)
-            ) *
+        ) *
         D2D1::Matrix3x2F::Rotation(
             (sc_rotationSpeed * time * 360.0f) * ((float)D3DX_PI / 180.0f),
             D2D1::Point2F(rtSize.width / 2, rtSize.height / 2)
-            )
-        );
+        )
+    );
 
     ID2D1SolidColorBrush *pBrush = NULL;
     hr = m_pBackBufferRT->CreateSolidColorBrush(
-            D2D1::ColorF(0, 0, 0),
-            &pBrush
-            );
+             D2D1::ColorF(0, 0, 0),
+             &pBrush
+         );
     if (SUCCEEDED(hr))
     {
         if (m_sampleType == SampleType::Filled)
@@ -765,7 +765,7 @@ HRESULT MSAASampleApp::RenderD2DContentIntoSurface(float time)
                             j*squareWidth,
                             (i+1)*squareWidth,
                             (j+1)*squareWidth
-                            );
+                        );
 
                     float dx = i+0.5f - 0.5f*m_numSquares;
                     float dy = j+0.5f - 0.5f*m_numSquares;
@@ -780,7 +780,7 @@ HRESULT MSAASampleApp::RenderD2DContentIntoSurface(float time)
                             0.0f,
                             intensity,
                             1.0f - intensity)
-                        );
+                    );
 
                     m_pBackBufferRT->FillRectangle(rect, pBrush);
                 }
@@ -797,14 +797,14 @@ HRESULT MSAASampleApp::RenderD2DContentIntoSurface(float time)
                     D2D1::Point2F(i*squareWidth, m_numSquares*squareWidth),
                     pBrush,
                     1.0f
-                    );
+                );
 
                 m_pBackBufferRT->DrawLine(
                     D2D1::Point2F(0, i*squareWidth),
                     D2D1::Point2F(m_numSquares*squareWidth, i*squareWidth),
                     pBrush,
                     1.0f
-                    );
+                );
             }
 
         }
@@ -836,9 +836,9 @@ HRESULT MSAASampleApp::RenderLoupe()
 
     ID3D10Resource *pBackBufferResource = NULL;
     hr = m_pSwapChain->GetBuffer(
-        0,
-        IID_PPV_ARGS(&pBackBufferResource)
-        );
+             0,
+             IID_PPV_ARGS(&pBackBufferResource)
+         );
     if (SUCCEEDED(hr))
     {
         m_pDevice->ResolveSubresource(
@@ -847,7 +847,7 @@ HRESULT MSAASampleApp::RenderLoupe()
             pBackBufferResource,
             0, // SrcSubresource,
             DXGI_FORMAT_B8G8R8A8_UNORM
-            );
+        );
 
         //
         // Render the magnified view.
@@ -859,14 +859,14 @@ HRESULT MSAASampleApp::RenderLoupe()
             D2D1::Point2F(
                 size.width - sc_loupeInset - 0.5f*sc_loupeSize,
                 sc_loupeInset + 0.5f*sc_loupeSize
-                );
+            );
 
         D2D1_ELLIPSE destEllipse =
             D2D1::Ellipse(
                 destCenter,
                 sc_loupeSize / 2,
                 sc_loupeSize / 2
-                );
+            );
 
         float loupeSrcRadius = sc_loupeSize / (2*GetZoom());
 
@@ -875,28 +875,28 @@ HRESULT MSAASampleApp::RenderLoupe()
                 m_mousePos,
                 loupeSrcRadius,
                 loupeSrcRadius
-                );
+            );
 
         ID2D1BitmapBrush *pLoupeBrush = NULL;
         hr = m_pBackBufferRT->CreateBitmapBrush(
-            m_pLoupeBitmap,
-            D2D1::BitmapBrushProperties(
-                D2D1_EXTEND_MODE_CLAMP,
-                D2D1_EXTEND_MODE_CLAMP,
-                D2D1_BITMAP_INTERPOLATION_MODE_NEAREST_NEIGHBOR),
-            D2D1::BrushProperties(
-                1.0f, // opacity
-                D2D1::Matrix3x2F::Scale(
-                    GetZoom(),
-                    GetZoom(),
-                    m_mousePos
-                    ) *
-                D2D1::Matrix3x2F::Translation(
-                    destCenter.x - m_mousePos.x,
-                    destCenter.y - m_mousePos.y
-                    )),
-            &pLoupeBrush
-            );
+                 m_pLoupeBitmap,
+                 D2D1::BitmapBrushProperties(
+                     D2D1_EXTEND_MODE_CLAMP,
+                     D2D1_EXTEND_MODE_CLAMP,
+                     D2D1_BITMAP_INTERPOLATION_MODE_NEAREST_NEIGHBOR),
+                 D2D1::BrushProperties(
+                     1.0f, // opacity
+                     D2D1::Matrix3x2F::Scale(
+                         GetZoom(),
+                         GetZoom(),
+                         m_mousePos
+                     ) *
+                     D2D1::Matrix3x2F::Translation(
+                         destCenter.x - m_mousePos.x,
+                         destCenter.y - m_mousePos.y
+                     )),
+                 &pLoupeBrush
+             );
         if (SUCCEEDED(hr))
         {
             m_pBackBufferRT->BeginDraw();
@@ -942,25 +942,25 @@ HRESULT MSAASampleApp::RenderTextInfo()
     if (m_times.GetCount() > 0)
     {
         fps = (m_times.GetCount()-1) * frequency.QuadPart /
-                static_cast<float>((m_times.GetLast() - m_times.GetFirst()));
+              static_cast<float>((m_times.GetLast() - m_times.GetFirst()));
 
         primsPerSecond = fps * m_numSquares * m_numSquares;
     }
 
     hr = StringCchPrintf(
-        textBuffer,
-        400,
-        L"%s\n"
-        L"# squares: %d x %d = %d\n"
-        L"Fps: %.2f\n"
-        L"Primitives / sec : %.0f\n",
-        GetAntialiasModeString(),
-        m_numSquares,
-        m_numSquares,
-        m_numSquares*m_numSquares,
-        fps,
-        primsPerSecond
-        );
+             textBuffer,
+             400,
+             L"%s\n"
+             L"# squares: %d x %d = %d\n"
+             L"Fps: %.2f\n"
+             L"Primitives / sec : %.0f\n",
+             GetAntialiasModeString(),
+             m_numSquares,
+             m_numSquares,
+             m_numSquares*m_numSquares,
+             fps,
+             primsPerSecond
+         );
     if (SUCCEEDED(hr))
     {
         m_pBackBufferRT->BeginDraw();
@@ -974,7 +974,7 @@ HRESULT MSAASampleApp::RenderTextInfo()
             D2D1::RectF(10.0f, 10.0f, 1000.0f, 1000.0f),
             m_pTextBrush,
             D2D1_DRAW_TEXT_OPTIONS_NONE
-            );
+        );
 
         hr = m_pBackBufferRT->EndDraw();
     }
@@ -997,7 +997,7 @@ void MSAASampleApp::OnKeyDown(SHORT vkey)
         m_antialiasMode =
             static_cast<MyAntialiasMode::Enum>(
                 (m_antialiasMode+1)%MyAntialiasMode::Count
-                );
+            );
 
         // This sample could be smarter about only discarding resources it doesn't
         // need in order to make transitions from one state to another more quickly.
@@ -1008,7 +1008,7 @@ void MSAASampleApp::OnKeyDown(SHORT vkey)
         m_antialiasMode =
             static_cast<MyAntialiasMode::Enum>(
                 (m_antialiasMode+MyAntialiasMode::Count-1)%MyAntialiasMode::Count
-                );
+            );
 
         // This sample could be smarter about only discarding resources it doesn't
         // need in order to make transitions from one state to another more quickly.
@@ -1080,9 +1080,9 @@ void MSAASampleApp::OnWheel(WPARAM wParam)
     m_logZoom += static_cast<float>(GET_WHEEL_DELTA_WPARAM(wParam));
 
     m_logZoom = min(
-        max(m_logZoom, sc_loupeMinLogZoom*WHEEL_DELTA),
-        sc_loupeMaxLogZoom*WHEEL_DELTA
-        );
+                    max(m_logZoom, sc_loupeMinLogZoom*WHEEL_DELTA),
+                    sc_loupeMaxLogZoom*WHEEL_DELTA
+                );
 }
 
 /******************************************************************
@@ -1106,17 +1106,17 @@ LRESULT CALLBACK MSAASampleApp::WndProc(HWND hwnd, UINT message, WPARAM wParam, 
             hwnd,
             GWLP_USERDATA,
             PtrToUlong(pMSAASampleApp)
-            );
+        );
 
         result = 1;
     }
     else
     {
         MSAASampleApp *pMSAASampleApp = reinterpret_cast<MSAASampleApp *>(static_cast<LONG_PTR>(
-            ::GetWindowLongPtrW(
-                hwnd,
-                GWLP_USERDATA
-                )));
+                                            ::GetWindowLongPtrW(
+                                                hwnd,
+                                                GWLP_USERDATA
+                                            )));
 
         bool wasHandled = false;
 
@@ -1126,49 +1126,49 @@ LRESULT CALLBACK MSAASampleApp::WndProc(HWND hwnd, UINT message, WPARAM wParam, 
             {
             case WM_PAINT:
             case WM_DISPLAYCHANGE:
-                {
-                    PAINTSTRUCT ps;
-                    BeginPaint(hwnd, &ps);
-                    pMSAASampleApp->OnRender();
-                    EndPaint(hwnd, &ps);
+            {
+                PAINTSTRUCT ps;
+                BeginPaint(hwnd, &ps);
+                pMSAASampleApp->OnRender();
+                EndPaint(hwnd, &ps);
 
-                    InvalidateRect(hwnd, NULL, FALSE);
-                }
-                result = 0;
-                wasHandled = true;
-                break;
+                InvalidateRect(hwnd, NULL, FALSE);
+            }
+            result = 0;
+            wasHandled = true;
+            break;
 
             case WM_KEYDOWN:
-                {
-                    pMSAASampleApp->OnKeyDown(static_cast<SHORT>(wParam));
-                }
-                result = 0;
-                wasHandled = true;
-                break;
+            {
+                pMSAASampleApp->OnKeyDown(static_cast<SHORT>(wParam));
+            }
+            result = 0;
+            wasHandled = true;
+            break;
 
             case WM_MOUSEMOVE:
-                {
-                    pMSAASampleApp->OnMouseMove(lParam);
-                }
-                result = 0;
-                wasHandled = true;
-                break;
+            {
+                pMSAASampleApp->OnMouseMove(lParam);
+            }
+            result = 0;
+            wasHandled = true;
+            break;
 
             case WM_MOUSEWHEEL:
-                {
-                    pMSAASampleApp->OnWheel(wParam);
-                }
-                result = 0;
-                wasHandled = true;
-                break;
+            {
+                pMSAASampleApp->OnWheel(wParam);
+            }
+            result = 0;
+            wasHandled = true;
+            break;
 
             case WM_DESTROY:
-                {
-                    PostQuitMessage(0);
-                }
-                result = 1;
-                wasHandled = true;
-                break;
+            {
+                PostQuitMessage(0);
+            }
+            result = 1;
+            wasHandled = true;
+            break;
             }
         }
 
@@ -1192,7 +1192,7 @@ HRESULT MSAASampleApp::CreateD3DDevice(
     D3D10_DRIVER_TYPE driverType,
     UINT flags,
     ID3D10Device1 **ppDevice
-    )
+)
 {
     HRESULT hr = S_OK;
 
@@ -1208,14 +1208,14 @@ HRESULT MSAASampleApp::CreateD3DDevice(
     {
         ID3D10Device1 *pDevice = NULL;
         hr = D3D10CreateDevice1(
-            pAdapter,
-            driverType,
-            NULL,
-            flags,
-            levelAttempts[level],
-            D3D10_1_SDK_VERSION,
-            &pDevice
-            );
+                 pAdapter,
+                 driverType,
+                 NULL,
+                 flags,
+                 levelAttempts[level],
+                 D3D10_1_SDK_VERSION,
+                 &pDevice
+             );
 
         if (SUCCEEDED(hr))
         {

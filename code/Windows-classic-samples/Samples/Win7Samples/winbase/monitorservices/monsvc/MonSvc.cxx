@@ -1,4 +1,4 @@
-// MonSvc.cpp : Sample service to illustrate usage of Notification APIs
+﻿// MonSvc.cpp : Sample service to illustrate usage of Notification APIs
 // MonSvc monitors start and start of other services. 
 
 #include <windows.h>

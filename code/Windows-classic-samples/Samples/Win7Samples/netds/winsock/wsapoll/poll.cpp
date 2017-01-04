@@ -1,16 +1,16 @@
-/******************************************************************************\
+﻿/******************************************************************************\
 * poll.cpp
 *
-* This IPv6 sample demonstrates the use of WSAPoll to test writability and 
-* readability of the socket. 
+* This IPv6 sample demonstrates the use of WSAPoll to test writability and
+* readability of the socket.
 *
-* WSAPoll is new to Windows Sockets in Windows Vista.  
+* WSAPoll is new to Windows Sockets in Windows Vista.
 *
-* 
+*
 * This sample requires that TCP/IP version 6 be installed on the system (default
 * configuration for Windows Vista).
 *
-* The client connects a socket to the server, then sends/recvs when WSAPoll 
+* The client connects a socket to the server, then sends/recvs when WSAPoll
 * indicates such is possible to do without blocking. Likewise for the server (listener).
 *
 *
@@ -24,8 +24,8 @@
 \******************************************************************************/
 
 #ifdef _IA64_
-    #pragma warning (disable: 4311)
-    #pragma warning (disable: 4312)
+#pragma warning (disable: 4311)
+#pragma warning (disable: 4312)
 #endif
 
 #ifndef WIN32_LEAN_AND_MEAN
@@ -71,7 +71,7 @@ DWORD WINAPI ConnectThread(LPVOID pParam)
         if (INVALID_SOCKET == (csock = socket(AF_INET6,
                                               SOCK_STREAM,
                                               0
-                                              )))
+                                             )))
         {
             ERR("socket");
             __leave;
@@ -80,7 +80,7 @@ DWORD WINAPI ConnectThread(LPVOID pParam)
         if (SOCKET_ERROR == ioctlsocket(csock,
                                         FIONBIO,
                                         &uNonBlockingMode
-                                        ))
+                                       ))
         {
             ERR("FIONBIO");
             __leave;
@@ -93,7 +93,7 @@ DWORD WINAPI ConnectThread(LPVOID pParam)
         if (SOCKET_ERROR == connect(csock,
                                     (SOCKADDR*)&addrLoopback,
                                     sizeof (addrLoopback)
-                                    ))
+                                   ))
         {
             if (WSAEWOULDBLOCK != WSAGetLastError())
             {
@@ -109,7 +109,7 @@ DWORD WINAPI ConnectThread(LPVOID pParam)
         if (SOCKET_ERROR == (ret = WSAPoll(&fdarray,
                                            1,
                                            DEFAULT_WAIT
-                                           )))
+                                          )))
         {
             ERR("WSAPoll");
             __leave;
@@ -138,14 +138,14 @@ DWORD WINAPI ConnectThread(LPVOID pParam)
             }
         }
 
-        
+
         //Call WSAPoll for readability on connected socket
         fdarray.events = POLLRDNORM;
 
         if (SOCKET_ERROR == (ret = WSAPoll(&fdarray,
                                            1,
                                            DEFAULT_WAIT
-                                           )))
+                                          )))
         {
             ERR("WSAPoll");
             __leave;
@@ -205,7 +205,8 @@ int __cdecl main()
             WSASetLastError(nErr);
             ERR("WSAStartup");
             __leave;
-        } else
+        }
+        else
             nStartup++;
 
         if (NULL == (hCloseSignal = CreateEvent(NULL,
@@ -305,7 +306,8 @@ int __cdecl main()
                 {
                     ERR("recv");
                     __leave;
-                } else
+                }
+                else
                     printf("Main: recvd %d bytes\n",ret);
             }
         }
@@ -336,7 +338,8 @@ int __cdecl main()
                 {
                     ERR("send");
                     __leave;
-                } else
+                }
+                else
                     printf("Main: sent %d bytes\n",ret);
             }
         }
@@ -352,10 +355,10 @@ int __cdecl main()
         CloseHandle(hThread);
         CLOSESOCK(asock);
         CLOSESOCK(lsock);
-        if(nStartup) 
+        if(nStartup)
             WSACleanup();
     }
 
     return 0;
-   
+
 }

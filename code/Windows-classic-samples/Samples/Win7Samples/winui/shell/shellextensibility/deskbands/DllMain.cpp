@@ -1,4 +1,4 @@
-#include <windows.h>
+﻿#include <windows.h>
 #include <strsafe.h> // for StringCchXXX functions
 #include <olectl.h> // for SELFREG_E_CLASS
 #include <shlobj.h> // for ICatRegister
@@ -87,7 +87,7 @@ HRESULT RegisterServer()
         if (SUCCEEDED(hr))
         {
             hr = HRESULT_FROM_WIN32(RegCreateKeyExW(HKEY_CLASSES_ROOT, szSubkey,
-                 0, NULL, REG_OPTION_NON_VOLATILE, KEY_WRITE, NULL, &hKey, NULL));
+                                                    0, NULL, REG_OPTION_NON_VOLATILE, KEY_WRITE, NULL, &hKey, NULL));
             if (SUCCEEDED(hr))
             {
                 WCHAR szModule[MAX_PATH];

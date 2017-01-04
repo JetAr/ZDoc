@@ -1,4 +1,4 @@
-//------------------------------------------------------------------------------
+﻿//------------------------------------------------------------------------------
 // File: Synth.cpp
 //
 // Desc: DirectShow sample code - implements an audio signal generator
@@ -32,43 +32,54 @@
 // setup data
 
 const AMOVIESETUP_MEDIATYPE sudOpPinTypes =
-{ &MEDIATYPE_Audio      // clsMajorType
-, &MEDIASUBTYPE_NULL }; // clsMinorType
+{
+    &MEDIATYPE_Audio      // clsMajorType
+    , &MEDIASUBTYPE_NULL
+}; // clsMinorType
 
 const AMOVIESETUP_PIN sudOpPin =
-{ L"Output"          // strName
-, FALSE              // bRendered
-, TRUE               // bOutput
-, FALSE              // bZero
-, FALSE              // bMany
-, &CLSID_NULL        // clsConnectsToFilter
-, L"Input"           // strConnectsToPin
-, 1                  // nTypes
-, &sudOpPinTypes };  // lpTypes
+{
+    L"Output"          // strName
+    , FALSE              // bRendered
+    , TRUE               // bOutput
+    , FALSE              // bZero
+    , FALSE              // bMany
+    , &CLSID_NULL        // clsConnectsToFilter
+    , L"Input"           // strConnectsToPin
+    , 1                  // nTypes
+    , &sudOpPinTypes
+};  // lpTypes
 
 const AMOVIESETUP_FILTER sudSynth =
-{ &CLSID_SynthFilter     // clsID
-, L"Audio Synthesizer" // strName
-, MERIT_UNLIKELY       // dwMerit
-, 1                    // nPins
-, &sudOpPin };         // lpPin
+{
+    &CLSID_SynthFilter     // clsID
+    , L"Audio Synthesizer" // strName
+    , MERIT_UNLIKELY       // dwMerit
+    , 1                    // nPins
+    , &sudOpPin
+};         // lpPin
 
 // -------------------------------------------------------------------------
 // g_Templates
 // -------------------------------------------------------------------------
 // COM global table of objects in this dll
 
-CFactoryTemplate g_Templates[] = {
+CFactoryTemplate g_Templates[] =
+{
 
-    { L"Audio Synthesizer"
-    , &CLSID_SynthFilter
-    , CSynthFilter::CreateInstance
-    , NULL
-    , &sudSynth }
-  ,
-    { L"Audio Synthesizer Property Page"
-    , &CLSID_SynthPropertyPage
-    , CSynthProperties::CreateInstance }
+    {
+        L"Audio Synthesizer"
+        , &CLSID_SynthFilter
+        , CSynthFilter::CreateInstance
+        , NULL
+        , &sudSynth
+    }
+    ,
+    {
+        L"Audio Synthesizer Property Page"
+        , &CLSID_SynthPropertyPage
+        , CSynthProperties::CreateInstance
+    }
 
 };
 int g_cTemplates = sizeof(g_Templates) / sizeof(g_Templates[0]);
@@ -85,12 +96,13 @@ const DWORD BITS_PER_BYTE = 8;
 //
 // The only allowed way to create Synthesizers
 
-CUnknown * WINAPI CSynthFilter::CreateInstance(LPUNKNOWN lpunk, HRESULT *phr) 
+CUnknown * WINAPI CSynthFilter::CreateInstance(LPUNKNOWN lpunk, HRESULT *phr)
 {
     ASSERT(phr);
-    
+
     CUnknown *punk = new CSynthFilter(lpunk, phr);
-    if (punk == NULL) {
+    if (punk == NULL)
+    {
         if (phr)
             *phr = E_OUTOFMEMORY;
     }
@@ -109,25 +121,28 @@ CSynthFilter::CSynthFilter(LPUNKNOWN lpunk, HRESULT *phr)
     , CPersistStream(lpunk, phr)
 {
     m_paStreams = (CDynamicSourceStream **) new CSynthStream*[1];
-    if (m_paStreams == NULL) {
+    if (m_paStreams == NULL)
+    {
         if (phr)
             *phr = E_OUTOFMEMORY;
         return;
     }
 
     m_paStreams[0] = new CSynthStream(phr, this, L"Audio Synth Stream");
-    if (m_paStreams[0] == NULL) {
+    if (m_paStreams[0] == NULL)
+    {
         if (phr)
             *phr = E_OUTOFMEMORY;
         return;
     }
 
-    if (SUCCEEDED(*phr)) {
+    if (SUCCEEDED(*phr))
+    {
         ASSERT(m_Synth);
         m_Synth->put_SynthFormat(1,     // Channels
                                  8,     // Bits Per Sample
                                  11025  // Samples Per Sececond
-                                 );
+                                );
     }
 }
 
@@ -135,7 +150,7 @@ CSynthFilter::CSynthFilter(LPUNKNOWN lpunk, HRESULT *phr)
 //
 // CSynthFilter::Destructor
 //
-CSynthFilter::~CSynthFilter(void) 
+CSynthFilter::~CSynthFilter(void)
 {
     //
     //  Base class will free our pins
@@ -150,16 +165,20 @@ CSynthFilter::~CSynthFilter(void)
 
 STDMETHODIMP CSynthFilter::NonDelegatingQueryInterface(REFIID riid, void **ppv)
 {
-    if (riid == IID_ISynth2) {
+    if (riid == IID_ISynth2)
+    {
         return GetInterface((ISynth2 *) this, ppv);
     }
-    else if (riid == IID_IPersistStream) {
+    else if (riid == IID_IPersistStream)
+    {
         return GetInterface((IPersistStream *) this, ppv);
     }
-    else if (riid == IID_ISpecifyPropertyPages) {
+    else if (riid == IID_ISpecifyPropertyPages)
+    {
         return GetInterface((ISpecifyPropertyPages *) this, ppv);
-    } 
-    else {
+    }
+    else
+    {
         return CDynamicSource::NonDelegatingQueryInterface(riid, ppv);
     }
 }
@@ -168,13 +187,14 @@ STDMETHODIMP CSynthFilter::NonDelegatingQueryInterface(REFIID riid, void **ppv)
 //
 // GetPages
 //
-STDMETHODIMP CSynthFilter::GetPages(CAUUID * pPages) 
+STDMETHODIMP CSynthFilter::GetPages(CAUUID * pPages)
 {
     CheckPointer(pPages,E_POINTER);
 
     pPages->cElems = 1;
     pPages->pElems = (GUID *) CoTaskMemAlloc(sizeof(GUID));
-    if (pPages->pElems == NULL) {
+    if (pPages->pElems == NULL)
+    {
         return E_OUTOFMEMORY;
     }
 
@@ -214,7 +234,7 @@ HRESULT CSynthFilter::WriteToStream(IStream *pStream)
     HRESULT hr;
     int i, k;
 
-    get_Frequency (&i);  
+    get_Frequency (&i);
     WRITEOUT(i);
 
     get_Waveform (&i);
@@ -295,7 +315,7 @@ DWORD CSynthFilter::GetSoftwareVersion(void)
 //
 // get_Frequency
 //
-STDMETHODIMP CSynthFilter::get_Frequency(int *Frequency) 
+STDMETHODIMP CSynthFilter::get_Frequency(int *Frequency)
 {
     m_Synth->get_Frequency(Frequency);
 
@@ -307,7 +327,7 @@ STDMETHODIMP CSynthFilter::get_Frequency(int *Frequency)
 //
 // put_Frequency
 //
-STDMETHODIMP CSynthFilter::put_Frequency(int Frequency) 
+STDMETHODIMP CSynthFilter::put_Frequency(int Frequency)
 {
     m_Synth->put_Frequency (Frequency);
 
@@ -319,7 +339,7 @@ STDMETHODIMP CSynthFilter::put_Frequency(int Frequency)
 //
 // get_Waveform
 //
-STDMETHODIMP CSynthFilter::get_Waveform(int *Waveform) 
+STDMETHODIMP CSynthFilter::get_Waveform(int *Waveform)
 {
     m_Synth->get_Waveform (Waveform);
 
@@ -331,7 +351,7 @@ STDMETHODIMP CSynthFilter::get_Waveform(int *Waveform)
 //
 // put_Waveform
 //
-STDMETHODIMP CSynthFilter::put_Waveform(int Waveform) 
+STDMETHODIMP CSynthFilter::put_Waveform(int Waveform)
 {
     m_Synth->put_Waveform (Waveform);
 
@@ -343,7 +363,7 @@ STDMETHODIMP CSynthFilter::put_Waveform(int Waveform)
 //
 // get_Channels
 //
-STDMETHODIMP CSynthFilter::get_Channels(int *Channels) 
+STDMETHODIMP CSynthFilter::get_Channels(int *Channels)
 {
     HRESULT hr = m_Synth->get_Channels( Channels );
 
@@ -355,7 +375,7 @@ STDMETHODIMP CSynthFilter::get_Channels(int *Channels)
 //
 // If the format changes, we need to reconnect
 //
-void CSynthFilter::ReconnectWithNewFormat(void) 
+void CSynthFilter::ReconnectWithNewFormat(void)
 {
     // The caller must hold the state lock because this
     // function calls IsConnected().
@@ -364,7 +384,8 @@ void CSynthFilter::ReconnectWithNewFormat(void)
     // The synth filter's only has one pin.  The pin is an output pin.
     CDynamicSourceStream* pOutputPin = (CDynamicSourceStream*)GetPin(0);
 
-    if( pOutputPin->IsConnected() ) {
+    if( pOutputPin->IsConnected() )
+    {
         pOutputPin->OutputPinNeedsToBeReconnected();
     }
 }
@@ -373,7 +394,7 @@ void CSynthFilter::ReconnectWithNewFormat(void)
 //
 // put_Channels
 //
-STDMETHODIMP CSynthFilter::put_Channels(int Channels) 
+STDMETHODIMP CSynthFilter::put_Channels(int Channels)
 {
     // This function holds the state lock because it does not want
     // the filter's format type state or its' connection state
@@ -382,7 +403,8 @@ STDMETHODIMP CSynthFilter::put_Channels(int Channels)
     CAutoLock lStateLock(pStateLock());
 
     HRESULT hr = m_Synth->put_Channels(Channels);
-    if( FAILED( hr ) ) {
+    if( FAILED( hr ) )
+    {
         return hr;
     }
 
@@ -396,7 +418,7 @@ STDMETHODIMP CSynthFilter::put_Channels(int Channels)
 //
 // get_BitsPerSample
 //
-STDMETHODIMP CSynthFilter::get_BitsPerSample(int *BitsPerSample) 
+STDMETHODIMP CSynthFilter::get_BitsPerSample(int *BitsPerSample)
 {
     HRESULT hr = m_Synth->get_BitsPerSample(BitsPerSample);
 
@@ -408,7 +430,7 @@ STDMETHODIMP CSynthFilter::get_BitsPerSample(int *BitsPerSample)
 //
 // put_BitsPerSample
 //
-STDMETHODIMP CSynthFilter::put_BitsPerSample(int BitsPerSample) 
+STDMETHODIMP CSynthFilter::put_BitsPerSample(int BitsPerSample)
 {
     // This function holds the state lock because it does not want
     // the filter's format type state or its' connection state
@@ -417,7 +439,8 @@ STDMETHODIMP CSynthFilter::put_BitsPerSample(int BitsPerSample)
     CAutoLock lStateLock(pStateLock());
 
     HRESULT hr = m_Synth->put_BitsPerSample(BitsPerSample);
-    if( FAILED( hr ) ) {
+    if( FAILED( hr ) )
+    {
         return hr;
     }
 
@@ -430,10 +453,10 @@ STDMETHODIMP CSynthFilter::put_BitsPerSample(int BitsPerSample)
 //
 // get_SamplesPerSec
 //
-STDMETHODIMP CSynthFilter::get_SamplesPerSec(int *SamplesPerSec) 
+STDMETHODIMP CSynthFilter::get_SamplesPerSec(int *SamplesPerSec)
 {
     HRESULT hr = m_Synth->get_SamplesPerSec(SamplesPerSec);
-    
+
     DbgLog((LOG_TRACE, 3, TEXT("get_SamplesPerSec: %d"), *SamplesPerSec));
     return hr;
 }
@@ -442,7 +465,7 @@ STDMETHODIMP CSynthFilter::get_SamplesPerSec(int *SamplesPerSec)
 //
 // put_SamplesPerSec
 //
-STDMETHODIMP CSynthFilter::put_SamplesPerSec(int SamplesPerSec) 
+STDMETHODIMP CSynthFilter::put_SamplesPerSec(int SamplesPerSec)
 {
     // This function holds the state lock because it does not want
     // the filter's format type state or its' connection state
@@ -451,7 +474,8 @@ STDMETHODIMP CSynthFilter::put_SamplesPerSec(int SamplesPerSec)
     CAutoLock lStateLock(pStateLock());
 
     HRESULT hr = m_Synth->put_SamplesPerSec(SamplesPerSec);
-    if( FAILED( hr ) ) {
+    if( FAILED( hr ) )
+    {
         return hr;
     }
 
@@ -465,7 +489,7 @@ STDMETHODIMP CSynthFilter::put_SamplesPerSec(int SamplesPerSec)
 //
 // get_Amplitude
 //
-STDMETHODIMP CSynthFilter::get_Amplitude(int *Amplitude) 
+STDMETHODIMP CSynthFilter::get_Amplitude(int *Amplitude)
 {
     m_Synth->get_Amplitude (Amplitude);
 
@@ -477,7 +501,7 @@ STDMETHODIMP CSynthFilter::get_Amplitude(int *Amplitude)
 //
 // put_Amplitude
 //
-STDMETHODIMP CSynthFilter::put_Amplitude(int Amplitude) 
+STDMETHODIMP CSynthFilter::put_Amplitude(int Amplitude)
 {
     m_Synth->put_Amplitude (Amplitude);
 
@@ -489,7 +513,7 @@ STDMETHODIMP CSynthFilter::put_Amplitude(int Amplitude)
 //
 // get_SweepRange
 //
-STDMETHODIMP CSynthFilter::get_SweepRange(int *SweepStart, int *SweepEnd) 
+STDMETHODIMP CSynthFilter::get_SweepRange(int *SweepStart, int *SweepEnd)
 {
     m_Synth->get_SweepRange (SweepStart, SweepEnd);
 
@@ -501,7 +525,7 @@ STDMETHODIMP CSynthFilter::get_SweepRange(int *SweepStart, int *SweepEnd)
 //
 // put_SweepRange
 //
-STDMETHODIMP CSynthFilter::put_SweepRange(int SweepStart, int SweepEnd) 
+STDMETHODIMP CSynthFilter::put_SweepRange(int SweepStart, int SweepEnd)
 {
     m_Synth->put_SweepRange (SweepStart, SweepEnd);
 
@@ -510,10 +534,11 @@ STDMETHODIMP CSynthFilter::put_SweepRange(int SweepStart, int SweepEnd)
 }
 
 
-STDMETHODIMP CSynthFilter::get_OutputFormat(SYNTH_OUTPUT_FORMAT* pOutputFormat) 
+STDMETHODIMP CSynthFilter::get_OutputFormat(SYNTH_OUTPUT_FORMAT* pOutputFormat)
 {
     HRESULT hr = m_Synth->get_OutputFormat(pOutputFormat);
-    if (FAILED(hr)) {
+    if (FAILED(hr))
+    {
         return hr;
     }
 
@@ -521,16 +546,17 @@ STDMETHODIMP CSynthFilter::get_OutputFormat(SYNTH_OUTPUT_FORMAT* pOutputFormat)
 }
 
 
-STDMETHODIMP CSynthFilter::put_OutputFormat(SYNTH_OUTPUT_FORMAT ofOutputFormat) 
+STDMETHODIMP CSynthFilter::put_OutputFormat(SYNTH_OUTPUT_FORMAT ofOutputFormat)
 {
     // This function holds the state lock because it does not want
     // the filter's format type state or its' connection state
     // to change between the call to put_OutputFormat() and the call to
     // ReconnectWithNewFormat().
-    CAutoLock lStateLock(pStateLock());    
+    CAutoLock lStateLock(pStateLock());
 
     HRESULT hr = m_Synth->put_OutputFormat(ofOutputFormat);
-    if (FAILED(hr)) {
+    if (FAILED(hr))
+    {
         return hr;
     }
 
@@ -552,14 +578,15 @@ CSynthStream::CSynthStream(HRESULT *phr, CSynthFilter *pParent, LPCWSTR pName)
     , m_hPCMToMSADPCMConversionStream(NULL)
     , m_dwTempPCMBufferSize(0)
     , m_fFirstSampleDelivered(FALSE)
-    , m_llSampleMediaTimeStart(0) 
+    , m_llSampleMediaTimeStart(0)
 {
     ASSERT(phr);
 
     m_Synth = new CAudioSynth(pParent->pStateLock());
 
     pParent->m_Synth = m_Synth;
-    if (m_Synth == NULL) {
+    if (m_Synth == NULL)
+    {
         *phr = E_OUTOFMEMORY;
         return;
     }
@@ -571,7 +598,7 @@ CSynthStream::CSynthStream(HRESULT *phr, CSynthFilter *pParent, LPCWSTR pName)
 //
 // CSynthStream::Destructor
 //
-CSynthStream::~CSynthStream(void) 
+CSynthStream::~CSynthStream(void)
 {
     delete m_Synth;
 }
@@ -581,21 +608,22 @@ CSynthStream::~CSynthStream(void)
 // FillBuffer
 //
 // Stuffs the buffer with data
-HRESULT CSynthStream::FillBuffer(IMediaSample *pms) 
+HRESULT CSynthStream::FillBuffer(IMediaSample *pms)
 {
     CheckPointer(pms,E_POINTER);
 
     BYTE *pData;
 
     HRESULT hr = pms->GetPointer(&pData);
-    if (FAILED(hr)) {
+    if (FAILED(hr))
+    {
         return hr;
     }
 
     // This function must hold the state lock because it calls
     // FillPCMAudioBuffer().
     CAutoLock lStateLock(m_pParent->pStateLock());
-    
+
     // This lock must be held because this function uses
     // m_dwTempPCMBufferSize, m_hPCMToMSADPCMConversionStream,
     // m_rtSampleTime, m_fFirstSampleDelivered and
@@ -604,7 +632,7 @@ HRESULT CSynthStream::FillBuffer(IMediaSample *pms)
 
     WAVEFORMATEX* pwfexCurrent = (WAVEFORMATEX*)m_mt.Format();
 
-    if (WAVE_FORMAT_PCM == pwfexCurrent->wFormatTag) 
+    if (WAVE_FORMAT_PCM == pwfexCurrent->wFormatTag)
     {
         m_Synth->FillPCMAudioBuffer(*pwfexCurrent, pData, pms->GetSize());
 
@@ -612,15 +640,15 @@ HRESULT CSynthStream::FillBuffer(IMediaSample *pms)
         if (FAILED(hr))
             return hr;
 
-    } 
-    else 
+    }
+    else
     {
-        // This filter only supports two audio formats: PCM and ADPCM. 
+        // This filter only supports two audio formats: PCM and ADPCM.
         ASSERT(WAVE_FORMAT_ADPCM == pwfexCurrent->wFormatTag);
 
         // Create PCM audio samples and then compress them.  We use the
-        // Audio Compression Manager (ACM) API to convert the samples to 
-        // the ADPCM format. 
+        // Audio Compression Manager (ACM) API to convert the samples to
+        // the ADPCM format.
 
         ACMSTREAMHEADER ACMStreamHeader;
 
@@ -629,13 +657,14 @@ HRESULT CSynthStream::FillBuffer(IMediaSample *pms)
         ACMStreamHeader.dwUser = 0;
         ACMStreamHeader.cbSrcLength = m_dwTempPCMBufferSize;
         ACMStreamHeader.cbSrcLengthUsed = 0;
-        ACMStreamHeader.dwSrcUser = 0; 
-        ACMStreamHeader.pbDst = pData; 
-        ACMStreamHeader.cbDstLength = pms->GetSize(); 
-        ACMStreamHeader.cbDstLengthUsed = 0; 
-        ACMStreamHeader.dwDstUser = 0; 
+        ACMStreamHeader.dwSrcUser = 0;
+        ACMStreamHeader.pbDst = pData;
+        ACMStreamHeader.cbDstLength = pms->GetSize();
+        ACMStreamHeader.cbDstLengthUsed = 0;
+        ACMStreamHeader.dwDstUser = 0;
         ACMStreamHeader.pbSrc = new BYTE[m_dwTempPCMBufferSize];
-        if (NULL == ACMStreamHeader.pbSrc) {
+        if (NULL == ACMStreamHeader.pbSrc)
+        {
             return E_OUTOFMEMORY;
         }
 
@@ -647,12 +676,13 @@ HRESULT CSynthStream::FillBuffer(IMediaSample *pms)
                                     ACMStreamHeader.pbSrc,
                                     ACMStreamHeader.cbSrcLength);
 
-        MMRESULT mmr = acmStreamPrepareHeader(m_hPCMToMSADPCMConversionStream,   
+        MMRESULT mmr = acmStreamPrepareHeader(m_hPCMToMSADPCMConversionStream,
                                               &ACMStreamHeader,
                                               0);
-  
+
         // acmStreamPrepareHeader() returns 0 if no errors occur.
-        if (mmr != 0) {
+        if (mmr != 0)
+        {
             delete [] ACMStreamHeader.pbSrc;
             return E_FAIL;
         }
@@ -661,65 +691,73 @@ HRESULT CSynthStream::FillBuffer(IMediaSample *pms)
                                &ACMStreamHeader,
                                ACM_STREAMCONVERTF_BLOCKALIGN);
 
-        MMRESULT mmrUnprepare = acmStreamUnprepareHeader(m_hPCMToMSADPCMConversionStream,   
-                                                         &ACMStreamHeader,
-                                                         0);
+        MMRESULT mmrUnprepare = acmStreamUnprepareHeader(m_hPCMToMSADPCMConversionStream,
+                                &ACMStreamHeader,
+                                0);
 
         delete [] ACMStreamHeader.pbSrc;
 
         // acmStreamConvert() andacmStreamUnprepareHeader() returns 0 if no errors occur.
-        if ((mmr != 0) || (mmrUnprepare != 0)) {
+        if ((mmr != 0) || (mmrUnprepare != 0))
+        {
             return E_FAIL;
         }
 
         hr = pms->SetActualDataLength(ACMStreamHeader.cbDstLengthUsed);
-        if (FAILED(hr)) {
+        if (FAILED(hr))
+        {
             return hr;
         }
     }
 
-    // Set the sample's time stamps.  
+    // Set the sample's time stamps.
     CRefTime rtStart = m_rtSampleTime;
 
-    m_rtSampleTime = rtStart + (REFERENCE_TIME)(UNITS * pms->GetActualDataLength()) / 
+    m_rtSampleTime = rtStart + (REFERENCE_TIME)(UNITS * pms->GetActualDataLength()) /
                      (REFERENCE_TIME)pwfexCurrent->nAvgBytesPerSec;
 
     hr = pms->SetTime((REFERENCE_TIME*)&rtStart, (REFERENCE_TIME*)&m_rtSampleTime);
 
-    if (FAILED(hr)) {
+    if (FAILED(hr))
+    {
         return hr;
     }
 
     // Set the sample's properties.
     hr = pms->SetPreroll(FALSE);
-    if (FAILED(hr)) {
+    if (FAILED(hr))
+    {
         return hr;
     }
 
     hr = pms->SetMediaType(NULL);
-    if (FAILED(hr)) {
+    if (FAILED(hr))
+    {
         return hr;
     }
-   
+
     hr = pms->SetDiscontinuity(!m_fFirstSampleDelivered);
-    if (FAILED(hr)) {
+    if (FAILED(hr))
+    {
         return hr;
     }
-    
+
     hr = pms->SetSyncPoint(!m_fFirstSampleDelivered);
-    if (FAILED(hr)) {
+    if (FAILED(hr))
+    {
         return hr;
     }
 
     LONGLONG llMediaTimeStart = m_llSampleMediaTimeStart;
-    
+
     DWORD dwNumAudioSamplesInPacket = (pms->GetActualDataLength() * BITS_PER_BYTE) /
                                       (pwfexCurrent->nChannels * pwfexCurrent->wBitsPerSample);
 
     LONGLONG llMediaTimeStop = m_llSampleMediaTimeStart + dwNumAudioSamplesInPacket;
 
     hr = pms->SetMediaTime(&llMediaTimeStart, &llMediaTimeStop);
-    if (FAILED(hr)) {
+    if (FAILED(hr))
+    {
         return hr;
     }
 
@@ -737,7 +775,7 @@ HRESULT CSynthStream::FillBuffer(IMediaSample *pms)
 //
 // GetMediaType
 //
-HRESULT CSynthStream::GetMediaType(CMediaType *pmt) 
+HRESULT CSynthStream::GetMediaType(CMediaType *pmt)
 {
     CheckPointer(pmt,E_POINTER);
 
@@ -745,7 +783,7 @@ HRESULT CSynthStream::GetMediaType(CMediaType *pmt)
     // calls get_OutputFormat() and GetPCMFormatStructure().
     // The function assumes that the state of the m_Synth
     // object does not change between the two calls.  The
-    // m_Synth object's state will not change if the 
+    // m_Synth object's state will not change if the
     // state lock is held.
     ASSERT(CritCheckIn(m_pParent->pStateLock()));
 
@@ -757,7 +795,7 @@ HRESULT CSynthStream::GetMediaType(CMediaType *pmt)
     {
         return hr;
     }
-    
+
     if(SYNTH_OF_PCM == ofCurrent)
     {
         pwfex = (WAVEFORMATEX *) pmt->AllocFormatBuffer(sizeof(WAVEFORMATEX));
@@ -773,8 +811,8 @@ HRESULT CSynthStream::GetMediaType(CMediaType *pmt)
     {
         DWORD dwMaxWAVEFORMATEXSize;
 
-        MMRESULT mmr = acmMetrics(NULL, ACM_METRIC_MAX_SIZE_FORMAT, 
-                                 (void*)&dwMaxWAVEFORMATEXSize);
+        MMRESULT mmr = acmMetrics(NULL, ACM_METRIC_MAX_SIZE_FORMAT,
+                                  (void*)&dwMaxWAVEFORMATEXSize);
 
         // acmMetrics() returns 0 if no errors occur.
         if(0 != mmr)
@@ -801,9 +839,9 @@ HRESULT CSynthStream::GetMediaType(CMediaType *pmt)
                                &wfexSourceFormat,
                                pwfex,
                                dwMaxWAVEFORMATEXSize,
-                               ACM_FORMATSUGGESTF_WFORMATTAG | 
-                                    ACM_FORMATSUGGESTF_NSAMPLESPERSEC | 
-                                    ACM_FORMATSUGGESTF_NCHANNELS);
+                               ACM_FORMATSUGGESTF_WFORMATTAG |
+                               ACM_FORMATSUGGESTF_NSAMPLESPERSEC |
+                               ACM_FORMATSUGGESTF_NCHANNELS);
         // acmFormatSuggest() returns 0 if no errors occur.
         if(0 != mmr)
         {
@@ -823,7 +861,7 @@ HRESULT CSynthStream::GetMediaType(CMediaType *pmt)
 HRESULT CSynthStream::CompleteConnect(IPin *pReceivePin)
 {
     // This lock must be held because this function uses
-    // m_hPCMToMSADPCMConversionStream, m_fFirstSampleDelivered 
+    // m_hPCMToMSADPCMConversionStream, m_fFirstSampleDelivered
     // and m_llSampleMediaTimeStart.
     CAutoLock lShared(&m_cSharedState);
 
@@ -851,14 +889,14 @@ HRESULT CSynthStream::CompleteConnect(IPin *pReceivePin)
         }
 
         MMRESULT mmr = acmStreamOpen(&m_hPCMToMSADPCMConversionStream,
-                                    NULL,
-                                    &wfexSourceFormat,
-                                    pwfexCurrent,
-                                    NULL,
-                                    0,
-                                    0,
-                                    ACM_STREAMOPENF_NONREALTIME);
-        // acmStreamOpen() returns 0 if an no errors occur.                              
+                                     NULL,
+                                     &wfexSourceFormat,
+                                     pwfexCurrent,
+                                     NULL,
+                                     0,
+                                     0,
+                                     ACM_STREAMOPENF_NONREALTIME);
+        // acmStreamOpen() returns 0 if an no errors occur.
         if(mmr != 0)
         {
             return E_FAIL;
@@ -876,7 +914,7 @@ HRESULT CSynthStream::CompleteConnect(IPin *pReceivePin)
         if(WAVE_FORMAT_ADPCM == pwfexCurrent->wFormatTag)
         {
             // acmStreamClose() should never fail because m_hPCMToMSADPCMConversionStream
-            // holds a valid ACM stream handle and all operations using the handle are 
+            // holds a valid ACM stream handle and all operations using the handle are
             // synchronous.
             EXECUTE_ASSERT(0 == acmStreamClose(m_hPCMToMSADPCMConversionStream, 0));
             m_hPCMToMSADPCMConversionStream = NULL;
@@ -892,14 +930,14 @@ HRESULT CSynthStream::CompleteConnect(IPin *pReceivePin)
 }
 
 
-void CSynthStream::DerivePCMFormatFromADPCMFormatStructure(const WAVEFORMATEX& wfexADPCM, 
-                                                           WAVEFORMATEX* pwfexPCM)
+void CSynthStream::DerivePCMFormatFromADPCMFormatStructure(const WAVEFORMATEX& wfexADPCM,
+        WAVEFORMATEX* pwfexPCM)
 {
     ASSERT(pwfexPCM);
     if (!pwfexPCM)
         return;
 
-    pwfexPCM->wFormatTag = WAVE_FORMAT_PCM; 
+    pwfexPCM->wFormatTag = WAVE_FORMAT_PCM;
     pwfexPCM->wBitsPerSample = 16;
     pwfexPCM->cbSize = 0;
 
@@ -926,7 +964,7 @@ HRESULT CSynthStream::BreakConnect(void)
     if(NULL != m_hPCMToMSADPCMConversionStream)
     {
         // acmStreamClose() should never fail because m_hPCMToMSADPCMConversionStream
-        // holds a valid ACM stream handle and all operations using the handle are 
+        // holds a valid ACM stream handle and all operations using the handle are
         // synchronous.
         EXECUTE_ASSERT(0 == acmStreamClose(m_hPCMToMSADPCMConversionStream, 0));
         m_hPCMToMSADPCMConversionStream = NULL;
@@ -946,8 +984,8 @@ HRESULT CSynthStream::BreakConnect(void)
 HRESULT CSynthStream::DecideBufferSize(IMemAllocator *pAlloc,
                                        ALLOCATOR_PROPERTIES *pProperties)
 {
-    // The caller should always hold the shared state lock 
-    // before calling this function.  This function must hold 
+    // The caller should always hold the shared state lock
+    // before calling this function.  This function must hold
     // the shared state lock because it uses m_hPCMToMSADPCMConversionStream
     // m_dwTempPCMBufferSize.
     ASSERT(CritCheckIn(&m_cSharedState));
@@ -963,7 +1001,7 @@ HRESULT CSynthStream::DecideBufferSize(IMemAllocator *pAlloc,
     }
     else
     {
-        // This filter only supports two formats: PCM and ADPCM. 
+        // This filter only supports two formats: PCM and ADPCM.
         ASSERT(WAVE_FORMAT_ADPCM == pwfexCurrent->wFormatTag);
 
         pProperties->cbBuffer = pwfexCurrent->nBlockAlign;
@@ -984,7 +1022,7 @@ HRESULT CSynthStream::DecideBufferSize(IMemAllocator *pAlloc,
     int nSamplesPerSec = pwfexCurrent->nSamplesPerSec;
     int nChannels = pwfexCurrent->nChannels;
 
-    pProperties->cBuffers = (nChannels * nSamplesPerSec * nBitsPerSample) / 
+    pProperties->cBuffers = (nChannels * nSamplesPerSec * nBitsPerSample) /
                             (pProperties->cbBuffer * BITS_PER_BYTE);
 
     // Get 1/2 second worth of buffers
@@ -1042,14 +1080,14 @@ HRESULT CSynthStream::Active(void)
 // Object that knows nothing about DirectShow, but just synthesizes waveforms
 
 CAudioSynth::CAudioSynth(
-                CCritSec* pStateLock,
-                int Frequency,
-                int Waveform,
-                int iBitsPerSample,
-                int iChannels,
-                int iSamplesPerSec,
-                int iAmplitude
-                )
+    CCritSec* pStateLock,
+    int Frequency,
+    int Waveform,
+    int iBitsPerSample,
+    int iChannels,
+    int iSamplesPerSec,
+    int iAmplitude
+)
     : m_bWaveCache(NULL)
     , m_wWaveCache(NULL)
     , m_pStateLock(pStateLock)
@@ -1149,12 +1187,12 @@ void CAudioSynth::GetPCMFormatStructure(WAVEFORMATEX* pwfex)
     ASSERT((1 == m_wChannels) || (2 == m_wChannels));
     ASSERT((8 == m_wBitsPerSample) || (16 == m_wBitsPerSample));
     ASSERT((8000 == m_dwSamplesPerSec) || (11025 == m_dwSamplesPerSec) ||
-        (22050 == m_dwSamplesPerSec) || (44100 == m_dwSamplesPerSec));
+           (22050 == m_dwSamplesPerSec) || (44100 == m_dwSamplesPerSec));
 
     pwfex->wFormatTag = WAVE_FORMAT_PCM;
     pwfex->nChannels = m_wChannels;
     pwfex->nSamplesPerSec = m_dwSamplesPerSec;
-    pwfex->wBitsPerSample = m_wBitsPerSample;        
+    pwfex->wBitsPerSample = m_wBitsPerSample;
     pwfex->nBlockAlign = (WORD)((pwfex->wBitsPerSample * pwfex->nChannels) / BITS_PER_BYTE);
     pwfex->nAvgBytesPerSec = pwfex->nBlockAlign * pwfex->nSamplesPerSec;
     pwfex->cbSize = 0;
@@ -1253,21 +1291,21 @@ void CAudioSynth::CalcCache(const WAVEFORMATEX& wfex)
 {
     switch(m_iWaveform)
     {
-        case WAVE_SINE:
-            CalcCacheSine(wfex);
-            break;
+    case WAVE_SINE:
+        CalcCacheSine(wfex);
+        break;
 
-        case WAVE_SQUARE:
-            CalcCacheSquare(wfex);
-            break;
+    case WAVE_SQUARE:
+        CalcCacheSquare(wfex);
+        break;
 
-        case WAVE_SAWTOOTH:
-            CalcCacheSawtooth(wfex);
-            break;
+    case WAVE_SAWTOOTH:
+        CalcCacheSawtooth(wfex);
+        break;
 
-        case WAVE_SINESWEEP:
-            CalcCacheSweep(wfex);
-            break;
+    case WAVE_SINESWEEP:
+        CalcCacheSweep(wfex);
+        break;
     }
 }
 
@@ -1373,7 +1411,7 @@ void CAudioSynth::CalcCacheSawtooth(const WAVEFORMATEX& wfex)
     BOOL fPositive;
 
     amplitude = ((wfex.wBitsPerSample == 8) ? 255 : 65535 )
-        * m_iAmplitude / 100;
+                * m_iAmplitude / 100;
 
     FTwoPIDivSpS = m_iFrequency * TWOPI / wfex.nSamplesPerSec;
     step = amplitude * m_iFrequency / wfex.nSamplesPerSec;
@@ -1595,7 +1633,7 @@ STDMETHODIMP CAudioSynth::put_SamplesPerSec(int SamplesPerSec)
 // put_SynthFormat
 //
 STDMETHODIMP CAudioSynth::put_SynthFormat(int Channels, int BitsPerSample,
-                                          int SamplesPerSec)
+        int SamplesPerSec)
 {
     CAutoLock l(m_pStateLock);
 
@@ -1604,7 +1642,7 @@ STDMETHODIMP CAudioSynth::put_SynthFormat(int Channels, int BitsPerSample,
     m_dwSamplesPerSec = SamplesPerSec;
 
     DbgLog((LOG_TRACE, 1, TEXT("put_SynthFormat: %d-bit %d-channel %dHz"),
-        BitsPerSample, Channels, SamplesPerSec));
+            BitsPerSample, Channels, SamplesPerSec));
 
     return NOERROR;
 }
@@ -1683,16 +1721,16 @@ STDMETHODIMP CAudioSynth::get_OutputFormat(SYNTH_OUTPUT_FORMAT *pOutputFormat)
 
     switch(m_wFormatTag)
     {
-        case WAVE_FORMAT_PCM:
-            *pOutputFormat = SYNTH_OF_PCM;
-            break;
+    case WAVE_FORMAT_PCM:
+        *pOutputFormat = SYNTH_OF_PCM;
+        break;
 
-        case WAVE_FORMAT_ADPCM:
-            *pOutputFormat = SYNTH_OF_MS_ADPCM;
-            break;
+    case WAVE_FORMAT_ADPCM:
+        *pOutputFormat = SYNTH_OF_MS_ADPCM;
+        break;
 
-        default:
-            return E_UNEXPECTED;
+    default:
+        return E_UNEXPECTED;
     }
 
     return S_OK;
@@ -1704,20 +1742,20 @@ STDMETHODIMP CAudioSynth::get_OutputFormat(SYNTH_OUTPUT_FORMAT *pOutputFormat)
 //
 STDMETHODIMP CAudioSynth::put_OutputFormat(SYNTH_OUTPUT_FORMAT ofOutputFormat)
 {
-    CAutoLock l(m_pStateLock);    
+    CAutoLock l(m_pStateLock);
 
     switch(ofOutputFormat)
     {
-        case SYNTH_OF_PCM:
-            m_wFormatTag = WAVE_FORMAT_PCM;
-            break;
+    case SYNTH_OF_PCM:
+        m_wFormatTag = WAVE_FORMAT_PCM;
+        break;
 
-        case SYNTH_OF_MS_ADPCM:
-            m_wFormatTag = WAVE_FORMAT_ADPCM;
-            break;
+    case SYNTH_OF_MS_ADPCM:
+        m_wFormatTag = WAVE_FORMAT_ADPCM;
+        break;
 
-        default:
-            return E_INVALIDARG;
+    default:
+        return E_INVALIDARG;
     }
 
     return S_OK;
@@ -1726,7 +1764,7 @@ STDMETHODIMP CAudioSynth::put_OutputFormat(SYNTH_OUTPUT_FORMAT ofOutputFormat)
 
 ////////////////////////////////////////////////////////////////////////
 //
-// Exported entry points for registration and unregistration 
+// Exported entry points for registration and unregistration
 // (in this case they only call through to default implementations).
 //
 ////////////////////////////////////////////////////////////////////////
@@ -1746,11 +1784,11 @@ STDAPI DllUnregisterServer()
 //
 extern "C" BOOL WINAPI DllEntryPoint(HINSTANCE, ULONG, LPVOID);
 
-BOOL APIENTRY DllMain(HANDLE hModule, 
-                      DWORD  dwReason, 
+BOOL APIENTRY DllMain(HANDLE hModule,
+                      DWORD  dwReason,
                       LPVOID lpReserved)
 {
-	return DllEntryPoint((HINSTANCE)(hModule), dwReason, lpReserved);
+    return DllEntryPoint((HINSTANCE)(hModule), dwReason, lpReserved);
 }
 
 

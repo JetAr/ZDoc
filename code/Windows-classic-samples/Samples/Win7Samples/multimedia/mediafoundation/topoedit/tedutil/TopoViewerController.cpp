@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -12,7 +12,7 @@
 STDAPI TEDCreateTopoViewer(ITedVideoWindowHandler* pVideoWindowHandler, ITedPropertyController* pPropertyController, ITedTopoEventHandler* pEventHandler, __out ITedTopoView** ppTopoViewer)
 {
     HRESULT hr = S_OK;
-    
+
     if(NULL == ppTopoViewer)
     {
         return E_POINTER;
@@ -26,7 +26,7 @@ STDAPI TEDCreateTopoViewer(ITedVideoWindowHandler* pVideoWindowHandler, ITedProp
     }
 
     hr = pController->Init(pVideoWindowHandler, pPropertyController, pEventHandler);
-    if(FAILED(hr)) 
+    if(FAILED(hr))
     {
         pController->Release();
         return hr;
@@ -51,7 +51,7 @@ HRESULT CTopoViewerController::Init(ITedVideoWindowHandler* pVideoWindowHandler,
 {
     HRESULT hr = S_OK;
     m_spVideoHandler = pVideoWindowHandler;
-    
+
     m_pWindow = new CTopoViewerWindow(hr);
     if(NULL == m_pWindow)
     {
@@ -65,7 +65,7 @@ HRESULT CTopoViewerController::Init(ITedVideoWindowHandler* pVideoWindowHandler,
         hr = E_OUTOFMEMORY;
     }
     IFC( hr );
-    
+
     m_pWindow->Init(this, m_pEditor);
     m_pEditor->Init(pVideoWindowHandler, pPropertyController, pEventHandler, m_pWindow);
 
@@ -82,7 +82,7 @@ HRESULT CTopoViewerController::CreateTopoWindow(LPCWSTR szTitle, DWORD dwStyle, 
     clientRect.top = y;
     clientRect.right = x + width;
     clientRect.bottom = y + height;
-    
+
     hWnd = m_pWindow->Create((HWND) hWndParent, clientRect, szTitle, dwStyle);
 
     if(NULL == hWnd)
@@ -94,7 +94,7 @@ HRESULT CTopoViewerController::CreateTopoWindow(LPCWSTR szTitle, DWORD dwStyle, 
     {
         *phWnd = (LONG_PTR) hWnd;
     }
-    
+
     return S_OK;
 }
 
@@ -120,7 +120,7 @@ HRESULT CTopoViewerController::IsSaved(BOOL* pfIsSaved)
 {
     if(NULL == pfIsSaved)
     {
-        return E_POINTER; 
+        return E_POINTER;
     }
 
     *pfIsSaved = m_pEditor->IsSaved();
@@ -185,7 +185,7 @@ Cleanup:
     {
         delete pSARNode;
     }
-    
+
     return hr;
 }
 
@@ -202,7 +202,7 @@ Cleanup:
     {
         delete pEVRNode;
     }
-    
+
     return hr;
 }
 
@@ -219,7 +219,7 @@ Cleanup:
     {
         delete pTransformNode;
     }
-    
+
     return hr;
 }
 
@@ -236,7 +236,7 @@ Cleanup:
     {
         delete pTransformNode;
     }
-    
+
     return hr;
 }
 
@@ -253,7 +253,7 @@ Cleanup:
     {
         delete pTeeNode;
     }
-    
+
     return hr;
 }
 
@@ -300,25 +300,25 @@ HRESULT CTopoViewerController::AddCaptureSource(IMFMediaSource* pSource)
     IFC( m_pEditor->AddNode(pSourceNode) );
 
 Cleanup:
-	if(FAILED(hr))
-	{
-		delete pSourceNode;
-	}
-    
+    if(FAILED(hr))
+    {
+        delete pSourceNode;
+    }
+
     return hr;
 }
 
 HRESULT CTopoViewerController::DeleteSelectedNode()
 {
     CVisualObject* pSelectedVisual = m_pWindow->GetSelectedVisual();
-    
+
     if(NULL == pSelectedVisual)
     {
         return S_OK;
     }
 
     m_pWindow->HandleDelete();
-    
+
     return S_OK;
 }
 

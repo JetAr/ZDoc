@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -9,10 +9,10 @@
 //
 //  File:             KeyDerivationWithPersistedKeys.cpp
 //
-//  Contents:         This sample shows how to create a persisted KDF key, and then derive 
+//  Contents:         This sample shows how to create a persisted KDF key, and then derive
 //                    ephemeral KDF/symmetric keys from the persisted KDF key using the NCryptKeyDerivation API.
 //                    The derived ephemeral AES key is used to encrypt and decrypt a message in CBC mode( non authentication mode )
-//    
+//
 //
 
 #define WIN32_NO_STATUS
@@ -27,23 +27,23 @@
 #include <bcrypt.h>
 #include <sal.h>
 
-static const 
-BYTE Secret[20] = 
+static const
+BYTE Secret[20] =
 {
     0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a,
     0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a,
 };
 
-static const 
-BYTE GenericParameter[20] = 
+static const
+BYTE GenericParameter[20] =
 {
     0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a,
-    0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 
+    0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09,
 };
 
 
-static const 
-BYTE Message[20] = 
+static const
+BYTE Message[20] =
 {
     0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a,
     0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a,
@@ -67,10 +67,10 @@ DWORD  AesKeyLength = 16;  // in bytes
 //  Prints error information to the console
 //
 //----------------------------------------------------------------------------
-void 
-ReportError( 
-    _In_    DWORD       dwErrCode 
-    )
+void
+ReportError(
+    _In_    DWORD       dwErrCode
+)
 {
     wprintf( L"Error: 0x%08x (%d)\n", dwErrCode, dwErrCode );
 }
@@ -80,18 +80,18 @@ EncryptData(
     _In_        BCRYPT_KEY_HANDLE   KeyHandle,
     _In_        DWORD               KeyObjectLength,
     _In_reads_bytes_(InitVectorLength)
-                PBYTE               InitVector,
+    PBYTE               InitVector,
     _In_        DWORD               InitVectorLength,
     _In_reads_bytes_(ChainingModeLength)
-                PBYTE               ChainingMode,
+    PBYTE               ChainingMode,
     _In_        DWORD               ChainingModeLength,
     _In_reads_bytes_(PlainTextLength)
-				PBYTE               PlainText,
+    PBYTE               PlainText,
     _In_        DWORD               PlainTextLength,
-    _Outptr_result_bytebuffer_(*CipherTextLengthPointer) 
-                PBYTE               *CipherTextPointer,
+    _Outptr_result_bytebuffer_(*CipherTextLengthPointer)
+    PBYTE               *CipherTextPointer,
     _Out_       DWORD               *CipherTextLengthPointer
-    )
+)
 {
     NTSTATUS    Status;
 
@@ -103,7 +103,7 @@ EncryptData(
     PBYTE   CipherText = NULL;
     DWORD   CipherTextLength = 0;
     PBYTE   KeyObject = NULL;
-    
+
     //
     // Allocate KeyObject on the heap
     //
@@ -117,15 +117,15 @@ EncryptData(
     }
 
     //
-    // Generate a duplicate AES key 
+    // Generate a duplicate AES key
     //
 
     Status = BCryptDuplicateKey(
-                                        KeyHandle,                  // A pointer to key handle
-                                        &EncryptKeyHandle,          // A pointer to BCRYPT_KEY_HANDLE that recieves a handle to the duplicate key 
-                                        KeyObject,                  // A pointer to the buffer that recieves the duplicate key object
-                                        KeyObjectLength,            // Size of the buffer in bytes
-                                        0);                         // Flags
+                 KeyHandle,                  // A pointer to key handle
+                 &EncryptKeyHandle,          // A pointer to BCRYPT_KEY_HANDLE that recieves a handle to the duplicate key
+                 KeyObject,                  // A pointer to the buffer that recieves the duplicate key object
+                 KeyObjectLength,            // Size of the buffer in bytes
+                 0);                         // Flags
     if( !NT_SUCCESS(Status) )
     {
         ReportError(Status);
@@ -135,13 +135,13 @@ EncryptData(
     //
     // Set the chaining mode on the key handle
     //
-    
-    Status = BCryptSetProperty( 
-                                        EncryptKeyHandle,           // Handle to a CNG object          
-                                        BCRYPT_CHAINING_MODE,       // Property name(null terminated unicode string)
-                                        ChainingMode,               // Address of the buffer that contains the new property value 
-                                        ChainingModeLength,         // Size of the buffer in bytes
-                                        0);                         // Flags
+
+    Status = BCryptSetProperty(
+                 EncryptKeyHandle,           // Handle to a CNG object
+                 BCRYPT_CHAINING_MODE,       // Property name(null terminated unicode string)
+                 ChainingMode,               // Address of the buffer that contains the new property value
+                 ChainingModeLength,         // Size of the buffer in bytes
+                 0);                         // Flags
     if( !NT_SUCCESS(Status) )
     {
         ReportError(Status);
@@ -160,7 +160,7 @@ EncryptData(
         ReportError(Status);
         goto cleanup;
     }
-    
+
     TempInitVectorLength = InitVectorLength;
     memcpy(TempInitVector, InitVector, TempInitVectorLength);
 
@@ -168,18 +168,18 @@ EncryptData(
     // Get CipherText's length
     // If the program can compute the length of cipher text(based on algorihtm and chaining mode info.), this call can be avoided.
     //
-    
+
     Status = BCryptEncrypt(
-                                        EncryptKeyHandle,           // Handle to a key which is used to encrypt 
-                                        PlainText,                  // Address of the buffer that contains the plaintext
-                                        PlainTextLength,            // Size of the buffer in bytes
-                                        NULL,                       // A pointer to padding info, used with asymmetric and authenticated encryption; else set to NULL
-                                        TempInitVector,             // Address of the buffer that contains the IV. 
-                                        TempInitVectorLength,       // Size of the IV buffer in bytes
-                                        NULL,                       // Address of the buffer the recieves the ciphertext
-                                        0,                          // Size of the buffer in bytes
-                                        &CipherTextLength,          // Variable that recieves number of bytes copied to ciphertext buffer 
-                                        BCRYPT_BLOCK_PADDING);      // Flags; Block padding allows to pad data to the next block size
+                 EncryptKeyHandle,           // Handle to a key which is used to encrypt
+                 PlainText,                  // Address of the buffer that contains the plaintext
+                 PlainTextLength,            // Size of the buffer in bytes
+                 NULL,                       // A pointer to padding info, used with asymmetric and authenticated encryption; else set to NULL
+                 TempInitVector,             // Address of the buffer that contains the IV.
+                 TempInitVectorLength,       // Size of the IV buffer in bytes
+                 NULL,                       // Address of the buffer the recieves the ciphertext
+                 0,                          // Size of the buffer in bytes
+                 &CipherTextLength,          // Variable that recieves number of bytes copied to ciphertext buffer
+                 BCRYPT_BLOCK_PADDING);      // Flags; Block padding allows to pad data to the next block size
     if( !NT_SUCCESS(Status) )
     {
         ReportError(Status);
@@ -202,18 +202,18 @@ EncryptData(
     // Peform encyption
     // For block length messages, block padding will add an extra block
     //
-    
+
     Status = BCryptEncrypt(
-                                        EncryptKeyHandle,           // Handle to a key which is used to encrypt 
-                                        PlainText,                  // Address of the buffer that contains the plaintext
-                                        PlainTextLength,            // Size of the buffer in bytes
-                                        NULL,                       // A pointer to padding info, used with asymmetric and authenticated encryption; else set to NULL
-                                        TempInitVector,             // Address of the buffer that contains the IV. 
-                                        TempInitVectorLength,       // Size of the IV buffer in bytes
-                                        CipherText,                 // Address of the buffer the recieves the ciphertext
-                                        CipherTextLength,           // Size of the buffer in bytes
-                                        &ResultLength,              // Variable that recieves number of bytes copied to ciphertext buffer 
-                                        BCRYPT_BLOCK_PADDING);      // Flags; Block padding allows to pad data to the next block size
+                 EncryptKeyHandle,           // Handle to a key which is used to encrypt
+                 PlainText,                  // Address of the buffer that contains the plaintext
+                 PlainTextLength,            // Size of the buffer in bytes
+                 NULL,                       // A pointer to padding info, used with asymmetric and authenticated encryption; else set to NULL
+                 TempInitVector,             // Address of the buffer that contains the IV.
+                 TempInitVectorLength,       // Size of the IV buffer in bytes
+                 CipherText,                 // Address of the buffer the recieves the ciphertext
+                 CipherTextLength,           // Size of the buffer in bytes
+                 &ResultLength,              // Variable that recieves number of bytes copied to ciphertext buffer
+                 BCRYPT_BLOCK_PADDING);      // Flags; Block padding allows to pad data to the next block size
 
     if( !NT_SUCCESS(Status) )
     {
@@ -248,7 +248,7 @@ cleanup:
     {
         BCryptDestroyKey(EncryptKeyHandle);
     }
-     
+
     return Status;
 
 }
@@ -264,18 +264,18 @@ DecryptData(
     _In_        BCRYPT_KEY_HANDLE   KeyHandle,
     _In_        DWORD               KeyObjectLength,
     _In_reads_bytes_(InitVectorLength)
-                PBYTE               InitVector,
+    PBYTE               InitVector,
     _In_        DWORD               InitVectorLength,
     _In_reads_bytes_(ChainingModeLength)
-                PBYTE               ChainingMode,
+    PBYTE               ChainingMode,
     _In_        DWORD               ChainingModeLength,
     _In_reads_bytes_(CipherTextLength)
-                PBYTE               CipherText,
+    PBYTE               CipherText,
     _In_        DWORD               CipherTextLength,
     _Outptr_result_bytebuffer_(*PlainTextLengthPointer)
-                PBYTE               *PlainTextPointer,
+    PBYTE               *PlainTextPointer,
     _Out_       DWORD               *PlainTextLengthPointer
-    )
+)
 {
     NTSTATUS    Status;
     PBYTE   TempInitVector = NULL;
@@ -285,7 +285,7 @@ DecryptData(
     DWORD   ResultLength = 0;
     BCRYPT_KEY_HANDLE DecryptKeyHandle = NULL;
     PBYTE   KeyObject = NULL;
-    
+
     //
     // Allocate KeyObject on the heap
     //
@@ -299,31 +299,31 @@ DecryptData(
     }
 
     //
-    // Generate a duplicate AES key 
+    // Generate a duplicate AES key
     //
 
     Status = BCryptDuplicateKey(
-                                        KeyHandle,                  // A pointer to key handle
-                                        &DecryptKeyHandle,          // A pointer to BCRYPT_KEY_HANDLE that recieves a handle to the duplicate key 
-                                        KeyObject,                  // A pointer to the buffer that recieves the duplicate key object
-                                        KeyObjectLength,            // Size of the buffer in bytes
-                                        0);                         // Flags
+                 KeyHandle,                  // A pointer to key handle
+                 &DecryptKeyHandle,          // A pointer to BCRYPT_KEY_HANDLE that recieves a handle to the duplicate key
+                 KeyObject,                  // A pointer to the buffer that recieves the duplicate key object
+                 KeyObjectLength,            // Size of the buffer in bytes
+                 0);                         // Flags
     if( !NT_SUCCESS(Status) )
     {
         ReportError(Status);
         goto cleanup;
     }
-    
+
     //
     // Set the chaining mode on the key handle
     //
-    
-    Status = BCryptSetProperty( 
-                                        DecryptKeyHandle,           // Handle to a CNG object          
-                                        BCRYPT_CHAINING_MODE,       // Property name(null terminated unicode string)
-                                        ChainingMode,               // Address of the buffer that contains the new property value 
-                                        ChainingModeLength,         // Size of the buffer in bytes
-                                        0);                         // Flags
+
+    Status = BCryptSetProperty(
+                 DecryptKeyHandle,           // Handle to a CNG object
+                 BCRYPT_CHAINING_MODE,       // Property name(null terminated unicode string)
+                 ChainingMode,               // Address of the buffer that contains the new property value
+                 ChainingModeLength,         // Size of the buffer in bytes
+                 0);                         // Flags
     if( !NT_SUCCESS(Status) )
     {
         ReportError(Status);
@@ -343,27 +343,27 @@ DecryptData(
         ReportError(Status);
         goto cleanup;
     }
-    
+
     TempInitVectorLength = InitVectorLength;
     memcpy(TempInitVector, InitVector, TempInitVectorLength);
-    
+
     //
     // Get CipherText's length
     // If the program can compute the length of cipher text(based on algorihtm and chaining mode info.), this call can be avoided.
     //
-    
+
     Status = BCryptDecrypt(
-                                        DecryptKeyHandle,           // Handle to a key which is used to encrypt 
-                                        CipherText,                 // Address of the buffer that contains the ciphertext
-                                        CipherTextLength,           // Size of the buffer in bytes
-                                        NULL,                       // A pointer to padding info, used with asymmetric and authenticated encryption; else set to NULL
-                                        TempInitVector,             // Address of the buffer that contains the IV. 
-                                        TempInitVectorLength,       // Size of the IV buffer in bytes
-                                        NULL,                       // Address of the buffer the recieves the plaintext
-                                        0,                          // Size of the buffer in bytes
-                                        &PlainTextLength,           // Variable that recieves number of bytes copied to plaintext buffer 
-                                        BCRYPT_BLOCK_PADDING);      // Flags; Block padding allows to pad data to the next block size
-                                        
+                 DecryptKeyHandle,           // Handle to a key which is used to encrypt
+                 CipherText,                 // Address of the buffer that contains the ciphertext
+                 CipherTextLength,           // Size of the buffer in bytes
+                 NULL,                       // A pointer to padding info, used with asymmetric and authenticated encryption; else set to NULL
+                 TempInitVector,             // Address of the buffer that contains the IV.
+                 TempInitVectorLength,       // Size of the IV buffer in bytes
+                 NULL,                       // Address of the buffer the recieves the plaintext
+                 0,                          // Size of the buffer in bytes
+                 &PlainTextLength,           // Variable that recieves number of bytes copied to plaintext buffer
+                 BCRYPT_BLOCK_PADDING);      // Flags; Block padding allows to pad data to the next block size
+
     if( !NT_SUCCESS(Status) )
     {
         ReportError(Status);
@@ -384,17 +384,17 @@ DecryptData(
     //
 
     Status = BCryptDecrypt(
-                                        DecryptKeyHandle,           // Handle to a key which is used to encrypt 
-                                        CipherText,                 // Address of the buffer that contains the ciphertext
-                                        CipherTextLength,           // Size of the buffer in bytes
-                                        NULL,                       // A pointer to padding info, used with asymmetric and authenticated encryption; else set to NULL
-                                        TempInitVector,             // Address of the buffer that contains the IV. 
-                                        TempInitVectorLength,       // Size of the IV buffer in bytes
-                                        PlainText,                  // Address of the buffer the recieves the plaintext
-                                        PlainTextLength,            // Size of the buffer in bytes
-                                        &ResultLength,              // Variable that recieves number of bytes copied to plaintext buffer 
-                                        BCRYPT_BLOCK_PADDING);      // Flags; Block padding allows to pad data to the next block size
-                                       
+                 DecryptKeyHandle,           // Handle to a key which is used to encrypt
+                 CipherText,                 // Address of the buffer that contains the ciphertext
+                 CipherTextLength,           // Size of the buffer in bytes
+                 NULL,                       // A pointer to padding info, used with asymmetric and authenticated encryption; else set to NULL
+                 TempInitVector,             // Address of the buffer that contains the IV.
+                 TempInitVectorLength,       // Size of the IV buffer in bytes
+                 PlainText,                  // Address of the buffer the recieves the plaintext
+                 PlainTextLength,            // Size of the buffer in bytes
+                 &ResultLength,              // Variable that recieves number of bytes copied to plaintext buffer
+                 BCRYPT_BLOCK_PADDING);      // Flags; Block padding allows to pad data to the next block size
+
     if( !NT_SUCCESS(Status) )
     {
         ReportError(Status);
@@ -441,16 +441,16 @@ __cdecl
 wmain(
     _In_               int     argc,
     _In_reads_(argc)   LPWSTR  argv[]
-    )
+)
 {
     NTSTATUS    Status;
     SECURITY_STATUS     secStatus = S_OK;
-    
+
     NCRYPT_PROV_HANDLE      ProviderHandle = 0;
     NCRYPT_KEY_HANDLE       KdfKeyHandle = 0;
     BCRYPT_KEY_HANDLE       AesKeyHandle = NULL;
     BCRYPT_ALG_HANDLE       AesAlgHandle = NULL;
-    
+
     LPCWSTR                 KdfKeyName = L"SampleKDFKey";
     NCryptBuffer            GenericKdfParameters[2] = {0};
     NCryptBufferDesc        GenericKdfParamList;
@@ -466,15 +466,15 @@ wmain(
     PBYTE                   AesKeyMaterial = NULL;
     DWORD                   KeyObjectLength = 0;
     DWORD                   BlockLength = 0;
-    
+
     //
-    // Open Microsoft KSP (Key Storage Provider) 
+    // Open Microsoft KSP (Key Storage Provider)
     //
 
     secStatus = NCryptOpenStorageProvider(
-                                        &ProviderHandle,            // Pointer to a variable that recieves the provider handle
-                                        MS_KEY_STORAGE_PROVIDER,    // Storage provider identifier(null terminated unicode string); If NULL, default provider is loaded
-                                        0);                         // Flags
+                    &ProviderHandle,            // Pointer to a variable that recieves the provider handle
+                    MS_KEY_STORAGE_PROVIDER,    // Storage provider identifier(null terminated unicode string); If NULL, default provider is loaded
+                    0);                         // Flags
     if( FAILED(secStatus) )
     {
         ReportError(secStatus);
@@ -489,12 +489,12 @@ wmain(
     //
 
     secStatus = NCryptCreatePersistedKey(
-                                        ProviderHandle,             // Handle of the key storage provider
-                                        &KdfKeyHandle,              // Address of the variable that recieves the key handle
-                                        NCRYPT_SP800108_CTR_HMAC_ALGORITHM, // Algorithm name (null terminated unicode string)
-                                        KdfKeyName,                 // Key name (null terminated unicode string)
-                                        0,                          // Legacy identifer (AT_KEYEXCHANGE, AT_SIGNATURE or 0 )
-                                        NCRYPT_OVERWRITE_KEY_FLAG); // Flags; If a key already exists in the container with the specified name, the existing key will be overwritten.
+                    ProviderHandle,             // Handle of the key storage provider
+                    &KdfKeyHandle,              // Address of the variable that recieves the key handle
+                    NCRYPT_SP800108_CTR_HMAC_ALGORITHM, // Algorithm name (null terminated unicode string)
+                    KdfKeyName,                 // Key name (null terminated unicode string)
+                    0,                          // Legacy identifer (AT_KEYEXCHANGE, AT_SIGNATURE or 0 )
+                    NCRYPT_OVERWRITE_KEY_FLAG); // Flags; If a key already exists in the container with the specified name, the existing key will be overwritten.
     if( FAILED(secStatus) )
     {
         ReportError(secStatus);
@@ -506,12 +506,12 @@ wmain(
     //
 
     secStatus = NCryptSetProperty(
-                                        KdfKeyHandle,               // Handle of the key storage object 
-                                        NCRYPT_KDF_SECRET_VALUE,    // Property name (null terminated unicode string)
-                                        (PBYTE)Secret,              // Address of the buffer that contains the property value
-                                        sizeof(Secret),             // Size of the buffer in bytes
-                                        0);                         // Flags
-                        
+                    KdfKeyHandle,               // Handle of the key storage object
+                    NCRYPT_KDF_SECRET_VALUE,    // Property name (null terminated unicode string)
+                    (PBYTE)Secret,              // Address of the buffer that contains the property value
+                    sizeof(Secret),             // Size of the buffer in bytes
+                    0);                         // Flags
+
     if( FAILED(secStatus) )
     {
         ReportError(secStatus);
@@ -524,23 +524,23 @@ wmain(
     //
 
     secStatus = NCryptFinalizeKey(
-                                        KdfKeyHandle,               // Handle of the key - that has to be finalized
-                                        0);                         // Flags
+                    KdfKeyHandle,               // Handle of the key - that has to be finalized
+                    0);                         // Flags
     if( FAILED(secStatus) )
     {
         ReportError(secStatus);
         goto cleanup;
-    }  
+    }
 
     //
     // Construct parameter list
     //
 
     //
-    // Generic parameters: 
+    // Generic parameters:
     // KDF_GENERIC_PARAMETER and KDF_HASH_ALGORITHM are the generic parameters that can be passed for the following KDF algorithms:
-    // BCRYPT/NCRYPT_SP800108_CTR_HMAC_ALGORITHM 
-    //      KDF_GENERIC_PARAMETER = KDF_LABEL||0x00||KDF_CONTEXT 
+    // BCRYPT/NCRYPT_SP800108_CTR_HMAC_ALGORITHM
+    //      KDF_GENERIC_PARAMETER = KDF_LABEL||0x00||KDF_CONTEXT
     // BCRYPT/NCRYPT_SP80056A_CONCAT_ALGORITHM
     //      KDF_GENERIC_PARAMETER = KDF_ALGORITHMID || KDF_PARTYUINFO || KDF_PARTYVINFO {|| KDF_SUPPPUBINFO } {|| KDF_SUPPPRIVINFO }
     // BCRYPT/NCRYPT_PBKDF2_ALGORITHM
@@ -549,7 +549,7 @@ wmain(
     //      KDF_GENERIC_PARAMETER = Not used
     //
     // Alternatively, KDF specific parameters can be passed as well.
-    // For NCRYPT_SP800108_CTR_HMAC_ALGORITHM: 
+    // For NCRYPT_SP800108_CTR_HMAC_ALGORITHM:
     //      KDF_HASH_ALGORITHM, KDF_LABEL and KDF_CONTEXT are required
     // For NCRYPT_SP80056A_CONCAT_ALGORITHM:
     //      KDF_HASH_ALGORITHM, KDF_ALGORITHMID, KDF_PARTYUINFO, KDF_PARTYVINFO are required
@@ -569,14 +569,14 @@ wmain(
     GenericKdfParameters[0].cbBuffer = sizeof(BCRYPT_SHA256_ALGORITHM);
     GenericKdfParameters[0].BufferType = KDF_HASH_ALGORITHM;
     GenericKdfParameters[0].pvBuffer = (void*)BCRYPT_SHA256_ALGORITHM;
-   
+
     //
     // KDF_GENERIC_PARAMETER
     //
     GenericKdfParameters[1].cbBuffer = sizeof(GenericParameter);
     GenericKdfParameters[1].BufferType = KDF_GENERIC_PARAMETER;
     GenericKdfParameters[1].pvBuffer = (void*)GenericParameter;
-   
+
     GenericKdfParamList.ulVersion = NCRYPTBUFFER_VERSION;
     GenericKdfParamList.cBuffers = ARRAYSIZE(GenericKdfParameters);
     GenericKdfParamList.pBuffers = GenericKdfParameters;
@@ -598,12 +598,12 @@ wmain(
     //
 
     secStatus = NCryptKeyDerivation(
-                                        KdfKeyHandle,               // Handel of the key
-                                        &GenericKdfParamList,       // Address of the NCryptBufferDesc structure that contains the KDF parameters
-                                        AesKeyMaterial,             // Variable that recieves the derived key material
-                                        AesKeyMaterialLength,       // Size of the buffer in bytes
-                                        &ResultLength,
-                                        0);                         // Flags 
+                    KdfKeyHandle,               // Handel of the key
+                    &GenericKdfParamList,       // Address of the NCryptBufferDesc structure that contains the KDF parameters
+                    AesKeyMaterial,             // Variable that recieves the derived key material
+                    AesKeyMaterialLength,       // Size of the buffer in bytes
+                    &ResultLength,
+                    0);                         // Flags
     if( FAILED(secStatus) )
     {
         ReportError(secStatus);
@@ -613,12 +613,12 @@ wmain(
     //
     // Open an algorithm handle
     //
-    
+
     Status = BCryptOpenAlgorithmProvider(
-                                        &AesAlgHandle,              // Alg Handle pointer
-                                        BCRYPT_AES_ALGORITHM,       // Cryptographic Algorithm name (null terminated unicode string)
-                                        NULL,                       // Provider name; if null, the default provider is loaded
-                                        0);                         // Flags
+                 &AesAlgHandle,              // Alg Handle pointer
+                 BCRYPT_AES_ALGORITHM,       // Cryptographic Algorithm name (null terminated unicode string)
+                 NULL,                       // Provider name; if null, the default provider is loaded
+                 0);                         // Flags
     if( !NT_SUCCESS(Status) )
     {
         secStatus = HRESULT_FROM_NT(Status);
@@ -631,13 +631,13 @@ wmain(
     //
 
     Status = BCryptGenerateSymmetricKey(
-                                        AesAlgHandle,               // Algorithm provider handle
-                                        &AesKeyHandle,              // A pointer to key handle
-                                        NULL,                       // A pointer to the buffer that recieves the key object;NULL implies memory is allocated and freed by the function
-                                        0,                          // Size of the buffer in bytes
-                                        (PBYTE)AesKeyMaterial,      // A pointer to a buffer that contains the key material
-                                        AesKeyMaterialLength,       // Size of the buffer in bytes
-                                        0);                         // Flags
+                 AesAlgHandle,               // Algorithm provider handle
+                 &AesKeyHandle,              // A pointer to key handle
+                 NULL,                       // A pointer to the buffer that recieves the key object;NULL implies memory is allocated and freed by the function
+                 0,                          // Size of the buffer in bytes
+                 (PBYTE)AesKeyMaterial,      // A pointer to a buffer that contains the key material
+                 AesKeyMaterialLength,       // Size of the buffer in bytes
+                 0);                         // Flags
     if( !NT_SUCCESS(Status) )
     {
         secStatus = HRESULT_FROM_NT(Status);
@@ -650,13 +650,13 @@ wmain(
     //
 
     Status = BCryptGetProperty(
-                                        AesAlgHandle,               // Handle to a CNG object
-                                        BCRYPT_OBJECT_LENGTH,       // Property name (null terminated unicode string)
-                                        (PBYTE)&KeyObjectLength,    // Addr of the output buffer which recieves the property value
-                                        sizeof (KeyObjectLength),   // Size of the buffer in the bytes
-                                        &ResultLength,              // Number of bytes that were copied into the buffer
-                                        0);                         // Flags
-                                        
+                 AesAlgHandle,               // Handle to a CNG object
+                 BCRYPT_OBJECT_LENGTH,       // Property name (null terminated unicode string)
+                 (PBYTE)&KeyObjectLength,    // Addr of the output buffer which recieves the property value
+                 sizeof (KeyObjectLength),   // Size of the buffer in the bytes
+                 &ResultLength,              // Number of bytes that were copied into the buffer
+                 0);                         // Flags
+
     if( !NT_SUCCESS(Status) )
     {
         secStatus = HRESULT_FROM_NT(Status);
@@ -667,15 +667,15 @@ wmain(
     //
     // Obtain block size
     //
-    
+
     Status = BCryptGetProperty(
-                                        AesAlgHandle,               // Handle to a CNG object
-                                        BCRYPT_BLOCK_LENGTH,        // Property name (null terminated unicode string)
-                                        (PBYTE)&BlockLength,        // Addr of the output buffer which recieves the property value
-                                        sizeof (BlockLength),       // Size of the buffer in the bytes
-                                        &ResultLength,              // Number of bytes that were copied into the buffer
-                                        0);                         // Flags
-                                        
+                 AesAlgHandle,               // Handle to a CNG object
+                 BCRYPT_BLOCK_LENGTH,        // Property name (null terminated unicode string)
+                 (PBYTE)&BlockLength,        // Addr of the output buffer which recieves the property value
+                 sizeof (BlockLength),       // Size of the buffer in the bytes
+                 &ResultLength,              // Number of bytes that were copied into the buffer
+                 0);                         // Flags
+
     if( !NT_SUCCESS(Status) )
     {
         secStatus = HRESULT_FROM_NT(Status);
@@ -683,7 +683,7 @@ wmain(
         goto cleanup;
     }
 
-    IVBufferLength = BlockLength; 
+    IVBufferLength = BlockLength;
 
     //
     // Allocate the InitVector on the heap
@@ -696,16 +696,16 @@ wmain(
         ReportError(secStatus);
         goto cleanup;
     }
-    
+
     //
     // Generate IV randomly
     //
 
     Status = BCryptGenRandom (
-                                        NULL,                       // Alg Handle pointer; If NULL, the default provider is chosen
-                                        (PBYTE)IVBuffer,            // Address of the buffer that recieves the random number(s)
-                                        IVBufferLength,             // Size of the buffer in bytes
-                                        BCRYPT_USE_SYSTEM_PREFERRED_RNG); // Flags 
+                 NULL,                       // Alg Handle pointer; If NULL, the default provider is chosen
+                 (PBYTE)IVBuffer,            // Address of the buffer that recieves the random number(s)
+                 IVBufferLength,             // Size of the buffer in bytes
+                 BCRYPT_USE_SYSTEM_PREFERRED_RNG); // Flags
     if( !NT_SUCCESS(Status) )
     {
         secStatus = HRESULT_FROM_NT(Status);
@@ -716,18 +716,18 @@ wmain(
     //
     // Encrypt plain text
     //
-        
+
     Status = EncryptData(
-                                        AesKeyHandle,
-                                        KeyObjectLength,
-                                        IVBuffer,
-                                        IVBufferLength,
-                                        (PBYTE)BCRYPT_CHAIN_MODE_CBC,
-                                        sizeof (BCRYPT_CHAIN_MODE_CBC),
-                                        (PBYTE)Message,
-                                        sizeof (Message),
-                                        &EncryptedMessage,
-                                        &EncryptedMessageLength);
+                 AesKeyHandle,
+                 KeyObjectLength,
+                 IVBuffer,
+                 IVBufferLength,
+                 (PBYTE)BCRYPT_CHAIN_MODE_CBC,
+                 sizeof (BCRYPT_CHAIN_MODE_CBC),
+                 (PBYTE)Message,
+                 sizeof (Message),
+                 &EncryptedMessage,
+                 &EncryptedMessageLength);
 
     if( !NT_SUCCESS(Status) )
     {
@@ -741,16 +741,16 @@ wmain(
     //
 
     Status = DecryptData(
-                                        AesKeyHandle,
-                                        KeyObjectLength,
-                                        IVBuffer,
-                                        IVBufferLength,
-                                        (PBYTE)BCRYPT_CHAIN_MODE_CBC,
-                                        sizeof (BCRYPT_CHAIN_MODE_CBC),
-                                        EncryptedMessage,
-                                        EncryptedMessageLength,
-                                        &DecryptedMessage,
-                                        &DecryptedMessageLength);
+                 AesKeyHandle,
+                 KeyObjectLength,
+                 IVBuffer,
+                 IVBufferLength,
+                 (PBYTE)BCRYPT_CHAIN_MODE_CBC,
+                 sizeof (BCRYPT_CHAIN_MODE_CBC),
+                 EncryptedMessage,
+                 EncryptedMessageLength,
+                 &DecryptedMessage,
+                 &DecryptedMessageLength);
 
     if( !NT_SUCCESS(Status) )
     {
@@ -760,7 +760,7 @@ wmain(
     }
 
     //
-    // Optional : Check if the original message and the message obtained after decrypt are the same 
+    // Optional : Check if the original message and the message obtained after decrypt are the same
     //
 
     if( 0 != (memcmp(Message, DecryptedMessage, sizeof (Message))) )
@@ -771,11 +771,11 @@ wmain(
     }
 
     secStatus = S_OK;
-      
+
     wprintf(L"Success!\n");
 
 cleanup:
-    
+
     if( NULL != EncryptedMessage )
     {
         HeapFree( GetProcessHeap(), 0, EncryptedMessage);
@@ -803,7 +803,7 @@ cleanup:
 
     if( NULL != AesKeyHandle )
     {
-        BCryptDestroyKey(AesKeyHandle);                           
+        BCryptDestroyKey(AesKeyHandle);
         AesKeyHandle = NULL;
     }
 
@@ -824,7 +824,7 @@ cleanup:
         NCryptFreeObject(ProviderHandle);                           // The handle of the object to free
         ProviderHandle = 0;
     }
-       
+
     return (DWORD)secStatus;
 
     UNREFERENCED_PARAMETER( argc );

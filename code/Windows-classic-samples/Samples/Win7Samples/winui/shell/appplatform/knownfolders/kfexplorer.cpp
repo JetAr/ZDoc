@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -225,42 +225,42 @@ int main(int, char *[])
             switch (at)
             {
             case ACT_REGISTER:
+            {
+                if (GUID_NULL == kfid)
                 {
-                    if (GUID_NULL == kfid)
-                    {
-                        CoCreateGuid(&kfid);
-                    }
+                    CoCreateGuid(&kfid);
+                }
 
-                    CompleteKnownFolderDef(&kfd);
-                    hr = RegisterKnownFolder(kfid, &kfd);
-                    if (S_OK == hr)
+                CompleteKnownFolderDef(&kfd);
+                hr = RegisterKnownFolder(kfid, &kfd);
+                if (S_OK == hr)
+                {
+                    // we create our knownfolder with SHGetKnownFolderPath() so that the shell will write
+                    // the desktop.ini file in the folder.  This is how our customizations
+                    // (i.e.: pszIcon, pszTooltip and pszLocalizedName) get picked up by explorer.
+                    PWSTR pszPath = NULL;
+                    hr = SHGetKnownFolderPath(kfid, KF_FLAG_CREATE | KF_FLAG_INIT, NULL, &pszPath);
+                    if (S_OK != hr)
                     {
-                        // we create our knownfolder with SHGetKnownFolderPath() so that the shell will write
-                        // the desktop.ini file in the folder.  This is how our customizations
-                        // (i.e.: pszIcon, pszTooltip and pszLocalizedName) get picked up by explorer.
-                        PWSTR pszPath = NULL;
-                        hr = SHGetKnownFolderPath(kfid, KF_FLAG_CREATE | KF_FLAG_INIT, NULL, &pszPath);
+                        wprintf(L"SHGetKnownFolderPath(KF_FLAG_CREATE | KF_FLAG_INIT) returned hr=0x%x\nThe KnownFolder was not registered.\n", hr);
+                        hr = UnregisterFolder(kfid);
                         if (S_OK != hr)
                         {
-                            wprintf(L"SHGetKnownFolderPath(KF_FLAG_CREATE | KF_FLAG_INIT) returned hr=0x%x\nThe KnownFolder was not registered.\n", hr);
-                            hr = UnregisterFolder(kfid);
-                            if (S_OK != hr)
-                            {
-                                wprintf(L"IKnownFolderManager::UnregisterFolder returned hr=0x%x.\nThe folder was NOT unregistered.\n", hr);
-                            }
-                            else
-                            {
-                                wprintf(L"The KnownFolder was not registered.\n");
-                            }
+                            wprintf(L"IKnownFolderManager::UnregisterFolder returned hr=0x%x.\nThe folder was NOT unregistered.\n", hr);
                         }
                         else
                         {
-                            CoTaskMemFree(pszPath);
-                            DumpKnownFolderDef(kfid, kfd);
+                            wprintf(L"The KnownFolder was not registered.\n");
                         }
                     }
+                    else
+                    {
+                        CoTaskMemFree(pszPath);
+                        DumpKnownFolderDef(kfid, kfd);
+                    }
                 }
-                break;
+            }
+            break;
 
             case ACT_ENUM:
                 wprintf(L"Enumerating all registered KnownFolders \n");
@@ -762,7 +762,7 @@ void AddRegisteredFolderToHistory(KNOWNFOLDERID kfid)
     HKEY hKey;
     DWORD dwDisp = 0;
     if (ERROR_SUCCESS == RegCreateKeyExW(HKEY_LOCAL_MACHINE, SZ_REG_PATH_HISTORY, 0, NULL,
-        REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, NULL, &hKey, &dwDisp))
+                                         REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, NULL, &hKey, &dwDisp))
     {
         WCHAR szGuid[GUID_SIZE];
         StringFromGUID2(kfid, szGuid, ARRAYSIZE(szGuid));

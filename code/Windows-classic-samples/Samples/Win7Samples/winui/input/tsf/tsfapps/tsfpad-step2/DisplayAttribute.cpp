@@ -1,4 +1,4 @@
-#include "private.h"
+﻿#include "private.h"
 #include "DisplayAttribute.h"
 
 ITfDisplayAttributeMgr *g_pdam = NULL;
@@ -10,10 +10,10 @@ CDispAttrProps *GetDispAttrProps()
     ITfCategoryMgr *pcat;
     HRESULT hr = E_FAIL;
     if (SUCCEEDED(hr = CoCreateInstance(CLSID_TF_CategoryMgr,
-                                   NULL,
-                                   CLSCTX_INPROC_SERVER,
-                                   IID_ITfCategoryMgr,
-                                   (void**)&pcat)))
+                                        NULL,
+                                        CLSCTX_INPROC_SERVER,
+                                        IID_ITfCategoryMgr,
+                                        (void**)&pcat)))
     {
         hr = pcat->EnumItemsInCategory(GUID_TFCAT_DISPLAYATTRIBUTEPROPERTY, &pEnumProp);
         pcat->Release();
@@ -24,19 +24,19 @@ CDispAttrProps *GetDispAttrProps()
     //
     if (SUCCEEDED(hr) && pEnumProp)
     {
-         GUID guidProp;
-         pProps = new CDispAttrProps;
+        GUID guidProp;
+        pProps = new CDispAttrProps;
 
-         //
-         // add System Display Attribute first.
-         // so no other Display Attribute property overwrite it.
-         //
-         pProps->Add(GUID_PROP_ATTRIBUTE);
-         while(pEnumProp->Next(1, &guidProp, NULL) == S_OK)
-         {
-             if (!IsEqualGUID(guidProp, GUID_PROP_ATTRIBUTE))
-                 pProps->Add(guidProp);
-         }
+        //
+        // add System Display Attribute first.
+        // so no other Display Attribute property overwrite it.
+        //
+        pProps->Add(GUID_PROP_ATTRIBUTE);
+        while(pEnumProp->Next(1, &guidProp, NULL) == S_OK)
+        {
+            if (!IsEqualGUID(guidProp, GUID_PROP_ATTRIBUTE))
+                pProps->Add(guidProp);
+        }
     }
 
     if (pEnumProp)
@@ -60,10 +60,10 @@ HRESULT InitDisplayAttrbute()
     g_pdam = NULL;
 
     if (FAILED(CoCreateInstance(CLSID_TF_DisplayAttributeMgr,
-                                   NULL, 
-                                   CLSCTX_INPROC_SERVER, 
-                                   IID_ITfDisplayAttributeMgr, 
-                                   (void**)&g_pdam)))
+                                NULL,
+                                CLSCTX_INPROC_SERVER,
+                                IID_ITfDisplayAttributeMgr,
+                                (void**)&g_pdam)))
     {
         return E_FAIL;
     }
@@ -106,15 +106,15 @@ HRESULT GetDisplayAttributeTrackPropertyRange(TfEditCookie ec, ITfContext *pic, 
     ULONG i;
 
     if (!pDispAttrProps)
-         goto Exit;
- 
+        goto Exit;
+
     pguidProp = pDispAttrProps->GetPropTable();
     if (!pguidProp)
-         goto Exit;
+        goto Exit;
 
     ulNumProp = pDispAttrProps->Count();
     if (!ulNumProp)
-         goto Exit;
+        goto Exit;
 
     // TrackProperties wants an array of GUID *'s
     if ((ppguidProp = (const GUID **)LocalAlloc(LMEM_ZEROINIT, sizeof(GUID *)*ulNumProp)) == NULL)
@@ -124,8 +124,8 @@ HRESULT GetDisplayAttributeTrackPropertyRange(TfEditCookie ec, ITfContext *pic, 
     {
         ppguidProp[i] = pguidProp++;
     }
-    
-    if (SUCCEEDED(hr = pic->TrackProperties(ppguidProp, 
+
+    if (SUCCEEDED(hr = pic->TrackProperties(ppguidProp,
                                             ulNumProp,
                                             0,
                                             NULL,
@@ -159,10 +159,10 @@ HRESULT GetDisplayAttributeData(TfEditCookie ec, ITfReadOnlyProperty *pProp, ITf
 
     ITfCategoryMgr *pcat = NULL;
     if (FAILED(hr = CoCreateInstance(CLSID_TF_CategoryMgr,
-                               NULL,
-                               CLSCTX_INPROC_SERVER,
-                               IID_ITfCategoryMgr,
-                               (void**)&pcat)))
+                                     NULL,
+                                     CLSCTX_INPROC_SERVER,
+                                     IID_ITfCategoryMgr,
+                                     (void**)&pcat)))
     {
         return hr;
     }
@@ -170,8 +170,8 @@ HRESULT GetDisplayAttributeData(TfEditCookie ec, ITfReadOnlyProperty *pProp, ITf
     hr = S_FALSE;
     if (SUCCEEDED(pProp->GetValue(ec, pRange, &var)))
     {
-        if (SUCCEEDED(var.punkVal->QueryInterface(IID_IEnumTfPropertyValue, 
-                                                  (void **)&pEnumPropertyVal)))
+        if (SUCCEEDED(var.punkVal->QueryInterface(IID_IEnumTfPropertyValue,
+                      (void **)&pEnumPropertyVal)))
         {
             while (pEnumPropertyVal->Next(1, &tfPropVal, NULL) == S_OK)
             {
@@ -186,9 +186,9 @@ HRESULT GetDisplayAttributeData(TfEditCookie ec, ITfReadOnlyProperty *pProp, ITf
                 {
                     //
                     // Issue: for simple apps.
-                    // 
+                    //
                     // Small apps can not show multi underline. So
-                    // this helper function returns only one 
+                    // this helper function returns only one
                     // DISPLAYATTRIBUTE structure.
                     //
                     if (pda)

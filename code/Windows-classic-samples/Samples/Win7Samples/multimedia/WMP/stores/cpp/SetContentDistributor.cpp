@@ -1,4 +1,4 @@
-/////////////////////////////////////////////////////////////////////////////
+﻿/////////////////////////////////////////////////////////////////////////////
 //
 // SetContentDistributor.cpp : Utility to set the content distributor ID in a media file.
 // Copyright (c) Microsoft Corporation. All rights reserved.
@@ -42,7 +42,7 @@ int wmain(int argc, WCHAR* argv[])
         wprintf(L"    <distributor>  ID of content distributor\n");
         return -1;
     }
-    
+
     HRESULT hr = SetContentDistributor(argv[1], argv[2]);
 
     if (FAILED(hr))

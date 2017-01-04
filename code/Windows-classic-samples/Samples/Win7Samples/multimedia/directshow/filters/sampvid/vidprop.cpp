@@ -1,4 +1,4 @@
-//------------------------------------------------------------------------------
+﻿//------------------------------------------------------------------------------
 // File: VidProp.cpp
 //
 // Desc: DirectShow sample code - implementation of CQualityProperties class.
@@ -59,7 +59,8 @@ HRESULT CQualityProperties::OnConnect(IUnknown *pUnknown)
     // Ask the renderer for it's IQualProp interface
 
     HRESULT hr = pUnknown->QueryInterface(IID_IQualProp,(void **)&m_pQualProp);
-    if (FAILED(hr)) {
+    if (FAILED(hr))
+    {
         return E_NOINTERFACE;
     }
 
@@ -88,7 +89,8 @@ HRESULT CQualityProperties::OnDisconnect()
 {
     // Release the interface
 
-    if (m_pQualProp == NULL) {
+    if (m_pQualProp == NULL)
+    {
         return E_UNEXPECTED;
     }
 

@@ -1,4 +1,4 @@
-//  Copyright (c) 1992 - 1997  Microsoft Corporation.  All Rights Reserved.
+﻿//  Copyright (c) 1992 - 1997  Microsoft Corporation.  All Rights Reserved.
 
 #ifndef _CHECKBMI_H_
 #define _CHECKBMI_H_
@@ -8,9 +8,11 @@ extern "C" {
 #endif
 
 //  Helper
-__inline BOOL MultiplyCheckOverflow(DWORD a, DWORD b, __deref_out_range(==, a * b) DWORD *pab) {
+__inline BOOL MultiplyCheckOverflow(DWORD a, DWORD b, __deref_out_range(==, a * b) DWORD *pab)
+{
     *pab = a * b;
-    if ((a == 0) || (((*pab) / a) == b)) {
+    if ((a == 0) || (((*pab) / a) == b))
+    {
         return TRUE;
     }
     return FALSE;
@@ -43,34 +45,39 @@ __success(return != 0) __inline BOOL ValidateBitmapInfoHeader(
 
     // Reject bad parameters - do the size check first to avoid reading bad memory
     if (cbSize < sizeof(BITMAPINFOHEADER) ||
-        pbmi->biSize < sizeof(BITMAPINFOHEADER) ||
-        pbmi->biSize > 4096) {
+            pbmi->biSize < sizeof(BITMAPINFOHEADER) ||
+            pbmi->biSize > 4096)
+    {
         return FALSE;
     }
 
     //  Reject 0 size
-    if (pbmi->biWidth == 0 || pbmi->biHeight == 0) {
+    if (pbmi->biWidth == 0 || pbmi->biHeight == 0)
+    {
         return FALSE;
     }
 
     // Use bpp of 200 for validating against further overflows if not set for compressed format
     dwBpp = 200;
 
-    if (pbmi->biBitCount > dwBpp) {
+    if (pbmi->biBitCount > dwBpp)
+    {
         return FALSE;
     }
 
     // Strictly speaking abs can overflow so cast explicitly to DWORD
     dwHeight = (DWORD)abs(pbmi->biHeight);
 
-    if (!MultiplyCheckOverflow(dwBpp, (DWORD)pbmi->biWidth, &dwWidthInBits)) {
+    if (!MultiplyCheckOverflow(dwBpp, (DWORD)pbmi->biWidth, &dwWidthInBits))
+    {
         return FALSE;
     }
 
     //  Compute correct width in bytes - rounding up to 4 bytes
     dwWidthInBytes = (dwWidthInBits / 8 + 3) & ~3;
 
-    if (!MultiplyCheckOverflow(dwWidthInBytes, dwHeight, &dwSizeImage)) {
+    if (!MultiplyCheckOverflow(dwWidthInBytes, dwHeight, &dwSizeImage))
+    {
         return FALSE;
     }
 
@@ -78,34 +85,43 @@ __success(return != 0) __inline BOOL ValidateBitmapInfoHeader(
     // Also don't allow huge values > 1GB which might cause arithmetic
     // errors for users
     if (dwSizeImage > 0x40000000 ||
-        pbmi->biSizeImage > 0x40000000) {
+            pbmi->biSizeImage > 0x40000000)
+    {
         return FALSE;
     }
 
     //  Fail if biClrUsed looks bad
-    if (pbmi->biClrUsed > 256) {
+    if (pbmi->biClrUsed > 256)
+    {
         return FALSE;
     }
 
-    if (pbmi->biClrUsed == 0 && pbmi->biBitCount <= 8 && pbmi->biBitCount > 0) {
+    if (pbmi->biClrUsed == 0 && pbmi->biBitCount <= 8 && pbmi->biBitCount > 0)
+    {
         dwClrUsed = (1 << pbmi->biBitCount);
-    } else {
+    }
+    else
+    {
         dwClrUsed = pbmi->biClrUsed;
     }
 
     //  Check total size
     if (cbSize < pbmi->biSize + dwClrUsed * sizeof(RGBQUAD) +
-                 (pbmi->biCompression == BI_BITFIELDS ? 3 * sizeof(DWORD) : 0)) {
+            (pbmi->biCompression == BI_BITFIELDS ? 3 * sizeof(DWORD) : 0))
+    {
         return FALSE;
     }
 
     //  If it is RGB validate biSizeImage - lots of code assumes the size is correct
-    if (pbmi->biCompression == BI_RGB || pbmi->biCompression == BI_BITFIELDS) {
-        if (pbmi->biSizeImage != 0) {
+    if (pbmi->biCompression == BI_RGB || pbmi->biCompression == BI_BITFIELDS)
+    {
+        if (pbmi->biSizeImage != 0)
+        {
             DWORD dwBits = (DWORD)pbmi->biWidth * (DWORD)pbmi->biBitCount;
             DWORD dwWidthInBytes = ((DWORD)((dwBits+31) & (~31)) / 8);
             DWORD dwTotalSize = (DWORD)abs(pbmi->biHeight) * dwWidthInBytes;
-            if (dwTotalSize > pbmi->biSizeImage) {
+            if (dwTotalSize > pbmi->biSizeImage)
+            {
                 return FALSE;
             }
         }

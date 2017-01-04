@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 //{{NO_DEPENDENCIES}}
 // Microsoft Developer Studio generated include file.
 // Used by AudioPlayer.rc
@@ -18,7 +18,7 @@
 #define IDC_OPEN                        40006
 
 // Next default values for new objects
-// 
+//
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        110

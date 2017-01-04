@@ -1,4 +1,4 @@
-// File: CRow.h
+﻿// File: CRow.h
 //
 //
 //	This file contains the definition for the CRow class
@@ -6,7 +6,7 @@
 //	The CRow class does the following:
 //
 //
-//		- Contains the conversion functions for getting the 
+//		- Contains the conversion functions for getting the
 //		  data from the string of data for the row into each
 //		  CColumn class
 //		- Contains the CColumn array which has an element
@@ -27,43 +27,46 @@
 class CRow
 {
 public:
-	char*		m_pbStartLoc;
-	int			m_cbRowSize;
+    char*		m_pbStartLoc;
+    int			m_cbRowSize;
 
-	ULONG		m_bmk;
+    ULONG		m_bmk;
 
-	BYTE *		m_pbProxyData;
-	size_t		m_cbProxyData;
+    BYTE *		m_pbProxyData;
+    size_t		m_cbProxyData;
 
-	bool		m_bRetrieved;
+    bool		m_bRetrieved;
 
-	CRow()
-	{
-		m_pbStartLoc = NULL;
-		m_cbRowSize = 0;
-		
-		m_bmk = 0;   
+    CRow()
+    {
+        m_pbStartLoc = NULL;
+        m_cbRowSize = 0;
 
-		m_pbProxyData = NULL;
-		m_cbProxyData = 0;
+        m_bmk = 0;
 
-		m_bRetrieved = false;
-	}
+        m_pbProxyData = NULL;
+        m_cbProxyData = 0;
+
+        m_bRetrieved = false;
+    }
 
 // Methods
-	void AllocProxyBuffer(ATLCOLUMNINFO * prgColInfo, DBORDINAL cNumCols);
-	void GetProxyData(ATLCOLUMNINFO * pColInfo, DBORDINAL cCols);
-	int  FetchColumnString(char * pszColData, char ** ppPos);
-	void StoreInProxy(DBORDINAL iCol, char * szColumnString, ATLCOLUMNINFO * pColInfo);
-	int  Update(ATLCOLUMNINFO * prgColInfo, DBORDINAL cCols);
-	int  CalculateRowData(ATLCOLUMNINFO * prgColInfo, DBORDINAL cNumCols, bool bAddEOL = false);
-    int  CreateDefaultRow(ATLCOLUMNINFO *prgColInfo, DBORDINAL cNumCols, bool bAddEOL = false); 
-	int  CalculateRowDataToDelete(ATLCOLUMNINFO * prgColInfo, DBORDINAL cNumCols, bool bAddEOL=false);
-	bool HasEOL(BYTE * pbEOF);
-	void AddEOL();
-	void AdjustStartLocationForEOL() { m_pbStartLoc +=2; }  // previous line had EOL added 
-	                                                       // we need to move this rows starting
-	                                                       // location
+    void AllocProxyBuffer(ATLCOLUMNINFO * prgColInfo, DBORDINAL cNumCols);
+    void GetProxyData(ATLCOLUMNINFO * pColInfo, DBORDINAL cCols);
+    int  FetchColumnString(char * pszColData, char ** ppPos);
+    void StoreInProxy(DBORDINAL iCol, char * szColumnString, ATLCOLUMNINFO * pColInfo);
+    int  Update(ATLCOLUMNINFO * prgColInfo, DBORDINAL cCols);
+    int  CalculateRowData(ATLCOLUMNINFO * prgColInfo, DBORDINAL cNumCols, bool bAddEOL = false);
+    int  CreateDefaultRow(ATLCOLUMNINFO *prgColInfo, DBORDINAL cNumCols, bool bAddEOL = false);
+    int  CalculateRowDataToDelete(ATLCOLUMNINFO * prgColInfo, DBORDINAL cNumCols, bool bAddEOL=false);
+    bool HasEOL(BYTE * pbEOF);
+    void AddEOL();
+    void AdjustStartLocationForEOL()
+    {
+        m_pbStartLoc +=2;    // previous line had EOL added
+    }
+    // we need to move this rows starting
+    // location
 };
 
 #endif __CROW_H_

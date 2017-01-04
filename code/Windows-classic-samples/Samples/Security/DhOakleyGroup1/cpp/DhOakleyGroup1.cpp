@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -24,9 +24,9 @@
 #include <bcrypt.h>
 #include <sal.h>
 
-static 
-const 
-BYTE OakleyGroup1P[] = 
+static
+const
+BYTE OakleyGroup1P[] =
 {
     0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xc9, 0x0f,
     0xda, 0xa2, 0x21, 0x68, 0xc2, 0x34, 0xc4, 0xc6, 0x62, 0x8b,
@@ -40,9 +40,9 @@ BYTE OakleyGroup1P[] =
     0xff, 0xff, 0xff, 0xff, 0xff, 0xff
 };
 
-static 
-const 
-BYTE OakleyGroup1G[] = 
+static
+const
+BYTE OakleyGroup1G[] =
 {
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -56,16 +56,16 @@ BYTE OakleyGroup1G[] =
     0x00, 0x00, 0x00, 0x00, 0x00, 0x02
 };
 
-static 
-const 
-BYTE rgbrgbTlsSeed[] = 
+static
+const
+BYTE rgbrgbTlsSeed[] =
 {
-    0x61, 0x62, 0x63, 0x64, 0x62, 0x63, 0x64, 0x65, 0x63, 0x64, 
-    0x65, 0x66, 0x64, 0x65, 0x66, 0x67, 0x65, 0x66, 0x67, 0x68, 
-    0x66, 0x67, 0x68, 0x69, 0x67, 0x68, 0x69, 0x6a, 0x68, 0x69, 
-    0x6a, 0x6b, 0x69, 0x6a, 0x6b, 0x6c, 0x6a, 0x6b, 0x6c, 0x6d, 
-    0x6b, 0x6c, 0x6d, 0x6e, 0x6c, 0x6d, 0x6e, 0x6f, 0x6d, 0x6e, 
-    0x66, 0x67, 0x68, 0x69, 0x67, 0x68, 0x69, 0x6a, 0x68, 0x69, 
+    0x61, 0x62, 0x63, 0x64, 0x62, 0x63, 0x64, 0x65, 0x63, 0x64,
+    0x65, 0x66, 0x64, 0x65, 0x66, 0x67, 0x65, 0x66, 0x67, 0x68,
+    0x66, 0x67, 0x68, 0x69, 0x67, 0x68, 0x69, 0x6a, 0x68, 0x69,
+    0x6a, 0x6b, 0x69, 0x6a, 0x6b, 0x6c, 0x6a, 0x6b, 0x6c, 0x6d,
+    0x6b, 0x6c, 0x6d, 0x6e, 0x6c, 0x6d, 0x6e, 0x6f, 0x6d, 0x6e,
+    0x66, 0x67, 0x68, 0x69, 0x67, 0x68, 0x69, 0x6a, 0x68, 0x69,
     0x6f, 0x70, 0x6e, 0x6f
 };
 
@@ -82,10 +82,10 @@ LPCWSTR  Label      = L"MyTlsLabel";
 //  Prints error information to the console
 //
 //----------------------------------------------------------------------------
-void 
-ReportError( 
-    _In_    DWORD       dwErrCode 
-    )
+void
+ReportError(
+    _In_    DWORD       dwErrCode
+)
 {
     wprintf( L"Error: 0x%08x (%d)\n", dwErrCode, dwErrCode );
 }
@@ -100,7 +100,7 @@ __cdecl
 wmain(
     _In_               int     argc,
     _In_reads_(argc)   LPWSTR  argv[]
-    )
+)
 {
     BCRYPT_ALG_HANDLE       ExchAlgHandleA  = NULL;
     BCRYPT_ALG_HANDLE       ExchAlgHandleB  = NULL;
@@ -108,9 +108,9 @@ wmain(
     BCRYPT_KEY_HANDLE       PubKeyHandleA   = NULL;
     BCRYPT_KEY_HANDLE       PrivKeyHandleB  = NULL;
     BCRYPT_KEY_HANDLE       PubKeyHandleB   = NULL;
-    
+
     NTSTATUS                Status;
-    
+
     PBYTE                   PubBlobA      = NULL,
                             PubBlobB      = NULL,
                             AgreedSecretA = NULL,
@@ -125,7 +125,7 @@ wmain(
     BCRYPT_SECRET_HANDLE    AgreedSecretHandleA = NULL,
                             AgreedSecretHandleB = NULL;
     BCryptBufferDesc        ParameterList = {0};
-    
+
     const DWORD             BufferLength = 2;
     BCryptBuffer            BufferArray[BufferLength] = {0};
 
@@ -143,14 +143,14 @@ wmain(
     //
     // Calculate size of param blob and allocate memory
 
-    DhParamBlobLength = sizeof(BCRYPT_DH_PARAMETER_HEADER) + 
-                    sizeof(OakleyGroup1G) + 
-                    sizeof(OakleyGroup1P);
+    DhParamBlobLength = sizeof(BCRYPT_DH_PARAMETER_HEADER) +
+                        sizeof(OakleyGroup1G) +
+                        sizeof(OakleyGroup1P);
 
     DhParamBlob = (PBYTE)HeapAlloc (
-                                        GetProcessHeap (), 
-                                        0, 
-                                        DhParamBlobLength);
+                      GetProcessHeap (),
+                      0,
+                      DhParamBlobLength);
     if( NULL == DhParamBlob )
     {
         Status = STATUS_NO_MEMORY;
@@ -173,8 +173,8 @@ wmain(
     //
 
     memcpy(DhParamBlob + sizeof(BCRYPT_DH_PARAMETER_HEADER),
-            OakleyGroup1P,
-            sizeof(OakleyGroup1P));
+           OakleyGroup1P,
+           sizeof(OakleyGroup1P));
 
     //
     // Set generator
@@ -190,10 +190,10 @@ wmain(
     //
 
     Status = BCryptOpenAlgorithmProvider(
-                                        &ExchAlgHandleA, 
-                                        BCRYPT_DH_ALGORITHM, 
-                                        NULL, 
-                                        0);
+                 &ExchAlgHandleA,
+                 BCRYPT_DH_ALGORITHM,
+                 NULL,
+                 0);
     if( !NT_SUCCESS(Status) )
     {
         ReportError(Status);
@@ -201,10 +201,10 @@ wmain(
     }
 
     Status = BCryptOpenAlgorithmProvider(
-                                        &ExchAlgHandleB, 
-                                        BCRYPT_DH_ALGORITHM, 
-                                        NULL, 
-                                        0);
+                 &ExchAlgHandleB,
+                 BCRYPT_DH_ALGORITHM,
+                 NULL,
+                 0);
     if( !NT_SUCCESS(Status) )
     {
         ReportError(Status);
@@ -213,13 +213,13 @@ wmain(
 
     //
     // A generates a private key
-    // 
+    //
 
     Status = BCryptGenerateKeyPair(
-                                        ExchAlgHandleA,             // Algorithm handle
-                                        &PrivKeyHandleA,            // Key handle - will be created
-                                        KeyLength,                  // Length of the key - in bits
-                                        0);                         // Flags
+                 ExchAlgHandleA,             // Algorithm handle
+                 &PrivKeyHandleA,            // Key handle - will be created
+                 KeyLength,                  // Length of the key - in bits
+                 0);                         // Flags
     if( !NT_SUCCESS(Status) )
     {
         ReportError(Status);
@@ -227,11 +227,11 @@ wmain(
     }
 
     Status = BCryptSetProperty(
-                                        PrivKeyHandleA,
-                                        BCRYPT_DH_PARAMETERS,
-                                        DhParamBlob,
-                                        DhParamBlobLength,
-                                        0);
+                 PrivKeyHandleA,
+                 BCRYPT_DH_PARAMETERS,
+                 DhParamBlob,
+                 DhParamBlobLength,
+                 0);
     if( !NT_SUCCESS(Status) )
     {
         ReportError(Status);
@@ -239,8 +239,8 @@ wmain(
     }
 
     Status = BCryptFinalizeKeyPair(
-                                        PrivKeyHandleA,             // Key handle
-                                        0);                         // Flags
+                 PrivKeyHandleA,             // Key handle
+                 0);                         // Flags
     if( !NT_SUCCESS(Status) )
     {
         ReportError(Status);
@@ -250,16 +250,16 @@ wmain(
 
     //
     // A exports DH public key
-    // 
+    //
 
     Status = BCryptExportKey(
-                                        PrivKeyHandleA,             // Handle of the key to export
-                                        NULL,                       // Handle of the key used to wrap the exported key
-                                        BCRYPT_DH_PUBLIC_BLOB,      // Blob type (null terminated unicode string)
-                                        NULL,                       // Buffer that recieves the key blob
-                                        0,                          // Buffer length (in bytes)
-                                        &PubBlobLengthA,            // Number of bytes copied to the buffer
-                                        0);                         // Flags
+                 PrivKeyHandleA,             // Handle of the key to export
+                 NULL,                       // Handle of the key used to wrap the exported key
+                 BCRYPT_DH_PUBLIC_BLOB,      // Blob type (null terminated unicode string)
+                 NULL,                       // Buffer that recieves the key blob
+                 0,                          // Buffer length (in bytes)
+                 &PubBlobLengthA,            // Number of bytes copied to the buffer
+                 0);                         // Flags
     if( !NT_SUCCESS(Status) )
     {
         ReportError(Status);
@@ -267,9 +267,9 @@ wmain(
     }
 
     PubBlobA = (PBYTE)HeapAlloc (
-                                        GetProcessHeap (), 
-                                        0, 
-                                        PubBlobLengthA);
+                   GetProcessHeap (),
+                   0,
+                   PubBlobLengthA);
     if( NULL == PubBlobA )
     {
         Status = STATUS_NO_MEMORY;
@@ -279,13 +279,13 @@ wmain(
 
 
     Status = BCryptExportKey(
-                                        PrivKeyHandleA,             // Handle of the key to export
-                                        NULL,                       // Handle of the key used to wrap the exported key
-                                        BCRYPT_DH_PUBLIC_BLOB,      // Blob type (null terminated unicode string)
-                                        PubBlobA,                   // Buffer that recieves the key blob
-                                        PubBlobLengthA,             // Buffer length (in bytes)
-                                        &PubBlobLengthA,            // Number of bytes copied to the buffer
-                                        0);                         // Flags
+                 PrivKeyHandleA,             // Handle of the key to export
+                 NULL,                       // Handle of the key used to wrap the exported key
+                 BCRYPT_DH_PUBLIC_BLOB,      // Blob type (null terminated unicode string)
+                 PubBlobA,                   // Buffer that recieves the key blob
+                 PubBlobLengthA,             // Buffer length (in bytes)
+                 &PubBlobLengthA,            // Number of bytes copied to the buffer
+                 0);                         // Flags
     if( !NT_SUCCESS(Status) )
     {
         ReportError(Status);
@@ -294,13 +294,13 @@ wmain(
 
     //
     // B generates a private key
-    // 
+    //
 
     Status = BCryptGenerateKeyPair(
-                                        ExchAlgHandleB,             // Algorithm handle
-                                        &PrivKeyHandleB,            // Key handle - will be created
-                                        KeyLength,                  // Length of the key - in bits
-                                        0);                         // Flags
+                 ExchAlgHandleB,             // Algorithm handle
+                 &PrivKeyHandleB,            // Key handle - will be created
+                 KeyLength,                  // Length of the key - in bits
+                 0);                         // Flags
     if( !NT_SUCCESS(Status) )
     {
         ReportError(Status);
@@ -308,11 +308,11 @@ wmain(
     }
 
     Status = BCryptSetProperty(
-                                        PrivKeyHandleB,
-                                        BCRYPT_DH_PARAMETERS,
-                                        DhParamBlob,
-                                        DhParamBlobLength,
-                                        0);
+                 PrivKeyHandleB,
+                 BCRYPT_DH_PARAMETERS,
+                 DhParamBlob,
+                 DhParamBlobLength,
+                 0);
     if( !NT_SUCCESS(Status) )
     {
         ReportError(Status);
@@ -320,8 +320,8 @@ wmain(
     }
 
     Status = BCryptFinalizeKeyPair(
-                                        PrivKeyHandleB,             // Key handle
-                                        0);                         // Flags
+                 PrivKeyHandleB,             // Key handle
+                 0);                         // Flags
     if( !NT_SUCCESS(Status) )
     {
         ReportError(Status);
@@ -333,13 +333,13 @@ wmain(
     //
 
     Status = BCryptExportKey(
-                                        PrivKeyHandleB,             // Handle of the key to export
-                                        NULL,                       // Handle of the key used to wrap the exported key
-                                        BCRYPT_DH_PUBLIC_BLOB,      // Blob type (null terminated unicode string)
-                                        NULL,                       // Buffer that recieves the key blob
-                                        0,                          // Buffer length (in bytes)
-                                        &PubBlobLengthB,            // Number of bytes copied to the buffer
-                                        0);                         // Flags
+                 PrivKeyHandleB,             // Handle of the key to export
+                 NULL,                       // Handle of the key used to wrap the exported key
+                 BCRYPT_DH_PUBLIC_BLOB,      // Blob type (null terminated unicode string)
+                 NULL,                       // Buffer that recieves the key blob
+                 0,                          // Buffer length (in bytes)
+                 &PubBlobLengthB,            // Number of bytes copied to the buffer
+                 0);                         // Flags
     if( !NT_SUCCESS(Status) )
     {
         ReportError(Status);
@@ -347,9 +347,9 @@ wmain(
     }
 
     PubBlobB = (PBYTE)HeapAlloc (
-                                        GetProcessHeap (), 
-                                        0, 
-                                        PubBlobLengthB);
+                   GetProcessHeap (),
+                   0,
+                   PubBlobLengthB);
     if( NULL == PubBlobB )
     {
         Status = STATUS_NO_MEMORY;
@@ -359,13 +359,13 @@ wmain(
 
 
     Status = BCryptExportKey(
-                                        PrivKeyHandleB,             // Handle of the key to export
-                                        NULL,                       // Handle of the key used to wrap the exported key
-                                        BCRYPT_DH_PUBLIC_BLOB,      // Blob type (null terminated unicode string)
-                                        PubBlobB,                   // Buffer that recieves the key blob
-                                        PubBlobLengthB,             // Buffer length (in bytes)
-                                        &PubBlobLengthB,            // Number of bytes copied to the buffer
-                                        0);                         // Flags
+                 PrivKeyHandleB,             // Handle of the key to export
+                 NULL,                       // Handle of the key used to wrap the exported key
+                 BCRYPT_DH_PUBLIC_BLOB,      // Blob type (null terminated unicode string)
+                 PubBlobB,                   // Buffer that recieves the key blob
+                 PubBlobLengthB,             // Buffer length (in bytes)
+                 &PubBlobLengthB,            // Number of bytes copied to the buffer
+                 0);                         // Flags
     if( !NT_SUCCESS(Status) )
     {
         ReportError(Status);
@@ -377,13 +377,13 @@ wmain(
     //
 
     Status = BCryptImportKeyPair(
-                                        ExchAlgHandleA,             // Alg handle
-                                        NULL,                       // Parameter not used
-                                        BCRYPT_DH_PUBLIC_BLOB,      // Blob type (Null terminated unicode string)
-                                        &PubKeyHandleA,             // Key handle that will be recieved
-                                        PubBlobB,                   // Buffer than points to the key blob
-                                        PubBlobLengthB,             // Buffer length in bytes
-                                        0);                         // Flags
+                 ExchAlgHandleA,             // Alg handle
+                 NULL,                       // Parameter not used
+                 BCRYPT_DH_PUBLIC_BLOB,      // Blob type (Null terminated unicode string)
+                 &PubKeyHandleA,             // Key handle that will be recieved
+                 PubBlobB,                   // Buffer than points to the key blob
+                 PubBlobLengthB,             // Buffer length in bytes
+                 0);                         // Flags
     if( !NT_SUCCESS(Status) )
     {
         ReportError(Status);
@@ -391,8 +391,8 @@ wmain(
     }
 
     Status = BCryptCloseAlgorithmProvider(
-                                        ExchAlgHandleA,
-                                        0);
+                 ExchAlgHandleA,
+                 0);
     if( !NT_SUCCESS(Status) )
     {
         ReportError(Status);
@@ -400,7 +400,7 @@ wmain(
     }
 
     ExchAlgHandleA = 0;
-    
+
     //
     // Build KDF parameter list
     //
@@ -426,10 +426,10 @@ wmain(
     //
 
     Status = BCryptSecretAgreement(
-                                        PrivKeyHandleA,             // Private key handle
-                                        PubKeyHandleA,              // Public key handle
-                                        &AgreedSecretHandleA,       // Handle that represents the secret agreement value
-                                        0);
+                 PrivKeyHandleA,             // Private key handle
+                 PubKeyHandleA,              // Public key handle
+                 &AgreedSecretHandleA,       // Handle that represents the secret agreement value
+                 0);
     if( !NT_SUCCESS(Status) )
     {
         ReportError(Status);
@@ -437,13 +437,13 @@ wmain(
     }
 
     Status = BCryptDeriveKey(
-                                       AgreedSecretHandleA,         // Secret agreement handle
-                                       BCRYPT_KDF_TLS_PRF,          // Key derivation function (null terminated unicode string)
-                                       &ParameterList,              // KDF parameters
-                                       NULL,                        // Buffer that recieves the derived key 
-                                       0,                           // Length of the buffer
-                                       &AgreedSecretLengthA,        // Number of bytes copied to the buffer
-                                       0);                          // Flags
+                 AgreedSecretHandleA,         // Secret agreement handle
+                 BCRYPT_KDF_TLS_PRF,          // Key derivation function (null terminated unicode string)
+                 &ParameterList,              // KDF parameters
+                 NULL,                        // Buffer that recieves the derived key
+                 0,                           // Length of the buffer
+                 &AgreedSecretLengthA,        // Number of bytes copied to the buffer
+                 0);                          // Flags
     if( !NT_SUCCESS(Status) )
     {
         ReportError(Status);
@@ -451,9 +451,9 @@ wmain(
     }
 
     AgreedSecretA = (PBYTE)HeapAlloc(
-                                        GetProcessHeap (), 
-                                        0, 
-                                        AgreedSecretLengthA);
+                        GetProcessHeap (),
+                        0,
+                        AgreedSecretLengthA);
     if( NULL == AgreedSecretA )
     {
         Status = STATUS_NO_MEMORY;
@@ -462,13 +462,13 @@ wmain(
     }
 
     Status = BCryptDeriveKey(
-                                       AgreedSecretHandleA,         // Secret agreement handle
-                                       BCRYPT_KDF_TLS_PRF,          // Key derivation function (null terminated unicode string)
-                                       &ParameterList,              // KDF parameters
-                                       AgreedSecretA,               // Buffer that recieves the derived key 
-                                       AgreedSecretLengthA,         // Length of the buffer
-                                       &AgreedSecretLengthA,        // Number of bytes copied to the buffer
-                                       0);                          // Flags
+                 AgreedSecretHandleA,         // Secret agreement handle
+                 BCRYPT_KDF_TLS_PRF,          // Key derivation function (null terminated unicode string)
+                 &ParameterList,              // KDF parameters
+                 AgreedSecretA,               // Buffer that recieves the derived key
+                 AgreedSecretLengthA,         // Length of the buffer
+                 &AgreedSecretLengthA,        // Number of bytes copied to the buffer
+                 0);                          // Flags
     if( !NT_SUCCESS(Status) )
     {
         ReportError(Status);
@@ -480,13 +480,13 @@ wmain(
     //
 
     Status = BCryptImportKeyPair(
-                                        ExchAlgHandleB,             // Alg handle
-                                        NULL,                       // Parameter not used
-                                        BCRYPT_DH_PUBLIC_BLOB,      // Blob type (Null terminated unicode string)
-                                        &PubKeyHandleB,             // Key handle that will be recieved
-                                        PubBlobA,                   // Buffer than points to the key blob
-                                        PubBlobLengthA,             // Buffer length in bytes
-                                        0);                         // Flags
+                 ExchAlgHandleB,             // Alg handle
+                 NULL,                       // Parameter not used
+                 BCRYPT_DH_PUBLIC_BLOB,      // Blob type (Null terminated unicode string)
+                 &PubKeyHandleB,             // Key handle that will be recieved
+                 PubBlobA,                   // Buffer than points to the key blob
+                 PubBlobLengthA,             // Buffer length in bytes
+                 0);                         // Flags
     if( !NT_SUCCESS(Status) )
     {
         ReportError(Status);
@@ -494,8 +494,8 @@ wmain(
     }
 
     Status = BCryptCloseAlgorithmProvider(
-                                        ExchAlgHandleB,
-                                        0);
+                 ExchAlgHandleB,
+                 0);
     if( !NT_SUCCESS(Status) )
     {
         ReportError(Status);
@@ -503,16 +503,16 @@ wmain(
     }
 
     ExchAlgHandleB = 0;
-    
+
     //
     // B generates the agreed secret
     //
 
     Status = BCryptSecretAgreement(
-                                        PrivKeyHandleB,             // Private key handle
-                                        PubKeyHandleB,              // Public key handle
-                                        &AgreedSecretHandleB,       // Handle that represents the secret agreement value
-                                        0);
+                 PrivKeyHandleB,             // Private key handle
+                 PubKeyHandleB,              // Public key handle
+                 &AgreedSecretHandleB,       // Handle that represents the secret agreement value
+                 0);
     if( !NT_SUCCESS(Status) )
     {
         ReportError(Status);
@@ -520,13 +520,13 @@ wmain(
     }
 
     Status = BCryptDeriveKey(
-                                       AgreedSecretHandleB,         // Secret agreement handle
-                                       BCRYPT_KDF_TLS_PRF,          // Key derivation function (null terminated unicode string)
-                                       &ParameterList,              // KDF parameters
-                                       NULL,                        // Buffer that recieves the derived key 
-                                       0,                           // Length of the buffer
-                                       &AgreedSecretLengthB,        // Number of bytes copied to the buffer
-                                       0);                          // Flags
+                 AgreedSecretHandleB,         // Secret agreement handle
+                 BCRYPT_KDF_TLS_PRF,          // Key derivation function (null terminated unicode string)
+                 &ParameterList,              // KDF parameters
+                 NULL,                        // Buffer that recieves the derived key
+                 0,                           // Length of the buffer
+                 &AgreedSecretLengthB,        // Number of bytes copied to the buffer
+                 0);                          // Flags
     if( !NT_SUCCESS(Status) )
     {
         ReportError(Status);
@@ -534,9 +534,9 @@ wmain(
     }
 
     AgreedSecretB = (PBYTE)HeapAlloc(
-                                        GetProcessHeap (), 
-                                        0, 
-                                        AgreedSecretLengthB);
+                        GetProcessHeap (),
+                        0,
+                        AgreedSecretLengthB);
     if( NULL == AgreedSecretB  )
     {
         Status = STATUS_NO_MEMORY;
@@ -545,13 +545,13 @@ wmain(
     }
 
     Status = BCryptDeriveKey(
-                                       AgreedSecretHandleB,         // Secret agreement handle   
-                                       BCRYPT_KDF_TLS_PRF,          // Key derivation function (null terminated unicode string)
-                                       &ParameterList,              // KDF parameters
-                                       AgreedSecretB,               // Buffer that recieves the derived key 
-                                       AgreedSecretLengthB,         // Length of the buffer
-                                       &AgreedSecretLengthB,        // Number of bytes copied to the buffer
-                                       0);                          // Flags
+                 AgreedSecretHandleB,         // Secret agreement handle
+                 BCRYPT_KDF_TLS_PRF,          // Key derivation function (null terminated unicode string)
+                 &ParameterList,              // KDF parameters
+                 AgreedSecretB,               // Buffer that recieves the derived key
+                 AgreedSecretLengthB,         // Length of the buffer
+                 &AgreedSecretLengthB,        // Number of bytes copied to the buffer
+                 0);                          // Flags
     if( !NT_SUCCESS(Status) )
     {
         ReportError(Status);
@@ -560,14 +560,14 @@ wmain(
 
     //
     // At this point the AgreedSecretA should be the same as AgreedSecretB.
-    // In a real scenario, the agreed secrets on both sides will probably 
-    // be input to a BCryptGenerateSymmetricKey function. 
+    // In a real scenario, the agreed secrets on both sides will probably
+    // be input to a BCryptGenerateSymmetricKey function.
     // Optional : Compare them
     //
 
     if( (AgreedSecretLengthA != AgreedSecretLengthB) ||
-        (memcmp(AgreedSecretA, AgreedSecretB, AgreedSecretLengthA))
-        )
+            (memcmp(AgreedSecretA, AgreedSecretB, AgreedSecretLengthA))
+      )
     {
         Status = STATUS_UNSUCCESSFUL;
         ReportError(Status);
@@ -577,26 +577,26 @@ wmain(
 
     Status = STATUS_SUCCESS;
 
-	wprintf(L"Success!\n");
+    wprintf(L"Success!\n");
 
 cleanup:
 
-    if( PubKeyHandleA )    
+    if( PubKeyHandleA )
     {
         BCryptDestroyKey(PubKeyHandleA);
     }
 
-    if( PubKeyHandleB )    
+    if( PubKeyHandleB )
     {
         BCryptDestroyKey(PubKeyHandleB);
     }
 
-    if( PrivKeyHandleA )    
+    if( PrivKeyHandleA )
     {
         BCryptDestroyKey(PrivKeyHandleA);
     }
 
-    if( PrivKeyHandleB )    
+    if( PrivKeyHandleB )
     {
         BCryptDestroyKey(PrivKeyHandleB);
     }

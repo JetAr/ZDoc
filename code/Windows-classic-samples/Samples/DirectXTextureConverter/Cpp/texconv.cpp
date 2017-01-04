@@ -1,4 +1,4 @@
-//--------------------------------------------------------------------------------------
+﻿//--------------------------------------------------------------------------------------
 // File: TexConv.cpp
 //
 // DirectX 11 Texture Converer
@@ -63,7 +63,7 @@ struct SValue
 //////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////
 
-SValue g_pOptions[] = 
+SValue g_pOptions[] =
 {
     { L"w",             OPT_WIDTH     },
     { L"h",             OPT_HEIGHT    },
@@ -95,66 +95,66 @@ SValue g_pOptions[] =
 
 #define DEFFMT(fmt) { L#fmt, DXGI_FORMAT_ ## fmt }
 
-SValue g_pFormats[] = 
+SValue g_pFormats[] =
 {
     // List does not include _TYPELESS or depth/stencil formats
-    DEFFMT(R32G32B32A32_FLOAT), 
-    DEFFMT(R32G32B32A32_UINT), 
-    DEFFMT(R32G32B32A32_SINT), 
-    DEFFMT(R32G32B32_FLOAT), 
-    DEFFMT(R32G32B32_UINT), 
-    DEFFMT(R32G32B32_SINT), 
-    DEFFMT(R16G16B16A16_FLOAT), 
-    DEFFMT(R16G16B16A16_UNORM), 
-    DEFFMT(R16G16B16A16_UINT), 
-    DEFFMT(R16G16B16A16_SNORM), 
-    DEFFMT(R16G16B16A16_SINT), 
-    DEFFMT(R32G32_FLOAT), 
-    DEFFMT(R32G32_UINT), 
-    DEFFMT(R32G32_SINT), 
-    DEFFMT(R10G10B10A2_UNORM), 
-    DEFFMT(R10G10B10A2_UINT), 
-    DEFFMT(R11G11B10_FLOAT), 
-    DEFFMT(R8G8B8A8_UNORM), 
-    DEFFMT(R8G8B8A8_UNORM_SRGB), 
-    DEFFMT(R8G8B8A8_UINT), 
-    DEFFMT(R8G8B8A8_SNORM), 
-    DEFFMT(R8G8B8A8_SINT), 
-    DEFFMT(R16G16_FLOAT), 
-    DEFFMT(R16G16_UNORM), 
-    DEFFMT(R16G16_UINT), 
-    DEFFMT(R16G16_SNORM), 
-    DEFFMT(R16G16_SINT), 
-    DEFFMT(R32_FLOAT), 
-    DEFFMT(R32_UINT), 
-    DEFFMT(R32_SINT), 
-    DEFFMT(R8G8_UNORM), 
-    DEFFMT(R8G8_UINT), 
-    DEFFMT(R8G8_SNORM), 
-    DEFFMT(R8G8_SINT), 
-    DEFFMT(R16_FLOAT), 
-    DEFFMT(R16_UNORM), 
-    DEFFMT(R16_UINT), 
-    DEFFMT(R16_SNORM), 
-    DEFFMT(R16_SINT), 
-    DEFFMT(R8_UNORM), 
-    DEFFMT(R8_UINT), 
-    DEFFMT(R8_SNORM), 
-    DEFFMT(R8_SINT), 
-    DEFFMT(A8_UNORM), 
+    DEFFMT(R32G32B32A32_FLOAT),
+    DEFFMT(R32G32B32A32_UINT),
+    DEFFMT(R32G32B32A32_SINT),
+    DEFFMT(R32G32B32_FLOAT),
+    DEFFMT(R32G32B32_UINT),
+    DEFFMT(R32G32B32_SINT),
+    DEFFMT(R16G16B16A16_FLOAT),
+    DEFFMT(R16G16B16A16_UNORM),
+    DEFFMT(R16G16B16A16_UINT),
+    DEFFMT(R16G16B16A16_SNORM),
+    DEFFMT(R16G16B16A16_SINT),
+    DEFFMT(R32G32_FLOAT),
+    DEFFMT(R32G32_UINT),
+    DEFFMT(R32G32_SINT),
+    DEFFMT(R10G10B10A2_UNORM),
+    DEFFMT(R10G10B10A2_UINT),
+    DEFFMT(R11G11B10_FLOAT),
+    DEFFMT(R8G8B8A8_UNORM),
+    DEFFMT(R8G8B8A8_UNORM_SRGB),
+    DEFFMT(R8G8B8A8_UINT),
+    DEFFMT(R8G8B8A8_SNORM),
+    DEFFMT(R8G8B8A8_SINT),
+    DEFFMT(R16G16_FLOAT),
+    DEFFMT(R16G16_UNORM),
+    DEFFMT(R16G16_UINT),
+    DEFFMT(R16G16_SNORM),
+    DEFFMT(R16G16_SINT),
+    DEFFMT(R32_FLOAT),
+    DEFFMT(R32_UINT),
+    DEFFMT(R32_SINT),
+    DEFFMT(R8G8_UNORM),
+    DEFFMT(R8G8_UINT),
+    DEFFMT(R8G8_SNORM),
+    DEFFMT(R8G8_SINT),
+    DEFFMT(R16_FLOAT),
+    DEFFMT(R16_UNORM),
+    DEFFMT(R16_UINT),
+    DEFFMT(R16_SNORM),
+    DEFFMT(R16_SINT),
+    DEFFMT(R8_UNORM),
+    DEFFMT(R8_UINT),
+    DEFFMT(R8_SNORM),
+    DEFFMT(R8_SINT),
+    DEFFMT(A8_UNORM),
     //DEFFMT(R1_UNORM)
-    DEFFMT(R9G9B9E5_SHAREDEXP), 
-    DEFFMT(R8G8_B8G8_UNORM), 
-    DEFFMT(G8R8_G8B8_UNORM), 
-    DEFFMT(BC1_UNORM), 
-    DEFFMT(BC1_UNORM_SRGB), 
-    DEFFMT(BC2_UNORM), 
-    DEFFMT(BC2_UNORM_SRGB), 
-    DEFFMT(BC3_UNORM), 
-    DEFFMT(BC3_UNORM_SRGB), 
-    DEFFMT(BC4_UNORM), 
-    DEFFMT(BC4_SNORM), 
-    DEFFMT(BC5_UNORM), 
+    DEFFMT(R9G9B9E5_SHAREDEXP),
+    DEFFMT(R8G8_B8G8_UNORM),
+    DEFFMT(G8R8_G8B8_UNORM),
+    DEFFMT(BC1_UNORM),
+    DEFFMT(BC1_UNORM_SRGB),
+    DEFFMT(BC2_UNORM),
+    DEFFMT(BC2_UNORM_SRGB),
+    DEFFMT(BC3_UNORM),
+    DEFFMT(BC3_UNORM_SRGB),
+    DEFFMT(BC4_UNORM),
+    DEFFMT(BC4_SNORM),
+    DEFFMT(BC5_UNORM),
     DEFFMT(BC5_SNORM),
     DEFFMT(B5G6R5_UNORM),
     DEFFMT(B5G5R5A1_UNORM),
@@ -176,7 +176,7 @@ SValue g_pFormats[] =
     { nullptr, DXGI_FORMAT_UNKNOWN }
 };
 
-SValue g_pFilters[] = 
+SValue g_pFilters[] =
 {
     { L"POINT",                     TEX_FILTER_POINT },
     { L"LINEAR",                    TEX_FILTER_LINEAR },
@@ -199,7 +199,7 @@ SValue g_pFilters[] =
     { nullptr,                      TEX_FILTER_DEFAULT                              }
 };
 
-#define CODEC_DDS 0xFFFF0001 
+#define CODEC_DDS 0xFFFF0001
 #define CODEC_TGA 0xFFFF0002
 
 SValue g_pSaveFileTypes[] =     // valid formats to write to
@@ -312,7 +312,7 @@ void PrintList(size_t cch, SValue *pValue)
     while(pValue->pName)
     {
         size_t cchName = wcslen(pValue->pName);
-        
+
         if(cch + cchName + 2>= 80)
         {
             wprintf( L"\n      ");
@@ -396,7 +396,7 @@ int __cdecl wmain(_In_ int argc, _In_z_count_(argc) wchar_t* argv[])
     INT nReturn;
 
     size_t width = 0;
-    size_t height = 0; 
+    size_t height = 0;
     size_t mipLevels = 0;
     DXGI_FORMAT format = DXGI_FORMAT_UNKNOWN;
     DWORD dwFilter = TEX_FILTER_DEFAULT;
@@ -449,12 +449,12 @@ int __cdecl wmain(_In_ int argc, _In_z_count_(argc) wchar_t* argv[])
             dwOptions |= 1 << dwOption;
 
             if( (OPT_NOLOGO != dwOption) && (OPT_TYPELESS_UNORM != dwOption) && (OPT_TYPELESS_FLOAT != dwOption)
-                && (OPT_SEPALPHA != dwOption) && (OPT_PREMUL_ALPHA != dwOption) && (OPT_EXPAND_LUMINANCE != dwOption)
-                && (OPT_TA_WRAP != dwOption) && (OPT_TA_MIRROR != dwOption)
-                && (OPT_FORCE_SINGLEPROC != dwOption)
-                && (OPT_SRGB != dwOption) && (OPT_SRGBI != dwOption) && (OPT_SRGBO != dwOption)
-                && (OPT_HFLIP != dwOption) && (OPT_VFLIP != dwOption)
-                && (OPT_DDS_DWORD_ALIGN != dwOption) && (OPT_USE_DX10 != dwOption) )
+                    && (OPT_SEPALPHA != dwOption) && (OPT_PREMUL_ALPHA != dwOption) && (OPT_EXPAND_LUMINANCE != dwOption)
+                    && (OPT_TA_WRAP != dwOption) && (OPT_TA_MIRROR != dwOption)
+                    && (OPT_FORCE_SINGLEPROC != dwOption)
+                    && (OPT_SRGB != dwOption) && (OPT_SRGBI != dwOption) && (OPT_SRGBO != dwOption)
+                    && (OPT_HFLIP != dwOption) && (OPT_VFLIP != dwOption)
+                    && (OPT_DDS_DWORD_ALIGN != dwOption) && (OPT_USE_DX10 != dwOption) )
             {
                 if(!*pValue)
                 {
@@ -584,7 +584,7 @@ int __cdecl wmain(_In_ int argc, _In_z_count_(argc) wchar_t* argv[])
             }
         }
         else
-        {         
+        {
             SConversion *pConv = new SConversion;
             if ( !pConv )
                 return 1;
@@ -1029,8 +1029,8 @@ int __cdecl wmain(_In_ int argc, _In_z_count_(argc) wchar_t* argv[])
 
         // --- Premultiplied alpha (if requested) --------------------------------------
         if ( ( dwOptions & (1 << OPT_PREMUL_ALPHA) )
-             && HasAlpha( info.format )
-             && info.format != DXGI_FORMAT_A8_UNORM )
+                && HasAlpha( info.format )
+                && info.format != DXGI_FORMAT_A8_UNORM )
         {
             if ( info.IsPMAlpha() )
             {
@@ -1061,7 +1061,7 @@ int __cdecl wmain(_In_ int argc, _In_z_count_(argc) wchar_t* argv[])
 
                 const TexMetadata& tinfo = timage->GetMetadata();
                 info.miscFlags2 = tinfo.miscFlags2;
- 
+
                 assert( info.width == tinfo.width );
                 assert( info.height == tinfo.height );
                 assert( info.depth == tinfo.depth );
@@ -1136,7 +1136,7 @@ int __cdecl wmain(_In_ int argc, _In_z_count_(argc) wchar_t* argv[])
 
         // --- Set alpha mode ----------------------------------------------------------
         if ( HasAlpha( info.format )
-             && info.format != DXGI_FORMAT_A8_UNORM )
+                && info.format != DXGI_FORMAT_A8_UNORM )
         {
             if ( image->IsAlphaAllOpaque() )
             {
@@ -1196,7 +1196,7 @@ int __cdecl wmain(_In_ int argc, _In_z_count_(argc) wchar_t* argv[])
             {
             case CODEC_DDS:
                 hr = SaveToDDSFile( img, nimg, info,
-                                    (dwOptions & (1 << OPT_USE_DX10) ) ? (DDS_FLAGS_FORCE_DX10_EXT|DDS_FLAGS_FORCE_DX10_EXT_MISC2) : DDS_FLAGS_NONE, 
+                                    (dwOptions & (1 << OPT_USE_DX10) ) ? (DDS_FLAGS_FORCE_DX10_EXT|DDS_FLAGS_FORCE_DX10_EXT_MISC2) : DDS_FLAGS_NONE,
                                     pConv->szDest );
                 break;
 

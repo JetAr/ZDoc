@@ -1,24 +1,24 @@
-
+﻿
 /************************************************************************
  *
  * File: CustomTextRenderer.cpp
  *
- * Description: 
- * 
- * 
+ * Description:
+ *
+ *
  *  This file is part of the Microsoft Windows SDK Code Samples.
- * 
+ *
  *  Copyright (C) Microsoft Corporation.  All rights reserved.
- * 
+ *
  * This source code is intended only as a supplement to Microsoft
  * Development Tools and/or on-line documentation.  See these other
  * materials for detailed information regarding Microsoft code samples.
- * 
+ *
  * THIS CODE AND INFORMATION ARE PROVIDED AS IS WITHOUT WARRANTY OF ANY
  * KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
  * PARTICULAR PURPOSE.
- * 
+ *
  ************************************************************************/
 
 #include "DWriteHelloWorld.h"
@@ -34,17 +34,17 @@
 ******************************************************************/
 
 CustomTextRenderer::CustomTextRenderer(
-    ID2D1Factory* pD2DFactory, 
-    ID2D1HwndRenderTarget* pRT, 
-    ID2D1SolidColorBrush* pOutlineBrush, 
+    ID2D1Factory* pD2DFactory,
+    ID2D1HwndRenderTarget* pRT,
+    ID2D1SolidColorBrush* pOutlineBrush,
     ID2D1BitmapBrush* pFillBrush
-    )
-:
-cRefCount_(0), 
-pD2DFactory_(pD2DFactory), 
-pRT_(pRT), 
-pOutlineBrush_(pOutlineBrush), 
-pFillBrush_(pFillBrush)
+)
+    :
+    cRefCount_(0),
+    pD2DFactory_(pD2DFactory),
+    pRT_(pRT),
+    pOutlineBrush_(pOutlineBrush),
+    pFillBrush_(pFillBrush)
 {
     pD2DFactory_->AddRef();
     pRT_->AddRef();
@@ -85,23 +85,23 @@ IFACEMETHODIMP CustomTextRenderer::DrawGlyphRun(
     __in DWRITE_GLYPH_RUN const* glyphRun,
     __in DWRITE_GLYPH_RUN_DESCRIPTION const* glyphRunDescription,
     IUnknown* clientDrawingEffect
-    )
+)
 {
     HRESULT hr = S_OK;
 
     // Create the path geometry.
     ID2D1PathGeometry* pPathGeometry = NULL;
     hr = pD2DFactory_->CreatePathGeometry(
-            &pPathGeometry
-            );
+             &pPathGeometry
+         );
 
     // Write to the path geometry using the geometry sink.
     ID2D1GeometrySink* pSink = NULL;
     if (SUCCEEDED(hr))
     {
         hr = pPathGeometry->Open(
-            &pSink
-            );
+                 &pSink
+             );
     }
 
     // Get the glyph run outline geometries back from DirectWrite and place them within the
@@ -109,15 +109,15 @@ IFACEMETHODIMP CustomTextRenderer::DrawGlyphRun(
     if (SUCCEEDED(hr))
     {
         hr = glyphRun->fontFace->GetGlyphRunOutline(
-            glyphRun->fontEmSize,
-            glyphRun->glyphIndices,
-            glyphRun->glyphAdvances,
-            glyphRun->glyphOffsets,
-            glyphRun->glyphCount,
-            glyphRun->isSideways,
-            glyphRun->bidiLevel%2,
-            pSink
-            );
+                 glyphRun->fontEmSize,
+                 glyphRun->glyphIndices,
+                 glyphRun->glyphAdvances,
+                 glyphRun->glyphOffsets,
+                 glyphRun->glyphCount,
+                 glyphRun->isSideways,
+                 glyphRun->bidiLevel%2,
+                 pSink
+             );
     }
 
     // Close the geometry sink
@@ -128,33 +128,33 @@ IFACEMETHODIMP CustomTextRenderer::DrawGlyphRun(
 
     // Initialize a matrix to translate the origin of the glyph run.
     D2D1::Matrix3x2F const matrix = D2D1::Matrix3x2F(
-        1.0f, 0.0f,
-        0.0f, 1.0f,
-        baselineOriginX, baselineOriginY
-        );
+                                        1.0f, 0.0f,
+                                        0.0f, 1.0f,
+                                        baselineOriginX, baselineOriginY
+                                    );
 
     // Create the transformed geometry
     ID2D1TransformedGeometry* pTransformedGeometry = NULL;
     if (SUCCEEDED(hr))
     {
         hr = pD2DFactory_->CreateTransformedGeometry(
-            pPathGeometry,
-            &matrix,
-            &pTransformedGeometry
-            );
+                 pPathGeometry,
+                 &matrix,
+                 &pTransformedGeometry
+             );
     }
 
     // Draw the outline of the glyph run
     pRT_->DrawGeometry(
         pTransformedGeometry,
         pOutlineBrush_
-        );
+    );
 
     // Fill in the glyph run
     pRT_->FillGeometry(
         pTransformedGeometry,
         pFillBrush_
-        );
+    );
 
     SafeRelease(&pPathGeometry);
     SafeRelease(&pSink);
@@ -178,51 +178,51 @@ IFACEMETHODIMP CustomTextRenderer::DrawUnderline(
     FLOAT baselineOriginY,
     __in DWRITE_UNDERLINE const* underline,
     IUnknown* clientDrawingEffect
-    )
+)
 {
     HRESULT hr;
 
     D2D1_RECT_F rect = D2D1::RectF(
-        0,
-        underline->offset,
-        underline->width,
-        underline->offset + underline->thickness
-        );
+                           0,
+                           underline->offset,
+                           underline->width,
+                           underline->offset + underline->thickness
+                       );
 
     ID2D1RectangleGeometry* pRectangleGeometry = NULL;
     hr = pD2DFactory_->CreateRectangleGeometry(
-            &rect, 
-            &pRectangleGeometry
-            );
+             &rect,
+             &pRectangleGeometry
+         );
 
     // Initialize a matrix to translate the origin of the underline
     D2D1::Matrix3x2F const matrix = D2D1::Matrix3x2F(
-        1.0f, 0.0f,
-        0.0f, 1.0f,
-        baselineOriginX, baselineOriginY
-        );
+                                        1.0f, 0.0f,
+                                        0.0f, 1.0f,
+                                        baselineOriginX, baselineOriginY
+                                    );
 
     ID2D1TransformedGeometry* pTransformedGeometry = NULL;
     if (SUCCEEDED(hr))
     {
         hr = pD2DFactory_->CreateTransformedGeometry(
-            pRectangleGeometry,
-            &matrix,
-            &pTransformedGeometry
-            );
+                 pRectangleGeometry,
+                 &matrix,
+                 &pTransformedGeometry
+             );
     }
 
     // Draw the outline of the rectangle
     pRT_->DrawGeometry(
         pTransformedGeometry,
         pOutlineBrush_
-        );
+    );
 
     // Fill in the rectangle
     pRT_->FillGeometry(
         pTransformedGeometry,
         pFillBrush_
-        );
+    );
 
     SafeRelease(&pRectangleGeometry);
     SafeRelease(&pTransformedGeometry);
@@ -245,51 +245,51 @@ IFACEMETHODIMP CustomTextRenderer::DrawStrikethrough(
     FLOAT baselineOriginY,
     __in DWRITE_STRIKETHROUGH const* strikethrough,
     IUnknown* clientDrawingEffect
-    )
+)
 {
     HRESULT hr;
 
     D2D1_RECT_F rect = D2D1::RectF(
-        0,
-        strikethrough->offset,
-        strikethrough->width,
-        strikethrough->offset + strikethrough->thickness
-        );
+                           0,
+                           strikethrough->offset,
+                           strikethrough->width,
+                           strikethrough->offset + strikethrough->thickness
+                       );
 
     ID2D1RectangleGeometry* pRectangleGeometry = NULL;
     hr = pD2DFactory_->CreateRectangleGeometry(
-            &rect, 
-            &pRectangleGeometry
-            );
+             &rect,
+             &pRectangleGeometry
+         );
 
     // Initialize a matrix to translate the origin of the strikethrough
     D2D1::Matrix3x2F const matrix = D2D1::Matrix3x2F(
-        1.0f, 0.0f,
-        0.0f, 1.0f,
-        baselineOriginX, baselineOriginY
-        );
+                                        1.0f, 0.0f,
+                                        0.0f, 1.0f,
+                                        baselineOriginX, baselineOriginY
+                                    );
 
     ID2D1TransformedGeometry* pTransformedGeometry = NULL;
     if (SUCCEEDED(hr))
     {
         hr = pD2DFactory_->CreateTransformedGeometry(
-            pRectangleGeometry,
-            &matrix,
-            &pTransformedGeometry
-            );
+                 pRectangleGeometry,
+                 &matrix,
+                 &pTransformedGeometry
+             );
     }
 
     // Draw the outline of the rectangle
     pRT_->DrawGeometry(
         pTransformedGeometry,
         pOutlineBrush_
-        );
+    );
 
     // Fill in the rectangle
     pRT_->FillGeometry(
         pTransformedGeometry,
         pFillBrush_
-        );
+    );
 
     SafeRelease(&pRectangleGeometry);
     SafeRelease(&pTransformedGeometry);
@@ -314,7 +314,7 @@ IFACEMETHODIMP CustomTextRenderer::DrawInlineObject(
     BOOL isSideways,
     BOOL isRightToLeft,
     IUnknown* clientDrawingEffect
-    )
+)
 {
     // Not implemented
     return E_NOTIMPL;
@@ -367,7 +367,7 @@ IFACEMETHODIMP_(unsigned long) CustomTextRenderer::Release()
 IFACEMETHODIMP CustomTextRenderer::IsPixelSnappingDisabled(
     __maybenull void* clientDrawingContext,
     __out BOOL* isDisabled
-    )
+)
 {
     *isDisabled = FALSE;
     return S_OK;
@@ -384,7 +384,7 @@ IFACEMETHODIMP CustomTextRenderer::IsPixelSnappingDisabled(
 IFACEMETHODIMP CustomTextRenderer::GetCurrentTransform(
     __maybenull void* clientDrawingContext,
     __out DWRITE_MATRIX* transform
-    )
+)
 {
     //forward the render target's transform
     pRT_->GetTransform(reinterpret_cast<D2D1_MATRIX_3X2_F*>(transform));
@@ -402,7 +402,7 @@ IFACEMETHODIMP CustomTextRenderer::GetCurrentTransform(
 IFACEMETHODIMP CustomTextRenderer::GetPixelsPerDip(
     __maybenull void* clientDrawingContext,
     __out FLOAT* pixelsPerDip
-    )
+)
 {
     *pixelsPerDip = 1.0f;
     return S_OK;
@@ -419,7 +419,7 @@ IFACEMETHODIMP CustomTextRenderer::GetPixelsPerDip(
 IFACEMETHODIMP CustomTextRenderer::QueryInterface(
     IID const& riid,
     void** ppvObject
-    )
+)
 {
     if (__uuidof(IDWriteTextRenderer) == riid)
     {

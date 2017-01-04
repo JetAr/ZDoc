@@ -1,4 +1,4 @@
-// --------------------------------------------------------------------
+﻿// --------------------------------------------------------------------
 //
 //  Copyright (c) Microsoft Corporation.  All rights reserved
 //
@@ -33,11 +33,11 @@ static char THIS_FILE[] = __FILE__;
 // CDisdrawApp
 
 BEGIN_MESSAGE_MAP(CDisdrawApp, CWinApp)
-	//{{AFX_MSG_MAP(CDisdrawApp)
-		// NOTE - the ClassWizard will add and remove mapping macros here.
-		//    DO NOT EDIT what you see in these blocks of generated code!
-	//}}AFX_MSG
-	ON_COMMAND(ID_HELP, CWinApp::OnHelp)
+    //{{AFX_MSG_MAP(CDisdrawApp)
+    // NOTE - the ClassWizard will add and remove mapping macros here.
+    //    DO NOT EDIT what you see in these blocks of generated code!
+    //}}AFX_MSG
+    ON_COMMAND(ID_HELP, CWinApp::OnHelp)
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
@@ -45,8 +45,8 @@ END_MESSAGE_MAP()
 
 CDisdrawApp::CDisdrawApp()
 {
-	// TODO: add construction code here,
-	// Place all significant initialization in InitInstance
+    // TODO: add construction code here,
+    // Place all significant initialization in InitInstance
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -61,62 +61,62 @@ CDisdrawApp theApp;
 
 BOOL CDisdrawApp::InitInstance()
 {
-	// Standard initialization
-	// If you are not using these features and wish to reduce the size
-	//  of your final executable, you should remove from the following
-	//  the specific initialization routines you do not need.
+    // Standard initialization
+    // If you are not using these features and wish to reduce the size
+    //  of your final executable, you should remove from the following
+    //  the specific initialization routines you do not need.
 
 #ifdef _AFXDLL
 #else
-	Enable3dControlsStatic();	// Call this when linking to MFC statically
+    Enable3dControlsStatic();	// Call this when linking to MFC statically
 #endif
 
-	//
-	// Prompt for the user's name
-	//
-	char mbsUserName[MAX_USERNAME_LEN];
-	DWORD dwNumBytes = MAX_USERNAME_LEN;
-	GetUserName(mbsUserName, &dwNumBytes);
-	CLoginDlg dlgLogin;
-	dlgLogin.m_strLogin = mbsUserName;
-	if (dlgLogin.DoModal() == IDCANCEL || dlgLogin.m_strLogin == "" )
-	{
-		return FALSE;
-	}
+    //
+    // Prompt for the user's name
+    //
+    char mbsUserName[MAX_USERNAME_LEN];
+    DWORD dwNumBytes = MAX_USERNAME_LEN;
+    GetUserName(mbsUserName, &dwNumBytes);
+    CLoginDlg dlgLogin;
+    dlgLogin.m_strLogin = mbsUserName;
+    if (dlgLogin.DoModal() == IDCANCEL || dlgLogin.m_strLogin == "" )
+    {
+        return FALSE;
+    }
 
-	dlgLogin.m_strLogin.MakeUpper();
-	
-
-	CConnectDlg dlgConnect;
-
-	if(dlgLogin.m_fDsEnabledLocaly)
-	{
-		dlgConnect.m_strLogin = dlgLogin.m_strLogin;
-		if (dlgConnect.DoModal() == IDCANCEL )
-		{
-			return FALSE;
-		}
-	}
-	CDisdrawDlg dlg;
-	m_pMainWnd = &dlg;
-	dlg.m_strLogin = dlgLogin.m_strLogin;
-	dlg.m_iRadioDS = dlgConnect.m_iRadioDS;
-	dlg.m_fDsEnabledLocaly = dlgLogin.m_fDsEnabledLocaly;
+    dlgLogin.m_strLogin.MakeUpper();
 
 
-	int nResponse = dlg.DoModal();
-	if (nResponse == IDOK)
-	{
-		// TODO: Place code here to handle when the dialog is
-		//  dismissed with OK
-	}
-	else if (nResponse == IDCANCEL)
-	{
-		// TODO: Place code here to handle when the dialog is
-		//  dismissed with Cancel
-	}
+    CConnectDlg dlgConnect;
 
-	// Since the dialog has been closed, return FALSE so that we exit the
-	//  application, rather than start the application's message pump.
-	return FALSE;
+    if(dlgLogin.m_fDsEnabledLocaly)
+    {
+        dlgConnect.m_strLogin = dlgLogin.m_strLogin;
+        if (dlgConnect.DoModal() == IDCANCEL )
+        {
+            return FALSE;
+        }
+    }
+    CDisdrawDlg dlg;
+    m_pMainWnd = &dlg;
+    dlg.m_strLogin = dlgLogin.m_strLogin;
+    dlg.m_iRadioDS = dlgConnect.m_iRadioDS;
+    dlg.m_fDsEnabledLocaly = dlgLogin.m_fDsEnabledLocaly;
+
+
+    int nResponse = dlg.DoModal();
+    if (nResponse == IDOK)
+    {
+        // TODO: Place code here to handle when the dialog is
+        //  dismissed with OK
+    }
+    else if (nResponse == IDCANCEL)
+    {
+        // TODO: Place code here to handle when the dialog is
+        //  dismissed with Cancel
+    }
+
+    // Since the dialog has been closed, return FALSE so that we exit the
+    //  application, rather than start the application's message pump.
+    return FALSE;
 }

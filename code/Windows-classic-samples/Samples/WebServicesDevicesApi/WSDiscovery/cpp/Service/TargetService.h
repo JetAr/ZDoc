@@ -1,4 +1,4 @@
-//////////////////////////////////////////////////////////////////////////////
+﻿//////////////////////////////////////////////////////////////////////////////
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -31,8 +31,8 @@ class CTargetService;
 _Success_( return == S_OK )
 HRESULT CreateTargetService
 (   _In_opt_ LPCWSTR id
-,   _In_opt_ const WSD_URI_LIST *scopesList
-,   _Outptr_ CTargetService **targetService
+    ,   _In_opt_ const WSD_URI_LIST *scopesList
+    ,   _Outptr_ CTargetService **targetService
 );
 
 //////////////////////////////////////////////////////////////////////////////
@@ -40,9 +40,9 @@ HRESULT CreateTargetService
 //       Implements the target service functionalities through the use of
 //       IWSDiscoveryPublisher and IWSDiscoveryPublisherNotify
 //////////////////////////////////////////////////////////////////////////////
-class CTargetService 
-:   public IWSDiscoveryPublisherNotify
-,   public IWSDScopeMatchingRule
+class CTargetService
+    :   public IWSDiscoveryPublisherNotify
+    ,   public IWSDScopeMatchingRule
 {
 public:
     //////////////////////////////////////////////////////////////////////////
@@ -78,7 +78,7 @@ public:
     HRESULT STDMETHODCALLTYPE SendByeMessage();
 
     // Terminates the target service, which uninitializes the variables.
-    // If Init has not been previously called, or if Terminate has already 
+    // If Init has not been previously called, or if Terminate has already
     // been called, this method returns E_ABORT and does nothing.
     //
     // The Terminate method calls SendByeMessage before proceeding with
@@ -93,7 +93,7 @@ public:
     // CreateTargetService.
     HRESULT STDMETHODCALLTYPE Init
     (   _In_opt_ LPCWSTR id
-    ,   _In_opt_ const WSD_URI_LIST *scopesList
+        ,   _In_opt_ const WSD_URI_LIST *scopesList
     );
 
 public:
@@ -104,12 +104,12 @@ public:
 
     HRESULT STDMETHODCALLTYPE ProbeHandler
     (   _In_ const WSD_SOAP_MESSAGE *soap
-    ,   _In_ IWSDMessageParameters *messageParameters
+        ,   _In_ IWSDMessageParameters *messageParameters
     );
-    
+
     HRESULT STDMETHODCALLTYPE ResolveHandler
     (   _In_ const WSD_SOAP_MESSAGE *soap
-    ,   _In_ IWSDMessageParameters *messageParameters
+        ,   _In_ IWSDMessageParameters *messageParameters
     );
 
     //////////////////////////////////////////////////////////////////////////
@@ -118,11 +118,11 @@ public:
     //////////////////////////////////////////////////////////////////////////
 
     HRESULT STDMETHODCALLTYPE GetScopeRule( _Outptr_ LPCWSTR *scopeMatchingRule );
-    
+
     HRESULT STDMETHODCALLTYPE MatchScopes
     (   _In_ LPCWSTR scope1
-    ,   _In_ LPCWSTR scope2
-    ,   _Out_ BOOL *isMatch
+        ,   _In_ LPCWSTR scope2
+        ,   _Out_ BOOL *isMatch
     );
 
 private:
@@ -138,7 +138,7 @@ private:
     // the MessageNumber and InstanceId to 0.
     HRESULT STDMETHODCALLTYPE GetNextMessageNumber
     (   _Out_ ULONGLONG *nextMessageNum
-    ,   _Out_ ULONGLONG *nextInstanceId
+        ,   _Out_ ULONGLONG *nextInstanceId
     );
 
 public:
@@ -151,7 +151,7 @@ public:
 
     HRESULT STDMETHODCALLTYPE QueryInterface
     (   _In_ REFIID riid
-    ,   _Outptr_ __RPC__deref_out void __RPC_FAR *__RPC_FAR *object
+        ,   _Outptr_ __RPC__deref_out void __RPC_FAR *__RPC_FAR *object
     );
 
     ULONG STDMETHODCALLTYPE AddRef();
@@ -194,15 +194,15 @@ private:
     ULONGLONG m_instanceId;
     ULONGLONG m_messageNum;
     BOOL volatile m_isActive;  // Determines whether the target service is active or terminated.
-                               // A target service is defined as being terminated if the
-                               // CTargetService::Terminate method has been called.
+    // A target service is defined as being terminated if the
+    // CTargetService::Terminate method has been called.
     BOOL volatile m_isSuspended; // Determines whether the target service is currently being
-                                  // suspended or not.  A target service is defined as being
-                                  // suspended if CTargetService::SendByeMessage has been called
-                                  // but not CTargetService::Terminate.  A target service can be
-                                  // awaken from the suspended state if the method
-                                  // CTargetService::SendHelloMessage is being called.  The
-                                  // m_isSuspended flag has no effect if m_isActive is FALSE.
+    // suspended or not.  A target service is defined as being
+    // suspended if CTargetService::SendByeMessage has been called
+    // but not CTargetService::Terminate.  A target service can be
+    // awaken from the suspended state if the method
+    // CTargetService::SendHelloMessage is being called.  The
+    // m_isSuspended flag has no effect if m_isActive is FALSE.
 
     // Critical section key used for synchronizing
     // MessageNumber sequencing
@@ -211,6 +211,6 @@ private:
     //////////////////////////////////////////////////////////////////////////
     // Private member variables that are used by IUnknown
     //////////////////////////////////////////////////////////////////////////
-    
+
     ULONG m_cRef; // IUnknown reference counter
 };

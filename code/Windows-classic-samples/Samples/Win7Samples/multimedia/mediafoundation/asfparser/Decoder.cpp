@@ -1,7 +1,7 @@
-//////////////////////////////////////////////////////////////////////////
+﻿//////////////////////////////////////////////////////////////////////////
 //
 // Decoder.cpp : CDecoder class implementation.
-// 
+//
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -17,13 +17,13 @@
 ///////////////////////////////////////////////////////////////////////
 //  Name: CreateInstance
 //  Description:  Static class method to create the CDecoder object.
-//  
-//  ppDecoder: Receives an AddRef's pointer to the CDecoder object. 
+//
+//  ppDecoder: Receives an AddRef's pointer to the CDecoder object.
 //            The caller must release the pointer.
 /////////////////////////////////////////////////////////////////////////
 
 HRESULT CDecoder::CreateInstance(CDecoder **ppDecoder)
-{  
+{
     CDecoder *pDecoder = new CDecoder();
 
     if (!pDecoder)
@@ -33,7 +33,7 @@ HRESULT CDecoder::CreateInstance(CDecoder **ppDecoder)
 
     *ppDecoder = pDecoder;
     (*ppDecoder)->AddRef();
-            
+
     TRACE((L"CDecoder created.\n"));
 
     SAFE_RELEASE (pDecoder);
@@ -49,12 +49,12 @@ HRESULT CDecoder::CreateInstance(CDecoder **ppDecoder)
 /////////////////////////////////////////////////////////////////////////
 
 CDecoder::CDecoder()
-: m_nRefCount (1),
-m_pMFT (NULL),
-m_dwInputID (0),
-m_dwOutputID (0),
-m_DecoderState (0),
-m_pMediaController (NULL)
+    : m_nRefCount (1),
+      m_pMFT (NULL),
+      m_dwInputID (0),
+      m_dwOutputID (0),
+      m_DecoderState (0),
+      m_pMediaController (NULL)
 {
 
 };
@@ -81,7 +81,7 @@ CDecoder::~CDecoder()
 //              the MFT will decode.
 /////////////////////////////////////////////////////////////////////
 
-HRESULT CDecoder::Initialize(CLSID clsid, 
+HRESULT CDecoder::Initialize(CLSID clsid,
                              IMFMediaType *pMediaType)
 {
 
@@ -100,17 +100,17 @@ HRESULT CDecoder::Initialize(CLSID clsid,
 
     //Create the MFT decoder
     CHECK_HR (hr = CoCreateInstance(
-        clsid, 
-        NULL,
-        CLSCTX_INPROC_SERVER,
-        __uuidof(IMFTransform),
-        (void**)&m_pMFT));
+                       clsid,
+                       NULL,
+                       CLSCTX_INPROC_SERVER,
+                       __uuidof(IMFTransform),
+                       (void**)&m_pMFT));
 
 
     //Create the media controller that will work with uncompressed data that the decoder generates
     if (!m_pMediaController)
     {
-        CHECK_HR (hr = CMediaController::CreateInstance(&m_pMediaController)); 
+        CHECK_HR (hr = CMediaController::CreateInstance(&m_pMediaController));
     }
 
     CHECK_HR (hr =  ConfigureDecoder( pMediaType));
@@ -124,7 +124,7 @@ done:
 
         hr = UnLoad();
     }
-   
+
     return hr;
 }
 
@@ -138,7 +138,7 @@ done:
 HRESULT CDecoder::UnLoad()
 {
     HRESULT hr = S_OK;
-    
+
     if (m_pMFT)
     {
         if (m_pMediaController)
@@ -147,11 +147,11 @@ HRESULT CDecoder::UnLoad()
         }
         SAFE_RELEASE(m_pMFT);
     }
-    
+
     TRACE((L"MFT unloaded.\n"));
 
 done:
-    
+
     LOG_MSG_IF_FAILED(L"MFT could not be unloaded.\n", hr);
 
     return hr;
@@ -205,9 +205,9 @@ HRESULT CDecoder::ConfigureDecoder(IMFMediaType *pMediaType)
         for ( DWORD dwTypeIndex = 0; (hrRes != MF_E_NO_MORE_TYPES) ; dwTypeIndex++ )
         {
             hrRes =  m_pMFT->GetOutputAvailableType(
-                                                m_dwOutputID,
-                                                dwTypeIndex,
-                                                &pOutputType);
+                         m_dwOutputID,
+                         dwTypeIndex,
+                         &pOutputType);
 
             if (pOutputType && SUCCEEDED(hrRes))
             {
@@ -223,7 +223,7 @@ HRESULT CDecoder::ConfigureDecoder(IMFMediaType *pMediaType)
 
                     break;
                 }
-            
+
                 else if((guidMajorType == MFMediaType_Video) && (guidSubType == MFVideoFormat_RGB32))
                 {
                     CHECK_HR (hr =  m_pMFT->SetOutputType(m_dwOutputID, pOutputType, 0));
@@ -246,7 +246,7 @@ HRESULT CDecoder::ConfigureDecoder(IMFMediaType *pMediaType)
 
 
 done:
-    
+
     LOG_MSG_IF_FAILED(L"MFT could not be configured.\n", hr);
 
     SAFE_RELEASE(pOutputType);
@@ -259,8 +259,8 @@ done:
 // Name: ProcessAudio
 //
 // Passes the input sample through the decoder and sends the output samples
-// to the CMediaController class. This class adds the buffers of the 
-// output sample to the audio test sample that it maintains. When ready, the 
+// to the CMediaController class. This class adds the buffers of the
+// output sample to the audio test sample that it maintains. When ready, the
 // caller can play the test sample through methods on the CMediaController
 //class.
 //
@@ -285,7 +285,7 @@ HRESULT CDecoder::ProcessAudio(IMFSample *pSample)
 
     IMFMediaBuffer* pBufferOut = NULL;
     IMFSample* pSampleOut = NULL;
-    
+
     //get the size of the output buffer processed by the decoder.
     //Again, there is only one output so the output stream id is 0.
     MFT_OUTPUT_STREAM_INFO mftStreamInfo;
@@ -308,7 +308,7 @@ HRESULT CDecoder::ProcessAudio(IMFSample *pSample)
         //Create the output sample
         CHECK_HR (hr = MFCreateSample(&pSampleOut));
 
-        //Add the output buffer 
+        //Add the output buffer
         CHECK_HR (hr = pSampleOut->AddBuffer(pBufferOut));
 
         //Set the output sample
@@ -326,14 +326,15 @@ HRESULT CDecoder::ProcessAudio(IMFSample *pSample)
 
         SAFE_RELEASE(pBufferOut);
         SAFE_RELEASE(pSampleOut);
-        
 
-    }while(hrRes != MF_E_TRANSFORM_NEED_MORE_INPUT);
+
+    }
+    while(hrRes != MF_E_TRANSFORM_NEED_MORE_INPUT);
 
 done:
     SAFE_RELEASE(pBufferOut);
     SAFE_RELEASE(pSampleOut);
-    
+
     return hr;
 }
 
@@ -342,7 +343,7 @@ done:
 //
 // Passes the input sample through the decoder and sends the output sample data
 // to the CMediaController class. This class creates a bitmap for the sample.
-// When ready, the caller can display the bitmap through methods on 
+// When ready, the caller can display the bitmap through methods on
 // the CMediaController class.
 //
 // pSample: Pointer to a compressed sample that needs to be decoded
@@ -359,11 +360,11 @@ HRESULT CDecoder::ProcessVideo(IMFSample *pSample)
     {
         return MF_E_NOT_INITIALIZED;
     }
-    
+
     HRESULT hr = S_OK, hrRes = S_OK;
 
     DWORD dwStatus = 0;
-    
+
     DWORD cbTotalLength = 0, cbCurrentLength = 0;
 
     BYTE *pData = NULL;
@@ -380,7 +381,7 @@ HRESULT CDecoder::ProcessVideo(IMFSample *pSample)
     //get the size of the output buffer processed by the decoder.
     //Again, there is only one output so the output stream id is 0.
     CHECK_HR (hr =  m_pMFT->GetOutputStreamInfo(0, &mftStreamInfo));
-    
+
     //Request samples from the decoder
     MFT_OUTPUT_DATA_BUFFER mftOutputData;
     ZeroMemory(&mftOutputData, sizeof(mftOutputData));
@@ -400,7 +401,7 @@ HRESULT CDecoder::ProcessVideo(IMFSample *pSample)
         //Create the output sample
         CHECK_HR (hr = MFCreateSample(&pSampleOut));
 
-        //Add the output buffer 
+        //Add the output buffer
         CHECK_HR (hr = pSampleOut->AddBuffer(pBufferOut));
 
         //Set the output sample
@@ -416,21 +417,22 @@ HRESULT CDecoder::ProcessVideo(IMFSample *pSample)
 
         SAFE_RELEASE(pBufferOut);
         SAFE_RELEASE(pSampleOut);
-        
 
-    }while(hrRes != MF_E_TRANSFORM_NEED_MORE_INPUT);
+
+    }
+    while(hrRes != MF_E_TRANSFORM_NEED_MORE_INPUT);
 
     //Get all bitmap data in one buffer
     CHECK_HR (hr = pBitmapSample->ConvertToContiguousBuffer(&pBufferOut));
 
-    CHECK_HR (hr =  m_pMFT->GetOutputCurrentType(m_dwOutputID, &pMediaType));  
-    
+    CHECK_HR (hr =  m_pMFT->GetOutputCurrentType(m_dwOutputID, &pMediaType));
+
     //Get a pointer to the memory
-    CHECK_HR (hr = pBufferOut->Lock(&pData, &cbTotalLength, &cbCurrentLength)); 
+    CHECK_HR (hr = pBufferOut->Lock(&pData, &cbTotalLength, &cbCurrentLength));
 
     //Send it to the media controller to create the bitmap
-    CHECK_HR (hr = m_pMediaController->CreateBitmapForKeyFrame(pData, pMediaType)); 
-    
+    CHECK_HR (hr = m_pMediaController->CreateBitmapForKeyFrame(pData, pMediaType));
+
     CHECK_HR (hr = pBufferOut->Unlock());
 
     pData = NULL;
@@ -456,12 +458,12 @@ HRESULT CDecoder::StartDecoding(void)
     {
         return MF_E_NOT_INITIALIZED;
     }
-    
+
     HRESULT hr =  m_pMFT->ProcessMessage(MFT_MESSAGE_NOTIFY_BEGIN_STREAMING, 0);
-    
+
     if (SUCCEEDED(hr))
     {
-         m_DecoderState = STREAMING;
+        m_DecoderState = STREAMING;
     }
     return hr;
 
@@ -475,10 +477,10 @@ HRESULT CDecoder::StopDecoding(void)
     }
 
     HRESULT hr =  m_pMFT->ProcessMessage(MFT_MESSAGE_NOTIFY_END_STREAMING, 0);
-    
+
     if (SUCCEEDED(hr))
     {
-         m_DecoderState = NOT_STREAMING;
+        m_DecoderState = NOT_STREAMING;
     }
     return hr;
 

@@ -1,7 +1,7 @@
-//////////////////////////////////////////////////////////////////////////
+﻿//////////////////////////////////////////////////////////////////////////
 //
 // Sprite: Manages drawing the thumbnail bitmap.
-// 
+//
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -58,14 +58,14 @@ inline float Height(const D2D1_RECT_F& rect)
 // Sprite constructor
 //-------------------------------------------------------------------
 
-Sprite::Sprite() 
- :  m_pBitmap(NULL), 
-    m_bAnimating(FALSE), 
-    m_timeStart(0), 
-    m_timeEnd(0), 
-    m_fAngle(0), 
-    m_theta(0), 
-    m_bTopDown(FALSE)
+Sprite::Sprite()
+    :  m_pBitmap(NULL),
+       m_bAnimating(FALSE),
+       m_timeStart(0),
+       m_timeEnd(0),
+       m_fAngle(0),
+       m_theta(0),
+       m_bTopDown(FALSE)
 {
 }
 
@@ -172,11 +172,11 @@ void Sprite::Update(ID2D1HwndRenderTarget *pRT, float time)
 
         D2D1_RECT_F v = m_nrcAnimDistance * ( (time - m_timeStart) / (m_timeEnd - m_timeStart) );
 
-        m_nrcBound = v + m_nrcStartPosition; 
+        m_nrcBound = v + m_nrcStartPosition;
     }
     else if (m_bAnimating && time >= m_timeEnd)
     {
-        // We have reached the end of an animation. 
+        // We have reached the end of an animation.
         // Set the final position (avoids any rounding errors)
 
         m_nrcBound = m_nrcStartPosition + m_nrcAnimDistance;
@@ -185,8 +185,8 @@ void Sprite::Update(ID2D1HwndRenderTarget *pRT, float time)
 
     // Compute the correct letterbox for the bitmap.
     //
-    // TODO: Strictly, this only needs to be update if the bitmap changes 
-    //       or the size of the render target changes. 
+    // TODO: Strictly, this only needs to be update if the bitmap changes
+    //       or the size of the render target changes.
 
     D2D1_SIZE_F sizeBitmap = m_AspectRatio;
 
@@ -220,7 +220,7 @@ void Sprite::Draw(ID2D1HwndRenderTarget *pRT)
     // Start with an identity transform.
     D2D1::Matrix3x2F  mat = D2D1::Matrix3x2F::Identity();
 
-    // If the image is bottom-up, flip around the x-axis. 
+    // If the image is bottom-up, flip around the x-axis.
     if (m_bTopDown == 0)
     {
         mat = D2D1::Matrix3x2F::Scale( D2D1::SizeF(1, -1), D2D1::Point2F(0, height/2) );
@@ -229,7 +229,7 @@ void Sprite::Draw(ID2D1HwndRenderTarget *pRT)
     // Apply wobble.
     if (m_fAngle >= FLT_EPSILON)
     {
-        mat = mat * D2D1::Matrix3x2F::Rotation( m_fAngle * sinf(m_theta) , D2D1::Point2F( width/2, height/2 ) );
+        mat = mat * D2D1::Matrix3x2F::Rotation( m_fAngle * sinf(m_theta), D2D1::Point2F( width/2, height/2 ) );
 
         // Reduce the wobble by the decay factor...
         m_theta += WOBBLE_DECAY;
@@ -304,7 +304,7 @@ D2D1_RECT_F LetterBoxRectF(D2D1_SIZE_F aspectRatio, const D2D1_RECT_F &rcDest)
         return rcResult;
     }
 
-   // First try: Letterbox along the sides. ("pillarbox")
+    // First try: Letterbox along the sides. ("pillarbox")
     width = DestHeight * SrcWidth / SrcHeight;
     height = DestHeight;
     if (width > DestWidth)
@@ -315,7 +315,7 @@ D2D1_RECT_F LetterBoxRectF(D2D1_SIZE_F aspectRatio, const D2D1_RECT_F &rcDest)
     }
 
     // Fill in the rectangle
-    
+
     rcResult.left = rcDest.left + ((DestWidth - width) / 2);
     rcResult.right = rcResult.left + width;
     rcResult.top = rcDest.top + ((DestHeight - height) / 2);

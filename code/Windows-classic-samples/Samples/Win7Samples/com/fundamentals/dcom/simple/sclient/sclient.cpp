@@ -1,35 +1,35 @@
-// ----------------------------------------------------------------------------
-// 
+﻿// ----------------------------------------------------------------------------
+//
 // This file is part of the Microsoft COM+ Samples.
-// 
+//
 // Copyright (C) 1995-2000 Microsoft Corporation. All rights reserved.
-// 
+//
 // This source code is intended only as a supplement to Microsoft
 // Development Tools and/or on-line documentation. See these other
 // materials for detailed information regarding Microsoft code samples.
-// 
+//
 // THIS CODE AND INFORMATION ARE PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
 // KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
 // IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
-// 
+//
 // ----------------------------------------------------------------------------
 
 // ===========================================================================
 // Description:
-// 
+//
 //  This is the client-portion of the SIMPLE Distributed COM sample. This
 // application uses the CLSID_SimpleObject class implemented by the SSERVER.CPP
 // module. Pass the machine-name to instantiate the object on, or pass no
 // arguments to instantiate the object on the same machine. See the comments
 // in SSERVER.CPP for further details.
-// 
+//
 //  The purpose of this sample is to demonstrate what is minimally required
 // to use a COM object, whether it runs on the same machine or on a different
 // machine.
-// 
+//
 // Instructions:
-// 
+//
 //  To use this sample:
 //   * build it using the NMAKE command. NMAKE will create SSERVER.EXE and
 //     SCLIENT.EXE.
@@ -40,7 +40,7 @@
 //     machine-name (UNC or DNS) to instantiate the object on a remote machine.
 //   * SCLIENT.EXE displays some simple information about the calls it is
 //     making on the object.
-// 
+//
 // Copyright 1996 Microsoft Corporation.  All Rights Reserved.
 // ===========================================================================
 
@@ -60,23 +60,23 @@ const ULONG cbDefault = 4096;    // default # of bytes to Read/Write
 
 // ---------------------------------------------------------------------------
 // %%Function: Message
-// 
+//
 //  Formats and displays a message to the console.
 // ---------------------------------------------------------------------------
- void
+void
 Message(LPTSTR szPrefix, HRESULT hr)
 {
     LPTSTR   szMessage;
 
     if (hr == S_OK)
-        {
+    {
         wprintf(szPrefix);
         return;
-        }
- 
+    }
+
     if (HRESULT_FACILITY(hr) == FACILITY_WINDOWS)
         hr = HRESULT_CODE(hr);
- 
+
     FormatMessage(
         FORMAT_MESSAGE_ALLOCATE_BUFFER |
         FORMAT_MESSAGE_FROM_SYSTEM |
@@ -89,27 +89,27 @@ Message(LPTSTR szPrefix, HRESULT hr)
         NULL);
 
     wprintf(TEXT("%s: %s(%lx)\n"), szPrefix, szMessage, hr);
-    
+
     LocalFree(szMessage);
 }  // Message
 
 // ---------------------------------------------------------------------------
 // %%Function: OutputTime
 // ---------------------------------------------------------------------------
- void
+void
 OutputTime(LARGE_INTEGER* pliStart, LARGE_INTEGER* pliFinish)
 {
     LARGE_INTEGER liFreq;
 
     QueryPerformanceFrequency(&liFreq);
     wprintf(TEXT("%0.4f seconds\n"),
-        (float)(pliFinish->LowPart - pliStart->LowPart)/(float)liFreq.LowPart);
+            (float)(pliFinish->LowPart - pliStart->LowPart)/(float)liFreq.LowPart);
 }  // OutputTime
 
 // ---------------------------------------------------------------------------
 // %%Function: main
 // ---------------------------------------------------------------------------
- void __cdecl
+void __cdecl
 main(int argc, CHAR **argv)
 {
     HRESULT hr;
@@ -121,25 +121,25 @@ main(int argc, CHAR **argv)
 
     // allow a machine-name as the command-line argument
     if (argc > 1)
-        {
+    {
         MultiByteToWideChar(CP_ACP, MB_PRECOMPOSED, argv[1], -1,
-            wsz, sizeof(wsz)/sizeof(wsz[0]));
+                            wsz, sizeof(wsz)/sizeof(wsz[0]));
         memset(&csi, 0, sizeof(COSERVERINFO));
         csi.pwszName = wsz;
         pcsi = &csi;
-        }
+    }
 
     // allow a byte-size to be passed on the command-line
     if (argc > 2)
         cb = atol(argv[2]);
-        
+
     // initialize COM for free-threaded use
     hr = CoInitializeEx(NULL, COINIT_MULTITHREADED);
     if (FAILED(hr))
-        {
+    {
         Message(TEXT("Client: CoInitializeEx"), hr);
         exit(hr);
-        }
+    }
 
     // create a remote instance of the object on the argv[1] machine
     Message(TEXT("Client: Creating Instance..."), S_OK);
@@ -154,15 +154,15 @@ main(int argc, CHAR **argv)
     if (FAILED(hr))
         Message(TEXT("Client: CoCreateInstanceEx"), hr);
     else
-        {
+    {
         LPVOID      pv;
         LPSTREAM    pstm = (IStream*)mq.pItf;
-	 // make prefast "happy"
-	 if (!pstm)
-	 	{
-	 	Message(TEXT("Client: NULL Interface pointer"),E_FAIL);
-		exit(E_FAIL);
-	 	}
+        // make prefast "happy"
+        if (!pstm)
+        {
+            Message(TEXT("Client: NULL Interface pointer"),E_FAIL);
+            exit(E_FAIL);
+        }
 
         // "read" some data from the object
         Message(TEXT("Client: Reading data..."), S_OK);
@@ -185,7 +185,7 @@ main(int argc, CHAR **argv)
 
         // let go of the object
         pstm->Release();
-        }
+    }
 
     CoUninitialize();
     Message(TEXT("Client: Done"), S_OK);

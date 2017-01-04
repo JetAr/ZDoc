@@ -1,4 +1,4 @@
-//*********************************************************
+﻿//*********************************************************
 //
 // Copyright (c) Microsoft. All rights reserved.
 // THIS CODE IS PROVIDED *AS IS* WITHOUT WARRANTY OF
@@ -71,12 +71,12 @@ static GENERIC_MAPPING ObjectMap =
 // NoPropagateInherit - only applies to child, not grandchildren
 //
 // Note: I only use container inheritance
-static SI_INHERIT_TYPE siSDKInheritTypes[] =  
-{  
-    &GUID_NULL, 0,                                        (L"This object only"),  
-    &GUID_NULL, CONTAINER_INHERIT_ACE,                    (L"This object and children (sections/topics)"),  
-    &GUID_NULL, INHERIT_ONLY_ACE | CONTAINER_INHERIT_ACE, (L"Children (sections/topics) only"),  
-};  
+static SI_INHERIT_TYPE siSDKInheritTypes[] =
+{
+    &GUID_NULL, 0,                                        (L"This object only"),
+    &GUID_NULL, CONTAINER_INHERIT_ACE,                    (L"This object and children (sections/topics)"),
+    &GUID_NULL, INHERIT_ONLY_ACE | CONTAINER_INHERIT_ACE, (L"Children (sections/topics) only"),
+};
 
 class CSecInfo : public ISecurityInformation, public ISecurityInformation3, public IEffectivePermission2, public ISecurityObjectTypeInfo
 {
@@ -98,24 +98,24 @@ private:
 
     // Tell ACL UI what to show
     DWORD m_dwSIFlags;
-    
+
     // This function iterates over a container's children and sets their security.
     //  parentIndex represents the index of the parent (see ResourceIndices)
     //  si can include either DACL_SECURITY_INFORMATION, SACL_SECURITY_INFORMATION, or both
     //  pSD is the security descriptor of the parent
     HRESULT SetSecurityOfChildren(
-        int parentIndex, 
-        THIS_ SECURITY_INFORMATION si, 
+        int parentIndex,
+        THIS_ SECURITY_INFORMATION si,
         PSECURITY_DESCRIPTOR pSD);
 
     // Helper function for GetInheritSource so that we can call it on specific children
     // and not just the object that we're currently editing.
     //  childIndex represents the index of the child (see ResourceIndices)
     HRESULT GetInheritSourceHelper(
-        int childIndex, 
-        SECURITY_INFORMATION psi, 
-        PACL acl, 
-PINHERITED_FROM *inheritArray);
+        int childIndex,
+        SECURITY_INFORMATION psi,
+        PACL acl,
+        PINHERITED_FROM *inheritArray);
 
     // This orders a DACL canonically. For more information, see:
     // http://msdn.microsoft.com/en-us/library/windows/desktop/aa379298(v=vs.85).aspx
@@ -129,7 +129,7 @@ public:
     bool m_bFailedToConstruct;
     CSecInfo();
     virtual ~CSecInfo();
-    
+
     void SetCurrentObject(int index)
     {
         m_editingResource = index;
@@ -141,67 +141,67 @@ public:
     }
 
     // IUnknown
-    IFACEMETHODIMP QueryInterface(_In_ REFIID riid, _Outptr_ void **ppv);  
+    IFACEMETHODIMP QueryInterface(_In_ REFIID riid, _Outptr_ void **ppv);
     IFACEMETHODIMP_(ULONG) AddRef();
-    IFACEMETHODIMP_(ULONG) Release();  
-    
+    IFACEMETHODIMP_(ULONG) Release();
+
     // ISecurityInformation
     IFACEMETHODIMP GetObjectInformation (THIS_ PSI_OBJECT_INFO pObjectInfo);
     IFACEMETHODIMP GetSecurity (
-        THIS_ SECURITY_INFORMATION si, 
-        PSECURITY_DESCRIPTOR *sd, 
+        THIS_ SECURITY_INFORMATION si,
+        PSECURITY_DESCRIPTOR *sd,
         BOOL fDefault);
     IFACEMETHODIMP SetSecurity (
-        THIS_ SECURITY_INFORMATION si, 
+        THIS_ SECURITY_INFORMATION si,
         PSECURITY_DESCRIPTOR sd);
     IFACEMETHODIMP GetAccessRights (
-        THIS_ const GUID* guidObjectType, 
-        DWORD dwFlags, 
+        THIS_ const GUID* guidObjectType,
+        DWORD dwFlags,
         PSI_ACCESS *access,
         ULONG *accesses, ULONG *defaultAccess);
     IFACEMETHODIMP MapGeneric (
-        THIS_ const GUID *guidObjectType, 
-        UCHAR *aceFlags, 
+        THIS_ const GUID *guidObjectType,
+        UCHAR *aceFlags,
         ACCESS_MASK *mask);
     IFACEMETHODIMP GetInheritTypes (
-        THIS_ PSI_INHERIT_TYPE *inheritTypes, 
+        THIS_ PSI_INHERIT_TYPE *inheritTypes,
         ULONG *numInheritTypes);
     IFACEMETHODIMP PropertySheetPageCallback (
-        THIS_ HWND hwnd, 
-        UINT uMsg, 
+        THIS_ HWND hwnd,
+        UINT uMsg,
         SI_PAGE_TYPE uPage);
 
     // ISecurityInformation3
     IFACEMETHODIMP GetFullResourceName (THIS_ _Outptr_ LPWSTR *resourceName);
     IFACEMETHODIMP OpenElevatedEditor (
-        THIS_ _In_ HWND hWnd, 
+        THIS_ _In_ HWND hWnd,
         _In_ SI_PAGE_TYPE uPage);
 
     // IEffectivePermission2
     STDMETHOD(ComputeEffectivePermissionWithSecondarySecurity) (THIS_
-        _In_ PSID pSid,
-        _In_opt_ PSID pDeviceSid,
-        _In_ PCWSTR pszServerName,
-        _Inout_updates_(dwSecurityObjectCount) PSECURITY_OBJECT pSecurityObjects,
-        _In_ DWORD dwSecurityObjectCount,
-        _In_opt_ PTOKEN_GROUPS pUserGroups,
-        _When_(pUserGroups != nullptr && *pAuthzUserGroupsOperations != AUTHZ_SID_OPERATION_REPLACE_ALL, _In_reads_(pUserGroups->GroupCount))
-        _In_opt_ PAUTHZ_SID_OPERATION pAuthzUserGroupsOperations,
-        _In_opt_ PTOKEN_GROUPS pDeviceGroups,
-        _When_(pDeviceGroups != nullptr && *pAuthzDeviceGroupsOperations != AUTHZ_SID_OPERATION_REPLACE_ALL, _In_reads_(pDeviceGroups->GroupCount))
-        _In_opt_ PAUTHZ_SID_OPERATION pAuthzDeviceGroupsOperations,
-        _In_opt_ PAUTHZ_SECURITY_ATTRIBUTES_INFORMATION pAuthzUserClaims,
-        _When_(pAuthzUserClaims != nullptr && *pAuthzUserClaimsOperations != AUTHZ_SECURITY_ATTRIBUTE_OPERATION_REPLACE_ALL, _In_reads_(pAuthzUserClaims->AttributeCount))
-        _In_opt_ PAUTHZ_SECURITY_ATTRIBUTE_OPERATION pAuthzUserClaimsOperations,
-        _In_opt_ PAUTHZ_SECURITY_ATTRIBUTES_INFORMATION pAuthzDeviceClaims,
-        _When_(pAuthzDeviceClaims != nullptr && *pAuthzDeviceClaimsOperations != AUTHZ_SECURITY_ATTRIBUTE_OPERATION_REPLACE_ALL, _In_reads_(pAuthzDeviceClaims->AttributeCount))
-        _In_opt_ PAUTHZ_SECURITY_ATTRIBUTE_OPERATION pAuthzDeviceClaimsOperations,
-        _Inout_updates_(dwSecurityObjectCount) PEFFPERM_RESULT_LIST pEffpermResultLists);
-    
+            _In_ PSID pSid,
+            _In_opt_ PSID pDeviceSid,
+            _In_ PCWSTR pszServerName,
+            _Inout_updates_(dwSecurityObjectCount) PSECURITY_OBJECT pSecurityObjects,
+            _In_ DWORD dwSecurityObjectCount,
+            _In_opt_ PTOKEN_GROUPS pUserGroups,
+            _When_(pUserGroups != nullptr && *pAuthzUserGroupsOperations != AUTHZ_SID_OPERATION_REPLACE_ALL, _In_reads_(pUserGroups->GroupCount))
+            _In_opt_ PAUTHZ_SID_OPERATION pAuthzUserGroupsOperations,
+            _In_opt_ PTOKEN_GROUPS pDeviceGroups,
+            _When_(pDeviceGroups != nullptr && *pAuthzDeviceGroupsOperations != AUTHZ_SID_OPERATION_REPLACE_ALL, _In_reads_(pDeviceGroups->GroupCount))
+            _In_opt_ PAUTHZ_SID_OPERATION pAuthzDeviceGroupsOperations,
+            _In_opt_ PAUTHZ_SECURITY_ATTRIBUTES_INFORMATION pAuthzUserClaims,
+            _When_(pAuthzUserClaims != nullptr && *pAuthzUserClaimsOperations != AUTHZ_SECURITY_ATTRIBUTE_OPERATION_REPLACE_ALL, _In_reads_(pAuthzUserClaims->AttributeCount))
+            _In_opt_ PAUTHZ_SECURITY_ATTRIBUTE_OPERATION pAuthzUserClaimsOperations,
+            _In_opt_ PAUTHZ_SECURITY_ATTRIBUTES_INFORMATION pAuthzDeviceClaims,
+            _When_(pAuthzDeviceClaims != nullptr && *pAuthzDeviceClaimsOperations != AUTHZ_SECURITY_ATTRIBUTE_OPERATION_REPLACE_ALL, _In_reads_(pAuthzDeviceClaims->AttributeCount))
+            _In_opt_ PAUTHZ_SECURITY_ATTRIBUTE_OPERATION pAuthzDeviceClaimsOperations,
+            _Inout_updates_(dwSecurityObjectCount) PEFFPERM_RESULT_LIST pEffpermResultLists);
+
     // ISecurityObjectTypeInfo
     STDMETHOD(GetInheritSource)(
-        SECURITY_INFORMATION psi, 
-        PACL acl, 
+        SECURITY_INFORMATION psi,
+        PACL acl,
         PINHERITED_FROM *ppInheritArray);
 };
 
@@ -210,22 +210,22 @@ const SI_ACCESS g_siForumsAccess[] =
     // This structure describes each flag in the file access mask.
     // It is constant. ACLUI displays these strings in its UI.
     { &GUID_NULL, GENERIC_ADMIN_PERM,L"Administer", SI_ACCESS_GENERAL | SI_ACCESS_SPECIFIC | INHERIT_FULL, },
-    { &GUID_NULL, GENERIC_MOD_PERM,  L"Moderate",   SI_ACCESS_GENERAL | INHERIT_FULL },  
-    { &GUID_NULL, GENERIC_POST_PERM, L"Post",       SI_ACCESS_GENERAL | INHERIT_FULL },  
+    { &GUID_NULL, GENERIC_MOD_PERM,  L"Moderate",   SI_ACCESS_GENERAL | INHERIT_FULL },
+    { &GUID_NULL, GENERIC_POST_PERM, L"Post",       SI_ACCESS_GENERAL | INHERIT_FULL },
 
     // Show advanced rights
-    { &GUID_NULL, CREATE_PERM,          L"Create",                          SI_ACCESS_SPECIFIC | INHERIT_FULL },  
-    { &GUID_NULL, READ_PERM,            L"Read",                            SI_ACCESS_SPECIFIC | INHERIT_FULL },  
-    { &GUID_NULL, VOTE_PERM,            L"Vote",                            SI_ACCESS_SPECIFIC | INHERIT_FULL },  
-    { &GUID_NULL, UPDATE_OWN_PERM,      L"Update / edit own content",       SI_ACCESS_SPECIFIC | INHERIT_FULL },  
-    { &GUID_NULL, UPDATE_OTHERS_PERM,   L"Update / edit others' content",   SI_ACCESS_SPECIFIC | INHERIT_FULL },  
-    { &GUID_NULL, HIDE_PERM,            L"Hide",                            SI_ACCESS_SPECIFIC | INHERIT_FULL },  
-    { &GUID_NULL, SHOW_PERM,            L"Show",                            SI_ACCESS_SPECIFIC | INHERIT_FULL },  
-    { &GUID_NULL, LOCK_PERM,            L"Lock",                            SI_ACCESS_SPECIFIC | INHERIT_FULL },  
-    { &GUID_NULL, UNLOCK_PERM,          L"Unlock",                          SI_ACCESS_SPECIFIC | INHERIT_FULL },  
-    { &GUID_NULL, DESTROY_PERM,         L"Destroy / delete",                SI_ACCESS_SPECIFIC | INHERIT_FULL },  
-    { &GUID_NULL, VIEW_PERMS_PERM,      L"View permissions",                SI_ACCESS_SPECIFIC | INHERIT_FULL },  
-    { &GUID_NULL, CHANGE_PERMS_PERM,    L"Change permissions",              SI_ACCESS_SPECIFIC | INHERIT_FULL },  
+    { &GUID_NULL, CREATE_PERM,          L"Create",                          SI_ACCESS_SPECIFIC | INHERIT_FULL },
+    { &GUID_NULL, READ_PERM,            L"Read",                            SI_ACCESS_SPECIFIC | INHERIT_FULL },
+    { &GUID_NULL, VOTE_PERM,            L"Vote",                            SI_ACCESS_SPECIFIC | INHERIT_FULL },
+    { &GUID_NULL, UPDATE_OWN_PERM,      L"Update / edit own content",       SI_ACCESS_SPECIFIC | INHERIT_FULL },
+    { &GUID_NULL, UPDATE_OTHERS_PERM,   L"Update / edit others' content",   SI_ACCESS_SPECIFIC | INHERIT_FULL },
+    { &GUID_NULL, HIDE_PERM,            L"Hide",                            SI_ACCESS_SPECIFIC | INHERIT_FULL },
+    { &GUID_NULL, SHOW_PERM,            L"Show",                            SI_ACCESS_SPECIFIC | INHERIT_FULL },
+    { &GUID_NULL, LOCK_PERM,            L"Lock",                            SI_ACCESS_SPECIFIC | INHERIT_FULL },
+    { &GUID_NULL, UNLOCK_PERM,          L"Unlock",                          SI_ACCESS_SPECIFIC | INHERIT_FULL },
+    { &GUID_NULL, DESTROY_PERM,         L"Destroy / delete",                SI_ACCESS_SPECIFIC | INHERIT_FULL },
+    { &GUID_NULL, VIEW_PERMS_PERM,      L"View permissions",                SI_ACCESS_SPECIFIC | INHERIT_FULL },
+    { &GUID_NULL, CHANGE_PERMS_PERM,    L"Change permissions",              SI_ACCESS_SPECIFIC | INHERIT_FULL },
 };
 
 #endif // _CSECINFO_H_

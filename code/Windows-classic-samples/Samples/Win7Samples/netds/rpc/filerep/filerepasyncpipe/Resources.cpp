@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -7,13 +7,13 @@
 
 
 /*
-   
+
 
     FILE: Resources.cpp
-    
+
     PURPOSE: Declarations for resource management routines and
         data structures.
-    
+
     COMMENTS:  See Resources.h for function and data-type info.
 
 */
@@ -27,7 +27,8 @@
 #include "DbgMsg.h"
 #endif
 
-Counter * CounterCreate(UINT Bound) {
+Counter * CounterCreate(UINT Bound)
+{
     Counter * pCounter;
 
 #ifdef DEBUG2
@@ -36,12 +37,13 @@ Counter * CounterCreate(UINT Bound) {
 
     pCounter = (Counter *)AutoHeapAlloc(sizeof(Counter));
 
-    if (pCounter == NULL) {
+    if (pCounter == NULL)
+    {
         return NULL;
     }
 
     pCounter->Value = 0;
-    pCounter->Bound = Bound;    
+    pCounter->Bound = Bound;
 
 #ifdef DEBUG2
     DbgMsgRecord(TEXT("<- CounterCreate\n"));
@@ -50,7 +52,8 @@ Counter * CounterCreate(UINT Bound) {
     return pCounter;
 }
 
-VOID CounterDelete(Counter * pCounter) {
+VOID CounterDelete(Counter * pCounter)
+{
 
 #ifdef DEBUG2
     DbgMsgRecord(TEXT("-> CounterDelete\n"));
@@ -65,7 +68,8 @@ VOID CounterDelete(Counter * pCounter) {
 #endif
 }
 
-BOOL CounterIncrement(Counter *pCounter) {
+BOOL CounterIncrement(Counter *pCounter)
+{
     BOOL ret = FALSE;
 
 #ifdef DEBUG2
@@ -75,11 +79,13 @@ BOOL CounterIncrement(Counter *pCounter) {
     ASSERT(pCounter != NULL);
 
     // Check for the bound.
-    if (InterlockedIncrement(&pCounter->Value) > pCounter->Bound) {
+    if (InterlockedIncrement(&pCounter->Value) > pCounter->Bound)
+    {
         ret = FALSE;
         InterlockedDecrement(&pCounter->Value);
     }
-    else {
+    else
+    {
         ret = TRUE;
     }
 
@@ -90,7 +96,8 @@ BOOL CounterIncrement(Counter *pCounter) {
     return ret;
 }
 
-VOID CounterDecrement(Counter *pCounter) {
+VOID CounterDecrement(Counter *pCounter)
+{
 
 #ifdef DEBUG2
     DbgMsgRecord(TEXT("-> CounterDecrement\n"));
@@ -106,15 +113,18 @@ VOID CounterDecrement(Counter *pCounter) {
 
 }
 
-BOOL CountersCreate(Counter *pCounters[], UINT n, UINT * Bounds) {
+BOOL CountersCreate(Counter *pCounters[], UINT n, UINT * Bounds)
+{
     BOOL ret = FALSE;
 
 #ifdef DEBUG2
     DbgMsgRecord(TEXT("-> CountersCreate\n"));
 #endif
 
-    for (UINT i=0; i<n; i++) {
-        if ((pCounters[i] = CounterCreate(Bounds[i])) == NULL) {
+    for (UINT i=0; i<n; i++)
+    {
+        if ((pCounters[i] = CounterCreate(Bounds[i])) == NULL)
+        {
             CountersDelete(pCounters, i-1);
             ret = FALSE;
             break;
@@ -129,13 +139,15 @@ BOOL CountersCreate(Counter *pCounters[], UINT n, UINT * Bounds) {
     return ret;
 }
 
-VOID CountersDelete(Counter *pCounters[], UINT n) {
+VOID CountersDelete(Counter *pCounters[], UINT n)
+{
 
 #ifdef DEBUG2
     DbgMsgRecord(TEXT("-> CountersDelete\n"));
 #endif
 
-    for (UINT i=0; i<n; i++) {
+    for (UINT i=0; i<n; i++)
+    {
         ASSERT(pCounters[i] != NULL);
         CounterDelete(pCounters[i]);
         pCounters[i] = NULL;
@@ -146,17 +158,21 @@ VOID CountersDelete(Counter *pCounters[], UINT n) {
 #endif
 }
 
-BOOL CountersCheckForNonzero(Counter *pCounters[], UINT n) {
-    for (UINT i=0; i<n; i++) {
+BOOL CountersCheckForNonzero(Counter *pCounters[], UINT n)
+{
+    for (UINT i=0; i<n; i++)
+    {
         ASSERT(pCounters[i] != NULL);
-        if (pCounters[i]->Value != 0) {
+        if (pCounters[i]->Value != 0)
+        {
             return TRUE;
         }
     }
     return FALSE;
 }
 
-Queue * QueueCreate(BOOL NoCritSec) {
+Queue * QueueCreate(BOOL NoCritSec)
+{
     Queue * pQueue;
 
 #ifdef DEBUG2
@@ -165,20 +181,24 @@ Queue * QueueCreate(BOOL NoCritSec) {
 
     pQueue = (Queue *)AutoHeapAlloc(sizeof(Queue));
 
-    if (pQueue == NULL) {
+    if (pQueue == NULL)
+    {
         AddToMessageLog(TEXT("QueueCreate: AutoHeapAlloc failed"));
         return NULL;
     }
 
     pQueue->pFirst = NULL;
-    pQueue->pLast = NULL;    
+    pQueue->pLast = NULL;
 
-    if (NoCritSec) {
+    if (NoCritSec)
+    {
         pQueue->lpCriticalSection = NULL;
     }
-    else {
+    else
+    {
         pQueue->lpCriticalSection = (LPCRITICAL_SECTION) AutoHeapAlloc(sizeof(CRITICAL_SECTION));
-        if (InitializeCriticalSectionAndSpinCount(pQueue->lpCriticalSection, 100) == 0) {
+        if (InitializeCriticalSectionAndSpinCount(pQueue->lpCriticalSection, 100) == 0)
+        {
             AddToMessageLogProcFailure(TEXT("QueueCreate: InitializeCriticalSectionAndSpinCount"), GetLastError());
             QueueDelete(pQueue);
             return NULL;
@@ -192,7 +212,8 @@ Queue * QueueCreate(BOOL NoCritSec) {
     return pQueue;
 }
 
-VOID QueueDelete(Queue * pQueue) {
+VOID QueueDelete(Queue * pQueue)
+{
     QueueNode *pNextNode;
 
 #ifdef DEBUG2
@@ -201,19 +222,22 @@ VOID QueueDelete(Queue * pQueue) {
 
     ASSERT(pQueue != NULL);
 
-    if (pQueue->lpCriticalSection != NULL) {
+    if (pQueue->lpCriticalSection != NULL)
+    {
         DeleteCriticalSection(pQueue->lpCriticalSection);
         AutoHeapFree(pQueue->lpCriticalSection);
     }
-    
-    if (pQueue->pFirst != NULL) {
-        for (QueueNode *pNode = pQueue->pFirst; pNode != NULL; pNode = pNextNode) {
+
+    if (pQueue->pFirst != NULL)
+    {
+        for (QueueNode *pNode = pQueue->pFirst; pNode != NULL; pNode = pNextNode)
+        {
             pNextNode = pNode->pNext;
             AutoHeapFree(pNode->pData);
             AutoHeapFree(pNode);
         }
     }
-    
+
     AutoHeapFree(pQueue);
 
 #ifdef DEBUG2
@@ -221,10 +245,11 @@ VOID QueueDelete(Queue * pQueue) {
 #endif
 }
 
-BOOL QueueIsEmpty(Queue * pQueue) {
+BOOL QueueIsEmpty(Queue * pQueue)
+{
     BOOL Ret = FALSE;
 
-    ASSERT(pQueue != NULL);    
+    ASSERT(pQueue != NULL);
 
     if (pQueue->lpCriticalSection != NULL) EnterCriticalSection(pQueue->lpCriticalSection);
 
@@ -237,7 +262,8 @@ BOOL QueueIsEmpty(Queue * pQueue) {
     return Ret;
 }
 
-VOID QueueAdd(Queue *pQueue, VOID *pData, BOOL EnterCritSec) {
+VOID QueueAdd(Queue *pQueue, VOID *pData, BOOL EnterCritSec)
+{
 
     ASSERT(pQueue != NULL);
 
@@ -246,7 +272,8 @@ VOID QueueAdd(Queue *pQueue, VOID *pData, BOOL EnterCritSec) {
 #endif
 
     QueueNode * pNode = (QueueNode *) AutoHeapAlloc(sizeof(QueueNode));
-    if (pNode == NULL) {
+    if (pNode == NULL)
+    {
         AddToMessageLog(TEXT("QueueAdd: AutoHeapAlloc failed"));
         return;
     }
@@ -256,12 +283,14 @@ VOID QueueAdd(Queue *pQueue, VOID *pData, BOOL EnterCritSec) {
 
     if (pQueue->lpCriticalSection != NULL && EnterCritSec) EnterCriticalSection(pQueue->lpCriticalSection);
 
-    if (pQueue->pFirst == NULL) {
+    if (pQueue->pFirst == NULL)
+    {
         //ASSERT(pQueue->pLast == NULL);
         pQueue->pFirst = pNode;
         pQueue->pLast = pNode;
     }
-    else {
+    else
+    {
         ASSERT(pQueue->pLast->pNext == NULL);
         pQueue->pLast->pNext = pNode;
         pQueue->pLast = pNode;
@@ -274,7 +303,8 @@ VOID QueueAdd(Queue *pQueue, VOID *pData, BOOL EnterCritSec) {
     if (pQueue->lpCriticalSection != NULL && EnterCritSec) LeaveCriticalSection(pQueue->lpCriticalSection);
 }
 
-VOID * QueueRemove(Queue *pQueue) {
+VOID * QueueRemove(Queue *pQueue)
+{
     VOID * pData;
     QueueNode *pFuturepFirst;
     VOID * pToFree;
@@ -287,7 +317,8 @@ VOID * QueueRemove(Queue *pQueue) {
     DbgMsgRecord(TEXT("-> QueueRemove\n"));
 #endif
 
-    if (pQueue->pFirst == NULL) {
+    if (pQueue->pFirst == NULL)
+    {
         ASSERT(pQueue->pFirst == pQueue->pLast);
 
         if (pQueue->lpCriticalSection != NULL) LeaveCriticalSection(pQueue->lpCriticalSection);
@@ -297,7 +328,8 @@ VOID * QueueRemove(Queue *pQueue) {
     pData = pQueue->pFirst->pData;
     pFuturepFirst = pQueue->pFirst->pNext;
 
-    if (pFuturepFirst == NULL) {
+    if (pFuturepFirst == NULL)
+    {
         pQueue->pLast = NULL;
     }
 
@@ -315,11 +347,12 @@ VOID * QueueRemove(Queue *pQueue) {
     return pData;
 }
 
-VOID * QueueRemoveData(Queue *pQueue, VOID *pData) {
+VOID * QueueRemoveData(Queue *pQueue, VOID *pData)
+{
     QueueNode *pFuturepFirst = NULL;
     VOID *pToFree = NULL;
     QueueNode *pNodeToFree = NULL;
-    QueueNode *pPrevNode = NULL; 
+    QueueNode *pPrevNode = NULL;
 
     ASSERT(pQueue != NULL);
 
@@ -331,24 +364,29 @@ VOID * QueueRemoveData(Queue *pQueue, VOID *pData) {
 
     // Find a node to remove.
     // Walk the queue of active client requests
-    for (QueueNode *pNode = pQueue->pFirst; pNode != NULL; pNode = pNode->pNext) {
-        if (pNode->pData == pData) {
-	  // If this is not the first node
-	  if (pPrevNode) {
-	    pPrevNode->pNext = pNode->pNext;
-	    if (pQueue->pLast == pNode) {
-	      ASSERT(pNode->pNext == NULL);
-	      pQueue->pLast = pPrevNode;
-	    }
-	  }
-	  else {
-	    pQueue->pFirst = pNode->pNext;
-	  }
-	  pToFree = pNode;
-	  break;
+    for (QueueNode *pNode = pQueue->pFirst; pNode != NULL; pNode = pNode->pNext)
+    {
+        if (pNode->pData == pData)
+        {
+            // If this is not the first node
+            if (pPrevNode)
+            {
+                pPrevNode->pNext = pNode->pNext;
+                if (pQueue->pLast == pNode)
+                {
+                    ASSERT(pNode->pNext == NULL);
+                    pQueue->pLast = pPrevNode;
+                }
+            }
+            else
+            {
+                pQueue->pFirst = pNode->pNext;
+            }
+            pToFree = pNode;
+            break;
         }
 
-	pPrevNode = pNode;
+        pPrevNode = pNode;
     }
 
 #ifdef DEBUG2
@@ -362,7 +400,8 @@ VOID * QueueRemoveData(Queue *pQueue, VOID *pData) {
     return pData;
 }
 
-VOID QueueMoveToBack(Queue *pQueue, QueueNode *pNode, QueueNode *pPrevNode) {
+VOID QueueMoveToBack(Queue *pQueue, QueueNode *pNode, QueueNode *pPrevNode)
+{
 
     ASSERT(pQueue != NULL);
     ASSERT(pNode != NULL);
@@ -370,27 +409,32 @@ VOID QueueMoveToBack(Queue *pQueue, QueueNode *pNode, QueueNode *pPrevNode) {
     if (pQueue->lpCriticalSection != NULL) EnterCriticalSection(pQueue->lpCriticalSection);
 
     // If it is the first element.
-    if (pPrevNode == NULL) {
+    if (pPrevNode == NULL)
+    {
         pQueue->pFirst = pNode->pNext;
     }
     // If it has a predecessor in the queue
-    else {
+    else
+    {
         pPrevNode->pNext = pNode->pNext;
     }
-    
+
     // If it is the last element.
-    if (pNode->pNext == NULL) {
+    if (pNode->pNext == NULL)
+    {
         if (pQueue->lpCriticalSection != NULL) LeaveCriticalSection(pQueue->lpCriticalSection);
         return;
     }
-    
+
     // Put the subqueue onto the back of the queue.
     pNode->pNext = NULL;
-    if (QueueIsEmpty(pQueue)) {
+    if (QueueIsEmpty(pQueue))
+    {
         pQueue->pFirst = pNode;
         pQueue->pLast = pNode;
     }
-    else {
+    else
+    {
         pQueue->pLast->pNext = pNode;
         pQueue->pLast = pNode;
     }
@@ -398,15 +442,18 @@ VOID QueueMoveToBack(Queue *pQueue, QueueNode *pNode, QueueNode *pPrevNode) {
     if (pQueue->lpCriticalSection != NULL) LeaveCriticalSection(pQueue->lpCriticalSection);
 }
 
-BOOL QueuesCreate(Queue *Queues[], UINT n, BOOL NoCritSec) {
+BOOL QueuesCreate(Queue *Queues[], UINT n, BOOL NoCritSec)
+{
     BOOL ret = FALSE;
 
 #ifdef DEBUG2
     DbgMsgRecord(TEXT("-> QueuesCreate\n"));
 #endif
 
-    for (UINT i=0; i<n; i++) {
-        if ((Queues[i] = QueueCreate(NoCritSec)) == NULL) {
+    for (UINT i=0; i<n; i++)
+    {
+        if ((Queues[i] = QueueCreate(NoCritSec)) == NULL)
+        {
             QueuesDelete(Queues, i-1);
             ret = FALSE;
             break;
@@ -422,13 +469,15 @@ BOOL QueuesCreate(Queue *Queues[], UINT n, BOOL NoCritSec) {
     return ret;
 }
 
-VOID QueuesDelete(Queue *Queues[], UINT n) {
+VOID QueuesDelete(Queue *Queues[], UINT n)
+{
 
 #ifdef DEBUG2
     DbgMsgRecord(TEXT("-> QueuesDelete\n"));
 #endif
 
-    for (UINT i=0; i<n; i++) {
+    for (UINT i=0; i<n; i++)
+    {
         QueueDelete(Queues[i]);
         Queues[i] = NULL;
     }
@@ -439,7 +488,8 @@ VOID QueuesDelete(Queue *Queues[], UINT n) {
 
 }
 
-VOID QueueHashAdd(Queue *pQueue, PSID Sid, VOID *pValue, BOOL EnterCritSec) {
+VOID QueueHashAdd(Queue *pQueue, PSID Sid, VOID *pValue, BOOL EnterCritSec)
+{
     QueueHashNode *pQueueHashNode;
     DWORD SidLength;
 
@@ -457,18 +507,20 @@ VOID QueueHashAdd(Queue *pQueue, PSID Sid, VOID *pValue, BOOL EnterCritSec) {
 
     // We need to copy the key so that if the original
     // copy gets deallocated we still have one.
-    if ((pQueueHashNode->pKey = AutoHeapAlloc(SidLength)) == NULL) {
+    if ((pQueueHashNode->pKey = AutoHeapAlloc(SidLength)) == NULL)
+    {
         AddToMessageLog(TEXT("QueueHashAdd: AutoHeapAlloc failed"));
 
         if (pQueue->lpCriticalSection != NULL && EnterCritSec) LeaveCriticalSection(pQueue->lpCriticalSection);
         return;
     }
 
-    if (CopySid(SidLength, pQueueHashNode->pKey, Sid) == 0) {
+    if (CopySid(SidLength, pQueueHashNode->pKey, Sid) == 0)
+    {
         AddToMessageLogProcFailure(TEXT("QueueHashAdd: CopySid"), GetLastError());
 
         if (pQueue->lpCriticalSection != NULL && EnterCritSec) LeaveCriticalSection(pQueue->lpCriticalSection);
-        return;    
+        return;
     }
 
     pQueueHashNode->pValue = pValue;
@@ -482,7 +534,8 @@ VOID QueueHashAdd(Queue *pQueue, PSID Sid, VOID *pValue, BOOL EnterCritSec) {
     if (pQueue->lpCriticalSection != NULL && EnterCritSec) LeaveCriticalSection(pQueue->lpCriticalSection);
 }
 
-VOID * QueueHashLookup(Queue *pQueue, PSID Sid, BOOL EnterCritSec) {
+VOID * QueueHashLookup(Queue *pQueue, PSID Sid, BOOL EnterCritSec)
+{
     VOID * pValue;
     QueueNode *pNextNode;
 
@@ -496,9 +549,11 @@ VOID * QueueHashLookup(Queue *pQueue, PSID Sid, BOOL EnterCritSec) {
 
     pValue = NULL;
 
-    for (QueueNode *pNode = pQueue->pFirst; pNode != NULL; pNode = pNextNode) {
+    for (QueueNode *pNode = pQueue->pFirst; pNode != NULL; pNode = pNextNode)
+    {
         pNextNode = pNode->pNext;
-        if (EqualSid(((QueueHashNode *)(pNode->pData))->pKey, Sid) == TRUE) {
+        if (EqualSid(((QueueHashNode *)(pNode->pData))->pKey, Sid) == TRUE)
+        {
             pValue = ((QueueHashNode *)(pNode->pData))->pValue;
             break;
         }
@@ -513,7 +568,8 @@ VOID * QueueHashLookup(Queue *pQueue, PSID Sid, BOOL EnterCritSec) {
     return pValue;
 }
 
-VOID QueueHashAddToSubqueue(Queue *pHashQueue, PSID pSID, VOID * pData) {
+VOID QueueHashAddToSubqueue(Queue *pHashQueue, PSID pSID, VOID * pData)
+{
 
     ASSERT(pHashQueue != NULL);
 
@@ -528,16 +584,18 @@ VOID QueueHashAddToSubqueue(Queue *pHashQueue, PSID pSID, VOID * pData) {
     // Lookup the subqueue for the user's sid.
     Queue * pQueue = (Queue *) QueueHashLookup(pHashQueue, pSID, FALSE);
     // If the subqueue does not exist, create it.
-    if (pQueue == NULL) {
-        if ((pQueue = QueueCreate(TRUE)) == NULL) {
+    if (pQueue == NULL)
+    {
+        if ((pQueue = QueueCreate(TRUE)) == NULL)
+        {
             AddToMessageLog(TEXT("QueueHashAddToSubqueue: QueueCreate failed"));
             if (pHashQueue->lpCriticalSection != NULL) LeaveCriticalSection(pHashQueue->lpCriticalSection);
             return;
-	}
+        }
         QueueHashAdd(pHashQueue, pSID, pQueue, FALSE);
     }
     // Add the request to the subqueue
-    QueueAdd(pQueue, pData, FALSE);   
+    QueueAdd(pQueue, pData, FALSE);
 
 #ifdef DEBUG2
     DbgMsgRecord(TEXT("<- QueueHashAddToSubqueue\n"));
@@ -546,7 +604,8 @@ VOID QueueHashAddToSubqueue(Queue *pHashQueue, PSID pSID, VOID * pData) {
     if (pHashQueue->lpCriticalSection != NULL) LeaveCriticalSection(pHashQueue->lpCriticalSection);
 }
 
-VOID * QueueHashRemoveFromSubqueue(Queue *pQueue) {
+VOID * QueueHashRemoveFromSubqueue(Queue *pQueue)
+{
     Queue * pSubQueue;
     QueueNode *pPrevNode;
     VOID * pData;
@@ -562,13 +621,16 @@ VOID * QueueHashRemoveFromSubqueue(Queue *pQueue) {
 #endif
 
     // If the hash queue is not empty.
-    if (pQueue->pFirst != NULL) {
+    if (pQueue->pFirst != NULL)
+    {
         // Find the first nonempty subqueue.
         pPrevNode = NULL;
-        for (QueueNode *pNode = pQueue->pFirst; pNode != NULL; pNode = pNode->pNext) {
+        for (QueueNode *pNode = pQueue->pFirst; pNode != NULL; pNode = pNode->pNext)
+        {
 
             // Check if it has elements in it.
-            if (!QueueIsEmpty((Queue*) ((QueueHashNode *)pNode->pData)->pValue)) {
+            if (!QueueIsEmpty((Queue*) ((QueueHashNode *)pNode->pData)->pValue))
+            {
                 // Select it.  We will extract an element off this subqueue
                 // and put the subqueue into the end of the hash queue.
                 pSubQueue = (Queue*) ((QueueHashNode *)pNode->pData)->pValue;
@@ -582,17 +644,20 @@ VOID * QueueHashRemoveFromSubqueue(Queue *pQueue) {
 
             pPrevNode = pNode;
         }
-        if (pSubQueue == NULL) {
+        if (pSubQueue == NULL)
+        {
             // We did not find any nonemoty subqueues.
             pData = NULL;
         }
     }
-    else {
+    else
+    {
         // There are no nonempty subqueues.
         pData = NULL;
     }
 
-    if (pSubQueue != NULL) {
+    if (pSubQueue != NULL)
+    {
         // Extract an element from the subqueue.
         pData = QueueRemove(pSubQueue);
     }
@@ -606,7 +671,8 @@ VOID * QueueHashRemoveFromSubqueue(Queue *pQueue) {
     return pData;
 }
 
-BOOL QueueHashIncrementCounter(Queue *pHashQueue, PSID pSID) {
+BOOL QueueHashIncrementCounter(Queue *pHashQueue, PSID pSID)
+{
     Counter *pCounter;
     BOOL ret;
 
@@ -622,8 +688,10 @@ BOOL QueueHashIncrementCounter(Queue *pHashQueue, PSID pSID) {
     // Lookup the counter for the user's sid.
     pCounter = (Counter *) QueueHashLookup(pHashQueue, pSID, FALSE);
     // If the counter does not exist, create it.
-    if (pCounter == NULL) {
-        if ((pCounter = CounterCreate(MaxUserReqs)) == NULL) {
+    if (pCounter == NULL)
+    {
+        if ((pCounter = CounterCreate(MaxUserReqs)) == NULL)
+        {
             AddToMessageLog(TEXT("QueueHashIncrementCounter: CounterCreate failed"));
             if (pHashQueue->lpCriticalSection != NULL) LeaveCriticalSection(pHashQueue->lpCriticalSection);
             return FALSE;
@@ -631,7 +699,7 @@ BOOL QueueHashIncrementCounter(Queue *pHashQueue, PSID pSID) {
         QueueHashAdd(pHashQueue, pSID, pCounter, FALSE);
     }
     // Attempt to increment the counter
-    ret = CounterIncrement(pCounter);   
+    ret = CounterIncrement(pCounter);
 
 #ifdef DEBUG2
     DbgMsgRecord(TEXT("<- QueueHashIncrementCounter\n"));
@@ -642,7 +710,8 @@ BOOL QueueHashIncrementCounter(Queue *pHashQueue, PSID pSID) {
     return ret;
 }
 
-VOID QueueHashDecrementCounter(Queue *pHashQueue, PSID pSID) {
+VOID QueueHashDecrementCounter(Queue *pHashQueue, PSID pSID)
+{
     Counter *pCounter;
 
     ASSERT(pHashQueue != NULL);
@@ -657,8 +726,10 @@ VOID QueueHashDecrementCounter(Queue *pHashQueue, PSID pSID) {
     // Lookup the counter for the user's sid.
     pCounter = (Counter *) QueueHashLookup(pHashQueue, pSID, FALSE);
     // If the counter does not exist, create it.
-    if (pCounter == NULL) {
-        if ((pCounter = CounterCreate(MaxUserReqs)) == NULL) {
+    if (pCounter == NULL)
+    {
+        if ((pCounter = CounterCreate(MaxUserReqs)) == NULL)
+        {
             AddToMessageLog(TEXT("QueueHashIncrementCounter: CounterCreate failed"));
             if (pHashQueue->lpCriticalSection != NULL) LeaveCriticalSection(pHashQueue->lpCriticalSection);
             return;
@@ -666,7 +737,7 @@ VOID QueueHashDecrementCounter(Queue *pHashQueue, PSID pSID) {
         QueueHashAdd(pHashQueue, pSID, pCounter, FALSE);
     }
     // Decrement the counter.
-    CounterDecrement(pCounter);   
+    CounterDecrement(pCounter);
 
 #ifdef DEBUG2
     DbgMsgRecord(TEXT("<- QueueHashDecrementCounter\n"));

@@ -1,9 +1,9 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
 //
-// Copyright � Microsoft Corporation. All rights reserved
+// Copyright © Microsoft Corporation. All rights reserved
 
 /****************************************************************************
 *   SimpleDictation.h
@@ -24,13 +24,13 @@ class CSimpleDict
 {
 public:
     CSimpleDict( HINSTANCE hInstance ) :
-            m_hInstance( hInstance ),
-            m_bGotReco( FALSE ),
-            m_bInSound( FALSE )
+        m_hInstance( hInstance ),
+        m_bGotReco( FALSE ),
+        m_bInSound( FALSE )
     {}
 
     static LRESULT CALLBACK CSimpleDict::SimpleDictDlgProc( HWND, UINT, WPARAM, LPARAM );
-                                    // Message handler
+    // Message handler
     bool InitDialog( HWND hDlg );   // Starts up SR
     void RecoEvent();               // Called whenever dialog process is notified of recognition
 

@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -36,44 +36,44 @@ public:
     {
         UINT32 storyboardIdScheduled;
         HRESULT hr = UIAnimation_GetStoryboardTag(
-            pStoryboardScheduled,
-            STORYBOARD_ID_NONE,
-            NULL,
-            &storyboardIdScheduled
-            );
+                         pStoryboardScheduled,
+                         STORYBOARD_ID_NONE,
+                         NULL,
+                         &storyboardIdScheduled
+                     );
 
         if (SUCCEEDED(hr))
-        {        
+        {
             UINT32 storyboardIdNew;
             hr = UIAnimation_GetStoryboardTag(
-                pStoryboardNew,
-                STORYBOARD_ID_NONE,
-                NULL,
-                &storyboardIdNew
-                );
-            
+                     pStoryboardNew,
+                     STORYBOARD_ID_NONE,
+                     NULL,
+                     &storyboardIdNew
+                 );
+
             if (SUCCEEDED(hr))
             {
                 bool fHasPriority = HasPriority(
-                    storyboardIdScheduled,
-                    storyboardIdNew,
-                    priorityEffect
-                    );
-                    
+                                        storyboardIdScheduled,
+                                        storyboardIdNew,
+                                        priorityEffect
+                                    );
+
                 hr = (fHasPriority ? S_OK : S_FALSE);
             }
         }
 
         return hr;
     }
-    
+
 protected:
 
     virtual bool HasPriority(
         UINT32 storyboardIdScheduled,
         UINT32 storyboardIdNew,
         UI_ANIMATION_PRIORITY_EFFECT priorityEffect
-        ) = 0;
+    ) = 0;
 };
 
 class CCancelPriorityComparison :
@@ -85,16 +85,16 @@ public:
         UINT32 storyboardIdScheduled,
         UINT32 /* storyboardIdNew */,
         UI_ANIMATION_PRIORITY_EFFECT /* priorityEffect */
-        )
+    )
     {
         // In this application, storyboards are canceled to avoid failure or delay
 
         // By default, storyboards cannot cancel other storyboards
-        
+
         bool fHasPriority = false;
-        
+
         // SLIDE_AFTER_WAVE can be canceled by any other storyboard
-        
+
         if (storyboardIdScheduled == STORYBOARD_ID_SLIDE_AFTER_WAVE)
         {
             fHasPriority = true;
@@ -113,23 +113,23 @@ public:
         UINT32 storyboardIdScheduled,
         UINT32 storyboardIdNew,
         UI_ANIMATION_PRIORITY_EFFECT priorityEffect
-        )
+    )
     {
         bool fHasPriority = false;
-        
+
         // In this application, storyboards are trimmed only to avoid failure
 
         if (priorityEffect == UI_ANIMATION_PRIORITY_EFFECT_FAILURE)
         {
             // By default, storyboards can trim other storyboards
-            
+
             fHasPriority = true;
-            
+
             if (storyboardIdScheduled == STORYBOARD_ID_SLIDE_AFTER_WAVE &&
-                storyboardIdNew == STORYBOARD_ID_WAVE)
+                    storyboardIdNew == STORYBOARD_ID_WAVE)
             {
                 // WAVE can trim SLIDE_AFTER_WAVE
-                
+
                 fHasPriority = true;
             }
             else
@@ -139,9 +139,9 @@ public:
                 case STORYBOARD_ID_SLIDE:
                 case STORYBOARD_ID_SLIDE_AFTER_WAVE:
                 case STORYBOARD_ID_WAVE:
-                    
+
                     // Otherwise, SLIDE, SLIDE_AFTER_WAVE, and WAVE cannot trim each other
-                    
+
                     switch (storyboardIdScheduled)
                     {
                     case STORYBOARD_ID_SLIDE:
@@ -150,7 +150,7 @@ public:
                         fHasPriority = false;
                         break;
                     }
-                    
+
                     break;
                 }
             }

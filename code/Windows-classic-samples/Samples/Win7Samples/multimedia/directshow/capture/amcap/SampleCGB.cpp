@@ -1,4 +1,4 @@
-//------------------------------------------------------------------------------
+﻿//------------------------------------------------------------------------------
 // File: SampleCGB.cpp
 //
 // Desc: DirectShow sample code - Sample capture graph builder class
@@ -31,17 +31,17 @@
 // |                   v|   --->  |                                     |    |             |
 // | Capture Filter     |         | Audio / video encoder & Multiplexer |  ->| MPEG2 demux |
 // |                   a|   --->  |                                     |    |             |
-// ----------------------         ---------------------------------------    ---------------    
+// ----------------------         ---------------------------------------    ---------------
 //
 //
 //
 //
 //
-//                        -> audio encoder -> 
+//                        -> audio encoder ->
 //  2. capture filter                           multiplexer -> MPEG2 demux
-//                        -> video encoder ->   
+//                        -> video encoder ->
 //
-//  -----------------------     -----------------    ----------------     ---------------   
+//  -----------------------     -----------------    ----------------     ---------------
 //  |                    a|  -> | audio encoder | -> |              |     |             |
 //  |                     |     -----------------    |              |     |             |
 //  | capture filter      |                          |  multiplexer |  -> | MPEG2 demux |
@@ -57,7 +57,7 @@
 //  3.  capture filter      - audio & video encoder -> multiplexer -> MPEG2 demux
 //                      v
 //
-//  -----------------------     -----------------    ----------------     ---------------   
+//  -----------------------     -----------------    ----------------     ---------------
 //  |                    a|  -> | audio encoder | -> |              |     |             |
 //  |                     |     |               |    |              |     |             |
 //  | capture filter      |     |               |    |  multiplexer |  -> | MPEG2 demux |
@@ -74,30 +74,31 @@
 // |                   MPEG2 PS | --->  |              |
 // | Capture Filter             |       | MPEG2 demux  |
 // |                            |       |              |
-// ------------------------------       ----------------    
+// ------------------------------       ----------------
 //
 //
 
 
 //
-//  How the algorithm works: 
-//      1. the video pin doesn't stream MPEG2    
-//          1. tries to connect the pin to an encoder   
+//  How the algorithm works:
+//      1. the video pin doesn't stream MPEG2
+//          1. tries to connect the pin to an encoder
 //          2. tries to connect the encoder directly to the MPEG2 demux
-//          3. if not possible, tries to find a multiplexor that can be connected to the 
+//          3. if not possible, tries to find a multiplexor that can be connected to the
 //             encoder and MPEG2 demux
-//          4. connect audio pin to the MPEG2 demux using the same algorithm as in 
+//          4. connect audio pin to the MPEG2 demux using the same algorithm as in
 //             video pin case
-//           
+//
 //      2. if pin streams MPEG2 PS, then connect it to the MPEG2 demux
 //      3. program the MPEG2 demux
-//      4. render the video and the audio pin from the MPEG2 demux      
-//      
+//      4. render the video and the audio pin from the MPEG2 demux
+//
 
 
-static 
+static
 BYTE
-Mpeg2ProgramVideo [] = {
+Mpeg2ProgramVideo [] =
+{
     0x00, 0x00, 0x00, 0x00,                         //  .hdr.rcSource.left              = 0x00000000
     0x00, 0x00, 0x00, 0x00,                         //  .hdr.rcSource.top               = 0x00000000
     0xD0, 0x02, 0x00, 0x00,                         //  .hdr.rcSource.right             = 0x000002d0
@@ -131,24 +132,25 @@ Mpeg2ProgramVideo [] = {
     0x02, 0x00, 0x00, 0x00,                         //  .dwProfile                      = 0x00000002
     0x02, 0x00, 0x00, 0x00,                         //  .dwLevel                        = 0x00000002
     0x00, 0x00, 0x00, 0x00,                         //  .Flags                          = 0x00000000
-                                                    //  .dwSequenceHeader [1]
+    //  .dwSequenceHeader [1]
     0x00, 0x00, 0x01, 0xB3, 0x2D, 0x01, 0xE0, 0x24,
-    0x09, 0xC4, 0x23, 0x81, 0x10, 0x11, 0x11, 0x12, 
-    0x12, 0x12, 0x13, 0x13, 0x13, 0x13, 0x14, 0x14, 
-    0x14, 0x14, 0x14, 0x15, 0x15, 0x15, 0x15, 0x15, 
-    0x15, 0x16, 0x16, 0x16, 0x16, 0x16, 0x16, 0x16, 
-    0x17, 0x17, 0x17, 0x17, 0x17, 0x17, 0x17, 0x17, 
-    0x18, 0x18, 0x18, 0x19, 0x18, 0x18, 0x18, 0x19, 
-    0x1A, 0x1A, 0x1A, 0x1A, 0x19, 0x1B, 0x1B, 0x1B, 
-    0x1B, 0x1B, 0x1C, 0x1C, 0x1C, 0x1C, 0x1E, 0x1E, 
-    0x1E, 0x1F, 0x1F, 0x21, 0x00, 0x00, 0x01, 0xB5, 
+    0x09, 0xC4, 0x23, 0x81, 0x10, 0x11, 0x11, 0x12,
+    0x12, 0x12, 0x13, 0x13, 0x13, 0x13, 0x14, 0x14,
+    0x14, 0x14, 0x14, 0x15, 0x15, 0x15, 0x15, 0x15,
+    0x15, 0x16, 0x16, 0x16, 0x16, 0x16, 0x16, 0x16,
+    0x17, 0x17, 0x17, 0x17, 0x17, 0x17, 0x17, 0x17,
+    0x18, 0x18, 0x18, 0x19, 0x18, 0x18, 0x18, 0x19,
+    0x1A, 0x1A, 0x1A, 0x1A, 0x19, 0x1B, 0x1B, 0x1B,
+    0x1B, 0x1B, 0x1C, 0x1C, 0x1C, 0x1C, 0x1E, 0x1E,
+    0x1E, 0x1F, 0x1F, 0x21, 0x00, 0x00, 0x01, 0xB5,
     0x14, 0x82, 0x00, 0x01, 0x00, 0x00
 } ;
 
 
 static
 BYTE
-MPEG1AudioFormat [] = {
+MPEG1AudioFormat [] =
+{
     0x50, 0x00, 0x02, 0x00, 0x80, 0xBB, 0x00, 0x00,
     0x00, 0x7D, 0x00, 0x00, 0x00, 0x03, 0x00, 0x00,
     0x16, 0x00, 0x02, 0x00, 0x00, 0xE8, 0x03, 0x00,
@@ -158,58 +160,58 @@ MPEG1AudioFormat [] = {
 
 
 
-HRESULT 
+HRESULT
 ISampleCaptureGraphBuilder::AllocCapFile( LPCOLESTR lpwstr, DWORDLONG dwlSize )
 {
     return graphBuilder2_->AllocCapFile( lpwstr, dwlSize );
 }
 
 
-HRESULT 
+HRESULT
 ISampleCaptureGraphBuilder::ControlStream( const GUID *pCategory,
-                                          const GUID *pType,
-                                          IBaseFilter *pFilter,
-                                          REFERENCE_TIME *pstart,
-                                          REFERENCE_TIME *pstop,
-                                          WORD wStartCookie,
-                                          WORD wStopCookie )
+        const GUID *pType,
+        IBaseFilter *pFilter,
+        REFERENCE_TIME *pstart,
+        REFERENCE_TIME *pstop,
+        WORD wStartCookie,
+        WORD wStopCookie )
 {
-    return graphBuilder2_->ControlStream( pCategory, pType, pFilter, 
+    return graphBuilder2_->ControlStream( pCategory, pType, pFilter,
                                           pstart, pstop, wStartCookie, wStopCookie );
 }
 
 
-HRESULT 
+HRESULT
 ISampleCaptureGraphBuilder::CopyCaptureFile(  LPOLESTR lpwstrOld,
-                                              LPOLESTR lpwstrNew,
-                                              int fAllowEscAbort,
-                                              IAMCopyCaptureFileProgress *pCallback)
+        LPOLESTR lpwstrNew,
+        int fAllowEscAbort,
+        IAMCopyCaptureFileProgress *pCallback)
 {
-    return graphBuilder2_->CopyCaptureFile( lpwstrOld, lpwstrNew, 
+    return graphBuilder2_->CopyCaptureFile( lpwstrOld, lpwstrNew,
                                             fAllowEscAbort, pCallback );
 }
 
 HRESULT ISampleCaptureGraphBuilder::FindInterface(const GUID *pCategory,
-                                                  const GUID *pType,
-                                                  IBaseFilter *pf,
-                                                  REFIID riid,
-                                                  void **ppint
-                                                  )
+        const GUID *pType,
+        IBaseFilter *pf,
+        REFIID riid,
+        void **ppint
+                                                 )
 {
     return graphBuilder2_->FindInterface( pCategory, pType, pf, riid, ppint );
 }
 
-HRESULT 
+HRESULT
 ISampleCaptureGraphBuilder::FindPin( IUnknown *pSource,
-                                      PIN_DIRECTION pindir,
-                                      const GUID *pCategory,
-                                      const GUID *pType,
-                                      BOOL fUnconnected,
-                                      int num,
-                                      IPin **ppPin)
+                                     PIN_DIRECTION pindir,
+                                     const GUID *pCategory,
+                                     const GUID *pType,
+                                     BOOL fUnconnected,
+                                     int num,
+                                     IPin **ppPin)
 {
-    return graphBuilder2_->FindPin( pSource, pindir, pCategory, pType, 
-                                    fUnconnected, num, ppPin ); 
+    return graphBuilder2_->FindPin( pSource, pindir, pCategory, pType,
+                                    fUnconnected, num, ppPin );
 }
 
 
@@ -218,20 +220,20 @@ HRESULT ISampleCaptureGraphBuilder::GetFiltergraph( IGraphBuilder **ppfg )
     return graphBuilder2_->GetFiltergraph( ppfg );
 }
 
-HRESULT 
+HRESULT
 ISampleCaptureGraphBuilder::RenderStream( const GUID *pCategory,
-                                          const GUID *pType,
-                                          IUnknown *pSource,
-                                          IBaseFilter *pIntermediate,
-                                          IBaseFilter *pSink)
+        const GUID *pType,
+        IUnknown *pSource,
+        IBaseFilter *pIntermediate,
+        IBaseFilter *pSink)
 {
     if( !pType ||  !::IsEqualGUID( MEDIATYPE_Stream, *pType ) )
     {
-        return graphBuilder2_->RenderStream( pCategory, pType, pSource, 
+        return graphBuilder2_->RenderStream( pCategory, pType, pSource,
                                              pIntermediate, pSink );
     }
 
-    
+
     HRESULT hr;
     if( !graph_ )
     {
@@ -281,18 +283,18 @@ ISampleCaptureGraphBuilder::RenderStream( const GUID *pCategory,
 }
 
 
-HRESULT 
+HRESULT
 ISampleCaptureGraphBuilder::SetFiltergraph( IGraphBuilder *pfg )
 {
     return graphBuilder2_->SetFiltergraph( pfg );
 }
 
 
-HRESULT 
+HRESULT
 ISampleCaptureGraphBuilder::SetOutputFileName(  const GUID *pType,
-                                                LPCOLESTR lpwstrFile,
-                                                IBaseFilter **ppf,
-                                                IFileSinkFilter **pSink )
+        LPCOLESTR lpwstrFile,
+        IBaseFilter **ppf,
+        IFileSinkFilter **pSink )
 {
     if( ! pType || ! lpwstrFile || !ppf || !pSink )
     {
@@ -323,7 +325,7 @@ ISampleCaptureGraphBuilder::SetOutputFileName(  const GUID *pType,
     {
         return hr;
     }
-    
+
     hr = pDump->SetFileName( lpwstrFile, NULL );
     if( FAILED( hr ) )
     {
@@ -343,7 +345,7 @@ ISampleCaptureGraphBuilder::SetOutputFileName(  const GUID *pType,
         return hr;
     }
 
-    
+
     *pSink = pDump;
     return S_OK;
 }
@@ -366,7 +368,7 @@ BOOL ISampleCaptureGraphBuilder::IsMPEG2Pin( IPin *pPin )
     {
         return FALSE;   // NULL pointer
     }
-    
+
     SmartPtr<IEnumMediaTypes> pMediaTypes;
     HRESULT hr = pPin->EnumMediaTypes( &pMediaTypes );
     if( FAILED( hr ) )
@@ -384,10 +386,10 @@ BOOL ISampleCaptureGraphBuilder::IsMPEG2Pin( IPin *pPin )
     AM_MEDIA_TYPE   *mediaType;
     while( S_OK == pMediaTypes->Next( 1, &mediaType, &fetched ) )
     {
-        if( 
+        if(
             (
                 ::IsEqualGUID( mediaType->majortype, MEDIATYPE_Video ) ||
-                ::IsEqualGUID( mediaType->majortype, MEDIATYPE_Stream ) 
+                ::IsEqualGUID( mediaType->majortype, MEDIATYPE_Stream )
             )
             &&
             (
@@ -415,7 +417,7 @@ BOOL ISampleCaptureGraphBuilder::IsVideoPin( IPin *pPin )
 HRESULT ISampleCaptureGraphBuilder::GetEncodersByCategory( IEnumMoniker **ppEncoders )
 {
     SmartPtr<ICreateDevEnum> pDeviceEnum;
-        
+
     HRESULT hr = CoCreateInstance(CLSID_SystemDeviceEnum, NULL, CLSCTX_INPROC_SERVER, IID_ICreateDevEnum, (void**)&pDeviceEnum);
     if( FAILED( hr ) )
     {
@@ -427,11 +429,11 @@ HRESULT ISampleCaptureGraphBuilder::GetEncodersByCategory( IEnumMoniker **ppEnco
 
 
 
-HRESULT 
+HRESULT
 ISampleCaptureGraphBuilder::GetEncodersByEnumerating(
-                                        IPin *pPin,   
-                                        const REGPINMEDIUM& pinMedium,
-                                        IEnumMoniker **ppEncoders )
+    IPin *pPin,
+    const REGPINMEDIUM& pinMedium,
+    IEnumMoniker **ppEncoders )
 {
     SmartPtr<IFilterMapper2> pFilterMapper2;
 
@@ -441,22 +443,22 @@ ISampleCaptureGraphBuilder::GetEncodersByEnumerating(
         return hr;
     }
 
-    hr = pFilterMapper2->EnumMatchingFilters( 
-                                ppEncoders, 
-                                NULL, 
-                                FALSE, 
-                                0,          //any merit
-                                TRUE, 
-                                0, 
-                                NULL, 
-                                &pinMedium, 
-                                NULL, 
-                                FALSE, 
-                                TRUE, 
-                                0, 
-                                NULL, 
-                                NULL, 
-                                NULL );
+    hr = pFilterMapper2->EnumMatchingFilters(
+             ppEncoders,
+             NULL,
+             FALSE,
+             0,          //any merit
+             TRUE,
+             0,
+             NULL,
+             &pinMedium,
+             NULL,
+             FALSE,
+             TRUE,
+             0,
+             NULL,
+             NULL,
+             NULL );
 
 
     return hr;
@@ -466,10 +468,10 @@ ISampleCaptureGraphBuilder::GetEncodersByEnumerating(
 //
 //  looks for an MPEG2 pin
 //
-HRESULT 
-ISampleCaptureGraphBuilder::FindMPEG2Pin( 
-                        IBaseFilter *pFilter, 
-                        IPin **ppPin )
+HRESULT
+ISampleCaptureGraphBuilder::FindMPEG2Pin(
+    IBaseFilter *pFilter,
+    IPin **ppPin )
 {
     if( !pFilter )
     {
@@ -483,7 +485,7 @@ ISampleCaptureGraphBuilder::FindMPEG2Pin(
     {
         return hr;
     }
-    
+
     SmartPtr<IPin>   pTempPin;
     ULONG           fetched;
     PIN_DIRECTION   dir;
@@ -508,14 +510,14 @@ ISampleCaptureGraphBuilder::FindMPEG2Pin(
 //
 //  search the encoder that has this special medium
 //  video == TRUE -- look for a video pin
-//  video == FALSE -- look for a audio pin  
+//  video == FALSE -- look for a audio pin
 //
-HRESULT ISampleCaptureGraphBuilder::FindPin( 
-            IBaseFilter *pFilter, 
-            const REGPINMEDIUM& regPinMedium, 
-            PIN_DIRECTION direction, 
-            BOOL video,             
-            IPin **ppPin)
+HRESULT ISampleCaptureGraphBuilder::FindPin(
+    IBaseFilter *pFilter,
+    const REGPINMEDIUM& regPinMedium,
+    PIN_DIRECTION direction,
+    BOOL video,
+    IPin **ppPin)
 {
     if( !pFilter )
     {
@@ -528,7 +530,7 @@ HRESULT ISampleCaptureGraphBuilder::FindPin(
     {
         return hr;
     }
-    
+
     SmartPtr<IPin>   pTempPin;
     ULONG           fetched;
     REGPINMEDIUM    regPinMediumTemp;
@@ -557,7 +559,7 @@ HRESULT ISampleCaptureGraphBuilder::FindPin(
         }
 
         if( ::IsEqualGUID( regPinMediumTemp.clsMedium, regPinMedium.clsMedium  ) &&
-            regPinMediumTemp.dw1 == regPinMedium.dw1 )
+                regPinMediumTemp.dw1 == regPinMedium.dw1 )
         {
             (*ppPin) = pTempPin.Detach();
             return S_OK;
@@ -573,10 +575,10 @@ HRESULT ISampleCaptureGraphBuilder::FindPin(
 //  Returns the first one it finds special
 //
 
-HRESULT 
-ISampleCaptureGraphBuilder::GetMedium( 
-                        IPin *pPin, 
-                        REGPINMEDIUM& regPinMedium )
+HRESULT
+ISampleCaptureGraphBuilder::GetMedium(
+    IPin *pPin,
+    REGPINMEDIUM& regPinMedium )
 {
     if( !pPin )
     {
@@ -596,13 +598,13 @@ ISampleCaptureGraphBuilder::GetMedium(
     {
         return hr;
     }
-    
+
     REGPINMEDIUM *pMedium = (REGPINMEDIUM *)(pmi + 1);
     for( ULONG i  = 0; i < pmi->Count; i++ )
     {
         if( !::IsEqualGUID( pMedium->clsMedium, GUID_NULL ) &&
-            !::IsEqualGUID( pMedium->clsMedium, KSMEDIUMSETID_Standard )
-        )
+                !::IsEqualGUID( pMedium->clsMedium, KSMEDIUMSETID_Standard )
+          )
         {
             regPinMedium.clsMedium = pMedium->clsMedium;
             regPinMedium.dw1 = pMedium->dw1;
@@ -622,7 +624,7 @@ ISampleCaptureGraphBuilder::GetMedium(
 
 
 //
-//  Adds the MPEG2 demux and renders 
+//  Adds the MPEG2 demux and renders
 //  the audio and video pin until the end (until the renderers)
 //
 
@@ -631,14 +633,14 @@ HRESULT ISampleCaptureGraphBuilder::AddMPEG2Demux( )
     if( pMPEG2Demux_ )
     {
         //
-        //  Instead of a MPEG2 demux there is a 
+        //  Instead of a MPEG2 demux there is a
         //  dump filter in which the file will be dumped
         //
         return S_OK;
     }
 
     HRESULT hr = CoCreateInstance(CLSID_MPEG2Demultiplexer, NULL, CLSCTX_INPROC_SERVER, IID_IBaseFilter, (void**)&pMPEG2Demux_);
-	if( FAILED( hr ) )
+    if( FAILED( hr ) )
     {
         return hr;
     }
@@ -647,10 +649,10 @@ HRESULT ISampleCaptureGraphBuilder::AddMPEG2Demux( )
 
 
 
-HRESULT 
-ISampleCaptureGraphBuilder::FindVideoPin( 
-                                IBaseFilter *pFilter, 
-                                IPin **ppPin  )
+HRESULT
+ISampleCaptureGraphBuilder::FindVideoPin(
+    IBaseFilter *pFilter,
+    IPin **ppPin  )
 {
     if( !pFilter )
     {
@@ -728,10 +730,10 @@ BOOL ISampleCaptureGraphBuilder::HasMediaType(IPin *pPin,  REFGUID majorType )
 }
 
 
-HRESULT 
-ISampleCaptureGraphBuilder::FindAudioPin( 
-                                IBaseFilter *pFilter, 
-                                IPin **ppPin  )
+HRESULT
+ISampleCaptureGraphBuilder::FindAudioPin(
+    IBaseFilter *pFilter,
+    IPin **ppPin  )
 {
     if( !pFilter )
     {
@@ -762,10 +764,10 @@ ISampleCaptureGraphBuilder::FindAudioPin(
 
 
 
-HRESULT ISampleCaptureGraphBuilder::FindEncoder( 
-                IEnumMoniker *pEncoders, 
-                REGPINMEDIUM pinMedium, 
-                IBaseFilter **ppEncoder  )
+HRESULT ISampleCaptureGraphBuilder::FindEncoder(
+    IEnumMoniker *pEncoders,
+    REGPINMEDIUM pinMedium,
+    IBaseFilter **ppEncoder  )
 {
     if( ! pEncoders )
     {
@@ -773,7 +775,7 @@ HRESULT ISampleCaptureGraphBuilder::FindEncoder(
     }
 
     if( IsEqualGUID( pinMedium.clsMedium, GUID_NULL ) ||
-        IsEqualGUID( pinMedium.clsMedium, KSMEDIUMSETID_Standard ) )
+            IsEqualGUID( pinMedium.clsMedium, KSMEDIUMSETID_Standard ) )
     {
         return E_INVALIDARG;
     }
@@ -784,11 +786,11 @@ HRESULT ISampleCaptureGraphBuilder::FindEncoder(
     ULONG                   fetched;
     SmartPtr<IPin>           pPin;
 
-    while( pFilter.Release(), pMoniker.Release(), 
-           S_OK == pEncoders->Next( 1, &pMoniker, &fetched ) )
+    while( pFilter.Release(), pMoniker.Release(),
+            S_OK == pEncoders->Next( 1, &pMoniker, &fetched ) )
     {
         hr = pMoniker->BindToObject(
-            0, 0, IID_IBaseFilter, reinterpret_cast<void **>( &pFilter ) );
+                 0, 0, IID_IBaseFilter, reinterpret_cast<void **>( &pFilter ) );
         if( FAILED( hr ) )
         {
             continue;
@@ -807,10 +809,10 @@ HRESULT ISampleCaptureGraphBuilder::FindEncoder(
 
 
 
-HRESULT 
-ISampleCaptureGraphBuilder::RenderToMPEG2Demux( 
-                            IPin *pPin, 
-                            IEnumMoniker *pEncoders)
+HRESULT
+ISampleCaptureGraphBuilder::RenderToMPEG2Demux(
+    IPin *pPin,
+    IEnumMoniker *pEncoders)
 {
     if( !pPin || !pEncoders )
     {
@@ -830,7 +832,7 @@ ISampleCaptureGraphBuilder::RenderToMPEG2Demux(
     while( pFilter.Release(), pMoniker.Release(), S_OK == pEncoders->Next( 1, &pMoniker, &fetched ) )
     {
         hr = pMoniker->BindToObject(
-            0, 0, IID_IBaseFilter, reinterpret_cast<void **>( &pFilter ) );
+                 0, 0, IID_IBaseFilter, reinterpret_cast<void **>( &pFilter ) );
         if( FAILED( hr ) )
         {
             continue;
@@ -868,23 +870,23 @@ ISampleCaptureGraphBuilder::RenderToMPEG2Demux(
 //  there is a special one on pPin.
 //  Otherwise, try to render using ICaptureGrapBuilder2
 //  and the encoder that matches this will be the chosen one/
-//  If the encoder is found, then this will be rendered to the 
+//  If the encoder is found, then this will be rendered to the
 //  MPEG2 demux.
 //
 
-HRESULT 
-    ISampleCaptureGraphBuilder::RenderToMPEG2Demux( 
-        IPin *pPin, 
-        const REGPINMEDIUM& pinMedium, 
-        IEnumMoniker *pEncoders 
+HRESULT
+ISampleCaptureGraphBuilder::RenderToMPEG2Demux(
+    IPin *pPin,
+    const REGPINMEDIUM& pinMedium,
+    IEnumMoniker *pEncoders
 )
 {
     //
-    //  The pin has a special medium, 
-    //  there shold be an encoder with the same 
+    //  The pin has a special medium,
+    //  there shold be an encoder with the same
     //  medium
     //
-    SmartPtr< IBaseFilter > pEncoder; 
+    SmartPtr< IBaseFilter > pEncoder;
     HRESULT hr = FindEncoder( pEncoders, pinMedium, &pEncoder );
     if( FAILED( hr ) )
     {
@@ -905,7 +907,7 @@ HRESULT
     }
 
     //
-    //  the video pin was rendered to the same 
+    //  the video pin was rendered to the same
     //  ( hardware? ) encoder with the same mediu
     //
     hr = ConnectEncoderToMPEG2Demux( pEncoder, pinMedium );
@@ -921,7 +923,7 @@ HRESULT
 
 
 
-HRESULT 
+HRESULT
 ISampleCaptureGraphBuilder::RenderToMPEG2Demux( IPin *pPin )
 {
     if( !pPin )
@@ -941,12 +943,12 @@ ISampleCaptureGraphBuilder::RenderToMPEG2Demux( IPin *pPin )
     if( ::IsEqualGUID( pinMedium.clsMedium, GUID_NULL ) )
     {
         //
-        //  Search throgh the codec category 
-        //  
+        //  Search throgh the codec category
+        //
         hr = GetEncodersByCategory( &pEncoders );
         if( FAILED( hr ) )
         {
-                return hr;
+            return hr;
         }
 
         hr = RenderToMPEG2Demux( pPin, pEncoders );
@@ -972,7 +974,7 @@ ISampleCaptureGraphBuilder::RenderToMPEG2Demux( IPin *pPin )
         {
             return S_OK;
         }
-        
+
         pEncoders = NULL;
         hr = GetEncodersByEnumerating( pPin, pinMedium, &pEncoders );
         if( FAILED( hr ) )
@@ -994,10 +996,10 @@ ISampleCaptureGraphBuilder::RenderToMPEG2Demux( IPin *pPin )
 //  pEncoder - the encoder to be connected using a multiplexer
 //
 //
-HRESULT 
-ISampleCaptureGraphBuilder::ConnectEncoderToMPEG2Demux( 
-                IBaseFilter *pEncoder, 
-                const REGPINMEDIUM& pinMedium )
+HRESULT
+ISampleCaptureGraphBuilder::ConnectEncoderToMPEG2Demux(
+    IBaseFilter *pEncoder,
+    const REGPINMEDIUM& pinMedium )
 {
 
     REGPINMEDIUM regPinMedium ;
@@ -1005,12 +1007,12 @@ ISampleCaptureGraphBuilder::ConnectEncoderToMPEG2Demux(
     regPinMedium.dw1 = 0;
     regPinMedium.dw2 = 0;
     //
-    //  try a direct connection between 
+    //  try a direct connection between
     //  codec and MPEG2Demux
     //
-    HRESULT hr = ConnectFilters( 
-                        pEncoder, 
-                        pMPEG2Demux_ );
+    HRESULT hr = ConnectFilters(
+                     pEncoder,
+                     pMPEG2Demux_ );
     if( SUCCEEDED( hr ) )
     {
         return S_OK;
@@ -1018,7 +1020,7 @@ ISampleCaptureGraphBuilder::ConnectEncoderToMPEG2Demux(
 
     //
     //  no luck
-    //  maybe I need a multiplexer 
+    //  maybe I need a multiplexer
     //
     SmartPtr< IEnumMoniker > pMultiplexers;
     hr = GetMultiplexersByCategory( &pMultiplexers );
@@ -1054,12 +1056,12 @@ ISampleCaptureGraphBuilder::ConnectEncoderToMPEG2Demux(
 }
 
 
-HRESULT 
+HRESULT
 ISampleCaptureGraphBuilder::GetMultiplexersByCategory( IEnumMoniker **ppMultiplexers )
 {
     SmartPtr<ICreateDevEnum> pDeviceEnum;
-        
-	HRESULT hr = CoCreateInstance(CLSID_SystemDeviceEnum, NULL, CLSCTX_INPROC_SERVER, IID_ICreateDevEnum, (void**)&pDeviceEnum);
+
+    HRESULT hr = CoCreateInstance(CLSID_SystemDeviceEnum, NULL, CLSCTX_INPROC_SERVER, IID_ICreateDevEnum, (void**)&pDeviceEnum);
     if( FAILED( hr ) )
     {
         return hr;
@@ -1068,19 +1070,19 @@ ISampleCaptureGraphBuilder::GetMultiplexersByCategory( IEnumMoniker **ppMultiple
     return pDeviceEnum->CreateClassEnumerator( KSCATEGORY_MULTIPLEXER, ppMultiplexers, 0 );
 }
 
-HRESULT 
-ISampleCaptureGraphBuilder::GetMultiplexersByFilterMapper( 
-                                    IEnumMoniker **ppMultiplexers, 
-                                    const REGPINMEDIUM& pinMedium  )
+HRESULT
+ISampleCaptureGraphBuilder::GetMultiplexersByFilterMapper(
+    IEnumMoniker **ppMultiplexers,
+    const REGPINMEDIUM& pinMedium  )
 {
     return E_NOTIMPL;
 }
 
 
-HRESULT 
-ISampleCaptureGraphBuilder::ConnectMultiplexerToMPEG2Demux( 
-                                        IBaseFilter *pEncoder, 
-                                        IEnumMoniker *pMultiplexers )
+HRESULT
+ISampleCaptureGraphBuilder::ConnectMultiplexerToMPEG2Demux(
+    IBaseFilter *pEncoder,
+    IEnumMoniker *pMultiplexers )
 {
     if( !pEncoder || !pMultiplexers )
     {
@@ -1092,11 +1094,11 @@ ISampleCaptureGraphBuilder::ConnectMultiplexerToMPEG2Demux(
     ULONG               fetched;
     HRESULT             hr;
 
-    while( pFilter.Release(), pMoniker.Release(), 
-           S_OK == pMultiplexers->Next( 1, &pMoniker, &fetched ) )
+    while( pFilter.Release(), pMoniker.Release(),
+            S_OK == pMultiplexers->Next( 1, &pMoniker, &fetched ) )
     {
         hr = pMoniker->BindToObject(
-            0, 0, IID_IBaseFilter, reinterpret_cast<void **>( &pFilter ) );
+                 0, 0, IID_IBaseFilter, reinterpret_cast<void **>( &pFilter ) );
         if( FAILED( hr ) )
         {
             continue;
@@ -1134,7 +1136,7 @@ ISampleCaptureGraphBuilder::ConnectMultiplexerToMPEG2Demux(
 }
 
 
-HRESULT 
+HRESULT
 ISampleCaptureGraphBuilder::BuildMPEG2Segment(IBaseFilter *pFilter)
 {
 
@@ -1143,7 +1145,7 @@ ISampleCaptureGraphBuilder::BuildMPEG2Segment(IBaseFilter *pFilter)
         return E_FAIL;
     }
 
-    
+
     HRESULT hr = AddMPEG2Demux( );
     if( FAILED( hr ) )
     {
@@ -1151,7 +1153,7 @@ ISampleCaptureGraphBuilder::BuildMPEG2Segment(IBaseFilter *pFilter)
     }
 
     //
-    //  Search a MPEG2 pin on the 
+    //  Search a MPEG2 pin on the
     //  filter
     //
     SmartPtr<IPin> pPin;
@@ -1210,10 +1212,10 @@ ISampleCaptureGraphBuilder::BuildMPEG2Segment(IBaseFilter *pFilter)
 }
 
 
-HRESULT 
-ISampleCaptureGraphBuilder::ConnectAudioPinToMultiplexer( 
-                                            IPin *pPin, 
-                                            IBaseFilter *pMultiplexer)
+HRESULT
+ISampleCaptureGraphBuilder::ConnectAudioPinToMultiplexer(
+    IPin *pPin,
+    IBaseFilter *pMultiplexer)
 {
     if( !pPin || !pMultiplexer )
     {
@@ -1247,15 +1249,15 @@ ISampleCaptureGraphBuilder::ConnectAudioPinToMultiplexer(
         {
             hr = graph_->AddFilter( pEncoder, L"Audio Encoder" );
             if( SUCCEEDED( hr ) &&
-                SUCCEEDED( ConnectPin( pPin, pEncoder ) ) &&
-                SUCCEEDED( ConnectFilters( pEncoder, pMultiplexer ) )
-            )
+                    SUCCEEDED( ConnectPin( pPin, pEncoder ) ) &&
+                    SUCCEEDED( ConnectFilters( pEncoder, pMultiplexer ) )
+              )
             {
                 return S_OK;
             }
         }
-        
-        
+
+
         pEncoders = NULL;
         hr = GetEncodersByEnumerating( pPin, pinMedium, &pEncoders );
         if( FAILED( hr ) )
@@ -1268,9 +1270,9 @@ ISampleCaptureGraphBuilder::ConnectAudioPinToMultiplexer(
         {
             hr = graph_->AddFilter( pEncoder, L"Audio Encoder" );
             if( SUCCEEDED( hr ) &&
-                SUCCEEDED( ConnectPin( pPin, pEncoder ) ) &&
-                SUCCEEDED( ConnectFilters( pEncoder, pMultiplexer ) )
-            )
+                    SUCCEEDED( ConnectPin( pPin, pEncoder ) ) &&
+                    SUCCEEDED( ConnectFilters( pEncoder, pMultiplexer ) )
+              )
             {
                 return S_OK;
             }
@@ -1280,8 +1282,8 @@ ISampleCaptureGraphBuilder::ConnectAudioPinToMultiplexer(
 
 
     //
-    //  Search throgh the codec category 
-    //  
+    //  Search throgh the codec category
+    //
     hr = GetEncodersByCategory( &pEncoders );
     if( FAILED( hr ) )
     {
@@ -1295,7 +1297,7 @@ ISampleCaptureGraphBuilder::ConnectAudioPinToMultiplexer(
     while( pFilter.Release(), pMoniker.Release(), S_OK == pEncoders->Next( 1, &pMoniker, &fetched ) )
     {
         hr = pMoniker->BindToObject(
-            0, 0, IID_IBaseFilter, reinterpret_cast<void **>( &pFilter ) );
+                 0, 0, IID_IBaseFilter, reinterpret_cast<void **>( &pFilter ) );
         if( FAILED( hr ) )
         {
             continue;
@@ -1327,9 +1329,9 @@ ISampleCaptureGraphBuilder::ConnectAudioPinToMultiplexer(
 }
 
 
-HRESULT 
+HRESULT
 ISampleCaptureGraphBuilder::CreateVideoPin(
-        IMpeg2Demultiplexer *pIMpeg2Demux )
+    IMpeg2Demultiplexer *pIMpeg2Demux )
 {
     if( !pIMpeg2Demux )
     {
@@ -1365,7 +1367,7 @@ ISampleCaptureGraphBuilder::CreateVideoPin(
         return hr;
     }
 
-    hr = pIVideoPIDMap->MapStreamId(VidPID_, MPEG2_PROGRAM_ELEMENTARY_STREAM , 0, 0);
+    hr = pIVideoPIDMap->MapStreamId(VidPID_, MPEG2_PROGRAM_ELEMENTARY_STREAM, 0, 0);
     if( FAILED( hr ) )
     {
         return hr;
@@ -1410,14 +1412,14 @@ ISampleCaptureGraphBuilder::CreateVideoPin(
     //
     SmartPtr<IPin> pInputPin;
     hr = graphBuilder2_->FindPin(
-            static_cast<IBaseFilter *>( pVMR ),  
-            PINDIR_INPUT, 
-            NULL, 
-            NULL, 
-            TRUE, 
-            0, 
-            &pInputPin
-        );
+             static_cast<IBaseFilter *>( pVMR ),
+             PINDIR_INPUT,
+             NULL,
+             NULL,
+             TRUE,
+             0,
+             &pInputPin
+         );
     if( FAILED( hr ) )
     {
 
@@ -1434,10 +1436,10 @@ ISampleCaptureGraphBuilder::CreateVideoPin(
 
 
 
-HRESULT 
+HRESULT
 ISampleCaptureGraphBuilder::CreateAudioPin(
-            IMpeg2Demultiplexer *pIMpeg2Demux 
-    )
+    IMpeg2Demultiplexer *pIMpeg2Demux
+)
 {
     if( !pIMpeg2Demux )
     {
@@ -1465,7 +1467,7 @@ ISampleCaptureGraphBuilder::CreateAudioPin(
     {
         return hr;
     }
-    
+
     SmartPtr<IMPEG2StreamIdMap> pIAudioPIDMap;
     hr = pAudioOutPin->QueryInterface( &pIAudioPIDMap );
     if( FAILED( hr ) )
@@ -1478,7 +1480,7 @@ ISampleCaptureGraphBuilder::CreateAudioPin(
     {
         return hr;
     }
-    
+
 
     return hr;
 }
@@ -1487,7 +1489,7 @@ ISampleCaptureGraphBuilder::CreateAudioPin(
 
 HRESULT ISampleCaptureGraphBuilder::ConfigureMPEG2Demux( IBaseFilter *pFilter)
 {
-    
+
     if( ! pFilter )
     {
         return E_INVALIDARG;
@@ -1519,7 +1521,7 @@ HRESULT ISampleCaptureGraphBuilder::ConfigureMPEG2Demux( IBaseFilter *pFilter)
 }
 
 
-HRESULT 
+HRESULT
 ISampleCaptureGraphBuilder::ConnectFilters(IBaseFilter *pUpFilter, IBaseFilter *pDownFilter)
 {
     if( !pUpFilter || !pDownFilter )
@@ -1528,22 +1530,22 @@ ISampleCaptureGraphBuilder::ConnectFilters(IBaseFilter *pUpFilter, IBaseFilter *
     }
 
     // All the need pin & pin enumerator pointers
-    SmartPtr<IEnumPins>  pEnumUpFilterPins , 
-                        pEnumDownFilterPins;
+    SmartPtr<IEnumPins>  pEnumUpFilterPins,
+             pEnumDownFilterPins;
 
-    SmartPtr<IPin>   pUpFilterPin , 
-                    pDownFilterPin;
+    SmartPtr<IPin>   pUpFilterPin,
+             pDownFilterPin;
 
     HRESULT hr = S_OK;
 
     // Get the pin enumerators for both the filtera
-    hr = pUpFilter->EnumPins(&pEnumUpFilterPins); 
+    hr = pUpFilter->EnumPins(&pEnumUpFilterPins);
     if( FAILED( hr ) )
     {
         return hr;
     }
 
-    hr= pDownFilter->EnumPins(&pEnumDownFilterPins); 
+    hr= pDownFilter->EnumPins(&pEnumDownFilterPins);
     if( FAILED( hr ) )
     {
         return hr;
@@ -1598,10 +1600,10 @@ ISampleCaptureGraphBuilder::ConnectFilters(IBaseFilter *pUpFilter, IBaseFilter *
 }
 
 
-HRESULT 
-ISampleCaptureGraphBuilder::ConnectPin( 
-                    IPin *pPin, 
-                    IBaseFilter *pDownFilter )
+HRESULT
+ISampleCaptureGraphBuilder::ConnectPin(
+    IPin *pPin,
+    IBaseFilter *pDownFilter )
 {
     if( !pPin || !pDownFilter )
     {
@@ -1625,9 +1627,9 @@ ISampleCaptureGraphBuilder::ConnectPin(
     //
     //  Loop through every input pin from downstream filter
     //  and try to connect the pin
-    //  
+    //
     SmartPtr< IEnumPins > pEnumDownFilterPins;
-    hr= pDownFilter->EnumPins( &pEnumDownFilterPins ); 
+    hr= pDownFilter->EnumPins( &pEnumDownFilterPins );
     if( FAILED( hr ) )
     {
         return hr;

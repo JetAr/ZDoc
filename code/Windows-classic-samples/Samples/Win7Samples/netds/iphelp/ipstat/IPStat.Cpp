@@ -1,17 +1,17 @@
-/*---------------------------------------------------------------------------
+﻿/*---------------------------------------------------------------------------
     Copyright (c) 1998 - 2000  Microsoft Corporation
-    Module Name: IpStat.exe    
+    Module Name: IpStat.exe
     File       : IpStat.cpp
     Description: This file demonstrates the use of IP Helper APIs to
                  get IP statistics.
     Author:
     Frank Li            April 21, 1998
 
-    
+
     Revision History:
     Who         When        What
     --------    --------    ----------------------------------
-    Frank Li    04-21-98    created   
+    Frank Li    04-21-98    created
 ---------------------------------------------------------------------------*/
 
 #include "IpStat.h"
@@ -22,7 +22,7 @@ void Usage(char * pszProgramName)
 
 
     printf("%s -p proto      Shows connections for the protocol specified\n", pszProgramName);
-    printf("                     by proto, proto may be tcp or udp.\n");  
+    printf("                     by proto, proto may be tcp or udp.\n");
     printf("%s -s [-p proto] Displays per-protocol statistics.\n", pszProgramName);
     printf("                     By default, statistics are shown for\n");
     printf("                     IP, ICMP, TCP and UDP; the -p option\n");
@@ -46,18 +46,18 @@ void _cdecl main(int argc, char **argv)
 
     nRet = WSAStartup(wVersionRequested, &wsaData);
     if (wsaData.wVersion != wVersionRequested)
-    {    
+    {
         fprintf(stderr,"\n Wrong version\n");
         return;
     }
 
-    if ((argc < 2) || (argv[1][0] != '-'))        
+    if ((argc < 2) || (argv[1][0] != '-'))
         Usage("IpStat");
-    if (strlen(argv[1]) > 2)     
-        Usage("IpStat");  
-    
-    switch(argv[1][1]) 
-    {    
+    if (strlen(argv[1]) > 2)
+        Usage("IpStat");
+
+    switch(argv[1][1])
+    {
     case 'p':
         // Print connection table
         if (argc == 3)
@@ -65,7 +65,7 @@ void _cdecl main(int argc, char **argv)
         else
             Usage("IpStat");
         break;
-    case 's':   
+    case 's':
         // show statistics
         if (argc == 4 && argv[2][1] == 'p')
             DoGetStat(argv[3]); // Get stat for a specific protocol
@@ -73,13 +73,13 @@ void _cdecl main(int argc, char **argv)
             DoGetStat(); // Get stat for all protocols
         else
             Usage("IpStat");
-        break;    
-         
-        
+        break;
+
+
     default:
         // help
-        Usage("IpStat");        
-        break;    
+        Usage("IpStat");
+        break;
     }
     WSACleanup();
 }
@@ -133,45 +133,45 @@ void DoGetStat(char* pszProto /*NULL*/)
     {
         // by default, display all statistics
         {
-        PMIB_IPSTATS pIpStats = NULL;
-        if (MyGetIpStatistics(pIpStats) != NO_ERROR)
-            printf("IpStat: error in getting ip statistics.\n");
-        else
-            PrintIpStats(pIpStats);
+            PMIB_IPSTATS pIpStats = NULL;
+            if (MyGetIpStatistics(pIpStats) != NO_ERROR)
+                printf("IpStat: error in getting ip statistics.\n");
+            else
+                PrintIpStats(pIpStats);
 
-        if (pIpStats)
-            free(pIpStats);
+            if (pIpStats)
+                free(pIpStats);
         }
         {
-        PMIB_ICMP pIcmpStats = NULL;
-        if (MyGetIcmpStatistics(pIcmpStats) != NO_ERROR)
-            printf("IpStat: error in getting icmp statistics.\n");
-        else
-            PrintIcmpStats(&(pIcmpStats->stats));
+            PMIB_ICMP pIcmpStats = NULL;
+            if (MyGetIcmpStatistics(pIcmpStats) != NO_ERROR)
+                printf("IpStat: error in getting icmp statistics.\n");
+            else
+                PrintIcmpStats(&(pIcmpStats->stats));
 
-        if (pIcmpStats)
-            free(pIcmpStats);
+            if (pIcmpStats)
+                free(pIcmpStats);
 
         }
         {
-        PMIB_TCPSTATS pTcpStats = NULL;
-        if (MyGetTcpStatistics(pTcpStats) != NO_ERROR)
-            printf("IpStat: error in getting tcp statistics.\n");
-        else
-            PrintTcpStats(pTcpStats);
+            PMIB_TCPSTATS pTcpStats = NULL;
+            if (MyGetTcpStatistics(pTcpStats) != NO_ERROR)
+                printf("IpStat: error in getting tcp statistics.\n");
+            else
+                PrintTcpStats(pTcpStats);
 
-        if (pTcpStats)
-            free(pTcpStats);
+            if (pTcpStats)
+                free(pTcpStats);
         }
         {
-        PMIB_UDPSTATS pUdpStats = NULL;
-        if (MyGetUdpStatistics(pUdpStats) != NO_ERROR)
-            printf("IpStat: error in getting udp statistics.\n");
-        else
-            PrintUdpStats(pUdpStats);
+            PMIB_UDPSTATS pUdpStats = NULL;
+            if (MyGetUdpStatistics(pUdpStats) != NO_ERROR)
+                printf("IpStat: error in getting udp statistics.\n");
+            else
+                PrintUdpStats(pUdpStats);
 
-        if (pUdpStats)
-            free(pUdpStats);
+            if (pUdpStats)
+                free(pUdpStats);
 
         }
     }
@@ -243,7 +243,7 @@ void DumpTcpTable(PMIB_TCPTABLE pTcpTable)
     {
         printf("TCP TABLE\n");
         printf("%20s %10s %20s %10s %s\n", "Loc Addr", "Loc Port", "Rem Addr",
-                "Rem Port", "State");
+               "Rem Port", "State");
         for (UINT i = 0; i < pTcpTable->dwNumEntries; ++i)
         {
             switch (pTcpTable->table[i].dwState)
@@ -298,10 +298,10 @@ void DumpTcpTable(PMIB_TCPTABLE pTcpTable)
             inadRemote.s_addr = pTcpTable->table[i].dwRemoteAddr;
             strcpy_s(szLocalIp, MAX_STRLEN, inet_ntoa(inadLocal));
             strcpy_s(szRemIp, MAX_STRLEN, inet_ntoa(inadRemote));
-            printf("%20s %10u %20s %10u %s\n", 
-                szLocalIp,  ntohs((unsigned short)(0x0000FFFF & pTcpTable->table[i].dwLocalPort)),
-                szRemIp, ntohs((unsigned short)(0x0000FFFF & dwRemotePort)),
-                strState);
+            printf("%20s %10u %20s %10u %s\n",
+                   szLocalIp,  ntohs((unsigned short)(0x0000FFFF & pTcpTable->table[i].dwLocalPort)),
+                   szRemIp, ntohs((unsigned short)(0x0000FFFF & dwRemotePort)),
+                   strState);
         }
     }
 }
@@ -318,8 +318,8 @@ void DumpUdpTable(PMIB_UDPTABLE pUdpTable)
         {
             inadLocal.s_addr = pUdpTable->table[i].dwLocalAddr;
 
-            printf("%20s %10u \n", 
-                inet_ntoa(inadLocal), ntohs((unsigned short)(0x0000FFFF & pUdpTable->table[i].dwLocalPort)));
+            printf("%20s %10u \n",
+                   inet_ntoa(inadLocal), ntohs((unsigned short)(0x0000FFFF & pUdpTable->table[i].dwLocalPort)));
         }
     }
 }
@@ -347,7 +347,7 @@ DWORD MyGetTcpTable(PMIB_TCPTABLE& pTcpTable, BOOL fOrder)
         // need more space
         pTcpTable = (PMIB_TCPTABLE) malloc(dwActualSize);
         assert(pTcpTable);
-        
+
         statusRetry = GetTcpTable(pTcpTable, &dwActualSize, fOrder);
         return statusRetry;
     }
@@ -380,7 +380,7 @@ DWORD MyGetUdpTable(PMIB_UDPTABLE& pUdpTable, BOOL fOrder)
         // need more space
         pUdpTable = (PMIB_UDPTABLE) malloc(dwActualSize);
         assert(pUdpTable);
-        
+
         statusRetry = GetUdpTable(pUdpTable, &dwActualSize, fOrder);
         return statusRetry;
     }
@@ -423,7 +423,7 @@ void PrintIpStats(PMIB_IPSTATS pStats)
     if (pStats != NULL)
     {
         printf("\nIP Statistics:\n");
-        
+
         printf("\
   dwForwarding       = %lu\n\
   dwDefaultTTL       = %lu\n\
@@ -448,29 +448,29 @@ void PrintIpStats(PMIB_IPSTATS pStats)
   dwNumIf            = %lu\n\
   dwNumAddr          = %lu\n\
   dwNumRoutes        = %lu\n",
-                  pStats->dwForwarding,
-                  pStats->dwDefaultTTL,
-                  pStats->dwInReceives,
-                  pStats->dwInHdrErrors,
-                  pStats->dwInAddrErrors,
-                  pStats->dwForwDatagrams,
-                  pStats->dwInUnknownProtos,
-                  pStats->dwInDiscards,
-                  pStats->dwInDelivers,
-                  pStats->dwOutRequests,
-                  pStats->dwRoutingDiscards,
-                  pStats->dwOutDiscards,
-                  pStats->dwOutNoRoutes,
-                  pStats->dwReasmTimeout,
-                  pStats->dwReasmReqds,
-                  pStats->dwReasmOks,
-                  pStats->dwReasmFails,
-                  pStats->dwFragOks,
-                  pStats->dwFragFails,
-                  pStats->dwFragCreates,
-                  pStats->dwNumIf,
-                  pStats->dwNumAddr,
-                  pStats->dwNumRoutes);
+               pStats->dwForwarding,
+               pStats->dwDefaultTTL,
+               pStats->dwInReceives,
+               pStats->dwInHdrErrors,
+               pStats->dwInAddrErrors,
+               pStats->dwForwDatagrams,
+               pStats->dwInUnknownProtos,
+               pStats->dwInDiscards,
+               pStats->dwInDelivers,
+               pStats->dwOutRequests,
+               pStats->dwRoutingDiscards,
+               pStats->dwOutDiscards,
+               pStats->dwOutNoRoutes,
+               pStats->dwReasmTimeout,
+               pStats->dwReasmReqds,
+               pStats->dwReasmOks,
+               pStats->dwReasmFails,
+               pStats->dwFragOks,
+               pStats->dwFragFails,
+               pStats->dwFragCreates,
+               pStats->dwNumIf,
+               pStats->dwNumAddr,
+               pStats->dwNumRoutes);
     }
 
 }
@@ -518,21 +518,21 @@ void PrintTcpStats(PMIB_TCPSTATS pStats)
   dwInErrs           = %lu\n\
   dwOutRsts          = %lu\n\
   dwNumConns         = %lu\n",
-pStats->dwRtoAlgorithm,
-pStats->dwRtoMin,
-pStats->dwRtoMax,
-pStats->dwMaxConn,
-pStats->dwActiveOpens,
-pStats->dwPassiveOpens,
-pStats->dwAttemptFails,
-pStats->dwEstabResets,
-pStats->dwCurrEstab,
-pStats->dwInSegs,
-pStats->dwOutSegs,
-pStats->dwRetransSegs,
-pStats->dwInErrs,
-pStats->dwOutRsts,
-pStats->dwNumConns);
+               pStats->dwRtoAlgorithm,
+               pStats->dwRtoMin,
+               pStats->dwRtoMax,
+               pStats->dwMaxConn,
+               pStats->dwActiveOpens,
+               pStats->dwPassiveOpens,
+               pStats->dwAttemptFails,
+               pStats->dwEstabResets,
+               pStats->dwCurrEstab,
+               pStats->dwInSegs,
+               pStats->dwOutSegs,
+               pStats->dwRetransSegs,
+               pStats->dwInErrs,
+               pStats->dwOutRsts,
+               pStats->dwNumConns);
     }
 }
 
@@ -547,11 +547,11 @@ void PrintUdpStats(PMIB_UDPSTATS pStats)
   dwInErrors         = %lu\n\
   dwOutDatagrams     = %lu\n\
   dwNumAddrs         = %lu\n",
-pStats->dwInDatagrams,
-pStats->dwNoPorts,
-pStats->dwInErrors,
-pStats->dwOutDatagrams,
-pStats->dwNumAddrs);
+               pStats->dwInDatagrams,
+               pStats->dwNoPorts,
+               pStats->dwInErrors,
+               pStats->dwOutDatagrams,
+               pStats->dwNumAddrs);
     }
 }
 

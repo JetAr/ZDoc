@@ -1,4 +1,4 @@
-//
+﻿//
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -12,11 +12,11 @@
 //
 //    This sample illustrates how to develop a layered service provider.
 //    This LSP is simply a pass through sample which counts the bytes transfered
-//    on each socket. 
+//    on each socket.
 //
 //    This file contains an installation program to insert the layered sample
 //    into the Winsock catalog of providers.
-//    
+//
 //
 // Compile:
 //
@@ -27,7 +27,7 @@
 //
 //    This project produces a executable file instlsp.exe. The installation app
 //    allows you to install the LSP over any provider. Note however that if you
-//    choose to install over a single provider, you should install over all 
+//    choose to install over a single provider, you should install over all
 //    providers of that address family (e.g. if you install over UDP, install
 //    over TCP and RAW providers as well). The arguments are:
 //
@@ -80,7 +80,7 @@
 //        1040 - Foobar LSP
 //
 //    To remove the LSP, supply the catalog ID of the hidden entry to remove:
-//       instlsp.exe -r 1040 
+//       instlsp.exe -r 1040
 //
 //    In case all else fails (removes all LSPs installed):
 //       instlsp.exe -f
@@ -111,7 +111,7 @@ void usage( __in_z char *progname );
 // Function: main
 //
 // Description:
-//    Parse the command line arguments and call either the install, remove, 
+//    Parse the command line arguments and call either the install, remove,
 //    print, etc. routines.
 //
 int _cdecl main(int argc, char *argv[])
@@ -140,8 +140,8 @@ int _cdecl main(int argc, char *argv[])
                         bArgsOkay                  = FALSE,
                         bIFSProvider               = FALSE;
     char               *lpszLspName = NULL,
-                       *lpszLspPathAndFile = NULL,
-                       *lpszLspPathAndFile32 = NULL;
+                        *lpszLspPathAndFile = NULL,
+                         *lpszLspPathAndFile32 = NULL;
     int                 rc;
 
     ////////////////////////////////////////////////////////////////////////////
@@ -173,7 +173,7 @@ int _cdecl main(int argc, char *argv[])
 
     // First count how many catalog parameters are supplied so we can dynamically
     // allocate the right sized buffer
-    for(i=1; i < argc ;i++)
+    for(i=1; i < argc ; i++)
     {
         if ( strncmp( argv[ i ], "-o", 2 ) == 0 )
             dwCatalogIdArrayCount++;
@@ -183,9 +183,9 @@ int _cdecl main(int argc, char *argv[])
     if ( 0 < dwCatalogIdArrayCount )
     {
         pdwCatalogIdArray = (DWORD *) LspAlloc(
-                sizeof( DWORD ) * dwCatalogIdArrayCount,
-                &rc
-                );
+                                sizeof( DWORD ) * dwCatalogIdArrayCount,
+                                &rc
+                            );
         if ( NULL == pdwCatalogIdArray )
         {
             goto cleanup;
@@ -196,11 +196,11 @@ int _cdecl main(int argc, char *argv[])
     dwCatalogIdArrayCount = 0;
 
     // Parse the command line
-    for(i=1; i < argc ;i++)
+    for(i=1; i < argc ; i++)
     {
-        if ( ( 2   != strlen( argv[i] ) ) && 
-             ( '-' != argv[i][0] ) && 
-             ( '/' != argv[i][0] )
+        if ( ( 2   != strlen( argv[i] ) ) &&
+                ( '-' != argv[i][0] ) &&
+                ( '/' != argv[i][0] )
            )
         {
             goto cleanup;
@@ -208,98 +208,98 @@ int _cdecl main(int argc, char *argv[])
 
         switch ( tolower( argv[i][1] ) )
         {
-            case 'a':               // Install LSP over all currently installed providers
-                bInstallOverAll = TRUE;
+        case 'a':               // Install LSP over all currently installed providers
+            bInstallOverAll = TRUE;
+            break;
+
+        case 'c':               // For 64-bit: which catalog to operate on?
+            if (i+1 >= argc)
+                goto cleanup;
+
+            switch (tolower(argv[i+1][0]))
+            {
+            case 'b':       // Both Winsock catalogs
+                eCatalog = LspCatalogBoth;
                 break;
-
-            case 'c':               // For 64-bit: which catalog to operate on?
-                if (i+1 >= argc)
-                    goto cleanup;
-
-                switch (tolower(argv[i+1][0]))
-                {
-                    case 'b':       // Both Winsock catalogs
-                        eCatalog = LspCatalogBoth;
-                        break;
-                    case '6':       // 64-bit Winsock catalog only
-                        eCatalog = LspCatalog64Only;
-                        break;
-                    case '3':       // 32-bit Winsock catalog only
-                        eCatalog = LspCatalog32Only;
-                        break;
-                    default:
-                        goto cleanup;
-                        break;
-                }
-                i++;
+            case '6':       // 64-bit Winsock catalog only
+                eCatalog = LspCatalog64Only;
                 break;
-
-            case 'd':               // Full path and filename to LSP
-                if ( i+1 >= argc )
-                    goto cleanup;
-                if (_strnicmp(argv[i], "-d32", 4))
-                    lpszLspPathAndFile32 = argv[ ++i ];
-                else
-                    lpszLspPathAndFile = argv[ ++i ];
-
+            case '3':       // 32-bit Winsock catalog only
+                eCatalog = LspCatalog32Only;
                 break;
-
-            case 'f':               // Uninstall all layered providers
-                bRemoveAllLayeredEntries = TRUE;
-                bInstall = FALSE;
-                break;
-
-            case 'h':               // Install as an IFS provider
-                bIFSProvider = TRUE;
-                break;
-
-            case 'i':               // install
-                bInstall = TRUE;
-                break;
-
-            case 'l':               // print the layered providers only
-                bPrintProviders = TRUE;
-                bDisplayOnlyLayeredEntries = TRUE;
-                break;
-
-            case 'm':               // Map and print the LSP structure
-                bMapLsp = TRUE;
-                bInstall = FALSE;
-                break;
-
-            case 'n':               // name of the LSP to install (not the DLL name)
-                if (i+1 >= argc)
-                    goto cleanup;
-
-                lpszLspName = argv[++i];
-                break;
-
-            case 'o':               // catalog id (to install over)
-                if (i+1 >= argc)
-                    goto cleanup;
-
-                pdwCatalogIdArray[dwCatalogIdArrayCount++] = atoi(argv[++i]);
-                break;
-
-            case 'p':               // print the catalog
-                bPrintProviders = TRUE;
-                bDisplayOnlyLayeredEntries = FALSE;
-                break;
-
-            case 'r':               // remove an LSP
-                bInstall = FALSE;
-                if (i+1 >= argc)
-                    goto cleanup;
-                dwRemoveCatalogId = atol(argv[++i]);
-                break;
-
-            case 'v':               // verbose mode (when printing with -p option)
-                bVerbose = TRUE;
-                break;
-
             default:
                 goto cleanup;
                 break;
+            }
+            i++;
+            break;
+
+        case 'd':               // Full path and filename to LSP
+            if ( i+1 >= argc )
+                goto cleanup;
+            if (_strnicmp(argv[i], "-d32", 4))
+                lpszLspPathAndFile32 = argv[ ++i ];
+            else
+                lpszLspPathAndFile = argv[ ++i ];
+
+            break;
+
+        case 'f':               // Uninstall all layered providers
+            bRemoveAllLayeredEntries = TRUE;
+            bInstall = FALSE;
+            break;
+
+        case 'h':               // Install as an IFS provider
+            bIFSProvider = TRUE;
+            break;
+
+        case 'i':               // install
+            bInstall = TRUE;
+            break;
+
+        case 'l':               // print the layered providers only
+            bPrintProviders = TRUE;
+            bDisplayOnlyLayeredEntries = TRUE;
+            break;
+
+        case 'm':               // Map and print the LSP structure
+            bMapLsp = TRUE;
+            bInstall = FALSE;
+            break;
+
+        case 'n':               // name of the LSP to install (not the DLL name)
+            if (i+1 >= argc)
+                goto cleanup;
+
+            lpszLspName = argv[++i];
+            break;
+
+        case 'o':               // catalog id (to install over)
+            if (i+1 >= argc)
+                goto cleanup;
+
+            pdwCatalogIdArray[dwCatalogIdArrayCount++] = atoi(argv[++i]);
+            break;
+
+        case 'p':               // print the catalog
+            bPrintProviders = TRUE;
+            bDisplayOnlyLayeredEntries = FALSE;
+            break;
+
+        case 'r':               // remove an LSP
+            bInstall = FALSE;
+            if (i+1 >= argc)
+                goto cleanup;
+            dwRemoveCatalogId = atol(argv[++i]);
+            break;
+
+        case 'v':               // verbose mode (when printing with -p option)
+            bVerbose = TRUE;
+            break;
+
+        default:
+            goto cleanup;
+            break;
         }
     }
 
@@ -355,13 +355,13 @@ int _cdecl main(int argc, char *argv[])
             if ( NULL == pProtocolInfo )
             {
                 fprintf( stderr, "%s: EnumerateProviders: Unable to enumerate Winsock catalog\n",
-                        argv[ 0 ]
-                        );
+                         argv[ 0 ]
+                       );
                 goto cleanup;
             }
 
             // Count how many non layered protocol entries there are
-            for(i=0; i < iTotalProtocols ;i++)
+            for(i=0; i < iTotalProtocols ; i++)
             {
                 if ( LAYERED_PROTOCOL != pProtocolInfo[ i ].ProtocolChain.ChainLen )
                     dwCatalogIdArrayCount++;
@@ -369,9 +369,9 @@ int _cdecl main(int argc, char *argv[])
 
             // Allocate space for all the entries
             pdwCatalogIdArray = (DWORD *) LspAlloc(
-                    sizeof( DWORD ) * dwCatalogIdArrayCount,
-                   &rc
-                    );
+                                    sizeof( DWORD ) * dwCatalogIdArrayCount,
+                                    &rc
+                                );
             if ( NULL == pdwCatalogIdArray )
             {
                 fprintf( stderr, "%s: LspAlloc failed: %d\n", argv[ 0 ], rc );
@@ -380,7 +380,7 @@ int _cdecl main(int argc, char *argv[])
 
             // Get the catalog IDs for all existing providers
             dwCatalogIdArrayCount = 0 ;
-            for(i=0; i < iTotalProtocols ;i++)
+            for(i=0; i < iTotalProtocols ; i++)
             {
                 if ( LAYERED_PROTOCOL != pProtocolInfo[ i ].ProtocolChain.ChainLen )
                 {
@@ -394,15 +394,15 @@ int _cdecl main(int argc, char *argv[])
 
         // Install the LSP with the supplied parameters
         rc = InstallLsp(
-                eCatalog,
-                lpszLspName,
-                lpszLspPathAndFile,
-                lpszLspPathAndFile32,
-                dwCatalogIdArrayCount,
-                pdwCatalogIdArray,
-                bIFSProvider,
-                bInstallOverAll
-                );
+                 eCatalog,
+                 lpszLspName,
+                 lpszLspPathAndFile,
+                 lpszLspPathAndFile32,
+                 dwCatalogIdArrayCount,
+                 pdwCatalogIdArray,
+                 bIFSProvider,
+                 bInstallOverAll
+             );
     }
     else if ( TRUE == bMapLsp )
     {
@@ -415,8 +415,8 @@ int _cdecl main(int argc, char *argv[])
             if ( NULL == pProtocolInfo )
             {
                 fprintf(stderr, "%s: EnumerateProviders: Unable to enumerate Winsock catalog\n",
-                        argv[ 0 ] 
-                        );
+                        argv[ 0 ]
+                       );
                 goto cleanup;
             }
 
@@ -432,7 +432,7 @@ int _cdecl main(int argc, char *argv[])
                 FreeLspMap( pLspMap, iLspCount );
                 pLspMap = NULL;
             }
-           
+
             FreeProviders( pProtocolInfo );
             pProtocolInfo = NULL;
         }
@@ -447,7 +447,7 @@ int _cdecl main(int argc, char *argv[])
             {
                 fprintf(stderr, "%s: EnumerateProviders: Unable to enumerate Winsock catalog\n",
                         argv[ 0 ]
-                        );
+                       );
                 goto cleanup;
             }
 
@@ -506,7 +506,7 @@ cleanup:
 
     //
     // When invoked on Vista under non elevated permissions, the EXE is launched in
-    // a new CMD window. The following getchar stops the window from exiting 
+    // a new CMD window. The following getchar stops the window from exiting
     // immediately so you can see what its output was.
     //
     printf("Press any key to continue...\n");
@@ -547,32 +547,32 @@ void usage( __in_z char *progname )
 {
     printf("usage: %s -i -r [CatId] -o [CatId] -p ...\n", progname);
     printf(
-           "       -a           Install over all providers (base or layered)\n"
-           "                       Cannot be combined with '-o' option\n"
-           "       -c Catalog   Indicates which catalog to operate on\n"
-           "          b            Both 64-bit and 32-bit Winsock catalogs\n"
-           "          6            64-bit Winsock catalog only\n"
-           "          3            32-bit Winsock catalog only\n"
-           "       -d           Full path and filename of LSP DLL to install\n"
-           "       -d32         Full path and filename of 32-bit DLL to install\n"
-           "                       (Only needed when installing on 64-bit OS\n"
-           "       -h           LSP is an IFS provider (by default its non-IFS)\n"
-           "       -i           Install LSP\n"
-           "       -f           Remove all layered entries\n"
-           "       -l           Print layered providers only\n"
-           "       -m           Display a map of the LSPs and the order they are\n"
-           "                       installed in\n"
-           "       -n Str       Name of LSP\n"
-           "       -o CatId     Install over specified LSP\n"
-           "                       This option may be specified multiple times\n"
-           "                       Cannot be combined with '-a' option\n"
-           "       -p           Print all layers and their catalog IDs\n"
-           "       -r CatId     Remove LSP\n"
-           "       -v           Print verbose catalog information (used with -p)\n"
-           "\n"
-           "Example:\n\n"
-           "   install:\n\tinstlsp.exe -i -o 1001 -o 1002 -n \"MyLsp\" -d c:\\lsp\\mylsp.dll\n\n"
-           "   remove:\n\tinstlsp.exe -r <DUMMY_CATALOG_ID>\n\n"
-           "   remove all LSPs:\n\tinstlsp.exe -f\n"
-           );
+        "       -a           Install over all providers (base or layered)\n"
+        "                       Cannot be combined with '-o' option\n"
+        "       -c Catalog   Indicates which catalog to operate on\n"
+        "          b            Both 64-bit and 32-bit Winsock catalogs\n"
+        "          6            64-bit Winsock catalog only\n"
+        "          3            32-bit Winsock catalog only\n"
+        "       -d           Full path and filename of LSP DLL to install\n"
+        "       -d32         Full path and filename of 32-bit DLL to install\n"
+        "                       (Only needed when installing on 64-bit OS\n"
+        "       -h           LSP is an IFS provider (by default its non-IFS)\n"
+        "       -i           Install LSP\n"
+        "       -f           Remove all layered entries\n"
+        "       -l           Print layered providers only\n"
+        "       -m           Display a map of the LSPs and the order they are\n"
+        "                       installed in\n"
+        "       -n Str       Name of LSP\n"
+        "       -o CatId     Install over specified LSP\n"
+        "                       This option may be specified multiple times\n"
+        "                       Cannot be combined with '-a' option\n"
+        "       -p           Print all layers and their catalog IDs\n"
+        "       -r CatId     Remove LSP\n"
+        "       -v           Print verbose catalog information (used with -p)\n"
+        "\n"
+        "Example:\n\n"
+        "   install:\n\tinstlsp.exe -i -o 1001 -o 1002 -n \"MyLsp\" -d c:\\lsp\\mylsp.dll\n\n"
+        "   remove:\n\tinstlsp.exe -r <DUMMY_CATALOG_ID>\n\n"
+        "   remove all LSPs:\n\tinstlsp.exe -f\n"
+    );
 }

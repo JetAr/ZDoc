@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -40,7 +40,8 @@ gtab_msg_vscroll(HWND hwnd, lpTable ptab, int opcode, int pos)
 {
     long change;
 
-    switch(opcode) {
+    switch(opcode)
+    {
     case SB_THUMBPOSITION:
     case SB_THUMBTRACK:
         change = (pos * ptab->scrollscale) - ptab->toprow;
@@ -78,7 +79,8 @@ gtab_msg_hscroll(HWND hwnd, lpTable ptab, int opcode, int pos)
 {
     int change;
 
-    switch(opcode) {
+    switch(opcode)
+    {
     case SB_THUMBPOSITION:
     case SB_THUMBTRACK:
         change = pos - ptab->scroll_dx;
@@ -136,12 +138,16 @@ gtab_dovscroll(HWND hwnd, lpTable ptab, long change)
 
     range = ptab->hdr.nrows - (ptab->nlines - 1);
     newtop = ptab->toprow + change;
-    if (range < 0) {
+    if (range < 0)
+    {
         range = 0;
     }
-    if (newtop > range) {
+    if (newtop > range)
+    {
         change = range - ptab->toprow;
-    } else if (newtop < 0) {
+    }
+    else if (newtop < 0)
+    {
         change = -(ptab->toprow);
     }
     ptab->toprow += change;
@@ -149,49 +155,60 @@ gtab_dovscroll(HWND hwnd, lpTable ptab, long change)
     newpos = (int) (newtop / ptab->scrollscale);
     SetScrollPos(hwnd, SB_VERT, newpos, TRUE);
 
-    if (ptab->hdr.sendscroll) {
+    if (ptab->hdr.sendscroll)
+    {
         gtab_sendtq(hwnd, TQ_SCROLL, ptab->toprow);
     }
 
     /* adjust data ptrs rather than invalidate, to retain the
      * data we know is still valid
      */
-    if (abs(change) >= ptab->nlines) {
+    if (abs(change) >= ptab->nlines)
+    {
         gtab_invallines(hwnd, ptab, ptab->hdr.fixedrows,
-            ptab->nlines - ptab->hdr.fixedrows);
+                        ptab->nlines - ptab->hdr.fixedrows);
         InvalidateRect(hwnd, NULL, FALSE);
         change = 0;
-    } else if (change < 0) {
+    }
+    else if (change < 0)
+    {
         /* copy data down */
         ncopy = (ptab->nlines - ptab->hdr.fixedrows) - abs(change);
         for (i =  ptab->nlines - 1;
-                i >= (ptab->hdr.fixedrows + abs(change)); i--) {
+                i >= (ptab->hdr.fixedrows + abs(change)); i--)
+        {
             ldtemp = ptab->pdata[i - abs(change)];
             ptab->pdata[i - abs(change)] = ptab->pdata[i];
             ptab->pdata[i] = ldtemp;
         }
         gtab_invallines(hwnd, ptab,
-                ptab->hdr.fixedrows, (int) abs(change));
-    } else if (change > 0) {
+                        ptab->hdr.fixedrows, (int) abs(change));
+    }
+    else if (change > 0)
+    {
         ncopy = (ptab->nlines - ptab->hdr.fixedrows) - change;
         for (i = ptab->hdr.fixedrows;
-                i < (ncopy + ptab->hdr.fixedrows); i++) {
+                i < (ncopy + ptab->hdr.fixedrows); i++)
+        {
             ldtemp = ptab->pdata[i + change];
             ptab->pdata[i + change] = ptab->pdata[i];
             ptab->pdata[i] = ldtemp;
         }
         gtab_invallines(hwnd, ptab,
-            (int) ncopy + ptab->hdr.fixedrows, (int) change);
+                        (int) ncopy + ptab->hdr.fixedrows, (int) change);
     }
 
     /* scroll window */
     GetClientRect(hwnd, &rc);
     rcpaint = rc;
-    if (change > 0) {
+    if (change > 0)
+    {
         rc.top += (int) (change + ptab->hdr.fixedrows) * ptab->rowheight;
         rcpaint.top = (ptab->hdr.fixedrows * ptab->rowheight);
         rcpaint.top += rc.bottom - rc.top;
-    } else if (change < 0) {
+    }
+    else if (change < 0)
+    {
         rc.top += (ptab->hdr.fixedrows * ptab->rowheight);
         rc.bottom += (int) (change * ptab->rowheight);
         rcpaint.bottom -= rc.bottom - rc.top;
@@ -204,7 +221,8 @@ gtab_dovscroll(HWND hwnd, lpTable ptab, long change)
      * which absolute row nr to ask for, for a given screen line
      */
     cury = 0;
-    for (i = 0; i < ptab->nlines; i++) {
+    for (i = 0; i < ptab->nlines; i++)
+    {
         cp = &ptab->pdata[i].linepos;
         cp->start = cury;
         cp->clipstart = cury;
@@ -213,10 +231,12 @@ gtab_dovscroll(HWND hwnd, lpTable ptab, long change)
     }
 
     /* now move and repaint the window */
-    if (change != 0) {
-        if (rc.top < rc.bottom) {
+    if (change != 0)
+    {
+        if (rc.top < rc.bottom)
+        {
             ScrollWindow(hwnd, 0, (int) -(change * ptab->rowheight),
-                &rc, NULL);
+                         &rc, NULL);
         }
 
         // don't repaint the fixed rows
@@ -230,7 +250,7 @@ gtab_dovscroll(HWND hwnd, lpTable ptab, long change)
          */
         ValidateRect(hwnd, &rcpaint);
         RedrawWindow(hwnd, &rcpaint, NULL,
-                RDW_NOERASE | RDW_INVALIDATE | RDW_INTERNALPAINT);
+                     RDW_NOERASE | RDW_INVALIDATE | RDW_INTERNALPAINT);
 
     }
 
@@ -258,23 +278,30 @@ gtab_dohscroll(HWND hwnd, lpTable ptab, long change)
     /* check that the new scroll pos is still within the valid range */
     range = ptab->rowwidth - ptab->winwidth;
     newdx = ptab->scroll_dx + (int) change;
-    if (range < 0) {
+    if (range < 0)
+    {
         range = 0;
     }
-    if (newdx > range) {
+    if (newdx > range)
+    {
         change = range - ptab->scroll_dx;
-    } else if (newdx < 0) {
+    }
+    else if (newdx < 0)
+    {
         change = -(ptab->scroll_dx);
     }
     ptab->scroll_dx += (int) change;
 
     SetScrollPos(hwnd, SB_HORZ, ptab->scroll_dx, TRUE);
-    if (ptab->hdr.fixedcols > 0) {
+    if (ptab->hdr.fixedcols > 0)
+    {
         RECT rc;
         GetClientRect(hwnd, &rc);
         rc.left = ptab->pcellpos[ptab->hdr.fixedcols - 1].clipend;
         InvalidateRect(hwnd, &rc, FALSE);
-    } else {
+    }
+    else
+    {
         InvalidateRect(hwnd, NULL, FALSE);
     }
 
@@ -283,7 +310,8 @@ gtab_dohscroll(HWND hwnd, lpTable ptab, long change)
 
     /* first set up fixed columns */
     curx = 0;
-    for (i = 0; i < ptab->hdr.fixedcols; i++) {
+    for (i = 0; i < ptab->hdr.fixedcols; i++)
+    {
         cp = &ptab->pcellpos[i];
         cp->start = curx + 1;
         cp->clipstart = cp->start;
@@ -294,7 +322,8 @@ gtab_dohscroll(HWND hwnd, lpTable ptab, long change)
     /* now moveable columns. remember start of moveable cols */
     moveable = curx;
     curx = - ptab->scroll_dx;       /* rel. pos of col */
-    for (i = ptab->hdr.fixedcols; i < ptab->hdr.ncols; i++) {
+    for (i = ptab->hdr.fixedcols; i < ptab->hdr.ncols; i++)
+    {
         cp = &ptab->pcellpos[i];
         cp->start = curx + moveable + 1;
         cp->clipstart = max(moveable+1, cp->start);
@@ -309,7 +338,8 @@ gtab_dohscroll(HWND hwnd, lpTable ptab, long change)
 long
 gtab_linetorow(HWND hwnd, lpTable ptab, int line)
 {
-    if (line < ptab->hdr.fixedrows) {
+    if (line < ptab->hdr.fixedrows)
+    {
         return(line);
     }
 
@@ -322,12 +352,14 @@ gtab_linetorow(HWND hwnd, lpTable ptab, int line)
 int
 gtab_rowtoline(HWND hwnd, lpTable ptab, long row)
 {
-    if (row < ptab->hdr.fixedrows) {
+    if (row < ptab->hdr.fixedrows)
+    {
         return( (int) row);
     }
 
     row -= ptab->toprow;
-    if ((row >= ptab->hdr.fixedrows) && (row < ptab->nlines)) {
+    if ((row >= ptab->hdr.fixedrows) && (row < ptab->nlines))
+    {
         return ( (int) row);
     }
     return(-1);
@@ -348,7 +380,8 @@ gtab_insideselection(
     long startrow, endrow;
     long startcell, endcell;
 
-    if (0 == ptab->select.nrows) {
+    if (0 == ptab->select.nrows)
+    {
         // no selection
         return FALSE;
     }
@@ -357,30 +390,39 @@ gtab_insideselection(
     // so the selection can extend forwards or backwards from there.
     // need to convert to forward only for comparison
     startrow = ptab->select.startrow;
-    if (ptab->select.nrows < 0) {
+    if (ptab->select.nrows < 0)
+    {
         endrow = startrow;
         startrow += ptab->select.nrows + 1;
-    } else {
+    }
+    else
+    {
         endrow = startrow + ptab->select.nrows - 1;
     }
-    if ((row < startrow) || (row > endrow)) {
+    if ((row < startrow) || (row > endrow))
+    {
         return FALSE;
     }
 
     // if we are in row-select mode, then that's it - its inside
-    if (ptab->hdr.selectmode & TM_ROW) {
+    if (ptab->hdr.selectmode & TM_ROW)
+    {
         return TRUE;
     }
 
     // same calculation for cells
     startcell = ptab->select.startcell;
-    if (ptab->select.ncells < 0) {
+    if (ptab->select.ncells < 0)
+    {
         endcell = startcell;
         startcell += ptab->select.ncells + 1;
-    } else {
+    }
+    else
+    {
         endcell = startcell + ptab->select.ncells - 1;
     }
-    if ((cell < startcell) || (cell > endcell)) {
+    if ((cell < startcell) || (cell > endcell))
+    {
         return FALSE;
     }
 
@@ -395,29 +437,32 @@ gtab_insideselection(
  */
 void
 gtab_select(
-        HWND hwnd,
-        lpTable ptab,
-        long row,
-        long col,
-        long nrows,
-        long ncells,
-        BOOL bNotify)
+    HWND hwnd,
+    lpTable ptab,
+    long row,
+    long col,
+    long nrows,
+    long ncells,
+    BOOL bNotify)
 {
 
     /* if in ROW mode, force col and ncells to reflect the entire row. */
-    if (ptab->hdr.selectmode & TM_ROW) {
+    if (ptab->hdr.selectmode & TM_ROW)
+    {
         col = 0;
         ncells = ptab->hdr.ncols;
     }
 
     /* clear existing sel if valid and visible */
-    if ((ptab->select.nrows != 0) && (ptab->selvisible == TRUE)) {
+    if ((ptab->select.nrows != 0) && (ptab->selvisible == TRUE))
+    {
 
         /* only clear sel if it is different from the new one */
         if ((ptab->select.startrow != row) ||
                 (ptab->select.startcell != col) ||
                 (ptab->select.nrows != nrows) ||
-                (ptab->select.ncells != ncells)) {
+                (ptab->select.ncells != ncells))
+        {
 
             gtab_invertsel(hwnd, ptab, NULL);
             ptab->selvisible = FALSE;
@@ -425,30 +470,39 @@ gtab_select(
     }
 
     /* set select fields and send TQ_SELECT */
-    if (row < ptab->hdr.nrows) {
+    if (row < ptab->hdr.nrows)
+    {
         ptab->select.startrow = row;
         ptab->select.startcell = col;
         ptab->select.nrows = nrows;
         ptab->select.ncells = ncells;
-    } else {
+    }
+    else
+    {
         ptab->select.nrows = 0;
         ptab->select.startrow = 0;
         ptab->select.startcell = 0;
         ptab->select.ncells = 0;
     }
 
-    if (bNotify) {
+    if (bNotify)
+    {
         gtab_sendtq(hwnd, TQ_SELECT, (LPARAM) &ptab->select);
     }
 
     /* paint in selection */
-    if (nrows != 0) {
-        if (!ptab->selvisible) {
+    if (nrows != 0)
+    {
+        if (!ptab->selvisible)
+        {
             gtab_invertsel(hwnd, ptab, NULL);
             ptab->selvisible = TRUE;
         }
-    } else {
-        if (ptab->selvisible) {
+    }
+    else
+    {
+        if (ptab->selvisible)
+        {
             gtab_invertsel(hwnd, ptab, NULL);
             ptab->selvisible = FALSE;
         }
@@ -474,10 +528,13 @@ gtab_xtocol(HWND hwnd, lpTable ptab, int x)
     int i;
     lpCellPos ppos;
 
-    for (i = 0; i < ptab->hdr.ncols; i++) {
+    for (i = 0; i < ptab->hdr.ncols; i++)
+    {
         ppos = &ptab->pcellpos[i];
-        if (ppos->clipstart < ppos->clipend) {
-            if ( (x >= ppos->clipstart) && (x < ppos->clipend)) {
+        if (ppos->clipstart < ppos->clipend)
+        {
+            if ( (x >= ppos->clipstart) && (x < ppos->clipend))
+            {
                 return(i);
             }
         }
@@ -493,9 +550,12 @@ BOOL
 gtab_isborder(HWND hwnd, lpTable ptab, long x, long col)
 {
 
-    if (abs(ptab->pcellpos[col].clipend - x) < 2) {
+    if (abs(ptab->pcellpos[col].clipend - x) < 2)
+    {
         return(TRUE);
-    } else {
+    }
+    else
+    {
         return(FALSE);
     }
 }
@@ -506,28 +566,33 @@ gtab_isborder(HWND hwnd, lpTable ptab, long x, long col)
  */
 void
 gtab_enter(HWND hwnd, lpTable ptab, long row, long col, long nrows,
-        long ncells)
+           long ncells)
 {
     /* clear existing sel if valid and visible */
-    if ((ptab->select.nrows != 0) && (ptab->selvisible == TRUE)) {
+    if ((ptab->select.nrows != 0) && (ptab->selvisible == TRUE))
+    {
 
         /* only clear sel if it is different from the new one */
         if ((ptab->select.startrow != row) ||
                 (ptab->select.startcell != col) ||
                 (ptab->select.nrows != nrows) ||
-                (ptab->select.ncells != ncells)) {
+                (ptab->select.ncells != ncells))
+        {
             gtab_invertsel(hwnd, ptab, NULL);
             ptab->selvisible = FALSE;
         }
     }
 
     /* set select fields and send TQ_ENTER */
-    if (row < ptab->hdr.nrows) {
+    if (row < ptab->hdr.nrows)
+    {
         ptab->select.startrow = row;
         ptab->select.startcell = col;
         ptab->select.nrows = nrows;
         ptab->select.ncells = ncells;
-    } else {
+    }
+    else
+    {
         ptab->select.nrows = 0;
         ptab->select.startrow = 0;
         ptab->select.startcell = 0;
@@ -535,15 +600,20 @@ gtab_enter(HWND hwnd, lpTable ptab, long row, long col, long nrows,
     }
 
     /* paint in selection */
-    if (nrows != 0) {
-        if (!ptab->selvisible) {
+    if (nrows != 0)
+    {
+        if (!ptab->selvisible)
+        {
             gtab_invertsel(hwnd, ptab, NULL);
             ptab->selvisible = TRUE;
         }
         /* do this at end because it could cause a layout-change */
         gtab_sendtq(hwnd, TQ_ENTER, (LPARAM) &ptab->select);
-    } else {
-        if (ptab->selvisible) {
+    }
+    else
+    {
+        if (ptab->selvisible)
+        {
             gtab_invertsel(hwnd, ptab, NULL);
         }
         ptab->selvisible = FALSE;
@@ -571,9 +641,12 @@ gtab_trackcol(HWND hwnd, lpTable ptab, long col, long x)
 #endif
 
     /* if line at other side of cell is visible, draw that too */
-    if (ptab->pcellpos[col].start >= ptab->pcellpos[col].clipstart) {
+    if (ptab->pcellpos[col].start >= ptab->pcellpos[col].clipstart)
+    {
         ptab->trackline2 = ptab->pcellpos[col].start;
-    } else {
+    }
+    else
+    {
         ptab->trackline2 = -1;
     }
     gtab_drawvertline(hwnd, ptab);
@@ -593,39 +666,50 @@ gtab_rightclick(HWND hwnd, lpTable ptab, int x, int y)
 
     /* find which col, row he selected */
     cell = gtab_xtocol(hwnd, ptab, x);
-    if (cell == -1) {
+    if (cell == -1)
+    {
         return;
     }
     row = gtab_linetorow(hwnd, ptab, gtab_ytoline(hwnd, ptab, y));
 
     /* is he selecting a disabled fixed area ? */
-    if ( (row < ptab->hdr.fixedrows) || (cell < ptab->hdr.fixedcols)) {
-        if (ptab->hdr.fixedselectable == FALSE) {
+    if ( (row < ptab->hdr.fixedrows) || (cell < ptab->hdr.fixedcols))
+    {
+        if (ptab->hdr.fixedselectable == FALSE)
+        {
             return;
         }
     }
 
     // ignore if beyond data
     if ((row >= ptab->hdr.nrows) ||
-            (cell >= ptab->hdr.ncols)) {
+            (cell >= ptab->hdr.ncols))
+    {
         return;
     }
 
     /* is this within the already-selected area? */
-    if (!gtab_insideselection(ptab, row, cell)) {
+    if (!gtab_insideselection(ptab, row, cell))
+    {
         // no selection, or clicked outside the selection - make new selection
         // before sending the right-click
 
         // if shift is down, extend selection
-        if (GetKeyState(VK_SHIFT) & 0x8000) {
+        if (GetKeyState(VK_SHIFT) & 0x8000)
+        {
             gtab_extendsel(hwnd, ptab, row, cell, TRUE);
-        } else {
+        }
+        else
+        {
             /* record and paint new selection */
 
-            if (ptab->hdr.selectmode & TM_ROW) {
+            if (ptab->hdr.selectmode & TM_ROW)
+            {
                 cell = 0;
                 ncells = ptab->hdr.ncols;
-            } else {
+            }
+            else
+            {
                 ncells = 1;
             }
             gtab_select(hwnd, ptab, row, cell, 1, ncells, TRUE);
@@ -647,20 +731,24 @@ gtab_press(HWND hwnd, lpTable ptab, int x, int y)
     long cell, ncells;
     long row;
 
-    if (ptab->trackmode != TRACK_NONE) {
+    if (ptab->trackmode != TRACK_NONE)
+    {
         return;
     }
 
     /* has he grabbed a cell-edge to resize ? */
     cell = gtab_xtocol(hwnd, ptab, x);
-    if (cell == -1) {
+    if (cell == -1)
+    {
         return;
     }
-    if (gtab_isborder(hwnd, ptab, x, cell)) {
+    if (gtab_isborder(hwnd, ptab, x, cell))
+    {
         gtab_trackcol(hwnd, ptab, cell, x);
         return;
     }
-    if ( (cell > 0) && gtab_isborder(hwnd, ptab, x, cell-1)) {
+    if ( (cell > 0) && gtab_isborder(hwnd, ptab, x, cell-1))
+    {
         gtab_trackcol(hwnd, ptab, cell, x);
         return;
     }
@@ -669,15 +757,18 @@ gtab_press(HWND hwnd, lpTable ptab, int x, int y)
     row = gtab_linetorow(hwnd, ptab, gtab_ytoline(hwnd, ptab, y));
 
     /* is he selecting a disabled fixed area ? */
-    if ( (row < ptab->hdr.fixedrows) || (cell < ptab->hdr.fixedcols)) {
-        if (ptab->hdr.fixedselectable == FALSE) {
+    if ( (row < ptab->hdr.fixedrows) || (cell < ptab->hdr.fixedcols))
+    {
+        if (ptab->hdr.fixedselectable == FALSE)
+        {
             return;
         }
     }
 
     // ignore if beyond data
     if ((row >= ptab->hdr.nrows) ||
-            (cell >= ptab->hdr.ncols)) {
+            (cell >= ptab->hdr.ncols))
+    {
         return;
     }
 
@@ -688,10 +779,13 @@ gtab_press(HWND hwnd, lpTable ptab, int x, int y)
 
     /* record and paint new selection */
 
-    if (ptab->hdr.selectmode & TM_ROW) {
+    if (ptab->hdr.selectmode & TM_ROW)
+    {
         cell = 0;
         ncells = ptab->hdr.ncols;
-    } else {
+    }
+    else
+    {
         ncells = 1;
     }
 
@@ -699,9 +793,12 @@ gtab_press(HWND hwnd, lpTable ptab, int x, int y)
      * if the shift key is down, then extend the selection to this
      * new anchor point, rather than create a new selection
      */
-    if (GetKeyState(VK_SHIFT) & 0x8000) {
+    if (GetKeyState(VK_SHIFT) & 0x8000)
+    {
         gtab_extendsel(hwnd, ptab, row, cell, FALSE);
-    } else {
+    }
+    else
+    {
         gtab_select(hwnd, ptab, row, cell, 1, ncells, FALSE);
     }
     return;
@@ -718,7 +815,8 @@ gtab_release(HWND hwnd, lpTable ptab, int x, int y)
     long row, cell;
     int cx;
 
-    switch(ptab->trackmode) {
+    switch(ptab->trackmode)
+    {
 
     case TRACK_NONE:
         return;
@@ -749,8 +847,10 @@ gtab_release(HWND hwnd, lpTable ptab, int x, int y)
 
         // ignore if before or beyond data
         if ( (row < ptab->hdr.fixedrows) ||
-             (cell < ptab->hdr.fixedcols)) {
-            if (ptab->hdr.fixedselectable == FALSE) {
+                (cell < ptab->hdr.fixedcols))
+        {
+            if (ptab->hdr.fixedselectable == FALSE)
+            {
                 gtab_select(
                     hwnd,
                     ptab,
@@ -765,15 +865,16 @@ gtab_release(HWND hwnd, lpTable ptab, int x, int y)
         }
 
         if ((row >= ptab->hdr.nrows) ||
-                (cell >= ptab->hdr.ncols)) {
+                (cell >= ptab->hdr.ncols))
+        {
             gtab_select(
-                    hwnd,
-                    ptab,
-                    ptab->select.startrow,
-                    ptab->select.startcell,
-                    ptab->select.nrows,
-                    ptab->select.ncells,
-                    TRUE);
+                hwnd,
+                ptab,
+                ptab->select.startrow,
+                ptab->select.startcell,
+                ptab->select.nrows,
+                ptab->select.ncells,
+                TRUE);
             return;
         }
 
@@ -800,19 +901,23 @@ gtab_move(HWND hwnd, lpTable ptab, int x, int y)
     int col;
     lpCellPos ppos;
 
-    switch(ptab->trackmode) {
+    switch(ptab->trackmode)
+    {
 
     case TRACK_NONE:
         col = gtab_xtocol(hwnd, ptab, x);
-        if (col == -1) {
+        if (col == -1)
+        {
             SetCursor((HCURSOR)hNormCurs);
             return;
         }
-        if (gtab_isborder(hwnd, ptab, x, col)) {
+        if (gtab_isborder(hwnd, ptab, x, col))
+        {
             SetCursor((HCURSOR)hVertCurs);
             return;
         }
-        if ( (col > 0) && gtab_isborder(hwnd, ptab, x, col-1)) {
+        if ( (col > 0) && gtab_isborder(hwnd, ptab, x, col-1))
+        {
             SetCursor((HCURSOR)hVertCurs);
             return;
         }
@@ -830,10 +935,13 @@ gtab_move(HWND hwnd, lpTable ptab, int x, int y)
         /* if extending selection then
          * allow scrolling by dragging off window
          */
-        if (line < 0) {
+        if (line < 0)
+        {
             gtab_dovscroll(hwnd, ptab, -1);
             line = gtab_ytoline(hwnd, ptab, y);
-        } else if (line >=  ptab->nlines) {
+        }
+        else if (line >=  ptab->nlines)
+        {
             gtab_dovscroll(hwnd, ptab, 1);
             line = gtab_ytoline(hwnd, ptab, y);
         }
@@ -843,14 +951,17 @@ gtab_move(HWND hwnd, lpTable ptab, int x, int y)
         col = gtab_xtocol(hwnd, ptab, x);
 
         // ignore if before or beyond data
-        if ( (row < ptab->hdr.fixedrows) || (col < ptab->hdr.fixedcols)) {
-            if (ptab->hdr.fixedselectable == FALSE) {
+        if ( (row < ptab->hdr.fixedrows) || (col < ptab->hdr.fixedcols))
+        {
+            if (ptab->hdr.fixedselectable == FALSE)
+            {
                 return;
             }
         }
 
         if ((row >= ptab->hdr.nrows) ||
-            (col >= ptab->hdr.ncols)) {
+                (col >= ptab->hdr.ncols))
+        {
             return;
         }
 
@@ -865,16 +976,22 @@ gtab_move(HWND hwnd, lpTable ptab, int x, int y)
         ppos = &ptab->pcellpos[ptab->tracknr];
         fOK = FALSE;
 
-        if (ptab->tracknr < ptab->hdr.fixedcols)  {
-            if ((x > ppos->start) && (x < ptab->winwidth)) {
-                fOK = TRUE;
-            }
-        } else {
-            if ((x > ppos->clipstart) && (x < ptab->winwidth)) {
+        if (ptab->tracknr < ptab->hdr.fixedcols)
+        {
+            if ((x > ppos->start) && (x < ptab->winwidth))
+            {
                 fOK = TRUE;
             }
         }
-        if (fOK == TRUE) {
+        else
+        {
+            if ((x > ppos->clipstart) && (x < ptab->winwidth))
+            {
+                fOK = TRUE;
+            }
+        }
+        if (fOK == TRUE)
+        {
             gtab_drawvertline(hwnd, ptab);
             ptab->trackline1 = x;
             gtab_drawvertline(hwnd, ptab);
@@ -892,16 +1009,21 @@ gtab_dblclick(HWND hwnd, lpTable ptab, int x, int y)
 
     line = gtab_ytoline(hwnd, ptab, y);
     cell = gtab_xtocol(hwnd, ptab, x);
-    if ( (line < ptab->hdr.fixedrows) || (cell < ptab->hdr.fixedcols) ) {
-        if (!ptab->hdr.fixedselectable) {
+    if ( (line < ptab->hdr.fixedrows) || (cell < ptab->hdr.fixedcols) )
+    {
+        if (!ptab->hdr.fixedselectable)
+        {
             return;
         }
     }
     row = gtab_linetorow(hwnd, ptab, line);
 
-    if (ptab->hdr.selectmode & TM_ROW) {
+    if (ptab->hdr.selectmode & TM_ROW)
+    {
         gtab_enter(hwnd, ptab, row, 0, 1, ptab->hdr.ncols);
-    } else {
+    }
+    else
+    {
         gtab_enter(hwnd, ptab, row, cell, 1, 1);
     }
 }
@@ -921,9 +1043,11 @@ gtab_showsel(HWND hwnd, lpTable ptab, BOOL bToBottom)
     line = gtab_rowtoline(hwnd, ptab, ptab->select.startrow);
 
     /* move up if last line or not at all visible */
-    if ( (line < 0) || line == (ptab->nlines - 1)) {
+    if ( (line < 0) || line == (ptab->nlines - 1))
+    {
         change = ptab->select.startrow - ptab->toprow;
-        if (bToBottom) {
+        if (bToBottom)
+        {
             /* change to bottom of window. subtract 2 not 1
              * since nlines includes one line that is only
              * partly visible
@@ -1000,21 +1124,28 @@ gtab_extendsel(
     /*
      * if no current selection, then just select the new anchor point
      */
-    if (ptab->select.nrows == 0) {
+    if (ptab->select.nrows == 0)
+    {
         gtab_select(hwnd, ptab, startrow, startcell, 1,
-            (ptab->hdr.selectmode & TM_ROW) ? ptab->hdr.ncols:1,
-            bNotify);
+                    (ptab->hdr.selectmode & TM_ROW) ? ptab->hdr.ncols:1,
+                    bNotify);
         return;
     }
 
-    if (startrow >= ptab->hdr.nrows) {
+    if (startrow >= ptab->hdr.nrows)
+    {
         startrow = ptab->hdr.nrows -1;
-    } else if (startrow < 0) {
+    }
+    else if (startrow < 0)
+    {
         startrow = 0;
     }
-    if (startcell >= ptab->hdr.ncols) {
+    if (startcell >= ptab->hdr.ncols)
+    {
         startcell = ptab->hdr.ncols-1;
-    } else if (startcell < 0) {
+    }
+    else if (startcell < 0)
+    {
         startcell = 0;
     }
 
@@ -1026,36 +1157,49 @@ gtab_extendsel(
      * to be the actual (inclusive) last row.
      */
     endrow = ptab->select.startrow + ptab->select.nrows;
-    if (ptab->select.nrows < 0) {
+    if (ptab->select.nrows < 0)
+    {
         endrow++;
-    } else {
+    }
+    else
+    {
         endrow--;
     }
 
-    if (endrow >= ptab->hdr.nrows) {
+    if (endrow >= ptab->hdr.nrows)
+    {
         endrow = ptab->hdr.nrows-1;
     }
     nrows = endrow - startrow;
 
-    if (nrows >= 0) {
+    if (nrows >= 0)
+    {
         // convert from exclusive to inclusive
         nrows++;
-    } else {
+    }
+    else
+    {
         // convert from exclusive to inclusive
         nrows--;
     }
 
     /* same calculation for cells */
     endcell = ptab->select.startcell + ptab->select.ncells;
-    if (ptab->select.ncells < 0) {
+    if (ptab->select.ncells < 0)
+    {
         endcell++;
-    } else {
+    }
+    else
+    {
         endcell--;
     }
     ncells = endcell - startcell;
-    if (ncells >= 0) {
+    if (ncells >= 0)
+    {
         ncells++;
-    } else {
+    }
+    else
+    {
         ncells--;
     }
     gtab_select(hwnd, ptab, startrow, startcell, nrows, ncells, bNotify);
@@ -1090,27 +1234,34 @@ gtab_changesel(
     long row, col, ncols;
 
     /* is there a selection ? */
-    if (ptab->select.nrows == 0) {
+    if (ptab->select.nrows == 0)
+    {
 
         /* no selection - force a selection
          * at the first visible unit
          */
-        if (ptab->hdr.fixedselectable) {
+        if (ptab->hdr.fixedselectable)
+        {
             row = 0;
             col = 0;
-        } else {
+        }
+        else
+        {
             row = gtab_linetorow(hwnd, ptab, ptab->hdr.fixedrows);
             /* should really check for first visible cell */
             col = ptab->hdr.fixedcols;
         }
         ncols = 1;
-        if (ptab->hdr.selectmode & TM_ROW) {
+        if (ptab->hdr.selectmode & TM_ROW)
+        {
             col = 0;
             ncols = ptab->hdr.ncols;
         }
         gtab_select(hwnd, ptab, row, col, 1, ncols, TRUE);
 
-    } else {
+    }
+    else
+    {
         /* move the anchor point by rowincr, cellincr */
         row = ptab->select.startrow + rowincr;
         col = ptab->select.startcell + cellincr;
@@ -1120,29 +1271,37 @@ gtab_changesel(
          * ensure that new anchor point is in a valid position
          */
 
-        while (col >= ptab->hdr.ncols) {
+        while (col >= ptab->hdr.ncols)
+        {
             col -= ptab->hdr.ncols;
             row++;
         }
-        while (col < 0) {
+        while (col < 0)
+        {
             col += ptab->hdr.ncols;
             row--;
         }
-        if (row < 0) {
+        if (row < 0)
+        {
             row = 0;
         }
-        if (row >= ptab->hdr.nrows) {
+        if (row >= ptab->hdr.nrows)
+        {
             row = ptab->hdr.nrows-1;
         }
         /* check we haven't moved into non-selectable region */
         if ((row < ptab->hdr.fixedrows) &&
-            (!ptab->hdr.fixedselectable)) {
-                    row = ptab->hdr.fixedrows;
+                (!ptab->hdr.fixedselectable))
+        {
+            row = ptab->hdr.fixedrows;
         }
 
-        if (bExtend) {
+        if (bExtend)
+        {
             gtab_extendsel(hwnd, ptab, row, col, TRUE);
-        } else {
+        }
+        else
+        {
             gtab_select(
                 hwnd,
                 ptab,
@@ -1171,26 +1330,36 @@ gtab_selhome(HWND hwnd, lpTable ptab, BOOL bExtend)
 {
     long startrow, startcell, ncells;
 
-    if (ptab->hdr.selectmode & TM_ROW) {
+    if (ptab->hdr.selectmode & TM_ROW)
+    {
         ncells = ptab->hdr.ncols;
-    } else {
+    }
+    else
+    {
         ncells = 1;
     }
     startcell = 0;
 
 
-    if (ptab->hdr.fixedselectable) {
+    if (ptab->hdr.fixedselectable)
+    {
         startrow = gtab_linetorow(hwnd, ptab, 0);
-    } else {
+    }
+    else
+    {
         startrow = gtab_linetorow(hwnd, ptab, ptab->hdr.fixedrows);
-        if (!(ptab->hdr.selectmode & TM_ROW)) {
+        if (!(ptab->hdr.selectmode & TM_ROW))
+        {
             startcell = ptab->hdr.fixedcols;
         }
     }
 
-    if (bExtend) {
+    if (bExtend)
+    {
         gtab_extendsel(hwnd, ptab, startrow, startcell, TRUE);
-    } else {
+    }
+    else
+    {
         gtab_select(hwnd, ptab, startrow, startcell, 1, ncells, TRUE);
     }
 }
@@ -1204,42 +1373,52 @@ gtab_key(HWND hwnd, lpTable ptab, int vkey)
     BOOL bControl = FALSE;
     BOOL bShift = FALSE;
 
-    if (GetKeyState(VK_CONTROL) & 0x8000) {
+    if (GetKeyState(VK_CONTROL) & 0x8000)
+    {
         bControl = TRUE;
     }
-    if (GetKeyState(VK_SHIFT) & 0x8000) {
+    if (GetKeyState(VK_SHIFT) & 0x8000)
+    {
         /* ignore shift key here if TM_MANY -multiple selection flag- is
          * not selected
          */
-        if (ptab->hdr.selectmode & TM_MANY) {
+        if (ptab->hdr.selectmode & TM_MANY)
+        {
             bShift = TRUE;
         }
     }
 
-    switch(vkey) {
+    switch(vkey)
+    {
 
     case VK_UP:
-        if (bControl) {
+        if (bControl)
+        {
             /* control-uparrow scrolls window without selection.
              * the selection is de-selected (to avoid surprises
              * moving back to it).
              */
             gtab_select(hwnd, ptab, 0, 0, 0, 0, TRUE);
             gtab_dovscroll(hwnd, ptab, -1);
-        } else {
+        }
+        else
+        {
             /* uparrow moves selection up one line */
             gtab_changesel(hwnd, ptab, -1, 0, FALSE, bShift);
         }
         return(0);
 
     case VK_DOWN:
-        if (bControl) {
+        if (bControl)
+        {
             /* control downarrow scrolls window without
              * a selection.
              */
             gtab_select(hwnd, ptab, 0, 0, 0, 0, TRUE);
             gtab_dovscroll(hwnd, ptab, 1);
-        } else {
+        }
+        else
+        {
             /* the normal gtab_changesel behaviour is
              * that if the selected line is not visible now,
              * we scroll it to the top of the window. This is fine
@@ -1260,14 +1439,20 @@ gtab_key(HWND hwnd, lpTable ptab, int vkey)
          * the line left a little
          */
 
-        if (ptab->hdr.selectmode & TM_ROW) {
-            if (bControl) {
+        if (ptab->hdr.selectmode & TM_ROW)
+        {
+            if (bControl)
+            {
                 /* ctrl-left moves to start of line */
                 gtab_dohscroll(hwnd, ptab, -(ptab->scroll_dx));
-            } else {
+            }
+            else
+            {
                 gtab_dohscroll(hwnd, ptab, -(ptab->avewidth));
             }
-        } else {
+        }
+        else
+        {
             gtab_changesel(hwnd, ptab, 0, -1, FALSE, bShift);
         }
         return(0);
@@ -1277,21 +1462,28 @@ gtab_key(HWND hwnd, lpTable ptab, int vkey)
          * otherwise the whole row is selected - scroll
          * the line right a little
          */
-        if (ptab->hdr.selectmode & TM_ROW) {
-            if (bControl) {
+        if (ptab->hdr.selectmode & TM_ROW)
+        {
+            if (bControl)
+            {
                 /* control-right moves to right end of line */
                 gtab_dohscroll(hwnd, ptab, ptab->rowwidth -
-                                ptab->winwidth);
-            } else {
+                               ptab->winwidth);
+            }
+            else
+            {
                 gtab_dohscroll(hwnd, ptab, ptab->avewidth);
             }
-        } else {
+        }
+        else
+        {
             gtab_changesel(hwnd, ptab, 0, 1, TRUE, bShift);
         }
         return(0);
 
     case VK_HOME:
-        if (bControl) {
+        if (bControl)
+        {
             /* control-home == top of file */
             gtab_dovscroll(hwnd, ptab, -(ptab->toprow));
         }
@@ -1302,26 +1494,34 @@ gtab_key(HWND hwnd, lpTable ptab, int vkey)
         return(0);
 
     case VK_END:
-        if (bControl) {
+        if (bControl)
+        {
             /* control-end -> end of file */
             startrow = ptab->hdr.nrows-1;
-        } else {
+        }
+        else
+        {
             startrow = gtab_linetorow(hwnd, ptab, ptab->nlines - 1);
-            if (startrow >= ptab->hdr.nrows) {
+            if (startrow >= ptab->hdr.nrows)
+            {
                 startrow = ptab->hdr.nrows-1;
             }
         }
 
         startcell = 0;
         ncells = ptab->hdr.ncols;
-        if (!(ptab->hdr.selectmode & TM_ROW)) {
+        if (!(ptab->hdr.selectmode & TM_ROW))
+        {
             startcell = ptab->hdr.ncols-1;
             ncells = 1;
         }
 
-        if (bShift) {
+        if (bShift)
+        {
             gtab_extendsel(hwnd, ptab, startrow, startcell, TRUE);
-        } else {
+        }
+        else
+        {
             gtab_select(hwnd, ptab, startrow, startcell, 1, ncells, TRUE);
         }
 
@@ -1331,7 +1531,8 @@ gtab_key(HWND hwnd, lpTable ptab, int vkey)
          * apply to the ctrl-end behaviour (move to bottom of
          * buffer.
          */
-        if (bControl) {
+        if (bControl)
+        {
             /* move the selection to make it visible - but move it
              * to the bottom and not to the top of the window
              */
@@ -1340,28 +1541,33 @@ gtab_key(HWND hwnd, lpTable ptab, int vkey)
         return(0);
 
     case VK_RETURN:
-        if (ptab->select.nrows != 0) {
+        if (ptab->select.nrows != 0)
+        {
             gtab_showsel(hwnd, ptab, FALSE);
             gtab_enter(hwnd, ptab, ptab->select.startrow,
-                    ptab->select.startcell,
-                    ptab->select.nrows, ptab->select.ncells);
+                       ptab->select.startcell,
+                       ptab->select.nrows, ptab->select.ncells);
         }
         return(0);
 
     case VK_SPACE:
         /* toggle the selection */
-        if (ptab->select.nrows == 0) {
-                /* no selection - make one */
-                gtab_changesel(hwnd, ptab, 0, 0, TRUE, FALSE);
-        } else {
-                /* there is a selection - deselect it */
-                gtab_select(hwnd, ptab, 0, 0, 0, 0, TRUE);
+        if (ptab->select.nrows == 0)
+        {
+            /* no selection - make one */
+            gtab_changesel(hwnd, ptab, 0, 0, TRUE, FALSE);
+        }
+        else
+        {
+            /* there is a selection - deselect it */
+            gtab_select(hwnd, ptab, 0, 0, 0, 0, TRUE);
         }
         return(0);
 
     case VK_PRIOR:          /* page up */
 
-        if (ptab->nlines > 3) {
+        if (ptab->nlines > 3)
+        {
             gtab_dovscroll(hwnd, ptab, -(ptab->nlines - 3));
         }
         gtab_selhome(hwnd, ptab, bShift);
@@ -1370,18 +1576,21 @@ gtab_key(HWND hwnd, lpTable ptab, int vkey)
     case VK_NEXT:           /* page down */
 
         /* scroll down one page */
-        if (ptab->nlines > 3) {
+        if (ptab->nlines > 3)
+        {
             gtab_dovscroll(hwnd, ptab, (ptab->nlines - 3));
         }
 
         /* select new bottom line */
         startrow = gtab_linetorow(hwnd, ptab, ptab->nlines - 1);
-        if (startrow >= ptab->hdr.nrows) {
+        if (startrow >= ptab->hdr.nrows)
+        {
             startrow = ptab->hdr.nrows-1;
         }
         startcell = 0;
         ncells = ptab->hdr.ncols;
-        if (!(ptab->hdr.selectmode & TM_ROW)) {
+        if (!(ptab->hdr.selectmode & TM_ROW))
+        {
             startcell = ptab->hdr.ncols-1;
             ncells = 1;
         }
@@ -1390,9 +1599,12 @@ gtab_key(HWND hwnd, lpTable ptab, int vkey)
          * since we don't want to adjust it's position - we
          * want it to remain at the bottom of the window
          */
-        if (bShift) {
+        if (bShift)
+        {
             gtab_extendsel(hwnd, ptab, startrow, startcell, TRUE);
-        } else {
+        }
+        else
+        {
             gtab_select(hwnd, ptab, startrow, startcell, 1, ncells, TRUE);
         }
         return(0);
@@ -1406,25 +1618,31 @@ int gtab_mousewheel(HWND hwnd, lpTable ptab, DWORD fwKeys, int zDelta)
 {
     static ULONG uScrollLines = 0;
 
-    if (fwKeys & MK_MBUTTON) {
+    if (fwKeys & MK_MBUTTON)
+    {
         return 1;
     }
 
-    if (uScrollLines == 0) {
+    if (uScrollLines == 0)
+    {
         SystemParametersInfo(SPI_GETWHEELSCROLLLINES, 0, &uScrollLines, FALSE);
-        if (uScrollLines == 0) {
+        if (uScrollLines == 0)
+        {
             uScrollLines = 3;
         }
     }
 
     zDelta /= -WHEEL_DELTA;
 
-    if (fwKeys & MK_CONTROL) {
+    if (fwKeys & MK_CONTROL)
+    {
         //
         // Left-Right scroll
         //
-        if (ptab->hdr.selectmode & TM_ROW) {
-            if (fwKeys & MK_SHIFT) {
+        if (ptab->hdr.selectmode & TM_ROW)
+        {
+            if (fwKeys & MK_SHIFT)
+            {
                 zDelta = (zDelta > 0) ? ptab->rowwidth : -ptab->rowwidth;
             }
             gtab_dohscroll(hwnd, ptab, ptab->avewidth * zDelta);
@@ -1433,16 +1651,20 @@ int gtab_mousewheel(HWND hwnd, lpTable ptab, DWORD fwKeys, int zDelta)
         return 1;
     }
 
-    if (fwKeys & MK_SHIFT) {
+    if (fwKeys & MK_SHIFT)
+    {
         //
         // Page scroll
         //
-        if (ptab->nlines > 3) {
+        if (ptab->nlines > 3)
+        {
             zDelta *= ptab->nlines - 3;
         }
     }
-    else {
-        if (uScrollLines) {
+    else
+    {
+        if (uScrollLines)
+        {
             zDelta *= uScrollLines;
             zDelta = min(zDelta, ptab->nlines - 3);
         }

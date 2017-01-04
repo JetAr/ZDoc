@@ -1,4 +1,4 @@
-//
+﻿//
 // flipsel.cpp
 //
 // "Flip Selection" menu item handler.
@@ -55,7 +55,7 @@ void CCaseTextService::_Menu_FlipSel(CCaseTextService *_this)
 
 Exit:
     SafeRelease(pContext);
-    pFocusDoc->Release();    
+    pFocusDoc->Release();
 }
 
 //+---------------------------------------------------------------------------
@@ -71,7 +71,7 @@ STDAPI CFlipEditSession::DoEditSession(TfEditCookie ec)
 
     // get the selection
     if (_pContext->GetSelection(ec, TF_DEFAULT_SELECTION, 1, &tfSelection, &cFetched) != S_OK ||
-        cFetched == 0)
+            cFetched == 0)
     {
         // no selection
         return S_OK;

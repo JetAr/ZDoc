@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -18,14 +18,14 @@ TextAnalysis::TextAnalysis(
     const wchar_t* localeName,
     IDWriteNumberSubstitution* numberSubstitution,
     DWRITE_READING_DIRECTION readingDirection
-    )
-:   text_(text),
-    textLength_(textLength),
-    localeName_(localeName),
-    readingDirection_(readingDirection),
-    numberSubstitution_(numberSubstitution),
-    currentPosition_(0),
-    currentRunIndex_(0)
+)
+    :   text_(text),
+        textLength_(textLength),
+        localeName_(localeName),
+        readingDirection_(readingDirection),
+        numberSubstitution_(numberSubstitution),
+        currentPosition_(0),
+        currentRunIndex_(0)
 {
 }
 
@@ -34,7 +34,7 @@ STDMETHODIMP TextAnalysis::GenerateResults(
     IDWriteTextAnalyzer* textAnalyzer,
     OUT std::vector<TextAnalysis::Run>& runs,
     OUT std::vector<DWRITE_LINE_BREAKPOINT>& breakpoints
-    )
+)
 {
     // Analyzes the text using each of the analyzers and returns
     // their results as a series of runs.
@@ -57,10 +57,10 @@ STDMETHODIMP TextAnalysis::GenerateResults(
 
         // Call each of the analyzers in sequence, recording their results.
         if (SUCCEEDED(hr = textAnalyzer->AnalyzeLineBreakpoints(   this, 0, textLength_, this))
-        &&  SUCCEEDED(hr = textAnalyzer->AnalyzeBidi(              this, 0, textLength_, this))
-        &&  SUCCEEDED(hr = textAnalyzer->AnalyzeScript(            this, 0, textLength_, this))
-        &&  SUCCEEDED(hr = textAnalyzer->AnalyzeNumberSubstitution(this, 0, textLength_, this))
-        )
+                &&  SUCCEEDED(hr = textAnalyzer->AnalyzeBidi(              this, 0, textLength_, this))
+                &&  SUCCEEDED(hr = textAnalyzer->AnalyzeScript(            this, 0, textLength_, this))
+                &&  SUCCEEDED(hr = textAnalyzer->AnalyzeNumberSubstitution(this, 0, textLength_, this))
+           )
         {
             // Exchange our results with the caller's.
             breakpoints.swap(breakpoints_);
@@ -93,7 +93,7 @@ IFACEMETHODIMP TextAnalysis::GetTextAtPosition(
     UINT32 textPosition,
     OUT WCHAR const** textString,
     OUT UINT32* textLength
-    ) throw()
+) throw()
 {
     if (textPosition >= textLength_)
     {
@@ -118,7 +118,7 @@ IFACEMETHODIMP TextAnalysis::GetTextBeforePosition(
     UINT32 textPosition,
     OUT WCHAR const** textString,
     OUT UINT32* textLength
-    ) throw()
+) throw()
 {
     if (textPosition == 0 || textPosition > textLength_)
     {
@@ -149,7 +149,7 @@ IFACEMETHODIMP TextAnalysis::GetLocaleName(
     UINT32 textPosition,
     OUT UINT32* textLength,
     OUT WCHAR const** localeName
-    ) throw()
+) throw()
 {
     // The pointer returned should remain valid until the next call,
     // or until analysis ends. Since only one locale name is supported,
@@ -167,7 +167,7 @@ IFACEMETHODIMP TextAnalysis::GetNumberSubstitution(
     UINT32 textPosition,
     OUT UINT32* textLength,
     OUT IDWriteNumberSubstitution** numberSubstitution
-    ) throw()
+) throw()
 {
     if (numberSubstitution_ != NULL)
         numberSubstitution_->AddRef();
@@ -186,7 +186,7 @@ IFACEMETHODIMP TextAnalysis::SetLineBreakpoints(
     UINT32 textPosition,
     UINT32 textLength,
     DWRITE_LINE_BREAKPOINT const* lineBreakpoints   // [textLength]
-    ) throw()
+) throw()
 {
     if (textLength > 0)
     {
@@ -200,7 +200,7 @@ IFACEMETHODIMP TextAnalysis::SetScriptAnalysis(
     UINT32 textPosition,
     UINT32 textLength,
     DWRITE_SCRIPT_ANALYSIS const* scriptAnalysis
-    ) throw()
+) throw()
 {
     try
     {
@@ -226,7 +226,7 @@ IFACEMETHODIMP TextAnalysis::SetBidiLevel(
     UINT32 textLength,
     UINT8 explicitLevel,
     UINT8 resolvedLevel
-    ) throw()
+) throw()
 {
     try
     {
@@ -251,7 +251,7 @@ IFACEMETHODIMP TextAnalysis::SetNumberSubstitution(
     UINT32 textPosition,
     UINT32 textLength,
     IDWriteNumberSubstitution* numberSubstitution
-    ) throw()
+) throw()
 {
     try
     {
@@ -277,7 +277,7 @@ IFACEMETHODIMP TextAnalysis::SetNumberSubstitution(
 
 TextAnalysis::LinkedRun& TextAnalysis::FetchNextRun(
     IN OUT UINT32* textLength
-    )
+)
 {
     // Used by the sink setters, this returns a reference to the next run.
     // Position and length are adjusted to now point after the current run
@@ -316,15 +316,15 @@ void TextAnalysis::SetCurrentRun(UINT32 textPosition)
     // corresponding run for the text position.
 
     if (currentRunIndex_ < runs_.size()
-    &&  runs_[currentRunIndex_].ContainsTextPosition(textPosition))
+            &&  runs_[currentRunIndex_].ContainsTextPosition(textPosition))
     {
         return;
     }
 
     currentRunIndex_ = static_cast<UINT32>(
-                            std::find(runs_.begin(), runs_.end(), textPosition)
-                            - runs_.begin()
-                            );
+                           std::find(runs_.begin(), runs_.end(), textPosition)
+                           - runs_.begin()
+                       );
 }
 
 

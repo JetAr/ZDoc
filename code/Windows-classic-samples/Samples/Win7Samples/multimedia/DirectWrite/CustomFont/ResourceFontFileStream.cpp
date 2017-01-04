@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -22,10 +22,10 @@ HMODULE ResourceFontFileStream::GetCurrentModule()
 
     // Determine the module handle from the address of this function.
     GetModuleHandleEx(
-        GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS, 
-        reinterpret_cast<LPCTSTR>(&GetCurrentModule), 
+        GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS,
+        reinterpret_cast<LPCTSTR>(&GetCurrentModule),
         &handle
-        );
+    );
 
     return handle;
 }
@@ -86,11 +86,11 @@ HRESULT STDMETHODCALLTYPE ResourceFontFileStream::ReadFileFragment(
     UINT64 fileOffset,
     UINT64 fragmentSize,
     OUT void** fragmentContext
-    )
+)
 {
     // The loader is responsible for doing a bounds check.
-    if (fileOffset <= resourceSize_ && 
-        fragmentSize <= resourceSize_ - fileOffset)
+    if (fileOffset <= resourceSize_ &&
+            fragmentSize <= resourceSize_ - fileOffset)
     {
         *fragmentStart = static_cast<BYTE const*>(resourcePtr_) + static_cast<size_t>(fileOffset);
         *fragmentContext = NULL;
@@ -106,13 +106,13 @@ HRESULT STDMETHODCALLTYPE ResourceFontFileStream::ReadFileFragment(
 
 void STDMETHODCALLTYPE ResourceFontFileStream::ReleaseFileFragment(
     void* fragmentContext
-    )
+)
 {
 }
 
 HRESULT STDMETHODCALLTYPE ResourceFontFileStream::GetFileSize(
     OUT UINT64* fileSize
-    )
+)
 {
     *fileSize = resourceSize_;
     return S_OK;
@@ -120,7 +120,7 @@ HRESULT STDMETHODCALLTYPE ResourceFontFileStream::GetFileSize(
 
 HRESULT STDMETHODCALLTYPE ResourceFontFileStream::GetLastWriteTime(
     OUT UINT64* lastWriteTime
-    )
+)
 {
     // The concept of last write time does not apply to this loader.
     *lastWriteTime = 0;

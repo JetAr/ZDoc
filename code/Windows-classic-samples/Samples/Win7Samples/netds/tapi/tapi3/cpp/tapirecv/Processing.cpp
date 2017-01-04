@@ -1,4 +1,4 @@
-/*
+﻿/*
 
 
 Copyright (c) 1999 - 2000  Microsoft Corporation
@@ -10,12 +10,12 @@ Module Name:
 
 Abstract:
 
-    Implementation of the ITTAPIEventNotification interface. An application 
-    must implement and register this interface in order to receive calls and 
-    events related to calls. See TAPI documentation for more information on 
+    Implementation of the ITTAPIEventNotification interface. An application
+    must implement and register this interface in order to receive calls and
+    events related to calls. See TAPI documentation for more information on
     this interface.
- 
-    This file also contains a collection of functions related to event 
+
+    This file also contains a collection of functions related to event
     processing
 
 */
@@ -48,10 +48,10 @@ CWorkerThread g_WorkerThread;
 //
 // ITTAPIEventNotification::Event
 //
-// the method on the tapi callback object that will be called 
-// when tapi notifies the application of an event 
+// the method on the tapi callback object that will be called
+// when tapi notifies the application of an event
 //
-// this method should return as soon as possible, so we are not 
+// this method should return as soon as possible, so we are not
 // going to actually process the events here. Instead, we will post
 // events to a worker thread for asynchronous processing.
 //
@@ -61,13 +61,13 @@ CWorkerThread g_WorkerThread;
 ///////////////////////////////////////////////////////////////////////////////
 
 HRESULT STDMETHODCALLTYPE CTAPIEventNotification::Event(IN TAPI_EVENT TapiEvent,
-                                                        IN IDispatch *pEvent)
+        IN IDispatch *pEvent)
 {
-    
+
     LogMessage("CTAPIEventNotification::Event "
                "posting message for asynchronous processing");
 
-    
+
     //
     // AddRef the event so it doesn't go away after we return
     //
@@ -80,8 +80,8 @@ HRESULT STDMETHODCALLTYPE CTAPIEventNotification::Event(IN TAPI_EVENT TapiEvent,
     //
 
     g_WorkerThread.PostMessage(WM_PRIVATETAPIEVENT,
-                              (WPARAM) TapiEvent,
-                              (LPARAM) pEvent);
+                               (WPARAM) TapiEvent,
+                               (LPARAM) pEvent);
 
     return S_OK;
 }
@@ -104,7 +104,7 @@ HRESULT GetTerminalFromStreamEvent(IN ITCallMediaEvent *pCallMediaEvent,
 
     HRESULT hr = E_FAIL;
 
-    
+
     //
     // don't return garbage
     //
@@ -117,12 +117,12 @@ HRESULT GetTerminalFromStreamEvent(IN ITCallMediaEvent *pCallMediaEvent,
     //
 
     ITStream *pStream = NULL;
-    
+
     hr = pCallMediaEvent->get_Stream(&pStream);
 
     if ( FAILED(hr) )
     {
-        
+
         LogMessage("GetTerminalFromStreamEvent: "
                    "Failed to get stream from pCallMediaEvent hr = 0x%lx", hr);
 
@@ -141,16 +141,16 @@ HRESULT GetTerminalFromStreamEvent(IN ITCallMediaEvent *pCallMediaEvent,
     pStream->Release();
     pStream = NULL;
 
-    if ( FAILED(hr) ) 
+    if ( FAILED(hr) )
     {
         LogMessage("GetTerminalFromStreamEvent: "
                    "Failed to enumerate terminals hr = 0x%lx", hr);
         return hr;
     }
 
-    
+
     //
-    // we should have at most one terminal selected on the stream, so 
+    // we should have at most one terminal selected on the stream, so
     // get the first terminal
     //
 
@@ -173,9 +173,9 @@ HRESULT GetTerminalFromStreamEvent(IN ITCallMediaEvent *pCallMediaEvent,
 
     pTerminal = NULL;
 
-    
+
     //
-    // we should not have any more terminals on this stream, 
+    // we should not have any more terminals on this stream,
     // double-check this.
     //
 
@@ -214,9 +214,9 @@ HRESULT GetTerminalFromStreamEvent(IN ITCallMediaEvent *pCallMediaEvent,
 
 BOOL IsMessageForActiveCall(IN ITCallStateEvent *pCallStateEvent)
 {
-    
+
     EnterCriticalSection(&g_CurrentCallCritSection);
-    
+
     //
     // if we don't have an active call we have not received call notification
     // for a call that we own, so return FALSE
@@ -225,7 +225,7 @@ BOOL IsMessageForActiveCall(IN ITCallStateEvent *pCallStateEvent)
     if (NULL == g_pCurrentCall)
     {
         LogMessage("IsMessageForActiveCall: no active call. return FALSE");
-    
+
         LeaveCriticalSection(&g_CurrentCallCritSection);
 
 
@@ -236,16 +236,16 @@ BOOL IsMessageForActiveCall(IN ITCallStateEvent *pCallStateEvent)
     //
     // get the call corresponding to the event
     //
-    
+
     ITCallInfo *pCallInfo = NULL;
-    
+
     HRESULT hr = pCallStateEvent->get_Call(&pCallInfo);
 
     if (FAILED(hr))
     {
         LogError("IsMessageForActiveCall: failed to get call. "
                  "returning FALSE");
-        
+
         LeaveCriticalSection(&g_CurrentCallCritSection);
 
         return FALSE;
@@ -269,7 +269,7 @@ BOOL IsMessageForActiveCall(IN ITCallStateEvent *pCallStateEvent)
                  "failed to qi incoming call for IUnknown. returning FALSE");
 
         LeaveCriticalSection(&g_CurrentCallCritSection);
-        
+
         return FALSE;
     }
 
@@ -311,14 +311,14 @@ BOOL IsMessageForActiveCall(IN ITCallStateEvent *pCallStateEvent)
     else
     {
         LogMessage("IsMessageForActiveCall: "
-                    "current and event calls are different. returning FALSE.");
+                   "current and event calls are different. returning FALSE.");
 
         bSameCall = FALSE;
     }
 
     pCurrentCallUnk->Release();
     pCurrentCallUnk = NULL;
-        
+
     pIncomingCallUnk->Release();
     pIncomingCallUnk = NULL;
 
@@ -331,12 +331,12 @@ BOOL IsMessageForActiveCall(IN ITCallStateEvent *pCallStateEvent)
 // GetAddressFromCall
 //
 //
-// return ITAddress of the address corresponding to the supplied 
+// return ITAddress of the address corresponding to the supplied
 // ITBasicCallControl
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-HRESULT GetAddressFromCall(IN ITBasicCallControl *pCallControl, 
+HRESULT GetAddressFromCall(IN ITBasicCallControl *pCallControl,
                            OUT ITAddress **ppAddress)
 {
 
@@ -349,11 +349,11 @@ HRESULT GetAddressFromCall(IN ITBasicCallControl *pCallControl,
 
     *ppAddress = NULL;
 
-    
+
     //
     // get ITCallInfo so we can get the call's address
     //
-    
+
     ITCallInfo *pCallInfo = NULL;
 
     hr = pCallControl->QueryInterface(IID_ITCallInfo, (void**)&pCallInfo);
@@ -374,8 +374,8 @@ HRESULT GetAddressFromCall(IN ITBasicCallControl *pCallControl,
     ITAddress *pAddress = NULL;
 
     hr = pCallInfo->get_Address(&pAddress);
-    
-    
+
+
     pCallInfo->Release();
     pCallInfo = NULL;
 
@@ -385,7 +385,7 @@ HRESULT GetAddressFromCall(IN ITBasicCallControl *pCallControl,
         LogError("GetAddressFromCall: failed to get address");
 
     }
-    else 
+    else
     {
         *ppAddress = pAddress;
     }
@@ -398,7 +398,7 @@ HRESULT GetAddressFromCall(IN ITBasicCallControl *pCallControl,
 //
 // CreateRenderMediaStreamingTerminal
 //
-// create rendering media streaming terminal. 
+// create rendering media streaming terminal.
 //
 // if success, return the pointer to the terminal
 // if failed, return NULL
@@ -407,7 +407,7 @@ HRESULT GetAddressFromCall(IN ITBasicCallControl *pCallControl,
 
 ITTerminal *CreateRenderMediaStreamingTerminal(IN ITBasicCallControl *pCallControl)
 {
-    
+
     HRESULT hr = E_FAIL;
 
 
@@ -426,7 +426,7 @@ ITTerminal *CreateRenderMediaStreamingTerminal(IN ITBasicCallControl *pCallContr
         return NULL;
     }
 
-    
+
     //
     // get the terminal support interface from the address
     //
@@ -447,7 +447,7 @@ ITTerminal *CreateRenderMediaStreamingTerminal(IN ITBasicCallControl *pCallContr
         return NULL;
     }
 
-    
+
     //
     // get string for the terminal's class id
     //
@@ -474,7 +474,7 @@ ITTerminal *CreateRenderMediaStreamingTerminal(IN ITBasicCallControl *pCallContr
 
     BSTR bstrTerminalClass = SysAllocString (pszTerminalClass);
 
-    
+
     //
     // free the string returned by StringFromIID
     //
@@ -486,7 +486,7 @@ ITTerminal *CreateRenderMediaStreamingTerminal(IN ITBasicCallControl *pCallContr
     //
     // create media streaming terminal for rendering
     //
-    
+
     ITTerminal *pTerminal = NULL;
 
     hr = pTerminalSupport->CreateTerminal(bstrTerminalClass,
@@ -494,7 +494,7 @@ ITTerminal *CreateRenderMediaStreamingTerminal(IN ITBasicCallControl *pCallContr
                                           TD_RENDER,
                                           &pTerminal);
 
-    
+
     //
     // release resources no longer needed
     //
@@ -530,7 +530,7 @@ ITTerminal *CreateRenderMediaStreamingTerminal(IN ITBasicCallControl *pCallContr
 ///////////////////////////////////////////////////////////////////////////////
 //
 // SetAudioFormat
-// 
+//
 // tell media streaming terminal the audio format we would like
 // to receive
 //
@@ -540,21 +540,21 @@ HRESULT SetAudioFormat(IN ITTerminal *pTerminal)
 {
 
     HRESULT hr = E_FAIL;
-    
-    
+
+
     //
     // get ITAMMediaFormat interface on the terminal
     //
 
     ITAMMediaFormat *pITMediaFormat = NULL;
 
-    hr = pTerminal->QueryInterface(IID_ITAMMediaFormat, 
+    hr = pTerminal->QueryInterface(IID_ITAMMediaFormat,
                                    (void **)&pITMediaFormat);
 
     if (FAILED(hr))
     {
         LogError("SetAudioFormat: failed to QI terminal for ITAMMediaFormat");
-     
+
         return hr;
     }
 
@@ -565,12 +565,12 @@ HRESULT SetAudioFormat(IN ITTerminal *pTerminal)
     WAVEFORMATEX WaveFormat;
 
     ZeroMemory(&WaveFormat, sizeof(WAVEFORMATEX));
-    
+
     WaveFormat.wFormatTag = WAVE_FORMAT_PCM; // pcm
     WaveFormat.nChannels = 1;                // mono
     WaveFormat.nSamplesPerSec = 8000;        // 8 khz
     WaveFormat.nAvgBytesPerSec = 16000;      // 16000 bytes per sec
-    WaveFormat.nBlockAlign = 2;              // 2 bytes per block 
+    WaveFormat.nBlockAlign = 2;              // 2 bytes per block
     WaveFormat.wBitsPerSample = 16;          // 16 bits per sample
     WaveFormat.cbSize = 0;                   // no extra format-specific data
 
@@ -634,7 +634,7 @@ HRESULT SetAudioFormat(IN ITTerminal *pTerminal)
                 LogFormat((WAVEFORMATEX*) pMediaFormat->pbFormat);
 
             }
-            else 
+            else
             {
 
                 LogError("SetAudioFormat: "
@@ -643,7 +643,7 @@ HRESULT SetAudioFormat(IN ITTerminal *pTerminal)
 
 
             //
-            // note: we are responsible for deallocating the format returned by 
+            // note: we are responsible for deallocating the format returned by
             // get_MediaFormat
             //
 
@@ -665,7 +665,7 @@ HRESULT SetAudioFormat(IN ITTerminal *pTerminal)
 
     LogError("SetAudioFormat: completed");
 
- 
+
     return hr;
 
 }
@@ -686,21 +686,21 @@ HRESULT SetAllocatorProperties(IN ITTerminal *pTerminal)
     //
     // different buffer sizes may produce different sound quality, depending
     // on the underlying transport that is being used.
-    // 
+    //
     // this function illustrates how an app can control the number and size of
     // buffers. A multiple of 30 ms (480 bytes at 16-bit 8 KHz PCM) is the most
     // appropriate sample size for IP (especailly G.723.1).
     //
     // However, small buffers can cause poor audio quality on some voice boards.
     //
-    // If this method is not called, the allocator properties suggested by the 
+    // If this method is not called, the allocator properties suggested by the
     // connecting filter will be used.
     //
 
 
     HRESULT hr = E_FAIL;
 
-    
+
     //
     // get ITAllocator properties interface on the terminal
     //
@@ -720,21 +720,21 @@ HRESULT SetAllocatorProperties(IN ITTerminal *pTerminal)
         return hr;
     }
 
-    
+
     //
     // configure allocator properties
     //
-    // suggest the size and number of the samples for MST to pre-allocate. 
+    // suggest the size and number of the samples for MST to pre-allocate.
     //
-    
+
     ALLOCATOR_PROPERTIES AllocProps;
-    
+
     AllocProps.cBuffers   = 5;    // ask MST to allocate 5 buffers
     AllocProps.cbBuffer   = 4800; // 4800 bytes each
     AllocProps.cbAlign    = 1;    // no need to align buffers
     AllocProps.cbPrefix   = 0;    // no extra memory preceeding the actual data
-    
-    
+
+
     hr = pITAllocatorProperties->SetAllocatorProperties(&AllocProps);
 
     if (FAILED(hr))
@@ -748,10 +748,10 @@ HRESULT SetAllocatorProperties(IN ITTerminal *pTerminal)
         return hr;
     }
 
-    
+
     //
-    // ask media streaming terminal to allocate buffers for us. 
-    // TRUE is the default, so strictly speaking, we didn't have to call 
+    // ask media streaming terminal to allocate buffers for us.
+    // TRUE is the default, so strictly speaking, we didn't have to call
     // this method.
     //
 
@@ -761,7 +761,7 @@ HRESULT SetAllocatorProperties(IN ITTerminal *pTerminal)
     pITAllocatorProperties->Release();
     pITAllocatorProperties = NULL;
 
-    
+
     if (FAILED(hr))
     {
         LogError("SetAllocatorProperties: "
@@ -796,7 +796,7 @@ HRESULT SetAllocatorProperties(IN ITTerminal *pTerminal)
 HRESULT SelectAndInitializeTerminal(IN ITTerminal *pRecordTerminal,
                                     IN ITStream *pStream)
 {
-    
+
     HRESULT hr = E_FAIL;
 
 
@@ -808,10 +808,10 @@ HRESULT SelectAndInitializeTerminal(IN ITTerminal *pRecordTerminal,
 
     if (FAILED(hr))
     {
-     
+
         //
         // the terminal does not support the wave format we wanted.
-        // no big deal for the receiver, we'll just have to create the 
+        // no big deal for the receiver, we'll just have to create the
         // file in the format requested by MST.
         //
 
@@ -830,9 +830,9 @@ HRESULT SelectAndInitializeTerminal(IN ITTerminal *pRecordTerminal,
 
     if (FAILED(hr))
     {
-     
+
         //
-        // not a fatal error. our allocator props were rejected, 
+        // not a fatal error. our allocator props were rejected,
         // but this does not necessarily mean streaming will fail.
         //
 
@@ -881,7 +881,7 @@ BOOL IsRenderingStream(ITStream *pStream)
     if (FAILED(hr))
     {
         LogError("IsRenderingStream: Failed to get stream direction");
-        
+
         return FALSE;
     }
 
@@ -901,17 +901,17 @@ BOOL IsRenderingStream(ITStream *pStream)
 //
 // IsAudioStream
 //
-// returns TRUE if the stream's type is TAPIMEDIATYPE_AUDIO 
+// returns TRUE if the stream's type is TAPIMEDIATYPE_AUDIO
 //
 ///////////////////////////////////////////////////////////////////////////////
 
 BOOL IsAudioStream(ITStream *pStream)
 {
-    
+
     //
-    // check the stream's media type 
+    // check the stream's media type
     //
-    
+
     long nMediaType = 0;
 
     HRESULT hr = pStream->get_MediaType(&nMediaType);
@@ -930,12 +930,12 @@ BOOL IsAudioStream(ITStream *pStream)
 
     if (TAPIMEDIATYPE_AUDIO == nMediaType)
     {
-        
+
         return TRUE;
     }
     else
     {
-    
+
         return FALSE;
     }
 
@@ -943,9 +943,9 @@ BOOL IsAudioStream(ITStream *pStream)
 
 
 ///////////////////////////////////////////////////////////////////////////////
-// 
+//
 // CreateAndSelectMST
-// 
+//
 // check the call's streams. create media streaming terminal on the first
 // incoming audio stream
 //
@@ -967,7 +967,7 @@ HRESULT CreateAndSelectMST()
     // we should already have the call
     //
 
-    if (NULL == g_pCurrentCall) 
+    if (NULL == g_pCurrentCall)
     {
         LogError("CreateAndSelectMST: g_pCurrentCall is NULL");
 
@@ -1000,31 +1000,31 @@ HRESULT CreateAndSelectMST()
     //
 
     IEnumStream *pEnumStreams = NULL;
-    
+
     hr = pStreamControl->EnumerateStreams(&pEnumStreams);
-    
+
     pStreamControl->Release();
     pStreamControl = NULL;
 
     if (FAILED(hr))
     {
         LogError("CreateAndSelectMST: failed to enumerate streams on call");
-        
+
         return hr;
     }
 
-    
+
     //
     // walk through the list of streams on the call
     // for the first incoming audio stream, create a media streaming terminal
     // and select it on the stream
     //
-  
+
     BOOL bTerminalCreatedAndSelected = FALSE;
 
     while (!bTerminalCreatedAndSelected)
     {
-        
+
         ITStream *pStream = NULL;
 
         hr = pEnumStreams->Next(1, &pStream, NULL);
@@ -1055,7 +1055,7 @@ HRESULT CreateAndSelectMST()
             //
             // create media streaming terminal and select it on the stream
             //
-            
+
             ITTerminal *pRecordTerminal = NULL;
 
             pRecordTerminal = CreateRenderMediaStreamingTerminal(g_pCurrentCall);
@@ -1083,7 +1083,7 @@ HRESULT CreateAndSelectMST()
         } // stream is rendering and audio
         else
         {
-            // 
+            //
             // the stream is of wrong direction, or type
             //
 
@@ -1102,7 +1102,7 @@ HRESULT CreateAndSelectMST()
     pEnumStreams->Release();
     pEnumStreams = NULL;
 
-    
+
     if (bTerminalCreatedAndSelected)
     {
         LogMessage("CreateAndSelectMST: terminal selected");
@@ -1160,13 +1160,13 @@ HRESULT GetTerminalFromMediaEvent(IN ITCallMediaEvent *pCallMediaEvent,
 
 
     //
-    // find the terminal on this stream 
+    // find the terminal on this stream
     //
 
     //
     // get terminal enumeration on the stream
     //
-    
+
     IEnumTerminal *pEnumTerminal = NULL;
 
     hr = pStream->EnumerateTerminals(&pEnumTerminal);
@@ -1178,19 +1178,19 @@ HRESULT GetTerminalFromMediaEvent(IN ITCallMediaEvent *pCallMediaEvent,
     if ( FAILED(hr) )
     {
         LogError("GetTerminalFromMediaEvent: failed to enumerate terminals, "
-            "hr = 0x%lx", hr);
-        
+                 "hr = 0x%lx", hr);
+
         return hr;
 
     }
 
-    
+
     //
     // walk through terminal enumeration
     //
 
     ULONG nTerminalsFetched = 0;
-    
+
     ITTerminal *pStreamTerminal = NULL;
 
 
@@ -1207,16 +1207,16 @@ HRESULT GetTerminalFromMediaEvent(IN ITCallMediaEvent *pCallMediaEvent,
     {
         LogError("GetTerminalFromMediaEvent: enumeration returned no "
                  "terminals, hr = 0x%lx", hr);
-        
+
         return hr;
 
     }
 
     *ppTerminal = pStreamTerminal;
 
-    
+
     LogMessage("GetTerminalFromMediaEvent: succeeded");
-    
+
     return S_OK;
 }
 
@@ -1240,7 +1240,7 @@ HRESULT GetNumberOfSamplesOnStream(IN IMediaStream *pTerminalMediaStream,
     //
     // don't return garbage
     //
-       
+
     *pnNumberOfSamples = 0;
 
 
@@ -1251,7 +1251,7 @@ HRESULT GetNumberOfSamplesOnStream(IN IMediaStream *pTerminalMediaStream,
     ITAllocatorProperties *pAllocProperites = NULL;
 
     hr = pTerminalMediaStream->QueryInterface(IID_ITAllocatorProperties,
-                                        (void **)&pAllocProperites);
+            (void **)&pAllocProperites);
 
     if (FAILED(hr))
     {
@@ -1261,7 +1261,7 @@ HRESULT GetNumberOfSamplesOnStream(IN IMediaStream *pTerminalMediaStream,
         return hr;
     }
 
-    
+
     //
     // we want to know the number of samples we will be getting
     //
@@ -1278,7 +1278,7 @@ HRESULT GetNumberOfSamplesOnStream(IN IMediaStream *pTerminalMediaStream,
     {
         LogError("GetNumberOfSamplesOnStream: "
                  "Failed to get terminal's allocator properties");
-        
+
         return hr;
     }
 
@@ -1309,7 +1309,7 @@ HRESULT GetNumberOfSamplesOnStream(IN IMediaStream *pTerminalMediaStream,
 
 void ReleaseEvents(IN OUT HANDLE *pEvents,   // array of events to be freed
                    IN DWORD nNumberOfEvents  // number of events in the array
-                   )
+                  )
 {
 
     //
@@ -1322,7 +1322,7 @@ void ReleaseEvents(IN OUT HANDLE *pEvents,   // array of events to be freed
         pEvents[i] = NULL;
     }
 
-    
+
     //
     // free the array itself
     //
@@ -1352,13 +1352,13 @@ HANDLE *AllocateEvents(IN DWORD nNumberOfEvents)
 
     HANDLE *pSampleReadyEvents = NULL;
 
-    pSampleReadyEvents = 
+    pSampleReadyEvents =
         (HANDLE*)AllocateMemory(sizeof(HANDLE) * nNumberOfEvents);
 
     if (NULL == pSampleReadyEvents)
     {
         LogError("AllocateEvents: Failed to allocate sample ready events.");
-        
+
         return NULL;
     }
 
@@ -1367,12 +1367,12 @@ HANDLE *AllocateEvents(IN DWORD nNumberOfEvents)
     // create an event for every allocated handle
     //
 
-    
+
     for (DWORD i = 0; i < nNumberOfEvents; i++)
     {
 
         pSampleReadyEvents[i] = CreateEvent(NULL, FALSE, FALSE, NULL);
-        
+
         if (NULL == pSampleReadyEvents[i])
         {
 
@@ -1401,7 +1401,7 @@ HANDLE *AllocateEvents(IN DWORD nNumberOfEvents)
 
     } // creating events for each sample
 
-    
+
     //
     // succeded creating events. return the pointer to the array
     //
@@ -1415,7 +1415,7 @@ HANDLE *AllocateEvents(IN DWORD nNumberOfEvents)
 //
 // ReleaseSamples
 //
-// aborts and releases every sample in the array of samples of size 
+// aborts and releases every sample in the array of samples of size
 // nNumberOfSamples and deallocates the array itself
 //
 // ppStreamSamples becomes invalid when the function returns
@@ -1432,7 +1432,7 @@ void ReleaseSamples(IN OUT IStreamSample **ppStreamSamples,
                                              COMPSTAT_ABORT,
                                              INFINITE);
 
-        
+
         //
         // regardless of the error code, release the sample
         //
@@ -1450,7 +1450,7 @@ void ReleaseSamples(IN OUT IStreamSample **ppStreamSamples,
 //
 // AllocateStreamSamples
 //
-// allocate the array of nNumberOfSamples samples, and initialize each sample 
+// allocate the array of nNumberOfSamples samples, and initialize each sample
 // pointer in the array with samples from the supplied stream.
 //
 // return pointer to the allocated and initialized array if success
@@ -1467,7 +1467,7 @@ IStreamSample **AllocateStreamSamples(IN IMediaStream *pMediaStream,
     //
 
     IStreamSample **ppStreamSamples = (IStreamSample **)
-        AllocateMemory( sizeof(IStreamSample*) * nNumberOfSamples );
+                                      AllocateMemory( sizeof(IStreamSample*) * nNumberOfSamples );
 
 
     if (NULL == ppStreamSamples)
@@ -1480,7 +1480,7 @@ IStreamSample **AllocateStreamSamples(IN IMediaStream *pMediaStream,
 
     //
     // allocate samples from the stream and put them into the array
-    // 
+    //
 
     for (DWORD i = 0; i < nNumberOfSamples; i++)
     {
@@ -1503,7 +1503,7 @@ IStreamSample **AllocateStreamSamples(IN IMediaStream *pMediaStream,
             ppStreamSamples = NULL;
 
             return NULL;
-            
+
         } // failed AllocateSample()
 
     } // allocating samples on the stream
@@ -1539,17 +1539,17 @@ HRESULT AssociateEventsWithSamples(IN HANDLE *pSampleReadyEvents,
     {
 
         //
-        // the event passed to Update will be signaled when the sample is 
+        // the event passed to Update will be signaled when the sample is
         // filled with data
         //
 
-        HRESULT hr = 
+        HRESULT hr =
             ppStreamSamples[i]->Update(0, pSampleReadyEvents[i], NULL, 0);
 
 
         if (FAILED(hr))
         {
-            
+
             LogError("AssociateEventsWithSamples: "
                      "Failed to call update on sample #%d", i);
 
@@ -1560,7 +1560,7 @@ HRESULT AssociateEventsWithSamples(IN HANDLE *pSampleReadyEvents,
 
             for (DWORD j = 0; j < i; j++)
             {
-      
+
                 //
                 // no need to check the return code here -- best effort attempt
                 // if failed -- too bad
@@ -1586,11 +1586,11 @@ HRESULT AssociateEventsWithSamples(IN HANDLE *pSampleReadyEvents,
 //
 // GetAudioFormat
 //
-// return a pointer to wave format structure for the audio data produced by 
+// return a pointer to wave format structure for the audio data produced by
 // the stream. the caller is responsible for deallocating returned stucture
 //
 // returns NULL if failed
-// 
+//
 //////////////////////////////////////////////////////////////////////////////
 
 WAVEFORMATEX *GetAudioFormat(IMediaStream *pTerminalMediaStream)
@@ -1605,13 +1605,13 @@ WAVEFORMATEX *GetAudioFormat(IMediaStream *pTerminalMediaStream)
     ITAMMediaFormat *pITMediaFormat = NULL;
 
     HRESULT hr = pTerminalMediaStream->QueryInterface(IID_ITAMMediaFormat,
-                                                     (void **)&pITMediaFormat);
+                 (void **)&pITMediaFormat);
 
     if (FAILED(hr))
     {
         LogError("GetAudioFormat: "
                  "failed to QI terminal for ITAMMediaFormat");
- 
+
         return NULL;
     }
 
@@ -1641,7 +1641,7 @@ WAVEFORMATEX *GetAudioFormat(IMediaStream *pTerminalMediaStream)
     //
 
     if ((pMediaType->pbFormat == NULL) ||
-        pMediaType->formattype != FORMAT_WaveFormatEx)
+            pMediaType->formattype != FORMAT_WaveFormatEx)
     {
 
         LogError("GetAudioFormat: invalid format");
@@ -1652,11 +1652,11 @@ WAVEFORMATEX *GetAudioFormat(IMediaStream *pTerminalMediaStream)
         return NULL;
     }
 
-    // 
+    //
     // allocate and return wave format
     //
 
-    WAVEFORMATEX *pFormat = 
+    WAVEFORMATEX *pFormat =
         (WAVEFORMATEX *)AllocateMemory(pMediaType->cbFormat);
 
     if (NULL != pFormat)
@@ -1694,14 +1694,14 @@ HRESULT WriteSampleToFile(IN IStreamSample *pStreamSample, // sample to record
 {
 
     //
-    // get the sample's IMemoryData interface so we can get to the 
+    // get the sample's IMemoryData interface so we can get to the
     // sample's data
     //
 
     IMemoryData *pSampleMemoryData = NULL;
 
     HRESULT hr = pStreamSample->QueryInterface(IID_IMemoryData,
-                                               (void **)&pSampleMemoryData);
+                 (void **)&pSampleMemoryData);
 
     if (FAILED(hr))
     {
@@ -1747,7 +1747,7 @@ HRESULT WriteSampleToFile(IN IStreamSample *pStreamSample, // sample to record
     //
 
     LogMessage("WriteSampleToFile: received a sample of size %ld bytes",
-                nActualDataSize);
+               nActualDataSize);
 
 
     ULONG nBytesWritten = 0;
@@ -1780,8 +1780,8 @@ HRESULT WriteSampleToFile(IN IStreamSample *pStreamSample, // sample to record
 
 HRESULT GetSampleID(IN DWORD nWaitCode,         // code from WaitForMultiple...
                     IN DWORD nNumberOfSamples,  // the total number of samples
-                    IN OUT DWORD *pnSampleID)   // the calculated id of the 
-                                                //          signaled sample
+                    IN OUT DWORD *pnSampleID)   // the calculated id of the
+//          signaled sample
 {
 
 
@@ -1789,11 +1789,11 @@ HRESULT GetSampleID(IN DWORD nWaitCode,         // code from WaitForMultiple...
     // event abandoned?
     //
 
-    if ( (nWaitCode >= WAIT_ABANDONED_0) && 
-         (nWaitCode < WAIT_ABANDONED_0 + nNumberOfSamples) )
+    if ( (nWaitCode >= WAIT_ABANDONED_0) &&
+            (nWaitCode < WAIT_ABANDONED_0 + nNumberOfSamples) )
     {
 
-        LogError("GetSampleID: event for sample #%lu abandoned.", 
+        LogError("GetSampleID: event for sample #%lu abandoned.",
                  nWaitCode - WAIT_ABANDONED_0);
 
         return E_FAIL;
@@ -1804,8 +1804,8 @@ HRESULT GetSampleID(IN DWORD nWaitCode,         // code from WaitForMultiple...
     // any other error?
     //
 
-    if ( (WAIT_OBJECT_0 > nWaitCode) || 
-         (WAIT_OBJECT_0 + nNumberOfSamples <= nWaitCode) )
+    if ( (WAIT_OBJECT_0 > nWaitCode) ||
+            (WAIT_OBJECT_0 + nNumberOfSamples <= nWaitCode) )
     {
         LogMessage("GetSampleID: "
                    "waiting for samples failed or timed out. "
@@ -1862,8 +1862,8 @@ HRESULT WriteStreamToFile(IN IMediaStream *pTerminalMediaStream)
 
 
     //
-    // the number of samples directly corresponds the number of events we will 
-    // be waiting on later. WaitForMultipleObjects has a limit of 
+    // the number of samples directly corresponds the number of events we will
+    // be waiting on later. WaitForMultipleObjects has a limit of
     // MAXIMUM_WAIT_OBJECTS events.
     //
 
@@ -1872,16 +1872,16 @@ HRESULT WriteStreamToFile(IN IMediaStream *pTerminalMediaStream)
 
         LogError("WriteStreamToFile: the number of samples [%ld] "
                  "exceeds the number allowed by the design of this "
-                 "application [%ld]", 
+                 "application [%ld]",
                  nNumberOfSamples, MAXIMUM_WAIT_OBJECTS);
 
         return E_FAIL;
 
     }
 
-   
+
     //
-    // allocate events that will be signaled when each sample is ready to be 
+    // allocate events that will be signaled when each sample is ready to be
     // saved to a file
     //
 
@@ -1892,7 +1892,7 @@ HRESULT WriteStreamToFile(IN IMediaStream *pTerminalMediaStream)
     if (NULL == pSampleReadyEvents)
     {
         LogError("WriteStreamToFile: Failed to allocate sample ready events.");
-        
+
         return E_OUTOFMEMORY;
     }
 
@@ -1900,10 +1900,10 @@ HRESULT WriteStreamToFile(IN IMediaStream *pTerminalMediaStream)
     //
     // allocate array of stream samples
     //
-   
+
     IStreamSample **ppStreamSamples = NULL;
 
-    ppStreamSamples = AllocateStreamSamples(pTerminalMediaStream, 
+    ppStreamSamples = AllocateStreamSamples(pTerminalMediaStream,
                                             nNumberOfSamples);
 
     if (NULL == ppStreamSamples)
@@ -1924,10 +1924,10 @@ HRESULT WriteStreamToFile(IN IMediaStream *pTerminalMediaStream)
 
 
     //
-    // we have the samples, we have the events. 
-    // associate events with samples so events get signaled when the 
+    // we have the samples, we have the events.
+    // associate events with samples so events get signaled when the
     // corresponding samples are ready to be written to a file
-    // 
+    //
 
     hr = AssociateEventsWithSamples(pSampleReadyEvents,
                                     ppStreamSamples,
@@ -1951,7 +1951,7 @@ HRESULT WriteStreamToFile(IN IMediaStream *pTerminalMediaStream)
         return E_FAIL;
     }
 
-    
+
     //
     // get the format of the data delivered by media streaming terminal
     //
@@ -1983,7 +1983,7 @@ HRESULT WriteStreamToFile(IN IMediaStream *pTerminalMediaStream)
     //
     // create a file with the required name and format.
     //
-   
+
     CAVIFileWriter FileWriter;
 
     hr = FileWriter.Initialize(SZ_OUTPUTFILENAME, *pAudioFormat);
@@ -2029,20 +2029,20 @@ HRESULT WriteStreamToFile(IN IMediaStream *pTerminalMediaStream)
 
         //
         // wait for the events associated with the samples
-        // when a samples has data, the corresponding event will be 
+        // when a samples has data, the corresponding event will be
         // signaled
         //
-    
-        DWORD nWaitCode = WaitForMultipleObjects(nNumberOfSamples,
-                                                 pSampleReadyEvents,
-                                                 FALSE,
-                                                 INFINITE);
 
-        
+        DWORD nWaitCode = WaitForMultipleObjects(nNumberOfSamples,
+                          pSampleReadyEvents,
+                          FALSE,
+                          INFINITE);
+
+
         //
         // get the id of the sample that was signaled. fail if Wait returned
         // error
-        // 
+        //
 
         DWORD nSampleID = 0;
 
@@ -2057,7 +2057,7 @@ HRESULT WriteStreamToFile(IN IMediaStream *pTerminalMediaStream)
 
 
         //
-        // we filtered out all invalid error codes. so nSampleID has no 
+        // we filtered out all invalid error codes. so nSampleID has no
         // choice but be a valid sample index.
         //
 
@@ -2070,7 +2070,7 @@ HRESULT WriteStreamToFile(IN IMediaStream *pTerminalMediaStream)
 
         hr = ppStreamSamples[nSampleID]->CompletionStatus(COMPSTAT_WAIT, 0);
 
-    
+
         //
         // check against S_OK explicitly -- not all success codes mean the
         // sample is ready to be used (MS_S_ENDOFSTREAM, etc)
@@ -2081,9 +2081,9 @@ HRESULT WriteStreamToFile(IN IMediaStream *pTerminalMediaStream)
 
             if (E_ABORT == hr)
             {
-        
+
                 //
-                // recording was aborted, probably because 
+                // recording was aborted, probably because
                 // the call was disconnected
                 //
 
@@ -2093,13 +2093,13 @@ HRESULT WriteStreamToFile(IN IMediaStream *pTerminalMediaStream)
             {
 
                 LogMessage("WriteStreamToFile: sample is not completed. "
-                            "hr = 0x%lx", hr);
+                           "hr = 0x%lx", hr);
             }
 
             break;
         }
 
-        
+
         //
         // we have the sample that was signaled and which is now ready to be
         // saved to a file. Record the sample.
@@ -2128,9 +2128,9 @@ HRESULT WriteStreamToFile(IN IMediaStream *pTerminalMediaStream)
         //
 
         hr = ppStreamSamples[nSampleID]->Update(0,
-                                               pSampleReadyEvents[nSampleID],
-                                               NULL,
-                                               0);
+                                                pSampleReadyEvents[nSampleID],
+                                                NULL,
+                                                0);
 
         if (FAILED(hr))
         {
@@ -2142,10 +2142,10 @@ HRESULT WriteStreamToFile(IN IMediaStream *pTerminalMediaStream)
         }
 
     } // sample-writing loop
- 
 
-    LogMessage("WriteStreamToFile: wrote the total of %lu samples", 
-                nStreamSamplesRecorded);
+
+    LogMessage("WriteStreamToFile: wrote the total of %lu samples",
+               nStreamSamplesRecorded);
 
 
     //
@@ -2165,7 +2165,7 @@ HRESULT WriteStreamToFile(IN IMediaStream *pTerminalMediaStream)
 
     LogMessage("WriteStreamToFile: completed, hr = 0x%lx", hr);
 
- 
+
     return hr;
 }
 
@@ -2189,10 +2189,10 @@ HRESULT RecordMessage(IN ITTerminal *pRecordTerm)
     //
     // get IMediaStream interface on the terminal
     //
-    
+
     IMediaStream *pTerminalMediaStream = NULL;
 
-    hr = pRecordTerm->QueryInterface(IID_IMediaStream, 
+    hr = pRecordTerm->QueryInterface(IID_IMediaStream,
                                      (void**)&pTerminalMediaStream);
 
     if (FAILED(hr))
@@ -2202,14 +2202,14 @@ HRESULT RecordMessage(IN ITTerminal *pRecordTerm)
         return hr;
     }
 
-    
+
     //
     // write terminal stream data to a file
     //
-    
+
     hr = WriteStreamToFile(pTerminalMediaStream);
 
-    
+
     //
     // done with the terminal stream, release.
     //
@@ -2250,8 +2250,8 @@ HRESULT ProcessCallNotificationEvent(IDispatch *pEvent)
 
     ITCallNotificationEvent *pCallNotificationEvent = NULL;
 
-    hr = pEvent->QueryInterface( IID_ITCallNotificationEvent, 
-                                (void **)&pCallNotificationEvent);
+    hr = pEvent->QueryInterface( IID_ITCallNotificationEvent,
+                                 (void **)&pCallNotificationEvent);
 
     if (FAILED(hr))
     {
@@ -2260,7 +2260,7 @@ HRESULT ProcessCallNotificationEvent(IDispatch *pEvent)
 
         return hr;
     }
-   
+
 
     //
     // get the call from notification event
@@ -2287,7 +2287,7 @@ HRESULT ProcessCallNotificationEvent(IDispatch *pEvent)
         return hr;
     }
 
-    
+
     //
     // if we already have an active call, reject the new incoming call
     //
@@ -2302,10 +2302,10 @@ HRESULT ProcessCallNotificationEvent(IDispatch *pEvent)
         LogMessage("ProcessCallNotificationEvent: "
                    "incoming call while another call in progress");
 
-        
+
         ITBasicCallControl *pSecondCall = NULL;
 
-        hr = pCall->QueryInterface(IID_ITBasicCallControl, 
+        hr = pCall->QueryInterface(IID_ITBasicCallControl,
                                    (void**)&pSecondCall);
 
         pCall->Release();
@@ -2326,7 +2326,7 @@ HRESULT ProcessCallNotificationEvent(IDispatch *pEvent)
         //
 
         LogMessage("ProcessCallNotificationEvent: rejecting the incoming call");
-        
+
 
         hr = pSecondCall->Disconnect(DC_REJECTED);
 
@@ -2342,7 +2342,7 @@ HRESULT ProcessCallNotificationEvent(IDispatch *pEvent)
     //
 
     CALL_PRIVILEGE cp;
-   
+
     hr = pCall->get_Privilege( &cp );
 
 
@@ -2382,20 +2382,20 @@ HRESULT ProcessCallNotificationEvent(IDispatch *pEvent)
 
     //
     // keep the call for future use
-    // 
+    //
 
-    hr = pCall->QueryInterface(IID_ITBasicCallControl, 
+    hr = pCall->QueryInterface(IID_ITBasicCallControl,
                                (void**)&g_pCurrentCall);
 
 
     if (FAILED(hr))
     {
         LogError("ProcessCallNotificationEvent: failed to qi incoming call for"
-                  "ITBasicCallControl.");
-        
+                 "ITBasicCallControl.");
+
         g_pCurrentCall = NULL;
     }
-    
+
     LeaveCriticalSection(&g_CurrentCallCritSection);
 
     pCall->Release();
@@ -2411,7 +2411,7 @@ HRESULT ProcessCallNotificationEvent(IDispatch *pEvent)
 //
 // ProcessCallMediaEvent
 //
-// processing for TE_CALLMEDIA event. if stream is active, record the 
+// processing for TE_CALLMEDIA event. if stream is active, record the
 // incoming data
 //
 ///////////////////////////////////////////////////////////////////////////////
@@ -2425,12 +2425,12 @@ HRESULT ProcessCallMediaEvent(IDispatch *pEvent)
 
     ITCallMediaEvent *pCallMediaEvent = NULL;
 
-    HRESULT hr = pEvent->QueryInterface( IID_ITCallMediaEvent, 
-                                 (void **)&pCallMediaEvent );
+    HRESULT hr = pEvent->QueryInterface( IID_ITCallMediaEvent,
+                                         (void **)&pCallMediaEvent );
 
     if (FAILED(hr))
     {
-    
+
         //
         // the event does not have the interface we want
         //
@@ -2454,12 +2454,12 @@ HRESULT ProcessCallMediaEvent(IDispatch *pEvent)
     {
 
         //
-        // failed to get call media event 
+        // failed to get call media event
         //
-        
+
         LogError("ProcessCallMediaEvent: TE_CALLMEDIA. "
                  "Failed to get call media event hr = 0x%lx", hr);
-        
+
         pCallMediaEvent->Release();
         pCallMediaEvent = NULL;
 
@@ -2469,147 +2469,147 @@ HRESULT ProcessCallMediaEvent(IDispatch *pEvent)
 
     LogMessage("ProcessCallMediaEvent: processing call media event");
 
-    switch (CallMediaEvent) 
+    switch (CallMediaEvent)
     {
 
-        case CME_STREAM_INACTIVE:
-        {
+    case CME_STREAM_INACTIVE:
+    {
 
-            LogMessage("ProcessCallMediaEvent: CME_STREAM_INACTIVE");
+        LogMessage("ProcessCallMediaEvent: CME_STREAM_INACTIVE");
+
+        break;
+    }
+
+    case CME_STREAM_NOT_USED:
+
+        LogMessage("ProcessCallMediaEvent: CME_STREAM_NOT_USED");
+
+        break;
+
+    case CME_NEW_STREAM:
+
+        LogMessage("ProcessCallMediaEvent: CME_NEW_STREAM received");
+
+        break;
+
+    case CME_STREAM_FAIL:
+
+        LogError("ProcessCallMediaEvent: CME_STREAM_FAIL received");
+
+        break;
+
+    case CME_TERMINAL_FAIL:
+
+        LogError("ProcessCallMediaEvent: CME_STREAM_FAIL received");
+
+        break;
+
+    case CME_STREAM_ACTIVE:
+    {
+
+        LogError("ProcessCallMediaEvent: CME_STREAM_ACTIVE received");
+
+
+        //
+        // Get the terminal on the active stream
+        //
+
+        ITTerminal *pRecordStreamTerminal = NULL;
+
+        hr = GetTerminalFromMediaEvent(pCallMediaEvent,
+                                       &pRecordStreamTerminal);
+
+        if ( FAILED(hr) )
+        {
+            //
+            // the stream has no terminals associated with it
+            //
+
+            LogError("ProcessCallMediaEvent: "
+                     "failed to get terminal on the active stream");
 
             break;
         }
 
-        case CME_STREAM_NOT_USED:
-            
-            LogMessage("ProcessCallMediaEvent: CME_STREAM_NOT_USED");
-            
-            break;
 
-        case CME_NEW_STREAM:
+        //
+        // make sure the direction is right -- we are recording, so the
+        // terminal should be TD_RENDER
+        //
 
-            LogMessage("ProcessCallMediaEvent: CME_NEW_STREAM received");
+        TERMINAL_DIRECTION td;
 
-            break;
+        hr = pRecordStreamTerminal->get_Direction( &td);
 
-        case CME_STREAM_FAIL:
-
-            LogError("ProcessCallMediaEvent: CME_STREAM_FAIL received");
-            
-            break;
-
-        case CME_TERMINAL_FAIL:
-            
-            LogError("ProcessCallMediaEvent: CME_STREAM_FAIL received");
-
-            break;
-
-        case CME_STREAM_ACTIVE:
+        if ( FAILED(hr) )
         {
 
-            LogError("ProcessCallMediaEvent: CME_STREAM_ACTIVE received");
+            LogError("ProcessCallMediaEvent: "
+                     "failed to get record terminal's direction.");
 
-
-            //
-            // Get the terminal on the active stream
-            //    
-
-            ITTerminal *pRecordStreamTerminal = NULL;
-
-            hr = GetTerminalFromMediaEvent(pCallMediaEvent, 
-                                           &pRecordStreamTerminal);
-
-            if ( FAILED(hr) )
-            {
-                // 
-                // the stream has no terminals associated with it
-                //
-
-                LogError("ProcessCallMediaEvent: "
-                         "failed to get terminal on the active stream");
-
-                break; 
-            }
-
-          
-            //
-            // make sure the direction is right -- we are recording, so the 
-            // terminal should be TD_RENDER
-            //
-
-            TERMINAL_DIRECTION td;
-
-            hr = pRecordStreamTerminal->get_Direction( &td);
-
-            if ( FAILED(hr) ) 
-            {
-
-                LogError("ProcessCallMediaEvent: "
-                         "failed to get record terminal's direction.");
-
-                pRecordStreamTerminal->Release();
-                pRecordStreamTerminal = NULL;
-
-                break; 
-            }
-            
-            
-            //
-            // double check that the terminal is rendering terminal
-            // since we are the recording side
-            //
-
-            if ( TD_RENDER != td ) 
-            {
-
-                //
-                // this should never ever happen
-                //
-
-                LogError("ProcessCallMediaEvent: bad terminal direction");
-
-                pRecordStreamTerminal->Release();
-                pRecordStreamTerminal = NULL;
-
-                hr = E_FAIL;
-
-                break;
-
-            }
-
-            //
-            // Now do the actual streaming.
-            //
-
-            //
-            // this will block until:
-            //
-            // the call is disconnected, or
-            // the user chooses to close the app, or
-            // there is an error
-            //
-            // Since we are in the message processing thread,
-            // the application will not be able to process messages
-            // (the messages will still be queued) until this call
-            // returns.
-            //
-            // If it is important that messages are processed while
-            // file is being recorded, recording should be done on 
-            // a different thread.
-            // 
-
-            RecordMessage(pRecordStreamTerminal);
-        
             pRecordStreamTerminal->Release();
             pRecordStreamTerminal = NULL;
-    
-            break;
-        }
-    
-        default:
 
             break;
-    
+        }
+
+
+        //
+        // double check that the terminal is rendering terminal
+        // since we are the recording side
+        //
+
+        if ( TD_RENDER != td )
+        {
+
+            //
+            // this should never ever happen
+            //
+
+            LogError("ProcessCallMediaEvent: bad terminal direction");
+
+            pRecordStreamTerminal->Release();
+            pRecordStreamTerminal = NULL;
+
+            hr = E_FAIL;
+
+            break;
+
+        }
+
+        //
+        // Now do the actual streaming.
+        //
+
+        //
+        // this will block until:
+        //
+        // the call is disconnected, or
+        // the user chooses to close the app, or
+        // there is an error
+        //
+        // Since we are in the message processing thread,
+        // the application will not be able to process messages
+        // (the messages will still be queued) until this call
+        // returns.
+        //
+        // If it is important that messages are processed while
+        // file is being recorded, recording should be done on
+        // a different thread.
+        //
+
+        RecordMessage(pRecordStreamTerminal);
+
+        pRecordStreamTerminal->Release();
+        pRecordStreamTerminal = NULL;
+
+        break;
+    }
+
+    default:
+
+        break;
+
     } // switch (call media event)
 
 
@@ -2620,8 +2620,8 @@ HRESULT ProcessCallMediaEvent(IDispatch *pEvent)
     pCallMediaEvent->Release();
     pCallMediaEvent = NULL;
 
-    
-    return S_OK;    
+
+    return S_OK;
 
 }
 
@@ -2630,8 +2630,8 @@ HRESULT ProcessCallMediaEvent(IDispatch *pEvent)
 //
 // ProcessCallStateEvent
 //
-// processing for TE_CALLSTATE. if CS_OFFERING, creates and selects MST, 
-// answers the call . Release call if disconnected. 
+// processing for TE_CALLSTATE. if CS_OFFERING, creates and selects MST,
+// answers the call . Release call if disconnected.
 //
 // also verifies that the event is for the current call
 //
@@ -2644,9 +2644,9 @@ HRESULT ProcessCallStateEvent(IDispatch *pEvent)
 
 
     //
-    // TE_CALLSTATE is a call state event.  
+    // TE_CALLSTATE is a call state event.
     // pEvent is an ITCallStateEvent
-    // 
+    //
 
     ITCallStateEvent *pCallStateEvent = NULL;
 
@@ -2655,7 +2655,7 @@ HRESULT ProcessCallStateEvent(IDispatch *pEvent)
     // Get the interface
     //
 
-    hr = pEvent->QueryInterface(IID_ITCallStateEvent, 
+    hr = pEvent->QueryInterface(IID_ITCallStateEvent,
                                 (void **)&pCallStateEvent);
 
     if ( FAILED(hr) )
@@ -2707,12 +2707,12 @@ HRESULT ProcessCallStateEvent(IDispatch *pEvent)
 
     if (FAILED(hr))
     {
-         LogError("ProcessCallStateEvent: "
-                  "failed to get state from call state event.");
+        LogError("ProcessCallStateEvent: "
+                 "failed to get state from call state event.");
 
-         LeaveCriticalSection(&g_CurrentCallCritSection);
+        LeaveCriticalSection(&g_CurrentCallCritSection);
 
-         return hr;
+        return hr;
     }
 
 
@@ -2723,7 +2723,7 @@ HRESULT ProcessCallStateEvent(IDispatch *pEvent)
 
     if (CS_OFFERING == CallState)
     {
-        
+
         LogMessage("ProcessCallStateEvent: call state is CS_OFFERING");
 
 
@@ -2736,7 +2736,7 @@ HRESULT ProcessCallStateEvent(IDispatch *pEvent)
 
         if (S_OK == hr)
         {
-        
+
             //
             // we have selected a terminal on one of the streams
             // answer the call
@@ -2754,9 +2754,9 @@ HRESULT ProcessCallStateEvent(IDispatch *pEvent)
         }
         else
         {
-            
+
             //
-            // we could not create mst on any of the streams of 
+            // we could not create mst on any of the streams of
             // the incoming call. reject the call.
             //
 
@@ -2772,7 +2772,7 @@ HRESULT ProcessCallStateEvent(IDispatch *pEvent)
         }
 
 
-        
+
     } // CS_OFFERING
     else if (CS_DISCONNECTED == CallState)
     {
@@ -2800,7 +2800,7 @@ HRESULT ProcessCallStateEvent(IDispatch *pEvent)
     } // CS_DISCONNECTED
     else if (CS_CONNECTED == CallState)
     {
-        
+
         LogMessage("ProcessCallStateEvent: call state is CS_CONNECTED");
 
     } // CS_CONNECTED
@@ -2829,7 +2829,7 @@ HRESULT ProcessCallStateEvent(IDispatch *pEvent)
 
 HRESULT OnTapiEvent(TAPI_EVENT TapiEvent, IDispatch *pEvent)
 {
-    
+
     LogMessage("OnTapiEvent: message received");
 
 
@@ -2838,40 +2838,40 @@ HRESULT OnTapiEvent(TAPI_EVENT TapiEvent, IDispatch *pEvent)
 
     switch ( TapiEvent )
     {
-    
-        case TE_CALLNOTIFICATION:
-        {
 
-            LogMessage("OnTapiEvent: received TE_CALLNOTIFICATION");
+    case TE_CALLNOTIFICATION:
+    {
 
-            hr = ProcessCallNotificationEvent(pEvent);
+        LogMessage("OnTapiEvent: received TE_CALLNOTIFICATION");
 
-            break;
+        hr = ProcessCallNotificationEvent(pEvent);
 
-        } // TE_CALLNOTIFICATION
-        
+        break;
 
-        case TE_CALLSTATE:
-        {
-            LogMessage("OnTapiEvent: received TE_CALLSTATE");
-
-            hr = ProcessCallStateEvent(pEvent);
-
-            break;
-
-        } // TE_CALLSTATE
+    } // TE_CALLNOTIFICATION
 
 
-        case TE_CALLMEDIA:
-        {
+    case TE_CALLSTATE:
+    {
+        LogMessage("OnTapiEvent: received TE_CALLSTATE");
 
-            LogMessage("OnTapiEvent: received TE_CALLMEDIA");
+        hr = ProcessCallStateEvent(pEvent);
 
-            hr = ProcessCallMediaEvent(pEvent);
+        break;
 
-            break;    
-        
-        } // case TE_CALLMEDIA
+    } // TE_CALLSTATE
+
+
+    case TE_CALLMEDIA:
+    {
+
+        LogMessage("OnTapiEvent: received TE_CALLMEDIA");
+
+        hr = ProcessCallMediaEvent(pEvent);
+
+        break;
+
+    } // case TE_CALLMEDIA
 
 
     default:
@@ -2888,7 +2888,7 @@ HRESULT OnTapiEvent(TAPI_EVENT TapiEvent, IDispatch *pEvent)
     // no longer need the event, release it.
     //
 
-    pEvent->Release(); 
+    pEvent->Release();
     pEvent = NULL;
 
     LogMessage("OnTapiEvent: exiting.");

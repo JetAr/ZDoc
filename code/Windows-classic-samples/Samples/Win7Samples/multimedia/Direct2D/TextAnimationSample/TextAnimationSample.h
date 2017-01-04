@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -60,7 +60,7 @@ template<class Interface>
 inline void
 SafeRelease(
     Interface **ppInterfaceToRelease
-    )
+)
 {
     if (*ppInterfaceToRelease != NULL)
     {
@@ -91,26 +91,26 @@ EXTERN_C IMAGE_DOS_HEADER __ImageBase;
 
 namespace AnimationStyle
 {
-    enum Enum
-    {
-        None = 0,
-        Translation = 1,
-        Rotation = 2,
-        Scaling = 4
-    };
+enum Enum
+{
+    None = 0,
+    Translation = 1,
+    Rotation = 2,
+    Scaling = 4
+};
 };
 
 DEFINE_ENUM_FLAG_OPERATORS(AnimationStyle::Enum);
 
 namespace TextRenderingMethod
 {
-    enum Enum
-    {
-        Default,
-        Outline,
-        UseA8Target,
-        NumValues
-    };
+enum Enum
+{
+    Default,
+    Outline,
+    UseA8Target,
+    NumValues
+};
 };
 
 class DemoApp
@@ -133,11 +133,11 @@ private:
     void OnResize(
         UINT width,
         UINT height
-        );
+    );
 
     HRESULT OnChar(
         SHORT key
-        );
+    );
 
     void OnDestroy();
 
@@ -146,7 +146,7 @@ private:
         UINT message,
         WPARAM wParam,
         LPARAM lParam
-        );
+    );
 
     BOOL IsRunning()
     {
@@ -157,11 +157,11 @@ private:
 
     HRESULT ResetAnimation(
         bool resetClock
-        );
+    );
 
     void CalculateTransform(
         D2D1_MATRIX_3X2_F *pTransform
-        );
+    );
 
 private:
     DWORD m_startTime;

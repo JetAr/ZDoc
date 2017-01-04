@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -120,9 +120,9 @@ HRESULT CSampleIME::_HandleCandidateWorker(TfEditCookie ec, _In_ ITfContext *pCo
         tempCandMode = CANDIDATE_WITH_NEXT_COMPOSITION;
 
         pTempCandListUIPresenter = new (std::nothrow) CCandidateListUIPresenter(this, Global::AtomCandidateWindow,
-            CATEGORY_CANDIDATE,
-            _pCompositionProcessorEngine->GetCandidateListIndexRange(),
-            FALSE);
+                CATEGORY_CANDIDATE,
+                _pCompositionProcessorEngine->GetCandidateListIndexRange(),
+                FALSE);
         if (nullptr == pTempCandListUIPresenter)
         {
             hrReturn = E_OUTOFMEMORY;
@@ -142,7 +142,7 @@ HRESULT CSampleIME::_HandleCandidateWorker(TfEditCookie ec, _In_ ITfContext *pCo
             if (pTempCandListUIPresenter)
             {
                 hrStartCandidateList = pTempCandListUIPresenter->_StartCandidateList(_tfClientId, pDocumentMgr, pContext, ec, pRange, _pCompositionProcessorEngine->GetCandidateWindowWidth());
-            } 
+            }
 
             pRange->Release();
         }
@@ -374,16 +374,16 @@ STDAPI CCandidateListUIPresenter::QueryInterface(REFIID riid, _Outptr_ void **pp
     *ppvObj = nullptr;
 
     if (IsEqualIID(riid, IID_ITfUIElement) ||
-        IsEqualIID(riid, IID_ITfCandidateListUIElement))
+            IsEqualIID(riid, IID_ITfCandidateListUIElement))
     {
         *ppvObj = (ITfCandidateListUIElement*)this;
     }
-    else if (IsEqualIID(riid, IID_IUnknown) || 
-        IsEqualIID(riid, IID_ITfCandidateListUIElementBehavior)) 
+    else if (IsEqualIID(riid, IID_IUnknown) ||
+             IsEqualIID(riid, IID_ITfCandidateListUIElementBehavior))
     {
         *ppvObj = (ITfCandidateListUIElementBehavior*)this;
     }
-    else if (IsEqualIID(riid, __uuidof(ITfIntegratableCandidateListUIElement))) 
+    else if (IsEqualIID(riid, __uuidof(ITfIntegratableCandidateListUIElement)))
     {
         *ppvObj = (ITfIntegratableCandidateListUIElement*)this;
     }
@@ -495,10 +495,10 @@ HRESULT CCandidateListUIPresenter::ToShowCandidateWindow()
 
 HRESULT CCandidateListUIPresenter::ToHideCandidateWindow()
 {
-	if (_pCandidateWnd)
-	{
-		_pCandidateWnd->_Show(FALSE);
-	}
+    if (_pCandidateWnd)
+    {
+        _pCandidateWnd->_Show(FALSE);
+    }
 
     _updatedFlags = TF_CLUIE_SELECTION | TF_CLUIE_CURRENTPAGE;
     _UpdateUIElement();
@@ -764,7 +764,8 @@ STDAPI CCandidateListUIPresenter::FinalizeExactCompositionString()
 
 HRESULT CCandidateListUIPresenter::_StartCandidateList(TfClientId tfClientId, _In_ ITfDocumentMgr *pDocumentMgr, _In_ ITfContext *pContextDocument, TfEditCookie ec, _In_ ITfRange *pRangeComposition, UINT wndWidth)
 {
-	pDocumentMgr;tfClientId;
+    pDocumentMgr;
+    tfClientId;
 
     HRESULT hr = E_FAIL;
 
@@ -831,10 +832,10 @@ void CCandidateListUIPresenter::_SetText(_In_ CSampleImeArray<CCandidateListItem
     else
     {
         _updatedFlags = TF_CLUIE_COUNT       |
-            TF_CLUIE_SELECTION   |
-            TF_CLUIE_STRING      |
-            TF_CLUIE_PAGEINDEX   |
-            TF_CLUIE_CURRENTPAGE;
+                        TF_CLUIE_SELECTION   |
+                        TF_CLUIE_STRING      |
+                        TF_CLUIE_PAGEINDEX   |
+                        TF_CLUIE_CURRENTPAGE;
         _UpdateUIElement();
     }
 }
@@ -947,7 +948,7 @@ BOOL CCandidateListUIPresenter::_SetSelection(_In_ int selectedIndex)
         else
         {
             _updatedFlags = TF_CLUIE_SELECTION |
-                TF_CLUIE_CURRENTPAGE;
+                            TF_CLUIE_CURRENTPAGE;
             _UpdateUIElement();
         }
     }
@@ -972,7 +973,7 @@ BOOL CCandidateListUIPresenter::_MovePage(_In_ int offSet)
         else
         {
             _updatedFlags = TF_CLUIE_SELECTION |
-                TF_CLUIE_CURRENTPAGE;
+                            TF_CLUIE_CURRENTPAGE;
             _UpdateUIElement();
         }
     }
@@ -1178,35 +1179,35 @@ void CCandidateListUIPresenter::AdviseUIChangedByArrowKey(_In_ KEYSTROKE_FUNCTIO
     switch (arrowKey)
     {
     case FUNCTION_MOVE_UP:
-        {
-            _MoveSelection(MOVEUP_ONE);
-            break;
-        }
+    {
+        _MoveSelection(MOVEUP_ONE);
+        break;
+    }
     case FUNCTION_MOVE_DOWN:
-        {
-            _MoveSelection(MOVEDOWN_ONE);
-            break;
-        }
+    {
+        _MoveSelection(MOVEDOWN_ONE);
+        break;
+    }
     case FUNCTION_MOVE_PAGE_UP:
-        {
-            _MovePage(MOVEUP_ONE);
-            break;
-        }
+    {
+        _MovePage(MOVEUP_ONE);
+        break;
+    }
     case FUNCTION_MOVE_PAGE_DOWN:
-        {
-            _MovePage(MOVEDOWN_ONE);
-            break;
-        }
+    {
+        _MovePage(MOVEDOWN_ONE);
+        break;
+    }
     case FUNCTION_MOVE_PAGE_TOP:
-        {
-            _SetSelection(MOVETO_TOP);
-            break;
-        }
+    {
+        _SetSelection(MOVETO_TOP);
+        break;
+    }
     case FUNCTION_MOVE_PAGE_BOTTOM:
-        {
-            _SetSelection(MOVETO_BOTTOM);
-            break;
-        }
+    {
+        _SetSelection(MOVETO_BOTTOM);
+        break;
+    }
     default:
         break;
     }

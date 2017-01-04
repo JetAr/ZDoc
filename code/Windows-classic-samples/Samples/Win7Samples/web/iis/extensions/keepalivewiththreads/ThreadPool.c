@@ -1,7 +1,7 @@
-/* Copyright (c) 1997-2002 Microsoft Corporation
+﻿/* Copyright (c) 1997-2002 Microsoft Corporation
 
 	Module Name:
-	
+
 		ThreadPool.c
 
 	Abstract:
@@ -16,9 +16,10 @@
 
 /* Structure to create simple linked list */
 
-typedef struct {
-	EXTENSION_CONTROL_BLOCK *pECB;	/* Data for list entry */
-	DWORD dwNextEntry;							/* Pointer to next entry */
+typedef struct
+{
+    EXTENSION_CONTROL_BLOCK *pECB;	/* Data for list entry */
+    DWORD dwNextEntry;							/* Pointer to next entry */
 } ECB_QUEUE_ENTRY;
 
 /* Array that is a simple linked list */
@@ -41,29 +42,29 @@ BOOL fQueueEmpty;
 
 BOOL InitThreadPool(void)
 {
-	DWORD i;
-	DWORD dwThreadID;
+    DWORD i;
+    DWORD dwThreadID;
 
-	/* Create Semaphore in nonsignaled state */
+    /* Create Semaphore in nonsignaled state */
 
-	if ((hWorkSem = CreateSemaphore(NULL, 0, 0x7fffffff, NULL)) == NULL)
-		return FALSE;
+    if ((hWorkSem = CreateSemaphore(NULL, 0, 0x7fffffff, NULL)) == NULL)
+        return FALSE;
 
-	InitializeCriticalSection(&csQueueLock);
+    InitializeCriticalSection(&csQueueLock);
 
-	fQueueEmpty = TRUE;
+    fQueueEmpty = TRUE;
 
-	/* Create Pool Threads */
+    /* Create Pool Threads */
 
-	for (i = 0; i < POOL_THREADS; i++)
-		if (CreateThread(NULL, 0, WorkerFunction, (LPVOID)i, 0, &dwThreadID) == NULL)
-			return FALSE;
+    for (i = 0; i < POOL_THREADS; i++)
+        if (CreateThread(NULL, 0, WorkerFunction, (LPVOID)i, 0, &dwThreadID) == NULL)
+            return FALSE;
 
-	/* Clear work queue */
+    /* Clear work queue */
 
-	ZeroMemory(ECBqueue, WORK_QUEUE_ENTRIES * sizeof(ECB_QUEUE_ENTRY));
+    ZeroMemory(ECBqueue, WORK_QUEUE_ENTRIES * sizeof(ECB_QUEUE_ENTRY));
 
-	return TRUE;
+    return TRUE;
 }
 
 /*
@@ -83,51 +84,59 @@ BOOL InitThreadPool(void)
 
 BOOL AddWorkQueueEntry(IN EXTENSION_CONTROL_BLOCK *pECB)
 {
-	DWORD i;
+    DWORD i;
 
-	for (i = 0; i < WORK_QUEUE_ENTRIES; i++) {
+    for (i = 0; i < WORK_QUEUE_ENTRIES; i++)
+    {
 
-		if (ECBqueue[i].pECB == NULL) {
+        if (ECBqueue[i].pECB == NULL)
+        {
 
-			if (fQueueEmpty) {
+            if (fQueueEmpty)
+            {
 
-				dwCurrentEntry = i;
+                dwCurrentEntry = i;
 
-				fQueueEmpty = FALSE;
+                fQueueEmpty = FALSE;
 
-			} else {
+            }
+            else
+            {
 
-				ECBqueue[dwLastEntry].dwNextEntry = i;
-			}
+                ECBqueue[dwLastEntry].dwNextEntry = i;
+            }
 
-			ECBqueue[i].pECB = pECB;
+            ECBqueue[i].pECB = pECB;
 
-			dwLastEntry = i;
+            dwLastEntry = i;
 
-			return TRUE;
-		}
-	}
+            return TRUE;
+        }
+    }
 
-	/* If no NULL queue entry found, indicate failure */
+    /* If no NULL queue entry found, indicate failure */
 
-	return FALSE;
+    return FALSE;
 }
 
 BOOL GetWorkQueueEntry(OUT EXTENSION_CONTROL_BLOCK **ppECB)
 {
-	if ((*ppECB = ECBqueue[dwCurrentEntry].pECB) == NULL) {
+    if ((*ppECB = ECBqueue[dwCurrentEntry].pECB) == NULL)
+    {
 
-		return FALSE;
+        return FALSE;
 
-	} else {
+    }
+    else
+    {
 
-		ECBqueue[dwCurrentEntry].pECB = NULL;
+        ECBqueue[dwCurrentEntry].pECB = NULL;
 
-		if (dwCurrentEntry == dwLastEntry)	/* If this is only pending item */
-			fQueueEmpty = TRUE;
-		else
-			dwCurrentEntry = ECBqueue[dwCurrentEntry].dwNextEntry;
-	}
+        if (dwCurrentEntry == dwLastEntry)	/* If this is only pending item */
+            fQueueEmpty = TRUE;
+        else
+            dwCurrentEntry = ECBqueue[dwCurrentEntry].dwNextEntry;
+    }
 
-	return TRUE;
+    return TRUE;
 }

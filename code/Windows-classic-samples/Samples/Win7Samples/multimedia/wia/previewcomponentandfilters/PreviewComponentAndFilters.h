@@ -1,4 +1,4 @@
-#ifndef __WIA_PREVIEWCOMPONENTANDFILTERS_SAMPLE
+﻿#ifndef __WIA_PREVIEWCOMPONENTANDFILTERS_SAMPLE
 //==========================================================================
 //
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
@@ -25,11 +25,11 @@
 class CWiaTransferCallback : public IWiaTransferCallback
 {
 private:
-    
+
     ULONG m_cRef;                    //for reference counting
     long  m_lPageCount;              //page counting for feeder item
-    BSTR  m_bstrFileExtension;       //file extension to be appended to the download file 
-    BSTR  m_bstrDirectoryName;       //download directory 
+    BSTR  m_bstrFileExtension;       //file extension to be appended to the download file
+    BSTR  m_bstrDirectoryName;       //download directory
     TCHAR m_szFileName[MAX_FILENAME_LENGTH];         //download file
 
 public:
@@ -37,14 +37,14 @@ public:
     CWiaTransferCallback();
     virtual ~CWiaTransferCallback();
 
-    // To Initialize the download directory , file extension and bFeederTransfer(which indicates whether download is from feeder item) 
+    // To Initialize the download directory , file extension and bFeederTransfer(which indicates whether download is from feeder item)
     HRESULT InitializeCallback(TCHAR* bstrDirectoryName, BSTR bstrExt);
 
     // IUnknown functions
     HRESULT CALLBACK QueryInterface( REFIID riid, void **ppvObject );
     ULONG CALLBACK AddRef();
     ULONG CALLBACK Release();
-    
+
     // IWiaTransferCallback functions
     HRESULT STDMETHODCALLTYPE TransferCallback(LONG lFlags,WiaTransferParams  *pWiaTransferParams);
     HRESULT STDMETHODCALLTYPE GetNextStream(LONG lFlags, BSTR bstrItemName, BSTR bstrFullItemName, IStream **ppDestination);
@@ -52,7 +52,7 @@ public:
 };
 HRESULT GetBrightnessContrast(IWiaPropertyStorage* pWiaPropertyStorage,LONG* lBrightness, LONG* lContrast);
 
-HRESULT ChangePropsAndUpdatePreview(IWiaItem2* pWiaItem2 , IWiaPreview* pWiaPreview, IWiaTransferCallback* pWiaTransferCallback);
+HRESULT ChangePropsAndUpdatePreview(IWiaItem2* pWiaItem2, IWiaPreview* pWiaPreview, IWiaTransferCallback* pWiaTransferCallback);
 
 HRESULT GetPreview( IWiaItem2 *pWiaItem2);
 

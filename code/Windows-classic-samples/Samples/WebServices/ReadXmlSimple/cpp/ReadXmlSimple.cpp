@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -15,7 +15,7 @@
 
 // Print out rich error info
 void PrintError(
-    _In_ HRESULT errorCode, 
+    _In_ HRESULT errorCode,
     _In_opt_ WS_ERROR* error)
 {
     wprintf(L"Failure: errorCode=0x%lx\n", errorCode);
@@ -57,38 +57,38 @@ static const WS_XML_STRING valueLocalName = WS_XML_STRING_VALUE("value");
 static const WS_XML_STRING valueNs = WS_XML_STRING_VALUE("");
 
 static const char xml[] =
-"<?xml version='1.0' encoding='UTF-8' standalone='yes'?>"
-"<value>Hello World.</value>";
+    "<?xml version='1.0' encoding='UTF-8' standalone='yes'?>"
+    "<value>Hello World.</value>";
 
 // Main entry point
 int __cdecl wmain()
 {
-    
+
     HRESULT hr = S_OK;
     WS_ERROR* error = NULL;
     WS_XML_READER* reader = NULL;
-    
+
     // Create an error object for storing rich error information
     hr = WsCreateError(
-        NULL, 
-        0, 
-        &error);
+             NULL,
+             0,
+             &error);
     if (FAILED(hr))
     {
         goto Exit;
     }
-    
+
     // Create an XML reader
     hr = WsCreateReader(
-        NULL,
-        0, 
-        &reader, 
-        error);
+             NULL,
+             0,
+             &reader,
+             error);
     if (FAILED(hr))
     {
         goto Exit;
     }
-    
+
     // Setup the input
     WS_XML_READER_BUFFER_INPUT bufferInput;
     ZeroMemory(
@@ -97,7 +97,7 @@ int __cdecl wmain()
     bufferInput.input.inputType = WS_XML_READER_INPUT_TYPE_BUFFER;
     bufferInput.encodedData = (BYTE*)xml;
     bufferInput.encodedDataSize = sizeof(xml) - 1;
-    
+
     // Setup the encoding
     WS_XML_READER_TEXT_ENCODING textEncoding;
     ZeroMemory(
@@ -105,76 +105,76 @@ int __cdecl wmain()
         sizeof(textEncoding));
     textEncoding.encoding.encodingType = WS_XML_READER_ENCODING_TYPE_TEXT;
     textEncoding.charSet = WS_CHARSET_AUTO;
-    
-    
+
+
     // Setup the reader
     hr = WsSetInput(
-        reader,
-        &textEncoding.encoding,
-        &bufferInput.input,
-        NULL,
-        0,
-        error);
+             reader,
+             &textEncoding.encoding,
+             &bufferInput.input,
+             NULL,
+             0,
+             error);
     if (FAILED(hr))
     {
         goto Exit;
     }
-    
+
     hr = WsReadToStartElement(
-        reader,
-        &valueLocalName,
-        &valueNs,
-        NULL,
-        error);
+             reader,
+             &valueLocalName,
+             &valueNs,
+             NULL,
+             error);
     if (FAILED(hr))
     {
         goto Exit;
     }
-    
+
     hr = WsReadStartElement(
-        reader,
-        error);
+             reader,
+             error);
     if (FAILED(hr))
     {
         goto Exit;
     }
-    
+
     for (;;)
     {
-            WCHAR chars[128];
-            ULONG charCount;
-            hr = WsReadChars(
-                reader,
-                chars,
-                128,
-                &charCount,
-                error);
+        WCHAR chars[128];
+        ULONG charCount;
+        hr = WsReadChars(
+                 reader,
+                 chars,
+                 128,
+                 &charCount,
+                 error);
         if (FAILED(hr))
         {
             goto Exit;
         }
-            if (charCount == 0)
-            {
-                break;
-            }
-            wprintf(L"%.*s", charCount, chars);
+        if (charCount == 0)
+        {
+            break;
+        }
+        wprintf(L"%.*s", charCount, chars);
     }
     wprintf(L"\n");
     hr = WsReadEndElement(
-        reader,
-        error);
+             reader,
+             error);
     if (FAILED(hr))
     {
         goto Exit;
     }
-    
+
 Exit:
     if (FAILED(hr))
     {
         // Print out the error
         PrintError(hr, error);
     }
-    
+
     if (reader != NULL)
     {
         WsFreeReader(reader);

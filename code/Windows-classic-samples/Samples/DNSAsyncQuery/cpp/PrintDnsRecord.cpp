@@ -1,4 +1,4 @@
-//
+﻿//
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -7,7 +7,7 @@
 // Copyright (c) Microsoft Corporation. All rights reserved
 //
 // Abstract:
-//      
+//
 //  This file abstracts printing various types of DNS records.
 //
 
@@ -23,10 +23,10 @@
 VOID
 ARecordPrint(
     PDNS_RECORD DnsRecord
-    )
+)
 {
     struct in_addr Ipv4address;
-    WCHAR Ipv4String[MAX_ADDRESS_STRING_LENGTH] = L"\0"; 
+    WCHAR Ipv4String[MAX_ADDRESS_STRING_LENGTH] = L"\0";
 
     Ipv4address.S_un.S_addr = DnsRecord->Data.A.IpAddress;
     RtlIpv4AddressToString(&Ipv4address, Ipv4String);
@@ -37,7 +37,7 @@ ARecordPrint(
 VOID
 PtrRecordPrint(
     PDNS_RECORD DnsRecord
-    )
+)
 {
     wprintf(L"\tHostName       = %s\n", DnsRecord->Data.PTR.pNameHost);
 }
@@ -45,7 +45,7 @@ PtrRecordPrint(
 VOID
 SoaRecordPrint(
     PDNS_RECORD DnsRecord
-    )
+)
 {
 
     wprintf(L"n\tPrimary        = %s\n"
@@ -67,12 +67,12 @@ SoaRecordPrint(
 VOID
 TxtRecordPrint(
     PDNS_RECORD DnsRecord
-    )
+)
 {
     INT Index = 0;
     INT Count = 0;
     LPTSTR *StringArray;
-    
+
 
     Count = DnsRecord->Data.TXT.dwStringCount;
     StringArray = DnsRecord->Data.TXT.pStringArray;
@@ -87,7 +87,7 @@ TxtRecordPrint(
 VOID
 MxRecordPrint(
     PDNS_RECORD DnsRecord
-    )
+)
 {
     wprintf(L"\tPreference     = %d\n"
             L"\tExchange       = %s\n",
@@ -98,13 +98,13 @@ MxRecordPrint(
 VOID
 AaaaRecordPrint(
     PDNS_RECORD DnsRecord
-    )
+)
 {
     IN6_ADDR Ipv6address;
-    WCHAR Ipv6String[MAX_ADDRESS_STRING_LENGTH] = L"\0"; 
+    WCHAR Ipv6String[MAX_ADDRESS_STRING_LENGTH] = L"\0";
 
-    CopyMemory(&Ipv6address, 
-               &DnsRecord->Data.AAAA.Ip6Address, 
+    CopyMemory(&Ipv6address,
+               &DnsRecord->Data.AAAA.Ip6Address,
                sizeof(Ipv6address));
 
     RtlIpv6AddressToString(&Ipv6address, Ipv6String);
@@ -114,7 +114,7 @@ AaaaRecordPrint(
 VOID
 SrvRecordPrint(
     PDNS_RECORD DnsRecord
-    )
+)
 {
     wprintf(L"\tPriority       = %d\n"
             L"\tWeight         = %d\n"
@@ -129,7 +129,7 @@ SrvRecordPrint(
 VOID
 SigRecordPrint(
     PDNS_RECORD DnsRecord
-    )
+)
 {
 
     wprintf(L"\tType Covered         = %d\n"
@@ -154,13 +154,13 @@ SigRecordPrint(
 VOID
 KeyRecordPrint(
     PDNS_RECORD DnsRecord
-    )
+)
 {
     wprintf(L"\tFlags                = 0x%04x\n"
             L"\tProtocol             = %d\n"
             L"\tAlgorithm            = %d\n",
             DnsRecord->Data.KEY.wFlags,
-            DnsRecord->Data.KEY.chProtocol,        
+            DnsRecord->Data.KEY.chProtocol,
             DnsRecord->Data.KEY.chAlgorithm);
 
 }
@@ -168,7 +168,7 @@ KeyRecordPrint(
 VOID
 DsRecordPrint(
     PDNS_RECORD DnsRecord
-    )
+)
 {
     wprintf(L"\tKey Tag              = %d\n"
             L"\tAlgorithm            = %d\n"
@@ -181,7 +181,7 @@ DsRecordPrint(
 VOID
 NsecRecordPrint(
     PDNS_RECORD DnsRecord
-    )
+)
 {
     wprintf(L"\tNext Domain Name     = %s\n",
             DnsRecord->Data.NSEC.pNextDomainName);
@@ -191,7 +191,7 @@ NsecRecordPrint(
 VOID
 Nsec3RecordPrint(
     PDNS_RECORD DnsRecord
-    )
+)
 {
     wprintf(L"\tHashAlgorithm                   = %d\n"
             L"\tFlags                           = 0x%02x\n"
@@ -204,7 +204,7 @@ Nsec3RecordPrint(
 VOID
 Nsec3ParamRecordPrint(
     PDNS_RECORD DnsRecord
-    )
+)
 {
     wprintf(L"\tHashAlgorithm                   = %d\n"
             L"\tFlags                           = 0x%02x\n"
@@ -215,8 +215,8 @@ Nsec3ParamRecordPrint(
 }
 
 typedef VOID (* PRINT_DNS_RECORD_DATA_FUNCTION)(
-            PDNS_RECORD DnsRecord
-    );
+    PDNS_RECORD DnsRecord
+);
 
 //
 //  This sample prints record data for most commonly used DNS TYPES.
@@ -255,17 +255,17 @@ PRINT_DNS_RECORD_DATA_FUNCTION   PrintDataTable[] =
     AaaaRecordPrint,    //  AAAA
     NULL,               //  LOC
     NULL,               //  NXT
-    NULL,               //  EID   
+    NULL,               //  EID
     NULL,               //  NIMLOC
-    SrvRecordPrint,     //  SRV   
-    NULL,               //  ATMA  
-    NULL,               //  NAPTR 
-    NULL,               //  KX    
-    NULL,               //  CERT  
-    NULL,               //  A6    
-    NULL,               //  DNAME 
-    NULL,               //  SINK  
-    NULL,               //  OPT   
+    SrvRecordPrint,     //  SRV
+    NULL,               //  ATMA
+    NULL,               //  NAPTR
+    NULL,               //  KX
+    NULL,               //  CERT
+    NULL,               //  A6
+    NULL,               //  DNAME
+    NULL,               //  SINK
+    NULL,               //  OPT
     NULL,               //  42
     DsRecordPrint,      //  DS
     NULL,               //  44
@@ -273,7 +273,7 @@ PRINT_DNS_RECORD_DATA_FUNCTION   PrintDataTable[] =
     SigRecordPrint,     //  RRSIG
     NsecRecordPrint,    //  NSEC
     KeyRecordPrint,     //  DNSKEY
-    NULL,               //  DHCID    
+    NULL,               //  DHCID
     Nsec3RecordPrint,   //  NSEC3
     Nsec3ParamRecordPrint  //  NSEC3PARAM
 };
@@ -281,7 +281,7 @@ PRINT_DNS_RECORD_DATA_FUNCTION   PrintDataTable[] =
 VOID
 PrintRecord(
     PDNS_RECORD DnsRecord
-    )
+)
 {
     wprintf(L"  Record:\n"
             L"\tPtr            = %p, pNext = %p\n"
@@ -307,16 +307,16 @@ PrintRecord(
             DnsRecord->wDataLength );
 
     if (DnsRecord->wType < ARRAYSIZE(PrintDataTable) &&
-        PrintDataTable[DnsRecord->wType] != NULL)
+            PrintDataTable[DnsRecord->wType] != NULL)
     {
         PrintDataTable[DnsRecord->wType](DnsRecord);
     }
 }
 
 VOID
-PrintDnsRecordList(  
+PrintDnsRecordList(
     PDNS_RECORD DnsRecord
-    )
+)
 {
     while(DnsRecord)
     {

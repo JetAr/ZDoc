@@ -1,10 +1,10 @@
-//------------------------------------------------------------------------------
+﻿//------------------------------------------------------------------------------
 // File: Scope.cpp
 //
 // Desc: DirectShow sample code - illustration of an audio oscilloscope.  It
 //       shows the waveform graphically as the audio is received by the filter.
 //       The filter is a renderer that can be placed wherever the normal
-//       runtime renderer goes.  It has a single input pin that accepts a 
+//       runtime renderer goes.  It has a single input pin that accepts a
 //       number of different audio formats and renders the data appropriately.
 //
 // Copyright (c) Microsoft Corporation.  All rights reserved.
@@ -87,7 +87,8 @@ const AMOVIESETUP_PIN sudPins  =
     &CLSID_NULL,                // Connects to filter
     L"Output",                  // Connects to pin
     1,                          // Number of pins types
-    &sudPinTypes } ;            // Pin information
+    &sudPinTypes
+} ;            // Pin information
 
 
 const AMOVIESETUP_FILTER sudScope =
@@ -102,12 +103,15 @@ const AMOVIESETUP_FILTER sudScope =
 
 // List of class IDs and creator functions for class factory
 
-CFactoryTemplate g_Templates []  = {
-    { L"Oscilloscope"
-    , &CLSID_Scope
-    , CScopeFilter::CreateInstance
-    , NULL
-    , &sudScope }
+CFactoryTemplate g_Templates []  =
+{
+    {
+        L"Oscilloscope"
+        , &CLSID_Scope
+        , CScopeFilter::CreateInstance
+        , NULL
+        , &sudScope
+    }
 };
 int g_cTemplates = sizeof(g_Templates) / sizeof(g_Templates[0]);
 
@@ -353,7 +357,7 @@ HRESULT CScopeInputPin::BreakConnect()
 
     if(m_mt.IsValid() == FALSE)
     {
-        // Don't return an error here, because it could lead to 
+        // Don't return an error here, because it could lead to
         // ASSERT failures when rendering media files in GraphEdit.
         return S_FALSE;
     }
@@ -721,18 +725,18 @@ typedef struct TBEntry_tag
 TBEntry Timebases[] =
 {
     10000,  TEXT("10 uS/Div"),
-     5000,  TEXT("20 uS/Div"),
-     2000,  TEXT("50 uS/Div"),
-     1000,  TEXT("100 uS/Div"),
-      500,  TEXT("200 uS/Div"),
-      200,  TEXT("500 uS/Div"),
-      100,  TEXT("1 mS/Div"),
-       50,  TEXT("2 mS/Div"),
-       20,  TEXT("5 mS/Div"),
-       10,  TEXT("10 mS/Div"),
-        5,  TEXT("20 mS/Div"),
-        2,  TEXT("50 mS/Div"),
-        1,  TEXT("100 mS/Div")
+    5000,  TEXT("20 uS/Div"),
+    2000,  TEXT("50 uS/Div"),
+    1000,  TEXT("100 uS/Div"),
+    500,  TEXT("200 uS/Div"),
+    200,  TEXT("500 uS/Div"),
+    100,  TEXT("1 mS/Div"),
+    50,  TEXT("2 mS/Div"),
+    20,  TEXT("5 mS/Div"),
+    10,  TEXT("10 mS/Div"),
+    5,  TEXT("20 mS/Div"),
+    2,  TEXT("50 mS/Div"),
+    1,  TEXT("100 mS/Div")
 };
 
 #define N_TIMEBASES (sizeof(Timebases) / sizeof (Timebases[0]))
@@ -785,30 +789,30 @@ void CScopeWindow::SetHorizScrollRange(HWND hDlg)
 
     switch(m_nBitsPerSample + m_nChannels)
     {
-        case 9:
-            // Mono, 8-bit
-            (void)StringCchCopy(szFormat, NUMELMS(szFormat), TEXT("M-8-\0"));
-            break;
+    case 9:
+        // Mono, 8-bit
+        (void)StringCchCopy(szFormat, NUMELMS(szFormat), TEXT("M-8-\0"));
+        break;
 
-        case 10:
-            // Stereo, 8-bit
-            (void)StringCchCopy(szFormat, NUMELMS(szFormat), TEXT("S-8-\0"));
-            break;
+    case 10:
+        // Stereo, 8-bit
+        (void)StringCchCopy(szFormat, NUMELMS(szFormat), TEXT("S-8-\0"));
+        break;
 
-        case 17:
-            // Mono, 16-bit
-            (void)StringCchCopy(szFormat, NUMELMS(szFormat), TEXT("M-16-\0"));
-            break;
+    case 17:
+        // Mono, 16-bit
+        (void)StringCchCopy(szFormat, NUMELMS(szFormat), TEXT("M-16-\0"));
+        break;
 
-        case 18:
-            // Stereo, 16-bit
-            (void)StringCchCopy(szFormat, NUMELMS(szFormat), TEXT("S-16-\0"));
-            break;
+    case 18:
+        // Stereo, 16-bit
+        (void)StringCchCopy(szFormat, NUMELMS(szFormat), TEXT("S-16-\0"));
+        break;
 
-        default:
-            (void)StringCchCopy(szFormat, NUMELMS(szFormat),  TEXT(" \0"));
-            SetDlgItemText(hDlg, IDC_FORMAT, szFormat);
-            return;
+    default:
+        (void)StringCchCopy(szFormat, NUMELMS(szFormat),  TEXT(" \0"));
+        SetDlgItemText(hDlg, IDC_FORMAT, szFormat);
+        return;
 
     } // End of format switch
 
@@ -831,13 +835,13 @@ void CScopeWindow::ProcessHorizScrollCommands(HWND hDlg, WPARAM wParam, LPARAM l
     int command = LOWORD(wParam);
 
     if (command != TB_ENDTRACK &&
-        command != TB_THUMBTRACK &&
-        command != TB_LINEDOWN &&
-        command != TB_LINEUP &&
-        command != TB_PAGEUP &&
-        command != TB_PAGEDOWN)
+            command != TB_THUMBTRACK &&
+            command != TB_LINEDOWN &&
+            command != TB_LINEUP &&
+            command != TB_PAGEUP &&
+            command != TB_PAGEDOWN)
     {
-       return;
+        return;
     }
 
     ASSERT(IsWindow((HWND) lParam));
@@ -865,11 +869,11 @@ void CScopeWindow::ProcessVertScrollCommands(HWND hDlg, WPARAM wParam, LPARAM lP
     int command = LOWORD(wParam);
 
     if (command != TB_ENDTRACK &&
-        command != TB_THUMBTRACK &&
-        command != TB_LINEDOWN &&
-        command != TB_LINEUP &&
-        command != TB_PAGEUP &&
-        command != TB_PAGEDOWN)
+            command != TB_THUMBTRACK &&
+            command != TB_LINEDOWN &&
+            command != TB_LINEUP &&
+            command != TB_PAGEUP &&
+            command != TB_PAGEDOWN)
     {
         return;
     }
@@ -905,13 +909,13 @@ void CScopeWindow::ProcessVertScrollCommands(HWND hDlg, WPARAM wParam, LPARAM lP
         if( m_nTimebase < 0 )
         {
             m_nTimebase = 0;
-        } 
-            
-        if( m_nTimebase >= N_TIMEBASES ) 
+        }
+
+        if( m_nTimebase >= N_TIMEBASES )
         {
             m_nTimebase = N_TIMEBASES - 1;
-        } 
-        
+        }
+
         SetDlgItemText(hDlg, IDC_TIMEBASE_TEXT, Timebases[m_nTimebase].TBText);
     }
     OnPaint();
@@ -973,12 +977,12 @@ HRESULT CScopeWindow::InitialiseWindow(HWND hDlg)
     SetHorizScrollRange(hDlg);
 
     CheckDlgButton(hDlg,                   // handle of dialog box
-        IDC_FREEZE,                 // button-control identifier
-        m_fFreeze);                 // check state
+                   IDC_FREEZE,                 // button-control identifier
+                   m_fFreeze);                 // check state
 
     CheckDlgButton(hDlg,                   // handle of dialog box
-        IDC_TRIGGER,            // button-control identifier
-        m_fTriggerPosZeroCrossing); // check state
+                   IDC_TRIGGER,            // button-control identifier
+                   m_fTriggerPosZeroCrossing); // check state
 
     m_hPen1 = CreatePen(PS_SOLID, 0, RGB(0, 0xff, 0));
     m_hPen2 = CreatePen(PS_SOLID, 0, RGB(0x40, 0x40, 0xff));
@@ -1029,80 +1033,80 @@ BOOL CALLBACK ScopeDlgProc(HWND hDlg,           // Handle of dialog box
                            LPARAM lParam)   // Second message parameter
 {
     CScopeWindow *pScopeWindow;      // Pointer to the owning object
-    
+
     // Get the window long pointer that holds our owner pointer
     pScopeWindow = _GetWindowLongPtr<CScopeWindow*>(hDlg, GWLP_USERDATA);
 
     switch(uMsg)
     {
-        case WM_INITDIALOG:
-            pScopeWindow = (CScopeWindow *) lParam;
-            _SetWindowLongPtr(hDlg, GWLP_USERDATA, pScopeWindow);
+    case WM_INITDIALOG:
+        pScopeWindow = (CScopeWindow *) lParam;
+        _SetWindowLongPtr(hDlg, GWLP_USERDATA, pScopeWindow);
+        return TRUE;
+
+    case WM_COMMAND:
+        switch(wParam)
+        {
+        case IDOK:
+        case IDCANCEL:
+            EndDialog(hDlg, 0);
             return TRUE;
 
-        case WM_COMMAND:
-            switch(wParam)
-            {
-                case IDOK:
-                case IDCANCEL:
-                    EndDialog(hDlg, 0);
-                    return TRUE;
-
-                case IDC_FREEZE:
-                    pScopeWindow->m_fFreeze =
-                    (BOOL) IsDlgButtonChecked(hDlg,IDC_FREEZE);
-                    pScopeWindow->DrawWaveform();
-                    break;
-
-                case IDC_TRIGGER:
-                    pScopeWindow->m_fTriggerPosZeroCrossing =
-                    (BOOL) IsDlgButtonChecked(hDlg,IDC_TRIGGER);
-                    pScopeWindow->DrawWaveform();
-                    break;
-
-                default:
-                    break;
-            }
-
-        case WM_VSCROLL:
-            pScopeWindow->ProcessVertScrollCommands(hDlg, wParam, lParam);
+        case IDC_FREEZE:
+            pScopeWindow->m_fFreeze =
+                (BOOL) IsDlgButtonChecked(hDlg,IDC_FREEZE);
+            pScopeWindow->DrawWaveform();
             break;
 
-        case WM_HSCROLL:
-            pScopeWindow->ProcessHorizScrollCommands(hDlg, wParam, lParam);
+        case IDC_TRIGGER:
+            pScopeWindow->m_fTriggerPosZeroCrossing =
+                (BOOL) IsDlgButtonChecked(hDlg,IDC_TRIGGER);
+            pScopeWindow->DrawWaveform();
             break;
-
-        case WM_PAINT:
-            ASSERT(pScopeWindow != NULL);
-            pScopeWindow->OnPaint();
-            break;
-
-        // We stop WM_CLOSE messages going any further by intercepting them
-        // and then setting an abort signal flag in the owning renderer so
-        // that it knows the user wants to quit. The renderer can then
-        // go about deleting it's interfaces and the window helper object
-        // which will eventually cause a WM_DESTROY message to arrive. To
-        // make it look as though the window has been immediately closed
-        // we hide it and then wait for the renderer to catch us up
-
-        case WM_CLOSE:
-            ASSERT(pScopeWindow != NULL);
-            pScopeWindow->OnClose();
-            return (LRESULT) 0;
-
-            // We receive a WM_GOODBYE window message (synchronously) from the
-            // window object destructor in which case we do actually destroy
-            // the window and complete the process in the WM_DESTROY message
-
-        case WM_GOODBYE:
-            ASSERT(pScopeWindow != NULL);
-            pScopeWindow->UninitialiseWindow();
-            PostQuitMessage(FALSE);
-            EndDialog(hDlg, 0);
-            return (LRESULT) 0;
 
         default:
             break;
+        }
+
+    case WM_VSCROLL:
+        pScopeWindow->ProcessVertScrollCommands(hDlg, wParam, lParam);
+        break;
+
+    case WM_HSCROLL:
+        pScopeWindow->ProcessHorizScrollCommands(hDlg, wParam, lParam);
+        break;
+
+    case WM_PAINT:
+        ASSERT(pScopeWindow != NULL);
+        pScopeWindow->OnPaint();
+        break;
+
+    // We stop WM_CLOSE messages going any further by intercepting them
+    // and then setting an abort signal flag in the owning renderer so
+    // that it knows the user wants to quit. The renderer can then
+    // go about deleting it's interfaces and the window helper object
+    // which will eventually cause a WM_DESTROY message to arrive. To
+    // make it look as though the window has been immediately closed
+    // we hide it and then wait for the renderer to catch us up
+
+    case WM_CLOSE:
+        ASSERT(pScopeWindow != NULL);
+        pScopeWindow->OnClose();
+        return (LRESULT) 0;
+
+    // We receive a WM_GOODBYE window message (synchronously) from the
+    // window object destructor in which case we do actually destroy
+    // the window and complete the process in the WM_DESTROY message
+
+    case WM_GOODBYE:
+        ASSERT(pScopeWindow != NULL);
+        pScopeWindow->UninitialiseWindow();
+        PostQuitMessage(FALSE);
+        EndDialog(hDlg, 0);
+        return (LRESULT) 0;
+
+    default:
+        break;
     }
 
     return (LRESULT) 0;
@@ -1133,10 +1137,10 @@ HRESULT CScopeWindow::MessageLoop()
         // be signaled when a sample is ready
 
         dwResult = MsgWaitForMultipleObjects((DWORD) 1,     // Number events
-            hWait,         // Event handle
-            FALSE,         // Wait for either
-            INFINITE,      // No timeout
-            QS_ALLINPUT);  // All messages
+                                             hWait,         // Event handle
+                                             FALSE,         // Wait for either
+                                             INFINITE,      // No timeout
+                                             QS_ALLINPUT);  // All messages
 
         // Has a sample become ready to render
         if(dwResult == WAIT_OBJECT_0)
@@ -1181,11 +1185,11 @@ DWORD __stdcall CScopeWindow::WindowMessageLoop(LPVOID lpvThreadParm)
 
     pScopeWindow->m_hwndDlg =
         CreateDialogParam(pScopeWindow->m_hInstance,    // Handle of app instance
-        MAKEINTRESOURCE(IDD_SCOPEDIALOG),               // Dialog box template
-        NULL,                                           // Handle of owner window
-        (DLGPROC) ScopeDlgProc,                         // Address of dialog procedure
-        (LPARAM) pScopeWindow                           // Initialization value
-        );
+                          MAKEINTRESOURCE(IDD_SCOPEDIALOG),               // Dialog box template
+                          NULL,                                           // Handle of owner window
+                          (DLGPROC) ScopeDlgProc,                         // Address of dialog procedure
+                          (LPARAM) pScopeWindow                           // Initialization value
+                         );
 
     if(pScopeWindow->m_hwndDlg != NULL)
     {
@@ -1385,19 +1389,19 @@ void CScopeWindow::DrawWaveform(void)
 
         // Draw the first section (from the end of the POINT array)
         DrawPartialWaveform(hdcT,
-            IndexStart1, IndexEnd1,     // Index start, Index end
-            0, ViewportBreak);          // Window start, Window end
+                            IndexStart1, IndexEnd1,     // Index start, Index end
+                            0, ViewportBreak);          // Window start, Window end
 
         // Draw the second section (from the beginning of the POINT array)
         DrawPartialWaveform(hdcT,
-            IndexStart2, IndexEnd2,     // Index start, Index end
-            ViewportBreak, m_Width);    // Window start, Window end
+                            IndexStart2, IndexEnd2,     // Index start, Index end
+                            ViewportBreak, m_Width);    // Window start, Window end
     }
     else
     {
         DrawPartialWaveform(hdcT,
-            IndexStart2, IndexEnd2,     // Index start, Index end
-            0, m_Width);                // Window start, Window end
+                            IndexStart2, IndexEnd2,     // Index start, Index end
+                            0, m_Width);                // Window start, Window end
     }
 
     SetMapMode(hdcT, MM_TEXT);
@@ -1565,59 +1569,63 @@ void CScopeWindow::CopyWaveform(IMediaSample *pMediaSample)
         BYTE * pb;
         WORD * pw;
 
-        case 9:
-        {   // Mono, 8-bit
-            pb = pWave;
-            while(nSamplesPerChan--)
-            {
-                m_pPoints1[m_nIndex].y = (int)*pb++ - 127;  // Make zero centered
-                if(++m_nIndex == m_nSamplesPerSec)
-                    m_nIndex = 0;
-            }
-            break;
+    case 9:
+    {
+        // Mono, 8-bit
+        pb = pWave;
+        while(nSamplesPerChan--)
+        {
+            m_pPoints1[m_nIndex].y = (int)*pb++ - 127;  // Make zero centered
+            if(++m_nIndex == m_nSamplesPerSec)
+                m_nIndex = 0;
         }
+        break;
+    }
 
-        case 10:
-        {   // Stereo, 8-bit
-            pb = pWave;
-            while(nSamplesPerChan--)
-            {
-                m_pPoints1[m_nIndex].y = (int)*pb++ - 127; // Make zero centered
-                m_pPoints2[m_nIndex].y = (int)*pb++ - 127;
-                if(++m_nIndex == m_nSamplesPerSec)
-                    m_nIndex = 0;
-            }
-            break;
+    case 10:
+    {
+        // Stereo, 8-bit
+        pb = pWave;
+        while(nSamplesPerChan--)
+        {
+            m_pPoints1[m_nIndex].y = (int)*pb++ - 127; // Make zero centered
+            m_pPoints2[m_nIndex].y = (int)*pb++ - 127;
+            if(++m_nIndex == m_nSamplesPerSec)
+                m_nIndex = 0;
         }
+        break;
+    }
 
-        case 17:
-        { // Mono, 16-bit
-            pw = (WORD *) pWave;
-            while(nSamplesPerChan--)
-            {
-                m_pPoints1[m_nIndex].y = (int) ((short) *pw++) / 256;
-                if(++m_nIndex == m_nSamplesPerSec)
-                    m_nIndex = 0;
-            }
-            break;
+    case 17:
+    {
+        // Mono, 16-bit
+        pw = (WORD *) pWave;
+        while(nSamplesPerChan--)
+        {
+            m_pPoints1[m_nIndex].y = (int) ((short) *pw++) / 256;
+            if(++m_nIndex == m_nSamplesPerSec)
+                m_nIndex = 0;
         }
+        break;
+    }
 
-        case 18:
-        { // Stereo, 16-bit
-            pw = (WORD *)pWave;
-            while(nSamplesPerChan--)
-            {
-                m_pPoints1[m_nIndex].y = (int) ((short) *pw++) / 256;
-                m_pPoints2[m_nIndex].y = (int) ((short) *pw++) / 256;
-                if(++m_nIndex == m_nSamplesPerSec)
-                    m_nIndex = 0;
-            }
-            break;
+    case 18:
+    {
+        // Stereo, 16-bit
+        pw = (WORD *)pWave;
+        while(nSamplesPerChan--)
+        {
+            m_pPoints1[m_nIndex].y = (int) ((short) *pw++) / 256;
+            m_pPoints2[m_nIndex].y = (int) ((short) *pw++) / 256;
+            if(++m_nIndex == m_nSamplesPerSec)
+                m_nIndex = 0;
         }
+        break;
+    }
 
-        default:
-            ASSERT(0);
-            break;
+    default:
+        ASSERT(0);
+        break;
 
     } // End of format switch
 
@@ -1668,7 +1676,7 @@ HRESULT CScopeWindow::Receive(IMediaSample *pSample)
 
 ////////////////////////////////////////////////////////////////////////
 //
-// Exported entry points for registration and unregistration 
+// Exported entry points for registration and unregistration
 // (in this case they only call through to default implementations).
 //
 ////////////////////////////////////////////////////////////////////////
@@ -1700,8 +1708,8 @@ STDAPI DllUnregisterServer()
 //
 extern "C" BOOL WINAPI DllEntryPoint(HINSTANCE, ULONG, LPVOID);
 
-BOOL APIENTRY DllMain(HANDLE hModule, 
-                      DWORD  dwReason, 
+BOOL APIENTRY DllMain(HANDLE hModule,
+                      DWORD  dwReason,
                       LPVOID lpReserved)
 {
     return DllEntryPoint((HINSTANCE)(hModule), dwReason, lpReserved);

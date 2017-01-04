@@ -1,6 +1,6 @@
-//--------------------------------------------------------------------
+﻿//--------------------------------------------------------------------
 // Microsoft OLE DB Test Table dump
-// Copyright 1995-1999 Microsoft Corporation.  
+// Copyright 1995-1999 Microsoft Corporation.
 //
 // File name: TABLEDUMP.H
 //
@@ -28,19 +28,19 @@
 
 enum ARG_VALUES
 {
-	//Provider
-	ARG_PROVIDER = 1,
+    //Provider
+    ARG_PROVIDER = 1,
 
-	//Data
-	ARG_BINDINGTYPE,
-	ARG_NODATA,
-	
-	//Log File
-	ARG_CREATETABLE,
-	ARG_CREATEINDEX,
+    //Data
+    ARG_BINDINGTYPE,
+    ARG_NODATA,
 
-	//Log File
-	ARG_OUTPUT
+    //Log File
+    ARG_CREATETABLE,
+    ARG_CREATEINDEX,
+
+    //Log File
+    ARG_OUTPUT
 };
 
 
@@ -66,7 +66,7 @@ HRESULT GetColumnsInfo(IUnknown* pIUnkRowset, DBORDINAL* pcColumns,	DBCOLUMNINFO
 HRESULT SetupBindings(DBORDINAL cColumns, DBCOLUMNINFO*	rgColumnInfo, DBTYPE wBindingType, DBCOUNTITEM* pcBindings, DBBINDING** prgBindings, DBLENGTH* pulRowSize);
 HRESULT CreateAccessor(IUnknown* pIUnkRowset, DBCOUNTITEM cBindings, DBBINDING* rgBindings, HACCESSOR* phAccessor);
 HRESULT CleanupRowset(IRowset* pIRowset, HACCESSOR hAccessor);
-    
+
 HRESULT DumpRowset(IRowset*	pIRowset, DBTYPE wBindingType,	CTable* pCTable);
 HRESULT DumpAllRows(IRowset* pIRowset, DBCOUNTITEM cBindings, DBBINDING* rgBindings, HACCESSOR hAccessor, DBTYPE wBindingType, DBLENGTH cMaxRowSize,	CTable* pCTable);
 

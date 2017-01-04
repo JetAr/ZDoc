@@ -1,4 +1,4 @@
-/************************************************************************
+﻿/************************************************************************
 *
 * Title:
 *
@@ -79,7 +79,7 @@
 *   SteRegister - standard class registration routine
 *
 ************************************************************************/
-int SteRegister( 
+int SteRegister(
     HANDLE hInstance )
 {
     BOOL bSuccess = TRUE;
@@ -166,7 +166,7 @@ int PASCAL WinMain(
 
     if ( !(hWnd = CreateWindow( szSteClass, szSteTitle,
                                 WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX,
-                                CW_USEDEFAULT, 0, CW_USEDEFAULT, 0, 
+                                CW_USEDEFAULT, 0, CW_USEDEFAULT, 0,
                                 NULL, NULL, hInstance, NULL)) )
     {
         bSuccess = FALSE;
@@ -179,8 +179,8 @@ int PASCAL WinMain(
     SetWindowPos( hWnd, 0, 0, 0,
                   MAXCOL*cxMetrics + GetSystemMetrics(SM_CXBORDER)*2,
                   MAXROW*cyMetrics + GetSystemMetrics(SM_CYBORDER)*2
-                    + GetSystemMetrics(SM_CYCAPTION)
-                    + GetSystemMetrics(SM_CYMENU),
+                  + GetSystemMetrics(SM_CYCAPTION)
+                  + GetSystemMetrics(SM_CYMENU),
                   SWP_NOZORDER );
     ShowWindow( hWnd, nCmdShow );
 
@@ -190,7 +190,7 @@ int PASCAL WinMain(
     gImeUIData.ImeState = 0;
 
     while( (bRet = GetMessage( &msg, NULL, 0, 0 )) != 0)
-    { 
+    {
         if (bRet == -1)
         {
             // handle the error and possibly exit
@@ -199,8 +199,8 @@ int PASCAL WinMain(
         }
         else
         {
-            TranslateMessage(&msg); 
-            DispatchMessage(&msg); 
+            TranslateMessage(&msg);
+            DispatchMessage(&msg);
         }
     }
 
@@ -221,15 +221,15 @@ exit_func:
 *   SteIMEOpenClose - This routines calls IMM API to open or close IME.
 *
 ************************************************************************/
-void SteImeOpenClose( 
-    HWND hWnd, 
+void SteImeOpenClose(
+    HWND hWnd,
     BOOL fFlag )
 {
-	HIMC hIMC;
+    HIMC hIMC;
 
-	//
-	// If fFlag is true then open IME; otherwise close it.
-	//
+    //
+    // If fFlag is true then open IME; otherwise close it.
+    //
 
     if ( !( hIMC = ImmGetContext( hWnd ) ) )
         return;
@@ -244,7 +244,7 @@ void SteImeOpenClose(
 *   SteCreate - WM_CREATE message handler
 *
 ************************************************************************/
-void SteCreate( 
+void SteCreate(
     HWND hWnd )
 {
     HDC        hdc;
@@ -304,7 +304,7 @@ void SteCreate(
         break;
     }
 
-    //                   
+    //
     // Initialize caret width.  Fat in INSERT mode, skinny in OVERTYPE mode.
     //
 
@@ -312,8 +312,8 @@ void SteCreate(
     CaretWidth = cxOverTypeCaret = GetSystemMetrics( SM_CXBORDER );
 
     //
-    // Sets the logical font to be used to display characters in the 
-    // composition window. Especially for at caret or near caret operation, 
+    // Sets the logical font to be used to display characters in the
+    // composition window. Especially for at caret or near caret operation,
     // application should set composition font.
     //
     // If Application provides user to dynamicly change font, each time after
@@ -340,7 +340,7 @@ void SteCreate(
     //
 
     gImeUIData.fdwProperty = ImmGetProperty( GetKeyboardLayout(0),
-                                             IGP_PROPERTY );
+                             IGP_PROPERTY );
 
     //
     // Initialize candidate list window array.
@@ -348,8 +348,8 @@ void SteCreate(
 
     for( i = 0; i < MAX_LISTCAND; i++ )
     {
-         gImeUIData.hListCand[ i ] = NULL;
-         gImeUIData.hListCandMem[ i ] = NULL;
+        gImeUIData.hListCand[ i ] = NULL;
+        gImeUIData.hListCandMem[ i ] = NULL;
     }
 
 
@@ -359,7 +359,7 @@ void SteCreate(
     //
     // Initialise the current keyboard layout.
     //
-    
+
     hCurKL = GetKeyboardLayout(0L);
 }
 
@@ -369,7 +369,7 @@ void SteCreate(
 *   ResetCaret - Reset caret shape to match input mode (overtype/insert)
 *
 ************************************************************************/
-void ResetCaret( 
+void ResetCaret(
     HWND hWnd )
 {
     HideCaret( hWnd );
@@ -382,21 +382,21 @@ void ResetCaret(
     SetCaretPos( xPos * cxMetrics, yPos * cyMetrics );
 
     if ( !( gImeUIData.fdwProperty & IME_PROP_AT_CARET ) &&
-         !( gImeUIData.fdwProperty & IME_PROP_SPECIAL_UI ) )
+            !( gImeUIData.fdwProperty & IME_PROP_SPECIAL_UI ) )
     {
         // near caret.
         SetIMECompFormPos( hWnd );
     }
- 
+
     ShowCaret( hWnd );
 }
 
 /************************************************************************
 *
-*   SetIMECompFormPos 
+*   SetIMECompFormPos
 *
 ************************************************************************/
-void SetIMECompFormPos( 
+void SetIMECompFormPos(
     HWND hWnd )
 {
     HIMC hIMC = ImmGetContext(hWnd);
@@ -412,7 +412,7 @@ void SetIMECompFormPos(
 
     if ( hIMC )
         ImmSetCompositionWindow(hIMC,&CompForm);
-    ImmReleaseContext( hWnd , hIMC);
+    ImmReleaseContext( hWnd, hIMC);
 }
 
 
@@ -422,8 +422,8 @@ void SetIMECompFormPos(
 *
 ************************************************************************/
 void SteCommand(
-    HWND hWnd, 
-    UINT cmd, 
+    HWND hWnd,
+    UINT cmd,
     LPARAM lParam )
 {
     switch( cmd )
@@ -434,7 +434,7 @@ void SteCommand(
         //
         for ( yPos = FIRSTROW; yPos <= LASTROW; yPos++ )
             for ( xPos = FIRSTCOL; xPos <= LASTCOL; xPos++ )
-        	textbuf[yPos][xPos] = ' ';
+                textbuf[yPos][xPos] = ' ';
         break;
 
     case IDC_ANSIFILL: /* fall through */
@@ -444,14 +444,15 @@ void SteCommand(
         //
         for ( yPos = FIRSTROW; yPos <= LASTROW; yPos++ )
             for ( xPos = FIRSTCOL; xPos <= LASTCOL; xPos++ )
-        	if ( cmd == IDC_ANSIFILL )
-        	    textbuf[yPos][xPos] = 'a';
-        	else {
-        	    textbuf[yPos][xPos]   = HIBYTE(DBCSFillChar);
-        	    textbuf[yPos][++xPos] = LOBYTE(DBCSFillChar);
-        	}
+                if ( cmd == IDC_ANSIFILL )
+                    textbuf[yPos][xPos] = 'a';
+                else
+                {
+                    textbuf[yPos][xPos]   = HIBYTE(DBCSFillChar);
+                    textbuf[yPos][++xPos] = LOBYTE(DBCSFillChar);
+                }
         break;
-    
+
     //
     // The following messages are to control IME.
     //
@@ -492,15 +493,15 @@ exit_func:
 *
 ************************************************************************/
 
-BOOL IsDBCSTrailByte( 
-    char *base, 
+BOOL IsDBCSTrailByte(
+    char *base,
     char *p )
 {
     int lbc = 0;    // lead byte count
 
     assert(base <= p);
 
-    while ( p > base ) 
+    while ( p > base )
     {
         if ( !IsDBCSLeadByte(*(--p)) )
             break;
@@ -516,7 +517,7 @@ BOOL IsDBCSTrailByte(
 *   MoveCaret
 *
 ************************************************************************/
-BOOL MoveCaret( 
+BOOL MoveCaret(
     HWND hwnd )
 {
     HIMC hIMC;
@@ -524,10 +525,10 @@ BOOL MoveCaret(
 
     if ( !( hIMC = ImmGetContext( hwnd ) ) )
         goto exit_func;
-	
+
     if ( ImmGetCompositionString( hIMC, GCS_CURSORPOS, (void *)NULL, 0 ) )
-        retVal = FALSE;                                    
-	
+        retVal = FALSE;
+
     ImmReleaseContext( hwnd, hIMC );
 
 exit_func:
@@ -545,8 +546,8 @@ exit_func:
 *
 ************************************************************************/
 
-void VirtualKeyHandler( 
-    HWND hWnd, 
+void VirtualKeyHandler(
+    HWND hWnd,
     UINT wParam )
 {
     int i;
@@ -554,7 +555,7 @@ void VirtualKeyHandler(
     static int delta = 1;
 
     if ( ( gImeUIData.ImeState & IME_IN_CHOSECAND ) ||
-         ( gImeUIData.ImeState & IME_IN_COMPOSITION && !MoveCaret( hWnd ) ) )
+            ( gImeUIData.ImeState & IME_IN_COMPOSITION && !MoveCaret( hWnd ) ) )
         return;
 
     switch( wParam )
@@ -582,9 +583,9 @@ void VirtualKeyHandler(
     case VK_LEFT:
         xPos = max( xPos - 1, FIRSTCOL );
 check_for_trailbyte:
-    	if ( IsDBCSTrailByte( (LPSTR)textbuf[yPos], (LPSTR)&(textbuf[yPos][xPos]) ) )
-    	    xPos--;
-    	break;
+        if ( IsDBCSTrailByte( (LPSTR)textbuf[yPos], (LPSTR)&(textbuf[yPos][xPos]) ) )
+            xPos--;
+        break;
 
     case VK_UP:
         yPos = max( yPos - 1, FIRSTROW );
@@ -619,7 +620,7 @@ Virtical_Check_Trail:
 
     case VK_BACK:   // backspace
 
-        if ( xPos > FIRSTCOL ) 
+        if ( xPos > FIRSTCOL )
         {
             xPos--;
 
@@ -627,19 +628,19 @@ Virtical_Check_Trail:
             // DB Character so backup one more to allign on boundary
             //
             if ( IsDBCSTrailByte( (LPSTR)textbuf[yPos], (LPSTR)&(textbuf[yPos][xPos]) ) )
-        	xPos--;
+                xPos--;
             //
             // Fall Through to VK_DELETE to adjust row
             //
         }
         else     //FIRST COLUMN  don't backup -- this would change for wrapping
         {
-           break;
+            break;
         }
 
     case VK_DELETE:
 
-        if ( !IsDBCSLeadByte( textbuf[yPos][xPos] ) ) 
+        if ( !IsDBCSLeadByte( textbuf[yPos][xPos] ) )
         {
             //
             // Move rest of line left by one, then blank out last character
@@ -650,15 +651,15 @@ Virtical_Check_Trail:
             }
             textbuf[yPos][LASTCOL] = ' ';
 
-        } 
-        else 
+        }
+        else
         {
             //
             // Move line left by two bytes, blank out last two bytes
             //
             for ( i = xPos; i < LASTCOL-1; i++ )
             {
-        	    textbuf[yPos][i] = textbuf[yPos][i+2];
+                textbuf[yPos][i] = textbuf[yPos][i+2];
             }
             textbuf[yPos][LASTCOL-1] = ' ';
             textbuf[yPos][LASTCOL]   = ' ';
@@ -674,20 +675,21 @@ Virtical_Check_Trail:
         break;
 
     case VK_TAB:    // tab  -- tabs are column allignment not character
+    {
+        int xTabMax = xPos + TABSTOP;
+        int xPosPrev;
+
+        do
         {
-            int xTabMax = xPos + TABSTOP;
-            int xPosPrev;
-
-            do 
-            {
-                xPosPrev = xPos;
-                SendMessage( hWnd, WM_KEYDOWN, VK_RIGHT, 1L );
-            } while ( (xPos % TABSTOP) &&
-                      (xPos < xTabMax) &&
-                      (xPos != xPosPrev));
-
+            xPosPrev = xPos;
+            SendMessage( hWnd, WM_KEYDOWN, VK_RIGHT, 1L );
         }
-        break;
+        while ( (xPos % TABSTOP) &&
+                (xPos < xTabMax) &&
+                (xPos != xPosPrev));
+
+    }
+    break;
 
     case VK_RETURN: // linefeed
         yPos = min( yPos+1, LASTROW );
@@ -705,8 +707,8 @@ Virtical_Check_Trail:
 *               cursor
 *
 ************************************************************************/
-void StoreChar( 
-    HWND hWnd, 
+void StoreChar(
+    HWND hWnd,
     UCHAR ch )
 {
     int i;
@@ -716,47 +718,48 @@ void StoreChar(
     // If insert mode, move rest of line to the right by one
     //
 
-    if ( fInsertMode ) 
+    if ( fInsertMode )
     {
-	    for ( i = LASTCOL; i > xPos; i-- )
-	        textbuf[yPos][i] = textbuf[yPos][i-1];
+        for ( i = LASTCOL; i > xPos; i-- )
+            textbuf[yPos][i] = textbuf[yPos][i-1];
 
-    	//
-    	// If the row ends on a lead byte, blank it out
-    	// To do this we must first traverse the string
-    	// starting from a known character boundry until
-    	// we reach the last column. If the last column
-    	// is a character boundry then the last character
-    	// is either a single byte or a lead byte
-    	//
-        for ( i = xPos+1; i < LASTCOL; ) 
+        //
+        // If the row ends on a lead byte, blank it out
+        // To do this we must first traverse the string
+        // starting from a known character boundry until
+        // we reach the last column. If the last column
+        // is a character boundry then the last character
+        // is either a single byte or a lead byte
+        //
+        for ( i = xPos+1; i < LASTCOL; )
         {
             if ( IsDBCSLeadByte( textbuf[yPos][i] ) )
             {
                 i++;
             }
             i++;
-	    }
-        
+        }
+
         if (i==LASTCOL)
             if ( IsDBCSLeadByte( textbuf[yPos][LASTCOL] ) )
                 textbuf[yPos][LASTCOL] = ' ';
-    } 
-    else 
-    {  // overtype mode
-    	if ( IsDBCSLeadByte( textbuf[yPos][xPos] ) )
+    }
+    else
+    {
+        // overtype mode
+        if ( IsDBCSLeadByte( textbuf[yPos][xPos] ) )
 
-    	    //
-    	    // Blank out trail byte
-    	    //
-    	    textbuf[yPos][xPos+1] = ' ';
+            //
+            // Blank out trail byte
+            //
+            textbuf[yPos][xPos+1] = ' ';
 
-    	    //
-    	    // or shift line left on character and blank last column
-    	    //
-    	    // for ( i = xPos+1; i < LASTCOL; i++ )
-    	    //     textbuf[yPos][i] = textbuf[yPos][i+1];
-    	    // textbuf[yPos][LASTCOL] = ' ';
+        //
+        // or shift line left on character and blank last column
+        //
+        // for ( i = xPos+1; i < LASTCOL; i++ )
+        //     textbuf[yPos][i] = textbuf[yPos][i+1];
+        // textbuf[yPos][LASTCOL] = ' ';
     }
 
     //
@@ -785,8 +788,8 @@ void StoreChar(
 *                   advances cursor
 *
 ************************************************************************/
-void StoreDBCSChar( 
-    HWND hWnd, 
+void StoreDBCSChar(
+    HWND hWnd,
     WORD ch )
 {
     int i;
@@ -802,42 +805,43 @@ void StoreDBCSChar(
     // If insert mode, move rest of line to the right by two
     //
 
-    if ( fInsertMode ) 
+    if ( fInsertMode )
     {
         for ( i = LASTCOL; i > xPos+1; i-- )
-	        textbuf[yPos][i] = textbuf[yPos][i-2];
+            textbuf[yPos][i] = textbuf[yPos][i-2];
 
-    	//
-    	// If the row ends on a lead byte, blank it out
-    	// To do this we must first traverse the string
-    	// starting from a known charcter boundry until
-    	// we reach the last column. If the last column
-    	// is not a trail byte then it is a single byte
-    	// or a lead byte
-    	//
+        //
+        // If the row ends on a lead byte, blank it out
+        // To do this we must first traverse the string
+        // starting from a known charcter boundry until
+        // we reach the last column. If the last column
+        // is not a trail byte then it is a single byte
+        // or a lead byte
+        //
 
-        for ( i = xPos+2; i < LASTCOL; ) 
+        for ( i = xPos+2; i < LASTCOL; )
         {
             if ( IsDBCSLeadByte( textbuf[yPos][i] ) )
                 i++;
             i++;
-	    }
-        
+        }
+
         if (i==LASTCOL)
             if (IsDBCSLeadByte( textbuf[yPos][LASTCOL] ) )
                 textbuf[yPos][LASTCOL] = ' ';
     }
-    else 
-    {  // overtype mode
-    	if ( !IsDBCSLeadByte( textbuf[yPos][xPos] ) )
+    else
+    {
+        // overtype mode
+        if ( !IsDBCSLeadByte( textbuf[yPos][xPos] ) )
 
-        //
-        // Overtyping the current byte, plus the following byte,
-        // which could be a lead byte.
-        //
+            //
+            // Overtyping the current byte, plus the following byte,
+            // which could be a lead byte.
+            //
 
-        if ( IsDBCSLeadByte( textbuf[yPos][xPos+1] ) )
-            textbuf[yPos][xPos+2] = ' ';
+            if ( IsDBCSLeadByte( textbuf[yPos][xPos+1] ) )
+                textbuf[yPos][xPos+2] = ' ';
     }
 
     //
@@ -866,8 +870,8 @@ void StoreDBCSChar(
 *   CharHandler - WM_CHAR handler
 *
 ************************************************************************/
-void CharHandler( 
-    HWND hWnd, 
+void CharHandler(
+    HWND hWnd,
     WORD wParam )
 {
     unsigned char ch = (unsigned char)wParam;
@@ -878,20 +882,20 @@ void CharHandler(
     // arrive very soon after.  We wait here for the trail byte and
     // store them into the text buffer together.
 
-    if ( IsDBCSLeadByte( ch ) ) 
+    if ( IsDBCSLeadByte( ch ) )
     {
-    	//
-    	// Wait an arbitrary amount of time for the trail byte to
-    	// arrive.  If it doesn't, then discard the lead byte.
-    	//
-    	// This could happen if the IME screwed up.  Or, more likely,
-    	// the user generated the lead byte through ALT-numpad.
-    	//
+        //
+        // Wait an arbitrary amount of time for the trail byte to
+        // arrive.  If it doesn't, then discard the lead byte.
+        //
+        // This could happen if the IME screwed up.  Or, more likely,
+        // the user generated the lead byte through ALT-numpad.
+        //
 
         MSG msg = {0};
         int i = 10;
 
-        while (!PeekMessage((LPMSG)&msg, hWnd, WM_CHAR, WM_CHAR, PM_REMOVE)) 
+        while (!PeekMessage((LPMSG)&msg, hWnd, WM_CHAR, WM_CHAR, PM_REMOVE))
         {
             if ( --i == 0 )
                 return;
@@ -899,22 +903,22 @@ void CharHandler(
         }
 
         StoreDBCSChar( hWnd,  (WORD)(((unsigned)(msg.wParam)<<8) | (unsigned)ch ));
-    } 
-    else 
+    }
+    else
     {
         switch( ch )
         {
-            case '\r': 
-            case '\t':
-            case '\b':
-                //
-                // Throw away.  Already handled at WM_KEYDOWN time.
-                //
-                break;
+        case '\r':
+        case '\t':
+        case '\b':
+            //
+            // Throw away.  Already handled at WM_KEYDOWN time.
+            //
+            break;
 
-            default:
-                StoreChar( hWnd, ch );
-                break;
+        default:
+            StoreChar( hWnd, ch );
+            break;
         }
     }
 }
@@ -925,13 +929,13 @@ void CharHandler(
 *   MouseHandler - WM_BUTTONDOWN handler
 *
 ************************************************************************/
-void MouseHandler( 
-    HWND hWnd, 
+void MouseHandler(
+    HWND hWnd,
     LONG lParam )
 {
 
     if ( ( gImeUIData.ImeState & IME_IN_CHOSECAND ) ||
-         ( gImeUIData.ImeState & IME_IN_COMPOSITION && !MoveCaret( hWnd ) ) )
+            ( gImeUIData.ImeState & IME_IN_COMPOSITION && !MoveCaret( hWnd ) ) )
         return;
 
     HideCaret( hWnd );
@@ -956,7 +960,7 @@ void MouseHandler(
         else
             xPos--;
     }
-    
+
     DestroyCaret();
     CreateCaret(hWnd, NULL,
                 (fInsertMode && IsDBCSLeadByte( textbuf[yPos][xPos] )) ? CaretWidth*2 : CaretWidth,
@@ -971,21 +975,21 @@ void MouseHandler(
 *   InputChangeHandler - WM_INPUTLANGCHANGE handler
 *
 ************************************************************************/
-void InputChangeHandler( 
+void InputChangeHandler(
     HWND hWnd )
 {
     HIMC hIMC;
 
-    // 
+    //
     // If the old keyboard layout is IME, the ime ui data have to be free.
-    // 
-       
+    //
+
     if (ImmIsIME(hCurKL))
     {
         //
         // If application prefers to use near caret provded by IME, or
         // IME provides special UI, then no need to clean UD data.
-        // 
+        //
         if ( gImeUIData.fdwProperty & IME_PROP_SPECIAL_UI )
             ;
         else if ( gImeUIData.fdwProperty & IME_PROP_AT_CARET )
@@ -1007,21 +1011,21 @@ void InputChangeHandler(
     // if this application set the candidate position, it need to set
     // it to default for the near caret IME
 
-    if ( hIMC = ImmGetContext( hWnd ) ) 
+    if ( hIMC = ImmGetContext( hWnd ) )
     {
         UINT i;
 
-        for (i = 0; i < 4; i++) 
+        for (i = 0; i < 4; i++)
         {
             CANDIDATEFORM CandForm;
 
-            if ( gImeUIData.fdwProperty & IME_PROP_AT_CARET ) 
+            if ( gImeUIData.fdwProperty & IME_PROP_AT_CARET )
             {
                 CandForm.dwIndex = i;
                 CandForm.dwStyle = CFS_CANDIDATEPOS;
 
 #if 0
-                // This application dooes not want to set candidate window 
+                // This application dooes not want to set candidate window
                 // to any position. If an application need to set the
                 // candidate position, it should remove the if 0 code
 
@@ -1031,15 +1035,15 @@ void InputChangeHandler(
 
                 ImmSetCandidateWindow( hIMC, &CandForm );
 #endif
-            } 
-            else 
+            }
+            else
             {
-                if ( !ImmGetCandidateWindow( hIMC, i, &CandForm ) ) 
+                if ( !ImmGetCandidateWindow( hIMC, i, &CandForm ) )
                 {
                     continue;
                 }
 
-                if ( CandForm.dwStyle == CFS_DEFAULT ) 
+                if ( CandForm.dwStyle == CFS_DEFAULT )
                 {
                     continue;
                 }
@@ -1067,7 +1071,7 @@ int WINAPI SteWndProc( HWND hWnd, UINT msg, UINT wParam, LONG lParam )
     HDC hdc;
     PAINTSTRUCT ps = {0};
 
-    switch( msg ) 
+    switch( msg )
     {
     case WM_CREATE:
         SteCreate( hWnd );
@@ -1084,7 +1088,7 @@ int WINAPI SteWndProc( HWND hWnd, UINT msg, UINT wParam, LONG lParam )
     case WM_SETFOCUS:
         CreateCaret( hWnd, NULL,
                      (fInsertMode && IsDBCSLeadByte( textbuf[yPos][xPos] )) ?
-                         CaretWidth*2 : CaretWidth,
+                     CaretWidth*2 : CaretWidth,
                      cyMetrics );
         SetCaretPos( xPos * cxMetrics, yPos * cyMetrics );
         ShowCaret( hWnd );
@@ -1121,7 +1125,7 @@ int WINAPI SteWndProc( HWND hWnd, UINT msg, UINT wParam, LONG lParam )
 
     case WM_PAINT:
         InvalidateRect(hWnd,NULL,FALSE);  //for repaint allignment problem??
-    				  // WinChi3.0
+        // WinChi3.0
         hdc = BeginPaint( hWnd, &ps );
 
         //
@@ -1146,7 +1150,7 @@ int WINAPI SteWndProc( HWND hWnd, UINT msg, UINT wParam, LONG lParam )
         // focus changing, the application should use WM_SETFOCUS or
         // WM_KILLFOCUS.
         //
-     
+
         if ( gImeUIData.fdwProperty & IME_PROP_SPECIAL_UI )
         {
             goto call_defwinproc;
@@ -1183,7 +1187,7 @@ int WINAPI SteWndProc( HWND hWnd, UINT msg, UINT wParam, LONG lParam )
         //
         // Make sure the size for drawing the composition string.
         // Application should draw the composition string correctly.
-        // 
+        //
         break;
 
     case WM_IME_NOTIFY:
@@ -1194,7 +1198,7 @@ int WINAPI SteWndProc( HWND hWnd, UINT msg, UINT wParam, LONG lParam )
             // by this application to the DefWindowProc.
             goto call_defwinproc;
         break;
-        
+
 
     case WM_IME_CONTROL:
         //

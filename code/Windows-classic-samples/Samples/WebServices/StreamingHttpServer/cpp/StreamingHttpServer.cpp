@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -16,7 +16,7 @@
 
 // Print out rich error info
 void PrintError(
-    _In_ HRESULT errorCode, 
+    _In_ HRESULT errorCode,
     _In_opt_ WS_ERROR* error)
 {
     wprintf(L"Failure: errorCode=0x%lx\n", errorCode);
@@ -58,7 +58,7 @@ Exit:
 // Main entry point
 int __cdecl wmain()
 {
-    
+
     HRESULT hr = S_OK;
     WS_ERROR* error = NULL;
     WS_CHANNEL* channel = NULL;
@@ -67,96 +67,96 @@ int __cdecl wmain()
     WS_MESSAGE* requestMessage = NULL;
     WS_MESSAGE* replyMessage = NULL;
     static const WS_STRING uri = WS_STRING_VALUE(L"http://+:80/example");
-    
+
     // Create an error object for storing rich error information
     hr = WsCreateError(
-        NULL, 
-        0, 
-        &error);
+             NULL,
+             0,
+             &error);
     if (FAILED(hr))
     {
         goto Exit;
     }
-    
+
     // Create a listener
     hr = WsCreateListener(
-        WS_CHANNEL_TYPE_REPLY, 
-        WS_HTTP_CHANNEL_BINDING, 
-        NULL, 0, 
-        NULL, 
-        &listener, 
-        error);
+             WS_CHANNEL_TYPE_REPLY,
+             WS_HTTP_CHANNEL_BINDING,
+             NULL, 0,
+             NULL,
+             &listener,
+             error);
     if (FAILED(hr))
     {
         goto Exit;
     }
-    
-    // Open listener 
+
+    // Open listener
     hr = WsOpenListener(
-        listener, 
-        &uri, 
-        NULL, 
-        error);
+             listener,
+             &uri,
+             NULL,
+             error);
     if (FAILED(hr))
     {
         goto Exit;
     }
-    
+
     // Set up a property indicating streamined input and output
     WS_TRANSFER_MODE transferMode = WS_STREAMED_TRANSFER_MODE;
     WS_CHANNEL_PROPERTY transferModeProperty;
     transferModeProperty.id = WS_CHANNEL_PROPERTY_TRANSFER_MODE;
     transferModeProperty.value = &transferMode;
     transferModeProperty.valueSize = sizeof(transferMode);
-    
+
     // Create a channel suitable for accepting from the listener
     hr = WsCreateChannelForListener(
-        listener, 
-        &transferModeProperty, 
-        1, 
-        &channel, 
-        error);
+             listener,
+             &transferModeProperty,
+             1,
+             &channel,
+             error);
     if (FAILED(hr))
     {
         goto Exit;
     }
-    
+
     hr = WsCreateMessageForChannel(
-        channel,
-        NULL, 
-        0, 
-        &requestMessage, 
-        error);
+             channel,
+             NULL,
+             0,
+             &requestMessage,
+             error);
     if (FAILED(hr))
     {
         goto Exit;
     }
-    
+
     hr = WsCreateMessageForChannel(
-        channel,
-        NULL, 
-        0, 
-        &replyMessage, 
-        error);
+             channel,
+             NULL,
+             0,
+             &replyMessage,
+             error);
     if (FAILED(hr))
     {
         goto Exit;
     }
-    
+
     // Create a heap to store deserialized data
     hr = WsCreateHeap(
-        /*maxSize*/ 2048, 
-        /*trimSize*/ 512, 
-        NULL, 
-        0, 
-        &heap, 
-        error);
+             /*maxSize*/ 2048,
+             /*trimSize*/ 512,
+             NULL,
+             0,
+             &heap,
+             error);
     if (FAILED(hr))
     {
         goto Exit;
     }
-    
-    
+
+
     // Receive messages and send replies
     for (int i = 0; i < 10; i++)
     {
@@ -166,76 +166,76 @@ int __cdecl wmain()
         {
             goto Exit;
         }
-        
+
         // Receive the message start (headers)
         hr = WsReadMessageStart(
-            channel, 
-            requestMessage, 
-            NULL, 
-            error);
+                 channel,
+                 requestMessage,
+                 NULL,
+                 error);
         if (FAILED(hr))
         {
             goto Exit;
         }
-        
+
         // Get action value
-        WS_XML_STRING receivedAction;    
+        WS_XML_STRING receivedAction;
         hr = WsGetHeader(
-            requestMessage, 
-            WS_ACTION_HEADER, 
-            WS_XML_STRING_TYPE,
-            WS_READ_REQUIRED_VALUE, NULL, 
-            &receivedAction, 
-            sizeof(receivedAction), 
-            error);
+                 requestMessage,
+                 WS_ACTION_HEADER,
+                 WS_XML_STRING_TYPE,
+                 WS_READ_REQUIRED_VALUE, NULL,
+                 &receivedAction,
+                 sizeof(receivedAction),
+                 error);
         if (FAILED(hr))
         {
             goto Exit;
         }
         // Make sure action is what we expect
         hr = WsXmlStringEquals(
-            &receivedAction, 
-            PurchaseOrder_wsdl.messages.PurchaseOrder.action, 
-            error);
-        
+                 &receivedAction,
+                 PurchaseOrder_wsdl.messages.PurchaseOrder.action,
+                 error);
+
         if (hr != S_OK)
         {
             hr = WS_E_ENDPOINT_ACTION_NOT_SUPPORTED;
             goto Exit;
         }
-        
+
         // Initialize the reply message based on the request
         hr = WsInitializeMessage(
-            replyMessage, 
-            WS_REPLY_MESSAGE, 
-            requestMessage, 
-            error);
+                 replyMessage,
+                 WS_REPLY_MESSAGE,
+                 requestMessage,
+                 error);
         if (FAILED(hr))
         {
             goto Exit;
         }
-        
+
         // Write the start of the reply message (headers)
         hr = WsWriteMessageStart(
-            channel, 
-            replyMessage, 
-            NULL, 
-            error);
+                 channel,
+                 replyMessage,
+                 NULL,
+                 error);
         if (FAILED(hr))
         {
             goto Exit;
         }
-        
+
         // Read the contents of the request body, and send response body
         for (;;)
         {
-            // Make sure we have at least one purchase order buffered in the request message.  
+            // Make sure we have at least one purchase order buffered in the request message.
             // Each purchase order may be up to 1024 bytes in size.
             hr = WsFillBody(
-                requestMessage, 
-                1024, 
-                NULL, 
-                error);
+                     requestMessage,
+                     1024,
+                     NULL,
+                     error);
             if (FAILED(hr))
             {
                 goto Exit;
@@ -243,130 +243,130 @@ int __cdecl wmain()
             // Deserialize purchase order into heap (if any more)
             _PurchaseOrderType* purchaseOrder;
             hr = WsReadBody(
-                requestMessage, 
-                &PurchaseOrder_wsdl.globalElements.PurchaseOrderType, 
-                WS_READ_OPTIONAL_POINTER, 
-                heap, 
-                &purchaseOrder, 
-                sizeof(purchaseOrder), 
-                error);
+                     requestMessage,
+                     &PurchaseOrder_wsdl.globalElements.PurchaseOrderType,
+                     WS_READ_OPTIONAL_POINTER,
+                     heap,
+                     &purchaseOrder,
+                     sizeof(purchaseOrder),
+                     error);
             if (FAILED(hr))
             {
                 goto Exit;
             }
-            
+
             // NULL indicates no more purchase orders
             if (purchaseOrder == NULL)
             {
                 break;
             }
-            
+
             // Print out purchase order contents
-            wprintf(L"%ld, %s\n", 
-                purchaseOrder->quantity, 
-                purchaseOrder->productName);
-            
+            wprintf(L"%ld, %s\n",
+                    purchaseOrder->quantity,
+                    purchaseOrder->productName);
+
             // Serialize a confirmation into the reply message
             _OrderConfirmationType orderConfirmation;
             orderConfirmation.expectedShipDate = L"1/1/2006";
             orderConfirmation.orderID = 123;
-            
+
             hr = WsWriteBody(
-                replyMessage, 
-                &PurchaseOrder_wsdl.globalElements.OrderConfirmationType, 
-                WS_WRITE_REQUIRED_VALUE,
-                &orderConfirmation, 
-                sizeof(orderConfirmation),
-                error);
+                     replyMessage,
+                     &PurchaseOrder_wsdl.globalElements.OrderConfirmationType,
+                     WS_WRITE_REQUIRED_VALUE,
+                     &orderConfirmation,
+                     sizeof(orderConfirmation),
+                     error);
             if (FAILED(hr))
             {
                 goto Exit;
             }
-            
+
             // Flush the confirmation data if at least 4096 bytes have been accumulated
             hr = WsFlushBody(
-                replyMessage, 
-                4096, 
-                NULL, 
-                error);
+                     replyMessage,
+                     4096,
+                     NULL,
+                     error);
             if (FAILED(hr))
             {
                 goto Exit;
             }
-            
+
             // Free purchase order
             hr = WsResetHeap(
-                heap, 
-                error);
+                     heap,
+                     error);
             if (FAILED(hr))
             {
                 goto Exit;
             }
         }
-        
+
         // Read the end of the message
         hr = WsReadMessageEnd(
-            channel, 
-            requestMessage, 
-            NULL, 
-            error);
+                 channel,
+                 requestMessage,
+                 NULL,
+                 error);
         if (FAILED(hr))
         {
             goto Exit;
         }
-        
+
         // Write the end of the message
         hr = WsWriteMessageEnd(
-            channel, 
-            replyMessage, 
-            NULL, 
-            error);
+                 channel,
+                 replyMessage,
+                 NULL,
+                 error);
         if (FAILED(hr))
         {
             goto Exit;
         }
-        
+
         // Reset the message so it can be used again
         hr = WsResetMessage(
-            requestMessage, 
-            error);
+                 requestMessage,
+                 error);
         if (FAILED(hr))
         {
             goto Exit;
         }
-        
+
         // Reset the message so it can be used again
         hr = WsResetMessage(
-            replyMessage, 
-            error);
+                 replyMessage,
+                 error);
         if (FAILED(hr))
         {
             goto Exit;
         }
-        
+
         if (channel != NULL)
         {
             // Close the channel
             WsCloseChannel(channel, NULL, error);
         }
-        
+
         // Reset the channel so it can be used again
         hr = WsResetChannel(
-            channel, 
-            error);
+                 channel,
+                 error);
         if (FAILED(hr))
         {
             goto Exit;
         }
     }
-    
+
 Exit:
     if (FAILED(hr))
     {
         // Print out the error
         PrintError(hr, error);
     }
-    
+
     if (channel != NULL)
     {
         // Close the channel
@@ -393,8 +393,8 @@ Exit:
     {
         WsFreeMessage(replyMessage);
     }
-    
-    
+
+
     if (heap != NULL)
     {
         WsFreeHeap(heap);

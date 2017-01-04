@@ -1,7 +1,7 @@
-//////////////////////////////////////////////////////////////////////////
+﻿//////////////////////////////////////////////////////////////////////////
 //
 // ASFManager.h : CASFManager class declaration.
-// 
+//
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -29,28 +29,28 @@ public:
     ~CASFManager();
 
     HRESULT OpenASFFile(const WCHAR *sFileName);
-    
+
     HRESULT EnumerateStreams (
-        WORD** ppwStreamNumbers, 
-        GUID** ppguidMajorType, 
+        WORD** ppwStreamNumbers,
+        GUID** ppguidMajorType,
         DWORD* cbTotalStreams);
 
     HRESULT SelectStream(WORD wStreamNumber, GUID* pguidCurrentMediaType);
 
     HRESULT GetSeekPosition(
-        MFTIME* seektime, 
-        QWORD *cbDataOffset, 
+        MFTIME* seektime,
+        QWORD *cbDataOffset,
         MFTIME* hnsApproxSeekTime
-        );
+    );
 
     HRESULT SetFilePropertiesObject(FILE_PROPERTIES_OBJECT* fileinfo);
 
     HRESULT GenerateSamples(
-        MFTIME hnsSeekTime, 
+        MFTIME hnsSeekTime,
         DWORD dwFlags,
         SAMPLE_INFO *pSampleInfo,
         void (*FuncPtrToDisplaySampleInfo)(SAMPLE_INFO*)
-        );
+    );
 
     // IUnknown methods
     STDMETHODIMP QueryInterface(REFIID iid, void** ppv)
@@ -70,13 +70,13 @@ public:
         }
         AddRef();
         return S_OK;
-    }   
+    }
 
     STDMETHODIMP_(ULONG) AddRef()
     {
         return InterlockedIncrement(&m_nRefCount);
     }
-        
+
     STDMETHODIMP_(ULONG) Release()
     {
         ULONG uCount = InterlockedDecrement(&m_nRefCount);
@@ -107,27 +107,27 @@ protected:
     HRESULT CreateASFIndexer(IMFByteStream *pContentByteStream, IMFASFIndexer **ppIndexer);
 
     HRESULT ReadDataIntoBuffer(
-        IMFByteStream *pStream,     
-        DWORD cbOffset,             
-        DWORD cbToRead,             
+        IMFByteStream *pStream,
+        DWORD cbOffset,
+        DWORD cbToRead,
         IMFMediaBuffer **ppBuffer
-        );
+    );
 
     HRESULT SetupStreamDecoder(WORD wStreamNumber, GUID* pguidCurrentMediaType);
 
-    HRESULT GetSeekPositionManually(MFTIME hnsSeekTime, QWORD *cbDataOffset); 
+    HRESULT GetSeekPositionManually(MFTIME hnsSeekTime, QWORD *cbDataOffset);
 
-    HRESULT GetSeekPositionWithIndexer( 
-        MFTIME hnsSeekTime, 
-        QWORD *cbDataOffset, 
+    HRESULT GetSeekPositionWithIndexer(
+        MFTIME hnsSeekTime,
+        QWORD *cbDataOffset,
         MFTIME* hnsApproxSeekTime
-        );
+    );
 
     void GetTestDuration(
-        const MFTIME& hnsSeekTime, 
-        BOOL bReverse, 
+        const MFTIME& hnsSeekTime,
+        BOOL bReverse,
         MFTIME* phnsTestDuration
-        );
+    );
 
     HRESULT SendAudioSampleToDecoder (
         IMFSample* pSample,
@@ -146,18 +146,18 @@ protected:
         void (*FuncPtrToDisplaySampleInfo)(SAMPLE_INFO*));
 
     HRESULT GetSampleInfo(IMFSample *pSample, SAMPLE_INFO *pSampleInfo);
-    
+
     void Reset();
 
     HRESULT GenerateSamplesLoop(
-        const MFTIME& hnsSeekTime, 
+        const MFTIME& hnsSeekTime,
         const MFTIME& hnsTestSampleDuration,
         BOOL  bReverse,
-        DWORD cbDataOffset, 
-        DWORD cbDataLen, 
+        DWORD cbDataOffset,
+        DWORD cbDataLen,
         SAMPLE_INFO* pSampleInfo,
         void (*FuncPtrToDisplaySampleInfo)(SAMPLE_INFO*)
-        );
+    );
 
 protected:
     long    m_nRefCount;    // Reference count

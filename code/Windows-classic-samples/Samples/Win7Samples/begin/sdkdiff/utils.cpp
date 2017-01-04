@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -46,7 +46,8 @@ INT_PTR dodlg_stringin(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
 /*
  * a FILEBUFFER handle is a pointer to a struct filebuffer
  */
-struct filebuffer {
+struct filebuffer
+{
     HANDLE fh;      /* open file handle */
     LPSTR start;    /* offset within buffer of next character */
     LPSTR last;     /* offset within buffer of last valid char read in */
@@ -59,7 +60,8 @@ struct filebuffer {
     LPWSTR pwzLast;
 };
 
-typedef enum {
+typedef enum
+{
     CT_LEAD = 0,
     CT_TRAIL = 1,
     CT_ANK = 2,
@@ -68,9 +70,9 @@ typedef enum {
 
 DBCSTYPE
 DBCScharType(
-            LPTSTR str,
-            int index
-            )
+    LPTSTR str,
+    int index
+)
 {
     /*
         TT .. ??? maybe LEAD or TRAIL
@@ -79,11 +81,13 @@ DBCScharType(
         TF .. ??? maybe ANK or TRAIL
     */
     //readfile_next uses this on fbuf->buffer which is explicitly NOT null-terminated.
-    if ( index >= 0) {   //  EOS is valid parameter.
+    if ( index >= 0)     //  EOS is valid parameter.
+    {
         LPTSTR pos = str + index;
         DBCSTYPE candidate = (IsDBCSLeadByte( *pos-- ) ? CT_LEAD : CT_ANK);
         BOOL maybeTrail = FALSE;
-        for ( ; pos >= str; pos-- ) {
+        for ( ; pos >= str; pos-- )
+        {
             if ( !IsDBCSLeadByte( *pos ) )
                 break;
             maybeTrail ^= 1;
@@ -99,30 +103,32 @@ DBCScharType(
 FILEBUFFER
 APIENTRY
 readfile_new(
-            HANDLE fh,
-            BOOL *pfUnicode
-            )
+    HANDLE fh,
+    BOOL *pfUnicode
+)
 {
     FILEBUFFER fbuf;
     DWORD cbRead;
     WCHAR wchMagic;
 
-    if (pfUnicode) 
+    if (pfUnicode)
     {
         *pfUnicode = FALSE;
     }
 
     fbuf = (FILEBUFFER) HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(struct filebuffer));
-    if (fbuf == NULL) {
+    if (fbuf == NULL)
+    {
         return(NULL);
     }
 
-    if (pfUnicode) 
+    if (pfUnicode)
     {
         /* return file pointer to beginning of file */
         SetFilePointer(fh, 0, NULL, FILE_BEGIN);
 
-        if (!ReadFile(fh, &wchMagic, sizeof(wchMagic), &cbRead, NULL)) {
+        if (!ReadFile(fh, &wchMagic, sizeof(wchMagic), &cbRead, NULL))
+        {
             HeapFree(GetProcessHeap(), NULL, fbuf);
             return(NULL);
         }
@@ -131,14 +137,14 @@ readfile_new(
         fbuf->start = fbuf->buffer;
         fbuf->last = fbuf->buffer;
         fbuf->fUnicode = FALSE;
-        if (cbRead == 2 && c_wchMagic == wchMagic) 
+        if (cbRead == 2 && c_wchMagic == wchMagic)
         {
             fbuf->fUnicode = TRUE;
             *pfUnicode = TRUE;
             fbuf->pwzStart = fbuf->wzBuffer;
             fbuf->pwzLast = fbuf->wzBuffer;
-        } 
-        else 
+        }
+        else
         {
             SetFilePointer(fh, 0, NULL, FILE_BEGIN);
         }
@@ -160,17 +166,20 @@ static BYTE delims[256];
 void
 APIENTRY
 readfile_setdelims(
-                  LPBYTE str
-                  )
+    LPBYTE str
+)
 {
     /* clear all bytes of delims */
     int i;
-    for (i=0; i<256; ++i) {
+    for (i=0; i<256; ++i)
+    {
         delims[i] = 0;
     }
 
     /* set the bytes in delims which correspond to delimiters */
-    for (; *str; ++str) { delims[(int)(*str)] = 1;
+    for (; *str; ++str)
+    {
+        delims[(int)(*str)] = 1;
     }
 
 } /* readfile_setdelims */
@@ -181,14 +190,14 @@ static BOOL FFindEOL(FILEBUFFER fbuf, LPSTR *ppszLine, int *pcch, LPWSTR *ppwzLi
     LPSTR psz;
     LPWSTR pwz;
 
-    if (fbuf->fUnicode) 
+    if (fbuf->fUnicode)
     {
-        for (pwz = fbuf->pwzStart; pwz < fbuf->pwzLast; pwz++) 
+        for (pwz = fbuf->pwzStart; pwz < fbuf->pwzLast; pwz++)
         {
             if (!*pwz)
                 *pwz = '.';
 
-            if (*pwz < 256 && delims[*pwz]) 
+            if (*pwz < 256 && delims[*pwz])
             {
                 *pcwch = (UINT)(pwz - fbuf->pwzStart) + 1;
                 *ppwzLine = fbuf->pwzStart;
@@ -198,14 +207,14 @@ static BOOL FFindEOL(FILEBUFFER fbuf, LPSTR *ppszLine, int *pcch, LPWSTR *ppwzLi
             }
         }
     }
-    for (psz = fbuf->start; psz < fbuf->last; psz = CharNext(psz)) 
+    for (psz = fbuf->start; psz < fbuf->last; psz = CharNext(psz))
     {
         if (!*psz)
             *psz = '.';
 
         // use LPBYTE cast to make sure sign extension doesn't index
         // negatively
-        if (delims[*(LPBYTE)psz]) 
+        if (delims[*(LPBYTE)psz])
         {
             *pcch = (UINT)(psz - fbuf->start) + 1;
             *ppszLine = fbuf->start;
@@ -231,21 +240,21 @@ __declspec(thread) WCHAR wzRoundtrip[MAX_LINE_LENGTH];
 
 LPSTR APIENTRY
 readfile_next(
-             FILEBUFFER fbuf,
-             int * plen,
-             LPWSTR *ppwz,
-             int *pcwch
-             )
+    FILEBUFFER fbuf,
+    int * plen,
+    LPWSTR *ppwz,
+    int *pcwch
+)
 {
     LPSTR cstart;
     UINT cbFree;
-    DWORD cbRead; 
+    DWORD cbRead;
 
     *ppwz = NULL;
     *pcwch = 0;
 
     /* look for an end of line in the buffer we have */
-    if (FFindEOL(fbuf, &cstart, plen, ppwz, pcwch)) 
+    if (FFindEOL(fbuf, &cstart, plen, ppwz, pcwch))
     {
         return cstart;
     }
@@ -254,13 +263,13 @@ readfile_next(
      * copy the partial up to the beginning of the buffer, and
      * adjust the pointers to reflect this move
      */
-    if (fbuf->fUnicode) 
+    if (fbuf->fUnicode)
     {
-        if ( ( (fbuf->pwzLast - fbuf->pwzStart) <= MAX_LINE_LENGTH) && ( (fbuf->pwzLast - fbuf->pwzStart) >= 0 ) ) 
+        if ( ( (fbuf->pwzLast - fbuf->pwzStart) <= MAX_LINE_LENGTH) && ( (fbuf->pwzLast - fbuf->pwzStart) >= 0 ) )
         {
             memmove(fbuf->wzBuffer, fbuf->pwzStart, (LPBYTE)fbuf->pwzLast - (LPBYTE)fbuf->pwzStart);
-        } 
-        else 
+        }
+        else
         {
             return NULL;
         }
@@ -268,11 +277,11 @@ readfile_next(
         fbuf->pwzStart = fbuf->wzBuffer;
     }
 
-    if ( ((fbuf->last - fbuf->start) <= BUFFER_SIZE) && ((fbuf->last - fbuf->start) >= 0 ) ) 
+    if ( ((fbuf->last - fbuf->start) <= BUFFER_SIZE) && ((fbuf->last - fbuf->start) >= 0 ) )
     {
         memmove(fbuf->buffer, fbuf->start, (LPBYTE)fbuf->last - (LPBYTE)fbuf->start);
-    } 
-    else 
+    }
+    else
     {
         return NULL;
     }
@@ -281,7 +290,7 @@ readfile_next(
     fbuf->start = fbuf->buffer;
 
     /* read in to fill the block */
-    if (fbuf->fUnicode) 
+    if (fbuf->fUnicode)
     {
         // for unicode files, we'll read in the unicode and convert it
         // to ansi.  we are converting to ACP, then converting
@@ -296,7 +305,8 @@ readfile_next(
         LPSTR pszACP;
 
         cbFree = sizeof(fbuf->wzBuffer) - (UINT)((LPBYTE)fbuf->pwzLast - (LPBYTE)fbuf->pwzStart);
-        if (!ReadFile(fbuf->fh, fbuf->pwzLast, cbFree, &cbRead, NULL)) {
+        if (!ReadFile(fbuf->fh, fbuf->pwzLast, cbFree, &cbRead, NULL))
+        {
             return NULL;
         }
 
@@ -323,16 +333,16 @@ readfile_next(
         pwzOrig = fbuf->pwzLast;
         pwzRoundtrip = wzRoundtrip;
         pszACP = szACP;
-        while (cchWide && cchRoundtrip) 
+        while (cchWide && cchRoundtrip)
         {
-            if (*pwzOrig == *pwzRoundtrip) 
+            if (*pwzOrig == *pwzRoundtrip)
             {
                 // copy the DBCS representation into the buffer
                 if (IsDBCSLeadByte(*pszACP))
                     *(fbuf->last++) = *(pszACP++);
                 *(fbuf->last++) = *(pszACP++);
-            } 
-            else 
+            }
+            else
             {
                 // copy a hexized representation into the buffer
                 static const char rgHex[] = "0123456789ABCDEF";
@@ -352,13 +362,13 @@ readfile_next(
             --cchRoundtrip;
         }
         fbuf->pwzLast = pwzOrig;
-    } 
-    else 
+    }
+    else
     {
         cbFree = sizeof(fbuf->buffer) - (UINT)((LPBYTE)fbuf->last - (LPBYTE)fbuf->start);
         if (ReadFile(fbuf->fh, fbuf->last, cbFree, &cbRead, NULL) &&
-            DBCScharType(fbuf->last, cbRead-1) == CT_LEAD) 
-            {
+                DBCScharType(fbuf->last, cbRead-1) == CT_LEAD)
+        {
             cbRead--;
             *(fbuf->last + cbRead) = '\0';
             SetFilePointer(fbuf->fh, -1, NULL, FILE_CURRENT);
@@ -368,7 +378,7 @@ readfile_next(
     }
 
     /* look for an end of line in the newly filled buffer */
-    if (FFindEOL(fbuf, &cstart, plen, ppwz, pcwch)) 
+    if (FFindEOL(fbuf, &cstart, plen, ppwz, pcwch))
     {
         return cstart;
     }
@@ -378,7 +388,7 @@ readfile_next(
      * the buffer. in either case, return all that we have
      */
 
-    if (fbuf->fUnicode) 
+    if (fbuf->fUnicode)
     {
         *pcwch = (UINT)(fbuf->pwzLast - fbuf->pwzStart);
         *ppwz = fbuf->pwzStart;
@@ -388,9 +398,12 @@ readfile_next(
     cstart = fbuf->start;
     fbuf->start += *plen;
 
-    if (*plen == 0) {
+    if (*plen == 0)
+    {
         return(NULL);
-    } else {
+    }
+    else
+    {
         return(cstart);
     }
 }
@@ -403,8 +416,8 @@ readfile_next(
  */
 void APIENTRY
 readfile_delete(
-               FILEBUFFER fbuf
-               )
+    FILEBUFFER fbuf
+)
 {
     HeapFree(GetProcessHeap(), NULL, fbuf);
 }
@@ -441,12 +454,12 @@ readfile_delete(
  *
  * The function appears to be compute bound.  Loop optimisation is appropriate!
  */
-CHECKSUM 
+CHECKSUM
 APIENTRY
 checksum_file(
-             LPCSTR fn,
-             LONG * err
-             )
+    LPCSTR fn,
+    LONG * err
+)
 {
     HANDLE fh=0;
 #define BUFFLEN 8192
@@ -464,7 +477,8 @@ checksum_file(
     /* conceivably someone is fiddling with the file...?
        we give 6 goes, with delays of 1,2,3,4 and 5 secs between
     */
-    for (i=0; i<=5; ++i) {
+    for (i=0; i<=5; ++i)
+    {
         Sleep(1000*i);
         fh = CreateFile(fn, GENERIC_READ, 0, NULL, OPEN_EXISTING, 0, NULL);
         if (fh!=INVALID_HANDLE_VALUE)
@@ -474,7 +488,7 @@ checksum_file(
             char msg[300];
             HRESULT hr = StringCchPrintf( msg,300, "SDKDiff: retry open. Error(%d), file(%s)\n"
                                           , GetLastError(), fn);
-            if (FAILED(hr)) 
+            if (FAILED(hr))
             {
                 OutputError(hr, IDS_SAFE_PRINTF);
             }
@@ -482,7 +496,8 @@ checksum_file(
         }
     }
 
-    if (fh == INVALID_HANDLE_VALUE) {
+    if (fh == INVALID_HANDLE_VALUE)
+    {
         *err = GetLastError();
         return 0xFF00FF00 | GetCurrentTime();
         /* The odds are very strong that this will show up
@@ -497,7 +512,8 @@ checksum_file(
      * and only at the very end are some bytes left over.
      */
 
-    for ( ; ;) {
+    for ( ; ;)
+    {
         /* Invariant: (which holds at THIS point in the flow)
          * A every byte in every block already passed has contributed to the checksum
          * B every byte before buffer[byte] in current block has contributed
@@ -516,18 +532,21 @@ checksum_file(
          * 4. Show the loop terminates.
          */
 
-        if (Byte>=Block) {
-            if (Byte>Block) {
+        if (Byte>=Block)
+        {
+            if (Byte>Block)
+            {
                 Trace_Error(NULL, "Checksum internal error.  Byte>Block", FALSE);
                 *err = -1;
                 break;                 /* go home */
             }
-            if (!ReadFile(fh, buffer, BUFFLEN, &Block, NULL)) {
+            if (!ReadFile(fh, buffer, BUFFLEN, &Block, NULL))
+            {
                 *err = GetLastError();
                 break;            /* go home */
             }
             if (Block==0)
-            /* ==0 is not error, but also no further addition to checksum */
+                /* ==0 is not error, but also no further addition to checksum */
             {
                 /*
                  * Every byte has contributed, and there are no more
@@ -538,10 +557,11 @@ checksum_file(
                 return lCheckSum;        /* success! */
             }
 
-            if (Ending) {
+            if (Ending)
+            {
                 char msg[300];
                 HRESULT hr = StringCchPrintf( msg, 300, "Short read other than last in file %s\n", fn);
-                if (FAILED(hr)) 
+                if (FAILED(hr))
                 {
                     OutputError(hr, IDS_SAFE_PRINTF);
                 }
@@ -549,7 +569,7 @@ checksum_file(
                 break;          /* go home */
             }
 
-            while ( (Block%4) && (Block < BUFFLEN)) 
+            while ( (Block%4) && (Block < BUFFLEN))
             {
                 buffer[Block++] = 0;
                 Ending = TRUE;
@@ -575,8 +595,8 @@ static BOOL sbUnattended = FALSE;
 
 void
 Trace_Unattended(
-                BOOL bUnattended
-                )
+    BOOL bUnattended
+)
 {
     sbUnattended = bUnattended;
 } /* Trace_Unattended */
@@ -591,34 +611,41 @@ Trace_Unattended(
  */
 BOOL APIENTRY
 Trace_Error(
-           HWND hwnd,
-           LPSTR msg,
-           BOOL fCancel
-           )
+    HWND hwnd,
+    LPSTR msg,
+    BOOL fCancel
+)
 {
     static HANDLE  hErrorLog = INVALID_HANDLE_VALUE;
 
     UINT fuStyle;
-    if (sbUnattended) {
+    if (sbUnattended)
+    {
         DWORD nw; /* number of bytes writtten */
         if (hErrorLog==INVALID_HANDLE_VALUE)
             hErrorLog = CreateFile( "WDError.log", GENERIC_WRITE, FILE_SHARE_WRITE
-                                    , NULL         , CREATE_ALWAYS, 0, NULL);
+                                    , NULL, CREATE_ALWAYS, 0, NULL);
         WriteFile(hErrorLog, msg, lstrlen(msg), &nw, NULL);
         WriteFile(hErrorLog, "\n", lstrlen("\n"), &nw, NULL);
         FlushFileBuffers(hErrorLog);
         return TRUE;
     }
 
-    if (fCancel) {
+    if (fCancel)
+    {
         fuStyle = MB_OKCANCEL|MB_ICONSTOP;
-    } else {
+    }
+    else
+    {
         fuStyle = MB_OK|MB_ICONSTOP;
     }
 
-    if (MessageBox(hwnd, msg, NULL, fuStyle) ==  IDOK) {
+    if (MessageBox(hwnd, msg, NULL, fuStyle) ==  IDOK)
+    {
         return(TRUE);
-    } else {
+    }
+    else
+    {
         return(FALSE);
     }
 }
@@ -630,8 +657,8 @@ static HANDLE  hTraceFile = INVALID_HANDLE_VALUE;
 void
 APIENTRY
 Trace_File(
-          LPSTR msg
-          )
+    LPSTR msg
+)
 {
     DWORD nw; /* number of bytes writtten */
     if (hTraceFile==INVALID_HANDLE_VALUE)
@@ -651,8 +678,8 @@ Trace_File(
 void
 APIENTRY
 Trace_Close(
-           void
-           )
+    void
+)
 {
     if (hTraceFile!=INVALID_HANDLE_VALUE)
         CloseHandle(hTraceFile);
@@ -693,38 +720,57 @@ Trace_Close(
  */
 int APIENTRY
 utils_CompPath(
-              LPSTR left,
-              LPSTR right
-              )
+    LPSTR left,
+    LPSTR right
+)
 {
     int compval;            // provisional value of comparison
 
     if (left==NULL) return -1;          // empty is less than anything else
     else if (right==NULL) return 1;           // anything is greater than empty
 
-    for (; ; ) {
+    for (; ; )
+    {
         if (*left=='\0' && *right=='\0') return 0;
         if (*left=='\0')  return -1;
         if (*right=='\0')  return 1;
 
-        if (IsDBCSLeadByte(*left) || IsDBCSLeadByte(*right)) {
-            if (*right != *left) {
+        if (IsDBCSLeadByte(*left) || IsDBCSLeadByte(*right))
+        {
+            if (*right != *left)
+            {
                 compval = (*left - *right);
                 break;
             }
             ++left;
             ++right;
-            if (*right != *left) {
+            if (*right != *left)
+            {
                 compval = (*left - *right);
                 break;
             }
             ++left;
             ++right;
-        } else {
-            if (*right==*left) { ++left; ++right; continue; }
-            if (*left=='\\') { compval = -1; break; }
-            if (*right=='\\') { compval = 1; break; }
-            compval = (*left - *right); 
+        }
+        else
+        {
+            if (*right==*left)
+            {
+                ++left;
+                ++right;
+                continue;
+            }
+            if (*left=='\\')
+            {
+                compval = -1;
+                break;
+            }
+            if (*right=='\\')
+            {
+                compval = 1;
+                break;
+            }
+            compval = (*left - *right);
             break;
         }
     }
@@ -762,9 +808,9 @@ utils_CompPath(
  */
 DWORD APIENTRY
 hash_string(
-           LPSTR string,
-           BOOL bIgnoreBlanks
-           )
+    LPSTR string,
+    BOOL bIgnoreBlanks
+)
 {
 #define LARGENUMBER     6293815
 
@@ -772,10 +818,13 @@ hash_string(
     DWORD multiple = LARGENUMBER;
     int index = 1;
 
-    while (*string != '\0') {
+    while (*string != '\0')
+    {
 
-        if (bIgnoreBlanks) {
-            while (IS_BLANK(*string)) {
+        if (bIgnoreBlanks)
+        {
+            while (IS_BLANK(*string))
+            {
                 string++;
             }
         }
@@ -792,10 +841,11 @@ hash_string(
  */
 BOOL APIENTRY
 utils_isblank(
-             LPSTR string
-             )
+    LPSTR string
+)
 {
-    while (IS_BLANK(*string)) {
+    while (IS_BLANK(*string))
+    {
         string++;
     }
 
@@ -826,12 +876,12 @@ LPSTR dlg_prompt, dlg_default, dlg_caption;
 
 int APIENTRY
 StringInput(
-           LPSTR result,
-           int resultsize,
-           LPSTR prompt,
-           LPSTR caption,
-           LPSTR def_input
-           )
+    LPSTR result,
+    int resultsize,
+    LPSTR prompt,
+    LPSTR caption,
+    LPSTR def_input
+)
 {
     DLGPROC lpProc;
     BOOL fOK;
@@ -853,29 +903,34 @@ StringInput(
 
 INT_PTR
 dodlg_stringin(
-              HWND hDlg,
-              UINT message,
-              WPARAM wParam,
-              LPARAM lParam
-              )
+    HWND hDlg,
+    UINT message,
+    WPARAM wParam,
+    LPARAM lParam
+)
 {
-    switch (message) {
-    
+    switch (message)
+    {
+
     case WM_INITDIALOG:
-        if (dlg_caption != NULL) {
+        if (dlg_caption != NULL)
+        {
             SendMessage(hDlg, WM_SETTEXT, 0, (LPARAM) dlg_caption);
         }
-        if (dlg_prompt != NULL) {
+        if (dlg_prompt != NULL)
+        {
             SetDlgItemText(hDlg, IDD_GUTILS_LABEL, dlg_prompt);
         }
-        if (dlg_default) {
+        if (dlg_default)
+        {
             SetDlgItemText(hDlg, IDD_GUTILS_FILE, dlg_default);
         }
         return(TRUE);
 
     case WM_COMMAND:
-        switch (GET_WM_COMMAND_ID(wParam, lParam)) {
-        
+        switch (GET_WM_COMMAND_ID(wParam, lParam))
+        {
+
         case IDCANCEL:
             EndDialog(hDlg, FALSE);
             return(TRUE);
@@ -900,15 +955,18 @@ dodlg_stringin(
  */
 PUCHAR
 My_mbspbrk(
-          PUCHAR psz,
-          PUCHAR pszSep
-          )
+    PUCHAR psz,
+    PUCHAR pszSep
+)
 {
     PUCHAR pszSepT;
-    while (*psz != '\0') {
+    while (*psz != '\0')
+    {
         pszSepT = pszSep;
-        while (*pszSepT != '\0') {
-            if (*pszSepT == *psz) {
+        while (*pszSepT != '\0')
+        {
+            if (*pszSepT == *psz)
+            {
                 return psz;
             }
             pszSepT = CharNext(pszSepT);
@@ -929,11 +987,12 @@ My_mbspbrk(
 
 LPSTR
 My_mbschr(
-         LPCSTR psz,
-         unsigned short uiSep
-         )
+    LPCSTR psz,
+    unsigned short uiSep
+)
 {
-    while (*psz != '\0' && *psz != uiSep) {
+    while (*psz != '\0' && *psz != uiSep)
+    {
         psz = CharNext(psz);
     }
     return(LPSTR)(*psz == uiSep ? psz : NULL);
@@ -950,27 +1009,36 @@ My_mbschr(
 
 LPSTR
 My_mbsncpy(
-          LPSTR psz1,
-          LPCSTR psz2,
-          size_t nLength
-          )
+    LPSTR psz1,
+    LPCSTR psz2,
+    size_t nLength
+)
 {
     int nLen = (int)nLength;
     LPTSTR pszSv = psz1;
 
-    while (0 < nLen) {
-        if (*psz2 == '\0') {
+    while (0 < nLen)
+    {
+        if (*psz2 == '\0')
+        {
             *psz1++ = '\0';
             nLen--;
-        } else if (IsDBCSLeadByte(*psz2)) {
-            if (nLen == 1) {
+        }
+        else if (IsDBCSLeadByte(*psz2))
+        {
+            if (nLen == 1)
+            {
                 *psz1 = '\0';
-            } else {
+            }
+            else
+            {
                 *psz1++ = *psz2++;
                 *psz1++ = *psz2++;
             }
             nLen -= 2;
-        } else {
+        }
+        else
+        {
             *psz1++ = *psz2++;
             nLen--;
         }
@@ -991,8 +1059,8 @@ My_mbsncpy(
 LPTSTR
 APIENTRY
 LoadRcString(
-            UINT wID
-            )
+    UINT wID
+)
 {
     static TCHAR szBuf[512];
 

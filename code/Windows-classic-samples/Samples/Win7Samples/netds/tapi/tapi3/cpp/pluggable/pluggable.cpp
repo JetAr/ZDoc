@@ -1,4 +1,4 @@
-/*++
+﻿/*++
 
 Copyright (c) 1999-2001 Microsoft Corporation
 
@@ -36,7 +36,7 @@ CComModule _Module;
 // Must have an entry here for each cocreatable object.
 
 BEGIN_OBJECT_MAP(ObjectMap)
-    OBJECT_ENTRY(CLSID_PlgTermSample, CPlgTermSample)
+OBJECT_ENTRY(CLSID_PlgTermSample, CPlgTermSample)
 END_OBJECT_MAP()
 
 /*++
@@ -53,10 +53,10 @@ HRESULT PTRegisterPluggable( BSTR bstrSuperclassCLSID)
     HRESULT hr=E_FAIL;
     CComPtr<ITPluggableTerminalClassRegistration> pITPTClassReg=NULL;
     hr=CoCreateInstance(CLSID_PluggableTerminalRegistration,
-							NULL,
-							CLSCTX_INPROC_SERVER,
-							IID_ITPluggableTerminalClassRegistration,
-							reinterpret_cast<void**>(&pITPTClassReg));
+                        NULL,
+                        CLSCTX_INPROC_SERVER,
+                        IID_ITPluggableTerminalClassRegistration,
+                        reinterpret_cast<void**>(&pITPTClassReg));
     if(FAILED(hr))
     {
         LOG((MSP_ERROR, "CoCreateInstance - ITPluggableTerminalClassRegistration 0x%08x", hr));
@@ -163,7 +163,7 @@ Description:
 --*/
 HRESULT PTRegister()
 {
-    
+
     LOG((MSP_TRACE, "PTRegister enter"));
 
     HRESULT hr=E_FAIL;
@@ -173,10 +173,10 @@ HRESULT PTRegister()
     //
     CComPtr<ITPluggableTerminalSuperclassRegistration> pITPTSuperReg=NULL;
     hr=CoCreateInstance(CLSID_PluggableSuperclassRegistration,
-							NULL,
-							CLSCTX_INPROC_SERVER,
-							IID_ITPluggableTerminalSuperclassRegistration,
-							reinterpret_cast<void**>(&pITPTSuperReg));
+                        NULL,
+                        CLSCTX_INPROC_SERVER,
+                        IID_ITPluggableTerminalSuperclassRegistration,
+                        reinterpret_cast<void**>(&pITPTSuperReg));
     if(FAILED(hr))
     {
         LOG((MSP_ERROR, "CoCreateInstance - ITPluggableTerminalSuperclassRegistration 0x%08x", hr));
@@ -188,7 +188,7 @@ HRESULT PTRegister()
     //
     LPOLESTR bstrSuperCLSID = NULL;
     hr = StringFromCLSID(CLSID_PlgSuperSampleClass, &bstrSuperCLSID);
-	
+
     if(FAILED(hr))
     {
         LOG((MSP_ERROR, "StringFromCLSID 0x%08x", hr));
@@ -210,10 +210,10 @@ HRESULT PTRegister()
     }
     if(FAILED(pITPTSuperReg->GetTerminalSuperclassInfo()))
     {
-	//
-	//it's ok just add one
-	//
-	BSTR bstrName = SysAllocString( _T("PluggableTerminalsSamples") );
+        //
+        //it's ok just add one
+        //
+        BSTR bstrName = SysAllocString( _T("PluggableTerminalsSamples") );
         if(bstrName==NULL)
         {
             LOG((MSP_ERROR, "SysAllocString failed"));
@@ -238,7 +238,7 @@ HRESULT PTRegister()
     }
 
     hr = StringFromCLSID(CLSID_PlgSuperSampleClass, &bstrSuperCLSID);
-	
+
     if(FAILED(hr))
     {
         LOG((MSP_ERROR, "StringFromCLSID 0x%08x", hr));
@@ -255,7 +255,7 @@ HRESULT PTRegister()
     //
     CoTaskMemFree(bstrSuperCLSID);
     bstrSuperCLSID=NULL;
-	
+
     if(FAILED(hr))
     {
         LOG((MSP_ERROR, "PTRegisterPluggable 0x%08x", hr));
@@ -278,10 +278,10 @@ HRESULT PTUnregister()
     HRESULT hr=E_FAIL;
     CComPtr<ITPluggableTerminalClassRegistration> pITPTClassReg=NULL;
     hr=CoCreateInstance(CLSID_PluggableTerminalRegistration,
-							NULL,
-							CLSCTX_INPROC_SERVER,
-							IID_ITPluggableTerminalClassRegistration,
-							reinterpret_cast<void**>(&pITPTClassReg));
+                        NULL,
+                        CLSCTX_INPROC_SERVER,
+                        IID_ITPluggableTerminalClassRegistration,
+                        reinterpret_cast<void**>(&pITPTClassReg));
     if(FAILED(hr))
     {
         LOG((MSP_ERROR, "CoCreateInstance - ITPluggableTerminalClassRegistration 0x%08x", hr));
@@ -314,7 +314,7 @@ HRESULT PTUnregister()
 
     LPOLESTR bstrSuperCLSID = NULL;
     hr = StringFromCLSID(CLSID_PlgSuperSampleClass, &bstrSuperCLSID);
-	
+
     if(FAILED(hr))
     {
         LOG((MSP_ERROR, "StringFromCLSID 0x%08x", hr));
@@ -357,7 +357,7 @@ BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID lpReserved)
         // turn on leak detection on process exit
         _CrtSetDbgFlag( _CrtSetDbgFlag(_CRTDBG_REPORT_FLAG) | _CRTDBG_LEAK_CHECK_DF );
 #endif // DEBUG_HEAPS
-        
+
         _Module.Init(ObjectMap, hInstance);
         DisableThreadLibraryCalls(hInstance);
         MSPLOGREGISTER(_T("sampleterm"));
@@ -450,7 +450,7 @@ STDAPI DllUnregisterServer(void)
 #endif
 
     _Module.UnregisterServer();
-    
+
     return S_OK;
 }
 

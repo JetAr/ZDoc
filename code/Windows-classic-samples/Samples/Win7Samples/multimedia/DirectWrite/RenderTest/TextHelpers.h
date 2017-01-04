@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -18,7 +18,7 @@ HRESULT CreateTextFormatFromLOGFONT(
     LOGFONT const& logFont,
     float fontSize,
     OUT IDWriteTextFormat** textFormat
-    );
+);
 
 //
 // MakeRotateTransform
@@ -30,7 +30,7 @@ DWRITE_MATRIX MakeRotateTransform(
     float angle,    // angle in degrees
     float x,        // x coordinate of the center of rotation
     float y         // y coordinate of the center of rotation
-    );
+);
 
 //
 // Conversions between pixels and DIPs.

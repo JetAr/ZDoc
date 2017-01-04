@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -68,10 +68,12 @@ public:
         Clear();
 
         dwVersion   = src.dwVersion;
-        if (src.szSubject) {
+        if (src.szSubject)
+        {
             szSubject  = _tcsdup(src.szSubject);
         }
-        if (src.szIssuer) {
+        if (src.szIssuer)
+        {
             szIssuer   = _tcsdup(src.szIssuer);
         }
 
@@ -94,26 +96,40 @@ public:
         return *this;
     }
 
-    LPCTSTR get_Subject() { return szSubject; }
+    LPCTSTR get_Subject()
+    {
+        return szSubject;
+    }
     void set_Subject(LPCTSTR s)
     {
-        if (szSubject) {
+        if (szSubject)
+        {
             free(szSubject);
         }
         szSubject = _tcsdup(s);
     }
 
-    LPCTSTR get_Issuer() { return szIssuer; }
+    LPCTSTR get_Issuer()
+    {
+        return szIssuer;
+    }
     void set_Issuer(LPCTSTR s)
     {
-        if (szIssuer) {
+        if (szIssuer)
+        {
             free(szIssuer);
         }
         szIssuer = _tcsdup(s);
     }
-    
-    DWORD get_Version() { return dwVersion; }
-    void set_Version(DWORD v) { dwVersion = v; }
+
+    DWORD get_Version()
+    {
+        return dwVersion;
+    }
+    void set_Version(DWORD v)
+    {
+        dwVersion = v;
+    }
 
     void set_EncodedData(const PBYTE pData, DWORD nSize)
     {

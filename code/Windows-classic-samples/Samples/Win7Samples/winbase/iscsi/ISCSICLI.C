@@ -1,7 +1,7 @@
-//***************************************************************************
+﻿//***************************************************************************
 //
 //  iscsicli.c
-// 
+//
 //  Module: iscsi discovery command line tool
 //
 //  Purpose: Contains iscsi discovery command line tool
@@ -46,7 +46,7 @@ typedef struct
         UCHAR VolumeDiskExtentsBuffer[sizeof(VOLUME_DISK_EXTENTS) + 1024 * sizeof(DISK_EXTENT)];
     };
     TCHAR VolumePathNames[1];
-    
+
 } VOLUMEMOREINFO, *PVOLUMEMOREINFO;
 
 
@@ -64,7 +64,7 @@ typedef ISDSC_STATUS (*ENUMDEVICEINTERFACECALLBACK)(
     IN LPGUID Guid,
     IN HDEVINFO DevInfo,
     IN OUT PDEVICEINTERFACEENTRY DevEntry
-    );
+);
 
 
 #define OffsetToPtr(Base, Offset) ((PBYTE)((PBYTE)(Base) + (Offset)))
@@ -94,13 +94,13 @@ void Usage(ULONG Code)
         printf("                   <OS Lun> ...\n");
         printf("\n");
     }
-    
+
     if ((Code == 0) || (Code == 2))
     {
         printf("iscsicli RemoveTarget <TargetName> \n");
         printf("\n");
     }
-    
+
     if ((Code == 0) || (Code == 3))
     {
         printf("iscsicli AddTargetPortal <TargetPortalAddress> <TargetPortalSocket> \n");
@@ -111,13 +111,13 @@ void Usage(ULONG Code)
         printf("                         <DefaultTime2Retain> <Username> <Password> <AuthType>\n");
         printf("\n");
     }
-    
+
     if ((Code == 0) || (Code == 4))
     {
         printf("iscsicli RemoveTargetPortal <TargetPortalAddress> <TargetPortalSocket> [HBA Name] [Port Number]\n");
         printf("\n");
     }
-    
+
     if ((Code == 0) || (Code == 5))
     {
         printf("iscsicli RefreshTargetPortal <TargetPortalAddress> <TargetPortalSocket> [HBA Name] [Port Number]\n");
@@ -129,57 +129,57 @@ void Usage(ULONG Code)
         printf("iscsicli ListTargets [ForceUpdate]\n");
         printf("\n");
     }
-    
+
     if ((Code == 0) || (Code == 7))
     {
         printf("iscsicli ListTargetPortals\n");
         printf("\n");
     }
-    
+
     if ((Code == 0) || (Code == 8))
     {
         printf("iscsicli TargetInfo <TargetName> [Discovery Mechanism]\n");
         printf("\n");
     }
-    
+
     if ((Code == 0) || (Code == 9))
     {
-        printf("iscsicli LoginTarget <TargetName> <ReportToPNP>\n");    
-        printf("                     <TargetPortalAddress> <TargetPortalSocket>\n");    
-        printf("                     <InitiatorInstance> <Port number> <Security Flags>\n");    
-        printf("                     <Login Flags> <Header Digest> <Data Digest> \n");    
-        printf("                     <Max Connections> <DefaultTime2Wait>\n");  
-        printf("                     <DefaultTime2Retain> <Username> <Password> <AuthType> <Key>\n");  
-        printf("                     <Mapping Count> <Target Lun> <OS Bus> <Os Target> \n");    
-        printf("                     <OS Lun> ...\n");  
+        printf("iscsicli LoginTarget <TargetName> <ReportToPNP>\n");
+        printf("                     <TargetPortalAddress> <TargetPortalSocket>\n");
+        printf("                     <InitiatorInstance> <Port number> <Security Flags>\n");
+        printf("                     <Login Flags> <Header Digest> <Data Digest> \n");
+        printf("                     <Max Connections> <DefaultTime2Wait>\n");
+        printf("                     <DefaultTime2Retain> <Username> <Password> <AuthType> <Key>\n");
+        printf("                     <Mapping Count> <Target Lun> <OS Bus> <Os Target> \n");
+        printf("                     <OS Lun> ...\n");
         printf("\n");
     }
-    
+
     if ((Code == 0) || (Code == 10))
     {
         printf("iscsicli LogoutTarget <SessionId>\n");
         printf("\n");
     }
-    
+
     if ((Code == 0) || (Code == 11))
     {
-        printf("iscsicli PersistentLoginTarget <TargetName> <ReportToPNP>\n");    
-        printf("                     <TargetPortalAddress> <TargetPortalSocket>\n");    
-        printf("                     <InitiatorInstance> <Port number> <Security Flags>\n");    
-        printf("                     <Login Flags> <Header Digest> <Data Digest> \n");    
-        printf("                     <Max Connections> <DefaultTime2Wait>\n");  
-        printf("                     <DefaultTime2Retain> <Username> <Password> <AuthType> <Key>\n");  
-        printf("                     <Mapping Count> <Target Lun> <OS Bus> <Os Target> \n");    
-        printf("                     <OS Lun> ...\n");  
+        printf("iscsicli PersistentLoginTarget <TargetName> <ReportToPNP>\n");
+        printf("                     <TargetPortalAddress> <TargetPortalSocket>\n");
+        printf("                     <InitiatorInstance> <Port number> <Security Flags>\n");
+        printf("                     <Login Flags> <Header Digest> <Data Digest> \n");
+        printf("                     <Max Connections> <DefaultTime2Wait>\n");
+        printf("                     <DefaultTime2Retain> <Username> <Password> <AuthType> <Key>\n");
+        printf("                     <Mapping Count> <Target Lun> <OS Bus> <Os Target> \n");
+        printf("                     <OS Lun> ...\n");
         printf("\n");
     }
-    
+
     if ((Code == 0) || (Code == 12))
     {
         printf("iscsicli ListPersistentTargets\n");
         printf("\n");
     }
-    
+
     if ((Code == 0) || (Code == 13))
     {
         printf("iscsicli RemovePersistentTarget <Initiator Name> <TargetName> \n");
@@ -188,133 +188,133 @@ void Usage(ULONG Code)
         printf("                                <Target Portal Socket> \n");
         printf("\n");
     }
-    
+
     if ((Code == 0) || (Code == 14))
     {
         printf("iscsicli AddConnection <SessionId> <Initiator Instance>\n");
-        printf("                       <Port Number> <Target Portal Address>\n");   
-        printf("                       <Target Portal Socket> <Security Flags>\n"); 
-        printf("                     <Login Flags> <Header Digest> <Data Digest> \n");    
-        printf("                     <Max Connections> <DefaultTime2Wait>\n");  
+        printf("                       <Port Number> <Target Portal Address>\n");
+        printf("                       <Target Portal Socket> <Security Flags>\n");
+        printf("                     <Login Flags> <Header Digest> <Data Digest> \n");
+        printf("                     <Max Connections> <DefaultTime2Wait>\n");
         printf("                     <DefaultTime2Retain> <Username> <Password> <AuthType> <Key>\n");
         printf("\n");
     }
-    
+
     if ((Code == 0) || (Code == 15))
     {
         printf("iscsicli RemoveConnection <SessionId> <ConnectionId> \n");
         printf("\n");
     }
-    
+
     if ((Code == 0) || (Code == 16))
     {
         printf("iscsicli ScsiInquiry <SessionId> <LUN> <EvpdCmddt> <PageCode>\n");
         printf("\n");
     }
-    
+
     if ((Code == 0) || (Code == 17))
     {
         printf("iscsicli ReadCapacity <SessionId> <LUN>\n");
         printf("\n");
     }
-    
+
     if ((Code == 0) || (Code == 18))
     {
         printf("iscsicli ReportLUNs <SessionId>\n");
         printf("\n");
     }
-    
+
     if ((Code == 0) || (Code == 19))
     {
-        printf("iscsicli ReportTargetMappings\n");  
+        printf("iscsicli ReportTargetMappings\n");
         printf("\n");
     }
-    
+
     if ((Code == 0) || (Code == 20))
     {
         printf("iscsicli ListInitiators\n");
         printf("\n");
     }
-    
+
     if ((Code == 0) || (Code == 21))
     {
         printf("iscsicli AddiSNSServer <iSNS Server Address>\n");
         printf("\n");
     }
-    
+
     if ((Code == 0) || (Code == 22))
     {
         printf("iscsicli RemoveiSNSServer <iSNS Server Address>\n");
         printf("\n");
     }
-    
+
     if ((Code == 0) || (Code == 23))
     {
         printf("iscsicli RefreshiSNSServer <iSNS Server Address>\n");
         printf("\n");
     }
-    
+
     if ((Code == 0) || (Code == 24))
     {
-        printf("iscsicli ListiSNSServers\n");       
+        printf("iscsicli ListiSNSServers\n");
         printf("\n");
     }
-    
+
     if ((Code == 0) || (Code == 25))
     {
         printf("iscsicli NodeName <node name>\n");
         printf("\n");
     }
-    
+
     if ((Code == 0) || (Code == 26))
     {
         printf("iscsicli SessionList <Show Session Info>\n");
         printf("\n");
     }
-    
+
     if ((Code == 0) || (Code == 27))
     {
         printf("iscsicli CHAPSecret <chap secret>\n");
         printf("\n");
     }
-    
+
     if ((Code == 0) || (Code == 28))
     {
         printf("iscsicli TunnelAddr <Initiator Name> <InitiatorPort> <Destination Address> <Tunnel Address> <Persist>\n");
         printf("\n");
     }
-    
+
     if ((Code == 0) || (Code == 29))
     {
         printf("iscsicli GroupKey <Key> <Persist>\n");
         printf("\n");
     }
-    
+
     if ((Code == 0) || (Code == 31))
     {
         printf("iscsicli BindPersistentVolumes\n\n");
         printf("iscsicli BindPersistentDevices\n");
         printf("\n");
     }
-    
+
     if ((Code == 0) || (Code == 37))
     {
         printf("iscsicli ReportPersistentDevices\n");
         printf("\n");
     }
-        
+
     if ((Code == 0) || (Code == 38))
     {
         printf("iscsicli AddPersistentDevice <Volume or Device Path>\n");
         printf("\n");
     }
-        
+
     if ((Code == 0) || (Code == 39))
     {
         printf("iscsicli RemovePersistentDevice <Volume or Device Path>\n");
         printf("\n");
     }
-        
+
     if ((Code == 0) || (Code == 40))
     {
         printf("iscsicli ClearPersistentDevices\n");
@@ -327,7 +327,7 @@ void Usage(ULONG Code)
         printf("iscsicli GetPSKey <Initiator Name> <initiator Port> <Id Type> <Id>\n");
         printf("\n");
     }
-    
+
     if ((Code == 0) || (Code == 30))
     {
         printf("iscsicli PSKey <Initiator Name> <initiator Port> <Security Flags> <Id Type> <Id> <Key> <persist>\n");
@@ -369,9 +369,9 @@ void Usage(ULONG Code)
     }
 
     if ((Code == 0) ||
-        (Code == 1) ||
-        (Code == 9) ||
-        (Code == 11))
+            (Code == 1) ||
+            (Code == 9) ||
+            (Code == 11))
     {
         printf("Target Mappings:\n");
         printf("    <Target Lun> is the LUN value the target uses to expose the LUN.\n");
@@ -383,8 +383,8 @@ void Usage(ULONG Code)
     }
 
     if ((Code == 0) ||
-        (Code == 30) ||
-        (Code == 42))
+            (Code == 30) ||
+            (Code == 42))
     {
         printf("Payload Id Type:\n");
         printf("    ID_IPV4_ADDR is      1 - Id format is 1.2.3.4\n");
@@ -392,13 +392,13 @@ void Usage(ULONG Code)
         printf("    ID_IPV6_ADDR is      5 - Id form is IPv6 Address\n");
         printf("\n");
     }
-        
+
     if ((Code == 0) ||
-        (Code == 3) ||
-        (Code == 9) ||
-        (Code == 11) ||
-        (Code == 14) ||
-        (Code == 30))
+            (Code == 3) ||
+            (Code == 9) ||
+            (Code == 11) ||
+            (Code == 14) ||
+            (Code == 30))
     {
         printf("Security Flags:\n");
         printf("    TunnelMode is          0x00000040\n");
@@ -410,13 +410,13 @@ void Usage(ULONG Code)
         printf("    Valid Flags is         0x00000001\n");
         printf("\n");
     }
-    
+
     if ((Code == 0) ||
-        (Code == 1) ||
-        (Code == 3) ||
-        (Code == 9) ||
-        (Code == 11) ||
-        (Code == 14))
+            (Code == 1) ||
+            (Code == 3) ||
+            (Code == 9) ||
+            (Code == 11) ||
+            (Code == 14))
     {
         printf("Login Flags:\n");
         printf("    ISCSI_LOGIN_FLAG_REQUIRE_IPSEC                0x00000001\n");
@@ -425,13 +425,13 @@ void Usage(ULONG Code)
         printf("        Multipathing is enabled for the target on this initiator\n");
         printf("\n");
     }
-    
+
     if ((Code == 0) ||
-        (Code == 1) ||
-        (Code == 3) ||
-        (Code == 9) ||
-        (Code == 11) ||
-        (Code == 14))
+            (Code == 1) ||
+            (Code == 3) ||
+            (Code == 9) ||
+            (Code == 11) ||
+            (Code == 14))
     {
         printf("AuthType:\n");
         printf("    ISCSI_NO_AUTH_TYPE = 0,\n");
@@ -442,15 +442,15 @@ void Usage(ULONG Code)
         printf("        Mutual CHAP (Target and Initiator authenticate each other is used)\n");
         printf("\n");
     }
-    
+
     if ((Code == 0) ||
-        (Code == 1))
+            (Code == 1))
     {
         printf("Target Flags:\n");
         printf("    ISCSI_TARGET_FLAG_HIDE_STATIC_TARGET            0x00000002\n");
         printf("        If this flag is set then the target will never be reported unless it\n");
         printf("        is also discovered dynamically.\n\n");
-        
+
         printf("    ISCSI_TARGET_FLAG_MERGE_TARGET_INFORMATION      0x00000004\n");
         printf("        If this flag is set then the target information passed will be\n");
         printf("        merged with any target information already statically configured for\n");
@@ -459,16 +459,16 @@ void Usage(ULONG Code)
     }
 
     if ((Code == 0) ||
-        (Code == 1) ||
-        (Code == 3) ||
-        (Code == 9) ||
-        (Code == 11) ||
-        (Code == 14) ||
-        (Code == 27) ||
-        (Code == 30) ||
-        (Code == 33) ||
-        (Code == 35) ||
-        (Code == 36))
+            (Code == 1) ||
+            (Code == 3) ||
+            (Code == 9) ||
+            (Code == 11) ||
+            (Code == 14) ||
+            (Code == 27) ||
+            (Code == 30) ||
+            (Code == 33) ||
+            (Code == 35) ||
+            (Code == 36))
     {
         printf("CHAP secrets, CHAP passwords and IPSEC preshared keys can be specified as\n");
         printf("a text string or as a sequence of hexadecimal values. The value specified on\n");
@@ -478,11 +478,11 @@ void Usage(ULONG Code)
         printf("For example 0x12345678 specifies a 4 byte secret\n");
         printf("\n");
     }
-    
+
     printf("All numerical values are assumed decimal unless preceeded by 0x. If\n");
     printf("preceeded by 0x then value is assumed to be hex\n");
     printf("\n");
-    
+
     if (Code == 0)
     {
 #ifdef UNICODE
@@ -499,23 +499,23 @@ PTCHAR GetiSCSIMessageText(
     __out_ecount(MessageLen) PTCHAR Message,
     ULONG MessageLen,
     ISDSC_STATUS Status
-    )
+)
 {
     ULONG d;
     HRESULT hr;
-    
+
     //
     // first check for os error code
     //
     d = FormatMessage(FORMAT_MESSAGE_MAX_WIDTH_MASK |
-                  FORMAT_MESSAGE_FROM_SYSTEM |
-                  FORMAT_MESSAGE_FROM_HMODULE,
-                  GetModuleHandle(TEXT("iscsidsc.dll")),
-                  Status,
-                  0,                                 // langid
-                  Message,
-                  FORMAT_MESSAGE_MAX_WIDTH_MASK,
-                  NULL);
+                      FORMAT_MESSAGE_FROM_SYSTEM |
+                      FORMAT_MESSAGE_FROM_HMODULE,
+                      GetModuleHandle(TEXT("iscsidsc.dll")),
+                      Status,
+                      0,                                 // langid
+                      Message,
+                      FORMAT_MESSAGE_MAX_WIDTH_MASK,
+                      NULL);
     if (d == 0)
     {
 #ifdef UNICODE
@@ -526,7 +526,7 @@ PTCHAR GetiSCSIMessageText(
 #else
         hr = StringCchPrintfA(Message, MessageLen, "Status: 0x%x", Status);
 #endif
-    } 
+    }
 
     return(Message);
 }
@@ -534,7 +534,7 @@ PTCHAR GetiSCSIMessageText(
 ISDSC_STATUS DiscpUnicodeToAnsiSize(
     IN __in PWCHAR UnicodeString,
     OUT ULONG *AnsiSizeInBytes
-    )
+)
 /*++
 
 Routine Description:
@@ -558,12 +558,13 @@ Return Value:
     _try
     {
         *AnsiSizeInBytes = WideCharToMultiByte(CP_ACP,
-                                               0,
-                                               UnicodeString,
-                                               -1,
-                                               NULL,
-                                               0, NULL, NULL);
-    } _except(EXCEPTION_EXECUTE_HANDLER) {
+        0,
+        UnicodeString,
+        -1,
+        NULL,
+        0, NULL, NULL);
+    } _except(EXCEPTION_EXECUTE_HANDLER)
+    {
         return(ERROR_NOACCESS);
     }
     return((*AnsiSizeInBytes == 0) ? GetLastError() : ERROR_SUCCESS);
@@ -574,7 +575,7 @@ ULONG DiscpUnicodeToAnsi(
     IN __in_opt LPWSTR pszW,
     OUT __deref_out LPSTR *ppszA,
     IN ULONG MaxLen
-    )
+)
 /*++
 
 Routine Description:
@@ -618,13 +619,19 @@ Return Value:
             {
                 Status = ERROR_NOT_ENOUGH_MEMORY;
                 AllocMemory = FALSE;
-            } else {
+            }
+            else
+            {
                 AllocMemory = TRUE;
             }
-        } else {
+        }
+        else
+        {
             AllocMemory = FALSE;
         }
-    } else {
+    }
+    else
+    {
         AllocMemory = FALSE;
         Status = ERROR_SUCCESS;
     }
@@ -652,7 +659,9 @@ Return Value:
                 Free(*ppszA);
             }
 
-        } else {
+        }
+        else
+        {
             Status = ERROR_SUCCESS;
         }
     }
@@ -663,7 +672,7 @@ Return Value:
 void PrintSecurityFlags(
     __in PCHAR Indent,
     ISCSI_SECURITY_FLAGS SecurityFlags
-                       )
+)
 {
     printf("%sSecurity Flags        : 0x%I64x\n",
            Indent,
@@ -715,34 +724,34 @@ void PrintSecurityFlags(
 
 void PrintTargetMapping(
     PISCSI_TARGET_MAPPING Mapping
-    )
+)
 {
     ULONG j;
-    
+
 #ifdef UNICODE
-    printf("    Session Id             : %I64x-%I64x\n"        
+    printf("    Session Id             : %I64x-%I64x\n"
            "    Target Name            : %ws\n"
            "    Initiator              : %ws\n"
            "    Initiator Scsi Device  : %ws\n"
            "    Initiator Bus          : %d\n"
            "    Initiator Target Id    : %d\n",
-#else                   
-    printf("    Session Id             : %I64x-%I64x\n"        
+#else
+    printf("    Session Id             : %I64x-%I64x\n"
            "    Target Name            : %s\n"
            "    Initiator              : %s\n"
            "    Initiator Scsi Device  : %s\n"
            "    Initiator Bus          : %d\n"
            "    Initiator Target Id    : %d\n",
 #endif
-                           Mapping->SessionId.AdapterUnique,
-                           Mapping->SessionId.AdapterSpecific,
-                           Mapping->TargetName,
-                           Mapping->InitiatorName,
-                           Mapping->OSDeviceName,
-                           Mapping->OSBusNumber,
-                           Mapping->OSTargetNumber
-                           );
-    
+           Mapping->SessionId.AdapterUnique,
+           Mapping->SessionId.AdapterSpecific,
+           Mapping->TargetName,
+           Mapping->InitiatorName,
+           Mapping->OSDeviceName,
+           Mapping->OSBusNumber,
+           Mapping->OSTargetNumber
+          );
+
     for (j = 0; j < Mapping->LUNCount; j++)
     {
         printf("        Target LUN: 0x%I64x <--> OS Lun: 0x%x\n",
@@ -757,10 +766,10 @@ void PrintStringList(
     __in PSTR Spacer,
     __in PTSTR Buffer,
     ULONG SizeInBytes
-    )
+)
 {
     printf("%s\n", Title);
-    
+
     while (*Buffer != 0)
     {
 #ifdef UNICODE
@@ -779,11 +788,15 @@ void PrintStringList(
             {
                 Buffer++;
                 SizeInBytes -= sizeof(TCHAR);
-            } else {
+            }
+            else
+            {
                 printf("StringList error2\n");
                 break;
             }
-        } else {
+        }
+        else
+        {
             printf("StringList error\n");
             break;
         }
@@ -794,16 +807,18 @@ void PrintBuffer(
     __in PSTR Spacer,
     __in_ecount(Size) PUCHAR Buffer,
     ULONG Size
-    )
+)
 {
     ULONG i, n;
-    
+
     while (Size > 0)
     {
         if (Size >= 0x10)
         {
             n = 0x10;
-        } else {
+        }
+        else
+        {
             n = Size;
         }
 
@@ -813,7 +828,9 @@ void PrintBuffer(
             if (i < n)
             {
                 printf("%02x ", Buffer[i]);
-            } else {
+            }
+            else
+            {
                 printf("   ");
             }
         }
@@ -823,12 +840,14 @@ void PrintBuffer(
             if ((Buffer[i] > 0x20) && (Buffer[i] < 0x7f))
             {
                 printf("%c", Buffer[i]);
-            } else {
+            }
+            else
+            {
                 printf(".");
             }
         }
         printf("\n");
-        
+
         Buffer += n;
         Size -= n;
     }
@@ -837,95 +856,105 @@ void PrintBuffer(
 void PrintLoginOptions(
     __in CHAR *Header,
     PISCSI_LOGIN_OPTIONS LoginOptions
-    )
+)
 {
     printf("%sVersion              : %d\n", Header, LoginOptions->Version);
     printf("%sInformation Specified: 0x%x\n",
-           Header, 
+           Header,
            LoginOptions->InformationSpecified);
 
     if ((LoginOptions->InformationSpecified &
-          ISCSI_LOGIN_OPTIONS_HEADER_DIGEST) == ISCSI_LOGIN_OPTIONS_HEADER_DIGEST)
+            ISCSI_LOGIN_OPTIONS_HEADER_DIGEST) == ISCSI_LOGIN_OPTIONS_HEADER_DIGEST)
     {
         printf("%sHeader Digest        : ", Header);
         if (LoginOptions->HeaderDigest == ISCSI_DIGEST_TYPE_NONE)
         {
             printf("None\n");
-        } else if (LoginOptions->HeaderDigest == ISCSI_DIGEST_TYPE_CRC32C) {
+        }
+        else if (LoginOptions->HeaderDigest == ISCSI_DIGEST_TYPE_CRC32C)
+        {
             printf("CRC-32C\n");
         }
     }
 
     if ((LoginOptions->InformationSpecified &
-          ISCSI_LOGIN_OPTIONS_DATA_DIGEST) == ISCSI_LOGIN_OPTIONS_DATA_DIGEST)
+            ISCSI_LOGIN_OPTIONS_DATA_DIGEST) == ISCSI_LOGIN_OPTIONS_DATA_DIGEST)
     {
         printf("%sData Digest          : ", Header);
         if (LoginOptions->DataDigest == ISCSI_DIGEST_TYPE_NONE)
         {
             printf("None\n");
-        } else if (LoginOptions->DataDigest == ISCSI_DIGEST_TYPE_CRC32C) {
+        }
+        else if (LoginOptions->DataDigest == ISCSI_DIGEST_TYPE_CRC32C)
+        {
             printf("CRC-32C\n");
         }
     }
 
     if ((LoginOptions->InformationSpecified &
-          ISCSI_LOGIN_OPTIONS_MAXIMUM_CONNECTIONS) == ISCSI_LOGIN_OPTIONS_MAXIMUM_CONNECTIONS)
+            ISCSI_LOGIN_OPTIONS_MAXIMUM_CONNECTIONS) == ISCSI_LOGIN_OPTIONS_MAXIMUM_CONNECTIONS)
     {
         printf("%sMaximum Connections  : %d\n",
                Header,
-              LoginOptions->MaximumConnections);
+               LoginOptions->MaximumConnections);
     }
 
     if ((LoginOptions->InformationSpecified &
-          ISCSI_LOGIN_OPTIONS_DEFAULT_TIME_2_WAIT) == ISCSI_LOGIN_OPTIONS_DEFAULT_TIME_2_WAIT)
+            ISCSI_LOGIN_OPTIONS_DEFAULT_TIME_2_WAIT) == ISCSI_LOGIN_OPTIONS_DEFAULT_TIME_2_WAIT)
     {
         printf("%sDefault Time 2 Wait  : %d\n",
                Header,
-              LoginOptions->DefaultTime2Wait);
+               LoginOptions->DefaultTime2Wait);
     }
 
     if ((LoginOptions->InformationSpecified &
-          ISCSI_LOGIN_OPTIONS_DEFAULT_TIME_2_RETAIN) == ISCSI_LOGIN_OPTIONS_DEFAULT_TIME_2_RETAIN)
+            ISCSI_LOGIN_OPTIONS_DEFAULT_TIME_2_RETAIN) == ISCSI_LOGIN_OPTIONS_DEFAULT_TIME_2_RETAIN)
     {
         printf("%sDefault Time 2 Retain: %d\n",
                Header,
-              LoginOptions->DefaultTime2Retain);
+               LoginOptions->DefaultTime2Retain);
     }
 
     printf("%sLogin Flags          : 0x%x\n",
-               Header,
+           Header,
            LoginOptions->LoginFlags);
 
     if ((LoginOptions->LoginFlags &
-          ISCSI_LOGIN_FLAG_REQUIRE_IPSEC) == ISCSI_LOGIN_FLAG_REQUIRE_IPSEC)
+            ISCSI_LOGIN_FLAG_REQUIRE_IPSEC) == ISCSI_LOGIN_FLAG_REQUIRE_IPSEC)
     {
         printf("%s                       Require IPsec\n", Header);
     }
 
     if ((LoginOptions->LoginFlags &
-          ISCSI_LOGIN_FLAG_MULTIPATH_ENABLED) == ISCSI_LOGIN_FLAG_MULTIPATH_ENABLED)
+            ISCSI_LOGIN_FLAG_MULTIPATH_ENABLED) == ISCSI_LOGIN_FLAG_MULTIPATH_ENABLED)
     {
         printf("%s                       Multipath Enabled\n", Header);
     }
 
     if ((LoginOptions->InformationSpecified &
-          ISCSI_LOGIN_OPTIONS_AUTH_TYPE) == ISCSI_LOGIN_OPTIONS_AUTH_TYPE)
+            ISCSI_LOGIN_OPTIONS_AUTH_TYPE) == ISCSI_LOGIN_OPTIONS_AUTH_TYPE)
     {
         printf("%sAuthentication Type  : ", Header);
         if (LoginOptions->AuthType == ISCSI_NO_AUTH_TYPE)
         {
             printf("None\n");
-        } else if (LoginOptions->AuthType == ISCSI_CHAP_AUTH_TYPE) {
+        }
+        else if (LoginOptions->AuthType == ISCSI_CHAP_AUTH_TYPE)
+        {
             printf("CHAP\n");
-        } else if (LoginOptions->AuthType == ISCSI_MUTUAL_CHAP_AUTH_TYPE) {
+        }
+        else if (LoginOptions->AuthType == ISCSI_MUTUAL_CHAP_AUTH_TYPE)
+        {
             printf("Mutual CHAP\n");
-        } else {
+        }
+        else
+        {
             printf("Unknown - %d\n", LoginOptions->AuthType);
         }
     }
 
     if ((LoginOptions->InformationSpecified &
-          ISCSI_LOGIN_OPTIONS_USERNAME) == ISCSI_LOGIN_OPTIONS_USERNAME)
+            ISCSI_LOGIN_OPTIONS_USERNAME) == ISCSI_LOGIN_OPTIONS_USERNAME)
     {
         printf("%sUsername             : \n", Header);
         PrintBuffer("                          ",
@@ -935,10 +964,10 @@ void PrintLoginOptions(
     }
 
     if ((LoginOptions->InformationSpecified &
-          ISCSI_LOGIN_OPTIONS_PASSWORD) == ISCSI_LOGIN_OPTIONS_PASSWORD)
+            ISCSI_LOGIN_OPTIONS_PASSWORD) == ISCSI_LOGIN_OPTIONS_PASSWORD)
     {
         printf("%sPassword             : <is established>\n", Header);
-    }               
+    }
 }
 
 //+-------------------------------------------------------------------------
@@ -961,7 +990,7 @@ BOOL HexStringToULONGLONG(
     ULONGLONG * RetValue,
     int cDigits,
     __in TCHAR chDelim
-    )
+)
 {
     int Count;
     ULONGLONG Value;
@@ -980,7 +1009,7 @@ BOOL HexStringToULONGLONG(
     }
 
     *RetValue = Value;
-    
+
     if (chDelim != 0)
         return *lpsz++ == chDelim;
     else
@@ -990,11 +1019,11 @@ BOOL HexStringToULONGLONG(
 BOOLEAN StringToSessionId(
     IN __in PTSTR String,
     OUT PISCSI_UNIQUE_SESSION_ID SessionId
-    )
+)
 {
     PTCHAR s, x;
     TCHAR c;
-    
+
     //
     // Session id is in the form of
     // 0x1234567812345678-0x1234567812345678
@@ -1004,7 +1033,7 @@ BOOLEAN StringToSessionId(
     // skip over '0x'
     //
     if ((*String == TEXT('0')) &&
-        ((String[1] == TEXT('x')) || (String[1] == TEXT('X'))))
+            ((String[1] == TEXT('x')) || (String[1] == TEXT('X'))))
     {
         String += 2;
     }
@@ -1032,11 +1061,11 @@ BOOLEAN StringToSessionId(
     *x = c;
 
     if ((*String == TEXT('0')) &&
-        ((String[1] == TEXT('x') ) || (String[1] == TEXT('X'))))
+            ((String[1] == TEXT('x') ) || (String[1] == TEXT('X'))))
     {
         String += 2;
     }
-    
+
     if (! HexStringToULONGLONG(String,
                                &SessionId->AdapterSpecific,
                                sizeof(ULONGLONG)*2, 0))
@@ -1067,21 +1096,21 @@ ULONG xtoi_(LPCTSTR lpsz)
     }
 
     return(Value);
-    
+
 }
 
 ISDSC_STATUS ParseHexString(
     IN LPCTSTR s,
     OUT PUCHAR *BufPtr,
     OUT ULONG *BufLen
-    )
+)
 {
     ISDSC_STATUS Status;
     TCHAR temp[3];
     PUCHAR b;
     ULONG slen, blen;
     ULONG i,j;
-    
+
     slen = (ULONG)_tcslen(s);
     blen = slen/2;
 
@@ -1100,10 +1129,14 @@ ISDSC_STATUS ParseHexString(
             }
             *BufPtr = b;
             Status = ERROR_SUCCESS;
-        } else {
+        }
+        else
+        {
             Status = ERROR_NOT_ENOUGH_MEMORY;
         }
-    } else {
+    }
+    else
+    {
         //
         // string must have 2 characters for each binary value
         //
@@ -1117,16 +1150,18 @@ ISDSC_STATUS ParseHexString(
 
 ULONG stoi(
     __in PTCHAR x
-    )
+)
 {
     ULONG r;
-    
+
     if ((_tcslen(x) > 2) &&
-        (x[0] == TEXT('0')) &&
-        ((x[1] == TEXT('x')) || (x[1] == TEXT('X'))))
+            (x[0] == TEXT('0')) &&
+            ((x[1] == TEXT('x')) || (x[1] == TEXT('X'))))
     {
         r = xtoi_(x+2);
-    } else {
+    }
+    else
+    {
 #ifdef UNICODE
         r = _wtoi(x);
 #else
@@ -1138,21 +1173,23 @@ ULONG stoi(
 
 ULONGLONG stoiD(
     __in PTCHAR x
-    )
+)
 {
     ULONGLONG r;
     ULONG base;
-    
+
     if ((_tcslen(x) > 2) &&
-        (x[0] == TEXT('0')) &&
-        ((x[1] == TEXT('x')) || (x[1] == TEXT('X'))))
+            (x[0] == TEXT('0')) &&
+            ((x[1] == TEXT('x')) || (x[1] == TEXT('X'))))
     {
         base = 16;
         x += 2;
-    } else {
+    }
+    else
+    {
         base = 10;
     }
-    
+
     r = _tcstoui64(x,
                    NULL,
                    base);
@@ -1162,17 +1199,17 @@ ULONGLONG stoiD(
 BOOLEAN stoiDForLogicalUnit(
     __in PTCHAR x,
     ULONGLONG *Value
-    )
+)
 {
     if ((_tcslen(x) != 18) ||
-        (x[0] != TEXT('0')) ||
-        ((x[1] != TEXT('x')) && (x[1] == TEXT('X'))))
+            (x[0] != TEXT('0')) ||
+            ((x[1] != TEXT('x')) && (x[1] == TEXT('X'))))
     {
         return(FALSE);
     }
 
     *Value = stoiD(x);
-    
+
     return(TRUE);
 }
 
@@ -1181,13 +1218,13 @@ void ParseLoginOptions(
     __in_ecount(ArgC) PTSTR *ArgV,
     ULONG  ArgC,
     ULONG ArgCIndex
-    )
+)
 {
     ISDSC_STATUS Status;
     PTCHAR Secret;
     UNREFERENCED_PARAMETER(ArgC);
     memset(LoginOptions, 0, sizeof(ISCSI_LOGIN_OPTIONS));
-    
+
     LoginOptions->InformationSpecified = 0;
 
     LoginOptions->LoginFlags = 0;
@@ -1197,7 +1234,7 @@ void ParseLoginOptions(
     }
     ArgCIndex++;
 
-    
+
     if (*ArgV[ArgCIndex] != TEXT('*'))
     {
         LoginOptions->InformationSpecified |= ISCSI_LOGIN_OPTIONS_HEADER_DIGEST;
@@ -1236,18 +1273,20 @@ void ParseLoginOptions(
     if (*ArgV[ArgCIndex] != TEXT('*'))
     {
         LoginOptions->InformationSpecified |= ISCSI_LOGIN_OPTIONS_USERNAME;
-        
+
         if (*ArgV[ArgCIndex] == TEXT('-'))
         {
             LoginOptions->Username = NULL;
             LoginOptions->UsernameLength = 0;
-        } else {
+        }
+        else
+        {
 #ifdef UNICODE
             LoginOptions->Username = NULL;
             DiscpUnicodeToAnsi(
-                               ArgV[ArgCIndex],
-                               (LPSTR *)&LoginOptions->Username,
-                               0);
+                ArgV[ArgCIndex],
+                (LPSTR *)&LoginOptions->Username,
+                0);
 #else
             LoginOptions->Username = ArgV[ArgCIndex];
 #endif
@@ -1263,23 +1302,27 @@ void ParseLoginOptions(
         {
             LoginOptions->Password = NULL;
             LoginOptions->PasswordLength = 0;
-        } else {
+        }
+        else
+        {
             Secret = ArgV[ArgCIndex];
             if ((Secret[0] == TEXT('0')) &&
-                ((Secret[1] == TEXT('X')) ||
-                 (Secret[1] == TEXT('x'))))
+                    ((Secret[1] == TEXT('X')) ||
+                     (Secret[1] == TEXT('x'))))
             {
                 Status = ParseHexString(Secret+2,
                                         &LoginOptions->Password,
                                         &LoginOptions->PasswordLength);
-            } else {
-            
+            }
+            else
+            {
+
 #ifdef UNICODE
                 LoginOptions->Password = NULL;
                 DiscpUnicodeToAnsi(
-                                   ArgV[ArgCIndex],
-                                   (LPSTR *)&LoginOptions->Password,
-                                   0);
+                    ArgV[ArgCIndex],
+                    (LPSTR *)&LoginOptions->Password,
+                    0);
 #else
                 LoginOptions->Password = ArgV[ArgCIndex];
 #endif
@@ -1295,20 +1338,20 @@ void ParseLoginOptions(
         LoginOptions->AuthType = stoi(ArgV[ArgCIndex]);
     }
     ArgCIndex++;
-    
+
 }
 
 
 BOOLEAN IsTrue(
     __in PTCHAR s,
-    BOOLEAN Default             
-    )
+    BOOLEAN Default
+)
 {
     if (*s == TEXT('*'))
     {
         return(Default);
     }
-    
+
     if ( (*s == TEXT('t')) || (*s == TEXT('T')))
     {
         return(TRUE);
@@ -1343,29 +1386,31 @@ ISDSC_STATUS TunnelAddress(
     if (*ArgV[3] == TEXT('*'))
     {
         InitiatorPort = ISCSI_ALL_INITIATOR_PORTS;
-    } else {
+    }
+    else
+    {
         InitiatorPort = stoi(ArgV[3]);
     }
-    
+
     DestAddress = ArgV[4];
     if (*DestAddress == TEXT('*'))
     {
         DestAddress = NULL;
     }
-    
+
     TunnelAddress = ArgV[5];
     if (*TunnelAddress == TEXT('*'))
     {
         TunnelAddress = NULL;
     }
-    
+
     Persist = IsTrue(ArgV[6], TRUE);
 
     Status = SetIScsiTunnelModeOuterAddress(Initiator,
-                                             InitiatorPort,
-                                             DestAddress,
-                                             TunnelAddress,
-                                             Persist);
+                                            InitiatorPort,
+                                            DestAddress,
+                                            TunnelAddress,
+                                            Persist);
 
     return(Status);
 }
@@ -1392,19 +1437,21 @@ ISDSC_STATUS GroupKey(
         Key = NULL;
         KeyLength = 0;
         Status = ERROR_SUCCESS;
-    } else {    
+    }
+    else
+    {
 #ifdef UNICODE
         Key = NULL;
         Status = DiscpUnicodeToAnsi(ArgV[2],
                                     &Key,
-                                    0); 
+                                    0);
 #else
         Key = ArgV[2];
         Status = ERROR_SUCCESS;
 #endif
         if (Status == ERROR_SUCCESS)
         {
-            KeyLength = (ULONG)strlen(Key) + 1;     
+            KeyLength = (ULONG)strlen(Key) + 1;
         }
     }
 
@@ -1423,9 +1470,9 @@ ISDSC_STATUS GroupKey(
         }
 #endif
     }
-    
+
     return(Status);
-    
+
 }
 
 
@@ -1446,26 +1493,30 @@ ISDSC_STATUS CHAPSecret(
         Usage(27);
         return(Status);
     }
-    
+
     Secret = ArgV[2];
     if (*Secret == TEXT('*'))
     {
         Key = NULL;
-        KeyLength = 0;      
-    } else {
+        KeyLength = 0;
+    }
+    else
+    {
         if ((Secret[0] == TEXT('0')) &&
-            ((Secret[1] == TEXT('X')) ||
-             (Secret[1] == TEXT('x'))))
+                ((Secret[1] == TEXT('X')) ||
+                 (Secret[1] == TEXT('x'))))
         {
             Status = ParseHexString(Secret+2,
                                     &Key,
                                     &KeyLength);
-        } else {
+        }
+        else
+        {
 #ifdef UNICODE
             Key = NULL;
             Status = DiscpUnicodeToAnsi(ArgV[2],
                                         (LPSTR *)&Key,
-                                        0); 
+                                        0);
 #else
             Key = ArgV[2];
             Status = ERROR_SUCCESS;
@@ -1480,20 +1531,20 @@ ISDSC_STATUS CHAPSecret(
     if (Status == ERROR_SUCCESS)
     {
         Status = SetIScsiInitiatorCHAPSharedSecret(KeyLength,
-                                          Key);
-        
+                 Key);
+
         if ((Key != NULL) && (Key != (PUCHAR)ArgV[2]))
         {
             Free(Key);
         }
     }
-                                      
-    return(Status);    
+
+    return(Status);
 }
 
 ISDSC_STATUS BindPeristentVolumes(
-    int  ArgC ,
-    __in_ecount(ArgC) PTCHAR *ArgV 
+    int  ArgC,
+    __in_ecount(ArgC) PTCHAR *ArgV
 )
 //    printf("iscsicli BindPersistentVolumes\n");
 {
@@ -1502,9 +1553,9 @@ ISDSC_STATUS BindPeristentVolumes(
     UNREFERENCED_PARAMETER(ArgV);
 
     Status = SetupPersistentIScsiVolumes();
-                                      
+
     return(Status);
-    
+
 }
 
 ISDSC_STATUS ClearPersistentVolumes(
@@ -1518,9 +1569,9 @@ ISDSC_STATUS ClearPersistentVolumes(
     UNREFERENCED_PARAMETER(ArgV);
 
     Status = ClearPersistentIScsiDevices();
-                                      
+
     return(Status);
-    
+
 }
 
 ISDSC_STATUS AddPersistentVolume(
@@ -1535,12 +1586,14 @@ ISDSC_STATUS AddPersistentVolume(
     {
         Usage(38);
         Status = ERROR_SUCCESS;
-    } else {    
+    }
+    else
+    {
         Status = AddPersistentIScsiDevice(ArgV[2]);
     }
-                                      
+
     return(Status);
-    
+
 }
 
 ISDSC_STATUS RemovePersistentVolume(
@@ -1555,12 +1608,14 @@ ISDSC_STATUS RemovePersistentVolume(
     {
         Usage(39);
         Status = ERROR_SUCCESS;
-    } else {    
+    }
+    else
+    {
         Status = RemovePersistentIScsiDevice(ArgV[2]);
     }
-                                      
+
     return(Status);
-    
+
 }
 
 ISDSC_STATUS ReportPersistentVolumes(
@@ -1593,14 +1648,16 @@ ISDSC_STATUS ReportPersistentVolumes(
                                 Buffer,
                                 SizeNeeded);
                 printf("\n");
-            }           
-        } else {
+            }
+        }
+        else
+        {
             Status = ERROR_NOT_ENOUGH_MEMORY;
         }
     }
-                                      
+
     return(Status);
-    
+
 }
 
 
@@ -1623,21 +1680,23 @@ ISDSC_STATUS NodeName(
     if (*ArgV[2] == TEXT('*'))
     {
         NodeName = NULL;
-    } else {
+    }
+    else
+    {
         NodeName = ArgV[2];
     }
-    
+
     Status = SetIScsiInitiatorNodeName(NodeName);
 
     return(Status);
-    
+
 }
 
 
 BOOLEAN DiscpIsDeviceNumberInVolume(
     IN ULONG DeviceNumber,
     IN PVOLUME_DISK_EXTENTS Volume
-    )
+)
 /*
 Description:
 
@@ -1672,7 +1731,7 @@ Return Values:
 PTCHAR DiscpIsStringInList(
     IN PTCHAR List,
     IN PTCHAR String
-    )
+)
 /*
 Description:
 
@@ -1720,7 +1779,8 @@ Return Values:
         //
         p += (_tcslen(p) + 1);
 
-    } while (*p != 0);
+    }
+    while (*p != 0);
 
     return(NULL);
 }
@@ -1729,7 +1789,7 @@ ISDSC_STATUS DiscpAddStringToMultiSzList(
     IN OUT PTCHAR *List,
     IN OUT PULONG ListSizeInBytes,
     IN PTCHAR String
-    )
+)
 /*
 Description:
 
@@ -1767,13 +1827,15 @@ Return Values:
     // First see if the string is already in the list
     //
     if ((DiscpIsStringInList(*List,
-                            String)) == NULL)
+                             String)) == NULL)
     {
         if (*ListSizeInBytes != sizeof(TCHAR))
         {
             NewListSizeInBytes = *ListSizeInBytes +
                                  ((_tcslen(String)+1) * sizeof(TCHAR));
-        } else {
+        }
+        else
+        {
             NewListSizeInBytes = ((_tcslen(String)+2) * sizeof(TCHAR));
         }
 
@@ -1788,7 +1850,9 @@ Return Values:
                 //
                 Len = (*ListSizeInBytes) - sizeof(TCHAR);
                 memcpy(NewList, *List, Len);
-            } else {
+            }
+            else
+            {
                 Len = 0;
             }
 
@@ -1798,8 +1862,8 @@ Return Values:
             //
             p = (PTCHAR)OffsetToPtr(NewList, Len);
             hr = StringCchCopy(p,
-                                (NewListSizeInBytes - Len) / sizeof(WCHAR),
-                                String);
+                               (NewListSizeInBytes - Len) / sizeof(WCHAR),
+                               String);
             p += (_tcslen(String) + 1);
             *p = 0;
 
@@ -1810,10 +1874,14 @@ Return Values:
             *List = NewList;
             *ListSizeInBytes = (ULONG)NewListSizeInBytes;
             Status = ERROR_SUCCESS;
-        } else {
+        }
+        else
+        {
             Status = ERROR_NOT_ENOUGH_MEMORY;
         }
-    } else {
+    }
+    else
+    {
         //
         // String already in the list, nothing to do
         //
@@ -1828,7 +1896,7 @@ ISDSC_STATUS DiscpVolumeMountList(
     IN PTCHAR VolumeNameToFind,
     IN OUT PTCHAR *VolumePath,
     IN OUT ULONG *VolumePathLen
-    )
+)
 /*++
 
 Routine Description:
@@ -1842,11 +1910,11 @@ Arguments:
     Name is the volume name for the volume on which to look for volume
         paths that are for VolumeNameToFind
 
-    VolumeNameToFind is the name of the volume we are searching for 
+    VolumeNameToFind is the name of the volume we are searching for
 
     *VolumePath returns with a pointer to the list of volume paths.
         Each path in the list is nul terminated with the last path
-        double nul terminated. The caller must free this buffer. 
+        double nul terminated. The caller must free this buffer.
 
     *VolumePathLen returns with the number of bytes in the
         VolumePath buffer
@@ -1877,10 +1945,10 @@ Return Value:
                                         MAX_PATH * sizeof(TCHAR));
         VolumeMountPoint = (PTCHAR)OffsetToPtr(LinkName2,
                                                MAX_PATH * sizeof(TCHAR));
-        
+
         MountPointPath = (PTCHAR)OffsetToPtr(VolumeMountPoint,
-                                               MAX_PATH * sizeof(TCHAR));
-        
+                                             MAX_PATH * sizeof(TCHAR));
+
         //
         // See if the mount point is for our volume name
         //
@@ -1889,7 +1957,7 @@ Return Value:
                                              MAX_PATH);
         if (b)
         {
-            
+
             if (_tcsicmp(VolumeName,
                          VolumeNameToFind) == 0)
             {
@@ -1900,7 +1968,9 @@ Return Value:
                 Status = DiscpAddStringToMultiSzList(VolumePath,
                                                      VolumePathLen,
                                                      Name);
-            } else {
+            }
+            else
+            {
                 c1 = VolumeName[48];
                 c2 = VolumeNameToFind[48];
                 VolumeName[48] = 0;
@@ -1909,9 +1979,9 @@ Return Value:
                 if (QueryDosDevice(&VolumeName[4],
                                    LinkName1,
                                    MAX_PATH) &&
-                    QueryDosDevice(&VolumeNameToFind[4],
-                                   LinkName2,
-                                   MAX_PATH))
+                        QueryDosDevice(&VolumeNameToFind[4],
+                                       LinkName2,
+                                       MAX_PATH))
                 {
                     if (_tcscmp(LinkName1, LinkName2) == 0)
                     {
@@ -1933,11 +2003,11 @@ Return Value:
                 do
                 {
                     hr = StringCchCopy(MountPointPath,
-                                        MAX_PATH,
-                                        Name);
-                    hr = StringCchCat(MountPointPath,
                                        MAX_PATH,
-                                       VolumeMountPoint);
+                                       Name);
+                    hr = StringCchCat(MountPointPath,
+                                      MAX_PATH,
+                                      VolumeMountPoint);
 
                     Status = DiscpVolumeMountList(MountPointPath,
                                                   VolumeNameToFind,
@@ -1948,17 +2018,20 @@ Return Value:
                                                  VolumeMountPoint,
                                                  MAX_PATH);
 
-                } while ((Status == ERROR_SUCCESS) && b);
+                }
+                while ((Status == ERROR_SUCCESS) && b);
 
                 FindVolumeMountPointClose(h);
             }
         }
-        
+
         Free(VolumeName);
-    } else {
+    }
+    else
+    {
         Status = ERROR_NOT_ENOUGH_MEMORY;
     }
-    
+
     return(Status);
 }
 
@@ -1966,7 +2039,7 @@ ISDSC_STATUS DiscpGetVolumePathNamesForVolumeName(
     IN PTCHAR VolumeNameToFind,
     OUT PTCHAR *VolumePath,
     OUT ULONG *VolumePathLen
-    )
+)
 /*++
 
 Routine Description:
@@ -1984,7 +2057,7 @@ Arguments:
 
     *VolumePath returns with a pointer to the list of volume paths.
         Each path in the list is nul terminated with the last path
-        double nul terminated. The caller must free this buffer. 
+        double nul terminated. The caller must free this buffer.
 
     *VolumePathLen returns with the number of characters in the
         VolumePath buffer
@@ -1998,7 +2071,7 @@ Return Value:
     ISDSC_STATUS Status;
     TCHAR c;
     TCHAR Drive[4];
-    
+
     //
     // Initialize output volume path list to double nul
     //
@@ -2017,8 +2090,8 @@ Return Value:
         Drive[3] = 0;
 
         for (c = L'C', Status = ERROR_SUCCESS;
-             ((c < (L'Z' + 1)) && (Status == ERROR_SUCCESS));
-             c++)
+                ((c < (L'Z' + 1)) && (Status == ERROR_SUCCESS));
+                c++)
         {
             Drive[0] = c;
             Status = DiscpVolumeMountList(Drive,
@@ -2027,24 +2100,26 @@ Return Value:
                                           VolumePathLen);
 
         }
-        
+
         //
         // COnvet VolumePathLen from bytes to characters
         //
         *VolumePathLen = *VolumePathLen / sizeof(TCHAR);
-    } else {
+    }
+    else
+    {
         Status = ERROR_NOT_ENOUGH_MEMORY;
     }
-    
+
     return(Status);
 }
 
 
 typedef BOOL (*GETVOLUMEPATHNAMESFORVOLUMENAMEAPI)(
-  LPCTSTR lpszVolumeName,
-  LPTSTR lpszVolumePathNames,
-  DWORD cchBufferLength,
-  PDWORD lpcchReturnLength
+    LPCTSTR lpszVolumeName,
+    LPTSTR lpszVolumePathNames,
+    DWORD cchBufferLength,
+    PDWORD lpcchReturnLength
 );
 
 
@@ -2053,7 +2128,7 @@ ISDSC_STATUS DiscpVolumeNameToVolumePath(
     IN PTCHAR VolumeName,
     OUT PTCHAR *VolumePath,
     OUT ULONG *VolumePathLen
-    )
+)
 /*++
 
 Routine Description:
@@ -2071,7 +2146,7 @@ Arguments:
 
     *VolumePath returns with a pointer to the list of volume paths.
         Each path in the list is nul terminated with the last path
-        double nul terminated. The caller must free this buffer. 
+        double nul terminated. The caller must free this buffer.
 
     *VolumePathLen returns with the number of characters in the
         VolumePath buffer
@@ -2094,16 +2169,18 @@ Return Value:
     if (GetVersionEx((LPOSVERSIONINFO)&VersionInfo))
     {
         if ((VersionInfo.dwMajorVersion == 5) &&
-            (VersionInfo.dwMinorVersion == 0))
+                (VersionInfo.dwMinorVersion == 0))
         {
             //
             // We are on W2K so we need to do the mapping from volume
             // name to VolumePath the hard way
             //
             Status = DiscpGetVolumePathNamesForVolumeName(VolumeName,
-                                                          VolumePath,
-                                                          VolumePathLen);
-        } else {
+                     VolumePath,
+                     VolumePathLen);
+        }
+        else
+        {
             //
             // Since we are on XP or W2003 then we can use the
             // advanced API so load it up from kernel32.dll
@@ -2111,13 +2188,13 @@ Return Value:
             Module = GetModuleHandle(TEXT("Kernel32.Dll"));
             GetVolumePathNamesForVolumeNameApi =
                 (GETVOLUMEPATHNAMESFORVOLUMENAMEAPI)GetProcAddress(Module,
-                                                                   "GetVolumePathNamesForVolumeNameW");
+                        "GetVolumePathNamesForVolumeNameW");
             if (GetVolumePathNamesForVolumeNameApi != NULL)
-            {               
+            {
                 b = (*GetVolumePathNamesForVolumeNameApi)(VolumeName,
-                                                          NULL,
-                                                          0,
-                                                          &CharNeeded);
+                        NULL,
+                        0,
+                        &CharNeeded);
 
                 Status = b ? ERROR_SUCCESS : GetLastError();
 
@@ -2127,22 +2204,28 @@ Return Value:
                     if (p != NULL)
                     {
                         b = (*GetVolumePathNamesForVolumeNameApi)(VolumeName,
-                                                                  p,
-                                                                  CharNeeded,
-                                                                  &CharNeeded);
+                                p,
+                                CharNeeded,
+                                &CharNeeded);
 
                         Status = b ? ERROR_SUCCESS : GetLastError();
                         if (Status == ERROR_SUCCESS)
                         {
                             *VolumePath = p;
                             *VolumePathLen = CharNeeded;
-                        } else {
+                        }
+                        else
+                        {
                             Free(p);
                         }
-                     } else {
+                    }
+                    else
+                    {
                         Status = ERROR_NOT_ENOUGH_MEMORY;
                     }
-                } else if (Status == ERROR_SUCCESS) {
+                }
+                else if (Status == ERROR_SUCCESS)
+                {
                     p = Alloc(2 * sizeof(TCHAR));
                     if (p != NULL)
                     {
@@ -2150,19 +2233,27 @@ Return Value:
                         p[1] = 0;
                         *VolumePath = p;
                         *VolumePathLen = 2;
-                    } else {
+                    }
+                    else
+                    {
                         Status = ERROR_NOT_ENOUGH_MEMORY;
-                    }                       
-                } else {
+                    }
+                }
+                else
+                {
                     Status = GetLastError();
                 }
-            } else {
+            }
+            else
+            {
                 Status = GetLastError();
             }
-        }           
-    } else {
+        }
+    }
+    else
+    {
         Status = GetLastError();
-    }       
+    }
 
     return(Status);
 }
@@ -2173,7 +2264,7 @@ ISDSC_STATUS DiscpEnumerateDeviceInterfaces(
     IN PVOID Context,
     OUT ULONG *CountPtr,
     OUT PDEVICEINTERFACEENTRY *ListPtr
-    )
+)
 {
     ISDSC_STATUS Status;
     HDEVINFO DevInfo;
@@ -2187,10 +2278,10 @@ ISDSC_STATUS DiscpEnumerateDeviceInterfaces(
     // get info on all exsiting disk devices
     //
     DevInfo = SetupDiGetClassDevs(
-                Guid,
-                NULL, // IN PCTSTR  Enumerator,  OPTIONAL
-                NULL, // IN HWND  hwndParent,  OPTIONAL
-                DIGCF_DEVICEINTERFACE | DIGCF_PRESENT);
+                  Guid,
+                  NULL, // IN PCTSTR  Enumerator,  OPTIONAL
+                  NULL, // IN HWND  hwndParent,  OPTIONAL
+                  DIGCF_DEVICEINTERFACE | DIGCF_PRESENT);
 
     if (DevInfo != INVALID_HANDLE_VALUE)
     {
@@ -2204,14 +2295,15 @@ ISDSC_STATUS DiscpEnumerateDeviceInterfaces(
         {
             DeviceInterfaceData.cbSize = sizeof(SP_DEVICE_INTERFACE_DATA);
             b =  SetupDiEnumDeviceInterfaces(
-                                             DevInfo,
-                                             NULL, // IN PSP_DEVINFO_DATA  DeviceInfoData,  OPTIONAL
-                                             Guid,
-                                             Count,
-                                             &DeviceInterfaceData
-                                            );
+                     DevInfo,
+                     NULL, // IN PSP_DEVINFO_DATA  DeviceInfoData,  OPTIONAL
+                     Guid,
+                     Count,
+                     &DeviceInterfaceData
+                 );
             Count++;
-        } while (b);
+        }
+        while (b);
 
         Status = GetLastError();
 
@@ -2247,12 +2339,12 @@ ISDSC_STATUS DiscpEnumerateDeviceInterfaces(
 
                         e->DeviceInterfaceData.cbSize = sizeof(SP_DEVICE_INTERFACE_DATA);
                         b =  SetupDiEnumDeviceInterfaces(
-                                                         DevInfo,
-                                                         NULL, // IN PSP_DEVINFO_DATA  DeviceInfoData,  OPTIONAL
-                                                         Guid,
-                                                         i++,
-                                                         &e->DeviceInterfaceData
-                                                        );
+                                 DevInfo,
+                                 NULL, // IN PSP_DEVINFO_DATA  DeviceInfoData,  OPTIONAL
+                                 Guid,
+                                 i++,
+                                 &e->DeviceInterfaceData
+                             );
                         if (b)
                         {
                             DeviceInterfaceDetailDataSize = sizeof(SP_DEVICE_INTERFACE_DETAIL_DATA) +
@@ -2263,12 +2355,12 @@ ISDSC_STATUS DiscpEnumerateDeviceInterfaces(
                                 e->DeviceInfoData.cbSize = sizeof(SP_DEVINFO_DATA);
                                 e->DeviceInterfaceDetailData->cbSize = sizeof(SP_DEVICE_INTERFACE_DETAIL_DATA);
                                 b =  SetupDiGetDeviceInterfaceDetail(
-                                                                DevInfo,
-                                                                &e->DeviceInterfaceData,
-                                                                e->DeviceInterfaceDetailData,
-                                                                DeviceInterfaceDetailDataSize,
-                                                                &DeviceInterfaceDetailDataSize,
-                                                                &e->DeviceInfoData);
+                                         DevInfo,
+                                         &e->DeviceInterfaceData,
+                                         e->DeviceInterfaceDetailData,
+                                         DeviceInterfaceDetailDataSize,
+                                         &DeviceInterfaceDetailDataSize,
+                                         &e->DeviceInfoData);
                                 if ((b == FALSE) && (GetLastError() == ERROR_INSUFFICIENT_BUFFER))
                                 {
                                     //
@@ -2283,12 +2375,12 @@ ISDSC_STATUS DiscpEnumerateDeviceInterfaces(
                                         e->DeviceInfoData.cbSize = sizeof(SP_DEVINFO_DATA);
                                         e->DeviceInterfaceDetailData->cbSize = sizeof(SP_DEVICE_INTERFACE_DETAIL_DATA);
                                         b =  SetupDiGetDeviceInterfaceDetail(
-                                                                        DevInfo,
-                                                                        &e->DeviceInterfaceData,
-                                                                        e->DeviceInterfaceDetailData,
-                                                                        DeviceInterfaceDetailDataSize,
-                                                                        &DeviceInterfaceDetailDataSize,
-                                                                        &e->DeviceInfoData);
+                                                 DevInfo,
+                                                 &e->DeviceInterfaceData,
+                                                 e->DeviceInterfaceDetailData,
+                                                 DeviceInterfaceDetailDataSize,
+                                                 &DeviceInterfaceDetailDataSize,
+                                                 &e->DeviceInfoData);
                                     }
                                 }
 
@@ -2305,17 +2397,23 @@ ISDSC_STATUS DiscpEnumerateDeviceInterfaces(
                                                              Guid,
                                                              DevInfo,
                                                              e);
-                                    } else {
+                                    }
+                                    else
+                                    {
                                         Status = ERROR_SUCCESS;
                                     }
 
                                     if (Status == ERROR_SUCCESS)
                                     {
                                         (*CountPtr)++;
-                                    } else {
+                                    }
+                                    else
+                                    {
                                         Free(e->DeviceInterfaceDetailData);
                                     }
-                                } else {
+                                }
+                                else
+                                {
                                     if (e->DeviceInterfaceDetailData != NULL)
                                     {
                                         Free(e->DeviceInterfaceDetailData);
@@ -2325,14 +2423,18 @@ ISDSC_STATUS DiscpEnumerateDeviceInterfaces(
                         }
                     }
                     Status = ERROR_SUCCESS;
-                } else {
+                }
+                else
+                {
                     Status = ERROR_NOT_ENOUGH_MEMORY;
                 }
             }
         }
 
         SetupDiDestroyDeviceInfoList(DevInfo);
-    } else {
+    }
+    else
+    {
         Status = GetLastError();
     }
     return(Status);
@@ -2341,7 +2443,7 @@ ISDSC_STATUS DiscpEnumerateDeviceInterfaces(
 void DiscpFreeDeviceInterfaceList(
     IN ULONG Count,
     IN PDEVICEINTERFACEENTRY List
-    )
+)
 /*++
 Description:
 
@@ -2380,7 +2482,7 @@ ISDSC_STATUS DiscpVolumeDeviceInterfaceCallback(
     IN LPGUID Guid,
     IN HDEVINFO DevInfo,
     IN OUT PDEVICEINTERFACEENTRY DevEntry
-    )
+)
 /*++
 
 Routine Description:
@@ -2421,10 +2523,10 @@ Return Value:
     UNREFERENCED_PARAMETER(Context);
     UNREFERENCED_PARAMETER(Guid);
     UNREFERENCED_PARAMETER(DevInfo);
-    
+
     VolumeMPLen = _tcslen(DevEntry->DeviceInterfaceDetailData->DevicePath) +2;
     VolumeName = Alloc((VolumeMPLen + MAX_PATH) *
-                                  sizeof(TCHAR));
+                       sizeof(TCHAR));
     if (VolumeName != NULL)
     {
         //
@@ -2440,8 +2542,8 @@ Return Value:
                           TEXT("\\"));
 
         b = GetVolumeNameForVolumeMountPoint(VolumeMP,
-                                            VolumeName,
-                                            MAX_PATH);
+                                             VolumeName,
+                                             MAX_PATH);
 
         if (b)
         {
@@ -2452,8 +2554,8 @@ Return Value:
             //
             Status = DiscpVolumeNameToVolumePath(VolumeName,
                                                  &VolumePath,
-                                                  &VolumeSize);
-            
+                                                 &VolumeSize);
+
             if (Status == ERROR_SUCCESS)
             {
                 //
@@ -2476,15 +2578,15 @@ Return Value:
                     {
                         VolumeMoreInfo = (PVOLUMEMOREINFO)DevEntry->MoreInfo;
                         b = DeviceIoControl(
-                                            Handle,
-                                            IOCTL_VOLUME_GET_VOLUME_DISK_EXTENTS,       // operation
-                                            NULL,           // input data buffer
-                                            0,         // size of input data buffer
-                                            VolumeMoreInfo->VolumeDiskExtentsBuffer,          // output data buffer
-                                            ExtentSize,        // size of output data buffer
-                                            &Returned,     // byte count
-                                            NULL    // overlapped information
-                                           );
+                                Handle,
+                                IOCTL_VOLUME_GET_VOLUME_DISK_EXTENTS,       // operation
+                                NULL,           // input data buffer
+                                0,         // size of input data buffer
+                                VolumeMoreInfo->VolumeDiskExtentsBuffer,          // output data buffer
+                                ExtentSize,        // size of output data buffer
+                                &Returned,     // byte count
+                                NULL    // overlapped information
+                            );
 
                         if (b)
                         {
@@ -2495,27 +2597,37 @@ Return Value:
                             memcpy(VolumeMoreInfo->VolumePathNames,
                                    VolumePath,
                                    VolumeSize * sizeof(TCHAR));
-                                            
+
                             Status = ERROR_SUCCESS;
-                        } else {
+                        }
+                        else
+                        {
                             Free(DevEntry->MoreInfo);
                             DevEntry->MoreInfo = NULL;
                             Status = GetLastError();
                         }
-                    } else {
+                    }
+                    else
+                    {
                         Status = ERROR_NOT_ENOUGH_MEMORY;
                     }
                     CloseHandle(Handle);
-                } else {
+                }
+                else
+                {
                     Status = GetLastError();
                 }
                 Free(VolumePath);
             }
-        } else {
+        }
+        else
+        {
             Status = GetLastError();
         }
         Free(VolumeName);
-    } else {
+    }
+    else
+    {
         Status = ERROR_NOT_ENOUGH_MEMORY;
     }
 
@@ -2525,7 +2637,7 @@ Return Value:
 
 PCHAR DeviceTypeFromGuid(
     LPGUID Guid
-    )
+)
 {
     if (memcmp(Guid,
                &GUID_DEVINTERFACE_DISK,
@@ -2540,35 +2652,35 @@ PCHAR DeviceTypeFromGuid(
     {
         return("Tape");
     }
-    
+
     if (memcmp(Guid,
                &GUID_DEVINTERFACE_CDROM,
                sizeof(GUID)) == 0)
     {
         return("CDRom");
     }
-    
+
     if (memcmp(Guid,
                &GUID_DEVINTERFACE_WRITEONCEDISK,
                sizeof(GUID)) == 0)
     {
         return("Write Once Disk");
     }
-    
+
     if (memcmp(Guid,
                &GUID_DEVINTERFACE_CDCHANGER,
                sizeof(GUID)) == 0)
     {
         return("CD Changer");
     }
-    
+
     if (memcmp(Guid,
                &GUID_DEVINTERFACE_MEDIUMCHANGER,
                sizeof(GUID)) == 0)
     {
         return("Medium Changer");
     }
-    
+
     if (memcmp(Guid,
                &GUID_DEVINTERFACE_FLOPPY,
                sizeof(GUID)) == 0)
@@ -2586,12 +2698,12 @@ ISDSC_STATUS GetMountPointsFromDeviceNumber(
     IN ULONG VolumeCount,
     IN PDEVICEINTERFACEENTRY VolumeList,
     IN OUT ULONG *VolumeIndex
-    )
+)
 /*
 Description:
 
     This routine will return the index of the volume that the device
-    belongs. 
+    belongs.
 
 Arguments:
 
@@ -2603,7 +2715,7 @@ Arguments:
 
     *VoluemIndex on entry has the next index in the list to being the
         search. On return it has the index into volume list for the
-        next match. 
+        next match.
 
 Return Values:
 
@@ -2662,9 +2774,9 @@ ISDSC_STATUS SessionList(
 
     SizeNeeded = 0;
     Status = GetIScsiSessionList(
-                                 &SizeNeeded,
-                                 &SessionCount,
-                                 NULL);
+                 &SizeNeeded,
+                 &SessionCount,
+                 NULL);
 
     if (Status == ERROR_INSUFFICIENT_BUFFER)
     {
@@ -2676,12 +2788,14 @@ ISDSC_STATUS SessionList(
         }
 
         Status = GetIScsiSessionList(
-                                     &SizeNeeded,
-                                     &SessionCount,
-                                     SessionInfo);
+                     &SizeNeeded,
+                     &SessionCount,
+                     SessionInfo);
 
 
-    } else {
+    }
+    else
+    {
         SessionCount = 0;
         SessionInfo = NULL;
     }
@@ -2690,7 +2804,7 @@ ISDSC_STATUS SessionList(
     {
         printf("Total of %d sessions\n\n", SessionCount);
 
-                                          
+
         for (i = 0; i < SessionCount; i++, SessionInfo++)
         {
 #if UNICODE
@@ -2742,7 +2856,7 @@ ISDSC_STATUS SessionList(
             {
                 printf("\n    Connections:\n");
             }
-            
+
             for (j = 0; j < SessionInfo->ConnectionCount; j++)
             {
                 ConnectionInfo = &SessionInfo->Connections[j];
@@ -2774,7 +2888,7 @@ ISDSC_STATUS SessionList(
                        ConnectionInfo->CID[1]);
 #endif
             }
-            
+
             printf("\n");
 
             if (ShowDeviceInfo)
@@ -2787,7 +2901,7 @@ ISDSC_STATUS SessionList(
                 PTCHAR p;
                 PVOLUMEMOREINFO VolumeMoreInfo;
                 ULONG VolumeIndex;
-                
+
                 Status = GetDevicesForIScsiSession(&SessionInfo->SessionId,
                                                    &DeviceCount,
                                                    NULL);
@@ -2801,7 +2915,7 @@ ISDSC_STATUS SessionList(
                                                            &DeviceCount,
                                                            DeviceList);
                         if ((Status == ERROR_SUCCESS) &&
-                            (DeviceCount > 0))
+                                (DeviceCount > 0))
                         {
                             Status = DiscpEnumerateDeviceInterfaces((LPGUID)&GUID_DEVINTERFACE_VOLUME,
                                                                     DiscpVolumeDeviceInterfaceCallback,
@@ -2829,7 +2943,7 @@ ISDSC_STATUS SessionList(
                                 printf("        Partition Number       : %d\n",
                                        DeviceList[k].StorageDeviceNumber.PartitionNumber);
 
-                                
+
                                 if (memcmp(&DeviceList[k].DeviceInterfaceType,
                                            &GUID_DEVINTERFACE_DISK,
                                            sizeof(GUID)) == 0)
@@ -2839,9 +2953,9 @@ ISDSC_STATUS SessionList(
                                     for( ; ;)
                                     {
                                         StatusDontCare = GetMountPointsFromDeviceNumber(DeviceList[k].StorageDeviceNumber.DeviceNumber,
-                                                                        VolumeCount,
-                                                                        VolumeList,
-                                                                        &VolumeIndex);
+                                                         VolumeCount,
+                                                         VolumeList,
+                                                         &VolumeIndex);
                                         if (StatusDontCare == ERROR_SUCCESS)
                                         {
                                             if (! HeaderPrinted)
@@ -2861,10 +2975,12 @@ ISDSC_STATUS SessionList(
                                                 p += _tcslen(p)+1;
                                             }
                                             VolumeIndex++;
-                                        } else {
+                                        }
+                                        else
+                                        {
                                             break;
                                         }
-                                    } 
+                                    }
                                 }
 
                                 printf("\n");
@@ -2875,18 +2991,18 @@ ISDSC_STATUS SessionList(
                                 DiscpFreeDeviceInterfaceList(VolumeCount,
                                                              VolumeList);
                             }
-                            
+
                         }
                         Free(DeviceList);
                     }
                 }
                 Status = ERROR_SUCCESS;
-            }           
+            }
         }
     }
-    
+
     return(Status);
-    
+
 }
 
 ISDSC_STATUS GetPSKey(
@@ -2909,7 +3025,7 @@ ISDSC_STATUS GetPSKey(
     struct sockaddr_in6 *sockaddr6;
     struct sockaddr_in *sockaddr4;
     IKE_AUTHENTICATION_INFORMATION AuthInfo;
-    
+
     if (ArgC != 6)
     {
         Usage(42);
@@ -2924,12 +3040,14 @@ ISDSC_STATUS GetPSKey(
     if (*ArgV[3] == TEXT('*'))
     {
         InitiatorPort = ISCSI_ALL_INITIATOR_PORTS;
-    } else {
+    }
+    else
+    {
         InitiatorPort = stoi(ArgV[3]);
     }
-    
+
     IdType = (IKE_IDENTIFICATION_PAYLOAD_TYPE)stoi(ArgV[4]);
-    
+
 #ifdef UNICODE
     IdText = NULL;
     Status = DiscpUnicodeToAnsi(ArgV[5],
@@ -2938,7 +3056,7 @@ ISDSC_STATUS GetPSKey(
     if (IdText == NULL)
     {
         Usage(42);
-        return(ERROR_SUCCESS);      
+        return(ERROR_SUCCESS);
     }
 #else
     IdText = ArgV[5];
@@ -2949,69 +3067,69 @@ ISDSC_STATUS GetPSKey(
     {
         switch(IdType)
         {
-            case ID_IPV4_ADDR:
+        case ID_IPV4_ADDR:
+        {
+            sockaddrlen = sizeof(sockaddrlen);
+            Status = WSAStringToAddressA(IdText,
+                                         PF_INET,
+                                         NULL,
+                                         (LPSOCKADDR)&sockaddr,
+                                         &sockaddrlen);
+            if (Status != ERROR_SUCCESS)
             {
-                sockaddrlen = sizeof(sockaddrlen);
-                Status = WSAStringToAddressA(IdText,
-                                            PF_INET,
-                                            NULL,
-                                            (LPSOCKADDR)&sockaddr,
-                                            &sockaddrlen);
-                if (Status != ERROR_SUCCESS)
-                {
-#ifdef UNICODE
-                    Free(IdText);
-#endif
-                    
-                    return(Status);
-                }
-
-                sockaddr4 = (struct sockaddr_in *)&sockaddr;
-                Addr = sockaddr4->sin_addr.S_un.S_addr;
-                Id = (PCHAR)&Addr;
-                IdLen = 4;
-                break;
-            }
-
-            case ID_IPV6_ADDR:
-            {
-                sockaddrlen = sizeof(sockaddrlen);
-                Status = WSAStringToAddressA(IdText,
-                                            PF_INET6,
-                                            NULL,
-                                            (LPSOCKADDR)&sockaddr,
-                                            &sockaddrlen);
-                if (Status != ERROR_SUCCESS)
-                {
-#ifdef UNICODE
-                    Free(IdText);
-#endif
-                    
-                    return(Status);
-                }
-
-                sockaddr6 = (struct sockaddr_in6 *)&sockaddr;
-                Id = (PCHAR)&sockaddr6->sin6_addr;
-                IdLen = 16;
-                break;
-            }
-
-            case ID_FQDN:
-            case ID_USER_FQDN:
-            {
-                Id = IdText;
-                IdLen = (ULONG)strlen(IdText);
-                break;
-            }
-
-            default:
-            {           
-                printf("Error, only id types ID_IPV4_ADDR (1), ID_FQDN (2), ID_USER_FQDN supported (3)\n");
 #ifdef UNICODE
                 Free(IdText);
 #endif
-                return(ERROR_SUCCESS);
+
+                return(Status);
             }
+
+            sockaddr4 = (struct sockaddr_in *)&sockaddr;
+            Addr = sockaddr4->sin_addr.S_un.S_addr;
+            Id = (PCHAR)&Addr;
+            IdLen = 4;
+            break;
+        }
+
+        case ID_IPV6_ADDR:
+        {
+            sockaddrlen = sizeof(sockaddrlen);
+            Status = WSAStringToAddressA(IdText,
+                                         PF_INET6,
+                                         NULL,
+                                         (LPSOCKADDR)&sockaddr,
+                                         &sockaddrlen);
+            if (Status != ERROR_SUCCESS)
+            {
+#ifdef UNICODE
+                Free(IdText);
+#endif
+
+                return(Status);
+            }
+
+            sockaddr6 = (struct sockaddr_in6 *)&sockaddr;
+            Id = (PCHAR)&sockaddr6->sin6_addr;
+            IdLen = 16;
+            break;
+        }
+
+        case ID_FQDN:
+        case ID_USER_FQDN:
+        {
+            Id = IdText;
+            IdLen = (ULONG)strlen(IdText);
+            break;
+        }
+
+        default:
+        {
+            printf("Error, only id types ID_IPV4_ADDR (1), ID_FQDN (2), ID_USER_FQDN supported (3)\n");
+#ifdef UNICODE
+            Free(IdText);
+#endif
+            return(ERROR_SUCCESS);
+        }
 
         }
 
@@ -3020,7 +3138,7 @@ ISDSC_STATUS GetPSKey(
         AuthInfo.PsKey.IdType = IdType;
         AuthInfo.PsKey.IdLengthInBytes = IdLen;
         AuthInfo.PsKey.Id = (PUCHAR)Id;
-                               
+
         Status = GetIScsiIKEInfo(Initiator,
                                  InitiatorPort,
                                  NULL,
@@ -3031,9 +3149,9 @@ ISDSC_STATUS GetPSKey(
             PrintSecurityFlags("    ",
                                AuthInfo.PsKey.SecurityFlags);
         }
-        
+
     }
-    return(Status); 
+    return(Status);
 }
 
 ISDSC_STATUS PSKey(
@@ -3075,10 +3193,12 @@ ISDSC_STATUS PSKey(
     if (*ArgV[3] == TEXT('*'))
     {
         InitiatorPort = ISCSI_ALL_INITIATOR_PORTS;
-    } else {
+    }
+    else
+    {
         InitiatorPort = stoi(ArgV[3]);
     }
-    
+
     SecurityFlags = stoi(ArgV[4]);
     IdType = (IKE_IDENTIFICATION_PAYLOAD_TYPE)stoi(ArgV[5]);
 
@@ -3086,7 +3206,7 @@ ISDSC_STATUS PSKey(
     IdText = NULL;
     Status = DiscpUnicodeToAnsi(ArgV[6],
                                 &IdText,
-                                0); 
+                                0);
 #else
     IdText = ArgV[6];
     Status = ERROR_SUCCESS;
@@ -3096,69 +3216,69 @@ ISDSC_STATUS PSKey(
     {
         switch(IdType)
         {
-            case ID_IPV4_ADDR:
+        case ID_IPV4_ADDR:
+        {
+            sockaddrlen = sizeof(sockaddr);
+            Status = WSAStringToAddressA(IdText,
+                                         PF_INET,
+                                         NULL,
+                                         (LPSOCKADDR)&sockaddr,
+                                         &sockaddrlen);
+            if (Status != ERROR_SUCCESS)
             {
-                sockaddrlen = sizeof(sockaddr);
-                Status = WSAStringToAddressA(IdText,
-                                            PF_INET,
-                                            NULL,
-                                            (LPSOCKADDR)&sockaddr,
-                                            &sockaddrlen);
-                if (Status != ERROR_SUCCESS)
-                {
-#ifdef UNICODE
-                    Free(IdText);
-#endif
-                    
-                    return(Status);
-                }
-
-                sockaddr4 = (struct sockaddr_in *)&sockaddr;
-                Addr = sockaddr4->sin_addr.S_un.S_addr;
-                Id = (PCHAR)&Addr;
-                IdLen = 4;
-                break;
-            }
-
-            case ID_IPV6_ADDR:
-            {
-                sockaddrlen = sizeof(sockaddrlen);
-                Status = WSAStringToAddressA(IdText,
-                                            PF_INET6,
-                                            NULL,
-                                            (LPSOCKADDR)&sockaddr,
-                                            &sockaddrlen);
-                if (Status != ERROR_SUCCESS)
-                {
-#ifdef UNICODE
-                    Free(IdText);
-#endif
-                    
-                    return(Status);
-                }
-
-                sockaddr6 = (struct sockaddr_in6 *)&sockaddr;
-                Id = (PCHAR)&sockaddr6->sin6_addr;
-                IdLen = 16;
-                break;
-            }
-
-            case ID_FQDN:
-            case ID_USER_FQDN:
-            {
-                Id = IdText;
-                IdLen = (ULONG)strlen(IdText);
-                break;
-            }
-
-            default:
-            {           
-                printf("Error, only id types ID_IPV4_ADDR (1), ID_FQDN (2), ID_USER_FQDN supported (3)\n");
 #ifdef UNICODE
                 Free(IdText);
 #endif
-                return(ERROR_SUCCESS);
+
+                return(Status);
             }
+
+            sockaddr4 = (struct sockaddr_in *)&sockaddr;
+            Addr = sockaddr4->sin_addr.S_un.S_addr;
+            Id = (PCHAR)&Addr;
+            IdLen = 4;
+            break;
+        }
+
+        case ID_IPV6_ADDR:
+        {
+            sockaddrlen = sizeof(sockaddrlen);
+            Status = WSAStringToAddressA(IdText,
+                                         PF_INET6,
+                                         NULL,
+                                         (LPSOCKADDR)&sockaddr,
+                                         &sockaddrlen);
+            if (Status != ERROR_SUCCESS)
+            {
+#ifdef UNICODE
+                Free(IdText);
+#endif
+
+                return(Status);
+            }
+
+            sockaddr6 = (struct sockaddr_in6 *)&sockaddr;
+            Id = (PCHAR)&sockaddr6->sin6_addr;
+            IdLen = 16;
+            break;
+        }
+
+        case ID_FQDN:
+        case ID_USER_FQDN:
+        {
+            Id = IdText;
+            IdLen = (ULONG)strlen(IdText);
+            break;
+        }
+
+        default:
+        {
+            printf("Error, only id types ID_IPV4_ADDR (1), ID_FQDN (2), ID_USER_FQDN supported (3)\n");
+#ifdef UNICODE
+            Free(IdText);
+#endif
+            return(ERROR_SUCCESS);
+        }
 
         }
 
@@ -3166,12 +3286,14 @@ ISDSC_STATUS PSKey(
         {
             Key = NULL;
             KeyLength = 0;
-        } else {
+        }
+        else
+        {
 #ifdef UNICODE
             Key = NULL;
             Status = DiscpUnicodeToAnsi(ArgV[7],
                                         &Key,
-                                        0); 
+                                        0);
 #else
             Key = ArgV[7];
 #endif
@@ -3206,7 +3328,7 @@ ISDSC_STATUS PSKey(
         Free(IdText);
 #endif
     }
-    
+
     return(Status);
 }
 
@@ -3215,7 +3337,7 @@ ISDSC_STATUS PSKey(
 ISDSC_STATUS ReportLUNs(
     int ArgC,
     __in_ecount(ArgC) PTCHAR *ArgV
-    )
+)
 //  iscsicli ReportLUNs <SessionId>
 {
     ISDSC_STATUS Status;
@@ -3228,30 +3350,32 @@ ISDSC_STATUS ReportLUNs(
     if (ArgC != 3)
     {
         Usage(18);
-        Status = ERROR_SUCCESS;     
-    } else {
+        Status = ERROR_SUCCESS;
+    }
+    else
+    {
         if (StringToSessionId(ArgV[2], &SessionId))
-        {            
+        {
             SenseSize = 18;
             Response = NULL;
             ResponseSize = 0;
             Status = SendScsiReportLuns(&SessionId,
-                                          &ScsiStatus,
-                                          &ResponseSize,
-                                          Response,
-                                          &SenseSize,
-                                          Sense);
+                                        &ScsiStatus,
+                                        &ResponseSize,
+                                        Response,
+                                        &SenseSize,
+                                        Sense);
             if (Status == ERROR_INSUFFICIENT_BUFFER)
             {
                 Response = Alloc(ResponseSize);
                 if (Response != NULL)
                 {
                     Status = SendScsiReportLuns(&SessionId,
-                                                  &ScsiStatus,
-                                                  &ResponseSize,
-                                                  Response,
-                                                  &SenseSize,
-                                                  Sense);
+                                                &ScsiStatus,
+                                                &ResponseSize,
+                                                Response,
+                                                &SenseSize,
+                                                Sense);
                     if (Status == ERROR_SUCCESS)
                     {
                         printf("    ScsiStatus             : 0x%x\n"
@@ -3271,9 +3395,11 @@ ISDSC_STATUS ReportLUNs(
                        "    Sense Buffer Size      : 0x%x\n",
                        ScsiStatus,
                        SenseSize);
-                PrintBuffer("    ", Sense, SenseSize);                      
-            }           
-        } else {
+                PrintBuffer("    ", Sense, SenseSize);
+            }
+        }
+        else
+        {
 #ifdef UNICODE
             printf("Invalid sessionid: %ws\n", ArgV[2]);
 #else
@@ -3281,9 +3407,9 @@ ISDSC_STATUS ReportLUNs(
 #endif
             Status = ERROR_INVALID_PARAMETER;
         }
-        
+
     }
-    
+
     return(Status);
 }
 
@@ -3291,7 +3417,7 @@ ISDSC_STATUS ReportLUNs(
 ISDSC_STATUS ReadCapacity(
     int ArgC,
     __in_ecount(ArgC) PTCHAR *ArgV
-    )
+)
 //  iscsicli ReadCapacity <SessionId> <LUN>
 {
     ISDSC_STATUS Status;
@@ -3305,11 +3431,13 @@ ISDSC_STATUS ReadCapacity(
     if (ArgC != 4)
     {
         Usage(17);
-        Status = ERROR_SUCCESS;     
-    } else {
+        Status = ERROR_SUCCESS;
+    }
+    else
+    {
         if (StringToSessionId(ArgV[2], &SessionId))
         {
-            
+
             if (HexStringToULONGLONG(ArgV[3], &LUN, sizeof(ULONGLONG)*2, 0))
             {
                 SenseSize = 18;
@@ -3346,16 +3474,18 @@ ISDSC_STATUS ReadCapacity(
                         Free(Response);
                     }
                 }
-                
+
                 if (Status ==  ISDSC_SCSI_REQUEST_FAILED)
                 {
                     printf("    ScsiStatus             : 0x%x\n"
                            "    Sense Buffer Size      : 0x%x\n",
                            ScsiStatus,
                            SenseSize);
-                    PrintBuffer("    ", Sense, SenseSize);                      
-                }           
-            } else {
+                    PrintBuffer("    ", Sense, SenseSize);
+                }
+            }
+            else
+            {
 #ifdef UNICODE
                 printf("Invalid LUN: %ws\n", ArgV[3]);
 #else
@@ -3363,7 +3493,9 @@ ISDSC_STATUS ReadCapacity(
 #endif
                 Status = ERROR_INVALID_PARAMETER;
             }
-        } else {
+        }
+        else
+        {
 #ifdef UNICODE
             printf("Invalid sessionid: %ws\n", ArgV[2]);
 #else
@@ -3371,16 +3503,16 @@ ISDSC_STATUS ReadCapacity(
 #endif
             Status = ERROR_INVALID_PARAMETER;
         }
-        
+
     }
-    
+
     return(Status);
 }
 
 ISDSC_STATUS DoScsiInquiry(
     int ArgC,
     __in_ecount(ArgC) PTCHAR *ArgV
-    )
+)
 //  iscsicli ScsiInquiry <SessionId> <LUN> <EvpdCmddt> <PageCode>
 {
     ISDSC_STATUS Status;
@@ -3395,42 +3527,44 @@ ISDSC_STATUS DoScsiInquiry(
     if (ArgC != 6)
     {
         Usage(16);
-        Status = ERROR_SUCCESS;     
-    } else {
+        Status = ERROR_SUCCESS;
+    }
+    else
+    {
         if (StringToSessionId(ArgV[2], &SessionId))
         {
-            
+
             if (HexStringToULONGLONG(ArgV[3], &LUN, sizeof(ULONGLONG)*2, 0))
             {
                 EvpdCmdt = (UCHAR)stoi(ArgV[4]);
                 PageCode = (UCHAR)stoi(ArgV[5]);
-                
+
                 SenseSize = 18;
                 Response = NULL;
                 ResponseSize = 0;
                 Status = SendScsiInquiry(&SessionId,
-                                              LUN,
-                                              EvpdCmdt,
-                                              PageCode,
-                                              &ScsiStatus,
-                                              &ResponseSize,
-                                              Response,
-                                              &SenseSize,
-                                              Sense);
+                                         LUN,
+                                         EvpdCmdt,
+                                         PageCode,
+                                         &ScsiStatus,
+                                         &ResponseSize,
+                                         Response,
+                                         &SenseSize,
+                                         Sense);
                 if (Status == ERROR_INSUFFICIENT_BUFFER)
                 {
                     Response = Alloc(ResponseSize);
                     if (Response != NULL)
                     {
                         Status = SendScsiInquiry(&SessionId,
-                                                      LUN,
-                                                      EvpdCmdt,
-                                                      PageCode,
-                                                      &ScsiStatus,
-                                                      &ResponseSize,
-                                                      Response,
-                                                      &SenseSize,
-                                                      Sense);
+                                                 LUN,
+                                                 EvpdCmdt,
+                                                 PageCode,
+                                                 &ScsiStatus,
+                                                 &ResponseSize,
+                                                 Response,
+                                                 &SenseSize,
+                                                 Sense);
                         if (Status == ERROR_SUCCESS)
                         {
                             printf("    ScsiStatus             : 0x%x\n"
@@ -3443,16 +3577,18 @@ ISDSC_STATUS DoScsiInquiry(
                         Free(Response);
                     }
                 }
-                
+
                 if (Status ==  ISDSC_SCSI_REQUEST_FAILED)
                 {
                     printf("    ScsiStatus             : 0x%x\n"
                            "    Sense Buffer Size      : 0x%x\n",
                            ScsiStatus,
                            SenseSize);
-                    PrintBuffer("    ", Sense, SenseSize);                      
-                }           
-            } else {
+                    PrintBuffer("    ", Sense, SenseSize);
+                }
+            }
+            else
+            {
 #ifdef UNICODE
                 printf("Invalid LUN: %ws\n", ArgV[3]);
 #else
@@ -3460,7 +3596,9 @@ ISDSC_STATUS DoScsiInquiry(
 #endif
                 Status = ERROR_INVALID_PARAMETER;
             }
-        } else {
+        }
+        else
+        {
 #ifdef UNICODE
             printf("Invalid sessionid: %ws\n", ArgV[2]);
 #else
@@ -3468,9 +3606,9 @@ ISDSC_STATUS DoScsiInquiry(
 #endif
             Status = ERROR_INVALID_PARAMETER;
         }
-        
+
     }
-    
+
     return(Status);
 }
 
@@ -3478,7 +3616,7 @@ ISDSC_STATUS DoScsiInquiry(
 ISDSC_STATUS DoLogoutTarget(
     int ArgC,
     __in_ecount(ArgC) PTCHAR *ArgV
-    )
+)
 //  iscsicli LogoutTarget <SessionId>
 {
     ISDSC_STATUS Status;
@@ -3488,7 +3626,9 @@ ISDSC_STATUS DoLogoutTarget(
     {
         Usage(10);
         Status = ERROR_SUCCESS;
-    } else {
+    }
+    else
+    {
         if (StringToSessionId(ArgV[2], &SessionId))
         {
             printf("Logout Target 0x%I64x-0x%I64x\n",
@@ -3496,7 +3636,9 @@ ISDSC_STATUS DoLogoutTarget(
                    SessionId.AdapterSpecific);
 
             Status = LogoutIScsiTarget(&SessionId);
-        } else {
+        }
+        else
+        {
 #ifdef UNICODE
             printf("Invalid sessionid: %ws\n", ArgV[2]);
 #else
@@ -3513,8 +3655,8 @@ ISDSC_STATUS DoLogoutTarget(
 ISDSC_STATUS DoLoginToTarget(
     int ArgC,
     __in_ecount(ArgC) PTCHAR *ArgV,
-    BOOLEAN IsPersistent                             
-    )
+    BOOLEAN IsPersistent
+)
 {
     ISDSC_STATUS Status;
     BOOLEAN ReportToPNP;
@@ -3543,15 +3685,17 @@ ISDSC_STATUS DoLoginToTarget(
     {
         Usage(IsPersistent ? 11 : 9);
         Status = ERROR_SUCCESS;
-    } else {
+    }
+    else
+    {
         TargetName = ArgV[2];
         ReportToPNP = TRUE;
         TargetPortalAddress = NULL;
         TargetPortalSocket = 0;
         InitiatorInstance = NULL;
-        
+
         ReportToPNP = IsTrue(ArgV[3], TRUE);
-        
+
         if (*ArgV[4] != TEXT('*'))
         {
             TargetPortalAddress = ArgV[4];
@@ -3559,7 +3703,7 @@ ISDSC_STATUS DoLoginToTarget(
             {
                 return(ERROR_INVALID_PARAMETER);
             }
-        }       
+        }
 
         if ((TargetPortalAddress != NULL) && (*ArgV[5] != TEXT('*')))
         {
@@ -3567,11 +3711,13 @@ ISDSC_STATUS DoLoginToTarget(
             hr = StringCchCopy(TargetPortal.Address,
                                MAX_ISCSI_PORTAL_ADDRESS_LEN,
                                TargetPortalAddress);
-                     
+
             TargetPortal.Socket = TargetPortalSocket;
             *TargetPortal.SymbolicName = 0;
-        } else if (! ((TargetPortalAddress ==  NULL) &&
-                      (*ArgV[5] == TEXT('*')))) {
+        }
+        else if (! ((TargetPortalAddress ==  NULL) &&
+                    (*ArgV[5] == TEXT('*'))))
+        {
             printf("Portal address and socket must be specified\n");
             return(ERROR_INVALID_PARAMETER);
         }
@@ -3584,7 +3730,9 @@ ISDSC_STATUS DoLoginToTarget(
         if (*ArgV[7] != TEXT('*'))
         {
             PortNumber = stoi(ArgV[7]);
-        } else {
+        }
+        else
+        {
             PortNumber = ISCSI_ANY_INITIATOR_PORT;
         }
 
@@ -3599,8 +3747,10 @@ ISDSC_STATUS DoLoginToTarget(
         {
             Key = NULL;
             KeyLength = 0;
-        } else {
-#ifdef UNICODE          
+        }
+        else
+        {
+#ifdef UNICODE
             Key = NULL;
             DiscpUnicodeToAnsi(ArgV[18],
                                &Key,
@@ -3610,7 +3760,7 @@ ISDSC_STATUS DoLoginToTarget(
 #endif
             KeyLength = (ULONG)strlen(Key) + 1;
         }
-        
+
         MappingCount = stoi(ArgV[19]);
         ArgCExpected = 20 + (MappingCount * 4);
         if (ArgC != ArgCExpected)
@@ -3623,7 +3773,7 @@ ISDSC_STATUS DoLoginToTarget(
         {
             SizeNeeded = sizeof(ISCSI_TARGET_MAPPING) +
                          MappingCount * sizeof(SCSI_LUN_LIST);
-            
+
             Mapping = (PISCSI_TARGET_MAPPING)Alloc(SizeNeeded) ;
             if (Mapping == NULL)
             {
@@ -3635,22 +3785,22 @@ ISDSC_STATUS DoLoginToTarget(
             *Mapping->OSDeviceName = 0;
             Mapping->OSBusNumber = stoi(ArgV[ArgCIndex+1]);
             Mapping->OSTargetNumber = stoi(ArgV[ArgCIndex+2]);
-            
+
             Mapping->LUNCount = MappingCount;
             Mapping->LUNList = (PSCSI_LUN_LIST)OffsetToPtr(Mapping,
-                                               sizeof(ISCSI_TARGET_MAPPING));
-            
+                               sizeof(ISCSI_TARGET_MAPPING));
+
             for (i = 0; i < MappingCount; i++)
             {
                 b = stoiDForLogicalUnit(ArgV[ArgCIndex],
-                                       &Mapping->LUNList[i].TargetLUN);
+                                        &Mapping->LUNList[i].TargetLUN);
 
                 if (b == FALSE)
                 {
                     printf("Target LUN must be in 0x0123456789abcdef format\n");
                     return(ERROR_INVALID_PARAMETER);
                 }
-                
+
                 ArgCIndex++;        // bus
 
                 x = stoi(ArgV[ArgCIndex]);
@@ -3659,7 +3809,7 @@ ISDSC_STATUS DoLoginToTarget(
                     printf("OSBus number must be the same for all LUNs\n");
                     return(ERROR_INVALID_PARAMETER);
                 }
-                
+
                 ArgCIndex++;        // target
                 x = stoi(ArgV[ArgCIndex]);
                 if (x != Mapping->OSTargetNumber)
@@ -3667,17 +3817,19 @@ ISDSC_STATUS DoLoginToTarget(
                     printf("OSTarget number must be the same for all LUNs\n");
                     return(ERROR_INVALID_PARAMETER);
                 }
-                
-                ArgCIndex++;                
+
+                ArgCIndex++;
                 Mapping->LUNList[i].OSLUN = stoi(ArgV[ArgCIndex]);
-                ArgCIndex++;                
+                ArgCIndex++;
             }
-        } else {
+        }
+        else
+        {
             Mapping = NULL;
         }
-        
 
-#ifdef UNICODE      
+
+#ifdef UNICODE
         printf("LoginTarget to %ws on %ws to %ws/%d\n",
                TargetName,
                InitiatorInstance ? InitiatorInstance : L"<no init instance>",
@@ -3691,21 +3843,21 @@ ISDSC_STATUS DoLoginToTarget(
                TargetPortalAddress ? TargetPortal.Address : "<no portal>",
                TargetPortalAddress ? TargetPortal.Socket : 0
               );
-#endif      
+#endif
 
         Status = LoginIScsiTarget(TargetName,
-                              ReportToPNP ? FALSE : TRUE,
-                              InitiatorInstance,
-                              PortNumber,                   // PortNUmber
-                              TargetPortalAddress ? &TargetPortal : NULL,
-                              SecurityFlags,                   
-                              Mapping,                // Mappings
-                              &LoginOptions,                // LoginOptions
-                              KeyLength,
-                              Key,
-                               IsPersistent,
-                              &SessionId,
-                                 &ConnectionId);
+                                  ReportToPNP ? FALSE : TRUE,
+                                  InitiatorInstance,
+                                  PortNumber,                   // PortNUmber
+                                  TargetPortalAddress ? &TargetPortal : NULL,
+                                  SecurityFlags,
+                                  Mapping,                // Mappings
+                                  &LoginOptions,                // LoginOptions
+                                  KeyLength,
+                                  Key,
+                                  IsPersistent,
+                                  &SessionId,
+                                  &ConnectionId);
 
         if (! IsPersistent)
         {
@@ -3719,7 +3871,7 @@ ISDSC_STATUS DoLoginToTarget(
                        ConnectionId.AdapterSpecific);
             }
         }
-        
+
         if (Mapping != NULL)
         {
             Free(Mapping);
@@ -3732,17 +3884,17 @@ ISDSC_STATUS DoLoginToTarget(
 ISDSC_STATUS TryLoginToTarget(
     int ArgC,
     __in_ecount(ArgC) PTCHAR *ArgV
-    )
+)
 //  iscsicli LoginTarget <TargetName> <ReportToPNP>
 //                       <TargetPortalAddress> <TargetPortalSocket>
 //                       <InitiatorInstance> <Port number> <Security Flags>
-//                     <Header Digest> <Data Digest> 
+//                     <Header Digest> <Data Digest>
 //                     <Max Connections> <DefaultTime2Wait>
 //                     <DefaultTime2Retain> <Username> <Password>
 //                     <AuthType> <Key>
-//                     <Mapping Count> <Target Lun> <OS Bus> <Os Target> 
+//                     <Mapping Count> <Target Lun> <OS Bus> <Os Target>
 //                     <OS Lun> ...
-//                       
+//
 {
     ISDSC_STATUS Status;
     Status = DoLoginToTarget(ArgC,
@@ -3755,17 +3907,17 @@ ISDSC_STATUS TryLoginToTarget(
 ISDSC_STATUS PersistentLoginTarget(
     int ArgC,
     __in_ecount(ArgC) PTCHAR *ArgV
-    )
+)
 //  iscsicli PersistentLoginTarget <TargetName> <ReportToPNP>
 //                       <TargetPortalAddress> <TargetPortalSocket>
 //                       <InitiatorInstance> <Port number> <Security Flags>
-//                     <Header Digest> <Data Digest> 
+//                     <Header Digest> <Data Digest>
 //                     <Max Connections> <DefaultTime2Wait>
 //                     <DefaultTime2Retain> <Username> <Password>
 //                     <AuthType> <Key>
-//                     <Mapping Count> <Target Lun> <OS Bus> <Os Target> 
+//                     <Mapping Count> <Target Lun> <OS Bus> <Os Target>
 //                     <OS Lun> ...
-//                       
+//
 {
     ISDSC_STATUS Status;
     Status = DoLoginToTarget(ArgC,
@@ -3777,7 +3929,7 @@ ISDSC_STATUS PersistentLoginTarget(
 ISDSC_STATUS RemovePersistentTarget(
     int ArgC,
     __in_ecount(ArgC) PTCHAR *ArgV
-    )
+)
 //  printf("iscsicli RemovePersistentTarget <Initiator Name> <TargetName>\n"
 //    printf("                                <Port Number> \n");
 //  printf("                                <Target Portal Address> \n");
@@ -3793,19 +3945,25 @@ ISDSC_STATUS RemovePersistentTarget(
     if (ArgC != 7)
     {
         Usage(13);
-        Status = ERROR_SUCCESS;     
-    } else {
+        Status = ERROR_SUCCESS;
+    }
+    else
+    {
         if (*ArgV[2] == TEXT('*'))
         {
             I = NULL;
-        } else {
+        }
+        else
+        {
             I = ArgV[2];
         }
 
         if (*ArgV[4] == TEXT('*'))
         {
             PortNumber = ISCSI_ALL_INITIATOR_PORTS;
-        } else {
+        }
+        else
+        {
             PortNumber = stoi(ArgV[4]);
         }
 
@@ -3819,28 +3977,30 @@ ISDSC_STATUS RemovePersistentTarget(
             TargetPortalPtr = &TargetPortal;
             memset(TargetPortalPtr, 0, sizeof(ISCSI_TARGET_PORTAL));
 #endif
-        } else {
+        }
+        else
+        {
             if (_tcslen(ArgV[5]) > (MAX_ISCSI_PORTAL_ADDRESS_LEN-1))
             {
                 return(ERROR_INVALID_PARAMETER);
             }
-            
+
             hr = StringCchCopy(TargetPortal.Address,
                                MAX_ISCSI_PORTAL_ADDRESS_LEN,
                                ArgV[5]);
-            
+
             TargetPortal.Socket = (USHORT)stoi(ArgV[6]);
             *TargetPortal.SymbolicName = 0;
             TargetPortalPtr = &TargetPortal;
         }
 
-        
+
         Status = RemoveIScsiPersistentTarget(I,
                                              PortNumber,
                                              ArgV[3],
                                              TargetPortalPtr);
     }
-    
+
     return(Status);
 }
 
@@ -3848,7 +4008,7 @@ ISDSC_STATUS RemovePersistentTarget(
 ISDSC_STATUS ListPersistentTarget(
     int ArgC,
     __in_ecount(ArgC) PTCHAR *ArgV
-    )
+)
 //  printf("iscsicli ListPersistentTargets\n");
 {
     ISDSC_STATUS Status;
@@ -3862,21 +4022,21 @@ ISDSC_STATUS ListPersistentTarget(
     Count = 0;
     SizeNeeded = 0;
     Status = ReportIScsiPersistentLogins(&Count,
-                                          NULL,
-                                        &SizeNeeded);
+                                         NULL,
+                                         &SizeNeeded);
 
     if (Status == ERROR_INSUFFICIENT_BUFFER)
     {
         printf("Total of %d peristent targets\n",
                Count
               );
-        
+
         LoginInfoArray = Alloc(SizeNeeded);
         if (LoginInfoArray != NULL)
         {
             Status = ReportIScsiPersistentLogins(&Count,
                                                  LoginInfoArray,
-                                                &SizeNeeded);
+                                                 &SizeNeeded);
             if (Status == ERROR_SUCCESS)
             {
                 for (i = 0; i < Count; i++)
@@ -3886,10 +4046,10 @@ ISDSC_STATUS ListPersistentTarget(
                     printf("    Target Name           : %ws\n"
                            "    Address and Socket    : %ws %d\n"
                            "    Session Type          : %s\n"
-                           "    Initiator Name        : %ws\n",                        
+                           "    Initiator Name        : %ws\n",
 #else
                     printf("    Target Name           : %s\n"
-                           "    Address and Socket    : %s %d\n" 
+                           "    Address and Socket    : %s %d\n"
                            "    Session Type          : %s\n"
                            "    Initiator Name        : %s\n",
 #endif
@@ -3903,30 +4063,32 @@ ISDSC_STATUS ListPersistentTarget(
                     if (LoginInfo->InitiatorPortNumber == ISCSI_ANY_INITIATOR_PORT)
                     {
                         printf("    Port Number           : <Any Port>\n");
-                    } else {
+                    }
+                    else
+                    {
                         printf("    Port Number           : %d\n",
                                LoginInfo->InitiatorPortNumber
                               );
                     }
 
                     PrintSecurityFlags("    ", LoginInfo->SecurityFlags);
-                            
+
                     PrintLoginOptions("    ",
                                       &LoginInfo->LoginOptions);
                     if (LoginInfo->Mappings != NULL)
                     {
                         PrintTargetMapping(LoginInfo->Mappings);
                     }
-                                        
+
                     printf("\n");
                 }
             }
             Free(LoginInfoArray);
-            
-        }
-    }   
 
-    return(Status); 
+        }
+    }
+
+    return(Status);
 }
 
 
@@ -3936,19 +4098,19 @@ ISDSC_STATUS GetTargetInfo(
     IN TARGET_INFORMATION_CLASS InfoClass,
     IN OUT PULONG BufferSize,
     OUT PVOID *Buffer
-   )
+)
 {
     ISDSC_STATUS Status;
     PVOID b;
     ULONG SizeNeeded;
 
     SizeNeeded = 0;
-    
+
     Status = GetIScsiTargetInformation(TargetName,
-                                  DiscoveryMechanism,
-                                  InfoClass,
-                                  &SizeNeeded,
-                                  NULL);
+                                       DiscoveryMechanism,
+                                       InfoClass,
+                                       &SizeNeeded,
+                                       NULL);
 
     if (Status == ERROR_INSUFFICIENT_BUFFER)
     {
@@ -3959,16 +4121,18 @@ ISDSC_STATUS GetTargetInfo(
         }
 
         Status = GetIScsiTargetInformation(TargetName,
-                                      DiscoveryMechanism,
-                                      InfoClass,
-                                      &SizeNeeded,
-                                      b);
+                                           DiscoveryMechanism,
+                                           InfoClass,
+                                           &SizeNeeded,
+                                           b);
 
         if (Status == ERROR_SUCCESS)
         {
             *Buffer = b;
             *BufferSize = SizeNeeded;
-        } else {
+        }
+        else
+        {
             Free(b);
         }
     }
@@ -3979,11 +4143,11 @@ void PrintPortalGroups(
     ULONG Count,
     PISCSI_TARGET_PORTAL_GROUP PortalGroups,
     ULONG Size
-    )
+)
 {
     PISCSI_TARGET_PORTAL_GROUP p;
     ULONG SizeUsed, i, j;
-    
+
     p = PortalGroups;
     for (i = 0; i < Count; i++)
     {
@@ -3995,10 +4159,12 @@ void PrintPortalGroups(
         if (p->Count == 0)
         {
             SizeUsed = (FIELD_OFFSET(ISCSI_TARGET_PORTAL_GROUP,
-                                    Portals) +3) & ~3;
-        } else {
+                                     Portals) +3) & ~3;
+        }
+        else
+        {
             SizeUsed = ((sizeof(ISCSI_TARGET_PORTAL_GROUP) +
-                       (p->Count-1) * sizeof(ISCSI_TARGET_PORTAL))+3) & ~3;
+                         (p->Count-1) * sizeof(ISCSI_TARGET_PORTAL))+3) & ~3;
         }
 
         if (SizeUsed <= Size)
@@ -4019,7 +4185,9 @@ void PrintPortalGroups(
             }
             Size -= SizeUsed;
             p = (PISCSI_TARGET_PORTAL_GROUP)((PUCHAR)p + SizeUsed);
-        } else {
+        }
+        else
+        {
             break;
         }
     }
@@ -4028,7 +4196,7 @@ void PrintPortalGroups(
 ISDSC_STATUS TargetInfo(
     int ArgC,
     __in_ecount(ArgC) PTCHAR *ArgV
-    )
+)
 //  iscsicli TargetInfo  <TargetName> [DiscoveryMechanism]
 {
     PTCHAR DiscoveryMechanism;
@@ -4037,18 +4205,24 @@ ISDSC_STATUS TargetInfo(
     ULONG Size;
     PVOID Buffer;
     TCHAR m[MAX_PATH];
-    
+
     if ((ArgC != 3) && (ArgC != 4))
     {
         Usage(8);
         return(ERROR_SUCCESS);
-    } else {
+    }
+    else
+    {
         if (ArgC == 3)
         {
             DiscoveryMechanism = NULL;
-        } else if (ArgV[3][0] == TEXT('*')) {
+        }
+        else if (ArgV[3][0] == TEXT('*'))
+        {
             DiscoveryMechanism = NULL;
-        } else {
+        }
+        else
+        {
             DiscoveryMechanism = ArgV[3];
         }
     }
@@ -4062,7 +4236,7 @@ ISDSC_STATUS TargetInfo(
            DiscoveryMechanism != NULL ? DiscoveryMechanism : TEXT("<all mechanisms>"));
 
     Status = GetTargetInfo(ArgV[2],
-                           DiscoveryMechanism,                        
+                           DiscoveryMechanism,
                            DiscoveryMechanisms,
                            &Size,
                            &Buffer);
@@ -4070,12 +4244,14 @@ ISDSC_STATUS TargetInfo(
     if (Status == ERROR_SUCCESS)
     {
         if (Size > 0)
-        {           
+        {
             PrintStringList("    Discovery Mechanisms :",
                             "         ",
                             Buffer,
                             Size);
-        } else {
+        }
+        else
+        {
             printf("    Discovery Mechanisms: <This List is Empty>\n");
         }
         Free(Buffer);
@@ -4084,7 +4260,7 @@ ISDSC_STATUS TargetInfo(
     if (DiscoveryMechanism != NULL)
     {
         Status = GetTargetInfo(ArgV[2],
-                               DiscoveryMechanism,                        
+                               DiscoveryMechanism,
                                ProtocolType,
                                &Size,
                                &Buffer);
@@ -4100,12 +4276,14 @@ ISDSC_STATUS TargetInfo(
             {
                 ProtocolType = 1;
             }
-            
+
             printf("    Protocol Type        : %s\n",
                    ProtocolList[ProtocolType]);
-            
+
             Free(Buffer);
-        } else {
+        }
+        else
+        {
 #ifdef UNICODE
             printf("    Protocol Type Failed : %ws\n",
                    GetiSCSIMessageText(m, MAX_PATH, Status));
@@ -4116,21 +4294,23 @@ ISDSC_STATUS TargetInfo(
         }
 
         Status = GetTargetInfo(ArgV[2],
-                               DiscoveryMechanism,                        
+                               DiscoveryMechanism,
                                TargetAlias,
                                &Size,
                                &Buffer);
 
         if (Status == ERROR_SUCCESS)
         {
-#ifdef UNICODE      
+#ifdef UNICODE
             printf("    Target Alias         : %ws\n",
 #else
             printf("    Target Alias         : %s\n",
 #endif
                    (PTCHAR)Buffer);
             Free(Buffer);
-        } else {
+        }
+        else
+        {
 #ifdef UNICODE
             printf("    Target Alias Failed  : %ws\n",
                    GetiSCSIMessageText(m, MAX_PATH, Status));
@@ -4138,10 +4318,10 @@ ISDSC_STATUS TargetInfo(
             printf("    Target Alias Failed  : %s\n",
                    GetiSCSIMessageText(m, MAX_PATH, Status));
 #endif
-        }    
+        }
 
         Status = GetTargetInfo(ArgV[2],
-                               DiscoveryMechanism,                        
+                               DiscoveryMechanism,
                                PortalGroups,
                                &Size,
                                &Buffer);
@@ -4154,18 +4334,22 @@ ISDSC_STATUS TargetInfo(
 
                 Count = *((PULONG)Buffer);
                 p = (PISCSI_TARGET_PORTAL_GROUP)((PUCHAR)Buffer + sizeof(ULONG));
-                   printf("    PortalGroups         : %d portal groups\n",
-                          Count
-                         );
-                   PrintPortalGroups(
-                                  Count,
-                                  p,
-                                  Size);
-            } else {
-                   printf("    PortalGroups         : <This List Is Empty>\n");
+                printf("    PortalGroups         : %d portal groups\n",
+                       Count
+                      );
+                PrintPortalGroups(
+                    Count,
+                    p,
+                    Size);
+            }
+            else
+            {
+                printf("    PortalGroups         : <This List Is Empty>\n");
             }
             Free(Buffer);
-        } else {
+        }
+        else
+        {
 #ifdef UNICODE
             printf("    Portal Groups Failed : %ws\n",
                    GetiSCSIMessageText(m, MAX_PATH, Status));
@@ -4175,7 +4359,7 @@ ISDSC_STATUS TargetInfo(
 #endif
         }
         Status = GetTargetInfo(ArgV[2],
-                               DiscoveryMechanism,                        
+                               DiscoveryMechanism,
                                InitiatorName,
                                &Size,
                                &Buffer);
@@ -4183,7 +4367,7 @@ ISDSC_STATUS TargetInfo(
         if (Status == ERROR_SUCCESS)
         {
             if (Size > 0)
-            {           
+            {
 #ifdef UNICODE
                 printf("    Initiator Name       : %ws\n",
                        (PWSTR)Buffer);
@@ -4191,11 +4375,15 @@ ISDSC_STATUS TargetInfo(
                 printf("    Initiator Name       : %s\n",
                        (PSTR)Buffer);
 #endif
-            } else {
+            }
+            else
+            {
                 printf("    Initiator Name       : <Empty>\n");
             }
             Free(Buffer);
-        } else {
+        }
+        else
+        {
 #ifdef UNICODE
             printf("    Initiator List Failed: %ws\n",
                    GetiSCSIMessageText(m, MAX_PATH, Status));
@@ -4204,9 +4392,9 @@ ISDSC_STATUS TargetInfo(
                    GetiSCSIMessageText(m, MAX_PATH, Status));
 #endif
         }
-        
+
         Status = GetTargetInfo(ArgV[2],
-                               DiscoveryMechanism,                        
+                               DiscoveryMechanism,
                                TargetFlags,
                                &Size,
                                &Buffer);
@@ -4218,18 +4406,20 @@ ISDSC_STATUS TargetInfo(
                 ISCSI_TARGET_FLAGS TargetFlags;
 
                 TargetFlags = *((PISCSI_TARGET_FLAGS)Buffer);
-                
+
                 printf("    Target Flags         : 0x%x\n",
                        TargetFlags);
-                
+
                 if (TargetFlags & ISCSI_TARGET_FLAG_HIDE_STATIC_TARGET)
                 {
                     printf("                          Target is hidden until dynamically discovered\n");
                 }
             }
-            
+
             Free(Buffer);
-        } else {
+        }
+        else
+        {
 #ifdef UNICODE
             printf("    Target Flags Failed  : %ws\n",
                    GetiSCSIMessageText(m, MAX_PATH, Status));
@@ -4240,7 +4430,7 @@ ISDSC_STATUS TargetInfo(
         }
 
         Status = GetTargetInfo(ArgV[2],
-                               DiscoveryMechanism,                        
+                               DiscoveryMechanism,
                                LoginOptions,
                                &Size,
                                &Buffer);
@@ -4256,9 +4446,11 @@ ISDSC_STATUS TargetInfo(
                 PrintLoginOptions("    ",
                                   LoginOptions);
             }
-            
+
             Free(Buffer);
-        } else {
+        }
+        else
+        {
 #ifdef UNICODE
             printf("    Login Options Failed : %ws\n",
                    GetiSCSIMessageText(m, MAX_PATH, Status));
@@ -4270,7 +4462,7 @@ ISDSC_STATUS TargetInfo(
 
 
         Status = GetTargetInfo(ArgV[2],
-                               DiscoveryMechanism,                        
+                               DiscoveryMechanism,
                                PersistentTargetMappings,
                                &Size,
                                &Buffer);
@@ -4284,11 +4476,13 @@ ISDSC_STATUS TargetInfo(
                 Mapping = (PISCSI_TARGET_MAPPING)Buffer;
 
                 PrintTargetMapping(
-                                  Mapping);
+                    Mapping);
             }
-            
+
             Free(Buffer);
-        } else {
+        }
+        else
+        {
 #ifdef UNICODE
             printf("    Target Mappings Failed : %ws\n",
                    GetiSCSIMessageText(m, MAX_PATH, Status));
@@ -4298,18 +4492,18 @@ ISDSC_STATUS TargetInfo(
 #endif
         }
 
-        
+
         Status = ERROR_SUCCESS;
     }
     printf("\n");
-    
+
     return(Status);
 }
 
 ISDSC_STATUS DoAddConnection(
     int ArgC,
     __in_ecount(ArgC) PTCHAR *ArgV
-    )
+)
 //  iscsicli AddConnection <SessionId> <initiator instance>
 //                         <Port Number> <Target Portal Address>
 //                         <Target Portal Socket> <Security Flags>
@@ -4347,14 +4541,18 @@ ISDSC_STATUS DoAddConnection(
     if (*ArgV[3] != TEXT('*'))
     {
         InitiatorName = ArgV[3];
-    } else {
+    }
+    else
+    {
         InitiatorName = NULL;
     }
 
     if (*ArgV[4] == TEXT('*'))
     {
         PortNumber = ISCSI_ANY_INITIATOR_PORT;
-    } else {
+    }
+    else
+    {
         PortNumber = stoi(ArgV[4]);
     }
 
@@ -4365,7 +4563,9 @@ ISDSC_STATUS DoAddConnection(
         {
             return(ERROR_INVALID_PARAMETER);
         }
-    } else {
+    }
+    else
+    {
         TargetPortalAddress = NULL;
     }
 
@@ -4375,15 +4575,17 @@ ISDSC_STATUS DoAddConnection(
         hr = StringCchCopy(TargetPortal.Address,
                            MAX_ISCSI_PORTAL_ADDRESS_LEN,
                            TargetPortalAddress);
-        
+
         TargetPortal.Socket = TargetPortalSocket;
         *TargetPortal.SymbolicName = 0;
-    } else {
+    }
+    else
+    {
         TargetPortalAddress = NULL;
     }
 
     SecurityFlags = stoi(ArgV[7]);
-    
+
     ParseLoginOptions(&LoginOptions,
                       ArgV,
                       ArgC,
@@ -4393,12 +4595,14 @@ ISDSC_STATUS DoAddConnection(
         Key = NULL;
         KeyLength = 0;
         Status = ERROR_SUCCESS;
-    } else {
-#ifdef UNICODE          
+    }
+    else
+    {
+#ifdef UNICODE
         Key = NULL;
         Status = DiscpUnicodeToAnsi(ArgV[17],
-                           &Key,
-                           0);
+                                    &Key,
+                                    0);
 #else
         Key = ArgV[17];
         Status = ERROR_SUCCESS;
@@ -4412,29 +4616,29 @@ ISDSC_STATUS DoAddConnection(
     if (Status == ERROR_SUCCESS)
     {
         Status = AddIScsiConnection(&SessionId,
-                               InitiatorName,
-                               PortNumber,
-                               TargetPortalAddress ? &TargetPortal : NULL,
-                               SecurityFlags,
-                               &LoginOptions,
-                               KeyLength,
-                                Key,
-                               &ConnectionId);
+                                    InitiatorName,
+                                    PortNumber,
+                                    TargetPortalAddress ? &TargetPortal : NULL,
+                                    SecurityFlags,
+                                    &LoginOptions,
+                                    KeyLength,
+                                    Key,
+                                    &ConnectionId);
 #ifdef UNICODE
         if (Key != NULL)
         {
             Free(Key);
-        }   
+        }
 #endif
-    }   
+    }
 
     return(Status);
-}    
+}
 
 ISDSC_STATUS DoRemoveConnection(
     int ArgC,
     __in_ecount(ArgC) PTCHAR *ArgV
-    )
+)
 //    printf("iscsicli RemoveConnection <SessionId> <ConnectionId> \n");
 {
     ISDSC_STATUS Status;
@@ -4463,29 +4667,31 @@ ISDSC_STATUS DoRemoveConnection(
                                    &ConnectionId);
 
     return(Status);
-}    
+}
 
 ISDSC_STATUS DoReportInitiatorList(
     int ArgC,
     __in_ecount(ArgC) PTCHAR *ArgV
-    )
-//  iscsicli ListInitiators 
+)
+//  iscsicli ListInitiators
 {
     ISDSC_STATUS Status;
     PTCHAR Buffer,b = NULL;
     ULONG BufferSize;
-    UNREFERENCED_PARAMETER(ArgV);    
-    
+    UNREFERENCED_PARAMETER(ArgV);
+
     if (ArgC != 2)
     {
         Usage(20);
         Status = ERROR_SUCCESS;
-    } else {
+    }
+    else
+    {
         BufferSize = 0;
         Buffer = NULL;
         Status = ReportIScsiInitiatorList(
-                                   &BufferSize,
-                                   NULL);
+                     &BufferSize,
+                     NULL);
 
         if (Status == ERROR_INSUFFICIENT_BUFFER)
         {
@@ -4497,9 +4703,9 @@ ISDSC_STATUS DoReportInitiatorList(
 
             b = Buffer;
             Status = ReportIScsiInitiatorList(
-                                       &BufferSize,
-                                       Buffer);
-            
+                         &BufferSize,
+                         Buffer);
+
         }
 
         if (Status == ERROR_SUCCESS)
@@ -4519,7 +4725,7 @@ ISDSC_STATUS DoReportInitiatorList(
                 Buffer++;
             }
         }
-        
+
         if (b != NULL)
         {
             Free(b);
@@ -4531,7 +4737,7 @@ ISDSC_STATUS DoReportInitiatorList(
 ISDSC_STATUS DoReportActiveIScsiTargetMappings(
     int ArgC,
     __in_ecount(ArgC) PTCHAR *ArgV
-    )
+)
 //  iscsicli ReportTargetMappings
 {
     ISDSC_STATUS Status;
@@ -4543,8 +4749,8 @@ ISDSC_STATUS DoReportActiveIScsiTargetMappings(
 
     BufferSize = 0;
     Status = ReportActiveIScsiTargetMappings(&BufferSize,
-                                             &MappingCount,
-                                             NULL);
+             &MappingCount,
+             NULL);
 
     if (Status == ERROR_INSUFFICIENT_BUFFER)
     {
@@ -4552,8 +4758,8 @@ ISDSC_STATUS DoReportActiveIScsiTargetMappings(
         if (MappingX != NULL)
         {
             Status = ReportActiveIScsiTargetMappings(&BufferSize,
-                                                     &MappingCount,
-                                                     MappingX);
+                     &MappingCount,
+                     MappingX);
             if (Status == ERROR_SUCCESS)
             {
                 printf("Total of %d mappings returned\n", MappingCount);
@@ -4566,7 +4772,9 @@ ISDSC_STATUS DoReportActiveIScsiTargetMappings(
             }
             Free(MappingX);
         }
-    } else if (Status == ERROR_SUCCESS) {
+    }
+    else if (Status == ERROR_SUCCESS)
+    {
         printf("No mappings\n");
     }
 
@@ -4576,31 +4784,35 @@ ISDSC_STATUS DoReportActiveIScsiTargetMappings(
 ISDSC_STATUS ListTargets(
     int ArgC,
     __in_ecount(ArgC) PTCHAR *ArgV
-    )
+)
 //  iscsicli ListTargets <ForceUpdate>
 {
     ISDSC_STATUS Status;
     BOOLEAN ForceUpdate;
     PTCHAR Buffer,b = NULL;
     ULONG BufferSize;
-    
+
     if ((ArgC != 3) && (ArgC != 2))
     {
         Usage(6);
         Status = ERROR_SUCCESS;
-    } else {
+    }
+    else
+    {
         if (ArgC == 3)
         {
             ForceUpdate = IsTrue(ArgV[2], FALSE);
-        } else {
+        }
+        else
+        {
             ForceUpdate = FALSE;
         }
 
         BufferSize = 0;
         Buffer = NULL;
         Status = ReportIScsiTargets(ForceUpdate,
-                                   &BufferSize,
-                                   NULL);
+                                    &BufferSize,
+                                    NULL);
 
         if (Status == ERROR_INSUFFICIENT_BUFFER)
         {
@@ -4609,12 +4821,12 @@ ISDSC_STATUS ListTargets(
             {
                 return(ERROR_NOT_ENOUGH_MEMORY);
             }
-            
+
             b = Buffer;
             Status = ReportIScsiTargets(ForceUpdate,
-                                       &BufferSize,
-                                       Buffer);
-            
+                                        &BufferSize,
+                                        Buffer);
+
         }
 
         if (Status == ERROR_SUCCESS)
@@ -4633,7 +4845,7 @@ ISDSC_STATUS ListTargets(
                 }
                 Buffer++;
             }
-                    
+
         }
     }
 
@@ -4641,7 +4853,7 @@ ISDSC_STATUS ListTargets(
     {
         Free(b);
     }
-    
+
     return(Status);
 }
 
@@ -4649,7 +4861,7 @@ ISDSC_STATUS ListTargets(
 ISDSC_STATUS RefreshTargetPortal(
     int ArgC,
     __in_ecount(ArgC) PTCHAR *ArgV
-    )
+)
 //  iscsicli RefreshTargetPortal <TargetPortalAddress>
 //                               <TargetPortalSocket> [HBAName]
 //                               [PortNumber]
@@ -4666,7 +4878,9 @@ ISDSC_STATUS RefreshTargetPortal(
     {
         Usage(5);
         Status = ERROR_SUCCESS;
-    } else {
+    }
+    else
+    {
         TargetPortalAddress = ArgV[2];
         if (_tcslen(TargetPortalAddress) > (MAX_ISCSI_PORTAL_ADDRESS_LEN-1))
         {
@@ -4687,13 +4901,19 @@ ISDSC_STATUS RefreshTargetPortal(
                 if (*ArgV[5] == TEXT('*'))
                 {
                     PortNumber = ISCSI_ALL_INITIATOR_PORTS;
-                } else {
+                }
+                else
+                {
                     PortNumber = stoi(ArgV[5]);
                 }
-            } else {
+            }
+            else
+            {
                 PortNumber = ISCSI_ALL_INITIATOR_PORTS;
             }
-        } else {
+        }
+        else
+        {
             HBAName = NULL;
             PortNumber = ISCSI_ALL_INITIATOR_PORTS;
         }
@@ -4701,12 +4921,12 @@ ISDSC_STATUS RefreshTargetPortal(
         hr = StringCchCopy(TargetPortal.Address,
                            MAX_ISCSI_PORTAL_ADDRESS_LEN,
                            TargetPortalAddress);
-        
+
         TargetPortal.Socket = (USHORT)stoi(TargetPortalSocket);
 
         Status = RefreshIScsiSendTargetPortal(HBAName,
                                               PortNumber,
-                                               &TargetPortal);
+                                              &TargetPortal);
     }
 
     return(Status);
@@ -4716,7 +4936,7 @@ ISDSC_STATUS RefreshTargetPortal(
 ISDSC_STATUS ListTargetPortals(
     int ArgC,
     __in_ecount(ArgC) PTCHAR *ArgV
-    )
+)
 //    iscsicli ListTargetPortals
 {
     ISDSC_STATUS Status;
@@ -4763,32 +4983,34 @@ ISDSC_STATUS ListTargetPortals(
                     if (PortalInfo->InitiatorPortNumber == ISCSI_ANY_INITIATOR_PORT)
                     {
                         printf("    Port Number          : <Any Port>\n");
-                    } else {
+                    }
+                    else
+                    {
                         printf("    Port Number          : %d\n",
                                PortalInfo->InitiatorPortNumber);
                     }
 
                     PrintSecurityFlags("    ",
                                        PortalInfo->SecurityFlags);
-                    
-                            
+
+
                     PrintLoginOptions("    ",
                                       &PortalInfo->LoginOptions);
                     printf("\n");
                 }
             }
-            Free(PortalInfoArray);            
+            Free(PortalInfoArray);
         }
-    }   
+    }
 
-    return(Status); 
+    return(Status);
 }
 
 
 ISDSC_STATUS RemoveTargetPortal(
     int ArgC,
     __in_ecount(ArgC) PTCHAR *ArgV
-    )
+)
 //  iscsicli RemoveTargetPortal <TargetPortalAddress> <TargetPortalSocket>
 //                           [HBA Name] [PortNumber]
 //
@@ -4805,7 +5027,9 @@ ISDSC_STATUS RemoveTargetPortal(
     {
         Usage(4);
         Status = ERROR_SUCCESS;
-    } else {
+    }
+    else
+    {
         TargetPortalAddress = ArgV[2];
         if (_tcslen(TargetPortalAddress) > (MAX_ISCSI_PORTAL_ADDRESS_LEN-1))
         {
@@ -4826,13 +5050,19 @@ ISDSC_STATUS RemoveTargetPortal(
                 if (*ArgV[5] == TEXT('*'))
                 {
                     PortNumber = ISCSI_ALL_INITIATOR_PORTS;
-                } else {
+                }
+                else
+                {
                     PortNumber = stoi(ArgV[5]);
                 }
-            } else {
+            }
+            else
+            {
                 PortNumber = ISCSI_ALL_INITIATOR_PORTS;
             }
-        } else {
+        }
+        else
+        {
             HBAName = NULL;
             PortNumber = ISCSI_ALL_INITIATOR_PORTS;
         }
@@ -4840,7 +5070,7 @@ ISDSC_STATUS RemoveTargetPortal(
         hr = StringCchCopy(TargetPortal.Address,
                            MAX_ISCSI_PORTAL_ADDRESS_LEN,
                            TargetPortalAddress);
-        
+
         TargetPortal.Socket = (USHORT)stoi(TargetPortalSocket);
 
         Status = RemoveIScsiSendTargetPortal(HBAName,
@@ -4854,7 +5084,7 @@ ISDSC_STATUS RemoveTargetPortal(
 ISDSC_STATUS AddTargetPortal(
     int ArgC,
     __in_ecount(ArgC) PTCHAR *ArgV
-    )
+)
 //  iscsicli AddTargetPortal <TargetPortalAddress> <TargetPortalSocket>
 //                           [HBA Name] [PortNumber]
 //  printf("                         <Security Flags>\n");
@@ -4862,7 +5092,7 @@ ISDSC_STATUS AddTargetPortal(
 //    printf("                         <Max Connections> <DefaultTime2Wait>\n");
 //    printf("                         <DefaultTime2Retain> <Username>
 //                                     <Password> <AuthType>\n");
-{   
+{
     ISDSC_STATUS Status;
     ISCSI_TARGET_PORTAL TargetPortal;
     PTCHAR TargetPortalAddress, TargetPortalSocket, HBAName;
@@ -4876,13 +5106,15 @@ ISDSC_STATUS AddTargetPortal(
     {
         Usage(3);
         Status = ERROR_SUCCESS;
-    } else {
+    }
+    else
+    {
         TargetPortalAddress = ArgV[2];
         if (_tcslen(TargetPortalAddress) > (MAX_ISCSI_PORTAL_ADDRESS_LEN-1))
         {
             return(ERROR_INVALID_PARAMETER);
         }
-        
+
         TargetPortalSocket = ArgV[3];
 
         if (ArgC > 4)
@@ -4898,13 +5130,15 @@ ISDSC_STATUS AddTargetPortal(
                 if (*ArgV[5] == TEXT('*'))
                 {
                     PortNumber = ISCSI_ALL_INITIATOR_PORTS;
-                } else {
+                }
+                else
+                {
                     PortNumber = stoi(ArgV[5]);
                 }
 
                 SecurityFlags = stoi(ArgV[6]);
 
-                
+
                 if (ArgC > 7)
                 {
                     ParseLoginOptions(&LO,
@@ -4912,21 +5146,27 @@ ISDSC_STATUS AddTargetPortal(
                                       ArgC,
                                       7);
                     LoginOptions = &LO;
-                } else {
+                }
+                else
+                {
                     LoginOptions = NULL;
                 }
-            } else {
+            }
+            else
+            {
                 PortNumber = ISCSI_ALL_INITIATOR_PORTS;
             }
-        } else {
+        }
+        else
+        {
             HBAName = NULL;
             PortNumber = ISCSI_ALL_INITIATOR_PORTS;
         }
-        
+
         hr = StringCchCopy(TargetPortal.Address,
                            MAX_ISCSI_PORTAL_ADDRESS_LEN,
                            TargetPortalAddress);
-        
+
         TargetPortal.Socket = (USHORT)stoi(TargetPortalSocket);
         *TargetPortal.SymbolicName = 0;
 
@@ -4934,17 +5174,17 @@ ISDSC_STATUS AddTargetPortal(
                                           PortNumber,
                                           LoginOptions,
                                           SecurityFlags,
-                                           &TargetPortal);
+                                          &TargetPortal);
 
     }
-    
+
     return(Status);
 }
 
 ISDSC_STATUS RemoveTarget(
     int ArgC,
     __in_ecount(ArgC) PTCHAR *ArgV
-    )
+)
 //  iscsicli RemoveTarget <TargetName>
 {
     ISDSC_STATUS Status;
@@ -4955,7 +5195,9 @@ ISDSC_STATUS RemoveTarget(
         Usage(2);
         Status = ERROR_SUCCESS;
         return(Status);
-    } else {
+    }
+    else
+    {
         TargetName = ArgV[2];
     }
 
@@ -4964,18 +5206,18 @@ ISDSC_STATUS RemoveTarget(
     return(Status);
 }
 
-    
+
 ISDSC_STATUS AddTarget(
     int ArgC,
     __in_ecount(ArgC) PTCHAR *ArgV
-    )
+)
 //  iscsicli AddTarget <TargetName> <TargetAlias> <TargetPortalAddress>
 //                     <TargetPortalSocket> <Target flags>
-//                     <Persist> <Header Digest> <Data Digest> 
+//                     <Persist> <Header Digest> <Data Digest>
 //                     <Max Connections> <DefaultTime2Wait>
 //                     <DefaultTime2Retain> <Username> <Password>
 //                     <AuthType>
-//                     <Mapping Count> <Target Lun> <OS Bus> <Os Target> 
+//                     <Mapping Count> <Target Lun> <OS Bus> <Os Target>
 //                     <OS Lun> ...
 {
     ISDSC_STATUS Status;
@@ -4992,17 +5234,21 @@ ISDSC_STATUS AddTarget(
     ULONG x;
     BOOLEAN b;
     HRESULT hr;
-            
+
     if (ArgC < 18)
     {
         Usage(1);
         Status = ERROR_SUCCESS;
-    } else {
+    }
+    else
+    {
         TargetName = ArgV[2];
         if (*ArgV[3] == TEXT('*'))
         {
             TargetAlias = NULL;
-        } else {
+        }
+        else
+        {
             TargetAlias = ArgV[3];
         }
 
@@ -5020,9 +5266,11 @@ ISDSC_STATUS AddTarget(
             hr = StringCchCopy(PortalGroup.Portals[0].Address,
                                MAX_ISCSI_PORTAL_ADDRESS_LEN,
                                TargetPortalAddress);
-            
+
             PortalGroup.Portals[0].Socket = (USHORT)stoi(TargetPortalSocket);
-        } else {
+        }
+        else
+        {
             PortalGroup.Count = 0;
             *PortalGroup.Portals[0].Address = 0;
         }
@@ -5035,7 +5283,7 @@ ISDSC_STATUS AddTarget(
                           ArgV,
                           ArgC,
                           8);
-                
+
         MappingCount = stoi(ArgV[17]);
         ArgCExpected = 18 + (MappingCount * 4);
         if (ArgC != ArgCExpected)
@@ -5048,7 +5296,7 @@ ISDSC_STATUS AddTarget(
         {
             SizeNeeded = sizeof(ISCSI_TARGET_MAPPING) +
                          MappingCount * sizeof(SCSI_LUN_LIST);
-            
+
             Mapping = (PISCSI_TARGET_MAPPING)Alloc(SizeNeeded) ;
             if (Mapping == NULL)
             {
@@ -5062,12 +5310,12 @@ ISDSC_STATUS AddTarget(
             Mapping->OSTargetNumber = stoi(ArgV[ArgCIndex+2]);
             Mapping->LUNCount = MappingCount;
             Mapping->LUNList = (PSCSI_LUN_LIST)OffsetToPtr(Mapping,
-                                               sizeof(ISCSI_TARGET_MAPPING));
-            
+                               sizeof(ISCSI_TARGET_MAPPING));
+
             for (i = 0; i < MappingCount; i++)
             {
                 b = stoiDForLogicalUnit(ArgV[ArgCIndex],
-                                       &Mapping->LUNList[i].TargetLUN);
+                                        &Mapping->LUNList[i].TargetLUN);
 
                 if (b == FALSE)
                 {
@@ -5082,7 +5330,7 @@ ISDSC_STATUS AddTarget(
                     printf("OSBus number must be the same for all LUNs\n");
                     return(ERROR_INVALID_PARAMETER);
                 }
-                
+
                 ArgCIndex++;        // target
                 x = stoi(ArgV[ArgCIndex]);
                 if (x != Mapping->OSTargetNumber)
@@ -5090,24 +5338,26 @@ ISDSC_STATUS AddTarget(
                     printf("OSTarget number must be the same for all LUNs\n");
                     return(ERROR_INVALID_PARAMETER);
                 }
-                
-                ArgCIndex++;                
+
+                ArgCIndex++;
                 Mapping->LUNList[i].OSLUN = stoi(ArgV[ArgCIndex]);
-                ArgCIndex++;                
+                ArgCIndex++;
             }
-        } else {
+        }
+        else
+        {
             Mapping = NULL;
         }
-                
+
         Status = AddIScsiStaticTarget(TargetName,
-                                       TargetAlias,
+                                      TargetAlias,
                                       TargetFlags,               // TargetFlags
-                                       Persist,           // Persist
+                                      Persist,           // Persist
                                       Mapping,            // Mappings
                                       &LoginOptions,            // LoginOptions
                                       PortalGroup.Count == 0 ?
-                                          NULL :
-                                          &PortalGroup);
+                                      NULL :
+                                      &PortalGroup);
         if (Mapping != NULL)
         {
             Free(Mapping);
@@ -5120,7 +5370,7 @@ ISDSC_STATUS AddTarget(
 ISDSC_STATUS AddiSNSServerX(
     int ArgC,
     __in_ecount(ArgC) PTCHAR *ArgV
-    )
+)
 //  iscsicli AddiSNSServer <Server name>
 {
     ISDSC_STATUS Status;
@@ -5143,7 +5393,7 @@ ISDSC_STATUS AddiSNSServerX(
 ISDSC_STATUS RemoveiSNSServerX(
     int ArgC,
     __in_ecount(ArgC) PTCHAR *ArgV
-    )
+)
 //  iscsicli RemoveiSNSServer <Server name>
 {
     ISDSC_STATUS Status;
@@ -5164,7 +5414,7 @@ ISDSC_STATUS RemoveiSNSServerX(
 ISDSC_STATUS RefreshiSNSServer(
     int ArgC,
     __in_ecount(ArgC) PTCHAR *ArgV
-    )
+)
 //  iscsicli RefreshiSNSServer <Server name>
 {
     ISDSC_STATUS Status;
@@ -5179,7 +5429,9 @@ ISDSC_STATUS RefreshiSNSServer(
     if (*ArgV[2] == TEXT('*'))
     {
         ServerName = NULL;
-    } else {
+    }
+    else
+    {
         ServerName = ArgV[2];
     }
 
@@ -5191,7 +5443,7 @@ ISDSC_STATUS RefreshiSNSServer(
 ISDSC_STATUS ListiSNSServers(
     int ArgC,
     __in_ecount(ArgC) PTCHAR *ArgV
-    )
+)
 //    printf("iscsicli ListiSNSServer\n");
 {
     ISDSC_STATUS Status;
@@ -5223,13 +5475,15 @@ ISDSC_STATUS ListiSNSServers(
                     printf("    %ws\n", b);
 #else
                     printf("    %s\n", b);;
-#endif                  
+#endif
                     Len += Size;
                 }
             }
             Free(Buffer);
         }
-    } else if (Status == ERROR_SUCCESS) {
+    }
+    else if (Status == ERROR_SUCCESS)
+    {
         printf("No SNS Servers\n");
     }
 
@@ -5240,7 +5494,7 @@ ISDSC_STATUS BuildLoginOptionsForCHAP(
     IN __in PTSTR CHAPUsername,
     IN __in PTSTR CHAPPassword,
     OUT PISCSI_LOGIN_OPTIONS *LoginOptionsPtr
-    )
+)
 /*++
 
 Routine Description:
@@ -5265,7 +5519,7 @@ Return Value:
     ISDSC_STATUS Status;
     PISCSI_LOGIN_OPTIONS LoginOptions;
     PTCHAR Secret;
-    
+
     LoginOptions = Alloc(sizeof(ISCSI_LOGIN_OPTIONS));
     if (LoginOptions != NULL)
     {
@@ -5276,19 +5530,21 @@ Return Value:
                                              ISCSI_LOGIN_OPTIONS_PASSWORD |
                                              ISCSI_LOGIN_OPTIONS_AUTH_TYPE;
         LoginOptions->AuthType = ISCSI_CHAP_AUTH_TYPE;
-        
+
         if ((*CHAPUsername == TEXT('-')) || (*CHAPUsername == TEXT('*')))
         {
             LoginOptions->Username = NULL;
             LoginOptions->UsernameLength = 0;
             Status = ERROR_SUCCESS;
-        } else {
+        }
+        else
+        {
 #ifdef UNICODE
             LoginOptions->Username = NULL;
             Status = DiscpUnicodeToAnsi(
-                                        CHAPUsername,
-                                        (LPSTR *)&LoginOptions->Username,
-                                        0);
+                         CHAPUsername,
+                         (LPSTR *)&LoginOptions->Username,
+                         0);
 #else
             LoginOptions->Username = CHAPUsername;
             Status = ERROR_SUCCESS;
@@ -5306,22 +5562,26 @@ Return Value:
                 LoginOptions->Password = NULL;
                 LoginOptions->PasswordLength = 0;
                 Status = ERROR_SUCCESS;
-            } else {
+            }
+            else
+            {
                 Secret = CHAPPassword;
                 if ((Secret[0] == TEXT('0')) &&
-                    ((Secret[1] == TEXT('X')) ||
-                     (Secret[1] == TEXT('x'))))
+                        ((Secret[1] == TEXT('X')) ||
+                         (Secret[1] == TEXT('x'))))
                 {
                     Status = ParseHexString(Secret+2,
                                             &LoginOptions->Password,
-                                            &LoginOptions->PasswordLength);                 
-                } else {
+                                            &LoginOptions->PasswordLength);
+                }
+                else
+                {
 #ifdef UNICODE
                     LoginOptions->Password = NULL;
                     Status = DiscpUnicodeToAnsi(
-                                       CHAPPassword,
-                                       (LPSTR *)&LoginOptions->Password,
-                                       0);
+                                 CHAPPassword,
+                                 (LPSTR *)&LoginOptions->Password,
+                                 0);
 #else
                     LoginOptions->Password = CHAPPassword;
                     Status = ERROR_SUCCESS;
@@ -5338,7 +5598,9 @@ Return Value:
                 *LoginOptionsPtr = LoginOptions;
             }
         }
-    } else {
+    }
+    else
+    {
         Status = ERROR_NOT_ENOUGH_MEMORY;
     }
 
@@ -5347,7 +5609,7 @@ Return Value:
 ISDSC_STATUS QLoginTarget(
     int ArgC,
     __in_ecount(ArgC) PTCHAR *ArgV
-    )
+)
 //  printf("iscsicli QLoginTarget <TargetName>  [CHAP Username] [CHAP Password]\n");
 {
     ISDSC_STATUS Status;
@@ -5372,7 +5634,9 @@ ISDSC_STATUS QLoginTarget(
         Status = BuildLoginOptionsForCHAP(CHAPUsername,
                                           CHAPPassword,
                                           &LoginOptions);
-    } else {
+    }
+    else
+    {
         LoginOptions = NULL;
         Status = ERROR_SUCCESS;
     }
@@ -5392,7 +5656,7 @@ ISDSC_STATUS QLoginTarget(
                                   FALSE,        // IsPersistent,
                                   &SessionId,
                                   &ConnectionId);
-        
+
         if (Status == ERROR_SUCCESS)
         {
             printf("Session Id is 0x%I64x-0x%I64x\n",
@@ -5419,14 +5683,14 @@ ISDSC_STATUS QLoginTarget(
 #endif
         Free(LoginOptions);
     }
-    
+
     return(Status);
 }
 
 ISDSC_STATUS QAddTarget(
     int ArgC,
     __in_ecount(ArgC) PTCHAR *ArgV
-    )
+)
 //  printf("iscsicli QAddTarget <TargetName> <TargetPortalAddress>\n");
 {
     ISDSC_STATUS Status;
@@ -5441,8 +5705,8 @@ ISDSC_STATUS QAddTarget(
     }
 
     TargetName = ArgV[2];
-    
-    if (*ArgV[3] != TEXT('*')) 
+
+    if (*ArgV[3] != TEXT('*'))
     {
         TargetPortalAddress = ArgV[3];
         if (_tcslen(TargetPortalAddress) > (MAX_ISCSI_PORTAL_ADDRESS_LEN-1))
@@ -5457,7 +5721,9 @@ ISDSC_STATUS QAddTarget(
                            TargetPortalAddress);
 
         PortalGroup.Portals[0].Socket = 3260;
-    } else {
+    }
+    else
+    {
         PortalGroup.Count = 0;
         *PortalGroup.Portals[0].Address = 0;
     }
@@ -5469,17 +5735,17 @@ ISDSC_STATUS QAddTarget(
                                   NULL,             // Mappings
                                   NULL,             // LoginOptions
                                   &PortalGroup);
-    
-    
-    
+
+
+
     return(Status);
 }
 
 ISDSC_STATUS QAddTargetPortal(
     int ArgC,
     __in_ecount(ArgC) PTCHAR *ArgV
-    )
-//      printf("iscsicli QAddTargetPortal <TargetPortalAddress> 
+)
+//      printf("iscsicli QAddTargetPortal <TargetPortalAddress>
 //      printf("                          [CHAP Username] [CHAP Password]\n"
 {
     ISDSC_STATUS Status;
@@ -5500,15 +5766,15 @@ ISDSC_STATUS QAddTargetPortal(
     {
         return(ERROR_INVALID_PARAMETER);
     }
-    
+
     hr = StringCchCopy(TargetPortal.Address,
                        MAX_ISCSI_PORTAL_ADDRESS_LEN,
                        TargetPortalAddress);
-    
+
     TargetPortal.Address[MAX_ISCSI_PORTAL_ADDRESS_LEN-1] = 0;
     TargetPortal.Socket = 3260;
     *TargetPortal.SymbolicName = 0;
-    
+
     if (ArgC == 5)
     {
         CHAPUsername = ArgV[3];
@@ -5517,7 +5783,9 @@ ISDSC_STATUS QAddTargetPortal(
         Status = BuildLoginOptionsForCHAP(CHAPUsername,
                                           CHAPPassword,
                                           &LoginOptions);
-    } else {
+    }
+    else
+    {
         LoginOptions = NULL;
         Status = ERROR_SUCCESS;
     }
@@ -5529,7 +5797,7 @@ ISDSC_STATUS QAddTargetPortal(
                                           LoginOptions,
                                           0,        // SecurityFlags,
                                           &TargetPortal);
-    }   
+    }
 
     if (LoginOptions != NULL)
     {
@@ -5546,14 +5814,14 @@ ISDSC_STATUS QAddTargetPortal(
 #endif
         Free(LoginOptions);
     }
-    
+
     return(Status);
 }
 
 ISDSC_STATUS QAddConnection(
     int ArgC,
     __in_ecount(ArgC) PTCHAR *ArgV
-    )
+)
 //      printf("iscsicli QAddConnection <SessionId> <Initiator Instance>\n");
 //      printf("                        <Target Portal Address>
 //      printf("                        [CHAP Username] [CHAP Password]\n");
@@ -5581,7 +5849,7 @@ ISDSC_STATUS QAddConnection(
     }
 
     InitiatorName = ArgV[3];
-    
+
     if (*ArgV[4] != TEXT('*'))
     {
         TargetPortalAddress = ArgV[4];
@@ -5593,14 +5861,16 @@ ISDSC_STATUS QAddConnection(
         hr = StringCchCopy(TargetPortal.Address,
                            MAX_ISCSI_PORTAL_ADDRESS_LEN,
                            TargetPortalAddress);
-        
+
         TargetPortal.Socket = 3260;
         *TargetPortal.SymbolicName = 0;
-        
-    } else {
+
+    }
+    else
+    {
         TargetPortalAddress = TEXT("");
     }
-    
+
     if (ArgC == 7)
     {
         CHAPUsername = ArgV[5];
@@ -5609,7 +5879,9 @@ ISDSC_STATUS QAddConnection(
         Status = BuildLoginOptionsForCHAP(CHAPUsername,
                                           CHAPPassword,
                                           &LoginOptions);
-    } else {
+    }
+    else
+    {
         LoginOptions = NULL;
         Status = ERROR_SUCCESS;
     }
@@ -5620,12 +5892,12 @@ ISDSC_STATUS QAddConnection(
                                     InitiatorName,
                                     ISCSI_ANY_INITIATOR_PORT,
                                     *TargetPortalAddress == 0 ?
-                                                    NULL : &TargetPortal,
+                                    NULL : &TargetPortal,
                                     0,              // SecurityFlags,
                                     LoginOptions,
                                     0,              // KeySize,
                                     NULL,           // Key
-                                    &ConnectionId); 
+                                    &ConnectionId);
 
         if (Status == ERROR_SUCCESS)
         {
@@ -5650,7 +5922,7 @@ ISDSC_STATUS QAddConnection(
 #endif
         Free(LoginOptions);
     }
-    
+
     return(Status);
 }
 
@@ -5659,14 +5931,14 @@ VOID __cdecl PrintErrorMessage(
     DWORD dwError,
     __in_opt LPTSTR szFmt,
     ...
-    )
+)
 {
     LPTSTR  szT;
     va_list arglist;
     LPTSTR  szErrMessage = NULL;
 
     FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM,
-        NULL, dwError, 0/*LANG_USER_DEFAULT*/, (LPTSTR)&szErrMessage, 0, NULL);
+                  NULL, dwError, 0/*LANG_USER_DEFAULT*/, (LPTSTR)&szErrMessage, 0, NULL);
     if(szFmt && szErrMessage)
     {
         for(szT = szErrMessage; *szT; szT++)
@@ -5704,7 +5976,7 @@ ISDSC_STATUS PerformCommandLine(
     int argc,
     __in_ecount(argc) char *argv[]
 #endif
-    )
+)
 {
     int ArgC;
     PTCHAR *ArgV;
@@ -5727,164 +5999,250 @@ ISDSC_STATUS PerformCommandLine(
             {
                 Status = AddTarget(ArgC, ArgV);
 
-            // RemoveIScsiStaticTarget          
-            } else if (_tcsicmp(ArgV[1], TEXT("RemoveTarget")) == 0) {
+                // RemoveIScsiStaticTarget
+            }
+            else if (_tcsicmp(ArgV[1], TEXT("RemoveTarget")) == 0)
+            {
                 Status = RemoveTarget(ArgC, ArgV);
 
-            // AddIScsiSendTargetPortal         
-            } else if (_tcsicmp(ArgV[1], TEXT("AddTargetPortal")) == 0) {
+                // AddIScsiSendTargetPortal
+            }
+            else if (_tcsicmp(ArgV[1], TEXT("AddTargetPortal")) == 0)
+            {
                 Status = AddTargetPortal(ArgC, ArgV);
 
-            // RemoveIScsiSendTargetPortal          
-            } else if (_tcsicmp(ArgV[1], TEXT("RemoveTargetPortal")) == 0) {
+                // RemoveIScsiSendTargetPortal
+            }
+            else if (_tcsicmp(ArgV[1], TEXT("RemoveTargetPortal")) == 0)
+            {
                 Status = RemoveTargetPortal(ArgC,ArgV);
 
-            // RefreshIScsiSendTargetPortal         
-            } else if (_tcsicmp(ArgV[1], TEXT("RefreshTargetPortal")) == 0) {
+                // RefreshIScsiSendTargetPortal
+            }
+            else if (_tcsicmp(ArgV[1], TEXT("RefreshTargetPortal")) == 0)
+            {
                 Status = RefreshTargetPortal(ArgC,ArgV);
 
-            // ReportIScsiSendTargetPortals         
-            } else if (_tcsicmp(ArgV[1], TEXT("ListTargetPortals")) == 0) {
+                // ReportIScsiSendTargetPortals
+            }
+            else if (_tcsicmp(ArgV[1], TEXT("ListTargetPortals")) == 0)
+            {
                 Status = ListTargetPortals(ArgC,ArgV);
 
-            // ReportTargets            
-            } else if (_tcsicmp(ArgV[1], TEXT("ListTargets")) == 0) {
+                // ReportTargets
+            }
+            else if (_tcsicmp(ArgV[1], TEXT("ListTargets")) == 0)
+            {
                 Status = ListTargets(ArgC,ArgV);
 
-            // GetTargetInformation         
-            } else if (_tcsicmp(ArgV[1], TEXT("TargetInfo")) == 0) {
+                // GetTargetInformation
+            }
+            else if (_tcsicmp(ArgV[1], TEXT("TargetInfo")) == 0)
+            {
                 Status = TargetInfo(ArgC,ArgV);
 
-            // LoginTarget          
-            } else if (_tcsicmp(ArgV[1], TEXT("LoginTarget")) == 0) {
+                // LoginTarget
+            }
+            else if (_tcsicmp(ArgV[1], TEXT("LoginTarget")) == 0)
+            {
                 Status = TryLoginToTarget(ArgC,ArgV);
 
-            // PersistentLoginTarget          
-            } else if (_tcsicmp(ArgV[1], TEXT("PersistentLoginTarget")) == 0) {
+                // PersistentLoginTarget
+            }
+            else if (_tcsicmp(ArgV[1], TEXT("PersistentLoginTarget")) == 0)
+            {
                 Status = PersistentLoginTarget(ArgC,ArgV);
 
-            // RemovePersistentTarget
-            } else if (_tcsicmp(ArgV[1], TEXT("RemovePersistentTarget")) == 0) {
+                // RemovePersistentTarget
+            }
+            else if (_tcsicmp(ArgV[1], TEXT("RemovePersistentTarget")) == 0)
+            {
                 Status = RemovePersistentTarget(ArgC,ArgV);
 
-            // ListPersistentTarget
-            } else if (_tcsicmp(ArgV[1], TEXT("ListPersistentTargets")) == 0) {
+                // ListPersistentTarget
+            }
+            else if (_tcsicmp(ArgV[1], TEXT("ListPersistentTargets")) == 0)
+            {
                 Status = ListPersistentTarget(ArgC,ArgV);
 
-            // LogoutTarget         
-            } else if (_tcsicmp(ArgV[1], TEXT("LogoutTarget")) == 0) {
+                // LogoutTarget
+            }
+            else if (_tcsicmp(ArgV[1], TEXT("LogoutTarget")) == 0)
+            {
                 Status = DoLogoutTarget(ArgC,ArgV);
 
-            // ReportInitiatorList          
-            } else if (_tcsicmp(ArgV[1], TEXT("ListInitiators")) == 0) {
+                // ReportInitiatorList
+            }
+            else if (_tcsicmp(ArgV[1], TEXT("ListInitiators")) == 0)
+            {
                 Status = DoReportInitiatorList(ArgC,ArgV);
 
-            // ReportActiveIScsiTargetMappings
-            } else if (_tcsicmp(ArgV[1], TEXT("ReportTargetMappings")) == 0) {
+                // ReportActiveIScsiTargetMappings
+            }
+            else if (_tcsicmp(ArgV[1], TEXT("ReportTargetMappings")) == 0)
+            {
                 Status = DoReportActiveIScsiTargetMappings(ArgC,ArgV);
 
-            // AddConnection            
-            } else if (_tcsicmp(ArgV[1], TEXT("AddConnection")) == 0) {
+                // AddConnection
+            }
+            else if (_tcsicmp(ArgV[1], TEXT("AddConnection")) == 0)
+            {
                 Status = DoAddConnection(ArgC,ArgV);
 
-            // RemoveConnection
-            } else if (_tcsicmp(ArgV[1], TEXT("RemoveConnection")) == 0) {
+                // RemoveConnection
+            }
+            else if (_tcsicmp(ArgV[1], TEXT("RemoveConnection")) == 0)
+            {
                 Status = DoRemoveConnection(ArgC,ArgV);
 
-            // SendScsiInquiry          
-            } else if (_tcsicmp(ArgV[1], TEXT("ScsiInquiry")) == 0) {
+                // SendScsiInquiry
+            }
+            else if (_tcsicmp(ArgV[1], TEXT("ScsiInquiry")) == 0)
+            {
                 Status = DoScsiInquiry(ArgC,ArgV);
 
-            // SendScsiReadCapacity         
-            } else if (_tcsicmp(ArgV[1], TEXT("ReadCapacity")) == 0) {
+                // SendScsiReadCapacity
+            }
+            else if (_tcsicmp(ArgV[1], TEXT("ReadCapacity")) == 0)
+            {
                 Status = ReadCapacity(ArgC,ArgV);
 
-            // SendScsiReportLuns           
-            } else if (_tcsicmp(ArgV[1], TEXT("ReportLUNs")) == 0) {
+                // SendScsiReportLuns
+            }
+            else if (_tcsicmp(ArgV[1], TEXT("ReportLUNs")) == 0)
+            {
                 Status = ReportLUNs(ArgC,ArgV);
 
-            // AddiSNSServer
-            } else if (_tcsicmp(ArgV[1], TEXT("AddiSNSServer")) == 0) {
+                // AddiSNSServer
+            }
+            else if (_tcsicmp(ArgV[1], TEXT("AddiSNSServer")) == 0)
+            {
                 Status = AddiSNSServerX(ArgC,ArgV);
 
-            // RemoveiSNSServer
-            } else if (_tcsicmp(ArgV[1], TEXT("RemoveiSNSServer")) == 0) {
+                // RemoveiSNSServer
+            }
+            else if (_tcsicmp(ArgV[1], TEXT("RemoveiSNSServer")) == 0)
+            {
                 Status = RemoveiSNSServerX(ArgC,ArgV);
 
-            // ListiSNSServers
-            } else if (_tcsicmp(ArgV[1], TEXT("ListiSNSServers")) == 0) {
+                // ListiSNSServers
+            }
+            else if (_tcsicmp(ArgV[1], TEXT("ListiSNSServers")) == 0)
+            {
                 Status = ListiSNSServers(ArgC,ArgV);
 
-            // RefreshiSNSServer
-            } else if (_tcsicmp(ArgV[1], TEXT("RefreshiSNSServer")) == 0) {
+                // RefreshiSNSServer
+            }
+            else if (_tcsicmp(ArgV[1], TEXT("RefreshiSNSServer")) == 0)
+            {
                 Status = RefreshiSNSServer(ArgC,ArgV);
 
-            // TunnelAddr
-            } else if (_tcsicmp(ArgV[1], TEXT("TunnelAddr")) == 0) {
+                // TunnelAddr
+            }
+            else if (_tcsicmp(ArgV[1], TEXT("TunnelAddr")) == 0)
+            {
                 Status = TunnelAddress(ArgC,ArgV);
 
-            // GroupKey
-            } else if (_tcsicmp(ArgV[1], TEXT("GroupKey")) == 0) {
+                // GroupKey
+            }
+            else if (_tcsicmp(ArgV[1], TEXT("GroupKey")) == 0)
+            {
                 Status = GroupKey(ArgC,ArgV);
 
-            // PSKey
-            } else if (_tcsicmp(ArgV[1], TEXT("PSKey")) == 0) {
+                // PSKey
+            }
+            else if (_tcsicmp(ArgV[1], TEXT("PSKey")) == 0)
+            {
                 Status = PSKey(ArgC,ArgV);
 
-            // CHAPSecret
-            } else if (_tcsicmp(ArgV[1], TEXT("CHAPSecret")) == 0) {
+                // CHAPSecret
+            }
+            else if (_tcsicmp(ArgV[1], TEXT("CHAPSecret")) == 0)
+            {
                 Status = CHAPSecret(ArgC,ArgV);
 
-            } else if (_tcsicmp(ArgV[1], TEXT("NodeName")) == 0) {
+            }
+            else if (_tcsicmp(ArgV[1], TEXT("NodeName")) == 0)
+            {
                 Status = NodeName(ArgC,ArgV);
 
-            } else if (_tcsicmp(ArgV[1], TEXT("SessionList")) == 0) {
+            }
+            else if (_tcsicmp(ArgV[1], TEXT("SessionList")) == 0)
+            {
                 Status = SessionList(ArgC,ArgV);
 
-            } else if (_tcsicmp(ArgV[1], TEXT("BindPersistentVolumes")) == 0) {
+            }
+            else if (_tcsicmp(ArgV[1], TEXT("BindPersistentVolumes")) == 0)
+            {
                 Status = BindPeristentVolumes(ArgC,ArgV);
 
-            } else if (_tcsicmp(ArgV[1], TEXT("BindPersistentDevices")) == 0) {
+            }
+            else if (_tcsicmp(ArgV[1], TEXT("BindPersistentDevices")) == 0)
+            {
                 Status = BindPeristentVolumes(ArgC,ArgV);
 
-            } else if (_tcsicmp(ArgV[1], TEXT("AddPersistentDevice")) == 0) {
+            }
+            else if (_tcsicmp(ArgV[1], TEXT("AddPersistentDevice")) == 0)
+            {
                 Status = AddPersistentVolume(ArgC,ArgV);
 
-            } else if (_tcsicmp(ArgV[1], TEXT("RemovePersistentDevice")) == 0) {
+            }
+            else if (_tcsicmp(ArgV[1], TEXT("RemovePersistentDevice")) == 0)
+            {
                 Status = RemovePersistentVolume(ArgC,ArgV);
 
-            } else if (_tcsicmp(ArgV[1], TEXT("ClearPersistentDevices")) == 0) {
+            }
+            else if (_tcsicmp(ArgV[1], TEXT("ClearPersistentDevices")) == 0)
+            {
                 Status = ClearPersistentVolumes(ArgC,ArgV);
 
-            } else if (_tcsicmp(ArgV[1], TEXT("ReportPersistentDevices")) == 0) {
+            }
+            else if (_tcsicmp(ArgV[1], TEXT("ReportPersistentDevices")) == 0)
+            {
                 Status = ReportPersistentVolumes(ArgC,ArgV);
 
-            } else if (_tcsicmp(ArgV[1], TEXT("GetPSKey")) == 0) {
+            }
+            else if (_tcsicmp(ArgV[1], TEXT("GetPSKey")) == 0)
+            {
                 Status = GetPSKey(ArgC,ArgV);
 
-            } else if (_tcsicmp(ArgV[1], TEXT("QLoginTarget")) == 0) {
+            }
+            else if (_tcsicmp(ArgV[1], TEXT("QLoginTarget")) == 0)
+            {
                 Status = QLoginTarget(ArgC,ArgV);
 
-            } else if (_tcsicmp(ArgV[1], TEXT("QAddTarget")) == 0) {
+            }
+            else if (_tcsicmp(ArgV[1], TEXT("QAddTarget")) == 0)
+            {
                 Status = QAddTarget(ArgC,ArgV);
 
-            } else if (_tcsicmp(ArgV[1], TEXT("QAddTargetPortal")) == 0) {
+            }
+            else if (_tcsicmp(ArgV[1], TEXT("QAddTargetPortal")) == 0)
+            {
                 Status = QAddTargetPortal(ArgC,ArgV);
 
-            } else if (_tcsicmp(ArgV[1], TEXT("QAddConnection")) == 0) {
+            }
+            else if (_tcsicmp(ArgV[1], TEXT("QAddConnection")) == 0)
+            {
                 Status = QAddConnection(ArgC,ArgV);
 
 
-            } else {
+            }
+            else
+            {
                 Usage(0);
                 Status = ERROR_SUCCESS;
             }
-        } else {
+        }
+        else
+        {
             Usage(0);
             Status = ERROR_SUCCESS;
         }
 
-    } else {
+    }
+    else
+    {
         Status = ERROR_NOT_ENOUGH_MEMORY;
     }
 #ifdef UNICODE
@@ -5915,7 +6273,7 @@ int _cdecl main(int argc, __in_ecount(argc) char *argv[])
     ISCSI_VERSION_INFO iSCSIVer;
     HRESULT hr;
     WORD wVersionRequested;
-    WSADATA DiscpWsaData;   
+    WSADATA DiscpWsaData;
     UNREFERENCED_PARAMETER(argv);
 
     Status = GetIScsiVersionInformation(&iSCSIVer);
@@ -5923,7 +6281,7 @@ int _cdecl main(int argc, __in_ecount(argc) char *argv[])
     {
         printf("Microsoft iSCSI Initiator Version %d.%d\n\n",
                iSCSIVer.MajorVersion,
-               iSCSIVer.MinorVersion  
+               iSCSIVer.MinorVersion
               );
     }
 
@@ -5934,14 +6292,14 @@ int _cdecl main(int argc, __in_ecount(argc) char *argv[])
     {
         if (argc == 1)
         {
-#ifdef UNICODE    
+#ifdef UNICODE
             while (! feof(stdin))
             {
                 Status = GetIScsiInitiatorNodeName(NodeName);
                 if (Status == ERROR_SUCCESS)
                 {
                     printf("[%ws] Enter command or ^C to exit\n", NodeName);
-                    if (_fgetts(s, INPUT_BUFFER_SIZE, stdin) != NULL) 
+                    if (_fgetts(s, INPUT_BUFFER_SIZE, stdin) != NULL)
                     {
                         hr = StringCchCopy(s1,
                                            INPUT_BUFFER_SIZE,
@@ -5956,9 +6314,11 @@ int _cdecl main(int argc, __in_ecount(argc) char *argv[])
                         }
                         Status = PerformCommandLine(s1);
                     }
-                } else {
+                }
+                else
+                {
 #ifdef UNICODE
-                    printf("Error getting node name: %ws\n", 
+                    printf("Error getting node name: %ws\n",
                            GetiSCSIMessageText(m, MAX_PATH, Status));
 #else
                     printf("Error getting node name: %s\n",
@@ -5975,7 +6335,9 @@ int _cdecl main(int argc, __in_ecount(argc) char *argv[])
                 printf("Running on node name %s\n", NodeName);
             }
 #endif
-        } else {
+        }
+        else
+        {
 #ifdef UNICODE
             Status = PerformCommandLine(GetCommandLineW());
 #else
@@ -5983,11 +6345,13 @@ int _cdecl main(int argc, __in_ecount(argc) char *argv[])
 #endif
         }
         WSACleanup();
-    } else {
-        printf("Error setting up Windows sockets: %ws\n",
-               GetiSCSIMessageText(m, MAX_PATH, Status));              
     }
-    
+    else
+    {
+        printf("Error setting up Windows sockets: %ws\n",
+               GetiSCSIMessageText(m, MAX_PATH, Status));
+    }
+
     return(Status);
 }
 

@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -8,29 +8,29 @@
 // MTManipulation application
 // Description:
 //  This application will initially draw rectangle in the center of client area
-//  (including diagonals). The user can manipulate the rectangle using his/her 
+//  (including diagonals). The user can manipulate the rectangle using his/her
 //  fingers. The available commands are:
-//      - rectangle stretch 
-//          By putting two fingers on the screen and modifying distance between 
+//      - rectangle stretch
+//          By putting two fingers on the screen and modifying distance between
 //          them by moving fingers in the opposite directions or towards each
 //          other the user can zoom in/out this rectangle.
 //      - panning
-//          By touching the screen with two fingers and moving them in the same 
+//          By touching the screen with two fingers and moving them in the same
 //          direction the user can move the rectangle. Also it's possible to pan
 //          object by using single finger (SFP - single finger panning)
 //      - rotate
-//          By putting one finger in the center of the rotation and then rotating 
+//          By putting one finger in the center of the rotation and then rotating
 //          the other finger around it the user can rotate the rectangle
 //
 // Purpose:
-//  This application demonstrate how to use _IManipulationEvents interface to 
+//  This application demonstrate how to use _IManipulationEvents interface to
 //  handle WM_TOUCH message to manipulate objects.
 //
-//  Manipulations are used to simplify 2D transformation operations on objects for 
-//  touch-enabled applications. By using manipulations, developers can more easily 
-//  perform transformations on objects in a way that is consistent with other 
-//  applications. 2D transformations resulting from applying system gestures zoom, 
-//  pan, and rotate, may be implemented using Manipulations and raw touch input 
+//  Manipulations are used to simplify 2D transformation operations on objects for
+//  touch-enabled applications. By using manipulations, developers can more easily
+//  perform transformations on objects in a way that is consistent with other
+//  applications. 2D transformations resulting from applying system gestures zoom,
+//  pan, and rotate, may be implemented using Manipulations and raw touch input
 //  (WM_TOUCH).
 //
 // MTManipulation.cpp : Defines the entry point for the application.
@@ -48,15 +48,15 @@
 #include "CManipulationEventSink.h" // contains definition of the CManipulationEventSink class  
 
 #define MAX_LOADSTRING 100
-    
-// Set up a variable to point to the manipulation event sink implementation class    
-CManipulationEventSink* g_pManipulationEventSink = NULL;    
-       
+
+// Set up a variable to point to the manipulation event sink implementation class
+CManipulationEventSink* g_pManipulationEventSink = NULL;
+
 // Pointer to a global reference of a manipulation processor event sink
-IManipulationProcessor* g_pIManipProc = NULL;     
+IManipulationProcessor* g_pIManipProc = NULL;
 
 CDrawingObject g_cRect; // CDrawingObject class holds information about the rectangle
-                        // and it is responsible for painting the rectangle
+// and it is responsible for painting the rectangle
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -86,7 +86,7 @@ int APIENTRY wWinMain(HINSTANCE hInstance,
     MSG msg;
 
     // Initialize COM
-    HRESULT hr = CoInitialize(0);       
+    HRESULT hr = CoInitialize(0);
     if (FAILED(hr))
     {
         ASSERT(SUCCEEDED(hr) && L"Failed to execute CoInitialize");
@@ -168,7 +168,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
     g_hInst = hInstance; // Store instance handle in our global variable
 
     hWnd = CreateWindow(g_wszWindowClass, g_wszTitle, WS_OVERLAPPEDWINDOW,
-        CW_USEDEFAULT, 0, CW_USEDEFAULT, 0, NULL, NULL, hInstance, NULL);
+                        CW_USEDEFAULT, 0, CW_USEDEFAULT, 0, NULL, NULL, hInstance, NULL);
 
     if (!hWnd)
     {
@@ -256,7 +256,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
     case WM_SIZE:
         // resize rectangle and place it in the center of the new client area
-        g_cRect.ResetObject(LOWORD(lParam),HIWORD(lParam));        
+        g_cRect.ResetObject(LOWORD(lParam),HIWORD(lParam));
         break;
 
     case WM_PAINT:
@@ -270,58 +270,58 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
     // WM_TOUCH message handlers
     case WM_TOUCH:
+    {
+        // WM_TOUCH message can contain several messages from different contacts
+        // packed together.
+        // Message parameters need to be decoded:
+        UINT  cInputs  = (int) wParam;      // Number of actual per-contact messages
+        TOUCHINPUT* pInputs = new TOUCHINPUT[cInputs]; // Allocate the storage for the parameters of the per-contact messages
+        if (pInputs == NULL)
         {
-            // WM_TOUCH message can contain several messages from different contacts
-            // packed together.
-            // Message parameters need to be decoded:
-            UINT  cInputs  = (int) wParam;      // Number of actual per-contact messages
-            TOUCHINPUT* pInputs = new TOUCHINPUT[cInputs]; // Allocate the storage for the parameters of the per-contact messages
-            if (pInputs == NULL)
+            break;
+        }
+        // Unpack message parameters into the array of TOUCHINPUT structures, each
+        // representing a message for one single contact.
+        if (GetTouchInputInfo((HTOUCHINPUT)lParam, cInputs, pInputs, sizeof(TOUCHINPUT)))
+        {
+            // For each contact, dispatch the message to the appropriate message
+            // handler.
+            for (unsigned int i = 0; i < cInputs; i++)
             {
-                break;
-            }
-            // Unpack message parameters into the array of TOUCHINPUT structures, each
-            // representing a message for one single contact.
-            if (GetTouchInputInfo((HTOUCHINPUT)lParam, cInputs, pInputs, sizeof(TOUCHINPUT)))
-            {
-                // For each contact, dispatch the message to the appropriate message
-                // handler.
-                for (unsigned int i = 0; i < cInputs; i++)
+                if (pInputs[i].dwFlags & TOUCHEVENTF_DOWN)
                 {
-                    if (pInputs[i].dwFlags & TOUCHEVENTF_DOWN)
-                    {
-                        g_pIManipProc->ProcessDown(pInputs[i].dwID, (FLOAT)pInputs[i].x, (FLOAT)pInputs[i].y);
-                    }
-                    else if (pInputs[i].dwFlags & TOUCHEVENTF_MOVE)
-                    {
-                        g_pIManipProc->ProcessMove(pInputs[i].dwID, (FLOAT)pInputs[i].x, (FLOAT)pInputs[i].y);
-                    }
-                    else if (pInputs[i].dwFlags & TOUCHEVENTF_UP)
-                    {
-                        g_pIManipProc->ProcessUp(pInputs[i].dwID, (FLOAT)pInputs[i].x, (FLOAT)pInputs[i].y);
-                    }
+                    g_pIManipProc->ProcessDown(pInputs[i].dwID, (FLOAT)pInputs[i].x, (FLOAT)pInputs[i].y);
+                }
+                else if (pInputs[i].dwFlags & TOUCHEVENTF_MOVE)
+                {
+                    g_pIManipProc->ProcessMove(pInputs[i].dwID, (FLOAT)pInputs[i].x, (FLOAT)pInputs[i].y);
+                }
+                else if (pInputs[i].dwFlags & TOUCHEVENTF_UP)
+                {
+                    g_pIManipProc->ProcessUp(pInputs[i].dwID, (FLOAT)pInputs[i].x, (FLOAT)pInputs[i].y);
                 }
             }
-            else
-            {
-                // error handling, presumably out of memory
-                ASSERT(FALSE && L"Error: failed to execute GetTouchInputInfo");
-                delete [] pInputs;
-                break;
-            }
-            if (!CloseTouchInputHandle((HTOUCHINPUT)lParam))
-            {
-                // error handling, presumably out of memory
-                ASSERT(FALSE && L"Error: failed to execute CloseTouchInputHandle");
-                delete [] pInputs;
-                break;
-            }
-            delete [] pInputs;
-
-            // Force redraw of the rectangle
-            InvalidateRect(hWnd, NULL, TRUE);
         }
-        break;
+        else
+        {
+            // error handling, presumably out of memory
+            ASSERT(FALSE && L"Error: failed to execute GetTouchInputInfo");
+            delete [] pInputs;
+            break;
+        }
+        if (!CloseTouchInputHandle((HTOUCHINPUT)lParam))
+        {
+            // error handling, presumably out of memory
+            ASSERT(FALSE && L"Error: failed to execute CloseTouchInputHandle");
+            delete [] pInputs;
+            break;
+        }
+        delete [] pInputs;
+
+        // Force redraw of the rectangle
+        InvalidateRect(hWnd, NULL, TRUE);
+    }
+    break;
 
     case WM_DESTROY:
         // Clean up of application data: unregister window for multi-touch.
@@ -332,8 +332,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         ASSERT(!IsTouchWindow(hWnd, NULL));
 
         // COM objects must be released before CoUninitialize
-        // Release ManipulationEventSink object 
-        if (g_pManipulationEventSink != NULL) 
+        // Release ManipulationEventSink object
+        if (g_pManipulationEventSink != NULL)
         {
             // Terminate the connection between ManipulationEventSink and ManipulationProcessor
             if (!g_pManipulationEventSink->Disconnect())

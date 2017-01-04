@@ -1,4 +1,4 @@
-//==========================================================================
+﻿//==========================================================================
 //
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
@@ -25,10 +25,10 @@
 
 void GiveUsage(LPTSTR AppName)
 {
-        _tprintf( TEXT("Usage : %s \n \
+    _tprintf( TEXT("Usage : %s \n \
             /o <cansendtofax> or <sendtofax> \n \
             /d Document that is to be sent as Fax  \n"),AppName);
-        _tprintf( TEXT("Usage : %s /? -- help message\n"),AppName);
+    _tprintf( TEXT("Usage : %s /? -- help message\n"),AppName);
 }
 
 //+---------------------------------------------------------------------------
@@ -45,20 +45,20 @@ void GiveUsage(LPTSTR AppName)
 
 bool IsOSVersionCompatible(DWORD dwVersion)
 {
-        OSVERSIONINFOEX osvi;
-        BOOL bOsVersionInfoEx;
+    OSVERSIONINFOEX osvi;
+    BOOL bOsVersionInfoEx;
 
-        ZeroMemory(&osvi, sizeof(OSVERSIONINFOEX));
-        osvi.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEX);
-        bOsVersionInfoEx = GetVersionEx ((OSVERSIONINFO *) &osvi);
-        if( !bOsVersionInfoEx  )
-        {
-                osvi.dwOSVersionInfoSize = sizeof (OSVERSIONINFO);
-                if (! GetVersionEx ( (OSVERSIONINFO *) &osvi) ) 
-                        return false;
-        }
-        bOsVersionInfoEx = (osvi.dwMajorVersion >= dwVersion );
-        return (bOsVersionInfoEx == TRUE);
+    ZeroMemory(&osvi, sizeof(OSVERSIONINFOEX));
+    osvi.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEX);
+    bOsVersionInfoEx = GetVersionEx ((OSVERSIONINFO *) &osvi);
+    if( !bOsVersionInfoEx  )
+    {
+        osvi.dwOSVersionInfoSize = sizeof (OSVERSIONINFO);
+        if (! GetVersionEx ( (OSVERSIONINFO *) &osvi) )
+            return false;
+    }
+    bOsVersionInfoEx = (osvi.dwMajorVersion >= dwVersion );
+    return (bOsVersionInfoEx == TRUE);
 }
 //+---------------------------------------------------------------------------
 //
@@ -73,201 +73,201 @@ bool IsOSVersionCompatible(DWORD dwVersion)
 //----------------------------------------------------------------------------
 
 bool CorrectString(LPTSTR inputDocListString)
-{      
-        bool bRetVal = false;
-        if(NULL == inputDocListString)
-        {
-                return false;
-        }
+{
+    bool bRetVal = false;
+    if(NULL == inputDocListString)
+    {
+        return false;
+    }
 
-        HRESULT hr = S_OK;      
-        size_t iStrLen = 0;
+    HRESULT hr = S_OK;
+    size_t iStrLen = 0;
 
-        hr = StringCchLength( inputDocListString,  2056 , &iStrLen);
-        if(FAILED(hr))
+    hr = StringCchLength( inputDocListString,  2056, &iStrLen);
+    if(FAILED(hr))
+    {
+        _tprintf(_T("StringCchLength of inputDocListString failed.  Error 0x%x"), hr);
+        bRetVal = false;
+        goto Exit;
+    }
+
+    //Replace ; with space
+    size_t i = 0;
+    while(i < iStrLen)
+    {
+        if(inputDocListString[i] == ';')
         {
-                _tprintf(_T("StringCchLength of inputDocListString failed.  Error 0x%x"), hr);
-                bRetVal = false;
-                goto Exit;
+            (inputDocListString)[i] = ' ';
         }
-  
-        //Replace ; with space
-        size_t i = 0;
-        while(i < iStrLen)
-        {                            
-                if(inputDocListString[i] == ';')
-                {
-                    (inputDocListString)[i] = ' ';
-                }
-                i++;
-        }
-        bRetVal = true;
-Exit:        
-        return bRetVal;
+        i++;
+    }
+    bRetVal = true;
+Exit:
+    return bRetVal;
 
 }
 
 int  __cdecl _tmain(int argc, _TCHAR* argv[])
 {
-        HRESULT hr = S_OK;
-        bool bRetVal = true;
-        LPTSTR lptstrOption = NULL;
-        LPTSTR lptstrDoc = NULL;
-        bool bConnected = false;
-        bool bResult = false;
-        int argcount = 0;
-        size_t argSize = 0;
-        DWORD dwRet = 0;
-        bool bFlag = false;
-        bool bVersion = IsOSVersionCompatible(VISTA);
+    HRESULT hr = S_OK;
+    bool bRetVal = true;
+    LPTSTR lptstrOption = NULL;
+    LPTSTR lptstrDoc = NULL;
+    bool bConnected = false;
+    bool bResult = false;
+    int argcount = 0;
+    size_t argSize = 0;
+    DWORD dwRet = 0;
+    bool bFlag = false;
+    bool bVersion = IsOSVersionCompatible(VISTA);
 
-        //Check is OS is Vista
-        if(bVersion == false)
-        {
-                _tprintf(_T("This sample is compatible with Windows Vista"));
-                bRetVal = false;
-                goto Exit;
-        }
+    //Check is OS is Vista
+    if(bVersion == false)
+    {
+        _tprintf(_T("This sample is compatible with Windows Vista"));
+        bRetVal = false;
+        goto Exit;
+    }
 
 #ifdef UNICODE
-        argv = CommandLineToArgvW( GetCommandLine(), &argc );
+    argv = CommandLineToArgvW( GetCommandLine(), &argc );
 #else
-        argv = argvA;
+    argv = argvA;
 #endif
 
-        if (argc == 1)
+    if (argc == 1)
+    {
+        _tprintf( TEXT("Missing args.\n") );
+        GiveUsage(argv[0]);
+        bRetVal = false;
+        goto Exit;
+    }
+
+
+    // check for commandline switches
+    for (argcount=1; argcount<argc; argcount++)
+    {
+        if(argcount + 1 < argc)
         {
-                _tprintf( TEXT("Missing args.\n") );
-                GiveUsage(argv[0]);
-                bRetVal = false;
-                goto Exit;
-        }
-
-
-        // check for commandline switches
-        for (argcount=1; argcount<argc; argcount++)
-        {                  
-                if(argcount + 1 < argc)
+            hr = StringCbLength(argv[argcount + 1],1024 * sizeof(TCHAR),&argSize);
+            if(!FAILED(hr))
+            {
+                if ((argv[argcount][0] == L'/') || (argv[argcount][0] == L'-'))
                 {
-                        hr = StringCbLength(argv[argcount + 1],1024 * sizeof(TCHAR),&argSize);
-                        if(!FAILED(hr))
+                    switch (towlower(argv[argcount][1]))
+                    {
+                    case 'o':
+                        if(lptstrOption == NULL)
                         {
-                                if ((argv[argcount][0] == L'/') || (argv[argcount][0] == L'-'))
-                                {
-                                        switch (towlower(argv[argcount][1]))
-                                        {
-                                                case 'o':
-                                                        if(lptstrOption == NULL)
-                                                        {                                                                  
-                                                                lptstrOption = (TCHAR*) malloc((argSize+1)* sizeof(TCHAR));
-                                                                if(lptstrOption == NULL)
-                                                                {
-                                                                        _tprintf(_T("lptstrOption: malloc failed. Error %d \n"), GetLastError());
-                                                                        bRetVal = false;
-                                                                        goto Exit;
-                                                                }
-                                                                memset(lptstrOption, 0, (argSize+1)* sizeof(TCHAR));
-                                                                hr = StringCchCopyN(lptstrOption,argSize+1, argv[argcount+1],argSize);
-                                                                if(FAILED(hr))
-                                                                {
-                                                                        _tprintf(_T("lptstrOption: StringCchCopyN failed. Error %x \n"), hr);
-                                                                        bRetVal = false;
-                                                                        goto Exit;
-                                                                }
-                                                        }
-                                                        else
-                                                        {
-                                                                GiveUsage(argv[0]);
-                                                                bRetVal = false;
-                                                                goto Exit;
-                                                        }
-                                                        argcount++;
-                                                        break;
-                                                case 'd':
-                                                        if(lptstrDoc == NULL)
-                                                        {                                                                  
-
-                                                                lptstrDoc = (TCHAR*) malloc((argSize+1)* sizeof(TCHAR));                        
-                                                                if(lptstrDoc == NULL)
-                                                                {
-                                                                        _tprintf(_T("lptstrDoc: malloc failed. Error %d \n"), GetLastError());
-                                                                        bRetVal = false;
-                                                                        goto Exit;
-                                                                }
-                                                                memset(lptstrDoc, 0, (argSize+1)* sizeof(TCHAR));
-                                                                hr = StringCchCopyN(lptstrDoc,argSize +1, argv[argcount+1],argSize);
-                                                                if(FAILED(hr))
-                                                                {
-                                                                        _tprintf(_T("lptstrDoc: StringCchCopyN failed. Error %x \n"), hr);
-                                                                        bRetVal = false;
-                                                                        goto Exit;
-                                                                }
-                                                        }
-                                                        else
-                                                        {
-                                                                GiveUsage(argv[0]);
-                                                                bRetVal = false;
-                                                                goto Exit;
-                                                        }
-                                                        argcount++;
-                                                        break;                                                
-                                                case '?':
-                                                        GiveUsage(argv[0]);
-                                                        bRetVal = false;
-                                                        goto Exit;                
-                                                default:
-                                                        break;
-                                        }//switch
-                                }//if
+                            lptstrOption = (TCHAR*) malloc((argSize+1)* sizeof(TCHAR));
+                            if(lptstrOption == NULL)
+                            {
+                                _tprintf(_T("lptstrOption: malloc failed. Error %d \n"), GetLastError());
+                                bRetVal = false;
+                                goto Exit;
+                            }
+                            memset(lptstrOption, 0, (argSize+1)* sizeof(TCHAR));
+                            hr = StringCchCopyN(lptstrOption,argSize+1, argv[argcount+1],argSize);
+                            if(FAILED(hr))
+                            {
+                                _tprintf(_T("lptstrOption: StringCchCopyN failed. Error %x \n"), hr);
+                                bRetVal = false;
+                                goto Exit;
+                            }
                         }
-                }
-        }//for
+                        else
+                        {
+                            GiveUsage(argv[0]);
+                            bRetVal = false;
+                            goto Exit;
+                        }
+                        argcount++;
+                        break;
+                    case 'd':
+                        if(lptstrDoc == NULL)
+                        {
 
-        if ((lptstrOption == NULL) || ((lptstrDoc == NULL) && ( _tcscmp(_T("sendtofax"), CharLower(lptstrOption)) == 0 ))) 
+                            lptstrDoc = (TCHAR*) malloc((argSize+1)* sizeof(TCHAR));
+                            if(lptstrDoc == NULL)
+                            {
+                                _tprintf(_T("lptstrDoc: malloc failed. Error %d \n"), GetLastError());
+                                bRetVal = false;
+                                goto Exit;
+                            }
+                            memset(lptstrDoc, 0, (argSize+1)* sizeof(TCHAR));
+                            hr = StringCchCopyN(lptstrDoc,argSize +1, argv[argcount+1],argSize);
+                            if(FAILED(hr))
+                            {
+                                _tprintf(_T("lptstrDoc: StringCchCopyN failed. Error %x \n"), hr);
+                                bRetVal = false;
+                                goto Exit;
+                            }
+                        }
+                        else
+                        {
+                            GiveUsage(argv[0]);
+                            bRetVal = false;
+                            goto Exit;
+                        }
+                        argcount++;
+                        break;
+                    case '?':
+                        GiveUsage(argv[0]);
+                        bRetVal = false;
+                        goto Exit;
+                    default:
+                        break;
+                    }//switch
+                }//if
+            }
+        }
+    }//for
+
+    if ((lptstrOption == NULL) || ((lptstrDoc == NULL) && ( _tcscmp(_T("sendtofax"), CharLower(lptstrOption)) == 0 )))
+    {
+        _tprintf( TEXT("Invalid Value.\n") );
+        GiveUsage(argv[0]);
+        bRetVal = false;
+        goto Exit;
+    }
+
+    if( _tcscmp(_T("sendtofax"), CharLower(lptstrOption)) == 0 )
+    {
+        bFlag = CorrectString(lptstrDoc);
+        if(bFlag == true)
         {
-                _tprintf( TEXT("Invalid Value.\n") );
-                GiveUsage(argv[0]);
+            dwRet = SendToFaxRecipient(SEND_TO_FAX_RECIPIENT_ATTACHMENT,lptstrDoc);
+            if(dwRet != 0)
+            {
+                _tprintf(_T("SendToFaxRecipient: failed. Error %d \n"), dwRet);
                 bRetVal = false;
                 goto Exit;
+            }
+            _tprintf(_T("SendToFaxRecipient was successful"));
+        }
+        else
+        {
+            _tprintf(_T("Replacement of semicolon with space failed.\n"));
+            bRetVal = false;
+            goto Exit;
         }
 
-        if( _tcscmp(_T("sendtofax"), CharLower(lptstrOption)) == 0 )
+    }
+    if( _tcscmp(_T("cansendtofax"), CharLower(lptstrOption)) == 0 )
+    {
+        if(CanSendToFaxRecipient() == FALSE)
         {
-            bFlag = CorrectString(lptstrDoc);
-            if(bFlag == true)
-            {
-                dwRet = SendToFaxRecipient(SEND_TO_FAX_RECIPIENT_ATTACHMENT,lptstrDoc);  
-                if(dwRet != 0)
-                {
-                        _tprintf(_T("SendToFaxRecipient: failed. Error %d \n"), dwRet);
-                        bRetVal = false;
-                        goto Exit;
-                }
-                _tprintf(_T("SendToFaxRecipient was successful"));
-            }
-            else
-            {
-                    _tprintf(_T("Replacement of semicolon with space failed.\n"));
-                    bRetVal = false;
-                    goto Exit;
-            }
-
+            _tprintf(_T("CanSendToFaxRecipient: failed. Error %d \n"), GetLastError());
+            bRetVal = false;
+            goto Exit;
         }
-        if( _tcscmp(_T("cansendtofax"), CharLower(lptstrOption)) == 0 )
-        {
-                if(CanSendToFaxRecipient() == FALSE)
-                {
-                        _tprintf(_T("CanSendToFaxRecipient: failed. Error %d \n"), GetLastError());
-                        bRetVal = false;
-                        goto Exit;
-                }
-                _tprintf(_T("CanSendToFaxRecipient was successful"));
-        }
+        _tprintf(_T("CanSendToFaxRecipient was successful"));
+    }
 
 Exit:
-        if(lptstrDoc)
-                free(lptstrDoc);
-        if(lptstrOption)
-                free(lptstrOption);               
-        return bRetVal;
+    if(lptstrDoc)
+        free(lptstrDoc);
+    if(lptstrOption)
+        free(lptstrOption);
+    return bRetVal;
 }

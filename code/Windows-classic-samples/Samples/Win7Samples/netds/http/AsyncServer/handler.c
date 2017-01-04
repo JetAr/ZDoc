@@ -1,4 +1,4 @@
-//
+﻿//
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -36,28 +36,28 @@ static CHAR g_szEntityTooLargeMessage[] = "Large buffer support is not implement
 //
 // Routine Description:
 //
-//     Retrieves the next available HTTP request from the specified request 
-//     queue asynchronously. If HttpReceiveHttpRequest call failed inline checks 
-//     the reason and cancels the Io if necessary. If our attempt to receive 
-//     an HTTP Request failed with ERROR_MORE_DATA the client is misbehaving 
-//     and we should return it error 400 back. Pretend that the call 
+//     Retrieves the next available HTTP request from the specified request
+//     queue asynchronously. If HttpReceiveHttpRequest call failed inline checks
+//     the reason and cancels the Io if necessary. If our attempt to receive
+//     an HTTP Request failed with ERROR_MORE_DATA the client is misbehaving
+//     and we should return it error 400 back. Pretend that the call
 //     failed asynchronously.
-// 
+//
 // Arguments:
-// 
+//
 //     pServerContext - context for the server
 //
 //     Io - Structure that defines the I/O object.
-// 
+//
 // Return Value:
-// 
+//
 //     N/A
-// 
+//
 
 VOID PostNewReceive(
-                    PSERVER_CONTEXT pServerContext,
-                    PTP_IO Io
-                    )
+    PSERVER_CONTEXT pServerContext,
+    PTP_IO Io
+)
 {
     PHTTP_IO_REQUEST pIoRequest;
     ULONG Result;
@@ -70,18 +70,18 @@ VOID PostNewReceive(
     StartThreadpoolIo(Io);
 
     Result = HttpReceiveHttpRequest(
-        pServerContext->hRequestQueue, 
-        HTTP_NULL_ID, 
-        HTTP_RECEIVE_REQUEST_FLAG_COPY_BODY, 
-        pIoRequest->pHttpRequest,
-        sizeof(pIoRequest->RequestBuffer),
-        NULL,
-        &pIoRequest->ioContext.Overlapped
-        );
+                 pServerContext->hRequestQueue,
+                 HTTP_NULL_ID,
+                 HTTP_RECEIVE_REQUEST_FLAG_COPY_BODY,
+                 pIoRequest->pHttpRequest,
+                 sizeof(pIoRequest->RequestBuffer),
+                 NULL,
+                 &pIoRequest->ioContext.Overlapped
+             );
 
     if (Result != ERROR_IO_PENDING &&
-        Result != NO_ERROR)
-    {    
+            Result != NO_ERROR)
+    {
         CancelThreadpoolIo(Io);
 
         fprintf(stderr, "HttpReceiveHttpRequest failed, error 0x%lx\n", Result);
@@ -90,43 +90,43 @@ VOID PostNewReceive(
         {
             ProcessReceiveAndPostResponse(pIoRequest, Io, ERROR_MORE_DATA);
         }
- 
-         CleanupHttpIoRequest(pIoRequest);
+
+        CleanupHttpIoRequest(pIoRequest);
     }
 }
- 
+
 //
 // Routine Description:
 //
 //     Completion routine for the asynchronous HttpSendHttpResponse
 //     call. This sample doesn't process the results of its send operations.
-// 
+//
 // Arguments:
-// 
+//
 //     IoContext - The HTTP_IO_CONTEXT tracking this operation.
 //
 //     Io - Ignored
-// 
+//
 //     IoResult - Ignored
-// 
+//
 // Return Value:
-// 
+//
 //     N/A
-// 
+//
 
 VOID SendCompletionCallback(
-                            PHTTP_IO_CONTEXT pIoContext,
-                            PTP_IO Io,
-                            ULONG IoResult
-                            )
+    PHTTP_IO_CONTEXT pIoContext,
+    PTP_IO Io,
+    ULONG IoResult
+)
 {
     PHTTP_IO_RESPONSE pIoResponse;
 
     UNREFERENCED_PARAMETER(IoResult);
     UNREFERENCED_PARAMETER(Io);
 
-    pIoResponse = CONTAINING_RECORD(pIoContext, 
-                                    HTTP_IO_RESPONSE, 
+    pIoResponse = CONTAINING_RECORD(pIoContext,
+                                    HTTP_IO_RESPONSE,
                                     ioContext);
 
     CleanupHttpIoResponse(pIoResponse);
@@ -137,22 +137,22 @@ VOID SendCompletionCallback(
 //
 //     Creates a response for a successful get, the content is served
 //     from a file.
-// 
+//
 // Arguments:
-// 
+//
 //     pServerContext - Pointer to the http server context structure.
 //
 //     hFile - Handle to the specified file.
 //
 // Return Value:
-// 
+//
 //     Return a pointer to the HTTP_IO_RESPONSE structure.
 //
 
 PHTTP_IO_RESPONSE CreateFileResponse(
-                                     PSERVER_CONTEXT pServerContext, 
-                                     HANDLE hFile
-                                     )
+    PSERVER_CONTEXT pServerContext,
+    HANDLE hFile
+)
 {
     PHTTP_IO_RESPONSE pIoResponse;
     PHTTP_DATA_CHUNK pChunk;
@@ -161,7 +161,7 @@ PHTTP_IO_RESPONSE CreateFileResponse(
 
     if (pIoResponse == NULL)
         return NULL;
-    
+
     pIoResponse->HttpResponse.StatusCode = g_usOKCode;
     pIoResponse->HttpResponse.pReason = g_szOKReason;
     pIoResponse->HttpResponse.ReasonLength = (USHORT)strlen(g_szOKReason);
@@ -179,9 +179,9 @@ PHTTP_IO_RESPONSE CreateFileResponse(
 // Routine Description:
 //
 //     Creates an http response if the requested file was not found.
-// 
+//
 // Arguments:
-// 
+//
 //     pServerContext - Pointer to the http server context structure.
 //
 //     code - The error code to use in the response
@@ -189,18 +189,18 @@ PHTTP_IO_RESPONSE CreateFileResponse(
 //     pReason - The reason string to send back to the client
 //
 //     pMessage - The more verbose message to send back to the client
-// 
+//
 // Return Value:
-// 
+//
 //     Return a pointer to the HTTP_IO_RESPONSE structure
 //
 
 PHTTP_IO_RESPONSE CreateMessageResponse(
-                                        PSERVER_CONTEXT pServerContext,
-                                        USHORT code,
-                                        PCHAR pReason,
-                                        PCHAR pMessage
-                                        )
+    PSERVER_CONTEXT pServerContext,
+    USHORT code,
+    PCHAR pReason,
+    PCHAR pMessage
+)
 {
     PHTTP_IO_RESPONSE pIoResponse;
     PHTTP_DATA_CHUNK pChunk;
@@ -230,25 +230,25 @@ PHTTP_IO_RESPONSE CreateMessageResponse(
 //     and sends it using HttpSendHttpResponse.
 //
 // Arguments:
-// 
+//
 //     IoContext - The HTTP_IO_CONTEXT tracking this operation.
 //
 //     Io - Structure that defines the I/O object.
-// 
+//
 //     IoResult - The result of the I/O operation. If the I/O is successful,
 //         this parameter is NO_ERROR. Otherwise, this parameter is one of
 //         the system error codes.
-// 
+//
 // Return Value:
-// 
+//
 //     N/A
 //
 
 VOID ProcessReceiveAndPostResponse(
-                                   PHTTP_IO_REQUEST pIoRequest,
-                                   PTP_IO Io,
-                                   ULONG IoResult
-                                   )
+    PHTTP_IO_REQUEST pIoRequest,
+    PTP_IO Io,
+    ULONG IoResult
+)
 {
     ULONG Result;
     HANDLE hFile;
@@ -259,87 +259,89 @@ VOID ProcessReceiveAndPostResponse(
     pServerContext = pIoRequest->ioContext.pServerContext;
     hFile = INVALID_HANDLE_VALUE;
 
-    switch(IoResult){
-        case NO_ERROR:
-        {
-            WCHAR wszFilePath[MAX_STR_SIZE];       
-            BOOL bValidUrl; 
-  
-            if (pIoRequest->pHttpRequest->Verb != HttpVerbGET){
-                pIoResponse = CreateMessageResponse(
-                                pServerContext,
-                                g_usNotImplementedCode,
-                                g_szNotImplementedReason,
-                                g_szNotImplementedMessage);
-                break;
-            }
-           
-            bValidUrl = GetFilePathName(
-                pServerContext->wszRootDirectory,
-                pIoRequest->pHttpRequest->CookedUrl.pAbsPath, 
-                wszFilePath, 
-                MAX_STR_SIZE);
+    switch(IoResult)
+    {
+    case NO_ERROR:
+    {
+        WCHAR wszFilePath[MAX_STR_SIZE];
+        BOOL bValidUrl;
 
-            if (bValidUrl == FALSE)
-            {
-                pIoResponse = CreateMessageResponse(
-                                pServerContext,
-                                g_usFileNotFoundCode,
-                                g_szFileNotFoundReason,
-                                g_szBadPathMessage);
-                break;
-            }
-        
-            hFile = CreateFileW(
-                wszFilePath, 
-                GENERIC_READ,
-                FILE_SHARE_READ,
-                NULL,
-                OPEN_EXISTING,
-                FILE_ATTRIBUTE_NORMAL, 
-                NULL);
-    
-            if (hFile == INVALID_HANDLE_VALUE)
-            {
-                if (GetLastError() == ERROR_PATH_NOT_FOUND || 
-                    GetLastError() == ERROR_FILE_NOT_FOUND)
-                {
-                    pIoResponse = CreateMessageResponse(
-                                    pServerContext,
-                                    g_usFileNotFoundCode,
-                                    g_szFileNotFoundReason,
-                                    g_szFileNotFoundMessage);
-                    break;
-                }
-
-                pIoResponse = CreateMessageResponse(
-                                pServerContext,
-                                g_usFileNotFoundCode,
-                                g_szFileNotFoundReason,
-                                g_szFileNotAccessibleMessage);
-                break;
-            }
-        
-            pIoResponse = CreateFileResponse(pServerContext, hFile);
-
-            CachePolicy.Policy = HttpCachePolicyUserInvalidates;
-            CachePolicy.SecondsToLive = 0;
-            break;
-        }
-        case ERROR_MORE_DATA:
+        if (pIoRequest->pHttpRequest->Verb != HttpVerbGET)
         {
             pIoResponse = CreateMessageResponse(
-                            pServerContext,
-                            g_usEntityTooLargeCode,
-                            g_szEntityTooLargeReason,
-                            g_szEntityTooLargeMessage);
+                              pServerContext,
+                              g_usNotImplementedCode,
+                              g_szNotImplementedReason,
+                              g_szNotImplementedMessage);
             break;
         }
-        default:
-            // If the HttpReceiveHttpRequest call failed asynchronously
-            // with a different error than ERROR_MORE_DATA, the error is fatal
-            // There's nothing this function can do
-            return;
+
+        bValidUrl = GetFilePathName(
+                        pServerContext->wszRootDirectory,
+                        pIoRequest->pHttpRequest->CookedUrl.pAbsPath,
+                        wszFilePath,
+                        MAX_STR_SIZE);
+
+        if (bValidUrl == FALSE)
+        {
+            pIoResponse = CreateMessageResponse(
+                              pServerContext,
+                              g_usFileNotFoundCode,
+                              g_szFileNotFoundReason,
+                              g_szBadPathMessage);
+            break;
+        }
+
+        hFile = CreateFileW(
+                    wszFilePath,
+                    GENERIC_READ,
+                    FILE_SHARE_READ,
+                    NULL,
+                    OPEN_EXISTING,
+                    FILE_ATTRIBUTE_NORMAL,
+                    NULL);
+
+        if (hFile == INVALID_HANDLE_VALUE)
+        {
+            if (GetLastError() == ERROR_PATH_NOT_FOUND ||
+                    GetLastError() == ERROR_FILE_NOT_FOUND)
+            {
+                pIoResponse = CreateMessageResponse(
+                                  pServerContext,
+                                  g_usFileNotFoundCode,
+                                  g_szFileNotFoundReason,
+                                  g_szFileNotFoundMessage);
+                break;
+            }
+
+            pIoResponse = CreateMessageResponse(
+                              pServerContext,
+                              g_usFileNotFoundCode,
+                              g_szFileNotFoundReason,
+                              g_szFileNotAccessibleMessage);
+            break;
+        }
+
+        pIoResponse = CreateFileResponse(pServerContext, hFile);
+
+        CachePolicy.Policy = HttpCachePolicyUserInvalidates;
+        CachePolicy.SecondsToLive = 0;
+        break;
+    }
+    case ERROR_MORE_DATA:
+    {
+        pIoResponse = CreateMessageResponse(
+                          pServerContext,
+                          g_usEntityTooLargeCode,
+                          g_szEntityTooLargeReason,
+                          g_szEntityTooLargeMessage);
+        break;
+    }
+    default:
+        // If the HttpReceiveHttpRequest call failed asynchronously
+        // with a different error than ERROR_MORE_DATA, the error is fatal
+        // There's nothing this function can do
+        return;
     }
 
     if (pIoResponse == NULL)
@@ -350,20 +352,20 @@ VOID ProcessReceiveAndPostResponse(
     StartThreadpoolIo(Io);
 
     Result = HttpSendHttpResponse(
-        pServerContext->hRequestQueue, 
-        pIoRequest->pHttpRequest->RequestId,
-        0,
-        &pIoResponse->HttpResponse,
-        (hFile != INVALID_HANDLE_VALUE) ? &CachePolicy : NULL,
-        NULL,
-        NULL,
-        0,
-        &pIoResponse->ioContext.Overlapped,
-        NULL
-        );
+                 pServerContext->hRequestQueue,
+                 pIoRequest->pHttpRequest->RequestId,
+                 0,
+                 &pIoResponse->HttpResponse,
+                 (hFile != INVALID_HANDLE_VALUE) ? &CachePolicy : NULL,
+                 NULL,
+                 NULL,
+                 0,
+                 &pIoResponse->ioContext.Overlapped,
+                 NULL
+             );
 
     if (Result != NO_ERROR &&
-        Result != ERROR_IO_PENDING)
+            Result != ERROR_IO_PENDING)
     {
         CancelThreadpoolIo(Io);
 
@@ -377,35 +379,35 @@ VOID ProcessReceiveAndPostResponse(
 // Routine Description:
 //
 //     Completion routine for the asynchronous HttpReceiveHttpRequest
-//     call. Check if the user asked us to stop the server. If not, send a 
+//     call. Check if the user asked us to stop the server. If not, send a
 //     response and post a new receive to HTTPAPI.
-// 
+//
 // Arguments:
-// 
+//
 //     IoContext - The HTTP_IO_CONTEXT tracking this operation.
 //
 //     Io - Structure that defines the I/O object.
-// 
+//
 //     IoResult - The result of the I/O operation. If the I/O is successful,
 //         this parameter is NO_ERROR. Otherwise, this parameter is one of
 //         the system error codes.
-// 
+//
 // Return Value:
-// 
+//
 //     N/A
 //
 
 VOID ReceiveCompletionCallback(
-                               PHTTP_IO_CONTEXT pIoContext,
-                               PTP_IO Io,
-                               ULONG IoResult
-                               )
+    PHTTP_IO_CONTEXT pIoContext,
+    PTP_IO Io,
+    ULONG IoResult
+)
 {
     PHTTP_IO_REQUEST pIoRequest;
     PSERVER_CONTEXT pServerContext;
 
-    pIoRequest = CONTAINING_RECORD(pIoContext, 
-                                   HTTP_IO_REQUEST, 
+    pIoRequest = CONTAINING_RECORD(pIoContext,
+                                   HTTP_IO_REQUEST,
                                    ioContext);
 
     pServerContext = pIoRequest->ioContext.pServerContext;
@@ -413,9 +415,9 @@ VOID ReceiveCompletionCallback(
     if (pServerContext->bStopServer == FALSE)
     {
         ProcessReceiveAndPostResponse(pIoRequest, Io, IoResult);
- 
+
         PostNewReceive(pServerContext, Io);
     }
-   
+
     CleanupHttpIoRequest(pIoRequest);
 }

@@ -1,4 +1,4 @@
-/*
+﻿/*
 THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED
 TO THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -43,7 +43,7 @@ int __cdecl wmain()
     hrComInit = CoInitializeEx(
                     0,
                     COINIT_APARTMENTTHREADED
-                    );
+                );
 
     // Ignore RPC_E_CHANGED_MODE; this just means that COM has already been
     // initialized with a different mode. Since we don't care what the mode is,
@@ -73,7 +73,7 @@ int __cdecl wmain()
     // Show status of 'File and Printer Sharing' rule group on specified profiles
     IsRuleGroupEnabled(pNetFwPolicy2);
 
-    // For the current firewall profiles display whether the changes to firewall rules 
+    // For the current firewall profiles display whether the changes to firewall rules
     //  will take effect or not
     GetLocalPolicyModifyState(pNetFwPolicy2);
 
@@ -87,7 +87,7 @@ Cleanup:
     {
         CoUninitialize();
     }
-   
+
     return 0;
 }
 
@@ -98,16 +98,16 @@ HRESULT WFCOMInitialize(INetFwPolicy2** ppNetFwPolicy2)
     HRESULT hr = S_OK;
 
     hr = CoCreateInstance(
-        __uuidof(NetFwPolicy2), 
-        NULL, 
-        CLSCTX_INPROC_SERVER, 
-        __uuidof(INetFwPolicy2), 
-        (void**)ppNetFwPolicy2);
+             __uuidof(NetFwPolicy2),
+             NULL,
+             CLSCTX_INPROC_SERVER,
+             __uuidof(INetFwPolicy2),
+             (void**)ppNetFwPolicy2);
 
     if (FAILED(hr))
     {
         wprintf(L"CoCreateInstance for INetFwPolicy2 failed: 0x%08lx\n", hr);
-        goto Cleanup;        
+        goto Cleanup;
     }
 
 Cleanup:
@@ -132,7 +132,7 @@ HRESULT GetCurrentFirewallState(__in INetFwPolicy2 *pNetFwPolicy2)
     HRESULT hr = S_FALSE;
     long    CurrentProfilesBitMask = 0;
     VARIANT_BOOL bActualFirewallEnabled = VARIANT_FALSE;
-    struct ProfileMapElement 
+    struct ProfileMapElement
     {
         NET_FW_PROFILE_TYPE2 Id;
         LPCWSTR Name;
@@ -155,7 +155,7 @@ HRESULT GetCurrentFirewallState(__in INetFwPolicy2 *pNetFwPolicy2)
         goto CLEANUP;
     }
 
-    // The returned 'CurrentProfiles' bitmask can have more than 1 bit set if multiple profiles 
+    // The returned 'CurrentProfiles' bitmask can have more than 1 bit set if multiple profiles
     //   are active or current at the same time
 
     for (int i=0; i<3; i++)
@@ -214,11 +214,11 @@ HRESULT IsRuleGroupCurrentlyEnabled(__in INetFwPolicy2 *pNetFwPolicy2)
         }
     }
     else
-    {  
+    {
         wprintf(L"Failed calling API IsRuleGroupCurrentlyEnabled. Error: 0x %x.\n", hr);
         goto Cleanup;
     }
-    
+
 
 Cleanup:
     SysFreeString(GroupName);
@@ -260,11 +260,11 @@ HRESULT IsRuleGroupEnabled(__in INetFwPolicy2 *pNetFwPolicy2)
         }
     }
     else
-    {  
+    {
         wprintf(L"Failed calling API IsRuleGroupCurrentlyEnabled. Error: 0x %x.\n", hr);
         goto Cleanup;
     }
-    
+
 
 Cleanup:
     SysFreeString(GroupName);
@@ -321,6 +321,6 @@ HRESULT GetLocalPolicyModifyState(__in INetFwPolicy2 *pNetFwPolicy2)
             wprintf(L"Changing or adding firewall rule (or group) to the current profiles will not take effect because unsolicited inbound traffic is not allowed on some of the current profiles.\n");
         }
     }
-    
+
     return hr;
 }

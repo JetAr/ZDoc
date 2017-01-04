@@ -1,12 +1,12 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
 //
-// Copyright � Microsoft Corporation. All rights reserved
+// Copyright © Microsoft Corporation. All rights reserved
 
 /******************************************************************************
-*   srengobj.cpp 
+*   srengobj.cpp
 *       This file contains the implementation of the CSrEngine class.
 *       This implements ISpSREngine, ISpSREngine2 and ISpObjectWithToken.
 *       This is the main recognition object
@@ -28,10 +28,10 @@ static const WCHAR ALT_WORD[] = L"Alt"; // This is the default word used for alt
 *---------------------------*
 *   Description:
 *       The ATL FinalConstruct method. Called after the standard C++ constructor
-*   Return: 
+*   Return:
 *       S_OK
 *       FAILED(hr)
-*****************************************************************************/   
+*****************************************************************************/
 HRESULT CSrEngine::FinalConstruct()
 {
 
@@ -42,7 +42,7 @@ HRESULT CSrEngine::FinalConstruct()
     m_FrameQueue.SetSpaceAvailEvent(m_hQueueHasRoom);
 
     // Create a thread control which will be used for the recognition thread
-    CComPtr<ISpTaskManager> cpTaskMgr;    
+    CComPtr<ISpTaskManager> cpTaskMgr;
     hr = cpTaskMgr.CoCreateInstance(CLSID_SpResourceManager);
     if (SUCCEEDED(hr))
     {
@@ -63,9 +63,9 @@ HRESULT CSrEngine::FinalConstruct()
 *---------------------------*
 *   Description:
 *       The ATL FinalRelease method. Clean up any resources not automatically destructed.
-*   Return: 
+*   Return:
 *       S_OK
-*****************************************************************************/   
+*****************************************************************************/
 HRESULT CSrEngine::FinalRelease()
 {
 
@@ -83,10 +83,10 @@ HRESULT CSrEngine::FinalRelease()
 *       The engine also can recover user set defaults for accuracy, rejection etc.
 *       Also could have different engines sharing the same code base (CLSID) but having different registry info
 *       e.g. if engine supports different languages
-*   Return: 
+*   Return:
 *       S_OK
 *       FAILED(hr)
-*****************************************************************************/   
+*****************************************************************************/
 STDMETHODIMP CSrEngine::SetObjectToken(ISpObjectToken * pToken)
 {
 
@@ -147,7 +147,7 @@ STDMETHODIMP CSrEngine::SetObjectToken(ISpObjectToken * pToken)
     // Looks for the file path stored in the registry
     hr = pToken->GetStorageFileName(CLSID_SampleSREngine, L"SampleEngDataFile", NULL, 0, &pszPath);
     // Could now load engine data-files from this given path
-    
+
     ::CoTaskMemFree(pszPath);
 
     return hr;
@@ -158,10 +158,10 @@ STDMETHODIMP CSrEngine::SetObjectToken(ISpObjectToken * pToken)
 *---------------------------*
 *   Description:
 *       This method is called if SAPI wants to find which object token this engine is using
-*   Return: 
+*   Return:
 *       S_OK
 *       FAILED(hr)
-*****************************************************************************/   
+*****************************************************************************/
 STDMETHODIMP CSrEngine::GetObjectToken(ISpObjectToken ** ppToken)
 {
 
@@ -176,9 +176,9 @@ STDMETHODIMP CSrEngine::GetObjectToken(ISpObjectToken ** ppToken)
 *   Description:
 *       This is called to give the engine a reference to the ISpSREngineSite.
 *       The engine uses this to call back to SAPI.
-*   Return: 
+*   Return:
 *       S_OK
-*****************************************************************************/   
+*****************************************************************************/
 STDMETHODIMP CSrEngine::SetSite(ISpSREngineSite *pSite)
 {
     m_cpSite = pSite;
@@ -193,10 +193,10 @@ STDMETHODIMP CSrEngine::SetSite(ISpSREngineSite *pSite)
 *       The RecoProfile is an object token holding information on the current
 *       user and enrollment session. The engine can store whatever information here
 *       it likes. It should store this in a key under the RecoProfile key named with the engine class id.
-*   Return: 
+*   Return:
 *       S_OK
 *       FAILED(hr)
-*****************************************************************************/   
+*****************************************************************************/
 STDMETHODIMP CSrEngine::SetRecoProfile(ISpObjectToken *pProfile)
 {
 
@@ -223,11 +223,11 @@ STDMETHODIMP CSrEngine::SetRecoProfile(ISpObjectToken *pProfile)
         // Now we can set some default values
         if(SUCCEEDED(hr))
         {
-            hr = dataKey->SetStringValue(L"GENDER", L"UNKNOWN");        
+            hr = dataKey->SetStringValue(L"GENDER", L"UNKNOWN");
         }
         if(SUCCEEDED(hr))
         {
-            hr = dataKey->SetStringValue(L"AGE", L"UNKNOWN");        
+            hr = dataKey->SetStringValue(L"AGE", L"UNKNOWN");
         }
 
         // Now we can create some temporary file storage (e.g. for trained models)
@@ -245,10 +245,10 @@ STDMETHODIMP CSrEngine::SetRecoProfile(ISpObjectToken *pProfile)
     {
         // We've already seen this profile so read values
         WCHAR *pszGender = NULL, *pszAge = NULL;
-        hr = dataKey->GetStringValue(L"GENDER", &pszGender);        
+        hr = dataKey->GetStringValue(L"GENDER", &pszGender);
         if(SUCCEEDED(hr))
         {
-            hr = dataKey->GetStringValue(L"AGE", &pszAge);        
+            hr = dataKey->GetStringValue(L"AGE", &pszAge);
         }
 
         // Now we could read training file
@@ -271,14 +271,14 @@ STDMETHODIMP CSrEngine::SetRecoProfile(ISpObjectToken *pProfile)
 * CSrEngine::OnCreateRecoContext *
 *---------------------------*
 *   Description:
-*       This method is called each time a new reco context is created in 
+*       This method is called each time a new reco context is created in
 *       an application using this engine.
 *       This sample engine does not strictly need info about reco contexts
 *       but for reference we will a keep list of them.
-*   Return: 
+*   Return:
 *       S_OK
 *       FAILED(hr)
-*****************************************************************************/   
+*****************************************************************************/
 STDMETHODIMP CSrEngine::OnCreateRecoContext(SPRECOCONTEXTHANDLE hSapiContext, void ** ppvDrvCtxt)
 {
 
@@ -288,7 +288,7 @@ STDMETHODIMP CSrEngine::OnCreateRecoContext(SPRECOCONTEXTHANDLE hSapiContext, vo
     // Store a reference to the CContext structure
     *ppvDrvCtxt = pContext;
     m_ContextList.InsertHead(pContext);
-    
+
     return S_OK;
 }
 
@@ -297,9 +297,9 @@ STDMETHODIMP CSrEngine::OnCreateRecoContext(SPRECOCONTEXTHANDLE hSapiContext, vo
 *---------------------------*
 *   Description:
 *       This method is called each time a reco context is deleted.
-*   Return: 
+*   Return:
 *       S_OK
-*****************************************************************************/   
+*****************************************************************************/
 STDMETHODIMP CSrEngine::OnDeleteRecoContext(void * pvDrvCtxt)
 {
 
@@ -315,12 +315,12 @@ STDMETHODIMP CSrEngine::OnDeleteRecoContext(void * pvDrvCtxt)
 * CSrEngine::OnCreateGrammar *
 *---------------------------*
 *   Description:
-*       This method is called each time a new reco grammar is created in 
+*       This method is called each time a new reco grammar is created in
 *       an application using this engine.
 *       We keep a list of grammars - storing a pointer to the list entry in ppvEngineGrammar.
-*   Return: 
+*   Return:
 *       S_OK
-*****************************************************************************/   
+*****************************************************************************/
 STDMETHODIMP CSrEngine::OnCreateGrammar(void * pvEngineRecoContext, SPGRAMMARHANDLE hSapiGrammar, void ** ppvEngineGrammar)
 {
 
@@ -334,7 +334,7 @@ STDMETHODIMP CSrEngine::OnCreateGrammar(void * pvEngineRecoContext, SPGRAMMARHAN
     // Store a reference to the CDrvGrammar structure
     *ppvEngineGrammar = pGrammar;
     m_GrammarList.InsertHead(pGrammar);
-    
+
     return S_OK;
 }
 
@@ -344,9 +344,9 @@ STDMETHODIMP CSrEngine::OnCreateGrammar(void * pvEngineRecoContext, SPGRAMMARHAN
 *---------------------------*
 *   Description:
 *       This method is called each time a reco grammar is deleted.
-*   Return: 
+*   Return:
 *       S_OK
-*****************************************************************************/   
+*****************************************************************************/
 STDMETHODIMP CSrEngine::OnDeleteGrammar(void * pvDrvGrammar)
 {
 
@@ -368,10 +368,10 @@ STDMETHODIMP CSrEngine::OnDeleteGrammar(void * pvDrvGrammar)
 *       the application loading or unloading grammars) this method is called.
 *       Here we examine the word text, see if it has an associated pronunciation,
 *       and see if there is a pronunciation in the lexicon.
-*   Return: 
+*   Return:
 *       S_OK
 *       FAILED(hr)
-*****************************************************************************/   
+*****************************************************************************/
 STDMETHODIMP CSrEngine::WordNotify(SPCFGNOTIFY Action, ULONG cWords, const SPWORDENTRY * pWords)
 {
 
@@ -379,7 +379,8 @@ STDMETHODIMP CSrEngine::WordNotify(SPCFGNOTIFY Action, ULONG cWords, const SPWOR
     ULONG i;
     WCHAR *wordPron;
 
-    switch(Action){
+    switch(Action)
+    {
     case SPCFGN_ADD:
         SPWORDENTRY WordEntry;
         for(i = 0; SUCCEEDED(hr) && i < cWords; i++)
@@ -485,16 +486,16 @@ STDMETHODIMP CSrEngine::WordNotify(SPCFGNOTIFY Action, ULONG cWords, const SPWOR
 *
 *       The engine can call GetRuleInfo to find the initial state in the rule, and
 *       then GetStateInfo to find the information about subsequent states and transitions in the rule.
-*       If a rule is edited then SPCFGN_INVALIDATE is called to indicate rule has changed so the engine 
+*       If a rule is edited then SPCFGN_INVALIDATE is called to indicate rule has changed so the engine
 *       must reparse the rule information.
 *
 *       The engine can obtain all the information about the rule either before or during recognition.
-*       In this sample engine we just keep a list of rules initially and then wait 
+*       In this sample engine we just keep a list of rules initially and then wait
 *       until we want to generate a result and then find a random path through the rule.
 *
-*   Return: 
+*   Return:
 *       S_OK
-*****************************************************************************/   
+*****************************************************************************/
 STDMETHODIMP CSrEngine::RuleNotify(SPCFGNOTIFY Action, ULONG cRules, const SPRULEENTRY * pRules)
 {
 
@@ -575,9 +576,9 @@ STDMETHODIMP CSrEngine::RuleNotify(SPCFGNOTIFY Action, ULONG cRules, const SPRUL
 *   Description:
 *       Called when SAPI wants the engine to load a dictaion language model (SLM).
 *       For each reco gramar one dictation as well as C&C rules can be loaded.
-*   Return: 
+*   Return:
 *       S_OK
-*****************************************************************************/   
+*****************************************************************************/
 STDMETHODIMP CSrEngine::LoadSLM(void * pvEngineGrammar, const WCHAR * pszTopicName)
 {
 
@@ -588,7 +589,7 @@ STDMETHODIMP CSrEngine::LoadSLM(void * pvEngineGrammar, const WCHAR * pszTopicNa
         //  this parameter. If NULL load the default dictation model.
         // Since just a sample ignore this parameter.
     }
-    
+
     // pvEngineGrammar is the pointer ppvEngineGrammar we set in OnCreateGrammar
     // Use this to find out on which grammar the SLM is being asked for.
     CDrvGrammar * pGrammar = (CDrvGrammar *)pvEngineGrammar;
@@ -602,9 +603,9 @@ STDMETHODIMP CSrEngine::LoadSLM(void * pvEngineGrammar, const WCHAR * pszTopicNa
 *---------------------------*
 *   Description:
 *       Called when SAPI wants the engine to delete an SLM.
-*   Return: 
+*   Return:
 *       S_OK
-*****************************************************************************/   
+*****************************************************************************/
 STDMETHODIMP CSrEngine::UnloadSLM(void *pvEngineGrammar)
 {
 
@@ -621,9 +622,9 @@ STDMETHODIMP CSrEngine::UnloadSLM(void *pvEngineGrammar)
 *   Description:
 *       Called to activate or deactivate an SLM for recognition.
 *       NewState is either SPRS_ACTIVE or SPRS_INACTIVE.
-*   Return: 
+*   Return:
 *       S_OK
-*****************************************************************************/   
+*****************************************************************************/
 HRESULT CSrEngine::SetSLMState(void * pvDrvGrammar, SPRULESTATE NewState)
 {
 
@@ -638,7 +639,7 @@ HRESULT CSrEngine::SetSLMState(void * pvDrvGrammar, SPRULESTATE NewState)
     {
         pGrammar->m_SLMActive = FALSE;
     }
-    
+
     return S_OK;
 }
 
@@ -650,9 +651,9 @@ HRESULT CSrEngine::SetSLMState(void * pvDrvGrammar, SPRULESTATE NewState)
 *       The text buffer supplied here can either be used in CFGs with the text buffer transition,
 *       or in dictation to supply information to the engine about the prior text visible on screen.
 *       This sample engine is just using the text buffer with the text buffer transition.
-*   Return: 
+*   Return:
 *       S_OK
-*****************************************************************************/   
+*****************************************************************************/
 STDMETHODIMP CSrEngine::SetWordSequenceData(void *pvEngineGrammar, const WCHAR *pText, ULONG cchText, const SPTEXTSELECTIONINFO *pInfo)
 {
 
@@ -662,7 +663,7 @@ STDMETHODIMP CSrEngine::SetWordSequenceData(void *pvEngineGrammar, const WCHAR *
     // Recover the data we have associated with this grammar.
     CDrvGrammar * pGrammar = (CDrvGrammar*)pvEngineGrammar;
 
-    // Delete previous grammar text buffer 
+    // Delete previous grammar text buffer
     if(pGrammar->m_pWordSequenceText)
     {
         delete pGrammar->m_pWordSequenceText;
@@ -686,7 +687,7 @@ STDMETHODIMP CSrEngine::SetWordSequenceData(void *pvEngineGrammar, const WCHAR *
     // This sample engine is using the active text selection only.
     SetTextSelection(pvEngineGrammar, pInfo);
 
-    
+
     return S_OK;
 }
 
@@ -696,16 +697,16 @@ STDMETHODIMP CSrEngine::SetWordSequenceData(void *pvEngineGrammar, const WCHAR *
 *   Description:
 *       This method tells engines if the SPTEXTSELECTIONINFO structure
 *       has been updated. This sample engine is using only fields ulStartActiveOffset and cchActiveChars of SPTEXTSELECTIONINFO.
-*   Return: 
+*   Return:
 *       S_OK
-*****************************************************************************/   
+*****************************************************************************/
 STDMETHODIMP CSrEngine::SetTextSelection(void * pvEngineGrammar, const SPTEXTSELECTIONINFO * pInfo)
 {
 
 
     // Recover the data we have associated with this grammar.
     CDrvGrammar * pGrammar = (CDrvGrammar*)pvEngineGrammar;
-    
+
     if (pGrammar->m_pInfo)
     {
         delete pGrammar->m_pInfo;
@@ -713,7 +714,7 @@ STDMETHODIMP CSrEngine::SetTextSelection(void * pvEngineGrammar, const SPTEXTSEL
 
     if (pInfo)
     {
-        pGrammar->m_pInfo = new SPTEXTSELECTIONINFO(*pInfo);    
+        pGrammar->m_pInfo = new SPTEXTSELECTIONINFO(*pInfo);
     }
     else
     {
@@ -727,12 +728,12 @@ STDMETHODIMP CSrEngine::SetTextSelection(void * pvEngineGrammar, const SPTEXTSEL
 * CSrEngine::IsPronounceable *
 *---------------------------*
 *   Description:
-*       Engines should return whether it has or will be able to 
+*       Engines should return whether it has or will be able to
 *       generate a pronounciation for this word.
 *       In this sample engine, this is always true.
-*   Return: 
+*   Return:
 *       S_OK
-*****************************************************************************/   
+*****************************************************************************/
 STDMETHODIMP CSrEngine::IsPronounceable(void * pDrvGrammar, const WCHAR * pszWord, SPWORDPRONOUNCEABLE * pWordPronounceable)
 {
 
@@ -750,8 +751,8 @@ STDMETHODIMP CSrEngine::IsPronounceable(void * pDrvGrammar, const WCHAR * pszWor
 *       we never fire that event this method should never be called.
 
 *   Return:
-*       E_UNEXPECTED 
-*****************************************************************************/   
+*       E_UNEXPECTED
+*****************************************************************************/
 STDMETHODIMP CSrEngine::SetAdaptationData(void * pvEngineCtxtCookie, const WCHAR *pAdaptationData, const ULONG cch)
 {
 
@@ -765,10 +766,10 @@ STDMETHODIMP CSrEngine::SetAdaptationData(void * pvEngineCtxtCookie, const WCHAR
 *---------------------------*
 *   Description:
 *       Internal helper method to send an event to SAPI.
-*   Return: 
+*   Return:
 *       S_OK
 *       FAILED(hr)
-*****************************************************************************/   
+*****************************************************************************/
 HRESULT CSrEngine::AddEvent(SPEVENTENUM eEventId, ULONGLONG ullStreamPos, WPARAM wParam, LPARAM lParam)
 {
 
@@ -793,10 +794,10 @@ HRESULT CSrEngine::AddEvent(SPEVENTENUM eEventId, ULONGLONG ullStreamPos, WPARAM
 *   Description:
 *       Internal helper method to send an event with a string LParam to SAPI.
 *       Request UI is the only event in the sample to need this.
-*   Return: 
+*   Return:
 *       S_OK
 *       FAILED(hr)
-*****************************************************************************/   
+*****************************************************************************/
 HRESULT CSrEngine::AddEventString(SPEVENTENUM eEventId, ULONGLONG ullStreamPos, const WCHAR * psz, WPARAM wParam)
 {
 
@@ -838,7 +839,7 @@ HRESULT CSrEngine::AddEventString(SPEVENTENUM eEventId, ULONGLONG ullStreamPos, 
 *        - const WAVEFORMATEX * pWaveFormatEx - this is the extended wav format information of the audio format
 *        - HANDLE hRequestSync - this Win32 event is used to indicate that there are pending tasks
 * and the engine should call Synchronize() for SAPI to process these.
-*        - HANDLE hDataAvailable - this Win32 event is used to tell the engine that data is available to be read.    
+*        - HANDLE hDataAvailable - this Win32 event is used to tell the engine that data is available to be read.
 * The frequency this is set can be controlled by the SetBufferNotifySize method.
 *        - HANDLE hExit - this Win32 event indicates the engine is being closed down and should exit immediately.
 *        - BOOL fNewAudioStream - this indicates this is a new input stream
@@ -847,10 +848,10 @@ HRESULT CSrEngine::AddEventString(SPEVENTENUM eEventId, ULONGLONG ullStreamPos, 
 *        - ISpObjectToken * pAudioObjectToken - this is the object token representing the audio input device
 * the engine may want to query this.
 *
-*   Return: 
+*   Return:
 *       S_OK
 *       FAILED(hr)
-*****************************************************************************/   
+*****************************************************************************/
 STDMETHODIMP CSrEngine::RecognizeStream(REFGUID rguidFormatId,
                                         const WAVEFORMATEX * pWaveFormatEx,
                                         HANDLE hRequestSync,
@@ -862,7 +863,7 @@ STDMETHODIMP CSrEngine::RecognizeStream(REFGUID rguidFormatId,
 {
 
     HRESULT hr = S_OK;
-    
+
     m_hRequestSync = hRequestSync;
 
     // Start the recognition thread
@@ -874,7 +875,7 @@ STDMETHODIMP CSrEngine::RecognizeStream(REFGUID rguidFormatId,
 
         while (TRUE) // sit in this loop until there is no more data
         {
-            // The Read method is used to read data. This will block until the required 
+            // The Read method is used to read data. This will block until the required
             // amount of data is available. If the stream has ended either a fail code
             // will be returned or the amount read will be less than the amount asked for.
             // To see how much data is available to be read without blocking the DataAvailable
@@ -934,7 +935,7 @@ STDMETHODIMP CSrEngine::RecognizeStream(REFGUID rguidFormatId,
 *-----------------------*
 *   Description:
 *       This is the main thread for the recognition process.
-*       This hExitThreadEvent indicates this thread should complete, 
+*       This hExitThreadEvent indicates this thread should complete,
 *       and the hNotifyEvent indicates the RecognizeStream thread is notifying
 *       that data is available for processing. The m_hRequestSync indicates
 *       SAPI is requesting the engine should call Synchronize.
@@ -983,7 +984,7 @@ STDMETHODIMP CSrEngine::ThreadProc(void *, HANDLE hExitThreadEvent, HANDLE hNoti
             if (m_ullStart == 0 && !m_bPhraseStarted)
             {
                 // Engines should also call Synchronize to indicate they are ready
-                // to be notified about grammar changes and other tasks. Within Synchronize 
+                // to be notified about grammar changes and other tasks. Within Synchronize
                 // if grammars have changed WordNotify, RuleNotify etc. will be called before Synchronize returns.
                 // Here Synchronize is called only if processing silence, not speech
                 // to avoid having to deal with grammar changes during recognition.
@@ -1034,7 +1035,7 @@ STDMETHODIMP CSrEngine::ThreadProc(void *, HANDLE hExitThreadEvent, HANDLE hNoti
                 //    and saying it's gone at 22 seconds
                 if (block % (100 * 30) == 20 * 100)
                 {
-                    const SPINTERFERENCE rgspi[] = 
+                    const SPINTERFERENCE rgspi[] =
                     { SPINTERFERENCE_NOISE, SPINTERFERENCE_NOSIGNAL, SPINTERFERENCE_TOOLOUD, SPINTERFERENCE_TOOQUIET };
 
                     AddEvent(SPEI_INTERFERENCE, block*BLOCKSIZE, 0, rgspi[rand() % 4]);
@@ -1045,10 +1046,10 @@ STDMETHODIMP CSrEngine::ThreadProc(void *, HANDLE hExitThreadEvent, HANDLE hNoti
                 }
                 // Ask for UI at 10 seconds into the stream
                 //  and cancel request one second later
-                else if (block == 10 * 100) 
+                else if (block == 10 * 100)
                 {
                     AddEventString(SPEI_REQUEST_UI, block * BLOCKSIZE, SPDUI_UserTraining);
-                } 
+                }
                 else if (block == 11 * 100) // Cancle the UI request at 11 seconds into the stream
                 {
                     AddEventString(SPEI_REQUEST_UI, block * BLOCKSIZE, NULL);
@@ -1056,7 +1057,7 @@ STDMETHODIMP CSrEngine::ThreadProc(void *, HANDLE hExitThreadEvent, HANDLE hNoti
             }
             break;
 
-        case WAIT_OBJECT_0 + 2: 
+        case WAIT_OBJECT_0 + 2:
             // SAPI has explicitly requested we call Synchronize
             m_cpSite->Synchronize((ULONGLONG)block * BLOCKSIZE);
             // Once synchronize is called the engine cannot fire events prior to that stream position
@@ -1094,9 +1095,9 @@ STDMETHODIMP CSrEngine::ThreadProc(void *, HANDLE hExitThreadEvent, HANDLE hNoti
 * CSrEngine::_CheckRecognition *
 *---------------------------*
 *   Description:
-*       This internal method decides when to fire sound start events, 
+*       This internal method decides when to fire sound start events,
 *       phrase start events and hypotheses.
-*****************************************************************************/   
+*****************************************************************************/
 void CSrEngine::_CheckRecognition()
 {
 
@@ -1149,7 +1150,7 @@ void CSrEngine::_NotifyRecognition( BOOL fHypothesis, ULONG nWords )
 
     // First count the active CFG rules
     ULONG cActiveCFGRules = 0;
-    CRuleEntry * pRule = m_RuleList.GetHead();        
+    CRuleEntry * pRule = m_RuleList.GetHead();
     for(; pRule; pRule = m_RuleList.GetNext(pRule))
     {
         if( pRule->m_fActive )
@@ -1160,7 +1161,7 @@ void CSrEngine::_NotifyRecognition( BOOL fHypothesis, ULONG nWords )
 
     // Then count all the grammars with active dictation
     ULONG cActiveSLM = 0;
-    CDrvGrammar * pGram = m_GrammarList.GetHead();        
+    CDrvGrammar * pGram = m_GrammarList.GetHead();
     for(; pGram; pGram = m_GrammarList.GetNext(pGram))
     {
         if(pGram->m_SLMActive)
@@ -1244,8 +1245,8 @@ void CSrEngine::_NotifyRecognition( BOOL fHypothesis, ULONG nWords )
 *       FAIL(hr)
 ****************************************************************************/
 HRESULT CSrEngine::CreatePhraseFromRule( CRuleEntry * pRule, BOOL fHypothesis,
-                                         ULONGLONG ullAudioPos, ULONG ulAudioSize,
-                                         ISpPhraseBuilder** ppPhrase )
+        ULONGLONG ullAudioPos, ULONG ulAudioSize,
+        ISpPhraseBuilder** ppPhrase )
 {
     HRESULT hr = S_OK;
     SPRULEENTRY RuleInfo;
@@ -1255,7 +1256,7 @@ HRESULT CSrEngine::CreatePhraseFromRule( CRuleEntry * pRule, BOOL fHypothesis,
     {
         // Limit of 200 transitions in grammar!
         const ULONG MAXPATH = 200;
-        SPPATHENTRY Path[MAXPATH];        
+        SPPATHENTRY Path[MAXPATH];
         ULONG cTrans;
         // Recursively generate random path
         hr = RecurseWalk(RuleInfo.hInitialState, Path, &cTrans);
@@ -1341,7 +1342,7 @@ CRuleEntry* CSrEngine::NextRuleAlt( CRuleEntry * pPriRule, CRuleEntry * pLastRul
     for(; pRule; pRule = m_RuleList.GetNext(pRule))
     {
         if( pRule->m_fActive &&
-            ( m_cpSite->IsAlternate( pPriRule->m_hRule, pRule->m_hRule ) == S_OK ) )
+                ( m_cpSite->IsAlternate( pPriRule->m_hRule, pRule->m_hRule ) == S_OK ) )
         {
             break;
         }
@@ -1355,7 +1356,7 @@ CRuleEntry* CSrEngine::NextRuleAlt( CRuleEntry * pPriRule, CRuleEntry * pLastRul
 *   Description:
 *       This method is used to produce the results information for a CFG result.
 *       It creates a result phrase and then some alternates phrases.
-*   Return: 
+*   Return:
 *       S_OK
 *       FAILED(hr)
 ****************************************************************************/
@@ -1491,10 +1492,10 @@ HRESULT CSrEngine::WalkCFGRule( SPRECORESULTINFO * pResult, ULONG cRulesActive, 
 *       This method is used to produce the results information for a dictation result.
 *       It creates a result phrase, and then serializes some alternates information
 *       that the CSrEngineAlternates object uses to generate alternates.
-*   Return: 
+*   Return:
 *       S_OK
 *       FAILED(hr)
-*****************************************************************************/   
+*****************************************************************************/
 HRESULT CSrEngine::WalkSLM(SPRECORESULTINFO * pResult, ULONG cSLMActive,
                            ULONG nWords, ULONGLONG ullAudioPos, ULONG ulAudioSize)
 {
@@ -1502,7 +1503,7 @@ HRESULT CSrEngine::WalkSLM(SPRECORESULTINFO * pResult, ULONG cSLMActive,
 
     // If several dictation grammars are active pick one at random
     ULONG ulGramIndex = rand() % cSLMActive;
-    CDrvGrammar * pGram = m_GrammarList.GetHead();        
+    CDrvGrammar * pGram = m_GrammarList.GetHead();
     ULONG nGram = 0;
     for(; pGram; pGram = m_GrammarList.GetNext(pGram))
     {
@@ -1545,7 +1546,7 @@ HRESULT CSrEngine::WalkSLM(SPRECORESULTINFO * pResult, ULONG cSLMActive,
         pElements[n].pszDisplayText =  DICT_WORD;
         pElements[n].ulAudioStreamOffset = n * ulInterval;
         pElements[n].ulAudioSizeBytes = ulInterval/2;
- 
+
     }
 
     // add elements to phrase
@@ -1618,10 +1619,10 @@ HRESULT CSrEngine::WalkSLM(SPRECORESULTINFO * pResult, ULONG cSLMActive,
 *       Any word can be the start word and then recognition can continue to
 *       the next \0 end of sentence marker or at the end of the active text selection.
 *       In this sample we pick a random string of words from the buffer.
-*   Return: 
+*   Return:
 *       S_OK
 *       FAILED(hr)
-*****************************************************************************/   
+*****************************************************************************/
 HRESULT CSrEngine::WalkTextBuffer(void* pvGrammarCookie, SPPATHENTRY * pPath, SPTRANSITIONID hId, ULONG * pcTrans)
 {
     HRESULT hr = S_OK;
@@ -1638,7 +1639,7 @@ HRESULT CSrEngine::WalkTextBuffer(void* pvGrammarCookie, SPPATHENTRY * pPath, SP
     // Count sentences
     ULONG nPhrase = 0;
     const WCHAR *cPhrase;
-    
+
     ULONG ulStartActiveOffset = 0; //The default value with text selection
     ULONG cchActiveChars = pGrammar->m_cchText - 2; //The default value with text selection
     ULONG ccChars = 0;
@@ -1682,7 +1683,10 @@ HRESULT CSrEngine::WalkTextBuffer(void* pvGrammarCookie, SPPATHENTRY * pPath, SP
     {
         if(iswspace(*cWord))
         {
-            while(*(cWord+1) && iswspace(*(cWord+1)) && ULONG(cWord - pGrammar->m_pWordSequenceText) < ulStartActiveOffset + cchActiveChars - 1) {cWord++;}
+            while(*(cWord+1) && iswspace(*(cWord+1)) && ULONG(cWord - pGrammar->m_pWordSequenceText) < ulStartActiveOffset + cchActiveChars - 1)
+            {
+                cWord++;
+            }
             nWord++;
         }
     }
@@ -1696,7 +1700,10 @@ HRESULT CSrEngine::WalkTextBuffer(void* pvGrammarCookie, SPPATHENTRY * pPath, SP
     {
         if(iswspace(*cWord))
         {
-            while(*(cWord+1) && iswspace(*(cWord+1)) && ULONG(cWord - pGrammar->m_pWordSequenceText) < ulStartActiveOffset + cchActiveChars - 1) {cWord++;}
+            while(*(cWord+1) && iswspace(*(cWord+1)) && ULONG(cWord - pGrammar->m_pWordSequenceText) < ulStartActiveOffset + cchActiveChars - 1)
+            {
+                cWord++;
+            }
             nWord++;
         }
     }
@@ -1719,7 +1726,10 @@ HRESULT CSrEngine::WalkTextBuffer(void* pvGrammarCookie, SPPATHENTRY * pPath, SP
             pPath++;
             (*pcTrans)++;
 
-            while(*(cWord+1) && iswspace(*(cWord+1)) && ULONG(cWord - pGrammar->m_pWordSequenceText) < ulStartActiveOffset + cchActiveChars - 1) {cWord++;}
+            while(*(cWord+1) && iswspace(*(cWord+1)) && ULONG(cWord - pGrammar->m_pWordSequenceText) < ulStartActiveOffset + cchActiveChars - 1)
+            {
+                cWord++;
+            }
             cW = cWord + 1; // first char of next word
             nWord++;
         }
@@ -1738,7 +1748,7 @@ HRESULT CSrEngine::WalkTextBuffer(void* pvGrammarCookie, SPPATHENTRY * pPath, SP
 *
 *       The initial state in each rule is obtained by calling GetRuleInfo. Then for each
 *       state GetStateInfo can be called. This gives an array of SPTRANSITION entries
-*       the contain information on the type of transition, the transition id and 
+*       the contain information on the type of transition, the transition id and
 *       the next state the transition goes to. The transition id is the main information
 *       included in the SPPATHENTRY. Only for word transitions are SPPATHENTRY created,
 *       as this is all that is required by ParseFromTransitions.
@@ -1837,19 +1847,19 @@ HRESULT CSrEngine::RecurseWalk(SPSTATEHANDLE hState, SPPATHENTRY * pPath, ULONG 
 *
 *       If the engines returned format is incompatible with the input audio
 *       object format SAPI will try and create a format convertor to convert the audio
-*       
-*   Return: 
+*
+*   Return:
 *       S_OK
 *       FAILED(hr)
-*****************************************************************************/   
+*****************************************************************************/
 STDMETHODIMP CSrEngine::GetInputAudioFormat(const GUID * pSourceFormatId, const WAVEFORMATEX * pSourceWaveFormatEx,
-                                            GUID * pDesiredFormatId, WAVEFORMATEX ** ppCoMemDesiredWFEX)
+        GUID * pDesiredFormatId, WAVEFORMATEX ** ppCoMemDesiredWFEX)
 {
 
 
     // Helper function which fills in the sample engine desired format (PCM 11kHz Mono).
     return SpConvertStreamFormatEnum(SPSF_11kHz16BitMono, pDesiredFormatId, ppCoMemDesiredWFEX);
-} 
+}
 
 
 /*****************************************************************************
@@ -1862,11 +1872,11 @@ STDMETHODIMP CSrEngine::GetInputAudioFormat(const GUID * pSourceFormatId, const 
 *       If the app tries to set or query an attribute the engine should return
 *       okay if it supports that attribute and S_FALSE if it does not.
 *       In this method the app is trying to set a numeric property value.
-*   Return: 
+*   Return:
 *       S_FALSE
 *****************************************************************************/
 STDMETHODIMP CSrEngine::
-    SetPropertyNum( SPPROPSRC eSrc, PVOID pvSrcObj, const WCHAR* pName, LONG lValue )
+SetPropertyNum( SPPROPSRC eSrc, PVOID pvSrcObj, const WCHAR* pName, LONG lValue )
 {
 
     HRESULT hr = S_OK;
@@ -1883,7 +1893,7 @@ STDMETHODIMP CSrEngine::
 *       In this method the app is trying to get a numeric property value.
 *****************************************************************************/
 STDMETHODIMP CSrEngine::
-    GetPropertyNum( SPPROPSRC eSrc, PVOID pvSrcObj, const WCHAR* pName, LONG * plValue )
+GetPropertyNum( SPPROPSRC eSrc, PVOID pvSrcObj, const WCHAR* pName, LONG * plValue )
 {
 
     HRESULT hr = S_OK;
@@ -1901,7 +1911,7 @@ STDMETHODIMP CSrEngine::
 *       In this method the app is trying to set a string property value.
 *****************************************************************************/
 STDMETHODIMP CSrEngine::
-    SetPropertyString( SPPROPSRC eSrc, PVOID pvSrcObj, const WCHAR* pName, const WCHAR* pValue )
+SetPropertyString( SPPROPSRC eSrc, PVOID pvSrcObj, const WCHAR* pName, const WCHAR* pValue )
 {
 
     HRESULT hr = S_OK;
@@ -1918,7 +1928,7 @@ STDMETHODIMP CSrEngine::
 *       In this method the app is trying to get a string property value.
 *****************************************************************************/
 STDMETHODIMP CSrEngine::
-    GetPropertyString( SPPROPSRC eSrc, PVOID pvSrcObj, const WCHAR* pName, __deref_out_opt WCHAR** ppCoMemValue )
+GetPropertyString( SPPROPSRC eSrc, PVOID pvSrcObj, const WCHAR* pName, __deref_out_opt WCHAR** ppCoMemValue )
 {
 
     HRESULT hr = S_OK;
@@ -1946,12 +1956,12 @@ STDMETHODIMP CSrEngine::
 *
 *       The single buffer is in/out. This call can update the buffer, and the updated buffer
 *       will be returned to the caller of _ISpPrivateEngineCall::CallEngine().  To return
-*       variable size buffers, use _ISpPrivateEngineCall::CallEngineEx() and 
+*       variable size buffers, use _ISpPrivateEngineCall::CallEngineEx() and
 *       ISpSREngine::PrivateCallEx().
 *
-*   Return: 
+*   Return:
 *       S_OK
-*****************************************************************************/   
+*****************************************************************************/
 STDMETHODIMP CSrEngine::PrivateCall(void * pvEngineContext, void * pCallFrame, ULONG ulCallFrameSize)
 {
 
@@ -1997,7 +2007,7 @@ STDMETHODIMP CSrEngine::PrivateCallEx(void * pvEngineContext, const void * pInCa
 *       S_OK
 *
 *****************************************************************************/
-STDMETHODIMP CSrEngine::PrivateCallImmediate( 
+STDMETHODIMP CSrEngine::PrivateCallImmediate(
     void *pvEngineContext,
     const void *pInCallFrame,
     ULONG ulInCallFrameSize,
@@ -2009,7 +2019,7 @@ STDMETHODIMP CSrEngine::PrivateCallImmediate(
 
     return S_OK;
 }
-    
+
 /****************************************************************************
 * CSrEngine::SetAdaptationData2 *
 *--------------------------*
@@ -2020,7 +2030,7 @@ STDMETHODIMP CSrEngine::PrivateCallImmediate(
 *       S_OK
 *
 *****************************************************************************/
-STDMETHODIMP CSrEngine::SetAdaptationData2( 
+STDMETHODIMP CSrEngine::SetAdaptationData2(
     void *pvEngineContext,
     __in_ecount(cch)  const WCHAR *pAdaptationData,
     const ULONG cch,
@@ -2030,7 +2040,7 @@ STDMETHODIMP CSrEngine::SetAdaptationData2(
 {
     return S_OK;
 }
-    
+
 /****************************************************************************
 * CSrEngine::SetGrammarPrefix *
 *--------------------------*
@@ -2042,14 +2052,14 @@ STDMETHODIMP CSrEngine::SetAdaptationData2(
 *       S_OK
 *
 *****************************************************************************/
-STDMETHODIMP CSrEngine::SetGrammarPrefix( 
+STDMETHODIMP CSrEngine::SetGrammarPrefix(
     void *pvEngineGrammar,
     __in_opt  LPCWSTR pszPrefix,
     BOOL fIsPrefixRequired)
 {
     return S_OK;
 }
-    
+
 /****************************************************************************
 * CSrEngine::SetRulePriority *
 *--------------------------*
@@ -2060,7 +2070,7 @@ STDMETHODIMP CSrEngine::SetGrammarPrefix(
 *       S_OK
 *
 *****************************************************************************/
-STDMETHODIMP CSrEngine::SetRulePriority( 
+STDMETHODIMP CSrEngine::SetRulePriority(
     SPRULEHANDLE hRule,
     void *pvClientRuleContext,
     int nRulePriority)
@@ -2081,14 +2091,14 @@ STDMETHODIMP CSrEngine::SetRulePriority(
 *       E_NOTIMPL
 *
 *****************************************************************************/
-STDMETHODIMP CSrEngine::EmulateRecognition( 
+STDMETHODIMP CSrEngine::EmulateRecognition(
     ISpPhrase *pPhrase,
     DWORD dwCompareFlags)
 {
     // Let SAPI do its own emulation.
     return E_NOTIMPL;
 }
-    
+
 /****************************************************************************
 * CSrEngine::SetSLMWeight *
 *--------------------------*
@@ -2099,13 +2109,13 @@ STDMETHODIMP CSrEngine::EmulateRecognition(
 *       S_OK
 *
 *****************************************************************************/
-STDMETHODIMP CSrEngine::SetSLMWeight( 
+STDMETHODIMP CSrEngine::SetSLMWeight(
     void *pvEngineGrammar,
     float flWeight)
 {
     return S_OK;
 }
-    
+
 /****************************************************************************
 * CSrEngine::SetRuleWeight *
 *--------------------------*
@@ -2116,14 +2126,14 @@ STDMETHODIMP CSrEngine::SetSLMWeight(
 *       S_OK
 *
 *****************************************************************************/
-STDMETHODIMP CSrEngine::SetRuleWeight( 
+STDMETHODIMP CSrEngine::SetRuleWeight(
     SPRULEHANDLE hRule,
     void *pvClientRuleContext,
     float flWeight)
 {
     return S_OK;
 }
-    
+
 /****************************************************************************
 * CSrEngine::SetTrainingState *
 *--------------------------*
@@ -2134,13 +2144,13 @@ STDMETHODIMP CSrEngine::SetRuleWeight(
 *       S_OK
 *
 *****************************************************************************/
-STDMETHODIMP CSrEngine::SetTrainingState( 
+STDMETHODIMP CSrEngine::SetTrainingState(
     BOOL fDoingTraining,
     BOOL fAdaptFromTrainingData)
 {
     return S_OK;
 }
-    
+
 /****************************************************************************
 * CSrEngine::ResetAcousticModelAdaptation *
 *--------------------------*
@@ -2155,7 +2165,7 @@ STDMETHODIMP CSrEngine::ResetAcousticModelAdaptation( void)
 {
     return S_OK;
 }
-    
+
 /****************************************************************************
 * CSrEngine::OnLoadCFG *
 *--------------------------*
@@ -2167,14 +2177,14 @@ STDMETHODIMP CSrEngine::ResetAcousticModelAdaptation( void)
 *       S_OK
 *
 *****************************************************************************/
-STDMETHODIMP CSrEngine::OnLoadCFG( 
+STDMETHODIMP CSrEngine::OnLoadCFG(
     void *pvEngineGrammar,
     const SPBINARYGRAMMAR *pGrammarData,
     ULONG ulGrammarID)
 {
     return S_OK;
 }
-    
+
 /****************************************************************************
 * CSrEngine::OnUnloadCFG *
 *--------------------------*
@@ -2185,7 +2195,7 @@ STDMETHODIMP CSrEngine::OnLoadCFG(
 *       S_OK
 *
 *****************************************************************************/
-STDMETHODIMP CSrEngine::OnUnloadCFG( 
+STDMETHODIMP CSrEngine::OnUnloadCFG(
     void *pvEngineGrammar,
     ULONG ulGrammarID)
 {

@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -8,7 +8,7 @@
 
 /****************************************************************************
 						Microsoft RPC
-        
+
                         usrdef Example
 
     FILE:       usrdefc.c
@@ -39,7 +39,7 @@ void Usage(char * pszProgramName)
     fprintf_s(stderr, " -p protocol_sequence\n");
     fprintf_s(stderr, " -n network_address\n");
     fprintf_s(stderr, " -e endpoint\n");
-    fprintf_s(stderr, " -a server principal name\n");	
+    fprintf_s(stderr, " -a server principal name\n");
     fprintf_s(stderr, " -o options\n");
     fprintf_s(stderr, " -s string\n");
     exit(1);
@@ -60,9 +60,12 @@ void __cdecl main(int argc, char **argv)
     dhBinding->pszOptions          = NULL;
 
     /* allow the user to override settings with command line switches */
-    for (i = 1; i < argc; i++) {
-        if ((*argv[i] == '-') || (*argv[i] == '/')) {
-            switch (tolower(*(argv[i]+1))) {
+    for (i = 1; i < argc; i++)
+    {
+        if ((*argv[i] == '-') || (*argv[i] == '/'))
+        {
+            switch (tolower(*(argv[i]+1)))
+            {
             case 'p':  // protocol sequence
                 dhBinding->pszProtocolSequence = argv[++i];
                 break;
@@ -72,7 +75,7 @@ void __cdecl main(int argc, char **argv)
             case 'e':
                 dhBinding->pszEndpoint = argv[++i];
                 break;
-            case 'a':  
+            case 'a':
                 dhBinding->pszSpn = argv[++i];
                 break;
             case 'o':
@@ -90,28 +93,30 @@ void __cdecl main(int argc, char **argv)
         else
             Usage(argv[0]);
     }
-	
-	
-	RpcTryExcept{
-    printf_s("Calling the remote procedure 'UsrdefProc'\n");
-    UsrdefProc(dhBinding, pszString);  // call the remote procedure
 
-    printf_s("Calling the remote procedure 'Shutdown'\n");
-    Shutdown(dhBinding);  // shut down the server side
-	}
-	RpcExcept(( ( (RpcExceptionCode() != STATUS_ACCESS_VIOLATION) &&
-                   (RpcExceptionCode() != STATUS_DATATYPE_MISALIGNMENT) &&
-                   (RpcExceptionCode() != STATUS_PRIVILEGED_INSTRUCTION) &&
-                   (RpcExceptionCode() != STATUS_BREAKPOINT) &&
-                   (RpcExceptionCode() != STATUS_STACK_OVERFLOW) &&
-                   (RpcExceptionCode() != STATUS_IN_PAGE_ERROR) &&
-                   (RpcExceptionCode() != STATUS_GUARD_PAGE_VIOLATION)
-                    )
-                    ? EXCEPTION_EXECUTE_HANDLER : EXCEPTION_CONTINUE_SEARCH )){
-	printf("\nFound an exception: %x",RpcExceptionCode());
-	}
-	RpcEndExcept
-   
+
+    RpcTryExcept
+    {
+        printf_s("Calling the remote procedure 'UsrdefProc'\n");
+        UsrdefProc(dhBinding, pszString);  // call the remote procedure
+
+        printf_s("Calling the remote procedure 'Shutdown'\n");
+        Shutdown(dhBinding);  // shut down the server side
+    }
+    RpcExcept(( ( (RpcExceptionCode() != STATUS_ACCESS_VIOLATION) &&
+                  (RpcExceptionCode() != STATUS_DATATYPE_MISALIGNMENT) &&
+                  (RpcExceptionCode() != STATUS_PRIVILEGED_INSTRUCTION) &&
+                  (RpcExceptionCode() != STATUS_BREAKPOINT) &&
+                  (RpcExceptionCode() != STATUS_STACK_OVERFLOW) &&
+                  (RpcExceptionCode() != STATUS_IN_PAGE_ERROR) &&
+                  (RpcExceptionCode() != STATUS_GUARD_PAGE_VIOLATION)
+                )
+                ? EXCEPTION_EXECUTE_HANDLER : EXCEPTION_CONTINUE_SEARCH ))
+    {
+        printf("\nFound an exception: %x",RpcExceptionCode());
+    }
+    RpcEndExcept
+
 }  // end main()
 
 /* This _bind routine is called by the client stub immediately */
@@ -121,7 +126,7 @@ RPC_BINDING_HANDLE __RPC_USER DATA_HANDLE_TYPE_bind(DATA_HANDLE_TYPE dh1)
     RPC_STATUS status;    // returned by RPC API functions
     RPC_BINDING_HANDLE hBinding;
     unsigned char * pszStringBinding;
-	RPC_SECURITY_QOS SecQos;
+    RPC_SECURITY_QOS SecQos;
 
     printf_s("Within DATA_HANDLE_TYPE_bind function:\n");
     status = RpcStringBindingCompose(dh1->pszUuid,
@@ -132,19 +137,22 @@ RPC_BINDING_HANDLE __RPC_USER DATA_HANDLE_TYPE_bind(DATA_HANDLE_TYPE dh1)
                                      &pszStringBinding);
     printf_s("RpcStringBindingCompose returned 0x%x\n", status);
     printf_s("pszStringBinding = %s\n", pszStringBinding);
-    if (status) {
+    if (status)
+    {
         exit(status);
     }
 
     status = RpcBindingFromStringBinding(pszStringBinding,
                                          &hBinding);
     printf_s("RpcBindingFromStringBinding returned 0x%x\n", status);
-    if (status) {
+    if (status)
+    {
         exit(status);
     }
-	
+
     /* User did not specify spn, construct one. */
-    if (dh1->pszSpn == NULL) {
+    if (dh1->pszSpn == NULL)
+    {
         MakeSpn(&dh1->pszSpn);
     }
 
@@ -162,15 +170,17 @@ RPC_BINDING_HANDLE __RPC_USER DATA_HANDLE_TYPE_bind(DATA_HANDLE_TYPE dh1)
                                      NULL,
                                      RPC_C_AUTHZ_NONE,
                                      &SecQos);
-	
+
     printf_s("RpcBindingSetAuthInfoEx returned 0x%x\n", status);
-    if (status) {
+    if (status)
+    {
         exit(status);
-    }	
-		
+    }
+
     status = RpcStringFree(&pszStringBinding);  // unbind
     printf_s("RpcStringFree returned 0x%x\n", status);
-    if (status) {
+    if (status)
+    {
         exit(status);
     }
 
@@ -180,15 +190,15 @@ RPC_BINDING_HANDLE __RPC_USER DATA_HANDLE_TYPE_bind(DATA_HANDLE_TYPE dh1)
 /* This _unbind routine is called by the client stub immediately */
 /* after each remote procedure call.                             */
 void __RPC_USER DATA_HANDLE_TYPE_unbind(DATA_HANDLE_TYPE dh1,
-                                       RPC_BINDING_HANDLE h1)
+                                        RPC_BINDING_HANDLE h1)
 {
-     RPC_STATUS status;    // returned by RPC API functions
+    RPC_STATUS status;    // returned by RPC API functions
 
-     printf_s("Within DATA_HANDLE_TYPE_unbind function:\n");
-     printf_s("Unbinding handle for %s\n", dh1->pszEndpoint);
+    printf_s("Within DATA_HANDLE_TYPE_unbind function:\n");
+    printf_s("Unbinding handle for %s\n", dh1->pszEndpoint);
 
-     status = RpcBindingFree(&h1);  // unbind
-     printf_s("RpcBindingFree returned 0x%x\n", status);
+    status = RpcBindingFree(&h1);  // unbind
+    printf_s("RpcBindingFree returned 0x%x\n", status);
 }
 
 /*********************************************************************/

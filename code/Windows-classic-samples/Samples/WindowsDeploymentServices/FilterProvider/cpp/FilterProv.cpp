@@ -1,4 +1,4 @@
-/*++
+﻿/*++
 
     Copyright (c) Microsoft Corporation
 
@@ -39,30 +39,30 @@ WCHAR g_wszConfigurationFile[MAX_PATH] = { 0 };
 //
 ULONG g_uFilterPolicy = VAL_FILTER_POLICY_DENY;
 
-BOOL 
-WINAPI 
+BOOL
+WINAPI
 DllMain(
-  _In_ HANDLE hInstance, 
-  _In_ DWORD dwReason, 
-  _In_ LPVOID pReserved
+    _In_ HANDLE hInstance,
+    _In_ DWORD dwReason,
+    _In_ LPVOID pReserved
 )
 /*++
 
 Routine Description:
 
-    It is called by the system when processes and threads are initialized and 
-    terminated, or on calls to the LoadLibrary and FreeLibrary functions. 
+    It is called by the system when processes and threads are initialized and
+    terminated, or on calls to the LoadLibrary and FreeLibrary functions.
 
 Arguments:
 
     hInstance   -   The value is the base address of the DLL.
-    dwReason    -   Specifies a flag indicating why the DLL entry-point function 
-                    is being called. 
-    pReserved   -   Specifies further aspects of DLL initialization and cleanup.                   
+    dwReason    -   Specifies a flag indicating why the DLL entry-point function
+                    is being called.
+    pReserved   -   Specifies further aspects of DLL initialization and cleanup.
 
 Return Value:
 
-    ERROR_SUCCESS on success. On failure appropriate Win32 Error Code is 
+    ERROR_SUCCESS on success. On failure appropriate Win32 Error Code is
     returned.
 
 --*/
@@ -101,7 +101,7 @@ Arguments:
 
 Return Value:
 
-    ERROR_SUCCESS on success. On failure appropriate Win32 Error Code is 
+    ERROR_SUCCESS on success. On failure appropriate Win32 Error Code is
     returned.
 
 --*/
@@ -134,7 +134,7 @@ Return Value:
                                   PxeProviderRecvRequest,
                                   NULL);
     W32_CLEANUP_ON_FAILURE(dwError, Cleanup);
-    
+
     //
     // Define filter to only receive requests which are valid Dhcp Packets and
     // contain Option 60 'PXEClient'.
@@ -149,7 +149,7 @@ Return Value:
     // Save Provider Handle.
     //
     g_hFilterProvider = hProvider;
-    
+
 Cleanup:
     return dwError;
 }
@@ -163,17 +163,17 @@ PxeProviderShutdown(
 
 Routine Description:
 
-    This function is registered as callback for PXE_CALLBACK_SHUTDOWN by 
+    This function is registered as callback for PXE_CALLBACK_SHUTDOWN by
     Provider and is called by WDSPXE when it needs to shutdown the Provider.
 
 Arguments:
 
-    pContext    -   Context which was passed to WDSPXE when callback was 
+    pContext    -   Context which was passed to WDSPXE when callback was
                     registered.
 
 Return Value:
 
-    ERROR_SUCCESS on success. On failure appropriate Win32 Error Code is 
+    ERROR_SUCCESS on success. On failure appropriate Win32 Error Code is
     returned.
 
 --*/
@@ -211,13 +211,13 @@ Arguments:
                         For this implementation, the remote address is ignored.
     pAction         -   [out] Contains the next action that should be taken by
                         WDS PXE.
-    pContext        -   Context which was passed to WDSPXE when callback was 
+    pContext        -   Context which was passed to WDSPXE when callback was
                         registered. For this implementation, the context pointer
                         is ignored.
 
 Return Value:
 
-    ERROR_SUCCESS on success. On failure appropriate Win32 Error Code is 
+    ERROR_SUCCESS on success. On failure appropriate Win32 Error Code is
     returned.
 
 --*/
@@ -239,7 +239,7 @@ Return Value:
     //
     // Convert client MAC address to string.
     //
-    dwError = GetClientMacAddress(pPacket, 
+    dwError = GetClientMacAddress(pPacket,
                                   wszMacAddress);
     W32_CLEANUP_ON_FAILURE(dwError, Cleanup);
 
@@ -289,7 +289,7 @@ Return Value:
         else
             *pAction = PXE_BA_IGNORE;
     }
-    
+
 Cleanup:
     return dwError;
 }
@@ -309,7 +309,7 @@ Arguments:
 
 Return Value:
 
-    ERROR_SUCCESS on success. On failure appropriate Win32 Error Code is 
+    ERROR_SUCCESS on success. On failure appropriate Win32 Error Code is
     returned.
 
 --*/
@@ -353,7 +353,7 @@ Return Value:
     }
 
     //
-    // Read the Policy. This is defined in the 'Configuration' section, using 
+    // Read the Policy. This is defined in the 'Configuration' section, using
     // the 'Policy' key.
     //
     if (GetPrivateProfileString(CONFIGURATION_SECTION,
@@ -362,7 +362,7 @@ Return Value:
                                 wszPolicy,
                                 NUMELEM(wszPolicy),
                                 g_wszConfigurationFile) == 0 ||
-        wszPolicy[0] == 0)
+            wszPolicy[0] == 0)
     {
         dwError = ERROR_FILE_NOT_FOUND;
         goto Cleanup;
@@ -390,8 +390,8 @@ Return Value:
     PxeTrace(g_hFilterProvider,
              PXE_TRACE_INFO,
              L"Filter Policy: %s",
-             (g_uFilterPolicy == VAL_FILTER_POLICY_DENY) ? 
-                L"Exclude" : L"Include");
+             (g_uFilterPolicy == VAL_FILTER_POLICY_DENY) ?
+             L"Exclude" : L"Include");
 
 Cleanup:
     return dwError;
@@ -413,10 +413,10 @@ Arguments:
 
     pPacket         -   Pointer to received packet.
     pwszMacAddress  -   [out] Contains mac address.
-    
+
 Return Value:
 
-    ERROR_SUCCESS on success. On failure appropriate Win32 Error Code is 
+    ERROR_SUCCESS on success. On failure appropriate Win32 Error Code is
     returned.
 
 --*/

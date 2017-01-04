@@ -1,20 +1,20 @@
-/*************************************************************************************************
+﻿/*************************************************************************************************
 * Description: Implementation of the accessible object.
-* 
+*
 * See EntryPoint.cpp for a full description of this sample.
-*   
+*
 *
 *  Copyright (C) Microsoft Corporation.  All rights reserved.
-* 
+*
 * This source code is intended only as a supplement to Microsoft
 * Development Tools and/or on-line documentation.  See these other
 * materials for detailed information regarding Microsoft code samples.
-* 
+*
 * THIS CODE AND INFORMATION ARE PROVIDED AS IS WITHOUT WARRANTY OF ANY
 * KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
 * IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 * PARTICULAR PURPOSE.
-* 
+*
 *************************************************************************************************/
 #include "AccServer.h"
 
@@ -52,26 +52,26 @@ IFACEMETHODIMP_(ULONG) AccServer::Release()
     if (--m_refCount <= 0)
     {
         delete this;
-        return 0;             
+        return 0;
     }
     return m_refCount;
 }
 
 IFACEMETHODIMP AccServer::QueryInterface(REFIID riid, void** ppInterface)
 {
-    if (riid == __uuidof(IUnknown))   
+    if (riid == __uuidof(IUnknown))
     {
         *ppInterface = static_cast<IUnknown*>(static_cast<IAccessible*>(this));
     }
-    else if (riid == __uuidof(IAccessible)) 
+    else if (riid == __uuidof(IAccessible))
     {
         *ppInterface = static_cast<IAccessible*>(this);
     }
-    else if (riid == __uuidof(IDispatch))   
+    else if (riid == __uuidof(IDispatch))
     {
         *ppInterface = static_cast<IDispatch*>(this);
     }
-    else if (riid == __uuidof(IEnumVARIANT))    
+    else if (riid == __uuidof(IEnumVARIANT))
     {
         *ppInterface = static_cast<IEnumVARIANT*>(this);
     }
@@ -82,7 +82,7 @@ IFACEMETHODIMP AccServer::QueryInterface(REFIID riid, void** ppInterface)
     }
     (static_cast<IUnknown*>(*ppInterface))->AddRef();
     return S_OK;
-  }
+}
 
 
 // IDispatch methods.
@@ -102,7 +102,7 @@ IFACEMETHODIMP AccServer::GetTypeInfo(UINT /*itinfo*/, LCID /*lcid*/, ITypeInfo*
 }
 
 IFACEMETHODIMP AccServer::GetIDsOfNames(REFIID /*riid*/, OLECHAR** rgszNames, UINT /*cNames*/,
-                                                   LCID /*lcid*/, DISPID* rgdispid)
+                                        LCID /*lcid*/, DISPID* rgdispid)
 {
     *rgszNames = NULL;
     *rgdispid = 0;
@@ -110,12 +110,12 @@ IFACEMETHODIMP AccServer::GetIDsOfNames(REFIID /*riid*/, OLECHAR** rgszNames, UI
 }
 
 IFACEMETHODIMP AccServer::Invoke(DISPID /*dispidMember*/, REFIID /*riid*/, LCID /*lcid*/, WORD /*wFlags*/,
-                                            DISPPARAMS* pdispparams, VARIANT* pvarResult,
-                                            EXCEPINFO* pexcepinfo, UINT* puArgErr)
+                                 DISPPARAMS* pdispparams, VARIANT* pvarResult,
+                                 EXCEPINFO* pexcepinfo, UINT* puArgErr)
 {
-    if (!m_controlIsAlive) 
-    { 
-        return RPC_E_DISCONNECTED; 
+    if (!m_controlIsAlive)
+    {
+        return RPC_E_DISCONNECTED;
     }
 
     pdispparams = NULL;
@@ -128,14 +128,14 @@ IFACEMETHODIMP AccServer::Invoke(DISPID /*dispidMember*/, REFIID /*riid*/, LCID 
 
 // IEnumVARIANT methods
 
-IFACEMETHODIMP AccServer::Next( 
-        ULONG celt,          // Number of elements to return.
-        VARIANT *rgVar,      // Array of returned elements.
-        ULONG *pCeltFetched) // Number actually returned.   
+IFACEMETHODIMP AccServer::Next(
+    ULONG celt,          // Number of elements to return.
+    VARIANT *rgVar,      // Array of returned elements.
+    ULONG *pCeltFetched) // Number actually returned.
 {
-    if (!m_controlIsAlive) 
-    { 
-        return RPC_E_DISCONNECTED; 
+    if (!m_controlIsAlive)
+    {
+        return RPC_E_DISCONNECTED;
     }
 
     ULONG childCount = static_cast<ULONG>(m_pControl->GetCount());
@@ -143,7 +143,7 @@ IFACEMETHODIMP AccServer::Next(
     {
         *pCeltFetched = 0;
     }
-    if (!rgVar) 
+    if (!rgVar)
     {
         return E_INVALIDARG;
     }
@@ -174,12 +174,12 @@ IFACEMETHODIMP AccServer::Next(
     return((fetched < celt) ? S_FALSE : S_OK);
 }
 
-    
+
 IFACEMETHODIMP AccServer::Skip(ULONG celt)
 {
-    if (!m_controlIsAlive) 
-    { 
-        return RPC_E_DISCONNECTED; 
+    if (!m_controlIsAlive)
+    {
+        return RPC_E_DISCONNECTED;
     }
 
     ULONG childCount = static_cast<ULONG>(m_pControl->GetCount());
@@ -195,18 +195,18 @@ IFACEMETHODIMP AccServer::Skip(ULONG celt)
     //
     return((m_enumCount >= childCount) ? S_FALSE : S_OK);
 }
-    
+
 IFACEMETHODIMP AccServer::Reset()
 {
-    if (!m_controlIsAlive) 
-    { 
-        return RPC_E_DISCONNECTED; 
+    if (!m_controlIsAlive)
+    {
+        return RPC_E_DISCONNECTED;
     }
 
     m_enumCount = 0;
     return S_OK;
 }
-    
+
 IFACEMETHODIMP AccServer::Clone(IEnumVARIANT **ppEnum)
 {
     *ppEnum = NULL;
@@ -219,18 +219,18 @@ IFACEMETHODIMP AccServer::Clone(IEnumVARIANT **ppEnum)
     }
     return hr;
 }
-        
+
 // IAccessible methods.
 
 // Gets the parent object.
 //
-IFACEMETHODIMP AccServer::get_accParent( 
+IFACEMETHODIMP AccServer::get_accParent(
     IDispatch **ppdispParent)
 {
     *ppdispParent = NULL;
-    if (!m_controlIsAlive) 
-    { 
-        return RPC_E_DISCONNECTED; 
+    if (!m_controlIsAlive)
+    {
+        return RPC_E_DISCONNECTED;
     }
 
     return m_pStdAccessibleObject->get_accParent(ppdispParent);
@@ -238,16 +238,16 @@ IFACEMETHODIMP AccServer::get_accParent(
 
 // Gets the count of child objects or elements.
 //
-IFACEMETHODIMP AccServer::get_accChildCount( 
+IFACEMETHODIMP AccServer::get_accChildCount(
     long *pcountChildren)
 {
     *pcountChildren = 0;
-    if (!m_controlIsAlive) 
-    { 
-        return RPC_E_DISCONNECTED; 
+    if (!m_controlIsAlive)
+    {
+        return RPC_E_DISCONNECTED;
     }
 
-    *pcountChildren = m_pControl->GetCount(); 
+    *pcountChildren = m_pControl->GetCount();
     return S_OK;
 }
 
@@ -255,34 +255,34 @@ IFACEMETHODIMP AccServer::get_accChildCount(
 // Gets a child object. Because the list items in this control are elements,
 // not objects, returns S_FALSE.
 //
-IFACEMETHODIMP AccServer::get_accChild( 
+IFACEMETHODIMP AccServer::get_accChild(
     VARIANT varChild,
     IDispatch **ppdispChild)
 {
     *ppdispChild = NULL;
-    if (!m_controlIsAlive) 
-    { 
-        return RPC_E_DISCONNECTED; 
+    if (!m_controlIsAlive)
+    {
+        return RPC_E_DISCONNECTED;
     }
 
     if ((varChild.vt != VT_I4) || (varChild.lVal > m_pControl->GetCount()))
     {
         return E_INVALIDARG;
     }
-    return S_FALSE;     
+    return S_FALSE;
 }
 
 // Get the name of the control or one of its children.
 
-IFACEMETHODIMP AccServer::get_accName( 
+IFACEMETHODIMP AccServer::get_accName(
     VARIANT varChild,
     BSTR *pszName)
 
 {
     *pszName = NULL;
-    if (!m_controlIsAlive) 
-    { 
-        return RPC_E_DISCONNECTED; 
+    if (!m_controlIsAlive)
+    {
+        return RPC_E_DISCONNECTED;
     }
 
     if ((varChild.vt != VT_I4) || (varChild.lVal > m_pControl->GetCount()))
@@ -295,7 +295,7 @@ IFACEMETHODIMP AccServer::get_accName(
     // there is no caption, the text of any label.
     if (varChild.lVal == CHILDID_SELF)
     {
-        return m_pStdAccessibleObject->get_accName(varChild, pszName);          
+        return m_pStdAccessibleObject->get_accName(varChild, pszName);
     }
     else
     {
@@ -313,14 +313,14 @@ IFACEMETHODIMP AccServer::get_accName(
 // Get the value of the control or one of its children.
 // Not implemented for a list box.
 
-IFACEMETHODIMP AccServer::get_accValue( 
+IFACEMETHODIMP AccServer::get_accValue(
     VARIANT /*varChild*/,
     BSTR *pszValue)
 {
-    *pszValue = NULL;   
-    if (!m_controlIsAlive) 
-    { 
-        return RPC_E_DISCONNECTED; 
+    *pszValue = NULL;
+    if (!m_controlIsAlive)
+    {
+        return RPC_E_DISCONNECTED;
     }
 
     return DISP_E_MEMBERNOTFOUND;
@@ -332,14 +332,14 @@ IFACEMETHODIMP AccServer::get_accValue(
 // see Description Property in the documentation for information
 // about when this property should be supported.
 
-IFACEMETHODIMP AccServer::get_accDescription( 
+IFACEMETHODIMP AccServer::get_accDescription(
     VARIANT varChild,
     BSTR *pszDescription)
 {
     *pszDescription = NULL;
-    if (!m_controlIsAlive) 
-    { 
-        return RPC_E_DISCONNECTED; 
+    if (!m_controlIsAlive)
+    {
+        return RPC_E_DISCONNECTED;
     }
 
     if ((varChild.vt != VT_I4) || (varChild.lVal > m_pControl->GetCount()))
@@ -348,11 +348,11 @@ IFACEMETHODIMP AccServer::get_accDescription(
     }
     if (varChild.lVal == CHILDID_SELF)
     {
-        *pszDescription = SysAllocString(L"List of contacts.");         
+        *pszDescription = SysAllocString(L"List of contacts.");
     }
     else
     {
-        *pszDescription = SysAllocString(L"A contact.");            
+        *pszDescription = SysAllocString(L"A contact.");
     }
     return S_OK;
 }
@@ -360,14 +360,14 @@ IFACEMETHODIMP AccServer::get_accDescription(
 
 // Get the role of the control or one of its children.
 
-IFACEMETHODIMP AccServer::get_accRole( 
+IFACEMETHODIMP AccServer::get_accRole(
     VARIANT varChild,
     VARIANT *pvarRole)
 {
     pvarRole->vt = VT_EMPTY;
-    if (!m_controlIsAlive) 
-    { 
-        return RPC_E_DISCONNECTED; 
+    if (!m_controlIsAlive)
+    {
+        return RPC_E_DISCONNECTED;
     }
 
     if ((varChild.vt != VT_I4) || (varChild.lVal > m_pControl->GetCount()))
@@ -390,14 +390,14 @@ IFACEMETHODIMP AccServer::get_accRole(
 
 // Gets the state of the control or one of its children.
 
-IFACEMETHODIMP AccServer::get_accState( 
+IFACEMETHODIMP AccServer::get_accState(
     VARIANT varChild,
     VARIANT *pvarState)
 {
     pvarState->vt = VT_EMPTY;
-    if (!m_controlIsAlive) 
-    { 
-        return RPC_E_DISCONNECTED; 
+    if (!m_controlIsAlive)
+    {
+        return RPC_E_DISCONNECTED;
     }
 
     if ((varChild.vt != VT_I4) || (varChild.lVal > m_pControl->GetCount()))
@@ -422,7 +422,7 @@ IFACEMETHODIMP AccServer::get_accState(
             }
         }
         pvarState->vt = VT_I4;
-        pvarState->lVal = flags; 
+        pvarState->lVal = flags;
     }
     return S_OK;
 }
@@ -430,14 +430,14 @@ IFACEMETHODIMP AccServer::get_accState(
 // Get a help string for the control or one of its children.
 // For simplicity, the string is not localized.
 
-IFACEMETHODIMP AccServer::get_accHelp( 
+IFACEMETHODIMP AccServer::get_accHelp(
     VARIANT varChild,
     BSTR *pszHelp)
 {
     *pszHelp = NULL;
-    if (!m_controlIsAlive) 
-    { 
-        return RPC_E_DISCONNECTED; 
+    if (!m_controlIsAlive)
+    {
+        return RPC_E_DISCONNECTED;
     }
 
     if ((varChild.vt != VT_I4) || (varChild.lVal > m_pControl->GetCount()))
@@ -458,7 +458,7 @@ IFACEMETHODIMP AccServer::get_accHelp(
         {
             *pszHelp = SysAllocString(L"Online contact.");
         }
-        else 
+        else
         {
             *pszHelp = SysAllocString(L"Offline contact.");
         }
@@ -468,15 +468,15 @@ IFACEMETHODIMP AccServer::get_accHelp(
 
 // Get a help file for the control or one of its children.
 //
-IFACEMETHODIMP AccServer::get_accHelpTopic( 
+IFACEMETHODIMP AccServer::get_accHelpTopic(
     BSTR *pszHelpFile,
     VARIANT /*varChild*/,
     long * /*pidTopic*/)
 {
     *pszHelpFile = NULL;
-    if (!m_controlIsAlive) 
-    { 
-        return RPC_E_DISCONNECTED; 
+    if (!m_controlIsAlive)
+    {
+        return RPC_E_DISCONNECTED;
     }
 
     return S_FALSE;
@@ -484,14 +484,14 @@ IFACEMETHODIMP AccServer::get_accHelpTopic(
 
 // Get a keyboard shortcut for the control.
 //
-IFACEMETHODIMP AccServer::get_accKeyboardShortcut( 
+IFACEMETHODIMP AccServer::get_accKeyboardShortcut(
     VARIANT varChild,
     BSTR *pszKeyboardShortcut)
 {
     *pszKeyboardShortcut = NULL;
-    if (!m_controlIsAlive) 
-    { 
-        return RPC_E_DISCONNECTED; 
+    if (!m_controlIsAlive)
+    {
+        return RPC_E_DISCONNECTED;
     }
 
     return m_pStdAccessibleObject->get_accKeyboardShortcut(varChild, pszKeyboardShortcut);
@@ -503,12 +503,12 @@ IFACEMETHODIMP AccServer::get_accKeyboardShortcut(
 IFACEMETHODIMP AccServer::get_accFocus(VARIANT *pvarChild)
 {
     pvarChild->vt = VT_EMPTY;
-    if (!m_controlIsAlive) 
-    { 
-        return RPC_E_DISCONNECTED; 
+    if (!m_controlIsAlive)
+    {
+        return RPC_E_DISCONNECTED;
     }
 
-    HRESULT hr = m_pStdAccessibleObject->get_accFocus(pvarChild); 
+    HRESULT hr = m_pStdAccessibleObject->get_accFocus(pvarChild);
     // If the HWND does not have the focus, the variant type is set to VT_EMPTY.
     if ((pvarChild->vt != VT_I4) || (FAILED(hr)))
     {
@@ -532,14 +532,14 @@ IFACEMETHODIMP AccServer::get_accFocus(VARIANT *pvarChild)
 
 
 
-// Get the index of the selected child. 
+// Get the index of the selected child.
 //
 IFACEMETHODIMP AccServer::get_accSelection(VARIANT *pvarChildren)
 {
     pvarChildren->vt = VT_EMPTY;
-    if (!m_controlIsAlive) 
-    { 
-        return RPC_E_DISCONNECTED; 
+    if (!m_controlIsAlive)
+    {
+        return RPC_E_DISCONNECTED;
     }
 
     int childID = m_pControl->GetSelectedIndex() + 1; // Convert from 0-based.
@@ -547,7 +547,7 @@ IFACEMETHODIMP AccServer::get_accSelection(VARIANT *pvarChildren)
     {
         pvarChildren->vt = VT_EMPTY;
     }
-    else 
+    else
     {
         pvarChildren->vt = VT_I4;
         pvarChildren->lVal = childID;
@@ -557,14 +557,14 @@ IFACEMETHODIMP AccServer::get_accSelection(VARIANT *pvarChildren)
 
 // Get a description of the default action.
 
-IFACEMETHODIMP AccServer::get_accDefaultAction( 
+IFACEMETHODIMP AccServer::get_accDefaultAction(
     VARIANT varChild,
     BSTR *pszDefaultAction)
 {
     *pszDefaultAction = NULL;
-    if (!m_controlIsAlive) 
-    { 
-        return RPC_E_DISCONNECTED; 
+    if (!m_controlIsAlive)
+    {
+        return RPC_E_DISCONNECTED;
     }
 
     if ((varChild.vt != VT_I4) || (varChild.lVal > m_pControl->GetCount()))
@@ -586,7 +586,7 @@ IFACEMETHODIMP AccServer::get_accDefaultAction(
 
 // Select an item. Allow only single selection.
 
-IFACEMETHODIMP AccServer::accSelect( 
+IFACEMETHODIMP AccServer::accSelect(
     long flagsSelect, VARIANT varChild)
 {
     // Check parameters. We don't support the following:
@@ -604,17 +604,17 @@ IFACEMETHODIMP AccServer::accSelect(
     {
         return E_INVALIDARG;
     }
-    if (!m_controlIsAlive) 
-    { 
-        return RPC_E_DISCONNECTED; 
+    if (!m_controlIsAlive)
+    {
+        return RPC_E_DISCONNECTED;
     }
 
     // Move the focus to the list box.
     SetFocus(m_hwnd);
 
     // Move the selection if called on to do so.
-    if (((flagsSelect & (SELFLAG_TAKESELECTION | SELFLAG_TAKEFOCUS)) != 0) 
-        && (varChild.lVal != CHILDID_SELF))
+    if (((flagsSelect & (SELFLAG_TAKESELECTION | SELFLAG_TAKEFOCUS)) != 0)
+            && (varChild.lVal != CHILDID_SELF))
     {
         int selection = static_cast<int>(varChild.lVal) - 1;
         m_pControl->SelectItem(selection);
@@ -624,7 +624,7 @@ IFACEMETHODIMP AccServer::accSelect(
 
 // Get the location of the control or the list item.
 
-IFACEMETHODIMP AccServer::accLocation( 
+IFACEMETHODIMP AccServer::accLocation(
     long *pxLeft,
     long *pyTop,
     long *pcxWidth,
@@ -639,9 +639,9 @@ IFACEMETHODIMP AccServer::accLocation(
     {
         return E_INVALIDARG;
     }
-    if (!m_controlIsAlive) 
-    { 
-        return RPC_E_DISCONNECTED; 
+    if (!m_controlIsAlive)
+    {
+        return RPC_E_DISCONNECTED;
     }
 
     if (varChild.lVal == CHILDID_SELF)
@@ -661,14 +661,14 @@ IFACEMETHODIMP AccServer::accLocation(
             *pyTop = rect.top;
             *pcxWidth = rect.right - rect.left;
             *pcyHeight = rect.bottom - rect.top;
-            return S_OK;    
+            return S_OK;
         }
     }
 }
 
 // Navigate through the tree.
 
-IFACEMETHODIMP AccServer::accNavigate( 
+IFACEMETHODIMP AccServer::accNavigate(
     long navDir,
     VARIANT varStart,
     VARIANT *pvarEndUpAt)
@@ -680,9 +680,9 @@ IFACEMETHODIMP AccServer::accNavigate(
     {
         return E_INVALIDARG;
     }
-    if (!m_controlIsAlive) 
-    { 
-        return RPC_E_DISCONNECTED; 
+    if (!m_controlIsAlive)
+    {
+        return RPC_E_DISCONNECTED;
     }
 
     switch (navDir)
@@ -693,7 +693,7 @@ IFACEMETHODIMP AccServer::accNavigate(
             pvarEndUpAt->vt = VT_I4;
             pvarEndUpAt->lVal = 1;
         }
-        else  
+        else
         {
             return S_FALSE;
         }
@@ -705,13 +705,13 @@ IFACEMETHODIMP AccServer::accNavigate(
             pvarEndUpAt->vt = VT_I4;
             pvarEndUpAt->lVal = m_pControl->GetCount();
         }
-        else    
+        else
         {
             return S_FALSE;
         }
         break;
 
-    case NAVDIR_NEXT:   
+    case NAVDIR_NEXT:
     case NAVDIR_DOWN:
         if (varStart.lVal != CHILDID_SELF)
         {
@@ -749,14 +749,14 @@ IFACEMETHODIMP AccServer::accNavigate(
         }
         break;
 
-        // Unsupported directions.
+    // Unsupported directions.
     case NAVDIR_LEFT:
     case NAVDIR_RIGHT:
         if (varStart.lVal == CHILDID_SELF)
         {
             return m_pStdAccessibleObject->accNavigate(navDir, varStart, pvarEndUpAt);
         }
-        else 
+        else
         {
             pvarEndUpAt->vt = VT_EMPTY;
             return S_FALSE;
@@ -766,25 +766,25 @@ IFACEMETHODIMP AccServer::accNavigate(
     return S_OK;
 }
 
-IFACEMETHODIMP AccServer::accHitTest( 
+IFACEMETHODIMP AccServer::accHitTest(
     long xLeft,
     long yTop,
-    VARIANT *pvarChild) 
+    VARIANT *pvarChild)
 
 {
     pvarChild->vt = VT_EMPTY;
-    if (!m_controlIsAlive) 
-    { 
-        return RPC_E_DISCONNECTED; 
+    if (!m_controlIsAlive)
+    {
+        return RPC_E_DISCONNECTED;
     }
 
     // Does the control window contain the point?
-    // Note: don't use WindowFromPoint, as it may return a transparent window such as 
+    // Note: don't use WindowFromPoint, as it may return a transparent window such as
     // a group box.
     RECT controlRect;
     GetWindowRect(m_hwnd, &controlRect);
     BOOL inWindow = ((xLeft >= controlRect.left) && (xLeft <= controlRect.right)
-        && (yTop >= controlRect.top) && (yTop <= controlRect.bottom));
+                     && (yTop >= controlRect.top) && (yTop <= controlRect.bottom));
 
     // Not in our window.
     if (!inWindow)
@@ -812,22 +812,22 @@ IFACEMETHODIMP AccServer::accHitTest(
     }
 }
 
-IFACEMETHODIMP AccServer::accDoDefaultAction( 
-    VARIANT varChild) 
+IFACEMETHODIMP AccServer::accDoDefaultAction(
+    VARIANT varChild)
 
 {
     if ((varChild.vt != VT_I4) || (varChild.lVal > m_pControl->GetCount()))
     {
         return E_INVALIDARG;
     }
-    if (!m_controlIsAlive) 
-    { 
-        return RPC_E_DISCONNECTED; 
+    if (!m_controlIsAlive)
+    {
+        return RPC_E_DISCONNECTED;
     }
 
     if (varChild.lVal != CHILDID_SELF)
     {
-        // Because our sample action is to open a dialog box (thus blocking), 
+        // Because our sample action is to open a dialog box (thus blocking),
         // do it indirectly. First select the item.
         if (SUCCEEDED(accSelect(SELFLAG_TAKESELECTION, varChild)))
         {
@@ -837,27 +837,27 @@ IFACEMETHODIMP AccServer::accDoDefaultAction(
     return S_OK;
 }
 
-IFACEMETHODIMP AccServer::put_accName( 
+IFACEMETHODIMP AccServer::put_accName(
     VARIANT /*varChild*/,
-    BSTR /*szName*/) 
+    BSTR /*szName*/)
 
 {
-    if (!m_controlIsAlive) 
-    { 
-        return RPC_E_DISCONNECTED; 
+    if (!m_controlIsAlive)
+    {
+        return RPC_E_DISCONNECTED;
     }
 
     return E_NOTIMPL;
 }
 
-IFACEMETHODIMP AccServer::put_accValue( 
+IFACEMETHODIMP AccServer::put_accValue(
     VARIANT /*varChild*/,
-    BSTR /*szValue*/) 
+    BSTR /*szValue*/)
 
 {
-    if (!m_controlIsAlive) 
-    { 
-        return RPC_E_DISCONNECTED; 
+    if (!m_controlIsAlive)
+    {
+        return RPC_E_DISCONNECTED;
     }
 
     return E_NOTIMPL;

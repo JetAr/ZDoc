@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -26,8 +26,8 @@ struct FontFaceInfo
 
     FontFaceInfo(
         const WCHAR* fontFaceName,
-        DWRITE_FONT_WEIGHT   fontWeight, 
-        DWRITE_FONT_STYLE    fontStyle, 
+        DWRITE_FONT_WEIGHT   fontWeight,
+        DWRITE_FONT_STYLE    fontStyle,
         DWRITE_FONT_STRETCH  fontStretch)
         :   fontWeight(fontWeight),
             fontStyle(fontStyle),

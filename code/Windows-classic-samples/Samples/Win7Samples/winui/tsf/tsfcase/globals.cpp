@@ -1,4 +1,4 @@
-//
+﻿//
 // globals.cpp
 //
 // Global variables.
@@ -32,11 +32,11 @@ WCHAR ToggleChar(WCHAR ch)
 {
     // toggle english ascii
     if ((ch >= 'a' && ch <= 'z') ||
-        (ch >= 'A' && ch <= 'Z'))
+            (ch >= 'A' && ch <= 'Z'))
     {
         return ch ^ 32;
     }
-     
+
     // give up for non-ascii
     return ch;
 }
@@ -92,6 +92,6 @@ void ToggleCase(TfEditCookie ec, ITfRange *pRange, BOOL fIgnoreRangeEnd)
         // prepare for next iteration
         pRangeToggle->Collapse(ec, TF_ANCHOR_END);
     }
-    
+
     pRangeToggle->Release();
 }

@@ -1,4 +1,4 @@
-/******************************************************************************\
+﻿/******************************************************************************\
 *       This is a part of the Microsoft Source Code Samples.
 *       Copyright 1996 - 2000 Microsoft Corporation.
 *       All rights reserved.
@@ -48,11 +48,12 @@ Revision History:
 #include <iphlpapi.h>
 #include <stdio.h>
 
-void Usage(void) {
+void Usage(void)
+{
     printf("Usage: Iprenew [ -l ] [ -r<index id> ] [ -n<index id>]\n\n"
-            "\t -l List adapters with corresponding index ID information\n"
-            "\t -r Release IP address for adapter index ID\n"
-            "\t -n Renew IP address for adapter index ID\n");
+           "\t -l List adapters with corresponding index ID information\n"
+           "\t -r Release IP address for adapter index ID\n"
+           "\t -n Renew IP address for adapter index ID\n");
 }
 
 void main(int argc, char *argv[])
@@ -75,27 +76,27 @@ void main(int argc, char *argv[])
     }
     for (i = 1; i < argc; i++)
     {
-        if ((argv[i][0] == '-') || (argv[i][0] == '/')) 
+        if ((argv[i][0] == '-') || (argv[i][0] == '/'))
         {
-            switch(tolower(argv[i][1])) 
+            switch(tolower(argv[i][1]))
             {
-                case 'l':
-                    OptList = TRUE;
-                    break;
-                case 'r':
-                    OptRelease = TRUE;
-                    if (strlen(argv[i]) > 2)
-                        Index = atoi(&argv[i][2]);
-                    break;
-                case 'n':
-                    OptRenew = TRUE;
-                    if (strlen(argv[i]) > 2)
-                        Index = atoi(&argv[i][2]);
-                    break;
-                default:
-                    Usage();
-                    return;
-                }
+            case 'l':
+                OptList = TRUE;
+                break;
+            case 'r':
+                OptRelease = TRUE;
+                if (strlen(argv[i]) > 2)
+                    Index = atoi(&argv[i][2]);
+                break;
+            case 'n':
+                OptRenew = TRUE;
+                if (strlen(argv[i]) > 2)
+                    Index = atoi(&argv[i][2]);
+                break;
+            default:
+                Usage();
+                return;
+            }
         }
         else
         {

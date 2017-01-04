@@ -1,4 +1,4 @@
-
+﻿
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -48,7 +48,7 @@ typedef enum
     OPERATION_DEL
 } OPERATION;
 
-// Define simple data structures for holding command line parsing results and 
+// Define simple data structures for holding command line parsing results and
 //  enumeration and query results
 typedef struct
 {
@@ -57,7 +57,7 @@ typedef struct
     PWSTR pszNamePath;
     PWSTR pszSubTitlePath;
     PWSTR pszImagePath;
-	PWSTR pszDisabledImagePath;
+    PWSTR pszDisabledImagePath;
     PWSTR pszExePath;
 } UXENTRY;
 
@@ -77,7 +77,8 @@ typedef struct
 {
     OPERATION eOperation;
     DWORD dwMask;
-    union {
+    union
+    {
         UXENTRY stEntry;
         PWSTR pszQuery;
     };

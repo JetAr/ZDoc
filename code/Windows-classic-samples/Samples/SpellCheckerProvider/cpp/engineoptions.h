@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -43,7 +43,8 @@ const unsigned int enusIgnoreRepeatedLabelIds[] = {IDS_IGNOREREPEATED_LABEL};
 const unsigned int enusOkletterLabelIds[] = {IDS_OKLETTER_LABEL_A, IDS_OKLETTER_LABEL_B, IDS_OKLETTER_LABEL_F};
 
 const OptionDeclaration enusOptions[] = {{L"samplespell:en-US:ignorerepeated", IDS_IGNOREREPEATED_HEADING, IDS_IGNOREREPEATED_DESCRIPTION, 0, enusIgnoreRepeatedLabelIds, ARRAYSIZE(enusIgnoreRepeatedLabelIds)}
-                                        ,{L"samplespell:en-US:okletter", IDS_OKLETTER_HEADING, IDS_OKLETTER_DESCRIPTION, 2, enusOkletterLabelIds, ARRAYSIZE(enusOkletterLabelIds)}};
+    ,{L"samplespell:en-US:okletter", IDS_OKLETTER_HEADING, IDS_OKLETTER_DESCRIPTION, 2, enusOkletterLabelIds, ARRAYSIZE(enusOkletterLabelIds)}
+};
 
 const LanguageOptions spellingOptions[] = {{L"en-US", enusOptions, ARRAYSIZE(enusOptions)}};
 
@@ -60,7 +61,7 @@ public:
         return GetOptionStringFromResource(optionId, &OptionDeclaration::descriptionRid, optionHeading);
     }
 
-    static HRESULT GetOptionIdsForLanguage(_In_ PCWSTR const languageTag, _Deref_out_range_(1, MAX_LANGUAGE_OPTIONS) _Out_ size_t* numOptions, 
+    static HRESULT GetOptionIdsForLanguage(_In_ PCWSTR const languageTag, _Deref_out_range_(1, MAX_LANGUAGE_OPTIONS) _Out_ size_t* numOptions,
                                            _Out_writes_to_(MAX_LANGUAGE_OPTIONS, *numOptions) PCWSTR* optionIds)
     {
         *numOptions = 1;
@@ -89,7 +90,7 @@ public:
         return hr;
     }
 
-    static HRESULT GetOptionLabels(_In_ PCWSTR const optionId, _Deref_out_range_(1, MAX_LABELS) _Out_ size_t* numLabels, 
+    static HRESULT GetOptionLabels(_In_ PCWSTR const optionId, _Deref_out_range_(1, MAX_LABELS) _Out_ size_t* numLabels,
                                    _Out_writes_to_(MAX_LABELS, *numLabels) PCWSTR* labels)
     {
         *numLabels = 1;
@@ -122,7 +123,7 @@ public:
     {
         const OptionDeclaration* declaration = GetOptionDeclarationFromId(optionId);
         HRESULT hr = (nullptr == declaration) ? E_INVALIDARG : S_OK;
-        
+
         if (SUCCEEDED(hr))
         {
             *optionValue = declaration->defaultValue;
@@ -206,7 +207,7 @@ private:
     }
 
     static HRESULT LoadStringFromResource(_In_ const int resourceIndex, _Out_ PCWSTR* stringResource)
-    { 
+    {
         HRESULT hr = S_OK;
         if (0 == LoadString(HINST_THISCOMPONENT, resourceIndex, reinterpret_cast<PWSTR>(stringResource), 0))
         {

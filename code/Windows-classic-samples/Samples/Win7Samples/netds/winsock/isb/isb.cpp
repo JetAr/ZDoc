@@ -1,36 +1,36 @@
-/******************************************************************************\
+﻿/******************************************************************************\
 * isb.cpp
 *
 * This simple IPv6 sample demonstrates the use of Winsock Ideal Send Backlog functionality.
 *
 * The Ideal Send Backlog functionality is new to Windows Sockets in Windows Vista SP1
 * and Windows Server 2008.
-* 
+*
 * This sample requires that TCP/IP version 6 be installed on the system (default
 * configuration for Windows Vista and Windows Server 2008).
 *
-* For an application to effectively use this functionality, the application should: 
+* For an application to effectively use this functionality, the application should:
 * 1. First query for the initial ideal send backlog value (idealsendbacklogquery).
-* 2. Post overlapped idealsendbacklognotify to receive isb change indications. 
+* 2. Post overlapped idealsendbacklognotify to receive isb change indications.
 * 3. Upon notify completion, immediately post another idealsendbacklognotify and
 *    query for new isb value (idealsendbacklogquery).
-* 
+*
 * The I/O model in the sample uses blocking send/recv calls to keep the sample simple.
 * A real world application could use non-blocking or overlapped I/O for possibly better performance.
-* 
-* Note: 
+*
+* Note:
 * On Windows 7/Server 2008 R2 and later versions, a new feature called Send Path Auto-Tuning is available.
 * With this new functionaly, Windows can perform the send auto-tuning (ideal send backlog)
 * on the application's behalf. To enable this functionality, the application:
 * 1. Must not change the connected socket's send buffer limit (SO_SNDBUF).
-* 2. Must not query for the ideal send backlog value. In other words, application must 
+* 2. Must not query for the ideal send backlog value. In other words, application must
 *    not call idealsendbacklogquery.
-* 
-* If application does either of the above, the send auto-tuning will be disabled for that connection. 
-* 
+*
+* If application does either of the above, the send auto-tuning will be disabled for that connection.
+*
 * The appication may however, post idealsendbacklognotify to receive indications that a send auto-tuning
 * event has occurred.
-* 
+*
 *
 *
 * This is a part of the Microsoft Source Code Samples.
@@ -83,7 +83,7 @@ VOID Usage()
              TEXT("-l act as listener\n") \
              TEXT("-n act as originator\n")
              TEXT("-a enable auto-tuning\n")
-             );
+            );
     ExitProcess(1);
 }
 
@@ -102,7 +102,7 @@ VOID ValidateArgs(int argc, _TCHAR** argv)
         Usage();
     }
 
-    for (i=1; i < argc ;i++)
+    for (i=1; i < argc ; i++)
     {
 
         if (lstrlen(argv[i]) < 2)
@@ -122,7 +122,7 @@ VOID ValidateArgs(int argc, _TCHAR** argv)
                 StringCbCopy(szServerName,
                              sizeof szServerName,
                              argv[i+1]
-                             );
+                            );
                 break;
             case TEXT('e'):
                 port = (USHORT)_ttoi(argv[i+1]);
@@ -139,7 +139,7 @@ VOID ValidateArgs(int argc, _TCHAR** argv)
     }
 
     if ((bListener && bOriginator) ||
-        ((!bListener) && (!bOriginator)) )
+            ((!bListener) && (!bOriginator)) )
     {
         Usage();
     }
@@ -159,7 +159,7 @@ SOCKET DualStackSocket(INT SockType)
         if (INVALID_SOCKET == (sock = socket(AF_INET6,
                                              SockType,
                                              0
-                                             )))
+                                            )))
         {
             ERR(TEXT("socket"));
             __leave;
@@ -170,7 +170,7 @@ SOCKET DualStackSocket(INT SockType)
                                        IPV6_V6ONLY,
                                        (char*)&off,
                                        sizeof off
-                                       ))
+                                      ))
         {
             ERR(TEXT("setsockopt"));
             CLOSESOCK(sock);
@@ -208,7 +208,7 @@ BOOL WINAPI ConsoleCtrlHandler(DWORD dwCtrlType)
 int _tmain(int argc, _TCHAR** argv)
 {
     WSADATA             wsd;
-    ADDRINFOT           hints = {0}, 
+    ADDRINFOT           hints = {0},
                         *res = NULL;
     SOCKADDR_STORAGE    lAddr = {0};
     SOCKET              sl = INVALID_SOCKET,
@@ -216,7 +216,7 @@ int _tmain(int argc, _TCHAR** argv)
                         sa = INVALID_SOCKET;
     PCHAR               buffer = NULL;
     WSAOVERLAPPED       ov = {0};
-    HANDLE              hEvents[2]; 
+    HANDLE              hEvents[2];
     INT                 nStartup = 0,
                         rc = 0,
                         err = 0,
@@ -234,11 +234,11 @@ int _tmain(int argc, _TCHAR** argv)
                                      TRUE,
                                      FALSE,
                                      NULL
-                                     );
+                                    );
 
     if (!SetConsoleCtrlHandler(ConsoleCtrlHandler,
                                TRUE
-                               ))
+                              ))
     {
         ERR(TEXT("SetConsoleCtrlHandler"));
         return 1;
@@ -255,7 +255,7 @@ int _tmain(int argc, _TCHAR** argv)
 
     __try
     {
-        //allocate our buffer 
+        //allocate our buffer
         if (NULL == (buffer = (PCHAR)MALLOC(RECV_MAX_BUFFER_SIZE)))
         {
             ERR(TEXT("HeapAlloc"));
@@ -263,7 +263,7 @@ int _tmain(int argc, _TCHAR** argv)
         }
 
         /*
-        listener mode - create a dual stack socket and listen to 
+        listener mode - create a dual stack socket and listen to
         v6 addr_any on the given port.
         */
         if (bListener)
@@ -272,7 +272,7 @@ int _tmain(int argc, _TCHAR** argv)
             FillMemory(buffer,
                        RECV_MAX_BUFFER_SIZE,
                        '@'
-                       );
+                      );
 
             if (INVALID_SOCKET == (sl = DualStackSocket(SOCK_STREAM)))
             {
@@ -286,7 +286,7 @@ int _tmain(int argc, _TCHAR** argv)
 
             if (SOCKET_ERROR == bind(sl,(PSOCKADDR)&lAddr,
                                      sizeof lAddr
-                                     ))
+                                    ))
             {
                 ERR(TEXT("bind"));
                 __leave;
@@ -294,7 +294,7 @@ int _tmain(int argc, _TCHAR** argv)
 
             if (SOCKET_ERROR == listen(sl,
                                        1
-                                       ))
+                                      ))
             {
                 ERR(TEXT("listen"));
                 __leave;
@@ -303,7 +303,7 @@ int _tmain(int argc, _TCHAR** argv)
             if (INVALID_SOCKET == (sa = accept(sl,
                                                NULL,
                                                NULL
-                                               )))
+                                              )))
             {
                 ERR(TEXT("accept"));
                 __leave;
@@ -314,7 +314,7 @@ int _tmain(int argc, _TCHAR** argv)
 
                 //query for initial isb
                 if (SOCKET_ERROR == (idealsendbacklogquery(sa,
-                                                           (PULONG)&isb
+                                     (PULONG)&isb
                                                           )))
                 {
                     ERR(TEXT("idealsendbacklogquery"));
@@ -326,12 +326,12 @@ int _tmain(int argc, _TCHAR** argv)
                                                  FALSE,
                                                  FALSE,
                                                  NULL
-                                                 );
+                                                );
 
             //post inital notify
             if (SOCKET_ERROR == idealsendbacklognotify(sa,
-                                                       &ov,
-                                                       NULL
+                    &ov,
+                    NULL
                                                       ))
             {
                 err = WSAGetLastError();
@@ -349,7 +349,7 @@ int _tmain(int argc, _TCHAR** argv)
                                                buffer,
                                                isb,
                                                0
-                                               )))
+                                              )))
                 {
                     ERR(TEXT("send"));
                     __leave;
@@ -363,7 +363,7 @@ int _tmain(int argc, _TCHAR** argv)
                                             hEvents,
                                             FALSE,
                                             1
-                                            );
+                                           );
 
                 switch (rc)
                 {
@@ -374,8 +374,8 @@ int _tmain(int argc, _TCHAR** argv)
                 case WAIT_OBJECT_0+1:
                     //immediately post another notify so we don't lose any indications
                     if (SOCKET_ERROR == idealsendbacklognotify(sa,
-                                                               &ov,
-                                                               NULL
+                            &ov,
+                            NULL
                                                               ))
                     {
                         err = WSAGetLastError();
@@ -392,7 +392,7 @@ int _tmain(int argc, _TCHAR** argv)
 
                         //query the updated backlog value
                         if (SOCKET_ERROR == idealsendbacklogquery(sa,
-                                                                  (PULONG)&isb
+                                (PULONG)&isb
                                                                  ))
                         {
                             ERR(TEXT("idealsendbacklogquery"));
@@ -419,13 +419,13 @@ int _tmain(int argc, _TCHAR** argv)
                            sizeof szPort,
                            TEXT("%d"),
                            port
-                           );
+                          );
 
             if (GetAddrInfo(szServerName,
                             szPort,
                             &hints,
                             &res
-                            ))
+                           ))
             {
                 ERR(TEXT("getaddrinfo"));
                 __leave;
@@ -434,12 +434,12 @@ int _tmain(int argc, _TCHAR** argv)
             sc = socket(res->ai_family,
                         res->ai_socktype,
                         res->ai_protocol
-                        );
+                       );
 
             if (SOCKET_ERROR == connect(sc,
                                         res->ai_addr,
                                         (int)res->ai_addrlen
-                                        ))
+                                       ))
             {
                 ERR(TEXT("connect"));
                 __leave;
@@ -450,31 +450,31 @@ int _tmain(int argc, _TCHAR** argv)
                                            SO_RCVTIMEO,
                                            (PCHAR)&timeout,
                                            sizeof timeout
-                                           ))
+                                          ))
             {
                 ERR(TEXT("SO_RCVTIMEO"));
                 __leave;
             }
 
-            //set a large receive window 
+            //set a large receive window
             rcvsize = RECV_MAX_BUFFER_SIZE;
             if (SOCKET_ERROR == (rc = setsockopt(sc,
                                                  SOL_SOCKET,
                                                  SO_RCVBUF,
                                                  (PCHAR)&rcvsize,
                                                  sizeof rcvsize
-                                                 )))
+                                                )))
             {
                 ERR(TEXT("SO_RCVBUF"));
                 __leave;
             }
-            
+
             //recv data until fin, error or exit
             for (;;)
             {
                 if (WAIT_OBJECT_0 == WaitForSingleObject(hExit,
-                                                         1
-                                                         ))
+                        1
+                                                        ))
                 {
                     __leave;
                 }
@@ -483,7 +483,7 @@ int _tmain(int argc, _TCHAR** argv)
                                                buffer,
                                                RECV_MAX_BUFFER_SIZE,
                                                0
-                                               )))
+                                              )))
                 {
                     if (WSAETIMEDOUT == WSAGetLastError())
                     {
@@ -504,10 +504,10 @@ int _tmain(int argc, _TCHAR** argv)
                 TotalBytes += (_int64)rc;
 
                 _tprintf(TEXT("Last recv completed with %d bytes. Total recvd: %I64d \r\r"),rc,TotalBytes);
-                
+
             }
 
-            
+
         }
     }
     __finally
@@ -528,7 +528,7 @@ int _tmain(int argc, _TCHAR** argv)
         WSACleanup();
 
     _tprintf(TEXT("\nExiting.\n"));
-    
-	return 0;
+
+    return 0;
 }
 

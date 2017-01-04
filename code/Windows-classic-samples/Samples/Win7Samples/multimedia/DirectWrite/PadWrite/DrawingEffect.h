@@ -12,11 +12,11 @@
 
 
 class DECLSPEC_UUID("1CD7C44F-526B-492a-B780-EF9C4159B653") DrawingEffect
-:   public ComBase<QiList<IUnknown> >
+    :   public ComBase<QiList<IUnknown> >
 {
 public:
     DrawingEffect(UINT32 color)
-    :   color_(color)
+        :   color_(color)
     { }
 
     inline UINT32 GetColor() const throw()

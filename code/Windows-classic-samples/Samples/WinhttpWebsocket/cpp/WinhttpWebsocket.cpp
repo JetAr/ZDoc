@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -202,10 +202,10 @@ int __cdecl wmain()
     //
 
     dwError = WinHttpWebSocketQueryCloseStatus(hWebSocketHandle,
-                                               &usStatus,
-                                               rgbCloseReasonBuffer,
-                                               ARRAYSIZE(rgbCloseReasonBuffer),
-                                               &dwCloseReasonLength);
+              &usStatus,
+              rgbCloseReasonBuffer,
+              ARRAYSIZE(rgbCloseReasonBuffer),
+              &dwCloseReasonLength);
     if (dwError != ERROR_SUCCESS)
     {
         goto quit;

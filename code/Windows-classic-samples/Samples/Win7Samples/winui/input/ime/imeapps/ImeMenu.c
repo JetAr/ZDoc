@@ -1,4 +1,4 @@
-/**********************************************************************/
+﻿/**********************************************************************/
 /*                                                                    */
 /*      IMEMENU.C                                                     */
 /*                                                                    */
@@ -24,7 +24,7 @@ int nIDTable = 0;
 /**********************************************************************/
 void EndMenuItemIDTable()
 {
-    if (lpdwIDTable) 
+    if (lpdwIDTable)
     {
         GlobalFree((HANDLE)lpdwIDTable);
         lpdwIDTable = NULL;
@@ -118,19 +118,19 @@ void FillMenuItemInfo(HWND hWnd, HIMC hIMC, LPMENUITEMINFO lpmii, LPMYIMEMENUITE
 
     if (lpIme->hbmpChecked &&  lpIme->hbmpUnchecked)
     {
-       lpmii->fMask |= MIIM_CHECKMARKS;
-       lpmii->hbmpChecked = lpIme->hbmpChecked;
-       lpmii->hbmpUnchecked = lpIme->hbmpUnchecked;
+        lpmii->fMask |= MIIM_CHECKMARKS;
+        lpmii->hbmpChecked = lpIme->hbmpChecked;
+        lpmii->hbmpUnchecked = lpIme->hbmpUnchecked;
     }
-    
+
 
     lpmii->fMask |= MIIM_DATA;
     lpmii->dwItemData = lpIme->dwItemData;
 
     if (lpIme->hbmpItem)
     {
-       lpmii->fMask |= MIIM_BITMAP;
-       lpmii->hbmpItem = lpIme->hbmpItem;
+        lpmii->fMask |= MIIM_BITMAP;
+        lpmii->hbmpItem = lpIme->hbmpItem;
     }
 
 
@@ -180,9 +180,9 @@ HMENU CreateImeMenu(HWND hWnd, HIMC hIMC, LPMYIMEMENUITEMINFO lpImeParentMenu, B
     DWORD dwSize, dwNum, dwI;
     MENUITEMINFO mii = {0};
     LPMYIMEMENUITEMINFO lpImeMenu = NULL;
-    
 
-    dwNum = MyImmGetImeMenuItems(hIMC, fRight ? IGIMIF_RIGHTMENU : 0, 
+
+    dwNum = MyImmGetImeMenuItems(hIMC, fRight ? IGIMIF_RIGHTMENU : 0,
                                  IGIMII_CMODE |
                                  IGIMII_SMODE |
                                  IGIMII_CONFIGURE |
@@ -202,7 +202,7 @@ HMENU CreateImeMenu(HWND hWnd, HIMC hIMC, LPMYIMEMENUITEMINFO lpImeParentMenu, B
 
     lpImeMenu = (LPMYIMEMENUITEMINFO)GlobalAlloc(GPTR, dwSize);
 
-    dwNum = MyImmGetImeMenuItems(hIMC, fRight ? IGIMIF_RIGHTMENU : 0, 
+    dwNum = MyImmGetImeMenuItems(hIMC, fRight ? IGIMIF_RIGHTMENU : 0,
                                  IGIMII_CMODE |
                                  IGIMII_SMODE |
                                  IGIMII_CONFIGURE |
@@ -211,7 +211,7 @@ HMENU CreateImeMenu(HWND hWnd, HIMC hIMC, LPMYIMEMENUITEMINFO lpImeParentMenu, B
                                  IGIMII_OTHER,
                                  lpImeParentMenu, lpImeMenu, dwSize);
 
-    
+
     hMenu = CreatePopupMenu();
 
     for (dwI = 0 ; dwI < dwNum; dwI++)

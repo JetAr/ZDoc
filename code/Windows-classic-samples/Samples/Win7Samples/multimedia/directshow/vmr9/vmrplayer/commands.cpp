@@ -1,4 +1,4 @@
-//------------------------------------------------------------------------------
+﻿//------------------------------------------------------------------------------
 // File: commands.cpp
 //
 // Desc: DirectShow sample code
@@ -66,7 +66,7 @@ BOOL VcdPlyerCaptureImage(LPCTSTR szFile)
             hdr.bfReserved1     = 0;
             hdr.bfReserved2     = 0;
             hdr.bfOffBits       = (DWORD)sizeof(BITMAPFILEHEADER) + pdib->biSize +
-                DibPaletteSize(pdib);
+                                  DibPaletteSize(pdib);
 
             // Write the bitmap header and bitmap bits to the file
             WriteFile(hFile, (LPCVOID) &hdr, sizeof(BITMAPFILEHEADER), &dwWritten, 0);
@@ -110,7 +110,7 @@ BOOL VcdPlyerCaptureImage(LPCTSTR szFile)
 BOOL
 VcdPlyerDisplayCapturedImage(
     LPCTSTR szFile
-    )
+)
 {
     // Open the bitmap with the system-default application
     ShellExecute(hwndApp, TEXT("open\0"), szFile, NULL, NULL, SW_SHOWNORMAL);
@@ -126,7 +126,7 @@ VcdPlyerDisplayCapturedImage(
 BOOL
 VcdPlayerOpenCmd(
     int strmID
-    )
+)
 {
     static BOOL fFirstTime = TRUE;
     BOOL fRet;
@@ -191,7 +191,7 @@ VcdPlayerOpenCmd(
 BOOL
 VcdPlayerCloseCmd(
     void
-    )
+)
 {
     if(pMovie)
     {
@@ -224,7 +224,7 @@ VcdPlayerCloseCmd(
 BOOL
 VcdPlayerPlayCmd(
     void
-    )
+)
 {
     BOOL fStopped = (g_State & VCD_STOPPED);
     BOOL fPaused  = (g_State & VCD_PAUSED);
@@ -251,7 +251,7 @@ VcdPlayerPlayCmd(
 BOOL
 VcdPlayerStopCmd(
     void
-    )
+)
 {
     BOOL fPlaying = (g_State & VCD_PLAYING);
     BOOL fPaused  = (g_State & VCD_PAUSED);
@@ -279,7 +279,7 @@ VcdPlayerStopCmd(
 BOOL
 VcdPlayerStepCmd(
     void
-    )
+)
 {
     if(pMovie)
     {
@@ -304,7 +304,7 @@ VcdPlayerStepCmd(
 BOOL
 VcdPlayerPauseCmd(
     void
-    )
+)
 {
     BOOL fPlaying = (g_State & VCD_PLAYING);
     BOOL fPaused  = (g_State & VCD_PAUSED);
@@ -342,7 +342,7 @@ VcdPlayerPauseCmd(
 void
 VcdPlayerSeekCmd(
     REFTIME rtSeekBy
-    )
+)
 {
     REFTIME rt;
     REFTIME rtDur;
@@ -365,7 +365,7 @@ void
 ProcessOpen(
     TCHAR *achFileName,
     BOOL bPlay
-    )
+)
 {
     /*
     ** If we currently have a video loaded we need to discard it here.
@@ -414,9 +414,9 @@ ProcessOpen(
             else
             {
                 MessageBox(hwndApp,
-                    TEXT("Failed to open the movie.  Either the file was ")
-                    TEXT("not found or the wave device is in use."),
-                    IdStr(STR_APP_TITLE), MB_OK);
+                           TEXT("Failed to open the movie.  Either the file was ")
+                           TEXT("not found or the wave device is in use."),
+                           IdStr(STR_APP_TITLE), MB_OK);
             }
 
             pMovie->CloseMovie();
@@ -443,7 +443,7 @@ ProcessOpen(
 int
 VcdPlayerChangeTimeFormat(
     int id
-    )
+)
 {
     // Menu items are disabled while we are playing
     BOOL    bRet = FALSE;
@@ -458,21 +458,21 @@ VcdPlayerChangeTimeFormat(
         // Change the time format with the filtergraph
         switch(id)
         {
-            case IDM_FRAME:
-                bRet = pMovie->SetTimeFormat(TIME_FORMAT_FRAME);
-                break;
+        case IDM_FRAME:
+            bRet = pMovie->SetTimeFormat(TIME_FORMAT_FRAME);
+            break;
 
-            case IDM_FIELD:
-                bRet = pMovie->SetTimeFormat(TIME_FORMAT_FIELD);
-                break;
+        case IDM_FIELD:
+            bRet = pMovie->SetTimeFormat(TIME_FORMAT_FIELD);
+            break;
 
-            case IDM_SAMPLE:
-                bRet = pMovie->SetTimeFormat(TIME_FORMAT_SAMPLE);
-                break;
+        case IDM_SAMPLE:
+            bRet = pMovie->SetTimeFormat(TIME_FORMAT_SAMPLE);
+            break;
 
-            case IDM_BYTES:
-                bRet = pMovie->SetTimeFormat(TIME_FORMAT_BYTE);
-                break;
+        case IDM_BYTES:
+            bRet = pMovie->SetTimeFormat(TIME_FORMAT_BYTE);
+            break;
         }
 
         if(!bRet)
@@ -500,7 +500,7 @@ VcdPlayerChangeTimeFormat(
 BOOL
 VcdPlayerRewindCmd(
     void
-    )
+)
 {
     if(pMovie)
     {

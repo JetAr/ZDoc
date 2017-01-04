@@ -1,4 +1,4 @@
-//////////////////////////////////////////////////////////////////////
+﻿//////////////////////////////////////////////////////////////////////
 //
 //  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 //  ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED
@@ -108,24 +108,24 @@ LRESULT CALLBACK CPropertyPopupWindow::_WndProc(HWND hwnd, UINT uMsg, WPARAM wPa
     CPropertyPopupWindow *_this;
     HDC hdc;
     PAINTSTRUCT ps;
-  
+
     _this = _GetThis(hwnd);
 
     switch (uMsg)
     {
-        case WM_CREATE:
-            _SetThis(hwnd, lParam);
-            return 0;
+    case WM_CREATE:
+        _SetThis(hwnd, lParam);
+        return 0;
 
-        case WM_PAINT:
-            hdc = BeginPaint(hwnd, &ps);
-            if (_this)
-                _this->OnPaint(hwnd, hdc);
-            EndPaint(hwnd, &ps);
-            break;
+    case WM_PAINT:
+        hdc = BeginPaint(hwnd, &ps);
+        if (_this)
+            _this->OnPaint(hwnd, hdc);
+        EndPaint(hwnd, &ps);
+        break;
 
-        default:
-            return DefWindowProc(hwnd, uMsg, wParam, lParam);
+    default:
+        return DefWindowProc(hwnd, uMsg, wParam, lParam);
     }
     return 0;
 }
@@ -152,8 +152,8 @@ void CPropertyPopupWindow::Show()
     SystemParametersInfo(SPI_GETWORKAREA,  0, &rcWork, FALSE);
 
     InvalidateRect(_hwnd, NULL, TRUE);
-    SetWindowPos(_hwnd, 
-                 HWND_TOPMOST, 
+    SetWindowPos(_hwnd,
+                 HWND_TOPMOST,
                  rcWork.right - POPUP_CX,
                  rcWork.bottom - POPUP_CY,
                  POPUP_CX,

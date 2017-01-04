@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -31,77 +31,77 @@ static const UINT32 DEFAULT_CONFIGURATION_ID = 0;
 
 class ShvUI : public INapComponentConfig3
 {
-    public:
-        ShvUI();
-        ~ShvUI();
+public:
+    ShvUI();
+    ~ShvUI();
 
-        // IUnknown
+    // IUnknown
 
-        STDMETHODIMP QueryInterface(
-            /* [in] */ __RPC__in const IID& iid, 
-            /* [out] */ __RPC__out void** ppv);
+    STDMETHODIMP QueryInterface(
+        /* [in] */ __RPC__in const IID& iid,
+        /* [out] */ __RPC__out void** ppv);
 
-        STDMETHODIMP_(ULONG) AddRef();
-    
-        STDMETHODIMP_(ULONG) Release();
+    STDMETHODIMP_(ULONG) AddRef();
 
-        // INapComponentConfig
+    STDMETHODIMP_(ULONG) Release();
 
-        STDMETHODIMP IsUISupported( 
-            /* [out] */ __RPC__out BOOL *isSupported);
-        
-        STDMETHODIMP InvokeUI( 
-            /* [unique][in] */ __RPC__in_opt HWND hwndParent);
-        
-        STDMETHODIMP GetConfig( 
-            /* [out] */ _Out_ UINT16 *bCount,
-            /* [size_is][size_is][out] */ _Outptr_result_buffer_all_(*bCount) BYTE **data);
-        
-        STDMETHODIMP SetConfig( 
-            /* [in] */ UINT16 bCount,
-            /* [size_is][in] */ __RPC__in_ecount_full(bCount) BYTE *data);
+    // INapComponentConfig
 
-        // INapComponentConfig2
+    STDMETHODIMP IsUISupported(
+        /* [out] */ __RPC__out BOOL *isSupported);
 
-        STDMETHODIMP IsRemoteConfigSupported(
-            /* [out] */ __RPC__out BOOL* isSupported, 
-            /* [out] */ __RPC__out UINT8* remoteConfigType);
+    STDMETHODIMP InvokeUI(
+        /* [unique][in] */ __RPC__in_opt HWND hwndParent);
 
-        STDMETHODIMP InvokeUIForMachine(
-            /* [in] */ __RPC__in_opt HWND hwndParent, 
-            /* [in] */ __RPC__in_opt CountedString* machineName);
+    STDMETHODIMP GetConfig(
+        /* [out] */ _Out_ UINT16 *bCount,
+        /* [size_is][size_is][out] */ _Outptr_result_buffer_all_(*bCount) BYTE **data);
 
-        STDMETHODIMP InvokeUIFromConfigBlob(
-            /* [unique][in] */ __RPC__in_opt HWND hwndParent,
-            /* [in] */ __RPC__in UINT16 inbCount,
-            /* [size_is][in] */ __RPC__in_ecount_full(inbCount) BYTE *inData,
-            /* [out] */ __RPC__out UINT16 *outbCount,
-            /* [size_is][size_is][out] */ _Outptr_result_buffer_all_(*outbCount) BYTE **outdata,
-            /* [out] */ __RPC__out BOOL *fConfigChanged);
+    STDMETHODIMP SetConfig(
+        /* [in] */ UINT16 bCount,
+        /* [size_is][in] */ __RPC__in_ecount_full(bCount) BYTE *data);
 
-        //INapComponentConfig3
+    // INapComponentConfig2
 
-        STDMETHODIMP NewConfig(
-            /* [in] */ UINT32 configID);
+    STDMETHODIMP IsRemoteConfigSupported(
+        /* [out] */ __RPC__out BOOL* isSupported,
+        /* [out] */ __RPC__out UINT8* remoteConfigType);
 
-        STDMETHODIMP DeleteConfig(
-            /* [in] */ UINT32 configID);
+    STDMETHODIMP InvokeUIForMachine(
+        /* [in] */ __RPC__in_opt HWND hwndParent,
+        /* [in] */ __RPC__in_opt CountedString* machineName);
 
-        STDMETHODIMP DeleteAllConfig();
+    STDMETHODIMP InvokeUIFromConfigBlob(
+        /* [unique][in] */ __RPC__in_opt HWND hwndParent,
+        /* [in] */ __RPC__in UINT16 inbCount,
+        /* [size_is][in] */ __RPC__in_ecount_full(inbCount) BYTE *inData,
+        /* [out] */ __RPC__out UINT16 *outbCount,
+        /* [size_is][size_is][out] */ _Outptr_result_buffer_all_(*outbCount) BYTE **outdata,
+        /* [out] */ __RPC__out BOOL *fConfigChanged);
 
-        _Success_(return == 0)
-        STDMETHODIMP GetConfigFromID(
-            /* [in] */ _In_ UINT32 configID,
-            /* [out] */ _Out_ UINT16 *count,
-            /* [size_is][size_is][out] */ _Outptr_result_buffer_all_(*count) BYTE **outdata);
+    //INapComponentConfig3
 
-        STDMETHODIMP SetConfigToID(
-            /* [in] */ UINT32 configID,
-            /* [in] */ UINT16 count,
-            /* [size_is][in] */ __RPC__in_ecount_full(count) BYTE *outdata);
+    STDMETHODIMP NewConfig(
+        /* [in] */ UINT32 configID);
 
-    private:
-        long m_cRef;
+    STDMETHODIMP DeleteConfig(
+        /* [in] */ UINT32 configID);
+
+    STDMETHODIMP DeleteAllConfig();
+
+    _Success_(return == 0)
+    STDMETHODIMP GetConfigFromID(
+        /* [in] */ _In_ UINT32 configID,
+        /* [out] */ _Out_ UINT16 *count,
+        /* [size_is][size_is][out] */ _Outptr_result_buffer_all_(*count) BYTE **outdata);
+
+    STDMETHODIMP SetConfigToID(
+        /* [in] */ UINT32 configID,
+        /* [in] */ UINT16 count,
+        /* [size_is][in] */ __RPC__in_ecount_full(count) BYTE *outdata);
+
+private:
+    long m_cRef;
 };
 
 #define MAX_LOGFILE_LINE_LEN 1024
@@ -113,28 +113,28 @@ ShavLogMessageToDebugger(
 {
     DWORD LogResult = ERROR_SUCCESS;
     va_list arglist;
-    WCHAR outputBuffer[1024]={0};
+    WCHAR outputBuffer[1024]= {0};
     size_t length = 0;
     SYSTEMTIME SystemTime = {0} ;
-    
+
     va_start(arglist, pFormat);
-	
+
     GetLocalTime( &SystemTime );
 
     //
     // Put the thread id and timestamp at the beginning of the line.
-    //    
-    
+    //
+
     LogResult = (DWORD) StringCchPrintf(
-                                &outputBuffer[0],
-                                ARRAYSIZE(outputBuffer),
-                                L"[%lu] %02u/%02u %02u:%02u:%02u ",
-                                GetCurrentThreadId(),
-                                SystemTime.wMonth,
-                                SystemTime.wDay,
-                                SystemTime.wHour,
-                                SystemTime.wMinute,
-                                SystemTime.wSecond);
+                    &outputBuffer[0],
+                    ARRAYSIZE(outputBuffer),
+                    L"[%lu] %02u/%02u %02u:%02u:%02u ",
+                    GetCurrentThreadId(),
+                    SystemTime.wMonth,
+                    SystemTime.wDay,
+                    SystemTime.wHour,
+                    SystemTime.wMinute,
+                    SystemTime.wSecond);
     if ( LogResult == S_OK )
     {
         LogResult = StringCchLength (outputBuffer,
@@ -143,15 +143,15 @@ ShavLogMessageToDebugger(
         if ( LogResult == S_OK )
         {
             LogResult = (DWORD) StringCchVPrintf(
-                                            outputBuffer, 
-                                            (MAX_LOGFILE_LINE_LEN-1)-length,  // allow only to write up to MAX_LOGFILE_LINE_LEN-1 characters
-                                            pFormat, 
-                                            arglist);        
+                            outputBuffer,
+                            (MAX_LOGFILE_LINE_LEN-1)-length,  // allow only to write up to MAX_LOGFILE_LINE_LEN-1 characters
+                            pFormat,
+                            arglist);
         }
     }
-    
-    va_end(arglist); 
-    
+
+    va_end(arglist);
+
     OutputDebugString(outputBuffer);
 
     return LogResult;

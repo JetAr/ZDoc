@@ -1,4 +1,4 @@
-/*++
+﻿/*++
 
 Copyright (c) 2003  Microsoft Corporation
 
@@ -25,21 +25,21 @@ ISAPI_EXTENSION::ISAPI_EXTENSION()
     : _fInitialized( FALSE ),
       _fFirstHitInitDone( FALSE ),
       _pfnInit( NULL )
-/*++
+      /*++
 
-Purpose:
+      Purpose:
 
-    Constructor for the ISAPI_EXTENSION object
+          Constructor for the ISAPI_EXTENSION object
 
-Arguments:
+      Arguments:
 
-    None
+          None
 
-Returns:
+      Returns:
 
-    None
+          None
 
---*/
+      --*/
 {
 }
 
@@ -75,7 +75,7 @@ Returns:
 BOOL
 ISAPI_EXTENSION::Initialize(
     LPSTR   szModuleName
-    )
+)
 /*++
 
 Purpose:
@@ -121,7 +121,7 @@ Returns:
                                            _strModulePath.QueryStr(),
                                            MAX_PATH );
     if ( cchModuleFileName == 0 ||
-         cchModuleFileName == MAX_PATH )
+            cchModuleFileName == MAX_PATH )
     {
         if ( cchModuleFileName == MAX_PATH )
         {
@@ -169,7 +169,7 @@ Returns:
     //
 
     fResult = InitializeCriticalSectionAndSpinCount( &_csInit,
-                                                     0 );
+              0 );
 
     if ( fResult )
     {
@@ -183,7 +183,7 @@ BOOL
 ISAPI_EXTENSION::InitOnce(
     PFN_FIRST_HIT_INIT          pfnInit,
     VOID *                      pContext
-    )
+)
 /*++
 
 Purpose:
@@ -259,7 +259,7 @@ Returns:
 CHAR *
 ISAPI_EXTENSION::QueryModulePath(
     VOID
-    )
+)
 /*++
 
 Purpose:

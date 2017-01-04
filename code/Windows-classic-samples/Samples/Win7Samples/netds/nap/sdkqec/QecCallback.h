@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 
@@ -29,9 +29,9 @@ using namespace SDK_SAMPLE_COMMON;
 
 namespace SDK_SAMPLE_QEC
 {
-    static const UINT16 NUMBER_OF_HRESULTS = 1;
+static const UINT16 NUMBER_OF_HRESULTS = 1;
 
-    typedef CComPtr<INapEnforcementClientCallback> IQecCallbackPtr;
+typedef CComPtr<INapEnforcementClientCallback> IQecCallbackPtr;
 }
 
 
@@ -39,16 +39,16 @@ using namespace SDK_SAMPLE_QEC;
 
 // This is a pseudo-COM object, i.e. not co-create-able and not in registry.
 class __declspec(novtable) QecCallback
-   : public CComObjectRootEx<CComMultiThreadModelNoCS>,
-     public INapEnforcementClientCallback
+    : public CComObjectRootEx<CComMultiThreadModelNoCS>,
+      public INapEnforcementClientCallback
 
 {
 public:
 
     // Create instance
     static IQecCallbackPtr CreateInstance(
-                            INapEnforcementClientBinding* binding
-                            ) throw();
+        INapEnforcementClientBinding* binding
+    ) throw();
 
     STDMETHOD(NotifySoHChange)(void) throw();
 
@@ -80,7 +80,7 @@ private:
     // variables correctly.
 
     QecCallback& operator=
-        (const QecCallback&rhs) throw();
+    (const QecCallback&rhs) throw();
 
 
     // Copy constructor not implemented. This explicitly prevents the
@@ -96,8 +96,8 @@ private:
     DECLARE_NOT_AGGREGATABLE(QecCallback)
 
     BEGIN_COM_MAP(QecCallback)
-      COM_INTERFACE_ENTRY(INapEnforcementClientCallback)
-   END_COM_MAP()
+    COM_INTERFACE_ENTRY(INapEnforcementClientCallback)
+    END_COM_MAP()
 };
 
 #endif

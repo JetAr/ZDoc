@@ -1,33 +1,34 @@
-#include <assert.h>
+﻿#include <assert.h>
 #include <windows.h>
 #include <imm.h>
 #include "FullIME.h"
 
 static DWORD CompColor[ 4 ] = { RGB( 255, 0, 0 ),
-                                RGB( 255, 0 , 255 ),
+                                RGB( 255, 0, 255 ),
                                 RGB( 0, 0, 255 ),
-                                RGB( 0, 255, 0 ) };
+                                RGB( 0, 255, 0 )
+                              };
 
 //**********************************************************************
 //
 // void ImeUIStartComposition()
 //
-// This handles WM_IME_STARTCOMPOSITION message. 
+// This handles WM_IME_STARTCOMPOSITION message.
 //
 //**********************************************************************
-void ImeUIStartComposition( 
+void ImeUIStartComposition(
     HWND hwnd )
 {
-        
+
     //
     // Change caption title to DBCS composition mode.
     //
 
-    SetWindowText( hwnd, szSteCompTitle );    
+    SetWindowText( hwnd, szSteCompTitle );
 
     //
     // Reset global variables.
-    // 
+    //
 
     gImeUIData.uCompLen = 0;             // length of composition string.
 
@@ -39,22 +40,22 @@ void ImeUIStartComposition(
 //
 // void ImeUIComposition()
 //
-// This handles WM_IME_COMPOSITION message. It here just handles 
-// composition string and result string. For normal case, it should 
+// This handles WM_IME_COMPOSITION message. It here just handles
+// composition string and result string. For normal case, it should
 // examine all posibile flags indicated by CompFlag, then do some
 // actitions to reflect what kinds of composition info. IME conversion
 // engine informs.
 //
 //**********************************************************************
-void ImeUIComposition( 
-    HWND hwnd, 
-    WPARAM wParam, 
+void ImeUIComposition(
+    HWND hwnd,
+    WPARAM wParam,
     LPARAM CompFlag )
 {
 
     if ( CompFlag & GCS_RESULTSTR )
     {
-         GetResultStr( hwnd );
+        GetResultStr( hwnd );
     }
     else
     {
@@ -74,137 +75,138 @@ void ImeUIComposition(
 // This handles WM_IME_COMPOSITION message with GCS_COMPSTR flag on.
 //
 //**********************************************************************
-void GetCompositionStr( 
-    HWND hwnd, 
+void GetCompositionStr(
+    HWND hwnd,
     LPARAM CompFlag )
 {
-     LONG       bufLen;               // Stogare for len. of composition str
-     LPSTR      lpCompStr;              // Pointer to composition str.
-     HIMC       hIMC;                   // Input context handle.
-     HLOCAL     hMem;                   // Memory handle.
-     LPSTR      lpCompStrAttr;          // Pointer to composition str array.
-     HLOCAL     hMemAttr = NULL;        // Memory handle for comp. str. array.
-     LONG       bufLenAttr;
-    
-     //
-     // If fail to get input context handle then do nothing.
-     // Applications should call ImmGetContext API to get
-     // input context handle.
-     //
+    LONG       bufLen;               // Stogare for len. of composition str
+    LPSTR      lpCompStr;              // Pointer to composition str.
+    HIMC       hIMC;                   // Input context handle.
+    HLOCAL     hMem;                   // Memory handle.
+    LPSTR      lpCompStrAttr;          // Pointer to composition str array.
+    HLOCAL     hMemAttr = NULL;        // Memory handle for comp. str. array.
+    LONG       bufLenAttr;
 
-     if ( !( hIMC = ImmGetContext( hwnd ) ) )
-         return;
+    //
+    // If fail to get input context handle then do nothing.
+    // Applications should call ImmGetContext API to get
+    // input context handle.
+    //
 
-     //
-     // Determines how much memory space to store the composition string.
-     // Applications should call ImmGetCompositionString with
-     // GCS_COMPSTR flag on, buffer length zero, to get the bullfer
-     // length.
-     //
+    if ( !( hIMC = ImmGetContext( hwnd ) ) )
+        return;
 
-     bufLen = ImmGetCompositionString( hIMC, GCS_COMPSTR, (void*)NULL, 0l );
-     if ( ( IMM_ERROR_NODATA == bufLen) || 
-          ( IMM_ERROR_GENERAL == bufLen) )
-     {
-         goto exit2;
-     }
+    //
+    // Determines how much memory space to store the composition string.
+    // Applications should call ImmGetCompositionString with
+    // GCS_COMPSTR flag on, buffer length zero, to get the bullfer
+    // length.
+    //
 
-     //
-     // Allocates memory with bufLen+1 bytes to store the composition
-     // string. Here we allocale on more byte to put null character.
-     //
+    bufLen = ImmGetCompositionString( hIMC, GCS_COMPSTR, (void*)NULL, 0l );
+    if ( ( IMM_ERROR_NODATA == bufLen) ||
+            ( IMM_ERROR_GENERAL == bufLen) )
+    {
+        goto exit2;
+    }
 
-     if ( !( hMem = LocalAlloc( LPTR, (int)bufLen + 1 ) ) )
-         goto exit2;
+    //
+    // Allocates memory with bufLen+1 bytes to store the composition
+    // string. Here we allocale on more byte to put null character.
+    //
 
-     if ( !( lpCompStr = (LPSTR) LocalLock( hMem ) ) )
-         goto exit1;
+    if ( !( hMem = LocalAlloc( LPTR, (int)bufLen + 1 ) ) )
+        goto exit2;
 
-     //
-     // Reads in the composition string.
-     //
+    if ( !( lpCompStr = (LPSTR) LocalLock( hMem ) ) )
+        goto exit1;
 
-     ImmGetCompositionString( hIMC, GCS_COMPSTR, lpCompStr, bufLen );
+    //
+    // Reads in the composition string.
+    //
 
-     //
-     // Null terminated.
-     //
+    ImmGetCompositionString( hIMC, GCS_COMPSTR, lpCompStr, bufLen );
 
-     lpCompStr[ bufLen ] = 0;
+    //
+    // Null terminated.
+    //
 
-     //
-     // If GCS_COMPATTR flag is on, then we need to take care of it.
-     //
+    lpCompStr[ bufLen ] = 0;
 
-     if ( CompFlag & GCS_COMPATTR )
-     {
-         bufLenAttr = ImmGetCompositionString( hIMC, GCS_COMPATTR, (void*)NULL, 0l );
-         if ( ( IMM_ERROR_NODATA == bufLenAttr) || 
-              ( IMM_ERROR_GENERAL == bufLenAttr) )
-         {
-             goto nothing;
-         }
+    //
+    // If GCS_COMPATTR flag is on, then we need to take care of it.
+    //
 
-         //
-         // Allocate memory to store attributes of composition strings.
-         //
+    if ( CompFlag & GCS_COMPATTR )
+    {
+        bufLenAttr = ImmGetCompositionString( hIMC, GCS_COMPATTR, (void*)NULL, 0l );
+        if ( ( IMM_ERROR_NODATA == bufLenAttr) ||
+                ( IMM_ERROR_GENERAL == bufLenAttr) )
+        {
+            goto nothing;
+        }
 
-         if ( !( hMemAttr = LocalAlloc( LPTR, (int)bufLenAttr + 1 ) ) )
-             goto nothing;
+        //
+        // Allocate memory to store attributes of composition strings.
+        //
 
-         if ( !( lpCompStrAttr = (LPSTR) LocalLock( hMemAttr ) ) )
-         {
-             LocalFree( hMemAttr );
-             goto nothing;
-         }
+        if ( !( hMemAttr = LocalAlloc( LPTR, (int)bufLenAttr + 1 ) ) )
+            goto nothing;
 
-         //
-         // Reads in the attribute array.
-         //
+        if ( !( lpCompStrAttr = (LPSTR) LocalLock( hMemAttr ) ) )
+        {
+            LocalFree( hMemAttr );
+            goto nothing;
+        }
 
-         ImmGetCompositionString( hIMC, GCS_COMPATTR, lpCompStrAttr,
-                                  bufLenAttr );
+        //
+        // Reads in the attribute array.
+        //
 
-         lpCompStrAttr[ bufLenAttr ] = 0;
+        ImmGetCompositionString( hIMC, GCS_COMPATTR, lpCompStrAttr,
+                                 bufLenAttr );
 
-     } else
-     {
+        lpCompStrAttr[ bufLenAttr ] = 0;
+
+    }
+    else
+    {
 
 nothing:
-         lpCompStrAttr = NULL;
-     }
+        lpCompStrAttr = NULL;
+    }
 
 
-     //
-     // Display new composition chars.
-     //
+    //
+    // Display new composition chars.
+    //
 
-     DisplayCompString( hwnd, lpCompStr, lpCompStrAttr );
+    DisplayCompString( hwnd, lpCompStr, lpCompStrAttr );
 
-     //
-     // Keep the length of the composition string for using later.
-     //
+    //
+    // Keep the length of the composition string for using later.
+    //
 
-     gImeUIData.uCompLen = (UINT)bufLen;
+    gImeUIData.uCompLen = (UINT)bufLen;
 
-     LocalUnlock( hMem );
+    LocalUnlock( hMem );
 
-     if ( lpCompStrAttr )
-     {
-         if (NULL != hMemAttr)
-         {
-             LocalUnlock( hMemAttr );
-             LocalFree( hMemAttr );
-         }
-     }
+    if ( lpCompStrAttr )
+    {
+        if (NULL != hMemAttr)
+        {
+            LocalUnlock( hMemAttr );
+            LocalFree( hMemAttr );
+        }
+    }
 
 exit1:
 
-     LocalFree( hMem );
+    LocalFree( hMem );
 
 exit2:
 
-     ImmReleaseContext( hwnd, hIMC );
+    ImmReleaseContext( hwnd, hIMC );
 
 }
 
@@ -216,7 +218,7 @@ exit2:
 // This handles WM_IME_COMPOSITION with GCS_RESULTSTR flag on.
 //
 //***********************************************************************
-void GetResultStr( 
+void GetResultStr(
     HWND hwnd )
 {
     LONG        bufLen;                 // Storage for length of result str.
@@ -239,7 +241,7 @@ void GetResultStr(
     //
 
     if ( ( bufLen = ImmGetCompositionString( hIMC, GCS_RESULTSTR,
-                                  (void *)NULL, (DWORD) 0 ) ) <= 0 )
+                    (void *)NULL, (DWORD) 0 ) ) <= 0 )
         goto exit2;
 
     //
@@ -268,7 +270,7 @@ void GetResultStr(
     LocalUnlock( hMem );
 
 exit1:
-    
+
     LocalFree( hMem );
 
 exit2:
@@ -285,10 +287,10 @@ exit2:
 // This handles WM_IME_ENDCOMPOSITION message.
 //
 //**********************************************************************
-void ImeUIEndComposition( 
+void ImeUIEndComposition(
     HWND hwnd )
 {
-        
+
     RECT rect = {0};
 
     //
@@ -322,38 +324,38 @@ void ImeUIEndComposition(
 // This handles WM_IME_NOTIFY message.
 //
 //**********************************************************************
-BOOL ImeUINotify( 
-    HWND hwnd, 
-    WPARAM wParam, 
+BOOL ImeUINotify(
+    HWND hwnd,
+    WPARAM wParam,
     LPARAM lParam )
 {
     switch (wParam )
     {
-        case IMN_OPENCANDIDATE:
+    case IMN_OPENCANDIDATE:
 
-            ImeUIOpenCandidate( hwnd, lParam );
-            break;
+        ImeUIOpenCandidate( hwnd, lParam );
+        break;
 
-        case IMN_CLOSECANDIDATE:
+    case IMN_CLOSECANDIDATE:
 
-            ImeUICloseCandidate( hwnd, lParam );
-            break;
+        ImeUICloseCandidate( hwnd, lParam );
+        break;
 
-        case IMN_CHANGECANDIDATE:
+    case IMN_CHANGECANDIDATE:
 
-            ImeUIChangeCandidate( hwnd, lParam );
-            break;
+        ImeUIChangeCandidate( hwnd, lParam );
+        break;
 
-        case IMN_SETOPENSTATUS:
+    case IMN_SETOPENSTATUS:
 
-            ImeUISetOpenStatus( hwnd );
-            break;
+        ImeUISetOpenStatus( hwnd );
+        break;
 
-	default:
-	    return FALSE;
+    default:
+        return FALSE;
 
     }
-    
+
     return TRUE;
 }
 
@@ -365,8 +367,8 @@ BOOL ImeUINotify(
 // This handles WM_IME_NOTIFY message with wParam = IMN_OPENCANDIDATE.
 //
 //**********************************************************************
-void ImeUIOpenCandidate( 
-    HWND hwnd, 
+void ImeUIOpenCandidate(
+    HWND hwnd,
     LPARAM CandList )
 {
     HIMC            hIMC;               // Input context handle.
@@ -415,7 +417,7 @@ void ImeUIOpenCandidate(
     {
 
         if ( CandList & ( 1 << dwIndex ) )
-        {   
+        {
             //
             // The dwIndex-th candidate list contains candidate strings.
             // So here we want to display them.
@@ -426,26 +428,26 @@ void ImeUIOpenCandidate(
             // read in the corresponding candidate list .
             //
 
-            if ( ! ( bufLen = ImmGetCandidateList( hIMC, dwIndex, &tempCandList, 0 ) ) )                      
+            if ( ! ( bufLen = ImmGetCandidateList( hIMC, dwIndex, &tempCandList, 0 ) ) )
                 goto exit2;
-                       
-            
+
+
             //
             // Allocate memory space.
             //
 
-            if( !( gImeUIData.hListCandMem[ dwIndex ]  = 
-                   GlobalAlloc( LPTR, (int)bufLen ) ) )
+            if( !( gImeUIData.hListCandMem[ dwIndex ]  =
+                        GlobalAlloc( LPTR, (int)bufLen ) ) )
                 goto exit2;
 
             if( !( lpStr =
-                 (LPSTR)GlobalLock( gImeUIData.hListCandMem[ dwIndex ] ) ) )
-            {   
+                        (LPSTR)GlobalLock( gImeUIData.hListCandMem[ dwIndex ] ) ) )
+            {
                 GlobalFree( gImeUIData.hListCandMem[ dwIndex ] );
                 gImeUIData.hListCandMem[ dwIndex ] = NULL;
                 goto exit2;
             }
-                    
+
             lpCandList = (LPCANDIDATELIST) lpStr;
 
             //
@@ -479,7 +481,7 @@ void ImeUIOpenCandidate(
                 // Get the pointer to i-th candidate string.
                 //
 
-                lpStr = (LPSTR)lpCandList + 
+                lpStr = (LPSTR)lpCandList +
                         lpCandList->dwOffset[ i ];
 
                 width = ( width < lstrlen( lpStr ) ) ? lstrlen( lpStr ) : width;
@@ -491,19 +493,19 @@ void ImeUIOpenCandidate(
             //
 
 
-            gImeUIData.hListCand[ dwIndex ] = 
-                   CreateWindow( szCandClass,
-                                 NULL,
-                                 WS_BORDER | WS_POPUP | WS_DISABLED,
-                                 CurNumCandList * X_INDENT + point.x,
-                                 CurNumCandList * Y_INDENT + 
-                                     point.y + cyMetrics,
-                                 ( width ) * cxMetrics + 10,
-                                 (int)(dwPreferNumPerPage) * cyMetrics + 5,
-                                 hwnd,
-                                 NULL,
-                                 (HINSTANCE)GetWindowLongPtr( hwnd, GWLP_HINSTANCE ),
-                                 NULL );
+            gImeUIData.hListCand[ dwIndex ] =
+                CreateWindow( szCandClass,
+                              NULL,
+                              WS_BORDER | WS_POPUP | WS_DISABLED,
+                              CurNumCandList * X_INDENT + point.x,
+                              CurNumCandList * Y_INDENT +
+                              point.y + cyMetrics,
+                              ( width ) * cxMetrics + 10,
+                              (int)(dwPreferNumPerPage) * cyMetrics + 5,
+                              hwnd,
+                              NULL,
+                              (HINSTANCE)GetWindowLongPtr( hwnd, GWLP_HINSTANCE ),
+                              NULL );
             //
             // If fail to create the candidate window then do nothing.
             //
@@ -515,7 +517,7 @@ void ImeUIOpenCandidate(
                 goto exit2;
             }
 
- 
+
             //
             // Show candidate window.
             //
@@ -555,8 +557,8 @@ exit2:
 // wParam = IMN_CLOSECANDIDATE.
 //
 //**********************************************************************
-void ImeUICloseCandidate( 
-    HWND hwnd, 
+void ImeUICloseCandidate(
+    HWND hwnd,
     LPARAM CandList )
 {
     int index;
@@ -608,12 +610,12 @@ void ImeUICloseCandidate(
 // This handles WM_IME_NOTIFY message with wParam = IMN_CHANGECANDIDATE.
 //
 //**********************************************************************
-void ImeUIChangeCandidate( 
-    HWND hwnd, 
+void ImeUIChangeCandidate(
+    HWND hwnd,
     LPARAM CandList )
 {
     HIMC            hIMC;
-    LPCANDIDATELIST lpCandList = NULL;         
+    LPCANDIDATELIST lpCandList = NULL;
     DWORD           dwIndex;
     DWORD 	        bufLen;
     LPSTR	        lpStr;
@@ -658,13 +660,13 @@ void ImeUIChangeCandidate(
     //
 
     if ( !( gImeUIData.hListCandMem[ dwIndex ] = GlobalReAlloc(
-	    gImeUIData.hListCandMem[ dwIndex ], (int)bufLen, LPTR ) ) )
+                gImeUIData.hListCandMem[ dwIndex ], (int)bufLen, LPTR ) ) )
     {
         goto exit2;
     }
 
-    if ( !( lpStr = 
-        (LPSTR)GlobalLock( gImeUIData.hListCandMem[ dwIndex ] ) ) )
+    if ( !( lpStr =
+                (LPSTR)GlobalLock( gImeUIData.hListCandMem[ dwIndex ] ) ) )
     {
         GlobalFree( gImeUIData.hListCandMem[ dwIndex ] );
         gImeUIData.hListCandMem[ dwIndex ] = NULL;
@@ -686,7 +688,7 @@ void ImeUIChangeCandidate(
     dwPreferNumPerPage = ( !lpCandList->dwPageSize ) ?
                          DEFAULT_CAND_NUM_PER_PAGE :
                          lpCandList->dwPageSize;
-    // 
+    //
     // Determining maximum character length  the list box
     // will display by loopping through all candidate strings.
     //
@@ -697,23 +699,23 @@ void ImeUIChangeCandidate(
         // Get the pointer to i-th candidate string.
         //
 
-        lpStr = (LPSTR)lpCandList + 
+        lpStr = (LPSTR)lpCandList +
                 lpCandList->dwOffset[ i ];
 
         width = ( width < lstrlen( lpStr ) ) ? lstrlen( lpStr ) :
-                  width;
+                width;
     }
 
-    GetWindowRect( gImeUIData.hListCand[ dwIndex ] , &rect);
+    GetWindowRect( gImeUIData.hListCand[ dwIndex ], &rect);
 
     SetWindowPos( gImeUIData.hListCand[ dwIndex ],
-		          hwnd,
-		          rect.left,
-		          rect.top,
-		          ( width ) * cxMetrics + 10,
-		          (int)(dwPreferNumPerPage) * cyMetrics + 5,
-		          SWP_NOZORDER | SWP_NOACTIVATE );
-		  
+                  hwnd,
+                  rect.left,
+                  rect.top,
+                  ( width ) * cxMetrics + 10,
+                  (int)(dwPreferNumPerPage) * cyMetrics + 5,
+                  SWP_NOZORDER | SWP_NOACTIVATE );
+
 
     DisplayCandStrings( gImeUIData.hListCand[ dwIndex ], lpCandList );
 
@@ -734,7 +736,7 @@ exit2:
 // lParam = IMC_SETOPENSTATUS.
 //
 //**********************************************************************
-void ImeUISetOpenStatus( 
+void ImeUISetOpenStatus(
     HWND hwnd )
 {
     int  i;       // Lopp counter
@@ -753,14 +755,14 @@ void ImeUISetOpenStatus(
         //
         // If the IME conversion engine is open, here we change
         // window's caption title to DBCS composition mode.
-        // 
+        //
 
         SetWindowText( hwnd, (LPSTR)szSteCompTitle );
-    } 
+    }
     else
     {
-        RECT rect = {0};        
-        
+        RECT rect = {0};
+
         //
         // If the IME conversion engine is closed, here we
         // erase all already displayed composition chars if any,
@@ -779,7 +781,7 @@ void ImeUISetOpenStatus(
 
         for( i = 0; i <= MAX_LISTCAND; i++ )
         {
-            if ( gImeUIData.hListCand[ i ] ) 
+            if ( gImeUIData.hListCand[ i ] )
             {
                 DestroyWindow( gImeUIData.hListCand[ i ] );
                 gImeUIData.hListCand[ i ] = NULL;
@@ -789,7 +791,7 @@ void ImeUISetOpenStatus(
         }
 
         //
-        // Reset IMEUI's global data. 
+        // Reset IMEUI's global data.
         //
 
         gImeUIData.uCompLen = 0;
@@ -814,7 +816,7 @@ void ImeUISetOpenStatus(
 //*********************************************************************
 void DisplayCompString( HWND hwnd, LPSTR lpStr, LPSTR lpStrAttr )
 {
-    HDC         hdc;                            
+    HDC         hdc;
     int         StrLen = lstrlen( lpStr );
     RECT        rect;
     DWORD       dwColor;
@@ -836,7 +838,7 @@ void DisplayCompString( HWND hwnd, LPSTR lpStr, LPSTR lpStrAttr )
     rect.right = ( (int)gImeUIData.uCompLen > StrLen ) ?
                  ( xPos + gImeUIData.uCompLen ) * cxMetrics:
                  ( xPos + StrLen ) * cxMetrics;
-   
+
     //
     // This example we use red to display composition chars
     // with attribute 000, pink for attribute 001,
@@ -849,7 +851,7 @@ void DisplayCompString( HWND hwnd, LPSTR lpStr, LPSTR lpStrAttr )
     // Red, pink, blue and green are for attribute 000, 001, 010 and 011,
     // respectively.
     //
-  
+
 
     dwColor = GetTextColor( hdc );
 
@@ -860,12 +862,13 @@ void DisplayCompString( HWND hwnd, LPSTR lpStr, LPSTR lpStrAttr )
             textbuf[ yPos ][ xPos + StrLen ] = ' ';
             fDBCSTrailByte = TRUE;
         }
-    } else
+    }
+    else
     {
         if ( !IsDBCSLeadByte( textbuf[ yPos ][ xPos + StrLen - 2 ] ) )
         {
             if ( IsDBCSLeadByte( textbuf[ yPos ][ xPos + StrLen - 1 ] ) )
-	    {
+            {
                 textbuf[ yPos ][ xPos + StrLen ] = ' ';
                 fDBCSTrailByte = TRUE;
             }
@@ -882,9 +885,10 @@ void DisplayCompString( HWND hwnd, LPSTR lpStr, LPSTR lpStrAttr )
         SetTextColor( hdc, CompColor[ 0 ] ); // default color
 
         ExtTextOut( hdc, xPos * cxMetrics, yPos * cyMetrics,
-                ETO_OPAQUE, &rect, lpStr, StrLen, 0 );
+                    ETO_OPAQUE, &rect, lpStr, StrLen, 0 );
 
-    } else
+    }
+    else
     {
 
         int  ColorIndex;
@@ -900,7 +904,7 @@ void DisplayCompString( HWND hwnd, LPSTR lpStr, LPSTR lpStrAttr )
             ColorIndex = ( ColorIndex > 3 ) ? 3 : ColorIndex;
 
             SetTextColor( hdc, CompColor[ ColorIndex ] );
-            
+
             TextOut( hdc, ( i + xPos ) * cxMetrics, yPos * cyMetrics,
                      lpStr, cnt );
             lpStr += cnt;
@@ -915,7 +919,7 @@ void DisplayCompString( HWND hwnd, LPSTR lpStr, LPSTR lpStrAttr )
     if ( fDBCSTrailByte )
     {
         TextOut( hdc, ( xPos + StrLen ) * cxMetrics, yPos * cyMetrics,
-	         " ", 1 );
+                 " ", 1 );
     }
 
     SetCaretPos( ( xPos + StrLen ) * cxMetrics, yPos * cyMetrics );
@@ -936,8 +940,8 @@ void DisplayCompString( HWND hwnd, LPSTR lpStr, LPSTR lpStrAttr )
 // This function supports only fixed pitch font.
 //
 //*********************************************************************
-void DisplayResultString( 
-    HWND hwnd, 
+void DisplayResultString(
+    HWND hwnd,
     LPSTR lpStr )
 {
 
@@ -969,7 +973,7 @@ void DisplayResultString(
         // If the row ends on a lead byte, blank it out,
         // To do this we must first traverse the string starting
         // from a know character boundry until we reach the last column.
-        // If the last column is a character boundry then the last 
+        // If the last column is a character boundry then the last
         // character is either a string byte or a lead byte.
         //
 
@@ -983,7 +987,7 @@ void DisplayResultString(
         if ( i == LASTCOL && IsDBCSLeadByte( textbuf[ yPos ][ i ] ) )
             textbuf[ yPos ][ LASTCOL ] = ' ';
 
-    } 
+    }
     else
     {
         //
@@ -994,7 +998,7 @@ void DisplayResultString(
         {
             if ( IsDBCSLeadByte( textbuf[ yPos ][ xPos + StrLen - 1 ] ) )
                 textbuf[ yPos ][ xPos + StrLen ] = ' ';
-        } 
+        }
         else
         {
             if ( !IsDBCSLeadByte( textbuf[ yPos ][ xPos + StrLen - 2 ] ) )
@@ -1063,13 +1067,13 @@ void DisplayResultString(
 // WM_PAINT message.
 //
 //**********************************************************************
-void RestoreImeUI( 
+void RestoreImeUI(
     HWND hwnd )
 {
     HIMC        hIMC;           // Storage for input context handle.
-    LONG        bufLen;         // 
+    LONG        bufLen;         //
 
-    
+
     //
     // If fail to get input context handle then do nothing.
     //
@@ -1083,15 +1087,15 @@ void RestoreImeUI(
     //
 
     if ( ImmGetOpenStatus( hIMC ) && gImeUIData.ImeState &&
-         ( bufLen = ImmGetCompositionString( hIMC, GCS_COMPSTR,
-                      (void *)NULL, 0l ) ) > 0 )
+            ( bufLen = ImmGetCompositionString( hIMC, GCS_COMPSTR,
+                       (void *)NULL, 0l ) ) > 0 )
     {
         LPSTR  lpCompStr;            // Pointer to composition string
         HLOCAL hMem;                 // Storage for memory handle.
         LPSTR  lpCompStrAttr = NULL; // Pointer to composition string's attribute
-        LONG   bufLenAttr;           // 
+        LONG   bufLenAttr;           //
         HLOCAL hMemAttr = NULL;      // Memory handle for composition string's
-                                     // attributes.
+        // attributes.
 
         //
         // If fail to allocate and lock memory space for reading in
@@ -1121,7 +1125,7 @@ void RestoreImeUI(
             //
 
             if ( ( bufLenAttr = ( ImmGetCompositionString( hIMC,
-                       GCS_COMPATTR, (void FAR*)NULL, 0l ) ) ) > 0 )
+                                  GCS_COMPATTR, (void FAR*)NULL, 0l ) ) ) > 0 )
             {
                 //
                 // If fail to allocate and lock memory space for reading in
@@ -1142,7 +1146,7 @@ void RestoreImeUI(
                                          bufLenAttr );
 
                 lpCompStrAttr[ bufLenAttr ] = 0;
-            } 
+            }
             else
             {
 nothing:
@@ -1153,12 +1157,12 @@ nothing:
             lpCompStr[ bufLen ] = 0;
 
             DisplayCompString( hwnd, lpCompStr, lpCompStrAttr );
-     
+
         }
 
         LocalUnlock( hMem );
         LocalFree( hMem );
-        
+
         if ( lpCompStrAttr )
         {
             if (NULL != hMemAttr)
@@ -1185,7 +1189,7 @@ exit2:
 // Handler routine of WM_MOVE message.
 //
 //*********************************************************************
-void ImeUIMoveCandWin( 
+void ImeUIMoveCandWin(
     HWND hwnd )
 {
 
@@ -1211,9 +1215,9 @@ void ImeUIMoveCandWin(
         {
             if ( gImeUIData.hListCand[ i ] )
             {
-                GetClientRect( gImeUIData.hListCand[ i ], &rect );                
-                
-                MoveWindow( gImeUIData.hListCand[ i ], 
+                GetClientRect( gImeUIData.hListCand[ i ], &rect );
+
+                MoveWindow( gImeUIData.hListCand[ i ],
                             point.x + X_INDENT * NumCandWin,
                             point.y + Y_INDENT * NumCandWin + cyMetrics,
                             ( rect.right - rect.left + 1 ),
@@ -1233,13 +1237,13 @@ void ImeUIMoveCandWin(
 // Handler routine of WM_IME_SELECT message.
 //
 //**********************************************************************
-void ImeUIClearData( 
+void ImeUIClearData(
     HWND hwnd )
 {
 
-    RECT            rect;           
+    RECT            rect;
     int             i;
-   
+
     SetWindowText( hwnd, szSteTitle );
 
     //
@@ -1262,7 +1266,7 @@ void ImeUIClearData(
             GlobalFree( gImeUIData.hListCandMem[ i ] );
 
             gImeUIData.hListCand[ i ] =
-            gImeUIData.hListCandMem[ i ] = NULL;
+                gImeUIData.hListCandMem[ i ] = NULL;
 
         }
     }

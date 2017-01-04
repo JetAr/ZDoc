@@ -1,4 +1,4 @@
-// TasksTest.cpp : Defines the entry point for the console application.
+﻿// TasksTest.cpp : Defines the entry point for the console application.
 //
 
 #pragma comment(lib,"wbemuuid")
@@ -25,8 +25,8 @@
 
 
 HRESULT InstallGame(__in_z PCWSTR pszGDFBinaryPath,
-                    __in_z PCWSTR pszGameInstallPath, 
-                    GAME_INSTALL_SCOPE gameInstallScope, 
+                    __in_z PCWSTR pszGameInstallPath,
+                    GAME_INSTALL_SCOPE gameInstallScope,
                     __out GUID *pguidInstanceId);
 
 HRESULT RemoveGame(__in GUID guidInstanceId);
@@ -49,14 +49,14 @@ int __cdecl wmain(int argc, __in_ecount(argc) wchar_t *argv[], __in wchar_t *)
     {
 
         hr = CoInitializeSecurity(NULL,
-            -1,
-            NULL,
-            NULL,
-            RPC_C_AUTHN_LEVEL_DEFAULT,
-            RPC_C_IMP_LEVEL_IMPERSONATE,
-            NULL,
-            EOAC_NONE,
-            NULL);
+                                  -1,
+                                  NULL,
+                                  NULL,
+                                  RPC_C_AUTHN_LEVEL_DEFAULT,
+                                  RPC_C_IMP_LEVEL_IMPERSONATE,
+                                  NULL,
+                                  EOAC_NONE,
+                                  NULL);
 
         if(SUCCEEDED(hr))
         {
@@ -82,7 +82,7 @@ int __cdecl wmain(int argc, __in_ecount(argc) wchar_t *argv[], __in wchar_t *)
                     wprintf(L"Press enter to remove game...");
                     wscanf_s(L"%*c");
                     wprintf(L"Removing game\n");
-                    
+
                     hr = RemoveGame(guidInstanceId);
 
                     if(SUCCEEDED(hr))
@@ -166,12 +166,12 @@ HRESULT RemoveGame(__in GUID guidInstanceId)
 //                   If an actual GUID is passed in, the AddGame() call will use that GUID as the instance ID as an IN parameter.
 //                   If the instance ID passed in is already taken, this call will result in an error.
 //
-// InstallGame will return S_FALSE if the game has already been added 
+// InstallGame will return S_FALSE if the game has already been added
 // to the Game Explorer for this specific GameID and Install Path
 
 HRESULT InstallGame(__in_z PCWSTR pszGDFBinaryPath,
-                    __in_z PCWSTR pszGameInstallPath, 
-                    GAME_INSTALL_SCOPE gameInstallScope, 
+                    __in_z PCWSTR pszGameInstallPath,
+                    GAME_INSTALL_SCOPE gameInstallScope,
                     __inout GUID *pguidInstanceId)
 {
     if(NULL == pszGDFBinaryPath)
@@ -266,24 +266,24 @@ HRESULT ListGames()
         if(NULL != bstrGameNamespace)
         {
             hr = spiWbemLocator->ConnectServer(bstrGameNamespace,
-                NULL,
-                NULL,
-                NULL,
-                NULL,
-                NULL,
-                NULL,
-                &spiWbemServices);
+                                               NULL,
+                                               NULL,
+                                               NULL,
+                                               NULL,
+                                               NULL,
+                                               NULL,
+                                               &spiWbemServices);
 
             if(SUCCEEDED(hr))
             {
                 hr = CoSetProxyBlanket(spiWbemServices,
-                    RPC_C_AUTHN_WINNT,
-                    RPC_C_AUTHZ_NONE,
-                    NULL,
-                    RPC_C_AUTHN_LEVEL_CALL,
-                    RPC_C_IMP_LEVEL_IMPERSONATE,
-                    NULL,
-                    EOAC_NONE);
+                                       RPC_C_AUTHN_WINNT,
+                                       RPC_C_AUTHZ_NONE,
+                                       NULL,
+                                       RPC_C_AUTHN_LEVEL_CALL,
+                                       RPC_C_IMP_LEVEL_IMPERSONATE,
+                                       NULL,
+                                       EOAC_NONE);
 
                 if(SUCCEEDED(hr))
                 {
@@ -294,10 +294,10 @@ HRESULT ListGames()
                         if(NULL != bstrQuery)
                         {
                             hr = spiWbemServices->ExecQuery(bstrQueryType,
-                                bstrQuery,
-                                WBEM_FLAG_FORWARD_ONLY | WBEM_FLAG_RETURN_IMMEDIATELY,
-                                NULL,
-                                &spiWbemEnumerator);
+                                                            bstrQuery,
+                                                            WBEM_FLAG_FORWARD_ONLY | WBEM_FLAG_RETURN_IMMEDIATELY,
+                                                            NULL,
+                                                            &spiWbemEnumerator);
 
 
                             if(SUCCEEDED(hr))
@@ -326,26 +326,26 @@ HRESULT ListGames()
                                         VariantInit(&vtGameInstallScope);
 
                                         hr = spiWbemClassObject->Get(WMI_GAME_NAME,
-                                            NULL,
-                                            &vtGameName,
-                                            NULL,
-                                            NULL);
+                                                                     NULL,
+                                                                     &vtGameName,
+                                                                     NULL,
+                                                                     NULL);
 
                                         if(SUCCEEDED(hr))
-                                        {    
+                                        {
                                             hr = spiWbemClassObject->Get(WMI_GAME_INSTANCE_ID,
-                                                NULL,
-                                                &vtGameInstanceID,
-                                                NULL,
-                                                NULL);
+                                                                         NULL,
+                                                                         &vtGameInstanceID,
+                                                                         NULL,
+                                                                         NULL);
 
                                             if(SUCCEEDED(hr))
                                             {
                                                 hr = spiWbemClassObject->Get(WMI_GAME_INSTALL_SCOPE,
-                                                    NULL,
-                                                    &vtGameInstallScope,
-                                                    NULL,
-                                                    NULL);
+                                                                             NULL,
+                                                                             &vtGameInstallScope,
+                                                                             NULL,
+                                                                             NULL);
 
                                                 if(SUCCEEDED(hr))
                                                 {

@@ -1,4 +1,4 @@
-/*++
+﻿/*++
 
 Copyright (c) 2005  Microsoft Corporation
 
@@ -27,10 +27,10 @@ Revision History:
 VOID
 PrintHelp(
     WCHAR * selfName
-    )
+)
 {
     printf("%S: %s\n"
-           "Usage:\n"           
+           "Usage:\n"
            "%S -list\n"
            "%S -write <dir> [-multi] [-close] [-drive <#>] [-boot <file>]\n"
            "%S -audio <dir> [-close] [-drive <#>]\n"
@@ -53,7 +53,7 @@ PrintHelp(
            "\tinject    -- Close the CD tray\n",
            selfName, VER_PRODUCTVERSION_STR,
            selfName,selfName,selfName,selfName,selfName,selfName
-           );
+          );
     return;
 }
 
@@ -62,7 +62,7 @@ ParseCommandLine(
     IN DWORD Count,
     IN WCHAR * Arguments[],
     OUT PPROGRAM_OPTIONS Options
-    )
+)
 {
     BOOLEAN goodEnough = FALSE;
     // initialize with defaults
@@ -140,14 +140,14 @@ ParseCommandLine(
                 validArgument = TRUE;
             }
             else if ( _wcsnicmp(Arguments[i], (L"-drive"), strlen("-drive")) == 0 )
-            {                
+            {
                 // requires second argument
                 if ( i+1 < Count )
                 {
                     i++; // advance argument index
                     ULONG tmp = 666;
                     if ( (swscanf_s( Arguments[i], (L"%d"), &tmp ) == 1) &&
-                         (tmp != 666) )
+                            (tmp != 666) )
                     {
                         // Let's do this zero based for now
                         Options->WriterIndex = tmp;
@@ -162,11 +162,11 @@ ParseCommandLine(
                            "writer to use in decimal format.  To"
                            "get a list of available drives and"
                            "their indexes, use \"-list\" option\n"
-                           );
+                          );
                 }
             }
             else if ( _wcsnicmp(Arguments[i], (L"-boot"), strlen("-boot")) == 0 )
-            {                
+            {
                 // requires second argument
                 if ( i+1 < Count )
                 {
@@ -185,11 +185,11 @@ ParseCommandLine(
                     printf("Need a second argument after boot,"
                            " which is the boot file the\n"
                            "writer will use\n"
-                           );
+                          );
                 }
             }
             else if ( _wcsnicmp(Arguments[i], (L"-vol"), strlen("-vol")) == 0 )
-            {                
+            {
                 // requires second argument
                 if ( i+1 < Count )
                 {
@@ -208,7 +208,7 @@ ParseCommandLine(
                     printf("Need a second argument after vol,"
                            " which is the volume name for\n"
                            "the disc\n"
-                           );
+                          );
                 }
             }
             else if ( _wcsnicmp(Arguments[i], (L"-list"), strlen("-list")) == 0 )
@@ -321,7 +321,7 @@ ParseCommandLine(
         }
 
     }
-    
+
     else if ( Options->Raw )
     {
         // Write allows erase, but not self-test
@@ -379,41 +379,41 @@ ParseCommandLine(
 
 //*********************************************************************
 //* FUNCTION: GetSecondsElapsed
-//*          
-//* PURPOSE: 
+//*
+//* PURPOSE:
 //*********************************************************************
- DWORD
- GetSecondsElapsed(
+DWORD
+GetSecondsElapsed(
     SYSTEMTIME * StartTime,
     SYSTEMTIME * EndTime)
-    {
+{
     FILETIME Start,End;
-    unsigned __int64 Start64=0, End64=0, Elapsed64=0; 
-    
-    
+    unsigned __int64 Start64=0, End64=0, Elapsed64=0;
+
+
     //
     //--- Convert System time
     //
     SystemTimeToFileTime(StartTime,&Start);
     SystemTimeToFileTime(EndTime,&End);
 
-     
+
     //
-    //---- Convert start and end file 
+    //---- Convert start and end file
     //---- time to 2  64 bit usigned integers
     //
     ((LPDWORD)(&Start64))[1] = Start.dwHighDateTime;
     ((LPDWORD)(&Start64))[0] = Start.dwLowDateTime;
-  
+
     ((LPDWORD)(&End64))[1] = End.dwHighDateTime;
     ((LPDWORD)(&End64))[0] = End.dwLowDateTime;
 
-   
+
     //
     //--- Calc elpased time
     //
     Elapsed64 = End64 - Start64;
-    
+
     //
     //---- Get micro seconds elpased
     //
@@ -434,57 +434,58 @@ ParseCommandLine(
     //--- This will be good enough for ~136 years elapsed
     //
     return(((LPDWORD)(&Elapsed64))[0]);
-    }
+}
 
 //*********************************************************************
 //* FUNCTION:CalcElapsedTime
-//*          
-//* PURPOSE: 
+//*
+//* PURPOSE:
 //*********************************************************************
 #define SECONDS_IN_A_DAY     ((DWORD)(SECONDS_IN_A_HOUR*24))
 #define SECONDS_IN_A_HOUR    ((DWORD)(SECONDS_IN_A_MINUTE*60))
 #define SECONDS_IN_A_MINUTE  ((DWORD)(60))
-void 
+void
 CalcElapsedTime(
-   SYSTEMTIME * StartTime,
-   SYSTEMTIME * FinishTime,
-   SYSTEMTIME * ElapsedTime)
-   {
-   DWORD SecondsElapsed;
-   
-   memset(ElapsedTime,0,sizeof(SYSTEMTIME));
-   
-   SecondsElapsed = GetSecondsElapsed(
-         StartTime, FinishTime);
+    SYSTEMTIME * StartTime,
+    SYSTEMTIME * FinishTime,
+    SYSTEMTIME * ElapsedTime)
+{
+    DWORD SecondsElapsed;
+
+    memset(ElapsedTime,0,sizeof(SYSTEMTIME));
+
+    SecondsElapsed = GetSecondsElapsed(
+                         StartTime, FinishTime);
 
 
-   if(SecondsElapsed >= SECONDS_IN_A_DAY)
-      {
-      ElapsedTime->wDay = (WORD) (SecondsElapsed / SECONDS_IN_A_DAY);
-      SecondsElapsed -= (ElapsedTime->wDay*SECONDS_IN_A_DAY);
-      }
-   
-   
-   if(SecondsElapsed >= SECONDS_IN_A_HOUR)
-      {
-      ElapsedTime->wHour  = (WORD) (SecondsElapsed / SECONDS_IN_A_HOUR);
-      SecondsElapsed -= (ElapsedTime->wHour * SECONDS_IN_A_HOUR);
-      }
-   
-   if(SecondsElapsed >= SECONDS_IN_A_MINUTE)
-      {
-      ElapsedTime->wMinute = (WORD) (SecondsElapsed / SECONDS_IN_A_MINUTE);
-      SecondsElapsed -= (ElapsedTime->wMinute * SECONDS_IN_A_MINUTE);
-      }
-   
-   
-   ElapsedTime->wSecond = (WORD) SecondsElapsed;
+    if(SecondsElapsed >= SECONDS_IN_A_DAY)
+    {
+        ElapsedTime->wDay = (WORD) (SecondsElapsed / SECONDS_IN_A_DAY);
+        SecondsElapsed -= (ElapsedTime->wDay*SECONDS_IN_A_DAY);
+    }
 
-   }
+
+    if(SecondsElapsed >= SECONDS_IN_A_HOUR)
+    {
+        ElapsedTime->wHour  = (WORD) (SecondsElapsed / SECONDS_IN_A_HOUR);
+        SecondsElapsed -= (ElapsedTime->wHour * SECONDS_IN_A_HOUR);
+    }
+
+    if(SecondsElapsed >= SECONDS_IN_A_MINUTE)
+    {
+        ElapsedTime->wMinute = (WORD) (SecondsElapsed / SECONDS_IN_A_MINUTE);
+        SecondsElapsed -= (ElapsedTime->wMinute * SECONDS_IN_A_MINUTE);
+    }
+
+
+    ElapsedTime->wSecond = (WORD) SecondsElapsed;
+
+}
 
 
 // using a simple array due to consecutive zero-based values in this enum
-CHAR * g_MediaTypeStrings[] = {
+CHAR * g_MediaTypeStrings[] =
+{
     "IMAPI_MEDIA_TYPE_UNKNOWN",
     "IMAPI_MEDIA_TYPE_CDROM",
     "IMAPI_MEDIA_TYPE_CDR",
@@ -521,7 +522,7 @@ HRESULT GetDiscRecorder(__in ULONG index, __out IDiscRecorder2 ** recorder)
     IDiscMaster2* tmpDiscMaster = NULL;
     BSTR tmpUniqueId;
     IDiscRecorder2* tmpRecorder = NULL;
-    
+
     *recorder = NULL;
 
     // create the disc master object
@@ -530,7 +531,7 @@ HRESULT GetDiscRecorder(__in ULONG index, __out IDiscRecorder2 ** recorder)
         hr = CoCreateInstance(CLSID_MsftDiscMaster2,
                               NULL, CLSCTX_ALL,
                               IID_PPV_ARGS(&tmpDiscMaster)
-                              );
+                             );
         if (FAILED(hr))
         {
             printf("Failed CoCreateInstance\n");
@@ -540,7 +541,7 @@ HRESULT GetDiscRecorder(__in ULONG index, __out IDiscRecorder2 ** recorder)
 
     // get the unique id string
     if (SUCCEEDED(hr))
-    {        
+    {
         hr = tmpDiscMaster->get_Item(index, &tmpUniqueId);
         if (FAILED(hr))
         {
@@ -555,7 +556,7 @@ HRESULT GetDiscRecorder(__in ULONG index, __out IDiscRecorder2 ** recorder)
         hr = CoCreateInstance(CLSID_MsftDiscRecorder2,
                               NULL, CLSCTX_ALL,
                               IID_PPV_ARGS(&tmpRecorder)
-                              );
+                             );
         if (FAILED(hr))
         {
             printf("Failed CoCreateInstance\n");
@@ -593,13 +594,13 @@ HRESULT ListAllRecorders()
     LONG          index = 0;
     IDiscMaster2* tmpDiscMaster = NULL;
 
-            // create a disc master object
+    // create a disc master object
     if (SUCCEEDED(hr))
     {
         hr = CoCreateInstance(CLSID_MsftDiscMaster2,
                               NULL, CLSCTX_ALL,
                               IID_PPV_ARGS(&tmpDiscMaster)
-                              );
+                             );
         if (FAILED(hr))
         {
             printf("Failed CoCreateInstance\n");
@@ -627,22 +628,28 @@ HRESULT ListAllRecorders()
 
         if (SUCCEEDED(hr))
         {
-            
+
             BSTR discId;
             BSTR venId;
-  
+
             // Get the device strings
-            if (SUCCEEDED(hr)) { hr = discRecorder->get_VendorId(&venId); }
-            if (SUCCEEDED(hr)) { hr = discRecorder->get_ProductId(&discId); }
+            if (SUCCEEDED(hr))
+            {
+                hr = discRecorder->get_VendorId(&venId);
+            }
+            if (SUCCEEDED(hr))
+            {
+                hr = discRecorder->get_ProductId(&discId);
+            }
             if (FAILED(hr))
             {
                 printf("Failed to get ID's\n");
                 PrintHR(hr);
-            }                
-        
+            }
+
             if (SUCCEEDED(hr))
             {
-                printf("Recorder %d: %ws %ws", i, venId, discId); 
+                printf("Recorder %d: %ws %ws", i, venId, discId);
             }
             // Get the mount point
             if (SUCCEEDED(hr))
@@ -679,9 +686,9 @@ HRESULT ListAllRecorders()
                 if (SUCCEEDED(hr))
                 {
                     hr = CoCreateInstance(CLSID_MsftDiscFormat2Data,
-                                        NULL, CLSCTX_ALL,
-                                        IID_PPV_ARGS(&dataWriter)
-                                        );
+                                          NULL, CLSCTX_ALL,
+                                          IID_PPV_ARGS(&dataWriter)
+                                         );
                     if (FAILED(hr))
                     {
                         printf("Failed CoCreateInstance on dataWriter\n");
@@ -704,7 +711,7 @@ HRESULT ListAllRecorders()
                     IMAPI_MEDIA_PHYSICAL_TYPE mediaType = IMAPI_MEDIA_TYPE_UNKNOWN;
                     hr = dataWriter->get_CurrentPhysicalMediaType(&mediaType);
                     if (SUCCEEDED(hr))
-                    {            
+                    {
                         printf(" (%s)", g_MediaTypeStrings[mediaType]);
                     }
                 }
@@ -714,10 +721,10 @@ HRESULT ListAllRecorders()
             printf("\n");
             FreeSysStringAndNull(venId);
             FreeSysStringAndNull(discId);
- 
+
         }
         else
-        {            
+        {
             printf("Failed to get drive %d\n", i);
         }
 
@@ -734,23 +741,24 @@ HRESULT GetIsoStreamForDataWriting(__out IStream** result, __out ULONG* sectors2
     HRESULT hr = S_OK;
     *result = NULL;
     *sectors2 = 0;
-    
+
     IStream* data = NULL;
     ULONG tmpSectors = 0;
 
     {
-        STATSTG stat; RtlZeroMemory(&stat, sizeof(STATSTG));
+        STATSTG stat;
+        RtlZeroMemory(&stat, sizeof(STATSTG));
         // open an ISO image for the stream
         if (SUCCEEDED(hr))
         {
             hr = SHCreateStreamOnFileW(shortStreamFilename,
-                                        STGM_READ | STGM_SHARE_DENY_WRITE,
-                                        &data
-                                        );
+                                       STGM_READ | STGM_SHARE_DENY_WRITE,
+                                       &data
+                                      );
             if (FAILED(hr))
             {
                 printf("Failed to open file %S\n",
-                            shortStreamFilename);
+                       shortStreamFilename);
                 PrintHR(hr);
             }
         }
@@ -770,13 +778,13 @@ HRESULT GetIsoStreamForDataWriting(__out IStream** result, __out ULONG* sectors2
             if (stat.cbSize.QuadPart % 2048 != 0)
             {
                 printf("File is not multiple of 2048 bytes.  File size is %I64d (%I64x)\n",
-                            stat.cbSize.QuadPart, stat.cbSize.QuadPart);
+                       stat.cbSize.QuadPart, stat.cbSize.QuadPart);
                 hr = E_FAIL;
             }
             else if (stat.cbSize.QuadPart / 2048 > 0x7FFFFFFF)
             {
                 printf("File is too large, # of sectors won't fit a LONG.  File size is %I64d (%I64x)\n",
-                            stat.cbSize.QuadPart, stat.cbSize.QuadPart);
+                       stat.cbSize.QuadPart, stat.cbSize.QuadPart);
                 hr = E_FAIL;
             }
             else
@@ -819,7 +827,7 @@ HRESULT ImageWriter(PROGRAM_OPTIONS options)
         hr = CoCreateInstance(CLSID_MsftDiscFormat2Data,
                               NULL, CLSCTX_ALL,
                               IID_PPV_ARGS(&dataWriter)
-                              );
+                             );
         if (FAILED(hr))
         {
             printf("CoCreateInstance failed\n");
@@ -864,7 +872,7 @@ HRESULT ImageWriter(PROGRAM_OPTIONS options)
         }
         FreeSysStringAndNull(appName);
     }
-   
+
     // verify the Current media write speed property gets
     //if (SUCCEEDED(hr))
     //{
@@ -880,8 +888,8 @@ HRESULT ImageWriter(PROGRAM_OPTIONS options)
     //        hr = S_OK;
     //    }
     //}
- 
- 
+
+
     // verify the SupportedMediaTypes property gets
     if (SUCCEEDED(hr))
     {
@@ -894,7 +902,7 @@ HRESULT ImageWriter(PROGRAM_OPTIONS options)
         }
         SafeArrayDestroyDataAndNull(value);
     }
-  
+
     // get a stream to write to the disc
     if (SUCCEEDED(hr))
     {
@@ -951,7 +959,7 @@ HRESULT ImageWriter(PROGRAM_OPTIONS options)
     }
 
     // unhook events
-        // unhook events
+    // unhook events
     if (NULL != eventSink)
     {
         eventSink->DispEventUnadvise(dataWriter);
@@ -976,7 +984,7 @@ HRESULT ImageWriter(PROGRAM_OPTIONS options)
     {
         printf("ImageWriter succeeded for drive index %d\n",
                index
-               );
+              );
     }
     else
     {
@@ -1062,7 +1070,7 @@ HRESULT EjectClose(PROGRAM_OPTIONS options, BOOLEAN close)
             PrintHR(hr);
         }
     }
- 
+
     ReleaseAndNull(recorder);
 
     if (SUCCEEDED(hr))
@@ -1070,10 +1078,10 @@ HRESULT EjectClose(PROGRAM_OPTIONS options, BOOLEAN close)
 
     }
     else
-    {    
+    {
         printf("EjectClose FAILED for drive index %d\n",
                index
-               );
+              );
         PrintHR(hr);
     }
     return hr;
@@ -1098,7 +1106,7 @@ HRESULT AudioWriter(PROGRAM_OPTIONS options)
         hr = CoCreateInstance(CLSID_MsftDiscFormat2TrackAtOnce,
                               NULL, CLSCTX_ALL,
                               IID_PPV_ARGS(&audioWriter)
-                              );
+                             );
         if (FAILED(hr))
         {
             printf("Failed CoCreateInstance on dataWriter\n");
@@ -1141,7 +1149,7 @@ HRESULT AudioWriter(PROGRAM_OPTIONS options)
             PrintHR(hr);
         }
         FreeSysStringAndNull(appName);
-    } 
+    }
 
     // get the current media in the recorder
     if (SUCCEEDED(hr))
@@ -1216,49 +1224,51 @@ HRESULT AudioWriter(PROGRAM_OPTIONS options)
     // Add a track
     if (SUCCEEDED(hr))
     {
-	    WCHAR             AppendPath[MAX_PATH];
+        WCHAR             AppendPath[MAX_PATH];
         WCHAR             FullPath[MAX_PATH];
-	    DWORD             ReturnCode;
+        DWORD             ReturnCode;
 //	    DWORD             FileAttributes;
-	    HANDLE            Files;
-	    WIN32_FIND_DATAW  FileData;
-	    memset(&FileData, 0, sizeof(WIN32_FIND_DATA));
+        HANDLE            Files;
+        WIN32_FIND_DATAW  FileData;
+        memset(&FileData, 0, sizeof(WIN32_FIND_DATA));
 
 
-    	StringCchPrintfW(AppendPath, (sizeof(AppendPath))/(sizeof(AppendPath[0])), (L"%s\\*"), options.FileName);
-	    Files = FindFirstFileW(AppendPath, &FileData);
+        StringCchPrintfW(AppendPath, (sizeof(AppendPath))/(sizeof(AppendPath[0])), (L"%s\\*"), options.FileName);
+        Files = FindFirstFileW(AppendPath, &FileData);
 
-		if (INVALID_HANDLE_VALUE != Files) {
-			//We have the search handle for the first file.
-			ReturnCode = 1;
-			while (ReturnCode) {
-				if (FileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
+        if (INVALID_HANDLE_VALUE != Files)
+        {
+            //We have the search handle for the first file.
+            ReturnCode = 1;
+            while (ReturnCode)
+            {
+                if (FileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
                 {
-						//This is a real directory that we should deal with.
-						printf("Skipping directory %ws\n", FileData.cFileName);
-				} 
-                else 
+                    //This is a real directory that we should deal with.
+                    printf("Skipping directory %ws\n", FileData.cFileName);
+                }
+                else
                 {
                     // We have a file, let's add it
                     IStream * testStream = NULL;
                     STATSTG stat;
-                    
-                    StringCchPrintfW(FullPath, (sizeof(FullPath))/(sizeof(FullPath[0])), 
-                                                (L"%s\\%s"), options.FileName, FileData.cFileName);
+
+                    StringCchPrintfW(FullPath, (sizeof(FullPath))/(sizeof(FullPath[0])),
+                                     (L"%s\\%s"), options.FileName, FileData.cFileName);
                     printf("Attempting to add %ws\n", FullPath);
 
                     // get a stream to write to the disc
                     hr = SHCreateStreamOnFileW(FullPath,
-                                        STGM_READWRITE,
-                                        &testStream
-                                        );
+                                               STGM_READWRITE,
+                                               &testStream
+                                              );
 
                     if (FAILED(hr))
                     {
                         printf("FAILED to get file stream\n");
                         PrintHR(hr);
                     }
-                    
+
                     if (SUCCEEDED(hr))
                     {
                         hr = testStream->Stat(&stat, STATFLAG_DEFAULT);
@@ -1303,39 +1313,39 @@ HRESULT AudioWriter(PROGRAM_OPTIONS options)
 
                     ReleaseAndNull(testStream);
 
-				}
-				memset(&FileData, 0, sizeof(WIN32_FIND_DATA));
-				ReturnCode = FindNextFileW(Files, &FileData);
-			}
+                }
+                memset(&FileData, 0, sizeof(WIN32_FIND_DATA));
+                ReturnCode = FindNextFileW(Files, &FileData);
+            }
 
-			if (!ReturnCode) 
+            if (!ReturnCode)
             {
-				ReturnCode = GetLastError();
-				if (ReturnCode != ERROR_NO_MORE_FILES) 
+                ReturnCode = GetLastError();
+                if (ReturnCode != ERROR_NO_MORE_FILES)
                 {
-					printf("Error in attempting to get the next file in %s\n.",
-							AppendPath);
-				} 
+                    printf("Error in attempting to get the next file in %s\n.",
+                           AppendPath);
+                }
                 else
                 {
-					printf("No More Files\n");
-				}
-			}
-			FindClose(Files);
-		}
+                    printf("No More Files\n");
+                }
+            }
+            FindClose(Files);
+        }
         else
         {
             ReturnCode = GetLastError();
-			printf("Could not open a search handle on %ws.\n", options.FileName);
+            printf("Could not open a search handle on %ws.\n", options.FileName);
             printf("return = %d\n", ReturnCode);
-		}
+        }
     }
 
     // unhook events
     if (NULL != eventSink)
     {
         eventSink->DispEventUnadvise(audioWriter);
-    }  
+    }
 
     // Release the media now that we are done
     if (SUCCEEDED(hr))
@@ -1346,7 +1356,7 @@ HRESULT AudioWriter(PROGRAM_OPTIONS options)
             printf("FAILED audioWriter->ReleaseMedia()\n");
             PrintHR(hr);
         }
-    } 
+    }
 
     // Let's clear the recorder also
     if (SUCCEEDED(hr))
@@ -1367,7 +1377,7 @@ HRESULT AudioWriter(PROGRAM_OPTIONS options)
     {
         printf("AudioWriter succeeded for drive index %d\n",
                index
-               );
+              );
     }
     else
     {
@@ -1388,7 +1398,7 @@ HRESULT RawWriter(PROGRAM_OPTIONS options)
     ATL::CComPtr<IDiscFormat2RawCD> iDiscFormatRaw;
     ATL::CComObject<CTestRawWriter2Event> *events = NULL;
     ULONG index = options.WriterIndex;
-    
+
     // cocreate all burning classes
 
     // create a DiscRecorder object
@@ -1438,7 +1448,7 @@ HRESULT RawWriter(PROGRAM_OPTIONS options)
             PrintHR(hr);
         }
         FreeSysStringAndNull(appName);
-    } 
+    }
 
     // check if the current recorder and media support burning
     VARIANT_BOOL recorderSupported = VARIANT_FALSE;
@@ -1459,7 +1469,7 @@ HRESULT RawWriter(PROGRAM_OPTIONS options)
             printf("ERROR: recorder reports it doesn't support burning DAO RAW capabilities!\n");
             hr = E_FAIL;
         }
-    } 
+    }
 
     if (SUCCEEDED(hr))
     {
@@ -1477,7 +1487,7 @@ HRESULT RawWriter(PROGRAM_OPTIONS options)
             hr = E_FAIL;
         }
     }
-    
+
     // create a raw image creator
     if (SUCCEEDED(hr))
     {
@@ -1489,7 +1499,7 @@ HRESULT RawWriter(PROGRAM_OPTIONS options)
             PrintHR(hr);
         }
     }
-    
+
     // set the image type
     if (SUCCEEDED(hr))
     {
@@ -1511,43 +1521,45 @@ HRESULT RawWriter(PROGRAM_OPTIONS options)
         HANDLE            Files;
         WIN32_FIND_DATAW  FileData;
         memset(&FileData, 0, sizeof(WIN32_FIND_DATA));
-        LONG index = 0; 
+        LONG index = 0;
 
 
-    	StringCchPrintfW(AppendPath, (sizeof(AppendPath))/(sizeof(AppendPath[0])), (L"%s\\*"), options.FileName);
-	    Files = FindFirstFileW(AppendPath, &FileData);
+        StringCchPrintfW(AppendPath, (sizeof(AppendPath))/(sizeof(AppendPath[0])), (L"%s\\*"), options.FileName);
+        Files = FindFirstFileW(AppendPath, &FileData);
 
-		if (INVALID_HANDLE_VALUE != Files) {
-			//We have the search handle for the first file.
-			ReturnCode = 1;
-			while (ReturnCode) {
-				if (FileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
+        if (INVALID_HANDLE_VALUE != Files)
+        {
+            //We have the search handle for the first file.
+            ReturnCode = 1;
+            while (ReturnCode)
+            {
+                if (FileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
                 {
-						//This is a real directory that we should deal with.
-						printf("Skipping directory %ws\n", FileData.cFileName);
-				} 
-                else 
+                    //This is a real directory that we should deal with.
+                    printf("Skipping directory %ws\n", FileData.cFileName);
+                }
+                else
                 {
                     // We have a file, let's add it
                     IStream * testStream = NULL;
                     STATSTG stat;
-                    
-                    StringCchPrintfW(FullPath, (sizeof(FullPath))/(sizeof(FullPath[0])), 
-                                                (L"%s\\%s"), options.FileName, FileData.cFileName);
+
+                    StringCchPrintfW(FullPath, (sizeof(FullPath))/(sizeof(FullPath[0])),
+                                     (L"%s\\%s"), options.FileName, FileData.cFileName);
                     printf("Attempting to add %ws\n", FullPath);
 
                     // get a stream to write to the disc
                     hr = SHCreateStreamOnFileW(FullPath,
-                                        STGM_READWRITE,
-                                        &testStream
-                                        );
+                                               STGM_READWRITE,
+                                               &testStream
+                                              );
 
                     if (FAILED(hr))
                     {
                         printf("FAILED to get file stream\n");
                         PrintHR(hr);
                     }
-                    
+
                     if (SUCCEEDED(hr))
                     {
                         hr = testStream->Stat(&stat, STATFLAG_DEFAULT);
@@ -1592,35 +1604,35 @@ HRESULT RawWriter(PROGRAM_OPTIONS options)
 
                     ReleaseAndNull(testStream);
 
-				}
-				memset(&FileData, 0, sizeof(WIN32_FIND_DATA));
-				ReturnCode = FindNextFileW(Files, &FileData);
-			}
+                }
+                memset(&FileData, 0, sizeof(WIN32_FIND_DATA));
+                ReturnCode = FindNextFileW(Files, &FileData);
+            }
 
-			if (!ReturnCode) 
+            if (!ReturnCode)
             {
-				ReturnCode = GetLastError();
-				if (ReturnCode != ERROR_NO_MORE_FILES) 
+                ReturnCode = GetLastError();
+                if (ReturnCode != ERROR_NO_MORE_FILES)
                 {
-					printf("Error in attempting to get the next file in %s\n.",
-							AppendPath);
-				} 
+                    printf("Error in attempting to get the next file in %s\n.",
+                           AppendPath);
+                }
                 else
                 {
-					printf("No More Files\n");
-				}
-			}
-			FindClose(Files);
-		}
+                    printf("No More Files\n");
+                }
+            }
+            FindClose(Files);
+        }
         else
         {
             ReturnCode = GetLastError();
-			printf("Could not open a search handle on %ws.\n", options.FileName);
+            printf("Could not open a search handle on %ws.\n", options.FileName);
             printf("return = %d\n", ReturnCode);
-		}
+        }
     }
 
-    // create the disc image    
+    // create the disc image
     if (SUCCEEDED(hr))
     {
         raw->CreateResultImage(&resultStream);
@@ -1703,7 +1715,7 @@ HRESULT DataWriter(PROGRAM_OPTIONS options)
     BOOLEAN           dualLayerDvdMedia = FALSE;
     ULONG             index = options.WriterIndex;
     VARIANT_BOOL      isBlank = FALSE;
-    
+
     SYSTEMTIME startTime;
     SYSTEMTIME endTime;
     SYSTEMTIME elapsedTime;
@@ -1723,7 +1735,7 @@ HRESULT DataWriter(PROGRAM_OPTIONS options)
         hr = CoCreateInstance(CLSID_MsftDiscFormat2Data,
                               NULL, CLSCTX_ALL,
                               IID_PPV_ARGS(&dataWriter)
-                              );
+                             );
         if (FAILED(hr))
         {
             printf("FAILED CoCreateInstance\n");
@@ -1779,7 +1791,7 @@ HRESULT DataWriter(PROGRAM_OPTIONS options)
         }
         SafeArrayDestroyDataAndNull(value);
     }
-    
+
     // Close the disc if specified
     if (SUCCEEDED(hr) && options.CloseDisc)
     {
@@ -1792,7 +1804,7 @@ HRESULT DataWriter(PROGRAM_OPTIONS options)
         }
     }
 
-    // verify the StartAddressOfPreviousSession property 
+    // verify the StartAddressOfPreviousSession property
     // ALSO -- for DVD+R DL, if from sector zero, set to finalize media
     //if (SUCCEEDED(hr))
     //{
@@ -1812,8 +1824,8 @@ HRESULT DataWriter(PROGRAM_OPTIONS options)
     //            PrintHR(hr);
     //        }
     //    }
-    //}   
-    //   
+    //}
+    //
     // get a stream to write to the disc
     // create a ID_IFileSystemImage object
     if (SUCCEEDED(hr))
@@ -1821,7 +1833,7 @@ HRESULT DataWriter(PROGRAM_OPTIONS options)
         hr = CoCreateInstance(CLSID_MsftFileSystemImage,
                               NULL, CLSCTX_ALL,
                               IID_PPV_ARGS(&image)
-                              );
+                             );
         if (FAILED(hr))
         {
             printf("Failed CoCreate for filesystem\n");
@@ -1857,7 +1869,7 @@ HRESULT DataWriter(PROGRAM_OPTIONS options)
 
     // Get the root dir
     if (SUCCEEDED(hr))
-    {       
+    {
         hr = image->get_Root(&root);
         if (FAILED(hr))
         {
@@ -1871,7 +1883,7 @@ HRESULT DataWriter(PROGRAM_OPTIONS options)
         hr = CoCreateInstance(CLSID_BootOptions,
                               NULL, CLSCTX_ALL,
                               IID_PPV_ARGS(&pBootOptions)
-                              );
+                             );
         if (FAILED(hr))
         {
             printf("FAILED cocreate bootoptions\n");
@@ -1881,9 +1893,9 @@ HRESULT DataWriter(PROGRAM_OPTIONS options)
         if (SUCCEEDED(hr))
         {
             hr = SHCreateStreamOnFileW(options.BootFileName,
-                    STGM_READ | STGM_SHARE_DENY_WRITE,
-                    &bootStream
-                    );
+                                       STGM_READ | STGM_SHARE_DENY_WRITE,
+                                       &bootStream
+                                      );
 
             if (FAILED(hr))
             {
@@ -1900,7 +1912,7 @@ HRESULT DataWriter(PROGRAM_OPTIONS options)
                 printf("Failed BootImage put_BootImage\n");
                 PrintHR(hr);
             }
-        }            
+        }
 
         if (SUCCEEDED(hr))
         {
@@ -1910,7 +1922,7 @@ HRESULT DataWriter(PROGRAM_OPTIONS options)
                 printf("Failed BootImage put_BootImageOptions\n");
                 PrintHR(hr);
             }
-        }                        
+        }
     }
 
     // Check if media is blank
@@ -1929,15 +1941,15 @@ HRESULT DataWriter(PROGRAM_OPTIONS options)
         printf("*** WRITING TO NON-BLANK MEDIA WITHOUT IMPORT! ***\n");
     }
 
-        // ImportFileSystem - Import file data from disc
+    // ImportFileSystem - Import file data from disc
     if (SUCCEEDED(hr) && options.Multi)
-    {       
+    {
         FsiFileSystems fileSystems;
         SAFEARRAY* multiSession = NULL;
 
         // Get mutlisession interface to set in image
         if (SUCCEEDED(hr))
-        {        
+        {
             hr = dataWriter->get_MultisessionInterfaces(&multiSession);
 
             if (FAILED(hr))
@@ -1988,7 +2000,7 @@ HRESULT DataWriter(PROGRAM_OPTIONS options)
     {
         LONG freeBlocks;
 
-        hr = dataWriter->get_FreeSectorsOnMedia(&freeBlocks);        
+        hr = dataWriter->get_FreeSectorsOnMedia(&freeBlocks);
         if (FAILED(hr))
         {
             printf("Failed to get Free Media Blocks\n");
@@ -2004,7 +2016,7 @@ HRESULT DataWriter(PROGRAM_OPTIONS options)
             }
         }
     }
-        
+
     // Add a dir to the image
     if (SUCCEEDED(hr))
     {
@@ -2021,8 +2033,8 @@ HRESULT DataWriter(PROGRAM_OPTIONS options)
         {
             CalcElapsedTime(&startTime, &endTime, &elapsedTime);
             printf(" - Time: %02d:%02d:%02d\n", elapsedTime.wHour,
-                                          elapsedTime.wMinute,
-                                          elapsedTime.wSecond);
+                   elapsedTime.wMinute,
+                   elapsedTime.wSecond);
         }
     }
 
@@ -2063,8 +2075,14 @@ HRESULT DataWriter(PROGRAM_OPTIONS options)
     {
         LONG numFiles = 0;
         LONG numDirs = 0;
-        if (SUCCEEDED(hr)) { hr = image->get_FileCount(&numFiles); }
-        if (SUCCEEDED(hr)) { hr = image->get_DirectoryCount(&numDirs); }
+        if (SUCCEEDED(hr))
+        {
+            hr = image->get_FileCount(&numFiles);
+        }
+        if (SUCCEEDED(hr))
+        {
+            hr = image->get_DirectoryCount(&numDirs);
+        }
         if (FAILED(hr))
         {
             printf("Failed image->get_FileCount\n");
@@ -2076,7 +2094,7 @@ HRESULT DataWriter(PROGRAM_OPTIONS options)
             printf("Number of Directories: %d\n", numDirs);
         }
     }
-    
+
     //Set the volume name
     if (SUCCEEDED(hr) && (NULL != options.VolumeName))
     {
@@ -2143,7 +2161,7 @@ HRESULT DataWriter(PROGRAM_OPTIONS options)
 
     // write the stream
     if (SUCCEEDED(hr))
-    {        
+    {
         GetSystemTime(&startTime);
         hr = dataWriter->Write(dataStream);
         GetSystemTime(&endTime);
@@ -2152,12 +2170,12 @@ HRESULT DataWriter(PROGRAM_OPTIONS options)
             printf("Failed to write stream\n");
             PrintHR(hr);
         }
-                else
+        else
         {
             CalcElapsedTime(&startTime, &endTime, &elapsedTime);
             printf(" - Time to write: %02d:%02d:%02d\n", elapsedTime.wHour,
-                                          elapsedTime.wMinute,
-                                          elapsedTime.wSecond);
+                   elapsedTime.wMinute,
+                   elapsedTime.wSecond);
         }
     }
     // unhook events
@@ -2165,7 +2183,7 @@ HRESULT DataWriter(PROGRAM_OPTIONS options)
     {
         eventSink->DispEventUnadvise(dataWriter);
     }
-    
+
     // verify the WriteProtectStatus property gets
     if (SUCCEEDED(hr))
     {
@@ -2177,7 +2195,7 @@ HRESULT DataWriter(PROGRAM_OPTIONS options)
             PrintHR(hr);
         }
     }
-    
+
     // verify that clearing the disc recorder works
     if (SUCCEEDED(hr))
     {
@@ -2189,7 +2207,7 @@ HRESULT DataWriter(PROGRAM_OPTIONS options)
         }
 
     }
-          
+
     ReleaseAndNull(eventSink);
     ReleaseAndNull(image);
     ReleaseAndNull(fsiresult);
@@ -2203,13 +2221,13 @@ HRESULT DataWriter(PROGRAM_OPTIONS options)
     {
         printf("DataWriter succeeded for drive index %d\n",
                index
-               );
+              );
     }
     else
-    {    
+    {
         printf("DataWriter FAILED for drive index %d\n",
                index
-               );
+              );
         PrintHR(hr);
     }
     return hr;
@@ -2241,20 +2259,20 @@ int __cdecl wmain(int argc, WCHAR *argv[])
     {
         //PrintOptions(&options);
     }
-    
+
     // Get start time for total time
     GetSystemTime(&startTime);
 
-     if (CAtlBaseModule::m_bInitFailed)
-     {
-         printf("AtlBaseInit failed...\n");
-         coInitHr = E_FAIL;
-     }
-     else
-     {
-         // printf("AtlBaseInit passed...\n");
-         coInitHr = S_OK;
-     }
+    if (CAtlBaseModule::m_bInitFailed)
+    {
+        printf("AtlBaseInit failed...\n");
+        coInitHr = E_FAIL;
+    }
+    else
+    {
+        // printf("AtlBaseInit passed...\n");
+        coInitHr = S_OK;
+    }
 
     if ( SUCCEEDED(coInitHr) && options.ListWriters )
     {
@@ -2298,8 +2316,8 @@ int __cdecl wmain(int argc, WCHAR *argv[])
 
     CalcElapsedTime(&startTime, &endTime, &elapsedTime);
     printf(" - Total Time: %02d:%02d:%02d\n", elapsedTime.wHour,
-                                    elapsedTime.wMinute,
-                                    elapsedTime.wSecond);
+           elapsedTime.wMinute,
+           elapsedTime.wSecond);
 
     if (SUCCEEDED(hr))
         return 0;

@@ -1,5 +1,5 @@
-//****************************************************************
-// 
+﻿//****************************************************************
+//
 // header file for wsnmputil.cpp utility.
 //
 //****************************************************************
@@ -49,20 +49,20 @@
 typedef struct _SNMP_MGR_SESSION
 {
 
- HSNMP_SESSION     hSnmpSession;     // handle to winsnmp session
- HSNMP_ENTITY      hAgentEntity;     // handle to agent entity
- HSNMP_ENTITY      hManagerEntity;   // handle to manager entity
- HSNMP_CONTEXT     hViewContext;     // handle to view context
- HSNMP_PDU         hPdu;             // handle to snmp pdu
- HSNMP_VBL         hVbl;             // handle to var bind list
- HWND              hWnd;             // handle to window
+    HSNMP_SESSION     hSnmpSession;     // handle to winsnmp session
+    HSNMP_ENTITY      hAgentEntity;     // handle to agent entity
+    HSNMP_ENTITY      hManagerEntity;   // handle to manager entity
+    HSNMP_CONTEXT     hViewContext;     // handle to view context
+    HSNMP_PDU         hPdu;             // handle to snmp pdu
+    HSNMP_VBL         hVbl;             // handle to var bind list
+    HWND              hWnd;             // handle to window
 
- smiINT32          nPduType;         // current pdu type
- smiINT32          nRequestId;       // current request id
- smiINT32          nError;           // last system error
- smiINT32          nErrorStatus;     // error status
- smiINT32          nErrorIndex;      // error index
- 
+    smiINT32          nPduType;         // current pdu type
+    smiINT32          nRequestId;       // current request id
+    smiINT32          nError;           // last system error
+    smiINT32          nErrorStatus;     // error status
+    smiINT32          nErrorIndex;      // error index
+
 } SNMP_MGR_SESSION, *PSNMP_MGR_SESSION;
 
 
@@ -75,8 +75,8 @@ typedef struct _SNMP_MGR_SESSION
 class GlobalVars
 {
 public:
-    GlobalVars( ) 
-    { 
+    GlobalVars( )
+    {
         nTimeOut        = 6000;
         nRetries        = 3;
         nRequestId      = 1;
@@ -102,7 +102,7 @@ public:
     smiINT       non_repeaters;               // non_repeaters field of SNMP_PDU_GETBULK
     smiINT       max_repetitions;             // max_repetitions field of SNMP_PDU_GETBULK
     BOOL         doSet;                       // should we do a set?
-    BOOL         fDone;                       // A bool var 
+    BOOL         fDone;                       // A bool var
     BOOL         version;                     // if TRUE -> v2C else use v1.
     CHAR         *pAgentStrAddr;              // pointer to agent string
     CHAR         *pSetValue;                  // pointer to the SET value in ASCII
@@ -116,7 +116,7 @@ extern GlobalVars    gVars;
 
 //****************************************************************
 //
-// function prototypes. 
+// function prototypes.
 //
 //****************************************************************
 

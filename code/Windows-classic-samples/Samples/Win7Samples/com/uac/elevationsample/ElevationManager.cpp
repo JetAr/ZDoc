@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -6,7 +6,7 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 
 // ElevationManager.cpp
-//	-Implements functionality for elevation including using 
+//	-Implements functionality for elevation including using
 //	the elevation moniker and setting a button shield icon.
 //
 
@@ -27,14 +27,14 @@
 //
 ElevationManager::ElevationManager(__out HRESULT * hr)
 {
-	CInitHR = CoInitializeEx(NULL, COINIT_MULTITHREADED);
-	*hr = CInitHR;
+    CInitHR = CoInitializeEx(NULL, COINIT_MULTITHREADED);
+    *hr = CInitHR;
 }
 
 ElevationManager::~ElevationManager(void)
 {
-	if(SUCCEEDED(CInitHR))
-		CoUninitialize();
+    if(SUCCEEDED(CInitHR))
+        CoUninitialize();
 }
 
 //
@@ -47,59 +47,64 @@ ElevationManager::~ElevationManager(void)
 //		hwndMain	- The handle to the main window.
 //		fRegister	- TRUE: register server.
 //					- FALSE: unregister server.
-//		
+//
 //		Uses CoCreateInstanceAsAdmin to load the IDllRegister Interface in an elevated process.
-//		
+//
 //		Succeeds if registration is successful, fails otherwise.
 //		Over The Shoulder (OTS) elevation will succeed in CoCreateInstanceAsAdmin with the correct credentials, but fail
-//		with E_ACCESSDENIED if the registry key 'AppId/{CLSID}/AccessPermission' is not correctly set to allow the 
+//		with E_ACCESSDENIED if the registry key 'AppId/{CLSID}/AccessPermission' is not correctly set to allow the
 //		Interactive user. (See Register.cpp function SetOTSRegValue)
-//		
-HRESULT ElevationManager::RegisterAsDll(const TCHAR * tszFileName, HWND hwndMain, BOOL fRegister){
-	
-	HRESULT hr;
-	IDllRegister * pDllRegister = NULL;
-	TCHAR *tszFullFileName = NULL;
-	BSTR bstrFileName = NULL;
-	int bufLen = GetFullPathName(tszFileName, 0, NULL, NULL);
+//
+HRESULT ElevationManager::RegisterAsDll(const TCHAR * tszFileName, HWND hwndMain, BOOL fRegister)
+{
 
-	tszFullFileName = (TCHAR *)malloc(sizeof(TCHAR) * bufLen);
-	if(!tszFullFileName){
-		hr = E_OUTOFMEMORY;
-		goto cleanup;
-	}
+    HRESULT hr;
+    IDllRegister * pDllRegister = NULL;
+    TCHAR *tszFullFileName = NULL;
+    BSTR bstrFileName = NULL;
+    int bufLen = GetFullPathName(tszFileName, 0, NULL, NULL);
 
-	if(!GetFullPathName(tszFileName, bufLen, tszFullFileName, NULL)){
-		hr = HRESULT_FROM_WIN32(GetLastError());
-		goto cleanup;
-	}
-	
-	hr = CoCreateInstanceAsAdmin(hwndMain, CLSID_RegistrationClass, IID_IDllRegister, (void **) &pDllRegister);
-	if(FAILED(hr)){
-		goto cleanup;
-	}
+    tszFullFileName = (TCHAR *)malloc(sizeof(TCHAR) * bufLen);
+    if(!tszFullFileName)
+    {
+        hr = E_OUTOFMEMORY;
+        goto cleanup;
+    }
 
-	bstrFileName = SysAllocString(tszFullFileName);
-	
-	if(!bstrFileName){
-		hr = E_OUTOFMEMORY;
-		goto cleanup;
-	}
+    if(!GetFullPathName(tszFileName, bufLen, tszFullFileName, NULL))
+    {
+        hr = HRESULT_FROM_WIN32(GetLastError());
+        goto cleanup;
+    }
 
-	if(fRegister)
-		hr = pDllRegister->RegisterDll(bstrFileName);
-	else
-		hr = pDllRegister->UnRegisterDll(bstrFileName);
-	
+    hr = CoCreateInstanceAsAdmin(hwndMain, CLSID_RegistrationClass, IID_IDllRegister, (void **) &pDllRegister);
+    if(FAILED(hr))
+    {
+        goto cleanup;
+    }
 
-cleanup:	
-	free(tszFullFileName);
-	SysFreeString(bstrFileName);
-	if(pDllRegister)
-		pDllRegister->Release();
-	pDllRegister=NULL;
-	
-	return hr;
+    bstrFileName = SysAllocString(tszFullFileName);
+
+    if(!bstrFileName)
+    {
+        hr = E_OUTOFMEMORY;
+        goto cleanup;
+    }
+
+    if(fRegister)
+        hr = pDllRegister->RegisterDll(bstrFileName);
+    else
+        hr = pDllRegister->UnRegisterDll(bstrFileName);
+
+
+cleanup:
+    free(tszFullFileName);
+    SysFreeString(bstrFileName);
+    if(pDllRegister)
+        pDllRegister->Release();
+    pDllRegister=NULL;
+
+    return hr;
 }
 
 //
@@ -109,10 +114,10 @@ cleanup:
 //
 //  COMMENTS:
 //		hwndMain	- The Window associated with this call.
-//		rclsid		- CLSID associated with the data and code that will be used to create the object. 
+//		rclsid		- CLSID associated with the data and code that will be used to create the object.
 //		riid		- Reference to the identifier of the interface to be used to communicate with the object.
-//		ppv			- [out] Address of pointer variable that receives the interface pointer requested in riid. 
-//						Upon successful return, *ppv contains the requested interface pointer. 
+//		ppv			- [out] Address of pointer variable that receives the interface pointer requested in riid.
+//						Upon successful return, *ppv contains the requested interface pointer.
 //						Upon failure, *ppv contains NULL.
 //
 //		Fails if:	-User declines Elevation
@@ -122,19 +127,19 @@ cleanup:
 HRESULT ElevationManager::CoCreateInstanceAsAdmin(HWND hwndMain, __in REFCLSID rclsid, __in REFIID riid, __deref_out void ** ppv)
 {
     BIND_OPTS3 bo;
-	WCHAR  wszCLSID[CLSIDSize];
-	WCHAR  wszMonikerName[MonikerSize+CLSIDSize];
+    WCHAR  wszCLSID[CLSIDSize];
+    WCHAR  wszMonikerName[MonikerSize+CLSIDSize];
 
-    StringFromGUID2(rclsid, wszCLSID, ARRAYSIZE(wszCLSID)); 
+    StringFromGUID2(rclsid, wszCLSID, ARRAYSIZE(wszCLSID));
     HRESULT hr = StringCchPrintf(wszMonikerName, ARRAYSIZE(wszMonikerName), MonikerName, wszCLSID);
     if (FAILED(hr))
         return hr;
     memset(&bo, 0, sizeof(bo));
     bo.cbStruct = sizeof(bo);
     bo.hwnd = hwndMain;
-	bo.dwClassContext  = CLSCTX_LOCAL_SERVER;
+    bo.dwClassContext  = CLSCTX_LOCAL_SERVER;
     hr = CoGetObject(wszMonikerName, &bo, riid, ppv);
-	return hr;
+    return hr;
 }
 
 //
@@ -147,40 +152,42 @@ HRESULT ElevationManager::CoCreateInstanceAsAdmin(HWND hwndMain, __in REFCLSID r
 //		hwndMain - The Window associated with this call.
 //		fRegister - TRUE: Register server
 //					FALSE: Unregister server.
-//		
-//		This function does not get an elevated instance of the server, instead the server is responsible 
+//
+//		This function does not get an elevated instance of the server, instead the server is responsible
 //			to elevate the executable using shell execute.
 //
-HRESULT ElevationManager::RegisterAsExe(const TCHAR * tszFileName, HWND hwndMain, BOOL fRegister){
+HRESULT ElevationManager::RegisterAsExe(const TCHAR * tszFileName, HWND hwndMain, BOOL fRegister)
+{
 
-	HRESULT hr;
-	IExeRegister * pExeRegister = NULL;
-	BSTR bstrFileName = NULL;
+    HRESULT hr;
+    IExeRegister * pExeRegister = NULL;
+    BSTR bstrFileName = NULL;
 
-	hr = CoCreateInstance(CLSID_RegistrationClass, NULL, CLSCTX_INPROC, IID_IExeRegister, (void **) &pExeRegister);
+    hr = CoCreateInstance(CLSID_RegistrationClass, NULL, CLSCTX_INPROC, IID_IExeRegister, (void **) &pExeRegister);
 
-	if(FAILED(hr))
-		goto cleanup;
-	
+    if(FAILED(hr))
+        goto cleanup;
 
-	bstrFileName = SysAllocString(tszFileName);
 
-	if(!bstrFileName){
-		hr = E_OUTOFMEMORY;
-		goto cleanup;
-	};
+    bstrFileName = SysAllocString(tszFileName);
 
-	if(fRegister)
-		hr = pExeRegister->RegisterExe(bstrFileName, hwndMain);
-	else
-		hr = pExeRegister->UnregisterExe(bstrFileName, hwndMain);
+    if(!bstrFileName)
+    {
+        hr = E_OUTOFMEMORY;
+        goto cleanup;
+    };
+
+    if(fRegister)
+        hr = pExeRegister->RegisterExe(bstrFileName, hwndMain);
+    else
+        hr = pExeRegister->UnregisterExe(bstrFileName, hwndMain);
 
 cleanup:
-	SysFreeString(bstrFileName);
-	if(pExeRegister)
-		pExeRegister->Release();
-	pExeRegister = NULL;
-	return hr;
+    SysFreeString(bstrFileName);
+    if(pExeRegister)
+        pExeRegister->Release();
+    pExeRegister = NULL;
+    return hr;
 }
 
 //
@@ -195,9 +202,10 @@ cleanup:
 //			In VS, add to ProjectProperties->Linker->Manifest File->Additional Manifest Dependencies:
 //			"type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' processorArchitecture='*' publicKeyToken='6595b64144ccf1df' language='*'"
 //
-LRESULT ElevationManager::SetButtonShield(HWND hwndButton){
+LRESULT ElevationManager::SetButtonShield(HWND hwndButton)
+{
 
-	return Button_SetElevationRequiredState(hwndButton, TRUE);
+    return Button_SetElevationRequiredState(hwndButton, TRUE);
 
 }
 
@@ -209,17 +217,18 @@ LRESULT ElevationManager::SetButtonShield(HWND hwndButton){
 //  COMMENTS:
 //		tszFileName - The server to unregister.
 //		hwndMain - the window associated with this call.
-//		
+//
 //		Filename can be an exe or a library image.
-//		
-HRESULT ElevationManager::UnRegisterServer(const TCHAR * tszFileName, HWND hwndMain){
+//
+HRESULT ElevationManager::UnRegisterServer(const TCHAR * tszFileName, HWND hwndMain)
+{
 
-	BOOL isExe = IsFileExe(tszFileName);
-	
-	if(isExe)
-		return RegisterAsExe(tszFileName, hwndMain, FALSE);
-	else
-		return RegisterAsDll(tszFileName, hwndMain, FALSE);
+    BOOL isExe = IsFileExe(tszFileName);
+
+    if(isExe)
+        return RegisterAsExe(tszFileName, hwndMain, FALSE);
+    else
+        return RegisterAsDll(tszFileName, hwndMain, FALSE);
 
 
 }
@@ -232,17 +241,18 @@ HRESULT ElevationManager::UnRegisterServer(const TCHAR * tszFileName, HWND hwndM
 //  COMMENTS:
 //		tszFileName - The server to register.
 //		hwndMain - the window associated with this call.
-//		
+//
 //		Filename can be an exe or a library image.
-//	
-HRESULT ElevationManager::RegisterServer(const TCHAR * tszFileName, HWND hwndMain){
-	
-	BOOL isExe = IsFileExe(tszFileName);
-	
-	if(isExe)
-		return RegisterAsExe(tszFileName, hwndMain, TRUE);
-	else
-		return RegisterAsDll(tszFileName, hwndMain, TRUE);
+//
+HRESULT ElevationManager::RegisterServer(const TCHAR * tszFileName, HWND hwndMain)
+{
+
+    BOOL isExe = IsFileExe(tszFileName);
+
+    if(isExe)
+        return RegisterAsExe(tszFileName, hwndMain, TRUE);
+    else
+        return RegisterAsDll(tszFileName, hwndMain, TRUE);
 
 }
 
@@ -251,19 +261,20 @@ HRESULT ElevationManager::RegisterServer(const TCHAR * tszFileName, HWND hwndMai
 //
 //  PURPOSE: Checks the file extension of the given file for '.exe'
 //  COMMENTS:
-//		tszFileName - The file name to check.		
+//		tszFileName - The file name to check.
 //		Returns - TRUE if file is EXE, FALSE Otherwise.
-BOOL ElevationManager::IsFileExe(const TCHAR * tszFileName){
-	size_t len = _tcslen(tszFileName);
-	size_t min = 5;
-	const TCHAR * tszTemp = NULL;
+BOOL ElevationManager::IsFileExe(const TCHAR * tszFileName)
+{
+    size_t len = _tcslen(tszFileName);
+    size_t min = 5;
+    const TCHAR * tszTemp = NULL;
 
-	if(len < min)
-		return FALSE;
-	tszTemp = tszFileName + (len - 4);
-	if(_tcscmp(tszTemp, _T(".exe"))==0)
-		return TRUE;
-	return FALSE;	
+    if(len < min)
+        return FALSE;
+    tszTemp = tszFileName + (len - 4);
+    if(_tcscmp(tszTemp, _T(".exe"))==0)
+        return TRUE;
+    return FALSE;
 }
 
 

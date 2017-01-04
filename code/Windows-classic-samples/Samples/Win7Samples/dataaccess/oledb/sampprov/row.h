@@ -1,8 +1,8 @@
-//--------------------------------------------------------------------
-// Microsoft OLE DB Sample Provider 
+﻿//--------------------------------------------------------------------
+// Microsoft OLE DB Sample Provider
 // (C) Copyright 1991 - 1999 Microsoft Corporation. All Rights Reserved.
 //
-// @doc 
+// @doc
 //
 // @module ROW.H | ROW base object and contained interface
 // definitions
@@ -46,78 +46,84 @@ typedef CImpIRowChange*		PIMPIROWCHANGE;
 //
 class CRow : public CBaseObj					//@base public | CBaseObj
 {
-	//	Contained interfaces are friends
-	friend class CImpIRow;
-	friend class CImpIColumnsInfo;
-	friend class CImpIConvertType;
-	friend class CImpIGetSession;
-	friend class CImpIRowChange;
+    //	Contained interfaces are friends
+    friend class CImpIRow;
+    friend class CImpIColumnsInfo;
+    friend class CImpIConvertType;
+    friend class CImpIGetSession;
+    friend class CImpIRowChange;
 
-	// Stream object interfaces are friends
-	// since stream objects always have implicit rowset context
-	friend class CStream;
-	
-	protected: //@access protected
-		//@cmember parent Object (either Rowset or Session)
-		CBaseObj *						m_pParentObj;
-		//@cmember associated Row Handle
-		HROW							m_hRow;
-		//@cmember File Manipulation Class
-		CFileIO *						m_pFileio;
-		//@cmember Row buffer size
-		DBLENGTH						m_cbRowSize;
-		//@cmember ptr to the row buffer
-		BYTE *							m_pRowBuff;
-		//@cmember count of Extra columns
-		DBORDINAL						m_cExtraCols;
-		//@cmember array of Extra dbcolumninfo structs
-		DBCOLUMNINFO					m_rgExtracolinfo[EXTRA_COLUMNS];
+    // Stream object interfaces are friends
+    // since stream objects always have implicit rowset context
+    friend class CStream;
 
-		// Interface and OLE Variables
+protected: //@access protected
+    //@cmember parent Object (either Rowset or Session)
+    CBaseObj *						m_pParentObj;
+    //@cmember associated Row Handle
+    HROW							m_hRow;
+    //@cmember File Manipulation Class
+    CFileIO *						m_pFileio;
+    //@cmember Row buffer size
+    DBLENGTH						m_cbRowSize;
+    //@cmember ptr to the row buffer
+    BYTE *							m_pRowBuff;
+    //@cmember count of Extra columns
+    DBORDINAL						m_cExtraCols;
+    //@cmember array of Extra dbcolumninfo structs
+    DBCOLUMNINFO					m_rgExtracolinfo[EXTRA_COLUMNS];
 
-		//@cmember Reference count
-		DBREFCOUNT						m_cRef;												
-		//@cmember Contained IRow
-		PIMPIROW						m_pIRow;
-		//@cmember Contained IColumnsInfo
-		PIMPICOLUMNSINFO				m_pIColumnsInfo;				
-		//@cmember Contained IConvertType
-		PIMPICONVERTTYPE				m_pIConvertType;
-		//@cmember Contained IGetSession
-		PIMPIGETSESSION					m_pIGetSession;
-		//@cmember Contained IRowChange
-		PIMPIROWCHANGE					m_pIRowChange;
+    // Interface and OLE Variables
 
-	public: //@access public
-		//@cmember Constructor
-		CRow(LPUNKNOWN);
-		//@cmember Destructor
-		virtual ~CRow(void);
-	
-		//@cmember Init row object that is a part of a rowset
-		BOOL			FInit(CRowset*);
-		//@cmember Init row object that is a result of a direct bind
-		BOOL			FInit(CDBSession*, CFileIO*, DBCOUNTITEM);
-		//@cmember Set the row object row handle value
-		STDMETHODIMP	SetRowHandle(HROW);
-		//@cmember Return m_pFileio
-		CFileIO *		GetFileObj();
-		//@cmember Return underlying ROWBUFF
-		ROWBUFF *		GetRowBuff();
-		//@cmember Return true if columnID is valid
-		BOOL 			GetColumnOrdinal(CFileIO*, DBID*, DBORDINAL*);
-		//@cmember Return m_cExtraCols
-		inline DBORDINAL		GetExtraColCount() { return m_cExtraCols; };
-		//@cmember Return 
-		inline DBCOLUMNINFO *	GetExtraColumnInfo() { return m_rgExtracolinfo; };
-		
-		//	Object's base IUnknown
-		//@cmember Request an Interface
-		STDMETHODIMP				QueryInterface(REFIID, LPVOID *);
-		//@cmember Increments the Reference count
-		STDMETHODIMP_(DBREFCOUNT)	AddRef(void);
-		//@cmember Decrements the Reference count
-		STDMETHODIMP_(DBREFCOUNT)	Release(void);		
+    //@cmember Reference count
+    DBREFCOUNT						m_cRef;
+    //@cmember Contained IRow
+    PIMPIROW						m_pIRow;
+    //@cmember Contained IColumnsInfo
+    PIMPICOLUMNSINFO				m_pIColumnsInfo;
+    //@cmember Contained IConvertType
+    PIMPICONVERTTYPE				m_pIConvertType;
+    //@cmember Contained IGetSession
+    PIMPIGETSESSION					m_pIGetSession;
+    //@cmember Contained IRowChange
+    PIMPIROWCHANGE					m_pIRowChange;
+
+public: //@access public
+    //@cmember Constructor
+    CRow(LPUNKNOWN);
+    //@cmember Destructor
+    virtual ~CRow(void);
+
+    //@cmember Init row object that is a part of a rowset
+    BOOL			FInit(CRowset*);
+    //@cmember Init row object that is a result of a direct bind
+    BOOL			FInit(CDBSession*, CFileIO*, DBCOUNTITEM);
+    //@cmember Set the row object row handle value
+    STDMETHODIMP	SetRowHandle(HROW);
+    //@cmember Return m_pFileio
+    CFileIO *		GetFileObj();
+    //@cmember Return underlying ROWBUFF
+    ROWBUFF *		GetRowBuff();
+    //@cmember Return true if columnID is valid
+    BOOL 			GetColumnOrdinal(CFileIO*, DBID*, DBORDINAL*);
+    //@cmember Return m_cExtraCols
+    inline DBORDINAL		GetExtraColCount()
+    {
+        return m_cExtraCols;
+    };
+    //@cmember Return
+    inline DBCOLUMNINFO *	GetExtraColumnInfo()
+    {
+        return m_rgExtracolinfo;
+    };
+
+    //	Object's base IUnknown
+    //@cmember Request an Interface
+    STDMETHODIMP				QueryInterface(REFIID, LPVOID *);
+    //@cmember Increments the Reference count
+    STDMETHODIMP_(DBREFCOUNT)	AddRef(void);
+    //@cmember Decrements the Reference count
+    STDMETHODIMP_(DBREFCOUNT)	Release(void);
 };
 
 
@@ -126,30 +132,30 @@ class CRow : public CBaseObj					//@base public | CBaseObj
 //
 class CImpIRow : public IRow		//@base public | IRow
 {
-	private: //@access private
-		DEFINE_DEFAULT_IUNKNOWN_MEMBER_DATA(CRow)
+private: //@access private
+    DEFINE_DEFAULT_IUNKNOWN_MEMBER_DATA(CRow)
 
-	public: //@access public
-		DEFINE_DEFAULT_IUNKNOWN_CTOR_DTOR(CRow, CImpIRow);
-		DEFINE_DEFAULT_IUNKNOWN_ADDREF_RELEASE
+public: //@access public
+    DEFINE_DEFAULT_IUNKNOWN_CTOR_DTOR(CRow, CImpIRow);
+    DEFINE_DEFAULT_IUNKNOWN_ADDREF_RELEASE
 
-		//	IRow members
-		//@cmember GetColumns Method
-		STDMETHODIMP GetColumns(DBORDINAL cColumns, DBCOLUMNACCESS rgColumns[]);
+    //	IRow members
+    //@cmember GetColumns Method
+    STDMETHODIMP GetColumns(DBORDINAL cColumns, DBCOLUMNACCESS rgColumns[]);
 
-		//@cmember GetSourceRowset Method
-		STDMETHODIMP GetSourceRowset(REFIID riid, IUnknown ** ppRowset, HROW * phRow);
+    //@cmember GetSourceRowset Method
+    STDMETHODIMP GetSourceRowset(REFIID riid, IUnknown ** ppRowset, HROW * phRow);
 
-		//@cmember Open Method
-		STDMETHODIMP Open
-					(
-						IUnknown *	pIUnkOuter,
-						DBID *		pColumnID,
-						REFGUID		rguidColumnType,
-						DWORD		dwBindFlags, 
-						REFIID		riid,
-						IUnknown ** ppUnk
-					);
+    //@cmember Open Method
+    STDMETHODIMP Open
+    (
+        IUnknown *	pIUnkOuter,
+        DBID *		pColumnID,
+        REFGUID		rguidColumnType,
+        DWORD		dwBindFlags,
+        REFIID		riid,
+        IUnknown ** ppUnk
+    );
 };
 
 
@@ -158,16 +164,16 @@ class CImpIRow : public IRow		//@base public | IRow
 //
 class CImpIGetSession : public IGetSession 		//@base public | IGetSession
 {
-	private: //@access private
-		DEFINE_DEFAULT_IUNKNOWN_MEMBER_DATA(CRow)
+private: //@access private
+    DEFINE_DEFAULT_IUNKNOWN_MEMBER_DATA(CRow)
 
-	public: //@access public
-		DEFINE_DEFAULT_IUNKNOWN_CTOR_DTOR(CRow, CImpIGetSession);
-		DEFINE_DEFAULT_IUNKNOWN_ADDREF_RELEASE
+public: //@access public
+    DEFINE_DEFAULT_IUNKNOWN_CTOR_DTOR(CRow, CImpIGetSession);
+    DEFINE_DEFAULT_IUNKNOWN_ADDREF_RELEASE
 
-		//	IGetSession members
-		//@cmember GetSessionMethod
-        STDMETHODIMP	GetSession(REFIID riid, IUnknown ** ppSession);
+    //	IGetSession members
+    //@cmember GetSessionMethod
+    STDMETHODIMP	GetSession(REFIID riid, IUnknown ** ppSession);
 };
 
 
@@ -176,16 +182,16 @@ class CImpIGetSession : public IGetSession 		//@base public | IGetSession
 //
 class CImpIRowChange : public IRowChange		//@base public | IRowChange
 {
-	private: //@access private
-		DEFINE_DEFAULT_IUNKNOWN_MEMBER_DATA(CRow)
+private: //@access private
+    DEFINE_DEFAULT_IUNKNOWN_MEMBER_DATA(CRow)
 
-	public: //@access public
-		DEFINE_DEFAULT_IUNKNOWN_CTOR_DTOR(CRow, CImpIRowChange);
-		DEFINE_DEFAULT_IUNKNOWN_ADDREF_RELEASE
+public: //@access public
+    DEFINE_DEFAULT_IUNKNOWN_CTOR_DTOR(CRow, CImpIRowChange);
+    DEFINE_DEFAULT_IUNKNOWN_ADDREF_RELEASE
 
-		// IRowChange members
-		//@cmember SetColumns method
-		STDMETHODIMP SetColumns(DBORDINAL cColumns, DBCOLUMNACCESS rgColumns[]);
+    // IRowChange members
+    //@cmember SetColumns method
+    STDMETHODIMP SetColumns(DBORDINAL cColumns, DBCOLUMNACCESS rgColumns[]);
 };
 
 

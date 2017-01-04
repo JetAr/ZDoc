@@ -1,4 +1,4 @@
-//------------------------------------------------------------
+﻿//------------------------------------------------------------
 // Copyright (c) Microsoft Corporation.  All rights reserved.
 //------------------------------------------------------------
 
@@ -14,7 +14,7 @@
 
 // Print out rich error info
 void PrintError(
-    __in HRESULT errorCode, 
+    __in HRESULT errorCode,
     __in_opt WS_ERROR* error)
 {
     wprintf(L"Failure: errorCode=0x%lx\n", errorCode);
@@ -56,7 +56,7 @@ Exit:
 // Main entry point
 int __cdecl wmain()
 {
-    
+
     HRESULT hr = S_OK;
     WS_ERROR* error = NULL;
     WS_HEAP* heap = NULL;
@@ -65,45 +65,45 @@ int __cdecl wmain()
     WS_ENDPOINT_ADDRESS address = {};
     static const WS_STRING url = WS_STRING_VALUE(L"https://localhost:8443/example");
     address.url = url;
-    
+
     // Create an error object for storing rich error information
     hr = WsCreateError(
-        NULL, 
-        0, 
-        &error);
+             NULL,
+             0,
+             &error);
     if (FAILED(hr))
     {
         goto Exit;
     }
-    
+
     // Create a heap to store deserialized data
     hr = WsCreateHeap(
-        /*maxSize*/ 2048, 
-        /*trimSize*/ 512, 
-        NULL, 
-        0, 
-        &heap, 
-        error);
+             /*maxSize*/ 2048,
+             /*trimSize*/ 512,
+             NULL,
+             0,
+             &heap,
+             error);
     if (FAILED(hr))
     {
         goto Exit;
     }
-    
-    
+
+
     // Create the proxy
     hr = DefaultBinding_ICalculator_CreateServiceProxy(
-        NULL,
-        NULL,
-        0,
-        &serviceProxy, 
-        error);
+             NULL,
+             NULL,
+             0,
+             &serviceProxy,
+             error);
     if (FAILED(hr))
     {
         goto Exit;
     }
-    
-    
-    
+
+
+
     hr = WsOpenServiceProxy(serviceProxy, &address, NULL, error);
     if (FAILED(hr))
     {
@@ -114,9 +114,9 @@ int __cdecl wmain()
     {
         goto Exit;
     }
-    
+
     wprintf(L"%d + %d = %d\n", 1, 2, result);
-                   
+
 Exit:
     if (FAILED(hr))
     {
@@ -128,8 +128,8 @@ Exit:
         WsCloseServiceProxy(serviceProxy, NULL, NULL);
         WsFreeServiceProxy(serviceProxy);
     }
-    
-    
+
+
     if (heap != NULL)
     {
         WsFreeHeap(heap);

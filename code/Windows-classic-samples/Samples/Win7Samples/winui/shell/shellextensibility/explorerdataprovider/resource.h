@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #define IDS_EXPLORE                     103
 #define IDS_OPEN                        104

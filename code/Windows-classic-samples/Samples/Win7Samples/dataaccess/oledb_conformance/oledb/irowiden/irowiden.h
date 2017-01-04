@@ -1,7 +1,7 @@
-//--------------------------------------------------------------------
+﻿//--------------------------------------------------------------------
 // Microsoft OLE DB Test
 //
-// Copyright 1995-2000 Microsoft Corporation.  
+// Copyright 1995-2000 Microsoft Corporation.
 //
 // @doc
 //
@@ -20,7 +20,7 @@
 #include "msdaguid.h"
 
 #include "privlib.h"		//include private library, which includes
-							//the "transact.h"
+//the "transact.h"
 
 //-----------------------------------------------------------------------------
 // constants
@@ -31,22 +31,22 @@
 
 enum	EACCESSORLOCATION
 {
-	NO_ACCESSOR,				// no accessor to be created
-	ON_ROWSET_ACCESSOR,			// the accessor is created on the rowset
-	ON_COMMAND_ACCESSOR,		// the accessor is created on the command
-	ON_ROWSET_FETCH_ACCESSOR	// the accessori s created on the rowset object
-								// after a row handle is fetched.
-};							
+    NO_ACCESSOR,				// no accessor to be created
+    ON_ROWSET_ACCESSOR,			// the accessor is created on the rowset
+    ON_COMMAND_ACCESSOR,		// the accessor is created on the command
+    ON_ROWSET_FETCH_ACCESSOR	// the accessori s created on the rowset object
+    // after a row handle is fetched.
+};
 
 
 enum	ECURSOR
 {
-	FORWARD_ONLY_CURSOR,		//the cursor is forward only
-	STATIC_CURSOR,				//the cursor is static
-	KEYSET_DRIVEN_CURSOR,		//the cursor is key set driven
-	DYNAMIC_CURSOR				//the cursor is dynamic
-};		
-   
+    FORWARD_ONLY_CURSOR,		//the cursor is forward only
+    STATIC_CURSOR,				//the cursor is static
+    KEYSET_DRIVEN_CURSOR,		//the cursor is key set driven
+    DYNAMIC_CURSOR				//the cursor is dynamic
+};
+
 //-----------------------------------------------------------------------------
 // String constants
 //-----------------------------------------------------------------------------

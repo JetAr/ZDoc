@@ -1,6 +1,6 @@
-//-------------------------------------------------------------------------------------
+﻿//-------------------------------------------------------------------------------------
 // DirectXTexWIC.cpp
-//  
+//
 // DirectX Texture Library - WIC-based file reader/writer
 //
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
@@ -21,45 +21,45 @@
 
 #if defined(WINAPI_FAMILY) && (WINAPI_FAMILY == WINAPI_FAMILY_APP) && (WINAPI_FAMILY != WINAPI_FAMILY_PHONE_APP)
 
-    #include <shcore.h>
-    #pragma comment(lib,"shcore.lib")
+#include <shcore.h>
+#pragma comment(lib,"shcore.lib")
 
 #ifdef __cplusplus_winrt
 
-    static inline HRESULT CreateMemoryStream( _Outptr_ IStream** stream )
-    {
-        auto randomAccessStream = ref new ::Windows::Storage::Streams::InMemoryRandomAccessStream();
-        return CreateStreamOverRandomAccessStream( randomAccessStream, IID_PPV_ARGS( stream ) );
-    }
+static inline HRESULT CreateMemoryStream( _Outptr_ IStream** stream )
+{
+    auto randomAccessStream = ref new ::Windows::Storage::Streams::InMemoryRandomAccessStream();
+    return CreateStreamOverRandomAccessStream( randomAccessStream, IID_PPV_ARGS( stream ) );
+}
 
 #else
 
-    #include <wrl\client.h>
-    #include <wrl\wrappers\corewrappers.h>
-    #include <windows.storage.streams.h>
+#include <wrl\client.h>
+#include <wrl\wrappers\corewrappers.h>
+#include <windows.storage.streams.h>
 
-    static inline HRESULT CreateMemoryStream( _Outptr_ IStream** stream )
+static inline HRESULT CreateMemoryStream( _Outptr_ IStream** stream )
+{
+    Microsoft::WRL::ComPtr<ABI::Windows::Storage::Streams::IRandomAccessStream> abiStream;
+    HRESULT hr = Windows::Foundation::ActivateInstance(
+                     Microsoft::WRL::Wrappers::HStringReference( RuntimeClass_Windows_Storage_Streams_InMemoryRandomAccessStream ).Get(),
+                     &abiStream);
+
+    if (SUCCEEDED(hr))
     {
-        Microsoft::WRL::ComPtr<ABI::Windows::Storage::Streams::IRandomAccessStream> abiStream;
-        HRESULT hr = Windows::Foundation::ActivateInstance(
-            Microsoft::WRL::Wrappers::HStringReference( RuntimeClass_Windows_Storage_Streams_InMemoryRandomAccessStream ).Get(),
-            &abiStream);
-
-        if (SUCCEEDED(hr))
-        {
-            hr = CreateStreamOverRandomAccessStream( abiStream.Get(), IID_PPV_ARGS( stream ) );
-        }
-        return hr;
+        hr = CreateStreamOverRandomAccessStream( abiStream.Get(), IID_PPV_ARGS( stream ) );
     }
+    return hr;
+}
 
 #endif // __cplusplus_winrt
 
 #else
 
-    static inline HRESULT CreateMemoryStream( _Outptr_ IStream** stream )
-    {
-        return CreateStreamOnHGlobal( 0, TRUE, stream );
-    }
+static inline HRESULT CreateMemoryStream( _Outptr_ IStream** stream )
+{
+    return CreateStreamOnHGlobal( 0, TRUE, stream );
+}
 
 #endif
 
@@ -74,29 +74,29 @@ struct WICConvert
     GUID        target;
 };
 
-static WICConvert g_WICConvert[] = 
+static WICConvert g_WICConvert[] =
 {
     // Directly support the formats listed in XnaTexUtil::g_WICFormats, so no conversion required
     // Note target GUID in this conversion table must be one of those directly supported formats.
 
-    { GUID_WICPixelFormat1bppIndexed,           GUID_WICPixelFormat32bppRGBA }, // DXGI_FORMAT_R8G8B8A8_UNORM 
-    { GUID_WICPixelFormat2bppIndexed,           GUID_WICPixelFormat32bppRGBA }, // DXGI_FORMAT_R8G8B8A8_UNORM 
-    { GUID_WICPixelFormat4bppIndexed,           GUID_WICPixelFormat32bppRGBA }, // DXGI_FORMAT_R8G8B8A8_UNORM 
-    { GUID_WICPixelFormat8bppIndexed,           GUID_WICPixelFormat32bppRGBA }, // DXGI_FORMAT_R8G8B8A8_UNORM 
+    { GUID_WICPixelFormat1bppIndexed,           GUID_WICPixelFormat32bppRGBA }, // DXGI_FORMAT_R8G8B8A8_UNORM
+    { GUID_WICPixelFormat2bppIndexed,           GUID_WICPixelFormat32bppRGBA }, // DXGI_FORMAT_R8G8B8A8_UNORM
+    { GUID_WICPixelFormat4bppIndexed,           GUID_WICPixelFormat32bppRGBA }, // DXGI_FORMAT_R8G8B8A8_UNORM
+    { GUID_WICPixelFormat8bppIndexed,           GUID_WICPixelFormat32bppRGBA }, // DXGI_FORMAT_R8G8B8A8_UNORM
 
-    { GUID_WICPixelFormat2bppGray,              GUID_WICPixelFormat8bppGray }, // DXGI_FORMAT_R8_UNORM 
-    { GUID_WICPixelFormat4bppGray,              GUID_WICPixelFormat8bppGray }, // DXGI_FORMAT_R8_UNORM 
+    { GUID_WICPixelFormat2bppGray,              GUID_WICPixelFormat8bppGray }, // DXGI_FORMAT_R8_UNORM
+    { GUID_WICPixelFormat4bppGray,              GUID_WICPixelFormat8bppGray }, // DXGI_FORMAT_R8_UNORM
 
-    { GUID_WICPixelFormat16bppGrayFixedPoint,   GUID_WICPixelFormat16bppGrayHalf }, // DXGI_FORMAT_R16_FLOAT 
-    { GUID_WICPixelFormat32bppGrayFixedPoint,   GUID_WICPixelFormat32bppGrayFloat }, // DXGI_FORMAT_R32_FLOAT 
+    { GUID_WICPixelFormat16bppGrayFixedPoint,   GUID_WICPixelFormat16bppGrayHalf }, // DXGI_FORMAT_R16_FLOAT
+    { GUID_WICPixelFormat32bppGrayFixedPoint,   GUID_WICPixelFormat32bppGrayFloat }, // DXGI_FORMAT_R32_FLOAT
 
-    { GUID_WICPixelFormat16bppBGR555,           GUID_WICPixelFormat16bppBGRA5551 }, // DXGI_FORMAT_B5G5R5A1_UNORM 
+    { GUID_WICPixelFormat16bppBGR555,           GUID_WICPixelFormat16bppBGRA5551 }, // DXGI_FORMAT_B5G5R5A1_UNORM
     { GUID_WICPixelFormat32bppBGR101010,        GUID_WICPixelFormat32bppRGBA1010102 }, // DXGI_FORMAT_R10G10B10A2_UNORM
 
-    { GUID_WICPixelFormat24bppBGR,              GUID_WICPixelFormat32bppRGBA }, // DXGI_FORMAT_R8G8B8A8_UNORM 
-    { GUID_WICPixelFormat24bppRGB,              GUID_WICPixelFormat32bppRGBA }, // DXGI_FORMAT_R8G8B8A8_UNORM 
-    { GUID_WICPixelFormat32bppPBGRA,            GUID_WICPixelFormat32bppRGBA }, // DXGI_FORMAT_R8G8B8A8_UNORM 
-    { GUID_WICPixelFormat32bppPRGBA,            GUID_WICPixelFormat32bppRGBA }, // DXGI_FORMAT_R8G8B8A8_UNORM 
+    { GUID_WICPixelFormat24bppBGR,              GUID_WICPixelFormat32bppRGBA }, // DXGI_FORMAT_R8G8B8A8_UNORM
+    { GUID_WICPixelFormat24bppRGB,              GUID_WICPixelFormat32bppRGBA }, // DXGI_FORMAT_R8G8B8A8_UNORM
+    { GUID_WICPixelFormat32bppPBGRA,            GUID_WICPixelFormat32bppRGBA }, // DXGI_FORMAT_R8G8B8A8_UNORM
+    { GUID_WICPixelFormat32bppPRGBA,            GUID_WICPixelFormat32bppRGBA }, // DXGI_FORMAT_R8G8B8A8_UNORM
 
     { GUID_WICPixelFormat48bppRGB,              GUID_WICPixelFormat64bppRGBA }, // DXGI_FORMAT_R16G16B16A16_UNORM
     { GUID_WICPixelFormat48bppBGR,              GUID_WICPixelFormat64bppRGBA }, // DXGI_FORMAT_R16G16B16A16_UNORM
@@ -104,21 +104,21 @@ static WICConvert g_WICConvert[] =
     { GUID_WICPixelFormat64bppPRGBA,            GUID_WICPixelFormat64bppRGBA }, // DXGI_FORMAT_R16G16B16A16_UNORM
     { GUID_WICPixelFormat64bppPBGRA,            GUID_WICPixelFormat64bppRGBA }, // DXGI_FORMAT_R16G16B16A16_UNORM
 
-    { GUID_WICPixelFormat48bppRGBFixedPoint,    GUID_WICPixelFormat64bppRGBAHalf }, // DXGI_FORMAT_R16G16B16A16_FLOAT 
-    { GUID_WICPixelFormat48bppBGRFixedPoint,    GUID_WICPixelFormat64bppRGBAHalf }, // DXGI_FORMAT_R16G16B16A16_FLOAT 
-    { GUID_WICPixelFormat64bppRGBAFixedPoint,   GUID_WICPixelFormat64bppRGBAHalf }, // DXGI_FORMAT_R16G16B16A16_FLOAT 
-    { GUID_WICPixelFormat64bppBGRAFixedPoint,   GUID_WICPixelFormat64bppRGBAHalf }, // DXGI_FORMAT_R16G16B16A16_FLOAT 
-    { GUID_WICPixelFormat64bppRGBFixedPoint,    GUID_WICPixelFormat64bppRGBAHalf }, // DXGI_FORMAT_R16G16B16A16_FLOAT 
-    { GUID_WICPixelFormat64bppRGBHalf,          GUID_WICPixelFormat64bppRGBAHalf }, // DXGI_FORMAT_R16G16B16A16_FLOAT 
-    { GUID_WICPixelFormat48bppRGBHalf,          GUID_WICPixelFormat64bppRGBAHalf }, // DXGI_FORMAT_R16G16B16A16_FLOAT 
+    { GUID_WICPixelFormat48bppRGBFixedPoint,    GUID_WICPixelFormat64bppRGBAHalf }, // DXGI_FORMAT_R16G16B16A16_FLOAT
+    { GUID_WICPixelFormat48bppBGRFixedPoint,    GUID_WICPixelFormat64bppRGBAHalf }, // DXGI_FORMAT_R16G16B16A16_FLOAT
+    { GUID_WICPixelFormat64bppRGBAFixedPoint,   GUID_WICPixelFormat64bppRGBAHalf }, // DXGI_FORMAT_R16G16B16A16_FLOAT
+    { GUID_WICPixelFormat64bppBGRAFixedPoint,   GUID_WICPixelFormat64bppRGBAHalf }, // DXGI_FORMAT_R16G16B16A16_FLOAT
+    { GUID_WICPixelFormat64bppRGBFixedPoint,    GUID_WICPixelFormat64bppRGBAHalf }, // DXGI_FORMAT_R16G16B16A16_FLOAT
+    { GUID_WICPixelFormat64bppRGBHalf,          GUID_WICPixelFormat64bppRGBAHalf }, // DXGI_FORMAT_R16G16B16A16_FLOAT
+    { GUID_WICPixelFormat48bppRGBHalf,          GUID_WICPixelFormat64bppRGBAHalf }, // DXGI_FORMAT_R16G16B16A16_FLOAT
 
-    { GUID_WICPixelFormat128bppPRGBAFloat,      GUID_WICPixelFormat128bppRGBAFloat }, // DXGI_FORMAT_R32G32B32A32_FLOAT 
-    { GUID_WICPixelFormat128bppRGBFloat,        GUID_WICPixelFormat128bppRGBAFloat }, // DXGI_FORMAT_R32G32B32A32_FLOAT 
-    { GUID_WICPixelFormat128bppRGBAFixedPoint,  GUID_WICPixelFormat128bppRGBAFloat }, // DXGI_FORMAT_R32G32B32A32_FLOAT 
-    { GUID_WICPixelFormat128bppRGBFixedPoint,   GUID_WICPixelFormat128bppRGBAFloat }, // DXGI_FORMAT_R32G32B32A32_FLOAT 
-    { GUID_WICPixelFormat32bppRGBE,             GUID_WICPixelFormat128bppRGBAFloat }, // DXGI_FORMAT_R32G32B32A32_FLOAT 
+    { GUID_WICPixelFormat128bppPRGBAFloat,      GUID_WICPixelFormat128bppRGBAFloat }, // DXGI_FORMAT_R32G32B32A32_FLOAT
+    { GUID_WICPixelFormat128bppRGBFloat,        GUID_WICPixelFormat128bppRGBAFloat }, // DXGI_FORMAT_R32G32B32A32_FLOAT
+    { GUID_WICPixelFormat128bppRGBAFixedPoint,  GUID_WICPixelFormat128bppRGBAFloat }, // DXGI_FORMAT_R32G32B32A32_FLOAT
+    { GUID_WICPixelFormat128bppRGBFixedPoint,   GUID_WICPixelFormat128bppRGBAFloat }, // DXGI_FORMAT_R32G32B32A32_FLOAT
+    { GUID_WICPixelFormat32bppRGBE,             GUID_WICPixelFormat128bppRGBAFloat }, // DXGI_FORMAT_R32G32B32A32_FLOAT
 
-    { GUID_WICPixelFormat32bppCMYK,             GUID_WICPixelFormat32bppRGBA }, // DXGI_FORMAT_R8G8B8A8_UNORM 
+    { GUID_WICPixelFormat32bppCMYK,             GUID_WICPixelFormat32bppRGBA }, // DXGI_FORMAT_R8G8B8A8_UNORM
     { GUID_WICPixelFormat64bppCMYK,             GUID_WICPixelFormat64bppRGBA }, // DXGI_FORMAT_R16G16B16A16_UNORM
     { GUID_WICPixelFormat40bppCMYKAlpha,        GUID_WICPixelFormat64bppRGBA }, // DXGI_FORMAT_R16G16B16A16_UNORM
     { GUID_WICPixelFormat80bppCMYKAlpha,        GUID_WICPixelFormat64bppRGBA }, // DXGI_FORMAT_R16G16B16A16_UNORM
@@ -126,7 +126,7 @@ static WICConvert g_WICConvert[] =
 #if (_WIN32_WINNT >= _WIN32_WINNT_WIN8) || defined(_WIN7_PLATFORM_UPDATE)
     { GUID_WICPixelFormat32bppRGB,              GUID_WICPixelFormat32bppRGBA }, // DXGI_FORMAT_R8G8B8A8_UNORM
     { GUID_WICPixelFormat64bppRGB,              GUID_WICPixelFormat64bppRGBA }, // DXGI_FORMAT_R16G16B16A16_UNORM
-    { GUID_WICPixelFormat64bppPRGBAHalf,        GUID_WICPixelFormat64bppRGBAHalf }, // DXGI_FORMAT_R16G16B16A16_FLOAT 
+    { GUID_WICPixelFormat64bppPRGBAHalf,        GUID_WICPixelFormat64bppRGBAHalf }, // DXGI_FORMAT_R16G16B16A16_FLOAT
 #endif
 
     // We don't support n-channel formats
@@ -206,7 +206,7 @@ static DXGI_FORMAT _DetermineFormat( _In_ const WICPixelFormatGUID& pixelFormat,
 
     case DXGI_FORMAT_B5G5R5A1_UNORM:
     case DXGI_FORMAT_B5G6R5_UNORM:
-        if ( flags & WIC_FLAGS_NO_16BPP ) 
+        if ( flags & WIC_FLAGS_NO_16BPP )
         {
             format = DXGI_FORMAT_R8G8B8A8_UNORM;
             if ( pConvert )
@@ -338,7 +338,7 @@ static HRESULT _DecodeSingleFrame( _In_ DWORD flags, _In_ const TexMetadata& met
 
     if ( memcmp( &convertGUID, &GUID_NULL, sizeof(GUID) ) == 0 )
     {
-        hr = frame->CopyPixels( 0, static_cast<UINT>( img->rowPitch ), static_cast<UINT>( img->slicePitch ), img->pixels );  
+        hr = frame->CopyPixels( 0, static_cast<UINT>( img->rowPitch ), static_cast<UINT>( img->slicePitch ), img->pixels );
         if ( FAILED(hr) )
             return hr;
     }
@@ -353,7 +353,7 @@ static HRESULT _DecodeSingleFrame( _In_ DWORD flags, _In_ const TexMetadata& met
         if ( FAILED(hr) )
             return hr;
 
-        hr = FC->CopyPixels( 0, static_cast<UINT>( img->rowPitch ), static_cast<UINT>( img->slicePitch ), img->pixels );  
+        hr = FC->CopyPixels( 0, static_cast<UINT>( img->rowPitch ), static_cast<UINT>( img->slicePitch ), img->pixels );
         if ( FAILED(hr) )
             return hr;
     }
@@ -409,7 +409,7 @@ static HRESULT _DecodeMultiframe( _In_ DWORD flags, _In_ const TexMetadata& meta
             if ( w == metadata.width && h == metadata.height )
             {
                 // This frame does not need resized or format converted, just copy...
-                hr = frame->CopyPixels( 0, static_cast<UINT>( img->rowPitch ), static_cast<UINT>( img->slicePitch ), img->pixels );  
+                hr = frame->CopyPixels( 0, static_cast<UINT>( img->rowPitch ), static_cast<UINT>( img->slicePitch ), img->pixels );
                 if ( FAILED(hr) )
                     return hr;
             }
@@ -441,11 +441,11 @@ static HRESULT _DecodeMultiframe( _In_ DWORD flags, _In_ const TexMetadata& meta
             hr = FC->Initialize( frame.Get(), pfGuid, _GetWICDither( flags ), 0, 0, WICBitmapPaletteTypeCustom );
             if ( FAILED(hr) )
                 return hr;
-            
+
             if ( w == metadata.width && h == metadata.height )
             {
                 // This frame is the same size, no need to scale
-                hr = FC->CopyPixels( 0, static_cast<UINT>( img->rowPitch ), static_cast<UINT>( img->slicePitch ), img->pixels );  
+                hr = FC->CopyPixels( 0, static_cast<UINT>( img->rowPitch ), static_cast<UINT>( img->slicePitch ), img->pixels );
                 if ( FAILED(hr) )
                     return hr;
             }
@@ -654,10 +654,10 @@ static HRESULT _EncodeSingleFrame( _In_ const Image& image, _In_ DWORD flags,
         PROPBAG2 option = { 0 };
         option.pstrName = L"EnableV5Header32bppBGRA";
 
-        VARIANT varValue;    
+        VARIANT varValue;
         varValue.vt = VT_BOOL;
-        varValue.boolVal = VARIANT_TRUE;      
-        (void)props->Write( 1, &option, &varValue ); 
+        varValue.boolVal = VARIANT_TRUE;
+        (void)props->Write( 1, &option, &varValue );
     }
 
     if ( setCustomProps )
@@ -808,7 +808,7 @@ HRESULT GetMetadataFromWICFile( LPCWSTR szFile, DWORD flags, TexMetadata& metada
     IWICImagingFactory* pWIC = _GetWIC();
     if ( !pWIC )
         return E_NOINTERFACE;
-    
+
     // Initialize WIC
     ScopedObject<IWICBitmapDecoder> decoder;
     HRESULT hr = pWIC->CreateDecoderFromFilename( szFile, 0, GENERIC_READ, WICDecodeMetadataCacheOnDemand, &decoder );
@@ -911,7 +911,7 @@ HRESULT LoadFromWICFile( LPCWSTR szFile, DWORD flags, TexMetadata* metadata, Scr
     IWICImagingFactory* pWIC = _GetWIC();
     if ( !pWIC )
         return E_NOINTERFACE;
-    
+
     image.Release();
 
     // Initialize WIC

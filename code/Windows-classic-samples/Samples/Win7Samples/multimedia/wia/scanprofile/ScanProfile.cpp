@@ -1,4 +1,4 @@
-//==========================================================================
+﻿//==========================================================================
 //
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
@@ -32,7 +32,7 @@ HRESULT CreateScanProfileUI(HWND hwndParent)
         {
             ReportError( TEXT("An error occurred while creating ScanProfileDialog"), hr );
         }
-        
+
         //Release IScanProfileUI interface
         pScanProfileUI->Release();
         pScanProfileUI = NULL;
@@ -41,12 +41,12 @@ HRESULT CreateScanProfileUI(HWND hwndParent)
     {
         ReportError( TEXT("CoCreateInstance failed on CLSID_ScanProfileUI"), hr );
     }
-    
+
     return hr;
 }
 
-// This function reads the Device ID (needed for creating scan profiles) and Device name. 
-HRESULT ReadDevIDandDevName( IWiaPropertyStorage *pWiaPropertyStorage , BSTR* pbstrDevID , BSTR* pbstrDevName)
+// This function reads the Device ID (needed for creating scan profiles) and Device name.
+HRESULT ReadDevIDandDevName( IWiaPropertyStorage *pWiaPropertyStorage, BSTR* pbstrDevID, BSTR* pbstrDevName)
 {
     // Validate arguments
     if ( (NULL == pWiaPropertyStorage) || (NULL == pbstrDevID) || (NULL == pbstrDevName) )
@@ -64,7 +64,7 @@ HRESULT ReadDevIDandDevName( IWiaPropertyStorage *pWiaPropertyStorage , BSTR* pb
         *pbstrDevID = NULL;
         return hr;
     }
-    
+
     //Read the Device Name from the IWiaPropertyStorage interface
     hr = ReadPropertyBSTR(pWiaPropertyStorage,WIA_DIP_DEV_NAME, pbstrDevName);
     if(FAILED(hr))
@@ -89,13 +89,13 @@ HRESULT ProfileDisplayDeviceID(IScanProfile* pScanProfile)
     HRESULT hr = pScanProfile->GetDeviceID(&bstrDevID);
     if(SUCCEEDED(hr))
     {
-        _tprintf(TEXT("\nDeviceID retreived from the profile => %ws"),bstrDevID); 
+        _tprintf(TEXT("\nDeviceID retreived from the profile => %ws"),bstrDevID);
     }
     else
     {
         ReportError(TEXT("Error calling pScanProfile->GetDeviceID()"),hr);
     }
-    return  hr; 
+    return  hr;
 }
 
 // This function sets the name of the profile and then prints it
@@ -109,7 +109,7 @@ HRESULT ProfileSetAndDisplayName(IScanProfile* pScanProfile)
         return hr;
     }
     BSTR bstrProfileName = SysAllocString(PROFILE_NAME);
-    
+
     HRESULT hr = pScanProfile->SetName(bstrProfileName);
     if(SUCCEEDED(hr))
     {
@@ -118,7 +118,7 @@ HRESULT ProfileSetAndDisplayName(IScanProfile* pScanProfile)
         hr = pScanProfile->GetName(&bstrProfileGetName);
         if(SUCCEEDED(hr))
         {
-            _tprintf(TEXT("\nProfile name just created for the device => %ws"),bstrProfileGetName); 
+            _tprintf(TEXT("\nProfile name just created for the device => %ws"),bstrProfileGetName);
         }
         else
         {
@@ -179,7 +179,7 @@ HRESULT DisplayAllProfilesForDevice(IScanProfileMgr* pScanProfileMgr,BSTR bstrDe
             for( ULONG count=0 ; count < lNumProfiles ; count ++)
             {
                 BSTR bstrProfDeviceName = NULL;
-                //Print the names of all the profiles 
+                //Print the names of all the profiles
                 hr  = arr_pScanProfileDevice[count]->GetName(&bstrProfDeviceName);
                 if(SUCCEEDED(hr))
                 {
@@ -207,10 +207,10 @@ HRESULT DisplayAllProfilesForDevice(IScanProfileMgr* pScanProfileMgr,BSTR bstrDe
     }
     return hr;
 }
-          
+
 
 //This function creates the scan profiles for the device and also performs various operations on them
-HRESULT CreateScanProfiles(BSTR bstrDeviceID , BSTR bstrDeviceName)
+HRESULT CreateScanProfiles(BSTR bstrDeviceID, BSTR bstrDeviceName)
 {
     // Validate arguments
     if( (!bstrDeviceName) || (!bstrDeviceID) )
@@ -219,26 +219,28 @@ HRESULT CreateScanProfiles(BSTR bstrDeviceID , BSTR bstrDeviceName)
         ReportError(TEXT("Invalid args passed to CreateScanProfiles()"),hr);
         return hr;
     }
-    
+
     //Create scan profile manager
     IScanProfileMgr* pScanProfileMgr = NULL;
     HRESULT hr = CoCreateInstance(CLSID_ScanProfileMgr, NULL,  CLSCTX_INPROC_SERVER, IID_IScanProfileMgr, reinterpret_cast<LPVOID *>(&pScanProfileMgr));
-    
+
     _tprintf(TEXT("\n\n\nDevice Name => %ws \nDeviceID    => %ws"), bstrDeviceName, bstrDeviceID);
-    
-    if(SUCCEEDED(hr)){
-        
+
+    if(SUCCEEDED(hr))
+    {
+
         //create scan profile
         IScanProfile* pScanProfile = NULL;
         hr = pScanProfileMgr->CreateProfile(bstrDeviceID,bstrDeviceName,WIA_CATEGORY_FLATBED, &pScanProfile);
-        if(SUCCEEDED(hr)){
+        if(SUCCEEDED(hr))
+        {
             _tprintf(TEXT("\nSuccessfully created profile for the device"));
-        
+
             // Display the deviceID back from the profile
             ProfileDisplayDeviceID(pScanProfile);
-        
+
             // Set the name of the profile and display it.
-            ProfileSetAndDisplayName(pScanProfile);                           
+            ProfileSetAndDisplayName(pScanProfile);
 
             //Set various properties in the profile
             PROPID propID[3] = {WIA_IPS_BRIGHTNESS,WIA_IPS_CONTRAST,WIA_IPA_FORMAT};
@@ -260,8 +262,8 @@ HRESULT CreateScanProfiles(BSTR bstrDeviceID , BSTR bstrDeviceName)
                 hr = pScanProfile->GetProperty(2, propid, propVariant);
                 if(SUCCEEDED(hr))
                 {
-                    //Print the Brightness and XRES 
-                    _tprintf(TEXT("\nFor the profile just created, Brightness = %ld , WIA_IPS_CONTRAST = %ld") , propVariant[0].lVal , propVariant[1].lVal);
+                    //Print the Brightness and XRES
+                    _tprintf(TEXT("\nFor the profile just created, Brightness = %ld , WIA_IPS_CONTRAST = %ld"), propVariant[0].lVal, propVariant[1].lVal);
                 }
                 else
                 {
@@ -272,7 +274,7 @@ HRESULT CreateScanProfiles(BSTR bstrDeviceID , BSTR bstrDeviceName)
             {
                 ReportError(TEXT("Error calling pScanProfile->SetProperty()"),hr);
             }
-           
+
             //Save the Scanprofile
             hr = pScanProfile->Save();
             if(SUCCEEDED(hr))
@@ -288,7 +290,7 @@ HRESULT CreateScanProfiles(BSTR bstrDeviceID , BSTR bstrDeviceName)
             {
                 ReportError(TEXT("Error calling pScanProfile->Save()"),hr);
             }
-                                
+
             //Release pScanProfile
             pScanProfile->Release();
             pScanProfile = NULL;
@@ -305,7 +307,7 @@ HRESULT CreateScanProfiles(BSTR bstrDeviceID , BSTR bstrDeviceName)
         hr = GetNumberOfProfiles(pScanProfileMgr,bstrDeviceID,&lNumProfiles);
         if(SUCCEEDED(hr))
         {
-            //Display all the profiles for the device 
+            //Display all the profiles for the device
             DisplayAllProfilesForDevice(pScanProfileMgr,bstrDeviceID,lNumProfiles);
         }
         else
@@ -314,10 +316,10 @@ HRESULT CreateScanProfiles(BSTR bstrDeviceID , BSTR bstrDeviceName)
         }
 
 
-        //Release pScanProfileMgr 
+        //Release pScanProfileMgr
         pScanProfileMgr->Release();
         pScanProfileMgr = NULL;
-        
+
     }
     else
     {
@@ -326,7 +328,7 @@ HRESULT CreateScanProfiles(BSTR bstrDeviceID , BSTR bstrDeviceName)
     return hr;
 }
 
-    
+
 //This function enumerates the WIA devices and then creates scan profiles for each.
 HRESULT EnumWiaDevicesandCreateScanProfiles( IWiaDevMgr2 *pWiaDevMgr2 )
 {
@@ -359,10 +361,10 @@ HRESULT EnumWiaDevicesandCreateScanProfiles( IWiaDevMgr2 *pWiaDevMgr2 )
                 if (hr == S_OK)
                 {
                     //Read Device name and Device ID
-                    //We will use Device name to create profile names   
+                    //We will use Device name to create profile names
                     BSTR bstrDevID = NULL;
                     BSTR bstrDevName = NULL;
-                    HRESULT hr1  = ReadDevIDandDevName(pWiaPropertyStorage , &bstrDevID ,&bstrDevName);
+                    HRESULT hr1  = ReadDevIDandDevName(pWiaPropertyStorage, &bstrDevID,&bstrDevName);
                     if(SUCCEEDED(hr1))
                     {
                         //Create and perform operations on profiles by calling various IScanProfile API's
@@ -383,7 +385,7 @@ HRESULT EnumWiaDevicesandCreateScanProfiles( IWiaDevMgr2 *pWiaDevMgr2 )
                     ReportError( TEXT("Error calling IEnumWIA_DEV_INFO::Next()"), hr );
                 }
             }
-            
+
             // If the result of the enumeration is S_FALSE, since this
             // is normal, we will change it to S_OK.
             if (S_FALSE == hr)
@@ -412,7 +414,7 @@ HRESULT EnumWiaDevicesandCreateScanProfiles( IWiaDevMgr2 *pWiaDevMgr2 )
 }
 
 //Entry point of the application
-extern "C" 
+extern "C"
 int __cdecl _tmain( int, TCHAR *[] )
 {
     // Initialize COM
@@ -425,9 +427,9 @@ int __cdecl _tmain( int, TCHAR *[] )
         {
             ReportError(TEXT("Error calling CreateScanProfilesWithoutUI()"),hr);
         }
-        
-        
-        //Demonstrating how to create, edit and delete scan profiles through a ScanProfile dialog, ie. using a GUI interface IScanProfileUI. 
+
+
+        //Demonstrating how to create, edit and delete scan profiles through a ScanProfile dialog, ie. using a GUI interface IScanProfileUI.
         hr = CreateScanProfileUI((HWND)0);
         if(FAILED(hr))
         {
@@ -453,15 +455,15 @@ HRESULT CreateScanProfilesWithoutUI()
     if (SUCCEEDED(hr))
     {
         //To create scan profiles without a ScanProfile dialog , deviceID is needed
-        //Hence we will get the device ID's of all WIA devices and then create scan profiles for each device 
-        
-        //Enumerate all of the WIA devices, get deviceID's and create scan profiles for each device 
+        //Hence we will get the device ID's of all WIA devices and then create scan profiles for each device
+
+        //Enumerate all of the WIA devices, get deviceID's and create scan profiles for each device
         hr = EnumWiaDevicesandCreateScanProfiles( pWiaDevMgr2 );
         if (FAILED(hr))
         {
             ReportError( TEXT("Error calling EnumWiaDevicesandCreateScanProfiles()"), hr );
         }
-          // Release the device manager
+        // Release the device manager
         pWiaDevMgr2->Release();
         pWiaDevMgr2 = NULL;
     }

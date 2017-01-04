@@ -1,4 +1,4 @@
-//------------------------------------------------------------------------------
+﻿//------------------------------------------------------------------------------
 // File: VideoCtl.cpp
 //
 // Desc: DirectShow base classes.
@@ -17,7 +17,8 @@
 
 LPTSTR WINAPI StringFromResource(__out_ecount(STR_MAX_LENGTH) LPTSTR pBuffer, int iResourceID)
 {
-    if (LoadString(g_hInst,iResourceID,pBuffer,STR_MAX_LENGTH) == 0) {
+    if (LoadString(g_hInst,iResourceID,pBuffer,STR_MAX_LENGTH) == 0)
+    {
         return TEXT("");
     }
     return pBuffer;
@@ -26,7 +27,8 @@ LPTSTR WINAPI StringFromResource(__out_ecount(STR_MAX_LENGTH) LPTSTR pBuffer, in
 #ifdef UNICODE
 LPSTR WINAPI StringFromResource(__out_ecount(STR_MAX_LENGTH) LPSTR pBuffer, int iResourceID)
 {
-    if (LoadStringA(g_hInst,iResourceID,pBuffer,STR_MAX_LENGTH) == 0) {
+    if (LoadStringA(g_hInst,iResourceID,pBuffer,STR_MAX_LENGTH) == 0)
+    {
         return "";
     }
     return pBuffer;
@@ -48,17 +50,21 @@ LPWSTR WINAPI WideStringFromResource(__out_ecount(STR_MAX_LENGTH) LPWSTR pBuffer
 {
     *pBuffer = 0;
 
-    if (g_amPlatform == VER_PLATFORM_WIN32_NT) {
-	LoadStringW(g_hInst,iResourceID,pBuffer,STR_MAX_LENGTH);
-    } else {
+    if (g_amPlatform == VER_PLATFORM_WIN32_NT)
+    {
+        LoadStringW(g_hInst,iResourceID,pBuffer,STR_MAX_LENGTH);
+    }
+    else
+    {
 
-	CHAR szBuffer[STR_MAX_LENGTH];
-	DWORD dwStringLength = LoadString(g_hInst,iResourceID,szBuffer,STR_MAX_LENGTH);
-	// if we loaded a string convert it to wide characters, ensuring
-	// that we also null terminate the result.
-	if (dwStringLength++) {
-	    MultiByteToWideChar(CP_ACP,0,szBuffer,dwStringLength,pBuffer,STR_MAX_LENGTH);
-	}
+        CHAR szBuffer[STR_MAX_LENGTH];
+        DWORD dwStringLength = LoadString(g_hInst,iResourceID,szBuffer,STR_MAX_LENGTH);
+        // if we loaded a string convert it to wide characters, ensuring
+        // that we also null terminate the result.
+        if (dwStringLength++)
+        {
+            MultiByteToWideChar(CP_ACP,0,szBuffer,dwStringLength,pBuffer,STR_MAX_LENGTH);
+        }
     }
     return pBuffer;
 }
@@ -83,7 +89,8 @@ BOOL WINAPI GetDialogSize(int iResourceID,
                              GetDesktopWindow(),
                              pDlgProc,
                              lParam);
-    if (hwnd == NULL) {
+    if (hwnd == NULL)
+    {
         return FALSE;
     }
 
@@ -110,9 +117,12 @@ STDMETHODIMP CAggDirectDraw::NonDelegatingQueryInterface(REFIID riid, __deref_ou
 
     // Do we have this interface
 
-    if (riid == IID_IDirectDraw) {
+    if (riid == IID_IDirectDraw)
+    {
         return GetInterface((IDirectDraw *)this,ppv);
-    } else {
+    }
+    else
+    {
         return CUnknown::NonDelegatingQueryInterface(riid,ppv);
     }
 }
@@ -133,9 +143,9 @@ STDMETHODIMP CAggDirectDraw::CreateClipper(DWORD dwFlags, __deref_out LPDIRECTDR
 
 
 STDMETHODIMP CAggDirectDraw::CreatePalette(DWORD dwFlags,
-                                           __in LPPALETTEENTRY lpColorTable,
-                                           __deref_out LPDIRECTDRAWPALETTE *lplpDDPalette,
-                                           __inout_opt IUnknown *pUnkOuter)
+        __in LPPALETTEENTRY lpColorTable,
+        __deref_out LPDIRECTDRAWPALETTE *lplpDDPalette,
+        __inout_opt IUnknown *pUnkOuter)
 {
     ASSERT(m_pDirectDraw);
     return m_pDirectDraw->CreatePalette(dwFlags,lpColorTable,lplpDDPalette,pUnkOuter);
@@ -143,8 +153,8 @@ STDMETHODIMP CAggDirectDraw::CreatePalette(DWORD dwFlags,
 
 
 STDMETHODIMP CAggDirectDraw::CreateSurface(__in LPDDSURFACEDESC lpDDSurfaceDesc,
-                                           __deref_out LPDIRECTDRAWSURFACE *lplpDDSurface,
-                                           __inout_opt IUnknown *pUnkOuter)
+        __deref_out LPDIRECTDRAWSURFACE *lplpDDSurface,
+        __inout_opt IUnknown *pUnkOuter)
 {
     ASSERT(m_pDirectDraw);
     return m_pDirectDraw->CreateSurface(lpDDSurfaceDesc,lplpDDSurface,pUnkOuter);
@@ -152,7 +162,7 @@ STDMETHODIMP CAggDirectDraw::CreateSurface(__in LPDDSURFACEDESC lpDDSurfaceDesc,
 
 
 STDMETHODIMP CAggDirectDraw::DuplicateSurface(__in LPDIRECTDRAWSURFACE lpDDSurface,
-                                              __deref_out LPDIRECTDRAWSURFACE *lplpDupDDSurface)
+        __deref_out LPDIRECTDRAWSURFACE *lplpDupDDSurface)
 {
     ASSERT(m_pDirectDraw);
     return m_pDirectDraw->DuplicateSurface(lpDDSurface,lplpDupDDSurface);
@@ -160,9 +170,9 @@ STDMETHODIMP CAggDirectDraw::DuplicateSurface(__in LPDIRECTDRAWSURFACE lpDDSurfa
 
 
 STDMETHODIMP CAggDirectDraw::EnumDisplayModes(DWORD dwSurfaceDescCount,
-                                              __in LPDDSURFACEDESC lplpDDSurfaceDescList,
-                                              __in LPVOID lpContext,
-                                              __in LPDDENUMMODESCALLBACK lpEnumCallback)
+        __in LPDDSURFACEDESC lplpDDSurfaceDescList,
+        __in LPVOID lpContext,
+        __in LPDDENUMMODESCALLBACK lpEnumCallback)
 {
     ASSERT(m_pDirectDraw);
     return m_pDirectDraw->EnumDisplayModes(dwSurfaceDescCount,lplpDDSurfaceDescList,lpContext,lpEnumCallback);
@@ -170,9 +180,9 @@ STDMETHODIMP CAggDirectDraw::EnumDisplayModes(DWORD dwSurfaceDescCount,
 
 
 STDMETHODIMP CAggDirectDraw::EnumSurfaces(DWORD dwFlags,
-                                          __in LPDDSURFACEDESC lpDDSD,
-                                          __in LPVOID lpContext,
-                                          __in LPDDENUMSURFACESCALLBACK lpEnumCallback)
+        __in LPDDSURFACEDESC lpDDSD,
+        __in LPVOID lpContext,
+        __in LPDDENUMSURFACESCALLBACK lpEnumCallback)
 {
     ASSERT(m_pDirectDraw);
     return m_pDirectDraw->EnumSurfaces(dwFlags,lpDDSD,lpContext,lpEnumCallback);
@@ -284,9 +294,12 @@ STDMETHODIMP CAggDrawSurface::NonDelegatingQueryInterface(REFIID riid, __deref_o
 
     // Do we have this interface
 
-    if (riid == IID_IDirectDrawSurface) {
+    if (riid == IID_IDirectDrawSurface)
+    {
         return GetInterface((IDirectDrawSurface *)this,ppv);
-    } else {
+    }
+    else
+    {
         return CUnknown::NonDelegatingQueryInterface(riid,ppv);
     }
 }
@@ -335,7 +348,7 @@ STDMETHODIMP CAggDrawSurface::BltFast(DWORD dwX,DWORD dwY,
 
 
 STDMETHODIMP CAggDrawSurface::DeleteAttachedSurface(DWORD dwFlags,
-                                                    __in LPDIRECTDRAWSURFACE lpDDSAttachedSurface)
+        __in LPDIRECTDRAWSURFACE lpDDSAttachedSurface)
 {
     ASSERT(m_pDirectDrawSurface);
     return m_pDirectDrawSurface->DeleteAttachedSurface(dwFlags,lpDDSAttachedSurface);
@@ -343,7 +356,7 @@ STDMETHODIMP CAggDrawSurface::DeleteAttachedSurface(DWORD dwFlags,
 
 
 STDMETHODIMP CAggDrawSurface::EnumAttachedSurfaces(__in LPVOID lpContext,
-                                                   __in LPDDENUMSURFACESCALLBACK lpEnumSurfacesCallback)
+        __in LPDDENUMSURFACESCALLBACK lpEnumSurfacesCallback)
 {
     ASSERT(m_pDirectDrawSurface);
     return m_pDirectDrawSurface->EnumAttachedSurfaces(lpContext,lpEnumSurfacesCallback);
@@ -351,8 +364,8 @@ STDMETHODIMP CAggDrawSurface::EnumAttachedSurfaces(__in LPVOID lpContext,
 
 
 STDMETHODIMP CAggDrawSurface::EnumOverlayZOrders(DWORD dwFlags,
-                                                 __in LPVOID lpContext,
-                                                 __in LPDDENUMSURFACESCALLBACK lpfnCallback)
+        __in LPVOID lpContext,
+        __in LPDDENUMSURFACESCALLBACK lpfnCallback)
 {
     ASSERT(m_pDirectDrawSurface);
     return m_pDirectDrawSurface->EnumOverlayZOrders(dwFlags,lpContext,lpfnCallback);
@@ -367,7 +380,7 @@ STDMETHODIMP CAggDrawSurface::Flip(__in LPDIRECTDRAWSURFACE lpDDSurfaceTargetOve
 
 
 STDMETHODIMP CAggDrawSurface::GetAttachedSurface(__in LPDDSCAPS lpDDSCaps,
-                                                 __deref_out LPDIRECTDRAWSURFACE *lplpDDAttachedSurface)
+        __deref_out LPDIRECTDRAWSURFACE *lplpDDAttachedSurface)
 {
     ASSERT(m_pDirectDrawSurface);
     return m_pDirectDrawSurface->GetAttachedSurface(lpDDSCaps,lplpDDAttachedSurface);
@@ -454,7 +467,8 @@ STDMETHODIMP CAggDrawSurface::GetSurfaceDesc(__out LPDDSURFACEDESC lpDDSurfaceDe
     // First call down to the underlying DirectDraw
 
     HRESULT hr = m_pDirectDrawSurface->GetSurfaceDesc(lpDDSurfaceDesc);
-    if (FAILED(hr)) {
+    if (FAILED(hr))
+    {
         return hr;
     }
 
@@ -538,10 +552,10 @@ STDMETHODIMP CAggDrawSurface::Unlock(__in LPVOID lpSurfaceData)
 
 
 STDMETHODIMP CAggDrawSurface::UpdateOverlay(__in LPRECT lpSrcRect,
-                                            __in LPDIRECTDRAWSURFACE lpDDDestSurface,
-                                            __in LPRECT lpDestRect,
-                                            DWORD dwFlags,
-                                            __in LPDDOVERLAYFX lpDDOverlayFX)
+        __in LPDIRECTDRAWSURFACE lpDDDestSurface,
+        __in LPRECT lpDestRect,
+        DWORD dwFlags,
+        __in LPDDOVERLAYFX lpDDOverlayFX)
 {
     ASSERT(m_pDirectDrawSurface);
     return m_pDirectDrawSurface->UpdateOverlay(lpSrcRect,lpDDDestSurface,lpDestRect,dwFlags,lpDDOverlayFX);
@@ -581,7 +595,8 @@ CLoadDirectDraw::~CLoadDirectDraw()
 {
     ReleaseDirectDraw();
 
-    if (m_hDirectDraw) {
+    if (m_hDirectDraw)
+    {
         NOTE("Unloading library");
         FreeLibrary(m_hDirectDraw);
     }
@@ -609,7 +624,8 @@ HRESULT CLoadDirectDraw::LoadDirectDraw(__in LPSTR szDevice)
 
     // Is DirectDraw already loaded
 
-    if (m_pDirectDraw) {
+    if (m_pDirectDraw)
+    {
         NOTE("Already loaded");
         ASSERT(m_hDirectDraw);
         return NOERROR;
@@ -623,7 +639,8 @@ HRESULT CLoadDirectDraw::LoadDirectDraw(__in LPSTR szDevice)
         m_hDirectDraw = LoadLibrary(TEXT("DDRAW.DLL"));
         SetErrorMode(ErrorMode);
 
-        if (m_hDirectDraw == NULL) {
+        if (m_hDirectDraw == NULL)
+        {
             DbgLog((LOG_ERROR,1,TEXT("Can't load DDRAW.DLL")));
             NOTE("No library");
             return E_NOINTERFACE;
@@ -636,34 +653,36 @@ HRESULT CLoadDirectDraw::LoadDirectDraw(__in LPSTR szDevice)
     // force ANSI, we assume it
     pDrawEnum = (PDRAWENUM)GetProcAddress(m_hDirectDraw,"DirectDrawEnumerateA");
     pDrawEnumEx = (LPDIRECTDRAWENUMERATEEXA)GetProcAddress(m_hDirectDraw,
-						"DirectDrawEnumerateExA");
+                  "DirectDrawEnumerateExA");
 
     // We don't NEED DirectDrawEnumerateEx, that's just for multimon stuff
-    if (pDrawCreate == NULL || pDrawEnum == NULL) {
+    if (pDrawCreate == NULL || pDrawEnum == NULL)
+    {
         DbgLog((LOG_ERROR,1,TEXT("Can't get functions: Create=%x Enum=%x"),
-			pDrawCreate, pDrawEnum));
+                pDrawCreate, pDrawEnum));
         NOTE("No entry point");
         ReleaseDirectDraw();
         return E_NOINTERFACE;
     }
 
     DbgLog((LOG_TRACE,3,TEXT("Creating DDraw for device %s"),
-					szDevice ? szDevice : "<NULL>"));
+            szDevice ? szDevice : "<NULL>"));
 
     // Create a DirectDraw display provider for this device, using the fancy
     // multimon-aware version, if it exists
     if (pDrawEnumEx)
         m_pDirectDraw = DirectDrawCreateFromDeviceEx(szDevice, pDrawCreate,
-								pDrawEnumEx);
+                        pDrawEnumEx);
     else
         m_pDirectDraw = DirectDrawCreateFromDevice(szDevice, pDrawCreate,
-								pDrawEnum);
+                        pDrawEnum);
 
-    if (m_pDirectDraw == NULL) {
-            DbgLog((LOG_ERROR,1,TEXT("Can't create DDraw")));
-            NOTE("No instance");
-            ReleaseDirectDraw();
-            return E_NOINTERFACE;
+    if (m_pDirectDraw == NULL)
+    {
+        DbgLog((LOG_ERROR,1,TEXT("Can't create DDraw")));
+        NOTE("No instance");
+        ReleaseDirectDraw();
+        return E_NOINTERFACE;
     }
     return NOERROR;
 }
@@ -681,7 +700,8 @@ void CLoadDirectDraw::ReleaseDirectDraw()
 
     // Release any DirectDraw provider interface
 
-    if (m_pDirectDraw) {
+    if (m_pDirectDraw)
+    {
         NOTE("Releasing instance");
         m_pDirectDraw->Release();
         m_pDirectDraw = NULL;
@@ -696,7 +716,8 @@ HRESULT CLoadDirectDraw::IsDirectDrawLoaded()
 {
     NOTE("Entering IsDirectDrawLoaded");
 
-    if (m_pDirectDraw == NULL) {
+    if (m_pDirectDraw == NULL)
+    {
         NOTE("DirectDraw not loaded");
         return S_FALSE;
     }
@@ -710,7 +731,8 @@ LPDIRECTDRAW CLoadDirectDraw::GetDirectDraw()
 {
     NOTE("Entering GetDirectDraw");
 
-    if (m_pDirectDraw == NULL) {
+    if (m_pDirectDraw == NULL)
+    {
         NOTE("No DirectDraw");
         return NULL;
     }
@@ -730,17 +752,20 @@ BOOL CLoadDirectDraw::IsDirectDrawVersion1()
 {
 
     if (m_pDirectDraw == NULL)
-	return FALSE;
+        return FALSE;
 
     IDirectDraw2 *p = NULL;
     HRESULT hr = m_pDirectDraw->QueryInterface(IID_IDirectDraw2, (void **)&p);
     if (p)
-	p->Release();
-    if (hr == NOERROR) {
+        p->Release();
+    if (hr == NOERROR)
+    {
         DbgLog((LOG_TRACE,3,TEXT("Direct Draw Version 2 or greater")));
-	return FALSE;
-    } else {
+        return FALSE;
+    }
+    else
+    {
         DbgLog((LOG_TRACE,3,TEXT("Direct Draw Version 1")));
-	return TRUE;
+        return TRUE;
     }
 }

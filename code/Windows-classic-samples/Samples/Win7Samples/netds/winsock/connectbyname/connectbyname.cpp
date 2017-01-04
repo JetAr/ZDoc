@@ -1,17 +1,17 @@
-/******************************************************************************\
+﻿/******************************************************************************\
 * connectbyname.cpp
 *
 * This IPv6 sample demonstrates the use of WSAConnectByName.
 *
 * WSAConnectByName is new to Windows Sockets in Windows Vista.
-* 
+*
 * This sample requires that TCP/IP version 6 be installed on the system (default
 * configuration for Windows Vista).
 *
-* IPv6 socket calls WSAConnectByName to resolve name and connect to listener in 
+* IPv6 socket calls WSAConnectByName to resolve name and connect to listener in
 * a single API call. The local and remote addresses are also returned. The connecting
 * entity sends some data after WSAConnectByName. The accepting entity receives the
-* peer data. Then both sides close the connection. 
+* peer data. Then both sides close the connection.
 *
 *
 * This is a part of the Microsoft Source Code Samples.
@@ -24,8 +24,8 @@
 \******************************************************************************/
 
 #ifdef _IA64_
-    #pragma warning (disable: 4311)
-    #pragma warning (disable: 4312)
+#pragma warning (disable: 4311)
+#pragma warning (disable: 4312)
 #endif
 
 #ifndef WIN32_LEAN_AND_MEAN
@@ -75,14 +75,14 @@ VOID SET_PORT(PSOCKADDR pAddr,USHORT port)
 
 
 typedef BOOL (WSAAPI * LPFN_WSACONNECTBYNAME) (SOCKET s,
-                                               LPCSTR name,
-                                               LPCSTR port,
-                                               LPDWORD LocalAddressLength,
-                                               LPSOCKADDR LocalAddress,
-                                               LPDWORD RemoteAddressLength,
-                                               LPSOCKADDR RemoteAddress,
-                                               TIMEVAL* timeout,
-                                               LPOVERLAPPED reserved);
+        LPCSTR name,
+        LPCSTR port,
+        LPDWORD LocalAddressLength,
+        LPSOCKADDR LocalAddress,
+        LPDWORD RemoteAddressLength,
+        LPSOCKADDR RemoteAddress,
+        TIMEVAL* timeout,
+        LPOVERLAPPED reserved);
 
 LPFN_WSACONNECTBYNAME GetWSAConnectByNameFunctionPointer()
 {
@@ -129,8 +129,8 @@ int __cdecl main()
                             remoteAddr = {0};
     USHORT                  uport = 0;
     CHAR                    szPort[MAX_PATH] = {0},
-                            hostname[MAX_PATH] = {0},
-                            buf[MAX_PATH] = {0}; 
+            hostname[MAX_PATH] = {0},
+                                 buf[MAX_PATH] = {0};
     DWORD                   dwLocalAddrLen = sizeof localAddr,
                             dwRemoteAddrLen = sizeof remoteAddr;
     TIMEVAL                 timeval = {CONNECT_TIMEOUT_VAL,0};
@@ -152,7 +152,7 @@ int __cdecl main()
         if (INVALID_SOCKET == (lsock = socket(AF_INET6,
                                               SOCK_STREAM,
                                               0
-                                              )))
+                                             )))
         {
             ERR("socket");
             __leave;
@@ -165,7 +165,7 @@ int __cdecl main()
         if (SOCKET_ERROR == bind(lsock,
                                  (SOCKADDR*)&listenAddr,
                                  sizeof listenAddr
-                                 ))
+                                ))
         {
             ERR("bind");
             __leave;
@@ -176,7 +176,7 @@ int __cdecl main()
         if (SOCKET_ERROR == getsockname(lsock,
                                         (SOCKADDR*)&listenAddr,
                                         &nAddrSize
-                                        ))
+                                       ))
         {
             ERR("getsockname");
             __leave;
@@ -193,7 +193,7 @@ int __cdecl main()
 
         if (SOCKET_ERROR == listen(lsock,
                                    1
-                                   ))
+                                  ))
         {
             ERR("listen");
             __leave;
@@ -204,7 +204,7 @@ int __cdecl main()
         if (INVALID_SOCKET == (csock = socket(AF_INET6,
                                               SOCK_STREAM,
                                               0
-                                              )))
+                                             )))
         {
             ERR("socket");
             __leave;
@@ -225,7 +225,7 @@ int __cdecl main()
                               (SOCKADDR*)&remoteAddr,
                               &timeval,
                               NULL
-                              ))
+                             ))
         {
             ERR("WSAConnectByName");
             __leave;
@@ -237,7 +237,7 @@ int __cdecl main()
                                        TST_MSG,
                                        lstrlenA(TST_MSG),
                                        0
-                                       )))
+                                      )))
         {
             ERR("send");
             __leave;
@@ -256,7 +256,7 @@ int __cdecl main()
         if (INVALID_SOCKET == (asock = accept(lsock,
                                               NULL,
                                               NULL
-                                              )))
+                                             )))
         {
             ERR("accept");
             __leave;
@@ -267,14 +267,14 @@ int __cdecl main()
                                        buf,
                                        sizeof buf,
                                        0
-                                       )))
+                                      )))
         {
             ERR("recv");
             __leave;
         }
 
         printf("Received %d bytes after accept.\n",rc);
-        
+
     }
     __finally
     {

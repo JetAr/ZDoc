@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 class CParamBase
 {
@@ -7,7 +7,10 @@ public:
     {
     }
     virtual int Init(int argc, WCHAR * argv[]) = 0;
-    BOOL Exists() { return m_fExists;  }
+    BOOL Exists()
+    {
+        return m_fExists;
+    }
 protected:
     BOOL m_fExists;
 };
@@ -30,7 +33,10 @@ public:
     {
     }
     virtual int Init(int argc, WCHAR * argv[]);
-    BOOL Get() { return m_fFlag; }
+    BOOL Get()
+    {
+        return m_fFlag;
+    }
 protected:
     BOOL m_fFlag;
     PCWSTR m_pszTrueParamName;
@@ -44,8 +50,14 @@ public:
     {
     }
     virtual int Init(int argc, WCHAR * argv[]);
-    PCWSTR Get() {  return m_pszValue; }
-    BOOL Empty() {  return (NULL == m_pszValue); } // parameter exists but value was not set
+    PCWSTR Get()
+    {
+        return m_pszValue;
+    }
+    BOOL Empty()
+    {
+        return (NULL == m_pszValue);    // parameter exists but value was not set
+    }
 
 protected:
     PCWSTR m_pszParamName;
@@ -59,8 +71,14 @@ public:
     {
     }
     virtual int Init(int argc, WCHAR * argv[]);
-    PCWSTR Get() {  return m_pszValue; }
-    BOOL Empty() {  return (NULL == m_pszValue); } // parameter exists but value was not set
+    PCWSTR Get()
+    {
+        return m_pszValue;
+    }
+    BOOL Empty()
+    {
+        return (NULL == m_pszValue);    // parameter exists but value was not set
+    }
 
 protected:
     PCWSTR m_pszParamName;
@@ -74,8 +92,14 @@ public:
     {
     }
     virtual int Init(int argc, WCHAR *argv[]);
-    SEARCH_QUERY_SYNTAX Get() { return m_syntaxValue; }
-    BOOL Empty() { return (NULL == m_pszValue); }
+    SEARCH_QUERY_SYNTAX Get()
+    {
+        return m_syntaxValue;
+    }
+    BOOL Empty()
+    {
+        return (NULL == m_pszValue);
+    }
 
 protected:
     PCWSTR m_pszParamName;
@@ -90,8 +114,14 @@ public:
     {
     }
     virtual int Init(int argc, WCHAR *argv[]);
-    SEARCH_TERM_EXPANSION Get() { return m_expansionValue; }
-    BOOL Empty() { return (NULL == m_pszValue); }
+    SEARCH_TERM_EXPANSION Get()
+    {
+        return m_expansionValue;
+    }
+    BOOL Empty()
+    {
+        return (NULL == m_pszValue);
+    }
 
 protected:
     PCWSTR m_pszParamName;
@@ -107,8 +137,14 @@ public:
         m_Set = FALSE;
     }
     virtual int Init(int argc, WCHAR *argv[]);
-    LCID Get() { return m_lcidValue; }
-    BOOL Empty() { return m_Set; }
+    LCID Get()
+    {
+        return m_lcidValue;
+    }
+    BOOL Empty()
+    {
+        return m_Set;
+    }
 
 protected:
     PCWSTR m_pszParamName;
@@ -124,8 +160,14 @@ public:
         m_Set = FALSE;
     }
     virtual int Init(int argc, WCHAR *argv[]);
-    int Get() { return m_iValue; }
-    BOOL Empty() { return m_Set; }
+    int Get()
+    {
+        return m_iValue;
+    }
+    BOOL Empty()
+    {
+        return m_Set;
+    }
 
 protected:
     PCWSTR m_pszParamName;

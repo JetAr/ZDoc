@@ -1,4 +1,4 @@
-//------------------------------------------------------------
+﻿//------------------------------------------------------------
 // Copyright (c) Microsoft Corporation.  All rights reserved.
 //------------------------------------------------------------
 
@@ -9,12 +9,12 @@
 #include "process.h"
 #include "stdio.h"
 #include "string.h"
-HANDLE closeServer = NULL;  
+HANDLE closeServer = NULL;
 
 #include "BlockUnBlockService.wsdl.h"
 
 static void CALLBACK AbortNotification(
-    __in WS_SERVICE_CANCEL_REASON reason, 
+    __in WS_SERVICE_CANCEL_REASON reason,
     __in_opt void* callbackState)
 {
     wprintf(L"Abort Reason is: %d\n", reason);
@@ -31,8 +31,8 @@ static void CALLBACK FreeState(
 }
 
 static HRESULT CALLBACK Block(
-    __in const WS_OPERATION_CONTEXT* context, 
-    __in_opt const WS_ASYNC_CONTEXT* asyncContext, 
+    __in const WS_OPERATION_CONTEXT* context,
+    __in_opt const WS_ASYNC_CONTEXT* asyncContext,
     __in_opt WS_ERROR* error)
 {
     UNREFERENCED_PARAMETER(asyncContext);
@@ -45,15 +45,15 @@ static HRESULT CALLBACK Block(
         goto Exit;
     }
     hr = WsRegisterOperationForCancel(
-        context, 
-        AbortNotification, 
-        FreeState, 
-        unblockMethod, 
-        error);
-if (FAILED(hr))
-{
-    goto Exit;
-}
+             context,
+             AbortNotification,
+             FreeState,
+             unblockMethod,
+             error);
+    if (FAILED(hr))
+    {
+        goto Exit;
+    }
     WaitForSingleObject(unblockMethod, INFINITE);
 Exit:
     SetEvent(closeServer);
@@ -65,8 +65,8 @@ Exit:
 }
 
 static HRESULT CALLBACK UnBlock(
-    __in const WS_OPERATION_CONTEXT* context, 
-    __in_opt const WS_ASYNC_CONTEXT* asyncContext, 
+    __in const WS_OPERATION_CONTEXT* context,
+    __in_opt const WS_ASYNC_CONTEXT* asyncContext,
     __in_opt WS_ERROR* error)
 {
     UNREFERENCED_PARAMETER(context);
@@ -79,7 +79,7 @@ static HRESULT CALLBACK UnBlock(
 
 // Print out rich error info
 void PrintError(
-    __in HRESULT errorCode, 
+    __in HRESULT errorCode,
     __in_opt WS_ERROR* error)
 {
     wprintf(L"Failure: errorCode=0x%lx\n", errorCode);
@@ -122,7 +122,7 @@ Exit:
 static const BlockServiceBindingFunctionTable serviceFunctions = {Block, UnBlock};
 
 // Method contract for the service
-static const WS_SERVICE_CONTRACT blockServiceContract = 
+static const WS_SERVICE_CONTRACT blockServiceContract =
 {
     &BlockUnBlockService_wsdl.contracts.BlockServiceBinding, // comes from the generated header.
     NULL, // for not specifying the default contract
@@ -133,7 +133,7 @@ static const WS_SERVICE_CONTRACT blockServiceContract =
 // Main entry point
 int __cdecl wmain()
 {
-    
+
     HRESULT hr = S_OK;
     WS_SERVICE_HOST* host = NULL;
     WS_SERVICE_ENDPOINT serviceEndpoint = {};
@@ -145,19 +145,19 @@ int __cdecl wmain()
     serviceProperties[0].id = WS_SERVICE_ENDPOINT_PROPERTY_MAX_CONCURRENCY;
     serviceProperties[0].value = (void*)&maxConcurrency;
     serviceProperties[0].valueSize = sizeof(maxConcurrency);
-    
+
     // Create Event object for closing the server
     closeServer = CreateEvent(
-        NULL, 
-        TRUE, 
-        FALSE, 
-        NULL);
+                      NULL,
+                      TRUE,
+                      FALSE,
+                      NULL);
     if (closeServer == NULL)
     {
         hr = HRESULT_FROM_WIN32(GetLastError());
         goto Exit;
-    }   
-    
+    }
+
     // Initialize service endpoint
     serviceEndpoint.address.url.chars = L"net.tcp://+/example"; // address given as uri
     serviceEndpoint.address.url.length = (ULONG)wcslen(serviceEndpoint.address.url.chars);
@@ -168,36 +168,36 @@ int __cdecl wmain()
     serviceEndpoint.propertyCount = WsCountOf(serviceProperties);
     // Create an error object for storing rich error information
     hr = WsCreateError(
-        NULL, 
-        0, 
-        &error);
+             NULL,
+             0,
+             &error);
     if (FAILED(hr))
     {
         goto Exit;
     }
     // Creating a service host
     hr = WsCreateServiceHost(
-        serviceEndpoints, 
-        1, 
-        NULL, 
-        0, 
-        &host, 
-        error);
+             serviceEndpoints,
+             1,
+             NULL,
+             0,
+             &host,
+             error);
     if (FAILED(hr))
     {
         goto Exit;
     }
-    // WsOpenServiceHost to start the listeners in the service host 
+    // WsOpenServiceHost to start the listeners in the service host
     hr = WsOpenServiceHost(
-        host, 
-        NULL, 
-        error);
+             host,
+             NULL,
+             error);
     if (FAILED(hr))
     {
         goto Exit;
     }
-    
-    
+
+
     WaitForSingleObject(closeServer, INFINITE);
     // Aborts the service host so that the blocked method can complete.
     WsAbortServiceHost(host, NULL);
@@ -207,7 +207,7 @@ int __cdecl wmain()
     {
         goto Exit;
     }
-    
+
 Exit:
     if (FAILED(hr))
     {
@@ -218,8 +218,8 @@ Exit:
     {
         WsFreeServiceHost(host);
     }
-    
-    
+
+
     if (error != NULL)
     {
         WsFreeError(error);

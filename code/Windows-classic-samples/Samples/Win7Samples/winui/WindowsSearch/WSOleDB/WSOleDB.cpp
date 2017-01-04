@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -167,17 +167,17 @@ HRESULT GetSQLStringFromCommandLine(int argc, WCHAR *argv[], PWSTR *ppszSQL)
         {
             // Initialize the query helper with the information from the cmd line
             hr = GetSQLStringFromParams(
-                    ContentLocaleParam.Get(),
-                    ContentPropertiesParam.Get(),
-                    KeywordLocaleParam.Get(),
-                    MaxResultsParam.Get(),
-                    SelectColumnsParam.Get(),
-                    SortingParam.Get(),
-                    SyntaxParam.Get(),
-                    TermExpansionParam.Get(),
-                    WhereRestrictionsParam.Get(),
-                    ExprParam.Get(),
-                    ppszSQL);
+                     ContentLocaleParam.Get(),
+                     ContentPropertiesParam.Get(),
+                     KeywordLocaleParam.Get(),
+                     MaxResultsParam.Get(),
+                     SelectColumnsParam.Get(),
+                     SortingParam.Get(),
+                     SyntaxParam.Get(),
+                     TermExpansionParam.Get(),
+                     WhereRestrictionsParam.Get(),
+                     ExprParam.Get(),
+                     ppszSQL);
         }
     }
     return hr;
@@ -245,16 +245,36 @@ void PrintPropVariant(REFPROPVARIANT variant)
     {
         switch (variant.vt)
         {
-        case VT_LPWSTR: wcout << variant.pwszVal; break;
-        case VT_BSTR: wcout << variant.bstrVal; break;
-        case VT_I1: wcout << variant.cVal; break;
-        case VT_UI2: wcout << variant.uiVal; break;
-        case VT_I2: wcout << variant.iVal; break;
-        case VT_UI4: wcout << variant.ulVal; break;
-        case VT_I4: wcout << variant.lVal; break;
-        case VT_UI8: wcout << variant.uhVal.HighPart << variant.uhVal.LowPart; break;
-        case VT_I8: wcout << variant.hVal.HighPart << variant.hVal.LowPart; break;
-        case VT_DATE: PrintDate(variant.date); break;
+        case VT_LPWSTR:
+            wcout << variant.pwszVal;
+            break;
+        case VT_BSTR:
+            wcout << variant.bstrVal;
+            break;
+        case VT_I1:
+            wcout << variant.cVal;
+            break;
+        case VT_UI2:
+            wcout << variant.uiVal;
+            break;
+        case VT_I2:
+            wcout << variant.iVal;
+            break;
+        case VT_UI4:
+            wcout << variant.ulVal;
+            break;
+        case VT_I4:
+            wcout << variant.lVal;
+            break;
+        case VT_UI8:
+            wcout << variant.uhVal.HighPart << variant.uhVal.LowPart;
+            break;
+        case VT_I8:
+            wcout << variant.hVal.HighPart << variant.hVal.LowPart;
+            break;
+        case VT_DATE:
+            PrintDate(variant.date);
+            break;
         default:
             wcout << L"Unhandled variant type " << variant.vt;
             break;
@@ -306,14 +326,14 @@ void BindToDynamicSample(int argc, WCHAR *argv[])
                                     PrintPropVariant(*(static_cast<PROPVARIANT *>(cCommand.GetValue(i))));
                                     break;
                                 case DBTYPE_WSTR:
-                                    {
-                                        DBLENGTH cbLen;
-                                        cCommand.GetLength(i, &cbLen);
-                                        WCHAR szBuffer[2048];
-                                        StringCchCopyN(szBuffer, ARRAYSIZE(szBuffer), static_cast<WCHAR *>(cCommand.GetValue(i)), cbLen / sizeof(WCHAR));
-                                        wcout << szBuffer;
-                                    }
-                                    break;
+                                {
+                                    DBLENGTH cbLen;
+                                    cCommand.GetLength(i, &cbLen);
+                                    WCHAR szBuffer[2048];
+                                    StringCchCopyN(szBuffer, ARRAYSIZE(szBuffer), static_cast<WCHAR *>(cCommand.GetValue(i)), cbLen / sizeof(WCHAR));
+                                    wcout << szBuffer;
+                                }
+                                break;
                                 case DBTYPE_I1:
                                     wcout << *static_cast<UCHAR *>(cCommand.GetValue(i));
                                     break;
@@ -381,8 +401,8 @@ public:
     WCHAR _szItemUrl[2048];
     __int64 _size;
     BEGIN_COLUMN_MAP(CMyAccessor)
-        COLUMN_ENTRY(1, _szItemUrl)
-        COLUMN_ENTRY(2, _size)
+    COLUMN_ENTRY(1, _szItemUrl)
+    COLUMN_ENTRY(2, _size)
     END_COLUMN_MAP()
 };
 
@@ -558,7 +578,7 @@ HRESULT PrintProperty(IPropertyStore *pps, REFPROPERTYKEY pkey)
 // DATERANGE is a new aggregate, introduced in Windows 7.
 WCHAR c_szAggregateSizeInUsers[] =
     L"GROUP ON System.Null AGGREGATE SUM(System.Size), DATERANGE(System.DateModified) OVER ("
-        L"SELECT System.Search.EntryID from SystemIndex WHERE Scope='file:c:/users'"
+    L"SELECT System.Search.EntryID from SystemIndex WHERE Scope='file:c:/users'"
     L")";
 
 // Execute the query, fetch first row and get a property store out of it, then print relevant properties

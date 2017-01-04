@@ -1,4 +1,4 @@
-
+﻿
 #include "private.h"
 #include "TextEditor.h"
 
@@ -37,7 +37,7 @@ void CTextEditor::MoveSelectionNext()
 {
     UINT nTextLength = GetTextLength();
     if (_nSelEnd < nTextLength)
-       _nSelEnd++;
+        _nSelEnd++;
 
     _nSelStart = _nSelEnd;
     _pTextStore->OnSelectionChange();
@@ -383,7 +383,7 @@ BOOL CTextEditor::AddCompositionRenderInfo(int nStart, int nEnd, TF_DISPLAYATTRI
 {
     if (_pCompositionRenderInfo)
     {
-        void *pvNew = LocalReAlloc(_pCompositionRenderInfo, 
+        void *pvNew = LocalReAlloc(_pCompositionRenderInfo,
                                    (_nCompositionRenderInfo + 1) * sizeof(COMPOSITIONRENDERINFO),
                                    LMEM_MOVEABLE | LMEM_ZEROINIT);
         if (!pvNew)
@@ -394,7 +394,7 @@ BOOL CTextEditor::AddCompositionRenderInfo(int nStart, int nEnd, TF_DISPLAYATTRI
     else
     {
         _pCompositionRenderInfo = (COMPOSITIONRENDERINFO *)LocalAlloc(LPTR,
-                                   (_nCompositionRenderInfo + 1) * sizeof(COMPOSITIONRENDERINFO));
+                                  (_nCompositionRenderInfo + 1) * sizeof(COMPOSITIONRENDERINFO));
         if (!_pCompositionRenderInfo)
             return FALSE;
     }
@@ -445,7 +445,7 @@ void CTextEditor::AleartMouseSink(POINT pt, DWORD dwBtnState, BOOL *pbEaten)
     {
         return;
     }
-    
+
     int nPos = (pt.x - rc.left) * 4 / (rc.right - rc.left) + 2;
     UINT uEdge = nSel + (nPos / 4);
     UINT uQuadrant = nPos % 4;

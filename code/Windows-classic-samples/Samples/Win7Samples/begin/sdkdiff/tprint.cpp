@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -50,7 +50,8 @@ gtab_print(HWND hwnd, lpTable ptab, lpPrintContext pcontext)
     fNoPD = FALSE;
     fNoMargin = FALSE;
 
-    if (pcontext == NULL) {
+    if (pcontext == NULL)
+    {
         fNoContext = TRUE;
         pcontext = (lpPrintContext) HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY,
                                               sizeof(PrintContext));
@@ -61,30 +62,38 @@ gtab_print(HWND hwnd, lpTable ptab, lpPrintContext pcontext)
         pcontext->pd = NULL;
         pcontext->id = 0;
     }
-    if (pcontext->pd == NULL) {
+    if (pcontext->pd == NULL)
+    {
         fNoPD = TRUE;
     }
-    if (pcontext->margin == NULL) {
+    if (pcontext->margin == NULL)
+    {
         fNoMargin = TRUE;
     }
     ptab_prt = gtab_printsetup(hwnd, ptab, pcontext);
 
-    if (ptab_prt != NULL) {
+    if (ptab_prt != NULL)
+    {
         gtab_printjob(hwnd, ptab_prt, pcontext);
 
         gtab_deltable(hwnd, ptab_prt);
-    } else fSuccess = FALSE;
-    if (fNoMargin) {
+    }
+    else fSuccess = FALSE;
+    if (fNoMargin)
+    {
         HeapFree(GetProcessHeap(), NULL, pcontext->margin);
         pcontext->margin = NULL;
     }
-    if (fNoPD) {
-        if (NULL != pcontext->pd) 
+    if (fNoPD)
+    {
+        if (NULL != pcontext->pd)
         {
-            if (pcontext->pd->hDevMode != NULL) {
+            if (pcontext->pd->hDevMode != NULL)
+            {
                 GlobalFree(pcontext->pd->hDevMode);
             }
-            if (pcontext->pd->hDevNames != NULL) {
+            if (pcontext->pd->hDevNames != NULL)
+            {
                 GlobalFree(pcontext->pd->hDevNames);
             }
         }
@@ -92,7 +101,8 @@ gtab_print(HWND hwnd, lpTable ptab, lpPrintContext pcontext)
         HeapFree(GetProcessHeap(), NULL, pcontext->pd);
         pcontext->pd = NULL;
     }
-    if (fNoContext) {
+    if (fNoContext)
+    {
         HeapFree(GetProcessHeap(), NULL, pcontext);
     }
     return fSuccess;
@@ -115,9 +125,11 @@ gtab_printsetup(HWND hwnd, lpTable ptab, lpPrintContext pcontext)
     ColPropsList cplist;
 
     /* set fields for context that user left null */
-    if (pcontext->margin == NULL) {
+    if (pcontext->margin == NULL)
+    {
         pcontext->margin = (lpMargin) HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(Margin));
-        if (pcontext->margin == NULL) {
+        if (pcontext->margin == NULL)
+        {
             return(NULL);
         }
         pcontext->margin->left = 10;
@@ -128,9 +140,11 @@ gtab_printsetup(HWND hwnd, lpTable ptab, lpPrintContext pcontext)
         pcontext->margin->bottominner = 15;
     }
 
-    if (pcontext->pd == NULL) {
+    if (pcontext->pd == NULL)
+    {
         pd = (PRINTDLG FAR *)HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(PRINTDLG));
-        if (pd == NULL) {
+        if (pd == NULL)
+        {
             return(NULL);
         }
         pcontext->pd = pd;
@@ -141,7 +155,8 @@ gtab_printsetup(HWND hwnd, lpTable ptab, lpPrintContext pcontext)
         pd->hDevNames = (HANDLE) NULL;
         pd->Flags = PD_RETURNDC|PD_RETURNDEFAULT;
 
-        if (PrintDlg(pd) == FALSE) {
+        if (PrintDlg(pd) == FALSE)
+        {
             return(NULL);
         }
     }
@@ -149,7 +164,8 @@ gtab_printsetup(HWND hwnd, lpTable ptab, lpPrintContext pcontext)
     /* now create a Table struct by querying the owner */
     pprttab = (lpTable)HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(Table));
 
-    if (pprttab == NULL) {
+    if (pprttab == NULL)
+    {
         return(NULL);
     }
     pprttab->hdr = ptab->hdr;
@@ -157,27 +173,33 @@ gtab_printsetup(HWND hwnd, lpTable ptab, lpPrintContext pcontext)
     pprttab->show_whitespace = ptab->show_whitespace;
 
     /* get the row/column count from owner window */
-    if (pcontext->id == 0) {
+    if (pcontext->id == 0)
+    {
         pprttab->hdr.id = ptab->hdr.id;
-    } else {
+    }
+    else
+    {
         pprttab->hdr.id = pcontext->id;
     }
     pprttab->hdr.props.valid = 0;
     pprttab->hdr.sendscroll = FALSE;
-    if (gtab_sendtq(hwnd, TQ_GETSIZE, (LPARAM)&pprttab->hdr) == FALSE) {
+    if (gtab_sendtq(hwnd, TQ_GETSIZE, (LPARAM)&pprttab->hdr) == FALSE)
+    {
         return(NULL);
     }
 
     /* alloc and init the col data structs */
     ncols = pprttab->hdr.ncols;
     pprttab->pcolhdr = (lpColProps) HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(ColProps) * ncols);
-    if (pprttab->pcolhdr == NULL) {
+    if (pprttab->pcolhdr == NULL)
+    {
         HeapFree(GetProcessHeap(), NULL, pprttab);
         return(NULL);
     }
 
     /* init col properties to default */
-    for (i=0; i < ncols; i++) {
+    for (i=0; i < ncols; i++)
+    {
         pprttab->pcolhdr[i].props.valid = 0;
         pprttab->pcolhdr[i].nchars = 0;
     }
@@ -191,8 +213,9 @@ gtab_printsetup(HWND hwnd, lpTable ptab, lpPrintContext pcontext)
 
     pprttab->scrollscale = 1;
     pprttab->pcellpos = (lpCellPos) HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY,
-                                              sizeof(CellPos) * ptab->hdr.ncols);
-    if (pprttab->pcellpos == NULL) {
+                        sizeof(CellPos) * ptab->hdr.ncols);
+    if (pprttab->pcellpos == NULL)
+    {
         HeapFree(GetProcessHeap(), NULL, pprttab->pcolhdr);
         HeapFree(GetProcessHeap(), NULL, pprttab);
         return(NULL);
@@ -202,7 +225,8 @@ gtab_printsetup(HWND hwnd, lpTable ptab, lpPrintContext pcontext)
     pprttab->pdata = NULL;
     pprttab->nlines = 0;
 
-    if (!gtab_prtwidths(hwnd, pprttab, pcontext)) {
+    if (!gtab_prtwidths(hwnd, pprttab, pcontext))
+    {
         HeapFree(GetProcessHeap(), NULL, pprttab->pcellpos);
         HeapFree(GetProcessHeap(), NULL, pprttab);
         return(NULL);
@@ -225,7 +249,8 @@ gtab_prtwidths(HWND hwnd, lpTable ptab, lpPrintContext pcontext)
     GetTextMetrics(pcontext->pd->hDC, &tm);
     ptab->avewidth = tm.tmAveCharWidth;
     ptab->rowheight = tm.tmHeight + tm.tmExternalLeading;
-    if (hdrprops->valid & P_HEIGHT) {
+    if (hdrprops->valid & P_HEIGHT)
+    {
         ptab->rowheight = hdrprops->height;
     }
 
@@ -235,15 +260,21 @@ gtab_prtwidths(HWND hwnd, lpTable ptab, lpPrintContext pcontext)
     /* set width/pos for each col. */
     cxtotal = 0;
     curx = rcinner.left;
-    for (i = 0; i < ptab->hdr.ncols; i++) {
+    for (i = 0; i < ptab->hdr.ncols; i++)
+    {
         cellprops = &ptab->pcolhdr[i].props;
         xpos = &ptab->pcellpos[i];
 
-        if (cellprops->valid & P_WIDTH) {
+        if (cellprops->valid & P_WIDTH)
+        {
             cx = cellprops->width;
-        } else if (hdrprops->valid & P_WIDTH) {
+        }
+        else if (hdrprops->valid & P_WIDTH)
+        {
             cx = hdrprops->width;
-        } else {
+        }
+        else
+        {
             cx = ptab->pcolhdr[i].nchars + 1;
             cx *= ptab->avewidth;
         }
@@ -261,7 +292,8 @@ gtab_prtwidths(HWND hwnd, lpTable ptab, lpPrintContext pcontext)
     }
     ptab->rowwidth = cxtotal;
 
-    if (pcontext->head != NULL) {
+    if (pcontext->head != NULL)
+    {
         xpos = &pcontext->head->xpos;
         ypos = &pcontext->head->ypos;
 
@@ -276,7 +308,8 @@ gtab_prtwidths(HWND hwnd, lpTable ptab, lpPrintContext pcontext)
         ypos->size = ptab->rowheight;
     }
 
-    if (pcontext->foot != NULL) {
+    if (pcontext->foot != NULL)
+    {
         xpos = &pcontext->foot->xpos;
         ypos = &pcontext->foot->ypos;
 
@@ -293,12 +326,14 @@ gtab_prtwidths(HWND hwnd, lpTable ptab, lpPrintContext pcontext)
 
     /* set nr of lines per page */
     ptab->nlines = (rcinner.bottom - rcinner.top) / ptab->rowheight;
-    if (!gtab_alloclinedata(hwnd, ptab)) {
+    if (!gtab_alloclinedata(hwnd, ptab))
+    {
         return(FALSE);
     }
     /* set line positions */
     cury = rcinner.top;
-    for (i = 0; i < ptab->nlines; i++) {
+    for (i = 0; i < ptab->nlines; i++)
+    {
         ypos = &ptab->pdata[i].linepos;
         ypos->start = cury;
         ypos->clipstart = ypos->start;
@@ -310,7 +345,7 @@ gtab_prtwidths(HWND hwnd, lpTable ptab, lpPrintContext pcontext)
 }
 
 
-/* static information for this module */ 
+/* static information for this module */
 BOOL g_bAbort;
 FARPROC lpAbortProc;
 DLGPROC lpAbortDlg;
@@ -338,7 +373,8 @@ gtab_printjob(HWND hwnd, lpTable ptab, lpPrintContext pcontext)
             / moveables;
     endpage = pages;
 
-    if (pcontext->pd->Flags & PD_PAGENUMS) {
+    if (pcontext->pd->Flags & PD_PAGENUMS)
+    {
         startpage = pcontext->pd->nFromPage;
         endpage = pcontext->pd->nToPage;
     }
@@ -361,7 +397,8 @@ gtab_printjob(HWND hwnd, lpTable ptab, lpPrintContext pcontext)
 
     /* add abort modeless dialog later!! */
     hAbortWnd = CreateDialog((HINSTANCE)hLibInst, "GABRTDLG", hwnd, lpAbortDlg);
-    if (hAbortWnd != NULL) {
+    if (hAbortWnd != NULL)
+    {
         ShowWindow(hAbortWnd, SW_NORMAL);
         EnableWindow(hwnd, FALSE);
     }
@@ -369,7 +406,8 @@ gtab_printjob(HWND hwnd, lpTable ptab, lpPrintContext pcontext)
 
 
     status = 0;  /* kills a "used without init" diagnostic */
-    for (npage = startpage; npage<=endpage; npage++) {
+    for (npage = startpage; npage<=endpage; npage++)
+    {
         LoadString((HINSTANCE)hLibInst,IDS_PAGE_STR,szPage,sizeof(szPage));
         HRESULT hr = StringCchPrintf(str, 256, szPage,  npage, pages);
         if (FAILED(hr))
@@ -377,16 +415,19 @@ gtab_printjob(HWND hwnd, lpTable ptab, lpPrintContext pcontext)
         if (hAbortWnd != NULL)
             SetDlgItemText(hAbortWnd, IDC_LPAGENR, str);
         status = gtab_printpage(hwnd, ptab, pcontext, npage);
-        if (status < 0) {
+        if (status < 0)
+        {
             AbortDoc(hpr);
             break;
         }
     }
-    if (status >= 0) {
+    if (status >= 0)
+    {
         EndDoc(hpr);
     }
 
-    if (hAbortWnd != NULL) {
+    if (hAbortWnd != NULL)
+    {
         EnableWindow(hwnd, TRUE);
         DestroyWindow(hAbortWnd);
     }
@@ -402,11 +443,14 @@ AbortProc(HDC hpr, int code)
 
     MSG msg;
 
-    if (!hAbortWnd) {
+    if (!hAbortWnd)
+    {
         return(TRUE);
     }
-    while (!g_bAbort && PeekMessage(&msg, NULL, 0, 0, PM_REMOVE)) {
-        if (!IsDialogMessage(hAbortWnd, &msg)) {
+    while (!g_bAbort && PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
+    {
+        if (!IsDialogMessage(hAbortWnd, &msg))
+        {
             TranslateMessage(&msg);
             DispatchMessage(&msg);
         }
@@ -417,8 +461,9 @@ AbortProc(HDC hpr, int code)
 int APIENTRY
 AbortDlg(HWND hdlg, UINT msg, UINT wParam, LONG lParam)
 {
-    switch (msg) {
-    
+    switch (msg)
+    {
+
     case WM_COMMAND:
         g_bAbort = TRUE;
         EndDialog(hdlg, TRUE);
@@ -447,17 +492,20 @@ gtab_printpage(HWND hwnd, lpTable ptab, lpPrintContext pcontext, int page)
     ptab->toprow = moveables * (page-1);
     gtab_invallines(hwnd, ptab, ptab->hdr.fixedrows, moveables);
 
-    for (i =0; i < ptab->nlines; i++) {
+    for (i =0; i < ptab->nlines; i++)
+    {
         gtab_paintline(hwnd, hpr, ptab, i, ptab->show_whitespace, TRUE);
     }
-    if ((ptab->hdr.vseparator) && (ptab->hdr.fixedcols > 0)) {
+    if ((ptab->hdr.vseparator) && (ptab->hdr.fixedcols > 0))
+    {
         x1 = ptab->pcellpos[ptab->hdr.fixedcols -1].clipend+1;
         y1 = ptab->pdata[0].linepos.clipstart;
         y2 = ptab->pdata[ptab->nlines-1].linepos.clipend;
         MoveToEx(hpr, x1, y1, NULL);
         LineTo(hpr, x1, y2);
     }
-    if ((ptab->hdr.hseparator) && (ptab->hdr.fixedrows > 0)) {
+    if ((ptab->hdr.hseparator) && (ptab->hdr.fixedrows > 0))
+    {
         y1 = ptab->pdata[ptab->hdr.fixedrows-1].linepos.clipend;
         x1 = ptab->pcellpos[0].clipstart;
         x2 = ptab->pcellpos[ptab->hdr.ncols-1].clipend;
@@ -465,10 +513,12 @@ gtab_printpage(HWND hwnd, lpTable ptab, lpPrintContext pcontext, int page)
         LineTo(hpr, x2, y1);
     }
 
-    if (pcontext->head != NULL) {
+    if (pcontext->head != NULL)
+    {
         gtab_printhead(hwnd, hpr, ptab, pcontext->head, page, FALSE);
     }
-    if (pcontext->foot != NULL) {
+    if (pcontext->foot != NULL)
+    {
         gtab_printhead(hwnd, hpr, ptab, pcontext->foot, page, TRUE);
     }
 
@@ -524,7 +574,8 @@ gtab_printhead(HWND hwnd, HDC hdc, lpTable ptab, lpTitle head, int page, BOOL fE
     TCHAR szbuffer[MAX_PATH];
     HRESULT hr;
 
-    fcol = 0; bkcol = 0;  /* eliminate spurious diagnostic - generate worse code */
+    fcol = 0;
+    bkcol = 0;  /* eliminate spurious diagnostic - generate worse code */
 
     rc.top = head->ypos.clipstart;
     rc.bottom = head->ypos.clipend;
@@ -533,19 +584,24 @@ gtab_printhead(HWND hwnd, HDC hdc, lpTable ptab, lpTitle head, int page, BOOL fE
     memset(str, 0, MAX_PATH*2);
 
     /* update page number */
-    if (fExpandChars) {
+    if (fExpandChars)
+    {
         chp = str;
-        for (i = 0; i < lstrlen(head->ptext); i++) {
+        for (i = 0; i < lstrlen(head->ptext); i++)
+        {
             memset(szbuffer, 0, MAX_PATH);
-            switch (head->ptext[i]) {
-            
+            switch (head->ptext[i])
+            {
+
             case '#':
                 hr = StringCchPrintf(szbuffer, MAX_PATH, "%d", page);
-                if (FAILED(hr)) {
+                if (FAILED(hr))
+                {
                     OutputError(hr, IDS_SAFE_PRINTF);
                 }
                 hr = StringCchCat(str, MAX_PATH*2, szbuffer);
-                if (FAILED(hr)) {
+                if (FAILED(hr))
+                {
                     OutputError(hr, IDS_SAFE_CAT);
                 }
                 chp += strlen(szbuffer);
@@ -556,7 +612,8 @@ gtab_printhead(HWND hwnd, HDC hdc, lpTable ptab, lpTitle head, int page, BOOL fE
                 if (FAILED(hr))
                     OutputError(hr, IDS_SAFE_PRINTF);
                 hr = StringCchCat(str, MAX_PATH*2, szbuffer);
-                if (FAILED(hr)) {
+                if (FAILED(hr))
+                {
                     OutputError(hr, IDS_SAFE_CAT);
                 }
                 chp += strlen(szbuffer);
@@ -564,8 +621,8 @@ gtab_printhead(HWND hwnd, HDC hdc, lpTable ptab, lpTitle head, int page, BOOL fE
 
             default:
                 if (IsDBCSLeadByte(head->ptext[i]) &&
-                    head->ptext[i+1]) 
-                    {
+                        head->ptext[i+1])
+                {
                     *chp = head->ptext[i];
                     chp++;
                     i++;
@@ -575,40 +632,56 @@ gtab_printhead(HWND hwnd, HDC hdc, lpTable ptab, lpTitle head, int page, BOOL fE
             }
         }
         *chp = '\0';
-    } else {
+    }
+    else
+    {
         hr = StringCchCopy(str,(MAX_PATH*2), head->ptext);
         if (FAILED(hr))
             OutputError(hr, IDS_SAFE_COPY);
     }
     chp = str;
 
-    if (head->props.valid & P_ALIGN) {
+    if (head->props.valid & P_ALIGN)
+    {
         align = head->props.alignment;
-    } else {
+    }
+    else
+    {
         align = P_LEFT;
     }
 
     /* set colours if not default */
-    if (head->props.valid & P_FCOLOUR) {
+    if (head->props.valid & P_FCOLOUR)
+    {
         fcol = SetTextColor(hdc, head->props.forecolour);
     }
-    if (head->props.valid & P_BCOLOUR) {
+    if (head->props.valid & P_BCOLOUR)
+    {
         bkcol = SetBkColor(hdc, head->props.backcolour);
     }
 
     /* calc offset of text within cell for right-align or centering */
-    if (align == P_LEFT) {
+    if (align == P_LEFT)
+    {
         cx = ptab->avewidth/2;
-    } else {
-        if (NULL == chp) {
+    }
+    else
+    {
+        if (NULL == chp)
+        {
             cx = 0;
-        } else {
+        }
+        else
+        {
             cx = LOWORD(GetTextExtent(hdc, chp, lstrlen(chp)));
         }
 
-        if (align == P_CENTRE) {
+        if (align == P_CENTRE)
+        {
             cx = (head->xpos.size - cx) / 2;
-        } else {
+        }
+        else
+        {
             cx = head->xpos.size - cx - (ptab->avewidth/2);
         }
     }
@@ -619,7 +692,8 @@ gtab_printhead(HWND hwnd, HDC hdc, lpTable ptab, lpTitle head, int page, BOOL fE
     x = 0;
     y = head->ypos.start;
 
-    for ( ; (tabp = My_mbschr(chp, '\t')) != NULL; ) {
+    for ( ; (tabp = My_mbschr(chp, '\t')) != NULL; )
+    {
         /* perform output upto tab char */
         ExtTextOut(hdc, x+cx, y, ETO_CLIPPED, &rc, chp, (UINT)(tabp-chp), NULL);
 
@@ -630,21 +704,26 @@ gtab_printhead(HWND hwnd, HDC hdc, lpTable ptab, lpTitle head, int page, BOOL fE
     }
 
     /*no more tabs - output rest of string */
-    if (NULL != chp) {
+    if (NULL != chp)
+    {
         ExtTextOut(hdc, x+cx, y, ETO_CLIPPED, &rc, chp, lstrlen(chp), NULL);
     }
 
     /* reset colours to original if not default */
-    if (head->props.valid & P_FCOLOUR) {
+    if (head->props.valid & P_FCOLOUR)
+    {
         SetTextColor(hdc, fcol);
     }
-    if (head->props.valid & P_BCOLOUR) {
+    if (head->props.valid & P_BCOLOUR)
+    {
         SetBkColor(hdc, bkcol);
     }
 
     /* now box cell if marked */
-    if (head->props.valid & P_BOX) {
-        if (head->props.box != 0) {
+    if (head->props.valid & P_BOX)
+    {
+        if (head->props.box != 0)
+        {
             rcbox.top = head->ypos.start;
             rcbox.bottom = rcbox.top + head->ypos.size;
             rcbox.left = head->xpos.start;

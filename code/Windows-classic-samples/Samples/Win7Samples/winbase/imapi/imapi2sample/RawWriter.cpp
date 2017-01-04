@@ -1,8 +1,8 @@
-//
+﻿//
 // Simple raw creator test
-// 
+//
 // Burns a.pcm, b.pcm, c.pcm to recorder #2 (imapi index)
-// 
+//
 HRESULT SimpleTestPass()
 {
     HRESULT hr = S_OK;
@@ -18,18 +18,18 @@ HRESULT SimpleTestPass()
     EXPECT_SUCCESS(SHCreateStreamOnFileW(L"a.pcm", STGM_READ | STGM_SHARE_DENY_WRITE, &(audioStreams[0])));
     EXPECT_SUCCESS(SHCreateStreamOnFileW(L"b.pcm", STGM_READ | STGM_SHARE_DENY_WRITE, &(audioStreams[1])));
     EXPECT_SUCCESS(SHCreateStreamOnFileW(L"c.pcm", STGM_READ | STGM_SHARE_DENY_WRITE, &(audioStreams[2])));
-    
+
     // set the image type
     // NOTE: this will change later to put a different mode when it's fully implemented
     EXPECT_SUCCESS(raw->put_ResultingImageType(IMAPI_FORMAT2_RAW_CD_SUBCODE_PQ_ONLY));
 
     // add the 3 tracks to the disc image
-    LONG index = 0; 
+    LONG index = 0;
     EXPECT_SUCCESS(raw->AddTrack(IMAPI_CD_SECTOR_AUDIO, audioStreams[0], &index));
     EXPECT_SUCCESS(raw->AddTrack(IMAPI_CD_SECTOR_AUDIO, audioStreams[1], &index));
     EXPECT_SUCCESS(raw->AddTrack(IMAPI_CD_SECTOR_AUDIO, audioStreams[2], &index));
 
-    // create the disc image    
+    // create the disc image
     EXPECT_SUCCESS(raw->CreateResultImage(&resultStream));
 
     //
@@ -41,7 +41,7 @@ HRESULT SimpleTestPass()
     ULONG recorderNumber = 2;
     BSTR recorderId;
     BSTR clientName = ::SysAllocString(L"RawTestBurn");
-    
+
     // cocreate all burning classes
     EXPECT_SUCCESS(iDiscMaster.CoCreateInstance(CLSID_MsftDiscMaster2));
     EXPECT_SUCCESS(iDiscRecorder.CoCreateInstance(CLSID_MsftDiscRecorder2));

@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -40,71 +40,74 @@ BOOL GetYesNoAnswer(BOOL *b)
 
 class CNotifyInterface : public IBackgroundCopyCallback2
 {
-  LONG m_lRefCount;
+    LONG m_lRefCount;
 
 public:
-  //Constructor, Destructor
-  CNotifyInterface() {m_lRefCount = 1;};
-  ~CNotifyInterface() {};
+    //Constructor, Destructor
+    CNotifyInterface()
+    {
+        m_lRefCount = 1;
+    };
+    ~CNotifyInterface() {};
 
-  //IUnknown
-  HRESULT __stdcall QueryInterface(REFIID riid, LPVOID *ppvObj);
-  ULONG __stdcall AddRef();
-  ULONG __stdcall Release();
+    //IUnknown
+    HRESULT __stdcall QueryInterface(REFIID riid, LPVOID *ppvObj);
+    ULONG __stdcall AddRef();
+    ULONG __stdcall Release();
 
-  //IBackgroundCopyCallback2 methods
-  HRESULT __stdcall JobTransferred(IBackgroundCopyJob* pJob);
-  HRESULT __stdcall JobError(IBackgroundCopyJob* pJob, IBackgroundCopyError* pError);
-  HRESULT __stdcall JobModification(IBackgroundCopyJob* pJob, DWORD dwReserved);
-  HRESULT __stdcall FileTransferred(IBackgroundCopyJob* pJob, IBackgroundCopyFile * pFile );
+    //IBackgroundCopyCallback2 methods
+    HRESULT __stdcall JobTransferred(IBackgroundCopyJob* pJob);
+    HRESULT __stdcall JobError(IBackgroundCopyJob* pJob, IBackgroundCopyError* pError);
+    HRESULT __stdcall JobModification(IBackgroundCopyJob* pJob, DWORD dwReserved);
+    HRESULT __stdcall FileTransferred(IBackgroundCopyJob* pJob, IBackgroundCopyFile * pFile );
 };
 
-HRESULT CNotifyInterface::QueryInterface(REFIID riid, LPVOID* ppvObj) 
+HRESULT CNotifyInterface::QueryInterface(REFIID riid, LPVOID* ppvObj)
 {
-  if (riid == __uuidof(IUnknown) 
-      || riid == __uuidof(IBackgroundCopyCallback)
-      || riid == __uuidof(IBackgroundCopyCallback2)) 
-  {
-    *ppvObj = this;
-  }
-  else
-  {
-    *ppvObj = NULL; 
-    return E_NOINTERFACE;
-  }
+    if (riid == __uuidof(IUnknown)
+            || riid == __uuidof(IBackgroundCopyCallback)
+            || riid == __uuidof(IBackgroundCopyCallback2))
+    {
+        *ppvObj = this;
+    }
+    else
+    {
+        *ppvObj = NULL;
+        return E_NOINTERFACE;
+    }
 
-  AddRef();
-  return NOERROR;
+    AddRef();
+    return NOERROR;
 }
 
-ULONG CNotifyInterface::AddRef() 
+ULONG CNotifyInterface::AddRef()
 {
-  return InterlockedIncrement(&m_lRefCount);
+    return InterlockedIncrement(&m_lRefCount);
 }
 
-ULONG CNotifyInterface::Release() 
+ULONG CNotifyInterface::Release()
 {
-  ULONG  ulCount = InterlockedDecrement(&m_lRefCount);
+    ULONG  ulCount = InterlockedDecrement(&m_lRefCount);
 
-  if(0 == ulCount) 
-  {
-    delete this;
-  }
+    if(0 == ulCount)
+    {
+        delete this;
+    }
 
-  return ulCount;
+    return ulCount;
 }
 
 HRESULT CNotifyInterface::JobTransferred(IBackgroundCopyJob* pJob)
 {
     HRESULT hr;
-    
+
     wprintf(L"Job transferred. Completing Job...\n");
 
     hr = pJob->Complete();
     if (FAILED(hr))
     {
-        //BITS probably was unable to rename one or more of the 
-        //temporary files. See the Remarks section of the IBackgroundCopyJob::Complete 
+        //BITS probably was unable to rename one or more of the
+        //temporary files. See the Remarks section of the IBackgroundCopyJob::Complete
         //method for more details.
         wprintf(L"Job Completion Failed with error %x\n", hr);
     }
@@ -127,8 +130,8 @@ HRESULT CNotifyInterface::JobError(IBackgroundCopyJob* pJob, IBackgroundCopyErro
     WCHAR* pszErrorDescription = NULL;
 
     //Use pJob and pError to retrieve information of interest. For example,
-    //if the job is an upload reply, call the IBackgroundCopyError::GetError method 
-    //to determine the context in which the job failed. If the context is 
+    //if the job is an upload reply, call the IBackgroundCopyError::GetError method
+    //to determine the context in which the job failed. If the context is
     wprintf(L"Job entered error state...\n");
     hr = pJob->GetDisplayName(&pszJobName);
     if (FAILED(hr))
@@ -158,12 +161,12 @@ HRESULT CNotifyInterface::JobError(IBackgroundCopyJob* pJob, IBackgroundCopyErro
 
 HRESULT CNotifyInterface::FileTransferred(IBackgroundCopyJob* pJob,IBackgroundCopyFile * pFile)
 {
-    IBackgroundCopyFile3 *pFile3;   
+    IBackgroundCopyFile3 *pFile3;
     LPWSTR pwszTempName;
     LPWSTR pwszFromName;
     HRESULT hr;
     BOOL b;
-    
+
     // Validate the downloaded File. Like checking the hash of the file. Or any other validation.
     printf("File transferred\n");
     hr = pFile->QueryInterface(__uuidof(IBackgroundCopyFile3), (void **)&pFile3);
@@ -179,17 +182,17 @@ HRESULT CNotifyInterface::FileTransferred(IBackgroundCopyJob* pJob,IBackgroundCo
     wprintf(L"%s \n",pwszFromName);
 
     pFile3->GetTemporaryName(&pwszTempName);
-    
+
     wprintf(L"Temporary location of the downloaded file: ");
     wprintf(L"%s",pwszTempName);
     wprintf(L"Is this a valid file?");
     while (1)
     {
-       if(GetYesNoAnswer(&b))
-       {
-        pFile3->SetValidationState(b);
-        break;
-       }
+        if(GetYesNoAnswer(&b))
+        {
+            pFile3->SetValidationState(b);
+            break;
+        }
     }
 
     pFile3->Release();

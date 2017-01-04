@@ -1,4 +1,4 @@
-////////////////////////////////////////////////////////////////////////////
+﻿////////////////////////////////////////////////////////////////////////////
 //
 //
 // Copyright (c) 1998-2001  Microsoft Corporation
@@ -21,9 +21,9 @@
 
 HRESULT
 OnTapiEvent(
-				IN TAPI_EVENT TapiEvent,
-				IN IDispatch * pEvent
-				);
+    IN TAPI_EVENT TapiEvent,
+    IN IDispatch * pEvent
+);
 
 /////////////////////////////////////////////////////////////////////////////
 // CTAPIEventNotification
@@ -31,97 +31,100 @@ class CTAPIEventNotification : public ITTAPIEventNotification
 {
 private:
 
-	LONG       m_dwRefCount;
+    LONG       m_dwRefCount;
 
 public:
 
-	// CTAPIEventNotification implements ITTAPIEventNotification
-	//  Declare ITTAPIEventNotification methods here
-	HRESULT STDMETHODCALLTYPE Event(
-                                    IN TAPI_EVENT TapiEvent,
-                                    IN IDispatch * pEvent
-                                   );
-    
+    // CTAPIEventNotification implements ITTAPIEventNotification
+    //  Declare ITTAPIEventNotification methods here
+    HRESULT STDMETHODCALLTYPE Event(
+        IN TAPI_EVENT TapiEvent,
+        IN IDispatch * pEvent
+    );
+
 // other COM stuff:
 public:
 
-	// constructor
-	CTAPIEventNotification() { m_dwRefCount = 1;}
+    // constructor
+    CTAPIEventNotification()
+    {
+        m_dwRefCount = 1;
+    }
 
-	// IUnknown implementation
-	HRESULT STDMETHODCALLTYPE QueryInterface(REFIID iid, void **ppvObject)
-	{
-		if (iid == IID_ITTAPIEventNotification)
-		{
-			AddRef();
-			*ppvObject = (void *)this;
-			return S_OK;
-		}
+    // IUnknown implementation
+    HRESULT STDMETHODCALLTYPE QueryInterface(REFIID iid, void **ppvObject)
+    {
+        if (iid == IID_ITTAPIEventNotification)
+        {
+            AddRef();
+            *ppvObject = (void *)this;
+            return S_OK;
+        }
 
-		if (iid == IID_IUnknown)
-		{
-			AddRef();
-			*ppvObject = (void *)this;
-			return S_OK;
-		}
+        if (iid == IID_IUnknown)
+        {
+            AddRef();
+            *ppvObject = (void *)this;
+            return S_OK;
+        }
 
-		return E_NOINTERFACE;
-	}
+        return E_NOINTERFACE;
+    }
 
-	//
-	// reference counting needs to be thread safe
-	//
+    //
+    // reference counting needs to be thread safe
+    //
 
-	ULONG STDMETHODCALLTYPE AddRef()
-	{
-		ULONG l = InterlockedIncrement(&m_dwRefCount);
-		return l;
-	}
-    
-	ULONG STDMETHODCALLTYPE Release()
-	{
-		ULONG l = InterlockedDecrement(&m_dwRefCount);
+    ULONG STDMETHODCALLTYPE AddRef()
+    {
+        ULONG l = InterlockedIncrement(&m_dwRefCount);
+        return l;
+    }
 
-		if ( 0 == l)
-		{
-			delete this;
-		}
+    ULONG STDMETHODCALLTYPE Release()
+    {
+        ULONG l = InterlockedDecrement(&m_dwRefCount);
 
-		return l;
-	}
+        if ( 0 == l)
+        {
+            delete this;
+        }
+
+        return l;
+    }
 
 };
 
 //
 //helper functions
 //
-HRESULT 
+HRESULT
 CreateAndSelectFileRecordTerminal();
 
-bool 
+bool
 SameCall(
-		IN ITCallStateEvent* pCallStateEvent
-		);
+    IN ITCallStateEvent* pCallStateEvent
+);
 
-HRESULT 
+HRESULT
 DoCallNotification(
-		IN IDispatch * pEvent
-		);
+    IN IDispatch * pEvent
+);
 
-HRESULT 
+HRESULT
 DoCallState(
-		IN IDispatch * pEvent
-		);
+    IN IDispatch * pEvent
+);
 
-HRESULT 
+HRESULT
 DoCallMedia(
-		IN IDispatch * pEvent
-		);
+    IN IDispatch * pEvent
+);
 
-HRESULT 
+HRESULT
 DoFileEvent(
-		IN IDispatch * pEvent
-		);
+    IN IDispatch * pEvent
+);
 
 
 #endif //__TAPIEventNotification_H__

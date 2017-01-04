@@ -1,4 +1,4 @@
-//
+﻿//
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -8,7 +8,7 @@
 //
 // CSampleProvider implements ICredentialProvider, which is the main
 // interface that logonUI uses to decide which tiles to display.
-// This sample illustrates processing asynchronous external events and 
+// This sample illustrates processing asynchronous external events and
 // using them to provide the user with an appropriate set of credentials.
 // In this sample, we provide two credentials: one for when the system
 // is "connected" and one for when it isn't. When it's "connected", the
@@ -65,7 +65,7 @@ void CSampleProvider::OnConnectStatusChanged()
 HRESULT CSampleProvider::SetUsageScenario(
     __in CREDENTIAL_PROVIDER_USAGE_SCENARIO cpus,
     __in DWORD dwFlags
-    )
+)
 {
     UNREFERENCED_PARAMETER(dwFlags);
     HRESULT hr;
@@ -75,19 +75,19 @@ HRESULT CSampleProvider::SetUsageScenario(
     switch (cpus)
     {
     case CPUS_LOGON:
-    case CPUS_UNLOCK_WORKSTATION:       
+    case CPUS_UNLOCK_WORKSTATION:
         _cpus = cpus;
 
         // Create the CSampleCredential (for connected scenarios), the CMessageCredential
         // (for disconnected scenarios), and the CCommandWindow (to detect commands, such
         // as the connect/disconnect here).  We can get SetUsageScenario multiple times
-        // (for example, cancel back out to the CAD screen, and then hit CAD again), 
+        // (for example, cancel back out to the CAD screen, and then hit CAD again),
         // but there's no point in recreating our creds, since they're the same all the
         // time
-        
+
         if (!_pCredential && !_pMessageCredential && !_pCommandWindow)
         {
-            // For the locked case, a more advanced credprov might only enumerate tiles for the 
+            // For the locked case, a more advanced credprov might only enumerate tiles for the
             // user whose owns the locked session, since those are the only creds that will work
             _pCredential = new CSampleCredential();
             if (_pCredential != NULL)
@@ -98,8 +98,8 @@ HRESULT CSampleProvider::SetUsageScenario(
                     _pCommandWindow = new CCommandWindow();
                     if (_pCommandWindow != NULL)
                     {
-                        // Initialize each of the object we've just created. 
-                        // - The CCommandWindow needs a pointer to us so it can let us know 
+                        // Initialize each of the object we've just created.
+                        // - The CCommandWindow needs a pointer to us so it can let us know
                         // when to re-enumerate credentials.
                         // - The CSampleCredential needs field descriptors.
                         // - The CMessageCredential needs field descriptors and a message.
@@ -174,7 +174,7 @@ HRESULT CSampleProvider::SetUsageScenario(
 //
 // SetSerialization is called for two main scenarios.  The first scenario is in the credui case
 // where it is prepopulating a tile with credentials that the user chose to store in the OS.
-// The second situation is in a remote logon case where the remote client may wish to 
+// The second situation is in a remote logon case where the remote client may wish to
 // prepopulate a tile with a username, or in some cases, completely populate the tile and
 // use it to logon without showing any UI.
 //
@@ -183,11 +183,11 @@ HRESULT CSampleProvider::SetUsageScenario(
 // this was built on top of didn't have SetSerialization.  And when we decided SetSerialization was
 // important enough to have in the sample, it ended up being a non-trivial amount of work to integrate
 // it into the main sample.  We felt it was more important to get these samples out to you quickly than to
-// hold them in order to do the work to integrate the SetSerialization changes from SampleCredentialProvider 
+// hold them in order to do the work to integrate the SetSerialization changes from SampleCredentialProvider
 // into this sample.]
 HRESULT CSampleProvider::SetSerialization(
     __in const CREDENTIAL_PROVIDER_CREDENTIAL_SERIALIZATION* pcpcs
-    )
+)
 {
     UNREFERENCED_PARAMETER(pcpcs);
     return E_NOTIMPL;
@@ -198,7 +198,7 @@ HRESULT CSampleProvider::SetSerialization(
 HRESULT CSampleProvider::Advise(
     __in ICredentialProviderEvents* pcpe,
     __in UINT_PTR upAdviseContext
-    )
+)
 {
     if (_pcpe != NULL)
     {
@@ -223,11 +223,11 @@ HRESULT CSampleProvider::UnAdvise()
 
 // Called by LogonUI to determine the number of fields in your tiles. We return the number
 // of fields to be displayed on our active tile, which depends on our connected state. The
-// "connected" CSampleCredential has SFI_NUM_FIELDS fields, whereas the "disconnected" 
+// "connected" CSampleCredential has SFI_NUM_FIELDS fields, whereas the "disconnected"
 // CMessageCredential has SMFI_NUM_FIELDS fields.
 HRESULT CSampleProvider::GetFieldDescriptorCount(
     __out DWORD* pdwCount
-    )
+)
 {
     if (_pCommandWindow->GetConnectedStatus())
     {
@@ -237,17 +237,17 @@ HRESULT CSampleProvider::GetFieldDescriptorCount(
     {
         *pdwCount = SMFI_NUM_FIELDS;
     }
-  
+
     return S_OK;
 }
 
 // Gets the field descriptor for a particular field. Note that we need to determine which
 // tile to use based on the "connected" status.
 HRESULT CSampleProvider::GetFieldDescriptorAt(
-    __in DWORD dwIndex, 
+    __in DWORD dwIndex,
     __deref_out CREDENTIAL_PROVIDER_FIELD_DESCRIPTOR** ppcpfd
-    )
-{    
+)
+{
     HRESULT hr;
 
     if (_pCommandWindow->GetConnectedStatus())
@@ -258,7 +258,7 @@ HRESULT CSampleProvider::GetFieldDescriptorAt(
             hr = FieldDescriptorCoAllocCopy(s_rgCredProvFieldDescriptors[dwIndex], ppcpfd);
         }
         else
-        { 
+        {
             hr = E_INVALIDARG;
         }
     }
@@ -270,7 +270,7 @@ HRESULT CSampleProvider::GetFieldDescriptorAt(
             hr = FieldDescriptorCoAllocCopy(s_rgMessageCredProvFieldDescriptors[dwIndex], ppcpfd);
         }
         else
-        { 
+        {
             hr = E_INVALIDARG;
         }
     }
@@ -278,7 +278,7 @@ HRESULT CSampleProvider::GetFieldDescriptorAt(
     return hr;
 }
 
-// We only use one tile at any given time since the system can either be "connected" or 
+// We only use one tile at any given time since the system can either be "connected" or
 // "disconnected". If we decided that there were multiple valid ways to be connected with
 // different sets of credentials, we would provide a combobox in the "connected" tile so
 // that the user could pick which one they want to use.
@@ -287,7 +287,7 @@ HRESULT CSampleProvider::GetCredentialCount(
     __out DWORD* pdwCount,
     __out_range(<,*pdwCount) DWORD* pdwDefault,
     __out BOOL* pbAutoLogonWithDefault
-    )
+)
 {
     *pdwCount = 1;
     *pdwDefault = 0;
@@ -299,9 +299,9 @@ HRESULT CSampleProvider::GetCredentialCount(
 // to enumerate the tiles. Note that we need to return the right credential, which depends
 // on whether we're connected or not.
 HRESULT CSampleProvider::GetCredentialAt(
-    __in DWORD dwIndex, 
+    __in DWORD dwIndex,
     __deref_out ICredentialProviderCredential** ppcpc
-    )
+)
 {
     HRESULT hr;
     // Make sure the parameters are valid.
@@ -320,11 +320,11 @@ HRESULT CSampleProvider::GetCredentialAt(
     {
         hr = E_INVALIDARG;
     }
-        
+
     return hr;
 }
 
-// Boilerplate method to create an instance of our provider. 
+// Boilerplate method to create an instance of our provider.
 HRESULT CSample_CreateInstance(__in REFIID riid, __in void** ppv)
 {
     HRESULT hr;
@@ -340,6 +340,6 @@ HRESULT CSample_CreateInstance(__in REFIID riid, __in void** ppv)
     {
         hr = E_OUTOFMEMORY;
     }
-    
+
     return hr;
 }

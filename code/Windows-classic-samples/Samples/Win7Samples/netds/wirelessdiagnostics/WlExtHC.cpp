@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -25,20 +25,22 @@
 #pragma hdrstop
 
 
-GUID gWirelessHelperExtensionRepairId = { /* cb2a064e-b691-4a63-9e7e-7d2970bbe025 */
+GUID gWirelessHelperExtensionRepairId =   /* cb2a064e-b691-4a63-9e7e-7d2970bbe025 */
+{
     0xcb2a064e,
     0xb691,
     0x4a63,
-    {0x9e, 0x7e, 0x7d, 0x29, 0x70, 0xbb, 0xe0, 0x25}};
+    {0x9e, 0x7e, 0x7d, 0x29, 0x70, 0xbb, 0xe0, 0x25}
+};
 
 
-__inline 
-HRESULT 
+__inline
+HRESULT
 StringCchCopyWithAlloc (
-    __deref_out_opt PWSTR* Dest, 
+    __deref_out_opt PWSTR* Dest,
     size_t cchMaxLen,
     __in PCWSTR Src
-    )
+)
 {
     size_t cchSize = 0;
 
@@ -47,7 +49,7 @@ StringCchCopyWithAlloc (
         return E_INVALIDARG;
     }
 
-    HRESULT hr = StringCchLength (Src, cchMaxLen - 1, &cchSize); 
+    HRESULT hr = StringCchLength (Src, cchMaxLen - 1, &cchSize);
     if (FAILED(hr))
     {
         return hr;
@@ -61,14 +63,14 @@ StringCchCopyWithAlloc (
     }
     SecureZeroMemory(*Dest, cbSize);
 
-    return StringCchCopy((STRSAFE_LPWSTR)*Dest, cchSize + 1, Src);    
+    return StringCchCopy((STRSAFE_LPWSTR)*Dest, cchSize + 1, Src);
 }
 
 HRESULT
 CWirelessHelperExtension::GetAttributeInfo(
-    __RPC__out ULONG *pcelt, 
+    __RPC__out ULONG *pcelt,
     __RPC__deref_out_ecount_full_opt(*pcelt) HelperAttributeInfo **pprgAttributeInfos
-    )
+)
 {
     HRESULT     hr = S_OK;
 
@@ -90,7 +92,7 @@ CWirelessHelperExtension::GetAttributeInfo(
         }
 
         SecureZeroMemory(info,3*sizeof(HelperAttributeInfo));
-    
+
         StringCchCopyWithAlloc(&info[0].pwszName, MAX_PATH, L"IfType");
         info[0].type=AT_UINT32;
         StringCchCopyWithAlloc(&info[1].pwszName, MAX_PATH, L"LowHealthAttributeType");
@@ -101,18 +103,19 @@ CWirelessHelperExtension::GetAttributeInfo(
         *pcelt=3;
         *pprgAttributeInfos=info;
 
-    } while (FALSE);
+    }
+    while (FALSE);
 
     LogExit (hr);
     return (hr);
 }
 
-HRESULT 
-CWirelessHelperExtension::Initialize( 
+HRESULT
+CWirelessHelperExtension::Initialize(
     ULONG celt,
     __RPC__in_ecount_full(celt) HELPER_ATTRIBUTE rgAttributes[  ]
-    )
-{   
+)
+{
     WDIAG_IHV_WLAN_ID   WDiagID = {0};
     HRESULT             hr = S_OK;
 
@@ -135,67 +138,67 @@ CWirelessHelperExtension::Initialize(
         {
             switch (rgAttributes[i].type)
             {
-                case (AT_GUID):
-                {
-                    LogInfo ("\t[%d] GUID Attribute <%ws>, value=<%!guid!>\n",
-                        i+1, rgAttributes[i].pwszName, &rgAttributes[i].Guid);
+            case (AT_GUID):
+            {
+                LogInfo ("\t[%d] GUID Attribute <%ws>, value=<%!guid!>\n",
+                         i+1, rgAttributes[i].pwszName, &rgAttributes[i].Guid);
 
+                break;
+            }
+
+            case (AT_UINT32):
+            {
+                LogInfo ("\t[%d] UINT Attribute <%ws>, value=<%d>\n",
+                         i+1, rgAttributes[i].pwszName, rgAttributes[i].DWord);
+
+                break;
+            }
+
+            case (AT_BOOLEAN):
+            {
+                LogInfo ("\t[%d] BOOLEAN Attribute <%ws>, value=<%d>\n",
+                         i+1, rgAttributes[i].pwszName, rgAttributes[i].Boolean);
+
+                break;
+            }
+
+            case (AT_STRING):
+            {
+                LogInfo ("\t[%d] STRING Attribute <%ws>, value=<%ws>\n",
+                         i+1, rgAttributes[i].pwszName, rgAttributes[i].PWStr);
+
+                break;
+            }
+
+            case (AT_OCTET_STRING):
+            {
+                LogInfo ("\t[%d] AT_OCTET_STRING Attribute <%ws>, Length=<%d>\n",
+                         i+1, rgAttributes[i].pwszName, rgAttributes[i].OctetString.dwLength);
+
+                if (rgAttributes[i].OctetString.dwLength < sizeof(WDIAG_IHV_WLAN_ID))
+                {
+                    LogInfo ("\t\tLength=<%d> < sizeof(WDIAG_IHV_WLAN_ID)=<%d>\n",
+                             rgAttributes[i].OctetString.dwLength, sizeof(WDIAG_IHV_WLAN_ID));
                     break;
                 }
 
-                case (AT_UINT32):
-                {
-                    LogInfo ("\t[%d] UINT Attribute <%ws>, value=<%d>\n",
-                        i+1, rgAttributes[i].pwszName, rgAttributes[i].DWord);
+                RtlCopyMemory (&WDiagID, rgAttributes[i].OctetString.lpValue, sizeof (WDIAG_IHV_WLAN_ID));
+                LogInfo ("\t\tProfileName=<%ws>\n", WDiagID.strProfileName);
+                LogInfo ("\t\tSsidLength=<%d>\n", WDiagID.Ssid.uSSIDLength);
+                LogInfo ("\t\tBssType=<%d>\n", WDiagID.BssType);
+                LogInfo ("\t\tReasonCode=<%d>\n", WDiagID.dwReasonCode);
+                LogInfo ("\t\tFlags=<0x%x>\n", WDiagID.dwFlags);
 
-                    break;
-                }
+                break;
+            }
 
-                case (AT_BOOLEAN):
-                {
-                    LogInfo ("\t[%d] BOOLEAN Attribute <%ws>, value=<%d>\n",
-                        i+1, rgAttributes[i].pwszName, rgAttributes[i].Boolean);
+            default:
+            {
+                LogInfo ("\t[%d] Attribute <%ws>, Unknown type=<%d>\n",
+                         i+1, rgAttributes[i].pwszName, rgAttributes[i].type);
 
-                    break;
-                }
-
-                case (AT_STRING):
-                {
-                    LogInfo ("\t[%d] STRING Attribute <%ws>, value=<%ws>\n",
-                        i+1, rgAttributes[i].pwszName, rgAttributes[i].PWStr);
-
-                    break;
-                }
-
-                case (AT_OCTET_STRING):
-                {
-                    LogInfo ("\t[%d] AT_OCTET_STRING Attribute <%ws>, Length=<%d>\n",
-                        i+1, rgAttributes[i].pwszName, rgAttributes[i].OctetString.dwLength);
-
-                    if (rgAttributes[i].OctetString.dwLength < sizeof(WDIAG_IHV_WLAN_ID))
-                    {
-                        LogInfo ("\t\tLength=<%d> < sizeof(WDIAG_IHV_WLAN_ID)=<%d>\n",
-                            rgAttributes[i].OctetString.dwLength, sizeof(WDIAG_IHV_WLAN_ID));
-                        break;
-                    }
-
-                    RtlCopyMemory (&WDiagID, rgAttributes[i].OctetString.lpValue, sizeof (WDIAG_IHV_WLAN_ID));
-                    LogInfo ("\t\tProfileName=<%ws>\n", WDiagID.strProfileName);
-                    LogInfo ("\t\tSsidLength=<%d>\n", WDiagID.Ssid.uSSIDLength);
-                    LogInfo ("\t\tBssType=<%d>\n", WDiagID.BssType);
-                    LogInfo ("\t\tReasonCode=<%d>\n", WDiagID.dwReasonCode);
-                    LogInfo ("\t\tFlags=<0x%x>\n", WDiagID.dwFlags);
-
-                    break;
-                }
-
-                default:
-                {
-                    LogInfo ("\t[%d] Attribute <%ws>, Unknown type=<%d>\n",
-                        i+1, rgAttributes[i].pwszName, rgAttributes[i].type);
-
-                    break;
-                }
+                break;
+            }
             }
         }
 
@@ -206,16 +209,17 @@ CWirelessHelperExtension::Initialize(
 
         InterlockedCompareExchange(&m_initialized, 1, 0);
 
-    } while (FALSE);
-    
+    }
+    while (FALSE);
+
     LogExit (hr);
     return (hr);
 }
 
-HRESULT  
-CWirelessHelperExtension::GetDiagnosticsInfo( 
+HRESULT
+CWirelessHelperExtension::GetDiagnosticsInfo(
     __RPC__deref_out_opt DiagnosticsInfo **ppInfo
-    )
+)
 {
     HRESULT     hr = S_OK;
 
@@ -239,17 +243,18 @@ CWirelessHelperExtension::GetDiagnosticsInfo(
         (*ppInfo)->cost = 0;
         (*ppInfo)->flags = DF_TRACELESS;
 
-    } while (FALSE);
+    }
+    while (FALSE);
 
     LogExit (hr);
     return (hr);
-}   
+}
 
-HRESULT  
-CWirelessHelperExtension::GetKeyAttributes( 
+HRESULT
+CWirelessHelperExtension::GetKeyAttributes(
     __RPC__out ULONG *pcelt,
     __RPC__deref_out_ecount_full_opt(*pcelt) HELPER_ATTRIBUTE **pprgAttributes
-    )
+)
 {
     HRESULT     hr = S_OK;
 
@@ -262,20 +267,21 @@ CWirelessHelperExtension::GetKeyAttributes(
     {
         hr = E_NOTIMPL;
 
-    } while (FALSE);
+    }
+    while (FALSE);
 
     LogExit (hr);
     return (hr);
 }
 
-HRESULT  
-CWirelessHelperExtension::LowHealth( 
-    __RPC__in_opt LPCWSTR pwszInstanceDescription,        
+HRESULT
+CWirelessHelperExtension::LowHealth(
+    __RPC__in_opt LPCWSTR pwszInstanceDescription,
     __RPC__deref_out_opt_string LPWSTR *ppwszDescription,
     __RPC__out long *pDeferredTime,
     __RPC__out DIAGNOSIS_STATUS *pStatus
-    )
-{  
+)
+{
     HRESULT     hr = S_OK;
 
     UNREFERENCED_PARAMETER (pwszInstanceDescription);
@@ -304,19 +310,20 @@ CWirelessHelperExtension::LowHealth(
         m_ReturnRepair = TRUE;
         hr = StringCchCopyWithAlloc(ppwszDescription, 256, L"Helper Extension LowHealth call succeeded.");
 
-    } while (FALSE);
+    }
+    while (FALSE);
 
     LogExit (hr);
     return (hr);
 }
 
-HRESULT  
-CWirelessHelperExtension::HighUtilization( 
-    __RPC__in_opt LPCWSTR pwszInstanceDescription,        
+HRESULT
+CWirelessHelperExtension::HighUtilization(
+    __RPC__in_opt LPCWSTR pwszInstanceDescription,
     __RPC__deref_out_opt_string LPWSTR *ppwszDescription,
     __RPC__out long *pDeferredTime,
     __RPC__out DIAGNOSIS_STATUS *pStatus
-    )
+)
 {
     HRESULT     hr = S_OK;
 
@@ -331,17 +338,18 @@ CWirelessHelperExtension::HighUtilization(
     {
         hr = E_NOTIMPL;
 
-    } while (FALSE);
+    }
+    while (FALSE);
 
     LogExit (hr);
     return (hr);
 }
 
-HRESULT  
-CWirelessHelperExtension::GetLowerHypotheses( 
+HRESULT
+CWirelessHelperExtension::GetLowerHypotheses(
     __RPC__out ULONG *pcelt,
     __RPC__deref_out_ecount_full_opt(*pcelt) HYPOTHESIS **pprgHypotheses
-    )
+)
 {
     HYPOTHESIS *hypothses = NULL;
     HELPER_ATTRIBUTE *attributes = NULL;
@@ -362,7 +370,7 @@ CWirelessHelperExtension::GetLowerHypotheses(
         {
             hr = E_INVALIDARG;
             break;
-        } 
+        }
 
         //if no attribute type specified we don't perform a lower hypotheses
         if(m_LowHealthAttributeType==0)
@@ -381,8 +389,8 @@ CWirelessHelperExtension::GetLowerHypotheses(
             hr = E_OUTOFMEMORY;
             break;
         }
-        SecureZeroMemory(hypothses, size);      
-    
+        SecureZeroMemory(hypothses, size);
+
         hr = StringCchCopyWithAlloc(&(hypothses->pwszClassName), MAX_PATH, L"LowHealthHypotheses");
         if (FAILED (hr))
         {
@@ -396,67 +404,67 @@ CWirelessHelperExtension::GetLowerHypotheses(
         }
 
         hypothses->celt = 1;
-        attributes = hypothses->rgAttributes = (PHELPER_ATTRIBUTE)CoTaskMemAlloc(sizeof HELPER_ATTRIBUTE);  
+        attributes = hypothses->rgAttributes = (PHELPER_ATTRIBUTE)CoTaskMemAlloc(sizeof HELPER_ATTRIBUTE);
 
         if (attributes == NULL)
-        {        
+        {
             hr = E_OUTOFMEMORY;
             break;
         }
 
         switch(m_LowHealthAttributeType)
         {
-            case AT_BOOLEAN:
-                attributes->type = AT_BOOLEAN;
-                break;
-            case AT_INT8:
-                attributes->type = AT_INT8;
-                break;
-            case AT_UINT8:
-                attributes->type = AT_UINT8;
-                break;
-            case AT_INT16:
-                attributes->type = AT_INT16;
-                break;
-            case AT_UINT16:
-                attributes->type = AT_UINT16;
-                break;
-            case AT_INT32:
-                attributes->type = AT_INT32;
-                break;
-            case AT_UINT32:
-                attributes->type = AT_UINT32;
-                break;
-            case AT_INT64:
-                attributes->type = AT_INT64;
-                break;
-            case AT_UINT64:
-                attributes->type = AT_UINT64;
-                break;
-            case AT_STRING:
-                attributes->type = AT_STRING;
-                StringCchCopyWithAlloc(&(attributes->PWStr), MAX_PATH, L"String Attribute Value");
-                break;
-            case AT_GUID:
-                attributes->type = AT_GUID;
-                break;
-            case AT_LIFE_TIME:
-                attributes->type = AT_LIFE_TIME;
+        case AT_BOOLEAN:
+            attributes->type = AT_BOOLEAN;
             break;
-            case AT_SOCKADDR:
-                attributes->type = AT_SOCKADDR;
+        case AT_INT8:
+            attributes->type = AT_INT8;
+            break;
+        case AT_UINT8:
+            attributes->type = AT_UINT8;
+            break;
+        case AT_INT16:
+            attributes->type = AT_INT16;
+            break;
+        case AT_UINT16:
+            attributes->type = AT_UINT16;
+            break;
+        case AT_INT32:
+            attributes->type = AT_INT32;
+            break;
+        case AT_UINT32:
+            attributes->type = AT_UINT32;
+            break;
+        case AT_INT64:
+            attributes->type = AT_INT64;
+            break;
+        case AT_UINT64:
+            attributes->type = AT_UINT64;
+            break;
+        case AT_STRING:
+            attributes->type = AT_STRING;
+            StringCchCopyWithAlloc(&(attributes->PWStr), MAX_PATH, L"String Attribute Value");
+            break;
+        case AT_GUID:
+            attributes->type = AT_GUID;
+            break;
+        case AT_LIFE_TIME:
+            attributes->type = AT_LIFE_TIME;
+            break;
+        case AT_SOCKADDR:
+            attributes->type = AT_SOCKADDR;
+            break;
+        case AT_OCTET_STRING:
+            attributes->type = AT_OCTET_STRING;
+            attributes->OctetString.dwLength = 32;
+            attributes->OctetString.lpValue = (BYTE *)CoTaskMemAlloc(32*sizeof(BYTE));
+            if(attributes->OctetString.lpValue==NULL)
+            {
+                hr = E_OUTOFMEMORY;
                 break;
-            case AT_OCTET_STRING:
-                attributes->type = AT_OCTET_STRING;
-                attributes->OctetString.dwLength = 32;
-                attributes->OctetString.lpValue = (BYTE *)CoTaskMemAlloc(32*sizeof(BYTE));
-                if(attributes->OctetString.lpValue==NULL)
-                {
-                    hr = E_OUTOFMEMORY;
-                    break;
-                }
-                SecureZeroMemory(attributes->OctetString.lpValue,32*sizeof(BYTE));
-                break;
+            }
+            SecureZeroMemory(attributes->OctetString.lpValue,32*sizeof(BYTE));
+            break;
         }
 
         if (FAILED (hr))
@@ -475,14 +483,15 @@ CWirelessHelperExtension::GetLowerHypotheses(
 
         *pcelt = 1;
         if (pprgHypotheses)
-        {    
+        {
             *pprgHypotheses = hypothses;
         }
 
-    } while (FALSE);
+    }
+    while (FALSE);
 
     if ((FAILED (hr)) &&
-        (hypothses))
+            (hypothses))
     {
         CoTaskMemFree(hypothses->pwszClassName);
 
@@ -490,14 +499,14 @@ CWirelessHelperExtension::GetLowerHypotheses(
         if (attributes)
         {
             for (UINT i = 0; i < hypothses->celt; i++, ++attributes)
-            {     
+            {
                 CoTaskMemFree(attributes->pwszName);
                 switch(attributes->type)
                 {
-                    case AT_STRING:
-                        if(attributes->PWStr!=NULL) CoTaskMemFree(attributes->PWStr);
-                    case AT_OCTET_STRING:
-                        if(attributes->OctetString.lpValue!=NULL) CoTaskMemFree(attributes->OctetString.lpValue);
+                case AT_STRING:
+                    if(attributes->PWStr!=NULL) CoTaskMemFree(attributes->PWStr);
+                case AT_OCTET_STRING:
+                    if(attributes->OctetString.lpValue!=NULL) CoTaskMemFree(attributes->OctetString.lpValue);
                 }
             }
             CoTaskMemFree(attributes);
@@ -509,11 +518,11 @@ CWirelessHelperExtension::GetLowerHypotheses(
     return (hr);
 }
 
-HRESULT  
-CWirelessHelperExtension::GetDownStreamHypotheses( 
+HRESULT
+CWirelessHelperExtension::GetDownStreamHypotheses(
     __RPC__out ULONG *pcelt,
     __RPC__deref_out_ecount_full_opt(*pcelt) HYPOTHESIS **pprgHypotheses
-    )
+)
 {
     HRESULT     hr = S_OK;
 
@@ -526,17 +535,18 @@ CWirelessHelperExtension::GetDownStreamHypotheses(
     {
         hr = E_NOTIMPL;
 
-    } while (FALSE);
+    }
+    while (FALSE);
 
     LogExit (hr);
     return (hr);
 }
 
-HRESULT  
-CWirelessHelperExtension::GetHigherHypotheses( 
+HRESULT
+CWirelessHelperExtension::GetHigherHypotheses(
     __RPC__out ULONG *pcelt,
     __RPC__deref_out_ecount_full_opt(*pcelt) HYPOTHESIS **pprgHypotheses
-    )
+)
 {
     HRESULT     hr = S_OK;
 
@@ -549,17 +559,18 @@ CWirelessHelperExtension::GetHigherHypotheses(
     {
         hr = E_NOTIMPL;
 
-    } while (FALSE);
+    }
+    while (FALSE);
 
     LogExit (hr);
     return (hr);
 }
 
-HRESULT  
-CWirelessHelperExtension::GetUpStreamHypotheses( 
+HRESULT
+CWirelessHelperExtension::GetUpStreamHypotheses(
     __RPC__out ULONG *pcelt,
     __RPC__deref_out_ecount_full_opt(*pcelt) HYPOTHESIS **pprgHypotheses
-    )
+)
 {
     HRESULT     hr = S_OK;
 
@@ -572,18 +583,19 @@ CWirelessHelperExtension::GetUpStreamHypotheses(
     {
         hr = E_NOTIMPL;
 
-    } while (FALSE);
+    }
+    while (FALSE);
 
     LogExit (hr);
     return (hr);
 }
 
-HRESULT  
-CWirelessHelperExtension::Repair( 
+HRESULT
+CWirelessHelperExtension::Repair(
     __RPC__in RepairInfo *pInfo,
     __RPC__out long *pDeferredTime,
     __RPC__out REPAIR_STATUS *pStatus
-    )
+)
 {
     HRESULT     hr = S_OK;
 
@@ -612,18 +624,19 @@ CWirelessHelperExtension::Repair(
         *pDeferredTime = 0;
         *pStatus = RS_REPAIRED;
 
-    } while (FALSE);
+    }
+    while (FALSE);
 
     LogExit (hr);
     return (hr);
 }
 
-HRESULT  
-CWirelessHelperExtension::Validate( 
+HRESULT
+CWirelessHelperExtension::Validate(
     PROBLEM_TYPE problem,
     __RPC__out long *pDeferredTime,
     __RPC__out REPAIR_STATUS *pStatus
-    )
+)
 {
     HRESULT     hr = S_OK;
 
@@ -643,18 +656,19 @@ CWirelessHelperExtension::Validate(
 
         hr = E_NOTIMPL;
 
-    } while (FALSE);
+    }
+    while (FALSE);
 
     LogExit (hr);
     return (hr);
 }
 
-HRESULT  
-CWirelessHelperExtension::GetRepairInfo( 
+HRESULT
+CWirelessHelperExtension::GetRepairInfo(
     PROBLEM_TYPE problem,
     __RPC__out ULONG *pcelt,
     __RPC__deref_out_ecount_full_opt(*pcelt) RepairInfo **ppInfo
-    )
+)
 {
     RepairInfo *info = NULL;
     HRESULT     hr = S_OK;
@@ -724,24 +738,25 @@ CWirelessHelperExtension::GetRepairInfo(
         *pcelt = 1;
         *ppInfo = info;
 
-    } while (FALSE);
-    
+    }
+    while (FALSE);
+
     if ((FAILED (hr)) &&
-        (info))
-    {            
+            (info))
+    {
         CoTaskMemFree(info->pwszClassName);
         CoTaskMemFree(info->pwszDescription);
         CoTaskMemFree(info);
     }
-    
+
     LogExit (hr);
     return (hr);
 }
 
-HRESULT  
-CWirelessHelperExtension::GetLifeTime( 
+HRESULT
+CWirelessHelperExtension::GetLifeTime(
     __RPC__out LIFE_TIME *pLifeTime
-    )
+)
 {
     HRESULT     hr = S_OK;
 
@@ -753,16 +768,17 @@ CWirelessHelperExtension::GetLifeTime(
     {
         hr = E_NOTIMPL;
 
-    } while (FALSE);
+    }
+    while (FALSE);
 
     LogExit (hr);
     return (hr);
 }
 
-HRESULT  
-CWirelessHelperExtension::SetLifeTime( 
+HRESULT
+CWirelessHelperExtension::SetLifeTime(
     LIFE_TIME lifeTime
-    )
+)
 {
     HRESULT     hr = S_OK;
 
@@ -774,16 +790,17 @@ CWirelessHelperExtension::SetLifeTime(
     {
         hr = E_NOTIMPL;
 
-    } while (FALSE);
+    }
+    while (FALSE);
 
     LogExit (hr);
     return (hr);
 }
 
-HRESULT  
-CWirelessHelperExtension::GetCacheTime( 
+HRESULT
+CWirelessHelperExtension::GetCacheTime(
     __RPC__out FILETIME *pCacheTime
-    )
+)
 {
     HRESULT     hr = S_OK;
 
@@ -793,17 +810,18 @@ CWirelessHelperExtension::GetCacheTime(
     {
         SecureZeroMemory (pCacheTime, sizeof(FILETIME));
 
-    } while (FALSE);
+    }
+    while (FALSE);
 
     LogExit (hr);
     return (hr);
 }
 
-HRESULT  
-CWirelessHelperExtension::GetAttributes( 
+HRESULT
+CWirelessHelperExtension::GetAttributes(
     __RPC__out ULONG *pcelt,
     __RPC__deref_out_ecount_full_opt(*pcelt) HELPER_ATTRIBUTE **pprgAttributes
-    )
+)
 {
     HRESULT     hr = S_OK;
 
@@ -816,15 +834,16 @@ CWirelessHelperExtension::GetAttributes(
     {
         hr = E_NOTIMPL;
 
-    } while (FALSE);
+    }
+    while (FALSE);
 
     LogExit (hr);
     return (hr);
 }
 
-HRESULT 
+HRESULT
 CWirelessHelperExtension::Cancel(
-    )
+)
 {
     HRESULT     hr = S_OK;
 
@@ -833,15 +852,16 @@ CWirelessHelperExtension::Cancel(
     do
     {
 
-    } while (FALSE);
+    }
+    while (FALSE);
 
     LogExit (hr);
     return (hr);
 }
 
-HRESULT 
+HRESULT
 CWirelessHelperExtension::Cleanup(
-    )
+)
 {
     HRESULT     hr = S_OK;
 
@@ -850,7 +870,8 @@ CWirelessHelperExtension::Cleanup(
     do
     {
 
-    } while (FALSE);
+    }
+    while (FALSE);
 
     LogExit (hr);
     return (hr);

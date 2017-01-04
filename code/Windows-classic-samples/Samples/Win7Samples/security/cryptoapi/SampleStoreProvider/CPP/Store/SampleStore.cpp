@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -37,117 +37,119 @@ static HMODULE hMyModule = NULL;
 //  External Store Provider handle information
 //
 typedef struct _FIND_EXT_INFO FIND_EXT_INFO, *PFIND_EXT_INFO;
-struct _FIND_EXT_INFO {
+struct _FIND_EXT_INFO
+{
     DWORD               dwContextType;
     void                *pvContext;
 };
 
-typedef struct _EXT_STORE {
+typedef struct _EXT_STORE
+{
     HCERTSTORE          hExtCertStore;
 } EXT_STORE, *PEXT_STORE;
 
 //
 //  External Store Provider Functions.
-// 
-static 
-void WINAPI 
+//
+static
+void WINAPI
 ExtStoreProvClose(
     HCERTSTOREPROV  hStoreProv,
     DWORD           dwFlags
-    );
+);
 
-static 
-BOOL WINAPI 
+static
+BOOL WINAPI
 ExtStoreProvReadCert(
     HCERTSTOREPROV  hStoreProv,
     PCCERT_CONTEXT  pStoreCertContext,
     DWORD           dwFlags,
     PCCERT_CONTEXT *ppProvCertContext
-    );
+);
 
-static 
-BOOL WINAPI 
+static
+BOOL WINAPI
 ExtStoreProvWriteCert(
     HCERTSTOREPROV  hStoreProv,
     PCCERT_CONTEXT  pCertContext,
-                    DWORD           dwFlags
-    );
+    DWORD           dwFlags
+);
 
-static 
-BOOL WINAPI 
+static
+BOOL WINAPI
 ExtStoreProvDeleteCert(
     HCERTSTOREPROV  hStoreProv,
     PCCERT_CONTEXT  pCertContext,
     DWORD           dwFlags
-    );
+);
 
-static 
-BOOL WINAPI 
+static
+BOOL WINAPI
 ExtStoreProvSetCertProperty(
     HCERTSTOREPROV  hStoreProv,
     PCCERT_CONTEXT  pCertContext,
     DWORD           dwPropId,
     DWORD           dwFlags,
     const void      *pvData
-    );
+);
 
-static 
-BOOL WINAPI 
+static
+BOOL WINAPI
 ExtStoreProvReadCrl(
     HCERTSTOREPROV  hStoreProv,
     PCCRL_CONTEXT   pStoreCrlContext,
     DWORD           dwFlags,
     PCCRL_CONTEXT   *ppProvCrlContext
-    );
+);
 
-static 
-BOOL WINAPI 
+static
+BOOL WINAPI
 ExtStoreProvWriteCrl(
     HCERTSTOREPROV  hStoreProv,
     PCCRL_CONTEXT   pCrlContext,
     DWORD           dwFlags
-    );
+);
 
-static 
-BOOL WINAPI 
+static
+BOOL WINAPI
 ExtStoreProvDeleteCrl(
     HCERTSTOREPROV  hStoreProv,
     PCCRL_CONTEXT   pCrlContext,
     DWORD           dwFlags
-    );
+);
 
-static 
-BOOL WINAPI 
+static
+BOOL WINAPI
 ExtStoreProvSetCrlProperty(
     HCERTSTOREPROV  hStoreProv,
     PCCRL_CONTEXT   pCrlContext,
     DWORD           dwPropId,
     DWORD           dwFlags,
     const void      *pvData
-    );
+);
 
-static 
-BOOL WINAPI 
+static
+BOOL WINAPI
 ExtStoreProvReadCtl(
     HCERTSTOREPROV hStoreProv,
     PCCTL_CONTEXT   pStoreCtlContext,
     DWORD           dwFlags,
     PCCTL_CONTEXT   *ppProvCtlContext
-    );
+);
 
-static 
-BOOL WINAPI 
+static
+BOOL WINAPI
 ExtStoreProvWriteCtl(
     HCERTSTOREPROV hStoreProv,
     PCCTL_CONTEXT pCtlContext,
     DWORD dwFlags
-    );
+);
 
 static BOOL WINAPI ExtStoreProvDeleteCtl(
     HCERTSTOREPROV hStoreProv,
     PCCTL_CONTEXT pCtlContext,
     DWORD dwFlags
-        );
+);
 
 static BOOL WINAPI ExtStoreProvSetCtlProperty(
     HCERTSTOREPROV hStoreProv,
@@ -155,14 +157,14 @@ static BOOL WINAPI ExtStoreProvSetCtlProperty(
     DWORD dwPropId,
     DWORD dwFlags,
     const void *pvData
-        );
+);
 
 static BOOL WINAPI ExtStoreProvControl(
     HCERTSTOREPROV hStoreProv,
     DWORD dwFlags,
     DWORD dwCtrlType,
     void const *pvCtrlPara
-        );
+);
 
 static BOOL WINAPI ExtStoreProvFindCert(
     HCERTSTOREPROV hStoreProv,
@@ -171,14 +173,14 @@ static BOOL WINAPI ExtStoreProvFindCert(
     DWORD dwFlags,
     void **ppvStoreProvFindInfo,
     PCCERT_CONTEXT *ppProvCertContext
-    );
+);
 
 static BOOL WINAPI ExtStoreProvFreeFindCert(
     HCERTSTOREPROV hStoreProv,
     PCCERT_CONTEXT pCertContext,
     void *pvStoreProvFindInfo,
     DWORD dwFlags
-        );
+);
 
 static BOOL WINAPI ExtStoreProvGetCertProperty(
     HCERTSTOREPROV hStoreProv,
@@ -187,7 +189,7 @@ static BOOL WINAPI ExtStoreProvGetCertProperty(
     DWORD dwFlags,
     void *pvData,
     DWORD *pcbData
-    );
+);
 
 static BOOL WINAPI ExtStoreProvFindCrl(
     HCERTSTOREPROV hStoreProv,
@@ -196,14 +198,14 @@ static BOOL WINAPI ExtStoreProvFindCrl(
     DWORD dwFlags,
     void **ppvStoreProvFindInfo,
     PCCRL_CONTEXT *ppProvCrlContext
-   );
+);
 
 static BOOL WINAPI ExtStoreProvFreeFindCrl(
     HCERTSTOREPROV hStoreProv,
     PCCRL_CONTEXT pCrlContext,
     void *pvStoreProvFindInfo,
     DWORD dwFlags
-        );
+);
 
 static BOOL WINAPI ExtStoreProvGetCrlProperty(
     HCERTSTOREPROV hStoreProv,
@@ -212,7 +214,7 @@ static BOOL WINAPI ExtStoreProvGetCrlProperty(
     DWORD dwFlags,
     void *pvData,
     DWORD *pcbData
-    );
+);
 
 static BOOL WINAPI ExtStoreProvFindCtl(
     HCERTSTOREPROV hStoreProv,
@@ -221,14 +223,14 @@ static BOOL WINAPI ExtStoreProvFindCtl(
     DWORD dwFlags,
     void **ppvStoreProvFindInfo,
     PCCTL_CONTEXT *ppProvCtlContext
-    );
+);
 
 static BOOL WINAPI ExtStoreProvFreeFindCtl(
     HCERTSTOREPROV hStoreProv,
     PCCTL_CONTEXT pCtlContext,
     void *pvStoreProvFindInfo,
     DWORD dwFlags
-    );
+);
 
 static BOOL WINAPI ExtStoreProvGetCtlProperty(
     HCERTSTOREPROV hStoreProv,
@@ -237,9 +239,10 @@ static BOOL WINAPI ExtStoreProvGetCtlProperty(
     DWORD dwFlags,
     void *pvData,
     DWORD *pcbData
-    );
+);
 
-static void * const rgpvExtStoreProvFunc[] = {
+static void * const rgpvExtStoreProvFunc[] =
+{
     // CERT_STORE_PROV_CLOSE_FUNC              0
     ExtStoreProvClose,
     // CERT_STORE_PROV_READ_CERT_FUNC          1
@@ -295,7 +298,7 @@ static void * const rgpvExtStoreProvFunc[] = {
 //
 static void *CSAlloc(
     size_t cbBytes
-    )
+)
 {
     void *pv;
     pv = malloc(cbBytes);
@@ -306,7 +309,7 @@ static void *CSAlloc(
 
 static void CSFree(
     void *pv
-    )
+)
 {
     if (pv)
         free(pv);
@@ -318,7 +321,7 @@ static void CSFree(
 static PFIND_EXT_INFO CreateExtInfo(
     DWORD dwContextType,
     void *pvContext
-    )
+)
 {
     PFIND_EXT_INFO pFindExtInfo;
 
@@ -332,7 +335,7 @@ static PFIND_EXT_INFO CreateExtInfo(
 
 static void FreeExtInfo(
     PFIND_EXT_INFO pFindExtInfo
-    )
+)
 {
     void *pvContext;
 
@@ -340,19 +343,21 @@ static void FreeExtInfo(
         return;
 
     pvContext = pFindExtInfo->pvContext;
-    if (pvContext) {
-        switch (pFindExtInfo->dwContextType) {
-            case (CERT_STORE_CERTIFICATE_CONTEXT - 1):
-                CertFreeCertificateContext((PCCERT_CONTEXT) pvContext);
-                break;
-            case (CERT_STORE_CRL_CONTEXT - 1):
-                CertFreeCRLContext((PCCRL_CONTEXT) pvContext);
-                break;
-            case (CERT_STORE_CTL_CONTEXT - 1):
-                CertFreeCTLContext((PCCTL_CONTEXT) pvContext);
-                break;
-            default:
-                ASSERT(pFindExtInfo->dwContextType < CERT_STORE_CTL_CONTEXT);
+    if (pvContext)
+    {
+        switch (pFindExtInfo->dwContextType)
+        {
+        case (CERT_STORE_CERTIFICATE_CONTEXT - 1):
+            CertFreeCertificateContext((PCCERT_CONTEXT) pvContext);
+            break;
+        case (CERT_STORE_CRL_CONTEXT - 1):
+            CertFreeCRLContext((PCCRL_CONTEXT) pvContext);
+            break;
+        case (CERT_STORE_CTL_CONTEXT - 1):
+            CertFreeCTLContext((PCCTL_CONTEXT) pvContext);
+            break;
+        default:
+            ASSERT(pFindExtInfo->dwContextType < CERT_STORE_CTL_CONTEXT);
         }
     }
 
@@ -365,11 +370,12 @@ static void FreeExtInfo(
 BOOL
 WINAPI
 DllMain(
-        HMODULE hModule,
-        ULONG  ulReason,
-        LPVOID lpReserved)
+    HMODULE hModule,
+    ULONG  ulReason,
+    LPVOID lpReserved)
 {
-    switch (ulReason) {
+    switch (ulReason)
+    {
     case DLL_PROCESS_ATTACH:
         hMyModule = hModule;
         break;
@@ -403,7 +409,7 @@ static HRESULT HError()
         hr = dw;
 
     if ( ! FAILED ( hr ) )
-    {        
+    {
         hr = E_UNEXPECTED;
     }
     return hr;
@@ -411,7 +417,7 @@ static HRESULT HError()
 
 static HRESULT GetDllFilename(
     WCHAR wszModule[_MAX_PATH]
-    )
+)
 {
     char szModule[_MAX_PATH];
     LPSTR pszModule;
@@ -424,20 +430,22 @@ static HRESULT GetDllFilename(
     // Strip off the Dll filename's directory components
     cchModule = (int)strlen(szModule);
     pszModule = szModule + cchModule;
-    while (cchModule-- > 0) {
+    while (cchModule-- > 0)
+    {
         pszModule--;
-        if ('\\' == *pszModule || ':' == *pszModule) {
+        if ('\\' == *pszModule || ':' == *pszModule)
+        {
             pszModule++;
             break;
         }
     }
     if (0 >= MultiByteToWideChar(
-            CP_ACP,
-            0,                      // dwFlags
-            pszModule,
-            -1,                     // null terminated
-            wszModule,
-            _MAX_PATH))
+                CP_ACP,
+                0,                      // dwFlags
+                pszModule,
+                -1,                     // null terminated
+                wszModule,
+                _MAX_PATH))
         return HError();
 
     return S_OK;
@@ -456,12 +464,13 @@ STDAPI DllRegisterServer(void)
 
     // Register the store provider
     if (!CryptRegisterOIDFunction(
-            0,								//dwEncodingType
-            CRYPT_OID_OPEN_STORE_PROV_FUNC,
-            sz_CERT_STORE_PROV_TEST_EXT,
-            wszModule,
-            TEST_EXT_OPEN_STORE_PROV_FUNC
-            )) {
+                0,								//dwEncodingType
+                CRYPT_OID_OPEN_STORE_PROV_FUNC,
+                sz_CERT_STORE_PROV_TEST_EXT,
+                wszModule,
+                TEST_EXT_OPEN_STORE_PROV_FUNC
+            ))
+    {
         if (ERROR_FILE_EXISTS != GetLastError())
             return HError();
     }
@@ -480,10 +489,11 @@ STDAPI DllUnregisterServer(void)
     if (FAILED(hr = GetDllFilename(wszModule)))
         return hr;
     if (!CryptUnregisterOIDFunction(
-            0,								//dwEncodingType
-            CRYPT_OID_OPEN_STORE_PROV_FUNC,
-            sz_CERT_STORE_PROV_TEST_EXT
-            )) {
+                0,								//dwEncodingType
+                CRYPT_OID_OPEN_STORE_PROV_FUNC,
+                sz_CERT_STORE_PROV_TEST_EXT
+            ))
+    {
         if (ERROR_FILE_NOT_FOUND != GetLastError())
             return HError();
     }
@@ -506,7 +516,7 @@ I_CertDllOpenSampleStoreProvW(
     const void *pvPara,
     HCERTSTORE hCertStore,
     PCERT_STORE_PROV_INFO pStoreProvInfo
-    )
+)
 {
     BOOL fResult;
     PEXT_STORE pExtStore = NULL;
@@ -515,14 +525,15 @@ I_CertDllOpenSampleStoreProvW(
         dwFlags |= CERT_SYSTEM_STORE_CURRENT_USER;
     dwFlags |= CERT_STORE_NO_CRYPT_RELEASE_FLAG;
 
-    if (dwFlags & CERT_STORE_DELETE_FLAG) {
+    if (dwFlags & CERT_STORE_DELETE_FLAG)
+    {
         CertOpenStore(
             CERT_STORE_PROV_SYSTEM_W,
             dwEncodingType,
             hCryptProv,
             dwFlags,
             pvPara
-            );
+        );
         pStoreProvInfo->dwStoreProvFlags |= CERT_STORE_PROV_DELETED_FLAG;
         if (0 == GetLastError())
             return TRUE;
@@ -542,7 +553,7 @@ I_CertDllOpenSampleStoreProvW(
             hCryptProv,
             dwFlags,
             pvPara
-            )))
+                                            )))
     {
         goto ErrorReturn;
     }
@@ -572,10 +583,11 @@ ErrorReturn:
 static void WINAPI ExtStoreProvClose(
     HCERTSTOREPROV hStoreProv,
     DWORD dwFlags
-        )
+)
 {
     PEXT_STORE pExtStore = (PEXT_STORE) hStoreProv;
-    if (pExtStore) {
+    if (pExtStore)
+    {
         if (pExtStore->hExtCertStore)
             CertCloseStore(pExtStore->hExtCertStore, 0);
         CSFree(pExtStore);
@@ -590,18 +602,18 @@ static void WINAPI ExtStoreProvClose(
 static PCCERT_CONTEXT FindCorrespondingCertificate (
     HCERTSTORE hExtCertStore,
     PCCERT_CONTEXT pCertContext
-    )
+)
 {
     DWORD           cbHash = MAX_HASH_LEN;
     BYTE            aHash[MAX_HASH_LEN];
     CRYPT_HASH_BLOB HashBlob;
 
     if ( CertGetCertificateContextProperty(
-             pCertContext,
-             CERT_HASH_PROP_ID,
-             aHash,
-             &cbHash
-             ) == FALSE )
+                pCertContext,
+                CERT_HASH_PROP_ID,
+                aHash,
+                &cbHash
+            ) == FALSE )
     {
         return( NULL );
     }
@@ -616,7 +628,7 @@ static PCCERT_CONTEXT FindCorrespondingCertificate (
                 CERT_FIND_HASH,
                 &HashBlob,
                 NULL
-                ) );
+            ) );
 }
 
 //
@@ -625,7 +637,7 @@ static PCCERT_CONTEXT FindCorrespondingCertificate (
 static PCCRL_CONTEXT FindCorrespondingCrl (
     HCERTSTORE hExtCertStore,
     PCCRL_CONTEXT pCrlContext
-    )
+)
 {
     DWORD         cbHash = MAX_HASH_LEN;
     BYTE          aHash[MAX_HASH_LEN];
@@ -635,11 +647,11 @@ static PCCRL_CONTEXT FindCorrespondingCrl (
     DWORD         dwFlags = 0;
 
     if ( CertGetCRLContextProperty(
-             pCrlContext,
-             CERT_HASH_PROP_ID,
-             aHash,
-             &cbHash
-             ) == FALSE )
+                pCrlContext,
+                CERT_HASH_PROP_ID,
+                aHash,
+                &cbHash
+            ) == FALSE )
     {
         return( NULL );
     }
@@ -649,14 +661,14 @@ static PCCRL_CONTEXT FindCorrespondingCrl (
                              NULL,
                              pFindCrl,
                              &dwFlags
-                             ) ) != NULL )
+                         ) ) != NULL )
     {
         if ( CertGetCRLContextProperty(
-                 pFindCrl,
-                 CERT_HASH_PROP_ID,
-                 aFindHash,
-                 &cbFindHash
-                 ) == TRUE )
+                    pFindCrl,
+                    CERT_HASH_PROP_ID,
+                    aFindHash,
+                    &cbFindHash
+                ) == TRUE )
         {
             if ( cbHash == cbFindHash )
             {
@@ -677,18 +689,18 @@ static PCCRL_CONTEXT FindCorrespondingCrl (
 static PCCTL_CONTEXT FindCorrespondingCtl (
     HCERTSTORE hExtCertStore,
     PCCTL_CONTEXT pCtlContext
-    )
+)
 {
     DWORD           cbHash = MAX_HASH_LEN;
     BYTE            aHash[MAX_HASH_LEN];
     CRYPT_HASH_BLOB HashBlob;
 
     if ( CertGetCTLContextProperty(
-             pCtlContext,
-             CERT_SHA1_HASH_PROP_ID,
-             aHash,
-             &cbHash
-             ) == FALSE )
+                pCtlContext,
+                CERT_SHA1_HASH_PROP_ID,
+                aHash,
+                &cbHash
+            ) == FALSE )
     {
         return( NULL );
     }
@@ -703,7 +715,7 @@ static PCCTL_CONTEXT FindCorrespondingCtl (
                 CTL_FIND_SHA1_HASH,
                 &HashBlob,
                 NULL
-                ) );
+            ) );
 }
 
 //
@@ -715,14 +727,14 @@ static BOOL WINAPI ExtStoreProvReadCert(
     PCCERT_CONTEXT pStoreCertContext,
     DWORD dwFlags,
     PCCERT_CONTEXT *ppProvCertContext
-        )
+)
 {
     PEXT_STORE pExtStore = (PEXT_STORE) hStoreProv;
     PCCERT_CONTEXT pProvCertContext;
 
     ASSERT(pExtStore && pExtStore->hExtCertStore);
     pProvCertContext = FindCorrespondingCertificate(
-        pExtStore->hExtCertStore, pStoreCertContext);
+                           pExtStore->hExtCertStore, pStoreCertContext);
 
     *ppProvCertContext = pProvCertContext;
     return NULL != pProvCertContext;
@@ -740,7 +752,7 @@ static BOOL WINAPI ExtStoreProvWriteCert(
     HCERTSTOREPROV hStoreProv,
     PCCERT_CONTEXT pCertContext,
     DWORD dwFlags
-        )
+)
 {
     PEXT_STORE pExtStore = (PEXT_STORE) hStoreProv;
     DWORD dwAddDisposition;
@@ -752,11 +764,11 @@ static BOOL WINAPI ExtStoreProvWriteCert(
         dwAddDisposition = 0;
 
     return CertAddCertificateContextToStore(
-        pExtStore->hExtCertStore,
-        pCertContext,
-        dwAddDisposition,
-        NULL                // ppStoreContext
-        );
+               pExtStore->hExtCertStore,
+               pCertContext,
+               dwAddDisposition,
+               NULL                // ppStoreContext
+           );
 }
 
 
@@ -769,14 +781,14 @@ static BOOL WINAPI ExtStoreProvDeleteCert(
     HCERTSTOREPROV hStoreProv,
     PCCERT_CONTEXT pCertContext,
     DWORD dwFlags
-        )
+)
 {
     PEXT_STORE pExtStore = (PEXT_STORE) hStoreProv;
     PCCERT_CONTEXT pExtContext;
 
     ASSERT(pExtStore && pExtStore->hExtCertStore);
     if ((pExtContext = FindCorrespondingCertificate(
-            pExtStore->hExtCertStore, pCertContext)) != 0)
+                           pExtStore->hExtCertStore, pCertContext)) != 0)
         return CertDeleteCertificateFromStore(pExtContext);
     else
         return FALSE;
@@ -800,25 +812,27 @@ static BOOL WINAPI ExtStoreProvSetCertProperty(
     DWORD dwPropId,
     DWORD dwFlags,
     const void *pvData
-        )
+)
 {
     PEXT_STORE pExtStore = (PEXT_STORE) hStoreProv;
     PCCERT_CONTEXT pExtContext;
 
     ASSERT(pExtStore && pExtStore->hExtCertStore);
     if ((pExtContext = FindCorrespondingCertificate(
-            pExtStore->hExtCertStore, pCertContext)) != 0) {
+                           pExtStore->hExtCertStore, pCertContext)) != 0)
+    {
         BOOL fResult;
 
         fResult = CertSetCertificateContextProperty(
-            pExtContext,
-            dwPropId,
-            dwFlags,
-            pvData
-            );
+                      pExtContext,
+                      dwPropId,
+                      dwFlags,
+                      pvData
+                  );
         CertFreeCertificateContext(pExtContext);
         return fResult;
-    } else
+    }
+    else
         return FALSE;
 }
 
@@ -831,14 +845,14 @@ static BOOL WINAPI ExtStoreProvReadCrl(
     PCCRL_CONTEXT pStoreCrlContext,
     DWORD dwFlags,
     PCCRL_CONTEXT *ppProvCrlContext
-        )
+)
 {
     PEXT_STORE pExtStore = (PEXT_STORE) hStoreProv;
     PCCRL_CONTEXT pProvCrlContext;
 
     ASSERT(pExtStore && pExtStore->hExtCertStore);
     pProvCrlContext = FindCorrespondingCrl(
-        pExtStore->hExtCertStore, pStoreCrlContext);
+                          pExtStore->hExtCertStore, pStoreCrlContext);
 
     *ppProvCrlContext = pProvCrlContext;
     return NULL != pProvCrlContext;
@@ -856,7 +870,7 @@ static BOOL WINAPI ExtStoreProvWriteCrl(
     HCERTSTOREPROV hStoreProv,
     PCCRL_CONTEXT pCrlContext,
     DWORD dwFlags
-        )
+)
 {
     PEXT_STORE pExtStore = (PEXT_STORE) hStoreProv;
     DWORD dwAddDisposition;
@@ -868,11 +882,11 @@ static BOOL WINAPI ExtStoreProvWriteCrl(
         dwAddDisposition = 0;
 
     return CertAddCRLContextToStore(
-        pExtStore->hExtCertStore,
-        pCrlContext,
-        dwAddDisposition,
-        NULL                // ppStoreContext
-        );
+               pExtStore->hExtCertStore,
+               pCrlContext,
+               dwAddDisposition,
+               NULL                // ppStoreContext
+           );
 }
 
 
@@ -885,14 +899,14 @@ static BOOL WINAPI ExtStoreProvDeleteCrl(
     HCERTSTOREPROV hStoreProv,
     PCCRL_CONTEXT pCrlContext,
     DWORD dwFlags
-        )
+)
 {
     PEXT_STORE pExtStore = (PEXT_STORE) hStoreProv;
     PCCRL_CONTEXT pExtContext;
 
     ASSERT(pExtStore && pExtStore->hExtCertStore);
     if ((pExtContext = FindCorrespondingCrl(
-            pExtStore->hExtCertStore, pCrlContext)) != 0)
+                           pExtStore->hExtCertStore, pCrlContext)) != 0)
         return CertDeleteCRLFromStore(pExtContext);
     else
         return FALSE;
@@ -916,26 +930,27 @@ static BOOL WINAPI ExtStoreProvSetCrlProperty(
     DWORD dwPropId,
     DWORD dwFlags,
     const void *pvData
-        )
+)
 {
     PEXT_STORE pExtStore = (PEXT_STORE) hStoreProv;
     PCCRL_CONTEXT pExtContext;
 
     ASSERT(pExtStore && pExtStore->hExtCertStore);
     if ((pExtContext = FindCorrespondingCrl(
-            pExtStore->hExtCertStore, pCrlContext)) != 0)
+                           pExtStore->hExtCertStore, pCrlContext)) != 0)
     {
         BOOL fResult;
 
         fResult = CertSetCRLContextProperty(
-            pExtContext,
-            dwPropId,
-            dwFlags,
-            pvData
-            );
+                      pExtContext,
+                      dwPropId,
+                      dwFlags,
+                      pvData
+                  );
         CertFreeCRLContext(pExtContext);
         return fResult;
-    } else
+    }
+    else
         return FALSE;
 }
 
@@ -948,14 +963,14 @@ static BOOL WINAPI ExtStoreProvReadCtl(
     PCCTL_CONTEXT pStoreCtlContext,
     DWORD dwFlags,
     PCCTL_CONTEXT *ppProvCtlContext
-        )
+)
 {
     PEXT_STORE pExtStore = (PEXT_STORE) hStoreProv;
     PCCTL_CONTEXT pProvCtlContext;
 
     ASSERT(pExtStore && pExtStore->hExtCertStore);
     pProvCtlContext = FindCorrespondingCtl(
-        pExtStore->hExtCertStore, pStoreCtlContext);
+                          pExtStore->hExtCertStore, pStoreCtlContext);
 
     *ppProvCtlContext = pProvCtlContext;
     return NULL != pProvCtlContext;
@@ -973,7 +988,7 @@ static BOOL WINAPI ExtStoreProvWriteCtl(
     HCERTSTOREPROV hStoreProv,
     PCCTL_CONTEXT pCtlContext,
     DWORD dwFlags
-        )
+)
 {
     PEXT_STORE pExtStore = (PEXT_STORE) hStoreProv;
     DWORD dwAddDisposition;
@@ -985,11 +1000,11 @@ static BOOL WINAPI ExtStoreProvWriteCtl(
         dwAddDisposition = 0;
 
     return CertAddCTLContextToStore(
-        pExtStore->hExtCertStore,
-        pCtlContext,
-        dwAddDisposition,
-        NULL                // ppStoreContext
-        );
+               pExtStore->hExtCertStore,
+               pCtlContext,
+               dwAddDisposition,
+               NULL                // ppStoreContext
+           );
 }
 
 
@@ -1002,14 +1017,14 @@ static BOOL WINAPI ExtStoreProvDeleteCtl(
     HCERTSTOREPROV hStoreProv,
     PCCTL_CONTEXT pCtlContext,
     DWORD dwFlags
-        )
+)
 {
     PEXT_STORE pExtStore = (PEXT_STORE) hStoreProv;
     PCCTL_CONTEXT pExtContext;
 
     ASSERT(pExtStore && pExtStore->hExtCertStore);
     if ((pExtContext = FindCorrespondingCtl(
-            pExtStore->hExtCertStore, pCtlContext)) != 0)
+                           pExtStore->hExtCertStore, pCtlContext)) != 0)
         return CertDeleteCTLFromStore(pExtContext);
     else
         return FALSE;
@@ -1033,26 +1048,27 @@ static BOOL WINAPI ExtStoreProvSetCtlProperty(
     DWORD dwPropId,
     DWORD dwFlags,
     const void *pvData
-        )
+)
 {
     PEXT_STORE pExtStore = (PEXT_STORE) hStoreProv;
     PCCTL_CONTEXT pExtContext;
 
     ASSERT(pExtStore && pExtStore->hExtCertStore);
     if ((pExtContext = FindCorrespondingCtl(
-            pExtStore->hExtCertStore, pCtlContext)) != 0)
+                           pExtStore->hExtCertStore, pCtlContext)) != 0)
     {
         BOOL fResult;
 
         fResult = CertSetCTLContextProperty(
-            pExtContext,
-            dwPropId,
-            dwFlags,
-            pvData
-            );
+                      pExtContext,
+                      dwPropId,
+                      dwFlags,
+                      pvData
+                  );
         CertFreeCTLContext(pExtContext);
         return fResult;
-    } else
+    }
+    else
         return FALSE;
 }
 
@@ -1062,16 +1078,16 @@ static BOOL WINAPI ExtStoreProvControl(
     DWORD dwFlags,
     DWORD dwCtrlType,
     void const *pvCtrlPara
-        )
+)
 {
     PEXT_STORE pExtStore = (PEXT_STORE) hStoreProv;
     ASSERT(pExtStore && pExtStore->hExtCertStore);
     return CertControlStore(
-        pExtStore->hExtCertStore,
-        dwFlags,
-        dwCtrlType,
-        pvCtrlPara
-        );
+               pExtStore->hExtCertStore,
+               dwFlags,
+               dwCtrlType,
+               pvCtrlPara
+           );
 }
 
 static BOOL WINAPI ExtStoreProvFindCert(
@@ -1081,45 +1097,47 @@ static BOOL WINAPI ExtStoreProvFindCert(
     DWORD dwFlags,
     void **ppvStoreProvFindInfo,
     PCCERT_CONTEXT *ppProvCertContext
-        )
+)
 {
     PEXT_STORE pExtStore = (PEXT_STORE) hStoreProv;
     PFIND_EXT_INFO pFindExtInfo = (PFIND_EXT_INFO) *ppvStoreProvFindInfo;
     PCCERT_CONTEXT pPrevExtContext;
     PCCERT_CONTEXT pProvCertContext;
 
-    if (pFindExtInfo) {
+    if (pFindExtInfo)
+    {
         ASSERT((CERT_STORE_CERTIFICATE_CONTEXT - 1) ==
-            pFindExtInfo->dwContextType);
+               pFindExtInfo->dwContextType);
         pPrevExtContext = (PCCERT_CONTEXT) pFindExtInfo->pvContext;
         pFindExtInfo->pvContext = NULL;
-    } else
+    }
+    else
         pPrevExtContext = NULL;
 
     ASSERT(pExtStore);
     ASSERT(pPrevCertContext == pPrevExtContext);
 
     if ((pProvCertContext = CertFindCertificateInStore(
-            pExtStore->hExtCertStore,
-            pFindInfo->dwMsgAndCertEncodingType,
-            pFindInfo->dwFindFlags,
-            pFindInfo->dwFindType,
-            pFindInfo->pvFindPara,
-            pPrevExtContext
-            )) != 0)
+                                pExtStore->hExtCertStore,
+                                pFindInfo->dwMsgAndCertEncodingType,
+                                pFindInfo->dwFindFlags,
+                                pFindInfo->dwFindType,
+                                pFindInfo->pvFindPara,
+                                pPrevExtContext
+                            )) != 0)
     {
         if (pFindExtInfo)
             // Re-use existing Find Info
             pFindExtInfo->pvContext = (void *) CertDuplicateCertificateContext(
-                pProvCertContext);
+                                          pProvCertContext);
         else
         {
             if ((pFindExtInfo = CreateExtInfo(
-                    CERT_STORE_CERTIFICATE_CONTEXT - 1,
-                    (void *) pProvCertContext
-                    )) != 0)
+                                    CERT_STORE_CERTIFICATE_CONTEXT - 1,
+                                    (void *) pProvCertContext
+                                )) != 0)
                 pProvCertContext = CertDuplicateCertificateContext(
-                    pProvCertContext);
+                                       pProvCertContext);
             else
             {
                 CertFreeCertificateContext(pProvCertContext);
@@ -1134,7 +1152,7 @@ static BOOL WINAPI ExtStoreProvFindCert(
             pPrevCertContext,
             pFindExtInfo,
             0                       // dwFlags
-            );
+        );
         pFindExtInfo = NULL;
     }
 
@@ -1150,14 +1168,15 @@ static BOOL WINAPI ExtStoreProvFreeFindCert(
     PCCERT_CONTEXT pCertContext,
     void *pvStoreProvFindInfo,
     DWORD dwFlags
-        )
+)
 {
     PFIND_EXT_INFO pFindExtInfo = (PFIND_EXT_INFO) pvStoreProvFindInfo;
 
     ASSERT(pFindExtInfo);
-    if (pFindExtInfo) {
+    if (pFindExtInfo)
+    {
         ASSERT((CERT_STORE_CERTIFICATE_CONTEXT - 1) ==
-            pFindExtInfo->dwContextType);
+               pFindExtInfo->dwContextType);
         FreeExtInfo(pFindExtInfo);
     }
     return TRUE;
@@ -1174,7 +1193,7 @@ static BOOL WINAPI ExtStoreProvGetCertProperty(
     DWORD dwFlags,
     void *pvData,
     DWORD *pcbData
-        )
+)
 {
     *pcbData = 0;
     SetLastError((DWORD) CRYPT_E_NOT_FOUND);
@@ -1195,58 +1214,59 @@ static PCCRL_CONTEXT WINAPI FindCrlInStore(
     DWORD dwFindType,
     const void *pvFindPara,
     PCCRL_CONTEXT pPrevCrlContext
-    )
+)
 {
     DWORD dwFlags = 0;
 
-    switch (dwFindType) {
-        case CRL_FIND_ANY:
-            return CertGetCRLFromStore(
-                hCertStore,
-                NULL,               // pIssuerContext,
-                pPrevCrlContext,
-                &dwFlags
-                );
-            break;
+    switch (dwFindType)
+    {
+    case CRL_FIND_ANY:
+        return CertGetCRLFromStore(
+                   hCertStore,
+                   NULL,               // pIssuerContext,
+                   pPrevCrlContext,
+                   &dwFlags
+               );
+        break;
 
-        case CRL_FIND_ISSUED_BY:
-            {
-                PCCERT_CONTEXT pIssuer = (PCCERT_CONTEXT) pvFindPara;
+    case CRL_FIND_ISSUED_BY:
+    {
+        PCCERT_CONTEXT pIssuer = (PCCERT_CONTEXT) pvFindPara;
 
-                return CertGetCRLFromStore(
-                    hCertStore,
-                    pIssuer,
-                    pPrevCrlContext,
-                    &dwFlags
-                    );
-            }
-            break;
+        return CertGetCRLFromStore(
+                   hCertStore,
+                   pIssuer,
+                   pPrevCrlContext,
+                   &dwFlags
+               );
+    }
+    break;
 
-        case CRL_FIND_EXISTING:
-            {
-                PCCRL_CONTEXT pCrl = pPrevCrlContext;
+    case CRL_FIND_EXISTING:
+    {
+        PCCRL_CONTEXT pCrl = pPrevCrlContext;
 
-                while ((pCrl = CertGetCRLFromStore(
-                        hCertStore,
-                        NULL,               // pIssuerContext,
-                        pCrl,
-                        &dwFlags)) != 0)
-                {
-                    PCCRL_CONTEXT pNew = (PCCRL_CONTEXT) pvFindPara;
-                    if (pNew->dwCertEncodingType == pCrl->dwCertEncodingType &&
-                            CertCompareCertificateName(
-                                pNew->dwCertEncodingType,
-                                &pCrl->pCrlInfo->Issuer,
-                                &pNew->pCrlInfo->Issuer))
-                        return pCrl;
-                }
-                return NULL;
-            }
-            break;
+        while ((pCrl = CertGetCRLFromStore(
+                           hCertStore,
+                           NULL,               // pIssuerContext,
+                           pCrl,
+                           &dwFlags)) != 0)
+        {
+            PCCRL_CONTEXT pNew = (PCCRL_CONTEXT) pvFindPara;
+            if (pNew->dwCertEncodingType == pCrl->dwCertEncodingType &&
+                    CertCompareCertificateName(
+                        pNew->dwCertEncodingType,
+                        &pCrl->pCrlInfo->Issuer,
+                        &pNew->pCrlInfo->Issuer))
+                return pCrl;
+        }
+        return NULL;
+    }
+    break;
 
-        default:
-            SetLastError((DWORD) ERROR_NOT_SUPPORTED);
-            return NULL;
+    default:
+        SetLastError((DWORD) ERROR_NOT_SUPPORTED);
+        return NULL;
     }
 
     UNREFERENCED_PARAMETER(dwFindFlags);
@@ -1260,45 +1280,47 @@ static BOOL WINAPI ExtStoreProvFindCrl(
     DWORD dwFlags,
     void **ppvStoreProvFindInfo,
     PCCRL_CONTEXT *ppProvCrlContext
-        )
+)
 {
     PEXT_STORE pExtStore = (PEXT_STORE) hStoreProv;
     PFIND_EXT_INFO pFindExtInfo = (PFIND_EXT_INFO) *ppvStoreProvFindInfo;
     PCCRL_CONTEXT pPrevExtContext;
     PCCRL_CONTEXT pProvCrlContext;
 
-    if (pFindExtInfo) {
+    if (pFindExtInfo)
+    {
         ASSERT((CERT_STORE_CRL_CONTEXT - 1) ==
-            pFindExtInfo->dwContextType);
+               pFindExtInfo->dwContextType);
         pPrevExtContext = (PCCRL_CONTEXT) pFindExtInfo->pvContext;
         pFindExtInfo->pvContext = NULL;
-    } else
+    }
+    else
         pPrevExtContext = NULL;
 
     ASSERT(pExtStore);
     ASSERT(pPrevCrlContext == pPrevExtContext);
 
     if ((pProvCrlContext = FindCrlInStore(
-            pExtStore->hExtCertStore,
-            pFindInfo->dwMsgAndCertEncodingType,
-            pFindInfo->dwFindFlags,
-            pFindInfo->dwFindType,
-            pFindInfo->pvFindPara,
-            pPrevExtContext
-            )) != 0)
+                               pExtStore->hExtCertStore,
+                               pFindInfo->dwMsgAndCertEncodingType,
+                               pFindInfo->dwFindFlags,
+                               pFindInfo->dwFindType,
+                               pFindInfo->pvFindPara,
+                               pPrevExtContext
+                           )) != 0)
     {
         if (pFindExtInfo)
             // Re-use existing Find Info
             pFindExtInfo->pvContext = (void *) CertDuplicateCRLContext(
-                pProvCrlContext);
+                                          pProvCrlContext);
         else
         {
             if ((pFindExtInfo = CreateExtInfo(
-                    CERT_STORE_CRL_CONTEXT - 1,
-                    (void *) pProvCrlContext
-                    )) != 0)
+                                    CERT_STORE_CRL_CONTEXT - 1,
+                                    (void *) pProvCrlContext
+                                )) != 0)
                 pProvCrlContext = CertDuplicateCRLContext(
-                    pProvCrlContext);
+                                      pProvCrlContext);
             else
             {
                 CertFreeCRLContext(pProvCrlContext);
@@ -1313,7 +1335,7 @@ static BOOL WINAPI ExtStoreProvFindCrl(
             pPrevCrlContext,
             pFindExtInfo,
             0                       // dwFlags
-            );
+        );
         pFindExtInfo = NULL;
     }
 
@@ -1329,7 +1351,7 @@ static BOOL WINAPI ExtStoreProvFreeFindCrl(
     PCCRL_CONTEXT pCrlContext,
     void *pvStoreProvFindInfo,
     DWORD dwFlags
-        )
+)
 {
     PFIND_EXT_INFO pFindExtInfo = (PFIND_EXT_INFO) pvStoreProvFindInfo;
 
@@ -1338,7 +1360,7 @@ static BOOL WINAPI ExtStoreProvFreeFindCrl(
     if (pFindExtInfo)
     {
         ASSERT((CERT_STORE_CRL_CONTEXT - 1) ==
-            pFindExtInfo->dwContextType);
+               pFindExtInfo->dwContextType);
         FreeExtInfo(pFindExtInfo);
     }
     return TRUE;
@@ -1355,7 +1377,7 @@ static BOOL WINAPI ExtStoreProvGetCrlProperty(
     DWORD dwFlags,
     void *pvData,
     DWORD *pcbData
-        )
+)
 {
     *pcbData = 0;
     SetLastError((DWORD) CRYPT_E_NOT_FOUND);
@@ -1376,7 +1398,7 @@ static BOOL WINAPI ExtStoreProvFindCtl(
     DWORD dwFlags,
     void **ppvStoreProvFindInfo,
     PCCTL_CONTEXT *ppProvCtlContext
-        )
+)
 {
     PEXT_STORE pExtStore = (PEXT_STORE) hStoreProv;
     PFIND_EXT_INFO pFindExtInfo = (PFIND_EXT_INFO) *ppvStoreProvFindInfo;
@@ -1386,33 +1408,35 @@ static BOOL WINAPI ExtStoreProvFindCtl(
     if (pFindExtInfo)
     {
         ASSERT((CERT_STORE_CTL_CONTEXT - 1) ==
-            pFindExtInfo->dwContextType);
+               pFindExtInfo->dwContextType);
         pPrevExtContext = (PCCTL_CONTEXT) pFindExtInfo->pvContext;
         pFindExtInfo->pvContext = NULL;
-    } else
+    }
+    else
         pPrevExtContext = NULL;
 
     ASSERT(pExtStore);
     ASSERT(pPrevCtlContext == pPrevExtContext);
 
     if ((pProvCtlContext = CertFindCTLInStore(
-            pExtStore->hExtCertStore,
-            pFindInfo->dwMsgAndCertEncodingType,
-            pFindInfo->dwFindFlags,
-            pFindInfo->dwFindType,
-            pFindInfo->pvFindPara,
-            pPrevExtContext
-            )) != 0)
+                               pExtStore->hExtCertStore,
+                               pFindInfo->dwMsgAndCertEncodingType,
+                               pFindInfo->dwFindFlags,
+                               pFindInfo->dwFindType,
+                               pFindInfo->pvFindPara,
+                               pPrevExtContext
+                           )) != 0)
     {
         if (pFindExtInfo)
             // Re-use existing Find Info
             pFindExtInfo->pvContext = (void *) CertDuplicateCTLContext(
-                pProvCtlContext);
-        else {
+                                          pProvCtlContext);
+        else
+        {
             if ((pFindExtInfo = CreateExtInfo(
-                    CERT_STORE_CTL_CONTEXT - 1,
-                    (void *) pProvCtlContext
-                    )) != 0)
+                                    CERT_STORE_CTL_CONTEXT - 1,
+                                    (void *) pProvCtlContext
+                                )) != 0)
                 pProvCtlContext = CertDuplicateCTLContext(pProvCtlContext);
             else
             {
@@ -1420,13 +1444,15 @@ static BOOL WINAPI ExtStoreProvFindCtl(
                 pProvCtlContext = NULL;
             }
         }
-    } else if (pFindExtInfo) {
+    }
+    else if (pFindExtInfo)
+    {
         ExtStoreProvFreeFindCtl(
             hStoreProv,
             pPrevCtlContext,
             pFindExtInfo,
             0                       // dwFlags
-            );
+        );
         pFindExtInfo = NULL;
     }
 
@@ -1442,7 +1468,7 @@ static BOOL WINAPI ExtStoreProvFreeFindCtl(
     PCCTL_CONTEXT pCtlContext,
     void *pvStoreProvFindInfo,
     DWORD dwFlags
-    )
+)
 {
     PFIND_EXT_INFO pFindExtInfo = (PFIND_EXT_INFO) pvStoreProvFindInfo;
 
@@ -1450,7 +1476,7 @@ static BOOL WINAPI ExtStoreProvFreeFindCtl(
     if (pFindExtInfo)
     {
         ASSERT((CERT_STORE_CTL_CONTEXT - 1) ==
-            pFindExtInfo->dwContextType);
+               pFindExtInfo->dwContextType);
         FreeExtInfo(pFindExtInfo);
     }
     return TRUE;
@@ -1467,7 +1493,7 @@ static BOOL WINAPI ExtStoreProvGetCtlProperty(
     DWORD dwFlags,
     void *pvData,
     DWORD *pcbData
-    )
+)
 {
     *pcbData = 0;
     SetLastError((DWORD) CRYPT_E_NOT_FOUND);

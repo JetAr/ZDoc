@@ -1,4 +1,4 @@
-/*=====================================================================
+﻿/*=====================================================================
 File:      OnlinePublishing.cpp
 
 THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
@@ -10,10 +10,10 @@ Copyright (C) Microsoft Corporation.  All rights reserved.
 =====================================================================*/
 
 //
-// This sample demonstrates online publishing. It takes an optional 
-// licensing server URL as input.  It will use Service Discovery to 
-// find the server URL if it is not provided.  The sample requires that 
-// a UserID be provided as input.  See the comments at the beginning of 
+// This sample demonstrates online publishing. It takes an optional
+// licensing server URL as input.  It will use Service Discovery to
+// find the server URL if it is not provided.  The sample requires that
+// a UserID be provided as input.  See the comments at the beginning of
 // wmain() for a more detailed description.
 //
 
@@ -49,27 +49,27 @@ typedef struct Drm_Context
 //
 // Print the correct usage of this application
 //
-void 
+void
 PrintUsage()
 {
     wprintf( L"Usage:\n" );
     wprintf( L"\n  OnlinePublishing -U UserID [-L LicensingSvr]\n" );
     wprintf( L"    -U: specifies the UserID.\n" );
     wprintf( L"        example: user@yourdomain.com\n" );
-	wprintf( L"    -L: specifies the Licensing Server. (optional)\n" );
-	wprintf( L"        example: http://localhost/_wmcs/licensing\n" );
+    wprintf( L"    -L: specifies the Licensing Server. (optional)\n" );
+    wprintf( L"        example: http://localhost/_wmcs/licensing\n" );
 }
 
 //
 // Parse the values passed in through the command line
 //
-HRESULT 
-ParseCommandLine( 
-                 int argc, 
-                 __in_ecount( argc )WCHAR **argv, 
-                 __deref_out_opt PWCHAR *pwszUserID,
-                 __deref_out PWCHAR *pwszLicensingSvr
-                 )
+HRESULT
+ParseCommandLine(
+    int argc,
+    __in_ecount( argc )WCHAR **argv,
+    __deref_out_opt PWCHAR *pwszUserID,
+    __deref_out PWCHAR *pwszLicensingSvr
+)
 {
     HRESULT hr                = S_OK;
     size_t  uiUserIDLength    = 0;
@@ -95,8 +95,8 @@ ParseCommandLine(
             hr = E_INVALIDARG;
             break;
         }
-        else if ( ( '-' == argv[ i + 1 ][ 0 ] ) || 
-            ( '/' == argv[ i + 1 ][ 0 ] ) )
+        else if ( ( '-' == argv[ i + 1 ][ 0 ] ) ||
+                  ( '/' == argv[ i + 1 ][ 0 ] ) )
         {
             hr = E_INVALIDARG;
             break;
@@ -104,10 +104,10 @@ ParseCommandLine(
 
         switch( toupper( argv[ i ][ 1 ] ) )
         {
-            //
-            // User ID
-            //
-        case 'U': 
+        //
+        // User ID
+        //
+        case 'U':
             if ( wcsstr( argv[ i + 1 ], ( wchar_t* )L"@\0" ) == NULL )
             {
                 //
@@ -119,10 +119,10 @@ ParseCommandLine(
             //
             // Retrieve the length of the user ID
             //
-            hr = StringCchLengthW( argv[ i + 1 ], 
-                STRSAFE_MAX_CCH, 
-                &uiUserIDLength 
-                );
+            hr = StringCchLengthW( argv[ i + 1 ],
+                                   STRSAFE_MAX_CCH,
+                                   &uiUserIDLength
+                                 );
             if ( FAILED( hr ) )
             {
                 wprintf( L"StringCchLengthW failed.  hr = 0x%x\n", hr );
@@ -132,7 +132,7 @@ ParseCommandLine(
             // Allocate memory for the user ID
             //
             *pwszUserID = new WCHAR[ uiUserIDLength + 1 ];
-            if ( NULL == *pwszUserID ) 
+            if ( NULL == *pwszUserID )
             {
                 wprintf( L"Failed to allocate memory for pwszUserID.\n" );
                 hr = E_OUTOFMEMORY;
@@ -141,20 +141,20 @@ ParseCommandLine(
             //
             // Copy the URL into the pwszUserID buffer
             //
-            hr = StringCchCopyW( ( wchar_t* )*pwszUserID, 
-                uiUserIDLength + 1 , 
-                argv[ i + 1 ] 
-                );
-                if ( FAILED( hr ) )
-                {
-                    wprintf( L"StringCchCopyW failed.  hr = 0x%x\n", hr );
-                    break;
-                }
-                i++;
+            hr = StringCchCopyW( ( wchar_t* )*pwszUserID,
+                                 uiUserIDLength + 1,
+                                 argv[ i + 1 ]
+                               );
+            if ( FAILED( hr ) )
+            {
+                wprintf( L"StringCchCopyW failed.  hr = 0x%x\n", hr );
                 break;
+            }
+            i++;
+            break;
         case 'L':
-            if ( ( _wcsnicmp( argv[ i + 1 ], L"http://", 7 ) != 0 ) && 
-                ( _wcsnicmp( argv[ i + 1 ], L"https://", 8 ) != 0 ) )
+            if ( ( _wcsnicmp( argv[ i + 1 ], L"http://", 7 ) != 0 ) &&
+                    ( _wcsnicmp( argv[ i + 1 ], L"https://", 8 ) != 0 ) )
             {
                 wprintf( L"Invalid licensing URL provided.\n" );
                 hr = E_INVALIDARG;
@@ -163,10 +163,10 @@ ParseCommandLine(
             //
             // Retrieve the length of the licensing server URL
             //
-            hr = StringCchLengthW( argv[ i + 1 ], 
-                STRSAFE_MAX_CCH, 
-                &uiLicSvrUrlLength 
-                );
+            hr = StringCchLengthW( argv[ i + 1 ],
+                                   STRSAFE_MAX_CCH,
+                                   &uiLicSvrUrlLength
+                                 );
             if ( FAILED( hr ) )
             {
                 wprintf( L"StringCchLengthW failed.  hr = 0x%x\n", hr );
@@ -176,27 +176,27 @@ ParseCommandLine(
             // Allocate memory for the URL
             //
             *pwszLicensingSvr = new WCHAR[ uiLicSvrUrlLength + 1 ];
-            if( NULL == *pwszLicensingSvr ) 
+            if( NULL == *pwszLicensingSvr )
             {
                 wprintf( L"Failed to allocate memory "\
-                    L"for pwszLicensingSvr.\n" );
+                         L"for pwszLicensingSvr.\n" );
                 hr = E_OUTOFMEMORY;
                 break;
             }
             //
             // Copy the URL into the pwszLicensingSvr buffer
             //
-            hr = StringCchCopyW( ( wchar_t* )*pwszLicensingSvr, 
-                uiLicSvrUrlLength + 1 , 
-                argv[ i + 1 ] 
-                );
-                if ( FAILED( hr ) )
-                {
-                    wprintf( L"StringCchCopyW failed.  hr = 0x%x\n", hr );
-                    break;
-                }
-                i++;
+            hr = StringCchCopyW( ( wchar_t* )*pwszLicensingSvr,
+                                 uiLicSvrUrlLength + 1,
+                                 argv[ i + 1 ]
+                               );
+            if ( FAILED( hr ) )
+            {
+                wprintf( L"StringCchCopyW failed.  hr = 0x%x\n", hr );
                 break;
+            }
+            i++;
+            break;
         default:
             hr = E_INVALIDARG;
             break;
@@ -213,13 +213,13 @@ ParseCommandLine(
 //
 // Callback function for asynchronous ADRMS client functions
 //
-HRESULT __stdcall 
-StatusCallback( 
-               DRM_STATUS_MSG msg, 
-               HRESULT hr, 
-               void *pvParam, 
-               void *pvContext 
-               )
+HRESULT __stdcall
+StatusCallback(
+    DRM_STATUS_MSG msg,
+    HRESULT hr,
+    void *pvParam,
+    void *pvContext
+)
 {
     size_t uiSignedILLength = 0;
     PDRM_CONTEXT pContext = ( PDRM_CONTEXT )pvContext;
@@ -247,9 +247,9 @@ StatusCallback(
     //
     switch( msg )
     {
-	case DRM_MSG_SIGN_ISSUANCE_LICENSE:
-		wprintf( L"\nCallback status msg = DRM_MSG_SIGN_ISSUANCE_LICENSE " );
-		break;
+    case DRM_MSG_SIGN_ISSUANCE_LICENSE:
+        wprintf( L"\nCallback status msg = DRM_MSG_SIGN_ISSUANCE_LICENSE " );
+        break;
     default:
         wprintf( L"\nDefault callback status msg = 0x%x ", msg );
         break;
@@ -279,10 +279,10 @@ StatusCallback(
                 //
                 // Retrieve the length of the signed issuance license
                 //
-                hr = StringCchLengthW( ( PWSTR )pvParam, 
-                                       STRSAFE_MAX_CCH, 
+                hr = StringCchLengthW( ( PWSTR )pvParam,
+                                       STRSAFE_MAX_CCH,
                                        &uiSignedILLength
-                                       );
+                                     );
                 if ( FAILED( hr ) )
                 {
                     wprintf( L"StringCchLengthW failed.  hr = 0x%x\n", hr );
@@ -292,21 +292,21 @@ StatusCallback(
                 // Allocate memory for the signed issuance license
                 //
                 pContext->wszData = new WCHAR[ uiSignedILLength + 1 ];
-                if( NULL == pContext->wszData ) 
+                if( NULL == pContext->wszData )
                 {
                     wprintf( L"Failed to allocate memory "\
-                        L"for the signed issuance license.\n" );
+                             L"for the signed issuance license.\n" );
                     hr = E_OUTOFMEMORY;
                     break;
                 }
                 //
-                // Copy the signed issuance license into the 
+                // Copy the signed issuance license into the
                 // pContext->wszData buffer
                 //
-                hr = StringCchCopyW( ( wchar_t* )pContext->wszData, 
-                    uiSignedILLength + 1 , 
-                    ( PWSTR )pvParam 
-                    );
+                hr = StringCchCopyW( ( wchar_t* )pContext->wszData,
+                                     uiSignedILLength + 1,
+                                     ( PWSTR )pvParam
+                                   );
                 if ( FAILED( hr ) )
                 {
                     wprintf( L"StringCchCopyW failed.  hr = 0x%x\n", hr );
@@ -314,10 +314,10 @@ StatusCallback(
                 }
             }
         }
-		if ( pContext->hEvent )
-		{
-			SetEvent( ( HANDLE )pContext->hEvent );
-		}
+        if ( pContext->hEvent )
+        {
+            SetEvent( ( HANDLE )pContext->hEvent );
+        }
         break;
     case E_DRM_ALREADY_IN_PROGRESS:
         wprintf( L"Callback hr = E_DRM_ALREADY_IN_PROGRESS\n" );
@@ -380,17 +380,17 @@ StatusCallback(
 //        pair to the issuance license.
 //    3.  Set the metadata in the issuance license
 //    4.  Create an event for the callback function.
-//    5.  If the licensing URL was not passed in via the command line, 
+//    5.  If the licensing URL was not passed in via the command line,
 //        find the licensing URL through service discovery
 //    6.  Sign the issuance license online
 //    7.  Wait for the callback to return
 //    8.  Clean up and free memory
 //
-int __cdecl 
-wmain( 
-      int argc, 
-      __in_ecount( argc )WCHAR **argv 
-      )
+int __cdecl
+wmain(
+    int argc,
+    __in_ecount( argc )WCHAR **argv
+)
 {
     HRESULT           hr               = E_FAIL;
     DRMHSESSION       hClient          = NULL;
@@ -421,12 +421,12 @@ wmain(
     //
     // 1. Create a client session
     //
-    hr = DRMCreateClientSession( &StatusCallback, 
-        0, 
-        DRM_DEFAULTGROUPIDTYPE_WINDOWSAUTH, 
-        wszUserId, 
-        &hClient 
-        );
+    hr = DRMCreateClientSession( &StatusCallback,
+                                 0,
+                                 DRM_DEFAULTGROUPIDTYPE_WINDOWSAUTH,
+                                 wszUserId,
+                                 &hClient
+                               );
     if ( FAILED( hr ) )
     {
         wprintf( L"\nDRMCreateClientSession failed. hr = 0x%x\n", hr );
@@ -441,19 +441,19 @@ wmain(
     GetSystemTime( &stTimeUntil );
     stTimeUntil.wYear++;
 
-    // 
+    //
     // 2. Create an issuance license, user, and right.  Add the right/user
     //    pair to the issuance license.
     //
     hr = DRMCreateIssuanceLicense( &stTimeFrom,
-        &stTimeUntil,
-        NULL,
-        NULL,
-        NULL,
-        NULL,
-        NULL,
-        &hIssuanceLicense 
-        );
+                                   &stTimeUntil,
+                                   NULL,
+                                   NULL,
+                                   NULL,
+                                   NULL,
+                                   NULL,
+                                   &hIssuanceLicense
+                                 );
     if ( FAILED( hr ) )
     {
         wprintf( L"\nDRMCreateIssuanceLicense failed. hr = 0x%x\n", hr );
@@ -467,7 +467,7 @@ wmain(
         goto e_Exit;
     }
 
-    hr = DRMCreateRight( L"EDIT", &stTimeFrom, &stTimeUntil, 
+    hr = DRMCreateRight( L"EDIT", &stTimeFrom, &stTimeUntil,
                          0, NULL, NULL, &hRight );
     if ( FAILED( hr ) )
     {
@@ -511,14 +511,14 @@ wmain(
     //
     // 3.  Set the metadata in the issuance license
     //
-    hr = DRMSetMetaData( hIssuanceLicense, 
-                         wszGUID, 
-                         L"MS-GUID", 
-                         NULL, 
-                         NULL, 
-                         NULL, 
-                         NULL 
-                         );
+    hr = DRMSetMetaData( hIssuanceLicense,
+                         wszGUID,
+                         L"MS-GUID",
+                         NULL,
+                         NULL,
+                         NULL,
+                         NULL
+                       );
     if ( FAILED( hr ) )
     {
         wprintf( L"DRMSetMetaData failed. hr = 0x%x\n", hr );
@@ -527,10 +527,10 @@ wmain(
 
     //
     // 4. Create an event for the callback function.  The StatusCallback
-    // function registered in DRMCreateClientSession. This event will be 
-    // passed as a void pointer to DRMAcquireLicense.  DRMAcquireLicense 
-    // simply passes back this pointer to the StatusCallback callback 
-    // function which knows that it is an event and will thus signal it 
+    // function registered in DRMCreateClientSession. This event will be
+    // passed as a void pointer to DRMAcquireLicense.  DRMAcquireLicense
+    // simply passes back this pointer to the StatusCallback callback
+    // function which knows that it is an event and will thus signal it
     // when completed.
     //
     if ( NULL == ( context.hEvent = CreateEvent( NULL, FALSE, FALSE, NULL ) ) )
@@ -540,23 +540,23 @@ wmain(
     }
 
     //
-    // 5. If the licensing URL was not passed in via the command line, 
+    // 5. If the licensing URL was not passed in via the command line,
     //    find the licensing URL through service discovery
     //
     if ( NULL == wszLicensingSvr )
     {
         //       The first call is to get -
-        //       (a) whether there is a service location and 
-        //       (b) if so, the size needed for a buffer to 
+        //       (a) whether there is a service location and
+        //       (b) if so, the size needed for a buffer to
         //           hold the URL for the service.
         //
-        hr = DRMGetServiceLocation( hClient, 
-                                    DRM_SERVICE_TYPE_PUBLISHING, 
+        hr = DRMGetServiceLocation( hClient,
+                                    DRM_SERVICE_TYPE_PUBLISHING,
                                     DRM_SERVICE_LOCATION_ENTERPRISE,
                                     NULL,
                                     &uiStrLen,
                                     NULL
-                                    );
+                                  );
         if ( FAILED( hr ) )
         {
             wprintf( L"DRMGetServiceLocation failed. hr = 0x%x\n", hr );
@@ -577,7 +577,7 @@ wmain(
                                     NULL,
                                     &uiStrLen,
                                     wszLicensingSvr
-                                    );
+                                  );
         if ( FAILED( hr ) )
         {
             wprintf( L"DRMGetServiceLocation failed. hr = 0x%x\n", hr );
@@ -590,7 +590,7 @@ wmain(
     //
     // 6. Sign the issuance license online
     //
-    hr = DRMGetSignedIssuanceLicense( NULL, 
+    hr = DRMGetSignedIssuanceLicense( NULL,
                                       hIssuanceLicense,
                                       DRM_SIGN_ONLINE | DRM_AUTO_GENERATE_KEY,
                                       NULL,
@@ -600,7 +600,7 @@ wmain(
                                       &StatusCallback,
                                       wszLicensingSvr,
                                       ( void* )&context
-                                      );
+                                    );
     if ( FAILED( hr ) )
     {
         wprintf( L"DRMGetSignedIssuanceLicense failed. hr = 0x%x\n", hr );
@@ -624,7 +624,7 @@ wmain(
         //
         hr = context.hr;
         wprintf( L"\nThe callback function returned failure "\
-            L"code. hr = 0x%x\n", context.hr );
+                 L"code. hr = 0x%x\n", context.hr );
         goto e_Exit;
     }
 

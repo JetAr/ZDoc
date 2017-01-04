@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -78,7 +78,7 @@ void main(int argc, char **argv)
     };
 
     if ( (argc > 1) &&
-         ((*argv[1] == '-') || (*argv[1] == '/')) )
+            ((*argv[1] == '-') || (*argv[1] == '/')) )
     {
         if ( _stricmp( "install", argv[1]+1 ) == 0 )
         {
@@ -103,16 +103,16 @@ void main(int argc, char **argv)
     // if it doesn't match any of the above parameters
     // the service control manager may be starting the service
     // so we must call StartServiceCtrlDispatcher
-    dispatch:
-        // this is just to be friendly
-        printf_s( "%s -install          to install the service\n", SZAPPNAME );
-        printf_s( "%s -remove           to remove the service\n", SZAPPNAME );
-        printf_s( "%s -debug <params>   to run as a console app for debugging\n", SZAPPNAME );
-        printf_s( "\nStartServiceCtrlDispatcher being called.\n" );
-        printf_s( "This may take several seconds.  Please wait.\n" );
+dispatch:
+    // this is just to be friendly
+    printf_s( "%s -install          to install the service\n", SZAPPNAME );
+    printf_s( "%s -remove           to remove the service\n", SZAPPNAME );
+    printf_s( "%s -debug <params>   to run as a console app for debugging\n", SZAPPNAME );
+    printf_s( "\nStartServiceCtrlDispatcher being called.\n" );
+    printf_s( "This may take several seconds.  Please wait.\n" );
 
-        if (!StartServiceCtrlDispatcher(dispatchTable))
-            AddToMessageLog(TEXT("StartServiceCtrlDispatcher failed."));
+    if (!StartServiceCtrlDispatcher(dispatchTable))
+        AddToMessageLog(TEXT("StartServiceCtrlDispatcher failed."));
 }
 
 
@@ -153,9 +153,9 @@ void WINAPI service_main(DWORD dwArgc, LPTSTR *lpszArgv)
     // report the status to the service control manager.
     //
     if (!ReportStatusToSCMgr(
-        SERVICE_START_PENDING, // service state
-        NO_ERROR,              // exit code
-        3000))                 // wait hint
+                SERVICE_START_PENDING, // service state
+                NO_ERROR,              // exit code
+                3000))                 // wait hint
         goto cleanup;
 
 
@@ -167,9 +167,9 @@ cleanup:
     //
     if (sshStatusHandle)
         (VOID)ReportStatusToSCMgr(
-                            SERVICE_STOPPED,
-                            dwErr,
-                            0);
+            SERVICE_STOPPED,
+            dwErr,
+            0);
 
     return;
 }
@@ -196,22 +196,22 @@ VOID WINAPI service_ctrl(DWORD dwCtrlCode)
     //
     switch(dwCtrlCode)
     {
-        // Stop the service.
-        //
-        case SERVICE_CONTROL_STOP:
-            ReportStatusToSCMgr(SERVICE_STOP_PENDING, NO_ERROR, 0);
-            ServiceStop();
-            return;
+    // Stop the service.
+    //
+    case SERVICE_CONTROL_STOP:
+        ReportStatusToSCMgr(SERVICE_STOP_PENDING, NO_ERROR, 0);
+        ServiceStop();
+        return;
 
-        // Update the service status.
-        //
-        case SERVICE_CONTROL_INTERROGATE:
-            break;
+    // Update the service status.
+    //
+    case SERVICE_CONTROL_INTERROGATE:
+        break;
 
-        // invalid control code
-        //
-        default:
-            break;
+    // invalid control code
+    //
+    default:
+        break;
 
     }
 
@@ -258,7 +258,7 @@ BOOL ReportStatusToSCMgr(DWORD dwCurrentState,
         ssStatus.dwWaitHint = dwWaitHint;
 
         if ( ( dwCurrentState == SERVICE_RUNNING ) ||
-             ( dwCurrentState == SERVICE_STOPPED ) )
+                ( dwCurrentState == SERVICE_STOPPED ) )
             ssStatus.dwCheckPoint = 0;
         else
             ssStatus.dwCheckPoint = dwCheckPoint++;
@@ -266,7 +266,8 @@ BOOL ReportStatusToSCMgr(DWORD dwCurrentState,
 
         // Report the status of the service to the service control manager.
         //
-        if (!(fResult = SetServiceStatus( sshStatusHandle, &ssStatus))) {
+        if (!(fResult = SetServiceStatus( sshStatusHandle, &ssStatus)))
+        {
             AddToMessageLog(TEXT("SetServiceStatus"));
         }
     }
@@ -307,16 +308,17 @@ VOID AddToMessageLog(LPTSTR lpszMsg)
         lpszStrings[0] = szMsg;
         lpszStrings[1] = lpszMsg;
 
-        if (hEventSource != NULL) {
+        if (hEventSource != NULL)
+        {
             ReportEvent(hEventSource, // handle of event source
-                EVENTLOG_ERROR_TYPE,  // event type
-                0,                    // event category
-                0,                    // event ID
-                NULL,                 // current user's SID
-                2,                    // strings in lpszStrings
-                0,                    // no bytes of raw data
-                lpszStrings,          // array of error strings
-                NULL);                // no raw data
+                        EVENTLOG_ERROR_TYPE,  // event type
+                        0,                    // event category
+                        0,                    // event ID
+                        NULL,                 // current user's SID
+                        2,                    // strings in lpszStrings
+                        0,                    // no bytes of raw data
+                        lpszStrings,          // array of error strings
+                        NULL);                // no raw data
 
             (VOID) DeregisterEventSource(hEventSource);
         }
@@ -359,26 +361,26 @@ void CmdInstallService()
     }
 
     schSCManager = OpenSCManager(
-                        NULL,                   // machine (NULL == local)
-                        NULL,                   // database (NULL == default)
-                        SC_MANAGER_ALL_ACCESS   // access required
-                        );
+                       NULL,                   // machine (NULL == local)
+                       NULL,                   // database (NULL == default)
+                       SC_MANAGER_ALL_ACCESS   // access required
+                   );
     if ( schSCManager )
     {
         schService = CreateService(
-            schSCManager,               // SCManager database
-            TEXT(SZSERVICENAME),        // name of service
-            TEXT(SZSERVICEDISPLAYNAME), // name to display
-            SERVICE_ALL_ACCESS,         // desired access
-            SERVICE_WIN32_OWN_PROCESS,  // service type
-            SERVICE_DEMAND_START,       // start type
-            SERVICE_ERROR_NORMAL,       // error control type
-            szPath,                     // service's binary
-            NULL,                       // no load ordering group
-            NULL,                       // no tag identifier
-            TEXT(SZDEPENDENCIES),       // dependencies
-            NULL,                       // LocalSystem account
-            NULL);                      // no password
+                         schSCManager,               // SCManager database
+                         TEXT(SZSERVICENAME),        // name of service
+                         TEXT(SZSERVICEDISPLAYNAME), // name to display
+                         SERVICE_ALL_ACCESS,         // desired access
+                         SERVICE_WIN32_OWN_PROCESS,  // service type
+                         SERVICE_DEMAND_START,       // start type
+                         SERVICE_ERROR_NORMAL,       // error control type
+                         szPath,                     // service's binary
+                         NULL,                       // no load ordering group
+                         NULL,                       // no tag identifier
+                         TEXT(SZDEPENDENCIES),       // dependencies
+                         NULL,                       // LocalSystem account
+                         NULL);                      // no password
 
         if ( schService )
         {
@@ -417,10 +419,10 @@ void CmdRemoveService()
     SC_HANDLE   schSCManager;
 
     schSCManager = OpenSCManager(
-                        NULL,                   // machine (NULL == local)
-                        NULL,                   // database (NULL == default)
-                        SC_MANAGER_ALL_ACCESS   // access required
-                        );
+                       NULL,                   // machine (NULL == local)
+                       NULL,                   // database (NULL == default)
+                       SC_MANAGER_ALL_ACCESS   // access required
+                   );
     if ( schSCManager )
     {
         schService = OpenService(schSCManager, TEXT(SZSERVICENAME), SERVICE_ALL_ACCESS);
@@ -530,12 +532,12 @@ BOOL WINAPI ControlHandler ( DWORD dwCtrlType )
 {
     switch( dwCtrlType )
     {
-        case CTRL_BREAK_EVENT:  // use Ctrl+C or Ctrl+Break to simulate
-        case CTRL_C_EVENT:      // SERVICE_CONTROL_STOP in debug mode
-            _tprintf_s(TEXT("Stopping %s.\n"), TEXT(SZSERVICEDISPLAYNAME));
-            ServiceStop();
-            return TRUE;
-            break;
+    case CTRL_BREAK_EVENT:  // use Ctrl+C or Ctrl+Break to simulate
+    case CTRL_C_EVENT:      // SERVICE_CONTROL_STOP in debug mode
+        _tprintf_s(TEXT("Stopping %s.\n"), TEXT(SZSERVICEDISPLAYNAME));
+        ServiceStop();
+        return TRUE;
+        break;
 
     }
     return FALSE;

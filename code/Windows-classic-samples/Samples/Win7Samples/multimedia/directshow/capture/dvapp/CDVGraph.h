@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -7,9 +7,9 @@
 
 // ---------------------------------------------------------------------------
 // File: CDVGraph.h
-// 
+//
 // Desc: CDVGraph Class declaration, it supports DV Graph Building
-//       This is the base class to build all AVC graphs using 
+//       This is the base class to build all AVC graphs using
 //       MSTape.sys
 //----------------------------------------------------------------------------
 
@@ -19,17 +19,17 @@
 #include <windows.h>
 #include <dshow.h>
 #include <assert.h>
-#include <xprtdefs.h> 
+#include <xprtdefs.h>
 
 #include <strsafe.h>
 
 // Common files
-#include "dshowutil.h" 
+#include "dshowutil.h"
 #include "utils.h"
 #include "smartptr.h"
 
 #ifndef NUMELMS
-   #define NUMELMS(aa) (sizeof(aa)/sizeof((aa)[0]))
+#define NUMELMS(aa) (sizeof(aa)/sizeof((aa)[0]))
 #endif
 
 #ifndef SAFE_RELEASE
@@ -45,28 +45,28 @@
 #define NTSC_DVENCODER_HEIGHT       480
 
 
-//track device mode or active 
+//track device mode or active
 enum DV_MODE
 {
     CameraMode  = 0L,
     VcrMode     = 1L,
     UnknownMode = 2L
-}; 
+};
 
 enum GRAPH_TYPE
 {
-    GRAPH_PREVIEW, 
-    GRAPH_DV_TO_FILE, 
-    GRAPH_DV_TO_FILE_NOPRE, 
-    GRAPH_FILE_TO_DV, 
-    GRAPH_FILE_TO_DV_NOPRE, 
-    GRAPH_DV_TO_FILE_TYPE2, 
-    GRAPH_DV_TO_FILE_NOPRE_TYPE2, 
-    GRAPH_FILE_TO_DV_TYPE2, 
+    GRAPH_PREVIEW,
+    GRAPH_DV_TO_FILE,
+    GRAPH_DV_TO_FILE_NOPRE,
+    GRAPH_FILE_TO_DV,
+    GRAPH_FILE_TO_DV_NOPRE,
+    GRAPH_DV_TO_FILE_TYPE2,
+    GRAPH_DV_TO_FILE_NOPRE_TYPE2,
+    GRAPH_FILE_TO_DV_TYPE2,
     GRAPH_FILE_TO_DV_NOPRE_TYPE2
 };
 
-class CDVGraph 
+class CDVGraph
 {
 public:
 
@@ -78,7 +78,7 @@ public:
     IMediaControl           *m_pMediaControl;
     IMediaEventEx           *m_pMediaEvent;
     IBaseFilter             *m_pDeviceFilter;
-    IBaseFilter             *m_pInputFileFilter;  
+    IBaseFilter             *m_pInputFileFilter;
 
     IVideoWindow            *m_pVideoWindow;
     IAMDroppedFrames        *m_pDroppedFrames;
@@ -91,15 +91,15 @@ public:
     // State maintaining member variables
     DV_MODE                 m_SubunitMode; // vcr or camera
     _DVENCODERVIDEOFORMAT   m_VideoFormat; //pal or ntsc
-    LONG                    m_AvgTimePerFrame;              
+    LONG                    m_AvgTimePerFrame;
     _DVRESOLUTION           m_DVResolution; //  resolution of DV decoder
     GRAPH_TYPE              m_iGraphType;
-    
+
     // member functions
     //constructor & destructor
     CDVGraph(void);
     ~CDVGraph(void);
-    
+
     // Graph Building Helper Methods
     HRESULT BuildBasicGraph(void);
     HRESULT GetTapeInfo(void);
@@ -108,13 +108,13 @@ public:
     HRESULT StartGraph(void);
 
     HRESULT MakePreviewGraph(void);
-    
+
     // Type 1 File (capture\playback\transmit)
     HRESULT MakeDvToFileGraph_Type1(TCHAR*        OutputFileName);
     HRESULT MakeDvToFileGraph_NoPre_Type1(TCHAR*  OutputFileName);
     HRESULT MakeFileToDvGraph_Type1(TCHAR*        InputFileName);
     HRESULT MakeFileToDvGraph_NoPre_Type1(TCHAR*  InputFileName);
-    
+
     // Type 2 File (capture\playback\transmit)
     HRESULT MakeDvToFileGraph_Type2(TCHAR*        OutputFileName);
     HRESULT MakeDvToFileGraph_NoPre_Type2(TCHAR*        OutputFileName);
@@ -125,8 +125,8 @@ public:
     HRESULT ChangeFrameRate( BOOL bHalfFrameRate );
     HRESULT GetVideoWindowDimensions(int *pWidth, int *pHeight, BOOL bChangeResolution,HWND hwndApp);
     HRESULT SeekATN(int iHr, int iMn, int iSc, int iFr);
-    HRESULT GetDVMode(DV_MODE *pSubunitMode );   
-    HRESULT SaveGraphToFile(TCHAR* pFileName);                                                          
+    HRESULT GetDVMode(DV_MODE *pSubunitMode );
+    HRESULT SaveGraphToFile(TCHAR* pFileName);
     HRESULT RemoveFilters(IBaseFilter *pFilter, BOOL bRemoveDownStream);
 
 private:

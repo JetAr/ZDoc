@@ -1,14 +1,14 @@
-/////////////////////////////////////////////////////////////////////////
-// Copyright © 2006 Microsoft Corporation. All rights reserved.
-// 
-//  This file may contain preliminary information or inaccuracies, 
-//  and may not correctly represent any associated Microsoft 
-//  Product as commercially released. All Materials are provided entirely 
-//  “AS IS.” To the extent permitted by law, MICROSOFT MAKES NO 
-//  WARRANTY OF ANY KIND, DISCLAIMS ALL EXPRESS, IMPLIED AND STATUTORY 
-//  WARRANTIES, AND ASSUMES NO LIABILITY TO YOU FOR ANY DAMAGES OF 
-//  ANY TYPE IN CONNECTION WITH THESE MATERIALS OR ANY INTELLECTUAL PROPERTY IN THEM. 
-// 
+ï»¿/////////////////////////////////////////////////////////////////////////
+// Copyright Â© 2006 Microsoft Corporation. All rights reserved.
+//
+//  This file may contain preliminary information or inaccuracies,
+//  and may not correctly represent any associated Microsoft
+//  Product as commercially released. All Materials are provided entirely
+//  â€œAS IS.â€ To the extent permitted by law, MICROSOFT MAKES NO
+//  WARRANTY OF ANY KIND, DISCLAIMS ALL EXPRESS, IMPLIED AND STATUTORY
+//  WARRANTIES, AND ASSUMES NO LIABILITY TO YOU FOR ANY DAMAGES OF
+//  ANY TYPE IN CONNECTION WITH THESE MATERIALS OR ANY INTELLECTUAL PROPERTY IN THEM.
+//
 
 
 // Main header
@@ -20,8 +20,8 @@ void VssClient::ExposeSnapshotLocally(VSS_ID snapshotID, wstring path)
 {
     FunctionTracer ft(DBG_INFO);
 
-    ft.WriteLine(L"- Exposing shadow copy " WSTR_GUID_FMT L" under the path '%s'", 
-        GUID_PRINTF_ARG(snapshotID), path.c_str());
+    ft.WriteLine(L"- Exposing shadow copy " WSTR_GUID_FMT L" under the path '%s'",
+                 GUID_PRINTF_ARG(snapshotID), path.c_str());
 
     // Make sure that the expose operation is valid for this snapshot.
     // Get the shadow copy properties
@@ -69,7 +69,7 @@ void VssClient::ExposeSnapshotLocally(VSS_ID snapshotID, wstring path)
     else
     {
         // Append a backslash
-        if (path[path.length() - 1] != L'\\') 
+        if (path[path.length() - 1] != L'\\')
             path += L'\\';
 
         ft.WriteLine(L"- Checking if '%s' is a valid empty directory ...", path.c_str());
@@ -86,25 +86,25 @@ void VssClient::ExposeSnapshotLocally(VSS_ID snapshotID, wstring path)
         WIN32_FIND_DATA FindFileData;
         wstring pattern = path + L'*';
         HANDLE hFind = FindFirstFile( pattern.c_str(), &FindFileData);
-        if (hFind == INVALID_HANDLE_VALUE) 
+        if (hFind == INVALID_HANDLE_VALUE)
             CHECK_WIN32_ERROR(GetLastError(), L"FindFirstFile");
 
         // Automatically calls FindClose at the end of scope
         CAutoSearchHandle autoHandle(hFind);
 
         // Enumerate all the files/subdirectories
-        while (true) 
-        { 
-            wstring fileName = FindFileData.cFileName; 
+        while (true)
+        {
+            wstring fileName = FindFileData.cFileName;
             if ((fileName != wstring(L".")) && (fileName != wstring(L"..")))
             {
                 ft.WriteLine(L"\nERROR: the second parameter to -el [%s] is not an empty directory!", path.c_str());
                 throw(E_INVALIDARG);
             }
-         
-            if (!FindNextFile(hFind, &FindFileData)) 
+
+            if (!FindNextFile(hFind, &FindFileData))
             {
-                if (GetLastError() == ERROR_NO_MORE_FILES) 
+                if (GetLastError() == ERROR_NO_MORE_FILES)
                     break;
 
                 CHECK_WIN32_ERROR(GetLastError(), L"FindNextFile");
@@ -114,8 +114,8 @@ void VssClient::ExposeSnapshotLocally(VSS_ID snapshotID, wstring path)
 
     // Expose locally the shadow copy set
     LPWSTR pwszExposed = NULL;
-    CHECK_COM(m_pVssObject->ExposeSnapshot(snapshotID, NULL, 
-        VSS_VOLSNAP_ATTR_EXPOSED_LOCALLY, (VSS_PWSZ)path.c_str(), &pwszExposed));
+    CHECK_COM(m_pVssObject->ExposeSnapshot(snapshotID, NULL,
+                                           VSS_VOLSNAP_ATTR_EXPOSED_LOCALLY, (VSS_PWSZ)path.c_str(), &pwszExposed));
 
     // Automatically call CoTaskMemFree on this pointer at the end of scope
     CAutoComPointer ptrAutoCleanup(pwszExposed);
@@ -130,8 +130,8 @@ void VssClient::ExposeSnapshotRemotely(VSS_ID snapshotID, wstring shareName, wst
 {
     FunctionTracer ft(DBG_INFO);
 
-    ft.WriteLine(L"- Exposing shadow copy " WSTR_GUID_FMT L" under the share '%s' (path from root: '%s')", 
-        GUID_PRINTF_ARG(snapshotID), shareName.c_str(), pathFromRoot.c_str());
+    ft.WriteLine(L"- Exposing shadow copy " WSTR_GUID_FMT L" under the share '%s' (path from root: '%s')",
+                 GUID_PRINTF_ARG(snapshotID), shareName.c_str(), pathFromRoot.c_str());
 
     // Make sure that the expose operation is valid for this snapshot.
     // Get the shadow copy properties
@@ -160,7 +160,7 @@ void VssClient::ExposeSnapshotRemotely(VSS_ID snapshotID, wstring shareName, wst
         throw(E_INVALIDARG);
     }
 
-    // Note: a true reqestor should also check here if 
+    // Note: a true reqestor should also check here if
     // - the remote share name is valid (i.e. unused)
     // - the path from root is valid
 
@@ -172,11 +172,11 @@ void VssClient::ExposeSnapshotRemotely(VSS_ID snapshotID, wstring shareName, wst
 
     // Expose locally the shadow copy set
     LPWSTR pwszExposed = NULL;
-    CHECK_COM(m_pVssObject->ExposeSnapshot(snapshotID, 
-        pwszPathFromRoot, 
-        VSS_VOLSNAP_ATTR_EXPOSED_REMOTELY, 
-        (VSS_PWSZ)shareName.c_str(), 
-        &pwszExposed));
+    CHECK_COM(m_pVssObject->ExposeSnapshot(snapshotID,
+                                           pwszPathFromRoot,
+                                           VSS_VOLSNAP_ATTR_EXPOSED_REMOTELY,
+                                           (VSS_PWSZ)shareName.c_str(),
+                                           &pwszExposed));
 
     // Automatically call CoTaskMemFree on this pointer at the end of scope
     CAutoComPointer ptrAutoCleanup(pwszExposed);

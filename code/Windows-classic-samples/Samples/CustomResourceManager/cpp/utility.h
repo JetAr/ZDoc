@@ -1,4 +1,4 @@
-//*********************************************************
+﻿//*********************************************************
 //
 // Copyright (c) Microsoft. All rights reserved.
 // THIS CODE IS PROVIDED *AS IS* WITHOUT WARRANTY OF
@@ -14,12 +14,12 @@
 #include <windows.h>
 #include "resource.h"
 
-// INHERIT_ONLY_ACE and NO_PROPAGATE_INHERIT_ACE are inheritable ACEs, 
-// but if they don't have OBJECT or CONTAINER inheritance set, then 
+// INHERIT_ONLY_ACE and NO_PROPAGATE_INHERIT_ACE are inheritable ACEs,
+// but if they don't have OBJECT or CONTAINER inheritance set, then
 // they aren't considered.
 #define IsInheritableAce(aceFlags) \
     (IS_FLAG_SET((aceFlags), OBJECT_INHERIT_ACE) || \
-        IS_FLAG_SET((aceFlags), CONTAINER_INHERIT_ACE)) 
+        IS_FLAG_SET((aceFlags), CONTAINER_INHERIT_ACE))
 
 #define IsAccessAllowedAce(aceType) \
     ((aceType) == ACCESS_ALLOWED_CALLBACK_ACE_TYPE ||\
@@ -33,9 +33,9 @@
     hr = HRESULT_FROM_WIN32(errorCode);                       \
     if ( FAILED(HRESULT_FROM_WIN32(hr)) ) { wprintf(text);    \
     goto exit_gracefully; } } }
-    
+
 #define ARGUMENT_PRESENT(ArgumentPointer) (\
-    (CHAR *)((ULONG_PTR)(ArgumentPointer)) != (CHAR *)(NULL) ) 
+    (CHAR *)((ULONG_PTR)(ArgumentPointer)) != (CHAR *)(NULL) )
 
 // Allocates space for 'dest' and copies 'source' into it
 HRESULT AllocAndCopyString(_In_ PCWSTR source, _Outptr_ PWSTR *dest);
@@ -54,9 +54,9 @@ HRESULT RemoveExplicitUniqueAces(PACL acl, PACL *destAcl);
 //  forInheritancePurposes - if true, this will ignore the "ID" flag on the ACE
 //                          and other inheritance flags on ACEs in the ACL
 HRESULT ACEAlreadyInACL(
-    _In_  PACL acl, 
-    _In_  LPVOID ace, 
-    _Out_ LPBOOL lpbAcePresent, 
+    _In_  PACL acl,
+    _In_  LPVOID ace,
+    _Out_ LPBOOL lpbAcePresent,
     _In_  bool forInheritancePurposes);
 
 HRESULT AddAceToAcl(LPVOID pNewAce, PACL *acl, bool bAddToEndOfList);
@@ -71,7 +71,7 @@ HRESULT GetSizeOfAllInheritableAces(PACL acl, DWORD &dwSizeNeeded);
 // Note: GetSecurityDescriptor* APIs work either with self-relative OR absolute,
 // but SetSecurityDescriptorDacl will only work with absolute.
 HRESULT ConvertSecurityDescriptor(
-    PSECURITY_DESCRIPTOR pSelfRelSD, 
+    PSECURITY_DESCRIPTOR pSelfRelSD,
     PSECURITY_DESCRIPTOR *absoluteSD);
 
 #endif // _UTILITY_H_

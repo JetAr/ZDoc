@@ -1,4 +1,4 @@
-#include "stdafx.h"
+﻿#include "stdafx.h"
 
 #include "DeviceListener.h"
 #include <windows.h>
@@ -47,7 +47,7 @@ HRESULT DeviceListener::Init(HWND hwnd)
     }
 
     if (isRoInit)
-    { 
+    {
         hr = RegisterForEvents(hwnd);
 
         if (SUCCEEDED(hr))
@@ -76,47 +76,47 @@ HRESULT DeviceListener::SetRotationResolution(double res)
 HRESULT DeviceListener::RegisterForEvents(HWND hwnd)
 {
     RETURN_IF_FAILED(Windows::Foundation::GetActivationFactory(
-        HStringReference(RuntimeClass_Windows_UI_Input_RadialController).Get(),
-        &_controllerInterop));
+                         HStringReference(RuntimeClass_Windows_UI_Input_RadialController).Get(),
+                         &_controllerInterop));
 
     RETURN_IF_FAILED(_controllerInterop->CreateForWindow(hwnd, IID_PPV_ARGS(&_controller)));
 
     // Wire events
     RETURN_IF_FAILED(_controller->add_ScreenContactContinued(
-        Callback<ITypedEventHandler<RadialController*, RadialControllerScreenContactContinuedEventArgs*>>(this, &DeviceListener::OnScreenContactContinued).Get(),
-        &_screenContactContinuedToken));
+                         Callback<ITypedEventHandler<RadialController*, RadialControllerScreenContactContinuedEventArgs*>>(this, &DeviceListener::OnScreenContactContinued).Get(),
+                         &_screenContactContinuedToken));
 
     RETURN_IF_FAILED(_controller->add_ScreenContactStarted(
-        Callback<ITypedEventHandler<RadialController*, RadialControllerScreenContactStartedEventArgs*>>(this, &DeviceListener::OnScreenContactStarted).Get(),
-        &_screenContactStartedToken));
+                         Callback<ITypedEventHandler<RadialController*, RadialControllerScreenContactStartedEventArgs*>>(this, &DeviceListener::OnScreenContactStarted).Get(),
+                         &_screenContactStartedToken));
 
     RETURN_IF_FAILED(_controller->add_ScreenContactEnded(
-        Callback<ITypedEventHandler<RadialController*, IInspectable*>>(this, &DeviceListener::OnScreenContactEnded).Get(),
-        &_screenContactEndedToken));
+                         Callback<ITypedEventHandler<RadialController*, IInspectable*>>(this, &DeviceListener::OnScreenContactEnded).Get(),
+                         &_screenContactEndedToken));
 
     RETURN_IF_FAILED(_controller->add_ControlLost(
-        Callback<ITypedEventHandler<RadialController*, IInspectable*>>(this, &DeviceListener::OnControlLost).Get(),
-        &_controlLostToken));
+                         Callback<ITypedEventHandler<RadialController*, IInspectable*>>(this, &DeviceListener::OnControlLost).Get(),
+                         &_controlLostToken));
 
     RETURN_IF_FAILED(_controller->add_ControlAcquired(
-        Callback<ITypedEventHandler<RadialController*, RadialControllerControlAcquiredEventArgs*>>(this, &DeviceListener::OnControlAcquired).Get(),
-        &_controlAcquiredToken));
+                         Callback<ITypedEventHandler<RadialController*, RadialControllerControlAcquiredEventArgs*>>(this, &DeviceListener::OnControlAcquired).Get(),
+                         &_controlAcquiredToken));
 
     RETURN_IF_FAILED(_controller->add_RotationChanged(
-        Callback<ITypedEventHandler<RadialController*, RadialControllerRotationChangedEventArgs*>>(this, &DeviceListener::OnRotationChanged).Get(),
-        &_rotatedToken));
+                         Callback<ITypedEventHandler<RadialController*, RadialControllerRotationChangedEventArgs*>>(this, &DeviceListener::OnRotationChanged).Get(),
+                         &_rotatedToken));
 
     // Lambda callback
     RETURN_IF_FAILED(_controller->add_ButtonClicked(
-        Callback<ITypedEventHandler<RadialController*, RadialControllerButtonClickedEventArgs*>>([this]
-        (IRadialController*, IRadialControllerButtonClickedEventArgs* args)
+                         Callback<ITypedEventHandler<RadialController*, RadialControllerButtonClickedEventArgs*>>([this]
+                                 (IRadialController*, IRadialControllerButtonClickedEventArgs* args)
     {
         PrintMsg(L"ButtonClicked\n", FOREGROUND_BLUE | FOREGROUND_GREEN);
         RETURN_IF_FAILED(LogContact(args));
 
         return S_OK;
     }).Get(),
-        &_buttonClickedToken));
+    &_buttonClickedToken));
 
     return S_OK;
 }
@@ -128,15 +128,15 @@ HRESULT DeviceListener::PopulateMenuItems()
     PrintMsg(L"Got Menu \n", FOREGROUND_BLUE);
 
     RETURN_IF_FAILED(Windows::Foundation::GetActivationFactory(
-        HStringReference(RuntimeClass_Windows_UI_Input_RadialControllerMenuItem).Get(),
-        &_menuItemStatics));
+                         HStringReference(RuntimeClass_Windows_UI_Input_RadialControllerMenuItem).Get(),
+                         &_menuItemStatics));
 
 
     RETURN_IF_FAILED(AddMenuItemFromKnownIcon(HStringReference(L"My Ink").Get(),
-        RadialControllerMenuKnownIcon::RadialControllerMenuKnownIcon_InkColor));
+                     RadialControllerMenuKnownIcon::RadialControllerMenuKnownIcon_InkColor));
 
     RETURN_IF_FAILED(AddMenuItemFromKnownIcon(HStringReference(L"Ruler").Get(),
-        RadialControllerMenuKnownIcon::RadialControllerMenuKnownIcon_Ruler));
+                     RadialControllerMenuKnownIcon::RadialControllerMenuKnownIcon_Ruler));
 
     return S_OK;
 }
@@ -154,8 +154,8 @@ HRESULT DeviceListener::AddMenuItemFromKnownIcon(_In_ HSTRING itemName, _In_ Rad
 
     // Set Callback
     RETURN_IF_FAILED(menuItem->add_Invoked(
-        Callback<ITypedEventHandler<RadialControllerMenuItem*, IInspectable*>>(this, &DeviceListener::OnItemInvoked).Get(),
-        &_menuItem2Token));
+                         Callback<ITypedEventHandler<RadialControllerMenuItem*, IInspectable*>>(this, &DeviceListener::OnItemInvoked).Get(),
+                         &_menuItem2Token));
 
     // Add item to menu
     RETURN_IF_FAILED(menuItems->Append(menuItem.Get()));
@@ -251,8 +251,8 @@ HRESULT DeviceListener::LogContact(_In_ TContactArgs* args)
         // Log contact info
         wchar_t message[2000];
         swprintf_s(message, 2000, L"\t Postion X=%lf, Y=%lf & \n \t Bounds Height=%lf, Width=%lf, X=%lf, Y=%lf\n",
-            position.X, position.Y,
-            bounds.Height, bounds.Width, bounds.X, bounds.Y);
+                   position.X, position.Y,
+                   bounds.Height, bounds.Width, bounds.X, bounds.Y);
 
         PrintMsg(message, FOREGROUND_GREEN | FOREGROUND_BLUE);
     }

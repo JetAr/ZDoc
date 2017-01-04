@@ -1,4 +1,4 @@
-//
+﻿//
 // Sample: IPv4/v6 Multicasting using WSAJoinLeaf
 //
 // Files:
@@ -7,7 +7,7 @@
 //      resolve.h       - header file for common routines
 //
 // Description:
-//    This sample illustrates how to use the WSAJoinLeaf API for 
+//    This sample illustrates how to use the WSAJoinLeaf API for
 //    multicasting. This sample may be invoked as either a sender
 //    or a receiver. This sample works for both IPv4 and IPv6.
 //    The one drawback to using the WSAJoinLeaf API is that only
@@ -38,7 +38,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-// This sample uses the new getaddrinfo/getnameinfo functions which are new to 
+// This sample uses the new getaddrinfo/getnameinfo functions which are new to
 // Windows XP. To run this sample on older OSes, include the following header
 // file which makes it work automagically.
 
@@ -63,8 +63,8 @@ int   gSocketType=SOCK_DGRAM,   // datagram
       gLoopBack=0,              // Enable or disable loopback
       gTtl=DEFAULT_TTL;         // Set multicast TTL
 char *gInterface=NULL,          // Local address to bind to
-     *gMulticast=NULL,          // Multicast group to join
-     *gPort=MCASTPORT;          // Port number to use
+      *gMulticast=NULL,          // Multicast group to join
+       *gPort=MCASTPORT;          // Port number to use
 
 //
 // Function: usage
@@ -75,17 +75,17 @@ char *gInterface=NULL,          // Local address to bind to
 void usage(char *progname)
 {
     fprintf(stderr, "usage: %s [-s] [-i local-addr] [-m remote-addr] [-p port-num] [-n count]\n", progname);
-    fprintf(stderr, 
-                    "  -i addr Local address to bind to\n"
-                    "  -j      Don't join the multicast grou\n"
-                    "  -l 0/1  Disable/enable loopback\n"
-                    "  -m addr Multicast address to join\n"
-                    "  -n int  Send/recv count\n"
-                    "  -p int  Port number\n"
-                    "  -s      Act as sender; default is receiver\n"
-                    "  -t int  Set multicast TTL\n"
-                    "  -z int  Buffer size (in bytes)\n"
-                    );
+    fprintf(stderr,
+            "  -i addr Local address to bind to\n"
+            "  -j      Don't join the multicast grou\n"
+            "  -l 0/1  Disable/enable loopback\n"
+            "  -m addr Multicast address to join\n"
+            "  -n int  Send/recv count\n"
+            "  -p int  Port number\n"
+            "  -s      Act as sender; default is receiver\n"
+            "  -t int  Set multicast TTL\n"
+            "  -z int  Buffer size (in bytes)\n"
+           );
     ExitProcess(1);
 }
 
@@ -100,57 +100,57 @@ void ValidateArgs(int argc, char **argv)
 {
     int     i;
 
-    for(i=1; i < argc ;i++)
+    for(i=1; i < argc ; i++)
     {
         if (((argv[i][0] != '/') && (argv[i][0] != '-')) || (strlen(argv[i]) < 2))
             usage(argv[0]);
         switch(tolower(argv[i][1]))
         {
-            case 'i':               // local address to bind to
-                if (i+1 >= argc)
-                    usage(argv[0]);
-                gInterface = argv[++i];
-                break;
-            case 'j':               // Don't join the multicast group
-                bDontJoin = TRUE;
-                break;
-            case 'l':               // enable/disable loopback
-                if (i+1 >= argc)
-                    usage(argv[0]);
-                bLoopBack = TRUE;
-                gLoopBack = atoi(argv[++i]);
-                break;
-            case 'm':               // remote (multicast) address to connect/join to
-                if (i+1 >= argc)
-                    usage(argv[0]);
-                gMulticast = argv[++i];
-                break;
-            case 'n':               // number of sends/recvs
-                if (i+1 >= argc)
-                    usage(argv[0]);
-                gCount = atoi(argv[++i]);
-                break;
-            case 'p':               // port number
-                if (i+1 >= argc)
-                    usage(argv[0]);
-                gPort = argv[++i];
-                break;
-            case 's':               // sender or receiver
-                bSender = TRUE;
-                break;
-            case 't':               // multicast ttl
-                if (i+1 >= argc)
-                    usage(argv[0]);
-                gTtl = atoi(argv[++i]);
-                break;
-            case 'z':               // buffer size
-                if (i+1 >= argc)
-                    usage(argv[0]);
-                gBufferSize = atoi(argv[++i]);
-                break;
-            default:
+        case 'i':               // local address to bind to
+            if (i+1 >= argc)
                 usage(argv[0]);
-                break;
+            gInterface = argv[++i];
+            break;
+        case 'j':               // Don't join the multicast group
+            bDontJoin = TRUE;
+            break;
+        case 'l':               // enable/disable loopback
+            if (i+1 >= argc)
+                usage(argv[0]);
+            bLoopBack = TRUE;
+            gLoopBack = atoi(argv[++i]);
+            break;
+        case 'm':               // remote (multicast) address to connect/join to
+            if (i+1 >= argc)
+                usage(argv[0]);
+            gMulticast = argv[++i];
+            break;
+        case 'n':               // number of sends/recvs
+            if (i+1 >= argc)
+                usage(argv[0]);
+            gCount = atoi(argv[++i]);
+            break;
+        case 'p':               // port number
+            if (i+1 >= argc)
+                usage(argv[0]);
+            gPort = argv[++i];
+            break;
+        case 's':               // sender or receiver
+            bSender = TRUE;
+            break;
+        case 't':               // multicast ttl
+            if (i+1 >= argc)
+                usage(argv[0]);
+            gTtl = atoi(argv[++i]);
+            break;
+        case 'z':               // buffer size
+            if (i+1 >= argc)
+                usage(argv[0]);
+            gBufferSize = atoi(argv[++i]);
+            break;
+        default:
+            usage(argv[0]);
+            break;
         }
     }
 }
@@ -195,12 +195,12 @@ int SetMulticastTtl(SOCKET s, int af, int ttl)
     {
         // Set the TTL value
         rc = setsockopt(
-                s,
-                optlevel,
-                option,
-                optval,
-                optlen
-                );
+                 s,
+                 optlevel,
+                 option,
+                 optval,
+                 optlen
+             );
         if (rc == SOCKET_ERROR)
         {
             fprintf(stderr, "SetMulticastTtl: setsockopt failed: %d\n", WSAGetLastError());
@@ -257,12 +257,12 @@ int SetMulticastLoopBack(SOCKET s, int af, int loopval)
     {
         // Set the multpoint loopback
         rc = setsockopt(
-                s,
-                optlevel,
-                option,
-                optval,
-                optlen
-                );
+                 s,
+                 optlevel,
+                 option,
+                 optval,
+                 optlen
+             );
         if (rc == SOCKET_ERROR)
         {
             fprintf(stderr, "SetMulticastLoopBack: setsockopt failed: %d\n", WSAGetLastError());
@@ -318,12 +318,12 @@ int SetSendInterface(SOCKET s, struct addrinfo *iface)
     {
         // Set the send interface
         rc = setsockopt(
-                s,
-                optlevel,
-                option,
-                optval,
-                optlen
-                );
+                 s,
+                 optlevel,
+                 option,
+                 optval,
+                 optlen
+             );
         if (rc == SOCKET_ERROR)
         {
             fprintf(stderr, "setsockopt failed: %d\n", WSAGetLastError());
@@ -341,20 +341,20 @@ int SetSendInterface(SOCKET s, struct addrinfo *iface)
 
 //
 // Function: main
-// 
+//
 // Description:
-//    Parse the command line arguments, load the Winsock library, 
+//    Parse the command line arguments, load the Winsock library,
 //    create a socket and join the multicast group. If set as a
 //    sender then begin sending messages to the multicast group;
-//    otherwise, call recvfrom() to read messages send to the 
+//    otherwise, call recvfrom() to read messages send to the
 //    group.
-//    
+//
 int __cdecl main(int argc, char **argv)
 {
     WSADATA             wsd;
     struct addrinfo    *reslocal = NULL,
-                       *resmulti = NULL;
-    SOCKET              s = INVALID_SOCKET,  
+                            *resmulti = NULL;
+    SOCKET              s = INVALID_SOCKET,
                         rs= INVALID_SOCKET;
     char               *buf=NULL;
     int                 rc,
@@ -388,19 +388,19 @@ int __cdecl main(int argc, char **argv)
 
     // Create the socket - remember to specify the multicast flags
     s = WSASocket(
-            reslocal->ai_family, 
-            reslocal->ai_socktype, 
-            reslocal->ai_protocol, 
-            NULL, 
-            0, 
+            reslocal->ai_family,
+            reslocal->ai_socktype,
+            reslocal->ai_protocol,
+            NULL,
+            0,
             WSA_FLAG_OVERLAPPED | WSA_FLAG_MULTIPOINT_C_LEAF | WSA_FLAG_MULTIPOINT_D_LEAF
-            );
+        );
     if (s == INVALID_SOCKET)
     {
         fprintf(stderr, "socket(af = %d) failed: %d\n", reslocal->ai_family, WSAGetLastError());
         goto cleanup;
     }
-        
+
     rc = bind(s, reslocal->ai_addr, (int) reslocal->ai_addrlen);
     if (rc == SOCKET_ERROR)
     {
@@ -411,7 +411,7 @@ int __cdecl main(int argc, char **argv)
     printf("bound to: ");
     PrintAddress(reslocal->ai_addr, (int) reslocal->ai_addrlen);
     printf("\n");
-    
+
     // Resolve the multicast address
     resmulti = ResolveAddress(gMulticast, gPort, reslocal->ai_family, reslocal->ai_socktype, reslocal->ai_protocol);
     if (resmulti == NULL)
@@ -443,15 +443,15 @@ int __cdecl main(int argc, char **argv)
     if (bDontJoin == FALSE)
     {
         rs = WSAJoinLeaf(
-                s, 
-                resmulti->ai_addr, 
-                (int) resmulti->ai_addrlen, 
-                NULL, 
-                NULL, 
-                NULL, 
-                NULL, 
-                (bSender ? JL_SENDER_ONLY : JL_RECEIVER_ONLY)
-                        );
+                 s,
+                 resmulti->ai_addr,
+                 (int) resmulti->ai_addrlen,
+                 NULL,
+                 NULL,
+                 NULL,
+                 NULL,
+                 (bSender ? JL_SENDER_ONLY : JL_RECEIVER_ONLY)
+             );
         if (rs == INVALID_SOCKET)
         {
             fprintf(stderr, "WSAJoinLeaf failed: %d\n", WSAGetLastError());
@@ -468,10 +468,10 @@ int __cdecl main(int argc, char **argv)
         }
 
         rc = connect(
-                s,
-                resmulti->ai_addr,
-                (int) resmulti->ai_addrlen
-                );
+                 s,
+                 resmulti->ai_addr,
+                 (int) resmulti->ai_addrlen
+             );
         if (rc == SOCKET_ERROR)
         {
             fprintf(stderr, "conect failed: %d\n", WSAGetLastError());
@@ -501,7 +501,7 @@ int __cdecl main(int argc, char **argv)
 
     if (bSender)
     {
-        for(i=0; i < gCount ;i++)
+        for(i=0; i < gCount ; i++)
         {
             rc = send(s, buf, gBufferSize, 0);
             if (rc == SOCKET_ERROR)
@@ -517,7 +517,7 @@ int __cdecl main(int argc, char **argv)
     }
     else
     {
-        for(i=0; i < gCount ;i++)
+        for(i=0; i < gCount ; i++)
         {
             rc = recv(s, buf, gBufferSize, 0);
             if (rc == SOCKET_ERROR)
@@ -549,7 +549,7 @@ cleanup:
 
     if (resmulti)
         freeaddrinfo(resmulti);
-    
+
     WSACleanup();
     return 0;
 }

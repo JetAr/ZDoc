@@ -1,4 +1,4 @@
-//
+﻿//
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -15,7 +15,7 @@ Module Name:
 
 Abstract:
 
-    This module implements a sample demonstrating how to use pull mode 
+    This module implements a sample demonstrating how to use pull mode
     Event Subscription.
 
 Environment:
@@ -39,7 +39,8 @@ Environment:
 //    ErrorCode - The error code associated with the subscription operation.
 //
 
-typedef struct _SUBSCRIBE_PARAMETER {
+typedef struct _SUBSCRIBE_PARAMETER
+{
     PCWSTR Channel;
     PCWSTR Query;
     PCWSTR BookMarkXml;
@@ -51,7 +52,7 @@ typedef struct _SUBSCRIBE_PARAMETER {
 VOID
 DisplayHelp (
     __in PCWSTR ExeName
-    )
+)
 
 /*++
 
@@ -79,13 +80,13 @@ RenderEvent (
     __in EVT_HANDLE Fragment,
     __in EVT_RENDER_FLAGS Flags,
     __out PCWSTR* RenderedXML
-    )
+)
 
 /*++
 
 Routine Description:
 
-    This function renders an event to text or renders a bookmark 
+    This function renders an event to text or renders a bookmark
     handle to XML text.
 
 Parameters:
@@ -115,12 +116,13 @@ Return Value:
     //
 
     Buffer = HeapAlloc(GetProcessHeap(), 0, DefaultSize);
-    if (Buffer == NULL) {
+    if (Buffer == NULL)
+    {
         return ERROR_OUTOFMEMORY;
     }
 
     //
-    // Return to the caller if the default size is enough to hold 
+    // Return to the caller if the default size is enough to hold
     // the final result.
     //
 
@@ -130,28 +132,31 @@ Return Value:
                   DefaultSize,
                   Buffer,
                   &SizeNeeded,
-                  NULL)) {
+                  NULL))
+    {
         *RenderedXML = (PCWSTR) Buffer;
         return ERROR_SUCCESS;
     }
 
     //
-    // If EvtRender fails with unknown error other than 
+    // If EvtRender fails with unknown error other than
     // ERROR_INSUFFICIENT_BUFFER, return the error directly.
     //
 
-    if (GetLastError() != ERROR_INSUFFICIENT_BUFFER) {
+    if (GetLastError() != ERROR_INSUFFICIENT_BUFFER)
+    {
         HeapFree(GetProcessHeap(), 0, Buffer);
         return GetLastError();
     }
 
     //
-    // Reallocate the memory according to the real needed size and 
+    // Reallocate the memory according to the real needed size and
     // call EvtRender again.
     //
 
     NewBuffer = HeapReAlloc(GetProcessHeap(), 0, Buffer, SizeNeeded);
-    if (NewBuffer == NULL) {
+    if (NewBuffer == NULL)
+    {
         HeapFree(GetProcessHeap(), 0, Buffer);
         return ERROR_OUTOFMEMORY;
     }
@@ -163,7 +168,8 @@ Return Value:
                    SizeNeeded,
                    Buffer,
                    &SizeNeeded,
-                   NULL)) {
+                   NULL))
+    {
         HeapFree(GetProcessHeap(), 0, Buffer);
         return GetLastError();
     }
@@ -175,7 +181,7 @@ Return Value:
 VOID
 PrintEventXML (
     __in EVT_HANDLE Event
-    )
+)
 
 /*++
 
@@ -198,10 +204,13 @@ Return Value:
     DWORD  Error;
 
     Error = RenderEvent(Event, EvtRenderEventXml, &RenderedXML);
-    if (Error == ERROR_SUCCESS) {
+    if (Error == ERROR_SUCCESS)
+    {
         wprintf(L"\n%s\n", RenderedXML);
         HeapFree(GetProcessHeap(), 0, (PVOID) RenderedXML);
-    } else {
+    }
+    else
+    {
         wprintf(L"\nRenderEventFail with error code=%u\n", Error);
     }
 }
@@ -210,7 +219,7 @@ DWORD
 SaveBookmarkXML (
     __in  EVT_HANDLE BookMark,
     __out PCWSTR* BookMarkXML
-    )
+)
 
 /*++
 
@@ -241,7 +250,7 @@ PullSubscription (
     __inout     PTP_CALLBACK_INSTANCE Instance,
     __inout_opt PVOID Context,
     __inout     PTP_WORK Work
-    )
+)
 
 /*++
 
@@ -257,7 +266,7 @@ Parameters:
 
     Context - Supplies the application-defined data.
 
-    Work - Supplies a TP_WORK structure that defines the work object that 
+    Work - Supplies a TP_WORK structure that defines the work object that
         generated the callback.
 
 Return Value:
@@ -287,7 +296,8 @@ Return Value:
     //
 
     BookMark = EvtCreateBookmark(Parameter->BookMarkXml);
-    if (BookMark == NULL) {
+    if (BookMark == NULL)
+    {
         Parameter->ErrorCode = GetLastError();
         goto Exit;
     }
@@ -310,7 +320,8 @@ Return Value:
                                 NULL,
                                 EvtSubscribeStartAfterBookmark);
 
-    if (Subscription == NULL) {
+    if (Subscription == NULL)
+    {
         Parameter->ErrorCode = GetLastError();
         goto Exit;
     }
@@ -319,7 +330,8 @@ Return Value:
     // Keep the subscription working if the Stop flag is not set.
     //
 
-    while (!Parameter->Stop) {
+    while (!Parameter->Stop)
+    {
 
         //
         // As long as EvtNext can return events, keep consuming them.
@@ -330,29 +342,34 @@ Return Value:
                        Events,
                        INFINITE,
                        0,
-                       &ReturnedNumber)) {
-               for (DWORD i = 0; i < ReturnedNumber; i++) {
-                    PrintEventXML(Events[i]);
-                    if (BookMark != NULL) {
-                        EvtUpdateBookmark(BookMark, Events[i]);
-                    }
-                    EvtClose(Events[i]);
-               }
+                       &ReturnedNumber))
+        {
+            for (DWORD i = 0; i < ReturnedNumber; i++)
+            {
+                PrintEventXML(Events[i]);
+                if (BookMark != NULL)
+                {
+                    EvtUpdateBookmark(BookMark, Events[i]);
+                }
+                EvtClose(Events[i]);
+            }
 
-               //
-               // User needs to stop the subscription, then exit.
-               //
+            //
+            // User needs to stop the subscription, then exit.
+            //
 
-               if (Parameter->Stop) {
-                   goto Exit;
-               }
+            if (Parameter->Stop)
+            {
+                goto Exit;
+            }
         }
 
         //
         // Subscription meets some un expected error, walk away.
         //
 
-        if (GetLastError() != ERROR_NO_MORE_ITEMS) {
+        if (GetLastError() != ERROR_NO_MORE_ITEMS)
+        {
             Parameter->ErrorCode = GetLastError();
             break;
         }
@@ -363,27 +380,31 @@ Return Value:
         // the subscription.
         //
 
-        if (WaitForSingleObject(Parameter->SignalEvent, INFINITE) != WAIT_OBJECT_0) {
+        if (WaitForSingleObject(Parameter->SignalEvent, INFINITE) != WAIT_OBJECT_0)
+        {
             Parameter->ErrorCode = GetLastError();
             break;
         }
     }
 
 Exit:
-    if (Subscription != NULL) {
+    if (Subscription != NULL)
+    {
         EvtClose(Subscription);
     }
-    if (BookMark != NULL) {
+    if (BookMark != NULL)
+    {
 
         //
         // Save the bookmark XML into the parameter so that next time
-        // a subscription can continue from where it stops. 
+        // a subscription can continue from where it stops.
         //
         // N.B. Free the existing bookmark string first before we update
         // bookmark to the new one to prevent memory leaks.
         //
 
-        if (Parameter->BookMarkXml != NULL) {
+        if (Parameter->BookMarkXml != NULL)
+        {
             HeapFree(GetProcessHeap(), 0, (PVOID) Parameter->BookMarkXml);
             Parameter->BookMarkXml = NULL;
         }
@@ -394,7 +415,8 @@ Exit:
         // code from previous operations.
         //
 
-        if (Parameter->ErrorCode == ERROR_SUCCESS) {
+        if (Parameter->ErrorCode == ERROR_SUCCESS)
+        {
             Parameter->ErrorCode = Error;
         }
         EvtClose(BookMark);
@@ -405,7 +427,7 @@ DWORD __cdecl
 wmain (
     __in int argc,
     __in_ecount(argc) PWSTR argv[]
-    )
+)
 
 /*++
 
@@ -433,10 +455,11 @@ Return Value:
     BOOL Done = FALSE;
 
     if (argc < 2 ||
-       (wcscmp(argv[1], L"-h") == 0) ||
-       (wcscmp(argv[1], L"-?") == 0) ||
-       (wcscmp(argv[1], L"/h") == 0) ||
-       (wcscmp(argv[1], L"/?") == 0)) {
+            (wcscmp(argv[1], L"-h") == 0) ||
+            (wcscmp(argv[1], L"-?") == 0) ||
+            (wcscmp(argv[1], L"/h") == 0) ||
+            (wcscmp(argv[1], L"/?") == 0))
+    {
 
         DisplayHelp(argv[0]);
         return ERROR_SUCCESS;
@@ -448,7 +471,8 @@ Return Value:
 
     ZeroMemory(&SubcriptionParameter, sizeof(SubcriptionParameter));
     SubcriptionParameter.Channel = argv[1];
-    if (argc >= 3) {
+    if (argc >= 3)
+    {
         SubcriptionParameter.Query = argv[2];
     }
 
@@ -460,24 +484,27 @@ Return Value:
     Work = CreateThreadpoolWork(PullSubscription,
                                 &SubcriptionParameter,
                                 NULL);
-    if (Work == NULL) {
+    if (Work == NULL)
+    {
         wprintf(L"error=%u\n", GetLastError());
         return GetLastError();
     }
 
     //
     // Create a NT signal event which will be used in subscription.
-    // 
+    //
 
     SubcriptionParameter.SignalEvent = CreateEvent(NULL, FALSE, FALSE, NULL);
-    if (SubcriptionParameter.SignalEvent == NULL) {
+    if (SubcriptionParameter.SignalEvent == NULL)
+    {
         CloseThreadpoolWork(Work);
         return GetLastError();
     }
 
     SubmitThreadpoolWork(Work);
 
-    while (!Done) {
+    while (!Done)
+    {
 
         //
         // Wait for user's input.
@@ -489,11 +516,12 @@ Return Value:
         // If user puts s, it means he wants the subscribption to stop.
         //
 
-        if (ControlCharacter == L's' || ControlCharacter == 'S') {
+        if (ControlCharacter == L's' || ControlCharacter == 'S')
+        {
             SubcriptionParameter.Stop = TRUE;
 
             //
-            // Wait for the work to finish himself and then we can 
+            // Wait for the work to finish himself and then we can
             // collect the error code.
             //
 
@@ -516,7 +544,8 @@ Return Value:
         // If user puts q, it menas he wants to end the whole process.
         //
 
-        if (ControlCharacter == L'q' || ControlCharacter == L'Q') {
+        if (ControlCharacter == L'q' || ControlCharacter == L'Q')
+        {
             Done = TRUE;
             SubcriptionParameter.Stop = TRUE;
 
@@ -528,7 +557,8 @@ Return Value:
         }
     }
 
-    if (SubcriptionParameter.BookMarkXml != NULL) {
+    if (SubcriptionParameter.BookMarkXml != NULL)
+    {
         HeapFree(GetProcessHeap(), 0, (PVOID) SubcriptionParameter.BookMarkXml);
     }
     CloseHandle(SubcriptionParameter.SignalEvent);

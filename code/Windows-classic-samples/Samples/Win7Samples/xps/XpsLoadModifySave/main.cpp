@@ -1,4 +1,4 @@
-
+﻿
 //+----------------------------------------------------------------------------
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
@@ -12,7 +12,7 @@
 //      XPS documents.
 //-----------------------------------------------------------------------------
 
-#ifndef _WIN32_WINNT            
+#ifndef _WIN32_WINNT
 #define _WIN32_WINNT 0x0601     // Specifies that the minimum required platform is Windows 7.
 #endif
 
@@ -43,8 +43,8 @@ LoadAttachedResourceToMemory(
     LPCTSTR               streamResourceId,
     LPCTSTR               lpType,
     PVOID                 *ppData,
-    PDWORD                pdwSize 
-    )
+    PDWORD                pdwSize
+)
 {
     DWORD           dwSize  = 0;
     HGLOBAL         hData   = NULL; // Not really HGlobal. See MSDN's LockResource for details.
@@ -96,15 +96,15 @@ HRESULT GetReadStreamFromAttachedResource(
     LPCTSTR           lpType,
     IStream         **ppReadStream,
     PDWORD            pdwSize
-    )
+)
 {
-    PVOID           pBuf = NULL; 
+    PVOID           pBuf = NULL;
     PVOID           pData = NULL;
     HRESULT         hr    = S_OK;
     IStream        *pReadStream = NULL;
 
     hr = LoadAttachedResourceToMemory(lpName, lpType, &pData, pdwSize);
-    
+
     if ( SUCCEEDED(hr) && pData)
     {
         if ( pData )
@@ -135,30 +135,30 @@ HRESULT GetReadStreamFromAttachedResource(
         *ppReadStream = pReadStream;
     }
     return hr;
-    
-    
+
+
 }
 
 HRESULT
 GetXpsFactory(
     IXpsOMObjectFactory **factory
-    )
+)
 {
     return CoCreateInstance(
-                __uuidof(XpsOMObjectFactory),
-                NULL,
-                CLSCTX_INPROC_SERVER,
-                __uuidof(IXpsOMObjectFactory),
-                reinterpret_cast<LPVOID*>(factory)
-                );
+               __uuidof(XpsOMObjectFactory),
+               NULL,
+               CLSCTX_INPROC_SERVER,
+               __uuidof(IXpsOMObjectFactory),
+               reinterpret_cast<LPVOID*>(factory)
+           );
 }
 
-HRESULT 
+HRESULT
 LoadXpsPackage(
     WORD                   xpsStreamResourceId,
     IXpsOMObjectFactory   *pXpsFactory,
     IXpsOMPackage        **ppXpsPackage
-    )
+)
 {
     HRESULT      hr = S_OK;
     IStream     *pStream = NULL;
@@ -166,19 +166,19 @@ LoadXpsPackage(
 
 
     hr = GetReadStreamFromAttachedResource(
-            reinterpret_cast<LPCWSTR>(xpsStreamResourceId),
-            reinterpret_cast<LPCWSTR>(RC_PACKAGE_DATA),
-            &pStream,
-            &size
-            );
+             reinterpret_cast<LPCWSTR>(xpsStreamResourceId),
+             reinterpret_cast<LPCWSTR>(RC_PACKAGE_DATA),
+             &pStream,
+             &size
+         );
 
-	if ( SUCCEEDED(hr) )
-	{
+    if ( SUCCEEDED(hr) )
+    {
         hr =  pXpsFactory->CreatePackageFromStream(
-                    pStream,
-                    FALSE,
-                    ppXpsPackage
-                    );
+                  pStream,
+                  FALSE,
+                  ppXpsPackage
+              );
     }
 
     if ( pStream )
@@ -196,7 +196,7 @@ FindFirstPageReference(
     IXpsOMObjectFactory*    /* pXpsFactory */,
     IXpsOMPackage          *pXpsPackage,
     IXpsOMPageReference   **ppXpsPageReference
-    )
+)
 {
     HRESULT                          hr                     = S_OK;
     IXpsOMDocumentSequence          *pXpsDocSeq             = NULL;
@@ -206,7 +206,7 @@ FindFirstPageReference(
 
 
     hr = pXpsPackage->GetDocumentSequence(&pXpsDocSeq);
-    
+
     if (SUCCEEDED(hr) )
     {
         hr = pXpsDocSeq->GetDocuments(&pXpsDocCollection);
@@ -260,7 +260,7 @@ CreateWaterMark(
     IXpsOMObjectFactory   *pXpsFactory,
     IXpsOMFontResource    *pXpsFontResource,
     IXpsOMCanvas         **ppXpsCanvas
-    )
+)
 {
 
     HRESULT                  hr = S_OK;
@@ -329,7 +329,7 @@ CreateWaterMark(
     {
         hr = pXpsVisualCollection->Append(pXpsGlyphs);
     }
-   
+
     if ( pXpsSolidColor )
     {
         pXpsSolidColor->Release();
@@ -361,7 +361,7 @@ HRESULT
 AddWatermarkToPage(
     IXpsOMPage      *pXpsPage,
     IXpsOMCanvas    *pXpsCanvas
-    )
+)
 {
     IXpsOMVisualCollection *pVisualCollection = NULL;
 
@@ -385,7 +385,7 @@ HRESULT
 GetFontResource(
     IXpsOMPageReference      *pXpsPageReference,
     IXpsOMFontResource     **ppXpsFontResource
-    )
+)
 {
     HRESULT                          hr                     = S_OK;
     IXpsOMPartResources             *pXpsPartResources      = NULL;
@@ -424,7 +424,7 @@ GetFontResource(
 HRESULT
 SerializePackage(
     IXpsOMPackage *pXpsPackage
-    )
+)
 {
     WCHAR szDesktopPath[MAX_PATH];
     HRESULT hr = SHGetFolderPath(0, CSIDL_DESKTOPDIRECTORY, 0, SHGFP_TYPE_CURRENT, szDesktopPath);
@@ -443,7 +443,7 @@ SerializePackage(
 
 int
 wmain(
-    int    /* argc   */, 
+    int    /* argc   */,
     wchar_t* /* argv[] */
 )
 {
@@ -471,8 +471,8 @@ wmain(
     else
     {
         hr = LoadXpsPackage(IDR_RC_PACKAGE_DATA1,
-                pXpsFactory,
-                &pXpsPackage);
+                            pXpsFactory,
+                            &pXpsPackage);
     }
 
     if ( !SUCCEEDED(hr) )
@@ -491,7 +491,7 @@ wmain(
 
     if ( SUCCEEDED(hr) )
     {
-         hr = CreateWaterMark(pXpsFactory, pXpsFontResource, &pXpsCanvas);
+        hr = CreateWaterMark(pXpsFactory, pXpsFontResource, &pXpsCanvas);
     }
 
     if (SUCCEEDED(hr) )
@@ -534,7 +534,7 @@ wmain(
         pXpsCanvas = NULL;
     }
 
-    
+
     if ( pXpsPackage )
     {
         pXpsPackage->Release();

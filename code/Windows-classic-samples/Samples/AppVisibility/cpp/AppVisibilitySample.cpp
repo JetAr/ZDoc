@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -18,19 +18,19 @@ PCWSTR const _GetMonitorAppVisibilityString(MONITOR_APP_VISIBILITY monitorAppVis
     PCWSTR pszAppVisibilityString = nullptr;
     switch (monitorAppVisibility)
     {
-        case MAV_NO_APP_VISIBLE:
-            pszAppVisibilityString = L"no apps visible";
-            break;
+    case MAV_NO_APP_VISIBLE:
+        pszAppVisibilityString = L"no apps visible";
+        break;
 
-        case MAV_APP_VISIBLE:
-            pszAppVisibilityString = L"a visible app";
-            break;
+    case MAV_APP_VISIBLE:
+        pszAppVisibilityString = L"a visible app";
+        break;
 
-        case MAV_UNKNOWN:
+    case MAV_UNKNOWN:
         __fallthrough;
-        default:
-            pszAppVisibilityString = L"unknown";
-            break;
+    default:
+        pszAppVisibilityString = L"unknown";
+        break;
     }
     return pszAppVisibilityString;
 }
@@ -39,16 +39,16 @@ PCWSTR const _GetMonitorAppVisibilityString(MONITOR_APP_VISIBILITY monitorAppVis
 // from the AppVisibility COM object.
 class CAppVisibilityNotificationSubscriber :
     public Microsoft::WRL::RuntimeClass<
-        Microsoft::WRL::RuntimeClassFlags<Microsoft::WRL::RuntimeClassType::ClassicCom>,
-        IAppVisibilityEvents>
+    Microsoft::WRL::RuntimeClassFlags<Microsoft::WRL::RuntimeClassType::ClassicCom>,
+    IAppVisibilityEvents>
 {
 public:
     CAppVisibilityNotificationSubscriber();
 
     // AppVisibilityOnMonitorChanged will be called when applications appear or disappear on a monitor
     IFACEMETHODIMP AppVisibilityOnMonitorChanged(_In_ HMONITOR hMonitor,
-                                           MONITOR_APP_VISIBILITY previousAppVisibility,
-                                           MONITOR_APP_VISIBILITY currentAppVisibility);
+            MONITOR_APP_VISIBILITY previousAppVisibility,
+            MONITOR_APP_VISIBILITY currentAppVisibility);
 
     // LauncherVisibilityChange will be called whenever the Start menu becomes visible or hidden
     IFACEMETHODIMP LauncherVisibilityChange(BOOL currentVisibleState);
@@ -73,13 +73,13 @@ CAppVisibilityNotificationSubscriber::~CAppVisibilityNotificationSubscriber()
 
 // Implementation of IAppVisibilityEvents
 IFACEMETHODIMP CAppVisibilityNotificationSubscriber::AppVisibilityOnMonitorChanged(_In_ HMONITOR hMonitor,
-                                                                             MONITOR_APP_VISIBILITY previousAppVisibility,
-                                                                             MONITOR_APP_VISIBILITY currentAppVisibility)
+        MONITOR_APP_VISIBILITY previousAppVisibility,
+        MONITOR_APP_VISIBILITY currentAppVisibility)
 {
     wprintf_s(L"Monitor %p previously had %s and now has %s\r\n",
-                hMonitor,
-                _GetMonitorAppVisibilityString(previousAppVisibility),
-                _GetMonitorAppVisibilityString(currentAppVisibility));
+              hMonitor,
+              _GetMonitorAppVisibilityString(previousAppVisibility),
+              _GetMonitorAppVisibilityString(currentAppVisibility));
     return S_OK;
 }
 
@@ -98,9 +98,9 @@ IFACEMETHODIMP CAppVisibilityNotificationSubscriber::LauncherVisibilityChange(BO
 }
 
 BOOL CALLBACK DisplayMonitorEnumProc(_In_ HMONITOR hMonitor,
-                                         _In_ HDC /*hdcMonitor*/,
-                                         _In_ LPRECT /*lprcMonitor*/,
-                                         _In_ LPARAM dwData)
+                                     _In_ HDC /*hdcMonitor*/,
+                                     _In_ LPRECT /*lprcMonitor*/,
+                                     _In_ LPARAM dwData)
 {
     IAppVisibility *pAppVisibility = reinterpret_cast<IAppVisibility *>(dwData);
 

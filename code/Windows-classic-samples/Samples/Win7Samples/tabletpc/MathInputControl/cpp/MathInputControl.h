@@ -1,16 +1,16 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
 //
 // Copyright (c) Microsoft Corporation. All rights reserved.
 //
-// Module:       
+// Module:
 //      MathInputControl.h
 //
 // Description:
-//      The header file for the CMathInputControlHost and 
-//      CMathInputControlEventListener classes. 
+//      The header file for the CMathInputControlHost and
+//      CMathInputControlEventListener classes.
 //
 //      CMathInputControlHost class is a host for Math Input Control object and
 //      user interface objects which interact with the control (main application
@@ -52,7 +52,7 @@ private:
     class CMathInputControlEventListener : public IMathInputControlEvents
     {
     public:
-        CMathInputControlEventListener(CMathInputControlHost* pMathInputControlHost) 
+        CMathInputControlEventListener(CMathInputControlHost* pMathInputControlHost)
             : p(pMathInputControlHost)
         {
         }

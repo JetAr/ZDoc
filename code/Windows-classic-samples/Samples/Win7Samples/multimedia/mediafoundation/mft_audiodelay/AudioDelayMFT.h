@@ -1,8 +1,8 @@
-//////////////////////////////////////////////////////////////////////////
+﻿//////////////////////////////////////////////////////////////////////////
 //
-// AudioDelayMFT.h 
+// AudioDelayMFT.h
 // Implements an audio effect as a Media Foundation transform.
-// 
+//
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -28,7 +28,7 @@ using namespace MediaFoundationSamples;
 const DWORD UNITS = 10000000;            // 1 sec = 1 * UNITS
 const DWORD DEFAULT_WET_DRY_MIX = 25;    // Percentage of "wet" (delay) audio in the mix.
 const DWORD DEFAULT_DELAY = 1000;        // Delay in msec
-const UINT32 ATTRIBUTE_COUNT = 2;        // Initial size of our attribute store. 
+const UINT32 ATTRIBUTE_COUNT = 2;        // Initial size of our attribute store.
 
 
 
@@ -52,13 +52,13 @@ public:
     STDMETHODIMP_(ULONG) Release();
 
     // IMFTransform methods.
-    STDMETHODIMP GetStreamLimits( 
+    STDMETHODIMP GetStreamLimits(
         DWORD   *pdwInputMinimum,
         DWORD   *pdwInputMaximum,
         DWORD   *pdwOutputMinimum,
         DWORD   *pdwOutputMaximum
     );
-    
+
     STDMETHODIMP GetStreamCount(DWORD *pcInputStreams, DWORD *pcOutputStreams);
 
     STDMETHODIMP GetStreamIDs(
@@ -67,7 +67,7 @@ public:
         DWORD   dwOutputIDArraySize,
         DWORD   *pdwOutputIDs
     );
-    
+
     STDMETHODIMP GetInputStreamInfo(DWORD dwInputStreamID, MFT_INPUT_STREAM_INFO *pStreamInfo);
     STDMETHODIMP GetOutputStreamInfo(DWORD dwOutputStreamID, MFT_OUTPUT_STREAM_INFO *pStreamInfo);
     STDMETHODIMP GetAttributes(IMFAttributes** ppAttributes);
@@ -91,13 +91,13 @@ public:
     STDMETHODIMP SetInputType(
         DWORD           dwInputStreamID,
         IMFMediaType    *pType,
-        DWORD           dwFlags 
+        DWORD           dwFlags
     );
 
     STDMETHODIMP SetOutputType(
         DWORD           dwOutputStreamID,
         IMFMediaType    *pType,
-        DWORD           dwFlags 
+        DWORD           dwFlags
     );
 
     STDMETHODIMP GetInputCurrentType(DWORD dwInputStreamID, IMFMediaType **ppType);
@@ -109,15 +109,15 @@ public:
     STDMETHODIMP ProcessMessage(MFT_MESSAGE_TYPE eMessage, ULONG_PTR ulParam);
     STDMETHODIMP ProcessInput(
         DWORD               dwInputStreamID,
-        IMFSample           *pSample, 
-        DWORD               dwFlags 
+        IMFSample           *pSample,
+        DWORD               dwFlags
     );
 
     STDMETHODIMP ProcessOutput(
-        DWORD                   dwFlags, 
+        DWORD                   dwFlags,
         DWORD                   cOutputBufferCount,
         MFT_OUTPUT_DATA_BUFFER  *pOutputSamples, // one per stream
-        DWORD                   *pdwStatus  
+        DWORD                   *pdwStatus
     );
 
 private:
@@ -152,26 +152,49 @@ private:
     enum StreamDirection { InputStream, OutputStream };
 
     // Format information. (Do not call unless the media type is set.)
-    UINT32 BlockAlign() const {     assert(m_pMediaType);   return MFGetAttributeUINT32(m_pMediaType, MF_MT_AUDIO_BLOCK_ALIGNMENT, 0); }
-    UINT32 AvgBytesPerSec() const { assert(m_pMediaType);   return MFGetAttributeUINT32(m_pMediaType, MF_MT_AUDIO_AVG_BYTES_PER_SECOND, 0); }
-    UINT32 SamplesPerSec() const {  assert(m_pMediaType);   return MFGetAttributeUINT32(m_pMediaType, MF_MT_AUDIO_SAMPLES_PER_SECOND, 0); }
-    UINT32 NumChannels() const {    assert(m_pMediaType);   return MFGetAttributeUINT32(m_pMediaType, MF_MT_AUDIO_NUM_CHANNELS, 0); }
-    UINT32 BitsPerSample() const {  assert(m_pMediaType);   return MFGetAttributeUINT32(m_pMediaType, MF_MT_AUDIO_BITS_PER_SAMPLE, 0); }
+    UINT32 BlockAlign() const
+    {
+        assert(m_pMediaType);
+        return MFGetAttributeUINT32(m_pMediaType, MF_MT_AUDIO_BLOCK_ALIGNMENT, 0);
+    }
+    UINT32 AvgBytesPerSec() const
+    {
+        assert(m_pMediaType);
+        return MFGetAttributeUINT32(m_pMediaType, MF_MT_AUDIO_AVG_BYTES_PER_SECOND, 0);
+    }
+    UINT32 SamplesPerSec() const
+    {
+        assert(m_pMediaType);
+        return MFGetAttributeUINT32(m_pMediaType, MF_MT_AUDIO_SAMPLES_PER_SECOND, 0);
+    }
+    UINT32 NumChannels() const
+    {
+        assert(m_pMediaType);
+        return MFGetAttributeUINT32(m_pMediaType, MF_MT_AUDIO_NUM_CHANNELS, 0);
+    }
+    UINT32 BitsPerSample() const
+    {
+        assert(m_pMediaType);
+        return MFGetAttributeUINT32(m_pMediaType, MF_MT_AUDIO_BITS_PER_SAMPLE, 0);
+    }
 
-    BOOL Is8Bit() const { return (BitsPerSample() == 8); }
+    BOOL Is8Bit() const
+    {
+        return (BitsPerSample() == 8);
+    }
 
     // IncrementDelayPtr: Moves the delay pointer around the circular buffer
-    void IncrementDelayPtr(size_t size) 
+    void IncrementDelayPtr(size_t size)
     {
         m_pbDelayPtr += size;
         if (m_pbDelayPtr + size > m_pbDelayBuffer + m_cbDelayBuffer)
         {
             m_pbDelayPtr = m_pbDelayBuffer;
         }
-    }   
+    }
 
     // IsValidInputStream: Returns TRUE if dwInputStreamID is a valid input stream identifier.
-    BOOL IsValidInputStream(DWORD dwInputStreamID) const 
+    BOOL IsValidInputStream(DWORD dwInputStreamID) const
     {
         return dwInputStreamID == 0;
     }
@@ -183,10 +206,10 @@ private:
     }
 
     // HasPendingOutput: Returns TRUE if the MFT can produce output.
-    BOOL HasPendingOutput() const 
-    { 
+    BOOL HasPendingOutput() const
+    {
         // Two cases: The MFT has an input buffer, OR the MFT is producing an effect tail.
-        return ((m_pBuffer != NULL) || (m_bDraining)); 
+        return ((m_pBuffer != NULL) || (m_bDraining));
     }
 
     BOOL IsOutputTypeSet() const
@@ -204,16 +227,16 @@ private:
     }
 
     HRESULT AllocateStreamingResources();
-    void    FreeStreamingResources(BOOL bFlush);  
+    void    FreeStreamingResources(BOOL bFlush);
     HRESULT CreateAttributeStore();
 
     HRESULT InternalProcessOutput(MFT_OUTPUT_DATA_BUFFER& OutputSample, DWORD *pdwStatus);
-    
+
     HRESULT ProcessAudio(
-                BYTE *pbData,            // Pointer to the output buffer
-                const BYTE *pbInputData, // Pointer to the input buffer
-                DWORD dwQuantaToProcess  // Number of quanta to process
-                );
+        BYTE *pbData,            // Pointer to the output buffer
+        const BYTE *pbInputData, // Pointer to the input buffer
+        DWORD dwQuantaToProcess  // Number of quanta to process
+    );
 
     HRESULT ProcessEffectTail(MFT_OUTPUT_DATA_BUFFER& OutputSample, DWORD *pdwStatus);
     void    FillBufferWithSilence(BYTE *pBuffer, DWORD cb);

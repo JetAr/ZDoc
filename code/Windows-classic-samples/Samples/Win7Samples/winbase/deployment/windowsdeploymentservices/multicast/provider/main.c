@@ -1,4 +1,4 @@
-/*++
+﻿/*++
 
 Copyright (c) 2007 Microsoft Corporation
 
@@ -9,7 +9,7 @@ Module Name:
 Abstract:
 
     Sample code demonstrating an implementation of the wds content provider.
-    
+
 Author:
 
    Blaine Young (blyoung)
@@ -64,15 +64,16 @@ typedef struct _CALLBACK_ENTRY
 //
 
 CALLBACK_ENTRY Callbacks[] = {{WDS_TRANSPORTPROVIDER_CREATE_INSTANCE, WdsTransportProviderCreateInstance},
-                              {WDS_TRANSPORTPROVIDER_COMPARE_CONTENT, WdsTransportProviderCompareContent},
-                              {WDS_TRANSPORTPROVIDER_OPEN_CONTENT, WdsTransportProviderOpenContent},
-                              {WDS_TRANSPORTPROVIDER_USER_ACCESS_CHECK, WdsTransportProviderUserAccessCheck},
-                              {WDS_TRANSPORTPROVIDER_GET_CONTENT_SIZE, WdsTransportProviderGetContentSize},
-                              {WDS_TRANSPORTPROVIDER_READ_CONTENT, WdsTransportProviderReadContent},
-                              {WDS_TRANSPORTPROVIDER_CLOSE_CONTENT, WdsTransportProviderCloseContent},
-                              {WDS_TRANSPORTPROVIDER_CLOSE_INSTANCE, WdsTransportProviderCloseInstance},
-                              {WDS_TRANSPORTPROVIDER_SHUTDOWN, WdsTransportProviderShutdown}};
-    
+    {WDS_TRANSPORTPROVIDER_COMPARE_CONTENT, WdsTransportProviderCompareContent},
+    {WDS_TRANSPORTPROVIDER_OPEN_CONTENT, WdsTransportProviderOpenContent},
+    {WDS_TRANSPORTPROVIDER_USER_ACCESS_CHECK, WdsTransportProviderUserAccessCheck},
+    {WDS_TRANSPORTPROVIDER_GET_CONTENT_SIZE, WdsTransportProviderGetContentSize},
+    {WDS_TRANSPORTPROVIDER_READ_CONTENT, WdsTransportProviderReadContent},
+    {WDS_TRANSPORTPROVIDER_CLOSE_CONTENT, WdsTransportProviderCloseContent},
+    {WDS_TRANSPORTPROVIDER_CLOSE_INSTANCE, WdsTransportProviderCloseInstance},
+    {WDS_TRANSPORTPROVIDER_SHUTDOWN, WdsTransportProviderShutdown}
+};
+
 
 typedef struct _CALLBACK_DATA
 {
@@ -89,7 +90,7 @@ DllMain(
     __in HINSTANCE hInstance,
     IN DWORD dwReason,
     __in PVOID pReserved
-    )
+)
 /*++
 
 Routine Description:
@@ -106,27 +107,27 @@ Returns:
 
     TRUE on success, FALSE on failure.
 
---*/    
+--*/
 {
     HRESULT hr = S_OK;
     UNREFERENCED_PARAMETER( pReserved );
 
     switch ( dwReason )
     {
-        case DLL_PROCESS_ATTACH:
-            g_hInstance = hInstance;
-            break;
-            
-        case DLL_PROCESS_DETACH:
-            break;
-        default:
-            break;
+    case DLL_PROCESS_ATTACH:
+        g_hInstance = hInstance;
+        break;
+
+    case DLL_PROCESS_DETACH:
+        break;
+    default:
+        break;
     }
 
     return !FAILED(hr);
 }
 
-VOID 
+VOID
 CompleteRead(
     __in DWORD dwErrorCode,
     __in DWORD dwBytesCount,
@@ -142,7 +143,7 @@ Arguments:
     dwErrorCode - The overall result of the read.
     dwBytesCount - The number of bytes read.
     pData - The length of the buffer pSettings, in bytes.
-    
+
 **/
 {
     HRESULT hr = S_OK;
@@ -159,11 +160,11 @@ Arguments:
     //
     // Inform the server that the read is complete.
     //
-    
+
     WdsTransportServerCompleteRead(g_hProvider,
                                    dwBytesCount,
                                    pData->pvCallerData,
-                                   hr); 
+                                   hr);
 
     //
     // Free our callback data since it is no longer needed.
@@ -177,7 +178,7 @@ WdsTransportProviderInit(
     __in PWDS_TRANSPORTPROVIDER_INIT_PARAMS pInParameters,
     __out_bcount(ulLength) PWDS_TRANSPORTPROVIDER_SETTINGS pSettings,
     __in ULONG ulLength
-    )
+)
 /*++
 
 Routine Description:
@@ -186,21 +187,21 @@ Routine Description:
 
 Arguments:
 
-    pInParameters - Pointer to a a PWDS_TRANSPORTPROVIDER_INIT_PARAMS structure 
-                    that will contain information about the multicast server and 
-                    the environment that the provider is running in.  Content 
-                    providers should check themselves against these setting to 
+    pInParameters - Pointer to a a PWDS_TRANSPORTPROVIDER_INIT_PARAMS structure
+                    that will contain information about the multicast server and
+                    the environment that the provider is running in.  Content
+                    providers should check themselves against these setting to
                     ensure that this is an environment that they can run in.
-    pSettings - Pointer to a PWDS_TRANSPORT_PROVIDER_SETTINGS structure that the 
+    pSettings - Pointer to a PWDS_TRANSPORT_PROVIDER_SETTINGS structure that the
                 content provider uses to inform the server about itself.
-    ulLength - The length of the buffer pSettings, in bytes. 
+    ulLength - The length of the buffer pSettings, in bytes.
 
 
 Returns:
 
     S_OK on success, an appropriate error code on failure.
 
---*/      
+--*/
 {
     HRESULT hr = S_OK;
     ULONG i = 0;
@@ -263,29 +264,29 @@ WDSTRANSPORTPROVIDERAPI
 WdsTransportProviderCreateInstance(
     __in PCWSTR pwszConfigString,
     __out PHANDLE phInstance
-    )
+)
 /*++
 
 Routine Description:
 
-    Initializes a new provider instance.  For more information about instances, 
+    Initializes a new provider instance.  For more information about instances,
     please see the Instances section in the api reference.
 
 Arguments:
 
-    pwszConfigString - Configuration information for this instance.  
-                       Configuration information may change on an instance by 
-                       instance basis.  The format of this string is determined 
+    pwszConfigString - Configuration information for this instance.
+                       Configuration information may change on an instance by
+                       instance basis.  The format of this string is determined
                        by the provider.
-    phInstance - Pointer to a handle that will be used to identify this 
-                 instance to the provider in future calls.  This handle must be 
-                 closed with a call to WdsTransportProviderCloseInstance. 
+    phInstance - Pointer to a handle that will be used to identify this
+                 instance to the provider in future calls.  This handle must be
+                 closed with a call to WdsTransportProviderCloseInstance.
 
 Returns:
 
     S_OK on success, an appropriate error code on failure.
 
---*/     
+--*/
 {
     //
     // This provider merely opens a handle to any file that is given to it,
@@ -302,31 +303,31 @@ WdsTransportProviderCompareContent(
     __in PCWSTR pwszContentName,
     __in HANDLE hContent,
     __out PBOOL pbContentMatches
-    )
+)
 /*++
 
 Routine Description:
 
-    Compares a content name/configuration string pair to an already opened 
+    Compares a content name/configuration string pair to an already opened
     content handle to determine if they are the exact same.
 
 Arguments:
 
-    hInstance - Handle to the instance against which this stream will be opened.  
+    hInstance - Handle to the instance against which this stream will be opened.
                 For more information, see the Instances section in the api
                 documentation.
     pwszStreamName - The name of the Stream to compare.
     hStream - An already opened Stream to compare to.
-    pbStreamsMatch - If the data streams pointed to by 
-                     hInstance/pwszContentName and hStream are the exact same, 
-                     this variable will be set to true.  It will be set to 
-                     false otherwise. 
+    pbStreamsMatch - If the data streams pointed to by
+                     hInstance/pwszContentName and hStream are the exact same,
+                     this variable will be set to true.  It will be set to
+                     false otherwise.
 
 Returns:
 
     S_OK on success, an appropriate error code on failure.
 
---*/     
+--*/
 {
     HRESULT hr = S_OK;
 
@@ -342,7 +343,7 @@ Returns:
     }
 
     *pbContentMatches = TRUE;
-    
+
 exit:
 
     return hr;
@@ -354,7 +355,7 @@ WdsTransportProviderUserAccessCheck(
     __in HANDLE hContent,
     __in HANDLE hUserToken,
     __out PBOOL pbAccessAllowed
-    )
+)
 /*++
 
 Routine Description:
@@ -373,7 +374,7 @@ Returns:
 
     S_OK on success, an appropriate error code on failure.
 
---*/        
+--*/
 {
     //
     // Grant access to the entire world.
@@ -390,30 +391,30 @@ WdsTransportProviderOpenContent(
     __in HANDLE hInstance,
     __in PCWSTR pwszContentName,
     __out PHANDLE phContent
-    )
+)
 /*++
 
 Routine Description:
 
-    The WdsTransportProviderOpenStream opens a new static view to contents. 
+    The WdsTransportProviderOpenStream opens a new static view to contents.
 
 Arguments:
 
-    hInstance - Handle to the instance against which this stream will be opened.  
+    hInstance - Handle to the instance against which this stream will be opened.
                 For more information, see the Instances section in the api
                 documentation.
-    pwszContentName - The name of the data stream that the user wants 
-                      multicasted.  The interpretation of this Stream name is 
+    pwszContentName - The name of the data stream that the user wants
+                      multicasted.  The interpretation of this Stream name is
                       provider specific.
-    phContent - Pointer to a handle that will be used to identify this data 
-                stream to the provider. 
+    phContent - Pointer to a handle that will be used to identify this data
+                stream to the provider.
 
 
 Returns:
 
     S_OK on success, an appropriate error code on failure.
 
---*/ 
+--*/
 {
     HANDLE hFile = INVALID_HANDLE_VALUE;
     BOOL bResult = FALSE;
@@ -421,7 +422,7 @@ Returns:
 
     //
     // Create a file for exclusive access.  For most users, this will not be
-    // sufficient since it's entirely possible for successive one-off sessions 
+    // sufficient since it's entirely possible for successive one-off sessions
     // to tie up a file indefinately, preventing any sort of maintanence on that
     // file.
     //
@@ -436,7 +437,7 @@ Returns:
     if (INVALID_HANDLE_VALUE == hFile)
     {
         EXIT_ON_WIN_ERROR(GetLastError());
-    }    
+    }
 
     bResult = BindIoCompletionCallback(hFile,
                                        (LPOVERLAPPED_COMPLETION_ROUTINE)CompleteRead,
@@ -471,7 +472,7 @@ WDSTRANSPORTPROVIDERAPI
 WdsTransportProviderGetContentSize(
     __in HANDLE hContent,
     __out PULARGE_INTEGER pContentSize
-    )
+)
 /*++
 
 Routine Description:
@@ -480,16 +481,16 @@ Routine Description:
 
 Arguments:
 
-    hContent - Content handle previously opened by a call to 
+    hContent - Content handle previously opened by a call to
                WdsTransportProviderOpenStream.
-    pContentSize - Pointer to a large integer that will receive the size of the 
-                   contents. 
+    pContentSize - Pointer to a large integer that will receive the size of the
+                   contents.
 
 Returns:
 
     S_OK on success, an appropriate error code on failure.
 
---*/    
+--*/
 {
     HRESULT hr = S_OK;
     BOOL bResult = FALSE;
@@ -503,7 +504,7 @@ Returns:
     }
 
     pContentSize->QuadPart = llFileSize.QuadPart;
-    
+
 exit:
 
     return hr;
@@ -517,7 +518,7 @@ WdsTransportProviderReadContent(
     __in ULONG ulBytesToRead,
     __in PULARGE_INTEGER pContentOffset,
     __in PVOID pvUserData
-    )
+)
 /*++
 
 Routine Description:
@@ -526,16 +527,16 @@ Routine Description:
 
 Arguments:
 
-    hContent - Content handle previously opened by a call to 
+    hContent - Content handle previously opened by a call to
                WdsTransportProviderOpenStream.
-    pContentSize - Pointer to a large integer that will receive the size of the 
-                   contents. 
+    pContentSize - Pointer to a large integer that will receive the size of the
+                   contents.
 
 Returns:
 
     S_OK on success, an appropriate error code on failure.
 
---*/       
+--*/
 {
     HRESULT hr = S_OK;
     BOOL bResult = FALSE;
@@ -577,7 +578,7 @@ Returns:
     //
 
     pData = NULL;
-    
+
 exit:
 
     if (NULL != pData)
@@ -592,7 +593,7 @@ HRESULT
 WDSTRANSPORTPROVIDERAPI
 WdsTransportProviderCloseContent(
     __in HANDLE hContent
-    )
+)
 /*++
 
 Routine Description:
@@ -603,7 +604,7 @@ Arguments:
 
     hContent - Handle to the data stream to close.
 
---*/      
+--*/
 {
     //
     // The handle belongs to the file system, so let the file system deal with
@@ -618,7 +619,7 @@ HRESULT
 WDSTRANSPORTPROVIDERAPI
 WdsTransportProviderCloseInstance(
     __in HANDLE hInstance
-    )
+)
 /*++
 
 Routine Description:
@@ -629,12 +630,12 @@ Arguments:
 
     hInstance - Handle to the instance to close.
 
---*/       
+--*/
 {
     //
     // We don't keep track of instances, so noop this.
     //
-    
+
     return S_OK;
 }
 
@@ -648,7 +649,7 @@ Routine Description:
 
     Globally deallocates the content provider.
 
---*/  
+--*/
 {
     //
     // We have nothing to clean up.

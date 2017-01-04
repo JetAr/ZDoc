@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -345,44 +345,44 @@ BOOL CheckForDragBegin(HWND hwnd, int x, int y)
         MSG msg;
         switch (MsgWaitForMultipleObjectsEx(0, NULL, INFINITE, QS_MOUSE, MWMO_INPUTAVAILABLE))
         {
-            case WAIT_OBJECT_0:
+        case WAIT_OBJECT_0:
+        {
+            if (PeekMessage(&msg, NULL, WM_MOUSEFIRST, WM_MOUSELAST, PM_REMOVE))
             {
-                if (PeekMessage(&msg, NULL, WM_MOUSEFIRST, WM_MOUSELAST, PM_REMOVE))
+                // See if the application wants to process the message...
+                if (CallMsgFilter(&msg, MSGF_COMMCTRL_BEGINDRAG) == 0)
                 {
-                    // See if the application wants to process the message...
-                    if (CallMsgFilter(&msg, MSGF_COMMCTRL_BEGINDRAG) == 0)
+                    switch (msg.message)
                     {
-                        switch (msg.message)
+                    case WM_LBUTTONUP:
+                    case WM_RBUTTONUP:
+                    case WM_LBUTTONDOWN:
+                    case WM_RBUTTONDOWN:
+                        // Released the mouse without moving outside the
+                        // drag radius, not beginning a drag.
+                        ReleaseCapture();
+                        return FALSE;
+
+                    case WM_MOUSEMOVE:
+                        if (!PtInRect(&rcDragRadius, msg.pt))
                         {
-                            case WM_LBUTTONUP:
-                            case WM_RBUTTONUP:
-                            case WM_LBUTTONDOWN:
-                            case WM_RBUTTONDOWN:
-                                // Released the mouse without moving outside the
-                                // drag radius, not beginning a drag.
-                                ReleaseCapture();
-                                return FALSE;
-
-                            case WM_MOUSEMOVE:
-                                if (!PtInRect(&rcDragRadius, msg.pt))
-                                {
-                                    // Moved outside the drag radius, beginning a drag.
-                                    ReleaseCapture();
-                                    return TRUE;
-                                }
-                                break;
-
-                            default:
-                                TranslateMessage(&msg);
-                                DispatchMessage(&msg);
-                                break;
+                            // Moved outside the drag radius, beginning a drag.
+                            ReleaseCapture();
+                            return TRUE;
                         }
+                        break;
+
+                    default:
+                        TranslateMessage(&msg);
+                        DispatchMessage(&msg);
+                        break;
                     }
                 }
-                break;
             }
-            default:
-                break;
+            break;
+        }
+        default:
+            break;
         }
 
         // WM_CANCELMODE messages will unset the capture, in that
@@ -422,38 +422,38 @@ INT_PTR CDragDropVisualsApp::_DlgProc(UINT uMsg, WPARAM wParam, LPARAM /*lParam*
         break;
 
     case WM_COMMAND:
+    {
+        const int idCmd = LOWORD(wParam);
+        switch (idCmd)
         {
-            const int idCmd = LOWORD(wParam);
-            switch (idCmd)
-            {
-            case IDOK:
-            case IDCANCEL:
-                return EndDialog(_hdlg, idCmd);
+        case IDOK:
+        case IDCANCEL:
+            return EndDialog(_hdlg, idCmd);
 
-            case IDC_OPEN:
+        case IDC_OPEN:
+            _OnOpen();
+            break;
+
+        case IDC_CLEAR:
+            SafeRelease(&_psiaDrop);
+            _BindUI();
+            break;
+
+        case IDC_IMAGE:
+            switch (HIWORD(wParam))
+            {
+            case STN_CLICKED:
+                _BeginDrag(GetDlgItem(_hdlg, idCmd));
+                break;
+
+            case STN_DBLCLK:
                 _OnOpen();
                 break;
-
-            case IDC_CLEAR:
-                SafeRelease(&_psiaDrop);
-                _BindUI();
-                break;
-
-            case IDC_IMAGE:
-                switch (HIWORD(wParam))
-                {
-                case STN_CLICKED:
-                    _BeginDrag(GetDlgItem(_hdlg, idCmd));
-                    break;
-
-                case STN_DBLCLK:
-                    _OnOpen();
-                    break;
-                }
-                break;
             }
+            break;
         }
-        break;
+    }
+    break;
 
     case WM_DESTROY:
         _OnDestroyDlg();

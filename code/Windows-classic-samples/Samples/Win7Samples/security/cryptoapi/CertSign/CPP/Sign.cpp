@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -10,9 +10,9 @@
 Title: Acquire a private key associated with a certificate and use it for signing
 
 This example shows how to acquire private key associated with a certificate,
-determine its type (CAPI or CNG) and used it to signed hashed message. 
+determine its type (CAPI or CNG) and used it to signed hashed message.
 In addition it demonstrates creating hash using CAPI or CNG APIs
-Please note: even though this sample shows CNG hash signed by CNG key and 
+Please note: even though this sample shows CNG hash signed by CNG key and
 CAPI hash signed by CAPI key, it is possible to use CNG key to sign CAPI hash
 
 ****************************************************************/
@@ -30,59 +30,59 @@ CAPI hash signed by CAPI key, it is possible to use CNG key to sign CAPI hash
 
 	Prints error information to the console
 *****************************************************************************/
-void 
-ReportError( 
-    LPCWSTR     wszMessage, 
-    DWORD       dwErrCode 
-    )
+void
+ReportError(
+    LPCWSTR     wszMessage,
+    DWORD       dwErrCode
+)
 {
-	LPWSTR pwszMsgBuf = NULL;
+    LPWSTR pwszMsgBuf = NULL;
 
-	if( NULL!=wszMessage && 0!=*wszMessage )
+    if( NULL!=wszMessage && 0!=*wszMessage )
     {
         wprintf( L"%s\n", wszMessage );
     }
 
-	FormatMessageW(
-        FORMAT_MESSAGE_ALLOCATE_BUFFER | 
+    FormatMessageW(
+        FORMAT_MESSAGE_ALLOCATE_BUFFER |
         FORMAT_MESSAGE_FROM_SYSTEM,
         NULL,                                       // Location of message
-                                                    //  definition ignored
+        //  definition ignored
         dwErrCode,                                  // Message identifier for
-                                                    //  the requested message    
+        //  the requested message
         MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),  // Language identifier for
-                                                    //  the requested message
+        //  the requested message
         (LPWSTR) &pwszMsgBuf,                       // Buffer that receives
-                                                    //  the formatted message
+        //  the formatted message
         0,                                          // Size of output buffer
-                                                    //  not needed as allocate
-                                                    //  buffer flag is set
+        //  not needed as allocate
+        //  buffer flag is set
         NULL                                        // Array of insert values
-		);
-	
-	if( NULL != pwszMsgBuf )
-	{
-	    wprintf( L"Error: 0x%08x (%d) %s\n", dwErrCode, dwErrCode, pwszMsgBuf );
-		LocalFree(pwszMsgBuf);
-	}
-	else
-	{
-	    wprintf( L"Error: 0x%08x (%d)\n", dwErrCode, dwErrCode );
-	}
+    );
+
+    if( NULL != pwszMsgBuf )
+    {
+        wprintf( L"Error: 0x%08x (%d) %s\n", dwErrCode, dwErrCode, pwszMsgBuf );
+        LocalFree(pwszMsgBuf);
+    }
+    else
+    {
+        wprintf( L"Error: 0x%08x (%d)\n", dwErrCode, dwErrCode );
+    }
 }
 
 /*****************************************************************************
   HrLoadFile
 
-    Load file into allocated (*ppbData). 
+    Load file into allocated (*ppbData).
     The caller must free the memory by LocalFree().
 *****************************************************************************/
 HRESULT
 HrLoadFile(
-	LPCWSTR  wszFileName,
+    LPCWSTR  wszFileName,
     PBYTE   *ppbData,
     DWORD   *pcbData
-    )
+)
 {
     HANDLE      hFile = INVALID_HANDLE_VALUE;
     DWORD       cbRead = 0;
@@ -91,23 +91,23 @@ HrLoadFile(
     *ppbData = NULL;
     *pcbData = 0;
 
-    hFile = CreateFileW( wszFileName, 
-                        GENERIC_READ,
-                        0,
-                        NULL, 
-                        OPEN_EXISTING, 
-                        0, 
-                        NULL );
+    hFile = CreateFileW( wszFileName,
+                         GENERIC_READ,
+                         0,
+                         NULL,
+                         OPEN_EXISTING,
+                         0,
+                         NULL );
 
     if( INVALID_HANDLE_VALUE == hFile )
     {
         hr = HRESULT_FROM_WIN32( GetLastError() );
-        
+
         goto CleanUp;
     }
 
     *pcbData = GetFileSize( hFile, NULL );
-    if( *pcbData == 0 ) 
+    if( *pcbData == 0 )
     {
         hr = S_FALSE;
         goto CleanUp;
@@ -117,14 +117,14 @@ HrLoadFile(
     if( NULL == *ppbData )
     {
         hr = HRESULT_FROM_WIN32( ERROR_OUTOFMEMORY );
-        
+
         goto CleanUp;
     }
 
     if( !ReadFile( hFile, *ppbData, *pcbData, &cbRead, NULL ))
     {
         hr = HRESULT_FROM_WIN32( GetLastError() );
-        
+
         goto CleanUp;
     }
 
@@ -156,33 +156,33 @@ CleanUp:
 HRESULT
 HrSaveFile(
     LPCWSTR             wszFileName,
-	PBYTE               pbData,
+    PBYTE               pbData,
     DWORD               cbData
-    )
+)
 {
     HANDLE      hFile = INVALID_HANDLE_VALUE;
     HRESULT     hr = S_OK;
     DWORD       cbWritten = 0;
 
-    hFile = CreateFileW( wszFileName, 
-                        GENERIC_WRITE,
-                        0,
-                        NULL, 
-                        CREATE_ALWAYS, 
-                        0, 
-                        NULL );
+    hFile = CreateFileW( wszFileName,
+                         GENERIC_WRITE,
+                         0,
+                         NULL,
+                         CREATE_ALWAYS,
+                         0,
+                         NULL );
 
     if( INVALID_HANDLE_VALUE == hFile )
     {
         hr = HRESULT_FROM_WIN32( GetLastError() );
-        
+
         goto CleanUp;
     }
 
     if( !WriteFile( hFile, pbData, cbData, &cbWritten, NULL ))
     {
         hr = HRESULT_FROM_WIN32( GetLastError() );
-        
+
         goto CleanUp;
     }
 
@@ -205,7 +205,7 @@ HrFindCertificateBySubjectName(
     LPCWSTR			wszStore,
     LPCWSTR			wszSubject,
     PCCERT_CONTEXT	*ppcCert
-    )
+)
 {
     HRESULT hr = S_OK;
     HCERTSTORE  hStoreHandle = NULL;  // The system store handle.
@@ -216,18 +216,18 @@ HrFindCertificateBySubjectName(
     // Open the certificate store to be searched.
 
     hStoreHandle = CertOpenStore(
-                           CERT_STORE_PROV_SYSTEM,          // the store provider type
-                           0,                               // the encoding type is not needed
-                           NULL,                            // use the default HCRYPTPROV
-                           CERT_SYSTEM_STORE_CURRENT_USER,  // set the store location in a 
-                                                            //  registry location
-                           wszStore
-                           );                               // the store name 
+                       CERT_STORE_PROV_SYSTEM,          // the store provider type
+                       0,                               // the encoding type is not needed
+                       NULL,                            // use the default HCRYPTPROV
+                       CERT_SYSTEM_STORE_CURRENT_USER,  // set the store location in a
+                       //  registry location
+                       wszStore
+                   );                               // the store name
 
     if( NULL == hStoreHandle )
     {
         hr = HRESULT_FROM_WIN32( GetLastError() );
-        
+
         goto CleanUp;
     }
 
@@ -235,22 +235,22 @@ HrFindCertificateBySubjectName(
     // Get a certificate that has the specified Subject Name
 
     *ppcCert = CertFindCertificateInStore(
-                           hStoreHandle,
-                           X509_ASN_ENCODING ,        // Use X509_ASN_ENCODING
-                           0,                         // No dwFlags needed
-                           CERT_FIND_SUBJECT_STR,     // Find a certificate with a
-                                                      //  subject that matches the 
-                                                      //  string in the next parameter
-                           wszSubject,                // The Unicode string to be found
-                                                      //  in a certificate's subject
-                           NULL);                     // NULL for the first call to the
-                                                      //  function; In all subsequent
-                                                      //  calls, it is the last pointer
-                                                      //  returned by the function
+                   hStoreHandle,
+                   X509_ASN_ENCODING,         // Use X509_ASN_ENCODING
+                   0,                         // No dwFlags needed
+                   CERT_FIND_SUBJECT_STR,     // Find a certificate with a
+                   //  subject that matches the
+                   //  string in the next parameter
+                   wszSubject,                // The Unicode string to be found
+                   //  in a certificate's subject
+                   NULL);                     // NULL for the first call to the
+    //  function; In all subsequent
+    //  calls, it is the last pointer
+    //  returned by the function
     if( NULL == *ppcCert )
     {
         hr = HRESULT_FROM_WIN32( GetLastError() );
-        
+
         goto CleanUp;
     }
 
@@ -259,25 +259,25 @@ CleanUp:
     if(NULL != hStoreHandle)
     {
         CertCloseStore( hStoreHandle, 0);
-    }   
+    }
 
     return hr;
 }
 
 //----------------------------------------------------------------------------------------------------------------
-// 
+//
 //  Function:   HrCreateCNGHash()
 //
 // The caller must call LocalFree to release (*ppbHash)
 //------------------------------------------------------------------------------------------------------------------
 HRESULT
-HrCreateCNGHash ( 
-    LPCWSTR     wszHashAlgName,                    
+HrCreateCNGHash (
+    LPCWSTR     wszHashAlgName,
     const BYTE  *pbData,
     ULONG       cbData,
     BYTE        **ppbHash,
     ULONG       *pcbHash
-    )
+)
 {
     HRESULT hr = S_OK;
 
@@ -299,11 +299,11 @@ HrCreateCNGHash (
 
     //get a handle to a cryptographic provider
     hr = BCryptOpenAlgorithmProvider(
-                                            &hAlgorithm, 
-                                            wszHashAlgName,             //hash algorthm 
-                                            NULL,                       //default MS provider; can be replaced with custom installed provider
-                                            0
-                                            );
+             &hAlgorithm,
+             wszHashAlgName,             //hash algorthm
+             NULL,                       //default MS provider; can be replaced with custom installed provider
+             0
+         );
     if( FAILED(hr) )
     {
         goto CleanUp;
@@ -311,35 +311,35 @@ HrCreateCNGHash (
 
     //first get size of HASH buffer
     hr =  BCryptGetProperty(
-                                            hAlgorithm, 
-                                            BCRYPT_OBJECT_LENGTH,   //name of the propery we retrieve
-                                            (PUCHAR) &cbHashObject, //hash object
-                                            sizeof(cbHashObject),   //size of hash object
-                                            &cbResult,              //not used in our case
-                                            0);                     //dwFlags
+              hAlgorithm,
+              BCRYPT_OBJECT_LENGTH,   //name of the propery we retrieve
+              (PUCHAR) &cbHashObject, //hash object
+              sizeof(cbHashObject),   //size of hash object
+              &cbResult,              //not used in our case
+              0);                     //dwFlags
     if( FAILED(hr) )
     {
         goto CleanUp;
     }
-    
+
     //now allocate memory for hash object
     pbHashObject = (BYTE*)LocalAlloc( LPTR, cbHashObject );
     if( NULL == pbHashObject )
     {
         hr = HRESULT_FROM_WIN32( ERROR_OUTOFMEMORY );
-        
+
         goto CleanUp;
     }
-    
+
     //create hash
     hr = BCryptCreateHash(
-                                        hAlgorithm,             //handle to an algorithm provider
-                                        &hHash,
-                                        pbHashObject,
-                                        cbHashObject,
-                                        NULL,                   //pbSecret
-                                        0,                      //cbSecret
-                                        0);                     //dwFlags
+             hAlgorithm,             //handle to an algorithm provider
+             &hHash,
+             pbHashObject,
+             cbHashObject,
+             NULL,                   //pbSecret
+             0,                      //cbSecret
+             0);                     //dwFlags
     if( FAILED(hr) )
     {
         goto CleanUp;
@@ -347,10 +347,10 @@ HrCreateCNGHash (
 
     //hash data
     hr = BCryptHashData(
-                                        hHash, 
-                                        (PUCHAR)pbData,         //data to be hashed
-                                        cbData,                 //size of data to be hashed in BYTES
-                                        0);                     //dwFlags
+             hHash,
+             (PUCHAR)pbData,         //data to be hashed
+             cbData,                 //size of data to be hashed in BYTES
+             0);                     //dwFlags
     if( FAILED(hr) )
     {
         goto CleanUp;
@@ -358,17 +358,17 @@ HrCreateCNGHash (
 
     //now get size of final HASH buffer
     hr =  BCryptGetProperty(
-                                        hAlgorithm, 
-                                        BCRYPT_HASH_LENGTH, //name of the propery we retrieve
-                                        (PUCHAR)pcbHash, 
-                                        sizeof(*pcbHash), 
-                                        &cbResult, //not used in our case
-                                        0); //dwFlags
+              hAlgorithm,
+              BCRYPT_HASH_LENGTH, //name of the propery we retrieve
+              (PUCHAR)pcbHash,
+              sizeof(*pcbHash),
+              &cbResult, //not used in our case
+              0); //dwFlags
     if( FAILED(hr) )
     {
         goto CleanUp;
     }
-    
+
     //now allocate memory for hash object
     *ppbHash = (BYTE*)LocalAlloc( LPTR, *pcbHash );
     if (NULL == *ppbHash)
@@ -378,15 +378,15 @@ HrCreateCNGHash (
     }
 
     //compute the hash and receive it in the buffer
-    hr = BCryptFinishHash(            hHash, 
-                                        (PUCHAR) *ppbHash, 
-                                        *pcbHash, 
-                                        0); //dwFlags
+    hr = BCryptFinishHash(            hHash,
+                                      (PUCHAR) *ppbHash,
+                                      *pcbHash,
+                                      0); //dwFlags
     if( FAILED(hr) )
     {
         goto CleanUp;
     }
-        
+
     hr = S_OK;
 
 CleanUp:
@@ -415,21 +415,21 @@ CleanUp:
 }
 
 //----------------------------------------------------------------------------------------------------------------
-// 
+//
 //  Function:   HrSignCNGHash()
 //
 // The caller must call LocalFree to release (*ppbSignature)
 //------------------------------------------------------------------------------------------------------------------
 HRESULT
-HrSignCNGHash(    
+HrSignCNGHash(
     NCRYPT_KEY_HANDLE   hKey,
     void                *pPaddingInfo,
     DWORD               dwFlag,
     const BYTE          *pbHash,
     ULONG               cbHash,
-	BYTE                **ppbSignature,
+    BYTE                **ppbSignature,
     ULONG               *pcbSignature
-    )
+)
 {
     HRESULT hr = S_OK;
 
@@ -439,38 +439,38 @@ HrSignCNGHash(
 
     //get a size of signature
     hr = NCryptSignHash(
-                                            hKey,
-                                            pPaddingInfo,
-                                            (PBYTE)pbHash,
-                                            cbHash,
-                                            NULL,           //pbSignature
-                                            0,              //The size, in bytes, of the pbSignature buffer
-                                            pcbSignature,
-                                            dwFlag);        //dwFlags
+             hKey,
+             pPaddingInfo,
+             (PBYTE)pbHash,
+             cbHash,
+             NULL,           //pbSignature
+             0,              //The size, in bytes, of the pbSignature buffer
+             pcbSignature,
+             dwFlag);        //dwFlags
 
     if( FAILED(hr) )
     {
         goto CleanUp;
     }
-        
+
     // allocate buffer for signature
     *ppbSignature = (BYTE*)LocalAlloc( LPTR, *pcbSignature );
     if (NULL == *ppbSignature)
     {
         hr = HRESULT_FROM_WIN32( ERROR_OUTOFMEMORY );
-        
+
         goto CleanUp;
     }
-    
+
     hr = NCryptSignHash(
-                                            hKey,
-                                            pPaddingInfo,
-                                            (PBYTE)pbHash,
-                                            cbHash,
-                                            *ppbSignature,
-                                            *pcbSignature, 
-                                            pcbSignature,
-                                            dwFlag); //dwFlags
+             hKey,
+             pPaddingInfo,
+             (PBYTE)pbHash,
+             cbHash,
+             *ppbSignature,
+             *pcbSignature,
+             pcbSignature,
+             dwFlag); //dwFlags
 
     if( FAILED(hr) )
     {
@@ -495,54 +495,54 @@ CleanUp:
 }
 
 //----------------------------------------------------------------------------------------------------------------
-// 
+//
 //  Function:   HrVerifySignature()
 //
 //------------------------------------------------------------------------------------------------------------------
 HRESULT
 HrVerifySignature(
     PCCERT_CONTEXT  pCertContext,
-	LPCWSTR         wszHashAlgName,
+    LPCWSTR         wszHashAlgName,
     const BYTE      *pbData,
     ULONG           cbData,
     const BYTE      *pbSignature,
     DWORD           cbSignature
-    )
+)
 {
     HRESULT hr = S_OK;
 
-	BCRYPT_PKCS1_PADDING_INFO *pPKCS1PaddingInfo = NULL;
-	DWORD	dwCngFlags = 0;
+    BCRYPT_PKCS1_PADDING_INFO *pPKCS1PaddingInfo = NULL;
+    DWORD	dwCngFlags = 0;
 
     //public key of a cert used to sign data
     BCRYPT_KEY_HANDLE   hKey = NULL;
-    
+
     BYTE *pbHash = NULL;
     DWORD cbHash = 0;
 
     BCRYPT_PKCS1_PADDING_INFO PKCS1PaddingInfo = {0};
-	PCCRYPT_OID_INFO pOidInfo = NULL;
+    PCCRYPT_OID_INFO pOidInfo = NULL;
 
     //get certificate public key
     if( !CryptImportPublicKeyInfoEx2(
-                                X509_ASN_ENCODING,
-                                &pCertContext->pCertInfo->SubjectPublicKeyInfo,
-                                CRYPT_OID_INFO_PUBKEY_SIGN_KEY_FLAG,
-                                NULL,
-                                &hKey
-                                ))
+                X509_ASN_ENCODING,
+                &pCertContext->pCertInfo->SubjectPublicKeyInfo,
+                CRYPT_OID_INFO_PUBKEY_SIGN_KEY_FLAG,
+                NULL,
+                &hKey
+            ))
     {
         hr = HRESULT_FROM_WIN32( GetLastError() );
         goto CleanUp;
     }
-    
-    hr = HrCreateCNGHash ( 
-                                wszHashAlgName,                    
-                                pbData,
-                                cbData,
-                                &pbHash,
-                                &cbHash
-                                );
+
+    hr = HrCreateCNGHash (
+             wszHashAlgName,
+             pbData,
+             cbData,
+             &pbHash,
+             &cbHash
+         );
     if( FAILED( hr ))
     {
         goto CleanUp;
@@ -552,34 +552,34 @@ HrVerifySignature(
     // Verify
     //
 
-	// TODO:
-	// The production code must specify valid padding.
-	// SAMPLE:
+    // TODO:
+    // The production code must specify valid padding.
+    // SAMPLE:
     //   This padding valid for RSA non PSS only:
-	//
+    //
 
-	pOidInfo = CryptFindOIDInfo(
-								CRYPT_OID_INFO_OID_KEY,
-								pCertContext->pCertInfo->SubjectPublicKeyInfo.Algorithm.pszObjId,
-								CRYPT_PUBKEY_ALG_OID_GROUP_ID
-								);
-	if( NULL != pOidInfo &&
-		0 == lstrcmpW( pOidInfo->pwszCNGAlgid, L"RSA" ))
-	{
-		PKCS1PaddingInfo.pszAlgId = wszHashAlgName;
-		pPKCS1PaddingInfo = &PKCS1PaddingInfo;
-		dwCngFlags = BCRYPT_PAD_PKCS1;
-	}
+    pOidInfo = CryptFindOIDInfo(
+                   CRYPT_OID_INFO_OID_KEY,
+                   pCertContext->pCertInfo->SubjectPublicKeyInfo.Algorithm.pszObjId,
+                   CRYPT_PUBKEY_ALG_OID_GROUP_ID
+               );
+    if( NULL != pOidInfo &&
+            0 == lstrcmpW( pOidInfo->pwszCNGAlgid, L"RSA" ))
+    {
+        PKCS1PaddingInfo.pszAlgId = wszHashAlgName;
+        pPKCS1PaddingInfo = &PKCS1PaddingInfo;
+        dwCngFlags = BCRYPT_PAD_PKCS1;
+    }
 
     hr = BCryptVerifySignature(
-                                hKey,
-                                pPKCS1PaddingInfo,
-                                (PUCHAR)pbHash,
-                                cbHash,
-                                (PUCHAR)pbSignature,
-                                cbSignature,
-                                dwCngFlags
-                                );
+             hKey,
+             pPKCS1PaddingInfo,
+             (PUCHAR)pbHash,
+             cbHash,
+             (PUCHAR)pbSignature,
+             cbSignature,
+             dwCngFlags
+         );
 
     if( FAILED(hr))
     {
@@ -604,7 +604,7 @@ CleanUp:
 }
 
 //----------------------------------------------------------------------------------------------------------------
-// 
+//
 //  Function:   HrSignCAPI()
 //
 //------------------------------------------------------------------------------------------------------------------
@@ -612,16 +612,16 @@ HRESULT
 HrSignCAPI(
     HCRYPTPROV  hProvider,
     DWORD       dwKeySpec,
-    LPCWSTR     wszHashAlgName,                    
+    LPCWSTR     wszHashAlgName,
     const BYTE  *pbData,
     ULONG       cbData,
-	PBYTE       *ppbSignature,
+    PBYTE       *ppbSignature,
     DWORD       *pcbSignature
-    )
+)
 {
-	DWORD i;
-	BYTE b;
-	PCCRYPT_OID_INFO pOidInfo = NULL;
+    DWORD i;
+    BYTE b;
+    PCCRYPT_OID_INFO pOidInfo = NULL;
     HRESULT hr = S_OK;
 
     HCRYPTHASH  hHash = NULL;
@@ -629,16 +629,16 @@ HrSignCAPI(
     //initialize OUT parameters
     *ppbSignature = NULL;
     *pcbSignature = 0;
-    
+
     // Find ALGID for
     pOidInfo = CryptFindOIDInfo(
-                                            CRYPT_OID_INFO_NAME_KEY,
-                                            (void*)wszHashAlgName,
-                                            CRYPT_HASH_ALG_OID_GROUP_ID
-                                            );
+                   CRYPT_OID_INFO_NAME_KEY,
+                   (void*)wszHashAlgName,
+                   CRYPT_HASH_ALG_OID_GROUP_ID
+               );
 
-    if( NULL == pOidInfo || 
-        IS_SPECIAL_OID_INFO_ALGID( pOidInfo->Algid ))
+    if( NULL == pOidInfo ||
+            IS_SPECIAL_OID_INFO_ALGID( pOidInfo->Algid ))
     {
         hr = CRYPT_E_UNKNOWN_ALGO;
         goto CleanUp;
@@ -646,35 +646,35 @@ HrSignCAPI(
 
     //create hash
     if (!CryptCreateHash(
-                                            hProvider,          //handle to an algorithm provider
-                                            pOidInfo->Algid,    //hash algorithm 
-                                            0,                  //hKey
-                                            0,                  //dwFlags
-                                            &hHash ))           //hash object 
+                hProvider,          //handle to an algorithm provider
+                pOidInfo->Algid,    //hash algorithm
+                0,                  //hKey
+                0,                  //dwFlags
+                &hHash ))           //hash object
     {
         hr = HRESULT_FROM_WIN32( GetLastError() );
         goto CleanUp;
     }
-        
+
     //hash data
     if (!CryptHashData(
-                                            hHash,        //hash object
-                                            pbData,     //data to be hashed
-                                            cbData,     //size of data to be hashed in BYTES
-                                            0 ))
+                hHash,        //hash object
+                pbData,     //data to be hashed
+                cbData,     //size of data to be hashed in BYTES
+                0 ))
     {
         hr = HRESULT_FROM_WIN32( GetLastError() );
         goto CleanUp;
     }
 
     //get a size of signature
-    if( !CryptSignHash(    
-                                            hHash,
-                                            dwKeySpec, 
-                                            NULL,       //sDescription, not supported, must be NULL
-                                            0,          //dwFlags
-                                            NULL,       //pbSignature
-                                            pcbSignature ))
+    if( !CryptSignHash(
+                hHash,
+                dwKeySpec,
+                NULL,       //sDescription, not supported, must be NULL
+                0,          //dwFlags
+                NULL,       //pbSignature
+                pcbSignature ))
     {
         hr = HRESULT_FROM_WIN32( GetLastError() );
         goto CleanUp;
@@ -687,38 +687,38 @@ HrSignCAPI(
         hr = HRESULT_FROM_WIN32( ERROR_OUTOFMEMORY );
         goto CleanUp;
     }
-    
+
     //now sign it
-    if( !CryptSignHash(    
-                                            hHash,
-                                            dwKeySpec,
-                                            NULL, //sDescription, not supported, must be NULL
-                                            0, //dwFlags
-                                            *ppbSignature,
-                                            pcbSignature))
+    if( !CryptSignHash(
+                hHash,
+                dwKeySpec,
+                NULL, //sDescription, not supported, must be NULL
+                0, //dwFlags
+                *ppbSignature,
+                pcbSignature))
     {
         hr = HRESULT_FROM_WIN32( GetLastError() );
         goto CleanUp;
     }
 
-	//
-	// Reverse bytes to Big Endian
-	//
+    //
+    // Reverse bytes to Big Endian
+    //
 
-	//
-	// TODO: Check if the keys is DSA, then Reverse R&S separately
-	// at the middle of the buffer.
-	//
+    //
+    // TODO: Check if the keys is DSA, then Reverse R&S separately
+    // at the middle of the buffer.
+    //
 
-	// works for non DSA keys only
+    // works for non DSA keys only
     if( *pcbSignature > 1 )
     {
-	    for( i=0; i<(*pcbSignature)/2; i++ )
-	    {
-		    b = (*ppbSignature)[i];
-		    (*ppbSignature)[i] = (*ppbSignature)[*pcbSignature-i-1];
-		     (*ppbSignature)[*pcbSignature-i-1] = b;
-	    }
+        for( i=0; i<(*pcbSignature)/2; i++ )
+        {
+            b = (*ppbSignature)[i];
+            (*ppbSignature)[i] = (*ppbSignature)[*pcbSignature-i-1];
+            (*ppbSignature)[*pcbSignature-i-1] = b;
+        }
     }
 
     hr = S_OK;
@@ -747,10 +747,10 @@ CleanUp:
  Usage
 
 *****************************************************************************/
-void 
-Usage( 
-	__in LPCWSTR wsName 
-    )
+void
+Usage(
+    __in LPCWSTR wsName
+)
 {
     wprintf( L"%s [Options] {SIGN|VERIFY} InputFile SignatureFile\n", wsName );
     wprintf( L"\tOptions:\n" );
@@ -768,18 +768,18 @@ __cdecl
 wmain(
     int     argc,
     LPWSTR  argv[]
-    )
+)
 {
     HRESULT hr = S_OK;
 
-    BOOL    fSign = TRUE;        
+    BOOL    fSign = TRUE;
 
     // The message to be signed.
     BYTE    *pbPlainText = NULL;
     ULONG   cbPlainText = 0;
 
     //certificate to be used to sign data
-    PCCERT_CONTEXT pCertContext = NULL; 
+    PCCERT_CONTEXT pCertContext = NULL;
 
     LPCWSTR pwszInputFile = NULL;
     LPCWSTR pwszSignatureFile = NULL;
@@ -802,7 +802,7 @@ wmain(
     //handle to CNG private key; is being used with CNG keys only
     NCRYPT_KEY_HANDLE hCngKey = NULL;
 
-	DWORD	dwCngFlags = 0;
+    DWORD	dwCngFlags = 0;
 
     //TRUE if user needs to free handle to a private key
     BOOL fCallerFreeKey = TRUE;
@@ -819,8 +819,8 @@ wmain(
     DWORD dwKeySpec = 0;
 
     BCRYPT_PKCS1_PADDING_INFO PKCS1PaddingInfo = {0};
-	BCRYPT_PKCS1_PADDING_INFO *pPKCS1PaddingInfo = NULL;
-	PCCRYPT_OID_INFO pOidInfo = NULL;
+    BCRYPT_PKCS1_PADDING_INFO *pPKCS1PaddingInfo = NULL;
+    PCCRYPT_OID_INFO pOidInfo = NULL;
 
     int i;
 
@@ -831,7 +831,7 @@ wmain(
     for( i=1; i<argc; i++ )
     {
         if ( lstrcmpW (argv[i], L"/?") == 0 ||
-             lstrcmpW (argv[i], L"-?") == 0 ) 
+                lstrcmpW (argv[i], L"-?") == 0 )
         {
             Usage( L"certsign.exe" );
             goto CleanUp;
@@ -850,8 +850,7 @@ wmain(
 
             pwszStoreName = argv[++i];
         }
-        else
-        if ( lstrcmpW (argv[i], L"-n") == 0 )
+        else if ( lstrcmpW (argv[i], L"-n") == 0 )
         {
             if( i+1 >= argc )
             {
@@ -861,8 +860,7 @@ wmain(
 
             pwszCName = argv[++i];
         }
-        else
-        if ( lstrcmpW (argv[i], L"-h") == 0 )
+        else if ( lstrcmpW (argv[i], L"-h") == 0 )
         {
             if( i+1 >= argc )
             {
@@ -882,8 +880,7 @@ wmain(
 
     if( 0 == lstrcmpW (argv[i], L"SIGN"))
         fSign = TRUE;
-    else
-    if( 0 == lstrcmpW (argv[i], L"VERIFY"))
+    else if( 0 == lstrcmpW (argv[i], L"VERIFY"))
         fSign = FALSE;
     else
     {
@@ -898,10 +895,10 @@ wmain(
     // Find the test certificate to be validated and obtain a pointer to it
 
     hr = HrFindCertificateBySubjectName(
-                                            pwszStoreName,
-                                            pwszCName,
-                                            &pCertContext
-                                            );
+             pwszStoreName,
+             pwszCName,
+             &pCertContext
+         );
     if( FAILED(hr) )
     {
         goto CleanUp;
@@ -909,13 +906,13 @@ wmain(
 
     //
     // Load file
-    // 
+    //
 
     hr = HrLoadFile(
-                                            pwszInputFile,
-                                            &pbPlainText,
-                                            &cbPlainText
-                                            );
+             pwszInputFile,
+             &pbPlainText,
+             &cbPlainText
+         );
     if( FAILED(hr) )
     {
         wprintf( L"Unable to read file: %s\n", pwszInputFile );
@@ -925,12 +922,12 @@ wmain(
     if( fSign )
     {
         if( !CryptAcquireCertificatePrivateKey(
-                                                pCertContext,
-                                                CRYPT_ACQUIRE_ALLOW_NCRYPT_KEY_FLAG,	//
-                                                NULL,                                   //Reserved for future use and must be NULL
-                                                &hCryptProvOrNCryptKey,
-                                                &dwKeySpec,
-                                                &fCallerFreeKey)) //user should free key if TRUE is returned
+                    pCertContext,
+                    CRYPT_ACQUIRE_ALLOW_NCRYPT_KEY_FLAG,	//
+                    NULL,                                   //Reserved for future use and must be NULL
+                    &hCryptProvOrNCryptKey,
+                    &dwKeySpec,
+                    &fCallerFreeKey)) //user should free key if TRUE is returned
         {
             hr = HRESULT_FROM_WIN32( GetLastError() );
             goto CleanUp;
@@ -941,110 +938,110 @@ wmain(
         // check whether we have CNG or CAPI key
         //
 
-        switch( dwKeySpec ) 
+        switch( dwKeySpec )
         {
-            case CERT_NCRYPT_KEY_SPEC: //CNG key
-                {
-                    hCngKey = (NCRYPT_KEY_HANDLE) hCryptProvOrNCryptKey;
-                    
-                    hr = HrCreateCNGHash(       pwszHashAlgName,
-                                                pbPlainText,
-                                                cbPlainText,
-                                                &pbHash, 
-                                                &cbHash 
-                                                );
-                    if( FAILED(hr) )
-                    {
-                        goto CleanUp;
-                    }
+        case CERT_NCRYPT_KEY_SPEC: //CNG key
+        {
+            hCngKey = (NCRYPT_KEY_HANDLE) hCryptProvOrNCryptKey;
 
-					// TODO:
-					// The production code must specify valid padding.
-					// SAMPLE:
-                    //   This padding valid for RSA non PSS only:
-					//
-				
-					pOidInfo = CryptFindOIDInfo(
-												CRYPT_OID_INFO_OID_KEY,
-												pCertContext->pCertInfo->SubjectPublicKeyInfo.Algorithm.pszObjId,
-												CRYPT_PUBKEY_ALG_OID_GROUP_ID
-												);
-					if( NULL != pOidInfo &&
-						0 == lstrcmpW( pOidInfo->pwszCNGAlgid, L"RSA" ))
-					{
-						PKCS1PaddingInfo.pszAlgId = pwszHashAlgName;
-						pPKCS1PaddingInfo = &PKCS1PaddingInfo;
-						dwCngFlags = BCRYPT_PAD_PKCS1;
-					}
+            hr = HrCreateCNGHash(       pwszHashAlgName,
+                                        pbPlainText,
+                                        cbPlainText,
+                                        &pbHash,
+                                        &cbHash
+                                );
+            if( FAILED(hr) )
+            {
+                goto CleanUp;
+            }
 
-                    hr = HrSignCNGHash(         hCngKey,
-                                                pPKCS1PaddingInfo,
-                                                dwCngFlags,
-                                                pbHash,
-                                                cbHash,
-                                                &pbSignature,
-                                                &cbSignature
-                                                );
-                    if( FAILED(hr) )
-                    {
-                        goto CleanUp;
-                    }
+            // TODO:
+            // The production code must specify valid padding.
+            // SAMPLE:
+            //   This padding valid for RSA non PSS only:
+            //
 
-                    wprintf( L"Signed message using CNG key.\n");
-                }
-                break;
+            pOidInfo = CryptFindOIDInfo(
+                           CRYPT_OID_INFO_OID_KEY,
+                           pCertContext->pCertInfo->SubjectPublicKeyInfo.Algorithm.pszObjId,
+                           CRYPT_PUBKEY_ALG_OID_GROUP_ID
+                       );
+            if( NULL != pOidInfo &&
+                    0 == lstrcmpW( pOidInfo->pwszCNGAlgid, L"RSA" ))
+            {
+                PKCS1PaddingInfo.pszAlgId = pwszHashAlgName;
+                pPKCS1PaddingInfo = &PKCS1PaddingInfo;
+                dwCngFlags = BCRYPT_PAD_PKCS1;
+            }
 
-            case AT_SIGNATURE: //CAPI key        
-            case AT_KEYEXCHANGE:
-                {
-                    //
-                    // Legacy (pre-Vista) key
-                    //
+            hr = HrSignCNGHash(         hCngKey,
+                                        pPKCS1PaddingInfo,
+                                        dwCngFlags,
+                                        pbHash,
+                                        cbHash,
+                                        &pbSignature,
+                                        &cbSignature
+                              );
+            if( FAILED(hr) )
+            {
+                goto CleanUp;
+            }
 
-                    hCSP = (HCRYPTPROV)hCryptProvOrNCryptKey;
+            wprintf( L"Signed message using CNG key.\n");
+        }
+        break;
 
-                    hr = HrSignCAPI(            hCSP,
-                                                dwKeySpec,
-                                                pwszHashAlgName,
-                                                pbPlainText,
-                                                cbPlainText,
-                                                &pbSignature,
-                                                &cbSignature
-                                                );
-                    if( FAILED(hr) )
-                    {
-                        goto CleanUp;
-                    }
+        case AT_SIGNATURE: //CAPI key
+        case AT_KEYEXCHANGE:
+        {
+            //
+            // Legacy (pre-Vista) key
+            //
 
-                    wprintf( L"Successfully signed message using legacy CSP key.\n");
-                }
-                break;
+            hCSP = (HCRYPTPROV)hCryptProvOrNCryptKey;
 
-            default:
-                wprintf( L"Unexpected dwKeySpec returned from CryptAcquireCertificatePrivateKey.\n");
+            hr = HrSignCAPI(            hCSP,
+                                        dwKeySpec,
+                                        pwszHashAlgName,
+                                        pbPlainText,
+                                        cbPlainText,
+                                        &pbSignature,
+                                        &cbSignature
+                           );
+            if( FAILED(hr) )
+            {
+                goto CleanUp;
+            }
+
+            wprintf( L"Successfully signed message using legacy CSP key.\n");
+        }
+        break;
+
+        default:
+            wprintf( L"Unexpected dwKeySpec returned from CryptAcquireCertificatePrivateKey.\n");
 
         }
 
         hr = HrSaveFile(
-                                    pwszSignatureFile,
-                                    pbSignature,
-                                    cbSignature
-                                    );
+                 pwszSignatureFile,
+                 pbSignature,
+                 cbSignature
+             );
         if( FAILED(hr) )
         {
             wprintf( L"Unable to save file: %s\n", pwszSignatureFile );
             goto CleanUp;
         }
 
-		wprintf( L"Created signature file: %s\n", pwszSignatureFile );
+        wprintf( L"Created signature file: %s\n", pwszSignatureFile );
     }
     else
     {
         hr = HrLoadFile(
-                                    pwszSignatureFile,
-                                    &pbSignature,
-                                    &cbSignature
-                                    );
+                 pwszSignatureFile,
+                 &pbSignature,
+                 &cbSignature
+             );
         if( FAILED(hr) )
         {
             wprintf( L"Unable to read file: %s\n", pwszSignatureFile );
@@ -1056,13 +1053,13 @@ wmain(
         //
 
         hr = HrVerifySignature(
-                                    pCertContext,
-                                    pwszHashAlgName,
-                                    pbPlainText,
-                                    cbPlainText,
-                                    pbSignature,
-                                    cbSignature
-                                    );
+                 pCertContext,
+                 pwszHashAlgName,
+                 pbPlainText,
+                 cbPlainText,
+                 pbSignature,
+                 cbSignature
+             );
         if( FAILED(hr) )
         {
             goto CleanUp;
@@ -1078,19 +1075,19 @@ CleanUp:
     //free CNG key or CAPI provider handle
     if( fCallerFreeKey )
     {
-        switch (dwKeySpec) 
+        switch (dwKeySpec)
         {
-            case CERT_NCRYPT_KEY_SPEC: //CNG key
-                NCryptFreeObject( hCngKey );
-                break;
+        case CERT_NCRYPT_KEY_SPEC: //CNG key
+            NCryptFreeObject( hCngKey );
+            break;
 
-            case AT_SIGNATURE: //CAPI key        
-            case AT_KEYEXCHANGE: 
-                CryptReleaseContext( hCSP, 0);
-                break;
+        case AT_SIGNATURE: //CAPI key
+        case AT_KEYEXCHANGE:
+            CryptReleaseContext( hCSP, 0);
+            break;
         }
     }
-    
+
     if( NULL != pCertContext )
     {
         CertFreeCertificateContext(pCertContext);

@@ -1,6 +1,6 @@
-//-------------------------------------------------------------------------------------
+﻿//-------------------------------------------------------------------------------------
 // DirectXTexTGA.cpp
-//  
+//
 // DirectX Texture Library - Targa Truevision (TGA) file format reader/writer
 //
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
@@ -132,7 +132,7 @@ static HRESULT _DecodeTGAHeader( _In_reads_bytes_(size) LPCVOID pSource, size_t 
     auto pHeader = reinterpret_cast<const TGA_HEADER*>( pSource );
 
     if ( pHeader->bColorMapType != 0
-         || pHeader->wColorMapLength != 0 )
+            || pHeader->wColorMapLength != 0 )
     {
         return HRESULT_FROM_WIN32( ERROR_NOT_SUPPORTED );
     }
@@ -146,7 +146,7 @@ static HRESULT _DecodeTGAHeader( _In_reads_bytes_(size) LPCVOID pSource, size_t 
     {
         return HRESULT_FROM_WIN32( ERROR_INVALID_DATA );
     }
-         
+
     switch ( pHeader->bImageType )
     {
     case TGA_TRUECOLOR:
@@ -284,8 +284,8 @@ static HRESULT _UncompressPixels( _In_reads_bytes_(size) LPCVOID pSource, size_t
             assert( offset < rowPitch);
 
             uint8_t* dPtr = reinterpret_cast<uint8_t*>( image->pixels )
-                         + ( image->rowPitch * ( (convFlags & CONV_FLAGS_INVERTY) ? y : (image->height - y - 1) ) )
-                         + offset;
+                            + ( image->rowPitch * ( (convFlags & CONV_FLAGS_INVERTY) ? y : (image->height - y - 1) ) )
+                            + offset;
 
             for( size_t x=0; x < image->width; )
             {
@@ -342,112 +342,176 @@ static HRESULT _UncompressPixels( _In_reads_bytes_(size) LPCVOID pSource, size_t
 
     //-------------------------------------------------------------------------- 16-bit
     case DXGI_FORMAT_B5G5R5A1_UNORM:
+    {
+        bool nonzeroa = false;
+        for( size_t y=0; y < image->height; ++y )
         {
-            bool nonzeroa = false;
-            for( size_t y=0; y < image->height; ++y )
-            {
-                size_t offset = ( (convFlags & CONV_FLAGS_INVERTX ) ? (image->width - 1) : 0 );
-                assert( offset*2 < rowPitch);
+            size_t offset = ( (convFlags & CONV_FLAGS_INVERTX ) ? (image->width - 1) : 0 );
+            assert( offset*2 < rowPitch);
 
-                uint16_t* dPtr = reinterpret_cast<uint16_t*>( reinterpret_cast<uint8_t*>( image->pixels )
+            uint16_t* dPtr = reinterpret_cast<uint16_t*>( reinterpret_cast<uint8_t*>( image->pixels )
                              + ( image->rowPitch * ( (convFlags & CONV_FLAGS_INVERTY) ? y : (image->height - y - 1) ) ) )
                              + offset;
 
-                for( size_t x=0; x < image->width; )
+            for( size_t x=0; x < image->width; )
+            {
+                if ( sPtr >= endPtr )
+                    return E_FAIL;
+
+                if ( *sPtr & 0x80 )
                 {
-                    if ( sPtr >= endPtr )
+                    // Repeat
+                    size_t j = (*sPtr & 0x7F) + 1;
+                    ++sPtr;
+
+                    if ( sPtr+1 >= endPtr )
                         return E_FAIL;
 
-                    if ( *sPtr & 0x80 )
-                    {
-                        // Repeat
-                        size_t j = (*sPtr & 0x7F) + 1;
-                        ++sPtr;
+                    uint16_t t =  *sPtr | (*(sPtr+1) << 8);
+                    if ( t & 0x8000 )
+                        nonzeroa = true;
+                    sPtr += 2;
 
-                        if ( sPtr+1 >= endPtr )
+                    for( ; j > 0; --j, ++x )
+                    {
+                        if ( x >= image->width )
+                            return E_FAIL;
+
+                        *dPtr = t;
+
+                        if ( convFlags & CONV_FLAGS_INVERTX )
+                            --dPtr;
+                        else
+                            ++dPtr;
+                    }
+                }
+                else
+                {
+                    // Literal
+                    size_t j = (*sPtr & 0x7F) + 1;
+                    ++sPtr;
+
+                    if ( sPtr+(j*2) > endPtr )
+                        return E_FAIL;
+
+                    for( ; j > 0; --j, ++x )
+                    {
+                        if ( x >= image->width )
                             return E_FAIL;
 
                         uint16_t t =  *sPtr | (*(sPtr+1) << 8);
                         if ( t & 0x8000 )
                             nonzeroa = true;
                         sPtr += 2;
+                        *dPtr = t;
 
-                        for( ; j > 0; --j, ++x )
-                        {
-                            if ( x >= image->width )
-                                return E_FAIL;
-
-                            *dPtr = t;
-
-                            if ( convFlags & CONV_FLAGS_INVERTX )
-                                --dPtr;
-                            else
-                                ++dPtr;
-                        }
-                    }
-                    else
-                    {
-                        // Literal
-                        size_t j = (*sPtr & 0x7F) + 1;
-                        ++sPtr;
-
-                        if ( sPtr+(j*2) > endPtr )
-                            return E_FAIL;
-
-                        for( ; j > 0; --j, ++x )
-                        {
-                            if ( x >= image->width )
-                                return E_FAIL;
-
-                            uint16_t t =  *sPtr | (*(sPtr+1) << 8);
-                            if ( t & 0x8000 )
-                                nonzeroa = true;
-                            sPtr += 2;
-                            *dPtr = t;
-
-                            if ( convFlags & CONV_FLAGS_INVERTX )
-                                --dPtr;
-                            else
-                                ++dPtr;
-                        }
+                        if ( convFlags & CONV_FLAGS_INVERTX )
+                            --dPtr;
+                        else
+                            ++dPtr;
                     }
                 }
             }
-
-            // If there are no non-zero alpha channel entries, we'll assume alpha is not used and force it to opaque
-            if ( !nonzeroa )
-            {
-                HRESULT hr = _SetAlphaChannelToOpaque( image );
-                if ( FAILED(hr) )
-                    return hr;
-            }
         }
-        break;
+
+        // If there are no non-zero alpha channel entries, we'll assume alpha is not used and force it to opaque
+        if ( !nonzeroa )
+        {
+            HRESULT hr = _SetAlphaChannelToOpaque( image );
+            if ( FAILED(hr) )
+                return hr;
+        }
+    }
+    break;
 
     //----------------------------------------------------------------------- 24/32-bit
     case DXGI_FORMAT_R8G8B8A8_UNORM:
+    {
+        bool nonzeroa = false;
+        for( size_t y=0; y < image->height; ++y )
         {
-            bool nonzeroa = false;
-            for( size_t y=0; y < image->height; ++y )
+            size_t offset = ( (convFlags & CONV_FLAGS_INVERTX ) ? (image->width - 1) : 0 );
+
+            uint32_t* dPtr = reinterpret_cast<uint32_t*>( reinterpret_cast<uint8_t*>( image->pixels )
+                             + ( image->rowPitch * ( (convFlags & CONV_FLAGS_INVERTY) ? y : (image->height - y - 1) ) ) )
+                             + offset;
+
+            for( size_t x=0; x < image->width; )
             {
-                size_t offset = ( (convFlags & CONV_FLAGS_INVERTX ) ? (image->width - 1) : 0 );
+                if ( sPtr >= endPtr )
+                    return E_FAIL;
 
-                uint32_t* dPtr = reinterpret_cast<uint32_t*>( reinterpret_cast<uint8_t*>( image->pixels )
-                              + ( image->rowPitch * ( (convFlags & CONV_FLAGS_INVERTY) ? y : (image->height - y - 1) ) ) )
-                              + offset;
-
-                for( size_t x=0; x < image->width; )
+                if ( *sPtr & 0x80 )
                 {
-                    if ( sPtr >= endPtr )
-                        return E_FAIL;
+                    // Repeat
+                    size_t j = (*sPtr & 0x7F) + 1;
+                    ++sPtr;
 
-                    if ( *sPtr & 0x80 )
+                    DWORD t;
+                    if ( convFlags & CONV_FLAGS_EXPAND )
                     {
-                        // Repeat
-                        size_t j = (*sPtr & 0x7F) + 1;
-                        ++sPtr;
+                        assert( offset*3 < rowPitch);
 
-                        DWORD t;
+                        if ( sPtr+2 >= endPtr )
+                            return E_FAIL;
+
+                        // BGR -> RGBA
+                        t = ( *sPtr << 16 ) | ( *(sPtr+1) << 8 ) | ( *(sPtr+2) ) | 0xFF000000;
+                        sPtr += 3;
+
+                        nonzeroa = true;
+                    }
+                    else
+                    {
+                        assert( offset*4 < rowPitch);
+
+                        if ( sPtr+3 >= endPtr )
+                            return E_FAIL;
+
+                        // BGRA -> RGBA
+                        t = ( *sPtr << 16 ) | ( *(sPtr+1) << 8 ) | ( *(sPtr+2) ) | ( *(sPtr+3) << 24 );
+
+                        if ( *(sPtr+3) > 0 )
+                            nonzeroa = true;
+
+                        sPtr += 4;
+                    }
+
+                    for( ; j > 0; --j, ++x )
+                    {
+                        if ( x >= image->width )
+                            return E_FAIL;
+
+                        *dPtr = t;
+
+                        if ( convFlags & CONV_FLAGS_INVERTX )
+                            --dPtr;
+                        else
+                            ++dPtr;
+                    }
+                }
+                else
+                {
+                    // Literal
+                    size_t j = (*sPtr & 0x7F) + 1;
+                    ++sPtr;
+
+                    if ( convFlags & CONV_FLAGS_EXPAND )
+                    {
+                        if ( sPtr+(j*3) > endPtr )
+                            return E_FAIL;
+                    }
+                    else
+                    {
+                        if ( sPtr+(j*4) > endPtr )
+                            return E_FAIL;
+                    }
+
+                    for( ; j > 0; --j, ++x )
+                    {
+                        if ( x >= image->width )
+                            return E_FAIL;
+
                         if ( convFlags & CONV_FLAGS_EXPAND )
                         {
                             assert( offset*3 < rowPitch);
@@ -456,7 +520,7 @@ static HRESULT _UncompressPixels( _In_reads_bytes_(size) LPCVOID pSource, size_t
                                 return E_FAIL;
 
                             // BGR -> RGBA
-                            t = ( *sPtr << 16 ) | ( *(sPtr+1) << 8 ) | ( *(sPtr+2) ) | 0xFF000000;
+                            *dPtr = ( *sPtr << 16 ) | ( *(sPtr+1) << 8 ) | ( *(sPtr+2) ) | 0xFF000000;
                             sPtr += 3;
 
                             nonzeroa = true;
@@ -469,7 +533,7 @@ static HRESULT _UncompressPixels( _In_reads_bytes_(size) LPCVOID pSource, size_t
                                 return E_FAIL;
 
                             // BGRA -> RGBA
-                            t = ( *sPtr << 16 ) | ( *(sPtr+1) << 8 ) | ( *(sPtr+2) ) | ( *(sPtr+3) << 24 );
+                            *dPtr = ( *sPtr << 16 ) | ( *(sPtr+1) << 8 ) | ( *(sPtr+2) ) | ( *(sPtr+3) << 24 );
 
                             if ( *(sPtr+3) > 0 )
                                 nonzeroa = true;
@@ -477,88 +541,24 @@ static HRESULT _UncompressPixels( _In_reads_bytes_(size) LPCVOID pSource, size_t
                             sPtr += 4;
                         }
 
-                        for( ; j > 0; --j, ++x )
-                        {
-                            if ( x >= image->width )
-                                return E_FAIL;
-
-                            *dPtr = t;
-
-                            if ( convFlags & CONV_FLAGS_INVERTX )
-                                --dPtr;
-                            else
-                                ++dPtr;
-                        }
-                    }
-                    else
-                    {
-                        // Literal
-                        size_t j = (*sPtr & 0x7F) + 1;
-                        ++sPtr;
-
-                        if ( convFlags & CONV_FLAGS_EXPAND )
-                        {
-                            if ( sPtr+(j*3) > endPtr )
-                                return E_FAIL;
-                        }
+                        if ( convFlags & CONV_FLAGS_INVERTX )
+                            --dPtr;
                         else
-                        {
-                            if ( sPtr+(j*4) > endPtr )
-                                return E_FAIL;
-                        }
-
-                        for( ; j > 0; --j, ++x )
-                        {
-                            if ( x >= image->width )
-                                return E_FAIL;
-
-                            if ( convFlags & CONV_FLAGS_EXPAND )
-                            {
-                                assert( offset*3 < rowPitch);
-
-                                if ( sPtr+2 >= endPtr )
-                                    return E_FAIL;
-
-                                // BGR -> RGBA
-                                *dPtr = ( *sPtr << 16 ) | ( *(sPtr+1) << 8 ) | ( *(sPtr+2) ) | 0xFF000000;
-                                sPtr += 3;
-
-                                nonzeroa = true;
-                            }
-                            else
-                            {
-                                assert( offset*4 < rowPitch);
-
-                                if ( sPtr+3 >= endPtr )
-                                    return E_FAIL;
-
-                                // BGRA -> RGBA
-                                *dPtr = ( *sPtr << 16 ) | ( *(sPtr+1) << 8 ) | ( *(sPtr+2) ) | ( *(sPtr+3) << 24 );
-
-                                if ( *(sPtr+3) > 0 )
-                                    nonzeroa = true;
-
-                                sPtr += 4;
-                            }
-
-                            if ( convFlags & CONV_FLAGS_INVERTX )
-                                --dPtr;
-                            else
-                                ++dPtr;
-                        }
+                            ++dPtr;
                     }
                 }
             }
-
-            // If there are no non-zero alpha channel entries, we'll assume alpha is not used and force it to opaque
-            if ( !nonzeroa )
-            {
-                HRESULT hr = _SetAlphaChannelToOpaque( image );
-                if ( FAILED(hr) )
-                    return hr;
-            }
         }
-        break;
+
+        // If there are no non-zero alpha channel entries, we'll assume alpha is not used and force it to opaque
+        if ( !nonzeroa )
+        {
+            HRESULT hr = _SetAlphaChannelToOpaque( image );
+            if ( FAILED(hr) )
+                return hr;
+        }
+    }
+    break;
 
     //---------------------------------------------------------------------------------
     default:
@@ -604,8 +604,8 @@ static HRESULT _CopyPixels( _In_reads_bytes_(size) LPCVOID pSource, size_t size,
             assert( offset < rowPitch);
 
             uint8_t* dPtr = reinterpret_cast<uint8_t*>( image->pixels )
-                         + ( image->rowPitch * ( (convFlags & CONV_FLAGS_INVERTY) ? y : (image->height - y - 1) ) )
-                         + offset;
+                            + ( image->rowPitch * ( (convFlags & CONV_FLAGS_INVERTY) ? y : (image->height - y - 1) ) )
+                            + offset;
 
             for( size_t x=0; x < image->width; ++x )
             {
@@ -624,112 +624,112 @@ static HRESULT _CopyPixels( _In_reads_bytes_(size) LPCVOID pSource, size_t size,
 
     //-------------------------------------------------------------------------- 16-bit
     case DXGI_FORMAT_B5G5R5A1_UNORM:
+    {
+        bool nonzeroa = false;
+        for( size_t y=0; y < image->height; ++y )
         {
-            bool nonzeroa = false;
-            for( size_t y=0; y < image->height; ++y )
-            {
-                size_t offset = ( (convFlags & CONV_FLAGS_INVERTX ) ? (image->width - 1) : 0 );
-                assert( offset*2 < rowPitch);
+            size_t offset = ( (convFlags & CONV_FLAGS_INVERTX ) ? (image->width - 1) : 0 );
+            assert( offset*2 < rowPitch);
 
-                uint16_t* dPtr = reinterpret_cast<uint16_t*>( reinterpret_cast<uint8_t*>( image->pixels )
+            uint16_t* dPtr = reinterpret_cast<uint16_t*>( reinterpret_cast<uint8_t*>( image->pixels )
                              + ( image->rowPitch * ( (convFlags & CONV_FLAGS_INVERTY) ? y : (image->height - y - 1) ) ) )
                              + offset;
 
-                for( size_t x=0; x < image->width; ++x )
-                {
-                    if ( sPtr+1 >= endPtr )
-                        return E_FAIL;
-
-                    uint16_t t =  *sPtr | (*(sPtr+1) << 8);
-                    sPtr += 2;
-                    *dPtr = t;
-
-                    if ( t & 0x8000 )
-                        nonzeroa = true;
-
-                    if ( convFlags & CONV_FLAGS_INVERTX )
-                        --dPtr;
-                    else
-                        ++dPtr;
-                }
-            }
-
-            // If there are no non-zero alpha channel entries, we'll assume alpha is not used and force it to opaque
-            if ( !nonzeroa )
+            for( size_t x=0; x < image->width; ++x )
             {
-                HRESULT hr = _SetAlphaChannelToOpaque( image );
-                if ( FAILED(hr) )
-                    return hr;
+                if ( sPtr+1 >= endPtr )
+                    return E_FAIL;
+
+                uint16_t t =  *sPtr | (*(sPtr+1) << 8);
+                sPtr += 2;
+                *dPtr = t;
+
+                if ( t & 0x8000 )
+                    nonzeroa = true;
+
+                if ( convFlags & CONV_FLAGS_INVERTX )
+                    --dPtr;
+                else
+                    ++dPtr;
             }
         }
-        break;
+
+        // If there are no non-zero alpha channel entries, we'll assume alpha is not used and force it to opaque
+        if ( !nonzeroa )
+        {
+            HRESULT hr = _SetAlphaChannelToOpaque( image );
+            if ( FAILED(hr) )
+                return hr;
+        }
+    }
+    break;
 
     //----------------------------------------------------------------------- 24/32-bit
     case DXGI_FORMAT_R8G8B8A8_UNORM:
+    {
+        bool nonzeroa = false;
+        for( size_t y=0; y < image->height; ++y )
         {
-            bool nonzeroa = false;
-            for( size_t y=0; y < image->height; ++y )
+            size_t offset = ( (convFlags & CONV_FLAGS_INVERTX ) ? (image->width - 1) : 0 );
+
+            uint32_t* dPtr = reinterpret_cast<uint32_t*>( reinterpret_cast<uint8_t*>( image->pixels )
+                             + ( image->rowPitch * ( (convFlags & CONV_FLAGS_INVERTY) ? y : (image->height - y - 1) ) ) )
+                             + offset;
+
+            for( size_t x=0; x < image->width; ++x )
             {
-                size_t offset = ( (convFlags & CONV_FLAGS_INVERTX ) ? (image->width - 1) : 0 );
-
-                uint32_t* dPtr = reinterpret_cast<uint32_t*>( reinterpret_cast<uint8_t*>( image->pixels )
-                              + ( image->rowPitch * ( (convFlags & CONV_FLAGS_INVERTY) ? y : (image->height - y - 1) ) ) )
-                              + offset;
-
-                for( size_t x=0; x < image->width; ++x )
+                if ( convFlags & CONV_FLAGS_EXPAND )
                 {
-                    if ( convFlags & CONV_FLAGS_EXPAND )
-                    {
-                        assert( offset*3 < rowPitch);
+                    assert( offset*3 < rowPitch);
 
-                        if ( sPtr+2 >= endPtr )
-                            return E_FAIL;
+                    if ( sPtr+2 >= endPtr )
+                        return E_FAIL;
 
-                        // BGR -> RGBA
-                        *dPtr = ( *sPtr << 16 ) | ( *(sPtr+1) << 8 ) | ( *(sPtr+2) ) | 0xFF000000;
-                        sPtr += 3;
+                    // BGR -> RGBA
+                    *dPtr = ( *sPtr << 16 ) | ( *(sPtr+1) << 8 ) | ( *(sPtr+2) ) | 0xFF000000;
+                    sPtr += 3;
 
-                        nonzeroa = true;
-                    }
-                    else
-                    {
-                        assert( offset*4 < rowPitch);
-
-                        if ( sPtr+3 >= endPtr )
-                            return E_FAIL;
-
-                        // BGRA -> RGBA
-                        *dPtr = ( *sPtr << 16 ) | ( *(sPtr+1) << 8 ) | ( *(sPtr+2) ) | ( *(sPtr+3) << 24 );
-
-                        if ( *(sPtr+3) > 0 )
-                            nonzeroa = true;
-
-                        sPtr += 4;
-                    }
-
-                    if ( convFlags & CONV_FLAGS_INVERTX )
-                        --dPtr;
-                    else
-                        ++dPtr;
+                    nonzeroa = true;
                 }
-            }
+                else
+                {
+                    assert( offset*4 < rowPitch);
 
-            // If there are no non-zero alpha channel entries, we'll assume alpha is not used and force it to opaque
-            if ( !nonzeroa )
-            {
-                HRESULT hr = _SetAlphaChannelToOpaque( image );
-                if ( FAILED(hr) )
-                    return hr;
+                    if ( sPtr+3 >= endPtr )
+                        return E_FAIL;
+
+                    // BGRA -> RGBA
+                    *dPtr = ( *sPtr << 16 ) | ( *(sPtr+1) << 8 ) | ( *(sPtr+2) ) | ( *(sPtr+3) << 24 );
+
+                    if ( *(sPtr+3) > 0 )
+                        nonzeroa = true;
+
+                    sPtr += 4;
+                }
+
+                if ( convFlags & CONV_FLAGS_INVERTX )
+                    --dPtr;
+                else
+                    ++dPtr;
             }
         }
-        break;
+
+        // If there are no non-zero alpha channel entries, we'll assume alpha is not used and force it to opaque
+        if ( !nonzeroa )
+        {
+            HRESULT hr = _SetAlphaChannelToOpaque( image );
+            if ( FAILED(hr) )
+                return hr;
+        }
+    }
+    break;
 
     //---------------------------------------------------------------------------------
     default:
         return E_FAIL;
     }
 
-    return S_OK;   
+    return S_OK;
 }
 
 
@@ -743,9 +743,9 @@ static HRESULT _EncodeTGAHeader( _In_ const Image& image, _Out_ TGA_HEADER& head
     memset( &header, 0, sizeof(TGA_HEADER) );
 
     if ( (image.width > 0xFFFF)
-         || (image.height > 0xFFFF) )
+            || (image.height > 0xFFFF) )
     {
-         return HRESULT_FROM_WIN32( ERROR_NOT_SUPPORTED );
+        return HRESULT_FROM_WIN32( ERROR_NOT_SUPPORTED );
     }
 
     header.wWidth = static_cast<uint16_t>( image.width );
@@ -801,7 +801,7 @@ static HRESULT _EncodeTGAHeader( _In_ const Image& image, _Out_ TGA_HEADER& head
 // Copies BGRX data to form BGR 24bpp data
 //-------------------------------------------------------------------------------------
 #pragma warning(suppress: 6001 6101) // In the case where outSize is insufficient we do not write to pDestination
-static void _Copy24bppScanline( _Out_writes_bytes_(outSize) LPVOID pDestination, _In_ size_t outSize, 
+static void _Copy24bppScanline( _Out_writes_bytes_(outSize) LPVOID pDestination, _In_ size_t outSize,
                                 _In_reads_bytes_(inSize) LPCVOID pSource, _In_ size_t inSize )
 {
     assert( pDestination && outSize > 0 );
@@ -858,7 +858,7 @@ HRESULT GetMetadataFromTGAFile( LPCWSTR szFile, TexMetadata& metadata )
     ScopedHandle hFile( safe_handle( CreateFile2( szFile, GENERIC_READ, FILE_SHARE_READ, OPEN_EXISTING, 0 ) ) );
 #else
     ScopedHandle hFile( safe_handle( CreateFileW( szFile, GENERIC_READ, FILE_SHARE_READ, 0, OPEN_EXISTING,
-                                                  FILE_FLAG_SEQUENTIAL_SCAN, 0 ) ) );
+                                     FILE_FLAG_SEQUENTIAL_SCAN, 0 ) ) );
 #endif
     if ( !hFile )
     {
@@ -975,7 +975,7 @@ HRESULT LoadFromTGAFile( LPCWSTR szFile, TexMetadata* metadata, ScratchImage& im
     ScopedHandle hFile( safe_handle( CreateFile2( szFile, GENERIC_READ, FILE_SHARE_READ, OPEN_EXISTING, 0 ) ) );
 #else
     ScopedHandle hFile( safe_handle( CreateFileW( szFile, GENERIC_READ, FILE_SHARE_READ, 0, OPEN_EXISTING,
-                                                  FILE_FLAG_SEQUENTIAL_SCAN, 0 ) ) );
+                                     FILE_FLAG_SEQUENTIAL_SCAN, 0 ) ) );
 #endif
     if ( !hFile )
     {
@@ -1065,104 +1065,104 @@ HRESULT LoadFromTGAFile( LPCWSTR szFile, TexMetadata* metadata, ScratchImage& im
         switch( mdata.format  )
         {
         case DXGI_FORMAT_R8G8B8A8_UNORM:
+        {
+            // TGA stores 32-bit data in BGRA form, need to swizzle to RGBA
+            assert( image.GetImageCount() == 1 );
+            const Image* img = image.GetImage(0,0,0);
+            if ( !img )
+                return E_POINTER;
+
+            uint8_t *pPixels = img->pixels;
+            if ( !pPixels )
+                return E_POINTER;
+
+            size_t rowPitch = img->rowPitch;
+
+            // Scan for non-zero alpha channel
+            bool nonzeroa = false;
+
+            for( size_t h = 0; h < img->height; ++h )
             {
-                // TGA stores 32-bit data in BGRA form, need to swizzle to RGBA
-                assert( image.GetImageCount() == 1 );
-                const Image* img = image.GetImage(0,0,0);
-                if ( !img )
-                    return E_POINTER;
+                const uint32_t* sPtr = reinterpret_cast<const uint32_t*>( pPixels );
 
-                uint8_t *pPixels = img->pixels;
-                if ( !pPixels )
-                    return E_POINTER;
-
-                size_t rowPitch = img->rowPitch;
-
-                // Scan for non-zero alpha channel
-                bool nonzeroa = false;
-
-                for( size_t h = 0; h < img->height; ++h )
+                for( size_t x=0; x < img->width; ++x )
                 {
-                    const uint32_t* sPtr = reinterpret_cast<const uint32_t*>( pPixels );
-
-                    for( size_t x=0; x < img->width; ++x )
+                    if ( (*sPtr) & 0xff000000 )
                     {
-                        if ( (*sPtr) & 0xff000000 )
-                        {
-                            nonzeroa = true;
-                            break;
-                        }
-
-                        ++sPtr;
+                        nonzeroa = true;
+                        break;
                     }
 
-                    if ( nonzeroa )
-                        break;
-
-                    pPixels += rowPitch;
+                    ++sPtr;
                 }
 
-                DWORD tflags = ( !nonzeroa ) ? TEXP_SCANLINE_SETALPHA : TEXP_SCANLINE_NONE;
+                if ( nonzeroa )
+                    break;
 
-                // Swizzle scanlines
-                pPixels = img->pixels;
-
-                for( size_t h = 0; h < img->height; ++h )
-                {
-                    _SwizzleScanline( pPixels, rowPitch, pPixels, rowPitch, mdata.format, tflags );
-                    pPixels += rowPitch;
-                }
+                pPixels += rowPitch;
             }
-            break;
+
+            DWORD tflags = ( !nonzeroa ) ? TEXP_SCANLINE_SETALPHA : TEXP_SCANLINE_NONE;
+
+            // Swizzle scanlines
+            pPixels = img->pixels;
+
+            for( size_t h = 0; h < img->height; ++h )
+            {
+                _SwizzleScanline( pPixels, rowPitch, pPixels, rowPitch, mdata.format, tflags );
+                pPixels += rowPitch;
+            }
+        }
+        break;
 
         // If we start using DXGI_FORMAT_B8G8R8X8_UNORM or DXGI_FORMAT_B8G8R8A8_UNORM we need to check for a fully 0 alpha channel
-     
+
         case DXGI_FORMAT_B5G5R5A1_UNORM:
+        {
+            assert( image.GetImageCount() == 1 );
+            const Image* img = image.GetImage(0,0,0);
+            if ( !img )
+                return E_POINTER;
+
+            // Scan for non-zero alpha channel
+            bool nonzeroa = false;
+
+            const uint8_t *pPixels = img->pixels;
+            if ( !pPixels )
+                return E_POINTER;
+
+            size_t rowPitch = img->rowPitch;
+
+            for( size_t h = 0; h < img->height; ++h )
             {
-                assert( image.GetImageCount() == 1 );
-                const Image* img = image.GetImage(0,0,0);
-                if ( !img )
-                    return E_POINTER;
+                const uint16_t* sPtr = reinterpret_cast<const uint16_t*>( pPixels );
 
-                // Scan for non-zero alpha channel
-                bool nonzeroa = false;
-
-                const uint8_t *pPixels = img->pixels;
-                if ( !pPixels )
-                    return E_POINTER;
-
-                size_t rowPitch = img->rowPitch;
-
-                for( size_t h = 0; h < img->height; ++h )
+                for( size_t x=0; x < img->width; ++x )
                 {
-                    const uint16_t* sPtr = reinterpret_cast<const uint16_t*>( pPixels );
-
-                    for( size_t x=0; x < img->width; ++x )
+                    if ( *sPtr & 0x8000 )
                     {
-                        if ( *sPtr & 0x8000 )
-                        {
-                            nonzeroa = true;
-                            break;
-                        }
-
-                        ++sPtr;
+                        nonzeroa = true;
+                        break;
                     }
 
-                    if ( nonzeroa )
-                        break;
-
-                    pPixels += rowPitch;
+                    ++sPtr;
                 }
 
-                // If there are no non-zero alpha channel entries, we'll assume alpha is not used and force it to opaque
-                if ( !nonzeroa )
-                {
-                    hr = _SetAlphaChannelToOpaque( img );
-                    if ( FAILED(hr) )
-                        return hr;
-                }
+                if ( nonzeroa )
+                    break;
+
+                pPixels += rowPitch;
             }
-            break;
+
+            // If there are no non-zero alpha channel entries, we'll assume alpha is not used and force it to opaque
+            if ( !nonzeroa )
+            {
+                hr = _SetAlphaChannelToOpaque( img );
+                if ( FAILED(hr) )
+                    return hr;
+            }
+        }
+        break;
         }
     }
     else // RLE || EXPAND || INVERTX || !INVERTY

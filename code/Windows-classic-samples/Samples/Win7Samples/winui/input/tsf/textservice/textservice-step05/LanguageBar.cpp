@@ -1,4 +1,4 @@
-//////////////////////////////////////////////////////////////////////
+﻿//////////////////////////////////////////////////////////////////////
 //
 //  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 //  ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED
@@ -43,7 +43,7 @@ static WCHAR c_szMenuItemDescriptionInsertHello[] = L"Insert Hello";
 //----------------------------------------------------------------------------
 
 class CLangBarItemButton : public ITfLangBarItemButton,
-                           public ITfSource
+    public ITfSource
 {
 public:
     CLangBarItemButton(CTextService *pTextService);
@@ -133,8 +133,8 @@ STDAPI CLangBarItemButton::QueryInterface(REFIID riid, void **ppvObj)
     *ppvObj = NULL;
 
     if (IsEqualIID(riid, IID_IUnknown) ||
-        IsEqualIID(riid, IID_ITfLangBarItem) ||
-        IsEqualIID(riid, IID_ITfLangBarItemButton))
+            IsEqualIID(riid, IID_ITfLangBarItem) ||
+            IsEqualIID(riid, IID_ITfLangBarItemButton))
     {
         *ppvObj = (ITfLangBarItemButton *)this;
     }
@@ -251,37 +251,37 @@ STDAPI CLangBarItemButton::OnClick(TfLBIClick click, POINT pt, const RECT *prcAr
 
 STDAPI CLangBarItemButton::InitMenu(ITfMenu *pMenu)
 {
-    // 
+    //
     // Add the fisrt menu item.
-    // 
+    //
     pMenu->AddMenuItem(MENUITEM_INDEX_0,
-                       0, 
-                       NULL, 
-                       NULL, 
-                       c_szMenuItemDescription0, 
-                       (ULONG)wcslen(c_szMenuItemDescription0), 
+                       0,
+                       NULL,
+                       NULL,
+                       c_szMenuItemDescription0,
+                       (ULONG)wcslen(c_szMenuItemDescription0),
                        NULL);
 
-    // 
+    //
     // Add the second menu item.
-    // 
+    //
     pMenu->AddMenuItem(MENUITEM_INDEX_1,
-                       0, 
-                       NULL, 
-                       NULL, 
-                       c_szMenuItemDescription1, 
-                       (ULONG)wcslen(c_szMenuItemDescription1), 
+                       0,
+                       NULL,
+                       NULL,
+                       c_szMenuItemDescription1,
+                       (ULONG)wcslen(c_szMenuItemDescription1),
                        NULL);
 
-    // 
+    //
     // Add the insert Hello menu item.
-    // 
+    //
     pMenu->AddMenuItem(MENUITEM_INDEX_INSERTHELLO,
-                       0, 
-                       NULL, 
-                       NULL, 
-                       c_szMenuItemDescriptionInsertHello, 
-                       (ULONG)wcslen(c_szMenuItemDescriptionInsertHello), 
+                       0,
+                       NULL,
+                       NULL,
+                       c_szMenuItemDescriptionInsertHello,
+                       (ULONG)wcslen(c_szMenuItemDescriptionInsertHello),
                        NULL);
 
     return S_OK;
@@ -300,15 +300,15 @@ STDAPI CLangBarItemButton::OnMenuSelect(UINT wID)
     //
     switch (wID)
     {
-        case MENUITEM_INDEX_0:
-            break;
+    case MENUITEM_INDEX_0:
+        break;
 
-        case MENUITEM_INDEX_1:
-            break;
+    case MENUITEM_INDEX_1:
+        break;
 
-        case MENUITEM_INDEX_INSERTHELLO:
-            _pTextService->InsertHello();
-            break;
+    case MENUITEM_INDEX_INSERTHELLO:
+        _pTextService->InsertHello();
+        break;
     }
 
     return S_OK;
@@ -323,7 +323,7 @@ STDAPI CLangBarItemButton::OnMenuSelect(UINT wID)
 STDAPI CLangBarItemButton::GetIcon(HICON *phIcon)
 {
     *phIcon = (HICON)LoadImage(g_hInst, TEXT("IDI_TEXTSERVICE"), IMAGE_ICON, 16, 16, 0);
- 
+
     return (*phIcon != NULL) ? S_OK : E_FAIL;
 }
 
@@ -384,9 +384,9 @@ STDAPI CLangBarItemButton::AdviseSink(REFIID riid, IUnknown *punk, DWORD *pdwCoo
 
 STDAPI CLangBarItemButton::UnadviseSink(DWORD dwCookie)
 {
-    // 
+    //
     // Check the given cookie.
-    // 
+    //
     if (dwCookie != TEXTSERVICE_LANGBARITEMSINK_COOKIE)
         return CONNECT_E_NOCONNECTION;
 

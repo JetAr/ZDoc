@@ -1,4 +1,4 @@
-//------------------------------------------------------------------------------
+﻿//------------------------------------------------------------------------------
 // File: persist.cpp
 //
 // Desc: DirectShow sample code
@@ -11,7 +11,7 @@
 
 
 // Global data
-RECENTFILES aRecentFiles[MAX_RECENT_FILES]={0};
+RECENTFILES aRecentFiles[MAX_RECENT_FILES]= {0};
 int         nRecentFiles=0;
 
 // Global static data
@@ -36,7 +36,7 @@ const int CY_DEFAULT = 400;     /* Default window height */
 HKEY
 GetAppKey(
     BOOL fCreate
-    )
+)
 {
     HKEY hKey = 0;
 
@@ -65,7 +65,7 @@ ProfileStringIn(
     LPTSTR  szDefault,
     LPTSTR  szProfileString,
     DWORD   cb
-    )
+)
 {
     CheckPointer(szKey,0);
     CheckPointer(szDefault,0);
@@ -80,9 +80,9 @@ ProfileStringIn(
         return lstrlen(szProfileString);
     }
 
-    if((RegQueryValueEx(hKey, szKey, NULL, &dwType, 
-                       (LPBYTE)szProfileString, &cb) != ERROR_SUCCESS)
-        || dwType != REG_SZ)
+    if((RegQueryValueEx(hKey, szKey, NULL, &dwType,
+                        (LPBYTE)szProfileString, &cb) != ERROR_SUCCESS)
+            || dwType != REG_SZ)
     {
         StringCbCopy(szProfileString, cb, szDefault);
         cb = lstrlen(szProfileString);
@@ -101,7 +101,7 @@ void
 ProfileStringOut(
     LPTSTR  szKey,
     LPTSTR  szProfileString
-    )
+)
 {
     assert(szKey);
     assert(szProfileString);
@@ -127,16 +127,16 @@ ProfileStringOut(
 \**************************************************************************/
 
 #ifndef SPI_GETWORKAREA
- #define SPI_GETWORKAREA 48  // because NT doesnt have this define yet
+#define SPI_GETWORKAREA 48  // because NT doesnt have this define yet
 #endif
 
 BOOL
 LoadWindowPos(
     LPRECT lprc
-    )
+)
 {
     CheckPointer(lprc,FALSE);
-    
+
     static RECT rcDefault = {0,0,CX_DEFAULT,CY_DEFAULT};
     RECT  rcScreen, rc;
     HKEY  hKey = GetAppKey(FALSE);
@@ -151,7 +151,7 @@ LoadWindowPos(
         DWORD dwType;
 
         if(ERROR_SUCCESS == RegQueryValueEx(hKey, cszWindow, NULL, &dwType, (LPBYTE)&rc, &cb)
-            && dwType == REG_BINARY && cb == sizeof(RECT))
+                && dwType == REG_BINARY && cb == sizeof(RECT))
         {
             *lprc = rc;
         }
@@ -190,7 +190,7 @@ LoadWindowPos(
 BOOL
 SaveWindowPos(
     HWND hwnd
-    )
+)
 {
     WINDOWPLACEMENT wpl;
 
@@ -207,8 +207,8 @@ SaveWindowPos(
     GetWindowPlacement(hwnd, &wpl);
 
     RegSetValueEx(hKey, cszWindow, 0, REG_BINARY,
-                 (LPBYTE)&wpl.rcNormalPosition,
-                 sizeof(wpl.rcNormalPosition));
+                  (LPBYTE)&wpl.rcNormalPosition,
+                  sizeof(wpl.rcNormalPosition));
 
     RegCloseKey(hKey);
     return TRUE;
@@ -218,8 +218,8 @@ SaveWindowPos(
 /*****************************Private*Routine******************************\
 * GetRecentFiles
 *
-* Reads at most MAX_RECENT_FILES from the app's registry entry. 
-* Returns the number of files actually read.  
+* Reads at most MAX_RECENT_FILES from the app's registry entry.
+* Returns the number of files actually read.
 * Updates the File menu to show the "recent" files.
 *
 \**************************************************************************/
@@ -227,7 +227,7 @@ int
 GetRecentFiles(
     int iLastCount,
     int iMenuPosition   // Menu position of start of MRU list
-    )
+)
 {
     int     i;
     TCHAR   FileName[MAX_PATH];
@@ -239,7 +239,7 @@ GetRecentFiles(
     //
     hSubMenu = GetSubMenu(GetMenu(hwndApp), 0);
 
-    // Delete the separator at the requested position and all the other 
+    // Delete the separator at the requested position and all the other
     // recent file entries
     if(iLastCount != 0)
     {
@@ -274,7 +274,7 @@ GetRecentFiles(
         }
 
         InsertMenu(hSubMenu, iMenuPosition + i, MF_STRING | MF_BYPOSITION,
-            ID_RECENT_FILE_BASE + i, szMenuName);
+                   ID_RECENT_FILE_BASE + i, szMenuName);
     }
 
     //
@@ -296,7 +296,7 @@ SetRecentFiles(
     TCHAR *FileName,    // File name to add
     int iCount,         // Current count of files
     int iMenuPosition   // Menu position of start of MRU list
-    )
+)
 {
     TCHAR   FullPathFileName[MAX_PATH];
     TCHAR   *lpFile=0;

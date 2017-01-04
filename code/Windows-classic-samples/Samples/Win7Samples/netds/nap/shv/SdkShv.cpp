@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 
@@ -23,7 +23,7 @@ extern "C" BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID lpRes
 
     UNREFERENCED_PARAMETER(hInstance);
 
-    retval = _AtlModule.DllMain(dwReason, lpReserved); 
+    retval = _AtlModule.DllMain(dwReason, lpReserved);
 
     return retval;
 }
@@ -79,7 +79,7 @@ STDAPI DllRegisterServer(void)
     // Register the SDK SHV with SHV Host using the Registration API.
     hr = _AtlModule.RegisterSdkShv();
 
- Cleanup:
+Cleanup:
     return hr;
 }
 
@@ -94,7 +94,7 @@ STDAPI DllUnregisterServer(void)
     hr = _AtlModule.UnregisterSdkShv();
 
     hr = _AtlModule.DllUnregisterServer(FALSE);
-   
+
     // Whether or not DllUnregisterServer() succeeded, this COM application
     // should remove itself from the registry.
 

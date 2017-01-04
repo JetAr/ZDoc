@@ -1,4 +1,4 @@
-//*****************************************************************************
+﻿//*****************************************************************************
 //
 // Microsoft Windows Media
 // Copyright (C) Microsoft Corporation. All rights reserved.
@@ -11,11 +11,11 @@
 
 #include "Reader.h"
 //////////////////////////////////////////////////////////////////////
-//    The CReader object reads stream data from an input (file or URL) 
-//    specified by the pwszFile parameter of the Configure method and 
+//    The CReader object reads stream data from an input (file or URL)
+//    specified by the pwszFile parameter of the Configure method and
 //    sends it the output, which is a CWriter or CWaveOut object,
 //    depending which one of them has been attached. Data sent to CWriter
-//    is compressed, while data sent to CWaveOut is decompressed by CReader. 
+//    is compressed, while data sent to CWaveOut is decompressed by CReader.
 //    The GetStats method enables you to get statistics at any time during
 //    data transmission.
 //////////////////////////////////////////////////////////////////////
@@ -71,7 +71,7 @@ HRESULT CReader::Init()
     do
     {
         m_hrAsync = S_OK ;
-    
+
         m_hEvent = CreateEvent( NULL, FALSE, FALSE, NULL ) ;
 
         if ( NULL ==  m_hEvent )
@@ -84,7 +84,7 @@ HRESULT CReader::Init()
             _tprintf( _T( "Could not create reader (hr=0x%08x).\n" ), hr );
             break;
         }
-        
+
         if ( FAILED( hr = m_pReader->QueryInterface( IID_IWMReaderAdvanced, ( void** )&m_pReaderAdvanced )))
         {
             _tprintf( _T( "Could not QI for IWMReaderAdvanced (hr=0x%08x).\n" ), hr );
@@ -106,7 +106,8 @@ HRESULT CReader::Init()
         }
 
 
-    } while( FALSE );
+    }
+    while( FALSE );
 
     if (FAILED( hr ) )
     {
@@ -129,22 +130,23 @@ HRESULT CReader::Configure( const WCHAR *pwszFile )
 
     HRESULT hr = S_OK;
     const WCHAR * wszAttributes[] = { g_wszWMTitle,
-                                g_wszWMAuthor,
-                                g_wszWMDescription,
-                                g_wszWMRating,
-                                g_wszWMCopyright,
-                                g_wszWMAlbumTitle,
-                                g_wszWMTrack,
-                                g_wszWMPromotionURL,
-                                g_wszWMAlbumCoverURL,
-                                g_wszWMGenre,
-                                g_wszWMYear,
-                                g_wszWMGenreID,
-                                g_wszWMMCDI,
-                                g_wszWMBannerImageType,
-                                g_wszWMBannerImageData,
-                                g_wszWMBannerImageURL,
-                                g_wszWMCopyrightURL };
+                                      g_wszWMAuthor,
+                                      g_wszWMDescription,
+                                      g_wszWMRating,
+                                      g_wszWMCopyright,
+                                      g_wszWMAlbumTitle,
+                                      g_wszWMTrack,
+                                      g_wszWMPromotionURL,
+                                      g_wszWMAlbumCoverURL,
+                                      g_wszWMGenre,
+                                      g_wszWMYear,
+                                      g_wszWMGenreID,
+                                      g_wszWMMCDI,
+                                      g_wszWMBannerImageType,
+                                      g_wszWMBannerImageData,
+                                      g_wszWMBannerImageURL,
+                                      g_wszWMCopyrightURL
+                                    };
 
     //
     // Check, if it's a net location.
@@ -156,22 +158,22 @@ HRESULT CReader::Configure( const WCHAR *pwszFile )
     m_fNetReading = _wcsnicmp( pwszFile, L"http", 4 )? FALSE : TRUE ;
 
     //
-    // Open the requested file 
+    // Open the requested file
     //
 
     hr = m_pReader->Open( pwszFile, this, NULL );
     if ( FAILED( hr ) )
     {
-        _tprintf( _T( "Could not open file %ws (hr=0x%08x).\n" ), pwszFile ,hr );
+        _tprintf( _T( "Could not open file %ws (hr=0x%08x).\n" ), pwszFile,hr );
         return( hr );
     }
-    
+
     //
     // Wait for the open to finish
     //
 
     WaitForEvent();
-    
+
     if ( FAILED( m_hrAsync ) )
     {
         _tprintf( _T( "Open failed (hr=0x%08x).\n" ), m_hrAsync );
@@ -196,7 +198,7 @@ HRESULT CReader::Configure( const WCHAR *pwszFile )
     IWMProfile*    pProfile = NULL;
 
     hr = m_pReader->QueryInterface( IID_IWMProfile, ( VOID ** )&pProfile );
-    if ( FAILED( hr ) ) 
+    if ( FAILED( hr ) )
     {
         _tprintf( _T(  "Could not QI for IWMProfile (hr=0x%08x).\n" ), hr );
         return( hr );
@@ -204,14 +206,14 @@ HRESULT CReader::Configure( const WCHAR *pwszFile )
 
     m_dwAudioStreamNum = 0;
 
-    do 
+    do
     {
-		//
+        //
         // Create the list of data unit extensions defined for all streams
         // in this profile
         //
         hr = m_ExtDataList.Create( pProfile );
-        if ( FAILED( hr ) ) 
+        if ( FAILED( hr ) )
         {
             _tprintf( _T( "Creating data unit extension list failed (hr=0x%08x).\n" ), hr );
             break;
@@ -235,7 +237,7 @@ HRESULT CReader::Configure( const WCHAR *pwszFile )
         if ( !m_fNetReading )
         {
             hr = m_pReaderAdvanced->SetUserProvidedClock( TRUE );
-            if ( FAILED( hr ) ) 
+            if ( FAILED( hr ) )
             {
                 _tprintf( _T( "SetUserProvidedClock failed (hr=0x%08x).\n" ), hr );
                 break;
@@ -268,7 +270,8 @@ HRESULT CReader::Configure( const WCHAR *pwszFile )
         }
 
 
-    }while( FALSE );
+    }
+    while( FALSE );
 
     SAFE_RELEASE( pProfile );
 
@@ -277,13 +280,13 @@ HRESULT CReader::Configure( const WCHAR *pwszFile )
 
 ///////////////////////////////////////////////////////////////
 //    Attach writer object used to output stream data
-//    This function stops an already attached writer object or 
+//    This function stops an already attached writer object or
 //    closes an already attached WaveOut object
 //
 HRESULT CReader::AttachWriter( CWriter *pWriter )
 {
     HRESULT hr = S_OK;
-    
+
     if ( NULL == pWriter )
         return E_INVALIDARG;
 
@@ -298,9 +301,9 @@ HRESULT CReader::AttachWriter( CWriter *pWriter )
 ///////////////////////////////////////////////////////////////
 //    Start sending data to attached output. If a writer object has been
 //    attached, it is initialized. This function is synchronous and waits until all
-//    data is sent. Since the current writer object implementation has only a 
+//    data is sent. Since the current writer object implementation has only a
 //    network sink, all data sent to this object is left compressed; that is, the
-//    codec is off and data is passed thru OnStreamSample. If a WaveOut object 
+//    codec is off and data is passed thru OnStreamSample. If a WaveOut object
 //    is attached, data is decompressed and passed through theOnSample method.
 //
 HRESULT CReader::Start()
@@ -316,7 +319,7 @@ HRESULT CReader::Start()
     if ( NULL != m_pWriter )
     {
         hr = m_pWriter->Start();
-        if ( FAILED( hr ) ) 
+        if ( FAILED( hr ) )
         {
             return( hr );
         }
@@ -371,7 +374,7 @@ HRESULT CReader::Stop( HANDLE *hThread, int cHandles )
     if ( NULL != m_pWriter )
     {
         hr = m_pWriter->Stop();
-        if ( FAILED( hr ) ) 
+        if ( FAILED( hr ) )
         {
             _tprintf( _T(  "Could not Stop IWMWriter (hr=0x%08x).\n" ), hr );
             return( hr );
@@ -394,7 +397,7 @@ HRESULT CReader::Stop( HANDLE *hThread, int cHandles )
 }
 ///////////////////////////////////////////////////////////////
 //    Stop and close reader object. If WaveOut is attached, wait
-//    until it finishes with all samples and close it before closing 
+//    until it finishes with all samples and close it before closing
 //    the reader. Asynchronous method
 //
 HRESULT CReader::Close( HANDLE *hThread, int cHandles )
@@ -414,7 +417,7 @@ HRESULT CReader::Close( HANDLE *hThread, int cHandles )
     {
         hr = m_pReader->Close();
     }
-    
+
     if( FAILED ( hr ) )
     {
         return hr;
@@ -461,11 +464,11 @@ void CReader::WaitForEvent()
 //    Callback used to send decompressed samples to attached
 //    WaveOut object
 //
-HRESULT CReader::OnSample( DWORD dwOutputNum, 
-                             QWORD cnsSampleTime,
-                             QWORD cnsSampleDuration, 
-                             DWORD dwFlags,
-                             INSSBuffer __RPC_FAR *pSample, void __RPC_FAR *pvContext )
+HRESULT CReader::OnSample( DWORD dwOutputNum,
+                           QWORD cnsSampleTime,
+                           QWORD cnsSampleDuration,
+                           DWORD dwFlags,
+                           INSSBuffer __RPC_FAR *pSample, void __RPC_FAR *pvContext )
 {
     HRESULT hr = S_OK;
 
@@ -486,12 +489,12 @@ HRESULT CReader::OnSample( DWORD dwOutputNum,
 ///////////////////////////////////////////////////////////////
 //    Callback function used to send compressed samples to attached writer object
 //
-HRESULT CReader::OnStreamSample( WORD wStreamNum, 
-                                   QWORD cnsSampleTime, 
-                                   QWORD cnsSampleDuration, 
-                                   DWORD dwFlags, 
-                                   INSSBuffer __RPC_FAR *pSample, 
-                                   void __RPC_FAR *pvContext )
+HRESULT CReader::OnStreamSample( WORD wStreamNum,
+                                 QWORD cnsSampleTime,
+                                 QWORD cnsSampleDuration,
+                                 DWORD dwFlags,
+                                 INSSBuffer __RPC_FAR *pSample,
+                                 void __RPC_FAR *pvContext )
 {
     HRESULT hr = S_OK;
 
@@ -505,11 +508,11 @@ HRESULT CReader::OnStreamSample( WORD wStreamNum,
         _tprintf( _T(  "*" ) );
     }
 
-	//
+    //
     // Getting extension data:
     // find what extensions are defined for this stream and then
     // iterate thru them, get their values and display them
-    // 
+    //
     CExtensionData *pExtData = NULL;
     INSSBuffer3 *pMS3 = NULL;
     DWORD pvBuffer = 0;
@@ -521,7 +524,7 @@ HRESULT CReader::OnStreamSample( WORD wStreamNum,
     }
 
     while( ret )
-    {        
+    {
         DWORD dwTemp = pExtData->m_cbExtensionDataSize;
         hr = pMS3->GetProperty( pExtData->m_guidDUExt, pExtData->m_pValue, &dwTemp );
         pExtData->DisplayData();
@@ -536,37 +539,37 @@ HRESULT CReader::OnStreamSample( WORD wStreamNum,
     //
 
     hr = m_pWriter->WriteStreamSample( wStreamNum,
-                                          cnsSampleTime,
-                                          0,
-                                          cnsSampleDuration,
-                                          dwFlags,
-                                          pSample );
+                                       cnsSampleTime,
+                                       0,
+                                       cnsSampleDuration,
+                                       dwFlags,
+                                       pSample );
     return( hr );
 }
 ///////////////////////////////////////////////////////////////
-//    Callback used for setting synchronization event and getting 
+//    Callback used for setting synchronization event and getting
 //    current status of data transfer
 //
-HRESULT CReader::OnStatus( WMT_STATUS Status, 
-                             HRESULT hr, 
-                             WMT_ATTR_DATATYPE dwType, 
-                             BYTE __RPC_FAR *pValue, 
-                             void __RPC_FAR *pvContext )
+HRESULT CReader::OnStatus( WMT_STATUS Status,
+                           HRESULT hr,
+                           WMT_ATTR_DATATYPE dwType,
+                           BYTE __RPC_FAR *pValue,
+                           void __RPC_FAR *pvContext )
 {
     switch( Status )
     {
-    
+
     case WMT_OPENED:
-        
+
         m_hrAsync = hr;
-        SetEvent( m_hEvent );        
+        SetEvent( m_hEvent );
         break;
-    
+
     case WMT_EOF:
 
         m_fEOF = true;
         _tprintf( _T(  "EndOfStream detected in reader.\n" ) );
-        
+
         SetEvent( m_hEvent );
         break;
 
@@ -577,11 +580,11 @@ HRESULT CReader::OnStatus( WMT_STATUS Status,
         break ;
 
     case WMT_STOPPED:
-        
+
         m_hrAsync = hr;
         SetEvent( m_hEvent );
         break;
-    
+
     case WMT_STARTED:
 
         //
@@ -658,7 +661,7 @@ HRESULT CReader::SetCodecOff(IWMProfile*    pProfile)
         if ( FAILED( hr ) )
         {
             _tprintf( _T(  "Could not get Stream %d of %d from IWMProfile (hr=0x%08x).\n" ),
-                    i, dwStreams, hr );
+                      i, dwStreams, hr );
             break;
         }
 
@@ -672,7 +675,7 @@ HRESULT CReader::SetCodecOff(IWMProfile*    pProfile)
         if ( FAILED( hr ) )
         {
             _tprintf( _T(  "Could not get stream number from IWMStreamConfig %d of %d (hr=0x%08x).\n" ),
-                    i, dwStreams, hr );
+                      i, dwStreams, hr );
             break;
         }
 
@@ -680,7 +683,7 @@ HRESULT CReader::SetCodecOff(IWMProfile*    pProfile)
         if ( FAILED( hr ) )
         {
             _tprintf( _T("Could not get stream type of stream %d of %d from IWMStreamConfig (hr=0x%08x).\n" ),
-                i, dwStreams, hr ) ;
+                      i, dwStreams, hr ) ;
             break ;
         }
 
@@ -692,7 +695,7 @@ HRESULT CReader::SetCodecOff(IWMProfile*    pProfile)
         if ( FAILED( hr ) )
         {
             _tprintf( _T(  "Could not SetReceivedStreamSamples for stream number %d (hr=0x%08x).\n" ),
-                wStreamNumber, hr );
+                      wStreamNumber, hr );
             break;
         }
 
@@ -702,7 +705,7 @@ HRESULT CReader::SetCodecOff(IWMProfile*    pProfile)
     return( hr );
 }
 ///////////////////////////////////////////////////////////////
-//    Copy attribute value from reader to attached writer. 
+//    Copy attribute value from reader to attached writer.
 //    pwszName - attribute name
 //
 HRESULT CReader::CopyAttribToWriter( const WCHAR *pwszName )
@@ -712,7 +715,7 @@ HRESULT CReader::CopyAttribToWriter( const WCHAR *pwszName )
     WMT_ATTR_DATATYPE   type;
     HRESULT             hr = S_OK;
     BYTE*               pValue = NULL;
-    
+
 
     if ( NULL == pwszName || 0 == wcslen(pwszName))
     {
@@ -729,10 +732,10 @@ HRESULT CReader::CopyAttribToWriter( const WCHAR *pwszName )
     //
 
     hr = m_pReaderHeaderInfo->GetAttributeByName( &nstreamNum,
-                                                  pwszName,
-                                                  &type,
-                                                  NULL,
-                                                  &cbLength );
+            pwszName,
+            &type,
+            NULL,
+            &cbLength );
     if ( FAILED( hr ) && hr != ASF_E_NOTFOUND )
     {
         _tprintf( _T( "GetAttributeByName failed for Attribute name %ws (hr=0x%08x).\n" ), pwszName, hr);
@@ -760,10 +763,10 @@ HRESULT CReader::CopyAttribToWriter( const WCHAR *pwszName )
         //
 
         hr = m_pReaderHeaderInfo->GetAttributeByName( &nstreamNum,
-                                                    pwszName,
-                                                    &type,
-                                                    pValue,
-                                                    &cbLength );
+                pwszName,
+                &type,
+                pValue,
+                &cbLength );
         if ( FAILED( hr ) )
         {
             _tprintf( _T( "GetAttributeByName failed for Attribute name %ws (hr=0x%08x).\n" ),
@@ -776,10 +779,10 @@ HRESULT CReader::CopyAttribToWriter( const WCHAR *pwszName )
         //
 
         hr = m_pWriter->SetAttribute( nstreamNum,
-                                                pwszName,
-                                                type,
-                                                pValue,
-                                                cbLength );
+                                      pwszName,
+                                      type,
+                                      pValue,
+                                      cbLength );
         if ( FAILED( hr ) )
         {
             _tprintf( _T( "SetAttribute failed for Attribute name %ws (hr=0x%08x).\n" ),
@@ -788,12 +791,12 @@ HRESULT CReader::CopyAttribToWriter( const WCHAR *pwszName )
         }
     }
     while( FALSE );
-        
-	if (NULL != pValue)
-	{
-		delete[] pValue;
-		pValue = NULL;
-	}
+
+    if (NULL != pValue)
+    {
+        delete[] pValue;
+        pValue = NULL;
+    }
 
     return( hr );
 }
@@ -827,18 +830,18 @@ HRESULT CReader::CopyScriptsToWriter()
         // Get the memory required for this script
         //
 
-        hr = m_pReaderHeaderInfo->GetScript( i ,
-                                             NULL ,
-                                             &cchTypeLen ,
-                                             NULL ,
-                                             &cchCommandLen ,
+        hr = m_pReaderHeaderInfo->GetScript( i,
+                                             NULL,
+                                             &cchTypeLen,
+                                             NULL,
+                                             &cchCommandLen,
                                              &cnsScriptTime );
         if ( FAILED( hr ) )
         {
             _tprintf( _T( "GetScript failed for Script no %d (hr=0x%08x).\n" ), i, hr ) ;
             break ;
         }
-        
+
         pwszType    = new WCHAR[ cchTypeLen ];
         pwszCommand = new WCHAR[ cchCommandLen ];
 
@@ -853,11 +856,11 @@ HRESULT CReader::CopyScriptsToWriter()
         // Get the script
         //
 
-        hr = m_pReaderHeaderInfo->GetScript( i ,
-                                             pwszType ,
-                                             &cchTypeLen ,
-                                             pwszCommand ,
-                                             &cchCommandLen ,
+        hr = m_pReaderHeaderInfo->GetScript( i,
+                                             pwszType,
+                                             &cchTypeLen,
+                                             pwszCommand,
+                                             &cchCommandLen,
                                              &cnsScriptTime );
         if ( FAILED( hr ) )
         {
@@ -869,44 +872,44 @@ HRESULT CReader::CopyScriptsToWriter()
         // Add the script to the writer
         //
 
-        hr = m_pWriter->AddScript( pwszType ,
-                                             pwszCommand ,
-                                             cnsScriptTime );
+        hr = m_pWriter->AddScript( pwszType,
+                                   pwszCommand,
+                                   cnsScriptTime );
         if ( FAILED( hr ) )
         {
             _tprintf( _T( "AddScript failed for Script no %d (hr=0x%08x).\n" ), i, hr);
             break;
         }
-        
+
         delete[] pwszType;
         delete[] pwszCommand;
 
         pwszType = pwszCommand = NULL;
-        
+
         cchTypeLen       = 0;
         cchCommandLen    = 0;
     }
-    
-	if(NULL != pwszType)
-	{
-		delete[] pwszType;
-		pwszType = NULL;
-	}
-	if(NULL != pwszCommand)
-	{
-		delete[] pwszCommand;
-		pwszCommand = NULL;
-	}
-    
+
+    if(NULL != pwszType)
+    {
+        delete[] pwszType;
+        pwszType = NULL;
+    }
+    if(NULL != pwszCommand)
+    {
+        delete[] pwszCommand;
+        pwszCommand = NULL;
+    }
+
     pwszType = pwszCommand = NULL;
-    
-    return( hr );    
+
+    return( hr );
 
 }
 
 ///////////////////////////////////////////////////////////////
 ////////
-HRESULT STDMETHODCALLTYPE CReader::QueryInterface( REFIID riid, void __RPC_FAR *__RPC_FAR *ppvObject) 
+HRESULT STDMETHODCALLTYPE CReader::QueryInterface( REFIID riid, void __RPC_FAR *__RPC_FAR *ppvObject)
 {
     if ( riid == IID_IWMReaderCallback )
     {

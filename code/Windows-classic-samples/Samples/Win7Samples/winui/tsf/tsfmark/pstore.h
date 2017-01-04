@@ -1,4 +1,4 @@
-//
+﻿//
 // pstore.h
 //
 // CCustomPropertyStore

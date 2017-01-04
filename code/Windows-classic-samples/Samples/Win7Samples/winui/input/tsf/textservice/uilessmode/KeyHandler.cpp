@@ -1,4 +1,4 @@
-//////////////////////////////////////////////////////////////////////
+﻿//////////////////////////////////////////////////////////////////////
 //
 //  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 //  ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED
@@ -50,21 +50,21 @@ STDAPI CKeyHandlerEditSession::DoEditSession(TfEditCookie ec)
 
     switch (_wParam)
     {
-        case VK_LEFT:
-        case VK_RIGHT:
-            return _pTextService->_HandleArrowKey(ec, _pContext, _wParam);
+    case VK_LEFT:
+    case VK_RIGHT:
+        return _pTextService->_HandleArrowKey(ec, _pContext, _wParam);
 
-        case VK_RETURN:
-            return _pTextService->_HandleReturnKey(ec, _pContext);
+    case VK_RETURN:
+        return _pTextService->_HandleReturnKey(ec, _pContext);
 
-        case VK_SPACE:
-            return _pTextService->_HandleSpaceKey(ec, _pContext);
+    case VK_SPACE:
+        return _pTextService->_HandleSpaceKey(ec, _pContext);
 
-        default:
-            if ((_wParam >= 'A' && _wParam <= 'Z') ||
+    default:
+        if ((_wParam >= 'A' && _wParam <= 'Z') ||
                 (_wParam >= '0' && _wParam <= '9'))
-                return _pTextService->_HandleCharacterKey(ec, _pContext, _wParam);
-            break;
+            return _pTextService->_HandleCharacterKey(ec, _pContext, _wParam);
+        break;
     }
 
     return S_OK;
@@ -84,13 +84,13 @@ BOOL IsRangeCovered(TfEditCookie ec, ITfRange *pRangeTest, ITfRange *pRangeCover
     LONG lResult;
 
     if (pRangeCover->CompareStart(ec, pRangeTest, TF_ANCHOR_START, &lResult) != S_OK ||
-        lResult > 0)
+            lResult > 0)
     {
         return FALSE;
     }
 
     if (pRangeCover->CompareEnd(ec, pRangeTest, TF_ANCHOR_END, &lResult) != S_OK ||
-        lResult < 0)
+            lResult < 0)
     {
         return FALSE;
     }
@@ -187,27 +187,27 @@ HRESULT CTextService::_HandleSpaceKey(TfEditCookie ec, ITfContext *pContext)
     //
     // set the display attribute to the composition range.
     //
-    // The real text service may have linguistic logic here and set 
-    // the specific range to apply the display attribute rather than 
+    // The real text service may have linguistic logic here and set
+    // the specific range to apply the display attribute rather than
     // applying the display attribute to the entire composition range.
     //
     _SetCompositionDisplayAttributes(ec, pContext, _gaDisplayAttributeConverted);
 
-    // 
+    //
     // create an instance of the candidate list class.
-    // 
+    //
     if (_pCandidateList == NULL)
         _pCandidateList = new CCandidateList(this);
 
-    // 
+    //
     // we don't cache the document manager object. So get it from pContext.
-    // 
+    //
     ITfDocumentMgr *pDocumentMgr;
     if (pContext->GetDocumentMgr(&pDocumentMgr) == S_OK)
     {
-        // 
+        //
         // get the composition range.
-        // 
+        //
         ITfRange *pRange;
         if (_pComposition->GetRange(&pRange) == S_OK)
         {
@@ -237,7 +237,7 @@ HRESULT CTextService::_HandleArrowKey(TfEditCookie ec, ITfContext *pContext, WPA
 
     // get the selection
     if (pContext->GetSelection(ec, TF_DEFAULT_SELECTION, 1, &tfSelection, &cFetched) != S_OK ||
-        cFetched != 1)
+            cFetched != 1)
     {
         // no selection?
         return S_OK; // eat the keystroke
@@ -251,7 +251,7 @@ HRESULT CTextService::_HandleArrowKey(TfEditCookie ec, ITfContext *pContext, WPA
     if (wParam == VK_LEFT)
     {
         if (tfSelection.range->IsEqualStart(ec, pRangeComposition, TF_ANCHOR_START, &fEqual) == S_OK &&
-            !fEqual)
+                !fEqual)
         {
             tfSelection.range->ShiftStart(ec, -1, &cch, NULL);
         }
@@ -261,7 +261,7 @@ HRESULT CTextService::_HandleArrowKey(TfEditCookie ec, ITfContext *pContext, WPA
     {
         // VK_RIGHT
         if (tfSelection.range->IsEqualEnd(ec, pRangeComposition, TF_ANCHOR_END, &fEqual) == S_OK &&
-            !fEqual)
+                !fEqual)
         {
             tfSelection.range->ShiftEnd(ec, +1, &cch, NULL);
         }

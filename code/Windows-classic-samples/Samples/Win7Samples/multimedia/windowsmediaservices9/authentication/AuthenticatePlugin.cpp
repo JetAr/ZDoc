@@ -1,4 +1,4 @@
-//+-------------------------------------------------------------------------
+﻿//+-------------------------------------------------------------------------
 //
 //  Microsoft Windows Media Technologies
 //  Copyright (C) Microsoft Corporation. All rights reserved.
@@ -42,8 +42,8 @@ STDMETHODIMP CAuthenticatePlugin::InitializePlugin
 )
 {
     if( ( NULL == pServerContext )
-        || ( NULL == pNamedValues )
-        || ( NULL == pClassFactory ) )
+            || ( NULL == pNamedValues )
+            || ( NULL == pClassFactory ) )
     {
         return( E_INVALIDARG );
     }
@@ -226,8 +226,8 @@ STDMETHODIMP CAuthenticatePlugin::GetFlags
     HRESULT hr = S_OK;
 
     *Flags = WMS_AUTHENTICATION_TEXT_CHALLENGE
-           | WMS_AUTHENTICATION_CLIENT_SHOWS_UI
-           | WMS_AUTHENTICATION_CHALLENGE_FIRST;
+             | WMS_AUTHENTICATION_CLIENT_SHOWS_UI
+             | WMS_AUTHENTICATION_CHALLENGE_FIRST;
 
     return( hr );
 }

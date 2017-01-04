@@ -1,6 +1,7 @@
-#pragma once
+﻿#pragma once
 
-typedef struct {
+typedef struct
+{
     UINT nStart;
     UINT nEnd;
     TF_DISPLAYATTRIBUTE da;
@@ -12,10 +13,13 @@ typedef struct {
 //
 //----------------------------------------------------------------
 
-typedef struct 
+typedef struct
 {
     RECT rc;
-    int GetWidth() {return rc.right - rc.left;}
+    int GetWidth()
+    {
+        return rc.right - rc.left;
+    }
 } CHARINFO;
 
 //----------------------------------------------------------------
@@ -24,7 +28,7 @@ typedef struct
 //
 //----------------------------------------------------------------
 
-typedef struct 
+typedef struct
 {
     UINT nPos;
     UINT nCnt;
@@ -60,7 +64,10 @@ public:
     UINT FineFirstEndCharPosInLine(UINT uCurPos, BOOL bFirst);
     void BlinkCaret(HDC hdc);
 
-    int GetLineHeight() {return _nLineHeight;}
+    int GetLineHeight()
+    {
+        return _nLineHeight;
+    }
 
 private:
     HPEN CreateUnderlinePen(const TF_DISPLAYATTRIBUTE *pda, int nWidth);

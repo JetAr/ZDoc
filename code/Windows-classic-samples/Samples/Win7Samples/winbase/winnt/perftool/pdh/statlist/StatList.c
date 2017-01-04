@@ -1,4 +1,4 @@
-//THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿//THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 //ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 //THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -65,40 +65,42 @@ LPTSTR   GetStringRes (int id);
 //
 ATOM MyRegisterClass(CONST WNDCLASS *lpwc)
 {
-   HANDLE  hMod;
-   FARPROC proc;
-   WNDCLASSEX wcex;
+    HANDLE  hMod;
+    FARPROC proc;
+    WNDCLASSEX wcex;
 
-   hMod = GetModuleHandle ("USER32");
-   if (hMod != NULL) {
+    hMod = GetModuleHandle ("USER32");
+    if (hMod != NULL)
+    {
 
 #if defined (UNICODE)
-      proc = GetProcAddress (hMod, "RegisterClassExW");
+        proc = GetProcAddress (hMod, "RegisterClassExW");
 #else
-      proc = GetProcAddress (hMod, "RegisterClassExA");
+        proc = GetProcAddress (hMod, "RegisterClassExA");
 #endif
 
-      if (proc != NULL) {
+        if (proc != NULL)
+        {
 
-         wcex.style         = lpwc->style;
-         wcex.lpfnWndProc   = lpwc->lpfnWndProc;
-         wcex.cbClsExtra    = lpwc->cbClsExtra;
-         wcex.cbWndExtra    = lpwc->cbWndExtra;
-         wcex.hInstance     = lpwc->hInstance;
-         wcex.hIcon         = lpwc->hIcon;
-         wcex.hCursor       = lpwc->hCursor;
-         wcex.hbrBackground = lpwc->hbrBackground;
-         wcex.lpszMenuName  = lpwc->lpszMenuName;
-         wcex.lpszClassName = lpwc->lpszClassName;
+            wcex.style         = lpwc->style;
+            wcex.lpfnWndProc   = lpwc->lpfnWndProc;
+            wcex.cbClsExtra    = lpwc->cbClsExtra;
+            wcex.cbWndExtra    = lpwc->cbWndExtra;
+            wcex.hInstance     = lpwc->hInstance;
+            wcex.hIcon         = lpwc->hIcon;
+            wcex.hCursor       = lpwc->hCursor;
+            wcex.hbrBackground = lpwc->hbrBackground;
+            wcex.lpszMenuName  = lpwc->lpszMenuName;
+            wcex.lpszClassName = lpwc->lpszClassName;
 
-         // Added elements for Windows 95:
-         wcex.cbSize = sizeof(WNDCLASSEX);
-         wcex.hIconSm = LoadIcon(wcex.hInstance, "SMALL");
+            // Added elements for Windows 95:
+            wcex.cbSize = sizeof(WNDCLASSEX);
+            wcex.hIconSm = LoadIcon(wcex.hInstance, "SMALL");
 
-         return (*proc)(&wcex);//return RegisterClassEx(&wcex) with type ATOM;
-      }
-   }
-   return (RegisterClass(lpwc));
+            return (*proc)(&wcex);//return RegisterClassEx(&wcex) with type ATOM;
+        }
+    }
+    return (RegisterClass(lpwc));
 }
 
 //
@@ -121,9 +123,11 @@ BOOL InitApplication(HINSTANCE hInstance)
     // things a little closer. This is because we only want a single
     // version of this app to run at a time
     hwnd = FindWindow (szAppName, NULL);
-    if (hwnd) {
+    if (hwnd)
+    {
         // We found another version of ourself. Lets defer to it:
-        if (IsIconic(hwnd)) {
+        if (IsIconic(hwnd))
+        {
             ShowWindow(hwnd, SW_RESTORE);
         }
         SetForegroundWindow (hwnd);
@@ -133,24 +137,24 @@ BOOL InitApplication(HINSTANCE hInstance)
         // should now perform based on how the user tried to
         // execute us.
         return FALSE;
-        }
+    }
 
-        // Fill in window class structure with parameters that describe
-        // the main window.
-        wc.style         = CS_HREDRAW | CS_VREDRAW;
-        wc.lpfnWndProc   = (WNDPROC)WndProc;
-        wc.cbClsExtra    = 0;
-        wc.cbWndExtra    = 0;
-        wc.hInstance     = hInstance;
-        wc.hIcon         = LoadIcon (hInstance, szAppName);
-        wc.hCursor       = LoadCursor(NULL, IDC_ARROW);
-        wc.hbrBackground = (HBRUSH)(COLOR_WINDOW+1);
+    // Fill in window class structure with parameters that describe
+    // the main window.
+    wc.style         = CS_HREDRAW | CS_VREDRAW;
+    wc.lpfnWndProc   = (WNDPROC)WndProc;
+    wc.cbClsExtra    = 0;
+    wc.cbWndExtra    = 0;
+    wc.hInstance     = hInstance;
+    wc.hIcon         = LoadIcon (hInstance, szAppName);
+    wc.hCursor       = LoadCursor(NULL, IDC_ARROW);
+    wc.hbrBackground = (HBRUSH)(COLOR_WINDOW+1);
 
-        wc.lpszMenuName  = szAppName;
-        wc.lpszClassName = szAppName;
+    wc.lpszMenuName  = szAppName;
+    wc.lpszClassName = szAppName;
 
-        // Register the window class and return success/failure code.
-        return RegisterClass(&wc);
+    // Register the window class and return success/failure code.
+    return RegisterClass(&wc);
 }
 
 //
@@ -165,24 +169,25 @@ BOOL InitApplication(HINSTANCE hInstance)
 //
 BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 {
-   HWND hWnd;
-   DWORD dwStatus;
+    HWND hWnd;
+    DWORD dwStatus;
 
-   hInst = hInstance; // Store instance handle in our global variable
+    hInst = hInstance; // Store instance handle in our global variable
 
-   hWnd = CreateWindow(szAppName, szTitle, WS_OVERLAPPEDWINDOW,
-      CW_USEDEFAULT, 0, CW_USEDEFAULT, 0,
-      NULL, NULL, hInstance, NULL);
+    hWnd = CreateWindow(szAppName, szTitle, WS_OVERLAPPEDWINDOW,
+                        CW_USEDEFAULT, 0, CW_USEDEFAULT, 0,
+                        NULL, NULL, hInstance, NULL);
 
-   if (!hWnd) {
-      dwStatus = GetLastError();
-      return (FALSE);
-   }
+    if (!hWnd)
+    {
+        dwStatus = GetLastError();
+        return (FALSE);
+    }
 
-   ShowWindow(hWnd, nCmdShow);
-   UpdateWindow(hWnd);
+    ShowWindow(hWnd, nCmdShow);
+    UpdateWindow(hWnd);
 
-   return (TRUE);
+    return (TRUE);
 }
 
 //
@@ -200,39 +205,44 @@ int APIENTRY WinMain(HINSTANCE hInstance,
                      LPSTR     lpCmdLine,
                      int       nCmdShow)
 {
-   MSG msg;
-   HANDLE hAccelTable;
+    MSG msg;
+    HANDLE hAccelTable;
 
-   // Initialize global strings
-   strncpy_s(szAppName, 99, APPNAME, _TRUNCATE);
-   szAppName[99] = '\0'; // ensure that szAppName is NULL terminated
-   LoadString (hInstance, IDS_APP_TITLE, szTitle, 100);
+    // Initialize global strings
+    strncpy_s(szAppName, 99, APPNAME, _TRUNCATE);
+    szAppName[99] = '\0'; // ensure that szAppName is NULL terminated
+    LoadString (hInstance, IDS_APP_TITLE, szTitle, 100);
 
 
-   if (!hPrevInstance) {
-      // Perform instance initialization:
-      if (!InitApplication(hInstance)) {
-         return (FALSE);
-      }
-   }
+    if (!hPrevInstance)
+    {
+        // Perform instance initialization:
+        if (!InitApplication(hInstance))
+        {
+            return (FALSE);
+        }
+    }
 
-   // Perform application initialization:
-   if (!InitInstance(hInstance, nCmdShow)) {
-      return (FALSE);
-   }
+    // Perform application initialization:
+    if (!InitInstance(hInstance, nCmdShow))
+    {
+        return (FALSE);
+    }
 
-   hAccelTable = LoadAccelerators (hInstance, szAppName);
+    hAccelTable = LoadAccelerators (hInstance, szAppName);
 
-   // Main message loop:
-   while (GetMessage(&msg, NULL, 0, 0)) {
-      if (!TranslateAccelerator (msg.hwnd, hAccelTable, &msg)) {
-         TranslateMessage(&msg);
-         DispatchMessage(&msg);
-      }
-   }
+    // Main message loop:
+    while (GetMessage(&msg, NULL, 0, 0))
+    {
+        if (!TranslateAccelerator (msg.hwnd, hAccelTable, &msg))
+        {
+            TranslateMessage(&msg);
+            DispatchMessage(&msg);
+        }
+    }
 
-   return (int) (msg.wParam);
+    return (int) (msg.wParam);
 
-   lpCmdLine; // This will prevent 'unused formal parameter' warnings
+    lpCmdLine; // This will prevent 'unused formal parameter' warnings
 }
 

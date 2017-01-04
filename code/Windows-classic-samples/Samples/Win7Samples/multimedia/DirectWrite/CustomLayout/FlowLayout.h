@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -18,8 +18,8 @@
 
 class DECLSPEC_UUID("E304E995-6157-48ec-8D44-ACB308A210D0") FlowLayout
     :   public ComBase<
-            QiListSelf<FlowLayout,
-            QiList<IUnknown
+        QiListSelf<FlowLayout,
+        QiList<IUnknown
         > > >
 {
     // This custom layout processes layout in two stages.
@@ -40,9 +40,9 @@ public:
     struct ClusterPosition
     {
         ClusterPosition()
-        :   textPosition(),
-            runIndex(),
-            runEndPosition()
+            :   textPosition(),
+                runIndex(),
+                runEndPosition()
         { }
 
         UINT32 textPosition;    // Current text position
@@ -52,13 +52,13 @@ public:
 
 public:
     FlowLayout(IDWriteFactory* dwriteFactory)
-    :   dwriteFactory_(SafeAcquire(dwriteFactory)),
-        fontFace_(),
-        numberSubstitution_(),
-        readingDirection_(DWRITE_READING_DIRECTION_LEFT_TO_RIGHT),
-        fontEmSize_(12),
-        maxSpaceWidth_(8),
-        isTextAnalysisComplete_(false)
+        :   dwriteFactory_(SafeAcquire(dwriteFactory)),
+            fontFace_(),
+            numberSubstitution_(),
+            readingDirection_(DWRITE_READING_DIRECTION_LEFT_TO_RIGHT),
+            fontEmSize_(12),
+            maxSpaceWidth_(8),
+            isTextAnalysisComplete_(false)
     {
     }
 
@@ -77,13 +77,13 @@ public:
     STDMETHODIMP AnalyzeText(
         const wchar_t* text,            // [textLength]
         UINT32 textLength
-        );
+    );
 
-    // Reflow the text analysis into 
+    // Reflow the text analysis into
     STDMETHODIMP FlowText(
         FlowLayoutSource* flowSource,
         FlowLayoutSink* flowSink
-        );
+    );
 
 protected:
     STDMETHODIMP ShapeGlyphRuns(IDWriteTextAnalyzer* textAnalyzer);
@@ -92,58 +92,58 @@ protected:
         IDWriteTextAnalyzer* textAnalyzer,
         UINT32 runIndex,
         IN OUT UINT32& glyphStart
-        );
+    );
 
     STDMETHODIMP FitText(
         const ClusterPosition& clusterStart,
         UINT32 textEnd,
         float maxWidth,
         OUT ClusterPosition* clusterEnd
-        );
+    );
 
     STDMETHODIMP ProduceGlyphRuns(
         FlowLayoutSink* flowSink,
         const FlowLayoutSource::RectF& rect,
         const ClusterPosition& clusterStart,
         const ClusterPosition& clusterEnd
-        ) const throw();
+    ) const throw();
 
     STDMETHODIMP ProduceJustifiedAdvances(
         const FlowLayoutSource::RectF& rect,
         const ClusterPosition& clusterStart,
         const ClusterPosition& clusterEnd,
         OUT std::vector<float>& justifiedAdvances
-        ) const throw();
+    ) const throw();
 
     void ProduceBidiOrdering(
         UINT32 spanStart,
         UINT32 spanCount,
         OUT UINT32* spanIndices         // [spanCount]
-        ) const throw();
+    ) const throw();
 
     void SetClusterPosition(
         IN OUT ClusterPosition& cluster,
         UINT32 textPosition
-        ) const throw();
+    ) const throw();
 
     void AdvanceClusterPosition(
         IN OUT ClusterPosition& cluster
-        ) const throw();
+    ) const throw();
 
     UINT32 GetClusterGlyphStart(
         const ClusterPosition& cluster
-        ) const throw();
+    ) const throw();
 
     float GetClusterRangeWidth(
         const ClusterPosition& clusterStart,
         const ClusterPosition& clusterEnd
-        ) const throw();
+    ) const throw();
 
     float GetClusterRangeWidth(
         UINT32 glyphStart,
         UINT32 glyphEnd,
         const float* glyphAdvances      // [glyphEnd]
-        ) const throw();
+    ) const throw();
 
 protected:
     IDWriteFactory* dwriteFactory_;

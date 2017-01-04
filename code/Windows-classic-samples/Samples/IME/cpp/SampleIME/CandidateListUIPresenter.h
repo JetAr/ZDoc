@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -20,9 +20,9 @@ class CReadingLine;
 //
 // CCandidateListUIPresenter
 //
-// ITfCandidateListUIElement / ITfIntegratableCandidateListUIElement is used for 
+// ITfCandidateListUIElement / ITfIntegratableCandidateListUIElement is used for
 // UILess mode support
-// ITfCandidateListUIElementBehavior sends the Selection behavior message to 
+// ITfCandidateListUIElementBehavior sends the Selection behavior message to
 // 3rd party IME.
 //----------------------------------------------------------------------------
 
@@ -32,9 +32,9 @@ class CCandidateListUIPresenter : public CTfTextLayoutSink,
 {
 public:
     CCandidateListUIPresenter(_In_ CSampleIME *pTextService, ATOM atom,
-        KEYSTROKE_CATEGORY Category,
-        _In_ CCandidateRange *pIndexRange,
-        BOOL hideWindow);
+                              KEYSTROKE_CATEGORY Category,
+                              _In_ CCandidateRange *pIndexRange,
+                              BOOL hideWindow);
     virtual ~CCandidateListUIPresenter();
 
     // IUnknown
@@ -67,7 +67,7 @@ public:
     STDMETHODIMP SetIntegrationStyle(GUID guidIntegrationStyle);
     STDMETHODIMP GetSelectionStyle(_Out_ TfIntegratableCandidateListSelectionStyle *ptfSelectionStyle);
     STDMETHODIMP OnKeyDown(_In_ WPARAM wParam, _In_ LPARAM lParam, _Out_ BOOL *pIsEaten);
-    STDMETHODIMP ShowCandidateNumbers(_Out_ BOOL *pIsShow); 
+    STDMETHODIMP ShowCandidateNumbers(_Out_ BOOL *pIsShow);
     STDMETHODIMP FinalizeExactCompositionString();
 
     virtual HRESULT _StartCandidateList(TfClientId tfClientId, _In_ ITfDocumentMgr *pDocumentMgr, _In_ ITfContext *pContextDocument, TfEditCookie ec, _In_ ITfRange *pRangeComposition, UINT wndWidth);
@@ -79,7 +79,10 @@ public:
     VOID _SetFillColor(HBRUSH hBrush);
 
     DWORD_PTR _GetSelectedCandidateString(_Outptr_result_maybenull_ const WCHAR **ppwchCandidateString);
-    BOOL _SetSelectionInPage(int nPos) { return _pCandidateWnd->_SetSelectionInPage(nPos); }
+    BOOL _SetSelectionInPage(int nPos)
+    {
+        return _pCandidateWnd->_SetSelectionInPage(nPos);
+    }
 
     BOOL _MoveSelection(_In_ int offSet);
     BOOL _SetSelection(_In_ int selectedIndex);

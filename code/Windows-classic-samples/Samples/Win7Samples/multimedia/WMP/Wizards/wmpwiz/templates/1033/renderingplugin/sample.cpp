@@ -1,4 +1,4 @@
-/////////////////////////////////////////////////////////////////////////////
+﻿/////////////////////////////////////////////////////////////////////////////
 //
 // [!output root].cpp : Implementation of C[!output Safe_root]
 //
@@ -37,7 +37,7 @@ C[!output Safe_root]::C[!output Safe_root]()
     m_heightSrc         = 0;
     m_hdcMem            = NULL;
     m_TextColor         = rgbBlue;
-  
+
     ZeroMemory( &m_rctSrc, sizeof( m_rctSrc ) );
     ZeroMemory( &m_rctDest, sizeof( m_rctDest) );
     ZeroMemory( &m_rctClip, sizeof( m_rctClip ) );
@@ -82,13 +82,13 @@ HRESULT C[!output Safe_root]::FinalConstruct()
     lResult = key.Open(HKEY_CURRENT_USER, kwszPrefsRegKey, KEY_READ);
     if (ERROR_SUCCESS == lResult)
     {
-[!if VSNET]
+        [!if VSNET]
         DWORD dwType = 0;
         ULONG uLength = sizeof(dwValue);
         lResult = key.QueryValue(kwszPrefsTextColor, &dwType, &dwValue, &uLength);
-[!else]
+        [!else]
         lResult = key.QueryValue(dwValue, kwszPrefsTextColor);
-[!endif]
+        [!endif]
         if (ERROR_SUCCESS == lResult)
         {
             // Assign the value to the member variable.
@@ -158,9 +158,9 @@ STDMETHODIMP C[!output Safe_root]::DestroyRenderWin()
 // Implementation of IMediaObject::GetStreamCount
 /////////////////////////////////////////////////////////////////////////////
 
-STDMETHODIMP C[!output Safe_root]::GetStreamCount( 
-               DWORD *pcInputStreams,
-               DWORD *pcOutputStreams)
+STDMETHODIMP C[!output Safe_root]::GetStreamCount(
+    DWORD *pcInputStreams,
+    DWORD *pcOutputStreams)
 {
     HRESULT hr = S_OK;
 
@@ -186,11 +186,11 @@ STDMETHODIMP C[!output Safe_root]::GetStreamCount(
 //
 // Implementation of IMediaObject::GetInputStreamInfo
 /////////////////////////////////////////////////////////////////////////////
-    
-STDMETHODIMP C[!output Safe_root]::GetInputStreamInfo( 
-               DWORD dwInputStreamIndex,
-               DWORD *pdwFlags)
-{    
+
+STDMETHODIMP C[!output Safe_root]::GetInputStreamInfo(
+    DWORD dwInputStreamIndex,
+    DWORD *pdwFlags)
+{
     if ( NULL == pdwFlags )
     {
         return E_POINTER;
@@ -202,7 +202,7 @@ STDMETHODIMP C[!output Safe_root]::GetInputStreamInfo(
         return DMO_E_INVALIDSTREAMINDEX;
     }
 
-    // Use the default input stream configuration (a single stream). 
+    // Use the default input stream configuration (a single stream).
     *pdwFlags = 0;
 
     return S_OK;
@@ -213,10 +213,10 @@ STDMETHODIMP C[!output Safe_root]::GetInputStreamInfo(
 //
 // Implementation of IMediaObject::GetOutputStreamInfo
 /////////////////////////////////////////////////////////////////////////////
-    
-STDMETHODIMP C[!output Safe_root]::GetOutputStreamInfo( 
-               DWORD dwOutputStreamIndex,
-               DWORD *pdwFlags)
+
+STDMETHODIMP C[!output Safe_root]::GetOutputStreamInfo(
+    DWORD dwOutputStreamIndex,
+    DWORD *pdwFlags)
 {
     if ( NULL == pdwFlags )
     {
@@ -240,11 +240,11 @@ STDMETHODIMP C[!output Safe_root]::GetOutputStreamInfo(
 //
 // Implementation of IMediaObject::GetInputType
 /////////////////////////////////////////////////////////////////////////////
-    
-STDMETHODIMP C[!output Safe_root]::GetInputType ( 
-               DWORD dwInputStreamIndex,
-               DWORD dwTypeIndex,
-               DMO_MEDIA_TYPE *pmt)
+
+STDMETHODIMP C[!output Safe_root]::GetInputType (
+    DWORD dwInputStreamIndex,
+    DWORD dwTypeIndex,
+    DMO_MEDIA_TYPE *pmt)
 {
     HRESULT hr = S_OK;
 
@@ -260,7 +260,7 @@ STDMETHODIMP C[!output Safe_root]::GetInputType (
     }
     else if ( NULL == pmt )
     {
-       return S_OK;    
+        return S_OK;
     }
 
     ::ZeroMemory( pmt, sizeof( DMO_MEDIA_TYPE ) );
@@ -275,11 +275,11 @@ STDMETHODIMP C[!output Safe_root]::GetInputType (
 //
 // Implementation of IMediaObject::GetOutputType
 /////////////////////////////////////////////////////////////////////////////
-    
-STDMETHODIMP C[!output Safe_root]::GetOutputType( 
-               DWORD dwOutputStreamIndex,
-               DWORD dwTypeIndex,
-               DMO_MEDIA_TYPE *pmt)
+
+STDMETHODIMP C[!output Safe_root]::GetOutputType(
+    DWORD dwOutputStreamIndex,
+    DWORD dwTypeIndex,
+    DMO_MEDIA_TYPE *pmt)
 {
     return DMO_E_NO_MORE_ITEMS;
 }
@@ -289,11 +289,11 @@ STDMETHODIMP C[!output Safe_root]::GetOutputType(
 //
 // Implementation of IMediaObject::SetInputType
 /////////////////////////////////////////////////////////////////////////////
-    
-STDMETHODIMP C[!output Safe_root]::SetInputType( 
-               DWORD dwInputStreamIndex,
-               const DMO_MEDIA_TYPE *pmt,
-               DWORD dwFlags)
+
+STDMETHODIMP C[!output Safe_root]::SetInputType(
+    DWORD dwInputStreamIndex,
+    const DMO_MEDIA_TYPE *pmt,
+    DWORD dwFlags)
 {
     HRESULT hr = S_OK;
 
@@ -302,7 +302,7 @@ STDMETHODIMP C[!output Safe_root]::SetInputType(
         return DMO_E_INVALIDSTREAMINDEX;
     }
 
-    if ( DMO_SET_TYPEF_CLEAR & dwFlags ) 
+    if ( DMO_SET_TYPEF_CLEAR & dwFlags )
     {
         ::MoFreeMediaType(&m_mtInput);
         ::ZeroMemory(&m_mtInput, sizeof(m_mtInput));
@@ -312,12 +312,12 @@ STDMETHODIMP C[!output Safe_root]::SetInputType(
 
     if ( NULL == pmt )
     {
-       return E_POINTER;
+        return E_POINTER;
     }
 
     // Validate that the input media type is correct.
     // Note: Your media type may require additional validation.
-    if(  MEDIATYPE_[!output SAFE_ROOT] != pmt->majortype ) 
+    if(  MEDIATYPE_[!output SAFE_ROOT] != pmt->majortype )
     {
         hr = DMO_E_TYPE_NOT_ACCEPTED;
     }
@@ -347,12 +347,12 @@ STDMETHODIMP C[!output Safe_root]::SetInputType(
 //
 // Implementation of IMediaObject::SetOutputType
 /////////////////////////////////////////////////////////////////////////////
-    
-STDMETHODIMP C[!output Safe_root]::SetOutputType( 
-               DWORD dwOutputStreamIndex,
-               const DMO_MEDIA_TYPE *pmt,
-               DWORD dwFlags)
-{ 
+
+STDMETHODIMP C[!output Safe_root]::SetOutputType(
+    DWORD dwOutputStreamIndex,
+    const DMO_MEDIA_TYPE *pmt,
+    DWORD dwFlags)
+{
     // Rendering plug-ins don't output data.
     return DMO_E_INVALIDSTREAMINDEX;
 }
@@ -363,9 +363,9 @@ STDMETHODIMP C[!output Safe_root]::SetOutputType(
 // Implementation of IMediaObject::GetInputCurrentType
 /////////////////////////////////////////////////////////////////////////////
 
-STDMETHODIMP C[!output Safe_root]::GetInputCurrentType( 
-               DWORD dwInputStreamIndex,
-               DMO_MEDIA_TYPE *pmt)
+STDMETHODIMP C[!output Safe_root]::GetInputCurrentType(
+    DWORD dwInputStreamIndex,
+    DMO_MEDIA_TYPE *pmt)
 {
     HRESULT hr = S_OK;
 
@@ -394,10 +394,10 @@ STDMETHODIMP C[!output Safe_root]::GetInputCurrentType(
 //
 // Implementation of IMediaObject::GetOutputCurrentType
 /////////////////////////////////////////////////////////////////////////////
-    
-STDMETHODIMP C[!output Safe_root]::GetOutputCurrentType( 
-               DWORD dwOutputStreamIndex,
-               DMO_MEDIA_TYPE *pmt)
+
+STDMETHODIMP C[!output Safe_root]::GetOutputCurrentType(
+    DWORD dwOutputStreamIndex,
+    DMO_MEDIA_TYPE *pmt)
 {
     // Rendering plug-ins don't output data.
     return DMO_E_INVALIDSTREAMINDEX;
@@ -408,12 +408,12 @@ STDMETHODIMP C[!output Safe_root]::GetOutputCurrentType(
 //
 // Implementation of IMediaObject::GetInputSizeInfo
 /////////////////////////////////////////////////////////////////////////////
-    
-STDMETHODIMP C[!output Safe_root]::GetInputSizeInfo( 
-               DWORD dwInputStreamIndex,
-               DWORD *pcbSize,
-               DWORD *pcbMaxLookahead,
-               DWORD *pcbAlignment)
+
+STDMETHODIMP C[!output Safe_root]::GetInputSizeInfo(
+    DWORD dwInputStreamIndex,
+    DWORD *pcbSize,
+    DWORD *pcbMaxLookahead,
+    DWORD *pcbAlignment)
 {
     if ( 0 != dwInputStreamIndex )
     {
@@ -422,7 +422,7 @@ STDMETHODIMP C[!output Safe_root]::GetInputSizeInfo(
 
     if ( NULL == pcbSize )
     {
-       return E_POINTER;
+        return E_POINTER;
     }
 
     if ( NULL == pcbMaxLookahead )
@@ -432,7 +432,7 @@ STDMETHODIMP C[!output Safe_root]::GetInputSizeInfo(
 
     if ( NULL == pcbAlignment )
     {
-       return E_POINTER;
+        return E_POINTER;
     }
 
     if ( GUID_NULL == m_mtInput.majortype )
@@ -457,11 +457,11 @@ STDMETHODIMP C[!output Safe_root]::GetInputSizeInfo(
 //
 // Implementation of IMediaObject::GetOutputSizeInfo
 /////////////////////////////////////////////////////////////////////////////
-    
-STDMETHODIMP C[!output Safe_root]::GetOutputSizeInfo( 
-               DWORD dwOutputStreamIndex,
-               DWORD *pcbSize,
-               DWORD *pcbAlignment)
+
+STDMETHODIMP C[!output Safe_root]::GetOutputSizeInfo(
+    DWORD dwOutputStreamIndex,
+    DWORD *pcbSize,
+    DWORD *pcbAlignment)
 {
     return E_NOTIMPL; // Not dealing with output pin.
 }
@@ -471,10 +471,10 @@ STDMETHODIMP C[!output Safe_root]::GetOutputSizeInfo(
 //
 // Implementation of IMediaObject::GetInputMaxLatency
 /////////////////////////////////////////////////////////////////////////////
-   
-STDMETHODIMP C[!output Safe_root]::GetInputMaxLatency( 
-               DWORD dwInputStreamIndex,
-               REFERENCE_TIME *prtMaxLatency)
+
+STDMETHODIMP C[!output Safe_root]::GetInputMaxLatency(
+    DWORD dwInputStreamIndex,
+    REFERENCE_TIME *prtMaxLatency)
 {
     return E_NOTIMPL; // Not dealing with latency in this plug-in.
 }
@@ -484,10 +484,10 @@ STDMETHODIMP C[!output Safe_root]::GetInputMaxLatency(
 //
 // Implementation of IMediaObject::SetInputMaxLatency
 /////////////////////////////////////////////////////////////////////////////
-    
-STDMETHODIMP C[!output Safe_root]::SetInputMaxLatency( 
-               DWORD dwInputStreamIndex,
-               REFERENCE_TIME rtMaxLatency)
+
+STDMETHODIMP C[!output Safe_root]::SetInputMaxLatency(
+    DWORD dwInputStreamIndex,
+    REFERENCE_TIME rtMaxLatency)
 {
     return E_NOTIMPL; // Not dealing with latency in this plug-in.
 }
@@ -497,7 +497,7 @@ STDMETHODIMP C[!output Safe_root]::SetInputMaxLatency(
 //
 // Implementation of IMediaObject::Flush
 /////////////////////////////////////////////////////////////////////////////
-    
+
 STDMETHODIMP C[!output Safe_root]::Flush( void )
 {
     Lock();
@@ -514,9 +514,9 @@ STDMETHODIMP C[!output Safe_root]::Flush( void )
 //
 // Implementation of IMediaObject::Discontinuity
 /////////////////////////////////////////////////////////////////////////////
-    
-STDMETHODIMP C[!output Safe_root]::Discontinuity( 
-               DWORD dwInputStreamIndex)
+
+STDMETHODIMP C[!output Safe_root]::Discontinuity(
+    DWORD dwInputStreamIndex)
 {
     return S_OK;
 }
@@ -526,7 +526,7 @@ STDMETHODIMP C[!output Safe_root]::Discontinuity(
 //
 // Implementation of IMediaObject::AllocateStreamingResources
 /////////////////////////////////////////////////////////////////////////////
-    
+
 STDMETHODIMP C[!output Safe_root]::AllocateStreamingResources ( void )
 {
     // Allocate any buffers need to process the stream. This plug-in does
@@ -540,7 +540,7 @@ STDMETHODIMP C[!output Safe_root]::AllocateStreamingResources ( void )
 //
 // Implementation of IMediaObject::FreeStreamingResources
 /////////////////////////////////////////////////////////////////////////////
-    
+
 STDMETHODIMP C[!output Safe_root]::FreeStreamingResources( void )
 {
     Lock();
@@ -557,11 +557,11 @@ STDMETHODIMP C[!output Safe_root]::FreeStreamingResources( void )
 //
 // Implementation of IMediaObject::GetInputStatus
 /////////////////////////////////////////////////////////////////////////////
-    
-STDMETHODIMP C[!output Safe_root]::GetInputStatus( 
-           DWORD dwInputStreamIndex,
-           DWORD *pdwFlags)
-{ 
+
+STDMETHODIMP C[!output Safe_root]::GetInputStatus(
+    DWORD dwInputStreamIndex,
+    DWORD *pdwFlags)
+{
     if ( 0 != dwInputStreamIndex )
     {
         return DMO_E_INVALIDSTREAMINDEX;
@@ -589,14 +589,14 @@ STDMETHODIMP C[!output Safe_root]::GetInputStatus(
 //
 // Implementation of IMediaObject::ProcessInput
 /////////////////////////////////////////////////////////////////////////////
-    
-STDMETHODIMP C[!output Safe_root]::ProcessInput( 
-               DWORD dwInputStreamIndex,
-               IMediaBuffer *pBuffer,
-               DWORD dwFlags,
-               REFERENCE_TIME rtTimestamp,
-               REFERENCE_TIME rtTimelength)
-{ 
+
+STDMETHODIMP C[!output Safe_root]::ProcessInput(
+    DWORD dwInputStreamIndex,
+    IMediaBuffer *pBuffer,
+    DWORD dwFlags,
+    REFERENCE_TIME rtTimestamp,
+    REFERENCE_TIME rtTimelength)
+{
     HRESULT hr = S_OK;
 
     if ( 0 != dwInputStreamIndex )
@@ -615,12 +615,12 @@ STDMETHODIMP C[!output Safe_root]::ProcessInput(
     }
 
     if ( m_hWnd &&
-         !IsWindowVisible() && 
-         m_bHosted  && 
-         !m_bWindowless &&
-         !m_bFullScreen )
+            !IsWindowVisible() &&
+            m_bHosted  &&
+            !m_bWindowless &&
+            !m_bFullScreen )
     {
-        // Under these circumstances, be sure 
+        // Under these circumstances, be sure
         // that the plug-in window is visible.
         ShowWindow( SW_SHOW );
     }
@@ -649,18 +649,18 @@ STDMETHODIMP C[!output Safe_root]::ProcessInput(
 
     return hr;
 }
-    
+
 /////////////////////////////////////////////////////////////////////////////
 // C[!output Safe_root]::ProcessOutput
 //
 // Implementation of IMediaObject::ProcessOutput
 /////////////////////////////////////////////////////////////////////////////
 
-STDMETHODIMP C[!output Safe_root]::ProcessOutput( 
-               DWORD dwFlags,
-               DWORD cOutputBufferCount,
-               DMO_OUTPUT_DATA_BUFFER *pOutputBuffers,
-               DWORD *pdwStatus)
+STDMETHODIMP C[!output Safe_root]::ProcessOutput(
+    DWORD dwFlags,
+    DWORD cOutputBufferCount,
+    DMO_OUTPUT_DATA_BUFFER *pOutputBuffers,
+    DWORD *pdwStatus)
 {
     // Rendering plug-ins don't wait for ProcessOutput
     // before rendering.
@@ -761,9 +761,9 @@ STDMETHODIMP C[!output Safe_root]::Init( DWORD dwPlaybackContext )
     // Create the plug-in window using the desktop as parent.
     // If Windows Media Player calls SetOwnerWindow(), the parent
     // will change.
- 
+
     HRESULT hr = CreateRenderWin();
- 
+
     return hr;
 }
 
@@ -870,13 +870,13 @@ STDMETHODIMP C[!output Safe_root]::AdviseWMPServices( IWMPServices *pWMPServices
 /////////////////////////////////////////////////////////////////////////////
 
 STDMETHODIMP C[!output Safe_root]::UnAdviseWMPServices( )
-{ 
+{
     // Release the smart pointers.
     m_spWMPServices.Release();
     m_spWMPNodeRealEstatehost.Release();
     m_spWMPNodeWindowedhost.Release();
     m_spWMPNodeWindowlesshost.Release();
-  
+
     return S_OK;
 }
 
@@ -912,7 +912,7 @@ HRESULT C[!output Safe_root]::GetFullScreen( BOOL *pfFullScreen )
     {
         return E_POINTER;
     }
-    
+
     *pfFullScreen = m_bFullScreen;
 
     return S_OK;
@@ -925,8 +925,8 @@ HRESULT C[!output Safe_root]::GetFullScreen( BOOL *pfFullScreen )
 /////////////////////////////////////////////////////////////////////////////
 
 HRESULT C[!output Safe_root]::GetRects(  RECT *pSrc,
-                                   RECT *pDest,
-                                   RECT *pClip)
+        RECT *pDest,
+        RECT *pClip)
 {
     if( pSrc )
     {
@@ -984,8 +984,8 @@ HRESULT C[!output Safe_root]::SetFullScreen( BOOL fFullScreen )
 /////////////////////////////////////////////////////////////////////////////
 
 HRESULT C[!output Safe_root]::SetRects( const RECT *pSrc,
-                                  const RECT *pDest,
-                                  const RECT *pClip )
+                                        const RECT *pDest,
+                                        const RECT *pClip )
 {
     if( pSrc )
     {
@@ -1025,11 +1025,11 @@ HRESULT C[!output Safe_root]::SetRects( const RECT *pSrc,
     long lShiftRight = m_rctDest.left - m_rctWindowPos.left;
     long lShiftDown  = m_rctDest.top - m_rctWindowPos.top;
     OffsetRect( &m_rctDisplay, lShiftRight, lShiftDown );
- 
+
     if( m_hWnd )
     {
         if( !m_bHosted ||
-            ( m_bWindowless && !m_bFullScreen ) )
+                ( m_bWindowless && !m_bFullScreen ) )
         {
             // Make the plug-in window invisible.
             SetWindowPos( HWND_TOP, &m_rctWindowPos, SWP_HIDEWINDOW );
@@ -1071,17 +1071,17 @@ HRESULT C[!output Safe_root]::SetOwnerWindow( OLE_HWND hwnd )
     {
         return S_FALSE;
     }
- 
-    if( NULL == hwnd ) 
-    { 
+
+    if( NULL == hwnd )
+    {
         // Hide the plug-in window.
         ShowWindow( SW_HIDE );
-        
+
         // Set the Desktop as parent
         SetParent( NULL );
         m_bHosted = false; // Now Playing isn't visible
     }
-    else 
+    else
     {
         // Set Windows Media Player as the parent
         SetParent( ( HWND ) hwnd );
@@ -1117,8 +1117,8 @@ HRESULT C[!output Safe_root]::GetOwnerWindow( OLE_HWND *phwnd )
 // Implementation of IWMPWindowMessageSink::OnWindowMessage
 /////////////////////////////////////////////////////////////////////////////
 
-HRESULT C[!output Safe_root]::OnWindowMessage( UINT uMsg, WPARAM wparam, LPARAM lparam, 
-                             LRESULT *plRet, BOOL *pfHandled )
+HRESULT C[!output Safe_root]::OnWindowMessage( UINT uMsg, WPARAM wparam, LPARAM lparam,
+        LRESULT *plRet, BOOL *pfHandled )
 {
     return S_OK;
 }
@@ -1141,7 +1141,7 @@ HRESULT C[!output Safe_root]::OnDraw( OLE_HDC hdc, const RECT *prcDraw )
     if ( prcDraw )
     {
         HDC hDC = ( HDC )hdc;
-    
+
         // Set the text color.
         COLORREF oldTextColor = ::SetTextColor( hDC, m_TextColor );
         // Set the text background color.
@@ -1163,9 +1163,9 @@ HRESULT C[!output Safe_root]::OnDraw( OLE_HDC hdc, const RECT *prcDraw )
 // Handles WM_ERASEBKGND window message.
 /////////////////////////////////////////////////////////////////////////////
 
-LRESULT C[!output Safe_root]::OnEraseBackground( UINT nMsg, WPARAM wParam, 
-                   LPARAM lParam, BOOL& bHandled )
-{   
+LRESULT C[!output Safe_root]::OnEraseBackground( UINT nMsg, WPARAM wParam,
+        LPARAM lParam, BOOL& bHandled )
+{
     // avoid erasing background to reduce flicker on resize
     return 1;
 }
@@ -1176,14 +1176,14 @@ LRESULT C[!output Safe_root]::OnEraseBackground( UINT nMsg, WPARAM wParam,
 // Handles WM_PAINT window message.
 /////////////////////////////////////////////////////////////////////////////
 
-LRESULT C[!output Safe_root]::OnPaint( UINT nMsg, WPARAM wParam, 
-                   LPARAM lParam, BOOL& bHandled )
+LRESULT C[!output Safe_root]::OnPaint( UINT nMsg, WPARAM wParam,
+                                       LPARAM lParam, BOOL& bHandled )
 {
     HRESULT hr = S_OK;
 
     PAINTSTRUCT ps;
     HDC hDC;
-    
+
     hDC = BeginPaint( &ps );
 
     if ( NULL == hDC )
@@ -1237,8 +1237,8 @@ STDMETHODIMP C[!output Safe_root]::DoRendering (HDC hDC, const RECT *prc)
     }
 
     if( !StretchBlt( hDC, prc->left, prc->top, widthDest, heightDest,
-        m_hdcMem, m_rctSrc.left, m_rctSrc.top, m_widthSrc, m_heightSrc,
-        SRCCOPY ) )
+                     m_hdcMem, m_rctSrc.left, m_rctSrc.top, m_widthSrc, m_heightSrc,
+                     SRCCOPY ) )
     {
         return E_HANDLE;
     }
@@ -1253,7 +1253,7 @@ STDMETHODIMP C[!output Safe_root]::DoRendering (HDC hDC, const RECT *prc)
 /////////////////////////////////////////////////////////////////////////////
 
 STDMETHODIMP C[!output Safe_root]::get_color( LPCOLORREF pVal )
-{ 
+{
     if ( NULL == pVal )
     {
         return E_POINTER;
@@ -1277,7 +1277,7 @@ STDMETHODIMP C[!output Safe_root]::put_color( COLORREF newVal )
     if( m_hWnd )
     {
         // Repaint to ensure that all text is the same color.
-       Repaint();
+        Repaint();
     }
 
     // Even if the repaint fails...
@@ -1304,7 +1304,7 @@ STDMETHODIMP C[!output Safe_root]::Repaint(void)
         }
     }
     else
-    {               
+    {
         InvalidateRect( NULL, FALSE );
         UpdateWindow();
     }
@@ -1318,8 +1318,8 @@ STDMETHODIMP C[!output Safe_root]::Repaint(void)
 // Handle or forward certain mouse and keyboard window messages.
 /////////////////////////////////////////////////////////////////////////////
 
-LRESULT C[!output Safe_root]::OnPluginWindowMessage( UINT uMsg, WPARAM wparam, LPARAM lparam, 
-                             BOOL& bHandled )
+LRESULT C[!output Safe_root]::OnPluginWindowMessage( UINT uMsg, WPARAM wparam, LPARAM lparam,
+        BOOL& bHandled )
 {
     int xPos;
     int yPos;
@@ -1334,54 +1334,54 @@ LRESULT C[!output Safe_root]::OnPluginWindowMessage( UINT uMsg, WPARAM wparam, L
 
     switch ( uMsg )
     {
-        case WM_KEYDOWN:
-        case WM_KEYUP:
-        case WM_MOUSEACTIVATE:
+    case WM_KEYDOWN:
+    case WM_KEYUP:
+    case WM_MOUSEACTIVATE:
 
-            // OK to forward these without change.
-            m_spWMPNodeWindowedhost->OnWindowMessageFromRenderer( uMsg, wparam, lparam, &lRet, &bHandled );
+        // OK to forward these without change.
+        m_spWMPNodeWindowedhost->OnWindowMessageFromRenderer( uMsg, wparam, lparam, &lRet, &bHandled );
 
-            break;
+        break;
 
-        case WM_LBUTTONDBLCLK:
-        case WM_LBUTTONDOWN:
-        case WM_LBUTTONUP:
-        case WM_MBUTTONDBLCLK:
-        case WM_MBUTTONDOWN:
-        case WM_MBUTTONUP:
-        case WM_MOUSEMOVE:
-        case WM_NCLBUTTONDBLCLK:
-        case WM_NCLBUTTONDOWN:
-        case WM_NCLBUTTONUP:
-        case WM_NCMBUTTONDBLCLK:
-        case WM_NCMBUTTONDOWN:
-        case WM_NCMBUTTONUP:
-        case WM_NCMOUSEMOVE:
-        case WM_NCRBUTTONDBLCLK:
-        case WM_NCRBUTTONDOWN:
-        case WM_NCRBUTTONUP:
-        case WM_RBUTTONDBLCLK:
-        case WM_RBUTTONDOWN:
-        case WM_RBUTTONUP:
+    case WM_LBUTTONDBLCLK:
+    case WM_LBUTTONDOWN:
+    case WM_LBUTTONUP:
+    case WM_MBUTTONDBLCLK:
+    case WM_MBUTTONDOWN:
+    case WM_MBUTTONUP:
+    case WM_MOUSEMOVE:
+    case WM_NCLBUTTONDBLCLK:
+    case WM_NCLBUTTONDOWN:
+    case WM_NCLBUTTONUP:
+    case WM_NCMBUTTONDBLCLK:
+    case WM_NCMBUTTONDOWN:
+    case WM_NCMBUTTONUP:
+    case WM_NCMOUSEMOVE:
+    case WM_NCRBUTTONDBLCLK:
+    case WM_NCRBUTTONDOWN:
+    case WM_NCRBUTTONUP:
+    case WM_RBUTTONDBLCLK:
+    case WM_RBUTTONDOWN:
+    case WM_RBUTTONUP:
 
-            // Cache the cursor position.
-            xPos = GET_X_LPARAM( lparam );
-            yPos = GET_Y_LPARAM( lparam );
+        // Cache the cursor position.
+        xPos = GET_X_LPARAM( lparam );
+        yPos = GET_Y_LPARAM( lparam );
 
-            // Translate the cursor position to the plug-in window RECT coordinates.
-            xPos += m_rctWindowPos.left;
-            yPos += m_rctWindowPos.top;
+        // Translate the cursor position to the plug-in window RECT coordinates.
+        xPos += m_rctWindowPos.left;
+        yPos += m_rctWindowPos.top;
 
-            // Rebuild the lparam.
-            lparam = MAKELPARAM( xPos, yPos );
+        // Rebuild the lparam.
+        lparam = MAKELPARAM( xPos, yPos );
 
-            // Forward the message.
-            m_spWMPNodeWindowedhost->OnWindowMessageFromRenderer( uMsg, wparam, lparam, &lRet, &bHandled );
+        // Forward the message.
+        m_spWMPNodeWindowedhost->OnWindowMessageFromRenderer( uMsg, wparam, lparam, &lRet, &bHandled );
 
-            break;
+        break;
 
-        default:
-            break;
+    default:
+        break;
 
     }
 
@@ -1428,12 +1428,12 @@ STDMETHODIMP C[!output Safe_root]::MakeBitmapFromData ( HDC hDC )
     SelectObject(m_hdcMem, (HGDIOBJ) hBitmap);
 
     // Paint the backround white.
-    hBrush = (HBRUSH) GetStockObject( WHITE_BRUSH );       
+    hBrush = (HBRUSH) GetStockObject( WHITE_BRUSH );
     HGDIOBJ oldMemObj = SelectObject( m_hdcMem, hBrush  );
 
     if(!FillRect( m_hdcMem, &m_rctSrc, hBrush ))
     {
-       hr = E_HANDLE;
+        hr = E_HANDLE;
     }
 
     SelectObject( m_hdcMem, oldMemObj );
@@ -1451,7 +1451,7 @@ STDMETHODIMP C[!output Safe_root]::MakeBitmapFromData ( HDC hDC )
     }
 
     if ( SUCCEEDED( hr ) )
-    {    
+    {
         // Display the data from the stream.
         ::DrawText( m_hdcMem, ( WCHAR* ) pbInputData, cbInputLength/sizeof( WCHAR ) - 1, &m_rctSrc, DT_VCENTER | DT_CENTER | DT_SINGLELINE );
     }
@@ -1496,7 +1496,7 @@ STDMETHODIMP C[!output Safe_root]::Read( LPCWSTR pwszPropName, VARIANT *pVar, IE
         {
             return hr;
         }
-        
+
         // There is only one image. Otherwise, set to VT_ARRAY.
         pVar->vt = VT_UNKNOWN;
         // Return the IStream pointer.
@@ -1622,7 +1622,7 @@ STDMETHODIMP C[!output Safe_root]::LoadResourceImage( IStream **ppStream )
     }
 
     if ( SUCCEEDED( hr ) &&
-         NULL != spStream.p )
+            NULL != spStream.p )
     {
         // Set the size for the stream.
         ULARGE_INTEGER ulSize;

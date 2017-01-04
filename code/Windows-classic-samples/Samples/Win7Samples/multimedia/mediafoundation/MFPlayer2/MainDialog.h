@@ -1,4 +1,4 @@
-//------------------------------------------------------------------------------
+﻿//------------------------------------------------------------------------------
 //
 // File: MainDialog.h
 // Implements the main dialog.
@@ -25,7 +25,7 @@ public:
     // Message handlers
 
     // WM_INITDIALOG
-    HRESULT OnInitDialog(); 
+    HRESULT OnInitDialog();
     // WM_COMMAND
     INT_PTR OnCommand(HWND hControl, WORD idControl, WORD msg);
     // WM_NOTIFY
@@ -37,9 +37,12 @@ private:
 
     // Dialog proc for the dialog we manage
     static INT_PTR CALLBACK DialogProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam);
-    
+
     // Return one of our dialog controls
-    HWND GetDlgItem(int nID) { return ::GetDlgItem(m_hDlg, nID); }
+    HWND GetDlgItem(int nID)
+    {
+        return ::GetDlgItem(m_hDlg, nID);
+    }
 
     void EndDialog(INT_PTR cmd)
     {
@@ -58,7 +61,7 @@ private:
 
     void    UpdateMetadata();
     void    ClearMetadata();
-    
+
     void    ApplyOptions();
     void    StopTimer();
     void    SetStatusTime(const MFTIME& time);
@@ -85,7 +88,7 @@ private:
 private:
 
     HWND            m_hDlg;     // this dialog window
-    int             m_nID;      // Resource ID of the dialog window 
+    int             m_nID;      // Resource ID of the dialog window
 
     MFPlayer2       *m_pPlayer;
 
@@ -96,7 +99,7 @@ private:
     HWND            m_hSeekbar;
     HWND            m_hVolume;
 
-    UINT_PTR        m_timerID; 
+    UINT_PTR        m_timerID;
 
     BOOL            m_bSeeking;
 };

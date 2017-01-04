@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -31,7 +31,10 @@ public:
     ~TArray();
 
     // Access to the elements.
-    int Count() const { return m_nCount; }
+    int Count() const
+    {
+        return m_nCount;
+    }
     T& operator [] (int i)
     {
         ASSERT((i >= 0) && (i <m_nCount));
@@ -51,8 +54,8 @@ protected:
 // Array constructor.
 template <class T, int AG>
 TArray<T,AG>::TArray()
-:   m_arrData(NULL),
-    m_nCount(0)
+    :   m_arrData(NULL),
+        m_nCount(0)
 {
 }
 
@@ -132,12 +135,24 @@ public:
     CStroke();
 
     // Property: stroke color
-    void SetColor(COLORREF clr) { m_clr = clr; }
-    COLORREF GetColor() const { return m_clr; }
+    void SetColor(COLORREF clr)
+    {
+        m_clr = clr;
+    }
+    COLORREF GetColor() const
+    {
+        return m_clr;
+    }
 
     // Property: stroke ID
-    void SetId(int id) { m_id = id; }
-    int GetId() const { return m_id; }
+    void SetId(int id)
+    {
+        m_id = id;
+    }
+    int GetId() const
+    {
+        return m_id;
+    }
 
     // Draw the complete stroke.
     void Draw(HDC hDC) const;

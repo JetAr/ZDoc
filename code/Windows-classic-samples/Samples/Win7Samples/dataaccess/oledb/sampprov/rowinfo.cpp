@@ -1,4 +1,4 @@
-//--------------------------------------------------------------------
+﻿//--------------------------------------------------------------------
 // Microsoft OLE DB Sample Provider
 // (C) Copyright 1991 - 1999 Microsoft Corporation. All Rights Reserved.
 //
@@ -30,30 +30,30 @@ STDMETHODIMP CImpIRowsetInfo::GetReferencedRowset
 (
     DBORDINAL	iOrdinal,			//@parm IN | Bookmark Column
     REFIID		riid,				//@parm IN | ID of the interface pointer to return
-	IUnknown **	ppReferencedRowset	//@parm OUT | IRowset Interface Pointer
+    IUnknown **	ppReferencedRowset	//@parm OUT | IRowset Interface Pointer
 )
 {
-	//
-	// Asserts
     //
-	assert( m_pObj );
+    // Asserts
+    //
+    assert( m_pObj );
 
     //
     // Check in-params and NULL out-params in case of error
     //
-	if( !ppReferencedRowset )
+    if( !ppReferencedRowset )
         return( E_INVALIDARG );
 
-	*ppReferencedRowset = NULL;
+    *ppReferencedRowset = NULL;
 
     //
-	// The oridinal was greater than the number of columns that we have.
+    // The oridinal was greater than the number of columns that we have.
     //
-	if( iOrdinal == 0 || iOrdinal > m_pObj->m_cCols )
-		return( DB_E_BADORDINAL );
-   
+    if( iOrdinal == 0 || iOrdinal > m_pObj->m_cCols )
+        return( DB_E_BADORDINAL );
+
     //
-	// Since we don't support bookmarks, this will alway return an error
+    // Since we don't support bookmarks, this will alway return an error
     //
     return( DB_E_NOTAREFERENCECOLUMN );
 }
@@ -79,25 +79,25 @@ STDMETHODIMP CImpIRowsetInfo::GetProperties
 {
     HRESULT hr;
 
-	//
-	// Asserts
     //
-	assert(m_pObj);
+    // Asserts
+    //
+    assert(m_pObj);
     assert(m_pObj->m_pUtilProp);
 
     //
     // Check in-params and NULL out-params in case of error
     //
-	hr = m_pObj->m_pUtilProp->GetPropertiesArgChk(PROPSET_ROWSET,cPropertySets,
-									rgPropertySets,pcProperties,prgProperties);
-	if( FAILED(hr) )
-		return hr;
+    hr = m_pObj->m_pUtilProp->GetPropertiesArgChk(PROPSET_ROWSET,cPropertySets,
+            rgPropertySets,pcProperties,prgProperties);
+    if( FAILED(hr) )
+        return hr;
 
     //
     // Just pass this call on to the utility object that manages our properties
     //
     return m_pObj->m_pUtilProp->GetProperties(PROPSET_ROWSET,cPropertySets,
-									rgPropertySets,pcProperties,prgProperties);
+            rgPropertySets,pcProperties,prgProperties);
 }
 
 
@@ -112,16 +112,16 @@ STDMETHODIMP CImpIRowsetInfo::GetProperties
 //
 STDMETHODIMP CImpIRowsetInfo::GetSpecification
 (
-	REFIID   riid,              //@parm IN | Interface ID of the interface being queried for.
-	IUnknown **ppSpecification  //@parm OUT | Pointer to interface that instantiated this object
+    REFIID   riid,              //@parm IN | Interface ID of the interface being queried for.
+    IUnknown **ppSpecification  //@parm OUT | Pointer to interface that instantiated this object
 )
 {
     //
-	// Asserts
+    // Asserts
     //
-	assert(m_pObj);
-	assert(m_pObj->m_pParentObj);
-	assert(m_pObj->m_pParentObj->GetOuterUnknown());
+    assert(m_pObj);
+    assert(m_pObj->m_pParentObj);
+    assert(m_pObj->m_pParentObj->GetOuterUnknown());
 
     //
     // Check in-params and NULL out-params in case of error
@@ -131,5 +131,5 @@ STDMETHODIMP CImpIRowsetInfo::GetSpecification
 
     *ppSpecification = NULL;
 
-	return m_pObj->m_pParentObj->GetOuterUnknown()->QueryInterface(riid,(void**)ppSpecification);
+    return m_pObj->m_pParentObj->GetOuterUnknown()->QueryInterface(riid,(void**)ppSpecification);
 }

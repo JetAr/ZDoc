@@ -1,4 +1,4 @@
-//------------------------------------------------------------------------------
+﻿//------------------------------------------------------------------------------
 // File: EZProp.cpp
 //
 // Desc: DirectShow sample code - implementation of CEZRgb24Properties class.
@@ -33,9 +33,10 @@ CUnknown *CEZrgb24Properties::CreateInstance(LPUNKNOWN lpunk, HRESULT *phr)
 
     CUnknown *punk = new CEZrgb24Properties(lpunk, phr);
 
-    if (punk == NULL) {
+    if (punk == NULL)
+    {
         if (phr)
-        	*phr = E_OUTOFMEMORY;
+            *phr = E_OUTOFMEMORY;
     }
 
     return punk;
@@ -63,24 +64,24 @@ CEZrgb24Properties::CEZrgb24Properties(LPUNKNOWN pUnk, HRESULT *phr) :
 // Handles the messages for our property window
 //
 INT_PTR CEZrgb24Properties::OnReceiveMessage(HWND hwnd,
-                                          UINT uMsg,
-                                          WPARAM wParam,
-                                          LPARAM lParam)
+        UINT uMsg,
+        WPARAM wParam,
+        LPARAM lParam)
 {
     switch (uMsg)
     {
-        case WM_COMMAND:
+    case WM_COMMAND:
+    {
+        if (m_bIsInitialized)
         {
-            if (m_bIsInitialized)
+            m_bDirty = TRUE;
+            if (m_pPageSite)
             {
-                m_bDirty = TRUE;
-                if (m_pPageSite)
-                {
-                    m_pPageSite->OnStatusChange(PROPPAGESTATUS_DIRTY);
-                }
+                m_pPageSite->OnStatusChange(PROPPAGESTATUS_DIRTY);
             }
-            return (LRESULT) 1;
         }
+        return (LRESULT) 1;
+    }
 
     }
 
@@ -100,7 +101,8 @@ HRESULT CEZrgb24Properties::OnConnect(IUnknown *pUnknown)
     ASSERT(m_pIPEffect == NULL);
 
     HRESULT hr = pUnknown->QueryInterface(IID_IIPEffect, (void **) &m_pIPEffect);
-    if (FAILED(hr)) {
+    if (FAILED(hr))
+    {
         return E_NOINTERFACE;
     }
 
@@ -219,16 +221,17 @@ void CEZrgb24Properties::GetControlValues()
 
     // Quick validation of the fields
 
-    if (tmp1 >= 0 && tmp2 >= 0) {
+    if (tmp1 >= 0 && tmp2 >= 0)
+    {
         m_start  = tmp1;
         m_length = tmp2;
     }
 
     // Find which special effect we have selected
 
-    for (int i = IDC_EMBOSS; i <= IDC_NONE; i++) 
+    for (int i = IDC_EMBOSS; i <= IDC_NONE; i++)
     {
-        if (IsDlgButtonChecked(m_Dlg, i)) 
+        if (IsDlgButtonChecked(m_Dlg, i))
         {
             m_effect = i;
             break;

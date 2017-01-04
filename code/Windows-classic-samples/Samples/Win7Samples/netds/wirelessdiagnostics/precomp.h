@@ -1,4 +1,4 @@
-
+﻿
 #pragma once
 
 #define _ATL_APARTMENT_THREADED

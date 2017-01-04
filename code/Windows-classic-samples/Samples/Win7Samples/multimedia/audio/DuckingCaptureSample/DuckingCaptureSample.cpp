@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -153,197 +153,197 @@ INT_PTR CALLBACK ChatDialogProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM l
     switch (message)
     {
     case WM_INITDIALOG:
+    {
+        //
+        //  Start by using the wave transport for "chat".
+        //
+
+        //
+        //  Allocate the WAVE chat transport.  If we failed to startup, we're done.
+        //
+        g_CurrentChat = new (std::nothrow) CWaveChat(hWnd);
+        if (g_CurrentChat == NULL)
         {
-            //
-            //  Start by using the wave transport for "chat".
-            //
-
-            //
-            //  Allocate the WAVE chat transport.  If we failed to startup, we're done.
-            //
-            g_CurrentChat = new (std::nothrow) CWaveChat(hWnd);
-            if (g_CurrentChat == NULL)
-            {
-                MessageBox(hWnd, L"Unable to allocate WAVE chat transport", L"Startup Error", MB_OK);
-                EndDialog(hWnd, TRUE);
-            }
-            if (!g_CurrentChat->Initialize(true))
-            {
-                EndDialog(hWnd, TRUE);
-            }
-
-            //
-            //  Set up the combobox and initialize the chat options to reflect that we've set the Wave chat transport by default.
-            //
-            g_WaveComboBoxIndex = ComboBox_InsertString(GetDlgItem(hWnd, IDC_COMBO_CHAT_TRANSPORT), 0, L"WAVE API Transport");
-            g_WasapiComboBoxIndex = ComboBox_InsertString(GetDlgItem(hWnd, IDC_COMBO_CHAT_TRANSPORT), 1, L"WASAPI API Transport");
-            ComboBox_SetCurSel(GetDlgItem(hWnd, IDC_COMBO_CHAT_TRANSPORT), g_WaveComboBoxIndex);
-
-            //
-            //  Simulate a "stop" event to get the UI in sync.
-            //
-            SyncUIState(hWnd, ChatStateNotPlaying);
-
-            handled = TRUE;
-            break;
+            MessageBox(hWnd, L"Unable to allocate WAVE chat transport", L"Startup Error", MB_OK);
+            EndDialog(hWnd, TRUE);
+        }
+        if (!g_CurrentChat->Initialize(true))
+        {
+            EndDialog(hWnd, TRUE);
         }
 
-    case WM_COMMAND:
-        {
-            int wmId    = LOWORD(wParam);
-            int wmEvent = HIWORD(wParam);
+        //
+        //  Set up the combobox and initialize the chat options to reflect that we've set the Wave chat transport by default.
+        //
+        g_WaveComboBoxIndex = ComboBox_InsertString(GetDlgItem(hWnd, IDC_COMBO_CHAT_TRANSPORT), 0, L"WAVE API Transport");
+        g_WasapiComboBoxIndex = ComboBox_InsertString(GetDlgItem(hWnd, IDC_COMBO_CHAT_TRANSPORT), 1, L"WASAPI API Transport");
+        ComboBox_SetCurSel(GetDlgItem(hWnd, IDC_COMBO_CHAT_TRANSPORT), g_WaveComboBoxIndex);
 
-            // Parse the menu selections:
-            switch (wmId)
+        //
+        //  Simulate a "stop" event to get the UI in sync.
+        //
+        SyncUIState(hWnd, ChatStateNotPlaying);
+
+        handled = TRUE;
+        break;
+    }
+
+    case WM_COMMAND:
+    {
+        int wmId    = LOWORD(wParam);
+        int wmEvent = HIWORD(wParam);
+
+        // Parse the menu selections:
+        switch (wmId)
+        {
+        case IDOK:
+        case IDCANCEL:
+            //
+            //  Stop on Cancel/OK.
+            //
+            if (g_CurrentChat)
             {
-            case IDOK:
-            case IDCANCEL:
+                g_CurrentChat->StopChat();
+            }
+            g_CurrentChat->Shutdown();
+            delete g_CurrentChat;
+            g_CurrentChat = NULL;
+
+            EndDialog(hWnd, TRUE);
+            handled = TRUE;
+            break;
+
+        case IDC_CHATSTART:
+            //
+            //  Start the chat engine.
+            //
+            if (g_CurrentChat->StartChat(IsDlgButtonChecked(hWnd, IDC_CHECK_HIDE_FROM_VOLUME_MIXER) == BST_CHECKED))
+            {
+                SyncUIState(hWnd, ChatStatePlaying);
+            }
+            handled = TRUE;
+            break;
+
+        case IDC_CHATSTOP:
+            //
+            //  Stop the chat engine.
+            //
+            g_CurrentChat->StopChat();
+
+            SyncUIState(hWnd, ChatStateNotPlaying);
+            handled = TRUE;
+            break;
+
+        //
+        //  The user's interacting with the chat transport combo box.
+        //
+        case IDC_COMBO_CHAT_TRANSPORT:
+        {
+            switch (wmEvent)
+            {
+            case CBN_SELCHANGE:
+            {
+                int currentSel = ComboBox_GetCurSel(GetDlgItem(hWnd, IDC_COMBO_CHAT_TRANSPORT));
+
                 //
-                //  Stop on Cancel/OK.
+                //  The user modified the chat transport.  Delete the existing chat transport and create a new one.
                 //
-                if (g_CurrentChat)
-                {
-                    g_CurrentChat->StopChat();
-                }
                 g_CurrentChat->Shutdown();
                 delete g_CurrentChat;
                 g_CurrentChat = NULL;
 
-                EndDialog(hWnd, TRUE);
-                handled = TRUE;
-                break;
-
-            case IDC_CHATSTART:
-                //
-                //  Start the chat engine.
-                //
-                if (g_CurrentChat->StartChat(IsDlgButtonChecked(hWnd, IDC_CHECK_HIDE_FROM_VOLUME_MIXER) == BST_CHECKED))
+                if (currentSel == g_WasapiComboBoxIndex)
                 {
-                    SyncUIState(hWnd, ChatStatePlaying);
+                    //
+                    //  Instantiate the WASAPI transport.
+                    //
+                    g_CurrentChat = new (std::nothrow) CWasapiChat(hWnd);
+                    if (g_CurrentChat == NULL)
+                    {
+                        MessageBox(hWnd, L"Unable to create WASAPI chat transport", L"Error", MB_OK);
+                    }
                 }
-                handled = TRUE;
-                break;
+                else if (currentSel == g_WaveComboBoxIndex)
+                {
+                    //
+                    //  Instantiate the wave transport.
+                    //
+                    g_CurrentChat = new (std::nothrow) CWaveChat(hWnd);
+                    if (g_CurrentChat == NULL)
+                    {
+                        MessageBox(hWnd, L"Unable to create WAVE chat transport", L"Error", MB_OK);
+                    }
+                }
 
-            case IDC_CHATSTOP:
                 //
-                //  Stop the chat engine.
+                //  Sync the UI to the transport choice
                 //
-                g_CurrentChat->StopChat();
-
                 SyncUIState(hWnd, ChatStateNotPlaying);
-                handled = TRUE;
-                break;
 
                 //
-                //  The user's interacting with the chat transport combo box.
+                //  Initialize the chat object
                 //
-            case IDC_COMBO_CHAT_TRANSPORT:
+                bool useInputDevice = (IsDlgButtonChecked(hWnd, IDC_RADIO_CAPTURE) == BST_CHECKED);
+                if (g_CurrentChat->Initialize(useInputDevice))
                 {
-                    switch (wmEvent)
-                    {
-                    case CBN_SELCHANGE:
-                        {
-                            int currentSel = ComboBox_GetCurSel(GetDlgItem(hWnd, IDC_COMBO_CHAT_TRANSPORT));
-
-                            //
-                            //  The user modified the chat transport.  Delete the existing chat transport and create a new one.
-                            //
-                            g_CurrentChat->Shutdown();
-                            delete g_CurrentChat;
-                            g_CurrentChat = NULL;
-
-                            if (currentSel == g_WasapiComboBoxIndex)
-                            {
-                                //
-                                //  Instantiate the WASAPI transport.
-                                //
-                                g_CurrentChat = new (std::nothrow) CWasapiChat(hWnd);
-                                if (g_CurrentChat == NULL)
-                                {
-                                    MessageBox(hWnd, L"Unable to create WASAPI chat transport", L"Error", MB_OK);
-                                }
-                            }
-                            else if (currentSel == g_WaveComboBoxIndex)
-                            {
-                                //
-                                //  Instantiate the wave transport.
-                                //
-                                g_CurrentChat = new (std::nothrow) CWaveChat(hWnd);
-                                if (g_CurrentChat == NULL)
-                                {
-                                    MessageBox(hWnd, L"Unable to create WAVE chat transport", L"Error", MB_OK);
-                                }
-                            }
-
-                            //
-                            //  Sync the UI to the transport choice
-                            //
-                            SyncUIState(hWnd, ChatStateNotPlaying);
-
-                            //
-                            //  Initialize the chat object
-                            //
-                            bool useInputDevice = (IsDlgButtonChecked(hWnd, IDC_RADIO_CAPTURE) == BST_CHECKED);
-                            if (g_CurrentChat->Initialize(useInputDevice))
-                            {
-                                //
-                                //  Sync the UI to the state again - we're not playing but after initializing the state might change.
-                                //
-                                SyncUIState(hWnd, ChatStateNotPlaying);
-                            }
-                            else
-                            {
-                                MessageBox(hWnd, L"Unable to initialize chat", L"Error", MB_OK);
-                            }
-                            break;
-                        }
-                    default:
-                        break;
-                    }
-                    handled = TRUE;
-                    break;
-                } // IDC_COMBO_CHAT_TRANSPORT
-            case IDC_RADIO_CAPTURE:
-            case IDC_RADIO_RENDER:
-                {
-                    int currentSel = ComboBox_GetCurSel(GetDlgItem(hWnd, IDC_COMBO_CHAT_TRANSPORT));
                     //
-                    //  The radio button selection may change when the transport is changed to Wave because render is not
-                    //  an option for Wave.  We detect that here and only rebuild the transport for Wasapi
+                    //  Sync the UI to the state again - we're not playing but after initializing the state might change.
                     //
-                    if ((currentSel == g_WasapiComboBoxIndex) && (g_CurrentChat->TransportType() == CChatTransport::ChatTransportWasapi))
-                    {
-                        //
-                        //  The user switched between render and capture.  Delete the existing chat transport and create a new one.
-                        //
-                        g_CurrentChat->Shutdown();
-                        delete g_CurrentChat;
-
-                        //
-                        //  Reinstantiate the WASAPI transport.
-                        //
-                        //  Also update the state of the rendering options since the WASAPI transport supports them.
-                        //
-                        g_CurrentChat = new (std::nothrow) CWasapiChat(hWnd);
-                        if (g_CurrentChat == NULL)
-                        {
-                            MessageBox(hWnd, L"Unable to create WASAPI chat transport", L"Error", MB_OK);
-                        }
-                        else if (g_CurrentChat->Initialize(IsDlgButtonChecked(hWnd, IDC_CHECK_HIDE_FROM_VOLUME_MIXER) == BST_CHECKED))
-                        {
-                        }
-                        else
-                        {
-                            MessageBox(hWnd, L"Unable to initialize chat", L"Error", MB_OK);
-                        }
-                    }
                     SyncUIState(hWnd, ChatStateNotPlaying);
-                    break;
                 }
+                else
+                {
+                    MessageBox(hWnd, L"Unable to initialize chat", L"Error", MB_OK);
+                }
+                break;
+            }
             default:
                 break;
-            }   // WM_COMMAND
+            }
+            handled = TRUE;
+            break;
+        } // IDC_COMBO_CHAT_TRANSPORT
+        case IDC_RADIO_CAPTURE:
+        case IDC_RADIO_RENDER:
+        {
+            int currentSel = ComboBox_GetCurSel(GetDlgItem(hWnd, IDC_COMBO_CHAT_TRANSPORT));
+            //
+            //  The radio button selection may change when the transport is changed to Wave because render is not
+            //  an option for Wave.  We detect that here and only rebuild the transport for Wasapi
+            //
+            if ((currentSel == g_WasapiComboBoxIndex) && (g_CurrentChat->TransportType() == CChatTransport::ChatTransportWasapi))
+            {
+                //
+                //  The user switched between render and capture.  Delete the existing chat transport and create a new one.
+                //
+                g_CurrentChat->Shutdown();
+                delete g_CurrentChat;
+
+                //
+                //  Reinstantiate the WASAPI transport.
+                //
+                //  Also update the state of the rendering options since the WASAPI transport supports them.
+                //
+                g_CurrentChat = new (std::nothrow) CWasapiChat(hWnd);
+                if (g_CurrentChat == NULL)
+                {
+                    MessageBox(hWnd, L"Unable to create WASAPI chat transport", L"Error", MB_OK);
+                }
+                else if (g_CurrentChat->Initialize(IsDlgButtonChecked(hWnd, IDC_CHECK_HIDE_FROM_VOLUME_MIXER) == BST_CHECKED))
+                {
+                }
+                else
+                {
+                    MessageBox(hWnd, L"Unable to initialize chat", L"Error", MB_OK);
+                }
+            }
+            SyncUIState(hWnd, ChatStateNotPlaying);
+            break;
         }
+        default:
+            break;
+        }   // WM_COMMAND
+    }
     default:
         //
         //  If the current chat transport is going to handle this message, pass the message to the transport.

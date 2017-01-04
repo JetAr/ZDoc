@@ -1,10 +1,10 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
 //
 // Copyright (C) 2004  Microsoft Corporation.  All Rights Reserved.
-// 
+//
 // Module Name: provider.h
 //
 // Description:
@@ -16,7 +16,7 @@
 //    throughout this project.
 //
 #ifndef _PROVIDER_H_
-#define _PROVIDER_H_ 
+#define _PROVIDER_H_
 
 #ifndef _PSDK_BLD
 #include <nt.h>
@@ -55,7 +55,7 @@ typedef struct _SOCK_INFO
     ULONGLONG  BytesSent;       // Byte counts
     ULONGLONG  BytesRecv;
     HANDLE     hIocp;           // associated with an IOCP?
-    
+
     int    LastError;           // Last error that occured on this socket
 
     HWND   hWnd;                // Window (if any) associated with socket
@@ -224,7 +224,7 @@ typedef enum
 // Our OVERLAPPED structure that includes state and argument
 //  information. This structure is used for all overlapped IO
 //  operations. Whenever the user app requests overlapped IO
-//  we intercept this and make our own call with our own 
+//  we intercept this and make our own call with our own
 //  structure. This way we will receive notification first
 //  at which time we can perform post processesing. When we
 //  are done we can then post the completion to the user app.
@@ -236,12 +236,12 @@ typedef struct _WSAOVERLAPPEDPLUS
     SOCK_INFO      *SockInfo;               // Socket initiating this operation
     SOCKET          CallerSocket;           // Upper layer's socket handle
     SOCKET          ProviderSocket;         // Lower layer's socket handle
-    HANDLE          Iocp;                   
+    HANDLE          Iocp;
     int             Error;                  // Error that operation completed with
 
     BOOL            CloseThread;            // Indicates whether we need to close thread we opened
 
-    union 
+    union
     {
         // Various arguments to the call being made
         ACCEPTEXARGS        AcceptExArgs;
@@ -274,14 +274,14 @@ typedef struct _WSAOVERLAPPEDPLUS
 ////////////////////////////////////////////////////////////////////////////////
 
 // Retrieves the async worker window and creates it if it hasn't already been
-HWND 
+HWND
 GetWorkerWindow(
-    );
+);
 
 // Issues the shutdown command to thread handling window messages
-int 
+int
 StopAsyncWindowManager(
-    );
+);
 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -294,60 +294,60 @@ StopAsyncWindowManager(
 // These are the Winsock functions an LSP must implement if it is non-IFS
 //
 
-SOCKET WSPAPI 
+SOCKET WSPAPI
 WSPAccept(
-    SOCKET          s,                      
-    struct sockaddr FAR * addr,  
-    LPINT           addrlen,                 
-    LPCONDITIONPROC lpfnCondition,  
-    DWORD_PTR       dwCallbackData,          
+    SOCKET          s,
+    struct sockaddr FAR * addr,
+    LPINT           addrlen,
+    LPCONDITIONPROC lpfnCondition,
+    DWORD_PTR       dwCallbackData,
     LPINT           lpErrno
-    );
+);
 
-int WSPAPI 
+int WSPAPI
 WSPAddressToString(
-    LPSOCKADDR          lpsaAddress,            
-    DWORD               dwAddressLength,               
-    LPWSAPROTOCOL_INFOW lpProtocolInfo,   
-    LPWSTR              lpszAddressString,            
-    LPDWORD             lpdwAddressStringLength,   
+    LPSOCKADDR          lpsaAddress,
+    DWORD               dwAddressLength,
+    LPWSAPROTOCOL_INFOW lpProtocolInfo,
+    LPWSTR              lpszAddressString,
+    LPDWORD             lpdwAddressStringLength,
     LPINT               lpErrno
-    );
+);
 
-int WSPAPI 
+int WSPAPI
 WSPAsyncSelect(
     SOCKET       s,
     HWND         hWnd,
     unsigned int wMsg,
     long         lEvent,
     LPINT        lpErrno
-    );
+);
 
-int WSPAPI 
+int WSPAPI
 WSPBind(
     SOCKET                s,
     const struct sockaddr FAR * name,
     int                   namelen,
     LPINT                 lpErrno
-    );
+);
 
-int WSPAPI 
+int WSPAPI
 WSPCancelBlockingCall(
     LPINT lpErrno
-    );
+);
 
-int WSPAPI 
+int WSPAPI
 WSPCleanup(
-    LPINT lpErrno  
-    );
+    LPINT lpErrno
+);
 
-int WSPAPI 
-WSPCloseSocket(  
-    SOCKET s,        
+int WSPAPI
+WSPCloseSocket(
+    SOCKET s,
     LPINT  lpErrno
-    );
+);
 
-int WSPAPI 
+int WSPAPI
 WSPConnect(
     SOCKET                s,
     const struct sockaddr FAR * name,
@@ -357,33 +357,33 @@ WSPConnect(
     LPQOS                 lpSQOS,
     LPQOS                 lpGQOS,
     LPINT                 lpErrno
-    );
+);
 
-int WSPAPI 
+int WSPAPI
 WSPDuplicateSocket(
     SOCKET              s,
-    DWORD               dwProcessId,                      
-    LPWSAPROTOCOL_INFOW lpProtocolInfo,   
+    DWORD               dwProcessId,
+    LPWSAPROTOCOL_INFOW lpProtocolInfo,
     LPINT               lpErrno
-    );
+);
 
-int WSPAPI 
-WSPEnumNetworkEvents(  
+int WSPAPI
+WSPEnumNetworkEvents(
     SOCKET             s,
     WSAEVENT           hEventObject,
     LPWSANETWORKEVENTS lpNetworkEvents,
     LPINT              lpErrno
-    );
+);
 
-int WSPAPI 
+int WSPAPI
 WSPEventSelect(
     SOCKET   s,
     WSAEVENT hEventObject,
     long     lNetworkEvents,
     LPINT    lpErrno
-    );
+);
 
-BOOL WSPAPI 
+BOOL WSPAPI
 WSPGetOverlappedResult(
     SOCKET          s,
     LPWSAOVERLAPPED lpOverlapped,
@@ -391,25 +391,25 @@ WSPGetOverlappedResult(
     BOOL            fWait,
     LPDWORD         lpdwFlags,
     LPINT           lpErrno
-    );
+);
 
-int WSPAPI 
-WSPGetPeerName(  
+int WSPAPI
+WSPGetPeerName(
     SOCKET          s,
     struct sockaddr FAR * name,
     LPINT           namelen,
     LPINT           lpErrno
-    );
+);
 
-int WSPAPI 
+int WSPAPI
 WSPGetSockName(
     SOCKET          s,
     struct sockaddr FAR * name,
     LPINT           namelen,
     LPINT           lpErrno
-    );
+);
 
-int WSPAPI 
+int WSPAPI
 WSPGetSockOpt(
     SOCKET     s,
     int        level,
@@ -417,17 +417,17 @@ WSPGetSockOpt(
     char FAR * optval,
     LPINT      optlen,
     LPINT      lpErrno
-    );
+);
 
-BOOL WSPAPI 
+BOOL WSPAPI
 WSPGetQOSByName(
     SOCKET   s,
     LPWSABUF lpQOSName,
     LPQOS    lpQOS,
     LPINT    lpErrno
-    );
+);
 
-int WSPAPI 
+int WSPAPI
 WSPIoctl(
     SOCKET          s,
     DWORD           dwIoControlCode,
@@ -440,9 +440,9 @@ WSPIoctl(
     LPWSAOVERLAPPED_COMPLETION_ROUTINE lpCompletionRoutine,
     LPWSATHREADID   lpThreadId,
     LPINT           lpErrno
-    );
+);
 
-SOCKET WSPAPI 
+SOCKET WSPAPI
 WSPJoinLeaf(
     SOCKET       s,
     const struct sockaddr FAR * name,
@@ -453,16 +453,16 @@ WSPJoinLeaf(
     LPQOS        lpGQOS,
     DWORD        dwFlags,
     LPINT        lpErrno
-    );
+);
 
-int WSPAPI 
+int WSPAPI
 WSPListen(
-    SOCKET s,        
-    int    backlog,     
+    SOCKET s,
+    int    backlog,
     LPINT  lpErrno
-    );
+);
 
-int WSPAPI 
+int WSPAPI
 WSPRecv(
     SOCKET          s,
     LPWSABUF        lpBuffers,
@@ -473,16 +473,16 @@ WSPRecv(
     LPWSAOVERLAPPED_COMPLETION_ROUTINE lpCompletionRoutine,
     LPWSATHREADID   lpThreadId,
     LPINT           lpErrno
-    );
+);
 
-int WSPAPI 
+int WSPAPI
 WSPRecvDisconnect(
     SOCKET   s,
     LPWSABUF lpInboundDisconnectData,
     LPINT    lpErrno
-    );
+);
 
-int WSPAPI 
+int WSPAPI
 WSPRecvFrom(
     SOCKET          s,
     LPWSABUF        lpBuffers,
@@ -495,9 +495,9 @@ WSPRecvFrom(
     LPWSAOVERLAPPED_COMPLETION_ROUTINE lpCompletionRoutine,
     LPWSATHREADID   lpThreadId,
     LPINT           lpErrno
-    );
+);
 
-int WSPAPI 
+int WSPAPI
 WSPSelect(
     int          nfds,
     fd_set FAR * readfds,
@@ -505,29 +505,29 @@ WSPSelect(
     fd_set FAR * exceptfds,
     const struct timeval FAR * timeout,
     LPINT        lpErrno
-    );
+);
 
-int WSPAPI 
+int WSPAPI
 WSPSend(
     SOCKET          s,
     LPWSABUF        lpBuffers,
     DWORD           dwBufferCount,
     LPDWORD         lpNumberOfBytesSent,
     DWORD           dwFlags,
-    LPWSAOVERLAPPED lpOverlapped,                             
-    LPWSAOVERLAPPED_COMPLETION_ROUTINE lpCompletionRoutine,   
-    LPWSATHREADID   lpThreadId,                                 
-    LPINT           lpErrno                                             
-    );
+    LPWSAOVERLAPPED lpOverlapped,
+    LPWSAOVERLAPPED_COMPLETION_ROUTINE lpCompletionRoutine,
+    LPWSATHREADID   lpThreadId,
+    LPINT           lpErrno
+);
 
-int WSPAPI 
+int WSPAPI
 WSPSendDisconnect(
     SOCKET   s,
     LPWSABUF lpOutboundDisconnectData,
     LPINT    lpErrno
-    );
+);
 
-int WSPAPI 
+int WSPAPI
 WSPSendTo(
     SOCKET          s,
     LPWSABUF        lpBuffers,
@@ -540,36 +540,36 @@ WSPSendTo(
     LPWSAOVERLAPPED_COMPLETION_ROUTINE lpCompletionRoutine,
     LPWSATHREADID   lpThreadId,
     LPINT           lpErrno
-    );
+);
 
-int WSPAPI 
+int WSPAPI
 WSPSetSockOpt(
     SOCKET     s,
     int        level,
     int        optname,
-    const char FAR * optval,   
+    const char FAR * optval,
     int        optlen,
     LPINT      lpErrno
-    );
+);
 
-int WSPAPI 
+int WSPAPI
 WSPShutdown (
     SOCKET s,
     int    how,
     LPINT  lpErrno
-    );
+);
 
-int WSPAPI 
+int WSPAPI
 WSPStringToAddress(
     LPWSTR              AddressString,
     INT                 AddressFamily,
-    LPWSAPROTOCOL_INFOW lpProtocolInfo,   
+    LPWSAPROTOCOL_INFOW lpProtocolInfo,
     LPSOCKADDR          lpAddress,
     LPINT               lpAddressLength,
     LPINT               lpErrno
-    );
+);
 
-SOCKET WSPAPI 
+SOCKET WSPAPI
 WSPSocket(
     int                 af,
     int                 type,
@@ -578,28 +578,28 @@ WSPSocket(
     GROUP               g,
     DWORD               dwFlags,
     LPINT               lpErrno
-    );
+);
 
 // Copies the offset values from one overlapped structure to another
-void 
+void
 CopyOffset(
-    WSAOVERLAPPED  *ProviderOverlapped, 
+    WSAOVERLAPPED  *ProviderOverlapped,
     WSAOVERLAPPED  *UserOverlapped
-    );
+);
 
 // Creates a new WSABUF array and copies the buffer and length values over
 WSABUF *
 CopyWSABuf(
-    WSABUF *BufferArray, 
+    WSABUF *BufferArray,
     DWORD   BufferCount,
     int    *lpErrno
-    );
+);
 
 // Frees a previously allocated WSABUF array
-void 
+void
 FreeWSABuf(
     WSABUF *BufferArray
-    );
+);
 
 ////////////////////////////////////////////////////////////////////////////////
 //
@@ -608,21 +608,21 @@ FreeWSABuf(
 ////////////////////////////////////////////////////////////////////////////////
 
 // Initialize the overlapped system for handing asynchronous (overlapped) I/O
-int 
+int
 InitOverlappedManager(
-    );
+);
 
 // Issues the shutdown command for all worker threads to exit
-int 
+int
 StopOverlappedManager(
-    );
+);
 
 // Queue an overlapped operation for execution
-int 
+int
 QueueOverlappedOperation(
-    WSAOVERLAPPEDPLUS  *lpOverlapped, 
+    WSAOVERLAPPEDPLUS  *lpOverlapped,
     SOCK_INFO          *Context
-    );
+);
 
 // Allocate and initialize a WSAOVERLAPPEDPLUS structure which describes an overlapped operation
 WSAOVERLAPPEDPLUS *
@@ -635,28 +635,28 @@ PrepareOverlappedOperation(
     LPWSAOVERLAPPED_COMPLETION_ROUTINE lpCompletionRoutine,
     LPWSATHREADID                      lpThreadId,
     int                               *lpErrno
-    );
+);
 
 // This function handles the completion of an overlapped operation
-void CALLBACK 
+void CALLBACK
 IntermediateCompletionRoutine(
-    DWORD           dwError, 
+    DWORD           dwError,
     DWORD           cbTransferred,
-    LPWSAOVERLAPPED lpOverlapped, 
+    LPWSAOVERLAPPED lpOverlapped,
     DWORD           dwFlags
-    );
+);
 
 // If an overlapped operation fails inline, we must undo some state
 void
-UndoOverlappedOperation( 
+UndoOverlappedOperation(
     SOCK_INFO         *SocketContext,
     WSAOVERLAPPEDPLUS *ProviderOverlapped
-    );
+);
 
 // Frees all cached WSAOVERLAPPEDPLUS structures when the LSP is unloaded
 void
 FreeOverlappedLookasideList(
-    );
+);
 
 ////////////////////////////////////////////////////////////////////////////////
 //
@@ -666,72 +666,72 @@ FreeOverlappedLookasideList(
 
 SOCK_INFO *
 GetCallerSocket(
-    PROVIDER   *provider, 
+    PROVIDER   *provider,
     SOCKET      ProviderSocket
-    );
+);
 
 // Allocates a SOCK_INFO structure, initializes it, and inserts into the provider list
 SOCK_INFO *
 CreateSockInfo(
-    PROVIDER   *Provider, 
-    SOCKET      ProviderSocket, 
-    SOCK_INFO  *Inherit, 
+    PROVIDER   *Provider,
+    SOCKET      ProviderSocket,
+    SOCK_INFO  *Inherit,
     BOOL        Insert,
     int        *lpErrno
-    );
+);
 
 // Looks up the socket context structure associated with the application socket
 SOCK_INFO *
 FindAndRefSocketContext(
-    SOCKET  s, 
+    SOCKET  s,
     int    *err
-    );
+);
 
 // Decrements the reference count on the given socket context object
-void 
+void
 DerefSocketContext(
-    SOCK_INFO  *context, 
+    SOCK_INFO  *context,
     int        *err
-    );
+);
 
 // Frees a previously allocated SOCK_INFO structure
-void 
+void
 FreeSockInfo(
     SOCK_INFO *info
-    );
+);
 
 // Inserts the SOCK_INFO structure at the tail of the given provider's socket list
-void 
+void
 InsertSocketInfo(
-    PROVIDER   *provider, 
+    PROVIDER   *provider,
     SOCK_INFO  *sock
-    );
+);
 
 // Removes the given SOCK_INFO structure from the provider's socket list
-void 
+void
 RemoveSocketInfo(
-    PROVIDER   *provider, 
+    PROVIDER   *provider,
     SOCK_INFO  *sock
-    );
+);
 
 // Enters the SOCK_INFO structure's critical section preventing other threads from accessing it
-void 
+void
 AcquireSocketLock(
     SOCK_INFO  *SockInfo
-    );
+);
 
 // Releases the SOCK_INFO structure's critical section
-void 
+void
 ReleaseSocketLock(
     SOCK_INFO  *SockInfo
-    );
+);
 
 // Closes all the sockets and frees all resources associated with a provider
-void 
+void
 CloseAndFreeSocketInfo(
     PROVIDER   *provider,
     BOOL        processDetach
-    );
+);
 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -740,7 +740,7 @@ CloseAndFreeSocketInfo(
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-BOOL PASCAL FAR 
+BOOL PASCAL FAR
 ExtTransmitFile (
     IN SOCKET hSocket,
     IN HANDLE hFile,
@@ -749,9 +749,9 @@ ExtTransmitFile (
     IN LPOVERLAPPED lpOverlapped,
     IN LPTRANSMIT_FILE_BUFFERS lpTransmitBuffers,
     IN DWORD dwReserved
-    );
+);
 
-BOOL PASCAL FAR 
+BOOL PASCAL FAR
 ExtAcceptEx(
     IN SOCKET sListenSocket,
     IN SOCKET sAcceptSocket,
@@ -761,9 +761,9 @@ ExtAcceptEx(
     IN DWORD dwRemoteAddressLength,
     OUT LPDWORD lpdwBytesReceived,
     IN LPOVERLAPPED lpOverlapped
-    );
+);
 
-BOOL PASCAL FAR 
+BOOL PASCAL FAR
 ExtConnectEx(
     IN SOCKET s,
     IN const struct sockaddr FAR *name,
@@ -772,9 +772,9 @@ ExtConnectEx(
     IN DWORD dwSendDataLength,
     OUT LPDWORD lpdwBytesSent,
     IN LPOVERLAPPED lpOverlapped
-    );
+);
 
-BOOL PASCAL FAR 
+BOOL PASCAL FAR
 ExtTransmitPackets(
     SOCKET hSocket,
     LPTRANSMIT_PACKETS_ELEMENT lpPacketArray,
@@ -782,24 +782,24 @@ ExtTransmitPackets(
     DWORD nSendSize,
     LPOVERLAPPED lpOverlapped,
     DWORD dwFlags
-    );
+);
 
-BOOL PASCAL FAR 
+BOOL PASCAL FAR
 ExtDisconnectEx(
     IN SOCKET s,
     IN LPOVERLAPPED lpOverlapped,
     IN DWORD  dwFlags,
     IN DWORD  dwReserved
-    );
+);
 
-INT PASCAL FAR 
+INT PASCAL FAR
 ExtWSARecvMsg(
     IN SOCKET s,
     IN OUT LPWSAMSG lpMsg,
     OUT LPDWORD lpdwNumberOfBytesRecvd,
     IN LPWSAOVERLAPPED lpOverlapped,
     IN LPWSAOVERLAPPED_COMPLETION_ROUTINE lpCompletionRoutine
-    );
+);
 
 INT PASCAL FAR
 ExtWSASendMsg(
@@ -807,7 +807,7 @@ ExtWSASendMsg(
     IN WSASENDMSG *sendMsg,
     IN LPWSATHREADID lpThreadId,
     OUT LPINT lpErrno
-    );
+);
 
 INT PASCAL FAR
 ExtWSAPoll(
@@ -815,7 +815,7 @@ ExtWSAPoll(
     IN WSAPOLLDATA *pollData,
     IN LPWSATHREADID lpThreadId,
     OUT LPINT lpErrno
-    );
+);
 
 // Loads the given extension function from the lower provider
 BOOL
@@ -824,7 +824,7 @@ LoadExtensionFunction(
     GUID        ExtensionGuid,
     LPWSPIOCTL  fnIoctl,
     SOCKET      s
-    );
+);
 
 ////////////////////////////////////////////////////////////////////////////////
 //
@@ -833,14 +833,14 @@ LoadExtensionFunction(
 ////////////////////////////////////////////////////////////////////////////////
 
 extern HINSTANCE        gDllInstance;       // Instance passed to DllMain
-extern CRITICAL_SECTION gCriticalSection,   // Critical section for initialization and 
-                                            //    socket list manipulation
-                        gOverlappedCS;      // Used in overlapped IO handling
+extern CRITICAL_SECTION gCriticalSection,   // Critical section for initialization and
+       //    socket list manipulation
+       gOverlappedCS;      // Used in overlapped IO handling
 extern INT              gLayerCount;        // Number of layered protocol entries for LSP
 extern PROVIDER        *gBaseInfo;          // Provider structures for each layered protocol
-extern HANDLE           gAddContextEvent,   // Event signaled whenver new socket context 
-                                            //    is added to a PROVIDER
-                        gIocp;              // Completion port handle
+extern HANDLE           gAddContextEvent,   // Event signaled whenver new socket context
+       //    is added to a PROVIDER
+       gIocp;              // Completion port handle
 extern WSPUPCALLTABLE   gMainUpCallTable;   // Upcall functions given to us by Winsock
 extern GUID             gProviderGuid;      // GUID of our dummy hidden entry
 

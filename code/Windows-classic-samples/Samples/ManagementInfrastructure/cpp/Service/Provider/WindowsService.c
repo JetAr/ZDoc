@@ -1,4 +1,4 @@
-//
+﻿//
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -13,10 +13,11 @@
 #define ID_PROMPT_USER_STRING 500
 
 MI_Char g_startMode[5][25] = { L"Service boot start",
-                           L"Service system start",
-                           L"Service auto start",
-                           L"Service demand start",
-                           L"Service disabled" };
+                               L"Service system start",
+                               L"Service auto start",
+                               L"Service demand start",
+                               L"Service disabled"
+                             };
 
 MI_Result SetService(
     _Out_ MSFT_WindowsService* self,
@@ -40,7 +41,7 @@ MI_Result SetService(
         MSFT_WindowsService_Destruct(self);
         return result;
     }
-    
+
     // Setting scoping system name
     {
         MI_Char buf[MAX_PATH];
@@ -100,7 +101,7 @@ MI_Result SetService(
         LPQUERY_SERVICE_CONFIG lpsc = NULL;
         SC_HANDLE service = NULL;
         DWORD bytesNeeded, cbBufSize = 0;
-		
+
         service = OpenService(*phSvcCtlMgr, lpService->lpServiceName, GENERIC_READ );
         if(NULL == service)
         {
@@ -132,7 +133,7 @@ MI_Result SetService(
         }
 
         // Query for service configuration with increased buffer size
-        if( !QueryServiceConfig( service, lpsc, cbBufSize, &bytesNeeded) ) 
+        if( !QueryServiceConfig( service, lpsc, cbBufSize, &bytesNeeded) )
         {
             MSFT_WindowsService_Destruct(self);
             CloseServiceHandle(service);
@@ -166,15 +167,15 @@ MI_Result IsValidInstance(_In_ const MSFT_WindowsService* instanceName)
 {
     MI_Result result = MI_RESULT_OK;
     // Check to make sure that instance is not null and instance has all the key properties.
-    if(instanceName && 
-        instanceName->SystemCreationClassName.exists == MI_TRUE &&
-        instanceName->CreationClassName.exists == MI_TRUE &&
-        instanceName->SystemName.exists == MI_TRUE &&
-        instanceName->Name.exists == MI_TRUE)
+    if(instanceName &&
+            instanceName->SystemCreationClassName.exists == MI_TRUE &&
+            instanceName->CreationClassName.exists == MI_TRUE &&
+            instanceName->SystemName.exists == MI_TRUE &&
+            instanceName->Name.exists == MI_TRUE)
     {
         // Making sure that key properties are same as the one set by the provider
         if( (_wcsicmp(instanceName->SystemCreationClassName.value, SYSTEM_CREATION_CLASS_NAME) != 0) ||
-            (_wcsicmp(instanceName->CreationClassName.value, CLASS_CREATION_NAME) != 0) )
+                (_wcsicmp(instanceName->CreationClassName.value, CLASS_CREATION_NAME) != 0) )
         {
             // The instance with the user passed in key is not found.
             return MI_RESULT_NOT_FOUND;
@@ -226,16 +227,16 @@ MI_Result EnumerateServices(
         // Cannot get access to SCManager object.
         return ResultFromWin32Error(GetLastError());
     }
-        
+
     returnValue = EnumServicesStatus(
-        hSvcCtlMgr,
-        SERVICE_WIN32,
-        SERVICE_STATE_ALL,
-        NULL,
-        0,
-        &dwBytesNeeded,
-        &dwServiceCount,
-        &dwResumeHandle);
+                      hSvcCtlMgr,
+                      SERVICE_WIN32,
+                      SERVICE_STATE_ALL,
+                      NULL,
+                      0,
+                      &dwBytesNeeded,
+                      &dwServiceCount,
+                      &dwResumeHandle);
 
     if (!returnValue)
     {
@@ -251,14 +252,14 @@ MI_Result EnumerateServices(
 
             dwResumeHandle = 0;
             returnValue = EnumServicesStatus(
-                hSvcCtlMgr,
-                SERVICE_WIN32,
-                SERVICE_STATE_ALL,
-                lpServiceArray,
-                dwBytesNeeded,
-                &dwBytesNeeded,
-                &dwServiceCount,
-                &dwResumeHandle);
+                              hSvcCtlMgr,
+                              SERVICE_WIN32,
+                              SERVICE_STATE_ALL,
+                              lpServiceArray,
+                              dwBytesNeeded,
+                              &dwBytesNeeded,
+                              &dwServiceCount,
+                              &dwResumeHandle);
             if (!returnValue)
             {
                 FreeMemory(lpServiceArray);
@@ -282,7 +283,7 @@ MI_Result EnumerateServices(
     for(dwServiceIndex = 0; dwServiceIndex < dwServiceCount; dwServiceIndex++)
     {
         MSFT_WindowsService serviceInstance;
-        
+
         //Setting service instance properties
         result = SetService(&serviceInstance, &hSvcCtlMgr, &lpServiceArray[dwServiceIndex], context);
         if(result == MI_RESULT_OK)
@@ -296,13 +297,13 @@ MI_Result EnumerateServices(
         }
         else
         {
-            // Notifying the user of the failure to query particular service information. 
+            // Notifying the user of the failure to query particular service information.
             // And also requesting for resonse whether to continue or stop processing further
             MI_Boolean bContinue = FALSE;
             MI_Char errMsg[MAX_PATH];
             StringCchPrintfW(errMsg,MAX_PATH,L"Error Querying the  service config %s", lpServiceArray[dwServiceIndex].lpServiceName);
             MI_Context_WriteError(context, result, MI_RESULT_TYPE_MI,errMsg, &bContinue);
-		    
+
             if(!bContinue)
             {
                 // The user asked to cancel the operation
@@ -332,9 +333,9 @@ MI_Result GetServiceInstance(
 
     result = IsValidInstance(instanceName);
     if(result != MI_RESULT_OK)
-    {    
+    {
         return result;
-    }   
+    }
 
     hSvcCtlMgr = OpenSCManager(NULL, NULL, SC_MANAGER_ENUMERATE_SERVICE | SC_MANAGER_CONNECT);
     if (hSvcCtlMgr == NULL)
@@ -342,16 +343,16 @@ MI_Result GetServiceInstance(
         // Cannot get access to SCManager object.
         return ResultFromWin32Error(GetLastError());
     }
-        
+
     returnValue = EnumServicesStatus(
-        hSvcCtlMgr,
-        SERVICE_WIN32,
-        SERVICE_STATE_ALL,
-        NULL,
-        0,
-        &dwBytesNeeded,
-        &dwServiceCount,
-        &dwResumeHandle);
+                      hSvcCtlMgr,
+                      SERVICE_WIN32,
+                      SERVICE_STATE_ALL,
+                      NULL,
+                      0,
+                      &dwBytesNeeded,
+                      &dwServiceCount,
+                      &dwResumeHandle);
 
     if (!returnValue)
     {
@@ -367,14 +368,14 @@ MI_Result GetServiceInstance(
 
             dwResumeHandle = 0;
             returnValue = EnumServicesStatus(
-                hSvcCtlMgr,
-                SERVICE_WIN32,
-                SERVICE_STATE_ALL,
-                lpServiceArray,
-                dwBytesNeeded,
-                &dwBytesNeeded,
-                &dwServiceCount,
-                &dwResumeHandle);
+                              hSvcCtlMgr,
+                              SERVICE_WIN32,
+                              SERVICE_STATE_ALL,
+                              lpServiceArray,
+                              dwBytesNeeded,
+                              &dwBytesNeeded,
+                              &dwServiceCount,
+                              &dwResumeHandle);
             if (!returnValue)
             {
                 FreeMemory(lpServiceArray);
@@ -400,8 +401,8 @@ MI_Result GetServiceInstance(
         // Checking if the name of the service instance requested is present in the list of services
         if(_wcsicmp(instanceName->Name.value, lpServiceArray[dwServiceIndex].lpServiceName) == 0)
         {
-            MSFT_WindowsService serviceInstance;     
-        
+            MSFT_WindowsService serviceInstance;
+
             //Setting service instance properties
             result = SetService(&serviceInstance, &hSvcCtlMgr, &lpServiceArray[dwServiceIndex], context);
             if(result == MI_RESULT_OK)
@@ -421,7 +422,7 @@ MI_Result GetServiceInstance(
 
     FreeMemory(lpServiceArray);
 
-    
+
     CloseServiceHandle(hSvcCtlMgr);
     return result;
 }
@@ -440,7 +441,7 @@ void Invoke_StartService(
 
     result = IsValidInstance(instanceName);
     if(result != MI_RESULT_OK)
-    {    
+    {
         MI_Context_PostError(context, result, MI_RESULT_TYPE_MI, L"Not a valid instance");
         return;
     }
@@ -448,7 +449,7 @@ void Invoke_StartService(
     sc = OpenSCManager (NULL,NULL,SC_MANAGER_ENUMERATE_SERVICE);
     if (sc == NULL)
     {
-        MI_Context_PostError(context, GetLastError(), MI_RESULT_TYPE_WIN32, L"Unable to Start service; OpenSCManager failed");		
+        MI_Context_PostError(context, GetLastError(), MI_RESULT_TYPE_WIN32, L"Unable to Start service; OpenSCManager failed");
         return;
     }
     service = OpenService(sc, instanceName->Name.value, SERVICE_START);
@@ -466,9 +467,9 @@ void Invoke_StartService(
     // current thread preferred UI languages setting.
     SetUILocale(context, &lpOrgUILang);
     LoadString(GetModuleHandle(L"service.dll"),
-        ID_PROMPT_USER_STRING,
-        PromptMsgTemplate,
-        sizeof(PromptMsgTemplate)/sizeof(wchar_t));
+               ID_PROMPT_USER_STRING,
+               PromptMsgTemplate,
+               sizeof(PromptMsgTemplate)/sizeof(wchar_t));
     // ResetUILocale will reset the current thread preferred UI Languages back
     // to the original setting
     ResetUILocale(lpOrgUILang);
@@ -476,12 +477,12 @@ void Invoke_StartService(
         DWORD_PTR pArgs[1];
         pArgs[0] = (DWORD_PTR)(instanceName->Name.value);
         FormatMessageW(FORMAT_MESSAGE_FROM_STRING | FORMAT_MESSAGE_ARGUMENT_ARRAY,
-            (LPCVOID)PromptMsgTemplate,
-            0,
-            0,
-            PromptMsg,
-            MAX_PATH - 1,
-            (va_list*)pArgs);
+                       (LPCVOID)PromptMsgTemplate,
+                       0,
+                       0,
+                       PromptMsg,
+                       MAX_PATH - 1,
+                       (va_list*)pArgs);
         PromptMsg[MAX_PATH - 1] = L'\0';
     }
     result = MI_Context_PromptUser(context, PromptMsg, MI_PROMPTTYPE_NORMAL, &bContinue);
@@ -489,11 +490,10 @@ void Invoke_StartService(
     {
         // Something went wrong while prompting the user.
         // Report the error to client and abort the operation.
-        MI_Context_PostError(context,result, MI_RESULT_TYPE_MI,L"Failed to Send Prompt to user - Start operation can't continue");		
+        MI_Context_PostError(context,result, MI_RESULT_TYPE_MI,L"Failed to Send Prompt to user - Start operation can't continue");
         goto CleanupAndExit;
     }
-    else 
-    if(!bContinue)
+    else if(!bContinue)
     {
         result = MI_Context_WriteVerbose(context,L"User said NO to start service prompt");
         MI_Context_PostResult(context, result);
@@ -530,7 +530,7 @@ void Invoke_StartService(
     {
         // Returning the result for the method.
         MSFT_WindowsService_StartService outInstance;
-	
+
         result = MSFT_WindowsService_StartService_Construct(&outInstance, context);
         if(result != MI_RESULT_OK)
         {
@@ -539,7 +539,7 @@ void Invoke_StartService(
         }
 
         // MIReturn is special name for the return value from the method.
-        result = MSFT_WindowsService_StartService_Set_MIReturn(&outInstance, 0); 
+        result = MSFT_WindowsService_StartService_Set_MIReturn(&outInstance, 0);
         if(result != MI_RESULT_OK)
         {
             MSFT_WindowsService_StartService_Destruct(&outInstance);
@@ -595,13 +595,15 @@ void Invoke_StopService(
     MI_Context_WriteVerbose(context, PromptMsg);
 
     sc = OpenSCManager (NULL,NULL,SC_MANAGER_ENUMERATE_SERVICE);
-    if (sc == NULL) {
-        MI_Context_PostError(context,GetLastError(),MI_RESULT_TYPE_WIN32, L"Unable to Stop service; OpenSCManager failed");		
+    if (sc == NULL)
+    {
+        MI_Context_PostError(context,GetLastError(),MI_RESULT_TYPE_WIN32, L"Unable to Stop service; OpenSCManager failed");
         return;
     }
 
     service = OpenService(sc, instanceName->Name.value, SERVICE_STOP);
-    if (service == NULL) {
+    if (service == NULL)
+    {
         MI_Context_PostError(context, GetLastError(), MI_RESULT_TYPE_WIN32, L"Failed in OpenService");
         goto CleanupAndExit;
     }
@@ -691,72 +693,72 @@ MI_Result ResultFromWin32Error(
     MI_Result result = MI_RESULT_FAILED;
     switch(error)
     {
-    case ERROR_FILE_NOT_FOUND : 
+    case ERROR_FILE_NOT_FOUND :
         result = MI_RESULT_NOT_FOUND;
         break;
-    case ERROR_PATH_NOT_FOUND : 
+    case ERROR_PATH_NOT_FOUND :
         result = MI_RESULT_NOT_FOUND;
         break;
-    case ERROR_ACCESS_DENIED: 
+    case ERROR_ACCESS_DENIED:
         result = MI_RESULT_ACCESS_DENIED;
         break;
-    case ERROR_INVALID_HANDLE : 
+    case ERROR_INVALID_HANDLE :
         result = MI_RESULT_INVALID_PARAMETER;
-        break; 
-    case ERROR_NOT_ENOUGH_MEMORY : 
+        break;
+    case ERROR_NOT_ENOUGH_MEMORY :
         result = MI_RESULT_SERVER_LIMITS_EXCEEDED;
-        break;     
-    case ERROR_INVALID_DATA : 
+        break;
+    case ERROR_INVALID_DATA :
         result = MI_RESULT_INVALID_PARAMETER;
-        break; 
-    case ERROR_NOT_SUPPORTED : 
+        break;
+    case ERROR_NOT_SUPPORTED :
         result = MI_RESULT_NOT_SUPPORTED;
         break;
-    case ERROR_INVALID_PARAMETER : 
+    case ERROR_INVALID_PARAMETER :
         result = MI_RESULT_INVALID_PARAMETER;
-        break;     
-    case ERROR_INSUFFICIENT_BUFFER : 
+        break;
+    case ERROR_INSUFFICIENT_BUFFER :
         result = MI_RESULT_INVALID_PARAMETER;
-        break;    
-    case ERROR_PROC_NOT_FOUND : 
-        result = MI_RESULT_NOT_FOUND;
-        break;   
-    case ERROR_BAD_PATHNAME : 
-        result = MI_RESULT_INVALID_PARAMETER;
-        break;        
-    case ERROR_ALREADY_EXISTS : 
-        result = MI_RESULT_ALREADY_EXISTS;
-        break;    
-    case ERROR_NO_DATA : 
-        result = MI_RESULT_NOT_FOUND;
-        break;  
-    case ERROR_NOINTERFACE : 
-        result = MI_RESULT_NOT_FOUND;
-        break;   
-    case ERROR_OBJECT_NAME_EXISTS : 
-        result = MI_RESULT_ALREADY_EXISTS;
-        break; 
-    case ERROR_SERVICE_DOES_NOT_EXIST : 
-        result = MI_RESULT_NOT_FOUND;
-        break;   
-    case ERROR_NOT_FOUND : 
-        result = MI_RESULT_NOT_FOUND;
-        break;      
-    case ERROR_NO_SUCH_USER : 
-        result = MI_RESULT_NOT_FOUND;
-        break;       
-    case ERROR_NO_SUCH_GROUP : 
-        result = MI_RESULT_NOT_FOUND;
-        break;   
-    case DNS_ERROR_RCODE_NAME_ERROR : 
+        break;
+    case ERROR_PROC_NOT_FOUND :
         result = MI_RESULT_NOT_FOUND;
         break;
-    case DNS_INFO_NO_RECORDS : 
+    case ERROR_BAD_PATHNAME :
+        result = MI_RESULT_INVALID_PARAMETER;
+        break;
+    case ERROR_ALREADY_EXISTS :
+        result = MI_RESULT_ALREADY_EXISTS;
+        break;
+    case ERROR_NO_DATA :
         result = MI_RESULT_NOT_FOUND;
-        break; 
-    default : 
+        break;
+    case ERROR_NOINTERFACE :
+        result = MI_RESULT_NOT_FOUND;
+        break;
+    case ERROR_OBJECT_NAME_EXISTS :
+        result = MI_RESULT_ALREADY_EXISTS;
+        break;
+    case ERROR_SERVICE_DOES_NOT_EXIST :
+        result = MI_RESULT_NOT_FOUND;
+        break;
+    case ERROR_NOT_FOUND :
+        result = MI_RESULT_NOT_FOUND;
+        break;
+    case ERROR_NO_SUCH_USER :
+        result = MI_RESULT_NOT_FOUND;
+        break;
+    case ERROR_NO_SUCH_GROUP :
+        result = MI_RESULT_NOT_FOUND;
+        break;
+    case DNS_ERROR_RCODE_NAME_ERROR :
+        result = MI_RESULT_NOT_FOUND;
+        break;
+    case DNS_INFO_NO_RECORDS :
+        result = MI_RESULT_NOT_FOUND;
+        break;
+    default :
         result = MI_RESULT_FAILED;
-        break;        
+        break;
     }
     return result;
 }

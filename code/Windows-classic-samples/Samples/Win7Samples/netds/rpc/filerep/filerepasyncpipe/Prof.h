@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -7,13 +7,13 @@
 
 
 /*
-  
+
     Server Profiling Routines
 
     FILE: Prof.h
-    
+
     PURPOSE: Routines for profiling server system services.
-    
+
     FUNCTIONS:
         ProfOpenLog - Opens the profile log file and prepares to
     take timings.
@@ -31,7 +31,7 @@
 // do not get reorded).
 #define PROF_LOG_MAX_SIZE (10*1024*1024)
 
-// This critsec is used for mutial exclusion when generating and 
+// This critsec is used for mutial exclusion when generating and
 // writing the profiling information.  It is also accessible to
 // the server routines that may want to use it for syncronising
 // their internal operation and creation of profiling info.

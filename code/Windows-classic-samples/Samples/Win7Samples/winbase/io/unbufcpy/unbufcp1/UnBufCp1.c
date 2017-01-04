@@ -1,4 +1,4 @@
-/*++
+﻿/*++
 THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED
 TO THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -84,7 +84,8 @@ HANDLE IoPort;
 
 #define MAX_CONCURRENT_IO 20
 
-typedef struct _COPY_CHUNK {
+typedef struct _COPY_CHUNK
+{
     OVERLAPPED Overlapped;
     LPVOID Buffer;
 } COPY_CHUNK, *PCOPY_CHUNK;
@@ -110,14 +111,14 @@ DWORD PageSize;
 VOID
 CopyLoop(
     ULARGE_INTEGER FileSize
-    );
+);
 
 int
 __cdecl
 main(
     int argc,
     char *argv[]
-    )
+)
 {
     ULARGE_INTEGER FileSize;
     ULARGE_INTEGER InitialSize;
@@ -127,7 +128,8 @@ main(
     SYSTEM_INFO SystemInfo;
     HANDLE BufferedHandle;
 
-    if (argc != 3) {
+    if (argc != 3)
+    {
         fprintf(stderr, "Usage: %s SourceFile DestinationFile\n", argv[0]);
         exit(1);
     }
@@ -153,17 +155,17 @@ main(
     Success = GetVersionEx((LPOSVERSIONINFO) &ver);
 
     if ( (!Success) ||                                   //GetVersionEx() failed - see above.
-         (ver.dwPlatformId != VER_PLATFORM_WIN32_NT) )   //GetVersionEx() succeeded but we are not on NT.
-      {
-       MessageBox(NULL,
-                  "This sample application can only be run on Windows NT. 3.5 or greater\n"
-                  "This application will now terminate.",
-                  "UnBufCp1",
-                  MB_OK           |
-                  MB_ICONSTOP     |
-                  MB_SETFOREGROUND );
-       exit( 1 );
-      }
+            (ver.dwPlatformId != VER_PLATFORM_WIN32_NT) )   //GetVersionEx() succeeded but we are not on NT.
+    {
+        MessageBox(NULL,
+                   "This sample application can only be run on Windows NT. 3.5 or greater\n"
+                   "This application will now terminate.",
+                   "UnBufCp1",
+                   MB_OK           |
+                   MB_ICONSTOP     |
+                   MB_SETFOREGROUND );
+        exit( 1 );
+    }
 
 
     //
@@ -185,12 +187,14 @@ main(
                             OPEN_EXISTING,
                             FILE_FLAG_NO_BUFFERING | FILE_FLAG_OVERLAPPED,
                             NULL);
-    if (SourceFile == INVALID_HANDLE_VALUE) {
+    if (SourceFile == INVALID_HANDLE_VALUE)
+    {
         fprintf(stderr, "failed to open %s, error %d\n", argv[1], GetLastError());
         exit(1);
     }
     FileSize.LowPart = GetFileSize(SourceFile, &FileSize.HighPart);
-    if ((FileSize.LowPart == 0xffffffff) && (GetLastError() != NO_ERROR)) {
+    if ((FileSize.LowPart == 0xffffffff) && (GetLastError() != NO_ERROR))
+    {
         fprintf(stderr, "GetFileSize failed, error %d\n", GetLastError());
         exit(1);
     }
@@ -202,7 +206,8 @@ main(
                           CREATE_ALWAYS,
                           FILE_FLAG_NO_BUFFERING | FILE_FLAG_OVERLAPPED,
                           SourceFile);
-    if (DestFile == INVALID_HANDLE_VALUE) {
+    if (DestFile == INVALID_HANDLE_VALUE)
+    {
         fprintf(stderr, "failed to open %s, error %d\n", argv[2], GetLastError());
         exit(1);
     }
@@ -216,12 +221,14 @@ main(
                             InitialSize.LowPart,
                             (PLONG)&InitialSize.HighPart,
                             FILE_BEGIN);
-    if ((Status == INVALID_SET_FILE_POINTER) && (GetLastError() != NO_ERROR)) {
+    if ((Status == INVALID_SET_FILE_POINTER) && (GetLastError() != NO_ERROR))
+    {
         fprintf(stderr, "initial SetFilePointer failed, error %d\n", GetLastError());
         exit(1);
     }
     Success = SetEndOfFile(DestFile);
-    if (!Success) {
+    if (!Success)
+    {
         fprintf(stderr, "SetEndOfFile failed, error %d\n", GetLastError());
         exit(1);
     }
@@ -235,7 +242,7 @@ main(
     //We know already that we are running on NT, or else we wouldn't have
     //gotten this far, so lets see what version we are running on.
     //
-    if (ver.dwMajorVersion == 3 && ver.dwMinorVersion == 50) 
+    if (ver.dwMajorVersion == 3 && ver.dwMinorVersion == 50)
         //
         //we're running on NT 3.5 - Completion Ports exists.
         //
@@ -244,42 +251,43 @@ main(
                                         ReadKey,               //completion key.
                                         1);                    //# of threads allowed to execute concurrently.
     else
+    {
+        //
+        //we are running on NT 3.51 or greater.
+        //Create the I/O Completion Port
+        //
+        IoPort = CreateIoCompletionPort(INVALID_HANDLE_VALUE,//file handle to associate with I/O completion port
+                                        NULL,                //optional handle to existing I/O completion port
+                                        ReadKey,             //completion key
+                                        1);                  //# of threads allowed to execute concurrently
+
+
+        if (IoPort == NULL)
         {
-          //                                                   
-          //we are running on NT 3.51 or greater.
-          //Create the I/O Completion Port
-          //
-          IoPort = CreateIoCompletionPort(INVALID_HANDLE_VALUE,//file handle to associate with I/O completion port
-                                          NULL,                //optional handle to existing I/O completion port
-                                          ReadKey,             //completion key
-                                          1);                  //# of threads allowed to execute concurrently
-
-
-          if (IoPort == NULL) {
-             fprintf(stderr, "failed to create ReadPort, error %d\n", GetLastError());
-             exit(1);
-          }
-
-         //
-         //If we need to, aka we're running on NT 3.51, let's associate a file handle with the
-         //completion port.
-         //
-
-         IoPort = CreateIoCompletionPort(SourceFile,
-                                         IoPort,
-                                         ReadKey,
-                                         1);
-
-         if (IoPort == NULL)
-           {
-             fprintf(stderr,
-                     "failed to create IoPort, error %d\n",
-                     GetLastError());
-
-             exit(1);
-
-           }
+            fprintf(stderr, "failed to create ReadPort, error %d\n", GetLastError());
+            exit(1);
         }
+
+        //
+        //If we need to, aka we're running on NT 3.51, let's associate a file handle with the
+        //completion port.
+        //
+
+        IoPort = CreateIoCompletionPort(SourceFile,
+                                        IoPort,
+                                        ReadKey,
+                                        1);
+
+        if (IoPort == NULL)
+        {
+            fprintf(stderr,
+                    "failed to create IoPort, error %d\n",
+                    GetLastError());
+
+            exit(1);
+
+        }
+    }
 
     //
     // Associate the destination file handle with the
@@ -290,7 +298,8 @@ main(
                                     IoPort,
                                     WriteKey,
                                     1);
-    if (IoPort == NULL) {
+    if (IoPort == NULL)
+    {
         fprintf(stderr, "failed to create WritePort, error %d\n", GetLastError());
         exit(1);
     }
@@ -321,7 +330,8 @@ main(
                                 OPEN_EXISTING,
                                 0,
                                 NULL);
-    if (BufferedHandle == INVALID_HANDLE_VALUE) {
+    if (BufferedHandle == INVALID_HANDLE_VALUE)
+    {
         fprintf(stderr,
                 "failed to open buffered handle to %s, error %d\n",
                 argv[2],
@@ -339,12 +349,14 @@ main(
                             FileSize.LowPart,
                             (PLONG)&FileSize.HighPart,
                             FILE_BEGIN);
-    if ((Status == INVALID_SET_FILE_POINTER) && (GetLastError() != NO_ERROR)) {
+    if ((Status == INVALID_SET_FILE_POINTER) && (GetLastError() != NO_ERROR))
+    {
         fprintf(stderr, "final SetFilePointer failed, error %d\n", GetLastError());
         exit(1);
     }
     Success = SetEndOfFile(BufferedHandle);
-    if (!Success) {
+    if (!Success)
+    {
         fprintf(stderr, "SetEndOfFile failed, error %d\n", GetLastError());
         exit(1);
     }
@@ -363,7 +375,7 @@ main(
 VOID
 CopyLoop(
     ULARGE_INTEGER FileSize
-    )
+)
 {
     ULARGE_INTEGER ReadPointer;
     BOOL Success;
@@ -380,8 +392,10 @@ CopyLoop(
     //
     ReadPointer.QuadPart = 0;
 
-    for (i=0; i < MAX_CONCURRENT_IO; i++) {
-        if (ReadPointer.QuadPart >= FileSize.QuadPart) {
+    for (i=0; i < MAX_CONCURRENT_IO; i++)
+    {
+        if (ReadPointer.QuadPart >= FileSize.QuadPart)
+        {
             break;
         }
         //
@@ -392,7 +406,8 @@ CopyLoop(
                                            BUFFER_SIZE,
                                            MEM_COMMIT,
                                            PAGE_READWRITE);
-        if (CopyChunk[i].Buffer == NULL) {
+        if (CopyChunk[i].Buffer == NULL)
+        {
             fprintf(stderr, "VirtualAlloc %d failed, error %d\n",i, GetLastError());
             exit(1);
         }
@@ -406,13 +421,16 @@ CopyLoop(
                            &NumberBytes,
                            &CopyChunk[i].Overlapped);
 
-        if (!Success && (GetLastError() != ERROR_IO_PENDING)) {
+        if (!Success && (GetLastError() != ERROR_IO_PENDING))
+        {
             fprintf(stderr,
                     "ReadFile at %lx failed, error %d\n",
                     ReadPointer.LowPart,
                     GetLastError());
             exit(1);
-        } else {
+        }
+        else
+        {
             ReadPointer.QuadPart += BUFFER_SIZE;
             ++PendingIO;
         }
@@ -424,28 +442,31 @@ CopyLoop(
     // I/O.  When a write completes, the next read is issued. When a
     // read completes, the corresponding write is issued.
     //
-    while (PendingIO) {
+    while (PendingIO)
+    {
         Success = GetQueuedCompletionStatus(IoPort,
                                             &NumberBytes,
                                             &Key,
                                             &CompletedOverlapped,
                                             INFINITE);
-        if (!Success) {
+        if (!Success)
+        {
             //
             // Either the function failed to dequeue a completion packet
             // (CompletedOverlapped is not NULL) or it dequeued a completion
-            // packet of a failed I/O operation (CompletedOverlapped is NULL).  
+            // packet of a failed I/O operation (CompletedOverlapped is NULL).
             //
             fprintf(stderr,
                     "GetQueuedCompletionStatus on the IoPort failed, error %d\n",
                     GetLastError());
             exit(1);
         }
-       
+
 
         Chunk = (PCOPY_CHUNK)CompletedOverlapped;
 
-        if (Key == ReadKey) {
+        if (Key == ReadKey)
+        {
 
             //
             // A read has completed, issue the corresponding write.
@@ -462,7 +483,8 @@ CopyLoop(
                                 &NumberBytes,
                                 &Chunk->Overlapped);
 
-            if (!Success && (GetLastError() != ERROR_IO_PENDING)) {
+            if (!Success && (GetLastError() != ERROR_IO_PENDING))
+            {
                 fprintf(stderr,
                         "WriteFile at %lx failed, error %d\n",
                         Chunk->Overlapped.Offset,
@@ -475,13 +497,16 @@ CopyLoop(
             //
             --PendingIO;
 
-        } else if (Key == WriteKey) {
+        }
+        else if (Key == WriteKey)
+        {
 
             //
             // A write has completed, issue the next read.
             //
 
-            if (ReadPointer.QuadPart < FileSize.QuadPart) {
+            if (ReadPointer.QuadPart < FileSize.QuadPart)
+            {
                 Chunk->Overlapped.Offset = ReadPointer.LowPart;
                 Chunk->Overlapped.OffsetHigh = ReadPointer.HighPart;
                 ReadPointer.QuadPart += BUFFER_SIZE;
@@ -490,14 +515,17 @@ CopyLoop(
                                    NumberBytes,
                                    &NumberBytes,
                                    &Chunk->Overlapped);
-                if (!Success && (GetLastError() != ERROR_IO_PENDING)) {
+                if (!Success && (GetLastError() != ERROR_IO_PENDING))
+                {
                     fprintf(stderr,
                             "ReadFile at %lx failed, error %d\n",
                             Chunk->Overlapped.Offset,
                             GetLastError());
                     exit(1);
                 }
-            } else {
+            }
+            else
+            {
                 //
                 // There are no more reads left to issue, just
                 // wait for the pending writes to drain.
@@ -507,7 +535,7 @@ CopyLoop(
         }
     }
     //
-    // All done. There is no need to call VirtualFree() to free CopyChunk 
+    // All done. There is no need to call VirtualFree() to free CopyChunk
     // buffers here. The buffers will be freed when this process exits.
     //
 }

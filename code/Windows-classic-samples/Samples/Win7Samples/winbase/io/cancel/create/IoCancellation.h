@@ -1,6 +1,6 @@
-//======================================================================
+﻿//======================================================================
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-// KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE 
+// KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
 // IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
 // PURPOSE.
 //
@@ -17,19 +17,19 @@
 
     Abstract:
 
-        IO cancellation facility that provides safe coding pattern for 
+        IO cancellation facility that provides safe coding pattern for
         cancellation of synchronous IO operations using CancelSynchronousIo.
-        
-        This facility allows to cancel synchronous IO during an IO 
+
+        This facility allows to cancel synchronous IO during an IO
         cancelable code section that is bounded using
         IoCancellationSectionEnter and IoCancellationSectionLeave
-        
-        In the cancelable section you should call only operations that 
-        are cancellation safe (e.g. CreateFile) and can be canceled a 
+
+        In the cancelable section you should call only operations that
+        are cancellation safe (e.g. CreateFile) and can be canceled a
         using single call to IoCancellationSignal.
-        
-        Using CancelSynchronousIo without proper synchronization can 
-        lead to unpredictable results since CancelSynchronousIo 
+
+        Using CancelSynchronousIo without proper synchronization can
+        lead to unpredictable results since CancelSynchronousIo
         can accidentally cancel the wrong operation.
 
 		See README.TXT and the comments in IoCancellation.c for
@@ -40,7 +40,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-	
+
 //
 // FN_CancelSynchronousIo
 // Prototype from Win32 API - CancelSynchronousIo

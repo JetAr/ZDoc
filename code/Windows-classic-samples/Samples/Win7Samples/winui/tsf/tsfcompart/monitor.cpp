@@ -1,4 +1,4 @@
-/**************************************************************************
+﻿/**************************************************************************
    THIS CODE AND INFORMATION IS PROVIDED 'AS IS' WITHOUT WARRANTY OF
    ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
    THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -11,7 +11,7 @@
 
    File:          Monitor.cpp
 
-   Description:   
+   Description:
 
 **************************************************************************/
 
@@ -58,8 +58,8 @@ CCompartmentMonitor::~CCompartmentMonitor()
 **************************************************************************/
 
 HRESULT CCompartmentMonitor::Initialize(    const GUID *pguidCompartment,
-                                            PCOMPARTMENTMONITORPROC pCallback, 
-                                            LPARAM lParam)
+        PCOMPARTMENTMONITORPROC pCallback,
+        LPARAM lParam)
 {
     if(!IsEqualGUID(m_guidCompartment, GUID_NULL))
     {
@@ -70,17 +70,17 @@ HRESULT CCompartmentMonitor::Initialize(    const GUID *pguidCompartment,
     m_guidCompartment = *pguidCompartment;
     m_pCallback = pCallback;
     m_lParam = lParam;
-    
+
     HRESULT         hr;
     ITfThreadMgr    *pThreadMgr;
-    
+
     //create a thread manager object
-    hr = CoCreateInstance(CLSID_TF_ThreadMgr, 
-        NULL, 
-        CLSCTX_INPROC_SERVER, 
-        IID_ITfThreadMgr, 
-        (void**)&pThreadMgr);
-    
+    hr = CoCreateInstance(CLSID_TF_ThreadMgr,
+                          NULL,
+                          CLSCTX_INPROC_SERVER,
+                          IID_ITfThreadMgr,
+                          (void**)&pThreadMgr);
+
     if(SUCCEEDED(hr))
     {
         ITfCompartmentMgr   *pCompMgr;
@@ -89,23 +89,23 @@ HRESULT CCompartmentMonitor::Initialize(    const GUID *pguidCompartment,
         hr = pThreadMgr->GetGlobalCompartment(&pCompMgr);
         if(SUCCEEDED(hr))
         {
-            //get the Speech UI compartment 
-            hr = pCompMgr->GetCompartment(m_guidCompartment, 
-                &m_pCompartment);
+            //get the Speech UI compartment
+            hr = pCompMgr->GetCompartment(m_guidCompartment,
+                                          &m_pCompartment);
             if(SUCCEEDED(hr))
             {
                 ITfSource   *pSource;
-                
+
                 //install the advise sink
-                hr = m_pCompartment->QueryInterface(IID_ITfSource, 
-                    (LPVOID*)&pSource);
+                hr = m_pCompartment->QueryInterface(IID_ITfSource,
+                                                    (LPVOID*)&pSource);
                 if(SUCCEEDED(hr))
                 {
-                    hr = pSource->AdviseSink(IID_ITfCompartmentEventSink, 
-                        (ITfCompartmentEventSink*)this,
-                        &m_dwCookie);
+                    hr = pSource->AdviseSink(IID_ITfCompartmentEventSink,
+                                             (ITfCompartmentEventSink*)this,
+                                             &m_dwCookie);
                 }
-                
+
                 //if something went wrong, release the member interface
                 if(FAILED(hr))
                 {
@@ -113,11 +113,11 @@ HRESULT CCompartmentMonitor::Initialize(    const GUID *pguidCompartment,
                     m_pCompartment = NULL;
                 }
             }
-            
+
             //release the compartment manager
             pCompMgr->Release();
         }
-        
+
         //release the thread manager
         pThreadMgr->Release();
     }
@@ -147,13 +147,13 @@ HRESULT CCompartmentMonitor::Uninitialize(void)
 
             pSource->Release();
         }
-    
+
         m_pCompartment->Release();
         m_pCompartment = NULL;
     }
 
     m_guidCompartment = GUID_NULL;
-    
+
     return hr;
 }
 
@@ -172,7 +172,7 @@ STDAPI CCompartmentMonitor::QueryInterface(REFIID riid, void **ppvObj)
     *ppvObj = NULL;
 
     if (IsEqualIID(riid, IID_IUnknown) ||
-        IsEqualIID(riid, IID_ITfCompartmentEventSink))
+            IsEqualIID(riid, IID_ITfCompartmentEventSink))
     {
         *ppvObj = (ITfCompartmentEventSink*)this;
     }
@@ -283,7 +283,7 @@ HRESULT CCompartmentMonitor::GetStatus(BOOL *pfEnabled)
         //this usually means the text service is not installed
         return E_UNEXPECTED;
     }
-    
-    
+
+
     return S_OK;
 }

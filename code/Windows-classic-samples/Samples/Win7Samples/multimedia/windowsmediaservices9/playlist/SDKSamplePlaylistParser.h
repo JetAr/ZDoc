@@ -1,4 +1,4 @@
-//*****************************************************************************
+﻿//*****************************************************************************
 //
 // Microsoft Windows Media
 // Copyright (C) Microsoft Corporation. All rights reserved.
@@ -27,9 +27,9 @@ class ATL_NO_VTABLE CSDKSamplePlaylistParser :
 {
 public:
 
-BEGIN_COM_MAP(CSDKSamplePlaylistParser)
+    BEGIN_COM_MAP(CSDKSamplePlaylistParser)
     COM_INTERFACE_ENTRY(IWMSPlaylistParser)
-END_COM_MAP()
+    END_COM_MAP()
 
     // CSDKSamplePlaylistParser
     CSDKSamplePlaylistParser();
@@ -42,28 +42,28 @@ END_COM_MAP()
         IWMSNamedValues *pNamedValues,
         DWORD dwFlags,
         IWMSClassObject *pClassFactory
-        );
+    );
     HRESULT Shutdown();
 
     // IWMSPlaylistParser
-    virtual HRESULT STDMETHODCALLTYPE ReadPlaylist( 
-            INSSBuffer __RPC_FAR *pBuffer,
-            IXMLDOMDocument __RPC_FAR *pPlayList,
-            IWMSPlaylistParserCallback __RPC_FAR *pCallback,
-            QWORD qwContext
-            );
-    virtual HRESULT STDMETHODCALLTYPE WritePlaylist( 
-            IXMLDOMDocument __RPC_FAR *pPlayList,
-            IWMSPlaylistParserCallback __RPC_FAR *pCallback,
-            QWORD qwContext
-            );
-    virtual HRESULT STDMETHODCALLTYPE ReadPlaylistFromDirectory( 
-            IWMSDirectory __RPC_FAR *pDirectory,
-            LPWSTR pszwFilePattern,
-            IXMLDOMDocument __RPC_FAR *pPlaylist,
-            IWMSPlaylistParserCallback __RPC_FAR *pCallback,
-            QWORD qwContext
-            );
+    virtual HRESULT STDMETHODCALLTYPE ReadPlaylist(
+        INSSBuffer __RPC_FAR *pBuffer,
+        IXMLDOMDocument __RPC_FAR *pPlayList,
+        IWMSPlaylistParserCallback __RPC_FAR *pCallback,
+        QWORD qwContext
+    );
+    virtual HRESULT STDMETHODCALLTYPE WritePlaylist(
+        IXMLDOMDocument __RPC_FAR *pPlayList,
+        IWMSPlaylistParserCallback __RPC_FAR *pCallback,
+        QWORD qwContext
+    );
+    virtual HRESULT STDMETHODCALLTYPE ReadPlaylistFromDirectory(
+        IWMSDirectory __RPC_FAR *pDirectory,
+        LPWSTR pszwFilePattern,
+        IXMLDOMDocument __RPC_FAR *pPlaylist,
+        IWMSPlaylistParserCallback __RPC_FAR *pCallback,
+        QWORD qwContext
+    );
 
 protected:
 
@@ -83,7 +83,7 @@ typedef CComObject< CSDKSamplePlaylistParser > CComSDKSamplePlaylistParser;
 
 /////////////////////////////////////////////////////////////////////////////
 // CSDKSamplePlaylistParserPlugin
-class ATL_NO_VTABLE CSDKSamplePlaylistParserPlugin : 
+class ATL_NO_VTABLE CSDKSamplePlaylistParserPlugin :
     public CComObjectRootEx<CComMultiThreadModel>,
     public CComCoClass<CSDKSamplePlaylistParserPlugin, &CLSID_SDKSamplePlaylistParser>,
     public IWMSBasicPlugin,
@@ -94,24 +94,24 @@ public:
     ~CSDKSamplePlaylistParserPlugin();
 
 
-DECLARE_REGISTRY_RESOURCEID(IDR_SDKSAMPLEPLAYLISTPARSER)
-DECLARE_PROTECT_FINAL_CONSTRUCT()
+    DECLARE_REGISTRY_RESOURCEID(IDR_SDKSAMPLEPLAYLISTPARSER)
+    DECLARE_PROTECT_FINAL_CONSTRUCT()
 
-BEGIN_COM_MAP(CSDKSamplePlaylistParserPlugin)
+    BEGIN_COM_MAP(CSDKSamplePlaylistParserPlugin)
     COM_INTERFACE_ENTRY(IWMSBasicPlugin)
     COM_INTERFACE_ENTRY(IWMSPlaylistParserPlugin)
-END_COM_MAP()
+    END_COM_MAP()
 
 public:
     // IWMSBasicPlugin
-    virtual HRESULT STDMETHODCALLTYPE InitializePlugin( 
-                    IWMSContext *pServerContext,
-                    IWMSNamedValues *pNamedValues,
-                    IWMSClassObject *pClassFactory
-                    );
-    virtual HRESULT STDMETHODCALLTYPE GetCustomAdminInterface( 
-                    IDispatch **ppValue
-                    );
+    virtual HRESULT STDMETHODCALLTYPE InitializePlugin(
+        IWMSContext *pServerContext,
+        IWMSNamedValues *pNamedValues,
+        IWMSClassObject *pClassFactory
+    );
+    virtual HRESULT STDMETHODCALLTYPE GetCustomAdminInterface(
+        IDispatch **ppValue
+    );
     virtual HRESULT STDMETHODCALLTYPE OnHeartbeat();
 
     STDMETHOD( ShutdownPlugin )();
@@ -120,20 +120,20 @@ public:
 
     // IWMSPlaylistParserPlugin
     virtual HRESULT STDMETHODCALLTYPE CreatePlaylistParser(
-                    IWMSCommandContext *pCommandContext,
-                    IWMSContext *pUser,
-                    IWMSContext *pPresentation,
-                    DWORD dwFlags,
-                    IWMSClassObject *pFactory,
-                    IWMSBufferAllocator *pBufferAllocator,
-                    IWMSPlaylistParserPluginCallback *pCallback,
-                    QWORD qwContext
-                    );
+        IWMSCommandContext *pCommandContext,
+        IWMSContext *pUser,
+        IWMSContext *pPresentation,
+        DWORD dwFlags,
+        IWMSClassObject *pFactory,
+        IWMSBufferAllocator *pBufferAllocator,
+        IWMSPlaylistParserPluginCallback *pCallback,
+        QWORD qwContext
+    );
 
 protected:
 
     CComPtr<IWMSNamedValues>      m_spNamedValues;
-    CComPtr<IWMSContext>          m_spServerContext; 
+    CComPtr<IWMSContext>          m_spServerContext;
     CComPtr<IWMSClassObject>      m_spClassFactory;
 };
 

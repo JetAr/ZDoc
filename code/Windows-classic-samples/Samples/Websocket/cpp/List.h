@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 // List entry that contain a buffer that is transmitted between peers.
 class ListEntry

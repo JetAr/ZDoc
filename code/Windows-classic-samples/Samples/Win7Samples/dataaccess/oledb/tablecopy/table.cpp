@@ -1,4 +1,4 @@
-//-----------------------------------------------------------------------------
+﻿//-----------------------------------------------------------------------------
 // Microsoft OLE DB TABLECOPY Sample
 // Copyright (C) 1995-2000 Microsoft Corporation
 //
@@ -40,8 +40,8 @@ CTable::CTable(CWizard* pCWizard)
 {
     ASSERT(pCWizard);
 
-    m_wszIDQuote[0]			= EOL;		
-    m_wszIDSeperator[0]		= EOL;		
+    m_wszIDQuote[0]			= EOL;
+    m_wszIDSeperator[0]		= EOL;
 
     //TableInfo
     memset(&m_TableInfo, 0, sizeof(TABLEINFO));
@@ -53,7 +53,7 @@ CTable::CTable(CWizard* pCWizard)
 
     //ColumnInfo
     m_cColumns		= 0;		// Count of columns
-    m_rgColDesc		= NULL;		// Column information	
+    m_rgColDesc		= NULL;		// Column information
 
     //DataSource
     m_pCDataSource  = new CDataSource;
@@ -72,7 +72,7 @@ CTable::CTable(CWizard* pCWizard)
 CTable::~CTable()
 {
     delete m_pCDataSource;
-    
+
     SAFE_FREE(m_rgIndexInfo);
     SAFE_FREE(m_rgColDesc);
 
@@ -89,7 +89,7 @@ CTable::~CTable()
 BOOL CTable::Connect(HWND hWnd, CDataSource* pCDataSource)
 {
     ASSERT(m_pCDataSource);
-    
+
     HRESULT hr = m_pCDataSource->Connect(hWnd, m_pCDataSource);
     if (SUCCEEDED(hr) && (REGDB_E_CLASSNOTREG != hr))
     {
@@ -123,10 +123,10 @@ HRESULT CTable::GetLiteralInfo()
     ASSERT(m_pCDataSource->m_pIDBInitialize);
 
     HRESULT hr;
-    
+
     const static ULONG cLiterals = 2;
     const static DBLITERAL rgLiterals[cLiterals] = {DBLITERAL_QUOTE, DBLITERAL_CATALOG_SEPARATOR};
-    
+
     IDBInfo* pIDBInfo = NULL;
 
     ULONG	cLiteralInfo = 0;
@@ -136,21 +136,21 @@ HRESULT CTable::GetLiteralInfo()
     //Reset Info
     m_wszIDQuote[0] = EOL;
     m_wszIDSeperator[0] = EOL;
-    
+
     //Obtain IDBInfo interface
     //Some providers may not support IDBInfo so don't display dialog
     QTESTC(hr = m_pCDataSource->m_pIDBInitialize->QueryInterface(IID_IDBInfo, (void **)&pIDBInfo));
-        
+
     //GetLiteralInfo
     //Can return an error for unsupported literals
     hr = pIDBInfo->GetLiteralInfo(cLiterals, rgLiterals, &cLiteralInfo, &rgLiteralInfo, &pwszCharBuffer);
-                
+
     //DBLITERAL_QUOTE
-    if(rgLiteralInfo && rgLiteralInfo[0].fSupported) 
+    if(rgLiteralInfo && rgLiteralInfo[0].fSupported)
         StringCchCopyW(m_wszIDQuote, sizeof(m_wszIDQuote)/sizeof(WCHAR), rgLiteralInfo[0].pwszLiteralValue);
 
     //DBLITERAL_CATALOG_SEPARATOR
-    if(rgLiteralInfo && rgLiteralInfo[1].fSupported) 
+    if(rgLiteralInfo && rgLiteralInfo[1].fSupported)
         StringCchCopyW(m_wszIDSeperator, sizeof(m_wszIDSeperator)/sizeof(WCHAR), rgLiteralInfo[1].pwszLiteralValue);
 
 
@@ -219,7 +219,7 @@ BOOL CTable::GetQuotedID(WCHAR* pwszOutBuff, size_t cwchOutBuff, WCHAR* pwszInBu
         pwszInBuff++;
         *pwszItr = EOL;
     }
-    
+
     //Put on the Tail delimeter
     StringCchCopyExW(pwszItr, cwchItr, m_wszIDQuote, &pwszItr, &cwchItr, 0);
 
@@ -275,7 +275,7 @@ HRESULT CTable::GetTypeNameAndParams(ULONG iCol, WCHAR* pwszName, size_t cwchNam
         // If required, add the precision and scale information
         StringCchCatW(pwszName, cwchName, wszBuffer);
     }
-        
+
     return S_OK;
 }
 
@@ -306,7 +306,7 @@ HRESULT CTable::GetColInfo(DWORD dwInsertOpt)
     SAFE_FREE(m_rgColDesc);
     SAFE_ALLOC(m_rgColDesc, COLDESC, cColumns);
     memset(m_rgColDesc, 0, cColumns*sizeof(COLDESC));
-            
+
     //Loop through the ColInfo and Copy to our ColDesc
     m_cColumns = 0;
     for(i=0; i<cColumns; i++)
@@ -319,16 +319,16 @@ HRESULT CTable::GetColInfo(DWORD dwInsertOpt)
         if(rgColInfo[i].pwszName==NULL)
         {
             //Although ColInfo is allowed to return NULL for unknown column names
-            //TableCopy needs column names for many operations, 
+            //TableCopy needs column names for many operations,
             //(CREATE TABLE, INSERT, INDEXES), so just "generate" one
-            StringCchPrintfW(m_rgColDesc[m_cColumns].wszColName, 
+            StringCchPrintfW(m_rgColDesc[m_cColumns].wszColName,
                              sizeof(m_rgColDesc[m_cColumns].wszColName)/sizeof(WCHAR),
-                             L"Unknown%d", 
+                             L"Unknown%d",
                              i);
         }
         else
         {
-            StringCchCopyW(m_rgColDesc[m_cColumns].wszColName, 
+            StringCchCopyW(m_rgColDesc[m_cColumns].wszColName,
                            sizeof(m_rgColDesc[m_cColumns].wszColName)/sizeof(WCHAR),
                            rgColInfo[i].pwszName);
         }
@@ -343,9 +343,9 @@ HRESULT CTable::GetColInfo(DWORD dwInsertOpt)
         m_cColumns++;
     }
 
-    
-CLEANUP:	
-    SAFE_RELEASE(pIColumnsInfo); 
+
+CLEANUP:
+    SAFE_RELEASE(pIColumnsInfo);
     SAFE_FREE(rgColInfo);
     SAFE_FREE(rgStringBuffer);
     return hr;
@@ -361,7 +361,7 @@ HRESULT CTable::GetTypeInfo()
 {
     ASSERT(m_pCDataSource);
     HRESULT hr;
-    
+
     IRowset*	pIRowset = NULL;
     IAccessor*	pIAccessor = NULL;
     HACCESSOR	hAccessor = DB_NULL_HACCESSOR;
@@ -369,7 +369,7 @@ HRESULT CTable::GetTypeInfo()
     ULONG		i;
     DBCOUNTITEM	cRowsObtained = 0;
     HROW*		rghRows = NULL;
-    
+
     //Current SchemaInfo for each type, until we find the correct match
     TYPEINFO TypeInfo;
     TYPEINFO* rgTypeInfo = NULL;
@@ -388,25 +388,25 @@ HRESULT CTable::GetTypeInfo()
     while(TRUE)
     {
         XTESTC(hr = pIRowset->GetNextRows(NULL,0,MAX_BLOCK_SIZE,&cRowsObtained, &rghRows));
-        
+
         //ENDOFROWSET
         if(cRowsObtained==0)
             break;
-                
+
         //Loop over the BLOCK of rows obtained
-        for(i=0; i<cRowsObtained; i++)	
-        {	
+        for(i=0; i<cRowsObtained; i++)
+        {
             //Reset all the TypeInfo fields
             memset(&TypeInfo, 0, sizeof(TYPEINFO));
-            
+
             //Put the data for one type into the TypeInfo Struct
             XTESTC(hr = pIRowset->GetData(rghRows[i],hAccessor, (void*)&TypeInfo));
 
             //Loop over all the columns and see if they match this type
             for(ULONG iCol=0; iCol<m_cColumns; iCol++)
-            {	
-                ASSERT(m_rgColDesc); 
-                
+            {
+                ASSERT(m_rgColDesc);
+
                 //Only try matching if this is the correct type and
                 //the column doesn't already have a perfect match
                 if(TypeInfo.wType != m_rgColDesc[iCol].wType || (rgMatch[iCol] & MATCH_EXACT))
@@ -415,7 +415,7 @@ HRESULT CTable::GetTypeInfo()
                 //A Nullable type cannot be mapped to a non-Nullable type
                 if(m_rgColDesc[iCol].fIsNullable && !TypeInfo.fIsNullable)
                     continue;
-                    
+
                 //If never matched before, we at least know they match by type
                 if(!rgMatch[iCol])
                 {
@@ -432,12 +432,12 @@ HRESULT CTable::GetTypeInfo()
 
                 // Otherwise try best fit size
                 if(COLINFO_SIZE(m_rgColDesc[iCol]) < TypeInfo.ulColumnSize &&
-                    TypeInfo.ulColumnSize <= rgTypeInfo[iCol].ulColumnSize)
+                        TypeInfo.ulColumnSize <= rgTypeInfo[iCol].ulColumnSize)
                 {
                     rgMatch[iCol] |= MATCH_SIZE;
                     rgTypeInfo[iCol] = TypeInfo;
                 }
-            }	
+            }
         }
 
         //Release this group of rows
@@ -446,13 +446,13 @@ HRESULT CTable::GetTypeInfo()
     }
 
     //Now that we have the TypeInfo matched, fill in our ColDesc struct
-    for(i=0; i<m_cColumns; i++) 
+    for(i=0; i<m_cColumns; i++)
     {
-        ASSERT(m_rgColDesc); 
+        ASSERT(m_rgColDesc);
         if(rgMatch[i])
         {
             //TYPEINFO
-            StringCchCopyW(m_rgColDesc[i].wszTypeName, 
+            StringCchCopyW(m_rgColDesc[i].wszTypeName,
                            sizeof(m_rgColDesc[i].wszTypeName)/sizeof(WCHAR),
                            rgTypeInfo[i].wszTypeName);
             m_rgColDesc[i].ulCreateParams	= GetCreateParams(rgTypeInfo[i].wszCreateParams);
@@ -461,8 +461,8 @@ HRESULT CTable::GetTypeInfo()
         }
         else
         {
-            wMessageBox(NULL, MB_TASKMODAL | MB_ICONEXCLAMATION | MB_OK, wsz_ERROR, 
-                wsz_NO_TYPE_FOUND_, GetDBTypeName(m_rgColDesc[i].wType));
+            wMessageBox(NULL, MB_TASKMODAL | MB_ICONEXCLAMATION | MB_OK, wsz_ERROR,
+                        wsz_NO_TYPE_FOUND_, GetDBTypeName(m_rgColDesc[i].wType));
         }
     }
 
@@ -511,56 +511,56 @@ HRESULT CTable::MapTableInfo(CTable* pCSourceTable)
     m_cColumns	= pCSourceTable->m_cColumns;
     SAFE_FREE(m_rgColDesc);
     SAFE_ALLOC(m_rgColDesc, COLDESC, m_cColumns);
-    memcpy(m_rgColDesc,	pCSourceTable->m_rgColDesc, m_cColumns * sizeof(COLDESC));	
+    memcpy(m_rgColDesc,	pCSourceTable->m_rgColDesc, m_cColumns * sizeof(COLDESC));
 
     //IndexInfo
     m_cIndexes	= pCSourceTable->m_cIndexes;
     SAFE_FREE(m_rgIndexInfo);
     SAFE_ALLOC(m_rgIndexInfo, INDEXINFO, m_cIndexes);
-    memcpy(m_rgIndexInfo, pCSourceTable->m_rgIndexInfo, m_cIndexes * sizeof(INDEXINFO));	
+    memcpy(m_rgIndexInfo, pCSourceTable->m_rgIndexInfo, m_cIndexes * sizeof(INDEXINFO));
 
     //Arrays to store best TypeInfo
     SAFE_ALLOC(rgTypeInfo, TYPEINFO, m_cColumns);
     SAFE_ALLOC(rgMatch, ULONG, m_cColumns);
     memset(rgMatch, NO_MATCH, m_cColumns*sizeof(ULONG));
-    
+
     //Get ProviderTypes rowset IDBSchemaRowset
     QTESTC(hr = GetTypeInfoRowset(&pIAccessor, &hAccessor, &pIRowset));
-    
+
     //Loop until all types are matched.
     //We may not find a match, which promotes the type to the next higher
     //type, which will require another cycle to match that type...
-    while(!fMatchedAll) 
+    while(!fMatchedAll)
     {
         //Get data for each row in rowset
         XTESTC(hr = pIRowset->RestartPosition(NULL));
-                                
+
         //Loops over the entire SchemaRowset
         while(TRUE)
         {
             XTESTC(hr = pIRowset->GetNextRows(NULL, 0, MAX_BLOCK_SIZE, &cRowsObtained, &rghRows));
-            
+
             //ENDOFROWSET
             if(cRowsObtained == 0)
                 break;
-        
+
             //Loop over the BLOCK of rows obtained
-            for(ULONG i=0; i<cRowsObtained; i++)	
-            {	
-                ASSERT(m_rgColDesc); 
-        
+            for(ULONG i=0; i<cRowsObtained; i++)
+            {
+                ASSERT(m_rgColDesc);
+
                 //Reset all the TypeInfo fields
                 memset(&TypeInfo, 0, sizeof(TYPEINFO));
 
                 //Put the data for one type into the TypeInfo Struct
                 XTESTC(hr = pIRowset->GetData(rghRows[i], hAccessor, (void *)&TypeInfo));
 
-                //Loop over the columns and get TypeInfo	
+                //Loop over the columns and get TypeInfo
                 for(ULONG iCol=0; iCol<m_cColumns; iCol++)
                 {
                     //Only try matching if this is the correct type and
                     //the column doesn't already have a perfect match
-                    if(TypeInfo.wType != m_rgColDesc[iCol].wType || (rgMatch[iCol] & MATCH_EXACT)) 
+                    if(TypeInfo.wType != m_rgColDesc[iCol].wType || (rgMatch[iCol] & MATCH_EXACT))
                         continue;
 
                     //An NonAutoInc Column cannot be placed into an AutoInc type
@@ -570,7 +570,7 @@ HRESULT CTable::MapTableInfo(CTable* pCSourceTable)
                     //A Nullable type cannot be mapped to a non-Nullable type
                     if(m_rgColDesc[iCol].fIsNullable && !TypeInfo.fIsNullable)
                         continue;
-                    
+
                     //If never matched before, we at least know they match by type
                     if(!rgMatch[iCol])
                     {
@@ -584,13 +584,13 @@ HRESULT CTable::MapTableInfo(CTable* pCSourceTable)
                         rgMatch[iCol] |= MATCH_EXACT;
                         rgTypeInfo[iCol] = TypeInfo;
                     }
-                    
+
                     // Otherwise try best fit size
                     if(COLINFO_SIZE(m_rgColDesc[iCol]) < TypeInfo.ulColumnSize &&
-                        TypeInfo.ulColumnSize <= rgTypeInfo[iCol].ulColumnSize)
+                            TypeInfo.ulColumnSize <= rgTypeInfo[iCol].ulColumnSize)
                     {
-                            rgMatch[iCol] |= MATCH_SIZE;
-                            rgTypeInfo[iCol] = TypeInfo;
+                        rgMatch[iCol] |= MATCH_SIZE;
+                        rgTypeInfo[iCol] = TypeInfo;
                     }
                 }
             }
@@ -599,12 +599,12 @@ HRESULT CTable::MapTableInfo(CTable* pCSourceTable)
             XTESTC(hr = pIRowset->ReleaseRows(cRowsObtained, rghRows, NULL, NULL, NULL));
             SAFE_FREE(rghRows);
         }
-            
+
         // See if every type has a match
         fMatchedAll = TRUE;
-        for(ULONG i=0; i<m_cColumns; i++) 
+        for(ULONG i=0; i<m_cColumns; i++)
         {
-            ASSERT(m_rgColDesc); 
+            ASSERT(m_rgColDesc);
 
             // If not we will have to promote a type and try again
             if(rgMatch[i])
@@ -626,11 +626,11 @@ HRESULT CTable::MapTableInfo(CTable* pCSourceTable)
                 fMatchedAll = FALSE;
 
                 //Try to promote it to the next largest type
-                if(!GetPromotedType(&m_rgColDesc[i].wType)) 
+                if(!GetPromotedType(&m_rgColDesc[i].wType))
                 {
                     //If unable to promote, we are out of luck
-                    wMessageBox(NULL, MB_TASKMODAL | MB_ICONEXCLAMATION | MB_OK, wsz_ERROR, 
-                        wsz_NO_TYPE_MATCH_, GetDBTypeName(m_rgColDesc[i].wType));
+                    wMessageBox(NULL, MB_TASKMODAL | MB_ICONEXCLAMATION | MB_OK, wsz_ERROR,
+                                wsz_NO_TYPE_MATCH_, GetDBTypeName(m_rgColDesc[i].wType));
                     goto CLEANUP;
                 }
             }
@@ -641,13 +641,13 @@ HRESULT CTable::MapTableInfo(CTable* pCSourceTable)
 CLEANUP:
     if(hAccessor && pIAccessor)
         XTEST(pIAccessor->ReleaseAccessor(hAccessor, NULL));
-    
+
     SAFE_RELEASE(pIAccessor);
     SAFE_RELEASE(pIRowset);
 
     SAFE_FREE(rgMatch);
     SAFE_FREE(rgTypeInfo);
-    
+
     SAFE_FREE(rghRows);
     return hr;
 }
@@ -681,7 +681,7 @@ HRESULT CTable::CreateTable()
     if(m_pCDataSource->m_pITableDefinition)
     {
         DBID			TableID;
-        
+
         //Get DBCOLUMNDESC info
         QTESTC(hr = GetColumnDesc(&rgColumnDesc));
 
@@ -692,13 +692,13 @@ HRESULT CTable::CreateTable()
 
         //ITableDefinition::CreateTable
         hr = m_pCDataSource->m_pITableDefinition->CreateTable(NULL, &TableID, m_cColumns, rgColumnDesc, IID_NULL, NULL, NULL, NULL, NULL);
-        
+
         //If table already exists, offer to drop it
         if(hr == DB_E_DUPLICATETABLEID)
         {
             //If the user doesn't wants to drop it, exit
-            if(IDNO == wMessageBox(NULL, MB_TASKMODAL | MB_ICONQUESTION | MB_YESNO, wsz_ERROR, 
-                wsz_ASK_DROP_TABLE_, m_pCDataSource->m_pwszTableTerm, m_wszQualTableName)) 
+            if(IDNO == wMessageBox(NULL, MB_TASKMODAL | MB_ICONQUESTION | MB_YESNO, wsz_ERROR,
+                                   wsz_ASK_DROP_TABLE_, m_pCDataSource->m_pwszTableTerm, m_wszQualTableName))
                 goto CLEANUP;
 
             //Otherwise drop that table and continue
@@ -732,34 +732,34 @@ HRESULT CTable::CreateTable()
 
         // If this didn't work, then we need to display messages, and if the
         // error was a duplicate table, offer to drop.
-        if(FAILED(hr)) 
+        if(FAILED(hr))
         {
             //Get the Error Records, need to save them, since every call
             //cleans the previous error objects
             QTESTC(GetErrorRecords(&cRecords, &pIErrorRecords));
 
             //If Error was due to an existing table, just ask to drop it
-            if(GetSqlErrorInfo(0, pIErrorRecords, &bstrSqlState)==S_OK && 
-                bstrSqlState && wcscmp(bstrSqlState, L"S0001")==0) 
+            if(GetSqlErrorInfo(0, pIErrorRecords, &bstrSqlState)==S_OK &&
+                    bstrSqlState && wcscmp(bstrSqlState, L"S0001")==0)
             {
                 WCHAR 	wszBuffer[MAX_QUERY_LEN];
 
                 //If the user doesn't wants to drop it, exit
-                if(IDNO == wMessageBox(NULL, MB_TASKMODAL | MB_ICONQUESTION | MB_YESNO, wsz_ERROR, 
-                                    wsz_ASK_DROP_TABLE_, m_pCDataSource->m_pwszTableTerm, m_wszQualTableName)) 
+                if(IDNO == wMessageBox(NULL, MB_TASKMODAL | MB_ICONQUESTION | MB_YESNO, wsz_ERROR,
+                                       wsz_ASK_DROP_TABLE_, m_pCDataSource->m_pwszTableTerm, m_wszQualTableName))
                     goto CLEANUP;
-                
+
                 //Otherwise drop that table and continue
                 CreateSQLStmt(ESQL_DROP_TABLE, wszBuffer, sizeof(wszBuffer)/sizeof(WCHAR));
-                    
+
                 //Drop the existing Table
                 XTESTC(hr = pICommandText->SetCommandText(DBGUID_DBSQL, wszBuffer));
                 XTESTC(hr = pICommandText->Execute(NULL, IID_NULL, NULL, NULL, NULL));
-                    
+
                 //Now reset the CreateTable text to the SqlStmt and Execute
                 XTESTC(hr = pICommandText->SetCommandText(DBGUID_DBSQL, wszSqlStmt));
                 XTESTC(hr = pICommandText->Execute(NULL, IID_NULL, NULL, NULL, NULL));
-            }	
+            }
             else
             {
                 //Otherwsie unknown error, just display it to the user
@@ -767,7 +767,7 @@ HRESULT CTable::CreateTable()
             }
         }
     }
-    
+
 CLEANUP:
     SAFE_SYSFREE(bstrSqlState);
     SAFE_RELEASE(pIErrorRecords);
@@ -793,7 +793,7 @@ HRESULT CTable::CopyIndexes(CTable* pCTable)
 {
     ASSERT(pCTable);
     HRESULT hr;
-    
+
     WCHAR			wszBuffer[MAX_NAME_LEN];
     WCHAR			wszSqlStmt[MAX_QUERY_LEN];
     ULONG i;
@@ -801,7 +801,7 @@ HRESULT CTable::CopyIndexes(CTable* pCTable)
     // Don't waste time if there aren't any indexes.
     if (m_cIndexes == 0)
         return (S_OK);
-    
+
     //Copy Index Info from Source table
     m_cIndexes	= pCTable->m_cIndexes;
     ULONG cIndexColumnDescs = 0;
@@ -831,45 +831,45 @@ HRESULT CTable::CopyIndexes(CTable* pCTable)
         TableID.uName.pwszName = wszSqlStmt;
 
         // Loop around each index that is valid.  See if any are to be created
-        for(i=0; i<m_cIndexes; i++) 
+        for(i=0; i<m_cIndexes; i++)
         {
             //If this index has already been created, skip
             //might have been used in another index creation
             if(rgIndexUsed[i])
                 continue;
-            
+
             //If this index is used as a primary key, skip
             //PrimaryKeys are taken care of differently
             if(m_rgIndexInfo[i].fIsPrimaryKey)
                 continue;
-            
+
             //Create IndexID
             DBID IndexID;
             IndexID.eKind = DBKIND_NAME;
             GetQuotedID(wszBuffer, sizeof(wszBuffer)/sizeof(WCHAR), m_rgIndexInfo[i].wszIndexName);
             IndexID.uName.pwszName = wszBuffer;
-        
+
             // Now loop through all columns that belong to this index
             cIndexColumnDescs = 0;
-            for(ULONG iCol=i; iCol<m_cIndexes; iCol++) 
+            for(ULONG iCol=i; iCol<m_cIndexes; iCol++)
             {
                 //If not the same index skip
                 if(wcscmp(m_rgIndexInfo[i].wszIndexName, m_rgIndexInfo[iCol].wszIndexName)!=0)
                     continue;
-                    
+
                 //mark this Index as used
                 rgIndexUsed[iCol] = TRUE;
-            
+
                 //DBINDEXCOLUMNDESC info
                 rgIndexColumnDescs[cIndexColumnDescs].pColumnID = &rgDBIDs[cIndexColumnDescs];
                 rgIndexColumnDescs[cIndexColumnDescs].pColumnID->eKind = DBKIND_NAME;
                 rgIndexColumnDescs[cIndexColumnDescs].pColumnID->uName.pwszName = m_rgIndexInfo[iCol].wszColName;
-                
+
                 //Indicate column order
                 rgIndexColumnDescs[cIndexColumnDescs].eIndexColOrder = (m_rgIndexInfo[iCol].dwCollation == DB_COLLATION_DESC) ? DBINDEX_COL_ORDER_DESC : DBINDEX_COL_ORDER_ASC;
                 cIndexColumnDescs++;
             }
-            
+
             //Now Setup Index Properties
             ULONG cPropSets = 0;
             DBPROPSET* rgPropSets = NULL;
@@ -877,7 +877,7 @@ HRESULT CTable::CopyIndexes(CTable* pCTable)
             //DBPROP_INDEX_AUTOUPDATE
             if(IsSettableProperty(m_pCDataSource->m_pIDBInitialize, DBPROP_INDEX_AUTOUPDATE, DBPROPSET_INDEX))
                 SetProperty(DBPROP_INDEX_AUTOUPDATE, DBPROPSET_INDEX, &cPropSets, &rgPropSets, DBTYPE_BOOL, m_rgIndexInfo[i].fAutoUpdate);
-            
+
             //DBPROP_INDEX_CLUSTERED
             if(IsSettableProperty(m_pCDataSource->m_pIDBInitialize, DBPROP_INDEX_CLUSTERED, DBPROPSET_INDEX))
                 SetProperty(DBPROP_INDEX_CLUSTERED, DBPROPSET_INDEX, &cPropSets, &rgPropSets, DBTYPE_BOOL, m_rgIndexInfo[i].fClustered);
@@ -889,7 +889,7 @@ HRESULT CTable::CopyIndexes(CTable* pCTable)
             //DBPROP_INDEX_INITIALSIZE
             if(IsSettableProperty(m_pCDataSource->m_pIDBInitialize, DBPROP_INDEX_INITIALSIZE, DBPROPSET_INDEX))
                 SetProperty(DBPROP_INDEX_INITIALSIZE, DBPROPSET_INDEX, &cPropSets, &rgPropSets, DBTYPE_I4, m_rgIndexInfo[i].dwInitialSize);
-            
+
             //DBPROP_INDEX_NULLCOLLATION
             if(IsSettableProperty(m_pCDataSource->m_pIDBInitialize, DBPROP_INDEX_NULLCOLLATION, DBPROPSET_INDEX))
                 SetProperty(DBPROP_INDEX_NULLCOLLATION, DBPROPSET_INDEX, &cPropSets, &rgPropSets, DBTYPE_I4, m_rgIndexInfo[i].dwNullCollation);
@@ -897,7 +897,7 @@ HRESULT CTable::CopyIndexes(CTable* pCTable)
             //DBPROP_INDEX_NULLS
             if(IsSettableProperty(m_pCDataSource->m_pIDBInitialize, DBPROP_INDEX_NULLS, DBPROPSET_INDEX))
                 SetProperty(DBPROP_INDEX_NULLS, DBPROPSET_INDEX, &cPropSets, &rgPropSets, DBTYPE_I4, m_rgIndexInfo[i].dwNulls);
-            
+
             //DBPROP_INDEX_PRIMARYKEY
             if(IsSettableProperty(m_pCDataSource->m_pIDBInitialize, DBPROP_INDEX_PRIMARYKEY, DBPROPSET_INDEX))
                 SetProperty(DBPROP_INDEX_PRIMARYKEY, DBPROPSET_INDEX, &cPropSets, &rgPropSets, DBTYPE_BOOL, m_rgIndexInfo[i].fIsPrimaryKey);
@@ -905,7 +905,7 @@ HRESULT CTable::CopyIndexes(CTable* pCTable)
             //DBPROP_INDEX_SORTBOOKMARKS
             if(IsSettableProperty(m_pCDataSource->m_pIDBInitialize, DBPROP_INDEX_SORTBOOKMARKS, DBPROPSET_INDEX))
                 SetProperty(DBPROP_INDEX_SORTBOOKMARKS, DBPROPSET_INDEX, &cPropSets, &rgPropSets, DBTYPE_BOOL, m_rgIndexInfo[i].fSortBookmarks);
-            
+
             //DBPROP_INDEX_TEMPINDEX
 //			if(IsSettableProperty(m_pCDataSource->m_pIDBInitialize, DBPROP_INDEX_TEMPINDEX, DBPROPSET_INDEX))
 //				SetProperty(DBPROP_INDEX_TEMPINDEX, DBPROPSET_INDEX, &cPropSets, &rgPropSets, DBTYPE_BOOL, m_rgIndexInfo[i].fTempIndex);
@@ -917,23 +917,23 @@ HRESULT CTable::CopyIndexes(CTable* pCTable)
             //DBPROP_INDEX_UNIQUE
             if(IsSettableProperty(m_pCDataSource->m_pIDBInitialize, DBPROP_INDEX_UNIQUE, DBPROPSET_INDEX))
                 SetProperty(DBPROP_INDEX_UNIQUE, DBPROPSET_INDEX, &cPropSets, &rgPropSets, DBTYPE_BOOL, m_rgIndexInfo[i].fUnique);
-            
+
             //IIndexDefinition::CreateIndex
             //Don't exit yet, the user might want to continue even though this index failed
             XTEST(hr = m_pCDataSource->m_pIIndexDefinition->CreateIndex(&TableID, &IndexID, cIndexColumnDescs, rgIndexColumnDescs, cPropSets, rgPropSets, NULL));
 
             //Free Properties
             FreeProperties(cPropSets, rgPropSets);
-            
+
             //If INDEX Failed
             if(FAILED(hr))
             {
                 //Index Failed, Do you want to Continue?
-                if(IDNO == wMessageBox(NULL, MB_TASKMODAL | MB_ICONINFORMATION | MB_YESNO, wsz_ERROR, 
-                        wsz_INDEX_FAILED_, m_rgIndexInfo[i].wszIndexName))
-                    goto CLEANUP;	
+                if(IDNO == wMessageBox(NULL, MB_TASKMODAL | MB_ICONINFORMATION | MB_YESNO, wsz_ERROR,
+                                       wsz_INDEX_FAILED_, m_rgIndexInfo[i].wszIndexName))
+                    goto CLEANUP;
             }
-            
+
             //Since the User didn't exit, continue as normal
             hr = S_OK;
         }
@@ -943,66 +943,66 @@ HRESULT CTable::CopyIndexes(CTable* pCTable)
     {
 
         // Loop around each index that is valid.  See if any are to be created
-        for(i=0; i<m_cIndexes; i++) 
+        for(i=0; i<m_cIndexes; i++)
         {
             //If this index has already been created, skip
             //might have been used in another index creation
             if(rgIndexUsed[i])
                 continue;
-            
+
             //If this index is used as a primary key, skip
             //PrimaryKeys are taken care of differently
             if(m_rgIndexInfo[i].fIsPrimaryKey)
                 continue;
-            
+
             //"CREATE <UNIQUE> INDEX "
             QTESTC(hr = StringCchPrintfW(wszSqlStmt, sizeof(wszSqlStmt)/sizeof(WCHAR), wsz_CREATE_INDEX_, (m_rgIndexInfo[i].fUnique == VARIANT_TRUE) ? wsz_UNIQUE_INDEX : wsz_SPACE));
-                
+
             //Add IndexName to the list (quoted)
             GetQuotedID(wszBuffer, sizeof(wszBuffer)/sizeof(WCHAR), m_rgIndexInfo[i].wszIndexName);
-            QTESTC(hr = StringCchCatW(wszSqlStmt, sizeof(wszSqlStmt)/sizeof(WCHAR), wszBuffer)); 
+            QTESTC(hr = StringCchCatW(wszSqlStmt, sizeof(wszSqlStmt)/sizeof(WCHAR), wszBuffer));
 
             //Add TableName
             QTESTC(hr = StringCchCatW(wszSqlStmt, sizeof(wszSqlStmt)/sizeof(WCHAR), L" ON "));
             GetQuotedID(wszBuffer, sizeof(wszBuffer)/sizeof(WCHAR), m_wszQualTableName);
-            QTESTC(hr = StringCchCatW(wszSqlStmt, sizeof(wszSqlStmt)/sizeof(WCHAR), wszBuffer)); 
+            QTESTC(hr = StringCchCatW(wszSqlStmt, sizeof(wszSqlStmt)/sizeof(WCHAR), wszBuffer));
             QTESTC(hr = StringCchCatW(wszSqlStmt, sizeof(wszSqlStmt)/sizeof(WCHAR), wsz_LPAREN));
-                
+
             // Now loop through find all columns that belong to this index
-            for(ULONG iCol=i; iCol<m_cIndexes; iCol++) 
+            for(ULONG iCol=i; iCol<m_cIndexes; iCol++)
             {
                 //If not the same index skip
                 if(wcscmp(m_rgIndexInfo[i].wszIndexName, m_rgIndexInfo[iCol].wszIndexName)!=0)
                     continue;
-                    
+
                 //mark this Index as used
                 rgIndexUsed[iCol] = TRUE;
-            
+
                 //Add Column Name to the list (quoted)
                 GetQuotedID(wszBuffer, sizeof(wszBuffer)/sizeof(WCHAR), m_rgIndexInfo[iCol].wszColName);
                 QTESTC(hr = StringCchCatW(wszSqlStmt, sizeof(wszSqlStmt)/sizeof(WCHAR), wszBuffer));
 
                 // Indicate Asending or Decending
                 if(m_rgIndexInfo[iCol].dwCollation == DB_COLLATION_DESC)
-                    QTESTC(hr = StringCchCatW(wszSqlStmt, sizeof(wszSqlStmt)/sizeof(WCHAR), wsz_INDEX_DESC)); 
+                    QTESTC(hr = StringCchCatW(wszSqlStmt, sizeof(wszSqlStmt)/sizeof(WCHAR), wsz_INDEX_DESC));
 
                 //Add trailing "," between col names
                 QTESTC(hr = StringCchCatW(wszSqlStmt, sizeof(wszSqlStmt)/sizeof(WCHAR), wsz_COMMA));
             }
-                
+
             //Replace last trailing "," with a ")"
             QTESTC(hr = StringCchCopyW(&wszSqlStmt[wcslen(wszSqlStmt)-wcslen(wsz_COMMA)],
-                           sizeof(wszSqlStmt)/sizeof(WCHAR) - wcslen(wszSqlStmt)+wcslen(wsz_COMMA),
-                           wsz_RPAREN));
-            
+                                       sizeof(wszSqlStmt)/sizeof(WCHAR) - wcslen(wszSqlStmt)+wcslen(wsz_COMMA),
+                                       wsz_RPAREN));
+
             // If user wants to see the statement, show it to them
             if(m_pCWizard->m_pCTableCopy->m_fShowQuery)
-                wMessageBox(NULL, MB_TASKMODAL | MB_OK | MB_ICONINFORMATION, wsz_OLEDB, 
-                    wsz_SHOW_SQL_, m_pCDataSource->m_pwszDataSource, wszSqlStmt);
-                
+                wMessageBox(NULL, MB_TASKMODAL | MB_OK | MB_ICONINFORMATION, wsz_OLEDB,
+                            wsz_SHOW_SQL_, m_pCDataSource->m_pwszDataSource, wszSqlStmt);
+
             //Set the command text
             XTESTC(hr = m_pCDataSource->m_pICommandText->SetCommandText(DBGUID_DBSQL, wszSqlStmt));
-                    
+
             //Execute the command
             //Don't exit yet, the user might want to continue even though this index failed
             XTEST(hr = m_pCDataSource->m_pICommandText->Execute(NULL, IID_NULL, NULL, NULL, NULL));
@@ -1011,11 +1011,11 @@ HRESULT CTable::CopyIndexes(CTable* pCTable)
             if(FAILED(hr))
             {
                 //Index Failed, Do you want to Continue?
-                if(IDNO == wMessageBox(NULL, MB_TASKMODAL | MB_ICONINFORMATION | MB_YESNO, wsz_ERROR, 
-                        wsz_INDEX_FAILED_, m_rgIndexInfo[i].wszIndexName))
-                    goto CLEANUP;	
+                if(IDNO == wMessageBox(NULL, MB_TASKMODAL | MB_ICONINFORMATION | MB_YESNO, wsz_ERROR,
+                                       wsz_INDEX_FAILED_, m_rgIndexInfo[i].wszIndexName))
+                    goto CLEANUP;
             }
-            
+
             //Since the User didn't exit, continue as normal
             hr = S_OK;
         }
@@ -1041,132 +1041,132 @@ HRESULT CTable::CreateSQLStmt(ESQL_STMT eSqlStmt, WCHAR* pwszSqlStmt, size_t cwc
 
     switch(eSqlStmt)
     {
-        //SELECT <ColumnList> FROM <QualifiedTableName>
-        case ESQL_SELECT:
+    //SELECT <ColumnList> FROM <QualifiedTableName>
+    case ESQL_SELECT:
+    {
+        //Create the SELECT statment
+        StringCchCopyW(pwszSqlStmt, cwchSqlStmt, wsz_SELECT);
+
+        // Loop through each column
+        for(ULONG i=0; i<m_cColumns; i++)
         {
-            //Create the SELECT statment
-            StringCchCopyW(pwszSqlStmt, cwchSqlStmt, wsz_SELECT);
-        
-            // Loop through each column
-            for(ULONG i=0; i<m_cColumns; i++) 
+            // Add the column to the list (quoted)
+            GetQuotedID(wszBuffer, sizeof(wszBuffer)/sizeof(WCHAR), m_rgColDesc[i].wszColName);
+            StringCchCatW(pwszSqlStmt, cwchSqlStmt, wszBuffer);
+
+            if(i<m_cColumns-1)
+                StringCchCatW(pwszSqlStmt, cwchSqlStmt, wsz_COMMA);
+        }
+
+        // Add the Table Name
+        StringCchCatW(pwszSqlStmt, cwchSqlStmt, wsz_FROM);
+        GetQuotedID(wszBuffer, sizeof(wszBuffer)/sizeof(WCHAR), m_wszQualTableName);
+        StringCchCatW(pwszSqlStmt, cwchSqlStmt, wszBuffer);
+    }
+    break;
+
+    case ESQL_INSERT:
+    {
+        StringCchCopyW(pwszSqlStmt, cwchSqlStmt, wsz_INSERT_INTO);
+
+        //Add the Table Name
+        GetQuotedID(wszBuffer, sizeof(wszBuffer)/sizeof(WCHAR), m_wszQualTableName);
+        StringCchCatW(pwszSqlStmt, cwchSqlStmt, wszBuffer);
+        StringCchCatW(pwszSqlStmt, cwchSqlStmt, wsz_LPAREN);
+        ULONG cColumns = 0;
+
+        ULONG i;
+        // Add the column list
+        for(i=0; i<m_cColumns; i++)
+        {
+            //Only Bind updatable columns
+            if(m_rgColDesc[i].dwFlags & DBCOLUMNFLAGS_WRITE || m_rgColDesc[i].dwFlags & DBCOLUMNFLAGS_WRITEUNKNOWN)
             {
+                //Only add a leading comma if there are preceding columns
+                if(cColumns++)
+                    StringCchCatW(pwszSqlStmt, cwchSqlStmt, wsz_COMMA);
+
                 // Add the column to the list (quoted)
                 GetQuotedID(wszBuffer, sizeof(wszBuffer)/sizeof(WCHAR), m_rgColDesc[i].wszColName);
                 StringCchCatW(pwszSqlStmt, cwchSqlStmt, wszBuffer);
-
-                if(i<m_cColumns-1)
-                    StringCchCatW(pwszSqlStmt, cwchSqlStmt, wsz_COMMA);
-            }     	
-    
-            // Add the Table Name
-            StringCchCatW(pwszSqlStmt, cwchSqlStmt, wsz_FROM);
-            GetQuotedID(wszBuffer, sizeof(wszBuffer)/sizeof(WCHAR), m_wszQualTableName);
-            StringCchCatW(pwszSqlStmt, cwchSqlStmt, wszBuffer);
-        }
-        break;
-
-        case ESQL_INSERT:
-        {
-            StringCchCopyW(pwszSqlStmt, cwchSqlStmt, wsz_INSERT_INTO);
-    
-            //Add the Table Name
-            GetQuotedID(wszBuffer, sizeof(wszBuffer)/sizeof(WCHAR), m_wszQualTableName);
-            StringCchCatW(pwszSqlStmt, cwchSqlStmt, wszBuffer);
-            StringCchCatW(pwszSqlStmt, cwchSqlStmt, wsz_LPAREN);
-            ULONG cColumns = 0;
-
-            ULONG i;
-            // Add the column list
-            for(i=0; i<m_cColumns; i++) 
-            {
-                //Only Bind updatable columns
-                if(m_rgColDesc[i].dwFlags & DBCOLUMNFLAGS_WRITE || m_rgColDesc[i].dwFlags & DBCOLUMNFLAGS_WRITEUNKNOWN)
-                {
-                    //Only add a leading comma if there are preceding columns 
-                    if(cColumns++)
-                        StringCchCatW(pwszSqlStmt, cwchSqlStmt, wsz_COMMA);
-
-                    // Add the column to the list (quoted)
-                    GetQuotedID(wszBuffer, sizeof(wszBuffer)/sizeof(WCHAR), m_rgColDesc[i].wszColName);
-                    StringCchCatW(pwszSqlStmt, cwchSqlStmt, wszBuffer);
-                }
-            } 
-
-            //Add VALUES clause
-            StringCchCatW(pwszSqlStmt, cwchSqlStmt, wsz_VALUES_CLAUSE);
-    
-            // Loop through each column
-            cColumns = 0;
-            for(i=0; i<m_cColumns; i++) 
-            {
-                //Only Bind those columns that are updatable
-                if(m_rgColDesc[i].dwFlags & DBCOLUMNFLAGS_WRITE || m_rgColDesc[i].dwFlags & DBCOLUMNFLAGS_WRITEUNKNOWN)
-                {
-                    //Only add a leading comma if there are preceding columns 
-                    if(cColumns++)
-                        StringCchCatW(pwszSqlStmt, cwchSqlStmt, wsz_COMMA);
-                    StringCchCatW(pwszSqlStmt, cwchSqlStmt, wsz_PARAM);
-                }
-            } 		
-
-            // Finish off the string
-            StringCchCatW(pwszSqlStmt, cwchSqlStmt, wsz_RPAREN);
-        }
-        break;
-
-        case ESQL_CREATE_TABLE:
-        {
-
-            // Setup the initialize CREATE TABLE '<CTableName>'
-            StringCchCopyW(pwszSqlStmt, cwchSqlStmt, wsz_CREATE_TABLE);
-            GetQuotedID(wszBuffer, sizeof(wszBuffer)/sizeof(WCHAR), m_wszQualTableName);
-            StringCchCatW(pwszSqlStmt, cwchSqlStmt, wszBuffer);
-
-            // Setup (<ColList>)
-            StringCchCatW(pwszSqlStmt, cwchSqlStmt, wsz_LPAREN);
-    
-            // Loop through each column and format the column name, type, and precision
-            for(ULONG i=0; i<m_cColumns; i++) 
-            {
-                // Add the column to the list (quoted)
-                GetQuotedID(wszBuffer, sizeof(wszBuffer)/sizeof(WCHAR), m_rgColDesc[i].wszColName);
-                StringCchCatW(pwszSqlStmt, cwchSqlStmt, wszBuffer);
-                StringCchCatW(pwszSqlStmt, cwchSqlStmt, wsz_SPACE);
-
-                // Add ColumnType (formatted with CreateParams)
-                GetTypeNameAndParams(i, wszBuffer, sizeof(wszBuffer)/sizeof(WCHAR));
-                StringCchCatW(pwszSqlStmt, cwchSqlStmt, wszBuffer);
-                
-                //Add PRIMARY KEY if Supported and a PrimaryKey Column
-                if(m_rgColDesc[i].fIsPrimaryKey && m_pCDataSource->m_fPrimaryKeysSupported && m_pCWizard->m_pCTableCopy->m_fCopyPrimaryKeys)
-                    StringCchCatW(pwszSqlStmt, cwchSqlStmt, wsz_PRIMARY_KEY);
-
-                //Add Comma
-                if(i<m_cColumns-1)
-                    StringCchCatW(pwszSqlStmt, cwchSqlStmt, wsz_COMMA);
             }
-
-            //Add trailing ")"
-            StringCchCatW(pwszSqlStmt, cwchSqlStmt, wsz_RPAREN);
         }
-        break;		
 
-        case ESQL_DROP_TABLE:
+        //Add VALUES clause
+        StringCchCatW(pwszSqlStmt, cwchSqlStmt, wsz_VALUES_CLAUSE);
+
+        // Loop through each column
+        cColumns = 0;
+        for(i=0; i<m_cColumns; i++)
         {
-            GetQuotedID(wszBuffer, sizeof(wszBuffer)/sizeof(WCHAR), m_wszQualTableName);
-            StringCchPrintfW(pwszSqlStmt, cwchSqlStmt, wsz_DROP_TABLE_, wszBuffer);
+            //Only Bind those columns that are updatable
+            if(m_rgColDesc[i].dwFlags & DBCOLUMNFLAGS_WRITE || m_rgColDesc[i].dwFlags & DBCOLUMNFLAGS_WRITEUNKNOWN)
+            {
+                //Only add a leading comma if there are preceding columns
+                if(cColumns++)
+                    StringCchCatW(pwszSqlStmt, cwchSqlStmt, wsz_COMMA);
+                StringCchCatW(pwszSqlStmt, cwchSqlStmt, wsz_PARAM);
+            }
         }
-        break;
 
-        default:
-            ASSERT(!"Unhandled Case!");
-            break;
+        // Finish off the string
+        StringCchCatW(pwszSqlStmt, cwchSqlStmt, wsz_RPAREN);
+    }
+    break;
+
+    case ESQL_CREATE_TABLE:
+    {
+
+        // Setup the initialize CREATE TABLE '<CTableName>'
+        StringCchCopyW(pwszSqlStmt, cwchSqlStmt, wsz_CREATE_TABLE);
+        GetQuotedID(wszBuffer, sizeof(wszBuffer)/sizeof(WCHAR), m_wszQualTableName);
+        StringCchCatW(pwszSqlStmt, cwchSqlStmt, wszBuffer);
+
+        // Setup (<ColList>)
+        StringCchCatW(pwszSqlStmt, cwchSqlStmt, wsz_LPAREN);
+
+        // Loop through each column and format the column name, type, and precision
+        for(ULONG i=0; i<m_cColumns; i++)
+        {
+            // Add the column to the list (quoted)
+            GetQuotedID(wszBuffer, sizeof(wszBuffer)/sizeof(WCHAR), m_rgColDesc[i].wszColName);
+            StringCchCatW(pwszSqlStmt, cwchSqlStmt, wszBuffer);
+            StringCchCatW(pwszSqlStmt, cwchSqlStmt, wsz_SPACE);
+
+            // Add ColumnType (formatted with CreateParams)
+            GetTypeNameAndParams(i, wszBuffer, sizeof(wszBuffer)/sizeof(WCHAR));
+            StringCchCatW(pwszSqlStmt, cwchSqlStmt, wszBuffer);
+
+            //Add PRIMARY KEY if Supported and a PrimaryKey Column
+            if(m_rgColDesc[i].fIsPrimaryKey && m_pCDataSource->m_fPrimaryKeysSupported && m_pCWizard->m_pCTableCopy->m_fCopyPrimaryKeys)
+                StringCchCatW(pwszSqlStmt, cwchSqlStmt, wsz_PRIMARY_KEY);
+
+            //Add Comma
+            if(i<m_cColumns-1)
+                StringCchCatW(pwszSqlStmt, cwchSqlStmt, wsz_COMMA);
+        }
+
+        //Add trailing ")"
+        StringCchCatW(pwszSqlStmt, cwchSqlStmt, wsz_RPAREN);
+    }
+    break;
+
+    case ESQL_DROP_TABLE:
+    {
+        GetQuotedID(wszBuffer, sizeof(wszBuffer)/sizeof(WCHAR), m_wszQualTableName);
+        StringCchPrintfW(pwszSqlStmt, cwchSqlStmt, wsz_DROP_TABLE_, wszBuffer);
+    }
+    break;
+
+    default:
+        ASSERT(!"Unhandled Case!");
+        break;
     };
-    
+
     // If user wants to see the statement, show it to them
     if(m_pCWizard->m_pCTableCopy->m_fShowQuery && fShowSql)
-        wMessageBox(NULL, MB_TASKMODAL | MB_OK | MB_ICONINFORMATION, wsz_OLEDB, 
-            wsz_SHOW_SQL_, m_pCDataSource->m_pwszDataSource, pwszSqlStmt);
+        wMessageBox(NULL, MB_TASKMODAL | MB_OK | MB_ICONINFORMATION, wsz_OLEDB,
+                    wsz_SHOW_SQL_, m_pCDataSource->m_pwszDataSource, pwszSqlStmt);
 
     return hr;
 }
@@ -1183,7 +1183,7 @@ HRESULT CTable::AdjustBindings(ULONG cBindings, DBBINDING* rgBindings, void* pDa
 
     //Adjust all Storage Objects
     //We have 2 problems.  First some providers (MSDASQL) may require the LENGTH
-    //of the storage object bound.  We have no clue what the LENGTH is unless 
+    //of the storage object bound.  We have no clue what the LENGTH is unless
     //we read the entire stream.  Second some providers may only allow 1 storage
     //object open at any one time.  The simplest soltuion would be just to buffer
     //the provider storage objects into our own and release the providers...
@@ -1202,9 +1202,9 @@ HRESULT CTable::AdjustBindings(ULONG cBindings, DBBINDING* rgBindings, void* pDa
         //DBTYPE_IUNKNOWN
         if(rgBindings[i].wType == DBTYPE_IUNKNOWN)
         {
-             //Obtain the providers ISeqStream object
+            //Obtain the providers ISeqStream object
             ISequentialStream* pISequentialStream = (ISequentialStream*)(*(LONG_PTR*)((BYTE*)pData + rgBindings[i].obValue));
-            
+
             //Copy the providers stream into our own CISeqStream object
             CISeqStream* pCISeqStream = new CISeqStream();
             pCISeqStream->Write(pISequentialStream, NULL);
@@ -1242,7 +1242,7 @@ HRESULT CTable::CreateAccessors(ULONG* pcBindingInfo, BINDINGINFO** prgBindingIn
     ULONG           i,cBindings = 0;
     DBBINDING*      rgBindings = NULL;
     ULONG           cStorageObjects = 0;
-    
+
     //Alloc the space for BindingInfo
     ULONG           cBindingInfo = 0;
     BINDINGINFO*    rgBindingInfo = NULL;
@@ -1252,21 +1252,21 @@ HRESULT CTable::CreateAccessors(ULONG* pcBindingInfo, BINDINGINFO** prgBindingIn
     SAFE_ALLOC(rgBindings, DBBINDING, m_cColumns);
 
     cBindings = 0;
-    for(i=0; i<m_cColumns; i++) 
+    for(i=0; i<m_cColumns; i++)
     {
         //SetUp the Bindings
         rgBindings[cBindings].iOrdinal	= m_rgColDesc[i].iOrdinal;
         rgBindings[cBindings].obStatus	= ulOffset;
         rgBindings[cBindings].obLength	= ulOffset + sizeof(DBSTATUS);
         rgBindings[cBindings].obValue	= ulOffset + sizeof(DBSTATUS) + sizeof(ULONG);
-        
+
         rgBindings[cBindings].pTypeInfo = NULL;
         rgBindings[cBindings].pBindExt  = NULL;
 
-        rgBindings[cBindings].dwPart	= DBPART_VALUE|DBPART_LENGTH|DBPART_STATUS;			
+        rgBindings[cBindings].dwPart	= DBPART_VALUE|DBPART_LENGTH|DBPART_STATUS;
         rgBindings[cBindings].dwMemOwner= DBMEMOWNER_CLIENTOWNED;
         rgBindings[cBindings].eParamIO	= DBPARAMIO_NOTPARAM;
-        
+
         rgBindings[cBindings].dwFlags	= 0;
         rgBindings[cBindings].bPrecision= m_rgColDesc[i].bPrecision;
         rgBindings[cBindings].bScale	= m_rgColDesc[i].bScale;
@@ -1280,7 +1280,7 @@ HRESULT CTable::CreateAccessors(ULONG* pcBindingInfo, BINDINGINFO** prgBindingIn
             rgBindings[cBindings].cbMaxLen	+= sizeof(CHAR);
         if(rgBindings[cBindings].wType == DBTYPE_WSTR)
             rgBindings[cBindings].cbMaxLen	+= sizeof(WCHAR);
-        
+
         //Adjust ISLONG Columns if not bound as ISeqStream
         if(m_rgColDesc[i].dwFlags & DBCOLUMNFLAGS_ISLONG)
             ADJUST_SIZE(rgBindings[cBindings].cbMaxLen, ulBlobSize);
@@ -1294,12 +1294,12 @@ HRESULT CTable::CreateAccessors(ULONG* pcBindingInfo, BINDINGINFO** prgBindingIn
             //Setup wType
             rgBindings[cBindings].wType		= DBTYPE_IUNKNOWN;
             rgBindings[cBindings].cbMaxLen	= sizeof(IUnknown*);
-            
+
             //Setup pObject structure
             SAFE_ALLOC(rgBindings[cBindings].pObject, DBOBJECT, 1);
             rgBindings[cBindings].pObject->iid = IID_ISequentialStream;
             rgBindings[cBindings].pObject->dwFlags = STGM_READ;
-        
+
             //Only need a seperate Accessor if there is more than 1 Storage column
             if(cStorageObjects > 1)
             {
@@ -1317,9 +1317,9 @@ HRESULT CTable::CreateAccessors(ULONG* pcBindingInfo, BINDINGINFO** prgBindingIn
         //Determine if there is out of line data...
         switch(rgBindings[cBindings].wType)
         {
-            case DBTYPE_VARIANT:
-                *pbOutofLine = TRUE;
-                break;
+        case DBTYPE_VARIANT:
+            *pbOutofLine = TRUE;
+            break;
         }
 
         ulOffset = ROUNDUP(rgBindings[cBindings].obValue + rgBindings[cBindings].cbMaxLen);
@@ -1347,7 +1347,7 @@ HRESULT CTable::CreateAccessors(ULONG* pcBindingInfo, BINDINGINFO** prgBindingIn
     //Accessors
     *pcBindingInfo = cBindingInfo;
     *prgBindingInfo = rgBindingInfo;
-    
+
 CLEANUP:
     return hr;
 }
@@ -1369,7 +1369,7 @@ HRESULT CTable::GetRowset(DWORD dwInsertOpt)
     //Release the current rowset
     SAFE_RELEASE(m_pIRowset);
     SAFE_RELEASE(m_pIAccessor);
-    
+
     //Kagera's Implementation requires IID_RowsetLocate for BLOB Support
     if(IsSettableProperty(m_pCDataSource->m_pIDBInitialize, DBPROP_IRowsetLocate, DBPROPSET_ROWSET))
         SetProperty(DBPROP_IRowsetLocate, DBPROPSET_ROWSET, &cPropSets, &rgPropSets, DBTYPE_BOOL, TRUE);
@@ -1394,7 +1394,7 @@ HRESULT CTable::GetRowset(DWORD dwInsertOpt)
     //Setup TableID
     DBID TableID;
     TableID.eKind = DBKIND_NAME;
-    
+
     //Quote the TableName
     TableID.uName.pwszName = wszBuffer;
     GetQuotedID(wszBuffer, sizeof(wszBuffer)/sizeof(WCHAR), m_wszQualTableName);
@@ -1405,7 +1405,7 @@ HRESULT CTable::GetRowset(DWORD dwInsertOpt)
 
     //Obtain the Accessor
     XTESTC(hr = m_pIRowset->QueryInterface(IID_IAccessor, (void**)&m_pIAccessor));
-    
+
 CLEANUP:
     FreeProperties(cPropSets, rgPropSets);
     return hr;
@@ -1454,32 +1454,32 @@ HRESULT CTable::CopyData(CTable* pCSourceTable, DBCOUNTITEM* pcRowsCopied)
     ULONG 		cBindingInfo = 0;
     BINDINGINFO* 	rgBindingInfo = NULL;
     CProgress* 		pCProgress = m_pCWizard->m_pCProgress;
-    
+
     //Get the Rowset from the SourceTable
     QTESTC(hr = pCSourceTable->CreateAccessors(&cBindingInfo, &rgBindingInfo, &cRowSize, ulBlobSize, &bOutofLine));
 
     //Obtain the Accessor
     SAFE_ALLOC(rgBindings, DBBINDING, m_cColumns);
 
-    cBindings = 0; 
-    for(i=0; i<m_cColumns; i++) 
+    cBindings = 0;
+    for(i=0; i<m_cColumns; i++)
     {
         rgBindings[cBindings].iOrdinal	= ulParamSets ? cBindings+1 : m_rgColDesc[i].iOrdinal;
         rgBindings[cBindings].obStatus  = ulOffset;
         rgBindings[cBindings].obLength  = ulOffset + sizeof(DBSTATUS);
         rgBindings[cBindings].obValue   = ulOffset + sizeof(ULONG) + sizeof(DBSTATUS);
-        
+
         rgBindings[cBindings].pTypeInfo = NULL;
         rgBindings[cBindings].pBindExt  = NULL;
 
-        rgBindings[cBindings].dwPart	= DBPART_VALUE | DBPART_LENGTH | DBPART_STATUS;			
+        rgBindings[cBindings].dwPart	= DBPART_VALUE | DBPART_LENGTH | DBPART_STATUS;
         rgBindings[cBindings].dwMemOwner= DBMEMOWNER_CLIENTOWNED;
         rgBindings[cBindings].eParamIO	= ulParamSets ? DBPARAMIO_INPUT : DBPARAMIO_NOTPARAM;
         rgBindings[cBindings].dwFlags	= 0;
-    
+
         rgBindings[cBindings].bPrecision= pCSourceTable->m_rgColDesc[i].bPrecision;
         rgBindings[cBindings].bScale	= pCSourceTable->m_rgColDesc[i].bScale;
-            
+
         rgBindings[cBindings].pObject	= NULL;
         rgBindings[cBindings].wType		= pCSourceTable->m_rgColDesc[i].wType;
         rgBindings[cBindings].cbMaxLen	= pCSourceTable->m_rgColDesc[i].ulColumnSize;
@@ -1489,19 +1489,19 @@ HRESULT CTable::CopyData(CTable* pCSourceTable, DBCOUNTITEM* pcRowsCopied)
             rgBindings[cBindings].cbMaxLen	+= sizeof(CHAR);
         if(rgBindings[cBindings].wType == DBTYPE_WSTR)
             rgBindings[cBindings].cbMaxLen	+= sizeof(WCHAR);
-        
+
         //Adjust ISLONG Columns if not bound as ISeqStream
-        if(pCSourceTable->m_rgColDesc[i].dwFlags & DBCOLUMNFLAGS_ISLONG) 
+        if(pCSourceTable->m_rgColDesc[i].dwFlags & DBCOLUMNFLAGS_ISLONG)
             ADJUST_SIZE(rgBindings[cBindings].cbMaxLen, ulBlobSize);
 
         //ISeqStream
-        if(m_rgColDesc[i].dwFlags & DBCOLUMNFLAGS_ISLONG && 
-            pCTableCopy->m_dwBlobOpt == IDR_ISEQ_STREAM)
+        if(m_rgColDesc[i].dwFlags & DBCOLUMNFLAGS_ISLONG &&
+                pCTableCopy->m_dwBlobOpt == IDR_ISEQ_STREAM)
         {
             //Setup wType
             rgBindings[cBindings].wType		= DBTYPE_IUNKNOWN;
             rgBindings[cBindings].cbMaxLen	= sizeof(IUnknown*);
-            
+
             //Setup pObject structure
             SAFE_ALLOC(rgBindings[cBindings].pObject, DBOBJECT, 1);
             rgBindings[cBindings].pObject->iid = IID_ISequentialStream;
@@ -1509,7 +1509,7 @@ HRESULT CTable::CopyData(CTable* pCSourceTable, DBCOUNTITEM* pcRowsCopied)
         }
 
         ulOffset = ROUNDUP(rgBindings[cBindings].obValue + rgBindings[cBindings].cbMaxLen);
-        
+
         //Only Bind Updatable columns
         //Note, we are not using the Source info here, since in the process
         //of adjusting columns to a different DSN, the columns may have become writeable
@@ -1522,7 +1522,7 @@ HRESULT CTable::CopyData(CTable* pCSourceTable, DBCOUNTITEM* pcRowsCopied)
     {
         // Now create the INSERT INTO statment
         CreateSQLStmt(ESQL_INSERT, wszSqlStmt, sizeof(wszSqlStmt)/sizeof(WCHAR), ulParamSets);
-    
+
         //Set the command text
         XTESTC(hr = m_pCDataSource->m_pICommandText->SetCommandText(DBGUID_DBSQL, wszSqlStmt));
 
@@ -1530,12 +1530,12 @@ HRESULT CTable::CopyData(CTable* pCSourceTable, DBCOUNTITEM* pcRowsCopied)
         XTESTC(hr = m_pCDataSource->m_pICommandText->QueryInterface(IID_IAccessor, (void**)&pIAccessor));
         XTESTC(hr = pIAccessor->CreateAccessor(DBACCESSOR_PARAMETERDATA, cBindings, rgBindings, ulOffset, &hAccessor, NULL));
     }
-    //were using InsertRow 
+    //were using InsertRow
     else
     {
-        //Obtain IRowsetChange interface from the TargetRowset 
+        //Obtain IRowsetChange interface from the TargetRowset
         XTESTC(hr = m_pIRowset->QueryInterface(IID_IRowsetChange, (void**)&pIRowsetChange));
-        
+
         //Create the Target Accessor
         XTESTC(hr = m_pIRowset->QueryInterface(IID_IAccessor, (void**)&pIAccessor));
         XTESTC(hr = pIAccessor->CreateAccessor(DBACCESSOR_ROWDATA, cBindings, rgBindings, ulOffset, &hAccessor, NULL));
@@ -1543,15 +1543,15 @@ HRESULT CTable::CopyData(CTable* pCSourceTable, DBCOUNTITEM* pcRowsCopied)
         if(pCTableCopy->m_dwInsertOpt == IDR_INSERTROW_BUFFERED)
             XTESTC(hr = m_pIRowset->QueryInterface(IID_IRowsetUpdate, (void**)&pIRowsetUpdate));
     }
-        
+
     // Display the progress dialog
     pCProgress->Display();
     pCProgress->SetHeading(wsz_COPYING);
-        
+
     //Alloc room for pData
     SAFE_ALLOC(pData, BYTE, max(ulParamSets, 1) * cRowSize);
     memset(pData, 0, max(ulParamSets, 1) * cRowSize);
-    
+
     //Setup DBPARAMS Struct
     DBParams.cParamSets = 1;			//Numer of Parameter sets
     DBParams.hAccessor	= hAccessor;	//Target Param Accessor
@@ -1564,9 +1564,9 @@ HRESULT CTable::CopyData(CTable* pCSourceTable, DBCOUNTITEM* pcRowsCopied)
         //ENDOFROWSET
         if(cRowsObtained==0)
             break;
-    
+
         //Determine the number of rows that are actually needed to retrieve
-        //The user might have specfified the number of rows to retrieve which could 
+        //The user might have specfified the number of rows to retrieve which could
         //be smaller than the number in the block size
         DBCOUNTITEM cRowsNeeded = min(cRowsObtained, ulMaxRows-cRows);
 
@@ -1574,7 +1574,7 @@ HRESULT CTable::CopyData(CTable* pCSourceTable, DBCOUNTITEM* pcRowsCopied)
         if(ulParamSets > 1)
         {
             //GetData
-            for(i=0; i<cRowsNeeded; i++) 
+            for(i=0; i<cRowsNeeded; i++)
             {
                 pRowData = (BYTE*)pData + (i*cRowSize);
                 for(j=0; j<cBindingInfo; j++)
@@ -1585,10 +1585,10 @@ HRESULT CTable::CopyData(CTable* pCSourceTable, DBCOUNTITEM* pcRowsCopied)
                     QTESTC(hr = AdjustBindings(rgBindingInfo[j].cBindings, rgBindingInfo[j].rgBindings, pRowData));
                 }
             }
-            
+
             //Adjust the paramerer sets
             DBParams.cParamSets = cRowsNeeded;
-            
+
             //Execute the INSERT (multiple param sets)
             XTESTC(hr = m_pCDataSource->m_pICommandText->Execute(NULL, IID_NULL, &DBParams, NULL, NULL));
 
@@ -1608,20 +1608,20 @@ HRESULT CTable::CopyData(CTable* pCSourceTable, DBCOUNTITEM* pcRowsCopied)
         //Use Paramseters to INSERT the data, but only 1 ParamSet (not multiple)
         else if(ulParamSets == 1)
         {
-            for(i=0; i<cRowsNeeded; i++) 
+            for(i=0; i<cRowsNeeded; i++)
             {
                 for(j=0; j<cBindingInfo; j++)
                 {
                     //GetData
                     XTESTC(hr = pISourceRowset->GetData(rghRows[i], rgBindingInfo[j].hAccessor, pData));
-            
+
                     //AdjustBindings
                     QTESTC(hr = AdjustBindings(rgBindingInfo[j].cBindings, rgBindingInfo[j].rgBindings, pData));
                 }
 
                 //Execute the INSERT
                 XTESTC(hr = m_pCDataSource->m_pICommandText->Execute(NULL, IID_NULL, &DBParams, NULL, NULL));
-            
+
                 //FreeBindingData - outofline memory
                 for(j=0; j<cBindingInfo && bOutofLine; j++)
                     QTESTC(FreeBindingData(rgBindingInfo[j].cBindings, rgBindingInfo[j].rgBindings, pData));
@@ -1635,13 +1635,13 @@ HRESULT CTable::CopyData(CTable* pCSourceTable, DBCOUNTITEM* pcRowsCopied)
         //Use InsertRow to INSERT the Data
         else
         {
-            for(i=0; i<cRowsNeeded; i++) 
+            for(i=0; i<cRowsNeeded; i++)
             {
                 for(j=0; j<cBindingInfo; j++)
                 {
                     //GetData from the Source
                     XTESTC(hr = pISourceRowset->GetData(rghRows[i], rgBindingInfo[j].hAccessor, pData));
-            
+
                     //AdjustBindings
                     QTESTC(hr = AdjustBindings(rgBindingInfo[j].cBindings, rgBindingInfo[j].rgBindings, pData));
                 }
@@ -1680,7 +1680,7 @@ HRESULT CTable::CopyData(CTable* pCSourceTable, DBCOUNTITEM* pcRowsCopied)
         XTESTC(hr = pISourceRowset->ReleaseRows(cRowsObtained, rghRows, NULL, NULL, NULL));
         SAFE_FREE(rghRows);
     }
-    
+
 CLEANUP:
     //Stop the propgress
     pCProgress->Destroy();
@@ -1701,7 +1701,7 @@ CLEANUP:
         XTEST(pCSourceTable->m_pIAccessor->ReleaseAccessor(rgBindingInfo[i].hAccessor, NULL));
         FreeBindings(rgBindingInfo[i].cBindings, rgBindingInfo[i].rgBindings);
     }
-    
+
     SAFE_FREE(rgBindingInfo);
     FreeBindings(cBindings, rgBindings);
     SAFE_FREE(pData);
@@ -1724,28 +1724,28 @@ HRESULT CTable::GetTypeInfoRowset(IAccessor** ppIAccessor, HACCESSOR* phAccessor
     ASSERT(ppIAccessor && phAccessor && ppIRowset);
     ASSERT(m_pCDataSource && m_pCDataSource->m_pIOpenRowset);
     HRESULT hr;
-    
+
     IDBSchemaRowset* pIDBSchemaRowset = m_pCDataSource->m_pIDBSchemaRowset;
 
     //Provider doesn't have to support IDBSchemaRowset
     if(pIDBSchemaRowset == NULL)
         return E_FAIL;
-    
-    //Bind all the columns from types rowset: 
+
+    //Bind all the columns from types rowset:
     const static ULONG cBindings = 6;
-    const static DBBINDING rgBindings[cBindings] = 
+    const static DBBINDING rgBindings[cBindings] =
     {
         //TYPE_NAME
-        1,	 			
+        1,
         offsetof(TYPEINFO, wszTypeName),	// offset of value in consumers buffer
         0,									// offset of length
         0,									// offset of status
         NULL,								// reserved
         NULL,								// for ole object
         NULL,								// reserved
-        DBPART_VALUE,						// specifies Value is bound only										
+        DBPART_VALUE,						// specifies Value is bound only
         DBMEMOWNER_CLIENTOWNED,				// memory is client owned
-        DBPARAMIO_NOTPARAM,					// 
+        DBPARAMIO_NOTPARAM,					//
         MAX_NAME_LEN,						// size in bytes of the value part in the consumers buffer
         0, 									// reserved
         DBTYPE_WSTR, 						// data type indicator
@@ -1753,16 +1753,16 @@ HRESULT CTable::GetTypeInfoRowset(IAccessor** ppIAccessor, HACCESSOR* phAccessor
         0, 									// scale
 
         //DATA_TYPE
-        2,	 			
+        2,
         offsetof(TYPEINFO, wType),			// offset of value in consumers buffer
         0,									// offset of length
         0,									// offset of status
         NULL,								// reserved
         NULL,								// for ole object
         NULL,								// reserved
-        DBPART_VALUE,						// specifies Value is bound only										
+        DBPART_VALUE,						// specifies Value is bound only
         DBMEMOWNER_CLIENTOWNED,				// memory is client owned
-        DBPARAMIO_NOTPARAM,					// 
+        DBPARAMIO_NOTPARAM,					//
         sizeof(USHORT),						// size in bytes of the value part in the consumers buffer
         0, 									// reserved
         DBTYPE_UI2, 						// data type indicator
@@ -1770,16 +1770,16 @@ HRESULT CTable::GetTypeInfoRowset(IAccessor** ppIAccessor, HACCESSOR* phAccessor
         0, 									// scale
 
         //COLUMN_SIZE
-        3,	 			
+        3,
         offsetof(TYPEINFO, ulColumnSize),	// offset of value in consumers buffer
         0,									// offset of length
         0,									// offset of status
         NULL,								// reserved
         NULL,								// for ole object
         NULL,								// reserved
-        DBPART_VALUE,						// specifies Value is bound only										
+        DBPART_VALUE,						// specifies Value is bound only
         DBMEMOWNER_CLIENTOWNED,				// memory is client owned
-        DBPARAMIO_NOTPARAM,					// 
+        DBPARAMIO_NOTPARAM,					//
         sizeof(ULONG),						// size in bytes of the value part in the consumers buffer
         0, 									// reserved
         DBTYPE_UI4, 						// data type indicator
@@ -1787,33 +1787,33 @@ HRESULT CTable::GetTypeInfoRowset(IAccessor** ppIAccessor, HACCESSOR* phAccessor
         0, 									// scale
 
         //CREATE_PARAMS
-        6,	 			
+        6,
         offsetof(TYPEINFO, wszCreateParams),// offset of value in consumers buffer
         0,									// offset of length
         0,									// offset of status
         NULL,								// reserved
         NULL,								// for ole object
         NULL,								// reserved
-        DBPART_VALUE,						// specifies Value is bound only										
+        DBPART_VALUE,						// specifies Value is bound only
         DBMEMOWNER_CLIENTOWNED,				// memory is client owned
-        DBPARAMIO_NOTPARAM,					// 
+        DBPARAMIO_NOTPARAM,					//
         MAX_NAME_LEN,						// size in bytes of the value part in the consumers buffer
         0, 									// reserved
         DBTYPE_WSTR, 						// data type indicator
         0,									// precision
         0, 									// scale
-        
+
         //IS_NULLABLE
-        7,	 			
+        7,
         offsetof(TYPEINFO, fIsNullable),	// offset of value in consumers buffer
         0,									// offset of length
         0,									// offset of status
         NULL,								// reserved
         NULL,								// for ole object
         NULL,								// reserved
-        DBPART_VALUE,						// specifies Value is bound only										
+        DBPART_VALUE,						// specifies Value is bound only
         DBMEMOWNER_CLIENTOWNED,				// memory is client owned
-        DBPARAMIO_NOTPARAM,					// 
+        DBPARAMIO_NOTPARAM,					//
         sizeof(VARIANT_BOOL),				// size in bytes of the value part in the consumers buffer
         0, 									// reserved
         DBTYPE_BOOL, 						// data type indicator
@@ -1821,16 +1821,16 @@ HRESULT CTable::GetTypeInfoRowset(IAccessor** ppIAccessor, HACCESSOR* phAccessor
         0, 									// scale
 
         //AUTO_UNIQUE_VALUE
-        12,	 			
+        12,
         offsetof(TYPEINFO, fIsAutoInc),		// offset of value in consumers buffer
         0,									// offset of length
         0,									// offset of status
         NULL,								// reserved
         NULL,								// for ole object
         NULL,								// reserved
-        DBPART_VALUE,						// specifies Value is bound only										
+        DBPART_VALUE,						// specifies Value is bound only
         DBMEMOWNER_CLIENTOWNED,				// memory is client owned
-        DBPARAMIO_NOTPARAM,					// 
+        DBPARAMIO_NOTPARAM,					//
         sizeof(VARIANT_BOOL),				// size in bytes of the value part in the consumers buffer
         0, 									// reserved
         DBTYPE_BOOL, 						// data type indicator
@@ -1845,7 +1845,7 @@ HRESULT CTable::GetTypeInfoRowset(IAccessor** ppIAccessor, HACCESSOR* phAccessor
     //Create the the Accessor
     XTESTC(hr = (*ppIRowset)->QueryInterface(IID_IAccessor, (void **)ppIAccessor));
     XTESTC(hr = (*ppIAccessor)->CreateAccessor(DBACCESSOR_ROWDATA, cBindings, rgBindings, 0, phAccessor, NULL));
-        
+
 
 CLEANUP:
     return hr;
@@ -1869,10 +1869,10 @@ HRESULT CTable::GetColumnDesc(DBCOLUMNDESC** prgColumnDesc)
     {
         //TypeName
         rgColumnDesc[i].pwszTypeName = m_rgColDesc[i].wszTypeName;
-        
+
         rgColumnDesc[i].pTypeInfo	 = NULL;
         rgColumnDesc[i].pclsid		 = NULL;
-        
+
         //ColumnID
         rgColumnDesc[i].dbcid.eKind = DBKIND_NAME;
         rgColumnDesc[i].dbcid.uName.pwszName = m_rgColDesc[i].wszColName;
@@ -1886,7 +1886,7 @@ HRESULT CTable::GetColumnDesc(DBCOLUMNDESC** prgColumnDesc)
         //Properties
         rgColumnDesc[i].cPropertySets = 0;
         rgColumnDesc[i].rgPropertySets = NULL;
-        
+
         //DBPPROP_COL_AUTOINCREMENT
 //why make a column auto inc just cause it can be?
 //		if(IsSettableProperty(m_pCDataSource->m_pIDBInitialize, DBPROP_COL_AUTOINCREMENT, DBPROPSET_COLUMN))
@@ -1899,7 +1899,7 @@ HRESULT CTable::GetColumnDesc(DBCOLUMNDESC** prgColumnDesc)
         //DBPROP_COL_FIXEDLENGTH
         if(IsSettableProperty(m_pCDataSource->m_pIDBInitialize, DBPROP_COL_FIXEDLENGTH, DBPROPSET_COLUMN))
             SetProperty(DBPROP_COL_FIXEDLENGTH, DBPROPSET_COLUMN, &rgColumnDesc[i].cPropertySets, &rgColumnDesc[i].rgPropertySets, DBTYPE_BOOL, IsNumericType(m_rgColDesc[i].wType),DBPROPOPTIONS_OPTIONAL);
-        
+
         //DBPROP_COL_NULLABLE
         if(IsSettableProperty(m_pCDataSource->m_pIDBInitialize, DBPROP_COL_NULLABLE, DBPROPSET_COLUMN))
             SetProperty(DBPROP_COL_NULLABLE, DBPROPSET_COLUMN, &rgColumnDesc[i].cPropertySets, &rgColumnDesc[i].rgPropertySets, DBTYPE_BOOL, m_rgColDesc[i].fIsNullable,DBPROPOPTIONS_OPTIONAL);
@@ -1907,7 +1907,7 @@ HRESULT CTable::GetColumnDesc(DBCOLUMNDESC** prgColumnDesc)
         //DBPROP_COL_PRIMARYKEY
         if(IsSettableProperty(m_pCDataSource->m_pIDBInitialize, DBPROP_COL_PRIMARYKEY, DBPROPSET_COLUMN))
             SetProperty(DBPROP_COL_PRIMARYKEY, DBPROPSET_COLUMN, &rgColumnDesc[i].cPropertySets, &rgColumnDesc[i].rgPropertySets, DBTYPE_BOOL, m_rgColDesc[i].fIsPrimaryKey && m_pCWizard->m_pCTableCopy->m_fCopyPrimaryKeys,DBPROPOPTIONS_OPTIONAL);
-        
+
         //TODO DBPROP_COL_UNIQUE
     }
 
@@ -1919,7 +1919,7 @@ CLEANUP:
 
 ///////////////////////////////////////////////////////////////////////////////
 // Class CISeqStream
-// 
+//
 // My implementation of ISeqStream interface
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -1953,7 +1953,7 @@ ULONG	CISeqStream::Release(void)
 
     if(--m_cRef)
         return m_cRef;
-    
+
     delete this;
     return 0;
 }
@@ -1967,7 +1967,7 @@ HRESULT CISeqStream::QueryInterface(REFIID riid, void** ppv)
         *ppv = this;
     if (riid == IID_ISequentialStream)
         *ppv = this;
-    
+
     if(*ppv)
     {
         ((IUnknown*)*ppv)->AddRef();
@@ -2022,9 +2022,9 @@ HRESULT CISeqStream::Read(void *pv,	ULONG cb, ULONG* pcbRead)
     ULONG cBytesLeft = m_cBufSize - m_iPos;
     ULONG cBytesRead = cb > cBytesLeft ? cBytesLeft : cb;
 
-    //if no more bytes to retrive return 
+    //if no more bytes to retrive return
     if(cBytesLeft == 0)
-        return S_FALSE; 
+        return S_FALSE;
 
     //Copy to users buffer the number of bytes requested or remaining
     memcpy(pv, (void*)((BYTE*)m_pBuffer + m_iPos), cBytesRead);
@@ -2034,11 +2034,11 @@ HRESULT CISeqStream::Read(void *pv,	ULONG cb, ULONG* pcbRead)
         *pcbRead = cBytesRead;
 
     if(cb != cBytesRead)
-        return S_FALSE; 
+        return S_FALSE;
 
     return S_OK;
 }
-        
+
 HRESULT CISeqStream::Write(const void *pv, ULONG cb, ULONG* pcbWritten)
 {
     //Parameter checking

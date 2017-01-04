@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -188,7 +188,7 @@ BOOL PathConvertLocalToUNC(PCWSTR pcszLocalPath, PWSTR *ppszUNC)
         DWORD dwNetType;
         WCHAR szCanidate[MAX_PATH]; // UNC path
         if (GetNetResourceFromLocalPath(szPath, szCanidate, ARRAYSIZE(szCanidate), &dwNetType) &&
-            (L'$' != szCanidate[lstrlen(szCanidate) - 1]))
+                (L'$' != szCanidate[lstrlen(szCanidate) - 1]))
         {
             PathAppend(szCanidate, pcszLocalPath + lstrlen(szPath));
             if ((0 == szResult[0]) || (lstrlen(szCanidate) < lstrlen(szResult)))

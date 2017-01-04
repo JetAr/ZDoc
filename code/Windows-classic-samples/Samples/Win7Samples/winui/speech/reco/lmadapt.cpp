@@ -1,12 +1,12 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
 //
-// Copyright � Microsoft Corporation. All rights reserved
+// Copyright © Microsoft Corporation. All rights reserved
 
 /******************************************************************************
-*   LMAdapt.cpp 
+*   LMAdapt.cpp
 *       Language Model adaptation routines
 ******************************************************************************/
 
@@ -40,7 +40,7 @@ HRESULT CRecoDlgClass::GetTextFile(
     WCHAR * pwszCoMem = 0;
     ULONG cch = 0;
     DWORD dwRead;
-	size_t ofnsize = (BYTE*)&ofn.lpTemplateName + sizeof(ofn.lpTemplateName) - (BYTE*)&ofn;
+    size_t ofnsize = (BYTE*)&ofn.lpTemplateName + sizeof(ofn.lpTemplateName) - (BYTE*)&ofn;
 
     if (SUCCEEDED(hr))
     {
@@ -116,7 +116,7 @@ HRESULT CRecoDlgClass::GetTextFile(
             if (SUCCEEDED(hr))
             {
                 SetFilePointer(hf, 0, NULL, FILE_BEGIN); // rewind
-        
+
                 hr = ReadFile(hf, pszBuffer, cBytes, &dwRead, NULL) ? S_OK : HRESULT_FROM_WIN32(GetLastError());
             }
 
@@ -153,7 +153,7 @@ HRESULT CRecoDlgClass::GetTextFile(
 
     *ppwszCoMem = pwszCoMem;
     *pcch = cch;
-    
+
     return hr;
 }
 
@@ -162,7 +162,7 @@ HRESULT CRecoDlgClass::GetTextFile(
 *-------------------------------------*
 *   Description: Open a text file and feed its content to the SR engine.
 *   Return:
-*       S_OK 
+*       S_OK
 *       E_FAIL if no client window or if unsuccessful at obtaining the file name
 ****************************************************************************************/
 
@@ -170,7 +170,7 @@ HRESULT CRecoDlgClass::FeedDocumentFromFile()
 {
     WCHAR * pwszCoMem = 0;
     ULONG cch = 0;
-    
+
     HRESULT hr = GetTextFile(&pwszCoMem, &cch);
 
     if (SUCCEEDED(hr))
@@ -180,13 +180,13 @@ HRESULT CRecoDlgClass::FeedDocumentFromFile()
 
     return hr;
 }
-   
+
 /***************************************************************************************
 * CRecoDlgClass::FeedDocumentFromClipboard *
 *------------------------------------------*
 *   Description: Take text from the clipboard and feed its content to the SR engine.
 *   Return:
-*       S_OK 
+*       S_OK
 *       E_FAIL if neither CF_TEXT or CF_UNICODETEXT was available on the clipboard
 ****************************************************************************************/
 
@@ -229,7 +229,7 @@ HRESULT CRecoDlgClass::FeedDocumentFromClipboard()
 
         hr = hData ? S_OK : HRESULT_FROM_WIN32(GetLastError());
     }
- 
+
     if (SUCCEEDED(hr))
     {
         VOID * pData = 0;
@@ -284,7 +284,7 @@ HRESULT CRecoDlgClass::FeedDocumentFromClipboard()
             if (SUCCEEDED(hr))
             {
                 MultiByteToWideChar(uiCodePage, 0, (char *)pData, (int) cBytes, pwszCoMem, (int) cch);
-            }            
+            }
         }
 
         if (pData)
@@ -292,7 +292,7 @@ HRESULT CRecoDlgClass::FeedDocumentFromClipboard()
             GlobalUnlock(hData);
         }
     }
-    
+
     if (SUCCEEDED(hr))
     {
         hr = FeedDocument(pwszCoMem, cch);
@@ -312,7 +312,7 @@ HRESULT CRecoDlgClass::FeedDocumentFromClipboard()
 *   Description: Common code for FeedDocumentFromFile and FeedDocumentFromClipboard.
 *                Feed the text buffer to the SR engine.
 *   Return:
-*       S_OK 
+*       S_OK
 *       E_* if error in SR engine
 ****************************************************************************************/
 
@@ -321,7 +321,7 @@ HRESULT CRecoDlgClass::FeedDocument(const WCHAR * pszCoMem, const SIZE_T cch)
     HRESULT hr = S_OK;
     //
     //  NOTE:  This function limits the size of the adaptation data to a maximum of 16K
-    //         characters (32K bytes).  This sample does NOT demonstrate the proper use 
+    //         characters (32K bytes).  This sample does NOT demonstrate the proper use
     //         of this method.  Applcations that use SetAdaptationData should break the
     //         data into small (1K or less) blocks, call SetAdaptationData, and then wait
     //         for a SPEI_ADAPTATION event before sending the next small block of data.
@@ -344,7 +344,7 @@ HRESULT CRecoDlgClass::FeedDocument(const WCHAR * pszCoMem, const SIZE_T cch)
 *   Description: Load a text file, and launch the User Training wizard using this text.
 *
 *   Return:
-*       S_OK 
+*       S_OK
 *       E_* if error in SR engine
 ****************************************************************************************/
 
@@ -352,7 +352,7 @@ HRESULT CRecoDlgClass::TrainFromFile()
 {
     WCHAR * pwszCoMem = 0;
     ULONG cch = 0;
-    
+
     HRESULT hr = GetTextFile(&pwszCoMem, &cch);
 
     if (SUCCEEDED(hr))

@@ -1,4 +1,4 @@
-//------------------------------------------------------------------------------
+﻿//------------------------------------------------------------------------------
 // File: DibHelper.cpp
 //
 // Desc: DirectShow sample code - In-memory push mode source filter
@@ -22,10 +22,10 @@ HBITMAP CopyScreenToBitmap(LPRECT lpRect, BYTE *pData, BITMAPINFO *pHeader)
 
     // check for an empty rectangle
     if (IsRectEmpty(lpRect))
-      return NULL;
+        return NULL;
 
     // create a DC for the screen and create
-    // a memory DC compatible to screen DC   
+    // a memory DC compatible to screen DC
     hScrDC = CreateDC(TEXT("DISPLAY"), NULL, NULL, NULL);
     hMemDC = CreateCompatibleDC(hScrDC);
 
@@ -62,7 +62,7 @@ HBITMAP CopyScreenToBitmap(LPRECT lpRect, BYTE *pData, BITMAPINFO *pHeader)
     BitBlt(hMemDC, 0, 0, nWidth, nHeight, hScrDC, nX, nY, SRCCOPY);
 
     // select old bitmap back into memory DC and get handle to
-    // bitmap of the screen   
+    // bitmap of the screen
     hBitmap = (HBITMAP)  SelectObject(hMemDC, hOldBitmap);
 
     // Copy the bitmap data into the provided BYTE buffer

@@ -1,4 +1,4 @@
-// SdkShaInfo.cpp : Implementation of DLL Exports.
+﻿// SdkShaInfo.cpp : Implementation of DLL Exports.
 
 #include "stdafx.h"
 #include "resource.h"
@@ -32,29 +32,29 @@ STDAPI DllRegisterServer(void)
 STDAPI DllUnregisterServer(void)
 {
 
-	HRESULT hr = _AtlModule.DllUnregisterServer(FALSE);
+    HRESULT hr = _AtlModule.DllUnregisterServer(FALSE);
 
-	return hr;
+    return hr;
 }
 
 // DllInstall - Adds/Removes entries to the system registry per user
-//              per machine.	
+//              per machine.
 STDAPI DllInstall(BOOL bInstall, LPCWSTR pszCmdLine)
 {
     HRESULT hr = E_FAIL;
     static const wchar_t szUserSwitch[] = _T("user");
 
     if (bInstall)
-    {	
-    	hr = DllRegisterServer();
-    	if (FAILED(hr))
-    	{	
-    		DllUnregisterServer();
-    	}
+    {
+        hr = DllRegisterServer();
+        if (FAILED(hr))
+        {
+            DllUnregisterServer();
+        }
     }
     else
     {
-    	hr = DllUnregisterServer();
+        hr = DllUnregisterServer();
     }
 
     return hr;

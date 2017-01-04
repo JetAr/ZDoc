@@ -1,10 +1,10 @@
-//------------------------------------------------------------------------------
+﻿//------------------------------------------------------------------------------
 // File: SampVid.cpp
 //
 // Desc: DirectShow sample code - illustrates a simple video renderer that
 //       draws video into a text-shaped window on Windows NT or a simple
-//       popup windows on Windows 95.  It shows hwo to use the base video 
-//       renderer classes from the DirectX SDK.  A property page is 
+//       popup windows on Windows 95.  It shows hwo to use the base video
+//       renderer classes from the DirectX SDK.  A property page is
 //       implemented to allow users to find out quality management details.
 //
 // Copyright (c) Microsoft Corporation.  All rights reserved.
@@ -50,9 +50,9 @@
 //
 // Demonstration instructions
 //
-// Start GraphEdit, which is available in the SDK DXUtils folder. 
+// Start GraphEdit, which is available in the SDK DXUtils folder.
 // Drag and drop an MPEG, AVI or MOV file into the tool and it will be rendered.
-// Then go to the filters in the graph and find the filter (box) titled 
+// Then go to the filters in the graph and find the filter (box) titled
 // "Video Renderer"
 //
 // This is the filter we will be replacing with the sample video renderer.
@@ -101,10 +101,10 @@
 // GUIDs
 
 DEFINE_GUID(CLSID_SampleRenderer,
-0x4d4b1600, 0x33ac, 0x11cf, 0xbf, 0x30, 0x00, 0xaa, 0x00, 0x55, 0x59, 0x5a);
+            0x4d4b1600, 0x33ac, 0x11cf, 0xbf, 0x30, 0x00, 0xaa, 0x00, 0x55, 0x59, 0x5a);
 
 DEFINE_GUID(CLSID_SampleQuality,
-0xdb76d7f0, 0x97cc, 0x11cf, 0xa0, 0x96, 0x00, 0x80, 0x5f, 0x6c, 0xab, 0x82);
+            0xdb76d7f0, 0x97cc, 0x11cf, 0xa0, 0x96, 0x00, 0x80, 0x5f, 0x6c, 0xab, 0x82);
 
 
 // Setup data
@@ -141,16 +141,21 @@ const AMOVIESETUP_FILTER sudSampVid =
 // provides the link between the OLE entry point in the DLL and an object
 // being created. The class factory will call the static CreateInstance
 
-CFactoryTemplate g_Templates[] = {
-    { L"Sample Video Renderer"
-    , &CLSID_SampleRenderer
-    , CVideoRenderer::CreateInstance
-    , NULL
-    , &sudSampVid }
-  ,
-    { L"Quality Property Page"
-    , &CLSID_SampleQuality
-    , CQualityProperties::CreateInstance }
+CFactoryTemplate g_Templates[] =
+{
+    {
+        L"Sample Video Renderer"
+        , &CLSID_SampleRenderer
+        , CVideoRenderer::CreateInstance
+        , NULL
+        , &sudSampVid
+    }
+    ,
+    {
+        L"Quality Property Page"
+        , &CLSID_SampleQuality
+        , CQualityProperties::CreateInstance
+    }
 };
 int g_cTemplates = sizeof(g_Templates) / sizeof(g_Templates[0]);
 
@@ -229,13 +234,15 @@ HRESULT CVideoRenderer::CheckMediaType(const CMediaType *pmtIn)
 CBasePin *CVideoRenderer::GetPin(int n)
 {
     ASSERT(n == 0);
-    if (n != 0) {
+    if (n != 0)
+    {
         return NULL;
     }
 
     // Assign the input pin if not already done so
 
-    if (m_pInputPin == NULL) {
+    if (m_pInputPin == NULL)
+    {
         m_pInputPin = &m_InputPin;
     }
 
@@ -253,13 +260,18 @@ STDMETHODIMP CVideoRenderer::NonDelegatingQueryInterface(REFIID riid,void **ppv)
 {
     CheckPointer(ppv,E_POINTER);
 
-    if (riid == IID_ISpecifyPropertyPages) {
+    if (riid == IID_ISpecifyPropertyPages)
+    {
         return GetInterface((ISpecifyPropertyPages *)this, ppv);
 
-    } else if (riid == IID_IVideoWindow) {
+    }
+    else if (riid == IID_IVideoWindow)
+    {
         return m_VideoText.NonDelegatingQueryInterface(riid,ppv);
 
-    } else if (riid == IID_IBasicVideo) {
+    }
+    else if (riid == IID_IBasicVideo)
+    {
         return m_VideoText.NonDelegatingQueryInterface(riid,ppv);
     }
 
@@ -384,7 +396,8 @@ HRESULT CVideoRenderer::SetMediaType(const CMediaType *pmt)
     // they're all identical colours we don't need to change the palette
 
     hr = m_ImagePalette.PreparePalette(&m_mtIn,&StoreFormat,NULL);
-    if (FAILED(hr)) {
+    if (FAILED(hr))
+    {
         return hr;
     }
 
@@ -415,13 +428,14 @@ HRESULT CVideoRenderer::BreakConnect()
     // Check we are in a valid state
 
     HRESULT hr = CBaseVideoRenderer::BreakConnect();
-    if (FAILED(hr)) {
+    if (FAILED(hr))
+    {
         return hr;
     }
 
     // The window is not used when disconnected
     IPin *pPin = m_InputPin.GetConnected();
-    if (pPin) 
+    if (pPin)
         SendNotifyWindow(pPin,NULL);
 
     // The base class break connect disables us from sending any EC_REPAINT
@@ -457,9 +471,9 @@ HRESULT CVideoRenderer::CompleteConnect(IPin *pReceivePin)
     // Has the video size changed between connections
 
     VIDEOINFOHEADER *pVideoInfo = (VIDEOINFOHEADER *) m_mtIn.Format();
-    if (pVideoInfo->bmiHeader.biWidth == m_VideoSize.cx) 
+    if (pVideoInfo->bmiHeader.biWidth == m_VideoSize.cx)
     {
-        if (pVideoInfo->bmiHeader.biHeight == m_VideoSize.cy) 
+        if (pVideoInfo->bmiHeader.biHeight == m_VideoSize.cy)
         {
             return NOERROR;
         }
@@ -495,7 +509,7 @@ HRESULT CVideoRenderer::CompleteConnect(IPin *pReceivePin)
 void CVideoRenderer::OnReceiveFirstSample(IMediaSample *pMediaSample)
 {
     ASSERT(pMediaSample);
-    
+
     DoRenderSample(pMediaSample);
 
 } // OnReceiveFirstSample
@@ -535,7 +549,7 @@ STDMETHODIMP CVideoInputPin::GetAllocator(IMemAllocator **ppAllocator)
 
     // Has an allocator been set yet in the base class
 
-    if (m_pAllocator == NULL) 
+    if (m_pAllocator == NULL)
     {
         m_pAllocator = &m_pRenderer->m_ImageAllocator;
         m_pAllocator->AddRef();
@@ -583,7 +597,7 @@ CVideoInputPin::NotifyAllocator(IMemAllocator *pAllocator,BOOL bReadOnly)
 
 ////////////////////////////////////////////////////////////////////////
 //
-// Exported entry points for registration and unregistration 
+// Exported entry points for registration and unregistration
 // (in this case they only call through to default implementations).
 //
 ////////////////////////////////////////////////////////////////////////
@@ -615,10 +629,10 @@ STDAPI DllUnregisterServer()
 //
 extern "C" BOOL WINAPI DllEntryPoint(HINSTANCE, ULONG, LPVOID);
 
-BOOL APIENTRY DllMain(HANDLE hModule, 
-                      DWORD  dwReason, 
+BOOL APIENTRY DllMain(HANDLE hModule,
+                      DWORD  dwReason,
                       LPVOID lpReserved)
 {
-	return DllEntryPoint((HINSTANCE)(hModule), dwReason, lpReserved);
+    return DllEntryPoint((HINSTANCE)(hModule), dwReason, lpReserved);
 }
 

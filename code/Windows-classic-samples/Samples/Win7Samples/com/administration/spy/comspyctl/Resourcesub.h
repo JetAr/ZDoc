@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -12,42 +12,51 @@
 
 /*C+C+++C+++C+++C+++C+++C+++C+++C+++C+++C+++C+++C+++C+++C+++C+++C+++C+++C+++C
 Class:   CResourceSub
-Summary: Resource Events Subscriber 
-C---C---C---C---C---C---C---C---C---C---C---C---C---C---C---C---C---C---C-C*/ 
-class ATL_NO_VTABLE CResourceSub : 
-	public CSysLCESub, 
-	public IComResourceEvents
+Summary: Resource Events Subscriber
+C---C---C---C---C---C---C---C---C---C---C---C---C---C---C---C---C---C---C-C*/
+class ATL_NO_VTABLE CResourceSub :
+    public CSysLCESub,
+    public IComResourceEvents
 
 {
 public:
-	CResourceSub(CComSpy * pSpy)
-	{
-		m_pSpy = pSpy;
-	}
-	CResourceSub()
-	{
-		m_pSpy = NULL;
-	}
+    CResourceSub(CComSpy * pSpy)
+    {
+        m_pSpy = pSpy;
+    }
+    CResourceSub()
+    {
+        m_pSpy = NULL;
+    }
 
-	DECLARE_NOT_AGGREGATABLE(CResourceSub)
-	DECLARE_GET_CONTROLLING_UNKNOWN()
+    DECLARE_NOT_AGGREGATABLE(CResourceSub)
+    DECLARE_GET_CONTROLLING_UNKNOWN()
 
-	BEGIN_COM_MAP(CResourceSub)
-		COM_INTERFACE_ENTRY(IComResourceEvents)
-		COM_INTERFACE_ENTRY_CHAIN(CSysLCESub)
-	END_COM_MAP()
+    BEGIN_COM_MAP(CResourceSub)
+    COM_INTERFACE_ENTRY(IComResourceEvents)
+    COM_INTERFACE_ENTRY_CHAIN(CSysLCESub)
+    END_COM_MAP()
 
-    virtual EventEnum EventType() { return Resource; }
-	virtual REFCLSID EventCLSID() { return CLSID_ComServiceEvents; }
-    virtual REFIID EventIID() { return IID_IComResourceEvents; }
+    virtual EventEnum EventType()
+    {
+        return Resource;
+    }
+    virtual REFCLSID EventCLSID()
+    {
+        return CLSID_ComServiceEvents;
+    }
+    virtual REFIID EventIID()
+    {
+        return IID_IComResourceEvents;
+    }
 
 // IResourceSub
 public:
-	STDMETHOD(OnResourceCreate)(COMSVCSEVENTINFO * pInfo, ULONG64 ObjectID, LPCWSTR pwszType,ULONG64 resId, BOOL enlisted);
-	STDMETHOD(OnResourceAllocate)(COMSVCSEVENTINFO * pInfo, ULONG64 ObjectID, LPCWSTR pwszType,ULONG64 resId, BOOL enlisted, DWORD NumRated, DWORD Rating);	
-	STDMETHOD(OnResourceRecycle)(COMSVCSEVENTINFO * pInfo, ULONG64 ObjectID, LPCWSTR pwszType,ULONG64 resId);
-	STDMETHOD(OnResourceDestroy)(COMSVCSEVENTINFO * pInfo, ULONG64 ObjectID, HRESULT hr, LPCWSTR pwszType,ULONG64 resId);
-	STDMETHOD(OnResourceTrack)(COMSVCSEVENTINFO * pInfo, ULONG64 ObjectID, LPCWSTR pwszType,ULONG64 resId, BOOL enlisted);
+    STDMETHOD(OnResourceCreate)(COMSVCSEVENTINFO * pInfo, ULONG64 ObjectID, LPCWSTR pwszType,ULONG64 resId, BOOL enlisted);
+    STDMETHOD(OnResourceAllocate)(COMSVCSEVENTINFO * pInfo, ULONG64 ObjectID, LPCWSTR pwszType,ULONG64 resId, BOOL enlisted, DWORD NumRated, DWORD Rating);
+    STDMETHOD(OnResourceRecycle)(COMSVCSEVENTINFO * pInfo, ULONG64 ObjectID, LPCWSTR pwszType,ULONG64 resId);
+    STDMETHOD(OnResourceDestroy)(COMSVCSEVENTINFO * pInfo, ULONG64 ObjectID, HRESULT hr, LPCWSTR pwszType,ULONG64 resId);
+    STDMETHOD(OnResourceTrack)(COMSVCSEVENTINFO * pInfo, ULONG64 ObjectID, LPCWSTR pwszType,ULONG64 resId, BOOL enlisted);
 };
 
 #endif //__RESOURCESUB_H_

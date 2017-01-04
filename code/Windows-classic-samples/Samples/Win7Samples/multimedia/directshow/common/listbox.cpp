@@ -1,4 +1,4 @@
-//-----------------------------------------------------------------------------
+﻿//-----------------------------------------------------------------------------
 // File: Listbox.cpp
 // Desc: Listbox control class
 //
@@ -18,7 +18,7 @@
 //-----------------------------------------------------------------------------
 
 ListBox::ListBox()
-: m_bMultiSelect(false)
+    : m_bMultiSelect(false)
 {
 
 }
@@ -75,7 +75,7 @@ BOOL ListBox::AddString(LPCTSTR sz)
 
 //-----------------------------------------------------------------------------
 // Name: GetString
-// Desc: Returns a string at a specified index. 
+// Desc: Returns a string at a specified index.
 //
 // ppStr: Receives a pointer to the string. The method allocates the string.
 //        The caller must free the string using CoTaskMemFree.
@@ -181,9 +181,9 @@ void* ListBox::GetItem(UINT index)
 BOOL ListBox::Select(UINT index)
 {
     LRESULT res;
-    
+
     if (IsMultiSelect())
-    {   
+    {
         res = SendMessage(LB_SETSEL, (WPARAM)TRUE, (LPARAM)index);
     }
     else
@@ -282,7 +282,7 @@ BOOL ListBox::GetMultiSelection(UINT **ppIndexes, UINT *pCount)
     *ppIndexes = pIndexes;
     return TRUE;
 }
-    
+
 
 
 //-----------------------------------------------------------------------------
@@ -304,14 +304,14 @@ void ListBox::ClearSelection()
     {
         SendMessage(LB_SETCURSEL, -1, 0);
 
-        // Per MSDN: In this case, SendMessage returns LB_ERR even though 
+        // Per MSDN: In this case, SendMessage returns LB_ERR even though
         // no error has occurred. Go figure.
     }
 }
 
 //-----------------------------------------------------------------------------
 // Name: DeleteItem
-// Desc: Deletes a listbox item. 
+// Desc: Deletes a listbox item.
 //
 // Note: Does not release any user data associated with the item.
 //-----------------------------------------------------------------------------

@@ -1,4 +1,4 @@
-/*++
+﻿/*++
 THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED
 TO THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -85,20 +85,20 @@ GetTextualSid(
     PSID pSid,          // binary Sid
     LPWSTR TextualSID,  // buffer for Textual representaion of Sid
     LPDWORD cchSidSize  // required/provided TextualSid buffersize
-    );
+);
 
 void
 DisplayWinError(
     LPWSTR szAPI,    // pointer to Ansi function name
     DWORD dwError   // DWORD WinError
-    );
+);
 
 
 int
 __cdecl
 main(
     void
-    )
+)
 {
 #define MY_BUFSIZE 256 // all allocations should be dynamic
     HANDLE hToken;
@@ -118,7 +118,7 @@ main(
                 GetCurrentProcess(), // target current process
                 TOKEN_QUERY,         // TOKEN_QUERY access
                 &hToken              // resultant hToken
-                ))
+            ))
     {
         DisplayWinError( TEXT(L"OpenProcessToken"), GetLastError() );
         return RTN_ERROR;
@@ -128,17 +128,18 @@ main(
     // obtain user identified by current process' access token
     //
     bSuccess = GetTokenInformation(
-                hToken,    // identifies access token
-                TokenUser, // TokenUser info type
-                ptgUser,   // retrieved info buffer
-                cbBuffer,  // size of buffer passed-in
-                &cbBuffer  // required buffer size
-                );
+                   hToken,    // identifies access token
+                   TokenUser, // TokenUser info type
+                   ptgUser,   // retrieved info buffer
+                   cbBuffer,  // size of buffer passed-in
+                   &cbBuffer  // required buffer size
+               );
 
     // close token handle.  do this even if error above
     CloseHandle(hToken);
 
-    if(!bSuccess) {
+    if(!bSuccess)
+    {
         DisplayWinError( TEXT(L"GetTokenInformation"), GetLastError() );
         return RTN_ERROR;
     }
@@ -150,7 +151,8 @@ main(
                 ptgUser->User.Sid, // user binary Sid
                 szTextualSid,      // buffer for TextualSid
                 &cchSid            // size/required buffer
-                )) {
+            ))
+    {
         DisplayWinError( TEXT(L"GetTextualSid"), GetLastError() );
         return RTN_ERROR;
     }
@@ -167,7 +169,7 @@ GetTextualSid(
     PSID pSid,          // binary Sid
     LPWSTR TextualSid,  // buffer for Textual representaion of Sid
     LPDWORD cchSidSize  // required/provided TextualSid buffersize in TCHARs
-    )
+)
 {
     PSID_IDENTIFIER_AUTHORITY psia;
     DWORD dwSubAuthorities;
@@ -201,7 +203,8 @@ GetTextualSid(
     // check provided buffer length.
     // If not large enough, indicate proper size and setlasterror
     //
-    if(*cchSidSize < cchMaxLen) {
+    if(*cchSidSize < cchMaxLen)
+    {
         *cchSidSize = cchMaxLen;
         SetLastError(ERROR_INSUFFICIENT_BUFFER);
         return FALSE;
@@ -211,41 +214,45 @@ GetTextualSid(
     // prepare S-SID_REVISION-
     //
     cchSidCopy = swprintf_s(TextualSid,
-                           cchMaxLen,
-                           TEXT(L"S-%lu-"),
-                           SID_REVISION );
+                            cchMaxLen,
+                            TEXT(L"S-%lu-"),
+                            SID_REVISION );
 
     //
     // prepare SidIdentifierAuthority
     //
-    if ( (psia->Value[0] != 0) || (psia->Value[1] != 0) ) {
+    if ( (psia->Value[0] != 0) || (psia->Value[1] != 0) )
+    {
         cchSidCopy += swprintf_s(TextualSid + cchSidCopy,
-                    cchMaxLen - cchSidCopy,
-                    TEXT(L"0x%02hx%02hx%02hx%02hx%02hx%02hx"),
-                    (USHORT)psia->Value[0],
-                    (USHORT)psia->Value[1],
-                    (USHORT)psia->Value[2],
-                    (USHORT)psia->Value[3],
-                    (USHORT)psia->Value[4],
-                    (USHORT)psia->Value[5]);
-    } else {
+                                 cchMaxLen - cchSidCopy,
+                                 TEXT(L"0x%02hx%02hx%02hx%02hx%02hx%02hx"),
+                                 (USHORT)psia->Value[0],
+                                 (USHORT)psia->Value[1],
+                                 (USHORT)psia->Value[2],
+                                 (USHORT)psia->Value[3],
+                                 (USHORT)psia->Value[4],
+                                 (USHORT)psia->Value[5]);
+    }
+    else
+    {
         cchSidCopy += swprintf_s(TextualSid + cchSidCopy,
-                    cchMaxLen - cchSidCopy,
-                    TEXT(L"%lu"),
-                    (ULONG)(psia->Value[5]      )   +
-                    (ULONG)(psia->Value[4] <<  8)   +
-                    (ULONG)(psia->Value[3] << 16)   +
-                    (ULONG)(psia->Value[2] << 24)   );
+                                 cchMaxLen - cchSidCopy,
+                                 TEXT(L"%lu"),
+                                 (ULONG)(psia->Value[5]      )   +
+                                 (ULONG)(psia->Value[4] <<  8)   +
+                                 (ULONG)(psia->Value[3] << 16)   +
+                                 (ULONG)(psia->Value[2] << 24)   );
     }
 
     //
     // loop through SidSubAuthorities
     //
-    for(dwCounter = 0 ; dwCounter < dwSubAuthorities ; dwCounter++) {
+    for(dwCounter = 0 ; dwCounter < dwSubAuthorities ; dwCounter++)
+    {
         cchSidCopy += swprintf_s(TextualSid + cchSidCopy,
-                    cchMaxLen - cchSidCopy,
-                    TEXT(L"-%lu"),
-                    *GetSidSubAuthority(pSid, dwCounter) );
+                                 cchMaxLen - cchSidCopy,
+                                 TEXT(L"-%lu"),
+                                 *GetSidSubAuthority(pSid, dwCounter) );
     }
 
     //
@@ -261,7 +268,7 @@ void
 DisplayWinError(
     LPWSTR szAPI,   // pointer to function name
     DWORD dwError   // DWORD WinError
-    )
+)
 {
     LPWSTR MessageBuffer;
     DWORD dwBufferLength;
@@ -272,15 +279,15 @@ DisplayWinError(
     }
 
     dwBufferLength = FormatMessage(
-            FORMAT_MESSAGE_ALLOCATE_BUFFER |
-            FORMAT_MESSAGE_FROM_SYSTEM,
-            NULL,
-            dwError,
-            MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
-            (LPTSTR) &MessageBuffer,
-            0,
-            NULL
-            );
+                         FORMAT_MESSAGE_ALLOCATE_BUFFER |
+                         FORMAT_MESSAGE_FROM_SYSTEM,
+                         NULL,
+                         dwError,
+                         MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
+                         (LPTSTR) &MessageBuffer,
+                         0,
+                         NULL
+                     );
     if( dwBufferLength )
     {
         //

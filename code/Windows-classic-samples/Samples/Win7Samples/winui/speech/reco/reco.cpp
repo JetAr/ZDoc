@@ -1,9 +1,9 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
 //
-// Copyright � Microsoft Corporation. All rights reserved
+// Copyright © Microsoft Corporation. All rights reserved
 
 /****************************************************************************
 * Reco.Cpp *
@@ -29,7 +29,7 @@
 *   Description:
 *       Main entry point for a Win32 application.  This program simply initializes
 *   COM, constructs a CRecoDlg class object on the stack, and displays the dialog
-*   by calling DialogBoxParam.    
+*   by calling DialogBoxParam.
 *
 *   Returns:
 *       Always returns 0
@@ -84,260 +84,260 @@ LRESULT CALLBACK CRecoDlgClass::DlgProc(HWND hDlg, UINT message, WPARAM wParam, 
 
     switch (message)
     {
-        case WM_INITDIALOG:
-            ::SetWindowLongPtr(hDlg, GWLP_USERDATA, (LONG_PTR)lParam);
-            pThis = (CRecoDlgClass *)lParam;
-            lr = pThis->InitDialog(hDlg);
-            break;
+    case WM_INITDIALOG:
+        ::SetWindowLongPtr(hDlg, GWLP_USERDATA, (LONG_PTR)lParam);
+        pThis = (CRecoDlgClass *)lParam;
+        lr = pThis->InitDialog(hDlg);
+        break;
 
-        case WM_RECOEVENT:
-            pThis->RecoEvent();
+    case WM_RECOEVENT:
+        pThis->RecoEvent();
+        lr = TRUE;
+        break;
+
+    case WM_HELP:
+        ::DialogBoxParam(pThis->m_hInstance, (LPCTSTR)IDD_DIALOG_BETAHELP, hDlg, (DLGPROC)BetaHelpDlgProc, NULL);
+        return TRUE;
+
+    case WM_COMMAND:
+        if (LOWORD(wParam) == IDC_CHECK_CREATE)
+        {
+            pThis->UpdateRecoCtxtState();
+        }
+        else if (LOWORD(wParam) == IDC_CHECK_MIC)
+        {
+            BOOL bIsChecked = (::SendDlgItemMessage( hDlg, IDC_CHECK_MIC, BM_GETCHECK, 0, 0 ) == BST_CHECKED);
+            if (bIsChecked)
+            {
+                pThis->m_cpRecognizer->SetRecoState( SPRST_ACTIVE );
+            }
+            else
+            {
+                pThis->m_cpRecognizer->SetRecoState( SPRST_INACTIVE );
+            }
+        }
+        else if (LOWORD(wParam) == IDM_FILE_EXIT || LOWORD(wParam) == IDCANCEL)
+        {
+            pThis->Cleanup();
+            EndDialog(hDlg, 0);
             lr = TRUE;
-            break;
-
-        case WM_HELP:
+        }
+        else if (LOWORD(wParam) == IDM_HELP)
+        {
             ::DialogBoxParam(pThis->m_hInstance, (LPCTSTR)IDD_DIALOG_BETAHELP, hDlg, (DLGPROC)BetaHelpDlgProc, NULL);
-            return TRUE;
-
-        case WM_COMMAND:
-            if (LOWORD(wParam) == IDC_CHECK_CREATE)
+        }
+        else if (LOWORD(wParam) == IDM_CFG_LOAD_GRAMMAR)
+        {
+            pThis->SpecifyCAndCGrammar();
+        }
+        else if (LOWORD(wParam) == IDM_CFG_SET_WORD_SEQUENCE_DATA)
+        {
+            pThis->SetWordSequenceData();
+        }
+        else if (LOWORD(wParam) == IDC_EDIT_PARSETEXT)
+        {
+            BOOL bEnableSubmit = (::SendDlgItemMessage(hDlg, IDC_EDIT_PARSETEXT, WM_GETTEXTLENGTH, 0, 0) != 0);
+            ::EnableWindow(::GetDlgItem(hDlg, IDC_BUTTON_SUBMIT), bEnableSubmit);
+        }
+        else if (LOWORD(wParam) == IDC_BUTTON_SUBMIT)
+        {
+            TCHAR tszText[MAX_PATH];
+            ::SendDlgItemMessage(hDlg, IDC_EDIT_PARSETEXT, WM_GETTEXT, sp_countof(tszText), (LPARAM)tszText);
+            if (tszText[0] != 0)
             {
-                pThis->UpdateRecoCtxtState();
+                pThis->EmulateRecognition(CT2W(tszText));
             }
-            else if (LOWORD(wParam) == IDC_CHECK_MIC)
+        }
+        else if( LOWORD(wParam) == IDC_BUTTON_ALTERNATES )
+        {
+            LRESULT item = ::SendDlgItemMessage(hDlg, IDC_LIST_PHRASES, LB_GETCURSEL, 0, 0);
+            CRecoDlgListItem * pli = NULL;
+            if (item != LB_ERR)
             {
-                BOOL bIsChecked = (::SendDlgItemMessage( hDlg, IDC_CHECK_MIC, BM_GETCHECK, 0, 0 ) == BST_CHECKED);
-                if (bIsChecked)
+                pli = (CRecoDlgListItem*)::SendDlgItemMessage(hDlg, IDC_LIST_PHRASES, LB_GETITEMDATA, item, 0);
+            }
+            if( pli )
+            {
+                CAlternatesDlgClass AltDlg;
+                AltDlg.m_pResult = pli->GetRecoResult();
+                if (AltDlg.m_pResult)
                 {
-                    pThis->m_cpRecognizer->SetRecoState( SPRST_ACTIVE );
-                }
-                else
-                {
-                    pThis->m_cpRecognizer->SetRecoState( SPRST_INACTIVE );
-                }
-            }
-            else if (LOWORD(wParam) == IDM_FILE_EXIT || LOWORD(wParam) == IDCANCEL)
-            {
-                pThis->Cleanup();
-                EndDialog(hDlg, 0);
-                lr = TRUE;
-            }
-            else if (LOWORD(wParam) == IDM_HELP)
-            {
-                ::DialogBoxParam(pThis->m_hInstance, (LPCTSTR)IDD_DIALOG_BETAHELP, hDlg, (DLGPROC)BetaHelpDlgProc, NULL);
-            }
-            else if (LOWORD(wParam) == IDM_CFG_LOAD_GRAMMAR)
-            {
-                pThis->SpecifyCAndCGrammar();
-            }
-            else if (LOWORD(wParam) == IDM_CFG_SET_WORD_SEQUENCE_DATA)
-            {
-                pThis->SetWordSequenceData();
-            }
-            else if (LOWORD(wParam) == IDC_EDIT_PARSETEXT)
-            {
-                BOOL bEnableSubmit = (::SendDlgItemMessage(hDlg, IDC_EDIT_PARSETEXT, WM_GETTEXTLENGTH, 0, 0) != 0);
-                ::EnableWindow(::GetDlgItem(hDlg, IDC_BUTTON_SUBMIT), bEnableSubmit);
-            }
-            else if (LOWORD(wParam) == IDC_BUTTON_SUBMIT)
-            {
-                TCHAR tszText[MAX_PATH];
-                ::SendDlgItemMessage(hDlg, IDC_EDIT_PARSETEXT, WM_GETTEXT, sp_countof(tszText), (LPARAM)tszText);
-                if (tszText[0] != 0)
-                {
-                    pThis->EmulateRecognition(CT2W(tszText));
-                }
-            }
-            else if( LOWORD(wParam) == IDC_BUTTON_ALTERNATES )
-            {
-                LRESULT item = ::SendDlgItemMessage(hDlg, IDC_LIST_PHRASES, LB_GETCURSEL, 0, 0);
-                CRecoDlgListItem * pli = NULL;
-                if (item != LB_ERR)
-                {
-                    pli = (CRecoDlgListItem*)::SendDlgItemMessage(hDlg, IDC_LIST_PHRASES, LB_GETITEMDATA, item, 0);
-                }
-                if( pli )
-                {
-                    CAlternatesDlgClass AltDlg;
-                    AltDlg.m_pResult = pli->GetRecoResult();
-                    if (AltDlg.m_pResult)
-                    {
-                        LPARAM RetVal = ::DialogBoxParam( pThis->m_hInstance, (LPCTSTR)IDD_ALTS_DIALOG, hDlg,
+                    LPARAM RetVal = ::DialogBoxParam( pThis->m_hInstance, (LPCTSTR)IDD_ALTS_DIALOG, hDlg,
                                                       (DLGPROC)CAlternatesDlgClass::AlternatesDlgProc,
                                                       (LPARAM)&AltDlg );
 
-                        //--- Draw the new item
-                        if( RetVal ==  IDOK )
-                        {
-                            CSpDynamicString dstrText;
-                            AltDlg.m_pResult->GetText( SP_GETWHOLEPHRASE, SP_GETWHOLEPHRASE,
-                                                       TRUE, &dstrText, NULL );
-                            CRecoDlgListItem * pNewItem =
-                                new CRecoDlgListItem( AltDlg.m_pResult, dstrText, pli->IsHypothesis() );
-                            LPARAM iNewPhrase = ::SendDlgItemMessage( hDlg, IDC_LIST_PHRASES, LB_ADDSTRING, 0, (LPARAM)pNewItem);
-                            ::SendDlgItemMessage( hDlg, IDC_LIST_PHRASES, LB_SETCURSEL, iNewPhrase, 0);
-                            ::SendDlgItemMessage( hDlg, IDC_LIST_PHRASES, LB_DELETESTRING, iNewPhrase-1, 0);
-                            pThis->UpdatePropWindow( pNewItem );
-                        }
+                    //--- Draw the new item
+                    if( RetVal ==  IDOK )
+                    {
+                        CSpDynamicString dstrText;
+                        AltDlg.m_pResult->GetText( SP_GETWHOLEPHRASE, SP_GETWHOLEPHRASE,
+                                                   TRUE, &dstrText, NULL );
+                        CRecoDlgListItem * pNewItem =
+                            new CRecoDlgListItem( AltDlg.m_pResult, dstrText, pli->IsHypothesis() );
+                        LPARAM iNewPhrase = ::SendDlgItemMessage( hDlg, IDC_LIST_PHRASES, LB_ADDSTRING, 0, (LPARAM)pNewItem);
+                        ::SendDlgItemMessage( hDlg, IDC_LIST_PHRASES, LB_SETCURSEL, iNewPhrase, 0);
+                        ::SendDlgItemMessage( hDlg, IDC_LIST_PHRASES, LB_DELETESTRING, iNewPhrase-1, 0);
+                        pThis->UpdatePropWindow( pNewItem );
                     }
                 }
-                lr = TRUE;
             }
-            else if (LOWORD(wParam) == IDM_CFG_ADD_DYNAMIC_RULE && pThis->m_cpCFGGrammar)
-            {
-                CDynGrammarDlgClass DlgClass(pThis, &pThis->m_ItemList);
-                ::DialogBoxParam(pThis->m_hInstance, (LPCTSTR)IDD_DYNGRAMMARDLG, hDlg, (DLGPROC)CDynGrammarDlgClass::DlgProc, (LPARAM)&DlgClass);
-                lr = TRUE;
-            }
-            else if (LOWORD(wParam) == IDM_SLM_ADAPT_FROM_FILE)
-            {
-                lr = pThis->FeedDocumentFromFile();
-            }
-            else if (LOWORD(wParam) == IDM_SLM_ADAPT_FROM_CLIPBOARD)
-            {
-                lr = pThis->FeedDocumentFromClipboard();
-            }
-            else if (LOWORD(wParam) == IDM_SLM_TRAIN_FROM_FILE)
-            {
-                lr = pThis->TrainFromFile();
-            }
-            else if (LOWORD(wParam) == IDC_RADIO_SHARED ||
-                     LOWORD(wParam) == IDC_RADIO_INPROC)
-            {
-                pThis->UpdateRecoCtxtState();
-            }
-            else if (pThis->m_cpRecoCtxt)
-            {
-                if (HIWORD(wParam) == BN_CLICKED && 
+            lr = TRUE;
+        }
+        else if (LOWORD(wParam) == IDM_CFG_ADD_DYNAMIC_RULE && pThis->m_cpCFGGrammar)
+        {
+            CDynGrammarDlgClass DlgClass(pThis, &pThis->m_ItemList);
+            ::DialogBoxParam(pThis->m_hInstance, (LPCTSTR)IDD_DYNGRAMMARDLG, hDlg, (DLGPROC)CDynGrammarDlgClass::DlgProc, (LPARAM)&DlgClass);
+            lr = TRUE;
+        }
+        else if (LOWORD(wParam) == IDM_SLM_ADAPT_FROM_FILE)
+        {
+            lr = pThis->FeedDocumentFromFile();
+        }
+        else if (LOWORD(wParam) == IDM_SLM_ADAPT_FROM_CLIPBOARD)
+        {
+            lr = pThis->FeedDocumentFromClipboard();
+        }
+        else if (LOWORD(wParam) == IDM_SLM_TRAIN_FROM_FILE)
+        {
+            lr = pThis->TrainFromFile();
+        }
+        else if (LOWORD(wParam) == IDC_RADIO_SHARED ||
+                 LOWORD(wParam) == IDC_RADIO_INPROC)
+        {
+            pThis->UpdateRecoCtxtState();
+        }
+        else if (pThis->m_cpRecoCtxt)
+        {
+            if (HIWORD(wParam) == BN_CLICKED &&
                     (LOWORD(wParam) == IDC_CHECK_CFG         ||
                      LOWORD(wParam) == IDC_CHECK_DICTATION   ||
                      LOWORD(wParam) == IDC_CHECK_DICTATION_ACTIVE ||
                      LOWORD(wParam) == IDC_CHECK_CFG_ACTIVE ||
                      LOWORD(wParam) == IDC_CHECK_SPELLING   ||
                      LOWORD(wParam) == IDC_CHECK_SPELLING_ACTIVE))
+            {
+                pThis->UpdateGrammarState(LOWORD(wParam));
+            }
+            else if (LOWORD(wParam) == IDC_CHECK_RETAIN_AUDIO)
+            {
+                SPAUDIOOPTIONS Opts = SPAO_NONE;
+                if (::SendDlgItemMessage( hDlg, IDC_CHECK_RETAIN_AUDIO, BM_GETCHECK, 0, 0 ) == BST_CHECKED)
                 {
-                    pThis->UpdateGrammarState(LOWORD(wParam));
+                    Opts = SPAO_RETAIN_AUDIO;
                 }
-                else if (LOWORD(wParam) == IDC_CHECK_RETAIN_AUDIO)
+                pThis->m_cpRecoCtxt->SetAudioOptions(Opts, NULL, NULL);
+            }
+            else if (LOWORD(wParam) == IDC_LIST_PHRASES)
+            {
+                WORD wNotify = HIWORD(wParam);
+                LPARAM item = ::SendDlgItemMessage(hDlg, IDC_LIST_PHRASES, LB_GETCURSEL, 0, 0);
+                CRecoDlgListItem * pli = NULL;
+                if (item != LB_ERR)
                 {
-                    SPAUDIOOPTIONS Opts = SPAO_NONE;
-                    if (::SendDlgItemMessage( hDlg, IDC_CHECK_RETAIN_AUDIO, BM_GETCHECK, 0, 0 ) == BST_CHECKED)
-                    {
-                        Opts = SPAO_RETAIN_AUDIO;
-                    }
-                    pThis->m_cpRecoCtxt->SetAudioOptions(Opts, NULL, NULL);
+                    pli = (CRecoDlgListItem*)::SendDlgItemMessage(hDlg, IDC_LIST_PHRASES, LB_GETITEMDATA, item, 0);
                 }
-                else if (LOWORD(wParam) == IDC_LIST_PHRASES)
+                if (wNotify == LBN_SELCHANGE)
                 {
-                    WORD wNotify = HIWORD(wParam);
-                    LPARAM item = ::SendDlgItemMessage(hDlg, IDC_LIST_PHRASES, LB_GETCURSEL, 0, 0);
-                    CRecoDlgListItem * pli = NULL;
-                    if (item != LB_ERR)
+                    pThis->UpdatePropWindow(pli);
+                }
+                else if (wNotify == LBN_DBLCLK && pli)
+                {
+                    ISpRecoResult * pResult = pli->GetRecoResult();
+                    if (pResult)
                     {
-                        pli = (CRecoDlgListItem*)::SendDlgItemMessage(hDlg, IDC_LIST_PHRASES, LB_GETITEMDATA, item, 0);
-                    }
-                    if (wNotify == LBN_SELCHANGE)
-                    {
-                        pThis->UpdatePropWindow(pli);
-                    }
-                    else if (wNotify == LBN_DBLCLK && pli)
-                    {
-                        ISpRecoResult * pResult = pli->GetRecoResult();
-                        if (pResult)
+                        if (FAILED(pli->GetRecoResult()->SpeakAudio(NULL, 0, SPF_ASYNC, NULL)))
                         {
-                            if (FAILED(pli->GetRecoResult()->SpeakAudio(NULL, 0, SPF_ASYNC, NULL)))
+                            CComPtr<ISpVoice> cpVoice;
+                            pThis->m_cpRecoCtxt->GetVoice(&cpVoice);
+                            if (cpVoice)
                             {
-                                CComPtr<ISpVoice> cpVoice;
-                                pThis->m_cpRecoCtxt->GetVoice(&cpVoice);
-                                if (cpVoice)
-                                {
-                                    cpVoice->Speak(pli->GetText(), SPF_ASYNC, NULL);
-                                }
+                                cpVoice->Speak(pli->GetText(), SPF_ASYNC, NULL);
                             }
                         }
                     }
                 }
             }
-            break;
+        }
+        break;
 
-        case WM_DRAWITEM:
-            if (wParam == IDC_LIST_PHRASES)
+    case WM_DRAWITEM:
+        if (wParam == IDC_LIST_PHRASES)
+        {
+            LPDRAWITEMSTRUCT pdis = (LPDRAWITEMSTRUCT)lParam;
+
+            const CRecoDlgListItem * pli = (const CRecoDlgListItem *)pdis->itemData;
+
+            if (pli && pli->GetText())
             {
-                LPDRAWITEMSTRUCT pdis = (LPDRAWITEMSTRUCT)lParam;
+                HGDIOBJ hfontOld = pThis->m_hfont ? SelectObject( pdis->hDC, pThis->m_hfont ) : NULL;
 
-                const CRecoDlgListItem * pli = (const CRecoDlgListItem *)pdis->itemData;
+                CComPtr<ISpRecoResult> cpResult;
+                SPRECORESULTTIMES times;
+                UINT oldTextAlign = GetTextAlign(pdis->hDC);
+                UINT options = ETO_OPAQUE | ETO_CLIPPED;
 
-                if (pli && pli->GetText())
+                cpResult = pli->GetRecoResult();
+                if (cpResult && cpResult->GetResultTimes(&times) == S_OK)
                 {
-                    HGDIOBJ hfontOld = pThis->m_hfont ? SelectObject( pdis->hDC, pThis->m_hfont ) : NULL;
+                    FILETIME localtime;
+                    SYSTEMTIME systime;
 
-                    CComPtr<ISpRecoResult> cpResult;
-                    SPRECORESULTTIMES times;
-                    UINT oldTextAlign = GetTextAlign(pdis->hDC);
-                    UINT options = ETO_OPAQUE | ETO_CLIPPED;
-
-                    cpResult = pli->GetRecoResult();
-                    if (cpResult && cpResult->GetResultTimes(&times) == S_OK)
-                    {
-                        FILETIME localtime;
-                        SYSTEMTIME systime;
-
-                        if (FileTimeToLocalFileTime(&times.ftStreamTime, &localtime) &&
+                    if (FileTimeToLocalFileTime(&times.ftStreamTime, &localtime) &&
                             FileTimeToSystemTime(&localtime, &systime))
-                        {
-                            TCHAR sztime[18];
-                            _stprintf_s(sztime, _countof(sztime), _T("[%2d:%02d:%02d.%03d] -"),
-                                        systime.wHour, systime.wMinute, systime.wSecond, systime.wMilliseconds);
-                            SetTextAlign(pdis->hDC, TA_UPDATECP);
-                            MoveToEx(pdis->hDC, pdis->rcItem.left, pdis->rcItem.top, NULL);
-                            ExtTextOut(pdis->hDC,
-                                        pdis->rcItem.left, pdis->rcItem.top,
-                                        options,
-                                        &pdis->rcItem,
-                                        sztime, 16,
-                                        NULL);
-                            options = ETO_CLIPPED;
-                        }
-                    }
-
-                    ExtTextOutW(pdis->hDC,
-                                pdis->rcItem.left, pdis->rcItem.top,
-                                options,
-                                &pdis->rcItem,
-                                pli->GetText(), pli->GetTextLength(),
-                                NULL);
-
-                    if (pli->IsHypothesis())
                     {
-                        const WCHAR *pszHypothesis = L" [Hypothesis]";
-                        ExtTextOutW(pdis->hDC,
+                        TCHAR sztime[18];
+                        _stprintf_s(sztime, _countof(sztime), _T("[%2d:%02d:%02d.%03d] -"),
+                                    systime.wHour, systime.wMinute, systime.wSecond, systime.wMilliseconds);
+                        SetTextAlign(pdis->hDC, TA_UPDATECP);
+                        MoveToEx(pdis->hDC, pdis->rcItem.left, pdis->rcItem.top, NULL);
+                        ExtTextOut(pdis->hDC,
+                                   pdis->rcItem.left, pdis->rcItem.top,
+                                   options,
+                                   &pdis->rcItem,
+                                   sztime, 16,
+                                   NULL);
+                        options = ETO_CLIPPED;
+                    }
+                }
+
+                ExtTextOutW(pdis->hDC,
+                            pdis->rcItem.left, pdis->rcItem.top,
+                            options,
+                            &pdis->rcItem,
+                            pli->GetText(), pli->GetTextLength(),
+                            NULL);
+
+                if (pli->IsHypothesis())
+                {
+                    const WCHAR *pszHypothesis = L" [Hypothesis]";
+                    ExtTextOutW(pdis->hDC,
                                 pdis->rcItem.left, pdis->rcItem.top,
                                 options,
                                 &pdis->rcItem,
                                 pszHypothesis, (UINT)wcslen(pszHypothesis),
                                 NULL);
-                    }
+                }
 
 
 
-                    SetTextAlign(pdis->hDC, oldTextAlign);
+                SetTextAlign(pdis->hDC, oldTextAlign);
 
-                    if (hfontOld)
-                    {
-                        SelectObject(pdis->hDC, hfontOld);
-                    }
+                if (hfontOld)
+                {
+                    SelectObject(pdis->hDC, hfontOld);
                 }
             }
-            break;
+        }
+        break;
 
-        case WM_DELETEITEM:
-            if (wParam == IDC_LIST_PHRASES)
-            {
-                CRecoDlgListItem * pli = (CRecoDlgListItem *)((DELETEITEMSTRUCT *)lParam)->itemData;
-                delete pli;
-                lr = TRUE;
-            }
-            break;
+    case WM_DELETEITEM:
+        if (wParam == IDC_LIST_PHRASES)
+        {
+            CRecoDlgListItem * pli = (CRecoDlgListItem *)((DELETEITEMSTRUCT *)lParam)->itemData;
+            delete pli;
+            lr = TRUE;
+        }
+        break;
 
     }
 
@@ -420,8 +420,8 @@ HRESULT CRecoDlgClass::ConstructRuleDisplay(const SPPHRASERULE *pRule, CSpDynami
 *       S_OK
 ****************************************************************************/
 
-HRESULT CRecoDlgClass::ConstructPropertyDisplay(const SPPHRASEELEMENT *pElem, const SPPHRASEPROPERTY *pProp, 
-                                                CSpDynamicString & dstr, ULONG ulLevel)
+HRESULT CRecoDlgClass::ConstructPropertyDisplay(const SPPHRASEELEMENT *pElem, const SPPHRASEPROPERTY *pProp,
+        CSpDynamicString & dstr, ULONG ulLevel)
 {
 
     HRESULT hr = S_OK;
@@ -523,7 +523,7 @@ HRESULT CRecoDlgClass::ConstructPropertyDisplay(const SPPHRASEELEMENT *pElem, co
 BOOL CRecoDlgClass::UpdatePropWindow(const CRecoDlgListItem * pli)
 {
     BOOL fOK = FALSE;
-    
+
     HWND hwndStatus = ::GetDlgItem(m_hDlg, IDC_STATUS);
     ISpPhrase * pPhrase = pli ? pli->GetRecoResult() : NULL;
     SPPHRASE *pElements;
@@ -579,7 +579,7 @@ BOOL CRecoDlgClass::UpdatePropWindow(const CRecoDlgListItem * pli)
             HRESULT hr = cpSML->GetXMLResult(&dstrSML, SPXRO_SML);
             if (hr == S_OK)
             {
-                dstr.Append(L"\r\nSML:\r\n");            
+                dstr.Append(L"\r\nSML:\r\n");
                 dstr.Append(dstrSML);
                 dstr.Append(L"\r\n");
             }
@@ -590,8 +590,8 @@ BOOL CRecoDlgClass::UpdatePropWindow(const CRecoDlgListItem * pli)
                 {
                     ULONG ulBufSize = 1024;
                     dstrSML.ClearAndGrowTo(ulBufSize);
-                    _snwprintf_s(dstrSML, ulBufSize, ulBufSize - 1, L"\r\nSML Error: [line: %d, HRESULT: %x] %s: %s\r\n", 
-                        err.ulLineNumber, err.hrResultCode, err.pszSource ? err.pszSource : L"", err.pszDescription ? err.pszDescription : L"");
+                    _snwprintf_s(dstrSML, ulBufSize, ulBufSize - 1, L"\r\nSML Error: [line: %d, HRESULT: %x] %s: %s\r\n",
+                                 err.ulLineNumber, err.hrResultCode, err.pszSource ? err.pszSource : L"", err.pszDescription ? err.pszDescription : L"");
                     dstrSML.m_psz[ulBufSize - 1] = L'\0';
                     dstr.Append(dstrSML);
                     if(err.pszScriptLine)
@@ -634,26 +634,26 @@ BOOL CRecoDlgClass::UpdatePropWindow(const CRecoDlgListItem * pli)
             WCHAR *pwszDisplayText = _wcsdup( pElements->pElements[i].pszDisplayText );
             if (pwszDisplayText && wcslen(pwszDisplayText) + wcslen(wszIntPhone) <= 200)
             {
-                swprintf_s(szText, _countof(szText), L" <%u - %u> \"%s\" {%s} {Confidence (%i) %f}\r\n", 
-                    pElements->pElements[i].ulAudioStreamOffset,
-                    pElements->pElements[i].ulAudioStreamOffset + pElements->pElements[i].ulAudioSizeBytes,
-                    pwszDisplayText, 
-                    wszIntPhone, pElements->pElements[i].ActualConfidence, pElements->pElements[i].SREngineConfidence);
+                swprintf_s(szText, _countof(szText), L" <%u - %u> \"%s\" {%s} {Confidence (%i) %f}\r\n",
+                           pElements->pElements[i].ulAudioStreamOffset,
+                           pElements->pElements[i].ulAudioStreamOffset + pElements->pElements[i].ulAudioSizeBytes,
+                           pwszDisplayText,
+                           wszIntPhone, pElements->pElements[i].ActualConfidence, pElements->pElements[i].SREngineConfidence);
             }
             else if (!pwszDisplayText || wcslen(pwszDisplayText) <= 200)
             {
-                swprintf_s(szText, _countof(szText), L" <%u - %u> \"%s\" {} {Confidence (%i) %f}\r\n", 
-                    pElements->pElements[i].ulAudioStreamOffset,
-                    pElements->pElements[i].ulAudioStreamOffset + pElements->pElements[i].ulAudioSizeBytes,
-                    pwszDisplayText ? pwszDisplayText : L"(out of memory)", 
-                    pElements->pElements[i].ActualConfidence, pElements->pElements[i].SREngineConfidence);
+                swprintf_s(szText, _countof(szText), L" <%u - %u> \"%s\" {} {Confidence (%i) %f}\r\n",
+                           pElements->pElements[i].ulAudioStreamOffset,
+                           pElements->pElements[i].ulAudioStreamOffset + pElements->pElements[i].ulAudioSizeBytes,
+                           pwszDisplayText ? pwszDisplayText : L"(out of memory)",
+                           pElements->pElements[i].ActualConfidence, pElements->pElements[i].SREngineConfidence);
             }
             else
             {
-                swprintf_s(szText, _countof(szText), L" <%u - %u> \"()\" {} {Confidence (%i) %f}\r\n", 
-                    pElements->pElements[i].ulAudioStreamOffset,
-                    pElements->pElements[i].ulAudioStreamOffset + pElements->pElements[i].ulAudioSizeBytes,
-                    pElements->pElements[i].ActualConfidence, pElements->pElements[i].SREngineConfidence);
+                swprintf_s(szText, _countof(szText), L" <%u - %u> \"()\" {} {Confidence (%i) %f}\r\n",
+                           pElements->pElements[i].ulAudioStreamOffset,
+                           pElements->pElements[i].ulAudioStreamOffset + pElements->pElements[i].ulAudioSizeBytes,
+                           pElements->pElements[i].ActualConfidence, pElements->pElements[i].SREngineConfidence);
             }
             if ( pwszDisplayText )
             {
@@ -698,7 +698,7 @@ BOOL CRecoDlgClass::UpdatePropWindow(const CRecoDlgListItem * pli)
 *-----------------------------------*
 *   Description:
 *       This method is called whenever a check box state has changed to update
-*   the state of grammars.  It will create or release m_cpCFGGrammar and 
+*   the state of grammars.  It will create or release m_cpCFGGrammar and
 *   m_cpDictationGrammar and activate or deactivate either of them.
 *
 *       If at any point during this function, a SAPI call fails, the state of
@@ -711,12 +711,12 @@ BOOL CRecoDlgClass::UpdatePropWindow(const CRecoDlgListItem * pli)
 
 HRESULT CRecoDlgClass::UpdateGrammarState(WORD wIdChanged)
 {
-    #ifdef _DEBUG
+#ifdef _DEBUG
     static BOOL fInUpdate = FALSE;
     _ASSERTE(!fInUpdate);
     fInUpdate = TRUE;
-    #endif // _DEBUG
-    
+#endif // _DEBUG
+
     HRESULT hr = S_OK;
 
     if (m_cpRecoCtxt)           // only if there is a recognition context
@@ -731,12 +731,12 @@ HRESULT CRecoDlgClass::UpdateGrammarState(WORD wIdChanged)
 
         // Force the pair of checks to be in sync.  If the ID is 0 then no checkbox
         // has changed state, so we don't have to do anything.
-        WORD wIdToUpdate = 0;  
+        WORD wIdToUpdate = 0;
         WPARAM NewState;
         switch (wIdChanged)
         {
         case IDC_CHECK_CFG:
-            if ((!fLoadCFG) && fActivateCFG) 
+            if ((!fLoadCFG) && fActivateCFG)
             {
                 fActivateCFG = FALSE;
                 wIdToUpdate = IDC_CHECK_CFG_ACTIVE;
@@ -744,7 +744,7 @@ HRESULT CRecoDlgClass::UpdateGrammarState(WORD wIdChanged)
             }
             break;
         case IDC_CHECK_DICTATION:
-            if ((!fLoadDictation) && fActivateDictation) 
+            if ((!fLoadDictation) && fActivateDictation)
             {
                 fActivateDictation = FALSE;
                 wIdToUpdate = IDC_CHECK_DICTATION_ACTIVE;
@@ -752,7 +752,7 @@ HRESULT CRecoDlgClass::UpdateGrammarState(WORD wIdChanged)
             }
             break;
         case IDC_CHECK_SPELLING:
-            if ((!fLoadSpelling) && fActivateSpelling) 
+            if ((!fLoadSpelling) && fActivateSpelling)
             {
                 fActivateSpelling = FALSE;
                 wIdToUpdate = IDC_CHECK_SPELLING_ACTIVE;
@@ -811,11 +811,11 @@ HRESULT CRecoDlgClass::UpdateGrammarState(WORD wIdChanged)
                     }
                     else
                     {
-                    // Need a method of determining the language id of the grammar resource we
-                    // want to load. This is dependent solely on the primary language of the engine the
-                    // user has selected. Hence, the resources are labelled 'Primary', SUBLANG_NEUTRAL
-                    // and we use the primary language id of the engine to do the LoadCmdFromResource.
-                    // NOTE: we now have an ENU vs. ENG system, so we need to make a sublanguage distinction
+                        // Need a method of determining the language id of the grammar resource we
+                        // want to load. This is dependent solely on the primary language of the engine the
+                        // user has selected. Hence, the resources are labelled 'Primary', SUBLANG_NEUTRAL
+                        // and we use the primary language id of the engine to do the LoadCmdFromResource.
+                        // NOTE: we now have an ENU vs. ENG system, so we need to make a sublanguage distinction
                         hr = m_cpCFGGrammar->LoadCmdFromResource(NULL, MAKEINTRESOURCEW(IDR_SOL_CFG),
                                 L"SRGRAMMAR", MAKELANGID(PRIMARYLANGID(m_langid), SUBLANGID(m_langid)), SPLO_DYNAMIC);
                     }
@@ -891,7 +891,7 @@ HRESULT CRecoDlgClass::UpdateGrammarState(WORD wIdChanged)
                 m_cpSpellingGrammar.Release();
             }
         }
-        
+
         // If we've failed by now, it's a grammar load failure
         if ( FAILED( hr ) )
         {
@@ -919,7 +919,7 @@ HRESULT CRecoDlgClass::UpdateGrammarState(WORD wIdChanged)
             hr = m_cpSpellingGrammar->SetDictationState(fActivateSpelling ? SPRS_ACTIVE : SPRS_INACTIVE);
         }
 
-        // If we have failed here, but the grammar load succeeded, then it's a 
+        // If we have failed here, but the grammar load succeeded, then it's a
         // SetRuleState/SetDictationState failure
         if ( FAILED( hr ) && (0 == uiErrorMessageID) )
         {
@@ -953,10 +953,10 @@ HRESULT CRecoDlgClass::UpdateGrammarState(WORD wIdChanged)
 
 
 
-    #ifdef _DEBUG
+#ifdef _DEBUG
     fInUpdate = FALSE;
-    #endif // _DEBUG
-    
+#endif // _DEBUG
+
     return hr;
 }
 
@@ -1040,7 +1040,7 @@ HRESULT CRecoDlgClass::UpdateRecoCtxtState()
 * CRecoDlgClass::InitDialog *
 *---------------------------*
 *   Description:
-*       Enumerates the available SR engines and populates the combo box.  
+*       Enumerates the available SR engines and populates the combo box.
 *   Initializes the application to the default starting state.
 *
 *   Returns:
@@ -1284,8 +1284,8 @@ HRESULT CRecoDlgClass::CreateRecoCtxt(LRESULT ItemData)
         DWORD dwVersion = GetVersion();
 
         if (   dwVersion >= 0x80000000
-            || LOBYTE(LOWORD(dwVersion)) < 5
-            || m_langid != MAKELANGID(LANG_ENGLISH, SUBLANG_ENGLISH_US))
+                || LOBYTE(LOWORD(dwVersion)) < 5
+                || m_langid != MAKELANGID(LANG_ENGLISH, SUBLANG_ENGLISH_US))
         {
             TCHAR achCodePage[6];
             UINT uiCodePage;
@@ -1303,7 +1303,7 @@ HRESULT CRecoDlgClass::CreateRecoCtxt(LRESULT ItemData)
             MIMECPINFO MimeCpInfo;
 
             if (   SUCCEEDED(cpMultiLanguage.CoCreateInstance(CLSID_CMultiLanguage))
-                && SUCCEEDED(cpMultiLanguage->GetCodePageInfo(uiCodePage, &MimeCpInfo)))
+                    && SUCCEEDED(cpMultiLanguage->GetCodePageInfo(uiCodePage, &MimeCpInfo)))
             {
                 if (m_hfont)
                 {
@@ -1341,7 +1341,7 @@ HRESULT CRecoDlgClass::CreateRecoCtxt(LRESULT ItemData)
 *------------------------------------------*
 *   Description:
 *       Called whenever the grammar file has changed to set the text of the
-*   grammar status control (a line in the dialog box below the property window).    
+*   grammar status control (a line in the dialog box below the property window).
 *
 *   Returns:
 *       void
@@ -1432,191 +1432,191 @@ void CRecoDlgClass::RecoEvent()
         {
             switch (event.eEventId)
             {
-                case SPEI_REQUEST_UI:
-                    if (event.RequestTypeOfUI() != NULL)
-                    {
-                        #ifdef _DEBUG
-                        SPRECOCONTEXTSTATUS recostatus;
-                        m_cpRecoCtxt->GetStatus(&recostatus);
-                        _ASSERTE(wcscmp(recostatus.szRequestTypeOfUI, event.RequestTypeOfUI()) == 0);
-                        #endif // _DEBUG
+            case SPEI_REQUEST_UI:
+                if (event.RequestTypeOfUI() != NULL)
+                {
+#ifdef _DEBUG
+                    SPRECOCONTEXTSTATUS recostatus;
+                    m_cpRecoCtxt->GetStatus(&recostatus);
+                    _ASSERTE(wcscmp(recostatus.szRequestTypeOfUI, event.RequestTypeOfUI()) == 0);
+#endif // _DEBUG
 
-                        m_cpRecognizer->DisplayUI(m_hDlg, L"Basic Speech Recognition", event.RequestTypeOfUI() , NULL, 0);
-                    }
-                    else
-                    {
-                        #ifdef _DEBUG
-                        SPRECOCONTEXTSTATUS recostatus;
-                        m_cpRecoCtxt->GetStatus(&recostatus);
-                        _ASSERTE(recostatus.szRequestTypeOfUI[0] == '\0');
-                        #endif // _DEBUG
-                    }
-                    break;
-                    
-            case SPEI_INTERFERENCE: 
-                { 
-                     CSpDynamicString dstr;
-                     switch(event.Interference())
-                     {
-                     case SPINTERFERENCE_NONE:
-                         dstr = L"Interference - None";
-                         break;
-                     case SPINTERFERENCE_NOISE:
-                         dstr = L"Interference - Noise";
-                         break;
-                     case SPINTERFERENCE_NOSIGNAL:
-                         dstr = L"Interference - No signal";
-                         break;
-                     case SPINTERFERENCE_TOOLOUD:
-                         dstr = L"Interference - Too loud";
-                         break;
-                     case SPINTERFERENCE_TOOQUIET:
-                         dstr = L"Interference - Too quiet";
-                         break;
-                     case SPINTERFERENCE_TOOFAST:
-                         dstr = L"Dictation mode: Interference - Too fast";
-                         break;
-                     case SPINTERFERENCE_TOOSLOW:
-                         dstr = L"Dictation mode: Interference - Too slow";
-                         break;
-                     default:
-                         dstr = L"Unrecognized Interference Event";
-                     }
-                        CRecoDlgListItem * pli = new CRecoDlgListItem(NULL, dstr, FALSE);
-                        if (pli)
-                        {
-                            iNewPhrase = ::SendDlgItemMessage(m_hDlg, IDC_LIST_PHRASES, LB_ADDSTRING, 0, (LPARAM)pli);
-                            ::SendDlgItemMessage(m_hDlg, IDC_LIST_PHRASES, LB_SETCURSEL, iNewPhrase, 0);
-                        }
-                    }
-                    break;
+                    m_cpRecognizer->DisplayUI(m_hDlg, L"Basic Speech Recognition", event.RequestTypeOfUI(), NULL, 0);
+                }
+                else
+                {
+#ifdef _DEBUG
+                    SPRECOCONTEXTSTATUS recostatus;
+                    m_cpRecoCtxt->GetStatus(&recostatus);
+                    _ASSERTE(recostatus.szRequestTypeOfUI[0] == '\0');
+#endif // _DEBUG
+                }
+                break;
 
-                case SPEI_PROPERTY_NUM_CHANGE:
-                    {
-                        TCHAR sz[MAX_PATH * 2];
-                        WCHAR *pwszPropertyName = NULL;
-                        if ( event.PropertyName() )
-                        {
-                            pwszPropertyName = _wcsdup( event.PropertyName() );
-                        }
-                        else
-                        {
-                            pwszPropertyName = _wcsdup( L"<no name>" );
-                        }
-                        _stprintf_s(sz, _countof(sz), _T("Attrib change:  %s=%d"), 
-                            pwszPropertyName ? (LPTSTR)CW2T(pwszPropertyName) : _T("(out of memory)"), 
+            case SPEI_INTERFERENCE:
+            {
+                CSpDynamicString dstr;
+                switch(event.Interference())
+                {
+                case SPINTERFERENCE_NONE:
+                    dstr = L"Interference - None";
+                    break;
+                case SPINTERFERENCE_NOISE:
+                    dstr = L"Interference - Noise";
+                    break;
+                case SPINTERFERENCE_NOSIGNAL:
+                    dstr = L"Interference - No signal";
+                    break;
+                case SPINTERFERENCE_TOOLOUD:
+                    dstr = L"Interference - Too loud";
+                    break;
+                case SPINTERFERENCE_TOOQUIET:
+                    dstr = L"Interference - Too quiet";
+                    break;
+                case SPINTERFERENCE_TOOFAST:
+                    dstr = L"Dictation mode: Interference - Too fast";
+                    break;
+                case SPINTERFERENCE_TOOSLOW:
+                    dstr = L"Dictation mode: Interference - Too slow";
+                    break;
+                default:
+                    dstr = L"Unrecognized Interference Event";
+                }
+                CRecoDlgListItem * pli = new CRecoDlgListItem(NULL, dstr, FALSE);
+                if (pli)
+                {
+                    iNewPhrase = ::SendDlgItemMessage(m_hDlg, IDC_LIST_PHRASES, LB_ADDSTRING, 0, (LPARAM)pli);
+                    ::SendDlgItemMessage(m_hDlg, IDC_LIST_PHRASES, LB_SETCURSEL, iNewPhrase, 0);
+                }
+            }
+            break;
+
+            case SPEI_PROPERTY_NUM_CHANGE:
+            {
+                TCHAR sz[MAX_PATH * 2];
+                WCHAR *pwszPropertyName = NULL;
+                if ( event.PropertyName() )
+                {
+                    pwszPropertyName = _wcsdup( event.PropertyName() );
+                }
+                else
+                {
+                    pwszPropertyName = _wcsdup( L"<no name>" );
+                }
+                _stprintf_s(sz, _countof(sz), _T("Attrib change:  %s=%d"),
+                            pwszPropertyName ? (LPTSTR)CW2T(pwszPropertyName) : _T("(out of memory)"),
                             event.PropertyNumValue());
-                        if ( pwszPropertyName )
-                        {
-                            free( pwszPropertyName );
-                        }
-                        CRecoDlgListItem * pli = new CRecoDlgListItem(NULL, CT2W(sz), FALSE);
-                        iNewPhrase = ::SendDlgItemMessage(m_hDlg, IDC_LIST_PHRASES, LB_ADDSTRING, 0, (LPARAM)pli);
-                        ::SendDlgItemMessage(m_hDlg, IDC_LIST_PHRASES, LB_SETCURSEL, iNewPhrase, 0);
-                    }
-                    break;
+                if ( pwszPropertyName )
+                {
+                    free( pwszPropertyName );
+                }
+                CRecoDlgListItem * pli = new CRecoDlgListItem(NULL, CT2W(sz), FALSE);
+                iNewPhrase = ::SendDlgItemMessage(m_hDlg, IDC_LIST_PHRASES, LB_ADDSTRING, 0, (LPARAM)pli);
+                ::SendDlgItemMessage(m_hDlg, IDC_LIST_PHRASES, LB_SETCURSEL, iNewPhrase, 0);
+            }
+            break;
 
-                case SPEI_PROPERTY_STRING_CHANGE:
-                    {
-                        TCHAR sz[MAX_PATH * 2];
-                        WCHAR *pwszPropertyName = NULL;
-                        if ( event.PropertyName() )
-                        {
-                            pwszPropertyName = _wcsdup( event.PropertyName() );
-                        }
-                        else
-                        {
-                            pwszPropertyName = _wcsdup( L"<no name>" );
-                        }
+            case SPEI_PROPERTY_STRING_CHANGE:
+            {
+                TCHAR sz[MAX_PATH * 2];
+                WCHAR *pwszPropertyName = NULL;
+                if ( event.PropertyName() )
+                {
+                    pwszPropertyName = _wcsdup( event.PropertyName() );
+                }
+                else
+                {
+                    pwszPropertyName = _wcsdup( L"<no name>" );
+                }
 
-                        WCHAR *pwszPropertyStringValue = NULL;
-                        if ( event.PropertyStringValue() )
-                        {
-                            pwszPropertyStringValue = _wcsdup( event.PropertyStringValue() );
-                        }
-                        else
-                        {
-                            pwszPropertyStringValue = _wcsdup( L"<no string value>" );
-                        }
-                        _stprintf_s(sz, _countof(sz), _T("Attrib change:  %s=%s"), 
-                            pwszPropertyName ? (LPTSTR)CW2T(pwszPropertyName) : _T("(out of memory)"), 
+                WCHAR *pwszPropertyStringValue = NULL;
+                if ( event.PropertyStringValue() )
+                {
+                    pwszPropertyStringValue = _wcsdup( event.PropertyStringValue() );
+                }
+                else
+                {
+                    pwszPropertyStringValue = _wcsdup( L"<no string value>" );
+                }
+                _stprintf_s(sz, _countof(sz), _T("Attrib change:  %s=%s"),
+                            pwszPropertyName ? (LPTSTR)CW2T(pwszPropertyName) : _T("(out of memory)"),
                             pwszPropertyStringValue ? (LPTSTR)CW2T(pwszPropertyStringValue): _T("(out of memory)") );
-                        if ( pwszPropertyName )
-                        {
-                            free( pwszPropertyName );
-                        }
-                        if ( pwszPropertyStringValue )
-                        {
-                            free( pwszPropertyStringValue );
-                        }
-                        CRecoDlgListItem * pli = new CRecoDlgListItem(NULL, CT2W(sz), FALSE);
+                if ( pwszPropertyName )
+                {
+                    free( pwszPropertyName );
+                }
+                if ( pwszPropertyStringValue )
+                {
+                    free( pwszPropertyStringValue );
+                }
+                CRecoDlgListItem * pli = new CRecoDlgListItem(NULL, CT2W(sz), FALSE);
+                iNewPhrase = ::SendDlgItemMessage(m_hDlg, IDC_LIST_PHRASES, LB_ADDSTRING, 0, (LPARAM)pli);
+                ::SendDlgItemMessage(m_hDlg, IDC_LIST_PHRASES, LB_SETCURSEL, iNewPhrase, 0);
+            }
+            break;
+
+            case SPEI_RECO_STATE_CHANGE:
+                ::SendDlgItemMessage( m_hDlg, IDC_CHECK_MIC, BM_SETCHECK,
+                                      (event.RecoState() == SPRST_INACTIVE) ? BST_UNCHECKED : BST_CHECKED, 0 );
+                break;
+
+
+
+            case SPEI_SOUND_START:
+                m_bInSound = TRUE;
+                break;
+
+            case SPEI_SOUND_END:
+                if (m_bInSound)
+                {
+                    m_bInSound = FALSE;
+                    if (!m_bGotReco)
+                    {
+                        const WCHAR wszNoise[] = L"(Noise without speech)";
+                        CRecoDlgListItem * pli = new CRecoDlgListItem(NULL, wszNoise, FALSE);
                         iNewPhrase = ::SendDlgItemMessage(m_hDlg, IDC_LIST_PHRASES, LB_ADDSTRING, 0, (LPARAM)pli);
                         ::SendDlgItemMessage(m_hDlg, IDC_LIST_PHRASES, LB_SETCURSEL, iNewPhrase, 0);
                     }
-                    break;
-                
-                case SPEI_RECO_STATE_CHANGE:
-                    ::SendDlgItemMessage( m_hDlg, IDC_CHECK_MIC, BM_SETCHECK,
-                                        (event.RecoState() == SPRST_INACTIVE) ? BST_UNCHECKED : BST_CHECKED, 0 );
-                    break;
+                    m_bGotReco = FALSE;
+                }
+                break;
 
+            case SPEI_RECO_OTHER_CONTEXT:
+            {
+                m_bGotReco = TRUE;
+                CRecoDlgListItem * pli = new CRecoDlgListItem(NULL, L"(Recognition for other client)", FALSE);
+                iNewPhrase = ::SendDlgItemMessage(m_hDlg, IDC_LIST_PHRASES, LB_ADDSTRING, 0, (LPARAM)pli);
+                ::SendDlgItemMessage(m_hDlg, IDC_LIST_PHRASES, LB_SETCURSEL, iNewPhrase, 0);
+            }
+            break;
 
+            case SPEI_FALSE_RECOGNITION:
+            case SPEI_HYPOTHESIS:
+            case SPEI_RECOGNITION:
+            {
 
-                case SPEI_SOUND_START:
-                    m_bInSound = TRUE;
-                    break;
+                CComPtr<ISpRecoResult> cpResult;
+                cpResult = event.RecoResult();
 
-                case SPEI_SOUND_END:
-                    if (m_bInSound)
-                    {
-                        m_bInSound = FALSE;
-                        if (!m_bGotReco)
-                        {
-                            const WCHAR wszNoise[] = L"(Noise without speech)";
-                            CRecoDlgListItem * pli = new CRecoDlgListItem(NULL, wszNoise, FALSE);
-                            iNewPhrase = ::SendDlgItemMessage(m_hDlg, IDC_LIST_PHRASES, LB_ADDSTRING, 0, (LPARAM)pli);
-                            ::SendDlgItemMessage(m_hDlg, IDC_LIST_PHRASES, LB_SETCURSEL, iNewPhrase, 0);
-                        }
-                        m_bGotReco = FALSE;
-                    }
-                    break;
+                m_bGotReco = TRUE;
 
-                case SPEI_RECO_OTHER_CONTEXT:
-                    {
-                        m_bGotReco = TRUE;
-                        CRecoDlgListItem * pli = new CRecoDlgListItem(NULL, L"(Recognition for other client)", FALSE);
-                        iNewPhrase = ::SendDlgItemMessage(m_hDlg, IDC_LIST_PHRASES, LB_ADDSTRING, 0, (LPARAM)pli);
-                        ::SendDlgItemMessage(m_hDlg, IDC_LIST_PHRASES, LB_SETCURSEL, iNewPhrase, 0);
-                    }
-                    break;
+                CRecoDlgListItem * pli;
 
-                case SPEI_FALSE_RECOGNITION:
-                case SPEI_HYPOTHESIS:
-                case SPEI_RECOGNITION:
-                    {
-                        
-                        CComPtr<ISpRecoResult> cpResult;
-                        cpResult = event.RecoResult();
+                CSpDynamicString dstrText;
 
-                        m_bGotReco = TRUE;
+                cpResult->GetText(SP_GETWHOLEPHRASE, SP_GETWHOLEPHRASE, TRUE, &dstrText, NULL);
 
-                        CRecoDlgListItem * pli;
+                if (event.eEventId == SPEI_FALSE_RECOGNITION)
+                    dstrText.Append(L"<FALSERECO>");
 
-                        CSpDynamicString dstrText;
+                pli = new CRecoDlgListItem(cpResult, dstrText, event.eEventId == SPEI_HYPOTHESIS);
+                iNewPhrase = ::SendDlgItemMessage(m_hDlg, IDC_LIST_PHRASES, LB_ADDSTRING, 0, (LPARAM)pli);
+                ::SendDlgItemMessage(m_hDlg, IDC_LIST_PHRASES, LB_SETCURSEL, iNewPhrase, 0);
+                UpdatePropWindow(pli);
 
-                        cpResult->GetText(SP_GETWHOLEPHRASE, SP_GETWHOLEPHRASE, TRUE, &dstrText, NULL);
-
-                        if (event.eEventId == SPEI_FALSE_RECOGNITION)
-                            dstrText.Append(L"<FALSERECO>");
-
-                        pli = new CRecoDlgListItem(cpResult, dstrText, event.eEventId == SPEI_HYPOTHESIS);
-                        iNewPhrase = ::SendDlgItemMessage(m_hDlg, IDC_LIST_PHRASES, LB_ADDSTRING, 0, (LPARAM)pli);
-                        ::SendDlgItemMessage(m_hDlg, IDC_LIST_PHRASES, LB_SETCURSEL, iNewPhrase, 0);
-                        UpdatePropWindow(pli);
-                        
-                        cpResult.Release();
-                    }
-                    break;
+                cpResult.Release();
+            }
+            break;
             }
         }
     }
@@ -1711,7 +1711,7 @@ int CRecoDlgClass::MessageBoxFromResource( UINT uiResource )
     TCHAR szMessage[ MAX_LOADSTRING ];
     ::LoadString( m_hInstance, uiResource, szMessage, _countof( szMessage ) );
     return ::MessageBox( m_hDlg, szMessage, NULL, MB_ICONEXCLAMATION );
-}  
+}
 
 /****************************************************************************
 * CRecoDlgClass::SetWordSequenceData *
@@ -1728,7 +1728,7 @@ void CRecoDlgClass::SetWordSequenceData()
     WCHAR * pwszCoMem = 0;
     WCHAR * pwszCoMem2 = 0;
     ULONG cch = 0;
-    
+
     HRESULT hr = GetTextFile(&pwszCoMem, &cch);
 
     if (SUCCEEDED(hr))
@@ -1739,7 +1739,7 @@ void CRecoDlgClass::SetWordSequenceData()
         tsi.cchActiveChars = cch;
         tsi.ulStartSelection = 0;
         tsi.cchSelection = cch;
-    
+
         pwszCoMem2 = (WCHAR *)CoTaskMemAlloc(sizeof(WCHAR) * (cch + 2));
 
         if (pwszCoMem2 == NULL)
@@ -1786,40 +1786,40 @@ LRESULT CALLBACK CDynGrammarDlgClass::DlgProc(HWND hDlg, UINT message, WPARAM wP
     CDynGrammarDlgClass * pThis = (CDynGrammarDlgClass *)(LONG_PTR)::GetWindowLongPtr(hDlg, GWLP_USERDATA);
     switch (message)
     {
-        case WM_INITDIALOG:
-            ::SetWindowLongPtr(hDlg, GWLP_USERDATA, (LONG_PTR)lParam);
-            pThis = (CDynGrammarDlgClass *)lParam;
-            return pThis->InitDialog(hDlg, pThis->m_pItemList);
+    case WM_INITDIALOG:
+        ::SetWindowLongPtr(hDlg, GWLP_USERDATA, (LONG_PTR)lParam);
+        pThis = (CDynGrammarDlgClass *)lParam;
+        return pThis->InitDialog(hDlg, pThis->m_pItemList);
 
-        case WM_HELP:
-            ::DialogBoxParam(pThis->m_pParent->m_hInstance, (LPCTSTR)IDD_DIALOG_BETAHELP, hDlg, (DLGPROC)BetaHelpDlgProc, NULL);
+    case WM_HELP:
+        ::DialogBoxParam(pThis->m_pParent->m_hInstance, (LPCTSTR)IDD_DIALOG_BETAHELP, hDlg, (DLGPROC)BetaHelpDlgProc, NULL);
+        return TRUE;
+
+    case WM_COMMAND:
+        if (LOWORD(wParam) == IDOK || LOWORD(wParam) == IDCANCEL)
+        {
+            pThis->Cleanup();
+            EndDialog(hDlg, 0);
             return TRUE;
+        }
+        else if (LOWORD(wParam) == IDC_BUTTON_ADDITEM)
+        {
+            pThis->AddItem();
+        }
+        else if (LOWORD(wParam) == IDC_BUTTON_CLEARALL)
+        {
+            pThis->ClearAll();
+        }
+        else if (HIWORD(wParam) == EN_UPDATE && LOWORD(wParam) == IDC_EDIT_NEWITEM)
+        {
+            //
+            //  Only enable the "Add" button if there is some text in the edit control
+            //
+            BOOL fEnable = (::SendMessage((HWND)lParam, WM_GETTEXTLENGTH, 0, 0) != 0);
+            ::EnableWindow(::GetDlgItem(hDlg, IDC_BUTTON_ADDITEM), fEnable);
+        }
 
-        case WM_COMMAND:
-            if (LOWORD(wParam) == IDOK || LOWORD(wParam) == IDCANCEL)
-            {
-                pThis->Cleanup();
-                EndDialog(hDlg, 0);
-                return TRUE;
-            }
-            else if (LOWORD(wParam) == IDC_BUTTON_ADDITEM)
-            {
-                pThis->AddItem();
-            }
-            else if (LOWORD(wParam) == IDC_BUTTON_CLEARALL)
-            {
-                pThis->ClearAll();
-            }
-            else if (HIWORD(wParam) == EN_UPDATE && LOWORD(wParam) == IDC_EDIT_NEWITEM)
-            {
-                //
-                //  Only enable the "Add" button if there is some text in the edit control
-                //
-                BOOL fEnable = (::SendMessage((HWND)lParam, WM_GETTEXTLENGTH, 0, 0) != 0);
-                ::EnableWindow(::GetDlgItem(hDlg, IDC_BUTTON_ADDITEM), fEnable);
-            }
-            
-            break;
+        break;
 
     }
     return FALSE;
@@ -1832,7 +1832,7 @@ LRESULT CALLBACK CDynGrammarDlgClass::DlgProc(HWND hDlg, UINT message, WPARAM wP
 *   Description:
 *       This method is called from the WM_INITDIALOG message.  It initialzes
 *   the m_hDlg member and populates the listbox with any items that have already
-*   been added to the "DynRule".    
+*   been added to the "DynRule".
 *
 *   Returns:
 *       TRUE if successful, else FALSE
@@ -1901,7 +1901,7 @@ void CDynGrammarDlgClass::AddItem()
 * CDynGrammarDlgClass::ClearAll *
 *-------------------------------*
 *   Description:
-*       Called when the "Clear" button is pressed.  Clears the contents of the 
+*       Called when the "Clear" button is pressed.  Clears the contents of the
 *   listbox and clears the "DynRule" in the CFG grammar.
 *
 *   Returns:
@@ -1942,44 +1942,44 @@ void CDynGrammarDlgClass::Cleanup()
 ****************************************************************************/
 
 const TCHAR g_szBetaHelpText[] =
-_T("INTRODUCTION:\r\n")
-_T("This tool can be used by engine vendors and CFG grammar developers to perform basic functionality ")
-_T("testing for recognition. The tool can select a specific engine, load a specified command and control grammar, add items to ")
-_T("a dynamic rule, enable a dictation grammar, and turn the microphone state on and off.\r\n\r\n")
-_T("BASIC USE:\r\n")
-_T("Select the speech recognition engine you want to use and then check Create Recognition Context. ")
-_T("Once the engine has loaded, you can enable a dictation grammar by checking Activate Dictation. ")
-_T("For debugging purposes, the operations of loading and then activating a specific grammar have been separated so that ")
-_T("engine developers can debug the process of loading a grammar prior to the grammar activation.\r\n\r\n")
-_T("COMMAND AND CONTROL GRAMMARS\r\n")
-_T("Recognition has a built-in grammar containing the basic commands for solitaire. Try saying \"Play the King of Diamonds\" or ")
-_T("\"Put the Jack of Clubs on the Queen please.\" If you want to load your own grammar, click Load C&&C. Use GramComp.Exe ")
-_T("to compile the grammar for use with this program. If you wish to test dynamic lists, author a grammar with a rule named \"DynRule\" ")
-_T("and then reference that rule from a top-level rule in your grammar. When you add items to the grammar, click Dynamic Rules. ")
-_T("The items will be added to the dynamic rule in your grammar. If the grammar does not contain a rule named \"DynRule\", then the ")
-_T("items added in the Dynamic Rules dialog will become top-level rules.\r\n\r\n")
-_T("OTHER FEATURES:\r\n")
-_T("When a command is recognized, the text is displayed in the list box at the top of the dialog box, and a dump of the full result is displayed ")
-_T("in the status window towards the bottom of the dialog. To examine the result of a particular utterance, simply click it in the list box, and ")
-_T("the result status window will be updated. To play back the audio from an utterance, double click the item. Note that if you have not ")
-_T("checked Retain Reco Audio, the text will be played back using synthesized speech. If you have enabled audio retention, the ")
-_T("original utterance will be played back.  To emulate recognition, you can type a phrase you want parsed into the edit box ")
-_T("at the bottom of the dialog and click \"Submit\"");
+    _T("INTRODUCTION:\r\n")
+    _T("This tool can be used by engine vendors and CFG grammar developers to perform basic functionality ")
+    _T("testing for recognition. The tool can select a specific engine, load a specified command and control grammar, add items to ")
+    _T("a dynamic rule, enable a dictation grammar, and turn the microphone state on and off.\r\n\r\n")
+    _T("BASIC USE:\r\n")
+    _T("Select the speech recognition engine you want to use and then check Create Recognition Context. ")
+    _T("Once the engine has loaded, you can enable a dictation grammar by checking Activate Dictation. ")
+    _T("For debugging purposes, the operations of loading and then activating a specific grammar have been separated so that ")
+    _T("engine developers can debug the process of loading a grammar prior to the grammar activation.\r\n\r\n")
+    _T("COMMAND AND CONTROL GRAMMARS\r\n")
+    _T("Recognition has a built-in grammar containing the basic commands for solitaire. Try saying \"Play the King of Diamonds\" or ")
+    _T("\"Put the Jack of Clubs on the Queen please.\" If you want to load your own grammar, click Load C&&C. Use GramComp.Exe ")
+    _T("to compile the grammar for use with this program. If you wish to test dynamic lists, author a grammar with a rule named \"DynRule\" ")
+    _T("and then reference that rule from a top-level rule in your grammar. When you add items to the grammar, click Dynamic Rules. ")
+    _T("The items will be added to the dynamic rule in your grammar. If the grammar does not contain a rule named \"DynRule\", then the ")
+    _T("items added in the Dynamic Rules dialog will become top-level rules.\r\n\r\n")
+    _T("OTHER FEATURES:\r\n")
+    _T("When a command is recognized, the text is displayed in the list box at the top of the dialog box, and a dump of the full result is displayed ")
+    _T("in the status window towards the bottom of the dialog. To examine the result of a particular utterance, simply click it in the list box, and ")
+    _T("the result status window will be updated. To play back the audio from an utterance, double click the item. Note that if you have not ")
+    _T("checked Retain Reco Audio, the text will be played back using synthesized speech. If you have enabled audio retention, the ")
+    _T("original utterance will be played back.  To emulate recognition, you can type a phrase you want parsed into the edit box ")
+    _T("at the bottom of the dialog and click \"Submit\"");
 
 LRESULT CALLBACK BetaHelpDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
     switch (message)
     {
-        case WM_INITDIALOG:
-            ::SendDlgItemMessage(hDlg, IDC_BETA_HELP, WM_SETTEXT, 0, (LPARAM)g_szBetaHelpText);
-            return TRUE;
+    case WM_INITDIALOG:
+        ::SendDlgItemMessage(hDlg, IDC_BETA_HELP, WM_SETTEXT, 0, (LPARAM)g_szBetaHelpText);
+        return TRUE;
 
-        case WM_COMMAND:
-            if (LOWORD(wParam) == IDOK || LOWORD(wParam) == IDCANCEL)
-            {
-                EndDialog(hDlg, 0);
-                return TRUE;
-            }
+    case WM_COMMAND:
+        if (LOWORD(wParam) == IDOK || LOWORD(wParam) == IDCANCEL)
+        {
+            EndDialog(hDlg, 0);
+            return TRUE;
+        }
 
     }
     return FALSE;
@@ -1989,20 +1989,20 @@ LRESULT CALLBACK BetaHelpDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM 
 * AlternatesDlgProc *
 *-------------------*
 *   Description:
-*       Dlgproc for the alternates dialog, which displays the 
-*       alternates for the current phrase and allows the user to 
+*       Dlgproc for the alternates dialog, which displays the
+*       alternates for the current phrase and allows the user to
 *       choose (commit) one of them.
 ****************************************************************************/
 LRESULT CALLBACK CAlternatesDlgClass::
-    AlternatesDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
+AlternatesDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
     HRESULT hr = S_OK;
     CAlternatesDlgClass* pThis = (CAlternatesDlgClass *)(LONG_PTR)::GetWindowLongPtr(hDlg, GWLP_USERDATA);
 
     switch( message )
     {
-      case WM_INITDIALOG:
-      {
+    case WM_INITDIALOG:
+    {
         ::SetWindowLongPtr(hDlg, GWLP_USERDATA, (LONG_PTR)lParam);
         pThis = (CAlternatesDlgClass *)lParam;
 
@@ -2030,10 +2030,10 @@ LRESULT CALLBACK CAlternatesDlgClass::
             ::SendDlgItemMessage( hDlg, IDC_ALTS_LIST, LB_SETCURSEL, 0, 0 );
         }
         break;
-      }
+    }
 
-      case WM_COMMAND:
-      {
+    case WM_COMMAND:
+    {
         if( LOWORD(wParam) == IDOK )
         {
             LPARAM Index = ::SendDlgItemMessage( hDlg, IDC_ALTS_LIST, LB_GETCURSEL, 0, 0 );
@@ -2049,8 +2049,8 @@ LRESULT CALLBACK CAlternatesDlgClass::
             return TRUE;
         }
         break;
-      }
+    }
     }
     return FALSE;
-} 
+}
 

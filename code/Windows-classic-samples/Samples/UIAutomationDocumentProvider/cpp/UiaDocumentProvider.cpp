@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -17,33 +17,33 @@ LRESULT CALLBACK MainWndProc(_In_ HWND hwnd, _In_ UINT message, _In_ WPARAM wPar
 {
     static HWND _hwndControl;
 
-    switch (message) 
+    switch (message)
     {
     case WM_CREATE:
+    {
+        // Create the child control...
+        _hwndControl = AnnotatedTextControl::Create(hwnd, thisInstance);
+        if (_hwndControl == NULL)
         {
-           // Create the child control...
-            _hwndControl = AnnotatedTextControl::Create(hwnd, thisInstance);
-            if (_hwndControl == NULL)
-            {
-                PostQuitMessage(0);
-            }
-            break;
+            PostQuitMessage(0);
         }
+        break;
+    }
 
     case WM_SIZE:
-        {
-            // When the main window gets resized, resize the child window
-            RECT rc;
-            GetClientRect( hwnd, & rc );
-            SetWindowPos( _hwndControl, NULL, rc.left, rc.top, rc.right, rc.bottom, SWP_NOZORDER | SWP_NOACTIVATE );
-            break;
-        }
+    {
+        // When the main window gets resized, resize the child window
+        RECT rc;
+        GetClientRect( hwnd, & rc );
+        SetWindowPos( _hwndControl, NULL, rc.left, rc.top, rc.right, rc.bottom, SWP_NOZORDER | SWP_NOACTIVATE );
+        break;
+    }
 
     case WM_SETFOCUS:
-        {
-            SetFocus(_hwndControl);
-            break;
-        }
+    {
+        SetFocus(_hwndControl);
+        break;
+    }
 
     case WM_CLOSE:
         PostQuitMessage(0);
@@ -93,14 +93,14 @@ int APIENTRY wWinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE, _In_ PWSTR, _
             {
                 thisInstance = instance;
                 HWND hwnd = CreateWindow(L"UiaDocumentProvider", L"UI Automation Document Provider",
-                    WS_OVERLAPPEDWINDOW | WS_VISIBLE | WS_CLIPCHILDREN,
-                    CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, NULL, NULL, instance, NULL);
+                                         WS_OVERLAPPEDWINDOW | WS_VISIBLE | WS_CLIPCHILDREN,
+                                         CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, NULL, NULL, instance, NULL);
 
                 if (hwnd != NULL)
                 {
                     // The message loop, it will exit when it gets a WM_QUIT message
                     MSG msg;
-                    while (GetMessage(&msg, NULL, 0, 0)) 
+                    while (GetMessage(&msg, NULL, 0, 0))
                     {
                         TranslateMessage(&msg);
                         DispatchMessage(&msg);

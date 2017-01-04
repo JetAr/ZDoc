@@ -1,4 +1,4 @@
-
+﻿
 /----------------------------------------------------------------------------
 //
 //  Microsoft Active Directory 2.5 Sample Code
@@ -31,9 +31,9 @@ typedef std::basic_string<WCHAR> stringW;
 //-----------------------------------------------------------------------------
 INT CchSzLen
 (
-CSZ cszString
+    CSZ cszString
 )
-    {
+{
     Assert(cszString);
 
     const WCHAR * pwch = cszString;
@@ -41,7 +41,7 @@ CSZ cszString
         pwch++;
 
     return (pwch - cszString);
-    }
+}
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -57,13 +57,15 @@ class CStringException
 {
 public:
     CStringException(CSZ cszError) throw()
-        {
+    {
         Assert(cszError);
         m_strError = cszError;
-        }
+    }
 
     operator CSZ (VOID) throw()
-        { return m_strError.c_str(); }
+    {
+        return m_strError.c_str();
+    }
 
 private:
     stringW m_strError;
@@ -91,9 +93,9 @@ private:
 //-----------------------------------------------------------------------------
 VOID VThrowAdsError
 (
-VOID
+    VOID
 )
-    {
+{
     DWORD dwCode = 0;
     const DWORD dwLen = 2048;
     WCHAR szError[dwLen];
@@ -103,7 +105,7 @@ VOID
                                     dwLen,
                                     szProvider,
                                     dwLen)))
-        {
+    {
         stringW strError;
 
         strError = TEXT("An ADSI error has occured.  Provider = '");
@@ -117,12 +119,12 @@ VOID
         strError += szNum;
 
         throw CStringException(strError.c_str());
-        }
-    else
-        {
-        throw CStringException(TEXT("Unknown ADSI error"));
-        }
     }
+    else
+    {
+        throw CStringException(TEXT("Unknown ADSI error"));
+    }
+}
 
 
 typedef VOID (*pfnArrayCallback)(CSZ cszValue, IADs * piads, FILE * pfile);
@@ -140,13 +142,13 @@ typedef VOID (*pfnArrayCallback)(CSZ cszValue, IADs * piads, FILE * pfile);
 //-----------------------------------------------------------------------------
 VOID VIterateSafeArray
 (
-SAFEARRAY * psa,    // safe array to iterate
-VARTYPE vt,            // type of array (VT_ARRAY | VT_BSTR, or something)
-IADs * piads,        // directory services object
-FILE * pfile,        // output file
-pfnArrayCallback fnCallback    // callback function
+    SAFEARRAY * psa,    // safe array to iterate
+    VARTYPE vt,            // type of array (VT_ARRAY | VT_BSTR, or something)
+    IADs * piads,        // directory services object
+    FILE * pfile,        // output file
+    pfnArrayCallback fnCallback    // callback function
 )
-    {
+{
     Assert(psa);
     Assert(1 == ::SafeArrayGetDim(psa));
     Assert(VT_ARRAY == (vt & VT_ARRAY) && "Should be an array");
@@ -161,38 +163,38 @@ pfnArrayCallback fnCallback    // callback function
     Verify(SUCCEEDED(::SafeArrayGetUBound(psa, 1, &lUBound)));
 
     switch (vt)
-        {
-        default:
+    {
+    default:
 #ifdef DEBUG
-            Assert(false && "Unknown variant type");
-            break;
+        Assert(false && "Unknown variant type");
+        break;
 
-        case VT_VARIANT:
+    case VT_VARIANT:
 #endif    // _DEBUG
-            {
-            for (long i = lLBound; i <= lUBound; i++)
-                {
-                CComVariant svar;
-                Verify(SUCCEEDED(::SafeArrayGetElement(psa, &i, &svar)));
-                if (VT_BSTR == svar.vt && svar.bstrVal)
-                    fnCallback(svar.bstrVal, piads, pfile);
-                }
-            break;
-            }
-
-        case VT_BSTR:
-            {
-            for (long i = lLBound; i <= lUBound; i++)
-                {
-                CComBSTR sbstr;
-                Verify(SUCCEEDED(::SafeArrayGetElement(psa, &i, &sbstr)));
-                if (sbstr)
-                    fnCallback(sbstr, piads, pfile);
-                }
-            break;
-            }
+    {
+        for (long i = lLBound; i <= lUBound; i++)
+        {
+            CComVariant svar;
+            Verify(SUCCEEDED(::SafeArrayGetElement(psa, &i, &svar)));
+            if (VT_BSTR == svar.vt && svar.bstrVal)
+                fnCallback(svar.bstrVal, piads, pfile);
         }
+        break;
     }
+
+    case VT_BSTR:
+    {
+        for (long i = lLBound; i <= lUBound; i++)
+        {
+            CComBSTR sbstr;
+            Verify(SUCCEEDED(::SafeArrayGetElement(psa, &i, &sbstr)));
+            if (sbstr)
+                fnCallback(sbstr, piads, pfile);
+        }
+        break;
+    }
+    }
+}
 
 
 //-----------------------------------------------------------------------------
@@ -208,18 +210,18 @@ pfnArrayCallback fnCallback    // callback function
 //-----------------------------------------------------------------------------
 VOID VDumpArray
 (
-CSZ cszValue,    // value
-IADs * piads,    // object to query (not used for this callback)
-FILE * pfile    // output file
+    CSZ cszValue,    // value
+    IADs * piads,    // object to query (not used for this callback)
+    FILE * pfile    // output file
 )
-    {
+{
     Assert(cszValue);
     Assert(pfile);
 
     UNUSED(piads);
 
     ::fprintf(pfile, "  \"%S\"", cszValue);
-    }
+}
 
 
 //-----------------------------------------------------------------------------
@@ -236,11 +238,11 @@ FILE * pfile    // output file
 //-----------------------------------------------------------------------------
 VOID VDumpAttribute
 (
-CSZ cszAttribute,    // name of attribute
-IADs * piads,        // object to query
-FILE * pfile        // output file
+    CSZ cszAttribute,    // name of attribute
+    IADs * piads,        // object to query
+    FILE * pfile        // output file
 )
-    {
+{
     Assert(piads);
     Assert(cszAttribute);
     Assert(pfile);
@@ -250,54 +252,54 @@ FILE * pfile        // output file
     HRESULT hr = S_OK;
     hr = piads->Get(sbstr, &svar);
     if (E_ADS_PROPERTY_NOT_FOUND != hr) CheckHresult(hr, TEXT("Failed to Get value of an attribute"));
-    
+
     ::fprintf(pfile, "\n    %S : ", (SZ) sbstr);
 
     switch (svar.vt)
+    {
+    default:
+        ::fprintf(pfile, "(Unknown variant type)");
+        break;
+
+    case VT_BSTR:
+        ::fprintf(pfile, "(BSTR) \"%S\"", svar.bstrVal);
+        break;
+
+    case (VT_ARRAY | VT_BSTR):
+    case (VT_ARRAY | VT_VARIANT):
+    {
+        if (svar.parray)
         {
-        default:
-            ::fprintf(pfile, "(Unknown variant type)");
-            break;
-
-        case VT_BSTR:
-            ::fprintf(pfile, "(BSTR) \"%S\"", svar.bstrVal);
-            break;
-
-        case (VT_ARRAY | VT_BSTR):
-        case (VT_ARRAY | VT_VARIANT):
-            {
-            if (svar.parray)
-                {
-                ::fprintf(pfile, "(ARRAY) [");
-                ::VIterateSafeArray(svar.parray,
-                                    svar.vt,
-                                    piads,
-                                    pfile,
-                                    VDumpArray);
-                ::fprintf(pfile, "]");
-                }
-            break;
-            }
-
-        case VT_I1:
-        case VT_I4:
-        case VT_UI1:
-        case VT_UI2:
-        case VT_INT:
-        case VT_UINT:
-            fprintf(pfile, "(INT) %d", svar.intVal);
-            break;
-
-        case VT_I8:
-        case VT_UI8:
-            ::fprintf(pfile, "(INT8) %ld", svar.uintVal);
-            break;
-
-        case VT_BOOL:
-            ::fprintf(pfile, "(BOOL) %s", (svar.boolVal) ? "TRUE" : "FALSE");
-            break;
+            ::fprintf(pfile, "(ARRAY) [");
+            ::VIterateSafeArray(svar.parray,
+                                svar.vt,
+                                piads,
+                                pfile,
+                                VDumpArray);
+            ::fprintf(pfile, "]");
         }
+        break;
     }
+
+    case VT_I1:
+    case VT_I4:
+    case VT_UI1:
+    case VT_UI2:
+    case VT_INT:
+    case VT_UINT:
+        fprintf(pfile, "(INT) %d", svar.intVal);
+        break;
+
+    case VT_I8:
+    case VT_UI8:
+        ::fprintf(pfile, "(INT8) %ld", svar.uintVal);
+        break;
+
+    case VT_BOOL:
+        ::fprintf(pfile, "(BOOL) %s", (svar.boolVal) ? "TRUE" : "FALSE");
+        break;
+    }
+}
 
 
 //-----------------------------------------------------------------------------
@@ -314,11 +316,11 @@ FILE * pfile        // output file
 //-----------------------------------------------------------------------------
 VOID VDumpObject
 (
-CSZ cszParent,        // name of parent (can be null)
-IADs * piads,        // object to dump
-FILE * pfile        // output file
+    CSZ cszParent,        // name of parent (can be null)
+    IADs * piads,        // object to dump
+    FILE * pfile        // output file
 )
-    {
+{
     Assert(piads);
     Assert(pfile);
 
@@ -361,8 +363,8 @@ FILE * pfile        // output file
     // open the class, get all the attributes
     CComPtr<IADsClass> srpiaclass;
     CheckHresultADs(::ADsGetObject(sbstrSchema,
-                                     IID_IADsClass,
-                                     (PVOID *) &srpiaclass));
+                                   IID_IADsClass,
+                                   (PVOID *) &srpiaclass));
     Assert(srpiaclass);
 
     VARIANT var;
@@ -370,24 +372,24 @@ FILE * pfile        // output file
     var.parray = NULL;
     CheckHresultADs(srpiaclass->get_MandatoryProperties(&var));
     if (VT_ARRAY == (var.vt & VT_ARRAY))
-        {
+    {
         Assert(var.parray);
         ::VIterateSafeArray(var.parray, var.vt, piads, pfile, VDumpAttribute);
         ::SafeArrayDestroy(var.parray);
-        }
+    }
 
     var.vt = VT_EMPTY;
     var.parray = NULL;
     CheckHresultADs(srpiaclass->get_OptionalProperties(&var));
     if (VT_ARRAY == (var.vt & VT_ARRAY))
-        {
+    {
         Assert(var.parray);
         ::VIterateSafeArray(var.parray, var.vt, piads, pfile, VDumpAttribute);
         ::SafeArrayDestroy(var.parray);
-        }
+    }
 
     ::fprintf(pfile, "\n");
-    }
+}
 
 
 //-----------------------------------------------------------------------------
@@ -403,11 +405,11 @@ FILE * pfile        // output file
 //-----------------------------------------------------------------------------
 VOID VDumpTree
 (
-CSZ cszParent,    // name of parent object
-IADs * piads,    // object to dump (dump its children as well)
-FILE * pfile    // file to which we dump
+    CSZ cszParent,    // name of parent object
+    IADs * piads,    // object to dump (dump its children as well)
+    FILE * pfile    // file to which we dump
 )
-    {
+{
     Assert(piads);
     Assert(pfile);
 
@@ -422,17 +424,17 @@ FILE * pfile    // file to which we dump
     CComPtr<IADsContainer> srpiac;
     HRESULT hr = S_OK;
     CheckHresult(piads->QueryInterface(IID_IADsContainer,(PVOID *) &srpiac),
-                    TEXT("Failed to QI to IADsContainer interface"));
+                 TEXT("Failed to QI to IADsContainer interface"));
 
     if (srpiac)
-        {
+    {
         CComPtr<IEnumVARIANT> srpiev;
         CheckHresult(srpiac->get__NewEnum((IUnknown **) &srpiev), TEXT("Failed to get_NewEnum"));
-            
+
         if (srpiev)
-            {
+        {
             while (true)
-                {
+            {
                 CComVariant svar;
                 ULONG cFetched = 0;
                 hr = srpiev->Next(1, &svar, &cFetched);
@@ -450,10 +452,10 @@ FILE * pfile    // file to which we dump
 
                 // dump the object and its children
                 ::VDumpTree(sbstrName, srpiads, pfile);
-                }
             }
         }
     }
+}
 
 
 //-----------------------------------------------------------------------------
@@ -470,27 +472,27 @@ FILE * pfile    // file to which we dump
 //-----------------------------------------------------------------------------
 void main
 (
-int argc,
-char* argv[]
+    int argc,
+    char* argv[]
 )
-    {
+{
     FILE * pfile = NULL;
 
     try
-        {
+    {
 
         // initialize COM
         CheckHresult(::CoInitialize(NULL), TEXT("Could not initialize COM"));
 
         // validate input
         if (3 != argc)
-            {
+        {
             MessageBox(NULL,
                        TEXT("Usage is AdsiDump <ADSI path> <Output file>"),
                        TEXT("Usage"),
                        MB_OK);
             return;
-            }
+        }
 
         // convert LDAP path to ANSI
         UINT cchLdapPath = ::strlen(argv[1]);
@@ -503,17 +505,17 @@ char* argv[]
                               cchLdapPath + 1);
 
         // open the file
-		errno_t status = 0;
+        errno_t status = 0;
         status = ::fopen_s(&pfile, argv[2], "w");
         if (status)
-            {
+        {
             ::MessageBox(NULL,
                          TEXT("Could not open output file for writing"),
                          TEXT("Error"),
                          MB_OK);
-			::CoUninitialize();
+            ::CoUninitialize();
             return;
-            }
+        }
 
         // open the object
         CComPtr<IADs> srpiads;
@@ -526,17 +528,17 @@ char* argv[]
         // dump the tree
         ::VDumpTree(NULL, srpiads, pfile);
 
-        }
+    }
     catch (CStringException& rstrex)
-        {
+    {
         ::MessageBox(NULL, rstrex, TEXT("Error"), MB_OK);
-        }
+    }
 
     // close the file
     if (pfile)
         ::fclose(pfile);
 
-	::CoUninitialize();
+    ::CoUninitialize();
 
     ::printf("\n");
-    }
+}

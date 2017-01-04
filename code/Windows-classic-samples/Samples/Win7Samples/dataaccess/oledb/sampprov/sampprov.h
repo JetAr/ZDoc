@@ -1,4 +1,4 @@
-//--------------------------------------------------------------------
+﻿//--------------------------------------------------------------------
 // Microsoft OLE DB Sample Provider
 // (C) Copyright 1991 - 1999 Microsoft Corporation. All Rights Reserved.
 //
@@ -50,10 +50,10 @@
 #define SAFE_DELETE_ARRAY(pv)		{ if(pv) delete [] (pv); pv = NULL; }
 
 //IUnknown->Release Wrapper
-#define SAFE_RELEASE(pv)			if((pv)) { ((IUnknown*)pv)->Release(); (pv) = NULL; }  
-#define SAFE_ADDREF(pv)				if((pv)) { ((IUnknown*)pv)->AddRef();				}  
-																									
-//Test macros																					
+#define SAFE_RELEASE(pv)			if((pv)) { ((IUnknown*)pv)->Release(); (pv) = NULL; }
+#define SAFE_ADDREF(pv)				if((pv)) { ((IUnknown*)pv)->AddRef();				}
+
+//Test macros
 #define TEST(exp)					{ if(FAILED(exp)) { ASSERT(!#exp); } }
 #define TESTC(exp)					{ if(FAILED(exp)) { goto CLEANUP;  } }
 
@@ -117,9 +117,9 @@ typedef unsigned short		USHORT;
 typedef struct tagACCESSOR
 {
     DBACCESSORFLAGS dwAccessorFlags;
-	DBREFCOUNT		cRef;
-	DBCOUNTITEM		cBindings;
-	DBBINDING		rgBindings[1];
+    DBREFCOUNT		cRef;
+    DBCOUNTITEM		cBindings;
+    DBBINDING		rgBindings[1];
 } ACCESSOR, *PACCESSOR;
 
 
@@ -153,7 +153,7 @@ typedef struct tagACCESSOR
 		BaseClass		*m_pObj;											\
 		LPUNKNOWN		m_pUnkOuter;
 
-// @func void | DEFINE_DEFAULT_IUNKNOWN_CTOR_DTOR | 
+// @func void | DEFINE_DEFAULT_IUNKNOWN_CTOR_DTOR |
 // Macro to define default IUnknown Ctor/Dtor.
 //
 // @parm BaseClass | BaseClass      | . | Class that is the OLE object.
@@ -210,7 +210,7 @@ typedef struct tagACCESSOR
 																			\
 			delete this;													\
 			return 0;														\
-		}																	
+		}
 
 
 // Globals -------------------------------------------------------------------

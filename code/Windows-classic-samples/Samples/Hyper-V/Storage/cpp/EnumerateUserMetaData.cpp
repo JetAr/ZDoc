@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -14,7 +14,7 @@
 #include "Storage.h"
 
 //
-// This sample shows how to enumberate the available metadata items of a VHDX file. 
+// This sample shows how to enumberate the available metadata items of a VHDX file.
 //
 // User metadata is not applicable to VHD files.
 //
@@ -40,12 +40,12 @@ SampleEnumerateUserMetaData(
         status = ERROR_INVALID_PARAMETER;
         goto Cleanup;
     }
-    
+
     //
     // Specify UNKNOWN for both device and vendor so the system will use the
     // file extension to determine the correct VHD format.
     //
-    
+
     storageType.DeviceId = VIRTUAL_STORAGE_TYPE_DEVICE_UNKNOWN;
     storageType.VendorId = VIRTUAL_STORAGE_TYPE_VENDOR_UNKNOWN;
 
@@ -58,25 +58,25 @@ SampleEnumerateUserMetaData(
     // VIRTUAL_DISK_ACCESS_NONE is the only acceptable access mask for V2 handle opens.
     // OPEN_VIRTUAL_DISK_FLAG_NO_PARENTS indicates the parent chain should not be opened.
     //
-    
+
     memset(&openParameters, 0, sizeof(openParameters));
     openParameters.Version = OPEN_VIRTUAL_DISK_VERSION_2;
     openParameters.Version2.GetInfoOnly = TRUE;
-    
+
     status = OpenVirtualDisk(
-        &storageType,
-        VHDPath,
-        VIRTUAL_DISK_ACCESS_NONE,
-        OPEN_VIRTUAL_DISK_FLAG_NO_PARENTS,
-        &openParameters,
-        &vhdHandle);
-    
+                 &storageType,
+                 VHDPath,
+                 VIRTUAL_DISK_ACCESS_NONE,
+                 OPEN_VIRTUAL_DISK_FLAG_NO_PARENTS,
+                 &openParameters,
+                 &vhdHandle);
+
     if (status != ERROR_SUCCESS)
     {
         goto Cleanup;
     }
 
-    numberOfItems = 0;    
+    numberOfItems = 0;
 
     //
     // EnumerateVirtualDiskMetadata returns the number of user metadata items in the VHDX.
@@ -84,7 +84,7 @@ SampleEnumerateUserMetaData(
     // NULL can be specified for the third parameter when trying to determine the number
     // of items to expect.
     //
-    
+
     status = EnumerateVirtualDiskMetadata(vhdHandle, &numberOfItems, NULL);
     if (status != ERROR_SUCCESS)
     {
@@ -97,20 +97,20 @@ SampleEnumerateUserMetaData(
             goto Cleanup;
         }
     }
-    
+
     wprintf(L"%d user defined metadata items are available\n", numberOfItems);
 
     //
     // Each user metadata item is specified by a unique GUID.
     //
-    
+
     items = (GUID *) malloc(numberOfItems * sizeof(GUID));
     if (items == NULL)
     {
         status = ERROR_OUTOFMEMORY;
         goto Cleanup;
     }
-        
+
     status = EnumerateVirtualDiskMetadata(vhdHandle, &numberOfItems, items);
     if (status != ERROR_SUCCESS)
     {
@@ -132,11 +132,11 @@ Cleanup:
     {
         free(items);
     }
-    
+
     if (vhdHandle != INVALID_HANDLE_VALUE)
     {
         CloseHandle(vhdHandle);
     }
 
     return status;
- }
+}

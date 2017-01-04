@@ -1,4 +1,4 @@
-//--------------------------------------------------------------------
+﻿//--------------------------------------------------------------------
 // Microsoft OLE DB Sample Provider
 // (C) Copyright 1991 - 1999 Microsoft Corporation. All Rights Reserved.
 //
@@ -30,9 +30,9 @@
 // @rdesc NONE
 //
 CExtBuffer::CExtBuffer
-    (
+(
     void
-    )
+)
 {
     m_cItem   = 0;
     m_cbAlloc = 0;
@@ -46,9 +46,9 @@ CExtBuffer::CExtBuffer
 // @rdesc NONE
 //
 CExtBuffer:: ~CExtBuffer
-    (
+(
     void
-    )
+)
 {
     if (m_cbAlloc)
         VirtualFree((VOID *) m_rgItem, m_cbAlloc, MEM_DECOMMIT );
@@ -66,11 +66,11 @@ CExtBuffer:: ~CExtBuffer
 //      @flag  E_OUTOFMEMORY | Not enough memory to allocate buffer
 //
 STDMETHODIMP CExtBuffer::FInit
-    (
+(
     ULONG cItemMax,     //@parm IN | Maximum number of items ever
     ULONG cbItem,       //@parm IN | Size of each item, in bytes
     ULONG cbPage        //@parm IN | Size of system page size (from SysInfo)
-    )
+)
 {
     BYTE  *pb;
 
@@ -84,11 +84,11 @@ STDMETHODIMP CExtBuffer::FInit
     m_dbAlloc = (cbItem / cbPage + 1) *cbPage;
     pb = (BYTE *) VirtualAlloc( m_rgItem, m_dbAlloc, MEM_COMMIT, PAGE_READWRITE );
     if (pb == NULL)
-        {
+    {
         VirtualFree((VOID *) m_rgItem, 0, MEM_RELEASE );
         m_rgItem = NULL;
         return ResultFromScode( E_OUTOFMEMORY );
-        }
+    }
 
     m_cbAlloc = m_dbAlloc;
     return ResultFromScode( S_OK );
@@ -102,9 +102,9 @@ STDMETHODIMP CExtBuffer::FInit
 // pointer is returned, else NULL is returned.
 //
 void* CExtBuffer::operator[]
-    (
+(
     DBCOUNTITEM hItem          //@parm IN | Index of element in buffer
-    )
+)
 {
     // Return ptr to element [n], where n = 1...m_cItem.
     // Returns NULL if 'n' is out of range.
@@ -129,16 +129,16 @@ void* CExtBuffer::operator[]
 //      @flag  E_OUTOFMEMORY | Not enough memory to allocate buffer
 //
 STDMETHODIMP CExtBuffer::InsertIntoExtBuffer
-    (
+(
     VOID* pvItem,       //@parm IN | Pointer to buffer to copy
     HACCESSOR &hItem    //@parm OUT | Index of where data was placed
-    )
+)
 {
     ULONG cbOffset;
 
     cbOffset = m_cItem*m_cbItem;
     if ((cbOffset + m_cbItem) > m_cbAlloc)
-        {
+    {
         BYTE *pb;
 
         if ((m_cbAlloc + m_dbAlloc) > m_cbReserved)
@@ -149,11 +149,11 @@ STDMETHODIMP CExtBuffer::InsertIntoExtBuffer
                                         MEM_COMMIT,
                                         PAGE_READWRITE );
         if (pb == NULL)
-            {
+        {
             return ResultFromScode( E_OUTOFMEMORY );
-            }
-        m_cbAlloc += m_dbAlloc;
         }
+        m_cbAlloc += m_dbAlloc;
+    }
 
     memcpy((m_rgItem + cbOffset), (BYTE *) pvItem, m_cbItem );
     m_cItem++;
@@ -172,15 +172,16 @@ STDMETHODIMP CExtBuffer::InsertIntoExtBuffer
 //      @flag  E_INVALIDARG | Invalid Index passed in
 //
 STDMETHODIMP CExtBuffer::GetItemOfExtBuffer
-    (
+(
     HACCESSOR hItem,        //@parm IN | Index of item to get
     VOID*     pvItem        //@parm OUT | Pointer to block at index
-    )
+)
 {
-    if ((hItem > m_cItem) || (hItem == 0) ) {
+    if ((hItem > m_cItem) || (hItem == 0) )
+    {
         *((PACCESSOR *)pvItem) = NULL;
-		return ResultFromScode( DB_E_BADACCESSORHANDLE );
-	}
+        return ResultFromScode( DB_E_BADACCESSORHANDLE );
+    }
 
     memcpy((BYTE *) pvItem, (m_rgItem + (hItem - 1) *m_cbItem), m_cbItem );
     return ResultFromScode( S_OK );
@@ -194,10 +195,10 @@ STDMETHODIMP CExtBuffer::GetItemOfExtBuffer
 //      @flag  S_OK | Extents were obtained successfuly
 //
 STDMETHODIMP CExtBuffer::GetFirstLastItemH
-    (
+(
     HACCESSOR &hItemFirst,      //@parm OUT | First item allocated
     HACCESSOR &hItemLast        //@parm OUT | Last item allocated
-    )
+)
 {
     hItemFirst = 1;
     hItemLast  = m_cItem;

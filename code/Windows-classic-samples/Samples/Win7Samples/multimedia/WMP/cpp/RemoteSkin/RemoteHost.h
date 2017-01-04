@@ -1,4 +1,4 @@
-// RemoteHost.h: interface for the RemoteHost class.
+﻿// RemoteHost.h: interface for the RemoteHost class.
 //
 // Copyright (c) Microsoft Corporation. All rights reserved.
 //
@@ -12,10 +12,10 @@
 
 #include "wmp.h"
 
-class CRemoteHost : 
-    public CComObjectRootEx<CComSingleThreadModel>, 
-    public IServiceProvider, 
-    public IWMPRemoteMediaServices  
+class CRemoteHost :
+    public CComObjectRootEx<CComSingleThreadModel>,
+    public IServiceProvider,
+    public IWMPRemoteMediaServices
 {
 public:
     CRemoteHost();
@@ -24,8 +24,8 @@ public:
     //DECLARE_PROTECT_FINAL_CONSTRUCT()
 
     BEGIN_COM_MAP(CRemoteHost)
-        COM_INTERFACE_ENTRY(IServiceProvider)
-        COM_INTERFACE_ENTRY(IWMPRemoteMediaServices)
+    COM_INTERFACE_ENTRY(IServiceProvider)
+    COM_INTERFACE_ENTRY(IWMPRemoteMediaServices)
     END_COM_MAP()
 
     // IServiceProvider

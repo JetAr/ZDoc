@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -29,10 +29,10 @@ HRESULT CCmdBase::Execute(PCWSTR* ppszArgs, int cArgs)
     HRESULT hr;
     PCWSTR pszFirstArg = cArgs ? ppszArgs[0] : NULL;
     if (pszFirstArg &&
-        (pszFirstArg[0] == L'-' || pszFirstArg[0] == L'/') &&
-        (!StrCmpICW(++pszFirstArg, L"help") ||
-         !StrCmpICW(pszFirstArg, L"h") ||
-         !StrCmpICW(pszFirstArg, L"?")))
+            (pszFirstArg[0] == L'-' || pszFirstArg[0] == L'/') &&
+            (!StrCmpICW(++pszFirstArg, L"help") ||
+             !StrCmpICW(pszFirstArg, L"h") ||
+             !StrCmpICW(pszFirstArg, L"?")))
     {
         hr = S_FALSE;
         PrintUsage();
@@ -65,9 +65,9 @@ HRESULT CCmdBase::_ProcessOptions(PCWSTR** pppszArgs, int* pcArgs)
         hr = S_OK;
         int iArg = 0;
         while (SUCCEEDED(hr) &&
-               (iArg < cArgs) &&
-               (ppszArgs[iArg][0] == L'-' ||
-                ppszArgs[iArg][0] == L'/'))
+                (iArg < cArgs) &&
+                (ppszArgs[iArg][0] == L'-' ||
+                 ppszArgs[iArg][0] == L'/'))
         {
             PCWSTR pszOptionName = &(ppszArgs[iArg][1]);
             PWSTR pszOptionArgs = const_cast<PWSTR>(wcschr(pszOptionName, L':'));

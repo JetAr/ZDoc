@@ -1,10 +1,10 @@
-/*++ BUILD Version: 0001    // Increment this if a change has global effects
+﻿/*++ BUILD Version: 0001    // Increment this if a change has global effects
 
 Copyright 1995 - 2000 Microsoft Corporation
 
 Module Name:
 
-    perfmsg.h  
+    perfmsg.h
 
 Abstract:
 
@@ -38,8 +38,8 @@ Revision History:
 //
 //    Levels:  LOG_NONE = No event log messages ever
 //             LOG_USER = User event log messages (e.g. errors)
-//             LOG_DEBUG = Minimum Debugging 
-//             LOG_VERBOSE = Maximum Debugging 
+//             LOG_DEBUG = Minimum Debugging
+//             LOG_VERBOSE = Maximum Debugging
 //
 
 #define  LOG_NONE     0
@@ -53,7 +53,7 @@ Revision History:
 //
 // Format for event log calls without corresponding insertion strings is:
 //    REPORT_xxx (message_value, message_level)
-//       where:   
+//       where:
 //          xxx is the severity to be displayed in the event log
 //          message_value is the numeric ID from above
 //          message_level is the "filtering" level of error reporting
@@ -61,8 +61,8 @@ Revision History:
 //
 // if the message has a corresponding insertion string whose symbol conforms
 // to the format CONSTANT = numeric value and CONSTANT_S = string constant for
-// that message, then the 
-// 
+// that message, then the
+//
 //    REPORT_xxx_STRING (message_value, message_level)
 //
 // macro may be used.
@@ -70,7 +70,7 @@ Revision History:
 
 //
 // REPORT_SUCCESS was intended to show Success in the error log, rather it
-// shows "N/A" so for now it's the same as information, though it could 
+// shows "N/A" so for now it's the same as information, though it could
 // (should) be changed  in the future
 //
 

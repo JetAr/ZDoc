@@ -1,4 +1,4 @@
-//// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿//// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 //// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 //// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 //// PARTICULAR PURPOSE.
@@ -35,10 +35,22 @@ public:
     virtual void OnDpiChange(int /* Dpi */) {};
     virtual void Tick() {};
 
-    float Left() const      { return m_left;};
-    float Top() const       { return m_top; };
-    void Left(float left)   { m_left = left; };
-    void Top(float top)     { m_top = top; };
+    float Left() const
+    {
+        return m_left;
+    };
+    float Top() const
+    {
+        return m_top;
+    };
+    void Left(float left)
+    {
+        m_left = left;
+    };
+    void Top(float top)
+    {
+        m_top = top;
+    };
 
     void SetPosition(float left, float top);
 

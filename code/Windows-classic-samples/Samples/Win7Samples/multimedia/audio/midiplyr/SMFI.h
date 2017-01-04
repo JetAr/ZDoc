@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -9,18 +9,18 @@
 #define _SMFI_
 
 /* Handle structure for HSMF
-*/ 
+*/
 
 #define SMF_TF_EOT          0x00000001L
 #define SMF_TF_INVALID      0x00000002L
 
 typedef struct tag_tempomapentry
 {
-    TICKS           tkTempo;           
-    DWORD           msBase;            
-    DWORD           dwTempo;           
+    TICKS           tkTempo;
+    DWORD           msBase;
+    DWORD           dwTempo;
 }   TEMPOMAPENTRY,
-    *PTEMPOMAPENTRY;
+*PTEMPOMAPENTRY;
 
 typedef struct tag_smf *PSMF;
 
@@ -28,24 +28,24 @@ typedef struct tag_track
 {
     PSMF            pSmf;
 
-    DWORD           idxTrack;          
-    
-    TICKS           tkPosition;        
-    DWORD           cbLeft;            
-    HPBYTE          hpbImage;          
-    BYTE            bRunningStatus;    
-    
-    DWORD           fdwTrack;          
+    DWORD           idxTrack;
+
+    TICKS           tkPosition;
+    DWORD           cbLeft;
+    HPBYTE          hpbImage;
+    BYTE            bRunningStatus;
+
+    DWORD           fdwTrack;
 
     struct
     {
         TICKS       tkLength;
         DWORD       cbLength;
     }
-    smti;                              
+    smti;
 
 }   TRACK,
-    *PTRACK;
+*PTRACK;
 
 #define SMF_F_EOF               0x00000001L
 #define SMF_F_INSERTSYSEX       0x00000002L
@@ -73,21 +73,21 @@ typedef struct tag_smf
     DWORD           dwPendingUserEvent;
     DWORD           cbPendingUserEvent;
     HPBYTE          hpbPendingUserEvent;
-    
+
     TRACK           rTracks[];
 }   SMF;
 
 typedef struct tagEVENT
 {
-    TICKS           tkDelta;           
-    BYTE            abEvent[3];        
-                                       
-                                       
-                                       
-    DWORD           cbParm;            
-    HPBYTE          hpbParm;           
+    TICKS           tkDelta;
+    BYTE            abEvent[3];
+
+
+
+    DWORD           cbParm;
+    HPBYTE          hpbParm;
 }   EVENT,
-    BSTACK *SPEVENT;
+BSTACK *SPEVENT;
 
 #define EVENT_TYPE(event)       ((event).abEvent[0])
 #define EVENT_CH_B1(event)      ((event).abEvent[1])
@@ -100,7 +100,7 @@ SMFRESULT FNLOCAL smfBuildFileIndex(
 
 DWORD FNLOCAL smfGetVDword(
     HPBYTE              hpbImage,
-    DWORD               dwLeft,                                
+    DWORD               dwLeft,
     DWORD BSTACK *      pdw);
 
 SMFRESULT FNLOCAL smfGetNextEvent(
@@ -131,7 +131,7 @@ typedef struct tag_chunkhdr
     FOURCC  fourccType;
     DWORD   dwLength;
 }   CHUNKHDR,
-    *PCHUNKHDR;
+*PCHUNKHDR;
 
 #pragma pack(1)	// override cl32 default packing, to match disk file.
 typedef struct tag_filehdr
@@ -140,7 +140,7 @@ typedef struct tag_filehdr
     WORD    wTracks;
     WORD    wDivision;
 }   FILEHDR,
-    *PFILEHDR;
+*PFILEHDR;
 #pragma pack()
 
 /* NOTE: This is arbitrary and only used if there is a tempo map but no

@@ -1,4 +1,4 @@
-
+﻿
 #pragma once
 
 #include "TextLayout.h"
@@ -14,16 +14,16 @@
 class CTextEditor : public CTextContainer
 {
 public:
-    CTextEditor() 
+    CTextEditor()
     {
         _nSelStart = 0;
         _nSelEnd = 0;
         _pTextStore = NULL;
         _pDocumentMgr = NULL;
-         
+
     }
 
-    ~CTextEditor() 
+    ~CTextEditor()
     {
         if (_pTextStore)
         {
@@ -37,7 +37,7 @@ public:
             _pDocumentMgr = NULL;
         }
     }
-    
+
     void MoveSelection(UINT nSelStart, UINT nSelEnd);
     BOOL MoveSelectionAtPoint(POINT pt);
     BOOL InsertAtSelection(LPCWSTR psz);
@@ -50,15 +50,27 @@ public:
     BOOL MoveSelectionToLineFirstEnd(BOOL bFirst);
 
     void Render(HDC hdc, const LOGFONT *plf);
-    UINT GetSelectionStart() {return _nSelStart;}
-    UINT GetSelectionEnd() {return _nSelEnd;}
+    UINT GetSelectionStart()
+    {
+        return _nSelStart;
+    }
+    UINT GetSelectionEnd()
+    {
+        return _nSelEnd;
+    }
     void BlinkCaret(HDC hdc)
     {
-         _layout.BlinkCaret(hdc);
+        _layout.BlinkCaret(hdc);
     }
 
-    void SetWnd(HWND hwnd) {_hwnd = hwnd;}
-    HWND GetWnd() {return _hwnd;}
+    void SetWnd(HWND hwnd)
+    {
+        _hwnd = hwnd;
+    }
+    HWND GetWnd()
+    {
+        return _hwnd;
+    }
 
     BOOL InitTSF();
     BOOL UninitTSF();
@@ -69,8 +81,14 @@ public:
         ::InvalidateRect(_hwnd, NULL, TRUE);
     }
 
-    int GetLineHeight() {return _layout.GetLineHeight();}
-    CTextLayout *GetLayout() {return &_layout;}
+    int GetLineHeight()
+    {
+        return _layout.GetLineHeight();
+    }
+    CTextLayout *GetLayout()
+    {
+        return &_layout;
+    }
 
 private:
     UINT _nSelStart;

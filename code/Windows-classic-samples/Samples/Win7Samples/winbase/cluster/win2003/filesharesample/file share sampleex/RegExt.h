@@ -1,4 +1,4 @@
-/////////////////////////////////////////////////////////////////////////////
+﻿/////////////////////////////////////////////////////////////////////////////
 //
 //  Copyright (c) 2003 <company name>
 //
@@ -32,52 +32,52 @@
 
 DWORD
 RegisterCluAdminClusterExtension(
-      HCLUSTER      hClusterIn
+    HCLUSTER      hClusterIn
     , const CLSID * pClsidIn
-    );
+);
 
 DWORD
 RegisterCluAdminAllNodesExtension(
-      HCLUSTER      hClusterIn
+    HCLUSTER      hClusterIn
     , const CLSID * pClsidIn
-    );
+);
 
 DWORD
 RegisterCluAdminAllGroupsExtension(
-      HCLUSTER      hClusterIn
+    HCLUSTER      hClusterIn
     , const CLSID * pClsidIn
-    );
+);
 
 DWORD
 RegisterCluAdminAllResourcesExtension(
-      HCLUSTER      hClusterIn
+    HCLUSTER      hClusterIn
     , const CLSID * pClsidIn
-    );
+);
 
 DWORD
 RegisterCluAdminAllResourceTypesExtension(
-      HCLUSTER      hClusterIn
+    HCLUSTER      hClusterIn
     , const CLSID * pClsidIn
-    );
+);
 
 DWORD
 RegisterCluAdminAllNetworksExtension(
-      HCLUSTER      hClusterIn
+    HCLUSTER      hClusterIn
     , const CLSID * pClsidIn
-    );
+);
 
 DWORD
 RegisterCluAdminAllNetInterfacesExtension(
-      HCLUSTER      hClusterIn
+    HCLUSTER      hClusterIn
     , const CLSID * pClsidIn
-    );
+);
 
 DWORD
 RegisterCluAdminResourceTypeExtension(
-      HCLUSTER      hClusterIn
+    HCLUSTER      hClusterIn
     , LPCWSTR       pwszResourceTypeIn
     , const CLSID * pClsidIn
-    );
+);
 
 //
 //  Unregistration routines.
@@ -85,49 +85,49 @@ RegisterCluAdminResourceTypeExtension(
 
 DWORD
 UnregisterCluAdminClusterExtension(
-      HCLUSTER      hClusterIn
+    HCLUSTER      hClusterIn
     , const CLSID * pClsidIn
-    );
+);
 
 DWORD
 UnregisterCluAdminAllNodesExtension(
-      HCLUSTER      hClusterIn
+    HCLUSTER      hClusterIn
     , const CLSID * pClsidIn
-    );
+);
 
 DWORD
 UnregisterCluAdminAllGroupsExtension(
-      HCLUSTER      hClusterIn
+    HCLUSTER      hClusterIn
     , const CLSID * pClsidIn
-    );
+);
 
 DWORD
 UnregisterCluAdminAllResourcesExtension(
-      HCLUSTER      hClusterIn
+    HCLUSTER      hClusterIn
     , const CLSID * pClsidIn
-    );
+);
 
 DWORD
 UnregisterCluAdminAllResourceTypesExtension(
-      HCLUSTER      hClusterIn
+    HCLUSTER      hClusterIn
     , const CLSID * pClsidIn
-    );
+);
 
 DWORD
 UnregisterCluAdminAllNetworksExtension(
-      HCLUSTER      hClusterIn
+    HCLUSTER      hClusterIn
     , const CLSID * pClsidIn
-    );
+);
 
 DWORD
 UnregisterCluAdminAllNetInterfacesExtension(
-      HCLUSTER      hClusterIn
+    HCLUSTER      hClusterIn
     , const CLSID * pClsidIn
-    );
+);
 
 DWORD
 UnregisterCluAdminResourceTypeExtension(
-       HCLUSTER      hClusterIn
-     , LPCWSTR       pwszResourceTypeIn
-     , const CLSID * pClsid
-    );
+    HCLUSTER      hClusterIn
+    , LPCWSTR       pwszResourceTypeIn
+    , const CLSID * pClsid
+);

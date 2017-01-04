@@ -1,4 +1,4 @@
-
+﻿
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -62,16 +62,16 @@ int APIENTRY WinMain(HINSTANCE hInstance,
     LoadString(hInstance, IDS_APPNAME, szAppName, sizeof(szAppName));
 
     hWnd = CreateWindow("Demo",
-        szAppName,
-        WS_OVERLAPPEDWINDOW,
-        CW_USEDEFAULT,
-        CW_USEDEFAULT,
-        CW_USEDEFAULT,
-        CW_USEDEFAULT,
-        NULL,
-        NULL,
-        hInstance,
-        NULL);
+                        szAppName,
+                        WS_OVERLAPPEDWINDOW,
+                        CW_USEDEFAULT,
+                        CW_USEDEFAULT,
+                        CW_USEDEFAULT,
+                        CW_USEDEFAULT,
+                        NULL,
+                        NULL,
+                        hInstance,
+                        NULL);
 
     if (!hWnd)
         return (0);
@@ -79,7 +79,8 @@ int APIENTRY WinMain(HINSTANCE hInstance,
     ShowWindow(hWnd, nCmdShow);
     UpdateWindow(hWnd);
 
-    while (GetMessage(&msg, NULL, 0, 0)) {
+    while (GetMessage(&msg, NULL, 0, 0))
+    {
         TranslateMessage(&msg);
         DispatchMessage(&msg);
     }
@@ -102,7 +103,8 @@ BOOL DemoInit(HANDLE hInstance)
     CHAR lpBuffer[128];
 
     hMemory = LocalAlloc(LPTR, sizeof(WNDCLASS));
-    if(!hMemory){
+    if(!hMemory)
+    {
         LoadString(hInst, IDS_NOMEM, lpBuffer, sizeof(lpBuffer));
         MessageBox(NULL, lpBuffer, NULL, MB_OK | MB_ICONHAND);
         return(FALSE);
@@ -168,93 +170,98 @@ LRESULT APIENTRY DemoWndProc(
     FARPROC lpProcAbout;
     HMENU hMenu;
 
-    switch (message) {
+    switch (message)
+    {
 
-        case WM_COMMAND:
+    case WM_COMMAND:
 
-            // LOWORD added for portability
+        // LOWORD added for portability
 
-            switch (LOWORD(wParam)) {
-                case IDM_BOX:
-                    Shape = SL_BOX;
-                    hMenu = GetMenu(hWnd);
-                    CheckMenuItem(hMenu, IDM_BOX, MF_CHECKED);
-                    CheckMenuItem(hMenu, IDM_BLOCK, MF_UNCHECKED);
-                    break;
+        switch (LOWORD(wParam))
+        {
+        case IDM_BOX:
+            Shape = SL_BOX;
+            hMenu = GetMenu(hWnd);
+            CheckMenuItem(hMenu, IDM_BOX, MF_CHECKED);
+            CheckMenuItem(hMenu, IDM_BLOCK, MF_UNCHECKED);
+            break;
 
-                case IDM_BLOCK:
-                    Shape = SL_BLOCK;
-                    hMenu = GetMenu(hWnd);
-                    CheckMenuItem(hMenu, IDM_BOX, MF_UNCHECKED);
-                    CheckMenuItem(hMenu, IDM_BLOCK, MF_CHECKED);
-                    break;
+        case IDM_BLOCK:
+            Shape = SL_BLOCK;
+            hMenu = GetMenu(hWnd);
+            CheckMenuItem(hMenu, IDM_BOX, MF_UNCHECKED);
+            CheckMenuItem(hMenu, IDM_BLOCK, MF_CHECKED);
+            break;
 
-                case IDM_RETAIN:
-                    if (RetainShape) {
-                        hMenu = GetMenu(hWnd);
-                        CheckMenuItem(hMenu, IDM_RETAIN, MF_UNCHECKED);
-                        RetainShape = FALSE;
-                    }
-                    else {
-                        hMenu = GetMenu(hWnd);
-                        CheckMenuItem(hMenu, IDM_RETAIN, MF_CHECKED);
-                        RetainShape = TRUE;
-                    }
-                    break;
-
-                case IDM_ABOUT:
-                    lpProcAbout = MakeProcInstance((FARPROC)About, hInst);
-                    DialogBox(hInst, "AboutBox", hWnd, (DLGPROC)lpProcAbout);
-                    FreeProcInstance(lpProcAbout);
-                    break;
-
+        case IDM_RETAIN:
+            if (RetainShape)
+            {
+                hMenu = GetMenu(hWnd);
+                CheckMenuItem(hMenu, IDM_RETAIN, MF_UNCHECKED);
+                RetainShape = FALSE;
+            }
+            else
+            {
+                hMenu = GetMenu(hWnd);
+                CheckMenuItem(hMenu, IDM_RETAIN, MF_CHECKED);
+                RetainShape = TRUE;
             }
             break;
 
-        case WM_LBUTTONDOWN:
-
-            bTrack = TRUE;               /* user has pressed the left button */
-
-            /* If you don't want the shape cleared, you must clear the Rect
-             * coordinates before calling StartSelection
-             */
-
-            if (RetainShape)
-                SetRectEmpty(&Rect);
-
-            StartSelection(hWnd, MAKEMPOINT(lParam), &Rect,
-                (wParam & MK_SHIFT) ? SL_EXTEND | Shape : Shape);
+        case IDM_ABOUT:
+            lpProcAbout = MakeProcInstance((FARPROC)About, hInst);
+            DialogBox(hInst, "AboutBox", hWnd, (DLGPROC)lpProcAbout);
+            FreeProcInstance(lpProcAbout);
             break;
 
-        case WM_MOUSEMOVE:
-            if (bTrack)
-                UpdateSelection(hWnd, MAKEMPOINT(lParam), &Rect, Shape);
-            break;
+        }
+        break;
 
-        case WM_LBUTTONUP:
-       if (bTrack) 
-               EndSelection(MAKEMPOINT(lParam), &Rect);
-         bTrack = FALSE;
-            break;
+    case WM_LBUTTONDOWN:
 
-   case WM_SIZE:
-      switch (wParam) {
-         case SIZEICONIC:
+        bTrack = TRUE;               /* user has pressed the left button */
 
-            /* If we aren't in retain mode we want to clear the 
-             * current rectangle now! 
+        /* If you don't want the shape cleared, you must clear the Rect
+         * coordinates before calling StartSelection
+         */
+
+        if (RetainShape)
+            SetRectEmpty(&Rect);
+
+        StartSelection(hWnd, MAKEMPOINT(lParam), &Rect,
+                       (wParam & MK_SHIFT) ? SL_EXTEND | Shape : Shape);
+        break;
+
+    case WM_MOUSEMOVE:
+        if (bTrack)
+            UpdateSelection(hWnd, MAKEMPOINT(lParam), &Rect, Shape);
+        break;
+
+    case WM_LBUTTONUP:
+        if (bTrack)
+            EndSelection(MAKEMPOINT(lParam), &Rect);
+        bTrack = FALSE;
+        break;
+
+    case WM_SIZE:
+        switch (wParam)
+        {
+        case SIZEICONIC:
+
+            /* If we aren't in retain mode we want to clear the
+             * current rectangle now!
              */
             if (!RetainShape)
-               SetRectEmpty(&Rect);
-      }
-      break;
+                SetRectEmpty(&Rect);
+        }
+        break;
 
-        case WM_DESTROY:
-            PostQuitMessage(0);
-            break;
+    case WM_DESTROY:
+        PostQuitMessage(0);
+        break;
 
-        default:
-            return (DefWindowProc(hWnd, message, wParam, lParam));
+    default:
+        return (DefWindowProc(hWnd, message, wParam, lParam));
     }
     return (0);
 }
@@ -278,19 +285,21 @@ BOOL APIENTRY About(
     UINT wParam,
     LONG lParam)
 {
-    switch (message) {
-        case WM_INITDIALOG:
-            return (TRUE);
+    switch (message)
+    {
+    case WM_INITDIALOG:
+        return (TRUE);
 
-        case WM_COMMAND:
-            // LOWORD added for portability
-            if (LOWORD(wParam) == IDOK
-             || LOWORD(wParam) == IDCANCEL) {
-                EndDialog(hDlg, TRUE);
-                return (TRUE);
-            }
+    case WM_COMMAND:
+        // LOWORD added for portability
+        if (LOWORD(wParam) == IDOK
+                || LOWORD(wParam) == IDCANCEL)
+        {
+            EndDialog(hDlg, TRUE);
             return (TRUE);
+        }
+        return (TRUE);
     }
     return (FALSE);
-        UNREFERENCED_PARAMETER(lParam);
+    UNREFERENCED_PARAMETER(lParam);
 }

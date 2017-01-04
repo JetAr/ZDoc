@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -30,23 +30,23 @@ Return value:
     HRESULT
 
 Notes:
-    
+
 	For our sample classifier, we specify the rule as never modified
 
 --*/
 
 STDMETHODIMP
 CFsrmSampleClassifier::get_LastModified(
-	VARIANT * LastModified
-	)
+    VARIANT * LastModified
+)
 {
-	// This classifier indicates that rule was never modified
-	DECIMAL dec = {0};
-	dec.Lo64 = ((ULONGLONG) 0x0000000000000000ui64);
-	LastModified->decVal = dec;
-	LastModified->vt = VT_DECIMAL;
+    // This classifier indicates that rule was never modified
+    DECIMAL dec = {0};
+    dec.Lo64 = ((ULONGLONG) 0x0000000000000000ui64);
+    LastModified->decVal = dec;
+    LastModified->vt = VT_DECIMAL;
 
-	return S_OK;
+    return S_OK;
 }
 
 
@@ -69,7 +69,7 @@ Return value:
     HRESULT
 
 Notes:
-    
+
 	For our sample classifier, we populate our map of <rule-guid,CFsrmSampleClassificationRule>
 	for those rules that have the additional classification parameter defined. These are the rules
 	this classifier is interested in.
@@ -78,189 +78,197 @@ Notes:
 
 STDMETHODIMP
 CFsrmSampleClassifier::UseRulesAndDefinitions(
-		IFsrmCollection * Rules, 
-		IFsrmCollection * propertyDefinitions
-		)
+    IFsrmCollection * Rules,
+    IFsrmCollection * propertyDefinitions
+)
 {
-	HRESULT hr = S_OK;
-	_variant_t vRule;
-	CComPtr<IFsrmRule> pFsrmRule;
-	CComPtr<IFsrmClassificationRule> pFsrmClassificationRule;
-	CComBSTR		strRuleName;
-	wstring			strRuleNameLower;
-	CComBSTR		strPropertyName;
-	CComBSTR		strPropertyValue;
-	CComBSTR		strFileNameContains;
-	CComBSTR		strFileContentContains;
-	SAFEARRAY *psaParams = NULL;
-	LONG			cRuleCount;
-	LONG lBoundParams;
-	LONG uBoundParams;
-	GUID idRule;
+    HRESULT hr = S_OK;
+    _variant_t vRule;
+    CComPtr<IFsrmRule> pFsrmRule;
+    CComPtr<IFsrmClassificationRule> pFsrmClassificationRule;
+    CComBSTR		strRuleName;
+    wstring			strRuleNameLower;
+    CComBSTR		strPropertyName;
+    CComBSTR		strPropertyValue;
+    CComBSTR		strFileNameContains;
+    CComBSTR		strFileContentContains;
+    SAFEARRAY *psaParams = NULL;
+    LONG			cRuleCount;
+    LONG lBoundParams;
+    LONG uBoundParams;
+    GUID idRule;
 
-	m_mapFsrmClassificationRules.clear();
+    m_mapFsrmClassificationRules.clear();
 
-	// Get the count of rules
-	hr = Rules->get_Count( &cRuleCount );
+    // Get the count of rules
+    hr = Rules->get_Count( &cRuleCount );
 
-	if (hr != S_OK) {
-		goto exit;
-	}
+    if (hr != S_OK)
+    {
+        goto exit;
+    }
 
-	//iterate over the rules collection and build a map to store 
-	//this map will be used while processing records for matching rules
-	for (LONG iRule = 1; iRule <= cRuleCount; iRule++) {
+    //iterate over the rules collection and build a map to store
+    //this map will be used while processing records for matching rules
+    for (LONG iRule = 1; iRule <= cRuleCount; iRule++)
+    {
 
-		vRule.Clear( );
+        vRule.Clear( );
 
-		// Get the next rule
-		hr = Rules->get_Item( iRule, &vRule );
-		if (hr != S_OK) {
-			goto exit;
-		}
-	
-		// Query for the IFsrmRule interface
-		pFsrmRule.Release( );
-		hr = vRule.pdispVal->QueryInterface( _uuidof( IFsrmRule ), (void **)&pFsrmRule );
-		if (hr != S_OK) {
-			goto exit;
-		}
+        // Get the next rule
+        hr = Rules->get_Item( iRule, &vRule );
+        if (hr != S_OK)
+        {
+            goto exit;
+        }
 
-		// Query for the IFsrmClassificationRule interface
-		pFsrmClassificationRule.Release( );
-		hr = pFsrmRule->QueryInterface( _uuidof( IFsrmClassificationRule ), (void **)&pFsrmClassificationRule );
-		if (hr != S_OK) {
-			goto exit;
-		}
+        // Query for the IFsrmRule interface
+        pFsrmRule.Release( );
+        hr = vRule.pdispVal->QueryInterface( _uuidof( IFsrmRule ), (void **)&pFsrmRule );
+        if (hr != S_OK)
+        {
+            goto exit;
+        }
 
-		// Get the rule's name
-		strRuleName.Empty( );
-		hr = pFsrmRule->get_Name( &strRuleName );
-		if (hr != S_OK) {
-			goto exit;
-		}		
+        // Query for the IFsrmClassificationRule interface
+        pFsrmClassificationRule.Release( );
+        hr = pFsrmRule->QueryInterface( _uuidof( IFsrmClassificationRule ), (void **)&pFsrmClassificationRule );
+        if (hr != S_OK)
+        {
+            goto exit;
+        }
 
-		// Get the property name for this rule
-		strPropertyName.Empty( );
-		hr = pFsrmClassificationRule->get_PropertyAffected( &strPropertyName );
-		if (hr != S_OK) {
-			goto exit;
-		}
+        // Get the rule's name
+        strRuleName.Empty( );
+        hr = pFsrmRule->get_Name( &strRuleName );
+        if (hr != S_OK)
+        {
+            goto exit;
+        }
 
-		// Get the property value that will be applied by this rule
-		strPropertyValue.Empty( );
-		hr = pFsrmClassificationRule->get_Value( &strPropertyValue );
-		if (hr != S_OK) {
-			goto exit;
-		}
+        // Get the property name for this rule
+        strPropertyName.Empty( );
+        hr = pFsrmClassificationRule->get_PropertyAffected( &strPropertyName );
+        if (hr != S_OK)
+        {
+            goto exit;
+        }
 
-		// Get the rule id guid
-		::memset(&idRule, 0, sizeof(GUID));
-		hr = pFsrmRule->get_Id(&idRule);
-		if (FAILED(hr))
-		{
-			goto exit;
-		}
+        // Get the property value that will be applied by this rule
+        strPropertyValue.Empty( );
+        hr = pFsrmClassificationRule->get_Value( &strPropertyValue );
+        if (hr != S_OK)
+        {
+            goto exit;
+        }
 
-		// Get the additional parameters specified for this rule
-		// This classifier needs filenamecontains and filecontentcontains
-		psaParams = NULL;
-		hr = pFsrmRule->get_Parameters(&psaParams);
-		if (FAILED(hr))
-		{
-			goto exit;
-		}
+        // Get the rule id guid
+        ::memset(&idRule, 0, sizeof(GUID));
+        hr = pFsrmRule->get_Id(&idRule);
+        if (FAILED(hr))
+        {
+            goto exit;
+        }
 
-		if (psaParams)
-		{
-			lBoundParams = 0;
-			uBoundParams = 0;
+        // Get the additional parameters specified for this rule
+        // This classifier needs filenamecontains and filecontentcontains
+        psaParams = NULL;
+        hr = pFsrmRule->get_Parameters(&psaParams);
+        if (FAILED(hr))
+        {
+            goto exit;
+        }
 
-			hr = SafeArrayGetLBound(psaParams, 1, &lBoundParams);
-			if (FAILED(hr))
-			{
-				goto exit;
-			}
+        if (psaParams)
+        {
+            lBoundParams = 0;
+            uBoundParams = 0;
 
-			hr = SafeArrayGetUBound(psaParams, 1, &uBoundParams);
-			if (FAILED(hr))
-			{
-				goto exit;
-			}
+            hr = SafeArrayGetLBound(psaParams, 1, &lBoundParams);
+            if (FAILED(hr))
+            {
+                goto exit;
+            }
 
-			strFileNameContains.Empty();
-			strFileContentContains.Empty();
+            hr = SafeArrayGetUBound(psaParams, 1, &uBoundParams);
+            if (FAILED(hr))
+            {
+                goto exit;
+            }
 
-			for (LONG iParam = lBoundParams; iParam <= uBoundParams; iParam++)
-			{
-				_variant_t vParam;				
+            strFileNameContains.Empty();
+            strFileContentContains.Empty();
 
-				hr = SafeArrayGetElement(psaParams, &iParam, &vParam);
-				if (FAILED(hr))
-				{
-					goto exit;
-				}
+            for (LONG iParam = lBoundParams; iParam <= uBoundParams; iParam++)
+            {
+                _variant_t vParam;
 
-				CComBSTR strParam = vParam.bstrVal;
-				LPWSTR pwszParamKey = (LPWSTR)strParam;
-				LPWSTR pwszParamVal = ::wcschr(pwszParamKey, L'=');
-				*pwszParamVal = 0;
-				pwszParamVal++;
+                hr = SafeArrayGetElement(psaParams, &iParam, &vParam);
+                if (FAILED(hr))
+                {
+                    goto exit;
+                }
 
-				CComBSTR strKey = pwszParamKey;
-				hr = strKey.ToLower();
-				if (FAILED(hr))
-				{
-					goto exit;
-				}
+                CComBSTR strParam = vParam.bstrVal;
+                LPWSTR pwszParamKey = (LPWSTR)strParam;
+                LPWSTR pwszParamVal = ::wcschr(pwszParamKey, L'=');
+                *pwszParamVal = 0;
+                pwszParamVal++;
 
-				if (wcscmp(strKey, g_wszFileNameContainsKey) == 0)
-				{
-					strFileNameContains = SysAllocString(pwszParamVal);
-					hr = strFileNameContains.ToLower();
-					if (FAILED(hr))
-					{
-						goto exit;
-					}
-				}
-				else if (wcscmp(strKey, g_wszFileContentContainsKey) == 0)
-				{
-					strFileContentContains = SysAllocString(pwszParamVal);
-					hr = strFileContentContains.ToLower();
-					if (FAILED(hr))
-					{
-						goto exit;
-					}
-				}
-			}
+                CComBSTR strKey = pwszParamKey;
+                hr = strKey.ToLower();
+                if (FAILED(hr))
+                {
+                    goto exit;
+                }
 
-			if (strFileNameContains.Length() != 0 || strFileContentContains.Length() != 0)
-			{
-				//create a new property/value pair to store
-				CFsrmSampleClassificationRule newRule( 
-					strPropertyName, 
-					strPropertyValue,
-					strFileNameContains,
-					strFileContentContains
-					);
+                if (wcscmp(strKey, g_wszFileNameContainsKey) == 0)
+                {
+                    strFileNameContains = SysAllocString(pwszParamVal);
+                    hr = strFileNameContains.ToLower();
+                    if (FAILED(hr))
+                    {
+                        goto exit;
+                    }
+                }
+                else if (wcscmp(strKey, g_wszFileContentContainsKey) == 0)
+                {
+                    strFileContentContains = SysAllocString(pwszParamVal);
+                    hr = strFileContentContains.ToLower();
+                    if (FAILED(hr))
+                    {
+                        goto exit;
+                    }
+                }
+            }
 
-				//make sure rule name is lower case for ease in matching
-				strRuleNameLower = strRuleName;
-				std::transform( strRuleNameLower.begin( ), strRuleNameLower.end( ), strRuleNameLower.begin( ), towlower );
+            if (strFileNameContains.Length() != 0 || strFileContentContains.Length() != 0)
+            {
+                //create a new property/value pair to store
+                CFsrmSampleClassificationRule newRule(
+                    strPropertyName,
+                    strPropertyValue,
+                    strFileNameContains,
+                    strFileContentContains
+                );
 
-				//add rule with property/value to map
-				m_mapFsrmClassificationRules[idRule] = newRule;	
-			}
+                //make sure rule name is lower case for ease in matching
+                strRuleNameLower = strRuleName;
+                std::transform( strRuleNameLower.begin( ), strRuleNameLower.end( ), strRuleNameLower.begin( ), towlower );
 
-		}
+                //add rule with property/value to map
+                m_mapFsrmClassificationRules[idRule] = newRule;
+            }
+
+        }
 
 
-	
-	}
+
+    }
 
 exit:
 
-	return hr;
+    return hr;
 
 }
 
@@ -275,29 +283,29 @@ Description:
 Arguments:
 
     propertyBag				- The FSRM property bag for this file.
-	
+
 Return value:
 
     HRESULT
 
 Notes:
-    
-	We cache this property bag for future access to the streaming interface on the file, 
+
+	We cache this property bag for future access to the streaming interface on the file,
 	and to access other properties of the file e.g. the file's name
 
 --*/
 
 STDMETHODIMP
 CFsrmSampleClassifier::OnBeginFile(
-		IFsrmPropertyBag * propertyBag,
-                SAFEARRAY           *psaRuleIds
-		)
+    IFsrmPropertyBag * propertyBag,
+    SAFEARRAY           *psaRuleIds
+)
 {
-	HRESULT hr = S_OK;
-	
-	m_spCurrentPropertyBag = propertyBag;	
+    HRESULT hr = S_OK;
 
-	return hr;
+    m_spCurrentPropertyBag = propertyBag;
+
+    return hr;
 }
 
 /*++
@@ -311,27 +319,27 @@ Description:
 Arguments:
 
     propertyBag				- The FSRM property bag for this file.
-	
+
 Return value:
 
     HRESULT
 
 Notes:
-    
+
 	This classifier uses the predefined values in the classification UI.
 
 --*/
 
 STDMETHODIMP
 CFsrmSampleClassifier::GetPropertyValueToApply(
-		BSTR property, 
-		BSTR * Value, 
-		GUID idRule, 
-		GUID idPropDef
-		)
+    BSTR property,
+    BSTR * Value,
+    GUID idRule,
+    GUID idPropDef
+)
 {
-	HRESULT hr = S_OK;
-	return hr;
+    HRESULT hr = S_OK;
+    return hr;
 }
 
 /*++
@@ -340,23 +348,23 @@ CFsrmSampleClassifier::GetPropertyValueToApply(
 
 Description:
 
-    This routine is called by the FSRM pipeline to determine if 
-	a rule is applicable to the current file being processed.	
+    This routine is called by the FSRM pipeline to determine if
+	a rule is applicable to the current file being processed.
 
 Arguments:
 
     property				- The FSRM property being applied
 	Value					- The value for this property that will be applied
 	applyValue				- A boolean for the classifier to indicate that this property is to be applied
-	idRule					- The rule guid 
+	idRule					- The rule guid
 	idPropDef				- The property's definition guid
-	
+
 Return value:
 
     HRESULT
 
 Notes:
-    
+
 	This classifier looks up the rule guid against the cache'd map to see if it should be interested
 	in this rule.
 	If so, the classifier finds the rule definition in its map. It then uses the rule's parameters
@@ -366,57 +374,60 @@ Notes:
 
 STDMETHODIMP
 CFsrmSampleClassifier::DoesPropertyValueApply(
-		BSTR property, 
-		BSTR Value, 
-		VARIANT_BOOL * applyValue, 
-		GUID idRule, 
-		GUID idPropDef
-		)
+    BSTR property,
+    BSTR Value,
+    VARIANT_BOOL * applyValue,
+    GUID idRule,
+    GUID idPropDef
+)
 {
-	HRESULT hr = S_OK;
-	wstring strRuleNameLower;	
-	FsrmClassificationRulesMap::iterator iterRules;		
-	VARIANT_BOOL bResult = VARIANT_FALSE;
+    HRESULT hr = S_OK;
+    wstring strRuleNameLower;
+    FsrmClassificationRulesMap::iterator iterRules;
+    VARIANT_BOOL bResult = VARIANT_FALSE;
 
-	try
-	{
-		iterRules = m_mapFsrmClassificationRules.find(idRule);
-		if (iterRules == m_mapFsrmClassificationRules.end())
-		{
-			goto exit;
-		}
-		else
-		{
-			CFsrmSampleClassificationRule &matchingRule = iterRules->second;			
-			hr = NameOrContentContains(
-				matchingRule.m_strFileNameContains, 
-				matchingRule.m_strFileContentContains, 
-				&bResult
-				);
-			if (FAILED(hr))
-			{
-				goto exit;
-			}
-		}
-	}
-	catch( _com_error& err ) {
-		hr = err.Error( );
-	}
-	catch( const std::bad_alloc& ) {
-		hr = E_OUTOFMEMORY;
-	}
-	catch( const std::exception& ) {
-		hr = E_UNEXPECTED;
-	}
-	
+    try
+    {
+        iterRules = m_mapFsrmClassificationRules.find(idRule);
+        if (iterRules == m_mapFsrmClassificationRules.end())
+        {
+            goto exit;
+        }
+        else
+        {
+            CFsrmSampleClassificationRule &matchingRule = iterRules->second;
+            hr = NameOrContentContains(
+                     matchingRule.m_strFileNameContains,
+                     matchingRule.m_strFileContentContains,
+                     &bResult
+                 );
+            if (FAILED(hr))
+            {
+                goto exit;
+            }
+        }
+    }
+    catch( _com_error& err )
+    {
+        hr = err.Error( );
+    }
+    catch( const std::bad_alloc& )
+    {
+        hr = E_OUTOFMEMORY;
+    }
+    catch( const std::exception& )
+    {
+        hr = E_UNEXPECTED;
+    }
 
-	*applyValue = bResult;
+
+    *applyValue = bResult;
 
 exit:
-	return hr;	
+    return hr;
 
 }
-	
+
 /*++
 
     Routine CFsrmSampleClassifier::OnEndFile
@@ -441,10 +452,10 @@ Notes:
 
 STDMETHODIMP
 CFsrmSampleClassifier::OnEndFile(
-		)
+)
 {
-	HRESULT hr = S_OK;
-	return hr;
+    HRESULT hr = S_OK;
+    return hr;
 
 }
 
@@ -467,71 +478,78 @@ Return value:
     HRESULT
 
 Notes:
-    
-	Performs initialialization by creating a connector 
+
+	Performs initialialization by creating a connector
 	and binding this instance of the module to it.
 
 --*/
 STDMETHODIMP
 CFsrmSampleClassifier::OnLoad(
-		IFsrmPipelineModuleDefinition * moduleDefinition, 
-		IFsrmPipelineModuleConnector * * moduleConnector
-		)
+    IFsrmPipelineModuleDefinition * moduleDefinition,
+    IFsrmPipelineModuleConnector * * moduleConnector
+)
 {
-	HRESULT hr = S_OK;
-	CComPtr<IFsrmPipelineModuleConnector> pConnector;
-	CComQIPtr<IFsrmPipelineModuleImplementation> pModuleImpl;
+    HRESULT hr = S_OK;
+    CComPtr<IFsrmPipelineModuleConnector> pConnector;
+    CComQIPtr<IFsrmPipelineModuleImplementation> pModuleImpl;
 
-	try {
+    try
+    {
 
-		if (moduleDefinition == NULL) {
-			hr = E_INVALIDARG;
-			goto exit;
-		}
-		
-		(*moduleConnector) = NULL;
+        if (moduleDefinition == NULL)
+        {
+            hr = E_INVALIDARG;
+            goto exit;
+        }
 
-		m_spDefinition = moduleDefinition;		
+        (*moduleConnector) = NULL;
 
-		// create the FsrmPipelineModuleConnector object reference
-		hr = ::CoCreateInstance(
-			__uuidof(FsrmPipelineModuleConnector),
-			NULL,			
-			CLSCTX_ALL,
-			__uuidof(IFsrmPipelineModuleConnector),
-			(void **)&pConnector);
-		
-		if (hr != S_OK) {
-			goto exit;
-		}
+        m_spDefinition = moduleDefinition;
 
-		pModuleImpl = GetControllingUnknown( );
+        // create the FsrmPipelineModuleConnector object reference
+        hr = ::CoCreateInstance(
+                 __uuidof(FsrmPipelineModuleConnector),
+                 NULL,
+                 CLSCTX_ALL,
+                 __uuidof(IFsrmPipelineModuleConnector),
+                 (void **)&pConnector);
 
-		if (pModuleImpl == NULL) {
-			hr = E_NOINTERFACE;
-			goto exit;
-		}
+        if (hr != S_OK)
+        {
+            goto exit;
+        }
 
-		//bind the connector to this instance
-		hr = pConnector->Bind( moduleDefinition, pModuleImpl );
+        pModuleImpl = GetControllingUnknown( );
 
-		(*moduleConnector) = pConnector.Detach( );
+        if (pModuleImpl == NULL)
+        {
+            hr = E_NOINTERFACE;
+            goto exit;
+        }
 
-	}
-	catch( _com_error& err ) {
-		hr = err.Error( );
-	}
-	catch( const std::bad_alloc& ) {
-		hr = E_OUTOFMEMORY;
-	}
-	catch( const std::exception& ) {
-		hr = E_UNEXPECTED;
-	}
+        //bind the connector to this instance
+        hr = pConnector->Bind( moduleDefinition, pModuleImpl );
+
+        (*moduleConnector) = pConnector.Detach( );
+
+    }
+    catch( _com_error& err )
+    {
+        hr = err.Error( );
+    }
+    catch( const std::bad_alloc& )
+    {
+        hr = E_OUTOFMEMORY;
+    }
+    catch( const std::exception& )
+    {
+        hr = E_UNEXPECTED;
+    }
 
 exit:
-	return hr;
+    return hr;
 }
-	
+
 /*++
 
     Routine CFsrmSampleClassifier::OnUnload
@@ -556,10 +574,10 @@ Notes:
 
 STDMETHODIMP
 CFsrmSampleClassifier::OnUnload(
-		)
+)
 {
-	HRESULT hr = S_OK;
-	return hr;
+    HRESULT hr = S_OK;
+    return hr;
 }
 
 
@@ -591,137 +609,146 @@ Notes:
 
 --*/
 
-HRESULT 
+HRESULT
 CFsrmSampleClassifier::NameOrContentContains(
-	LPCWSTR szFileNameContains,
-	LPCWSTR szFileContentContains,
-	VARIANT_BOOL * bResult
-	)
+    LPCWSTR szFileNameContains,
+    LPCWSTR szFileContentContains,
+    VARIANT_BOOL * bResult
+)
 
 {
-	HRESULT hr = S_OK;
-	CComVariant var;
-	CComBSTR strFileName;
-	CComBSTR strFromBytesRead;
-	BYTE bytesToRead[ReadBufferSize];
-	ULONG bytesRead;
-	ULARGE_INTEGER readOffset;	
-	wstring strRuleNameLower;	
-	wstring strMatch;
-	size_t pos = 0;	
+    HRESULT hr = S_OK;
+    CComVariant var;
+    CComBSTR strFileName;
+    CComBSTR strFromBytesRead;
+    BYTE bytesToRead[ReadBufferSize];
+    ULONG bytesRead;
+    ULARGE_INTEGER readOffset;
+    wstring strRuleNameLower;
+    wstring strMatch;
+    size_t pos = 0;
 
-	*bResult = VARIANT_FALSE;
+    *bResult = VARIANT_FALSE;
 
-	try {
+    try
+    {
 
-		if (szFileNameContains != NULL)
-		{
+        if (szFileNameContains != NULL)
+        {
 
-			// get the file name and lower case it for lookup
-			m_spCurrentPropertyBag->get_Name( &strFileName );
-			hr = strFileName.ToLower( );
-			if (FAILED(hr))
-			{
-				goto exit;
-			}
-			strMatch = strFileName;
+            // get the file name and lower case it for lookup
+            m_spCurrentPropertyBag->get_Name( &strFileName );
+            hr = strFileName.ToLower( );
+            if (FAILED(hr))
+            {
+                goto exit;
+            }
+            strMatch = strFileName;
 
-			pos = strMatch.find(szFileNameContains);
+            pos = strMatch.find(szFileNameContains);
 
-			if (std::wstring::npos != pos)
-			{
-				*bResult = VARIANT_TRUE;
-				goto exit;
-			}
-		}
-		if (szFileContentContains != NULL)
-		{
-			// get the file's streaming interface
-			hr = m_spCurrentPropertyBag->GetFileStreamInterface(
-				FsrmFileStreamingMode_Read,
-				FsrmFileStreamingInterfaceType_ILockBytes,
-				&var);
+            if (std::wstring::npos != pos)
+            {
+                *bResult = VARIANT_TRUE;
+                goto exit;
+            }
+        }
+        if (szFileContentContains != NULL)
+        {
+            // get the file's streaming interface
+            hr = m_spCurrentPropertyBag->GetFileStreamInterface(
+                     FsrmFileStreamingMode_Read,
+                     FsrmFileStreamingInterfaceType_ILockBytes,
+                     &var);
 
-			if (hr != S_OK) {
-				goto exit;
-			}
+            if (hr != S_OK)
+            {
+                goto exit;
+            }
 
-			if (var.vt == VT_UNKNOWN && var.punkVal != NULL) {
+            if (var.vt == VT_UNKNOWN && var.punkVal != NULL)
+            {
 
-				CComQIPtr<ILockBytes> pLockBytes = var.punkVal;
-				if (pLockBytes == NULL) {
-					hr = S_FALSE;
-					goto exit;
-				}
+                CComQIPtr<ILockBytes> pLockBytes = var.punkVal;
+                if (pLockBytes == NULL)
+                {
+                    hr = S_FALSE;
+                    goto exit;
+                }
 
-				readOffset.QuadPart = 0;
+                readOffset.QuadPart = 0;
 
-				do
-				{
+                do
+                {
 
-					// read the first ReadBufferSize bytes from the file
-					hr = pLockBytes->ReadAt( 
-						readOffset, 
-						bytesToRead, 
-						sizeof(bytesToRead) - 1, 
-						&bytesRead
-						); 
+                    // read the first ReadBufferSize bytes from the file
+                    hr = pLockBytes->ReadAt(
+                             readOffset,
+                             bytesToRead,
+                             sizeof(bytesToRead) - 1,
+                             &bytesRead
+                         );
 
-					if (hr != S_OK) {
-						hr = S_FALSE;
-						goto exit;
-					}
-					
-					if (bytesRead > 0)
-					{
+                    if (hr != S_OK)
+                    {
+                        hr = S_FALSE;
+                        goto exit;
+                    }
 
-						bytesToRead[bytesRead] = 0;
-						readOffset.QuadPart += bytesRead;
-							
-						strFromBytesRead.Empty();
-						hr = strFromBytesRead.Append((char *)bytesToRead);
-						if (FAILED(hr))
-						{
-							goto exit;
-						}
-						hr = strFromBytesRead.ToLower( );
-						if (FAILED(hr))
-						{
-							goto exit;
-						}
-						strMatch += strFromBytesRead;
+                    if (bytesRead > 0)
+                    {
 
-						pos = strMatch.find(szFileContentContains);
+                        bytesToRead[bytesRead] = 0;
+                        readOffset.QuadPart += bytesRead;
 
-						if (std::wstring::npos != pos)
-						{
-							*bResult = VARIANT_TRUE;	
-							goto exit;
-						}
+                        strFromBytesRead.Empty();
+                        hr = strFromBytesRead.Append((char *)bytesToRead);
+                        if (FAILED(hr))
+                        {
+                            goto exit;
+                        }
+                        hr = strFromBytesRead.ToLower( );
+                        if (FAILED(hr))
+                        {
+                            goto exit;
+                        }
+                        strMatch += strFromBytesRead;
 
-						strMatch.empty();			
-						strMatch += strFromBytesRead;
-					}
-				} while(bytesRead > 0);
+                        pos = strMatch.find(szFileContentContains);
 
-			}
-		}
+                        if (std::wstring::npos != pos)
+                        {
+                            *bResult = VARIANT_TRUE;
+                            goto exit;
+                        }
 
-			
-	}
-	catch( _com_error& err ) {
-		hr = err.Error( );
-	}
-	catch( const std::bad_alloc& ) {
-		hr = E_OUTOFMEMORY;
-	}
-	catch( const std::exception& ) {
-		hr = E_UNEXPECTED;
-	}
-	
+                        strMatch.empty();
+                        strMatch += strFromBytesRead;
+                    }
+                }
+                while(bytesRead > 0);
 
-	
+            }
+        }
+
+
+    }
+    catch( _com_error& err )
+    {
+        hr = err.Error( );
+    }
+    catch( const std::bad_alloc& )
+    {
+        hr = E_OUTOFMEMORY;
+    }
+    catch( const std::exception& )
+    {
+        hr = E_UNEXPECTED;
+    }
+
+
+
 exit:
-	return hr;
+    return hr;
 }
 

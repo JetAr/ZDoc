@@ -1,4 +1,4 @@
-//////////////////////////////////////////////////////////////////////
+﻿//////////////////////////////////////////////////////////////////////
 //
 //  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 //  ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED
@@ -27,7 +27,7 @@ STDAPI CExtentMonitorTextService::OnSetThreadFocus()
 {
     if (_pPopupWindow)
     {
-       _pPopupWindow->Show();
+        _pPopupWindow->Show();
     }
     return S_OK;
 }
@@ -42,7 +42,7 @@ STDAPI CExtentMonitorTextService::OnKillThreadFocus()
 {
     if (_pPopupWindow)
     {
-       _pPopupWindow->Hide();
+        _pPopupWindow->Hide();
     }
 
     return S_OK;
@@ -66,7 +66,7 @@ BOOL CExtentMonitorTextService::_InitThreadFocusSink()
 
     return TRUE;
 }
- 
+
 //+---------------------------------------------------------------------------
 //
 // _UninitThreadFocusSink
@@ -83,7 +83,7 @@ void CExtentMonitorTextService::_UninitThreadFocusSink()
         pSource->Release();
     }
 }
- 
- 
+
+
 
 

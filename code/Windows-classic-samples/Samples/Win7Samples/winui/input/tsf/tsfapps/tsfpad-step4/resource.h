@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #define IDC_MYICON                      2
 #define IDS_APP_TITLE                   103

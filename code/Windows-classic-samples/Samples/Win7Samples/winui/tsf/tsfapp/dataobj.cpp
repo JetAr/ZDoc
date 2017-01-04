@@ -1,4 +1,4 @@
-/**************************************************************************
+﻿/**************************************************************************
    THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
    ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
    THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -10,7 +10,7 @@
 /**************************************************************************
 
    File:          DataObj.cpp
-   
+
    Description:   CTSFDataObject implementation.
 
 **************************************************************************/
@@ -66,8 +66,8 @@ CTSFDataObject::~CTSFDataObject()
 
 **************************************************************************/
 
-STDMETHODIMP CTSFDataObject::QueryInterface(   REFIID riid, 
-                                            LPVOID *ppReturn)
+STDMETHODIMP CTSFDataObject::QueryInterface(   REFIID riid,
+        LPVOID *ppReturn)
 {
     *ppReturn = NULL;
 
@@ -78,7 +78,7 @@ STDMETHODIMP CTSFDataObject::QueryInterface(   REFIID riid,
     else if(IsEqualIID(riid, IID_IDataObject))
     {
         *ppReturn = (LPDATAOBJECT)this;
-    }   
+    }
 
     if(*ppReturn)
     {
@@ -87,7 +87,7 @@ STDMETHODIMP CTSFDataObject::QueryInterface(   REFIID riid,
     }
 
     return E_NOINTERFACE;
-}                                             
+}
 
 /**************************************************************************
 
@@ -112,7 +112,7 @@ STDMETHODIMP_(DWORD) CTSFDataObject::Release()
     {
         delete this;
     }
-   
+
     return m_ObjRefCount;
 }
 
@@ -170,7 +170,7 @@ STDMETHODIMP CTSFDataObject::GetDataHere(LPFORMATETC pFE, LPSTGMEDIUM pStgMedium
                 {
                     return STG_E_MEDIUMFULL;
                 }
-                
+
                 CopyMemory(pwsz, m_pwszText, sizeSrcBytes);
 
                 GlobalUnlock(pStgMedium->hGlobal);
@@ -199,7 +199,7 @@ STDMETHODIMP CTSFDataObject::GetDataHere(LPFORMATETC pFE, LPSTGMEDIUM pStgMedium
 
 STDMETHODIMP CTSFDataObject::QueryGetData(LPFORMATETC pFE)
 {
-BOOL fReturn = FALSE;
+    BOOL fReturn = FALSE;
 
     /*
     Check the aspects we support. Implementations of this object will only
@@ -242,8 +242,8 @@ STDMETHODIMP CTSFDataObject::GetCanonicalFormatEtc(LPFORMATETC pFEIn, LPFORMATET
 
 **************************************************************************/
 
-STDMETHODIMP CTSFDataObject::EnumFormatEtc(  DWORD dwDirection, 
-                                          IEnumFORMATETC** ppEFE)
+STDMETHODIMP CTSFDataObject::EnumFormatEtc(  DWORD dwDirection,
+        IEnumFORMATETC** ppEFE)
 {
     return E_NOTIMPL;
 }
@@ -254,9 +254,9 @@ STDMETHODIMP CTSFDataObject::EnumFormatEtc(  DWORD dwDirection,
 
 **************************************************************************/
 
-STDMETHODIMP CTSFDataObject::SetData(  LPFORMATETC pFE, 
-                                    LPSTGMEDIUM pStgMedium, 
-                                    BOOL fRelease)
+STDMETHODIMP CTSFDataObject::SetData(  LPFORMATETC pFE,
+                                       LPSTGMEDIUM pStgMedium,
+                                       BOOL fRelease)
 {
     return E_NOTIMPL;
 }
@@ -267,10 +267,10 @@ STDMETHODIMP CTSFDataObject::SetData(  LPFORMATETC pFE,
 
 **************************************************************************/
 
-STDMETHODIMP CTSFDataObject::DAdvise(  LPFORMATETC pFE, 
-                                    DWORD advf, 
-                                    IAdviseSink *ppAdviseSink, 
-                                    LPDWORD pdwConnection)
+STDMETHODIMP CTSFDataObject::DAdvise(  LPFORMATETC pFE,
+                                       DWORD advf,
+                                       IAdviseSink *ppAdviseSink,
+                                       LPDWORD pdwConnection)
 {
     return E_NOTIMPL;
 }
@@ -318,7 +318,7 @@ HRESULT CTSFDataObject::_SetText(LPWSTR pwszText)
 
     if(pwszText && *pwszText)
     {
-        size_t cch = lstrlenW(pwszText) + 1; 
+        size_t cch = lstrlenW(pwszText) + 1;
         m_pwszText = (LPWSTR)GlobalAlloc(GMEM_FIXED, cch * sizeof(WCHAR));
         if(NULL == m_pwszText)
         {
@@ -327,7 +327,7 @@ HRESULT CTSFDataObject::_SetText(LPWSTR pwszText)
 
         wcscpy_s(m_pwszText, cch, pwszText);
     }
-    
+
     return S_OK;
 }
 

@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -20,7 +20,7 @@ int WINAPI WinMain(
     HINSTANCE /* hPrevInstance */,
     LPSTR /* lpCmdLine */,
     int /* nCmdShow */
-    )
+)
 {
     // Ignoring the return value because we want to continue running even in the
     // unlikely event that HeapSetInformation fails.
@@ -135,17 +135,17 @@ HRESULT ListViewApp::Initialize()
             m_pD2DFactory->GetDesktopDpi(&dpiX, &dpiY);
 
             m_parentHwnd = CreateWindow(
-                L"DemoAppWindow",
-                L"D2D ListView",
-                WS_OVERLAPPEDWINDOW | WS_VSCROLL,
-                CW_USEDEFAULT,
-                CW_USEDEFAULT,
-                static_cast<UINT>(ceil(640.0f * dpiX / 96.0f)),
-                static_cast<UINT>(ceil(480.0f * dpiY / 96.0f)),
-                NULL,
-                NULL,
-                HINST_THISCOMPONENT,
-                this);
+                               L"DemoAppWindow",
+                               L"D2D ListView",
+                               WS_OVERLAPPEDWINDOW | WS_VSCROLL,
+                               CW_USEDEFAULT,
+                               CW_USEDEFAULT,
+                               static_cast<UINT>(ceil(640.0f * dpiX / 96.0f)),
+                               static_cast<UINT>(ceil(480.0f * dpiY / 96.0f)),
+                               NULL,
+                               NULL,
+                               HINST_THISCOMPONENT,
+                               this);
 
             hr = m_parentHwnd ? S_OK : E_FAIL;
             if (SUCCEEDED(hr))
@@ -175,18 +175,18 @@ HRESULT ListViewApp::Initialize()
 
             //create window
             m_d2dHwnd = CreateWindow(
-                L"D2DListViewApp",
-                L"",
-                WS_CHILDWINDOW | WS_VISIBLE,
-                0,
-                0,
-                d2dWindowSize.width,
-                d2dWindowSize.height,
-                m_parentHwnd,
-                NULL,
-                HINST_THISCOMPONENT,
-                this
-                );
+                            L"D2DListViewApp",
+                            L"",
+                            WS_CHILDWINDOW | WS_VISIBLE,
+                            0,
+                            0,
+                            d2dWindowSize.width,
+                            d2dWindowSize.height,
+                            m_parentHwnd,
+                            NULL,
+                            HINST_THISCOMPONENT,
+                            this
+                        );
 
             hr = m_d2dHwnd ? S_OK : E_FAIL;
         }
@@ -242,35 +242,35 @@ HRESULT ListViewApp::CreateDeviceIndependentResources()
     {
         //create WIC factory
         hr = CoCreateInstance(
-            CLSID_WICImagingFactory,
-            NULL,
-            CLSCTX_INPROC_SERVER,
-            IID_IWICImagingFactory,
-            reinterpret_cast<void **>(&m_pWICFactory)
-            );
+                 CLSID_WICImagingFactory,
+                 NULL,
+                 CLSCTX_INPROC_SERVER,
+                 IID_IWICImagingFactory,
+                 reinterpret_cast<void **>(&m_pWICFactory)
+             );
     }
     if (SUCCEEDED(hr))
     {
         //create DWrite factory
         hr = DWriteCreateFactory(
-            DWRITE_FACTORY_TYPE_SHARED,
-            __uuidof(m_pDWriteFactory),
-            reinterpret_cast<IUnknown **>(&m_pDWriteFactory)
-            );
+                 DWRITE_FACTORY_TYPE_SHARED,
+                 __uuidof(m_pDWriteFactory),
+                 reinterpret_cast<IUnknown **>(&m_pDWriteFactory)
+             );
     }
     if (SUCCEEDED(hr))
     {
         //create DWrite text format object
         hr = m_pDWriteFactory->CreateTextFormat(
-            msc_fontName,
-            NULL,
-            DWRITE_FONT_WEIGHT_THIN,
-            DWRITE_FONT_STYLE_NORMAL,
-            DWRITE_FONT_STRETCH_NORMAL,
-            msc_fontSize,
-            L"", //locale
-            &m_pTextFormat
-            );
+                 msc_fontName,
+                 NULL,
+                 DWRITE_FONT_WEIGHT_THIN,
+                 DWRITE_FONT_STYLE_NORMAL,
+                 DWRITE_FONT_STRETCH_NORMAL,
+                 msc_fontSize,
+                 L"", //locale
+                 &m_pTextFormat
+             );
     }
     if (SUCCEEDED(hr))
     {
@@ -328,31 +328,31 @@ HRESULT ListViewApp::CreateDeviceResources()
         GetClientRect(m_d2dHwnd, &rc);
 
         D2D1_SIZE_U size = D2D1::SizeU(
-            rc.right - rc.left,
-            rc.bottom - rc.top
-            );
+                               rc.right - rc.left,
+                               rc.bottom - rc.top
+                           );
 
         //create a D2D render target
         hr = m_pD2DFactory->CreateHwndRenderTarget(
-            D2D1::RenderTargetProperties(),
-            D2D1::HwndRenderTargetProperties(m_d2dHwnd, size),
-            &m_pRT
-            );
+                 D2D1::RenderTargetProperties(),
+                 D2D1::HwndRenderTargetProperties(m_d2dHwnd, size),
+                 &m_pRT
+             );
         if (SUCCEEDED(hr))
         {
             //create a black brush
             hr = m_pRT->CreateSolidColorBrush(
-                D2D1::ColorF(D2D1::ColorF::Black),
-                &m_pBlackBrush
-                );
+                     D2D1::ColorF(D2D1::ColorF::Black),
+                     &m_pBlackBrush
+                 );
         }
         if (SUCCEEDED(hr))
         {
             hr = m_pRT->CreateBitmap(
-                D2D1::SizeU(msc_atlasWidth, msc_atlasHeight),
-                D2D1::BitmapProperties(D2D1::PixelFormat(DXGI_FORMAT_B8G8R8A8_UNORM, D2D1_ALPHA_MODE_PREMULTIPLIED)),
-                &m_pBitmapAtlas
-                );
+                     D2D1::SizeU(msc_atlasWidth, msc_atlasHeight),
+                     D2D1::BitmapProperties(D2D1::PixelFormat(DXGI_FORMAT_B8G8R8A8_UNORM, D2D1_ALPHA_MODE_PREMULTIPLIED)),
+                     &m_pBitmapAtlas
+                 );
         }
         if (SUCCEEDED(hr))
         {
@@ -539,10 +539,10 @@ HRESULT ListViewApp::LoadDirectory()
             // so that we can get a icon/thumbnail for it.
             SafeRelease(&pShellItemImageFactory);
             hr = SHCreateItemFromParsingName(
-                    wszAbsolutePath,
-                    m_pBindContext,
-                    IID_PPV_ARGS(&pShellItemImageFactory)
-                    );
+                     wszAbsolutePath,
+                     m_pBindContext,
+                     IID_PPV_ARGS(&pShellItemImageFactory)
+                 );
             if (FAILED(hr))
             {
                 break;
@@ -584,7 +584,7 @@ HRESULT ListViewApp::LoadDirectory()
                         NULL,       // lpvBits
                         &bi,
                         DIB_RGB_COLORS
-                        ))
+                    ))
             {
                 hr = E_FAIL;
                 break;
@@ -599,8 +599,8 @@ HRESULT ListViewApp::LoadDirectory()
 
             // If we happen to find an icon that's too big, skip over this item.
             if (   (-bi.bmiHeader.biHeight > msc_iconSize)
-                || (bi.bmiHeader.biWidth > msc_iconSize)
-                || (bi.bmiHeader.biSizeImage > sc_bitsArraySize))
+                    || (bi.bmiHeader.biWidth > msc_iconSize)
+                    || (bi.bmiHeader.biSizeImage > sc_bitsArraySize))
             {
                 continue;
             }
@@ -630,10 +630,10 @@ HRESULT ListViewApp::LoadDirectory()
 
             // Now we copy the buffer into video memory.
             hr = m_pBitmapAtlas->CopyFromMemory(
-                    &m_pFiles[i].placement,
-                    pBits,
-                    bi.bmiHeader.biSizeImage / -bi.bmiHeader.biHeight
-                    );
+                     &m_pFiles[i].placement,
+                     pBits,
+                     bi.bmiHeader.biSizeImage / -bi.bmiHeader.biHeight
+                 );
 
             if (FAILED(hr))
             {
@@ -759,10 +759,10 @@ HRESULT ListViewApp::OnRender()
             // position and the current position. The position that we draw for
             // this frame is somewhere between the two.
             FLOAT interpolatedPosition = GetFancyAccelerationInterpolatedValue(
-                interpolationFactor,
-                m_pFiles[i].previousPosition,
-                m_pFiles[i].currentPosition
-                );
+                                             interpolationFactor,
+                                             m_pFiles[i].previousPosition,
+                                             m_pFiles[i].currentPosition
+                                         );
 
             // We do a quick check to see if the items we are drawing will be in
             // the visible region. If they are not, we don't bother issues the
@@ -771,7 +771,7 @@ HRESULT ListViewApp::OnRender()
             FLOAT bottomOfIcon = interpolatedPosition + msc_iconSize;
 
             if (   bottomOfIcon < interpolatedScroll
-                || topOfIcon > interpolatedScroll + m_pRT->GetSize().height)
+                    || topOfIcon > interpolatedScroll + m_pRT->GetSize().height)
             {
                 // Some further items could be in the visible region. Continue
                 // the loop so that they will be drawn.
@@ -800,7 +800,7 @@ HRESULT ListViewApp::OnRender()
                     (FLOAT)m_pFiles[i].placement.top,
                     (FLOAT)m_pFiles[i].placement.right,
                     (FLOAT)m_pFiles[i].placement.bottom)
-                );
+            );
 
             // Draw the filename. For brevity we just use DrawText. A real
             // application should consider caching the TextLayout object during
@@ -816,7 +816,7 @@ HRESULT ListViewApp::OnRender()
                     rtSize.width,
                     interpolatedPosition + static_cast<FLOAT>(msc_iconSize)),
                 m_pBlackBrush
-                );
+            );
         }
 
         hr = m_pRT->EndDraw();
@@ -1139,10 +1139,10 @@ void ListViewApp::OnChar(SHORT aChar)
             FLOAT interpolationFactor = GetAnimatingItemInterpolationFactor();
 
             m_pFiles[i].previousPosition = GetFancyAccelerationInterpolatedValue(
-                interpolationFactor,
-                m_pFiles[i].previousPosition,
-                m_pFiles[i].currentPosition
-                );
+                                               interpolationFactor,
+                                               m_pFiles[i].previousPosition,
+                                               m_pFiles[i].currentPosition
+                                           );
         }
 
         // Apply the new sort.
@@ -1201,17 +1201,17 @@ LRESULT CALLBACK ListViewApp::ParentWndProc(HWND hwnd, UINT message, WPARAM wPar
             hwnd,
             GWLP_USERDATA,
             PtrToUlong(pListViewApp)
-            );
+        );
 
         result = 1;
     }
     else
     {
         ListViewApp *pListViewApp = reinterpret_cast<ListViewApp *>(static_cast<LONG_PTR>(
-            ::GetWindowLongPtrW(
-                hwnd,
-                GWLP_USERDATA
-                )));
+                                        ::GetWindowLongPtrW(
+                                            hwnd,
+                                            GWLP_USERDATA
+                                        )));
 
         bool wasHandled = false;
 
@@ -1220,44 +1220,44 @@ LRESULT CALLBACK ListViewApp::ParentWndProc(HWND hwnd, UINT message, WPARAM wPar
             switch (message)
             {
             case WM_SIZE:
-                {
-                    pListViewApp->OnResize();
-                }
-                result = 0;
-                wasHandled = true;
-                break;
+            {
+                pListViewApp->OnResize();
+            }
+            result = 0;
+            wasHandled = true;
+            break;
 
             case WM_VSCROLL:
-                {
-                    pListViewApp->OnVScroll(wParam, lParam);
-                }
-                result = 0;
-                wasHandled = true;
-                break;
+            {
+                pListViewApp->OnVScroll(wParam, lParam);
+            }
+            result = 0;
+            wasHandled = true;
+            break;
 
             case WM_MOUSEWHEEL:
-                {
-                    pListViewApp->OnMouseWheel(wParam, lParam);
-                }
-                result = 0;
-                wasHandled = true;
-                break;
+            {
+                pListViewApp->OnMouseWheel(wParam, lParam);
+            }
+            result = 0;
+            wasHandled = true;
+            break;
 
             case WM_CHAR:
-                {
-                    pListViewApp->OnChar(static_cast<SHORT>(wParam));
-                }
-                result = 0;
-                wasHandled = true;
-                break;
+            {
+                pListViewApp->OnChar(static_cast<SHORT>(wParam));
+            }
+            result = 0;
+            wasHandled = true;
+            break;
 
             case WM_DESTROY:
-                {
-                    PostQuitMessage(0);
-                }
-                result = 1;
-                wasHandled = true;
-                break;
+            {
+                PostQuitMessage(0);
+            }
+            result = 1;
+            wasHandled = true;
+            break;
             }
         }
 
@@ -1290,16 +1290,16 @@ LRESULT CALLBACK ListViewApp::ChildWndProc(HWND hwnd, UINT message, WPARAM wPara
             hwnd,
             GWLP_USERDATA,
             PtrToUlong(pListViewApp)
-            );
+        );
 
         return 1;
     }
 
     ListViewApp *pListViewApp = reinterpret_cast<ListViewApp *>(static_cast<LONG_PTR>(
-        ::GetWindowLongPtrW(
-            hwnd,
-            GWLP_USERDATA
-            )));
+                                    ::GetWindowLongPtrW(
+                                        hwnd,
+                                        GWLP_USERDATA
+                                    )));
 
     if (pListViewApp)
     {
@@ -1307,28 +1307,28 @@ LRESULT CALLBACK ListViewApp::ChildWndProc(HWND hwnd, UINT message, WPARAM wPara
         {
         case WM_PAINT:
         case WM_DISPLAYCHANGE:
-            {
-                PAINTSTRUCT ps;
-                BeginPaint(hwnd, &ps);
+        {
+            PAINTSTRUCT ps;
+            BeginPaint(hwnd, &ps);
 
-                pListViewApp->OnRender();
-                EndPaint(hwnd, &ps);
-            }
-            return 0;
+            pListViewApp->OnRender();
+            EndPaint(hwnd, &ps);
+        }
+        return 0;
 
         case WM_LBUTTONDOWN:
-            {
-                D2D1_POINT_2F diPosition = pListViewApp->GetScrolledDIPositionFromPixelPosition(D2D1::Point2U(LOWORD(lParam), HIWORD(lParam)));
+        {
+            D2D1_POINT_2F diPosition = pListViewApp->GetScrolledDIPositionFromPixelPosition(D2D1::Point2U(LOWORD(lParam), HIWORD(lParam)));
 
-                pListViewApp->OnLeftButtonDown(diPosition);
-            }
-            return 0;
+            pListViewApp->OnLeftButtonDown(diPosition);
+        }
+        return 0;
 
         case WM_DESTROY:
-            {
-                PostQuitMessage(0);
-            }
-            return 1;
+        {
+            PostQuitMessage(0);
+        }
+        return 1;
         }
     }
     return DefWindowProc(hwnd, message, wParam, lParam);
@@ -1431,18 +1431,18 @@ void ListViewApp::OnVScroll(WPARAM wParam, LPARAM /* lParam */)
         break;
 
     case SB_THUMBTRACK:
+    {
+        SCROLLINFO si = {0};
+        si.fMask = SIF_PAGE | SIF_POS | SIF_RANGE | SIF_TRACKPOS;
+        BOOL ret = GetScrollInfo(m_parentHwnd, SB_VERT, &si);
+        if (!ret)
         {
-            SCROLLINFO si = {0};
-            si.fMask = SIF_PAGE | SIF_POS | SIF_RANGE | SIF_TRACKPOS;
-            BOOL ret = GetScrollInfo(m_parentHwnd, SB_VERT, &si);
-            if (!ret)
-            {
-                Assert(ret);
-                return;
-            }
-            newScrollPos = si.nTrackPos;
+            Assert(ret);
+            return;
         }
-        break;
+        newScrollPos = si.nTrackPos;
+    }
+    break;
 
     default:
         break;

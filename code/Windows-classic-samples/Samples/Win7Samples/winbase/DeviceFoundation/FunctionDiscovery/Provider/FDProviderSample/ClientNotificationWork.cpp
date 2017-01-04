@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -22,7 +22,7 @@ TClientNotificationWork::TClientNotificationWork():
 TClientNotificationWork* TClientNotificationWork::CreateClientOnErrorWork(HRESULT hr)
 {
     TClientNotificationWork* pClientNotificationWork = new(std::nothrow) TClientNotificationWork;
-    
+
     if (pClientNotificationWork)
     {
         pClientNotificationWork->WorkType = OnError;
@@ -35,7 +35,7 @@ TClientNotificationWork* TClientNotificationWork::CreateClientOnErrorWork(HRESUL
 TClientNotificationWork* TClientNotificationWork::CreateClientOnEventWork(DWORD EventId)
 {
     TClientNotificationWork* pClientNotificationWork = new(std::nothrow) TClientNotificationWork;
-    
+
     if (pClientNotificationWork)
     {
         pClientNotificationWork->WorkType = OnEvent;
@@ -46,11 +46,11 @@ TClientNotificationWork* TClientNotificationWork::CreateClientOnEventWork(DWORD 
 }  // TClientNotificationWork::CreateClientOnEventWork
 
 TClientNotificationWork* TClientNotificationWork::CreateClientOnUpdateWork(
-    QueryUpdateAction QueryUpdateAction, 
+    QueryUpdateAction QueryUpdateAction,
     __in TFunctionInstanceInfo* pFunctionInstanceInfo)
 {
     TClientNotificationWork* pClientNotificationWork = new(std::nothrow) TClientNotificationWork;
-    
+
     if (pClientNotificationWork)
     {
         pFunctionInstanceInfo->AddRef();

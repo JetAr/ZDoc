@@ -1,4 +1,4 @@
-/********************************************************************++
+﻿/********************************************************************++
 THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED
 TO THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -34,7 +34,7 @@ Feedback:
 //-----------------------------------------------------------------------------
 // Function:    SubscribeEndpointData
 // Purpose:     Subscribe to changes in a specific endpoint's data
-// Parameters:  
+// Parameters:
 //   pcEndpoint [in] : pointer to endpoint whose data we wish to subscribe to
 //
 void SubscribeEndpointData()
@@ -72,7 +72,7 @@ exit:
 //-----------------------------------------------------------------------------
 // Function:    UnsubscribeEndpointData
 // Purpose:     Unsubscrie from changes to a specific endpoints data
-// Parameters:  
+// Parameters:
 //   None
 //
 void UnsubscribeEndpointData()
@@ -128,7 +128,7 @@ void PublishEndpointObject()
     wprintf(L"Publication Scope (1) Near Me, (2) Internet, (3) All [1-3]: ");
     GET_PROMPT_RESPONSE(hr, wzBuff);
 
-    // since wtoi can't distinguish between 0 and an error, note that valid values start at 1, not 0    
+    // since wtoi can't distinguish between 0 and an error, note that valid values start at 1, not 0
     nPublicationScope = _wtoi(wzBuff);
     if (nPublicationScope < 1  || nPublicationScope > 3)
     {

@@ -1,4 +1,4 @@
-//
+﻿//
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -230,8 +230,8 @@ HRESULT CSampleCredential::SetDeselected()
 // Get info for a particular field of a tile. Called by logonUI to get information
 // to display the tile.
 HRESULT CSampleCredential::GetFieldState(DWORD dwFieldID,
-                                         _Out_ CREDENTIAL_PROVIDER_FIELD_STATE *pcpfs,
-                                         _Out_ CREDENTIAL_PROVIDER_FIELD_INTERACTIVE_STATE *pcpfis)
+        _Out_ CREDENTIAL_PROVIDER_FIELD_STATE *pcpfs,
+        _Out_ CREDENTIAL_PROVIDER_FIELD_INTERACTIVE_STATE *pcpfis)
 {
     HRESULT hr;
 
@@ -327,8 +327,8 @@ HRESULT CSampleCredential::SetStringValue(DWORD dwFieldID, _In_ PCWSTR pwz)
 
     // Validate parameters.
     if (dwFieldID < ARRAYSIZE(_rgCredProvFieldDescriptors) &&
-        (CPFT_EDIT_TEXT == _rgCredProvFieldDescriptors[dwFieldID].cpft ||
-        CPFT_PASSWORD_TEXT == _rgCredProvFieldDescriptors[dwFieldID].cpft))
+            (CPFT_EDIT_TEXT == _rgCredProvFieldDescriptors[dwFieldID].cpft ||
+             CPFT_PASSWORD_TEXT == _rgCredProvFieldDescriptors[dwFieldID].cpft))
     {
         PWSTR *ppwszStored = &_rgFieldStrings[dwFieldID];
         CoTaskMemFree(*ppwszStored);
@@ -350,7 +350,7 @@ HRESULT CSampleCredential::GetCheckboxValue(DWORD dwFieldID, _Out_ BOOL *pbCheck
 
     // Validate parameters.
     if (dwFieldID < ARRAYSIZE(_rgCredProvFieldDescriptors) &&
-        (CPFT_CHECKBOX == _rgCredProvFieldDescriptors[dwFieldID].cpft))
+            (CPFT_CHECKBOX == _rgCredProvFieldDescriptors[dwFieldID].cpft))
     {
         *pbChecked = _fChecked;
         hr = SHStrDupW(_rgFieldStrings[SFI_CHECKBOX], ppwszLabel);
@@ -370,7 +370,7 @@ HRESULT CSampleCredential::SetCheckboxValue(DWORD dwFieldID, BOOL bChecked)
 
     // Validate parameters.
     if (dwFieldID < ARRAYSIZE(_rgCredProvFieldDescriptors) &&
-        (CPFT_CHECKBOX == _rgCredProvFieldDescriptors[dwFieldID].cpft))
+            (CPFT_CHECKBOX == _rgCredProvFieldDescriptors[dwFieldID].cpft))
     {
         _fChecked = bChecked;
         hr = S_OK;
@@ -393,7 +393,7 @@ HRESULT CSampleCredential::GetComboBoxValueCount(DWORD dwFieldID, _Out_ DWORD *p
 
     // Validate parameters.
     if (dwFieldID < ARRAYSIZE(_rgCredProvFieldDescriptors) &&
-        (CPFT_COMBOBOX == _rgCredProvFieldDescriptors[dwFieldID].cpft))
+            (CPFT_COMBOBOX == _rgCredProvFieldDescriptors[dwFieldID].cpft))
     {
         *pcItems = ARRAYSIZE(s_rgComboBoxStrings);
         *pdwSelectedItem = 0;
@@ -415,7 +415,7 @@ HRESULT CSampleCredential::GetComboBoxValueAt(DWORD dwFieldID, DWORD dwItem, _Ou
 
     // Validate parameters.
     if (dwFieldID < ARRAYSIZE(_rgCredProvFieldDescriptors) &&
-        (CPFT_COMBOBOX == _rgCredProvFieldDescriptors[dwFieldID].cpft))
+            (CPFT_COMBOBOX == _rgCredProvFieldDescriptors[dwFieldID].cpft))
     {
         hr = SHStrDupW(s_rgComboBoxStrings[dwItem], ppwszItem);
     }
@@ -434,7 +434,7 @@ HRESULT CSampleCredential::SetComboBoxSelectedValue(DWORD dwFieldID, DWORD dwSel
 
     // Validate parameters.
     if (dwFieldID < ARRAYSIZE(_rgCredProvFieldDescriptors) &&
-        (CPFT_COMBOBOX == _rgCredProvFieldDescriptors[dwFieldID].cpft))
+            (CPFT_COMBOBOX == _rgCredProvFieldDescriptors[dwFieldID].cpft))
     {
         _dwComboIndex = dwSelectedItem;
         hr = S_OK;
@@ -456,7 +456,7 @@ HRESULT CSampleCredential::CommandLinkClicked(DWORD dwFieldID)
 
     // Validate parameter.
     if (dwFieldID < ARRAYSIZE(_rgCredProvFieldDescriptors) &&
-        (CPFT_COMMAND_LINK == _rgCredProvFieldDescriptors[dwFieldID].cpft))
+            (CPFT_COMMAND_LINK == _rgCredProvFieldDescriptors[dwFieldID].cpft))
     {
         HWND hwndOwner = nullptr;
         switch (dwFieldID)
@@ -500,9 +500,9 @@ HRESULT CSampleCredential::CommandLinkClicked(DWORD dwFieldID)
 // (logon/unlock is what's demonstrated in this sample).  LogonUI then passes these credentials
 // back to the system to log on.
 HRESULT CSampleCredential::GetSerialization(_Out_ CREDENTIAL_PROVIDER_GET_SERIALIZATION_RESPONSE *pcpgsr,
-                                            _Out_ CREDENTIAL_PROVIDER_CREDENTIAL_SERIALIZATION *pcpcs,
-                                            _Outptr_result_maybenull_ PWSTR *ppwszOptionalStatusText,
-                                            _Out_ CREDENTIAL_PROVIDER_STATUS_ICON *pcpsiOptionalStatusIcon)
+        _Out_ CREDENTIAL_PROVIDER_CREDENTIAL_SERIALIZATION *pcpcs,
+        _Outptr_result_maybenull_ PWSTR *ppwszOptionalStatusText,
+        _Out_ CREDENTIAL_PROVIDER_STATUS_ICON *pcpsiOptionalStatusIcon)
 {
     HRESULT hr = E_UNEXPECTED;
     *pcpgsr = CPGSR_NO_CREDENTIAL_NOT_FINISHED;
@@ -559,7 +559,7 @@ HRESULT CSampleCredential::GetSerialization(_Out_ CREDENTIAL_PROVIDER_GET_SERIAL
 
         // First get the size of the authentication buffer to allocate
         if (!CredPackAuthenticationBuffer(dwAuthFlags, _pszQualifiedUserName, const_cast<PWSTR>(_rgFieldStrings[SFI_PASSWORD]), nullptr, &pcpcs->cbSerialization) &&
-            (GetLastError() == ERROR_INSUFFICIENT_BUFFER))
+                (GetLastError() == ERROR_INSUFFICIENT_BUFFER))
         {
             pcpcs->rgbSerialization = static_cast<byte *>(CoTaskMemAlloc(pcpcs->cbSerialization));
             if (pcpcs->rgbSerialization != nullptr)
@@ -683,7 +683,7 @@ HRESULT CSampleCredential::GetUserSid(_Outptr_result_nullonfailure_ PWSTR *ppszS
 
 // GetFieldOptions to enable the password reveal button and touch keyboard auto-invoke in the password field.
 HRESULT CSampleCredential::GetFieldOptions(DWORD dwFieldID,
-                                           _Out_ CREDENTIAL_PROVIDER_CREDENTIAL_FIELD_OPTIONS *pcpcfo)
+        _Out_ CREDENTIAL_PROVIDER_CREDENTIAL_FIELD_OPTIONS *pcpcfo)
 {
     *pcpcfo = CPCFO_NONE;
 

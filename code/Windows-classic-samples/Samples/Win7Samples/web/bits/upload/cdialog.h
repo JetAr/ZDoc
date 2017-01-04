@@ -1,12 +1,12 @@
-//+---------------------------------------------------------------------------
+﻿//+---------------------------------------------------------------------------
 //
-//  Copyright (c) Microsoft Corporation. All rights reserved. 
+//  Copyright (c) Microsoft Corporation. All rights reserved.
 //
 //
 //  BITS Upload sample
 //  ==================
 //
-//  Module name: 
+//  Module name:
 //  cdialog.h
 //
 //  Purpose:
@@ -23,12 +23,12 @@
 #endif
 
 //---------------------------------------------------------------------------
-class CSimpleDialog  
+class CSimpleDialog
 {
     HINSTANCE m_hInstance;
     HWND      m_hWnd;         // Handle from CreateDialogParam
     ULONG     m_ulDialogId;   // Dialog template ID
-    DLGPROC   m_DlgProc;      // Points to Dialog Proc      
+    DLGPROC   m_DlgProc;      // Points to Dialog Proc
 
     static INT_PTR CALLBACK DlgProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
@@ -42,14 +42,14 @@ class CSimpleDialog
     BOOL ProcessMessage( HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam );
 
     HRESULT CollectUserInput(
-        IN OUT WCHAR *wszBuffVirtualDir, 
-        IN     DWORD  cchBuffVirtualDir, 
-        IN OUT WCHAR *wszBuffSampleText, 
+        IN OUT WCHAR *wszBuffVirtualDir,
+        IN     DWORD  cchBuffVirtualDir,
+        IN OUT WCHAR *wszBuffSampleText,
         IN     DWORD  cchBuffSampleText,
-        OUT    BOOL  *fRequireUploadReply 
+        OUT    BOOL  *fRequireUploadReply
     );
 
-  public:
+public:
     CSimpleDialog(HINSTANCE hInstance, ULONG ulDialogId);
     ~CSimpleDialog();
 

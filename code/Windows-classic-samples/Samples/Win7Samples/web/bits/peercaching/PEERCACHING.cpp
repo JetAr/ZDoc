@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -22,7 +22,7 @@ HRESULT InDomain(bool *b)
     s = NetGetJoinInformation( NULL, &name, &status );
     if (s != 0)
     {
-       return HRESULT_FROM_WIN32(s);
+        return HRESULT_FROM_WIN32(s);
     }
     NetApiBufferFree(name);
     name = NULL;
@@ -36,11 +36,11 @@ HRESULT InDomain(bool *b)
 }
 
 void _cdecl _tmain(int argc, LPWSTR* argv)
-{	
+{
     GUID guidJob;
     HRESULT hr;
-	IBackgroundCopyManager *pQueueMgr;
-	IBackgroundCopyJob* pJob = NULL;
+    IBackgroundCopyManager *pQueueMgr;
+    IBackgroundCopyJob* pJob = NULL;
     IBitsPeerCacheAdministration* pCacheAdmin = NULL;
     IBackgroundCopyJobHttpOptions* pHttp = NULL;
     IBackgroundCopyJob4* pJob4 = NULL;
@@ -49,7 +49,7 @@ void _cdecl _tmain(int argc, LPWSTR* argv)
     LPWSTR pwszPeerName = NULL;
     CNotifyInterface *pNotify;
     ULONG ulCount = 0;
-	bool b;
+    bool b;
 
     //
     // BITS requires that you run in a domain for peercaching
@@ -83,25 +83,25 @@ void _cdecl _tmain(int argc, LPWSTR* argv)
     {
         //The impersonation level must be at least RPC_C_IMP_LEVEL_IMPERSONATE.
         hr = CoInitializeSecurity(NULL, -1, NULL, NULL,
-                            RPC_C_AUTHN_LEVEL_CONNECT,
-                            RPC_C_IMP_LEVEL_IMPERSONATE,
-                            NULL, EOAC_NONE, 0);
+                                  RPC_C_AUTHN_LEVEL_CONNECT,
+                                  RPC_C_IMP_LEVEL_IMPERSONATE,
+                                  NULL, EOAC_NONE, 0);
 
         if (SUCCEEDED(hr))
         {
 
-	        // Connect to BITS
+            // Connect to BITS
             hr = CoCreateInstance(__uuidof(BackgroundCopyManager), NULL,
-                CLSCTX_LOCAL_SERVER,
-                __uuidof(IBackgroundCopyManager),
-                (void **)&pQueueMgr);
+                                  CLSCTX_LOCAL_SERVER,
+                                  __uuidof(IBackgroundCopyManager),
+                                  (void **)&pQueueMgr);
 
-	        if (FAILED(hr))
-	        {
-		        // Failed to connect
+            if (FAILED(hr))
+            {
+                // Failed to connect
                 wprintf(L"Failed to connect to BITS.Error: 0x%x\n",hr);
-		        goto done;
-	        }
+                goto done;
+            }
         }
         else
         {
@@ -118,11 +118,11 @@ void _cdecl _tmain(int argc, LPWSTR* argv)
 
     // Find out who is in the neighborhood
     hr = pQueueMgr->QueryInterface(
-        __uuidof(IBitsPeerCacheAdministration), 
-        (void **)&pCacheAdmin);
-    
-	if(FAILED(hr))
-    {   
+             __uuidof(IBitsPeerCacheAdministration),
+             (void **)&pCacheAdmin);
+
+    if(FAILED(hr))
+    {
         wprintf(L"IBitsPeerCacheAdministration failed with error: %x\n",hr);
     }
     else
@@ -131,9 +131,9 @@ void _cdecl _tmain(int argc, LPWSTR* argv)
         if (pPeers)
         {
             hr = pPeers->GetCount( &ulCount );
-            
+
             if(FAILED(hr))
-            {   
+            {
                 wprintf(L"pPeers->GetCount failed with error: %x\n",hr);
             }
             else
@@ -155,20 +155,20 @@ void _cdecl _tmain(int argc, LPWSTR* argv)
         pCacheAdmin->Release();
     }
 
-	// Create a Job
+    // Create a Job
     wprintf(L"Creating Job...\n");
     hr = pQueueMgr->CreateJob(L"P2PSample",
-        BG_JOB_TYPE_DOWNLOAD,
-        &guidJob,
-        &pJob);
+                              BG_JOB_TYPE_DOWNLOAD,
+                              &guidJob,
+                              &pJob);
 
-	if(FAILED(hr))
-    {   
+    if(FAILED(hr))
+    {
         wprintf(L"Create Job failed with error: %x\n",hr);
-	    pQueueMgr->Release();
-    	goto done;
+        pQueueMgr->Release();
+        goto done;
     }
-    
+
     // Set the File Completed Call
     pNotify = new CNotifyInterface();
     if (pNotify)
@@ -176,9 +176,9 @@ void _cdecl _tmain(int argc, LPWSTR* argv)
         hr = pJob->SetNotifyInterface(pNotify);
         if (SUCCEEDED(hr))
         {
-            hr = pJob->SetNotifyFlags(BG_NOTIFY_JOB_TRANSFERRED | 
-                                BG_NOTIFY_JOB_ERROR | 
-                                BG_NOTIFY_FILE_TRANSFERRED );
+            hr = pJob->SetNotifyFlags(BG_NOTIFY_JOB_TRANSFERRED |
+                                      BG_NOTIFY_JOB_ERROR |
+                                      BG_NOTIFY_FILE_TRANSFERRED );
         }
         pNotify->Release();
         pNotify = NULL;
@@ -186,7 +186,7 @@ void _cdecl _tmain(int argc, LPWSTR* argv)
         {
             wprintf(L"Unable to register callbacks\nError: %x\n",hr);
             wprintf(L"Cancelling job\n");
-	        pQueueMgr->Release();
+            pQueueMgr->Release();
             goto cancel;
         }
     }
@@ -197,42 +197,42 @@ void _cdecl _tmain(int argc, LPWSTR* argv)
         goto cancel;
     }
 
-	// Add a File
-	// Replace parameters with variables that contain valid paths.
+    // Add a File
+    // Replace parameters with variables that contain valid paths.
     wprintf(L"Adding File to Job\n");
-	hr = pJob->AddFile(argv[1], argv[2]);
+    hr = pJob->AddFile(argv[1], argv[2]);
 
     if(FAILED(hr))
-    {   
+    {
         wprintf(L"Add File failed with error: %x\n",hr);
-    	goto done;
+        goto done;
     }
 
-	// Get the IBitsPeerCacheAdministration interface     
-    hr = pQueueMgr->QueryInterface(__uuidof(IBitsPeerCacheAdministration), 
-        (void **)&pCacheAdmin);
+    // Get the IBitsPeerCacheAdministration interface
+    hr = pQueueMgr->QueryInterface(__uuidof(IBitsPeerCacheAdministration),
+                                   (void **)&pCacheAdmin);
 
     // We don't need this again
-	pQueueMgr->Release();
-	
+    pQueueMgr->Release();
+
     if (!FAILED(hr))
     {
-	    // Enable local caching for this job
-	    hr = pCacheAdmin->SetConfigurationFlags(BG_ENABLE_PEERCACHING_CLIENT
-            || BG_ENABLE_PEERCACHING_SERVER);
+        // Enable local caching for this job
+        hr = pCacheAdmin->SetConfigurationFlags(BG_ENABLE_PEERCACHING_CLIENT
+                                                || BG_ENABLE_PEERCACHING_SERVER);
 
         // Free the resource
         pCacheAdmin->Release();
 
-	    if (FAILED(hr))
-	    {
-		    //Log the error
+        if (FAILED(hr))
+        {
+            //Log the error
             wprintf(L"SetConfigurationFlags Failed with error: %x\n",hr);
-	    }
+        }
 
-        hr = pJob->QueryInterface(__uuidof(IBackgroundCopyJob4), 
-            (void **)&pJob4);
-        
+        hr = pJob->QueryInterface(__uuidof(IBackgroundCopyJob4),
+                                  (void **)&pJob4);
+
         if (!FAILED(hr))
         {
             pJob4->SetPeerCachingFlags(
@@ -241,10 +241,10 @@ void _cdecl _tmain(int argc, LPWSTR* argv)
             pJob4->Release();
         }
     }
-	
-	// Get the IBackgroundCopyJobHttpOptions interface     
-    hr = pJob->QueryInterface(__uuidof(IBackgroundCopyJobHttpOptions), 
-        (void **)&pHttp);
+
+    // Get the IBackgroundCopyJobHttpOptions interface
+    hr = pJob->QueryInterface(__uuidof(IBackgroundCopyJobHttpOptions),
+                              (void **)&pHttp);
 
     if (pHttp)
     {
@@ -254,47 +254,47 @@ void _cdecl _tmain(int argc, LPWSTR* argv)
         // Free resources
         pHttp->Release();
 
-	    if (FAILED(hr))
-	    {
-		    //Log the error
+        if (FAILED(hr))
+        {
+            //Log the error
             wprintf(L"SetSecurityFlags failed with error: %x\n",hr);
-	    }
-    }    
+        }
+    }
 
-	//Resume the job
+    //Resume the job
     wprintf(L"Resuming Job...\n");
-	hr = pJob->Resume();
-	if (FAILED(hr))
-	{
-		// Resume Failed
+    hr = pJob->Resume();
+    if (FAILED(hr))
+    {
+        // Resume Failed
         wprintf(L"Resume failed with error: %x\n",hr);
         wprintf(L"Cancelling Job\n");
-		goto cancel;
-	}
-    
+        goto cancel;
+    }
+
     // Wait for QuitMessage from CallBack
     DWORD dwLimit = GetTickCount() + (15 * 60 * 1000);  // set 15 minute limit
     while (dwLimit > GetTickCount())
     {
-         MSG msg;
+        MSG msg;
 
-        while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE)) 
-        { 
+        while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
+        {
             // If it is a quit message, exit.
             // the job
             if (msg.message == WM_QUIT)
             {
                 pJob->Release();
-                goto done; 
+                goto done;
             }
             // Otherwise, dispatch the message.
-            DispatchMessage(&msg); 
+            DispatchMessage(&msg);
         } // End of PeekMessage while loop
     }
 
 done:
     CoUninitialize();
-	return;
+    return;
 cancel:
     pJob->Cancel();
     pJob->Release();

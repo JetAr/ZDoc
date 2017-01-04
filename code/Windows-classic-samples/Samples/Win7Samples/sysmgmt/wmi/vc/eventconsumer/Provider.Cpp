@@ -1,11 +1,11 @@
-// **************************************************************************
+﻿// **************************************************************************
 
 // Copyright (c)  Microsoft Corporation, All Rights Reserved
 //
 // File:  Provider.cpp
 //
 // Description: Event consumer provider class implementation
-//    
+//
 //
 // History:
 //
@@ -18,8 +18,8 @@
 
 CProvider::CProvider(CListBox *pOutputList)
 {
-	m_cRef = 0L;
-	m_pOutputList = pOutputList;
+    m_cRef = 0L;
+    m_pOutputList = pOutputList;
 }
 
 CProvider::~CProvider()
@@ -57,10 +57,10 @@ STDMETHODIMP_(ULONG) CProvider::Release(void)
 }
 
 STDMETHODIMP CProvider::Initialize(LPWSTR wszUser, LONG lFlags,
-								   LPWSTR wszNamespace, LPWSTR wszLocale,
-								   IWbemServices __RPC_FAR *pNamespace,
-								   IWbemContext __RPC_FAR *pCtx,
-								   IWbemProviderInitSink __RPC_FAR *pInitSink)
+                                   LPWSTR wszNamespace, LPWSTR wszLocale,
+                                   IWbemServices __RPC_FAR *pNamespace,
+                                   IWbemContext __RPC_FAR *pCtx,
+                                   IWbemProviderInitSink __RPC_FAR *pInitSink)
 {
 
     // Tell CIMOM that we are initialized
@@ -70,15 +70,15 @@ STDMETHODIMP CProvider::Initialize(LPWSTR wszUser, LONG lFlags,
 
 //-----------------------------------------------------------
 STDMETHODIMP CProvider::FindConsumer(
-						IWbemClassObject* pLogicalConsumer,
-						IWbemUnboundObjectSink** ppConsumer)
+    IWbemClassObject* pLogicalConsumer,
+    IWbemUnboundObjectSink** ppConsumer)
 {
-	CConsumer* pSink = new CConsumer(m_pOutputList);
-	if (pSink)
-	{
-		return pSink->QueryInterface(IID_IWbemUnboundObjectSink, 
-                                        (void**)ppConsumer);
-	}
-	 return WBEM_E_FAILED;
+    CConsumer* pSink = new CConsumer(m_pOutputList);
+    if (pSink)
+    {
+        return pSink->QueryInterface(IID_IWbemUnboundObjectSink,
+                                     (void**)ppConsumer);
+    }
+    return WBEM_E_FAILED;
 }
 

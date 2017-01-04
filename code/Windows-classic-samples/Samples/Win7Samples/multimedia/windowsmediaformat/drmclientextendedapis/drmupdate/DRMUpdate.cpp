@@ -1,4 +1,4 @@
-///////////////////////////////////////////////////////////////////////////////
+﻿///////////////////////////////////////////////////////////////////////////////
 //
 // DRMUpdate.cpp : Contains application entry and functions for the DRMUpdate
 //  sample.
@@ -24,11 +24,11 @@ HRESULT TryOpenFile(wchar_t* FileName, FILE** ppFile);
 //
 // Description: Application entry point. The DRMUpdate application is a simple,
 //  command-line way to individualize the DRM component. DRMUpdate displays the
-//  current security version, then performs individualization and displayes the 
+//  current security version, then performs individualization and displayes the
 //  post-update security version. Status messages are displayed as they are
 //  received.
 //
-// Parameters: The application take a single optional parameter, -force. If 
+// Parameters: The application take a single optional parameter, -force. If
 //  set, the -force parameter causes the application to force individualization
 //  instead of letting the DRM subsystem determine whether individualization is
 //  required.
@@ -43,7 +43,7 @@ void wmain(int argc, wchar_t **argv)
 
     IWMDRMProvider*         pProvider       = NULL;
     IWMDRMSecurity*         pSecurity       = NULL;
- 
+
     // Check the arguments.
     if (argc == 1)
     {
@@ -59,12 +59,12 @@ void wmain(int argc, wchar_t **argv)
     {
         // The first argument should be the output filename.
         hr = TryOpenFile(argv[1], &pFile);
-        
-        // Check the second argument for the force flag.        
+
+        // Check the second argument for the force flag.
         if (wcsstr(argv[2], L"-force") != NULL)
         {
             fForce = TRUE;
-        }        
+        }
     }
     else
     {
@@ -72,7 +72,7 @@ void wmain(int argc, wchar_t **argv)
         hr = E_INVALIDARG;
     }
 
-    // Several branches of the argument checking above can set hr to 
+    // Several branches of the argument checking above can set hr to
     //  E_INVALIDARG. In all cases, this indicates that the passed arguments
     //  were incorrect. Print a message to that effect.
     if (hr == E_INVALIDARG)
@@ -81,7 +81,7 @@ void wmain(int argc, wchar_t **argv)
         printf("DRMUpdate.exe <output file name> [-force]\n");
         printf("Where <> indicates vriable text and [] indicates an optional argument.\n");
     }
-   
+
     // Initialize DRM.
     if (SUCCEEDED(hr))
     {
@@ -112,10 +112,10 @@ void wmain(int argc, wchar_t **argv)
         hr = Individualize(pSecurity, fForce, pFile);
     }
 
-    // The security interface must be re-initialized in order to get an 
+    // The security interface must be re-initialized in order to get an
     //  accurate security version after indiv.
     if (SUCCEEDED(hr))
-    {  
+    {
         SAFE_RELEASE(pSecurity);
 
         hr = pProvider->CreateObject(IID_IWMDRMSecurity, (void**)&pSecurity);
@@ -170,11 +170,11 @@ HRESULT DisplaySecurityVersion(IWMDRMSecurity* pSecurity)
 ///////////////////////////////////////////////////////////////////////////////
 //
 // Function: Individualize
-// Description: Individualizes the DRM subsystem, reporting progress to the 
+// Description: Individualizes the DRM subsystem, reporting progress to the
 //  specified log file.
 // Parameters: pSecurity - Security interface to use for individualization.
 //             fForce    - Flag indicating whether to force individualization.
-//             pLogFile  - Pointer to an opened file that will be overwritten 
+//             pLogFile  - Pointer to an opened file that will be overwritten
 //                         with the individualization event log.
 //
 ///////////////////////////////////////////////////////////////////////////////
@@ -196,8 +196,8 @@ HRESULT Individualize(IWMDRMSecurity* pSecurity, BOOL fForce, FILE* pLogFile)
     // Intialize structures.
     ZeroMemory(&IndivStatusStruct, sizeof(IndivStatusStruct));
     PROPVARIANT    EventValue;
-    
-    DWORD dwFlags = 0;  
+
+    DWORD dwFlags = 0;
 
     // Initialize the property variant.
     PropVariantInit(&EventValue);
@@ -212,7 +212,7 @@ HRESULT Individualize(IWMDRMSecurity* pSecurity, BOOL fForce, FILE* pLogFile)
     if (fForce == TRUE)
     {
         dwFlags = WMDRM_SECURITY_PERFORM_FORCE_INDIV;
-        printf("Performing forced individualization.\n"); 
+        printf("Performing forced individualization.\n");
     }
     else
     {
@@ -228,7 +228,7 @@ HRESULT Individualize(IWMDRMSecurity* pSecurity, BOOL fForce, FILE* pLogFile)
 
     // Status loop.
     if (SUCCEEDED(hr))
-    { 
+    {
         do
         {
             // Release the previous event (if there is one).
@@ -261,9 +261,9 @@ HRESULT Individualize(IWMDRMSecurity* pSecurity, BOOL fForce, FILE* pLogFile)
                 switch (EventType)
                 {
                 case MEWMDRMIndividualizationProgress:
-                    
+
                     fprintf(pLogFile, "%d.) Received a progress event.\n", cEvents);
-                    
+
                     hr = pEvent->GetValue(&EventValue);
                     if (SUCCEEDED(hr))
                     {
@@ -271,8 +271,8 @@ HRESULT Individualize(IWMDRMSecurity* pSecurity, BOOL fForce, FILE* pLogFile)
                         {
                             // Get the extended status interface.
                             hr = EventValue.punkVal->QueryInterface(
-                                IID_IWMDRMIndividualizationStatus, 
-                                (void**)&pIndivStatus);
+                                     IID_IWMDRMIndividualizationStatus,
+                                     (void**)&pIndivStatus);
 
                             // If the interface can't be gotten, make a note in the log and continue.
                             if (FAILED(hr))
@@ -364,10 +364,10 @@ HRESULT Individualize(IWMDRMSecurity* pSecurity, BOOL fForce, FILE* pLogFile)
                             }
 
                             // HTTP progress.
-                            fprintf(pLogFile, 
-                                "   HTTP Progress = %d of %d bytes downloaded.\n\n", 
-                                IndivStatusStruct.dwHTTPReadProgress, 
-                                IndivStatusStruct.dwHTTPReadTotal);
+                            fprintf(pLogFile,
+                                    "   HTTP Progress = %d of %d bytes downloaded.\n\n",
+                                    IndivStatusStruct.dwHTTPReadProgress,
+                                    IndivStatusStruct.dwHTTPReadTotal);
 
                             //
                             //////////
@@ -390,18 +390,19 @@ HRESULT Individualize(IWMDRMSecurity* pSecurity, BOOL fForce, FILE* pLogFile)
                     break;
                 default:
                     fprintf(pLogFile, "Received event number %d.\n", EventType);
-                } 
+                }
             }
 
             // Give up CPU time to stay out of a busy loop.
             Sleep(0);
 
-        } while (EventType != MEWMDRMIndividualizationCompleted);
+        }
+        while (EventType != MEWMDRMIndividualizationCompleted);
 
-        // Print a newline character to the console so that subsequent events 
+        // Print a newline character to the console so that subsequent events
         //  will display properly.
         printf("\n");
- 
+
     }
 
     SAFE_RELEASE(pEvent);
@@ -428,7 +429,7 @@ HRESULT TryOpenFile(wchar_t* FileName, FILE** ppFile)
 
     if (_wfopen_s(ppFile, FileName, L"w") != 0)
     {
-       hr = E_INVALIDARG; 
+        hr = E_INVALIDARG;
     }
 
     return hr;

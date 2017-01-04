@@ -1,4 +1,4 @@
-//*********************************************************
+﻿//*********************************************************
 //
 // Copyright (c) Microsoft. All rights reserved.
 // THIS CODE IS PROVIDED *AS IS* WITHOUT WARRANTY OF
@@ -12,10 +12,10 @@
 #include "CSecInfo.h"
 #include "windows.h"
 #include <AclUI.h>
-  
-#pragma warning(push)  
+
+#pragma warning(push)
 // C4127: conditional expression is constant (disabled for our input loop)
-#pragma warning(disable : 4127)   
+#pragma warning(disable : 4127)
 
 int __cdecl wmain(
     _In_ int argc,
@@ -24,7 +24,7 @@ int __cdecl wmain(
     UNREFERENCED_PARAMETER(argc);
     UNREFERENCED_PARAMETER(argv);
 
-    
+
     CSecInfo cSecInfo;
     BOOL bResult;
     if ( cSecInfo.m_bFailedToConstruct != FALSE)
@@ -32,9 +32,10 @@ int __cdecl wmain(
         wprintf(L"Couldn't construct our class. Exiting.\n");
         return 1;
     }
-    
+
     int choice;
-    do {
+    do
+    {
         // Print the following:
         // ------------------------------------
         // 1. Contoso forums
@@ -63,30 +64,30 @@ int __cdecl wmain(
         wprintf(L"11. Help\n");
         wprintf(L"------------------------------------\n");
         wprintf(L"Input a number to view/edit the security descriptor "
-            L"for one of the above: ");
+                L"for one of the above: ");
         std::cin >> choice;
 
         if ( choice >= 1 && choice <= 10 )
         {
             cSecInfo.SetCurrentObject(choice-1);
-            wprintf(L"You chose %s\n\n", 
-                cSecInfo.GetResource(choice-1)->GetName());
+            wprintf(L"You chose %s\n\n",
+                    cSecInfo.GetResource(choice-1)->GetName());
         }
         else if ( choice == 11 )
         {
             wprintf(L"\n"
-                L"This resource manager example models a set of forums"
-                L". On the top level, there is a single FORUMS object "
-                L"(%s). It has three children, which are SECTIONs (%s,"
-                L" %s, and %s), and they each have two children, which"
-                L" are TOPICs. Inheritable ACEs follow this inheritance"
-                L" hierarchy. Choose a number (1-%d) to edit any of "
-                L"their security descriptors.\n\n",
-                cSecInfo.GetResource(CONTOSO_FORUMS)->GetName(), 
-                cSecInfo.GetResource(SPORTS)->GetName(),
-                cSecInfo.GetResource(MOVIES)->GetName(), 
-                cSecInfo.GetResource(HOBBIES)->GetName(),
-                NUMBER_OF_RESOURCES);
+                    L"This resource manager example models a set of forums"
+                    L". On the top level, there is a single FORUMS object "
+                    L"(%s). It has three children, which are SECTIONs (%s,"
+                    L" %s, and %s), and they each have two children, which"
+                    L" are TOPICs. Inheritable ACEs follow this inheritance"
+                    L" hierarchy. Choose a number (1-%d) to edit any of "
+                    L"their security descriptors.\n\n",
+                    cSecInfo.GetResource(CONTOSO_FORUMS)->GetName(),
+                    cSecInfo.GetResource(SPORTS)->GetName(),
+                    cSecInfo.GetResource(MOVIES)->GetName(),
+                    cSecInfo.GetResource(HOBBIES)->GetName(),
+                    NUMBER_OF_RESOURCES);
             continue;
         }
         else
@@ -95,7 +96,7 @@ int __cdecl wmain(
         }
 
         // Suppress warning about the param being 0
-        #pragma warning(suppress: 6387)
+#pragma warning(suppress: 6387)
         bResult = EditSecurity(nullptr, &cSecInfo);
         if ( !bResult )
         {
@@ -103,9 +104,10 @@ int __cdecl wmain(
             break;
         }
 
-    } while ( true );
+    }
+    while ( true );
 
     return 0;
 }
 
-#pragma warning(pop)  
+#pragma warning(pop)

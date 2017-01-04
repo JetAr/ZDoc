@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -22,7 +22,7 @@ __checkReturn HRESULT CCommandHandler::CreateInstance(__deref_out IUICommandHand
     *ppCommandHandler = NULL;
 
     HRESULT hr = S_OK;
-   
+
     CCommandHandler* pCommandHandler = new CCommandHandler();
 
     if (pCommandHandler != NULL)
@@ -64,7 +64,7 @@ STDMETHODIMP CCommandHandler::QueryInterface(REFIID iid, void** ppv)
     {
         *ppv = static_cast<IUICommandHandler*>(this);
     }
-    else 
+    else
     {
         *ppv = NULL;
         return E_NOINTERFACE;
@@ -82,9 +82,9 @@ STDMETHODIMP CCommandHandler::QueryInterface(REFIID iid, void** ppv)
 //  COMMENTS:
 //
 //    This function is used to provide new command property values, such as labels, icons, or
-//    tooltip information, when requested by the Ribbon framework.  
-//    
-//    In this SimpleRibbon sample, the method is not implemented.  
+//    tooltip information, when requested by the Ribbon framework.
+//
+//    In this SimpleRibbon sample, the method is not implemented.
 //
 STDMETHODIMP CCommandHandler::UpdateProperty(
     UINT nCmdID,

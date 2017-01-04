@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -15,13 +15,13 @@
 #include "dcomperm.h"
 
 /*---------------------------------------------------------------------------*\
- * NAME: CreateNewSD 
+ * NAME: CreateNewSD
  * --------------------------------------------------------------------------*
  * DESCRIPTION: Creates a new security descriptor.
 \*---------------------------------------------------------------------------*/
 DWORD CreateNewSD (
     SECURITY_DESCRIPTOR **ppSecurityDesc
-    )
+)
 {
     PACL    pAcl          = NULL;
     DWORD   cbSid         = 0;
@@ -32,23 +32,23 @@ DWORD CreateNewSD (
     SID_IDENTIFIER_AUTHORITY SystemSidAuthority= SECURITY_NT_AUTHORITY;
 
     if(!ppSecurityDesc) return ERROR_BAD_ARGUMENTS;
-    
+
     *ppSecurityDesc = NULL;
 
     //Create a SID for the owner (BUILTIN\Administrators)
-    if ( ! AllocateAndInitializeSid ( &SystemSidAuthority, 2, 
-            SECURITY_BUILTIN_DOMAIN_RID, 
-            DOMAIN_ALIAS_RID_ADMINS,
-            0, 0, 0, 0, 0, 0, &pSid) )
+    if ( ! AllocateAndInitializeSid ( &SystemSidAuthority, 2,
+                                      SECURITY_BUILTIN_DOMAIN_RID,
+                                      DOMAIN_ALIAS_RID_ADMINS,
+                                      0, 0, 0, 0, 0, 0, &pSid) )
     {
         dwReturnValue = GetLastError();
         goto CLEANUP;
     }
-    
+
     cbSid = GetLengthSid (pSid);
 
     *ppSecurityDesc = (SECURITY_DESCRIPTOR *) malloc (
-         sizeof (ACL) +  (2 * cbSid) + sizeof (SECURITY_DESCRIPTOR));
+                          sizeof (ACL) +  (2 * cbSid) + sizeof (SECURITY_DESCRIPTOR));
 
     if(!*ppSecurityDesc)
     {
@@ -107,7 +107,7 @@ CLEANUP:
 }
 
 /*---------------------------------------------------------------------------*\
- * NAME: CanonicalizeSD 
+ * NAME: CanonicalizeSD
  * --------------------------------------------------------------------------*
  * DESCRIPTION: Ensures the entire security descriptor is consistent with the new permission
  * format.
@@ -118,47 +118,47 @@ DWORD CanonicalizeSD(PSECURITY_DESCRIPTOR pSD)
     ACL* pACL = NULL;
 
     if(IsLegacySecurityModel()) return ERROR_SUCCESS;
- 
+
     fSuccess = GetSecurityDescriptorDacl(pSD, &fACLPresent, &pACL, &fDefaulted);
     if (fSuccess == FALSE)
     {
         return GetLastError();
     }
- 
+
     ACCESS_MASK dwOtherRights = COM_RIGHTS_EXECUTE_LOCAL |
                                 COM_RIGHTS_EXECUTE_REMOTE |
                                 COM_RIGHTS_ACTIVATE_LOCAL |
                                 COM_RIGHTS_ACTIVATE_REMOTE;
- 
+
     DWORD dwSizeOfACL = sizeof(ACL);
     ULONG_PTR ulptrACL = (ULONG_PTR)pACL;
     PACE_HEADER pAceHeader = (PACE_HEADER)(ulptrACL + dwSizeOfACL);
     PACCESS_MASK pAccessMask = (PACCESS_MASK)((ULONG_PTR)pAceHeader+sizeof(ACE_HEADER));
- 
+
     // Iterate through the ACE's in the ACL and canonicalize the representation
     // Each ACE has a header and Mask Field as a minimum.
- 
+
     if ( pACL )
     {
         for ( int i = 0; i < pACL->AceCount ; i++)
         {
             DWORD dwError = NULL;
             void* pNewAcl = NULL;
-       
-            // Protect against bad ACL structure 
+
+            // Protect against bad ACL structure
             if (((ULONG_PTR)pAceHeader-(ULONG_PTR)pACL) >= (pACL->AclSize-sizeof(ACCESS_MASK)))
-           {
+            {
                 return ERROR_INVALID_PARAMETER;
             }
-      
+
             DWORD dwAceSize = pAceHeader->AceSize;
- 
+
             // Ensure minimum size ACE
             if (dwAceSize < (sizeof(ACE_HEADER)+sizeof(ACCESS_MASK)))
             {
                 return ERROR_INVALID_PARAMETER;
             }
- 
+
             // Canonicalize AccessMask
             if (*pAccessMask & COM_RIGHTS_EXECUTE)
             {
@@ -174,73 +174,73 @@ DWORD CanonicalizeSD(PSECURITY_DESCRIPTOR pSD)
                 // COM_RIGHTS_EXECUTE Not Set so clear all other RIGHTS bits
                 *pAccessMask &= ~dwOtherRights;
             }
- 
+
             ulptrACL = (ULONG_PTR)pAceHeader;
             pAceHeader = (PACE_HEADER)(ulptrACL + dwAceSize);
             pAccessMask = (PACCESS_MASK)((ULONG_PTR)pAceHeader+sizeof(ACE_HEADER));
         }
- 
+
     }
- 
+
     return ERROR_SUCCESS;
 }
 
 /*---------------------------------------------------------------------------*\
  * NAME: SetLegacyAclDefaults
  * --------------------------------------------------------------------------*
- * DESCRIPTION: Adds the default ACEs to the supplied ACL as confgured in 
+ * DESCRIPTION: Adds the default ACEs to the supplied ACL as confgured in
  * the legacy COM security model.
 \*---------------------------------------------------------------------------*/
 DWORD SetLegacyAclDefaults(
-    PACL pDacl, 
+    PACL pDacl,
     DWORD dwSDType
-    ) 
+)
 {
     DWORD dwReturnValue = ERROR_BAD_ARGUMENTS;
 
     switch (dwSDType)
     {
 
-        case SDTYPE_DEFAULT_LAUNCH:
-        case SDTYPE_APPLICATION_LAUNCH:
+    case SDTYPE_DEFAULT_LAUNCH:
+    case SDTYPE_APPLICATION_LAUNCH:
 
-        dwReturnValue = AddAccessAllowedACEToACL (&pDacl, 
-                                                  COM_RIGHTS_EXECUTE, 
-                                                  _T("SYSTEM"));
-
-        if(dwReturnValue != ERROR_SUCCESS) goto CLEANUP;
-
-        dwReturnValue = AddAccessAllowedACEToACL (&pDacl, 
-                                                  COM_RIGHTS_EXECUTE, 
-                                                  _T("Administrators"));
+        dwReturnValue = AddAccessAllowedACEToACL (&pDacl,
+                        COM_RIGHTS_EXECUTE,
+                        _T("SYSTEM"));
 
         if(dwReturnValue != ERROR_SUCCESS) goto CLEANUP;
 
-        dwReturnValue = AddAccessAllowedACEToACL (&pDacl, 
-                                                  COM_RIGHTS_EXECUTE, 
-                                                  _T("Interactive"));
+        dwReturnValue = AddAccessAllowedACEToACL (&pDacl,
+                        COM_RIGHTS_EXECUTE,
+                        _T("Administrators"));
+
+        if(dwReturnValue != ERROR_SUCCESS) goto CLEANUP;
+
+        dwReturnValue = AddAccessAllowedACEToACL (&pDacl,
+                        COM_RIGHTS_EXECUTE,
+                        _T("Interactive"));
         break;
-        
-        case SDTYPE_DEFAULT_ACCESS:
-        case SDTYPE_APPLICATION_ACCESS:
+
+    case SDTYPE_DEFAULT_ACCESS:
+    case SDTYPE_APPLICATION_ACCESS:
 
         if(dwReturnValue != ERROR_SUCCESS) goto CLEANUP;
 
-        dwReturnValue = AddAccessAllowedACEToACL (&pDacl, 
-                                                  COM_RIGHTS_EXECUTE, 
-                                                  _T("SYSTEM"));
+        dwReturnValue = AddAccessAllowedACEToACL (&pDacl,
+                        COM_RIGHTS_EXECUTE,
+                        _T("SYSTEM"));
 
         if(dwReturnValue != ERROR_SUCCESS) goto CLEANUP;
 
-        dwReturnValue = AddAccessAllowedACEToACL (&pDacl, 
-                                                  COM_RIGHTS_EXECUTE, 
-                                                  _T("SELF"));
+        dwReturnValue = AddAccessAllowedACEToACL (&pDacl,
+                        COM_RIGHTS_EXECUTE,
+                        _T("SELF"));
         break;
-        
-        default:
 
-            _tprintf(_T("WARNING: SetLegacyAclDefaults- Invalid security descriptor type.\n"));
-        
+    default:
+
+        _tprintf(_T("WARNING: SetLegacyAclDefaults- Invalid security descriptor type.\n"));
+
         break;
 
     }
@@ -254,131 +254,131 @@ CLEANUP:
 /*---------------------------------------------------------------------------*\
  * NAME: SetAclDefaults
  * --------------------------------------------------------------------------*
- * DESCRIPTION: Sets the default ACEs in a ACL for the enhanced COM 
+ * DESCRIPTION: Sets the default ACEs in a ACL for the enhanced COM
  * security model.
 \*---------------------------------------------------------------------------*/
 DWORD SetAclDefaults(
-    PACL *ppDacl, 
+    PACL *ppDacl,
     DWORD dwSDType
-    ) 
+)
 {
     DWORD dwReturnValue = ERROR_BAD_ARGUMENTS;
 
     switch (dwSDType)
     {
 
-        case SDTYPE_MACHINE_LAUNCH:
+    case SDTYPE_MACHINE_LAUNCH:
 
-        dwReturnValue = AddAccessAllowedACEToACL (ppDacl, 
-                                                  COM_RIGHTS_ACTIVATE_REMOTE |
-                                                  COM_RIGHTS_EXECUTE_REMOTE | 
-                                                  COM_RIGHTS_ACTIVATE_LOCAL |
-                                                  COM_RIGHTS_EXECUTE_LOCAL | 
-                                                  COM_RIGHTS_EXECUTE, 
-                                                  _T("Administrators"));
-
-        if(dwReturnValue != ERROR_SUCCESS) goto CLEANUP;
-        
-        dwReturnValue = AddAccessAllowedACEToACL (ppDacl, 
-                                                  COM_RIGHTS_ACTIVATE_REMOTE |
-                                                  COM_RIGHTS_EXECUTE_REMOTE | 
-                                                  COM_RIGHTS_ACTIVATE_LOCAL |
-                                                  COM_RIGHTS_EXECUTE_LOCAL | 
-                                                  COM_RIGHTS_EXECUTE, 
-                                                  _T("Offer Remote Assistance Helpers"));
+        dwReturnValue = AddAccessAllowedACEToACL (ppDacl,
+                        COM_RIGHTS_ACTIVATE_REMOTE |
+                        COM_RIGHTS_EXECUTE_REMOTE |
+                        COM_RIGHTS_ACTIVATE_LOCAL |
+                        COM_RIGHTS_EXECUTE_LOCAL |
+                        COM_RIGHTS_EXECUTE,
+                        _T("Administrators"));
 
         if(dwReturnValue != ERROR_SUCCESS) goto CLEANUP;
 
-        dwReturnValue = AddAccessAllowedACEToACL (ppDacl, 
-                                                  COM_RIGHTS_ACTIVATE_LOCAL |
-                                                  COM_RIGHTS_EXECUTE_LOCAL | 
-                                                  COM_RIGHTS_EXECUTE, 
-                                                  _T("Everyone"));
+        dwReturnValue = AddAccessAllowedACEToACL (ppDacl,
+                        COM_RIGHTS_ACTIVATE_REMOTE |
+                        COM_RIGHTS_EXECUTE_REMOTE |
+                        COM_RIGHTS_ACTIVATE_LOCAL |
+                        COM_RIGHTS_EXECUTE_LOCAL |
+                        COM_RIGHTS_EXECUTE,
+                        _T("Offer Remote Assistance Helpers"));
 
         if(dwReturnValue != ERROR_SUCCESS) goto CLEANUP;
 
-        break;
-        
-        case SDTYPE_MACHINE_ACCESS:
-
-        dwReturnValue = AddAccessAllowedACEToACL (ppDacl, 
-                                                  COM_RIGHTS_EXECUTE_REMOTE | 
-                                                  COM_RIGHTS_EXECUTE_LOCAL | 
-                                                  COM_RIGHTS_EXECUTE, 
-                                                  _T("Everyone"));
-
-        if(dwReturnValue != ERROR_SUCCESS) goto CLEANUP;
-
-        dwReturnValue = AddAccessAllowedACEToACL (ppDacl, 
-                                                  COM_RIGHTS_EXECUTE_LOCAL | 
-                                                  COM_RIGHTS_EXECUTE, 
-                                                  _T("Everyone"));
-
+        dwReturnValue = AddAccessAllowedACEToACL (ppDacl,
+                        COM_RIGHTS_ACTIVATE_LOCAL |
+                        COM_RIGHTS_EXECUTE_LOCAL |
+                        COM_RIGHTS_EXECUTE,
+                        _T("Everyone"));
 
         if(dwReturnValue != ERROR_SUCCESS) goto CLEANUP;
 
         break;
-        
-        case SDTYPE_DEFAULT_LAUNCH:
-        case SDTYPE_APPLICATION_LAUNCH:
 
-        dwReturnValue = AddAccessAllowedACEToACL (ppDacl, 
-                                                  COM_RIGHTS_ACTIVATE_REMOTE |
-                                                  COM_RIGHTS_EXECUTE_REMOTE | 
-                                                  COM_RIGHTS_ACTIVATE_LOCAL |
-                                                  COM_RIGHTS_EXECUTE_LOCAL | 
-                                                  COM_RIGHTS_EXECUTE, 
-                                                  _T("SYSTEM"));
+    case SDTYPE_MACHINE_ACCESS:
+
+        dwReturnValue = AddAccessAllowedACEToACL (ppDacl,
+                        COM_RIGHTS_EXECUTE_REMOTE |
+                        COM_RIGHTS_EXECUTE_LOCAL |
+                        COM_RIGHTS_EXECUTE,
+                        _T("Everyone"));
 
         if(dwReturnValue != ERROR_SUCCESS) goto CLEANUP;
 
-        dwReturnValue = AddAccessAllowedACEToACL (ppDacl, 
-                                                  COM_RIGHTS_ACTIVATE_REMOTE |
-                                                  COM_RIGHTS_EXECUTE_REMOTE | 
-                                                  COM_RIGHTS_ACTIVATE_LOCAL |
-                                                  COM_RIGHTS_EXECUTE_LOCAL | 
-                                                  COM_RIGHTS_EXECUTE, 
-                                                  _T("Administrators"));
+        dwReturnValue = AddAccessAllowedACEToACL (ppDacl,
+                        COM_RIGHTS_EXECUTE_LOCAL |
+                        COM_RIGHTS_EXECUTE,
+                        _T("Everyone"));
 
-        if(dwReturnValue != ERROR_SUCCESS) goto CLEANUP;
-
-        dwReturnValue = AddAccessAllowedACEToACL (ppDacl, 
-                                                  COM_RIGHTS_ACTIVATE_REMOTE |
-                                                  COM_RIGHTS_EXECUTE_REMOTE | 
-                                                  COM_RIGHTS_ACTIVATE_LOCAL |
-                                                  COM_RIGHTS_EXECUTE_LOCAL | 
-                                                  COM_RIGHTS_EXECUTE, 
-                                                  _T("Interactive"));
 
         if(dwReturnValue != ERROR_SUCCESS) goto CLEANUP;
 
         break;
-        
-        case SDTYPE_DEFAULT_ACCESS:
-        case SDTYPE_APPLICATION_ACCESS:
 
+    case SDTYPE_DEFAULT_LAUNCH:
+    case SDTYPE_APPLICATION_LAUNCH:
 
-        dwReturnValue = AddAccessAllowedACEToACL (ppDacl, 
-                                                  COM_RIGHTS_EXECUTE_LOCAL | 
-                                                  COM_RIGHTS_EXECUTE, 
-                                                  _T("SYSTEM"));
+        dwReturnValue = AddAccessAllowedACEToACL (ppDacl,
+                        COM_RIGHTS_ACTIVATE_REMOTE |
+                        COM_RIGHTS_EXECUTE_REMOTE |
+                        COM_RIGHTS_ACTIVATE_LOCAL |
+                        COM_RIGHTS_EXECUTE_LOCAL |
+                        COM_RIGHTS_EXECUTE,
+                        _T("SYSTEM"));
 
         if(dwReturnValue != ERROR_SUCCESS) goto CLEANUP;
 
-        dwReturnValue = AddAccessAllowedACEToACL (ppDacl, 
-                                                  COM_RIGHTS_EXECUTE_REMOTE | 
-                                                  COM_RIGHTS_EXECUTE_LOCAL | 
-                                                  COM_RIGHTS_EXECUTE, 
-                                                  _T("SELF"));
+        dwReturnValue = AddAccessAllowedACEToACL (ppDacl,
+                        COM_RIGHTS_ACTIVATE_REMOTE |
+                        COM_RIGHTS_EXECUTE_REMOTE |
+                        COM_RIGHTS_ACTIVATE_LOCAL |
+                        COM_RIGHTS_EXECUTE_LOCAL |
+                        COM_RIGHTS_EXECUTE,
+                        _T("Administrators"));
+
+        if(dwReturnValue != ERROR_SUCCESS) goto CLEANUP;
+
+        dwReturnValue = AddAccessAllowedACEToACL (ppDacl,
+                        COM_RIGHTS_ACTIVATE_REMOTE |
+                        COM_RIGHTS_EXECUTE_REMOTE |
+                        COM_RIGHTS_ACTIVATE_LOCAL |
+                        COM_RIGHTS_EXECUTE_LOCAL |
+                        COM_RIGHTS_EXECUTE,
+                        _T("Interactive"));
 
         if(dwReturnValue != ERROR_SUCCESS) goto CLEANUP;
 
         break;
-        
-        default:
 
-            _tprintf(_T("WARNING: SetAclDefaults- Invalid security descriptor type.\n"));
-        
+    case SDTYPE_DEFAULT_ACCESS:
+    case SDTYPE_APPLICATION_ACCESS:
+
+
+        dwReturnValue = AddAccessAllowedACEToACL (ppDacl,
+                        COM_RIGHTS_EXECUTE_LOCAL |
+                        COM_RIGHTS_EXECUTE,
+                        _T("SYSTEM"));
+
+        if(dwReturnValue != ERROR_SUCCESS) goto CLEANUP;
+
+        dwReturnValue = AddAccessAllowedACEToACL (ppDacl,
+                        COM_RIGHTS_EXECUTE_REMOTE |
+                        COM_RIGHTS_EXECUTE_LOCAL |
+                        COM_RIGHTS_EXECUTE,
+                        _T("SELF"));
+
+        if(dwReturnValue != ERROR_SUCCESS) goto CLEANUP;
+
+        break;
+
+    default:
+
+        _tprintf(_T("WARNING: SetAclDefaults- Invalid security descriptor type.\n"));
+
         break;
 
     }
@@ -390,7 +390,7 @@ CLEANUP:
 
 
 /*---------------------------------------------------------------------------*\
- * NAME: MakeSDAbsolute 
+ * NAME: MakeSDAbsolute
  * --------------------------------------------------------------------------*
  * DESCRIPTION: Takes a self-relative security descriptor and returns a
  * newly created absolute security descriptor.
@@ -398,7 +398,7 @@ CLEANUP:
 DWORD MakeSDAbsolute (
     PSECURITY_DESCRIPTOR psidOld,
     PSECURITY_DESCRIPTOR *psidNew
-    )
+)
 {
     PSECURITY_DESCRIPTOR  pSid           = NULL;
     DWORD                 cbDescriptor   = 0;
@@ -424,7 +424,7 @@ DWORD MakeSDAbsolute (
     if (pSacl && fPresent)
     {
         cbSacl = pSacl->AclSize;
-    } 
+    }
 
     // Get DACL
     if (!GetSecurityDescriptorDacl (psidOld, &fPresent, &pDacl, &fSystemDefault))
@@ -436,7 +436,7 @@ DWORD MakeSDAbsolute (
     if (pDacl && fPresent)
     {
         cbDacl = pDacl->AclSize;
-    } 
+    }
 
     // Get Owner
     if (!GetSecurityDescriptorOwner (psidOld, &psidOwner, &fSystemDefault))
@@ -471,7 +471,7 @@ DWORD MakeSDAbsolute (
     }
 
     ZeroMemory(pSid, cbDescriptor);
-    
+
     if (!InitializeSecurityDescriptor (pSid, SECURITY_DESCRIPTOR_REVISION))
     {
         dwReturnValue = GetLastError();
@@ -500,7 +500,7 @@ CLEANUP:
 }
 
 /*---------------------------------------------------------------------------*\
- * NAME: SetNamedValueSD 
+ * NAME: SetNamedValueSD
  * --------------------------------------------------------------------------*
  * DESCRIPTION: Copies the supplied security descriptor to the registry.
 \*---------------------------------------------------------------------------*/
@@ -509,7 +509,7 @@ DWORD SetNamedValueSD (
     LPTSTR tszKeyName,
     LPTSTR tszValueName,
     SECURITY_DESCRIPTOR *pSecurityDesc
-    )
+)
 {
     DWORD   dwReturnValue = ERROR_SUCCESS;
     DWORD   dwDisposition = 0;
@@ -537,9 +537,9 @@ CLEANUP:
 }
 
 /*---------------------------------------------------------------------------*\
- * NAME: GetNamedValueSD 
+ * NAME: GetNamedValueSD
  * --------------------------------------------------------------------------*
- * DESCRIPTION: Retrieves a designated security descriptor from the 
+ * DESCRIPTION: Retrieves a designated security descriptor from the
  * registry.
 \*---------------------------------------------------------------------------*/
 DWORD GetNamedValueSD (
@@ -548,7 +548,7 @@ DWORD GetNamedValueSD (
     LPTSTR tszValueName,
     SECURITY_DESCRIPTOR **ppSecurityDesc,
     BOOL *psdNew
-    )
+)
 {
     DWORD  dwReturnValue = ERROR_SUCCESS;
     HKEY   hkeyReg       = NULL;
@@ -570,16 +570,16 @@ DWORD GetNamedValueSD (
         {
             goto CLEANUP;
         }
-        
+
         return dwReturnValue;
     }
-    
+
     dwReturnValue = RegQueryValueEx (hkeyReg, tszValueName, NULL, &dwType, NULL, &cbSize);
 
     if (dwReturnValue != ERROR_SUCCESS && dwReturnValue != ERROR_INSUFFICIENT_BUFFER)
     {
         goto CLEANUP;
-    } 
+    }
 
     *ppSecurityDesc = (SECURITY_DESCRIPTOR *) malloc (cbSize);
 
@@ -591,7 +591,7 @@ CLEANUP:
     if(dwReturnValue != ERROR_SUCCESS)
     {
         if(*ppSecurityDesc) free(*ppSecurityDesc);
-    
+
         *ppSecurityDesc = NULL;
 
         if(psdNew)
@@ -610,7 +610,7 @@ CLEANUP:
 }
 
 /*---------------------------------------------------------------------------*\
- * NAME: ListNamedValueSD 
+ * NAME: ListNamedValueSD
  * --------------------------------------------------------------------------*
  * DESCRIPTION: Displays the designated security descriptor.
 \*---------------------------------------------------------------------------*/
@@ -619,7 +619,7 @@ DWORD ListNamedValueSD (
     LPTSTR tszKeyName,
     LPTSTR tszValueName,
     DWORD dwSDType
-    )
+)
 {
     DWORD               dwReturnValue = ERROR_SUCCESS;
     SECURITY_DESCRIPTOR *pSD          = NULL;
@@ -657,7 +657,7 @@ CLEANUP:
 }
 
 /*---------------------------------------------------------------------------*\
- * NAME: AddPrincipalToNamedValueSD 
+ * NAME: AddPrincipalToNamedValueSD
  * --------------------------------------------------------------------------*
  * DESCRIPTION: Retrieves the designated security descriptor from the
  * registry and adds an ACE for the designated principal.
@@ -670,7 +670,7 @@ DWORD AddPrincipalToNamedValueSD (
     BOOL fPermit,
     DWORD dwAccessMask,
     DWORD dwSDType
-    )
+)
 {
     DWORD               dwReturnValue    = ERROR_SUCCESS;
     SECURITY_DESCRIPTOR *pSD             = NULL;
@@ -727,7 +727,7 @@ DWORD AddPrincipalToNamedValueSD (
     {
         dwReturnValue = GetLastError();
         goto CLEANUP;
-     }
+    }
 
     //Now ensure consistency of the SD
     dwReturnValue = CanonicalizeSD(psdAbsolute);
@@ -767,7 +767,7 @@ CLEANUP:
 
 
 /*---------------------------------------------------------------------------*\
- * NAME: UpdatePrincipalInNamedValueSD 
+ * NAME: UpdatePrincipalInNamedValueSD
  * --------------------------------------------------------------------------*
  * DESCRIPTION: Retrieves the designated security descriptor from the
  * registry and updates all ACLs that belong to the named principal.
@@ -780,7 +780,7 @@ DWORD UpdatePrincipalInNamedValueSD (
     DWORD dwAccessMask,
     BOOL fRemove,
     DWORD fAceType
-    )
+)
 {
     DWORD               dwReturnValue    = ERROR_SUCCESS;
     SECURITY_DESCRIPTOR *pSD             = NULL;
@@ -824,8 +824,8 @@ DWORD UpdatePrincipalInNamedValueSD (
         goto CLEANUP;
     }
 
-    // Make the security descriptor absolute 
-    dwReturnValue = MakeSDAbsolute ((PSECURITY_DESCRIPTOR) pSD, (PSECURITY_DESCRIPTOR *) &psdAbsolute); 
+    // Make the security descriptor absolute
+    dwReturnValue = MakeSDAbsolute ((PSECURITY_DESCRIPTOR) pSD, (PSECURITY_DESCRIPTOR *) &psdAbsolute);
     if (dwReturnValue != ERROR_SUCCESS)  goto CLEANUP;
 
     // Set the discretionary ACL on the security descriptor
@@ -866,7 +866,7 @@ CLEANUP:
 }
 
 /*---------------------------------------------------------------------------*\
- * NAME: RemovePrincipalFromNamedValueSD 
+ * NAME: RemovePrincipalFromNamedValueSD
  * --------------------------------------------------------------------------*
  * DESCRIPTION: Retrieves the designated security descriptor from the
  * registry and removes all ACLs that belong to the named principal.
@@ -877,7 +877,7 @@ DWORD RemovePrincipalFromNamedValueSD (
     LPTSTR tszValueName,
     LPTSTR tszPrincipal,
     DWORD fAceType
-    )
+)
 {
     DWORD               dwReturnValue    = ERROR_SUCCESS;
     SECURITY_DESCRIPTOR *pSD             = NULL;
@@ -920,7 +920,7 @@ DWORD RemovePrincipalFromNamedValueSD (
     }
 
     // Make the security descriptor absolute if it isn't new
-    dwReturnValue = MakeSDAbsolute ((PSECURITY_DESCRIPTOR) pSD, (PSECURITY_DESCRIPTOR *) &psdAbsolute); 
+    dwReturnValue = MakeSDAbsolute ((PSECURITY_DESCRIPTOR) pSD, (PSECURITY_DESCRIPTOR *) &psdAbsolute);
     if (dwReturnValue != ERROR_SUCCESS)  goto CLEANUP;
 
     // Set the discretionary ACL on the security descriptor

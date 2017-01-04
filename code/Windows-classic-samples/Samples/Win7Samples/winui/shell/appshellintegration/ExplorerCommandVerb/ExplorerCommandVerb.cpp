@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -22,8 +22,8 @@ static WCHAR const c_szVerbDisplayName[] = L"ExplorerCommand Verb Sample";
 static WCHAR const c_szVerbName[] = L"Sample.ExplorerCommandVerb";
 
 class CExplorerCommandVerb : public IExplorerCommand,
-                             public IInitializeCommand,
-                             public IObjectWithSite
+    public IInitializeCommand,
+    public IObjectWithSite
 {
 public:
     CExplorerCommandVerb() : _cRef(1), _punkSite(NULL), _hwnd(NULL), _pstmShellItemArray(NULL)

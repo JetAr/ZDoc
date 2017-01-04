@@ -40,11 +40,11 @@ const static wchar_t g_sampleText[] =
 // Main entry.
 
 int APIENTRY wWinMain(
-    HINSTANCE   hInstance, 
+    HINSTANCE   hInstance,
     HINSTANCE   hPrevInstance,
     LPWSTR      commandLine,
     int         nCmdShow
-    )
+)
 {
     // The Microsoft Security Development Lifecycle recommends that all
     // applications include the following call to ensure that heap corruptions
@@ -76,14 +76,14 @@ int APIENTRY wWinMain(
 
 
 MainWindow::MainWindow()
-:   renderTargetType_(RenderTargetTypeD2D),
-    hwnd_(NULL),
-    dwriteFactory_(),
-    wicFactory_(),
-    d2dFactory_(),
-    renderTarget_(),
-    textEditor_(),
-    inlineObjectImages_()
+    :   renderTargetType_(RenderTargetTypeD2D),
+        hwnd_(NULL),
+        dwriteFactory_(),
+        wicFactory_(),
+        d2dFactory_(),
+        renderTarget_(),
+        textEditor_(),
+        inlineObjectImages_()
 {
     // no heavyweight initialization in the constructor.
 }
@@ -102,10 +102,10 @@ HRESULT MainWindow::Initialize()
     if (SUCCEEDED(hr))
     {
         hr = DWriteCreateFactory(
-                DWRITE_FACTORY_TYPE_SHARED,
-                __uuidof(IDWriteFactory),
-                reinterpret_cast<IUnknown**>(&dwriteFactory_)
-                );
+                 DWRITE_FACTORY_TYPE_SHARED,
+                 __uuidof(IDWriteFactory),
+                 reinterpret_cast<IUnknown**>(&dwriteFactory_)
+             );
     }
 
     // Create D2D factory
@@ -115,19 +115,19 @@ HRESULT MainWindow::Initialize()
         D2D1CreateFactory(
             D2D1_FACTORY_TYPE_SINGLE_THREADED,
             &d2dFactory_
-            );
+        );
     }
 
     // Create WIC factory to load images.
     if (SUCCEEDED(hr))
     {
         hr = CoCreateInstance(
-                CLSID_WICImagingFactory,
-                NULL,
-                CLSCTX_INPROC_SERVER,
-                IID_IWICImagingFactory,
-                (IID_PPV_ARGS(&wicFactory_))
-                );
+                 CLSID_WICImagingFactory,
+                 NULL,
+                 CLSCTX_INPROC_SERVER,
+                 IID_IWICImagingFactory,
+                 (IID_PPV_ARGS(&wicFactory_))
+             );
     }
 
     //////////////////////////////
@@ -140,17 +140,17 @@ HRESULT MainWindow::Initialize()
 
         // create window (the hwnd is stored in the create event)
         CreateWindow(
-                L"DirectWritePadDemo",
-                TEXT(APPLICATION_TITLE),
-                WS_OVERLAPPEDWINDOW|WS_CLIPCHILDREN,
-                CW_USEDEFAULT, CW_USEDEFAULT,
-                800,
-                600,
-                NULL,
-                NULL,
-                HINST_THISCOMPONENT,
-                this
-                );
+            L"DirectWritePadDemo",
+            TEXT(APPLICATION_TITLE),
+            WS_OVERLAPPEDWINDOW|WS_CLIPCHILDREN,
+            CW_USEDEFAULT, CW_USEDEFAULT,
+            800,
+            600,
+            NULL,
+            NULL,
+            HINST_THISCOMPONENT,
+            this
+        );
 
         if (hwnd_ == NULL)
             hr = HRESULT_FROM_WIN32(GetLastError());
@@ -170,27 +170,27 @@ HRESULT MainWindow::Initialize()
     if (SUCCEEDED(hr))
     {
         hr = dwriteFactory_->CreateTextFormat(
-            L"Arial",
-            NULL,
-            DWRITE_FONT_WEIGHT_NORMAL,
-            DWRITE_FONT_STYLE_NORMAL,
-            DWRITE_FONT_STRETCH_NORMAL,
-            16,
-            L"",
-            &textFormat
-            );
+                 L"Arial",
+                 NULL,
+                 DWRITE_FONT_WEIGHT_NORMAL,
+                 DWRITE_FONT_STYLE_NORMAL,
+                 DWRITE_FONT_STRETCH_NORMAL,
+                 16,
+                 L"",
+                 &textFormat
+             );
     }
 
     // Set initial text and assign to the text editor.
     if (SUCCEEDED(hr))
     {
         hr = TextEditor::Create(
-                hwnd_,
-                g_sampleText,
-                textFormat,
-                dwriteFactory_,
-                &textEditor_
-                );
+                 hwnd_,
+                 g_sampleText,
+                 textFormat,
+                 dwriteFactory_,
+                 &textEditor_
+             );
     }
 
     if (SUCCEEDED(hr))
@@ -259,7 +259,7 @@ HRESULT MainWindow::CreateRenderTarget(HWND hwnd, RenderTargetType renderTargetT
             hr = RenderTargetD2D::Create(d2dFactory_, dwriteFactory_, hwnd, &renderTarget);
             break;
         }
-        // Fall through to DirectWrite if no D2D factory exists.
+    // Fall through to DirectWrite if no D2D factory exists.
 
     case RenderTargetTypeDW:
     default:
@@ -301,15 +301,15 @@ LRESULT CALLBACK MainWindow::WindowProc(HWND hwnd, UINT message, WPARAM wParam, 
     switch (message)
     {
     case WM_NCCREATE:
-        {
-            // Associate the data structure with this window handle.
-            CREATESTRUCT* pcs = reinterpret_cast<CREATESTRUCT*>(lParam);
-            window = reinterpret_cast<MainWindow*>(pcs->lpCreateParams);
-            window->hwnd_ = hwnd;
-            window->AddRef(); // implicit reference via HWND
-            SetWindowLongPtr(hwnd, GWLP_USERDATA, PtrToUlong(window));
-        }
-        return DefWindowProc(hwnd, message, wParam, lParam);
+    {
+        // Associate the data structure with this window handle.
+        CREATESTRUCT* pcs = reinterpret_cast<CREATESTRUCT*>(lParam);
+        window = reinterpret_cast<MainWindow*>(pcs->lpCreateParams);
+        window->hwnd_ = hwnd;
+        window->AddRef(); // implicit reference via HWND
+        SetWindowLongPtr(hwnd, GWLP_USERDATA, PtrToUlong(window));
+    }
+    return DefWindowProc(hwnd, message, wParam, lParam);
 
     case WM_COMMAND:
         window->OnCommand(static_cast<UINT>(wParam));
@@ -411,33 +411,33 @@ void MainWindow::OnCommand(UINT commandId)
         break;
 
     case CommandIdWrap:
-        {
-            DWRITE_WORD_WRAPPING wordWrapping = textLayout->GetWordWrapping();
-            textLayout->SetWordWrapping((wordWrapping == DWRITE_WORD_WRAPPING_NO_WRAP)
-                                              ? DWRITE_WORD_WRAPPING_WRAP
-                                              : DWRITE_WORD_WRAPPING_NO_WRAP
-                                              );
-            RedrawTextEditor();
-        }
-        break;
+    {
+        DWRITE_WORD_WRAPPING wordWrapping = textLayout->GetWordWrapping();
+        textLayout->SetWordWrapping((wordWrapping == DWRITE_WORD_WRAPPING_NO_WRAP)
+                                    ? DWRITE_WORD_WRAPPING_WRAP
+                                    : DWRITE_WORD_WRAPPING_NO_WRAP
+                                   );
+        RedrawTextEditor();
+    }
+    break;
 
     case CommandIdTrim:
-        {
-            // Retrieve existing trimming sign and settings
-            // and modify them according to button state.
-            IDWriteInlineObject* inlineObject = NULL;
-            DWRITE_TRIMMING trimming = { DWRITE_TRIMMING_GRANULARITY_NONE, 0, 0 };
+    {
+        // Retrieve existing trimming sign and settings
+        // and modify them according to button state.
+        IDWriteInlineObject* inlineObject = NULL;
+        DWRITE_TRIMMING trimming = { DWRITE_TRIMMING_GRANULARITY_NONE, 0, 0 };
 
-            textLayout->GetTrimming(&trimming, &inlineObject);
-            trimming.granularity = (trimming.granularity == DWRITE_TRIMMING_GRANULARITY_NONE)
-                                 ? DWRITE_TRIMMING_GRANULARITY_CHARACTER
-                                 : DWRITE_TRIMMING_GRANULARITY_NONE;
-            textLayout->SetTrimming(&trimming, inlineObject);
-            SafeRelease(&inlineObject);
+        textLayout->GetTrimming(&trimming, &inlineObject);
+        trimming.granularity = (trimming.granularity == DWRITE_TRIMMING_GRANULARITY_NONE)
+                               ? DWRITE_TRIMMING_GRANULARITY_CHARACTER
+                               : DWRITE_TRIMMING_GRANULARITY_NONE;
+        textLayout->SetTrimming(&trimming, inlineObject);
+        SafeRelease(&inlineObject);
 
-            RedrawTextEditor();
-        }
-        break;
+        RedrawTextEditor();
+    }
+    break;
 
     case CommandIdZoomIn:
         textEditor_->SetScale(1.25f, 1.25f, true);
@@ -490,7 +490,7 @@ void MainWindow::OnSize()
         clientRect.right  - clientRect.left,
         clientRect.bottom - clientRect.top,
         SWP_NOACTIVATE|SWP_NOZORDER
-        );
+    );
 }
 
 
@@ -663,10 +663,10 @@ HRESULT MainWindow::OnSetInlineImage()
 
     IWICBitmapSource* bitmap = NULL;
     hr = InlineImage::LoadImageFromFile(
-            fileName,
-            wicFactory_,
-            &bitmap
-            );
+             fileName,
+             wicFactory_,
+             &bitmap
+         );
 
     // Get the range of text to be replaced with an inline image.
     // If no text is selected, insert the Unicode object replacement
@@ -699,7 +699,7 @@ HRESULT MainWindow::OnSetInlineImage()
 STDMETHODIMP MainWindow::CreateFontFromLOGFONT(
     const LOGFONT& logFont,
     OUT IDWriteFont** font
-    )
+)
 {
     *font = NULL;
 
@@ -725,7 +725,7 @@ STDMETHODIMP MainWindow::GetFontFamilyName(
     IDWriteFont* font,
     OUT wchar_t* fontFamilyName,
     UINT32 fontFamilyNameLength
-    )
+)
 {
     HRESULT hr = S_OK;
 
@@ -782,9 +782,9 @@ HRESULT MainWindow::FormatSampleLayout(IDWriteTextLayout* textLayout)
     if (SUCCEEDED(hr))
     {
         hr = dwriteFactory_->CreateEllipsisTrimmingSign(
-                textLayout,
-                &inlineObject
-                );
+                 textLayout,
+                 &inlineObject
+             );
     }
 
     if (SUCCEEDED(hr))

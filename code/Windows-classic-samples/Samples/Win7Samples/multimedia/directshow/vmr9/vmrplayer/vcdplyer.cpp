@@ -1,4 +1,4 @@
-//------------------------------------------------------------------------------
+﻿//------------------------------------------------------------------------------
 // File: vcdplyer.cpp
 //
 // Desc: DirectShow sample code
@@ -23,17 +23,17 @@ extern int FrameStepCount;
 *
 \**************************************************************************/
 CMovie::CMovie(HWND hwndApplication) :
-      m_hwndApp(hwndApplication),
-      m_MediaEvent(NULL),
-      m_Mode(MOVIE_NOTOPENED),
-      m_Fg(NULL),
-      m_Gb(NULL),
-      m_Mc(NULL),
-      m_Ms(NULL),
-      m_Me(NULL),
-      m_Wc(NULL),
-      m_pMixControl(NULL),
-      m_TimeFormat(TIME_FORMAT_MEDIA_TIME)
+    m_hwndApp(hwndApplication),
+    m_MediaEvent(NULL),
+    m_Mode(MOVIE_NOTOPENED),
+    m_Fg(NULL),
+    m_Gb(NULL),
+    m_Mc(NULL),
+    m_Ms(NULL),
+    m_Me(NULL),
+    m_Wc(NULL),
+    m_pMixControl(NULL),
+    m_TimeFormat(TIME_FORMAT_MEDIA_TIME)
 {
 }
 
@@ -133,7 +133,7 @@ CMovie::AddVideoMixingRendererToFG()
 HRESULT
 CMovie::RenderSecondFile(
     TCHAR* lpFileName
-    )
+)
 {
     HRESULT hRes;
     WCHAR FileName[MAX_PATH];
@@ -180,7 +180,7 @@ CMovie::RenderSecondFile(
 HRESULT
 CMovie::OpenMovie(
     TCHAR *lpFileName
-    )
+)
 {
     IUnknown        *pUnk;
     HRESULT         hres;
@@ -212,7 +212,8 @@ CMovie::OpenMovie(
         hres = AddVideoMixingRendererToFG();
         if(FAILED(hres))
         {
-            m_Fg->Release(); m_Fg = NULL;
+            m_Fg->Release();
+            m_Fg = NULL;
             return hres;
         }
 
@@ -220,8 +221,10 @@ CMovie::OpenMovie(
         if(FAILED(hres))
         {
             pUnk->Release();
-            m_Fg->Release(); m_Fg = NULL;
-            m_Wc->Release(); m_Wc = NULL;
+            m_Fg->Release();
+            m_Fg = NULL;
+            m_Wc->Release();
+            m_Wc = NULL;
             return hres;
         }
 
@@ -229,9 +232,12 @@ CMovie::OpenMovie(
         if(FAILED(hres))
         {
             pUnk->Release();
-            m_Fg->Release(); m_Fg = NULL;
-            m_Wc->Release(); m_Wc = NULL;
-            m_Gb->Release(); m_Gb = NULL;
+            m_Fg->Release();
+            m_Fg = NULL;
+            m_Wc->Release();
+            m_Wc = NULL;
+            m_Gb->Release();
+            m_Gb = NULL;
             return hres;
         }
 
@@ -239,9 +245,12 @@ CMovie::OpenMovie(
         if(FAILED(hres))
         {
             pUnk->Release();
-            m_Fg->Release(); m_Fg = NULL;
-            m_Wc->Release(); m_Wc = NULL;
-            m_Gb->Release(); m_Gb = NULL;
+            m_Fg->Release();
+            m_Fg = NULL;
+            m_Wc->Release();
+            m_Wc = NULL;
+            m_Gb->Release();
+            m_Gb = NULL;
             m_pMixControl = NULL;
             return hres;
         }
@@ -250,9 +259,12 @@ CMovie::OpenMovie(
         if(FAILED(hres))
         {
             pUnk->Release();
-            m_Fg->Release(); m_Fg = NULL;
-            m_Wc->Release(); m_Wc = NULL;
-            m_Gb->Release(); m_Gb = NULL;
+            m_Fg->Release();
+            m_Fg = NULL;
+            m_Wc->Release();
+            m_Wc = NULL;
+            m_Gb->Release();
+            m_Gb = NULL;
             return hres;
         }
 
@@ -282,7 +294,7 @@ CMovie::OpenMovie(
 \**************************************************************************/
 DWORD
 CMovie::CloseMovie(
-    )
+)
 {
     m_Mode = MOVIE_NOTOPENED;
 
@@ -342,7 +354,7 @@ BOOL
 CMovie::GetNativeMovieSize(
     LONG *pcx,
     LONG *pcy
-    )
+)
 {
     BOOL    bRet = FALSE;
     if(m_Wc)
@@ -364,13 +376,13 @@ CMovie::GetMoviePosition(
     LONG *py,
     LONG *pcx,
     LONG *pcy
-    )
+)
 {
     BOOL    bRet = FALSE;
 
     if(m_Wc)
     {
-        RECT src={0}, dest={0};
+        RECT src= {0}, dest= {0};
         HRESULT hr = m_Wc->GetVideoPosition(&src, &dest);
         *px = dest.left;
         *py = dest.right;
@@ -391,7 +403,7 @@ CMovie::PutMoviePosition(
     LONG y,
     LONG cx,
     LONG cy
-    )
+)
 {
     BOOL    bRet = FALSE;
 
@@ -412,7 +424,7 @@ CMovie::PutMoviePosition(
 \**************************************************************************/
 BOOL
 CMovie::PlayMovie(
-    )
+)
 {
     REFTIME rt, rtAbs, rtDur;
     HRESULT hr=S_OK;
@@ -450,7 +462,7 @@ CMovie::PlayMovie(
 \**************************************************************************/
 BOOL
 CMovie::PauseMovie(
-    )
+)
 {
     m_Mode = MOVIE_PAUSED;
 
@@ -466,7 +478,7 @@ CMovie::PauseMovie(
 
 OAFilterState
 CMovie::GetStateMovie(
-    )
+)
 {
     OAFilterState State;
 
@@ -481,7 +493,7 @@ CMovie::GetStateMovie(
 \**************************************************************************/
 BOOL
 CMovie::StopMovie(
-    )
+)
 {
     m_Mode = MOVIE_STOPPED;
     HRESULT hr = m_Mc->Stop();
@@ -495,7 +507,7 @@ CMovie::StopMovie(
 \**************************************************************************/
 EMovieMode
 CMovie::StatusMovie(
-    )
+)
 {
     if(m_Mc)
     {
@@ -512,17 +524,17 @@ CMovie::StatusMovie(
 
         switch(fs)
         {
-            case State_Stopped:
-                m_Mode = MOVIE_STOPPED;
-                break;
+        case State_Stopped:
+            m_Mode = MOVIE_STOPPED;
+            break;
 
-            case State_Paused:
-                m_Mode = MOVIE_PAUSED;
-                break;
+        case State_Paused:
+            m_Mode = MOVIE_PAUSED;
+            break;
 
-            case State_Running:
-                m_Mode = MOVIE_PLAYING;
-                break;
+        case State_Running:
+            m_Mode = MOVIE_PLAYING;
+            break;
         }
     }
 
@@ -583,7 +595,7 @@ CMovie::FrameStepMovie()
 \**************************************************************************/
 HANDLE
 CMovie::GetMovieEventHandle(
-    )
+)
 {
     HRESULT     hr;
 
@@ -705,7 +717,7 @@ BOOL
 CMovie::SeekToPosition(
     REFTIME rt,
     BOOL bFlushData
-    )
+)
 {
     HRESULT hr;
     LONGLONG llTime = (LONGLONG)(m_TimeFormat == TIME_FORMAT_MEDIA_TIME ? rt * double(10000000) : rt );
@@ -743,7 +755,7 @@ HRESULT
 CMovie::FindInterfaceFromFilterGraph(
     REFIID iid, // interface to look for
     LPVOID *lp  // place to return interface pointer in
-    )
+)
 {
     IEnumFilters* pEF;
     IBaseFilter*  pFilter;
@@ -864,7 +876,7 @@ BOOL
 CMovie::RepaintVideo(
     HWND hwnd,
     HDC hdc
-    )
+)
 {
     BOOL bRet = FALSE;
 
@@ -884,7 +896,7 @@ CMovie::RepaintVideo(
 HRESULT
 CMovie::SetAppImage(
     VMR9AlphaBitmap* lpBmpInfo
-    )
+)
 {
     IVMRMixerBitmap9* pBmp;
 

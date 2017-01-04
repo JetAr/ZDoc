@@ -1,4 +1,4 @@
-//+-------------------------------------------------------------------------
+﻿//+-------------------------------------------------------------------------
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -33,8 +33,8 @@ ceDupString(
     *ppwszOut = (WCHAR *) LocalAlloc(LMEM_FIXED, cb);
     if (NULL == *ppwszOut)
     {
-	hr = E_OUTOFMEMORY;
-	_JumpError(hr, error, "LocalAlloc");
+        hr = E_OUTOFMEMORY;
+        _JumpError(hr, error, "LocalAlloc");
     }
     CopyMemory(*ppwszOut, pwszIn, cb);
     hr = S_OK;
@@ -64,7 +64,7 @@ ceSanitizedNameToDSName(
     cwcCopy = cwc;
     if (cwcCHOPBASE < cwcCopy)
     {
-	cwcCopy = cwcCHOPBASE;
+        cwcCopy = cwcCHOPBASE;
     }
     CopyMemory(wszDSName, pwszSanitizedName, cwcCopy * sizeof(WCHAR));
     wszDSName[cwcCopy] = L'\0';
@@ -73,27 +73,27 @@ ceSanitizedNameToDSName(
     {
         // Hash the rest of the name into a USHORT
         USHORT usHash = 0;
-	size_t i;
-	WCHAR *pwsz;
+        size_t i;
+        WCHAR *pwsz;
 
-	// Truncate an incomplete sanitized Unicode character
+        // Truncate an incomplete sanitized Unicode character
 
-	pwsz = wcsrchr(wszDSName, L'!');
-	if (NULL != pwsz && wcslen(pwsz) < 5)
-	{
-	    cwcCopy -= wcslen(pwsz);
-	    *pwsz = L'\0';
-	}
+        pwsz = wcsrchr(wszDSName, L'!');
+        if (NULL != pwsz && wcslen(pwsz) < 5)
+        {
+            cwcCopy -= wcslen(pwsz);
+            *pwsz = L'\0';
+        }
 
         for (i = cwcCopy; i < cwc; i++)
         {
             USHORT usLowBit = (0x8000 & usHash)? 1 : 0;
 
-	    usHash = ((usHash << 1) | usLowBit) + pwszSanitizedName[i];
+            usHash = ((usHash << 1) | usLowBit) + pwszSanitizedName[i];
         }
-	hr = StringCchPrintf(&wszDSName[cwcCopy], sizeof(wszDSName)/sizeof(WCHAR) - cwcCopy, L"-%05hu", usHash);
-	_JumpIfError(hr, error, "StringCchPrintf");
-	assert(wcslen(wszDSName) < ARRAYSIZE(wszDSName));
+        hr = StringCchPrintf(&wszDSName[cwcCopy], sizeof(wszDSName)/sizeof(WCHAR) - cwcCopy, L"-%05hu", usHash);
+        _JumpIfError(hr, error, "StringCchPrintf");
+        assert(wcslen(wszDSName) < ARRAYSIZE(wszDSName));
     }
 
     hr = ceDupString(wszDSName, ppwszNameOut);
@@ -116,53 +116,53 @@ ceInternetCanonicalizeUrl(
 
     if (0 == _wcsnicmp(L"file:", pwszIn, 5))
     {
-	hr = ceDupString(pwszIn, &pwsz);
+        hr = ceDupString(pwszIn, &pwsz);
         _JumpIfError(hr, error, "ceDupString");
     }
     else
     {
-	// Calculate required buffer size by passing a very small buffer
-	// The call will fail, and tell us how big the buffer should be.
+        // Calculate required buffer size by passing a very small buffer
+        // The call will fail, and tell us how big the buffer should be.
 
-	WCHAR wszPlaceHolder[1];
-	DWORD cwc = ARRAYSIZE(wszPlaceHolder);
-	BOOL bResult;
+        WCHAR wszPlaceHolder[1];
+        DWORD cwc = ARRAYSIZE(wszPlaceHolder);
+        BOOL bResult;
 
-	bResult = InternetCanonicalizeUrl(
-				    pwszIn,		// lpszUrl
-				    wszPlaceHolder,	// lpszBuffer
-				    &cwc,		// lpdwBufferLength
-				    0);		// dwFlags
-	assert(!bResult);	// This will always fail
+        bResult = InternetCanonicalizeUrl(
+                      pwszIn,		// lpszUrl
+                      wszPlaceHolder,	// lpszBuffer
+                      &cwc,		// lpdwBufferLength
+                      0);		// dwFlags
+        assert(!bResult);	// This will always fail
 
-	hr = ceHLastError();
-	if (HRESULT_FROM_WIN32(ERROR_INSUFFICIENT_BUFFER) != hr)
-	{
-	    // unexpected error
+        hr = ceHLastError();
+        if (HRESULT_FROM_WIN32(ERROR_INSUFFICIENT_BUFFER) != hr)
+        {
+            // unexpected error
 
-	    _JumpError(hr, error, "InternetCanonicalizeUrl");
-	}
+            _JumpError(hr, error, "InternetCanonicalizeUrl");
+        }
 
-	// NOTE: InternetCanonicalizeUrl counts characters, not bytes as doc'd
-	// cwc includes trailing L'0'
+        // NOTE: InternetCanonicalizeUrl counts characters, not bytes as doc'd
+        // cwc includes trailing L'0'
 
-	pwsz = (WCHAR *) LocalAlloc(LMEM_FIXED, cwc * sizeof(WCHAR));
-	if (NULL == pwsz)
-	{
-	    hr = E_OUTOFMEMORY;
-	    _JumpError(hr, error, "LocalAlloc");
-	}
+        pwsz = (WCHAR *) LocalAlloc(LMEM_FIXED, cwc * sizeof(WCHAR));
+        if (NULL == pwsz)
+        {
+            hr = E_OUTOFMEMORY;
+            _JumpError(hr, error, "LocalAlloc");
+        }
 
-	// canonicalize
-	if (!InternetCanonicalizeUrl(
-				pwszIn,	// lpszUrl
-				pwsz,	// lpszBuffer
-				&cwc,	// lpdwBufferLength
-				0))		// dwFlags
-	{
-	    hr = ceHLastError();
-	    _JumpError(hr, error, "InternetCanonicalizeUrl");
-	}
+        // canonicalize
+        if (!InternetCanonicalizeUrl(
+                    pwszIn,	// lpszUrl
+                    pwsz,	// lpszBuffer
+                    &cwc,	// lpdwBufferLength
+                    0))		// dwFlags
+        {
+            hr = ceHLastError();
+            _JumpError(hr, error, "InternetCanonicalizeUrl");
+        }
     }
     *ppwszOut = pwsz;
     pwsz = NULL;
@@ -308,11 +308,11 @@ ceFormatCertsrvStringArray(
     if (0 != iCert_p4 || MAXDWORD != iCertTarget_p4)
     {
         StringCbPrintf(
-	    wszCertSuffix,
-	    sizeof(wszCertSuffix),
-	    MAXDWORD != iCertTarget_p4? L"(%u-%u)" : L"(%u)",
-	    iCert_p4,
-	    iCertTarget_p4);
+            wszCertSuffix,
+            sizeof(wszCertSuffix),
+            MAXDWORD != iCertTarget_p4? L"(%u-%u)" : L"(%u)",
+            iCert_p4,
+            iCertTarget_p4);
     }
     apwszInsertionArray[4 - 1] = wszCertSuffix;
 
@@ -321,7 +321,7 @@ ceFormatCertsrvStringArray(
 
     if (NULL == pwszDomainDN_p5 || L'\0' == *pwszDomainDN_p5)
     {
-	pwszDomainDN_p5 = L"DC=UnavailableDomainDN";
+        pwszDomainDN_p5 = L"DC=UnavailableDomainDN";
     }
     assert(L'5' == wszFCSAPARM_DOMAINDN[1]);
     apwszInsertionArray[5 - 1] = pwszDomainDN_p5;
@@ -331,7 +331,7 @@ ceFormatCertsrvStringArray(
 
     if (NULL == pwszConfigDN_p6 || L'\0' == *pwszConfigDN_p6)
     {
-	pwszConfigDN_p6 = L"DC=UnavailableConfigDN";
+        pwszConfigDN_p6 = L"DC=UnavailableConfigDN";
     }
     assert(L'6' == wszFCSAPARM_CONFIGDN[1]);
     apwszInsertionArray[6 - 1] = pwszConfigDN_p6;
@@ -378,9 +378,9 @@ ceFormatCertsrvStringArray(
     pwszT = L"";
     if (fDSAttrib_p10_11)
     {
-	pwszT = fDeltaCRL_p9?
-		    wszDSSEARCHDELTACRLATTRIBUTE :
-		    wszDSSEARCHBASECRLATTRIBUTE;
+        pwszT = fDeltaCRL_p9?
+                wszDSSEARCHDELTACRLATTRIBUTE :
+                wszDSSEARCHBASECRLATTRIBUTE;
     }
     apwszInsertionArray[10 - 1] = pwszT;
 
@@ -392,7 +392,7 @@ ceFormatCertsrvStringArray(
     pwszT = L"";
     if (fDSAttrib_p10_11)
     {
-	pwszT = wszDSSEARCHCACERTATTRIBUTE;
+        pwszT = wszDSSEARCHCACERTATTRIBUTE;
     }
     apwszInsertionArray[11 - 1] = pwszT;
 
@@ -404,7 +404,7 @@ ceFormatCertsrvStringArray(
     pwszT = L"";
     if (fDSAttrib_p10_11)
     {
-	pwszT = wszDSSEARCHUSERCERTATTRIBUTE;
+        pwszT = wszDSSEARCHUSERCERTATTRIBUTE;
     }
     apwszInsertionArray[12 - 1] = pwszT;
 
@@ -416,7 +416,7 @@ ceFormatCertsrvStringArray(
     pwszT = L"";
     if (fDSAttrib_p10_11)
     {
-	pwszT = wszDSSEARCHKRACERTATTRIBUTE;
+        pwszT = wszDSSEARCHKRACERTATTRIBUTE;
     }
     apwszInsertionArray[13 - 1] = pwszT;
 
@@ -428,7 +428,7 @@ ceFormatCertsrvStringArray(
     pwszT = L"";
     if (fDSAttrib_p10_11)
     {
-	pwszT = wszDSSEARCHCROSSCERTPAIRATTRIBUTE;
+        pwszT = wszDSSEARCHCROSSCERTPAIRATTRIBUTE;
     }
     apwszInsertionArray[14 - 1] = pwszT;
 
@@ -438,42 +438,42 @@ ceFormatCertsrvStringArray(
     for (i = 0; i < cStrings; i++)
     {
         if (0 == FormatMessage(
-			FORMAT_MESSAGE_ALLOCATE_BUFFER |
-			    FORMAT_MESSAGE_FROM_STRING |
-			    FORMAT_MESSAGE_ARGUMENT_ARRAY,
-			(VOID *) apwszStringsIn[i],
-			0,              // dwMessageID
-			0,              // dwLanguageID
-			(LPWSTR) &apwszStringsOut[i],
-			(DWORD)wcslen(apwszStringsIn[i]),
-			(va_list *) apwszInsertionArray))
+                    FORMAT_MESSAGE_ALLOCATE_BUFFER |
+                    FORMAT_MESSAGE_FROM_STRING |
+                    FORMAT_MESSAGE_ARGUMENT_ARRAY,
+                    (VOID *) apwszStringsIn[i],
+                    0,              // dwMessageID
+                    0,              // dwLanguageID
+                    (LPWSTR) &apwszStringsOut[i],
+                    (DWORD)wcslen(apwszStringsIn[i]),
+                    (va_list *) apwszInsertionArray))
         {
             hr = ceHLastError();
-	    _JumpError(hr, error, "FormatMessage");
+            _JumpError(hr, error, "FormatMessage");
         }
-	if (fURL)
-	{
-	    WCHAR *pwsz;
+        if (fURL)
+        {
+            WCHAR *pwsz;
 
-	    hr = ceInternetCanonicalizeUrl(apwszStringsOut[i], &pwsz);
-	    _JumpIfError(hr, error, "ceInternetCanonicalizeUrl");
+            hr = ceInternetCanonicalizeUrl(apwszStringsOut[i], &pwsz);
+            _JumpIfError(hr, error, "ceInternetCanonicalizeUrl");
 
-	    LocalFree(apwszStringsOut[i]);
-	    apwszStringsOut[i] = pwsz;
-	}
+            LocalFree(apwszStringsOut[i]);
+            apwszStringsOut[i] = pwsz;
+        }
     }
 
 error:
     if (S_OK != hr)
     {
-	for (i = 0; i < cStrings; i++)
-	{
-	    if (NULL != apwszStringsOut[i])
-	    {
-		LocalFree(apwszStringsOut[i]);
-		apwszStringsOut[i] = NULL;
-	    }
-	}
+        for (i = 0; i < cStrings; i++)
+        {
+            if (NULL != apwszStringsOut[i])
+            {
+                LocalFree(apwszStringsOut[i]);
+                apwszStringsOut[i] = NULL;
+            }
+        }
     }
     SysFreeString(strShortMachineName);
     if (NULL != pwszSanitizedDSName)

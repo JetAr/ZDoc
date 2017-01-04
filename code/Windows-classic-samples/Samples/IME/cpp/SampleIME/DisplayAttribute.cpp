@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -66,7 +66,7 @@ BOOL CSampleIME::_SetCompositionDisplayAttributes(TfEditCookie ec, _In_ ITfConte
         // set the value over the range
         // the application will use this guid atom to lookup the acutal rendering information
         var.vt = VT_I4; // we're going to set a TfGuidAtom
-        var.lVal = gaDisplayAttribute; 
+        var.lVal = gaDisplayAttribute;
 
         hr = pDisplayAttributeProperty->SetValue(ec, pRangeComposition, &var);
 
@@ -97,13 +97,13 @@ BOOL CSampleIME::_InitDisplayAttributeGuidAtom()
 
     // register the display attribute for input text.
     hr = pCategoryMgr->RegisterGUID(Global::SampleIMEGuidDisplayAttributeInput, &_gaDisplayAttributeInput);
-	if (FAILED(hr))
+    if (FAILED(hr))
     {
         goto Exit;
     }
     // register the display attribute for the converted text.
     hr = pCategoryMgr->RegisterGUID(Global::SampleIMEGuidDisplayAttributeConverted, &_gaDisplayAttributeConverted);
-	if (FAILED(hr))
+    if (FAILED(hr))
     {
         goto Exit;
     }

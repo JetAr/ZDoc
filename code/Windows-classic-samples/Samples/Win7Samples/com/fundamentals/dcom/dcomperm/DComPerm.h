@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -24,13 +24,13 @@
 #define SIZE_MSG_BUFFER 256
 
 #define SDTYPE_MACHINE_LAUNCH     (0x1L)
-#define SDTYPE_MACHINE_ACCESS     (0x2L) 
-#define SDTYPE_DEFAULT_LAUNCH     (0x4L) 
+#define SDTYPE_MACHINE_ACCESS     (0x2L)
+#define SDTYPE_DEFAULT_LAUNCH     (0x4L)
 #define SDTYPE_DEFAULT_ACCESS     (0x8L)
 #define SDTYPE_APPLICATION_LAUNCH (0x10L)
 #define SDTYPE_APPLICATION_ACCESS (0x20L)
 
-#define SDTYPE_ACCESS (SDTYPE_MACHINE_ACCESS|SDTYPE_DEFAULT_ACCESS|SDTYPE_APPLICATION_ACCESS) 
+#define SDTYPE_ACCESS (SDTYPE_MACHINE_ACCESS|SDTYPE_DEFAULT_ACCESS|SDTYPE_APPLICATION_ACCESS)
 
 #ifndef COM_RIGHTS_EXECUTE_LOCAL
 #define COM_RIGHTS_EXECUTE_LOCAL  0x2
@@ -64,12 +64,12 @@ ListDefaultLaunchACL();
 DWORD
 ListAppIDAccessACL (
     LPTSTR AppID
-    );
+);
 
 DWORD
 ListAppIDLaunchACL (
     LPTSTR AppID
-    );
+);
 
 DWORD
 ChangeMachineAccessACL (
@@ -77,7 +77,7 @@ ChangeMachineAccessACL (
     BOOL fSetPrincipal,
     BOOL fPermit,
     DWORD dwAccessMask
-    );
+);
 
 DWORD
 ChangeMachineLaunchAndActivateACL (
@@ -85,7 +85,7 @@ ChangeMachineLaunchAndActivateACL (
     BOOL fSetPrincipal,
     BOOL fPermit,
     DWORD dwAccessMask
-    );
+);
 
 DWORD
 ChangeDefaultAccessACL (
@@ -93,7 +93,7 @@ ChangeDefaultAccessACL (
     BOOL SetPrincipal,
     BOOL Permit,
     DWORD dwAccessMask
-    );
+);
 
 DWORD
 ChangeDefaultLaunchAndActivateACL (
@@ -101,7 +101,7 @@ ChangeDefaultLaunchAndActivateACL (
     BOOL SetPrincipal,
     BOOL Permit,
     DWORD dwAccessMask
-    );
+);
 
 DWORD
 ChangeAppIDAccessACL (
@@ -109,8 +109,8 @@ ChangeAppIDAccessACL (
     LPTSTR Principal,
     BOOL SetPrincipal,
     BOOL Permit,
-    DWORD dwAccessMask    
-    );
+    DWORD dwAccessMask
+);
 
 DWORD
 ChangeAppIDLaunchAndActivateACL (
@@ -119,28 +119,28 @@ ChangeAppIDLaunchAndActivateACL (
     BOOL SetPrincipal,
     BOOL Permit,
     DWORD dwAccessMask
-    );
+);
 
 DWORD GetRunAsPassword (
     LPTSTR AppID,
     LPTSTR Password
-    );
+);
 
 DWORD SetRunAsPassword (
     LPTSTR AppID,
     LPTSTR Principal,
     LPTSTR Password
-    );
+);
 
 DWORD GetRunAsPassword (
     LPTSTR AppID,
     LPTSTR Password
-    );
+);
 
 DWORD SetRunAsPassword (
     LPTSTR AppID,
     LPTSTR Password
-    );
+);
 
 //
 // Internal functions
@@ -149,19 +149,19 @@ DWORD SetRunAsPassword (
 DWORD
 CreateNewSD (
     SECURITY_DESCRIPTOR **SD
-    );
+);
 
 DWORD
 SetAclDefaults(
-    PACL pDacl, 
+    PACL pDacl,
     DWORD dwSDType
-    );
+);
 
 DWORD
 MakeSDAbsolute (
     PSECURITY_DESCRIPTOR OldSD,
     PSECURITY_DESCRIPTOR *NewSD
-    );
+);
 
 DWORD
 SetNamedValueSD (
@@ -169,7 +169,7 @@ SetNamedValueSD (
     LPTSTR KeyName,
     LPTSTR ValueName,
     SECURITY_DESCRIPTOR *SD
-    );
+);
 
 DWORD
 GetNamedValueSD (
@@ -178,7 +178,7 @@ GetNamedValueSD (
     LPTSTR ValueName,
     SECURITY_DESCRIPTOR **SD,
     BOOL *NewSD
-    );
+);
 
 DWORD
 ListNamedValueSD (
@@ -186,7 +186,7 @@ ListNamedValueSD (
     LPTSTR tszKeyName,
     LPTSTR tszValueName,
     DWORD dwSDType
-    );
+);
 
 DWORD
 AddPrincipalToNamedValueSD (
@@ -197,7 +197,7 @@ AddPrincipalToNamedValueSD (
     BOOL Permit,
     DWORD dwAccessMask,
     DWORD dwSDType
-    );
+);
 
 DWORD
 UpdatePrincipalInNamedValueSD (
@@ -208,7 +208,7 @@ UpdatePrincipalInNamedValueSD (
     DWORD dwAccessMask,
     BOOL fRemove,
     DWORD fAceType
-    );
+);
 
 DWORD
 RemovePrincipalFromNamedValueSD (
@@ -217,7 +217,7 @@ RemovePrincipalFromNamedValueSD (
     LPTSTR ValueName,
     LPTSTR Principal,
     DWORD fAceType
-    );
+);
 
 BOOL
 IsLegacySecurityModel ();
@@ -225,33 +225,33 @@ IsLegacySecurityModel ();
 DWORD
 GetCurrentUserSID (
     PSID *Sid
-    );
+);
 
 DWORD
 GetPrincipalSID (
     LPTSTR Principal,
     PSID *Sid
-    );
+);
 
 DWORD
 CopyACL (
     PACL paclOld,
     PACL paclNew
-    );
+);
 
 DWORD
 AddAccessDeniedACEToACL (
     PACL *paclOrig,
     DWORD dwPermissionMask,
     LPTSTR tszPrincipal
-    );
+);
 
 DWORD
 AddAccessAllowedACEToACL (
     PACL *paclOrig,
     DWORD dwAccessMask,
     LPTSTR tszPrincipal
-    );
+);
 
 DWORD
 UpdatePrincipalInACL (
@@ -260,26 +260,26 @@ UpdatePrincipalInACL (
     DWORD dwAccessMask,
     BOOL fRemove,
     DWORD fAceType
-    );
+);
 
 DWORD
 RemovePrincipalFromACL (
     PACL paclOrig,
     LPTSTR tszPrincipal,
     DWORD fAceType
-    );
+);
 
 void
 ListACL (
     PACL Acl,
     DWORD dwSDType
-    );
+);
 
 DWORD
 SetAccountRights (
     LPTSTR User,
     LPTSTR Privilege
-    );
+);
 
 //
 // Utility Functions
@@ -290,5 +290,5 @@ SystemMessage (
     LPTSTR szBuffer,
     DWORD cbBuffer,
     HRESULT hr
-    );
+);
 

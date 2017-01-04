@@ -1,4 +1,4 @@
-//+--------------------------------------------------------------------------
+﻿//+--------------------------------------------------------------------------
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -32,15 +32,15 @@ exitGetProperty(
 /////////////////////////////////////////////////////////////////////////////
 // certexit
 
-class CCertExitSample: 
-    public CComDualImpl<ICertExit2, &IID_ICertExit2, &LIBID_CERTEXITSAMPLELib>, 
+class CCertExitSample:
+    public CComDualImpl<ICertExit2, &IID_ICertExit2, &LIBID_CERTEXITSAMPLELib>,
     public ISupportErrorInfo,
     public CComObjectRoot,
     public CComCoClass<CCertExitSample, &CLSID_CCertExitSample>
 {
 public:
-    CCertExitSample() 
-    { 
+    CCertExitSample()
+    {
         m_strDescription = NULL;
         m_strCAName = NULL;
         m_pwszRegStorageLoc = NULL;
@@ -50,42 +50,42 @@ public:
     }
     ~CCertExitSample();
 
-BEGIN_COM_MAP(CCertExitSample)
+    BEGIN_COM_MAP(CCertExitSample)
     COM_INTERFACE_ENTRY(IDispatch)
     COM_INTERFACE_ENTRY(ICertExit)
     COM_INTERFACE_ENTRY(ICertExit2)
     COM_INTERFACE_ENTRY(ISupportErrorInfo)
-END_COM_MAP()
+    END_COM_MAP()
 
-DECLARE_NOT_AGGREGATABLE(CCertExitSample) 
+    DECLARE_NOT_AGGREGATABLE(CCertExitSample)
 
-DECLARE_REGISTRY(
-    CCertExitSample,
-    wszCLASS_CERTEXITSAMPLE TEXT(".1"),
-    wszCLASS_CERTEXITSAMPLE,
-    IDS_CERTEXIT_DESC,
-    THREADFLAGS_BOTH)
+    DECLARE_REGISTRY(
+        CCertExitSample,
+        wszCLASS_CERTEXITSAMPLE TEXT(".1"),
+        wszCLASS_CERTEXITSAMPLE,
+        IDS_CERTEXIT_DESC,
+        THREADFLAGS_BOTH)
 
     // ISupportsErrorInfo
     STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
 
     // ICertExit
 public:
-    STDMETHOD(Initialize)( 
-            /* [in] */ BSTR const strConfig,
-            /* [retval][out] */ LONG __RPC_FAR *pEventMask);
+    STDMETHOD(Initialize)(
+        /* [in] */ BSTR const strConfig,
+        /* [retval][out] */ LONG __RPC_FAR *pEventMask);
 
     STDMETHOD(Notify)(
-            /* [in] */ LONG ExitEvent,
-            /* [in] */ LONG Context);
+        /* [in] */ LONG ExitEvent,
+        /* [in] */ LONG Context);
 
-    STDMETHOD(GetDescription)( 
-            /* [retval][out] */ BSTR *pstrDescription);
+    STDMETHOD(GetDescription)(
+        /* [retval][out] */ BSTR *pstrDescription);
 
 // ICertExit2
 public:
     STDMETHOD(GetManageModule)(
-		/* [out, retval] */ ICertManageModule **ppManageModule);
+        /* [out, retval] */ ICertManageModule **ppManageModule);
 
 private:
     HRESULT _NotifyNewCert(IN LONG Context);
@@ -93,14 +93,14 @@ private:
     HRESULT _NotifyCRLIssued(IN LONG Context);
 
     HRESULT _WriteCertToFile(
-	    IN ICertServerExit *pServer,
-	    IN BYTE const *pbCert,
-	    IN DWORD cbCert);
+        IN ICertServerExit *pServer,
+        IN BYTE const *pbCert,
+        IN DWORD cbCert);
 
     HRESULT _ExpandEnvironmentVariables(
-	    __in LPCWSTR pwszIn,
-	    __out_ecount(cwcOut) LPWSTR pwszOut,
-	    IN DWORD cwcOut);
+        __in LPCWSTR pwszIn,
+        __out_ecount(cwcOut) LPWSTR pwszOut,
+        IN DWORD cwcOut);
 
     // Member variables & private methods here:
     BSTR           m_strDescription;

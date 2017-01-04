@@ -1,4 +1,4 @@
-//*****************************************************************************
+﻿//*****************************************************************************
 //	Copyright (C) Microsoft Corporation
 //  All rights reserved.
 //*****************************************************************************
@@ -10,28 +10,28 @@
 BOOL APIENTRY DllMain( HMODULE hModule,
                        DWORD  ul_reason_for_call,
                        LPVOID lpReserved
-					 )
+                     )
 {
-	switch (ul_reason_for_call)
-	{
-	case DLL_PROCESS_ATTACH:
-	case DLL_THREAD_ATTACH:
-	case DLL_THREAD_DETACH:
-	case DLL_PROCESS_DETACH:
-		break;
-	}
-	return TRUE;
+    switch (ul_reason_for_call)
+    {
+    case DLL_PROCESS_ATTACH:
+    case DLL_THREAD_ATTACH:
+    case DLL_THREAD_DETACH:
+    case DLL_PROCESS_DETACH:
+        break;
+    }
+    return TRUE;
 }
 
 #define URI_SHELL_CMD L"http://microsoft.test/shelltestresource"
 
-static WSMAN_OPTION noProfileOption = 
+static WSMAN_OPTION noProfileOption =
 {
     WSMAN_SHELL_OPTION_NOPROFILE,
-    L"TRUE",                 
+    L"TRUE",
     FALSE
 };
-static WSMAN_OPTION_SET noProfileOptionSet = 
+static WSMAN_OPTION_SET noProfileOptionSet =
 {
     1,
     &noProfileOption,
@@ -39,9 +39,9 @@ static WSMAN_OPTION_SET noProfileOptionSet =
 };
 
 class ShellClient
-{   
+{
 public:
-    ShellClient() 
+    ShellClient()
         :
         shellHandle(NULL),
         shellCreated(NULL),
@@ -104,11 +104,11 @@ public:
     {
         ZeroMemory(receiveBuffer, sizeof(receiveBuffer));
     }
-    ~ShellClient() 
+    ~ShellClient()
     {
         if (session)
         {
-			WSManCloseSession(session, 0);            
+            WSManCloseSession(session, 0);
         }
         if (apiHandle)
         {
@@ -137,9 +137,9 @@ public:
         if (send)
             CloseHandle(send);
     }
-    bool Initialize() 
+    bool Initialize()
     {
-		//Create Events to synchronize WSMan Async APIs
+        //Create Events to synchronize WSMan Async APIs
         shellCreated = CreateEvent(NULL, FALSE, FALSE, NULL);
         shellDeleted = CreateEvent(NULL, FALSE, FALSE, NULL);
         shellDisconnected = CreateEvent(NULL, FALSE, FALSE, NULL);
@@ -151,70 +151,70 @@ public:
         signal = CreateEvent(NULL, FALSE, FALSE, NULL);
         receive = CreateEvent(NULL, FALSE, FALSE, NULL);
         send = CreateEvent(NULL, FALSE, FALSE, NULL);
-        
+
         //INITIALIZE WSMAN CLIENT
-        if (!WSManInitialize(WSMAN_FLAG_REQUESTED_API_VERSION_1_1, &apiHandle))            
+        if (!WSManInitialize(WSMAN_FLAG_REQUESTED_API_VERSION_1_1, &apiHandle))
         {
-			return false;
+            return false;
         }
 
         WSMAN_AUTHENTICATION_CREDENTIALS creds;
         ZeroMemory(&creds, sizeof(WSMAN_AUTHENTICATION_CREDENTIALS));
-		/*Use the following to set authentication information
-		creds.authenticationMechanism = authFlag;
-		creds.userAccount.username = username;
-		creds.userAccount.password = password;
-		userPassCreds->certificateThumbprint = thumbprint;
-		userPassCreds->authenticationMechanism = WSMAN_FLAG_AUTH_CLIENT_CERTIFICATE;
-		*/
-		
-		//set connection string
-		PCWSTR connectionString = L"http://localhost:5985";
+        /*Use the following to set authentication information
+        creds.authenticationMechanism = authFlag;
+        creds.userAccount.username = username;
+        creds.userAccount.password = password;
+        userPassCreds->certificateThumbprint = thumbprint;
+        userPassCreds->authenticationMechanism = WSMAN_FLAG_AUTH_CLIENT_CERTIFICATE;
+        */
+
+        //set connection string
+        PCWSTR connectionString = L"http://localhost:5985";
 
         //CREATE SESSION
         DWORD errorCode = WSManCreateSession(apiHandle, connectionString, 0, &creds, NULL, &session);
         if (errorCode != ERROR_SUCCESS)
         {
-			return false;
+            return false;
         }
-        
-		//Set timeouts
-		WSMAN_DATA timeout;
+
+        //Set timeouts
+        WSMAN_DATA timeout;
         timeout.type = WSMAN_DATA_TYPE_DWORD;
         timeout.number = 10000;
         errorCode = WSManSetSessionOption(session, WSMAN_OPTION_TIMEOUTMS_CREATE_SHELL, &timeout);
         if (errorCode != ERROR_SUCCESS)
         {
-			return false;
+            return false;
         }
         errorCode = WSManSetSessionOption(session, WSMAN_OPTION_TIMEOUTMS_RUN_SHELL_COMMAND, &timeout);
         if (errorCode != ERROR_SUCCESS)
         {
-			return false;
+            return false;
         }
         errorCode = WSManSetSessionOption(session, WSMAN_OPTION_TIMEOUTMS_RECEIVE_SHELL_OUTPUT, &timeout);
         if (errorCode != ERROR_SUCCESS)
         {
-			return false;
+            return false;
         }
         errorCode = WSManSetSessionOption(session, WSMAN_OPTION_TIMEOUTMS_SEND_SHELL_INPUT, &timeout);
         if (errorCode != ERROR_SUCCESS)
         {
-			return false;
+            return false;
         }
         errorCode = WSManSetSessionOption(session, WSMAN_OPTION_TIMEOUTMS_SIGNAL_SHELL, &timeout);
         if (errorCode != ERROR_SUCCESS)
         {
-			return false;
+            return false;
         }
         errorCode = WSManSetSessionOption(session, WSMAN_OPTION_TIMEOUTMS_CLOSE_SHELL, &timeout);
         if (errorCode != ERROR_SUCCESS)
         {
-			return false;
+            return false;
         }
 
         return true;
-    }    
+    }
     bool CreateShell()
     {
         WSMAN_SHELL_ASYNC createShellAsync;
@@ -253,18 +253,18 @@ public:
         inboundData.text.bufferLength = wcslen(inboundData.text.buffer);
 
         WSManCreateShell(session, 0, shellUri, &startupInfo, NULL, &inboundData, &createShellAsync, &shellHandle);
-        
-		if (shellHandle == NULL)
-		{
-			return false;
-		}
 
-		if (!WaitForSingleObject(shellCreated, INFINITE) == WAIT_OBJECT_0)
-		{
-			return false;
-		}
+        if (shellHandle == NULL)
+        {
+            return false;
+        }
 
-		return true;
+        if (!WaitForSingleObject(shellCreated, INFINITE) == WAIT_OBJECT_0)
+        {
+            return false;
+        }
+
+        return true;
     }
 
     bool DeleteShell()
@@ -275,13 +275,13 @@ public:
             ZeroMemory(&deleteShellAsync, sizeof(WSMAN_SHELL_ASYNC));
             deleteShellAsync.operationContext = this;
             deleteShellAsync.completionFunction = (WSMAN_SHELL_COMPLETION_FUNCTION)ShellDeletedCallback;
-            
+
             WSManCloseShell(shellHandle, 0, &deleteShellAsync);
 
-			if (WaitForSingleObject(shellDeleted, INFINITE) != WAIT_OBJECT_0)
-			{
-				false;
-			}
+            if (WaitForSingleObject(shellDeleted, INFINITE) != WAIT_OBJECT_0)
+            {
+                false;
+            }
             shellHandle = NULL;
         }
         return true;
@@ -295,18 +295,18 @@ public:
             ZeroMemory(&disconnectShellAsync, sizeof(WSMAN_SHELL_ASYNC));
             disconnectShellAsync.operationContext = this;
             disconnectShellAsync.completionFunction = (WSMAN_SHELL_COMPLETION_FUNCTION)ShellDisconnectedCallback;
-            
+
             WSMAN_SHELL_DISCONNECT_INFO disconnectInfo;
             disconnectInfo.idleTimeoutMs = 3*60*1000;
             WSManDisconnectShell(shellHandle, 0, &disconnectInfo, &disconnectShellAsync);
 
-			if (WaitForSingleObject(shellDisconnected, INFINITE) != WAIT_OBJECT_0)
-			{
-				return false;
-			}
+            if (WaitForSingleObject(shellDisconnected, INFINITE) != WAIT_OBJECT_0)
+            {
+                return false;
+            }
         }
         return true;
-    } 
+    }
     bool ReconnectShell()
     {
         if (shellHandle)
@@ -315,13 +315,13 @@ public:
             ZeroMemory(&reconnectShellAsync, sizeof(WSMAN_SHELL_ASYNC));
             reconnectShellAsync.operationContext = this;
             reconnectShellAsync.completionFunction = (WSMAN_SHELL_COMPLETION_FUNCTION)ShellReconnectedCallback;
-            
+
             WSManReconnectShell(shellHandle, 0, &reconnectShellAsync);
 
-			if (WaitForSingleObject(shellReconnected, INFINITE) != WAIT_OBJECT_0)
-			{
-				return false;
-			}
+            if (WaitForSingleObject(shellReconnected, INFINITE) != WAIT_OBJECT_0)
+            {
+                return false;
+            }
         }
         return true;
     }
@@ -341,16 +341,16 @@ public:
 
         WSManConnectShell(session, 0, shellUri, shellID, NULL, &inboundData, &connectShellAsync, &shellHandle);
 
-		if (shellHandle == NULL)
-		{
-			return false;
-		}
+        if (shellHandle == NULL)
+        {
+            return false;
+        }
 
-		if (WaitForSingleObject(shellConnected, INFINITE) != WAIT_OBJECT_0)
-		{
-			return false;
-		}
-        
+        if (WaitForSingleObject(shellConnected, INFINITE) != WAIT_OBJECT_0)
+        {
+            return false;
+        }
+
         return true;
     }
 
@@ -363,15 +363,15 @@ public:
 
         WSManRunShellCommand(shellHandle, 0, command, NULL, NULL, &createCommandAsync, &commandHandle);
 
-		if (commandHandle == NULL)
-		{
-			return false;
-		}
+        if (commandHandle == NULL)
+        {
+            return false;
+        }
 
-		if (WaitForSingleObject(commandCreated, INFINITE) != WAIT_OBJECT_0)
-		{
-			return false;
-		}
+        if (WaitForSingleObject(commandCreated, INFINITE) != WAIT_OBJECT_0)
+        {
+            return false;
+        }
 
         return true;
     }
@@ -392,16 +392,16 @@ public:
 
         WSManConnectShellCommand(shellHandle, 0, commandId, NULL, &inboundData, &connectCommandAsync, &commandHandle);
 
-		if (commandHandle == NULL)
-		{
-			return false;
-		}
+        if (commandHandle == NULL)
+        {
+            return false;
+        }
 
-		if (WaitForSingleObject(commandConnected, INFINITE) != WAIT_OBJECT_0)
-		{
-			return false;
-		}
-		
+        if (WaitForSingleObject(commandConnected, INFINITE) != WAIT_OBJECT_0)
+        {
+            return false;
+        }
+
         return true;
     }
 
@@ -416,10 +416,10 @@ public:
 
             WSManCloseCommand(commandHandle, 0, &deleteCommandAsync);
 
-			if (WaitForSingleObject(commandDeleted, INFINITE) == WAIT_OBJECT_0)
-			{
-				return false;
-			}
+            if (WaitForSingleObject(commandDeleted, INFINITE) == WAIT_OBJECT_0)
+            {
+                return false;
+            }
             commandHandle = NULL;
         }
 
@@ -435,15 +435,15 @@ public:
 
         WSManSignalShell(shellHandle, commandHandle, 0, signalURL, &signalAsync, &signalHandle);
 
-		if (signalHandle == NULL)
-		{
-			return false;
-		}
+        if (signalHandle == NULL)
+        {
+            return false;
+        }
 
-		if (WaitForSingleObject(signal, INFINITE) != WAIT_OBJECT_0)
-		{
-			return false;
-		}
+        if (WaitForSingleObject(signal, INFINITE) != WAIT_OBJECT_0)
+        {
+            return false;
+        }
 
         return true;
     }
@@ -452,10 +452,10 @@ public:
     {
         if (signalHandle)
         {
-			if (!WSManCloseOperation(signalHandle, 0))
-			{
-				return false;
-			}
+            if (!WSManCloseOperation(signalHandle, 0))
+            {
+                return false;
+            }
             signalHandle = NULL;
         }
 
@@ -471,25 +471,25 @@ public:
 
         WSManReceiveShellOutput(shellHandle, commandHandle, 0, &stdoutSet, &receiveAsync, &receiveHandle);
         if (NULL == receiveHandle)
-		{
-			return false;
-		}
+        {
+            return false;
+        }
 
         return true;
     }
-    
+
     bool WaitAndCloseReceive()
     {
-		//wait for receive operation to complete
-		if (WaitForSingleObject(receive, INFINITE) != WAIT_OBJECT_0)
-		{
-			return false;
-		}
+        //wait for receive operation to complete
+        if (WaitForSingleObject(receive, INFINITE) != WAIT_OBJECT_0)
+        {
+            return false;
+        }
 
         if (!WSManCloseOperation(receiveHandle, 0))
-		{
-			return false;
-		}
+        {
+            return false;
+        }
         receiveHandle = NULL;
         return true;
     }
@@ -503,19 +503,19 @@ public:
 
         WSManSendShellInput(shellHandle, commandHandle, 0, stream, streamData, endOfStream, &sendAsync, &sendHandle);
         if (NULL == sendHandle)
-		{
-			return false;
+        {
+            return false;
         }
 
-		if (WaitForSingleObject(send, INFINITE) != WAIT_OBJECT_0)
-		{
-			return false;
-		}
+        if (WaitForSingleObject(send, INFINITE) != WAIT_OBJECT_0)
+        {
+            return false;
+        }
 
-		if (!WSManCloseOperation(sendHandle, 0))
-		{
-			return false;
-		}
+        if (!WSManCloseOperation(sendHandle, 0))
+        {
+            return false;
+        }
 
         return true;
     }
@@ -525,12 +525,12 @@ public:
         _In_ PVOID operationContext,                     //user defined context
         DWORD flags,                                         // one or more flags from WSManCallbackFlags
         _In_ WSMAN_ERROR *error,                             // error allocated and owned by the winrm stack; valid in the callback only;
-        _In_ WSMAN_SHELL_HANDLE shell,                      // shell handle associated with the user context 
-        _In_opt_ WSMAN_COMMAND_HANDLE command,              // command handle associated with the user context  
-        _In_opt_ WSMAN_OPERATION_HANDLE operationHandle,     // valid only for Send/Receive/Signal operations; must be closed using WSManCloseOperation  
+        _In_ WSMAN_SHELL_HANDLE shell,                      // shell handle associated with the user context
+        _In_opt_ WSMAN_COMMAND_HANDLE command,              // command handle associated with the user context
+        _In_opt_ WSMAN_OPERATION_HANDLE operationHandle,     // valid only for Send/Receive/Signal operations; must be closed using WSManCloseOperation
         _In_opt_ WSMAN_RESPONSE_DATA *data             // output data from command/shell; allocated internally and owned by the winrm stack
-                                                             // valid only within this function
-        )
+        // valid only within this function
+    )
     {
         ShellClient *pThis = (ShellClient*) operationContext;
         pThis->shellCreatedError = error->code;
@@ -542,12 +542,12 @@ public:
         _In_ PVOID operationContext,                     //user defined context
         DWORD flags,                                         // one or more flags from WSManCallbackFlags
         _In_ WSMAN_ERROR *error,                             // error allocated and owned by the winrm stack; valid in the callback only;
-        _In_ WSMAN_SHELL_HANDLE shell,                       // shell handle associated with the user context 
-        _In_opt_ WSMAN_COMMAND_HANDLE command,               // command handle associated with the user context  
-        _In_opt_ WSMAN_OPERATION_HANDLE operationHandle,     // valid only for Send/Receive/Signal operations; must be closed using WSManCloseOperation  
+        _In_ WSMAN_SHELL_HANDLE shell,                       // shell handle associated with the user context
+        _In_opt_ WSMAN_COMMAND_HANDLE command,               // command handle associated with the user context
+        _In_opt_ WSMAN_OPERATION_HANDLE operationHandle,     // valid only for Send/Receive/Signal operations; must be closed using WSManCloseOperation
         _In_opt_ WSMAN_RESPONSE_DATA *data             // output data from command/shell; allocated internally and owned by the winrm stack
-                                                             // valid only within this function
-        )
+        // valid only within this function
+    )
     {
         ShellClient *pThis = (ShellClient*) operationContext;
         pThis->shellDeletedError = error->code;
@@ -559,12 +559,12 @@ public:
         _In_ PVOID operationContext,                     //user defined context
         DWORD flags,                                         // one or more flags from WSManCallbackFlags
         _In_ WSMAN_ERROR *error,                             // error allocated and owned by the winrm stack; valid in the callback only;
-        _In_ WSMAN_SHELL_HANDLE shell,                       // shell handle associated with the user context 
-        _In_opt_ WSMAN_COMMAND_HANDLE command,               // command handle associated with the user context  
-        _In_opt_ WSMAN_OPERATION_HANDLE operationHandle,     // valid only for Send/Receive/Signal operations; must be closed using WSManCloseOperation  
+        _In_ WSMAN_SHELL_HANDLE shell,                       // shell handle associated with the user context
+        _In_opt_ WSMAN_COMMAND_HANDLE command,               // command handle associated with the user context
+        _In_opt_ WSMAN_OPERATION_HANDLE operationHandle,     // valid only for Send/Receive/Signal operations; must be closed using WSManCloseOperation
         _In_opt_ WSMAN_RESPONSE_DATA *data             // output data from command/shell; allocated internally and owned by the winrm stack
-                                                             // valid only within this function
-        )
+        // valid only within this function
+    )
     {
         ShellClient *pThis = (ShellClient*) operationContext;
         pThis->shellDisconnectedError = error->code;
@@ -576,12 +576,12 @@ public:
         _In_ PVOID operationContext,                     //user defined context
         DWORD flags,                                         // one or more flags from WSManCallbackFlags
         _In_ WSMAN_ERROR *error,                             // error allocated and owned by the winrm stack; valid in the callback only;
-        _In_ WSMAN_SHELL_HANDLE shell,                       // shell handle associated with the user context 
-        _In_opt_ WSMAN_COMMAND_HANDLE command,               // command handle associated with the user context  
-        _In_opt_ WSMAN_OPERATION_HANDLE operationHandle,     // valid only for Send/Receive/Signal operations; must be closed using WSManCloseOperation  
+        _In_ WSMAN_SHELL_HANDLE shell,                       // shell handle associated with the user context
+        _In_opt_ WSMAN_COMMAND_HANDLE command,               // command handle associated with the user context
+        _In_opt_ WSMAN_OPERATION_HANDLE operationHandle,     // valid only for Send/Receive/Signal operations; must be closed using WSManCloseOperation
         _In_opt_ WSMAN_RESPONSE_DATA *data             // output data from command/shell; allocated internally and owned by the winrm stack
-                                                             // valid only within this function
-        )
+        // valid only within this function
+    )
     {
         ShellClient *pThis = (ShellClient*) operationContext;
         pThis->shellReconnectedError = error->code;
@@ -593,12 +593,12 @@ public:
         _In_ PVOID operationContext,                     //user defined context
         DWORD flags,                                         // one or more flags from WSManCallbackFlags
         _In_ WSMAN_ERROR *error,                             // error allocated and owned by the winrm stack; valid in the callback only;
-        _In_ WSMAN_SHELL_HANDLE shell,                      // shell handle associated with the user context 
-        _In_opt_ WSMAN_COMMAND_HANDLE command,              // command handle associated with the user context  
-        _In_opt_ WSMAN_OPERATION_HANDLE operationHandle,     // valid only for Send/Receive/Signal operations; must be closed using WSManCloseOperation  
+        _In_ WSMAN_SHELL_HANDLE shell,                      // shell handle associated with the user context
+        _In_opt_ WSMAN_COMMAND_HANDLE command,              // command handle associated with the user context
+        _In_opt_ WSMAN_OPERATION_HANDLE operationHandle,     // valid only for Send/Receive/Signal operations; must be closed using WSManCloseOperation
         _In_opt_ WSMAN_RESPONSE_DATA *data             // output data from command/shell; allocated internally and owned by the winrm stack
-                                                             // valid only within this function
-        )
+        // valid only within this function
+    )
     {
         ShellClient *pThis = (ShellClient*) operationContext;
         pThis->shellConnectedError = error->code;
@@ -610,12 +610,12 @@ public:
         _In_ PVOID operationContext,                     //user defined context
         DWORD flags,                                         // one or more flags from WSManCallbackFlags
         _In_ WSMAN_ERROR *error,                             // error allocated and owned by the winrm stack; valid in the callback only;
-        _In_ WSMAN_SHELL_HANDLE shell,                      // shell handle associated with the user context 
-        _In_opt_ WSMAN_COMMAND_HANDLE command,              // command handle associated with the user context  
-        _In_opt_ WSMAN_OPERATION_HANDLE operationHandle,     // valid only for Send/Receive/Signal operations; must be closed using WSManCloseOperation  
+        _In_ WSMAN_SHELL_HANDLE shell,                      // shell handle associated with the user context
+        _In_opt_ WSMAN_COMMAND_HANDLE command,              // command handle associated with the user context
+        _In_opt_ WSMAN_OPERATION_HANDLE operationHandle,     // valid only for Send/Receive/Signal operations; must be closed using WSManCloseOperation
         _In_opt_ WSMAN_RESPONSE_DATA *data             // output data from command/shell; allocated internally and owned by the winrm stack
-                                                             // valid only within this function
-        )
+        // valid only within this function
+    )
     {
         ShellClient *pThis = (ShellClient*) operationContext;
         pThis->commandCreatedError = error->code;
@@ -627,12 +627,12 @@ public:
         _In_ PVOID operationContext,                     //user defined context
         DWORD flags,                                         // one or more flags from WSManCallbackFlags
         _In_ WSMAN_ERROR *error,                             // error allocated and owned by the winrm stack; valid in the callback only;
-        _In_ WSMAN_SHELL_HANDLE shell,             // shell handle associated with the user context 
-        _In_opt_ WSMAN_COMMAND_HANDLE command,       // command handle associated with the user context  
-        _In_opt_ WSMAN_OPERATION_HANDLE operationHandle,     // valid only for Send/Receive/Signal operations; must be closed using WSManCloseOperation  
+        _In_ WSMAN_SHELL_HANDLE shell,             // shell handle associated with the user context
+        _In_opt_ WSMAN_COMMAND_HANDLE command,       // command handle associated with the user context
+        _In_opt_ WSMAN_OPERATION_HANDLE operationHandle,     // valid only for Send/Receive/Signal operations; must be closed using WSManCloseOperation
         _In_opt_ WSMAN_RESPONSE_DATA *data             // output data from command/shell; allocated internally and owned by the winrm stack
-                                                             // valid only within this function
-        )
+        // valid only within this function
+    )
     {
         ShellClient *pThis = (ShellClient*) operationContext;
         pThis->commandDeletedError = error->code;
@@ -644,12 +644,12 @@ public:
         _In_ PVOID operationContext,                     //user defined context
         DWORD flags,                                         // one or more flags from WSManCallbackFlags
         _In_ WSMAN_ERROR *error,                             // error allocated and owned by the winrm stack; valid in the callback only;
-        _In_ WSMAN_SHELL_HANDLE shell,                      // shell handle associated with the user context 
-        _In_opt_ WSMAN_COMMAND_HANDLE command,              // command handle associated with the user context  
-        _In_opt_ WSMAN_OPERATION_HANDLE operationHandle,     // valid only for Send/Receive/Signal operations; must be closed using WSManCloseOperation  
+        _In_ WSMAN_SHELL_HANDLE shell,                      // shell handle associated with the user context
+        _In_opt_ WSMAN_COMMAND_HANDLE command,              // command handle associated with the user context
+        _In_opt_ WSMAN_OPERATION_HANDLE operationHandle,     // valid only for Send/Receive/Signal operations; must be closed using WSManCloseOperation
         _In_opt_ WSMAN_RESPONSE_DATA *data             // output data from command/shell; allocated internally and owned by the winrm stack
-                                                             // valid only within this function
-        )
+        // valid only within this function
+    )
     {
         ShellClient *pThis = (ShellClient*) operationContext;
         pThis->commandConnectedError = error->code;
@@ -661,12 +661,12 @@ public:
         _In_ PVOID operationContext,                     //user defined context
         DWORD flags,                                         // one or more flags from WSManCallbackFlags
         _In_ WSMAN_ERROR *error,                             // error allocated and owned by the winrm stack; valid in the callback only;
-        _In_ WSMAN_SHELL_HANDLE shell,             // shell handle associated with the user context 
-        _In_opt_ WSMAN_COMMAND_HANDLE command,       // command handle associated with the user context  
-        _In_opt_ WSMAN_OPERATION_HANDLE operationHandle,     // valid only for Send/Receive/Signal operations; must be closed using WSManCloseOperation  
+        _In_ WSMAN_SHELL_HANDLE shell,             // shell handle associated with the user context
+        _In_opt_ WSMAN_COMMAND_HANDLE command,       // command handle associated with the user context
+        _In_opt_ WSMAN_OPERATION_HANDLE operationHandle,     // valid only for Send/Receive/Signal operations; must be closed using WSManCloseOperation
         _In_opt_ WSMAN_RESPONSE_DATA *data             // output data from command/shell; allocated internally and owned by the winrm stack
-                                                             // valid only within this function
-        )
+        // valid only within this function
+    )
     {
         ShellClient *pThis = (ShellClient*) operationContext;
         pThis->signalError = error->code;
@@ -678,19 +678,19 @@ public:
         _In_ PVOID operationContext,                     //user defined context
         DWORD flags,                                         // one or more flags from WSManCallbackFlags
         _In_ WSMAN_ERROR *error,                             // error allocated and owned by the winrm stack; valid in the callback only;
-        _In_ WSMAN_SHELL_HANDLE shell,             // shell handle associated with the user context 
-        _In_opt_ WSMAN_COMMAND_HANDLE command,       // command handle associated with the user context  
-        _In_opt_ WSMAN_OPERATION_HANDLE operationHandle,     // valid only for Send/Receive/Signal operations; must be closed using WSManCloseOperation  
+        _In_ WSMAN_SHELL_HANDLE shell,             // shell handle associated with the user context
+        _In_opt_ WSMAN_COMMAND_HANDLE command,       // command handle associated with the user context
+        _In_opt_ WSMAN_OPERATION_HANDLE operationHandle,     // valid only for Send/Receive/Signal operations; must be closed using WSManCloseOperation
         _In_opt_ WSMAN_RESPONSE_DATA *data             // output data from command/shell; allocated internally and owned by the winrm stack
-                                                             // valid only within this function
-        )
+        // valid only within this function
+    )
     {
         ShellClient *pThis = (ShellClient*) operationContext;
         pThis->receiveError = error->code;
         pThis->receiveCount++;
         if(data)
         {
-            WSMAN_RECEIVE_DATA_RESULT* receivedata = &(data->receiveData);            
+            WSMAN_RECEIVE_DATA_RESULT* receivedata = &(data->receiveData);
             //TASSERT(receivedata->streamData.type == WSMAN_DATA_TYPE_BINARY, L"receive binary data");
             if (pThis->receiveByteCount + receivedata->streamData.binaryData.dataLength < 1024) //receiveBuffer is max 1024 in size
             {
@@ -703,7 +703,7 @@ public:
             pThis->receiveEndOfStreamCount++;
         }
         if ((flags & WSMAN_FLAG_CALLBACK_END_OF_OPERATION) ||
-            (pThis->receiveSignalEveryResult))
+                (pThis->receiveSignalEveryResult))
         {
             SetEvent(pThis->receive);
         }
@@ -713,12 +713,12 @@ public:
         _In_ PVOID operationContext,                     //user defined context
         DWORD flags,                                         // one or more flags from WSManCallbackFlags
         _In_ WSMAN_ERROR *error,                             // error allocated and owned by the winrm stack; valid in the callback only;
-        _In_ WSMAN_SHELL_HANDLE shell,             // shell handle associated with the user context 
-        _In_opt_ WSMAN_COMMAND_HANDLE command,       // command handle associated with the user context  
-        _In_opt_ WSMAN_OPERATION_HANDLE operationHandle,     // valid only for Send/Receive/Signal operations; must be closed using WSManCloseOperation  
+        _In_ WSMAN_SHELL_HANDLE shell,             // shell handle associated with the user context
+        _In_opt_ WSMAN_COMMAND_HANDLE command,       // command handle associated with the user context
+        _In_opt_ WSMAN_OPERATION_HANDLE operationHandle,     // valid only for Send/Receive/Signal operations; must be closed using WSManCloseOperation
         _In_opt_ WSMAN_RESPONSE_DATA *data             // output data from command/shell; allocated internally and owned by the winrm stack
-                                                             // valid only within this function
-        )
+        // valid only within this function
+    )
     {
         ShellClient *pThis = (ShellClient*) operationContext;
         pThis->sendError = error->code;

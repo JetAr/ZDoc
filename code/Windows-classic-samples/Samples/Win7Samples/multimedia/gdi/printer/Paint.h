@@ -1,11 +1,11 @@
-
+﻿
 /******************************************************************************\
-*       This is a part of the Microsoft Source Code Samples. 
+*       This is a part of the Microsoft Source Code Samples.
 *       Copyright 1993 - 2000 Microsoft Corporation.
-*       All rights reserved. 
-*       This source code is only intended as a supplement to 
+*       All rights reserved.
+*       This source code is only intended as a supplement to
 *       Microsoft Development Tools and/or WinHelp documentation.
-*       See these sources for detailed information regarding the 
+*       See these sources for detailed information regarding the
 *       Microsoft samples programs.
 \******************************************************************************/
 
@@ -34,21 +34,21 @@
 
 typedef struct
 {
-  int left;
-  int top;
-  int right;
-  int bottom;
+    int left;
+    int top;
+    int right;
+    int bottom;
 
 } RECTI, *PRECTI;
 
 typedef struct tagArFonts
 {
-  int        nFonts;
-  int        cySpace;
-  HDC        hdc;
-  LOGFONT    *lf;
-  TEXTMETRIC *tm;
-  int        *Type;
+    int        nFonts;
+    int        cySpace;
+    HDC        hdc;
+    LOGFONT    *lf;
+    TEXTMETRIC *tm;
+    int        *Type;
 
 } ARFONTS, *PARFONTS;
 

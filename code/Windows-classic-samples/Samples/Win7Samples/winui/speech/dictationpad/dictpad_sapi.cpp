@@ -1,13 +1,13 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
 //
-// Copyright � Microsoft Corporation. All rights reserved
+// Copyright © Microsoft Corporation. All rights reserved
 
 /******************************************************************************
-*   dictpad_sapi.cpp 
-*       This file contains the methods of CDictationPad that 
+*   dictpad_sapi.cpp
+*       This file contains the methods of CDictationPad that
 *       pertain to the SAPI interfaces used in this app.
 ******************************************************************************/
 #include "stdafx.h"
@@ -20,10 +20,10 @@
 #define SAPIINITERR _T("SAPI Inititalization Error")
 
 #ifndef _DEBUG
-    #define DUMP_EVENT_NAME(x)
+#define DUMP_EVENT_NAME(x)
 #else
-    void DumpEventName(int id);     // forward definition
-    #define DUMP_EVENT_NAME(x) DumpEventName(x)
+void DumpEventName(int id);     // forward definition
+#define DUMP_EVENT_NAME(x) DumpEventName(x)
 #endif
 
 /****************************************************************************
@@ -34,10 +34,10 @@
 *       Set up the SR and TTS objects and obtains the relevant information
 *       about them.
 *       If any errors occur in the initialization, compains.
-*   Return: 
+*   Return:
 *       S_OK
 *       failed HRESULTs of the various SAPI initialization routines
-*****************************************************************************/   
+*****************************************************************************/
 HRESULT CDictationPad::InitializeSAPIObjs()
 {
     HRESULT hr = S_OK;
@@ -46,8 +46,8 @@ HRESULT CDictationPad::InitializeSAPIObjs()
     if ( m_pRecoEventMgr->IsProcessingPhrase()  && (m_dwFlags & DP_DICTATION_MODE) )
     {
         m_pRecoEventMgr->FalseRecognition();
-        ::SendMessage( m_hToolBar, TB_SETSTATE, IDM_PLAY, 
-            MAKELONG( TBSTATE_ENABLED, 0 ) );
+        ::SendMessage( m_hToolBar, TB_SETSTATE, IDM_PLAY,
+                       MAKELONG( TBSTATE_ENABLED, 0 ) );
         if ( m_pCandidateList )
         {
             m_pCandidateList->ShowButton( true );
@@ -76,8 +76,8 @@ HRESULT CDictationPad::InitializeSAPIObjs()
         hr = ::CreateStreamOnHGlobal( NULL, TRUE, &cpTextRunListStream );
         if ( SUCCEEDED( hr ) )
         {
-            hr = m_pTextRunList->Serialize( 
-                cpTextRunListStream, m_cpDictRecoCtxt );
+            hr = m_pTextRunList->Serialize(
+                     cpTextRunListStream, m_cpDictRecoCtxt );
         }
 
         // Commit the changes to the stream so that we can read them later
@@ -96,7 +96,7 @@ HRESULT CDictationPad::InitializeSAPIObjs()
     }
 
     // Release the SAPI object in the reverse order in which they
-    // were created.  This will ensure that everything really does 
+    // were created.  This will ensure that everything really does
     // get released
     if ( m_cpVoice )
     {
@@ -127,8 +127,8 @@ HRESULT CDictationPad::InitializeSAPIObjs()
     {
         // Inproc reco engine.
         hr = m_cpRecoEngine.CoCreateInstance( CLSID_SpInprocRecognizer );
-    
-        // For an inproc reco engine, we need to call ISpRecognizer::SetInput() 
+
+        // For an inproc reco engine, we need to call ISpRecognizer::SetInput()
         // ourselves.
         CComPtr<ISpObjectToken> cpAudioToken;
         if (SUCCEEDED(hr))
@@ -141,7 +141,7 @@ HRESULT CDictationPad::InitializeSAPIObjs()
             hr = m_cpRecoEngine->SetInput(cpAudioToken, TRUE);
         }
     }
-    
+
     if ( FAILED( hr ) )
     {
 #ifdef _DEBUG
@@ -169,7 +169,7 @@ HRESULT CDictationPad::InitializeSAPIObjs()
         return hr;
     }
 
-    // Now that there is a recognition context, deserialize the text-run list 
+    // Now that there is a recognition context, deserialize the text-run list
     // (serialized before any pre-existing recognition context was released)
     // using the new reco context
     if ( cpTextRunListStream )
@@ -295,8 +295,8 @@ HRESULT CDictationPad::InitializeSAPIObjs()
         ::MessageBox( m_hClient, _T("Querying engine for 'SPDUI_UserTraining' support failed"), SAPIINITERR, MB_OK );
     }
 #endif
-    ::EnableMenuItem( hMenu, IDM_VOICE_TRAINING, 
-        ( (SUCCEEDED(hrUISupport) && fSupported) ? MF_ENABLED: MF_GRAYED ) );
+    ::EnableMenuItem( hMenu, IDM_VOICE_TRAINING,
+                      ( (SUCCEEDED(hrUISupport) && fSupported) ? MF_ENABLED: MF_GRAYED ) );
 
     // Mic training UI
     hrUISupport = m_cpRecoEngine->IsUISupported( SPDUI_MicTraining, NULL, 0, &fSupported );
@@ -306,8 +306,8 @@ HRESULT CDictationPad::InitializeSAPIObjs()
         ::MessageBox( m_hClient, _T("Querying engine for 'SPDUI_MicTraining' support failed"), SAPIINITERR, MB_OK );
     }
 #endif
-    ::EnableMenuItem( hMenu, IDM_MICROPHONE_SETUP, 
-        ( (SUCCEEDED(hrUISupport) && fSupported) ? MF_ENABLED: MF_GRAYED ) );
+    ::EnableMenuItem( hMenu, IDM_MICROPHONE_SETUP,
+                      ( (SUCCEEDED(hrUISupport) && fSupported) ? MF_ENABLED: MF_GRAYED ) );
 
     // Add/Remove words UI
     hrUISupport = m_cpRecoEngine->IsUISupported( SPDUI_AddRemoveWord, NULL, 0, &fSupported );
@@ -317,8 +317,8 @@ HRESULT CDictationPad::InitializeSAPIObjs()
         ::MessageBox( m_hClient, _T("Querying engine for 'SPDUI_AddRemoveWord' support failed"), SAPIINITERR, MB_OK );
     }
 #endif
-    ::EnableMenuItem( hMenu, IDM_ADDREMOVEWORDS, 
-        ( (SUCCEEDED(hrUISupport) && fSupported) ? MF_ENABLED: MF_GRAYED ) );
+    ::EnableMenuItem( hMenu, IDM_ADDREMOVEWORDS,
+                      ( (SUCCEEDED(hrUISupport) && fSupported) ? MF_ENABLED: MF_GRAYED ) );
 
     return S_OK;
 }   /* CDictationPad::InitializeSAPIObjs */
@@ -377,7 +377,7 @@ HRESULT CDictationPad::InitSAPICallback( HWND hWnd )
 
     // ISpRecoContext::SetInterest() allows the caller to indicate
     // which types of SAPI events it wants to be notified about.
-    // Initially set interest in no events for the recognition contexts; 
+    // Initially set interest in no events for the recognition contexts;
     // The event interests will be set when the grammars are first activated
     if ( SUCCEEDED( hr ) )
     {
@@ -437,7 +437,7 @@ HRESULT CDictationPad::LoadGrammars()
     {
         langid = Stat.aLangID[0];
     }
-    
+
 
     // Create the grammar for the commands that are available for dictation mode.
     // The compiled C&C grammars are resources in this project
@@ -448,8 +448,8 @@ HRESULT CDictationPad::LoadGrammars()
         if (SUCCEEDED(hr))
         {
             hr = m_cpDictCCGrammar->LoadCmdFromResource(NULL, (const WCHAR*)MAKEINTRESOURCE(IDR_DICTATION_MODE_CFG),
-                                                   L"SRGRAMMAR", langid,
-                                                   SPLO_STATIC);
+                    L"SRGRAMMAR", langid,
+                    SPLO_STATIC);
         }
         if (FAILED(hr))
         {
@@ -483,7 +483,7 @@ HRESULT CDictationPad::LoadGrammars()
 *-------------------------------------*
 *   Description:
 *       Called whenever there is an SR event from the dictation
-*       reco context.  
+*       reco context.
 *       Processes the event appropriately.
 *   Return:
 *       true iff successful
@@ -496,172 +496,172 @@ bool CDictationPad::SRDictEventHandler()
     while ( event.GetFrom(m_cpDictRecoCtxt) == S_OK )
     {
         DUMP_EVENT_NAME(event.eEventId);
-        
+
         switch (event.eEventId)
         {
-            // PHRASE_START: The engine heard the start of sounds that it thinks
-            // is recognizable speech.
-            // This event is guaranteed to be followed eventually by either an
-            // SPEI_RECOGNITION or an SPEI_FALSE_RECOGNITION
-            case SPEI_PHRASE_START:
-            {    
-                // We don't expect SR events during a playback
-                _ASSERTE( !(m_dwFlags & DP_IS_SPEAKING) );
+        // PHRASE_START: The engine heard the start of sounds that it thinks
+        // is recognizable speech.
+        // This event is guaranteed to be followed eventually by either an
+        // SPEI_RECOGNITION or an SPEI_FALSE_RECOGNITION
+        case SPEI_PHRASE_START:
+        {
+            // We don't expect SR events during a playback
+            _ASSERTE( !(m_dwFlags & DP_IS_SPEAKING) );
 
-                HIMC himc = ::ImmGetContext( m_hClient );
-                ::ImmNotifyIME( himc, NI_COMPOSITIONSTR, CPS_CANCEL, 0 );
+            HIMC himc = ::ImmGetContext( m_hClient );
+            ::ImmNotifyIME( himc, NI_COMPOSITIONSTR, CPS_CANCEL, 0 );
 
-                // Throw out this event unless our grammars are active
-                // and we are in dictation mode.
-                // This will get rid of PHRASE_STARTs from other reco contexts
-                if ( !(m_dwFlags & DP_GRAMMARS_ACTIVE) || !(m_dwFlags & DP_DICTATION_MODE) )
-                {
-                    break;
-                }
-        
-                // Alternates UI and playback should be disabled
-                ::SendMessage( m_hToolBar, TB_SETSTATE, IDM_PLAY, MAKELONG(TBSTATE_INDETERMINATE, 0) );
-                if ( m_pCandidateList )
-                {
-                    m_pCandidateList->ShowButton( false );
-                }
-
-                // Tell the recoevent manager about what the selection is now,
-                // and move the selection to an IP at the end of the "waiting" text (...)
-                // This move should not trigger an update
-                m_dwFlags |= DP_SKIP_UPDATE;
-                HRESULT hr = m_pRecoEventMgr->PhraseStart( *m_cpTextSel );
-                m_dwFlags &= ~DP_SKIP_UPDATE;
-                if ( FAILED( hr ) )
-                {
-                    return false;
-                }
-
-                // Status bar update
-                {
-                    CSpDynamicString dstr;
-                    dstr = L"Dictation mode";
-                    ::SendMessage( m_hStatusBar, SB_SETTEXT, 0 | SBT_NOBORDERS, (LPARAM)(LPTSTR)CW2T( dstr ) );
-                }
+            // Throw out this event unless our grammars are active
+            // and we are in dictation mode.
+            // This will get rid of PHRASE_STARTs from other reco contexts
+            if ( !(m_dwFlags & DP_GRAMMARS_ACTIVE) || !(m_dwFlags & DP_DICTATION_MODE) )
+            {
                 break;
             }
 
-            // SPEI_RECO_STATE_CHANGE: For whatever reason, SAPI found it necessary to change the
-            // reco state.
-            // This can happen e.g. if a shared recognizer is running and some other context using 
-            // that recognizer changes its RecoState
-            case SPEI_RECO_STATE_CHANGE:
-                if (event.RecoState() == SPRST_INACTIVE)
-                    SetGrammarState( (event.RecoState() != SPRST_INACTIVE) );
-                break;
-
-            // FALSE_RECOGNITION: The engine thought this utterance might be recognizable speech,
-            // but it turned out not to be
-            // RECO_OTHER_CONTEXT: This will happen in the shared case.  If some other app
-            // is using the engine at the same time, and it gets a recognition, then DictationPad
-            // will get this message to indicate that the utterance was recognized, just for 
-            // someone else
-            case SPEI_FALSE_RECOGNITION:
-            case SPEI_RECO_OTHER_CONTEXT:
-                // Throw out this event unless our grammars are active
-                // and we are in dictation mode.
-                // This will get rid of PHRASE_STARTs from other reco contexts
-                if ( !(m_dwFlags & DP_GRAMMARS_ACTIVE) || !(m_dwFlags & DP_DICTATION_MODE) )
-                {
-                    break;
-                }
-
-                m_pRecoEventMgr->FalseRecognition();
-                ::SendMessage( m_hToolBar, TB_SETSTATE, IDM_PLAY, 
-                    MAKELONG( TBSTATE_ENABLED, 0 ) );
-                if ( m_pCandidateList )
-                {
-                    m_pCandidateList->ShowButton( m_pCandidateList->FHasAlternates() );
-                }
-
-                // This will unleash any WM_COMMANDs that were waiting
-                m_pRecoEventMgr->DoneProcessingPhrase();
-                
-                break;
-
-            // HYPOTHESIS: One of a set of ongoing "guesses" that the engine makes.
-            //              Any number of these can precede an SPEI_RECOGNITION
-            // RECOGNITION: The engine is done processing the utterance and has a result
-            case SPEI_HYPOTHESIS:
-            case SPEI_RECOGNITION:
+            // Alternates UI and playback should be disabled
+            ::SendMessage( m_hToolBar, TB_SETSTATE, IDM_PLAY, MAKELONG(TBSTATE_INDETERMINATE, 0) );
+            if ( m_pCandidateList )
             {
-                if ( m_dwFlags & DP_IS_SPEAKING )
+                m_pCandidateList->ShowButton( false );
+            }
+
+            // Tell the recoevent manager about what the selection is now,
+            // and move the selection to an IP at the end of the "waiting" text (...)
+            // This move should not trigger an update
+            m_dwFlags |= DP_SKIP_UPDATE;
+            HRESULT hr = m_pRecoEventMgr->PhraseStart( *m_cpTextSel );
+            m_dwFlags &= ~DP_SKIP_UPDATE;
+            if ( FAILED( hr ) )
+            {
+                return false;
+            }
+
+            // Status bar update
+            {
+                CSpDynamicString dstr;
+                dstr = L"Dictation mode";
+                ::SendMessage( m_hStatusBar, SB_SETTEXT, 0 | SBT_NOBORDERS, (LPARAM)(LPTSTR)CW2T( dstr ) );
+            }
+            break;
+        }
+
+        // SPEI_RECO_STATE_CHANGE: For whatever reason, SAPI found it necessary to change the
+        // reco state.
+        // This can happen e.g. if a shared recognizer is running and some other context using
+        // that recognizer changes its RecoState
+        case SPEI_RECO_STATE_CHANGE:
+            if (event.RecoState() == SPRST_INACTIVE)
+                SetGrammarState( (event.RecoState() != SPRST_INACTIVE) );
+            break;
+
+        // FALSE_RECOGNITION: The engine thought this utterance might be recognizable speech,
+        // but it turned out not to be
+        // RECO_OTHER_CONTEXT: This will happen in the shared case.  If some other app
+        // is using the engine at the same time, and it gets a recognition, then DictationPad
+        // will get this message to indicate that the utterance was recognized, just for
+        // someone else
+        case SPEI_FALSE_RECOGNITION:
+        case SPEI_RECO_OTHER_CONTEXT:
+            // Throw out this event unless our grammars are active
+            // and we are in dictation mode.
+            // This will get rid of PHRASE_STARTs from other reco contexts
+            if ( !(m_dwFlags & DP_GRAMMARS_ACTIVE) || !(m_dwFlags & DP_DICTATION_MODE) )
+            {
+                break;
+            }
+
+            m_pRecoEventMgr->FalseRecognition();
+            ::SendMessage( m_hToolBar, TB_SETSTATE, IDM_PLAY,
+                           MAKELONG( TBSTATE_ENABLED, 0 ) );
+            if ( m_pCandidateList )
+            {
+                m_pCandidateList->ShowButton( m_pCandidateList->FHasAlternates() );
+            }
+
+            // This will unleash any WM_COMMANDs that were waiting
+            m_pRecoEventMgr->DoneProcessingPhrase();
+
+            break;
+
+        // HYPOTHESIS: One of a set of ongoing "guesses" that the engine makes.
+        //              Any number of these can precede an SPEI_RECOGNITION
+        // RECOGNITION: The engine is done processing the utterance and has a result
+        case SPEI_HYPOTHESIS:
+        case SPEI_RECOGNITION:
+        {
+            if ( m_dwFlags & DP_IS_SPEAKING )
+            {
+                // Don't handle reco notifications if a playback is going on
+                break;
+            }
+
+            ISpRecoResult *pResult = event.RecoResult();
+            if ( !pResult )
+            {
+                // We expect these events to come with reco results
+                return false;
+            }
+
+            // The result can be either from the dictation grammar
+            // or from the dictation-mode C&C grammar
+            SPPHRASE * pPhrase = NULL;
+            HRESULT hr = pResult->GetPhrase( &pPhrase );
+
+            bool fSuccess = false;
+            if ( SUCCEEDED( hr ) )
+            {
+                switch( pPhrase->ullGrammarID )
                 {
-                    // Don't handle reco notifications if a playback is going on
+                case GID_DICTATION:
+
+                    // Put the hypotesis or recognition into the edit window
+                    fSuccess = ProcessDictation( *pResult, event.eEventId );
                     break;
-                }
 
-                ISpRecoResult *pResult = event.RecoResult();
-                if ( !pResult )
-                {
-                    // We expect these events to come with reco results
-                    return false;
-                }
+                case GID_DICTATIONCC:
 
-                // The result can be either from the dictation grammar
-                // or from the dictation-mode C&C grammar
-                SPPHRASE * pPhrase = NULL;
-                HRESULT hr = pResult->GetPhrase( &pPhrase );
-                
-                bool fSuccess = false;
-                if ( SUCCEEDED( hr ) )
-                {
-                    switch( pPhrase->ullGrammarID )
+                    // Don't handle hypotheses, since this is just a command
+                    if ( event.eEventId == SPEI_HYPOTHESIS )
                     {
-                    case GID_DICTATION:
-
-                        // Put the hypotesis or recognition into the edit window
-                        fSuccess = ProcessDictation( *pResult, event.eEventId );
-                        break;
-
-                    case GID_DICTATIONCC:
-                        
-                        // Don't handle hypotheses, since this is just a command
-                        if ( event.eEventId == SPEI_HYPOTHESIS )
-                        {
-                            fSuccess = true;
-                            break;
-                        }
-
-                        // Carry out the command
-                        fSuccess = ProcessDictationModeCommands( *pResult );
-                        break;
-                        
-                    default:
-                        // We should not be seeing any events from other grammars
-                        _ASSERTE( false );
-                        fSuccess = false;
+                        fSuccess = true;
                         break;
                     }
-                    ::CoTaskMemFree(pPhrase);
-                }
-                
-                if ( SPEI_RECOGNITION == event.eEventId )
-                {
-                    // The playback option will have been disabled by the 
-                    // PHRASE_START event for this utterance.
-                    // Since we are done processing this utterance,
-                    // playback can now be re-enabled
-                    ::SendMessage( m_hToolBar, TB_SETSTATE, IDM_PLAY, 
-                        MAKELONG( TBSTATE_ENABLED, 0 ) );
-                }
 
-                if ( !fSuccess || FAILED( hr ) )
-                {
-                    // Bail: something went wrong
-                    return false;
-                }
+                    // Carry out the command
+                    fSuccess = ProcessDictationModeCommands( *pResult );
+                    break;
 
-                break;
+                default:
+                    // We should not be seeing any events from other grammars
+                    _ASSERTE( false );
+                    fSuccess = false;
+                    break;
+                }
+                ::CoTaskMemFree(pPhrase);
             }
 
-            default:
-                break;
+            if ( SPEI_RECOGNITION == event.eEventId )
+            {
+                // The playback option will have been disabled by the
+                // PHRASE_START event for this utterance.
+                // Since we are done processing this utterance,
+                // playback can now be re-enabled
+                ::SendMessage( m_hToolBar, TB_SETSTATE, IDM_PLAY,
+                               MAKELONG( TBSTATE_ENABLED, 0 ) );
+            }
+
+            if ( !fSuccess || FAILED( hr ) )
+            {
+                // Bail: something went wrong
+                return false;
+            }
+
+            break;
+        }
+
+        default:
+            break;
         }
     }
 
@@ -673,7 +673,7 @@ bool CDictationPad::SRDictEventHandler()
 * CDictationPad::SRCCEventHandler() *
 *-----------------------------------*
 *   Description:
-*       Called whenever there is an SR or a TTS event.  
+*       Called whenever there is an SR or a TTS event.
 *       Processes the event appropriately.
 *   Return:
 *       true iff successful
@@ -687,7 +687,7 @@ bool CDictationPad::SRCCEventHandler()
         DUMP_EVENT_NAME(event.eEventId);
 
         if ( SPEI_RECOGNITION == event.eEventId )
-        {  
+        {
             // Get the reco result from the event
             ISpRecoResult *pResult;
             pResult = event.RecoResult();
@@ -697,7 +697,7 @@ bool CDictationPad::SRCCEventHandler()
             }
 
             bool fSuccess = ProcessCommandModeCommands( *pResult );
-          
+
             if ( !fSuccess )
             {
                 // We really expect to succeed
@@ -754,7 +754,7 @@ void CDictationPad::TTSEventHandler()
         // Error: bail
         return;
     }
-    
+
     // There might be numerous events coming at once, hence the loop
     SPVOICESTATUS Stat;
     HRESULT hr = m_cpVoice->GetStatus( &Stat, NULL );
@@ -762,98 +762,98 @@ void CDictationPad::TTSEventHandler()
     {
         switch( event.eEventId )
         {
-            // Each TextRun in the TextRunList gets its own call to
-            // ISpVoice::Speak() (or ISpVoice::SpeakAudio()), and
-            // thus each one will generate its own SPEI_START_INPUT_STREAM
-            // and SPEI_END_INPUT_STREAM
+        // Each TextRun in the TextRunList gets its own call to
+        // ISpVoice::Speak() (or ISpVoice::SpeakAudio()), and
+        // thus each one will generate its own SPEI_START_INPUT_STREAM
+        // and SPEI_END_INPUT_STREAM
 
-            case SPEI_START_INPUT_STREAM:
+        case SPEI_START_INPUT_STREAM:
 
-                // If the node is a dictation node, highlight the whole thing
-                if ( m_SpeakInfo.pCurrentNode->pTextRun->IsDict() )
-                {
-                    // Find out where the speaking range starts and ends
-                    // (since these might be somewhere within this TextRun
-                    long lSpeakRangeStart, lSpeakRangeEnd;
-                    m_SpeakInfo.pSpeakRange->GetStart( &lSpeakRangeStart );
-                    m_SpeakInfo.pSpeakRange->GetEnd( &lSpeakRangeEnd );
-
-                    // The highlighting should start at the beginning of the speaking range
-                    // and end at the end of pCurrentNode's run or the end of the speaking
-                    // range, whichever comes first
-                    HighlightAndBringIntoView( *m_cpTextDoc, lSpeakRangeStart,
-                        __min( m_SpeakInfo.pCurrentNode->pTextRun->GetEnd(), lSpeakRangeEnd ) );
-                }
-
-                break;
-
-            case SPEI_END_INPUT_STREAM:
-
-                // Stat.ulLastStreamQueued is the index of the last TextRun we have asked
-                // to speak (starting with the first one in the TextRunList that we asked
-                // to speak).
-                if ( m_SpeakInfo.ulCurrentStream >= Stat.ulLastStreamQueued )
-                {
-                    // We just got to the end of the final input stream
-                    // for this speak.
-                    EndSpeaking();
-                }
-                else
-                {
-                    // We have moved on to the next stream, so move the pCurrentNode along
-                    m_SpeakInfo.pCurrentNode = m_SpeakInfo.pCurrentNode->pNext;
-                    m_SpeakInfo.ulCurrentStream++;
-                }
-
-                break;
-
-            // SPEI_WORD_BOUNDARY events are generated from calls to ISpVoice::Speak(), 
-            // and the status of the voice indicates offsets in the text input to that
-            // call to tell us where the voice is.
-            // ISpVoice::SpeakAudio() does not generate these events
-            case SPEI_WORD_BOUNDARY:
-            { 
-                // Highlight the word being spoken
-            
-                // The voice's status will tell us where the word is relative
-                // to the start of the current run (in characters)
-                // and how long it is (in bytes)
-                ULONG ulWordPos = Stat.ulInputWordPos;
-                ULONG ulWordLen = Stat.ulInputWordLen / sizeof( char );
-
-                // Find out where the speak started to determine whether
-                // it started somewhere in this run
-                long lSpeakRangeStart;
+            // If the node is a dictation node, highlight the whole thing
+            if ( m_SpeakInfo.pCurrentNode->pTextRun->IsDict() )
+            {
+                // Find out where the speaking range starts and ends
+                // (since these might be somewhere within this TextRun
+                long lSpeakRangeStart, lSpeakRangeEnd;
                 m_SpeakInfo.pSpeakRange->GetStart( &lSpeakRangeStart );
-                if (m_SpeakInfo.pCurrentNode->pTextRun->WithinRange( lSpeakRangeStart ))
-                {
-                    // This run is the first run we are speaking, 
-                    // and thus the start of the speak range may not
-                    // be the same as the start of this run.
-                    // The position of the word is relative to the start of the 
-                    // speak range
-                    ulWordPos += lSpeakRangeStart;
-                }
-                else
-                {
-                    // This is not the first textrun in this speaking range.
-                    // The word position is relative to the start of this run.
-                    ulWordPos += m_SpeakInfo.pCurrentNode->pTextRun->GetStart();
-                }
+                m_SpeakInfo.pSpeakRange->GetEnd( &lSpeakRangeEnd );
 
-                // The highlighting will end at the end of this word
-                long lHighlightEnd;
-                lHighlightEnd = ulWordPos + ulWordLen;
-        
-                // Highlight from the beginning of the speak range to the end of
-                // this word
-                HighlightAndBringIntoView( *m_cpTextDoc, lSpeakRangeStart, lHighlightEnd );
-                
-                break;
+                // The highlighting should start at the beginning of the speaking range
+                // and end at the end of pCurrentNode's run or the end of the speaking
+                // range, whichever comes first
+                HighlightAndBringIntoView( *m_cpTextDoc, lSpeakRangeStart,
+                                           __min( m_SpeakInfo.pCurrentNode->pTextRun->GetEnd(), lSpeakRangeEnd ) );
             }
-        
-            default:
-                break;
+
+            break;
+
+        case SPEI_END_INPUT_STREAM:
+
+            // Stat.ulLastStreamQueued is the index of the last TextRun we have asked
+            // to speak (starting with the first one in the TextRunList that we asked
+            // to speak).
+            if ( m_SpeakInfo.ulCurrentStream >= Stat.ulLastStreamQueued )
+            {
+                // We just got to the end of the final input stream
+                // for this speak.
+                EndSpeaking();
+            }
+            else
+            {
+                // We have moved on to the next stream, so move the pCurrentNode along
+                m_SpeakInfo.pCurrentNode = m_SpeakInfo.pCurrentNode->pNext;
+                m_SpeakInfo.ulCurrentStream++;
+            }
+
+            break;
+
+        // SPEI_WORD_BOUNDARY events are generated from calls to ISpVoice::Speak(),
+        // and the status of the voice indicates offsets in the text input to that
+        // call to tell us where the voice is.
+        // ISpVoice::SpeakAudio() does not generate these events
+        case SPEI_WORD_BOUNDARY:
+        {
+            // Highlight the word being spoken
+
+            // The voice's status will tell us where the word is relative
+            // to the start of the current run (in characters)
+            // and how long it is (in bytes)
+            ULONG ulWordPos = Stat.ulInputWordPos;
+            ULONG ulWordLen = Stat.ulInputWordLen / sizeof( char );
+
+            // Find out where the speak started to determine whether
+            // it started somewhere in this run
+            long lSpeakRangeStart;
+            m_SpeakInfo.pSpeakRange->GetStart( &lSpeakRangeStart );
+            if (m_SpeakInfo.pCurrentNode->pTextRun->WithinRange( lSpeakRangeStart ))
+            {
+                // This run is the first run we are speaking,
+                // and thus the start of the speak range may not
+                // be the same as the start of this run.
+                // The position of the word is relative to the start of the
+                // speak range
+                ulWordPos += lSpeakRangeStart;
+            }
+            else
+            {
+                // This is not the first textrun in this speaking range.
+                // The word position is relative to the start of this run.
+                ulWordPos += m_SpeakInfo.pCurrentNode->pTextRun->GetStart();
+            }
+
+            // The highlighting will end at the end of this word
+            long lHighlightEnd;
+            lHighlightEnd = ulWordPos + ulWordLen;
+
+            // Highlight from the beginning of the speak range to the end of
+            // this word
+            HighlightAndBringIntoView( *m_cpTextDoc, lSpeakRangeStart, lHighlightEnd );
+
+            break;
+        }
+
+        default:
+            break;
         }
     }
 }   /* CDictationPad::TTSEventHandler */
@@ -877,7 +877,7 @@ void CDictationPad::SetSREventInterest( bool fOn )
 * CDictationPad::ProcessDictationModeCommands() *
 *-----------------------------------------------*
 *   Description:
-*       Processes commands spoken while in dictation mode (i.e. from the 
+*       Processes commands spoken while in dictation mode (i.e. from the
 *       DictCC grammar.
 *   Return:
 *       true iff successful
@@ -912,17 +912,17 @@ bool CDictationPad::ProcessDictationModeCommands( ISpRecoResult &rResult )
     // The Rule.ulId member of an SPPHRASE tells which C&C rule needs to be fired
     switch( pPhrase->Rule.ulId )
     {
-    case PID_DictMode: 
+    case PID_DictMode:
         // This rule sends us to command mode
         ::SendMessage( m_hClient, WM_COMMAND, IDM_COMMAND_MODE, 0 );
         break;
 
     default:
-        {    
-            // Default - just dump the command to the screen
-            DumpCommandToScreen( m_hClient, rResult );
-            break;
-        }
+    {
+        // Default - just dump the command to the screen
+        DumpCommandToScreen( m_hClient, rResult );
+        break;
+    }
     }
 
     ::CoTaskMemFree( pPhrase );
@@ -936,9 +936,9 @@ bool CDictationPad::ProcessDictationModeCommands( ISpRecoResult &rResult )
 * DATA FOR PROCESSING COMMANDS *
 *************************************************************************************/
 // This array bundles the responses for all of the voice-enabled menu & toolbar items accessible during command mode.
-//    NOTE:  Items that use the WM_NULL uiMessage are place holders.  When the app actually implements those features, 
+//    NOTE:  Items that use the WM_NULL uiMessage are place holders.  When the app actually implements those features,
 //           then those lines will need to be updated
-static PROPERTYMAP s_aCmdModePropertyMap[] = 
+static PROPERTYMAP s_aCmdModePropertyMap[] =
 {
     { PID_CmdMenuFile,                  WM_SYSCOMMAND,  SC_KEYMENU,             'f' },
     { PID_CmdMenuEdit,                  WM_SYSCOMMAND,  SC_KEYMENU,             'e' },
@@ -963,7 +963,7 @@ static PROPERTYMAP s_aCmdModePropertyMap[] =
     { PID_CmdMicrophoneSetup,           WM_COMMAND,     IDM_MICROPHONE_SETUP,   0   },
     { PID_CmdAbout,                     WM_COMMAND,     IDM_ABOUT,              0   },
     { PID_CmdEscape,                    WM_KEYDOWN,     VK_ESCAPE,              0x10001}
-};  
+};
 static const int s_iCmdModePropertyMapSize_c = sizeof( s_aCmdModePropertyMap ) / sizeof( *s_aCmdModePropertyMap );
 
 
@@ -975,8 +975,8 @@ static const int s_iCmdModePropertyMapSize_c = sizeof( s_aCmdModePropertyMap ) /
 *   Return:
 *       true iff successful
 *************************************************************************************/
-bool CDictationPad::ProcessCommandModeCommands( ISpRecoResult &rResult  ) 
-{ 
+bool CDictationPad::ProcessCommandModeCommands( ISpRecoResult &rResult  )
+{
     SPPHRASE *pPhrase = NULL;
     HRESULT hr = rResult.GetPhrase( &pPhrase );
     if ( FAILED( hr ) || pPhrase->ullGrammarID != GID_CC )
@@ -984,7 +984,7 @@ bool CDictationPad::ProcessCommandModeCommands( ISpRecoResult &rResult  )
         ::CoTaskMemFree(pPhrase);
         return false;
     }
-    
+
     // Set the status bar text
     CSpDynamicString dstr;
     dstr = L"Command Mode: ";
@@ -1003,135 +1003,135 @@ bool CDictationPad::ProcessCommandModeCommands( ISpRecoResult &rResult  )
     switch( pPhrase->Rule.ulId )
     {
     case PID_CmdMenu:
+    {
+        _ASSERTE( pPhrase->pProperties );
+        if ( pPhrase->pProperties == NULL )
         {
-            _ASSERTE( pPhrase->pProperties );
-            if ( pPhrase->pProperties == NULL )
-            {
-                return false;
-            }
-            
-            // Spin through the property map array to figure out 
-            // which voice-enabled menu item just got triggered
-            for( int i = 0;  i < s_iCmdModePropertyMapSize_c;  ++i )
-            {
-                if( pPhrase->pProperties[0].vValue.ulVal == s_aCmdModePropertyMap[ i ].dwPropertyID )
-                {
-                    // WM_CANCELMODE will destroy any active popup menus, which is what we want 
-                    // if the user selects a menu item
-                    if ( WM_SYSCOMMAND != s_aCmdModePropertyMap[ i ].uiMessage )
-                    {
-                        ::SendMessage( m_hClient, WM_CANCELMODE, 0, 0 );
-                    
-                        // Turn off grammars while we are processing this command,
-                        // unless this is a command to deactivate the grammars
-                        if ( IDM_MIC_TOGGLE != s_aCmdModePropertyMap[ i ].wParam )
-                        {
-                            SetGrammarState( FALSE );
-                        }
-
-                    }
-                    
-                    // When we've discovered which voice-enabled menu item just got triggered, we'll
-                    // use our property map to figure out how we simulate that menu item
-                    ::SendMessage( m_hClient, 
-                                   s_aCmdModePropertyMap[ i ].uiMessage, 
-                                   s_aCmdModePropertyMap[ i ].wParam, 
-                                   s_aCmdModePropertyMap[ i ].lParam );
-    
-                    if (( WM_SYSCOMMAND != s_aCmdModePropertyMap[ i ].uiMessage )
-                        && ( IDM_MIC_TOGGLE != s_aCmdModePropertyMap[ i ].wParam ))
-                    {
-                        // Reactivate grammars
-                        SetGrammarState( TRUE );
-                    }
-
-                    break;
-                }
-            }
-
+            return false;
         }
-        break;
+
+        // Spin through the property map array to figure out
+        // which voice-enabled menu item just got triggered
+        for( int i = 0;  i < s_iCmdModePropertyMapSize_c;  ++i )
+        {
+            if( pPhrase->pProperties[0].vValue.ulVal == s_aCmdModePropertyMap[ i ].dwPropertyID )
+            {
+                // WM_CANCELMODE will destroy any active popup menus, which is what we want
+                // if the user selects a menu item
+                if ( WM_SYSCOMMAND != s_aCmdModePropertyMap[ i ].uiMessage )
+                {
+                    ::SendMessage( m_hClient, WM_CANCELMODE, 0, 0 );
+
+                    // Turn off grammars while we are processing this command,
+                    // unless this is a command to deactivate the grammars
+                    if ( IDM_MIC_TOGGLE != s_aCmdModePropertyMap[ i ].wParam )
+                    {
+                        SetGrammarState( FALSE );
+                    }
+
+                }
+
+                // When we've discovered which voice-enabled menu item just got triggered, we'll
+                // use our property map to figure out how we simulate that menu item
+                ::SendMessage( m_hClient,
+                               s_aCmdModePropertyMap[ i ].uiMessage,
+                               s_aCmdModePropertyMap[ i ].wParam,
+                               s_aCmdModePropertyMap[ i ].lParam );
+
+                if (( WM_SYSCOMMAND != s_aCmdModePropertyMap[ i ].uiMessage )
+                        && ( IDM_MIC_TOGGLE != s_aCmdModePropertyMap[ i ].wParam ))
+                {
+                    // Reactivate grammars
+                    SetGrammarState( TRUE );
+                }
+
+                break;
+            }
+        }
+
+    }
+    break;
 
     case PID_CmdNavigationVertical:
+    {
+        // Vertical navigation has 3 components: direction, unit of travel & number of units.
+        // The grammar was created to allow some flexibility in the way the user says these 3 components.
+        // So, the first task is to figure out which components the user actually said - default values will
+        // be used for the component not explicitly mentioned.
+
+        // Default values: scroll down 1 page
+        long lUnit  = tomScreen;
+        long lCount = 1;
+        BOOL bDown  = TRUE;
+        const SPPHRASEPROPERTY    *pProp = pPhrase->pProperties;
+
+        // Spin thru all of the properties, identifying the individual components
+        // It is possible to have the 'direction' specified twice - the last value will be used.
+        while( pProp )
         {
-            // Vertical navigation has 3 components: direction, unit of travel & number of units.
-            // The grammar was created to allow some flexibility in the way the user says these 3 components.
-            // So, the first task is to figure out which components the user actually said - default values will
-            // be used for the component not explicitly mentioned.
-
-            // Default values: scroll down 1 page
-            long lUnit  = tomScreen;
-            long lCount = 1;
-            BOOL bDown  = TRUE;
-            const SPPHRASEPROPERTY    *pProp = pPhrase->pProperties;
-
-            // Spin thru all of the properties, identifying the individual components
-            // It is possible to have the 'direction' specified twice - the last value will be used.
-            while( pProp )
+            switch( pProp->ulId )
             {
-                switch( pProp->ulId )
+            case PID_CmdDirection:
+                if( PID_CmdUp == pProp->vValue.ulVal )
                 {
-                case PID_CmdDirection:
-                    if( PID_CmdUp == pProp->vValue.ulVal )
-                    {
-                        bDown = FALSE;
-                    }
-                    else
-                    {
-                        bDown = TRUE;
-                    }
+                    bDown = FALSE;
+                }
+                else
+                {
+                    bDown = TRUE;
+                }
+                break;
+
+            case PID_CmdUnits:
+                switch( pProp->vValue.ulVal )
+                {
+                case PID_CmdPage:
+                    lUnit = tomScreen;
                     break;
 
-                case PID_CmdUnits:
-                    switch( pProp->vValue.ulVal )
-                    {
-                    case PID_CmdPage:
-                        lUnit = tomScreen;
-                        break;
-                        
-                    case PID_CmdLine:
-                        lUnit = tomLine;
-                        break;
-
-                    case PID_CmdParagraph:
-                        lUnit = tomParagraph;
-                        break;
-                    }
+                case PID_CmdLine:
+                    lUnit = tomLine;
                     break;
 
-                case PID_CmdNumber:
-                    // Calculate the number.
-                    // See cmdmode.xml for details on how this grammar is constructed.
-                    // It consists of an optional tens value followed by a ones value.
-                    _ASSERTE( pProp->pFirstChild );
-                    const SPPHRASEPROPERTY *pPropNum;
-                    lCount = 0;
-                    for ( pPropNum = pProp->pFirstChild; pPropNum; pPropNum = pPropNum->pNextSibling )
-                    {
-                        lCount += pPropNum->vValue.uiVal;
-                    }
-                    break;
-
-                default:
-                    _ASSERTE( FALSE );
+                case PID_CmdParagraph:
+                    lUnit = tomParagraph;
                     break;
                 }
+                break;
 
-                // Get the next property.  A 'NULL' value terminates our hunt
-                pProp = pProp->pNextSibling;
+            case PID_CmdNumber:
+                // Calculate the number.
+                // See cmdmode.xml for details on how this grammar is constructed.
+                // It consists of an optional tens value followed by a ones value.
+                _ASSERTE( pProp->pFirstChild );
+                const SPPHRASEPROPERTY *pPropNum;
+                lCount = 0;
+                for ( pPropNum = pProp->pFirstChild; pPropNum; pPropNum = pPropNum->pNextSibling )
+                {
+                    lCount += pPropNum->vValue.uiVal;
+                }
+                break;
+
+            default:
+                _ASSERTE( FALSE );
+                break;
             }
 
-            // Now, actually navigate.
-            if( bDown )
-            {
-                m_cpTextSel->MoveDown( lUnit, lCount, 0, NULL );
-            }
-            else
-            {
-                m_cpTextSel->MoveUp( lUnit, lCount, 0, NULL );
-            }
+            // Get the next property.  A 'NULL' value terminates our hunt
+            pProp = pProp->pNextSibling;
         }
-        break;
+
+        // Now, actually navigate.
+        if( bDown )
+        {
+            m_cpTextSel->MoveDown( lUnit, lCount, 0, NULL );
+        }
+        else
+        {
+            m_cpTextSel->MoveUp( lUnit, lCount, 0, NULL );
+        }
+    }
+    break;
 
     case PID_CmdNavigationOther:
         // This handles the rule that covers the extraneous navigation
@@ -1195,12 +1195,12 @@ bool CDictationPad::ProcessCommandModeCommands( ISpRecoResult &rResult  )
 *       Types the dictated text to where the selection was when the text was
 *       dictated.  Inserts spaces on either side of the dictated text as
 *       necessary (observing the display attributes)
-*       
+*
 *   Return:
 *       true iff successful
 *************************************************************************************/
-bool CDictationPad::ProcessDictation( ISpRecoResult &rResult, int eEventId ) 
-{ 
+bool CDictationPad::ProcessDictation( ISpRecoResult &rResult, int eEventId )
+{
     _ASSERTE(( eEventId == SPEI_RECOGNITION ) || ( eEventId == SPEI_HYPOTHESIS ));
     if ( eEventId == SPEI_HYPOTHESIS )
     {
@@ -1214,14 +1214,14 @@ bool CDictationPad::ProcessDictation( ISpRecoResult &rResult, int eEventId )
 
     // Get the range to replace from the RecoEventManager.
     // In order to do this, we need to tell m_pRecoEventMgr when this
-    // dictation was spoken.  
+    // dictation was spoken.
     // Why we need this: If the user moved the IP around while dictating
     // this phrase, we want to put the text where the IP was when he actually
     // dictated this phrase.
     SPRECORESULTTIMES times;
     rResult.GetResultTimes( &times );
     ITextRange *pRecoRange = NULL;
-    HRESULT hr = m_pRecoEventMgr->Recognition( times.ftStreamTime, &pRecoRange ); 
+    HRESULT hr = m_pRecoEventMgr->Recognition( times.ftStreamTime, &pRecoRange );
     if ( FAILED( hr ) )
     {
         return false;
@@ -1237,15 +1237,15 @@ bool CDictationPad::ProcessDictation( ISpRecoResult &rResult, int eEventId )
         // unexpected error
         return false;
     }
-    
-    // Does the current selection overlap or adjoin the range in 
+
+    // Does the current selection overlap or adjoin the range in
     // which the recognized text will go?
     bool bRecoAndSelDisjoint = AreDisjointRanges( pRecoRange, m_cpTextSel );
-    
+
     ITextRange *pOldSel = NULL;
     if ( bRecoAndSelDisjoint )
     {
-        // The recognized text will appear in an entirely different part of 
+        // The recognized text will appear in an entirely different part of
         // the document from the current selection.
         // Remember where the text selection was.
         // If this call fails, then it is not serious; the text selection
@@ -1264,14 +1264,14 @@ bool CDictationPad::ProcessDictation( ISpRecoResult &rResult, int eEventId )
     // Determine whether whatever is currently at lEnd wants leading spaces
     // (i.e. the spaces at the end of this newly-dictated text) consumed
     bool fConsumeLeadingSpaces;
-    HRESULT hrConsumeSpaces = m_pTextRunList->IsConsumeLeadingSpaces( 
-        lEnd, &fConsumeLeadingSpaces );
+    HRESULT hrConsumeSpaces = m_pTextRunList->IsConsumeLeadingSpaces(
+                                  lEnd, &fConsumeLeadingSpaces );
 
     // Get the text and display attributes from the result object
     CSpDynamicString dstrText;
     BYTE dwAttributes;
-    hr = rResult.GetText( SP_GETWHOLEPHRASE, SP_GETWHOLEPHRASE, TRUE, 
-                                &dstrText, &dwAttributes );
+    hr = rResult.GetText( SP_GETWHOLEPHRASE, SP_GETWHOLEPHRASE, TRUE,
+                          &dstrText, &dwAttributes );
     if ( FAILED( hr ) )
     {
         return false;
@@ -1279,14 +1279,14 @@ bool CDictationPad::ProcessDictation( ISpRecoResult &rResult, int eEventId )
 
     bool bRet = false;
 
-    // Deal with the display attributes of the text: 
-    
+    // Deal with the display attributes of the text:
+
     // Determine how much space should follow the result text.
     // Space should not follow the text if leading spaces at lEnd are to
     // be consumed
     if ( !( SUCCEEDED( hrConsumeSpaces ) && fConsumeLeadingSpaces ) )
     {
-        LRESULT lIsDelimiter = 
+        LRESULT lIsDelimiter =
             ::SendMessage( m_hEdit, EM_FINDWORDBREAK, WB_ISDELIMITER, lEnd );
         if ( !lIsDelimiter )
         {
@@ -1306,16 +1306,16 @@ bool CDictationPad::ProcessDictation( ISpRecoResult &rResult, int eEventId )
         else
         {
             // There is at least one space here.  If there isn't a second
-            // space and the attributes call for two trailing spaces, 
+            // space and the attributes call for two trailing spaces,
             // add another space.
             if ( (dwAttributes & SPAF_TWO_TRAILING_SPACES) &&
-                !::SendMessage( m_hEdit, EM_FINDWORDBREAK, WB_ISDELIMITER, lEnd+1 ) )
+                    !::SendMessage( m_hEdit, EM_FINDWORDBREAK, WB_ISDELIMITER, lEnd+1 ) )
             {
                 dstrText.Append( L" " );
             }
         }
     }
-    
+
     // Determine how much space should precede the new text
     UINT uiSpacesNeeded = 0;
     bool fSpacePrepended = false;
@@ -1329,16 +1329,16 @@ bool CDictationPad::ProcessDictation( ISpRecoResult &rResult, int eEventId )
     }
     if ( (dwAttributes & SPAF_CONSUME_LEADING_SPACES) && (lStart > 0) )
     {
-        // This result requires that we consume leading space; 
+        // This result requires that we consume leading space;
         // move the start back until we have consumed all leading spaces
-        
+
         // Create a degenerate range one space before
         ITextRange *pRange;
         hr = m_cpTextDoc->Range( lStart - 1, lStart - 1, &pRange );
 
         if ( SUCCEEDED( hr ) )
         {
-            // Push the start and pRange back until the first character of 
+            // Push the start and pRange back until the first character of
             // pRange is no longer whitespace.
             long lChar = 0;
             pRange->GetChar( &lChar );
@@ -1368,7 +1368,7 @@ bool CDictationPad::ProcessDictation( ISpRecoResult &rResult, int eEventId )
         m_dwFlags &= ~DP_SKIP_UPDATE;
 
         // Insert a space at the beginning of the range.
-        // We do this right now even if the space is not needed 
+        // We do this right now even if the space is not needed
         // so that the dictated text is inserted intact (not running
         // into anything else).
         // If the space is not needed, we get rid of it below
@@ -1387,7 +1387,7 @@ bool CDictationPad::ProcessDictation( ISpRecoResult &rResult, int eEventId )
 
     // lWhereNewTextBegins is the beginning of the new text (not the space
     // that may precede it)
-    const long lWhereNewTextBegins = lStart; 
+    const long lWhereNewTextBegins = lStart;
 
     // Get the text of the reco result
     BSTR bstrText = ::SysAllocString( dstrText );
@@ -1413,7 +1413,7 @@ bool CDictationPad::ProcessDictation( ISpRecoResult &rResult, int eEventId )
     m_cpTextSel->TypeText( bstrText );
     ::SysFreeString( bstrText );
 
-    // Get the dictated range (it ends wherever the text selection ends now), 
+    // Get the dictated range (it ends wherever the text selection ends now),
     // and give it to the new dictation run
     long lDictRunEnd;
     m_cpTextSel->GetEnd( &lDictRunEnd );
@@ -1447,7 +1447,7 @@ bool CDictationPad::ProcessDictation( ISpRecoResult &rResult, int eEventId )
     {
         if (( 0 == uiSpacesNeeded ) && fSpacePrepended )
         {
-            // Need to get rid of this space, since we prepended a 
+            // Need to get rid of this space, since we prepended a
             // space but no space is needed.
             // DictationPad should handle the deletion of this space.
             // If the deletion fails, the spacing will be wrong.
@@ -1460,17 +1460,17 @@ bool CDictationPad::ProcessDictation( ISpRecoResult &rResult, int eEventId )
             // one behind because of the deletion
             m_cpTextSel->SetRange( lDictRunEnd - 1, lDictRunEnd - 1 );
         }
-        else if (( uiSpacesNeeded > 0 ) && 
-            !(dwAttributes & SPAF_CONSUME_LEADING_SPACES) ) // SPAF_CONSUME_LEADING_SPACES
-                                                            // trumps the trailing spaces
-                                                            // attribs of previous runs
+        else if (( uiSpacesNeeded > 0 ) &&
+                 !(dwAttributes & SPAF_CONSUME_LEADING_SPACES) ) // SPAF_CONSUME_LEADING_SPACES
+            // trumps the trailing spaces
+            // attribs of previous runs
         {
             // Determine how many more spaces are needed, since we
             // may have already taken care of it if we already prepended
             // a space
             INT iAdditionalSpacesNeeded = uiSpacesNeeded - (fSpacePrepended ? 1 : 0);
-            _ASSERTE( (iAdditionalSpacesNeeded >= 0) 
-                && (iAdditionalSpacesNeeded <= 2) );
+            _ASSERTE( (iAdditionalSpacesNeeded >= 0)
+                      && (iAdditionalSpacesNeeded <= 2) );
 
             if ( iAdditionalSpacesNeeded )
             {
@@ -1479,16 +1479,16 @@ bool CDictationPad::ProcessDictation( ISpRecoResult &rResult, int eEventId )
                 // If the insertion fails, the spacing will be wrong
                 m_cpTextSel->SetRange( lWhereNewTextBegins, lWhereNewTextBegins );
                 m_dwFlags &= ~DP_SKIP_UPDATE;
-                BSTR bstrSpaces = ::SysAllocString( 
-                    (1 == iAdditionalSpacesNeeded) ? L" " : L"  " );
+                BSTR bstrSpaces = ::SysAllocString(
+                                      (1 == iAdditionalSpacesNeeded) ? L" " : L"  " );
                 m_cpTextSel->TypeText( bstrSpaces );
                 ::SysFreeString( bstrSpaces );
                 m_dwFlags |= DP_SKIP_UPDATE;
 
                 // Restore the selection, realizing that it's going to be further along
                 // than it was because of the spaces
-                m_cpTextSel->SetRange( lDictRunEnd + iAdditionalSpacesNeeded, 
-                    lDictRunEnd + iAdditionalSpacesNeeded );
+                m_cpTextSel->SetRange( lDictRunEnd + iAdditionalSpacesNeeded,
+                                       lDictRunEnd + iAdditionalSpacesNeeded );
             }
         }
     }
@@ -1537,22 +1537,22 @@ bool CDictationPad::ProcessDictation( ISpRecoResult &rResult, int eEventId )
 *   Return:
 *       true iff successful
 ****************************************************************************************/
-bool CDictationPad::ProcessDictationHypothesis( ISpRecoResult &rResult ) 
-{ 
+bool CDictationPad::ProcessDictationHypothesis( ISpRecoResult &rResult )
+{
     // Set the flag to indicate that the next insertion will be a dictation run
     m_dwFlags |= DP_SKIP_UPDATE;
 
     // Get the text
     CSpDynamicString dstrText;
-    HRESULT hr = rResult.GetText( SP_GETWHOLEPHRASE, SP_GETWHOLEPHRASE, TRUE, 
-                                &dstrText, NULL );
+    HRESULT hr = rResult.GetText( SP_GETWHOLEPHRASE, SP_GETWHOLEPHRASE, TRUE,
+                                  &dstrText, NULL );
     if ( FAILED( hr ) )
     {
         return false;
     }
 
     // Get the range to replace from the RecoEventManager.
-    // Just like in CDictationPad::ProcessDictation() above, when the 
+    // Just like in CDictationPad::ProcessDictation() above, when the
     // utterance was occurred determines where it will go.
     SPRECORESULTTIMES times;
     rResult.GetResultTimes( &times );
@@ -1569,7 +1569,7 @@ bool CDictationPad::ProcessDictationHypothesis( ISpRecoResult &rResult )
     BSTR bstrText = ::SysAllocString( dstrText );
     pRecoRange->SetText( bstrText );
     ::SysFreeString( bstrText );
-    
+
     // Check if the selection now interferes with some non-editable range.
     // (A range is not editable if it currently contains hypotheses)
     // If so, move it to the end of that range
@@ -1602,7 +1602,7 @@ bool CDictationPad::ProcessDictationHypothesis( ISpRecoResult &rResult )
 
     // DictationPad should resume processing selection changes
     m_dwFlags &= ~DP_SKIP_UPDATE;
-    
+
     return SUCCEEDED( hr );
 } /* CDictationPad::ProcessDictationHypothesis */
 
@@ -1610,7 +1610,7 @@ bool CDictationPad::ProcessDictationHypothesis( ISpRecoResult &rResult )
 * CDictationPad::SetMode() *
 *--------------------------*
 *   Description:
-*       Switches to dictation or to command mode (depending 
+*       Switches to dictation or to command mode (depending
 *       on the value of fDictationMode).
 *       Updates the toolbar/statusbar accordingly.
 *       Switching between dictation and command mode involves
@@ -1632,8 +1632,8 @@ HRESULT CDictationPad::SetMode( bool fDictationMode )
         if ( SUCCEEDED( hr ) )
         {
             // Flip the mode flag
-            m_dwFlags ^= DP_DICTATION_MODE; 
-            
+            m_dwFlags ^= DP_DICTATION_MODE;
+
             // Since the flags are now set to the mode that the
             // user wanted to switch to, this will now activate the
             // rules in the correct grammar (if the user had the
@@ -1652,12 +1652,12 @@ HRESULT CDictationPad::SetMode( bool fDictationMode )
     // Keep the toolbar button in sync with the current mode
     ::SendMessage( m_hToolBar, TB_PRESSBUTTON, IDM_DICTATION_MODE, MAKELONG( fDictationMode, 0 ) );
     ::SendMessage( m_hToolBar, TB_PRESSBUTTON, IDM_COMMAND_MODE, MAKELONG( !fDictationMode, 0 ) );
-    
+
     // Keep the menu items in sync with the current mode
     HMENU hMenu = ::GetMenu( m_hClient );
     ::CheckMenuItem( hMenu, IDM_DICTATION_MODE, fDictationMode ? MF_CHECKED : MF_UNCHECKED );
     ::CheckMenuItem( hMenu, IDM_COMMAND_MODE, fDictationMode ? MF_UNCHECKED : MF_CHECKED );
-    
+
     // Keep the status bar in sync with the current mode
     {
         CSpDynamicString dstr;
@@ -1749,8 +1749,8 @@ HRESULT CDictationPad::SetGrammarState( BOOL bOn )
     if ( SUCCEEDED( hr ) )
     {
         // Grammars successfully (de)activated, set the flag
-        bOn ? ( m_dwFlags |= DP_GRAMMARS_ACTIVE ) 
-            : ( m_dwFlags &= ~DP_GRAMMARS_ACTIVE );
+        bOn ? ( m_dwFlags |= DP_GRAMMARS_ACTIVE )
+        : ( m_dwFlags &= ~DP_GRAMMARS_ACTIVE );
 #ifdef _DEBUG
         OutputDebugString( _T("success\r\n") );
 #endif
@@ -1789,11 +1789,11 @@ HRESULT CDictationPad::SetGrammarState( BOOL bOn )
         }
     }
     ::SendMessage( m_hToolBar, TB_SETSTATE, IDM_MIC_TOGGLE, lButtonState );
-    
+
     if ( bOn && ( ::GetFocus() != m_hEdit ) )
     {
         // Asking to turn the microphone on, but the edit window does not have
-        // the input focus: Set the input focus to the edit window 
+        // the input focus: Set the input focus to the edit window
         ::SetFocus( m_hEdit );
     }
 
@@ -1806,7 +1806,7 @@ HRESULT CDictationPad::SetGrammarState( BOOL bOn )
 *   Description:
 *       Gets the first word in the current selection, if the selection
 *       contains any words.
-*       Displays the UI for adding and deleting words with the word as 
+*       Displays the UI for adding and deleting words with the word as
 *       a parameter.
 *   Return:
 *       S_OK
@@ -1816,7 +1816,7 @@ HRESULT CDictationPad::SetGrammarState( BOOL bOn )
 HRESULT CDictationPad::RunAddDeleteUI()
 {
     HRESULT hr;
-    
+
     // Stop listening
     hr = SetGrammarState( false );
     if ( FAILED( hr ) )
@@ -1846,7 +1846,7 @@ HRESULT CDictationPad::RunAddDeleteUI()
     {
         cpFirstWordRange->GetText( &bstrFirstWordSelected );
     }
-    
+
     WCHAR *pwszNewWord = NULL;
     if ( bstrFirstWordSelected )
     {
@@ -1854,12 +1854,12 @@ HRESULT CDictationPad::RunAddDeleteUI()
         ::SysFreeString( bstrFirstWordSelected );
     }
 
-    ULONG ulDataSize = pwszNewWord ? 
-        (ULONG)(sizeof(WCHAR) * wcslen( pwszNewWord )) : 0;
+    ULONG ulDataSize = pwszNewWord ?
+                       (ULONG)(sizeof(WCHAR) * wcslen( pwszNewWord )) : 0;
 
-    hr = m_cpRecoEngine->DisplayUI( 
-        m_hClient, NULL, SPDUI_AddRemoveWord, pwszNewWord, ulDataSize );
-        
+    hr = m_cpRecoEngine->DisplayUI(
+             m_hClient, NULL, SPDUI_AddRemoveWord, pwszNewWord, ulDataSize );
+
     free(pwszNewWord);
 
     return hr;
@@ -1894,11 +1894,11 @@ void HighlightAndBringIntoView( ITextDocument &rTextDoc, long lStart, long lEnd 
 
     // Bring the most recently-spoken text into view
     POINT pt;
-    hr = cpWordRange->GetPoint( tomEnd | TA_BOTTOM | TA_RIGHT, 
-        &(pt.x), &(pt.y) );
+    hr = cpWordRange->GetPoint( tomEnd | TA_BOTTOM | TA_RIGHT,
+                                &(pt.x), &(pt.y) );
     if ( hr == S_FALSE )
     {
-        // An S_FALSE return value from ITextRange::GetPoint() means that 
+        // An S_FALSE return value from ITextRange::GetPoint() means that
         // the requested point is not visible
         cpWordRange->ScrollIntoView( tomEnd );
     }
@@ -1933,7 +1933,7 @@ void DumpCommandToScreen( HWND hwndClient, ISpPhrase &rPhrase )
     WCHAR *pwszSpokenText = NULL;
     BYTE b;
     hr = rPhrase.GetText( SP_GETWHOLEPHRASE, SP_GETWHOLEPHRASE, true,
-        &pwszSpokenText, &b );
+                          &pwszSpokenText, &b );
     if ( FAILED( hr ) )
     {
         return;

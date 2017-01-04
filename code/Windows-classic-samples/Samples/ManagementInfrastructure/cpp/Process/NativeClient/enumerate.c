@@ -1,4 +1,4 @@
-//
+﻿//
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -24,22 +24,22 @@ void Do_Enumerate(MI_Session *miSession, _In_z_ const wchar_t *namespaceName, co
     wchar_t keysOnly;
 
     keysOnly = GetUserSelection(
-                L"How do you want the Enumerate operation to return property keys only?\n"
-                L"\t[1] All instance properties\n"
-                L"\t[2] Instance key properties only\n"
-                L"\t[0] back to operation choice\n",
-                L"012");
+                   L"How do you want the Enumerate operation to return property keys only?\n"
+                   L"\t[1] All instance properties\n"
+                   L"\t[2] Instance key properties only\n"
+                   L"\t[0] back to operation choice\n",
+                   L"012");
     if (keysOnly == L'0')
     {
         return;
     }
 
     synchronous = GetUserSelection(
-                L"How do you want the Enumerate operation to be carried out?\n"
-                L"\t[1] Synchronous\n"
-                L"\t[2] Asynchronous\n"
-                L"\t[0] back to operation choice\n",
-                L"012");
+                      L"How do you want the Enumerate operation to be carried out?\n"
+                      L"\t[1] Synchronous\n"
+                      L"\t[2] Asynchronous\n"
+                      L"\t[0] back to operation choice\n",
+                      L"012");
     if (synchronous == L'0')
     {
         return;
@@ -57,8 +57,8 @@ void Do_Enumerate(MI_Session *miSession, _In_z_ const wchar_t *namespaceName, co
 }
 
 /* Do_Enumerate_Synchronous() carries out an instance Enumerate operation synchronously, retrieving all results
- * on the same thread.  The results can be retrieved on any thread, but that would be unusual for a 
- * synchronous operation. 
+ * on the same thread.  The results can be retrieved on any thread, but that would be unusual for a
+ * synchronous operation.
  */
 void Do_Enumerate_Synchronous(MI_Session *miSession, _In_z_ const wchar_t *namespaceName, const wchar_t *className, MI_Boolean keysOnly)
 {
@@ -79,10 +79,10 @@ void Do_Enumerate_Synchronous(MI_Session *miSession, _In_z_ const wchar_t *names
      *      MI_OperationCallbacks.writeProgress
      */
 
-    /* Initiate the EnumerateInstances operation.  Synchronous results are always retrieved through a call MI_Operation_GetInstance(). 
+    /* Initiate the EnumerateInstances operation.  Synchronous results are always retrieved through a call MI_Operation_GetInstance().
      * All operations must be closed with a call to MI_Operation_Close(), but all results must be processed before that.
      * The operation can be cancelled via MI_Operation_Cancel(), although even then all results must be consumed before the operation
-     * is closed. 
+     * is closed.
      */
     MI_Session_EnumerateInstances(miSession, 0, NULL, namespaceName, className, keysOnly, NULL, &miOperation);
 
@@ -110,7 +110,8 @@ void Do_Enumerate_Synchronous(MI_Session *miSession, _In_z_ const wchar_t *names
             instanceCount++;
         }
 
-    } while (miResult == MI_RESULT_OK && moreResults == MI_TRUE);
+    }
+    while (miResult == MI_RESULT_OK && moreResults == MI_TRUE);
 
     /* moreResults == MI_FALSE, dump the final outcome of the operation */
     wprintf(L"------------------------------------------\n");
@@ -127,8 +128,8 @@ void Do_Enumerate_Synchronous(MI_Session *miSession, _In_z_ const wchar_t *names
 
     /* All operations must be closed.  If an operation is not closed the owning session will hang until the operations
      * are closed fully.  MI_Operation_Close will cancel an operation if it is still running, however results must be
-     * consumed before the close can complete fully.  
-     * For synchronous operations the MI_Operation_Close() method is synchronous until the final result has been consumed 
+     * consumed before the close can complete fully.
+     * For synchronous operations the MI_Operation_Close() method is synchronous until the final result has been consumed
      * (moreResults == MI_FALSE).
      */
     _miResult = MI_Operation_Close(&miOperation);
@@ -138,7 +139,7 @@ void Do_Enumerate_Synchronous(MI_Session *miSession, _In_z_ const wchar_t *names
          * When an out of memory error happens, the operation will shut down as best it can.
          * Invalid parameter means a programming error happened.
          * Access denied means the security context while calling into the Close() is different from
-         * when the operation was created.  This will be a programming error and could happen if closing 
+         * when the operation was created.  This will be a programming error and could happen if closing
          * from a different thread and forgetting to impersonate.
          */
         wprintf(L"MI_Operation_Close failed, error %s\n", MI_Result_To_String(_miResult));
@@ -146,7 +147,7 @@ void Do_Enumerate_Synchronous(MI_Session *miSession, _In_z_ const wchar_t *names
 }
 
 /* Do_Enumerate_Asynchronous() carries out an instance enumeration operation asynchronously. The asynchronous callback
- * will keep being called until moreResults==MI_FALSE. 
+ * will keep being called until moreResults==MI_FALSE.
  */
 void Do_Enumerate_Asynchronous(MI_Session *miSession, _In_z_ const wchar_t *namespaceName, const wchar_t *className, MI_Boolean keysOnly)
 {
@@ -163,7 +164,7 @@ void Do_Enumerate_Asynchronous(MI_Session *miSession, _In_z_ const wchar_t *name
     if (instanceCallback_Context.asyncNotificationHandle == NULL)
     {
         wprintf(L"Failed to create a Windows Event, windows error %u\n", GetLastError());
-        goto NoHandleError; 
+        goto NoHandleError;
     }
     instanceCallback_Context.keysOnly = keysOnly;
 
@@ -197,13 +198,13 @@ void Do_Enumerate_Asynchronous(MI_Session *miSession, _In_z_ const wchar_t *name
     MI_Session_EnumerateInstances(miSession, 0, NULL, namespaceName, className, keysOnly, &miOperationCallbacks, &miOperation);
 
     /* InstanceResultCallback() will always be called back for asyncronous operations, so wait for it to finish */
-    
+
     WaitForSingleObject(instanceCallback_Context.asyncNotificationHandle, INFINITE);
 
     CloseHandle(instanceCallback_Context.asyncNotificationHandle);
 
-    /* Final miResult is here if needed: instanceCallback_Context.finalResult 
-     * Any data from the callback cannot be accessed here because the lifetime of the data is 
+    /* Final miResult is here if needed: instanceCallback_Context.finalResult
+     * Any data from the callback cannot be accessed here because the lifetime of the data is
      * only valid in the callback and until the operation is closed.
      * In this sample the operation handle is closed inside the instance callback.
      */

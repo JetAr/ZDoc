@@ -1,5 +1,5 @@
-//////////////////////////////////////////////////////////////////////
-// 
+﻿//////////////////////////////////////////////////////////////////////
+//
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -16,7 +16,7 @@
 //-------------------------------------------------------------------
 // DrawColorBars
 //
-// Draw SMPTE colors bars to a Direct3D surface. 
+// Draw SMPTE colors bars to a Direct3D surface.
 // The surface format is assumed to be YUY2.
 //-------------------------------------------------------------------
 
@@ -29,8 +29,8 @@ HRESULT DrawColorBars(IDirect3DSurface9 *pSurf, UINT width, UINT height)
     D3DLOCKED_RECT lr;
 
     hr = pSurf->LockRect(&lr, NULL, D3DLOCK_NOSYSLOCK);
-    if (FAILED(hr)) 
-    { 
+    if (FAILED(hr))
+    {
         return hr;
     }
 
@@ -81,16 +81,16 @@ HRESULT DrawColorBars(IDirect3DSurface9 *pSurf, UINT width, UINT height)
 // LoadBitmapResourceToAYUVSurface
 //
 // Load a 24-bpp RGB bitmap resource onto a Direct3D surface.
-// The surface format is assumed to be AYUV. 
+// The surface format is assumed to be AYUV.
 //-------------------------------------------------------------------
 
 HRESULT LoadBitmapResourceToAYUVSurface(
-    IDirect3DSurface9 *pSurf, 
+    IDirect3DSurface9 *pSurf,
     LONG width,                 // Surface width
     LONG height,                // Surface height
-    INT nIDBitmap,              // Resource ID          
+    INT nIDBitmap,              // Resource ID
     BYTE PixelAlphaValue        // Per-pixel alpha value
-    )
+)
 {
     HRESULT hr = S_OK;
 
@@ -124,9 +124,12 @@ HRESULT LoadBitmapResourceToAYUVSurface(
     // Lock the Direct3D surface.
     hr = pSurf->LockRect(&lr, NULL, D3DLOCK_NOSYSLOCK);
 
-    if (FAILED(hr)) { goto done; }
+    if (FAILED(hr))
+    {
+        goto done;
+    }
 
-    // Calculate source and target stride. 
+    // Calculate source and target stride.
     // The source bitmap is bottom-up, the target image is top-down.
 
     LPBYTE lpBits = (LPBYTE)(lpBitmap + 1);
@@ -143,10 +146,10 @@ HRESULT LoadBitmapResourceToAYUVSurface(
         for (LONG x = 0; x < lpBitmap->biWidth; x++)
         {
             const D3DCOLOR rgb = D3DCOLOR_ARGB(
-                PixelAlphaValue, 
-                pPel[x].rgbtRed, 
-                pPel[x].rgbtGreen, pPel[x].rgbtBlue
-                );
+                                     PixelAlphaValue,
+                                     pPel[x].rgbtRed,
+                                     pPel[x].rgbtGreen, pPel[x].rgbtBlue
+                                 );
 
             ((DWORD*) pDest)[x] = RGBtoYUV(rgb);
         }
@@ -170,19 +173,19 @@ done:
 //-------------------------------------------------------------------
 
 HRESULT SetAYUVSurfacePixelAlpha(
-    IDirect3DSurface9 *pSurf, 
-    UINT width, 
-    UINT height, 
+    IDirect3DSurface9 *pSurf,
+    UINT width,
+    UINT height,
     BYTE PixelAlphaValue
-    )
+)
 {
     HRESULT hr;
 
     D3DLOCKED_RECT lr;
 
     hr = pSurf->LockRect(&lr, NULL, D3DLOCK_NOSYSLOCK);
-    if (FAILED(hr)) 
-    { 
+    if (FAILED(hr))
+    {
         return hr;
     }
 
@@ -207,7 +210,7 @@ HRESULT SetAYUVSurfacePixelAlpha(
 // FillRectangle
 //
 // Fills a subrectangle in a Direct3D surface with a solid color.
-// 
+//
 // The caller must call LockSurface to lock the surface, and pass in
 // the D3DLOCKED_RECT structure.
 //-------------------------------------------------------------------
@@ -219,7 +222,7 @@ void FillRectangle(
     const UINT ex,          // Horizontal extent.
     const UINT ey,          // Vertical extent.
     const DWORD color
-    )
+)
 {
     BYTE* p = (BYTE*) lr.pBits;
 
@@ -239,9 +242,9 @@ void FillRectangle(
 // ScaleRectangle
 //
 // Scales an input rectangle, using the following scaling factor:
-// 
+//
 //      output = input * (dst / src)
-//    
+//
 //-------------------------------------------------------------------
 
 RECT ScaleRectangle(const RECT& input, const RECT& src, const RECT& dst)
@@ -268,7 +271,7 @@ RECT ScaleRectangle(const RECT& input, const RECT& src, const RECT& dst)
 //-------------------------------------------------------------------
 // InflateRectBounded
 //
-// Resizes a rectangle by a specified amount, but clips the result 
+// Resizes a rectangle by a specified amount, but clips the result
 // to a bounding rectangle.
 //
 // prc:     The rectangle to resize.

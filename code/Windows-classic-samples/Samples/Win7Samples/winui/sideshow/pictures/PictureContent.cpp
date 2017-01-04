@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -11,9 +11,9 @@
 static const WCHAR s_wszNoPictures[] = L"<body><content id=\"1\" title=\"Picture Viewer Sample\"><txt align=\"c\">No pictures were found in the Pictures folder</txt></content></body>";
 
 /////////////////////////////////////////////////////////////////////////
-//                                          
+//
 // UTF8FromWideStr()
-// 
+//
 // This function, given a wide character string (Unicode), produces a string
 // in UTF8 encoding.
 //
@@ -35,12 +35,12 @@ HRESULT UTF8FromWideStr(
     LPCWSTR wszIn,
     LPSTR* pwszOut,
     DWORD* pcbOut
-    )
+)
 {
     HRESULT hr      = S_OK;
     LPSTR   pszData = NULL;
     DWORD   cbData  = 0;
-    
+
     //
     // Determine the number of bytes needed for the string.
     //
@@ -49,7 +49,7 @@ HRESULT UTF8FromWideStr(
     {
         hr = HRESULT_FROM_WIN32(GetLastError());
     }
-    
+
     //
     // If all went well, make the allocation.  Add one to allow for a NULL
     // terminator.
@@ -62,7 +62,7 @@ HRESULT UTF8FromWideStr(
             hr = E_OUTOFMEMORY;
         }
     }
-    
+
     //
     // Allocate the string as UTF-8 and return it.
     //
@@ -78,7 +78,7 @@ HRESULT UTF8FromWideStr(
     }
     *pcbOut = cbData;
     *pwszOut = pszData;
-    
+
     return hr;
 }
 
@@ -105,14 +105,14 @@ CPictureContent::~CPictureContent()
 void CNoPicturesContent::LoadContent(DWORD* pdwSize, BYTE** ppbData, ISideShowCapabilities* /*pICapabilities*/)
 {
     if (NULL == pdwSize ||
-        NULL == ppbData)
+            NULL == ppbData)
     {
         return;
     }
 
     *ppbData = NULL;
     *pdwSize = 0;
-    
+
     UTF8FromWideStr(s_wszNoPictures, (LPSTR*)ppbData, pdwSize);
 }
 
@@ -124,7 +124,7 @@ void CNoPicturesContent::FreeContent(BYTE** ppbData)
 void CPictureContent::LoadContent(DWORD* pdwSize, BYTE** ppbData, ISideShowCapabilities* /*pICapabilities*/)
 {
     if (NULL == pdwSize ||
-        NULL == ppbData)
+            NULL == ppbData)
     {
         return;
     }
@@ -140,21 +140,21 @@ void CPictureContent::LoadContent(DWORD* pdwSize, BYTE** ppbData, ISideShowCapab
     //
     WCHAR wszPicPath[MAX_PATH];
     BOOL retVal = SHGetSpecialFolderPath(
-            NULL,
-            wszPicPath,
-            CSIDL_MYPICTURES,
-            0);
-            
+                      NULL,
+                      wszPicPath,
+                      CSIDL_MYPICTURES,
+                      0);
+
     if (TRUE == retVal)
     {
         retVal = SUCCEEDED(StringCchCat(wszPicPath, MAX_PATH, L"\\*.jpg"));
     }
-            
+
     if (TRUE == retVal)
     {
         hSearch = ::FindFirstFile(wszPicPath, &fileData);
     }
-    
+
     if (INVALID_HANDLE_VALUE != hSearch)
     {
         //
@@ -189,7 +189,8 @@ void CPictureContent::LoadContent(DWORD* pdwSize, BYTE** ppbData, ISideShowCapab
 
             cPicture++;
 
-        } while (::FindNextFile(hSearch, &fileData) && cPicture < MAX_PICTURES);
+        }
+        while (::FindNextFile(hSearch, &fileData) && cPicture < MAX_PICTURES);
 
         //
         // Have the content wrap around at the edges
@@ -230,7 +231,7 @@ void CPictureContent::FreeContent(BYTE** ppbData)
 ISideShowContent* CPictureContent::GetContent(CONTENT_ID id)
 {
     ISideShowContent*   pContent = NULL;
-    
+
     //
     // If there are no pictures, return a NULL content.
     //
@@ -253,7 +254,7 @@ ISideShowContent* CPictureContent::GetContent(CONTENT_ID id)
         int index = id - CID_XMLIMAGE_FIRST;
         if (index < MAX_PICTURES)
         {
-            pContent = m_PictureXml[index];                   
+            pContent = m_PictureXml[index];
         }
     }
     else if (CID_RAWIMAGE_FIRST <= id)
@@ -265,7 +266,7 @@ ISideShowContent* CPictureContent::GetContent(CONTENT_ID id)
         int index = id - CID_RAWIMAGE_FIRST;
         if (index < MAX_PICTURES)
         {
-            pContent = m_PictureRaw[index];                   
+            pContent = m_PictureRaw[index];
         }
     }
 

@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -70,8 +70,8 @@ public:
 
         // This object only supports IDispatch/_IInkCollectorEvents
         if ((riid == IID_IUnknown)
-            || (riid == IID_IDispatch)
-            || (riid == DIID__IInkCollectorEvents))
+                || (riid == IID_IDispatch)
+                || (riid == DIID__IInkCollectorEvents))
         {
             *ppvObject = (IDispatch *) this;
 
@@ -159,131 +159,131 @@ public:
     {
         switch(dispidMember)
         {
-            case DISPID_ICEStroke:
-                Stroke(
-                    (IInkCursor*) pdispparams->rgvarg[2].pdispVal,
-                    (IInkStrokeDisp*) pdispparams->rgvarg[1].pdispVal,
-                    (VARIANT_BOOL *)pdispparams->rgvarg[0].pboolVal);
-                break;
+        case DISPID_ICEStroke:
+            Stroke(
+                (IInkCursor*) pdispparams->rgvarg[2].pdispVal,
+                (IInkStrokeDisp*) pdispparams->rgvarg[1].pdispVal,
+                (VARIANT_BOOL *)pdispparams->rgvarg[0].pboolVal);
+            break;
 
-            case DISPID_ICECursorDown:
-                CursorDown(
-                    (IInkCursor*) pdispparams->rgvarg[1].pdispVal,
-                    (IInkStrokeDisp*) pdispparams->rgvarg[0].pdispVal);
-                break;
+        case DISPID_ICECursorDown:
+            CursorDown(
+                (IInkCursor*) pdispparams->rgvarg[1].pdispVal,
+                (IInkStrokeDisp*) pdispparams->rgvarg[0].pdispVal);
+            break;
 
-            case DISPID_ICENewPackets:
-                NewPackets(
-                    (IInkCursor*) pdispparams->rgvarg[3].pdispVal,
-                    (IInkStrokeDisp*) pdispparams->rgvarg[2].pdispVal,
-                    pdispparams->rgvarg[1].lVal,
-                    pdispparams->rgvarg[0].pvarVal);
-                break;
+        case DISPID_ICENewPackets:
+            NewPackets(
+                (IInkCursor*) pdispparams->rgvarg[3].pdispVal,
+                (IInkStrokeDisp*) pdispparams->rgvarg[2].pdispVal,
+                pdispparams->rgvarg[1].lVal,
+                pdispparams->rgvarg[0].pvarVal);
+            break;
 
-            case DISPID_IPEDblClick:
-                DblClick(
-                    (VARIANT_BOOL *)pdispparams->rgvarg[0].pboolVal);
-                break;
+        case DISPID_IPEDblClick:
+            DblClick(
+                (VARIANT_BOOL *)pdispparams->rgvarg[0].pboolVal);
+            break;
 
-            case DISPID_IPEMouseMove:
-                MouseMove(
-                    (InkMouseButton) pdispparams->rgvarg[4].lVal,
-                    (InkShiftKeyModifierFlags) pdispparams->rgvarg[3].lVal,
-                    pdispparams->rgvarg[2].lVal,
-                    pdispparams->rgvarg[1].lVal,
-                    (VARIANT_BOOL *)pdispparams->rgvarg[0].pboolVal);
-                break;
+        case DISPID_IPEMouseMove:
+            MouseMove(
+                (InkMouseButton) pdispparams->rgvarg[4].lVal,
+                (InkShiftKeyModifierFlags) pdispparams->rgvarg[3].lVal,
+                pdispparams->rgvarg[2].lVal,
+                pdispparams->rgvarg[1].lVal,
+                (VARIANT_BOOL *)pdispparams->rgvarg[0].pboolVal);
+            break;
 
-            case DISPID_IPEMouseDown:
-                MouseDown(
-                    (InkMouseButton) pdispparams->rgvarg[4].lVal,
-                    (InkShiftKeyModifierFlags) pdispparams->rgvarg[3].lVal,
-                    pdispparams->rgvarg[2].lVal,
-                    pdispparams->rgvarg[1].lVal,
-                    (VARIANT_BOOL *)pdispparams->rgvarg[0].pboolVal);
-                break;
+        case DISPID_IPEMouseDown:
+            MouseDown(
+                (InkMouseButton) pdispparams->rgvarg[4].lVal,
+                (InkShiftKeyModifierFlags) pdispparams->rgvarg[3].lVal,
+                pdispparams->rgvarg[2].lVal,
+                pdispparams->rgvarg[1].lVal,
+                (VARIANT_BOOL *)pdispparams->rgvarg[0].pboolVal);
+            break;
 
-            case DISPID_IPEMouseUp:
-                MouseUp(
-                    (InkMouseButton) pdispparams->rgvarg[4].lVal,
-                    (InkShiftKeyModifierFlags) pdispparams->rgvarg[3].lVal,
-                    pdispparams->rgvarg[2].lVal,
-                    pdispparams->rgvarg[1].lVal,
-                    (VARIANT_BOOL *)pdispparams->rgvarg[0].pboolVal);
-                break;
+        case DISPID_IPEMouseUp:
+            MouseUp(
+                (InkMouseButton) pdispparams->rgvarg[4].lVal,
+                (InkShiftKeyModifierFlags) pdispparams->rgvarg[3].lVal,
+                pdispparams->rgvarg[2].lVal,
+                pdispparams->rgvarg[1].lVal,
+                (VARIANT_BOOL *)pdispparams->rgvarg[0].pboolVal);
+            break;
 
-            case DISPID_IPEMouseWheel:
-                MouseWheel(
-                    (InkMouseButton) pdispparams->rgvarg[5].lVal,
-                    (InkShiftKeyModifierFlags) pdispparams->rgvarg[4].lVal,
-                    pdispparams->rgvarg[3].lVal,
-                    pdispparams->rgvarg[2].lVal,
-                    pdispparams->rgvarg[1].lVal,
-                    (VARIANT_BOOL *)pdispparams->rgvarg[0].pboolVal);
-                break;
+        case DISPID_IPEMouseWheel:
+            MouseWheel(
+                (InkMouseButton) pdispparams->rgvarg[5].lVal,
+                (InkShiftKeyModifierFlags) pdispparams->rgvarg[4].lVal,
+                pdispparams->rgvarg[3].lVal,
+                pdispparams->rgvarg[2].lVal,
+                pdispparams->rgvarg[1].lVal,
+                (VARIANT_BOOL *)pdispparams->rgvarg[0].pboolVal);
+            break;
 
-            case DISPID_ICENewInAirPackets:
-                NewInAirPackets(
-                    (IInkCursor*) pdispparams->rgvarg[2].pdispVal,
-                    pdispparams->rgvarg[1].lVal,
-                    pdispparams->rgvarg[0].pvarVal);
-                break;
+        case DISPID_ICENewInAirPackets:
+            NewInAirPackets(
+                (IInkCursor*) pdispparams->rgvarg[2].pdispVal,
+                pdispparams->rgvarg[1].lVal,
+                pdispparams->rgvarg[0].pvarVal);
+            break;
 
-            case DISPID_ICECursorButtonDown:
-                CursorButtonDown(
-                    (IInkCursor*) pdispparams->rgvarg[1].pdispVal,
-                    (IInkCursorButton*) pdispparams->rgvarg[0].pdispVal);
-                break;
+        case DISPID_ICECursorButtonDown:
+            CursorButtonDown(
+                (IInkCursor*) pdispparams->rgvarg[1].pdispVal,
+                (IInkCursorButton*) pdispparams->rgvarg[0].pdispVal);
+            break;
 
-            case DISPID_ICECursorButtonUp:
-                CursorButtonUp(
-                    (IInkCursor*) pdispparams->rgvarg[1].pdispVal,
-                    (IInkCursorButton*) pdispparams->rgvarg[0].pdispVal);
-                break;
+        case DISPID_ICECursorButtonUp:
+            CursorButtonUp(
+                (IInkCursor*) pdispparams->rgvarg[1].pdispVal,
+                (IInkCursorButton*) pdispparams->rgvarg[0].pdispVal);
+            break;
 
-            case DISPID_ICECursorInRange:
-                CursorInRange(
-                    (IInkCursor*) pdispparams->rgvarg[2].pdispVal,
-                    (VARIANT_BOOL) pdispparams->rgvarg[1].iVal,
-                    pdispparams->rgvarg[0]);
-                break;
+        case DISPID_ICECursorInRange:
+            CursorInRange(
+                (IInkCursor*) pdispparams->rgvarg[2].pdispVal,
+                (VARIANT_BOOL) pdispparams->rgvarg[1].iVal,
+                pdispparams->rgvarg[0]);
+            break;
 
-            case DISPID_ICECursorOutOfRange:
-                CursorOutOfRange(
-                    (IInkCursor*) pdispparams->rgvarg[0].pdispVal);
-                break;
+        case DISPID_ICECursorOutOfRange:
+            CursorOutOfRange(
+                (IInkCursor*) pdispparams->rgvarg[0].pdispVal);
+            break;
 
-            case DISPID_ICESystemGesture:
-                SystemGesture(
-                    (IInkCursor*) pdispparams->rgvarg[6].pdispVal,
-                    (InkSystemGesture) pdispparams->rgvarg[5].lVal,
-                    pdispparams->rgvarg[4].lVal,
-                    pdispparams->rgvarg[3].lVal,
-                    pdispparams->rgvarg[2].lVal,
-                    pdispparams->rgvarg[1].bstrVal,
-                    pdispparams->rgvarg[0].lVal);
-                break;
+        case DISPID_ICESystemGesture:
+            SystemGesture(
+                (IInkCursor*) pdispparams->rgvarg[6].pdispVal,
+                (InkSystemGesture) pdispparams->rgvarg[5].lVal,
+                pdispparams->rgvarg[4].lVal,
+                pdispparams->rgvarg[3].lVal,
+                pdispparams->rgvarg[2].lVal,
+                pdispparams->rgvarg[1].bstrVal,
+                pdispparams->rgvarg[0].lVal);
+            break;
 
-            case DISPID_ICEGesture:
-                Gesture(
-                    (IInkCursor*) pdispparams->rgvarg[3].pdispVal,
-                    (IInkStrokes*) pdispparams->rgvarg[2].pdispVal,
-                    pdispparams->rgvarg[1],
-                    (VARIANT_BOOL *)pdispparams->rgvarg[0].pboolVal);
-                break;
+        case DISPID_ICEGesture:
+            Gesture(
+                (IInkCursor*) pdispparams->rgvarg[3].pdispVal,
+                (IInkStrokes*) pdispparams->rgvarg[2].pdispVal,
+                pdispparams->rgvarg[1],
+                (VARIANT_BOOL *)pdispparams->rgvarg[0].pboolVal);
+            break;
 
-            case DISPID_ICETabletAdded:
-                TabletAdded(
-                    (IInkTablet*) pdispparams->rgvarg[0].pdispVal);
-                break;
+        case DISPID_ICETabletAdded:
+            TabletAdded(
+                (IInkTablet*) pdispparams->rgvarg[0].pdispVal);
+            break;
 
-            case DISPID_ICETabletRemoved:
-                TabletRemoved(
-                    pdispparams->rgvarg[0].lVal);
-                break;
+        case DISPID_ICETabletRemoved:
+            TabletRemoved(
+                pdispparams->rgvarg[0].lVal);
+            break;
 
-            default:
-                break;
+        default:
+            break;
         }
 
         return S_OK;
@@ -510,8 +510,8 @@ public:
             // Get the connection point container
             IConnectionPointContainer *pIConnectionPointContainer;
             hr = pIInkCollector->QueryInterface(
-                IID_IConnectionPointContainer,
-                (void **) &pIConnectionPointContainer);
+                     IID_IConnectionPointContainer,
+                     (void **) &pIConnectionPointContainer);
 
             if (FAILED(hr))
             {
@@ -520,7 +520,7 @@ public:
 
             // Find the connection point for Ink Collector events
             hr = pIConnectionPointContainer->FindConnectionPoint(
-                __uuidof(_IInkCollectorEvents), &m_pIConnectionPoint);
+                     __uuidof(_IInkCollectorEvents), &m_pIConnectionPoint);
 
             if (SUCCEEDED(hr))
             {

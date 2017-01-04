@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -13,10 +13,10 @@
 #include "ntsecapi.h"
 #include "dcomperm.h"
 
-#define VERSION_MAJOR_W2K_XP_W2K3 5 
-#define VERSION_MINOR_W2K         0 
-#define VERSION_MINOR_XP          1 
-#define VERSION_MINOR_W2K3        2 
+#define VERSION_MAJOR_W2K_XP_W2K3 5
+#define VERSION_MINOR_W2K         0
+#define VERSION_MINOR_XP          1
+#define VERSION_MINOR_W2K3        2
 
 
 /*---------------------------------------------------------------------------*\
@@ -26,7 +26,7 @@
 \*---------------------------------------------------------------------------*/
 DWORD GetCurrentUserSID (
     PSID *pSid
-    )
+)
 {
     TOKEN_USER  *ptokenUser = NULL;
     HANDLE      hToken = NULL;
@@ -36,8 +36,8 @@ DWORD GetCurrentUserSID (
 
     if (!OpenProcessToken (GetCurrentProcess(), TOKEN_QUERY, &hToken))
     {
-            dwReturnValue = GetLastError();
-            goto CLEANUP;
+        dwReturnValue = GetLastError();
+        goto CLEANUP;
     }
 
 
@@ -49,32 +49,32 @@ DWORD GetCurrentUserSID (
 
     ptokenUser = (TOKEN_USER *) malloc (cbToken);
 
- if(!ptokenUser)
+    if(!ptokenUser)
     {
         dwReturnValue = ERROR_OUTOFMEMORY;
         goto CLEANUP;
     }
-	   
- if (!GetTokenInformation (hToken,
-                             TokenUser,
-                             ptokenUser,
-                             cbToken,
-                             &cbToken))
+
+    if (!GetTokenInformation (hToken,
+                              TokenUser,
+                              ptokenUser,
+                              cbToken,
+                              &cbToken))
     {
-            dwReturnValue = GetLastError();
-            goto CLEANUP;
+        dwReturnValue = GetLastError();
+        goto CLEANUP;
     }
 
 
     cbSid = GetLengthSid (ptokenUser->User.Sid);
     *pSid = (PSID) malloc (cbSid);
 
- if(!*pSid)
+    if(!*pSid)
     {
         dwReturnValue = ERROR_OUTOFMEMORY;
         goto CLEANUP;
     }
- 
+
     memcpy (*pSid, ptokenUser->User.Sid, cbSid);
     CloseHandle (hToken);
 
@@ -82,8 +82,8 @@ DWORD GetCurrentUserSID (
 CLEANUP:
 
     if (ptokenUser)
-    	free (ptokenUser);
-    
+        free (ptokenUser);
+
     return dwReturnValue;
 }
 
@@ -96,76 +96,76 @@ CLEANUP:
 BOOL ConstructWellKnownSID(
     LPTSTR tszPrincipal,
     PSID *pSid
-    )
+)
 {
 
     BOOL fRetVal = FALSE;
     PSID psidTemp = NULL;
     BOOL fUseWorldAuth = FALSE;
-    
+
     SID_IDENTIFIER_AUTHORITY SidAuthorityNT = SECURITY_NT_AUTHORITY;
     SID_IDENTIFIER_AUTHORITY SidAuthorityWorld = SECURITY_WORLD_SID_AUTHORITY;
 
     DWORD dwSubAuthority;
 
     // Look for well-known English names
-    if (_tcsicmp (tszPrincipal, _T("Administrators")) == 0) 
+    if (_tcsicmp (tszPrincipal, _T("Administrators")) == 0)
     {
         dwSubAuthority = DOMAIN_ALIAS_RID_ADMINS;
-    } 
-    else if (_tcsicmp (tszPrincipal, _T("Power Users")) == 0) 
+    }
+    else if (_tcsicmp (tszPrincipal, _T("Power Users")) == 0)
     {
         dwSubAuthority = DOMAIN_ALIAS_RID_POWER_USERS;
-    } 
-    else if (_tcsicmp (tszPrincipal, _T("Everyone")) == 0) 
+    }
+    else if (_tcsicmp (tszPrincipal, _T("Everyone")) == 0)
     {
         dwSubAuthority = SECURITY_WORLD_RID;
         fUseWorldAuth = TRUE;
-    } 
-    else if (_tcsicmp (tszPrincipal, _T("System")) == 0) 
+    }
+    else if (_tcsicmp (tszPrincipal, _T("System")) == 0)
     {
         dwSubAuthority = SECURITY_LOCAL_SYSTEM_RID;
-    } 
-    else if (_tcsicmp (tszPrincipal, _T("Self")) == 0) 
+    }
+    else if (_tcsicmp (tszPrincipal, _T("Self")) == 0)
     {
         dwSubAuthority = SECURITY_PRINCIPAL_SELF_RID;
-    } 
-    else if (_tcsicmp (tszPrincipal, _T("Anonymous")) == 0) 
+    }
+    else if (_tcsicmp (tszPrincipal, _T("Anonymous")) == 0)
     {
         dwSubAuthority = SECURITY_ANONYMOUS_LOGON_RID;
-    } 
-    else if (_tcsicmp (tszPrincipal, _T("Interactive")) == 0) 
+    }
+    else if (_tcsicmp (tszPrincipal, _T("Interactive")) == 0)
     {
         dwSubAuthority = SECURITY_INTERACTIVE_RID;
-    } 
-    else 
+    }
+    else
     {
         return FALSE;
     }
 
 
     if(dwSubAuthority == DOMAIN_ALIAS_RID_ADMINS ||
-       dwSubAuthority == DOMAIN_ALIAS_RID_POWER_USERS)
+            dwSubAuthority == DOMAIN_ALIAS_RID_POWER_USERS)
     {
         if(!AllocateAndInitializeSid (
-            &SidAuthorityNT, 
-            2,
-            SECURITY_BUILTIN_DOMAIN_RID,
-            dwSubAuthority,
-            0, 0, 0, 0, 0, 0,
-            &psidTemp
-            )) return FALSE;
+                    &SidAuthorityNT,
+                    2,
+                    SECURITY_BUILTIN_DOMAIN_RID,
+                    dwSubAuthority,
+                    0, 0, 0, 0, 0, 0,
+                    &psidTemp
+                )) return FALSE;
     }
     else
     {
 
         if(!AllocateAndInitializeSid (
-            fUseWorldAuth ? &SidAuthorityWorld : &SidAuthorityNT, 
-            1, 
-            dwSubAuthority,
-            0, 0, 0, 0, 0, 0, 0, 
-            &psidTemp
-            )) return FALSE;
+                    fUseWorldAuth ? &SidAuthorityWorld : &SidAuthorityNT,
+                    1,
+                    dwSubAuthority,
+                    0, 0, 0, 0, 0, 0, 0,
+                    &psidTemp
+                )) return FALSE;
 
     }
 
@@ -200,7 +200,7 @@ BOOL ConstructWellKnownSID(
 DWORD GetPrincipalSID (
     LPTSTR tszPrincipal,
     PSID *pSid
-    )
+)
 {
     DWORD        cbSid              = 0;
     TCHAR        tszRefDomain [256] = {0};
@@ -234,7 +234,7 @@ DWORD GetPrincipalSID (
     }
 
     cbRefDomain = 255;
-    
+
     if (!LookupAccountName (NULL,
                             tszPrincipal,
                             *pSid,
@@ -261,7 +261,7 @@ LPTSTR SystemMessage (
     LPTSTR tszBuffer,
     DWORD cbBuffer,
     HRESULT hr
-    )
+)
 {
     LPTSTR   tszMessage = NULL;
 
@@ -275,7 +275,7 @@ LPTSTR SystemMessage (
                    NULL);
 
     _stprintf_s (tszBuffer, cbBuffer, _T("%s(%lx)\n"), tszMessage, hr);
-    
+
     LocalFree (tszMessage);
     return tszBuffer;
 }

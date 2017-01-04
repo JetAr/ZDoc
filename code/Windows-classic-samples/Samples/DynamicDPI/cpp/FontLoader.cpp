@@ -1,4 +1,4 @@
-//// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿//// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 //// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 //// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 //// PARTICULAR PURPOSE.
@@ -15,7 +15,7 @@ using namespace Microsoft::WRL;
 FontLoader::FontLoader(
     _In_ std::wstring location,
     _In_ IDWriteFactory* dwriteFactory
-    ) :
+) :
     m_refCount(),
     m_location(location),
     m_fontFileCount(),
@@ -62,11 +62,11 @@ HRESULT FontLoader::Load()
 
                 FILE_STANDARD_INFO fileInfo = { 0 };
                 if (!GetFileInformationByHandleEx(
-                    fileHandle,
-                    FileStandardInfo,
-                    &fileInfo,
-                    sizeof(fileInfo)
-                    ))
+                            fileHandle,
+                            FileStandardInfo,
+                            &fileInfo,
+                            sizeof(fileInfo)
+                        ))
                 {
                     hr = GetLastError();
                     CloseHandle(fileHandle);
@@ -101,7 +101,8 @@ HRESULT FontLoader::Load()
                 ComPtr<FontFileStream> fontFileStream(new FontFileStream(fileData));
                 m_fontFileStreams.push_back(fontFileStream);
                 m_fontFileCount++;
-            } while (FindNextFileW(findHandle, &fileNameData));
+            }
+            while (FindNextFileW(findHandle, &fileNameData));
             FindClose(findHandle);
         }
     }
@@ -111,13 +112,13 @@ HRESULT FontLoader::Load()
 HRESULT STDMETHODCALLTYPE FontLoader::QueryInterface(
     REFIID uuid,
     _Outptr_ void** object
-    )
+)
 {
     if (    uuid == IID_IUnknown
-        ||  uuid == __uuidof(IDWriteFontCollectionLoader)
-        ||  uuid == __uuidof(IDWriteFontFileEnumerator)
-        ||  uuid == __uuidof(IDWriteFontFileLoader)
-        )
+            ||  uuid == __uuidof(IDWriteFontCollectionLoader)
+            ||  uuid == __uuidof(IDWriteFontFileEnumerator)
+            ||  uuid == __uuidof(IDWriteFontFileLoader)
+       )
     {
         *object = this;
         AddRef();
@@ -154,7 +155,7 @@ HRESULT STDMETHODCALLTYPE FontLoader::CreateEnumeratorFromKey(
     _In_reads_bytes_(fontCollectionKeySize) void const* fontCollectionKey,
     UINT32 fontCollectionKeySize,
     _Outptr_ IDWriteFontFileEnumerator** fontFileEnumerator
-    )
+)
 {
     UNREFERENCED_PARAMETER(factory);
     UNREFERENCED_PARAMETER(fontCollectionKey);
@@ -175,8 +176,8 @@ HRESULT STDMETHODCALLTYPE FontLoader::MoveNext(OUT BOOL* hasCurrentFile)
                 sizeof(size_t),
                 this,
                 &m_currentFontFile
-                )
-            );
+            )
+        );
 
         *hasCurrentFile = TRUE;
         ++m_fontFileStreamIndex;
@@ -199,7 +200,7 @@ HRESULT STDMETHODCALLTYPE FontLoader::CreateStreamFromKey(
     _In_reads_bytes_(fontFileReferenceKeySize) void const* fontFileReferenceKey,
     UINT32 fontFileReferenceKeySize,
     _Outptr_ IDWriteFontFileStream** fontFileStream
-    )
+)
 {
     if (fontFileReferenceKeySize != sizeof(size_t))
     {

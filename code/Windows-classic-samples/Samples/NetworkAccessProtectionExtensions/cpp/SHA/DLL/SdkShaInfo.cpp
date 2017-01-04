@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -22,7 +22,7 @@ extern LONG g_nComObjsInUse;
 STDAPI DllCanUnloadNow(void)
 {
     // A DLL is no longer in use when it is not managing any existing objects
-    // (the reference count on all of its objects is 0). 
+    // (the reference count on all of its objects is 0).
     if (g_nComObjsInUse == 0)
     {
         return S_OK;
@@ -38,7 +38,7 @@ STDAPI DllCanUnloadNow(void)
 _Check_return_
 STDAPI  DllGetClassObject(_In_ REFCLSID rclsid, _In_ REFIID riid, _Outptr_ LPVOID FAR* ppv)
 {
-    HRESULT hr = CLASS_E_CLASSNOTAVAILABLE; 
+    HRESULT hr = CLASS_E_CLASSNOTAVAILABLE;
 
     //Check if the requested COM object is implemented in this DLL
     if (rclsid == CLSID_ComponentInfo)
@@ -50,7 +50,7 @@ STDAPI  DllGetClassObject(_In_ REFCLSID rclsid, _In_ REFIID riid, _Outptr_ LPVOI
         }
         else
         {
-            hr = pShaFact->QueryInterface(riid , ppv);
+            hr = pShaFact->QueryInterface(riid, ppv);
 
             if (FAILED(hr))
             {
@@ -75,31 +75,31 @@ STDAPI DllRegisterServer(void)
 // DllUnregisterServer - Removes entries from the system registry
 STDAPI DllUnregisterServer(void)
 {
-	HRESULT hr = sdkModule.UnregisterServer();
+    HRESULT hr = sdkModule.UnregisterServer();
 
-	return hr;
+    return hr;
 }
 
 // DllInstall - Adds/Removes entries to the system registry per user
-//              per machine.	
+//              per machine.
 STDAPI DllInstall(
-    _In_ BOOL bInstall, 
+    _In_ BOOL bInstall,
     _In_z_ LPCWSTR /*pCmdLine*/)
 {
     HRESULT hr = E_FAIL;
     static const wchar_t userSwitch[] = L"user";
 
     if (bInstall)
-    {	
-    	hr = DllRegisterServer();
-    	if (FAILED(hr))
-    	{	
-    		DllUnregisterServer();
-    	}
+    {
+        hr = DllRegisterServer();
+        if (FAILED(hr))
+        {
+            DllUnregisterServer();
+        }
     }
     else
     {
-    	hr = DllUnregisterServer();
+        hr = DllUnregisterServer();
     }
 
     return hr;

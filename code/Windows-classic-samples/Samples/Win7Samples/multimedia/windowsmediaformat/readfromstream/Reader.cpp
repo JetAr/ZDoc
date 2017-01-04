@@ -1,4 +1,4 @@
-//*****************************************************************************
+﻿//*****************************************************************************
 //
 // Microsoft Windows Media
 // Copyright (C) Microsoft Corporation. All rights reserved.
@@ -51,10 +51,10 @@ CReader::~CReader()
 // Implementation of IUnknown methods
 //------------------------------------------------------------------------------
 HRESULT STDMETHODCALLTYPE CReader::QueryInterface( /* [in] */ REFIID riid,
-                                                   /* [out] */ void __RPC_FAR *__RPC_FAR *ppvObject ) 
+        /* [out] */ void __RPC_FAR *__RPC_FAR *ppvObject )
 {
     if( ( IID_IWMReaderCallback == riid ) ||
-        ( IID_IUnknown == riid ) )
+            ( IID_IUnknown == riid ) )
     {
         *ppvObject = static_cast< IWMReaderCallback* >( this );
         AddRef();
@@ -86,11 +86,11 @@ ULONG STDMETHODCALLTYPE CReader::Release()
 // Desc: Implementation of IWMReaderCallback::OnSample.
 //------------------------------------------------------------------------------
 HRESULT CReader::OnSample( /* [in] */ DWORD dwOutputNum,
-                           /* [in] */ QWORD cnsSampleTime,
-                           /* [in] */ QWORD cnsSampleDuration,
-                           /* [in] */ DWORD dwFlags,
-                           /* [in] */ INSSBuffer __RPC_FAR *pSample,
-                           /* [in] */ void __RPC_FAR *pvContext )
+                                      /* [in] */ QWORD cnsSampleTime,
+                                      /* [in] */ QWORD cnsSampleDuration,
+                                      /* [in] */ DWORD dwFlags,
+                                      /* [in] */ INSSBuffer __RPC_FAR *pSample,
+                                      /* [in] */ void __RPC_FAR *pvContext )
 {
     //
     // Add your code here
@@ -103,28 +103,28 @@ HRESULT CReader::OnSample( /* [in] */ DWORD dwOutputNum,
 // Desc: Implementation of IWMStatusCallback::OnStatus.
 //------------------------------------------------------------------------------
 HRESULT CReader::OnStatus( /* [in] */ WMT_STATUS Status,
-                           /* [in] */ HRESULT hr,
-                           /* [in] */ WMT_ATTR_DATATYPE dwType,
-                           /* [in] */ BYTE __RPC_FAR *pValue,
-                           /* [in] */ void __RPC_FAR *pvContext )
+                                      /* [in] */ HRESULT hr,
+                                      /* [in] */ WMT_ATTR_DATATYPE dwType,
+                                      /* [in] */ BYTE __RPC_FAR *pValue,
+                                      /* [in] */ void __RPC_FAR *pvContext )
 {
     switch( Status )
     {
     case WMT_OPENED:
         m_hrAsync = hr;
-        SetEvent( m_hEvent );        
+        SetEvent( m_hEvent );
         printf( "Opened the file ...\n" );
         break;
 
     case WMT_STARTED:
         m_hrAsync = hr;
-        SetEvent( m_hEvent );        
+        SetEvent( m_hEvent );
         printf( "Started ...\n" );
         break;
 
     case WMT_STOPPED:
         m_hrAsync = hr;
-        SetEvent( m_hEvent );        
+        SetEvent( m_hEvent );
         printf( "Stopped ...\n" );
         break;
 
@@ -133,7 +133,7 @@ HRESULT CReader::OnStatus( /* [in] */ WMT_STATUS Status,
         SetEvent( m_hEvent );
         printf( "Closed the file ...\n" );
         break;
- 
+
     case WMT_EOF:
         m_hrAsync = hr;
         SetEvent( m_hEvent );
@@ -156,14 +156,14 @@ HRESULT CReader::Open( /* [in] */ const TCHAR *ptszFile )
     {
         m_hrAsync = S_OK;
 
-		if( NULL == m_pStream )
+        if( NULL == m_pStream )
         {
             m_pStream = new CROStream;
-	        if( NULL == m_pStream )
-	        {
+            if( NULL == m_pStream )
+            {
                 hr = E_OUTOFMEMORY;
                 break;
-	        }
+            }
         }
 
         //
@@ -205,7 +205,7 @@ HRESULT CReader::Open( /* [in] */ const TCHAR *ptszFile )
         }
 
         //
-        // QI for IWMReaderAdvanced2 
+        // QI for IWMReaderAdvanced2
         //
         hr = m_pReader->QueryInterface( IID_IWMReaderAdvanced2, ( void** )&m_pReader2 );
         if( FAILED( hr ) )
@@ -223,7 +223,7 @@ HRESULT CReader::Open( /* [in] */ const TCHAR *ptszFile )
             printf( "Could not open reader from stream (hr=%#X).\n", hr );
             break;
         }
-    
+
         //
         // Wait for the open to finish
         //

@@ -1,4 +1,4 @@
-//////////////////////////////////////////////////////////////////////
+﻿//////////////////////////////////////////////////////////////////////
 //
 //  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 //  ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED
@@ -109,24 +109,24 @@ LRESULT CALLBACK CExtentVisualWindow::_WndProc(HWND hwnd, UINT uMsg, WPARAM wPar
     CExtentVisualWindow *_this;
     HDC hdc;
     PAINTSTRUCT ps;
-  
+
     _this = _GetThis(hwnd);
 
     switch (uMsg)
     {
-        case WM_CREATE:
-            _SetThis(hwnd, lParam);
-            return 0;
+    case WM_CREATE:
+        _SetThis(hwnd, lParam);
+        return 0;
 
-        case WM_PAINT:
-            hdc = BeginPaint(hwnd, &ps);
-            if (_this)
-                _this->OnPaint(hwnd, hdc);
-            EndPaint(hwnd, &ps);
-            break;
+    case WM_PAINT:
+        hdc = BeginPaint(hwnd, &ps);
+        if (_this)
+            _this->OnPaint(hwnd, hdc);
+        EndPaint(hwnd, &ps);
+        break;
 
-        default:
-            return DefWindowProc(hwnd, uMsg, wParam, lParam);
+    default:
+        return DefWindowProc(hwnd, uMsg, wParam, lParam);
     }
     return 0;
 }
@@ -144,8 +144,8 @@ void CExtentVisualWindow::Show(RECT *prc)
         return;
 
     InvalidateRect(_hwnd, NULL, TRUE);
-    SetWindowPos(_hwnd, 
-                 HWND_TOPMOST, 
+    SetWindowPos(_hwnd,
+                 HWND_TOPMOST,
                  prc->left,
                  prc->top,
                  prc->right - prc->left > 2 ? prc->right - prc->left : 2,
@@ -199,17 +199,17 @@ void CExtentVisualWindow::OnPaint(HWND hwnd, HDC hdc)
 void CExtentMonitorTextService::_EnsureExtentVisualWindows()
 {
     if (!_pExtentVisualWinodowStartPos)
-         _pExtentVisualWinodowStartPos = new CExtentVisualWindow(L"Start", 0x0000FF);
+        _pExtentVisualWinodowStartPos = new CExtentVisualWindow(L"Start", 0x0000FF);
     if (_pExtentVisualWinodowStartPos)
         _pExtentVisualWinodowStartPos->CreateWnd();
 
     if (!_pExtentVisualWinodowEndPos)
-         _pExtentVisualWinodowEndPos = new CExtentVisualWindow(L"End", 0xFF0000);
+        _pExtentVisualWinodowEndPos = new CExtentVisualWindow(L"End", 0xFF0000);
     if (_pExtentVisualWinodowEndPos)
         _pExtentVisualWinodowEndPos->CreateWnd();
 
     if (!_pExtentVisualWinodowSelection)
-         _pExtentVisualWinodowSelection = new CExtentVisualWindow(L"Selection", 0x00FF00);
+        _pExtentVisualWinodowSelection = new CExtentVisualWindow(L"Selection", 0x00FF00);
     if (_pExtentVisualWinodowSelection)
         _pExtentVisualWinodowSelection->CreateWnd();
 }

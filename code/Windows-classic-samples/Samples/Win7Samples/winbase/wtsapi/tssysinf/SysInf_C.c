@@ -1,4 +1,4 @@
-/*++
+﻿/*++
 
 Copyright 1998 - 2000 Microsoft Corporation
 
@@ -61,30 +61,30 @@ void DisplayError(LPTSTR pszAPI)
 
 BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved)
 {
-UNREFERENCED_PARAMETER(lpvReserved);
-UNREFERENCED_PARAMETER(hinstDLL);
+    UNREFERENCED_PARAMETER(lpvReserved);
+    UNREFERENCED_PARAMETER(hinstDLL);
 
     switch(fdwReason)
     {
-        case DLL_PROCESS_ATTACH:
-            OutputDebugString(TEXT("SYSINF_C: process attach\n"));
-            break;
+    case DLL_PROCESS_ATTACH:
+        OutputDebugString(TEXT("SYSINF_C: process attach\n"));
+        break;
 
-        case DLL_THREAD_ATTACH:
-            OutputDebugString(TEXT("SYSINF_C: thread attach\n"));
-            break;
+    case DLL_THREAD_ATTACH:
+        OutputDebugString(TEXT("SYSINF_C: thread attach\n"));
+        break;
 
-        case DLL_THREAD_DETACH:
-            OutputDebugString(TEXT("SYSINF_C: thread detach\n"));
-            break;
+    case DLL_THREAD_DETACH:
+        OutputDebugString(TEXT("SYSINF_C: thread detach\n"));
+        break;
 
-        case DLL_PROCESS_DETACH:
-            OutputDebugString(TEXT("SYSINF_C: process detach\n"));
-            break;
+    case DLL_PROCESS_DETACH:
+        OutputDebugString(TEXT("SYSINF_C: process detach\n"));
+        break;
 
-        default:
-            OutputDebugString(TEXT("SYSINF_C: Unknown reason in DllMain\n"));
-            break;
+    default:
+        OutputDebugString(TEXT("SYSINF_C: Unknown reason in DllMain\n"));
+        break;
     }
     return TRUE;
 }
@@ -113,9 +113,9 @@ void GetMemoryInfo(void)
     // write memory info to channel
     //
     ui = gpEntryPoints->pVirtualChannelWrite(gdwOpenChannel,
-                                             (LPVOID)&ms,
-                                             sizeof(ms),
-                                             (LPVOID)&dwControlCode);
+            (LPVOID)&ms,
+            sizeof(ms),
+            (LPVOID)&dwControlCode);
     if (ui != CHANNEL_RC_OK)
         OutputDebugString(TEXT("SYSINF_C: worker thread VirtualChannelWrite failed\n"));
 
@@ -186,9 +186,9 @@ void GetVersionInfo(void)
     // write memory info to channel
     //
     ui = gpEntryPoints->pVirtualChannelWrite(gdwOpenChannel,
-                                             (LPVOID)&tsvi,
-                                             sizeof(tsvi),
-                                             (LPVOID)&dwControlCode);
+            (LPVOID)&tsvi,
+            sizeof(tsvi),
+            (LPVOID)&dwControlCode);
     if (ui != CHANNEL_RC_OK)
         OutputDebugString(TEXT("SYSINF_C: worker thread VirtualChannelWrite failed\n"));
 
@@ -209,7 +209,8 @@ void WINAPI WorkerThread(void)
     hEventConnect[0] = ghStopThread;
     hEventConnect[1] = ghAlertThread;
 
-    while( !bDone ) {
+    while( !bDone )
+    {
 
         OutputDebugString(TEXT("SYSINF_C: worker thread waiting...\n"));
 
@@ -217,42 +218,42 @@ void WINAPI WorkerThread(void)
 
         switch(dw)
         {
-            case WAIT_FAILED:
-            {
-                DisplayError(TEXT("WaitForMultipleObjects"));
-            }
-            break;
+        case WAIT_FAILED:
+        {
+            DisplayError(TEXT("WaitForMultipleObjects"));
+        }
+        break;
 
-            case WAIT_OBJECT_0:
-            {
-                bDone = TRUE;
-            }
-            break;
+        case WAIT_OBJECT_0:
+        {
+            bDone = TRUE;
+        }
+        break;
 
-            case WAIT_OBJECT_0 + 1:
-            {
-                OutputDebugString(TEXT("SYSINF_C: worker thread wakeup\n"));
+        case WAIT_OBJECT_0 + 1:
+        {
+            OutputDebugString(TEXT("SYSINF_C: worker thread wakeup\n"));
 
-                dwControlCode = gdwControlCode;
+            dwControlCode = gdwControlCode;
 
-                //
-                // signal
-                //
-                if (!SetEvent(ghSynchCodeEvent))
-                    DisplayError(TEXT("SetEvent"));
+            //
+            // signal
+            //
+            if (!SetEvent(ghSynchCodeEvent))
+                DisplayError(TEXT("SetEvent"));
 
-                if (dwControlCode == TSMEMORYINFO)
-                    GetMemoryInfo();
-                else
-                    GetVersionInfo();
-            }
-            break;
+            if (dwControlCode == TSMEMORYINFO)
+                GetMemoryInfo();
+            else
+                GetVersionInfo();
+        }
+        break;
 
-            default:
-            {
-                OutputDebugString(TEXT("SYSINF_C: worker thread - unknown wait rc\n"));
-            }
-            break;
+        default:
+        {
+            OutputDebugString(TEXT("SYSINF_C: worker thread - unknown wait rc\n"));
+        }
+        break;
         }
     }
 
@@ -269,72 +270,73 @@ void WINAPI VirtualChannelOpenEvent(DWORD openHandle, UINT event, LPVOID pdata, 
     UNREFERENCED_PARAMETER(openHandle);
     UNREFERENCED_PARAMETER(dataFlags);
 
-    if (dataLength == totalLength){
+    if (dataLength == totalLength)
+    {
         switch(event)
         {
-            case CHANNEL_EVENT_DATA_RECEIVED:
+        case CHANNEL_EVENT_DATA_RECEIVED:
+        {
+            //
+            // initialize
+            //
+            gdwControlCode = *pdwControlCode;
+
+            //
+            // initiate a write
+            //
+            if (!SetEvent(ghAlertThread))
+                DisplayError(TEXT("SetEvent"));
+            else
+                OutputDebugString(TEXT("SYSINF_C: signal to wake up thread\n"));
+
+            //
+            // wait for worker thread to read control
+            //
+            if (WaitForSingleObject(ghSynchCodeEvent, INFINITE) == WAIT_FAILED)
+                DisplayError(TEXT("WaitForSingleObject"));
+        }
+        break;
+
+        case CHANNEL_EVENT_WRITE_COMPLETE:
+        {
+            switch (*pdwControlCode)
             {
-                //
-                // initialize
-                //
-                gdwControlCode = *pdwControlCode;
+            case TSMEMORYINFO:
+                OutputDebugString(TEXT("SYSINF_C: write completed for memory info\n"));
+                break;
 
-                //
-                // initiate a write
-                //
-                if (!SetEvent(ghAlertThread))
-                    DisplayError(TEXT("SetEvent"));
-                else
-                    OutputDebugString(TEXT("SYSINF_C: signal to wake up thread\n"));
-
-                //
-                // wait for worker thread to read control
-                //
-                if (WaitForSingleObject(ghSynchCodeEvent, INFINITE) == WAIT_FAILED)
-                    DisplayError(TEXT("WaitForSingleObject"));
-            }
-            break;
-
-            case CHANNEL_EVENT_WRITE_COMPLETE:
-            {
-                switch (*pdwControlCode)
-                {
-                    case TSMEMORYINFO:
-                        OutputDebugString(TEXT("SYSINF_C: write completed for memory info\n"));
-                        break;
-
-                    case TSVERSIONINFO:
-                        OutputDebugString(TEXT("SYSINF_C: write completed for version info\n"));
-                        break;
-
-                    default:
-                        OutputDebugString(TEXT("SYSINF_C: write completed for UNKNOWN\n"));
-                        break;
-                }
-
-                //
-                // set event to notify write is complete
-                //
-                if (!SetEvent(ghWriteEvent))
-                    DisplayError(TEXT("SetEvent"));
-            }
-            break;
-
-            case CHANNEL_EVENT_WRITE_CANCELLED:
-            {
-                //
-                // set event to notify write is complete since write was cancelled
-                //
-                if (!SetEvent(ghWriteEvent))
-                    DisplayError(TEXT("SetEvent"));
-            }
-            break;
+            case TSVERSIONINFO:
+                OutputDebugString(TEXT("SYSINF_C: write completed for version info\n"));
+                break;
 
             default:
-            {
-                OutputDebugString(TEXT("SYSINF_C: unrecognized open event\n"));
+                OutputDebugString(TEXT("SYSINF_C: write completed for UNKNOWN\n"));
+                break;
             }
-            break;
+
+            //
+            // set event to notify write is complete
+            //
+            if (!SetEvent(ghWriteEvent))
+                DisplayError(TEXT("SetEvent"));
+        }
+        break;
+
+        case CHANNEL_EVENT_WRITE_CANCELLED:
+        {
+            //
+            // set event to notify write is complete since write was cancelled
+            //
+            if (!SetEvent(ghWriteEvent))
+                DisplayError(TEXT("SetEvent"));
+        }
+        break;
+
+        default:
+        {
+            OutputDebugString(TEXT("SYSINF_C: unrecognized open event\n"));
+        }
+        break;
         }
     }
     else
@@ -352,148 +354,149 @@ VOID VCAPITYPE VirtualChannelInitEventProc(LPVOID pInitHandle, UINT event, LPVOI
 
     switch(event)
     {
-        case CHANNEL_EVENT_INITIALIZED:
+    case CHANNEL_EVENT_INITIALIZED:
+    {
+        OutputDebugString(TEXT("SYSINF_C: channel initialized\n"));
+    }
+    break;
+
+    case CHANNEL_EVENT_CONNECTED:
+    {
+        //
+        // save client machine
+        //
+        ZeroMemory(gszClientName, sizeof(gszClientName));
+        strcpy_s(gszClientName, strlen((LPSTR)pData)+1, (LPSTR)pData);
+
+        OutputDebugString(TEXT("SYSINF_C: channel connected\n"));
+
+        //
+        // open channel
+        //
+        ui = gpEntryPoints->pVirtualChannelOpen(gphChannel,
+                                                &gdwOpenChannel,
+                                                CHANNELNAME,
+                                                (PCHANNEL_OPEN_EVENT_FN)VirtualChannelOpenEvent);
+        if (ui != CHANNEL_RC_OK)
         {
-            OutputDebugString(TEXT("SYSINF_C: channel initialized\n"));
+            OutputDebugString(TEXT("SYSINF_C: virtual channel open failed\n"));
+            return;
         }
-        break;
 
-        case CHANNEL_EVENT_CONNECTED:
+        //
+        // create write completion event
+        //
+        ghWriteEvent = CreateEvent(NULL, FALSE, FALSE, NULL);
+        if (ghWriteEvent == NULL)
+            DisplayError(TEXT("CreateEvent"));
+
+        //
+        // create thread wakeup event
+        //
+        ghAlertThread = CreateEvent(NULL, FALSE, FALSE, NULL);
+        if (ghAlertThread == NULL)
+            DisplayError(TEXT("CreateEvent"));
+
+        //
+        // create thread stop event
+        //
+        ghStopThread = CreateEvent(NULL, FALSE, FALSE, NULL);
+        if (ghStopThread == NULL)
+            DisplayError(TEXT("CreateEvent"));
+
+        //
+        // create thread synch event
+        //
+        ghSynchCodeEvent = CreateEvent(NULL, FALSE, FALSE, NULL);
+        if (ghSynchCodeEvent == NULL)
+            DisplayError(TEXT("CreateEvent"));
+
+        //
+        // spawn the worker thread
+        //
+        ghThread = CreateThread(NULL,
+                                0,
+                                (LPTHREAD_START_ROUTINE)WorkerThread,
+                                NULL,
+                                0,
+                                &dwThreadId);
+        if (ghThread == NULL)
+            DisplayError(TEXT("CreateThread"));
+    }
+    break;
+
+    case CHANNEL_EVENT_V1_CONNECTED:
+    {
+        OutputDebugString(TEXT("SYSINF_C: v1 connected\n"));
+        MessageBox(NULL,
+                   TEXT("Connecting to a non Windows 2000 Terminal Server"),
+                   TEXT("sysinf_c.dll"),
+                   MB_OK);
+    }
+    break;
+
+    case CHANNEL_EVENT_DISCONNECTED:
+    {
+        DWORD dw;
+
+        OutputDebugString(TEXT("SYSINF_C: disconnected\n"));
+
+        //
+        // signal worker thread to end
+        //
+        if (!SetEvent(ghStopThread))
+            DisplayError(TEXT("SetEvent"));
+
+        //
+        // wait for thread to die
+        //
+        dw = WaitForSingleObject(ghThread, 5000);
+
+        switch(dw)
         {
+        case WAIT_TIMEOUT:
             //
-            // save client machine
+            // blow away thread since time expired
             //
-            ZeroMemory(gszClientName, sizeof(gszClientName));
-            strcpy_s(gszClientName, strlen((LPSTR)pData)+1, (LPSTR)pData);
+            OutputDebugString(TEXT("SYSINF_C: blowing away worker thread\n"));
+            if (!TerminateThread(ghThread, 0))
+                DisplayError(TEXT("TerminateThread"));
+            break;
 
-            OutputDebugString(TEXT("SYSINF_C: channel connected\n"));
-
-            //
-            // open channel
-            //
-            ui = gpEntryPoints->pVirtualChannelOpen(gphChannel,
-                                                    &gdwOpenChannel,
-                                                    CHANNELNAME,
-                                                    (PCHANNEL_OPEN_EVENT_FN)VirtualChannelOpenEvent);
-            if (ui != CHANNEL_RC_OK){
-                OutputDebugString(TEXT("SYSINF_C: virtual channel open failed\n"));
-                return;
-            }
-
-            //
-            // create write completion event
-            //
-            ghWriteEvent = CreateEvent(NULL, FALSE, FALSE, NULL);
-            if (ghWriteEvent == NULL)
-                DisplayError(TEXT("CreateEvent"));
-
-            //
-            // create thread wakeup event
-            //
-            ghAlertThread = CreateEvent(NULL, FALSE, FALSE, NULL);
-            if (ghAlertThread == NULL)
-                DisplayError(TEXT("CreateEvent"));
-
-            //
-            // create thread stop event
-            //
-            ghStopThread = CreateEvent(NULL, FALSE, FALSE, NULL);
-            if (ghStopThread == NULL)
-                DisplayError(TEXT("CreateEvent"));
-
-            //
-            // create thread synch event
-            //
-            ghSynchCodeEvent = CreateEvent(NULL, FALSE, FALSE, NULL);
-            if (ghSynchCodeEvent == NULL)
-                DisplayError(TEXT("CreateEvent"));
-
-            //
-            // spawn the worker thread
-            //
-            ghThread = CreateThread(NULL,
-                                    0,
-                                    (LPTHREAD_START_ROUTINE)WorkerThread,
-                                    NULL,
-                                    0,
-                                    &dwThreadId);
-            if (ghThread == NULL)
-                DisplayError(TEXT("CreateThread"));
-        }
-        break;
-
-        case CHANNEL_EVENT_V1_CONNECTED:
-        {
-            OutputDebugString(TEXT("SYSINF_C: v1 connected\n"));
-            MessageBox(NULL,
-                       TEXT("Connecting to a non Windows 2000 Terminal Server"),
-                       TEXT("sysinf_c.dll"),
-                       MB_OK);
-        }
-        break;
-
-        case CHANNEL_EVENT_DISCONNECTED:
-        {
-            DWORD dw;
-
-            OutputDebugString(TEXT("SYSINF_C: disconnected\n"));
-
-            //
-            // signal worker thread to end
-            //
-            if (!SetEvent(ghStopThread))
-                DisplayError(TEXT("SetEvent"));
-
-            //
-            // wait for thread to die
-            //
-            dw = WaitForSingleObject(ghThread, 5000);
-
-            switch(dw)
-            {
-                case WAIT_TIMEOUT:
-                    //
-                    // blow away thread since time expired
-                    //
-                    OutputDebugString(TEXT("SYSINF_C: blowing away worker thread\n"));
-                    if (!TerminateThread(ghThread, 0))
-                        DisplayError(TEXT("TerminateThread"));
-                    break;
-
-                case WAIT_FAILED:
-                    DisplayError(TEXT("WaitForSingleObject"));
-                    break;
-                default:
-                    break;
-            }
-
-            OutputDebugString(TEXT("SYSINF_C: worker thread terminated\n"));
-
-            //
-            // close handles
-            //
-            CloseHandle(ghStopThread);
-            CloseHandle(ghAlertThread);
-            CloseHandle(ghWriteEvent);
-            CloseHandle(ghSynchCodeEvent);
-        }
-        break;
-
-        case CHANNEL_EVENT_TERMINATED:
-        {
-            OutputDebugString(TEXT("SYSINF_C: client terminated\n"));
-            //
-            // free the entry points table
-            //
-            LocalFree((HLOCAL)gpEntryPoints);
-        }
-        break;
-
+        case WAIT_FAILED:
+            DisplayError(TEXT("WaitForSingleObject"));
+            break;
         default:
-        {
-            OutputDebugString(TEXT("SYSINF_C: unrecognized init event\n"));
+            break;
         }
-        break;
+
+        OutputDebugString(TEXT("SYSINF_C: worker thread terminated\n"));
+
+        //
+        // close handles
+        //
+        CloseHandle(ghStopThread);
+        CloseHandle(ghAlertThread);
+        CloseHandle(ghWriteEvent);
+        CloseHandle(ghSynchCodeEvent);
+    }
+    break;
+
+    case CHANNEL_EVENT_TERMINATED:
+    {
+        OutputDebugString(TEXT("SYSINF_C: client terminated\n"));
+        //
+        // free the entry points table
+        //
+        LocalFree((HLOCAL)gpEntryPoints);
+    }
+    break;
+
+    default:
+    {
+        OutputDebugString(TEXT("SYSINF_C: unrecognized init event\n"));
+    }
+    break;
     }
 }
 
@@ -529,9 +532,9 @@ BOOL VCAPITYPE VirtualChannelEntry(PCHANNEL_ENTRY_POINTS pEntryPoints)
     // register channel
     //
     uRet = gpEntryPoints->pVirtualChannelInit((LPVOID *)&gphChannel,
-                                              (PCHANNEL_DEF)&cd, 1,
-                                              VIRTUAL_CHANNEL_VERSION_WIN2000,
-                                              (PCHANNEL_INIT_EVENT_FN)VirtualChannelInitEventProc);
+            (PCHANNEL_DEF)&cd, 1,
+            VIRTUAL_CHANNEL_VERSION_WIN2000,
+            (PCHANNEL_INIT_EVENT_FN)VirtualChannelInitEventProc);
     if (uRet != CHANNEL_RC_OK)
         return FALSE;
 

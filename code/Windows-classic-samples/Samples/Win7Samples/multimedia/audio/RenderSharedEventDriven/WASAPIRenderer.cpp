@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -14,7 +14,7 @@
 //  A simple WASAPI Render client.
 //
 
-CWASAPIRenderer::CWASAPIRenderer(IMMDevice *Endpoint, bool EnableStreamSwitch, ERole EndpointRole) : 
+CWASAPIRenderer::CWASAPIRenderer(IMMDevice *Endpoint, bool EnableStreamSwitch, ERole EndpointRole) :
     _RefCount(1),
     _Endpoint(Endpoint),
     _AudioClient(NULL),
@@ -38,7 +38,7 @@ CWASAPIRenderer::CWASAPIRenderer(IMMDevice *Endpoint, bool EnableStreamSwitch, E
 //
 //  Empty destructor - everything should be released in the Shutdown() call.
 //
-CWASAPIRenderer::~CWASAPIRenderer(void) 
+CWASAPIRenderer::~CWASAPIRenderer(void)
 {
 }
 
@@ -47,12 +47,12 @@ CWASAPIRenderer::~CWASAPIRenderer(void)
 //
 bool CWASAPIRenderer::InitializeAudioEngine()
 {
-    HRESULT hr = _AudioClient->Initialize(AUDCLNT_SHAREMODE_SHARED, 
-        AUDCLNT_STREAMFLAGS_EVENTCALLBACK | AUDCLNT_STREAMFLAGS_NOPERSIST, 
-        _EngineLatencyInMS*10000, 
-        0, 
-        _MixFormat, 
-        NULL);
+    HRESULT hr = _AudioClient->Initialize(AUDCLNT_SHAREMODE_SHARED,
+                                          AUDCLNT_STREAMFLAGS_EVENTCALLBACK | AUDCLNT_STREAMFLAGS_NOPERSIST,
+                                          _EngineLatencyInMS*10000,
+                                          0,
+                                          _MixFormat,
+                                          NULL);
 
     if (FAILED(hr))
     {
@@ -131,8 +131,8 @@ bool CWASAPIRenderer::LoadFormat()
 //
 bool CWASAPIRenderer::CalculateMixFormatType()
 {
-    if (_MixFormat->wFormatTag == WAVE_FORMAT_PCM || 
-        _MixFormat->wFormatTag == WAVE_FORMAT_EXTENSIBLE &&
+    if (_MixFormat->wFormatTag == WAVE_FORMAT_PCM ||
+            _MixFormat->wFormatTag == WAVE_FORMAT_EXTENSIBLE &&
             reinterpret_cast<WAVEFORMATEXTENSIBLE *>(_MixFormat)->SubFormat == KSDATAFORMAT_SUBTYPE_PCM)
     {
         if (_MixFormat->wBitsPerSample == 16)
@@ -147,11 +147,11 @@ bool CWASAPIRenderer::CalculateMixFormatType()
     }
     else if (_MixFormat->wFormatTag == WAVE_FORMAT_IEEE_FLOAT ||
              (_MixFormat->wFormatTag == WAVE_FORMAT_EXTENSIBLE &&
-               reinterpret_cast<WAVEFORMATEXTENSIBLE *>(_MixFormat)->SubFormat == KSDATAFORMAT_SUBTYPE_IEEE_FLOAT))
+              reinterpret_cast<WAVEFORMATEXTENSIBLE *>(_MixFormat)->SubFormat == KSDATAFORMAT_SUBTYPE_IEEE_FLOAT))
     {
         _RenderSampleType = SampleTypeFloat;
     }
-    else 
+    else
     {
         printf("unrecognized device format.\n");
         return false;
@@ -301,7 +301,7 @@ bool CWASAPIRenderer::Start(RenderBuffer *RenderBufferQueue)
     _RenderBufferQueue = RenderBufferQueue;
 
     //
-    //  We want to pre-roll the first buffer's worth of data into the pipeline.  That way the audio engine won't glitch on startup.  
+    //  We want to pre-roll the first buffer's worth of data into the pipeline.  That way the audio engine won't glitch on startup.
     //
     {
         BYTE *pData;
@@ -375,7 +375,7 @@ void CWASAPIRenderer::Stop()
     HRESULT hr;
 
     //
-    //  Tell the render thread to shut down, wait for the thread to complete then clean up all the stuff we 
+    //  Tell the render thread to shut down, wait for the thread to complete then clean up all the stuff we
     //  allocated in Start().
     //
     if (_ShutdownEvent)
@@ -557,7 +557,7 @@ bool CWASAPIRenderer::InitializeStreamSwitch()
         return false;
     }
     //
-    //  Register for session and endpoint change notifications.  
+    //  Register for session and endpoint change notifications.
     //
     //  A stream switch is initiated when we receive a session disconnect notification or we receive a default device changed notification.
     //
@@ -615,11 +615,11 @@ void CWASAPIRenderer::TerminateStreamSwitch()
 //  When a stream switch happens, we want to do several things in turn:
 //
 //  1) Stop the current renderer.
-//  2) Release any resources we have allocated (the _AudioClient, _AudioSessionControl (after unregistering for notifications) and 
+//  2) Release any resources we have allocated (the _AudioClient, _AudioSessionControl (after unregistering for notifications) and
 //        _RenderClient).
 //  3) Wait until the default device has changed (or 500ms has elapsed).  If we time out, we need to abort because the stream switch can't happen.
 //  4) Retrieve the new default endpoint for our role.
-//  5) Re-instantiate the audio client on that new endpoint.  
+//  5) Re-instantiate the audio client on that new endpoint.
 //  6) Retrieve the mix format for the new endpoint.  If the mix format doesn't match the old endpoint's mix format, we need to abort because the stream
 //      switch can't happen.
 //  7) Re-initialize the _AudioClient.
@@ -658,15 +658,15 @@ bool CWASAPIRenderer::HandleStreamSwitchEvent()
     //
     //  Step 3.  Wait for the default device to change.
     //
-    //  There is a race between the session disconnect arriving and the new default device 
-    //  arriving (if applicable).  Wait the shorter of 500 milliseconds or the arrival of the 
-    //  new default device, then attempt to switch to the default device.  In the case of a 
+    //  There is a race between the session disconnect arriving and the new default device
+    //  arriving (if applicable).  Wait the shorter of 500 milliseconds or the arrival of the
+    //  new default device, then attempt to switch to the default device.  In the case of a
     //  format change (i.e. the default device does not change), we artificially generate  a
-    //  new default device notification so the code will not needlessly wait 500ms before 
-    //  re-opening on the new format.  (However, note below in step 6 that in this SDK 
-    //  sample, we are unlikely to actually successfully absorb a format change, but a 
-    //  real audio application implementing stream switching would re-format their 
-    //  pipeline to deliver the new format).  
+    //  new default device notification so the code will not needlessly wait 500ms before
+    //  re-opening on the new format.  (However, note below in step 6 that in this SDK
+    //  sample, we are unlikely to actually successfully absorb a format change, but a
+    //  real audio application implementing stream switching would re-format their
+    //  pipeline to deliver the new format).
     //
     DWORD waitResult = WaitForSingleObject(_StreamSwitchCompleteEvent, 500);
     if (waitResult == WAIT_TIMEOUT)
@@ -764,9 +764,9 @@ ErrorExit:
 }
 
 //
-//  Called when an audio session is disconnected.  
+//  Called when an audio session is disconnected.
 //
-//  When a session is disconnected because of a device removal or format change event, we just want 
+//  When a session is disconnected because of a device removal or format change event, we just want
 //  to let the render thread know that the session's gone away
 //
 HRESULT CWASAPIRenderer::OnSessionDisconnected(AudioSessionDisconnectReason DisconnectReason)
@@ -799,7 +799,7 @@ HRESULT CWASAPIRenderer::OnSessionDisconnected(AudioSessionDisconnectReason Disc
     return S_OK;
 }
 //
-//  Called when the default render device changed.  We just want to set an event which lets the stream switch logic know that it's ok to 
+//  Called when the default render device changed.  We just want to set an event which lets the stream switch logic know that it's ok to
 //  continue with the stream switch.
 //
 HRESULT CWASAPIRenderer::OnDefaultDeviceChanged(EDataFlow Flow, ERole Role, LPCWSTR /*NewDefaultDeviceId*/)
@@ -807,9 +807,9 @@ HRESULT CWASAPIRenderer::OnDefaultDeviceChanged(EDataFlow Flow, ERole Role, LPCW
     if (Flow == eRender && Role == _EndpointRole)
     {
         //
-        //  The default render device for our configuredf role was changed.  
+        //  The default render device for our configuredf role was changed.
         //
-        //  If we're not in a stream switch already, we want to initiate a stream switch event.  
+        //  If we're not in a stream switch already, we want to initiate a stream switch event.
         //  We also we want to set the stream switch complete event.  That will signal the render thread that it's ok to re-initialize the
         //  audio renderer.
         //

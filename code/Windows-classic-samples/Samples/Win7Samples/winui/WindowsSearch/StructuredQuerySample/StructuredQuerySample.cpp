@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -30,7 +30,11 @@ PCWSTR GetOperationLabel(CONDITION_OPERATION op)
 {
     PCWSTR pszLabel = NULL;
 
-    static struct { PCWSTR pszLabel; CONDITION_OPERATION op; } const c_rgOperationLabels[] =
+    static struct
+    {
+        PCWSTR pszLabel;
+        CONDITION_OPERATION op;
+    } const c_rgOperationLabels[] =
     {
         MAP_ENTRY(COP_IMPLICIT),
         MAP_ENTRY(COP_EQUAL),
@@ -81,87 +85,87 @@ HRESULT DisplayQuery(ICondition2* pc, int cIndentation)
         {
         case CT_AND_CONDITION:
         case CT_OR_CONDITION:
+        {
+            wprintf(L"%*s%s\n", 2 * cIndentation, L"", (ct == CT_AND_CONDITION ? L"AND" : L"OR"));
+            IObjectArray* poaSubs;
+            hr = pc->GetSubConditions(IID_PPV_ARGS(&poaSubs));
+            if (SUCCEEDED(hr))
             {
-                wprintf(L"%*s%s\n", 2 * cIndentation, L"", (ct == CT_AND_CONDITION ? L"AND" : L"OR"));
-                IObjectArray* poaSubs;
-                hr = pc->GetSubConditions(IID_PPV_ARGS(&poaSubs));
-                if (SUCCEEDED(hr))
+                UINT cSubs;
+                hr = poaSubs->GetCount(&cSubs);
+                for (UINT i = 0 ; SUCCEEDED(hr) && i < cSubs ; ++i)
                 {
-                    UINT cSubs;
-                    hr = poaSubs->GetCount(&cSubs);
-                    for (UINT i = 0 ; SUCCEEDED(hr) && i < cSubs ; ++i)
-                    {
-                        ICondition2* pcSub;
-                        hr = poaSubs->GetAt(i, IID_PPV_ARGS(&pcSub));
-                        if (SUCCEEDED(hr))
-                        {
-                            DisplayQuery(pcSub, cIndentation + 1);
-                            pcSub->Release();
-                        }
-                    }
-                    poaSubs->Release();
-                }
-            }
-            break;
-        case CT_NOT_CONDITION:
-            {
-                wprintf(L"%*s%s\n", 2 * cIndentation, L"", L"NOT");
-                // ICondition::GetSubConditions can return the single subcondition of a negation node directly.
-                ICondition2* pcSub;
-                hr = pc->GetSubConditions(IID_PPV_ARGS(&pcSub));
-                if (SUCCEEDED(hr))
-                {
-                    DisplayQuery(pcSub, cIndentation + 1);
-                    pcSub->Release();
-                }
-            }
-            break;
-        case CT_LEAF_CONDITION:
-            {
-                PROPERTYKEY propkey;
-                CONDITION_OPERATION op;
-                PROPVARIANT propvar;
-                hr = pc->GetLeafConditionInfo(&propkey, &op, &propvar);
-                if (SUCCEEDED(hr))
-                {
-                    IPropertyDescription* ppd;
-                    hr = PSGetPropertyDescription(propkey, IID_PPV_ARGS(&ppd));
+                    ICondition2* pcSub;
+                    hr = poaSubs->GetAt(i, IID_PPV_ARGS(&pcSub));
                     if (SUCCEEDED(hr))
                     {
-                        PWSTR pszPropertyName;
-                        hr = ppd->GetCanonicalName(&pszPropertyName);
+                        DisplayQuery(pcSub, cIndentation + 1);
+                        pcSub->Release();
+                    }
+                }
+                poaSubs->Release();
+            }
+        }
+        break;
+        case CT_NOT_CONDITION:
+        {
+            wprintf(L"%*s%s\n", 2 * cIndentation, L"", L"NOT");
+            // ICondition::GetSubConditions can return the single subcondition of a negation node directly.
+            ICondition2* pcSub;
+            hr = pc->GetSubConditions(IID_PPV_ARGS(&pcSub));
+            if (SUCCEEDED(hr))
+            {
+                DisplayQuery(pcSub, cIndentation + 1);
+                pcSub->Release();
+            }
+        }
+        break;
+        case CT_LEAF_CONDITION:
+        {
+            PROPERTYKEY propkey;
+            CONDITION_OPERATION op;
+            PROPVARIANT propvar;
+            hr = pc->GetLeafConditionInfo(&propkey, &op, &propvar);
+            if (SUCCEEDED(hr))
+            {
+                IPropertyDescription* ppd;
+                hr = PSGetPropertyDescription(propkey, IID_PPV_ARGS(&ppd));
+                if (SUCCEEDED(hr))
+                {
+                    PWSTR pszPropertyName;
+                    hr = ppd->GetCanonicalName(&pszPropertyName);
+                    if (SUCCEEDED(hr))
+                    {
+                        PROPVARIANT propvarString;
+                        hr = PropVariantChangeType(&propvarString, propvar, PVCHF_ALPHABOOL, VT_LPWSTR); // Real applications should prefer PSFormatForDisplay but we want more "raw" values.
                         if (SUCCEEDED(hr))
                         {
-                            PROPVARIANT propvarString;
-                            hr = PropVariantChangeType(&propvarString, propvar, PVCHF_ALPHABOOL, VT_LPWSTR); // Real applications should prefer PSFormatForDisplay but we want more "raw" values.
+                            PWSTR pszSemanticType;
+                            hr = pc->GetValueType(&pszSemanticType);
                             if (SUCCEEDED(hr))
                             {
-                                PWSTR pszSemanticType;
-                                hr = pc->GetValueType(&pszSemanticType);
+                                // The semantic type may be NULL; if so, do not display it at all.
+                                if (!pszSemanticType)
+                                {
+                                    hr = SHStrDup(L"", &pszSemanticType);
+                                }
+
                                 if (SUCCEEDED(hr))
                                 {
-                                    // The semantic type may be NULL; if so, do not display it at all.
-                                    if (!pszSemanticType)
-                                    {
-                                        hr = SHStrDup(L"", &pszSemanticType);
-                                    }
-
-                                    if (SUCCEEDED(hr))
-                                    {
-                                        wprintf(L"%*sLEAF %s %s %s %s\n", 2 * cIndentation, L"", pszPropertyName, GetOperationLabel(op), propvarString.pwszVal, pszSemanticType);
-                                    }
-                                    CoTaskMemFree(pszSemanticType);
+                                    wprintf(L"%*sLEAF %s %s %s %s\n", 2 * cIndentation, L"", pszPropertyName, GetOperationLabel(op), propvarString.pwszVal, pszSemanticType);
                                 }
-                                PropVariantClear(&propvarString);
+                                CoTaskMemFree(pszSemanticType);
                             }
-                            CoTaskMemFree(pszPropertyName);
+                            PropVariantClear(&propvarString);
                         }
-                        ppd->Release();
+                        CoTaskMemFree(pszPropertyName);
                     }
-                    PropVariantClear(&propvar);
+                    ppd->Release();
                 }
+                PropVariantClear(&propvar);
             }
-            break;
+        }
+        break;
         }
     }
     return hr;
@@ -177,82 +181,82 @@ HRESULT DisplayQuery(ICondition* pc, int cIndentation)
         {
         case CT_AND_CONDITION:
         case CT_OR_CONDITION:
+        {
+            wprintf(L"%*s%s\n", 2 * cIndentation, L"", (ct == CT_AND_CONDITION ? L"AND" : L"OR"));
+            IEnumUnknown* peuSubs;
+            hr = pc->GetSubConditions(IID_PPV_ARGS(&peuSubs));
+            if (SUCCEEDED(hr))
             {
-                wprintf(L"%*s%s\n", 2 * cIndentation, L"", (ct == CT_AND_CONDITION ? L"AND" : L"OR"));
-                IEnumUnknown* peuSubs;
-                hr = pc->GetSubConditions(IID_PPV_ARGS(&peuSubs));
-                if (SUCCEEDED(hr))
+                IUnknown* punk;
+                while ((hr = peuSubs->Next(1, &punk, NULL)) == S_OK)
                 {
-                    IUnknown* punk;
-                    while ((hr = peuSubs->Next(1, &punk, NULL)) == S_OK)
-                    {
-                        ICondition* pcSub;
-                        hr = punk->QueryInterface(IID_PPV_ARGS(&pcSub));
-                        if (SUCCEEDED(hr))
-                        {
-                            DisplayQuery(pcSub, cIndentation + 1);
-                            pcSub->Release();
-                        }
-                        punk->Release();
-                    }
-                    peuSubs->Release();
-                }
-            }
-            break;
-        case CT_NOT_CONDITION:
-            {
-                wprintf(L"%*s%s\n", 2 * cIndentation, L"", L"NOT");
-                // ICondition::GetSubConditions can return the single subcondition of a negation node directly.
-                ICondition* pcSub;
-                hr = pc->GetSubConditions(IID_PPV_ARGS(&pcSub));
-                if (SUCCEEDED(hr))
-                {
-                    DisplayQuery(pcSub, cIndentation + 1);
-                    pcSub->Release();
-                }
-            }
-            break;
-        case CT_LEAF_CONDITION:
-            {
-                PWSTR pszPropertyName;
-                CONDITION_OPERATION op;
-                PROPVARIANT propvar;
-                hr = pc->GetComparisonInfo(&pszPropertyName, &op, &propvar);
-                if (SUCCEEDED(hr))
-                {
-                    // The property name may be NULL or "*"; if NULL, display it as such.
-                    if (!pszPropertyName)
-                    {
-                        hr = SHStrDup(L"(NULL)", &pszPropertyName);
-                    }
-
-                    PROPVARIANT propvarString;
-                    hr = PropVariantChangeType(&propvarString, propvar, PVCHF_ALPHABOOL, VT_LPWSTR); // Real applications should prefer PSFormatForDisplay but we want more "raw" values.
+                    ICondition* pcSub;
+                    hr = punk->QueryInterface(IID_PPV_ARGS(&pcSub));
                     if (SUCCEEDED(hr))
                     {
-                        PWSTR pszSemanticType;
-                        hr = pc->GetValueType(&pszSemanticType);
+                        DisplayQuery(pcSub, cIndentation + 1);
+                        pcSub->Release();
+                    }
+                    punk->Release();
+                }
+                peuSubs->Release();
+            }
+        }
+        break;
+        case CT_NOT_CONDITION:
+        {
+            wprintf(L"%*s%s\n", 2 * cIndentation, L"", L"NOT");
+            // ICondition::GetSubConditions can return the single subcondition of a negation node directly.
+            ICondition* pcSub;
+            hr = pc->GetSubConditions(IID_PPV_ARGS(&pcSub));
+            if (SUCCEEDED(hr))
+            {
+                DisplayQuery(pcSub, cIndentation + 1);
+                pcSub->Release();
+            }
+        }
+        break;
+        case CT_LEAF_CONDITION:
+        {
+            PWSTR pszPropertyName;
+            CONDITION_OPERATION op;
+            PROPVARIANT propvar;
+            hr = pc->GetComparisonInfo(&pszPropertyName, &op, &propvar);
+            if (SUCCEEDED(hr))
+            {
+                // The property name may be NULL or "*"; if NULL, display it as such.
+                if (!pszPropertyName)
+                {
+                    hr = SHStrDup(L"(NULL)", &pszPropertyName);
+                }
+
+                PROPVARIANT propvarString;
+                hr = PropVariantChangeType(&propvarString, propvar, PVCHF_ALPHABOOL, VT_LPWSTR); // Real applications should prefer PSFormatForDisplay but we want more "raw" values.
+                if (SUCCEEDED(hr))
+                {
+                    PWSTR pszSemanticType;
+                    hr = pc->GetValueType(&pszSemanticType);
+                    if (SUCCEEDED(hr))
+                    {
+                        // The semantic type may be NULL; if so, do not display it at all.
+                        if (!pszSemanticType)
+                        {
+                            hr = SHStrDup(L"", &pszSemanticType);
+                        }
+
                         if (SUCCEEDED(hr))
                         {
-                            // The semantic type may be NULL; if so, do not display it at all.
-                            if (!pszSemanticType)
-                            {
-                                hr = SHStrDup(L"", &pszSemanticType);
-                            }
-
-                            if (SUCCEEDED(hr))
-                            {
-                                wprintf(L"%*sLEAF %s %s %s %s\n", 2 * cIndentation, L"", pszPropertyName, GetOperationLabel(op), propvarString.pwszVal, pszSemanticType);
-                            }
-                            CoTaskMemFree(pszSemanticType);
+                            wprintf(L"%*sLEAF %s %s %s %s\n", 2 * cIndentation, L"", pszPropertyName, GetOperationLabel(op), propvarString.pwszVal, pszSemanticType);
                         }
-                        PropVariantClear(&propvarString);
+                        CoTaskMemFree(pszSemanticType);
                     }
-                    CoTaskMemFree(pszPropertyName);
-                    PropVariantClear(&propvar);
+                    PropVariantClear(&propvarString);
                 }
+                CoTaskMemFree(pszPropertyName);
+                PropVariantClear(&propvar);
             }
-            break;
+        }
+        break;
         }
     }
     return hr;

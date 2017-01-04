@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -10,9 +10,9 @@
 #include "endpointMonitor.h"
 
 CVolumeMonitor::CVolumeMonitor()
-:   m_bRegisteredForEndpointNotifications(FALSE),
-    m_bRegisteredForVolumeNotifications(FALSE),
-    m_cRef(1)
+    :   m_bRegisteredForEndpointNotifications(FALSE),
+        m_bRegisteredForVolumeNotifications(FALSE),
+        m_cRef(1)
 {
 }
 
@@ -59,7 +59,7 @@ HRESULT CVolumeMonitor::Initialize()
 }
 
 // ----------------------------------------------------------------------
-//  Called from the UI thread when the volume is changed (see OSD.cpp 
+//  Called from the UI thread when the volume is changed (see OSD.cpp
 //  WM_VOLUMECHANGE handler)
 //
 // ----------------------------------------------------------------------
@@ -158,8 +158,8 @@ void CVolumeMonitor::ChangeEndpoint()
 // ----------------------------------------------------------------------
 HRESULT CVolumeMonitor::OnDefaultDeviceChanged
 (
-    EDataFlow   flow, 
-    ERole       /*role*/, 
+    EDataFlow   flow,
+    ERole       /*role*/,
     LPCWSTR     /*pwstrDefaultDeviceId*/
 )
 {
@@ -176,7 +176,7 @@ HRESULT CVolumeMonitor::OnDefaultDeviceChanged
 // ----------------------------------------------------------------------
 //  Implementation of IAudioEndpointVolumeCallback::OnNotify
 //
-//  This is called by the audio core when anyone in any process changes the volume or 
+//  This is called by the audio core when anyone in any process changes the volume or
 //  mute state for the endpoint we are monitoring
 //
 // ----------------------------------------------------------------------
@@ -194,7 +194,7 @@ HRESULT CVolumeMonitor::OnNotify(PAUDIO_VOLUME_NOTIFICATION_DATA /*pNotify*/)
 HRESULT CVolumeMonitor::QueryInterface(REFIID iid, void** ppUnk)
 {
     if ((iid == __uuidof(IUnknown)) ||
-        (iid == __uuidof(IMMNotificationClient)))
+            (iid == __uuidof(IMMNotificationClient)))
     {
         *ppUnk = static_cast<IMMNotificationClient*>(this);
     }

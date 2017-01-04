@@ -1,4 +1,4 @@
-//==========================================================================
+﻿//==========================================================================
 //
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
@@ -75,18 +75,18 @@ extern CComModule _Module;
 
 class CFaxNotify
 {
-        public:
-                CFaxNotify(): 
-                        m_pFaxServer(NULL), 
-                        m_lpwzServerName(NULL)                        
-                { }
-                HRESULT Initialize(LPTSTR lptstrServerName);
-                HRESULT Listen(BOOL bServerNotify);
-                HRESULT Terminate();
-        private: 
-                CComPtr<IFaxServer2> m_pFaxServer;
-                CComPtr<IFaxAccount> m_pFaxAccount;
-                LPWSTR m_lpwzServerName;
+public:
+    CFaxNotify():
+        m_pFaxServer(NULL),
+        m_lpwzServerName(NULL)
+    { }
+    HRESULT Initialize(LPTSTR lptstrServerName);
+    HRESULT Listen(BOOL bServerNotify);
+    HRESULT Terminate();
+private:
+    CComPtr<IFaxServer2> m_pFaxServer;
+    CComPtr<IFaxAccount> m_pFaxAccount;
+    LPWSTR m_lpwzServerName;
 };
 
 inline HRESULT ValidateFaxAccount(CComPtr<IFaxAccount> pFaxAccount);
@@ -96,17 +96,17 @@ void DisplayJobStatus(CComPtr<IFaxJobStatus> pJobStatus);
 inline HRESULT ValidateFaxServer(CComPtr<IFaxServer2> pFaxServer);
 
 HRESULT GetConnectionPoint(CComPtr<IUnknown> pSource,
-                REFIID riidOutgoingInterface,
-                IConnectionPoint **ppIConnPoint);
+                           REFIID riidOutgoingInterface,
+                           IConnectionPoint **ppIConnPoint);
 
 HRESULT AttachToConnectionPoint(CComPtr<IUnknown> pSource,
-                CComPtr<IUnknown> pSink,
-                REFIID riidOutgoingInterface,
-                LPDWORD lpdwCookie);
+                                CComPtr<IUnknown> pSink,
+                                REFIID riidOutgoingInterface,
+                                LPDWORD lpdwCookie);
 
 HRESULT DetachFromConnectionPoint(CComPtr<IUnknown> pSource,
-                REFIID riidOutgoingInterface,
-                DWORD dwCookie);
+                                  REFIID riidOutgoingInterface,
+                                  DWORD dwCookie);
 
 #endif // __COM_FAXNOTIFY_SAMPLE
 

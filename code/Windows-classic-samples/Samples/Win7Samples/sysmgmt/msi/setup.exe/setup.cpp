@@ -1,4 +1,4 @@
-//+-------------------------------------------------------------------------
+﻿//+-------------------------------------------------------------------------
 //
 //  Copyright (c) Microsoft Corporation. All rights reserved.
 //
@@ -78,7 +78,7 @@ const DWORD lcidLOCALE_INVARIANT = MAKELCID(MAKELANGID(LANG_ENGLISH, SUBLANG_ENG
 // WinMain -- Application Entry Point
 //
 
-extern "C" int __stdcall WinMain(HINSTANCE hInst, HINSTANCE hPrevInst , __in LPSTR lpszCmdLine, int nCmdShow)
+extern "C" int __stdcall WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, __in LPSTR lpszCmdLine, int nCmdShow)
 {
 
 //-----------------------------------------------------------------------------------------------------------------
@@ -115,7 +115,7 @@ extern "C" int __stdcall WinMain(HINSTANCE hInst, HINSTANCE hPrevInst , __in LPS
 
     char szModuleFile[MAX_PATH]         = {0};
     DWORD dwModuleFileSize       = MAX_PATH;
-    
+
     DWORD dwMsiFileSize          = 0;
     DWORD dwBaseURLSize          = 0;
     DWORD cchInstallPath         = 0;
@@ -166,7 +166,7 @@ extern "C" int __stdcall WinMain(HINSTANCE hInst, HINSTANCE hPrevInst , __in LPS
     MSIHANDLE hRec = 0;
 
     INSTALLSTATE isProduct = INSTALLSTATE_UNKNOWN;
-    
+
     const char * szAdminImagePath = 0;
 
 
@@ -190,7 +190,7 @@ extern "C" int __stdcall WinMain(HINSTANCE hInst, HINSTANCE hPrevInst , __in LPS
 
     // Figure out what we want to do
     emExecMode = GetExecutionMode (lpszCmdLine);
-    
+
     if (emVerify == emExecMode)
     {
         //
@@ -202,19 +202,19 @@ extern "C" int __stdcall WinMain(HINSTANCE hInst, HINSTANCE hPrevInst , __in LPS
         if (ERROR_BAD_ARGUMENTS != uiRet)
             goto CleanUp;
     }
-    
+
     if (ERROR_BAD_ARGUMENTS == uiRet || emHelp == emExecMode)
     {
         DisplayUsage(hInst, NULL, szAppTitle);
         goto CleanUp;
     }
-    
+
     //
     // NOTE:
     // Delay handling admin. installs until we have determined if we are
     // patching an existing install or if we are doing a default install.
     //
- 
+
     // initialize our UI object with desktop as parent
     DownloadUI.Initialize(hInst, /* hwndParent = */ 0, szAppTitle);
 
@@ -232,10 +232,10 @@ extern "C" int __stdcall WinMain(HINSTANCE hInst, HINSTANCE hPrevInst , __in LPS
     if (AlreadyInProgress(hMutex))
     {
         // silently return - correct return code ?
-		uiRet = ERROR_INSTALL_ALREADY_RUNNING;
-		goto CleanUp;
+        uiRet = ERROR_INSTALL_ALREADY_RUNNING;
+        goto CleanUp;
     }
-    
+
     // determine operation, default (if not present) is INSTALL
     if (ERROR_OUTOFMEMORY == (uiRet = SetupLoadResourceString(hInst, ISETUPPROPNAME_OPERATION, &szOperation, dwOperationSize)))
     {
@@ -313,7 +313,7 @@ extern "C" int __stdcall WinMain(HINSTANCE hInst, HINSTANCE hPrevInst , __in LPS
 
         fPatch = true;
     }
-    
+
     //
     // If we are here, this is either an admin. install or a default install.
     // File signature verification, help and other invalid parameters have
@@ -328,7 +328,7 @@ extern "C" int __stdcall WinMain(HINSTANCE hInst, HINSTANCE hPrevInst , __in LPS
             goto CleanUp;
         }
     }
-    
+
     //
     // At this point, the validation of the commandline arguments is complete
     // and we have all the information we need.
@@ -390,8 +390,8 @@ extern "C" int __stdcall WinMain(HINSTANCE hInst, HINSTANCE hPrevInst , __in LPS
         {
             PostResourceNotFoundError(hInst, DownloadUI.GetCurrentWindow(), szAppTitle, ISETUPPROPNAME_UPDATE);
             goto CleanUp;
-        }            
-        
+        }
+
         // determine if we need to download the Windows Installer update package from the web -- based on presence of UPDATELOCATION property
         if (ERROR_OUTOFMEMORY == (uiRet = SetupLoadResourceString(hInst, ISETUPPROPNAME_UPDATELOCATION, &szBase, dwBaseUpdateSize)))
         {
@@ -432,9 +432,9 @@ extern "C" int __stdcall WinMain(HINSTANCE hInst, HINSTANCE hPrevInst , __in LPS
 
     // perform some extra authoring validation
     if (fPatch
-        && CSTR_EQUAL != CompareString(lcidLOCALE_INVARIANT, NORM_IGNORECASE, szOperation, -1, szMinPatchOperation, -1)
-        && CSTR_EQUAL != CompareString(lcidLOCALE_INVARIANT, NORM_IGNORECASE, szOperation, -1, szMajPatchOperation, -1)
-        && CSTR_EQUAL != CompareString(lcidLOCALE_INVARIANT, NORM_IGNORECASE, szOperation, -1, szDefaultOperation, -1))
+            && CSTR_EQUAL != CompareString(lcidLOCALE_INVARIANT, NORM_IGNORECASE, szOperation, -1, szMinPatchOperation, -1)
+            && CSTR_EQUAL != CompareString(lcidLOCALE_INVARIANT, NORM_IGNORECASE, szOperation, -1, szMajPatchOperation, -1)
+            && CSTR_EQUAL != CompareString(lcidLOCALE_INVARIANT, NORM_IGNORECASE, szOperation, -1, szDefaultOperation, -1))
     {
         // wrong operation
         DebugMsg("[Error] Operation %s is not valid for a patch\n", szOperation);
@@ -443,9 +443,9 @@ extern "C" int __stdcall WinMain(HINSTANCE hInst, HINSTANCE hPrevInst , __in LPS
         goto CleanUp;
     }
     else if (!fPatch
-        && CSTR_EQUAL != CompareString(lcidLOCALE_INVARIANT, NORM_IGNORECASE, szOperation, -1, szInstallOperation, -1)
-        && CSTR_EQUAL != CompareString(lcidLOCALE_INVARIANT, NORM_IGNORECASE, szOperation, -1, szInstallUpdOperation, -1)
-        && CSTR_EQUAL != CompareString(lcidLOCALE_INVARIANT, NORM_IGNORECASE, szOperation, -1, szDefaultOperation, -1))
+             && CSTR_EQUAL != CompareString(lcidLOCALE_INVARIANT, NORM_IGNORECASE, szOperation, -1, szInstallOperation, -1)
+             && CSTR_EQUAL != CompareString(lcidLOCALE_INVARIANT, NORM_IGNORECASE, szOperation, -1, szInstallUpdOperation, -1)
+             && CSTR_EQUAL != CompareString(lcidLOCALE_INVARIANT, NORM_IGNORECASE, szOperation, -1, szDefaultOperation, -1))
     {
         // wrong operation
         DebugMsg("[Error] Operation %s is not valid for a package\n", szOperation);
@@ -456,8 +456,8 @@ extern "C" int __stdcall WinMain(HINSTANCE hInst, HINSTANCE hPrevInst , __in LPS
 
     // by now we either have a MSI or a MSP
     if (CSTR_EQUAL == CompareString(lcidLOCALE_INVARIANT, NORM_IGNORECASE, szOperation, -1, szMinPatchOperation, -1)
-        || CSTR_EQUAL == CompareString(lcidLOCALE_INVARIANT, NORM_IGNORECASE, szOperation, -1, szInstallUpdOperation, -1)
-        || (fPatch && CSTR_EQUAL == CompareString(lcidLOCALE_INVARIANT, NORM_IGNORECASE, szOperation, -1, szDefaultOperation, -1)))
+            || CSTR_EQUAL == CompareString(lcidLOCALE_INVARIANT, NORM_IGNORECASE, szOperation, -1, szInstallUpdOperation, -1)
+            || (fPatch && CSTR_EQUAL == CompareString(lcidLOCALE_INVARIANT, NORM_IGNORECASE, szOperation, -1, szDefaultOperation, -1)))
         fQFE = true;
 
     // obtain base URL
@@ -503,7 +503,7 @@ extern "C" int __stdcall WinMain(HINSTANCE hInst, HINSTANCE hPrevInst , __in LPS
             PostError(hInst, DownloadUI.GetCurrentWindow(), szAppTitle, IDS_INTERNAL_ERROR);
             uiRet = ERROR_INSTALL_FAILURE;
             goto CleanUp;
-        }        
+        }
 
         // canocialize the URL path
         cchInstallPath = cchTempPath*2;
@@ -592,7 +592,7 @@ extern "C" int __stdcall WinMain(HINSTANCE hInst, HINSTANCE hPrevInst , __in LPS
             goto CleanUp;
         }
 
-        // perform trust check 
+        // perform trust check
         itvEnum itv = IsPackageTrusted(szModuleFile, szMsiCacheFile, DownloadUI.GetCurrentWindow());
         if (itvWintrustNotOnMachine == itv)
         {
@@ -638,7 +638,7 @@ extern "C" int __stdcall WinMain(HINSTANCE hInst, HINSTANCE hPrevInst , __in LPS
             uiRet = ERROR_INSTALL_FAILURE;
             goto CleanUp;
         }
-        
+
         cchInstallPath = 2*cchTempPath;
         szInstallPath = new char[cchInstallPath];
         if (!szInstallPath)
@@ -705,11 +705,11 @@ extern "C" int __stdcall WinMain(HINSTANCE hInst, HINSTANCE hPrevInst , __in LPS
     DownloadUI.Terminate();
 
     //
-    // perform install 
+    // perform install
     //
 
     hMsi = LoadLibrary(MSI_DLL);
-    
+
     if (hMsi)
     {
         pfnMsiSetInternalUI = (PFnMsiSetInternalUI)GetProcAddress(hMsi, MSIAPI_MsiSetInternalUI);
@@ -725,7 +725,7 @@ extern "C" int __stdcall WinMain(HINSTANCE hInst, HINSTANCE hPrevInst , __in LPS
         pfnMsiCloseHandle = (PFnMsiCloseHandle)GetProcAddress(hMsi, MSIAPI_MsiCloseHandle);
     }
     if (!hMsi || !pfnMsiSetInternalUI || !pfnMsiInstallProduct || !pfnMsiApplyPatch || !pfnMsiReinstallProduct || !pfnMsiQueryProductState
-        || !pfnMsiDatabaseOpenView || !pfnMsiViewExecute || !pfnMsiViewFetch || !pfnMsiRecordGetString || !pfnMsiCloseHandle)
+            || !pfnMsiDatabaseOpenView || !pfnMsiViewExecute || !pfnMsiViewFetch || !pfnMsiRecordGetString || !pfnMsiCloseHandle)
     {
         PostError(hInst, DownloadUI.GetCurrentWindow(), szAppTitle, IDS_FAILED_TO_UPGRADE_MSI);
         uiRet = ERROR_INSTALL_FAILURE;
@@ -738,7 +738,7 @@ extern "C" int __stdcall WinMain(HINSTANCE hInst, HINSTANCE hPrevInst , __in LPS
     if (!fPatch)
     {
         // performing install or reinstall/recache
-        DebugMsg("[Info] Calling MsiInstallProduct with szInstallPath = %s", szInstallPath); 
+        DebugMsg("[Info] Calling MsiInstallProduct with szInstallPath = %s", szInstallPath);
         DebugMsg(" and szCommandLine = %s\n", szProperties ? szProperties : "{null}");
 
         // default operation for a package is INSTALL
@@ -747,10 +747,10 @@ extern "C" int __stdcall WinMain(HINSTANCE hInst, HINSTANCE hPrevInst , __in LPS
         {
             // check to see if this product is already installed
             if (ERROR_SUCCESS == pfnMsiOpenDatabase(szMsiCacheFile ? szMsiCacheFile : szInstallPath, MSIDBOPEN_READONLY, &hDatabase)
-                && ERROR_SUCCESS == pfnMsiDatabaseOpenView(hDatabase, sqlProductCode, &hView)
-                && ERROR_SUCCESS == pfnMsiViewExecute(hView, 0)
-                && ERROR_SUCCESS == pfnMsiViewFetch(hView, &hRec)
-                && ERROR_SUCCESS == pfnMsiRecordGetString(hRec, 1, szProductCode, &dwProductCodeSize))
+                    && ERROR_SUCCESS == pfnMsiDatabaseOpenView(hDatabase, sqlProductCode, &hView)
+                    && ERROR_SUCCESS == pfnMsiViewExecute(hView, 0)
+                    && ERROR_SUCCESS == pfnMsiViewFetch(hView, &hRec)
+                    && ERROR_SUCCESS == pfnMsiRecordGetString(hRec, 1, szProductCode, &dwProductCodeSize))
             {
                 isProduct = pfnMsiQueryProductState(szProductCode);
                 DebugMsg("[Info] MsiQueryProductState returned %d\n", isProduct);
@@ -779,7 +779,7 @@ extern "C" int __stdcall WinMain(HINSTANCE hInst, HINSTANCE hPrevInst , __in LPS
             if (hRec)
                 pfnMsiCloseHandle(hRec);
         }
-        
+
         //
         // Set up the properties to be passed into MSIInstallProduct
         //
@@ -789,7 +789,7 @@ extern "C" int __stdcall WinMain(HINSTANCE hInst, HINSTANCE hPrevInst , __in LPS
             cchInstProperties = lstrlen (szProperties);
         if (emAdminInstall == emExecMode)
             cchInstProperties += lstrlen (szAdminInstallProperty);
-        
+
         szInstProperties = new char[cchInstProperties + 1];
         if (! szInstProperties)
         {
@@ -797,7 +797,7 @@ extern "C" int __stdcall WinMain(HINSTANCE hInst, HINSTANCE hPrevInst , __in LPS
             uiRet = ERROR_OUTOFMEMORY;
             goto CleanUp;
         }
-        
+
         if (fQFE && !szProperties)
         {
             if (FAILED(StringCchCopy(szInstProperties, cchInstProperties + 1, szDefaultInstallUpdCommandLine)))
@@ -888,7 +888,7 @@ extern "C" int __stdcall WinMain(HINSTANCE hInst, HINSTANCE hPrevInst , __in LPS
         DebugMsg("[Info] MsiApplyPatch returned %d\n", uiRet);
     }
 
-    
+
 CleanUp:
 
     if (szMsiFile)

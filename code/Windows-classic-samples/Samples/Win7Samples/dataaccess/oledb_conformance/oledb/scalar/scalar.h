@@ -1,7 +1,7 @@
-//--------------------------------------------------------------------
+﻿//--------------------------------------------------------------------
 // Microsoft OLE DB Test
 //
-// Copyright 1995-2000 Microsoft Corporation.  
+// Copyright 1995-2000 Microsoft Corporation.
 //
 // @doc
 //
@@ -19,7 +19,7 @@
 #include "oledberr.h"
 
 #include "privlib.h"		//include private library, which includes
-							//the "transact.h"
+//the "transact.h"
 
 #define MAX_BUF		2000
 
@@ -134,217 +134,218 @@
 #define idsSelectLikeNative                               (IDS_USER+116)
 #define idsDropORAProc									  (IDS_USER+117)
 #define idsSelectORAProcText                              (IDS_USER+118)
-#define idsSelect											(IDS_USER+119)		
-#define idsCanonShort     									(IDS_USER+120)		
-#define	idsFromString 										(IDS_USER+121)	
+#define idsSelect											(IDS_USER+119)
+#define idsCanonShort     									(IDS_USER+120)
+#define	idsFromString 										(IDS_USER+121)
 
-#define   idsFnAscii               (IDS_USER+122)	
-#define   idsFnChar                 (IDS_USER+123)	
-#define   idsFnSubstring            (IDS_USER+124)	
-#define   idsFnAbs                  (IDS_USER+125)	
-#define   idsTestDateTimeFunctions  (IDS_USER+126)	
+#define   idsFnAscii               (IDS_USER+122)
+#define   idsFnChar                 (IDS_USER+123)
+#define   idsFnSubstring            (IDS_USER+124)
+#define   idsFnAbs                  (IDS_USER+125)
+#define   idsTestDateTimeFunctions  (IDS_USER+126)
 
-#define   idsFnNow                  (IDS_USER+127)	
-#define   idsFnCurdate              (IDS_USER+128)	
-#define   idsFnDayofmonth           (IDS_USER+129)	
-#define   idsFnUser                 (IDS_USER+130)	
-#define   idsFnCHAR                (IDS_USER+131)	
-#define   idsFnVARCHAR             (IDS_USER+132)	
-#define   idsFnLONGVARCHAR          (IDS_USER+133)	
-#define   idsFnLONGVARBINARY        (IDS_USER+134)	
-#define   idsFnDECIMAL              (IDS_USER+135)	
-#define   idsFnNUMERIC              (IDS_USER+136)	
-#define   idsFnBIT                  (IDS_USER+137)	
-#define   idsFnTINYINT              (IDS_USER+138)	
-#define   idsFnSMALLINT             (IDS_USER+139)	
-#define   idsFnINTEGER              (IDS_USER+140)	
-#define   idsFnBIGINT               (IDS_USER+141)	
-#define   idsFnREAL                 (IDS_USER+142)	
-#define   idsFnFLOAT                (IDS_USER+143)	
-#define   idsFnDOUBLE               (IDS_USER+144)	
-#define   idsFnBINARY               (IDS_USER+145)	
-#define   idsFnVARBINARY            (IDS_USER+146)	
-#define   idsFnDATE                 (IDS_USER+147)	
-#define   idsFnTIME                 (IDS_USER+148)	
-#define   idsFnTIMESTAMP            (IDS_USER+149)	
-#define   idsFnWCHAR                (IDS_USER+150)	
-#define   idsFnWVARCHAR             (IDS_USER+151)	
-#define   idsFnWLONGVARCHAR          (IDS_USER+152)	
+#define   idsFnNow                  (IDS_USER+127)
+#define   idsFnCurdate              (IDS_USER+128)
+#define   idsFnDayofmonth           (IDS_USER+129)
+#define   idsFnUser                 (IDS_USER+130)
+#define   idsFnCHAR                (IDS_USER+131)
+#define   idsFnVARCHAR             (IDS_USER+132)
+#define   idsFnLONGVARCHAR          (IDS_USER+133)
+#define   idsFnLONGVARBINARY        (IDS_USER+134)
+#define   idsFnDECIMAL              (IDS_USER+135)
+#define   idsFnNUMERIC              (IDS_USER+136)
+#define   idsFnBIT                  (IDS_USER+137)
+#define   idsFnTINYINT              (IDS_USER+138)
+#define   idsFnSMALLINT             (IDS_USER+139)
+#define   idsFnINTEGER              (IDS_USER+140)
+#define   idsFnBIGINT               (IDS_USER+141)
+#define   idsFnREAL                 (IDS_USER+142)
+#define   idsFnFLOAT                (IDS_USER+143)
+#define   idsFnDOUBLE               (IDS_USER+144)
+#define   idsFnBINARY               (IDS_USER+145)
+#define   idsFnVARBINARY            (IDS_USER+146)
+#define   idsFnDATE                 (IDS_USER+147)
+#define   idsFnTIME                 (IDS_USER+148)
+#define   idsFnTIMESTAMP            (IDS_USER+149)
+#define   idsFnWCHAR                (IDS_USER+150)
+#define   idsFnWVARCHAR             (IDS_USER+151)
+#define   idsFnWLONGVARCHAR          (IDS_USER+152)
 #define	  idsFnGUID					(IDS_USER+153)
-	
+
 
 #define	CHECKSTR					1
 #define	CHECKINT					2
 #define	CHECKFLOAT					3
 #define	CHECKISTR					4
 #define CHECKTIMESTAMP				5
-#define	CHECKREAL					6	
+#define	CHECKREAL					6
 
 
 
 //-----------------------------------------------------------------------------
 // String constants
 //-----------------------------------------------------------------------------
-typedef struct tagStringList {
-	UWORD                   id; // non-essential, but friendly field 
-	WCHAR *					wszItem;
-	} StringList;
+typedef struct tagStringList
+{
+    UWORD                   id; // non-essential, but friendly field
+    WCHAR *					wszItem;
+} StringList;
 
 const StringList pwszStringList[] =
-{    
-	{idsFnLeft               ,L"fn LEFT('aBCdef',2)"},
-	{idsFnConcat             ,L"fn CONCAT('Fire','Truck')"},
-	{idsFnInsert             ,L"fn INSERT('FireTruck',5,4,'hose')"},
-	{idsFnLtrim              ,L"fn LTRIM('     a BCdef')"},
-	{idsFnLength             ,L"fn LENGTH('     a BCdef   ')"},
-	{idsFnLocate             ,L"fn LOCATE('st','forest estates',6)"},
-	{idsFnLcase              ,L"fn LCASE('fIrEtRucK')"},
-	{idsFnRepeat             ,L"fn REPEAT('t q',3)"},
-	{idsFnReplace            ,L"fn REPLACE('forest estates','es','truck')"},
-	{idsFnRight              ,L"fn RIGHT('forest estates',7)"},
-	{idsFnRtrim              ,L"fn RTRIM('  forest estates  ')"},
-	{idsFnUcase              ,L"fn UCASE('  forest estates  ')"},
-	{idsFnAcos               ,L"fn ACOS(1)"},
-	{idsFnAsin               ,L"fn ASIN(-1)"},
-	{idsFnAtan               ,L"fn ATAN(2)"},
-	{idsFnAtan2              ,L"fn ATAN2(2,1)"},
-	{idsFnCeiling            ,L"fn CEILING(1.09)"},
-	{idsFnCos                ,L"fn COS(0)"},
-	{idsFnCot                ,L"fn COT(.5)"},
-	{idsFnExp                ,L"fn EXP(1)"},
-	{idsFnFloor              ,L"fn FLOOR(1.09)"},
-	{idsFnLog                ,L"fn LOG(10)"},
-	{idsFnMod                ,L"fn MOD(10,6)"},
-	{idsFnPi                 ,L"fn PI()"},
-	{idsFnRand               ,L"fn RAND(10)"},
-	{idsFnSign               ,L"fn SIGN(10)"},
-	{idsFnSin                ,L"fn SIN(.05)"},
-	{idsFnSqrt               ,L"fn SQRT(9)"},
-	{idsFnTan                ,L"fn TAN(2)"},
-	{idsFnDayofweek          ,L"fn DAYOFWEEK({d '1991-02-26'})"},
-	{idsFnDayofyear          ,L"fn DAYOFYEAR({d '1991-02-26'})"},
-	{idsFnMonth              ,L"fn MONTH({d '1991-02-26'})"},
-	{idsFnQuarter            ,L"fn QUARTER({d '1991-02-26'})"},
-	{idsFnWeek               ,L"fn WEEK({d '1991-02-26'})"},
-	{idsFnYear               ,L"fn YEAR({d '1991-02-26'})"},
-	{idsFnCurtime            ,L"fn CURTIME()"},
-	{idsFnHour               ,L"fn HOUR({t '14:49:19'})"},
-	{idsFnMinute             ,L"fn MINUTE({t '14:49:19'})"},
-	{idsFnSecond             ,L"fn SECOND({t '14:49:19'})"},
-	{idsFnDatabase           ,L"fn DATABASE()"},
-	{idsFnIfnull1            ,L"fn IFNULL(NULL,4)"},
-	{idsFnIfnull2            ,L"fn IFNULL(-1,4)"},
-	{idsFnDiff		   ,L"fn DIFFERENCE('c','ab')"},
-	{idsFnSoundex		   ,L"fn SOUNDEX('ab')" },
-	{idsFnSpace		   ,L"fn SPACE(5)"},						
-	{idsFnDegrees		   ,L"fn DEGREES(3)"},
-	{idsFnLog10		   ,L"fn LOG10(97.1)"},
-	{idsFnPower		   ,L"fn POWER(9.600,3)"},
-	{idsFnRadians		   ,L"fn RADIANS(8.5)"},
-	{idsFnRound		   ,L"fn ROUND(97.56,1)"},
-	{idsFnTruncate	   ,L"fn TRUNCATE(97.56,1)"}	,
-	{idsFnDayname		   ,L"fn DAYNAME({d '1994-12-12'})"},
-	{idsFnMonthname	   ,L"fn MONTHNAME({d '1994-12-12'})"},
-	{idsFnTimestampadd	  ,L"fn TIMESTAMPADD(SQL_TSI_DAY,2,{d '1994-12-12'})"}	 	,
-	{idsFnTimestampdiff	  ,L"fn TIMESTAMPDIFF(SQL_TSI_MONTH,{d '1994-11-15'},{d '1994-12-12'})"},
-	{idsFnTimestamp	   ,L"ts '1994-12-12 01:12:56'"	},
-	{idsFnDate		   ,L"d '1995-01-15'"},
-	{idsFnTime		   ,L"t '07:15:26'"},
+{
+    {idsFnLeft,L"fn LEFT('aBCdef',2)"},
+    {idsFnConcat,L"fn CONCAT('Fire','Truck')"},
+    {idsFnInsert,L"fn INSERT('FireTruck',5,4,'hose')"},
+    {idsFnLtrim,L"fn LTRIM('     a BCdef')"},
+    {idsFnLength,L"fn LENGTH('     a BCdef   ')"},
+    {idsFnLocate,L"fn LOCATE('st','forest estates',6)"},
+    {idsFnLcase,L"fn LCASE('fIrEtRucK')"},
+    {idsFnRepeat,L"fn REPEAT('t q',3)"},
+    {idsFnReplace,L"fn REPLACE('forest estates','es','truck')"},
+    {idsFnRight,L"fn RIGHT('forest estates',7)"},
+    {idsFnRtrim,L"fn RTRIM('  forest estates  ')"},
+    {idsFnUcase,L"fn UCASE('  forest estates  ')"},
+    {idsFnAcos,L"fn ACOS(1)"},
+    {idsFnAsin,L"fn ASIN(-1)"},
+    {idsFnAtan,L"fn ATAN(2)"},
+    {idsFnAtan2,L"fn ATAN2(2,1)"},
+    {idsFnCeiling,L"fn CEILING(1.09)"},
+    {idsFnCos,L"fn COS(0)"},
+    {idsFnCot,L"fn COT(.5)"},
+    {idsFnExp,L"fn EXP(1)"},
+    {idsFnFloor,L"fn FLOOR(1.09)"},
+    {idsFnLog,L"fn LOG(10)"},
+    {idsFnMod,L"fn MOD(10,6)"},
+    {idsFnPi,L"fn PI()"},
+    {idsFnRand,L"fn RAND(10)"},
+    {idsFnSign,L"fn SIGN(10)"},
+    {idsFnSin,L"fn SIN(.05)"},
+    {idsFnSqrt,L"fn SQRT(9)"},
+    {idsFnTan,L"fn TAN(2)"},
+    {idsFnDayofweek,L"fn DAYOFWEEK({d '1991-02-26'})"},
+    {idsFnDayofyear,L"fn DAYOFYEAR({d '1991-02-26'})"},
+    {idsFnMonth,L"fn MONTH({d '1991-02-26'})"},
+    {idsFnQuarter,L"fn QUARTER({d '1991-02-26'})"},
+    {idsFnWeek,L"fn WEEK({d '1991-02-26'})"},
+    {idsFnYear,L"fn YEAR({d '1991-02-26'})"},
+    {idsFnCurtime,L"fn CURTIME()"},
+    {idsFnHour,L"fn HOUR({t '14:49:19'})"},
+    {idsFnMinute,L"fn MINUTE({t '14:49:19'})"},
+    {idsFnSecond,L"fn SECOND({t '14:49:19'})"},
+    {idsFnDatabase,L"fn DATABASE()"},
+    {idsFnIfnull1,L"fn IFNULL(NULL,4)"},
+    {idsFnIfnull2,L"fn IFNULL(-1,4)"},
+    {idsFnDiff		,L"fn DIFFERENCE('c','ab')"},
+    {idsFnSoundex		,L"fn SOUNDEX('ab')" },
+    {idsFnSpace		,L"fn SPACE(5)"},
+    {idsFnDegrees		,L"fn DEGREES(3)"},
+    {idsFnLog10		,L"fn LOG10(97.1)"},
+    {idsFnPower		,L"fn POWER(9.600,3)"},
+    {idsFnRadians		,L"fn RADIANS(8.5)"},
+    {idsFnRound		,L"fn ROUND(97.56,1)"},
+    {idsFnTruncate	,L"fn TRUNCATE(97.56,1)"}	,
+    {idsFnDayname		,L"fn DAYNAME({d '1994-12-12'})"},
+    {idsFnMonthname	,L"fn MONTHNAME({d '1994-12-12'})"},
+    {idsFnTimestampadd	,L"fn TIMESTAMPADD(SQL_TSI_DAY,2,{d '1994-12-12'})"}	 	,
+    {idsFnTimestampdiff	,L"fn TIMESTAMPDIFF(SQL_TSI_MONTH,{d '1994-11-15'},{d '1994-12-12'})"},
+    {idsFnTimestamp	,L"ts '1994-12-12 01:12:56'"	},
+    {idsFnDate		,L"d '1995-01-15'"},
+    {idsFnTime		,L"t '07:15:26'"},
 
-	{idsFnConcatNested	,L"fn concat({fn ucase('aaa')},{fn ucase('bbb')})"},
-	{idsFnLeftNested		,L"fn left('abcdefg',{fn ceiling(2)})"	},
-	{idsFnRightNested	,L"fn right('abcdefg',{fn ceiling(2)})"},
-	{idsFnLocateNested	,L"fn locate({fn lcase('A')},'bbac')"},
-	{idsFnSubstringNested	,L"fn substring('abcdefg',{fn floor(2)},{fn ceiling(2)})"},
-	{idsFnDiffNested		,L"fn DIFFERENCE({fn lcase('A')},{fn lcase('BC')})"},
-	{idsFnInsertNested	,L"fn INSERT('abcdefg',2,3,{fn ucase('xy')})"},
-	{idsFnRepeatNested	,L"fn REPEAT({fn lcase('ABC')},3)"},
-	{idsFnReplaceNested	,L"fn REPLACE('acbcdc',{fn lcase('C')},{fn ucase('x')})"},
-	{idsFnMultiInsert		,L"fn INSERT({fn LCASE({fn CONCAT('12345678',{fn SPACE(4)})})},4,1,'XWZ')"},
-	{idsFnMultiConcat		,L"fn CONCAT({fn UCASE({fn CHAR(99)})}, {fn SPACE(4)})"},
-	{idsFnStringAndNumeric	,L"fn CHAR({fn ABS({fn FLOOR(99)})})"},
-	
-	{idsConvertNotSupported     ,L"Convert functions are not supported"},
-	{idsTestConvertFunctions    ,L"Data Type Conversions"},
-	{idsProcedureNotSupported   ,L"Procedures are not supported"},
-	{idsTestProcedures          ,L"Procedure tests"},
-	{idsTestOuterJoins          ,L"OuterJoin tests"},
-	{idsSelectProcText	      	,L"create proc %s as select * from %s"	},
-	{idsProcCall		      		,L"{call  %s}"},
-	{idsDropProc		      		,L"drop proc %s"},
-	{idsDropORAProc	      		,L"drop procedure %s"},
-	{idsSelectORAProcText      	,L"create or replace procedure %s as begin select * from %s; end;"	},
-	{idsLongProcOnly	      	,L"--(* vendor(Microsoft),product(ODBC) call %s *)--"	},
+    {idsFnConcatNested	,L"fn concat({fn ucase('aaa')},{fn ucase('bbb')})"},
+    {idsFnLeftNested		,L"fn left('abcdefg',{fn ceiling(2)})"	},
+    {idsFnRightNested	,L"fn right('abcdefg',{fn ceiling(2)})"},
+    {idsFnLocateNested	,L"fn locate({fn lcase('A')},'bbac')"},
+    {idsFnSubstringNested	,L"fn substring('abcdefg',{fn floor(2)},{fn ceiling(2)})"},
+    {idsFnDiffNested		,L"fn DIFFERENCE({fn lcase('A')},{fn lcase('BC')})"},
+    {idsFnInsertNested	,L"fn INSERT('abcdefg',2,3,{fn ucase('xy')})"},
+    {idsFnRepeatNested	,L"fn REPEAT({fn lcase('ABC')},3)"},
+    {idsFnReplaceNested	,L"fn REPLACE('acbcdc',{fn lcase('C')},{fn ucase('x')})"},
+    {idsFnMultiInsert		,L"fn INSERT({fn LCASE({fn CONCAT('12345678',{fn SPACE(4)})})},4,1,'XWZ')"},
+    {idsFnMultiConcat		,L"fn CONCAT({fn UCASE({fn CHAR(99)})}, {fn SPACE(4)})"},
+    {idsFnStringAndNumeric	,L"fn CHAR({fn ABS({fn FLOOR(99)})})"},
 
-	{idsInsertLikeTbl	      	,L"insert into %s values ('%%a')"},
-	{idsSelectLikeEscape	      ,L"select col1 from %s where col1 like '%s%%a__%%' --(*vendor(Microsoft),product(ODBC) escape '%s'*)--"},
-	{idsSelectLikeShort	      ,L"select col1 from %s where col1 like '%s%%a__%%' {escape '%s'}"},
-	{idsSelectLikeNative	      ,L"select col1 from %s where col1 like '%s%%a__%%' ESCAPE '%s'"},
+    {idsConvertNotSupported,L"Convert functions are not supported"},
+    {idsTestConvertFunctions,L"Data Type Conversions"},
+    {idsProcedureNotSupported,L"Procedures are not supported"},
+    {idsTestProcedures,L"Procedure tests"},
+    {idsTestOuterJoins,L"OuterJoin tests"},
+    {idsSelectProcText	      	,L"create proc %s as select * from %s"	},
+    {idsProcCall		      		,L"{call  %s}"},
+    {idsDropProc		      		,L"drop proc %s"},
+    {idsDropORAProc	      		,L"drop procedure %s"},
+    {idsSelectORAProcText      	,L"create or replace procedure %s as begin select * from %s; end;"	},
+    {idsLongProcOnly	      	,L"--(* vendor(Microsoft),product(ODBC) call %s *)--"	},
 
-	{idsTestLikePreds	      	,L"LIKE Predicate tests"	},
+    {idsInsertLikeTbl	      	,L"insert into %s values ('%%a')"},
+    {idsSelectLikeEscape	,L"select col1 from %s where col1 like '%s%%a__%%' --(*vendor(Microsoft),product(ODBC) escape '%s'*)--"},
+    {idsSelectLikeShort	,L"select col1 from %s where col1 like '%s%%a__%%' {escape '%s'}"},
+    {idsSelectLikeNative	,L"select col1 from %s where col1 like '%s%%a__%%' ESCAPE '%s'"},
 
-	{idsLongLJoin	             ,L"select * from --(*vendor(Microsoft),product(ODBC) oj %s left outer join %s on %s.%s%s%s.%s*)--"},
-	{idsShortLJoin	     			,L"select * from {oj %s left outer join %s on %s.%s%s%s.%s}"	},
-	{idsLongRJoin	             ,L"select * from --(*vendor(Microsoft),product(ODBC) oj %s right outer join %s on %s.%s%s%s.%s*)--"},
-	{idsShortRJoin	     			,L"select * from {oj %s right outer join %s on %s.%s%s%s.%s}"	},
-	{idsNestedLongJoin         	,L"select %s.%s from --(*vendor(Microsoft),product(ODBC) oj %s left outer join %s left outer join %s on %s.%s%s%s.%s on %s.%s%s%s.%s*)--"},
-	{idsNestedShortJoin	     	,L"select %s.%s from {oj %s left outer join %s left outer join %s on %s.%s%s%s.%s on %s.%s%s%s.%s}"},
-	{idsTestLeftOJSyntax	     	,L"Left Outer Join escape syntax"	},
-	{idsTestRightOJSyntax	     	,L"Right Outer Join escape syntax"	},
-	{idsTestNestedOJSyntax     	,L"Nested Outer Join escape syntax"	},
-	{idsInOutShortOJSyntax     	,L"select  * from %s, {oj %s left outer join %s on %s.%s%s%s.%s}  where %s.%s%s%s.%s" 	},
-	{idsInOutLongOJSyntax	     	,L"select  * from %s, --(*vendor(Microsoft),product(ODBC) oj %s left outer join %s on %s.%s%s%s.%s*)-- where %s.%s%s%s.%s"						},
-	{idsNoLikePred					,L"LIKE Predicate not supported"},
-	{idsJetDropProc					,L"drop table %s"			},
-	{idsProcCallQ 	 				,L"{?=call  %s}"},
-	{idsProcCallQPP	 				,L"{?=call  %s()}"},
+    {idsTestLikePreds	      	,L"LIKE Predicate tests"	},
 
-	{idsSelect                 ,L"Select "},
-	{idsFnAscii                ,L"fn ASCII('Bz')"},
-	{idsFnChar                 ,L"fn CHAR(102)"},
-	{idsFnSubstring            ,L"fn SUBSTRING('  forest estates',5,4)"},
-	{idsFnAbs                  ,L"fn ABS(-123)"},
-	{idsTestDateTimeFunctions  ,L"Time and Date Functions"},
+    {idsLongLJoin	,L"select * from --(*vendor(Microsoft),product(ODBC) oj %s left outer join %s on %s.%s%s%s.%s*)--"},
+    {idsShortLJoin	     			,L"select * from {oj %s left outer join %s on %s.%s%s%s.%s}"	},
+    {idsLongRJoin	,L"select * from --(*vendor(Microsoft),product(ODBC) oj %s right outer join %s on %s.%s%s%s.%s*)--"},
+    {idsShortRJoin	     			,L"select * from {oj %s right outer join %s on %s.%s%s%s.%s}"	},
+    {idsNestedLongJoin         	,L"select %s.%s from --(*vendor(Microsoft),product(ODBC) oj %s left outer join %s left outer join %s on %s.%s%s%s.%s on %s.%s%s%s.%s*)--"},
+    {idsNestedShortJoin	     	,L"select %s.%s from {oj %s left outer join %s left outer join %s on %s.%s%s%s.%s on %s.%s%s%s.%s}"},
+    {idsTestLeftOJSyntax	     	,L"Left Outer Join escape syntax"	},
+    {idsTestRightOJSyntax	     	,L"Right Outer Join escape syntax"	},
+    {idsTestNestedOJSyntax     	,L"Nested Outer Join escape syntax"	},
+    {idsInOutShortOJSyntax     	,L"select  * from %s, {oj %s left outer join %s on %s.%s%s%s.%s}  where %s.%s%s%s.%s" 	},
+    {idsInOutLongOJSyntax	     	,L"select  * from %s, --(*vendor(Microsoft),product(ODBC) oj %s left outer join %s on %s.%s%s%s.%s*)-- where %s.%s%s%s.%s"						},
+    {idsNoLikePred					,L"LIKE Predicate not supported"},
+    {idsJetDropProc					,L"drop table %s"			},
+    {idsProcCallQ 	 				,L"{?=call  %s}"},
+    {idsProcCallQPP	 				,L"{?=call  %s()}"},
 
-	{idsFnNow                  ,L"fn NOW()"},
-   {idsFnCurdate              ,L"fn CURDATE()"},
-   {idsFnDayofmonth           ,L"fn DAYOFMONTH({d '1991-02-26'})"},
-   {idsFnUser                 ,L"fn USER()"},
-   {idsFnCHAR                 ,L"fn CONVERT(%s,SQL_CHAR)"},
-   {idsFnVARCHAR              ,L"fn CONVERT(%s,SQL_VARCHAR)"},
-   {idsFnLONGVARCHAR          ,L"fn CONVERT(%s,SQL_LONGVARCHAR)"},
-   {idsFnLONGVARBINARY        ,L"fn CONVERT(%s,SQL_LONGVARBINARY)"},
-   {idsFnDECIMAL              ,L"fn CONVERT(%s,SQL_DECIMAL)"},
-   {idsFnNUMERIC              ,L"fn CONVERT(%s,SQL_NUMERIC)"},
-   {idsFnBIT                  ,L"fn CONVERT(%s,SQL_BIT)"},
-   {idsFnTINYINT              ,L"fn CONVERT(%s,SQL_TINYINT)"},
-   {idsFnSMALLINT             ,L"fn CONVERT(%s,SQL_SMALLINT)"},
-   {idsFnINTEGER              ,L"fn CONVERT(%s,SQL_INTEGER)"},
-   {idsFnBIGINT               ,L"fn CONVERT(%s,SQL_BIGINT)"},
-   {idsFnREAL                 ,L"fn CONVERT(%s,SQL_REAL)"},
-   {idsFnFLOAT                ,L"fn CONVERT(%s,SQL_FLOAT)"},
-   {idsFnDOUBLE               ,L"fn CONVERT(%s,SQL_DOUBLE)"},
-   {idsFnBINARY               ,L"fn CONVERT(%s,SQL_BINARY)"},
-   {idsFnVARBINARY            ,L"fn CONVERT(%s,SQL_VARBINARY)"},
-   {idsFnDATE                 ,L"fn CONVERT(%s,SQL_DATE)"},
-   {idsFnTIME                 ,L"fn CONVERT(%s,SQL_TIME)"},
-	{idsFnTIMESTAMP            ,L"fn CONVERT(%s,SQL_TIMESTAMP)"},
-	{idsFnWCHAR                 ,L"fn CONVERT(%s,SQL_WCHAR)"},
-   {idsFnWVARCHAR              ,L"fn CONVERT(%s,SQL_WVARCHAR)"},
-   {idsFnWLONGVARCHAR          ,L"fn CONVERT(%s,SQL_WLONGVARCHAR)"},
-   {idsFnGUID			       ,L"fn CONVERT(%s,SQL_GUID)"},
+    {idsSelect,L"Select "},
+    {idsFnAscii,L"fn ASCII('Bz')"},
+    {idsFnChar,L"fn CHAR(102)"},
+    {idsFnSubstring,L"fn SUBSTRING('  forest estates',5,4)"},
+    {idsFnAbs,L"fn ABS(-123)"},
+    {idsTestDateTimeFunctions,L"Time and Date Functions"},
+
+    {idsFnNow,L"fn NOW()"},
+    {idsFnCurdate,L"fn CURDATE()"},
+    {idsFnDayofmonth,L"fn DAYOFMONTH({d '1991-02-26'})"},
+    {idsFnUser,L"fn USER()"},
+    {idsFnCHAR,L"fn CONVERT(%s,SQL_CHAR)"},
+    {idsFnVARCHAR,L"fn CONVERT(%s,SQL_VARCHAR)"},
+    {idsFnLONGVARCHAR,L"fn CONVERT(%s,SQL_LONGVARCHAR)"},
+    {idsFnLONGVARBINARY,L"fn CONVERT(%s,SQL_LONGVARBINARY)"},
+    {idsFnDECIMAL,L"fn CONVERT(%s,SQL_DECIMAL)"},
+    {idsFnNUMERIC,L"fn CONVERT(%s,SQL_NUMERIC)"},
+    {idsFnBIT,L"fn CONVERT(%s,SQL_BIT)"},
+    {idsFnTINYINT,L"fn CONVERT(%s,SQL_TINYINT)"},
+    {idsFnSMALLINT,L"fn CONVERT(%s,SQL_SMALLINT)"},
+    {idsFnINTEGER,L"fn CONVERT(%s,SQL_INTEGER)"},
+    {idsFnBIGINT,L"fn CONVERT(%s,SQL_BIGINT)"},
+    {idsFnREAL,L"fn CONVERT(%s,SQL_REAL)"},
+    {idsFnFLOAT,L"fn CONVERT(%s,SQL_FLOAT)"},
+    {idsFnDOUBLE,L"fn CONVERT(%s,SQL_DOUBLE)"},
+    {idsFnBINARY,L"fn CONVERT(%s,SQL_BINARY)"},
+    {idsFnVARBINARY,L"fn CONVERT(%s,SQL_VARBINARY)"},
+    {idsFnDATE,L"fn CONVERT(%s,SQL_DATE)"},
+    {idsFnTIME,L"fn CONVERT(%s,SQL_TIME)"},
+    {idsFnTIMESTAMP,L"fn CONVERT(%s,SQL_TIMESTAMP)"},
+    {idsFnWCHAR,L"fn CONVERT(%s,SQL_WCHAR)"},
+    {idsFnWVARCHAR,L"fn CONVERT(%s,SQL_WVARCHAR)"},
+    {idsFnWLONGVARCHAR,L"fn CONVERT(%s,SQL_WLONGVARCHAR)"},
+    {idsFnGUID			,L"fn CONVERT(%s,SQL_GUID)"},
 
 
     {idsCallFailed		,L"ExecDirect call failed even though the string function was supported."},
-	{idsCanonShort     ,L"{%s}"},
-	{idsFromString           ,L" from %s"}
+    {idsCanonShort,L"{%s}"},
+    {idsFromString,L" from %s"}
 };
 
 struct ValueInfo
 {
-	DBSTATUS		dbsStatus;
-	DBLENGTH		cbLength;
-	void			*pValue;
+    DBSTATUS		dbsStatus;
+    DBLENGTH		cbLength;
+    void			*pValue;
 };
 
 
@@ -376,7 +377,7 @@ struct ValueInfo
 #define SQL_FN_STR_POSITION					0x00800000L
 
 /* SQL_SQL92_STRING_FUNCTIONS */
-#define SQL_SSF_CONVERT						0x00000001L	
+#define SQL_SSF_CONVERT						0x00000001L
 #define SQL_SSF_LOWER						0x00000002L
 #define SQL_SSF_UPPER						0x00000004L
 #define SQL_SSF_SUBSTRING					0x00000008L

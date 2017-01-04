@@ -1,4 +1,4 @@
-// Copyright (c) Microsoft Corporation
+﻿// Copyright (c) Microsoft Corporation
 //
 #pragma once
 
@@ -6,8 +6,8 @@ SAFEARRAY * BuildIntSafeArray(_In_reads_(length) const int * data, _In_ int leng
 
 // A Class representing the top level frame of the AnnotatedTextControl
 class FrameProvider : public IRawElementProviderSimple,
-                      public IRawElementProviderFragment,
-                      public IRawElementProviderFragmentRoot
+    public IRawElementProviderFragment,
+    public IRawElementProviderFragmentRoot
 {
 public:
     FrameProvider(_In_ HWND hwnd, _In_ AnnotatedTextControl *control);
@@ -17,7 +17,7 @@ public:
     ULONG STDMETHODCALLTYPE AddRef();
     ULONG STDMETHODCALLTYPE Release();
     HRESULT STDMETHODCALLTYPE QueryInterface(_In_ REFIID riid, _Outptr_ void**ppInterface);
-    
+
     // IRawElementProviderSimple methods
     HRESULT STDMETHODCALLTYPE get_ProviderOptions(_Out_ ProviderOptions * retVal);
     HRESULT STDMETHODCALLTYPE GetPatternProvider(PATTERNID iid, _Outptr_result_maybenull_ IUnknown * * retVal );

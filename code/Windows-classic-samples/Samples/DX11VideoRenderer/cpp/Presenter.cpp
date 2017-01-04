@@ -1,4 +1,4 @@
-#include "Presenter.h"
+﻿#include "Presenter.h"
 
 /////////////////////////////////////////////////////////////////////////////////////////////
 //
@@ -780,7 +780,7 @@ void DX11VideoRenderer::CPresenter::AspectRatioCorrectSize(
     const SIZE& sizeAr,     // aspect ratio of image
     const SIZE& sizeOrig,   // original image size
     BOOL ScaleXorY          // axis to correct in
-    )
+)
 {
     int cxAR = sizeAr.cx;
     int cyAR = sizeAr.cy;
@@ -847,7 +847,7 @@ void DX11VideoRenderer::CPresenter::CheckDecodeSwitchRegKey(void)
 
     return;
 }
-        
+
 HRESULT DX11VideoRenderer::CPresenter::CheckDeviceState(BOOL* pbDeviceChanged)
 {
     if (pbDeviceChanged == NULL)
@@ -1234,11 +1234,11 @@ HRESULT DX11VideoRenderer::CPresenter::GetVideoDisplayArea(IMFMediaType* pType, 
     if (bPanScan)
     {
         hr = pType->GetBlob(
-            MF_MT_PAN_SCAN_APERTURE,
-            (UINT8*)pArea,
-            sizeof(MFVideoArea),
-            NULL
-            );
+                 MF_MT_PAN_SCAN_APERTURE,
+                 (UINT8*)pArea,
+                 sizeof(MFVideoArea),
+                 NULL
+             );
     }
 
     // If not in pan/scan mode, or the pan/scan region is not set,
@@ -1247,11 +1247,11 @@ HRESULT DX11VideoRenderer::CPresenter::GetVideoDisplayArea(IMFMediaType* pType, 
     if (!bPanScan || hr == MF_E_ATTRIBUTENOTFOUND)
     {
         hr = pType->GetBlob(
-            MF_MT_MINIMUM_DISPLAY_APERTURE,
-            (UINT8*)pArea,
-            sizeof(MFVideoArea),
-            NULL
-            );
+                 MF_MT_MINIMUM_DISPLAY_APERTURE,
+                 (UINT8*)pArea,
+                 sizeof(MFVideoArea),
+                 NULL
+             );
 
         if (hr == MF_E_ATTRIBUTENOTFOUND)
         {
@@ -1261,11 +1261,11 @@ HRESULT DX11VideoRenderer::CPresenter::GetVideoDisplayArea(IMFMediaType* pType, 
             // check for a geometric aperture.
 
             hr = pType->GetBlob(
-                MF_MT_GEOMETRIC_APERTURE,
-                (UINT8*)pArea,
-                sizeof(MFVideoArea),
-                NULL
-                );
+                     MF_MT_GEOMETRIC_APERTURE,
+                     (UINT8*)pArea,
+                     sizeof(MFVideoArea),
+                     NULL
+                 );
         }
 
         // Default: Use the entire video area.
@@ -1299,7 +1299,7 @@ void DX11VideoRenderer::CPresenter::LetterBoxDstRect(
     LPRECT lprcLBDst,     // output letterboxed rectangle
     const RECT& rcSrc,    // input source rectangle
     const RECT& rcDst     // input destination rectangle
-    )
+)
 {
     // figure out src/dest scale ratios
     int iSrcWidth  = rcSrc.right - rcSrc.left;
@@ -1361,7 +1361,7 @@ void DX11VideoRenderer::CPresenter::PixelAspectToPictureAspect(
     int PixelAspectY,
     int* pPictureAspectX,
     int* pPictureAspectY
-    )
+)
 {
     //
     // sanity check - if any inputs are 0, return 0
@@ -1402,7 +1402,7 @@ void DX11VideoRenderer::CPresenter::PixelAspectToPictureAspect(
         PixelAspectY * Height,
         pPictureAspectX,
         pPictureAspectY
-        );
+    );
 }
 
 HRESULT DX11VideoRenderer::CPresenter::ProcessFrameUsingD3D11( ID3D11Texture2D* pLeftTexture2D, ID3D11Texture2D* pRightTexture2D, UINT dwLeftViewIndex, UINT dwRightViewIndex, RECT rcDest, UINT32 unInterlaceMode, IMFSample** ppVideoOutFrame )
@@ -1674,7 +1674,7 @@ HRESULT DX11VideoRenderer::CPresenter::ProcessFrameUsingD3D11( ID3D11Texture2D* 
             }
 
             pVideoContext->VideoProcessorSetStreamStereoFormat(m_pVideoProcessor,
-                0, m_bStereoEnabled, vpStereoFormat, TRUE, TRUE, D3D11_VIDEO_PROCESSOR_STEREO_FLIP_NONE, 0);
+                    0, m_bStereoEnabled, vpStereoFormat, TRUE, TRUE, D3D11_VIDEO_PROCESSOR_STEREO_FLIP_NONE, 0);
         }
 
         QueryPerformanceCounter(&lpcEnd);
@@ -1999,7 +1999,7 @@ void DX11VideoRenderer::CPresenter::ReduceToLowestTerms(
     int DenominatorIn,
     int* pNumeratorOut,
     int* pDenominatorOut
-    )
+)
 {
     int GCD = gcd(NumeratorIn, DenominatorIn);
 
@@ -2151,10 +2151,10 @@ HRESULT DX11VideoRenderer::CPresenter::SetXVPOutputMediaType(IMFMediaType* pType
     if (SUCCEEDED(hr))
     {
         hr = MFInitVideoFormat_RGB(
-            &mfvf,
-            m_rcDstApp.right,
-            m_rcDstApp.bottom,
-            MFMapDXGIFormatToDX9Format(vpOutputFormat));
+                 &mfvf,
+                 m_rcDstApp.right,
+                 m_rcDstApp.bottom,
+                 MFMapDXGIFormatToDX9Format(vpOutputFormat));
     }
 
     if (SUCCEEDED(hr))
@@ -2206,13 +2206,13 @@ HRESULT DX11VideoRenderer::CPresenter::UpdateDXGISwapChain(void)
         {
             // Resize our back buffers for the desired format.
             hr = m_pSwapChain1->ResizeBuffers
-                (
-                4,
-                m_rcDstApp.right,
-                m_rcDstApp.bottom,
-                scd.Format,
-                scd.Flags
-                );
+                 (
+                     4,
+                     m_rcDstApp.right,
+                     m_rcDstApp.bottom,
+                     scd.Format,
+                     scd.Flags
+                 );
 
             break;
         }

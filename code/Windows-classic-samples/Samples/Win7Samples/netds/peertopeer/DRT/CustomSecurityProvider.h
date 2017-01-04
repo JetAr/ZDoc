@@ -1,4 +1,4 @@
-// CustomSecurityProvider.h - Interface for CustomSecurityProvider
+﻿// CustomSecurityProvider.h - Interface for CustomSecurityProvider
 
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
@@ -179,9 +179,9 @@ private:
     static HRESULT SecureAndPackPayload(
         __in_opt    const PVOID pvContext,
         __in_opt    VOID* pvKeyContext,
-                    BYTE bProtocolMajor,
-                    BYTE bProtocolMinor,
-                    DWORD dwFlags,
+        BYTE bProtocolMajor,
+        BYTE bProtocolMinor,
+        DWORD dwFlags,
         __in        const DRT_DATA* pKey,
         __in_opt    const DRT_DATA* pPayload,
         __in_opt    const SOCKET_ADDRESS_LIST* pAddressList,
@@ -205,14 +205,14 @@ private:
         __in_ecount(dwBuffers)        DRT_DATA* pDataBuffers,
         __out_ecount(dwBuffers)        DRT_DATA* pEncryptedBuffers,
         __out       DRT_DATA *pKeyToken
-        );
+    );
     static HRESULT DecryptData(
         __in        const PVOID pvContext,
         __in        DRT_DATA* pKeyToken,
         __in        const PVOID pvKeyContext,
         __in        DWORD dwBuffers,
         __inout_ecount(dwBuffers) DRT_DATA* pData
-        );
+    );
 
     static HRESULT GetSerializedCredential(
         __in        const PVOID pvContext,

@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -216,30 +216,30 @@ HRESULT GetBundleReader(
 
     // Create a new Appx bundle factory
     hr = CoCreateInstance(
-            __uuidof(AppxBundleFactory),
-            NULL,
-            CLSCTX_INPROC_SERVER,
-            __uuidof(IAppxBundleFactory),
-            (LPVOID*)(&appxBundleFactory));
+             __uuidof(AppxBundleFactory),
+             NULL,
+             CLSCTX_INPROC_SERVER,
+             __uuidof(IAppxBundleFactory),
+             (LPVOID*)(&appxBundleFactory));
 
     // Create a stream over the input bundle file
     if (SUCCEEDED(hr))
     {
         hr = SHCreateStreamOnFileEx(
-                inputFileName,
-                STGM_READ | STGM_SHARE_EXCLUSIVE,
-                0, // default file attributes
-                FALSE, // do not create new file
-                NULL, // no template
-                &inputStream);
+                 inputFileName,
+                 STGM_READ | STGM_SHARE_EXCLUSIVE,
+                 0, // default file attributes
+                 FALSE, // do not create new file
+                 NULL, // no template
+                 &inputStream);
     }
 
     // Create a new bundle reader using the factory
     if (SUCCEEDED(hr))
     {
         hr = appxBundleFactory->CreateBundleReader(
-                inputStream,
-                reader);
+                 inputStream,
+                 reader);
     }
 
     // Clean up allocated resources

@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -43,7 +43,7 @@ int APIENTRY wWinMain(
     HINSTANCE hPrevInstance,
     LPWSTR    lpCmdLine,
     int       nCmdShow
-    )
+)
 {
     // The Microsoft Security Development Lifecycle recommends that all
     // applications include the following call to ensure that heap corruptions
@@ -65,20 +65,20 @@ int APIENTRY wWinMain(
     if (SUCCEEDED(hr))
     {
         hr = DWriteCreateFactory(
-                DWRITE_FACTORY_TYPE_SHARED, 
-                __uuidof(IDWriteFactory), 
-                reinterpret_cast<IUnknown**>(&g_dwriteFactory)
-                );
+                 DWRITE_FACTORY_TYPE_SHARED,
+                 __uuidof(IDWriteFactory),
+                 reinterpret_cast<IUnknown**>(&g_dwriteFactory)
+             );
     }
 
     if (SUCCEEDED(hr))
     {
         hr = D2D1CreateFactory(
-                D2D1_FACTORY_TYPE_SINGLE_THREADED, 
-                __uuidof(ID2D1Factory), 
-                NULL, 
-                (IID_PPV_ARGS(&g_d2dFactory))
-                );
+                 D2D1_FACTORY_TYPE_SINGLE_THREADED,
+                 __uuidof(ID2D1Factory),
+                 NULL,
+                 (IID_PPV_ARGS(&g_d2dFactory))
+             );
     }
 
     if (SUCCEEDED(hr))
@@ -117,17 +117,17 @@ int APIENTRY wWinMain(
 
         // Create the window.
         hwnd = CreateWindow(
-                MAKEINTATOM(classAtom), 
-                appTitle,
-                WS_OVERLAPPEDWINDOW,
-                CW_USEDEFAULT, CW_USEDEFAULT, 
-                windowRect.right  - windowRect.left, 
-                windowRect.bottom - windowRect.top, 
-                NULL, 
-                NULL, 
-                hInstance, 
-                NULL
-                );
+                   MAKEINTATOM(classAtom),
+                   appTitle,
+                   WS_OVERLAPPEDWINDOW,
+                   CW_USEDEFAULT, CW_USEDEFAULT,
+                   windowRect.right  - windowRect.left,
+                   windowRect.bottom - windowRect.top,
+                   NULL,
+                   NULL,
+                   hInstance,
+                   NULL
+               );
 
         if (hwnd == NULL)
             hr = HRESULT_FROM_WIN32(GetLastError());
@@ -148,7 +148,8 @@ int APIENTRY wWinMain(
         hr = static_cast<HRESULT>(msg.wParam);
     }
 
-    delete g_layout; g_layout = NULL;
+    delete g_layout;
+    g_layout = NULL;
     SafeRelease(&g_textBrush);
     SafeRelease(&g_renderTarget);
     SafeRelease(&g_d2dFactory);
@@ -223,20 +224,20 @@ HRESULT RenderFrame(HWND hwnd)
 
         // Create the render target.
         hr = g_d2dFactory->CreateHwndRenderTarget(
-                D2D1::RenderTargetProperties(), 
-                D2D1::HwndRenderTargetProperties(hwnd, D2D1::SizeU(clientRect.right, clientRect.bottom)), 
-                &g_renderTarget
-                );
+                 D2D1::RenderTargetProperties(),
+                 D2D1::HwndRenderTargetProperties(hwnd, D2D1::SizeU(clientRect.right, clientRect.bottom)),
+                 &g_renderTarget
+             );
     }
 
     // Create the text brush if we haven't already.
     if (SUCCEEDED(hr) && g_textBrush == NULL)
     {
         hr = g_renderTarget->CreateSolidColorBrush(
-            D2D1::ColorF(GetSysColor(COLOR_WINDOWTEXT)), 
-            D2D1::BrushProperties(), 
-            &g_textBrush
-            );
+                 D2D1::ColorF(GetSysColor(COLOR_WINDOWTEXT)),
+                 D2D1::BrushProperties(),
+                 &g_textBrush
+             );
     }
 
     if (SUCCEEDED(hr))
@@ -246,10 +247,10 @@ HRESULT RenderFrame(HWND hwnd)
         g_renderTarget->Clear(D2D1::ColorF(GetSysColor(COLOR_WINDOW)));
 
         hr = g_layout->Draw(
-                clientWidthInDips,
-                g_renderTarget,
-                g_textBrush
-                );
+                 clientWidthInDips,
+                 g_renderTarget,
+                 g_textBrush
+             );
     }
 
     if (SUCCEEDED(hr))
@@ -266,15 +267,15 @@ HRESULT UpdateRenderingParams(HWND hwnd)
     HRESULT hr = S_OK;
 
     // Get the current monitor for the window.
-    HMONITOR monitor = MonitorFromWindow(hwnd, MONITOR_DEFAULTTONULL); 
+    HMONITOR monitor = MonitorFromWindow(hwnd, MONITOR_DEFAULTTONULL);
 
     // Only update if monitor is different from last time.
-    if (monitor == g_monitor) 
+    if (monitor == g_monitor)
         return hr;
 
     // An ID2D1HwndRenderTarget is automatically created with the correct text rendering
     // parameters for the specified window. However, if the render target already exists
-    // and the window is moved to a different monitor then we need to change the text 
+    // and the window is moved to a different monitor then we need to change the text
     // rendering parameters.
     if (g_renderTarget != NULL)
     {

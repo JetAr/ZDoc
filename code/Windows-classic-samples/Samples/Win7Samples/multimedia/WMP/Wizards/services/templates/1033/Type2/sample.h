@@ -1,4 +1,4 @@
-/////////////////////////////////////////////////////////////////////////////
+﻿/////////////////////////////////////////////////////////////////////////////
 //
 // [!output root].h : Implementation of C[!output Safe_root]
 // Copyright (c) Microsoft Corporation. All rights reserved.
@@ -20,7 +20,7 @@ DEFINE_GUID(CLSID_[!output Safe_root], [!output DEFINEGUID]);
 const WCHAR kwszContentDistributorID[] = L"[!output CONTENTDISTRIBUTOR]";
 
 //**********************************************************************
-class ATL_NO_VTABLE C[!output Safe_root] : 
+class ATL_NO_VTABLE C[!output Safe_root] :
     public CComObjectRootEx<CComSingleThreadModel>,
     public CComCoClass<C[!output Safe_root], &CLSID_[!output Safe_root]>,
     public IWMPSubscriptionService2
@@ -35,8 +35,8 @@ public:
     DECLARE_PROTECT_FINAL_CONSTRUCT()
 
     BEGIN_COM_MAP(C[!output Safe_root])
-        COM_INTERFACE_ENTRY(IWMPSubscriptionService)
-        COM_INTERFACE_ENTRY(IWMPSubscriptionService2)
+    COM_INTERFACE_ENTRY(IWMPSubscriptionService)
+    COM_INTERFACE_ENTRY(IWMPSubscriptionService2)
     END_COM_MAP()
 
 public:
@@ -76,33 +76,36 @@ class CAllowBurnDialog :
 {
 public:
     enum { IDD = IDD_ALLOWBURN };
-    
+
     BEGIN_MSG_MAP(CAllowBurnDialog)
-        MESSAGE_HANDLER(WM_INITDIALOG, OnInitDialog)
-        COMMAND_ID_HANDLER(IDC_TRANSFER_REMOVE, OnRemoveMediaFromPlaylist)
-        COMMAND_ID_HANDLER(IDYES, OnYes)
-        COMMAND_ID_HANDLER(IDNO, OnNo)
+    MESSAGE_HANDLER(WM_INITDIALOG, OnInitDialog)
+    COMMAND_ID_HANDLER(IDC_TRANSFER_REMOVE, OnRemoveMediaFromPlaylist)
+    COMMAND_ID_HANDLER(IDYES, OnYes)
+    COMMAND_ID_HANDLER(IDNO, OnNo)
     END_MSG_MAP()
 
-    void SetPlaylist(IWMPPlaylist *pPlaylist) { m_spPlaylist = pPlaylist; }
+    void SetPlaylist(IWMPPlaylist *pPlaylist)
+    {
+        m_spPlaylist = pPlaylist;
+    }
 
     LRESULT OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL &bHandled)
     {
         return CAllowBaseDialog<CAllowBurnDialog>::OnInitDialog(uMsg, wParam, lParam, bHandled, IDC_ALLOWBURN_LISTBOX);
     }
-    
+
     LRESULT OnRemoveMediaFromPlaylist(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL &bHandled)
     {
         return CAllowBaseDialog<CAllowBurnDialog>::OnRemoveMediaFromPlaylist(wNotifyCode, wID, hWndCtl, bHandled, IDC_ALLOWBURN_LISTBOX);
     }
-    
+
     LRESULT OnYes(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL &bHandled)
     {
         EndDialog(IDYES);
         bHandled = TRUE;
         return 0;
     }
-    
+
     LRESULT OnNo(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL &bHandled)
     {
         EndDialog(IDNO);
@@ -117,33 +120,36 @@ class CAllowTransferDialog :
 {
 public:
     enum { IDD = IDD_ALLOWTRANSFER };
-    
+
     BEGIN_MSG_MAP(CAllowTransferDialog)
-        MESSAGE_HANDLER(WM_INITDIALOG, OnInitDialog)
-        COMMAND_ID_HANDLER(IDC_TRANSFER_REMOVE, OnRemoveMediaFromPlaylist)
-        COMMAND_ID_HANDLER(IDYES, OnYes)
-        COMMAND_ID_HANDLER(IDNO, OnNo)
+    MESSAGE_HANDLER(WM_INITDIALOG, OnInitDialog)
+    COMMAND_ID_HANDLER(IDC_TRANSFER_REMOVE, OnRemoveMediaFromPlaylist)
+    COMMAND_ID_HANDLER(IDYES, OnYes)
+    COMMAND_ID_HANDLER(IDNO, OnNo)
     END_MSG_MAP()
 
-    void SetPlaylist(IWMPPlaylist *pPlaylist) { m_spPlaylist = pPlaylist; }
+    void SetPlaylist(IWMPPlaylist *pPlaylist)
+    {
+        m_spPlaylist = pPlaylist;
+    }
 
     LRESULT OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL &bHandled)
     {
         return CAllowBaseDialog<CAllowTransferDialog>::OnInitDialog(uMsg, wParam, lParam, bHandled, IDC_ALLOWPDA_LISTBOX);
     }
-    
+
     LRESULT OnRemoveMediaFromPlaylist(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL &bHandled)
     {
         return CAllowBaseDialog<CAllowTransferDialog>::OnRemoveMediaFromPlaylist(wNotifyCode, wID, hWndCtl, bHandled, IDC_ALLOWPDA_LISTBOX);
     }
-    
+
     LRESULT OnYes(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL &bHandled)
     {
         EndDialog(IDYES);
         bHandled = TRUE;
         return 0;
     }
-    
+
     LRESULT OnNo(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL &bHandled)
     {
         EndDialog(IDNO);

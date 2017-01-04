@@ -1,4 +1,4 @@
-/*++
+﻿/*++
 
 Copyright (c) 2003  Microsoft Corporation
 
@@ -36,10 +36,10 @@ Author:
 class ISAPI_BUFFER
 {
 public:
-    
+
     ISAPI_BUFFER(
         DWORD   dwMaxAlloc = 0 // 0 defaults to DEFAULT_MAX_ALLOC_SIZE
-        );
+    );
 
     virtual
     ~ISAPI_BUFFER();
@@ -48,63 +48,63 @@ public:
     SetData(
         VOID *  pData,
         DWORD   cbData
-        );
+    );
 
     BOOL
     AppendData(
         VOID *  pData,
         DWORD   cbData
-        );
+    );
 
     BOOL
     Resize(
         DWORD   cbNewSize
-        );
+    );
 
     VOID
     Reset(
         BOOL    fDealloc = FALSE
-        );
+    );
 
     BOOL
     SetDataSize(
         DWORD   cbNewSize
-        );
+    );
 
     VOID
     SetMaxAlloc(
         DWORD   dwMaxAlloc
-        );
+    );
 
     DWORD
     QueryMaxAlloc(
         VOID
-        );
+    );
 
     VOID *
     QueryPtr(
         VOID
-        );
+    );
 
     DWORD
     QueryDataSize(
         VOID
-        );
+    );
 
     DWORD
     QueryBufferSize(
         VOID
-        );
+    );
 
     BOOL
     Base64Decode(
         CHAR *  szString
-        );
+    );
 
     VOID
     ZeroBuffer(
         VOID
-        );
+    );
 
 private:
 

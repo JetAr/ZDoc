@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -27,19 +27,22 @@ const LPCWSTR DataPath = L"Data\\";
 // The produced Appx package's content consists of these files, with
 // corresponding content types and compression options.
 const int PayloadFilesCount = 4;
-const LPCWSTR PayloadFilesName[PayloadFilesCount] = {
+const LPCWSTR PayloadFilesName[PayloadFilesCount] =
+{
     L"AppTile.png",
     L"Default.html",
     L"images\\smiley.jpg",
     L"Error.html",
 };
-const LPCWSTR PayloadFilesContentType[PayloadFilesCount] = {
+const LPCWSTR PayloadFilesContentType[PayloadFilesCount] =
+{
     L"image/png",
     L"text/html",
     L"image/jpeg",
     L"text/html",
 };
-const APPX_COMPRESSION_OPTION PayloadFilesCompression[PayloadFilesCount] = {
+const APPX_COMPRESSION_OPTION PayloadFilesCompression[PayloadFilesCount] =
+{
     APPX_COMPRESSION_OPTION_NONE,
     APPX_COMPRESSION_OPTION_NORMAL,
     APPX_COMPRESSION_OPTION_NONE,
@@ -89,12 +92,12 @@ HRESULT GetFileStream(
     if (SUCCEEDED(hr))
     {
         hr = SHCreateStreamOnFileEx(
-                fullFileName,
-                STGM_READ | STGM_SHARE_EXCLUSIVE,
-                0, // default file attributes
-                FALSE, // do not create new file
-                NULL, // no template
-                stream);
+                 fullFileName,
+                 STGM_READ | STGM_SHARE_EXCLUSIVE,
+                 0, // default file attributes
+                 FALSE, // do not create new file
+                 NULL, // no template
+                 stream);
     }
     return hr;
 }
@@ -121,22 +124,22 @@ HRESULT GetPackageWriter(
 
     // Create a stream over the output file where the package will be written
     hr = SHCreateStreamOnFileEx(
-            outputFileName,
-            STGM_CREATE | STGM_WRITE | STGM_SHARE_EXCLUSIVE,
-            0, // default file attributes
-            TRUE, // create file if it does not exist
-            NULL, // no template
-            &outputStream);
+             outputFileName,
+             STGM_CREATE | STGM_WRITE | STGM_SHARE_EXCLUSIVE,
+             0, // default file attributes
+             TRUE, // create file if it does not exist
+             NULL, // no template
+             &outputStream);
 
     // Create default package writer settings, including hash algorithm URI
     // and Zip format.
     if (SUCCEEDED(hr))
     {
         hr = CreateUri(
-                Sha256AlgorithmUri,
-                Uri_CREATE_CANONICALIZE,
-                0, // reserved parameter
-                &hashMethod);
+                 Sha256AlgorithmUri,
+                 Uri_CREATE_CANONICALIZE,
+                 0, // reserved parameter
+                 &hashMethod);
     }
 
     if (SUCCEEDED(hr))
@@ -149,20 +152,20 @@ HRESULT GetPackageWriter(
     if (SUCCEEDED(hr))
     {
         hr = CoCreateInstance(
-                __uuidof(AppxFactory),
-                NULL,
-                CLSCTX_INPROC_SERVER,
-                __uuidof(IAppxFactory),
-                (LPVOID*)(&appxFactory));
+                 __uuidof(AppxFactory),
+                 NULL,
+                 CLSCTX_INPROC_SERVER,
+                 __uuidof(IAppxFactory),
+                 (LPVOID*)(&appxFactory));
     }
 
     // Create a new package writer using the factory
     if (SUCCEEDED(hr))
     {
         hr = appxFactory->CreatePackageWriter(
-                outputStream,
-                &packageSettings,
-                writer);
+                 outputStream,
+                 &packageSettings,
+                 writer);
     }
 
     // Clean up allocated resources

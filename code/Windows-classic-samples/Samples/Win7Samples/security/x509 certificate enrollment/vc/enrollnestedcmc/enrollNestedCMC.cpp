@@ -1,21 +1,21 @@
-//---------------------------------------------------------------------
+﻿//---------------------------------------------------------------------
 //  This file is part of the Microsoft .NET Framework SDK Code Samples.
-// 
+//
 //  Copyright (C) Microsoft Corporation.  All rights reserved.
-// 
+//
 //This source code is intended only as a supplement to Microsoft
 //Development Tools and/or on-line documentation.  See these other
 //materials for detailed information regarding Microsoft code samples.
-// 
+//
 //THIS CODE AND INFORMATION ARE PROVIDED AS IS WITHOUT WARRANTY OF ANY
 //KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
 //IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 //PARTICULAR PURPOSE.
 //---------------------------------------------------------------------
 
-// Read an existing CMC request from a file, add an additional 
-// CMC layer, then add a signature to the new outer layer.Submit 
-// the request to an enterprise CA, and save the response to 
+// Read an existing CMC request from a file, add an additional
+// CMC layer, then add a signature to the new outer layer.Submit
+// the request to an enterprise CA, and save the response to
 // a file.
 
 #include <stdio.h>
@@ -57,7 +57,8 @@ HRESULT __cdecl wmain(__in int argc, __in_ecount(argc) wchar_t *argv[])
     DWORD cbReq;
 
     // Process command line arguments
-    if (argc !=  3 && argc != 4) {
+    if (argc !=  3 && argc != 4)
+    {
         Usage();
         hr = E_INVALIDARG;
         _JumpError(hr, error, "invalid arg");
@@ -92,27 +93,27 @@ HRESULT __cdecl wmain(__in int argc, __in_ecount(argc) wchar_t *argv[])
 
     // Create IX509CertificateRequestCmc
     hr = CoCreateInstance(
-            _uuidof(CX509CertificateRequestCmc),
-            NULL,       // pUnkOuter
-            CLSCTX_INPROC_SERVER,
-            _uuidof(IX509CertificateRequestCmc),
-            (void **) &pInnerCmc);
+             _uuidof(CX509CertificateRequestCmc),
+             NULL,       // pUnkOuter
+             CLSCTX_INPROC_SERVER,
+             _uuidof(IX509CertificateRequestCmc),
+             (void **) &pInnerCmc);
     _JumpIfError(hr, error, "CoCreateInstance");
 
     // Initialize IX509CertificateRequestCmc
     hr = pInnerCmc->InitializeDecode(
-            strRequest,        
-            XCN_CRYPT_STRING_ANY);  
+             strRequest,
+             XCN_CRYPT_STRING_ANY);
     _JumpIfError(hr, error, "InitializeDecode");
 
 
     // Create IX509CertificateRequestCmc
     hr = CoCreateInstance(
-            _uuidof(CX509CertificateRequestCmc),
-            NULL,       // pUnkOuter
-            CLSCTX_INPROC_SERVER,
-            _uuidof(IX509CertificateRequestCmc),
-            (void **) &pCmc);
+             _uuidof(CX509CertificateRequestCmc),
+             NULL,       // pUnkOuter
+             CLSCTX_INPROC_SERVER,
+             _uuidof(IX509CertificateRequestCmc),
+             (void **) &pCmc);
     _JumpIfError(hr, error, "CoCreateInstance");
 
 
@@ -122,15 +123,15 @@ HRESULT __cdecl wmain(__in int argc, __in_ecount(argc) wchar_t *argv[])
 
     // Find a signing cert
     hr = findCertByKeyUsage(CERT_DIGITAL_SIGNATURE_KEY_USAGE, &pCert);
-   if (S_OK != hr)  // Cert not found
+    if (S_OK != hr)  // Cert not found
     {
         // Enroll a signing cert first
         hr = enrollCertByTemplate(pwszSigningTemplateName);
-        _JumpIfError(hr, error, "enrollCertByTemplate");    
- 
+        _JumpIfError(hr, error, "enrollCertByTemplate");
+
         // Search again
         hr = findCertByKeyUsage(CERT_DIGITAL_SIGNATURE_KEY_USAGE, &pCert);
-        _JumpIfError(hr, error, "findCertByKeyUsage");  
+        _JumpIfError(hr, error, "findCertByKeyUsage");
     }
 
     // Verify the certificate chain
@@ -139,8 +140,8 @@ HRESULT __cdecl wmain(__in int argc, __in_ecount(argc) wchar_t *argv[])
 
     // Convert PCCERT_CONTEXT to BSTR
     strRACert = SysAllocStringByteLen(
-            (CHAR const *) pCert->pbCertEncoded, 
-            pCert->cbCertEncoded);
+                    (CHAR const *) pCert->pbCertEncoded,
+                    pCert->cbCertEncoded);
 
     if (NULL == strRACert)
     {
@@ -154,40 +155,40 @@ HRESULT __cdecl wmain(__in int argc, __in_ecount(argc) wchar_t *argv[])
 
     // Create ISignerCertificate
     hr = CoCreateInstance(
-            __uuidof(CSignerCertificate), 
-            NULL,    // pUnkOuter
-            CLSCTX_INPROC_SERVER, 
-            __uuidof(ISignerCertificate), 
-            (void **)&pSignerCertificate); 
-   _JumpIfError(hr, error, "CoCreateInstance");
+             __uuidof(CSignerCertificate),
+             NULL,    // pUnkOuter
+             CLSCTX_INPROC_SERVER,
+             __uuidof(ISignerCertificate),
+             (void **)&pSignerCertificate);
+    _JumpIfError(hr, error, "CoCreateInstance");
 
     // Initialize ISignerCertificate
     hr = pSignerCertificate->Initialize(
-            VARIANT_FALSE,
-            VerifyNone,
-            XCN_CRYPT_STRING_BINARY,
-            strRACert);
-   _JumpIfError(hr, error, "Initialize");
+             VARIANT_FALSE,
+             VerifyNone,
+             XCN_CRYPT_STRING_BINARY,
+             strRACert);
+    _JumpIfError(hr, error, "Initialize");
 
     // Add RA certificate into ISignerCertificates collection
     hr = pSignerCertificates->Add(pSignerCertificate);
-     _JumpIfError(hr, error, "Add");
+    _JumpIfError(hr, error, "Add");
 
     // Encode CMC
     hr = pCmc->Encode();
     _JumpIfError(hr, error, "Encode");
-    
+
     // Get BSTR request
     hr = pCmc->get_RawData(XCN_CRYPT_STRING_BASE64, &strRequest);
     _JumpIfError(hr, error, "Encode");
 
     // Create ICertConfig
     hr = CoCreateInstance(
-            __uuidof(CCertConfig),
-            NULL,
-            CLSCTX_INPROC_SERVER,
-            __uuidof(ICertConfig),
-            (void**)&pCertConfig);
+             __uuidof(CCertConfig),
+             NULL,
+             CLSCTX_INPROC_SERVER,
+             __uuidof(ICertConfig),
+             (void**)&pCertConfig);
     _JumpIfError(hr, error, "CoCreateInstance");
 
     // Get CA config from UI
@@ -196,33 +197,33 @@ HRESULT __cdecl wmain(__in int argc, __in_ecount(argc) wchar_t *argv[])
 
     // Initialize ICertRequest2
     hr = CoCreateInstance(
-            __uuidof(CCertRequest),
-            NULL,
-            CLSCTX_INPROC_SERVER,
-            __uuidof(ICertRequest2),
-            (void**)&pCertRequest2);
+             __uuidof(CCertRequest),
+             NULL,
+             CLSCTX_INPROC_SERVER,
+             __uuidof(ICertRequest2),
+             (void**)&pCertRequest2);
     _JumpIfError(hr, error, "CoCreateInstance");
-  
+
     // Submit the request
     hr = pCertRequest2->Submit(
-            CR_IN_BASE64 | CR_IN_FORMATANY, 
-            strRequest, 
-            NULL, 
-            strCAConfig,
-            &pDisposition);   
+             CR_IN_BASE64 | CR_IN_FORMATANY,
+             strRequest,
+             NULL,
+             strCAConfig,
+             &pDisposition);
     _JumpIfError(hr, error, "Submit");
 
-   // Check the submission status
+    // Check the submission status
     if (pDisposition != CR_DISP_ISSUED) // Not enrolled
     {
         hr = pCertRequest2->GetDispositionMessage(&strDisposition);
         _JumpIfError(hr, error, "GetDispositionMessage");
-        
+
         if (pDisposition == CR_DISP_UNDER_SUBMISSION) // Pending
         {
             wprintf(L"The submission is pending: %ws\n", strDisposition);
             _JumpError(hr, error, "Submit");
-        } 
+        }
         else // Failed
         {
             wprintf(L"The submission failed: %ws\n", strDisposition);
@@ -238,19 +239,19 @@ HRESULT __cdecl wmain(__in int argc, __in_ecount(argc) wchar_t *argv[])
 
     // Get the full response
     hr = pCertRequest2->GetFullResponseProperty(
-            FR_PROP_FULLRESPONSENOPKCS7,
-            0,
-            PROPTYPE_BINARY,
-            CR_OUT_BINARY,
-            &varFullResponse);
+             FR_PROP_FULLRESPONSENOPKCS7,
+             0,
+             PROPTYPE_BINARY,
+             CR_OUT_BINARY,
+             &varFullResponse);
     _JumpIfError(hr, error, "GetFullResponseProperty");
-    
+
     // Save response to file in base64 format
     hr = EncodeToFileW(
-            pwszFileOut, 
-            (BYTE const *) varFullResponse.bstrVal, 
-            SysStringByteLen(varFullResponse.bstrVal), 
-            CR_OUT_BASE64 | DECF_FORCEOVERWRITE);
+             pwszFileOut,
+             (BYTE const *) varFullResponse.bstrVal,
+             SysStringByteLen(varFullResponse.bstrVal),
+             CR_OUT_BASE64 | DECF_FORCEOVERWRITE);
     _JumpIfError(hr, error, "EncodeToFileW");
 
 error:

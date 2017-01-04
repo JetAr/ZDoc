@@ -1,7 +1,7 @@
-//--------------------------------------------------------------------
+﻿//--------------------------------------------------------------------
 // Microsoft OLE DB Test
 //
-// Copyright 1995-2000 Microsoft Corporation.  
+// Copyright 1995-2000 Microsoft Corporation.
 //
 // @doc
 //
@@ -14,14 +14,14 @@
 #ifndef _ISRCROW_H_
 #define _ISRCROW_H_
 
-#include "initguid.h"						  
+#include "initguid.h"
 #include "oledb.h" 			// OLE DB Header Files
 #include "oledberr.h"
 #include "msdaguid.h"
 #include "msdasql.h"
 
 #include "privlib.h"		//include private library, which includes
-							//the "transact.h"
+//the "transact.h"
 
 //-----------------------------------------------------------------------------
 // Defines
@@ -46,10 +46,11 @@
 // ENUM
 //-----------------------------------------------------------------------------
 enum PROP_STATUS
-    {	NOTSUPPORTED	= 0,
-		SUPPORTED		= 1,
-		SETTABLE		= 2
-    };
+{
+    NOTSUPPORTED	= 0,
+    SUPPORTED		= 1,
+    SETTABLE		= 2
+};
 
 
 #endif 	//_ISRCROW_H_

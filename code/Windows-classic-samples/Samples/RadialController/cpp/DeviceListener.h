@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include <wrl\client.h>
 #include <windows.ui.input.h>

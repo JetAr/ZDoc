@@ -1,4 +1,4 @@
-// FirewallConfig.h - Based on MSDN Sample code for the Windows Firewall COM interface.
+﻿// FirewallConfig.h - Based on MSDN Sample code for the Windows Firewall COM interface.
 
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
@@ -28,27 +28,27 @@ HRESULT WindowsFirewallTurnOn(IN INetFwProfile* fwProfile);
 HRESULT WindowsFirewallTurnOff(IN INetFwProfile* fwProfile);
 
 HRESULT WindowsFirewallAppIsEnabled(
-            IN INetFwProfile* fwProfile,
-            IN const wchar_t* fwProcessImageFileName,
-            OUT BOOL* fwAppEnabled
-            );
+    IN INetFwProfile* fwProfile,
+    IN const wchar_t* fwProcessImageFileName,
+    OUT BOOL* fwAppEnabled
+);
 
 HRESULT WindowsFirewallAddApp(
-            IN INetFwProfile* fwProfile,
-            IN const wchar_t* fwProcessImageFileName,
-            IN const wchar_t* fwName
-            );
+    IN INetFwProfile* fwProfile,
+    IN const wchar_t* fwProcessImageFileName,
+    IN const wchar_t* fwName
+);
 
 HRESULT WindowsFirewallPortIsEnabled(
-            IN INetFwProfile* fwProfile,
-            IN LONG portNumber,
-            IN NET_FW_IP_PROTOCOL ipProtocol,
-            OUT BOOL* fwPortEnabled
-            );
+    IN INetFwProfile* fwProfile,
+    IN LONG portNumber,
+    IN NET_FW_IP_PROTOCOL ipProtocol,
+    OUT BOOL* fwPortEnabled
+);
 
 HRESULT WindowsFirewallPortAdd(
-            IN INetFwProfile* fwProfile,
-            IN LONG portNumber,
-            IN NET_FW_IP_PROTOCOL ipProtocol,
-            IN const wchar_t* name
-            );
+    IN INetFwProfile* fwProfile,
+    IN LONG portNumber,
+    IN NET_FW_IP_PROTOCOL ipProtocol,
+    IN const wchar_t* name
+);

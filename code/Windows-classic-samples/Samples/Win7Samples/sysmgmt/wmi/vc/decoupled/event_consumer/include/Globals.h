@@ -1,4 +1,4 @@
-/*++
+﻿/*++
 
 Copyright (C)  Microsoft Corporation
 
@@ -18,9 +18,9 @@ History:
 
 /******************************************************************************
  *
- *	Name:	Provider_Globals 
+ *	Name:	Provider_Globals
  *
- *	
+ *
  *  Description:
  *
  *		class encapsulates global helper functions.
@@ -34,24 +34,24 @@ public:
 
 // Public Static Variables.
 
-	static LONG s_LocksInProgress ;
-	static LONG s_ObjectsInProgress ;
+    static LONG s_LocksInProgress ;
+    static LONG s_ObjectsInProgress ;
 
 public:
 
 // Public Functions
 
-	static HRESULT Global_Startup () ;
-	static HRESULT Global_Shutdown () ;
+    static HRESULT Global_Startup () ;
+    static HRESULT Global_Shutdown () ;
 
-	static HRESULT CreateInstance ( 
+    static HRESULT CreateInstance (
 
-		const CLSID &a_ReferenceClsid ,
-		LPUNKNOWN a_OuterUnknown ,
-		const DWORD &a_ClassContext ,
-		const UUID &a_ReferenceInterfaceId ,
-		void **a_ObjectInterface
-	);
+        const CLSID &a_ReferenceClsid,
+        LPUNKNOWN a_OuterUnknown,
+        const DWORD &a_ClassContext,
+        const UUID &a_ReferenceInterfaceId,
+        void **a_ObjectInterface
+    );
 } ;
 
 #endif // _Globals_H

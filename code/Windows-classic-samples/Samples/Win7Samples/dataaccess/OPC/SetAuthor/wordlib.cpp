@@ -1,4 +1,4 @@
-//<SnippetSetAuthor_cppHeadWordlibWholePage>
+﻿//<SnippetSetAuthor_cppHeadWordlibWholePage>
 /*****************************************************************************
 *
 * File: wordlib.cpp
@@ -12,18 +12,18 @@
 * ------------------------------------
 *
 *  This file is part of the Microsoft Windows SDK Code Samples.
-* 
+*
 *  Copyright (C) Microsoft Corporation.  All rights reserved.
-* 
+*
 * This source code is intended only as a supplement to Microsoft
 * Development Tools and/or on-line documentation.  See these other
 * materials for detailed information regarding Microsoft code samples.
-* 
+*
 * THIS CODE AND INFORMATION ARE PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
 * KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
 * IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 * PARTICULAR PURPOSE.
-* 
+*
 ****************************************************************************/
 
 #include "stdio.h"
@@ -71,10 +71,10 @@ static const WCHAR g_wordSelectionNamespaces[] =
 // find text, nothing will be printed. This function is not intended to
 // display complex wordprocessing documents.
 //////////////////////////////////////////////////////////////////////////////
-HRESULT 
+HRESULT
 ShowParagraph(
     IXMLDOMNode *paragraph
-    )
+)
 {
     IXMLDOMNodeList * textNodeList = NULL;
 
@@ -137,21 +137,21 @@ ShowParagraph(
 // office document relationship type and returns a pointer to target part of
 // that relationship.
 //////////////////////////////////////////////////////////////////////////////
-HRESULT 
+HRESULT
 FindDocumentInPackage(
     IOpcPackage *package,
     IOpcPart   **documentPart
-    )
+)
 {
     // Find the Main Document part of the word processing document.
-    // Note: Check the content type of the found part to ensure 
+    // Note: Check the content type of the found part to ensure
     // that this is a word processing document.
     return opclib::FindPartByRelationshipType(
-                package,
-                g_officeDocumentRelationshipType,
-                g_wordProcessingContentType,
-                documentPart
-                );
+               package,
+               g_officeDocumentRelationshipType,
+               g_wordProcessingContentType,
+               documentPart
+           );
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -163,16 +163,16 @@ HRESULT
 PrintBeginningParagraphs(
     IOpcPart *documentPart,
     DWORD maxParagraphCount
-    )
+)
 {
     IXMLDOMDocument2 * documentDom = NULL;
     IXMLDOMNodeList * paragraphNodeList = NULL;
 
     HRESULT hr = opclib::DOMFromPart(
-                    documentPart,
-                    g_wordSelectionNamespaces,
-                    &documentDom
-                    );
+                     documentPart,
+                     g_wordSelectionNamespaces,
+                     &documentDom
+                 );
 
     if (SUCCEEDED(hr))
     {

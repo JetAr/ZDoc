@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -12,38 +12,38 @@ using namespace Gdiplus;
 
 int GetEncoderClsid(const WCHAR* format, CLSID* pClsid)
 {
-   UINT  num = 0;          // number of image encoders
-   UINT  size = 0;         // size of the image encoder array in bytes
+    UINT  num = 0;          // number of image encoders
+    UINT  size = 0;         // size of the image encoder array in bytes
 
-   ImageCodecInfo* pImageCodecInfo = NULL;
+    ImageCodecInfo* pImageCodecInfo = NULL;
 
-   GetImageEncodersSize(&num, &size);
-   if(size == 0)
-   {
-      return -1;  // Failure
-   }
+    GetImageEncodersSize(&num, &size);
+    if(size == 0)
+    {
+        return -1;  // Failure
+    }
 
-   pImageCodecInfo = (ImageCodecInfo*)(malloc(size));
-   if(pImageCodecInfo == NULL)
-   {
-      return -1;  // Failure
-   }
+    pImageCodecInfo = (ImageCodecInfo*)(malloc(size));
+    if(pImageCodecInfo == NULL)
+    {
+        return -1;  // Failure
+    }
 
-   GetImageEncoders(num, size, pImageCodecInfo);
+    GetImageEncoders(num, size, pImageCodecInfo);
 
-   for (UINT j = 0; j < num; ++j)
-   {
-      if ( wcscmp(pImageCodecInfo[j].MimeType, format) == 0 )
-      {
-         *pClsid = pImageCodecInfo[j].Clsid;
-         free(pImageCodecInfo);
-         return j;  // Success
-      }    
-   }
+    for (UINT j = 0; j < num; ++j)
+    {
+        if ( wcscmp(pImageCodecInfo[j].MimeType, format) == 0 )
+        {
+            *pClsid = pImageCodecInfo[j].Clsid;
+            free(pImageCodecInfo);
+            return j;  // Success
+        }
+    }
 
-   free(pImageCodecInfo);
-   
-   return -1;  // Failure
+    free(pImageCodecInfo);
+
+    return -1;  // Failure
 }
 
 CImageContent::CImageContent()
@@ -58,13 +58,13 @@ CImageContent::CImageContent(CONTENT_ID id, LPWSTR pwszFile)
 
     //
     // Copy the filename locally so we can delay-load the file
-    // 
+    //
     if (NULL != pwszFile)
     {
         size_t length = wcslen(pwszFile) + 1;
         m_pwszFile = new WCHAR[length];
         if (NULL != m_pwszFile)
-        {           
+        {
             StringCchCopyW(m_pwszFile, length, pwszFile);
         }
     }
@@ -85,7 +85,7 @@ void CImageContent::CreateDeviceImage(
     Rect rect)
 {
     HRESULT hr = E_FAIL;
-    
+
     //
     // Open the file handle
     //
@@ -95,10 +95,10 @@ void CImageContent::CreateDeviceImage(
     wszImagePath[0] = 0;
     wszDirPath[0] = 0;
     BOOL retVal = SHGetSpecialFolderPath(
-            NULL,
-            wszDirPath,
-            CSIDL_MYPICTURES,
-            0);
+                      NULL,
+                      wszDirPath,
+                      CSIDL_MYPICTURES,
+                      0);
     if (TRUE == retVal)
     {
         hr = StringCchCat(wszDirPath, MAX_PATH, L"\\");
@@ -111,7 +111,7 @@ void CImageContent::CreateDeviceImage(
     {
         hr = StringCchCat(wszImagePath, MAX_PATH, wszFileName);
     }
-    
+
     Image* pImage = NULL;
     if (SUCCEEDED(hr))
     {
@@ -137,14 +137,14 @@ void CImageContent::CreateDeviceImage(
             newH = (int)(origH * ((float)rect.Width / (float)origW));
         }
     }
-    
+
     if (NULL != pImage)
     {
         Status status;
         Bitmap* pBitmap = new Bitmap(newW, newH);
         Graphics graphics(pBitmap);
         status = graphics.DrawImage(pImage, 0, 0, newW, newH);
-        
+
         //
         // Save the new version of the image to file.
         //
@@ -156,17 +156,17 @@ void CImageContent::CreateDeviceImage(
             WCHAR wszTempPath[MAX_PATH];
             DWORD dwResults = 0;
             dwResults = GetTempPath(MAX_PATH, wszTempPath);
-            
+
             if (0 != dwResults)
             {
                 dwResults = GetTempFileName(
-                    wszTempPath,
-                    wszFileName,
-                    0,
-                    wszDeviceImage
-                    );
+                                wszTempPath,
+                                wszFileName,
+                                0,
+                                wszDeviceImage
+                            );
             }
-            
+
             if (0 != dwResults)
             {
                 CLSID jpgClsid;
@@ -184,8 +184,8 @@ void CImageContent::CreateDeviceImage(
 void CImageContent::LoadContent(DWORD* pdwSize, BYTE** ppbData, ISideShowCapabilities* pICapabilities)
 {
     if (NULL == pdwSize ||
-        NULL == ppbData ||
-        NULL == m_pwszFile)
+            NULL == ppbData ||
+            NULL == m_pwszFile)
     {
         return;
     }
@@ -211,7 +211,7 @@ void CImageContent::LoadContent(DWORD* pdwSize, BYTE** ppbData, ISideShowCapabil
     }
     Rect rect(0, 0, pvWidth.uiVal, pvHeight.uiVal);
     CreateDeviceImage(m_pwszFile, wszDeviceImage, rect);
-    
+
     //
     // Open the file handle
     //
@@ -256,7 +256,7 @@ void CImageContent::LoadContent(DWORD* pdwSize, BYTE** ppbData, ISideShowCapabil
 
         ::CloseHandle(hFile);
     }
-    
+
     PropVariantClear(&pvHeight);
     PropVariantClear(&pvWidth);
 }

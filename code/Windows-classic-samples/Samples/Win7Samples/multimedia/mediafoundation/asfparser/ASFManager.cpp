@@ -1,7 +1,7 @@
-//////////////////////////////////////////////////////////////////////////
+﻿//////////////////////////////////////////////////////////////////////////
 //
 // ASFManager.cpp : CASFManager class implementation.
-// 
+//
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -59,18 +59,18 @@ HRESULT CASFManager::CreateInstance(CASFManager **ppASFManager)
 /////////////////////////////////////////////////////////////////////////
 
 CASFManager::CASFManager(HRESULT* hr)
-:   m_nRefCount(1),
-    m_CurrentStreamID (0),
-    m_guidCurrentMediaType (GUID_NULL),
-    m_fileinfo(NULL),
-    m_pDecoder (NULL),
-    m_pContentInfo (NULL),
-    m_pIndexer (NULL),
-    m_pSplitter (NULL),
-    m_pDataBuffer (NULL),
-    m_pByteStream(NULL),
-    m_cbDataOffset(0),
-    m_cbDataLength(0)
+    :   m_nRefCount(1),
+        m_CurrentStreamID (0),
+        m_guidCurrentMediaType (GUID_NULL),
+        m_fileinfo(NULL),
+        m_pDecoder (NULL),
+        m_pContentInfo (NULL),
+        m_pIndexer (NULL),
+        m_pSplitter (NULL),
+        m_pDataBuffer (NULL),
+        m_pByteStream(NULL),
+        m_cbDataOffset(0),
+        m_cbDataLength(0)
 {
     //Initialize Media Foundation
     *hr = MFStartup(MF_VERSION);
@@ -90,7 +90,7 @@ CASFManager::~CASFManager()
     //Release memory
     Reset();
 
-   // Shutdown the Media Foundation platform
+    // Shutdown the Media Foundation platform
     (void)MFShutdown();
 
 }
@@ -114,12 +114,12 @@ HRESULT CASFManager::OpenASFFile(const WCHAR *sFileName)
 
     // Open a byte stream for the file.
     CHECK_HR(hr = MFCreateFile(
-        MF_ACCESSMODE_READ, 
-        MF_OPENMODE_FAIL_IF_NOT_EXIST,
-        MF_FILEFLAGS_NONE,
-        sFileName,
-        &pStream
-        ));
+                      MF_ACCESSMODE_READ,
+                      MF_OPENMODE_FAIL_IF_NOT_EXIST,
+                      MF_FILEFLAGS_NONE,
+                      sFileName,
+                      &pStream
+                  ));
 
 
     TRACE((L"Opened ASF File\n"));
@@ -135,7 +135,7 @@ HRESULT CASFManager::OpenASFFile(const WCHAR *sFileName)
     CHECK_HR(hr = CreateASFIndexer(pStream, &m_pIndexer));
 
 done:
-    
+
     LOG_MSG_IF_FAILED(L"CASFManager::OpenASFFile failed.\n", hr);
 
     SAFE_RELEASE(pStream);
@@ -143,7 +143,7 @@ done:
     return hr;
 }
 
- 
+
 
 // ----- Private Methods -----------------------------------------------
 
@@ -153,7 +153,7 @@ done:
 // Reads the ASF Header Object from a byte stream and returns a
 // pointer to the ASF content information object.
 //
-// pStream:       Pointer to the byte stream. The byte stream's 
+// pStream:       Pointer to the byte stream. The byte stream's
 //                current read position must be 0 that indicates the start of the
 //                ASF Header Object.
 // ppContentInfo: Receives a pointer to the ASF content information
@@ -161,34 +161,34 @@ done:
 /////////////////////////////////////////////////////////////////////
 
 HRESULT CASFManager::CreateASFContentInfo (IMFByteStream *pContentByteStream,
-                                           IMFASFContentInfo **ppContentInfo)
+        IMFASFContentInfo **ppContentInfo)
 {
     if (!pContentByteStream || !ppContentInfo)
     {
         return E_INVALIDARG;
     }
- 
+
     HRESULT hr = S_OK;
     QWORD cbHeader = 0;
 
-   
+
     IMFASFContentInfo *pContentInfo = NULL;
     IMFMediaBuffer *pBuffer = NULL;
 
     // Create the ASF content information object.
     CHECK_HR(hr = MFCreateASFContentInfo(&pContentInfo));
-    
+
     // Read the first 30 bytes to find the total header size.
     CHECK_HR(hr = ReadDataIntoBuffer(
-        pContentByteStream, 0, MIN_ASF_HEADER_SIZE, &pBuffer));
+                      pContentByteStream, 0, MIN_ASF_HEADER_SIZE, &pBuffer));
 
     CHECK_HR(hr = pContentInfo->GetHeaderSize(pBuffer, &cbHeader));
 
     SAFE_RELEASE(pBuffer);
-    
+
     //Read the header into a buffer
     CHECK_HR(hr = ReadDataIntoBuffer(
-        pContentByteStream, 0, (DWORD)cbHeader, &pBuffer));
+                      pContentByteStream, 0, (DWORD)cbHeader, &pBuffer));
 
     // Pass the buffer for the header object.
     CHECK_HR(hr = pContentInfo->ParseHeader(pBuffer, 0));
@@ -201,7 +201,7 @@ HRESULT CASFManager::CreateASFContentInfo (IMFByteStream *pContentByteStream,
     TRACE((L"Created ContentInfo object.\n"));
 
 done:
-    
+
     LOG_MSG_IF_FAILED(L"CASFManager::CreateASFContentInfo failed.\n", hr);
 
     SAFE_RELEASE(pBuffer);
@@ -215,7 +215,7 @@ done:
 //
 // Creates the ASF splitter.
 //
-// pContentByteStream: Pointer to the byte stream that contains the ASF Data Object. 
+// pContentByteStream: Pointer to the byte stream that contains the ASF Data Object.
 // ppSplitter:   Receives a pointer to the ASF splitter.
 /////////////////////////////////////////////////////////////////////
 
@@ -233,14 +233,14 @@ HRESULT CASFManager::CreateASFSplitter (IMFByteStream *pContentByteStream,
     }
 
     HRESULT hr = S_OK;
-    
+
     IMFASFSplitter *pSplitter = NULL;
     IMFPresentationDescriptor* pPD = NULL;
 
     UINT64 cbDataOffset = 0, cbDataLength = 0;
 
     CHECK_HR(hr = MFCreateASFSplitter(&pSplitter));
-    
+
     CHECK_HR(hr = pSplitter->Initialize(m_pContentInfo));
 
     //Generate the presentation descriptor
@@ -274,7 +274,7 @@ done:
 
     return hr;
 }
- 
+
 /////////////////////////////////////////////////////////////////////
 // Name: CreateASFIndexer
 //
@@ -313,7 +313,7 @@ HRESULT CASFManager::CreateASFIndexer (IMFByteStream *pContentByteStream,
     CHECK_HR(hr =  pIndexer->Initialize(m_pContentInfo));
 
 
-    //Check if the index exists. 
+    //Check if the index exists.
     //you can only do this after creating the indexer
 
     //Get byte stream length
@@ -321,7 +321,7 @@ HRESULT CASFManager::CreateASFIndexer (IMFByteStream *pContentByteStream,
 
     //Get index offset
     CHECK_HR(hr = pIndexer->GetIndexPosition( m_pContentInfo, &qwIndexOffset ));
-    
+
     if ( qwIndexOffset >= qwLength)
     {
         //index object does not exist, release the indexer
@@ -332,9 +332,9 @@ HRESULT CASFManager::CreateASFIndexer (IMFByteStream *pContentByteStream,
         // initialize the indexer
         // Create a byte stream that the Indexer will use to read in
         // and parse the indexers.
-         CHECK_HR(hr = MFCreateASFIndexerByteStream( pContentByteStream,
-                                qwIndexOffset,
-                                &pIndexerByteStream ));
+        CHECK_HR(hr = MFCreateASFIndexerByteStream( pContentByteStream,
+                      qwIndexOffset,
+                      &pIndexerByteStream ));
     }
 
     CHECK_HR(hr = pIndexer->GetIndexByteStreamCount( &dwByteStreamsNeeded ));
@@ -343,7 +343,7 @@ HRESULT CASFManager::CreateASFIndexer (IMFByteStream *pContentByteStream,
     {
         CHECK_HR(hr = pIndexer->SetIndexByteStreams( &pIndexerByteStream, dwByteStreamsNeeded ));
     }
-    
+
     // Return the pointer to the caller.
     *ppIndexer = pIndexer;
     (*ppIndexer)->AddRef();
@@ -365,17 +365,17 @@ done:
 //
 // Enumerates the streams in the ASF file.
 //
-// ppwStreamNumbers: Receives the stream identifiers in an array. 
+// ppwStreamNumbers: Receives the stream identifiers in an array.
 //                   The caller must release the allocated memory.
 //
-// ppguidMajorType: Receives the major media type GUIDs in an array. 
+// ppguidMajorType: Receives the major media type GUIDs in an array.
 //                   The caller must release the allocated memory.
 //
 // cbTotalStreams:   Receives total number of elements in the array.
 /////////////////////////////////////////////////////////////////////
 
-HRESULT CASFManager::EnumerateStreams (WORD** ppwStreamNumbers, 
-                                       GUID** ppguidMajorType, 
+HRESULT CASFManager::EnumerateStreams (WORD** ppwStreamNumbers,
+                                       GUID** ppguidMajorType,
                                        DWORD* pcbTotalStreams)
 {
     if (!ppwStreamNumbers || !ppguidMajorType || !pcbTotalStreams)
@@ -395,8 +395,8 @@ HRESULT CASFManager::EnumerateStreams (WORD** ppwStreamNumbers,
 
     *pcbTotalStreams =0;
 
-    WORD* pwStreamNumbers; 
-    GUID* pguidMajorType;   
+    WORD* pwStreamNumbers;
+    GUID* pguidMajorType;
 
     CHECK_HR(hr =  m_pContentInfo->GetProfile(&pProfile));
 
@@ -422,7 +422,7 @@ HRESULT CASFManager::EnumerateStreams (WORD** ppwStreamNumbers,
 
     //create an array of guids and initialize elements with GUID_NULL.
     pguidMajorType = new GUID[*pcbTotalStreams*sizeof(GUID)];
-    
+
     if (!pguidMajorType)
     {
         hr = E_OUTOFMEMORY;
@@ -469,9 +469,9 @@ done:
 // Selects the streams in the ASF file.
 //
 // pwStreamNumber: Specifies the identifier of the stream to be selected
-//                 on the splitter. 
+//                 on the splitter.
 //
-// pguidCurrentMediaType: Receives the major media type GUID of the 
+// pguidCurrentMediaType: Receives the major media type GUID of the
 //                   currently selected stream.
 //
 /////////////////////////////////////////////////////////////////////
@@ -496,7 +496,7 @@ HRESULT CASFManager::SelectStream (WORD wStreamNumber,
 
     //Load the appropriate stream decoder
     CHECK_HR(hr = SetupStreamDecoder(wStreamNumber, pguidCurrentMediaType));
-    
+
     m_CurrentStreamID = wStreamNumber;
 
     m_guidCurrentMediaType = *pguidCurrentMediaType;
@@ -514,21 +514,21 @@ done:
 // Name: SetupStreamDecoder
 //
 // Loads the appropriate decoder for stream. The decoder is implemented as
-// a Media Foundation Transform (MFT). The class CDecoder provides a wrapper for 
-// the MFT. The CASFManager::GenerateSamples feeds compressed samples to 
+// a Media Foundation Transform (MFT). The class CDecoder provides a wrapper for
+// the MFT. The CASFManager::GenerateSamples feeds compressed samples to
 // the decoder. The MFT decodes the samples and sends them to the CMediaController
 // object, which plays 10 seconds of uncompressed audio samples or displays the
 // key frame for the video stream
 //
-// wStreamNumber: Specifies the identifier of the stream. 
+// wStreamNumber: Specifies the identifier of the stream.
 //
-// pguidCurrentMediaType: Receives the major media type GUID of the 
+// pguidCurrentMediaType: Receives the major media type GUID of the
 //                   currently selected stream.
 //
 /////////////////////////////////////////////////////////////////////
 
-HRESULT CASFManager::SetupStreamDecoder (WORD wStreamNumber, 
-                                         GUID* pguidCurrentMediaType)
+HRESULT CASFManager::SetupStreamDecoder (WORD wStreamNumber,
+        GUID* pguidCurrentMediaType)
 {
     if (! m_pContentInfo)
     {
@@ -550,9 +550,9 @@ HRESULT CASFManager::SetupStreamDecoder (WORD wStreamNumber,
 
     BOOL fIsCompressed = TRUE;
 
-    CLSID *pDecoderCLSIDs = NULL;   // Pointer to an array of CLISDs. 
+    CLSID *pDecoderCLSIDs = NULL;   // Pointer to an array of CLISDs.
     UINT32 cDecoderCLSIDs = 0;   // Size of the array.
-    
+
     HRESULT hr = S_OK;
 
     //Get the profile object that stores stream information
@@ -566,10 +566,10 @@ HRESULT CASFManager::SetupStreamDecoder (WORD wStreamNumber,
 
     //Get the major media type
     CHECK_HR(hr = pMediaType->GetMajorType(&guidMajorType));
-        
+
     //Get the sub media type
     CHECK_HR(hr = pMediaType->GetGUID(MF_MT_SUBTYPE, &guidSubType));
-    
+
     //find out if the media type is compressed
     CHECK_HR(hr = pMediaType->IsCompressedFormat(&fIsCompressed));
 
@@ -595,14 +595,14 @@ HRESULT CASFManager::SetupStreamDecoder (WORD wStreamNumber,
         tinfo.guidSubtype = guidSubType;
 
         CHECK_HR(hr = MFTEnum(
-            guidDecoderCategory,
-            0,                  // Reserved
-            &tinfo,             // Input type to match. (Encoded type.)
-            NULL,               // Output type to match. (Don't care.)
-            NULL,               // Attributes to match. (None.)
-            &pDecoderCLSIDs,    // Receives a pointer to an array of CLSIDs.
-            &cDecoderCLSIDs     // Receives the size of the array.
-            ));
+                          guidDecoderCategory,
+                          0,                  // Reserved
+                          &tinfo,             // Input type to match. (Encoded type.)
+                          NULL,               // Output type to match. (Don't care.)
+                          NULL,               // Attributes to match. (None.)
+                          &pDecoderCLSIDs,    // Receives a pointer to an array of CLSIDs.
+                          &cDecoderCLSIDs     // Receives the size of the array.
+                      ));
 
         // MFTEnum can return zero matches.
         if (cDecoderCLSIDs == 0)
@@ -616,7 +616,7 @@ HRESULT CASFManager::SetupStreamDecoder (WORD wStreamNumber,
             {
                 CHECK_HR(hr = CDecoder::CreateInstance(&m_pDecoder));
             }
-            
+
             //Load the first MFT in the array for the current media type
             CHECK_HR(hr = m_pDecoder->Initialize(pDecoderCLSIDs[0], pMediaType));
         }
@@ -624,8 +624,8 @@ HRESULT CASFManager::SetupStreamDecoder (WORD wStreamNumber,
     }
     else
     {
-        // Not compressed. Don't need a decoder. 
-         CHECK_HR(hr = MF_E_INVALIDREQUEST);
+        // Not compressed. Don't need a decoder.
+        CHECK_HR(hr = MF_E_INVALIDREQUEST);
     }
 
 
@@ -634,7 +634,7 @@ HRESULT CASFManager::SetupStreamDecoder (WORD wStreamNumber,
 done:
 
     LOG_MSG_IF_FAILED(L"CASFManager::SetupStreamDecoder failed.\n", hr);
-    
+
     SAFE_RELEASE(pProfile);
     SAFE_RELEASE(pMediaType);
     SAFE_RELEASE(pStream);
@@ -650,15 +650,15 @@ done:
 // Gets the offset from the start of the ASF Data Object corresponding
 // to the specified time that is seeked by the caller.
 //
-// hnsSeekTime: [In/out]Seek time in hns. This includes the preroll time. The received 
+// hnsSeekTime: [In/out]Seek time in hns. This includes the preroll time. The received
 //              value is the actual seek time wth preroll adjustment.
 //
 // cbDataOffset: Receives the offset in bytes.
 //
 /////////////////////////////////////////////////////////////////////
 
-HRESULT CASFManager::GetSeekPosition (MFTIME* hnsSeekTime, 
-                                      QWORD *pcbDataOffset, 
+HRESULT CASFManager::GetSeekPosition (MFTIME* hnsSeekTime,
+                                      QWORD *pcbDataOffset,
                                       MFTIME* phnsApproxSeekTime)
 {
     HRESULT hr = S_OK;
@@ -674,7 +674,7 @@ HRESULT CASFManager::GetSeekPosition (MFTIME* hnsSeekTime,
     //if the type is video, get the position with the indexer
     if (( m_guidCurrentMediaType == MFMediaType_Video))
     {
-        CHECK_HR(hr =  GetSeekPositionWithIndexer(*hnsSeekTime, pcbDataOffset, phnsApproxSeekTime));        
+        CHECK_HR(hr =  GetSeekPositionWithIndexer(*hnsSeekTime, pcbDataOffset, phnsApproxSeekTime));
     }
 
 
@@ -693,14 +693,14 @@ done:
 // Gets the offset for audio media types or ones that do not have ASF Index Objects defined.
 //Offset is calculated as fraction with respect to time
 //
-// hnsSeekTime: Presentation time in hns. 
+// hnsSeekTime: Presentation time in hns.
 //
 // cbDataOffset: Receives the offset in bytes.
 //
 /////////////////////////////////////////////////////////////////////
 
-HRESULT CASFManager::GetSeekPositionManually(MFTIME hnsSeekTime, 
-                                    QWORD *cbDataOffset) 
+HRESULT CASFManager::GetSeekPositionManually(MFTIME hnsSeekTime,
+        QWORD *cbDataOffset)
 {
     //Get average packet size
     UINT32 averagepacketsize = ( m_fileinfo->cbMaxPacketSize+ m_fileinfo->cbMinPacketSize)/2;
@@ -710,7 +710,7 @@ HRESULT CASFManager::GetSeekPositionManually(MFTIME hnsSeekTime,
     double fraction = 0;
 
     HRESULT hr = S_OK;
-    
+
     //Check if the reverse flag is set, if so, offset is calculated from the end of the presentation
     CHECK_HR(hr = this->m_pSplitter->GetFlags(&dwFlags));
 
@@ -722,10 +722,10 @@ HRESULT CASFManager::GetSeekPositionManually(MFTIME hnsSeekTime,
     {
         fraction = (double)(hnsSeekTime)/(double) (m_fileinfo->cbPresentationDuration);
     }
-    
+
     //calculate the number of packets passed
     int seeked_packets = (int)( m_fileinfo->cbPackets * fraction);
-    
+
     //get the offset
     *cbDataOffset = (QWORD)averagepacketsize * seeked_packets;
 
@@ -749,16 +749,16 @@ done:
 //
 // Gets the offset for video media types that have ASF Index Objects defined.
 //
-// hnsSeekTime: Presentation time in hns. 
+// hnsSeekTime: Presentation time in hns.
 //
 // cbDataOffset: Receives the offset in bytes.
 //
 /////////////////////////////////////////////////////////////////////
 
-HRESULT CASFManager::GetSeekPositionWithIndexer ( 
-                        MFTIME hnsSeekTime, 
-                        QWORD *cbDataOffset, 
-                        MFTIME* hnsApproxSeekTime)
+HRESULT CASFManager::GetSeekPositionWithIndexer (
+    MFTIME hnsSeekTime,
+    QWORD *cbDataOffset,
+    MFTIME* hnsApproxSeekTime)
 {
     if (! m_pIndexer)
     {
@@ -769,7 +769,7 @@ HRESULT CASFManager::GetSeekPositionWithIndexer (
 
     PROPVARIANT var;
     PropVariantInit(&var);
-    
+
     var.vt = VT_I8;
     var.hVal.QuadPart = hnsSeekTime;
 
@@ -786,9 +786,9 @@ HRESULT CASFManager::GetSeekPositionWithIndexer (
 
     //Is the stream indexed? Get the value of cbIndexDescriptor
     hr = m_pIndexer->GetIndexStatus( &IndexIdentifier,
-        &fIsIndexed,
-        NULL,
-        &cbIndexDescriptor );
+                                     &fIsIndexed,
+                                     NULL,
+                                     &cbIndexDescriptor );
 
     if (hr == MF_E_BUFFERTOOSMALL)
     {
@@ -809,11 +809,11 @@ HRESULT CASFManager::GetSeekPositionWithIndexer (
     if (fIsIndexed)
     {
         CHECK_HR(hr = m_pIndexer->GetSeekPositionForValue(
-            &var, 
-            &IndexIdentifier, 
-            cbDataOffset, 
-            hnsApproxSeekTime, 
-            0 ));
+                          &var,
+                          &IndexIdentifier,
+                          cbDataOffset,
+                          hnsApproxSeekTime,
+                          0 ));
     }
     else
     {
@@ -837,8 +837,8 @@ done:
 //
 //For audio stream, this method retrieves the duration of the test sample.
 //
-// hnsSeekTime: Presentation time in hns. 
-// hnsTestDuration: Presentation time in hns that represents the end time. 
+// hnsSeekTime: Presentation time in hns.
+// hnsTestDuration: Presentation time in hns that represents the end time.
 // dwFlags: Specifies splitter configuration, generate samples in reverse
 //          or generate samples for protected content.
 /////////////////////////////////////////////////////////////////////
@@ -859,7 +859,7 @@ void CASFManager::GetTestDuration(const MFTIME& hnsSeekTime, BOOL bReverse, MFTI
         {
             *phnsTestDuration = hnsSeekTime - TEST_AUDIO_DURATION;
         }
-        
+
     }
     else
     {
@@ -880,21 +880,21 @@ void CASFManager::GetTestDuration(const MFTIME& hnsSeekTime, BOOL bReverse, MFTI
 //
 //Gets data offset for the seektime and prepares buffer for parsing.
 //
-// hnsSeekTime: Presentation time in hns. 
-// dwFlags: Specifies splitter configuration, generate samples in 
+// hnsSeekTime: Presentation time in hns.
+// dwFlags: Specifies splitter configuration, generate samples in
 //          reverse or generate samples for protected content.
-// pSampleInfo: Pointer to SAMPLE_INFO structure that stores sample 
+// pSampleInfo: Pointer to SAMPLE_INFO structure that stores sample
 //          information.
-// FuncPtrToDisplaySampleInfo: Callback defined by the caller that 
+// FuncPtrToDisplaySampleInfo: Callback defined by the caller that
 //          will display the sample information
 /////////////////////////////////////////////////////////////////////
 
 HRESULT CASFManager::GenerateSamples(
-    MFTIME hnsSeekTime, 
+    MFTIME hnsSeekTime,
     DWORD dwFlags,
     SAMPLE_INFO* pSampleInfo,
     void (*FuncPtrToDisplaySampleInfo)(SAMPLE_INFO*)
-    )
+)
 {
     if (! m_pSplitter)
     {
@@ -946,43 +946,43 @@ HRESULT CASFManager::GenerateSamples(
             SAFE_RELEASE(m_pDecoder);
         }
     }
-        
+
     cbReadLen = (DWORD)(m_cbDataLength - cbStartOffset);
 
     if (bReverse)
     {
-        // Reverse playback: Read from the offset back to zero. 
-        
+        // Reverse playback: Read from the offset back to zero.
+
         CHECK_HR(hr = GenerateSamplesLoop(
-            hnsSeekTime,
-            hnsTestSampleDuration,
-            bReverse,
-            (DWORD)(m_cbDataLength + m_cbDataOffset - cbStartOffset), //DWORD cbDataOffset
-            cbReadLen,              //DWORD cbDataLen
-            pSampleInfo,
-            FuncPtrToDisplaySampleInfo
-            ));
+                          hnsSeekTime,
+                          hnsTestSampleDuration,
+                          bReverse,
+                          (DWORD)(m_cbDataLength + m_cbDataOffset - cbStartOffset), //DWORD cbDataOffset
+                          cbReadLen,              //DWORD cbDataLen
+                          pSampleInfo,
+                          FuncPtrToDisplaySampleInfo
+                      ));
 
     }
     else
     {
         // Forward playback: Read from the offset to the end.
-            
+
         CHECK_HR(hr = GenerateSamplesLoop(
-            hnsSeekTime,
-            hnsTestSampleDuration,
-            bReverse,
-            (DWORD)(m_cbDataOffset + cbStartOffset), //DWORD cbDataOffset, 
-            cbReadLen,                              //DWORD cbDataLen
-            pSampleInfo,
-            FuncPtrToDisplaySampleInfo
-            ));
+                          hnsSeekTime,
+                          hnsTestSampleDuration,
+                          bReverse,
+                          (DWORD)(m_cbDataOffset + cbStartOffset), //DWORD cbDataOffset,
+                          cbReadLen,                              //DWORD cbDataLen
+                          pSampleInfo,
+                          FuncPtrToDisplaySampleInfo
+                      ));
     }
 
     // Note: cbStartOffset is relative to the start of the data object.
     // GenerateSamplesLoop expects the offset relative to the start of the file.
 
-        
+
 done:
     LOG_MSG_IF_FAILED(L"CASFManager::GenerateSamples failed.\n", hr);
     return hr;
@@ -991,31 +991,31 @@ done:
 /////////////////////////////////////////////////////////////////////
 // Name: GenerateSamplesLoop
 //
-//Reads 1024 * 4 byte chunks of media data from a byte stream and 
+//Reads 1024 * 4 byte chunks of media data from a byte stream and
 //parses the ASF Data Object starting at the specified offset.
 //Collects 5seconds audio samples and sends to the MFT to decode.
 //Gets the first key frame for the video stream and sends to the MFT
 //
-// hnsSeekTime: Presentation time in hns. 
+// hnsSeekTime: Presentation time in hns.
 // hnsTestSampleDuration: Presentation time at which the parsing should end.
 // bReverse: Specifies if the splitter configured to parse in reverse.
 // cbDataOffset: Offset relative to the start of the data object.
 // cbDataLen: Length of data to parse
-// pSampleInfo: Pointer to SAMPLE_INFO structure that stores sample 
+// pSampleInfo: Pointer to SAMPLE_INFO structure that stores sample
 //          information.
-// FuncPtrToDisplaySampleInfo: Callback defined by the caller that 
+// FuncPtrToDisplaySampleInfo: Callback defined by the caller that
 //          will display the sample information
 /////////////////////////////////////////////////////////////////////
 
 HRESULT CASFManager::GenerateSamplesLoop(
-    const MFTIME& hnsSeekTime, 
+    const MFTIME& hnsSeekTime,
     const MFTIME& hnsTestSampleDuration,
     BOOL  bReverse,
-    DWORD cbDataOffset, 
-    DWORD cbDataLen, 
+    DWORD cbDataOffset,
+    DWORD cbDataLen,
     SAMPLE_INFO* pSampleInfo,
     void (*FuncPtrToDisplaySampleInfo)(SAMPLE_INFO*)
-    )
+)
 {
     const DWORD READ_SIZE = 1024 * 4;
 
@@ -1053,7 +1053,7 @@ HRESULT CASFManager::GenerateSamplesLoop(
         CHECK_HR(hr =  m_pSplitter->ParseData(pBuffer, 0, 0));
 
         // Start getting samples from the splitter as long as it returns ASF_STATUSFLAGS_INCOMPLETE
-        do 
+        do
         {
             CHECK_HR(hr = m_pSplitter->GetNextSample(&dwStatusFlags, &wStreamNumber, &pSample));
 
@@ -1086,7 +1086,8 @@ HRESULT CASFManager::GenerateSamplesLoop(
 
             SAFE_RELEASE(pSample);
 
-        } while (dwStatusFlags & ASF_STATUSFLAGS_INCOMPLETE);
+        }
+        while (dwStatusFlags & ASF_STATUSFLAGS_INCOMPLETE);
 
         SAFE_RELEASE(pBuffer);
     }
@@ -1119,9 +1120,9 @@ HRESULT CASFManager::SendAudioSampleToDecoder(
     {
         return E_INVALIDARG;
     }
-    
+
     HRESULT hr = S_OK;
-    
+
     MFTIME hnsCurrentSampleTime = 0;
     BOOL   bShouldDecode = FALSE;
 
@@ -1147,7 +1148,7 @@ HRESULT CASFManager::SendAudioSampleToDecoder(
         }
 
         CHECK_HR (hr =  m_pDecoder->ProcessAudio (pSample));
-        
+
         //Get sample information
         (void)GetSampleInfo(pSample, pSampleInfo);
 
@@ -1189,9 +1190,9 @@ HRESULT CASFManager::SendKeyFrameToDecoder(
     {
         return E_INVALIDARG;
     }
-    
+
     HRESULT hr = S_OK;
-    
+
     MFTIME hnsCurrentSampleTime =0;
 
     BOOL   fShouldDecode = FALSE;
@@ -1218,7 +1219,7 @@ HRESULT CASFManager::SendKeyFrameToDecoder(
     // Should we decode this sample?
     if (bReverse)
     {
-        // Reverse playback: 
+        // Reverse playback:
         // Is the sample *prior* to the seek time, and a key frame?
         fShouldDecode = (hnsCurrentSampleTime <= hnsSeekTime) ;
     }
@@ -1239,20 +1240,20 @@ HRESULT CASFManager::SendKeyFrameToDecoder(
         }
 
         // Set the discontinity attribute.
-        CHECK_HR (hr = pSample->SetUINT32(MFSampleExtension_Discontinuity, TRUE)); 
+        CHECK_HR (hr = pSample->SetUINT32(MFSampleExtension_Discontinuity, TRUE));
 
         //Send the sample to the decoder.
         CHECK_HR (hr =  m_pDecoder->ProcessVideo(pSample));
 
         *fDecodedKeyFrame = TRUE;
-        
+
         //Get sample information
         (void)GetSampleInfo(pSample, pSampleInfo);
         pSampleInfo->fSeekedKeyFrame = *fDecodedKeyFrame;
 
         //Send it to callback to display
         FuncPtrToDisplaySampleInfo(pSampleInfo);
-            
+
         CHECK_HR (hr =  m_pDecoder->StopDecoding());
     }
 
@@ -1278,7 +1279,7 @@ HRESULT CASFManager::ReadDataIntoBuffer(
     DWORD cbOffset,             // Offset at which to start reading
     DWORD cbToRead,             // Number of bytes to read
     IMFMediaBuffer **ppBuffer   // Receives a pointer to the buffer.
-    )
+)
 {
     HRESULT hr = S_OK;
     BYTE *pData = NULL;
@@ -1313,7 +1314,7 @@ HRESULT CASFManager::ReadDataIntoBuffer(
 done:
 
     LOG_MSG_IF_FAILED(L"CASFManager::ReadDataIntoBuffer failed.\n", hr);
-    
+
     if (pData)
     {
         pBuffer->Unlock();
@@ -1356,7 +1357,7 @@ HRESULT CASFManager::SetFilePropertiesObject(FILE_PROPERTIES_OBJECT* fileinfo)
     //get Play Duration
     hr = pPD->GetUINT64(MF_PD_ASF_FILEPROPERTIES_PLAY_DURATION, &fileinfo->cbPlayDuration);
 
-    //get presentation duration 
+    //get presentation duration
     hr = pPD->GetUINT64(MF_PD_DURATION, &fileinfo->cbPresentationDuration);
 
     //get Send Duration
@@ -1376,10 +1377,10 @@ HRESULT CASFManager::SetFilePropertiesObject(FILE_PROPERTIES_OBJECT* fileinfo)
 
     //get Minimum Data Packet Size
     hr = pPD->GetUINT32(MF_PD_ASF_FILEPROPERTIES_MIN_PACKET_SIZE, &fileinfo->cbMinPacketSize);
-    
+
     // get Maximum Bit rate
     hr = pPD->GetUINT32(MF_PD_ASF_FILEPROPERTIES_MAX_BITRATE, &fileinfo->cbMaxBitRate);
-    
+
 
     this->m_fileinfo = fileinfo;
 
@@ -1420,7 +1421,7 @@ HRESULT CASFManager::GetSampleInfo(IMFSample *pSample, SAMPLE_INFO* pSampleInfo)
     //Total buffer length
     CHECK_HR(hr = pSample->GetTotalLength(&pSampleInfo->cbTotalLength));
 
-    //Sample time   
+    //Sample time
     hr = pSample->GetSampleTime(&pSampleInfo->hnsSampleTime);
 
     if (hr == MF_E_NO_SAMPLE_TIMESTAMP)

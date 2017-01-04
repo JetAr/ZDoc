@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -36,7 +36,7 @@ int WINAPI WinMain(
     HINSTANCE /*hPrevInstance*/,
     LPSTR /*lpCmdLine*/,
     int /*nCmdShow*/
-    )
+)
 {
     // Ignoring the return value because we want to continue running even in the
     // unlikely event that HeapSetInformation fails.
@@ -192,10 +192,10 @@ public:
                 NoRefComObject<PointSnappingSink> snapper(pSink);
 
                 hr = pGeometry->Simplify(
-                        D2D1_GEOMETRY_SIMPLIFICATION_OPTION_LINES,
-                        NULL, // world transform
-                        &snapper
-                        );
+                         D2D1_GEOMETRY_SIMPLIFICATION_OPTION_LINES,
+                         NULL, // world transform
+                         &snapper
+                     );
 
                 if (SUCCEEDED(hr))
                 {
@@ -225,17 +225,17 @@ public:
     static D2D1_POINT_2F SnapPoint(D2D1_POINT_2F pt)
     {
         return D2D1::Point2F(
-            SnapCoordinate(pt.x),
-            SnapCoordinate(pt.y)
-            );
+                   SnapCoordinate(pt.x),
+                   SnapCoordinate(pt.y)
+               );
     }
 
     static D3DXVECTOR2 SnapPoint(D3DXVECTOR2 pt)
     {
         return D3DXVECTOR2(
-            SnapCoordinate(pt.x),
-            SnapCoordinate(pt.y)
-            );
+                   SnapCoordinate(pt.x),
+                   SnapCoordinate(pt.y)
+               );
     }
 
 private:
@@ -323,7 +323,7 @@ HRESULT D2DFlatten(
     ID2D1Geometry *pGeometry,
     float flatteningTolerance,
     ID2D1Geometry **ppGeometry
-    )
+)
 {
     HRESULT hr;
     ID2D1Factory *pFactory = NULL;
@@ -340,11 +340,11 @@ HRESULT D2DFlatten(
         if (SUCCEEDED(hr))
         {
             hr = pGeometry->Simplify(
-                    D2D1_GEOMETRY_SIMPLIFICATION_OPTION_LINES,
-                    NULL, // world transform
-                    flatteningTolerance,
-                    pSink
-                    );
+                     D2D1_GEOMETRY_SIMPLIFICATION_OPTION_LINES,
+                     NULL, // world transform
+                     flatteningTolerance,
+                     pSink
+                 );
 
             if (SUCCEEDED(hr))
             {
@@ -381,7 +381,7 @@ HRESULT D2DFlatten(
 HRESULT D2DOutline(
     ID2D1Geometry *pGeometry,
     ID2D1Geometry **ppGeometry
-    )
+)
 {
     HRESULT hr;
     ID2D1Factory *pFactory = NULL;
@@ -434,7 +434,7 @@ HRESULT D2DCombine(
     ID2D1Geometry *pGeometry1,
     ID2D1Geometry *pGeometry2,
     ID2D1Geometry **ppGeometry
-    )
+)
 {
     HRESULT hr;
     ID2D1Factory *pFactory = NULL;
@@ -451,11 +451,11 @@ HRESULT D2DCombine(
         if (SUCCEEDED(hr))
         {
             hr = pGeometry1->CombineWithGeometry(
-                pGeometry2,
-                combineMode,
-                NULL, // world transform
-                pSink
-                );
+                     pGeometry2,
+                     combineMode,
+                     NULL, // world transform
+                     pSink
+                 );
 
             if (SUCCEEDED(hr))
             {
@@ -491,7 +491,7 @@ public:
         ID2D1Geometry *pGeometry,
         float height,
         CArray<SimpleVertex> &vertices
-        )
+    )
     {
         HRESULT hr;
 
@@ -556,10 +556,10 @@ public:
                     {
                         // Simplify is a convenient API for extracting the data out of a geometry.
                         hr = pOutlinedGeometry->Simplify(
-                            D2D1_GEOMETRY_SIMPLIFICATION_OPTION_LINES,
-                            NULL, // world transform
-                            &helper
-                            );
+                                 D2D1_GEOMETRY_SIMPLIFICATION_OPTION_LINES,
+                                 NULL, // world transform
+                                 &helper
+                             );
 
                         if (SUCCEEDED(hr))
                         {
@@ -636,9 +636,9 @@ private:
                     // and the front/back tessellations.
                     //
                     if ((m_figureVertices.GetCount() == 0) ||
-                        (v.pt.x != m_figureVertices.GetBack().pt.x) ||
-                        (v.pt.y != m_figureVertices.GetBack().pt.y)
-                        )
+                            (v.pt.x != m_figureVertices.GetBack().pt.x) ||
+                            (v.pt.y != m_figureVertices.GetBack().pt.y)
+                       )
                     {
                         m_hr = m_figureVertices.Add(v);
                     }
@@ -652,7 +652,8 @@ private:
             {
                 m_figureVertices.RemoveAll();
 
-                Vertex2D v = {
+                Vertex2D v =
+                {
                     D3DXVECTOR2(startPoint.x, startPoint.y),
                     D3DXVECTOR2(0,0), // dummy
                     D3DXVECTOR2(0,0), // dummy
@@ -726,7 +727,7 @@ private:
                             D3DXVECTOR2 sum = m_figureVertices[i].norm + m_figureVertices[h].norm;
 
                             m_figureVertices[i].interpNorm1 = m_figureVertices[i].interpNorm2 =
-                                Normalize(sum);
+                                                                  Normalize(sum);
                         }
                         else
                         {
@@ -909,7 +910,7 @@ public:
         DWRITE_GLYPH_RUN const* glyphRun,
         DWRITE_GLYPH_RUN_DESCRIPTION const* /*glyphRunDescription*/,
         IUnknown* /*clientDrawingEffect*/
-        )
+    )
     {
         HRESULT hr;
 
@@ -926,15 +927,15 @@ public:
             if (SUCCEEDED(hr))
             {
                 hr = glyphRun->fontFace->GetGlyphRunOutline(
-                        glyphRun->fontEmSize,
-                        glyphRun->glyphIndices,
-                        glyphRun->glyphAdvances,
-                        glyphRun->glyphOffsets,
-                        glyphRun->glyphCount,
-                        glyphRun->isSideways,
-                        (glyphRun->bidiLevel % 2) == 1,
-                        pSink
-                        );
+                         glyphRun->fontEmSize,
+                         glyphRun->glyphIndices,
+                         glyphRun->glyphAdvances,
+                         glyphRun->glyphOffsets,
+                         glyphRun->glyphCount,
+                         glyphRun->isSideways,
+                         (glyphRun->bidiLevel % 2) == 1,
+                         pSink
+                     );
 
                 if (SUCCEEDED(hr))
                 {
@@ -944,10 +945,10 @@ public:
                     {
                         ID2D1TransformedGeometry *pTransformedGeometry = NULL;
                         hr = m_pFactory->CreateTransformedGeometry(
-                            pPathGeometry,
-                            D2D1::Matrix3x2F::Translation(baselineOriginX, baselineOriginY),
-                            &pTransformedGeometry
-                            );
+                                 pPathGeometry,
+                                 D2D1::Matrix3x2F::Translation(baselineOriginX, baselineOriginY),
+                                 &pTransformedGeometry
+                             );
 
                         if (SUCCEEDED(hr))
                         {
@@ -971,7 +972,7 @@ public:
         FLOAT /*baselineOriginY*/,
         DWRITE_UNDERLINE const* /*underline*/,
         IUnknown* /*clientDrawingEffect*/
-        )
+    )
     {
         // Implement this to add support for underlines. See the
         // CustomTextRender in the DWrite PDC hands-on lab for
@@ -985,7 +986,7 @@ public:
         FLOAT /*baselineOriginY*/,
         DWRITE_STRIKETHROUGH const* /*strikethrough*/,
         IUnknown* /*clientDrawingEffect*/
-        )
+    )
     {
         // Implement this to add support for strikethroughs. See the
         // CustomTextRender in the DWrite PDC hands-on lab for
@@ -1001,7 +1002,7 @@ public:
         BOOL /*isSideways*/,
         BOOL /*isRightToLeft*/,
         IUnknown* /*clientDrawingEffect*/
-        )
+    )
     {
         // Implement this to add support for inline objects.
         // See the CustomTextRender in the DWrite PDC hands-on lab for an
@@ -1012,7 +1013,7 @@ public:
     STDMETHOD(IsPixelSnappingDisabled)(
         void* /*clientDrawingContext*/,
         BOOL* isDisabled
-        )
+    )
     {
         *isDisabled = TRUE;
         return S_OK;
@@ -1021,7 +1022,7 @@ public:
     STDMETHOD(GetCurrentTransform)(
         void* /*clientDrawingContext*/,
         DWRITE_MATRIX* transform
-        )
+    )
     {
         DWRITE_MATRIX matrix = {1, 0, 0, 1, 0, 0};
 
@@ -1033,7 +1034,7 @@ public:
     STDMETHOD(GetPixelsPerDip)(
         void* /*clientDrawingContext*/,
         FLOAT* pixelsPerDip
-        )
+    )
     {
         *pixelsPerDip = 1.0f;
 
@@ -1042,7 +1043,7 @@ public:
 
     HRESULT GetGeometry(
         ID2D1Geometry **ppGeometry
-        )
+    )
     {
         HRESULT hr = S_OK;
 
@@ -1084,7 +1085,7 @@ public:
 protected:
     HRESULT AddGeometry(
         ID2D1Geometry *pGeometry
-        )
+    )
     {
         HRESULT hr = S_OK;
 
@@ -1093,11 +1094,11 @@ protected:
             ID2D1Geometry *pCombinedGeometry = NULL;
 
             hr = D2DCombine(
-                D2D1_COMBINE_MODE_UNION,
-                m_pGeometry,
-                pGeometry,
-                &pCombinedGeometry
-                );
+                     D2D1_COMBINE_MODE_UNION,
+                     m_pGeometry,
+                     pGeometry,
+                     &pCombinedGeometry
+                 );
             if (SUCCEEDED(hr))
             {
                 SafeReplace(&m_pGeometry, pCombinedGeometry);
@@ -1224,7 +1225,7 @@ HRESULT Interactive3dTextSampleApp::Initialize()
         //
         // This sample does not handle resize so we create the window such that
         // it can't be resized.
-        // 
+        //
         // Because the CreateWindow function takes its size in pixels, we
         // obtain the system DPI and use it to scale the window size.
         FLOAT dpiX;
@@ -1232,18 +1233,18 @@ HRESULT Interactive3dTextSampleApp::Initialize()
         m_pD2DFactory->GetDesktopDpi(&dpiX, &dpiY);
 
         m_hwnd = CreateWindow(
-            L"D2DDemoApp",
-            L"Direct2D Demo App",
-            WS_OVERLAPPEDWINDOW & ~(WS_MAXIMIZEBOX | WS_SIZEBOX),
-            CW_USEDEFAULT,
-            CW_USEDEFAULT,
-            static_cast<UINT>(ceil(1024.f * dpiX / 96.f)),
-            static_cast<UINT>(ceil(480.f * dpiY / 96.f)),
-            NULL,
-            NULL,
-            HINST_THISCOMPONENT,
-            this
-            );
+                     L"D2DDemoApp",
+                     L"Direct2D Demo App",
+                     WS_OVERLAPPEDWINDOW & ~(WS_MAXIMIZEBOX | WS_SIZEBOX),
+                     CW_USEDEFAULT,
+                     CW_USEDEFAULT,
+                     static_cast<UINT>(ceil(1024.f * dpiX / 96.f)),
+                     static_cast<UINT>(ceil(480.f * dpiY / 96.f)),
+                     NULL,
+                     NULL,
+                     HINST_THISCOMPONENT,
+                     this
+                 );
 
         hr = m_hwnd ? S_OK : E_FAIL;
         if (SUCCEEDED(hr))
@@ -1257,7 +1258,7 @@ HRESULT Interactive3dTextSampleApp::Initialize()
                 0, //timerId
                 33, //msecs
                 NULL //lpTimerProc
-                );
+            );
 
             ShowWindow(m_hwnd, SW_SHOWNORMAL);
             UpdateWindow(m_hwnd);
@@ -1291,10 +1292,10 @@ HRESULT Interactive3dTextSampleApp::CreateDeviceIndependentResources()
     {
         // Create DWrite factory
         hr = DWriteCreateFactory(
-            DWRITE_FACTORY_TYPE_SHARED,
-            __uuidof(m_pDWriteFactory),
-            reinterpret_cast<IUnknown **>(&m_pDWriteFactory)
-            );
+                 DWRITE_FACTORY_TYPE_SHARED,
+                 __uuidof(m_pDWriteFactory),
+                 reinterpret_cast<IUnknown **>(&m_pDWriteFactory)
+             );
     }
 
     //
@@ -1335,26 +1336,26 @@ HRESULT Interactive3dTextSampleApp::UpdateTextGeometry()
     IDWriteTextFormat *pFormat = NULL;
 
     hr = m_pDWriteFactory->CreateTextFormat(
-            sc_fontFace,
-            NULL,
-            DWRITE_FONT_WEIGHT_EXTRA_BOLD,
-            DWRITE_FONT_STYLE_NORMAL,
-            DWRITE_FONT_STRETCH_NORMAL,
-            sc_fontSize,
-            L"", // locale name
-            &pFormat
-            );
+             sc_fontFace,
+             NULL,
+             DWRITE_FONT_WEIGHT_EXTRA_BOLD,
+             DWRITE_FONT_STYLE_NORMAL,
+             DWRITE_FONT_STRETCH_NORMAL,
+             sc_fontSize,
+             L"", // locale name
+             &pFormat
+         );
     if (SUCCEEDED(hr))
     {
         IDWriteTextLayout *pLayout = NULL;
         hr = m_pDWriteFactory->CreateTextLayout(
-                &m_characters[0],
-                m_characters.GetCount(),
-                pFormat,
-                0.0f, // lineWidth (ignored because of NO_WRAP)
-                sc_fontSize, // lineHeight
-                &pLayout
-                );
+                 &m_characters[0],
+                 m_characters.GetCount(),
+                 pFormat,
+                 0.0f, // lineWidth (ignored because of NO_WRAP)
+                 sc_fontSize, // lineHeight
+                 &pLayout
+             );
         if (SUCCEEDED(hr))
         {
             hr = pLayout->SetWordWrapping(DWRITE_WORD_WRAPPING_NO_WRAP);
@@ -1383,11 +1384,11 @@ HRESULT Interactive3dTextSampleApp::UpdateTextGeometry()
                 NoRefComObject<OutlineRenderer> renderer(m_pD2DFactory);
 
                 hr = pLayout->Draw(
-                    NULL, // clientDrawingContext
-                    &renderer,
-                    0.0f, // originX
-                    0.0f // originY
-                    );
+                         NULL, // clientDrawingContext
+                         &renderer,
+                         0.0f, // originX
+                         0.0f // originY
+                     );
                 if (SUCCEEDED(hr))
                 {
                     ID2D1Geometry *pGeometry = NULL;;
@@ -1421,7 +1422,7 @@ HRESULT Interactive3dTextSampleApp::UpdateTextGeometry()
 HRESULT Interactive3dTextSampleApp::GenerateTextOutline(
     bool includeCursor,
     ID2D1Geometry **ppGeometry
-    )
+)
 {
     HRESULT hr;
 
@@ -1435,10 +1436,10 @@ HRESULT Interactive3dTextSampleApp::GenerateTextOutline(
     // newlines.
     //
     hr = m_pTextLayout->GetLineMetrics(
-            &lineMetrics,
-            1, // maxLineCount
-            &actualNumLines // ignored
-            );
+             &lineMetrics,
+             1, // maxLineCount
+             &actualNumLines // ignored
+         );
     if (SUCCEEDED(hr))
     {
         hr = m_pTextLayout->GetMetrics(&textMetrics);
@@ -1449,10 +1450,10 @@ HRESULT Interactive3dTextSampleApp::GenerateTextOutline(
             ID2D1TransformedGeometry *pTransformedGeometry = NULL;
 
             hr = m_pD2DFactory->CreateTransformedGeometry(
-                m_pTextGeometry,
-                D2D1::Matrix3x2F::Translation(offsetX, offsetY),
-                &pTransformedGeometry
-                );
+                     m_pTextGeometry,
+                     D2D1::Matrix3x2F::Translation(offsetX, offsetY),
+                     &pTransformedGeometry
+                 );
             if (SUCCEEDED(hr))
             {
                 ID2D1Geometry *pGeometry = NULL;
@@ -1465,12 +1466,12 @@ HRESULT Interactive3dTextSampleApp::GenerateTextOutline(
                     DWRITE_HIT_TEST_METRICS hitTestMetrics;
 
                     hr = m_pTextLayout->HitTestTextPosition(
-                        lineMetrics.length,
-                        TRUE, // isTrailingHit
-                        &x,
-                        &y,
-                        &hitTestMetrics
-                        );
+                             lineMetrics.length,
+                             TRUE, // isTrailingHit
+                             &x,
+                             &y,
+                             &hitTestMetrics
+                         );
                     if (SUCCEEDED(hr))
                     {
                         float width = sc_cursorWidth;
@@ -1478,22 +1479,22 @@ HRESULT Interactive3dTextSampleApp::GenerateTextOutline(
                         ID2D1RectangleGeometry *pCursorGeometry = NULL;
 
                         hr = m_pD2DFactory->CreateRectangleGeometry(
-                            D2D1::RectF(
-                                left,
-                                hitTestMetrics.top + offsetY,
-                                left + width,
-                                0.0f),
-                            &pCursorGeometry
-                            );
+                                 D2D1::RectF(
+                                     left,
+                                     hitTestMetrics.top + offsetY,
+                                     left + width,
+                                     0.0f),
+                                 &pCursorGeometry
+                             );
                         if (SUCCEEDED(hr))
                         {
                             ID2D1Geometry *pCombinedGeometry = NULL;
                             hr = D2DCombine(
-                                    D2D1_COMBINE_MODE_UNION,
-                                    pGeometry,
-                                    pCursorGeometry,
-                                    &pCombinedGeometry
-                                    );
+                                     D2D1_COMBINE_MODE_UNION,
+                                     pGeometry,
+                                     pCursorGeometry,
+                                     &pCombinedGeometry
+                                 );
                             if (SUCCEEDED(hr))
                             {
                                 SafeReplace(&pGeometry, pCombinedGeometry);
@@ -1560,20 +1561,20 @@ HRESULT Interactive3dTextSampleApp::CreateDeviceResources()
 
         // Create device
         hr = CreateD3DDevice(
-            NULL, // adapter
-            D3D10_DRIVER_TYPE_HARDWARE,
-            nDeviceFlags,
-            &pDevice
-            );
+                 NULL, // adapter
+                 D3D10_DRIVER_TYPE_HARDWARE,
+                 nDeviceFlags,
+                 &pDevice
+             );
 
         if (FAILED(hr))
         {
             hr = CreateD3DDevice(
-                NULL,
-                D3D10_DRIVER_TYPE_WARP,
-                nDeviceFlags,
-                &pDevice
-                );
+                     NULL,
+                     D3D10_DRIVER_TYPE_WARP,
+                     nDeviceFlags,
+                     &pDevice
+                 );
         }
 
         if (SUCCEEDED(hr))
@@ -1599,10 +1600,10 @@ HRESULT Interactive3dTextSampleApp::CreateDeviceResources()
             for (sampleCount = sc_maxMsaaSampleCount; SUCCEEDED(hr) && sampleCount > 0; --sampleCount)
             {
                 hr = m_pDevice->CheckMultisampleQualityLevels(
-                    DXGI_FORMAT_B8G8R8A8_UNORM,
-                    sampleCount,
-                    &msaaQuality
-                    );
+                         DXGI_FORMAT_B8G8R8A8_UNORM,
+                         sampleCount,
+                         &msaaQuality
+                     );
 
                 if (SUCCEEDED(hr))
                 {
@@ -1657,10 +1658,10 @@ HRESULT Interactive3dTextSampleApp::CreateDeviceResources()
             for (sampleCount = sc_maxMsaaSampleCount; SUCCEEDED(hr) && sampleCount > 0; --sampleCount)
             {
                 hr = m_pDevice->CheckMultisampleQualityLevels(
-                    DXGI_FORMAT_B8G8R8A8_UNORM,
-                    sampleCount,
-                    &msaaQuality
-                    );
+                         DXGI_FORMAT_B8G8R8A8_UNORM,
+                         sampleCount,
+                         &msaaQuality
+                     );
 
                 if (SUCCEEDED(hr))
                 {
@@ -1676,9 +1677,9 @@ HRESULT Interactive3dTextSampleApp::CreateDeviceResources()
         {
             // Create views on the RT buffers and set them on the device
             hr = m_pSwapChain->GetBuffer(
-                0,
-                IID_PPV_ARGS(&pBackBufferResource)
-                );
+                     0,
+                     IID_PPV_ARGS(&pBackBufferResource)
+                 );
         }
 
         if (SUCCEEDED(hr))
@@ -1735,19 +1736,19 @@ HRESULT Interactive3dTextSampleApp::CreateDeviceResources()
 
             // Get a surface in the swap chain
             hr = m_pSwapChain->GetBuffer(
-                0,
-                IID_PPV_ARGS(&pBackBuffer)
-                );
+                     0,
+                     IID_PPV_ARGS(&pBackBuffer)
+                 );
         }
 
         if (SUCCEEDED(hr))
         {
             // Load pixel shader
             hr = LoadResourceShader(
-                m_pDevice,
-                MAKEINTRESOURCE(IDR_PIXEL_SHADER),
-                &m_pShader
-                );
+                     m_pDevice,
+                     MAKEINTRESOURCE(IDR_PIXEL_SHADER),
+                     &m_pShader
+                 );
         }
 
         if (SUCCEEDED(hr))
@@ -1798,12 +1799,12 @@ HRESULT Interactive3dTextSampleApp::CreateDeviceResources()
             m_pTechniqueNoRef->GetPassByIndex(0)->GetDesc(&PassDesc);
 
             hr = m_pDevice->CreateInputLayout(
-                s_InputLayout,
-                numElements,
-                PassDesc.pIAInputSignature,
-                PassDesc.IAInputSignatureSize,
-                &m_pVertexLayout
-                );
+                     s_InputLayout,
+                     numElements,
+                     PassDesc.pIAInputSignature,
+                     PassDesc.IAInputSignatureSize,
+                     &m_pVertexLayout
+                 );
         }
 
         if (SUCCEEDED(hr))
@@ -1834,7 +1835,7 @@ HRESULT Interactive3dTextSampleApp::CreateDeviceResources()
                 &pVertexBuffer,
                 &stride,
                 &offset
-                );
+            );
 
             // Set primitive topology.
             m_pDevice->IASetPrimitiveTopology(D3D10_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
@@ -1852,7 +1853,7 @@ HRESULT Interactive3dTextSampleApp::CreateDeviceResources()
                 nWidth / (FLOAT)nHeight, // aspect
                 0.1f, // zn
                 800.0f // zf
-                );
+            );
 
             // Update variables that never change.
             m_pViewVariableNoRef->SetMatrix((float*)&m_ViewMatrix);
@@ -1997,10 +1998,10 @@ HRESULT Interactive3dTextSampleApp::OnRender()
             CArray<SimpleVertex> vertices;
 
             hr = Extruder::ExtrudeGeometry(
-                pGeometry,
-                24.0f, // height
-                vertices
-                );
+                     pGeometry,
+                     24.0f, // height
+                     vertices
+                 );
 
             if (SUCCEEDED(hr))
             {
@@ -2024,7 +2025,7 @@ HRESULT Interactive3dTextSampleApp::OnRender()
                 {
                     m_pDevice->ClearDepthStencilView(m_pDepthStencilView, D3D10_CLEAR_DEPTH, 1, 0);
 
-                    const float black[4] ={0};
+                    const float black[4] = {0};
 
                     m_pDevice->ClearRenderTargetView(m_pRenderTargetView, black);
 
@@ -2051,10 +2052,10 @@ HRESULT Interactive3dTextSampleApp::OnRender()
                         void *pVertices;
 
                         hr = m_pVertexBuffer->Map(
-                            D3D10_MAP_WRITE_DISCARD,
-                            0, // MapFlags
-                            &pVertices
-                            );
+                                 D3D10_MAP_WRITE_DISCARD,
+                                 0, // MapFlags
+                                 &pVertices
+                             );
                         if (SUCCEEDED(hr))
                         {
                             memcpy(pVertices, &vertices[index], verticesToCopy*sizeof(SimpleVertex));
@@ -2080,7 +2081,7 @@ HRESULT Interactive3dTextSampleApp::OnRender()
 
     // If the device is lost for any reason, we need to recreate it
     if (hr == DXGI_ERROR_DEVICE_RESET ||
-        hr == DXGI_ERROR_DEVICE_REMOVED)
+            hr == DXGI_ERROR_DEVICE_REMOVED)
     {
         hr = S_OK;
 
@@ -2123,17 +2124,17 @@ LRESULT CALLBACK Interactive3dTextSampleApp::WndProc(HWND hwnd, UINT message, WP
             hwnd,
             GWLP_USERDATA,
             PtrToUlong(pInteractive3dTextSampleApp)
-            );
+        );
 
         result = 1;
     }
     else
     {
         Interactive3dTextSampleApp *pInteractive3dTextSampleApp = reinterpret_cast<Interactive3dTextSampleApp *>(static_cast<LONG_PTR>(
-            ::GetWindowLongPtrW(
-                hwnd,
-                GWLP_USERDATA
-                )));
+                    ::GetWindowLongPtrW(
+                        hwnd,
+                        GWLP_USERDATA
+                    )));
 
         bool wasHandled = false;
 
@@ -2143,39 +2144,39 @@ LRESULT CALLBACK Interactive3dTextSampleApp::WndProc(HWND hwnd, UINT message, WP
             {
             case WM_PAINT:
             case WM_DISPLAYCHANGE:
-                {
-                    PAINTSTRUCT ps;
-                    BeginPaint(hwnd, &ps);
-                    pInteractive3dTextSampleApp->OnRender();
-                    EndPaint(hwnd, &ps);
-                }
-                result = 0;
-                wasHandled = true;
-                break;
+            {
+                PAINTSTRUCT ps;
+                BeginPaint(hwnd, &ps);
+                pInteractive3dTextSampleApp->OnRender();
+                EndPaint(hwnd, &ps);
+            }
+            result = 0;
+            wasHandled = true;
+            break;
 
             case WM_CHAR:
-                {
-                    pInteractive3dTextSampleApp->OnChar(static_cast<SHORT>(wParam));
-                }
-                result = 0;
-                wasHandled = true;
-                break;
+            {
+                pInteractive3dTextSampleApp->OnChar(static_cast<SHORT>(wParam));
+            }
+            result = 0;
+            wasHandled = true;
+            break;
 
             case WM_TIMER:
-                {
-                    pInteractive3dTextSampleApp->OnTimer();
-                }
-                result = 0;
-                wasHandled = true;
-                break;
+            {
+                pInteractive3dTextSampleApp->OnTimer();
+            }
+            result = 0;
+            wasHandled = true;
+            break;
 
             case WM_DESTROY:
-                {
-                    PostQuitMessage(0);
-                }
-                result = 1;
-                wasHandled = true;
-                break;
+            {
+                PostQuitMessage(0);
+            }
+            result = 1;
+            wasHandled = true;
+            break;
             }
         }
 
@@ -2199,7 +2200,7 @@ HRESULT Interactive3dTextSampleApp::CreateD3DDevice(
     D3D10_DRIVER_TYPE driverType,
     UINT flags,
     ID3D10Device1 **ppDevice
-    )
+)
 {
     HRESULT hr = S_OK;
 
@@ -2215,14 +2216,14 @@ HRESULT Interactive3dTextSampleApp::CreateD3DDevice(
     {
         ID3D10Device1 *pDevice = NULL;
         hr = D3D10CreateDevice1(
-            pAdapter,
-            driverType,
-            NULL,
-            flags,
-            levelAttempts[level],
-            D3D10_1_SDK_VERSION,
-            &pDevice
-            );
+                 pAdapter,
+                 driverType,
+                 NULL,
+                 flags,
+                 levelAttempts[level],
+                 D3D10_1_SDK_VERSION,
+                 &pDevice
+             );
 
         if (SUCCEEDED(hr))
         {
@@ -2254,7 +2255,7 @@ HRESULT Interactive3dTextSampleApp::LoadResourceShader(
     ID3D10Device *pDevice,
     PCWSTR pszResource,
     ID3D10Effect **ppShader
-    )
+)
 {
     HRESULT hr;
 
@@ -2274,13 +2275,13 @@ HRESULT Interactive3dTextSampleApp::LoadResourceShader(
             if (SUCCEEDED(hr))
             {
                 hr = ::D3D10CreateEffectFromMemory(
-                    pData,
-                    ::SizeofResource(HINST_THISCOMPONENT, hResource),
-                    0,
-                    pDevice,
-                    NULL,
-                    ppShader
-                    );
+                         pData,
+                         ::SizeofResource(HINST_THISCOMPONENT, hResource),
+                         0,
+                         pDevice,
+                         NULL,
+                         ppShader
+                     );
             }
         }
     }

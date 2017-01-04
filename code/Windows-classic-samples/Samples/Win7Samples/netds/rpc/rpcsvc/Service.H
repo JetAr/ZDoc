@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -8,9 +8,9 @@
 
 //  Comments:  The use of this header file and the accompanying service.c
 //  file simplifies the process of writting a service.  You as a developer
-//  simply need to follow the TODO's outlined in this header file, and 
+//  simply need to follow the TODO's outlined in this header file, and
 //  implement the ServiceStart() and ServiceStop() functions.
-//  
+//
 //  There is no need to modify the code in service.c.  Just add service.c
 //  to your project and link with the following libraries...
 //
@@ -105,7 +105,7 @@ VOID ServiceStop();
 //    dwWaitHint - worst case estimate to next checkpoint
 //
 //  RETURN VALUE:
-//    TRUE  - success 
+//    TRUE  - success
 //    FALSE - failure
 //
 BOOL ReportStatusToSCMgr(DWORD dwCurrentState, DWORD dwWin32ExitCode, DWORD dwWaitHint);

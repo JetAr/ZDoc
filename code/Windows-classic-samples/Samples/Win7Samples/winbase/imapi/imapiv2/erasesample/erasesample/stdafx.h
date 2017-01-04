@@ -1,4 +1,4 @@
-/*--
+﻿/*--
 
 Copyright (C) Microsoft Corporation, 2006
 
@@ -18,7 +18,7 @@ Copyright (C) Microsoft Corporation, 2006
 
 #ifndef _WIN32_WINNT		// Allow use of features specific to Windows XP or later.                   
 #define _WIN32_WINNT 0x0501	// Change this to the appropriate value to target other versions of Windows.
-#endif						
+#endif
 
 #ifndef _WIN32_WINDOWS		// Allow use of features specific to Windows 98 or later.
 #define _WIN32_WINDOWS 0x0410 // Change this to the appropriate value to target Windows Me or later.
@@ -36,15 +36,15 @@ Copyright (C) Microsoft Corporation, 2006
 #include <ntddcdrm.h>
 
 #pragma warning(push)
-    #pragma warning(disable:4200)
-    #include <ntddcdvd.h>
+#pragma warning(disable:4200)
+#include <ntddcdvd.h>
 #pragma warning(pop)
 
 #include <ntddmmc.h>
 #pragma warning(push)
-    #pragma warning(disable:4201) // nonstandard extension used : nameless struct/union
-    #define _NTSCSI_USER_MODE_ 1 // CDBs and such only
-    #include <scsi.h>            // CDBs, opcodes, SRB_STATUS, etc.
+#pragma warning(disable:4201) // nonstandard extension used : nameless struct/union
+#define _NTSCSI_USER_MODE_ 1 // CDBs and such only
+#include <scsi.h>            // CDBs, opcodes, SRB_STATUS, etc.
 #pragma warning(pop)
 
 #include <assert.h>
@@ -55,7 +55,7 @@ Copyright (C) Microsoft Corporation, 2006
 #include "eraseSample.h"
 #include "utility.h"
 
-// 
+//
 typedef ATL::CComEnum< IEnumVARIANT, &IID_IEnumVARIANT, VARIANT, ATL::_Copy<VARIANT> > CComEnumVariant;
 
 // Most of the events take two IDispatch* (object, args) as arguments

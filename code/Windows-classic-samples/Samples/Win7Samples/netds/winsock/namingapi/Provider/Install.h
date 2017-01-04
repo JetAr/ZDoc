@@ -1,4 +1,4 @@
-/********************************************************************++
+﻿/********************************************************************++
 THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED
 TO THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -59,14 +59,14 @@ INT DoInstall(GUID ProviderId);
 VOID DoUninstall(GUID ProviderId);
 
 ULONG GetTotalCch(
-        ULONG cStrings, 
-        __in_ecount(cStrings) PCWSTR *prgStrings);
+    ULONG cStrings,
+    __in_ecount(cStrings) PCWSTR *prgStrings);
 
 INT CreateInstallationBlob(
-        BOOL  fWildcard,
-        ULONG cDomains,
-        __in_ecount(cDomains)  PCWSTR *prgwzDomain,
-        __in_ecount(cDomains)  BOOL  *prgfPrimary,
-        __out ULONG *pcbBuffer,
-        __out PBYTE *ppbBuffer);
+    BOOL  fWildcard,
+    ULONG cDomains,
+    __in_ecount(cDomains)  PCWSTR *prgwzDomain,
+    __in_ecount(cDomains)  BOOL  *prgfPrimary,
+    __out ULONG *pcbBuffer,
+    __out PBYTE *ppbBuffer);
 

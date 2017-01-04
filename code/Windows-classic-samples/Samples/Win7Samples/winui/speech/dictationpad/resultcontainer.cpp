@@ -1,13 +1,13 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
 //
-// Copyright � Microsoft Corporation. All rights reserved
+// Copyright © Microsoft Corporation. All rights reserved
 
 /******************************************************************************
-*   resultcontainer.cpp 
-*       This module contains the definition of CResultContainer.  
+*   resultcontainer.cpp
+*       This module contains the definition of CResultContainer.
 *       CResultContainer makes all of the recognition-object-
 *       specific SAPI5 calls
 ******************************************************************************/
@@ -18,20 +18,20 @@
 /**********************************************************************
 * CResultContainer::CResultContainer *
 *------------------------------------*
-*	Description:  
+*	Description:
 *       Constructor for the CResultContainer class.
 *       A CResultContainer is created by the first CDictationRun
 *       to be created for a given result object.
 **********************************************************************/
 CResultContainer::CResultContainer( ISpRecoResult &rResult,
-                                   CDictationRun &rFirstOwner,
-                                   CPhraseReplacement &rPhraseReplacement ) :
-                            m_cpRecoResult( &rResult ),
-                            m_pPhraseReplacement( &rPhraseReplacement ),
-                            m_pOwnerListHead( NULL ),
-                            m_cLastRequestedAltsReturned( 0 ),
-                            m_ulStartOfLastRequestedAlts( 0 ),
-                            m_cElementsInLastRequestedAlts( 0 )
+                                    CDictationRun &rFirstOwner,
+                                    CPhraseReplacement &rPhraseReplacement ) :
+    m_cpRecoResult( &rResult ),
+    m_pPhraseReplacement( &rPhraseReplacement ),
+    m_pOwnerListHead( NULL ),
+    m_cLastRequestedAltsReturned( 0 ),
+    m_ulStartOfLastRequestedAlts( 0 ),
+    m_cElementsInLastRequestedAlts( 0 )
 {
     // The owner should go onto the list
     m_pOwnerListHead = new OWNERNODE;
@@ -40,18 +40,18 @@ CResultContainer::CResultContainer( ISpRecoResult &rResult,
         m_pOwnerListHead->pOwner = &rFirstOwner;
         m_pOwnerListHead->pNext = NULL;
     }
-    // If the allocation failed, all calls that need it 
+    // If the allocation failed, all calls that need it
     // will return E_OUTOFMEMORY
 
     // Zero out the requested phrase alternates array
-    memset( (void *) m_apLastRequestedPhraseAlts, 0, 
-        ALT_REQUEST_COUNT * sizeof( ISpPhraseAlt *) );
+    memset( (void *) m_apLastRequestedPhraseAlts, 0,
+            ALT_REQUEST_COUNT * sizeof( ISpPhraseAlt *) );
 }   /* CResultContainer::CResultContainer */
 
 /**********************************************************************
 * CResultContainer::~CResultContainer *
 *-------------------------------------*
-*	Description:  
+*	Description:
 *       Destructor for the CResultContainer class.
 *       This object gets destroyed when there are no longer
 *       any CDictationRuns referencing it.
@@ -65,23 +65,23 @@ CResultContainer::~CResultContainer()
         delete m_pPhraseReplacement;
     }
 
-    // Release any ISpPhraseAlt's that are still around from the 
+    // Release any ISpPhraseAlt's that are still around from the
     // last call to ISpPhrase::GetAlternates()
     for (int i = 0; i < ALT_REQUEST_COUNT; i++)
     {
         if (m_apLastRequestedPhraseAlts[i])
         {
             m_apLastRequestedPhraseAlts[i]->Release();
-        }        
+        }
     }
 }   /* CResultContainer::~CResultContainer */
 
 /**********************************************************************
 * CResultContainer::AddOwner *
 *----------------------------*
-*	Description:  
+*	Description:
 *       Called whenever a new CDictationRun is created to use this
-*       same RecoResult.  Adds that CDictationRun to the front of 
+*       same RecoResult.  Adds that CDictationRun to the front of
 *       the list of owners.
 *   Return:
 *       S_OK
@@ -101,7 +101,7 @@ HRESULT CResultContainer::AddOwner( CDictationRun &rNewOwner )
         pNode->pNext = m_pOwnerListHead;
         pNode->pOwner = &rNewOwner;
         m_pOwnerListHead = pNode;
-        
+
         return S_OK;
     }
     else
@@ -113,9 +113,9 @@ HRESULT CResultContainer::AddOwner( CDictationRun &rNewOwner )
 /**********************************************************************
 * CResultContainer::DeleteOwner *
 *-------------------------------*
-*	Description:  
+*	Description:
 *       Called whenever a DictationRun using this RecoResult
-*       has been deleted.  Removes the CDictationRun from the 
+*       has been deleted.  Removes the CDictationRun from the
 *       list and deletes itself if that was the last owner
 **********************************************************************/
 void CResultContainer::DeleteOwner( CDictationRun &rOldOwner )
@@ -127,9 +127,9 @@ void CResultContainer::DeleteOwner( CDictationRun &rOldOwner )
     }
 
     OWNERNODE **ppNode;
-    for ( ppNode = &m_pOwnerListHead; 
-        (*ppNode) && ((*ppNode)->pOwner != &rOldOwner); 
-        ppNode = &((*ppNode)->pNext) )
+    for ( ppNode = &m_pOwnerListHead;
+            (*ppNode) && ((*ppNode)->pOwner != &rOldOwner);
+            ppNode = &((*ppNode)->pNext) )
         ;
 
     if ( *ppNode )
@@ -155,7 +155,7 @@ void CResultContainer::DeleteOwner( CDictationRun &rOldOwner )
 /**********************************************************************
 * CResultContainer::SpeakAudio *
 *------------------------------*
-*	Description:  
+*	Description:
 *       Calls ISpRecoResult::SpeakAudio() on the recoresult.
 *       Converts the arguments to pre-replacement elements
 *   Return:
@@ -165,32 +165,32 @@ void CResultContainer::DeleteOwner( CDictationRun &rOldOwner )
 *       Return value of ISpRecoResult::SpeakAudio()
 **********************************************************************/
 HRESULT CResultContainer::SpeakAudio( ULONG ulStartElement,
-                                     ULONG cElements )
+                                      ULONG cElements )
 {
     if (!cElements)
     {
         return S_FALSE;
     }
 
-    // Convert the start and end to phrase element indices 
+    // Convert the start and end to phrase element indices
     // as seen from the result object's point of view
     ULONG ulPreReplStart;
     ULONG ulPreReplEnd;
     ULONG cPreReplElts;
     HRESULT hr = m_pPhraseReplacement->PostToPreReplacementIndex(
-        ulStartElement, &ulPreReplStart );
+                     ulStartElement, &ulPreReplStart );
     if (SUCCEEDED(hr))
     {
         hr = m_pPhraseReplacement->PostToPreReplacementIndex(
-            ulStartElement + cElements, &ulPreReplEnd );
+                 ulStartElement + cElements, &ulPreReplEnd );
     }
 
     // Call ISpRecoResult::SpeakAudio()
     if (SUCCEEDED(hr))
     {
         cPreReplElts = ulPreReplEnd - ulPreReplStart;
-        hr = m_cpRecoResult->SpeakAudio( 
-            ulPreReplStart, cPreReplElts, SPF_ASYNC, NULL );
+        hr = m_cpRecoResult->SpeakAudio(
+                 ulPreReplStart, cPreReplElts, SPF_ASYNC, NULL );
     }
 
     return hr;
@@ -199,8 +199,8 @@ HRESULT CResultContainer::SpeakAudio( ULONG ulStartElement,
 /**********************************************************************
 * CResultContainer::GetAlternatesText *
 *-------------------------------------*
-*	Description:  
-*       Called to get the text of the alternates for 
+*	Description:
+*       Called to get the text of the alternates for
 *       a specific range of elements in this result.
 *       ppszCoMemText is expected to point to a buffer
 *       of size at least sizeof( WCHAR * ) * ulRequestCount,
@@ -213,10 +213,10 @@ HRESULT CResultContainer::SpeakAudio( ULONG ulStartElement,
 *       return value of CResultContainer::GetAltText()
 **********************************************************************/
 HRESULT CResultContainer::GetAlternatesText( ULONG ulStartElement,
-                                            ULONG cElements, 
-                                            ULONG ulRequestCount,
-                                            __out_ecount_part(ulRequestCount, *pcPhrasesReturned) WCHAR **ppszCoMemText,
-                                            __out ULONG *pcPhrasesReturned )
+        ULONG cElements,
+        ULONG ulRequestCount,
+        __out_ecount_part(ulRequestCount, *pcPhrasesReturned) WCHAR **ppszCoMemText,
+        __out ULONG *pcPhrasesReturned )
 {
 
     if ( !ppszCoMemText || !pcPhrasesReturned )
@@ -224,7 +224,7 @@ HRESULT CResultContainer::GetAlternatesText( ULONG ulStartElement,
         return E_POINTER;
     }
 
-    // Get as many alternates as we can 
+    // Get as many alternates as we can
     ULONG cAvailableAlts;
     HRESULT hr = GetAlternates( ulStartElement, cElements, ulRequestCount,
                                 &cAvailableAlts );
@@ -239,7 +239,7 @@ HRESULT CResultContainer::GetAlternatesText( ULONG ulStartElement,
     {
         return E_UNEXPECTED;
     }
-    
+
     if ( !cAvailableAlts )
     {
         // No alternates
@@ -252,17 +252,17 @@ HRESULT CResultContainer::GetAlternatesText( ULONG ulStartElement,
     memset(ppszCoMemText, 0, ulRequestCount * sizeof(WCHAR *));
 
     // Get the text
-    for ( ULONG ulAlt = 0; 
-        SUCCEEDED(hr) && (ulAlt < cAvailableAlts); 
-        ulAlt++ )
+    for ( ULONG ulAlt = 0;
+            SUCCEEDED(hr) && (ulAlt < cAvailableAlts);
+            ulAlt++ )
     {
         // ppszCoMemText[ulAlt] is the ulAlt'th (WCHAR *)
-        // in the array.  
+        // in the array.
         // Its address will give us a WCHAR ** which will
         // point to a buffer that is to be CoTaskMemAlloced
         // by GetAltText()
-        hr = GetAltText( ulStartElement, cElements, ulAlt, 
-            &(ppszCoMemText[ulAlt]), NULL );
+        hr = GetAltText( ulStartElement, cElements, ulAlt,
+                         &(ppszCoMemText[ulAlt]), NULL );
     }
     *pcPhrasesReturned = cAvailableAlts;
 
@@ -272,13 +272,13 @@ HRESULT CResultContainer::GetAlternatesText( ULONG ulStartElement,
 /**********************************************************************
 * CResultContainer::GetAlternates *
 *---------------------------------*
-*	Description:  
-*       Gets the ISpPhraseAlts for this range of elements 
+*	Description:
+*       Gets the ISpPhraseAlts for this range of elements
 *       (indices are given taking replacement into account).
-*       The phrase alternates are pointed to by 
+*       The phrase alternates are pointed to by
 *       m_apLastRequestedPhraseAlts.
 *       It is very likely that GetAlternates() would be called
-*       numerous times consecutively for the same set of 
+*       numerous times consecutively for the same set of
 *       alternates.  Thus, these are cached between calls.
 *   Return:
 *       S_OK
@@ -287,46 +287,46 @@ HRESULT CResultContainer::GetAlternatesText( ULONG ulStartElement,
 *       Return value of ISpRecoResult::GetAlternates
 **********************************************************************/
 HRESULT CResultContainer::GetAlternates( ULONG ulStartElement,
-                                        ULONG cElements,
-                                        ULONG ulRequestCount, 
-                                        __out_opt ULONG *pcPhrasesReturned )
+        ULONG cElements,
+        ULONG ulRequestCount,
+        __out_opt ULONG *pcPhrasesReturned )
 {
     // First check to see if we have these alternates cached.
     // We check that there is at least one alternate cached,
     // that the alternates are for the same set of phrase elements,
     // and that there are enough.
-    if ( m_apLastRequestedPhraseAlts[0] && 
-        ( m_ulStartOfLastRequestedAlts == ulStartElement ) &&
-        ( m_cElementsInLastRequestedAlts == cElements ) &&
-        ( m_cLastRequestedAltsReturned >= ulRequestCount) )
+    if ( m_apLastRequestedPhraseAlts[0] &&
+            ( m_ulStartOfLastRequestedAlts == ulStartElement ) &&
+            ( m_cElementsInLastRequestedAlts == cElements ) &&
+            ( m_cLastRequestedAltsReturned >= ulRequestCount) )
     {
         if ( pcPhrasesReturned )
         {
             // We already have these alternates, so don't bother
             // getting them again
-            *pcPhrasesReturned = __min( 
-                ulRequestCount, m_cLastRequestedAltsReturned );
+            *pcPhrasesReturned = __min(
+                                     ulRequestCount, m_cLastRequestedAltsReturned );
         }
         return S_OK;
     }
 
-    if ( (ulStartElement + cElements) > 
-        m_pPhraseReplacement->GetNumReplacementElements() )
+    if ( (ulStartElement + cElements) >
+            m_pPhraseReplacement->GetNumReplacementElements() )
     {
         // Out of bounds
         return E_INVALIDARG;
     }
-    
-    // Convert the start and end to phrase element indices 
+
+    // Convert the start and end to phrase element indices
     // as seen from the result object's point of view
     ULONG ulPreReplStart;
     ULONG ulPreReplLast;
-    HRESULT hr = m_pPhraseReplacement->PostToPreReplacementIndex( 
-        ulStartElement, &ulPreReplStart );
+    HRESULT hr = m_pPhraseReplacement->PostToPreReplacementIndex(
+                     ulStartElement, &ulPreReplStart );
     if ( SUCCEEDED(hr) )
     {
         hr = m_pPhraseReplacement->PostToPreReplacementIndex(
-            ulStartElement + cElements, &ulPreReplLast );
+                 ulStartElement + cElements, &ulPreReplLast );
     }
     ULONG cPreReplElements;
     if ( SUCCEEDED(hr) )
@@ -344,14 +344,14 @@ HRESULT CResultContainer::GetAlternates( ULONG ulStartElement,
         }
     }
 
-    // Get as many alternates as we can by calling 
+    // Get as many alternates as we can by calling
     // ISpRecoResult::GetAlternates()
     ULONG cPhrasesReturned;
     if ( SUCCEEDED(hr) )
     {
         hr = m_cpRecoResult->GetAlternates( ulPreReplStart,
-            cPreReplElements, ulRequestCount, m_apLastRequestedPhraseAlts,
-            &cPhrasesReturned );
+                                            cPreReplElements, ulRequestCount, m_apLastRequestedPhraseAlts,
+                                            &cPhrasesReturned );
     }
     if ( SUCCEEDED(hr) && pcPhrasesReturned )
     {
@@ -372,14 +372,14 @@ HRESULT CResultContainer::GetAlternates( ULONG ulStartElement,
 /**********************************************************************
 * CResultContainer::GetAltInfo *
 *------------------------------*
-*	Description:  
-*       Given the alternates index, gets the info for the 
-*       alternate (i.e. which elements it replaces in the 
+*	Description:
+*       Given the alternates index, gets the info for the
+*       alternate (i.e. which elements it replaces in the
 *       parent and how many elements it has).
 *       Returns element indices TAKING REPLACEMENTS INTO
 *       ACCOUNT, unless the fReturnPostReplIndices flag has
 *       been set to false (it is set to true by default).
-*   
+*
 *       If the end of the alternate falls in the middle of
 *       a replacement, then the result indices are expanded
 *       to include the entire replacement.
@@ -388,18 +388,18 @@ HRESULT CResultContainer::GetAlternates( ULONG ulStartElement,
 *       E_FAIL if we couldn't get ulAlternateIndex alternates
 *       Return value of CResultContainer::GetAlternates()
 *       Return value of ISpPhraseAlt::GetAltInfo()
-*       Return value of 
+*       Return value of
 *           CResultContainer::ExpandToIncludeWholeReplacements()
 *       Return value of CPhraseReplacement::Initialize()
 *       Return value of CPhraseReplacement conversion routines
 **********************************************************************/
 HRESULT CResultContainer::GetAltInfo( ULONG ulStartElement,
-                                     ULONG cElements,
-                                     ULONG ulAlternateIndex, 
-                                     ULONG *pulStartInParent,
-                                     ULONG *pcEltsInParent,
-                                     ULONG *pcEltsInAlt,
-                                     bool fReturnPostReplIndices)
+                                      ULONG cElements,
+                                      ULONG ulAlternateIndex,
+                                      ULONG *pulStartInParent,
+                                      ULONG *pcEltsInParent,
+                                      ULONG *pcEltsInAlt,
+                                      bool fReturnPostReplIndices)
 {
     if ( ulAlternateIndex >= ALT_REQUEST_COUNT )
     {
@@ -409,8 +409,8 @@ HRESULT CResultContainer::GetAltInfo( ULONG ulStartElement,
 
     // First make sure we actually have this alternate
     ULONG cPhrasesReturned;
-    HRESULT hr = GetAlternates( 
-        ulStartElement, cElements, ulAlternateIndex + 1, &cPhrasesReturned );
+    HRESULT hr = GetAlternates(
+                     ulStartElement, cElements, ulAlternateIndex + 1, &cPhrasesReturned );
     if ( FAILED( hr ) )
     {
         return hr;
@@ -435,19 +435,19 @@ HRESULT CResultContainer::GetAltInfo( ULONG ulStartElement,
     ULONG cEltsInParent;
     ULONG cEltsInAlt;
     hr = (m_apLastRequestedPhraseAlts[ ulAlternateIndex ])->GetAltInfo(
-        NULL, &ulStartInParent, &cEltsInParent, &cEltsInAlt );
+             NULL, &ulStartInParent, &cEltsInParent, &cEltsInAlt );
 
 #ifdef _DEBUG
     // Debug code for seeing the text of the entire alternate
     // (which covers the entire parent phrase) and for seeing
-    // the text for just the part of the alternate that 
+    // the text for just the part of the alternate that
     // covers the elements in the parent that we are interested in
     WCHAR * pwszWhole = 0;
     WCHAR * pwszAlt = 0;
     BYTE b;
-    m_apLastRequestedPhraseAlts[ ulAlternateIndex ]->GetText( 
+    m_apLastRequestedPhraseAlts[ ulAlternateIndex ]->GetText(
         SP_GETWHOLEPHRASE, SP_GETWHOLEPHRASE, true, &pwszWhole, &b );
-    m_apLastRequestedPhraseAlts[ ulAlternateIndex ]->GetText( 
+    m_apLastRequestedPhraseAlts[ ulAlternateIndex ]->GetText(
         ulStartInParent, cEltsInAlt, true, &pwszAlt, &b );
     ::CoTaskMemFree( pwszWhole );
     ::CoTaskMemFree( pwszAlt );
@@ -456,7 +456,7 @@ HRESULT CResultContainer::GetAltInfo( ULONG ulStartElement,
     // If there is replaced (ITNed) text anywhere in this set of
     // elements in the parent, we should be getting alternate
     // text for the entire replacement.
-    // That is, if a replacement covers the word "thirty" in the 
+    // That is, if a replacement covers the word "thirty" in the
     // phrase "I have thirty nine dollars", we should also be
     // showing alternate text for the elements "nine dollars",
     // since it appears to all be one element ("$39.00") to the
@@ -464,15 +464,15 @@ HRESULT CResultContainer::GetAltInfo( ULONG ulStartElement,
     if ( SUCCEEDED( hr ) )
     {
         const ULONG cEltsInParentBeforeExpansion = cEltsInParent;
-        
+
         // Expand the endpoints to include entire replacements
-        hr = m_pPhraseReplacement->ExpandToIncludeWholeReplacements( 
-            &ulStartInParent, &cEltsInParent );
+        hr = m_pPhraseReplacement->ExpandToIncludeWholeReplacements(
+                 &ulStartInParent, &cEltsInParent );
         _ASSERTE( SUCCEEDED( hr ) );
-        
+
         // Adjust the number of elements in the alternate accordingly
-        // (all of the extra elements we have just included are the 
-        // same in the alternate as they are in the parent, so it 
+        // (all of the extra elements we have just included are the
+        // same in the alternate as they are in the parent, so it
         // will be the same number of extra elements in the alternate
         cEltsInAlt += cEltsInParent - cEltsInParentBeforeExpansion;
     }
@@ -499,11 +499,11 @@ HRESULT CResultContainer::GetAltInfo( ULONG ulStartElement,
 
     // Convert these element indices to post-replacement indices
     if ( SUCCEEDED( hr ) )
-    {    
-        // First convert the start element    
+    {
+        // First convert the start element
         ULONG ulPostReplStartInParent;
         hr = m_pPhraseReplacement->PreToPostReplacementIndex(
-            ulStartInParent, &ulPostReplStartInParent );
+                 ulStartInParent, &ulPostReplStartInParent );
         if (FAILED(hr))
         {
             return hr;
@@ -520,7 +520,7 @@ HRESULT CResultContainer::GetAltInfo( ULONG ulStartElement,
             ULONG ulEndInParent = ulStartInParent + cEltsInParent;
             ULONG ulEndPostReplElement;
             hr = m_pPhraseReplacement->PreToPostReplacementIndex(
-                ulEndInParent, &ulEndPostReplElement );
+                     ulEndInParent, &ulEndPostReplElement );
             if (FAILED(hr))
             {
                 return hr;
@@ -533,18 +533,18 @@ HRESULT CResultContainer::GetAltInfo( ULONG ulStartElement,
     if ( SUCCEEDED(hr) && pcEltsInAlt )
     {
         // Since this ISpPhraseAlt is a completely different ISpPhrase
-        // from the one associated with m_cpRecoResult, we have to 
+        // from the one associated with m_cpRecoResult, we have to
         // construct a new CPhraseReplacement object to deal specifically
         // with this phrase.
         CPhraseReplacement newPhraseRepl;
         hr = newPhraseRepl.Initialize(*(m_apLastRequestedPhraseAlts[ ulAlternateIndex ]));
-        
-        // First convert the start element    
+
+        // First convert the start element
         ULONG ulPostReplStartInAlt;
         if ( SUCCEEDED( hr ) )
         {
             hr = newPhraseRepl.PreToPostReplacementIndex(
-                ulStartInParent, &ulPostReplStartInAlt );
+                     ulStartInParent, &ulPostReplStartInAlt );
         }
 
         // Convert the end element to determine how many post-replacement
@@ -554,7 +554,7 @@ HRESULT CResultContainer::GetAltInfo( ULONG ulStartElement,
         if ( SUCCEEDED(hr) )
         {
             hr = newPhraseRepl.PreToPostReplacementIndex(
-                ulEndInAlt, &ulEndPostReplElement );
+                     ulEndInAlt, &ulEndPostReplElement );
         }
         if ( SUCCEEDED(hr) )
         {
@@ -567,8 +567,8 @@ HRESULT CResultContainer::GetAltInfo( ULONG ulStartElement,
 /**********************************************************************
 * CResultContainer::GetAltText *
 *------------------------------*
-*	Description:  
-*       Given the alternates index, gets the text for the 
+*	Description:
+*       Given the alternates index, gets the text for the
 *       alternate and display attributes.
 *   Return:
 *       S_OK
@@ -577,10 +577,10 @@ HRESULT CResultContainer::GetAltInfo( ULONG ulStartElement,
 *       Return value of ISpPhraseAlt::GetText()
 **********************************************************************/
 HRESULT CResultContainer::GetAltText( ULONG ulStartElement,
-                                     ULONG cElements,
-                                     ULONG ulAlternateIndex, 
-                                     __deref_out WCHAR **ppszCoMemText,
-                                     __out_opt BYTE *pbDisplayAttributes )
+                                      ULONG cElements,
+                                      ULONG ulAlternateIndex,
+                                      __deref_out WCHAR **ppszCoMemText,
+                                      __out_opt BYTE *pbDisplayAttributes )
 {
     if ( ulAlternateIndex >= ALT_REQUEST_COUNT )
     {
@@ -590,8 +590,8 @@ HRESULT CResultContainer::GetAltText( ULONG ulStartElement,
 
     // First make sure we actually have this alternate
     ULONG cPhrasesReturned;
-    HRESULT hr = GetAlternates( 
-        ulStartElement, cElements, ulAlternateIndex + 1, &cPhrasesReturned );
+    HRESULT hr = GetAlternates(
+                     ulStartElement, cElements, ulAlternateIndex + 1, &cPhrasesReturned );
     if ( FAILED( hr ) )
     {
         return hr;
@@ -619,23 +619,23 @@ HRESULT CResultContainer::GetAltText( ULONG ulStartElement,
     ULONG ulStartInParent;
     ULONG cEltsInParent;
     ULONG cEltsInAlt;
-    hr = GetAltInfo( ulStartElement, cElements, ulAlternateIndex, 
-        &ulStartInParent, &cEltsInParent, &cEltsInAlt, false );
+    hr = GetAltInfo( ulStartElement, cElements, ulAlternateIndex,
+                     &ulStartInParent, &cEltsInParent, &cEltsInAlt, false );
     if ( FAILED(hr) )
     {
         return hr;
     }
- 
+
     // Call to ISpPhraseAlt::GetText()
     return m_apLastRequestedPhraseAlts[ ulAlternateIndex ]->GetText(
-        ulStartInParent, cEltsInAlt, true, ppszCoMemText, pbDisplayAttributes );
+               ulStartInParent, cEltsInAlt, true, ppszCoMemText, pbDisplayAttributes );
 }   /* CResultContainer::GetAltText */
 
 
 /**********************************************************************
 * CResultContainer::ChooseAlternate *
 *-----------------------------------*
-*	Description:  
+*	Description:
 *       Called when the caller wishes to commit one of the alternates.
 *       If pbDisplayAttributes is non-NULL, hands back the display
 *       attributes of the alternate text going in.
@@ -650,9 +650,9 @@ HRESULT CResultContainer::GetAltText( ULONG ulStartElement,
 *       Return value of CPhraseReplacement::Initialize()
 **********************************************************************/
 HRESULT CResultContainer::ChooseAlternate( ULONG ulStartElement,
-                                          ULONG cElements, 
-                                          ULONG ulAlternateIndex,
-                                          BYTE *pbDisplayAttributes )
+        ULONG cElements,
+        ULONG ulAlternateIndex,
+        BYTE *pbDisplayAttributes )
 {
     if ( ulAlternateIndex >= ALT_REQUEST_COUNT )
     {
@@ -662,8 +662,8 @@ HRESULT CResultContainer::ChooseAlternate( ULONG ulStartElement,
 
     // First make sure we actually have this alternate
     ULONG cPhrasesReturned;
-    HRESULT hr = GetAlternates( 
-        ulStartElement, cElements, ulAlternateIndex + 1, &cPhrasesReturned );
+    HRESULT hr = GetAlternates(
+                     ulStartElement, cElements, ulAlternateIndex + 1, &cPhrasesReturned );
     if ( FAILED( hr ) )
     {
         return hr;
@@ -683,13 +683,13 @@ HRESULT CResultContainer::ChooseAlternate( ULONG ulStartElement,
         return E_UNEXPECTED;
     }
 
-    // If there is interest in the display attributes for the alternate, 
+    // If there is interest in the display attributes for the alternate,
     // get them
     if ( pbDisplayAttributes )
     {
         WCHAR *pszCoMemText;
-        hr = GetAltText( ulStartElement, cElements, ulAlternateIndex, 
-            &pszCoMemText, pbDisplayAttributes );
+        hr = GetAltText( ulStartElement, cElements, ulAlternateIndex,
+                         &pszCoMemText, pbDisplayAttributes );
         if ( FAILED( hr ) )
         {
             return hr;
@@ -723,8 +723,8 @@ HRESULT CResultContainer::ChooseAlternate( ULONG ulStartElement,
 /**********************************************************************
 * CResultContainer::NotifyOwnersOfCommit *
 *----------------------------------------*
-*	Description:  
-*       Called when an alternate is about to be committed BEFORE 
+*	Description:
+*       Called when an alternate is about to be committed BEFORE
 *       the commit happens.
 *       Notifies all DictationRuns that hold onto this result
 *       that their phrase element offset maps will need to change
@@ -737,9 +737,9 @@ HRESULT CResultContainer::ChooseAlternate( ULONG ulStartElement,
 *       Return value of CResultContainer::GetAltInfo()
 **********************************************************************/
 HRESULT CResultContainer::NotifyOwnersOfCommit( ULONG ulStartElement,
-                                               ULONG cElements, 
-                                               ULONG ulAlternateIndex )
-                                               //ISpPhraseAlt *pChosenAlternate )
+        ULONG cElements,
+        ULONG ulAlternateIndex )
+//ISpPhraseAlt *pChosenAlternate )
 {
     if ( ulAlternateIndex >= ALT_REQUEST_COUNT )
     {
@@ -754,8 +754,8 @@ HRESULT CResultContainer::NotifyOwnersOfCommit( ULONG ulStartElement,
 
     // First make sure we actually have this alternate
     ULONG cPhrasesReturned;
-    HRESULT hr = GetAlternates( 
-        ulStartElement, cElements, ulAlternateIndex + 1, &cPhrasesReturned );
+    HRESULT hr = GetAlternates(
+                     ulStartElement, cElements, ulAlternateIndex + 1, &cPhrasesReturned );
     if ( FAILED( hr ) )
     {
         return hr;
@@ -787,22 +787,22 @@ HRESULT CResultContainer::NotifyOwnersOfCommit( ULONG ulStartElement,
     }
     ULONG cPostReplElementsAfterCommit = newPhraseRepl.GetNumReplacementElements();
 
-    // Find out which (post-replacement) elements in the parent 
+    // Find out which (post-replacement) elements in the parent
     // this alternate will replace
     ULONG ulStartInParent;
     ULONG cEltsInParent;
-    hr = GetAltInfo( ulStartElement, cElements, ulAlternateIndex, 
-        &ulStartInParent, &cEltsInParent );
+    hr = GetAltInfo( ulStartElement, cElements, ulAlternateIndex,
+                     &ulStartInParent, &cEltsInParent );
     if ( FAILED(hr) )
     {
         return hr;
     }
-    
+
     // Loop through the owner list, and let each one adjust its maps
     for ( OWNERNODE *pNode = m_pOwnerListHead; pNode; pNode = pNode->pNext )
     {
-        hr = pNode->pOwner->OnAlternateCommit( ulStartInParent, 
-            cEltsInParent, cPostReplElementsAfterCommit );
+        hr = pNode->pOwner->OnAlternateCommit( ulStartInParent,
+                                               cEltsInParent, cPostReplElementsAfterCommit );
         if ( FAILED( hr ) )
         {
             return hr;

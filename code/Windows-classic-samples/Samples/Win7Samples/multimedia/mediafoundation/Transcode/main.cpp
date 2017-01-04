@@ -1,4 +1,4 @@
-//////////////////////////////////////////////////////////////////////////
+﻿//////////////////////////////////////////////////////////////////////////
 //
 // main.cpp - Defines the entry point for the console application.
 //
@@ -12,7 +12,7 @@
 // This sample demonstrates how to perform simple transcoding
 // to WMA or WMV.
 //
-////////////////////////////////////////////////////////////////////////// 
+//////////////////////////////////////////////////////////////////////////
 
 #include "Transcode.h"
 
@@ -28,7 +28,7 @@ int wmain(int argc, wchar_t* argv[])
 
     const WCHAR* sInputFile = argv[1];  // Audio source file name
     const WCHAR* sOutputFile = argv[2];  // Output file name
-    
+
     HRESULT hr = S_OK;
 
     hr = CoInitializeEx(NULL, COINIT_APARTMENTTHREADED | COINIT_DISABLE_OLE1DDE);
@@ -57,7 +57,7 @@ int wmain(int argc, wchar_t* argv[])
         {
             hr = transcoder.ConfigureVideoOutput();
         }
-    
+
         if (SUCCEEDED(hr))
         {
             hr = transcoder.ConfigureContainer();
@@ -69,7 +69,7 @@ int wmain(int argc, wchar_t* argv[])
         {
             hr = transcoder.EncodeToFile(sOutputFile);
         }
-    
+
         if (SUCCEEDED(hr))
         {
             wprintf_s(L"Output file created: %s\n", sOutputFile);

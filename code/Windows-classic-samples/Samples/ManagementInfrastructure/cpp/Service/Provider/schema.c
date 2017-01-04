@@ -1,4 +1,4 @@
-//
+﻿//
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -8878,20 +8878,20 @@ static MI_MethodDecl MI_CONST* MI_CONST MSFT_WindowsService_meths[] =
 
 static MI_CONST MI_ProviderFT MSFT_WindowsService_funcs =
 {
-  (MI_ProviderFT_Load)MSFT_WindowsService_Load,
-  (MI_ProviderFT_Unload)MSFT_WindowsService_Unload,
-  (MI_ProviderFT_GetInstance)MSFT_WindowsService_GetInstance,
-  (MI_ProviderFT_EnumerateInstances)MSFT_WindowsService_EnumerateInstances,
-  (MI_ProviderFT_CreateInstance)MSFT_WindowsService_CreateInstance,
-  (MI_ProviderFT_ModifyInstance)MSFT_WindowsService_ModifyInstance,
-  (MI_ProviderFT_DeleteInstance)MSFT_WindowsService_DeleteInstance,
-  (MI_ProviderFT_AssociatorInstances)NULL,
-  (MI_ProviderFT_ReferenceInstances)NULL,
-  (MI_ProviderFT_EnableIndications)NULL,
-  (MI_ProviderFT_DisableIndications)NULL,
-  (MI_ProviderFT_Subscribe)NULL,
-  (MI_ProviderFT_Unsubscribe)NULL,
-  (MI_ProviderFT_Invoke)NULL,
+    (MI_ProviderFT_Load)MSFT_WindowsService_Load,
+    (MI_ProviderFT_Unload)MSFT_WindowsService_Unload,
+    (MI_ProviderFT_GetInstance)MSFT_WindowsService_GetInstance,
+    (MI_ProviderFT_EnumerateInstances)MSFT_WindowsService_EnumerateInstances,
+    (MI_ProviderFT_CreateInstance)MSFT_WindowsService_CreateInstance,
+    (MI_ProviderFT_ModifyInstance)MSFT_WindowsService_ModifyInstance,
+    (MI_ProviderFT_DeleteInstance)MSFT_WindowsService_DeleteInstance,
+    (MI_ProviderFT_AssociatorInstances)NULL,
+    (MI_ProviderFT_ReferenceInstances)NULL,
+    (MI_ProviderFT_EnableIndications)NULL,
+    (MI_ProviderFT_DisableIndications)NULL,
+    (MI_ProviderFT_Subscribe)NULL,
+    (MI_ProviderFT_Unsubscribe)NULL,
+    (MI_ProviderFT_Invoke)NULL,
 };
 
 static MI_CONST MI_Char* MSFT_WindowsService_UMLPackagePath_qual_value = MI_T("CIM::Core::Service");
@@ -9160,20 +9160,20 @@ static MI_MethodDecl MI_CONST* MI_CONST MSFT_WindowsServiceManager_meths[] =
 
 static MI_CONST MI_ProviderFT MSFT_WindowsServiceManager_funcs =
 {
-  (MI_ProviderFT_Load)MSFT_WindowsServiceManager_Load,
-  (MI_ProviderFT_Unload)MSFT_WindowsServiceManager_Unload,
-  (MI_ProviderFT_GetInstance)NULL,
-  (MI_ProviderFT_EnumerateInstances)NULL,
-  (MI_ProviderFT_CreateInstance)NULL,
-  (MI_ProviderFT_ModifyInstance)NULL,
-  (MI_ProviderFT_DeleteInstance)NULL,
-  (MI_ProviderFT_AssociatorInstances)NULL,
-  (MI_ProviderFT_ReferenceInstances)NULL,
-  (MI_ProviderFT_EnableIndications)NULL,
-  (MI_ProviderFT_DisableIndications)NULL,
-  (MI_ProviderFT_Subscribe)NULL,
-  (MI_ProviderFT_Unsubscribe)NULL,
-  (MI_ProviderFT_Invoke)NULL,
+    (MI_ProviderFT_Load)MSFT_WindowsServiceManager_Load,
+    (MI_ProviderFT_Unload)MSFT_WindowsServiceManager_Unload,
+    (MI_ProviderFT_GetInstance)NULL,
+    (MI_ProviderFT_EnumerateInstances)NULL,
+    (MI_ProviderFT_CreateInstance)NULL,
+    (MI_ProviderFT_ModifyInstance)NULL,
+    (MI_ProviderFT_DeleteInstance)NULL,
+    (MI_ProviderFT_AssociatorInstances)NULL,
+    (MI_ProviderFT_ReferenceInstances)NULL,
+    (MI_ProviderFT_EnableIndications)NULL,
+    (MI_ProviderFT_DisableIndications)NULL,
+    (MI_ProviderFT_Subscribe)NULL,
+    (MI_ProviderFT_Unsubscribe)NULL,
+    (MI_ProviderFT_Invoke)NULL,
 };
 
 static MI_CONST MI_Char* MSFT_WindowsServiceManager_Description_qual_value = MI_T("388");
@@ -9270,7 +9270,8 @@ MI_SchemaDecl schemaDecl =
 */
 
 MI_Result MI_CALL MI_Server_GetVersion(
-    MI_Uint32* version){
+    MI_Uint32* version)
+{
     return __mi_server->serverFT->GetVersion(version);
 }
 

@@ -1,4 +1,4 @@
-// This is a part of the Microsoft Foundation Classes C++ library.
+﻿// This is a part of the Microsoft Foundation Classes C++ library.
 // Copyright (c) Microsoft Corporation.  All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -23,10 +23,10 @@ class CEditToolbar : public CToolBar
 {
 // Construction
 public:
-	CEditToolbar();
-	CComboBox m_fontNameCombo;
-	CComboBox m_fontSizeCombo;
-	CFont m_font;
+    CEditToolbar();
+    CComboBox m_fontNameCombo;
+    CComboBox m_fontSizeCombo;
+    CFont m_font;
 
 // Attributes
 public:
@@ -35,21 +35,21 @@ public:
 public:
 
 // Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CEditToolbar)
-	//}}AFX_VIRTUAL
+    // ClassWizard generated virtual function overrides
+    //{{AFX_VIRTUAL(CEditToolbar)
+    //}}AFX_VIRTUAL
 
 // Implementation
 public:
-	virtual ~CEditToolbar();
+    virtual ~CEditToolbar();
 
-	// Generated message map functions
+    // Generated message map functions
 protected:
-	//{{AFX_MSG(CEditToolbar)
-	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
-	//}}AFX_MSG
+    //{{AFX_MSG(CEditToolbar)
+    afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
+    //}}AFX_MSG
 
-	DECLARE_MESSAGE_MAP()
+    DECLARE_MESSAGE_MAP()
 };
 
 /////////////////////////////////////////////////////////////////////////////

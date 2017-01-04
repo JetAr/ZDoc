@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -57,8 +57,8 @@ CFile::~CFile()
 //---------------------------------------------------------------------
 
 BOOL CFile::CreateFile(_In_ PCWSTR pFileName, DWORD desiredAccess,
-    DWORD creationDisposition,
-    DWORD sharedMode, _Inout_opt_ LPSECURITY_ATTRIBUTES lpSecurityAttributes, DWORD flagsAndAttributes, _Inout_opt_ HANDLE templateFileHandle)
+                       DWORD creationDisposition,
+                       DWORD sharedMode, _Inout_opt_ LPSECURITY_ATTRIBUTES lpSecurityAttributes, DWORD flagsAndAttributes, _Inout_opt_ HANDLE templateFileHandle)
 {
     size_t fullPathLen = wcslen(pFileName);
     if (!_pFileName)
@@ -73,7 +73,7 @@ BOOL CFile::CreateFile(_In_ PCWSTR pFileName, DWORD desiredAccess,
     StringCchCopyN(_pFileName, fullPathLen + 1, pFileName, fullPathLen);
 
     _fileHandle = ::CreateFile(pFileName, desiredAccess, sharedMode,
-        lpSecurityAttributes, creationDisposition, flagsAndAttributes, templateFileHandle);
+                               lpSecurityAttributes, creationDisposition, flagsAndAttributes, templateFileHandle);
 
     if (_fileHandle == INVALID_HANDLE_VALUE)
     {

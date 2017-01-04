@@ -1,4 +1,4 @@
-//
+﻿//
 // (c) 1995 Microsoft Corporation.  All Rights Reserved.
 //
 #define IDH_DIALER_CHANGE_DIAL_HELPER    1000

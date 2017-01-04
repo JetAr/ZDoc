@@ -1,4 +1,4 @@
-//////////////////////////////////////////////////////////////////////
+﻿//////////////////////////////////////////////////////////////////////
 //
 //  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 //  ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED
@@ -34,16 +34,16 @@ BOOL CTextService::_IsKeyboardDisabled()
     BOOL fDisabled = FALSE;
 
     if ((_pThreadMgr->GetFocus(&pDocMgrFocus) != S_OK) ||
-        (pDocMgrFocus == NULL))
+            (pDocMgrFocus == NULL))
     {
-        // if there is no focus document manager object, the keyboard 
+        // if there is no focus document manager object, the keyboard
         // is disabled.
         fDisabled = TRUE;
         goto Exit;
     }
 
     if ((pDocMgrFocus->GetTop(&pContext) != S_OK) ||
-        (pContext == NULL))
+            (pContext == NULL))
     {
         // if there is no context object, the keyboard is disabled.
         fDisabled = TRUE;

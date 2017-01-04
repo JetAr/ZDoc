@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -16,7 +16,7 @@
 
 // Print out rich error info
 void PrintError(
-    _In_ HRESULT errorCode, 
+    _In_ HRESULT errorCode,
     _In_opt_ WS_ERROR* error)
 {
     wprintf(L"Failure: errorCode=0x%lx\n", errorCode);
@@ -141,21 +141,21 @@ HRESULT CALLBACK Send1(
 
     next->function = Send2;
 
-    
+
     // Create a TCP duplex session channel
     hr = WsCreateChannel(
-        WS_CHANNEL_TYPE_DUPLEX_SESSION, 
-        WS_TCP_CHANNEL_BINDING, 
-        NULL, 
-        0, 
-        NULL, 
-        &sendState->channel, 
-        error);
+             WS_CHANNEL_TYPE_DUPLEX_SESSION,
+             WS_TCP_CHANNEL_BINDING,
+             NULL,
+             0,
+             NULL,
+             &sendState->channel,
+             error);
     if (FAILED(hr))
     {
         goto Exit;
     }
-    
+
     // Initialize address of service
     WS_ENDPOINT_ADDRESS address;
     address.url.chars = L"net.tcp://localhost/example";
@@ -163,13 +163,13 @@ HRESULT CALLBACK Send1(
     address.headers = NULL;
     address.extensions = NULL;
     address.identity = NULL;
-    
+
     // Open channel to address
     hr = WsOpenChannel(
-        sendState->channel, 
-        &address, 
-        asyncContext, 
-        error);
+             sendState->channel,
+             &address,
+             asyncContext,
+             error);
     if (FAILED(hr))
     {
         goto Exit;
@@ -237,13 +237,13 @@ HRESULT CALLBACK Send3(
 
     // Add the action header
     hr = WsSetHeader(
-        sendState->message,
-        WS_ACTION_HEADER,
-        WS_XML_STRING_TYPE,
-        WS_WRITE_REQUIRED_VALUE,
-        PurchaseOrder_wsdl.messages.PurchaseOrder.action,
-        sizeof(*PurchaseOrder_wsdl.messages.PurchaseOrder.action),
-        error);
+             sendState->message,
+             WS_ACTION_HEADER,
+             WS_XML_STRING_TYPE,
+             WS_WRITE_REQUIRED_VALUE,
+             PurchaseOrder_wsdl.messages.PurchaseOrder.action,
+             sizeof(*PurchaseOrder_wsdl.messages.PurchaseOrder.action),
+             error);
 
     if (FAILED(hr))
     {
@@ -293,12 +293,12 @@ HRESULT CALLBACK Send4(
 
     // Write body data
     hr = WsWriteElement(
-        writer,
-        &PurchaseOrder_wsdl.globalElements.PurchaseOrderType,
-        WS_WRITE_REQUIRED_VALUE,
-        &purchaseOrder,
-        sizeof(purchaseOrder),
-        error);
+             writer,
+             &PurchaseOrder_wsdl.globalElements.PurchaseOrderType,
+             WS_WRITE_REQUIRED_VALUE,
+             &purchaseOrder,
+             sizeof(purchaseOrder),
+             error);
 
     if (FAILED(hr))
     {
@@ -424,48 +424,48 @@ static void CALLBACK OnSendComplete(
 // Main entry point
 int __cdecl wmain()
 {
-    
+
     HRESULT hr = S_OK;
     WS_ERROR* error = NULL;
-    
+
     WS_ASYNC_STATE asyncState = {};
     SEND_STATE sendState;
     sendState.channel = NULL;
     sendState.message = NULL;
     sendState.messageCount = 0;
     sendState.orderCount = 0;
-    
+
     THREAD_INFO threadInfo;
     threadInfo.hr = S_OK;
     threadInfo.handle = NULL;
-    
-    
+
+
     // Create an error object for storing rich error information
     hr = WsCreateError(
-        NULL, 
-        0, 
-        &error);
+             NULL,
+             0,
+             &error);
     if (FAILED(hr))
     {
         goto Exit;
     }
-    
+
     threadInfo.handle = CreateEvent(NULL, TRUE, FALSE, NULL);
     if (threadInfo.handle == NULL)
     {
         goto Exit;
     }
-    
+
     WS_ASYNC_CONTEXT sendComplete;
     sendComplete.callback = OnSendComplete;
     sendComplete.callbackState = &threadInfo;
-    
+
     hr = WsAsyncExecute(&asyncState, Send1, WS_LONG_CALLBACK, &sendState, &sendComplete, error);
     if (FAILED(hr))
     {
         goto Exit;
     }
-    
+
     if (hr == WS_S_ASYNC)
     {
         WaitForSingleObject(threadInfo.handle, INFINITE);
@@ -475,19 +475,19 @@ int __cdecl wmain()
             goto Exit;
         }
     }
-    
+
 Exit:
     if (FAILED(hr))
     {
         // Print out the error
         PrintError(hr, error);
     }
-    
+
     if (threadInfo.handle != NULL)
     {
         CloseHandle(threadInfo.handle);
     }
-    
+
     if (sendState.channel != NULL)
     {
         // Close the channel
@@ -505,8 +505,8 @@ Exit:
     {
         WsFreeError(error);
     }
-    
-    
+
+
     fflush(stdout);
     return SUCCEEDED(hr) ? 0 : -1;
 }

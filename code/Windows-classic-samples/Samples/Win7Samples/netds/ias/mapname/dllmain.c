@@ -1,4 +1,4 @@
-/* Copyright (c) Microsoft Corporation. All rights reserved. */
+﻿/* Copyright (c) Microsoft Corporation. All rights reserved. */
 
 #include "windows.h"
 #include "radutil.h"
@@ -10,28 +10,28 @@ static HMODULE hModule;
 BOOL
 WINAPI
 DllMain(
-   HINSTANCE hInstance,
-   DWORD dwReason,
-   LPVOID lpReserved
-   )
+    HINSTANCE hInstance,
+    DWORD dwReason,
+    LPVOID lpReserved
+)
 {
-   if (dwReason == DLL_PROCESS_ATTACH)
-   {
-      hModule = hInstance;
-      DisableThreadLibraryCalls(hInstance);
-   }
+    if (dwReason == DLL_PROCESS_ATTACH)
+    {
+        hModule = hInstance;
+        DisableThreadLibraryCalls(hInstance);
+    }
 
-   return TRUE;
+    return TRUE;
 }
 
 STDAPI
 DllRegisterServer( VOID )
 {
-   return RadiusExtensionInstall(hModule, pwszDllType, TRUE);
+    return RadiusExtensionInstall(hModule, pwszDllType, TRUE);
 }
 
 STDAPI
 DllUnregisterServer( VOID )
 {
-   return RadiusExtensionInstall(hModule, pwszDllType, FALSE);
+    return RadiusExtensionInstall(hModule, pwszDllType, FALSE);
 }

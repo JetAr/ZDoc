@@ -1,4 +1,4 @@
-//--------------------------------------------------------------------
+﻿//--------------------------------------------------------------------
 // Microsoft OLE DB Test OLEDB Simple Provider
 // (C) Copyright 1991 - 1999 Microsoft Corporation.  All Rights Reserved.
 //
@@ -36,10 +36,10 @@
 #define SAFE_SYSFREE(bstr)			{ SysFreeString(bstr); bstr = NULL;}
 
 //IUnknown->Release Wrapper
-#define SAFE_RELEASE(pv)			if((pv)) { (pv)->Release(); (pv) = NULL; }  
-#define SAFE_ADDREF(pv)				if((pv)) { (pv)->AddRef();				}  
-																									
-//Test macros																					
+#define SAFE_RELEASE(pv)			if((pv)) { (pv)->Release(); (pv) = NULL; }
+#define SAFE_ADDREF(pv)				if((pv)) { (pv)->AddRef();				}
+
+//Test macros
 #define TEST(exp)					{ if(FAILED(exp)) { ASSERT(!#exp); } }
 #define TESTC(exp)					{ if(FAILED(exp)) { goto CLEANUP;  } }
 
@@ -51,7 +51,7 @@
 #define EQUAL		 (0)
 #define LESSTHAN	(-1)
 #define GREATERTHAN  (1)
-#define NOTEQUAL	(-2) 
+#define NOTEQUAL	(-2)
 
 ////////////////////////////////////////////////////////
 // General
@@ -67,7 +67,7 @@ LONG CompareVariant(VARIANT* pVar1, VARIANT* pVar2,	BOOL fCaseSensitive);
 ////////////////////////////////////////////////////////
 struct REGENTRY
 {
-	HKEY  hRootKey;
+    HKEY  hRootKey;
     CHAR* szKeyName;
     CHAR* szValueName;
     CHAR* szValue;

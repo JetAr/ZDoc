@@ -1,4 +1,4 @@
-#include "tedutil.h"
+﻿#include "tedutil.h"
 #include "resource.h"
 
 class CTedTestSink
@@ -8,16 +8,16 @@ class CTedTestSink
 {
 public:
     BEGIN_COM_MAP(CTedTestSink)
-        COM_INTERFACE_ENTRY(IMFMediaSink)
+    COM_INTERFACE_ENTRY(IMFMediaSink)
     END_COM_MAP()
 
     DECLARE_REGISTRY_RESOURCEID(IDR_TEDTESTSINK);
     DECLARE_NOT_AGGREGATABLE(CTedTestSink);
     DECLARE_CLASSFACTORY();
-    
+
     CTedTestSink();
     virtual ~CTedTestSink();
-    
+
     STDMETHODIMP AddStreamSink(DWORD dwStreamSinkIdentifier, IMFMediaType* pMediaType, IMFStreamSink** ppStreamSink);
     STDMETHODIMP GetCharacteristics(DWORD* pdwCharacterisitics);
     STDMETHODIMP GetPresentationClock(IMFPresentationClock** ppPresentationClock);
@@ -31,11 +31,11 @@ public:
     /*STDMETHODIMP QueryInterface(REFIID riid, void** ppInterface);
     ULONG STDMETHODCALLTYPE AddRef();
     ULONG STDMETHODCALLTYPE Release();*/
-    
+
 protected:
     STDMETHODIMP InitAudioStream();
     STDMETHODIMP InitVideoStream();
-        
+
 private:
     CComPtr<IMFPresentationClock> m_spPresentationClock;
     CComPtr<IMFStreamSink> m_spAudioStreamSink;
@@ -53,14 +53,14 @@ public:
     virtual ~CTedTestStreamSink();
 
     DECLARE_NOT_AGGREGATABLE(CTedTestStreamSink);
-    
+
     BEGIN_COM_MAP(CTedTestStreamSink)
-        COM_INTERFACE_ENTRY(IMFStreamSink)
-        COM_INTERFACE_ENTRY(IMFMediaEventGenerator)
+    COM_INTERFACE_ENTRY(IMFStreamSink)
+    COM_INTERFACE_ENTRY(IMFMediaEventGenerator)
     END_COM_MAP()
 
     STDMETHODIMP Init(CTedTestSink* pSink, IMFMediaTypeHandler* pMTH, DWORD dwIdentifier);
-    
+
     STDMETHODIMP Flush();
     STDMETHODIMP GetIdentifier(DWORD* pdwIdentifier);
     STDMETHODIMP GetMediaSink(IMFMediaSink** ppMediaSink);
@@ -87,11 +87,11 @@ class CTedTestMediaTypeHandler
 public:
     CTedTestMediaTypeHandler();
     virtual ~CTedTestMediaTypeHandler();
-    
+
     BEGIN_COM_MAP(CTedTestMediaTypeHandler)
-        COM_INTERFACE_ENTRY(IMFMediaTypeHandler)
+    COM_INTERFACE_ENTRY(IMFMediaTypeHandler)
     END_COM_MAP()
-    
+
     STDMETHODIMP GetCurrentMediaType(IMFMediaType** ppType);
     STDMETHODIMP GetMajorType(GUID* pguidMajorType);
     STDMETHODIMP GetMediaTypeByIndex(DWORD dwIndex, IMFMediaType** ppType);
@@ -101,7 +101,7 @@ public:
 
     STDMETHODIMP AddAvailableType(IMFMediaType* pType);
     STDMETHODIMP SetMajorType(GUID gidMajorType);
-    
+
 private:
     CComPtr<IMFMediaType> m_spCurrentType;
     CAtlArray<IMFMediaType*> m_arrAvailableTypes;

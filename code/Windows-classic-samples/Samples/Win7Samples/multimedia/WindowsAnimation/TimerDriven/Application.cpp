@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -20,7 +20,7 @@ int APIENTRY WinMain(
     HINSTANCE hPrevInstance,
     LPSTR lpCmdLine,
     int nCmdShow
-    )
+)
 {
     HRESULT hr = CoInitialize(NULL);
     if (SUCCEEDED(hr))
@@ -29,7 +29,7 @@ int APIENTRY WinMain(
         {
             ULONG_PTR gdiplusToken;
             GdiplusStartupInput gdiplusStartupInput;
-            
+
             if (GdiplusStartup(&gdiplusToken, &gdiplusStartupInput, NULL) == Ok)
             {
                 {
@@ -45,10 +45,10 @@ int APIENTRY WinMain(
                         }
                     }
                 }
-                
+
                 GdiplusShutdown(gdiplusToken);
             }
-            
+
             BufferedPaintUnInit();
         }
 

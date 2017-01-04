@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -84,6 +84,6 @@ void DisplayDataPlanStatus (_In_ const NLM_DATAPLAN_STATUS *pDataPlanStatus);
 //
 //  Description:This function sorts a list of Ipv4 & Ipv6 addresses, and returns the "best" address that stack determines
 //
-DWORD GetPreferredAddress(_In_ DWORD numElement, 
-                          _In_reads_(numElement) SOCKADDR_IN6 *pAddrList, 
+DWORD GetPreferredAddress(_In_ DWORD numElement,
+                          _In_reads_(numElement) SOCKADDR_IN6 *pAddrList,
                           _Out_ SOCKADDR_STORAGE *pPreferredAddr);

@@ -1,4 +1,4 @@
-// dialogs.h : dialog utilities
+﻿// dialogs.h : dialog utilities
 //
 // Copyright (c) Microsoft Corporation. All rights reserved.
 //
@@ -25,10 +25,10 @@ bool FAILMSG(HRESULT hr)
 class CFileOpenDlg : public CDialogImpl<CFileOpenDlg>
 {
     BEGIN_MSG_MAP(CFileOpenDlg)
-        MESSAGE_HANDLER(WM_INITDIALOG, OnInitDialog)
-        COMMAND_ID_HANDLER(IDOK, OnEndDialog)
-        COMMAND_ID_HANDLER(IDCANCEL, OnEndDialog)
-        COMMAND_ID_HANDLER(IDC_FILEOPEN_BROWSE, OnBrowse)
+    MESSAGE_HANDLER(WM_INITDIALOG, OnInitDialog)
+    COMMAND_ID_HANDLER(IDOK, OnEndDialog)
+    COMMAND_ID_HANDLER(IDCANCEL, OnEndDialog)
+    COMMAND_ID_HANDLER(IDC_FILEOPEN_BROWSE, OnBrowse)
     END_MSG_MAP()
 
     LRESULT OnInitDialog(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/)
@@ -58,7 +58,7 @@ class CFileOpenDlg : public CDialogImpl<CFileOpenDlg>
         ofn.lpstrDefExt = NULL;
         ofn.Flags = OFN_HIDEREADONLY | OFN_FILEMUSTEXIST | OFN_EXPLORER;
         ofn.lpstrFilter = L"All files\0*.*\0";
-        ofn.nFilterIndex = 0; 
+        ofn.nFilterIndex = 0;
         ofn.hwndOwner = m_hWnd;
         ofn.hInstance = _Module.GetResourceInstance();
 
@@ -82,9 +82,9 @@ class CFileOpenDlg : public CDialogImpl<CFileOpenDlg>
 class CStringDlg : public CDialogImpl<CStringDlg>
 {
     BEGIN_MSG_MAP(CStringDlg)
-        MESSAGE_HANDLER(WM_INITDIALOG, OnInitDialog)
-        COMMAND_ID_HANDLER(IDOK, OnEndDialog)
-        COMMAND_ID_HANDLER(IDCANCEL, OnEndDialog)
+    MESSAGE_HANDLER(WM_INITDIALOG, OnInitDialog)
+    COMMAND_ID_HANDLER(IDOK, OnEndDialog)
+    COMMAND_ID_HANDLER(IDCANCEL, OnEndDialog)
     END_MSG_MAP()
 
     CStringDlg(const WCHAR *wszTitle = NULL, const WCHAR *wszInitialValue = NULL)
@@ -129,9 +129,9 @@ class CStringDlg : public CDialogImpl<CStringDlg>
 class CBooleanDlg : public CDialogImpl<CBooleanDlg>
 {
     BEGIN_MSG_MAP(CBooleanDlg)
-        MESSAGE_HANDLER(WM_INITDIALOG, OnInitDialog)
-        COMMAND_ID_HANDLER(IDOK, OnEndDialog)
-        COMMAND_ID_HANDLER(IDCANCEL, OnEndDialog)
+    MESSAGE_HANDLER(WM_INITDIALOG, OnInitDialog)
+    COMMAND_ID_HANDLER(IDOK, OnEndDialog)
+    COMMAND_ID_HANDLER(IDCANCEL, OnEndDialog)
     END_MSG_MAP()
 
     CBooleanDlg(const WCHAR *wszTitle = NULL, VARIANT_BOOL fInitialValue = VARIANT_FALSE)
@@ -146,7 +146,7 @@ class CBooleanDlg : public CDialogImpl<CBooleanDlg>
         {
             SetWindowText(m_bstrTitle);
         }
-        
+
         CheckRadioButton(IDC_BOOLEAN_TRUE, IDC_BOOLEAN_FALSE, (VARIANT_TRUE == m_fValue) ? IDC_BOOLEAN_TRUE : IDC_BOOLEAN_FALSE);
 
         CenterWindow();

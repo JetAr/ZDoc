@@ -1,4 +1,4 @@
-//-----------------------------------------------------------------------------
+﻿//-----------------------------------------------------------------------------
 // File: ComboBox.h
 // Desc: ComboBox control class
 //
@@ -29,8 +29,8 @@ public:
     void ClearItems();
     UINT Count();
 
-	BOOL SetItemData(int nIndex, DWORD_PTR pData);
-	BOOL GetItemData(int nIndex, DWORD_PTR *ppData);
-	BOOL GetCurrentSelectionItemData(DWORD_PTR *pData);
+    BOOL SetItemData(int nIndex, DWORD_PTR pData);
+    BOOL GetItemData(int nIndex, DWORD_PTR *ppData);
+    BOOL GetCurrentSelectionItemData(DWORD_PTR *pData);
 
 };

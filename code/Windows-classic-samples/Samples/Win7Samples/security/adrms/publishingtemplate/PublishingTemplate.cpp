@@ -1,4 +1,4 @@
-/*=====================================================================
+﻿/*=====================================================================
 File:      PublishingTemplate.cpp
 
 THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
@@ -10,8 +10,8 @@ Copyright (C) Microsoft Corporation.  All rights reserved.
 =====================================================================*/
 
 //
-// This sample shows how to create a issuance license from an existing 
-// template. See the comments at the beginning of wmain() for a more 
+// This sample shows how to create a issuance license from an existing
+// template. See the comments at the beginning of wmain() for a more
 // detailed description.
 //
 
@@ -31,19 +31,20 @@ void PrintUsage()
 {
     wprintf( L"Usage:\n" );
     wprintf( L"\n  PublishingTemplate -T Template\n" );
-    wprintf( L"    -T: Template to use for the issuance license \n" );\
+    wprintf( L"    -T: Template to use for the issuance license \n" );
+    \
     wprintf( L"        example: myTemplate.xml\n" );
 }
 
 //
 // Parse the values passed in through the command line
 //
-HRESULT 
-ParseCommandLine( 
-                 int argc, 
-                 __in_ecount( argc )WCHAR **argv, 
-                 __deref_out_opt PWCHAR *pwszTemplate
-                 )
+HRESULT
+ParseCommandLine(
+    int argc,
+    __in_ecount( argc )WCHAR **argv,
+    __deref_out_opt PWCHAR *pwszTemplate
+)
 {
     HRESULT hr               = S_OK;
     size_t  uiTemplateLength = 0;
@@ -68,8 +69,8 @@ ParseCommandLine(
             hr = E_INVALIDARG;
             break;
         }
-        else if ( ( '-' == argv[ i + 1 ][ 0 ] ) || 
-            ( '/' == argv[ i + 1 ][ 0 ] ) )
+        else if ( ( '-' == argv[ i + 1 ][ 0 ] ) ||
+                  ( '/' == argv[ i + 1 ][ 0 ] ) )
         {
             hr = E_INVALIDARG;
             break;
@@ -83,10 +84,10 @@ ParseCommandLine(
             //
             // Retrieve the length of the template name
             //
-            hr = StringCchLengthW( argv[ i + 1 ], 
-                STRSAFE_MAX_CCH, 
-                &uiTemplateLength 
-                );
+            hr = StringCchLengthW( argv[ i + 1 ],
+                                   STRSAFE_MAX_CCH,
+                                   &uiTemplateLength
+                                 );
             if ( FAILED( hr ) )
             {
                 wprintf( L"StringCchLengthW failed.  hr = 0x%x\n", hr );
@@ -96,7 +97,7 @@ ParseCommandLine(
             // Allocate memory for the template name
             //
             *pwszTemplate = new WCHAR[ uiTemplateLength + 1 ];
-            if ( NULL == *pwszTemplate ) 
+            if ( NULL == *pwszTemplate )
             {
                 wprintf( L"Failed to allocate memory for pwszPath\n" );
                 hr = E_OUTOFMEMORY;
@@ -105,10 +106,10 @@ ParseCommandLine(
             //
             // Copy the template name into the pwszTemplate buffer
             //
-            hr = StringCchCopyW( ( wchar_t* )*pwszTemplate, 
-                uiTemplateLength + 1 , 
-                argv[ i + 1 ] 
-            );
+            hr = StringCchCopyW( ( wchar_t* )*pwszTemplate,
+                                 uiTemplateLength + 1,
+                                 argv[ i + 1 ]
+                               );
             if ( FAILED( hr ) )
             {
                 wprintf( L"StringCchCopyW failed.  hr = 0x%x\n", hr );
@@ -135,9 +136,9 @@ ParseCommandLine(
 //
 HRESULT
 ReadFileToWideString(
-                     __in LPCWSTR szFileName,
-                     __deref_out PWCHAR *pwszTemplateString
-                     )
+    __in LPCWSTR szFileName,
+    __deref_out PWCHAR *pwszTemplateString
+)
 {
     HRESULT                    hr            = S_OK;
     HANDLE                     hFile         = INVALID_HANDLE_VALUE;
@@ -148,8 +149,8 @@ ReadFileToWideString(
     // Validate the parameters
     //
     if ( ( NULL == szFileName ) ||
-         ( FAILED( StringCchLengthW( ( LPCWSTR )szFileName, MAX_PATH, NULL ) ) ) ||
-         ( NULL == pwszTemplateString ) )
+            ( FAILED( StringCchLengthW( ( LPCWSTR )szFileName, MAX_PATH, NULL ) ) ) ||
+            ( NULL == pwszTemplateString ) )
     {
         hr = E_INVALIDARG;
         goto e_Exit;
@@ -158,14 +159,14 @@ ReadFileToWideString(
     //
     // Get a handle to the file
     //
-    hFile = CreateFileW( szFileName, 
-                         GENERIC_READ, 
-                         0, 
-                         NULL, 
-                         OPEN_EXISTING, 
-                         0, 
-                         NULL 
-                         );
+    hFile = CreateFileW( szFileName,
+                         GENERIC_READ,
+                         0,
+                         NULL,
+                         OPEN_EXISTING,
+                         0,
+                         NULL
+                       );
     if ( INVALID_HANDLE_VALUE == hFile )
     {
         wprintf( L"CreateFileW failed. hFile == INVALID_HANDLE_VALUE\n" );
@@ -183,8 +184,8 @@ ReadFileToWideString(
     //
     // Check for files that are too long and unsigned integer overflow
     //
-    if ( ( 0 != fileInfo.nFileSizeHigh ) || 
-         ( fileInfo.nFileSizeLow + sizeof( WCHAR ) < fileInfo.nFileSizeLow ) )
+    if ( ( 0 != fileInfo.nFileSizeHigh ) ||
+            ( fileInfo.nFileSizeLow + sizeof( WCHAR ) < fileInfo.nFileSizeLow ) )
     {
         wprintf(L"\nFile too long.\n");
         hr = E_FAIL;
@@ -202,12 +203,12 @@ ReadFileToWideString(
     //
     // Put the contents of the file into pwszTemplateString
     //
-    if ( 0 == ReadFile( hFile, 
-                        *pwszTemplateString, 
-                        fileInfo.nFileSizeLow, 
-                        &dwBytesRead, 
-                        0 
-                        ) )
+    if ( 0 == ReadFile( hFile,
+                        *pwszTemplateString,
+                        fileInfo.nFileSizeLow,
+                        &dwBytesRead,
+                        0
+                      ) )
     {
         hr = HRESULT_FROM_WIN32( GetLastError() );
         goto e_Exit;
@@ -227,11 +228,11 @@ e_Exit:
 //    2.  Create an unsigned issuance license from the template
 //    3.  Clean up and free memory
 //
-int __cdecl 
-wmain( 
-      int argc, 
-      __in_ecount( argc )WCHAR **argv 
-      )
+int __cdecl
+wmain(
+    int argc,
+    __in_ecount( argc )WCHAR **argv
+)
 {
     HRESULT                   hr                 = E_FAIL;
     PWCHAR                    pwszTemplateString = NULL;
@@ -260,14 +261,14 @@ wmain(
     // 2. Create an unsigned issuance license from the template
     //
     hr = DRMCreateIssuanceLicense( NULL,
-        NULL,
-        NULL,
-        NULL,
-        NULL,
-        pwszTemplateString,
-        NULL,
-        &hIssuanceLicense 
-        );
+                                   NULL,
+                                   NULL,
+                                   NULL,
+                                   NULL,
+                                   pwszTemplateString,
+                                   NULL,
+                                   &hIssuanceLicense
+                                 );
     if ( FAILED( hr ) )
     {
         wprintf( L"\nDRMCreateIssuanceLicense failed. hr = 0x%x\n", hr );
@@ -294,7 +295,7 @@ e_Exit:
         if ( FAILED( hr ) )
         {
             wprintf( L"DRMClosePubHandle failed while closing "\
-                L"hIssuanceLicense.  hr = 0x%x\n", hr );
+                     L"hIssuanceLicense.  hr = 0x%x\n", hr );
             hr = E_FAIL;
         }
     }

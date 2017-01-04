@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -42,13 +42,13 @@ HRESULT CALLBACK CustomCreateListener(
 
     // Create the underlying listener using the passed in parameters
     hr = WsCreateListener(
-        channelType,
-        layeredListenerParameters->channelBinding,
-        layeredListenerParameters->listenerProperties,
-        layeredListenerParameters->listenerPropertyCount,
-        layeredListenerParameters->securityDescription,
-        &customListener->listener,
-        error);
+             channelType,
+             layeredListenerParameters->channelBinding,
+             layeredListenerParameters->listenerProperties,
+             layeredListenerParameters->listenerPropertyCount,
+             layeredListenerParameters->securityDescription,
+             &customListener->listener,
+             error);
     if (FAILED(hr))
     {
         goto Exit;
@@ -184,11 +184,11 @@ HRESULT CALLBACK CustomCreateChannelForListener(
 
     // Create the underlying channel using the passed in parameters
     hr = WsCreateChannelForListener(
-        customListener->listener,
-        layeredChannelParameters->channelProperties,
-        layeredChannelParameters->channelPropertyCount,
-        &customChannel->channel,
-        error);
+             customListener->listener,
+             layeredChannelParameters->channelProperties,
+             layeredChannelParameters->channelPropertyCount,
+             &customChannel->channel,
+             error);
     if (FAILED(hr))
     {
         goto Exit;

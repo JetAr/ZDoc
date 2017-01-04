@@ -1,4 +1,4 @@
-#include "CHWMFT_DecodeTask.h"
+﻿#include "CHWMFT_DecodeTask.h"
 #include <Mfapi.h>
 
 #include <initguid.h>
@@ -44,7 +44,8 @@ HRESULT CDecodeTask::Create(
         {
             break;
         }
-    }while(false);
+    }
+    while(false);
 
     SAFERELEASE(pNewDecodeTask);
 
@@ -78,7 +79,8 @@ HRESULT CDecodeTask::Begin(
             break;
         }
 
-    }while(false);
+    }
+    while(false);
 
     SAFERELEASE(pDecodeTask);
     SAFERELEASE(pResult);
@@ -108,7 +110,8 @@ HRESULT CDecodeTask::GetParameters(
 
         (*pdwFlags) = 0;
         (*pdwQueue) = m_dwDecodeWorkQueueID;
-    }while(false);
+    }
+    while(false);
 
     return hr;
 }
@@ -148,7 +151,8 @@ HRESULT CDecodeTask::Invoke(
         {
             break;
         }
-    }while(false);
+    }
+    while(false);
 
     SAFERELEASE(pStateUnk);
     SAFERELEASE(pMYMFT);
@@ -193,7 +197,8 @@ HRESULT CDecodeTask::QueryInterface(
         }
 
         AddRef();
-    }while(false);
+    }
+    while(false);
 
     return hr;
 }
@@ -201,7 +206,7 @@ HRESULT CDecodeTask::QueryInterface(
 ULONG CDecodeTask::Release(void)
 {
     ULONG   ulRef = 0;
-    
+
     if(m_ulRef > 0)
     {
         ulRef = InterlockedDecrement(&m_ulRef);

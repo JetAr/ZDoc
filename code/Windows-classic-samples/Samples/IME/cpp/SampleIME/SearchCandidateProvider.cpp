@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -19,7 +19,7 @@ create instance of CSearchCandidateProvider
 
 ------------------------------------------------------------------------------*/
 HRESULT CSearchCandidateProvider::CreateInstance(_Outptr_ ITfFnSearchCandidateProvider **ppobj, _In_ ITfTextInputProcessorEx *ptip)
-{  
+{
     if (ppobj == nullptr)
     {
         return E_INVALIDARG;
@@ -41,7 +41,7 @@ create instance of CSearchCandidateProvider
 
 ------------------------------------------------------------------------------*/
 HRESULT CSearchCandidateProvider::CreateInstance(REFIID riid, _Outptr_ void **ppvObj, _In_ ITfTextInputProcessorEx *ptip)
-{ 
+{
     if (ppvObj == nullptr)
     {
         return E_INVALIDARG;
@@ -76,7 +76,7 @@ destructor of CSearchCandidateProvider
 
 ------------------------------------------------------------------------------*/
 CSearchCandidateProvider::~CSearchCandidateProvider(void)
-{  
+{
 }
 
 /*------------------------------------------------------------------------------
@@ -153,7 +153,8 @@ STDMETHODIMP CSearchCandidateProvider::GetDisplayName(_Out_ BSTR *pbstrName)
 
 STDMETHODIMP CSearchCandidateProvider::GetSearchCandidates(BSTR bstrQuery, BSTR bstrApplicationID, _Outptr_result_maybenull_ ITfCandidateList **pplist)
 {
-	bstrApplicationID;bstrQuery;
+    bstrApplicationID;
+    bstrQuery;
     HRESULT hr = E_FAIL;
     *pplist = nullptr;
 
@@ -175,10 +176,10 @@ STDMETHODIMP CSearchCandidateProvider::GetSearchCandidates(BSTR bstrQuery, BSTR 
     if (0 < cCand)
     {
         hr = CTipCandidateList::CreateInstance(pplist, cCand);
-		if (FAILED(hr))
-		{
-			return hr;
-		}
+        if (FAILED(hr))
+        {
+            return hr;
+        }
         for (int iCand = 0; iCand < cCand; iCand++)
         {
             ITfCandidateString* pCandStr = nullptr;
@@ -203,7 +204,9 @@ set result
 ------------------------------------------------------------------------------*/
 STDMETHODIMP CSearchCandidateProvider::SetResult(BSTR bstrQuery, BSTR bstrApplicationID, BSTR bstrResult)
 {
-    bstrQuery;bstrApplicationID;bstrResult;
+    bstrQuery;
+    bstrApplicationID;
+    bstrResult;
 
     return E_NOTIMPL;
 }

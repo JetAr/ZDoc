@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -35,7 +35,7 @@ HRESULT CThumbnail::Initialize(
     IUIAnimationManager *pAnimationManager,
     DOUBLE x,
     DOUBLE y
-    )
+)
 {
     m_pBitmap = pBitmap;
     m_pBitmap->AddRef();
@@ -46,15 +46,15 @@ HRESULT CThumbnail::Initialize(
     // Create the animation variables for the x and y coordinates
 
     HRESULT hr = m_pAnimationManager->CreateAnimationVariable(
-        x,
-        &m_pAnimationVariableX
-        );
+                     x,
+                     &m_pAnimationVariableX
+                 );
     if (SUCCEEDED(hr))
     {
         hr = m_pAnimationManager->CreateAnimationVariable(
-            y,
-            &m_pAnimationVariableY
-            );
+                 y,
+                 &m_pAnimationVariableY
+             );
     }
 
     return hr;
@@ -72,40 +72,40 @@ D2D1_SIZE_F CThumbnail::GetSize()
 HRESULT CThumbnail::Render(
     ID2D1HwndRenderTarget* pRT,
     ID2D1Brush *pBrushOutline
-    )
+)
 {
     D2D1_SIZE_F size = GetSize();
-    
+
     DOUBLE x = 0;
     HRESULT hr = m_pAnimationVariableX->GetValue(
-        &x
-        );
+                     &x
+                 );
     if (SUCCEEDED(hr))
     {
         DOUBLE y = 0;
         hr = m_pAnimationVariableY->GetValue(
-            &y
-            );
+                 &y
+             );
         if (SUCCEEDED(hr))
         {
             D2D1_RECT_F rc = D2D1::Rect<FLOAT>(
-                static_cast<FLOAT>(x - 0.5 * size.width),
-                static_cast<FLOAT>(y - 0.5 * size.height),
-                static_cast<FLOAT>(x + 0.5 * size.width),
-                static_cast<FLOAT>(y + 0.5 * size.height) 
-                );
-            
+                                 static_cast<FLOAT>(x - 0.5 * size.width),
+                                 static_cast<FLOAT>(y - 0.5 * size.height),
+                                 static_cast<FLOAT>(x + 0.5 * size.width),
+                                 static_cast<FLOAT>(y + 0.5 * size.height)
+                             );
+
             pRT->DrawBitmap(
                 m_pBitmap,
                 rc,
                 OPACITY
-                );
+            );
 
             pRT->DrawRectangle(
                 rc,
                 pBrushOutline,
                 LINE_WEIGHT
-                );
+            );
         }
     }
 

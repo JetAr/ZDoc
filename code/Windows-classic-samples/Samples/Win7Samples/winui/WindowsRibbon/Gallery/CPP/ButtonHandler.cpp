@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -25,10 +25,10 @@ extern CRenderer   g_renderer;
 //
 //
 STDMETHODIMP CButtonHandler::Execute(UINT nCmdID,
-                   UI_EXECUTIONVERB verb, 
-                   __in_opt const PROPERTYKEY* key,
-                   __in_opt const PROPVARIANT* ppropvarValue,
-                   __in_opt IUISimplePropertySet* pCommandExecutionProperties)
+                                     UI_EXECUTIONVERB verb,
+                                     __in_opt const PROPERTYKEY* key,
+                                     __in_opt const PROPVARIANT* ppropvarValue,
+                                     __in_opt IUISimplePropertySet* pCommandExecutionProperties)
 {
     UNREFERENCED_PARAMETER(ppropvarValue);
     UNREFERENCED_PARAMETER(pCommandExecutionProperties);
@@ -74,9 +74,9 @@ STDMETHODIMP CButtonHandler::Execute(UINT nCmdID,
 //
 //
 STDMETHODIMP CButtonHandler::UpdateProperty(UINT nCmdID,
-                              __in REFPROPERTYKEY key,
-                              __in_opt const PROPVARIANT* ppropvarCurrentValue,
-                              __out PROPVARIANT* ppropvarNewValue)
+        __in REFPROPERTYKEY key,
+        __in_opt const PROPVARIANT* ppropvarCurrentValue,
+        __out PROPVARIANT* ppropvarNewValue)
 {
     UNREFERENCED_PARAMETER(ppropvarCurrentValue);
 
@@ -156,7 +156,7 @@ STDMETHODIMP CButtonHandler::QueryInterface(REFIID iid, void** ppv)
     {
         *ppv = static_cast<IUICommandHandler*>(this);
     }
-    else 
+    else
     {
         *ppv = NULL;
         return E_NOINTERFACE;

@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -27,8 +27,8 @@ public:
     int Run();
 
 private:
-    CApplication(const CApplication &); 
-    CApplication &operator=(const CApplication &); 
+    CApplication(const CApplication &);
+    CApplication &operator=(const CApplication &);
 
 private:
     HRESULT BeforeEnteringMessageLoop();
@@ -64,7 +64,7 @@ private:
 
     HRESULT CreateRotateTransform(float centerX, float centerY, float centerZ, float axisX, float axisY, float axisZ, float angle, IDCompositionRotateTransform3D **rotateTransform);
     HRESULT CreateRotateTransform(float centerX, float centerY, float centerZ, float axisX, float axisY, float axisZ, float beginAngle, float endAngle, float beginTime, float endTime, IDCompositionRotateTransform3D **rotateTransform);
-    
+
     HRESULT CreatePerspectiveTransform(float dx, float dy, float dz, IDCompositionMatrixTransform3D **perspectiveTransform);
 
     HRESULT CreateLinearAnimation(float beginValue, float endValue, float beginTime, float endTime, IDCompositionAnimation **Animation);
@@ -121,7 +121,7 @@ private:
     CComPtr<IDCompositionVisual> _visualRight;
 
     CComPtr<IDCompositionSurface> _surfaceLeftChild[4];
-    
+
     CComPtr<IDCompositionEffectGroup> _effectGroupLeft;
     CComPtr<IDCompositionEffectGroup> _effectGroupLeftChild[4];
     CComPtr<IDCompositionEffectGroup> _effectGroupRight;

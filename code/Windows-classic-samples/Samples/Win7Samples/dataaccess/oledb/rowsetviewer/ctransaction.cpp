@@ -1,4 +1,4 @@
-//-----------------------------------------------------------------------------
+﻿//-----------------------------------------------------------------------------
 // Microsoft OLE DB RowsetViewer
 // Copyright (C) 1994 - 1999 By Microsoft Corporation.
 //
@@ -19,14 +19,14 @@
 // CTransaction::CTransaction
 //
 /////////////////////////////////////////////////////////////////
-CTransaction::CTransaction(CMainWindow* pCMainWindow, CMDIChild* pCMDIChild) 
-	: CContainerBase(eCTransaction, pCMainWindow, pCMDIChild)
+CTransaction::CTransaction(CMainWindow* pCMainWindow, CMDIChild* pCMDIChild)
+    : CContainerBase(eCTransaction, pCMainWindow, pCMDIChild)
 {
-	//OLE DB Interfaces
-	m_pITransaction				= NULL;		//Transaction interface
-	
-	//Extra interfaces
-	m_dwCookieTransNotify		= 0;
+    //OLE DB Interfaces
+    m_pITransaction				= NULL;		//Transaction interface
+
+    //Extra interfaces
+    m_dwCookieTransNotify		= 0;
 }
 
 /////////////////////////////////////////////////////////////////
@@ -35,7 +35,7 @@ CTransaction::CTransaction(CMainWindow* pCMainWindow, CMDIChild* pCMDIChild)
 /////////////////////////////////////////////////////////////////
 CTransaction::~CTransaction()
 {
-	ReleaseObject(0);
+    ReleaseObject(0);
 }
 
 
@@ -45,10 +45,10 @@ CTransaction::~CTransaction()
 /////////////////////////////////////////////////////////////////
 IUnknown** CTransaction::GetInterfaceAddress(REFIID riid)
 {
-	HANDLE_GETINTERFACE(ITransaction);
+    HANDLE_GETINTERFACE(ITransaction);
 
-	//Otherwise delegate
-	return CContainerBase::GetInterfaceAddress(riid);
+    //Otherwise delegate
+    return CContainerBase::GetInterfaceAddress(riid);
 }
 
 
@@ -58,11 +58,11 @@ IUnknown** CTransaction::GetInterfaceAddress(REFIID riid)
 /////////////////////////////////////////////////////////////////
 HRESULT CTransaction::AutoRelease()
 {
-	//DataSource interfaces
-	RELEASE_INTERFACE(ITransaction);
+    //DataSource interfaces
+    RELEASE_INTERFACE(ITransaction);
 
-	//Delegate
-	return CContainerBase::AutoRelease();
+    //Delegate
+    return CContainerBase::AutoRelease();
 }
 
 
@@ -72,35 +72,35 @@ HRESULT CTransaction::AutoRelease()
 /////////////////////////////////////////////////////////////////
 HRESULT CTransaction::AutoQI(DWORD dwCreateOpts)
 {
-	//Delegate First so we have base interfaces
-	CContainerBase::AutoQI(dwCreateOpts);
+    //Delegate First so we have base interfaces
+    CContainerBase::AutoQI(dwCreateOpts);
 
-	//[MANDATORY]
-	if(dwCreateOpts & CREATE_QI_MANDATORY)
-	{
-		OBTAIN_INTERFACE(ITransaction);
-	}
-	
-	//Auto QI
-	if(dwCreateOpts & CREATE_QI_OPTIONAL)
-	{
-	}
+    //[MANDATORY]
+    if(dwCreateOpts & CREATE_QI_MANDATORY)
+    {
+        OBTAIN_INTERFACE(ITransaction);
+    }
 
-	return S_OK;
+    //Auto QI
+    if(dwCreateOpts & CREATE_QI_OPTIONAL)
+    {
+    }
+
+    return S_OK;
 }
 
 
 
-	
+
 ////////////////////////////////////////////////////////////////
 // CTransactionOptions::CTransactionOptions
 //
 /////////////////////////////////////////////////////////////////
-CTransactionOptions::CTransactionOptions(CMainWindow* pCMainWindow, CMDIChild* pCMDIChild) 
-	: CBase(eCTransactionOptions, pCMainWindow, pCMDIChild)
+CTransactionOptions::CTransactionOptions(CMainWindow* pCMainWindow, CMDIChild* pCMDIChild)
+    : CBase(eCTransactionOptions, pCMainWindow, pCMDIChild)
 {
-	//OLE DB Interfaces
-	m_pITransactionOptions		= NULL;		//TransactionOptions interface
+    //OLE DB Interfaces
+    m_pITransactionOptions		= NULL;		//TransactionOptions interface
 }
 
 /////////////////////////////////////////////////////////////////
@@ -109,7 +109,7 @@ CTransactionOptions::CTransactionOptions(CMainWindow* pCMainWindow, CMDIChild* p
 /////////////////////////////////////////////////////////////////
 CTransactionOptions::~CTransactionOptions()
 {
-	ReleaseObject(0);
+    ReleaseObject(0);
 }
 
 
@@ -119,10 +119,10 @@ CTransactionOptions::~CTransactionOptions()
 /////////////////////////////////////////////////////////////////
 IUnknown** CTransactionOptions::GetInterfaceAddress(REFIID riid)
 {
-	HANDLE_GETINTERFACE(ITransactionOptions);
+    HANDLE_GETINTERFACE(ITransactionOptions);
 
-	//Otherwise delegate
-	return CBase::GetInterfaceAddress(riid);
+    //Otherwise delegate
+    return CBase::GetInterfaceAddress(riid);
 }
 
 
@@ -132,11 +132,11 @@ IUnknown** CTransactionOptions::GetInterfaceAddress(REFIID riid)
 /////////////////////////////////////////////////////////////////
 HRESULT CTransactionOptions::AutoRelease()
 {
-	//Interfaces
-	RELEASE_INTERFACE(ITransactionOptions);
+    //Interfaces
+    RELEASE_INTERFACE(ITransactionOptions);
 
-	//Delegate
-	return CBase::AutoRelease();
+    //Delegate
+    return CBase::AutoRelease();
 }
 
 
@@ -146,19 +146,19 @@ HRESULT CTransactionOptions::AutoRelease()
 /////////////////////////////////////////////////////////////////
 HRESULT CTransactionOptions::AutoQI(DWORD dwCreateOpts)
 {
-	//Delegate First so we have base interfaces
-	CBase::AutoQI(dwCreateOpts);
+    //Delegate First so we have base interfaces
+    CBase::AutoQI(dwCreateOpts);
 
-	//[MANDATORY]
-	if(dwCreateOpts & CREATE_QI_MANDATORY)
-	{
-		OBTAIN_INTERFACE(ITransactionOptions);
-	}
-	
-	//Auto QI
-	if(dwCreateOpts & CREATE_QI_OPTIONAL)
-	{
-	}
+    //[MANDATORY]
+    if(dwCreateOpts & CREATE_QI_MANDATORY)
+    {
+        OBTAIN_INTERFACE(ITransactionOptions);
+    }
 
-	return S_OK;
+    //Auto QI
+    if(dwCreateOpts & CREATE_QI_OPTIONAL)
+    {
+    }
+
+    return S_OK;
 }

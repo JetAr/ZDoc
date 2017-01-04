@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -30,14 +30,14 @@ BOOL CSampleIME::_IsRangeCovered(TfEditCookie ec, _In_ ITfRange *pRangeTest, _In
 {
     LONG lResult = 0;;
 
-    if (FAILED(pRangeCover->CompareStart(ec, pRangeTest, TF_ANCHOR_START, &lResult)) 
-        || (lResult > 0))
+    if (FAILED(pRangeCover->CompareStart(ec, pRangeTest, TF_ANCHOR_START, &lResult))
+            || (lResult > 0))
     {
         return FALSE;
     }
 
-    if (FAILED(pRangeCover->CompareEnd(ec, pRangeTest, TF_ANCHOR_END, &lResult)) 
-        || (lResult < 0))
+    if (FAILED(pRangeCover->CompareEnd(ec, pRangeTest, TF_ANCHOR_END, &lResult))
+            || (lResult < 0))
     {
         return FALSE;
     }
@@ -53,7 +53,8 @@ BOOL CSampleIME::_IsRangeCovered(TfEditCookie ec, _In_ ITfRange *pRangeTest, _In
 
 VOID CSampleIME::_DeleteCandidateList(BOOL isForce, _In_opt_ ITfContext *pContext)
 {
-    isForce;pContext;
+    isForce;
+    pContext;
 
     CCompositionProcessorEngine* pCompositionProcessorEngine = nullptr;
     pCompositionProcessorEngine = _pCompositionProcessorEngine;
@@ -228,7 +229,7 @@ HRESULT CSampleIME::_CreateAndStartCandidate(_In_ CCompositionProcessorEngine *p
     HRESULT hr = S_OK;
 
     if (((_candidateMode == CANDIDATE_PHRASE) && (_pCandidateListUIPresenter))
-        || ((_candidateMode == CANDIDATE_NONE) && (_pCandidateListUIPresenter)))
+            || ((_candidateMode == CANDIDATE_NONE) && (_pCandidateListUIPresenter)))
     {
         // Recreate candidate list
         _pCandidateListUIPresenter->_EndCandidateList();
@@ -242,9 +243,9 @@ HRESULT CSampleIME::_CreateAndStartCandidate(_In_ CCompositionProcessorEngine *p
     if (_pCandidateListUIPresenter == nullptr)
     {
         _pCandidateListUIPresenter = new (std::nothrow) CCandidateListUIPresenter(this, Global::AtomCandidateWindow,
-            CATEGORY_CANDIDATE,
-            pCompositionProcessorEngine->GetCandidateListIndexRange(),
-            FALSE);
+                CATEGORY_CANDIDATE,
+                pCompositionProcessorEngine->GetCandidateListIndexRange(),
+                FALSE);
         if (!_pCandidateListUIPresenter)
         {
             return E_OUTOFMEMORY;
@@ -369,15 +370,15 @@ HRESULT CSampleIME::_HandleCompositionConvert(TfEditCookie ec, _In_ ITfContext *
             _isCandidateWithWildcard = FALSE;
         }
 
-        // 
+        //
         // create an instance of the candidate list class.
-        // 
+        //
         if (_pCandidateListUIPresenter == nullptr)
         {
             _pCandidateListUIPresenter = new (std::nothrow) CCandidateListUIPresenter(this, Global::AtomCandidateWindow,
-                CATEGORY_CANDIDATE,
-                pCompositionProcessorEngine->GetCandidateListIndexRange(),
-                FALSE);
+                    CATEGORY_CANDIDATE,
+                    pCompositionProcessorEngine->GetCandidateListIndexRange(),
+                    FALSE);
             if (!_pCandidateListUIPresenter)
             {
                 return E_OUTOFMEMORY;
@@ -491,7 +492,7 @@ HRESULT CSampleIME::_HandleCompositionArrowKey(TfEditCookie ec, _In_ ITfContext 
 
     // get the selection
     if (FAILED(pContext->GetSelection(ec, TF_DEFAULT_SELECTION, 1, &tfSelection, &fetched))
-        || fetched != 1)
+            || fetched != 1)
     {
         // no selection, eat the keystroke
         return S_OK;

@@ -1,4 +1,4 @@
-//
+﻿//
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -43,7 +43,7 @@ typedef struct __PollingThreadArgument
     MI_Context* contextForStarted;
     MI_Context* contextForStopped;
 
-}PollingThreadArgument;
+} PollingThreadArgument;
 
 // Polling thread procedure
 DWORD WINAPI ThreadProc(__in LPVOID lpParameter);
@@ -54,18 +54,18 @@ typedef struct __WindowsService
     LPWSTR pName;
     DWORD dwState;
     struct __WindowsService * pNextService;
-}WindowsService;
+} WindowsService;
 
 // Helper function used to enable ServiceStarted indication
 MI_Result EnableServiceStartedIndication(__in MI_Context *context,
-                                         _In_opt_z_ const MI_Char *lpwszNamespace);
+        _In_opt_z_ const MI_Char *lpwszNamespace);
 
 // Helper function used to disable ServiceStarted indication
 MI_Result DisableServiceStartedIndication(__in MI_Context *context);
 
 // Helper function used to enable ServiceStopped indication
 MI_Result EnableServiceStoppedIndication(__in MI_Context *context,
-                                         _In_opt_z_ const MI_Char *lpwszNamespace);
+        _In_opt_z_ const MI_Char *lpwszNamespace);
 
 // Helper function used to disable ServiceStopped indication
 MI_Result DisableServiceStoppedIndication(__in MI_Context *context);

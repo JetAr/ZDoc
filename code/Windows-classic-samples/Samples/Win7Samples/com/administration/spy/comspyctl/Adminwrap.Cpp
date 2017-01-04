@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -50,19 +50,19 @@ CComBSTR g_bstrTransientSubscriberProperties(L"TransientSubscriberProperties");
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 HRESULT AddTransientSubscription(
-        __in ICOMAdminCatalog* pCatalog,
-        __in LPCWSTR pwszSubName,
-        __in LPCWSTR pwszECID,
-        __in_opt LPCWSTR pwszPubID,
-        __in LPCWSTR pwszIID,
-        __in IUnknown *punk,
-        __in_opt LPCWSTR pwszMethod,
-        __in_opt LPCWSTR pwszCriteria,
-        __in ULONG cPubProps,
-        __in_ecount_opt(cPubProps) SubscriptionProperty* pubProps,
-        __in ULONG cSubProps,
-        __in_ecount_opt(cSubProps) SubscriptionProperty* subProps,
-        __deref_out BSTR* pbstrSubscriptionID)
+    __in ICOMAdminCatalog* pCatalog,
+    __in LPCWSTR pwszSubName,
+    __in LPCWSTR pwszECID,
+    __in_opt LPCWSTR pwszPubID,
+    __in LPCWSTR pwszIID,
+    __in IUnknown *punk,
+    __in_opt LPCWSTR pwszMethod,
+    __in_opt LPCWSTR pwszCriteria,
+    __in ULONG cPubProps,
+    __in_ecount_opt(cPubProps) SubscriptionProperty* pubProps,
+    __in ULONG cSubProps,
+    __in_ecount_opt(cSubProps) SubscriptionProperty* subProps,
+    __deref_out BSTR* pbstrSubscriptionID)
 {
     HRESULT                     hr;
     CComPtr<ICatalogObject>     pCatObjSub;
@@ -70,7 +70,7 @@ HRESULT AddTransientSubscription(
     CComPtr<IDispatch>          pDisp;
     LONG                        lIgnored;
     bool                        fCreate = false, fComplete = false;
-    
+
     if (!pCatalog || !pwszSubName || !punk || !pbstrSubscriptionID)
         return E_INVALIDARG;
 
@@ -166,7 +166,7 @@ HRESULT AddTransientSubscription(
 
             hr = SetStringProperty(pCatObjProp, g_bstrName, subProps[i].pwszPropName);
             if_failed_exit(hr);
-        
+
             hr = pCatObjProp->put_Value(g_bstrValue, subProps[i].varPropVal);
             if_failed_exit(hr);
         }
@@ -176,7 +176,7 @@ HRESULT AddTransientSubscription(
     }
 
     fComplete = true;
-    
+
 exit:
     if (fCreate && !fComplete)
         RemoveTransientSubscription(pCatalog, *pbstrSubscriptionID);
@@ -193,8 +193,8 @@ exit:
 // Return Value : HRESULT
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 HRESULT RemoveTransientSubscription(
-        __in ICOMAdminCatalog* pCatalog,
-        __in BSTR bstrSubscriptionID)
+    __in ICOMAdminCatalog* pCatalog,
+    __in BSTR bstrSubscriptionID)
 {
     HRESULT                        hr;
     CComPtr<ICatalogCollection> pCatCollSubs;
@@ -215,14 +215,14 @@ HRESULT RemoveTransientSubscription(
     if (lCount == 0)
         exit_with_result(E_UNEXPECTED);
 
-    // Loop through 
+    // Loop through
     for (lIndex = 0; lIndex < lCount; lIndex++)
     {
         // Get the next item
         CComPtr<IDispatch> pDisp;
         hr = pCatCollSubs->get_Item(lIndex, &pDisp);
         if_failed_exit(hr);
-        
+
         CComPtr<ICatalogObject> pCatObjSub;
         hr = pDisp->QueryInterface(IID_PPV_ARGS(&pCatObjSub));
         if_failed_exit(hr);
@@ -265,16 +265,16 @@ exit:
 // Return Value : HRESULT
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 HRESULT GetCollection(
-        __in ICOMAdminCatalog* pCatalog,
-        __in BSTR bstrCollName,
-        __deref_out ICatalogCollection** ppCatColl)
+    __in ICOMAdminCatalog* pCatalog,
+    __in BSTR bstrCollName,
+    __deref_out ICatalogCollection** ppCatColl)
 {
     HRESULT hr;
     CComPtr<IDispatch> pDisp;
 
-    if (!pCatalog || !bstrCollName || !ppCatColl) 
+    if (!pCatalog || !bstrCollName || !ppCatColl)
         return E_INVALIDARG;
-    
+
     hr = pCatalog->GetCollection(bstrCollName, &pDisp);
     if_failed_exit(hr);
 
@@ -297,12 +297,12 @@ exit:
 //              : BSTR bstrCollName                 - Collection Name
 //              : ICatalogCollection** ppCatColl    - Collection returned
 // Return Value : HRESULT
-////////////////////////////////////////////////////////////////////////////////////////////////////    
+////////////////////////////////////////////////////////////////////////////////////////////////////
 HRESULT GetCollection(
-        __in ICatalogCollection* pCatCollParent,
-        __in ICatalogObject* pCatObjParent,
-        __in BSTR bstrCollName,
-        __deref_out ICatalogCollection** ppCatColl)
+    __in ICatalogCollection* pCatCollParent,
+    __in ICatalogObject* pCatObjParent,
+    __in BSTR bstrCollName,
+    __deref_out ICatalogCollection** ppCatColl)
 {
     HRESULT hr;
     CComVariant var;
@@ -335,11 +335,11 @@ exit:
 //              : BSTR bstrPropName                 -  Name of the property
 //              : LPCWSTR pwszVal                   -  Value of the property
 // Return Value : HRESULT
-////////////////////////////////////////////////////////////////////////////////////////////////////    
+////////////////////////////////////////////////////////////////////////////////////////////////////
 HRESULT SetStringProperty(
-        __in ICatalogObject* pCatObj,
-        __in BSTR bstrPropName,
-        __in_opt LPCWSTR pwszVal)
+    __in ICatalogObject* pCatObj,
+    __in BSTR bstrPropName,
+    __in_opt LPCWSTR pwszVal)
 {
     if (!pCatObj || !bstrPropName)
         return E_INVALIDARG;
@@ -359,11 +359,11 @@ HRESULT SetStringProperty(
 //              : BSTR bstrPropName                 -  Name of the property
 //              : IUnknown* punk                    -  Value of the property
 // Return Value : HRESULT
-////////////////////////////////////////////////////////////////////////////////////////////////////    
+////////////////////////////////////////////////////////////////////////////////////////////////////
 HRESULT SetIUnknownProperty(
-        __in ICatalogObject* pCatObj,
-        __in BSTR bstrPropName,
-        __in IUnknown* punk)
+    __in ICatalogObject* pCatObj,
+    __in BSTR bstrPropName,
+    __in IUnknown* punk)
 {
     if (!pCatObj || !bstrPropName || !punk)
         return E_INVALIDARG;
@@ -380,11 +380,11 @@ HRESULT SetIUnknownProperty(
 //              : BSTR bstrPropName                 -  Name of the property
 //              : BSTR* pbstrVal                    -  Value of the property
 // Return Value : HRESULT
-////////////////////////////////////////////////////////////////////////////////////////////////////    
+////////////////////////////////////////////////////////////////////////////////////////////////////
 HRESULT GetStringProperty(
-        __in ICatalogObject* pCatObj,
-        __in BSTR bstrPropName,
-        __deref_out BSTR* pbstrVal)
+    __in ICatalogObject* pCatObj,
+    __in BSTR bstrPropName,
+    __deref_out BSTR* pbstrVal)
 {
     HRESULT hr;
 

@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -7,14 +7,14 @@
 
 
 /*
-   
+
 
     File Replication Sample
     File Replication Client Utility
-    
+
     FILE: FileRep.cpp
-    
-    USAGE: 
+
+    USAGE:
         FileRep [server name] [remote file] [local file] <options...>
 
     OPTIONS:
@@ -22,12 +22,12 @@
         -p protocol_sequence
         -e endpoint
         -d print messages
-                         
+
     PURPOSE: Client utility for the file replication application
-    
+
     FUNCTIONS: main() - binds to replication server and requests
         file replication.
-    
+
     COMMENTS:
 
 */
@@ -56,7 +56,8 @@
 
     COMMENTS:
 */
-void PrintUsage(TCHAR *ProgName) {
+void PrintUsage(TCHAR *ProgName)
+{
     _tprintf_s(TEXT("%s - File Replication Client Utility\n\n"), ProgName);
     _tprintf_s(TEXT("Usage: %s [server name] [remote file] [local file] <options...> \n\n"), ProgName);
     _tprintf_s(TEXT("Options:\n"));
@@ -82,7 +83,8 @@ void PrintUsage(TCHAR *ProgName) {
     COMMENTS:
 
 */
-INT _cdecl main(int argc, char **argv) {
+INT _cdecl main(int argc, char **argv)
+{
 
     INT i;
     RPC_STATUS rpcstatus;
@@ -133,11 +135,12 @@ INT _cdecl main(int argc, char **argv) {
     PSID pSID = (PSID)&sidBuffer;
 #endif
 
-    // Get a common handle on the command line arguments for both 
+    // Get a common handle on the command line arguments for both
     // UNICODE and ASCII
 #ifdef _UNICODE
     LPWSTR *szArgList = CommandLineToArgvW(GetCommandLine(), &nNumArgs);
-    if (NULL == szArgList) {
+    if (NULL == szArgList)
+    {
         _tprintf_s(TEXT("FileRep main: CommandLineToArgW failed"));
         exit(EXIT_FAILURE);
     }
@@ -147,7 +150,8 @@ INT _cdecl main(int argc, char **argv) {
 #endif
 
     // Check that the correct number of arguments is given.
-    if(nNumArgs<4){
+    if(nNumArgs<4)
+    {
         PrintUsage(szArgList[0]);
         exit(EXIT_FAILURE);
     }
@@ -158,68 +162,78 @@ INT _cdecl main(int argc, char **argv) {
     LocalFileName = szArgList[3];
 
     // Allow the user to override settings with command line switches.
-    for (i = 4; i < nNumArgs; i++) {
+    for (i = 4; i < nNumArgs; i++)
+    {
         // Well-formed argument switches start with '/' or '-' and are
         // two characters long.
-        if (((*szArgList[i] == TEXT('-')) || (*szArgList[i] == TEXT('/'))) && _tcsclen(szArgList[i]) == 2) {
+        if (((*szArgList[i] == TEXT('-')) || (*szArgList[i] == TEXT('/'))) && _tcsclen(szArgList[i]) == 2)
+        {
 
-            switch (_totlower(*(szArgList[i]+1))) {
+            switch (_totlower(*(szArgList[i]+1)))
+            {
 
-                case TEXT('p'):
+            case TEXT('p'):
 
-                    // Override protocol sequence.
+                // Override protocol sequence.
 
-                    // Check that the next argument exists and is not a
-                    // switch.
-                    if(i+1 < nNumArgs && *szArgList[i+1] != TEXT('-') && *szArgList[i+1] != TEXT('/')) {
-                        pszProtocolSequence = (RPC_STR)szArgList[++i];
-                    }
-                    // Otherwise we have an empty protocol sequence.
-                    else {
-                        // We do not allow an empty protocol sequence.
-                        _tprintf_s(TEXT("Protocol sequence can't be \"\".\n"));
-                        exit(EXIT_FAILURE);
-                    }
-                    
-                    break;
-                    
-                case TEXT('n'):
+                // Check that the next argument exists and is not a
+                // switch.
+                if(i+1 < nNumArgs && *szArgList[i+1] != TEXT('-') && *szArgList[i+1] != TEXT('/'))
+                {
+                    pszProtocolSequence = (RPC_STR)szArgList[++i];
+                }
+                // Otherwise we have an empty protocol sequence.
+                else
+                {
+                    // We do not allow an empty protocol sequence.
+                    _tprintf_s(TEXT("Protocol sequence can't be \"\".\n"));
+                    exit(EXIT_FAILURE);
+                }
 
-                    // Override the network address.
-                    if(i+1 < nNumArgs && *szArgList[i+1] != TEXT('-') && *szArgList[i+1] != TEXT('/')) {
-                        pszNetworkAddress = (RPC_STR)szArgList[++i];
-                    }
-                    else {
-                        pszNetworkAddress = (RPC_STR)TEXT("");
-                    }
-                    
-                    break;
-                    
-                case TEXT('e'):
+                break;
 
-                    // Override the endpoint.
-                    if(i+1 < nNumArgs && *szArgList[i+1] != TEXT('-') && *szArgList[i+1] != TEXT('/')) {
-                        pszEndpoint = (RPC_STR)szArgList[++i];
-                    }
-                    else {
-                        pszEndpoint = (RPC_STR)TEXT("");
-                    }
-                    
-                    break;
-                    
-                case TEXT('d'):
-                    // Turn on debugging.
-                    bDebug = TRUE;
-                    break; 
-                    
-                case TEXT('h'):
-                case TEXT('?'):
-                default:
-                    PrintUsage(szArgList[0]);
-                    exit(EXIT_SUCCESS);
+            case TEXT('n'):
+
+                // Override the network address.
+                if(i+1 < nNumArgs && *szArgList[i+1] != TEXT('-') && *szArgList[i+1] != TEXT('/'))
+                {
+                    pszNetworkAddress = (RPC_STR)szArgList[++i];
+                }
+                else
+                {
+                    pszNetworkAddress = (RPC_STR)TEXT("");
+                }
+
+                break;
+
+            case TEXT('e'):
+
+                // Override the endpoint.
+                if(i+1 < nNumArgs && *szArgList[i+1] != TEXT('-') && *szArgList[i+1] != TEXT('/'))
+                {
+                    pszEndpoint = (RPC_STR)szArgList[++i];
+                }
+                else
+                {
+                    pszEndpoint = (RPC_STR)TEXT("");
+                }
+
+                break;
+
+            case TEXT('d'):
+                // Turn on debugging.
+                bDebug = TRUE;
+                break;
+
+            case TEXT('h'):
+            case TEXT('?'):
+            default:
+                PrintUsage(szArgList[0]);
+                exit(EXIT_SUCCESS);
             }
         }
-        else {
+        else
+        {
             PrintUsage(szArgList[0]);
             exit(EXIT_FAILURE);
         }
@@ -233,7 +247,8 @@ INT _cdecl main(int argc, char **argv) {
                                         pszEndpoint,
                                         pszOptions,
                                         &pszStringBinding);
-    if(bDebug){
+    if(bDebug)
+    {
         _tprintf_s(TEXT("RpcStringBindingCompose returned 0x%x\n"), rpcstatus);
         _tprintf_s(TEXT("pszStringBinding = %s\n"), pszStringBinding);
     }
@@ -269,7 +284,8 @@ INT _cdecl main(int argc, char **argv) {
     if (AllocateAndInitializeSid(&SIDAuth, 1,
                                  SECURITY_NETWORK_SERVICE_RID,
                                  0, 0, 0, 0, 0, 0, 0,
-                                 &pSID) == 0) {
+                                 &pSID) == 0)
+    {
         printf_s("AllocateAndInitializeSid failed\n");
         exit(EXIT_FAILURE);
     }
@@ -280,7 +296,8 @@ INT _cdecl main(int argc, char **argv) {
                          &cbName, // size of account name buffer
                          DomainName, // domain name
                          &cbDomainName, // size of domain name buffer
-                         &Use) == 0) { // SID type
+                         &Use) == 0)   // SID type
+    {
         printf_s("LookupAccountSid failed\n");
         exit(EXIT_FAILURE);
     }
@@ -295,7 +312,7 @@ INT _cdecl main(int argc, char **argv) {
     // context for the current address space.
     // The security level is "PRIVACY" since it is the only level
     // provided by LRPC.
-    // We are assured of talking to a local service running with 
+    // We are assured of talking to a local service running with
     // system privileges.
     rpcstatus = RpcBindingSetAuthInfoEx(hFileRepClient, pszServerPrincipalName, RPC_C_AUTHN_LEVEL_PKT_PRIVACY, RPC_C_AUTHN_WINNT, NULL, NULL, &SecurityQOS);
     RPC_EEINFO_EXIT_IF_FAIL(rpcstatus, TEXT("RpcBindingSetAuthInfo"));
@@ -303,11 +320,12 @@ INT _cdecl main(int argc, char **argv) {
 #endif
 
     // Make the RPC to request file replication.
-    RpcTryExcept {
+    RpcTryExcept
+    {
         if(bDebug) _tprintf_s(TEXT("Calling the remote procedure RequestFile(hFileRepClient, %s, %s, %s)\n"), ServerName, RemoteFileName, LocalFileName);
 
         RequestFile(hFileRepClient, ServerName, RemoteFileName, LocalFileName);
-        
+
         if(bDebug) _tprintf_s(TEXT("RequestFile() finished\n"));
     }
     // Return "non-fatal" errors.  Catching fatal errors
@@ -317,9 +335,10 @@ INT _cdecl main(int argc, char **argv) {
                   (RpcExceptionCode() != STATUS_PRIVILEGED_INSTRUCTION) &&
                   (RpcExceptionCode() != STATUS_ILLEGAL_INSTRUCTION) &&
                   (RpcExceptionCode() != STATUS_BREAKPOINT))
-                  ? EXCEPTION_EXECUTE_HANDLER : EXCEPTION_CONTINUE_SEARCH ) {
-     
-	    PrintProcFailureEEInfo(TEXT("RequestFile"), RpcExceptionCode()); 
+                ? EXCEPTION_EXECUTE_HANDLER : EXCEPTION_CONTINUE_SEARCH )
+    {
+
+        PrintProcFailureEEInfo(TEXT("RequestFile"), RpcExceptionCode());
         exit(EXIT_FAILURE);
     }
     RpcEndExcept;
@@ -327,9 +346,9 @@ INT _cdecl main(int argc, char **argv) {
     // Free the binding.
     rpcstatus = RpcBindingFree((VOID **)&hFileRepClient);
     ASSERT(rpcstatus == RPC_S_OK);
-    
+
     if(bDebug) _tprintf_s(TEXT("Success!\n"));
-    
+
     return(EXIT_SUCCESS);
 
 } // end main()
@@ -338,12 +357,15 @@ INT _cdecl main(int argc, char **argv) {
     MIDL allocate() and free()
 */
 
-VOID __RPC_FAR * __RPC_API midl_user_allocate(size_t len) {
+VOID __RPC_FAR * __RPC_API midl_user_allocate(size_t len)
+{
     return(AutoHeapAlloc(len));
 }
 
-VOID __RPC_API midl_user_free(VOID __RPC_FAR * ptr) {
-    if(ptr != NULL) {
+VOID __RPC_API midl_user_free(VOID __RPC_FAR * ptr)
+{
+    if(ptr != NULL)
+    {
         AutoHeapFree(ptr);
     }
 }

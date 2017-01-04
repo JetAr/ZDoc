@@ -1,4 +1,4 @@
-//////////////////////////////////////////////////////////////////////
+﻿//////////////////////////////////////////////////////////////////////
 //
 //  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 //  ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED
@@ -40,7 +40,7 @@ static WCHAR c_szMenuItemDescriptionShowPopupWindow[] = L"Show PopupWindow";
 //----------------------------------------------------------------------------
 
 class CLangBarItemButton : public ITfLangBarItemButton,
-                           public ITfSource
+    public ITfSource
 {
 public:
     CLangBarItemButton(CPropertyMonitorTextService *pTextService);
@@ -130,8 +130,8 @@ STDAPI CLangBarItemButton::QueryInterface(REFIID riid, void **ppvObj)
     *ppvObj = NULL;
 
     if (IsEqualIID(riid, IID_IUnknown) ||
-        IsEqualIID(riid, IID_ITfLangBarItem) ||
-        IsEqualIID(riid, IID_ITfLangBarItemButton))
+            IsEqualIID(riid, IID_ITfLangBarItem) ||
+            IsEqualIID(riid, IID_ITfLangBarItemButton))
     {
         *ppvObj = (ITfLangBarItemButton *)this;
     }
@@ -248,22 +248,22 @@ STDAPI CLangBarItemButton::OnClick(TfLBIClick click, POINT pt, const RECT *prcAr
 
 STDAPI CLangBarItemButton::InitMenu(ITfMenu *pMenu)
 {
-    // 
+    //
     // Add the fisrt menu item.
-    // 
+    //
     DWORD dwFlags = 0;
     if (_pTextService->_GetPopupWindow() &&
-        _pTextService->_GetPopupWindow()->IsShown())
+            _pTextService->_GetPopupWindow()->IsShown())
     {
         dwFlags |= TF_LBMENUF_CHECKED;
     }
 
     pMenu->AddMenuItem(MENUITEM_INDEX_SHOWPOPUPWINDOW,
-                       dwFlags, 
-                       NULL, 
-                       NULL, 
-                       c_szMenuItemDescriptionShowPopupWindow, 
-                       (ULONG)lstrlen(c_szMenuItemDescriptionShowPopupWindow), 
+                       dwFlags,
+                       NULL,
+                       NULL,
+                       c_szMenuItemDescriptionShowPopupWindow,
+                       (ULONG)lstrlen(c_szMenuItemDescriptionShowPopupWindow),
                        NULL);
 
     return S_OK;
@@ -282,15 +282,15 @@ STDAPI CLangBarItemButton::OnMenuSelect(UINT wID)
     //
     switch (wID)
     {
-        case MENUITEM_INDEX_SHOWPOPUPWINDOW:
-            if (_pTextService->_GetPopupWindow())
-            {
-                if (_pTextService->_GetPopupWindow()->IsShown())
-                    _pTextService->_GetPopupWindow()->Hide();
-                else
-                    _pTextService->_GetPopupWindow()->Show();
-            }
-            break;
+    case MENUITEM_INDEX_SHOWPOPUPWINDOW:
+        if (_pTextService->_GetPopupWindow())
+        {
+            if (_pTextService->_GetPopupWindow()->IsShown())
+                _pTextService->_GetPopupWindow()->Hide();
+            else
+                _pTextService->_GetPopupWindow()->Show();
+        }
+        break;
 
     }
 
@@ -306,7 +306,7 @@ STDAPI CLangBarItemButton::OnMenuSelect(UINT wID)
 STDAPI CLangBarItemButton::GetIcon(HICON *phIcon)
 {
     *phIcon = (HICON)LoadImage(g_hInst, TEXT("IDI_TEXTSERVICE"), IMAGE_ICON, 16, 16, 0);
- 
+
     return (*phIcon != NULL) ? S_OK : E_FAIL;
 }
 
@@ -367,9 +367,9 @@ STDAPI CLangBarItemButton::AdviseSink(REFIID riid, IUnknown *punk, DWORD *pdwCoo
 
 STDAPI CLangBarItemButton::UnadviseSink(DWORD dwCookie)
 {
-    // 
+    //
     // Check the given cookie.
-    // 
+    //
     if (dwCookie != TEXTSERVICE_LANGBARITEMSINK_COOKIE)
         return CONNECT_E_NOCONNECTION;
 

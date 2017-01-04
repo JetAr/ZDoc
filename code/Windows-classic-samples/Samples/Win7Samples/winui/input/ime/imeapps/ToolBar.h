@@ -1,4 +1,4 @@
-
+﻿
 // Global variable for Toolbar window
 extern HWND hWndToolbar;
 

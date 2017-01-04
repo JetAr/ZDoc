@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -58,7 +58,7 @@ CTask::~CTask()
 void CTask::LoadContent(DWORD* pdwSize, BYTE** ppbData)
 {
     if (NULL == pdwSize ||
-        NULL == ppbData)
+            NULL == ppbData)
     {
         return;
     }
@@ -105,22 +105,22 @@ LPSTR CTask::GetContentXML()
 
     CXmlElement* pBody = xmlDoc.AddElement(L"body");
     CXmlElement* pContent = pBody->AddElement(L"content");
-        pContent->AddAttribute(L"id", GetID());
-        pContent->AddAttribute(L"title", GetName());
-        CXmlElement* pCategory = pContent->AddElement(L"txt");
-            pCategory->AddText(m_wszCategory);
-        CXmlElement* pDetails = pContent->AddElement(L"txt");
-            pDetails->AddText(m_wszDetails);
-        CXmlElement* pDueTime = pContent->AddElement(L"txt");
-            pDueTime->AddText(m_wszTimeDue);
+    pContent->AddAttribute(L"id", GetID());
+    pContent->AddAttribute(L"title", GetName());
+    CXmlElement* pCategory = pContent->AddElement(L"txt");
+    pCategory->AddText(m_wszCategory);
+    CXmlElement* pDetails = pContent->AddElement(L"txt");
+    pDetails->AddText(m_wszDetails);
+    CXmlElement* pDueTime = pContent->AddElement(L"txt");
+    pDueTime->AddText(m_wszTimeDue);
 
-        CXmlElement* pLeftBtn = pContent->AddElement(L"btn");
-            pLeftBtn->AddAttribute(L"key", L"left");
-            pLeftBtn->AddAttribute(L"target", m_prevId);
+    CXmlElement* pLeftBtn = pContent->AddElement(L"btn");
+    pLeftBtn->AddAttribute(L"key", L"left");
+    pLeftBtn->AddAttribute(L"target", m_prevId);
 
-        CXmlElement* pRightBtn = pContent->AddElement(L"btn");
-            pRightBtn->AddAttribute(L"key", L"right");
-            pRightBtn->AddAttribute(L"target", m_nextId);
+    CXmlElement* pRightBtn = pContent->AddElement(L"btn");
+    pRightBtn->AddAttribute(L"key", L"right");
+    pRightBtn->AddAttribute(L"target", m_nextId);
 
     BSTR bstrXml;
     xmlDoc.GetXml(&bstrXml);

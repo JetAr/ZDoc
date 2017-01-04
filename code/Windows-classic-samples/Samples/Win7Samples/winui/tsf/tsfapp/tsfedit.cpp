@@ -1,4 +1,4 @@
-/**************************************************************************
+﻿/**************************************************************************
    THIS CODE AND INFORMATION IS PROVIDED 'AS IS' WITHOUT WARRANTY OF
    ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
    THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -24,7 +24,7 @@
 #include <ctffunc.h>
 
 /*
-None of the GUIDs in TSATTRS.H are defined in a LIB, so you have to include 
+None of the GUIDs in TSATTRS.H are defined in a LIB, so you have to include
 INITGUID.H just before the first time you include TSATTRS.H
 */
 #include <initguid.h>
@@ -91,7 +91,7 @@ CTSFEditWnd::CTSFEditWnd(HINSTANCE hInstance, HWND hwndParent)
 CTSFEditWnd::~CTSFEditWnd()
 {
     /*
-    Make sure the advise sink is cleaned up. This should have been done 
+    Make sure the advise sink is cleaned up. This should have been done
     before, but this is just in case.
     */
     _ClearAdviseSink(&m_AdviseSink);
@@ -101,7 +101,7 @@ CTSFEditWnd::~CTSFEditWnd()
         m_pServices->Release();
         m_pServices = NULL;
     }
-    
+
     _Uninitialize();
 }
 
@@ -116,7 +116,7 @@ BOOL CTSFEditWnd::_Initialize(ITfThreadMgr *ptm, TfClientId tfcId)
     HRESULT hr;
 
     InitCommonControls();
-    
+
     m_tfClientID = tfcId;
     hr = ptm->QueryInterface(IID_ITfThreadMgr, (LPVOID*)&m_pThreadMgr);
     if(FAILED(hr))
@@ -125,28 +125,28 @@ BOOL CTSFEditWnd::_Initialize(ITfThreadMgr *ptm, TfClientId tfcId)
     }
 
     hr = CoCreateInstance(  CLSID_TF_CategoryMgr,
-                            NULL, 
-                            CLSCTX_INPROC_SERVER, 
-                            IID_ITfCategoryMgr, 
+                            NULL,
+                            CLSCTX_INPROC_SERVER,
+                            IID_ITfCategoryMgr,
                             (LPVOID*)&m_pCategoryMgr);
     if(FAILED(hr))
     {
         return FALSE;
     }
-    
+
 
     //create the display attribute manager
     hr = CoCreateInstance(  CLSID_TF_DisplayAttributeMgr,
-                            NULL, 
-                            CLSCTX_INPROC_SERVER, 
-                            IID_ITfDisplayAttributeMgr, 
+                            NULL,
+                            CLSCTX_INPROC_SERVER,
+                            IID_ITfDisplayAttributeMgr,
                             (LPVOID*)&m_pDisplayAttrMgr);
     if(FAILED(hr))
     {
         return FALSE;
     }
 
-    
+
     //create the document manager
     hr = m_pThreadMgr->CreateDocumentMgr(&m_pDocMgr);
     if(FAILED(hr))
@@ -155,10 +155,10 @@ BOOL CTSFEditWnd::_Initialize(ITfThreadMgr *ptm, TfClientId tfcId)
     }
 
     //create the context
-    hr = m_pDocMgr->CreateContext(  tfcId, 
-                                    0, 
-                                    (ITextStoreACP*)this, 
-                                    &m_pContext, 
+    hr = m_pDocMgr->CreateContext(  tfcId,
+                                    0,
+                                    (ITextStoreACP*)this,
+                                    &m_pContext,
                                     &m_EditCookie);
     if(FAILED(hr))
     {
@@ -171,7 +171,7 @@ BOOL CTSFEditWnd::_Initialize(ITfThreadMgr *ptm, TfClientId tfcId)
     {
         return FALSE;
     }
-    
+
     WNDCLASS  wc;
 
     //If the class is not already registered, register it.
@@ -200,9 +200,9 @@ BOOL CTSFEditWnd::_Initialize(ITfThreadMgr *ptm, TfClientId tfcId)
                                 g_szTSFEditClassName,
                                 NULL,
                                 WS_OVERLAPPED |
-                                    WS_CHILD |
-                                    WS_VISIBLE |
-                                    WS_TABSTOP,
+                                WS_CHILD |
+                                WS_VISIBLE |
+                                WS_TABSTOP,
                                 CW_USEDEFAULT,
                                 CW_USEDEFAULT,
                                 CW_USEDEFAULT,
@@ -217,13 +217,13 @@ BOOL CTSFEditWnd::_Initialize(ITfThreadMgr *ptm, TfClientId tfcId)
         m_hwndEdit = CreateWindowEx(    WS_EX_CLIENTEDGE,
                                         TEXT("edit"),
                                         NULL,
-                                        WS_CLIPSIBLINGS | 
-                                            WS_CHILD | 
-                                            WS_VISIBLE | 
-                                            WS_BORDER | 
-                                            WS_VSCROLL | 
-                                            ES_AUTOVSCROLL | 
-                                            ES_MULTILINE,
+                                        WS_CLIPSIBLINGS |
+                                        WS_CHILD |
+                                        WS_VISIBLE |
+                                        WS_BORDER |
+                                        WS_VSCROLL |
+                                        ES_AUTOVSCROLL |
+                                        ES_MULTILINE,
                                         0, 0, 0, 0,
                                         m_hWnd,
                                         (HMENU)IDC_EDIT,
@@ -247,9 +247,9 @@ BOOL CTSFEditWnd::_Initialize(ITfThreadMgr *ptm, TfClientId tfcId)
 
 #ifdef USE_ASSOC_FOCUS
         /*
-        Associate the focus with this window. The TSF Manager watches for 
-        focus changes throughout the system. When a window handle that has 
-        been associated gets the focus, it then knows the window receiving 
+        Associate the focus with this window. The TSF Manager watches for
+        focus changes throughout the system. When a window handle that has
+        been associated gets the focus, it then knows the window receiving
         the focus is TSF enabled.
         */
         hr = m_pThreadMgr->AssociateFocus(m_hwndEdit, m_pDocMgr, &m_pPrevDocMgr);
@@ -257,7 +257,7 @@ BOOL CTSFEditWnd::_Initialize(ITfThreadMgr *ptm, TfClientId tfcId)
 
         //initialize the supported attributes
         TfGuidAtom guidatom;
-        
+
         //mode bias
         m_rgAttributes[ATTR_INDEX_MODEBIAS].dwFlags = 0;
         m_rgAttributes[ATTR_INDEX_MODEBIAS].attrid = &GUID_PROP_MODEBIAS;
@@ -285,7 +285,7 @@ BOOL CTSFEditWnd::_Initialize(ITfThreadMgr *ptm, TfClientId tfcId)
         m_rgAttributes[ATTR_INDEX_TEXT_VERTICALWRITING].varDefaultValue.lVal = FALSE;
 
         _InitFunctionProvider();
-        
+
         UpdateWindow(m_hWnd);
 
         return TRUE;
@@ -310,7 +310,7 @@ void CTSFEditWnd::_Uninitialize()
         ITfDocumentMgr *pTempDocMgr = NULL;
 
         /*
-        Its okay if m_pPrevDocMgr is NULL as this will just disassociate the 
+        Its okay if m_pPrevDocMgr is NULL as this will just disassociate the
         focus from the window.
         */
         m_pThreadMgr->AssociateFocus(m_hwndEdit, m_pPrevDocMgr, &pTempDocMgr);
@@ -319,7 +319,7 @@ void CTSFEditWnd::_Uninitialize()
         {
             pTempDocMgr->Release();
         }
-    
+
         if(m_pPrevDocMgr)
         {
             m_pPrevDocMgr->Release();
@@ -340,7 +340,7 @@ void CTSFEditWnd::_Uninitialize()
         {
             //pop all of the contexts off of the stack
             m_pDocMgr->Pop(TF_POPF_ALL);
-        
+
             m_pDocMgr->Release();
             m_pDocMgr = NULL;
         }
@@ -350,13 +350,13 @@ void CTSFEditWnd::_Uninitialize()
             m_pDisplayAttrMgr->Release();
             m_pDisplayAttrMgr = NULL;
         }
-        
+
         if(m_pContext)
         {
             m_pContext->Release();
             m_pContext = NULL;
         }
-    
+
         if(m_pCategoryMgr)
         {
             m_pCategoryMgr->Release();
@@ -371,7 +371,7 @@ void CTSFEditWnd::_Uninitialize()
 /**************************************************************************
 
    CTSFEditWnd::_GetWindow()
-   
+
 **************************************************************************/
 
 HWND CTSFEditWnd::_GetWindow()
@@ -382,14 +382,14 @@ HWND CTSFEditWnd::_GetWindow()
 /**************************************************************************
 
    CTSFEditWnd::_OnGetPreservedKey()
-   
+
 **************************************************************************/
 
 HRESULT CTSFEditWnd::_OnGetPreservedKey()
 {
     HRESULT hr;
     ITfKeystrokeMgr *pKeyMgr;
-    
+
     hr = m_pThreadMgr->QueryInterface(IID_ITfKeystrokeMgr, (LPVOID*)&pKeyMgr);
     if(SUCCEEDED(hr))
     {
@@ -398,7 +398,7 @@ HRESULT CTSFEditWnd::_OnGetPreservedKey()
 
         tfPreKey.uVKey = 'F';
         tfPreKey.uModifiers = TF_MOD_CONTROL;
-        
+
         hr = pKeyMgr->GetPreservedKey(m_pContext, &tfPreKey, &guid);
 
         if(SUCCEEDED(hr) && !IsEqualGUID(guid, GUID_NULL))
@@ -407,13 +407,13 @@ HRESULT CTSFEditWnd::_OnGetPreservedKey()
 
             hr = pKeyMgr->IsPreservedKey(guid, &tfPreKey, &fPreserved);
 
-        
+
             BOOL    fEaten;
 
             guid.Data1 = 12;
             hr = pKeyMgr->SimulatePreservedKey(m_pContext, guid, &fEaten);
         }
-        
+
         pKeyMgr->Release();
     }
 
@@ -423,12 +423,12 @@ HRESULT CTSFEditWnd::_OnGetPreservedKey()
 /**************************************************************************
 
    CTSFEditWnd::_WndProc()
-   
+
 **************************************************************************/
 
-LRESULT CALLBACK CTSFEditWnd::_WndProc( HWND hWnd, 
-                                        UINT uMessage, 
-                                        WPARAM wParam, 
+LRESULT CALLBACK CTSFEditWnd::_WndProc( HWND hWnd,
+                                        UINT uMessage,
+                                        WPARAM wParam,
                                         LPARAM lParam)
 {
     CTSFEditWnd *pThis = (CTSFEditWnd*)GetWindowLongPtr(hWnd, THIS_POINTER_OFFSET);
@@ -437,29 +437,29 @@ LRESULT CALLBACK CTSFEditWnd::_WndProc( HWND hWnd,
     {
         return DefWindowProc(hWnd, uMessage, wParam, lParam);
     }
-    
+
     switch (uMessage)
     {
     case WM_NCCREATE:
-        {
-            LPCREATESTRUCT lpcs = (LPCREATESTRUCT)lParam;
-            pThis = (CTSFEditWnd*)(lpcs->lpCreateParams);
-            SetWindowLongPtr(hWnd, THIS_POINTER_OFFSET, (LONG_PTR)pThis);
+    {
+        LPCREATESTRUCT lpcs = (LPCREATESTRUCT)lParam;
+        pThis = (CTSFEditWnd*)(lpcs->lpCreateParams);
+        SetWindowLongPtr(hWnd, THIS_POINTER_OFFSET, (LONG_PTR)pThis);
 
-            //set the window handle
-            pThis->m_hWnd = hWnd;
+        //set the window handle
+        pThis->m_hWnd = hWnd;
 
-            /*
-            AddRef() the object. Release() will be called in WM_NCDESTROY. 
-            Many owners will call Release during their WM_DESTROY, but the 
-            child window isn't destroyed until after the parent, so the object 
-            gets deleted while the window still exists. Calling Release() 
-            ourselves in WM_NCDESTROY ensures the object exists for the entire 
-            life of the window.
-            */
-            pThis->AddRef();
-        }
-        break;
+        /*
+        AddRef() the object. Release() will be called in WM_NCDESTROY.
+        Many owners will call Release during their WM_DESTROY, but the
+        child window isn't destroyed until after the parent, so the object
+        gets deleted while the window still exists. Calling Release()
+        ourselves in WM_NCDESTROY ensures the object exists for the entire
+        life of the window.
+        */
+        pThis->AddRef();
+    }
+    break;
 
     case WM_CREATE:
         return pThis->_OnCreate();
@@ -477,13 +477,13 @@ LRESULT CALLBACK CTSFEditWnd::_WndProc( HWND hWnd,
         return pThis->_OnKillFocus();
 
     case WM_COMMAND:
-        return pThis->_OnCommand(   GET_WM_COMMAND_ID(wParam, lParam), 
-                                    GET_WM_COMMAND_CMD(wParam, lParam), 
+        return pThis->_OnCommand(   GET_WM_COMMAND_ID(wParam, lParam),
+                                    GET_WM_COMMAND_CMD(wParam, lParam),
                                     GET_WM_COMMAND_HWND(wParam, lParam));
 
     case WM_NCDESTROY:
         pThis->Release();
-        
+
         pThis->m_hWnd = NULL;
         break;
 
@@ -512,9 +512,9 @@ LRESULT CTSFEditWnd::_OnCreate(VOID)
 LRESULT CTSFEditWnd::_OnDestroy(VOID)
 {
     _Uninitialize();
-    
+
     PostQuitMessage(0);
-    
+
     return 0;
 }
 
@@ -538,7 +538,7 @@ LRESULT CTSFEditWnd::_OnCommand(WORD wID, WORD wCmd, HWND hWnd)
         case EN_KILLFOCUS:
             _OnEditKillFocus();
             break;
-        
+
         case EN_CHANGE:
             _OnEditChange();
             break;
@@ -559,7 +559,7 @@ LRESULT CTSFEditWnd::_OnCommand(WORD wID, WORD wCmd, HWND hWnd)
 LRESULT CTSFEditWnd::_OnSetFocus(VOID)
 {
     OutputDebugString(TEXT("CTSFEditWnd::_OnSetFocus\n"));
-    
+
     SetFocus(m_hwndEdit);
 
     return 0;
@@ -574,7 +574,7 @@ LRESULT CTSFEditWnd::_OnSetFocus(VOID)
 LRESULT CTSFEditWnd::_OnEditSetFocus(VOID)
 {
     OutputDebugString(TEXT("CTSFEditWnd::_OnEditSetFocus\n"));
-    
+
 #ifndef USE_ASSOC_FOCUS
     m_pThreadMgr->SetFocus(m_pDocMgr);
 #endif
@@ -611,7 +611,7 @@ LRESULT CTSFEditWnd::_OnEditChange(void)
 
         m_cchOldLength = cch;
     }
-    
+
     return 0;
 }
 
@@ -624,7 +624,7 @@ LRESULT CTSFEditWnd::_OnEditChange(void)
 LRESULT CTSFEditWnd::_OnKillFocus(VOID)
 {
     OutputDebugString(TEXT("CTSFEditWnd::_OnKillFocus\n"));
-    
+
     return 0;
 }
 
@@ -637,7 +637,7 @@ LRESULT CTSFEditWnd::_OnKillFocus(VOID)
 LRESULT CTSFEditWnd::_OnEditKillFocus(VOID)
 {
     OutputDebugString(TEXT("CTSFEditWnd::_OnEditKillFocus\n"));
-    
+
     return 0;
 }
 
@@ -666,12 +666,12 @@ LRESULT CTSFEditWnd::_OnSize(WPARAM wParam, LPARAM lParam)
     RECT    rc;
 
     GetWindowRect(m_hwndStatus, &rc);
-    
-    MoveWindow( m_hwndEdit, 
-                0, 
-                0, 
-                LOWORD(lParam), 
-                HIWORD(lParam) - (rc.bottom - rc.top), 
+
+    MoveWindow( m_hwndEdit,
+                0,
+                0,
+                LOWORD(lParam),
+                HIWORD(lParam) - (rc.bottom - rc.top),
                 TRUE);
 
     m_AdviseSink.pTextStoreACPSink->OnLayoutChange(TS_LC_CHANGE, EDIT_VIEW_COOKIE);
@@ -685,14 +685,14 @@ LRESULT CTSFEditWnd::_OnSize(WPARAM wParam, LPARAM lParam)
 
 **************************************************************************/
 
-BOOL CTSFEditWnd::_IsLocked(DWORD dwLockType) 
-{ 
+BOOL CTSFEditWnd::_IsLocked(DWORD dwLockType)
+{
     if(m_dwInternalLockType)
     {
         return TRUE;
     }
 
-    return m_fLocked && (m_dwLockType & dwLockType); 
+    return m_fLocked && (m_dwLockType & dwLockType);
 }
 
 /**************************************************************************
@@ -732,10 +732,10 @@ BOOL CTSFEditWnd::_LockDocument(DWORD dwLockFlags)
     {
         return FALSE;
     }
-    
+
     m_fLocked = TRUE;
     m_dwLockType = dwLockFlags;
-    
+
     return TRUE;
 }
 
@@ -748,7 +748,7 @@ BOOL CTSFEditWnd::_LockDocument(DWORD dwLockFlags)
 BOOL CTSFEditWnd::_InternalLockDocument(DWORD dwLockFlags)
 {
     m_dwInternalLockType = dwLockFlags;
-    
+
     return TRUE;
 }
 
@@ -761,10 +761,10 @@ BOOL CTSFEditWnd::_InternalLockDocument(DWORD dwLockFlags)
 void CTSFEditWnd::_UnlockDocument()
 {
     HRESULT hr;
-    
+
     m_fLocked = FALSE;
     m_dwLockType = 0;
-    
+
     //if there is a pending lock upgrade, grant it
     if(m_fPendingLockUpgrade)
     {
@@ -850,7 +850,7 @@ void CTSFEditWnd::_UpdateStatusBar(void)
     nParts[0] = size.cx + (GetSystemMetrics(SM_CXEDGE) * 4);
 
     nParts[1] = -1;
-    
+
     SendMessage(m_hwndStatus, SB_SIMPLE, FALSE, 0);
     SendMessage(m_hwndStatus, SB_SETPARTS, ARRAYSIZE(nParts), (LPARAM)nParts);
 
@@ -878,7 +878,7 @@ void CTSFEditWnd::_UpdateStatusBar(void)
 LRESULT CTSFEditWnd::_OnInitMenuPopup(WPARAM wParam, LPARAM lParam)
 {
     HMENU hMenu = (HMENU)wParam;
-    
+
     if(NULL != hMenu)
     {
         EnableMenuItem(hMenu, IDM_TERMINATE_COMPOSITION, m_cCompositions ? MF_ENABLED : MF_DISABLED | MF_GRAYED);
@@ -922,7 +922,7 @@ void CTSFEditWnd::_ClearText(void)
     }
 
     _LockDocument(TS_LF_READWRITE);
-    
+
     //empty the text in the edit control, but don't send a change notification
     BOOL    fOldNotify = m_fNotify;
     m_fNotify = FALSE;
@@ -931,14 +931,14 @@ void CTSFEditWnd::_ClearText(void)
 
     //update current selection
     m_acpStart = m_acpEnd = 0;
-    
+
     //notify TSF about the changes
     m_AdviseSink.pTextStoreACPSink->OnSelectionChange();
-    
+
     _OnEditChange();
-    
+
     _UnlockDocument();
-    
+
     // make sure to send the OnLayoutChange notification AFTER releasing the lock
     // so clients can do something useful during the notification
     m_AdviseSink.pTextStoreACPSink->OnLayoutChange(TS_LC_CHANGE, EDIT_VIEW_COOKIE);
@@ -954,25 +954,25 @@ HRESULT CTSFEditWnd::_GetText(LPWSTR *ppwsz, LPLONG pcch)
 {
     DWORD   cch;
     LPWSTR  pwszText;
-    
+
     *ppwsz = NULL;
-    
+
     cch = GetWindowTextLength(m_hwndEdit);
     pwszText = (LPWSTR)GlobalAlloc(GMEM_FIXED, (cch + 1) * sizeof(WCHAR));
     if(NULL == pwszText)
     {
         return E_OUTOFMEMORY;
     }
-    
+
     GetWindowTextW(m_hwndEdit, pwszText, cch + 1);
 
     *ppwsz = pwszText;
-    
+
     if(pcch)
     {
         *pcch = cch;
     }
-    
+
     return S_OK;
 }
 
@@ -1014,10 +1014,10 @@ void CTSFEditWnd::_GetDisplayAttributes(void)
                 ULONG       uFetched;
 
                 /*
-                Each range in pEnumRanges represents a span of text that has 
+                Each range in pEnumRanges represents a span of text that has
                 the same properties specified in TrackProperties.
                 */
-                while((hr = pEnumRanges->Next(1, &pPropRange, &uFetched)) == S_OK && uFetched) 
+                while((hr = pEnumRanges->Next(1, &pPropRange, &uFetched)) == S_OK && uFetched)
                 {
                     //get the attribute property for the property range
                     VARIANT var;
@@ -1028,7 +1028,7 @@ void CTSFEditWnd::_GetDisplayAttributes(void)
                     if(SUCCEEDED(hr))
                     {
                         /*
-                        The property is actually a VT_UNKNOWN that contains an 
+                        The property is actually a VT_UNKNOWN that contains an
                         IEnumTfPropertyValue object.
                         */
                         IEnumTfPropertyValue    *pEnumPropertyVal;
@@ -1038,7 +1038,7 @@ void CTSFEditWnd::_GetDisplayAttributes(void)
                         {
                             TF_PROPERTYVAL tfPropVal;
 
-                            while((hr = pEnumPropertyVal->Next(1, &tfPropVal, &uFetched)) == S_OK && uFetched) 
+                            while((hr = pEnumPropertyVal->Next(1, &tfPropVal, &uFetched)) == S_OK && uFetched)
                             {
                                 if(VT_EMPTY == tfPropVal.varValue.vt)
                                 {
@@ -1062,7 +1062,7 @@ void CTSFEditWnd::_GetDisplayAttributes(void)
                                         if(SUCCEEDED(hr))
                                         {
                                             TF_DISPLAYATTRIBUTE da;
-                                            
+
                                             hr = pDispInfo->GetAttributeInfo(&da);
 
                                             {
@@ -1080,7 +1080,7 @@ void CTSFEditWnd::_GetDisplayAttributes(void)
                                                     SysFreeString(bstr);
                                                 }
                                             }
-                                            
+
                                             pDispInfo->Release();
                                         }
                                     }
@@ -1090,22 +1090,22 @@ void CTSFEditWnd::_GetDisplayAttributes(void)
                                     //the property is not recognized
                                 }
                             }
-                            
+
                             pEnumPropertyVal->Release();
                         }
-                        
+
                         VariantClear(&var);
                     }
-                    
+
                     pPropRange->Release();
                 }
-                
+
                 pEnumRanges->Release();
             }
 
             pRangeAllText->Release();
         }
-        
+
         pTrackProperty->Release();
     }
 }
@@ -1148,10 +1148,10 @@ void CTSFEditWnd::_GetTextOwner(void)
                 ULONG       uFetched;
 
                 /*
-                Each range in pEnumRanges represents a span of text that has 
+                Each range in pEnumRanges represents a span of text that has
                 the same properties specified in TrackProperties.
                 */
-                while((hr = pEnumRanges->Next(1, &pPropRange, &uFetched)) == S_OK && uFetched) 
+                while((hr = pEnumRanges->Next(1, &pPropRange, &uFetched)) == S_OK && uFetched)
                 {
                     //get the attribute property for the property range
                     VARIANT var;
@@ -1162,7 +1162,7 @@ void CTSFEditWnd::_GetTextOwner(void)
                     if(SUCCEEDED(hr))
                     {
                         /*
-                        The property is actually a VT_UNKNOWN that contains an 
+                        The property is actually a VT_UNKNOWN that contains an
                         IEnumTfPropertyValue object.
                         */
                         IEnumTfPropertyValue    *pEnumPropertyVal;
@@ -1172,7 +1172,7 @@ void CTSFEditWnd::_GetTextOwner(void)
                         {
                             TF_PROPERTYVAL tfPropVal;
 
-                            while((hr = pEnumPropertyVal->Next(1, &tfPropVal, &uFetched)) == S_OK && uFetched) 
+                            while((hr = pEnumPropertyVal->Next(1, &tfPropVal, &uFetched)) == S_OK && uFetched)
                             {
                                 /*
                                 The GUID_PROP_TEXTOWNER attribute value is the CLSID of the text service that owns the text. If the text is not owned, the value is VT_EMPTY.
@@ -1200,22 +1200,22 @@ void CTSFEditWnd::_GetTextOwner(void)
                                     //the property is not recognized
                                 }
                             }
-                            
+
                             pEnumPropertyVal->Release();
                         }
-                        
+
                         VariantClear(&var);
                     }
-                    
+
                     pPropRange->Release();
                 }
-                
+
                 pEnumRanges->Release();
             }
 
             pRangeAllText->Release();
         }
-        
+
         pTrackProperty->Release();
     }
 }
@@ -1258,10 +1258,10 @@ void CTSFEditWnd::_GetReadingText(void)
                 ULONG       uFetched;
 
                 /*
-                Each range in pEnumRanges represents a span of text that has 
+                Each range in pEnumRanges represents a span of text that has
                 the same properties specified in TrackProperties.
                 */
-                while((hr = pEnumRanges->Next(1, &pPropRange, &uFetched)) == S_OK && uFetched) 
+                while((hr = pEnumRanges->Next(1, &pPropRange, &uFetched)) == S_OK && uFetched)
                 {
                     //get the attribute property for the property range
                     VARIANT var;
@@ -1272,7 +1272,7 @@ void CTSFEditWnd::_GetReadingText(void)
                     if(SUCCEEDED(hr))
                     {
                         /*
-                        The property is actually a VT_UNKNOWN that contains an 
+                        The property is actually a VT_UNKNOWN that contains an
                         IEnumTfPropertyValue object.
                         */
                         IEnumTfPropertyValue    *pEnumPropertyVal;
@@ -1282,7 +1282,7 @@ void CTSFEditWnd::_GetReadingText(void)
                         {
                             TF_PROPERTYVAL tfPropVal;
 
-                            while((hr = pEnumPropertyVal->Next(1, &tfPropVal, &uFetched)) == S_OK && uFetched) 
+                            while((hr = pEnumPropertyVal->Next(1, &tfPropVal, &uFetched)) == S_OK && uFetched)
                             {
                                 /*
                                 The GUID_PROP_TEXTOWNER attribute value is the CLSID of the text service that owns the text. If the text is not owned, the value is VT_EMPTY.
@@ -1308,22 +1308,22 @@ void CTSFEditWnd::_GetReadingText(void)
                                     //the property is not recognized
                                 }
                             }
-                            
+
                             pEnumPropertyVal->Release();
                         }
-                        
+
                         VariantClear(&var);
                     }
-                    
+
                     pPropRange->Release();
                 }
-                
+
                 pEnumRanges->Release();
             }
 
             pRangeAllText->Release();
         }
-        
+
         pTrackProperty->Release();
     }
 }
@@ -1366,10 +1366,10 @@ void CTSFEditWnd::_GetComposing(void)
                 ULONG       uFetched;
 
                 /*
-                Each range in pEnumRanges represents a span of text that has 
+                Each range in pEnumRanges represents a span of text that has
                 the same properties specified in TrackProperties.
                 */
-                while((hr = pEnumRanges->Next(1, &pPropRange, &uFetched)) == S_OK && uFetched) 
+                while((hr = pEnumRanges->Next(1, &pPropRange, &uFetched)) == S_OK && uFetched)
                 {
                     //get the attribute property for the property range
                     VARIANT var;
@@ -1380,7 +1380,7 @@ void CTSFEditWnd::_GetComposing(void)
                     if(SUCCEEDED(hr))
                     {
                         /*
-                        The property is actually a VT_UNKNOWN that contains an 
+                        The property is actually a VT_UNKNOWN that contains an
                         IEnumTfPropertyValue object.
                         */
                         IEnumTfPropertyValue    *pEnumPropertyVal;
@@ -1390,7 +1390,7 @@ void CTSFEditWnd::_GetComposing(void)
                         {
                             TF_PROPERTYVAL tfPropVal;
 
-                            while((hr = pEnumPropertyVal->Next(1, &tfPropVal, &uFetched)) == S_OK && uFetched) 
+                            while((hr = pEnumPropertyVal->Next(1, &tfPropVal, &uFetched)) == S_OK && uFetched)
                             {
                                 /*
                                 The GUID_PROP_COMPOSING attribute value is a VT_I4 that contains a boolean indicating if the text is part of a composition.
@@ -1415,22 +1415,22 @@ void CTSFEditWnd::_GetComposing(void)
                                     //the property is not recognized
                                 }
                             }
-                            
+
                             pEnumPropertyVal->Release();
                         }
-                        
+
                         VariantClear(&var);
                     }
-                    
+
                     pPropRange->Release();
                 }
-                
+
                 pEnumRanges->Release();
             }
 
             pRangeAllText->Release();
         }
-        
+
         pTrackProperty->Release();
     }
 }
@@ -1446,14 +1446,14 @@ BOOL CTSFEditWnd::_CanReconvertSelection(void)
     BOOL                fConv = FALSE;
     HRESULT             hr;
     ITfFunctionProvider *pFuncProv;
-    
+
     _InternalLockDocument(TS_LF_READ);
 
     hr = m_pThreadMgr->GetFunctionProvider(GUID_SYSTEM_FUNCTIONPROVIDER, &pFuncProv);
     if(SUCCEEDED(hr))
     {
         ITfFnReconversion  *pRecon;
-        
+
         hr = pFuncProv->GetFunction(GUID_NULL, IID_ITfFnReconversion, (IUnknown**)&pRecon);
         if(SUCCEEDED(hr))
         {
@@ -1464,16 +1464,16 @@ BOOL CTSFEditWnd::_CanReconvertSelection(void)
             if(SUCCEEDED(hr))
             {
                 ITfRange    *pRange = NULL;
-            
+
                 hr = pRecon->QueryRange(ts.range, &pRange, &fConv);
                 if(SUCCEEDED(hr) && pRange)
                 {
                     pRange->Release();
                 }
-            
-            ts.range->Release();
+
+                ts.range->Release();
             }
-            
+
             pRecon->Release();
         }
 
@@ -1495,14 +1495,14 @@ void CTSFEditWnd::_Reconvert(void)
 {
     HRESULT hr;
     ITfFunctionProvider *pFuncProv;
-    
+
     _InternalLockDocument(TS_LF_READ);
 
     hr = m_pThreadMgr->GetFunctionProvider(GUID_SYSTEM_FUNCTIONPROVIDER, &pFuncProv);
     if(SUCCEEDED(hr))
     {
         ITfFnReconversion  *pRecon;
-        
+
         hr = pFuncProv->GetFunction(GUID_NULL, IID_ITfFnReconversion, (IUnknown**)&pRecon);
         if(SUCCEEDED(hr))
         {
@@ -1514,7 +1514,7 @@ void CTSFEditWnd::_Reconvert(void)
             {
                 ITfRange    *pRange;
                 BOOL        fConv;
-            
+
                 //get the range that covers the text to be reconverted
                 hr = pRecon->QueryRange(ts.range, &pRange, &fConv);
                 if(SUCCEEDED(hr) && pRange)
@@ -1525,7 +1525,7 @@ void CTSFEditWnd::_Reconvert(void)
                         pRange->GetText(m_EditCookie, 0, wsz, MAX_PATH-1, &cch);
                         wsz[cch] = 0;
                     }
-                    
+
                     //get the list of reconversion candidates
                     ITfCandidateList    *pCandList;
                     hr = pRecon->GetReconversion(pRange, &pCandList);
@@ -1557,7 +1557,7 @@ void CTSFEditWnd::_Reconvert(void)
                                 pCandString->Release();
                             }
                         }
-                        
+
                         pCandList->Release();
                     }
                     //cause the reconversion to happen
@@ -1565,13 +1565,13 @@ void CTSFEditWnd::_Reconvert(void)
 
                 }
             }
-            
+
             pRecon->Release();
         }
 
         pFuncProv->Release();
     }
-    
+
     _InternalUnlockDocument();
 }
 
@@ -1586,14 +1586,14 @@ BOOL CTSFEditWnd::_CanPlaybackSelection(void)
     BOOL                fCanPlayback = FALSE;
     HRESULT             hr;
     ITfFunctionProvider *pFuncProv;
-    
+
     _InternalLockDocument(TS_LF_READ);
 
     hr = m_pThreadMgr->GetFunctionProvider(CLSID_SapiLayr, &pFuncProv);
     if(SUCCEEDED(hr))
     {
         ITfFnPlayBack *pPlayback;
-        
+
         hr = pFuncProv->GetFunction(GUID_NULL, IID_ITfFnPlayBack, (IUnknown**)&pPlayback);
         if(SUCCEEDED(hr))
         {
@@ -1604,16 +1604,16 @@ BOOL CTSFEditWnd::_CanPlaybackSelection(void)
             if(SUCCEEDED(hr))
             {
                 ITfRange    *pRange = NULL;
-            
+
                 hr = pPlayback->QueryRange(ts.range, &pRange, &fCanPlayback);
                 if(SUCCEEDED(hr) && pRange)
                 {
                     pRange->Release();
                 }
-            
-            ts.range->Release();
+
+                ts.range->Release();
             }
-            
+
             pPlayback->Release();
         }
 
@@ -1635,14 +1635,14 @@ void CTSFEditWnd::_Playback(void)
 {
     HRESULT             hr;
     ITfFunctionProvider *pFuncProv;
-    
+
     _InternalLockDocument(TS_LF_READ);
 
     hr = m_pThreadMgr->GetFunctionProvider(CLSID_SapiLayr, &pFuncProv);
     if(SUCCEEDED(hr))
     {
         ITfFnPlayBack *pPlayback;
-        
+
         hr = pFuncProv->GetFunction(GUID_NULL, IID_ITfFnPlayBack, (IUnknown**)&pPlayback);
         if(SUCCEEDED(hr))
         {
@@ -1654,18 +1654,18 @@ void CTSFEditWnd::_Playback(void)
             {
                 BOOL        fCanPlayback;
                 ITfRange    *pRange = NULL;
-            
+
                 hr = pPlayback->QueryRange(ts.range, &pRange, &fCanPlayback);
                 if(SUCCEEDED(hr) && pRange)
                 {
                     hr = pPlayback->Play(pRange);
-                    
+
                     pRange->Release();
                 }
-            
-            ts.range->Release();
+
+                ts.range->Release();
             }
-            
+
             pPlayback->Release();
         }
 
@@ -1716,7 +1716,7 @@ STDMETHODIMP CTSFEditWnd::QueryInterface(REFIID riid, LPVOID *ppReturn)
     }
 
     return E_NOINTERFACE;
-}                                             
+}
 
 /**************************************************************************
 
@@ -1743,7 +1743,7 @@ STDMETHODIMP_(DWORD) CTSFEditWnd::Release()
         delete this;
         return 0;
     }
-   
+
     return m_ObjRefCount;
 }
 

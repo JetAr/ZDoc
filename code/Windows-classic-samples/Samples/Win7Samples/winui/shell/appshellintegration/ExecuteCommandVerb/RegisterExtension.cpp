@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -14,13 +14,20 @@
 #pragma comment(lib, "crypt32.lib")
 #pragma comment(lib, "shlwapi.lib")     // link to this
 
-__inline HRESULT ResultFromKnownLastError() { const DWORD err = GetLastError(); return err == ERROR_SUCCESS ? E_FAIL : HRESULT_FROM_WIN32(err); }
+__inline HRESULT ResultFromKnownLastError()
+{
+    const DWORD err = GetLastError();
+    return err == ERROR_SUCCESS ? E_FAIL : HRESULT_FROM_WIN32(err);
+}
 
 // retrieve the HINSTANCE for the current DLL or EXE using this symbol that
 // the linker provides for every module, avoids the need for a global HINSTANCE variable
 // and provides access to this value for static libraries
 EXTERN_C IMAGE_DOS_HEADER __ImageBase;
-__inline HINSTANCE GetModuleHINSTANCE() { return (HINSTANCE)&__ImageBase; }
+__inline HINSTANCE GetModuleHINSTANCE()
+{
+    return (HINSTANCE)&__ImageBase;
+}
 
 CRegisterExtension::CRegisterExtension(REFCLSID clsid /* = CLSID_NULL */, HKEY hkeyRoot /* = HKEY_CURRENT_USER */) : _hkeyRoot(hkeyRoot), _fAssocChanged(false)
 {
@@ -141,28 +148,32 @@ HRESULT CRegisterExtension::RegisterElevatableInProcServer(PCWSTR pszFriendlyNam
         if (SUCCEEDED(hr))
         {
             const unsigned char c_rgAccessPermission[] =
-                {0x01,0x00,0x04,0x80,0x60,0x00,0x00,0x00,0x70,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x14,
-                 0x00,0x00,0x00,0x02,0x00,0x4c,0x00,0x03,0x00,0x00,0x00,0x00,0x00,0x14,0x00,0x03,0x00,
-                 0x00,0x00,0x01,0x01,0x00,0x00,0x00,0x00,0x00,0x05,0x12,0x00,0x00,0x00,0x00,0x00,0x14,
-                 0x00,0x07,0x00,0x00,0x00,0x01,0x01,0x00,0x00,0x00,0x00,0x00,0x05,0x0a,0x00,0x00,0x00,
-                 0x00,0x00,0x14,0x00,0x03,0x00,0x00,0x00,0x01,0x01,0x00,0x00,0x00,0x00,0x00,0x05,0x04,
-                 0x00,0x00,0x00,0xcd,0xcd,0xcd,0xcd,0xcd,0xcd,0xcd,0xcd,0x01,0x02,0x00,0x00,0x00,0x00,
-                 0x00,0x05,0x20,0x00,0x00,0x00,0x20,0x02,0x00,0x00,0x01,0x02,0x00,0x00,0x00,0x00,0x00,
-                 0x05,0x20,0x00,0x00,0x00,0x20,0x02,0x00,0x00};
+            {
+                0x01,0x00,0x04,0x80,0x60,0x00,0x00,0x00,0x70,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x14,
+                0x00,0x00,0x00,0x02,0x00,0x4c,0x00,0x03,0x00,0x00,0x00,0x00,0x00,0x14,0x00,0x03,0x00,
+                0x00,0x00,0x01,0x01,0x00,0x00,0x00,0x00,0x00,0x05,0x12,0x00,0x00,0x00,0x00,0x00,0x14,
+                0x00,0x07,0x00,0x00,0x00,0x01,0x01,0x00,0x00,0x00,0x00,0x00,0x05,0x0a,0x00,0x00,0x00,
+                0x00,0x00,0x14,0x00,0x03,0x00,0x00,0x00,0x01,0x01,0x00,0x00,0x00,0x00,0x00,0x05,0x04,
+                0x00,0x00,0x00,0xcd,0xcd,0xcd,0xcd,0xcd,0xcd,0xcd,0xcd,0x01,0x02,0x00,0x00,0x00,0x00,
+                0x00,0x05,0x20,0x00,0x00,0x00,0x20,0x02,0x00,0x00,0x01,0x02,0x00,0x00,0x00,0x00,0x00,
+                0x05,0x20,0x00,0x00,0x00,0x20,0x02,0x00,0x00
+            };
             // shell32\shell32.man uses this for InProcServer32 cases
             // 010004805800000068000000000000001400000002004400030000000000140003000000010100000000000504000000000014000700000001010000000000050a00000000001400030000000101000000000005120000000102000000000005200000002002000001020000000000052000000020020000
             hr = RegSetKeyValuePrintf(HKEY_LOCAL_MACHINE, L"Software\\Classes\\AppId\\%s", L"AccessPermission", c_rgAccessPermission, sizeof(c_rgAccessPermission), _szCLSID);
 
             const unsigned char c_rgLaunchPermission[] =
-                {0x01,0x00,0x04,0x80,0x78,0x00,0x00,0x00,0x88,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x14,
-                 0x00,0x00,0x00,0x02,0x00,0x64,0x00,0x04,0x00,0x00,0x00,0x00,0x00,0x14,0x00,0x1f,0x00,
-                 0x00,0x00,0x01,0x01,0x00,0x00,0x00,0x00,0x00,0x05,0x12,0x00,0x00,0x00,0x00,0x00,0x18,
-                 0x00,0x1f,0x00,0x00,0x00,0x01,0x02,0x00,0x00,0x00,0x00,0x00,0x05,0x20,0x00,0x00,0x00,
-                 0x20,0x02,0x00,0x00,0x00,0x00,0x14,0x00,0x1f,0x00,0x00,0x00,0x01,0x01,0x00,0x00,0x00,
-                 0x00,0x00,0x05,0x04,0x00,0x00,0x00,0x00,0x00,0x14,0x00,0x0b,0x00,0x00,0x00,0x01,0x01,
-                 0x00,0x00,0x00,0x00,0x00,0x05,0x12,0x00,0x00,0x00,0xcd,0xcd,0xcd,0xcd,0xcd,0xcd,0xcd,
-                 0xcd,0x01,0x02,0x00,0x00,0x00,0x00,0x00,0x05,0x20,0x00,0x00,0x00,0x20,0x02,0x00,0x00,
-                 0x01,0x02,0x00,0x00,0x00,0x00,0x00,0x05,0x20,0x00,0x00,0x00,0x20,0x02,0x00,0x00};
+            {
+                0x01,0x00,0x04,0x80,0x78,0x00,0x00,0x00,0x88,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x14,
+                0x00,0x00,0x00,0x02,0x00,0x64,0x00,0x04,0x00,0x00,0x00,0x00,0x00,0x14,0x00,0x1f,0x00,
+                0x00,0x00,0x01,0x01,0x00,0x00,0x00,0x00,0x00,0x05,0x12,0x00,0x00,0x00,0x00,0x00,0x18,
+                0x00,0x1f,0x00,0x00,0x00,0x01,0x02,0x00,0x00,0x00,0x00,0x00,0x05,0x20,0x00,0x00,0x00,
+                0x20,0x02,0x00,0x00,0x00,0x00,0x14,0x00,0x1f,0x00,0x00,0x00,0x01,0x01,0x00,0x00,0x00,
+                0x00,0x00,0x05,0x04,0x00,0x00,0x00,0x00,0x00,0x14,0x00,0x0b,0x00,0x00,0x00,0x01,0x01,
+                0x00,0x00,0x00,0x00,0x00,0x05,0x12,0x00,0x00,0x00,0xcd,0xcd,0xcd,0xcd,0xcd,0xcd,0xcd,
+                0xcd,0x01,0x02,0x00,0x00,0x00,0x00,0x00,0x05,0x20,0x00,0x00,0x00,0x20,0x02,0x00,0x00,
+                0x01,0x02,0x00,0x00,0x00,0x00,0x00,0x05,0x20,0x00,0x00,0x00,0x20,0x02,0x00,0x00
+            };
             hr = RegSetKeyValuePrintf(HKEY_LOCAL_MACHINE, L"Software\\Classes\\AppId\\%s", L"LaunchPermission", c_rgLaunchPermission, sizeof(c_rgLaunchPermission), _szCLSID);
 
             hr = RegSetKeyValuePrintf(HKEY_LOCAL_MACHINE, L"Software\\Classes\\CLSID\\%s", L"", pszFriendlyName, _szCLSID);
@@ -255,8 +266,8 @@ HRESULT CRegisterExtension::RegisterAppDropTarget() const
     {
         // Windows7 supports per user App Paths, downlevel requires HKLM
         hr = RegSetKeyValuePrintf(_hkeyRoot,
-            L"SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\App Paths\\%s",
-            L"DropTarget", _szCLSID, PathFindFileName(_szModule));
+                                  L"SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\App Paths\\%s",
+                                  L"DropTarget", _szCLSID, PathFindFileName(_szModule));
     }
     return hr;
 }
@@ -278,8 +289,8 @@ HRESULT CRegisterExtension::_EnsureBaseProgIDVerbIsNone(PCWSTR pszProgID) const
     // putting the value of "none" that does not match any of the verbs under this key
     // avoids those verbs from becoming the default.
     return _IsBaseClassProgID(pszProgID) ?
-        RegSetKeyValuePrintf(_hkeyRoot, L"Software\\Classes\\%s\\Shell", L"", L"none", pszProgID) :
-        S_OK;
+           RegSetKeyValuePrintf(_hkeyRoot, L"Software\\Classes\\%s\\Shell", L"", L"none", pszProgID) :
+           S_OK;
 }
 
 HRESULT CRegisterExtension::RegisterCreateProcessVerb(PCWSTR pszProgID, PCWSTR pszVerb, PCWSTR pszCmdLine, PCWSTR pszVerbDisplayName) const
@@ -304,13 +315,13 @@ HRESULT CRegisterExtension::RegisterDropTargetVerb(PCWSTR pszProgID, PCWSTR pszV
     UnRegisterVerb(pszProgID, pszVerb); // make sure no existing registration exists, ignore failure
 
     HRESULT hr = RegSetKeyValuePrintf(_hkeyRoot, L"Software\\Classes\\%s\\Shell\\%s\\DropTarget",
-        L"CLSID", _szCLSID, pszProgID, pszVerb);
+                                      L"CLSID", _szCLSID, pszProgID, pszVerb);
     if (SUCCEEDED(hr))
     {
         hr = _EnsureBaseProgIDVerbIsNone(pszProgID);
 
         hr = RegSetKeyValuePrintf(_hkeyRoot, L"Software\\Classes\\%s\\Shell\\%s",
-            L"", pszVerbDisplayName, pszProgID, pszVerb);
+                                  L"", pszVerbDisplayName, pszProgID, pszVerb);
     }
     return hr;
 }
@@ -320,13 +331,13 @@ HRESULT CRegisterExtension::RegisterExecuteCommandVerb(PCWSTR pszProgID, PCWSTR 
     UnRegisterVerb(pszProgID, pszVerb); // make sure no existing registration exists, ignore failure
 
     HRESULT hr = RegSetKeyValuePrintf(_hkeyRoot, L"Software\\Classes\\%s\\Shell\\%s\\command",
-        L"DelegateExecute", _szCLSID, pszProgID, pszVerb);
+                                      L"DelegateExecute", _szCLSID, pszProgID, pszVerb);
     if (SUCCEEDED(hr))
     {
         hr = _EnsureBaseProgIDVerbIsNone(pszProgID);
 
         hr = RegSetKeyValuePrintf(_hkeyRoot, L"Software\\Classes\\%s\\Shell\\%s",
-            L"", pszVerbDisplayName, pszProgID, pszVerb);
+                                  L"", pszVerbDisplayName, pszProgID, pszVerb);
     }
     return hr;
 }
@@ -338,13 +349,13 @@ HRESULT CRegisterExtension::RegisterExplorerCommandVerb(PCWSTR pszProgID, PCWSTR
     UnRegisterVerb(pszProgID, pszVerb); // make sure no existing registration exists, ignore failure
 
     HRESULT hr = RegSetKeyValuePrintf(_hkeyRoot, L"Software\\Classes\\%s\\Shell\\%s",
-        L"ExplorerCommandHandler", _szCLSID, pszProgID, pszVerb);
+                                      L"ExplorerCommandHandler", _szCLSID, pszProgID, pszVerb);
     if (SUCCEEDED(hr))
     {
         hr = _EnsureBaseProgIDVerbIsNone(pszProgID);
 
         hr = RegSetKeyValuePrintf(_hkeyRoot, L"Software\\Classes\\%s\\Shell\\%s",
-            L"", pszVerbDisplayName, pszProgID, pszVerb);
+                                  L"", pszVerbDisplayName, pszProgID, pszVerb);
     }
     return hr;
 }
@@ -352,7 +363,7 @@ HRESULT CRegisterExtension::RegisterExplorerCommandVerb(PCWSTR pszProgID, PCWSTR
 HRESULT CRegisterExtension::RegisterExplorerCommandStateHandler(PCWSTR pszProgID, PCWSTR pszVerb) const
 {
     return RegSetKeyValuePrintf(_hkeyRoot, L"Software\\Classes\\%s\\Shell\\%s",
-        L"CommandStateHandler", _szCLSID, pszProgID, pszVerb);
+                                L"CommandStateHandler", _szCLSID, pszProgID, pszVerb);
 }
 
 HRESULT CRegisterExtension::UnRegisterVerb(PCWSTR pszProgID, PCWSTR pszVerb) const
@@ -381,7 +392,7 @@ HRESULT CRegisterExtension::RegisterThumbnailHandler(PCWSTR pszExtension) const
     // HKEY_CLASSES_ROOT\.wma\ShellEx\{e357fccd-a995-4576-b01f-234630154e96}={9DBD2C50-62AD-11D0-B806-00C04FD706EC}
 
     return RegSetKeyValuePrintf(_hkeyRoot, L"Software\\Classes\\%s\\ShellEx\\{e357fccd-a995-4576-b01f-234630154e96}",
-        L"", _szCLSID, pszExtension);
+                                L"", _szCLSID, pszExtension);
 }
 
 // in process context menu handler for right drag context menu
@@ -391,7 +402,7 @@ HRESULT CRegisterExtension::RegisterThumbnailHandler(PCWSTR pszExtension) const
 HRESULT CRegisterExtension::RegisterRightDragContextMenuHandler(PCWSTR pszProgID, PCWSTR pszDescription) const
 {
     return RegSetKeyValuePrintf(_hkeyRoot, L"Software\\Classes\\%s\\shellex\\DragDropHandlers\\%s",
-        L"", pszDescription, pszProgID, _szCLSID);
+                                L"", pszDescription, pszProgID, _szCLSID);
 }
 
 // in process context menu handler
@@ -399,7 +410,7 @@ HRESULT CRegisterExtension::RegisterRightDragContextMenuHandler(PCWSTR pszProgID
 HRESULT CRegisterExtension::RegisterContextMenuHandler(PCWSTR pszProgID, PCWSTR pszDescription) const
 {
     return RegSetKeyValuePrintf(_hkeyRoot, L"Software\\Classes\\%s\\shellex\\ContextMenuHandlers\\%s",
-        L"", pszDescription, pszProgID, _szCLSID);
+                                L"", pszDescription, pszProgID, _szCLSID);
 }
 
 HRESULT CRegisterExtension::RegisterPropertyHandler(PCWSTR pszExtension) const
@@ -408,7 +419,7 @@ HRESULT CRegisterExtension::RegisterPropertyHandler(PCWSTR pszExtension) const
     // HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\PropertySystem\PropertyHandlers\.docx={993BE281-6695-4BA5-8A2A-7AACBFAAB69E}
 
     return RegSetKeyValuePrintf(HKEY_LOCAL_MACHINE, L"Software\\Microsoft\\Windows\\CurrentVersion\\PropertySystem\\PropertyHandlers\\%s",
-        L"", _szCLSID, pszExtension);
+                                L"", _szCLSID, pszExtension);
 }
 
 HRESULT CRegisterExtension::UnRegisterPropertyHandler(PCWSTR pszExtension) const
@@ -538,7 +549,7 @@ HRESULT CRegisterExtension::RegisterVerbDefaultAndOrder(PCWSTR pszProgID, PCWSTR
 // register a verb on an array of ProgIDs
 
 HRESULT CRegisterExtension::RegisterPlayerVerbs(PCWSTR const rgpszAssociation[], UINT countAssociation,
-                                                PCWSTR pszVerb, PCWSTR pszTitle) const
+        PCWSTR pszVerb, PCWSTR pszTitle) const
 {
     HRESULT hr = RegisterAppAsLocalServer(pszTitle, NULL);
     if (SUCCEEDED(hr))
@@ -706,7 +717,7 @@ HRESULT CRegisterExtension::RegSetKeyValuePrintf(HKEY hkey, PCWSTR pszKeyFormatS
     if (SUCCEEDED(hr))
     {
         hr = HRESULT_FROM_WIN32(RegSetKeyValueW(hkey, szKeyName, pszValueName, REG_SZ, pszValue,
-            lstrlen(pszValue) * sizeof(*pszValue)));
+                                                lstrlen(pszValue) * sizeof(*pszValue)));
     }
 
     va_end(argList);
@@ -762,7 +773,7 @@ HRESULT CRegisterExtension::RegSetKeyValueBinaryPrintf(HKEY hkey, PCWSTR pszKeyF
     {
         DWORD dwDecodedImageSize, dwSkipChars, dwActualFormat;
         hr = CryptStringToBinaryA(pszBase64, NULL, CRYPT_STRING_BASE64, NULL,
-            &dwDecodedImageSize, &dwSkipChars, &dwActualFormat) ? S_OK : E_FAIL;
+                                  &dwDecodedImageSize, &dwSkipChars, &dwActualFormat) ? S_OK : E_FAIL;
         if (SUCCEEDED(hr))
         {
             BYTE *pbDecodedImage = (BYTE*)LocalAlloc(LPTR, dwDecodedImageSize);
@@ -770,7 +781,7 @@ HRESULT CRegisterExtension::RegSetKeyValueBinaryPrintf(HKEY hkey, PCWSTR pszKeyF
             if (SUCCEEDED(hr))
             {
                 hr = CryptStringToBinaryA(pszBase64, lstrlenA(pszBase64), CRYPT_STRING_BASE64,
-                    pbDecodedImage, &dwDecodedImageSize, &dwSkipChars, &dwActualFormat) ? S_OK : E_FAIL;
+                                          pbDecodedImage, &dwDecodedImageSize, &dwSkipChars, &dwActualFormat) ? S_OK : E_FAIL;
                 if (SUCCEEDED(hr))
                 {
                     hr = HRESULT_FROM_WIN32(RegSetKeyValueW(hkey, szKeyName, pszValueName, REG_BINARY, pbDecodedImage, dwDecodedImageSize));
@@ -830,9 +841,9 @@ void CRegisterExtension::_UpdateAssocChanged(HRESULT hr, PCWSTR pszKeyFormatStri
 {
     static const WCHAR c_szProgIDPrefix[] = L"Software\\Classes\\%s";
     if (SUCCEEDED(hr) && !_fAssocChanged &&
-        (StrCmpNIC(pszKeyFormatString, c_szProgIDPrefix, ARRAYSIZE(c_szProgIDPrefix) - 1) == 0 ||
-         StrStrI(pszKeyFormatString, L"PropertyHandlers") ||
-         StrStrI(pszKeyFormatString, L"KindMap")))
+            (StrCmpNIC(pszKeyFormatString, c_szProgIDPrefix, ARRAYSIZE(c_szProgIDPrefix) - 1) == 0 ||
+             StrStrI(pszKeyFormatString, L"PropertyHandlers") ||
+             StrStrI(pszKeyFormatString, L"KindMap")))
     {
         const_cast<CRegisterExtension*>(this)->_fAssocChanged = true;
     }

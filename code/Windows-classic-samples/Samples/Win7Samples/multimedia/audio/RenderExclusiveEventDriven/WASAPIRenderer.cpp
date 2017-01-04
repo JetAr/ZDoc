@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -14,7 +14,7 @@
 //  A simple WASAPI Render client.
 //
 
-CWASAPIRenderer::CWASAPIRenderer(IMMDevice *Endpoint) : 
+CWASAPIRenderer::CWASAPIRenderer(IMMDevice *Endpoint) :
     _RefCount(1),
     _Endpoint(Endpoint),
     _AudioClient(NULL),
@@ -31,31 +31,31 @@ CWASAPIRenderer::CWASAPIRenderer(IMMDevice *Endpoint) :
 //
 //  Empty destructor - everything should be released in the Shutdown() call.
 //
-CWASAPIRenderer::~CWASAPIRenderer(void) 
+CWASAPIRenderer::~CWASAPIRenderer(void)
 {
 }
 
 //
-//  Initialize WASAPI in event driven mode, associate the audio client with our samples ready event handle, and retrieve 
+//  Initialize WASAPI in event driven mode, associate the audio client with our samples ready event handle, and retrieve
 //  a render client for the transport.
 //
 bool CWASAPIRenderer::InitializeAudioEngine()
 {
     REFERENCE_TIME bufferDuration = _EngineLatencyInMS*10000;
 
-    HRESULT hr = _AudioClient->Initialize(AUDCLNT_SHAREMODE_EXCLUSIVE, 
-                                          AUDCLNT_STREAMFLAGS_EVENTCALLBACK | AUDCLNT_STREAMFLAGS_NOPERSIST, 
-                                          bufferDuration, 
-                                          bufferDuration ,
-                                          _MixFormat, 
+    HRESULT hr = _AudioClient->Initialize(AUDCLNT_SHAREMODE_EXCLUSIVE,
+                                          AUDCLNT_STREAMFLAGS_EVENTCALLBACK | AUDCLNT_STREAMFLAGS_NOPERSIST,
+                                          bufferDuration,
+                                          bufferDuration,
+                                          _MixFormat,
                                           NULL);
 
     //
-    //  When rendering in exclusive mode event driven, the HDAudio specification requires that the buffers handed to the device must 
+    //  When rendering in exclusive mode event driven, the HDAudio specification requires that the buffers handed to the device must
     //  be aligned on a 128 byte boundary.  When the buffer is initialized and the resulting buffer size would not be 128 byte aligned,
     //  we need to "swizzle" the periodicity of the engine to ensure that the buffers are properly aligned.
     //
-    if (hr == AUDCLNT_E_BUFFER_SIZE_NOT_ALIGNED) 
+    if (hr == AUDCLNT_E_BUFFER_SIZE_NOT_ALIGNED)
     {
         UINT32 bufferSize;
         printf("Buffers not aligned. Aligning the buffers... \n");
@@ -77,7 +77,7 @@ bool CWASAPIRenderer::InitializeAudioEngine()
 
         //
         //  Calculate the new aligned periodicity.  We do that by taking the buffer size returned (which is in frames),
-        //  multiplying it by the frames/second in the render format (which gets us seconds per buffer), then converting the 
+        //  multiplying it by the frames/second in the render format (which gets us seconds per buffer), then converting the
         //  seconds/buffer calculation into a REFERENCE_TIME.
         //
         bufferDuration = (REFERENCE_TIME)(10000.0 *                         // (REFERENCE_TIME / ms) *
@@ -96,11 +96,11 @@ bool CWASAPIRenderer::InitializeAudioEngine()
             return false;
         }
 
-        hr = _AudioClient->Initialize(AUDCLNT_SHAREMODE_EXCLUSIVE, 
-                                      AUDCLNT_STREAMFLAGS_EVENTCALLBACK | AUDCLNT_STREAMFLAGS_NOPERSIST, 
-                                      bufferDuration, 
-                                      bufferDuration, 
-                                      _MixFormat, 
+        hr = _AudioClient->Initialize(AUDCLNT_SHAREMODE_EXCLUSIVE,
+                                      AUDCLNT_STREAMFLAGS_EVENTCALLBACK | AUDCLNT_STREAMFLAGS_NOPERSIST,
+                                      bufferDuration,
+                                      bufferDuration,
+                                      _MixFormat,
                                       NULL);
         if (FAILED(hr))
         {
@@ -151,7 +151,7 @@ bool CWASAPIRenderer::InitializeAudioEngine()
 //  Retrieve the format we'll use to rendersamples.
 //
 //  Start with the mix format and see if the endpoint can render that.  If not, try
-//  the mix format converted to an integer form (most audio solutions don't support floating 
+//  the mix format converted to an integer form (most audio solutions don't support floating
 //  point rendering and the mix format is usually a floating point format).
 //
 bool CWASAPIRenderer::LoadFormat()
@@ -179,8 +179,8 @@ bool CWASAPIRenderer::LoadFormat()
             _MixFormat->nBlockAlign = (_MixFormat->wBitsPerSample / 8) * _MixFormat->nChannels;
             _MixFormat->nAvgBytesPerSec = _MixFormat->nSamplesPerSec*_MixFormat->nBlockAlign;
         }
-        else if (_MixFormat->wFormatTag == WAVE_FORMAT_EXTENSIBLE && 
-            reinterpret_cast<WAVEFORMATEXTENSIBLE *>(_MixFormat)->SubFormat == KSDATAFORMAT_SUBTYPE_IEEE_FLOAT)
+        else if (_MixFormat->wFormatTag == WAVE_FORMAT_EXTENSIBLE &&
+                 reinterpret_cast<WAVEFORMATEXTENSIBLE *>(_MixFormat)->SubFormat == KSDATAFORMAT_SUBTYPE_IEEE_FLOAT)
         {
             WAVEFORMATEXTENSIBLE *waveFormatExtensible = reinterpret_cast<WAVEFORMATEXTENSIBLE *>(_MixFormat);
             waveFormatExtensible->SubFormat = KSDATAFORMAT_SUBTYPE_PCM;
@@ -216,8 +216,8 @@ bool CWASAPIRenderer::LoadFormat()
 //
 bool CWASAPIRenderer::CalculateMixFormatType()
 {
-    if (_MixFormat->wFormatTag == WAVE_FORMAT_PCM || 
-        _MixFormat->wFormatTag == WAVE_FORMAT_EXTENSIBLE &&
+    if (_MixFormat->wFormatTag == WAVE_FORMAT_PCM ||
+            _MixFormat->wFormatTag == WAVE_FORMAT_EXTENSIBLE &&
             reinterpret_cast<WAVEFORMATEXTENSIBLE *>(_MixFormat)->SubFormat == KSDATAFORMAT_SUBTYPE_PCM)
     {
         if (_MixFormat->wBitsPerSample == 16)
@@ -232,11 +232,11 @@ bool CWASAPIRenderer::CalculateMixFormatType()
     }
     else if (_MixFormat->wFormatTag == WAVE_FORMAT_IEEE_FLOAT ||
              (_MixFormat->wFormatTag == WAVE_FORMAT_EXTENSIBLE &&
-               reinterpret_cast<WAVEFORMATEXTENSIBLE *>(_MixFormat)->SubFormat == KSDATAFORMAT_SUBTYPE_IEEE_FLOAT))
+              reinterpret_cast<WAVEFORMATEXTENSIBLE *>(_MixFormat)->SubFormat == KSDATAFORMAT_SUBTYPE_IEEE_FLOAT))
     {
         _RenderSampleType = SampleTypeFloat;
     }
-    else 
+    else
     {
         printf("unrecognized device format.\n");
         return false;
@@ -353,7 +353,7 @@ bool CWASAPIRenderer::Start(RenderBuffer *RenderBufferQueue)
     }
 
     //
-    //  We want to pre-roll the first buffer's worth of data into the pipeline.  That way the audio engine won't glitch on startup.  
+    //  We want to pre-roll the first buffer's worth of data into the pipeline.  That way the audio engine won't glitch on startup.
     //
     {
         BYTE *pData;
@@ -417,7 +417,7 @@ void CWASAPIRenderer::Stop()
     HRESULT hr;
 
     //
-    //  Tell the render thread to shut down, wait for the thread to complete then clean up all the stuff we 
+    //  Tell the render thread to shut down, wait for the thread to complete then clean up all the stuff we
     //  allocated in Start().
     //
     if (_ShutdownEvent)

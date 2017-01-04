@@ -1,7 +1,7 @@
-//--------------------------------------------------------------------
+﻿//--------------------------------------------------------------------
 // Microsoft OLE DB Test
 //
-// Copyright 1995-2000 Microsoft Corporation.  
+// Copyright 1995-2000 Microsoft Corporation.
 //
 // @doc
 //
@@ -24,11 +24,11 @@
 //-----------------------------------------------------------------------------
 #define	COLUMN_ALIGNVAL			8
 
-typedef struct 
+typedef struct
 {
-	ULONG ulStatus;		// for Read: indicates null, coercion, or any error state
-	ULONG ulLength;		// true count of length of data pulled back, count of bytes
-	BYTE bValue[1];		// data pulled back
-} COLUMNDATA; 
+    ULONG ulStatus;		// for Read: indicates null, coercion, or any error state
+    ULONG ulLength;		// true count of length of data pulled back, count of bytes
+    BYTE bValue[1];		// data pulled back
+} COLUMNDATA;
 
 #endif	//_IROWDEL_H_

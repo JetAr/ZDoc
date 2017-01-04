@@ -1,4 +1,4 @@
-////////////////////////////////////////////////////////////////////////////////
+﻿////////////////////////////////////////////////////////////////////////////////
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -27,7 +27,7 @@
 HRESULT CreateCWSDSimpleThermostatProxy(
     IPropertyStore* pPropertyStore,
     ISimpleThermostat** ppSimpleThermostat
-    )
+)
 {
     HRESULT                     hr                          = S_OK;
     PROPVARIANT                 pv                          = {0};
@@ -37,7 +37,7 @@ HRESULT CreateCWSDSimpleThermostatProxy(
     CWSDSimpleThermostatProxy*  pCWSDSimpleThermostatProxy  = NULL;
 
     if( NULL == pPropertyStore ||
-        NULL == ppSimpleThermostat )
+            NULL == ppSimpleThermostat )
     {
         return E_INVALIDARG;
     }
@@ -60,11 +60,11 @@ HRESULT CreateCWSDSimpleThermostatProxy(
         if( S_OK == hr )
         {
             hr = StringCbPrintfW(
-                szProxyAddress, sizeof(szProxyAddress),
-                L"urn:uuid:%08x-%04x-%04x-%02x%02x-%02x%02x%02x%02x%02x%02x",
-                uuid.Data1, uuid.Data2, uuid.Data3,
-                uuid.Data4[0], uuid.Data4[1], uuid.Data4[2], uuid.Data4[3],
-                uuid.Data4[4], uuid.Data4[5], uuid.Data4[6], uuid.Data4[7]);
+                     szProxyAddress, sizeof(szProxyAddress),
+                     L"urn:uuid:%08x-%04x-%04x-%02x%02x-%02x%02x%02x%02x%02x%02x",
+                     uuid.Data1, uuid.Data2, uuid.Data3,
+                     uuid.Data4[0], uuid.Data4[1], uuid.Data4[2], uuid.Data4[3],
+                     uuid.Data4[4], uuid.Data4[5], uuid.Data4[6], uuid.Data4[7]);
         }
     }
 
@@ -78,11 +78,11 @@ HRESULT CreateCWSDSimpleThermostatProxy(
     {
         wprintf( L"Calling CreateCSimpleThermostat_WSDProxy..." );
         hr = CreateCSimpleThermostat_WSDProxy(
-            pv.pwszVal,
-            szProxyAddress,
-            &pCSimpleThermostat_WSDProxy,
-            NULL
-            );
+                 pv.pwszVal,
+                 szProxyAddress,
+                 &pCSimpleThermostat_WSDProxy,
+                 NULL
+             );
         wprintf( L"0x%x\n", hr );
     }
 
@@ -95,7 +95,7 @@ HRESULT CreateCWSDSimpleThermostatProxy(
         wprintf( L"Creating the CWSDSimpleThermostatProxy object..." );
         pCWSDSimpleThermostatProxy =  new CWSDSimpleThermostatProxy(
             pCSimpleThermostat_WSDProxy
-            );
+        );
         if( NULL == pCWSDSimpleThermostatProxy )
         {
             hr = E_OUTOFMEMORY;
@@ -128,7 +128,7 @@ HRESULT CreateCWSDSimpleThermostatProxy(
 //------------------------------------------------------------------------------
 CWSDSimpleThermostatProxy::CWSDSimpleThermostatProxy(
     ISimpleThermostat_WSD* pSimpleThermostat_WSD
-    ):
+):
     m_cRef(1)
 {
     pSimpleThermostat_WSD->AddRef();
@@ -158,7 +158,7 @@ CWSDSimpleThermostatProxy::~CWSDSimpleThermostatProxy()
 //------------------------------------------------------------------------------
 HRESULT CWSDSimpleThermostatProxy::GetCurrentTemp(
     LONG* plTemp
-    )
+)
 {
     return m_pSimpleThermostat_WSD->GetCurrentTemp( plTemp );
 }// CWSDSimpleThermostatProxy::GetCurrentTemp
@@ -169,7 +169,7 @@ HRESULT CWSDSimpleThermostatProxy::GetCurrentTemp(
 //------------------------------------------------------------------------------
 HRESULT CWSDSimpleThermostatProxy::GetDesiredTemp(
     LONG* plTemp
-    )
+)
 {
     return m_pSimpleThermostat_WSD->GetDesiredTemp( plTemp );
 }// CWSDSimpleThermostatProxy::GetDesiredTemp
@@ -180,7 +180,7 @@ HRESULT CWSDSimpleThermostatProxy::GetDesiredTemp(
 //------------------------------------------------------------------------------
 HRESULT CWSDSimpleThermostatProxy::SetDesiredTemp(
     LONG lTemp
-    )
+)
 {
     return m_pSimpleThermostat_WSD->SetDesiredTemp( lTemp );
 }// CWSDSimpleThermostatProxy::SetDesiredTemp
@@ -194,9 +194,9 @@ HRESULT CWSDSimpleThermostatProxy::SetDesiredTemp(
 // CWSDSimpleThermostatProxy::QueryInterface
 //------------------------------------------------------------------------------
 HRESULT CWSDSimpleThermostatProxy::QueryInterface(
-    REFIID riid, 
+    REFIID riid,
     void** ppvObject
-    )
+)
 {
     HRESULT hr = S_OK;
 

@@ -1,4 +1,4 @@
-//-----------------------------------------------------------------------------
+﻿//-----------------------------------------------------------------------------
 // Microsoft OLE DB RowsetViewer
 // Copyright (C) 1994 - 2000 By Microsoft Corporation.
 //
@@ -10,7 +10,7 @@
 
 #ifndef _LIST_H_
 #define _LIST_H_
-            
+
 /////////////////////////////////////////////////////////////////////////////
 // Includes
 //
@@ -90,7 +90,7 @@ private:
     CNode<TYPE>*        m_pNodeTail;                    // Tail of CList
 
     ULONG                m_ulElements;                    // Elements in the list
-    
+
 public:
     //list modifying operations
     virtual POSITION    AddHead(ARG_TYPE element);        // Add to Head
@@ -102,16 +102,38 @@ public:
     virtual TYPE        RemoveHead();                    // Remove from Head
     virtual TYPE        RemoveTail();                    // Remove from Tail
     virtual TYPE        RemoveAt(POSITION position);    // RemoveAt position
-            void        RemoveAll();                    // Remove all elements
+    void        RemoveAll();                    // Remove all elements
 
     //Peek methods
-    inline    POSITION    GetHeadPosition()    const        {    return m_pNodeHead; }
-    inline    POSITION    GetTailPosition()    const        {    return m_pNodeTail; }
+    inline    POSITION    GetHeadPosition()    const
+    {
+        return m_pNodeHead;
+    }
+    inline    POSITION    GetTailPosition()    const
+    {
+        return m_pNodeTail;
+    }
 
-    inline    TYPE        GetHead()    const                {     ASSERT(m_pNodeHead);    return m_pNodeHead->m_data;        }
-    inline    TYPE&        GetHead()                        {     ASSERT(m_pNodeHead);    return m_pNodeHead->m_data;        }
-    inline    TYPE        GetTail()    const                {     ASSERT(m_pNodeTail);    return m_pNodeTail->m_data;        }
-    inline    TYPE&        GetTail()                        {     ASSERT(m_pNodeTail);    return m_pNodeTail->m_data;        }
+    inline    TYPE        GetHead()    const
+    {
+        ASSERT(m_pNodeHead);
+        return m_pNodeHead->m_data;
+    }
+    inline    TYPE&        GetHead()
+    {
+        ASSERT(m_pNodeHead);
+        return m_pNodeHead->m_data;
+    }
+    inline    TYPE        GetTail()    const
+    {
+        ASSERT(m_pNodeTail);
+        return m_pNodeTail->m_data;
+    }
+    inline    TYPE&        GetTail()
+    {
+        ASSERT(m_pNodeTail);
+        return m_pNodeTail->m_data;
+    }
 
     virtual TYPE        GetNext(POSITION& position)    const;    // Next element
     virtual TYPE&        GetNext(POSITION& position);        // Next element
@@ -128,8 +150,14 @@ public:
     virtual POSITION    Find(ARG_TYPE element, POSITION startAfter = NULL) const;
 
     //informational methods
-    inline BOOL            IsEmpty()    const        {    return m_ulElements==0; }
-    inline ULONG        GetCount()    const        {    return m_ulElements;    }
+    inline BOOL            IsEmpty()    const
+    {
+        return m_ulElements==0;
+    }
+    inline ULONG        GetCount()    const
+    {
+        return m_ulElements;
+    }
 };
 
 
@@ -149,7 +177,7 @@ template <class TYPE, class ARG_TYPE> CList<TYPE, ARG_TYPE>::CList()
 // CList::~CList
 //
 /////////////////////////////////////////////////////////////////////////////
-template <class TYPE, class ARG_TYPE> CList<TYPE, ARG_TYPE>::~CList() 
+template <class TYPE, class ARG_TYPE> CList<TYPE, ARG_TYPE>::~CList()
 {
     //Remove all elements
     RemoveAll();
@@ -160,7 +188,7 @@ template <class TYPE, class ARG_TYPE> CList<TYPE, ARG_TYPE>::~CList()
 // CList::AddHead
 //
 /////////////////////////////////////////////////////////////////////////////
-template <class TYPE, class ARG_TYPE> POSITION CList<TYPE, ARG_TYPE>::AddHead(ARG_TYPE element) 
+template <class TYPE, class ARG_TYPE> POSITION CList<TYPE, ARG_TYPE>::AddHead(ARG_TYPE element)
 {
     //Add to the Head of the CList, (stack)
     CNode<TYPE>* pNewNode = new CNode<TYPE>(NULL, m_pNodeHead);
@@ -169,7 +197,7 @@ template <class TYPE, class ARG_TYPE> POSITION CList<TYPE, ARG_TYPE>::AddHead(AR
         pNewNode->m_data = element;
 
         //If there was a list hook the head->prev to the new head
-        if(m_pNodeHead) 
+        if(m_pNodeHead)
             m_pNodeHead->m_pPrev = pNewNode;
         else
             m_pNodeTail = pNewNode;
@@ -185,7 +213,7 @@ template <class TYPE, class ARG_TYPE> POSITION CList<TYPE, ARG_TYPE>::AddHead(AR
 // CList::AddTail
 //
 /////////////////////////////////////////////////////////////////////////////
-template <class TYPE, class ARG_TYPE> POSITION CList<TYPE, ARG_TYPE>::AddTail(ARG_TYPE element) 
+template <class TYPE, class ARG_TYPE> POSITION CList<TYPE, ARG_TYPE>::AddTail(ARG_TYPE element)
 {
     //Add to the m_pNodeTail of the CList
     CNode<TYPE>* pNewNode = new CNode<TYPE>(m_pNodeTail, NULL);
@@ -197,7 +225,7 @@ template <class TYPE, class ARG_TYPE> POSITION CList<TYPE, ARG_TYPE>::AddTail(AR
             m_pNodeTail->m_pNext = pNewNode;
         else
             m_pNodeHead = pNewNode;
-        
+
         m_pNodeTail = pNewNode;
         m_ulElements++;
     }
@@ -247,11 +275,11 @@ template <class TYPE, class ARG_TYPE> TYPE& CList<TYPE, ARG_TYPE>::GetNext(POSIT
 template <class TYPE, class ARG_TYPE> TYPE CList<TYPE, ARG_TYPE>::GetPrev(POSITION& position) const
 {
     ASSERT(position);
-    
+
     //Set position to the next element
     CNode<TYPE>* pNode = (CNode<TYPE>*)position;
     position = pNode->m_pPrev;
-    
+
     //return the current element
     return pNode->m_data;
 }
@@ -261,14 +289,14 @@ template <class TYPE, class ARG_TYPE> TYPE CList<TYPE, ARG_TYPE>::GetPrev(POSITI
 // CList::GetPrev
 //
 /////////////////////////////////////////////////////////////////////////////
-template <class TYPE, class ARG_TYPE> TYPE& CList<TYPE, ARG_TYPE>::GetPrev(POSITION& position) 
+template <class TYPE, class ARG_TYPE> TYPE& CList<TYPE, ARG_TYPE>::GetPrev(POSITION& position)
 {
     ASSERT(position);
-    
+
     //Set position to the next element
     CNode<TYPE>* pNode = (CNode<TYPE>*)position;
     position = pNode->m_pPrev;
-    
+
     //return the current element
     return pNode->m_data;
 }
@@ -316,7 +344,7 @@ template <class TYPE, class ARG_TYPE> void CList<TYPE, ARG_TYPE>::SetAt(POSITION
 // CList::RemoveHead
 //
 /////////////////////////////////////////////////////////////////////////////
-template <class TYPE, class ARG_TYPE> TYPE CList<TYPE, ARG_TYPE>::RemoveHead() 
+template <class TYPE, class ARG_TYPE> TYPE CList<TYPE, ARG_TYPE>::RemoveHead()
 {
     //Remove and return from the Head of the List
     ASSERT(m_pNodeHead);
@@ -345,7 +373,7 @@ template <class TYPE, class ARG_TYPE> TYPE CList<TYPE, ARG_TYPE>::RemoveHead()
 // CList::RemoveTail
 //
 /////////////////////////////////////////////////////////////////////////////
-template <class TYPE, class ARG_TYPE> TYPE CList<TYPE, ARG_TYPE>::RemoveTail() 
+template <class TYPE, class ARG_TYPE> TYPE CList<TYPE, ARG_TYPE>::RemoveTail()
 {
     //Remove and return from the m_pNodeTail of the CList
     ASSERT(m_pNodeTail);
@@ -409,7 +437,7 @@ template <class TYPE, class ARG_TYPE> TYPE CList<TYPE, ARG_TYPE>::RemoveAt(POSIT
 // CList::RemoveAll
 //
 /////////////////////////////////////////////////////////////////////////////
-template <class TYPE, class ARG_TYPE> void CList<TYPE, ARG_TYPE>::RemoveAll() 
+template <class TYPE, class ARG_TYPE> void CList<TYPE, ARG_TYPE>::RemoveAll()
 {
     // Remove all items from the CList
     CNode<TYPE>* pNode = m_pNodeHead;
@@ -434,7 +462,7 @@ template <class TYPE, class ARG_TYPE> POSITION CList<TYPE, ARG_TYPE>::InsertBefo
 {
     //insert before the position
     if(position == m_pNodeHead)    // Add before Head
-      return AddHead(element);
+        return AddHead(element);
 
     CNode<TYPE>* pOldNode = (CNode<TYPE>*)position;
 
@@ -443,7 +471,7 @@ template <class TYPE, class ARG_TYPE> POSITION CList<TYPE, ARG_TYPE>::InsertBefo
     if(pNewNode)
     {
         pNewNode->m_data = element;
-    
+
         //Hook up before after nodes to it
         if(pOldNode->m_pPrev)
         {
@@ -469,8 +497,8 @@ template <class TYPE, class ARG_TYPE> POSITION CList<TYPE, ARG_TYPE>::InsertAfte
 {
     //insert after the position
     if(position == m_pNodeTail)     // Add after the m_pNodeTail
-      return AddTail(element);
-    
+        return AddTail(element);
+
     CNode<TYPE>* pOldNode = (CNode<TYPE>*)position;
 
     //other wise a little more difficult
@@ -525,8 +553,8 @@ template <class TYPE, class ARG_TYPE> POSITION CList<TYPE, ARG_TYPE>::Find(ARG_T
 
     //return pointer to found element
     for(CNode<TYPE>* p = pNode; p != NULL; p = p->m_pNext)
-      if(p->m_data == element)
-        return p;   // return position to found CNode
+        if(p->m_data == element)
+            return p;   // return position to found CNode
 
     return NULL;  // return NULL if not found
 }
@@ -608,7 +636,7 @@ public:
 protected:
     POSITION            GetPosition(ARG_KEY key);
     CAssoc<KEY, VALUE>*    AssocFromPos(POSITION);
-    
+
     CList<CAssoc<KEY, VALUE>*, CAssoc<KEY, VALUE>*>  m_listValues;
 };
 
@@ -659,7 +687,7 @@ POSITION CMap<KEY, ARG_KEY, VALUE, ARG_VALUE>::GetPosition(ARG_KEY key)
 // CMap::AssocFromPos
 //
 /////////////////////////////////////////////////////////////////////////////
-template<class KEY, class ARG_KEY, class VALUE, class ARG_VALUE> 
+template<class KEY, class ARG_KEY, class VALUE, class ARG_VALUE>
 CAssoc<KEY, VALUE>* CMap<KEY, ARG_KEY, VALUE, ARG_VALUE>::AssocFromPos(POSITION pos)
 {
     if(!pos)
@@ -684,7 +712,7 @@ POSITION CMap<KEY, ARG_KEY, VALUE, ARG_VALUE>::GetStartPosition()
 //
 /////////////////////////////////////////////////////////////////////////////
 template<class KEY, class ARG_KEY, class VALUE, class ARG_VALUE>
-int CMap<KEY, ARG_KEY, VALUE, ARG_VALUE>::GetCount() 
+int CMap<KEY, ARG_KEY, VALUE, ARG_VALUE>::GetCount()
 {
     return m_listValues.GetCount();
 }
@@ -694,7 +722,7 @@ int CMap<KEY, ARG_KEY, VALUE, ARG_VALUE>::GetCount()
 //
 /////////////////////////////////////////////////////////////////////////////
 template<class KEY, class ARG_KEY, class VALUE, class ARG_VALUE>
-BOOL CMap<KEY, ARG_KEY, VALUE, ARG_VALUE>::IsEmpty() 
+BOOL CMap<KEY, ARG_KEY, VALUE, ARG_VALUE>::IsEmpty()
 {
     return m_listValues.IsEmpty();
 }
@@ -709,7 +737,7 @@ BOOL CMap<KEY, ARG_KEY, VALUE, ARG_VALUE>::Lookup(ARG_KEY key, VALUE& rValue)
     POSITION pos = GetPosition(key);
     if(!pos)
         return FALSE;
-    
+
     rValue = AssocFromPos(pos)->m_value;
     return TRUE;
 }
@@ -737,7 +765,7 @@ BOOL CMap<KEY, ARG_KEY, VALUE, ARG_VALUE>::RemoveKey(ARG_KEY key)
     POSITION pos = GetPosition(key);
     if(pos == NULL)
         return FALSE;
-    
+
     //Remove this Node...
     m_listValues.RemoveAt(pos);
     return TRUE;
@@ -757,14 +785,14 @@ BOOL CMap<KEY, ARG_KEY, VALUE, ARG_VALUE>::SetAt(ARG_KEY key, ARG_VALUE value)
     {
         //Found already, just change the value...
         AssocFromPos(pos)->m_value = value;
-    }    
+    }
     else
     {
         //Not found, just need to add to the list...
         CAssoc<KEY, VALUE>* pCAssoc = new CAssoc<KEY, VALUE>;
         if(!pCAssoc)
             return FALSE;
-        
+
         pCAssoc->m_key = key;
         pCAssoc->m_value = value;
 
@@ -781,7 +809,7 @@ BOOL CMap<KEY, ARG_KEY, VALUE, ARG_VALUE>::SetAt(ARG_KEY key, ARG_VALUE value)
 /////////////////////////////////////////////////////////////////////////////
 template<class KEY, class ARG_KEY, class VALUE, class ARG_VALUE>
 void CMap<KEY, ARG_KEY, VALUE, ARG_VALUE>::GetNextAssoc(POSITION& rNextPosition,
-    KEY& rKey, VALUE& rValue) 
+        KEY& rKey, VALUE& rValue)
 {
     if(rNextPosition)
     {
@@ -815,7 +843,7 @@ public:
     //insertion deletion routines
     virtual TYPE*        InsertAt(IDX iIndex, TYPE element);    // Insert element at index
     virtual void        RemoveAt(IDX iIndex);                    // Remove element at index
-    
+
     //Attaching
     virtual void        Attach(CVector& rVector);
     virtual void        Attach(IDX cElements, TYPE* rgElements);
@@ -823,11 +851,20 @@ public:
 
     //Array-like methods
     virtual TYPE&        GetElement(IDX iIndex);
-    virtual TYPE&        operator[](IDX iIndex)            {    return GetElement(iIndex);    }
+    virtual TYPE&        operator[](IDX iIndex)
+    {
+        return GetElement(iIndex);
+    }
 
     //informational methods
-    virtual    const IDX    GetCount()                        {    return m_cElements;            }
-    virtual    const TYPE*    GetElements() const             {    return m_rgElements;        }
+    virtual    const IDX    GetCount()
+    {
+        return m_cElements;
+    }
+    virtual    const TYPE*    GetElements() const
+    {
+        return m_rgElements;
+    }
 
 protected:
     //data
@@ -849,7 +886,7 @@ template <class TYPE, class IDX> CVector<TYPE, IDX>::CVector(IDX ulLowerBound, I
     m_ulLowerBound = ulLowerBound;
     m_ulMaxSize = 0;
     m_ulGrowSize = ulGrowSize;
-    
+
     m_cElements = 0;
     m_rgElements = NULL;
 }
@@ -859,7 +896,7 @@ template <class TYPE, class IDX> CVector<TYPE, IDX>::CVector(IDX ulLowerBound, I
 // CVector::~CVector
 //
 /////////////////////////////////////////////////////////////////////////////
-template <class TYPE, class IDX> CVector<TYPE, IDX>::~CVector() 
+template <class TYPE, class IDX> CVector<TYPE, IDX>::~CVector()
 {
     //Delete the Array
     CoTaskMemFree(m_rgElements);
@@ -878,7 +915,7 @@ template <class TYPE, class IDX> void CVector<TYPE, IDX>::Attach(CVector& rVecto
     IDX cElements = 0;
     TYPE* rgElements = NULL;
     rVector.Detach(&cElements, &rgElements);
-    
+
     //Now Attch them to our object
     Attach(cElements, rgElements);
 }
@@ -897,7 +934,7 @@ template <class TYPE, class IDX> void CVector<TYPE, IDX>::Attach(IDX cElements, 
     m_cElements        = cElements;
     m_rgElements    = rgElements;
 }
-    
+
 
 ///////////////////////////////////////////////////////////////
 // CVector::Detach
@@ -907,26 +944,26 @@ template <class TYPE, class IDX> void CVector<TYPE, IDX>::Detach(IDX* pcElements
 {
     ASSERT(pcElements);
     ASSERT(prgElements);
-    
+
     //Give our elements to the user...
     *pcElements = m_cElements;
     *prgElements = m_rgElements;
-    
+
     //We are done with them (consumer owns them...)
     m_ulMaxSize    = 0;
     m_cElements = 0;
     m_rgElements = NULL;
 }
 
-    
+
 /////////////////////////////////////////////////////////////////////////////
 // CVector::RemoveAll
 //
 /////////////////////////////////////////////////////////////////////////////
-template <class TYPE, class IDX> void CVector<TYPE, IDX>::RemoveAll() 
+template <class TYPE, class IDX> void CVector<TYPE, IDX>::RemoveAll()
 {
     //NOTE: We don't actually free the array, for optmizations.
-    //We just reset the count of elements, and m_ulMaxSize records the amount of 
+    //We just reset the count of elements, and m_ulMaxSize records the amount of
     //memory that can be reused without needing reallocations...
     m_cElements = 0;
 }
@@ -1051,7 +1088,7 @@ template <class TYPE, class IDX> CVectorEx<TYPE, IDX>::CVectorEx(IDX ulLowerBoun
 // CVectorEx::~CVectorEx
 //
 /////////////////////////////////////////////////////////////////////////////
-template <class TYPE, class IDX> CVectorEx<TYPE, IDX>::~CVectorEx() 
+template <class TYPE, class IDX> CVectorEx<TYPE, IDX>::~CVectorEx()
 {
 }
 
@@ -1063,7 +1100,7 @@ template <class TYPE, class IDX> void CVectorEx<TYPE, IDX>::RemoveElement(TYPE e
 {
     //Try to find the index of the element
     IDX iIndex = FindElement(element);
-    
+
     //Deletgate to our RemoveAt method
     RemoveAt(iIndex);
 }
@@ -1076,8 +1113,8 @@ template <class TYPE, class IDX> IDX CVectorEx<TYPE, IDX>::FindElement(TYPE elem
 {
     //return pointer to found element
     for(IDX i=0; i<m_cElements; i++)
-      if(m_rgElements[i] == element)
-        return i + m_ulLowerBound;   // return position to found element
+        if(m_rgElements[i] == element)
+            return i + m_ulLowerBound;   // return position to found element
 
     return ULONG_MAX;
 }

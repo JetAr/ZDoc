@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -22,9 +22,9 @@
 \*---------------------------------------------------------------------------*/
 DWORD ListMachineAccessACL()
 {
-    return ListNamedValueSD (HKEY_LOCAL_MACHINE, 
-                             _T("Software\\Microsoft\\Ole"), 
-                             _T("MachineAccessRestriction"), 
+    return ListNamedValueSD (HKEY_LOCAL_MACHINE,
+                             _T("Software\\Microsoft\\Ole"),
+                             _T("MachineAccessRestriction"),
                              SDTYPE_MACHINE_ACCESS);
 }
 
@@ -37,9 +37,9 @@ DWORD ListMachineAccessACL()
 \*---------------------------------------------------------------------------*/
 DWORD ListMachineLaunchACL()
 {
-    return ListNamedValueSD (HKEY_LOCAL_MACHINE, 
-                             _T("Software\\Microsoft\\Ole"), 
-                             _T("MachineLaunchRestriction"), 
+    return ListNamedValueSD (HKEY_LOCAL_MACHINE,
+                             _T("Software\\Microsoft\\Ole"),
+                             _T("MachineLaunchRestriction"),
                              SDTYPE_MACHINE_LAUNCH);
 }
 
@@ -52,9 +52,9 @@ DWORD ListMachineLaunchACL()
 \*---------------------------------------------------------------------------*/
 DWORD ListDefaultAccessACL()
 {
-    return ListNamedValueSD (HKEY_LOCAL_MACHINE, 
-                             _T("Software\\Microsoft\\Ole"), 
-                             _T("DefaultAccessPermission"), 
+    return ListNamedValueSD (HKEY_LOCAL_MACHINE,
+                             _T("Software\\Microsoft\\Ole"),
+                             _T("DefaultAccessPermission"),
                              SDTYPE_DEFAULT_ACCESS);
 }
 
@@ -67,9 +67,9 @@ DWORD ListDefaultAccessACL()
 \*---------------------------------------------------------------------------*/
 DWORD ListDefaultLaunchACL()
 {
-    return ListNamedValueSD (HKEY_LOCAL_MACHINE, 
-                             _T("Software\\Microsoft\\Ole"), 
-                             _T("DefaultLaunchPermission"), 
+    return ListNamedValueSD (HKEY_LOCAL_MACHINE,
+                             _T("Software\\Microsoft\\Ole"),
+                             _T("DefaultLaunchPermission"),
                              SDTYPE_DEFAULT_LAUNCH);
 }
 
@@ -82,18 +82,18 @@ DWORD ListDefaultLaunchACL()
 \*---------------------------------------------------------------------------*/
 DWORD ListAppIDAccessACL (
     LPTSTR tszAppID
-    )
+)
 {
     TCHAR   tszKeyName [256] = {0};
 
-    _stprintf_s (tszKeyName, 
+    _stprintf_s (tszKeyName,
                  RTL_NUMBER_OF(tszKeyName),
-                 tszAppID [0] == '{' ? _T("APPID\\%s") : _T("APPID\\{%s}"), 
+                 tszAppID [0] == '{' ? _T("APPID\\%s") : _T("APPID\\{%s}"),
                  tszAppID);
 
-    return ListNamedValueSD (HKEY_CLASSES_ROOT, 
-                             tszKeyName, 
-                             _T("AccessPermission"), 
+    return ListNamedValueSD (HKEY_CLASSES_ROOT,
+                             tszKeyName,
+                             _T("AccessPermission"),
                              SDTYPE_APPLICATION_ACCESS);
 }
 
@@ -106,18 +106,18 @@ DWORD ListAppIDAccessACL (
 \*---------------------------------------------------------------------------*/
 DWORD ListAppIDLaunchACL (
     LPTSTR tszAppID
-    )
+)
 {
     TCHAR   tszKeyName [256] = {0};
 
-    _stprintf_s (tszKeyName, 
+    _stprintf_s (tszKeyName,
                  RTL_NUMBER_OF(tszKeyName),
-                 tszAppID [0] == '{' ? _T("APPID\\%s") : _T("APPID\\{%s}"), 
+                 tszAppID [0] == '{' ? _T("APPID\\%s") : _T("APPID\\{%s}"),
                  tszAppID);
 
-    return ListNamedValueSD (HKEY_CLASSES_ROOT, 
-                             tszKeyName, 
-                             _T("LaunchPermission"), 
+    return ListNamedValueSD (HKEY_CLASSES_ROOT,
+                             tszKeyName,
+                             _T("LaunchPermission"),
                              SDTYPE_APPLICATION_LAUNCH);
 }
 
@@ -151,49 +151,49 @@ DWORD ChangeMachineAccessACL (
     BOOL fSetPrincipal,
     BOOL fPermit,
     DWORD dwAccessMask
-    )
+)
 {
 
     DWORD dwReturnValue = ERROR_SUCCESS;
 
     if (fSetPrincipal)
     {
-        dwReturnValue = 
-            RemovePrincipalFromNamedValueSD (HKEY_LOCAL_MACHINE, 
-                                             _T("Software\\Microsoft\\Ole"), 
-                                             _T("MachineAccessRestriction"), 
-                                             tszPrincipal, 
+        dwReturnValue =
+            RemovePrincipalFromNamedValueSD (HKEY_LOCAL_MACHINE,
+                                             _T("Software\\Microsoft\\Ole"),
+                                             _T("MachineAccessRestriction"),
+                                             tszPrincipal,
                                              fPermit ? ACCESS_ALLOWED_ACE_TYPE : ACCESS_DENIED_ACE_TYPE);
 
         if(dwReturnValue != ERROR_SUCCESS) return dwReturnValue;
-        
-        dwReturnValue = 
-            UpdatePrincipalInNamedValueSD(HKEY HKEY_LOCAL_MACHINE, 
-                                          _T("Software\\Microsoft\\Ole"), 
-                                          _T("MachineAccessRestriction"), 
-                                          tszPrincipal, 
-                                          dwAccessMask, 
-                                          TRUE, 
+
+        dwReturnValue =
+            UpdatePrincipalInNamedValueSD(HKEY HKEY_LOCAL_MACHINE,
+                                          _T("Software\\Microsoft\\Ole"),
+                                          _T("MachineAccessRestriction"),
+                                          tszPrincipal,
+                                          dwAccessMask,
+                                          TRUE,
                                           fPermit ? ACCESS_DENIED_ACE_TYPE : ACCESS_ALLOWED_ACE_TYPE);
 
         if(dwReturnValue != ERROR_SUCCESS) return dwReturnValue;
 
-        dwReturnValue = 
-            AddPrincipalToNamedValueSD (HKEY_LOCAL_MACHINE, 
-                                        _T("Software\\Microsoft\\Ole"), 
-                                        _T("MachineAccessRestriction"), 
-                                        tszPrincipal, 
-                                        fPermit, 
+        dwReturnValue =
+            AddPrincipalToNamedValueSD (HKEY_LOCAL_MACHINE,
+                                        _T("Software\\Microsoft\\Ole"),
+                                        _T("MachineAccessRestriction"),
+                                        tszPrincipal,
+                                        fPermit,
                                         dwAccessMask,
                                         SDTYPE_MACHINE_ACCESS);
-    } 
+    }
     else
     {
-        dwReturnValue =  
-            RemovePrincipalFromNamedValueSD (HKEY_LOCAL_MACHINE, 
-                                             _T("Software\\Microsoft\\Ole"),  
-                                             _T("MachineAccessRestriction"), 
-                                             tszPrincipal, 
+        dwReturnValue =
+            RemovePrincipalFromNamedValueSD (HKEY_LOCAL_MACHINE,
+                                             _T("Software\\Microsoft\\Ole"),
+                                             _T("MachineAccessRestriction"),
+                                             tszPrincipal,
                                              ACE_TYPE_ALL);
     }
 
@@ -229,51 +229,51 @@ DWORD ChangeMachineLaunchAndActivateACL (
     BOOL fSetPrincipal,
     BOOL fPermit,
     DWORD dwAccessMask
-    )
+)
 {
 
     DWORD dwReturnValue = ERROR_SUCCESS;
 
     if (fSetPrincipal)
     {
-        dwReturnValue = 
-            RemovePrincipalFromNamedValueSD (HKEY_LOCAL_MACHINE, 
-                                             _T("Software\\Microsoft\\Ole"), 
-                                             _T("MachineLaunchRestriction"), 
-                                             tszPrincipal, 
-                                             fPermit ? ACCESS_ALLOWED_ACE_TYPE : 
+        dwReturnValue =
+            RemovePrincipalFromNamedValueSD (HKEY_LOCAL_MACHINE,
+                                             _T("Software\\Microsoft\\Ole"),
+                                             _T("MachineLaunchRestriction"),
+                                             tszPrincipal,
+                                             fPermit ? ACCESS_ALLOWED_ACE_TYPE :
                                              ACCESS_DENIED_ACE_TYPE);
 
         if(dwReturnValue != ERROR_SUCCESS) return dwReturnValue;
-        
-        dwReturnValue = 
-            UpdatePrincipalInNamedValueSD(HKEY_LOCAL_MACHINE, 
-                                          _T("Software\\Microsoft\\Ole"), 
-                                          _T("MachineLaunchRestriction"), 
-                                          tszPrincipal, 
-                                          dwAccessMask, 
-                                          TRUE, 
-                                          fPermit ? ACCESS_DENIED_ACE_TYPE : 
+
+        dwReturnValue =
+            UpdatePrincipalInNamedValueSD(HKEY_LOCAL_MACHINE,
+                                          _T("Software\\Microsoft\\Ole"),
+                                          _T("MachineLaunchRestriction"),
+                                          tszPrincipal,
+                                          dwAccessMask,
+                                          TRUE,
+                                          fPermit ? ACCESS_DENIED_ACE_TYPE :
                                           ACCESS_ALLOWED_ACE_TYPE);
 
         if(dwReturnValue != ERROR_SUCCESS) return dwReturnValue;
 
-        dwReturnValue = 
-            AddPrincipalToNamedValueSD (HKEY_LOCAL_MACHINE, 
+        dwReturnValue =
+            AddPrincipalToNamedValueSD (HKEY_LOCAL_MACHINE,
                                         _T("Software\\Microsoft\\Ole"),
-                                        _T("MachineLaunchRestriction"), 
-                                        tszPrincipal, 
-                                        fPermit, 
+                                        _T("MachineLaunchRestriction"),
+                                        tszPrincipal,
+                                        fPermit,
                                         dwAccessMask,
                                         SDTYPE_MACHINE_LAUNCH);
-    } 
+    }
     else
     {
-        dwReturnValue =  
-            RemovePrincipalFromNamedValueSD (HKEY_LOCAL_MACHINE, 
-                                             _T("Software\\Microsoft\\Ole"), 
-                                             _T("MachineLaunchRestriction"), 
-                                             tszPrincipal, 
+        dwReturnValue =
+            RemovePrincipalFromNamedValueSD (HKEY_LOCAL_MACHINE,
+                                             _T("Software\\Microsoft\\Ole"),
+                                             _T("MachineLaunchRestriction"),
+                                             tszPrincipal,
                                              ACE_TYPE_ALL);
     }
 
@@ -310,51 +310,51 @@ DWORD ChangeDefaultAccessACL (
     BOOL fSetPrincipal,
     BOOL fPermit,
     DWORD dwAccessMask
-    )
+)
 {
 
     DWORD dwReturnValue = ERROR_SUCCESS;
 
     if (fSetPrincipal)
     {
-        dwReturnValue = 
-            RemovePrincipalFromNamedValueSD (HKEY_LOCAL_MACHINE, 
-                                             _T("Software\\Microsoft\\Ole"), 
-                                             _T("DefaultAccessPermission"), 
-                                             tszPrincipal, 
-                                             fPermit ? ACCESS_ALLOWED_ACE_TYPE : 
+        dwReturnValue =
+            RemovePrincipalFromNamedValueSD (HKEY_LOCAL_MACHINE,
+                                             _T("Software\\Microsoft\\Ole"),
+                                             _T("DefaultAccessPermission"),
+                                             tszPrincipal,
+                                             fPermit ? ACCESS_ALLOWED_ACE_TYPE :
                                              ACCESS_DENIED_ACE_TYPE);
 
         if(dwReturnValue != ERROR_SUCCESS) return dwReturnValue;
-        
-        dwReturnValue = 
-            UpdatePrincipalInNamedValueSD(HKEY_LOCAL_MACHINE, 
-                                          _T("Software\\Microsoft\\Ole"), 
-                                          _T("DefaultAccessPermission"), 
-                                          tszPrincipal, 
-                                          dwAccessMask, 
-                                          TRUE, 
-                                          fPermit ? ACCESS_DENIED_ACE_TYPE : 
+
+        dwReturnValue =
+            UpdatePrincipalInNamedValueSD(HKEY_LOCAL_MACHINE,
+                                          _T("Software\\Microsoft\\Ole"),
+                                          _T("DefaultAccessPermission"),
+                                          tszPrincipal,
+                                          dwAccessMask,
+                                          TRUE,
+                                          fPermit ? ACCESS_DENIED_ACE_TYPE :
                                           ACCESS_ALLOWED_ACE_TYPE);
 
         if(dwReturnValue != ERROR_SUCCESS) return dwReturnValue;
 
-        dwReturnValue = 
-            AddPrincipalToNamedValueSD (HKEY_LOCAL_MACHINE, 
-                                        _T("Software\\Microsoft\\Ole"), 
-                                        _T("DefaultAccessPermission"), 
-                                        tszPrincipal, 
-                                        fPermit, 
+        dwReturnValue =
+            AddPrincipalToNamedValueSD (HKEY_LOCAL_MACHINE,
+                                        _T("Software\\Microsoft\\Ole"),
+                                        _T("DefaultAccessPermission"),
+                                        tszPrincipal,
+                                        fPermit,
                                         dwAccessMask,
                                         SDTYPE_DEFAULT_ACCESS);
-    } 
+    }
     else
     {
-        dwReturnValue =  
-            RemovePrincipalFromNamedValueSD (HKEY_LOCAL_MACHINE, 
-                                             _T("Software\\Microsoft\\Ole"), 
-                                             _T("DefaultAccessPermission"), 
-                                             tszPrincipal, 
+        dwReturnValue =
+            RemovePrincipalFromNamedValueSD (HKEY_LOCAL_MACHINE,
+                                             _T("Software\\Microsoft\\Ole"),
+                                             _T("DefaultAccessPermission"),
+                                             tszPrincipal,
                                              ACE_TYPE_ALL);
     }
 
@@ -391,50 +391,50 @@ DWORD ChangeDefaultLaunchAndActivateACL (
     BOOL fSetPrincipal,
     BOOL fPermit,
     DWORD dwAccessMask
-    )
+)
 {
     DWORD dwReturnValue = ERROR_SUCCESS;
 
     if (fSetPrincipal)
     {
-        dwReturnValue = 
-            RemovePrincipalFromNamedValueSD (HKEY_LOCAL_MACHINE, 
-                                             _T("Software\\Microsoft\\Ole"), 
-                                             _T("DefaultLaunchPermission"), 
-                                             tszPrincipal, 
-                                             fPermit ? ACCESS_ALLOWED_ACE_TYPE : 
+        dwReturnValue =
+            RemovePrincipalFromNamedValueSD (HKEY_LOCAL_MACHINE,
+                                             _T("Software\\Microsoft\\Ole"),
+                                             _T("DefaultLaunchPermission"),
+                                             tszPrincipal,
+                                             fPermit ? ACCESS_ALLOWED_ACE_TYPE :
                                              ACCESS_DENIED_ACE_TYPE);
 
         if(dwReturnValue != ERROR_SUCCESS) return dwReturnValue;
-        
-        dwReturnValue = 
-            UpdatePrincipalInNamedValueSD(HKEY_LOCAL_MACHINE, 
-                                          _T("Software\\Microsoft\\Ole"), 
-                                          _T("DefaultLaunchPermission"), 
-                                          tszPrincipal, 
-                                          dwAccessMask, 
-                                          TRUE, 
-                                          fPermit ? ACCESS_DENIED_ACE_TYPE : 
+
+        dwReturnValue =
+            UpdatePrincipalInNamedValueSD(HKEY_LOCAL_MACHINE,
+                                          _T("Software\\Microsoft\\Ole"),
+                                          _T("DefaultLaunchPermission"),
+                                          tszPrincipal,
+                                          dwAccessMask,
+                                          TRUE,
+                                          fPermit ? ACCESS_DENIED_ACE_TYPE :
                                           ACCESS_ALLOWED_ACE_TYPE);
 
         if(dwReturnValue != ERROR_SUCCESS) return dwReturnValue;
 
-        dwReturnValue = 
-            AddPrincipalToNamedValueSD (HKEY_LOCAL_MACHINE, 
-                                        _T("Software\\Microsoft\\Ole"), 
-                                        _T("DefaultLaunchPermission"), 
-                                        tszPrincipal, 
-                                        fPermit, 
+        dwReturnValue =
+            AddPrincipalToNamedValueSD (HKEY_LOCAL_MACHINE,
+                                        _T("Software\\Microsoft\\Ole"),
+                                        _T("DefaultLaunchPermission"),
+                                        tszPrincipal,
+                                        fPermit,
                                         dwAccessMask,
                                         SDTYPE_DEFAULT_LAUNCH);
-    } 
+    }
     else
     {
-        dwReturnValue =  
-            RemovePrincipalFromNamedValueSD (HKEY_LOCAL_MACHINE, 
-                                             _T("Software\\Microsoft\\Ole"), 
-                                             _T("DefaultLaunchPermission"), 
-                                             tszPrincipal, 
+        dwReturnValue =
+            RemovePrincipalFromNamedValueSD (HKEY_LOCAL_MACHINE,
+                                             _T("Software\\Microsoft\\Ole"),
+                                             _T("DefaultLaunchPermission"),
+                                             tszPrincipal,
                                              ACE_TYPE_ALL);
     }
 
@@ -475,56 +475,56 @@ DWORD ChangeAppIDAccessACL (
     BOOL fSetPrincipal,
     BOOL fPermit,
     DWORD dwAccessMask
-    )
+)
 {
     TCHAR   tszKeyName [256] = {0};
     DWORD dwReturnValue = ERROR_SUCCESS;
 
-    _stprintf_s (tszKeyName, 
+    _stprintf_s (tszKeyName,
                  RTL_NUMBER_OF(tszKeyName),
-                 tszAppID [0] == '{' ? _T("APPID\\%s") : _T("APPID\\{%s}"), 
+                 tszAppID [0] == '{' ? _T("APPID\\%s") : _T("APPID\\{%s}"),
                  tszAppID);
 
     if (fSetPrincipal)
     {
-        dwReturnValue = 
-            RemovePrincipalFromNamedValueSD (HKEY_CLASSES_ROOT, 
-                                             tszKeyName, 
-                                             _T("AccessPermission"), 
-                                             tszPrincipal, 
-                                             fPermit ? ACCESS_ALLOWED_ACE_TYPE : 
+        dwReturnValue =
+            RemovePrincipalFromNamedValueSD (HKEY_CLASSES_ROOT,
+                                             tszKeyName,
+                                             _T("AccessPermission"),
+                                             tszPrincipal,
+                                             fPermit ? ACCESS_ALLOWED_ACE_TYPE :
                                              ACCESS_DENIED_ACE_TYPE);
 
         if(dwReturnValue != ERROR_SUCCESS) return dwReturnValue;
-        
-        dwReturnValue = 
-            UpdatePrincipalInNamedValueSD(HKEY_CLASSES_ROOT, 
-                                          tszKeyName, 
-                                          _T("AccessPermission"), 
-                                          tszPrincipal, 
-                                          dwAccessMask, 
-                                          TRUE, 
-                                          fPermit ? ACCESS_DENIED_ACE_TYPE : 
+
+        dwReturnValue =
+            UpdatePrincipalInNamedValueSD(HKEY_CLASSES_ROOT,
+                                          tszKeyName,
+                                          _T("AccessPermission"),
+                                          tszPrincipal,
+                                          dwAccessMask,
+                                          TRUE,
+                                          fPermit ? ACCESS_DENIED_ACE_TYPE :
                                           ACCESS_ALLOWED_ACE_TYPE);
 
         if(dwReturnValue != ERROR_SUCCESS) return dwReturnValue;
 
-        dwReturnValue = 
-            AddPrincipalToNamedValueSD (HKEY_CLASSES_ROOT, 
-                                        tszKeyName, 
-                                        _T("AccessPermission"), 
-                                        tszPrincipal, 
-                                        fPermit, 
+        dwReturnValue =
+            AddPrincipalToNamedValueSD (HKEY_CLASSES_ROOT,
+                                        tszKeyName,
+                                        _T("AccessPermission"),
+                                        tszPrincipal,
+                                        fPermit,
                                         dwAccessMask,
                                         SDTYPE_APPLICATION_ACCESS);
-    } 
+    }
     else
     {
-        dwReturnValue =  
-            RemovePrincipalFromNamedValueSD (HKEY_CLASSES_ROOT, 
-                                             tszKeyName, 
-                                             _T("AccessPermission"), 
-                                             tszPrincipal, 
+        dwReturnValue =
+            RemovePrincipalFromNamedValueSD (HKEY_CLASSES_ROOT,
+                                             tszKeyName,
+                                             _T("AccessPermission"),
+                                             tszPrincipal,
                                              ACE_TYPE_ALL);
     }
 
@@ -564,56 +564,56 @@ DWORD ChangeAppIDLaunchAndActivateACL (
     BOOL fSetPrincipal,
     BOOL fPermit,
     DWORD dwAccessMask
-    )
+)
 {
     TCHAR   tszKeyName [256] = {0};
     DWORD dwReturnValue = ERROR_SUCCESS;
 
-    _stprintf_s (tszKeyName, 
+    _stprintf_s (tszKeyName,
                  RTL_NUMBER_OF(tszKeyName),
-                 tszAppID [0] == '{' ? _T("APPID\\%s") : _T("APPID\\{%s}"), 
+                 tszAppID [0] == '{' ? _T("APPID\\%s") : _T("APPID\\{%s}"),
                  tszAppID);
 
     if (fSetPrincipal)
     {
-        dwReturnValue = 
-            RemovePrincipalFromNamedValueSD (HKEY_CLASSES_ROOT, 
-                                             tszKeyName, 
-                                             _T("LaunchPermission"), 
-                                             tszPrincipal, 
-                                             fPermit ? ACCESS_ALLOWED_ACE_TYPE : 
+        dwReturnValue =
+            RemovePrincipalFromNamedValueSD (HKEY_CLASSES_ROOT,
+                                             tszKeyName,
+                                             _T("LaunchPermission"),
+                                             tszPrincipal,
+                                             fPermit ? ACCESS_ALLOWED_ACE_TYPE :
                                              ACCESS_DENIED_ACE_TYPE);
 
         if(dwReturnValue != ERROR_SUCCESS) return dwReturnValue;
-        
-        dwReturnValue = 
-            UpdatePrincipalInNamedValueSD(HKEY_CLASSES_ROOT, 
-                                          tszKeyName, 
-                                          _T("LaunchPermission"), 
-                                          tszPrincipal, 
-                                          dwAccessMask, 
-                                          TRUE, 
-                                          fPermit ? ACCESS_DENIED_ACE_TYPE : 
+
+        dwReturnValue =
+            UpdatePrincipalInNamedValueSD(HKEY_CLASSES_ROOT,
+                                          tszKeyName,
+                                          _T("LaunchPermission"),
+                                          tszPrincipal,
+                                          dwAccessMask,
+                                          TRUE,
+                                          fPermit ? ACCESS_DENIED_ACE_TYPE :
                                           ACCESS_ALLOWED_ACE_TYPE);
 
         if(dwReturnValue != ERROR_SUCCESS) return dwReturnValue;
 
-        dwReturnValue = 
-            AddPrincipalToNamedValueSD (HKEY_CLASSES_ROOT, 
-                                        tszKeyName, 
-                                        _T("LaunchPermission"), 
-                                        tszPrincipal, 
-                                        fPermit, 
+        dwReturnValue =
+            AddPrincipalToNamedValueSD (HKEY_CLASSES_ROOT,
+                                        tszKeyName,
+                                        _T("LaunchPermission"),
+                                        tszPrincipal,
+                                        fPermit,
                                         dwAccessMask,
                                         SDTYPE_APPLICATION_LAUNCH);
-    } 
+    }
     else
     {
-        dwReturnValue =  
-            RemovePrincipalFromNamedValueSD (HKEY_CLASSES_ROOT, 
-                                             tszKeyName, 
-                                             _T("LaunchPermission"), 
-                                             tszPrincipal, 
+        dwReturnValue =
+            RemovePrincipalFromNamedValueSD (HKEY_CLASSES_ROOT,
+                                             tszKeyName,
+                                             _T("LaunchPermission"),
+                                             tszPrincipal,
                                              ACE_TYPE_ALL);
     }
 

@@ -1,4 +1,4 @@
-//*****************************************************************************
+﻿//*****************************************************************************
 //
 // Microsoft Windows Media
 // Copyright (C) Microsoft Corporation. All rights reserved.
@@ -44,24 +44,24 @@ public:
     virtual ~CSampleDataContainer();
     HRESULT Shutdown();
     HRESULT Initialize(
-                IWMSContext *pUserContext,
-                LPWSTR pszContainerName,
-                DWORD dwFlags,
-                IWMSBufferAllocator __RPC_FAR *pBufferAllocator,
-                CSDKSampleStorageSystem *pOwnerContainer,
-                IWMSDataSourcePluginCallback __RPC_FAR *pCallback,
-                QWORD qwContext
-                );
-    
+        IWMSContext *pUserContext,
+        LPWSTR pszContainerName,
+        DWORD dwFlags,
+        IWMSBufferAllocator __RPC_FAR *pBufferAllocator,
+        CSDKSampleStorageSystem *pOwnerContainer,
+        IWMSDataSourcePluginCallback __RPC_FAR *pCallback,
+        QWORD qwContext
+    );
+
     void OnIoCompletion(
-                        DWORD dwError,
-                        DWORD dwIoType,
-                        QWORD qwOffset,
-                        DWORD cbTransferred,
-                        BYTE *pbBuffer,
-                        IWMSDataContainerCallback __RPC_FAR *pCallback,
-                        QWORD qwContext
-                        );
+        DWORD dwError,
+        DWORD dwIoType,
+        QWORD qwOffset,
+        DWORD cbTransferred,
+        BYTE *pbBuffer,
+        IWMSDataContainerCallback __RPC_FAR *pCallback,
+        QWORD qwContext
+    );
 
     // IUnknown
     STDMETHOD_(ULONG, AddRef)();
@@ -69,54 +69,54 @@ public:
     STDMETHOD(QueryInterface)(REFIID riid, void **ppvObject);
 
     // IWMSDataContainer
-    virtual HRESULT STDMETHODCALLTYPE GetContainerFormat( 
-                    GUID __RPC_FAR *pFormat
-                    );
-    virtual HRESULT STDMETHODCALLTYPE GetDataSourcePlugin( 
-                    IWMSDataSourcePlugin __RPC_FAR *__RPC_FAR *ppDataSource
-                    );
-    virtual HRESULT STDMETHODCALLTYPE GetInfo( 
-                    DWORD dwInfoValueId,
-                    IWMSDataContainerCallback __RPC_FAR *pCallback,
-                    QWORD qwContext
-                    );
-    virtual HRESULT STDMETHODCALLTYPE Read( 
-                    BYTE __RPC_FAR *pbBuffer,
-                    QWORD qwOffset,
-                    DWORD dwMaxDataSize,
-                    DWORD dwFlags,
-                    IWMSDataContainerCallback __RPC_FAR *pCallback,
-                    QWORD qwContext
-                    );
-    virtual HRESULT STDMETHODCALLTYPE Write( 
-                    BYTE __RPC_FAR *pbBuffer,
-                    DWORD dwDataSize,
-                    QWORD qwWritePosition,
-                    IWMSDataContainerCallback __RPC_FAR *pCallback,
-                    QWORD qwContext
-                    );
-    virtual HRESULT STDMETHODCALLTYPE GetTransferParameters( 
-                    QWORD qwDesiredOffset,
-                    DWORD dwDesiredMinSize,
-                    DWORD dwDesiredMaxSize,
-                    QWORD *pqwOffset,
-                    DWORD *pdwSize,
-                    DWORD *pdwBufferAlignment
-                    );
-    virtual HRESULT STDMETHODCALLTYPE DoDataContainerExtendedCommand( 
-                    LPWSTR szCommandName,
-                    IWMSCommandContext *pCommand,
-                    DWORD dwCallFlags,
-                    IWMSDataContainerCallback __RPC_FAR *pCallback,
-                    QWORD qwContext
-                    );
-    virtual HRESULT STDMETHODCALLTYPE FinishParsingPacketlist( 
-                    IWMSPacketList *pPacketList 
-                    );
+    virtual HRESULT STDMETHODCALLTYPE GetContainerFormat(
+        GUID __RPC_FAR *pFormat
+    );
+    virtual HRESULT STDMETHODCALLTYPE GetDataSourcePlugin(
+        IWMSDataSourcePlugin __RPC_FAR *__RPC_FAR *ppDataSource
+    );
+    virtual HRESULT STDMETHODCALLTYPE GetInfo(
+        DWORD dwInfoValueId,
+        IWMSDataContainerCallback __RPC_FAR *pCallback,
+        QWORD qwContext
+    );
+    virtual HRESULT STDMETHODCALLTYPE Read(
+        BYTE __RPC_FAR *pbBuffer,
+        QWORD qwOffset,
+        DWORD dwMaxDataSize,
+        DWORD dwFlags,
+        IWMSDataContainerCallback __RPC_FAR *pCallback,
+        QWORD qwContext
+    );
+    virtual HRESULT STDMETHODCALLTYPE Write(
+        BYTE __RPC_FAR *pbBuffer,
+        DWORD dwDataSize,
+        QWORD qwWritePosition,
+        IWMSDataContainerCallback __RPC_FAR *pCallback,
+        QWORD qwContext
+    );
+    virtual HRESULT STDMETHODCALLTYPE GetTransferParameters(
+        QWORD qwDesiredOffset,
+        DWORD dwDesiredMinSize,
+        DWORD dwDesiredMaxSize,
+        QWORD *pqwOffset,
+        DWORD *pdwSize,
+        DWORD *pdwBufferAlignment
+    );
+    virtual HRESULT STDMETHODCALLTYPE DoDataContainerExtendedCommand(
+        LPWSTR szCommandName,
+        IWMSCommandContext *pCommand,
+        DWORD dwCallFlags,
+        IWMSDataContainerCallback __RPC_FAR *pCallback,
+        QWORD qwContext
+    );
+    virtual HRESULT STDMETHODCALLTYPE FinishParsingPacketlist(
+        IWMSPacketList *pPacketList
+    );
 
 protected:
     enum { IO_READ, IO_WRITE };
-    LONG                        m_cRef; 
+    LONG                        m_cRef;
     CSDKSampleStorageSystem    *m_pOwnerStorageSystem;
     CHAR                       *m_pszPathName;
     HANDLE                      m_hFile;
@@ -133,100 +133,100 @@ protected:
 /////////////////////////////////////////////////////////////////////////////
 // CSDKSampleStorageSystem
 
-class ATL_NO_VTABLE CSDKSampleStorageSystem : 
-	public CComObjectRootEx<CComMultiThreadModel>,
-	public CComCoClass<CSDKSampleStorageSystem, &CLSID_SDKSampleStorageSystem>,
+class ATL_NO_VTABLE CSDKSampleStorageSystem :
+    public CComObjectRootEx<CComMultiThreadModel>,
+    public CComCoClass<CSDKSampleStorageSystem, &CLSID_SDKSampleStorageSystem>,
     public IWMSDataSourcePlugin,
     public IWMSBasicPlugin
 {
 public:
     CSDKSampleStorageSystem();
     virtual ~CSDKSampleStorageSystem();
-    
-DECLARE_REGISTRY_RESOURCEID(IDR_SDKSAMPLESTORAGESYSTEM)
-DECLARE_GET_CONTROLLING_UNKNOWN()
 
-DECLARE_PROTECT_FINAL_CONSTRUCT()
+    DECLARE_REGISTRY_RESOURCEID(IDR_SDKSAMPLESTORAGESYSTEM)
+    DECLARE_GET_CONTROLLING_UNKNOWN()
 
-BEGIN_COM_MAP(CSDKSampleStorageSystem)
+    DECLARE_PROTECT_FINAL_CONSTRUCT()
+
+    BEGIN_COM_MAP(CSDKSampleStorageSystem)
     COM_INTERFACE_ENTRY(IWMSDataSourcePlugin)
     COM_INTERFACE_ENTRY(IWMSBasicPlugin)
-END_COM_MAP()
+    END_COM_MAP()
 
     // IWMSDataSourcePlugin
-    virtual HRESULT STDMETHODCALLTYPE OpenDataContainer( 
-                    IWMSCommandContext *pCommandContext,
-                    IWMSContext *pUserContext,
-                    IWMSContext *pPresentationContext,
-                    LPWSTR pszContainerName,
-                    DWORD dwFlags,
-                    IWMSBufferAllocator __RPC_FAR *pBufferAllocator,
-                    IWMSDataSourcePluginCallback __RPC_FAR *pCallback,
-                    QWORD qwContext
-                    );
-    virtual HRESULT STDMETHODCALLTYPE OpenDirectory( 
-                    IWMSCommandContext *pCommandContext,
-                    IWMSContext *pUserContext,
-                    IWMSContext *pPresentationContext,
-                    LPWSTR pszContainerName,
-                    DWORD dwFlags,
-                    IWMSBufferAllocator *pBufferAllocator,
-                    IWMSDataSourcePluginCallback *pCallback,
-                    QWORD qwContext
-                    );
-    virtual HRESULT STDMETHODCALLTYPE DeleteDataContainer( 
-                    LPWSTR pszContainerName,
-                    DWORD dwFlags,
-                    IWMSDataSourcePluginCallback __RPC_FAR *pCallback,
-                    QWORD qwContext
-                    );
-    virtual HRESULT STDMETHODCALLTYPE GetDataContainerVersion( 
-                    IWMSCommandContext __RPC_FAR *pCommandContext,
-                    IWMSContext __RPC_FAR *pUserContext,
-                    IWMSContext __RPC_FAR *pPresContext,
-                    LPWSTR pszContainerName,
-                    DWORD dwFlags,
-                    IWMSDataSourcePluginCallback __RPC_FAR *pCallback,
-                    QWORD qwContext
-                    );
-    virtual HRESULT STDMETHODCALLTYPE GetRootDirectories( 
-                    LPWSTR __RPC_FAR *pstrRootDirectoryList,
-                    DWORD dwMaxRoots,
-                    IWMSDataSourcePluginCallback __RPC_FAR *pCallback,
-                    QWORD qwContext
-                    );
-    virtual HRESULT STDMETHODCALLTYPE GetDataSourceAttributes( 
-                    DWORD __RPC_FAR *pdwFlags
-                    );
-    virtual HRESULT STDMETHODCALLTYPE CreateDataSourceDirectory( 
-                    IWMSCommandContext *pCommandContext,
-                    LPWSTR pszContainerName,
-                    DWORD dwFlags,
-                    IWMSDataSourcePluginCallback *pCallback,
-                    QWORD qwContext
-                    );
-    virtual HRESULT STDMETHODCALLTYPE DeleteDirectory( 
-                    LPWSTR pszContainerName,
-                    DWORD dwFlags,
-                    IWMSDataSourcePluginCallback *pCallback,
-                    QWORD qwContext
-                    );
+    virtual HRESULT STDMETHODCALLTYPE OpenDataContainer(
+        IWMSCommandContext *pCommandContext,
+        IWMSContext *pUserContext,
+        IWMSContext *pPresentationContext,
+        LPWSTR pszContainerName,
+        DWORD dwFlags,
+        IWMSBufferAllocator __RPC_FAR *pBufferAllocator,
+        IWMSDataSourcePluginCallback __RPC_FAR *pCallback,
+        QWORD qwContext
+    );
+    virtual HRESULT STDMETHODCALLTYPE OpenDirectory(
+        IWMSCommandContext *pCommandContext,
+        IWMSContext *pUserContext,
+        IWMSContext *pPresentationContext,
+        LPWSTR pszContainerName,
+        DWORD dwFlags,
+        IWMSBufferAllocator *pBufferAllocator,
+        IWMSDataSourcePluginCallback *pCallback,
+        QWORD qwContext
+    );
+    virtual HRESULT STDMETHODCALLTYPE DeleteDataContainer(
+        LPWSTR pszContainerName,
+        DWORD dwFlags,
+        IWMSDataSourcePluginCallback __RPC_FAR *pCallback,
+        QWORD qwContext
+    );
+    virtual HRESULT STDMETHODCALLTYPE GetDataContainerVersion(
+        IWMSCommandContext __RPC_FAR *pCommandContext,
+        IWMSContext __RPC_FAR *pUserContext,
+        IWMSContext __RPC_FAR *pPresContext,
+        LPWSTR pszContainerName,
+        DWORD dwFlags,
+        IWMSDataSourcePluginCallback __RPC_FAR *pCallback,
+        QWORD qwContext
+    );
+    virtual HRESULT STDMETHODCALLTYPE GetRootDirectories(
+        LPWSTR __RPC_FAR *pstrRootDirectoryList,
+        DWORD dwMaxRoots,
+        IWMSDataSourcePluginCallback __RPC_FAR *pCallback,
+        QWORD qwContext
+    );
+    virtual HRESULT STDMETHODCALLTYPE GetDataSourceAttributes(
+        DWORD __RPC_FAR *pdwFlags
+    );
+    virtual HRESULT STDMETHODCALLTYPE CreateDataSourceDirectory(
+        IWMSCommandContext *pCommandContext,
+        LPWSTR pszContainerName,
+        DWORD dwFlags,
+        IWMSDataSourcePluginCallback *pCallback,
+        QWORD qwContext
+    );
+    virtual HRESULT STDMETHODCALLTYPE DeleteDirectory(
+        LPWSTR pszContainerName,
+        DWORD dwFlags,
+        IWMSDataSourcePluginCallback *pCallback,
+        QWORD qwContext
+    );
 
 
     // IWMSBasicPlugin
-    virtual HRESULT STDMETHODCALLTYPE InitializePlugin( 
-                    IWMSContext __RPC_FAR *pServerContext,
-                    IWMSNamedValues *pNamedValues,
-                    IWMSClassObject __RPC_FAR *pClassFactory);
-                    
-    virtual HRESULT STDMETHODCALLTYPE GetCustomAdminInterface( 
-                    IDispatch **ppValue
-                    );
+    virtual HRESULT STDMETHODCALLTYPE InitializePlugin(
+        IWMSContext __RPC_FAR *pServerContext,
+        IWMSNamedValues *pNamedValues,
+        IWMSClassObject __RPC_FAR *pClassFactory);
+
+    virtual HRESULT STDMETHODCALLTYPE GetCustomAdminInterface(
+        IDispatch **ppValue
+    );
     virtual HRESULT STDMETHODCALLTYPE OnHeartbeat();
     virtual HRESULT STDMETHODCALLTYPE ShutdownPlugin();
 
     STDMETHOD( EnablePlugin )( long *pdwFlags, long *pdwHeartbeatPeriod );
-    STDMETHOD( DisablePlugin )();    
+    STDMETHOD( DisablePlugin )();
 
 protected:
 
@@ -242,8 +242,8 @@ class CSampleDirectoryInfo
 {
 public:
     ///////////////////////////
-    CSampleDirectoryInfo() 
-    { 
+    CSampleDirectoryInfo()
+    {
         m_pszwName = NULL;
         m_dwFlags = 0;
         m_qwSize = 0;
@@ -251,7 +251,7 @@ public:
     }
 
     ///////////////////////////
-    virtual ~CSampleDirectoryInfo() 
+    virtual ~CSampleDirectoryInfo()
     {
         if( NULL != m_pszwName )
         {
@@ -279,12 +279,12 @@ public:
     virtual ~CSampleDirectory();
 
     HRESULT Initialize(
-                IWMSContext *pUserContext,
-                LPWSTR pszContainerName,
-                CSDKSampleStorageSystem *pOwnerStorageSystem,
-                IWMSDataSourcePluginCallback *pCallback,
-                QWORD qwContext
-                );
+        IWMSContext *pUserContext,
+        LPWSTR pszContainerName,
+        CSDKSampleStorageSystem *pOwnerStorageSystem,
+        IWMSDataSourcePluginCallback *pCallback,
+        QWORD qwContext
+    );
     HRESULT Shutdown();
 
     // IUnknown
@@ -293,16 +293,16 @@ public:
     STDMETHOD(QueryInterface)(REFIID riid, void **ppvObject);
 
     // IWMSDirectory
-    virtual HRESULT STDMETHODCALLTYPE GetDataSourcePlugin( 
-                    IWMSDataSourcePlugin **ppDataSource
-                    );
-    virtual HRESULT STDMETHODCALLTYPE GetName( 
-                    LPOLESTR *pstrValue
-                    );
-    virtual HRESULT STDMETHODCALLTYPE GetChildInfo( 
-                    DWORD dwIndex,
-                    WMSDirectoryEntryInfo *pInfo
-                    );
+    virtual HRESULT STDMETHODCALLTYPE GetDataSourcePlugin(
+        IWMSDataSourcePlugin **ppDataSource
+    );
+    virtual HRESULT STDMETHODCALLTYPE GetName(
+        LPOLESTR *pstrValue
+    );
+    virtual HRESULT STDMETHODCALLTYPE GetChildInfo(
+        DWORD dwIndex,
+        WMSDirectoryEntryInfo *pInfo
+    );
 
 protected:
     LONG                        m_cRef;

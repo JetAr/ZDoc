@@ -1,4 +1,4 @@
-//*****************************************************************************
+﻿//*****************************************************************************
 //
 // Microsoft Windows Media
 // Copyright (C) Microsoft Corporation. All rights reserved.
@@ -18,8 +18,8 @@
 #pragma once
 #endif // _MSC_VER > 1000
 
-#ifndef WINVER		
-#define WINVER 0x0501		
+#ifndef WINVER
+#define WINVER 0x0501
 #endif
 
 

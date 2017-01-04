@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -22,7 +22,7 @@ public:
 
     HRESULT Initialize(
         HINSTANCE hInstance
-        );
+    );
 
     HRESULT Invalidate();
 
@@ -40,43 +40,43 @@ protected:
         UINT uMsg,
         WPARAM wParam,
         LPARAM lParam
-        );
+    );
 
     HRESULT OnPaint(
         HDC hdc,
         const RECT &rcPaint
-        );
-    
+    );
+
     HRESULT OnLButtonDown();
 
     HRESULT OnResize(
         UINT width,
         UINT height
-        );
-    
+    );
+
     void OnDestroy();
-    
+
     HRESULT DrawClientArea();
-    
+
     HRESULT DrawBackground(
         const D2D1_RECT_F &rectPaint
-        );
+    );
 
     HRESULT ChangeColor(
         DOUBLE red,
         DOUBLE green,
         DOUBLE blue
-        );
+    );
 
     DOUBLE RandomFromRange(
         DOUBLE minimum,
         DOUBLE maximum
-        );
+    );
 
 private:
 
     HWND m_hwnd;
-    
+
     // D2D components
 
     ID2D1Factory *m_pD2DFactory;

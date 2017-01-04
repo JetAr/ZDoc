@@ -1,4 +1,4 @@
-/////////////////////////////////////////////////////////////////////////////
+﻿/////////////////////////////////////////////////////////////////////////////
 //
 //  Copyright (c) 2003 <company name>
 //
@@ -115,7 +115,7 @@ CFileShareSampleParamsPage::CFileShareSampleParamsPage( void )
 void
 CFileShareSampleParamsPage::DoDataExchange(
     CDataExchange * pDXIn
-    )
+)
 {
     if ( ! pDXIn->m_bSaveAndValidate || ! BSaved() )
     {
@@ -141,13 +141,13 @@ CFileShareSampleParamsPage::DoDataExchange(
         if ( ! BBackPressed() )
         {
             DDX_Number(
-                  pDXIn
+                pDXIn
                 , IDC_PP_FILESHARESAMPLE_MAXUSERS
                 , m_nMaxUsers
                 , static_cast< DWORD >( 0 )
                 , static_cast< DWORD >( 4294967295 )
                 , FALSE /*bSigned*/
-                );
+            );
         } // if: back button not pressed
 
         //
@@ -302,9 +302,9 @@ CFileShareSampleParamsPage::BAllRequiredFieldsPresent( void ) const
     BOOL    fPresent;
 
     if ( 0
-        || (m_editShareName.GetWindowTextLength() == 0)
-        || (m_editPath.GetWindowTextLength() == 0)
-        )
+            || (m_editShareName.GetWindowTextLength() == 0)
+            || (m_editPath.GetWindowTextLength() == 0)
+       )
     {
         fPresent = FALSE;
     } // if: required field not present

@@ -1,4 +1,4 @@
-//--------------------------------------------------------------------
+﻿//--------------------------------------------------------------------
 // Microsoft OLE DB Test
 //
 // Copyright (C) 1995-2000 Microsoft Corporation
@@ -17,7 +17,7 @@
 #include "msdadc.h"			//CLSID_RowPosition
 
 #include "privlib.h"		//include private library, which includes
-							//the "transact.h"
+//the "transact.h"
 
 //-----------------------------------------------------------------------------
 // String constants

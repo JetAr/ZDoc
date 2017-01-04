@@ -52,12 +52,12 @@ HRESULT RenderTargetD2D::Create(ID2D1Factory* d2dFactory, IDWriteFactory* dwrite
 
 
 RenderTargetD2D::RenderTargetD2D(ID2D1Factory* d2dFactory, IDWriteFactory* dwriteFactory, HWND hwnd)
-:   hwnd_(hwnd),
-    hmonitor_(NULL),
-    d2dFactory_(SafeAcquire(d2dFactory)),
-    dwriteFactory_(SafeAcquire(dwriteFactory)),
-    target_(),
-    brush_()
+    :   hwnd_(hwnd),
+        hmonitor_(NULL),
+        d2dFactory_(SafeAcquire(d2dFactory)),
+        dwriteFactory_(SafeAcquire(dwriteFactory)),
+        target_(),
+        brush_()
 {
 }
 
@@ -86,10 +86,10 @@ HRESULT RenderTargetD2D::CreateTarget()
     ID2D1HwndRenderTarget* target = NULL;
 
     hr = d2dFactory_->CreateHwndRenderTarget(
-                    D2D1::RenderTargetProperties(),
-                    D2D1::HwndRenderTargetProperties(hwnd_, d2dSize),
-                    &target
-                    );
+             D2D1::RenderTargetProperties(),
+             D2D1::HwndRenderTargetProperties(hwnd_, d2dSize),
+             &target
+         );
 
     if (SUCCEEDED(hr))
     {
@@ -141,9 +141,9 @@ void RenderTargetD2D::UpdateMonitor()
         IDWriteRenderingParams* renderingParams = NULL;
 
         dwriteFactory_->CreateMonitorRenderingParams(
-                            monitor,
-                            &renderingParams
-                            );
+            monitor,
+            &renderingParams
+        );
         target_->SetTextRenderingParams(renderingParams);
 
         hmonitor_ = monitor;
@@ -230,7 +230,7 @@ ID2D1Bitmap* RenderTargetD2D::GetCachedImage(IWICBitmapSource* image)
 void RenderTargetD2D::FillRectangle(
     const RectF& destRect,
     const DrawingEffect& drawingEffect
-    )
+)
 {
     ID2D1Brush* brush = GetCachedBrush(&drawingEffect);
     if (brush == NULL)
@@ -246,15 +246,15 @@ void RenderTargetD2D::DrawImage(
     IWICBitmapSource* image,
     const RectF& sourceRect,  // where in source atlas texture
     const RectF& destRect     // where on display to draw it
-    )
+)
 {
     // Ignore zero size source rects.
     // Draw nothing if the destination is zero size.
     if (&sourceRect    == NULL
-    || sourceRect.left >= sourceRect.right
-    || sourceRect.top  >= sourceRect.bottom
-    || destRect.left   >= destRect.right
-    || destRect.top    >= destRect.bottom)
+            || sourceRect.left >= sourceRect.right
+            || sourceRect.top  >= sourceRect.bottom
+            || destRect.left   >= destRect.right
+            || destRect.top    >= destRect.bottom)
     {
         return;
     }
@@ -264,19 +264,19 @@ void RenderTargetD2D::DrawImage(
         return;
 
     target_->DrawBitmap(
-            bitmap,
-            destRect,
-            1.0, // opacity
-            D2D1_BITMAP_INTERPOLATION_MODE_LINEAR,
-            sourceRect
-            );
+        bitmap,
+        destRect,
+        1.0, // opacity
+        D2D1_BITMAP_INTERPOLATION_MODE_LINEAR,
+        sourceRect
+    );
 }
 
 
 void RenderTargetD2D::DrawTextLayout(
     IDWriteTextLayout* textLayout,
     const RectF& rect
-    )
+)
 {
     if (textLayout == NULL)
         return;
@@ -287,13 +287,13 @@ void RenderTargetD2D::DrawTextLayout(
         this,
         rect.left,
         rect.top
-        );
+    );
 }
 
 
 ID2D1Brush* RenderTargetD2D::GetCachedBrush(
     const DrawingEffect* effect
-    )
+)
 {
     if (effect == NULL || brush_ == NULL)
         return NULL;
@@ -333,7 +333,7 @@ HRESULT STDMETHODCALLTYPE RenderTargetD2D::DrawGlyphRun(
     const DWRITE_GLYPH_RUN* glyphRun,
     const DWRITE_GLYPH_RUN_DESCRIPTION* glyphRunDescription,
     IUnknown* clientDrawingEffect
-    )
+)
 {
     // If no drawing effect is applied to run, but a clientDrawingContext
     // is passed, use the one from that instead. This is useful for trimming
@@ -365,7 +365,7 @@ HRESULT STDMETHODCALLTYPE RenderTargetD2D::DrawUnderline(
     FLOAT baselineOriginY,
     const DWRITE_UNDERLINE* underline,
     IUnknown* clientDrawingEffect
-    )
+)
 {
     clientDrawingEffect = GetDrawingEffect(clientDrawingContext, clientDrawingEffect);
 
@@ -382,7 +382,7 @@ HRESULT STDMETHODCALLTYPE RenderTargetD2D::DrawUnderline(
         baselineOriginY + underline->offset,
         baselineOriginX + underline->width,
         baselineOriginY + underline->offset + underline->thickness
-   };
+    };
 
     // Draw this as a rectangle, rather than a line.
     target_->FillRectangle(&rectangle, brush);
@@ -397,7 +397,7 @@ HRESULT STDMETHODCALLTYPE RenderTargetD2D::DrawStrikethrough(
     FLOAT baselineOriginY,
     const DWRITE_STRIKETHROUGH* strikethrough,
     IUnknown* clientDrawingEffect
-    )
+)
 {
     clientDrawingEffect = GetDrawingEffect(clientDrawingContext, clientDrawingEffect);
 
@@ -414,7 +414,7 @@ HRESULT STDMETHODCALLTYPE RenderTargetD2D::DrawStrikethrough(
         baselineOriginY + strikethrough->offset,
         baselineOriginX + strikethrough->width,
         baselineOriginY + strikethrough->offset + strikethrough->thickness
-   };
+    };
 
     // Draw this as a rectangle, rather than a line.
     target_->FillRectangle(&rectangle, brush);
@@ -431,7 +431,7 @@ HRESULT STDMETHODCALLTYPE RenderTargetD2D::DrawInlineObject(
     BOOL isSideways,
     BOOL isRightToLeft,
     IUnknown* clientDrawingEffect
-    )
+)
 {
     // Inline objects inherit the drawing effect of the text
     // they are in, so we should pass it down (if none is set
@@ -449,7 +449,7 @@ HRESULT STDMETHODCALLTYPE RenderTargetD2D::DrawInlineObject(
         false,
         false,
         subContext.drawingEffect
-        );
+    );
 
     return S_OK;
 }
@@ -458,7 +458,7 @@ HRESULT STDMETHODCALLTYPE RenderTargetD2D::DrawInlineObject(
 HRESULT STDMETHODCALLTYPE RenderTargetD2D::IsPixelSnappingDisabled(
     void* clientDrawingContext,
     OUT BOOL* isDisabled
-    )
+)
 {
     // Enable pixel snapping of the text baselines,
     // since we're not animating and don't want blurry text.
@@ -470,7 +470,7 @@ HRESULT STDMETHODCALLTYPE RenderTargetD2D::IsPixelSnappingDisabled(
 HRESULT STDMETHODCALLTYPE RenderTargetD2D::GetCurrentTransform(
     void* clientDrawingContext,
     OUT DWRITE_MATRIX* transform
-    )
+)
 {
     // Simply forward what the real renderer holds onto.
     target_->GetTransform(reinterpret_cast<D2D1_MATRIX_3X2_F*>(transform));
@@ -481,7 +481,7 @@ HRESULT STDMETHODCALLTYPE RenderTargetD2D::GetCurrentTransform(
 HRESULT STDMETHODCALLTYPE RenderTargetD2D::GetPixelsPerDip(
     void* clientDrawingContext,
     OUT FLOAT* pixelsPerDip
-    )
+)
 {
     // Any scaling will be combined into matrix transforms rather than an
     // additional DPI scaling. This simplifies the logic for rendering
@@ -519,12 +519,12 @@ HRESULT RenderTargetDW::Create(IDWriteFactory* dwriteFactory, HWND hwnd, OUT Ren
 
 
 RenderTargetDW::RenderTargetDW(IDWriteFactory* dwriteFactory, HWND hwnd)
-:   hwnd_(hwnd),
-    hmonitor_(NULL),
-    dwriteFactory_(SafeAcquire(dwriteFactory)),
-    gdiInterop_(),
-    renderingParams_(),
-    target_()
+    :   hwnd_(hwnd),
+        hmonitor_(NULL),
+        dwriteFactory_(SafeAcquire(dwriteFactory)),
+        gdiInterop_(),
+        renderingParams_(),
+        target_()
 {
 }
 
@@ -596,9 +596,9 @@ void RenderTargetDW::UpdateMonitor()
 
         SafeRelease(&renderingParams_);
         dwriteFactory_->CreateMonitorRenderingParams(
-                            monitor,
-                            &renderingParams_
-                            );
+            monitor,
+            &renderingParams_
+        );
         hmonitor_ = monitor;
         InvalidateRect(hwnd_, NULL, FALSE);
     }
@@ -637,7 +637,7 @@ void RenderTargetDW::EndDraw()
         memoryHdc_,
         0, 0,
         SRCCOPY | NOMIRRORBITMAP
-        );
+    );
 
     ReleaseDC(hwnd_, hdc);
 }
@@ -685,7 +685,8 @@ HBITMAP RenderTargetDW::GetCachedImage(IWICBitmapSource* image)
         return NULL;
 
     // Initialize bitmap information.
-    BITMAPINFO bmi = {
+    BITMAPINFO bmi =
+    {
         sizeof(BITMAPINFOHEADER),   // biSize
         width,                      // biWidth
         -int(height),               // biHeight
@@ -712,7 +713,7 @@ HBITMAP RenderTargetDW::GetCachedImage(IWICBitmapSource* image)
         &pixelBuffer[0],
         &bmi,
         DIB_RGB_COLORS
-        );
+    );
 
     // Save for later calls.
     try
@@ -733,7 +734,7 @@ HBITMAP RenderTargetDW::GetCachedImage(IWICBitmapSource* image)
 void RenderTargetDW::FillRectangle(
     const RectF& destRect,
     const DrawingEffect& drawingEffect
-    )
+)
 {
     // Convert D2D/GDI+ color order to GDI's COLORREF,
     // which expects the lowest byte to be red.
@@ -755,7 +756,7 @@ void RenderTargetDW::FillRectangle(
         int(floor(destRect.top    + .5f)),
         int(floor(destRect.right  + .5f)),
         int(floor(destRect.bottom + .5f))
-        );
+    );
 }
 
 
@@ -763,15 +764,15 @@ void RenderTargetDW::DrawImage(
     IWICBitmapSource* image,
     const RectF& sourceRect,  // where in source atlas texture
     const RectF& destRect     // where on display to draw it
-    )
+)
 {
     // Ignore zero size source rects.
     // Draw nothing if the destination is zero size.
     if (&sourceRect == NULL
-    || sourceRect.left >= sourceRect.right
-    || sourceRect.top  >= sourceRect.bottom
-    || destRect.left   >= destRect.right
-    || destRect.top    >= destRect.bottom)
+            || sourceRect.left >= sourceRect.right
+            || sourceRect.top  >= sourceRect.bottom
+            || destRect.left   >= destRect.right
+            || destRect.top    >= destRect.bottom)
     {
         return;
     }
@@ -783,7 +784,8 @@ void RenderTargetDW::DrawImage(
     HDC tempHdc = CreateCompatibleDC(memoryHdc_);
     HBITMAP oldBitmap = (HBITMAP)SelectObject(tempHdc, bitmap);
 
-    const static BLENDFUNCTION blend = {
+    const static BLENDFUNCTION blend =
+    {
         AC_SRC_OVER, // blend-op
         0, // flags
         255, // alpha
@@ -805,7 +807,7 @@ void RenderTargetDW::DrawImage(
         int(sourceRect.right - sourceRect.left),
         int(sourceRect.bottom - sourceRect.top),
         blend
-        );
+    );
 
     SelectObject(tempHdc, oldBitmap);
     DeleteDC(tempHdc);
@@ -815,7 +817,7 @@ void RenderTargetDW::DrawImage(
 void RenderTargetDW::DrawTextLayout(
     IDWriteTextLayout* textLayout,
     const RectF& rect
-    )
+)
 {
     if (textLayout == NULL)
         return;
@@ -826,7 +828,7 @@ void RenderTargetDW::DrawTextLayout(
         this,
         rect.left,
         rect.top
-        );
+    );
 }
 
 
@@ -852,13 +854,13 @@ HRESULT STDMETHODCALLTYPE RenderTargetDW::DrawGlyphRun(
     const DWRITE_GLYPH_RUN* glyphRun,
     const DWRITE_GLYPH_RUN_DESCRIPTION* glyphRunDescription,
     IUnknown* clientDrawingEffect
-    )
+)
 {
     // If no drawing effect is applied to run, but a clientDrawingContext
     // is passed, use the one from that instead. This is useful for trimming
     // signs, where they don't have a color of their own.
     clientDrawingEffect = GetDrawingEffect(clientDrawingContext, clientDrawingEffect);
-    
+
     // Since we use our own custom renderer and explicitly set the effect
     // on the layout, we know exactly what the parameter is and can
     // safely cast it directly.
@@ -875,7 +877,7 @@ HRESULT STDMETHODCALLTYPE RenderTargetDW::DrawGlyphRun(
         renderingParams_,
         effect->GetColorRef(),
         NULL
-        );
+    );
 
     return S_OK;
 }
@@ -887,18 +889,18 @@ HRESULT STDMETHODCALLTYPE RenderTargetDW::DrawUnderline(
     FLOAT baselineOriginY,
     const DWRITE_UNDERLINE* underline,
     IUnknown* clientDrawingEffect
-    )
+)
 {
     clientDrawingEffect = GetDrawingEffect(clientDrawingContext, clientDrawingEffect);
 
     return DrawLine(
-        baselineOriginX,
-        baselineOriginY,
-        underline->width,
-        underline->offset,
-        underline->thickness,
-        clientDrawingEffect
-        );
+               baselineOriginX,
+               baselineOriginY,
+               underline->width,
+               underline->offset,
+               underline->thickness,
+               clientDrawingEffect
+           );
 }
 
 
@@ -908,18 +910,18 @@ HRESULT STDMETHODCALLTYPE RenderTargetDW::DrawStrikethrough(
     FLOAT baselineOriginY,
     const DWRITE_STRIKETHROUGH* strikethrough,
     IUnknown* clientDrawingEffect
-    )
+)
 {
     clientDrawingEffect = GetDrawingEffect(clientDrawingContext, clientDrawingEffect);
 
     return DrawLine(
-        baselineOriginX,
-        baselineOriginY,
-        strikethrough->width,
-        strikethrough->offset,
-        strikethrough->thickness,
-        clientDrawingEffect
-        );
+               baselineOriginX,
+               baselineOriginY,
+               strikethrough->width,
+               strikethrough->offset,
+               strikethrough->thickness,
+               clientDrawingEffect
+           );
 }
 
 
@@ -930,7 +932,7 @@ HRESULT RenderTargetDW::DrawLine(
     float offset,
     float thickness,
     IUnknown* clientDrawingEffect
-    )
+)
 {
     // Get solid color from drawing effect.
     DrawingEffect* effect = static_cast<DrawingEffect*>(clientDrawingEffect);
@@ -938,12 +940,13 @@ HRESULT RenderTargetDW::DrawLine(
         return E_FAIL;
 
     HDC hdc = target_->GetMemoryDC();
-    RECT rect = {
+    RECT rect =
+    {
         LONG(baselineOriginX),
         LONG(baselineOriginY + offset),
         LONG(baselineOriginX + width),
         LONG(baselineOriginY + offset + thickness),
-        };
+    };
 
     // Account for the possibility that the line became zero height,
     // which can occur at small font sizes.
@@ -962,7 +965,7 @@ HRESULT RenderTargetDW::DrawLine(
         L"",
         0,
         NULL
-        );
+    );
 
     return S_OK;
 }
@@ -976,7 +979,7 @@ HRESULT STDMETHODCALLTYPE RenderTargetDW::DrawInlineObject(
     BOOL isSideways,
     BOOL isRightToLeft,
     IUnknown* clientDrawingEffect
-    )
+)
 {
     // Inline objects inherit the drawing effect of the text
     // they are in, so we should pass it down (if none is set
@@ -994,7 +997,7 @@ HRESULT STDMETHODCALLTYPE RenderTargetDW::DrawInlineObject(
         false,
         false,
         subContext.drawingEffect
-        );
+    );
 
     return S_OK;
 }
@@ -1003,7 +1006,7 @@ HRESULT STDMETHODCALLTYPE RenderTargetDW::DrawInlineObject(
 HRESULT STDMETHODCALLTYPE RenderTargetDW::IsPixelSnappingDisabled(
     void* clientDrawingContext,
     OUT BOOL* isDisabled
-    )
+)
 {
     // Enable pixel snapping of the text baselines,
     // since we're not animating and don't want blurry text.
@@ -1015,7 +1018,7 @@ HRESULT STDMETHODCALLTYPE RenderTargetDW::IsPixelSnappingDisabled(
 HRESULT STDMETHODCALLTYPE RenderTargetDW::GetCurrentTransform(
     void* clientDrawingContext,
     OUT DWRITE_MATRIX* transform
-    )
+)
 {
     // Simply forward what the real renderer holds onto.
     target_->GetCurrentTransform(transform);
@@ -1026,7 +1029,7 @@ HRESULT STDMETHODCALLTYPE RenderTargetDW::GetCurrentTransform(
 HRESULT STDMETHODCALLTYPE RenderTargetDW::GetPixelsPerDip(
     void* clientDrawingContext,
     OUT FLOAT* pixelsPerDip
-    )
+)
 {
     // Simply forward what the real renderer holds onto.
     *pixelsPerDip = target_->GetPixelsPerDip();

@@ -1,4 +1,4 @@
-//
+﻿//
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -47,7 +47,7 @@ Return Value:
     HANDLE hFile = INVALID_HANDLE_VALUE;
 
     if (pcwszFileName == NULL ||
-        *pcwszFileName == L'\0')
+            *pcwszFileName == L'\0')
     {
         hr = E_INVALIDARG;
         goto Exit;
@@ -120,7 +120,7 @@ Return Value:
     }
 
     if (pv == NULL ||
-        cb == 0)
+            cb == 0)
     {
         hr = E_INVALIDARG;
         goto Exit;

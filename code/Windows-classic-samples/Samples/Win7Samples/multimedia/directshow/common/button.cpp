@@ -1,6 +1,6 @@
-//////////////////////////////////////////////////////////////////////////
+﻿//////////////////////////////////////////////////////////////////////////
 // Button.cpp: Button control class.
-// 
+//
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -32,11 +32,11 @@
 // rcBound:   Bounding rectangle.
 //-----------------------------------------------------------------------------
 
-HRESULT Button::CreateText(HWND hParent, const TCHAR *szCaption, int nID, 
-                               const Rect& rcBound)
+HRESULT Button::CreateText(HWND hParent, const TCHAR *szCaption, int nID,
+                           const Rect& rcBound)
 {
     CREATESTRUCT create;
-	ZeroMemory(&create, sizeof(CREATESTRUCT));
+    ZeroMemory(&create, sizeof(CREATESTRUCT));
 
     create.x = rcBound.left;
     create.y = rcBound.top;

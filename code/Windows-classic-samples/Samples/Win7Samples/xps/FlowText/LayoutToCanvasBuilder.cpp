@@ -1,4 +1,4 @@
-
+﻿
 //+--------------------------------------------------------------------------
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
@@ -21,13 +21,13 @@ static const WCHAR g_layoutBrushKey[] = L"textLayoutBrush";
 //
 HRESULT
 LayoutToCanvasBuilder::ClusterMapToMappingArray(
-    const UINT16 *clusterMap, 
+    const UINT16 *clusterMap,
     UINT32 mapLen, // number of elements in clusterMap array
     UINT32 glyphsArrayLen, // number of elements in glyphs array
     UINT32 resultMaxCount, // size of output buffer resultGlyphMapping (max number of elements)
     XPS_GLYPH_MAPPING* resultGlyphMapping, // output buffer
     UINT32* resultGlyphMappingCount // number of elements returned in resultGlyphMapping
-    )
+)
 {
     // assumption:
     // clusterMap[0] <= clusterMap[1] <= ... <= clusterMap[mapLen-1] < glyphsArrayLen
@@ -41,17 +41,17 @@ LayoutToCanvasBuilder::ClusterMapToMappingArray(
     while (mapPos < mapLen && i < resultMaxCount)
     {
         UINT32 codePointRangeLen = 1, glyphIndexRangeLen = 1;
-        while (mapPos + codePointRangeLen < mapLen && 
-               clusterMap[mapPos + codePointRangeLen] == clusterMap[mapPos])
+        while (mapPos + codePointRangeLen < mapLen &&
+                clusterMap[mapPos + codePointRangeLen] == clusterMap[mapPos])
         {
             codePointRangeLen++;
         }
-        if (mapPos + codePointRangeLen == mapLen) 
+        if (mapPos + codePointRangeLen == mapLen)
         {
             // end of cluster map
             glyphIndexRangeLen = glyphsArrayLen - clusterMap[mapPos];
         }
-        else 
+        else
         {
             glyphIndexRangeLen = clusterMap[mapPos + codePointRangeLen] - clusterMap[mapPos];
         }
@@ -80,7 +80,7 @@ LayoutToCanvasBuilder::ClusterMapToMappingArray(
 
 LayoutToCanvasBuilder::LayoutToCanvasBuilder(
     IXpsOMObjectFactory* xpsFactory
-    )
+)
     : _refCount(1),
       _xpsFactory(NULL), _xpsCanvas(NULL), _xpsResources(NULL),
       _fontMapSize(0)
@@ -102,12 +102,12 @@ LayoutToCanvasBuilder::CreateRootCanvasAndResources()
     IXpsOMSolidColorBrush* blueSolidBrush = NULL;
 
     hr = _xpsFactory->CreateCanvas( &_xpsCanvas );
-    
+
     if (SUCCEEDED(hr))
     {
         hr = _xpsFactory->CreatePartResources( &_xpsResources );
     }
-    
+
     // Create dictionary and add to canvas
     if (SUCCEEDED(hr))
     {
@@ -129,27 +129,27 @@ LayoutToCanvasBuilder::CreateRootCanvasAndResources()
         rgbBlue.value.sRGB.green = 0;
         rgbBlue.value.sRGB.blue = 0xFF;
         hr = _xpsFactory->CreateSolidColorBrush(
-                &rgbBlue,
-                NULL, // no color profile for this color type
-                &blueSolidBrush
-                );
+                 &rgbBlue,
+                 NULL, // no color profile for this color type
+                 &blueSolidBrush
+             );
     }
 
     if (SUCCEEDED(hr))
     {
-        hr = canvasDictionary->Append( 
-                g_layoutBrushKey, 
-                blueSolidBrush
-                );
+        hr = canvasDictionary->Append(
+                 g_layoutBrushKey,
+                 blueSolidBrush
+             );
     }
 
     // cleanup
-    if (blueSolidBrush) 
+    if (blueSolidBrush)
     {
         blueSolidBrush->Release();
         blueSolidBrush = NULL;
     }
-    if (canvasDictionary) 
+    if (canvasDictionary)
     {
         canvasDictionary->Release();
         canvasDictionary = NULL;
@@ -166,19 +166,19 @@ LayoutToCanvasBuilder::~LayoutToCanvasBuilder()
     }
     _fontMapSize = 0;
 
-    if (_xpsFactory) 
+    if (_xpsFactory)
     {
         _xpsFactory->Release();
         _xpsFactory = NULL;
     }
 
-    if (_xpsCanvas) 
+    if (_xpsCanvas)
     {
         _xpsCanvas->Release();
         _xpsCanvas = NULL;
     }
 
-    if (_xpsResources) 
+    if (_xpsResources)
     {
         _xpsResources->Release();
         _xpsResources = NULL;
@@ -186,19 +186,19 @@ LayoutToCanvasBuilder::~LayoutToCanvasBuilder()
 
 }
 
-//static 
-HRESULT 
+//static
+HRESULT
 LayoutToCanvasBuilder::CreateInstance(
     IXpsOMObjectFactory* xpsFactory,
     LayoutToCanvasBuilder** ppNewInstance
-    )
+)
 {
     HRESULT hr = S_OK;
 
     LayoutToCanvasBuilder* pResult = NULL;
 
     pResult = new(std::nothrow) LayoutToCanvasBuilder(xpsFactory);
-    if (!pResult) 
+    if (!pResult)
     {
         hr = E_OUTOFMEMORY;
     }
@@ -220,23 +220,23 @@ LayoutToCanvasBuilder::CreateInstance(
     return hr;
 }
 
-IXpsOMCanvas* 
+IXpsOMCanvas*
 LayoutToCanvasBuilder::GetCanvas()
 {
     return _xpsCanvas;
 }
 
-IXpsOMPartResources* 
+IXpsOMPartResources*
 LayoutToCanvasBuilder::GetResources()
 {
     return _xpsResources;
 }
 
 STDMETHODIMP
-LayoutToCanvasBuilder::QueryInterface( 
+LayoutToCanvasBuilder::QueryInterface(
     REFIID riid,
     void** ppvObject
-    )
+)
 {
     if (ppvObject == NULL)
     {
@@ -244,9 +244,9 @@ LayoutToCanvasBuilder::QueryInterface(
     }
     *ppvObject = NULL;
 
-    if (IsEqualGUID(riid, __uuidof(IUnknown)) || 
-        IsEqualGUID(riid, __uuidof(IDWritePixelSnapping)) ||
-        IsEqualGUID(riid, __uuidof(IDWriteTextRenderer)))
+    if (IsEqualGUID(riid, __uuidof(IUnknown)) ||
+            IsEqualGUID(riid, __uuidof(IDWritePixelSnapping)) ||
+            IsEqualGUID(riid, __uuidof(IDWriteTextRenderer)))
     {
         IUnknown* pUnk = static_cast<IUnknown*>(this);
         pUnk->AddRef();
@@ -256,13 +256,13 @@ LayoutToCanvasBuilder::QueryInterface(
     return E_NOINTERFACE;
 }
 
-ULONG 
+ULONG
 LayoutToCanvasBuilder::AddRef()
 {
     return ++_refCount;
 }
 
-ULONG 
+ULONG
 LayoutToCanvasBuilder::Release()
 {
     ULONG newCount = --_refCount;
@@ -276,20 +276,20 @@ STDMETHODIMP
 LayoutToCanvasBuilder::IsPixelSnappingDisabled(
     void* /* clientDrawingContext */,
     BOOL* isDisabled
-    )
+)
 {
     *isDisabled = FALSE;
-    return S_OK; 
+    return S_OK;
 }
 
 //
-// returns identity matrix - our abstract coordinates are device independent pixels. 
+// returns identity matrix - our abstract coordinates are device independent pixels.
 //
 STDMETHODIMP
 LayoutToCanvasBuilder::GetCurrentTransform(
     void* /* clientDrawingContext */,
     DWRITE_MATRIX* transform
-    )
+)
 {
     transform->m11 = transform->m22 = 1.0;
     transform->m12 = transform->m21 = transform->dx = transform->dy = 0.0;
@@ -303,7 +303,7 @@ STDMETHODIMP
 LayoutToCanvasBuilder::GetPixelsPerDip(
     void* /* clientDrawingContext */,
     FLOAT* pixelsPerDip
-    )
+)
 {
     // DIP used in XPS (96 DPI)
     *pixelsPerDip = FLOAT(1.0);
@@ -320,17 +320,17 @@ LayoutToCanvasBuilder::DrawGlyphRun(
     DWRITE_GLYPH_RUN const* glyphRun,
     DWRITE_GLYPH_RUN_DESCRIPTION const* glyphRunDescription,
     IUnknown* /* clientDrawingEffect */
-    )
-{    
+)
+{
     HRESULT hr = S_OK;
 
     // supported font types in xps
-    DWRITE_FONT_FACE_TYPE fontFaceType = 
+    DWRITE_FONT_FACE_TYPE fontFaceType =
         glyphRun->fontFace->GetType();
 
     if (fontFaceType != DWRITE_FONT_FACE_TYPE_CFF &&
-        fontFaceType != DWRITE_FONT_FACE_TYPE_TRUETYPE &&
-        fontFaceType != DWRITE_FONT_FACE_TYPE_TRUETYPE_COLLECTION)
+            fontFaceType != DWRITE_FONT_FACE_TYPE_TRUETYPE &&
+            fontFaceType != DWRITE_FONT_FACE_TYPE_TRUETYPE_COLLECTION)
     {
         // XPS does not support this type of font - just ignore this glyph run.
         hr = S_OK;
@@ -358,7 +358,7 @@ LayoutToCanvasBuilder::DrawGlyphRun(
         }
 
         // Add new Glyphs element to canvas
-        if (SUCCEEDED(hr)) 
+        if (SUCCEEDED(hr))
         {
             hr = _xpsCanvas->GetVisuals( &canvasVisuals );
         }
@@ -386,7 +386,7 @@ LayoutToCanvasBuilder::DrawGlyphRun(
         }
 
         if (SUCCEEDED(hr) &&
-            fontFaceType == DWRITE_FONT_FACE_TYPE_TRUETYPE_COLLECTION)
+                fontFaceType == DWRITE_FONT_FACE_TYPE_TRUETYPE_COLLECTION)
         {
             // set font face index
             hr = xpsGlyphs->SetFontFaceIndex( (SHORT)glyphRun->fontFace->GetIndex() );
@@ -394,7 +394,7 @@ LayoutToCanvasBuilder::DrawGlyphRun(
 
         if (SUCCEEDED(hr))
         {
-            DWRITE_FONT_SIMULATIONS dwriteFontSim = 
+            DWRITE_FONT_SIMULATIONS dwriteFontSim =
                 glyphRun->fontFace->GetSimulations();
 
             if (dwriteFontSim & DWRITE_FONT_SIMULATIONS_BOLD)
@@ -426,7 +426,7 @@ LayoutToCanvasBuilder::DrawGlyphRun(
         if (SUCCEEDED(hr))
         {
             glyphIndexVector = (XPS_GLYPH_INDEX *)CoTaskMemAlloc( glyphRun->glyphCount * sizeof(XPS_GLYPH_INDEX) );
-            if (!glyphIndexVector) 
+            if (!glyphIndexVector)
             {
                 hr = E_OUTOFMEMORY;
             }
@@ -439,15 +439,15 @@ LayoutToCanvasBuilder::DrawGlyphRun(
                 // NOTE: these values may need extra adjustment depending on transformation, IsSideways and bidiLevel
                 glyphIndexVector[i].index = glyphRun->glyphIndices[i];
                 // advanceWidth, horizontal and vertical offset in Indices attribute in XPS Glyphs element are in 1/100 of font em size.
-                glyphIndexVector[i].advanceWidth = FLOAT(glyphRun->glyphAdvances[i] * positionScale);  
-                glyphIndexVector[i].horizontalOffset = (glyphRun->glyphOffsets != NULL) ? FLOAT(glyphRun->glyphOffsets[i].advanceOffset * positionScale) : 0; 
-                glyphIndexVector[i].verticalOffset = (glyphRun->glyphOffsets != NULL) ? FLOAT(glyphRun->glyphOffsets[i].ascenderOffset * positionScale) : 0; 
+                glyphIndexVector[i].advanceWidth = FLOAT(glyphRun->glyphAdvances[i] * positionScale);
+                glyphIndexVector[i].horizontalOffset = (glyphRun->glyphOffsets != NULL) ? FLOAT(glyphRun->glyphOffsets[i].advanceOffset * positionScale) : 0;
+                glyphIndexVector[i].verticalOffset = (glyphRun->glyphOffsets != NULL) ? FLOAT(glyphRun->glyphOffsets[i].ascenderOffset * positionScale) : 0;
             }
 
             hr = xpsGlyphsEditor->SetGlyphIndices(
-                    (UINT32)glyphRun->glyphCount,
-                    glyphIndexVector
-                    );
+                     (UINT32)glyphRun->glyphCount,
+                     glyphIndexVector
+                 );
         }
 
         if (SUCCEEDED(hr))
@@ -462,11 +462,11 @@ LayoutToCanvasBuilder::DrawGlyphRun(
 
         // Check for unicode string and cluster map
         if (SUCCEEDED(hr) &&
-            glyphRunDescription->string && glyphRunDescription->stringLength > 0)
+                glyphRunDescription->string && glyphRunDescription->stringLength > 0)
         {
             // IXpsOMGlyphsEditor::SetUnicodeString expects null terminated string but glyphRunDescription->string may not be so terminated.
             pszUnicodeString = (PWSTR)CoTaskMemAlloc( (glyphRunDescription->stringLength + 1) * sizeof(WCHAR) );
-            if ( !pszUnicodeString ) 
+            if ( !pszUnicodeString )
             {
                 hr = E_OUTOFMEMORY;
             }
@@ -474,11 +474,11 @@ LayoutToCanvasBuilder::DrawGlyphRun(
             if (SUCCEEDED(hr))
             {
                 hr = StringCchCopyN(
-                        pszUnicodeString, 
-                        glyphRunDescription->stringLength + 1, 
-                        glyphRunDescription->string, 
-                        glyphRunDescription->stringLength
-                        );
+                         pszUnicodeString,
+                         glyphRunDescription->stringLength + 1,
+                         glyphRunDescription->string,
+                         glyphRunDescription->stringLength
+                     );
             }
 
             if (SUCCEEDED(hr))
@@ -488,7 +488,7 @@ LayoutToCanvasBuilder::DrawGlyphRun(
 
             // fill in glyph mapping array and call xpsGlyphsEditor->SetGlyphMappings
             if (SUCCEEDED(hr) &&
-                glyphRunDescription->clusterMap)
+                    glyphRunDescription->clusterMap)
             {
                 //
                 // This sample uses GLYPH_MAPPING_MAX_COUNT constant to limit number of non-trivial (1:N, N:1 or M:N) mappings
@@ -498,21 +498,21 @@ LayoutToCanvasBuilder::DrawGlyphRun(
                 XPS_GLYPH_MAPPING glyphMapVector[GLYPH_MAPPING_MAX_COUNT];
                 UINT32 glyphMappingCount = 0;
                 hr = ClusterMapToMappingArray(
-                        glyphRunDescription->clusterMap, 
-                        glyphRunDescription->stringLength,
-                        glyphRun->glyphCount,
-                        ARRAYSIZE(glyphMapVector),
-                        glyphMapVector,
-                        &glyphMappingCount
-                        );
+                         glyphRunDescription->clusterMap,
+                         glyphRunDescription->stringLength,
+                         glyphRun->glyphCount,
+                         ARRAYSIZE(glyphMapVector),
+                         glyphMapVector,
+                         &glyphMappingCount
+                     );
 
                 if (SUCCEEDED(hr) &&
-                    glyphMappingCount > 0)
+                        glyphMappingCount > 0)
                 {
                     hr = xpsGlyphsEditor->SetGlyphMappings(
-                            glyphMappingCount,
-                            glyphMapVector
-                            );
+                             glyphMappingCount,
+                             glyphMapVector
+                         );
                 }
             }
         }
@@ -523,32 +523,32 @@ LayoutToCanvasBuilder::DrawGlyphRun(
         }
 
         // release local resources here
-        if (pszUnicodeString) 
+        if (pszUnicodeString)
         {
             CoTaskMemFree(pszUnicodeString);
             pszUnicodeString = NULL;
         }
-        if (glyphIndexVector) 
+        if (glyphIndexVector)
         {
             CoTaskMemFree(glyphIndexVector);
             glyphIndexVector = NULL;
         }
-        if (fontResource) 
+        if (fontResource)
         {
             fontResource->Release();
             fontResource = NULL;
         }
-        if (xpsGlyphs) 
+        if (xpsGlyphs)
         {
             xpsGlyphs->Release();
             xpsGlyphs = NULL;
         }
-        if (canvasVisuals) 
+        if (canvasVisuals)
         {
             canvasVisuals->Release();
             canvasVisuals = NULL;
         }
-        if (xpsGlyphsEditor) 
+        if (xpsGlyphsEditor)
         {
             xpsGlyphsEditor->Release();
             xpsGlyphsEditor = NULL;
@@ -566,7 +566,7 @@ LayoutToCanvasBuilder::DrawUnderline(
     FLOAT baselineOriginY,
     DWRITE_UNDERLINE const* underline,
     IUnknown* /* clientDrawingEffect */
-    )
+)
 {
     XPS_POINT begin, end;
 
@@ -588,7 +588,7 @@ LayoutToCanvasBuilder::DrawStrikethrough(
     FLOAT baselineOriginY,
     DWRITE_STRIKETHROUGH const* strikethrough,
     IUnknown* /* clientDrawingEffect */
-    )
+)
 {
     XPS_POINT begin, end;
 
@@ -615,20 +615,20 @@ LayoutToCanvasBuilder::DrawInlineObject(
     BOOL /* isSideways */,
     BOOL /* isRightToLeft */,
     IUnknown* /* clientDrawingEffect */
-    )
+)
 {
     return S_OK;
 }
 
 //
 // This method looks for font file object (by COM identity) in resource map. If found, the corresponding XPS font resource is used.
-// If not, a new font resource is created and font file data is copied to new XPS font resource. 
+// If not, a new font resource is created and font file data is copied to new XPS font resource.
 //
 HRESULT
-LayoutToCanvasBuilder::FindOrCreateFontResource( 
+LayoutToCanvasBuilder::FindOrCreateFontResource(
     IDWriteFontFace* fontFace,
     IXpsOMFontResource** ppXpsFontResource
-    )
+)
 {
     HRESULT hr = S_OK;
     UINT32 numFiles = 1;
@@ -660,7 +660,7 @@ LayoutToCanvasBuilder::FindOrCreateFontResource(
         fontFileKey = UINT_PTR(pUnk);
         if (pUnk)
         {
-            pUnk->Release(); 
+            pUnk->Release();
             pUnk = NULL;
         }
 
@@ -683,7 +683,7 @@ LayoutToCanvasBuilder::FindOrCreateFontResource(
     else
     {
         // This is a new font file. We have to create XPS resource for it.
-    
+
         // First, create temporary storage with IStream implementation for font bytes. HGLOBAL memory is used in this sample.
         // NOTE: Font data may be large - temp file is recommended for complete implementation.
         IStream* fontResourceStream = NULL;
@@ -692,18 +692,18 @@ LayoutToCanvasBuilder::FindOrCreateFontResource(
         IOpcPartUri* fontPartUri = NULL;
         IXpsOMFontResource* pNewFontResource = NULL;
         IXpsOMFontResourceCollection* fontResources = NULL;
-    
+
         const void *fontFileRef = NULL;
         UINT32 fontFileRefSize = 0;
         UINT64 bytesLeft = 0, readOffset = 0;
 
-        if (SUCCEEDED(hr)) 
+        if (SUCCEEDED(hr))
         {
             hr = CreateStreamOnHGlobal( // Win32 API
-                    NULL, // let implementation take care of memory
-                    TRUE, // release memory when done
-                    &fontResourceStream
-                    );
+                     NULL, // let implementation take care of memory
+                     TRUE, // release memory when done
+                     &fontResourceStream
+                 );
         }
 
         // Copy font data to temporary storage
@@ -711,20 +711,20 @@ LayoutToCanvasBuilder::FindOrCreateFontResource(
         {
             hr = fontFile->GetReferenceKey(&fontFileRef, &fontFileRefSize);
         }
-    
+
         if (SUCCEEDED(hr))
         {
             hr = fontFile->GetLoader(&fontFileLoader);
         }
-    
+
         if (SUCCEEDED(hr))
         {
             hr = fontFileLoader->CreateStreamFromKey(
-                    fontFileRef,
-                    fontFileRefSize,
-                    &fontFileStream
-                    );
-            fontFileLoader->Release(); 
+                     fontFileRef,
+                     fontFileRefSize,
+                     &fontFileStream
+                 );
+            fontFileLoader->Release();
             fontFileLoader = NULL;
         }
 
@@ -743,20 +743,20 @@ LayoutToCanvasBuilder::FindOrCreateFontResource(
                 UINT64 readSize = min(bytesLeft, 16384);
 
                 hr = fontFileStream->ReadFileFragment(
-                        &fragment,
-                        readOffset,
-                        readSize,
-                        &fragmentContext
-                        );
+                         &fragment,
+                         readOffset,
+                         readSize,
+                         &fragmentContext
+                     );
 
                 if (SUCCEEDED(hr))
                 {
                     bFragmentContextAcquired = true;
                     hr = fontResourceStream->Write(
-                            fragment, 
-                            ULONG(readSize),
-                            NULL
-                            );
+                             fragment,
+                             ULONG(readSize),
+                             NULL
+                         );
                 }
 
                 if (SUCCEEDED(hr))
@@ -770,7 +770,7 @@ LayoutToCanvasBuilder::FindOrCreateFontResource(
                     fontFileStream->ReleaseFileFragment(fragmentContext);
                 }
             }
-            fontFileStream->Release(); 
+            fontFileStream->Release();
             fontFileStream = NULL;
         }
 
@@ -788,17 +788,17 @@ LayoutToCanvasBuilder::FindOrCreateFontResource(
 
         // NOTE: See XPS spec section 2.1.7.2
         // This sample will obfuscate all font resources. It is allowed by XPS specification.
-        // This sample does not set RestrictedFont relationship for any font resource! 
+        // This sample does not set RestrictedFont relationship for any font resource!
         // This may result in incorrect XPS file if one or more fonts have Print&Preview flag!
         if (SUCCEEDED(hr))
         {
             hr = _xpsFactory->CreateFontResource(
-                    fontResourceStream,
-                    XPS_FONT_EMBEDDING_OBFUSCATED,
-                    fontPartUri,
-                    FALSE, //isObfSourceStream
-                    &pNewFontResource
-                    );
+                     fontResourceStream,
+                     XPS_FONT_EMBEDDING_OBFUSCATED,
+                     fontPartUri,
+                     FALSE, //isObfSourceStream
+                     &pNewFontResource
+                 );
         }
 
         // New font resource must be added to map and fonts collection before returning it to caller
@@ -824,10 +824,10 @@ LayoutToCanvasBuilder::FindOrCreateFontResource(
             else
             {
                 //
-                // Do nothing here. 
+                // Do nothing here.
                 //
                 // NOTE:
-                // This sample limits number of entries with FONT_MAP_MAX_SIZE constant. If _fontMap is full and 
+                // This sample limits number of entries with FONT_MAP_MAX_SIZE constant. If _fontMap is full and
                 // the same font file is used in another glyph run, it may be added as a new font resource part in XPS.
                 // This may result in large XPS file!
                 // Complete implementation should dynamically increase _fontMap array size to avoid font data duplication.
@@ -839,32 +839,32 @@ LayoutToCanvasBuilder::FindOrCreateFontResource(
         }
 
         // release objects used for converting DWrite font file to XPS font resource
-        if (fontResourceStream) 
+        if (fontResourceStream)
         {
             fontResourceStream->Release();
             fontResourceStream = NULL;
         }
-        if (fontFileLoader) 
+        if (fontFileLoader)
         {
             fontFileLoader->Release();
             fontFileLoader = NULL;
         }
-        if (fontFileStream) 
+        if (fontFileStream)
         {
             fontFileStream->Release();
             fontFileStream = NULL;
         }
-        if (fontPartUri) 
+        if (fontPartUri)
         {
             fontPartUri->Release();
             fontPartUri = NULL;
         }
-        if (pNewFontResource) 
+        if (pNewFontResource)
         {
             pNewFontResource->Release();
             pNewFontResource = NULL;
         }
-        if (fontResources) 
+        if (fontResources)
         {
             fontResources->Release();
             fontResources = NULL;
@@ -878,7 +878,7 @@ LayoutToCanvasBuilder::FindOrCreateFontResource(
     }
     if (pUnk)
     {
-        pUnk->Release(); 
+        pUnk->Release();
         pUnk = NULL;
     }
 
@@ -888,10 +888,10 @@ LayoutToCanvasBuilder::FindOrCreateFontResource(
 //
 //  Returns IOpcPartUri object built from URI '/Resources/Fonts/__guid__.odttf'
 //
-HRESULT 
+HRESULT
 LayoutToCanvasBuilder::GenerateNewFontPartUri(
     IOpcPartUri** ppPartUri
-    )
+)
 {
     HRESULT hr = S_OK;
     GUID guid;
@@ -899,7 +899,7 @@ LayoutToCanvasBuilder::GenerateNewFontPartUri(
     WCHAR uriString[256] = {0};
 
     hr = CoCreateGuid(&guid);
-    
+
     if (SUCCEEDED(hr))
     {
         hr = StringFromGUID2( guid, guidString, ARRAYSIZE(guidString) );
@@ -930,15 +930,15 @@ LayoutToCanvasBuilder::GenerateNewFontPartUri(
 }
 
 //
-// This methods creates a line path and adds it to current canvas visuals. 
+// This methods creates a line path and adds it to current canvas visuals.
 // It is used by callback methods DrawUnderline and DrawStrikethrough.
-// 
-HRESULT 
+//
+HRESULT
 LayoutToCanvasBuilder::AddLinePath(
     const XPS_POINT *beginPoint,
     const XPS_POINT *endPoint,
     FLOAT thickness
-    )
+)
 {
     HRESULT hr = S_OK;
 
@@ -949,104 +949,104 @@ LayoutToCanvasBuilder::AddLinePath(
     IXpsOMGeometryFigure* lineFigure = NULL;
 
     // Create Path element and add to canvas
-    if (SUCCEEDED(hr)) 
+    if (SUCCEEDED(hr))
     {
         hr = _xpsFactory->CreatePath(&linePath);
     }
-    if (SUCCEEDED(hr)) 
+    if (SUCCEEDED(hr))
     {
         hr = _xpsCanvas->GetVisuals(&canvasVisuals);
     }
-    if (SUCCEEDED(hr)) 
+    if (SUCCEEDED(hr))
     {
         hr = canvasVisuals->Append(linePath);
     }
 
     // Set necessary path properties
-    if (SUCCEEDED(hr)) 
+    if (SUCCEEDED(hr))
     {
         hr = linePath->SetStrokeBrushLookup(g_layoutBrushKey);
     }
-    if (SUCCEEDED(hr)) 
+    if (SUCCEEDED(hr))
     {
         hr = linePath->SetSnapsToPixels(TRUE);
     }
-    if (SUCCEEDED(hr)) 
+    if (SUCCEEDED(hr))
     {
         hr = linePath->SetStrokeThickness(thickness);
     }
 
     // Create geometry and assign it to Path.Data property
-    if (SUCCEEDED(hr)) 
+    if (SUCCEEDED(hr))
     {
         hr = _xpsFactory->CreateGeometry(&lineGeom);
     }
-    if (SUCCEEDED(hr)) 
+    if (SUCCEEDED(hr))
     {
         hr = linePath->SetGeometryLocal( lineGeom );
     }
 
     // create geometry figure and add it to geometry
-    if (SUCCEEDED(hr)) 
+    if (SUCCEEDED(hr))
     {
         hr = _xpsFactory->CreateGeometryFigure( beginPoint, &lineFigure );
     }
-    if (SUCCEEDED(hr)) 
+    if (SUCCEEDED(hr))
     {
         hr = lineGeom->GetFigures( &geomFigures );
     }
-    if (SUCCEEDED(hr)) 
+    if (SUCCEEDED(hr))
     {
         hr = geomFigures->Append( lineFigure );
     }
 
     // set line segment in figure
-    if (SUCCEEDED(hr)) 
+    if (SUCCEEDED(hr))
     {
         XPS_SEGMENT_TYPE segmType = XPS_SEGMENT_TYPE_LINE;
-        FLOAT segmentData[2] = { endPoint->x , endPoint->y };
+        FLOAT segmentData[2] = { endPoint->x, endPoint->y };
         BOOL segmStroke = TRUE;
 
         hr = lineFigure->SetSegments(
-                1, // segment count
-                2, // segment data count
-                &segmType, // segment types array (1 element)
-                segmentData,
-                &segmStroke // segment stroke array (1 element)
-                );
+                 1, // segment count
+                 2, // segment data count
+                 &segmType, // segment types array (1 element)
+                 segmentData,
+                 &segmStroke // segment stroke array (1 element)
+             );
     }
 
     // line figure is not closed or filled
-    if (SUCCEEDED(hr)) 
+    if (SUCCEEDED(hr))
     {
         hr = lineFigure->SetIsClosed( FALSE );
     }
-    if (SUCCEEDED(hr)) 
+    if (SUCCEEDED(hr))
     {
         hr = lineFigure->SetIsFilled( FALSE );
     }
 
-    if (canvasVisuals) 
+    if (canvasVisuals)
     {
         canvasVisuals->Release();
         canvasVisuals = NULL;
     }
-    if (linePath) 
+    if (linePath)
     {
         linePath->Release();
         linePath = NULL;
     }
-    if (lineGeom) 
+    if (lineGeom)
     {
         lineGeom->Release();
         lineGeom = NULL;
     }
-    if (geomFigures) 
+    if (geomFigures)
     {
         geomFigures->Release();
         geomFigures = NULL;
     }
-    if (lineFigure) 
+    if (lineFigure)
     {
         lineFigure->Release();
         lineFigure = NULL;

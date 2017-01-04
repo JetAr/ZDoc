@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -110,101 +110,101 @@ INT_PTR CMainDlg::DlgProc(UINT msg, WPARAM wParam, LPARAM lParam)
 
     switch (msg)
     {
-        case WM_INITDIALOG:
-            // Set up the listbox to allow drag and drop
-            if (MakeDragList(GetDlgItem(_hwnd, IDC_TABLIST)))
-            {
-                g_mDragList = RegisterWindowMessage(DRAGLISTMSGSTRING);
-            }
+    case WM_INITDIALOG:
+        // Set up the listbox to allow drag and drop
+        if (MakeDragList(GetDlgItem(_hwnd, IDC_TABLIST)))
+        {
+            g_mDragList = RegisterWindowMessage(DRAGLISTMSGSTRING);
+        }
 
+        nResult = TRUE;
+        break;
+
+    case WM_COMMAND:
+        switch (LOWORD(wParam))
+        {
+        case IDC_ADD:
+            _AddTab();
+            break;
+
+        case IDC_REMOVE:
+            _RemoveSelectedTab();
+            break;
+
+        case IDC_INVALIDATE:
+            _InvalidateSelectedTab();
+            break;
+
+        case IDC_DEACTIVATE:
+            _DeactivateTab();
+            break;
+
+        case IDC_MOVEPREV:
+            _MoveTabByOffset(_GetSelectedTab(), -1);
+            break;
+
+        case IDC_MOVENEXT:
+            _MoveTabByOffset(_GetSelectedTab(), 2);
+            break;
+
+        case IDOK:
+            _CleanUp();
+            EndDialog(_hwnd, LOWORD(wParam));
             nResult = TRUE;
             break;
 
-        case WM_COMMAND:
-            switch (LOWORD(wParam))
+        case IDC_TABLIST:
+            switch (HIWORD(wParam))
             {
-                case IDC_ADD:
-                    _AddTab();
-                    break;
-
-                case IDC_REMOVE:
-                    _RemoveSelectedTab();
-                    break;
-
-                case IDC_INVALIDATE:
-                    _InvalidateSelectedTab();
-                    break;
-
-                case IDC_DEACTIVATE:
-                    _DeactivateTab();
-                    break;
-
-                case IDC_MOVEPREV:
-                    _MoveTabByOffset(_GetSelectedTab(), -1);
-                    break;
-
-                case IDC_MOVENEXT:
-                    _MoveTabByOffset(_GetSelectedTab(), 2);
-                    break;
-
-                case IDOK:
-                    _CleanUp();
-                    EndDialog(_hwnd, LOWORD(wParam));
-                    nResult = TRUE;
-                    break;
-
-                case IDC_TABLIST:
-                    switch (HIWORD(wParam))
-                    {
-                        case LBN_SELCHANGE:
-                            _ActivateSelectedTab();
-                            break;
-                    }
-                    break;
-            }
-            break;
-
-        default:
-            if (msg == g_mDragList)
-            {
-                DRAGLISTINFO *pdli = (DRAGLISTINFO *)lParam;
-                switch (pdli->uNotification)
-                {
-                    case DL_BEGINDRAG:
-                        _iDrag = LBItemFromPt(pdli->hWnd, pdli->ptCursor, TRUE);
-                        DrawInsert(_hwnd, pdli->hWnd, _iDrag);
-
-                        // Set the return value to allow the drag to contine
-                        SetDlgMsgResult(_hwnd, g_mDragList, TRUE);
-                        break;
-
-                    case DL_CANCELDRAG:
-                        DrawInsert(_hwnd, pdli->hWnd, -1);
-                        break;
-
-                    case DL_DRAGGING:
-                    {
-                        int iDragOver = LBItemFromPt(pdli->hWnd, pdli->ptCursor, TRUE);
-                        DrawInsert(_hwnd, pdli->hWnd, iDragOver);
-
-                        // Set the return value to show feedback
-                        SetDlgMsgResult(_hwnd, g_mDragList, (iDragOver != -1) ? DL_MOVECURSOR : DL_STOPCURSOR);
-                        break;
-                    }
-
-                    case DL_DROPPED:
-                    {
-                        int iDragOver = LBItemFromPt(pdli->hWnd, pdli->ptCursor, TRUE);
-                        DrawInsert(_hwnd, pdli->hWnd, -1);
-
-                        _MoveTab(_iDrag, iDragOver);
-                        _ActivateSelectedTab();
-                        break;
-                    }
-                }
+            case LBN_SELCHANGE:
+                _ActivateSelectedTab();
                 break;
             }
             break;
+        }
+        break;
+
+    default:
+        if (msg == g_mDragList)
+        {
+            DRAGLISTINFO *pdli = (DRAGLISTINFO *)lParam;
+            switch (pdli->uNotification)
+            {
+            case DL_BEGINDRAG:
+                _iDrag = LBItemFromPt(pdli->hWnd, pdli->ptCursor, TRUE);
+                DrawInsert(_hwnd, pdli->hWnd, _iDrag);
+
+                // Set the return value to allow the drag to contine
+                SetDlgMsgResult(_hwnd, g_mDragList, TRUE);
+                break;
+
+            case DL_CANCELDRAG:
+                DrawInsert(_hwnd, pdli->hWnd, -1);
+                break;
+
+            case DL_DRAGGING:
+            {
+                int iDragOver = LBItemFromPt(pdli->hWnd, pdli->ptCursor, TRUE);
+                DrawInsert(_hwnd, pdli->hWnd, iDragOver);
+
+                // Set the return value to show feedback
+                SetDlgMsgResult(_hwnd, g_mDragList, (iDragOver != -1) ? DL_MOVECURSOR : DL_STOPCURSOR);
+                break;
+            }
+
+            case DL_DROPPED:
+            {
+                int iDragOver = LBItemFromPt(pdli->hWnd, pdli->ptCursor, TRUE);
+                DrawInsert(_hwnd, pdli->hWnd, -1);
+
+                _MoveTab(_iDrag, iDragOver);
+                _ActivateSelectedTab();
+                break;
+            }
+            }
+            break;
+        }
+        break;
     }
 
     return nResult;
@@ -329,8 +329,8 @@ void CMainDlg::_MoveTabByOffset(int iTab, int iTabOffset)
 void CMainDlg::_MoveTab(int iTab, int iTabTo)
 {
     if (iTab >= 0 && iTab < _cTabs &&
-        iTabTo >= 0 && iTabTo <= _cTabs &&
-        iTab != iTabTo)
+            iTabTo >= 0 && iTabTo <= _cTabs &&
+            iTab != iTabTo)
     {
         CTabWnd *pTabWnd = _apTabs[iTab];
 

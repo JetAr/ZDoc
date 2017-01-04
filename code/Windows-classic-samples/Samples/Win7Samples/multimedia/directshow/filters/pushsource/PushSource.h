@@ -1,4 +1,4 @@
-//------------------------------------------------------------------------------
+﻿//------------------------------------------------------------------------------
 // File: PushSource.H
 //
 // Desc: DirectShow sample code - In-memory push mode source filter
@@ -9,7 +9,7 @@
 
 #include <strsafe.h>
 
-// UNITS = 10 ^ 7  
+// UNITS = 10 ^ 7
 // UNITS / 30 = 30 fps;
 // UNITS / 20 = 20 fps, etc
 const REFERENCE_TIME FPS_30 = UNITS / 30;
@@ -48,11 +48,11 @@ protected:
 
     BITMAPINFO *m_pBmi;                 // Pointer to the bitmap header
     DWORD       m_cbBitmapInfo;         // Size of the bitmap header
-	
-	// File opening variables 
-	HANDLE m_hFile;                     // Handle returned from CreateFile
+
+    // File opening variables
+    HANDLE m_hFile;                     // Handle returned from CreateFile
     BYTE * m_pFile;                     // Points to beginning of file buffer
-	BYTE * m_pImage;                    // Points to pixel bits                                      
+    BYTE * m_pImage;                    // Points to pixel bits
 
     int m_iFrameNumber;
     const REFERENCE_TIME m_rtFrameLength;
@@ -69,11 +69,11 @@ public:
     HRESULT GetMediaType(CMediaType *pMediaType);
     HRESULT DecideBufferSize(IMemAllocator *pAlloc, ALLOCATOR_PROPERTIES *pRequest);
     HRESULT FillBuffer(IMediaSample *pSample);
-    
+
     // Quality control
-	// Not implemented because we aren't going in real time.
-	// If the file-writing filter slows the graph down, we just do nothing, which means
-	// wait until we're unblocked. No frames are ever dropped.
+    // Not implemented because we aren't going in real time.
+    // If the file-writing filter slows the graph down, we just do nothing, which means
+    // wait until we're unblocked. No frames are ever dropped.
     STDMETHODIMP Notify(IBaseFilter *pSelf, Quality q)
     {
         return E_FAIL;
@@ -92,11 +92,11 @@ protected:
 
     BITMAPINFO *m_pBmi[NUM_FILES];      // Pointer to the bitmap headers
     DWORD m_cbBitmapInfo[NUM_FILES];    // Size of the bitmap headers
-	
-	// File opening variables 
-	HANDLE m_hFile[NUM_FILES];          // Handles returned from CreateFile
+
+    // File opening variables
+    HANDLE m_hFile[NUM_FILES];          // Handles returned from CreateFile
     BYTE * m_pFile[NUM_FILES];          // Points to beginning of file buffers
-	BYTE * m_pImage[NUM_FILES];         // Points to pixel bits                                      
+    BYTE * m_pImage[NUM_FILES];         // Points to pixel bits
     BOOL m_bFilesLoaded;
 
     int m_iCurrentBitmap;               // Which bitmap is being displayed
@@ -115,11 +115,11 @@ public:
     HRESULT GetMediaType(CMediaType *pMediaType);
     HRESULT DecideBufferSize(IMemAllocator *pAlloc, ALLOCATOR_PROPERTIES *pRequest);
     HRESULT FillBuffer(IMediaSample *pSample);
-    
+
     // Quality control
-	// Not implemented because we aren't going in real time.
-	// If the file-writing filter slows the graph down, we just do nothing, which means
-	// wait until we're unblocked. No frames are ever dropped.
+    // Not implemented because we aren't going in real time.
+    // If the file-writing filter slows the graph down, we just do nothing, which means
+    // wait until we're unblocked. No frames are ever dropped.
     STDMETHODIMP Notify(IBaseFilter *pSelf, Quality q)
     {
         return E_FAIL;
@@ -158,7 +158,7 @@ public:
     // Override the version that offers exactly one media type
     HRESULT DecideBufferSize(IMemAllocator *pAlloc, ALLOCATOR_PROPERTIES *pRequest);
     HRESULT FillBuffer(IMediaSample *pSample);
-    
+
     // Set the agreed media type and set up the necessary parameters
     HRESULT SetMediaType(const CMediaType *pMediaType);
 
@@ -167,9 +167,9 @@ public:
     HRESULT GetMediaType(int iPosition, CMediaType *pmt);
 
     // Quality control
-	// Not implemented because we aren't going in real time.
-	// If the file-writing filter slows the graph down, we just do nothing, which means
-	// wait until we're unblocked. No frames are ever dropped.
+    // Not implemented because we aren't going in real time.
+    // If the file-writing filter slows the graph down, we just do nothing, which means
+    // wait until we're unblocked. No frames are ever dropped.
     STDMETHODIMP Notify(IBaseFilter *pSelf, Quality q)
     {
         return E_FAIL;
@@ -190,7 +190,7 @@ private:
     CPushPinBitmap *m_pPin;
 
 public:
-    static CUnknown * WINAPI CreateInstance(IUnknown *pUnk, HRESULT *phr);  
+    static CUnknown * WINAPI CreateInstance(IUnknown *pUnk, HRESULT *phr);
 
 };
 
@@ -206,7 +206,7 @@ private:
     CPushPinBitmapSet *m_pPin;
 
 public:
-    static CUnknown * WINAPI CreateInstance(IUnknown *pUnk, HRESULT *phr);  
+    static CUnknown * WINAPI CreateInstance(IUnknown *pUnk, HRESULT *phr);
 
 };
 
@@ -222,7 +222,7 @@ private:
     CPushPinDesktop *m_pPin;
 
 public:
-    static CUnknown * WINAPI CreateInstance(IUnknown *pUnk, HRESULT *phr);  
+    static CUnknown * WINAPI CreateInstance(IUnknown *pUnk, HRESULT *phr);
 
 };
 

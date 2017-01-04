@@ -1,4 +1,4 @@
-/*++
+﻿/*++
 THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED
 TO THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -51,7 +51,8 @@ Revision History:
 //  This is the counter structure presently returned by Nbf for
 //  each Resource.  Each Resource is an Instance, named by its number.
 //
-typedef struct _APPMEM_DATA_DEFINITION {
+typedef struct _APPMEM_DATA_DEFINITION
+{
     PERF_OBJECT_TYPE            AppMemObjectType;
     PERF_COUNTER_DEFINITION AppMemBytesAllocated;
     PERF_COUNTER_DEFINITION AppMemAllocs;
@@ -62,7 +63,8 @@ typedef struct _APPMEM_DATA_DEFINITION {
     PERF_COUNTER_DEFINITION AppMemFreesSec;
 } APPMEM_DATA_DEFINITION;
 
-typedef struct _APPMEM_COUNTERS {
+typedef struct _APPMEM_COUNTERS
+{
     PERF_COUNTER_BLOCK  CounterBlock;
     DWORD               dwAppMemBytesAllocated;
     DWORD               dwAppMemAllocs;

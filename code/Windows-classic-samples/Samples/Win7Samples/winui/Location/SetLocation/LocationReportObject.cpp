@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -32,9 +32,9 @@ STDMETHODIMP CLocationReport::GetValue(REFPROPERTYKEY pKey, PROPVARIANT *pValue)
     if (pKey.pid == SENSOR_DATA_TYPE_ADDRESS1.pid)
     {
         hr = InitPropVariantFromString(m_address1, pValue);
-    } 
+    }
     else if (pKey.pid == SENSOR_DATA_TYPE_ADDRESS2.pid)
-    {    
+    {
         hr = InitPropVariantFromString(m_address2, pValue);
     }
     else if (pKey.pid == SENSOR_DATA_TYPE_CITY.pid)
@@ -44,12 +44,12 @@ STDMETHODIMP CLocationReport::GetValue(REFPROPERTYKEY pKey, PROPVARIANT *pValue)
     else if (pKey.pid == SENSOR_DATA_TYPE_STATE_PROVINCE.pid)
     {
         hr = InitPropVariantFromString(m_stateprovince, pValue);
-    } 
+    }
     else if (pKey.pid == SENSOR_DATA_TYPE_POSTALCODE.pid)
     {
         hr = InitPropVariantFromString(m_postalcode, pValue);
     }
-    else if (pKey.pid == SENSOR_DATA_TYPE_COUNTRY_REGION.pid)    
+    else if (pKey.pid == SENSOR_DATA_TYPE_COUNTRY_REGION.pid)
     {
         hr = InitPropVariantFromString(m_countryregion, pValue);
     }
@@ -57,16 +57,16 @@ STDMETHODIMP CLocationReport::GetValue(REFPROPERTYKEY pKey, PROPVARIANT *pValue)
     else if (pKey.pid == SENSOR_DATA_TYPE_LATITUDE_DEGREES.pid)
     {
         hr = InitPropVariantFromDouble(m_latitude, pValue);
-    } 
+    }
     else if (pKey.pid == SENSOR_DATA_TYPE_LONGITUDE_DEGREES.pid)
     {
         hr = InitPropVariantFromDouble(m_longitude, pValue);
     }
-    else if (pKey.pid == SENSOR_DATA_TYPE_ERROR_RADIUS_METERS.pid)    
+    else if (pKey.pid == SENSOR_DATA_TYPE_ERROR_RADIUS_METERS.pid)
     {
         hr = InitPropVariantFromDouble(m_errorradius, pValue);
     }
-    else 
+    else
     {
         hr = HRESULT_FROM_WIN32(ERROR_NO_DATA);
         PropVariantInit(pValue);
@@ -127,7 +127,7 @@ STDMETHODIMP CLocationReport::GetLongitude(DOUBLE *pLongitude)
     return S_OK;
 }
 
-// The error radius field is not displayed in the 
+// The error radius field is not displayed in the
 // Default Location Control Panel, but is available from the Location API.
 STDMETHODIMP CLocationReport::GetErrorRadius(DOUBLE *pErrorRadius)
 {
@@ -139,7 +139,7 @@ STDMETHODIMP CLocationReport::GetErrorRadius(DOUBLE *pErrorRadius)
     return S_OK;
 }
 
-// The altitude field is not displayed in the 
+// The altitude field is not displayed in the
 // Default Location Control Panel, but is available from the Location API.
 STDMETHODIMP CLocationReport::GetAltitude(DOUBLE *pAltitude)
 {
@@ -151,7 +151,7 @@ STDMETHODIMP CLocationReport::GetAltitude(DOUBLE *pAltitude)
     return S_OK;
 }
 
-// The altitude error field is not displayed in the 
+// The altitude error field is not displayed in the
 // Default Location Control Panel, but is available from the Location API.
 STDMETHODIMP CLocationReport::GetAltitudeError(DOUBLE *pAltitudeError)
 {

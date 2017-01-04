@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -21,14 +21,14 @@
 
 // This is a pseudo-COM object, i.e. not co-create-able and not in registry.
 class ShaCallback :
-     public INapSystemHealthAgentCallback
+    public INapSystemHealthAgentCallback
 {
 public:
 
     // IUnknown
 
     STDMETHODIMP QueryInterface(
-        __RPC__in REFIID riid , 
+        __RPC__in REFIID riid,
         __RPC__out void **ppObj);
 
     STDMETHODIMP_(ULONG) AddRef();
@@ -49,17 +49,17 @@ public:
         /* out */ __RPC__deref_out_opt FixupInfo** ppstatus);
 
     STDMETHOD(CompareSoHRequests)(
-       /* in */ __RPC__in const SoHRequest* lhs,
-       /* in */ __RPC__in const SoHRequest* rhs,
-       /* out */ __RPC__out BOOL* isEqual);
+        /* in */ __RPC__in const SoHRequest* lhs,
+        /* in */ __RPC__in const SoHRequest* rhs,
+        /* out */ __RPC__out BOOL* isEqual);
 
     STDMETHOD(NotifyOrphanedSoHRequest)(
-       /* in */ __RPC__in const CorrelationId* correlationId);
+        /* in */ __RPC__in const CorrelationId* correlationId);
 
 public:
 
     // Create instance
-	static INapSystemHealthAgentCallback* CreateInstance(
+    static INapSystemHealthAgentCallback* CreateInstance(
         /* in */ _In_ INapSystemHealthAgentBinding* binding);
 
 protected:

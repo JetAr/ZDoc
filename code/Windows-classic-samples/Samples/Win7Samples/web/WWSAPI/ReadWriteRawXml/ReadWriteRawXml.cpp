@@ -1,4 +1,4 @@
-//------------------------------------------------------------
+﻿//------------------------------------------------------------
 // Copyright (c) Microsoft Corporation.  All rights reserved.
 //------------------------------------------------------------
 
@@ -11,7 +11,7 @@
 #include "string.h"
 // Print out rich error info
 void PrintError(
-    __in HRESULT errorCode, 
+    __in HRESULT errorCode,
     __in_opt WS_ERROR* error)
 {
     wprintf(L"Failure: errorCode=0x%lx\n", errorCode);
@@ -52,14 +52,14 @@ Exit:
 
 // Main entry point
 int __cdecl wmain(
-    __in int argc, 
+    __in int argc,
     __in_ecount(argc) wchar_t **argv)
 {
     HRESULT hr = S_OK;
     WS_ERROR* error = NULL;
     WS_XML_WRITER* xmlWriter = NULL;
     WS_XML_READER* xmlReader = NULL;
-    
+
     // Command line parameter specifies whether to read or write raw
     BOOL readRaw = FALSE;
     BOOL writeRaw = FALSE;
@@ -93,59 +93,59 @@ int __cdecl wmain(
         wprintf(L"usage : WsReadWriteRawXml.exe [none|read|write|both]\n");
         return 1;
     }
-    
+
     // Create an error object for storing rich error information
     hr = WsCreateError(
-        NULL, 
-        0, 
-        &error);
+             NULL,
+             0,
+             &error);
     if (FAILED(hr))
     {
         goto Exit;
     }
-    
+
     // Create an XML reader
     hr = WsCreateReader(
-        NULL,
-        0, 
-        &xmlReader, 
-        error);
+             NULL,
+             0,
+             &xmlReader,
+             error);
     if (FAILED(hr))
     {
         goto Exit;
     }
     // Create an XML writer
     hr = WsCreateWriter(
-        NULL, 
-        0, 
-        &xmlWriter, 
-        error);
+             NULL,
+             0,
+             &xmlWriter,
+             error);
     if (FAILED(hr))
     {
         goto Exit;
     }
-    
+
     if (readRaw)
     {
         // Setup some non-textual xml to read
         static const char bytes[] = "{ 1, 2, 3 }";
-        static const WS_XML_READER_RAW_ENCODING rawEncoding = 
-        { 
-            { WS_XML_READER_ENCODING_TYPE_RAW } 
+        static const WS_XML_READER_RAW_ENCODING rawEncoding =
+        {
+            { WS_XML_READER_ENCODING_TYPE_RAW }
         };
         static const WS_XML_READER_BUFFER_INPUT bufferInput =
-        { 
+        {
             { WS_XML_READER_INPUT_TYPE_BUFFER },
             (void*)bytes,
             sizeof(bytes) - 1,
         };
         hr = WsSetInput(
-            xmlReader, 
-            &rawEncoding.encoding, 
-            &bufferInput.input, 
-            NULL, 
-            0, 
-            error);
+                 xmlReader,
+                 &rawEncoding.encoding,
+                 &bufferInput.input,
+                 NULL,
+                 0,
+                 error);
         if (FAILED(hr))
         {
             goto Exit;
@@ -155,13 +155,13 @@ int __cdecl wmain(
     {
         // Setup the base64 encoded version of "{ 1, 2, 3 }";
         static const char bytes[] = "eyAxLCAyLCAzIH0=";
-        WS_XML_READER_TEXT_ENCODING textEncoding = 
-        { 
+        WS_XML_READER_TEXT_ENCODING textEncoding =
+        {
             { WS_XML_READER_ENCODING_TYPE_TEXT },
             WS_CHARSET_AUTO
         };
         WS_XML_READER_BUFFER_INPUT bufferInput =
-        { 
+        {
             { WS_XML_READER_INPUT_TYPE_BUFFER },
             (void*)bytes,
             sizeof(bytes) - 1,
@@ -173,39 +173,39 @@ int __cdecl wmain(
         properties[0].id = WS_XML_READER_PROPERTY_ALLOW_FRAGMENT;
         properties[0].value = &allowFragment;
         properties[0].valueSize = sizeof(allowFragment);
-    
+
         hr = WsSetInput(
-            xmlReader, 
-            &textEncoding.encoding, 
-            &bufferInput.input, 
-            properties,
-            WsCountOf(properties),
-            error);
-    
+                 xmlReader,
+                 &textEncoding.encoding,
+                 &bufferInput.input,
+                 properties,
+                 WsCountOf(properties),
+                 error);
+
         if (FAILED(hr))
         {
             goto Exit;
         }
     }
-    
+
     if (writeRaw)
     {
         // Setup the writer to emit the raw data
-        WS_XML_WRITER_RAW_ENCODING rawEncoding = 
-        { 
-            { WS_XML_WRITER_ENCODING_TYPE_RAW } 
+        WS_XML_WRITER_RAW_ENCODING rawEncoding =
+        {
+            { WS_XML_WRITER_ENCODING_TYPE_RAW }
         };
         WS_XML_WRITER_BUFFER_OUTPUT bufferOutput =
-        { 
+        {
             { WS_XML_WRITER_OUTPUT_TYPE_BUFFER }
         };
         hr = WsSetOutput(
-            xmlWriter, 
-            &rawEncoding.encoding, 
-            &bufferOutput.output, 
-            NULL, 
-            0, 
-            error);
+                 xmlWriter,
+                 &rawEncoding.encoding,
+                 &bufferOutput.output,
+                 NULL,
+                 0,
+                 error);
         if (FAILED(hr))
         {
             goto Exit;
@@ -214,13 +214,13 @@ int __cdecl wmain(
     else
     {
         // Setup the writer to emit the data as base64 characters
-        WS_XML_WRITER_TEXT_ENCODING textEncoding = 
-        { 
+        WS_XML_WRITER_TEXT_ENCODING textEncoding =
+        {
             { WS_XML_WRITER_ENCODING_TYPE_TEXT },
             WS_CHARSET_UTF8
         };
         WS_XML_WRITER_BUFFER_OUTPUT bufferOutput =
-        { 
+        {
             { WS_XML_WRITER_OUTPUT_TYPE_BUFFER }
         };
         // Since the base64 encoded data is at the root in the raw encoding, we need
@@ -230,48 +230,48 @@ int __cdecl wmain(
         properties[0].id = WS_XML_WRITER_PROPERTY_ALLOW_FRAGMENT;
         properties[0].value = &allowFragment;
         properties[0].valueSize = sizeof(allowFragment);
-    
+
         hr = WsSetOutput(
-            xmlWriter, 
-            &textEncoding.encoding, 
-            &bufferOutput.output, 
-            properties, 
-            WsCountOf(properties),
-            error);
-    
+                 xmlWriter,
+                 &textEncoding.encoding,
+                 &bufferOutput.output,
+                 properties,
+                 WsCountOf(properties),
+                 error);
+
         if (FAILED(hr))
         {
             goto Exit;
         }
     }
-    
+
     hr = WsCopyNode(xmlWriter, xmlReader, error);
     if (FAILED(hr))
     {
         goto Exit;
     }
-    
+
     WS_BYTES bytes;
     hr = WsGetWriterProperty(
-        xmlWriter, 
-        WS_XML_WRITER_PROPERTY_BYTES, 
-        &bytes, 
-        sizeof(bytes), 
-        error);
-    
+             xmlWriter,
+             WS_XML_WRITER_PROPERTY_BYTES,
+             &bytes,
+             sizeof(bytes),
+             error);
+
     if (FAILED(hr))
     {
         goto Exit;
     }
     printf("%.*s\n", bytes.length, bytes.bytes);
-    
+
 Exit:
     if (FAILED(hr))
     {
         // Print out the error
         PrintError(hr, error);
     }
-    
+
     if (xmlReader != NULL)
     {
         WsFreeReader(xmlReader);

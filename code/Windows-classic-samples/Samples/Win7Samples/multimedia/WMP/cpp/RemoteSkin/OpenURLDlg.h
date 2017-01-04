@@ -1,4 +1,4 @@
-// OpenURLDlg.h : Declaration of the COpenURLDlg
+﻿// OpenURLDlg.h : Declaration of the COpenURLDlg
 //
 // Copyright (c) Microsoft Corporation. All rights reserved.
 //
@@ -11,20 +11,20 @@
 
 /////////////////////////////////////////////////////////////////////////////
 // COpenURLDlg
-class COpenURLDlg : 
+class COpenURLDlg :
     public CAxDialogImpl<COpenURLDlg>
 {
 public:
     COpenURLDlg();
-    ~COpenURLDlg(){}
+    ~COpenURLDlg() {}
 
     enum { IDD = IDD_OPENURLDLG };
 
-BEGIN_MSG_MAP(COpenURLDlg)
+    BEGIN_MSG_MAP(COpenURLDlg)
     COMMAND_ID_HANDLER(IDOK, OnOK)
     COMMAND_ID_HANDLER(IDCANCEL, OnCancel)
     COMMAND_ID_HANDLER(IDC_BROWSE, OnBrowse)
-END_MSG_MAP()
+    END_MSG_MAP()
 
     LRESULT OnCancel(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl*/, BOOL& /*bHandled*/);
     LRESULT OnOK(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl*/, BOOL& /*bHandled*/);

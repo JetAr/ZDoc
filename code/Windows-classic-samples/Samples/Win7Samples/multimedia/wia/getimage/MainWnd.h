@@ -1,4 +1,4 @@
-/*++
+﻿/*++
 
 Copyright (c) Microsoft Corporation. All rights reserved.
 
@@ -16,7 +16,7 @@ Copyright (c) Microsoft Corporation. All rights reserved.
 
 /*++
 
-    CMainWindow is the main MDI frame window. It is descended from IUnknown 
+    CMainWindow is the main MDI frame window. It is descended from IUnknown
     for reference counting.
 
 Methods
@@ -25,14 +25,14 @@ Methods
         Registers the window class
 
     DoModal
-        Invokes the window and returns when the main window is closed. 
+        Invokes the window and returns when the main window is closed.
 
     WindowProc
         Processes window messages.
 
     OnFromScannerOrCamera
-        Displays the WIA device selection, image selection and image tranfer 
-        dialogs to transfer one or multiple images from a WIA device when the 
+        Displays the WIA device selection, image selection and image tranfer
+        dialogs to transfer one or multiple images from a WIA device when the
         user selects "From Scanner Or Camera..." menu item.
 
 --*/
@@ -56,7 +56,7 @@ public:
 
 private:
     static
-    LRESULT 
+    LRESULT
     CALLBACK
     WindowProc(
         HWND   hWnd,

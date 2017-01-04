@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -29,76 +29,76 @@ LRESULT CALLBACK MainWndProc(_In_ HWND hwnd, _In_ UINT message, _In_ WPARAM wPar
 {
     LRESULT retVal = 0;
 
-    switch (message) 
+    switch (message)
     {
     case WM_CREATE:
-        {
-           // Create the Load/Unload Button...
-            loadButton = CreateWindow(L"BUTTON", L"Load DLL",
-                    WS_TABSTOP | WS_CHILD | WS_VISIBLE | BS_DEFPUSHBUTTON,
-                    10, 30, 130, 40, hwnd, NULL, thisInstance, NULL);
+    {
+        // Create the Load/Unload Button...
+        loadButton = CreateWindow(L"BUTTON", L"Load DLL",
+                                  WS_TABSTOP | WS_CHILD | WS_VISIBLE | BS_DEFPUSHBUTTON,
+                                  10, 30, 130, 40, hwnd, NULL, thisInstance, NULL);
 
-            WCHAR szFontFace[50];
-            LoadString(thisInstance, CONTROL_FONTFACE, szFontFace, ARRAYSIZE(szFontFace));
-            HFONT font = CreateFont(0,0,0,0,0,FALSE,FALSE,FALSE,DEFAULT_CHARSET,OUT_DEFAULT_PRECIS,CLIP_DEFAULT_PRECIS,DEFAULT_QUALITY,DEFAULT_PITCH|FF_DONTCARE,szFontFace);
-            SendMessage(loadButton, WM_SETFONT, reinterpret_cast<WPARAM>(font), NULL);
-            break;
-        }
+        WCHAR szFontFace[50];
+        LoadString(thisInstance, CONTROL_FONTFACE, szFontFace, ARRAYSIZE(szFontFace));
+        HFONT font = CreateFont(0,0,0,0,0,FALSE,FALSE,FALSE,DEFAULT_CHARSET,OUT_DEFAULT_PRECIS,CLIP_DEFAULT_PRECIS,DEFAULT_QUALITY,DEFAULT_PITCH|FF_DONTCARE,szFontFace);
+        SendMessage(loadButton, WM_SETFONT, reinterpret_cast<WPARAM>(font), NULL);
+        break;
+    }
 
     case WM_CLOSE:
-        {
-            PostQuitMessage(0);
-            break;
-        }
+    {
+        PostQuitMessage(0);
+        break;
+    }
 
     case WM_COMMAND:
+    {
+        // If the button is pressed
+        if ((HWND)lParam == loadButton && HIWORD(wParam) == BN_CLICKED)
         {
-            // If the button is pressed
-            if ((HWND)lParam == loadButton && HIWORD(wParam) == BN_CLICKED)
+            if (controlLibrary == NULL)
             {
-                if (controlLibrary == NULL)
+                // Load the Library and Access the CreateCleanShutdownControl in it
+                controlLibrary = LoadLibraryEx(controlLibraryName, NULL, LOAD_LIBRARY_SEARCH_APPLICATION_DIR);
+                if (controlLibrary != NULL)
                 {
-                    // Load the Library and Access the CreateCleanShutdownControl in it
-                    controlLibrary = LoadLibraryEx(controlLibraryName, NULL, LOAD_LIBRARY_SEARCH_APPLICATION_DIR);
-                    if (controlLibrary != NULL)
+                    CreateCleanShutdownControl* createControl = reinterpret_cast<CreateCleanShutdownControl *>(GetProcAddress(controlLibrary, "CreateCleanShutdownControl"));
+                    if (createControl != NULL)
                     {
-                        CreateCleanShutdownControl* createControl = reinterpret_cast<CreateCleanShutdownControl *>(GetProcAddress(controlLibrary, "CreateCleanShutdownControl"));
-                        if (createControl != NULL)
+                        RECT rc;
+                        if (GetClientRect(hwnd, &rc))
                         {
-                            RECT rc;
-                            if (GetClientRect(hwnd, &rc))
-                            {
-                                // Call the DLL to create the control
-                                loadedControl = createControl(hwnd, rc.right/2, 4, rc.right/2 - 4, rc.bottom - 8);
-                            }
+                            // Call the DLL to create the control
+                            loadedControl = createControl(hwnd, rc.right/2, 4, rc.right/2 - 4, rc.bottom - 8);
                         }
-                        SendMessage(loadButton, WM_SETTEXT, NULL, reinterpret_cast<LPARAM>(L"Unload DLL"));
                     }
-                }
-                else
-                {
-                    // Before unloading the DLL first delete the instance of the control
-                    if (loadedControl != NULL)
-                    {
-                        DestroyWindow(loadedControl);
-                        loadedControl = NULL;
-                    }
-
-                    // Now unload the library
-                    if (FreeLibrary(controlLibrary))
-                    {
-                        controlLibrary = NULL;
-                        SendMessage(loadButton, WM_SETTEXT, NULL, reinterpret_cast<LPARAM>(L"Load DLL"));
-                    }
+                    SendMessage(loadButton, WM_SETTEXT, NULL, reinterpret_cast<LPARAM>(L"Unload DLL"));
                 }
             }
-            break;
+            else
+            {
+                // Before unloading the DLL first delete the instance of the control
+                if (loadedControl != NULL)
+                {
+                    DestroyWindow(loadedControl);
+                    loadedControl = NULL;
+                }
+
+                // Now unload the library
+                if (FreeLibrary(controlLibrary))
+                {
+                    controlLibrary = NULL;
+                    SendMessage(loadButton, WM_SETTEXT, NULL, reinterpret_cast<LPARAM>(L"Load DLL"));
+                }
+            }
         }
+        break;
+    }
 
     default:
-        {
-            retVal = DefWindowProc(hwnd, message, wParam, lParam);
-        }
+    {
+        retVal = DefWindowProc(hwnd, message, wParam, lParam);
+    }
     }
 
     return retVal;
@@ -133,7 +133,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE, _In_ PWSTR, _
     HeapSetInformation(NULL, HeapEnableTerminationOnCorruption, NULL, 0);
 
     // Set the Debug flags so if we're a debug build we'll dump all memory leaks on exit
-    _CrtSetDbgFlag( _CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF); 
+    _CrtSetDbgFlag( _CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 
     HRESULT hr = CoInitialize(NULL);
 
@@ -147,14 +147,14 @@ int APIENTRY wWinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE, _In_ PWSTR, _
             {
                 thisInstance = instance;
                 HWND hwnd = CreateWindow(L"UiaCleanShutdownHost", L"UI Automation Clean Shutdown Sample",
-                    WS_CAPTION | WS_VISIBLE | WS_CLIPCHILDREN | WS_SYSMENU | WS_MINIMIZEBOX,
-                    CW_USEDEFAULT, CW_USEDEFAULT, 320, 230, NULL, NULL, instance, NULL);
+                                         WS_CAPTION | WS_VISIBLE | WS_CLIPCHILDREN | WS_SYSMENU | WS_MINIMIZEBOX,
+                                         CW_USEDEFAULT, CW_USEDEFAULT, 320, 230, NULL, NULL, instance, NULL);
 
                 if (hwnd != NULL)
                 {
                     // The message loop, it will exit when it gets a WM_QUIT message
                     MSG msg;
-                    while (GetMessage(&msg, NULL, 0, 0)) 
+                    while (GetMessage(&msg, NULL, 0, 0))
                     {
                         TranslateMessage(&msg);
                         DispatchMessage(&msg);

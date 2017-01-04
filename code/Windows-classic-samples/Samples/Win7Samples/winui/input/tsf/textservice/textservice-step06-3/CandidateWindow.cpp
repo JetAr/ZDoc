@@ -1,4 +1,4 @@
-//////////////////////////////////////////////////////////////////////
+﻿//////////////////////////////////////////////////////////////////////
 //
 //  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 //  ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED
@@ -191,16 +191,16 @@ LRESULT CALLBACK CCandidateWindow::_WindowProc(HWND hwnd, UINT uMsg, WPARAM wPar
 
     switch (uMsg)
     {
-        case WM_CREATE:
-            _SetThis(hwnd, lParam);
-            return 0;
+    case WM_CREATE:
+        _SetThis(hwnd, lParam);
+        return 0;
 
-        case WM_PAINT:
-            hdc = BeginPaint(hwnd, &ps);
-            SetBkMode(hdc, TRANSPARENT);
-            TextOut(hdc, 0, 0, c_szCandidateDescription, lstrlen(c_szCandidateDescription));
-            EndPaint(hwnd, &ps);
-            return 0;
+    case WM_PAINT:
+        hdc = BeginPaint(hwnd, &ps);
+        SetBkMode(hdc, TRANSPARENT);
+        TextOut(hdc, 0, 0, c_szCandidateDescription, lstrlen(c_szCandidateDescription));
+        EndPaint(hwnd, &ps);
+        return 0;
     }
 
     return DefWindowProc(hwnd, uMsg, wParam, lParam);

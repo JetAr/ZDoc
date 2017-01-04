@@ -1,12 +1,12 @@
-//+---------------------------------------------------------------------------
+﻿//+---------------------------------------------------------------------------
 //
-//  Copyright (c) Microsoft Corporation. All rights reserved. 
+//  Copyright (c) Microsoft Corporation. All rights reserved.
 //
 //
 //  BITS Upload sample
 //  ==================
 //
-//  Module name: 
+//  Module name:
 //  util.cpp
 //
 //  Purpose:
@@ -38,7 +38,7 @@ HRESULT DisplayErrorMessage(LPCWSTR pwszAdditionalMsg, HRESULT hrCode)
         //
         // Prepare to get a locale-specific error message.
         // We we are going to try different LCIDs; depending if this is a localized OS or not,
-        // we may be able to get localized error messages. Otherwise fall back to English strings. 
+        // we may be able to get localized error messages. Otherwise fall back to English strings.
         //
         LCID LcidsToTry[] =
         {
@@ -53,12 +53,12 @@ HRESULT DisplayErrorMessage(LPCWSTR pwszAdditionalMsg, HRESULT hrCode)
         //
         // Loop until we run out of LCIDs or until we succeed.
         // Note that if the error is not BITS specific, the function will search
-        // winhttp and the system for a description. 
+        // winhttp and the system for a description.
         //
         for (SIZE_T i = 0;
-                (( HRESULT_FROM_WIN32( ERROR_RESOURCE_LANG_NOT_FOUND ) == LookupHr || 
-                   HRESULT_FROM_WIN32( ERROR_MR_MID_NOT_FOUND ) == LookupHr) 
-                && i < NumberOfLCIDs);
+                (( HRESULT_FROM_WIN32( ERROR_RESOURCE_LANG_NOT_FOUND ) == LookupHr ||
+                   HRESULT_FROM_WIN32( ERROR_MR_MID_NOT_FOUND ) == LookupHr)
+                 && i < NumberOfLCIDs);
                 i++)
         {
             LookupHr = g_JobManager->GetErrorDescription(hrCode, LcidsToTry[i], &pwszBITSErrorMsg);
@@ -70,17 +70,17 @@ HRESULT DisplayErrorMessage(LPCWSTR pwszAdditionalMsg, HRESULT hrCode)
 
         //
         // Build the full message that we are going to display to the user.
-        // Note that maybe we didn't get an error description from BITS after all, 
+        // Note that maybe we didn't get an error description from BITS after all,
         // or the pwszAdditionalMsg parameter given was NULL. We need to test for those.
         //
         hr = StringCbPrintfW(
-            wszErrorMessage, 
-            sizeof(wszErrorMessage), 
-            L"%s\n\nThe specific error message returned by the system is: [Error 0x%8.8x] %s\nPlease check the BITS SDK or post a question to the BITS newsgroup if you need \nassistance troubleshooting this issue.", 
-            (pwszAdditionalMsg? pwszAdditionalMsg : L""),
-            hrCode,
-            (pwszBITSErrorMsg? pwszBITSErrorMsg : L"")
-        );
+                 wszErrorMessage,
+                 sizeof(wszErrorMessage),
+                 L"%s\n\nThe specific error message returned by the system is: [Error 0x%8.8x] %s\nPlease check the BITS SDK or post a question to the BITS newsgroup if you need \nassistance troubleshooting this issue.",
+                 (pwszAdditionalMsg? pwszAdditionalMsg : L""),
+                 hrCode,
+                 (pwszBITSErrorMsg? pwszBITSErrorMsg : L"")
+             );
 
         if (FAILED(hr))
         {

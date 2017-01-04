@@ -1,4 +1,4 @@
-/*--
+﻿/*--
 
 Copyright (C) Microsoft Corporation, 2006
 
@@ -13,7 +13,7 @@ Main header file
 class CMsftEraseSample;
 
 // the list of media types supported...
-static const IMAPI_MEDIA_PHYSICAL_TYPE g_EraseSupportedMediaTypes[] = 
+static const IMAPI_MEDIA_PHYSICAL_TYPE g_EraseSupportedMediaTypes[] =
 {
     IMAPI_MEDIA_TYPE_CDRW,
     IMAPI_MEDIA_TYPE_DVDRAM,
@@ -25,14 +25,15 @@ static const ULONG g_EraseSupportedMediaTypesCount = RTL_NUMBER_OF(g_EraseSuppor
 
 // This structure is used locally during "standard" erase
 // when using READ_DISC_INFO to estimate time to completion
-typedef struct _ERASE_UPDATE_CALLBACK_CONTEXT {
+typedef struct _ERASE_UPDATE_CALLBACK_CONTEXT
+{
 
-    CMsftEraseSample*   Erase;    
+    CMsftEraseSample*   Erase;
     CTaskTimeEstimator* BlankTime;
 
     // need to track old value...
     ULONG   LastProgress;
-    // 
+    //
     BOOLEAN IsDecreasing;
     // some drives cycle 3x around....
     ULONG   CycleCount;
@@ -50,7 +51,8 @@ public:
         T* pT = static_cast<T*>(this);
 
         // setup the dispatch parameters to be used repeatedly
-        DISPPARAMS disp; RtlZeroMemory(&disp, sizeof(disp));
+        DISPPARAMS disp;
+        RtlZeroMemory(&disp, sizeof(disp));
         VARIANT args[3];
         VariantInit(&args[2]);
         VariantInit(&args[1]);
@@ -74,7 +76,10 @@ public:
             IDispatch* pDispatch = NULL;
             pT->Lock();
             IUnknown* sp = m_vec.GetAt(nConnectionIndex);
-            if (sp != NULL) { sp->QueryInterface(&pDispatch); }
+            if (sp != NULL)
+            {
+                sp->QueryInterface(&pDispatch);
+            }
             pT->Unlock();
             if (pDispatch != NULL)
             {
@@ -88,7 +93,7 @@ public:
                     NULL, // [out,retval]
                     NULL, // exception info
                     NULL // which arg is incorrect
-                    );
+                );
                 pDispatch->Release();
             }
         }
@@ -100,25 +105,25 @@ public:
 // The next typedef allows less typing to support IWriteEngine2Event callbacks
 #define ERASE_WRITE_ENGINE_SOURCE 0
 typedef ::ATL::IDispEventSimpleImpl<ERASE_WRITE_ENGINE_SOURCE,
-                                    CMsftEraseSample, 
-                                    &IID_DWriteEngine2Events> EraseWriteEngineEventSimpleImpl;
+        CMsftEraseSample,
+        &IID_DWriteEngine2Events> EraseWriteEngineEventSimpleImpl;
 
 class CMsftEraseSample :
-    // CComObjectRootEx provide helpers for IUknown
+// CComObjectRootEx provide helpers for IUknown
     public ::ATL::CComObjectRootEx<::ATL::CComMultiThreadModel>,
-    // CComCoClass provides helpers for creating the object
+// CComCoClass provides helpers for creating the object
     public ::ATL::CComCoClass<CMsftEraseSample, &CLSID_MsftEraseSample>,
-    // IDispatchImpl should provide most IDispatch support
+// IDispatchImpl should provide most IDispatch support
     public ::ATL::IDispatchImpl<IEraseSample, &IID_IEraseSample, &LIBID_EraseSampleLib, /*Major*/1, /*Minor*/0>,
-    // IConn...ContainerImpl handles finding/using our events via connection points
+// IConn...ContainerImpl handles finding/using our events via connection points
     public ::ATL::IConnectionPointContainerImpl<CMsftEraseSample>,
-    // allows simpler/quicker use of events by clients
+// allows simpler/quicker use of events by clients
     public ::ATL::IProvideClassInfo2Impl<&CLSID_MsftEraseSample, &IID_DEraseSampleEvents, &LIBID_IMAPILib2, IMAPILib2_MajorVersion, IMAPILib2_MinorVersion>,
-    // Use my custom proxy template class for this (similiar to VS wizard code)
+// Use my custom proxy template class for this (similiar to VS wizard code)
     public CProxy_DEraseSampleEvents<CMsftEraseSample>,
-    // Need to implement events for the IWriteEngine use (erase of randomly writable media)
+// Need to implement events for the IWriteEngine use (erase of randomly writable media)
     public EraseWriteEngineEventSimpleImpl,
-    // ISupportErrorInfo is Yet Another Interface to be supported
+// ISupportErrorInfo is Yet Another Interface to be supported
     public ISupportErrorInfo
 {
 
@@ -132,21 +137,21 @@ public:
 
     // This is the list of all interfaces supported by the object
     BEGIN_COM_MAP(CMsftEraseSample)
-        COM_INTERFACE_ENTRY(IEraseSample)
-        COM_INTERFACE_ENTRY(IDiscFormat2)
-        COM_INTERFACE_ENTRY(IDispatch)
-        COM_INTERFACE_ENTRY(ISupportErrorInfo)
-        COM_INTERFACE_ENTRY(IProvideClassInfo2)
-        COM_INTERFACE_ENTRY(IProvideClassInfo)
-        COM_INTERFACE_ENTRY(IConnectionPointContainer)
+    COM_INTERFACE_ENTRY(IEraseSample)
+    COM_INTERFACE_ENTRY(IDiscFormat2)
+    COM_INTERFACE_ENTRY(IDispatch)
+    COM_INTERFACE_ENTRY(ISupportErrorInfo)
+    COM_INTERFACE_ENTRY(IProvideClassInfo2)
+    COM_INTERFACE_ENTRY(IProvideClassInfo)
+    COM_INTERFACE_ENTRY(IConnectionPointContainer)
     END_COM_MAP()
 
     BEGIN_CONNECTION_POINT_MAP(CMsftEraseSample)
-        CONNECTION_POINT_ENTRY(IID_DEraseSampleEvents)
+    CONNECTION_POINT_ENTRY(IID_DEraseSampleEvents)
     END_CONNECTION_POINT_MAP()
 
     BEGIN_SINK_MAP(CMsftEraseSample)
-        SINK_ENTRY_INFO(ERASE_WRITE_ENGINE_SOURCE, IID_DWriteEngine2Events, DISPID_DWRITEENGINE2EVENTS_UPDATE, &WriteEngineUpdate, &g_GenericDualIDispatchEventInfo)
+    SINK_ENTRY_INFO(ERASE_WRITE_ENGINE_SOURCE, IID_DWriteEngine2Events, DISPID_DWRITEENGINE2EVENTS_UPDATE, &WriteEngineUpdate, &g_GenericDualIDispatchEventInfo)
     END_SINK_MAP()
 
 public: // IDispatch for write engine updates
@@ -182,17 +187,17 @@ private:
     HRESULT EraseByWrite(IMAPI_MEDIA_PHYSICAL_TYPE mediaType);
 
     static HRESULT GetDiscInformation(
-                        __in                              IDiscRecorder2Ex* recorder,
-                        __deref_out_bcount(*DiscInfoSize) DISC_INFORMATION ** DiscInfo,
-                        __out                             ULONG * DiscInfoSize,
-                                                          ULONG RequiredSize
-                        );
+        __in                              IDiscRecorder2Ex* recorder,
+        __deref_out_bcount(*DiscInfoSize) DISC_INFORMATION ** DiscInfo,
+        __out                             ULONG * DiscInfoSize,
+        ULONG RequiredSize
+    );
     static HRESULT GetDiscCapabilities(
-                        __in                                  IDiscRecorder2Ex* recorder,
-                        __deref_out_bcount(*CapabilitiesSize) CDVD_CAPABILITIES_PAGE ** Capabilities,
-                        __out                                 ULONG * CapabilitiesSize,
-                                                              ULONG RequiredSize
-                        );
+        __in                                  IDiscRecorder2Ex* recorder,
+        __deref_out_bcount(*CapabilitiesSize) CDVD_CAPABILITIES_PAGE ** Capabilities,
+        __out                                 ULONG * CapabilitiesSize,
+        ULONG RequiredSize
+    );
 
     HRESULT WaitForReadDiscInfoToWorkAfterBlank(ULONG EstimatedMillisecondsToCompletion);
     BOOLEAN CheckRecorderSupportsErase(__in IDiscRecorder2Ex * DiscRecorder, BOOLEAN CheckCurrentMedia);

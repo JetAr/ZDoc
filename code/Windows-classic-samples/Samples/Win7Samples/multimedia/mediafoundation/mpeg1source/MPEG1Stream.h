@@ -1,8 +1,8 @@
-//////////////////////////////////////////////////////////////////////////
+﻿//////////////////////////////////////////////////////////////////////////
 //
 // MPEG1Stream.h
 // Implements the stream object (IMFMediaStream) for the MPEG-1 source.
-// 
+//
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -17,7 +17,7 @@
 class MPEG1Source;
 
 // The media stream object.
-class MPEG1Stream : BaseObject, RefCountedObject, public IMFMediaStream 
+class MPEG1Stream : BaseObject, RefCountedObject, public IMFMediaStream
 {
 public:
 
@@ -48,7 +48,10 @@ public:
     HRESULT     EndOfStream();
     HRESULT     Shutdown();
 
-    BOOL        IsActive() const { return m_bActive; }
+    BOOL        IsActive() const
+    {
+        return m_bActive;
+    }
     BOOL        NeedsData();
 
     HRESULT     DeliverPayload(IMFSample *pSample);
@@ -59,7 +62,7 @@ public:
 private:
 
     // SourceLock class:
-    // Small helper class to lock and unlock the source. 
+    // Small helper class to lock and unlock the source.
     // It works like the AutoLock class in Common\critsec.h.
     class SourceLock
     {
@@ -72,7 +75,7 @@ private:
 
 private:
 
-    HRESULT CheckShutdown() const 
+    HRESULT CheckShutdown() const
     {
         return ( m_state == STATE_SHUTDOWN ? MF_E_SHUTDOWN : S_OK );
     }

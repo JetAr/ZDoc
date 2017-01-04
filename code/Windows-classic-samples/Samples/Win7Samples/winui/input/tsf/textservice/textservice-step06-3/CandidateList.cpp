@@ -1,4 +1,4 @@
-//////////////////////////////////////////////////////////////////////
+﻿//////////////////////////////////////////////////////////////////////
 //
 //  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 //  ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED
@@ -112,7 +112,7 @@ STDAPI CCandidateList::QueryInterface(REFIID riid, void **ppvObj)
     *ppvObj = NULL;
 
     if (IsEqualIID(riid, IID_IUnknown) ||
-        IsEqualIID(riid, IID_ITfContextKeyEventSink))
+            IsEqualIID(riid, IID_ITfContextKeyEventSink))
     {
         *ppvObj = (ITfContextKeyEventSink *)this;
     }
@@ -192,9 +192,9 @@ STDAPI CCandidateList::OnKeyUp(WPARAM wParam, LPARAM lParam, BOOL *pfEaten)
 
     *pfEaten = TRUE;
 
-    // 
+    //
     // we eat VK_RETURN here to finish candidate list.
-    // 
+    //
     if (wParam == VK_RETURN)
         _EndCandidateList();
     else
@@ -252,27 +252,27 @@ STDAPI CCandidateList::OnLayoutChange(ITfContext *pContext, TfLayoutCode lcode, 
 
     switch (lcode)
     {
-        case TF_LC_CHANGE:
-            if (_pCandidateWindow != NULL)
+    case TF_LC_CHANGE:
+        if (_pCandidateWindow != NULL)
+        {
+            CGetTextExtentEditSession *pEditSession;
+
+            if ((pEditSession = new CGetTextExtentEditSession(_pTextService, pContext, pContextView, _pRangeComposition, _pCandidateWindow)) != NULL)
             {
-                CGetTextExtentEditSession *pEditSession;
+                HRESULT hr;
+                // we need a lock to do our work
+                // nb: this method is one of the few places where it is legal to use
+                // the TF_ES_SYNC flag
+                pContext->RequestEditSession(_pTextService->_GetClientId(), pEditSession, TF_ES_SYNC | TF_ES_READ, &hr);
 
-                if ((pEditSession = new CGetTextExtentEditSession(_pTextService, pContext, pContextView, _pRangeComposition, _pCandidateWindow)) != NULL)
-                {
-                    HRESULT hr;
-                    // we need a lock to do our work
-                    // nb: this method is one of the few places where it is legal to use
-                    // the TF_ES_SYNC flag
-                    pContext->RequestEditSession(_pTextService->_GetClientId(), pEditSession, TF_ES_SYNC | TF_ES_READ, &hr);
-
-                    pEditSession->Release();
-                 }
+                pEditSession->Release();
             }
-            break;
+        }
+        break;
 
-        case TF_LC_DESTROY:
-            _EndCandidateList();
-            break;
+    case TF_LC_DESTROY:
+        _EndCandidateList();
+        break;
 
     }
     return S_OK;
@@ -305,7 +305,7 @@ HRESULT CCandidateList::_StartCandidateList(TfClientId tfClientId, ITfDocumentMg
         return E_FAIL;
 
     //
-    // push the new context. 
+    // push the new context.
     //
     if (FAILED(pDocumentMgr->Push(_pContextCandidateWindow)))
         goto Exit;
@@ -319,19 +319,19 @@ HRESULT CCandidateList::_StartCandidateList(TfClientId tfClientId, ITfDocumentMg
     _pRangeComposition = pRangeComposition;
     _pRangeComposition->AddRef();
 
-    // 
+    //
     // advise ITfContextKeyEventSink to the new context.
-    // 
+    //
     if (FAILED(_AdviseContextKeyEventSink()))
         goto Exit;
 
-    // 
+    //
     // advise ITfTextLayoutSink to the document context.
-    // 
+    //
     if (FAILED(_AdviseTextLayoutSink()))
         goto Exit;
 
-    // 
+    //
     // create an instance of CCandidateWindow class.
     //
     if (_pCandidateWindow = new CCandidateWindow())
@@ -353,7 +353,7 @@ HRESULT CCandidateList::_StartCandidateList(TfClientId tfClientId, ITfDocumentMg
 
         pContextView->Release();
 
-        
+
         //
         // create the dummy candidate window
         //
@@ -391,29 +391,29 @@ void CCandidateList::_EndCandidateList()
 
     if (_pRangeComposition)
     {
-       _pRangeComposition->Release();
-       _pRangeComposition = NULL;
+        _pRangeComposition->Release();
+        _pRangeComposition = NULL;
     }
 
     if (_pContextCandidateWindow)
     {
-       _UnadviseContextKeyEventSink();
-       _pContextCandidateWindow->Release();
-       _pContextCandidateWindow = NULL;
+        _UnadviseContextKeyEventSink();
+        _pContextCandidateWindow->Release();
+        _pContextCandidateWindow = NULL;
     }
 
     if (_pContextDocument)
     {
-       _UnadviseTextLayoutSink();
-       _pContextDocument->Release();
-       _pContextDocument = NULL;
+        _UnadviseTextLayoutSink();
+        _pContextDocument->Release();
+        _pContextDocument = NULL;
     }
 
     if (_pDocumentMgr)
     {
-       _pDocumentMgr->Pop(0);
-       _pDocumentMgr->Release();
-       _pDocumentMgr = NULL;
+        _pDocumentMgr->Pop(0);
+        _pDocumentMgr->Release();
+        _pDocumentMgr = NULL;
     }
 }
 

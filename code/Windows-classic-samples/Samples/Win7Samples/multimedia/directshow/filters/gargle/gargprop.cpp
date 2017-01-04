@@ -1,4 +1,4 @@
-//------------------------------------------------------------------------------
+﻿//------------------------------------------------------------------------------
 // File: GargProp.cpp
 //
 // Desc: DirectShow sample code - implementation of CGargleProperties class.
@@ -34,9 +34,10 @@
 CUnknown * WINAPI CGargleProperties::CreateInstance(LPUNKNOWN lpunk, HRESULT *phr)
 {
     ASSERT(phr);
-    
+
     CUnknown *punk = new CGargleProperties(lpunk, phr);
-    if (punk == NULL) {
+    if (punk == NULL)
+    {
         if (phr)
             *phr = E_OUTOFMEMORY;
     }
@@ -52,7 +53,7 @@ CUnknown * WINAPI CGargleProperties::CreateInstance(LPUNKNOWN lpunk, HRESULT *ph
 // initialise a CGargleProperties object.
 //
 CGargleProperties::CGargleProperties(LPUNKNOWN lpunk, HRESULT *phr)
-    : CBasePropertyPage(NAME("Gargle Property Page"), lpunk, 
+    : CBasePropertyPage(NAME("Gargle Property Page"), lpunk,
                         IDD_GARGPROP, IDS_NAME)
     , m_pGargle(NULL)
 {
@@ -142,83 +143,84 @@ INT_PTR CGargleProperties::OnReceiveMessage(HWND hwnd, UINT uMsg, WPARAM wParam,
 {
     UNREFERENCED_PARAMETER(lParam);
 
-    switch (uMsg) 
+    switch (uMsg)
     {
-        case WM_INITDIALOG:
+    case WM_INITDIALOG:
 
-            m_hwndSlider = CreateSlider(hwnd);
-            SetButtonText(hwnd, m_iGargleShape);
-            ASSERT(m_hwndSlider);
-            return TRUE;                // I don't call setfocus...
+        m_hwndSlider = CreateSlider(hwnd);
+        SetButtonText(hwnd, m_iGargleShape);
+        ASSERT(m_hwndSlider);
+        return TRUE;                // I don't call setfocus...
 
-        case WM_VSCROLL:
+    case WM_VSCROLL:
 
-            ASSERT(m_hwndSlider);
-            OnSliderNotification(wParam);
-            return TRUE;
+        ASSERT(m_hwndSlider);
+        OnSliderNotification(wParam);
+        return TRUE;
 
-        case WM_COMMAND:
-            if (LOWORD(wParam) == IDB_SQUARE_TRIANGLE) 
-            {
-                // Cycle through shapes.  See note below.
-                //
-                int iShape;
+    case WM_COMMAND:
+        if (LOWORD(wParam) == IDB_SQUARE_TRIANGLE)
+        {
+            // Cycle through shapes.  See note below.
+            //
+            int iShape;
 
-                m_pGargle->get_GargleShape(&iShape);  // find what we now have
-                iShape = 1-iShape;                            // change shapes
+            m_pGargle->get_GargleShape(&iShape);  // find what we now have
+            iShape = 1-iShape;                            // change shapes
 
-                m_pGargle->put_GargleShape(iShape);             // put it back
-                SetButtonText(hwnd, iShape);              // reflect in dialog
+            m_pGargle->put_GargleShape(iShape);             // put it back
+            SetButtonText(hwnd, iShape);              // reflect in dialog
 
-            } 
-            else if (LOWORD(wParam) == IDB_DEFAULT) 
-            {
-                // Restore the default settings.
+        }
+        else if (LOWORD(wParam) == IDB_DEFAULT)
+        {
+            // Restore the default settings.
 
-                // Set the filter.
-                //
-                m_pGargle->put_DefaultGargleRate();
-                m_pGargle->put_GargleShape(0);
+            // Set the filter.
+            //
+            m_pGargle->put_DefaultGargleRate();
+            m_pGargle->put_GargleShape(0);
 
-                // Set the slider position on the screen to match.
-                //
-                int iPos;
-                m_pGargle->get_GargleRate(&iPos);
+            // Set the slider position on the screen to match.
+            //
+            int iPos;
+            m_pGargle->get_GargleRate(&iPos);
 
-                iPos = ConvertToPosition(iPos);
-                SendMessage(m_hwndSlider, TBM_SETPOS, TRUE, iPos);
+            iPos = ConvertToPosition(iPos);
+            SendMessage(m_hwndSlider, TBM_SETPOS, TRUE, iPos);
 
-                // Set the button text to match.
-                //
-                int iShape;
+            // Set the button text to match.
+            //
+            int iShape;
 
-                m_pGargle->get_GargleShape(&iShape);  // find out what we now have
-                SetButtonText(hwnd, iShape);
+            m_pGargle->get_GargleShape(&iShape);  // find out what we now have
+            SetButtonText(hwnd, iShape);
 
-            } else 
-            {
-                // Should not occur - debug!
-                //
-                TCHAR Buff[100];
-                (void)StringCchPrintf(Buff, NUMELMS(Buff), TEXT("wParam=%08x\0"), wParam);
+        }
+        else
+        {
+            // Should not occur - debug!
+            //
+            TCHAR Buff[100];
+            (void)StringCchPrintf(Buff, NUMELMS(Buff), TEXT("wParam=%08x\0"), wParam);
 
-                #ifdef DEBUG
-                    DbgBreakPoint( Buff, TEXT(__FILE__), __LINE__ );
-                #else
-                    ASSERT(!"Should not occur - debug!");
-                #endif
-            }
+#ifdef DEBUG
+            DbgBreakPoint( Buff, TEXT(__FILE__), __LINE__ );
+#else
+            ASSERT(!"Should not occur - debug!");
+#endif
+        }
 
-            return TRUE;
+        return TRUE;
 
-        case WM_DESTROY:
+    case WM_DESTROY:
 
-            DestroyWindow(m_hwndSlider);
-            return TRUE;
+        DestroyWindow(m_hwndSlider);
+        return TRUE;
 
-        default:
+    default:
 
-            return FALSE;
+        return FALSE;
 
     } // switch
 
@@ -236,7 +238,8 @@ HRESULT CGargleProperties::OnConnect(IUnknown * punk)
 {
     // Get IGargle interface
     //
-    if (punk == NULL) {
+    if (punk == NULL)
+    {
         DbgBreak("You can't call OnConnect with a NULL pointer!!");
         return(E_POINTER);
     }
@@ -244,7 +247,8 @@ HRESULT CGargleProperties::OnConnect(IUnknown * punk)
     ASSERT(m_pGargle == NULL);
 
     HRESULT hr = punk->QueryInterface(IID_IGargle, (void **) &m_pGargle);
-    if (FAILED(hr)) {
+    if (FAILED(hr))
+    {
         DbgBreak("Can't get IGargle interface!");
         return E_NOINTERFACE;
     }
@@ -289,7 +293,7 @@ HRESULT CGargleProperties::OnDisconnect()
 HRESULT CGargleProperties::OnDeactivate(void)
 {
     ASSERT(m_pGargle);
-    
+
     //
     // Remember the Gargle Rate and shape for the next Activate() call
     //
@@ -318,20 +322,21 @@ HWND CGargleProperties::CreateSlider(HWND hwndParent)
     // Create the slider child window at a position which fits the dialog
     //
     HWND hwndSlider = CreateWindow( TRACKBAR_CLASS
-                                  , TEXT("")
-                                  , WS_CHILD | WS_VISIBLE | TBS_VERT | TBS_BOTH
-                                  , 15*XUnit          // x
-                                  , 0                 // y
-                                  , 5*XUnit           // width
-                                  , 5*YUnit           // Height
-                                  , hwndParent
-                                  , NULL              // menu
-                                  , g_hInst
-                                  , NULL              // CLIENTCREATESTRUCT
+                                    , TEXT("")
+                                    , WS_CHILD | WS_VISIBLE | TBS_VERT | TBS_BOTH
+                                    , 15*XUnit          // x
+                                    , 0                 // y
+                                    , 5*XUnit           // width
+                                    , 5*YUnit           // Height
+                                    , hwndParent
+                                    , NULL              // menu
+                                    , g_hInst
+                                    , NULL              // CLIENTCREATESTRUCT
                                   );
-    if (hwndSlider == NULL) {       
+    if (hwndSlider == NULL)
+    {
         DbgLog((LOG_ERROR, 1,
-               TEXT("Could not create window.  error code: 0x%x"), GetLastError()));
+                TEXT("Could not create window.  error code: 0x%x"), GetLastError()));
         return NULL;
     }
 
@@ -366,35 +371,35 @@ void CGargleProperties::OnSliderNotification(WPARAM wParam)
 {
     int iPos;
 
-    switch (wParam) 
+    switch (wParam)
     {
-        case TB_BOTTOM:
-            iPos = ConvertToPosition(MinGargleRate);
-            SendMessage(m_hwndSlider, TBM_SETPOS, TRUE, (LPARAM) iPos);
-            break;
+    case TB_BOTTOM:
+        iPos = ConvertToPosition(MinGargleRate);
+        SendMessage(m_hwndSlider, TBM_SETPOS, TRUE, (LPARAM) iPos);
+        break;
 
-        case TB_TOP:
-            iPos = ConvertToPosition(MaxGargleRate);
-            SendMessage(m_hwndSlider, TBM_SETPOS, TRUE, (LPARAM) iPos);
-            break;
+    case TB_TOP:
+        iPos = ConvertToPosition(MaxGargleRate);
+        SendMessage(m_hwndSlider, TBM_SETPOS, TRUE, (LPARAM) iPos);
+        break;
 
-        case TB_PAGEDOWN:
-        case TB_PAGEUP:
-            break;
+    case TB_PAGEDOWN:
+    case TB_PAGEUP:
+        break;
 
-        case TB_THUMBPOSITION:
-        case TB_ENDTRACK:
-        {
-            int iRate = (int) SendMessage(m_hwndSlider, TBM_GETPOS, 0, 0L);
-            iRate = ConvertToFrequency(iRate);
-            m_pGargle->put_GargleRate(iRate);
-            break;
-        }
+    case TB_THUMBPOSITION:
+    case TB_ENDTRACK:
+    {
+        int iRate = (int) SendMessage(m_hwndSlider, TBM_GETPOS, 0, 0L);
+        iRate = ConvertToFrequency(iRate);
+        m_pGargle->put_GargleRate(iRate);
+        break;
+    }
 
-        case TB_THUMBTRACK: // default handling of these messages is ok.
-        case TB_LINEDOWN:
-        case TB_LINEUP:
-            break;
+    case TB_THUMBTRACK: // default handling of these messages is ok.
+    case TB_LINEDOWN:
+    case TB_LINEUP:
+        break;
     }
 
 } // OnSliderNotification

@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -23,7 +23,7 @@ void DisplayGuidProperty(
 void DisplayFormat(
     IPortableDeviceServiceCapabilities* pCapabilities,
     REFGUID                             Format);
-    
+
 // Implemented in ServiceCapabilities.cpp
 void DisplayParameterForm(
     DWORD                   dwForm);
@@ -36,7 +36,7 @@ void DisplayVarType(
 // Helper class to convert a GUID to a string
 class CGuidToString
 {
-private:        
+private:
     WCHAR _szGUID[64];
 
 public:

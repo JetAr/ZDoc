@@ -1,4 +1,4 @@
-/********************************************************************++
+﻿/********************************************************************++
 THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED
 TO THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -43,7 +43,7 @@ size_t RoundedStringSize(PCWSTR pcwzString)
     }
 }
 
-// Utility routine to return the number of bytes required to store a 
+// Utility routine to return the number of bytes required to store a
 // full WSAQUERYSET2 in a single buffer
 //
 size_t GetWSAQuerySet2Size(__in  WSAQUERYSET2  *pQuerySet)
@@ -62,7 +62,7 @@ size_t GetWSAQuerySet2Size(__in  WSAQUERYSET2  *pQuerySet)
         cbTotal += sizeof(WSAVERSION);
         cbTotal = ROUND_UP_COUNT(cbTotal, ALIGN_LPVOID);
     }
-    
+
     if (pQuerySet->lpNSProviderId != NULL)
     {
         cbTotal += sizeof(GUID);
@@ -106,9 +106,9 @@ size_t GetWSAQuerySet2Size(__in  WSAQUERYSET2  *pQuerySet)
 // ppBuffer: Location to copy the data to.  The pointer is updated to point to the end
 //           of the buffer (ready for the next copy into it).
 //
-void SerializeData(__out void **ppDest, 
-                   __in  const void *pvSrc, 
-                         size_t cbSrc, 
+void SerializeData(__out void **ppDest,
+                   __in  const void *pvSrc,
+                   size_t cbSrc,
                    __out_ecount(cbSrc) BYTE **ppBuffer)
 {
     if (pvSrc != NULL && cbSrc > 0)
@@ -133,8 +133,8 @@ void SerializeData(__out void **ppDest,
 
 // Utility routine to serialize a string into a buffer
 //
-void SerializeString(__out WCHAR **ppDest, 
-                     PCWSTR pcwzSrc, 
+void SerializeString(__out WCHAR **ppDest,
+                     PCWSTR pcwzSrc,
                      __out BYTE **ppBuffer)
 {
     if (pcwzSrc != NULL)
@@ -150,9 +150,9 @@ void SerializeString(__out WCHAR **ppDest,
 
 // Utility routine to serialize the array of addresses into a buffer
 //
-void SerializeAddresses(__out CSADDR_INFO **ppDestAddrs, 
-                        __in_ecount(cAddr) CSADDR_INFO *pSrcAddrs, 
-                        DWORD cAddr, 
+void SerializeAddresses(__out CSADDR_INFO **ppDestAddrs,
+                        __in_ecount(cAddr) CSADDR_INFO *pSrcAddrs,
+                        DWORD cAddr,
                         __out BYTE **ppBuffer)
 {
     DWORD i = 0;
@@ -161,16 +161,16 @@ void SerializeAddresses(__out CSADDR_INFO **ppDestAddrs,
     {
         // Serialize the outer level array of addresss
         SerializeData(ppDestAddrs, pSrcAddrs, sizeof(CSADDR_INFO) * cAddr, ppBuffer);
-            
+
         // loop through and serialize the inner pointers
         for (i = 0; i < cAddr; i++)
         {
             CSADDR_INFO *pAddr = &((*ppDestAddrs)[i]);
 
-            SerializeData(&pAddr->LocalAddr.lpSockaddr, pSrcAddrs[i].LocalAddr.lpSockaddr, 
+            SerializeData(&pAddr->LocalAddr.lpSockaddr, pSrcAddrs[i].LocalAddr.lpSockaddr,
                           pSrcAddrs[i].LocalAddr.iSockaddrLength, ppBuffer);
 
-            SerializeData(&pAddr->RemoteAddr.lpSockaddr, pSrcAddrs[i].RemoteAddr.lpSockaddr, 
+            SerializeData(&pAddr->RemoteAddr.lpSockaddr, pSrcAddrs[i].RemoteAddr.lpSockaddr,
                           pSrcAddrs[i].RemoteAddr.iSockaddrLength, ppBuffer);
         }
     }
@@ -185,12 +185,12 @@ void SerializeAddresses(__out CSADDR_INFO **ppDestAddrs,
 //
 INT BuildSerializedQuerySet2(
     __in                               PWSAQUERYSET2  pQuerySet,
-                                       size_t         cbSerializedQuerySet,
+    size_t         cbSerializedQuerySet,
     __out_bcount(cbSerializedQuerySet) PBYTE          pbSerializedQuerySet)
 {
     PBYTE pbCurrData   = NULL;
     PWSAQUERYSET2 pQS2 = (PWSAQUERYSET2) pbSerializedQuerySet;
- 
+
     // Verify the output buffer is big enough.  This is ** CRITICAL ** because this function
     // does not continue to track the amount of memory consumed in the buffer as it is written to.
     //
@@ -225,11 +225,11 @@ INT BuildSerializedQuerySet2(
     {
         SerializeData(&pQS2->lpBlob->pBlobData, pQuerySet->lpBlob->pBlobData, pQuerySet->lpBlob->cbSize, &pbCurrData);
     }
-    
+
     // Serialize other pointer fields
     SerializeData(&pQS2->lpVersion, pQuerySet->lpVersion, sizeof(WSAVERSION), &pbCurrData);
     SerializeData(&pQS2->lpNSProviderId, pQuerySet->lpNSProviderId, sizeof(GUID), &pbCurrData);
-    SerializeData(&pQS2->lpafpProtocols, pQuerySet->lpafpProtocols, 
+    SerializeData(&pQS2->lpafpProtocols, pQuerySet->lpafpProtocols,
                   pQuerySet->dwNumberOfProtocols * sizeof(AFPROTOCOLS), &pbCurrData);
 
     return NO_ERROR;

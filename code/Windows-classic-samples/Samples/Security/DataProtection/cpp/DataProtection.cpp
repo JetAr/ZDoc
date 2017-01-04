@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -10,7 +10,7 @@
 //  File:             DataProtection.cpp
 //
 //  Contents:         This sample demonstrates the use of Data Protection API.
-//    
+//
 //
 
 #include <windows.h>
@@ -36,10 +36,10 @@ static    LPCWSTR                 SecretString = L"Some message to protect";
 //  Prints error information to the console
 //
 //----------------------------------------------------------------------------
-void 
-ReportError( 
-    _In_    SECURITY_STATUS       Status 
-    )
+void
+ReportError(
+    _In_    SECURITY_STATUS       Status
+)
 {
     wprintf( L"Error: 0x%08x \n", Status );
 }
@@ -54,32 +54,32 @@ SECURITY_STATUS
 ProtectSecret(
     _In_        LPCWSTR             ProtectionDescString,
     _In_reads_bytes_(PlainTextLength)
-                PBYTE               PlainText,
+    PBYTE               PlainText,
     _In_        ULONG               PlainTextLength,
-    _Outptr_result_bytebuffer_maybenull_(*ProtectedDataLengthPointer) 
-                PBYTE               *ProtectedDataPointer,
+    _Outptr_result_bytebuffer_maybenull_(*ProtectedDataLengthPointer)
+    PBYTE               *ProtectedDataPointer,
     _Out_       ULONG               *ProtectedDataLengthPointer
-    )
+)
 {
     SECURITY_STATUS Status;
     PBYTE       ProtectedData = NULL;
     ULONG       ProtectedDataLength = 0;
-  
+
     NCRYPT_DESCRIPTOR_HANDLE    DescriptorHandle = NULL;
 
     *ProtectedDataPointer = NULL;
     *ProtectedDataLengthPointer = 0;
 
     //
-    // Create Protection Descriptor Handle from the supplied 
+    // Create Protection Descriptor Handle from the supplied
     // protection string
     //
 
     Status = NCryptCreateProtectionDescriptor(
-                                        ProtectionDescString,
-                                        0,
-                                        &DescriptorHandle
-                                        );
+                 ProtectionDescString,
+                 0,
+                 &DescriptorHandle
+             );
     if( ERROR_SUCCESS != Status )
     {
         ReportError(Status);
@@ -91,15 +91,15 @@ ProtectSecret(
     //
 
     Status = NCryptProtectSecret(
-                            DescriptorHandle,
-                            0,
-                            PlainText,
-                            PlainTextLength,
-                            NULL, // Use default allocations by LocalAlloc/LocalFree
-                            NULL, // Use default parent windows handle. 
-                            &ProtectedData,  // out LocalFree
-                            &ProtectedDataLength
-                            );
+                 DescriptorHandle,
+                 0,
+                 PlainText,
+                 PlainTextLength,
+                 NULL, // Use default allocations by LocalAlloc/LocalFree
+                 NULL, // Use default parent windows handle.
+                 &ProtectedData,  // out LocalFree
+                 &ProtectedDataLength
+             );
     if( ERROR_SUCCESS != Status )
     {
         ReportError(Status);
@@ -126,7 +126,7 @@ cleanup:
     {
         NCryptCloseProtectionDescriptor( DescriptorHandle );
     }
-   
+
     return Status;
 
 }
@@ -140,12 +140,12 @@ cleanup:
 SECURITY_STATUS
 UnprotectSecret(
     _In_reads_bytes_(ProtectedDataLength)
-                PBYTE               ProtectedData,
+    PBYTE               ProtectedData,
     _In_        ULONG               ProtectedDataLength,
     _Outptr_result_bytebuffer_maybenull_(*PlainTextLengthPointer)
-                PBYTE               *PlainTextPointer,
+    PBYTE               *PlainTextPointer,
     _Out_       ULONG               *PlainTextLengthPointer
-    )
+)
 {
     SECURITY_STATUS    Status;
     PBYTE       PlainText = NULL;
@@ -159,15 +159,15 @@ UnprotectSecret(
     //
 
     Status = NCryptUnprotectSecret(
-                                NULL,       // Optional
-                                0,          // no flags
-                                ProtectedData,
-                                ProtectedDataLength,
-                                NULL,        // Use default allocations by LocalAlloc/LocalFree
-                                NULL,        // Use default parent windows handle. 
-                                &PlainText,  // out LocalFree
-                                &PlainTextLength
-                                );
+                 NULL,       // Optional
+                 0,          // no flags
+                 ProtectedData,
+                 ProtectedDataLength,
+                 NULL,        // Use default allocations by LocalAlloc/LocalFree
+                 NULL,        // Use default parent windows handle.
+                 &PlainText,  // out LocalFree
+                 &PlainTextLength
+             );
 
     if( ERROR_SUCCESS != Status )
     {
@@ -191,7 +191,7 @@ cleanup:
     {
         LocalFree( PlainText );
     }
-  
+
     return Status;
 }
 
@@ -202,11 +202,11 @@ cleanup:
 //-----------------------------------------------------------------------------
 
 SECURITY_STATUS
-GetProtectionInfo( 
+GetProtectionInfo(
     _In_reads_bytes_(ProtectedDataLength)
-                PBYTE               ProtectedData,
+    PBYTE               ProtectedData,
     _In_        ULONG               ProtectedDataLength
-    )
+)
 {
     SECURITY_STATUS    Status;
 
@@ -220,27 +220,27 @@ GetProtectionInfo(
     // This call will only reconstruct the Protectuion Descriptor
     //
     Status = NCryptUnprotectSecret(
-                                &DescriptorHandle,
-                                NCRYPT_UNPROTECT_NO_DECRYPT,
-                                ProtectedData,
-                                (ULONG)ProtectedDataLength,
-                                NULL,
-                                NULL,
-                                &Data,
-                                &DataLength
-                                );
+                 &DescriptorHandle,
+                 NCRYPT_UNPROTECT_NO_DECRYPT,
+                 ProtectedData,
+                 (ULONG)ProtectedDataLength,
+                 NULL,
+                 NULL,
+                 &Data,
+                 &DataLength
+             );
     if( ERROR_SUCCESS != Status )
     {
         ReportError(Status);
         goto cleanup;
     }
-    
+
     Status = NCryptGetProtectionDescriptorInfo(
-                                        DescriptorHandle,
-                                        NULL,
-                                        NCRYPT_PROTECTION_INFO_TYPE_DESCRIPTOR_STRING,
-                                        (void**)&DescriptorString
-                                        );
+                 DescriptorHandle,
+                 NULL,
+                 NCRYPT_PROTECTION_INFO_TYPE_DESCRIPTOR_STRING,
+                 (void**)&DescriptorString
+             );
     if( ERROR_SUCCESS != Status )
     {
         ReportError(Status);
@@ -277,7 +277,7 @@ __cdecl
 wmain(
     _In_               int     argc,
     _In_reads_(argc)   LPWSTR  argv[]
-    )
+)
 {
     SECURITY_STATUS         Status;
 
@@ -300,12 +300,12 @@ wmain(
     //
 
     Status = ProtectSecret(
-                        ProtectionDescriptorString,
-                        Secret,
-                        SecretLength,
-                        &ProtectedSecret,
-                        &ProtectedSecretLength
-                        );
+                 ProtectionDescriptorString,
+                 Secret,
+                 SecretLength,
+                 &ProtectedSecret,
+                 &ProtectedSecretLength
+             );
 
     if( ERROR_SUCCESS != Status )
     {
@@ -324,10 +324,10 @@ wmain(
     // Open encrypted data to get descriptor information
     //
 
-    Status = GetProtectionInfo( 
-                            ProtectedSecret,
-                            ProtectedSecretLength
-                            );
+    Status = GetProtectionInfo(
+                 ProtectedSecret,
+                 ProtectedSecretLength
+             );
 
     if( ERROR_SUCCESS != Status )
     {
@@ -341,11 +341,11 @@ wmain(
     //
 
     Status = UnprotectSecret(
-                        ProtectedSecret,
-                        ProtectedSecretLength,
-                        &UnprotectedSecret,
-                        &UnprotectedSecretLength
-                        );
+                 ProtectedSecret,
+                 ProtectedSecretLength,
+                 &UnprotectedSecret,
+                 &UnprotectedSecretLength
+             );
 
     if( ERROR_SUCCESS != Status )
     {
@@ -361,11 +361,11 @@ wmain(
     }
 
     //
-    // Optional : Check if the original message and the message obtained after decrypt are the same 
+    // Optional : Check if the original message and the message obtained after decrypt are the same
     //
 
     if( SecretLength != UnprotectedSecretLength ||
-        0 != (memcmp(Secret, UnprotectedSecret, SecretLength)) )
+            0 != (memcmp(Secret, UnprotectedSecret, SecretLength)) )
     {
         Status = NTE_FAIL;
         ReportError(Status);
@@ -373,11 +373,11 @@ wmain(
     }
 
     Status = ERROR_SUCCESS;
-      
+
     wprintf(L"Success!\n");
 
 cleanup:
-    
+
     //
     // Release allocated resources
     //

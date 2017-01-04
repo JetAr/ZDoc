@@ -1,4 +1,4 @@
-
+﻿
 
 #include "private.h"
 #include "TextLayout.h"
@@ -13,16 +13,16 @@ COLORREF GetAttributeColor(const TF_DA_COLOR *pdac)
 {
     switch (pdac->type)
     {
-        case TF_CT_SYSCOLOR:
-            return GetSysColor(pdac->nIndex);
-            break;
+    case TF_CT_SYSCOLOR:
+        return GetSysColor(pdac->nIndex);
+        break;
 
-        case TF_CT_COLORREF:
-            return pdac->cr;
-            break;
+    case TF_CT_COLORREF:
+        return pdac->cr;
+        break;
     }
     return GetSysColor(COLOR_WINDOWTEXT);
-    
+
 }
 
 
@@ -44,15 +44,15 @@ BOOL CTextLayout::Layout(HDC hdc, const WCHAR *psz,  UINT nCnt)
     {
         switch (psz[i])
         {
-            case 0x0d:
-            case 0x0a:
-                bNewLine = TRUE;
-                break;
-            default:
-                if (bNewLine)
-                    _nLineCnt++;
-                bNewLine = FALSE;
-                break;
+        case 0x0d:
+        case 0x0a:
+            bNewLine = TRUE;
+            break;
+        default:
+            if (bNewLine)
+                _nLineCnt++;
+            bNewLine = FALSE;
+            break;
         }
     }
 
@@ -67,23 +67,23 @@ BOOL CTextLayout::Layout(HDC hdc, const WCHAR *psz,  UINT nCnt)
     {
         switch (psz[i])
         {
-            case 0x0d:
-            case 0x0a:
-                bNewLine = TRUE;
-                break;
-            default:
-                if (bNewLine)
-                {
-                    nCurrentLine++;
-                    _prgLines[nCurrentLine].nPos = i;
-                    _prgLines[nCurrentLine].nCnt = 1;
-                }
-                else
-                {
-                    _prgLines[nCurrentLine].nCnt++;
-                }
-                bNewLine = FALSE;
-                break;
+        case 0x0d:
+        case 0x0a:
+            bNewLine = TRUE;
+            break;
+        default:
+            if (bNewLine)
+            {
+                nCurrentLine++;
+                _prgLines[nCurrentLine].nPos = i;
+                _prgLines[nCurrentLine].nCnt = 1;
+            }
+            else
+            {
+                _prgLines[nCurrentLine].nCnt++;
+            }
+            bNewLine = FALSE;
+            break;
         }
     }
 
@@ -150,10 +150,10 @@ BOOL CTextLayout::Render(HDC hdc, const WCHAR *psz,  UINT nCnt, UINT nSelStart, 
     {
         if (_prgLines[i].nCnt)
         {
-            TextOut(hdc, 
-                    ptCurrent.x, 
-                    ptCurrent.y, 
-                    psz + _prgLines[i].nPos, 
+            TextOut(hdc,
+                    ptCurrent.x,
+                    ptCurrent.y,
+                    psz + _prgLines[i].nPos,
                     _prgLines[i].nCnt);
         }
         ptCurrent.x = 0;
@@ -169,7 +169,7 @@ BOOL CTextLayout::Render(HDC hdc, const WCHAR *psz,  UINT nCnt, UINT nSelStart, 
         for (UINT i = 0; i < _nLineCnt; i++)
         {
             if ((nSelEnd >= _prgLines[i].nPos) &&
-                (nSelStart <= _prgLines[i].nPos + _prgLines[i].nCnt))
+                    (nSelStart <= _prgLines[i].nPos + _prgLines[i].nCnt))
             {
                 UINT nSelStartInLine = 0;
                 UINT nSelEndInLine = _prgLines[i].nCnt;
@@ -179,7 +179,7 @@ BOOL CTextLayout::Render(HDC hdc, const WCHAR *psz,  UINT nCnt, UINT nSelStart, 
 
                 if (nSelEnd < _prgLines[i].nPos + _prgLines[i].nCnt)
                     nSelEndInLine = nSelEnd - _prgLines[i].nPos;
-    
+
                 if (nSelStartInLine != nSelEndInLine)
                 {
                     for (UINT j = nSelStartInLine; j < nSelEndInLine; j++)
@@ -208,42 +208,42 @@ BOOL CTextLayout::Render(HDC hdc, const WCHAR *psz,  UINT nCnt, UINT nSelStart, 
 
             for (UINT j = 0; j < nCompositionRenderInfo; j++)
             {
-    
+
                 if ((pCompositionRenderInfo[j].nEnd >= _prgLines[i].nPos) &&
-                   (pCompositionRenderInfo[j].nStart <= _prgLines[i].nPos + _prgLines[i].nCnt))
+                        (pCompositionRenderInfo[j].nStart <= _prgLines[i].nPos + _prgLines[i].nCnt))
                 {
                     UINT nCompStartInLine = 0;
                     UINT nCompEndInLine = _prgLines[i].nCnt;
                     int  nBaseLineWidth = (_nLineHeight / 18) + 1;
-    
+
                     if (pCompositionRenderInfo[j].nStart > _prgLines[i].nPos)
                         nCompStartInLine = pCompositionRenderInfo[j].nStart - _prgLines[i].nPos;
-    
+
                     if (pCompositionRenderInfo[j].nEnd < _prgLines[i].nPos + _prgLines[i].nCnt)
                         nCompEndInLine = pCompositionRenderInfo[j].nEnd - _prgLines[i].nPos;
-    
+
                     for (UINT k = nCompStartInLine; k < nCompEndInLine; k++)
                     {
                         UINT uCurrentCompPos = _prgLines[i].nPos + k - pCompositionRenderInfo[j].nStart;
                         BOOL bClause = FALSE;
-     
+
                         if (k + 1 == nCompEndInLine)
                         {
                             bClause = TRUE;
                         }
 
                         if ((pCompositionRenderInfo[j].da.crText.type != TF_CT_NONE) &&
-                            (pCompositionRenderInfo[j].da.crBk.type != TF_CT_NONE))
+                                (pCompositionRenderInfo[j].da.crBk.type != TF_CT_NONE))
                         {
                             SetBkMode(hdc, OPAQUE);
                             SetTextColor(hdc, GetAttributeColor(&pCompositionRenderInfo[j].da.crText));
                             SetBkColor(hdc, GetAttributeColor(&pCompositionRenderInfo[j].da.crBk));
- 
+
                             RECT rc = _prgLines[i].prgCharInfo[k].rc;
-                            ExtTextOut(hdc, rc.left, rc.top, ETO_OPAQUE, &rc, 
+                            ExtTextOut(hdc, rc.left, rc.top, ETO_OPAQUE, &rc,
                                        psz + _prgLines[i].nPos + k, 1, NULL);
                         }
-     
+
                         if (pCompositionRenderInfo[j].da.lsStyle != TF_LS_NONE)
                         {
                             HPEN hpen = CreateUnderlinePen(&pCompositionRenderInfo[j].da, nBaseLineWidth);
@@ -252,14 +252,14 @@ BOOL CTextLayout::Render(HDC hdc, const WCHAR *psz,  UINT nCnt, UINT nSelStart, 
                                 HPEN hpenOrg;
                                 hpenOrg = (HPEN)SelectObject(hdc, hpen);
                                 RECT rc = _prgLines[i].prgCharInfo[k].rc;
-     
+
                                 POINT pts[2];
                                 pts[0].x = rc.left;
                                 pts[0].y = rc.bottom;
                                 pts[1].x = rc.right - (bClause ? nBaseLineWidth : 0);
                                 pts[1].y = rc.bottom;
                                 Polyline(hdc, pts, 2);
-     
+
                                 SelectObject(hdc, hpenOrg);
                             }
                         }
@@ -332,23 +332,23 @@ BOOL CTextLayout::RectFromCharPos(UINT nPos, RECT *prc)
     for (UINT i = 0; i < _nLineCnt; i++)
     {
         if (nPos < _prgLines[i].nPos)
-           continue;
+            continue;
 
         if (nPos >= _prgLines[i].nPos + _prgLines[i].nCnt)
         {
-           if (((nPos -_prgLines[i].nPos) > 0) && (nPos == _prgLines[i].nPos + _prgLines[i].nCnt))
-           {
-               *prc = _prgLines[i].prgCharInfo[nPos - _prgLines[i].nPos - 1].rc;
-               prc->left = prc->right;
-               return TRUE;
-           }
-           continue;
+            if (((nPos -_prgLines[i].nPos) > 0) && (nPos == _prgLines[i].nPos + _prgLines[i].nCnt))
+            {
+                *prc = _prgLines[i].prgCharInfo[nPos - _prgLines[i].nPos - 1].rc;
+                prc->left = prc->right;
+                return TRUE;
+            }
+            continue;
         }
-        
+
         *prc = _prgLines[i].prgCharInfo[nPos - _prgLines[i].nPos].rc;
         return TRUE;
     }
-    
+
     prc->top = _nLineCnt * _nLineHeight;
     prc->bottom = prc->top +  _nLineHeight;
     return TRUE;
@@ -413,7 +413,7 @@ UINT CTextLayout::FineFirstEndCharPosInLine(UINT uCurPos, BOOL bFirst)
     for (UINT i = 0; i < _nLineCnt; i++)
     {
         if ((_prgLines[i].nPos <= uCurPos) &&
-            (_prgLines[i].nPos + _prgLines[i].nCnt >= uCurPos))
+                (_prgLines[i].nPos + _prgLines[i].nCnt >= uCurPos))
         {
             if (bFirst)
             {
@@ -472,20 +472,20 @@ HPEN CTextLayout::CreateUnderlinePen(const TF_DISPLAYATTRIBUTE *pda, int nWidth)
 
     switch (pda->lsStyle)
     {
-        case TF_LS_NONE:
-            return NULL;
+    case TF_LS_NONE:
+        return NULL;
 
-        case TF_LS_SOLID:
-            dwPenStyle = PS_GEOMETRIC | PS_SOLID | PS_ENDCAP_FLAT;
-            break;
+    case TF_LS_SOLID:
+        dwPenStyle = PS_GEOMETRIC | PS_SOLID | PS_ENDCAP_FLAT;
+        break;
 
-        case TF_LS_DOT:
-        case TF_LS_DASH:
-        case TF_LS_SQUIGGLE:
-            dwPenStyle = PS_GEOMETRIC | PS_USERSTYLE | PS_ENDCAP_FLAT;
-            dwStyles = 2;
-            lpdwStyles = s_dwDotStyles;
-            break;
+    case TF_LS_DOT:
+    case TF_LS_DASH:
+    case TF_LS_SQUIGGLE:
+        dwPenStyle = PS_GEOMETRIC | PS_USERSTYLE | PS_ENDCAP_FLAT;
+        dwStyles = 2;
+        lpdwStyles = s_dwDotStyles;
+        break;
     }
 
 

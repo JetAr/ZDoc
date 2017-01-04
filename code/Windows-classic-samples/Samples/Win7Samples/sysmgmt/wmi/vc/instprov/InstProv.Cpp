@@ -1,4 +1,4 @@
-//***************************************************************************
+﻿//***************************************************************************
 
 //
 
@@ -71,19 +71,20 @@ STDMETHODIMP CInstPro::QueryInterface(REFIID riid, PPVOID ppv)
     // Since we have dual inheritance, it is necessary to cast the return type
 
     if(riid== IID_IWbemServices)
-       *ppv=(IWbemServices*)this;
+        *ppv=(IWbemServices*)this;
 
     if(IID_IUnknown==riid || riid== IID_IWbemProviderInit)
-       *ppv=(IWbemProviderInit*)this;
-    
+        *ppv=(IWbemProviderInit*)this;
 
-    if (NULL!=*ppv) {
+
+    if (NULL!=*ppv)
+    {
         AddRef();
         return NOERROR;
-        }
+    }
     else
         return E_NOINTERFACE;
-  
+
 }
 
 
@@ -97,7 +98,7 @@ STDMETHODIMP_(ULONG) CInstPro::Release(void)
     ULONG nNewCount = InterlockedDecrement((long *)&m_cRef);
     if (0L == nNewCount)
         delete this;
-    
+
     return nNewCount;
 }
 
@@ -111,24 +112,24 @@ STDMETHODIMP_(ULONG) CInstPro::Release(void)
 ***********************************************************************/
 
 STDMETHODIMP CInstPro::Initialize(LPWSTR pszUser, LONG lFlags,
-                                    LPWSTR pszNamespace, LPWSTR pszLocale,
-                                    IWbemServices *pNamespace, 
-                                    IWbemContext *pCtx,
-                                    IWbemProviderInitSink *pInitSink)
+                                  LPWSTR pszNamespace, LPWSTR pszLocale,
+                                  IWbemServices *pNamespace,
+                                  IWbemContext *pCtx,
+                                  IWbemProviderInitSink *pInitSink)
 {
-  
-	if(! pNamespace)
-	{
-	    pInitSink->SetStatus(WBEM_E_FAILED , 0);
-	}
-	else
-	{
-		m_pNamespace = pNamespace;
-	    m_pNamespace->AddRef();
-		pInitSink->SetStatus(WBEM_S_INITIALIZED, 0);
-	}
 
-    
+    if(! pNamespace)
+    {
+        pInitSink->SetStatus(WBEM_E_FAILED, 0);
+    }
+    else
+    {
+        m_pNamespace = pNamespace;
+        m_pNamespace->AddRef();
+        pInitSink->SetStatus(WBEM_S_INITIALIZED, 0);
+    }
+
+
     return WBEM_S_NO_ERROR;
 }
 
@@ -136,41 +137,41 @@ STDMETHODIMP CInstPro::Initialize(LPWSTR pszUser, LONG lFlags,
 //
 // CInstPro::CreateInstanceEnumAsync
 //
-// Purpose: Asynchronously enumerates the instances.  
+// Purpose: Asynchronously enumerates the instances.
 //
 //***************************************************************************
 
 SCODE CInstPro::CreateInstanceEnumAsync( const BSTR RefStr, long lFlags, IWbemContext *pCtx,
-       IWbemObjectSink FAR* pHandler)
+        IWbemObjectSink FAR* pHandler)
 {
 
-	//Impersonate the client
-	HRESULT hr = CoImpersonateClient () ;
+    //Impersonate the client
+    HRESULT hr = CoImpersonateClient () ;
 
-	if ( FAILED ( hr ) )
-	{
-		pHandler->SetStatus ( 0 , hr , NULL , NULL ) ;
-		return hr ;
-	}	
+    if ( FAILED ( hr ) )
+    {
+        pHandler->SetStatus ( 0, hr, NULL, NULL ) ;
+        return hr ;
+    }
 
-	//	Check to see if call is at lower than RPC_C_IMP_LEVEL_IMPERSONATE level. If that's the case,
-	//  the provider will not be able to impersonate the client to access the protected resources.	
+    //	Check to see if call is at lower than RPC_C_IMP_LEVEL_IMPERSONATE level. If that's the case,
+    //  the provider will not be able to impersonate the client to access the protected resources.
 
-	DWORD t_CurrentImpersonationLevel = GetCurrentImpersonationLevel () ;
-	if ( t_CurrentImpersonationLevel < RPC_C_IMP_LEVEL_IMPERSONATE )
-	{
-		//	Revert before we perform any operations	
-		CoRevertToSelf () ;
+    DWORD t_CurrentImpersonationLevel = GetCurrentImpersonationLevel () ;
+    if ( t_CurrentImpersonationLevel < RPC_C_IMP_LEVEL_IMPERSONATE )
+    {
+        //	Revert before we perform any operations
+        CoRevertToSelf () ;
 
-		hr = WBEM_E_ACCESS_DENIED;
-		pHandler->SetStatus ( 0 , hr , NULL , NULL ) ;
-		return hr ;
-	}
+        hr = WBEM_E_ACCESS_DENIED;
+        pHandler->SetStatus ( 0, hr, NULL, NULL ) ;
+        return hr ;
+    }
 
     SCODE sc;
     int iCnt;
     IWbemClassObject FAR* pNewInst;
-  
+
     // Do a check of arguments and make sure we have pointer to Namespace
 
     if(pHandler == NULL || m_pNamespace == NULL)
@@ -179,8 +180,8 @@ SCODE CInstPro::CreateInstanceEnumAsync( const BSTR RefStr, long lFlags, IWbemCo
     for(iCnt=0; iCnt < glNumInst; iCnt++)
     {
         sc = CreateInst(m_pNamespace,MyDefs[iCnt].pwcKey,
-                    MyDefs[iCnt].lValue, &pNewInst, RefStr, pCtx);
- 
+                        MyDefs[iCnt].lValue, &pNewInst, RefStr, pCtx);
+
         if(sc != S_OK)
             break;
 
@@ -210,26 +211,26 @@ SCODE CInstPro::CreateInstanceEnumAsync( const BSTR RefStr, long lFlags, IWbemCo
 
 
 SCODE CInstPro::GetObjectAsync(const BSTR ObjectPath, long lFlags,IWbemContext  *pCtx,
-                    IWbemObjectSink FAR* pHandler)
+                               IWbemObjectSink FAR* pHandler)
 {
 
-	//Impersonate the client
-	HRESULT hr = CoImpersonateClient () ;
+    //Impersonate the client
+    HRESULT hr = CoImpersonateClient () ;
 
-	if ( FAILED ( hr ) )
-	{
-		pHandler->SetStatus ( 0 , hr , NULL , NULL ) ;
-		return hr ;
-	}	
+    if ( FAILED ( hr ) )
+    {
+        pHandler->SetStatus ( 0, hr, NULL, NULL ) ;
+        return hr ;
+    }
 
-	//	Check to see if call is at the RPC_C_IMP_LEVEL_IDENTIFY level. If that's the case,
-	//  the provider will not be able to impersonate the client to access the protected resources.
-	if ( GetCurrentImpersonationLevel () == RPC_C_IMP_LEVEL_IDENTIFY )
-	{
-			hr = WBEM_E_ACCESS_DENIED;
-			pHandler->SetStatus ( 0 , hr , NULL , NULL ) ;
-			return hr ;
-	}
+    //	Check to see if call is at the RPC_C_IMP_LEVEL_IDENTIFY level. If that's the case,
+    //  the provider will not be able to impersonate the client to access the protected resources.
+    if ( GetCurrentImpersonationLevel () == RPC_C_IMP_LEVEL_IDENTIFY )
+    {
+        hr = WBEM_E_ACCESS_DENIED;
+        pHandler->SetStatus ( 0, hr, NULL, NULL ) ;
+        return hr ;
+    }
 
     SCODE sc;
     IWbemClassObject FAR* pObj;
@@ -241,9 +242,9 @@ SCODE CInstPro::GetObjectAsync(const BSTR ObjectPath, long lFlags,IWbemContext  
         return WBEM_E_INVALID_PARAMETER;
 
     // do the get, pass the object on to the notify
-    
+
     sc = GetByPath(ObjectPath,&pObj, pCtx);
-    if(sc == S_OK) 
+    if(sc == S_OK)
     {
         pHandler->Indicate(1,&pObj);
         pObj->Release();
@@ -258,7 +259,7 @@ SCODE CInstPro::GetObjectAsync(const BSTR ObjectPath, long lFlags,IWbemContext  
 
     return sc;
 }
- 
+
 //***************************************************************************
 //
 // CInstPro::GetByPath
@@ -270,7 +271,7 @@ SCODE CInstPro::GetObjectAsync(const BSTR ObjectPath, long lFlags,IWbemContext  
 SCODE CInstPro::GetByPath(BSTR ObjectPath, IWbemClassObject FAR* FAR* ppObj, IWbemContext  *pCtx)
 {
     SCODE sc = S_OK;
-    
+
     int iCnt;
 
     // do a simple path parse.  The path will look something like
@@ -278,8 +279,8 @@ SCODE CInstPro::GetByPath(BSTR ObjectPath, IWbemClassObject FAR* FAR* ppObj, IWb
     // Create a test string with just the part between quotes.
 
     WCHAR wcTest[MAX_PATH+1];
-	memset(wcTest, NULL, sizeof(wcTest));
-	StringCbCopyW(wcTest, sizeof(wcTest), ObjectPath);
+    memset(wcTest, NULL, sizeof(wcTest));
+    StringCbCopyW(wcTest, sizeof(wcTest), ObjectPath);
 
     WCHAR * pwcTest, * pwcCompare = NULL;
     int iNumQuotes = 0;
@@ -309,11 +310,11 @@ SCODE CInstPro::GetByPath(BSTR ObjectPath, IWbemClassObject FAR* FAR* ppObj, IWb
         if(!_wcsicmp(MyDefs[iCnt].pwcKey, pwcCompare))
         {
             sc = CreateInst(m_pNamespace,MyDefs[iCnt].pwcKey,
-                    MyDefs[iCnt].lValue, ppObj, wcTest, pCtx);
+                            MyDefs[iCnt].lValue, ppObj, wcTest, pCtx);
             return sc;
         }
     }
 
     return WBEM_E_NOT_FOUND;
 }
- 
+

@@ -1,4 +1,4 @@
-/*++
+﻿/*++
 
 Copyright (c) Microsoft Corporation. All rights reserved.
 
@@ -25,22 +25,22 @@ void RunGetImage()
     {
         TCHAR szTitle[DEFAULT_STRING_SIZE] = _T("");
 
-	    LoadString(g_hInstance, IDS_MAIN_WINDOW_TITLE, szTitle, COUNTOF(szTitle));
+        LoadString(g_hInstance, IDS_MAIN_WINDOW_TITLE, szTitle, COUNTOF(szTitle));
 
         HWND hWnd = CreateWindowEx(
-            0,
-            _T("MainWindow"),
-            szTitle,
-            WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN | WS_VISIBLE,
-            CW_USEDEFAULT,
-            CW_USEDEFAULT,
-            CW_USEDEFAULT, 
-            CW_USEDEFAULT,
-            NULL,
-            NULL,
-            g_hInstance,
-            pMainWindow
-        );
+                        0,
+                        _T("MainWindow"),
+                        szTitle,
+                        WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN | WS_VISIBLE,
+                        CW_USEDEFAULT,
+                        CW_USEDEFAULT,
+                        CW_USEDEFAULT,
+                        CW_USEDEFAULT,
+                        NULL,
+                        NULL,
+                        g_hInstance,
+                        pMainWindow
+                    );
 
         if (hWnd != NULL)
         {
@@ -55,8 +55,8 @@ void RunGetImage()
 // Main entry point of the application
 //
 
-int 
-APIENTRY 
+int
+APIENTRY
 WinMain(
     HINSTANCE hInstance,
     HINSTANCE hPrevInstance,
@@ -82,10 +82,10 @@ WinMain(
     InitCommonControlsEx(&iccex);
 
     CBitmapWnd::Register();
-    
+
     CMainWindow::Register();
 
-    // Initialize the COM library 
+    // Initialize the COM library
 
     HRESULT hr = CoInitialize(NULL);
 
@@ -95,7 +95,7 @@ WinMain(
 
         RunGetImage();
 
-        // Close the COM library 
+        // Close the COM library
 
         CoUninitialize();
     }

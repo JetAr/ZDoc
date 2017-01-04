@@ -1,4 +1,4 @@
-/*
+﻿/*
 **++
 **
 ** Copyright (c) Microsoft Corporation
@@ -22,25 +22,32 @@
 // Declarations and Definitions
 
 // This GUID identifies the writer
-static const VSS_ID DepWriterId = 
-	{ 0x079462f1, 0x1079, 0x48dd, { 0xb3, 0xfb, 0xcc, 0xb2, 0xf2, 0x93, 0x4e, 0xcf } };
+static const VSS_ID DepWriterId =
+{ 0x079462f1, 0x1079, 0x48dd, { 0xb3, 0xfb, 0xcc, 0xb2, 0xf2, 0x93, 0x4e, 0xcf } };
 
 static const wchar_t* const  DepWriterName = L"MSDNSampleWriter";
 
 ///////////////////////////////////////////////////////////////////////////////
 // DepWriter class
 
-class DepWriter : public CVssWriter    {
+class DepWriter : public CVssWriter
+{
 private:
 public:
     // initialize all static variables
     static void StaticInitialize()  {  }
-    
+
     DepWriter() { }
-    virtual ~DepWriter() { Uninitialize(); }
+    virtual ~DepWriter()
+    {
+        Uninitialize();
+    }
 
     HRESULT STDMETHODCALLTYPE Initialize();
-    HRESULT STDMETHODCALLTYPE Uninitialize()    { return Unsubscribe(); }
+    HRESULT STDMETHODCALLTYPE Uninitialize()
+    {
+        return Unsubscribe();
+    }
     bool STDMETHODCALLTYPE OnIdentify(IN IVssCreateWriterMetadata *pMetadata);
     bool STDMETHODCALLTYPE OnPrepareBackup(_In_ IVssWriterComponents *pComponents);
     bool STDMETHODCALLTYPE OnPrepareSnapshot();
@@ -56,4 +63,4 @@ public:
 
 
 #endif
-	
+

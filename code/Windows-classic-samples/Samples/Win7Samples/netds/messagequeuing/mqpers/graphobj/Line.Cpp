@@ -1,4 +1,4 @@
-// --------------------------------------------------------------------
+﻿// --------------------------------------------------------------------
 //
 //  Copyright (c) Microsoft Corporation.  All rights reserved
 //
@@ -19,72 +19,72 @@
 
 STDMETHODIMP CLine::InterfaceSupportsErrorInfo(REFIID riid)
 {
-	static const IID* arr[] = 
-	{
-		&IID_ILine,
-	};
-	for (int i=0;i<sizeof(arr)/sizeof(arr[0]);i++)
-	{
-		if ( ::InlineIsEqualGUID(*arr[i], riid) )
+    static const IID* arr[] =
+    {
+        &IID_ILine,
+    };
+    for (int i=0; i<sizeof(arr)/sizeof(arr[0]); i++)
+    {
+        if ( ::InlineIsEqualGUID(*arr[i], riid) )
 
-			return S_OK;
-	}
-	return S_FALSE;
+            return S_OK;
+    }
+    return S_FALSE;
 }
 
 STDMETHODIMP CLine::get_x1(long * pVal)
 {
-	*pVal = m_Line.x1;
-	return S_OK;
+    *pVal = m_Line.x1;
+    return S_OK;
 }
 
 STDMETHODIMP CLine::put_x1(long newVal)
 {
-	m_Line.x1 = newVal;
+    m_Line.x1 = newVal;
 
-	return S_OK;
+    return S_OK;
 }
 
 STDMETHODIMP CLine::get_y1(long * pVal)
 {
-	*pVal = m_Line.y1;
+    *pVal = m_Line.y1;
 
-	return S_OK;
+    return S_OK;
 }
 
 STDMETHODIMP CLine::put_y1(long newVal)
 {
-	m_Line.y1 = newVal;
+    m_Line.y1 = newVal;
 
-	return S_OK;
+    return S_OK;
 }
 
 STDMETHODIMP CLine::get_x2(long * pVal)
 {
-	*pVal = m_Line.x2;
+    *pVal = m_Line.x2;
 
-	return S_OK;
+    return S_OK;
 }
 
 STDMETHODIMP CLine::put_x2(long newVal)
 {
-	m_Line.x2 = newVal;
+    m_Line.x2 = newVal;
 
-	return S_OK;
+    return S_OK;
 }
 
 STDMETHODIMP CLine::get_y2(long * pVal)
 {
-	*pVal = m_Line.y2;
+    *pVal = m_Line.y2;
 
-	return S_OK;
+    return S_OK;
 }
 
 STDMETHODIMP CLine::put_y2(long newVal)
 {
-	m_Line.y2 = newVal;
+    m_Line.y2 = newVal;
 
-	return S_OK;
+    return S_OK;
 }
 
 STDMETHODIMP CLine::IMyPersistStreamImpl_Load(LPSTREAM pIStream)
@@ -103,7 +103,7 @@ STDMETHODIMP CLine::IMyPersistStreamImpl_Load(LPSTREAM pIStream)
     if (sizeof(LINEDATA) != cb)
         return E_FAIL;
 
-	return NOERROR;
+    return NOERROR;
 }
 
 
@@ -122,16 +122,16 @@ STDMETHODIMP CLine::IMyPersistStreamImpl_Save(LPSTREAM pIStream, BOOL /* fClearD
     hr=pIStream->Write(&m_Line, (ULONG)sizeof(LINEDATA), &cb);
 
     if (FAILED(hr) || sizeof(LINEDATA)!=cb)
-       return ResultFromScode(STG_E_WRITEFAULT);
+        return ResultFromScode(STG_E_WRITEFAULT);
 
-	return NOERROR;
+    return NOERROR;
 }
 
 
 STDMETHODIMP CLine::IMyPersistStreamImpl_GetSizeMax(ULARGE_INTEGER FAR* pcbSize)
 {
-	pcbSize->LowPart = (DWORD)(sizeof(LINEDATA));
-	pcbSize->HighPart = 0L;
-	return NOERROR;
+    pcbSize->LowPart = (DWORD)(sizeof(LINEDATA));
+    pcbSize->HighPart = 0L;
+    return NOERROR;
 }
 

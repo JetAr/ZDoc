@@ -1,4 +1,4 @@
-//------------------------------------------------------------------------------
+﻿//------------------------------------------------------------------------------
 // File: PushSourceBitmap.cpp
 //
 // Desc: DirectShow sample code - In-memory push mode source filter
@@ -27,33 +27,33 @@ const TCHAR* DXUtil_GetDXSDKMediaPath();
 /**********************************************
  *
  *  CPushPinBitmap Class
- *  
+ *
  *
  **********************************************/
 
 CPushPinBitmap::CPushPinBitmap(HRESULT *phr, CSource *pFilter)
-      : CSourceStream(NAME("Push Source Bitmap"), phr, pFilter, L"Out"),
-        m_FramesWritten(0),
-        m_bZeroMemory(0),
-        m_pBmi(0),
-        m_cbBitmapInfo(0),
-        m_hFile(INVALID_HANDLE_VALUE),
-        m_pFile(NULL),
-        m_pImage(NULL),
-        m_iFrameNumber(0),
-        m_rtFrameLength(FPS_5) // Display 5 bitmap frames per second
+    : CSourceStream(NAME("Push Source Bitmap"), phr, pFilter, L"Out"),
+      m_FramesWritten(0),
+      m_bZeroMemory(0),
+      m_pBmi(0),
+      m_cbBitmapInfo(0),
+      m_hFile(INVALID_HANDLE_VALUE),
+      m_pFile(NULL),
+      m_pImage(NULL),
+      m_iFrameNumber(0),
+      m_rtFrameLength(FPS_5) // Display 5 bitmap frames per second
 {
     // The main point of this sample is to demonstrate how to take a DIB
-    // in host memory and insert it into a video stream. 
+    // in host memory and insert it into a video stream.
     // To keep this sample as simple as possible, we just read a single 24 bpp bitmap
     // from a file and copy it into every frame that we send downstream.
 
-    // In the filter graph, we connect this filter to the AVI Mux, which creates 
-    // the AVI file with the video frames we pass to it. In this case, 
+    // In the filter graph, we connect this filter to the AVI Mux, which creates
+    // the AVI file with the video frames we pass to it. In this case,
     // the end result is a still image rendered as a video stream.
 
-    // Your filter will hopefully do something more interesting here. 
-    // The main point is to set up a buffer containing the DIB pixel bits. 
+    // Your filter will hopefully do something more interesting here.
+    // The main point is to set up a buffer containing the DIB pixel bits.
     // This must be done before you start running.
 
     TCHAR szCurrentDir[MAX_PATH], szFileCurrent[MAX_PATH], szFileMedia[MAX_PATH];
@@ -62,7 +62,7 @@ CPushPinBitmap::CPushPinBitmap(HRESULT *phr, CSource *pFilter)
     GetCurrentDirectory(MAX_PATH-1, szCurrentDir);
     (void)StringCchPrintf(szFileCurrent, NUMELMS(szFileCurrent), TEXT("%s\\%s\0"), szCurrentDir, BITMAP_NAME);
 
-    m_hFile = CreateFile(szFileCurrent, GENERIC_READ, 0, NULL, OPEN_EXISTING, 
+    m_hFile = CreateFile(szFileCurrent, GENERIC_READ, 0, NULL, OPEN_EXISTING,
                          FILE_ATTRIBUTE_NORMAL, NULL);
 
     if (m_hFile == INVALID_HANDLE_VALUE)
@@ -72,7 +72,7 @@ CPushPinBitmap::CPushPinBitmap(HRESULT *phr, CSource *pFilter)
         (void)StringCchCopy(szFileMedia, NUMELMS(szFileMedia), DXUtil_GetDXSDKMediaPath());
         (void)StringCchCat(szFileMedia, NUMELMS(szFileMedia), BITMAP_NAME);
 
-        m_hFile = CreateFile(szFileMedia, GENERIC_READ, 0, NULL, OPEN_EXISTING, 
+        m_hFile = CreateFile(szFileMedia, GENERIC_READ, 0, NULL, OPEN_EXISTING,
                              FILE_ATTRIBUTE_NORMAL, NULL);
 
         if (m_hFile == INVALID_HANDLE_VALUE)
@@ -80,11 +80,11 @@ CPushPinBitmap::CPushPinBitmap(HRESULT *phr, CSource *pFilter)
             TCHAR szMsg[MAX_PATH + MAX_PATH + 100];
 
             (void)StringCchPrintf(szMsg, NUMELMS(szMsg),TEXT("Could not open bitmap source file in the application directory:\r\n\r\n\t[%s]\n\n")
-                     TEXT("or in the DirectX SDK Media folder:\r\n\r\n\t[%s]\n\n")
-                     TEXT("Please copy this file either to the application's folder\r\n")
-                     TEXT("or to the DirectX SDK Media folder, then recreate this filter.\r\n")
-                     TEXT("Otherwise, you will not be able to render the output pin.\0"),
-                     szFileCurrent, szFileMedia);
+                                  TEXT("or in the DirectX SDK Media folder:\r\n\r\n\t[%s]\n\n")
+                                  TEXT("Please copy this file either to the application's folder\r\n")
+                                  TEXT("or to the DirectX SDK Media folder, then recreate this filter.\r\n")
+                                  TEXT("Otherwise, you will not be able to render the output pin.\0"),
+                                  szFileCurrent, szFileMedia);
 
             OutputDebugString(szMsg);
             MessageBox(NULL, szMsg, TEXT("PushSource filter error"), MB_ICONERROR | MB_OK);
@@ -118,12 +118,12 @@ CPushPinBitmap::CPushPinBitmap(HRESULT *phr, CSource *pFilter)
     }
 
     // WARNING - This code does not verify that the file is a valid bitmap file.
-    // In your own filter, you would check this or else generate the bitmaps 
+    // In your own filter, you would check this or else generate the bitmaps
     // yourself in memory.
 
     int cbFileHeader = sizeof(BITMAPFILEHEADER);
 
-    // Store the size of the BITMAPINFO 
+    // Store the size of the BITMAPINFO
     BITMAPFILEHEADER *pBm = (BITMAPFILEHEADER*)m_pFile;
     m_cbBitmapInfo = pBm->bfOffBits - cbFileHeader;
 
@@ -140,7 +140,7 @@ CPushPinBitmap::CPushPinBitmap(HRESULT *phr, CSource *pFilter)
 
 
 CPushPinBitmap::~CPushPinBitmap()
-{   
+{
     DbgLog((LOG_TRACE, 3, TEXT("Frames written %d"),m_iFrameNumber));
 
     if (m_pFile)
@@ -180,10 +180,10 @@ HRESULT CPushPinBitmap::GetMediaType(CMediaType *pMediaType)
 
     // Allocate enough room for the VIDEOINFOHEADER and the color tables
     VIDEOINFOHEADER *pvi = (VIDEOINFOHEADER*)pMediaType->AllocFormatBuffer(SIZE_PREHEADER + m_cbBitmapInfo);
-    if (pvi == 0) 
+    if (pvi == 0)
         return(E_OUTOFMEMORY);
 
-    ZeroMemory(pvi, pMediaType->cbFormat);   
+    ZeroMemory(pvi, pMediaType->cbFormat);
     pvi->AvgTimePerFrame = m_rtFrameLength;
 
     // Copy the header info
@@ -222,7 +222,7 @@ HRESULT CPushPinBitmap::DecideBufferSize(IMemAllocator *pAlloc, ALLOCATOR_PROPER
         return E_FAIL;
 
     VIDEOINFOHEADER *pvi = (VIDEOINFOHEADER*) m_mt.Format();
-    
+
     // Ensure a minimum number of buffers
     if (pRequest->cBuffers == 0)
     {
@@ -232,13 +232,13 @@ HRESULT CPushPinBitmap::DecideBufferSize(IMemAllocator *pAlloc, ALLOCATOR_PROPER
 
     ALLOCATOR_PROPERTIES Actual;
     hr = pAlloc->SetProperties(pRequest, &Actual);
-    if (FAILED(hr)) 
+    if (FAILED(hr))
     {
         return hr;
     }
 
     // Is this allocator unsuitable?
-    if (Actual.cbBuffer < pRequest->cbBuffer) 
+    if (Actual.cbBuffer < pRequest->cbBuffer)
     {
         return E_FAIL;
     }
@@ -274,7 +274,7 @@ HRESULT CPushPinBitmap::FillBuffer(IMediaSample *pSample)
     // If we want to change the contents of our source buffer (m_pImage)
     // at some interval or based on some condition, this is where to do it.
     // Remember that the new data has the same format that we specified in GetMediaType.
-    // For example: 
+    // For example:
     // if(m_iFrameNumber > SomeValue)
     //    LoadNewBitsIntoBuffer(m_pImage)
 
@@ -284,7 +284,7 @@ HRESULT CPushPinBitmap::FillBuffer(IMediaSample *pSample)
 
     // Set the timestamps that will govern playback frame rate.
     // If this file is getting written out as an AVI,
-    // then you'll also need to configure the AVI Mux filter to 
+    // then you'll also need to configure the AVI Mux filter to
     // set the Average Time Per Frame for the AVI Header.
     // The current time is the sample's start
     REFERENCE_TIME rtStart = m_iFrameNumber * m_rtFrameLength;
@@ -307,7 +307,7 @@ HRESULT CPushPinBitmap::FillBuffer(IMediaSample *pSample)
  **********************************************/
 
 CPushSourceBitmap::CPushSourceBitmap(IUnknown *pUnk, HRESULT *phr)
-           : CSource(NAME("PushSourceBitmap"), pUnk, CLSID_PushSourceBitmap)
+    : CSource(NAME("PushSourceBitmap"), pUnk, CLSID_PushSourceBitmap)
 {
     // The pin magically adds itself to our pin array.
     m_pPin = new CPushPinBitmap(phr, this);
@@ -318,7 +318,7 @@ CPushSourceBitmap::CPushSourceBitmap(IUnknown *pUnk, HRESULT *phr)
             *phr = E_OUTOFMEMORY;
         else
             *phr = S_OK;
-    }  
+    }
 }
 
 
@@ -334,7 +334,7 @@ CUnknown * WINAPI CPushSourceBitmap::CreateInstance(IUnknown *pUnk, HRESULT *phr
 
     if (phr)
     {
-        if (pNewFilter == NULL) 
+        if (pNewFilter == NULL)
             *phr = E_OUTOFMEMORY;
         else
             *phr = S_OK;
@@ -357,7 +357,7 @@ const TCHAR* DXUtil_GetDXSDKMediaPath()
     DWORD type=0, size=MAX_PATH;
 
     strPath[0] = 0;     // Initialize to NULL
-    
+
     // Open the appropriate registry key
     LONG result = RegOpenKeyEx( HKEY_LOCAL_MACHINE,
                                 TEXT("Software\\Microsoft\\DirectX SDK"),

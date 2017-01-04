@@ -1,4 +1,4 @@
-/*++
+﻿/*++
 
 Copyright (c) 2006 Microsoft Corporation
 
@@ -31,7 +31,7 @@ Environment:
 #include <atlbase.h>
 #include <iostream>
 #include <iomanip>
-// headers needed to use WLAN APIs 
+// headers needed to use WLAN APIs
 #include <wlanapi.h>
 
 using namespace std;
@@ -56,32 +56,32 @@ GetInterfaceStateString(
 
     switch(wlanInterfaceState)
     {
-        case wlan_interface_state_not_ready:
-            strRetCode = L"\"not ready\"";
-            break;
-        case wlan_interface_state_connected:
-            strRetCode = L"\"connected\"";
-            break;
-        case wlan_interface_state_ad_hoc_network_formed:
-            strRetCode = L"\"ad hoc network formed\"";
-            break;
-        case wlan_interface_state_disconnecting:
-            strRetCode = L"\"disconnecting\"";
-            break;
-        case wlan_interface_state_disconnected:
-            strRetCode = L"\"disconnected\"";
-            break;
-        case wlan_interface_state_associating:
-            strRetCode = L"\"associating\"";
-            break;
-        case wlan_interface_state_discovering:
-            strRetCode = L"\"discovering\"";
-            break;
-        case wlan_interface_state_authenticating:
-            strRetCode = L"\"authenticating\"";
-            break;
-        default:
-            strRetCode = L"\"invalid interface state\"";
+    case wlan_interface_state_not_ready:
+        strRetCode = L"\"not ready\"";
+        break;
+    case wlan_interface_state_connected:
+        strRetCode = L"\"connected\"";
+        break;
+    case wlan_interface_state_ad_hoc_network_formed:
+        strRetCode = L"\"ad hoc network formed\"";
+        break;
+    case wlan_interface_state_disconnecting:
+        strRetCode = L"\"disconnecting\"";
+        break;
+    case wlan_interface_state_disconnected:
+        strRetCode = L"\"disconnected\"";
+        break;
+    case wlan_interface_state_associating:
+        strRetCode = L"\"associating\"";
+        break;
+    case wlan_interface_state_discovering:
+        strRetCode = L"\"discovering\"";
+        break;
+    case wlan_interface_state_authenticating:
+        strRetCode = L"\"authenticating\"";
+        break;
+    default:
+        strRetCode = L"\"invalid interface state\"";
     }
 
     return strRetCode;
@@ -97,68 +97,68 @@ GetAcmNotificationString(
 
     switch(acmNotif)
     {
-        case wlan_notification_acm_autoconf_enabled:
-            strRetCode = L"\"autoconf enabled\"";
-            break;
-        case wlan_notification_acm_autoconf_disabled:
-            strRetCode = L"\"autoconf disabled\"";
-            break;
-        case wlan_notification_acm_background_scan_enabled:
-            strRetCode = L"\"background scan enabled\"";
-            break;
-        case wlan_notification_acm_background_scan_disabled:
-            strRetCode = L"\"background scan disabled\"";
-            break;
-        case wlan_notification_acm_power_setting_change:
-            strRetCode = L"\"power setting change\"";
-            break;
-        case wlan_notification_acm_scan_complete:
-            strRetCode = L"\"scan complete\"";
-            break;
-        case wlan_notification_acm_scan_fail:
-            strRetCode = L"\"scan fail\"";
-            break;
-        case wlan_notification_acm_connection_start:
-            strRetCode = L"\"connection start\"";
-            break;
-        case wlan_notification_acm_connection_complete:
-            strRetCode = L"\"connection complete\"";
-            break;
-        case wlan_notification_acm_connection_attempt_fail:
-            strRetCode = L"\"connection fail\"";
-            break;
-        case wlan_notification_acm_filter_list_change:
-            strRetCode = L"\"filter list change\"";
-            break;
-        case wlan_notification_acm_interface_arrival:
-            strRetCode = L"\"interface arrival\"";
-            break;
-        case wlan_notification_acm_interface_removal:
-            strRetCode = L"\"interface removal\"";
-            break;
-        case wlan_notification_acm_profile_change:
-            strRetCode = L"\"profile change\"";
-            break;
-        case wlan_notification_acm_profiles_exhausted:
-            strRetCode = L"\"profiles exhausted\"";
-            break;
-        case wlan_notification_acm_network_not_available:
-            strRetCode = L"\"network not available\"";
-            break;
-        case wlan_notification_acm_network_available:
-            strRetCode = L"\"network available\"";
-            break;
-        case wlan_notification_acm_disconnecting:
-            strRetCode = L"\"disconnecting\"";
-            break;
-        case wlan_notification_acm_disconnected:
-            strRetCode = L"\"disconnected\"";
-            break;
-        case wlan_notification_acm_adhoc_network_state_change:
-            strRetCode = L"\"ad hoc network state changes\"";
-            break;
-        default:
-            strRetCode = L"\"unknown ACM notification\"";
+    case wlan_notification_acm_autoconf_enabled:
+        strRetCode = L"\"autoconf enabled\"";
+        break;
+    case wlan_notification_acm_autoconf_disabled:
+        strRetCode = L"\"autoconf disabled\"";
+        break;
+    case wlan_notification_acm_background_scan_enabled:
+        strRetCode = L"\"background scan enabled\"";
+        break;
+    case wlan_notification_acm_background_scan_disabled:
+        strRetCode = L"\"background scan disabled\"";
+        break;
+    case wlan_notification_acm_power_setting_change:
+        strRetCode = L"\"power setting change\"";
+        break;
+    case wlan_notification_acm_scan_complete:
+        strRetCode = L"\"scan complete\"";
+        break;
+    case wlan_notification_acm_scan_fail:
+        strRetCode = L"\"scan fail\"";
+        break;
+    case wlan_notification_acm_connection_start:
+        strRetCode = L"\"connection start\"";
+        break;
+    case wlan_notification_acm_connection_complete:
+        strRetCode = L"\"connection complete\"";
+        break;
+    case wlan_notification_acm_connection_attempt_fail:
+        strRetCode = L"\"connection fail\"";
+        break;
+    case wlan_notification_acm_filter_list_change:
+        strRetCode = L"\"filter list change\"";
+        break;
+    case wlan_notification_acm_interface_arrival:
+        strRetCode = L"\"interface arrival\"";
+        break;
+    case wlan_notification_acm_interface_removal:
+        strRetCode = L"\"interface removal\"";
+        break;
+    case wlan_notification_acm_profile_change:
+        strRetCode = L"\"profile change\"";
+        break;
+    case wlan_notification_acm_profiles_exhausted:
+        strRetCode = L"\"profiles exhausted\"";
+        break;
+    case wlan_notification_acm_network_not_available:
+        strRetCode = L"\"network not available\"";
+        break;
+    case wlan_notification_acm_network_available:
+        strRetCode = L"\"network available\"";
+        break;
+    case wlan_notification_acm_disconnecting:
+        strRetCode = L"\"disconnecting\"";
+        break;
+    case wlan_notification_acm_disconnected:
+        strRetCode = L"\"disconnected\"";
+        break;
+    case wlan_notification_acm_adhoc_network_state_change:
+        strRetCode = L"\"ad hoc network state changes\"";
+        break;
+    default:
+        strRetCode = L"\"unknown ACM notification\"";
     }
 
     return strRetCode;
@@ -174,47 +174,47 @@ GetMsmNotificationString(
 
     switch(msmNotif)
     {
-        case wlan_notification_msm_associating:
-            strRetCode = L"\"associating\"";
-            break;
-        case wlan_notification_msm_associated:
-            strRetCode = L"\"associated\"";
-            break;
-        case wlan_notification_msm_authenticating:
-            strRetCode = L"\"authenticating\"";
-            break;
-        case wlan_notification_msm_connected:
-            strRetCode = L"\"connected\"";
-            break;
-        case wlan_notification_msm_roaming_start:
-            strRetCode = L"\"roaming start\"";
-            break;
-        case wlan_notification_msm_roaming_end:
-            strRetCode = L"\"roaming end\"";
-            break;
-        case wlan_notification_msm_radio_state_change:
-            strRetCode = L"\"radio state change\"";
-            break;
-        case wlan_notification_msm_signal_quality_change:
-            strRetCode = L"\"signal quality change\"";
-            break;
-        case wlan_notification_msm_disassociating:
-            strRetCode = L"\"disassociating\"";
-            break;
-        case wlan_notification_msm_disconnected:
-            strRetCode = L"\"disconnected\"";
-            break;
-        case wlan_notification_msm_peer_join:
-            strRetCode = L"\"a peer joins the ad hoc network\"";
-            break;
-        case wlan_notification_msm_peer_leave:
-            strRetCode = L"\"a peer leaves the ad hoc network\"";
-            break;
-        case wlan_notification_msm_adapter_removal:
-            strRetCode = L"\"adapter is in a bad state\"";
-            break;
-        default:
-            strRetCode = L"\"unknown MSM notification\"";
+    case wlan_notification_msm_associating:
+        strRetCode = L"\"associating\"";
+        break;
+    case wlan_notification_msm_associated:
+        strRetCode = L"\"associated\"";
+        break;
+    case wlan_notification_msm_authenticating:
+        strRetCode = L"\"authenticating\"";
+        break;
+    case wlan_notification_msm_connected:
+        strRetCode = L"\"connected\"";
+        break;
+    case wlan_notification_msm_roaming_start:
+        strRetCode = L"\"roaming start\"";
+        break;
+    case wlan_notification_msm_roaming_end:
+        strRetCode = L"\"roaming end\"";
+        break;
+    case wlan_notification_msm_radio_state_change:
+        strRetCode = L"\"radio state change\"";
+        break;
+    case wlan_notification_msm_signal_quality_change:
+        strRetCode = L"\"signal quality change\"";
+        break;
+    case wlan_notification_msm_disassociating:
+        strRetCode = L"\"disassociating\"";
+        break;
+    case wlan_notification_msm_disconnected:
+        strRetCode = L"\"disconnected\"";
+        break;
+    case wlan_notification_msm_peer_join:
+        strRetCode = L"\"a peer joins the ad hoc network\"";
+        break;
+    case wlan_notification_msm_peer_leave:
+        strRetCode = L"\"a peer leaves the ad hoc network\"";
+        break;
+    case wlan_notification_msm_adapter_removal:
+        strRetCode = L"\"adapter is in a bad state\"";
+        break;
+    default:
+        strRetCode = L"\"unknown MSM notification\"";
     }
 
     return strRetCode;
@@ -230,30 +230,30 @@ GetConnectionModeString(
 
     switch(wlanConnMode)
     {
-        case wlan_connection_mode_profile:
-            strRetCode = L"\"manual connection with a profile\"";
-            break;
-        case wlan_connection_mode_temporary_profile:
-            strRetCode = L"\"manual connection with a temporary profile\"";
-            break;
-        case wlan_connection_mode_discovery_secure:
-            strRetCode = L"\"connection to a secure network without a profile\"";
-            break;
-        case wlan_connection_mode_discovery_unsecure:
-            strRetCode = L"\"connection to an unsecure network without a profile\"";
-            break;
-        case wlan_connection_mode_auto:
-            strRetCode = L"\"automatic connection with a profile\"";
-            break;
-        default:
-            strRetCode = L"\"invalid connection mode\"";
+    case wlan_connection_mode_profile:
+        strRetCode = L"\"manual connection with a profile\"";
+        break;
+    case wlan_connection_mode_temporary_profile:
+        strRetCode = L"\"manual connection with a temporary profile\"";
+        break;
+    case wlan_connection_mode_discovery_secure:
+        strRetCode = L"\"connection to a secure network without a profile\"";
+        break;
+    case wlan_connection_mode_discovery_unsecure:
+        strRetCode = L"\"connection to an unsecure network without a profile\"";
+        break;
+    case wlan_connection_mode_auto:
+        strRetCode = L"\"automatic connection with a profile\"";
+        break;
+    default:
+        strRetCode = L"\"invalid connection mode\"";
     }
 
     return strRetCode;
 }
 
 // get PHY type string
-LPWSTR 
+LPWSTR
 GetPhyTypeString(
     __in ULONG uDot11PhyType
 )
@@ -262,36 +262,36 @@ GetPhyTypeString(
 
     switch(uDot11PhyType)
     {
-        case dot11_phy_type_dsss:
-            strRetCode = L"\"DSSS\"";
-            break;
-        case dot11_phy_type_erp:
-            strRetCode = L"\"802.11g\"";
-            break;
-        case dot11_phy_type_fhss:
-            strRetCode = L"\"FHSS\"";
-            break;
-        case dot11_phy_type_hrdsss:
-            strRetCode = L"\"802.11b\"";
-            break;
-        case dot11_phy_type_irbaseband:
-            strRetCode = L"\"IR-base band\"";
-            break;
-        case dot11_phy_type_ofdm:
-            strRetCode = L"\"802.11a\"";
-            break;
-        case dot11_phy_type_any:
-            strRetCode = L"\"any\"";
-            break;
-        default:
-            strRetCode = L"\"Unknown PHY type\"";
+    case dot11_phy_type_dsss:
+        strRetCode = L"\"DSSS\"";
+        break;
+    case dot11_phy_type_erp:
+        strRetCode = L"\"802.11g\"";
+        break;
+    case dot11_phy_type_fhss:
+        strRetCode = L"\"FHSS\"";
+        break;
+    case dot11_phy_type_hrdsss:
+        strRetCode = L"\"802.11b\"";
+        break;
+    case dot11_phy_type_irbaseband:
+        strRetCode = L"\"IR-base band\"";
+        break;
+    case dot11_phy_type_ofdm:
+        strRetCode = L"\"802.11a\"";
+        break;
+    case dot11_phy_type_any:
+        strRetCode = L"\"any\"";
+        break;
+    default:
+        strRetCode = L"\"Unknown PHY type\"";
     }
 
     return strRetCode;
 }
 
 // get BSS type string
-LPWSTR 
+LPWSTR
 GetBssTypeString(
     __in DOT11_BSS_TYPE dot11BssType
 )
@@ -300,17 +300,17 @@ GetBssTypeString(
 
     switch(dot11BssType)
     {
-        case dot11_BSS_type_infrastructure:
-            strRetCode = L"\"Infrastructure\"";
-            break;
-        case dot11_BSS_type_independent:
-            strRetCode = L"\"Ad hoc\"";
-            break;
-        case dot11_BSS_type_any:
-            strRetCode = L"\"Any\"";
-            break;
-        default:
-            strRetCode = L"\"Unknown BSS type\"";
+    case dot11_BSS_type_infrastructure:
+        strRetCode = L"\"Infrastructure\"";
+        break;
+    case dot11_BSS_type_independent:
+        strRetCode = L"\"Ad hoc\"";
+        break;
+    case dot11_BSS_type_any:
+        strRetCode = L"\"Any\"";
+        break;
+    default:
+        strRetCode = L"\"Unknown BSS type\"";
     }
 
     return strRetCode;
@@ -326,14 +326,14 @@ GetRadioStateString(
 
     switch(radioState)
     {
-        case dot11_radio_state_on:
-            strRetCode = L"\"on\"";
-            break;
-        case dot11_radio_state_off:
-            strRetCode = L"\"off\"";
-            break;
-        default:
-            strRetCode = L"\"unknown state\"";
+    case dot11_radio_state_on:
+        strRetCode = L"\"on\"";
+        break;
+    case dot11_radio_state_off:
+        strRetCode = L"\"off\"";
+        break;
+    default:
+        strRetCode = L"\"unknown state\"";
     }
 
     return strRetCode;
@@ -341,7 +341,7 @@ GetRadioStateString(
 
 
 // get auth algorithm string
-LPWSTR 
+LPWSTR
 GetAuthAlgoString(
     __in DOT11_AUTH_ALGORITHM dot11AuthAlgo
 )
@@ -350,39 +350,39 @@ GetAuthAlgoString(
 
     switch(dot11AuthAlgo)
     {
-        case DOT11_AUTH_ALGO_80211_OPEN:
-            strRetCode = L"\"Open\"";
-            break;
-        case DOT11_AUTH_ALGO_80211_SHARED_KEY:
-            strRetCode = L"\"Shared\"";
-            break;
-        case DOT11_AUTH_ALGO_WPA:
-            strRetCode = L"\"WPA-Enterprise\"";
-            break;
-        case DOT11_AUTH_ALGO_WPA_PSK:
-            strRetCode = L"\"WPA-Personal\"";
-            break;
-        case DOT11_AUTH_ALGO_WPA_NONE:
-            strRetCode = L"\"WPA-NONE\"";
-            break;
-        case DOT11_AUTH_ALGO_RSNA:
-            strRetCode = L"\"WPA2-Enterprise\"";
-            break;
-        case DOT11_AUTH_ALGO_RSNA_PSK:
-            strRetCode = L"\"WPA2-Personal\"";
-            break;
-        default:
-            if (dot11AuthAlgo & DOT11_AUTH_ALGO_IHV_START)
-            {
-                strRetCode = L"\"Vendor-specific algorithm\"";
-            }
+    case DOT11_AUTH_ALGO_80211_OPEN:
+        strRetCode = L"\"Open\"";
+        break;
+    case DOT11_AUTH_ALGO_80211_SHARED_KEY:
+        strRetCode = L"\"Shared\"";
+        break;
+    case DOT11_AUTH_ALGO_WPA:
+        strRetCode = L"\"WPA-Enterprise\"";
+        break;
+    case DOT11_AUTH_ALGO_WPA_PSK:
+        strRetCode = L"\"WPA-Personal\"";
+        break;
+    case DOT11_AUTH_ALGO_WPA_NONE:
+        strRetCode = L"\"WPA-NONE\"";
+        break;
+    case DOT11_AUTH_ALGO_RSNA:
+        strRetCode = L"\"WPA2-Enterprise\"";
+        break;
+    case DOT11_AUTH_ALGO_RSNA_PSK:
+        strRetCode = L"\"WPA2-Personal\"";
+        break;
+    default:
+        if (dot11AuthAlgo & DOT11_AUTH_ALGO_IHV_START)
+        {
+            strRetCode = L"\"Vendor-specific algorithm\"";
+        }
     }
 
     return strRetCode;
 }
 
 // get cipher algorithm string
-LPWSTR 
+LPWSTR
 GetCipherAlgoString(
     __in DOT11_CIPHER_ALGORITHM dot11CipherAlgo
 )
@@ -391,32 +391,32 @@ GetCipherAlgoString(
 
     switch(dot11CipherAlgo)
     {
-        case DOT11_CIPHER_ALGO_NONE:
-            strRetCode = L"\"None\"";
-            break;
-        case DOT11_CIPHER_ALGO_WEP40:
-            strRetCode = L"\"WEP40\"";
-            break;
-        case DOT11_CIPHER_ALGO_TKIP:
-            strRetCode = L"\"TKIP\"";
-            break;
-        case DOT11_CIPHER_ALGO_CCMP:
-            strRetCode = L"\"AES\"";
-            break;
-        case DOT11_CIPHER_ALGO_WEP104:
-            strRetCode = L"\"WEP104\"";
-            break;
-        case DOT11_CIPHER_ALGO_WPA_USE_GROUP:
-            strRetCode = L"\"USE-GROUP\"";
-            break;
-        case DOT11_CIPHER_ALGO_WEP:
-            strRetCode = L"\"WEP\"";
-            break;
-        default:
-            if (dot11CipherAlgo & DOT11_CIPHER_ALGO_IHV_START)
-            {
-                strRetCode = L"\"Vendor-specific algorithm\"";
-            }
+    case DOT11_CIPHER_ALGO_NONE:
+        strRetCode = L"\"None\"";
+        break;
+    case DOT11_CIPHER_ALGO_WEP40:
+        strRetCode = L"\"WEP40\"";
+        break;
+    case DOT11_CIPHER_ALGO_TKIP:
+        strRetCode = L"\"TKIP\"";
+        break;
+    case DOT11_CIPHER_ALGO_CCMP:
+        strRetCode = L"\"AES\"";
+        break;
+    case DOT11_CIPHER_ALGO_WEP104:
+        strRetCode = L"\"WEP104\"";
+        break;
+    case DOT11_CIPHER_ALGO_WPA_USE_GROUP:
+        strRetCode = L"\"USE-GROUP\"";
+        break;
+    case DOT11_CIPHER_ALGO_WEP:
+        strRetCode = L"\"WEP\"";
+        break;
+    default:
+        if (dot11CipherAlgo & DOT11_CIPHER_ALGO_IHV_START)
+        {
+            strRetCode = L"\"Vendor-specific algorithm\"";
+        }
     }
 
     return strRetCode;
@@ -425,7 +425,7 @@ GetCipherAlgoString(
 // get SSID from the WCHAR string
 DWORD
 StringWToSsid(
-    __in LPCWSTR strSsid, 
+    __in LPCWSTR strSsid,
     __out PDOT11_SSID pSsid
 )
 {
@@ -439,13 +439,13 @@ StringWToSsid(
     else
     {
         pSsid->uSSIDLength = WideCharToMultiByte (CP_ACP,
-                                                   0,
-                                                   strSsid,
-                                                   -1,
-                                                   (LPSTR)pbSsid,
-                                                   sizeof(pbSsid),
-                                                   NULL,
-                                                   NULL);
+                             0,
+                             strSsid,
+                             -1,
+                             (LPSTR)pbSsid,
+                             sizeof(pbSsid),
+                             NULL,
+                             NULL);
 
         pSsid->uSSIDLength--;
         memcpy(&pSsid->ucSSID, pbSsid, pSsid->uSSIDLength);
@@ -461,7 +461,7 @@ SsidToStringW(
     __out_ecount(count) LPWSTR   buf,
     __in ULONG   count,
     __in PDOT11_SSID pSsid
-    )
+)
 {
     ULONG   bytes, i;
 
@@ -486,10 +486,10 @@ PrintReason(
     WCHAR strReason[WLSAMPLE_REASON_STRING_LEN];
 
     if (WlanReasonCodeToString(
-            reason, 
-            WLSAMPLE_REASON_STRING_LEN,
-            strReason, 
-            NULL            // reserved
+                reason,
+                WLSAMPLE_REASON_STRING_LEN,
+                strReason,
+                NULL            // reserved
             ) == ERROR_SUCCESS)
     {
         wcout << L" The reason is \"" << strReason << L"\"." << endl;
@@ -551,7 +551,7 @@ VOID PrintNetworkInfo(
 
         // BSS type
         wcout << L"\tBSS type: " << GetBssTypeString(pNetwork->dot11BssType) << endl;
-        
+
         // Signal quality
         wcout << L"\tSignal quality: " << pNetwork->wlanSignalQuality << L"%" << endl;
 
@@ -564,7 +564,7 @@ VOID PrintNetworkInfo(
 }
 
 // print BSS info
-VOID 
+VOID
 PrintBssInfo(
     __in PWLAN_BSS_ENTRY pBss
 )
@@ -572,7 +572,7 @@ PrintBssInfo(
     WCHAR strSsid[DOT11_SSID_MAX_LENGTH+1];
     UINT i;
     PBYTE pIe = NULL;
-    
+
     if (pBss != NULL)
     {
         // MAC address
@@ -582,13 +582,13 @@ PrintBssInfo(
             wcout << setw(2) << setfill(L'0') << hex << (UINT)pBss->dot11Bssid[i] <<L" ";
         }
         wcout << endl;
-        
+
         // SSID
         wcout << L"\tSSID: " << SsidToStringW(strSsid, sizeof(strSsid)/sizeof(WCHAR), &pBss->dot11Ssid) << endl;
 
         // Beacon period
         wcout << L"\tBeacon period: " << dec << pBss->usBeaconPeriod << L" TU" << endl;
-        
+
         // IE
         wcout << L"\tIE";
         i = 0;
@@ -607,13 +607,13 @@ PrintBssInfo(
 
         wcout << endl;
     }
-    
+
 }
 
 #define WLAN_INVALID_COUNTER (ULONGLONG)-1
 
 // print the counter value in driver statistics
-VOID 
+VOID
 PrintCounterValue(
     __in ULONGLONG value
 )
@@ -671,14 +671,14 @@ OpenHandleAndCheckVersion(
     __try
     {
         *phClient = NULL;
-        
+
         // open a handle to the service
         if ((dwError = WlanOpenHandle(
-                            WLAN_API_VERSION,
-                            NULL,               // reserved
-                            &dwServiceVersion,
-                            &hClient
-                            )) != ERROR_SUCCESS)
+                           WLAN_API_VERSION,
+                           NULL,               // reserved
+                           &dwServiceVersion,
+                           &hClient
+                       )) != ERROR_SUCCESS)
         {
             __leave;
         }
@@ -701,9 +701,9 @@ OpenHandleAndCheckVersion(
         {
             // clean up
             WlanCloseHandle(
-                hClient, 
+                hClient,
                 NULL            // reserved
-                );
+            );
         }
     }
 
@@ -717,7 +717,7 @@ OpenHandleAndCheckVersion(
 // Notification callback function
 VOID WINAPI
 NotificationCallback(
-    __in PWLAN_NOTIFICATION_DATA pNotifData, 
+    __in PWLAN_NOTIFICATION_DATA pNotifData,
     __in_opt PVOID pContext  // this parameter is not used
 )
 {
@@ -728,65 +728,65 @@ NotificationCallback(
     {
         switch(pNotifData->NotificationSource)
         {
-            case WLAN_NOTIFICATION_SOURCE_ACM:
-                wcout << L"Got notification " << GetAcmNotificationString(pNotifData->NotificationCode) << L" from ACM." << endl; 
+        case WLAN_NOTIFICATION_SOURCE_ACM:
+            wcout << L"Got notification " << GetAcmNotificationString(pNotifData->NotificationCode) << L" from ACM." << endl;
 
-                // print some notifications as examples
-                switch(pNotifData->NotificationCode)
+            // print some notifications as examples
+            switch(pNotifData->NotificationCode)
+            {
+            case wlan_notification_acm_connection_complete:
+                if (pNotifData->dwDataSize < sizeof(WLAN_CONNECTION_NOTIFICATION_DATA))
                 {
-                    case wlan_notification_acm_connection_complete:
-                        if (pNotifData->dwDataSize < sizeof(WLAN_CONNECTION_NOTIFICATION_DATA))
-                        {
-                            break;
-                        }
-                        pConnNotifData = (PWLAN_CONNECTION_NOTIFICATION_DATA)pNotifData->pData;
-                        if (pConnNotifData->wlanReasonCode == WLAN_REASON_CODE_SUCCESS)
-                        {
-                            wcout << L"The connection succeeded." << endl;
-
-                            if (pConnNotifData->wlanConnectionMode == wlan_connection_mode_discovery_secure ||
-                                pConnNotifData->wlanConnectionMode == wlan_connection_mode_discovery_unsecure)
-                            {
-                                // the temporary profile generated for discovery
-                                wcout << L"The profile used for this connection is as follows:" << endl;
-                                wcout << pConnNotifData->strProfileXml << endl;
-                            }
-                        }
-                        else
-                        {
-                            wcout << L"The connection failed.";
-                            PrintReason(pConnNotifData->wlanReasonCode);
-                        }
-                        break;
-                    case wlan_notification_acm_connection_start:
-                        if (pNotifData->dwDataSize != sizeof(WLAN_CONNECTION_NOTIFICATION_DATA))
-                        {
-                            break;
-                        }
-                        pConnNotifData = (PWLAN_CONNECTION_NOTIFICATION_DATA)pNotifData->pData;
-                        // print out some connection information
-                        wcout << L"\tCurrently connecting to " << SsidToStringW(strSsid, sizeof(strSsid)/sizeof(WCHAR), &pConnNotifData->dot11Ssid);
-        
-                        wcout << L" using profile " << pConnNotifData->strProfileName;
-                        wcout << L", connection mode is " << GetConnectionModeString(pConnNotifData->wlanConnectionMode);
-                        wcout << L", BSS type is " << GetBssTypeString(pConnNotifData->dot11BssType) << endl;
-
-                        break;
+                    break;
                 }
+                pConnNotifData = (PWLAN_CONNECTION_NOTIFICATION_DATA)pNotifData->pData;
+                if (pConnNotifData->wlanReasonCode == WLAN_REASON_CODE_SUCCESS)
+                {
+                    wcout << L"The connection succeeded." << endl;
+
+                    if (pConnNotifData->wlanConnectionMode == wlan_connection_mode_discovery_secure ||
+                            pConnNotifData->wlanConnectionMode == wlan_connection_mode_discovery_unsecure)
+                    {
+                        // the temporary profile generated for discovery
+                        wcout << L"The profile used for this connection is as follows:" << endl;
+                        wcout << pConnNotifData->strProfileXml << endl;
+                    }
+                }
+                else
+                {
+                    wcout << L"The connection failed.";
+                    PrintReason(pConnNotifData->wlanReasonCode);
+                }
+                break;
+            case wlan_notification_acm_connection_start:
+                if (pNotifData->dwDataSize != sizeof(WLAN_CONNECTION_NOTIFICATION_DATA))
+                {
+                    break;
+                }
+                pConnNotifData = (PWLAN_CONNECTION_NOTIFICATION_DATA)pNotifData->pData;
+                // print out some connection information
+                wcout << L"\tCurrently connecting to " << SsidToStringW(strSsid, sizeof(strSsid)/sizeof(WCHAR), &pConnNotifData->dot11Ssid);
+
+                wcout << L" using profile " << pConnNotifData->strProfileName;
+                wcout << L", connection mode is " << GetConnectionModeString(pConnNotifData->wlanConnectionMode);
+                wcout << L", BSS type is " << GetBssTypeString(pConnNotifData->dot11BssType) << endl;
 
                 break;
-            case WLAN_NOTIFICATION_SOURCE_MSM:
-                wcout << L"Got notification " << GetMsmNotificationString(pNotifData->NotificationCode) << L" from MSM." << endl; 
-                break;
+            }
+
+            break;
+        case WLAN_NOTIFICATION_SOURCE_MSM:
+            wcout << L"Got notification " << GetMsmNotificationString(pNotifData->NotificationCode) << L" from MSM." << endl;
+            break;
         }
 
     }
 }
 
 // Register for notification
-VOID 
+VOID
 RegisterNotification(
-    __in int argc, 
+    __in int argc,
     __in_ecount(argc) LPWSTR argv[]
 )
 {
@@ -804,22 +804,22 @@ RegisterNotification(
 
         // open a handle to the service
         if ((dwError = OpenHandleAndCheckVersion(
-                            &hClient
-                            )) != ERROR_SUCCESS)
+                           &hClient
+                       )) != ERROR_SUCCESS)
         {
             __leave;
         }
 
         // register for ACM and MSM notifications
         if ((dwError = WlanRegisterNotification(
-                            hClient,
-                            WLAN_NOTIFICATION_SOURCE_ACM | WLAN_NOTIFICATION_SOURCE_MSM,
-                            FALSE,			// do not ignore duplications
-                            NotificationCallback,
-                            NULL,			// no callback context is needed
-                            NULL,           // reserved
-                            &dwPrevNotifType
-                            )) != ERROR_SUCCESS)
+                           hClient,
+                           WLAN_NOTIFICATION_SOURCE_ACM | WLAN_NOTIFICATION_SOURCE_MSM,
+                           FALSE,			// do not ignore duplications
+                           NotificationCallback,
+                           NULL,			// no callback context is needed
+                           NULL,           // reserved
+                           &dwPrevNotifType
+                       )) != ERROR_SUCCESS)
         {
             __leave;
         }
@@ -831,14 +831,14 @@ RegisterNotification(
 
         // unregister notifications
         if ((dwError = WlanRegisterNotification(
-                            hClient,
-                            WLAN_NOTIFICATION_SOURCE_NONE,
-                            FALSE,          // do not ignore duplications
-                            NULL,           // no callback function is needed
-                            NULL,           // no callback context is needed
-                            NULL,           // reserved
-                            &dwPrevNotifType
-                            )) == ERROR_SUCCESS)
+                           hClient,
+                           WLAN_NOTIFICATION_SOURCE_NONE,
+                           FALSE,          // do not ignore duplications
+                           NULL,           // no callback function is needed
+                           NULL,           // no callback context is needed
+                           NULL,           // reserved
+                           &dwPrevNotifType
+                       )) == ERROR_SUCCESS)
         {
             wcout << L"ACM and MSM notifications are successfully unregistered." << endl;
         }
@@ -853,9 +853,9 @@ RegisterNotification(
         if (hClient != NULL)
         {
             WlanCloseHandle(
-                hClient, 
+                hClient,
                 NULL            // reserved
-                );
+            );
         }
     }
 
@@ -864,9 +864,9 @@ RegisterNotification(
 
 
 // set profile
-VOID 
+VOID
 SetProfile(
-    __in int argc, 
+    __in int argc,
     __in_ecount(argc) LPWSTR argv[]
 )
 {
@@ -879,7 +879,7 @@ SetProfile(
     VARIANT_BOOL vbSuccess;
     DWORD dwReason;
 
-	// __try and __leave cannot be used here because of COM object
+    // __try and __leave cannot be used here because of COM object
     do
     {
         if (argc != 3)
@@ -902,23 +902,23 @@ SetProfile(
             dwError = WIN32_FROM_HRESULT(hr);
             break;
         }
-        
+
         // create a COM object to read the XML file
         hr = CoCreateInstance(
-                CLSID_DOMDocument60,
-                NULL,
-                CLSCTX_INPROC_SERVER,
-                IID_IXMLDOMDocument2,
-                (void**)&pXmlDoc
-                );
+                 CLSID_DOMDocument60,
+                 NULL,
+                 CLSCTX_INPROC_SERVER,
+                 IID_IXMLDOMDocument2,
+                 (void**)&pXmlDoc
+             );
         if (hr != S_OK)
         {
             dwError = WIN32_FROM_HRESULT(hr);
             break;
         }
-		
-		// load the file into the COM object
-		hr = pXmlDoc->load((CComVariant)argv[2], &vbSuccess);
+
+        // load the file into the COM object
+        hr = pXmlDoc->load((CComVariant)argv[2], &vbSuccess);
         if (hr != S_OK || vbSuccess != VARIANT_TRUE)
         {
             dwError = ERROR_BAD_PROFILE;
@@ -935,46 +935,47 @@ SetProfile(
 
         // open handle
         if ((dwError = OpenHandleAndCheckVersion(
-                                &hClient
-                                )) != ERROR_SUCCESS)
+                           &hClient
+                       )) != ERROR_SUCCESS)
         {
             break;
         }
 
         // set profile
         dwError = WlanSetProfile(
-                            hClient, 
-                            &guidIntf, 
-                            0,          // no flags for the profile 
-                            bstrXml, 
-                            NULL,       // use the default ACL
-                            TRUE,		// overwrite a profile if it already exists
-                            NULL,       // reserved
-                            &dwReason
-                            );
+                      hClient,
+                      &guidIntf,
+                      0,          // no flags for the profile
+                      bstrXml,
+                      NULL,       // use the default ACL
+                      TRUE,		// overwrite a profile if it already exists
+                      NULL,       // reserved
+                      &dwReason
+                  );
         if (dwError == ERROR_BAD_PROFILE)
         {
             wcout << L"The profile is bad.";
             PrintReason(dwReason);
         }
-    } while (FALSE);
+    }
+    while (FALSE);
 
     // clean up
     if (hClient != NULL)
     {
         WlanCloseHandle(
-            hClient, 
+            hClient,
             NULL            // reserved
-            );
+        );
     }
 
     PrintErrorMsg(argv[0], dwError);
 }
 
 // get profile
-VOID 
+VOID
 GetProfile(
-    __in int argc, 
+    __in int argc,
     __in_ecount(argc) LPWSTR argv[]
 )
 {
@@ -1001,22 +1002,22 @@ GetProfile(
 
         // open handle
         if ((dwError = OpenHandleAndCheckVersion(
-                            &hClient
-                            )) != ERROR_SUCCESS)
+                           &hClient
+                       )) != ERROR_SUCCESS)
         {
             __leave;
         }
 
         // get profile
         if ((dwError = WlanGetProfile(
-                            hClient, 
-                            &guidIntf, 
-                            argv[2],    // profile name
-                            NULL,       // reserved
-                            &strXml,    // XML string of the profile
-                            NULL,       // not interested in the profile flags
-                            NULL        // don't care about ACL
-                            )) == ERROR_SUCCESS)
+                           hClient,
+                           &guidIntf,
+                           argv[2],    // profile name
+                           NULL,       // reserved
+                           &strXml,    // XML string of the profile
+                           NULL,       // not interested in the profile flags
+                           NULL        // don't care about ACL
+                       )) == ERROR_SUCCESS)
         {
             wcout << L"The return profile xml is: " << endl << strXml << endl;
             WlanFreeMemory(strXml);
@@ -1029,9 +1030,9 @@ GetProfile(
         if (hClient != NULL)
         {
             WlanCloseHandle(
-                hClient, 
+                hClient,
                 NULL            // reserved
-                );
+            );
         }
     }
 
@@ -1039,9 +1040,9 @@ GetProfile(
 }
 
 // delete profile
-VOID 
+VOID
 DeleteProfile(
-    __in int argc, 
+    __in int argc,
     __in_ecount(argc) LPWSTR argv[]
 )
 {
@@ -1065,22 +1066,22 @@ DeleteProfile(
             __leave;
         }
 
-        
+
         // open handle
         if ((dwError = OpenHandleAndCheckVersion(
-                            &hClient
-                            )) != ERROR_SUCCESS)
+                           &hClient
+                       )) != ERROR_SUCCESS)
         {
             __leave;
         }
 
         // delete profile
         dwError = WlanDeleteProfile(
-                        hClient, 
-                        &guidIntf, 
-                        argv[2],        // profile name
-                        NULL            // reserved
-                        );
+                      hClient,
+                      &guidIntf,
+                      argv[2],        // profile name
+                      NULL            // reserved
+                  );
 
     }
     __finally
@@ -1089,9 +1090,9 @@ DeleteProfile(
         if (hClient != NULL)
         {
             WlanCloseHandle(
-                hClient, 
+                hClient,
                 NULL            // reserved
-                );
+            );
         }
     }
 
@@ -1099,9 +1100,9 @@ DeleteProfile(
 }
 
 // set profile list
-VOID 
+VOID
 SetProfileList(
-    __in int argc, 
+    __in int argc,
     __in_ecount(argc) LPWSTR argv[]
 )
 {
@@ -1116,7 +1117,7 @@ SetProfileList(
             dwError = ERROR_INVALID_PARAMETER;
             __leave;
         }
-            
+
         // get the interface GUID
         if (UuidFromString((RPC_WSTR)argv[1], &guidIntf) != RPC_S_OK)
         {
@@ -1127,20 +1128,20 @@ SetProfileList(
 
         // open handle
         if ((dwError = OpenHandleAndCheckVersion(
-                            &hClient
-                            )) != ERROR_SUCCESS)
+                           &hClient
+                       )) != ERROR_SUCCESS)
         {
             __leave;
         }
-        
+
         // set profile list
         dwError = WlanSetProfileList(
-                        hClient, 
-                        &guidIntf, 
-                        argc - 2,                   // number of profiles
-                        (LPCWSTR *)(argv + 2),      // the list of profiles name following the command and the interface GUID
-                        NULL                        // reserved
-                        );
+                      hClient,
+                      &guidIntf,
+                      argc - 2,                   // number of profiles
+                      (LPCWSTR *)(argv + 2),      // the list of profiles name following the command and the interface GUID
+                      NULL                        // reserved
+                  );
 
     }
     __finally
@@ -1149,9 +1150,9 @@ SetProfileList(
         if (hClient != NULL)
         {
             WlanCloseHandle(
-                hClient, 
+                hClient,
                 NULL            // reserved
-                );
+            );
         }
     }
 
@@ -1159,9 +1160,9 @@ SetProfileList(
 }
 
 // get the list of profiles
-VOID 
+VOID
 GetProfileList(
-    __in int argc, 
+    __in int argc,
     __in_ecount(argc) LPWSTR argv[]
 )
 {
@@ -1190,20 +1191,20 @@ GetProfileList(
 
         // open handle
         if ((dwError = OpenHandleAndCheckVersion(
-                            &hClient
-                            )) != ERROR_SUCCESS)
+                           &hClient
+                       )) != ERROR_SUCCESS)
         {
             __leave;
         }
-        
+
 
         // get profile list
         if ((dwError = WlanGetProfileList(
-                            hClient, 
-                            &guidIntf, 
-                            NULL,               // reserved
-                            &pProfileList
-                            )) != ERROR_SUCCESS)
+                           hClient,
+                           &guidIntf,
+                           NULL,               // reserved
+                           &pProfileList
+                       )) != ERROR_SUCCESS)
         {
             __leave;
         }
@@ -1224,13 +1225,13 @@ GetProfileList(
         {
             WlanFreeMemory(pProfileList);
         }
-        
+
         if (hClient != NULL)
         {
             WlanCloseHandle(
-                hClient, 
+                hClient,
                 NULL            // reserved
-                );
+            );
         }
     }
 
@@ -1238,9 +1239,9 @@ GetProfileList(
 }
 
 // enumerate wireless interfaces
-VOID 
+VOID
 EnumInterface(
-    __in int argc, 
+    __in int argc,
     __in_ecount(argc) LPWSTR argv[]
 )
 {
@@ -1260,18 +1261,18 @@ EnumInterface(
 
         // open handle
         if ((dwError = OpenHandleAndCheckVersion(
-                            &hClient
-                            )) != ERROR_SUCCESS)
+                           &hClient
+                       )) != ERROR_SUCCESS)
         {
             __leave;
         }
 
         // enumerate wireless interfaces
         if ((dwError = WlanEnumInterfaces(
-                            hClient,
-                            NULL,               // reserved
-                            &pIntfList
-                            )) != ERROR_SUCCESS)
+                           hClient,
+                           NULL,               // reserved
+                           &pIntfList
+                       )) != ERROR_SUCCESS)
         {
             __leave;
         }
@@ -1299,13 +1300,13 @@ EnumInterface(
         {
             WlanFreeMemory(pIntfList);
         }
-        
+
         if (hClient != NULL)
         {
             WlanCloseHandle(
-                hClient, 
+                hClient,
                 NULL            // reserved
-                );
+            );
         }
     }
 
@@ -1313,9 +1314,9 @@ EnumInterface(
 }
 
 // get interface capability and supported auth/cipher
-VOID 
+VOID
 GetInterfaceCapability(
-    __in int argc, 
+    __in int argc,
     __in_ecount(argc) LPWSTR argv[]
 )
 {
@@ -1345,19 +1346,19 @@ GetInterfaceCapability(
 
         // open handle
         if ((dwError = OpenHandleAndCheckVersion(
-                            &hClient
-                            )) != ERROR_SUCCESS)
+                           &hClient
+                       )) != ERROR_SUCCESS)
         {
             __leave;
         }
-        
-        
+
+
         if (( dwError = WlanGetInterfaceCapability(
-                            hClient, 
-                            &guidIntf, 
+                            hClient,
+                            &guidIntf,
                             NULL,               // reserved
                             &pCapability
-                            )) != ERROR_SUCCESS)
+                        )) != ERROR_SUCCESS)
         {
             __leave;
         }
@@ -1375,7 +1376,7 @@ GetInterfaceCapability(
         {
             wcout << L"Unknown NIC." << endl;
         }
-        
+
         // print supported PHY type
         wcout << L"Supports " << pCapability->dwNumberOfSupportedPhys << L" PHY types:" << endl;
         for (i = 0; i < pCapability->dwNumberOfSupportedPhys; i++)
@@ -1385,14 +1386,14 @@ GetInterfaceCapability(
 
         // query supported auth/cipher for infrastructure
         if ((dwError = WlanQueryInterface(
-                        hClient,
-                        &guidIntf,
-                        wlan_intf_opcode_supported_infrastructure_auth_cipher_pairs,
-                        NULL,                   // reserved
-                        &dwDataSize,
-                        (PVOID *)&(pSupportedAuthCipherList),
-                        NULL                    // not interesed in the type of the opcode value
-                        )) != ERROR_SUCCESS)
+                           hClient,
+                           &guidIntf,
+                           wlan_intf_opcode_supported_infrastructure_auth_cipher_pairs,
+                           NULL,                   // reserved
+                           &dwDataSize,
+                           (PVOID *)&(pSupportedAuthCipherList),
+                           NULL                    // not interesed in the type of the opcode value
+                       )) != ERROR_SUCCESS)
         {
             __leave;
         }
@@ -1401,7 +1402,7 @@ GetInterfaceCapability(
         wcout << L"Supported auth cipher pairs (infrastructure):" << endl;
         for (i = 0; i < pSupportedAuthCipherList->dwNumberOfItems; i++)
         {
-            wcout << L"\t"; 
+            wcout << L"\t";
             wcout << GetAuthAlgoString(pSupportedAuthCipherList->pAuthCipherPairList[i].AuthAlgoId);
             wcout << L" and ";
             wcout << GetCipherAlgoString(pSupportedAuthCipherList->pAuthCipherPairList[i].CipherAlgoId) << endl;
@@ -1412,14 +1413,14 @@ GetInterfaceCapability(
 
         // query supported auth/cipher for ad hoc
         if ((dwError = WlanQueryInterface(
-                        hClient,
-                        &guidIntf,
-                        wlan_intf_opcode_supported_adhoc_auth_cipher_pairs,
-                        NULL,                   // reserved
-                        &dwDataSize,
-                        (PVOID *)&(pSupportedAuthCipherList),
-                        NULL                    // not interesed in the type of the opcode value
-                        )) != ERROR_SUCCESS)
+                           hClient,
+                           &guidIntf,
+                           wlan_intf_opcode_supported_adhoc_auth_cipher_pairs,
+                           NULL,                   // reserved
+                           &dwDataSize,
+                           (PVOID *)&(pSupportedAuthCipherList),
+                           NULL                    // not interesed in the type of the opcode value
+                       )) != ERROR_SUCCESS)
         {
             __leave;
         }
@@ -1428,7 +1429,7 @@ GetInterfaceCapability(
         wcout << L"Supported auth cipher pairs (ad hoc):" << endl;
         for (i = 0; i < pSupportedAuthCipherList->dwNumberOfItems; i++)
         {
-            wcout << L"\t"; 
+            wcout << L"\t";
             wcout << GetAuthAlgoString(pSupportedAuthCipherList->pAuthCipherPairList[i].AuthAlgoId);
             wcout << L" and ";
             wcout << GetCipherAlgoString(pSupportedAuthCipherList->pAuthCipherPairList[i].CipherAlgoId) << endl;
@@ -1443,9 +1444,9 @@ GetInterfaceCapability(
         if (hClient != NULL)
         {
             WlanCloseHandle(
-                hClient, 
+                hClient,
                 NULL            // reserved
-                );
+            );
         }
     }
 
@@ -1453,9 +1454,9 @@ GetInterfaceCapability(
 }
 
 // set the radio state
-VOID 
+VOID
 SetRadioState(
-    __in int argc, 
+    __in int argc,
     __in_ecount(argc) LPWSTR argv[]
 )
 {
@@ -1487,7 +1488,7 @@ SetRadioState(
             dwError = ERROR_INVALID_PARAMETER;
             __leave;
         }
-        
+
         // get the interface GUID
         if (UuidFromString((RPC_WSTR)argv[1], &guidIntf) != RPC_S_OK)
         {
@@ -1498,19 +1499,19 @@ SetRadioState(
 
         // open handle
         if ((dwError = OpenHandleAndCheckVersion(
-                            &hClient
-                            )) != ERROR_SUCCESS)
+                           &hClient
+                       )) != ERROR_SUCCESS)
         {
             __leave;
         }
 
         // get interface capability, which includes the supported PHYs
         if ((dwError = WlanGetInterfaceCapability(
-                    hClient,
-                    &guidIntf,
-                    NULL,                       // reserved
-                    &pInterfaceCapability
-                    )) != ERROR_SUCCESS)
+                           hClient,
+                           &guidIntf,
+                           NULL,                       // reserved
+                           &pInterfaceCapability
+                       )) != ERROR_SUCCESS)
         {
             __leave;
         }
@@ -1522,13 +1523,13 @@ SetRadioState(
             wlanPhyRadioState.dwPhyIndex = i;
 
             if ((dwError = WlanSetInterface(
-                            hClient, 
-                            &guidIntf, 
-                            wlan_intf_opcode_radio_state, 
-                            sizeof(wlanPhyRadioState),
-                            (PBYTE)&wlanPhyRadioState,
-                            NULL                        // reserved
-                            )) != ERROR_SUCCESS)
+                               hClient,
+                               &guidIntf,
+                               wlan_intf_opcode_radio_state,
+                               sizeof(wlanPhyRadioState),
+                               (PBYTE)&wlanPhyRadioState,
+                               NULL                        // reserved
+                           )) != ERROR_SUCCESS)
             {
                 // rollback is nice to have, but not required
                 __leave;
@@ -1542,9 +1543,9 @@ SetRadioState(
         if (hClient != NULL)
         {
             WlanCloseHandle(
-                hClient, 
+                hClient,
                 NULL            // reserved
-                );
+            );
         }
 
         if (pInterfaceCapability != NULL)
@@ -1557,9 +1558,9 @@ SetRadioState(
 }
 
 // query basic interface information
-VOID 
+VOID
 QueryInterface(
-    __in int argc, 
+    __in int argc,
     __in_ecount(argc) LPWSTR argv[]
 )
 {
@@ -1573,7 +1574,7 @@ QueryInterface(
     PVOID pData = NULL;
     DWORD dwDataSize = 0;
     UINT i;
-    
+
     __try
     {
         if (argc != 2)
@@ -1592,8 +1593,8 @@ QueryInterface(
 
         // open handle
         if ((dwError = OpenHandleAndCheckVersion(
-                            &hClient
-                            )) != ERROR_SUCCESS)
+                           &hClient
+                       )) != ERROR_SUCCESS)
         {
             __leave;
         }
@@ -1601,15 +1602,15 @@ QueryInterface(
         // query radio state information
         // this opcode is not supported in XP
         if ((dwError = WlanQueryInterface(
-                        hClient,
-                        &guidIntf,
-                        wlan_intf_opcode_radio_state,
-                        NULL,                       // reserved
-                        &dwDataSize,
-                        &pData,
-                        NULL                        // not interesed in the type of the opcode value
-                        )) != ERROR_SUCCESS && 
-                        dwError != ERROR_NOT_SUPPORTED)
+                           hClient,
+                           &guidIntf,
+                           wlan_intf_opcode_radio_state,
+                           NULL,                       // reserved
+                           &dwDataSize,
+                           &pData,
+                           NULL                        // not interesed in the type of the opcode value
+                       )) != ERROR_SUCCESS &&
+                dwError != ERROR_NOT_SUPPORTED)
         {
             __leave;
         }
@@ -1621,7 +1622,7 @@ QueryInterface(
                 dwError = ERROR_INVALID_DATA;
                 __leave;
             }
-            
+
             wlanRadioState = *((PWLAN_RADIO_STATE)pData);
 
             // print radio state
@@ -1644,14 +1645,14 @@ QueryInterface(
 
         // query interface state
         if ((dwError = WlanQueryInterface(
-                        hClient,
-                        &guidIntf,
-                        wlan_intf_opcode_interface_state,
-                        NULL,                       // reserved
-                        &dwDataSize,
-                        &pData,
-                        NULL                        // not interesed in the type of the opcode value
-                        )) != ERROR_SUCCESS)
+                           hClient,
+                           &guidIntf,
+                           wlan_intf_opcode_interface_state,
+                           NULL,                       // reserved
+                           &dwDataSize,
+                           &pData,
+                           NULL                        // not interesed in the type of the opcode value
+                       )) != ERROR_SUCCESS)
         {
             __leave;
         }
@@ -1661,9 +1662,9 @@ QueryInterface(
             dwError = ERROR_INVALID_DATA;
             __leave;
         }
-        
+
         isState = *((PWLAN_INTERFACE_STATE)pData);
-        
+
         // print interface state
         wcout << L"Interface state: " << GetInterfaceStateString(isState) << L"." << endl;
 
@@ -1672,16 +1673,16 @@ QueryInterface(
 
         // query the current connection
         if ((dwError = WlanQueryInterface(
-                        hClient,
-                        &guidIntf,
-                        wlan_intf_opcode_current_connection,
-                        NULL,                       // reserved
-                        &dwDataSize,
-                        &pData,
-                        NULL                        // not interesed in the type of the opcode value
-                        )) == ERROR_SUCCESS && 
-              dwDataSize == sizeof(WLAN_CONNECTION_ATTRIBUTES)
-            )
+                           hClient,
+                           &guidIntf,
+                           wlan_intf_opcode_current_connection,
+                           NULL,                       // reserved
+                           &dwDataSize,
+                           &pData,
+                           NULL                        // not interesed in the type of the opcode value
+                       )) == ERROR_SUCCESS &&
+                dwDataSize == sizeof(WLAN_CONNECTION_ATTRIBUTES)
+           )
         {
             pCurrentNetwork = (PWLAN_CONNECTION_ATTRIBUTES)pData;
         }
@@ -1691,24 +1692,24 @@ QueryInterface(
         {
             dwError = ERROR_SUCCESS;
         }
-        
+
         if (pCurrentNetwork == NULL)
         {
             // no connection information
             __leave;
         }
-        
+
         // print current connection information
         if (pCurrentNetwork->isState == wlan_interface_state_connected)
             wcout << L"Currently connected to ";
         else if (pCurrentNetwork->isState == wlan_interface_state_ad_hoc_network_formed)
             wcout << L"Currently formed ";
         else if (pCurrentNetwork->isState == wlan_interface_state_associating ||
-                 pCurrentNetwork->isState == wlan_interface_state_discovering ||   
+                 pCurrentNetwork->isState == wlan_interface_state_discovering ||
                  pCurrentNetwork->isState == wlan_interface_state_authenticating
-                 )
+                )
             wcout << L"Currently connecting to ";
-        
+
         wcout << SsidToStringW(strSsid, sizeof(strSsid)/sizeof(WCHAR), &pCurrentNetwork->wlanAssociationAttributes.dot11Ssid);
         wcout << L" using profile " << pCurrentNetwork->strProfileName;
         wcout << L", connection mode is " << GetConnectionModeString(pCurrentNetwork->wlanConnectionMode);
@@ -1724,14 +1725,14 @@ QueryInterface(
         {
             WlanFreeMemory(pData);
         }
-        
+
         // clean up
         if (hClient != NULL)
         {
             WlanCloseHandle(
-                hClient, 
+                hClient,
                 NULL            // reserved
-                );
+            );
         }
     }
 
@@ -1739,9 +1740,9 @@ QueryInterface(
 }
 
 // scan
-VOID 
+VOID
 Scan(
-    __in int argc, 
+    __in int argc,
     __in_ecount(argc) LPWSTR argv[]
 )
 {
@@ -1767,20 +1768,20 @@ Scan(
 
         // open handle
         if ((dwError = OpenHandleAndCheckVersion(
-                            &hClient
-                            )) != ERROR_SUCCESS)
+                           &hClient
+                       )) != ERROR_SUCCESS)
         {
             __leave;
         }
 
         // scan
         dwError = WlanScan(
-                    hClient, 
-                    &guidIntf, 
-                    NULL,                   // don't perform additional probe for a specific SSID
-                    NULL,                   // no IE data for the additional probe
-                    NULL                    // reserved
-                    );
+                      hClient,
+                      &guidIntf,
+                      NULL,                   // don't perform additional probe for a specific SSID
+                      NULL,                   // no IE data for the additional probe
+                      NULL                    // reserved
+                  );
 
     }
     __finally
@@ -1789,9 +1790,9 @@ Scan(
         if (hClient != NULL)
         {
             WlanCloseHandle(
-                hClient, 
+                hClient,
                 NULL            // reserved
-                );
+            );
         }
     }
 
@@ -1799,9 +1800,9 @@ Scan(
 }
 
 // get the list of visible wireless networks
-VOID 
+VOID
 GetVisibleNetworkList(
-    __in int argc, 
+    __in int argc,
     __in_ecount(argc) LPWSTR argv[]
 )
 {
@@ -1829,19 +1830,19 @@ GetVisibleNetworkList(
 
         // open handle
         if ((dwError = OpenHandleAndCheckVersion(
-                            &hClient
-                            )) != ERROR_SUCCESS)
+                           &hClient
+                       )) != ERROR_SUCCESS)
         {
             __leave;
         }
-        
+
         if ((dwError = WlanGetAvailableNetworkList(
-                            hClient,
-                            &guidIntf,
-                            0,                      // only show visible networks
-                            NULL,                   // reserved
-                            &pVList
-                            )) != ERROR_SUCCESS)
+                           hClient,
+                           &guidIntf,
+                           0,                      // only show visible networks
+                           NULL,                   // reserved
+                           &pVList
+                       )) != ERROR_SUCCESS)
         {
             __leave;
         }
@@ -1863,9 +1864,9 @@ GetVisibleNetworkList(
         if (hClient != NULL)
         {
             WlanCloseHandle(
-                hClient, 
+                hClient,
                 NULL            // reserved
-                );
+            );
         }
     }
 
@@ -1873,9 +1874,9 @@ GetVisibleNetworkList(
 }
 
 // get driver statistics
-VOID 
+VOID
 GetDriverStatistics(
-    __in int argc, 
+    __in int argc,
     __in_ecount(argc) LPWSTR argv[]
 )
 {
@@ -1905,22 +1906,22 @@ GetDriverStatistics(
 
         // open handle
         if ((dwError = OpenHandleAndCheckVersion(
-                            &hClient
-                            )) != ERROR_SUCCESS)
+                           &hClient
+                       )) != ERROR_SUCCESS)
         {
             __leave;
         }
-        
-        
+
+
         if ((dwError = WlanQueryInterface(
-                            hClient,
-                            &guidIntf,
-                            wlan_intf_opcode_statistics,
-                            NULL,                       // reserved
-                            &dwSize,
-                            &pData,
-                            NULL                        // not interesed in the type of the opcode value
-                            )) != ERROR_SUCCESS)
+                           hClient,
+                           &guidIntf,
+                           wlan_intf_opcode_statistics,
+                           NULL,                       // reserved
+                           &dwSize,
+                           &pData,
+                           NULL                        // not interesed in the type of the opcode value
+                       )) != ERROR_SUCCESS)
         {
             __leave;
         }
@@ -1963,7 +1964,7 @@ GetDriverStatistics(
             wcout << L"\tMulticast received frame count: \t";
             PrintCounterValue(pStatistics->PhyCounters[i].ullMulticastReceivedFrameCount);
         }
-        
+
         WlanFreeMemory(pData);
     }
     __finally
@@ -1972,9 +1973,9 @@ GetDriverStatistics(
         if (hClient != NULL)
         {
             WlanCloseHandle(
-                hClient, 
+                hClient,
                 NULL            // reserved
-                );
+            );
         }
     }
 
@@ -1982,9 +1983,9 @@ GetDriverStatistics(
 }
 
 // get BSS list
-VOID 
+VOID
 GetBssList(
-    __in int argc, 
+    __in int argc,
     __in_ecount(argc) LPWSTR argv[]
 )
 {
@@ -2046,24 +2047,24 @@ GetBssList(
                 __leave;
             }
         }
-        
+
         // open handle
         if ((dwError = OpenHandleAndCheckVersion(
-                            &hClient
-                            )) != ERROR_SUCCESS)
+                           &hClient
+                       )) != ERROR_SUCCESS)
         {
             __leave;
         }
-        
+
         if ((dwError = WlanGetNetworkBssList(
-                            hClient,
-                            &guidIntf,
-                            pDot11Ssid,
-                            dot11BssType,
-                            bSecurityEnabled,
-                            NULL,                       // reserved
-                            &pWlanBssList
-                            )) != ERROR_SUCCESS)
+                           hClient,
+                           &guidIntf,
+                           pDot11Ssid,
+                           dot11BssType,
+                           bSecurityEnabled,
+                           NULL,                       // reserved
+                           &pWlanBssList
+                       )) != ERROR_SUCCESS)
         {
             __leave;
         }
@@ -2072,7 +2073,7 @@ GetBssList(
         {
             PrintBssInfo(&pWlanBssList->wlanBssEntries[i]);
         }
-            
+
         WlanFreeMemory(pWlanBssList);
     }
     __finally
@@ -2081,9 +2082,9 @@ GetBssList(
         if (hClient != NULL)
         {
             WlanCloseHandle(
-                hClient, 
+                hClient,
                 NULL            // reserved
-                );
+            );
         }
     }
 
@@ -2091,9 +2092,9 @@ GetBssList(
 }
 
 // connect to a network using a saved profile
-VOID 
+VOID
 Connect(
-    __in int argc, 
+    __in int argc,
     __in_ecount(argc) LPWSTR argv[]
 )
 {
@@ -2150,19 +2151,19 @@ Connect(
 
         // open handle
         if ((dwError = OpenHandleAndCheckVersion(
-                            &hClient
-                            )) != ERROR_SUCCESS)
+                           &hClient
+                       )) != ERROR_SUCCESS)
         {
             __leave;
         }
-        
-        
+
+
         dwError = WlanConnect(
-                    hClient,
-                    &guidIntf,
-                    &wlanConnPara,
-                    NULL            // reserved
-                    );
+                      hClient,
+                      &guidIntf,
+                      &wlanConnPara,
+                      NULL            // reserved
+                  );
 
     }
     __finally
@@ -2171,9 +2172,9 @@ Connect(
         if (hClient != NULL)
         {
             WlanCloseHandle(
-                hClient, 
+                hClient,
                 NULL            // reserved
-                );
+            );
         }
     }
 
@@ -2181,9 +2182,9 @@ Connect(
 }
 
 // discovery a network without using a saved profile
-VOID 
+VOID
 Discover(
-    __in int argc, 
+    __in int argc,
     __in_ecount(argc) LPWSTR argv[]
 )
 {
@@ -2249,19 +2250,19 @@ Discover(
 
         // open handle
         if ((dwError = OpenHandleAndCheckVersion(
-                            &hClient
-                            )) != ERROR_SUCCESS)
+                           &hClient
+                       )) != ERROR_SUCCESS)
         {
             __leave;
         }
-        
-    
+
+
         dwError = WlanConnect(
-                    hClient,
-                    &guidIntf,
-                    &wlanConnPara,
-                    NULL            // reserved
-                    );
+                      hClient,
+                      &guidIntf,
+                      &wlanConnPara,
+                      NULL            // reserved
+                  );
 
     }
     __finally
@@ -2270,9 +2271,9 @@ Discover(
         if (hClient != NULL)
         {
             WlanCloseHandle(
-                hClient, 
+                hClient,
                 NULL            // reserved
-                );
+            );
         }
     }
 
@@ -2280,9 +2281,9 @@ Discover(
 }
 
 // disconnect from the current network
-VOID 
+VOID
 Disconnect(
-    __in int argc, 
+    __in int argc,
     __in_ecount(argc) LPWSTR argv[]
 )
 {
@@ -2308,17 +2309,17 @@ Disconnect(
 
         // open handle
         if ((dwError = OpenHandleAndCheckVersion(
-                            &hClient
-                            )) != ERROR_SUCCESS)
+                           &hClient
+                       )) != ERROR_SUCCESS)
         {
             __leave;
         }
-        
+
         dwError = WlanDisconnect(
-                        hClient, 
-                        &guidIntf, 
-                        NULL            // reserved
-                        );
+                      hClient,
+                      &guidIntf,
+                      NULL            // reserved
+                  );
 
     }
     __finally
@@ -2327,21 +2328,21 @@ Disconnect(
         if (hClient != NULL)
         {
             WlanCloseHandle(
-                hClient, 
+                hClient,
                 NULL            // reserved
-                );
+            );
         }
     }
-    
+
     PrintErrorMsg(argv[0], dwError);
 }
 
 // save a temporary profile
 // a temporary profile can be generated by the service for discovery
 // or passed with WlanConnect when the connection mode is wlan_connection_mode_temporary_profile
-VOID 
+VOID
 SaveTemporaryProfile(
-    __in int argc, 
+    __in int argc,
     __in_ecount(argc) LPWSTR argv[]
 )
 {
@@ -2368,21 +2369,21 @@ SaveTemporaryProfile(
 
         // open handle
         if ((dwError = OpenHandleAndCheckVersion(
-                            &hClient
-                            )) != ERROR_SUCCESS)
+                           &hClient
+                       )) != ERROR_SUCCESS)
         {
             __leave;
         }
-        
+
         dwError = WlanSaveTemporaryProfile(
-                        hClient, 
-                        &guidIntf, 
-                        argv[2],        // profile name
-                        NULL,           // use default ACL
-                        0,              // no profile flags 
-                        TRUE,           // overwrite the existing profile
-                        NULL            // reserved
-                        );
+                      hClient,
+                      &guidIntf,
+                      argv[2],        // profile name
+                      NULL,           // use default ACL
+                      0,              // no profile flags
+                      TRUE,           // overwrite the existing profile
+                      NULL            // reserved
+                  );
 
     }
     __finally
@@ -2391,24 +2392,25 @@ SaveTemporaryProfile(
         if (hClient != NULL)
         {
             WlanCloseHandle(
-                hClient, 
+                hClient,
                 NULL            // reserved
-                );
+            );
         }
     }
     PrintErrorMsg(argv[0], dwError);
 }
 
 // show help messages
-VOID 
+VOID
 Help(
-    __in int argc, 
+    __in int argc,
     __in_ecount(argc) LPWSTR argv[]
 );
 
 typedef VOID (*WLSAMPLE_FUNCTION) (int argc, LPWSTR argv[]);
 
-typedef struct _WLSAMPLE_COMMAND {
+typedef struct _WLSAMPLE_COMMAND
+{
     LPWSTR strCommandName;           // command name
     LPWSTR strShortHand;             // a shorthand for the command
     WLSAMPLE_FUNCTION Func;         // pointer to the function
@@ -2418,7 +2420,8 @@ typedef struct _WLSAMPLE_COMMAND {
     LPWSTR strRemarks;              // remarks
 } WLSAMPLE_COMMAND, *PWLSAMPLE_COMMAND;
 
-WLSAMPLE_COMMAND g_Commands[] = {
+WLSAMPLE_COMMAND g_Commands[] =
+{
     // interface related commands
     {
         L"EnumInterface",
@@ -2460,7 +2463,7 @@ WLSAMPLE_COMMAND g_Commands[] = {
         L"GetDriverStatistics",
         L"gds",
         GetDriverStatistics,
-        L"Get driver statistics." ,
+        L"Get driver statistics.",
         L"<interface GUID>",
         TRUE,
         L"Use EnumInterface (ei) command to get the GUID of an interface."
@@ -2479,7 +2482,7 @@ WLSAMPLE_COMMAND g_Commands[] = {
         L"GetBssList",
         L"gbs",
         GetBssList,
-        L"Get the list of BSS." ,
+        L"Get the list of BSS.",
         L"<interface GUID> [<SSID> <infrastructure(i)|adhoc(a)> <secure(s)|unsecure(u)>]",
         TRUE,
         L"Use EnumInterface (ei) command to get the GUID of an interface."
@@ -2543,7 +2546,7 @@ WLSAMPLE_COMMAND g_Commands[] = {
         L"GetProfileList",
         L"gpl",
         GetProfileList,
-        L"Get the list of saved profiles, in the preference order." ,
+        L"Get the list of saved profiles, in the preference order.",
         L"<interface GUID>",
         TRUE,
         L"Use EnumInterface (ei) command to get the GUID of an interface."
@@ -2598,9 +2601,9 @@ WLSAMPLE_COMMAND g_Commands[] = {
 };
 
 // show help messages
-VOID 
+VOID
 Help(
-    __in int argc, 
+    __in int argc,
     __in_ecount(argc) LPWSTR argv[]
 )
 {
@@ -2613,8 +2616,8 @@ Help(
         wcout << L"The following commands are available. Use \"help xyz\" to show the description of command xyz." << endl;
         for (i=0; i < sizeof(g_Commands)/sizeof(WLSAMPLE_COMMAND); i++)
         {
-                wcout << L"\t"<< g_Commands[i].strCommandName;
-                wcout << L"(" << g_Commands[i].strShortHand << L")" << endl;
+            wcout << L"\t"<< g_Commands[i].strCommandName;
+            wcout << L"(" << g_Commands[i].strShortHand << L")" << endl;
         }
     }
     else if (argc == 2)
@@ -2646,9 +2649,9 @@ Help(
 }
 
 // command is stored in the global variable
-void 
+void
 ExecuteCommand(
-    __in int argc, 
+    __in int argc,
     __in_ecount(argc) LPWSTR argv[]
 )
 {
@@ -2658,7 +2661,7 @@ ExecuteCommand(
     {
         // find the command and call the function
         if (_wcsicmp(argv[0], g_Commands[i].strCommandName) == 0 ||
-            _wcsicmp(argv[0], g_Commands[i].strShortHand) == 0)
+                _wcsicmp(argv[0], g_Commands[i].strShortHand) == 0)
         {
             g_Commands[i].Func(argc, argv);
             break;
@@ -2672,14 +2675,14 @@ ExecuteCommand(
 }
 
 // the main program
-int _cdecl 
+int _cdecl
 wmain(
-    __in int argc, 
+    __in int argc,
     __in_ecount(argc) LPWSTR argv[]
 )
 {
     DWORD dwRetCode = ERROR_SUCCESS;
-    
+
     if (argc <= 1)
     {
         wcout << L"Please type \"" << argv[0] << L" ?\" for help." << endl;

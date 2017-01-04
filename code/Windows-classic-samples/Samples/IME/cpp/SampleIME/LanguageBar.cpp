@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -22,40 +22,40 @@ void CSampleIME::_UpdateLanguageBarOnSetFocus(_In_ ITfDocumentMgr *pDocMgrFocus)
 {
     BOOL needDisableButtons = FALSE;
 
-    if (!pDocMgrFocus) 
+    if (!pDocMgrFocus)
     {
         needDisableButtons = TRUE;
-    } 
-    else 
+    }
+    else
     {
         IEnumTfContexts* pEnumContext = nullptr;
 
-        if (FAILED(pDocMgrFocus->EnumContexts(&pEnumContext)) || !pEnumContext) 
+        if (FAILED(pDocMgrFocus->EnumContexts(&pEnumContext)) || !pEnumContext)
         {
             needDisableButtons = TRUE;
-        } 
-        else 
+        }
+        else
         {
             ULONG fetched = 0;
             ITfContext* pContext = nullptr;
 
-            if (FAILED(pEnumContext->Next(1, &pContext, &fetched)) || fetched != 1) 
+            if (FAILED(pEnumContext->Next(1, &pContext, &fetched)) || fetched != 1)
             {
                 needDisableButtons = TRUE;
             }
 
-            if (!pContext) 
+            if (!pContext)
             {
                 // context is not associated
                 needDisableButtons = TRUE;
-            } 
-            else 
+            }
+            else
             {
                 pContext->Release();
             }
         }
 
-        if (pEnumContext) 
+        if (pEnumContext)
         {
             pEnumContext->Release();
         }
@@ -75,13 +75,16 @@ void CSampleIME::_UpdateLanguageBarOnSetFocus(_In_ ITfDocumentMgr *pDocMgrFocus)
 
 VOID CCompositionProcessorEngine::SetLanguageBarStatus(DWORD status, BOOL isSet)
 {
-    if (_pLanguageBar_IMEMode) {
+    if (_pLanguageBar_IMEMode)
+    {
         _pLanguageBar_IMEMode->SetStatus(status, isSet);
     }
-    if (_pLanguageBar_DoubleSingleByte) {
+    if (_pLanguageBar_DoubleSingleByte)
+    {
         _pLanguageBar_DoubleSingleByte->SetStatus(status, isSet);
     }
-    if (_pLanguageBar_Punctuation) {
+    if (_pLanguageBar_Punctuation)
+    {
         _pLanguageBar_Punctuation->SetStatus(status, isSet);
     }
 }
@@ -126,10 +129,10 @@ CLangBarItemButton::CLangBarItemButton(REFGUID guidLangBar, LPCWSTR description,
     _pTooltipText = nullptr;
     if (tooltip)
     {
-		size_t len = 0;
-		if (StringCchLength(tooltip, STRSAFE_MAX_CCH, &len) != S_OK)
+        size_t len = 0;
+        if (StringCchLength(tooltip, STRSAFE_MAX_CCH, &len) != S_OK)
         {
-            len = 0; 
+            len = 0;
         }
         bufLen = static_cast<DWORD>(len) + 1;
         _pTooltipText = (LPCWSTR) new (std::nothrow) WCHAR[ bufLen ];
@@ -137,7 +140,7 @@ CLangBarItemButton::CLangBarItemButton(REFGUID guidLangBar, LPCWSTR description,
         {
             StringCchCopy((LPWSTR)_pTooltipText, bufLen, tooltip);
         }
-    }   
+    }
 }
 
 //+---------------------------------------------------------------------------
@@ -167,11 +170,11 @@ void CLangBarItemButton::CleanUp()
     }
 
     ITfThreadMgr* pThreadMgr = nullptr;
-    HRESULT hr = CoCreateInstance(CLSID_TF_ThreadMgr, 
-        NULL, 
-        CLSCTX_INPROC_SERVER, 
-        IID_ITfThreadMgr, 
-        (void**)&pThreadMgr);
+    HRESULT hr = CoCreateInstance(CLSID_TF_ThreadMgr,
+                                  NULL,
+                                  CLSCTX_INPROC_SERVER,
+                                  IID_ITfThreadMgr,
+                                  (void**)&pThreadMgr);
     if (SUCCEEDED(hr))
     {
         _UnregisterCompartment(pThreadMgr);
@@ -210,8 +213,8 @@ STDAPI CLangBarItemButton::QueryInterface(REFIID riid, _Outptr_ void **ppvObj)
     *ppvObj = nullptr;
 
     if (IsEqualIID(riid, IID_IUnknown) ||
-        IsEqualIID(riid, IID_ITfLangBarItem) ||
-        IsEqualIID(riid, IID_ITfLangBarItemButton))
+            IsEqualIID(riid, IID_ITfLangBarItem) ||
+            IsEqualIID(riid, IID_ITfLangBarItemButton))
     {
         *ppvObj = (ITfLangBarItemButton *)this;
     }
@@ -301,24 +304,24 @@ void CLangBarItemButton::SetStatus(DWORD dwStatus, BOOL fSet)
 {
     BOOL isChange = FALSE;
 
-    if (fSet) 
+    if (fSet)
     {
-        if (!(_status & dwStatus)) 
+        if (!(_status & dwStatus))
         {
             _status |= dwStatus;
             isChange = TRUE;
         }
-    } 
-    else 
+    }
+    else
     {
-        if (_status & dwStatus) 
+        if (_status & dwStatus)
         {
             _status &= ~dwStatus;
             isChange = TRUE;
         }
     }
 
-    if (isChange && _pLangBarItemSink) 
+    if (isChange && _pLangBarItemSink)
     {
         _pLangBarItemSink->OnUpdate(TF_LBI_STATUS | TF_LBI_ICON);
     }
@@ -334,7 +337,7 @@ void CLangBarItemButton::SetStatus(DWORD dwStatus, BOOL fSet)
 
 STDAPI CLangBarItemButton::Show(BOOL fShow)
 {
-	fShow;
+    fShow;
     if (_pLangBarItemSink)
     {
         _pLangBarItemSink->OnUpdate(TF_LBI_STATUS);
@@ -363,7 +366,8 @@ STDAPI CLangBarItemButton::GetTooltipString(_Out_ BSTR *pbstrToolTip)
 
 STDAPI CLangBarItemButton::OnClick(TfLBIClick click, POINT pt, _In_ const RECT *prcArea)
 {
-    click;pt;
+    click;
+    pt;
     prcArea;
 
     BOOL isOn = FALSE;
@@ -425,7 +429,7 @@ STDAPI CLangBarItemButton::GetIcon(_Out_ HICON *phIcon)
     DWORD status = 0;
     GetStatus(&status);
 
-	// If IME is working on the UAC mode, the size of ICON should be 24 x 24.
+    // If IME is working on the UAC mode, the size of ICON should be 24 x 24.
     int desiredSize = 16;
     if (_isSecureMode) // detect UAC mode
     {
@@ -620,7 +624,7 @@ BOOL CLangBarItemButton::_RegisterCompartment(_In_ ITfThreadMgr *pThreadMgr, TfC
 
 BOOL CLangBarItemButton::_UnregisterCompartment(_In_ ITfThreadMgr *pThreadMgr)
 {
-	pThreadMgr;
+    pThreadMgr;
     if (_pCompartment)
     {
         // Unadvice ITfCompartmentEventSink

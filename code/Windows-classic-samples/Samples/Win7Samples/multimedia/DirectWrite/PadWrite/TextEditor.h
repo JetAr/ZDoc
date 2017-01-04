@@ -50,7 +50,7 @@ public:
         IDWriteTextFormat* textFormat,
         IDWriteFactory* factory,
         OUT TextEditor** textEditor
-        );
+    );
 
     ~TextEditor()
     {
@@ -64,7 +64,10 @@ public:
 
     static ATOM RegisterWindowClass();
     static LRESULT CALLBACK WindowProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam);
-    HWND GetHwnd() {return hwnd_;}
+    HWND GetHwnd()
+    {
+        return hwnd_;
+    }
     void OnDestroy();
 
     ////////////////////
@@ -87,7 +90,10 @@ public:
     void GetCaretRect(OUT RectF& rect);
     void UpdateSystemCaret(const RectF& rect);
     void SetRenderTarget(RenderTarget* target);
-    void PostRedraw() { InvalidateRect(hwnd_, NULL, FALSE); }
+    void PostRedraw()
+    {
+        InvalidateRect(hwnd_, NULL, FALSE);
+    }
 
     ////////////////////
     // Used by the main application to respond to button commands.
@@ -102,12 +108,21 @@ public:
     bool SetSelection(SetSelectionMode moveMode, UINT32 advance, bool extendSelection, bool updateCaretFormat = true);
     DWRITE_TEXT_RANGE GetSelectionRange();
     UINT32 GetCaretPosition();
-    IDWriteTextLayout* GetLayout() { return textLayout_; }
-    EditableLayout::CaretFormat& GetCaretFormat() { return caretFormat_; }
+    IDWriteTextLayout* GetLayout()
+    {
+        return textLayout_;
+    }
+    EditableLayout::CaretFormat& GetCaretFormat()
+    {
+        return caretFormat_;
+    }
 
     ////////////////////
     // Current view
-    float GetAngle() {return angle_;}
+    float GetAngle()
+    {
+        return angle_;
+    }
     float SetAngle(float angle, bool relativeAdjustement);
     void  SetScale(float scaleX, float scaleY, bool relativeAdjustement);
     void  GetScale(OUT float* scaleX, OUT  float* scaleY);
@@ -135,7 +150,7 @@ protected:
         UINT32 textPosition,
         OUT UINT32* lineOut,
         OUT UINT32* linePositionOut
-        );
+    );
 
 protected:
     HWND hwnd_;

@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -131,17 +131,17 @@ Keyboard assignment:
 
 typedef HRESULT (WINAPI * PFNDWMISCOMPOSITIONENABLED)(
     __out BOOL* pfEnabled
-    );
+);
 
 typedef HRESULT (WINAPI * PFNDWMGETCOMPOSITIONTIMINGINFO)(
     __in HWND hwnd,
     __out DWM_TIMING_INFO* pTimingInfo
-    );
+);
 
 typedef HRESULT (WINAPI * PFNDWMSETPRESENTPARAMETERS)(
     __in HWND hwnd,
     __inout DWM_PRESENT_PARAMETERS* pPresentParams
-    );
+);
 
 
 //
@@ -518,9 +518,9 @@ CreateDXVA2VPDevice(REFGUID guid)
     D3DFORMAT* formats = NULL;
 
     hr = g_pDXVAVPS->GetVideoProcessorRenderTargets(guid,
-                                                    &g_VideoDesc,
-                                                    &count,
-                                                    &formats);
+            &g_VideoDesc,
+            &count,
+            &formats);
 
     if (FAILED(hr))
     {
@@ -550,10 +550,10 @@ CreateDXVA2VPDevice(REFGUID guid)
     formats = NULL;
 
     hr = g_pDXVAVPS->GetVideoProcessorSubStreamFormats(guid,
-                                                       &g_VideoDesc,
-                                                       VIDEO_RENDER_TARGET_FORMAT,
-                                                       &count,
-                                                       &formats);
+            &g_VideoDesc,
+            VIDEO_RENDER_TARGET_FORMAT,
+            &count,
+            &formats);
 
     if (FAILED(hr))
     {
@@ -885,16 +885,35 @@ UpdateSubStream()
 
     switch (g_VK_Fx)
     {
-    case VK_F1 : color = RGB_WHITE;   break;
-    case VK_F2 : color = RGB_RED;     break;
-    case VK_F3 : color = RGB_YELLOW;  break;
-    case VK_F4 : color = RGB_GREEN;   break;
-    case VK_F5 : color = RGB_CYAN;    break;
-    case VK_F6 : color = RGB_BLUE;    break;
-    case VK_F7 : color = RGB_MAGENTA; break;
-    case VK_F8 : color = RGB_BLACK;   break;
-    case VK_F9 : color = RGB_ORANGE;  break;
-    default    :                      return FALSE;
+    case VK_F1 :
+        color = RGB_WHITE;
+        break;
+    case VK_F2 :
+        color = RGB_RED;
+        break;
+    case VK_F3 :
+        color = RGB_YELLOW;
+        break;
+    case VK_F4 :
+        color = RGB_GREEN;
+        break;
+    case VK_F5 :
+        color = RGB_CYAN;
+        break;
+    case VK_F6 :
+        color = RGB_BLUE;
+        break;
+    case VK_F7 :
+        color = RGB_MAGENTA;
+        break;
+    case VK_F8 :
+        color = RGB_BLACK;
+        break;
+    case VK_F9 :
+        color = RGB_ORANGE;
+        break;
+    default    :
+        return FALSE;
     }
 
     D3DLOCKED_RECT lr;
@@ -1731,7 +1750,7 @@ ValidateValueRange(
     const DXVA2_Fixed32& value,
     const INT steps,
     const DXVA2_ValueRange& range
-    )
+)
 {
     float f_value = DXVA2FixedToFloat(value);
     float f_max = DXVA2FixedToFloat(range.MaxValue);
@@ -2078,7 +2097,7 @@ OnKey(HWND hwnd, UINT vk, BOOL fDown, int cRepeat, UINT flags)
 VOID
 OnPaint(HWND hwnd)
 {
-    ValidateRect(hwnd , NULL);
+    ValidateRect(hwnd, NULL);
 
     ProcessVideo();
 }
@@ -2114,7 +2133,7 @@ OnSize(HWND hwnd, UINT state, int cx, int cy)
         return;
     }
 
-    InvalidateRect(hwnd , NULL , FALSE);
+    InvalidateRect(hwnd, NULL, FALSE);
 }
 
 
@@ -2464,16 +2483,16 @@ _tWinMain(
     __in_opt HINSTANCE hPrevInstance,
     __in     LPTSTR lpCmdLine,
     __in     INT nCmdShow
-    )
+)
 {
     INT wParam = 0;
 
     if (InitializeModule() &&
-        InitializeParameter(lpCmdLine) &&
-        InitializeWindow() &&
-        InitializeD3D9() &&
-        InitializeDXVA2() &&
-        InitializeTimer())
+            InitializeParameter(lpCmdLine) &&
+            InitializeWindow() &&
+            InitializeD3D9() &&
+            InitializeDXVA2() &&
+            InitializeTimer())
     {
         wParam = MessageLoop();
     }

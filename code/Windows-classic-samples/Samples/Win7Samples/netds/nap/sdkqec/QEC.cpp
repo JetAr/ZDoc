@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 
@@ -84,7 +84,7 @@ Cleanup:
 void DoQECRegistration ( CSdkQecModule * sdkQecModule ) throw()
 {
     HRESULT hr = S_OK;
-    
+
     // Register QEC with NapAgent
     hr = sdkQecModule->RegisterSdkQec();
     if (FAILED(hr))
@@ -121,8 +121,8 @@ void DoQECExecution ( ) throw()
 
     // Create binding.
     hr = binding.CoCreateInstance(CLSID_NapEnforcementClientBinding,
-                                            NULL,
-                                            CLSCTX_INPROC_SERVER);
+                                  NULL,
+                                  CLSCTX_INPROC_SERVER);
     if (FAILED(hr))
     {
         wprintf(L"\nQEC DoQECExecution: Failed to create an instance to NapEnforcementClientBinding (error = %x)\n", hr);
@@ -141,9 +141,9 @@ void DoQECExecution ( ) throw()
     hr = binding->Initialize(NapSdkQecId,callback);
     if (FAILED(hr))
     {
-         wprintf(L"\nQEC DoQECExecution: Failed to call NapEnforcementClientBinding::Initialize (error = %x)\n", hr);
-         wprintf(L"\n\tIs the SDKQEC enabled ?  (enable via netsh or the NAP Client Configuration console) \n");
-         goto Cleanup;
+        wprintf(L"\nQEC DoQECExecution: Failed to call NapEnforcementClientBinding::Initialize (error = %x)\n", hr);
+        wprintf(L"\n\tIs the SDKQEC enabled ?  (enable via netsh or the NAP Client Configuration console) \n");
+        goto Cleanup;
     }
 
     // SDK Note:
@@ -165,8 +165,8 @@ void DoQECExecution ( ) throw()
     hr = binding->Uninitialize();
     if (FAILED(hr))
     {
-         wprintf(L"\nQEC DoQECExecution: Failed to call QuarSystemHealthAgentBinding-> Uninitialize (error = %x)\n", hr);
-         goto Cleanup;
+        wprintf(L"\nQEC DoQECExecution: Failed to call QuarSystemHealthAgentBinding-> Uninitialize (error = %x)\n", hr);
+        goto Cleanup;
     }
 
     wprintf(L"\nQEC DoQECExecution: QEC stopped successfully \n");
@@ -209,7 +209,7 @@ DWORD __cdecl wmain(DWORD argc, WCHAR * pArgv[])  throw()
                                -1,
                                NULL,
                                NULL,
-                               RPC_C_AUTHN_LEVEL_PKT, 
+                               RPC_C_AUTHN_LEVEL_PKT,
                                RPC_C_IMP_LEVEL_IMPERSONATE,
                                NULL,
                                EOAC_NONE,
@@ -224,33 +224,33 @@ DWORD __cdecl wmain(DWORD argc, WCHAR * pArgv[])  throw()
     actionCode = GetActionFromParams( pArgv[1] );
     switch (actionCode)
     {
-        case DOREGISTER:
-                wprintf(L"\nQEC main: Action code is DOREGISTER, proceeding\n");
-                DoQECRegistration(&_AtlModule);
-                break;
+    case DOREGISTER:
+        wprintf(L"\nQEC main: Action code is DOREGISTER, proceeding\n");
+        DoQECRegistration(&_AtlModule);
+        break;
 
-        case DOUNREGISTER:
-                wprintf(L"\nQEC main: Action code is DOUNREGISTER, proceeding\n");
-                DoQECUnRegistration(&_AtlModule);
-                break;
+    case DOUNREGISTER:
+        wprintf(L"\nQEC main: Action code is DOUNREGISTER, proceeding\n");
+        DoQECUnRegistration(&_AtlModule);
+        break;
 
-        case DOEXECUTE:
-                wprintf(L"\nQEC main: Action code is DOEXECUTE, proceeding\n");
-                DoQECExecution();
-                break;
+    case DOEXECUTE:
+        wprintf(L"\nQEC main: Action code is DOEXECUTE, proceeding\n");
+        DoQECExecution();
+        break;
 
-        default:
-                wprintf(L"\nQEC main: No action code, or unrecognized, proceeding\n");
-                showSdkQecExecutionOptions();
-                break;
+    default:
+        wprintf(L"\nQEC main: No action code, or unrecognized, proceeding\n");
+        showSdkQecExecutionOptions();
+        break;
     }
 
-    Cleanup:
-        if (comInitialized)
-        {
-            CoUninitialize();
-        }
-        return 0;
+Cleanup:
+    if (comInitialized)
+    {
+        CoUninitialize();
+    }
+    return 0;
 }
 
 

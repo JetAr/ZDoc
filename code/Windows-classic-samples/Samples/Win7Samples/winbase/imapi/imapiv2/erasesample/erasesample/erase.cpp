@@ -1,4 +1,4 @@
-/*--
+﻿/*--
 
 Copyright (C) Microsoft Corporation, 2006
 
@@ -58,9 +58,9 @@ STDMETHODIMP CMsftEraseSample::put_Recorder(IDiscRecorder2* value)
     {
         ReleaseAndNull(m_Recorder);
         ReleaseAndNull(m_RecorderEx);
-        if (value != NULL) 
-        { 
-            value->AddRef(); 
+        if (value != NULL)
+        {
+            value->AddRef();
         }
         m_Recorder = value;
         m_RecorderEx = tmpRecorderEx;
@@ -174,11 +174,11 @@ STDMETHODIMP CMsftEraseSample::get_FullErase(VARIANT_BOOL* value)
 {
     HRESULT hr;
 
-    if (value == NULL) 
+    if (value == NULL)
     {
         hr = E_POINTER;
-    } 
-    else 
+    }
+    else
     {
         *value = m_FullErase;
         hr = S_OK;
@@ -225,16 +225,16 @@ STDMETHODIMP CMsftEraseSample::IsCurrentMediaSupported(IDiscRecorder2* Recorder,
     ULONG               discInfoSize = 0;
     ULONG               requiredSize;
 
-    if (Recorder == NULL) 
+    if (Recorder == NULL)
     {
         hr = E_POINTER;
     }
 
-    if (Supported == NULL) 
+    if (Supported == NULL)
     {
         hr = E_POINTER;
-    } 
-    else 
+    }
+    else
     {
         *Supported = VARIANT_FALSE;
     }
@@ -245,7 +245,7 @@ STDMETHODIMP CMsftEraseSample::IsCurrentMediaSupported(IDiscRecorder2* Recorder,
         hr = Recorder->QueryInterface(IID_PPV_ARGS(&tmpRecorderEx));
     }
 
-    if (SUCCEEDED (hr)) 
+    if (SUCCEEDED (hr))
     {
         tmpSupported = CheckRecorderSupportsErase(tmpRecorderEx, TRUE);
     }
@@ -254,22 +254,22 @@ STDMETHODIMP CMsftEraseSample::IsCurrentMediaSupported(IDiscRecorder2* Recorder,
     // If it's supported, and they are asking about the current media,
     // need to check that the disc is actually erasable via READ_DISC_INFO
     //
-        
-    if (SUCCEEDED (hr) && (tmpSupported)) 
+
+    if (SUCCEEDED (hr) && (tmpSupported))
     {
         tmpSupported = FALSE;
 
-        requiredSize = RTL_SIZEOF_THROUGH_FIELD (DISC_INFORMATION, 
-                                                 FirstTrackNumber);
+        requiredSize = RTL_SIZEOF_THROUGH_FIELD (DISC_INFORMATION,
+                       FirstTrackNumber);
 
         hr = GetDiscInformation (tmpRecorderEx, &discInfo, &discInfoSize, requiredSize);
 
-        if (SUCCEEDED (hr)) 
+        if (SUCCEEDED (hr))
         {
             assert (discInfo != NULL);
             assert (discInfoSize >= 12);
 
-            if (discInfo->Erasable) 
+            if (discInfo->Erasable)
             {
                 tmpSupported = TRUE;
             }
@@ -278,7 +278,7 @@ STDMETHODIMP CMsftEraseSample::IsCurrentMediaSupported(IDiscRecorder2* Recorder,
         }
     }
 
-    if (SUCCEEDED(hr)) 
+    if (SUCCEEDED(hr))
     {
         *Supported = tmpSupported ? VARIANT_TRUE : VARIANT_FALSE;
     }
@@ -312,7 +312,7 @@ HRESULT CMsftEraseSample::get_MediaPhysicallyBlank(VARIANT_BOOL* value)
 
     // Parameter Validation
     if ((m_RecorderEx == NULL) ||
-        (value == NULL))
+            (value == NULL))
     {
         return E_POINTER;
     }
@@ -331,7 +331,7 @@ HRESULT CMsftEraseSample::get_MediaHeuristicallyBlank(VARIANT_BOOL* value)
 
     // Parameter Validation
     if ((m_RecorderEx == NULL) ||
-        (value == NULL))
+            (value == NULL))
     {
         return E_POINTER;
     }
@@ -364,9 +364,9 @@ HRESULT CMsftEraseSample::get_SupportedMediaTypes(SAFEARRAY** value)
         // Assert that the cast next line is safe
         assert(sizeof(g_EraseSupportedMediaTypes[0]) == sizeof(LONG));
         hr = CreateVariantSafeArrayFromEnums((LONG*)g_EraseSupportedMediaTypes,
-                                              g_EraseSupportedMediaTypesCount,
-                                              &tmpValue
-                                              );
+                                             g_EraseSupportedMediaTypesCount,
+                                             &tmpValue
+                                            );
     }
     // save it
     if (SUCCEEDED(hr))
@@ -395,9 +395,9 @@ HRESULT CMsftEraseSample::WaitForReadDiscInfoToWorkAfterBlank(ULONG EstimatedMil
 
     tmpBlankTime.StartNow();
     hr =  WaitForReadDiscInfo(m_RecorderEx,
-                             1 * 60 * 60, // allow to run for upto 60 minutes (1 hour)
-                             &eraseCallbackContext,
-                             (READ_DISC_INFO_CALLBACK)EraseUpdateCallBack
+                              1 * 60 * 60, // allow to run for upto 60 minutes (1 hour)
+                              &eraseCallbackContext,
+                              (READ_DISC_INFO_CALLBACK)EraseUpdateCallBack
                              );
     tmpBlankTime.EndNow();
 
@@ -438,7 +438,7 @@ BOOLEAN CMsftEraseSample::CheckRecorderSupportsErase(__in IDiscRecorder2Ex* Disc
         FALSE,
         (BYTE**)&incrementalStreaming,
         &incrementalStreamingSize);
-   
+
     DiscRecorder->GetFeaturePage (
         IMAPI_FEATURE_PAGE_TYPE_RESTRICTED_OVERWRITE,
         FALSE,
@@ -462,7 +462,7 @@ BOOLEAN CMsftEraseSample::CheckRecorderSupportsErase(__in IDiscRecorder2Ex* Disc
         FALSE,
         (BYTE**)&dvdDash,
         &dvdDashSize);
-    
+
     DiscRecorder->GetFeaturePage (
         IMAPI_FEATURE_PAGE_TYPE_DOUBLE_DENSITY_CD_RW_WRITE,
         FALSE,
@@ -479,44 +479,44 @@ BOOLEAN CMsftEraseSample::CheckRecorderSupportsErase(__in IDiscRecorder2Ex* Disc
     // DDCD-RW feature requires blank if blank bit set
     //
 
-    if ((incrementalStreaming != NULL) && 
-        (incrementalStreaming->Header.Current || !CheckCurrentMedia))
-    {
-        supported = TRUE;
-    }
-        
-    if ((restrictedOverwrite != NULL) &&
-        (restrictedOverwrite->Header.Current || !CheckCurrentMedia)) 
+    if ((incrementalStreaming != NULL) &&
+            (incrementalStreaming->Header.Current || !CheckCurrentMedia))
     {
         supported = TRUE;
     }
 
-    if ((cdTao != NULL) && 
-        (cdTao->Header.Current || !CheckCurrentMedia))
+    if ((restrictedOverwrite != NULL) &&
+            (restrictedOverwrite->Header.Current || !CheckCurrentMedia))
     {
         supported = TRUE;
     }
-    
+
+    if ((cdTao != NULL) &&
+            (cdTao->Header.Current || !CheckCurrentMedia))
+    {
+        supported = TRUE;
+    }
+
     if ((rigidOverwrite != NULL) &&
-        (rigidOverwrite->Header.Current || !CheckCurrentMedia) &&
-        (rigidOverwriteSize >= 8) &&
-        (rigidOverwrite->Blank != 0)) 
+            (rigidOverwrite->Header.Current || !CheckCurrentMedia) &&
+            (rigidOverwriteSize >= 8) &&
+            (rigidOverwrite->Blank != 0))
     {
         supported = TRUE;
     }
 
     if ((dvdDash != NULL) &&
-        (dvdDash->Header.Current || !CheckCurrentMedia) &&
-        (dvdDashSize >= 8) &&
-        (dvdDash->DVD_RW != 0)) 
+            (dvdDash->Header.Current || !CheckCurrentMedia) &&
+            (dvdDashSize >= 8) &&
+            (dvdDash->DVD_RW != 0))
     {
         supported = TRUE;
     }
 
     if ((ddCdrwWrite != NULL) &&
-        (ddCdrwWrite->Header.Current || !CheckCurrentMedia) &&
-        (ddCdrwWriteSize >= 8) &&
-        (ddCdrwWrite->Blank != 0)) 
+            (ddCdrwWrite->Header.Current || !CheckCurrentMedia) &&
+            (ddCdrwWriteSize >= 8) &&
+            (ddCdrwWrite->Blank != 0))
     {
         supported = TRUE;
     }
@@ -525,11 +525,11 @@ BOOLEAN CMsftEraseSample::CheckRecorderSupportsErase(__in IDiscRecorder2Ex* Disc
     // some older CD-R/RW drives didn't support GET_CONFIGURATION
     //
 
-    if (!supported) 
+    if (!supported)
     {
         capabilities = NULL;
         capabilitiesSize = 0;
-        
+
         //
         // if none of the features are available, it's possible we may
         // still need to support this device if it's a cd recorder according
@@ -537,28 +537,28 @@ BOOLEAN CMsftEraseSample::CheckRecorderSupportsErase(__in IDiscRecorder2Ex* Disc
         //
 
         requiredSize = RTL_SIZEOF_THROUGH_FIELD (CDVD_CAPABILITIES_PAGE,
-                                                 NumberVolumeLevels);
+                       NumberVolumeLevels);
 
-        
+
         hr = GetDiscCapabilities (DiscRecorder,
-                                  &capabilities, 
+                                  &capabilities,
                                   &capabilitiesSize,
                                   requiredSize);
-        
-        if (SUCCEEDED (hr)) 
+
+        if (SUCCEEDED (hr))
         {
             assert (capabilities != NULL);
             assert (capabilitiesSize >=8);
-            
-            if (capabilities->CDEWrite) 
+
+            if (capabilities->CDEWrite)
             {
                 supported = TRUE;
             }
-            
+
             CoTaskMemFreeAndNull (capabilities);
         }
     }
-    
+
     CoTaskMemFreeAndNull (ddCdrwWrite);
     CoTaskMemFreeAndNull (dvdDash);
     CoTaskMemFreeAndNull (rigidOverwrite);
@@ -589,7 +589,7 @@ STDMETHODIMP CMsftEraseSample::EraseMedia()
         hr = IsCurrentMediaSupported(m_Recorder, &isMediaSupported);
 
         if (SUCCEEDED(hr) &&
-            (isMediaSupported == VARIANT_FALSE))
+                (isMediaSupported == VARIANT_FALSE))
         {
             // media not supported, fail out!
             hr = E_IMAPI_ERASE_MEDIA_IS_NOT_SUPPORTED;
@@ -604,7 +604,7 @@ STDMETHODIMP CMsftEraseSample::EraseMedia()
         {
             exclusiveAccessObtained = TRUE;
         }
-    }    
+    }
 
     // lock the media in the tray
     if (SUCCEEDED(hr))
@@ -653,40 +653,40 @@ STDMETHODIMP CMsftEraseSample::EraseMedia()
 
         switch (mediaType)
         {
-            case IMAPI_MEDIA_TYPE_CDROM:
-            case IMAPI_MEDIA_TYPE_CDR:
-            case IMAPI_MEDIA_TYPE_CDRW:
-            {
-                //use initialized value.
-                break;
-            }
+        case IMAPI_MEDIA_TYPE_CDROM:
+        case IMAPI_MEDIA_TYPE_CDR:
+        case IMAPI_MEDIA_TYPE_CDRW:
+        {
+            //use initialized value.
+            break;
+        }
 
-            case IMAPI_MEDIA_TYPE_DVDROM:
-            case IMAPI_MEDIA_TYPE_DVDPLUSR:
-            case IMAPI_MEDIA_TYPE_DVDPLUSRW:
-            case IMAPI_MEDIA_TYPE_DVDPLUSR_DUALLAYER:
-            case IMAPI_MEDIA_TYPE_DVDDASHR:
-            case IMAPI_MEDIA_TYPE_DVDDASHRW:
-            case IMAPI_MEDIA_TYPE_DVDDASHR_DUALLAYER:
-            {
-                estimatedMilliSecondsForQuickFormat = MILLISECONDS_FROM_SECONDS(90);
-                estimatedMilliSecondsForFullFormat  = MILLISECONDS_FROM_SECONDS(15*60);
-                break;
-            }
+        case IMAPI_MEDIA_TYPE_DVDROM:
+        case IMAPI_MEDIA_TYPE_DVDPLUSR:
+        case IMAPI_MEDIA_TYPE_DVDPLUSRW:
+        case IMAPI_MEDIA_TYPE_DVDPLUSR_DUALLAYER:
+        case IMAPI_MEDIA_TYPE_DVDDASHR:
+        case IMAPI_MEDIA_TYPE_DVDDASHRW:
+        case IMAPI_MEDIA_TYPE_DVDDASHR_DUALLAYER:
+        {
+            estimatedMilliSecondsForQuickFormat = MILLISECONDS_FROM_SECONDS(90);
+            estimatedMilliSecondsForFullFormat  = MILLISECONDS_FROM_SECONDS(15*60);
+            break;
+        }
 
-            case IMAPI_MEDIA_TYPE_DVDRAM:
-            case IMAPI_MEDIA_TYPE_DISK:
-            case IMAPI_MEDIA_TYPE_UNKNOWN:
-            {
-                estimatedMilliSecondsForQuickFormat = MILLISECONDS_FROM_SECONDS(30);
-                estimatedMilliSecondsForFullFormat  = MILLISECONDS_FROM_SECONDS(10*60);
-                break;
-            }
-            default:
-            {
-                hr = E_FAIL;
-                break;
-            }
+        case IMAPI_MEDIA_TYPE_DVDRAM:
+        case IMAPI_MEDIA_TYPE_DISK:
+        case IMAPI_MEDIA_TYPE_UNKNOWN:
+        {
+            estimatedMilliSecondsForQuickFormat = MILLISECONDS_FROM_SECONDS(30);
+            estimatedMilliSecondsForFullFormat  = MILLISECONDS_FROM_SECONDS(10*60);
+            break;
+        }
+        default:
+        {
+            hr = E_FAIL;
+            break;
+        }
         }
 
         if (SUCCEEDED(hr))
@@ -707,22 +707,22 @@ STDMETHODIMP CMsftEraseSample::EraseMedia()
     {
         switch (mediaType)
         {
-            case IMAPI_MEDIA_TYPE_DISK:
-            case IMAPI_MEDIA_TYPE_DVDRAM:
-            case IMAPI_MEDIA_TYPE_DVDPLUSRW:
+        case IMAPI_MEDIA_TYPE_DISK:
+        case IMAPI_MEDIA_TYPE_DVDRAM:
+        case IMAPI_MEDIA_TYPE_DVDPLUSRW:
+        {
+            hr = EraseByWrite(mediaType);
+            break;
+        }
+        default:
+        {
+            hr = SendEraseCommand();
+            if (SUCCEEDED (hr))
             {
-                hr = EraseByWrite(mediaType);
-                break;
+                hr = WaitForReadDiscInfoToWorkAfterBlank(millisecondsToErase);
             }
-            default:
-            {
-                hr = SendEraseCommand();
-                if (SUCCEEDED (hr))
-                {
-                    hr = WaitForReadDiscInfoToWorkAfterBlank(millisecondsToErase);
-                }
-                break;
-            }
+            break;
+        }
         }
     }
 
@@ -755,7 +755,7 @@ STDMETHODIMP CMsftEraseSample::EraseMedia()
             }
         }
     }
-    
+
     return hr;
 }
 
@@ -770,7 +770,7 @@ HRESULT CMsftEraseSample::SendEraseCommand()
 
     cdb.BLANK_MEDIA.OperationCode = SCSIOP_BLANK;
     cdb.BLANK_MEDIA.Immediate = 1;
-    
+
     if (m_FullErase == VARIANT_FALSE)
     {
         cdb.BLANK_MEDIA.BlankType = 1;
@@ -780,7 +780,7 @@ HRESULT CMsftEraseSample::SendEraseCommand()
                                           sizeof(cdb.BLANK_MEDIA),
                                           (BYTE*)&sense,
                                           IMAPI2_DEFAULT_COMMAND_TIMEOUT
-                                          );
+                                         );
 
     if (FAILED(hr) && (hr == S_IMAPI_COMMAND_HAS_SENSE_DATA))
     {
@@ -803,10 +803,10 @@ HRESULT CMsftEraseSample::EraseByWrite(IMAPI_MEDIA_PHYSICAL_TYPE mediaType)
     // 0) For DVD+RW media, check if never formatted
     if (mediaType == IMAPI_MEDIA_TYPE_DVDPLUSRW)
     {
-        if (SUCCEEDED (hr)) 
+        if (SUCCEEDED (hr))
         {
-            ULONG requiredSize = RTL_SIZEOF_THROUGH_FIELD (DISC_INFORMATION, 
-                                                           FirstTrackNumber);
+            ULONG requiredSize = RTL_SIZEOF_THROUGH_FIELD (DISC_INFORMATION,
+                                 FirstTrackNumber);
             hr = GetDiscInformation (m_RecorderEx, &discInfo, &discInfoSize, requiredSize);
         }
 
@@ -815,7 +815,7 @@ HRESULT CMsftEraseSample::EraseByWrite(IMAPI_MEDIA_PHYSICAL_TYPE mediaType)
             //    0.1) Exit early if media is totally blank and unused for both
             //         quick and full formats.
             if (discInfo->DiscStatus == 0)
-            {                
+            {
                 hr = S_OK;
                 goto EraseByWriteExit;
             }
@@ -833,7 +833,7 @@ HRESULT CMsftEraseSample::EraseByWrite(IMAPI_MEDIA_PHYSICAL_TYPE mediaType)
     }
 
     // For a quick erase on DVD+RW media we need to write over the first 2MB of the media
-    // and the last 2MB of formatted media, not the last 2MB of total media.  
+    // and the last 2MB of formatted media, not the last 2MB of total media.
     // Currently do not have a way to determine this so will do two writes over the beginning of the media.
     // In the event there is less than 2mb of formatted media, the drive will format
     // the entire media, which we do not want.
@@ -853,7 +853,7 @@ HRESULT CMsftEraseSample::EraseByWrite(IMAPI_MEDIA_PHYSICAL_TYPE mediaType)
     {
         if (totalSectorsToWrite < (2*DefaultSectorsPerWriteForQuickErase))
         {
-            // pathological case 
+            // pathological case
             m_SectorsFirstWrite = totalSectorsToWrite;
             m_SectorsSecondWrite = totalSectorsToWrite;
         }
@@ -875,19 +875,19 @@ HRESULT CMsftEraseSample::EraseByWrite(IMAPI_MEDIA_PHYSICAL_TYPE mediaType)
         hr = CoCreateInstance(CLSID_MsftStreamZero,
                               NULL, CLSCTX_ALL,
                               IID_PPV_ARGS(&firstStream)
-                              );
+                             );
         if (SUCCEEDED(hr))
         {
             hr = CoCreateInstance(CLSID_MsftStreamZero,
                                   NULL, CLSCTX_ALL,
                                   IID_PPV_ARGS(&secondStream)
-                                  );
+                                 );
         }
     }
     //    3.1) First one is size of first write
     if (SUCCEEDED(hr))
     {
-        ULARGE_INTEGER newSize; 
+        ULARGE_INTEGER newSize;
         RtlZeroMemory(&newSize, sizeof(ULARGE_INTEGER));
         newSize.QuadPart = ((ULONGLONG)2048) * m_SectorsFirstWrite;
         hr = firstStream->SetSize(newSize);
@@ -895,7 +895,7 @@ HRESULT CMsftEraseSample::EraseByWrite(IMAPI_MEDIA_PHYSICAL_TYPE mediaType)
     //    3.2) Second one is always 2MB
     if (SUCCEEDED(hr))
     {
-        ULARGE_INTEGER newSize; 
+        ULARGE_INTEGER newSize;
         RtlZeroMemory(&newSize, sizeof(ULARGE_INTEGER));
         newSize.QuadPart = ((ULONGLONG)2048) * m_SectorsSecondWrite;
         hr = secondStream->SetSize(newSize);
@@ -910,7 +910,7 @@ HRESULT CMsftEraseSample::EraseByWrite(IMAPI_MEDIA_PHYSICAL_TYPE mediaType)
             hr = CoCreateInstance(CLSID_MsftWriteEngine2,
                                   NULL, CLSCTX_ALL,
                                   IID_PPV_ARGS(&writeEngine)
-                                  );
+                                 );
         }
         // set the disc recorder and options for the write engine
         if (SUCCEEDED(hr))
@@ -987,7 +987,7 @@ HRESULT CMsftEraseSample::EraseByWrite(IMAPI_MEDIA_PHYSICAL_TYPE mediaType)
     if (SUCCEEDED(hr))
     {
         m_WritingFirstSection = FALSE;
-        // start LBA == totalSectorsToWrite - m_SectorsSecondWrite; 
+        // start LBA == totalSectorsToWrite - m_SectorsSecondWrite;
 
         hr = writeEngine->WriteSection(secondStream, totalSectorsToWrite - m_SectorsSecondWrite, m_SectorsSecondWrite);
     }
@@ -1002,7 +1002,7 @@ HRESULT CMsftEraseSample::EraseByWrite(IMAPI_MEDIA_PHYSICAL_TYPE mediaType)
 
 EraseByWriteExit:
     // CLEANUP FOLLOWS ///////////////////////////////
-    delete m_TimeKeeperWrite; 
+    delete m_TimeKeeperWrite;
     m_TimeKeeperWrite = NULL; // delete of NULL is harmless
     CoTaskMemFreeAndNull(discInfo);
     ReleaseAndNull(firstStream);
@@ -1088,34 +1088,34 @@ VOID CMsftEraseSample::EraseUpdateCallBack(__in PVOID Object, __in SENSE_DATA* S
     // 8. Fire the event
     context->Erase->Fire_Update(MILLISECONDS_TO_SECONDS(context->BlankTime->get_ElapsedMilliseconds()),
                                 MILLISECONDS_TO_SECONDS(context->BlankTime->get_TotalMilliseconds())
-                                );
+                               );
 
     // 9. Return
     return;
 }
 
 HRESULT CMsftEraseSample::GetDiscInformation(
-                                            IDiscRecorder2Ex*   Recorder,
-                                            PDISC_INFORMATION*  DiscInfo,
-                                            PULONG              DiscInfoSize,
-                                            ULONG               RequiredSize
-                                            )
+    IDiscRecorder2Ex*   Recorder,
+    PDISC_INFORMATION*  DiscInfo,
+    PULONG              DiscInfoSize,
+    ULONG               RequiredSize
+)
 {
     HRESULT hr;
 
-    if (DiscInfo == NULL) 
+    if (DiscInfo == NULL)
     {
         return E_POINTER;
     }
 
-    if (DiscInfoSize == NULL) 
+    if (DiscInfoSize == NULL)
     {
         return E_POINTER;
     }
 
     hr = Recorder->GetDiscInformation ((BYTE**)DiscInfo, DiscInfoSize);
 
-    if (SUCCEEDED (hr)) 
+    if (SUCCEEDED (hr))
     {
         if (*DiscInfoSize < RequiredSize)
         {
@@ -1125,7 +1125,7 @@ HRESULT CMsftEraseSample::GetDiscInformation(
             // Freeing memory as the client would not on seeing an error.
             //
 
-            if (*DiscInfo) 
+            if (*DiscInfo)
             {
                 CoTaskMemFreeAndNull (*DiscInfo);
             }
@@ -1137,34 +1137,34 @@ HRESULT CMsftEraseSample::GetDiscInformation(
 }
 
 HRESULT CMsftEraseSample::GetDiscCapabilities(
-                                __in                                  IDiscRecorder2Ex* recorder,
-                                __deref_out_bcount(*CapabilitiesSize) CDVD_CAPABILITIES_PAGE ** Capabilities, 
-                                __out                                 ULONG * CapabilitiesSize,
-                                                                      ULONG   RequiredSize
-                                )
+    __in                                  IDiscRecorder2Ex* recorder,
+    __deref_out_bcount(*CapabilitiesSize) CDVD_CAPABILITIES_PAGE ** Capabilities,
+    __out                                 ULONG * CapabilitiesSize,
+    ULONG   RequiredSize
+)
 {
     HRESULT hr;
 
-    if (Capabilities == NULL) 
+    if (Capabilities == NULL)
     {
         return E_POINTER;
     }
 
-    if (CapabilitiesSize == NULL) 
+    if (CapabilitiesSize == NULL)
     {
         return E_POINTER;
     }
 
     hr = recorder->GetModePage (
-                                IMAPI_MODE_PAGE_TYPE_LEGACY_CAPABILITIES,
-                                IMAPI_MODE_PAGE_REQUEST_TYPE_CURRENT_VALUES,
-                                (BYTE **)Capabilities,
-                                CapabilitiesSize                                  
-                                );
-    
-    if (SUCCEEDED (hr)) 
+             IMAPI_MODE_PAGE_TYPE_LEGACY_CAPABILITIES,
+             IMAPI_MODE_PAGE_REQUEST_TYPE_CURRENT_VALUES,
+             (BYTE **)Capabilities,
+             CapabilitiesSize
+         );
+
+    if (SUCCEEDED (hr))
     {
-        if ( *CapabilitiesSize < RequiredSize ) 
+        if ( *CapabilitiesSize < RequiredSize )
         {
             hr = E_IMAPI_ERASE_MODE_PAGE_2A_TOO_SMALL;
 
@@ -1172,9 +1172,9 @@ HRESULT CMsftEraseSample::GetDiscCapabilities(
             // Freeing memory as the client would not on seeing an error.
             //
 
-            if (*Capabilities) 
+            if (*Capabilities)
             {
-                CoTaskMemFreeAndNull (*Capabilities);        
+                CoTaskMemFreeAndNull (*Capabilities);
             }
 
             *CapabilitiesSize = 0;
@@ -1186,7 +1186,7 @@ HRESULT CMsftEraseSample::GetDiscCapabilities(
 
 STDMETHODIMP_(VOID) CMsftEraseSample::WriteEngineUpdate(IDispatch* objectDispatch, IDispatch* progressDispatch)
 {
-    UNREFERENCED_PARAMETER(objectDispatch);   
+    UNREFERENCED_PARAMETER(objectDispatch);
 
     HRESULT                 hr = S_OK;
     IWriteEngine2EventArgs* tmpProgress = NULL;

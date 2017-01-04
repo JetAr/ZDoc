@@ -1,4 +1,4 @@
-//*****************************************************************************
+﻿//*****************************************************************************
 //
 // Microsoft Windows Media
 // Copyright ( C) Microsoft Corporation. All rights reserved.
@@ -14,13 +14,13 @@
 #include "WMVRecompress.h"
 
 ///////////////////////////////////////////////////////////////////////////////
-// Convert a TCHAR string to WCHAR string. 
+// Convert a TCHAR string to WCHAR string.
 // Caller must release the memory of pwszOutput by calling delete[] pwszOutput.
 ///////////////////////////////////////////////////////////////////////////////
 HRESULT ConvertTCharToWChar( LPCTSTR ptszInput, __out LPWSTR * pwszOutput )
 {
     int cchOutput = 0;
-    
+
     if( NULL == ptszInput || NULL == pwszOutput )
     {
         return( E_INVALIDARG );
@@ -52,15 +52,15 @@ HRESULT ConvertTCharToWChar( LPCTSTR ptszInput, __out LPWSTR * pwszOutput )
     {
         SAFE_ARRAYDELETE( *pwszOutput );
         return( HRESULT_FROM_WIN32( GetLastError() ) );
-    }        
+    }
 #endif // UNICODE
 
     return( S_OK );
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-// This function gives the correct usage, 
-// if the user gives invalid arguments.      
+// This function gives the correct usage,
+// if the user gives invalid arguments.
 ////////////////////////////////////////////////////////////////////////////////
 void Usage()
 {
@@ -179,7 +179,7 @@ int __cdecl _tmain( int argc, __in_ecount(argc) LPTSTR argv[] )
             else if( 0 == _tcsicmp( argv[i], _T( "-m" ) ) )
             {
                 fMultiPass = TRUE;
-            }        
+            }
             else if( 0 == _tcsicmp( argv[i], _T( "-c" ) ) )
             {
                 fMultiChannel = TRUE;
@@ -193,7 +193,7 @@ int __cdecl _tmain( int argc, __in_ecount(argc) LPTSTR argv[] )
                 break;
             }
 
-            fValidArgument = TRUE;            
+            fValidArgument = TRUE;
         }
 
         if( !fValidArgument || i < argc )
@@ -207,9 +207,9 @@ int __cdecl _tmain( int argc, __in_ecount(argc) LPTSTR argv[] )
         //
         // The input file and the output file must not be empty, or equal.
         //
-        if( NULL == pwszInFile || 
-            NULL == pwszOutFile || 
-            0 == _wcsicmp(pwszInFile, pwszOutFile) )
+        if( NULL == pwszInFile ||
+                NULL == pwszOutFile ||
+                0 == _wcsicmp(pwszInFile, pwszOutFile) )
         {
             hr = E_INVALIDARG;
             _tprintf( _T( "Input file and output file must be specified.\n" ) );
@@ -236,7 +236,7 @@ int __cdecl _tmain( int argc, __in_ecount(argc) LPTSTR argv[] )
             }
 
             if( vi.dwMajorVersion < 5
-                || vi.dwMajorVersion == 5 && vi.dwMinorVersion < 1 )
+                    || vi.dwMajorVersion == 5 && vi.dwMinorVersion < 1 )
             {
                 hr = E_INVALIDARG;
                 _tprintf( _T( "Multi-channel is only supported on Windows XP or newer version.\n" ) );
@@ -272,8 +272,8 @@ int __cdecl _tmain( int argc, __in_ecount(argc) LPTSTR argv[] )
         else if( NULL != pwszCustomProfile )
         {
             //
-            // Load custom profile 
-            // 
+            // Load custom profile
+            //
             hr = CWMVRecompress::LoadCustomProfile( pwszCustomProfile, &pIWMProfile );
             if( FAILED( hr ) )
             {
@@ -299,10 +299,10 @@ int __cdecl _tmain( int argc, __in_ecount(argc) LPTSTR argv[] )
         //
         // Recompress the WMV file using the specified profile.
         //
-        hr = pWMVRecompress->Recompress( pwszInFile, 
-                                         pwszOutFile, 
-                                         pIWMProfile, 
-                                         fMultiPass, 
+        hr = pWMVRecompress->Recompress( pwszInFile,
+                                         pwszOutFile,
+                                         pIWMProfile,
+                                         fMultiPass,
                                          fMultiChannel,
                                          fSmartRecompression );
         if( FAILED( hr ) )

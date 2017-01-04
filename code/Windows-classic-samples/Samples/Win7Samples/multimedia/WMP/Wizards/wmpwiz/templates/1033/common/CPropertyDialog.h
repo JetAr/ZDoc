@@ -1,4 +1,4 @@
-/////////////////////////////////////////////////////////////////////////////
+﻿/////////////////////////////////////////////////////////////////////////////
 //
 // CPropertyDialog.h : Declaration of the CPropertyDialog
 //
@@ -14,9 +14,9 @@ public:
     enum { IDD = IDD_PROPERTYDIALOG };
 
     BEGIN_MSG_MAP(CPropertyDialog)
-        MESSAGE_HANDLER( WM_INITDIALOG, OnInitDialog )
-        COMMAND_ID_HANDLER( IDOK, OnOK )
-        COMMAND_ID_HANDLER( IDCANCEL, OnCancel )
+    MESSAGE_HANDLER( WM_INITDIALOG, OnInitDialog )
+    COMMAND_ID_HANDLER( IDOK, OnOK )
+    COMMAND_ID_HANDLER( IDCANCEL, OnCancel )
     END_MSG_MAP()
 
     CPropertyDialog(C[!output Safe_root] *pPlugin)

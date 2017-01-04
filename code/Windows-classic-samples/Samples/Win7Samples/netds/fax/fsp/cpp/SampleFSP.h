@@ -1,4 +1,4 @@
-//==========================================================================
+﻿//==========================================================================
 //
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
@@ -60,7 +60,8 @@
 // JOB_RECEIVE indicates the fax job is a receive
 #define JOB_RECEIVE                3
 
-typedef struct _DEVICE_INFO {
+typedef struct _DEVICE_INFO
+{
     CRITICAL_SECTION     cs;                      // object to serialize access to the virtual fax device
     DWORD                DeviceId;                // specifies the identifier of the virtual fax device
     WCHAR                Directory[MAX_PATH_LEN]; // specifies the virtual fax device's incoming fax directory
@@ -70,7 +71,8 @@ typedef struct _DEVICE_INFO {
     struct _JOB_INFO     *pJobInfo;               // pointer to the fax job associated with the virtual fax device
 } DEVICE_INFO, *PDEVICE_INFO;
 
-typedef struct _JOB_INFO {
+typedef struct _JOB_INFO
+{
     PDEVICE_INFO         pDeviceInfo;             // pointer to the virtual fax device data associated with the fax job
     HANDLE               CompletionPortHandle;    // specifies a handle to an I/O completion port
     ULONG_PTR            CompletionKey;           // specifies a completion port key value

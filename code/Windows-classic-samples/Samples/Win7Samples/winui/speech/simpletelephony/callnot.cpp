@@ -1,9 +1,9 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
 //
-// Copyright � Microsoft Corporation. All rights reserved
+// Copyright © Microsoft Corporation. All rights reserved
 
 /*++
 
@@ -28,7 +28,7 @@ Abstract:
 
 #include <tapi3.h>
 #include "callnot.h"
-                
+
 ///////////////////////////////////////////////////////////////////
 // CallEventNotification
 //
@@ -42,9 +42,9 @@ Abstract:
 HRESULT
 STDMETHODCALLTYPE
 CTAPIEventNotification::Event(
-                              TAPI_EVENT TapiEvent,
-                              IDispatch * pEvent
-                             )
+    TAPI_EVENT TapiEvent,
+    IDispatch * pEvent
+)
 {
     //
     // Addref the event so it doesn't go away.
@@ -57,9 +57,9 @@ CTAPIEventNotification::Event(
     //
 
     PostMessage( m_hWnd,
-                WM_PRIVATETAPIEVENT,
-                (WPARAM) TapiEvent,
-                (LPARAM) pEvent
+                 WM_PRIVATETAPIEVENT,
+                 (WPARAM) TapiEvent,
+                 (LPARAM) pEvent
                );
 
     return S_OK;

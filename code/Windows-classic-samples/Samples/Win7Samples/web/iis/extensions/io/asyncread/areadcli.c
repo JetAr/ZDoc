@@ -1,4 +1,4 @@
-/* Copyright (c) 1997-2002 Microsoft Corporation
+﻿/* Copyright (c) 1997-2002 Microsoft Corporation
 
 Module Name:
 
@@ -7,12 +7,12 @@ Module Name:
 Abstract:
 
     This module demonstrates using asynchronous ReadClient call
-    to read data sent from client. On return, this sends the 
+    to read data sent from client. On return, this sends the
     followings back to client:
-    
+
     1) the number of bytes intended to send
     2) the number of bytes actually read.
-    3) data content 
+    3) data content
 */
 
 #include <windows.h>
@@ -22,11 +22,12 @@ Abstract:
 #define MAX_BUF_SIZE        (49152)                 /* Max number of bytes for each read - 48K */
 #define MEM_ALLOC_THRESHOLD (1024 * 1024)           /* Default heap size is 1M */
 
-typedef struct _IO_WORK_ITEM {
+typedef struct _IO_WORK_ITEM
+{
 
     PBYTE                    pbDATAFromClient;   /* Grand read data holder */
     DWORD                    cbReadSoFar;        /* Number of bytes read so far */
-                                                 /* and is used as index for pbDATAFromClient */
+    /* and is used as index for pbDATAFromClient */
     EXTENSION_CONTROL_BLOCK *pecb;
 
 }  IO_WORK_ITEM, * PIOWI;
@@ -34,23 +35,23 @@ typedef struct _IO_WORK_ITEM {
 /* Sample Form for doing a POST method */
 
 static CHAR             g_szPostForm[] =
-                        "<h2>Asychronous ReadClient Sample Post Form</h2><p>\r\n\r\n"
-                        "This demonstrates a post request being sent by this form to the sample ISAPI - AReadCli.dll<p>\r\n\r\n"
-                        "AReadCli.dll reads data posted by this form and send it back to the browser.<p>\r\n"
-                        "<h3>Post Form</h3>\r\n"
-                        "Please enter data below:<br>\r\n"
-                        "<form method=POST action=\"areadcli.dll\">\r\n"
-                        "<textarea name=\"Data\" cols=48 rows=4></textarea>\r\n\r\n"
-                        "<input type=submit> <input type=reset>\r\n"
-                        "</form>";
+    "<h2>Asychronous ReadClient Sample Post Form</h2><p>\r\n\r\n"
+    "This demonstrates a post request being sent by this form to the sample ISAPI - AReadCli.dll<p>\r\n\r\n"
+    "AReadCli.dll reads data posted by this form and send it back to the browser.<p>\r\n"
+    "<h3>Post Form</h3>\r\n"
+    "Please enter data below:<br>\r\n"
+    "<form method=POST action=\"areadcli.dll\">\r\n"
+    "<textarea name=\"Data\" cols=48 rows=4></textarea>\r\n\r\n"
+    "<input type=submit> <input type=reset>\r\n"
+    "</form>";
 
 /* Report read data */
 
-static CHAR             g_szReport[] = 
-                        "Bytes count including \"Data=\"  \r\n"
-                        "ECB Total Bytes:    %d.\r\n"
-                        "Actual Read Bytes:  %d.\r\n";
-                
+static CHAR             g_szReport[] =
+    "Bytes count including \"Data=\"  \r\n"
+    "ECB Total Bytes:    %d.\r\n"
+    "Actual Read Bytes:  %d.\r\n";
+
 DWORD DoInit(IN OUT PIOWI piowi);
 VOID DoCleanUp(IN PIOWI piowi);
 DWORD DoAsyncReadClient(IN PIOWI piowi);
@@ -79,37 +80,38 @@ BOOL AR_Free(IN LPEXTENSION_CONTROL_BLOCK pecb, IN LPVOID pvData);
 
 __stdcall DllMain(IN HINSTANCE hinstDll, IN DWORD fdwReason, IN LPVOID lpvContext OPTIONAL)
 {
-	BOOL fReturn = TRUE;
+    BOOL fReturn = TRUE;
 
-	switch (fdwReason) {
+    switch (fdwReason)
+    {
 
-		case DLL_PROCESS_ATTACH :
-			
-				OutputDebugString("Initializing the global data for areadcli.dll\n");
+    case DLL_PROCESS_ATTACH :
 
-				/* Prevent the system from calling DllMain when threads are created or destroyed. */
-				
-				DisableThreadLibraryCalls(hinstDll);
+        OutputDebugString("Initializing the global data for areadcli.dll\n");
 
-				/* Initialize various data and modules. */
-				
-				break;
+        /* Prevent the system from calling DllMain when threads are created or destroyed. */
 
-		case DLL_PROCESS_DETACH :
+        DisableThreadLibraryCalls(hinstDll);
 
-				if (lpvContext != NULL) 
-				{ 
-				}
+        /* Initialize various data and modules. */
 
-				break;
+        break;
 
-		default:
+    case DLL_PROCESS_DETACH :
 
-			break;
-	} 
+        if (lpvContext != NULL)
+        {
+        }
 
-	return fReturn;
-} 
+        break;
+
+    default:
+
+        break;
+    }
+
+    return fReturn;
+}
 
 /*
 	Description:
@@ -127,18 +129,18 @@ __stdcall DllMain(IN HINSTANCE hinstDll, IN DWORD fdwReason, IN LPVOID lpvContex
 
 BOOL WINAPI GetExtensionVersion(HSE_VERSION_INFO *pVer)
 {
-	pVer->dwExtensionVersion = MAKELONG(HSE_VERSION_MINOR, HSE_VERSION_MAJOR);
+    pVer->dwExtensionVersion = MAKELONG(HSE_VERSION_MINOR, HSE_VERSION_MAJOR);
 
-	strncpy_s((LPSTR) pVer->lpszExtensionDesc, sizeof(pVer->lpszExtensionDesc), "Asynchronous Read Client Sample ISAPI DLL", HSE_MAX_EXT_DLL_NAME_LEN);
+    strncpy_s((LPSTR) pVer->lpszExtensionDesc, sizeof(pVer->lpszExtensionDesc), "Asynchronous Read Client Sample ISAPI DLL", HSE_MAX_EXT_DLL_NAME_LEN);
 
-	return TRUE;
+    return TRUE;
 }
 
 /*
 	Description:
 
 		This is the main routine for any ISAPI application. Inside DoASyncReadClient,
-		proper action will be performed to read data from client asynchronously. Any data 
+		proper action will be performed to read data from client asynchronously. Any data
 		read from client will be sent back to the client by using synchronous WriteClient.
 
 	Arguments:
@@ -154,56 +156,62 @@ BOOL WINAPI GetExtensionVersion(HSE_VERSION_INFO *pVer)
 
 DWORD WINAPI HttpExtensionProc(LPEXTENSION_CONTROL_BLOCK pecb)
 {
-	PIOWI   piowi;
-	DWORD   hseStatus = HSE_STATUS_SUCCESS;
+    PIOWI   piowi;
+    DWORD   hseStatus = HSE_STATUS_SUCCESS;
 
-	/*
-		The string length of textarea name "Data=" is 5. 
-		Available bytes <= 5 indicates that no user-
-		entered data has been sent, and the post form 
-		is shown.
-	*/
+    /*
+    	The string length of textarea name "Data=" is 5.
+    	Available bytes <= 5 indicates that no user-
+    	entered data has been sent, and the post form
+    	is shown.
+    */
 
-	if (pecb->cbAvailable <= 5) {  
+    if (pecb->cbAvailable <= 5)
+    {
 
-			hseStatus = SendMSGToClient(pecb, g_szPostForm);
+        hseStatus = SendMSGToClient(pecb, g_szPostForm);
 
-	} else {
+    }
+    else
+    {
 
-		piowi  = (PIOWI)LocalAlloc(LMEM_FIXED, sizeof(IO_WORK_ITEM));
+        piowi  = (PIOWI)LocalAlloc(LMEM_FIXED, sizeof(IO_WORK_ITEM));
 
-		if (NULL == piowi) {
+        if (NULL == piowi)
+        {
 
-			SetLastError(ERROR_NOT_ENOUGH_MEMORY);
+            SetLastError(ERROR_NOT_ENOUGH_MEMORY);
 
-			return HSE_STATUS_ERROR;
-		}
+            return HSE_STATUS_ERROR;
+        }
 
-		piowi->pecb = pecb;
+        piowi->pecb = pecb;
 
-		/*
-			Init Grand data holder, assign the first chunk(read-ahead chunk)
-			and update the index (cbRreadSoFar) of the grand data holder.
-		*/
-		
-		hseStatus = DoInit(piowi);
-	  
-		if (HSE_STATUS_ERROR != hseStatus) {
+        /*
+        	Init Grand data holder, assign the first chunk(read-ahead chunk)
+        	and update the index (cbRreadSoFar) of the grand data holder.
+        */
 
-			/* Now we are ready to do asynchronous readclient here */
+        hseStatus = DoInit(piowi);
 
-			hseStatus = DoAsyncReadClient(piowi);
-	
-			if (hseStatus != HSE_STATUS_PENDING) {
+        if (HSE_STATUS_ERROR != hseStatus)
+        {
 
-				/* When IO finishes, tell IIS we will end the session. Also clean up other resources here */
+            /* Now we are ready to do asynchronous readclient here */
 
-				DoCleanUp(piowi);
-			}
-		}
-	}
-	    
-	return hseStatus;
+            hseStatus = DoAsyncReadClient(piowi);
+
+            if (hseStatus != HSE_STATUS_PENDING)
+            {
+
+                /* When IO finishes, tell IIS we will end the session. Also clean up other resources here */
+
+                DoCleanUp(piowi);
+            }
+        }
+    }
+
+    return hseStatus;
 }
 
 /*
@@ -223,7 +231,7 @@ DWORD WINAPI HttpExtensionProc(LPEXTENSION_CONTROL_BLOCK pecb)
 
 BOOL WINAPI TerminateExtension(DWORD dwFlags)
 {
-	return TRUE;
+    return TRUE;
 }
 
 /*
@@ -239,72 +247,73 @@ BOOL WINAPI TerminateExtension(DWORD dwFlags)
 
 	Return Value:
 
-		HSE_STATUS_SUCCESS 
+		HSE_STATUS_SUCCESS
 		HSE_STATUS_ERROR
 */
 
 DWORD SendMSGToClient(IN LPEXTENSION_CONTROL_BLOCK  pecb, IN LPCSTR pszMsg)
 {
-	HSE_SEND_HEADER_EX_INFO	SHEI;
+    HSE_SEND_HEADER_EX_INFO	SHEI;
 
-	BOOL    fReturn;
-	DWORD   cbText;
-	DWORD   hseStatus = HSE_STATUS_SUCCESS;
-	CHAR    *pszText = NULL;
+    BOOL    fReturn;
+    DWORD   cbText;
+    DWORD   hseStatus = HSE_STATUS_SUCCESS;
+    CHAR    *pszText = NULL;
 
-	CHAR    szStatus[] = "200 OK";
-	CHAR    szHeaderBase[] = "Content-type: text/html\r\n\r\n";
+    CHAR    szStatus[] = "200 OK";
+    CHAR    szHeaderBase[] = "Content-type: text/html\r\n\r\n";
 
 
-	/*
-		Populate SendHeaderExInfo struct
-	
-		NOTE we must send Content-Length header with correct 
-		byte count in order for keep-alive to work.
-	*/
+    /*
+    	Populate SendHeaderExInfo struct
 
-	SHEI.pszStatus = szStatus;
-	SHEI.pszHeader = szHeaderBase;
-	SHEI.cchStatus = lstrlen(szStatus);
-	SHEI.cchHeader = lstrlen(szHeaderBase);
-	SHEI.fKeepConn = FALSE;
+    	NOTE we must send Content-Length header with correct
+    	byte count in order for keep-alive to work.
+    */
 
-	/* Build page */
+    SHEI.pszStatus = szStatus;
+    SHEI.pszHeader = szHeaderBase;
+    SHEI.cchStatus = lstrlen(szStatus);
+    SHEI.cchHeader = lstrlen(szHeaderBase);
+    SHEI.fKeepConn = FALSE;
 
-	cbText = strlen("<head><title>Simple Async Read Client Sample</title></head>\n<body></body>\n") + strlen(pszMsg) + 1;
+    /* Build page */
 
-	pszText = (PCHAR)AR_Allocate(pecb, cbText);
+    cbText = strlen("<head><title>Simple Async Read Client Sample</title></head>\n<body></body>\n") + strlen(pszMsg) + 1;
 
-	/* Verify allocation */
+    pszText = (PCHAR)AR_Allocate(pecb, cbText);
 
-	if (NULL == pszText) {
+    /* Verify allocation */
 
-		SetLastError(ERROR_NOT_ENOUGH_MEMORY);
+    if (NULL == pszText)
+    {
 
-		return HSE_STATUS_ERROR;
-	}
+        SetLastError(ERROR_NOT_ENOUGH_MEMORY);
 
-	
-	strcpy_s(pszText, sizeof(pszText), "<head><title>Simple Async Read Client Sample</title></head>\n");
-	strcat_s(pszText, sizeof(pszText), "<body>");
-	strcat_s(pszText, sizeof(pszText), pszMsg);
-	strcat_s(pszText, sizeof(pszText), "</body>\n");
+        return HSE_STATUS_ERROR;
+    }
 
-	cbText = (DWORD)strlen(pszText); 
-	    
-	/* Send header and body text to client */
 
-	fReturn = pecb->ServerSupportFunction(pecb->ConnID, HSE_REQ_SEND_RESPONSE_HEADER_EX, &SHEI, NULL, NULL);
+    strcpy_s(pszText, sizeof(pszText), "<head><title>Simple Async Read Client Sample</title></head>\n");
+    strcat_s(pszText, sizeof(pszText), "<body>");
+    strcat_s(pszText, sizeof(pszText), pszMsg);
+    strcat_s(pszText, sizeof(pszText), "</body>\n");
 
-	fReturn &= pecb->WriteClient(pecb->ConnID, pszText, &cbText, 0);
+    cbText = (DWORD)strlen(pszText);
 
-	if (!fReturn)
-		hseStatus = HSE_STATUS_ERROR;
+    /* Send header and body text to client */
 
-	AR_Free(pecb, pszText);
+    fReturn = pecb->ServerSupportFunction(pecb->ConnID, HSE_REQ_SEND_RESPONSE_HEADER_EX, &SHEI, NULL, NULL);
 
-	return hseStatus;
-} 
+    fReturn &= pecb->WriteClient(pecb->ConnID, pszText, &cbText, 0);
+
+    if (!fReturn)
+        hseStatus = HSE_STATUS_ERROR;
+
+    AR_Free(pecb, pszText);
+
+    return hseStatus;
+}
 
 /*
 	Description:
@@ -323,98 +332,102 @@ DWORD SendMSGToClient(IN LPEXTENSION_CONTROL_BLOCK  pecb, IN LPCSTR pszMsg)
 */
 
 DWORD DoAsyncReadClient(IN PIOWI piowi)
-{   
-	BOOL    fReturn;
-	CHAR    szTmp[MAX_BUF_SIZE];
-	DWORD   dwFlags;
-	DWORD   cbTotalToRead = MAX_BUF_SIZE;
-	DWORD   hseStatus =  HSE_STATUS_PENDING;
-	BYTE    *pbData = NULL;
+{
+    BOOL    fReturn;
+    CHAR    szTmp[MAX_BUF_SIZE];
+    DWORD   dwFlags;
+    DWORD   cbTotalToRead = MAX_BUF_SIZE;
+    DWORD   hseStatus =  HSE_STATUS_PENDING;
+    BYTE    *pbData = NULL;
 
-	/*
-		Check if cbTotalBytes == cbAvailable if so lpbData contains all the data sent by 
-		the client, and complete the session. 
-	*/
+    /*
+    	Check if cbTotalBytes == cbAvailable if so lpbData contains all the data sent by
+    	the client, and complete the session.
+    */
 
-	if (piowi->pecb->cbTotalBytes == piowi->pecb->cbAvailable) {
-	    
-		/* Construct the report and write it to client */
+    if (piowi->pecb->cbTotalBytes == piowi->pecb->cbAvailable)
+    {
 
-		pbData = (PBYTE)AR_Allocate(piowi->pecb, piowi->pecb->cbAvailable + MAX_BUF_SIZE);
-	      
-		if (NULL == pbData) {
+        /* Construct the report and write it to client */
 
-			SetLastError(ERROR_NOT_ENOUGH_MEMORY);
+        pbData = (PBYTE)AR_Allocate(piowi->pecb, piowi->pecb->cbAvailable + MAX_BUF_SIZE);
 
-			return HSE_STATUS_ERROR;
-		}
+        if (NULL == pbData)
+        {
 
-		sprintf_s(pbData, sizeof(pbData), g_szReport, piowi->pecb->cbTotalBytes, piowi->pecb->cbAvailable);
-	              
-		strcat_s(pbData, sizeof(pbData), piowi->pecb->lpbData);  
+            SetLastError(ERROR_NOT_ENOUGH_MEMORY);
 
-		hseStatus = SendMSGToClient(piowi->pecb, pbData);
+            return HSE_STATUS_ERROR;
+        }
 
-		AR_Free(piowi->pecb, pbData);
+        sprintf_s(pbData, sizeof(pbData), g_szReport, piowi->pecb->cbTotalBytes, piowi->pecb->cbAvailable);
 
-		DoCleanUp(piowi);
-	  
-		return hseStatus; // HSE_STATUS_SUCCESS or HSE_STATUS_ERROR;
-	}
+        strcat_s(pbData, sizeof(pbData), piowi->pecb->lpbData);
 
-	/*
-		There is more to read. Set a call back function and context that will 
-		be used for handling asynchrnous IO operations. This only needs to set up once.
-	*/
+        hseStatus = SendMSGToClient(piowi->pecb, pbData);
 
-	fReturn =	piowi->pecb->ServerSupportFunction(piowi->pecb->ConnID, HSE_REQ_IO_COMPLETION, AsyncReadClientIoCompletion, 0, (LPDWORD)piowi);  
+        AR_Free(piowi->pecb, pbData);
 
-	if (!fReturn) {
+        DoCleanUp(piowi);
 
-		sprintf_s (szTmp, sizeof(szTmp), "Problem occurred at ServerSupportFunction() sending HSE_REQ_IO_COMPLETION request.");
+        return hseStatus; // HSE_STATUS_SUCCESS or HSE_STATUS_ERROR;
+    }
 
-		SendMSGToClient(piowi->pecb, szTmp);
-	    
-		return HSE_STATUS_ERROR;
-	}
+    /*
+    	There is more to read. Set a call back function and context that will
+    	be used for handling asynchrnous IO operations. This only needs to set up once.
+    */
 
-	/*
-		Fire off the call to perform an asynchronus read from the client. 
-	
-		We need to first check if the size of the remaining chunk 
-		is less than MAX_BUF_SIZE, if so just read what is available, 
-		otherwise read MAX_BUF_SIZE bytes of data.
-	*/ 
+    fReturn =	piowi->pecb->ServerSupportFunction(piowi->pecb->ConnID, HSE_REQ_IO_COMPLETION, AsyncReadClientIoCompletion, 0, (LPDWORD)piowi);
 
-	cbTotalToRead = piowi->pecb->cbTotalBytes - piowi->cbReadSoFar;
+    if (!fReturn)
+    {
 
-	if (cbTotalToRead > MAX_BUF_SIZE)
-		cbTotalToRead = MAX_BUF_SIZE;
+        sprintf_s (szTmp, sizeof(szTmp), "Problem occurred at ServerSupportFunction() sending HSE_REQ_IO_COMPLETION request.");
 
-	dwFlags = HSE_IO_ASYNC;
+        SendMSGToClient(piowi->pecb, szTmp);
 
-	/* append the new chunk to buffer, cbReadSoFar indexes the byte right after the last written byte in the buffer */
+        return HSE_STATUS_ERROR;
+    }
 
-	fReturn = piowi->pecb->ServerSupportFunction(piowi->pecb->ConnID, HSE_REQ_ASYNC_READ_CLIENT, piowi->pbDATAFromClient +	piowi->cbReadSoFar, &cbTotalToRead, &dwFlags);
+    /*
+    	Fire off the call to perform an asynchronus read from the client.
 
-	if (!fReturn) {
-	    
-		sprintf_s(szTmp, sizeof(szTmp), "Problem occurred at ServerSupportFunction() sending HSE_REQ_ASYNC_READ_CLIENT request.");
+    	We need to first check if the size of the remaining chunk
+    	is less than MAX_BUF_SIZE, if so just read what is available,
+    	otherwise read MAX_BUF_SIZE bytes of data.
+    */
 
-		SendMSGToClient(piowi->pecb, szTmp);
-	    
-		hseStatus = HSE_STATUS_ERROR;
-	}
+    cbTotalToRead = piowi->pecb->cbTotalBytes - piowi->cbReadSoFar;
 
-	return hseStatus;
+    if (cbTotalToRead > MAX_BUF_SIZE)
+        cbTotalToRead = MAX_BUF_SIZE;
+
+    dwFlags = HSE_IO_ASYNC;
+
+    /* append the new chunk to buffer, cbReadSoFar indexes the byte right after the last written byte in the buffer */
+
+    fReturn = piowi->pecb->ServerSupportFunction(piowi->pecb->ConnID, HSE_REQ_ASYNC_READ_CLIENT, piowi->pbDATAFromClient +	piowi->cbReadSoFar, &cbTotalToRead, &dwFlags);
+
+    if (!fReturn)
+    {
+
+        sprintf_s(szTmp, sizeof(szTmp), "Problem occurred at ServerSupportFunction() sending HSE_REQ_ASYNC_READ_CLIENT request.");
+
+        SendMSGToClient(piowi->pecb, szTmp);
+
+        hseStatus = HSE_STATUS_ERROR;
+    }
+
+    return hseStatus;
 }
 
 /*
 	Description:
 
 		This is the callback function for handling completions of asynchronous ReadClient.
-		This function resubmits additional IO to read the next chunk of data from the 
-		client. If there is no more data to read or problem during operation, this function 
+		This function resubmits additional IO to read the next chunk of data from the
+		client. If there is no more data to read or problem during operation, this function
 		will inform IIS that it is about to end the request session.
 
 	Arguments:
@@ -431,94 +444,102 @@ DWORD DoAsyncReadClient(IN PIOWI piowi)
 
 VOID WINAPI AsyncReadClientIoCompletion(IN LPEXTENSION_CONTROL_BLOCK pECB, IN PVOID pContext, IN DWORD cbIO, IN DWORD dwError)
 {
-	BOOL fReturn;
-	CHAR szTmp[MAX_BUF_SIZE];
-	DWORD dwFlags;
-	DWORD cbTotalToRead;
-	BYTE *pbData = NULL;
-	PIOWI piowi = (PIOWI)pContext;
-	EXTENSION_CONTROL_BLOCK *pecb = piowi->pecb;
+    BOOL fReturn;
+    CHAR szTmp[MAX_BUF_SIZE];
+    DWORD dwFlags;
+    DWORD cbTotalToRead;
+    BYTE *pbData = NULL;
+    PIOWI piowi = (PIOWI)pContext;
+    EXTENSION_CONTROL_BLOCK *pecb = piowi->pecb;
 
-	if (ERROR_SUCCESS == dwError) {
+    if (ERROR_SUCCESS == dwError)
+    {
 
-		/* Read successfully, so update current total bytes read (aka index of grand data holder) */
+        /* Read successfully, so update current total bytes read (aka index of grand data holder) */
 
-		piowi->cbReadSoFar += cbIO;     
-	                          
-		/* If they are equal, we finish reading all bytes from client */
-	  
-		if (piowi->cbReadSoFar == pecb->cbTotalBytes) { 
+        piowi->cbReadSoFar += cbIO;
 
-			/* Construct the report and write it to client */
+        /* If they are equal, we finish reading all bytes from client */
 
-			pbData = (PBYTE)AR_Allocate(pecb, piowi->cbReadSoFar + MAX_BUF_SIZE);
-	        
-			if (NULL == pbData) {
+        if (piowi->cbReadSoFar == pecb->cbTotalBytes)
+        {
 
-				SetLastError(ERROR_NOT_ENOUGH_MEMORY);
+            /* Construct the report and write it to client */
 
-				sprintf_s(szTmp, sizeof(szTmp), "Failed to allocate memory inside AsyncReadClientIoCompletion().");
+            pbData = (PBYTE)AR_Allocate(pecb, piowi->cbReadSoFar + MAX_BUF_SIZE);
 
-				SendMSGToClient(pecb, szTmp);
-	      
-				DoCleanUp(piowi);
+            if (NULL == pbData)
+            {
 
-				return;
-			}
-	    
-			sprintf_s(pbData, sizeof(pbData), g_szReport, pecb->cbTotalBytes, piowi->cbReadSoFar);
+                SetLastError(ERROR_NOT_ENOUGH_MEMORY);
 
-			piowi->pbDATAFromClient[piowi->cbReadSoFar] = 0; 
+                sprintf_s(szTmp, sizeof(szTmp), "Failed to allocate memory inside AsyncReadClientIoCompletion().");
 
-			strcat_s(pbData, sizeof(pbData), piowi->pbDATAFromClient);
+                SendMSGToClient(pecb, szTmp);
 
-			SendMSGToClient(pecb, pbData);
-	    
-			AR_Free(piowi->pecb, pbData);
+                DoCleanUp(piowi);
 
-			DoCleanUp(piowi);
-	      
-		} else {
+                return;
+            }
 
-			/*
-				Still have more data to read...
-			 
-				We need to first check if the size of the remaining chunk 
-				is less than MAX_BUF_SIZE, if so just read what is available, 
-				otherwise read MAX_BUF_SIZE bytes of data.
-			*/ 
+            sprintf_s(pbData, sizeof(pbData), g_szReport, pecb->cbTotalBytes, piowi->cbReadSoFar);
 
-			cbTotalToRead = pecb->cbTotalBytes - piowi->cbReadSoFar;
+            piowi->pbDATAFromClient[piowi->cbReadSoFar] = 0;
 
-			if (cbTotalToRead > MAX_BUF_SIZE)
-				cbTotalToRead = MAX_BUF_SIZE;
-	    
-			/* Fire off another call to perform an asynchronus read from the client. */
+            strcat_s(pbData, sizeof(pbData), piowi->pbDATAFromClient);
 
-			dwFlags = HSE_IO_ASYNC;
+            SendMSGToClient(pecb, pbData);
 
-			/* append the new chunk to buffer, cbReadSoFar indexes the byte right after the last written byte in the buffer */
+            AR_Free(piowi->pecb, pbData);
 
-			fReturn = pecb->ServerSupportFunction(pecb->ConnID, HSE_REQ_ASYNC_READ_CLIENT, piowi->pbDATAFromClient + piowi->cbReadSoFar, &cbTotalToRead, &dwFlags);
+            DoCleanUp(piowi);
 
-			if (!fReturn) { 
+        }
+        else
+        {
 
-				sprintf_s(szTmp,  sizeof(szTmp), "Problem occurred at ServerSupportFunction() sending HSE_REQ_ASYNC_READ_CLIENT request.");
+            /*
+            	Still have more data to read...
 
-				SendMSGToClient(pecb, szTmp);
+            	We need to first check if the size of the remaining chunk
+            	is less than MAX_BUF_SIZE, if so just read what is available,
+            	otherwise read MAX_BUF_SIZE bytes of data.
+            */
 
-				DoCleanUp(piowi);
-			}
-		}
+            cbTotalToRead = pecb->cbTotalBytes - piowi->cbReadSoFar;
 
-	} else {
+            if (cbTotalToRead > MAX_BUF_SIZE)
+                cbTotalToRead = MAX_BUF_SIZE;
 
-		/* Error on read */
+            /* Fire off another call to perform an asynchronus read from the client. */
 
-		SetLastError(dwError);
-	  
-		DoCleanUp(piowi);
-	}
+            dwFlags = HSE_IO_ASYNC;
+
+            /* append the new chunk to buffer, cbReadSoFar indexes the byte right after the last written byte in the buffer */
+
+            fReturn = pecb->ServerSupportFunction(pecb->ConnID, HSE_REQ_ASYNC_READ_CLIENT, piowi->pbDATAFromClient + piowi->cbReadSoFar, &cbTotalToRead, &dwFlags);
+
+            if (!fReturn)
+            {
+
+                sprintf_s(szTmp,  sizeof(szTmp), "Problem occurred at ServerSupportFunction() sending HSE_REQ_ASYNC_READ_CLIENT request.");
+
+                SendMSGToClient(pecb, szTmp);
+
+                DoCleanUp(piowi);
+            }
+        }
+
+    }
+    else
+    {
+
+        /* Error on read */
+
+        SetLastError(dwError);
+
+        DoCleanUp(piowi);
+    }
 }
 
 /*
@@ -538,22 +559,23 @@ VOID WINAPI AsyncReadClientIoCompletion(IN LPEXTENSION_CONTROL_BLOCK pECB, IN PV
 
 DWORD DoInit(IN OUT PIOWI piowi)
 {
-	piowi->pbDATAFromClient = (PBYTE)AR_Allocate(piowi->pecb, piowi->pecb->cbTotalBytes + MAX_BUF_SIZE);
+    piowi->pbDATAFromClient = (PBYTE)AR_Allocate(piowi->pecb, piowi->pecb->cbTotalBytes + MAX_BUF_SIZE);
 
-	if (NULL == piowi->pbDATAFromClient) {
+    if (NULL == piowi->pbDATAFromClient)
+    {
 
-		SetLastError(ERROR_NOT_ENOUGH_MEMORY);
+        SetLastError(ERROR_NOT_ENOUGH_MEMORY);
 
-		return HSE_STATUS_ERROR;
-	}
+        return HSE_STATUS_ERROR;
+    }
 
-	/* The first chunk (read-ahead chunk) has arrived. */
+    /* The first chunk (read-ahead chunk) has arrived. */
 
-	strcpy_s(piowi->pbDATAFromClient, strlen(piowi->pbDATAFromClient), piowi->pecb->lpbData);
+    strcpy_s(piowi->pbDATAFromClient, strlen(piowi->pbDATAFromClient), piowi->pecb->lpbData);
 
-	piowi->cbReadSoFar = piowi->pecb->cbAvailable;
+    piowi->cbReadSoFar = piowi->pecb->cbAvailable;
 
-	return HSE_STATUS_SUCCESS;
+    return HSE_STATUS_SUCCESS;
 }
 
 /*
@@ -572,22 +594,22 @@ DWORD DoInit(IN OUT PIOWI piowi)
 
 VOID DoCleanUp(IN PIOWI piowi)
 {
-	if (piowi->pbDATAFromClient != NULL)
-		AR_Free( piowi->pecb, piowi->pbDATAFromClient);
+    if (piowi->pbDATAFromClient != NULL)
+        AR_Free( piowi->pecb, piowi->pbDATAFromClient);
 
-	piowi->pecb->ServerSupportFunction(piowi->pecb->ConnID, HSE_REQ_DONE_WITH_SESSION, NULL, NULL, NULL);
+    piowi->pecb->ServerSupportFunction(piowi->pecb->ConnID, HSE_REQ_DONE_WITH_SESSION, NULL, NULL, NULL);
 
-	LocalFree(piowi);
+    LocalFree(piowi);
 
-	return;
+    return;
 }
 
 /*
 	Description:
 
 		Memory allocation routine. Two different Win32 API's to allocate
-		bytes in memory, which is based on the number of bytes coming from 
-		the client. If the size is greater than 1 M bytes VirtualAllocate is 
+		bytes in memory, which is based on the number of bytes coming from
+		the client. If the size is greater than 1 M bytes VirtualAllocate is
 		used, otherwise HeapAllocate is used.
 
 	Arguments:
@@ -602,23 +624,23 @@ VOID DoCleanUp(IN PIOWI piowi)
 
 LPVOID AR_Allocate(IN LPEXTENSION_CONTROL_BLOCK pecb, IN DWORD dwSize)
 {
-	LPVOID pvData = NULL;
+    LPVOID pvData = NULL;
 
-	if (pecb->cbTotalBytes > MEM_ALLOC_THRESHOLD)
-		pvData = VirtualAlloc(NULL, dwSize, MEM_RESERVE | MEM_COMMIT, PAGE_READWRITE);
-	 else
-		pvData = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, dwSize);
+    if (pecb->cbTotalBytes > MEM_ALLOC_THRESHOLD)
+        pvData = VirtualAlloc(NULL, dwSize, MEM_RESERVE | MEM_COMMIT, PAGE_READWRITE);
+    else
+        pvData = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, dwSize);
 
-	return pvData;
+    return pvData;
 }
 
 /*
 	Description:
 
-		Freeing memory routine, a complementary routine to AR_Allocate. 
+		Freeing memory routine, a complementary routine to AR_Allocate.
 		Two different Win32 API's will be used to free up bytes in memory,
-		which is based on the number of bytes coming from the client. If 
-		the size is greater than 1 M bytes VirtualFree is used. Otherwise, 
+		which is based on the number of bytes coming from the client. If
+		the size is greater than 1 M bytes VirtualFree is used. Otherwise,
 		HeapFree is used.
 
 	Arguments:
@@ -633,12 +655,12 @@ LPVOID AR_Allocate(IN LPEXTENSION_CONTROL_BLOCK pecb, IN DWORD dwSize)
 
 BOOL AR_Free( IN LPEXTENSION_CONTROL_BLOCK pecb, IN LPVOID pvData)
 {
-	BOOL fReturn = FALSE;
+    BOOL fReturn = FALSE;
 
-	if (pecb->cbTotalBytes > MEM_ALLOC_THRESHOLD)
-		fReturn = VirtualFree(pvData, 0, MEM_RELEASE);
-	else
-		fReturn = HeapFree(GetProcessHeap(), 0, pvData);
+    if (pecb->cbTotalBytes > MEM_ALLOC_THRESHOLD)
+        fReturn = VirtualFree(pvData, 0, MEM_RELEASE);
+    else
+        fReturn = HeapFree(GetProcessHeap(), 0, pvData);
 
-	return fReturn;
+    return fReturn;
 }

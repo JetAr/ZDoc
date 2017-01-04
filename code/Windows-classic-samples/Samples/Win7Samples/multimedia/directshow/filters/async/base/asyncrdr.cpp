@@ -1,8 +1,8 @@
-//------------------------------------------------------------------------------
+﻿//------------------------------------------------------------------------------
 // File: AsyncRdr.cpp
 //
 // Desc: DirectShow sample code - base library with I/O functionality.
-//       This file implements I/O source filter methods and output pin 
+//       This file implements I/O source filter methods and output pin
 //       methods for CAsyncReader and CAsyncOutputPin.
 //
 // Copyright (c) Microsoft Corporation.  All rights reserved.
@@ -24,15 +24,15 @@ CAsyncOutputPin::CAsyncOutputPin(
     CAsyncReader *pReader,
     CAsyncIo *pIo,
     CCritSec * pLock)
-  : CBasePin(
-    NAME("Async output pin"),
-    pReader,
-    pLock,
-    phr,
-    L"Output",
-    PINDIR_OUTPUT),
-    m_pReader(pReader),
-    m_pIo(pIo)
+    : CBasePin(
+          NAME("Async output pin"),
+          pReader,
+          pLock,
+          phr,
+          L"Output",
+          PINDIR_OUTPUT),
+      m_pReader(pReader),
+      m_pIo(pIo)
 {
 }
 
@@ -68,9 +68,9 @@ HRESULT CAsyncOutputPin::GetMediaType(int iPosition, CMediaType *pMediaType)
         return VFW_S_NO_MORE_ITEMS;
     }
 
-    CheckPointer(pMediaType,E_POINTER); 
-    CheckPointer(m_pReader,E_UNEXPECTED); 
-    
+    CheckPointer(pMediaType,E_POINTER);
+    CheckPointer(m_pReader,E_UNEXPECTED);
+
     *pMediaType = *m_pReader->LoadType();
 
     return S_OK;
@@ -83,8 +83,8 @@ HRESULT CAsyncOutputPin::CheckMediaType(const CMediaType* pType)
 
     /*  We treat MEDIASUBTYPE_NULL subtype as a wild card */
     if((m_pReader->LoadType()->majortype == pType->majortype) &&
-       (m_pReader->LoadType()->subtype == MEDIASUBTYPE_NULL   ||
-        m_pReader->LoadType()->subtype == pType->subtype))
+            (m_pReader->LoadType()->subtype == MEDIASUBTYPE_NULL   ||
+             m_pReader->LoadType()->subtype == pType->subtype))
     {
         return S_OK;
     }
@@ -129,7 +129,7 @@ HRESULT CAsyncOutputPin::InitAllocator(IMemAllocator **ppAlloc)
 
 // we need to return an addrefed allocator, even if it is the preferred
 // one, since he doesn't know whether it is the preferred one or not.
-STDMETHODIMP 
+STDMETHODIMP
 CAsyncOutputPin::RequestAllocator(
     IMemAllocator* pPreferred,
     ALLOCATOR_PROPERTIES* pProps,
@@ -250,9 +250,9 @@ STDMETHODIMP CAsyncOutputPin::Request(
 
 
 // sync-aligned request. just like a request/waitfornext pair.
-STDMETHODIMP 
+STDMETHODIMP
 CAsyncOutputPin::SyncReadAligned(
-                  IMediaSample* pSample)
+    IMediaSample* pSample)
 {
     CheckPointer(pSample,E_POINTER);
 
@@ -395,19 +395,19 @@ CAsyncReader::CAsyncReader(
     LPUNKNOWN pUnk,
     CAsyncStream *pStream,
     HRESULT *phr)
-  : CBaseFilter(
-                pName,
-                pUnk,
-                &m_csFilter,
-                CLSID_AsyncSample,
-                NULL
-                ),
-    m_OutputPin(
-                phr,
-                this,
-                &m_Io,
-                &m_csFilter),
-    m_Io(pStream)
+    : CBaseFilter(
+          pName,
+          pUnk,
+          &m_csFilter,
+          CLSID_AsyncSample,
+          NULL
+      ),
+      m_OutputPin(
+          phr,
+          this,
+          &m_Io,
+          &m_csFilter),
+      m_Io(pStream)
 {
 }
 

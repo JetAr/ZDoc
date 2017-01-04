@@ -1,4 +1,4 @@
-/*++
+﻿/*++
 
 Copyright (c) Microsoft Corporation. All rights reserved.
 
@@ -21,9 +21,9 @@ CProgressDlg::CProgressDlg(HWND hWndParent)
 {
     m_cRef = 0;
 
-	m_hDlg       = NULL;
-	m_hWndParent = hWndParent;
-	m_bCancelled = FALSE;
+    m_hDlg       = NULL;
+    m_hWndParent = hWndParent;
+    m_bCancelled = FALSE;
 
     m_hInitDlg = CreateEvent(NULL, FALSE, FALSE, NULL);
 
@@ -32,20 +32,20 @@ CProgressDlg::CProgressDlg(HWND hWndParent)
         // Create the progress dialog in a separate thread so that it
         // remains responsive
 
-	    DWORD dwThreadId;
+        DWORD dwThreadId;
 
-	    HANDLE hThread = CreateThread(
-		    NULL,
-		    0,
-		    ThreadProc,
-		    this,
-		    0,
-		    &dwThreadId
-	    );
+        HANDLE hThread = CreateThread(
+                             NULL,
+                             0,
+                             ThreadProc,
+                             this,
+                             0,
+                             &dwThreadId
+                         );
 
         // Wait until the progress dialog is created and ready to process
-        // messages. During creation, the new thread will send window messages 
-        // to this thread, and this will cause a deadlock if we use 
+        // messages. During creation, the new thread will send window messages
+        // to this thread, and this will cause a deadlock if we use
         // WaitForSingleObject instead of MsgWaitForMultipleObjects
 
         if (hThread != NULL)
@@ -87,12 +87,12 @@ STDMETHODIMP CProgressDlg::QueryInterface(REFIID iid, LPVOID *ppvObj)
 {
     if (ppvObj == NULL)
     {
-	    return E_POINTER;
+        return E_POINTER;
     }
 
     if (iid == IID_IUnknown)
     {
-	    *ppvObj = (IUnknown *) this;
+        *ppvObj = (IUnknown *) this;
     }
     else
     {
@@ -100,7 +100,7 @@ STDMETHODIMP CProgressDlg::QueryInterface(REFIID iid, LPVOID *ppvObj)
         return E_NOINTERFACE;
     }
 
-	AddRef();
+    AddRef();
     return S_OK;
 }
 
@@ -148,7 +148,7 @@ BOOL CProgressDlg::Cancelled() const
 
 VOID CProgressDlg::SetTitle(PCTSTR pszTitle)
 {
-	SetWindowText(m_hDlg, pszTitle);
+    SetWindowText(m_hDlg, pszTitle);
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -168,7 +168,7 @@ VOID CProgressDlg::SetMessage(PCTSTR pszMessage)
 
 VOID CProgressDlg::SetPercent(UINT nPercent)
 {
-	SendDlgItemMessage(m_hDlg, IDC_PROGRESS_BAR, PBM_SETPOS, (WPARAM) nPercent, 0);	
+    SendDlgItemMessage(m_hDlg, IDC_PROGRESS_BAR, PBM_SETPOS, (WPARAM) nPercent, 0);
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -181,82 +181,82 @@ DWORD WINAPI CProgressDlg::ThreadProc(PVOID pParameter)
     CProgressDlg *that = (CProgressDlg *) pParameter;
 
     INT_PTR nResult = DialogBoxParam(
-        g_hInstance,
-        MAKEINTRESOURCE(IDD_PROGRESS),
-        that->m_hWndParent,
-        DialogProc,
-        (LPARAM) that
-    );
-    
+                          g_hInstance,
+                          MAKEINTRESOURCE(IDD_PROGRESS),
+                          that->m_hWndParent,
+                          DialogProc,
+                          (LPARAM) that
+                      );
+
     return (DWORD) nResult;
-}                  
-    
+}
+
 //////////////////////////////////////////////////////////////////////////
 //
 // CProgressDlg::DialogProc
 //
 
-INT_PTR  
-CALLBACK 
-CProgressDlg::DialogProc(  
+INT_PTR
+CALLBACK
+CProgressDlg::DialogProc(
     HWND   hDlg,
     UINT   uMsg,
     WPARAM wParam,
     LPARAM lParam
 )
 {
-    switch (uMsg) 
+    switch (uMsg)
     {
-		case WM_INITDIALOG: 
-		{
-            // Retrieve and store the "this" pointer
+    case WM_INITDIALOG:
+    {
+        // Retrieve and store the "this" pointer
 
-			CProgressDlg *that = (CProgressDlg *) lParam;
+        CProgressDlg *that = (CProgressDlg *) lParam;
 
-			SetWindowLongPtr(hDlg, DWLP_USER, (LONG_PTR) that);
+        SetWindowLongPtr(hDlg, DWLP_USER, (LONG_PTR) that);
 
-			that->m_hDlg = hDlg;
+        that->m_hDlg = hDlg;
 
-            // Initialize progress bar to the range 0 to 100
+        // Initialize progress bar to the range 0 to 100
 
-			SendDlgItemMessage(hDlg, IDC_PROGRESS_BAR, PBM_SETRANGE32, (WPARAM) 0, (LPARAM) 100);
+        SendDlgItemMessage(hDlg, IDC_PROGRESS_BAR, PBM_SETRANGE32, (WPARAM) 0, (LPARAM) 100);
 
-            // Signal the main thread that we are ready
+        // Signal the main thread that we are ready
 
-            SetEvent(that->m_hInitDlg);
+        SetEvent(that->m_hInitDlg);
 
-			return TRUE;
-		}
+        return TRUE;
+    }
 
-		case WM_COMMAND: 
-		{
-			switch (LOWORD(wParam)) 
-			{
-				case IDCANCEL:
-				{
-                    // If the user presses the cancel button, set the m_bCancelled flag.
+    case WM_COMMAND:
+    {
+        switch (LOWORD(wParam))
+        {
+        case IDCANCEL:
+        {
+            // If the user presses the cancel button, set the m_bCancelled flag.
 
-					CProgressDlg *that = (CProgressDlg *) GetWindowLongPtr(hDlg, DWLP_USER);
+            CProgressDlg *that = (CProgressDlg *) GetWindowLongPtr(hDlg, DWLP_USER);
 
-					InterlockedIncrement(&that->m_bCancelled);
+            InterlockedIncrement(&that->m_bCancelled);
 
-                    // The cancel operation will probably take some time, so 
-                    // change the cancel button text to "wait...", so that 
-                    // the user will see the cancel command is received and 
-                    // is being processed
+            // The cancel operation will probably take some time, so
+            // change the cancel button text to "wait...", so that
+            // the user will see the cancel command is received and
+            // is being processed
 
-					TCHAR szWait[DEFAULT_STRING_SIZE] = _T("...");
+            TCHAR szWait[DEFAULT_STRING_SIZE] = _T("...");
 
-					LoadString(g_hInstance, IDS_WAIT, szWait, COUNTOF(szWait));
+            LoadString(g_hInstance, IDS_WAIT, szWait, COUNTOF(szWait));
 
-				    SetDlgItemText(hDlg, IDCANCEL, szWait);
+            SetDlgItemText(hDlg, IDCANCEL, szWait);
 
-					return TRUE;
-				}
-			}
+            return TRUE;
+        }
+        }
 
-			break;
-		}
+        break;
+    }
     }
 
     return FALSE;

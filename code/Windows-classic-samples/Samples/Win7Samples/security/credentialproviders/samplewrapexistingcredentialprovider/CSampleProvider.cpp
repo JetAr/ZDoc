@@ -1,4 +1,4 @@
-//
+﻿//
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -36,7 +36,7 @@ CSampleProvider::CSampleProvider():
 CSampleProvider::~CSampleProvider()
 {
     _CleanUpAllCredentials();
-    
+
     if (_pWrappedProvider)
     {
         _pWrappedProvider->Release();
@@ -70,12 +70,12 @@ void CSampleProvider::_CleanUpAllCredentials()
 HRESULT CSampleProvider::SetUsageScenario(
     __in CREDENTIAL_PROVIDER_USAGE_SCENARIO cpus,
     __in DWORD dwFlags
-    )
+)
 {
     HRESULT hr;
 
     // Create the password credential provider and query its interface for an
-    // ICredentialProvider we can use. Once it's up and running, ask it about the 
+    // ICredentialProvider we can use. Once it's up and running, ask it about the
     // usage scenario being provided.
     IUnknown *pUnknown = NULL;
     hr = CoCreateInstance(CLSID_PasswordCredentialProvider, NULL, CLSCTX_ALL, IID_PPV_ARGS(&pUnknown));
@@ -103,10 +103,10 @@ HRESULT CSampleProvider::SetUsageScenario(
 // We pass this along to the wrapped provider.
 HRESULT CSampleProvider::SetSerialization(
     __in const CREDENTIAL_PROVIDER_CREDENTIAL_SERIALIZATION* pcpcs
-    )
+)
 {
     HRESULT hr = E_UNEXPECTED;
-    
+
     if (_pWrappedProvider != NULL)
     {
         hr = _pWrappedProvider->SetSerialization(pcpcs);
@@ -119,7 +119,7 @@ HRESULT CSampleProvider::SetSerialization(
 HRESULT CSampleProvider::Advise(
     __in ICredentialProviderEvents* pcpe,
     __in UINT_PTR upAdviseContext
-    )
+)
 {
     HRESULT hr = E_UNEXPECTED;
     if (_pWrappedProvider != NULL)
@@ -129,7 +129,7 @@ HRESULT CSampleProvider::Advise(
     return hr;
 }
 
-// Called by LogonUI when the ICredentialProviderEvents callback is no longer valid. 
+// Called by LogonUI when the ICredentialProviderEvents callback is no longer valid.
 // We pass this along to the wrapped provider.
 HRESULT CSampleProvider::UnAdvise()
 {
@@ -145,12 +145,12 @@ HRESULT CSampleProvider::UnAdvise()
 // does mean that all your tiles must have the same number of fields.
 // This number must include both visible and invisible fields. If you want a tile
 // to have different fields from the other tiles you enumerate for a given usage
-// scenario you must include them all in this count and then hide/show them as desired 
+// scenario you must include them all in this count and then hide/show them as desired
 // using the field descriptors. We pass this along to the wrapped provider and then append
 // our own credential count.
 HRESULT CSampleProvider::GetFieldDescriptorCount(
     __out DWORD* pdwCount
-    )
+)
 {
     HRESULT hr = E_UNEXPECTED;
 
@@ -171,10 +171,10 @@ HRESULT CSampleProvider::GetFieldDescriptorCount(
 // Gets the field descriptor for a particular field. If this descriptor refers to one owned
 // by our wrapped provider, we'll pass it along. Otherwise we provide our own.
 HRESULT CSampleProvider::GetFieldDescriptorAt(
-    __in DWORD dwIndex, 
+    __in DWORD dwIndex,
     __deref_out CREDENTIAL_PROVIDER_FIELD_DESCRIPTOR** ppcpfd
-    )
-{    
+)
+{
     HRESULT hr = E_UNEXPECTED;
 
     if (_pWrappedProvider != NULL)
@@ -199,13 +199,13 @@ HRESULT CSampleProvider::GetFieldDescriptorAt(
                     (*ppcpfd)->dwFieldID += _dwWrappedDescriptorCount;
                 }
                 else
-                { 
+                {
                     hr = E_INVALIDARG;
                 }
             }
         }
         else
-        { 
+        {
             hr = E_INVALIDARG;
         }
     }
@@ -215,9 +215,9 @@ HRESULT CSampleProvider::GetFieldDescriptorAt(
 
 // Sets pdwCount to the number of tiles that we wish to show at this time.
 // Sets pdwDefault to the index of the tile which should be used as the default.
-// The default tile is the tile which will be shown in the zoomed view by default. If 
+// The default tile is the tile which will be shown in the zoomed view by default. If
 // more than one provider specifies a default tile the last cred prov used can select
-// the default tile. 
+// the default tile.
 // If *pbAutoLogonWithDefault is TRUE, LogonUI will immediately call GetSerialization
 // on the credential you've specified as the default and will submit that credential
 // for authentication without showing any further UI.
@@ -227,7 +227,7 @@ HRESULT CSampleProvider::GetCredentialCount(
     __out DWORD* pdwCount,
     __out_range(<,*pdwCount) DWORD* pdwDefault,
     __out BOOL* pbAutoLogonWithDefault
-    )
+)
 {
     HRESULT hr = E_UNEXPECTED;
     DWORD dwDefault = 0;
@@ -237,7 +237,7 @@ HRESULT CSampleProvider::GetCredentialCount(
     if (_pWrappedProvider != NULL)
     {
         // This probably shouldn't happen, but in the event that this gets called after
-        // we've already been through once, we want to clean up everything before 
+        // we've already been through once, we want to clean up everything before
         // allocating new stuff all over again.
         if (_rgpCredentials != NULL)
         {
@@ -271,8 +271,8 @@ HRESULT CSampleProvider::GetCredentialCount(
                             hr = _pWrappedProvider->GetCredentialAt(lcv, &(pCredential));
                             if (SUCCEEDED(hr))
                             {
-                                // Set the Field State Pair and Field Descriptors for ppc's 
-                                // fields to the defaults (s_rgCredProvFieldDescriptors, 
+                                // Set the Field State Pair and Field Descriptors for ppc's
+                                // fields to the defaults (s_rgCredProvFieldDescriptors,
                                 // and s_rgFieldStatePairs) and the value of SFI_USERNAME
                                 // to pwzUsername.
                                 hr = _rgpCredentials[lcv]->Initialize(s_rgCredProvFieldDescriptors, s_rgFieldStatePairs, pCredential, _dwWrappedDescriptorCount);
@@ -295,7 +295,7 @@ HRESULT CSampleProvider::GetCredentialCount(
                         else
                         {
                             hr = E_OUTOFMEMORY;
-                        } 
+                        }
                     } // (End of _rgpCredentials allocation loop.)
                 } // (End if for allocating _rgpCredentials succeeded.)
                 else
@@ -325,20 +325,20 @@ HRESULT CSampleProvider::GetCredentialCount(
     return hr;
 }
 
-// Returns the credential at the index specified by dwIndex. This function is called by 
+// Returns the credential at the index specified by dwIndex. This function is called by
 // logonUI to enumerate the tiles.
 HRESULT CSampleProvider::GetCredentialAt(
-    __in DWORD dwIndex, 
+    __in DWORD dwIndex,
     __in ICredentialProviderCredential** ppcpc
-    )
+)
 {
     HRESULT hr;
 
     // Validate parameters.
-    if ((dwIndex < _dwCredentialCount) && 
-        (ppcpc != NULL) &&
-        (_rgpCredentials != NULL) &&
-        (_rgpCredentials[dwIndex] != NULL))
+    if ((dwIndex < _dwCredentialCount) &&
+            (ppcpc != NULL) &&
+            (_rgpCredentials != NULL) &&
+            (_rgpCredentials[dwIndex] != NULL))
     {
         hr = _rgpCredentials[dwIndex]->QueryInterface(IID_ICredentialProviderCredential, reinterpret_cast<void**>(ppcpc));
     }
@@ -366,6 +366,6 @@ HRESULT CSample_CreateInstance(__in REFIID riid, __deref_out void** ppv)
     {
         hr = E_OUTOFMEMORY;
     }
-    
+
     return hr;
 }

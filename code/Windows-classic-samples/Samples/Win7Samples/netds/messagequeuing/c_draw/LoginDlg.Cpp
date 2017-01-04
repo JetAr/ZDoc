@@ -1,4 +1,4 @@
-// --------------------------------------------------------------------
+﻿// --------------------------------------------------------------------
 //
 //  Copyright (c) Microsoft Corporation.  All rights reserved
 //
@@ -29,27 +29,27 @@ static char THIS_FILE[] = __FILE__;
 
 
 CLoginDlg::CLoginDlg(CWnd* pParent /*=NULL*/)
-	: CDialog(CLoginDlg::IDD, pParent)
+    : CDialog(CLoginDlg::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(CLoginDlg)
-	m_strLogin = _T("");
-	//}}AFX_DATA_INIT
+    //{{AFX_DATA_INIT(CLoginDlg)
+    m_strLogin = _T("");
+    //}}AFX_DATA_INIT
 }
 
 
 void CLoginDlg::DoDataExchange(CDataExchange* pDX)
 {
-	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CLoginDlg)
-	DDX_Text(pDX, IDC_EDIT_LOGIN, m_strLogin);
-	//}}AFX_DATA_MAP
+    CDialog::DoDataExchange(pDX);
+    //{{AFX_DATA_MAP(CLoginDlg)
+    DDX_Text(pDX, IDC_EDIT_LOGIN, m_strLogin);
+    //}}AFX_DATA_MAP
 }
 
 
 BEGIN_MESSAGE_MAP(CLoginDlg, CDialog)
-	//{{AFX_MSG_MAP(CLoginDlg)
-		// NOTE: the ClassWizard will add message map macros here
-	//}}AFX_MSG_MAP
+    //{{AFX_MSG_MAP(CLoginDlg)
+    // NOTE: the ClassWizard will add message map macros here
+    //}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////

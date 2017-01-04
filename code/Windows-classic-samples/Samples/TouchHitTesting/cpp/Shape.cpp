@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -308,9 +308,9 @@ D2D1_POINT_2F CShape::_UnscaledToClient(_In_ POINT unscaled)
 D2D1_RECT_F CShape::_UnscaledToClient(_In_ RECT unscaled)
 {
     return D2D1::RectF(
-        floor(_xR + unscaled.left * _scale),
-        floor(_yR + unscaled.top * _scale),
-        floor(_xR + unscaled.right * _scale),
-        floor(_yR + unscaled.bottom * _scale)
-    );
+               floor(_xR + unscaled.left * _scale),
+               floor(_yR + unscaled.top * _scale),
+               floor(_xR + unscaled.right * _scale),
+               floor(_yR + unscaled.bottom * _scale)
+           );
 }

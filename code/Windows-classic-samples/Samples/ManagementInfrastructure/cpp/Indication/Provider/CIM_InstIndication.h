@@ -1,4 +1,4 @@
-//
+﻿//
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -102,7 +102,7 @@ MI_INLINE MI_Result MI_CALL CIM_InstIndication_Construct(
     _In_ MI_Context* context)
 {
     return MI_Context_ConstructInstance(context, &CIM_InstIndication_rtti,
-        (MI_Instance*)&self->__instance);
+                                        (MI_Instance*)&self->__instance);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_InstIndication_Clone(
@@ -110,7 +110,7 @@ MI_INLINE MI_Result MI_CALL CIM_InstIndication_Clone(
     _Outptr_ CIM_InstIndication** newInstance)
 {
     return MI_Instance_Clone(
-        &self->__instance, (MI_Instance**)newInstance);
+               &self->__instance, (MI_Instance**)newInstance);
 }
 
 MI_INLINE MI_Boolean MI_CALL CIM_InstIndication_IsA(
@@ -137,9 +137,9 @@ MI_INLINE MI_Result MI_CALL CIM_InstIndication_Post(
     _In_z_ const MI_Char* bookmark)
 {
     return MI_Context_PostIndication(context,
-        &self->__instance,
-        subscriptionIDCount,
-        bookmark);
+                                     &self->__instance,
+                                     subscriptionIDCount,
+                                     bookmark);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_InstIndication_Set_IndicationIdentifier(
@@ -147,11 +147,11 @@ MI_INLINE MI_Result MI_CALL CIM_InstIndication_Set_IndicationIdentifier(
     _In_z_ const MI_Char* str)
 {
     return self->__instance.ft->SetElementAt(
-        (MI_Instance*)&self->__instance,
-        0,
-        (MI_Value*)&str,
-        MI_STRING,
-        0);
+               (MI_Instance*)&self->__instance,
+               0,
+               (MI_Value*)&str,
+               MI_STRING,
+               0);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_InstIndication_SetPtr_IndicationIdentifier(
@@ -159,19 +159,19 @@ MI_INLINE MI_Result MI_CALL CIM_InstIndication_SetPtr_IndicationIdentifier(
     _In_z_ const MI_Char* str)
 {
     return self->__instance.ft->SetElementAt(
-        (MI_Instance*)&self->__instance,
-        0,
-        (MI_Value*)&str,
-        MI_STRING,
-        MI_FLAG_BORROW);
+               (MI_Instance*)&self->__instance,
+               0,
+               (MI_Value*)&str,
+               MI_STRING,
+               MI_FLAG_BORROW);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_InstIndication_Clear_IndicationIdentifier(
     _Inout_ CIM_InstIndication* self)
 {
     return self->__instance.ft->ClearElementAt(
-        (MI_Instance*)&self->__instance,
-        0);
+               (MI_Instance*)&self->__instance,
+               0);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_InstIndication_Set_CorrelatedIndications(
@@ -183,11 +183,11 @@ MI_INLINE MI_Result MI_CALL CIM_InstIndication_Set_CorrelatedIndications(
     arr.data = (void*)data;
     arr.size = size;
     return self->__instance.ft->SetElementAt(
-        (MI_Instance*)&self->__instance,
-        1,
-        (MI_Value*)&arr,
-        MI_STRINGA,
-        0);
+               (MI_Instance*)&self->__instance,
+               1,
+               (MI_Value*)&arr,
+               MI_STRINGA,
+               0);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_InstIndication_SetPtr_CorrelatedIndications(
@@ -199,19 +199,19 @@ MI_INLINE MI_Result MI_CALL CIM_InstIndication_SetPtr_CorrelatedIndications(
     arr.data = (void*)data;
     arr.size = size;
     return self->__instance.ft->SetElementAt(
-        (MI_Instance*)&self->__instance,
-        1,
-        (MI_Value*)&arr,
-        MI_STRINGA,
-        MI_FLAG_BORROW);
+               (MI_Instance*)&self->__instance,
+               1,
+               (MI_Value*)&arr,
+               MI_STRINGA,
+               MI_FLAG_BORROW);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_InstIndication_Clear_CorrelatedIndications(
     _Inout_ CIM_InstIndication* self)
 {
     return self->__instance.ft->ClearElementAt(
-        (MI_Instance*)&self->__instance,
-        1);
+               (MI_Instance*)&self->__instance,
+               1);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_InstIndication_Set_IndicationTime(
@@ -251,11 +251,11 @@ MI_INLINE MI_Result MI_CALL CIM_InstIndication_Set_OtherSeverity(
     _In_z_ const MI_Char* str)
 {
     return self->__instance.ft->SetElementAt(
-        (MI_Instance*)&self->__instance,
-        4,
-        (MI_Value*)&str,
-        MI_STRING,
-        0);
+               (MI_Instance*)&self->__instance,
+               4,
+               (MI_Value*)&str,
+               MI_STRING,
+               0);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_InstIndication_SetPtr_OtherSeverity(
@@ -263,19 +263,19 @@ MI_INLINE MI_Result MI_CALL CIM_InstIndication_SetPtr_OtherSeverity(
     _In_z_ const MI_Char* str)
 {
     return self->__instance.ft->SetElementAt(
-        (MI_Instance*)&self->__instance,
-        4,
-        (MI_Value*)&str,
-        MI_STRING,
-        MI_FLAG_BORROW);
+               (MI_Instance*)&self->__instance,
+               4,
+               (MI_Value*)&str,
+               MI_STRING,
+               MI_FLAG_BORROW);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_InstIndication_Clear_OtherSeverity(
     _Inout_ CIM_InstIndication* self)
 {
     return self->__instance.ft->ClearElementAt(
-        (MI_Instance*)&self->__instance,
-        4);
+               (MI_Instance*)&self->__instance,
+               4);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_InstIndication_Set_IndicationFilterName(
@@ -283,11 +283,11 @@ MI_INLINE MI_Result MI_CALL CIM_InstIndication_Set_IndicationFilterName(
     _In_z_ const MI_Char* str)
 {
     return self->__instance.ft->SetElementAt(
-        (MI_Instance*)&self->__instance,
-        5,
-        (MI_Value*)&str,
-        MI_STRING,
-        0);
+               (MI_Instance*)&self->__instance,
+               5,
+               (MI_Value*)&str,
+               MI_STRING,
+               0);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_InstIndication_SetPtr_IndicationFilterName(
@@ -295,19 +295,19 @@ MI_INLINE MI_Result MI_CALL CIM_InstIndication_SetPtr_IndicationFilterName(
     _In_z_ const MI_Char* str)
 {
     return self->__instance.ft->SetElementAt(
-        (MI_Instance*)&self->__instance,
-        5,
-        (MI_Value*)&str,
-        MI_STRING,
-        MI_FLAG_BORROW);
+               (MI_Instance*)&self->__instance,
+               5,
+               (MI_Value*)&str,
+               MI_STRING,
+               MI_FLAG_BORROW);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_InstIndication_Clear_IndicationFilterName(
     _Inout_ CIM_InstIndication* self)
 {
     return self->__instance.ft->ClearElementAt(
-        (MI_Instance*)&self->__instance,
-        5);
+               (MI_Instance*)&self->__instance,
+               5);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_InstIndication_Set_SequenceContext(
@@ -315,11 +315,11 @@ MI_INLINE MI_Result MI_CALL CIM_InstIndication_Set_SequenceContext(
     _In_z_ const MI_Char* str)
 {
     return self->__instance.ft->SetElementAt(
-        (MI_Instance*)&self->__instance,
-        6,
-        (MI_Value*)&str,
-        MI_STRING,
-        0);
+               (MI_Instance*)&self->__instance,
+               6,
+               (MI_Value*)&str,
+               MI_STRING,
+               0);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_InstIndication_SetPtr_SequenceContext(
@@ -327,19 +327,19 @@ MI_INLINE MI_Result MI_CALL CIM_InstIndication_SetPtr_SequenceContext(
     _In_z_ const MI_Char* str)
 {
     return self->__instance.ft->SetElementAt(
-        (MI_Instance*)&self->__instance,
-        6,
-        (MI_Value*)&str,
-        MI_STRING,
-        MI_FLAG_BORROW);
+               (MI_Instance*)&self->__instance,
+               6,
+               (MI_Value*)&str,
+               MI_STRING,
+               MI_FLAG_BORROW);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_InstIndication_Clear_SequenceContext(
     _Inout_ CIM_InstIndication* self)
 {
     return self->__instance.ft->ClearElementAt(
-        (MI_Instance*)&self->__instance,
-        6);
+               (MI_Instance*)&self->__instance,
+               6);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_InstIndication_Set_SequenceNumber(
@@ -363,11 +363,11 @@ MI_INLINE MI_Result MI_CALL CIM_InstIndication_Set_SourceInstance(
     _In_ const MI_Instance* x)
 {
     return self->__instance.ft->SetElementAt(
-        (MI_Instance*)&self->__instance,
-        8,
-        (MI_Value*)&x,
-        MI_INSTANCE,
-        0);
+               (MI_Instance*)&self->__instance,
+               8,
+               (MI_Value*)&x,
+               MI_INSTANCE,
+               0);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_InstIndication_SetPtr_SourceInstance(
@@ -375,19 +375,19 @@ MI_INLINE MI_Result MI_CALL CIM_InstIndication_SetPtr_SourceInstance(
     _In_ const MI_Instance* x)
 {
     return self->__instance.ft->SetElementAt(
-        (MI_Instance*)&self->__instance,
-        8,
-        (MI_Value*)&x,
-        MI_INSTANCE,
-        MI_FLAG_BORROW);
+               (MI_Instance*)&self->__instance,
+               8,
+               (MI_Value*)&x,
+               MI_INSTANCE,
+               MI_FLAG_BORROW);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_InstIndication_Clear_SourceInstance(
     _Inout_ CIM_InstIndication* self)
 {
     return self->__instance.ft->ClearElementAt(
-        (MI_Instance*)&self->__instance,
-        8);
+               (MI_Instance*)&self->__instance,
+               8);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_InstIndication_Set_SourceInstanceModelPath(
@@ -395,11 +395,11 @@ MI_INLINE MI_Result MI_CALL CIM_InstIndication_Set_SourceInstanceModelPath(
     _In_z_ const MI_Char* str)
 {
     return self->__instance.ft->SetElementAt(
-        (MI_Instance*)&self->__instance,
-        9,
-        (MI_Value*)&str,
-        MI_STRING,
-        0);
+               (MI_Instance*)&self->__instance,
+               9,
+               (MI_Value*)&str,
+               MI_STRING,
+               0);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_InstIndication_SetPtr_SourceInstanceModelPath(
@@ -407,19 +407,19 @@ MI_INLINE MI_Result MI_CALL CIM_InstIndication_SetPtr_SourceInstanceModelPath(
     _In_z_ const MI_Char* str)
 {
     return self->__instance.ft->SetElementAt(
-        (MI_Instance*)&self->__instance,
-        9,
-        (MI_Value*)&str,
-        MI_STRING,
-        MI_FLAG_BORROW);
+               (MI_Instance*)&self->__instance,
+               9,
+               (MI_Value*)&str,
+               MI_STRING,
+               MI_FLAG_BORROW);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_InstIndication_Clear_SourceInstanceModelPath(
     _Inout_ CIM_InstIndication* self)
 {
     return self->__instance.ft->ClearElementAt(
-        (MI_Instance*)&self->__instance,
-        9);
+               (MI_Instance*)&self->__instance,
+               9);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_InstIndication_Set_SourceInstanceHost(
@@ -427,11 +427,11 @@ MI_INLINE MI_Result MI_CALL CIM_InstIndication_Set_SourceInstanceHost(
     _In_z_ const MI_Char* str)
 {
     return self->__instance.ft->SetElementAt(
-        (MI_Instance*)&self->__instance,
-        10,
-        (MI_Value*)&str,
-        MI_STRING,
-        0);
+               (MI_Instance*)&self->__instance,
+               10,
+               (MI_Value*)&str,
+               MI_STRING,
+               0);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_InstIndication_SetPtr_SourceInstanceHost(
@@ -439,19 +439,19 @@ MI_INLINE MI_Result MI_CALL CIM_InstIndication_SetPtr_SourceInstanceHost(
     _In_z_ const MI_Char* str)
 {
     return self->__instance.ft->SetElementAt(
-        (MI_Instance*)&self->__instance,
-        10,
-        (MI_Value*)&str,
-        MI_STRING,
-        MI_FLAG_BORROW);
+               (MI_Instance*)&self->__instance,
+               10,
+               (MI_Value*)&str,
+               MI_STRING,
+               MI_FLAG_BORROW);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_InstIndication_Clear_SourceInstanceHost(
     _Inout_ CIM_InstIndication* self)
 {
     return self->__instance.ft->ClearElementAt(
-        (MI_Instance*)&self->__instance,
-        10);
+               (MI_Instance*)&self->__instance,
+               10);
 }
 
 

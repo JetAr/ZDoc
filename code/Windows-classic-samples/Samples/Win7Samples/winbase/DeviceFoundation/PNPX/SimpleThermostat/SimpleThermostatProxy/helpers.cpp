@@ -1,4 +1,4 @@
-////////////////////////////////////////////////////////////////////////////////
+﻿////////////////////////////////////////////////////////////////////////////////
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -30,7 +30,7 @@ HRESULT GetDeviceType( IPropertyStore* pPropStore, DEVICE_PROTOCOL_TYPE* pDevice
     PROPVARIANT pv  = {0};
 
     if( NULL == pPropStore ||
-        NULL == pDeviceType )
+            NULL == pDeviceType )
     {
         return E_INVALIDARG;
     }
@@ -39,13 +39,13 @@ HRESULT GetDeviceType( IPropertyStore* pPropStore, DEVICE_PROTOCOL_TYPE* pDevice
     // Get the types list of the thermostat device
     //
     hr = pPropStore->GetValue( PKEY_PNPX_Types, &pv );
-    
+
     //
     // Search all the types until a recognized one is found. If no recognized
     // one is found, S_FALSE will be returned to the caller.
     //
     if( S_OK == hr &&
-        (VT_VECTOR | VT_LPWSTR) == pv.vt )
+            (VT_VECTOR | VT_LPWSTR) == pv.vt )
     {
         for( i = 0; i < pv.calpwstr.cElems; i++ )
         {

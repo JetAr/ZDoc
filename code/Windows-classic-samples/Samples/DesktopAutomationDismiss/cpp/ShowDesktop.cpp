@@ -8,7 +8,7 @@
 //**********************************************************************
 //
 // IMPORTANT NOTE!
-// For this program to have the privileges to dismiss the desktop, it 
+// For this program to have the privileges to dismiss the desktop, it
 // must be signed and run from Program Files or Windows directory.
 //
 //**********************************************************************
@@ -31,7 +31,8 @@ HANDLE g_hFile = nullptr;
 BOOL g_fOutputToFile = FALSE;
 
 // Forward declarations and typedefs
-typedef struct _ENUMDISPLAYDATA {
+typedef struct _ENUMDISPLAYDATA
+{
     BOOL fAppVisible;
     IAppVisibility *pAppVisible;
 } ENUMDISPLAYDATA;
@@ -56,7 +57,7 @@ void ShowDesktop()
 
     inputs[0].type = INPUT_KEYBOARD;
     inputs[0].ki.wVk = VK_LWIN;
-    
+
     inputs[1].type = INPUT_KEYBOARD;
     inputs[1].ki.wVk = VK_D;
 
@@ -86,9 +87,9 @@ BOOL CALLBACK MonitorEnumProc (_In_ HMONITOR hMonitor, _In_ HDC, _In_ LPRECT, _I
     ENUMDISPLAYDATA *pData =  reinterpret_cast<ENUMDISPLAYDATA *>(dwData);
     MONITOR_APP_VISIBILITY monitorAppVisibility = MAV_UNKNOWN;
 
-    HRESULT hr = pData->pAppVisible->GetAppVisibilityOnMonitor(hMonitor, &monitorAppVisibility);  
-    if (SUCCEEDED(hr))  
-    {  
+    HRESULT hr = pData->pAppVisible->GetAppVisibilityOnMonitor(hMonitor, &monitorAppVisibility);
+    if (SUCCEEDED(hr))
+    {
         OutputString(L"\tMonitor app visibility:\t\t");
         switch (monitorAppVisibility)
         {
@@ -106,7 +107,7 @@ BOOL CALLBACK MonitorEnumProc (_In_ HMONITOR hMonitor, _In_ HDC, _In_ LPRECT, _I
             OutputString(L"UNDEFINED\r\n");
             break;
         }
-    }  
+    }
 
     return TRUE;
 }
@@ -116,15 +117,15 @@ BOOL CALLBACK MonitorEnumProc (_In_ HMONITOR hMonitor, _In_ HDC, _In_ LPRECT, _I
 // Checks to see if any apps or the Start menu is visible
 //
 //**********************************************************************
-BOOL IsAppVisible()  
+BOOL IsAppVisible()
 {
     OutputString(L"Checking for apps\r\n");
-    BOOL fAppVisible = FALSE;  
-    
+    BOOL fAppVisible = FALSE;
+
     ENUMDISPLAYDATA data = {0};
-    
+
     HRESULT hr = CoCreateInstance(CLSID_AppVisibility, nullptr, CLSCTX_INPROC_SERVER, IID_PPV_ARGS(&data.pAppVisible));
-    if (SUCCEEDED(hr))  
+    if (SUCCEEDED(hr))
     {
         hr = data.pAppVisible->IsLauncherVisible(&fAppVisible);
         if (SUCCEEDED(hr))
@@ -171,7 +172,7 @@ BOOL WaitForDesktop()
         Sleep(1000);
         fAppVisible = IsAppVisible();
     }
-    
+
     return !fAppVisible;
 }
 
@@ -252,7 +253,7 @@ BOOL OutputString(_In_z_ _Null_terminated_ WCHAR *pszFormatString, ...)
     {
         fRetValue = FALSE;
     }
-    
+
     return fRetValue;
 }
 
@@ -292,7 +293,7 @@ int __cdecl wmain(_In_ int argc, _In_reads_(argc) WCHAR *argv[], _In_reads_(argc
             pszfileName = argv[i];
             g_fOutputToFile = TRUE;
         }
-        
+
         // Flag to ignore the check for UIAccess
         if (_wcsicmp(argv[i], L"-i") == 0)
         {
@@ -305,7 +306,7 @@ int __cdecl wmain(_In_ int argc, _In_reads_(argc) WCHAR *argv[], _In_reads_(argc
     {
         DWORD dwCreationDisposition = fOverwrite ? CREATE_ALWAYS: CREATE_NEW;
         g_hFile = CreateFile(pszfileName, GENERIC_WRITE, FILE_SHARE_READ, nullptr, dwCreationDisposition, FILE_ATTRIBUTE_NORMAL, nullptr);
-        
+
         if (g_hFile == INVALID_HANDLE_VALUE)
         {
             nResult = GetLastError();

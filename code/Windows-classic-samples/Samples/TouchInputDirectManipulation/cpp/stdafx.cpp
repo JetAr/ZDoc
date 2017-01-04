@@ -1,4 +1,4 @@
-// Copyright (c) Microsoft Corporation. All rights reserved 
+﻿// Copyright (c) Microsoft Corporation. All rights reserved
 
 // stdafx.cpp : source file that includes just the standard includes
 // DirectManipulationSample.pch will be the pre-compiled header

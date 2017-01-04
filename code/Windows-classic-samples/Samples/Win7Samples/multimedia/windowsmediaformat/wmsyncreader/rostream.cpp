@@ -1,4 +1,4 @@
-//*****************************************************************************
+﻿//*****************************************************************************
 //
 // Microsoft Windows Media
 // Copyright ( C) Microsoft Corporation. All rights reserved.
@@ -6,9 +6,9 @@
 // FileName:            rostream.cpp
 //
 // Abstract:            Implementation of CROStream, which is an IStream-
-//						derived data sourcing class. The IWMSyncReader 
-//						interface is capable of sourcing through a custom object 
-//						supporting the IStream interface. The CROStream class is 
+//						derived data sourcing class. The IWMSyncReader
+//						interface is capable of sourcing through a custom object
+//						supporting the IStream interface. The CROStream class is
 //						used in the sample to demonstrate this capability.
 //
 //*****************************************************************************
@@ -43,14 +43,14 @@ HRESULT CROStream::Open( LPCTSTR ptszURL )
     HRESULT hr = S_OK;
     LPSTR pszURL = NULL;
 
-  m_hFile = CreateFile(
-                    ptszURL,
-                    GENERIC_READ,
-                    FILE_SHARE_READ,
-                    NULL,
-                    OPEN_EXISTING,
-                    FILE_ATTRIBUTE_NORMAL,
-                    NULL );
+    m_hFile = CreateFile(
+                  ptszURL,
+                  GENERIC_READ,
+                  FILE_SHARE_READ,
+                  NULL,
+                  OPEN_EXISTING,
+                  FILE_ATTRIBUTE_NORMAL,
+                  NULL );
 
     if( INVALID_HANDLE_VALUE == m_hFile )
     {
@@ -82,28 +82,28 @@ HRESULT CROStream::Read( void *pv, ULONG cb, ULONG *pcbRead )
 //////////////////////////////////////////////////////////////////////////////
 ///////
 HRESULT CROStream::Seek(
-                                    LARGE_INTEGER dlibMove,
-                                    DWORD dwOrigin,
-                                    ULARGE_INTEGER *plibNewPosition )
+    LARGE_INTEGER dlibMove,
+    DWORD dwOrigin,
+    ULARGE_INTEGER *plibNewPosition )
 {
     DWORD dwMoveMethod;
 
     switch( dwOrigin )
     {
-        case STREAM_SEEK_SET:
-            dwMoveMethod = FILE_BEGIN;
-            break;
+    case STREAM_SEEK_SET:
+        dwMoveMethod = FILE_BEGIN;
+        break;
 
-        case STREAM_SEEK_CUR:
-            dwMoveMethod = FILE_CURRENT;
-            break;
+    case STREAM_SEEK_CUR:
+        dwMoveMethod = FILE_CURRENT;
+        break;
 
-        case STREAM_SEEK_END:
-            dwMoveMethod = FILE_END;
-            break;
+    case STREAM_SEEK_END:
+        dwMoveMethod = FILE_END;
+        break;
 
-        default:
-            return( E_INVALIDARG );
+    default:
+        return( E_INVALIDARG );
     };
 
     DWORD dwPos = SetFilePointer( m_hFile, dlibMove.LowPart, NULL, dwMoveMethod );
@@ -158,7 +158,7 @@ HRESULT CROStream::QueryInterface( REFIID riid, void **ppv )
 
         return( S_OK );
     }
-        
+
     *ppv = NULL;
     return( E_NOINTERFACE );
 }
@@ -179,7 +179,7 @@ ULONG CROStream::Release()
         delete this;
         return( 0 );
     }
-    
+
     return( 0xbad );
 }
 

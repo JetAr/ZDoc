@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -15,9 +15,9 @@
 
 /*C+C+++C+++C+++C+++C+++C+++C+++C+++C+++C+++C+++C+++C+++C+++C+++C+++C+++C+++C
 Class:   CSecuritySub
-Summary: Security Events Subscriber 
-C---C---C---C---C---C---C---C---C---C---C---C---C---C---C---C---C---C---C-C*/ 
-class ATL_NO_VTABLE CSecuritySub : 
+Summary: Security Events Subscriber
+C---C---C---C---C---C---C---C---C---C---C---C---C---C---C---C---C---C---C-C*/
+class ATL_NO_VTABLE CSecuritySub :
     public CSysLCESub,
     public IComSecurityEvents
 {
@@ -35,25 +35,34 @@ public:
     DECLARE_GET_CONTROLLING_UNKNOWN()
 
     BEGIN_COM_MAP(CSecuritySub)
-        COM_INTERFACE_ENTRY(IComSecurityEvents)
-        COM_INTERFACE_ENTRY_CHAIN(CSysLCESub)
+    COM_INTERFACE_ENTRY(IComSecurityEvents)
+    COM_INTERFACE_ENTRY_CHAIN(CSysLCESub)
     END_COM_MAP()
 
-    virtual EventEnum EventType() { return Security; }
-    virtual REFCLSID EventCLSID() { return CLSID_ComServiceEvents; }
-    virtual REFIID EventIID() { return IID_IComSecurityEvents; }
+    virtual EventEnum EventType()
+    {
+        return Security;
+    }
+    virtual REFCLSID EventCLSID()
+    {
+        return CLSID_ComServiceEvents;
+    }
+    virtual REFIID EventIID()
+    {
+        return IID_IComSecurityEvents;
+    }
 
-    STDMETHODIMP OnAuthenticate(  COMSVCSEVENTINFO * pInfo, 
-                                  REFGUID guidActivity, 
+    STDMETHODIMP OnAuthenticate(  COMSVCSEVENTINFO * pInfo,
+                                  REFGUID guidActivity,
                                   ULONG64 ObjectID,
-                                  REFGUID guidIID, 
+                                  REFGUID guidIID,
                                   ULONG iMeth,
-                                  ULONG cbByteOrig,  
+                                  ULONG cbByteOrig,
                                   BYTE * pSidOriginalUser,
-                                  ULONG cbByteCur,   
-                                  BYTE * pSidCurrentUser, 
+                                  ULONG cbByteCur,
+                                  BYTE * pSidCurrentUser,
                                   BOOL bCurrentUserInpersonatingInProc
-                            )
+                               )
     {
 
         m_pSpy->AddEventToList(pInfo->perfCount, L"OnAuthenticate", GuidToBstr(pInfo->guidApp));
@@ -91,31 +100,31 @@ public:
 
         m_pSpy->AddParamValueToList(L"Direct User Inpersonating InProc", bCurrentUserInpersonatingInProc ? L"Yes" : L"No");
 
-        
+
         IF_AUDIT_DO(OnAuthenticate)(pInfo->perfCount,
                                     GuidToBstr(pInfo->guidApp),
-                                    bstrGuidActivity,    
-                                    sObjId, 
-                                    bstrIID, 
-                                    sMethod, 
-                                    sOriginalUser,                        
-                                    sDirectUser,            
+                                    bstrGuidActivity,
+                                    sObjId,
+                                    bstrIID,
+                                    sMethod,
+                                    sOriginalUser,
+                                    sDirectUser,
                                     bCurrentUserInpersonatingInProc);
 
         return S_OK;
     }
 
-    STDMETHODIMP OnAuthenticateFail(  COMSVCSEVENTINFO * pInfo, 
-                                  REFGUID guidActivity, 
-                                  ULONG64 ObjectID,
-                                  REFGUID guidIID, 
-                                  ULONG iMeth,
-                                  ULONG cbByteOrig,  
-                                  BYTE * pSidOriginalUser,
-                                  ULONG cbByteCur,   
-                                  BYTE * pSidCurrentUser, 
-                                  BOOL bCurrentUserInpersonatingInProc
-                               )
+    STDMETHODIMP OnAuthenticateFail(  COMSVCSEVENTINFO * pInfo,
+                                      REFGUID guidActivity,
+                                      ULONG64 ObjectID,
+                                      REFGUID guidIID,
+                                      ULONG iMeth,
+                                      ULONG cbByteOrig,
+                                      BYTE * pSidOriginalUser,
+                                      ULONG cbByteCur,
+                                      BYTE * pSidCurrentUser,
+                                      BOOL bCurrentUserInpersonatingInProc
+                                   )
     {
 
         m_pSpy->AddEventToList(pInfo->perfCount, L"OnAuthenticateFail", GuidToBstr(pInfo->guidApp));
@@ -154,23 +163,23 @@ public:
         m_pSpy->AddParamValueToList(L"Direct User Inpersonating InProc", bCurrentUserInpersonatingInProc ? L"Yes" : L"No");
 
         IF_AUDIT_DO(OnAuthenticateFail)(pInfo->perfCount,
-                                    GuidToBstr(pInfo->guidApp),
-                                    bstrGuidActivity,    
-                                    sObjId, // objectID
-                                    bstrIID, //interface ID
-                                    sMethod, //
-                                    sOriginalUser,                        
-                                    sDirectUser,            
-                                    bCurrentUserInpersonatingInProc);
+                                        GuidToBstr(pInfo->guidApp),
+                                        bstrGuidActivity,
+                                        sObjId, // objectID
+                                        bstrIID, //interface ID
+                                        sMethod, //
+                                        sOriginalUser,
+                                        sDirectUser,
+                                        bCurrentUserInpersonatingInProc);
 
         return S_OK;
     }
 
 
     bool GetDomainSlashUser(
-         __in PSID pSid,
-         __out_ecount(cchDomainSlashUser) LPWSTR pwszDomainSlashUser,
-         __in DWORD cchDomainSlashUser)
+        __in PSID pSid,
+        __out_ecount(cchDomainSlashUser) LPWSTR pwszDomainSlashUser,
+        __in DWORD cchDomainSlashUser)
     {
         WCHAR wszName[USERNAMELEN + 1];
         DWORD cchName = ARRAYSIZE(wszName);

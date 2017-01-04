@@ -1,4 +1,4 @@
-//////////////////////////////////////////////////////////////////////
+﻿//////////////////////////////////////////////////////////////////////
 //
 //  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 //  ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED
@@ -51,7 +51,7 @@ static WCHAR c_szMenuItemDescriptionCustom[] = L"Attach Cutsom Property to selec
 //----------------------------------------------------------------------------
 
 class CLangBarItemButton : public ITfLangBarItemButton,
-                           public ITfSource
+    public ITfSource
 {
 public:
     CLangBarItemButton(CTextService *pTextService);
@@ -140,8 +140,8 @@ STDAPI CLangBarItemButton::QueryInterface(REFIID riid, void **ppvObj)
     *ppvObj = NULL;
 
     if (IsEqualIID(riid, IID_IUnknown) ||
-        IsEqualIID(riid, IID_ITfLangBarItem) ||
-        IsEqualIID(riid, IID_ITfLangBarItemButton))
+            IsEqualIID(riid, IID_ITfLangBarItem) ||
+            IsEqualIID(riid, IID_ITfLangBarItemButton))
     {
         *ppvObj = (ITfLangBarItemButton *)this;
     }
@@ -258,81 +258,81 @@ STDAPI CLangBarItemButton::OnClick(TfLBIClick click, POINT pt, const RECT *prcAr
 
 STDAPI CLangBarItemButton::InitMenu(ITfMenu *pMenu)
 {
-    // 
+    //
     // Add the fisrt menu item.
-    // 
+    //
     ITfMenu *pSubMenu;
     pSubMenu = NULL;
     pMenu->AddMenuItem((UINT)-1,
                        TF_LBMENUF_SUBMENU,
-                       NULL, 
-                       NULL, 
-                       c_szMenuItemDescriptionStaticCompact, 
-                       (ULONG)wcslen(c_szMenuItemDescriptionStaticCompact), 
+                       NULL,
+                       NULL,
+                       c_szMenuItemDescriptionStaticCompact,
+                       (ULONG)wcslen(c_szMenuItemDescriptionStaticCompact),
                        &pSubMenu);
 
     if (pSubMenu)
     {
         pSubMenu->AddMenuItem(MENUITEM_INDEX_STATICCOMPACT0,
                               0,
-                              NULL, 
-                              NULL, 
-                              c_szMenuItemDescriptionStaticCompact0, 
-                              (ULONG)wcslen(c_szMenuItemDescriptionStaticCompact0), 
+                              NULL,
+                              NULL,
+                              c_szMenuItemDescriptionStaticCompact0,
+                              (ULONG)wcslen(c_szMenuItemDescriptionStaticCompact0),
                               NULL);
 
         pSubMenu->AddMenuItem(MENUITEM_INDEX_STATICCOMPACT1,
                               0,
-                              NULL, 
-                              NULL, 
-                              c_szMenuItemDescriptionStaticCompact1, 
-                              (ULONG)wcslen(c_szMenuItemDescriptionStaticCompact1), 
+                              NULL,
+                              NULL,
+                              c_szMenuItemDescriptionStaticCompact1,
+                              (ULONG)wcslen(c_szMenuItemDescriptionStaticCompact1),
                               NULL);
 
         pSubMenu->Release();
     }
 
-    // 
+    //
     // Add the second menu item.
-    // 
+    //
     pSubMenu = NULL;
     pMenu->AddMenuItem(MENUITEM_INDEX_STATIC,
                        TF_LBMENUF_SUBMENU,
-                       NULL, 
-                       NULL, 
-                       c_szMenuItemDescriptionStatic, 
-                       (ULONG)wcslen(c_szMenuItemDescriptionStatic), 
+                       NULL,
+                       NULL,
+                       c_szMenuItemDescriptionStatic,
+                       (ULONG)wcslen(c_szMenuItemDescriptionStatic),
                        &pSubMenu);
     if (pSubMenu)
     {
         pSubMenu->AddMenuItem(MENUITEM_INDEX_STATIC0,
                               0,
-                              NULL, 
-                              NULL, 
-                              c_szMenuItemDescriptionStatic0, 
-                              (ULONG)wcslen(c_szMenuItemDescriptionStatic0), 
+                              NULL,
+                              NULL,
+                              c_szMenuItemDescriptionStatic0,
+                              (ULONG)wcslen(c_szMenuItemDescriptionStatic0),
                               NULL);
 
         pSubMenu->AddMenuItem(MENUITEM_INDEX_STATIC1,
                               0,
-                              NULL, 
-                              NULL, 
-                              c_szMenuItemDescriptionStatic1, 
-                              (ULONG)wcslen(c_szMenuItemDescriptionStatic1), 
+                              NULL,
+                              NULL,
+                              c_szMenuItemDescriptionStatic1,
+                              (ULONG)wcslen(c_szMenuItemDescriptionStatic1),
                               NULL);
 
         pSubMenu->Release();
     }
 
-    // 
+    //
     // Add the third menu item.
-    // 
+    //
     pMenu->AddMenuItem(MENUITEM_INDEX_CUSTOM,
-                       0, 
-                       NULL, 
-                       NULL, 
-                       c_szMenuItemDescriptionCustom, 
-                       (ULONG)wcslen(c_szMenuItemDescriptionCustom), 
+                       0,
+                       NULL,
+                       NULL,
+                       c_szMenuItemDescriptionCustom,
+                       (ULONG)wcslen(c_szMenuItemDescriptionCustom),
                        NULL);
 
 
@@ -352,25 +352,25 @@ STDAPI CLangBarItemButton::OnMenuSelect(UINT wID)
     //
     switch (wID)
     {
-        case MENUITEM_INDEX_STATICCOMPACT0:
-            _pTextService->_AttachStaticCompactProperty(0);
-            break;
+    case MENUITEM_INDEX_STATICCOMPACT0:
+        _pTextService->_AttachStaticCompactProperty(0);
+        break;
 
-        case MENUITEM_INDEX_STATICCOMPACT1:
-            _pTextService->_AttachStaticCompactProperty(1);
-            break;
+    case MENUITEM_INDEX_STATICCOMPACT1:
+        _pTextService->_AttachStaticCompactProperty(1);
+        break;
 
-        case MENUITEM_INDEX_STATIC0:
-            _pTextService->_AttachStaticProperty(L"String 1");
-            break;
+    case MENUITEM_INDEX_STATIC0:
+        _pTextService->_AttachStaticProperty(L"String 1");
+        break;
 
-        case MENUITEM_INDEX_STATIC1:
-            _pTextService->_AttachStaticProperty(L"String 2");
-            break;
+    case MENUITEM_INDEX_STATIC1:
+        _pTextService->_AttachStaticProperty(L"String 2");
+        break;
 
-        case MENUITEM_INDEX_CUSTOM:
-            _pTextService->_AttachCustomProperty();
-            break;
+    case MENUITEM_INDEX_CUSTOM:
+        _pTextService->_AttachCustomProperty();
+        break;
     }
 
     return S_OK;
@@ -385,7 +385,7 @@ STDAPI CLangBarItemButton::OnMenuSelect(UINT wID)
 STDAPI CLangBarItemButton::GetIcon(HICON *phIcon)
 {
     *phIcon = (HICON)LoadImage(g_hInst, TEXT("IDI_TEXTSERVICE"), IMAGE_ICON, 16, 16, 0);
- 
+
     return (*phIcon != NULL) ? S_OK : E_FAIL;
 }
 
@@ -446,9 +446,9 @@ STDAPI CLangBarItemButton::AdviseSink(REFIID riid, IUnknown *punk, DWORD *pdwCoo
 
 STDAPI CLangBarItemButton::UnadviseSink(DWORD dwCookie)
 {
-    // 
+    //
     // Check the given cookie.
-    // 
+    //
     if (dwCookie != TEXTSERVICE_LANGBARITEMSINK_COOKIE)
         return CONNECT_E_NOCONNECTION;
 

@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -38,7 +38,8 @@ public:
     STDMETHODIMP_(ULONG) Release(void);
 
     // ITfTextInputProcessor
-    STDMETHODIMP Activate(ITfThreadMgr *pThreadMgr, TfClientId tfClientId) {
+    STDMETHODIMP Activate(ITfThreadMgr *pThreadMgr, TfClientId tfClientId)
+    {
         return ActivateEx(pThreadMgr, tfClientId, 0);
     }
     // ITfTextInputProcessorEx
@@ -92,8 +93,14 @@ public:
     static HRESULT CreateInstance(_In_ IUnknown *pUnkOuter, REFIID riid, _Outptr_ void **ppvObj);
 
     // utility function for thread manager.
-    ITfThreadMgr* _GetThreadMgr() { return _pThreadMgr; }
-    TfClientId _GetClientId() { return _tfClientId; }
+    ITfThreadMgr* _GetThreadMgr()
+    {
+        return _pThreadMgr;
+    }
+    TfClientId _GetClientId()
+    {
+        return _tfClientId;
+    }
 
     // functions for the composition object.
     void _SetComposition(_In_ ITfComposition *pComposition);
@@ -124,11 +131,23 @@ public:
     HRESULT _HandlePhraseArrowKey(TfEditCookie ec, _In_ ITfContext *pContext, _In_ KEYSTROKE_FUNCTION keyFunction);
     HRESULT _HandlePhraseSelectByNumber(TfEditCookie ec, _In_ ITfContext *pContext, _In_ UINT uCode);
 
-    BOOL _IsSecureMode(void) { return (_dwActivateFlags & TF_TMAE_SECUREMODE) ? TRUE : FALSE; }
-    BOOL _IsComLess(void) { return (_dwActivateFlags & TF_TMAE_COMLESS) ? TRUE : FALSE; }
-    BOOL _IsStoreAppMode(void) { return (_dwActivateFlags & TF_TMF_IMMERSIVEMODE) ? TRUE : FALSE; };
+    BOOL _IsSecureMode(void)
+    {
+        return (_dwActivateFlags & TF_TMAE_SECUREMODE) ? TRUE : FALSE;
+    }
+    BOOL _IsComLess(void)
+    {
+        return (_dwActivateFlags & TF_TMAE_COMLESS) ? TRUE : FALSE;
+    }
+    BOOL _IsStoreAppMode(void)
+    {
+        return (_dwActivateFlags & TF_TMF_IMMERSIVEMODE) ? TRUE : FALSE;
+    };
 
-    CCompositionProcessorEngine* GetCompositionProcessorEngine() { return (_pCompositionProcessorEngine); };
+    CCompositionProcessorEngine* GetCompositionProcessorEngine()
+    {
+        return (_pCompositionProcessorEngine);
+    };
 
     // comless helpers
     static HRESULT CSampleIME::CreateInstance(REFCLSID rclsid, REFIID riid, _Outptr_result_maybenull_ LPVOID* ppv, _Out_opt_ HINSTANCE* phInst, BOOL isComLessMode);
@@ -239,7 +258,7 @@ private:
     ITfCompartment* _pSIPIMEOnOffCompartment;
     DWORD _dwSIPIMEOnOffCompartmentSinkCookie;
 
-    HWND _msgWndHandle; 
+    HWND _msgWndHandle;
 
     LONG _refCount;
 

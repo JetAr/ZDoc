@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -51,7 +51,7 @@ void OnInitDialog(HWND hwndDlg)
 
     ListView_SetExtendedListViewStyle(GetDlgItem(hwndDlg, IDC_DEVLIST), LVS_EX_FULLROWSELECT | LVS_EX_GRIDLINES);
 
-	// Init portable devices manager
+    // Init portable devices manager
     hr = g_DevManager.InitManager();
     if (FAILED(hr))
     {
@@ -121,8 +121,9 @@ void OnDevListRightClick(HWND hwndDlg, LPNMITEMACTIVATE pNMItemActivate)
 
     ClientToScreen(hwndDlg, &pNMItemActivate->ptAction);
 
-    hmenu = LoadMenu(GetModuleHandle(NULL), MAKEINTRESOURCE(IDR_POPUPMENU)); 
-    if (hmenu == NULL) {
+    hmenu = LoadMenu(GetModuleHandle(NULL), MAKEINTRESOURCE(IDR_POPUPMENU));
+    if (hmenu == NULL)
+    {
         return;
     }
 
@@ -131,13 +132,12 @@ void OnDevListRightClick(HWND hwndDlg, LPNMITEMACTIVATE pNMItemActivate)
     if (lstrcmp(szStringBuffer, _T("Microsoft WPD Enhanced Storage Password Driver")) == 0)
     {
         // password silo device
-        hmenuTrackPopup = GetSubMenu(hmenu, 0); 
+        hmenuTrackPopup = GetSubMenu(hmenu, 0);
     }
-    else
-    if (lstrcmp(szStringBuffer, _T("Microsoft WPD Enhanced Storage Certificate Driver")) == 0)
+    else if (lstrcmp(szStringBuffer, _T("Microsoft WPD Enhanced Storage Certificate Driver")) == 0)
     {
         // certificate silo device
-        hmenuTrackPopup = GetSubMenu(hmenu, 1); 
+        hmenuTrackPopup = GetSubMenu(hmenu, 1);
     }
     else
     {
@@ -192,17 +192,17 @@ INT_PTR CALLBACK MainDialogProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM l
 }
 
 int APIENTRY _tWinMain(HINSTANCE hInstance,
-                     HINSTANCE hPrevInstance,
-                     LPTSTR    lpCmdLine,
-                     int       nCmdShow)
+                       HINSTANCE hPrevInstance,
+                       LPTSTR    lpCmdLine,
+                       int       nCmdShow)
 {
-	UNREFERENCED_PARAMETER(hPrevInstance);
-	UNREFERENCED_PARAMETER(lpCmdLine);
+    UNREFERENCED_PARAMETER(hPrevInstance);
+    UNREFERENCED_PARAMETER(lpCmdLine);
 
     // create main dialog
     DialogBox(hInstance,  MAKEINTRESOURCE(IDD_EHSTORENUMERATOR_DIALOG), GetDesktopWindow(), MainDialogProc);
 
-	return 0;
+    return 0;
 }
 
 // get selected device index and PNP id
@@ -211,7 +211,8 @@ int GetSelectedDevice(HWND hwndDlg, LPTSTR szPNPID, LONG nBufferSize)
     int nSelectedDeviceIDX = -1;
     HWND hListCtrl = GetDlgItem(hwndDlg, IDC_DEVLIST);
 
-    if (szPNPID == NULL || nBufferSize < 1 || hListCtrl == NULL) {
+    if (szPNPID == NULL || nBufferSize < 1 || hListCtrl == NULL)
+    {
         return -1;
     }
 
@@ -222,8 +223,9 @@ int GetSelectedDevice(HWND hwndDlg, LPTSTR szPNPID, LONG nBufferSize)
         return -1;
     }
 
-    nSelectedDeviceIDX = ListView_GetNextItem(hListCtrl, -1 , LVNI_SELECTED);
-    if (nSelectedDeviceIDX >= 0) {
+    nSelectedDeviceIDX = ListView_GetNextItem(hListCtrl, -1, LVNI_SELECTED);
+    if (nSelectedDeviceIDX >= 0)
+    {
         ListView_GetItemText(hListCtrl, nSelectedDeviceIDX, 2, szPNPID, nBufferSize);
     }
 
@@ -236,5 +238,5 @@ void DisplayError(HWND hwndDlg, LPCTSTR szMessage, HRESULT hrError)
 
     StringCbPrintf(szMessageBuf, _countof(szMessageBuf), _T("%s\n0x%08X"), szMessage, hrError);
     MessageBox(hwndDlg, szMessageBuf, _T(""),
-        MB_OK | (FAILED(hrError) ? MB_ICONERROR : MB_ICONINFORMATION));
+               MB_OK | (FAILED(hrError) ? MB_ICONERROR : MB_ICONINFORMATION));
 }

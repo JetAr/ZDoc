@@ -1,4 +1,4 @@
-//
+﻿//
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -15,7 +15,7 @@ Module Name:
 
 Abstract:
 
-    This module implements a sample demonstrating how to use the push mode 
+    This module implements a sample demonstrating how to use the push mode
     Event Subscription.
 
 Environment:
@@ -42,7 +42,8 @@ Environment:
 // User defined context to pass to the callback.
 //
 
-typedef struct _RENDER_CONTEXT {
+typedef struct _RENDER_CONTEXT
+{
     DWORD PropertiesCount;
     EVT_HANDLE RenderContext;
     DWORD EventCount;
@@ -62,7 +63,7 @@ typedef enum _SYSTEM_PROPERTY_ID
 VOID
 DisplayHelp (
     __in PCWSTR ExeName
-    )
+)
 
 /*++
 
@@ -125,7 +126,8 @@ Return Value:
 
     Buffer = (PWSTR)G_ALLOC(BufferSize*sizeof(WCHAR));
 
-    if (Buffer == NULL)    {
+    if (Buffer == NULL)
+    {
         return ERROR_OUTOFMEMORY;
     }
 
@@ -137,13 +139,16 @@ Return Value:
                           Flags,
                           BufferSize,
                           (LPWSTR)Buffer,
-                          &BufferSize)) {
+                          &BufferSize))
+    {
         Error = GetLastError();
-        if (Error == ERROR_INSUFFICIENT_BUFFER) {
+        if (Error == ERROR_INSUFFICIENT_BUFFER)
+        {
             PreviousBuffer = Buffer;
             Buffer = (PWSTR)G_REALLOC(PreviousBuffer,
                                       BufferSize * sizeof(WCHAR));
-            if (Buffer == NULL) {
+            if (Buffer == NULL)
+            {
                 G_FREE(PreviousBuffer);
                 return ERROR_OUTOFMEMORY;
             }
@@ -156,12 +161,15 @@ Return Value:
                                   Flags,
                                   BufferSize,
                                   (LPWSTR)Buffer,
-                                  &BufferSize)) {
+                                  &BufferSize))
+            {
                 Error = GetLastError();
                 G_FREE(Buffer);
                 Buffer = NULL;
             }
-        } else {
+        }
+        else
+        {
             G_FREE(Buffer);
             Buffer = NULL;
         }
@@ -170,11 +178,11 @@ Return Value:
 }
 
 DWORD WINAPI
-SubscriptionCallBack( 
-    __in EVT_SUBSCRIBE_NOTIFY_ACTION Action, 
-    __in PVOID Context, 
+SubscriptionCallBack(
+    __in EVT_SUBSCRIBE_NOTIFY_ACTION Action,
+    __in PVOID Context,
     __in EVT_HANDLE Event
-    )
+)
 
 /*++
 
@@ -211,14 +219,15 @@ Return Value:
     ULONGLONG Temp;
     PWSTR PropertyDescription;
     EVT_HANDLE Provider = NULL;
-    
+
     //
     // When the callback cannot retrieve event, the event
     // handle returns win32 errorcode specifying why retrieving
     // event failed.
     //
 
-    if (Action == EvtSubscribeActionError) {
+    if (Action == EvtSubscribeActionError)
+    {
         Error = reinterpret_cast<DWORD>(Event);
         wprintf(L"Could not get Event!. Error = 0x%x", Error);
         return Error;
@@ -228,7 +237,8 @@ Return Value:
 
     EventPropertyBuffer = (PBYTE)G_ALLOC(BufferSize);
 
-    if (EventPropertyBuffer == NULL) {
+    if (EventPropertyBuffer == NULL)
+    {
         return ERROR_OUTOFMEMORY;
     }
 
@@ -242,9 +252,11 @@ Return Value:
                    BufferSize,
                    EventPropertyBuffer,
                    &BufferUsed,
-                   &PropertyCount)) {
+                   &PropertyCount))
+    {
         Error = GetLastError();
-        if (Error == ERROR_INSUFFICIENT_BUFFER) {
+        if (Error == ERROR_INSUFFICIENT_BUFFER)
+        {
 
             //
             // Allocate the buffer size needed to for the properties.
@@ -254,12 +266,13 @@ Return Value:
             PreviousEventPropertyBuffer = EventPropertyBuffer;
             EventPropertyBuffer = (PBYTE)G_REALLOC(PreviousEventPropertyBuffer,
                                                    BufferSize);
-            if (EventPropertyBuffer == NULL) {
+            if (EventPropertyBuffer == NULL)
+            {
                 G_FREE(PreviousEventPropertyBuffer);
                 return ERROR_OUTOFMEMORY;
             }
             Error = ERROR_SUCCESS;
-            
+
             //
             // Get the Event properties.
             //
@@ -268,23 +281,27 @@ Return Value:
                            Event,
                            EvtRenderEventValues,
                            BufferSize,
-                           EventPropertyBuffer, 
+                           EventPropertyBuffer,
                            &BufferUsed,
-                           &PropertyCount)) {
+                           &PropertyCount))
+            {
                 Error = GetLastError();
                 wprintf(L"Could not Render Event Properties!. Error = 0x%x",
                         Error);
                 G_FREE(EventPropertyBuffer);
                 return Error;
             }
-        } else {
+        }
+        else
+        {
             G_FREE(EventPropertyBuffer);
         }
     }
 
     EventPropertyValues = (PEVT_VARIANT)EventPropertyBuffer;
 
-    if (PropertyCount < Callbackcontext->PropertiesCount) {
+    if (PropertyCount < Callbackcontext->PropertiesCount)
+    {
         wprintf(L"Could not Render Events Properties!. Error = 0x%x",
                 ERROR_INVALID_DATA);
         G_FREE(EventPropertyBuffer);
@@ -302,19 +319,22 @@ Return Value:
     EventTimeStampFileTime.dwHighDateTime = (DWORD)((Temp >> 32) & 0xFFFFFFFF);
     EventTimeStampFileTime.dwLowDateTime = (DWORD)(Temp & 0xFFFFFFFF);
 
-    if (FileTimeToSystemTime(&EventTimeStampFileTime,&EventTimeStampSystemTime)) {
+    if (FileTimeToSystemTime(&EventTimeStampFileTime,&EventTimeStampSystemTime))
+    {
         wprintf(L"  Date: %02d/%02d/%d  %02d:%02d\n",
                 EventTimeStampSystemTime.wMonth,
                 EventTimeStampSystemTime.wDay,
                 EventTimeStampSystemTime.wYear,
                 EventTimeStampSystemTime.wHour,
                 EventTimeStampSystemTime.wMinute);
-    } else {
+    }
+    else
+    {
         wprintf(L"  Date: N/A\n");
     }
 
     //
-    // If we cannot open provider handle, we use default provider by passing NULL 
+    // If we cannot open provider handle, we use default provider by passing NULL
     // to RenderMessage. Also, it is recommended to use some sort of cache for
     // provider handle, for the sake of simplicity this example does not add cache.
     //
@@ -332,11 +352,14 @@ Return Value:
                           EvtFormatMessageLevel,
                           PropertyDescription);
 
-    if (Error == ERROR_SUCCESS) {
-        wprintf(L"  Level: %s\n", 
+    if (Error == ERROR_SUCCESS)
+    {
+        wprintf(L"  Level: %s\n",
                 PropertyDescription);
         G_FREE(PropertyDescription);
-    } else {
+    }
+    else
+    {
         wprintf(L"  Level: N/A\n");
     }
 
@@ -344,12 +367,15 @@ Return Value:
                           Event,
                           EvtFormatMessageTask,
                           PropertyDescription);
-    
-    if (Error == ERROR_SUCCESS) {
+
+    if (Error == ERROR_SUCCESS)
+    {
         wprintf(L"  Task: %s\n",
                 PropertyDescription);
         G_FREE(PropertyDescription);
-    } else {
+    }
+    else
+    {
         wprintf(L"  Task: N/A\n");
     }
 
@@ -358,15 +384,19 @@ Return Value:
                           EvtFormatMessageEvent,
                           PropertyDescription);
 
-    if (Error == ERROR_SUCCESS) {
+    if (Error == ERROR_SUCCESS)
+    {
         wprintf(L"  Event Description: %s\n\n",
                 PropertyDescription);
         G_FREE(PropertyDescription);
-    } else {
+    }
+    else
+    {
         wprintf(L"  Event Description: N/A\n\n");
     }
 
-    if (Provider != NULL) {
+    if (Provider != NULL)
+    {
         EvtClose(Provider);
     }
     return Error;
@@ -376,8 +406,8 @@ DWORD __cdecl
 wmain(
     __in int argc,
     __in_ecount(argc) PWSTR *argv
-    )
-    
+)
+
 /*++
 
 Routine Description:
@@ -404,8 +434,9 @@ Return Value:
     WCHAR* Query = L"*";
     WCHAR CommandlineInput;
     DWORD Error = ERROR_SUCCESS;
-    
-    PCWSTR RenderContextProperties[] = {
+
+    PCWSTR RenderContextProperties[] =
+    {
         L"Event/System/Provider/@Name",
         L"Event/System/EventID",
         L"Event/System/TimeCreated/@SystemTime"
@@ -417,10 +448,13 @@ Return Value:
     // print help.
     //
 
-    if (argc == 3) {
+    if (argc == 3)
+    {
         Channel = argv[1];
         Query = argv[2];
-    } else if (argc != 1) {
+    }
+    else if (argc != 1)
+    {
         DisplayHelp(argv[0]);
         return ERROR_INVALID_DATA;
     }
@@ -433,10 +467,11 @@ Return Value:
     UserContext.EventCount = 0;
 
     UserContext.RenderContext = EvtCreateRenderContext(UserContext.PropertiesCount,
-                                                       RenderContextProperties,
-                                                       EvtRenderContextValues);
+                                RenderContextProperties,
+                                EvtRenderContextValues);
 
-    if (UserContext.RenderContext == NULL) {
+    if (UserContext.RenderContext == NULL)
+    {
         Error = GetLastError();
         wprintf(L"Could not create RenderContext. Error = 0x%x",
                 Error);
@@ -447,16 +482,17 @@ Return Value:
     // Register the subscription.
     //
 
-    SubscrptionHandle = EvtSubscribe(NULL, 
+    SubscrptionHandle = EvtSubscribe(NULL,
                                      NULL,
                                      Channel,
                                      Query,
                                      NULL,
                                      &UserContext,
-                                     (EVT_SUBSCRIBE_CALLBACK) SubscriptionCallBack, 
+                                     (EVT_SUBSCRIBE_CALLBACK) SubscriptionCallBack,
                                      EvtSubscribeToFutureEvents);
 
-    if (SubscrptionHandle == NULL) {
+    if (SubscrptionHandle == NULL)
+    {
         Error = GetLastError();
         EvtClose(UserContext.RenderContext);
         wprintf(L"Could not Subscribe to Events!. Error = 0x%x",
@@ -469,13 +505,15 @@ Return Value:
             Channel,
             Query);
 
-    do {
+    do
+    {
         CommandlineInput = _getwch();
         CommandlineInput = towupper(CommandlineInput);
-    } while(CommandlineInput != 'Q');
+    }
+    while(CommandlineInput != 'Q');
 
     //
-    // Close the subscriber handle first followed by RenderContext. 
+    // Close the subscriber handle first followed by RenderContext.
     // This gurantees that rendercontext does not go away while subscription
     // callback is using it.
     //

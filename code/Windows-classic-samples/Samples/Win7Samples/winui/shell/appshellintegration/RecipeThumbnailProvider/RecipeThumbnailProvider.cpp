@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -21,7 +21,7 @@
 // in an isolated process for robustness
 
 class CRecipeThumbProvider : public IInitializeWithStream,
-                             public IThumbnailProvider
+    public IThumbnailProvider
 {
 public:
     CRecipeThumbProvider() : _cRef(1), _pStream(NULL)
@@ -212,8 +212,8 @@ HRESULT CRecipeThumbProvider::_GetStreamFromString(PCWSTR pszImageName, IStream 
 }
 
 HRESULT ConvertBitmapSourceTo32BPPHBITMAP(IWICBitmapSource *pBitmapSource,
-                                           IWICImagingFactory *pImagingFactory,
-                                           HBITMAP *phbmp)
+        IWICImagingFactory *pImagingFactory,
+        HBITMAP *phbmp)
 {
     *phbmp = NULL;
 

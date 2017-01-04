@@ -1,4 +1,4 @@
-//------------------------------------------------------------
+﻿//------------------------------------------------------------
 // Copyright (c) Microsoft Corporation.  All rights reserved.
 //------------------------------------------------------------
 
@@ -174,12 +174,12 @@ void CALLBACK FreeEncoder(
 WS_CHANNEL_ENCODER channelEncoder =
 {
     NULL,
-    CreateEncoder, 
-    EncoderGetContentType, 
+    CreateEncoder,
+    EncoderGetContentType,
     EncoderStart,
-    EncoderEncode, 
+    EncoderEncode,
     EncoderEnd,
-    FreeEncoder 
+    FreeEncoder
 };
 
 struct Decoder
@@ -352,11 +352,11 @@ void CALLBACK FreeDecoder(
 WS_CHANNEL_DECODER channelDecoder =
 {
     NULL,
-    CreateDecoder, 
-    DecoderGetContentType, 
+    CreateDecoder,
+    DecoderGetContentType,
     DecoderStart,
-    DecoderDecode, 
+    DecoderDecode,
     DecoderEnd,
-    FreeDecoder 
+    FreeDecoder
 };
 

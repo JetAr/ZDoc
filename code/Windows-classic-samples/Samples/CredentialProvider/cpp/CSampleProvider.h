@@ -1,4 +1,4 @@
-//
+﻿//
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -15,9 +15,9 @@
 #include "CSampleCredential.h"
 
 class CSampleProvider : public ICredentialProvider,
-                        public ICredentialProviderSetUserArray
+    public ICredentialProviderSetUserArray
 {
-  public:
+public:
     // IUnknown
     IFACEMETHODIMP_(ULONG) AddRef()
     {
@@ -45,7 +45,7 @@ class CSampleProvider : public ICredentialProvider,
         return QISearch(this, qit, riid, ppv);
     }
 
-  public:
+public:
     IFACEMETHODIMP SetUsageScenario(CREDENTIAL_PROVIDER_USAGE_SCENARIO cpus, DWORD dwFlags);
     IFACEMETHODIMP SetSerialization(_In_ CREDENTIAL_PROVIDER_CREDENTIAL_SERIALIZATION const *pcpcs);
 
@@ -65,11 +65,11 @@ class CSampleProvider : public ICredentialProvider,
 
     friend HRESULT CSample_CreateInstance(_In_ REFIID riid, _Outptr_ void** ppv);
 
-  protected:
+protected:
     CSampleProvider();
     __override ~CSampleProvider();
 
-  private:
+private:
     void _ReleaseEnumeratedCredentials();
     void _CreateEnumeratedCredentials();
     HRESULT _EnumerateEmpty();

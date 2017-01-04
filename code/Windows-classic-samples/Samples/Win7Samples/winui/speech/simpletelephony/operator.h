@@ -1,9 +1,9 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
 //
-// Copyright � Microsoft Corporation. All rights reserved
+// Copyright © Microsoft Corporation. All rights reserved
 
 /****************************************************************************
 *	Operator.h
@@ -31,12 +31,12 @@ const WCHAR gszTelephonySample[] = L"SAPI 5.0 Telephony sample";
 class COperator
 {
 public:
-    COperator::COperator( HINSTANCE hInst ) : 
-                                m_hDlg( NULL ),
-                                m_pTapi( NULL ),
-                                m_pCall( NULL ),
-                                m_fAutoAnswer( FALSE ),
-                                m_pTAPIEventNotification( NULL )
+    COperator::COperator( HINSTANCE hInst ) :
+        m_hDlg( NULL ),
+        m_pTapi( NULL ),
+        m_pCall( NULL ),
+        m_fAutoAnswer( FALSE ),
+        m_pTAPIEventNotification( NULL )
     {};
     COperator::~COperator();
 
@@ -54,29 +54,29 @@ private:
     void ShutdownTapi();
 
     // Main dialog proc is a friend function
-    
+
     friend INT_PTR WINAPI MainDialogProc( HWND hDlg,
                                           UINT uMsg,
                                           WPARAM wParam,
                                           LPARAM lParam );
 
     // TAPI actions
-    
+
     HRESULT RegisterTapiEventInterface();
-    
+
     HRESULT ListenOnAddresses();
-    
+
     HRESULT ListenOnThisAddress( ITAddress * pAddress );
-    
+
     HRESULT AnswerTheCall();
-    
+
     HRESULT DisconnectTheCall();
 
     void ReleaseTheCall();
 
     HRESULT OnTapiEvent(
-            TAPI_EVENT TapiEvent,
-            IDispatch * pEvent );
+        TAPI_EVENT TapiEvent,
+        IDispatch * pEvent );
 
     // SAPI actions
 
@@ -96,7 +96,7 @@ private:
     // Win32 data
     HWND                    m_hDlg;
     BOOL                    m_fAutoAnswer;
-    
+
     // TAPI data
     ITTAPI *                        m_pTapi;
     ITBasicCallControl *            m_pCall;
@@ -121,5 +121,5 @@ private:
 
 // Helper function
 BOOL AddressSupportsMediaType( ITAddress * pAddress,
-                                long lMediaType );
+                               long lMediaType );
 

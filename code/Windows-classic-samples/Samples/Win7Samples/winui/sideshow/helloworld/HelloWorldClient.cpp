@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -15,7 +15,7 @@
 //
 
 // {625B4120-AD9D-4109-B4FB-D3CC0863BAA3}
-static const APPLICATION_ID HELLOWORLD_APPLICATION_ID = 
+static const APPLICATION_ID HELLOWORLD_APPLICATION_ID =
 { 0x625b4120, 0xad9d, 0x4109, { 0xb4, 0xfb, 0xd3, 0xcc, 0x8, 0x63, 0xba, 0xa3 } };
 
 using namespace std;
@@ -40,8 +40,8 @@ void CHelloWorldClient::Register()
     cout << "Registering Windows SideShow Client..." << endl;
     HRESULT hr = S_OK;
 
-    if (NULL == m_pSession && 
-        NULL == m_pContentMgr)
+    if (NULL == m_pSession &&
+            NULL == m_pContentMgr)
     {
         ::CoCreateInstance(CLSID_SideShowSession,
                            NULL,
@@ -67,18 +67,18 @@ void CHelloWorldClient::Register()
             else if (S_FALSE == hr)
             {
                 cout << "Successfully registered with the Windows SideShow platform, " <<
-                        "but no devices available or enabled." << endl;
+                     "but no devices available or enabled." << endl;
             }
             else if (E_INVALIDARG == hr)
             {
                 cout << "ISideShowSession::RegisterContent failed with Invalid Argument: " <<
-                        "Have you added the proper information to the registry for this application?" << endl;
+                     "Have you added the proper information to the registry for this application?" << endl;
             }
-            else 
+            else
             {
                 cout << "ISideShowSession::RegisterContent failed, hr = " << hr << endl;
             }
-        }       
+        }
     }
     else
     {
@@ -101,7 +101,7 @@ void CHelloWorldClient::Unregister()
     }
 
     if (NULL != m_pSession)
-    {       
+    {
         m_pSession->Release();
         m_pSession = NULL;
     }

@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -98,9 +98,15 @@ public:
     HRESULT RegDeleteKeyPrintf(HKEY hkey, PCWSTR pszKeyFormatString, ...) const;
     HRESULT RegDeleteKeyValuePrintf(HKEY hkey, PCWSTR pszKeyFormatString, PCWSTR pszValue, ...) const;
 
-    PCWSTR GetCLSIDString() const { return _szCLSID; };
+    PCWSTR GetCLSIDString() const
+    {
+        return _szCLSID;
+    };
 
-    bool HasClassID() const { return _clsid != CLSID_NULL ? true : false; };
+    bool HasClassID() const
+    {
+        return _clsid != CLSID_NULL ? true : false;
+    };
 
 private:
 

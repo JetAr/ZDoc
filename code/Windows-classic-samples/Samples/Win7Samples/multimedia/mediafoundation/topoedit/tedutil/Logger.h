@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -44,8 +44,8 @@ public:
 
         return cRef;
     }
-    
-    virtual ULONG STDMETHODCALLTYPE Release() 
+
+    virtual ULONG STDMETHODCALLTYPE Release()
     {
         LONG cRef = InterlockedDecrement( &m_cRef );
 
@@ -55,7 +55,7 @@ public:
         }
         return( cRef );
     }
-    
+
 private:
     CAtlFile m_file;
     LONG m_cRef;

@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -14,8 +14,8 @@
 LPCTSTR CSplitterBar::ms_strNextCursor = NULL;
 bool CSplitterBar::ms_fVert = false;
 
-CSplitterBar::CSplitterBar(CDock* pDock, bool vert, HWND parent) 
-    : m_pDock(pDock), m_bSelected(false), m_fVert(vert), m_hParent(parent) 
+CSplitterBar::CSplitterBar(CDock* pDock, bool vert, HWND parent)
+    : m_pDock(pDock), m_bSelected(false), m_fVert(vert), m_hParent(parent)
 {
 
     ms_fVert = vert;
@@ -24,15 +24,15 @@ CSplitterBar::CSplitterBar(CDock* pDock, bool vert, HWND parent)
 LRESULT CSplitterBar::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
     HCURSOR hCursor;
-    if(m_fVert) 
+    if(m_fVert)
     {
         hCursor = LoadCursor(NULL, IDC_SIZEWE);
     }
-    else 
+    else
     {
         hCursor = LoadCursor(NULL, IDC_SIZENS);
     }
-    
+
     SetClassLongPtr(m_hWnd, GCLP_HCURSOR, (LONG_PTR) hCursor);
 
 
@@ -44,15 +44,15 @@ LRESULT CSplitterBar::OnPaint(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHa
     PAINTSTRUCT ps;
 
     HDC dc = ::BeginPaint(m_hWnd, &ps);
-    
+
     RECT drawArea;
     GetClientRect(&drawArea);
 
     HPEN grayPen = CreatePen(PS_SOLID, 1, GetSysColor(COLOR_3DFACE));
     HPEN darkPen = CreatePen(PS_SOLID, 1, GetSysColor(COLOR_3DDKSHADOW));
     HBRUSH grayBrush = CreateSolidBrush(GetSysColor(COLOR_3DFACE));
-    
-    if(drawArea.bottom - drawArea.top > drawArea.right - drawArea.left) 
+
+    if(drawArea.bottom - drawArea.top > drawArea.right - drawArea.left)
     {
         HPEN oldPen = (HPEN) SelectObject(dc, darkPen);
 
@@ -71,7 +71,7 @@ LRESULT CSplitterBar::OnPaint(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHa
 
         SelectObject(dc, oldPen);
     }
-    else 
+    else
     {
         HPEN oldPen = (HPEN) SelectObject(dc, darkPen);
 
@@ -102,7 +102,7 @@ LRESULT CSplitterBar::OnPaint(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHa
 
 LRESULT CSplitterBar::OnMouseMove(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
-    if(m_bSelected) 
+    if(m_bSelected)
     {
         m_pDock->MoveSplitter(this, GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
 

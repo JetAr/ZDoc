@@ -1,4 +1,4 @@
-//*****************************************************************************
+﻿//*****************************************************************************
 //
 // Microsoft Windows Media
 // Copyright ( C) Microsoft Corporation. All rights reserved.
@@ -6,9 +6,9 @@
 // FileName:            main.cpp
 //
 // Abstract:            Merge samples for audio and video from several AVI files
-//                      and either merge these into similar streams or create a 
-//                      new stream based on the source stream profile. Profiles 
-//                      have to be prx-based. The sample also shows how to create an 
+//                      and either merge these into similar streams or create a
+//                      new stream based on the source stream profile. Profiles
+//                      have to be prx-based. The sample also shows how to create an
 //                      arbitraty stream and do multipass encoding.
 //
 //*****************************************************************************
@@ -49,11 +49,11 @@ void Usage()
     _tprintf( _T( "\n" ) );
     _tprintf( _T( "  REMARK: only AVI files with uncompressed streams are accepted\n\n" ) );
 
-	HRESULT hr = CUncompAVIToWMV::ListSystemProfile();
-	if( FAILED( hr ) )
-	{
-		_tprintf( _T( "Could not list system profile (hr=0x%08x).\n" ), hr );
-	}
+    HRESULT hr = CUncompAVIToWMV::ListSystemProfile();
+    if( FAILED( hr ) )
+    {
+        _tprintf( _T( "Could not list system profile (hr=0x%08x).\n" ), hr );
+    }
 }
 
 //------------------------------------------------------------------------------
@@ -67,12 +67,12 @@ int __cdecl _tmain( int argc, __in_ecount(argc) LPTSTR argv[] )
     TCHAR*              ptszOutFile = NULL;
     TCHAR*              ptszInFile = NULL;
     TCHAR*              ptszOutProfile = NULL;
-	TCHAR*				ptszCustomProfile = NULL;
+    TCHAR*				ptszCustomProfile = NULL;
     BOOLEAN             fUseDRM = FALSE;
     CONTENT_DESC        rgCntDesc[20];
     int                 cCntDesc = 0;
     int                 i = 0;
-	DWORD				dwSystemProfile = 0xFFFFFFFF;
+    DWORD				dwSystemProfile = 0xFFFFFFFF;
     IWMProfile*         pIWMProfile = NULL;
     BOOL                fPause = FALSE;
     BOOL                fArbitrary = FALSE;
@@ -80,7 +80,7 @@ int __cdecl _tmain( int argc, __in_ecount(argc) LPTSTR argv[] )
     BOOL                fPreserveProfile = TRUE;
     BOOL                fAddSMPTE = FALSE;
     BOOL                fValidArgument = FALSE;
-    int                 nMaxDuration = -1;  // Max duration in seconds of output file 
+    int                 nMaxDuration = -1;  // Max duration in seconds of output file
     CUncompAVIToWMV     converter;
 
     hr = CoInitialize( NULL );
@@ -133,7 +133,7 @@ int __cdecl _tmain( int argc, __in_ecount(argc) LPTSTR argv[] )
         else if( 0 == _tcsicmp( argv[i], _T( "-if" ) ) )
         {
             fInFileListFile = TRUE;
-        }        
+        }
         else if( 0 == _tcsicmp( argv[i], _T( "-o" ) ) )
         {
             i++;
@@ -155,20 +155,20 @@ int __cdecl _tmain( int argc, __in_ecount(argc) LPTSTR argv[] )
             if ( !_stscanf_s( argv[i], _T( "%d" ), &dwSystemProfile ) )
                 break;
         }
-		else if( 0 == _tcsicmp( argv[i], _T( "-pf" ) ) )
-		{
-			i++;
-			if( i >= argc )
-			{
-				break;
-			}
+        else if( 0 == _tcsicmp( argv[i], _T( "-pf" ) ) )
+        {
+            i++;
+            if( i >= argc )
+            {
+                break;
+            }
 
-			ptszCustomProfile = argv[i];
-		}
+            ptszCustomProfile = argv[i];
+        }
         else if( 0 == _tcsicmp( argv[i], _T( "-pe" ) ) )
         {
             fPreserveProfile = FALSE;
-        }            
+        }
         else if( 0 == _tcsicmp( argv[i], _T( "-sp" ) ) )
         {
             i++;
@@ -182,7 +182,7 @@ int __cdecl _tmain( int argc, __in_ecount(argc) LPTSTR argv[] )
         else if( 0 == _tcsicmp( argv[i], _T( "-m" ) ) )
         {
             converter.SetPreprocessing( TRUE );
-        }        
+        }
         else if( 0 == _tcsicmp( argv[i], _T( "-drm" ) ) )
         {
             fUseDRM = TRUE;
@@ -190,7 +190,7 @@ int __cdecl _tmain( int argc, __in_ecount(argc) LPTSTR argv[] )
         else if( 0 == _tcsicmp( argv[i], _T( "-arb" ) ) )
         {
             fArbitrary = TRUE;
-        }            
+        }
         else if( 0 == _tcsicmp( argv[i], _T( "-pause" ) ) )
         {
             fPause = TRUE;
@@ -216,7 +216,7 @@ int __cdecl _tmain( int argc, __in_ecount(argc) LPTSTR argv[] )
         else
             break;
 
-        fValidArgument = TRUE;            
+        fValidArgument = TRUE;
     }
 
     if ( !fValidArgument || i < argc )
@@ -253,11 +253,11 @@ int __cdecl _tmain( int argc, __in_ecount(argc) LPTSTR argv[] )
                 //
                 // Load system profile
                 //
-                hr = CUncompAVIToWMV::LoadSystemProfile( dwSystemProfile, 
-                                                         &pIWMProfile );
+                hr = CUncompAVIToWMV::LoadSystemProfile( dwSystemProfile,
+                        &pIWMProfile );
                 if( FAILED( hr ) )
                 {
-                    _tprintf( _T( "Could not load system profile index %d (hr=0x%08x)\n" ), 
+                    _tprintf( _T( "Could not load system profile index %d (hr=0x%08x)\n" ),
                               dwSystemProfile, hr );
                     break;
                 }
@@ -266,41 +266,41 @@ int __cdecl _tmain( int argc, __in_ecount(argc) LPTSTR argv[] )
         else if( NULL != ptszCustomProfile )
         {
             //
-            // Load custom profile 
-            // 
-            hr = CUncompAVIToWMV::LoadCustomProfile( ptszCustomProfile, 
-                                                     &pIWMProfile );
+            // Load custom profile
+            //
+            hr = CUncompAVIToWMV::LoadCustomProfile( ptszCustomProfile,
+                    &pIWMProfile );
             if( FAILED( hr ) )
             {
-                _tprintf( _T( "Could not load custom profile %s (hr=0x%08x)\n" ), 
+                _tprintf( _T( "Could not load custom profile %s (hr=0x%08x)\n" ),
                           ptszCustomProfile, hr );
                 break;
             }
         }
         else
         {
-		    //
-		    // Create an empty profile
-		    //
-		    hr = CUncompAVIToWMV::CreateEmptyProfile( &pIWMProfile );
-		    if( FAILED( hr ) )
-		    {
-    		    _tprintf( _T( "Could not create empty profile (hr=0x%08x)\n" ), hr );
+            //
+            // Create an empty profile
+            //
+            hr = CUncompAVIToWMV::CreateEmptyProfile( &pIWMProfile );
+            if( FAILED( hr ) )
+            {
+                _tprintf( _T( "Could not create empty profile (hr=0x%08x)\n" ), hr );
                 break;
-		    }
+            }
 
             _tprintf( _T( "-pe option is automatically used when no profile is specified.\n" ) );
             fPreserveProfile = FALSE;
         }
 
-        hr = converter.Initial( ptszInFile, 
-                              fInFileListFile, 
-                              ptszOutFile, 
-                              pIWMProfile, 
-                              fArbitrary, 
-                              fPreserveProfile,
-                              fAddSMPTE,
-                              nMaxDuration );
+        hr = converter.Initial( ptszInFile,
+                                fInFileListFile,
+                                ptszOutFile,
+                                pIWMProfile,
+                                fArbitrary,
+                                fPreserveProfile,
+                                fAddSMPTE,
+                                nMaxDuration );
         if( FAILED( hr ) )
         {
             break;
@@ -308,7 +308,7 @@ int __cdecl _tmain( int argc, __in_ecount(argc) LPTSTR argv[] )
 
         for( i = 0; i < cCntDesc; i++ )
         {
-            hr = converter.SetAttribute( &rgCntDesc[i] ); 
+            hr = converter.SetAttribute( &rgCntDesc[i] );
             if( FAILED( hr ) )
             {
                 _tprintf( _T( "Could not set attribute (hr=0x%08x)\n" ), hr );
@@ -320,7 +320,7 @@ int __cdecl _tmain( int argc, __in_ecount(argc) LPTSTR argv[] )
         {
             break;
         }
-    
+
         if( fUseDRM )
         {
             hr = converter.SetDRM();

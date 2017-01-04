@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -25,10 +25,10 @@ BOOL CompareWsString(const WS_STRING* string1, const WS_STRING* string2)
             return TRUE;
         }
 
-// The strings are not null-terminated because we pass also their lenghts to the CompareStringW        
+// The strings are not null-terminated because we pass also their lenghts to the CompareStringW
 #pragma warning(suppress:26035)
         if (CompareStringW(LOCALE_INVARIANT, 0, string1->chars,
-            length, string2->chars, length) == CSTR_EQUAL)
+                           length, string2->chars, length) == CSTR_EQUAL)
         {
             return TRUE;
         }
@@ -40,7 +40,7 @@ BOOL CompareWsString(const WS_STRING* string1, const WS_STRING* string2)
 
 // Print out rich error info
 void PrintError(
-    _In_ HRESULT errorCode, 
+    _In_ HRESULT errorCode,
     _In_opt_ WS_ERROR* error)
 {
     wprintf(L"Failure: errorCode=0x%lx\n", errorCode);
@@ -83,9 +83,9 @@ Exit:
 // define a custom validator for received username/password pairs
 static HRESULT CALLBACK MyPasswordValidator(
     _In_ void* callbackState,
-    _In_ const WS_STRING* username, 
+    _In_ const WS_STRING* username,
     _In_ const WS_STRING* password,
-    _In_ const WS_ASYNC_CONTEXT* asyncContext, 
+    _In_ const WS_ASYNC_CONTEXT* asyncContext,
     _In_opt_ WS_ERROR* error)
 {
     UNREFERENCED_PARAMETER(callbackState);
@@ -96,12 +96,12 @@ static HRESULT CALLBACK MyPasswordValidator(
     const WS_STRING fixedPassword = WS_STRING_VALUE(L"pwd1");
 
     if (CompareWsString(
-            username, 
-            &fixedUsername) 
-        && 
-        CompareWsString(
-            password, 
-            &fixedPassword))
+                username,
+                &fixedUsername)
+            &&
+            CompareWsString(
+                password,
+                &fixedPassword))
     {
         return S_OK;
     }
@@ -130,7 +130,7 @@ static const WS_MESSAGE_DESCRIPTION purchasingFaultMessageDescription =
 // Main entry point
 int __cdecl wmain()
 {
-    
+
     HRESULT hr = S_OK;
     WS_ERROR* error = NULL;
     WS_LISTENER* listener = NULL;
@@ -138,106 +138,106 @@ int __cdecl wmain()
     WS_MESSAGE* requestMessage = NULL;
     WS_MESSAGE* replyMessage = NULL;
     WS_HEAP* heap = NULL;
-    
+
     // declare and initialize a username message security binding
     WS_USERNAME_MESSAGE_SECURITY_BINDING usernameBinding = {}; // zero out the struct
     usernameBinding.binding.bindingType = WS_USERNAME_MESSAGE_SECURITY_BINDING_TYPE; // set the binding type
     usernameBinding.bindingUsage = WS_SUPPORTING_MESSAGE_SECURITY_USAGE; // set the binding usage
     usernameBinding.passwordValidator = MyPasswordValidator;
-    
+
     // declare and initialize an SSL transport security binding
     WS_SSL_TRANSPORT_SECURITY_BINDING sslBinding = {}; // zero out the struct
     sslBinding.binding.bindingType = WS_SSL_TRANSPORT_SECURITY_BINDING_TYPE; // set the binding type
     // NOTE: At the server, the SSL certificate for the listen URI must be
     // registered with http.sys using a tool such as httpcfg.exe.
-    
+
     // declare and initialize the array of all security bindings
     WS_SECURITY_BINDING* securityBindings[2] = { &sslBinding.binding, &usernameBinding.binding };
-    
+
     // declare and initialize the security description
     WS_SECURITY_DESCRIPTION securityDescription = {}; // zero out the struct
     securityDescription.securityBindings = securityBindings;
     securityDescription.securityBindingCount = WsCountOf(securityBindings);
-    
+
     static const WS_STRING uri = WS_STRING_VALUE(L"https://localhost:8443/example");
-    
+
     // Create an error object for storing rich error information
     hr = WsCreateError(
-        NULL, 
-        0, 
-        &error);
+             NULL,
+             0,
+             &error);
     if (FAILED(hr))
     {
         goto Exit;
     }
-    
+
     // Create a heap to store deserialized data
     hr = WsCreateHeap(
-        /*maxSize*/ 2048, 
-        /*trimSize*/ 512, 
-        NULL, 
-        0, 
-        &heap, 
-        error);
+             /*maxSize*/ 2048,
+             /*trimSize*/ 512,
+             NULL,
+             0,
+             &heap,
+             error);
     if (FAILED(hr))
     {
         goto Exit;
     }
-    
+
     // Create a listener
     hr = WsCreateListener(
-        WS_CHANNEL_TYPE_REPLY, 
-        WS_HTTP_CHANNEL_BINDING, 
-        NULL, 0, 
-        &securityDescription, 
-        &listener, 
-        error);
+             WS_CHANNEL_TYPE_REPLY,
+             WS_HTTP_CHANNEL_BINDING,
+             NULL, 0,
+             &securityDescription,
+             &listener,
+             error);
     if (FAILED(hr))
     {
         goto Exit;
     }
-    
-    // Open listener 
+
+    // Open listener
     hr = WsOpenListener(listener, &uri, NULL, error);
     if (FAILED(hr))
     {
         goto Exit;
     }
-    
+
     hr = WsCreateChannelForListener(
-        listener, 
-        NULL, 
-        0, 
-        &channel, 
-        error);
+             listener,
+             NULL,
+             0,
+             &channel,
+             error);
     if (FAILED(hr))
     {
         goto Exit;
     }
-    
+
     hr = WsCreateMessageForChannel(
-        channel,
-        NULL, 
-        0, 
-        &requestMessage, 
-        error);
+             channel,
+             NULL,
+             0,
+             &requestMessage,
+             error);
     if (FAILED(hr))
     {
         goto Exit;
     }
-    
+
     hr = WsCreateMessageForChannel(
-        channel,
-        NULL, 
-        0, 
-        &replyMessage, 
-        error);
+             channel,
+             NULL,
+             0,
+             &replyMessage,
+             error);
     if (FAILED(hr))
     {
         goto Exit;
     }
-    
-    
+
+
     // Receive requests / send replies
     for (int i = 0; i < 300; i++)
     {
@@ -247,7 +247,7 @@ int __cdecl wmain()
         {
             goto Exit;
         }
-    
+
         // Set up the descriptions of the expected messages. We expect either a purchase order
         // or a request for order status.
         const WS_MESSAGE_DESCRIPTION* requestMessageDescriptions[] =
@@ -255,43 +255,43 @@ int __cdecl wmain()
             &PurchaseOrder_wsdl.messages.PurchaseOrder,   // contains a _PurchaseOrderType in the body
             &PurchaseOrder_wsdl.messages.GetOrderStatus,  // contains a GetOrderStatus in the body
         };
-        
+
         // Receive the message and deserialize the element of the body into the appropriate
         // structure, based on the message descriptions.  The value of the body will be
         // allocated in the specified WS_HEAP, and are valid until WsResetHeap is called.
         void* requestBodyPointer;
         ULONG indexOfMatchedMessageDescription;
-        
+
         hr = WsReceiveMessage(channel, requestMessage, requestMessageDescriptions, WsCountOf(requestMessageDescriptions),
-            WS_RECEIVE_REQUIRED_MESSAGE, WS_READ_REQUIRED_POINTER, heap,
-            &requestBodyPointer, sizeof(requestBodyPointer), &indexOfMatchedMessageDescription, NULL, error);
-        
+                              WS_RECEIVE_REQUIRED_MESSAGE, WS_READ_REQUIRED_POINTER, heap,
+                              &requestBodyPointer, sizeof(requestBodyPointer), &indexOfMatchedMessageDescription, NULL, error);
+
         // Process the request, and generate the reply
         const WS_MESSAGE_DESCRIPTION* replyMessageDescription = NULL;
         const void* replyBodyPointer = NULL;
         ULONG replyBodySize = 0;
         _OrderConfirmationType orderConfirmation;
         _GetOrderStatusResponseType getOrderStatusResponse;
-        
+
         if (SUCCEEDED(hr))
         {
             // Get the message description that matched
             const WS_MESSAGE_DESCRIPTION* requestMessageDescription = requestMessageDescriptions[indexOfMatchedMessageDescription];
-        
+
             if (requestMessageDescription == &PurchaseOrder_wsdl.messages.PurchaseOrder)
             {
                 // The message was a purchase order.  Get the pointer to the deserialized value.
                 _PurchaseOrderType* purchaseOrder = (_PurchaseOrderType*)requestBodyPointer;
-        
+
                 // Print out purchase order contents
                 wprintf(L"%d, %s\n",
-                    purchaseOrder->quantity,
-                    purchaseOrder->productName);
-        
+                        purchaseOrder->quantity,
+                        purchaseOrder->productName);
+
                 // Initialize order confirmation data
                 orderConfirmation.expectedShipDate = L"1/1/2006";
                 orderConfirmation.orderID = 123;
-        
+
                 // Setup up reply message
                 replyMessageDescription = &PurchaseOrder_wsdl.messages.OrderConfirmation;
                 replyBodyPointer = &orderConfirmation;
@@ -301,53 +301,53 @@ int __cdecl wmain()
             {
                 // The message was a order status request.  Get the pointer to the deserialized value.
                 _GetOrderStatusType* getOrderStatus = (_GetOrderStatusType*)requestBodyPointer;
-        
+
                 // Generate a fault if we don't recognize the order ID
                 if (getOrderStatus->orderID != 123)
                 {
                     // Fill out details about the fault
                     _OrderNotFoundFaultType orderNotFound;
                     orderNotFound.orderID = getOrderStatus->orderID;
-                    
+
                     static const WS_XML_STRING _faultDetailName = WS_XML_STRING_VALUE("OrderNotFound");
                     static const WS_XML_STRING _faultDetailNs = WS_XML_STRING_VALUE("http://example.com");
                     static const WS_XML_STRING _faultAction = WS_XML_STRING_VALUE("http://example.com/fault");
-                    static const WS_ELEMENT_DESCRIPTION _faultElementDescription = 
-                    { 
-                        (WS_XML_STRING*)&_faultDetailName, 
-                        (WS_XML_STRING*)&_faultDetailNs, 
-                        WS_UINT32_TYPE, 
-                        NULL 
+                    static const WS_ELEMENT_DESCRIPTION _faultElementDescription =
+                    {
+                        (WS_XML_STRING*)&_faultDetailName,
+                        (WS_XML_STRING*)&_faultDetailNs,
+                        WS_UINT32_TYPE,
+                        NULL
                     };
-                    static const WS_FAULT_DETAIL_DESCRIPTION orderNotFoundFaultTypeDescription = 
-                    { 
-                        (WS_XML_STRING*)&_faultAction, 
-                        (WS_ELEMENT_DESCRIPTION*)&_faultElementDescription 
+                    static const WS_FAULT_DETAIL_DESCRIPTION orderNotFoundFaultTypeDescription =
+                    {
+                        (WS_XML_STRING*)&_faultAction,
+                        (WS_ELEMENT_DESCRIPTION*)&_faultElementDescription
                     };
-                    
+
                     // Set fault detail information in the error object
                     hr = WsSetFaultErrorDetail(
-                        error,
-                        &orderNotFoundFaultTypeDescription,
-                        WS_WRITE_REQUIRED_VALUE,
-                        &orderNotFound,
-                        sizeof(orderNotFound));
-                    
+                             error,
+                             &orderNotFoundFaultTypeDescription,
+                             WS_WRITE_REQUIRED_VALUE,
+                             &orderNotFound,
+                             sizeof(orderNotFound));
+
                     if (FAILED(hr))
                     {
                         goto Exit;
                     }
-                    
+
                     // Add an error string to the error object.  This string will
                     // be included in the fault that is sent.
                     static const WS_STRING errorMessage = WS_STRING_VALUE(L"Invalid order ID");
                     hr = WsAddErrorString(error, &errorMessage);
-                    
+
                     if (FAILED(hr))
                     {
                         goto Exit;
                     }
-        
+
                     // Use a failure code to indicate that a fault should be sent
                     hr = E_FAIL;
                 }
@@ -356,7 +356,7 @@ int __cdecl wmain()
                     // Initialize the order status response
                     getOrderStatusResponse.orderID = getOrderStatus->orderID;
                     getOrderStatusResponse.status = L"Pending";
-        
+
                     // Specify which message description to use for reply
                     replyMessageDescription = &PurchaseOrder_wsdl.messages.GetOrderStatusResponse;
                     replyBodyPointer = &getOrderStatusResponse;
@@ -364,7 +364,7 @@ int __cdecl wmain()
                 }
             }
         }
-        
+
         // If there was an error receiving the message
         if (FAILED(hr))
         {
@@ -374,27 +374,27 @@ int __cdecl wmain()
             // generate an error string if no error strings are present in the
             // error object.
             hr = WsSendFaultMessageForError(
-                channel,
-                replyMessage,
-                error,
-                hr,
-                WS_FULL_FAULT_DISCLOSURE,
-                requestMessage,
-                NULL,
-                error);
-        
+                     channel,
+                     replyMessage,
+                     error,
+                     hr,
+                     WS_FULL_FAULT_DISCLOSURE,
+                     requestMessage,
+                     NULL,
+                     error);
+
             if (FAILED(hr))
             {
                 goto Exit;
             }
-        
+
             // Reset the error so it can be used again
             hr = WsResetError(error);
             if (FAILED(hr))
             {
                 goto Exit;
             }
-        
+
             // Reset the reply message so it can be used again
             hr = WsResetMessage(replyMessage, error);
             if (FAILED(hr))
@@ -406,21 +406,21 @@ int __cdecl wmain()
         {
             // Send a reply message
             hr = WsSendReplyMessage(
-                channel,
-                replyMessage,
-                replyMessageDescription,
-                WS_WRITE_REQUIRED_VALUE,
-                replyBodyPointer,
-                replyBodySize,
-                requestMessage,
-                NULL,
-                error);
-        
+                     channel,
+                     replyMessage,
+                     replyMessageDescription,
+                     WS_WRITE_REQUIRED_VALUE,
+                     replyBodyPointer,
+                     replyBodySize,
+                     requestMessage,
+                     NULL,
+                     error);
+
             if (FAILED(hr))
             {
                 goto Exit;
             }
-        
+
             // Reset the reply message so it can be used again
             hr = WsResetMessage(replyMessage, error);
             if (FAILED(hr))
@@ -428,28 +428,28 @@ int __cdecl wmain()
                 goto Exit;
             }
         }
-        
+
         // Reset the request message so it can be used again
         hr = WsResetMessage(requestMessage, error);
         if (FAILED(hr))
         {
             goto Exit;
         }
-        
+
         // Reset the heap, which will free any allocations made on it
         hr = WsResetHeap(heap, error);
         if (FAILED(hr))
         {
             goto Exit;
         }
-    
+
         // Close the request
         hr = WsCloseChannel(channel, NULL, error);
         if (FAILED(hr))
         {
             goto Exit;
         }
-    
+
         // Prepare channel for reuse
         hr = WsResetChannel(channel, error);
         if (FAILED(hr))
@@ -457,14 +457,14 @@ int __cdecl wmain()
             goto Exit;
         }
     }
-    
+
 Exit:
     if (FAILED(hr))
     {
         // Print out the error
         PrintError(hr, error);
     }
-    
+
     if (channel != NULL)
     {
         // Close the channel
@@ -491,8 +491,8 @@ Exit:
     {
         WsFreeListener(listener);
     }
-    
-    
+
+
     if (error != NULL)
     {
         WsFreeError(error);

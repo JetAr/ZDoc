@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -145,7 +145,7 @@ COMPITEM view_getitem(VIEW view, long row);
 /*
  * return TRUE if the current mapping is expanded mode
  */
-BOOL view_isexpanded(VIEW view); 	
+BOOL view_isexpanded(VIEW view);
 
 /* return a text string describing the current compitem. Only valid
  * if in expand mode. This will be normally the file name

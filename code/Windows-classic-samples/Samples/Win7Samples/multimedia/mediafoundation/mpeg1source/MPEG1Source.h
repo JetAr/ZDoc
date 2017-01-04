@@ -1,8 +1,8 @@
-//////////////////////////////////////////////////////////////////////////
+﻿//////////////////////////////////////////////////////////////////////////
 //
 // MPEG1Source.h
 // Implements the MPEG-1 media source object.
-// 
+//
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -18,7 +18,7 @@
 #include <windows.h>
 #include <assert.h>
 
-#ifndef _ASSERTE 
+#ifndef _ASSERTE
 #define _ASSERTE assert
 #endif
 
@@ -60,7 +60,7 @@ class SourceOp;
 typedef GrowableArray<MPEG1Stream*> StreamList;
 typedef TinyMap<BYTE, DWORD>        StreamMap;    // Maps stream ID to index
 
-typedef ComPtrList<IMFSample>       SampleList;   
+typedef ComPtrList<IMFSample>       SampleList;
 typedef ComPtrList<IUnknown, true>  TokenList;    // List of tokens for IMFMediaStream::RequestSample
 
 
@@ -106,16 +106,28 @@ public:
 
     // IUnknown
     STDMETHODIMP QueryInterface(REFIID iid, void** ppv);
-    STDMETHODIMP_(ULONG) AddRef() { return RefCountedObject::AddRef(); }
-    STDMETHODIMP_(ULONG) Release() { return RefCountedObject::Release(); }
+    STDMETHODIMP_(ULONG) AddRef()
+    {
+        return RefCountedObject::AddRef();
+    }
+    STDMETHODIMP_(ULONG) Release()
+    {
+        return RefCountedObject::Release();
+    }
 
     SourceOp(Operation op);
     virtual ~SourceOp();
 
     HRESULT SetData(const PROPVARIANT& var);
 
-    Operation Op() const { return m_op; }
-    const PROPVARIANT& Data() { return m_data;}
+    Operation Op() const
+    {
+        return m_op;
+    }
+    const PROPVARIANT& Data()
+    {
+        return m_data;
+    }
 
 protected:
     Operation                   m_op;
@@ -144,8 +156,14 @@ public:
 
     // IUnknown
     STDMETHODIMP QueryInterface(REFIID iid, void** ppv);
-    STDMETHODIMP_(ULONG) AddRef() { return RefCountedObject::AddRef(); }
-    STDMETHODIMP_(ULONG) Release() { return RefCountedObject::Release(); }
+    STDMETHODIMP_(ULONG) AddRef()
+    {
+        return RefCountedObject::AddRef();
+    }
+    STDMETHODIMP_(ULONG) Release()
+    {
+        return RefCountedObject::Release();
+    }
 
     // IMFMediaEventGenerator
     STDMETHODIMP BeginGetEvent(IMFAsyncCallback* pCallback,IUnknown* punkState);
@@ -175,8 +193,14 @@ public:
 
     // Lock/Unlock:
     // Holds and releases the source's critical section. Called by the streams.
-    void    Lock() { m_critSec.Lock(); }
-    void    Unlock() { m_critSec.Unlock(); }
+    void    Lock()
+    {
+        m_critSec.Lock();
+    }
+    void    Unlock()
+    {
+        m_critSec.Unlock();
+    }
 
     // Callbacks
     HRESULT OnByteStreamRead(IMFAsyncResult *pResult);  // Async callback for RequestData
@@ -217,7 +241,7 @@ private:
     HRESULT     CreateStream(const MPEG1PacketHeader& packetHdr);
 
     HRESULT     ValidatePresentationDescriptor(IMFPresentationDescriptor *pPD);
-        
+
     // Handler for async errors.
     void        StreamingError(HRESULT hr);
 
@@ -244,7 +268,7 @@ private:
 
     MPEG1SystemHeader           *m_pHeader;                 // Release with CoTaskMemFree
 
-    StreamList                  m_streams;                  // Array of streams.  
+    StreamList                  m_streams;                  // Array of streams.
     StreamMap                   m_streamMap;                // Maps stream IDs to indexes into m_streams array.
 
     DWORD                       m_cPendingEOS;              // Pending EOS notifications.

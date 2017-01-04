@@ -1,10 +1,10 @@
-/*++
+﻿/*++
 
 Copyright (c) 1998-1999  Microsoft Corporation
 
 Module Name:
 
-    MSPCall.cpp 
+    MSPCall.cpp
 
 Abstract:
 
@@ -29,7 +29,7 @@ CMSPCallBase::CMSPCallBase()
     LOG((MSP_TRACE, "CMSPCallBase::CMSPCallBase exited."));
 }
 
-    
+
 CMSPCallBase::~CMSPCallBase()
 {
     LOG((MSP_TRACE, "CMSPCallBase::~CMSPCallBase[%p] entered.", this));
@@ -40,12 +40,12 @@ CMSPCallBase::~CMSPCallBase()
     // has released its reference, this pointer will not be used again.
 
     // If the MSPAddress had a refcount on the call, it should have been
-    // released in the ShutdownMSPCall() method. 
+    // released in the ShutdownMSPCall() method.
 
-    // release the address 
+    // release the address
     if (m_pMSPAddress != NULL)
     {
-        LOG((MSP_TRACE, "CMSPCallBase::~CMSPCallBase releasing address [%p].", m_pMSPAddress));    
+        LOG((MSP_TRACE, "CMSPCallBase::~CMSPCallBase releasing address [%p].", m_pMSPAddress));
 
         m_pMSPAddress->MSPAddressRelease();
     }
@@ -56,10 +56,10 @@ CMSPCallBase::~CMSPCallBase()
 // ITStreamControl methods, called by the app.
 STDMETHODIMP CMSPCallBase::EnumerateStreams(
     OUT     IEnumStream **      ppEnumStream
-    )
+)
 {
-    LOG((MSP_TRACE, 
-        "EnumerateStreams entered. ppEnumStream:%x", ppEnumStream));
+    LOG((MSP_TRACE,
+         "EnumerateStreams entered. ppEnumStream:%x", ppEnumStream));
 
     //
     // Check parameters.
@@ -68,7 +68,7 @@ STDMETHODIMP CMSPCallBase::EnumerateStreams(
     if (!ppEnumStream)
     {
         LOG((MSP_ERROR, "CMSPCallBase::EnumerateStreams - "
-            "bad pointer argument - exit E_POINTER"));
+             "bad pointer argument - exit E_POINTER"));
 
         return E_POINTER;
     }
@@ -83,7 +83,7 @@ STDMETHODIMP CMSPCallBase::EnumerateStreams(
     if (m_Streams.GetData() == NULL)
     {
         LOG((MSP_ERROR, "CMSPCallBase::EnumerateStreams - "
-            "call appears to have been shut down - exit E_UNEXPECTED"));
+             "call appears to have been shut down - exit E_UNEXPECTED"));
 
         // This call has been shut down.
         return E_UNEXPECTED;
@@ -94,8 +94,8 @@ STDMETHODIMP CMSPCallBase::EnumerateStreams(
     //
 
     typedef _CopyInterface<ITStream> CCopy;
-    typedef CSafeComEnum<IEnumStream, &IID_IEnumStream, 
-                ITStream *, CCopy> CEnumerator;
+    typedef CSafeComEnum<IEnumStream, &IID_IEnumStream,
+            ITStream *, CCopy> CEnumerator;
 
     HRESULT hr;
 
@@ -105,7 +105,7 @@ STDMETHODIMP CMSPCallBase::EnumerateStreams(
     if (pEnum == NULL)
     {
         LOG((MSP_ERROR, "CMSPCallBase::EnumerateStreams - "
-            "Could not create enumerator object, %x", hr));
+             "Could not create enumerator object, %x", hr));
 
         return hr;
     }
@@ -115,11 +115,11 @@ STDMETHODIMP CMSPCallBase::EnumerateStreams(
     //
 
     hr = pEnum->_InternalQueryInterface(IID_IEnumStream, (void**)ppEnumStream);
-    
+
     if (FAILED(hr))
     {
         LOG((MSP_ERROR, "CMSPCallBase::EnumerateStreams - "
-            "query enum interface failed, %x", hr));
+             "query enum interface failed, %x", hr));
 
         delete pEnum;
         return hr;
@@ -131,16 +131,16 @@ STDMETHODIMP CMSPCallBase::EnumerateStreams(
     //
 
     hr = pEnum->Init(
-        m_Streams.GetData(),                        // the begin itor
-        m_Streams.GetData() + m_Streams.GetSize(),  // the end itor, 
-        NULL,                                       // IUnknown
-        AtlFlagCopy                                 // copy the data.
-        );
+             m_Streams.GetData(),                        // the begin itor
+             m_Streams.GetData() + m_Streams.GetSize(),  // the end itor,
+             NULL,                                       // IUnknown
+             AtlFlagCopy                                 // copy the data.
+         );
 
     if (FAILED(hr))
     {
         LOG((MSP_ERROR, "CMSPCallBase::EnumerateStreams - "
-            "init enumerator object failed, %x", hr));
+             "init enumerator object failed, %x", hr));
 
         (*ppEnumStream)->Release();
         return hr;
@@ -159,7 +159,7 @@ STDMETHODIMP CMSPCallBase::EnumerateStreams(
 
 STDMETHODIMP CMSPCallBase::get_Streams(
     OUT     VARIANT *           pVariant
-    )
+)
 {
     LOG((MSP_TRACE, "CMSPCallBase::get_Streams - enter"));
 
@@ -170,7 +170,7 @@ STDMETHODIMP CMSPCallBase::get_Streams(
     if ( !pVariant)
     {
         LOG((MSP_ERROR, "CMSPCallBase::get_Streams - "
-            "bad pointer argument - exit E_POINTER"));
+             "bad pointer argument - exit E_POINTER"));
 
         return E_POINTER;
     }
@@ -185,7 +185,7 @@ STDMETHODIMP CMSPCallBase::get_Streams(
     if (m_Streams.GetData() == NULL)
     {
         LOG((MSP_ERROR, "CMSPCallBase::get_Streams - "
-            "call appears to have been shut down - exit E_UNEXPECTED"));
+             "call appears to have been shut down - exit E_UNEXPECTED"));
 
         // This call has been shut down.
         return E_UNEXPECTED;
@@ -202,7 +202,7 @@ STDMETHODIMP CMSPCallBase::get_Streams(
     if ( FAILED(hr) )
     {
         LOG((MSP_ERROR, "CMSPCallBase::get_Streams - "
-            "can't create collection - exit 0x%08x", hr));
+             "can't create collection - exit 0x%08x", hr));
 
         return hr;
     }
@@ -214,12 +214,12 @@ STDMETHODIMP CMSPCallBase::get_Streams(
     IDispatch * pDispatch;
 
     hr = pCollection->_InternalQueryInterface(IID_IDispatch,
-                                              (void **) &pDispatch );
+            (void **) &pDispatch );
 
     if ( FAILED(hr) )
     {
         LOG((MSP_ERROR, "CMSPCallBase::get_Streams - "
-            "QI for IDispatch on collection failed - exit 0x%08x", hr));
+             "QI for IDispatch on collection failed - exit 0x%08x", hr));
 
         delete pCollection;
 
@@ -238,8 +238,8 @@ STDMETHODIMP CMSPCallBase::get_Streams(
     if (FAILED(hr))
     {
         LOG((MSP_ERROR, "CMSPCallBase::get_Streams - "
-            "Initialize on collection failed - exit 0x%08x", hr));
-        
+             "Initialize on collection failed - exit 0x%08x", hr));
+
         pDispatch->Release();
         return hr;
     }
@@ -249,21 +249,21 @@ STDMETHODIMP CMSPCallBase::get_Streams(
     //
 
     LOG((MSP_INFO, "CMSPCallBase::get_Streams - "
-        "placing IDispatch value %08x in variant", pDispatch));
+         "placing IDispatch value %08x in variant", pDispatch));
 
     VariantInit(pVariant);
     pVariant->vt = VT_DISPATCH;
     pVariant->pdispVal = pDispatch;
 
     LOG((MSP_TRACE, "CMSPCallBase::get_Streams - exit S_OK"));
- 
+
     return S_OK;
 }
 
 // methods called by the MSPstream object.
 HRESULT CMSPCallBase::HandleStreamEvent(
     IN      MSPEVENTITEM *     pEventItem
-    ) const
+) const
 {
     _ASSERTE(!!pEventItem);
 
@@ -275,7 +275,7 @@ STDMETHODIMP CMSPCallBase::CreateStream(
     IN      long                lMediaType,
     IN      TERMINAL_DIRECTION  Direction,
     IN OUT  ITStream **         ppStream
-    )
+)
 /*++
 
 Routine Description:
@@ -283,7 +283,7 @@ Routine Description:
 
 Arguments:
 
-  
+
 Return Value:
 
 S_OK
@@ -296,16 +296,16 @@ TAPI_E_INVALIDTERMINALCLASS
 
 --*/
 {
-    LOG((MSP_TRACE, 
-        "CreateStream--dwMediaType:%x, Direction:%x, ppStream %x",
-        lMediaType, Direction, ppStream
+    LOG((MSP_TRACE,
+         "CreateStream--dwMediaType:%x, Direction:%x, ppStream %x",
+         lMediaType, Direction, ppStream
         ));
- 
+
     if ( ! IsValidSingleMediaType( (DWORD) lMediaType, m_dwMediaType) )
     {
-        LOG((MSP_ERROR, 
-            "wrong media type:%x, call media type:%x",
-            lMediaType, m_dwMediaType
+        LOG((MSP_ERROR,
+             "wrong media type:%x, call media type:%x",
+             lMediaType, m_dwMediaType
             ));
 
         return TAPI_E_INVALIDMEDIATYPE;
@@ -322,9 +322,9 @@ TAPI_E_INVALIDTERMINALCLASS
 }
 
 HRESULT CMSPCallBase::ReceiveTSPCallData(
-        IN      PBYTE               pBuffer,
-        IN      DWORD               dwSize
-        )
+    IN      PBYTE               pBuffer,
+    IN      DWORD               dwSize
+)
 /*++
 
 Routine Description:
@@ -335,7 +335,7 @@ Routine Description:
 
 Arguments:
 
-  
+
 Return Value:
 
 S_OK
@@ -359,7 +359,7 @@ S_OK
 HRESULT
 SetGraphLogFile(
     IN IGraphBuilder *pIGraphBuilder
-    )
+)
 /*++
 
 Routine Description:
@@ -367,7 +367,7 @@ Routine Description:
     Set the log file for the filter graph.
 
 Arguments:
-    
+
     pIGraphBuilder - The filter graph.
 
 Return Value:
@@ -379,25 +379,25 @@ Return Value:
     const TCHAR GRAPHLOGPATH[] = _T("c:\\temp\\graph.log");
 
     HANDLE hFile = CreateFile(
-        GRAPHLOGPATH,
-        GENERIC_WRITE,
-        FILE_SHARE_READ, // sharing
-        NULL, // no security
-        OPEN_ALWAYS,
-        0,    // no attributes, no flags
-        NULL  // no template
-        );
+                       GRAPHLOGPATH,
+                       GENERIC_WRITE,
+                       FILE_SHARE_READ, // sharing
+                       NULL, // no security
+                       OPEN_ALWAYS,
+                       0,    // no attributes, no flags
+                       NULL  // no template
+                   );
 
     if (hFile == INVALID_HANDLE_VALUE)
     {
-        LOG((MSP_ERROR, 
-            "Can not open graph log file: %s, %x", 
-            GRAPHLOGPATH, 
-            GetLastError()
+        LOG((MSP_ERROR,
+             "Can not open graph log file: %s, %x",
+             GRAPHLOGPATH,
+             GetLastError()
             ));
         return S_FALSE;
     }
-    
+
     SetFilePointer(hFile, 0, NULL, FILE_END);
     HRESULT hr = pIGraphBuilder->SetLogFile(hFile);
 
@@ -415,7 +415,7 @@ CMSPCallMultiGraph::CMSPCallMultiGraph()
     LOG((MSP_TRACE, "CMSPCallMultiGraph::CMSPCallMultiGraph entered."));
     LOG((MSP_TRACE, "CMSPCallMultiGraph::CMSPCallMultiGraph exited."));
 }
-    
+
 CMSPCallMultiGraph::~CMSPCallMultiGraph()
 {
     LOG((MSP_TRACE, "CMSPCallMultiGraph::~CMSPCallMultiGraph entered."));
@@ -429,18 +429,18 @@ HRESULT CMSPCallMultiGraph::Init(
     IN      MSP_HANDLE          htCall,
     IN      DWORD               dwReserved,
     IN      DWORD               dwMediaType
-    )
+)
 /*++
 
 Routine Description:
 
-This method is called by CMSPAddress when the call is first created. 
-It creates a filter graph for the streams. It gets the event handle from 
+This method is called by CMSPAddress when the call is first created.
+It creates a filter graph for the streams. It gets the event handle from
 the graph and posts it to the thread pool. The derived method is supposed
 to create its own streams based one the mediatypes.
 
 Arguments:
-    
+
 
 Return Value:
 
@@ -448,9 +448,9 @@ Return Value:
 
 --*/
 {
-    LOG((MSP_TRACE, 
-        "MSP call %x initialize entered, pMSPAddress:%x",
-        this, pMSPAddress));
+    LOG((MSP_TRACE,
+         "MSP call %x initialize entered, pMSPAddress:%x",
+         this, pMSPAddress));
 
     // No need to acquire locks on this call because it is called only
     // once when the object is created. No other calls can be made on
@@ -468,7 +468,7 @@ Return Value:
     m_htCall        = htCall;
     m_dwMediaType   = dwMediaType;
 
-    return S_OK;   
+    return S_OK;
 }
 
 
@@ -478,11 +478,11 @@ HRESULT CMSPCallMultiGraph::ShutDown()
 Routine Description:
 
 Cancel the event waiting and then call the base impelmentaion. Call the
-shutdown on the stream objects. Release the references on all the stream 
+shutdown on the stream objects. Release the references on all the stream
 objects. Acquires the lock in the function.
 
 Arguments:
-    
+
     pIGraphBuilder - The filter graph.
 
 Return Value:
@@ -517,7 +517,7 @@ HRESULT CMSPCallMultiGraph::InternalCreateStream(
     IN      DWORD               dwMediaType,
     IN      TERMINAL_DIRECTION  Direction,
     IN OUT  ITStream **         ppStream
-    )
+)
 /*++
 
 Routine Description:
@@ -525,7 +525,7 @@ Routine Description:
 
 Arguments:
 
-  
+
 Return Value:
 
 S_OK
@@ -541,12 +541,12 @@ TAPI_E_INVALIDTERMINALCLASS
     // Create a filter graph and get the media event interface.
     CComPtr <IMediaEvent> pIMediaEvent;
     HRESULT hr = CoCreateInstance(
-            CLSID_FilterGraph,     
-            NULL,
-            CLSCTX_INPROC_SERVER,
-            IID_IMediaEvent,
-            (void **) &pIMediaEvent
-            );
+                     CLSID_FilterGraph,
+                     NULL,
+                     CLSCTX_INPROC_SERVER,
+                     IID_IMediaEvent,
+                     (void **) &pIMediaEvent
+                 );
 
     if (FAILED(hr))
     {
@@ -556,11 +556,11 @@ TAPI_E_INVALIDTERMINALCLASS
 
     ITStream * pITStream;
     hr = CreateStreamObject(
-        dwMediaType, 
-        Direction, 
-        pIMediaEvent, 
-        &pITStream
-        );
+             dwMediaType,
+             Direction,
+             pIMediaEvent,
+             &pITStream
+         );
 
     if (FAILED(hr))
     {
@@ -574,7 +574,7 @@ TAPI_E_INVALIDTERMINALCLASS
     {
         ((CMSPStream*)pITStream)->ShutDown();
         pITStream->Release();
-        
+
         m_lock.Unlock();
 
         LOG((MSP_ERROR, "out of memory is adding a stream."));
@@ -599,7 +599,7 @@ TAPI_E_INVALIDTERMINALCLASS
     m_lock.Unlock();
 
     // AddRef the interface pointer and return it.
-    pITStream->AddRef(); 
+    pITStream->AddRef();
     *ppStream = pITStream;
 
     return S_OK;
@@ -608,9 +608,9 @@ TAPI_E_INVALIDTERMINALCLASS
 HRESULT CMSPCallMultiGraph::RegisterWaitEvent(
     IN  IMediaEvent *   pIMediaEvent,
     IN  ITStream *      pITStream
-    )
+)
 {
-    // This function should only be called within a critical section 
+    // This function should only be called within a critical section
     // on the object.
 
     HANDLE hEvent;
@@ -655,20 +655,20 @@ HRESULT CMSPCallMultiGraph::RegisterWaitEvent(
     //
 
     HANDLE hWaitHandle = NULL;
-    
+
     BOOL fSuccess = RegisterWaitForSingleObject(
-        & hWaitHandle,          // pointer to the returned handle
-        hEvent,                 // the event handle to wait for.
-        DispatchGraphEvent,     // the callback function.
-        WaitBlock.pContext,     // the context for the callback.
-        INFINITE,               // wait forever.
-        WT_EXECUTEINWAITTHREAD  // use the wait thread to call the callback.
-        );
+                        & hWaitHandle,          // pointer to the returned handle
+                        hEvent,                 // the event handle to wait for.
+                        DispatchGraphEvent,     // the callback function.
+                        WaitBlock.pContext,     // the context for the callback.
+                        INFINITE,               // wait forever.
+                        WT_EXECUTEINWAITTHREAD  // use the wait thread to call the callback.
+                    );
 
     if ( ( ! fSuccess ) || (hWaitHandle == NULL) )
     {
-        LOG((MSP_ERROR, 
-            "Register wait call back failed. %x", GetLastError()));
+        LOG((MSP_ERROR,
+             "Register wait call back failed. %x", GetLastError()));
 
         // decrement the ref count if the posting failed.
         this->MSPCallRelease();
@@ -683,7 +683,7 @@ HRESULT CMSPCallMultiGraph::RegisterWaitEvent(
     }
 
     // If register succeeded, save the wait handle. We know it is the last one.
-    m_ThreadPoolWaitBlocks[m_ThreadPoolWaitBlocks.GetSize() - 1].hWaitHandle 
+    m_ThreadPoolWaitBlocks[m_ThreadPoolWaitBlocks.GetSize() - 1].hWaitHandle
         = hWaitHandle;
 
     return S_OK;
@@ -691,7 +691,7 @@ HRESULT CMSPCallMultiGraph::RegisterWaitEvent(
 
 STDMETHODIMP CMSPCallMultiGraph::RemoveStream(
     IN      ITStream *         pStream
-    )
+)
 /*++
 
 Routine Description:
@@ -699,7 +699,7 @@ Routine Description:
 
 Arguments:
 
-  
+
 Return Value:
 
 S_OK
@@ -720,7 +720,7 @@ E_INVALIDARG
         return E_INVALIDARG;
     }
 
-    UnregisterWaitEvent(index);    
+    UnregisterWaitEvent(index);
 
     ((CMSPStream*)m_Streams[index])->ShutDown();
     m_Streams[index]->Release();
@@ -734,7 +734,7 @@ E_INVALIDARG
 
 HRESULT CMSPCallMultiGraph::UnregisterWaitEvent(
     IN  int     index
-    )
+)
 {
     if (index >= m_ThreadPoolWaitBlocks.GetSize())
     {
@@ -753,16 +753,16 @@ HRESULT CMSPCallMultiGraph::UnregisterWaitEvent(
     if (!fRes)
     {
         // we should never get here, UnregisterWaitEx will block until success
-        
-        LOG((MSP_ERROR, 
-            "UnregisterWait failed. %x", GetLastError()));
+
+        LOG((MSP_ERROR,
+             "UnregisterWait failed. %x", GetLastError()));
 
         // just remove it from the list. keep the data so that it won't AV.
         m_ThreadPoolWaitBlocks.RemoveAt(index);
         return E_FAIL;
     }
 
-    // We need to decrement the refcount because it was incremented 
+    // We need to decrement the refcount because it was incremented
     // before we post the wait.
     (WaitBlock.pContext->pMSPCall)->MSPCallRelease();
     (WaitBlock.pContext->pITStream)->Release();
@@ -780,11 +780,11 @@ HRESULT CMSPCallMultiGraph::UnregisterWaitEvent(
 VOID NTAPI CMSPCallMultiGraph::DispatchGraphEvent(
     IN      VOID *              pContext,
     IN      BOOLEAN             bFlag
-    )
+)
 {
-    LOG((MSP_EVENT, 
-        "DispatchGraphEvent:pContext:%x, bFlag:%u", 
-        pContext, bFlag));
+    LOG((MSP_EVENT,
+         "DispatchGraphEvent:pContext:%x, bFlag:%u",
+         pContext, bFlag));
 
     // the pContext is a pointer to a call, since it carries a ref count,
     // the call should still be alive.
@@ -796,7 +796,7 @@ VOID NTAPI CMSPCallMultiGraph::DispatchGraphEvent(
 
 VOID CMSPCallMultiGraph::HandleGraphEvent(
     IN  MSPSTREAMCONTEXT * pContext
-    )
+)
 {
     long     lEventCode;
     LONG_PTR lParam1, lParam2; // win64 fix
@@ -809,7 +809,7 @@ VOID CMSPCallMultiGraph::HandleGraphEvent(
     }
 
     LOG((MSP_EVENT, "ProcessGraphEvent, code:%d param1:%x param2:%x",
-        lEventCode, lParam1, lParam2));
+         lEventCode, lParam1, lParam2));
 
     //
     // Create an event data structure that we will pass to the worker thread.
@@ -817,7 +817,7 @@ VOID CMSPCallMultiGraph::HandleGraphEvent(
 
     MULTI_GRAPH_EVENT_DATA * pData;
     pData = new MULTI_GRAPH_EVENT_DATA;
-    
+
     if (pData == NULL)
     {
         pContext->pIMediaEvent->FreeEventParams(lEventCode, lParam1, lParam2);
@@ -825,7 +825,7 @@ VOID CMSPCallMultiGraph::HandleGraphEvent(
         LOG((MSP_ERROR, "Out of memory for event data."));
         return;
     }
-    
+
     pData->pCall      = this;
     pData->pITStream  = pContext->pITStream;
     pData->lEventCode = lEventCode;
@@ -841,7 +841,7 @@ VOID CMSPCallMultiGraph::HandleGraphEvent(
     pData->pIMediaEvent = pContext->pIMediaEvent;
     pData->pIMediaEvent->AddRef();
 
- 
+
     //
     // Make sure the call and stream don't go away while we handle the event.
     // but use our special inner object addref for the call
@@ -901,7 +901,7 @@ DWORD WINAPI AsyncMultiGraphEvent(LPVOID pVoid)
 
 
     //
-    // if we have IMediaEvent pointer, free event params and release the media 
+    // if we have IMediaEvent pointer, free event params and release the media
     // event interface pointer
     //
 
@@ -928,15 +928,15 @@ HRESULT CMSPCallMultiGraph::ProcessGraphEvent(
     IN      long            lEventCode,
     IN      LONG_PTR        lParam1,
     IN      LONG_PTR        lParam2
-    )
+)
 {
     CLock lock(m_lock);
 
     if (m_Streams.Find(pITStream) < 0)
     {
-        LOG((MSP_WARN, 
-            "stream %x is already removed.", 
-            pITStream));
+        LOG((MSP_WARN,
+             "stream %x is already removed.",
+             pITStream));
         return TAPI_E_NOITEMS;
     }
 
@@ -945,5 +945,5 @@ HRESULT CMSPCallMultiGraph::ProcessGraphEvent(
     //
 
     return ((CMSPStream*)pITStream)->
-        ProcessGraphEvent(lEventCode, lParam1, lParam2);
+           ProcessGraphEvent(lEventCode, lParam1, lParam2);
 }

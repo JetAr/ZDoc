@@ -1,4 +1,4 @@
-/*++
+﻿/*++
 
 Copyright (c) Microsoft Corporation. All rights reserved.
 
@@ -33,16 +33,16 @@ STDMETHODIMP CEventCallback::QueryInterface(REFIID iid, LPVOID *ppvObj)
 {
     if (ppvObj == NULL)
     {
-	    return E_POINTER;
+        return E_POINTER;
     }
 
     if (iid == IID_IUnknown)
     {
-	    *ppvObj = (IUnknown *) this;
+        *ppvObj = (IUnknown *) this;
     }
     else if (iid == IID_IWiaEventCallback)
     {
-	    *ppvObj = (IWiaEventCallback *) this;
+        *ppvObj = (IWiaEventCallback *) this;
     }
     else
     {
@@ -50,7 +50,7 @@ STDMETHODIMP CEventCallback::QueryInterface(REFIID iid, LPVOID *ppvObj)
         return E_NOINTERFACE;
     }
 
-	AddRef();
+    AddRef();
     return S_OK;
 }
 
@@ -123,12 +123,12 @@ HRESULT CEventCallback::Register()
     // Register the callback interface
 
     hr = pWiaDevMgr->RegisterEventCallbackInterface(
-        0,
-        NULL,
-        &WIA_EVENT_DEVICE_CONNECTED,
-        this,
-        &m_pConnectEventObject
-    );
+             0,
+             NULL,
+             &WIA_EVENT_DEVICE_CONNECTED,
+             this,
+             &m_pConnectEventObject
+         );
 
     if (FAILED(hr))
     {
@@ -136,12 +136,12 @@ HRESULT CEventCallback::Register()
     }
 
     hr = pWiaDevMgr->RegisterEventCallbackInterface(
-        0,
-        NULL,
-        &WIA_EVENT_DEVICE_DISCONNECTED,
-        this,
-        &m_pDisconnectEventObject
-    );
+             0,
+             NULL,
+             &WIA_EVENT_DEVICE_DISCONNECTED,
+             this,
+             &m_pDisconnectEventObject
+         );
 
     if (FAILED(hr))
     {

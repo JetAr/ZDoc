@@ -1,4 +1,4 @@
-/****************************************************************************
+﻿/****************************************************************************
                    Microsoft RPC Version 2.0
            Copyright Microsoft Corp. 1992 - 2000
                         xmit Example
@@ -54,7 +54,7 @@ void Usage(char * pszProgramName)
     fprintf(stderr, "Usage:  %s\n", pszProgramName);
     fprintf(stderr, " -p protocol_sequence\n");
     fprintf(stderr, " -e endpoint\n");
-    fprintf(stderr, " -a server principal name\n");	
+    fprintf(stderr, " -a server principal name\n");
     fprintf(stderr, " -m maxcalls\n");
     fprintf(stderr, " -n mincalls\n");
     fprintf(stderr, " -f flag_wait_op\n");
@@ -68,16 +68,19 @@ void __cdecl main(int argc, char * argv[])
     unsigned char * pszProtocolSequence = "ncacn_np";
     unsigned char * pszSecurity         = NULL;
     unsigned char * pszEndpoint         = "\\pipe\\xmit";
-    unsigned char * pszSpn              = NULL;	
+    unsigned char * pszSpn              = NULL;
     unsigned int    cMinCalls           = 1;
     unsigned int    cMaxCalls           = 20;
     unsigned int    fDontWait           = FALSE;
     int i;
 
     /* allow the user to override settings with command line switches */
-    for (i = 1; i < argc; i++) {
-        if ((*argv[i] == '-') || (*argv[i] == '/')) {
-            switch (tolower(*(argv[i]+1))) {
+    for (i = 1; i < argc; i++)
+    {
+        if ((*argv[i] == '-') || (*argv[i] == '/'))
+        {
+            switch (tolower(*(argv[i]+1)))
+            {
             case 'p':  // protocol sequence
                 pszProtocolSequence = argv[++i];
                 break;
@@ -106,17 +109,19 @@ void __cdecl main(int argc, char * argv[])
             Usage(argv[0]);
     }
 
-	status = RpcServerUseProtseqEp(pszProtocolSequence,
+    status = RpcServerUseProtseqEp(pszProtocolSequence,
                                    cMaxCalls,
                                    pszEndpoint,
                                    pszSecurity);  // Security descriptor
     printf("RpcServerUseProtseqEp returned 0x%x\n", status);
-    if (status) {
+    if (status)
+    {
         exit(status);
     }
 
     /* User did not specify spn, construct one. */
-    if (pszSpn == NULL) {
+    if (pszSpn == NULL)
+    {
         MakeSpn(&pszSpn);
     }
 
@@ -125,33 +130,37 @@ void __cdecl main(int argc, char * argv[])
                                        RPC_C_AUTHN_GSS_NEGOTIATE,
                                        NULL,
                                        NULL);
-	
+
     printf_s("RpcServerRegisterAuthInfo returned 0x%x\n", status);
-    if (status) {
+    if (status)
+    {
         exit(status);
-    }	
+    }
 
     status = RpcServerRegisterIfEx(xmit_ServerIfHandle,
-		                           NULL,
-		                           NULL,
-		                           0,
-		                           RPC_C_LISTEN_MAX_CALLS_DEFAULT,
-		                           NULL );
+                                   NULL,
+                                   NULL,
+                                   0,
+                                   RPC_C_LISTEN_MAX_CALLS_DEFAULT,
+                                   NULL );
 
     printf("Calling RpcServerListen\n");
     status = RpcServerListen(cMinCalls,
                              cMaxCalls,
                              fDontWait);
     printf("RpcServerListen returned: 0x%x\n", status);
-    if (status) {
+    if (status)
+    {
         exit(status);
     }
 
-    if (fDontWait) {
+    if (fDontWait)
+    {
         printf("Calling RpcMgmtWaitServerListen\n");
         status = RpcMgmtWaitServerListen();  //  wait operation
         printf("RpcMgmtWaitServerListen returned: 0x%x\n", status);
-        if (status) {
+        if (status)
+        {
             exit(status);
         }
     }

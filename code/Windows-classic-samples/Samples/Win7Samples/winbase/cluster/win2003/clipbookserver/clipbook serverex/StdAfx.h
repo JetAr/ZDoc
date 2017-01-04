@@ -1,4 +1,4 @@
-// stdafx.h : include file for standard system include files,
+﻿// stdafx.h : include file for standard system include files,
 //  or project specific include files that are used frequently, but
 //      are changed infrequently
 //
@@ -9,8 +9,8 @@
 
 #ifndef _UNICODE
 #define _UNICODE            // Microsoft Windows NT Cluster Administrator
-                            //   Extension DLLs need to be Unicode
-                            //   applications.
+//   Extension DLLs need to be Unicode
+//   applications.
 #endif
 
 // Choose which threading model you want by commenting or uncommenting

@@ -1,4 +1,4 @@
-/*++
+﻿/*++
 
 Copyright (c) 2003  Microsoft Corporation
 
@@ -34,7 +34,7 @@ FILETIME g_ftInitTime = {0};
 BOOL
 InitializeIsapiTime(
     VOID
-    )
+)
 /*++
 
 Purpose:
@@ -65,7 +65,7 @@ Returns:
 DWORD
 GetCurrentTimeInSeconds(
     VOID
-    )
+)
 /*++
 
 Purpose:
@@ -88,7 +88,7 @@ Returns:
 DWORD64
 GetCurrentTimeInMilliseconds(
     VOID
-    )
+)
 /*++
 
 Purpose:
@@ -142,7 +142,7 @@ Returns:
 BOOL
 GetCurrentTimeAsFileTime(
     FILETIME *  pft
-    )
+)
 /*++
 
 Purpose:
@@ -174,7 +174,7 @@ BOOL
 GetFileTimeFromString(
     FILETIME *  pft,
     CHAR *      szTimeString
-    )
+)
 /*++
 
 Purpose:
@@ -412,7 +412,7 @@ BOOL
 GetFileTimeAsString(
     FILETIME *      pft,
     ISAPI_STRING *  pString
-    )
+)
 /*++
 
 Purpose:
@@ -504,7 +504,7 @@ Failed:
 BOOL
 GetCurrentTimeAsString(
     ISAPI_STRING *  pString
-    )
+)
 /*++
 
 Purpose:
@@ -545,7 +545,7 @@ DWORD
 DiffFileTimeInSeconds(
     FILETIME *  pft1,
     FILETIME *  pft2
-    )
+)
 /*++
 
 Purpose:
@@ -571,7 +571,7 @@ DWORD64
 DiffFileTimeInMilliseconds(
     FILETIME *  pft1,
     FILETIME *  pft2
-    )
+)
 /*++
 
 Purpose:

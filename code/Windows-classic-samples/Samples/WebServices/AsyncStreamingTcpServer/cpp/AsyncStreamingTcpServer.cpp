@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -15,7 +15,7 @@
 #include "PurchaseOrder.wsdl.h"
 // Print out rich error info
 void PrintError(
-    _In_ HRESULT errorCode, 
+    _In_ HRESULT errorCode,
     _In_opt_ WS_ERROR* error)
 {
     wprintf(L"Failure: errorCode=0x%lx\n", errorCode);
@@ -274,14 +274,14 @@ HRESULT CALLBACK Receive5(
     // Get action value
     WS_XML_STRING receivedAction;
     hr = WsGetHeader(
-        receiveState->message,
-        WS_ACTION_HEADER,
-        WS_XML_STRING_TYPE,
-        WS_READ_REQUIRED_VALUE,
-        NULL,
-        &receivedAction,
-        sizeof(receivedAction),
-        error);
+             receiveState->message,
+             WS_ACTION_HEADER,
+             WS_XML_STRING_TYPE,
+             WS_READ_REQUIRED_VALUE,
+             NULL,
+             &receivedAction,
+             sizeof(receivedAction),
+             error);
     if (FAILED(hr))
     {
         return hr;
@@ -344,7 +344,7 @@ HRESULT CALLBACK Receive8(
     // Read purchase order into heap, if there are any more to read.
     _PurchaseOrderType* purchaseOrder;
     hr = WsReadElement(receiveState->reader, &PurchaseOrder_wsdl.globalElements.PurchaseOrderType,
-        WS_READ_OPTIONAL_POINTER, receiveState->heap, &purchaseOrder, sizeof(purchaseOrder), error);
+                       WS_READ_OPTIONAL_POINTER, receiveState->heap, &purchaseOrder, sizeof(purchaseOrder), error);
     if (FAILED(hr))
     {
         return hr;
@@ -358,8 +358,8 @@ HRESULT CALLBACK Receive8(
     }
 
     wprintf(L"%ld, %s\n",
-        purchaseOrder->quantity,
-        purchaseOrder->productName);
+            purchaseOrder->quantity,
+            purchaseOrder->productName);
     fflush(stdout);
 
     // Free purchase order
@@ -447,10 +447,10 @@ static void CALLBACK OnReceiveComplete(
 // Main entry point
 int __cdecl wmain()
 {
-    
+
     HRESULT hr = S_OK;
     WS_ERROR* error = NULL;
-    
+
     WS_ASYNC_STATE asyncState = {};
     RECEIVE_STATE receiveState;
     receiveState.listener = NULL;
@@ -458,45 +458,45 @@ int __cdecl wmain()
     receiveState.message = NULL;
     receiveState.heap = NULL;
     receiveState.reader = NULL;
-    
+
     THREAD_INFO threadInfo;
     threadInfo.hr = S_OK;
     threadInfo.handle = NULL;
-    
-    
+
+
     // Create an error object for storing rich error information
     hr = WsCreateError(
-        NULL, 
-        0, 
-        &error);
+             NULL,
+             0,
+             &error);
     if (FAILED(hr))
     {
         goto Exit;
     }
-    
+
     // Create a heap to hold body data, with a max size to limit size of purchase order read
     hr = WsCreateHeap(/*maxSize*/ 1024, /*trimSize*/ 1024, NULL, 0, &receiveState.heap, error);
     if (FAILED(hr))
     {
         goto Exit;
     }
-    
+
     threadInfo.handle = CreateEvent(NULL, TRUE, FALSE, NULL);
     if (threadInfo.handle == NULL)
     {
         goto Exit;
     }
-    
+
     WS_ASYNC_CONTEXT receiveComplete;
     receiveComplete.callback = OnReceiveComplete;
     receiveComplete.callbackState = &threadInfo;
-    
+
     hr = WsAsyncExecute(&asyncState, Receive1, WS_LONG_CALLBACK, &receiveState, &receiveComplete, error);
     if (FAILED(hr))
     {
         goto Exit;
     }
-    
+
     if (hr == WS_S_ASYNC)
     {
         WaitForSingleObject(threadInfo.handle, INFINITE);
@@ -506,14 +506,14 @@ int __cdecl wmain()
             goto Exit;
         }
     }
-    
+
 Exit:
     if (FAILED(hr))
     {
         // Print out the error
         PrintError(hr, error);
     }
-    
+
     if (receiveState.channel != NULL)
     {
         // Close the channel
@@ -544,8 +544,8 @@ Exit:
     {
         WsFreeError(error);
     }
-    
-    
+
+
     fflush(stdout);
     return SUCCEEDED(hr) ? 0 : -1;
 }

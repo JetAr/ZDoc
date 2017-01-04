@@ -1,4 +1,4 @@
-//
+﻿//
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -53,7 +53,7 @@ public:
         };
         return QISearch(this, qit, riid, ppv);
     }
-  public:
+public:
     // ICredentialProviderCredential
     IFACEMETHODIMP Advise(_In_ ICredentialProviderCredentialEvents *pcpce);
     IFACEMETHODIMP UnAdvise();
@@ -94,14 +94,14 @@ public:
     IFACEMETHODIMP GetFieldOptions(DWORD dwFieldID,
                                    _Out_ CREDENTIAL_PROVIDER_CREDENTIAL_FIELD_OPTIONS *pcpcfo);
 
-  public:
+public:
     HRESULT Initialize(CREDENTIAL_PROVIDER_USAGE_SCENARIO cpus,
                        _In_ CREDENTIAL_PROVIDER_FIELD_DESCRIPTOR const *rgcpfd,
                        _In_ FIELD_STATE_PAIR const *rgfsp,
                        _In_ ICredentialProviderUser *pcpUser);
     CSampleCredential();
 
-  private:
+private:
 
     virtual ~CSampleCredential();
     long                                    _cRef;
@@ -112,7 +112,7 @@ public:
     PWSTR                                   _pszUserSid;
     PWSTR                                   _pszQualifiedUserName;                          // The user name that's used to pack the authentication buffer
     ICredentialProviderCredentialEvents2*    _pCredProvCredentialEvents;                    // Used to update fields.
-                                                                                            // CredentialEvents2 for Begin and EndFieldUpdates.
+    // CredentialEvents2 for Begin and EndFieldUpdates.
     BOOL                                    _fChecked;                                      // Tracks the state of our checkbox.
     DWORD                                   _dwComboIndex;                                  // Tracks the current index of our combobox.
     bool                                    _fShowControls;                                 // Tracks the state of our show/hide controls link.

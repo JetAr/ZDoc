@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -18,65 +18,65 @@ DWORD RetrySubscription(LPCWSTR subscriptionName)
 {
 
     DWORD dwRetVal, dwEventSourceCount;
-    
+
     EC_HANDLE hSubscription;
     EC_OBJECT_ARRAY_PROPERTY_HANDLE hArray=NULL;
 
     PEC_VARIANT vProperty, vEventSource;
     std::vector<BYTE> buffer, eventSourceBuffer;
 
-      //Open an existing subscription for reading
-    hSubscription = EcOpenSubscription( subscriptionName, 
-                                                      EC_READ_ACCESS, 
-                                                      EC_OPEN_EXISTING);
+    //Open an existing subscription for reading
+    hSubscription = EcOpenSubscription( subscriptionName,
+                                        EC_READ_ACCESS,
+                                        EC_OPEN_EXISTING);
     if (!hSubscription)
         return GetLastError();
 
     //Get the event sources collection
-    dwRetVal = GetProperty( hSubscription, 
-                                      EcSubscriptionEventSources, 
-                                      0,
-                                      buffer, 
-                                      vProperty);
+    dwRetVal = GetProperty( hSubscription,
+                            EcSubscriptionEventSources,
+                            0,
+                            buffer,
+                            vProperty);
 
-     if ( ERROR_SUCCESS != dwRetVal )
+    if ( ERROR_SUCCESS != dwRetVal )
     {
-	 goto Cleanup;
+        goto Cleanup;
     }
 
-   //Ensure that we have obtained handle to the Array Property
+    //Ensure that we have obtained handle to the Array Property
     if ( vProperty->Type != EcVarTypeNull && vProperty->Type!= EcVarObjectArrayPropertyHandle)
     {
         dwRetVal =  ERROR_INVALID_DATA;
-	 goto Cleanup;
+        goto Cleanup;
     }
 
     hArray = (vProperty->Type == EcVarTypeNull) ? NULL: vProperty->PropertyHandleVal ;
 
     if(!hArray)
     {
-	dwRetVal = ERROR_INVALID_DATA;
-	goto Cleanup;
+        dwRetVal = ERROR_INVALID_DATA;
+        goto Cleanup;
     }
-	
-    // Get the EventSources array size (number of elements) 
+
+    // Get the EventSources array size (number of elements)
     if ( !EcGetObjectArraySize( hArray,
-                                         &dwEventSourceCount ) )
+                                &dwEventSourceCount ) )
     {
         dwRetVal = GetLastError();
-	 goto Cleanup;
+        goto Cleanup;
     }
 
     //Retry for all the event sources in the subcription
     for ( DWORD i = 0; i < dwEventSourceCount ; i++)
     {
 
-        dwRetVal = GetArrayProperty( hArray, 
-                                                 EcSubscriptionEventSourceAddress,
-                                                 i,
-                                                 0,
-                                                 eventSourceBuffer,
-                                                 vEventSource);
+        dwRetVal = GetArrayProperty( hArray,
+                                     EcSubscriptionEventSourceAddress,
+                                     i,
+                                     0,
+                                     eventSourceBuffer,
+                                     vEventSource);
 
         if (ERROR_SUCCESS != dwRetVal)
         {
@@ -86,7 +86,7 @@ DWORD RetrySubscription(LPCWSTR subscriptionName)
         if (vEventSource->Type != EcVarTypeNull && vEventSource->Type != EcVarTypeString)
         {
             dwRetVal =  ERROR_INVALID_DATA;
-	     goto Cleanup;
+            goto Cleanup;
         }
 
         LPCWSTR eventSource = (vEventSource->Type == EcVarTypeNull) ? NULL: vEventSource->StringVal;
@@ -94,20 +94,20 @@ DWORD RetrySubscription(LPCWSTR subscriptionName)
         if (!eventSource)
             continue;
 
-        if(!EcRetrySubscription( subscriptionName, 
-                                        eventSource, 
-                                        0))
+        if(!EcRetrySubscription( subscriptionName,
+                                 eventSource,
+                                 0))
         {
             dwRetVal =  GetLastError();
-	     goto Cleanup;
+            goto Cleanup;
         }
     }
 
 Cleanup:
 
     if(hArray)
-		EcClose(hArray);
-	
+        EcClose(hArray);
+
     EcClose(hSubscription);
     return dwRetVal;
 }

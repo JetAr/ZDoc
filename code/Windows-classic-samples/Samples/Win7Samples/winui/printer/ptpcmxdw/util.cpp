@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -24,10 +24,10 @@
 
 VOID vPrint(
     __in    LPCTSTR   szMessageText
-    )
+)
 {
 
-    // 
+    //
     // Declare the length of buffer required to store multibyte string
     // for \n.  DBCS char set, needs 2 bytes to store singe char.
     //
@@ -36,52 +36,52 @@ VOID vPrint(
     DWORD dwNumCharsWritten     = 0;
 
 
-    if ( !szMessageText ) 
+    if ( !szMessageText )
     {
         return;
     }
 
 
     //
-    // Format Unicode Text to a Multibyte 
+    // Format Unicode Text to a Multibyte
     //
     if ( WideCharToMultiByte(CP_OEMCP, 0, szMessageText, -1, szMultiByteString,
-                              CCHOF(szMultiByteString), NULL, NULL) )
-    {   
-        WriteConsoleA(GetStdHandle(STD_OUTPUT_HANDLE), szMultiByteString, 
-                       (DWORD) strlen(szMultiByteString),
-                       &dwNumCharsWritten, NULL);
+                             CCHOF(szMultiByteString), NULL, NULL) )
+    {
+        WriteConsoleA(GetStdHandle(STD_OUTPUT_HANDLE), szMultiByteString,
+                      (DWORD) strlen(szMultiByteString),
+                      &dwNumCharsWritten, NULL);
     }
 
 }
 
 VOID vFormatAndPrint(
-        IN  DWORD dwMsgId
-    )
+    IN  DWORD dwMsgId
+)
 {
     //
-    // It would have been so easy to use 
+    // It would have been so easy to use
     //      CString MessageText;
     //      MessageText.FormatMessage(dwMsgId);
     // But what happens if the error message is that we are out of memory.
-    // CString allocates memory, so CString might fail, the message might not 
+    // CString allocates memory, so CString might fail, the message might not
     // get printed, and the user wont know what happened to the program.
     // Therefore, we cannot use dynamic allocation of mem here.
     //
 
     TCHAR szMessageText[ERROR_MESSAGE_NUMCHARS];
     if ( ! LoadString( (HINSTANCE)GetModuleHandle(NULL),// handle to resource module
-                    dwMsgId,                            // resource identifier
-                    szMessageText,                      // resource buffer
-                    ERROR_MESSAGE_NUMCHARS )            // num chars in buffer
-    )
+                       dwMsgId,                            // resource identifier
+                       szMessageText,                      // resource buffer
+                       ERROR_MESSAGE_NUMCHARS )            // num chars in buffer
+       )
     {
 
         //
-        // The size of 1024 is big enough. But if for some reason, the error 
+        // The size of 1024 is big enough. But if for some reason, the error
         // message becomes real big, the buffer will be filled with part of the
-        // message. But no crash will happen. The only other thing we need to 
-        // check for is whether LoadString() could actually find the string with the 
+        // message. But no crash will happen. The only other thing we need to
+        // check for is whether LoadString() could actually find the string with the
         // corresponding dwMsgID. In this case, we cant print anything, so we
         // quietly return.
         //
@@ -97,9 +97,9 @@ VOID vFormatAndPrint(
 
 VOID DisplayUsage(
     VOID
-    )
+)
 {
-   
+
     vFormatAndPrint(IDS_APP_SUMMARY);
     vFormatAndPrint(IDS_APP_PREREQ);
     vFormatAndPrint(IDS_APP_SYNTAX);
@@ -126,20 +126,20 @@ Arguments:
                     parser error.
 Return Value:
 
-    
+
 
 --*/
 
 HRESULT
 IStreamToDOMDocument(
-    __inout     IStream           *pStream, 
+    __inout     IStream           *pStream,
     __deref_out IXMLDOMDocument2 **ppXmlDocument
-    )
+)
 {
     HRESULT           hr        = S_OK;
 
-    if (NULL == ppXmlDocument || 
-        NULL == pStream)
+    if (NULL == ppXmlDocument ||
+            NULL == pStream)
     {
         hr = E_INVALIDARG;
     }
@@ -177,14 +177,14 @@ IStreamToDOMDocument(
 
         //
         // Check immediately to see if there was a parse error, since this
-        // comes back as S_FALSE instead of E_...  
+        // comes back as S_FALSE instead of E_...
         //
         if (hr == S_FALSE)
         {
-            // We could Figure out why it failed, but for now, lets just 
+            // We could Figure out why it failed, but for now, lets just
             // signal failure.
             hr = E_FAIL;
-            
+
         }
 
         VariantClear(&streamVar);
@@ -197,13 +197,13 @@ HRESULT
 DOMDocumentToIStream(
     __in    IXMLDOMDocument2 *pDocument,
     __inout IStream          *pStream
-     )
+)
 {
     HRESULT hr = S_OK;
 
-    if ( NULL == pDocument || 
-         NULL == pStream
-        )
+    if ( NULL == pDocument ||
+            NULL == pStream
+       )
     {
         return E_INVALIDARG;
     }
@@ -232,14 +232,14 @@ HRESULT
 StringDupUsingHeapAlloc(
     __in        PCWSTR pszString,
     __deref_out PWSTR  *ppszNewString
-    )
+)
 {
     HRESULT hr           = S_OK;
     size_t  cchString    = 0;
     PWSTR  pszNewString  = NULL;
 
     if ( NULL == pszString ||
-         NULL == ppszNewString )
+            NULL == ppszNewString )
     {
         hr = E_INVALIDARG;
     }

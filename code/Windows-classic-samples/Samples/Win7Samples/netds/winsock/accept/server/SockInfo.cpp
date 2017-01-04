@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -35,7 +35,7 @@ PSOCK_INFO AllocAndInitSockInfo()
     printf("Allocated SockInfo at %p\n", pNewSockInfo);
 
     // Initialize the SOCK_INFO structure with the suitable initial values
-    // for each field. 
+    // for each field.
     memset(pNewSockInfo,0,sizeof(SOCK_INFO));
     pNewSockInfo->sock = INVALID_SOCKET;
 
@@ -45,8 +45,8 @@ CLEANUP:
 
 
 /*
-    This function frees the SOCK_INFO structure allocated by 
-    AllocAndInitSockInfo. 
+    This function frees the SOCK_INFO structure allocated by
+    AllocAndInitSockInfo.
 */
 void FreeSockInfo(PSOCK_INFO pSockInfo)
 {
@@ -75,12 +75,12 @@ void AddSockInfoToList(PSOCK_INFO *ppHead, PSOCK_INFO pNewSockInfo)
         (*ppHead)->prev = pNewSockInfo;
 
     // the new head is this new node, as we inserted at the head.
-    *ppHead = pNewSockInfo;            
-    
+    *ppHead = pNewSockInfo;
+
     printf("Added SockInfo %p to list\n", pNewSockInfo);
     return;
 }
-   
+
 /*
     This function removes a given sockinfo structure from the given list
     and frees the memory also.
@@ -98,11 +98,11 @@ void DeleteSockInfoFromList(PSOCK_INFO *ppHead, PSOCK_INFO pDelSockInfo)
     if (*ppHead == pDelSockInfo)
         *ppHead = pDelSockInfo->next;
 
-    // now, pDelSockInfo can be safely deleted as nobody points to it. 
+    // now, pDelSockInfo can be safely deleted as nobody points to it.
     FreeSockInfo(pDelSockInfo);
-    
+
     printf("Deleted and freed SockInfo %p\n", pDelSockInfo);
     return;
 }
-   
+
 

@@ -1,12 +1,12 @@
-//-----------------------------------------------------------------------
+﻿//-----------------------------------------------------------------------
 // This file is part of the Windows SDK Code Samples.
-// 
+//
 // Copyright (C) Microsoft Corporation.  All rights reserved.
-// 
+//
 // This source code is intended only as a supplement to Microsoft
 // Development Tools and/or on-line documentation.  See these other
 // materials for detailed information regarding Microsoft code samples.
-// 
+//
 // THIS CODE AND INFORMATION ARE PROVIDED AS IS WITHOUT WARRANTY OF ANY
 // KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
 // IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -43,7 +43,7 @@ public:
         }
 
         if (riid == __uuidof(IUnknown) ||
-            riid == __uuidof(IMalloc))
+                riid == __uuidof(IMalloc))
         {
             *ppvObject = static_cast<IMalloc *>(this);
         }
@@ -113,13 +113,16 @@ public:
     void STDMETHODCALLTYPE HeapMinimize() {}
 
     // Sets the maximum number of bytes allowed to be allocated.
-    // If 0 -> infinite 
-    void SetAllocatedMaximum(SIZE_T cbMaximum) { m_cbAllocatedMaximum = cbMaximum; }
+    // If 0 -> infinite
+    void SetAllocatedMaximum(SIZE_T cbMaximum)
+    {
+        m_cbAllocatedMaximum = cbMaximum;
+    }
     // Sets the maximum number of bytes allowed for every single allocation.
     // If 0 -> infinite
-    void SetSingleBufferMaximum(SIZE_T cbMaximum) 
-    { 
-        m_cbSingleBufferMaximum = cbMaximum; 
+    void SetSingleBufferMaximum(SIZE_T cbMaximum)
+    {
+        m_cbSingleBufferMaximum = cbMaximum;
     }
 
 private:

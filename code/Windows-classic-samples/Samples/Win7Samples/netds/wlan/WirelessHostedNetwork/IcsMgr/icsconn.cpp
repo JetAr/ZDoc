@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -71,10 +71,10 @@ CIcsConnection::InitIcsConnection
     pNetConnection->AddRef( );
 
     hr =
-    m_pNetConnection->GetProperties
-    (
-        &pNCProps
-    );
+        m_pNetConnection->GetProperties
+        (
+            &pNCProps
+        );
     BAIL_ON_HRESULT_ERROR(hr);
     ASSERT(pNCProps);
 
@@ -96,11 +96,11 @@ CIcsConnection::InitIcsConnection
     }
 
     hr =
-    m_pIcsMgr->m_pNSMgr->get_INetSharingConfigurationForINetConnection
-    (
-        pNetConnection,
-        &m_pNSConfig
-    );
+        m_pIcsMgr->m_pNSMgr->get_INetSharingConfigurationForINetConnection
+        (
+            pNetConnection,
+            &m_pNSConfig
+        );
     BAIL_ON_HRESULT_ERROR(hr);
     ASSERT(m_pNSConfig);
 
@@ -129,10 +129,10 @@ CIcsConnection::RefreshSharingEnabled
     SHARINGCONNECTIONTYPE   Type        =   ICSSHARINGTYPE_PUBLIC;
 
     hr =
-    m_pNSConfig->get_SharingEnabled
-    (
-        &bEnabled
-    );
+        m_pNSConfig->get_SharingEnabled
+        (
+            &bEnabled
+        );
     BAIL_ON_HRESULT_ERROR(hr);
 
     m_bSharingEnabled   =   (bEnabled == VARIANT_TRUE);
@@ -142,10 +142,10 @@ CIcsConnection::RefreshSharingEnabled
     if (m_bSharingEnabled)
     {
         hr =
-        m_pNSConfig->get_SharingConnectionType
-        (
-            &Type
-        );
+            m_pNSConfig->get_SharingConnectionType
+            (
+                &Type
+            );
         BAIL_ON_HRESULT_ERROR(hr);
 
         m_bPublic   = (Type == ICSSHARINGTYPE_PUBLIC);

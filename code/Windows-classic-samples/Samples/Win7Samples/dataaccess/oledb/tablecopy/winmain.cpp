@@ -1,4 +1,4 @@
-//-----------------------------------------------------------------------------
+﻿//-----------------------------------------------------------------------------
 // Microsoft OLE DB TABLECOPY Sample
 // Copyright (C) 1991-2000 Microsoft Corporation
 //
@@ -38,22 +38,22 @@ int WINAPI WinMain(	HINSTANCE hInstance,
         hr = E_OUTOFMEMORY;
         goto CLEANUP;
     }
-    
+
     //CoInitialize - COM/OLE
     XTESTC(hr = CoInitialize(NULL));
 
     //Initlialize Window Controls
     InitCommonControls();
-    
+
     //Main Execution
     pCWizard->Display();
-    
+
 CLEANUP:
     if (pCWizard)
         delete pCWizard;
 
     CoUninitialize();
-   
+
     return (hr==S_OK);
 }
 
@@ -66,10 +66,10 @@ void SyncSibling(HWND hToWnd, HWND hFromWnd)
 {
     ASSERT(hToWnd && hFromWnd);
 
-    //Make both windows synched, 
+    //Make both windows synched,
     //Get the current selection from the Source
     LONG iItem = (LONG)SendMessage(hFromWnd, LVM_GETNEXTITEM, (WPARAM)-1, (LPARAM)LVNI_SELECTED);
-    
+
     //Tell the Target to select the same selection
     if(iItem != LVM_ERR)
     {
@@ -87,7 +87,7 @@ void SyncSibling(HWND hToWnd, HWND hFromWnd)
             SendMessage(hToWnd, LVM_ENSUREVISIBLE, (WPARAM)iItem, (LPARAM)FALSE);
         }
     }
-}                
+}
 
 
 //////////////////////////////////////////////////////////////////
@@ -98,26 +98,26 @@ int InternalAssert(					// 1 to break, 0 to skip.
     char*	pszExp,					// The expression causing assert
     char*	pszFile,				// The file name
     UINT	iLine					// Line number of assert
-    )
+)
 {
     CHAR	szMsg[MAX_QUERY_LEN];
     StringCchPrintfA(szMsg, MAX_NAME_LEN, "Assertion Error!\n File '%s', Line '%lu'\n"
-                    "Expression '%s'\n\n"
-                    "Do you wish to Continue?  (Press 'OK' to ignore the assertion."
-                    "  Press 'Cancel to debug.)",pszFile, iLine, pszExp);
-    
+                     "Expression '%s'\n\n"
+                     "Do you wish to Continue?  (Press 'OK' to ignore the assertion."
+                     "  Press 'Cancel to debug.)",pszFile, iLine, pszExp);
+
     //Popup a MessageBox
     LONG dwSelection = MessageBoxA(NULL, szMsg,	"Microsoft OLE DB TableCopy - Error",
-        MB_TASKMODAL | MB_ICONSTOP | MB_OKCANCEL | MB_DEFBUTTON1 );
+                                   MB_TASKMODAL | MB_ICONSTOP | MB_OKCANCEL | MB_DEFBUTTON1 );
 
     switch(dwSelection)
     {
-        case IDOK:
-            return 0;
-        case IDCANCEL:
-            return 1;
-        default:
-            ASSERT(!L"Unhandled Choice");
+    case IDOK:
+        return 0;
+    case IDCANCEL:
+        return 1;
+    default:
+        ASSERT(!L"Unhandled Choice");
     }
 
     return 0;
@@ -144,10 +144,10 @@ void InternalTrace(WCHAR*	pwszFmt, ...)
     //Make sure there is a NULL Terminator, vsnwprintf will not copy
     //the terminator if length==MAX_NAME_LEN
     wszBuffer[MAX_NAME_LEN-1] = EOL;
-    
+
     //Convert to MBCS
     ConvertToMBCS(wszBuffer, szBuffer, MAX_NAME_LEN);
-    
+
     //Output to the DebugWindow
     OutputDebugString(szBuffer);
 }
@@ -172,7 +172,7 @@ void InternalTrace(CHAR*	pszFmt, ...)
     //Make sure there is a NULL Terminator, vsnwprintf will not copy
     //the terminator if length==MAX_NAME_LEN
     szBuffer[MAX_NAME_LEN-1] = '\0';
-    
+
     OutputDebugStringA(szBuffer);
 }
 
@@ -185,9 +185,9 @@ void Busy(BOOL bValue)
 {
     static HCURSOR	hWaitCursor = LoadCursor(NULL, IDC_WAIT);
 
-    if(bValue) 
+    if(bValue)
         SetCursor(hWaitCursor);
-    else 
+    else
         SetCursor(NULL);
 }
 
@@ -217,23 +217,23 @@ BOOL CenterDialog(HWND hdlg)
 
     // Get frame window client rect in screen coordinates
     hwnd = GetParent(hdlg);
-    if(hwnd == NULL || hwnd == GetDesktopWindow()) 
+    if(hwnd == NULL || hwnd == GetDesktopWindow())
     {
         rcParent.top = rcParent.left = 0;
         rcParent.right = GetSystemMetrics(SM_CXFULLSCREEN);
         rcParent.bottom = GetSystemMetrics(SM_CYFULLSCREEN);
     }
-    else 
+    else
         GetWindowRect(hwnd, &rcParent);
 
     // Determine the top-left point for the dialog to be centered
     GetWindowRect(hdlg, &rcDlg);
     cWidth  = rcDlg.right  - rcDlg.left;
     cHeight = rcDlg.bottom - rcDlg.top;
-    nLeft   = rcParent.left + 
-            (((rcParent.right  - rcParent.left) - cWidth ) / 2);
+    nLeft   = rcParent.left +
+              (((rcParent.right  - rcParent.left) - cWidth ) / 2);
     nTop    = rcParent.top  +
-            (((rcParent.bottom - rcParent.top ) - cHeight) / 2);
+              (((rcParent.bottom - rcParent.top ) - cHeight) / 2);
     if (nLeft < 0) nLeft = 0;
     if (nTop  < 0) nTop  = 0;
 
@@ -252,7 +252,7 @@ INT wMessageBox(
     WCHAR* pwszTitle,					// Title for message
     WCHAR* pwszFmt,						// Format string
     ...									// Substitution parameters
-    )
+)
 {
     va_list		marker;
     WCHAR		wszBuffer[MAX_QUERY_LEN];
@@ -263,7 +263,7 @@ INT wMessageBox(
     va_start(marker, pwszFmt);
     _vsnwprintf_s(wszBuffer, MAX_QUERY_LEN, _TRUNCATE, pwszFmt, marker);
     va_end(marker);
-   
+
     //Make sure there is a NULL Terminator, vsnwprintf will not copy
     //the terminator if length==MAX_QUERY_LEN
     wszBuffer[MAX_QUERY_LEN-1] = EOL;
@@ -298,7 +298,7 @@ void wSetDlgItemText(HWND hWnd, INT DlgItem, WCHAR* pwszFmt, ...)
 
     //convert to MBCS
     ConvertToMBCS(wszBuffer, szBuffer, MAX_NAME_LEN);
-    
+
     SetDlgItemTextA(hWnd, DlgItem, szBuffer);
 }
 
@@ -327,16 +327,16 @@ UINT wGetDlgItemText(HWND hWnd, INT DlgItem, WCHAR* pwsz, INT nMaxSize)
 //////////////////////////////////////////////////////////////////
 LRESULT wSendMessage(HWND hWnd, UINT Msg, WPARAM wParam, WCHAR* pwszBuffer)
 {
-    CHAR szBuffer[MAX_NAME_LEN];						  
+    CHAR szBuffer[MAX_NAME_LEN];
     szBuffer[0] = '\0';
-    
+
     if(pwszBuffer && Msg != WM_GETTEXT && Msg != LVM_GETITEM && Msg != CB_GETLBTEXT)
     {
         //Convert to ANSI before sending, since we don't know if this was a GET/SET message
         ConvertToMBCS(pwszBuffer, szBuffer, MAX_NAME_LEN);
     }
 
-    //Send the message with an ANSI Buffer 
+    //Send the message with an ANSI Buffer
     LRESULT lResult = SendMessageA(hWnd, Msg, (WPARAM)wParam, (LPARAM)szBuffer);
 
     if(pwszBuffer && Msg == WM_GETTEXT || Msg == LVM_GETITEM || Msg == CB_GETLBTEXT)
@@ -360,16 +360,16 @@ BOOL GetEditBoxValue(HWND hEditWnd, ULONG ulMin, ULONG ulMax, ULONG* pulCount)
     ULONG	ulCount = 0;
     WCHAR	wszBuffer[MAX_NAME_LEN];
     WCHAR*  pwszEnd = NULL;
-    
+
     //Get the EditText
     wSendMessage(hEditWnd, WM_GETTEXT, MAX_NAME_LEN, wszBuffer);
-        
+
     //Convert to ULONG
     ulCount = wcstoul(wszBuffer, &pwszEnd, 10);
-    if(!wszBuffer[0] || ulCount<ulMin || ulCount>ulMax || pwszEnd==NULL || pwszEnd[0]!=EOL) 
+    if(!wszBuffer[0] || ulCount<ulMin || ulCount>ulMax || pwszEnd==NULL || pwszEnd[0]!=EOL)
     {
-        wMessageBox(hEditWnd, MB_APPLMODAL | MB_ICONEXCLAMATION | MB_OK, 	wsz_ERROR, 
-            wsz_INVALID_VALUE_, wszBuffer, ulMin, ulMax);
+        wMessageBox(hEditWnd, MB_APPLMODAL | MB_ICONEXCLAMATION | MB_OK, 	wsz_ERROR,
+                    wsz_INVALID_VALUE_, wszBuffer, ulMin, ulMax);
         SetFocus(hEditWnd);
         return FALSE;
     }
@@ -387,7 +387,7 @@ LONG LV_InsertColumn(HWND hWnd, LONG iColumn, CHAR* szName)
 {
     //Setup LV_COLUMNINFO
     LV_COLUMN lvColumnHeader = { LVCF_TEXT | LVCF_FMT | LVCF_SUBITEM, LVCFMT_LEFT, 0, szName, MAX_NAME_LEN, 0};
-    
+
     //LVM_INSERTCOLUMN
     return (LONG)SendMessage(hWnd, LVM_INSERTCOLUMN, (WPARAM)iColumn, (LPARAM)&lvColumnHeader);
 }
@@ -457,7 +457,7 @@ LONG LV_FindItem(HWND hWnd, CHAR* szName, LONG iStart)
 HTREEITEM TV_InsertItem(HWND hWnd, HTREEITEM hParent, HTREEITEM hInsAfter, CHAR* szName, LONG iParam, LONG iImage, LONG iSelectedImage)
 {
     TV_INSERTSTRUCT tvInsertStruct = { hParent, hInsAfter, { TVIF_TEXT | TVIF_IMAGE | TVIF_SELECTEDIMAGE | TVIF_PARAM, 0, 0, 0, szName, 0, iImage, iSelectedImage, 0, iParam} };
-    
+
     //TVM_INSERTITEM
     return (HTREEITEM)SendMessage(hWnd, TVM_INSERTITEM, (WPARAM)0, (LPARAM)&tvInsertStruct);
 }

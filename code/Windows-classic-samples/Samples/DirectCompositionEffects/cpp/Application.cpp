@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -155,16 +155,16 @@ HRESULT CApplication::CreateD3D11Device()
         CComPtr<ID3D11DeviceContext> d3d11DeviceContext;
 
         hr = D3D11CreateDevice(
-            nullptr,
-            driverTypes[i],
-            NULL,
-            D3D11_CREATE_DEVICE_BGRA_SUPPORT,
-            NULL,
-            0,
-            D3D11_SDK_VERSION,
-            &d3d11Device,
-            &featureLevelSupported,
-            &d3d11DeviceContext);
+                 nullptr,
+                 driverTypes[i],
+                 NULL,
+                 D3D11_CREATE_DEVICE_BGRA_SUPPORT,
+                 NULL,
+                 0,
+                 D3D11_SDK_VERSION,
+                 &d3d11Device,
+                 &featureLevelSupported,
+                 &d3d11DeviceContext);
 
         if (SUCCEEDED(hr))
         {
@@ -205,7 +205,7 @@ HRESULT CApplication::CreateDCompositionVisualTree()
 
     if (SUCCEEDED(hr))
     {
-        hr = _device->CreateVisual(&_visual);		
+        hr = _device->CreateVisual(&_visual);
     }
 
     if (SUCCEEDED(hr))
@@ -360,10 +360,10 @@ HRESULT CApplication::CreateSurface(int size, float red, float green, float blue
         _d2d1Factory->GetDesktopDpi(&dpiX, &dpiY);
 
         D2D1_BITMAP_PROPERTIES1 bitmapProperties = D2D1::BitmapProperties1(
-            D2D1_BITMAP_OPTIONS_TARGET | D2D1_BITMAP_OPTIONS_CANNOT_DRAW,
-            D2D1::PixelFormat(DXGI_FORMAT_R8G8B8A8_UNORM, D2D1_ALPHA_MODE_IGNORE),
-            dpiX,
-            dpiY);
+                    D2D1_BITMAP_OPTIONS_TARGET | D2D1_BITMAP_OPTIONS_CANNOT_DRAW,
+                    D2D1::PixelFormat(DXGI_FORMAT_R8G8B8A8_UNORM, D2D1_ALPHA_MODE_IGNORE),
+                    dpiX,
+                    dpiY);
 
         hr = _d2d1DeviceContext->CreateBitmapFromDxgiSurface(dxgiSurface, &bitmapProperties, &d2d1Bitmap);
 
@@ -441,10 +441,10 @@ HRESULT CApplication::SetEffectOnVisualLeft()
     if (SUCCEEDED(hr))
     {
         hr = CreateTranslateTransform(
-            beginOffsetX * CApplication::_gridSize, offsetY * CApplication::_gridSize, 0.0f,
-            endOffsetX * CApplication::_gridSize, offsetY * CApplication::_gridSize, 0.0f,
-            0.25f, 1.25f,
-            &translateTransform);
+                 beginOffsetX * CApplication::_gridSize, offsetY * CApplication::_gridSize, 0.0f,
+                 endOffsetX * CApplication::_gridSize, offsetY * CApplication::_gridSize, 0.0f,
+                 0.25f, 1.25f,
+                 &translateTransform);
     }
 
     CComPtr<IDCompositionRotateTransform3D> rotateTransform;
@@ -452,11 +452,11 @@ HRESULT CApplication::SetEffectOnVisualLeft()
     if (SUCCEEDED(hr))
     {
         hr = CreateRotateTransform(
-            3.5f * CApplication::_gridSize, 1.5f * CApplication::_gridSize, 0.0f * CApplication::_gridSize,
-            0.0f, 1.0f, 0.0f,
-            beginAngle, endAngle,
-            0.25f, 1.25f,
-            &rotateTransform);
+                 3.5f * CApplication::_gridSize, 1.5f * CApplication::_gridSize, 0.0f * CApplication::_gridSize,
+                 0.0f, 1.0f, 0.0f,
+                 beginAngle, endAngle,
+                 0.25f, 1.25f,
+                 &rotateTransform);
     }
 
     CComPtr<IDCompositionMatrixTransform3D> perspectiveTransform;
@@ -514,9 +514,9 @@ HRESULT CApplication::SetEffectOnVisualLeftChildren()
         if (SUCCEEDED(hr))
         {
             hr = CreateScaleTransform(
-                0.0f, 0.0f, 0.0f,
-                1.0f / 3.0f, 1.0f / 3.0f, 1.0f,
-                &scale);
+                     0.0f, 0.0f, 0.0f,
+                     1.0f / 3.0f, 1.0f / 3.0f, 1.0f,
+                     &scale);
         }
 
         CComPtr<IDCompositionTranslateTransform3D> translate;
@@ -589,10 +589,10 @@ HRESULT CApplication::SetEffectOnVisualRight()
     if (SUCCEEDED(hr))
     {
         hr = CreateTranslateTransform(
-            beginOffsetX * CApplication::_gridSize, offsetY * CApplication::_gridSize, 0.0f,
-            endOffsetX * CApplication::_gridSize, offsetY * CApplication::_gridSize, 0.0f,
-            0.25f, 1.25f,
-            &translateTransform);
+                 beginOffsetX * CApplication::_gridSize, offsetY * CApplication::_gridSize, 0.0f,
+                 endOffsetX * CApplication::_gridSize, offsetY * CApplication::_gridSize, 0.0f,
+                 0.25f, 1.25f,
+                 &translateTransform);
     }
 
     IDCompositionTransform3D *transforms[] =
@@ -1068,10 +1068,22 @@ HRESULT CApplication::CreatePerspectiveTransform(float dx, float dy, float dz, I
     }
 
     D3DMATRIX matrix;
-    matrix._11 = 1.0f; matrix._12 = 0.0f; matrix._13 = 0.0f; matrix._14 = dx;
-    matrix._21 = 0.0f; matrix._22 = 1.0f; matrix._23 = 0.0f; matrix._24 = dy;
-    matrix._31 = 0.0f; matrix._32 = 0.0f; matrix._33 = 1.0f; matrix._34 = dz;
-    matrix._41 = 0.0f; matrix._42 = 0.0f; matrix._43 = 0.0f; matrix._44 = 1.0f;
+    matrix._11 = 1.0f;
+    matrix._12 = 0.0f;
+    matrix._13 = 0.0f;
+    matrix._14 = dx;
+    matrix._21 = 0.0f;
+    matrix._22 = 1.0f;
+    matrix._23 = 0.0f;
+    matrix._24 = dy;
+    matrix._31 = 0.0f;
+    matrix._32 = 0.0f;
+    matrix._33 = 1.0f;
+    matrix._34 = dz;
+    matrix._41 = 0.0f;
+    matrix._42 = 0.0f;
+    matrix._43 = 0.0f;
+    matrix._44 = 1.0f;
 
     CComPtr<IDCompositionMatrixTransform3D> transform;
 
@@ -1181,28 +1193,28 @@ LRESULT CALLBACK CApplication::WindowProc(HWND hwnd, UINT msg, WPARAM wParam, LP
 
     switch (msg)
     {
-        case WM_LBUTTONUP:
-            result = _application->OnLeftButton();
-            break;
+    case WM_LBUTTONUP:
+        result = _application->OnLeftButton();
+        break;
 
-        case WM_KEYDOWN:
-            result = _application->OnKeyDown(wParam);
-            break;
+    case WM_KEYDOWN:
+        result = _application->OnKeyDown(wParam);
+        break;
 
-        case WM_CLOSE:
-            result = _application->OnClose();
-            break;
+    case WM_CLOSE:
+        result = _application->OnClose();
+        break;
 
-        case WM_DESTROY:
-            result = _application->OnDestroy();
-            break;
+    case WM_DESTROY:
+        result = _application->OnDestroy();
+        break;
 
-        case WM_PAINT:
-            result = _application->OnPaint();
-            break;
+    case WM_PAINT:
+        result = _application->OnPaint();
+        break;
 
-        default:
-            result = DefWindowProc(hwnd, msg, wParam, lParam);
+    default:
+        result = DefWindowProc(hwnd, msg, wParam, lParam);
     }
 
     return result;
@@ -1256,18 +1268,18 @@ HRESULT CApplication::CreateApplicationWindow()
         AdjustWindowRect(&rect, WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX, FALSE);
 
         _hwnd = CreateWindowExW(
-           0,
-           L"MainWindowClass",
-           L"DirectComposition Effects Sample",
-           WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX,
-           CW_USEDEFAULT,
-           CW_USEDEFAULT,
-           rect.right - rect.left,
-           rect.bottom - rect.top,
-           NULL,
-           NULL,
-           _hinstance,
-           nullptr);
+                    0,
+                    L"MainWindowClass",
+                    L"DirectComposition Effects Sample",
+                    WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX,
+                    CW_USEDEFAULT,
+                    CW_USEDEFAULT,
+                    rect.right - rect.left,
+                    rect.bottom - rect.top,
+                    NULL,
+                    NULL,
+                    _hinstance,
+                    nullptr);
 
         if (_hwnd == NULL)
         {
@@ -1346,7 +1358,7 @@ VOID CApplication::DestroyApplicationWindow()
     if (_hwnd != NULL)
     {
         DestroyWindow(_hwnd);
-       _hwnd = NULL;
+        _hwnd = NULL;
     }
 }
 
@@ -1447,7 +1459,7 @@ LRESULT CApplication::OnClose()
     if (_hwnd != NULL)
     {
         DestroyWindow(_hwnd);
-       _hwnd = NULL;
+        _hwnd = NULL;
     }
 
     return 0;

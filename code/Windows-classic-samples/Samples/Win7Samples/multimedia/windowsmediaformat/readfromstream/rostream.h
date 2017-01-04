@@ -1,4 +1,4 @@
-//*****************************************************************************
+﻿//*****************************************************************************
 //
 // Microsoft Windows Media
 // Copyright (C) Microsoft Corporation. All rights reserved.
@@ -30,7 +30,7 @@ public:
     // IUnknown methods
     //
     HRESULT STDMETHODCALLTYPE QueryInterface( /* [in] */  REFIID riid,
-                                              /* [out] */ void **ppvObject );
+            /* [out] */ void **ppvObject );
     ULONG STDMETHODCALLTYPE AddRef();
     ULONG STDMETHODCALLTYPE Release();
 

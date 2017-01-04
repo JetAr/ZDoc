@@ -1,12 +1,12 @@
-//*****************************************************************************
+﻿//*****************************************************************************
 //
 // Microsoft Windows Media
 // Copyright ( C) Microsoft Corporation. All rights reserved.
 //
 // FileName:            reader.cpp
 //
-// Abstract:            Implementation of the CReader class which handles 
-//						opening and reading files with the Format SDK's 
+// Abstract:            Implementation of the CReader class which handles
+//						opening and reading files with the Format SDK's
 //						IWMSyncReader interface.
 //
 //*****************************************************************************
@@ -63,7 +63,7 @@ HRESULT CReader::Open( const TCHAR *ptszFile )
     //
     if( 0 == _tcsnicmp( ptszFile, TEXT( "http" ), 4 ) )
     {
-        _tprintf( _T( "Wrong input file - streams are not supported : (hr=0x%08x).\n" ) ,hr );
+        _tprintf( _T( "Wrong input file - streams are not supported : (hr=0x%08x).\n" ),hr );
         return( E_INVALIDARG );
     }
 
@@ -79,21 +79,21 @@ HRESULT CReader::Open( const TCHAR *ptszFile )
     }
 
     //
-    // Open the requested file using IStream just to show how to use IStream with the synchronous reader 
+    // Open the requested file using IStream just to show how to use IStream with the synchronous reader
     //
-	m_pStream = new CROStream;
-	if( NULL == m_pStream )
-	{
-		hr = E_OUTOFMEMORY;
+    m_pStream = new CROStream;
+    if( NULL == m_pStream )
+    {
+        hr = E_OUTOFMEMORY;
         _tprintf( _T( "Could not open file (hr=0x%08x).\n" ), hr );
-		return( hr );
-	}
+        return( hr );
+    }
 
     hr = m_pStream->Open( ptszFile );
-    
+
     if( FAILED( hr ) )
     {
-        _tprintf( _T( "Could not open file (hr=0x%08x).\n" ) ,hr );
+        _tprintf( _T( "Could not open file (hr=0x%08x).\n" ),hr );
         return( hr );
     }
 
@@ -103,14 +103,14 @@ HRESULT CReader::Open( const TCHAR *ptszFile )
         _tprintf( _T( "Could not open file (hr=0x%08x).\n" ), hr );
         return( hr );
     }
-    
+
     //
     // Get the profile interface
     //
     IWMProfile*    pProfile = NULL;
 
     hr = m_pReader->QueryInterface( IID_IWMProfile, ( VOID ** )&pProfile );
-    if ( FAILED( hr ) ) 
+    if ( FAILED( hr ) )
     {
         _tprintf( _T(  "Could not QI for IWMProfile (hr=0x%08x).\n" ), hr );
         return( hr );
@@ -121,7 +121,7 @@ HRESULT CReader::Open( const TCHAR *ptszFile )
     //
     hr = GetStreamNumbers( pProfile );
     SAFE_RELEASE( pProfile );
-    if ( FAILED( hr ) ) 
+    if ( FAILED( hr ) )
     {
         _tprintf( _T(  "Could not stream numbers (hr=0x%08x).\n" ), hr );
         return( hr );
@@ -133,11 +133,11 @@ HRESULT CReader::Open( const TCHAR *ptszFile )
 ///////////////////////////////////////////////////////////////
 ////
 HRESULT CReader::SetParams(  DWORD cnsStart = 0,
-                        DWORD cnsEnd = 0,
-                        BOOL fCompressed = FALSE,
-                        BOOL fAudioPresent = TRUE,
-                        BOOL fVideoPresent = TRUE,
-                        BOOL fRangeInFrames = FALSE )
+                             DWORD cnsEnd = 0,
+                             BOOL fCompressed = FALSE,
+                             BOOL fAudioPresent = TRUE,
+                             BOOL fVideoPresent = TRUE,
+                             BOOL fRangeInFrames = FALSE )
 {
     HRESULT hr = S_OK;
 
@@ -166,7 +166,7 @@ HRESULT CReader::Close()
     {
         hr = m_pReader->Close();
     }
-    
+
     if( FAILED ( hr ) )
     {
         return hr;
@@ -209,7 +209,7 @@ HRESULT CReader::GetStreamNumbers(IWMProfile* pProfile)
         if ( FAILED( hr ) )
         {
             _tprintf( _T(  "Could not get Stream %d of %d from IWMProfile (hr=0x%08x).\n" ),
-                    i, dwStreams, hr );
+                      i, dwStreams, hr );
             break;
         }
 
@@ -223,7 +223,7 @@ HRESULT CReader::GetStreamNumbers(IWMProfile* pProfile)
         if ( FAILED( hr ) )
         {
             _tprintf( _T(  "Could not get stream number from IWMStreamConfig %d of %d (hr=0x%08x).\n" ),
-                    i, dwStreams, hr );
+                      i, dwStreams, hr );
             break;
         }
 
@@ -231,10 +231,10 @@ HRESULT CReader::GetStreamNumbers(IWMProfile* pProfile)
         if ( FAILED( hr ) )
         {
             _tprintf( _T("Could not get stream type of stream %d of %d from IWMStreamConfig (hr=0x%08x).\n" ),
-                i, dwStreams, hr ) ;
+                      i, dwStreams, hr ) ;
             break ;
         }
-        
+
         if( WMMEDIATYPE_Audio == pguidStreamType )
         {
             m_wAudioStreamNum = wStreamNumber;
@@ -361,12 +361,12 @@ HRESULT CReader::ReadSamples()
     {
 
 
-	    hr = m_pReader->GetNextSample( 0, &pSample,
-                                            &cnsSampleTime,
-                                            &cnsDuration,
-                                            &dwFlags,
-                                            &dwOutputNum,
-                                            &wStreamNum );
+        hr = m_pReader->GetNextSample( 0, &pSample,
+                                       &cnsSampleTime,
+                                       &cnsDuration,
+                                       &dwFlags,
+                                       &dwOutputNum,
+                                       &wStreamNum );
 
         if( FAILED( hr ) )
         {

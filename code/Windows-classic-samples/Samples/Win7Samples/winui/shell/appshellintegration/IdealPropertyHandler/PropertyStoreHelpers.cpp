@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -204,8 +204,8 @@ HRESULT DeserializePropVariantFromString(PCWSTR pszIn, PROPVARIANT *ppropvar)
 
     // compute and validate the required buffer size
     if (CryptStringToBinaryW(pszIn, 0, CRYPT_STRING_BASE64, NULL, &cbBlob, &dwSkip, &dwFormatUsed) &&
-        dwSkip == 0 &&
-        dwFormatUsed == CRYPT_STRING_BASE64)
+            dwSkip == 0 &&
+            dwFormatUsed == CRYPT_STRING_BASE64)
     {
         // allocate a buffer to hold the serialized binary blob
         hr = E_OUTOFMEMORY;

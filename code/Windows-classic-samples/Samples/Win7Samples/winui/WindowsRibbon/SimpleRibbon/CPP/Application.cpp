@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -22,7 +22,7 @@ __checkReturn HRESULT CApplication::CreateInstance(__deref_out IUIApplication **
     *ppApplication = NULL;
 
     HRESULT hr = S_OK;
-   
+
     CApplication* pApplication = new CApplication();
 
     if (pApplication != NULL)
@@ -64,7 +64,7 @@ STDMETHODIMP CApplication::QueryInterface(REFIID iid, void** ppv)
     {
         *ppv = static_cast<IUIApplication*>(this);
     }
-    else 
+    else
     {
         *ppv = NULL;
         return E_NOINTERFACE;
@@ -84,7 +84,7 @@ STDMETHODIMP CApplication::QueryInterface(REFIID iid, void** ppv)
 //
 //    In this SimpleRibbon sample, the same command handler is returned for all commands
 //    specified in the SimpleRibbon.xml file.
-//    
+//
 //    To view the OnCreateUICommand callbacks, uncomment the _cwprintf call.
 //
 //
@@ -130,30 +130,30 @@ STDMETHODIMP CApplication::OnViewChanged(
     if (UI_VIEWTYPE_RIBBON == typeId)
     {
         switch (verb)
-        {           
-            // The view was newly created.
+        {
+        // The view was newly created.
         case UI_VIEWVERB_CREATE:
             hr = S_OK;
             break;
 
-            // The view has been resized.  For the Ribbon view, the application should
-            // call GetHeight to determine the height of the ribbon.
+        // The view has been resized.  For the Ribbon view, the application should
+        // call GetHeight to determine the height of the ribbon.
         case UI_VIEWVERB_SIZE:
-            {
-                IUIRibbon* pRibbon = NULL;
-                UINT uRibbonHeight;
+        {
+            IUIRibbon* pRibbon = NULL;
+            UINT uRibbonHeight;
 
-                hr = pView->QueryInterface(IID_PPV_ARGS(&pRibbon));
-                if (SUCCEEDED(hr))
-                {
-                    // Call to the framework to determine the desired height of the Ribbon.
-                    hr = pRibbon->GetHeight(&uRibbonHeight);
-                    pRibbon->Release();
-                    // Use the ribbon height to position controls in the client area of the window.
-                }
+            hr = pView->QueryInterface(IID_PPV_ARGS(&pRibbon));
+            if (SUCCEEDED(hr))
+            {
+                // Call to the framework to determine the desired height of the Ribbon.
+                hr = pRibbon->GetHeight(&uRibbonHeight);
+                pRibbon->Release();
+                // Use the ribbon height to position controls in the client area of the window.
             }
-            break;
-            // The view was destroyed.
+        }
+        break;
+        // The view was destroyed.
         case UI_VIEWVERB_DESTROY:
             hr = S_OK;
             break;

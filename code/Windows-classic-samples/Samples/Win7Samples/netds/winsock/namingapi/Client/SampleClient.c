@@ -1,4 +1,4 @@
-/********************************************************************++
+﻿/********************************************************************++
 THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED
 TO THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -37,20 +37,20 @@ Feedback:
 #endif
 
 #ifndef celems
-#define celems(x) (sizeof(x)/sizeof((x)[0]))    
+#define celems(x) (sizeof(x)/sizeof((x)[0]))
 #endif
 
 #define MAX_ADDR        16
 
 void PrintIPV6Addr(
-        __in                SOCKADDR_IN6 *             pSockAddr)
+    __in                SOCKADDR_IN6 *             pSockAddr)
 {
     WORD * pwAddr = (WORD *)(&(pSockAddr->sin6_addr));
     printf("[%x:%x:%x:%x%x:%x:%x:%x]:%d\n",
-        htons(pwAddr[0]),  htons(pwAddr[1]), htons(pwAddr[2]), 
-        htons(pwAddr[3]),  htons(pwAddr[4]),  htons(pwAddr[5]), 
-        htons(pwAddr[6]),  htons(pwAddr[7]),
-        htons(pSockAddr->sin6_port));
+           htons(pwAddr[0]),  htons(pwAddr[1]), htons(pwAddr[2]),
+           htons(pwAddr[3]),  htons(pwAddr[4]),  htons(pwAddr[5]),
+           htons(pwAddr[6]),  htons(pwAddr[7]),
+           htons(pSockAddr->sin6_port));
 }
 
 //
@@ -58,14 +58,14 @@ void PrintIPV6Addr(
 // This sample only accepts ipv6 addresses.
 //
 HRESULT Publish(BOOL    fPublish,
-                PCWSTR  pwzEmailName, 
+                PCWSTR  pwzEmailName,
                 PCWSTR  pwzServiceName,
                 ULONG   cIPV6Addrs,
                 __in_ecount(cIPV6Addrs) SOCKADDR_IN6 *pIPV6Sockaddr)
 {
     HRESULT hr                                    = S_OK;
     INT iErr                                      = 0;
-    WSAQUERYSETW querySet                         = {0};        
+    WSAQUERYSETW querySet                         = {0};
     CSADDR_INFO  rgAddrs[MAX_ADDR]                = {0};
     ULONG i                                       = 0;
 
@@ -82,7 +82,7 @@ HRESULT Publish(BOOL    fPublish,
     }
 
     querySet.dwSize                  = sizeof(WSAQUERYSETW);
-    querySet.lpszServiceInstanceName = (PWSTR) pwzEmailName; 
+    querySet.lpszServiceInstanceName = (PWSTR) pwzEmailName;
     querySet.lpszContext             = (PWSTR) pwzServiceName;
     querySet.lpNSProviderId          = NULL;
     querySet.lpServiceClassId        = NULL;
@@ -110,12 +110,12 @@ void Usage(PCWSTR wzProgram)
 }
 
 HRESULT ParseCmdLine(
-    int argc, 
-    __in_ecount(argc) LPWSTR *argv, 
-    __out BOOL *pfPublish, 
-    ULONG cchMailAddress, 
+    int argc,
+    __in_ecount(argc) LPWSTR *argv,
+    __out BOOL *pfPublish,
+    ULONG cchMailAddress,
     __out_ecount(cchMailAddress) WCHAR *wzEmailAddress,
-    ULONG cchServiceName, 
+    ULONG cchServiceName,
     __out_ecount(cchServiceName) WCHAR *wzServiceName)
 {
     int   index = 1;
@@ -168,7 +168,7 @@ HRESULT ParseCmdLine(
 //
 // Get the ipv6 addresses for the local machine
 //
-HRESULT GetAddresses(__inout ULONG *pcAddrs, 
+HRESULT GetAddresses(__inout ULONG *pcAddrs,
                      __out_ecount(*pcAddrs) SOCKADDR_IN6 *rgAddrs)
 {
     HRESULT hr = S_OK;
@@ -181,7 +181,7 @@ HRESULT GetAddresses(__inout ULONG *pcAddrs,
 
     if (!GetComputerNameA(szHostName, &cchHostName))
     {
-        DWORD dwErr = GetLastError();            
+        DWORD dwErr = GetLastError();
         hr = HRESULT_FROM_WIN32(dwErr);
         fprintf(stderr, "GetComputerName failed error = %u\n", dwErr);
     }
@@ -238,7 +238,7 @@ int __cdecl wmain(int argc, __in_ecount(argc) LPWSTR * argv)
     if (SUCCEEDED(hr))
     {
         hr = ParseCmdLine(argc, argv, &fPublish, celems(wzEmailAddress), wzEmailAddress,
-                celems(wzServiceName), wzServiceName);
+                          celems(wzServiceName), wzServiceName);
     }
 
     if (SUCCEEDED(hr))
@@ -264,8 +264,8 @@ int __cdecl wmain(int argc, __in_ecount(argc) LPWSTR * argv)
         printf ("\n");
 
         hr = Publish(fPublish, wzEmailAddress, wzServiceName, cAddrs, rgAddrs);
-        
-        fprintf (stderr, "%s %s - hr = %x\n", 
+
+        fprintf (stderr, "%s %s - hr = %x\n",
                  fPublish ? "Publishing" : "Unpublishing",
                  SUCCEEDED(hr) ? "SUCCEEDED" : "FAILED",
                  hr);
@@ -276,7 +276,7 @@ int __cdecl wmain(int argc, __in_ecount(argc) LPWSTR * argv)
     {
         iErr = WSAGetLastError();
         fprintf (stderr, "WSACleanup failed WSAError = 0x%x\n", iErr);
-    }    
+    }
 
     return hr;
 }

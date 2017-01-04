@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -15,7 +15,7 @@
 #include "resource.h"
 #include "sampleengine.h"
 
-class ATL_NO_VTABLE CSampleSpellCheckProvider 
+class ATL_NO_VTABLE CSampleSpellCheckProvider
     : public ISpellCheckProvider
     , public ATL::CComCoClass<CSampleSpellCheckProvider, &CLSID_SampleSpellCheckProvider> // ATL implementation for CreateInstance, etc...
     , public ATL::CComObjectRootEx<ATL::CComMultiThreadModelNoCS> // ATL implementation for IUnknown
@@ -41,7 +41,7 @@ public:
     DECLARE_REGISTRY_RESOURCEID(IDR_SPELLCHECKPROVIDER)
 
     BEGIN_COM_MAP(CSampleSpellCheckProvider)
-        COM_INTERFACE_ENTRY(ISpellCheckProvider)
+    COM_INTERFACE_ENTRY(ISpellCheckProvider)
     END_COM_MAP()
 
     DECLARE_NOT_AGGREGATABLE(CSampleSpellCheckProvider)

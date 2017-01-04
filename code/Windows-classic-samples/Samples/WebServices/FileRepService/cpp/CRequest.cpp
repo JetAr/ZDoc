@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -360,14 +360,14 @@ HRESULT CRequest::ReadHeader(
     // Get action value
     WS_XML_STRING* receivedAction = NULL;
     IfFailedExit(WsGetHeader(
-        requestMessage,
-        WS_ACTION_HEADER,
-        WS_XML_STRING_TYPE,
-        WS_READ_REQUIRED_POINTER,
-        NULL,
-        &receivedAction,
-        sizeof(receivedAction),
-        error));
+                     requestMessage,
+                     WS_ACTION_HEADER,
+                     WS_XML_STRING_TYPE,
+                     WS_READ_REQUIRED_POINTER,
+                     NULL,
+                     &receivedAction,
+                     sizeof(receivedAction),
+                     error));
 
     // This function is implemented by the derived classes, so the execution forks
     // depending on whether we are client or server.
@@ -558,8 +558,8 @@ HRESULT CRequest::SendFault(
 
     WCHAR errorString[128];
     DWORD lengthInCharacters = FormatMessageW(
-        FORMAT_MESSAGE_FROM_HMODULE | FORMAT_MESSAGE_IGNORE_INSERTS, module,
-        (DWORD)faultType, 0, errorString, WsCountOf(errorString), NULL);
+                                   FORMAT_MESSAGE_FROM_HMODULE | FORMAT_MESSAGE_IGNORE_INSERTS, module,
+                                   (DWORD)faultType, 0, errorString, WsCountOf(errorString), NULL);
     if (lengthInCharacters == 0)
     {
         hr = HRESULT_FROM_WIN32(GetLastError());
@@ -584,13 +584,13 @@ HRESULT CRequest::SendFault(
     IfFailedExit(WsResetMessage(replyMessage, error));
     IfFailedExit(WsInitializeMessage(replyMessage, WS_BLANK_MESSAGE, GetRequestMessage(), error));
     IfFailedExit(WsSetHeader(
-        replyMessage,
-        WS_ACTION_HEADER,
-        WS_XML_STRING_TYPE,
-        WS_WRITE_REQUIRED_VALUE,
-        &faultAction,
-        sizeof(faultAction),
-        error));
+                     replyMessage,
+                     WS_ACTION_HEADER,
+                     WS_XML_STRING_TYPE,
+                     WS_WRITE_REQUIRED_VALUE,
+                     &faultAction,
+                     sizeof(faultAction),
+                     error));
     IfFailedExit(WsGetMessageProperty(replyMessage, WS_MESSAGE_PROPERTY_HEAP, &heap, sizeof(heap), error));
 
     // We put it on the message heap so its cleaned up later when the heap is reset or freed.

@@ -1,10 +1,10 @@
-/////////////////////////////////////////////////////////////////////////
-// Copyright © 2008 Microsoft Corporation. All rights reserved.
+Ôªø/////////////////////////////////////////////////////////////////////////
+// Copyright ¬© 2008 Microsoft Corporation. All rights reserved.
 //
 //  This file may contain preliminary information or inaccuracies,
 //  and may not correctly represent any associated Microsoft
 //  Product as commercially released. All Materials are provided entirely
-//  ìAS IS.î To the extent permitted by law, MICROSOFT MAKES NO
+//  ‚ÄúAS IS.‚Äù To the extent permitted by law, MICROSOFT MAKES NO
 //  WARRANTY OF ANY KIND, DISCLAIMS ALL EXPRESS, IMPLIED AND STATUTORY
 //  WARRANTIES, AND ASSUMES NO LIABILITY TO YOU FOR ANY DAMAGES OF
 //  ANY TYPE IN CONNECTION WITH THESE MATERIALS OR ANY INTELLECTUAL PROPERTY IN THEM.
@@ -16,12 +16,12 @@
 
 ///////////////////////////////////////////////////////////////////
 //
-//  Main routine 
+//  Main routine
 //
 //  Return values:
 //      0 - Success
 //      1 - Object not found
-//      2 - Runtime Error 
+//      2 - Runtime Error
 //      3 - Memory allocation error
 //
 extern "C" int __cdecl wmain(__in int argc, __in_ecount(argc) WCHAR ** argv)
@@ -38,9 +38,9 @@ extern "C" int __cdecl wmain(__in int argc, __in_ecount(argc) WCHAR ** argv)
             L"VSHADOW.EXE 3.0 - Volume Shadow Copy sample client.\n"
             L"Copyright (C) 2005 Microsoft Corporation. All rights reserved.\n"
             L"\n"
-            );
+        );
 
-        // Build the argument vector 
+        // Build the argument vector
         vector<wstring> arguments;
         for(int i = 1; i < argc; i++)
             arguments.push_back(argv[i]);
@@ -74,7 +74,7 @@ extern "C" int __cdecl wmain(__in int argc, __in_ecount(argc) WCHAR ** argv)
 //  - First, parse the command-line options
 //  - Then execute the appropriate client calls
 //
-//  WARNING: 
+//  WARNING:
 //  - The routine does not check for mutually exclusive flags/options
 //
 //  On error, this function throws
@@ -95,8 +95,8 @@ int CommandLineParser::MainRoutine(vector<wstring> arguments)
     // the volume for which to delete the oldest shadow copy
     wstring stringVolume;
 
-    // The script file prefix 
-    // Non-empty if scripts have to be generated 
+    // The script file prefix
+    // Non-empty if scripts have to be generated
     wstring stringFileName;
 
     // Script to execute between snapshot creation and backup complete
@@ -303,14 +303,14 @@ int CommandLineParser::MainRoutine(vector<wstring> arguments)
 
 
         //
-        //  Operations 
+        //  Operations
         //
 
         // Check for /? or -?
         if (MatchArgument(arguments[argIndex], L"?"))
             break;
 
-        // Query all shadow copies in the set 
+        // Query all shadow copies in the set
         if (MatchArgument(arguments[argIndex], L"q"))
         {
             ft.WriteLine(L"(Option: Query all shadow copies)");
@@ -324,7 +324,7 @@ int CommandLineParser::MainRoutine(vector<wstring> arguments)
             return 0;
         }
 
-        // Query all shadow copies in the set 
+        // Query all shadow copies in the set
         wstring id;
         if (MatchArgument(arguments[argIndex], L"qx", id))
         {
@@ -341,11 +341,11 @@ int CommandLineParser::MainRoutine(vector<wstring> arguments)
             return 0;
         }
 
-        // Query the specified shadow copy 
+        // Query the specified shadow copy
         if (MatchArgument(arguments[argIndex], L"s", id))
         {
             ft.WriteLine(L"(Option: Query shadow copy)");
-            
+
             VSS_ID queryingSnapshotID = WString2Guid(id);
 
             // Initialize the VSS client
@@ -395,7 +395,7 @@ int CommandLineParser::MainRoutine(vector<wstring> arguments)
             return 0;
         }
 
-        // Delete a certain shadow copy 
+        // Delete a certain shadow copy
         if (MatchArgument(arguments[argIndex], L"ds", id))
         {
             ft.WriteLine(L"(Option: Delete a shadow copy)");
@@ -554,8 +554,8 @@ int CommandLineParser::MainRoutine(vector<wstring> arguments)
                 }
 
                 // Make the volumes read-write
-                ft.WriteLine(L"- Making shadow copy devices from " WSTR_GUID_FMT L" read-write...", 
-                    GUID_PRINTF_ARG(breakingSnapshotSetID));
+                ft.WriteLine(L"- Making shadow copy devices from " WSTR_GUID_FMT L" read-write...",
+                             GUID_PRINTF_ARG(breakingSnapshotSetID));
 
                 m_vssClient.MakeVolumesReadWrite(volumeList);
             }
@@ -627,9 +627,9 @@ int CommandLineParser::MainRoutine(vector<wstring> arguments)
             m_vssClient.Initialize(VSS_CTX_ALL);
 
             // Expose this shadow copy as a share
-            m_vssClient.ExposeSnapshotRemotely(snapshotID, 
-                exposeArgsArray[1], 
-                exposeArgsArray.size() == 3? exposeArgsArray[2]: L"");
+            m_vssClient.ExposeSnapshotRemotely(snapshotID,
+                                               exposeArgsArray[1],
+                                               exposeArgsArray.size() == 3? exposeArgsArray[2]: L"");
 
             return 0;
         }
@@ -766,7 +766,7 @@ int CommandLineParser::MainRoutine(vector<wstring> arguments)
 
             wstring wsDest;
 
-            if (resyncArgsArray.size() == 1)   
+            if (resyncArgsArray.size() == 1)
                 ft.WriteLine(L"(Option: Add snapshot Id for resync to original volume location specified in BCD)");
             else if (resyncArgsArray.size() == 2)
             {
@@ -797,7 +797,7 @@ int CommandLineParser::MainRoutine(vector<wstring> arguments)
             dwResyncFlags |= VSS_RECOVERY_NO_VOLUME_CHECK;
             continue;
         }
-        
+
         // Perform hardware resync
         if (MatchArgument(arguments[argIndex], L"resync", xmlBackupComponentsDoc))
         {
@@ -812,7 +812,7 @@ int CommandLineParser::MainRoutine(vector<wstring> arguments)
             }
             else
                 throw(E_INVALIDARG);
-            
+
             xmlDoc = ReadFileContents(xmlBackupComponentsDoc);
 
             m_vssClient.Initialize(VSS_CTX_ALL, xmlDoc, true);
@@ -821,7 +821,7 @@ int CommandLineParser::MainRoutine(vector<wstring> arguments)
             return 0;
         }
 
-        // Check if the arguments are volumes. If yes, try to create the shadow copy set 
+        // Check if the arguments are volumes. If yes, try to create the shadow copy set
         if (IsVolume(arguments[argIndex]))
         {
             ft.WriteLine(L"(Option: Create shadow copy set)");
@@ -829,7 +829,7 @@ int CommandLineParser::MainRoutine(vector<wstring> arguments)
             ft.Trace(DBG_INFO, L"\nAttempting to create a shadow copy set... (volume %s was added as parameter)", arguments[argIndex].c_str());
 
             // Make sure that all the arguments are volumes
-            vector<wstring> volumeList; 
+            vector<wstring> volumeList;
             volumeList.push_back(GetUniqueVolumeNameForPath(arguments[argIndex], true));
 
             // Process the rest of the arguments
@@ -848,18 +848,18 @@ int CommandLineParser::MainRoutine(vector<wstring> arguments)
                 // Add the volume to the list
                 volumeList.push_back(GetUniqueVolumeNameForPath(arguments[i], true));
             }
-            
+
             // Initialize the VSS client
             dwContext = UpdateFinalContext(dwContext);
             m_vssClient.Initialize(dwContext);
 
             // Create the shadow copy set
             m_vssClient.CreateSnapshotSet(
-                volumeList, 
-                xmlBackupComponentsDoc, 
+                volumeList,
+                xmlBackupComponentsDoc,
                 excludedWriterList,
                 includedWriterList
-                );
+            );
 
             // Execute BackupComplete, except in fast snapshot creation
             if ((dwContext & VSS_VOLSNAP_ATTR_DELAYED_POSTSNAPSHOT) == 0)
@@ -885,14 +885,14 @@ int CommandLineParser::MainRoutine(vector<wstring> arguments)
                 }
 
                 // Complete the backup
-                // Note that this will notify writers that the backup is succesful! 
+                // Note that this will notify writers that the backup is succesful!
                 // (which means eventually log truncation)
                 if ((dwContext & VSS_VOLSNAP_ATTR_NO_WRITERS) == 0)
                     m_vssClient.BackupComplete(true);
             }
 
             ft.WriteLine(L"\nSnapshot creation done.");
-            
+
             return 0;
         }
 
@@ -932,11 +932,11 @@ bool CommandLineParser::MatchArgument(wstring argument, wstring optionPattern)
 bool CommandLineParser::MatchArgument(wstring argument, wstring optionPattern, wstring & additionalParameter)
 {
     FunctionTracer ft(DBG_INFO);
-    
+
     ft.Trace(DBG_INFO, L"Matching Arg: '%s' with '%s'", argument.c_str(), optionPattern.c_str());
 
     _ASSERTE(argument.length() > 0);
-    
+
     if ((argument[0] != L'/') && (argument[0] != L'-'))
         return false;
 
@@ -946,7 +946,7 @@ bool CommandLineParser::MatchArgument(wstring argument, wstring optionPattern, w
         return false;
 
     ft.Trace(DBG_INFO, L"%s %d", argument.substr(1, equalSignPos - 1).c_str(), equalSignPos);
-    
+
     // Check to see if this is our option
     if (!IsEqual(argument.substr(1, equalSignPos - 1), optionPattern))
         return false;
@@ -964,14 +964,14 @@ bool CommandLineParser::MatchArgument(wstring argument, wstring optionPattern, w
     size_t lastPos = additionalParameter.length() - 1;
     if ((additionalParameter[0] == L'"') && (additionalParameter[lastPos] == L'"'))
         additionalParameter = additionalParameter.substr(1, additionalParameter.length() - 2);
-    
+
     ft.Trace(DBG_INFO, L"Return true; (additional param = %s)", additionalParameter.c_str());
-    
+
     return true;
 }
 
 
-// 
+//
 //  Prints the command line options
 //
 void CommandLineParser::PrintUsage()
@@ -1060,7 +1060,7 @@ void CommandLineParser::PrintUsage()
         L"Please see the README.DOC file for more details.\n"
         L"\n"
         L"\n"
-        );
+    );
 #else
     ft.WriteLine(
         L"Usage:\n"
@@ -1103,7 +1103,7 @@ void CommandLineParser::PrintUsage()
         L"Please see the README.DOC file for more details.\n"
         L"\n"
         L"\n"
-        );
+    );
 #endif
 }
 
@@ -1114,14 +1114,14 @@ DWORD CommandLineParser::UpdateFinalContext(DWORD dwContext)
 #ifdef VSS_SERVER
     if (m_bPersistent)
     {
-        if (m_bWithWriters) 
+        if (m_bWithWriters)
             dwContext |= VSS_CTX_APP_ROLLBACK;
         else
             dwContext |= VSS_CTX_NAS_ROLLBACK;
     }
     else
     {
-        if (m_bWithWriters) 
+        if (m_bWithWriters)
             dwContext |= VSS_CTX_BACKUP;
         else
             dwContext |= VSS_CTX_FILE_SHARE_BACKUP;

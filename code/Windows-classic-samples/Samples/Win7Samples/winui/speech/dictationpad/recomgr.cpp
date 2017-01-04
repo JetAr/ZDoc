@@ -1,13 +1,13 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
 //
-// Copyright � Microsoft Corporation. All rights reserved
+// Copyright © Microsoft Corporation. All rights reserved
 
 /****************************************************************************
 *	recomgr.cpp
-*		Support for queuing insertion points and correctly placing 
+*		Support for queuing insertion points and correctly placing
 *       recognized text
 *****************************************************************************/
 
@@ -22,13 +22,13 @@
 *   Description:
 *       Constructor for the recoevent manager
 *****************************************************************************/
-CRecoEventMgr::CRecoEventMgr( HINSTANCE hInstance ) :   
-                            m_hInst( hInstance ), 
-                            m_fPhraseStarted( false ),
-                            m_pTextSel( NULL ),
-                            m_pHeadLP( NULL ),
-                            m_pHeadWM( NULL ),
-                            m_pTailWM( NULL )
+CRecoEventMgr::CRecoEventMgr( HINSTANCE hInstance ) :
+    m_hInst( hInstance ),
+    m_fPhraseStarted( false ),
+    m_pTextSel( NULL ),
+    m_pHeadLP( NULL ),
+    m_pHeadWM( NULL ),
+    m_pTailWM( NULL )
 {
 }   /* CRecoEventMgr::CRecoEventMgr */
 
@@ -107,9 +107,9 @@ HRESULT CRecoEventMgr::SelNotify( ITextRange &rSelRange )
 
         // Does this range overlap any of the existing ranges in the list?
         LISTENPOINT *p;
-        for ( p = m_pHeadLP; 
-            p && AreDisjointRanges( &rSelRange, p->cpRangeToReplace ); 
-            p = p->pNext )
+        for ( p = m_pHeadLP;
+                p && AreDisjointRanges( &rSelRange, p->cpRangeToReplace );
+                p = p->pNext )
             ;
 
         // If p is not NULL, that means that there is already some listen point
@@ -146,8 +146,8 @@ HRESULT CRecoEventMgr::SelNotify( ITextRange &rSelRange )
             // The selection should be forced to the end of the range to replace;
             // this keeps the selection out of ranges that might be replaced
             // by recognized text
-            m_pTextSel->SetRange( 
-                    lEndOfRangeToReplace, lEndOfRangeToReplace );
+            m_pTextSel->SetRange(
+                lEndOfRangeToReplace, lEndOfRangeToReplace );
 
             // If we got here, we were successful
             hr = S_OK;
@@ -161,14 +161,14 @@ HRESULT CRecoEventMgr::SelNotify( ITextRange &rSelRange )
 *---------------------------*
 *   Description:
 *       Determines whether pRange overlaps any of the current listen points.
-*       If it does, and if pNextEditableRange is non-NULL, sets 
+*       If it does, and if pNextEditableRange is non-NULL, sets
 *       pNextEditableRange to the next range that can be edited with
 *       impunity
 *   Return:
 *       true iff the RecoEventMgr is okay with this text being edited
 *****************************************************************************/
-bool CRecoEventMgr::IsEditable( ITextRange *pRange, 
-                               ITextRange **ppNextEditableRange )
+bool CRecoEventMgr::IsEditable( ITextRange *pRange,
+                                ITextRange **ppNextEditableRange )
 {
     if ( !pRange )
     {
@@ -182,15 +182,15 @@ bool CRecoEventMgr::IsEditable( ITextRange *pRange,
 
     // Does this range overlap or abut any of the existing ranges in the list?
     LISTENPOINT *p;
-    for ( p = m_pHeadLP; 
-        p && AreDisjointRanges( pRange, p->cpRangeToReplace ); 
-        p = p->pNext )
+    for ( p = m_pHeadLP;
+            p && AreDisjointRanges( pRange, p->cpRangeToReplace );
+            p = p->pNext )
         ;
 
     if ( p )
     {
         // There is a phrase that overlaps or abuts this one.
-        // If pRange dovetails onto the end of it, then the 
+        // If pRange dovetails onto the end of it, then the
         // range is editable; otherwise it is not
         long lRangeStart = 0;
         long lLPEnd = 0;
@@ -237,8 +237,8 @@ bool CRecoEventMgr::IsEditable( ITextRange *pRange,
 *       Called when the engine is currently processing a phrase.
 *       Puts the command at the tail of the command queue.
 *****************************************************************************/
-void CRecoEventMgr::QueueCommand( HWND hWnd, UINT message, 
-                                 WPARAM wParam, LPARAM lParam )
+void CRecoEventMgr::QueueCommand( HWND hWnd, UINT message,
+                                  WPARAM wParam, LPARAM lParam )
 {
     if ( !m_fPhraseStarted )
     {
@@ -270,7 +270,7 @@ void CRecoEventMgr::QueueCommand( HWND hWnd, UINT message,
         m_pHeadWM = m_pTailWM = pWM;
     }
 }   /* CRecoEventMgr::QueueCommand */
- 
+
 /****************************************************************************
 * CRecoEventMgr::Hypothesis *
 *---------------------------*
@@ -298,12 +298,12 @@ ITextRange * CRecoEventMgr::Hypothesis( FILETIME ftRecoTime )
     // Since the listen points are ordered by most recent first, we are
     // looking for the first element whose timestamp predates ftRecoTime
     LISTENPOINT *p;
-    for ( p = m_pHeadLP; 
-        p && (CompareFiletimes( ftRecoTime, p->ftTime ) < 0) && 
-                !(p->fFromPhraseStart);
-        p = p->pNext )
+    for ( p = m_pHeadLP;
+            p && (CompareFiletimes( ftRecoTime, p->ftTime ) < 0) &&
+            !(p->fFromPhraseStart);
+            p = p->pNext )
         ;
-        
+
     if ( !p )
     {
         // Should not happen!  There should at least be a listen point queued
@@ -314,7 +314,7 @@ ITextRange * CRecoEventMgr::Hypothesis( FILETIME ftRecoTime )
 
     // This listen point has now been marked to receive hypothesis text
     p->fHasHypothesisText = true;
-    
+
     return p->cpRangeToReplace;
 }   /* CRecoEventMgr::Hypothesis */
 
@@ -323,11 +323,11 @@ ITextRange * CRecoEventMgr::Hypothesis( FILETIME ftRecoTime )
 *----------------------------*
 *   Description:
 *       Called whenever a recognition comes back to DictationPad.
-*       Looks for the latest listening point whose timestamp predates 
+*       Looks for the latest listening point whose timestamp predates
 *       ftRecoTime or for the phrase-start-generated listening point,
 *       whichever came later.
-*       Deletes all earlier listening points. 
-*       Hands back a duplicate of the range to be replaced by the recognized 
+*       Deletes all earlier listening points.
+*       Hands back a duplicate of the range to be replaced by the recognized
 *       text.
 *   Return:
 *       S_OK
@@ -348,11 +348,11 @@ HRESULT CRecoEventMgr::Recognition( FILETIME ftRecoTime, ITextRange **ppRecoRang
     // Since the listen points are ordered by most recent first, we are
     // looking for the first element whose timestamp predates ftRecoTime
     LISTENPOINT *p;
-    for ( p = m_pHeadLP; 
-        p && (CompareFiletimes( ftRecoTime, p->ftTime ) < 0) && !(p->fFromPhraseStart);
-        p = p->pNext )
+    for ( p = m_pHeadLP;
+            p && (CompareFiletimes( ftRecoTime, p->ftTime ) < 0) && !(p->fFromPhraseStart);
+            p = p->pNext )
         ;
-        
+
     _ASSERTE( p );
     if ( !p )
     {
@@ -414,7 +414,7 @@ void CRecoEventMgr::FalseRecognition()
 *-------------------------------------*
 *   Description:
 *       Sets m_fPhraseStarted to false.
-*       Calls CleanUp() to clean up the listen point list 
+*       Calls CleanUp() to clean up the listen point list
 *       and WM_COMMAND queue.
 *****************************************************************************/
 void CRecoEventMgr::DoneProcessingPhrase()
@@ -433,7 +433,7 @@ void CRecoEventMgr::DoneProcessingPhrase()
 void CRecoEventMgr::CleanUp()
 {
     m_fPhraseStarted = false;
-    
+
     // Remove any hypothesis text
     for ( LISTENPOINT *p = m_pHeadLP; p; p = p->pNext )
     {
@@ -528,7 +528,7 @@ int CompareFiletimes( FILETIME ft1, FILETIME ft2 )
 *   Description:
 *       Suppose Range1 has limits cpMin1, cpMax1.
 *       Suppose Range2 has limits cpMin2, cpMax2.
-*       Range1 and Range2 are disjoint iff 
+*       Range1 and Range2 are disjoint iff
 *           cpMin2 > cpMax1 OR cpMax2 < cpMin1.
 *       That is, they are disjoint iff there is no overlap and they do not
 *       dovetail.

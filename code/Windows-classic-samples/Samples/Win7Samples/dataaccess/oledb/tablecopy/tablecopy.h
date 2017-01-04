@@ -1,4 +1,4 @@
-//-----------------------------------------------------------------------------
+﻿//-----------------------------------------------------------------------------
 // Microsoft OLE DB TABLECOPY Sample
 // Copyright (C) 1991-2000 Microsoft Corporation
 //
@@ -44,7 +44,7 @@ class CWizard;
 #define CP_LENGTH			0x0004
 #define CP_MAXLENGTH		0x0008
 
-// This macro will determine if the type is numeric, and 
+// This macro will determine if the type is numeric, and
 // if numeric -> bPrecision, if not numeric -> dwColumnSize
 #define COLINFO_SIZE(ColInfo) (IsNumericType(ColInfo.wType) ? ColInfo.bPrecision : ColInfo.ulColumnSize)
 
@@ -56,38 +56,38 @@ class CWizard;
 class CTableCopy
 {
 public:
-	//Constructors
-	CTableCopy(CWizard* pCWizard);
-	virtual ~CTableCopy();
-	
-	//Members
-	virtual HRESULT MapTypes();
-	virtual HRESULT CopyTables();
+    //Constructors
+    CTableCopy(CWizard* pCWizard);
+    virtual ~CTableCopy();
 
-	//Row Options
-	DWORD		m_dwRowOpt;			// Row Options
-	ULONG		m_ulMaxRows;		// Maximum rows or ALL_ROWS
-	
-	//Insert Options
-	DWORD		m_dwInsertOpt;		// Insert Options
-	ULONG		m_ulParamSets;		// Number of Parameters Sets
-	
-	//BLOB options
-	DWORD		m_dwBlobOpt;        // Blob Options
-	ULONG		m_ulBlobSize;       // Maximum Size for BLOB Columns
+    //Members
+    virtual HRESULT MapTypes();
+    virtual HRESULT CopyTables();
 
-	//Options
-	BOOL		m_fShowQuery;		// TRUE to display SQL statements
-	BOOL		m_fCopyTables;		// TRUE to create the table definition
-	BOOL		m_fCopyIndexes;		// TRUE to create indexes on new table
-	BOOL		m_fCopyPrimaryKeys;	// TRUE to copy primary keys on new table
+    //Row Options
+    DWORD		m_dwRowOpt;			// Row Options
+    ULONG		m_ulMaxRows;		// Maximum rows or ALL_ROWS
 
-	//Data
-	CTable*		m_pCFromTable;		//Source Table
-	CTable*		m_pCToTable;		//Target Table
+    //Insert Options
+    DWORD		m_dwInsertOpt;		// Insert Options
+    ULONG		m_ulParamSets;		// Number of Parameters Sets
 
-	BOOL		m_fTranslate;		// TRUE to translate object names
-	CWizard*    m_pCWizard;
+    //BLOB options
+    DWORD		m_dwBlobOpt;        // Blob Options
+    ULONG		m_ulBlobSize;       // Maximum Size for BLOB Columns
+
+    //Options
+    BOOL		m_fShowQuery;		// TRUE to display SQL statements
+    BOOL		m_fCopyTables;		// TRUE to create the table definition
+    BOOL		m_fCopyIndexes;		// TRUE to create indexes on new table
+    BOOL		m_fCopyPrimaryKeys;	// TRUE to copy primary keys on new table
+
+    //Data
+    CTable*		m_pCFromTable;		//Source Table
+    CTable*		m_pCToTable;		//Target Table
+
+    BOOL		m_fTranslate;		// TRUE to translate object names
+    CWizard*    m_pCWizard;
 };
 
 

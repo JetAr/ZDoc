@@ -1,4 +1,4 @@
-/****************************************************************************
+﻿/****************************************************************************
 
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
@@ -26,25 +26,27 @@ CAzRole::~CAzRole(void)
 {
 }
 
-CAzRole::CAzRole(IAzRole *pNative,bool pisNew):CAzBase<IAzRole>(pNative,pisNew){
+CAzRole::CAzRole(IAzRole *pNative,bool pisNew):CAzBase<IAzRole>(pNative,pisNew)
+{
 }
 
 /*++
 
 Routine description:
 
-    This method copies properties from the source role to *this* 
+    This method copies properties from the source role to *this*
     role
 
 Arguments: srcRole - Source role
 
 Return Value:
 
-    Returns success, appropriate failure value 
+    Returns success, appropriate failure value
 
 --*/
 
-HRESULT CAzRole::CopyUserData(CAzRole &srcRole){
+HRESULT CAzRole::CopyUserData(CAzRole &srcRole)
+{
 
     CAzLogging::Entering(_TEXT("CAzRole::CopyUserData"));
 
@@ -54,9 +56,10 @@ HRESULT CAzRole::CopyUserData(CAzRole &srcRole){
 
     hr=srcRole.m_native->get_Operations(&var);
 
-    CAzLogging::Log(hr,_TEXT("Getting operations for role"),COLE2T(getName()));			
+    CAzLogging::Log(hr,_TEXT("Getting operations for role"),COLE2T(getName()));
 
-    if (SUCCEEDED(hr)) {
+    if (SUCCEEDED(hr))
+    {
 
         hr=InitializeUsingSafeArray(var,&IAzRole::AddOperation);
 
@@ -69,7 +72,8 @@ HRESULT CAzRole::CopyUserData(CAzRole &srcRole){
 
     CAzLogging::Log(hr,_TEXT("Getting app members for role"),COLE2T(getName()));
 
-    if (SUCCEEDED(hr)) {
+    if (SUCCEEDED(hr))
+    {
 
         hr=InitializeUsingSafeArray(var,&IAzRole::AddAppMember);
 
@@ -79,13 +83,15 @@ HRESULT CAzRole::CopyUserData(CAzRole &srcRole){
 
     }
 
-    if (!CAzGlobalOptions::m_bIgnoreMembers) {
+    if (!CAzGlobalOptions::m_bIgnoreMembers)
+    {
 
         hr=srcRole.m_native->get_Members(&var);
 
         CAzLogging::Log(hr,_TEXT("Getting Members for role"),COLE2T(getName()));
 
-        if (SUCCEEDED(hr)) {
+        if (SUCCEEDED(hr))
+        {
 
             hr=InitializeUsingSafeArray(var,&IAzRole::AddMember);
 
@@ -100,13 +106,14 @@ HRESULT CAzRole::CopyUserData(CAzRole &srcRole){
 
     CAzLogging::Log(hr,_TEXT("Getting Tasks for role"),COLE2T(getName()));
 
-    if (SUCCEEDED(hr)) {
+    if (SUCCEEDED(hr))
+    {
 
         hr=InitializeUsingSafeArray(var,&IAzRole::AddTask);
 
         CAzLogging::Log(hr,_TEXT("Setting Tasks for role"),COLE2T(getName()));
 
-        }
+    }
 
     CAzLogging::Exiting(_TEXT("CAzRole::CopyUserData"));
 
@@ -117,18 +124,19 @@ HRESULT CAzRole::CopyUserData(CAzRole &srcRole){
 
 Routine description:
 
-    This method copies properties from the source role to *this* 
+    This method copies properties from the source role to *this*
     role
 
 Arguments: srcRole - Source role
 
 Return Value:
 
-    Returns success, appropriate failure value 
+    Returns success, appropriate failure value
 
 --*/
 
-HRESULT CAzRole::Copy(CAzRole &srcRole) {
+HRESULT CAzRole::Copy(CAzRole &srcRole)
+{
 
     CAzLogging::Entering(_TEXT("CAzRole::Copy"));
 
@@ -145,7 +153,8 @@ HRESULT CAzRole::Copy(CAzRole &srcRole) {
 
     CAzLogging::Log(hr,_TEXT("Getting Description for role"),COLE2T(getName()));
 
-    if (SUCCEEDED(hr)) {
+    if (SUCCEEDED(hr))
+    {
 
         hr=m_native->put_Description(bstrData);
 
@@ -158,7 +167,8 @@ HRESULT CAzRole::Copy(CAzRole &srcRole) {
 
     CAzLogging::Log(hr,_TEXT("Getting ApplicationData for role"),COLE2T(getName()));
 
-    if (SUCCEEDED(hr)) {
+    if (SUCCEEDED(hr))
+    {
 
         hr=m_native->put_ApplicationData(bstrData);
 

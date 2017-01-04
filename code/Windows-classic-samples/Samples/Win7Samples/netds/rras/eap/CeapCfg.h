@@ -1,4 +1,4 @@
-/*
+﻿/*
 
 Copyright (c) 1997 - 2000 Microsoft Corporation, all rights reserved
 
@@ -30,7 +30,7 @@ extern CComModule _Module;
 // External references
 extern const CLSID  CLSID_EapCfg;
 
-class ATL_NO_VTABLE CEapCfg : 
+class ATL_NO_VTABLE CEapCfg :
     public CComObjectRootEx<CComSingleThreadModel>,
     public CComCoClass<CEapCfg, &CLSID_EapCfg>,
     public IEAPProviderConfig
@@ -38,12 +38,12 @@ class ATL_NO_VTABLE CEapCfg :
 public:
     CEapCfg()  {}
 
-DECLARE_REGISTRY_RESOURCEID(IDR_EAPCFG)
-DECLARE_NOT_AGGREGATABLE(CEapCfg)
+    DECLARE_REGISTRY_RESOURCEID(IDR_EAPCFG)
+    DECLARE_NOT_AGGREGATABLE(CEapCfg)
 
-BEGIN_COM_MAP(CEapCfg)
+    BEGIN_COM_MAP(CEapCfg)
     COM_INTERFACE_ENTRY(IEAPProviderConfig)
-END_COM_MAP()
+    END_COM_MAP()
 
 public:
     // This is the declaration of the UI interface members.

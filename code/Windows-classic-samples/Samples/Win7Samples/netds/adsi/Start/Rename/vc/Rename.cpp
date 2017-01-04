@@ -1,4 +1,4 @@
-// Rename.cpp : Defines the entry point for the console application.
+﻿// Rename.cpp : Defines the entry point for the console application.
 //
 
 #include "stdafx.h"
@@ -7,25 +7,25 @@
 
 int main(int argc, char* argv[])
 {
-HRESULT hr;
-IADsContainer *pCont=NULL;
-IDispatch *pDisp=NULL;
+    HRESULT hr;
+    IADsContainer *pCont=NULL;
+    IDispatch *pDisp=NULL;
 
-CoInitialize(NULL);
+    CoInitialize(NULL);
 
-hr = ADsGetObject(L"LDAP://CN=Users,DC=Microsoft,DC=COM", IID_IADsContainer, (void**) &pCont);
-if (FAILED(hr) )
-{
-	return 0;
-}
-    
-hr = pCont->MoveHere(L"LDAP://CN=Jeff Smith,CN=Users,DC=Microsoft,DC=COM",L"CN=Jeffrey Smith", &pDisp );
-if ( SUCCEEDED(hr) )
-{
-	pDisp->Release();
-}
+    hr = ADsGetObject(L"LDAP://CN=Users,DC=Microsoft,DC=COM", IID_IADsContainer, (void**) &pCont);
+    if (FAILED(hr) )
+    {
+        return 0;
+    }
 
-CoUninitialize();
+    hr = pCont->MoveHere(L"LDAP://CN=Jeff Smith,CN=Users,DC=Microsoft,DC=COM",L"CN=Jeffrey Smith", &pDisp );
+    if ( SUCCEEDED(hr) )
+    {
+        pDisp->Release();
+    }
 
-return 0;
+    CoUninitialize();
+
+    return 0;
 }

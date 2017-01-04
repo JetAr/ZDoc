@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -27,22 +27,22 @@ public:
         IUIAnimationTransitionLibrary *pTransitionLibrary,
         UINT uThumbCount,
         CThumbnail *thumbs
-        );
+    );
 
     HRESULT Arrange(
         D2D1_SIZE_F sizeClient
-        );
+    );
 
 protected:
 
     HRESULT ArrangeRow(
         IUIAnimationStoryboard *pStoryboard,
-        int iThumbMin, 
+        int iThumbMin,
         int iThumbMax,
         DOUBLE xRow,
         DOUBLE yRow,
         DOUBLE heightMax
-        );
+    );
 
     HRESULT AddThumbnailTransitions(
         IUIAnimationStoryboard *pStoryboard,
@@ -50,7 +50,7 @@ protected:
         DOUBLE valuePrimary,
         IUIAnimationVariable *pVariableSecondary,
         DOUBLE valueSecondary
-        );
+    );
 
     // Animation objects
 

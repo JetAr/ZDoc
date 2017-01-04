@@ -1,4 +1,4 @@
-//
+﻿//
 // dispattr.h
 //
 
@@ -12,12 +12,12 @@
 class CDispAttrProps
 {
 public:
-    CDispAttrProps() 
+    CDispAttrProps()
     {
-        for (int i = 0;i < MAX_DISPATTRGUID; i++)
+        for (int i = 0; i < MAX_DISPATTRGUID; i++)
         {
-             _guid[i] = GUID_NULL;
-             _rgpguid[i] = &_guid[i];
+            _guid[i] = GUID_NULL;
+            _rgpguid[i] = &_guid[i];
         }
         _nCount = 0;
     }
@@ -29,7 +29,7 @@ public:
             _guid[_nCount] = rguid;
             _nCount++;
         }
-        
+
     }
 
     BOOL FindGuid(REFGUID rguid)

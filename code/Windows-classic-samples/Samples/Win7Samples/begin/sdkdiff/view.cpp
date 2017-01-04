@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -62,11 +62,12 @@
  * data structures
  */
 #ifdef WIN32
-    #define huge
+#define huge
 #endif
 
 /* in expand mode, we keep an array of one of these per screen line. */
-typedef struct viewline {
+typedef struct viewline
+{
     LINE line;              /* handle to LINE for this row */
     SECTION section;        /* handle to section containing this line */
     int nr_left;            /* line nr in left file */
@@ -77,7 +78,8 @@ typedef struct viewline {
 /*
  * The users VIEW handle is in fact a pointer to this structure
  */
-struct view {
+struct view
+{
 
     HWND     hwnd;          /* the table window to send notifies to */
 
@@ -142,14 +144,15 @@ view_new(HWND hwndTable)
 {
     VIEW view;
 
-    if (!bDoneInit) {
+    if (!bDoneInit)
+    {
         InitializeCriticalSection(&CSView);
         bDoneInit = TRUE;
     }
 
     /* alloc the view using HeapAlloc */
     view = (VIEW) HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(struct view));
-    if (view == NULL) 
+    if (view == NULL)
     {
         return NULL;
     }
@@ -190,12 +193,14 @@ view_setcomplist(VIEW view, COMPLIST cl)
 {
     LPSTR both;
 
-    if (view == NULL) {
+    if (view == NULL)
+    {
         return(FALSE);
     }
 
     /* there can be only one call to this per VIEW */
-    if (view->cl != NULL) {
+    if (view->cl != NULL)
+    {
         return(FALSE);
     }
 
@@ -223,7 +228,8 @@ view_setcomplist(VIEW view, COMPLIST cl)
 COMPLIST
 view_getcomplist(VIEW view)
 {
-    if (view == NULL) {
+    if (view == NULL)
+    {
         return(NULL);
     }
 
@@ -240,7 +246,8 @@ view_getcomplist(VIEW view)
 void
 view_close(VIEW view)
 {
-    if (view == NULL) {
+    if (view == NULL)
+    {
         return;
     }
 
@@ -260,7 +267,8 @@ view_close(VIEW view)
 void
 view_delete(VIEW view)
 {
-    if (view == NULL) {
+    if (view == NULL)
+    {
         return;
     }
 
@@ -294,7 +302,8 @@ view_delete(VIEW view)
 void
 view_outline(VIEW view)
 {
-    if (view == NULL) {
+    if (view == NULL)
+    {
         return;
     }
 
@@ -322,17 +331,19 @@ view_expand(VIEW view, long row)
     COMPITEM ci;
     BOOL bRet;
 
-    if (row<0) return FALSE; 
+    if (row<0) return FALSE;
 
     ViewEnter();
 
-    if ((view == NULL) || (view->bExpand)) {
+    if ((view == NULL) || (view->bExpand))
+    {
         /* no view, or already expanded */
         ViewLeave();
         return(FALSE);
     }
 
-    if (row >= view->rows) {
+    if (row >= view->rows)
+    {
         /* no such row */
         ViewLeave();
         return FALSE;
@@ -360,23 +371,27 @@ view_gettext(VIEW view, long row, int col)
     HRESULT hr;
 
     pstr = NULL;   /* kill spurious diagnostic */
-    if (view == NULL) {
+    if (view == NULL)
+    {
         return(NULL);
     }
 
     ViewEnter();
 
-    if ((0 > row) || (row >= view->rows)) {
+    if ((0 > row) || (row >= view->rows))
+    {
         ViewLeave();
         return(NULL);
     }
 
-    if (view->bExpand) {
+    if (view->bExpand)
+    {
         /* we are in expand mode */
 
         state = section_getstate(view->pLines[row].section);
 
-        switch (col) {
+        switch (col)
+        {
         case 0:
             /* row nr */
 
@@ -384,7 +399,8 @@ view_gettext(VIEW view, long row, int col)
              * this is a menu-selectable option
              */
             line = 0;
-            switch (line_numbers) {
+            switch (line_numbers)
+            {
             case IDM_NONRS:
                 pstr = NULL;
                 break;
@@ -392,7 +408,8 @@ view_gettext(VIEW view, long row, int col)
             case IDM_LNRS:
                 line = view->pLines[row].nr_left;
                 if (state == STATE_MOVEDRIGHT
-                    || state == STATE_SIMILARRIGHT) {
+                        || state == STATE_SIMILARRIGHT)
+                {
                     line = -line;
                 }
                 break;
@@ -400,30 +417,37 @@ view_gettext(VIEW view, long row, int col)
             case IDM_RNRS:
                 line = view->pLines[row].nr_right;
                 if (state == STATE_MOVEDLEFT
-                    || state == STATE_SIMILARLEFT) {
+                        || state == STATE_SIMILARLEFT)
+                {
                     line = -line;
                 }
                 break;
             }
-            if (line == 0) {
+            if (line == 0)
+            {
                 ViewLeave();
                 return(NULL);
             }
 
-            if (line < 0) {
+            if (line < 0)
+            {
                 /* lines that are moved appear twice.
                  * show the correct-sequence line nr
                  * for the out-of-seq. copy in brackets.
                  */
                 hr = StringCchPrintf(view->nrtext, 12, "(%d)", abs(line));
-                if (FAILED(hr)) {
+                if (FAILED(hr))
+                {
                     OutputError(hr, IDS_SAFE_PRINTF);
                     return(NULL);
                 }
 
-            } else {
+            }
+            else
+            {
                 hr = StringCchPrintf(view->nrtext, 12, "%d", line);
-                if (FAILED(hr)) {
+                if (FAILED(hr))
+                {
                     OutputError(hr, IDS_SAFE_PRINTF);
                     return(NULL);
                 }
@@ -435,7 +459,8 @@ view_gettext(VIEW view, long row, int col)
             /* tag text - represents the state of the line */
 
 
-            switch (state) {
+            switch (state)
+            {
             case STATE_SAME:
                 pstr = "    ";
                 break;
@@ -465,13 +490,17 @@ view_gettext(VIEW view, long row, int col)
             pstr = line_gettext(view->pLines[row].line);
             break;
         }
-    } else {
+    }
+    else
+    {
         /* outline mode */
-        switch (col) {
+        switch (col)
+        {
         case 0:
             /* row number - just the line number */
             hr = StringCchPrintf(view->nrtext, 12, "%d", row+1);
-            if (FAILED(hr)) {
+            if (FAILED(hr))
+            {
                 OutputError(hr, IDS_SAFE_PRINTF);
                 return(NULL);
             }
@@ -506,23 +535,27 @@ view_gettextW(VIEW view, long row, int col)
     LPWSTR pwz;
 
     pwz = NULL;   /* kill spurious diagnostic */
-    if (view == NULL) {
+    if (view == NULL)
+    {
         return(NULL);
     }
 
     ViewEnter();
 
-    if ((0 > row) || (row >= view->rows)) {
+    if ((0 > row) || (row >= view->rows))
+    {
         ViewLeave();
         return(NULL);
     }
 
-    if (view->bExpand) {
+    if (view->bExpand)
+    {
         /* we are in expand mode */
 
         state = section_getstate(view->pLines[row].section);
 
-        switch (col) {
+        switch (col)
+        {
         case 2:
             /* main text - line */
             pwz = line_gettextW(view->pLines[row].line);
@@ -544,14 +577,16 @@ view_getlinenr_left(VIEW view, long row)
 {
     int state, line;
 
-    if ((0> row) || (view == NULL) || (row >= view->rows) || !view->bExpand) {
+    if ((0> row) || (view == NULL) || (row >= view->rows) || !view->bExpand)
+    {
         return 0;
     }
 
     ViewEnter();
     state = section_getstate(view->pLines[row].section);
     line = view->pLines[row].nr_left;
-    if (state == STATE_MOVEDRIGHT || state == STATE_SIMILARRIGHT) {
+    if (state == STATE_MOVEDRIGHT || state == STATE_SIMILARRIGHT)
+    {
         line = -line;
     }
     ViewLeave();
@@ -570,7 +605,8 @@ view_getlinenr_right(VIEW view, long row)
 {
     int state, line;
 
-    if ((0 > row) || (view == NULL) || (row > view->rows) || !view->bExpand) {
+    if ((0 > row) || (view == NULL) || (row > view->rows) || !view->bExpand)
+    {
         return 0;
     }
 
@@ -578,7 +614,8 @@ view_getlinenr_right(VIEW view, long row)
 
     state = section_getstate(view->pLines[row].section);
     line = view->pLines[row].nr_right;
-    if (state == STATE_MOVEDLEFT || state == STATE_SIMILARLEFT) {
+    if (state == STATE_MOVEDLEFT || state == STATE_SIMILARLEFT)
+    {
         line = -line;
     }
     ViewLeave();
@@ -592,11 +629,13 @@ view_getlinenr_right(VIEW view, long row)
 int
 view_getwidth(VIEW view, int col)
 {
-    if (view == NULL) {
+    if (view == NULL)
+    {
         return(0);
     }
 
-    switch (col) {
+    switch (col)
+    {
     case 0:
         /* line nr column - always 5 characters wide */
         return(5);
@@ -618,7 +657,8 @@ view_getwidth(VIEW view, int col)
 long
 view_getrowcount(VIEW view)
 {
-    if (view == NULL) {
+    if (view == NULL)
+    {
         return(0);
     }
 
@@ -637,17 +677,23 @@ view_getstate(VIEW view, long row)
 {
     int state;
 
-    if (view == NULL) {
+    if (view == NULL)
+    {
         return(0);
     }
 
     ViewEnter();
-    if ( (row >= view->rows) || (row < 0)) {
+    if ( (row >= view->rows) || (row < 0))
+    {
         state = 0;
-    } else if (view->bExpand) {
+    }
+    else if (view->bExpand)
+    {
         /* its a line state that's needed */
         state = section_getstate(view->pLines[row].section);
-    } else {
+    }
+    else
+    {
 
         /* its a compitem state */
         state = compitem_getstate(view->pItems[row]);
@@ -666,9 +712,11 @@ view_getmarkstate(VIEW view, long row)
 {
     BOOL bMark = FALSE;
 
-    if (view != NULL) {
+    if (view != NULL)
+    {
         ViewEnter();
-        if ( (0 < row) && (row < view->rows) && (!view->bExpand)) {
+        if ( (0 < row) && (row < view->rows) && (!view->bExpand))
+        {
             bMark = compitem_getmark(view->pItems[row]);
         }
         ViewLeave();
@@ -688,9 +736,11 @@ view_setmarkstate(VIEW view, long row, BOOL bMark)
 {
     BOOL bOK = FALSE;
 
-    if (view != NULL) {
+    if (view != NULL)
+    {
         ViewEnter();
-        if ( (0 < row) && (0 <= view->rows) && (row < view->rows) && !view->bExpand) {
+        if ( (0 < row) && (0 <= view->rows) && (row < view->rows) && !view->bExpand)
+        {
             compitem_setmark(view->pItems[row], bMark);
             bOK = TRUE;
         }
@@ -710,19 +760,26 @@ view_getitem(VIEW view, long row)
 {
     COMPITEM ci;
 
-    if (view == NULL) {
+    if (view == NULL)
+    {
         return(NULL);
     }
 
     ViewEnter();
 
-    if (!view->bExpand) {
-        if ((row >= 0) && (row < view->rows)) {
+    if (!view->bExpand)
+    {
+        if ((row >= 0) && (row < view->rows))
+        {
             ci = view->pItems[row];
-        } else {
+        }
+        else
+        {
             ci = NULL;
         }
-    } else {
+    }
+    else
+    {
         ci = view->ciSelect;
     }
 
@@ -736,7 +793,8 @@ view_getitem(VIEW view, long row)
 BOOL
 view_isexpanded(VIEW view)
 {
-    if (view == NULL) {
+    if (view == NULL)
+    {
         return(FALSE);
     }
     return(view->bExpand);
@@ -752,9 +810,12 @@ view_getcurrenttag(VIEW view)
 {
     LPSTR str;
 
-    if ((view == NULL) || (!view->bExpand)) {
+    if ((view == NULL) || (!view->bExpand))
+    {
         return(NULL);
-    } else {
+    }
+    else
+    {
         ViewEnter();
 
         str = compitem_gettext_tag(view->ciSelect);
@@ -805,8 +866,9 @@ view_newitem(VIEW view)
     ViewEnter();
 
     if ((view != NULL) &&
-        !(view->bExpand) &&
-        !(view->bExpanding)) {
+            !(view->bExpand) &&
+            !(view->bExpanding))
+    {
 
         /* save some state about the present mapping */
         maxtag = view->maxtag;
@@ -814,7 +876,8 @@ view_newitem(VIEW view)
 
 
         // remember the compitem this corresponds to
-        if (view->pItems && (rownr >= 0) && (rownr < view->rows)) {
+        if (view->pItems && (rownr >= 0) && (rownr < view->rows))
+        {
             ciTop = view->pItems[rownr];
         }
 
@@ -828,10 +891,13 @@ view_newitem(VIEW view)
         view_outline_opt(view, FALSE, ciTop, &rownr);
 
         /* have the column widths changed ? */
-        if ((maxtag < view->maxtag) || (maxrest < view->maxrest)) {
+        if ((maxtag < view->maxtag) || (maxrest < view->maxrest))
+        {
             /* yes - need complete redraw */
             bRedraw = TRUE;
-        } else {
+        }
+        else
+        {
             bAppend = TRUE;
         }
     }
@@ -839,23 +905,28 @@ view_newitem(VIEW view)
     ViewLeave();
 
 
-    if (bRedraw) {
+    if (bRedraw)
+    {
 
         /* switch to new mapping */
         SendMessage(view->hwnd, TM_NEWLAYOUT, 0, (LPARAM) view);
 
         // go to the visible row closest to the old top row
-        if ((rownr >= 0) && (rownr < view->rows)) {
+        if ((rownr >= 0) && (rownr < view->rows))
+        {
             SendMessage(view->hwnd, TM_TOPROW, TRUE, rownr);
         }
 
         // select the old selection too (if the table class allowed
         // us to get it)
-        if (bSelect) {
+        if (bSelect)
+        {
             SendMessage(view->hwnd, TM_SELECT,0, (LPARAM) &Select);
         }
 
-    } else if (bAppend) {
+    }
+    else if (bAppend)
+    {
         /* we can just append */
 
         /*
@@ -887,7 +958,8 @@ view_changeviewoptions(VIEW view)
     int state, number;
     BOOL bRight;
 
-    if (view == NULL) {
+    if (view == NULL)
+    {
         return;
     }
 
@@ -896,7 +968,8 @@ view_changeviewoptions(VIEW view)
 
     ViewEnter();
 
-    if (!view->bExpand) {
+    if (!view->bExpand)
+    {
 
 
         // view_outline_opt allows us to find the first visible row
@@ -905,19 +978,23 @@ view_changeviewoptions(VIEW view)
         // still go to just after it.
 
         INT newrow = -1;
-        if (row < view->rows) {
+        if (row < view->rows)
+        {
 
             COMPITEM ciTop = view->pItems[row];
 
             view_outline_opt(view, TRUE, ciTop, &newrow);
-        } else {
+        }
+        else
+        {
             view_outline_opt(view, TRUE, NULL, NULL);
         }
         ViewLeave();
 
         // row now has the visible row that corresponds to
         // ciTop or where it would have been
-        if ((newrow >=0) && (newrow < view->rows)) {
+        if ((newrow >=0) && (newrow < view->rows))
+        {
             SendMessage(view->hwnd, TM_TOPROW, TRUE, newrow);
         }
         return;
@@ -928,15 +1005,21 @@ view_changeviewoptions(VIEW view)
 
     bRight = FALSE;  /* arbitrarily - avoid strange diagnostic */
     /* save the line number on one side (and remember which side) */
-    if (row >= view->rows) {
+    if (row >= view->rows)
+    {
         number = -1;
-    } else {
+    }
+    else
+    {
         state = section_getstate(view->pLines[row].section);
         if ((state == STATE_MOVEDRIGHT) ||
-            (state == STATE_RIGHTONLY)) {
+                (state == STATE_RIGHTONLY))
+        {
             bRight = TRUE;
             number = view->pLines[row].nr_right;
-        } else {
+        }
+        else
+        {
             bRight = FALSE;
             number = view->pLines[row].nr_left;
         }
@@ -949,14 +1032,16 @@ view_changeviewoptions(VIEW view)
      * two threads.  At least we won't deadlock.
      */
     /* find the nearest row in the new view */
-    if (number >= 0) {
+    if (number >= 0)
+    {
 
         ViewEnter();
         row = view_findrow(view, number, bRight);
         ViewLeave();
 
         /* scroll this row to top of window */
-        if (row >= 0) {
+        if (row >= 0)
+        {
 
             /* things may happen now due to simultaneous scrolling from
              * two threads.  At least we won't deadlock.
@@ -980,7 +1065,8 @@ view_changediffoptions(VIEW view)
     COMPITEM ci;
 
     number = 0;
-    if (view == NULL) {
+    if (view == NULL)
+    {
         return;
     }
 
@@ -994,15 +1080,19 @@ view_changediffoptions(VIEW view)
     /* find the current line number so we can go back to it
      * (only if we are in expanded mode
      */
-    if (view->bExpand) {
+    if (view->bExpand)
+    {
 
         state = section_getstate(view->pLines[row].section);
         if ((state == STATE_MOVEDRIGHT) ||
-            (state == STATE_SIMILARRIGHT) ||
-            (state == STATE_RIGHTONLY)) {
+                (state == STATE_SIMILARRIGHT) ||
+                (state == STATE_RIGHTONLY))
+        {
             bRight = TRUE;
             number = view->pLines[row].nr_right;
-        } else {
+        }
+        else
+        {
             bRight = FALSE;
             number = view->pLines[row].nr_left;
         }
@@ -1015,11 +1105,13 @@ view_changediffoptions(VIEW view)
      */
     li = complist_getitems(view->cl);
 
-    for (ci = (COMPITEM) List_First(li); ci != NULL; ci = (COMPITEM) List_Next(ci)) {
+    for (ci = (COMPITEM) List_First(li); ci != NULL; ci = (COMPITEM) List_Next(ci))
+    {
         compitem_discardsections(ci);
     }
 
-    if (!view->bExpand) {
+    if (!view->bExpand)
+    {
         ViewLeave();
 
         // we are in outline mode. Refreshing the outline view
@@ -1027,7 +1119,8 @@ view_changediffoptions(VIEW view)
         view_outline(view);
 
         // now scroll to the previous position if still there
-        if (row < view->rows) {
+        if (row < view->rows)
+        {
             SendMessage(view->hwnd, TM_TOPROW, TRUE, row);
         }
 
@@ -1042,7 +1135,8 @@ view_changediffoptions(VIEW view)
     ViewLeave();
 
     /* scroll this row to top of window */
-    if (row >= 0) {
+    if (row >= 0)
+    {
         SendMessage(view->hwnd, TM_TOPROW, TRUE, row);
     }
 }
@@ -1057,28 +1151,35 @@ view_findchange(VIEW view, long startrow, BOOL bForward)
 {
     long i;
 
-    if (view == NULL) {
+    if (view == NULL)
+    {
         return(0);
     }
 
-    if (view->rows <= 0) {
+    if (view->rows <= 0)
+    {
         return(-1);
     }
 
     ViewEnter();
 
-    if (bForward) {
+    if (bForward)
+    {
 
-        if (startrow >= view->rows) {
+        if (startrow >= view->rows)
+        {
             ViewLeave();
             return(-1);
         }
 
-        if (!view->bExpand) {
+        if (!view->bExpand)
+        {
 
             /* look for next compitem with an expandable state*/
-            for (i = startrow; i < view->rows; i++) {
-                if (compitem_getstate(view->pItems[i]) == STATE_DIFFER) {
+            for (i = startrow; i < view->rows; i++)
+            {
+                if (compitem_getstate(view->pItems[i]) == STATE_DIFFER)
+                {
                     ViewLeave();
                     return(i);
                 }
@@ -1086,21 +1187,27 @@ view_findchange(VIEW view, long startrow, BOOL bForward)
             /* none found */
             ViewLeave();
             return(-1);
-        } else {
+        }
+        else
+        {
             /*
              * find the next line that matches, then go on to the
              * next line that does not match
              *
              */
-            for (i= startrow; i < view->rows; i++) {
+            for (i= startrow; i < view->rows; i++)
+            {
                 if (section_getstate(view->pLines[i].section)
-                    == STATE_SAME) {
+                        == STATE_SAME)
+                {
                     break;
                 }
             }
-            for ( ; i < view->rows; i++) {
+            for ( ; i < view->rows; i++)
+            {
                 if (section_getstate(view->pLines[i].section)
-                    != STATE_SAME) {
+                        != STATE_SAME)
+                {
                     ViewLeave();
                     return(i);
                 }
@@ -1110,35 +1217,47 @@ view_findchange(VIEW view, long startrow, BOOL bForward)
 
             return(-1);
         }
-    } else {
+    }
+    else
+    {
         /* same search backwards */
-        if (startrow < 0) {
+        if (startrow < 0)
+        {
             ViewLeave();
             return(-1);
         }
-        if (view->bExpand) {
+        if (view->bExpand)
+        {
             /* search backwards for first row that is not
              * changed (has state SAME). then carry on for
              * the next changed row.
              */
-            for (i = startrow; i >= 0; i--) {
+            for (i = startrow; i >= 0; i--)
+            {
                 if (section_getstate(view->pLines[i].section)
-                    == STATE_SAME) {
+                        == STATE_SAME)
+                {
                     break;
                 }
             }
-            for ( ; i >= 0; i--) {
+            for ( ; i >= 0; i--)
+            {
                 if (section_getstate(view->pLines[i].section)
-                    != STATE_SAME) {
+                        != STATE_SAME)
+                {
                     ViewLeave();
                     return(i);
                 }
             }
             ViewLeave();
             return(-1);
-        } else {
-            for (i = startrow; i >= 0; i--) {
-                if (compitem_getstate(view->pItems[i]) == STATE_DIFFER) {
+        }
+        else
+        {
+            for (i = startrow; i >= 0; i--)
+            {
+                if (compitem_getstate(view->pItems[i]) == STATE_DIFFER)
+                {
                     ViewLeave();
                     return(i);
                 }
@@ -1154,11 +1273,13 @@ int view_getrowstate(VIEW view, long row)
 {
     int state;
 
-    if (view == NULL) {
+    if (view == NULL)
+    {
         return(0);
     }
 
-    if ((view->rows) <= 0 || (row >= view->rows) || (row <= 0) ) {
+    if ((view->rows) <= 0 || (row >= view->rows) || (row <= 0) )
+    {
         return(STATE_SAME);
     }
 
@@ -1209,37 +1330,48 @@ view_expanding(VIEW view)
  */
 int
 view_findrow(
-            VIEW view,
-            int number,
-            BOOL bRight
-            )
+    VIEW view,
+    int number,
+    BOOL bRight
+)
 {
     int i;
 
-    if (!view->bExpand) {
+    if (!view->bExpand)
+    {
         return(0);
     }
 
-    for (i = 0; i < view->rows; i++) {
+    for (i = 0; i < view->rows; i++)
+    {
 
-        if (bRight) {
-            if (view->pLines[i].nr_right == number) {
+        if (bRight)
+        {
+            if (view->pLines[i].nr_right == number)
+            {
 
                 /* found the exact number */
                 return(i);
 
-            } else if (view->pLines[i].nr_right > number) {
+            }
+            else if (view->pLines[i].nr_right > number)
+            {
 
                 /* passed our line -stop here */
                 return(i);
             }
-        } else {
-            if (view->pLines[i].nr_left == number) {
+        }
+        else
+        {
+            if (view->pLines[i].nr_left == number)
+            {
 
                 /* found the exact number */
                 return(i);
 
-            } else if (view->pLines[i].nr_left > number) {
+            }
+            else if (view->pLines[i].nr_left > number)
+            {
 
                 /* passed our line -stop here */
                 return(i);
@@ -1254,15 +1386,18 @@ view_findrow(
  */
 void
 view_freemappings(
-                 VIEW view
-                 )
+    VIEW view
+)
 {
 
-    if (view->pLines) {
+    if (view->pLines)
+    {
 
         HeapFree(GetProcessHeap(), NULL, view->pLines);
         view->pLines = NULL;
-    } else if (view->pItems) {
+    }
+    else if (view->pItems)
+    {
 
         /* previous outline mapping array is still there - free it
          * before we build a new one
@@ -1271,7 +1406,7 @@ view_freemappings(
         HeapFree(GetProcessHeap(), NULL, view->pItems);
         view->pItems = NULL;
     }
-    view->rows = 0;  
+    view->rows = 0;
 }
 
 /* build a view outline to map one row to a COMPITEM handle by traversing
@@ -1289,11 +1424,11 @@ view_freemappings(
  */
 void
 view_outline_opt(
-                VIEW view,
-                BOOL bRedraw,
-                COMPITEM ciFind,
-                int * prow
-                )
+    VIEW view,
+    BOOL bRedraw,
+    COMPITEM ciFind,
+    int * prow
+)
 {
     int prev_row = -1;      /* the row nr of the previously-expanded row*/
     int i;                  /* nr of includable items */
@@ -1306,7 +1441,8 @@ view_outline_opt(
      * check that view_setcomplist has already been called. if not,
      * nothing to do
      */
-    if (view->cl == NULL) {
+    if (view->cl == NULL)
+    {
         return;
     }
 
@@ -1322,10 +1458,13 @@ view_outline_opt(
     li = complist_getitems(view->cl);
 
     ci = (COMPITEM) List_First(li);
-    for (i = 0; ci != NULL; ci = (COMPITEM) List_Next(ci)) {
+    for (i = 0; ci != NULL; ci = (COMPITEM) List_Next(ci))
+    {
 
-        if ((ciFind != NULL) && (prow != NULL)) {
-            if (ci == ciFind) {
+        if ((ciFind != NULL) && (prow != NULL))
+        {
+            if (ci == ciFind)
+            {
                 // now that we have found the requested item,
                 // the next visible row is the one we want,
                 // whether it is ci or a later one
@@ -1336,10 +1475,12 @@ view_outline_opt(
         state = compitem_getstate(ci);
 
         if (((outline_include & INCLUDE_SAME) && (state == STATE_SAME)) ||
-            ((outline_include & INCLUDE_DIFFER) && (state == STATE_DIFFER)) ||
-            ((outline_include & INCLUDE_LEFTONLY) && (state == STATE_FILELEFTONLY)) ||
-            ((outline_include & INCLUDE_RIGHTONLY) && (state == STATE_FILERIGHTONLY))) {
-            if (!compitem_getmark(ci) || !hide_markedfiles) {
+                ((outline_include & INCLUDE_DIFFER) && (state == STATE_DIFFER)) ||
+                ((outline_include & INCLUDE_LEFTONLY) && (state == STATE_FILELEFTONLY)) ||
+                ((outline_include & INCLUDE_RIGHTONLY) && (state == STATE_FILERIGHTONLY)))
+        {
+            if (!compitem_getmark(ci) || !hide_markedfiles)
+            {
                 i++;
             }
         }
@@ -1347,7 +1488,8 @@ view_outline_opt(
 
 
     /* allocate an array big enough for all of these */
-    { /* DO NOT link in any storage with garbage pointers in it */
+    {
+        /* DO NOT link in any storage with garbage pointers in it */
         COMPITEM * temp;
         temp = (COMPITEM *)HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, i * sizeof(COMPITEM));
         if (temp == NULL)
@@ -1366,20 +1508,24 @@ view_outline_opt(
      * out for the handle of the previously expanded item
      */
     ci = (COMPITEM) List_First(li);
-    for (i = 0; ci != NULL; ci = (COMPITEM) List_Next(ci)) {
+    for (i = 0; ci != NULL; ci = (COMPITEM) List_Next(ci))
+    {
 
         state = compitem_getstate(ci);
 
         if (((outline_include & INCLUDE_SAME) && (state == STATE_SAME)) ||
-            ((outline_include & INCLUDE_DIFFER) && (state == STATE_DIFFER)) ||
-            ((outline_include & INCLUDE_LEFTONLY) && (state == STATE_FILELEFTONLY)) ||
-            ((outline_include & INCLUDE_RIGHTONLY) && (state == STATE_FILERIGHTONLY))) {
+                ((outline_include & INCLUDE_DIFFER) && (state == STATE_DIFFER)) ||
+                ((outline_include & INCLUDE_LEFTONLY) && (state == STATE_FILELEFTONLY)) ||
+                ((outline_include & INCLUDE_RIGHTONLY) && (state == STATE_FILERIGHTONLY)))
+        {
 
-            if (!compitem_getmark(ci) || !hide_markedfiles) {
+            if (!compitem_getmark(ci) || !hide_markedfiles)
+            {
 
                 view->pItems[i] = ci;
 
-                if (ci == view->ciSelect) {
+                if (ci == view->ciSelect)
+                {
                     prev_row = i;
                 }
 
@@ -1398,13 +1544,15 @@ view_outline_opt(
     ViewLeave();
 
     /* inform table of new layout of table - force refresh */
-    if (bRedraw) {
+    if (bRedraw)
+    {
         SendMessage(view->hwnd, TM_NEWLAYOUT, 0, (LPARAM) view);
 
         /* scroll to and highlight the row that represents the file
          * we were previously expanding
          */
-        if (prev_row != -1) {
+        if (prev_row != -1)
+        {
             select.startrow = prev_row;
             select.startcell = 0;
             select.nrows = 1;
@@ -1440,9 +1588,9 @@ view_outline_opt(
  */
 BOOL
 view_expand_item(
-                VIEW view,
-                COMPITEM ci
-                )
+    VIEW view,
+    COMPITEM ci
+)
 {
     LIST li;
     SECTION sh;
@@ -1451,7 +1599,8 @@ view_expand_item(
 
     // We could be on a second thread trying to expand while it's
     // already going on.  That ain't clever!
-    if (view->bExpandGuard) {
+    if (view->bExpandGuard)
+    {
         Trace_Error(NULL, "Expansion in progress.  Please wait.", FALSE);
         ViewLeave();
         return FALSE;
@@ -1469,7 +1618,8 @@ view_expand_item(
     ViewLeave();
     /* get the composite section list */
     li = compitem_getcomposite(ci);
-    if (li == NULL) {
+    if (li == NULL)
+    {
         view->bExpanding = FALSE;
         view->bExpandGuard = FALSE;
         return FALSE;
@@ -1499,20 +1649,26 @@ view_expand_item(
      */
     view->rows = 0;
     for ( sh = (SECTION) List_First(li); sh != NULL;
-        sh = (SECTION) List_Next(sh)) {
+            sh = (SECTION) List_Next(sh))
+    {
 
         state = section_getstate(sh);
 
-        if (expand_mode == IDM_RONLY) {
+        if (expand_mode == IDM_RONLY)
+        {
             if ((state == STATE_LEFTONLY) ||
-                (state == STATE_SIMILARLEFT) ||
-                (state == STATE_MOVEDLEFT)) {
+                    (state == STATE_SIMILARLEFT) ||
+                    (state == STATE_MOVEDLEFT))
+            {
                 continue;
             }
-        } else if (expand_mode == IDM_LONLY) {
+        }
+        else if (expand_mode == IDM_LONLY)
+        {
             if ((state == STATE_RIGHTONLY) ||
-                (state == STATE_SIMILARRIGHT) ||
-                (state == STATE_MOVEDRIGHT)) {
+                    (state == STATE_SIMILARRIGHT) ||
+                    (state == STATE_MOVEDRIGHT))
+            {
                 continue;
             }
         }
@@ -1520,21 +1676,23 @@ view_expand_item(
         /* include all lines in this section
            if the section meets the include criteria */
         if ( ((state == STATE_SAME)         && (expand_include & INCLUDE_SAME))
-             || ((state == STATE_LEFTONLY)     && (expand_include & INCLUDE_LEFTONLY))
-             || ((state == STATE_RIGHTONLY)    && (expand_include & INCLUDE_RIGHTONLY))
-             || ((state == STATE_MOVEDLEFT)    && (expand_include & INCLUDE_MOVEDLEFT))
-             || ((state == STATE_MOVEDRIGHT)   && (expand_include & INCLUDE_MOVEDRIGHT))
-             || ((state == STATE_SIMILARLEFT)  && (expand_include & INCLUDE_SIMILARLEFT))
-             || ((state == STATE_SIMILARRIGHT) && (expand_include & INCLUDE_SIMILARRIGHT))) {
+                || ((state == STATE_LEFTONLY)     && (expand_include & INCLUDE_LEFTONLY))
+                || ((state == STATE_RIGHTONLY)    && (expand_include & INCLUDE_RIGHTONLY))
+                || ((state == STATE_MOVEDLEFT)    && (expand_include & INCLUDE_MOVEDLEFT))
+                || ((state == STATE_MOVEDRIGHT)   && (expand_include & INCLUDE_MOVEDRIGHT))
+                || ((state == STATE_SIMILARLEFT)  && (expand_include & INCLUDE_SIMILARLEFT))
+                || ((state == STATE_SIMILARRIGHT) && (expand_include & INCLUDE_SIMILARRIGHT)))
+        {
             view->rows += section_getlinecount(sh);
         }
     }
 
     /* allocate the memory for the mapping array */
-    {    /* DO NOT chain in any storage with garbage pointers in it */
+    {
+        /* DO NOT chain in any storage with garbage pointers in it */
         PVIEWLINE temp;
         temp = (PVIEWLINE) HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, view->rows * sizeof(VIEWLINE));
-        if (temp == NULL) 
+        if (temp == NULL)
         {
             return FALSE;
         }
@@ -1546,20 +1704,26 @@ view_expand_item(
     view->maxtag = 5;
     view->maxrest = 0;
     for (sh = (SECTION) List_First(li); sh != NULL;
-        sh = (SECTION) List_Next(sh)) {
+            sh = (SECTION) List_Next(sh))
+    {
 
         state = section_getstate(sh);
 
-        if (expand_mode == IDM_RONLY) {
+        if (expand_mode == IDM_RONLY)
+        {
             if ((state == STATE_LEFTONLY) ||
-                (state == STATE_SIMILARLEFT) ||
-                (state == STATE_MOVEDLEFT)) {
+                    (state == STATE_SIMILARLEFT) ||
+                    (state == STATE_MOVEDLEFT))
+            {
                 continue;
             }
-        } else if (expand_mode == IDM_LONLY) {
+        }
+        else if (expand_mode == IDM_LONLY)
+        {
             if ((state == STATE_RIGHTONLY) ||
-                (state == STATE_SIMILARRIGHT) ||
-                (state == STATE_MOVEDRIGHT)) {
+                    (state == STATE_SIMILARRIGHT) ||
+                    (state == STATE_MOVEDRIGHT))
+            {
                 continue;
             }
         }
@@ -1567,12 +1731,13 @@ view_expand_item(
         /* include all lines in this section
            if the section meets the include criteria */
         if ( ((state == STATE_SAME)         && (expand_include & INCLUDE_SAME))
-             || ((state == STATE_LEFTONLY)     && (expand_include & INCLUDE_LEFTONLY))
-             || ((state == STATE_RIGHTONLY)    && (expand_include & INCLUDE_RIGHTONLY))
-             || ((state == STATE_MOVEDLEFT)    && (expand_include & INCLUDE_MOVEDLEFT))
-             || ((state == STATE_MOVEDRIGHT)   && (expand_include & INCLUDE_MOVEDRIGHT))
-             || ((state == STATE_SIMILARLEFT)  && (expand_include & INCLUDE_SIMILARLEFT))
-             || ((state == STATE_SIMILARRIGHT) && (expand_include & INCLUDE_SIMILARRIGHT))) {
+                || ((state == STATE_LEFTONLY)     && (expand_include & INCLUDE_LEFTONLY))
+                || ((state == STATE_RIGHTONLY)    && (expand_include & INCLUDE_RIGHTONLY))
+                || ((state == STATE_MOVEDLEFT)    && (expand_include & INCLUDE_MOVEDLEFT))
+                || ((state == STATE_MOVEDRIGHT)   && (expand_include & INCLUDE_MOVEDRIGHT))
+                || ((state == STATE_SIMILARLEFT)  && (expand_include & INCLUDE_SIMILARLEFT))
+                || ((state == STATE_SIMILARRIGHT) && (expand_include & INCLUDE_SIMILARRIGHT)))
+        {
 
             /* find the base line number in each file */
             base_left = section_getleftbasenr(sh);
@@ -1587,7 +1752,8 @@ view_expand_item(
             line1 = section_getfirstline(sh);
             line2 = section_getlastline(sh);
 
-            for (; line1 != NULL; line1 = (LINE) List_Next(line1)) {
+            for (; line1 != NULL; line1 = (LINE) List_Next(line1))
+            {
 
                 view->pLines[i].line = line1;
                 view->pLines[i].section = sh;
@@ -1599,12 +1765,14 @@ view_expand_item(
                  */
 
                 view->pLines[i].nr_left = base_left;
-                if (state!=STATE_SIMILARRIGHT && base_left != 0) {
+                if (state!=STATE_SIMILARRIGHT && base_left != 0)
+                {
                     base_left++;
                 }
 
                 view->pLines[i].nr_right = base_right;
-                if (state!=STATE_SIMILARLEFT && base_right != 0) {
+                if (state!=STATE_SIMILARLEFT && base_right != 0)
+                {
                     base_right++;
                 }
 
@@ -1616,7 +1784,8 @@ view_expand_item(
                                     (line_gettabbedlength(line1, g_tabwidth)));
 
                 /* end of section ? */
-                if (line1 == line2) {
+                if (line1 == line2)
+                {
                     break;
                 }
             }
@@ -1651,10 +1820,10 @@ view_gethwnd(VIEW view)
 void
 view_gototableline(VIEW view, LONG iLine)
 {
-    if (view) 
+    if (view)
     {
         const LONG cLines = view_getrowcount(view);
-        if ( (iLine >= 0) && (iLine < cLines)) 
+        if ( (iLine >= 0) && (iLine < cLines))
         {
             TableSelection select;
             memset(&select, 0, sizeof(TableSelection));
@@ -1678,7 +1847,7 @@ view_findstring(VIEW view, LONG iCol, LPCSTR pszFind, BOOL fSearchDown, BOOL fMa
     const LONG cRows = view_getrowcount(view);
     BOOL fFound = FALSE;
 
-    if (cRows > 0) 
+    if (cRows > 0)
     {
         STRSUBFUNC pfnSub = (fMatchCase) ? My_mbsstr : My_mbsistr;
         const char *pszRow = NULL;
@@ -1690,14 +1859,14 @@ view_findstring(VIEW view, LONG iCol, LPCSTR pszFind, BOOL fSearchDown, BOOL fMa
         LONG iWrapAt = 0;
         LONG iWrapTo = 0;
 
-        if (fSearchDown) 
+        if (fSearchDown)
         {
             nStep = 1;
             iRow = selection + selection_nrows - 1;
             iWrapAt = cRows;
             iWrapTo = 0;
         }
-        else 
+        else
         {
             nStep = -1;
             iRow = selection;
@@ -1706,40 +1875,40 @@ view_findstring(VIEW view, LONG iCol, LPCSTR pszFind, BOOL fSearchDown, BOOL fMa
         }
 
         iRow += nStep;
-        if (iRow < 0 || iRow >= cRows) 
+        if (iRow < 0 || iRow >= cRows)
         {
             iRow = iWrapTo;
         }
 
         iEnd = iRow;
 
-        for (;;) 
+        for (;;)
         {
             pszRow = view_gettext(view, iRow, iCol);
-            if (pszRow) 
+            if (pszRow)
             {
                 pszEnd = NULL;
                 pszFound = (const char*)pfnSub((PUCHAR)pszRow, (PUCHAR)pszFind, (PUCHAR*)&pszEnd);
-                if (pszFound) 
+                if (pszFound)
                 {
-                    if (!fWholeWord) 
+                    if (!fWholeWord)
                     {
                         fFound = TRUE;
-                    } 
-                    else 
+                    }
+                    else
                     {
                         /* check end of string */
-                        if (!pszEnd || !*pszEnd || (!IsDBCSLeadByte(*pszEnd) && !isalpha((UCHAR)*pszEnd) && !isdigit((UCHAR)*pszEnd))) 
+                        if (!pszEnd || !*pszEnd || (!IsDBCSLeadByte(*pszEnd) && !isalpha((UCHAR)*pszEnd) && !isdigit((UCHAR)*pszEnd)))
                         {
                             /* check beginning of string */
-                            if (pszFound == pszRow) 
+                            if (pszFound == pszRow)
                             {
                                 fFound = TRUE;
-                            } 
-                            else 
+                            }
+                            else
                             {
                                 const char *pchT = CharPrev(pszRow, pszFound);
-                                if (!pchT || !*pchT || (!IsDBCSLeadByte(*pchT) && !isalpha((UCHAR)*pchT) && !isdigit((UCHAR)*pchT))) 
+                                if (!pchT || !*pchT || (!IsDBCSLeadByte(*pchT) && !isalpha((UCHAR)*pchT) && !isdigit((UCHAR)*pchT)))
                                 {
                                     fFound = TRUE;
                                 }
@@ -1747,7 +1916,7 @@ view_findstring(VIEW view, LONG iCol, LPCSTR pszFind, BOOL fSearchDown, BOOL fMa
                         }
                     }
 
-                    if (fFound) 
+                    if (fFound)
                     {
                         view_gototableline(view, iRow);
                         break;
@@ -1756,12 +1925,12 @@ view_findstring(VIEW view, LONG iCol, LPCSTR pszFind, BOOL fSearchDown, BOOL fMa
             }
 
             iRow += nStep;
-            if (iRow == iWrapAt) 
+            if (iRow == iWrapAt)
             {
                 iRow = iWrapTo;
             }
 
-            if (iRow == iEnd) 
+            if (iRow == iEnd)
             {
                 break;
             }

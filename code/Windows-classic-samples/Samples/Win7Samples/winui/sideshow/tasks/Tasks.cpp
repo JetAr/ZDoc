@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -88,7 +88,7 @@ void CreateClient()
     HANDLE hInstanceMutex = NULL;
 
     if ((NULL == (hInstanceMutex = ::CreateMutex(NULL, TRUE, L"Tasks"))) &&
-        (ERROR_ALREADY_EXISTS == GetLastError()))
+            (ERROR_ALREADY_EXISTS == GetLastError()))
     {
         return;
     }
@@ -126,8 +126,8 @@ void CreateClient()
     }
 }
 
-void CALLBACK StartTasks(HWND /*hwnd*/, 
-                         HINSTANCE /*hinst*/, 
+void CALLBACK StartTasks(HWND /*hwnd*/,
+                         HINSTANCE /*hinst*/,
                          LPSTR /*lpszCmdLine*/,
                          int /*nCmdShow*/)
 {
@@ -151,7 +151,7 @@ void CALLBACK StartTasks(HWND /*hwnd*/,
 // DLL Entry Point
 extern "C" BOOL WINAPI DllMain(HINSTANCE /*hInstance*/, DWORD dwReason, LPVOID lpReserved)
 {
-    return _AtlModule.DllMain(dwReason, lpReserved); 
+    return _AtlModule.DllMain(dwReason, lpReserved);
 }
 
 // Used to determine whether the DLL can be unloaded by OLE

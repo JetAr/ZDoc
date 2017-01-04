@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -44,8 +44,8 @@ UINT mmGetProfileIntA(LPCSTR appname, LPCSTR valuename, INT uDefault);
  * result is number of characters written into pResult
  */
 DWORD mmGetProfileString(LPCTSTR appname, LPCTSTR valuename, LPCTSTR pDefault,
-                    LPTSTR pResult, int cbResult
-);
+                         LPTSTR pResult, int cbResult
+                        );
 
 /*
  * write a string/integer to the profile
@@ -76,20 +76,20 @@ VOID CloseKeys(VOID);
  * convert an Ansi string to Wide characters
  */
 LPWSTR mmAnsiToWide (
-   LPWSTR lpwsz,   // out: wide char buffer to convert into
-   LPCSTR  lpsz,   // in: ansi string to convert from
-   UINT   nChars); // in: count of characters in each buffer
+    LPWSTR lpwsz,   // out: wide char buffer to convert into
+    LPCSTR  lpsz,   // in: ansi string to convert from
+    UINT   nChars); // in: count of characters in each buffer
 
 /*
  * convert a Wide char string to Ansi
  */
 LPSTR mmWideToAnsi (
-   LPSTR  lpsz,    // out: ansi buffer to convert into
-   LPCWSTR lpwsz,  // in: wide char buffer to convert from
-   UINT   nChars); // in: count of characters (not bytes!)
+    LPSTR  lpsz,    // out: ansi buffer to convert into
+    LPCWSTR lpwsz,  // in: wide char buffer to convert from
+    UINT   nChars); // in: count of characters (not bytes!)
 
 #if !defined NUMELMS
- #define NUMELMS(aa) (sizeof(aa)/sizeof((aa)[0]))
+#define NUMELMS(aa) (sizeof(aa)/sizeof((aa)[0]))
 #endif
 
 #endif

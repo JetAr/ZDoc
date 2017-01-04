@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #ifndef _NOTIF_H_
 #define _NOTIF_H_
@@ -42,13 +42,17 @@ public:
     static const UINT HostedNetworkNotAvailable   = 6;
     static const UINT HostedNetworkAvailable      = 7;
 
-    UINT GetNotificationType() {return m_Type;};
+    UINT GetNotificationType()
+    {
+        return m_Type;
+    };
 
     //
     // Get notification data.
     // The caller is responsible for releasing the data after using it.
     //
-    CRefObject * GetNotificationData() {
+    CRefObject * GetNotificationData()
+    {
         if (m_Data != NULL)
         {
             m_Data->AddRef();
@@ -79,11 +83,20 @@ private:
 
     CRITICAL_SECTION m_CriticalSection;            // critical section to protect the notification list
 
-    VOID Lock() {EnterCriticalSection(const_cast<LPCRITICAL_SECTION>(&m_CriticalSection));};
-    VOID Unlock() {LeaveCriticalSection(const_cast<LPCRITICAL_SECTION>(&m_CriticalSection));};
+    VOID Lock()
+    {
+        EnterCriticalSection(const_cast<LPCRITICAL_SECTION>(&m_CriticalSection));
+    };
+    VOID Unlock()
+    {
+        LeaveCriticalSection(const_cast<LPCRITICAL_SECTION>(&m_CriticalSection));
+    };
 
     // Don't allow to create an empty CNotificationSink object
-    CNotificationSink() {InitializeCriticalSection(const_cast<LPCRITICAL_SECTION>(&m_CriticalSection));};
+    CNotificationSink()
+    {
+        InitializeCriticalSection(const_cast<LPCRITICAL_SECTION>(&m_CriticalSection));
+    };
 
     VOID OnNewNotifcationAvailable(CHostedNetworkNotification *);
 
@@ -93,7 +106,7 @@ private:
 
 public:
 
-    CNotificationSink(HWND hParent) 
+    CNotificationSink(HWND hParent)
     {
         m_hParent = hParent;
         InitializeCriticalSection(const_cast<LPCRITICAL_SECTION>(&m_CriticalSection));
@@ -116,8 +129,8 @@ public:
     virtual VOID OnHostedNetworkStarted()
     {
         CHostedNetworkNotification * pNotification = new(std::nothrow) CHostedNetworkNotification(
-                                                        CHostedNetworkNotification::HostedNetworkStarted
-                                                        );
+            CHostedNetworkNotification::HostedNetworkStarted
+        );
 
         OnNewNotifcationAvailable(pNotification);
     };
@@ -125,8 +138,8 @@ public:
     virtual VOID OnHostedNetworkStopped()
     {
         CHostedNetworkNotification * pNotification = new(std::nothrow) CHostedNetworkNotification(
-                                                        CHostedNetworkNotification::HostedNetworkStopped
-                                                        );
+            CHostedNetworkNotification::HostedNetworkStopped
+        );
 
         OnNewNotifcationAvailable(pNotification);
     };
@@ -134,8 +147,8 @@ public:
     virtual VOID OnHostedNetworkNotAvailable()
     {
         CHostedNetworkNotification * pNotification = new(std::nothrow) CHostedNetworkNotification(
-                                                        CHostedNetworkNotification::HostedNetworkNotAvailable
-                                                        );
+            CHostedNetworkNotification::HostedNetworkNotAvailable
+        );
 
         OnNewNotifcationAvailable(pNotification);
     };
@@ -143,8 +156,8 @@ public:
     virtual VOID OnHostedNetworkAvailable()
     {
         CHostedNetworkNotification * pNotification = new(std::nothrow) CHostedNetworkNotification(
-                                                        CHostedNetworkNotification::HostedNetworkAvailable
-                                                        );
+            CHostedNetworkNotification::HostedNetworkAvailable
+        );
 
         OnNewNotifcationAvailable(pNotification);
     };
@@ -159,9 +172,9 @@ public:
         if (pDevice != NULL)
         {
             CHostedNetworkNotification * pNotification = new(std::nothrow) CHostedNetworkNotification(
-                                                            CHostedNetworkNotification::DeviceAdd,
-                                                            pDevice
-                                                            );
+                CHostedNetworkNotification::DeviceAdd,
+                pDevice
+            );
 
             OnNewNotifcationAvailable(pNotification);
 
@@ -184,9 +197,9 @@ public:
         if (pDevice != NULL)
         {
             CHostedNetworkNotification * pNotification = new(std::nothrow) CHostedNetworkNotification(
-                                                            CHostedNetworkNotification::DeviceRemove,
-                                                            pDevice
-                                                            );
+                CHostedNetworkNotification::DeviceRemove,
+                pDevice
+            );
 
             OnNewNotifcationAvailable(pNotification);
 
@@ -195,7 +208,7 @@ public:
         }
     };
 
-    // 
+    //
     // Get next hosted network notification
     // Caller is responsible for releasing the notification after using it.
     // The caller is required to process all notifications till the queue is empty

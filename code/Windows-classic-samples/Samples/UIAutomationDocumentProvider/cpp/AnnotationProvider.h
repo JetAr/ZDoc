@@ -1,12 +1,12 @@
-// Copyright (c) Microsoft Corporation
+﻿// Copyright (c) Microsoft Corporation
 //
 #pragma once
 
 // Class representing each individual annotation
 class  __declspec(uuid("87304f6a-0602-4b92-9efb-ed9da88f147c"))
-AnnotationProvider : public IRawElementProviderSimple,
-                     public IRawElementProviderFragment,
-                     public IAnnotationProvider
+    AnnotationProvider : public IRawElementProviderSimple,
+    public IRawElementProviderFragment,
+    public IAnnotationProvider
 {
 public:
     AnnotationProvider(_In_ HWND hwnd, _In_ AnnotatedTextControl *control, _In_ int annotationId);
@@ -16,7 +16,7 @@ public:
     ULONG STDMETHODCALLTYPE AddRef();
     ULONG STDMETHODCALLTYPE Release();
     HRESULT STDMETHODCALLTYPE QueryInterface(_In_ REFIID riid, _Outptr_ void**ppInterface);
-    
+
     // IRawElementProviderSimple methods
     HRESULT STDMETHODCALLTYPE get_ProviderOptions(_Out_ ProviderOptions * retVal);
     HRESULT STDMETHODCALLTYPE GetPatternProvider(PATTERNID iid, _Outptr_result_maybenull_ IUnknown * * retVal );

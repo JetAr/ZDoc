@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -27,7 +27,7 @@
 //
 // Description:
 //    This function dynamically loads the given extension function from the
-//    underlying provider. Each extension function checks to see if the 
+//    underlying provider. Each extension function checks to see if the
 //    corresponding extension function for the lower provider is loaded
 //    before calling. If not, it will load it as needed. This is necessary
 //    if the app loads the extension function for say TCP and then calls
@@ -40,42 +40,42 @@ LoadExtensionFunction(
     GUID        ExtensionGuid,
     LPWSPIOCTL  fnIoctl,
     SOCKET      s
-    )
+)
 {
     DWORD   dwBytes;
-    int     rc, 
+    int     rc,
             error,
             ret = TRUE;
 
     // Use the lower provider's WSPIoctl to load the extension function
     rc = fnIoctl(
-            s,
-            SIO_GET_EXTENSION_FUNCTION_POINTER,
-           &ExtensionGuid,
-            sizeof(GUID),
-            func,
-            sizeof(FARPROC),
-           &dwBytes,
-            NULL,
-            NULL,
-            NULL,
-           &error
-            );
-    
+             s,
+             SIO_GET_EXTENSION_FUNCTION_POINTER,
+             &ExtensionGuid,
+             sizeof(GUID),
+             func,
+             sizeof(FARPROC),
+             &dwBytes,
+             NULL,
+             NULL,
+             NULL,
+             &error
+         );
+
 
     if ( SOCKET_ERROR == rc )
     {
         dbgprint("LoadExtensionFunction: WSAIoctl (SIO_GET_EXTENSION_FUNCTION) failed: %d",
-            error);
+                 error);
         ret = FALSE;
     }
     else if( NULL == *func )
     {
         // Some providers won't throw an error even when
-        // they return a NULL function pointer    
+        // they return a NULL function pointer
 
         dbgprint("LoadExtensionFunction: WSAIoctl (SIO_GET_EXTENSION_FUNCTION) returned a NULL"
-                    " function pointer");
+                 " function pointer");
         ret = FALSE;
     }
 
@@ -102,7 +102,7 @@ LoadExtensionFunction(
 //    to request the function pointer to TransmitFile, we intercept the call
 //    and return a pointer to our extension function instead.
 //
-BOOL PASCAL FAR 
+BOOL PASCAL FAR
 ExtTransmitFile(
     IN SOCKET hSocket,
     IN HANDLE hFile,
@@ -111,7 +111,7 @@ ExtTransmitFile(
     IN LPOVERLAPPED lpOverlapped,
     IN LPTRANSMIT_FILE_BUFFERS lpTransmitBuffers,
     IN DWORD dwFlags
-    )
+)
 {
     SOCK_INFO          *SocketContext = NULL;
     LPWSAOVERLAPPEDPLUS ProviderOverlapped = NULL;
@@ -132,17 +132,17 @@ ExtTransmitFile(
         GUID    guidTransmitFile = WSAID_TRANSMITFILE;
 
         ret = LoadExtensionFunction(
-                (FARPROC **)&SocketContext->Provider->NextProcTableExt.lpfnTransmitFile,
-                guidTransmitFile,
-                SocketContext->Provider->NextProcTable.lpWSPIoctl,
-                SocketContext->ProviderSocket
-                );
+                  (FARPROC **)&SocketContext->Provider->NextProcTableExt.lpfnTransmitFile,
+                  guidTransmitFile,
+                  SocketContext->Provider->NextProcTable.lpWSPIoctl,
+                  SocketContext->ProviderSocket
+              );
         if ( FALSE == ret )
         {
             dbgprint( "Next provider's TransmitFile pointer is NULL!" );
             Errno = WSAEFAULT;
             goto cleanup;
-        }   
+        }
     }
 
     //
@@ -151,15 +151,15 @@ ExtTransmitFile(
     if ( NULL != lpOverlapped )
     {
         ProviderOverlapped = PrepareOverlappedOperation(
-                SocketContext,
-                LSP_OP_TRANSMITFILE,
-                NULL,
-                0,
-                lpOverlapped,
-                NULL,
-                NULL,
-               &Errno
-                );
+                                 SocketContext,
+                                 LSP_OP_TRANSMITFILE,
+                                 NULL,
+                                 0,
+                                 lpOverlapped,
+                                 NULL,
+                                 NULL,
+                                 &Errno
+                             );
         if ( NULL == ProviderOverlapped )
         {
             goto cleanup;
@@ -186,14 +186,14 @@ ExtTransmitFile(
     else
     {
         ret = SocketContext->Provider->NextProcTableExt.lpfnTransmitFile(
-                SocketContext->ProviderSocket,
-                hFile,
-                nNumberOfBytesToWrite,
-                nNumberOfBytesPerSend,
-                NULL,
-                lpTransmitBuffers,
-                dwFlags
-                );
+                  SocketContext->ProviderSocket,
+                  hFile,
+                  nNumberOfBytesToWrite,
+                  nNumberOfBytesPerSend,
+                  NULL,
+                  lpTransmitBuffers,
+                  dwFlags
+              );
         if ( FALSE == ret )
             Errno = WSAGetLastError();
     }
@@ -217,7 +217,7 @@ cleanup:
 //    to request the function pointer to AcceptEx, we intercept the call
 //    and return a pointer to our extension function instead.
 //
-BOOL PASCAL FAR 
+BOOL PASCAL FAR
 ExtAcceptEx(
     IN SOCKET sListenSocket,
     IN SOCKET sAcceptSocket,
@@ -227,11 +227,11 @@ ExtAcceptEx(
     IN DWORD dwRemoteAddressLength,
     OUT LPDWORD lpdwBytesReceived,
     IN LPOVERLAPPED lpOverlapped
-    )
+)
 {
     LPWSAOVERLAPPEDPLUS ProviderOverlapped = NULL;
     SOCK_INFO          *ListenSocketContext = NULL,
-                       *AcceptSocketContext = NULL;
+                        *AcceptSocketContext = NULL;
     int                 Errno = 0,
                         ret = FALSE;
 
@@ -261,11 +261,11 @@ ExtAcceptEx(
         GUID    guidAcceptEx = WSAID_ACCEPTEX;
 
         ret = LoadExtensionFunction(
-                 (FARPROC **)&ListenSocketContext->Provider->NextProcTableExt.lpfnAcceptEx,
-                 guidAcceptEx,
-                 ListenSocketContext->Provider->NextProcTable.lpWSPIoctl,
-                 ListenSocketContext->ProviderSocket
-                 );
+                  (FARPROC **)&ListenSocketContext->Provider->NextProcTableExt.lpfnAcceptEx,
+                  guidAcceptEx,
+                  ListenSocketContext->Provider->NextProcTable.lpWSPIoctl,
+                  ListenSocketContext->ProviderSocket
+              );
         if ( FALSE == ret )
         {
             dbgprint("Lower provider AcceptEx == NULL!");
@@ -278,15 +278,15 @@ ExtAcceptEx(
     if ( NULL != lpOverlapped )
     {
         ProviderOverlapped = PrepareOverlappedOperation(
-                ListenSocketContext,
-                LSP_OP_ACCEPTEX,
-                NULL,
-                0,
-                lpOverlapped,
-                NULL,
-                NULL,
-               &Errno
-                );
+                                 ListenSocketContext,
+                                 LSP_OP_ACCEPTEX,
+                                 NULL,
+                                 0,
+                                 lpOverlapped,
+                                 NULL,
+                                 NULL,
+                                 &Errno
+                             );
         if ( NULL == ProviderOverlapped )
         {
             goto cleanup;
@@ -335,15 +335,15 @@ ExtAcceptEx(
     else
     {
         ret = ListenSocketContext->Provider->NextProcTableExt.lpfnAcceptEx(
-                ListenSocketContext->ProviderSocket,
-                AcceptSocketContext->ProviderSocket,
-                lpOutputBuffer,
-                dwReceiveDataLength,
-                dwLocalAddressLength,
-                dwRemoteAddressLength,
-                lpdwBytesReceived,
-                NULL
-                );
+                  ListenSocketContext->ProviderSocket,
+                  AcceptSocketContext->ProviderSocket,
+                  lpOutputBuffer,
+                  dwReceiveDataLength,
+                  dwLocalAddressLength,
+                  dwRemoteAddressLength,
+                  lpdwBytesReceived,
+                  NULL
+              );
         if ( FALSE == ret )
             Errno = WSAGetLastError();
     }
@@ -370,7 +370,7 @@ cleanup:
 //    to request the function pointer to ConnectEx, we intercept the call
 //    and return a pointer to our extension function instead.
 //
-BOOL PASCAL FAR 
+BOOL PASCAL FAR
 ExtConnectEx(
     IN SOCKET s,
     IN const struct sockaddr FAR *name,
@@ -379,7 +379,7 @@ ExtConnectEx(
     IN DWORD dwSendDataLength,
     OUT LPDWORD lpdwBytesSent,
     IN LPOVERLAPPED lpOverlapped
-    )
+)
 {
     SOCK_INFO           *SocketContext = NULL;
     LPWSAOVERLAPPEDPLUS  ProviderOverlapped = NULL;
@@ -400,11 +400,11 @@ ExtConnectEx(
         GUID    guidConnectEx = WSAID_CONNECTEX;
 
         ret = LoadExtensionFunction(
-                (FARPROC **)&SocketContext->Provider->NextProcTableExt.lpfnConnectEx,
-                guidConnectEx,
-                SocketContext->Provider->NextProcTable.lpWSPIoctl,
-                SocketContext->ProviderSocket
-                );
+                  (FARPROC **)&SocketContext->Provider->NextProcTableExt.lpfnConnectEx,
+                  guidConnectEx,
+                  SocketContext->Provider->NextProcTable.lpWSPIoctl,
+                  SocketContext->ProviderSocket
+              );
         if ( FALSE == ret )
         {
             dbgprint("Next proc table ConnectEx == NULL!");
@@ -417,15 +417,15 @@ ExtConnectEx(
     if ( NULL != lpOverlapped )
     {
         ProviderOverlapped = PrepareOverlappedOperation(
-                SocketContext,
-                LSP_OP_CONNECTEX,
-                NULL,
-                0,
-                lpOverlapped,
-                NULL,
-                NULL,
-               &Errno
-                );
+                                 SocketContext,
+                                 LSP_OP_CONNECTEX,
+                                 NULL,
+                                 0,
+                                 lpOverlapped,
+                                 NULL,
+                                 NULL,
+                                 &Errno
+                             );
         if ( NULL == ProviderOverlapped )
         {
             dbgprint("ExtConnectEx: PrepareOverlappedOperation returned NULL");
@@ -462,14 +462,14 @@ ExtConnectEx(
     else
     {
         ret = SocketContext->Provider->NextProcTableExt.lpfnConnectEx(
-                SocketContext->ProviderSocket,
-                name,
-                namelen,
-                lpSendBuffer,
-                dwSendDataLength,
-                lpdwBytesSent,
-                NULL
-                );
+                  SocketContext->ProviderSocket,
+                  name,
+                  namelen,
+                  lpSendBuffer,
+                  dwSendDataLength,
+                  lpdwBytesSent,
+                  NULL
+              );
         if ( FALSE == ret )
             Errno = WSAGetLastError();
     }
@@ -493,7 +493,7 @@ cleanup:
 //    to request the function pointer to TransmitPackets, we intercept the call
 //    and return a pointer to our extension function instead.
 //
-BOOL PASCAL FAR 
+BOOL PASCAL FAR
 ExtTransmitPackets(
     SOCKET hSocket,
     LPTRANSMIT_PACKETS_ELEMENT lpPacketArray,
@@ -521,11 +521,11 @@ ExtTransmitPackets(
         GUID    guidTransmitPackets = WSAID_TRANSMITPACKETS;
 
         ret = LoadExtensionFunction(
-                (FARPROC **)&SocketContext->Provider->NextProcTableExt.lpfnTransmitPackets,
-                guidTransmitPackets,
-                SocketContext->Provider->NextProcTable.lpWSPIoctl,
-                SocketContext->ProviderSocket
-                );
+                  (FARPROC **)&SocketContext->Provider->NextProcTableExt.lpfnTransmitPackets,
+                  guidTransmitPackets,
+                  SocketContext->Provider->NextProcTable.lpWSPIoctl,
+                  SocketContext->ProviderSocket
+              );
         if ( FALSE == ret )
         {
             dbgprint( "Next provider's TransmitPackets function is NULL!" );
@@ -540,21 +540,21 @@ ExtTransmitPackets(
     if ( NULL != lpOverlapped )
     {
         ProviderOverlapped = PrepareOverlappedOperation(
-                SocketContext,
-                LSP_OP_TRANSMITPACKETS,
-                NULL,
-                0,
-                lpOverlapped,
-                NULL,
-                NULL,
-               &Errno
-                );
+                                 SocketContext,
+                                 LSP_OP_TRANSMITPACKETS,
+                                 NULL,
+                                 0,
+                                 lpOverlapped,
+                                 NULL,
+                                 NULL,
+                                 &Errno
+                             );
         if ( NULL == ProviderOverlapped )
         {
             dbgprint("ExtTransmitPackets: PrepareOverlappedOperation returned NULL");
             goto cleanup;
         }
-        
+
         ProviderOverlapped->lpCallerCompletionRoutine         = NULL;
         ProviderOverlapped->TransmitPacketsArgs.s             = hSocket;
         ProviderOverlapped->TransmitPacketsArgs.lpPacketArray = lpPacketArray;
@@ -576,13 +576,13 @@ ExtTransmitPackets(
     else
     {
         ret = SocketContext->Provider->NextProcTableExt.lpfnTransmitPackets(
-                SocketContext->ProviderSocket,
-                lpPacketArray,
-                nElementCount,
-                nSendSize,
-                NULL,
-                dwFlags
-                );
+                  SocketContext->ProviderSocket,
+                  lpPacketArray,
+                  nElementCount,
+                  nSendSize,
+                  NULL,
+                  dwFlags
+              );
         if ( FALSE == ret )
             Errno = WSAGetLastError();
     }
@@ -606,13 +606,13 @@ cleanup:
 //    to request the function pointer to DisconnectEx, we intercept the call
 //    and return a pointer to our extension function instead.
 //
-BOOL PASCAL FAR 
+BOOL PASCAL FAR
 ExtDisconnectEx(
     IN SOCKET s,
     IN LPOVERLAPPED lpOverlapped,
     IN DWORD  dwFlags,
     IN DWORD  dwReserved
-    )
+)
 {
     SOCK_INFO           *SocketContext = NULL;
     LPWSAOVERLAPPEDPLUS  ProviderOverlapped = NULL;
@@ -633,11 +633,11 @@ ExtDisconnectEx(
         GUID    guidDisconnectEx = WSAID_DISCONNECTEX;
 
         ret = LoadExtensionFunction(
-                 (FARPROC **)&SocketContext->Provider->NextProcTableExt.lpfnDisconnectEx,
-                 guidDisconnectEx,
-                 SocketContext->Provider->NextProcTable.lpWSPIoctl,
-                 SocketContext->ProviderSocket
-                 );
+                  (FARPROC **)&SocketContext->Provider->NextProcTableExt.lpfnDisconnectEx,
+                  guidDisconnectEx,
+                  SocketContext->Provider->NextProcTable.lpWSPIoctl,
+                  SocketContext->ProviderSocket
+              );
         if ( FALSE == ret )
         {
             dbgprint( "Next provider's DisconnectEx function is NULL!" );
@@ -651,15 +651,15 @@ ExtDisconnectEx(
     if ( NULL != lpOverlapped )
     {
         ProviderOverlapped = PrepareOverlappedOperation(
-                SocketContext,
-                LSP_OP_DISCONNECTEX,
-                NULL,
-                0,
-                lpOverlapped,
-                NULL,
-                NULL,
-               &Errno
-                );
+                                 SocketContext,
+                                 LSP_OP_DISCONNECTEX,
+                                 NULL,
+                                 0,
+                                 lpOverlapped,
+                                 NULL,
+                                 NULL,
+                                 &Errno
+                             );
         if ( NULL == ProviderOverlapped )
         {
             dbgprint("ExtDisconnectEx: PrepareOverlappedOperation returned NULL");
@@ -669,7 +669,7 @@ ExtDisconnectEx(
         ProviderOverlapped->DisconnectExArgs.s          = s;
         ProviderOverlapped->DisconnectExArgs.dwFlags    = dwFlags;
         ProviderOverlapped->DisconnectExArgs.dwReserved = dwReserved;
- 
+
         ret = QueueOverlappedOperation( ProviderOverlapped, SocketContext );
         if ( NO_ERROR != ret )
         {
@@ -684,11 +684,11 @@ ExtDisconnectEx(
     else
     {
         ret = SocketContext->Provider->NextProcTableExt.lpfnDisconnectEx(
-                SocketContext->ProviderSocket,
-                lpOverlapped,
-                dwFlags,
-                dwReserved
-                );
+                  SocketContext->ProviderSocket,
+                  lpOverlapped,
+                  dwFlags,
+                  dwReserved
+              );
         if ( FALSE == ret )
             Errno = WSAGetLastError();
     }
@@ -712,14 +712,14 @@ cleanup:
 //    to request the function pointer to WSARecvMsg, we intercept the call
 //    and return a pointer to our extension function instead.
 //
-INT PASCAL FAR 
+INT PASCAL FAR
 ExtWSARecvMsg(
     IN SOCKET s,
     IN OUT LPWSAMSG lpMsg,
     OUT LPDWORD lpdwNumberOfBytesRecvd,
     IN LPWSAOVERLAPPED lpOverlapped,
     IN LPWSAOVERLAPPED_COMPLETION_ROUTINE lpCompletionRoutine
-    )
+)
 {
     SOCK_INFO           *SocketContext = NULL;
     LPWSAOVERLAPPEDPLUS  ProviderOverlapped = NULL;
@@ -740,11 +740,11 @@ ExtWSARecvMsg(
         GUID    guidWSARecvMsg = WSAID_WSARECVMSG;
 
         ret = LoadExtensionFunction(
-                (FARPROC **)&SocketContext->Provider->NextProcTableExt.lpfnWSARecvMsg,
-                guidWSARecvMsg,
-                SocketContext->Provider->NextProcTable.lpWSPIoctl,
-                SocketContext->ProviderSocket
-                );
+                  (FARPROC **)&SocketContext->Provider->NextProcTableExt.lpfnWSARecvMsg,
+                  guidWSARecvMsg,
+                  SocketContext->Provider->NextProcTable.lpWSPIoctl,
+                  SocketContext->ProviderSocket
+              );
         if ( FALSE == ret )
         {
             dbgprint("Next proc table WSARecvMsg == NULL!");
@@ -759,22 +759,22 @@ ExtWSARecvMsg(
     if ( NULL != lpOverlapped )
     {
         ProviderOverlapped = PrepareOverlappedOperation(
-                SocketContext,
-                LSP_OP_RECVMSG,
-                lpMsg->lpBuffers,
-                lpMsg->dwBufferCount,
-                lpOverlapped,
-                lpCompletionRoutine,
-                NULL,
-               &Errno
-                );
+                                 SocketContext,
+                                 LSP_OP_RECVMSG,
+                                 lpMsg->lpBuffers,
+                                 lpMsg->dwBufferCount,
+                                 lpOverlapped,
+                                 lpCompletionRoutine,
+                                 NULL,
+                                 &Errno
+                             );
         if ( NULL == ProviderOverlapped )
         {
             dbgprint("ExtWSARecvMsg: PrepareOverlappedOperation returned NULL");
             goto cleanup;
         }
 
-        __try 
+        __try
         {
             //
             // The WSABUF array was copied in PrepareOverlappedOperation so fill in
@@ -804,12 +804,12 @@ ExtWSARecvMsg(
         ASSERT( SocketContext->Provider->NextProcTableExt.lpfnWSARecvMsg );
 
         ret = SocketContext->Provider->NextProcTableExt.lpfnWSARecvMsg(
-                SocketContext->ProviderSocket,
-                lpMsg,
-                lpdwNumberOfBytesRecvd,
-                NULL,
-                NULL
-                );
+                  SocketContext->ProviderSocket,
+                  lpMsg,
+                  lpdwNumberOfBytesRecvd,
+                  NULL,
+                  NULL
+              );
         if ( SOCKET_ERROR == ret )
             Errno = WSAGetLastError();
     }
@@ -835,7 +835,7 @@ cleanup:
 //    SIO_BSP_HANDLE and SIO_EXT_SENDMSG in its WSPIoctl function. By not intercepting
 //    those ioctls, if an application calls WSASendMsg, the call will be routed to the
 //    base provider's WSASendMsg routine with that base provider's socket handle and
-//    everything will work normally. 
+//    everything will work normally.
 //
 //    This implementation of WSASendMsg is a pass through -- it simply translates the
 //    application handle to the lower provider socket handle and passes the call to the
@@ -847,7 +847,7 @@ ExtWSASendMsg(
     IN WSASENDMSG *sendMsg,
     IN LPWSATHREADID lpThreadId,
     OUT LPINT lpErrno
-    )
+)
 {
     LPWSAOVERLAPPEDPLUS  ProviderOverlapped = NULL;
     SOCK_INFO      *SocketContext = NULL;
@@ -863,18 +863,18 @@ ExtWSASendMsg(
         goto cleanup;
     }
 
-    if (NULL != sendMsg->lpOverlapped) 
+    if (NULL != sendMsg->lpOverlapped)
     {
         ProviderOverlapped = PrepareOverlappedOperation(
-                SocketContext,
-                LSP_OP_SENDMSG,
-                sendMsg->lpMsg->lpBuffers,
-                sendMsg->lpMsg->dwBufferCount,
-                sendMsg->lpOverlapped,
-                sendMsg->lpCompletionRoutine,
-                lpThreadId,
-                lpErrno
-                );
+                                 SocketContext,
+                                 LSP_OP_SENDMSG,
+                                 sendMsg->lpMsg->lpBuffers,
+                                 sendMsg->lpMsg->dwBufferCount,
+                                 sendMsg->lpOverlapped,
+                                 sendMsg->lpCompletionRoutine,
+                                 lpThreadId,
+                                 lpErrno
+                             );
         if ( NULL == ProviderOverlapped )
         {
             dbgprint( "ExtWSARecvMsg: PrepareOverlappedOperation return NULL" );
@@ -909,27 +909,27 @@ ExtWSASendMsg(
             goto cleanup;
         }
     }
-    else 
+    else
     {
 
         ret = SocketContext->Provider->NextProcTable.lpWSPIoctl(
-                SocketContext->ProviderSocket,
-                SIO_EXT_SENDMSG,
-                sendMsg,
-                sizeof(*sendMsg),
-                &errorCode,
-                sizeof(errorCode),
-               &dwBytes,
-                NULL,
-                NULL,
-                lpThreadId,
-                lpErrno
-                );
+                  SocketContext->ProviderSocket,
+                  SIO_EXT_SENDMSG,
+                  sendMsg,
+                  sizeof(*sendMsg),
+                  &errorCode,
+                  sizeof(errorCode),
+                  &dwBytes,
+                  NULL,
+                  NULL,
+                  lpThreadId,
+                  lpErrno
+              );
         if (NO_ERROR != errorCode)
         {
             //
             // The actual error code is returned via the lpvOutBuffer parameter and
-            // not from the WSPIoctl call (or lpErrno). 
+            // not from the WSPIoctl call (or lpErrno).
             //
             *lpErrno = errorCode;
             ret = SOCKET_ERROR;
@@ -954,14 +954,14 @@ cleanup:
 //
 // Description:
 //    This is the LSPs implementation of WSAPoll. Note that an LSP does not need to
-//    implement this function. If an LSP has no purpose to override this function then 
+//    implement this function. If an LSP has no purpose to override this function then
 //    it should not. An LSP intercepts this call by trapping the ioctl codes
 //    SIO_BSP_HANDLE_POLL and SIO_EXT_POLL in its WSPIoctl function. By not intercepting
 //    those ioctls, if an application calls WSAPoll, the call will be routed to the
-//    base provider's WSAPoll routien which the base provider socket handles and 
+//    base provider's WSAPoll routien which the base provider socket handles and
 //    everything will work normally.
 //
-//    This implementation of WSAPoll is a pass through -- it simply translates all 
+//    This implementation of WSAPoll is a pass through -- it simply translates all
 //    handles passed in the WSAPOLLDATA structure to the lower provider socket handles
 //    and passes the call to the lower provider.
 //
@@ -971,7 +971,7 @@ ExtWSAPoll(
     IN WSAPOLLDATA *pollData,
     IN LPWSATHREADID lpThreadId,
     OUT LPINT lpErrno
-    )
+)
 {
     SOCK_INFO     **SocketContext = NULL;
     SOCK_INFO      *nextSocketContext = NULL;
@@ -1004,14 +1004,14 @@ ExtWSAPoll(
     nextPollData->fds = pollData->fds;
     nextPollData->timeout = pollData->timeout;
 
-    for(i=0; i < pollData->fds ;i++)
+    for(i=0; i < pollData->fds ; i++)
     {
-        SocketContext[i] = FindAndRefSocketContext(pollData->fdArray[i].fd ,lpErrno);
+        SocketContext[i] = FindAndRefSocketContext(pollData->fdArray[i].fd,lpErrno);
         if (NULL == SocketContext[i])
         {
             // Unknown handle -- could belong to a BSP so pass it down unmodified
             dbgprint( "ExtWSAPoll: FindAndRefSocket failed for handle 0x%p\n",
-                    pollData->fdArray[i].fd);
+                      pollData->fdArray[i].fd);
             nextPollData->fdArray[i].fd = pollData->fdArray[i].fd;
         }
         else
@@ -1030,18 +1030,18 @@ ExtWSAPoll(
     // Handles have been translated so pass the call to the lower provider
     //
     ret = nextSocketContext->Provider->NextProcTable.lpWSPIoctl(
-            nextSocketContext->ProviderSocket,
-            SIO_EXT_POLL,
-            nextPollData,
-            nextPollDataLength,
-            nextPollData,
-            nextPollDataLength,
-           &dwBytes,
-            NULL,
-            NULL,
-            lpThreadId,
-            lpErrno
-            );
+              nextSocketContext->ProviderSocket,
+              SIO_EXT_POLL,
+              nextPollData,
+              nextPollDataLength,
+              nextPollData,
+              nextPollDataLength,
+              &dwBytes,
+              NULL,
+              NULL,
+              lpThreadId,
+              lpErrno
+          );
 
     pollData->result = nextPollData->result;
 
@@ -1049,7 +1049,7 @@ ExtWSAPoll(
     {
         // On a successful call, map the return events back to the user supplied
         // poll structure
-        for(i=0; i < nextPollData->fds ;i++)
+        for(i=0; i < nextPollData->fds ; i++)
         {
             pollData->fdArray[i].revents = nextPollData->fdArray[i].revents;
         }
@@ -1057,9 +1057,10 @@ ExtWSAPoll(
 
 cleanup:
 
-    if (SocketContext) {
+    if (SocketContext)
+    {
 
-        for(i=0; i < pollData->fds ;i++) 
+        for(i=0; i < pollData->fds ; i++)
         {
             if (SocketContext[i] != NULL)
                 DerefSocketContext(SocketContext[i], lpErrno);

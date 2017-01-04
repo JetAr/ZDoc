@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -50,7 +50,7 @@ template<class Interface>
 inline void
 SafeRelease(
     Interface **ppInterfaceToRelease
-    )
+)
 {
     if (*ppInterfaceToRelease != NULL)
     {
@@ -65,7 +65,7 @@ inline void
 SafeReplace(
     DestInterface **ppDestInterface,
     SourceInterace *pSourceInterface
-    )
+)
 {
     if (*ppDestInterface != NULL)
     {
@@ -137,32 +137,32 @@ private:
 
     void OnChar(
         SHORT vkey
-        );
+    );
 
     HRESULT CreateD3DDevice(
         IDXGIAdapter *pAdapter,
         D3D10_DRIVER_TYPE DriverType,
         UINT Flags,
         ID3D10Device1 **ppDevice
-        );
+    );
 
     HRESULT GenerateTextOutline(
         bool includeCursor,
         ID2D1Geometry **ppGeometry
-        );
+    );
 
     static LRESULT CALLBACK WndProc(
         HWND hWnd,
         UINT message,
         WPARAM wParam,
         LPARAM lParam
-        );
+    );
 
     HRESULT LoadResourceShader(
         ID3D10Device *pDevice,
         PCWSTR pszResource,
         ID3D10Effect **ppEffect
-        );
+    );
 
     HRESULT UpdateTextGeometry();
 

@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -113,7 +113,7 @@ public:
 
         // Create the ink collector
         hr = CoCreateInstance(CLSID_InkCollector, NULL, CLSCTX_ALL,
-            IID_IInkCollector, (void **) &m_pInkCollector);
+                              IID_IInkCollector, (void **) &m_pInkCollector);
 
         if (FAILED(hr))
         {

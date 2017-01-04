@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -6,14 +6,14 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 
 /*
-   
+
 
     Server Profiling Routines
 
     FILE: Prof.cpp
-    
+
     PURPOSE: Routines for profiling server system services.
-    
+
     FUNCTIONS:
         ProfOpenLog - Opens the profile log file and prepares to
     take timings.
@@ -55,10 +55,12 @@ UINT nProfLogSize = 0;
 
 CRITICAL_SECTION ProfCriticalSection;
 
-VOID ProfOpenLog(LPTSTR LogFileName) {
+VOID ProfOpenLog(LPTSTR LogFileName)
+{
 
     // Init the critsec.
-    if (InitializeCriticalSectionAndSpinCount(&ProfCriticalSection, 0) == 0) {
+    if (InitializeCriticalSectionAndSpinCount(&ProfCriticalSection, 0) == 0)
+    {
         AddToMessageLogProcFailure(TEXT("ProfOpenLog: InitializeCriticalSectionAndSpinCount"), GetLastError());
         return;
     }
@@ -70,41 +72,47 @@ VOID ProfOpenLog(LPTSTR LogFileName) {
                                NULL,
                                CREATE_ALWAYS,
                                FILE_ATTRIBUTE_NORMAL,
-                               NULL)) == INVALID_HANDLE_VALUE) {
+                               NULL)) == INVALID_HANDLE_VALUE)
+    {
         AddToMessageLogProcFailure(TEXT("ProfOpenLog: CreateFile"), GetLastError());
         return;
     }
 
     // Get the current time.
-    if (QueryPerformanceCounter(&lpStartTime) == FALSE) {
+    if (QueryPerformanceCounter(&lpStartTime) == FALSE)
+    {
         AddToMessageLogProcFailure(TEXT("ProfOpenLog: QueryPerformanceCounter"), GetLastError());
-        return;        
+        return;
     }
 
     // Get the frequency.
-    if (QueryPerformanceFrequency(&lpFrequency) == FALSE) {
+    if (QueryPerformanceFrequency(&lpFrequency) == FALSE)
+    {
         AddToMessageLogProcFailure(TEXT("ProfOpenLog: QueryPerformanceCounter"), GetLastError());
-        return;        
+        return;
     }
 }
 
-VOID ProfRecordTime(UINT id, LPTSTR msg) {
+VOID ProfRecordTime(UINT id, LPTSTR msg)
+{
     FLOAT dt;
 
     EnterCriticalSection(&ProfCriticalSection);
 
     // Write the entry only if there is enough space left in
     // the log.
-    if (nProfLogSize < PROF_LOG_MAX_SIZE - (MAX_ENTRY_SIZE_NOMSG + _tcslen(msg))) {
-        if (QueryPerformanceCounter(&lpCurrentTime) == FALSE) {
+    if (nProfLogSize < PROF_LOG_MAX_SIZE - (MAX_ENTRY_SIZE_NOMSG + _tcslen(msg)))
+    {
+        if (QueryPerformanceCounter(&lpCurrentTime) == FALSE)
+        {
             AddToMessageLogProcFailure(TEXT("ProfRecordTime: QueryPerformanceCounter"), GetLastError());
             LeaveCriticalSection(&ProfCriticalSection);
             return;
         }
-        
+
         // Get the time stamp for the event.
         dt = (FLOAT)(lpCurrentTime.QuadPart - lpStartTime.QuadPart)/(FLOAT)(lpFrequency.QuadPart);
-        
+
         // Append the entry to the log.
         nProfLogSize+=_stprintf_s(&PROF_LOG[nProfLogSize], nProfLogSize, TEXT("%d %s %f\n"), id, msg, dt);
     }
@@ -112,7 +120,8 @@ VOID ProfRecordTime(UINT id, LPTSTR msg) {
     LeaveCriticalSection(&ProfCriticalSection);
 }
 
-VOID ProfCloseLog(VOID) {
+VOID ProfCloseLog(VOID)
+{
     ULONG cbWritten;
     DWORD status;
 
@@ -130,14 +139,16 @@ VOID ProfCloseLog(VOID) {
                   (LPVOID)PROF_LOG,
                   nProfLogSize*sizeof(TCHAR),
                   &cbWritten,
-                  NULL)) {
+                  NULL))
+    {
 
         AddToMessageLogProcFailure(TEXT("ProfCloseLog: WriteFile"), GetLastError());
         return;
     }
 
     // Close the profile log.
-    if (hProfLog != NULL && hProfLog != INVALID_HANDLE_VALUE) {
+    if (hProfLog != NULL && hProfLog != INVALID_HANDLE_VALUE)
+    {
         status = CloseHandle(hProfLog);
         ASSERT(status);
     }

@@ -1,4 +1,4 @@
-//-----------------------------------------------------------------------------
+﻿//-----------------------------------------------------------------------------
 // Microsoft OLE DB RowsetViewer
 // Copyright (C) 1994 - 1999 By Microsoft Corporation.
 //
@@ -34,16 +34,16 @@ extern CComPtr<IDataConvert>	g_spDataConvert;
 //////////////////////////////////////////////////////////////////////////////
 enum CONV_FLAGS
 {
-	CONV_NONE			= 0x00000000,
-	CONV_VARBOOL		= 0x00000001,
-	CONV_ALPHABOOL		= 0x00000002,
-	CONV_HEX			= 0x00000004,
-	CONV_OCTAL			= 0x00000008,
-	CONV_DECIMAL		= 0x00000010,
-	CONV_BINARY			= 0x00000020,
+    CONV_NONE			= 0x00000000,
+    CONV_VARBOOL		= 0x00000001,
+    CONV_ALPHABOOL		= 0x00000002,
+    CONV_HEX			= 0x00000004,
+    CONV_OCTAL			= 0x00000008,
+    CONV_DECIMAL		= 0x00000010,
+    CONV_BINARY			= 0x00000020,
 
-	CONV_TYPENAME		= 0x00000100,
-	CONV_MSDADC_ONLY	= 0x00001000
+    CONV_TYPENAME		= 0x00000100,
+    CONV_MSDADC_ONLY	= 0x00001000
 };
 
 
@@ -121,16 +121,16 @@ const BOOL UNHANDLED_MSG = FALSE;
 #define CHECK_MEMORY(p)				{ if(!(p)) { DisplayAllErrors(hr = E_OUTOFMEMORY, WIDESTRING(__FILE__), __LINE__); goto CLEANUP; }			}
 #define SAFE_ALLOC(p, type, cb)		{ DISP_FILE_LINE; (p) = (type*)CoTaskMemAlloc(ULONG((cb)*sizeof(type))); CHECK_MEMORY(p);					}
 #define SAFE_REALLOC(p, type, cb)	{ DISP_FILE_LINE; (p) = (type*)CoTaskMemRealloc((type*)p, ULONG((cb)*sizeof(type))); CHECK_MEMORY(p);		}
-#define SAFE_BSTRALLOC(p, bstr)		{ (p) = SysAllocString(bstr); CHECK_MEMORY(p);																}		
+#define SAFE_BSTRALLOC(p, bstr)		{ (p) = SysAllocString(bstr); CHECK_MEMORY(p);																}
 
 #define SAFE_FREE(p)				if(p) { CoTaskMemFree((void*)p); (p) = NULL;	}
 #define SAFE_BSTRFREE(p)			if(p) { SysFreeString(p); (p) = NULL;			}
 
 #define SAFE_ADDREF(p)				if(p) { (p)->AddRef();							}
-#define SAFE_RELEASE(p)				if(p) { (p)->Release(); (p) = NULL;				}  
+#define SAFE_RELEASE(p)				if(p) { (p)->Release(); (p) = NULL;				}
 #define SAFE_DELETE(p)				if(p) { delete p; p = NULL;						}
 
-																									
+
 //Error Checking
 #define TEST(hr)					{ (hr);										}
 #define TESTC(hr)					{ if(FAILED(hr)) goto CLEANUP;				}
@@ -160,7 +160,7 @@ const BOOL UNHANDLED_MSG = FALSE;
 #define MAX_OPENROWS			 256
 
 //POINTER_DISPLAYSIZE = 0x00000000 = (1 Byte = 2 Asci Chars + "0x" + NULL Terminator)
-#define POINTER_DISPLAYSIZE		(sizeof(INT_PTR)*2+2+1)		
+#define POINTER_DISPLAYSIZE		(sizeof(INT_PTR)*2+2+1)
 
 //Displays values like VALUE as   VALUE , L"VALUE"
 #define VALUE_WCHAR(value)		L#value, value
@@ -175,7 +175,7 @@ const BOOL UNHANDLED_MSG = FALSE;
 
 
 ///////////////////////////////////////////////////////////////////
-// Accessor / Binding 
+// Accessor / Binding
 //
 ///////////////////////////////////////////////////////////////////
 // Constant combination of two DBTYPEs
@@ -234,7 +234,7 @@ HRESULT			GetDBTypeMaxSize(DBTYPE wType, DBLENGTH* pulMaxSize = NULL, BYTE* pbPr
 
 WCHAR*			GetVariantTypeName(DBTYPE wType);
 DBTYPE			GetVariantType(WCHAR* pwszName);
-			  
+
 WCHAR*			GetColName(const DBCOLUMNINFO* pColInfo);
 DBLENGTH		GetMaxDisplaySize(DBTYPE wBindingType, DBTYPE wBackendType, DBLENGTH ulColumnSize, DBLENGTH ulMaxVarSize);
 
@@ -279,20 +279,20 @@ HRESULT		PostProcessString(WCHAR* pwsz, DBLENGTH ulMaxSize, DWORD dwFlags);
 //Conversions
 HRESULT DataConvert
 (
-	DBSTATUS		 dbSrcStatus,		// @parm IN | source data status
-	DBLENGTH		 cbSrcLength,		// @parm IN | size of source data
-	DBLENGTH		 cbSrcMaxLength,	// @parm IN | max size of input buffer
-	DBTYPE			 wSrcType,			// @parm IN | type of source data
-	void*			 pSrcValue,			// @parm IN | ptr to source data
-	BYTE			 bPrecision,		// @parm IN | precision to use for dst
-	BYTE			 bScale,			// @parm IN | scale to use for dst
+    DBSTATUS		 dbSrcStatus,		// @parm IN | source data status
+    DBLENGTH		 cbSrcLength,		// @parm IN | size of source data
+    DBLENGTH		 cbSrcMaxLength,	// @parm IN | max size of input buffer
+    DBTYPE			 wSrcType,			// @parm IN | type of source data
+    void*			 pSrcValue,			// @parm IN | ptr to source data
+    BYTE			 bPrecision,		// @parm IN | precision to use for dst
+    BYTE			 bScale,			// @parm IN | scale to use for dst
 
-	DBTYPE			 wDstType,			// @parm IN | type of output data
-	DBSTATUS*		 pdbDstStatus,		// @parm OUT | ptr to output data status
-	DBLENGTH*		 pcbDstLength,		// @parm OUT | ptr to size of output data
-	void*			 pDstValue,			// @parm OUT | ptr to output data
-	DBLENGTH		 cbDstMaxLength,	// @parm IN | max size of output buffer
-	DWORD			 dwConvFlags		// @parm IN | Conversion flags
+    DBTYPE			 wDstType,			// @parm IN | type of output data
+    DBSTATUS*		 pdbDstStatus,		// @parm OUT | ptr to output data status
+    DBLENGTH*		 pcbDstLength,		// @parm OUT | ptr to size of output data
+    void*			 pDstValue,			// @parm OUT | ptr to output data
+    DBLENGTH		 cbDstMaxLength,	// @parm IN | max size of output buffer
+    DWORD			 dwConvFlags		// @parm IN | Conversion flags
 );
 
 
@@ -304,17 +304,17 @@ HRESULT DataConvert
 class CVariant : public tagVARIANT
 {
 public:
-	//constructors
-	CVariant();
-	~CVariant();
+    //constructors
+    CVariant();
+    ~CVariant();
 
-	HRESULT Init();
-	HRESULT Clear();
-	HRESULT Attach(VARIANT* pSrc);
-	HRESULT Detach(VARIANT* pDest);
+    HRESULT Init();
+    HRESULT Clear();
+    HRESULT Attach(VARIANT* pSrc);
+    HRESULT Detach(VARIANT* pDest);
 
-	HRESULT Copy(VARIANT* pSrc);
-	HRESULT ChangeType(VARTYPE vt, VARIANT* pSrc = NULL);
+    HRESULT Copy(VARIANT* pSrc);
+    HRESULT ChangeType(VARTYPE vt, VARIANT* pSrc = NULL);
 
 protected:
 };
@@ -391,7 +391,7 @@ HRESULT		SetRegEntry(HKEY hRootKey, WCHAR* pwszKeyName, WCHAR* pwszValueName, vo
 
 HRESULT		DelRegEntry(HKEY hRootKey, WCHAR* pwszKeyName);
 HRESULT		DelRegEntry(HKEY hRootKey, WCHAR* pwszKeyName, BOOL fSubKeys);
-	
+
 HRESULT		CloseRegKey(HKEY hKey);
 
 
@@ -431,16 +431,16 @@ void InternalTraceFmt(LPCWSTR pwszFmt, ...);
 ///////////////////////////////////////////////////////////////
 
 //General Status
-extern WCHAR wsz_SUCCESS[];				
-extern WCHAR wsz_WARNING[];				
+extern WCHAR wsz_SUCCESS[];
+extern WCHAR wsz_WARNING[];
 extern WCHAR wsz_INFO[];
 
-extern WCHAR wsz_ERROR[];				
+extern WCHAR wsz_ERROR[];
 extern WCHAR wsz_EXCEPTION[];
-extern WCHAR wsz_ERRORINFO[];			
-								 
+extern WCHAR wsz_ERRORINFO[];
+
 //General String Values
-extern WCHAR wsz_INVALID_VALUE_[];	
+extern WCHAR wsz_INVALID_VALUE_[];
 
 
 #endif //_COMMON_H_

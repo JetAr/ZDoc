@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -162,8 +162,8 @@ IDynamicRenderer* CreateDynamicRenderer(IRealTimeStylus* pRealTimeStylus)
     }
 
     hr = pRealTimeStylus->AddStylusSyncPlugin(
-        0,                      // insert plugin at position 0 in the sync plugin list
-        pSyncDynamicRenderer);  // plugin to be inserted - DynamicRenderer
+             0,                      // insert plugin at position 0 in the sync plugin list
+             pSyncDynamicRenderer);  // plugin to be inserted - DynamicRenderer
     if (FAILED(hr))
     {
         ASSERT(SUCCEEDED(hr) && L"CreateDynamicRenderer: failed to add DynamicRenderer to the RealTimeStylus plugins");
@@ -257,7 +257,7 @@ bool OnPaintHandler(IDynamicRenderer* pDynamicRenderer)
     {
         ASSERT(SUCCEEDED(hr) && L"OnPaintHandler: failed to refresh DynamicRenderer");
         return false;
-    }    
+    }
 
     return true;
 }
@@ -307,7 +307,7 @@ class CSyncEventHandlerRTS : public IStylusSyncPlugin
     CSyncEventHandlerRTS();
     virtual ~CSyncEventHandlerRTS();
 
-    public:
+public:
     // Factory method
     static IStylusSyncPlugin* Create(IRealTimeStylus* pRealTimeStylus);
 
@@ -320,19 +320,58 @@ class CSyncEventHandlerRTS : public IStylusSyncPlugin
     STDMETHOD(DataInterest)(RealTimeStylusDataInterest* pEventInterest);
 
     // IStylusSyncPlugin methods with trivial inline implementation, they all return S_OK
-    STDMETHOD(RealTimeStylusEnabled)(IRealTimeStylus*, ULONG, const TABLET_CONTEXT_ID*) { return S_OK; }
-    STDMETHOD(RealTimeStylusDisabled)(IRealTimeStylus*, ULONG, const TABLET_CONTEXT_ID*) { return S_OK; }
-    STDMETHOD(StylusInRange)(IRealTimeStylus*, TABLET_CONTEXT_ID, STYLUS_ID) { return S_OK; }
-    STDMETHOD(StylusOutOfRange)(IRealTimeStylus*, TABLET_CONTEXT_ID, STYLUS_ID) { return S_OK; }
-    STDMETHOD(InAirPackets)(IRealTimeStylus*, const StylusInfo*, ULONG, ULONG, LONG*, ULONG*, LONG**) { return S_OK; }
-    STDMETHOD(StylusButtonUp)(IRealTimeStylus*, STYLUS_ID, const GUID*, POINT*) { return S_OK; }
-    STDMETHOD(StylusButtonDown)(IRealTimeStylus*, STYLUS_ID, const GUID*, POINT*) { return S_OK; }
-    STDMETHOD(SystemEvent)(IRealTimeStylus*, TABLET_CONTEXT_ID, STYLUS_ID, SYSTEM_EVENT, SYSTEM_EVENT_DATA) { return S_OK; }
-    STDMETHOD(TabletAdded)(IRealTimeStylus*, IInkTablet*) { return S_OK; }
-    STDMETHOD(TabletRemoved)(IRealTimeStylus*, LONG) { return S_OK; }
-    STDMETHOD(CustomStylusDataAdded)(IRealTimeStylus*, const GUID*, ULONG, const BYTE*) { return S_OK; }
-    STDMETHOD(Error)(IRealTimeStylus*, IStylusPlugin*, RealTimeStylusDataInterest, HRESULT, LONG_PTR*) { return S_OK; }
-    STDMETHOD(UpdateMapping)(IRealTimeStylus*) { return S_OK; }
+    STDMETHOD(RealTimeStylusEnabled)(IRealTimeStylus*, ULONG, const TABLET_CONTEXT_ID*)
+    {
+        return S_OK;
+    }
+    STDMETHOD(RealTimeStylusDisabled)(IRealTimeStylus*, ULONG, const TABLET_CONTEXT_ID*)
+    {
+        return S_OK;
+    }
+    STDMETHOD(StylusInRange)(IRealTimeStylus*, TABLET_CONTEXT_ID, STYLUS_ID)
+    {
+        return S_OK;
+    }
+    STDMETHOD(StylusOutOfRange)(IRealTimeStylus*, TABLET_CONTEXT_ID, STYLUS_ID)
+    {
+        return S_OK;
+    }
+    STDMETHOD(InAirPackets)(IRealTimeStylus*, const StylusInfo*, ULONG, ULONG, LONG*, ULONG*, LONG**)
+    {
+        return S_OK;
+    }
+    STDMETHOD(StylusButtonUp)(IRealTimeStylus*, STYLUS_ID, const GUID*, POINT*)
+    {
+        return S_OK;
+    }
+    STDMETHOD(StylusButtonDown)(IRealTimeStylus*, STYLUS_ID, const GUID*, POINT*)
+    {
+        return S_OK;
+    }
+    STDMETHOD(SystemEvent)(IRealTimeStylus*, TABLET_CONTEXT_ID, STYLUS_ID, SYSTEM_EVENT, SYSTEM_EVENT_DATA)
+    {
+        return S_OK;
+    }
+    STDMETHOD(TabletAdded)(IRealTimeStylus*, IInkTablet*)
+    {
+        return S_OK;
+    }
+    STDMETHOD(TabletRemoved)(IRealTimeStylus*, LONG)
+    {
+        return S_OK;
+    }
+    STDMETHOD(CustomStylusDataAdded)(IRealTimeStylus*, const GUID*, ULONG, const BYTE*)
+    {
+        return S_OK;
+    }
+    STDMETHOD(Error)(IRealTimeStylus*, IStylusPlugin*, RealTimeStylusDataInterest, HRESULT, LONG_PTR*)
+    {
+        return S_OK;
+    }
+    STDMETHOD(UpdateMapping)(IRealTimeStylus*)
+    {
+        return S_OK;
+    }
 
     // IUnknown methods
     STDMETHOD_(ULONG,AddRef)();
@@ -347,9 +386,9 @@ private:
 
 // CSyncEventHandlerRTS constructor.
 CSyncEventHandlerRTS::CSyncEventHandlerRTS()
-:   m_cRefCount(1),
-    m_punkFTMarshaller(NULL),
-    m_nContacts(0)
+    :   m_cRefCount(1),
+        m_punkFTMarshaller(NULL),
+        m_nContacts(0)
 {
 }
 
@@ -396,8 +435,8 @@ IStylusSyncPlugin* CSyncEventHandlerRTS::Create(IRealTimeStylus* pRealTimeStylus
 
     // Add CSyncEventHandlerRTS object to the list of synchronous plugins in the RTS object.
     hr = pRealTimeStylus->AddStylusSyncPlugin(
-        0,                      // insert plugin at position 0 in the sync plugin list
-        pSyncEventHandlerRTS);  // plugin to be inserted - event handler CSyncEventHandlerRTS
+             0,                      // insert plugin at position 0 in the sync plugin list
+             pSyncEventHandlerRTS);  // plugin to be inserted - event handler CSyncEventHandlerRTS
     if (FAILED(hr))
     {
         ASSERT(SUCCEEDED(hr) && L"CEventHandlerRTS::Create: failed to add CSyncEventHandlerRTS to the RealTimeStylus plugins");
@@ -431,7 +470,7 @@ HRESULT CSyncEventHandlerRTS::StylusDown(
     HRESULT hr = g_pDynamicRenderer->get_DrawingAttributes(&pDrawingAttributesDynamicRenderer);
     if (FAILED(hr))
     {
-        ASSERT(SUCCEEDED(hr) && L"CSyncEventHandlerRTS::StylusDown: failed to get RTS's drawing attributes");        
+        ASSERT(SUCCEEDED(hr) && L"CSyncEventHandlerRTS::StylusDown: failed to get RTS's drawing attributes");
         return hr;
     }
 
@@ -498,7 +537,7 @@ HRESULT CSyncEventHandlerRTS::Packets(
     ULONG* /* pcInOutPkts */,
     LONG** /* ppInOutPkts */)
 {
-    return S_OK;    
+    return S_OK;
 }
 
 // Defines which handlers are called by the framework. We set the flags for pen-down, pen-up and pen-move.
@@ -575,9 +614,9 @@ LRESULT CALLBACK    WndProc(HWND, UINT, WPARAM, LPARAM);
 //      lpCmdLine       command line for the application, null-terminated string
 //      nCmdShow        how to show the window
 int APIENTRY wWinMain(HINSTANCE hInstance,
-                     HINSTANCE /* hPrevInstance */,
-                     LPWSTR    /* lpCmdLine */,
-                     int       nCmdShow)
+                      HINSTANCE /* hPrevInstance */,
+                      LPWSTR    /* lpCmdLine */,
+                      int       nCmdShow)
 {
     MSG msg;
 
@@ -667,7 +706,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 
     // Create the application window
     hWnd = CreateWindow(g_wszWindowClass, g_wszTitle, WS_OVERLAPPEDWINDOW,
-    CW_USEDEFAULT, 0, CW_USEDEFAULT, 0, NULL, NULL, hInstance, NULL);
+                        CW_USEDEFAULT, 0, CW_USEDEFAULT, 0, NULL, NULL, hInstance, NULL);
 
     if (!hWnd)
     {
@@ -746,42 +785,42 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
     switch (message)
     {
-        case WM_COMMAND:
-            wmId = LOWORD(wParam);
-            // Parse the menu selections:
-            switch (wmId)
-            {
-            case IDM_EXIT:
-                DestroyWindow(hWnd);
-                break;
-            default:
-                return DefWindowProc(hWnd, message, wParam, lParam);
-            }
+    case WM_COMMAND:
+        wmId = LOWORD(wParam);
+        // Parse the menu selections:
+        switch (wmId)
+        {
+        case IDM_EXIT:
+            DestroyWindow(hWnd);
             break;
-
-        case WM_PAINT:
-            hdc = BeginPaint(hWnd, &ps);
-            OnPaintHandler(g_pDynamicRenderer);
-            UNREFERENCED_PARAMETER(hdc);
-            EndPaint(hWnd, &ps);
-            break;
-
-        case WM_DESTROY:
-            // Release COM objects before CoUninitialize
-            g_pDynamicRenderer->Release();
-            g_pDynamicRenderer = NULL;
-
-            g_pRealTimeStylus->Release();
-            g_pRealTimeStylus = NULL;
-
-            g_pSyncEventHandlerRTS->Release();
-            g_pSyncEventHandlerRTS = NULL;
-
-            PostQuitMessage(0);
-            break;
-
         default:
             return DefWindowProc(hWnd, message, wParam, lParam);
+        }
+        break;
+
+    case WM_PAINT:
+        hdc = BeginPaint(hWnd, &ps);
+        OnPaintHandler(g_pDynamicRenderer);
+        UNREFERENCED_PARAMETER(hdc);
+        EndPaint(hWnd, &ps);
+        break;
+
+    case WM_DESTROY:
+        // Release COM objects before CoUninitialize
+        g_pDynamicRenderer->Release();
+        g_pDynamicRenderer = NULL;
+
+        g_pRealTimeStylus->Release();
+        g_pRealTimeStylus = NULL;
+
+        g_pSyncEventHandlerRTS->Release();
+        g_pSyncEventHandlerRTS = NULL;
+
+        PostQuitMessage(0);
+        break;
+
+    default:
+        return DefWindowProc(hWnd, message, wParam, lParam);
     }
     return 0;
 }

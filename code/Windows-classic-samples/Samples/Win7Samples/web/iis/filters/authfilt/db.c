@@ -1,4 +1,4 @@
-/*
+﻿/*
 Copyright (c) 1996-2002  Microsoft Corporation
 
 Module Name:
@@ -49,50 +49,50 @@ CHAR *pszUserFile = NULL;
 
 BOOL ValidateUser(IN OUT CHAR *pszUserName, IN OUT CHAR *pszPassword, OUT BOOL *pfValid)
 {
-	BOOL fFound;
-	CHAR achPassword[SF_MAX_PASSWORD];
-	CHAR achNTUser[SF_MAX_USERNAME];
-	CHAR achNTUserPassword[SF_MAX_PASSWORD];
+    BOOL fFound;
+    CHAR achPassword[SF_MAX_PASSWORD];
+    CHAR achNTUser[SF_MAX_USERNAME];
+    CHAR achNTUserPassword[SF_MAX_PASSWORD];
 
-  /*  Assume we're going to fail validation */
+    /*  Assume we're going to fail validation */
 
-  *pfValid = FALSE;
+    *pfValid = FALSE;
 
-  /*  Lookup the user in the cache, if that fails, get the user from the */
-  /*  database and add the retrieved user to the cache */
+    /*  Lookup the user in the cache, if that fails, get the user from the */
+    /*  database and add the retrieved user to the cache */
 
-	if (!LookupUserInCache(pszUserName, &fFound, achPassword, achNTUser, achNTUserPassword))
-		return FALSE;
-	
-  if (!fFound)
-  {
-		if (!LookupUserInDb(pszUserName, &fFound, achPassword, achNTUser, achNTUserPassword))
-			return FALSE;
-      
-		if (fFound)
-			AddUserToCache(pszUserName, achPassword, achNTUser, achNTUserPassword);
-	}
+    if (!LookupUserInCache(pszUserName, &fFound, achPassword, achNTUser, achNTUserPassword))
+        return FALSE;
 
-	if (!fFound)
-	{
-		DbgWrite((DEST, "[ValidateUser] Failed to find user %s\n", pszUserName));
+    if (!fFound)
+    {
+        if (!LookupUserInDb(pszUserName, &fFound, achPassword, achNTUser, achNTUserPassword))
+            return FALSE;
 
-		return TRUE;
-	}
+        if (fFound)
+            AddUserToCache(pszUserName, achPassword, achNTUser, achNTUserPassword);
+    }
 
-	/* Do the passwords match? */
-  
-	if (!strcmp(pszPassword, achPassword))
-	{
-		/* We have a match, map to the NT user and password */
-    
-		strcpy_s(pszUserName, sizeof(pszUserName), achNTUser);
-		strcpy_s(pszPassword, sizeof(pszPassword), achNTUserPassword);
+    if (!fFound)
+    {
+        DbgWrite((DEST, "[ValidateUser] Failed to find user %s\n", pszUserName));
 
-		*pfValid = TRUE;
-	}
+        return TRUE;
+    }
 
-	return TRUE;
+    /* Do the passwords match? */
+
+    if (!strcmp(pszPassword, achPassword))
+    {
+        /* We have a match, map to the NT user and password */
+
+        strcpy_s(pszUserName, sizeof(pszUserName), achNTUser);
+        strcpy_s(pszPassword, sizeof(pszPassword), achNTUserPassword);
+
+        *pfValid = TRUE;
+    }
+
+    return TRUE;
 }
 
 /*
@@ -108,56 +108,56 @@ BOOL ValidateUser(IN OUT CHAR *pszUserName, IN OUT CHAR *pszPassword, OUT BOOL *
 
 BOOL InitializeUserDatabase(VOID)
 {
-	HANDLE hFile;
-	DWORD  cbFile;
-	DWORD  cbRead;
+    HANDLE hFile;
+    DWORD  cbFile;
+    DWORD  cbRead;
 
-	/* Open and read the file.  The System account must have access to the file. */
-    
-	hFile = CreateFile(USER_LIST_FILE, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, 0, NULL);
+    /* Open and read the file.  The System account must have access to the file. */
 
-	if (hFile == INVALID_HANDLE_VALUE)
-	{
-		DbgWrite((DEST, "[InitializeUserDatabase] Error %d openning %s\n", GetLastError(), USER_LIST_FILE));
+    hFile = CreateFile(USER_LIST_FILE, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, 0, NULL);
 
-		return FALSE;
-	}
+    if (hFile == INVALID_HANDLE_VALUE)
+    {
+        DbgWrite((DEST, "[InitializeUserDatabase] Error %d openning %s\n", GetLastError(), USER_LIST_FILE));
 
-	cbFile = GetFileSize(hFile, NULL);
+        return FALSE;
+    }
 
-	if (cbFile == (DWORD) -1)
-	{
-		CloseHandle(hFile);
+    cbFile = GetFileSize(hFile, NULL);
 
-		return FALSE;
-	}
+    if (cbFile == (DWORD) -1)
+    {
+        CloseHandle(hFile);
 
-	pszUserFile = LocalAlloc(LPTR, cbFile + 1);
+        return FALSE;
+    }
 
-	if (!pszUserFile)
-	{
-		SetLastError(ERROR_NOT_ENOUGH_MEMORY);
+    pszUserFile = LocalAlloc(LPTR, cbFile + 1);
 
-		CloseHandle(hFile);
-		
-		return FALSE;
-	}
+    if (!pszUserFile)
+    {
+        SetLastError(ERROR_NOT_ENOUGH_MEMORY);
 
-	if (!ReadFile(hFile, pszUserFile, cbFile, &cbRead, NULL))
-	{
-		CloseHandle(hFile);
-		LocalFree(pszUserFile);
+        CloseHandle(hFile);
 
-		return FALSE;
-	}
+        return FALSE;
+    }
 
-	CloseHandle( hFile );
+    if (!ReadFile(hFile, pszUserFile, cbFile, &cbRead, NULL))
+    {
+        CloseHandle(hFile);
+        LocalFree(pszUserFile);
 
-	/* Null terminate the file data */
+        return FALSE;
+    }
 
-	pszUserFile[cbRead] = '\0';
+    CloseHandle( hFile );
 
-	return TRUE;
+    /* Null terminate the file data */
+
+    pszUserFile[cbRead] = '\0';
+
+    return TRUE;
 }
 
 /*
@@ -184,106 +184,106 @@ BOOL InitializeUserDatabase(VOID)
 
 BOOL LookupUserInDb(IN CHAR *pszUser, OUT BOOL *pfFound, OUT CHAR *pszPassword, OUT CHAR *pszNTUser, OUT CHAR *pszNTUserPassword)
 {
-	CHAR *pch = pszUserFile;
-	CHAR *pchEnd;
-	DWORD cchUser = strlen(pszUser);
-	DWORD cch;
+    CHAR *pch = pszUserFile;
+    CHAR *pchEnd;
+    DWORD cchUser = strlen(pszUser);
+    DWORD cch;
 
-	*pfFound = FALSE;
+    *pfFound = FALSE;
 
-	/*
-	  Find the external username.  We're expecting one user per line in
-	  the form:
-	
-	      username:password, NTUser:NTUserPassword
-	*/
+    /*
+      Find the external username.  We're expecting one user per line in
+      the form:
 
-	while (pch && *pch)
-	{
-		while (ISWHITE(*pch))
-			pch++;
+          username:password, NTUser:NTUserPassword
+    */
 
-		if (toupper(*pch) == toupper(*pszUser) && !_strnicmp(pszUser, pch, cchUser) && pch[cchUser] == ':')
-		{
-			pch += cchUser + 1;
-			goto Found;
-		}
+    while (pch && *pch)
+    {
+        while (ISWHITE(*pch))
+            pch++;
 
-		pch = strchr(pch + 1, '\n');
-	}
+        if (toupper(*pch) == toupper(*pszUser) && !_strnicmp(pszUser, pch, cchUser) && pch[cchUser] == ':')
+        {
+            pch += cchUser + 1;
+            goto Found;
+        }
 
-	/* Not found */
+        pch = strchr(pch + 1, '\n');
+    }
 
-	return TRUE;
+    /* Not found */
+
+    return TRUE;
 
 Found:
 
-	/* Break out the external username */
+    /* Break out the external username */
 
-	if (!(pchEnd = strchr(pch, ',')))
-	{
-		SetLastError(ERROR_INVALID_PASSWORDNAME);
-		return FALSE;
-	}
+    if (!(pchEnd = strchr(pch, ',')))
+    {
+        SetLastError(ERROR_INVALID_PASSWORDNAME);
+        return FALSE;
+    }
 
-	cch = pchEnd - pch;
+    cch = pchEnd - pch;
 
-	if (cch + 1 > SF_MAX_PASSWORD)
-	{
-		SetLastError(ERROR_INVALID_PASSWORDNAME);
-		return FALSE;
-	}
+    if (cch + 1 > SF_MAX_PASSWORD)
+    {
+        SetLastError(ERROR_INVALID_PASSWORDNAME);
+        return FALSE;
+    }
 
-	memcpy(pszPassword, pch, cch);
-	pszPassword[cch] = '\0';
+    memcpy(pszPassword, pch, cch);
+    pszPassword[cch] = '\0';
 
-	pch = pchEnd + 1;
+    pch = pchEnd + 1;
 
-	/* Get the NT username from the file */
+    /* Get the NT username from the file */
 
-	while (ISWHITE(*pch))
-			pch++;
+    while (ISWHITE(*pch))
+        pch++;
 
-	if (!(pchEnd = strchr(pch, ':')))
-	{
-		SetLastError(ERROR_BAD_USERNAME);
-		return FALSE;
-	}
+    if (!(pchEnd = strchr(pch, ':')))
+    {
+        SetLastError(ERROR_BAD_USERNAME);
+        return FALSE;
+    }
 
-	cch = pchEnd - pch;
+    cch = pchEnd - pch;
 
-	if (cch + 1 > SF_MAX_USERNAME)
-	{
-		SetLastError(ERROR_BAD_USERNAME);
-		return FALSE;
-	}
+    if (cch + 1 > SF_MAX_USERNAME)
+    {
+        SetLastError(ERROR_BAD_USERNAME);
+        return FALSE;
+    }
 
-	memcpy(pszNTUser, pch, cch);
-	pszNTUser[cch] = '\0';
+    memcpy(pszNTUser, pch, cch);
+    pszNTUser[cch] = '\0';
 
-	pch = pchEnd + 1;
+    pch = pchEnd + 1;
 
-	/* Get the NT password from the file, look for a '\r' or '\n' */
+    /* Get the NT password from the file, look for a '\r' or '\n' */
 
-	pchEnd = pch;
+    pchEnd = pch;
 
-	while (*pchEnd && *pchEnd != '\r' && *pchEnd != '\n')
-		pchEnd++;
+    while (*pchEnd && *pchEnd != '\r' && *pchEnd != '\n')
+        pchEnd++;
 
-	cch = pchEnd - pch;
+    cch = pchEnd - pch;
 
-	if (cch + 1 > SF_MAX_PASSWORD)
-	{
-		SetLastError(ERROR_INVALID_PASSWORDNAME);
-		return FALSE;
-	}
+    if (cch + 1 > SF_MAX_PASSWORD)
+    {
+        SetLastError(ERROR_INVALID_PASSWORDNAME);
+        return FALSE;
+    }
 
-	memcpy(pszNTUserPassword, pch, cch);
-	pszNTUserPassword[cch] = '\0';
+    memcpy(pszNTUserPassword, pch, cch);
+    pszNTUserPassword[cch] = '\0';
 
-	*pfFound = TRUE;
+    *pfFound = TRUE;
 
-	return TRUE;
+    return TRUE;
 }
 
 /*
@@ -294,6 +294,6 @@ Found:
 
 VOID TerminateUserDatabase(VOID)
 {
-	if (pszUserFile)
-		LocalFree(pszUserFile);
+    if (pszUserFile)
+        LocalFree(pszUserFile);
 }

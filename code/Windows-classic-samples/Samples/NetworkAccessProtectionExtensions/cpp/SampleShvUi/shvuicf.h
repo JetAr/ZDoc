@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -19,58 +19,58 @@ extern long g_cObjRefCount;
 class SHVUIClassFactoryData
 {
 public:
-	const GUID m_pCLSID;
-	const char* m_registryName ;
-	const char* m_progID ;
-	const char* m_verIndProgID ;
- 	
-	//
-	// Out of process server support
-	//
+    const GUID m_pCLSID;
+    const char* m_registryName ;
+    const char* m_progID ;
+    const char* m_verIndProgID ;
 
-	// Pointer to running class factory for this component
-	IClassFactory* m_pIClassFactory ;
+    //
+    // Out of process server support
+    //
 
-	// Cookie to identify running object
-	DWORD m_register ;
+    // Pointer to running class factory for this component
+    IClassFactory* m_pIClassFactory ;
 
-	SHVUIClassFactoryData() :  
+    // Cookie to identify running object
+    DWORD m_register ;
+
+    SHVUIClassFactoryData() :
         m_pCLSID(CLSID_SDK_SHV_UI),
-        m_registryName("Reg Name") ,
+        m_registryName("Reg Name"),
         m_progID("Prog ID"),
         m_verIndProgID("Prog ID ver ind"),
         m_pIClassFactory(NULL),
         m_register(0)
-        {}
+    {}
 
 private:
-	const SHVUIClassFactoryData& operator=(const SHVUIClassFactoryData&);
+    const SHVUIClassFactoryData& operator=(const SHVUIClassFactoryData&);
 } ;
 
 
 // The class factory
 class ShvUIClassFactory: public IClassFactory
 {
-public:    
+public:
 
-    ShvUIClassFactory();    
+    ShvUIClassFactory();
     ~ShvUIClassFactory();
-		
+
     // IUnknown
-    STDMETHODIMP_(ULONG) AddRef(void);   
+    STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
     STDMETHODIMP QueryInterface(
-        _In_ const IID& riid, 
+        _In_ const IID& riid,
         _Out_ void** ppvObject);
-        
+
     // IClassFactory
-    STDMETHODIMP 
+    STDMETHODIMP
     CreateInstance(
-        _In_opt_ IUnknown *pUnkOuter, 
-        _In_ REFIID riid, 
+        _In_opt_ IUnknown *pUnkOuter,
+        _In_ REFIID riid,
         _Outptr_ void **ppvObject);
 
-    STDMETHODIMP 
+    STDMETHODIMP
     LockServer(
         __RPC__in BOOL fLock);
     // end IClassFactory
@@ -79,7 +79,7 @@ public:
 
     static void StopFactory();
 
-    static LONG s_cServerLocks ;   
+    static LONG s_cServerLocks ;
     static HMODULE s_hModule ;
 
 private:

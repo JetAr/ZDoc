@@ -1,7 +1,7 @@
-/******************************************************************************
+﻿/******************************************************************************
  * <copyright file="PluginContext.h" company="Microsoft">
  *     Copyright (c) Microsoft Corporation.  All rights reserved.
- * </copyright>                                                                
+ * </copyright>
  *****************************************************************************/
 
 #ifndef _PLUGINCONTEXT_H_
@@ -14,7 +14,7 @@
 class CCommandContext;
 
 /*------------------------------------------------------------------------
-Implements a class to handle shell operations such as 
+Implements a class to handle shell operations such as
 Command / Send / Receive / Signal operations targeted at Shell
   ------------------------------------------------------------------------*/
 class CShellContext
@@ -50,7 +50,7 @@ public:
 private:
 
     static VOID CALLBACK _ShellCancellationCallback(PVOID context,
-                                                    BOOLEAN TimerOrWaitFired);
+            BOOLEAN TimerOrWaitFired);
     VOID ShellCancellationCallback();
 
 
@@ -59,7 +59,7 @@ private:
 };
 
 /*------------------------------------------------------------------------
-Implements a class to handle command operations such as 
+Implements a class to handle command operations such as
 Send / Receive / Signal operations targeted at command (not Shell)
   ------------------------------------------------------------------------*/
 class CCommandContext
@@ -89,11 +89,11 @@ public:
 
 private:
     static VOID CALLBACK _CommandCancellationCallback(PVOID context,
-                                                      BOOLEAN TimerOrWaitFired);
+            BOOLEAN TimerOrWaitFired);
     VOID CommandCancellationCallback();
 
     static VOID CALLBACK _ReceiveCancellationCallback(PVOID context,
-                                                      BOOLEAN TimerOrWaitFired);
+            BOOLEAN TimerOrWaitFired);
     VOID ReceiveCancellationCallback();
 
     WSMAN_PLUGIN_REQUEST * commandPluginRequest;

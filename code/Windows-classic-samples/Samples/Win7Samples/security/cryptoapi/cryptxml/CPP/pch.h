@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -26,7 +26,7 @@
 /*****************************************************************************
   HrLoadFile
 
-    Load file into allocated (*ppbData). 
+    Load file into allocated (*ppbData).
     The caller must free the memory by LocalFree().
 *****************************************************************************/
 HRESULT
@@ -34,18 +34,18 @@ HrLoadFile(
     LPCWSTR     wszFileName,
     BYTE        **ppbData,
     DWORD       *pcbData
-    );
+);
 
 /****************************************************************************
  HrSampleResolveExternalXmlReference
 
 ****************************************************************************/
-HRESULT 
-WINAPI 
+HRESULT
+WINAPI
 HrSampleResolveExternalXmlReference(
     LPCWSTR                 wszUri,
     CRYPT_XML_DATA_PROVIDER *pProviderOut
-    );
+);
 
 /*****************************************************************************
  HrVerify
@@ -54,7 +54,7 @@ HrSampleResolveExternalXmlReference(
 HRESULT
 HrVerify(
     LPCWSTR         wszFileIn
-    );
+);
 
 
 /*****************************************************************************
@@ -83,4 +83,4 @@ HrSign(
     const SIGN_PARA *pPara,
     ULONG           argc,
     LPWSTR          argv[]
-    );
+);

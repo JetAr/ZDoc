@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -14,7 +14,7 @@
 // Smart pointer to singleton instance of the font file loader.
 IDWriteFontFileLoader* ResourceFontFileLoader::instance_(
     new(std::nothrow) ResourceFontFileLoader()
-    );
+);
 
 // QueryInterface
 HRESULT STDMETHODCALLTYPE ResourceFontFileLoader::QueryInterface(REFIID iid, void** ppvObject)
@@ -63,7 +63,7 @@ HRESULT STDMETHODCALLTYPE ResourceFontFileLoader::CreateStreamFromKey(
     void const* fontFileReferenceKey,       // [fontFileReferenceKeySize] in bytes
     UINT32 fontFileReferenceKeySize,
     OUT IDWriteFontFileStream** fontFileStream
-    )
+)
 {
     *fontFileStream = NULL;
 

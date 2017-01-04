@@ -1,4 +1,4 @@
-
+﻿
 #pragma once
 #ifndef _IMAPI2TEST_COMMON_
 #define _IMAPI2TEST_COMMON_
@@ -31,7 +31,7 @@
 
 // shlwapip.h
 #ifdef OFFSETOFCLASS
-    #undef OFFSETOFCLASS
+#undef OFFSETOFCLASS
 #endif
 //***   OFFSETOFCLASS -- (Copied from ATL, minor mods)
 #define OFFSETOFCLASS(_IBase, _CDerived) \
@@ -87,7 +87,8 @@ __inline void FreeSysStringAndNull(BSTR &t)
 #define FORMAT_TRACKATONCE 2
 #define FORMAT_RAWCD 3
 
-typedef struct _PROGRAM_OPTIONS {
+typedef struct _PROGRAM_OPTIONS
+{
 
     // defaults should all be logical if all are set to FALSE / NULL / 0
 
@@ -131,9 +132,9 @@ void PrintHR(HRESULT hr);
 // from imapi2sample.cpp
 HRESULT GetDiscRecorder(__in ULONG index, __out IDiscRecorder2 ** recorder);
 void CalcElapsedTime(
-   SYSTEMTIME * StartTime,
-   SYSTEMTIME * FinishTime,
-   SYSTEMTIME * ElapsedTime);
+    SYSTEMTIME * StartTime,
+    SYSTEMTIME * FinishTime,
+    SYSTEMTIME * ElapsedTime);
 
 // from erase.cpp
 HRESULT EraseMedia(ULONG index, BOOL full);

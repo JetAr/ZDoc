@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -8,9 +8,9 @@
 //    WcnApiHlpr.h
 //
 // Abstract:
-//	This file includes all the necessary declarations for implementing the 
+//	This file includes all the necessary declarations for implementing the
 //  IFunctionDiscoveryNotification interface
-// 
+//
 
 #pragma once
 
@@ -46,11 +46,11 @@ class CWcnFdDiscoveryNotify:
     public CComObjectRootEx<CComObjectThreadModel>,
     public IFunctionDiscoveryNotification
 {
-   public:
+public:
 
-      BEGIN_COM_MAP(CWcnFdDiscoveryNotify)
-         COM_INTERFACE_ENTRY(IFunctionDiscoveryNotification)
-      END_COM_MAP()
+    BEGIN_COM_MAP(CWcnFdDiscoveryNotify)
+    COM_INTERFACE_ENTRY(IFunctionDiscoveryNotification)
+    END_COM_MAP()
 
     CWcnFdDiscoveryNotify();
     ~CWcnFdDiscoveryNotify();
@@ -59,38 +59,38 @@ class CWcnFdDiscoveryNotify:
     HRESULT WcnFDSearchStart(__in UUID* pUUID, __in PWSTR pSearchSSID);
     BOOL WaitForAnyDiscoveryEvent(DWORD Timeout_ms);
 
-	BOOL GetWCNDeviceInstance( __deref_out_opt IWCNDevice** ppWcnDevice);
+    BOOL GetWCNDeviceInstance( __deref_out_opt IWCNDevice** ppWcnDevice);
 
-	//
-	// IFunctionDiscoveryNotification
-	//
+    //
+    // IFunctionDiscoveryNotification
+    //
 
     HRESULT STDMETHODCALLTYPE OnUpdate(
-            __in      QueryUpdateAction          enumQueryUpdateAction,
-            __in      FDQUERYCONTEXT             fdqcQueryContext,
-            __in      IFunctionInstance         *pIFunctionInstance);
+        __in      QueryUpdateAction          enumQueryUpdateAction,
+        __in      FDQUERYCONTEXT             fdqcQueryContext,
+        __in      IFunctionInstance         *pIFunctionInstance);
 
     HRESULT STDMETHODCALLTYPE OnError(
-            __in      HRESULT                    hrFD,
-            __in      FDQUERYCONTEXT             fdqcQueryContext,
-            __in      const WCHAR               *pszProvider);
+        __in      HRESULT                    hrFD,
+        __in      FDQUERYCONTEXT             fdqcQueryContext,
+        __in      const WCHAR               *pszProvider);
 
     HRESULT STDMETHODCALLTYPE OnEvent(
-            __in      DWORD                      dwEventID,
-            __in      FDQUERYCONTEXT             fdqcQueryContext,
-            __in      const WCHAR               *pszProvider);
+        __in      DWORD                      dwEventID,
+        __in      FDQUERYCONTEXT             fdqcQueryContext,
+        __in      const WCHAR               *pszProvider);
 
-    private:
+private:
 
 
-	   CComPtr<IFunctionDiscovery> m_pFunctionDiscovery;
-       CComPtr<IFunctionInstanceCollectionQuery> m_pFunctionInstanceCollectionQuery;
-	   CComPtr<IFunctionInstanceCollection> m_pFiCollection;
-       CComPtr<IFunctionInstance> m_pFunctionInstance;  
+    CComPtr<IFunctionDiscovery> m_pFunctionDiscovery;
+    CComPtr<IFunctionInstanceCollectionQuery> m_pFunctionInstanceCollectionQuery;
+    CComPtr<IFunctionInstanceCollection> m_pFiCollection;
+    CComPtr<IFunctionInstance> m_pFunctionInstance;
 
-	   WCHAR wszUUID[64];
-	   WCHAR wszSSIDInHex[2 * DOT11_SSID_MAX_LENGTH + 1]; // 2 * DOT11_MAX_SSID_LENGTH + null terminator
-	   BOOL bUseSSID;
-       HANDLE anySearchEvent;       // set on _any_ event (device added, removed, etc)
+    WCHAR wszUUID[64];
+    WCHAR wszSSIDInHex[2 * DOT11_SSID_MAX_LENGTH + 1]; // 2 * DOT11_MAX_SSID_LENGTH + null terminator
+    BOOL bUseSSID;
+    HANDLE anySearchEvent;       // set on _any_ event (device added, removed, etc)
 };
 

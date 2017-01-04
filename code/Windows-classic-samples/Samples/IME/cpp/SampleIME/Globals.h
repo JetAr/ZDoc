@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -15,7 +15,8 @@ void DllAddRef();
 void DllRelease();
 
 
-namespace Global {
+namespace Global
+{
 //---------------------------------------------------------------------
 // inline
 //---------------------------------------------------------------------
@@ -35,7 +36,7 @@ inline void QuickVariantInit(_Inout_ VARIANT *pvar)
 
 inline void QuickVariantClear(_Inout_ VARIANT *pvar)
 {
-    switch (pvar->vt) 
+    switch (pvar->vt)
     {
     // some ovbious VTs that don't need to call VariantClear.
     case VT_EMPTY:
@@ -57,7 +58,7 @@ inline void QuickVariantClear(_Inout_ VARIANT *pvar)
     case VT_BOOL:
         break;
 
-        // Call release for VT_UNKNOWN.
+    // Call release for VT_UNKNOWN.
     case VT_UNKNOWN:
         SafeRelease(pvar->punkVal);
         break;

@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -21,50 +21,52 @@
 #endif
 
 /*  one of these per visible line */
-typedef struct {
-        CellPos linepos;        /* posn and clipping info for line */
+typedef struct
+{
+    CellPos linepos;        /* posn and clipping info for line */
 
-        lpCellData pdata;       /* array of CellData structs for all cells */
+    lpCellData pdata;       /* array of CellData structs for all cells */
 } LineData, *lpLineData;
 
 
 /* master info struct pointed to by window extra bytes */
 
-typedef struct {
-        /* table info */
-        TableHdr        hdr;            /* main hdr info from owner */
-        lpColProps      pcolhdr;        /* ptr to array of phdr->ncols hdrs */
+typedef struct
+{
+    /* table info */
+    TableHdr        hdr;            /* main hdr info from owner */
+    lpColProps      pcolhdr;        /* ptr to array of phdr->ncols hdrs */
 
-        /* window info */
-        int     avewidth;       /* font ave width - for default cell sizing */
-        int     rowheight;      /* height of one row */
-        int     rowwidth;       /* total width of one row in pixels */
-        int     winwidth;       /* width of window */
-        int     nlines;         /* actual lines currently visible */
+    /* window info */
+    int     avewidth;       /* font ave width - for default cell sizing */
+    int     rowheight;      /* height of one row */
+    int     rowwidth;       /* total width of one row in pixels */
+    int     winwidth;       /* width of window */
+    int     nlines;         /* actual lines currently visible */
 
-        lpCellPos pcellpos;     /* array of cell position structs */
+    lpCellPos pcellpos;     /* array of cell position structs */
 
-        /* scroll settings */
-        long    scrollscale;    /* scaling factor (force 16-bit range) */
-        long    toprow;         /* 0-based rownr of top moveable line */
-        int     scroll_dx;      /* horz scroll posn in pixels. */
+    /* scroll settings */
+    long    scrollscale;    /* scaling factor (force 16-bit range) */
+    long    toprow;         /* 0-based rownr of top moveable line */
+    int     scroll_dx;      /* horz scroll posn in pixels. */
 
-        /* column data */
-        lpLineData pdata;       /* ptr to array of nlines of LineData */
+    /* column data */
+    lpLineData pdata;       /* ptr to array of nlines of LineData */
 
-        /* selection/dragging */
-        UINT    trackmode;      /* current mouse-tracking mode */
-        int     tracknr;        /* col or row being resized */
-        int     trackline1;     /* currently drawn track lines */
-        int     trackline2;
-        BOOL    selvisible;     /* used during mouse-down: T if sel drawn */
-        TableSelection select;
+    /* selection/dragging */
+    UINT    trackmode;      /* current mouse-tracking mode */
+    int     tracknr;        /* col or row being resized */
+    int     trackline1;     /* currently drawn track lines */
+    int     trackline2;
+    BOOL    selvisible;     /* used during mouse-down: T if sel drawn */
+    TableSelection select;
 
-        // tab expansion
-        int     tabchars;
+    // tab expansion
+    int     tabchars;
 
-        // show whitespace chars
-        BOOL    show_whitespace;
+    // show whitespace chars
+    BOOL    show_whitespace;
 
 } Table, *lpTable;
 

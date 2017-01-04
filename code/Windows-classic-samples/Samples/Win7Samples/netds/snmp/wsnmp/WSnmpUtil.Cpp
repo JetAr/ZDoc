@@ -1,4 +1,4 @@
-/*++
+﻿/*++
 
 Copyright (c) Microsoft Corporation
 
@@ -8,7 +8,7 @@ Abstract:
 
     Command Line utility to query the SNMP agent using WINSNMP API.
 
---*/ 
+--*/
 
 
 #include  <stdio.h>
@@ -25,7 +25,7 @@ GlobalVars    gVars;
 
 
 
-// 
+//
 // abstract: main entry point.
 // input arguments:
 // argc->number of input arguments
@@ -51,7 +51,7 @@ int __cdecl main( int argc, char **argv )
     smiUINT32 nTranslateMode  = 0;
     smiUINT32 nRetransmitMode = 0;
 
-    __try 
+    __try
     {
         //SNMPAPI_UNTRANSLATED_V1 & SNMPAPI_UNTRANSLATED_V2 require transport address
         //and we will use winsock api to get transport address from host names
@@ -70,13 +70,13 @@ int __cdecl main( int argc, char **argv )
         if (osvi.dwPlatformId == VER_PLATFORM_WIN32_NT)
         {
             if (osvi.dwMajorVersion <= 4)
-            { 
+            {
                 PrintDbgMessage( "wsnmputil: WinSnmp is supported on Windows NT 5.0 or later ..\n" );
                 nReturn = -1;
                 __leave;
             }
         }
-        else    
+        else
         {
             PrintDbgMessage( "wsnmputil: WinSnmp is supported on Windows NT 5.0 or later ..\n" );
             nReturn = -1;
@@ -95,14 +95,14 @@ int __cdecl main( int argc, char **argv )
 
         // start winsnmp
         status = SnmpStartup(
-                      &nMajorVersion,
-                      &nMinorVersion,
-                      &nLevel,
-                      &nTranslateMode,
-                      &nRetransmitMode
-                      );
+                     &nMajorVersion,
+                     &nMinorVersion,
+                     &nLevel,
+                     &nTranslateMode,
+                     &nRetransmitMode
+                 );
 
-        if ( !SNMP_FAILURE(status) ) 
+        if ( !SNMP_FAILURE(status) )
         {
             if ( gVars.version == FALSE )
                 SnmpSetTranslateMode( SNMPAPI_UNTRANSLATED_V1 );
@@ -139,87 +139,87 @@ int __cdecl main( int argc, char **argv )
             nReturn = -1;
             __leave;
         }
-        
+
         switch (gVars.operation)
         {
-            case TRAP:
-                // WaitForTraps will block in While (ProcessAgentResponse()) loop
-                // Util user hits Ctrl+C to exit the program
-                WaitForTraps( pSession );
-                break;
+        case TRAP:
+            // WaitForTraps will block in While (ProcessAgentResponse()) loop
+            // Util user hits Ctrl+C to exit the program
+            WaitForTraps( pSession );
+            break;
 
-            case WALK:
-                while ( pSession->nErrorStatus == SNMP_ERROR_NOERROR )
-                {
-                    if ( ! ( result = CreatePduSendRequest( pSession, NULL ) ) )
-                        break;
-                    if ( gVars.fDone == TRUE )
-                        break;
-                }
-                break;
+        case WALK:
+            while ( pSession->nErrorStatus == SNMP_ERROR_NOERROR )
+            {
+                if ( ! ( result = CreatePduSendRequest( pSession, NULL ) ) )
+                    break;
+                if ( gVars.fDone == TRUE )
+                    break;
+            }
+            break;
 
-            case GET:
-            case GET_NEXT:
-                // do create a pdu and send a request.
-                for( i = 0; i < gVars.oidCount; i++ )
-                    result = CreatePduSendRequest( pSession, NULL );
-                break;
-
-            case GET_BULK:
+        case GET:
+        case GET_NEXT:
+            // do create a pdu and send a request.
+            for( i = 0; i < gVars.oidCount; i++ )
                 result = CreatePduSendRequest( pSession, NULL );
-                break;
+            break;
 
-            case SUB_TREE:
-                while ( pSession->nErrorStatus == SNMP_ERROR_NOERROR )
-                {           
-                    result = CreatePduSendRequest( pSession, NULL );
+        case GET_BULK:
+            result = CreatePduSendRequest( pSession, NULL );
+            break;
 
-                    // check the return status.
-                    if ( result == FALSE )
-                       break;
+        case SUB_TREE:
+            while ( pSession->nErrorStatus == SNMP_ERROR_NOERROR )
+            {
+                result = CreatePduSendRequest( pSession, NULL );
 
-                    // check if we hit the end of the subtree ..
-                    if ( gVars.fDone == TRUE )
-                        break;
-                }
-                break;
+                // check the return status.
+                if ( result == FALSE )
+                    break;
 
-            case SET:
-                result = FALSE;
-                gVars.doSet = TRUE;
+                // check if we hit the end of the subtree ..
+                if ( gVars.fDone == TRUE )
+                    break;
+            }
+            break;
 
-                if ( gVars.pSetValue != NULL )
-                {
-                    gVars.operation = GET;
-                    result = CreatePduSendRequest( pSession, NULL );
-                }
-            
-                if ( result != FALSE )
-                {
-                    gVars.operation = SET;
+        case SET:
+            result = FALSE;
+            gVars.doSet = TRUE;
 
-                    // copy the object type. Ex: INT UINT32 etc..               
-                    lvalue.syntax = gVars.value.syntax;
+            if ( gVars.pSetValue != NULL )
+            {
+                gVars.operation = GET;
+                result = CreatePduSendRequest( pSession, NULL );
+            }
 
-                    ConvertStringToSmiValue( &lvalue );
+            if ( result != FALSE )
+            {
+                gVars.operation = SET;
 
-                    result = CreatePduSendRequest( pSession, &lvalue );
-        
-                    // check the error status on pSession.
-                    if( pSession->nErrorStatus != 0 )
-                        PrintDbgMessage( "Failed in setting the OID value ..\n" );
-                    else
-                        PrintDbgMessage( "Succeeded in setting the OID value ..\n" );
+                // copy the object type. Ex: INT UINT32 etc..
+                lvalue.syntax = gVars.value.syntax;
 
-                }
-                break;
+                ConvertStringToSmiValue( &lvalue );
+
+                result = CreatePduSendRequest( pSession, &lvalue );
+
+                // check the error status on pSession.
+                if( pSession->nErrorStatus != 0 )
+                    PrintDbgMessage( "Failed in setting the OID value ..\n" );
+                else
+                    PrintDbgMessage( "Succeeded in setting the OID value ..\n" );
+
+            }
+            break;
 
         }  //end switch
 
     }  // end try block
     __finally
     {
-        // free memory ..    
+        // free memory ..
         for( i = 0; i < gVars.oidCount; i++ )
         {
             if ( gVars.pszOid[ i ] )
@@ -231,17 +231,17 @@ int __cdecl main( int argc, char **argv )
 
         if ( gVars.pAgentStrAddr != NULL )
             SnmpUtilMemFree( gVars.pAgentCommunity );
-    
+
         if ( gVars.pSetValue )
             SnmpUtilMemFree( gVars.pSetValue );
 
-        if ( 
-            ( ( lvalue.syntax == SNMP_SYNTAX_OCTETS )    
-             || ( lvalue.syntax == SNMP_SYNTAX_BITS )        
-             || ( lvalue.syntax == SNMP_SYNTAX_OPAQUE )    
-             || ( lvalue.syntax == SNMP_SYNTAX_IPADDR )    
-             || ( lvalue.syntax == SNMP_SYNTAX_OID ) ) 
-             &&  lvalue.value.string.ptr )
+        if (
+            ( ( lvalue.syntax == SNMP_SYNTAX_OCTETS )
+              || ( lvalue.syntax == SNMP_SYNTAX_BITS )
+              || ( lvalue.syntax == SNMP_SYNTAX_OPAQUE )
+              || ( lvalue.syntax == SNMP_SYNTAX_IPADDR )
+              || ( lvalue.syntax == SNMP_SYNTAX_OID ) )
+            &&  lvalue.value.string.ptr )
         {
             SnmpUtilMemFree (lvalue.value.string.ptr);
         }
@@ -258,7 +258,7 @@ int __cdecl main( int argc, char **argv )
         WSACleanup( );
 
     }  // end finally block
-    
+
     return ( nReturn );
 
 } //end of main()
@@ -268,7 +268,7 @@ int __cdecl main( int argc, char **argv )
 //abstract: open a WinSNMP session
 //input :   PSNMP_MGR_SESSION pSession
 //output:   TRUE if successful, FALSE if not.
-//        
+//
 BOOL    OpenWinSNMPSession ( PSNMP_MGR_SESSION pSession )
 {
 
@@ -285,14 +285,14 @@ BOOL    OpenWinSNMPSession ( PSNMP_MGR_SESSION pSession )
 
     if ( gVars.pAgentStrAddr != NULL )
     {
-        
+
         // create a remote agent entity
-        pSession->hAgentEntity = SnmpStrToEntity( pSession->hSnmpSession, 
-                                             (char*)(&gVars.agentAddr));     
+        pSession->hAgentEntity = SnmpStrToEntity( pSession->hSnmpSession,
+                                 (char*)(&gVars.agentAddr));
 
         if ( SNMP_FAILURE( pSession->hAgentEntity ) )
             return ( FALSE );
-        
+
         // attach timeout specified with agent
         SnmpSetTimeout( pSession->hAgentEntity, gVars.nTimeOut / 10 );
 
@@ -301,8 +301,8 @@ BOOL    OpenWinSNMPSession ( PSNMP_MGR_SESSION pSession )
 
         // create local manager entity
         pSession->hManagerEntity = SnmpStrToEntity(
-                                     pSession->hSnmpSession,
-                                     DEFAULT_ADDRESS_IP );
+                                       pSession->hSnmpSession,
+                                       DEFAULT_ADDRESS_IP );
         if ( SNMP_FAILURE( pSession->hManagerEntity ) )
             return ( FALSE );
 
@@ -310,12 +310,12 @@ BOOL    OpenWinSNMPSession ( PSNMP_MGR_SESSION pSession )
         SnmpSetTimeout( pSession->hManagerEntity, gVars.nTimeOut / 10 );
 
         // attach retries specified with manager
-        SnmpSetRetry( pSession->hManagerEntity, gVars.nRetries );  
+        SnmpSetRetry( pSession->hManagerEntity, gVars.nRetries );
 
     } // end of if ( pAgentStrAddr )
 
-        // validate pointer
-    if ( gVars.pAgentCommunity != NULL) 
+    // validate pointer
+    if ( gVars.pAgentCommunity != NULL)
     {
 
         // transfer community string
@@ -326,24 +326,24 @@ BOOL    OpenWinSNMPSession ( PSNMP_MGR_SESSION pSession )
         pSession->hViewContext = SnmpStrToContext(
                                      pSession->hSnmpSession,
                                      &smiCommunity
-                                    );
+                                 );
 
         // validate context handle
-        if ( SNMP_FAILURE( pSession->hViewContext) ) 
+        if ( SNMP_FAILURE( pSession->hViewContext) )
             return ( FALSE );
 
     }
 
     // success
     return (TRUE);
-  
+
 }  //end of OpenWinSNMP Session
 
 
 //
 // abstarct:   close a WinSNMP session
 // input :     pointer to a SNMP_MGR_SESSION
-// output:     TRUE if successful, FALSE if not.    
+// output:     TRUE if successful, FALSE if not.
 //
 BOOL    CloseWinSNMPSession ( PSNMP_MGR_SESSION pSession )
 {
@@ -356,7 +356,7 @@ BOOL    CloseWinSNMPSession ( PSNMP_MGR_SESSION pSession )
         return FALSE;
 
     // check if window opened
-    if ( pSession->hWnd != (HWND)NULL ) 
+    if ( pSession->hWnd != (HWND)NULL )
     {
         // destroy notification window
         fOk = DestroyNotificationWindow( pSession );
@@ -369,14 +369,14 @@ BOOL    CloseWinSNMPSession ( PSNMP_MGR_SESSION pSession )
     }
 
     // check if agent entity allocated
-    if ( pSession->hAgentEntity != (HSNMP_ENTITY)NULL ) 
+    if ( pSession->hAgentEntity != (HSNMP_ENTITY)NULL )
     {
 
         // close the entity handle
         status = SnmpFreeEntity( pSession->hAgentEntity );
 
         // validate status
-        if ( status == SNMPAPI_FAILURE ) 
+        if ( status == SNMPAPI_FAILURE )
         {
             // failure
             fOk = FALSE;
@@ -387,16 +387,16 @@ BOOL    CloseWinSNMPSession ( PSNMP_MGR_SESSION pSession )
     }
 
     // check if manager entity allocated
-    if ( pSession->hManagerEntity != (HSNMP_ENTITY)NULL ) 
+    if ( pSession->hManagerEntity != (HSNMP_ENTITY)NULL )
     {
 
         // close the entity handle
         status = SnmpFreeEntity( pSession->hManagerEntity );
 
         // validate status
-        if ( status == SNMPAPI_FAILURE ) 
+        if ( status == SNMPAPI_FAILURE )
         {
-    
+
             // failure
             fOk = FALSE;
         }
@@ -405,9 +405,9 @@ BOOL    CloseWinSNMPSession ( PSNMP_MGR_SESSION pSession )
         pSession->hManagerEntity = (HSNMP_ENTITY)NULL;
     }
 
-   
+
     // check if session allocated
-    if ( pSession->hSnmpSession != (HSNMP_SESSION)NULL ) 
+    if ( pSession->hSnmpSession != (HSNMP_SESSION)NULL )
     {
 
         // close the winsnmp session
@@ -435,7 +435,7 @@ BOOL    CloseWinSNMPSession ( PSNMP_MGR_SESSION pSession )
 //           The window will remain hidden.
 //
 // input:    pointer to PSNMP_MGR_SESSION
-// 
+//
 // output:
 // TRUE     if successful in creating the window
 // FALSE    if not successful in creating the window handle.
@@ -447,7 +447,7 @@ BOOL    CreateNotificationWindow( PSNMP_MGR_SESSION pSession )
     WNDCLASS wc;
 
     if ( pSession == NULL )
-    {    
+    {
         return FALSE;
     }
 
@@ -464,43 +464,43 @@ BOOL    CreateNotificationWindow( PSNMP_MGR_SESSION pSession )
     wc.style         = 0;    // register class
     fOk = RegisterClass(&wc);
 
-    if (!fOk) 
+    if (!fOk)
     {
         PrintDbgMessage( "snmputil: RegisterClass returned %d.\n", GetLastError() );
         return (FALSE);
     }
     // create notification window
     pSession->hWnd = CreateWindow(
-                      NOTIFICATION_CLASS,
-                      "SNMP Util Class",                // pointer to window name
-                      WS_OVERLAPPEDWINDOW,              // window style
-                      0,                                // horizontal position of window
-                      0,                                // vertical position of window
-                      0,                                // window width
-                      0,                                // window height
-                      NULL,                             // handle to parent or owner window
-                      NULL,                             // handle to menu or child-window identifier
-                      gVars.g_hInst,                    // handle to application instance
-                      NULL                              // pointer to window-creation data
-                    );
+                         NOTIFICATION_CLASS,
+                         "SNMP Util Class",                // pointer to window name
+                         WS_OVERLAPPEDWINDOW,              // window style
+                         0,                                // horizontal position of window
+                         0,                                // vertical position of window
+                         0,                                // window width
+                         0,                                // window height
+                         NULL,                             // handle to parent or owner window
+                         NULL,                             // handle to menu or child-window identifier
+                         gVars.g_hInst,                    // handle to application instance
+                         NULL                              // pointer to window-creation data
+                     );
 
     // validate window handle
-    if ( pSession->hWnd != NULL ) 
+    if ( pSession->hWnd != NULL )
     {
         // store pointer to session in window
         SetWindowLongPtr( pSession->hWnd, 0, (INT_PTR)pSession );
 
         // success
         fOk = TRUE;
-    } 
-    else 
-    {     
+    }
+    else
+    {
         // failure
         fOk = FALSE;
     }
 
     return fOk;
-    
+
 } // end of CreateNotificationWindow
 
 
@@ -547,12 +547,12 @@ NotificationWndProc(
     UINT   uMsg,
     WPARAM wParam,
     LPARAM lParam
-    )
+)
 {
     // check for winsnmp notification
-    if (uMsg == WM_SNMP_INCOMING) 
+    if (uMsg == WM_SNMP_INCOMING)
     {
-        
+
         PSNMP_MGR_SESSION pSession;
 
         // retrieve session pointer from window
@@ -561,9 +561,9 @@ NotificationWndProc(
         // validate session ptr
         if ( pSession == NULL )
             return (LRESULT)0;
-            
+
         // process notification message
-        if ( ProcessNotification( pSession ) ) 
+        if ( ProcessNotification( pSession ) )
         {
             // post message to break out of message pump
             PostMessage( pSession->hWnd, WM_SNMP_DONE, (WPARAM)0, (LPARAM)0 );
@@ -571,8 +571,8 @@ NotificationWndProc(
 
         return (LRESULT)0;
 
-    } 
-    else 
+    }
+    else
     {
         // forward all other messages to windows
         return DefWindowProc(hWnd, uMsg, wParam, lParam);
@@ -595,7 +595,7 @@ BOOL    ProcessNotification( PSNMP_MGR_SESSION pSession )
     HSNMP_ENTITY   hAgentEntity   = (HSNMP_ENTITY)NULL;
     HSNMP_ENTITY   hManagerEntity = (HSNMP_ENTITY)NULL;
     HSNMP_CONTEXT  hViewContext   = (HSNMP_CONTEXT)NULL;
-    smiINT32       nPduType; 
+    smiINT32       nPduType;
     smiINT32       nRequestId;
     char           szBuf[1024];
 
@@ -605,75 +605,75 @@ BOOL    ProcessNotification( PSNMP_MGR_SESSION pSession )
 
     // retrieve message
     status = SnmpRecvMsg(
-                pSession->hSnmpSession,
-                &hAgentEntity,
-                &hManagerEntity,
-                &hViewContext,
-                &pSession->hPdu
-                );
+                 pSession->hSnmpSession,
+                 &hAgentEntity,
+                 &hManagerEntity,
+                 &hViewContext,
+                 &pSession->hPdu
+             );
 
     // validate return code
     if ( status != SNMPAPI_FAILURE )
-    {                
+    {
         // retrieve pdu data
         status = SnmpGetPduData(
-                    pSession->hPdu,
-                    &nPduType,
-                    &nRequestId,
-                    &pSession->nErrorStatus,
-                    &pSession->nErrorIndex,
-                    &pSession->hVbl
-                    );
-    
-        // validate return code            
-        if ( status != SNMPAPI_FAILURE ) 
+                     pSession->hPdu,
+                     &nPduType,
+                     &nRequestId,
+                     &pSession->nErrorStatus,
+                     &pSession->nErrorIndex,
+                     &pSession->hVbl
+                 );
+
+        // validate return code
+        if ( status != SNMPAPI_FAILURE )
         {
 
             // process reponse to request
-            if (nPduType == SNMP_PDU_RESPONSE) 
-            {  
+            if (nPduType == SNMP_PDU_RESPONSE)
+            {
                 // validate context information
                 if (( pSession->nRequestId   == nRequestId ) &&
-                    ( pSession->hViewContext == hViewContext ) &&
-                    ( pSession->hAgentEntity == hAgentEntity ) &&
-                    ( pSession->hManagerEntity == hManagerEntity ) ) 
+                        ( pSession->hViewContext == hViewContext ) &&
+                        ( pSession->hAgentEntity == hAgentEntity ) &&
+                        ( pSession->hManagerEntity == hManagerEntity ) )
                 {
 
                     // if we hit the end of tree, break.
                     if ( PrintVarBind( pSession ) == FALSE )
                         gVars.fDone = TRUE;
-                
-                } 
-                else 
+
+                }
+                else
                 {
                     // continue
                     fDone = FALSE;
                 }
 
-            } 
-            else if (nPduType == SNMP_PDU_TRAP) 
+            }
+            else if (nPduType == SNMP_PDU_TRAP)
             {
 
                 status = SnmpEntityToStr( hAgentEntity, 1024, szBuf );
                 if ( ! (SNMP_FAILURE ( status )  ) )
                     PrintDbgMessage( "Agent : %s \n\n", szBuf );
 
-                // Process the TRAP                
+                // Process the TRAP
                 ParseAndPrintv2Trap( pSession );
 
-            } 
-            else 
+            }
+            else
             {
                 PrintDbgMessage( "snmputil: Invalid PDU type %d \n", nPduType );
                 // continue
                 fDone = FALSE;
             }
 
-        } 
-        else 
+        }
+        else
             PrintDbgMessage( "snmputil: SnmpGetPduData returned error %d \n", SnmpGetLastError( pSession->hSnmpSession ) );
-      
-        
+
+
         // release temporary entity
         SnmpFreeEntity(hAgentEntity);
 
@@ -683,18 +683,18 @@ BOOL    ProcessNotification( PSNMP_MGR_SESSION pSession )
         // release temporary context
         SnmpFreeContext(hViewContext);
 
-    } 
-    
+    }
+
     // release pdu
     FreeVblandPdu( pSession );
-    
+
     return fDone;
 
 }  //end of ProcessNotification
 
 
 
-// 
+//
 //    abstarct: Sit in an infinite loop waiting for traps.
 //    input :   pointer to a snmp mgr session
 //    output:   TRUE when a WM_QUIT is sent to pSession->hWnd
@@ -711,14 +711,14 @@ BOOL    WaitForTraps( PSNMP_MGR_SESSION pSession )
     pSession->nError = 0;
 
     // register
-    status = SnmpRegister( 
+    status = SnmpRegister(
                  pSession->hSnmpSession,
-                (HSNMP_ENTITY)NULL,     // hManagerEntity
-                (HSNMP_ENTITY)NULL,     // hAgentEntity
-                (HSNMP_CONTEXT)NULL,    // hViewContext
-                (smiLPCOID)NULL,        // notification
-                SNMPAPI_ON
-                );
+                 (HSNMP_ENTITY)NULL,     // hManagerEntity
+                 (HSNMP_ENTITY)NULL,     // hAgentEntity
+                 (HSNMP_CONTEXT)NULL,    // hViewContext
+                 (smiLPCOID)NULL,        // notification
+                 SNMPAPI_ON
+             );
 
     if ( SNMP_FAILURE( status ) )
     {
@@ -730,7 +730,7 @@ BOOL    WaitForTraps( PSNMP_MGR_SESSION pSession )
     {
         printf("WSnmpUtil: listening for traps...\n");
         while( ProcessAgentResponse ( pSession ) )
-        {                
+        {
         }
     }
     return TRUE;
@@ -754,16 +754,16 @@ BOOL ProcessAgentResponse( PSNMP_MGR_SESSION pSession )
         return FALSE;
 
     // get the next message for this session
-    while ( GetMessage( &uMsg, pSession->hWnd, 0, 0) ) 
+    while ( GetMessage( &uMsg, pSession->hWnd, 0, 0) )
     {
 
         // check for private message
-        if ( uMsg.message != WM_SNMP_DONE) 
+        if ( uMsg.message != WM_SNMP_DONE)
         {
             TranslateMessage(&uMsg);
             DispatchMessage(&uMsg);
-        } 
-        else 
+        }
+        else
         {
             // success
             fOk = TRUE;
@@ -789,19 +789,19 @@ BOOL CreateVbl( PSNMP_MGR_SESSION pSession, smiOID *pOid, smiVALUE * pValue  )
 
     // check for NULL pointers
     if ( ( pOid == NULL )    ||
-         ( pSession == NULL ) )
-         return FALSE;
+            ( pSession == NULL ) )
+        return FALSE;
 
     // create the var bind list.
-    pSession->hVbl = SnmpCreateVbl( pSession->hSnmpSession, 
-                                      pOid, 
+    pSession->hVbl = SnmpCreateVbl( pSession->hSnmpSession,
+                                    pOid,
                                     ( ( pSession->nPduType == SNMP_PDU_SET ) ? pValue : NULL ) );
 
     if ( SNMP_FAILURE( pSession->hVbl ) )
         return FALSE;
     else
         return TRUE;
-    
+
 } //end of CreateVbl
 
 
@@ -834,8 +834,8 @@ void    FreeVblandPdu( PSNMP_MGR_SESSION pSession )
 
 
 //
-// abstarct: create a needed PDU,  send the request and loop in the message loop 
-//           within the ProcessAgentResponse function until the SNMP reply PDU is 
+// abstarct: create a needed PDU,  send the request and loop in the message loop
+//           within the ProcessAgentResponse function until the SNMP reply PDU is
 //           processed.
 // input:    pointer to PSNMP_MGR_SESSION
 // output:   status: TRUE if successful, FALSE otherwise.
@@ -850,33 +850,33 @@ BOOL    CreatePduSendRequest( PSNMP_MGR_SESSION pSession, smiVALUE *pValue )
     // set the pdu type.
     switch ( gVars.operation )
     {
-        case GET:
-            pSession->nPduType = SNMP_PDU_GET;
-            break;
-        case GET_NEXT:
-            pSession->nPduType = SNMP_PDU_GETNEXT;
-            break;
-        case WALK:
-            pSession->nPduType = SNMP_PDU_GETNEXT;
-            break;
-        case SET:
-            pSession->nPduType = SNMP_PDU_SET;
-            break;
-        case SUB_TREE:
-            pSession->nPduType = SNMP_PDU_GETNEXT;
-            break;
-        case GET_BULK:
-            pSession->nPduType = SNMP_PDU_GETBULK;
-        default:
-            break;
+    case GET:
+        pSession->nPduType = SNMP_PDU_GET;
+        break;
+    case GET_NEXT:
+        pSession->nPduType = SNMP_PDU_GETNEXT;
+        break;
+    case WALK:
+        pSession->nPduType = SNMP_PDU_GETNEXT;
+        break;
+    case SET:
+        pSession->nPduType = SNMP_PDU_SET;
+        break;
+    case SUB_TREE:
+        pSession->nPduType = SNMP_PDU_GETNEXT;
+        break;
+    case GET_BULK:
+        pSession->nPduType = SNMP_PDU_GETBULK;
+    default:
+        break;
     }
 
     // first time around, walk: always use the first oid
     if ( ( gVars.nRequestId  == 1 ) && ( ( gVars.operation == WALK ) || ( gVars.operation == SUB_TREE ) ) ) // || ( gVars.operation == GET_BULK ) ) )
     {
-        if ( SNMP_FAILURE ( SnmpStrToOid( gVars.pszOid[0] , &gVars.oid ) ) )
+        if ( SNMP_FAILURE ( SnmpStrToOid( gVars.pszOid[0], &gVars.oid ) ) )
         {
-            if ( SnmpMgrStrToOid( gVars.pszOid[0] , (AsnObjectIdentifier *)&gVars.oid ) == FALSE )
+            if ( SnmpMgrStrToOid( gVars.pszOid[0], (AsnObjectIdentifier *)&gVars.oid ) == FALSE )
             {
                 PrintDbgMessage( "snmputil: Failed in SnmpStrToOid( ) or SnmpMgrStrToOid( ) function ..\n" );
                 return ( FALSE );
@@ -897,52 +897,52 @@ BOOL    CreatePduSendRequest( PSNMP_MGR_SESSION pSession, smiVALUE *pValue )
     }
     else if ( ( gVars.operation == GET_NEXT ) || ( gVars.operation == GET ) )
     {
-        
-        if ( SNMP_FAILURE ( SnmpStrToOid( gVars.pszOid[ gVars.nRequestId - 1 ] , 
-                                      &gVars.oid ) ) )
+
+        if ( SNMP_FAILURE ( SnmpStrToOid( gVars.pszOid[ gVars.nRequestId - 1 ],
+                                          &gVars.oid ) ) )
         {
-            if ( SnmpMgrStrToOid( gVars.pszOid[gVars.nRequestId - 1] , (AsnObjectIdentifier *)&gVars.oid ) == FALSE )
+            if ( SnmpMgrStrToOid( gVars.pszOid[gVars.nRequestId - 1], (AsnObjectIdentifier *)&gVars.oid ) == FALSE )
             {
                 PrintDbgMessage( "snmputil: Failed in SnmpStrToOid( ) or SnmpMgrStrToOid( ) function ..\n" );
                 return ( FALSE );
             }
-        }    
-        
+        }
+
         if ( ( CreateVbl( pSession, &gVars.oid, NULL ) ) == FALSE )
-                return ( FALSE );
-                    
+            return ( FALSE );
+
     }
-    else if ( gVars.operation == SET ) 
-    {        
+    else if ( gVars.operation == SET )
+    {
         pSession->hVbl = SnmpCreateVbl( pSession->hSnmpSession,
                                         &gVars.oid,
                                         pValue
-                                        );
-       }
-    
-    else if ( gVars.operation == GET_BULK ) 
+                                      );
+    }
+
+    else if ( gVars.operation == GET_BULK )
     {
         //CreateVbl first then add OIDs to the Vbl
-        pSession->hVbl = 
-            SnmpCreateVbl(  pSession->hSnmpSession,  // handle to the WinSNMP session 
-                            NULL,                    // pointer to the variable name 
-                            NULL                     // pointer to the value to associate with the variable 
-                            );
-        
+        pSession->hVbl =
+            SnmpCreateVbl(  pSession->hSnmpSession,  // handle to the WinSNMP session
+                            NULL,                    // pointer to the variable name
+                            NULL                     // pointer to the value to associate with the variable
+                         );
+
 
         if ( SNMP_FAILURE( pSession->hVbl ) )
             return (FALSE);
         for (int i = 0; i < gVars.oidCount; i++)
         {
             //the very last gVars.oid in the loop will be freed later.
-            if (i > 0) 
+            if (i > 0)
             {
-                    SnmpFreeDescriptor ( SNMP_SYNTAX_OID, (smiLPOPAQUE)&gVars.oid);
+                SnmpFreeDescriptor ( SNMP_SYNTAX_OID, (smiLPOPAQUE)&gVars.oid);
             }
 
-            if ( SNMP_FAILURE ( SnmpStrToOid( gVars.pszOid[i] , &gVars.oid ) ) )
+            if ( SNMP_FAILURE ( SnmpStrToOid( gVars.pszOid[i], &gVars.oid ) ) )
             {
-                if ( SnmpMgrStrToOid( gVars.pszOid[i] , (AsnObjectIdentifier *)&gVars.oid ) == FALSE )
+                if ( SnmpMgrStrToOid( gVars.pszOid[i], (AsnObjectIdentifier *)&gVars.oid ) == FALSE )
                 {
                     PrintDbgMessage( "snmputil: Failed in SnmpStrToOid( ) or SnmpMgrStrToOid( ) function ..\n" );
                     return ( FALSE );
@@ -955,19 +955,19 @@ BOOL    CreatePduSendRequest( PSNMP_MGR_SESSION pSession, smiVALUE *pValue )
                 return ( FALSE );
             }
         }
-                
+
     }
 
-    
+
     pSession->nRequestId = gVars.nRequestId++;
 
     // create a pdu using the parameters in pSession structure
     pSession->hPdu = SnmpCreatePdu( pSession->hSnmpSession,
-                                      pSession->nPduType,
-                                      pSession->nRequestId,
-                                      ( ( gVars.operation == GET_BULK ) ? gVars.non_repeaters : 0 ),
-                                      ( ( gVars.operation == GET_BULK ) ? gVars.max_repetitions : 0 ),
-                                      pSession->hVbl );
+                                    pSession->nPduType,
+                                    pSession->nRequestId,
+                                    ( ( gVars.operation == GET_BULK ) ? gVars.non_repeaters : 0 ),
+                                    ( ( gVars.operation == GET_BULK ) ? gVars.max_repetitions : 0 ),
+                                    pSession->hVbl );
 
     if ( SNMP_FAILURE ( pSession->hPdu ) )
     {
@@ -977,22 +977,22 @@ BOOL    CreatePduSendRequest( PSNMP_MGR_SESSION pSession, smiVALUE *pValue )
 
     // send the message to the agent
     pSession->nError = SnmpSendMsg(    pSession->hSnmpSession,
-                                        pSession->hManagerEntity,
-                                        pSession->hAgentEntity,
-                                        pSession->hViewContext,
-                                        pSession->hPdu );
+                                       pSession->hManagerEntity,
+                                       pSession->hAgentEntity,
+                                       pSession->hViewContext,
+                                       pSession->hPdu );
 
-    if ( gVars.operation != SUB_TREE ) SnmpFreeDescriptor ( SNMP_SYNTAX_OID, (smiLPOPAQUE)&gVars.oid); 
+    if ( gVars.operation != SUB_TREE ) SnmpFreeDescriptor ( SNMP_SYNTAX_OID, (smiLPOPAQUE)&gVars.oid);
 
-    
+
     // check error status and return.
     if ( SNMP_FAILURE( pSession->nError ) )
     {
-         
-         pSession->nError = SnmpGetLastError( pSession->hSnmpSession );
-         PrintDbgMessage( "snmputil: Failed in send message, Last Error %d \n", pSession->nError );
-         FreeVblandPdu( pSession );
-         return (FALSE);
+
+        pSession->nError = SnmpGetLastError( pSession->hSnmpSession );
+        PrintDbgMessage( "snmputil: Failed in send message, Last Error %d \n", pSession->nError );
+        FreeVblandPdu( pSession );
+        return (FALSE);
     }
     else
     {

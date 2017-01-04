@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -24,7 +24,8 @@ struct KEYENTRY
     const WCHAR * pszDescription;
 };
 
-const KEYENTRY g_Keys[] = {
+const KEYENTRY g_Keys[] =
+{
     KEY_ENTRY(ComputerName),
     KEY_ENTRY(FD_Visibility),
     KEY_ENTRY(Device_InstanceId),
@@ -151,10 +152,10 @@ HRESULT CMyFDHelper::Initialize( )
     // CoCreate function discovery
     if ( S_OK == hr )
         hr = CoCreateInstance( CLSID_FunctionDiscovery,
-        NULL,
-        CLSCTX_ALL,
-        IID_IFunctionDiscovery,
-        (LPVOID*) &m_pFunDisc );
+                               NULL,
+                               CLSCTX_ALL,
+                               IID_IFunctionDiscovery,
+                               (LPVOID*) &m_pFunDisc );
 
     return hr;
 }
@@ -180,11 +181,11 @@ HRESULT CMyFDHelper::ListFunctionInstances( const WCHAR* pszCategory )
     //
     if( S_OK == hr )
         hr = m_pFunDisc->CreateInstanceCollectionQuery( pszCategory,
-        NULL,
-        TRUE,
-        this,
-        NULL,
-        &pQuery);
+                NULL,
+                TRUE,
+                this,
+                NULL,
+                &pQuery);
 
     // Execute the query.  If it's a local query, for example PnP
     // or the registry, hr will be set to S_OK and the collection
@@ -196,12 +197,12 @@ HRESULT CMyFDHelper::ListFunctionInstances( const WCHAR* pszCategory )
     if( S_OK == hr )
         hr = pQuery->Execute( &pCollection );
 
-	// If this is a local query, we expect S_OK
+    // If this is a local query, we expect S_OK
     if( S_OK == hr )
         hr = pCollection->GetCount( &dwCount );
 
     // Loop through all instances returned in the collection
-	// This is done only in the case of a local query
+    // This is done only in the case of a local query
 
     for( DWORD i = 0; ( S_OK == hr && ( i < dwCount )); i++ )
     {
@@ -227,9 +228,9 @@ HRESULT CMyFDHelper::ListFunctionInstances( const WCHAR* pszCategory )
     if( NULL != pStore )
         pStore->Release( );
 
-	// If it's a network query, we expected E_PENDING from the above
-	// call to pQuery->Execute( &pCollection )
-	// Instances will be returned via notifications, return S_OK
+    // If it's a network query, we expected E_PENDING from the above
+    // call to pQuery->Execute( &pCollection )
+    // Instances will be returned via notifications, return S_OK
     if( E_PENDING == hr )
         hr = S_OK;
 
@@ -239,8 +240,8 @@ HRESULT CMyFDHelper::ListFunctionInstances( const WCHAR* pszCategory )
 // Waits for the specified amount of time for an add, remove
 // or change notification
 HRESULT CMyFDHelper::WaitForChange( DWORD dwTimeout,
-    const WCHAR* pszCategory,
-    QueryUpdateAction eAction )
+                                    const WCHAR* pszCategory,
+                                    QueryUpdateAction eAction )
 {
 
     DWORD dwEventIndex;
@@ -264,12 +265,12 @@ HRESULT CMyFDHelper::WaitForChange( DWORD dwTimeout,
     // Create a query to recieve notifications
     if( S_OK == hr )
         hr = m_pFunDisc->CreateInstanceCollectionQuery(
-        pszCategory,
-        NULL,
-        TRUE,
-        this,
-        NULL,
-        &pQuery);
+                 pszCategory,
+                 NULL,
+                 TRUE,
+                 this,
+                 NULL,
+                 &pQuery);
 
     // Add a query constraint
 
@@ -282,8 +283,8 @@ HRESULT CMyFDHelper::WaitForChange( DWORD dwTimeout,
     // will ignore the constraint.  It is PnP provider specific.
     if( S_OK == hr )
         hr = pQuery->AddQueryConstraint(
-        PROVIDERPNP_QUERYCONSTRAINT_NOTIFICATIONSONLY,
-        L"TRUE" );
+                 PROVIDERPNP_QUERYCONSTRAINT_NOTIFICATIONSONLY,
+                 L"TRUE" );
 
     // Execute the query.  As long as the query exists
     // we will recieve notifications.
@@ -306,10 +307,10 @@ HRESULT CMyFDHelper::WaitForChange( DWORD dwTimeout,
     // Block and wait for a notification
     if(( S_OK == hr ) && ( NULL != hEvent ))
         hr = ::CoWaitForMultipleHandles( 0,
-        dwTimeout,
-        1,
-        &hEvent,
-        &dwEventIndex );
+                                         dwTimeout,
+                                         1,
+                                         &hEvent,
+                                         &dwEventIndex );
 
     if( RPC_S_CALLPENDING == hr )
         wprintf(L"Timeout!\n");
@@ -333,10 +334,10 @@ HRESULT CMyFDHelper::WaitForChange( DWORD dwTimeout,
 // In this implementation it displays the name of the
 // added removed or modify device
 HRESULT CMyFDHelper::OnUpdate( QueryUpdateAction eAction,
-    FDQUERYCONTEXT fdqcQueryContext,
-    IFunctionInstance *pInstance)
+                               FDQUERYCONTEXT fdqcQueryContext,
+                               IFunctionInstance *pInstance)
 {
-	UNREFERENCED_PARAMETER(fdqcQueryContext);
+    UNREFERENCED_PARAMETER(fdqcQueryContext);
 
     if( NULL == pInstance )
         return E_INVALIDARG;
@@ -393,10 +394,10 @@ HRESULT CMyFDHelper::OnUpdate( QueryUpdateAction eAction,
 
 // Required for the implementation of IFunctionDiscoveryNotification
 HRESULT CMyFDHelper::OnError(HRESULT hr,
-    FDQUERYCONTEXT fdqcQueryContext,
-    const WCHAR *pszProvider)
+                             FDQUERYCONTEXT fdqcQueryContext,
+                             const WCHAR *pszProvider)
 {
-	UNREFERENCED_PARAMETER(fdqcQueryContext);
+    UNREFERENCED_PARAMETER(fdqcQueryContext);
 
     if( NULL != pszProvider )
         wprintf( L"%s encountered 0x%x.", pszProvider, hr );
@@ -410,8 +411,8 @@ HRESULT CMyFDHelper::OnEvent(
     FDQUERYCONTEXT fdqcQueryContext,
     const WCHAR *pszProvider)
 {
-	UNREFERENCED_PARAMETER(dwEventID);
-	UNREFERENCED_PARAMETER(fdqcQueryContext);
+    UNREFERENCED_PARAMETER(dwEventID);
+    UNREFERENCED_PARAMETER(fdqcQueryContext);
 
     if( NULL != pszProvider )
         wprintf( L"%s sent OnEvent notification.", pszProvider );
@@ -462,10 +463,10 @@ HRESULT CMyFDHelper::DisplayProperties( IPropertyStore * pPStore )
                 WCHAR szGuidKey[MAX_PATH];
                 ::StringFromGUID2(key.fmtid, szGuidKey, ARRAY_SIZE(szGuidKey));
                 StringCchPrintfW(szKeyNameBuff,
-                    ARRAY_SIZE(szKeyNameBuff),
-                    L"%s-%08x",
-                    szGuidKey,
-                    key.pid);
+                                 ARRAY_SIZE(szKeyNameBuff),
+                                 L"%s-%08x",
+                                 szGuidKey,
+                                 key.pid);
 
                 pszKeyName = szKeyNameBuff;
             }
@@ -491,29 +492,29 @@ HRESULT CMyFDHelper::DisplayProperties( IPropertyStore * pPStore )
                 break;
             case VT_BOOL:
                 wprintf(L"%30s = %s\n",
-                    pszKeyName,
-                    val.boolVal?L"TRUE":L"FALSE" );
+                        pszKeyName,
+                        val.boolVal?L"TRUE":L"FALSE" );
                 break;
             case VT_LPWSTR | VT_VECTOR:
                 for (ULONG i = 0; i < val.calpwstr.cElems; i++)
                 {
                     wprintf(L"%30s = %s\n",
-                        pszKeyName,
-                        val.calpwstr.pElems[i]);
+                            pszKeyName,
+                            val.calpwstr.pElems[i]);
                     pszKeyName = L"";
                 }
                 break;
             case VT_CLSID:
-                {
-                    WCHAR szGuid[MAX_PATH];
-                    ::StringFromGUID2(*val.puuid, szGuid, ARRAY_SIZE(szGuid));
-                    wprintf(L"%30s = %s\n", pszKeyName, szGuid);
-                }
-                break;
+            {
+                WCHAR szGuid[MAX_PATH];
+                ::StringFromGUID2(*val.puuid, szGuid, ARRAY_SIZE(szGuid));
+                wprintf(L"%30s = %s\n", pszKeyName, szGuid);
+            }
+            break;
             default:
                 wprintf(L"%30s = Variant Type %08x Unknown\n",
-                    pszKeyName,
-                    val.vt);
+                        pszKeyName,
+                        val.vt);
                 break;
             }
             ::PropVariantClear(&val);

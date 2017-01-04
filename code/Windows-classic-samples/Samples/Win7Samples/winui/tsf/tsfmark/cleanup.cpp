@@ -1,4 +1,4 @@
-//
+﻿//
 // cleanup.cpp
 //
 // ITfCleanupContextDurationSink, ITfCleanupContextSink implementation.

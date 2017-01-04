@@ -1,4 +1,4 @@
-//
+﻿//
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -90,7 +90,7 @@ MI_INLINE MI_Result MI_CALL MSFT_WindowsServiceManager_Construct(
     _In_ MI_Context* context)
 {
     return MI_Context_ConstructInstance(context, &MSFT_WindowsServiceManager_rtti,
-        (MI_Instance*)&self->__instance);
+                                        (MI_Instance*)&self->__instance);
 }
 
 MI_INLINE MI_Result MI_CALL MSFT_WindowsServiceManager_Clone(
@@ -98,7 +98,7 @@ MI_INLINE MI_Result MI_CALL MSFT_WindowsServiceManager_Clone(
     _Outptr_ MSFT_WindowsServiceManager** newInstance)
 {
     return MI_Instance_Clone(
-        &self->__instance, (MI_Instance**)newInstance);
+               &self->__instance, (MI_Instance**)newInstance);
 }
 
 MI_INLINE MI_Boolean MI_CALL MSFT_WindowsServiceManager_IsA(
@@ -148,7 +148,7 @@ MI_INLINE MI_Result MI_CALL MSFT_WindowsServiceManager_GetWindowsServices_Constr
     _In_ MI_Context* context)
 {
     return MI_Context_ConstructParameters(context, &MSFT_WindowsServiceManager_GetWindowsServices_rtti,
-        (MI_Instance*)&self->__instance);
+                                          (MI_Instance*)&self->__instance);
 }
 
 MI_INLINE MI_Result MI_CALL MSFT_WindowsServiceManager_GetWindowsServices_Clone(
@@ -156,7 +156,7 @@ MI_INLINE MI_Result MI_CALL MSFT_WindowsServiceManager_GetWindowsServices_Clone(
     _Outptr_ MSFT_WindowsServiceManager_GetWindowsServices** newInstance)
 {
     return MI_Instance_Clone(
-        &self->__instance, (MI_Instance**)newInstance);
+               &self->__instance, (MI_Instance**)newInstance);
 }
 
 MI_INLINE MI_Result MI_CALL MSFT_WindowsServiceManager_GetWindowsServices_Destruct(

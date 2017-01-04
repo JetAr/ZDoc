@@ -1,11 +1,11 @@
-// **************************************************************************
+﻿// **************************************************************************
 //
 // Copyright (c) Microsoft Corporation, All Rights Reserved
 //
-// File:  Security.cpp 
+// File:  Security.cpp
 //
 // Description:
-//        WMI Client Security Sample.  This sample shows how various how to 
+//        WMI Client Security Sample.  This sample shows how various how to
 // handle various DCOM security issues.  In particular, it shows how to call
 // CoSetProxyBlanket in order to deal with common situations.  The sample also
 // shows how to access the security descriptors that wmi uses to control
@@ -16,9 +16,9 @@
 // **************************************************************************
 
 #include <objbase.h>
-#include <windows.h>                                     
+#include <windows.h>
 #include <stdio.h>
-#include <wbemidl.h> 
+#include <wbemidl.h>
 #include <comdef.h>
 #include <wincred.h>
 #include <strsafe.h>
@@ -32,7 +32,7 @@ WCHAR wPassWord[CREDUI_MAX_PASSWORD_LENGTH + 1];
 bool bPassWordSet = false;
 bool bUserNameSet = false;
 
-void __stdcall _com_issue_error(HRESULT){}
+void __stdcall _com_issue_error(HRESULT) {}
 
 //***************************************************************************
 //
@@ -45,13 +45,13 @@ void __stdcall _com_issue_error(HRESULT){}
 void DisplayOptions()
 {
     printf("\nThis application demonstrates various DCOM security issues.  It \n"
-            "will connect up to the namespace and enumerate the top level classes\n"
-            "and will also dump the security descriptor used to control access to the namespace.\n\n"
-			"usage: Security [-S:<Server>] -N:<WMINamespace>\n"
-            "              -S:<Server>             Optional Server Name. If not provided, local machine is assumed\n"
-            "              -N:<WMINamespace>       WMI Namespace name\n"
-			"Example; c:>Security -S:serverName -N:root\\default\n"
-            );
+           "will connect up to the namespace and enumerate the top level classes\n"
+           "and will also dump the security descriptor used to control access to the namespace.\n\n"
+           "usage: Security [-S:<Server>] -N:<WMINamespace>\n"
+           "              -S:<Server>             Optional Server Name. If not provided, local machine is assumed\n"
+           "              -N:<WMINamespace>       WMI Namespace name\n"
+           "Example; c:>Security -S:serverName -N:root\\default\n"
+          );
     return;
 }
 
@@ -71,8 +71,8 @@ BOOL ProcessArguments(int iArgCnt, WCHAR ** argv)
 
     wPath[0] = 0;
     wFullUserName[0] = 0;
-	memset(wServerName, NULL, sizeof(wServerName));
-	memset(wNameSpace, NULL, sizeof(wNameSpace));
+    memset(wServerName, NULL, sizeof(wServerName));
+    memset(wNameSpace, NULL, sizeof(wNameSpace));
 
     for(int iCnt = 1; iCnt <= iArgCnt-1 ; iCnt++)
     {
@@ -81,19 +81,19 @@ BOOL ProcessArguments(int iArgCnt, WCHAR ** argv)
             return FALSE;
         switch (pArg[1])
         {
-            case L's':
-            case L'S':
-                StringCbCopyW(wServerName, sizeof(wServerName), pArg+3);
-                break;
-            case L'n':
-            case L'N':
-                StringCbCopyW(wNameSpace, sizeof(wNameSpace), pArg+3);
-                break;
-            default:
-                return FALSE;
+        case L's':
+        case L'S':
+            StringCbCopyW(wServerName, sizeof(wServerName), pArg+3);
+            break;
+        case L'n':
+        case L'N':
+            StringCbCopyW(wNameSpace, sizeof(wNameSpace), pArg+3);
+            break;
+        default:
+            return FALSE;
         }
     }
-    
+
     return TRUE;
 }
 
@@ -101,7 +101,7 @@ BOOL ProcessArguments(int iArgCnt, WCHAR ** argv)
 //
 // SetProxySecurity
 //
-// Purpose: Calls CoSetProxyBlanket in order to control the security on a 
+// Purpose: Calls CoSetProxyBlanket in order to control the security on a
 // particular interface proxy.
 //
 //***************************************************************************
@@ -109,52 +109,52 @@ BOOL ProcessArguments(int iArgCnt, WCHAR ** argv)
 HRESULT SetProxySecurity(IUnknown * pProxy)
 {
     HRESULT hr;
-    DWORD dwAuthnSvc, dwAuthzSvc ,dwAuthnLevel, dwImpLevel, dwCapabilities;
+    DWORD dwAuthnSvc, dwAuthzSvc,dwAuthnLevel, dwImpLevel, dwCapabilities;
     RPC_AUTH_IDENTITY_HANDLE * pAuthInfo = NULL;
 
-    //  There are various reasons to set security.  An application that can 
+    //  There are various reasons to set security.  An application that can
     //  call CoInitializeSecurity and doesnt use an alternative user\password,
     //  need not bother with call CoSetProxyBlanket.  There are at least
     //  three cases that do need it though.
     //
     //  1) Dlls cannot call CoInitializeSecurity and will need to call it just
-    //     to raise the impersonation level.  This does NOT require that the 
+    //     to raise the impersonation level.  This does NOT require that the
     //     RPC_AUTH_IDENTITY_HANDLE to be set nor does this require setting
     //     it on the IUnknown pointer.
     //  2) Any time that an alternative user\password are set as is the case
-    //     in this simple sample.  Note that it is necessary in that case to 
+    //     in this simple sample.  Note that it is necessary in that case to
     //     also set the information on the IUnknown.
     //  3) If the caller has a thread token from a remote call to itself and
     //     it wants to use that identity.  That would be the case of an RPC/COM
     //     server which is handling a call from one of its clients and it wants
-    //     to use the client's identity in calls to WMI.  In this case, then 
-    //     the RPC_AUTH_IDENTITY_HANDLE does not need to be set, but the 
+    //     to use the client's identity in calls to WMI.  In this case, then
+    //     the RPC_AUTH_IDENTITY_HANDLE does not need to be set, but the
     //     dwCapabilities arguement should be set for cloaking.  This is also
     //     required for the IUnknown pointer.
-    
+
 
     if(bPassWordSet == false && bUserNameSet == false)
     {
-        // In this case, nothing needs to be done.  But for the sake of 
-        // example the code will set the impersonation level.  
+        // In this case, nothing needs to be done.  But for the sake of
+        // example the code will set the impersonation level.
 
         // For backwards compatibility, retrieve the previous authentication level, so
         // we can echo-back the value when we set the blanket
 
         hr = CoQueryProxyBlanket(
-            pProxy,           //Location for the proxy to query
-            &dwAuthnSvc,      //Location for the current authentication service
-            &dwAuthzSvc,      //Location for the current authorization service
-            NULL,             //Location for the current principal name
-            &dwAuthnLevel,    //Location for the current authentication level
-            &dwImpLevel,      //Location for the current impersonation level
-            NULL,             //Location for the value passed to IClientSecurity::SetBlanket
-            &dwCapabilities   //Location for flags indicating further capabilities of the proxy
-                );
+                 pProxy,           //Location for the proxy to query
+                 &dwAuthnSvc,      //Location for the current authentication service
+                 &dwAuthzSvc,      //Location for the current authorization service
+                 NULL,             //Location for the current principal name
+                 &dwAuthnLevel,    //Location for the current authentication level
+                 &dwImpLevel,      //Location for the current impersonation level
+                 NULL,             //Location for the value passed to IClientSecurity::SetBlanket
+                 &dwCapabilities   //Location for flags indicating further capabilities of the proxy
+             );
         if(FAILED(hr))
             return hr;
         hr = CoSetProxyBlanket(pProxy, RPC_C_AUTHN_DEFAULT, RPC_C_AUTHZ_DEFAULT, COLE_DEFAULT_PRINCIPAL, dwAuthnLevel,
-            RPC_C_IMP_LEVEL_IMPERSONATE, COLE_DEFAULT_AUTHINFO, EOAC_DEFAULT);
+                               RPC_C_IMP_LEVEL_IMPERSONATE, COLE_DEFAULT_AUTHINFO, EOAC_DEFAULT);
         return hr;
     }
     else
@@ -168,51 +168,51 @@ HRESULT SetProxySecurity(IUnknown * pProxy)
         // we can echo-back the value when we set the blanket
 
         hr = CoQueryProxyBlanket(
-            pProxy,           //Location for the proxy to query
-            &dwAuthnSvc,      //Location for the current authentication service
-            &dwAuthzSvc,      //Location for the current authorization service
-            NULL,             //Location for the current principal name
-            &dwAuthnLevel,    //Location for the current authentication level
-            &dwImpLevel,      //Location for the current impersonation level
-            NULL,             //Location for the value passed to IClientSecurity::SetBlanket
-            &dwCapabilities   //Location for flags indicating further capabilities of the proxy
-                );
+                 pProxy,           //Location for the proxy to query
+                 &dwAuthnSvc,      //Location for the current authentication service
+                 &dwAuthzSvc,      //Location for the current authorization service
+                 NULL,             //Location for the current principal name
+                 &dwAuthnLevel,    //Location for the current authentication level
+                 &dwImpLevel,      //Location for the current impersonation level
+                 NULL,             //Location for the value passed to IClientSecurity::SetBlanket
+                 &dwCapabilities   //Location for flags indicating further capabilities of the proxy
+             );
 
         memset((void *)&authident,0,sizeof(COAUTHIDENTITY));
 
-        // note that this assumes NT.  Win9X would fill in the field with 
+        // note that this assumes NT.  Win9X would fill in the field with
         // ascii and then use SEC_WINNT_AUTH_IDENTITY_ANSI flag instead
 
         WCHAR wUserName[ CREDUI_MAX_USERNAME_LENGTH + 1];
         WCHAR wDomainName[CRED_MAX_DOMAIN_TARGET_NAME_LENGTH + 1];
         memset(wUserName, NULL, sizeof(wUserName));
-		memset(wDomainName, NULL, sizeof(wDomainName));
+        memset(wDomainName, NULL, sizeof(wDomainName));
         bool bDomainNameSet = false;
 
         if(bUserNameSet)
         {
-			
+
             // Note that the user name may be in the form domain\user.  If so, split it up
 
-			DWORD dwRes = CredUIParseUserNameW(wFullUserName,
-				wUserName, sizeof(wUserName)/sizeof(WCHAR),
-				wDomainName, sizeof(wDomainName)/sizeof(WCHAR));
+            DWORD dwRes = CredUIParseUserNameW(wFullUserName,
+                                               wUserName, sizeof(wUserName)/sizeof(WCHAR),
+                                               wDomainName, sizeof(wDomainName)/sizeof(WCHAR));
 
-			if (dwRes != NO_ERROR)
-			{
-				printf ("Could not parse user name.\n");
-				return E_FAIL;
-			}
-         
+            if (dwRes != NO_ERROR)
+            {
+                printf ("Could not parse user name.\n");
+                return E_FAIL;
+            }
+
             authident.UserLength = (ULONG)wcslen(wUserName);
             authident.User = (USHORT*)wUserName;
-			
+
         }
         if(wcslen(wDomainName) > 0)
         {
             authident.DomainLength = (ULONG)wcslen(wDomainName);
             authident.Domain = (USHORT*)wDomainName;
-        } 
+        }
         if(bPassWordSet)
         {
             authident.PasswordLength = (ULONG)wcslen(wPassWord);
@@ -222,7 +222,7 @@ HRESULT SetProxySecurity(IUnknown * pProxy)
 
 
         hr = CoSetProxyBlanket(pProxy, RPC_C_AUTHN_DEFAULT, RPC_C_AUTHZ_DEFAULT, COLE_DEFAULT_PRINCIPAL, dwAuthnLevel,
-            RPC_C_IMP_LEVEL_IMPERSONATE, &authident, EOAC_DEFAULT);
+                               RPC_C_IMP_LEVEL_IMPERSONATE, &authident, EOAC_DEFAULT);
         if(FAILED(hr))
             return hr;
 
@@ -234,7 +234,7 @@ HRESULT SetProxySecurity(IUnknown * pProxy)
         if(FAILED(hr))
             return hr;
         hr = CoSetProxyBlanket(pUnk, RPC_C_AUTHN_DEFAULT, RPC_C_AUTHZ_DEFAULT, COLE_DEFAULT_PRINCIPAL, dwAuthnLevel,
-            RPC_C_IMP_LEVEL_IMPERSONATE, &authident, EOAC_DEFAULT);
+                               RPC_C_IMP_LEVEL_IMPERSONATE, &authident, EOAC_DEFAULT);
         pUnk->Release();
         return hr;
     }
@@ -257,7 +257,7 @@ void ListClasses(IWbemServices *pNamespace)
     if(SUCCEEDED(hr))
     {
 
-        // Note that even though security was set on the namespace pointer, it must 
+        // Note that even though security was set on the namespace pointer, it must
         // also be set on this pointer since COM will revert back to the default
         // settings for any new pointers!
 
@@ -303,30 +303,30 @@ void ListClasses(IWbemServices *pNamespace)
 void DumpAce(ACCESS_ALLOWED_ACE * pAce)
 {
     printf("\n Ace, type=0x%x, flags=0x%x, mask=0x%x",
-        pAce->Header.AceType, pAce->Header.AceFlags, pAce->Mask);
+           pAce->Header.AceType, pAce->Header.AceFlags, pAce->Mask);
 
     PSID pSid = 0;
     SID_NAME_USE use;
     WCHAR wcUser[100], wcDomain[100];
     DWORD dwNameSize = sizeof(wcUser)/ sizeof(WCHAR);
-	DWORD dwDomainSize =  sizeof(wcDomain)/ sizeof(WCHAR);
+    DWORD dwDomainSize =  sizeof(wcDomain)/ sizeof(WCHAR);
     pSid = &pAce->SidStart;
     if(LookupAccountSidW(
-            NULL,              // name of local or remote computer
-            pSid,              // security identifier
-            wcUser,            // account name buffer
-            &dwNameSize,       // size of account name buffer
-            wcDomain,          // domain name
-            &dwDomainSize,     // size of domain name buffer
-            &use))
+                NULL,              // name of local or remote computer
+                pSid,              // security identifier
+                wcUser,            // account name buffer
+                &dwNameSize,       // size of account name buffer
+                wcDomain,          // domain name
+                &dwDomainSize,     // size of domain name buffer
+                &use))
         printf(" User name = %S, Domain name = %S", wcUser, wcDomain);
-}   
+}
 
 //***************************************************************************
 //
 // DumpSD
 //
-// Purpose: Dumps information in a security descriptor.  Note that this is 
+// Purpose: Dumps information in a security descriptor.  Note that this is
 // simple cook book code.  There are many available wrappers to do this sort
 // of thing.
 //
@@ -340,7 +340,7 @@ void DumpSD(PSECURITY_DESCRIPTOR pSD)
     BOOL DaclPresent, DaclDefaulted;
     PACL pDacl;
     if(GetSecurityDescriptorDacl(pSD, &DaclPresent,
-                &pDacl, &DaclDefaulted) && DaclPresent)
+                                 &pDacl, &DaclDefaulted) && DaclPresent)
     {
 
         // Dump the aces
@@ -348,11 +348,11 @@ void DumpSD(PSECURITY_DESCRIPTOR pSD)
         ACL_SIZE_INFORMATION inf;
         DWORD dwNumAces;
         if(GetAclInformation(
-            pDacl,
-            &inf,
-            sizeof(ACL_SIZE_INFORMATION),
-            AclSizeInformation
-            ))
+                    pDacl,
+                    &inf,
+                    sizeof(ACL_SIZE_INFORMATION),
+                    AclSizeInformation
+                ))
         {
             dwNumAces = inf.AceCount;
             printf("\nThe DACL has %d ACEs", dwNumAces);
@@ -380,8 +380,8 @@ bool StoreSD(IWbemServices * pSession, PSECURITY_DESCRIPTOR pSD)
     bool bRet = false;
     HRESULT hr;
 
-	if (!IsValidSecurityDescriptor(pSD))
-		return false;
+    if (!IsValidSecurityDescriptor(pSD))
+        return false;
 
     // Get the class object
 
@@ -413,10 +413,11 @@ bool StoreSD(IWbemServices * pSession, PSECURITY_DESCRIPTOR pSD)
     // move the SD into a variant.
 
     SAFEARRAY FAR* psa;
-    SAFEARRAYBOUND rgsabound[1];    rgsabound[0].lLbound = 0;
+    SAFEARRAYBOUND rgsabound[1];
+    rgsabound[0].lLbound = 0;
     long lSize = GetSecurityDescriptorLength(pSD);
     rgsabound[0].cElements = lSize;
-    psa = SafeArrayCreate( VT_UI1, 1 , rgsabound );
+    psa = SafeArrayCreate( VT_UI1, 1, rgsabound );
     if(psa == NULL)
     {
         pInArg->Release();
@@ -440,7 +441,7 @@ bool StoreSD(IWbemServices * pSession, PSECURITY_DESCRIPTOR pSD)
 
     // put the property
 
-    hr = pInArg->Put(L"SD" , 0, &var, 0);      
+    hr = pInArg->Put(L"SD", 0, &var, 0);
     if(FAILED(hr))
     {
         pInArg->Release();
@@ -451,10 +452,10 @@ bool StoreSD(IWbemServices * pSession, PSECURITY_DESCRIPTOR pSD)
 
     IWbemClassObject * pOutParams = NULL;
     hr = pSession->ExecMethod(InstPath,
-            MethName,
-            0,
-            NULL, pInArg,
-            NULL, NULL);
+                              MethName,
+                              0,
+                              NULL, pInArg,
+                              NULL, NULL);
     if(FAILED(hr))
         printf("\nPut failed, returned 0x%x",hr);
 
@@ -477,12 +478,12 @@ bool ReadACL(IWbemServices *pNamespace)
     IWbemClassObject * pOutParams = NULL;
 
     // The security descriptor is returned via the GetSD method
-    
+
     HRESULT hr = pNamespace->ExecMethod(InstPath,
-            MethName,
-            0,
-            NULL, NULL,
-            &pOutParams, NULL);
+                                        MethName,
+                                        0,
+                                        NULL, NULL,
+                                        &pOutParams, NULL);
     if(SUCCEEDED(hr))
     {
 
@@ -507,7 +508,7 @@ bool ReadACL(IWbemServices *pNamespace)
 
             // Given that the security desciptor is now present, the code could use standard
             // nt functions to add or remove ace's.  There are also various libraries available
-            // that can make the job a bit easier.  This sample does not change the security 
+            // that can make the job a bit easier.  This sample does not change the security
             // descriptor, but does write it back unchanged as an example.
 
             StoreSD(pNamespace, pSD);
@@ -527,7 +528,7 @@ bool ReadACL(IWbemServices *pNamespace)
 //***************************************************************************
 
 BOOL g_bInProc = FALSE;
- 
+
 int wmain(int iArgCnt, WCHAR ** argv)
 {
 
@@ -535,40 +536,40 @@ int wmain(int iArgCnt, WCHAR ** argv)
     {
         DisplayOptions();
         return 1;
-	}
+    }
 
-	if (wcslen(wServerName) > 0)
-	{
-		
-		
-		//prompt for credentials for a remote connection
+    if (wcslen(wServerName) > 0)
+    {
 
-		DWORD dwRes = CredUICmdLinePromptForCredentialsW(
-									(const WCHAR *) wServerName, NULL, 0, 
-									wFullUserName, sizeof(wFullUserName)/sizeof(WCHAR),
-									wPassWord, sizeof(wPassWord)/sizeof(WCHAR),
-									FALSE, 
-									CREDUI_FLAGS_EXCLUDE_CERTIFICATES | CREDUI_FLAGS_DO_NOT_PERSIST );
 
-		if (dwRes != NO_ERROR)
-		{
-			printf("Failed to retrieve credentials: error %d. Using the default credentials.", dwRes);
-		}
-		
-		bUserNameSet = bPassWordSet = (dwRes == NO_ERROR);
+        //prompt for credentials for a remote connection
 
-	}
-	else
-	{
-		//no server name passed in, assume local
-		StringCbCopyW(wServerName, sizeof(wPath), L".");
-	}
+        DWORD dwRes = CredUICmdLinePromptForCredentialsW(
+                          (const WCHAR *) wServerName, NULL, 0,
+                          wFullUserName, sizeof(wFullUserName)/sizeof(WCHAR),
+                          wPassWord, sizeof(wPassWord)/sizeof(WCHAR),
+                          FALSE,
+                          CREDUI_FLAGS_EXCLUDE_CERTIFICATES | CREDUI_FLAGS_DO_NOT_PERSIST );
 
-	StringCbCopyW(wPath, sizeof(wPath), L"\\\\");
-	StringCbCatW(wPath, sizeof(wPath),  wServerName);
-	StringCbCatW(wPath, sizeof(wPath),  L"\\");
-	StringCbCatW(wPath, sizeof(wPath),  wNameSpace);
-          
+        if (dwRes != NO_ERROR)
+        {
+            printf("Failed to retrieve credentials: error %d. Using the default credentials.", dwRes);
+        }
+
+        bUserNameSet = bPassWordSet = (dwRes == NO_ERROR);
+
+    }
+    else
+    {
+        //no server name passed in, assume local
+        StringCbCopyW(wServerName, sizeof(wPath), L".");
+    }
+
+    StringCbCopyW(wPath, sizeof(wPath), L"\\\\");
+    StringCbCatW(wPath, sizeof(wPath),  wServerName);
+    StringCbCatW(wPath, sizeof(wPath),  L"\\");
+    StringCbCatW(wPath, sizeof(wPath),  wNameSpace);
+
     IWbemLocator *pLocator = NULL;
     IWbemServices *pNamespace = 0;
     IWbemClassObject * pClass = NULL;
@@ -576,49 +577,49 @@ int wmain(int iArgCnt, WCHAR ** argv)
     // Initialize COM.
 
     HRESULT hr = CoInitialize(0);
-	if (FAILED(hr))
-	{
-	    printf("\nCoInitialize returned 0x%x:", hr);
-		return 1;
-	}
+    if (FAILED(hr))
+    {
+        printf("\nCoInitialize returned 0x%x:", hr);
+        return 1;
+    }
 
-    // This sets the default impersonation level to "Impersonate" which is what WMI 
-	// providers will generally require. 
+    // This sets the default impersonation level to "Impersonate" which is what WMI
+    // providers will generally require.
     //
-    // DLLs cannot call this function.  To bump up the impersonation level, they must 
-    // call CoSetProxyBlanket which is illustrated later on.  
-	//  
-	//  When using asynchronous WMI API's remotely in an environment where the "Local System" account 
-	//  has no network identity (such as non-Kerberos domains), the authentication level of 
-	//  RPC_C_AUTHN_LEVEL_NONE is needed. However, lowering the authentication level to 
-	//  RPC_C_AUTHN_LEVEL_NONE makes your application less secure. It is wise to
-	//	use semi-synchronous API's for accessing WMI data and events instead of the asynchronous ones.
-    
-    hr = CoInitializeSecurity(NULL, -1, NULL, NULL,
-                                RPC_C_AUTHN_LEVEL_PKT_PRIVACY,
-                                RPC_C_IMP_LEVEL_IMPERSONATE,
-                                NULL, 
-								EOAC_SECURE_REFS, //change to EOAC_NONE if you change dwAuthnLevel to RPC_C_AUTHN_LEVEL_NONE
-								0);
-	if (FAILED(hr))
-	{
-	    printf("\nCoInitializeSecurity returned 0x%x:", hr);
-		return 1;
-	}
-                                
-    hr = CoCreateInstance(CLSID_WbemLocator, 0, CLSCTX_INPROC_SERVER,
-            IID_IWbemLocator, (LPVOID *) &pLocator);
+    // DLLs cannot call this function.  To bump up the impersonation level, they must
+    // call CoSetProxyBlanket which is illustrated later on.
+    //
+    //  When using asynchronous WMI API's remotely in an environment where the "Local System" account
+    //  has no network identity (such as non-Kerberos domains), the authentication level of
+    //  RPC_C_AUTHN_LEVEL_NONE is needed. However, lowering the authentication level to
+    //  RPC_C_AUTHN_LEVEL_NONE makes your application less secure. It is wise to
+    //	use semi-synchronous API's for accessing WMI data and events instead of the asynchronous ones.
 
-	if (FAILED(hr))
-	{
-	    printf("\nCoCreateInstance for CLSID_WbemLocator returned 0x%x:", hr);
-		return 1;
-	}
-   
-    hr = pLocator->ConnectServer(wPath, 
-                    (bUserNameSet) ? wFullUserName : NULL, 
-                    (bPassWordSet) ? wPassWord : NULL, 
-                    NULL, 0, NULL, NULL, &pNamespace);
+    hr = CoInitializeSecurity(NULL, -1, NULL, NULL,
+                              RPC_C_AUTHN_LEVEL_PKT_PRIVACY,
+                              RPC_C_IMP_LEVEL_IMPERSONATE,
+                              NULL,
+                              EOAC_SECURE_REFS, //change to EOAC_NONE if you change dwAuthnLevel to RPC_C_AUTHN_LEVEL_NONE
+                              0);
+    if (FAILED(hr))
+    {
+        printf("\nCoInitializeSecurity returned 0x%x:", hr);
+        return 1;
+    }
+
+    hr = CoCreateInstance(CLSID_WbemLocator, 0, CLSCTX_INPROC_SERVER,
+                          IID_IWbemLocator, (LPVOID *) &pLocator);
+
+    if (FAILED(hr))
+    {
+        printf("\nCoCreateInstance for CLSID_WbemLocator returned 0x%x:", hr);
+        return 1;
+    }
+
+    hr = pLocator->ConnectServer(wPath,
+                                 (bUserNameSet) ? wFullUserName : NULL,
+                                 (bPassWordSet) ? wPassWord : NULL,
+                                 NULL, 0, NULL, NULL, &pNamespace);
     if(FAILED(hr))
     {
         wprintf(L"\nConnectServer  to %s failed, hr = 0x%x", wPath, hr);

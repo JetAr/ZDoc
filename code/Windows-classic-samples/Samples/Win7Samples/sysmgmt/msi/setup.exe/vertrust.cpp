@@ -1,4 +1,4 @@
-//+-------------------------------------------------------------------------
+﻿//+-------------------------------------------------------------------------
 //
 //  Copyright (c) Microsoft Corporation.  All rights reserved.
 //
@@ -110,7 +110,7 @@ itvEnum IsFileTrusted(LPCWSTR lpwFile, HWND hwndParent, DWORD dwUIChoice, bool *
     hr = pfnWinVerifyTrust(/* UI Window Handle */ (dwUIChoice == WTD_UI_NONE) ? (HWND)INVALID_HANDLE_VALUE : hwndParent, &guidAction, &sWintrustData);
     DebugMsg("[WVT] WVT returned 0x%X\n", hr);
 
-    itv = (TRUST_E_PROVIDER_UNKNOWN == hr) ? itvWintrustNotOnMachine : ((S_OK == hr) ? itvTrusted : itvUnTrusted); 
+    itv = (TRUST_E_PROVIDER_UNKNOWN == hr) ? itvWintrustNotOnMachine : ((S_OK == hr) ? itvTrusted : itvUnTrusted);
 
     if (itvWintrustNotOnMachine == itv)
     {
@@ -155,7 +155,7 @@ itvEnum IsFileTrusted(LPCWSTR lpwFile, HWND hwndParent, DWORD dwUIChoice, bool *
                 psProvCert = pfnWTHelperGetProvCertFromChain(psProvSigner, 0);
             }
         }
-    
+
         if (!psProvCert)
         {
             // some failure in obtaining the signer cert data
@@ -287,10 +287,10 @@ itvEnum IsPackageTrusted(LPCSTR szSetupExe, LPCSTR szPackage, HWND hwndParent)
     //
 
     if ( !fSetupExeIsSigned  // exe is not signed
-        || !fPackageIsSigned // package is not signed
-        || !pcExeSigner      // exe signer cert is missing
-        || !pcMsiSigner      // package signer cert is missing
-        || !pfnCertCompareCertificate(X509_ASN_ENCODING | PKCS_7_ASN_ENCODING, pcExeSigner->pCertInfo, pcMsiSigner->pCertInfo)) // signed by different certs
+            || !fPackageIsSigned // package is not signed
+            || !pcExeSigner      // exe signer cert is missing
+            || !pcMsiSigner      // package signer cert is missing
+            || !pfnCertCompareCertificate(X509_ASN_ENCODING | PKCS_7_ASN_ENCODING, pcExeSigner->pCertInfo, pcMsiSigner->pCertInfo)) // signed by different certs
     {
         // always show UI
         DebugMsg("[WVT] step3: last call to WinVerifyTrust using full UI\n");

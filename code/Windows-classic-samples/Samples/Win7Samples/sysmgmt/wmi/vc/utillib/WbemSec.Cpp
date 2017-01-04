@@ -1,4 +1,4 @@
-//***************************************************************************
+﻿//***************************************************************************
 
 //
 
@@ -28,10 +28,10 @@
 //
 //  Initialize DCOM security.  The authentication level is typically
 //  RPC_C_AUTHN_LEVEL_PKT_PRIVACY,  and the impersonation level is typically
-//  RPC_C_IMP_LEVEL_IMPERSONATE.  
-//  When using asynchronous WMI callbacks remotely in an environment where the "Local System" account 
-//  has no network identity (such as non-Kerberos domains), the authentication level of 
-//  RPC_C_AUTHN_LEVEL_NONE is needed. However, lowering the authentication level to 
+//  RPC_C_IMP_LEVEL_IMPERSONATE.
+//  When using asynchronous WMI callbacks remotely in an environment where the "Local System" account
+//  has no network identity (such as non-Kerberos domains), the authentication level of
+//  RPC_C_AUTHN_LEVEL_NONE is needed. However, lowering the authentication level to
 //  RPC_C_AUTHN_LEVEL_NONE makes your application less secure. It is wise to
 //	use semi-synchronous API's for accessing WMI data and events instead of the asynchronous ones.
 //
@@ -46,20 +46,20 @@ HRESULT InitializeSecurity(DWORD dwAuthLevel, DWORD dwImpLevel)
     // Initialize security
     // ===================
 
-	DWORD dwCapabilities;
+    DWORD dwCapabilities;
 
-	if (dwAuthLevel == RPC_C_AUTHN_LEVEL_NONE) 
+    if (dwAuthLevel == RPC_C_AUTHN_LEVEL_NONE)
         dwCapabilities = EOAC_NONE;
-	else
+    else
         dwCapabilities = EOAC_SECURE_REFS;
 
 
     return CoInitializeSecurity
-		(NULL, -1, NULL, NULL,
-        dwAuthLevel, dwImpLevel,
-        NULL, 
-		dwCapabilities, 
-		0);
+           (NULL, -1, NULL, NULL,
+            dwAuthLevel, dwImpLevel,
+            NULL,
+            dwCapabilities,
+            0);
 }
 
 //***************************************************************************
@@ -149,14 +149,14 @@ SCODE ParseAuthorityUserArgs(BSTR & AuthArg, BSTR & UserArg,BSTR & Authority,BST
             return E_INVALIDARG;
 
         AuthArg = SysAllocString(Authority + 11);
-		if (!AuthArg)
-			return E_OUTOFMEMORY;
-        if(User) 
-		{
-			UserArg = SysAllocString(User);
-			if (!UserArg)
-				return E_OUTOFMEMORY;
-		}
+        if (!AuthArg)
+            return E_OUTOFMEMORY;
+        if(User)
+        {
+            UserArg = SysAllocString(User);
+            if (!UserArg)
+                return E_OUTOFMEMORY;
+        }
 
         return S_OK;
     }
@@ -167,23 +167,22 @@ SCODE ParseAuthorityUserArgs(BSTR & AuthArg, BSTR & UserArg,BSTR & Authority,BST
         wcsncpy_s(cTemp, User, iDomLen);
         cTemp[iDomLen] = 0;
         AuthArg = SysAllocString(cTemp);
-		if (!AuthArg)
-			return E_OUTOFMEMORY;
+        if (!AuthArg)
+            return E_OUTOFMEMORY;
         if(wcslen(pSlashInUser+1))
-		{
+        {
             UserArg = SysAllocString(pSlashInUser+1);
-			if (!UserArg)
-				return E_OUTOFMEMORY;
-		}
+            if (!UserArg)
+                return E_OUTOFMEMORY;
+        }
 
     }
-    else
-        if(User) 
-		{
-			UserArg = SysAllocString(User);
-			if (!UserArg)
-				return E_OUTOFMEMORY;
-		}
+    else if(User)
+    {
+        UserArg = SysAllocString(User);
+        if (!UserArg)
+            return E_OUTOFMEMORY;
+    }
 
     return S_OK;
 }
@@ -221,9 +220,9 @@ SCODE GetAuthImp(IUnknown * pFrom, DWORD * pdwAuthLevel, DWORD * pdwImpLevel)
     {
         DWORD dwAuthnSvc, dwAuthzSvc, dwCapabilities;
         sc = pFromSec->QueryBlanket(pFrom, &dwAuthnSvc, &dwAuthzSvc,
-                                            NULL,
-                                            pdwAuthLevel, pdwImpLevel,
-                                            NULL, &dwCapabilities);
+                                    NULL,
+                                    pdwAuthLevel, pdwImpLevel,
+                                    NULL, &dwCapabilities);
 
         // Special case of going to a win9x share level box
 
@@ -243,22 +242,22 @@ SCODE GetAuthImp(IUnknown * pFrom, DWORD * pdwAuthLevel, DWORD * pdwImpLevel)
 //
 //  DESCRIPTION:
 //
-//  This routine is used by clients in order to set the security settings of a particular 
+//  This routine is used by clients in order to set the security settings of a particular
 //  interface proxy. NOTE that setting the security blanket on the interface is not always needed:
-//  simple client applications that execute in their own process can typically just call 
-//	CoInitializeSecurity( NULL, -1, NULL, NULL, 
-//						RPC_C_AUTHN_LEVEL_PKT_PRIVACY, 
-//						RPC_C_IMP_LEVEL_IMPERSONATE, 
-//						NULL, 
-//						EOAC_NONE, 
+//  simple client applications that execute in their own process can typically just call
+//	CoInitializeSecurity( NULL, -1, NULL, NULL,
+//						RPC_C_AUTHN_LEVEL_PKT_PRIVACY,
+//						RPC_C_IMP_LEVEL_IMPERSONATE,
+//						NULL,
+//						EOAC_NONE,
 //						NULL );
-//  before calling out to WMI.  
-//  However, for clients that reside in DLLs and do not control 
-//  the hosting process' COM security setting (MMC snap-ins, Visual Studio extensions and such), 
-//  it is necessary to set security on WMI interface proxies by calling 
-//  CoSetProxyBlanket() directly or through this helper.  
+//  before calling out to WMI.
+//  However, for clients that reside in DLLs and do not control
+//  the hosting process' COM security setting (MMC snap-ins, Visual Studio extensions and such),
+//  it is necessary to set security on WMI interface proxies by calling
+//  CoSetProxyBlanket() directly or through this helper.
 //
-//	Another case where setting proxy security for WMI connection is needed is when 
+//	Another case where setting proxy security for WMI connection is needed is when
 //  credentials different from the client process user context must be specified.
 //
 //
@@ -290,23 +289,23 @@ HRESULT SetInterfaceSecurity(IUnknown * pInterface, LPWSTR pAuthority, LPWSTR pU
 
     if(dwAuthLevel == RPC_C_AUTHN_LEVEL_NONE)
         return CoSetProxyBlanket(pInterface, RPC_C_AUTHN_WINNT, RPC_C_AUTHZ_NONE, NULL,
-                       RPC_C_AUTHN_LEVEL_NONE, RPC_C_IMP_LEVEL_IMPERSONATE, NULL, EOAC_NONE);
+                                 RPC_C_AUTHN_LEVEL_NONE, RPC_C_IMP_LEVEL_IMPERSONATE, NULL, EOAC_NONE);
 
     // If we are doing trivial case, just pass in a null authentication structure which is used
     // if the current logged in user's credentials are OK.
 
     if((pAuthority == NULL || wcslen(pAuthority) < 1) &&
-        (pUser == NULL || wcslen(pUser) < 1) &&
-        (pPassword == NULL || wcslen(pPassword) < 1))
-            return CoSetProxyBlanket(pInterface, RPC_C_AUTHN_WINNT, RPC_C_AUTHZ_NONE, NULL,
-                       dwAuthLevel, dwImpLevel, NULL, EOAC_NONE);
+            (pUser == NULL || wcslen(pUser) < 1) &&
+            (pPassword == NULL || wcslen(pPassword) < 1))
+        return CoSetProxyBlanket(pInterface, RPC_C_AUTHN_WINNT, RPC_C_AUTHZ_NONE, NULL,
+                                 dwAuthLevel, dwImpLevel, NULL, EOAC_NONE);
 
     // If user, or Authority was passed in, the we need to create an authority argument for the login
 
     COAUTHIDENTITY  authident;
     BSTR AuthArg = NULL, UserArg = NULL;
     sc = ParseAuthorityUserArgs(AuthArg, UserArg, pAuthority, pUser);
-	size_t * intReturnValue = NULL;
+    size_t * intReturnValue = NULL;
     if(sc != S_OK)
         return sc;
 
@@ -333,58 +332,58 @@ HRESULT SetInterfaceSecurity(IUnknown * pInterface, LPWSTR pAuthority, LPWSTR pU
     else
     {
         char szUser[MAX_PATH], szAuthority[MAX_PATH], szPassword[MAX_PATH];
-		ZeroMemory(szUser, sizeof(szUser));
-		ZeroMemory(szAuthority, sizeof(szAuthority));
-		ZeroMemory(szPassword, sizeof(szPassword));
+        ZeroMemory(szUser, sizeof(szUser));
+        ZeroMemory(szAuthority, sizeof(szAuthority));
+        ZeroMemory(szPassword, sizeof(szPassword));
 
-		size_t written = 0;
+        size_t written = 0;
 
         // Fill in the indentity structure
 
         if(UserArg)
         {
-			written = wcstombs_s(intReturnValue, szUser, sizeof(szUser), UserArg, sizeof(szUser));
+            written = wcstombs_s(intReturnValue, szUser, sizeof(szUser), UserArg, sizeof(szUser));
             //written = wcstombs(szUser, UserArg, sizeof(szUser));
-			if (written < sizeof(szUser) - 1)
-			{
-				//we could retry by calling wcstombs to find out required buffer size, but this is a simple sample
-				sc = E_INVALIDARG;
-				goto cleanup;
-			}
-	
+            if (written < sizeof(szUser) - 1)
+            {
+                //we could retry by calling wcstombs to find out required buffer size, but this is a simple sample
+                sc = E_INVALIDARG;
+                goto cleanup;
+            }
+
             authident.UserLength = (ULONG)strlen(szUser);
             authident.User = (USHORT*)szUser;
         }
         if(AuthArg)
         {
             written = wcstombs_s(intReturnValue, szAuthority, sizeof(szAuthority), AuthArg, sizeof(szAuthority));
-			//written = wcstombs(szAuthority, AuthArg, sizeof(szAuthority));
-			if (written < sizeof(szAuthority) - 1)
-			{
-				//we could retry by calling wcstombs to find out required buffer size, but this is a simple sample
-				sc = E_INVALIDARG;
-				goto cleanup;
-			}
+            //written = wcstombs(szAuthority, AuthArg, sizeof(szAuthority));
+            if (written < sizeof(szAuthority) - 1)
+            {
+                //we could retry by calling wcstombs to find out required buffer size, but this is a simple sample
+                sc = E_INVALIDARG;
+                goto cleanup;
+            }
             authident.DomainLength = (ULONG)strlen(szAuthority);
             authident.Domain = (USHORT*)szAuthority;
         }
         if(pPassword)
         {
             written = wcstombs_s(intReturnValue, szPassword, sizeof(szPassword), pPassword, sizeof(szPassword));
-			//written = wcstombs(szPassword, pPassword, sizeof(szPassword));
-			if (written < sizeof(szPassword) - 1)
-			{
-				//we could retry by calling wcstombs to find out required buffer size, but this is a simple sample
-				sc = E_INVALIDARG;
-				goto cleanup;
-			}
+            //written = wcstombs(szPassword, pPassword, sizeof(szPassword));
+            if (written < sizeof(szPassword) - 1)
+            {
+                //we could retry by calling wcstombs to find out required buffer size, but this is a simple sample
+                sc = E_INVALIDARG;
+                goto cleanup;
+            }
             authident.PasswordLength = (ULONG)strlen(szPassword);
             authident.Password = (USHORT*)szPassword;
         }
         authident.Flags = SEC_WINNT_AUTH_IDENTITY_ANSI;
     }
     sc = CoSetProxyBlanket(pInterface, RPC_C_AUTHN_WINNT, RPC_C_AUTHZ_NONE, NULL,
-                       dwAuthLevel, dwImpLevel, &authident, EOAC_NONE);
+                           dwAuthLevel, dwImpLevel, &authident, EOAC_NONE);
 
 cleanup:
     if(UserArg)
@@ -397,7 +396,7 @@ cleanup:
 /******************************************************************************
  *
  *	Name:	CheckAccess
- *				
+ *
  *  Description:	Allow provider to evaluate permissions against a security descriptor
  *
  *  This method should be called by WMI providers in scenarios where
@@ -407,109 +406,109 @@ cleanup:
  *
  *****************************************************************************/
 
-HRESULT CheckAccess (SECURITY_DESCRIPTOR *a_SecurityDescriptor ,
-					DWORD a_Access , 
-					GENERIC_MAPPING *a_Mapping)
+HRESULT CheckAccess (SECURITY_DESCRIPTOR *a_SecurityDescriptor,
+                     DWORD a_Access,
+                     GENERIC_MAPPING *a_Mapping)
 {
-	HRESULT t_Result = S_OK ;
+    HRESULT t_Result = S_OK ;
 
-	HANDLE t_Token = NULL ;
+    HANDLE t_Token = NULL ;
 
-	BOOL t_Status = OpenThreadToken (
+    BOOL t_Status = OpenThreadToken (
 
-		GetCurrentThread () ,
-		TOKEN_QUERY ,
-		TRUE ,
-		& t_Token 										
-	) ;
+                        GetCurrentThread (),
+                        TOKEN_QUERY,
+                        TRUE,
+                        & t_Token
+                    ) ;
 
-	DWORD t_LastError = GetLastError () ;
-	if ( ! t_Status)
-	{
-		//the thread token should always be available
+    DWORD t_LastError = GetLastError () ;
+    if ( ! t_Status)
+    {
+        //the thread token should always be available
 
-		switch ( t_LastError )
-		{
-			case E_ACCESSDENIED:
-			{
-				return 	WBEM_E_ACCESS_DENIED ;
-			}
-			break ;
+        switch ( t_LastError )
+        {
+        case E_ACCESSDENIED:
+        {
+            return 	WBEM_E_ACCESS_DENIED ;
+        }
+        break ;
 
-			default:
-			{
-				return WBEM_E_FAILED ;
-			}
-			break ;
-		}
-	}
-	
-
-	DWORD t_Access = 0 ;
-	BOOL t_AccessStatus = FALSE ;
-	PRIVILEGE_SET *t_PrivilegeSet = NULL ;
-	DWORD t_PrivilegeSetSize = 0 ;
-
-	MapGenericMask (
-
-		& a_Access ,
-		a_Mapping
-	) ;
-
-	t_Status = AccessCheck (
-
-		a_SecurityDescriptor ,
-		t_Token,
-		a_Access ,
-		a_Mapping ,
-		NULL ,
-		& t_PrivilegeSetSize ,
-		& t_Access ,
-		& t_AccessStatus
-	) ;
-
-	if (!t_Status || !t_AccessStatus )
-	{
-		DWORD t_LastError = GetLastError () ;
-		if ( t_LastError == ERROR_INSUFFICIENT_BUFFER )
-		{
-			t_PrivilegeSet = ( PRIVILEGE_SET * ) new BYTE [ t_PrivilegeSetSize ] ;
-			if ( t_PrivilegeSet )
-			{				
-				t_Status = AccessCheck (
-					a_SecurityDescriptor ,
-					t_Token,
-					a_Access ,
-					a_Mapping ,
-					t_PrivilegeSet ,
-					& t_PrivilegeSetSize ,
-					& t_Access ,
-					& t_AccessStatus
-				) ;
-
-				if ( !t_Status || !t_AccessStatus )
-				{
-					t_Result = WBEM_E_ACCESS_DENIED ;
-				}
-
-				delete [] ( BYTE * ) t_PrivilegeSet ;
-			}
-			else
-			{
-				t_Result = WBEM_E_OUT_OF_MEMORY ;
-			}
-		}
-		else
-		{
-			t_Result = WBEM_E_ACCESS_DENIED;
-		}
-
-	}
-
-	CloseHandle ( t_Token ) ;	
+        default:
+        {
+            return WBEM_E_FAILED ;
+        }
+        break ;
+        }
+    }
 
 
-	return t_Result ;
+    DWORD t_Access = 0 ;
+    BOOL t_AccessStatus = FALSE ;
+    PRIVILEGE_SET *t_PrivilegeSet = NULL ;
+    DWORD t_PrivilegeSetSize = 0 ;
+
+    MapGenericMask (
+
+        & a_Access,
+        a_Mapping
+    ) ;
+
+    t_Status = AccessCheck (
+
+                   a_SecurityDescriptor,
+                   t_Token,
+                   a_Access,
+                   a_Mapping,
+                   NULL,
+                   & t_PrivilegeSetSize,
+                   & t_Access,
+                   & t_AccessStatus
+               ) ;
+
+    if (!t_Status || !t_AccessStatus )
+    {
+        DWORD t_LastError = GetLastError () ;
+        if ( t_LastError == ERROR_INSUFFICIENT_BUFFER )
+        {
+            t_PrivilegeSet = ( PRIVILEGE_SET * ) new BYTE [ t_PrivilegeSetSize ] ;
+            if ( t_PrivilegeSet )
+            {
+                t_Status = AccessCheck (
+                               a_SecurityDescriptor,
+                               t_Token,
+                               a_Access,
+                               a_Mapping,
+                               t_PrivilegeSet,
+                               & t_PrivilegeSetSize,
+                               & t_Access,
+                               & t_AccessStatus
+                           ) ;
+
+                if ( !t_Status || !t_AccessStatus )
+                {
+                    t_Result = WBEM_E_ACCESS_DENIED ;
+                }
+
+                delete [] ( BYTE * ) t_PrivilegeSet ;
+            }
+            else
+            {
+                t_Result = WBEM_E_OUT_OF_MEMORY ;
+            }
+        }
+        else
+        {
+            t_Result = WBEM_E_ACCESS_DENIED;
+        }
+
+    }
+
+    CloseHandle ( t_Token ) ;
+
+
+    return t_Result ;
 }
 
 
@@ -518,105 +517,105 @@ HRESULT CheckAccess (SECURITY_DESCRIPTOR *a_SecurityDescriptor ,
  *
  *	Name:	GetCurrentImpersonationLevel
  *
- *	
+ *
  *  Description:
  *
- *			Get COM impersonation level of caller.	
+ *			Get COM impersonation level of caller.
  *
  *****************************************************************************/
 
 DWORD GetCurrentImpersonationLevel ()
 {
-	DWORD t_ImpersonationLevel = RPC_C_IMP_LEVEL_ANONYMOUS ;
+    DWORD t_ImpersonationLevel = RPC_C_IMP_LEVEL_ANONYMOUS ;
 
     HANDLE t_ThreadToken = NULL ;
 
     BOOL t_Status = OpenThreadToken (
 
-		GetCurrentThread() ,
-		TOKEN_QUERY,
-		TRUE,
-		&t_ThreadToken
-	) ;
+                        GetCurrentThread(),
+                        TOKEN_QUERY,
+                        TRUE,
+                        &t_ThreadToken
+                    ) ;
 
     if ( t_Status )
     {
-		SECURITY_IMPERSONATION_LEVEL t_Level = SecurityAnonymous ;
-		DWORD t_Returned = 0 ;
+        SECURITY_IMPERSONATION_LEVEL t_Level = SecurityAnonymous ;
+        DWORD t_Returned = 0 ;
 
-		t_Status = GetTokenInformation (
+        t_Status = GetTokenInformation (
 
-			t_ThreadToken ,
-			TokenImpersonationLevel ,
-			& t_Level ,
-			sizeof ( SECURITY_IMPERSONATION_LEVEL ) ,
-			& t_Returned
-		) ;
+                       t_ThreadToken,
+                       TokenImpersonationLevel,
+                       & t_Level,
+                       sizeof ( SECURITY_IMPERSONATION_LEVEL ),
+                       & t_Returned
+                   ) ;
 
-		CloseHandle ( t_ThreadToken ) ;
+        CloseHandle ( t_ThreadToken ) ;
 
-		if ( t_Status == FALSE )
-		{
-			t_ImpersonationLevel = RPC_C_IMP_LEVEL_ANONYMOUS ;
-		}
-		else
-		{
-			switch ( t_Level )
-			{
-				case SecurityAnonymous:
-				{
-					t_ImpersonationLevel = RPC_C_IMP_LEVEL_ANONYMOUS ;
-				}
-				break ;
+        if ( t_Status == FALSE )
+        {
+            t_ImpersonationLevel = RPC_C_IMP_LEVEL_ANONYMOUS ;
+        }
+        else
+        {
+            switch ( t_Level )
+            {
+            case SecurityAnonymous:
+            {
+                t_ImpersonationLevel = RPC_C_IMP_LEVEL_ANONYMOUS ;
+            }
+            break ;
 
-				case SecurityIdentification:
-				{
-					t_ImpersonationLevel = RPC_C_IMP_LEVEL_IDENTIFY ;
-				}
-				break ;
+            case SecurityIdentification:
+            {
+                t_ImpersonationLevel = RPC_C_IMP_LEVEL_IDENTIFY ;
+            }
+            break ;
 
-				case SecurityImpersonation:
-				{
-					t_ImpersonationLevel = RPC_C_IMP_LEVEL_IMPERSONATE ;
-				}
-				break ;
+            case SecurityImpersonation:
+            {
+                t_ImpersonationLevel = RPC_C_IMP_LEVEL_IMPERSONATE ;
+            }
+            break ;
 
-				case SecurityDelegation:
-				{
-					t_ImpersonationLevel = RPC_C_IMP_LEVEL_DELEGATE ;
-				}
-				break ;
+            case SecurityDelegation:
+            {
+                t_ImpersonationLevel = RPC_C_IMP_LEVEL_DELEGATE ;
+            }
+            break ;
 
-				default:
-				{
-					t_ImpersonationLevel = RPC_C_IMP_LEVEL_ANONYMOUS ;
-				}
-				break ;
-			}
-		}
-	}
-	else
-	{
+            default:
+            {
+                t_ImpersonationLevel = RPC_C_IMP_LEVEL_ANONYMOUS ;
+            }
+            break ;
+            }
+        }
+    }
+    else
+    {
         ULONG t_LastError = GetLastError () ;
 
         if ( t_LastError == ERROR_NO_IMPERSONATION_TOKEN || t_LastError == ERROR_NO_TOKEN )
         {
             t_ImpersonationLevel = RPC_C_IMP_LEVEL_DELEGATE ;
         }
-        else 
-		{
-			if ( t_LastError == ERROR_CANT_OPEN_ANONYMOUS )
-			{
-				t_ImpersonationLevel = RPC_C_IMP_LEVEL_ANONYMOUS ;
-			}
-			else
-			{
-				t_ImpersonationLevel = RPC_C_IMP_LEVEL_ANONYMOUS ;
-			}
-		}
+        else
+        {
+            if ( t_LastError == ERROR_CANT_OPEN_ANONYMOUS )
+            {
+                t_ImpersonationLevel = RPC_C_IMP_LEVEL_ANONYMOUS ;
+            }
+            else
+            {
+                t_ImpersonationLevel = RPC_C_IMP_LEVEL_ANONYMOUS ;
+            }
+        }
     }
 
-	return t_ImpersonationLevel ;
+    return t_ImpersonationLevel ;
 }
 
 

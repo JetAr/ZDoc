@@ -1,4 +1,4 @@
-//*****************************************************************************
+﻿//*****************************************************************************
 //
 // Microsoft Windows Media
 // Copyright ( C) Microsoft Corporation. All rights reserved.
@@ -15,9 +15,9 @@
 
 static void Usage();
 static HRESULT CommandLineParser( int argc, __in_ecount(argc) LPTSTR argv[], __out LPTSTR *    ptszInput,
-                          DWORD *cnsStart, DWORD *cnsEnd,
-                          BOOL *fCompressed, BOOL *fAudioPresent,
-                          BOOL *fVideoPresent, BOOL *fRangeInFrames);
+                                  DWORD *cnsStart, DWORD *cnsEnd,
+                                  BOOL *fCompressed, BOOL *fAudioPresent,
+                                  BOOL *fVideoPresent, BOOL *fRangeInFrames);
 ///////////////////////////////////////////////////////////////
 ///////
 int __cdecl _tmain( int argc, __in_ecount(argc) LPTSTR argv[] )
@@ -33,11 +33,11 @@ int __cdecl _tmain( int argc, __in_ecount(argc) LPTSTR argv[] )
 
     hr = CommandLineParser( argc, argv, &ptszInput, &cnsStart, &cnsEnd, &fCompressed,
                             &fAudioPresent, &fVideoPresent, &fRangeInFrames );
-	if ( !fAudioPresent && !fVideoPresent )
-	{
-		_tprintf(_T("No streams specified to read. Please specify at least one of audio or video streams.\n\n"));
-		hr = E_INVALIDARG;
-	}
+    if ( !fAudioPresent && !fVideoPresent )
+    {
+        _tprintf(_T("No streams specified to read. Please specify at least one of audio or video streams.\n\n"));
+        hr = E_INVALIDARG;
+    }
 
     if ( FAILED( hr ) )
     {
@@ -54,7 +54,7 @@ int __cdecl _tmain( int argc, __in_ecount(argc) LPTSTR argv[] )
 
     CReader reader;
 
-    do 
+    do
     {
         hr = reader.SetParams( cnsStart, cnsEnd, fCompressed, fAudioPresent, fVideoPresent, fRangeInFrames );
         if( FAILED( hr ) )
@@ -76,7 +76,8 @@ int __cdecl _tmain( int argc, __in_ecount(argc) LPTSTR argv[] )
             break ;
         }
 
-    }while( FALSE );
+    }
+    while( FALSE );
 
     if (FAILED( hr ) )
     {
@@ -86,12 +87,12 @@ int __cdecl _tmain( int argc, __in_ecount(argc) LPTSTR argv[] )
     hr = reader.Close();
     if( FAILED( hr ) )
     {
-        _tprintf( _T( "Close failed: hr = 0x%08x\n" ), hr );       
+        _tprintf( _T( "Close failed: hr = 0x%08x\n" ), hr );
     }
 
     CoUninitialize();
 
-	return( 0 );
+    return( 0 );
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -100,31 +101,31 @@ int __cdecl _tmain( int argc, __in_ecount(argc) LPTSTR argv[] )
 //////////////////////////////////////////////////////////////////////////////
 void Usage()
 {
-   _tprintf( _T( "\nWMSyncReader -i <infile> [ -st <start> -e <end> -c -a -v -f ]\n" ) );
-   _tprintf( _T( "\tinfile\t = Input filename (cannot be a network stream)\n" ) );
-   _tprintf( _T( "\tstart\t = Start time in (ms), or starting frame number (if -f is specified)\n" ) );
-   _tprintf( _T( "\tend\t = End time in (ms), or ending frame number (if -f is specified), 0 means EOF\n" ) );
-   _tprintf( _T( "\t-c\t = Read compressed samples\n" ) );
-   _tprintf( _T( "\t-a\t = Read audio stream if present\n" ) );
-   _tprintf( _T( "\t-v\t = Read video stream if present\n" ) );
-   _tprintf( _T( "\t-f\t = Use frame seeking. Reading range is specified in frames numbers rather than time (see -st and -e options). " ) );
-   _tprintf( _T( "The file must be frame indexed in order to use -f option.\n\n" ) );
-   _tprintf( _T( "\tREMARK = at least one of -a or -v should be set to get any samples\n" ) );
+    _tprintf( _T( "\nWMSyncReader -i <infile> [ -st <start> -e <end> -c -a -v -f ]\n" ) );
+    _tprintf( _T( "\tinfile\t = Input filename (cannot be a network stream)\n" ) );
+    _tprintf( _T( "\tstart\t = Start time in (ms), or starting frame number (if -f is specified)\n" ) );
+    _tprintf( _T( "\tend\t = End time in (ms), or ending frame number (if -f is specified), 0 means EOF\n" ) );
+    _tprintf( _T( "\t-c\t = Read compressed samples\n" ) );
+    _tprintf( _T( "\t-a\t = Read audio stream if present\n" ) );
+    _tprintf( _T( "\t-v\t = Read video stream if present\n" ) );
+    _tprintf( _T( "\t-f\t = Use frame seeking. Reading range is specified in frames numbers rather than time (see -st and -e options). " ) );
+    _tprintf( _T( "The file must be frame indexed in order to use -f option.\n\n" ) );
+    _tprintf( _T( "\tREMARK = at least one of -a or -v should be set to get any samples\n" ) );
 
 }
 
 ///////////////////////////////////////////////////////////////
 ////////
 HRESULT CommandLineParser( int argc, __in_ecount(argc) LPTSTR argv[], __out LPTSTR *    ptszInput,
-                          DWORD *cnsStart, DWORD *cnsEnd,
-                          BOOL *fCompressed, BOOL *fAudioPresent,
-                          BOOL *fVideoPresent, BOOL *fRangeInFrames)
+                           DWORD *cnsStart, DWORD *cnsEnd,
+                           BOOL *fCompressed, BOOL *fAudioPresent,
+                           BOOL *fVideoPresent, BOOL *fRangeInFrames)
 {
 
     if ( argc < 2 || NULL == argv || NULL == ptszInput
-        || NULL == cnsStart || NULL == cnsEnd
-        || NULL == fCompressed || NULL == fAudioPresent
-        || NULL == fVideoPresent || NULL == fRangeInFrames )
+            || NULL == cnsStart || NULL == cnsEnd
+            || NULL == fCompressed || NULL == fAudioPresent
+            || NULL == fVideoPresent || NULL == fRangeInFrames )
     {
         return( E_INVALIDARG );
     }
@@ -148,7 +149,7 @@ HRESULT CommandLineParser( int argc, __in_ecount(argc) LPTSTR argv[], __out LPTS
                 Usage();
                 return( E_INVALIDARG );
             }
-            
+
             *ptszInput = argv[i];
             continue ;
 
@@ -162,20 +163,20 @@ HRESULT CommandLineParser( int argc, __in_ecount(argc) LPTSTR argv[], __out LPTS
             {
                 *cnsStart = 0;
             }
-			else
-			{
+            else
+            {
 
-				int ret = _stscanf_s( argv[i], _T( "%lu" ), cnsStart ) ;
-				if (EOF == ret || 0 == ret )
-				{
-					Usage();
-					return( E_INVALIDARG );
-				}
-			}
+                int ret = _stscanf_s( argv[i], _T( "%lu" ), cnsStart ) ;
+                if (EOF == ret || 0 == ret )
+                {
+                    Usage();
+                    return( E_INVALIDARG );
+                }
+            }
             continue;
         }
 
-        if( 0 == _tcsicmp( argv[i] , _T( "-e" ) ) )
+        if( 0 == _tcsicmp( argv[i], _T( "-e" ) ) )
         {
             i++ ;
 
@@ -183,35 +184,35 @@ HRESULT CommandLineParser( int argc, __in_ecount(argc) LPTSTR argv[], __out LPTS
             {
                 *cnsEnd = 0;
             }
-			else
-			{
-				int ret = _stscanf_s( argv[i], _T( "%lu" ), cnsEnd ) ;
-				if (EOF == ret || 0 == ret )
-				{
-					Usage();
-					return( E_INVALIDARG );
-				}
-			}
+            else
+            {
+                int ret = _stscanf_s( argv[i], _T( "%lu" ), cnsEnd ) ;
+                if (EOF == ret || 0 == ret )
+                {
+                    Usage();
+                    return( E_INVALIDARG );
+                }
+            }
 
             continue;
         }
 
-        if( 0 == _tcsicmp( argv[i] , _T( "-c" ) ) )
+        if( 0 == _tcsicmp( argv[i], _T( "-c" ) ) )
         {
             *fCompressed = TRUE;
             continue;
         }
-        if( 0 == _tcsicmp( argv[i] , _T( "-a" ) ) )
+        if( 0 == _tcsicmp( argv[i], _T( "-a" ) ) )
         {
             *fAudioPresent = TRUE;
             continue;
         }
-        if( 0 == _tcsicmp( argv[i] , _T( "-v" ) ) )
+        if( 0 == _tcsicmp( argv[i], _T( "-v" ) ) )
         {
             *fVideoPresent = TRUE;
             continue;
         }
-        if( 0 == _tcsicmp( argv[i] , _T( "-f" ) ) )
+        if( 0 == _tcsicmp( argv[i], _T( "-f" ) ) )
         {
             *fRangeInFrames = TRUE;
             continue;

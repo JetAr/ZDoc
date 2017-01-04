@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -68,7 +68,7 @@ void CPropertySet::InitializeCategoryProperties(__in PCWSTR label, int categoryI
 //  PURPOSE: Retrieves the value of one of the properties used when adding something to a gallery.
 //
 //  COMMENTS:
-//    This will be called by the framework on the property sets returned for the ItemsSource and 
+//    This will be called by the framework on the property sets returned for the ItemsSource and
 //    Categories properties in order to create and display the contents of the gallery.
 //
 //
@@ -163,7 +163,7 @@ STDMETHODIMP CPropertySet::QueryInterface(REFIID iid, void** ppv)
     {
         *ppv = static_cast<IUISimplePropertySet*>(this);
     }
-    else 
+    else
     {
         *ppv = NULL;
         return E_NOINTERFACE;

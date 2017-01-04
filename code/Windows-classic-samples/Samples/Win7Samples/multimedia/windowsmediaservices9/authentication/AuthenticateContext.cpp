@@ -1,4 +1,4 @@
-//+-------------------------------------------------------------------------
+﻿//+-------------------------------------------------------------------------
 //
 //  Microsoft Windows Media Technologies
 //  Copyright (C) Microsoft Corporation. All rights reserved.
@@ -167,7 +167,7 @@ STDMETHODIMP CAuthenticateContext::Authenticate
             dwState = WMS_AUTHENTICATION_CONTINUE;
 
             WCHAR wszChallenge[ sizeof( REALM_NAME ) / sizeof( WCHAR ) + 9 ];
-            _snwprintf_s( wszChallenge,sizeof( REALM_NAME ) / sizeof( WCHAR ) + 9 , sizeof( REALM_NAME ) / sizeof( WCHAR ) + 9, L"realm=\"%s\"", REALM_NAME );
+            _snwprintf_s( wszChallenge,sizeof( REALM_NAME ) / sizeof( WCHAR ) + 9, sizeof( REALM_NAME ) / sizeof( WCHAR ) + 9, L"realm=\"%s\"", REALM_NAME );
             wszChallenge[ sizeof( REALM_NAME ) / sizeof( WCHAR ) + 8 ] = L'\0';
             CSafeArrayOfBytes challenge( &ChallengeBlob );
             hr = challenge.SetData( ( BYTE* ) wszChallenge, DWORD(sizeof( WCHAR ) * wcslen( wszChallenge ) ));
@@ -240,7 +240,8 @@ STDMETHODIMP CAuthenticateContext::Authenticate
         // m_hToken = ...
         //
 
-    } while( FALSE );
+    }
+    while( FALSE );
 
     if( SUCCEEDED( hr ) )
     {
@@ -453,7 +454,7 @@ HRESULT CSafeArrayOfBytes::SetData
         SafeArrayUnaccessData( m_psaBlob );
         m_dataPtr = NULL;
     }
-        if( m_psaBlob )
+    if( m_psaBlob )
     {
         SafeArrayDestroy( m_psaBlob );
     }
@@ -480,7 +481,8 @@ HRESULT CSafeArrayOfBytes::SetData
 //  base64 encode/decode functions
 ///////////////////////////////////////////////////////////////////////////////
 
-static const int pr2six[256] = {
+static const int pr2six[256] =
+{
     64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,
     64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,62,64,64,64,63,
     52,53,54,55,56,57,58,59,60,61,64,64,64,64,64,64,64,0,1,2,3,4,5,6,7,8,9,
@@ -583,7 +585,8 @@ BOOL base64Decode
     // Adjust if trailing characters are in invalid
     //
 
-    if(nprbytes & 03) {
+    if(nprbytes & 03)
+    {
         if(pr2six[bufin[-2]] > 63)
             nbytesdecoded -= 2;
         else

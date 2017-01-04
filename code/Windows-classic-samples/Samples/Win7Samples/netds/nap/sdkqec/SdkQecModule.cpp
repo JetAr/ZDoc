@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 
@@ -29,8 +29,8 @@ HRESULT CSdkQecModule::RegisterSdkQec() throw()
 
     ZeroMemory (&m_qecInfo, sizeof(m_qecInfo));
     hr = m_pQECMgmt.CoCreateInstance(CLSID_NapClientManagement,
-                                        NULL,
-                                        CLSCTX_INPROC_SERVER);
+                                     NULL,
+                                     CLSCTX_INPROC_SERVER);
 
     if (FAILED(hr))
     {
@@ -73,8 +73,8 @@ HRESULT CSdkQecModule::UnregisterSdkQec() throw()
 
     // create an instance of the Management interface
     hr = m_pQECMgmt.CoCreateInstance(CLSID_NapClientManagement,
-                                        NULL,
-                                        CLSCTX_INPROC_SERVER);
+                                     NULL,
+                                     CLSCTX_INPROC_SERVER);
 
     if (FAILED(hr))
     {
@@ -104,7 +104,7 @@ HRESULT CSdkQecModule::FillQecComponentRegistrationInfo (NapComponentRegistratio
 {
     HRESULT hr = S_OK;
     agentInfo->id = NapSdkQecId;
-    agentInfo->infoClsid = CLSID_INFO; 
+    agentInfo->infoClsid = CLSID_INFO;
 
     hr = FillCountedString( QEC_FRIENDLY_NAME, &(agentInfo->friendlyName) );
     if (FAILED(hr))

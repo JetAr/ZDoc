@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -37,9 +37,9 @@ HRESULT CSdkShaModule::RegisterSdkSha()
     if(FAILED(hr))
     {
         wprintf(L"RegisterSdkSha:: FillShaComponentRegistrationInfo Failed with %#x",hr);
-		ZeroMemory(&shaInfo, sizeof(shaInfo));
-		goto Cleanup;
-	}
+        ZeroMemory(&shaInfo, sizeof(shaInfo));
+        goto Cleanup;
+    }
 
     hr = pNAPClientMgmt->RegisterSystemHealthAgent(&shaInfo);
     if ( FAILED(hr) )
@@ -84,9 +84,9 @@ HRESULT CSdkShaModule::UnregisterSdkSha()
             wprintf(L"UnregisterSdkSha: UnregisterSystemHealthAgent failed with NAP_E_STILL_BOUND; stop 'SDKSHA /execute' prior to attempting Unregister.");
         else
             wprintf(L"UnregisterSdkSha: Failed to unregister SdkSha from NapAgent -unknown (error = %x)\n", hr);
-            
+
         goto Cleanup;
-    }        
+    }
 
     wprintf(L"UnregisterSdkSha: SdkSha unregistration from NapAgent returned SUCCESS");
 
@@ -101,7 +101,7 @@ HRESULT CSdkShaModule::FillShaComponentRegistrationInfo (
 {
     HRESULT hr = S_OK;
     agentInfo->id = QuarSampleSystemHealthId;
-    agentInfo->infoClsid = CLSID_INFO; 
+    agentInfo->infoClsid = CLSID_INFO;
 
     hr = FillCountedString( SHA_FRIENDLY_NAME, &(agentInfo->friendlyName) );
     if (FAILED(hr))
@@ -130,10 +130,10 @@ HRESULT CSdkShaModule::FillShaComponentRegistrationInfo (
         DebugPrintfW(L"SdkSha::FillShaComponentRegistrationInfo(): AllocCountedString for vendorName returned error %#x!",hr);
         goto Cleanup;
     }
-	return hr;
+    return hr;
 
 Cleanup:
-	FreeComponentRegistration(agentInfo);
+    FreeComponentRegistration(agentInfo);
     return hr;
 }
 

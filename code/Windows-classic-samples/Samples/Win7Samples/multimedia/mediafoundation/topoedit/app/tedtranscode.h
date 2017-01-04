@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -27,7 +27,7 @@ protected:
         LPCWSTR szName;
         GUID gidValue;
     };
-    
+
     enum EAttributeType
     {
         AttributeType_UINT32,
@@ -47,7 +47,7 @@ protected:
 
     HRESULT LoadTranscodeProfiles();
     HRESULT LoadTranscodeProfile(ITedDataLoader* pLoader);
-    
+
     HRESULT MakeCompleteAudioAttributes(IMFAttributes* pAudioAttributes);
 
     // String -> Guid conversion functions

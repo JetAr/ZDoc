@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -78,17 +78,18 @@ CComModule _Module;
 
 // Type information of the Recognition event of IInkRecognitionEvents
 const _ATL_FUNC_INFO IInkRecognitionEventsImpl<CMultiRecoApp>::mc_AtlFuncInfo =
-        {CC_STDCALL, VT_EMPTY, 3, {VT_BSTR, VT_VARIANT, VT_I4}};
+{CC_STDCALL, VT_EMPTY, 3, {VT_BSTR, VT_VARIANT, VT_I4}};
 
 // Type information of the Stroke event of IInkCollectorEvents
 const _ATL_FUNC_INFO IInkCollectorEventsImpl<CMultiRecoApp>::mc_AtlFuncInfo =
-        {CC_STDCALL, VT_EMPTY, 3, {VT_UNKNOWN, VT_UNKNOWN, VT_BOOL|VT_BYREF}};
+{CC_STDCALL, VT_EMPTY, 3, {VT_UNKNOWN, VT_UNKNOWN, VT_BOOL|VT_BYREF}};
 
 
 // The sample uses different colors for different collections of strokes. Below is the palette.
-const COLORREF CMultiRecoApp::mc_crColors[] = {
-     RGB( 0, 0, 0)/*black*/, RGB(0xA0,0,0)/*red*/, RGB(0,0xA0,0)/*green*/, RGB(0,0,0xA0)/*blue*/,
-     RGB(0xA0,0xA0,0)/**/, RGB(0xA0,0,0xA0)/**/, RGB(0,0xA0,0xA0)/**/, RGB(0xA0,0xA0,0xA0)/*gray*/
+const COLORREF CMultiRecoApp::mc_crColors[] =
+{
+    RGB( 0, 0, 0)/*black*/, RGB(0xA0,0,0)/*red*/, RGB(0,0xA0,0)/*green*/, RGB(0,0,0xA0)/*blue*/,
+    RGB(0xA0,0xA0,0)/**/, RGB(0xA0,0,0xA0)/**/, RGB(0,0xA0,0xA0)/**/, RGB(0xA0,0xA0,0xA0)/*gray*/
 };
 
 const WCHAR gc_szAppName[] = L"Multiple Language Recognition with Serialization";
@@ -112,11 +113,11 @@ const WCHAR gc_szAppName[] = L"Multiple Language Recognition with Serialization"
 //
 /////////////////////////////////////////////////////////
 int APIENTRY WinMain(
-        HINSTANCE hInstance,
-        HINSTANCE /*hPrevInstance*/,   // not used here
-        LPSTR     /*lpCmdLine*/,       // not used here
-        int       nCmdShow
-        )
+    HINSTANCE hInstance,
+    HINSTANCE /*hPrevInstance*/,   // not used here
+    LPSTR     /*lpCmdLine*/,       // not used here
+    int       nCmdShow
+)
 {
     int iRet = 0;
 
@@ -137,7 +138,7 @@ int APIENTRY WinMain(
         else
         {
             ::MessageBoxW(NULL, L"Error initializing the common controls.",
-                         gc_szAppName, MB_ICONERROR | MB_OK);
+                          gc_szAppName, MB_ICONERROR | MB_OK);
         }
 
         // Release the module and the COM library
@@ -165,8 +166,8 @@ int APIENTRY WinMain(
 //
 /////////////////////////////////////////////////////////
 int CMultiRecoApp::Run(
-        int nCmdShow
-        )
+    int nCmdShow
+)
 {
 
     CMultiRecoApp theApp;
@@ -212,7 +213,7 @@ int CMultiRecoApp::Run(
     else
     {
         ::MessageBoxW(NULL, L"Error creating the window",
-                     gc_szAppName, MB_ICONERROR | MB_OK);
+                      gc_szAppName, MB_ICONERROR | MB_OK);
         ::DestroyMenu(hMenu);
         iRet = 0;
     }
@@ -239,11 +240,11 @@ int CMultiRecoApp::Run(
 //
 /////////////////////////////////////////////////////////
 LRESULT CMultiRecoApp::OnCreate(
-        UINT /*uMsg*/,
-        WPARAM /*wParam*/,
-        LPARAM /*lParam*/,
-        BOOL& /*bHandled*/
-        )
+    UINT /*uMsg*/,
+    WPARAM /*wParam*/,
+    LPARAM /*lParam*/,
+    BOOL& /*bHandled*/
+)
 {
     // Create child windows for ink input and recognition output,
     // listview controls for the lists of gestures, and a status bar
@@ -295,11 +296,11 @@ LRESULT CMultiRecoApp::OnCreate(
 //
 /////////////////////////////////////////////////////////
 LRESULT CMultiRecoApp::OnDestroy(
-        UINT /*uMsg*/,
-        WPARAM /*wParam*/,
-        LPARAM /*lParam*/,
-        BOOL& /*bHandled*/
-        )
+    UINT /*uMsg*/,
+    WPARAM /*wParam*/,
+    LPARAM /*lParam*/,
+    BOOL& /*bHandled*/
+)
 {
     // Disable ink input and release the InkCollector object
     if (m_spIInkCollector != NULL)
@@ -346,11 +347,11 @@ LRESULT CMultiRecoApp::OnDestroy(
 //
 /////////////////////////////////////////////////////////
 LRESULT CMultiRecoApp::OnSize(
-        UINT /*uMsg*/,
-        WPARAM wParam,
-        LPARAM /*lParam*/,
-        BOOL& /*bHandled*/
-        )
+    UINT /*uMsg*/,
+    WPARAM wParam,
+    LPARAM /*lParam*/,
+    BOOL& /*bHandled*/
+)
 {
     if (wParam != SIZE_MINIMIZED)
     {
@@ -381,10 +382,10 @@ LRESULT CMultiRecoApp::OnSize(
 //
 /////////////////////////////////////////////////////////
 HRESULT CMultiRecoApp::OnStroke(
-        IInkCursor* /*pIInkCursor*/,
-        IInkStrokeDisp* pIInkStroke,
-        VARIANT_BOOL* pbCancel
-        )
+    IInkCursor* /*pIInkCursor*/,
+    IInkStrokeDisp* pIInkStroke,
+    VARIANT_BOOL* pbCancel
+)
 {
     if (m_spIInkStrokes == NULL)    // shouldn't happen
         return E_FAIL;
@@ -430,10 +431,10 @@ HRESULT CMultiRecoApp::OnStroke(
 //
 /////////////////////////////////////////////////////////
 HRESULT CMultiRecoApp::OnRecognition(
-        BSTR bstrRecognizedString,
-        VARIANT /*vCustomParam*/,
-        InkRecognitionStatus /*RecognitionStatus*/
-        )
+    BSTR bstrRecognizedString,
+    VARIANT /*vCustomParam*/,
+    InkRecognitionStatus /*RecognitionStatus*/
+)
 {
     if (m_wndResults.IsWindow())
     {
@@ -466,11 +467,11 @@ HRESULT CMultiRecoApp::OnRecognition(
 //
 /////////////////////////////////////////////////////////
 LRESULT CMultiRecoApp::OnClear(
-        WORD /*wNotifyCode*/,
-        WORD /*wID*/,
-        HWND /*hWndCtl*/,
-        BOOL& /*bHandled*/
-        )
+    WORD /*wNotifyCode*/,
+    WORD /*wID*/,
+    HWND /*hWndCtl*/,
+    BOOL& /*bHandled*/
+)
 {
     if (m_spIInkDisp == NULL)   // there is nothing to clear
         return 0;
@@ -486,12 +487,12 @@ LRESULT CMultiRecoApp::OnClear(
 
     // Delete all strokes from the Ink object
     m_spIInkDisp->DeleteStrokes(NULL);  // Passing NULL as a stroke collection pointer
-                                        // means asking to delete all strokes
+    // means asking to delete all strokes
 
     // Get a new stroke collection from the ink object
 
     CComVariant v;  // This varaint is used to pass an array of ID's of the strokes
-                    // which to be included into the new collection.
+    // which to be included into the new collection.
     // Ask for an empty collection by passing an empty variant
     if (SUCCEEDED(m_spIInkDisp->CreateStrokes(v, &m_spIInkStrokes)))
     {
@@ -516,9 +517,9 @@ LRESULT CMultiRecoApp::OnClear(
     // Tell the results window that a new stroke collection
     // is started, and set the color for it.
     m_wndResults.AddString(
-            mc_crColors[m_iColor],  // new current color
-            NULL                    // recognition result string, none yet
-            );
+        mc_crColors[m_iColor],  // new current color
+        NULL                    // recognition result string, none yet
+    );
 
     return 0;
 }
@@ -543,11 +544,11 @@ LRESULT CMultiRecoApp::OnClear(
 //
 /////////////////////////////////////////////////////////
 LRESULT CMultiRecoApp::OnNewStrokes(
-        WORD /*wNotifyCode*/,
-        WORD wID,
-        HWND /*hWndCtl*/,
-        BOOL& /*bHandled*/
-        )
+    WORD /*wNotifyCode*/,
+    WORD wID,
+    HWND /*hWndCtl*/,
+    BOOL& /*bHandled*/
+)
 {
     // Change cursor to the system's Hourglass
     HCURSOR hCursor = ::SetCursor(::LoadCursor(NULL, IDC_WAIT));
@@ -574,9 +575,9 @@ LRESULT CMultiRecoApp::OnNewStrokes(
         // Get a pointer to the recognizer object from the recognizer collection
         CComPtr<IInkRecognizer> spIInkRecognizer;
         if ((m_spIInkRecognizers == NULL)
-            || FAILED(m_spIInkRecognizers->Item(wID - ID_RECOGNIZER_FIRST,
-                                                &spIInkRecognizer))
-            || (false == CreateRecoContext(spIInkRecognizer)))
+                || FAILED(m_spIInkRecognizers->Item(wID - ID_RECOGNIZER_FIRST,
+                          &spIInkRecognizer))
+                || (false == CreateRecoContext(spIInkRecognizer)))
         {
             // restore the cursor
             ::SetCursor(hCursor);
@@ -642,9 +643,9 @@ void CMultiRecoApp::StartNewStrokeCollection()
         // it's future recognition results should be shown in the RichEdit control
         // with a different color
         m_wndResults.AddString(
-                mc_crColors[m_iColor],  // new current color
-                NULL                    // recognition result string, none yet
-                );
+            mc_crColors[m_iColor],  // new current color
+            NULL                    // recognition result string, none yet
+        );
     }
     else
     {
@@ -684,8 +685,8 @@ HMENU CMultiRecoApp::LoadMenu()
     if (0 == lCount)
     {
         ::MessageBoxW(NULL, L"There are no handwriting recognizers installed.\n"
-             L"You need to have at least one in order to run this sample.\nExiting.",
-             gc_szAppName, MB_ICONERROR | MB_OK);
+                      L"You need to have at least one in order to run this sample.\nExiting.",
+                      gc_szAppName, MB_ICONERROR | MB_OK);
         return NULL;
     }
 
@@ -732,8 +733,8 @@ HMENU CMultiRecoApp::LoadMenu()
         if (SUCCEEDED(spIInkRecognizer->get_Languages(&vLanguages)))
         {
             if ((VT_ARRAY == (VT_ARRAY & vLanguages.vt))            // it should be an array
-                && (NULL != vLanguages.parray)
-                && (0 < vLanguages.parray->rgsabound[0].cElements)) // with at least one element
+                    && (NULL != vLanguages.parray)
+                    && (0 < vLanguages.parray->rgsabound[0].cElements)) // with at least one element
             {
                 // This is a language recognizer. Add its name to the menu.
                 CComBSTR bstrName;
@@ -744,7 +745,7 @@ HMENU CMultiRecoApp::LoadMenu()
                     miinfo.wID = ID_RECOGNIZER_FIRST + i;
                     miinfo.dwTypeData = bstrName;
                     if ((::InsertMenuItemW(hSubMenu, (UINT)-1, TRUE, &miinfo) != 0)
-                        && (true == bAllFailed))
+                            && (true == bAllFailed))
                     {
                         bAllFailed = false;
                     }
@@ -793,8 +794,8 @@ HMENU CMultiRecoApp::LoadMenu()
 //
 /////////////////////////////////////////////////////////
 bool CMultiRecoApp::DoOpen(
-        bool bNew
-        )
+    bool bNew
+)
 {
     // Disable inking
     m_spIInkCollector->put_Enabled(VARIANT_FALSE);
@@ -852,7 +853,7 @@ bool CMultiRecoApp::DoOpen(
                 CComPtr<IInkStrokeDisp> spIInkStroke;
                 CComPtr<IInkDrawingAttributes> spIDrawAttrs;
                 if (SUCCEEDED(pIInkStrokes->Item(0, &spIInkStroke))
-                    && SUCCEEDED(spIInkStroke->get_DrawingAttributes(&spIDrawAttrs)))
+                        && SUCCEEDED(spIInkStroke->get_DrawingAttributes(&spIDrawAttrs)))
                 {
                     spIDrawAttrs->get_Color((long*)&clr);
                 }
@@ -862,9 +863,9 @@ bool CMultiRecoApp::DoOpen(
                 {
                     // Add the string to the RichEdit control
                     m_wndResults.AddString(
-                            clr,                // the strokes color
-                            bstrToString        // the recognition result string
-                            );
+                        clr,                // the strokes color
+                        bstrToString        // the recognition result string
+                    );
                 }
                 pIInkStrokes->Release();
             }
@@ -911,9 +912,9 @@ bool CMultiRecoApp::DoOpen(
 //
 /////////////////////////////////////////////////////////
 bool CMultiRecoApp::DoSave(
-        bool bSaveAs,
-        bool bAskUser
-        )
+    bool bSaveAs,
+    bool bAskUser
+)
 {
     if (m_spIInkDisp == NULL)
         return true;
@@ -922,8 +923,8 @@ bool CMultiRecoApp::DoSave(
     // and it's not a SaveAs command, do nothing and return true
     VARIANT_BOOL bDirty = VARIANT_TRUE;
     if ((false == bSaveAs)
-        && SUCCEEDED(m_spIInkDisp->get_Dirty(&bDirty))
-        && VARIANT_FALSE == bDirty)
+            && SUCCEEDED(m_spIInkDisp->get_Dirty(&bDirty))
+            && VARIANT_FALSE == bDirty)
     {
         return true;
     }
@@ -976,23 +977,23 @@ bool CMultiRecoApp::DoSave(
     bool bOk = false;
     CComVariant vData;
     if (SUCCEEDED(m_spIInkDisp->Save(
-                         IPF_InkSerializedFormat, // save as ISF
-                         IPCM_Default,            // use default compression
-                         &vData)                  // the output
-                         ))
+                      IPF_InkSerializedFormat, // save as ISF
+                      IPCM_Default,            // use default compression
+                      &vData)                  // the output
+                 ))
     {
         BYTE* pbData;
         if (SUCCEEDED(::SafeArrayAccessData(vData.parray, (void**)&pbData)))
         {
             // Create new or overwrite the existing file
             HANDLE hFile = ::CreateFileW(
-                                bSaveAs ? wchFile : m_wchFile,
-                                GENERIC_WRITE,
-                                0,
-                                NULL,
-                                CREATE_ALWAYS,
-                                0,
-                                NULL);
+                               bSaveAs ? wchFile : m_wchFile,
+                               GENERIC_WRITE,
+                               0,
+                               NULL,
+                               CREATE_ALWAYS,
+                               0,
+                               NULL);
             if (INVALID_HANDLE_VALUE != hFile)
             {
                 // Write the data into the file
@@ -1042,8 +1043,8 @@ bool CMultiRecoApp::DoSave(
 //
 /////////////////////////////////////////////////////////
 bool CMultiRecoApp::LoadFile(
-        IInkDisp* pIInkDisp
-        )
+    IInkDisp* pIInkDisp
+)
 {
     WCHAR wchFile[MAX_PATH];
     WCHAR wchFileTitle[MAX_PATH];
@@ -1092,7 +1093,7 @@ bool CMultiRecoApp::LoadFile(
             if (SUCCEEDED(::SafeArrayAccessData(vtData.parray, (void**)&pbData)))
             {
                 if (TRUE == ::ReadFile(hFile, pbData, dwSize, &dwRead, NULL)
-                    && SUCCEEDED(pIInkDisp->Load(vtData)))
+                        && SUCCEEDED(pIInkDisp->Load(vtData)))
                 {
                     bOk = true;
                 }
@@ -1145,7 +1146,7 @@ void CMultiRecoApp::CreateRecoGuides()
 {
     CComPtr<IInkRenderer> spIInkRenderer;
     if ((m_spIInkCollector == NULL)
-        || FAILED(m_spIInkCollector->get_Renderer(&spIInkRenderer)))
+            || FAILED(m_spIInkCollector->get_Renderer(&spIInkRenderer)))
         return;
 
     HDC hdc = m_wndInput.GetDC();
@@ -1170,19 +1171,19 @@ void CMultiRecoApp::CreateRecoGuides()
     // rectangles into ink space coordinates
     // - the guide's writing box
     if (   SUCCEEDED(spIInkRenderer->PixelToInkSpace((long)hdc,
-                                                     &irg.rectWritingBox.left,
-                                                     &irg.rectWritingBox.top))
-        && SUCCEEDED(spIInkRenderer->PixelToInkSpace((long)hdc,
-                                                     &irg.rectWritingBox.right,
-                                                     &irg.rectWritingBox.bottom))
-        // and the drawn box
-        && SUCCEEDED(spIInkRenderer->PixelToInkSpace((long)hdc,
-                                                     &irg.rectDrawnBox.left,
-                                                     &irg.rectDrawnBox.top))
-        && SUCCEEDED(spIInkRenderer->PixelToInkSpace((long)hdc,
-                                                     &irg.rectDrawnBox.right,
-                                                     &irg.rectDrawnBox.bottom))
-        )
+                     &irg.rectWritingBox.left,
+                     &irg.rectWritingBox.top))
+            && SUCCEEDED(spIInkRenderer->PixelToInkSpace((long)hdc,
+                         &irg.rectWritingBox.right,
+                         &irg.rectWritingBox.bottom))
+            // and the drawn box
+            && SUCCEEDED(spIInkRenderer->PixelToInkSpace((long)hdc,
+                         &irg.rectDrawnBox.left,
+                         &irg.rectDrawnBox.top))
+            && SUCCEEDED(spIInkRenderer->PixelToInkSpace((long)hdc,
+                         &irg.rectDrawnBox.right,
+                         &irg.rectDrawnBox.bottom))
+       )
     {
         // Create the boxed guide
         if (SUCCEEDED(m_spIInkRecoGuideBoxed.CoCreateInstance(CLSID_InkRecognizerGuide)))
@@ -1272,7 +1273,7 @@ void CMultiRecoApp::SaveStrokeCollection()
         GUID guid;
         WCHAR szGuid[40]; // format: "{xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx}"
         if (SUCCEEDED(::CoCreateGuid(&guid))
-            && (::StringFromGUID2(guid, szGuid, countof(szGuid)) != 0))
+                && (::StringFromGUID2(guid, szGuid, countof(szGuid)) != 0))
         {
             CComBSTR bstrGuid(szGuid);
             if (FAILED(m_spIInkCustomStrokes->Add(bstrGuid, m_spIInkStrokes)))
@@ -1316,8 +1317,8 @@ void CMultiRecoApp::SaveStrokeCollection()
 //
 /////////////////////////////////////////////////////////
 bool CMultiRecoApp::CreateRecoContext(
-        IInkRecognizer* pIInkRecognizer
-        )
+    IInkRecognizer* pIInkRecognizer
+)
 {
     // Create a new recognition context
     CComPtr<IInkRecognizerContext> spNewContext;
@@ -1352,8 +1353,8 @@ bool CMultiRecoApp::CreateRecoContext(
         if (SUCCEEDED(pIInkRecognizer->get_Languages(&vLanguages)))
         {
             if ((VT_ARRAY == (VT_ARRAY & vLanguages.vt))            // it should be an array
-                && (NULL != vLanguages.parray)
-                && (0 < vLanguages.parray->rgsabound[0].cElements)) // with at least one element
+                    && (NULL != vLanguages.parray)
+                    && (0 < vLanguages.parray->rgsabound[0].cElements)) // with at least one element
             {
                 ULONG ulSize = vLanguages.parray->rgsabound[0].cElements;
                 short *pbData;
@@ -1362,9 +1363,9 @@ bool CMultiRecoApp::CreateRecoContext(
                     for(ULONG i = 0; i < ulSize; i++)
                     {
                         if (  0x411 == pbData[i] ||   // Japanese
-                              0x404 == pbData[i] ||   // Chinese
-                              0x804 == pbData[i] ||   // Chinese
-                              0x412 == pbData[i])     // Korean
+                                0x404 == pbData[i] ||   // Chinese
+                                0x804 == pbData[i] ||   // Chinese
+                                0x412 == pbData[i])     // Korean
                         {
                             fRequiresBoxGuide = true;
                             break;
@@ -1376,7 +1377,7 @@ bool CMultiRecoApp::CreateRecoContext(
         }
         // Try the boxed guide in case it is required
         if (((IRC_BoxedInput & dwCapabilities) == IRC_BoxedInput)
-            && (m_spIInkRecoGuideBoxed != NULL) && fRequiresBoxGuide)
+                && (m_spIInkRecoGuideBoxed != NULL) && fRequiresBoxGuide)
         {
             HRESULT hr = m_spIInkRecoContext->putref_Guide(m_spIInkRecoGuideBoxed);
             if (SUCCEEDED(hr))
@@ -1386,7 +1387,7 @@ bool CMultiRecoApp::CreateRecoContext(
         }
         // or the lined one
         else if (((IRC_LinedInput & dwCapabilities) == IRC_LinedInput)
-            && (m_spIInkRecoGuideLined != NULL))
+                 && (m_spIInkRecoGuideLined != NULL))
         {
             if (SUCCEEDED(m_spIInkRecoContext->putref_Guide(m_spIInkRecoGuideLined)))
             {
@@ -1419,16 +1420,16 @@ bool CMultiRecoApp::CreateChildWindows()
 {
     // Create windows for input and output
     if ((m_wndResults.Create(m_hWnd, mc_iOutputWndId) == NULL)
-        || (m_wndInput.Create(m_hWnd, CWindow::rcDefault, NULL,
-                             WS_CHILD, WS_EX_CLIENTEDGE, (UINT)mc_iInputWndId) == NULL))
+            || (m_wndInput.Create(m_hWnd, CWindow::rcDefault, NULL,
+                                  WS_CHILD, WS_EX_CLIENTEDGE, (UINT)mc_iInputWndId) == NULL))
     {
         return false;
     }
 
     // Create a status bar (Ignore if it fails, the application can live without it).
     m_hwndStatusBar = ::CreateStatusWindow(
-                        WS_CHILD|WS_VISIBLE|WS_CLIPCHILDREN|WS_CLIPSIBLINGS|SBARS_SIZEGRIP,
-                        NULL, m_hWnd, (UINT)mc_iStatusWndId);
+                          WS_CHILD|WS_VISIBLE|WS_CLIPCHILDREN|WS_CLIPSIBLINGS|SBARS_SIZEGRIP,
+                          NULL, m_hWnd, (UINT)mc_iStatusWndId);
 
     if (NULL != m_hwndStatusBar)
     {
@@ -1469,7 +1470,7 @@ void CMultiRecoApp::UpdateLayout()
 
     // update the size and position of the status bar
     if (::IsWindow(m_hwndStatusBar)
-        && ((DWORD)::GetWindowLong(m_hwndStatusBar, GWL_STYLE) & WS_VISIBLE))
+            && ((DWORD)::GetWindowLong(m_hwndStatusBar, GWL_STYLE) & WS_VISIBLE))
     {
         ::SendMessage(m_hwndStatusBar, WM_SIZE, 0, 0);
         RECT rectStatusBar;
@@ -1547,9 +1548,9 @@ void CMultiRecoApp::UpdateStatusBar()
 //
 /////////////////////////////////////////////////////////
 void CMultiRecoApp::UpdateFilename(
-        WCHAR* pwsFile,
-        WCHAR* pwsFileTitle
-        )
+    WCHAR* pwsFile,
+    WCHAR* pwsFileTitle
+)
 {
     // The title that appears in the window's caption bar
     CComBSTR bstrTitle;

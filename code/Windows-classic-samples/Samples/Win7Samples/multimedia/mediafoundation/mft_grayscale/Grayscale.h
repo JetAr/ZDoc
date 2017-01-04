@@ -1,7 +1,7 @@
-//////////////////////////////////////////////////////////////////////////
+﻿//////////////////////////////////////////////////////////////////////////
 //
 // Grayscale.h: Defines the transform class.
-// 
+//
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -21,7 +21,7 @@ typedef void (*IMAGE_TRANSFORM_FN)(
     LONG        lSrcStride,
     DWORD       dwWidthInPixels,
     DWORD       dwHeightInPixels
-    );
+);
 
 // CGrayscale class:
 // Implements a grayscale video effect.
@@ -37,13 +37,13 @@ public:
     STDMETHODIMP_(ULONG) Release();
 
     // IMFTransform
-    STDMETHODIMP GetStreamLimits( 
+    STDMETHODIMP GetStreamLimits(
         DWORD   *pdwInputMinimum,
         DWORD   *pdwInputMaximum,
         DWORD   *pdwOutputMinimum,
         DWORD   *pdwOutputMaximum
     );
-    
+
     STDMETHODIMP GetStreamCount(
         DWORD   *pcInputStreams,
         DWORD   *pcOutputStreams
@@ -55,15 +55,15 @@ public:
         DWORD   dwOutputIDArraySize,
         DWORD   *pdwOutputIDs
     );
-    
+
     STDMETHODIMP GetInputStreamInfo(
         DWORD                     dwInputStreamID,
         MFT_INPUT_STREAM_INFO *   pStreamInfo
     );
-    
+
     STDMETHODIMP GetOutputStreamInfo(
-        DWORD                     dwOutputStreamID, 
-        MFT_OUTPUT_STREAM_INFO *  pStreamInfo      
+        DWORD                     dwOutputStreamID,
+        MFT_OUTPUT_STREAM_INFO *  pStreamInfo
     );
 
     STDMETHODIMP GetAttributes(IMFAttributes** pAttributes);
@@ -80,7 +80,7 @@ public:
 
     STDMETHODIMP DeleteInputStream(DWORD dwStreamID);
 
-    STDMETHODIMP AddInputStreams( 
+    STDMETHODIMP AddInputStreams(
         DWORD   cStreams,
         DWORD   *adwStreamIDs
     );
@@ -100,13 +100,13 @@ public:
     STDMETHODIMP SetInputType(
         DWORD           dwInputStreamID,
         IMFMediaType    *pType,
-        DWORD           dwFlags 
+        DWORD           dwFlags
     );
 
     STDMETHODIMP SetOutputType(
         DWORD           dwOutputStreamID,
         IMFMediaType    *pType,
-        DWORD           dwFlags 
+        DWORD           dwFlags
     );
 
     STDMETHODIMP GetInputCurrentType(
@@ -121,7 +121,7 @@ public:
 
     STDMETHODIMP GetInputStatus(
         DWORD           dwInputStreamID,
-        DWORD           *pdwFlags 
+        DWORD           *pdwFlags
     );
 
     STDMETHODIMP GetOutputStatus(DWORD *pdwFlags);
@@ -133,25 +133,25 @@ public:
 
     STDMETHODIMP ProcessEvent(
         DWORD              dwInputStreamID,
-        IMFMediaEvent      *pEvent 
+        IMFMediaEvent      *pEvent
     );
 
     STDMETHODIMP ProcessMessage(
         MFT_MESSAGE_TYPE    eMessage,
         ULONG_PTR           ulParam
     );
-        
+
     STDMETHODIMP ProcessInput(
         DWORD               dwInputStreamID,
-        IMFSample           *pSample, 
-        DWORD               dwFlags 
+        IMFSample           *pSample,
+        DWORD               dwFlags
     );
 
     STDMETHODIMP ProcessOutput(
-        DWORD                   dwFlags, 
+        DWORD                   dwFlags,
         DWORD                   cOutputBufferCount,
         MFT_OUTPUT_DATA_BUFFER  *pOutputSamples, // one per stream
-        DWORD                   *pdwStatus  
+        DWORD                   *pdwStatus
     );
 
 
@@ -165,10 +165,13 @@ private:
 
 
     // HasPendingOutput: Returns TRUE if the MFT is holding an input sample.
-    BOOL HasPendingOutput() const { return m_pSample != NULL; }
+    BOOL HasPendingOutput() const
+    {
+        return m_pSample != NULL;
+    }
 
     // IsValidInputStream: Returns TRUE if dwInputStreamID is a valid input stream identifier.
-    BOOL IsValidInputStream(DWORD dwInputStreamID) const 
+    BOOL IsValidInputStream(DWORD dwInputStreamID) const
     {
         return dwInputStreamID == 0;
     }

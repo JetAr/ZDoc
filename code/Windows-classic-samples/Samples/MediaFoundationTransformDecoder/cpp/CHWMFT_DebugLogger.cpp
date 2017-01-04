@@ -1,4 +1,4 @@
-#include "CHWMFT_DebugLogger.h"
+﻿#include "CHWMFT_DebugLogger.h"
 #ifdef  _HMFTLOGGING_
 #include <evntrace.h>
 #include <strsafe.h>
@@ -18,11 +18,11 @@ void NTAPI EventRegisterCallback(
 {
     switch(ulIsEnabled)
     {
-    case EVENT_CONTROL_CODE_ENABLE_PROVIDER:  
+    case EVENT_CONTROL_CODE_ENABLE_PROVIDER:
         g_bEnabled  = TRUE;
         g_ucLevel   = ucLevel;
         break;
-    case EVENT_CONTROL_CODE_DISABLE_PROVIDER:  
+    case EVENT_CONTROL_CODE_DISABLE_PROVIDER:
         g_bEnabled  = FALSE;
         g_ucLevel   = 0;
         break;
@@ -40,15 +40,15 @@ void TraceInitialize(void)
     {
         // Provider ID: {54E23341-C608-4161-97F1-653A9B6FFFF1}
         // TODO: Generate a new unique provider ID. Do not reuse this GUID.
-        static const GUID guidTrace = 
-            { 0x54e23341, 0xc608, 0x4161, { 0x97, 0xf1, 0x65, 0x3a, 0x9b, 0x6f, 0xff, 0xf1 } };
+        static const GUID guidTrace =
+        { 0x54e23341, 0xc608, 0x4161, { 0x97, 0xf1, 0x65, 0x3a, 0x9b, 0x6f, 0xff, 0xf1 } };
 
         EventRegister(
             &guidTrace,
             &EventRegisterCallback,
             NULL,
             &g_ETWHandle
-            );
+        );
     }
 #endif
 }
@@ -70,7 +70,7 @@ void TraceUninitialize(void)
 
 void TraceString(
     const UCHAR ucLevel,
-    const WCHAR* pwszFormat, 
+    const WCHAR* pwszFormat,
     ...)
 {
 #ifdef  _HMFTLOGGING_
@@ -83,7 +83,7 @@ void TraceString(
         }
 
         if( (ucLevel > g_ucLevel)   &&
-            (g_ucLevel != 0)        )
+                (g_ucLevel != 0)        )
         {
             // Do not trace
             break;
@@ -99,11 +99,12 @@ void TraceString(
             ARRAYSIZE(pwszTrace),
             pwszFormat,
             args
-            );
+        );
 
         va_end(args);
 
         EventWriteString(g_ETWHandle, ucLevel, 0, pwszTrace);
-    }while(false);
+    }
+    while(false);
 #endif
 }

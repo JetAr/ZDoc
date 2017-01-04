@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -21,9 +21,9 @@ DWORD CreateSubscription(const SUBSCRIPTION& sub)
     }
 
 
-    hSubscription = EcOpenSubscription( sub.Name.c_str(), 	
-	                                                   EC_READ_ACCESS | EC_WRITE_ACCESS, 
-       	                                            EC_CREATE_NEW);
+    hSubscription = EcOpenSubscription( sub.Name.c_str(),
+                                        EC_READ_ACCESS | EC_WRITE_ACCESS,
+                                        EC_CREATE_NEW);
 
     if ( !hSubscription)
     {
@@ -39,8 +39,8 @@ DWORD CreateSubscription(const SUBSCRIPTION& sub)
 
     if (!EcSetSubscriptionProperty(hSubscription, EcSubscriptionDescription, NULL, &vPropertyValue))
     {
-            dwRetVal = GetLastError();
-            goto Cleanup;
+        dwRetVal = GetLastError();
+        goto Cleanup;
     }
 
 
@@ -50,8 +50,8 @@ DWORD CreateSubscription(const SUBSCRIPTION& sub)
 
     if (!EcSetSubscriptionProperty(hSubscription, EcSubscriptionURI, NULL, &vPropertyValue))
     {
-            dwRetVal = GetLastError();
-            goto Cleanup;
+        dwRetVal = GetLastError();
+        goto Cleanup;
     }
 
 
@@ -61,8 +61,8 @@ DWORD CreateSubscription(const SUBSCRIPTION& sub)
 
     if (!EcSetSubscriptionProperty(hSubscription, EcSubscriptionQuery, NULL, &vPropertyValue))
     {
-            dwRetVal = GetLastError();
-            goto Cleanup;
+        dwRetVal = GetLastError();
+        goto Cleanup;
     }
 
     //Property: Destination Log File (EC_SUBSCRIPTION_PROPERTY_ID::EcSubscriptionLogFile)
@@ -71,8 +71,8 @@ DWORD CreateSubscription(const SUBSCRIPTION& sub)
 
     if (!EcSetSubscriptionProperty(hSubscription, EcSubscriptionLogFile, NULL, &vPropertyValue))
     {
-            dwRetVal = GetLastError();
-            goto Cleanup;
+        dwRetVal = GetLastError();
+        goto Cleanup;
     }
 
     //Property: Configuration Mode (EC_SUBSCRIPTION_PROPERTY_ID::EcSubscriptionConfigurationMode)
@@ -81,13 +81,13 @@ DWORD CreateSubscription(const SUBSCRIPTION& sub)
 
     if (!EcSetSubscriptionProperty(hSubscription, EcSubscriptionConfigurationMode, NULL, &vPropertyValue))
     {
-            dwRetVal = GetLastError();
-            goto Cleanup;
+        dwRetVal = GetLastError();
+        goto Cleanup;
     }
 
-    //Accept Delivery Mode, MaxItems, HearbeatInterval and MaxLatency values only if 
+    //Accept Delivery Mode, MaxItems, HearbeatInterval and MaxLatency values only if
     // Configuration Mode is Custom (EcConfigurationModeCustom)
-    // If it is other configuration modes (Normal, MinLatency or MinBandwidth) they will be ignored 
+    // If it is other configuration modes (Normal, MinLatency or MinBandwidth) they will be ignored
 
     if ( sub.ConfigMode == EcConfigurationModeCustom)
     {
@@ -110,7 +110,7 @@ DWORD CreateSubscription(const SUBSCRIPTION& sub)
             goto Cleanup;
         }
 
-         //Property: HearbeatInterval (EC_SUBSCRIPTION_PROPERTY_ID::EcSubscriptionHeartbeatInterval)
+        //Property: HearbeatInterval (EC_SUBSCRIPTION_PROPERTY_ID::EcSubscriptionHeartbeatInterval)
         vPropertyValue.Type = EcVarTypeUInt32;
         vPropertyValue.UInt32Val = sub.HeartbeatInerval;
         if (!EcSetSubscriptionProperty(hSubscription, EcSubscriptionHeartbeatInterval, NULL, &vPropertyValue))
@@ -118,7 +118,7 @@ DWORD CreateSubscription(const SUBSCRIPTION& sub)
             dwRetVal = GetLastError();
             goto Cleanup;
         }
-         //Property: MaxLatency ( EC_SUBSCRIPTION_PROPERTY_ID::EcSubscriptionDeliveryMaxLatencyTime)
+        //Property: MaxLatency ( EC_SUBSCRIPTION_PROPERTY_ID::EcSubscriptionDeliveryMaxLatencyTime)
         vPropertyValue.Type = EcVarTypeUInt32;
         vPropertyValue.UInt32Val = sub.MaxLatencyTime;
         if (!EcSetSubscriptionProperty(hSubscription, EcSubscriptionDeliveryMaxLatencyTime, NULL, &vPropertyValue))
@@ -133,27 +133,27 @@ DWORD CreateSubscription(const SUBSCRIPTION& sub)
     vPropertyValue.Type = EcVarTypeUInt32;
     vPropertyValue.UInt32Val = sub.ContentFormat;
 
-    if (!EcSetSubscriptionProperty(hSubscription, 
-                                             EcSubscriptionContentFormat, 
-                                             0, 
-                                             &vPropertyValue))
+    if (!EcSetSubscriptionProperty(hSubscription,
+                                   EcSubscriptionContentFormat,
+                                   0,
+                                   &vPropertyValue))
     {
-            dwRetVal = GetLastError();
-            goto Cleanup;
+        dwRetVal = GetLastError();
+        goto Cleanup;
     }
-    
+
     //Property: Credentials Type (EC_SUBSCRIPTION_PROPERTY_ID::EcSubscriptionCredentialsType)
     vPropertyValue.Type = EcVarTypeUInt32;
     vPropertyValue.UInt32Val = sub.CredentialsType;
 
     if (!EcSetSubscriptionProperty(hSubscription,
-                                             EcSubscriptionCredentialsType, 
-                                             0, 
-                                             &vPropertyValue))
+                                   EcSubscriptionCredentialsType,
+                                   0,
+                                   &vPropertyValue))
     {
-            dwRetVal = GetLastError();
-            goto Cleanup;
-    }   
+        dwRetVal = GetLastError();
+        goto Cleanup;
+    }
 
     //Enable the Subscription
     //Property: Enable/Disable Subscription (EC_SUBSCRIPTION_PROPERTY_ID::EcSubscriptionEnabled)
@@ -161,19 +161,19 @@ DWORD CreateSubscription(const SUBSCRIPTION& sub)
     vPropertyValue.Type = EcVarTypeBoolean;
     vPropertyValue.BooleanVal = sub.SubscriptionStatus;
 
-    if (!EcSetSubscriptionProperty(hSubscription, 
-                                             EcSubscriptionEnabled, 
-                                             0, 
-                                             &vPropertyValue))
+    if (!EcSetSubscriptionProperty(hSubscription,
+                                   EcSubscriptionEnabled,
+                                   0,
+                                   &vPropertyValue))
     {
-            dwRetVal = GetLastError();
-            goto Cleanup;
+        dwRetVal = GetLastError();
+        goto Cleanup;
     }
 
-    
+
     //Property: Common Username (EC_SUBSCRIPTION_PROPERTY_ID::EcSubscriptionCommonUserName)
     // This property is used across all the event sources available for this subscription
-    
+
     if ( sub.CommonUserName.length() > 0)
     {
         vPropertyValue.Type = EcVarTypeString;
@@ -188,7 +188,7 @@ DWORD CreateSubscription(const SUBSCRIPTION& sub)
         //Property: Common Password (EC_SUBSCRIPTION_PROPERTY_ID::EcSubscriptionCommonPassword)
         //Set Password to empty (""/blank password) if Password is not specified.
         //NOTE: Please use Credential Manager Functions to handle Password information
-        
+
         vPropertyValue.Type = EcVarTypeString;
         vPropertyValue.StringVal = (sub.CommonPassword.length() > 0) ? sub.CommonPassword.c_str(): L"" ;
 
@@ -197,21 +197,21 @@ DWORD CreateSubscription(const SUBSCRIPTION& sub)
             dwRetVal = GetLastError();
             goto Cleanup;
         }
-         
+
         //Add the event source - so it uses the common user's credentials
-        dwRetVal = AddEventSource( hSubscription, 
-	                                                sub.EventSource, 
-        	                                         sub.EventSourceStatus, 
-               	                                  L"", 
-                      	                           L"");
+        dwRetVal = AddEventSource( hSubscription,
+                                   sub.EventSource,
+                                   sub.EventSourceStatus,
+                                   L"",
+                                   L"");
     }
     else
     {
-        dwRetVal = AddEventSource( hSubscription, 
-	                                                sub.EventSource, 
-       	                                         sub.EventSourceStatus, 
-              	                                  sub.EventSourceUserName, 
-                     	                           sub.EventSourcePassword);
+        dwRetVal = AddEventSource( hSubscription,
+                                   sub.EventSource,
+                                   sub.EventSourceStatus,
+                                   sub.EventSourceUserName,
+                                   sub.EventSourcePassword);
     }
 
     if ( ERROR_SUCCESS != dwRetVal)
@@ -220,9 +220,9 @@ DWORD CreateSubscription(const SUBSCRIPTION& sub)
     }
 
     //Save the subscription with the associated properties
-    // This will create the subscription and store it in the 
-    // subscription repository 
-    
+    // This will create the subscription and store it in the
+    // subscription repository
+
     if( !EcSaveSubscription(hSubscription, NULL) )
     {
         dwRetVal = GetLastError();

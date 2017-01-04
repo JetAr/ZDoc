@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -40,7 +40,7 @@ void CBaseClient::ClearContent()
         // Be sure to Release the reference to the COM interface!
         //
         if (NULL != m_pContentList->m_pContent)
-        {          
+        {
             m_pContentList->m_pContent->Release();
         }
 
@@ -57,9 +57,9 @@ void CBaseClient::Register()
     //
     HRESULT hr = S_OK;
 
-    if (NULL == m_pSession && 
-        NULL == m_pContentMgr &&
-        NULL == m_pNotificationMgr)
+    if (NULL == m_pSession &&
+            NULL == m_pContentMgr &&
+            NULL == m_pNotificationMgr)
     {
         cout << "Registering Windows SideShow Client..." << endl;
 
@@ -110,7 +110,7 @@ void CBaseClient::Register()
                     // but no devices available or enabled.
                     //
                     cout << "Successfully registered with the Windows SideShow platform for content and notifications, " <<
-                            "but no devices available or enabled." << endl;
+                         "but no devices available or enabled." << endl;
                 }
                 else if (E_INVALIDARG == hr)
                 {
@@ -119,7 +119,7 @@ void CBaseClient::Register()
                     // Have you added the proper information to the registry for this application?
                     //
                     cout << "ISideShowSession::RegisterContent failed with Invalid Argument: " <<
-                            "Have you added the proper information to the registry for this application?" << endl;
+                         "Have you added the proper information to the registry for this application?" << endl;
                 }
                 else
                 {
@@ -133,16 +133,16 @@ void CBaseClient::Register()
                 // Have you added the proper information to the registry for this application?
                 //
                 cout << "ISideShowSession::RegisterContent failed with Invalid Argument: " <<
-                        "Have you added the proper information to the registry for this application?" << endl;
+                     "Have you added the proper information to the registry for this application?" << endl;
             }
-            else 
+            else
             {
                 //
                 // ISideShowSession::RegisterContent failed
                 //
                 cout << "ISideShowSession::RegisterContent failed, hr = " << hr << endl;
             }
-        }       
+        }
     }
     else
     {
@@ -173,7 +173,7 @@ void CBaseClient::Unregister()
     }
 
     if (NULL != m_pSession)
-    {       
+    {
         m_pSession->Release();
         m_pSession = NULL;
     }
@@ -247,7 +247,7 @@ void CBaseClient::RemoveAllContent()
             cout << "Failed to remove content, HRESULT = " << hr << endl;
         }
     }
-    
+
     ClearContent();
 }
 

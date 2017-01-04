@@ -1,4 +1,4 @@
- //////////////////////////////////////////////////////////////////////////////
+﻿//////////////////////////////////////////////////////////////////////////////
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -22,11 +22,12 @@ WSD_LOCALIZED_STRING_LIST thisDeviceNameList = {NULL, &thisDeviceName};
 // "0.095" is the FirmwareVersion
 // "0123456789-9876543210" is the SerialNumber
 
-const WSD_THIS_DEVICE_METADATA thisDeviceMetadata = {
+const WSD_THIS_DEVICE_METADATA thisDeviceMetadata =
+{
     &thisDeviceNameList,
     L"0.095",
     L"0123456789-9876543210",
-}; 
+};
 
 //////////////////////////////////////////////////////////////////////////////
 // CFileServiceSecureService Class
@@ -50,7 +51,7 @@ public:
 
     HRESULT STDMETHODCALLTYPE GetFile(
         WSD_EVENT* wsdEvent,
-        GET_FILE_REQUEST* parameters, 
+        GET_FILE_REQUEST* parameters,
         GET_FILE_RESPONSE** parametersOut);
 
     HRESULT STDMETHODCALLTYPE GetFileList(
@@ -62,7 +63,7 @@ public:
     // Methods to make this class act like a COM object
     //////////////////////////////////////////////////////////////////////////
     HRESULT STDMETHODCALLTYPE QueryInterface(
-        REFIID riid, 
+        REFIID riid,
         void** ppvObject);
 
     ULONG STDMETHODCALLTYPE AddRef();
@@ -77,9 +78,9 @@ public:
 class CFileChangeNotificationThread
 {
 private:
-    WCHAR m_szDirectory[MAX_PATH]; 
-    IWSDDeviceHost* m_pHost;         
-    WCHAR m_szServiceId[MAX_PATH]; 
+    WCHAR m_szDirectory[MAX_PATH];
+    IWSDDeviceHost* m_pHost;
+    WCHAR m_szServiceId[MAX_PATH];
     // Handle for the change notification thread
     HANDLE m_hThread;
     // Handle to signal shutdown of notification thread
@@ -91,14 +92,14 @@ public:
     ~CFileChangeNotificationThread();
 
     HRESULT Init(
-        LPCWSTR pszDirectory, 
-        LPCWSTR pszServiceId, 
+        LPCWSTR pszDirectory,
+        LPCWSTR pszServiceId,
         IWSDDeviceHost* pHost);
 
-    // Starts the file change notification thread 
+    // Starts the file change notification thread
     HRESULT Start();
 
-    // Stops the file change notification thread 
+    // Stops the file change notification thread
     HRESULT Stop();
 
     //////////////////////////////////////////////////////////////////////////
@@ -112,7 +113,7 @@ private:
 
     // Notifies the client via the FileChangeEvent
     void NotifyClient(
-        LPCWSTR pszFileName, 
+        LPCWSTR pszFileName,
         DWORD dwAction);
 };
 
@@ -135,7 +136,7 @@ public:
     CSendAttachmentThread();
 
     HRESULT Init(
-        LPCWSTR pszFilePath, 
+        LPCWSTR pszFilePath,
         IWSDOutboundAttachment* pAttachment);
 
     // Starts the send-attachment thread via thread-pool thread

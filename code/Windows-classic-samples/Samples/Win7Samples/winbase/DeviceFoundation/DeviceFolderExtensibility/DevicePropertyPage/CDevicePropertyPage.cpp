@@ -1,4 +1,4 @@
-////////////////////////////////////////////////////////////////////////////////
+﻿////////////////////////////////////////////////////////////////////////////////
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -18,7 +18,7 @@
 #include <new>
 
 // Needed before including devpkey.h as there's no lib with the DEVPKEY objects
-#include <initguid.h> 
+#include <initguid.h>
 #include <devpkey.h>
 
 // Sample Headers
@@ -69,7 +69,7 @@ CDevicePropertyPage::~CDevicePropertyPage()
 //------------------------------------------------------------------------------
 // CDevicePropertyPage::AddPages
 //
-//      This method is called by the Windows Shell to give oportunity to 
+//      This method is called by the Windows Shell to give oportunity to
 //      register one or more property pages with the property sheet. Minimal
 //      work should be done here. Essentially only enough work to figure out
 //      whether the property page should be added or not (i.e. no critical data
@@ -79,7 +79,7 @@ CDevicePropertyPage::~CDevicePropertyPage()
 IFACEMETHODIMP CDevicePropertyPage::AddPages(
     __in LPFNADDPROPSHEETPAGE pfnAddPage,
     __in LPARAM lParam
-    )
+)
 {
     HPROPSHEETPAGE  hPage;
     HRESULT         hr  = S_OK;
@@ -140,7 +140,7 @@ IFACEMETHODIMP CDevicePropertyPage::AddPages(
     // Give the shell the page
     //
     if( S_OK == hr &&
-        !pfnAddPage( hPage, lParam ) )
+            !pfnAddPage( hPage, lParam ) )
     {
         hr = E_FAIL;
     }
@@ -151,7 +151,7 @@ IFACEMETHODIMP CDevicePropertyPage::AddPages(
     // this by giving the index of the page you added (1 based). In this sample
     // we just added one page, so we can return 1 instead of the HR (assuming
     // we didn't fail) to request our page to be the one visible on launch.
-    // Keep in mind it is a "request" and is not guaranteed. 
+    // Keep in mind it is a "request" and is not guaranteed.
     //
     if( S_OK == hr )
     {
@@ -185,7 +185,7 @@ IFACEMETHODIMP CDevicePropertyPage::ReplacePage(
     __in UINT uPageID,
     __in LPFNADDPROPSHEETPAGE pfnReplacePage,
     __in LPARAM lParam
-    )
+)
 {
     UNREFERENCED_PARAMETER( uPageID );
     UNREFERENCED_PARAMETER( pfnReplacePage );
@@ -209,7 +209,7 @@ IFACEMETHODIMP CDevicePropertyPage::Initialize(
     __in PCIDLIST_ABSOLUTE pidlFolder,
     __in IDataObject* pdtobj,
     __in HKEY hkeyProgID
-    )
+)
 {
     UNREFERENCED_PARAMETER( hkeyProgID );
     UNREFERENCED_PARAMETER( pidlFolder );
@@ -224,10 +224,10 @@ IFACEMETHODIMP CDevicePropertyPage::Initialize(
     // Grab the interface to the shell item
     //
     return SHGetItemFromObject(
-        pdtobj, 
-        __uuidof(IShellItem2),
-        reinterpret_cast<void**>(&m_pShellItem)
-        );
+               pdtobj,
+               __uuidof(IShellItem2),
+               reinterpret_cast<void**>(&m_pShellItem)
+           );
 }// CDevicePropertyPage::Initialize
 
 
@@ -239,9 +239,9 @@ IFACEMETHODIMP CDevicePropertyPage::Initialize(
 // CDevicePropertyPage::QueryInterface
 //------------------------------------------------------------------------------
 IFACEMETHODIMP CDevicePropertyPage::QueryInterface(
-    __in REFIID riid, 
+    __in REFIID riid,
     __deref_out void** ppvObject
-    )
+)
 {
     HRESULT hr = S_OK;
 
@@ -308,13 +308,13 @@ IFACEMETHODIMP_(ULONG) CDevicePropertyPage::Release()
 // CDevicePropertyPage::GetIconFromItem [STATIC FUNC]
 //
 //      Gets a handle to the icon of the shell item. phIcon needs to be cleaned
-//      up with DestroyIcon() when done. 
+//      up with DestroyIcon() when done.
 //------------------------------------------------------------------------------
 HRESULT CDevicePropertyPage::GetIconFromItem(
-    __in IShellItem* pShellItem, 
-    __in int iImageList, 
+    __in IShellItem* pShellItem,
+    __in int iImageList,
     __out HICON* phIcon
-    )
+)
 {
     HRESULT         hr              = S_OK;
     int             iIcon           = 0;
@@ -335,10 +335,10 @@ HRESULT CDevicePropertyPage::GetIconFromItem(
     if( S_OK == hr )
     {
         hr = SHGetImageList(
-            iImageList,
-            __uuidof(IImageList),
-            reinterpret_cast<void**>(&pImageList)
-            );
+                 iImageList,
+                 __uuidof(IImageList),
+                 reinterpret_cast<void**>(&pImageList)
+             );
     }
 
     if( S_OK == hr )
@@ -382,7 +382,7 @@ INT_PTR CALLBACK CDevicePropertyPage::PropPageDlgProc(
     __in UINT uMsg,
     __in WPARAM wParam,
     __in LPARAM lParam
-    )
+)
 {
     UNREFERENCED_PARAMETER( wParam );
 
@@ -405,7 +405,7 @@ INT_PTR CALLBACK CDevicePropertyPage::PropPageDlgProc(
                 STM_SETICON,
                 reinterpret_cast<WPARAM>(pPropsInput->hIcon),
                 0
-                );
+            );
         }
 
         //
@@ -432,20 +432,20 @@ INT_PTR CALLBACK CDevicePropertyPage::PropPageDlgProc(
 //
 //      This function is called just before the page is created and when it's
 //      about to be destroyed. In this sample, it will just be used to free the
-//      pidl. 
+//      pidl.
 //------------------------------------------------------------------------------
 UINT CALLBACK CDevicePropertyPage::PropPageDlgCleanup(
     __in HWND hwnd,
     __in UINT uMsg,
     __in LPPROPSHEETPAGE ppsp
-    )
+)
 {
     UNREFERENCED_PARAMETER( hwnd );
 
     PROPSINPUT* pPropsInput = reinterpret_cast<PROPSINPUT*>(ppsp->lParam);
 
     if( PSPCB_RELEASE == uMsg &&
-        NULL != pPropsInput )
+            NULL != pPropsInput )
     {
         if( NULL != pPropsInput->pShellItem )
         {
@@ -468,13 +468,13 @@ UINT CALLBACK CDevicePropertyPage::PropPageDlgCleanup(
 //
 //      Populates the property page with the properties available directly from
 //      the shell item object.  Other properties have to be farmed from the
-//      devnodes that make up the device. This process is shown in 
+//      devnodes that make up the device. This process is shown in
 //      PopulateDevnodeProperties.
 //------------------------------------------------------------------------------
 HRESULT CDevicePropertyPage::PopulateShellProperties(
     __in HWND hWndDlg,
     __in IShellItem2* pShellItem
-    )
+)
 {
     HRESULT hr              = S_OK;
     PWSTR   pszValue        = {0};
@@ -493,7 +493,7 @@ HRESULT CDevicePropertyPage::PopulateShellProperties(
     // Device Name
     //
     if( S_OK == hr &&
-        S_OK == pShellItem->GetString( PKEY_ItemNameDisplay, &pszValue ))
+            S_OK == pShellItem->GetString( PKEY_ItemNameDisplay, &pszValue ))
     {
         SetDlgItemText( hWndDlg, IDC_NAME_FIELD, pszValue );
         CoTaskMemFree( pszValue );
@@ -503,8 +503,8 @@ HRESULT CDevicePropertyPage::PopulateShellProperties(
     // Container Id
     //
     if( S_OK == hr &&
-        S_OK == pShellItem->GetCLSID( PKEY_Devices_ContainerId, &guidContainerID ) &&
-        S_OK == StringFromCLSID( guidContainerID, &pszValue ))
+            S_OK == pShellItem->GetCLSID( PKEY_Devices_ContainerId, &guidContainerID ) &&
+            S_OK == StringFromCLSID( guidContainerID, &pszValue ))
     {
         SetDlgItemText( hWndDlg, IDC_CONTAINERID_FIELD, pszValue );
         CoTaskMemFree( pszValue );
@@ -514,7 +514,7 @@ HRESULT CDevicePropertyPage::PopulateShellProperties(
     // Manufacturer
     //
     if( S_OK == hr &&
-        S_OK == pShellItem->GetString( PKEY_Devices_Manufacturer, &pszValue ))
+            S_OK == pShellItem->GetString( PKEY_Devices_Manufacturer, &pszValue ))
     {
         SetDlgItemText( hWndDlg, IDC_MANUFACTURER_FIELD, pszValue );
         CoTaskMemFree( pszValue );
@@ -524,7 +524,7 @@ HRESULT CDevicePropertyPage::PopulateShellProperties(
     // Model Name
     //
     if( S_OK == hr &&
-        S_OK == pShellItem->GetString( PKEY_Devices_ModelName, &pszValue ))
+            S_OK == pShellItem->GetString( PKEY_Devices_ModelName, &pszValue ))
     {
         SetDlgItemText( hWndDlg, IDC_MODELNAME_FIELD, pszValue );
         CoTaskMemFree( pszValue );
@@ -534,7 +534,7 @@ HRESULT CDevicePropertyPage::PopulateShellProperties(
     // Model Number
     //
     if( S_OK == hr &&
-        S_OK == pShellItem->GetString( PKEY_Devices_ModelNumber, &pszValue ))
+            S_OK == pShellItem->GetString( PKEY_Devices_ModelNumber, &pszValue ))
     {
         SetDlgItemText( hWndDlg, IDC_MODELNUMBER_FIELD, pszValue );
         CoTaskMemFree( pszValue );
@@ -544,7 +544,7 @@ HRESULT CDevicePropertyPage::PopulateShellProperties(
     // Device Description 1
     //
     if( S_OK == hr &&
-        S_OK == pShellItem->GetString( PKEY_Devices_DeviceDescription1, &pszValue ))
+            S_OK == pShellItem->GetString( PKEY_Devices_DeviceDescription1, &pszValue ))
     {
         SetDlgItemText( hWndDlg, IDC_DESCRIPTION1_FIELD, pszValue );
         CoTaskMemFree( pszValue );
@@ -554,7 +554,7 @@ HRESULT CDevicePropertyPage::PopulateShellProperties(
     // Device Description 2
     //
     if( S_OK == hr &&
-        S_OK == pShellItem->GetString( PKEY_Devices_DeviceDescription2, &pszValue ))
+            S_OK == pShellItem->GetString( PKEY_Devices_DeviceDescription2, &pszValue ))
     {
         SetDlgItemText( hWndDlg, IDC_DESCRIPTION2_FIELD, pszValue );
         CoTaskMemFree( pszValue );
@@ -585,15 +585,15 @@ HRESULT CDevicePropertyPage::PopulateShellProperties(
 //          This property is a vectory of strings of the Device Interface Paths
 //          of all your device's devnodes. Use of this property use not shown in
 //          this sample, but if you find the property helpful for your scenario
-//          you can use it. 
+//          you can use it.
 //------------------------------------------------------------------------------
 HRESULT CDevicePropertyPage::PopulateDevnodeProperties(
     __in HWND hWndDlg,
     __in IShellItem2* pShellItem
-    )
+)
 {
     DWORD           cbBuffer            = 0;
-    HDEVINFO        devInfo             = {0}; 
+    HDEVINFO        devInfo             = {0};
     SP_DEVINFO_DATA devInfoData         = {0};
     DEVPROPTYPE     devPropType         = 0;
     HRESULT         hr                  = S_OK;
@@ -614,10 +614,10 @@ HRESULT CDevicePropertyPage::PopulateDevnodeProperties(
         hr = pShellItem->GetProperty( PKEY_Devices_FunctionPaths, &pv );
     }
     if( S_OK == hr &&
-        ((VT_VECTOR | VT_LPWSTR) != pv.vt ||
-        ( 0 == pv.calpwstr.cElems ) ) )
+            ((VT_VECTOR | VT_LPWSTR) != pv.vt ||
+             ( 0 == pv.calpwstr.cElems ) ) )
     {
-        // Function Paths doesn't exist or is the wrong type or empty. 
+        // Function Paths doesn't exist or is the wrong type or empty.
         // This should never happen, but its good practice to check anyway.
         hr = HRESULT_FROM_WIN32( ERROR_NOT_FOUND );
     }
@@ -633,7 +633,7 @@ HRESULT CDevicePropertyPage::PopulateDevnodeProperties(
     // figure out which one contains the properties you're after. In this sample
     // we're just attempting to get a set of properties from the devnode who's
     // Device Instance Path is in the FunctionPaths list retreived from the shell
-    // object. 
+    // object.
     //
 
     //
@@ -656,12 +656,12 @@ HRESULT CDevicePropertyPage::PopulateDevnodeProperties(
         devInfoData.cbSize = sizeof(SP_DEVINFO_DATA);
 
         if( FALSE == SetupDiOpenDeviceInfo(
-                        devInfo,
-                        pv.calpwstr.pElems[0],
-                        NULL, 
-                        0, 
-                        &devInfoData 
-                        ) )
+                    devInfo,
+                    pv.calpwstr.pElems[0],
+                    NULL,
+                    0,
+                    &devInfoData
+                ) )
         {
             hr = HRESULT_FROM_WIN32( GetLastError() );
         }
@@ -669,8 +669,8 @@ HRESULT CDevicePropertyPage::PopulateDevnodeProperties(
 
     //
     // Now populate the property page with some properties from the devnode
-    // 
-    // You can ask for properties defined in devpkey.h. Some keys in 
+    //
+    // You can ask for properties defined in devpkey.h. Some keys in
     // FunctionDiscoveryKey.h are also available on devnodes; For example,
     // devnodes from PnP-X (Network Devices) will have PKEY_PNPX properties
     // set on them. These can be retreived with SetupDi* calls as well.
@@ -679,10 +679,10 @@ HRESULT CDevicePropertyPage::PopulateDevnodeProperties(
     // superset of DEVPROPTYPEs. The mapping on many property types is
     // straight forward. DEVPROP_TYPE_STRING and VT_LPWSTR
     // are the same, for example. Below we'll get a PnP-X property so it's
-    // clear how this works. 
+    // clear how this works.
     //
     // One case where the mapping isn't exact, is VT_VECTOR | VT_LPWSTR
-    // (vector of strings), which in the devnode is stored as a 
+    // (vector of strings), which in the devnode is stored as a
     // DEVPROP_TYPE_STRING_LIST (REG_MULTI_SZ style string list). Keep this
     // in mind when asking for PKEY types from a devnode vs. DEVPKEY types.
     //
@@ -692,18 +692,18 @@ HRESULT CDevicePropertyPage::PopulateDevnodeProperties(
     //
     if( S_OK == hr )
     {
-        // Get the required buffer size 
+        // Get the required buffer size
         if( FALSE == SetupDiGetDeviceProperty(
-                        devInfo,
-                        &devInfoData,
-                        &DEVPKEY_Device_HardwareIds,
-                        &devPropType,
-                        NULL,
-                        0,
-                        &cbBuffer,
-                        0 
-                        ) &&
-            ERROR_INSUFFICIENT_BUFFER != GetLastError() )
+                    devInfo,
+                    &devInfoData,
+                    &DEVPKEY_Device_HardwareIds,
+                    &devPropType,
+                    NULL,
+                    0,
+                    &cbBuffer,
+                    0
+                ) &&
+                ERROR_INSUFFICIENT_BUFFER != GetLastError() )
         {
             hr = HRESULT_FROM_WIN32( GetLastError() );
         }
@@ -722,22 +722,22 @@ HRESULT CDevicePropertyPage::PopulateDevnodeProperties(
     if( S_OK == hr )
     {
         if( FALSE == SetupDiGetDeviceProperty(
-                        devInfo,
-                        &devInfoData,
-                        &DEVPKEY_Device_HardwareIds,
-                        &devPropType,
-                        pBuffer,
-                        cbBuffer,
-                        NULL,
-                        0 
-                        ) )
+                    devInfo,
+                    &devInfoData,
+                    &DEVPKEY_Device_HardwareIds,
+                    &devPropType,
+                    pBuffer,
+                    cbBuffer,
+                    NULL,
+                    0
+                ) )
         {
             hr = HRESULT_FROM_WIN32( GetLastError() );
         }
     }
 
     if( S_OK == hr &&
-        DEVPROP_TYPE_STRING_LIST == devPropType )
+            DEVPROP_TYPE_STRING_LIST == devPropType )
     {
         //
         // The UI only has slots for up to three hardware ids, so we'll
@@ -748,31 +748,31 @@ HRESULT CDevicePropertyPage::PopulateDevnodeProperties(
         if( NULL != *pszHwid )
         {
             SetDlgItemText(
-                hWndDlg, 
-                IDC_HARDWAREID_FIELD1, 
+                hWndDlg,
+                IDC_HARDWAREID_FIELD1,
                 pszHwid
-                );
+            );
             pszHwid = pszHwid + wcslen(pszHwid) + 1;
         }
         if( NULL != *pszHwid )
         {
             SetDlgItemText(
-                hWndDlg, 
-                IDC_HARDWAREID_FIELD2, 
+                hWndDlg,
+                IDC_HARDWAREID_FIELD2,
                 pszHwid
-                );
+            );
             pszHwid = pszHwid + wcslen(pszHwid) + 1;
         }
         if( NULL != *pszHwid )
         {
             SetDlgItemText(
-                hWndDlg, 
-                IDC_HARDWAREID_FIELD3, 
+                hWndDlg,
+                IDC_HARDWAREID_FIELD3,
                 pszHwid
-                );
+            );
         }
     }
-    
+
     if( NULL != pBuffer )
     {
         delete[] pBuffer;
@@ -784,18 +784,18 @@ HRESULT CDevicePropertyPage::PopulateDevnodeProperties(
     //
     if( S_OK == hr )
     {
-        // Get the required buffer size 
+        // Get the required buffer size
         if( FALSE == SetupDiGetDeviceProperty(
-                        devInfo,
-                        &devInfoData,
-                        &DEVPKEY_Device_InstallDate,
-                        &devPropType,
-                        NULL,
-                        0,
-                        &cbBuffer,
-                        0 
-                        ) &&
-            ERROR_INSUFFICIENT_BUFFER != GetLastError() )
+                    devInfo,
+                    &devInfoData,
+                    &DEVPKEY_Device_InstallDate,
+                    &devPropType,
+                    NULL,
+                    0,
+                    &cbBuffer,
+                    0
+                ) &&
+                ERROR_INSUFFICIENT_BUFFER != GetLastError() )
         {
             hr = HRESULT_FROM_WIN32( GetLastError() );
         }
@@ -813,15 +813,15 @@ HRESULT CDevicePropertyPage::PopulateDevnodeProperties(
     if( S_OK == hr )
     {
         if( FALSE == SetupDiGetDeviceProperty(
-                        devInfo,
-                        &devInfoData,
-                        &DEVPKEY_Device_InstallDate,
-                        &devPropType,
-                        pBuffer,
-                        cbBuffer,
-                        NULL,
-                        0 
-                        ) )
+                    devInfo,
+                    &devInfoData,
+                    &DEVPKEY_Device_InstallDate,
+                    &devPropType,
+                    pBuffer,
+                    cbBuffer,
+                    NULL,
+                    0
+                ) )
         {
             hr = HRESULT_FROM_WIN32( GetLastError() );
         }
@@ -834,8 +834,8 @@ HRESULT CDevicePropertyPage::PopulateDevnodeProperties(
     if( S_OK == hr )
     {
         if( FALSE == FileTimeToSystemTime(
-                reinterpret_cast<FILETIME*>(pBuffer), 
-                &installTime ))
+                    reinterpret_cast<FILETIME*>(pBuffer),
+                    &installTime ))
         {
             hr = HRESULT_FROM_WIN32( GetLastError() );
         }
@@ -843,14 +843,14 @@ HRESULT CDevicePropertyPage::PopulateDevnodeProperties(
 
     if( S_OK == hr )
     {
-        if( 0 == GetDateFormatEx( 
-                LOCALE_NAME_USER_DEFAULT,
-                DATE_AUTOLAYOUT | DATE_LONGDATE,
-                &installTime,
-                NULL,
-                szInstallTime,
-                ARRAY_SIZE(szInstallTime),
-                NULL
+        if( 0 == GetDateFormatEx(
+                    LOCALE_NAME_USER_DEFAULT,
+                    DATE_AUTOLAYOUT | DATE_LONGDATE,
+                    &installTime,
+                    NULL,
+                    szInstallTime,
+                    ARRAY_SIZE(szInstallTime),
+                    NULL
                 ))
         {
             hr = HRESULT_FROM_WIN32( GetLastError() );
@@ -861,7 +861,7 @@ HRESULT CDevicePropertyPage::PopulateDevnodeProperties(
     {
         SetDlgItemText( hWndDlg, IDC_INSTALLDATE_FIELD, szInstallTime );
     }
-    
+
     if( NULL != pBuffer )
     {
         delete[] pBuffer;
@@ -877,27 +877,27 @@ HRESULT CDevicePropertyPage::PopulateDevnodeProperties(
     // Let's attempt to get the IP Address, though it won't be available on
     // Mice (which is what this sample property page binds to). It at least
     // shows how the process would work. Also, as stated above, only *some*
-    // of the devnodes that make up your PnP-X device may contain the 
+    // of the devnodes that make up your PnP-X device may contain the
     // IP Address, so you might have to look through all the devnodes by
-    // iterating the FunctionPaths list. 
+    // iterating the FunctionPaths list.
     //
     // This property won't be set on the property page itself since a mouse
     // will never have an IP Address.
     //
     if( S_OK == hr )
     {
-        // Get the required buffer size 
+        // Get the required buffer size
         if( FALSE == SetupDiGetDeviceProperty(
-                        devInfo,
-                        &devInfoData,
-                        (const DEVPROPKEY*)&PKEY_PNPX_IpAddress,
-                        &devPropType,
-                        NULL,
-                        0,
-                        &cbBuffer,
-                        0 
-                        ) &&
-            ERROR_INSUFFICIENT_BUFFER != GetLastError() )
+                    devInfo,
+                    &devInfoData,
+                    (const DEVPROPKEY*)&PKEY_PNPX_IpAddress,
+                    &devPropType,
+                    NULL,
+                    0,
+                    &cbBuffer,
+                    0
+                ) &&
+                ERROR_INSUFFICIENT_BUFFER != GetLastError() )
         {
             hr = HRESULT_FROM_WIN32( GetLastError() );
         }
@@ -915,23 +915,23 @@ HRESULT CDevicePropertyPage::PopulateDevnodeProperties(
     if( S_OK == hr )
     {
         if( FALSE == SetupDiGetDeviceProperty(
-                        devInfo,
-                        &devInfoData,
-                        (const DEVPROPKEY*)&PKEY_PNPX_IpAddress,
-                        &devPropType,
-                        pBuffer,
-                        cbBuffer,
-                        NULL,
-                        0 
-                        ) )
+                    devInfo,
+                    &devInfoData,
+                    (const DEVPROPKEY*)&PKEY_PNPX_IpAddress,
+                    &devPropType,
+                    pBuffer,
+                    cbBuffer,
+                    NULL,
+                    0
+                ) )
         {
             hr = HRESULT_FROM_WIN32( GetLastError() );
         }
     }
 
     if( S_OK == hr &&
-        DEVPROP_TYPE_STRING == devPropType
-        )
+            DEVPROP_TYPE_STRING == devPropType
+      )
     {
         // pBuffer now contains the IP Address if this is a PnP-X device and
         // this was one of the devnodes that had the property set.

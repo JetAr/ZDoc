@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -8,7 +8,7 @@
 
 /****************************************************************************
 							Microsoft RPC
-           
+
                           DynEpt Example
 
     FILE:       dyneptp.c
@@ -43,8 +43,9 @@ void Shutdown(IN RPC_BINDING_HANDLE hBinding)
     printf_s("Calling RpcMgmtStopServerListening\n");
     status = RpcMgmtStopServerListening(NULL);
     printf_s("RpcMgmtStopServerListening returned: 0x%x\n", status);
-    if (status) {
-       exit(status);
+    if (status)
+    {
+        exit(status);
     }
 }
 

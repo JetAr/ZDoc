@@ -1,4 +1,4 @@
-//<SnippetSetAuthor_cppOpclibWholePage>
+﻿//<SnippetSetAuthor_cppOpclibWholePage>
 /*****************************************************************************
 *
 * File: opclib.cpp
@@ -11,18 +11,18 @@
 * ------------------------------------
 *
 *  This file is part of the Microsoft Windows SDK Code Samples.
-* 
+*
 *  Copyright (C) Microsoft Corporation.  All rights reserved.
-* 
+*
 * This source code is intended only as a supplement to Microsoft
 * Development Tools and/or on-line documentation.  See these other
 * materials for detailed information regarding Microsoft code samples.
-* 
+*
 * THIS CODE AND INFORMATION ARE PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
 * KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
 * IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 * PARTICULAR PURPOSE.
-* 
+*
 ****************************************************************************/
 
 #include "stdio.h"
@@ -44,19 +44,19 @@ namespace opclib
 // The relationship type (core-properties relationship type) of the
 // relationship targeting the Core Properties part, as defined by the OPC
 // (ECMA-376 Part 2).
-static const WCHAR g_corePropertiesRelationshipType[] = 
+static const WCHAR g_corePropertiesRelationshipType[] =
     L"http://schemas.openxmlformats.org/package/2006/relationships/metadata/core-properties";
 //</SnippetFindPart_cppDefineRelType>
 
 //<SnippetFindPart_cppDefineCorePropContentType>
 // The expected content type of the Core Properties part, as defined by the OPC
 // (ECMA-376 Part 2).
-static const WCHAR g_corePropertiesContentType[] = 
+static const WCHAR g_corePropertiesContentType[] =
     L"application/vnd.openxmlformats-package.core-properties+xml";
 //</SnippetFindPart_cppDefineCorePropContentType>
 
 // Namespaces used in XPath selection queries for the Core Properties part.
-// This includes a number of namespaces used in the Core Properties 
+// This includes a number of namespaces used in the Core Properties
 // part as specified by the OPC.
 static const WCHAR g_corePropertiesSelectionNamespaces[] =
     L"xmlns:cp='http://schemas.openxmlformats.org/package/2006/metadata/core-properties' "
@@ -76,7 +76,7 @@ LoadPackage(
     IOpcFactory *factory,
     LPCWSTR packageName,
     IOpcPackage **outPackage
-    )
+)
 {
 //<SnippetLoadPackage_cppDeclareStreamVar>
     IStream * sourceFileStream = NULL;
@@ -88,12 +88,12 @@ LoadPackage(
     // Create a read-only stream over the package to prevent errors caused by
     // simultaneously writing and reading from a package.
     HRESULT hr = factory->CreateStreamOnFile(
-                    packageName, 
-                    OPC_STREAM_IO_READ, 
-                    NULL, 
-                    0, 
-                    &sourceFileStream
-                    );
+                     packageName,
+                     OPC_STREAM_IO_READ,
+                     NULL,
+                     0,
+                     &sourceFileStream
+                 );
 
 //</SnippetLoadPackage_cppCreateReadStream>
 //<SnippetLoadPackage_cppBeginRead>
@@ -106,12 +106,12 @@ LoadPackage(
 
         // Read the package into a package object.
         // Note: A stream used to read a package is active for the lifetime of
-        // the package object into which it is read. 
+        // the package object into which it is read.
         hr = factory->ReadPackageFromStream(
-                sourceFileStream, 
-                OPC_CACHE_ON_ACCESS, 
-                outPackage
-                );
+                 sourceFileStream,
+                 OPC_CACHE_ON_ACCESS,
+                 outPackage
+             );
     }
 
     // Release resources
@@ -120,7 +120,7 @@ LoadPackage(
         sourceFileStream->Release();
         sourceFileStream = NULL;
     }
-    
+
 //</SnippetLoadPackage_cppBeginRead>
     return hr;
 }
@@ -140,7 +140,7 @@ SavePackage(
     IOpcFactory *factory,
     IOpcPackage *package,
     LPCWSTR targetFileName
-    )
+)
 {
 //<SnippetSavePackage_cppDefineTStream>
     IStream * targetFileStream = NULL;
@@ -151,12 +151,12 @@ SavePackage(
 
     // Create a writable stream over the specified target file name.
     HRESULT hr = factory->CreateStreamOnFile(
-                    targetFileName, 
-                    OPC_STREAM_IO_WRITE, 
-                    NULL, 
-                    0, 
-                    &targetFileStream
-                    );
+                     targetFileName,
+                     OPC_STREAM_IO_WRITE,
+                     NULL,
+                     0,
+                     &targetFileStream
+                 );
 
 //</SnippetSavePackage_cppCreateWriteOnlyStream>
 //<SnippetSavePackage_cppWrite>
@@ -165,10 +165,10 @@ SavePackage(
         // After a stream over the specified file is created successfully,
         // write package data to the file.
         hr = factory->WritePackageToStream(
-                package, 
-                OPC_WRITE_DEFAULT, 
-                targetFileStream
-                );
+                 package,
+                 OPC_WRITE_DEFAULT,
+                 targetFileStream
+             );
     }
 
     // Release resources
@@ -186,7 +186,7 @@ SavePackage(
 //////////////////////////////////////////////////////////////////////////////
 // Description:
 // If the target of the relationship is a part, get the relative URI of the
-// target and resolve this URI to the part name using the URI of the 
+// target and resolve this URI to the part name using the URI of the
 // relationship's source as the base URI.
 //////////////////////////////////////////////////////////////////////////////
 //<SnippetResolveTargetUri_cppWholeFunc>
@@ -194,7 +194,7 @@ HRESULT
 ResolveTargetUriToPart(
     IOpcRelationship *relationship,
     IOpcPartUri **resolvedUri
-    )
+)
 {
 //<SnippetResolveTargetUri_cppDeclareVars>
     IOpcUri * sourceUri = NULL;
@@ -216,8 +216,8 @@ ResolveTargetUriToPart(
     }
 //</SnippetResolveTargetUri_cppCheckNotInternalFailure>
     // Get the segments of the URI and turn it into a valid part URI.
-    // The target should be resolved against the source URI of the 
-    // relationship to expand relative URIs into part URIs with absolute 
+    // The target should be resolved against the source URI of the
+    // relationship to expand relative URIs into part URIs with absolute
     // paths.
 //<SnippetResolveTargetUri_cppGetTURI>
     if (SUCCEEDED(hr))
@@ -265,20 +265,20 @@ ResolveTargetUriToPart(
 // specified relationship type. If a content type is specified, check the
 // content type of the part to ensure that only a part with the specified
 // is retrieved.
-// 
+//
 // Note: This function finds the first, arbitrary part that is the target of
 // a relationship of the specified type and has the specified content type, if
 // a content type is provided.
 //
 // Example of the relationship markup for a relationship that targets a part:
-//   <Relationship Id="rId1" 
-//      Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" 
+//   <Relationship Id="rId1"
+//      Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument"
 //      Target="word/document.xml" />
 //
-// The "Type" attribute (relationship type) is the definitive way to find a 
+// The "Type" attribute (relationship type) is the definitive way to find a
 // part of interest in a package. The relationship type is defined by the
 // package designer or in the OPC and is therefore consistent and predictable.
-// 
+//
 // In contrast, the "Id" and "Target" attributes are arbitrary, and not recommended
 // for finding specific parts of interest.
 //
@@ -286,7 +286,7 @@ ResolveTargetUriToPart(
 // 1. Identify the relationship type, as defined by the package designer or the
 //    OPC, of the relationship(s) that has the part of interest as the target.
 // 2. Get relationships of that relationship type from a relationship set.
-//    Note: It may be necessary to check that the number of retrieved 
+//    Note: It may be necessary to check that the number of retrieved
 //          relationships conforms to an expected number of relationships
 //          specified by the format designer or in the OPC.
 // 3. If the target of a retrieved relationship is a part, resolve the part
@@ -298,13 +298,13 @@ ResolveTargetUriToPart(
 //    content type is defined, return the part.
 //////////////////////////////////////////////////////////////////////////////
 //<SnippetFindPart_cppFindPartWholeFunction>
-HRESULT 
+HRESULT
 FindPartByRelationshipType(
     IOpcPackage *package,
     LPCWSTR relationshipType, // Relationship type used to find the part.
     LPCWSTR contentType, // Expected content type of part (optional).
     IOpcPart **part
-    )
+)
 {
 //<SnippetFindPart_cppFindPartByRelTypeDeclareFuncVars>
     *part = NULL; // Enable checks against value of *part.
@@ -330,9 +330,9 @@ FindPartByRelationshipType(
     {
         // Get package relationships of the specified relationship type.
         hr = packageRels->GetEnumeratorForType(
-                relationshipType,
-                &packageRelsEnum
-                );
+                 relationshipType,
+                 &packageRelsEnum
+             );
     }
 //</SnippetFindPart_cppEnumRelsOfType>
 
@@ -397,7 +397,7 @@ FindPartByRelationshipType(
                 // Compare the content type of the part with the specified
                 // content type.
                 if (SUCCEEDED(hr) &&
-                    0 == wcscmp(contentType, currentContentType))
+                        0 == wcscmp(contentType, currentContentType))
                 {
                     // Part content type matches specified content type.
                     // Part found.
@@ -415,7 +415,7 @@ FindPartByRelationshipType(
 
             // Release resources
             CoTaskMemFree(static_cast<LPVOID>(currentContentType));
-            
+
             if (currentPart)
             {
                 currentPart->Release();
@@ -482,25 +482,25 @@ FindPartByRelationshipType(
 // are provided, set up DOM document for XPath queries. Changes made to
 // content from the DOM document must be written to the part explicitly.
 //////////////////////////////////////////////////////////////////////////////
-HRESULT 
+HRESULT
 DOMFromPart(
     IOpcPart * part,
     LPCWSTR selectionNamespaces,
     IXMLDOMDocument2 **document
-    )
+)
 {
     IXMLDOMDocument2 * partContentXmlDocument = NULL;
     IStream * partContentStream = NULL;
 
     HRESULT hr = CoCreateInstance(
-                    __uuidof(DOMDocument60), 
-                    NULL, 
-                    CLSCTX_INPROC_SERVER, 
-                    __uuidof(IXMLDOMDocument2), 
-                    (LPVOID*)&partContentXmlDocument
-                    );
+                     __uuidof(DOMDocument60),
+                     NULL,
+                     CLSCTX_INPROC_SERVER,
+                     __uuidof(IXMLDOMDocument2),
+                     (LPVOID*)&partContentXmlDocument
+                 );
 
-    // If selection namespaces were provided, configure the document 
+    // If selection namespaces were provided, configure the document
     // for XPath queries.
     if (SUCCEEDED(hr) && selectionNamespaces)
     {
@@ -534,7 +534,7 @@ DOMFromPart(
     {
         // Note: The DOM may hold the content stream open for the life of the
         // DOM tree, and the content stream may hold a reference to the package.
-        hr = part->GetContentStream(&partContentStream);        
+        hr = part->GetContentStream(&partContentStream);
     }
 
     if (SUCCEEDED(hr))
@@ -585,15 +585,15 @@ HRESULT
 FindCorePropertiesPart(
     IOpcPackage *package,
     IOpcPart **part
-    )
+)
 {
 //<SnippetFindPart_cppFindCorePropertiesPartBody>
     return FindPartByRelationshipType(
-                package,
-                g_corePropertiesRelationshipType,
-                g_corePropertiesContentType,
-                part
-                );
+               package,
+               g_corePropertiesRelationshipType,
+               g_corePropertiesContentType,
+               part
+           );
 //</SnippetFindPart_cppFindCorePropertiesPartBody>
 }
 //</SnippetFindPart_cppFindCorePropWholeFunction>
@@ -605,23 +605,23 @@ FindCorePropertiesPart(
 HRESULT
 PrintCoreProperties(
     IOpcPackage *package
-    )
+)
 {
     IOpcPart * corePropertiesPart = NULL;
     IXMLDOMDocument2 * corePropertiesDom = NULL;
 
     HRESULT hr = FindCorePropertiesPart(
-                    package,
-                    &corePropertiesPart
-                    );
+                     package,
+                     &corePropertiesPart
+                 );
 
     if (SUCCEEDED(hr))
     {
         hr = DOMFromPart(
-                corePropertiesPart, 
-                g_corePropertiesSelectionNamespaces, 
-                &corePropertiesDom
-                );
+                 corePropertiesPart,
+                 g_corePropertiesSelectionNamespaces,
+                 &corePropertiesDom
+             );
     }
 
     // Find & show author name.
@@ -631,9 +631,9 @@ PrintCoreProperties(
         BSTR text = NULL;
 
         hr = corePropertiesDom->selectSingleNode(
-                L"//dc:creator",
-                &creatorNode
-                );
+                 L"//dc:creator",
+                 &creatorNode
+             );
 
         if (SUCCEEDED(hr) && creatorNode != NULL)
         {
@@ -665,9 +665,9 @@ PrintCoreProperties(
         BSTR dateText = NULL;
 
         hr = corePropertiesDom->selectSingleNode(
-                L"//cp:lastModifiedBy",
-                &modifiedName
-                );
+                 L"//cp:lastModifiedBy",
+                 &modifiedName
+             );
 
         if (SUCCEEDED(hr) && modifiedName != NULL)
         {
@@ -677,9 +677,9 @@ PrintCoreProperties(
         if (SUCCEEDED(hr))
         {
             hr = corePropertiesDom->selectSingleNode(
-                    L"//dcterms:modified",
-                    &modifiedDate
-                    );
+                     L"//dcterms:modified",
+                     &modifiedDate
+                 );
         }
 
         if (SUCCEEDED(hr) && modifiedDate != NULL)
@@ -690,10 +690,10 @@ PrintCoreProperties(
         if (SUCCEEDED(hr))
         {
             wprintf(
-                L"Last modified by %s on %s\n", 
-                (nameText != NULL) ? nameText : L"[missing]", 
+                L"Last modified by %s on %s\n",
+                (nameText != NULL) ? nameText : L"[missing]",
                 (dateText != NULL) ? dateText : L"[missing]"
-                );
+            );
         }
 
         // Release resources
@@ -738,7 +738,7 @@ HRESULT
 SetAuthorAndModifiedBy(
     IOpcPackage *package,
     LPCWSTR author
-    )
+)
 {
     IOpcPart * corePropertiesPart = NULL;
     IXMLDOMDocument2 * corePropertiesDom = NULL;
@@ -747,17 +747,17 @@ SetAuthorAndModifiedBy(
     IStream * stream = NULL;
 
     HRESULT hr = FindCorePropertiesPart(
-                    package,
-                    &corePropertiesPart
-                    );
+                     package,
+                     &corePropertiesPart
+                 );
 
     if (SUCCEEDED(hr))
     {
         hr = DOMFromPart(
-                corePropertiesPart, 
-                g_corePropertiesSelectionNamespaces, 
-                &corePropertiesDom
-                );
+                 corePropertiesPart,
+                 g_corePropertiesSelectionNamespaces,
+                 &corePropertiesDom
+             );
     }
 
     // Change text of the author and modified by properties to the specified
@@ -765,9 +765,9 @@ SetAuthorAndModifiedBy(
     if (SUCCEEDED(hr))
     {
         hr = corePropertiesDom->selectSingleNode(
-                L"//dc:creator",
-                &creatorNode
-                );
+                 L"//dc:creator",
+                 &creatorNode
+             );
     }
 
     if (SUCCEEDED(hr) && creatorNode != NULL)
@@ -778,9 +778,9 @@ SetAuthorAndModifiedBy(
     if (SUCCEEDED(hr))
     {
         hr = corePropertiesDom->selectSingleNode(
-                L"//cp:lastModifiedBy",
-                &modifiedName
-                );
+                 L"//cp:lastModifiedBy",
+                 &modifiedName
+             );
     }
 
     if (SUCCEEDED(hr) && modifiedName != NULL)

@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 
@@ -30,8 +30,8 @@ HRESULT CSdkShaModule::RegisterSdkSha()
     ZeroMemory (&m_shaInfo, sizeof(m_shaInfo));
 
     hr = m_pNAPClientMgmt.CoCreateInstance(CLSID_NapClientManagement,
-                                            NULL,
-                                            CLSCTX_INPROC_SERVER);
+                                           NULL,
+                                           CLSCTX_INPROC_SERVER);
     if (FAILED(hr))
     {
         wprintf(L"RegisterSdkSha: CoCreateInstance Failed with %#x",hr);
@@ -70,8 +70,8 @@ HRESULT CSdkShaModule::UnregisterSdkSha()
     CComPtr<INapClientManagement> m_pNAPClientMgmt = NULL;
 
     hr = m_pNAPClientMgmt.CoCreateInstance(CLSID_NapClientManagement,
-                                            NULL,
-                                            CLSCTX_INPROC_SERVER);
+                                           NULL,
+                                           CLSCTX_INPROC_SERVER);
     if (FAILED(hr))
     {
         wprintf(L"UnregisterSdkSha: CoCreateInstance Failed with %#x",hr);
@@ -85,9 +85,9 @@ HRESULT CSdkShaModule::UnregisterSdkSha()
             wprintf(L"UnregisterSdkSha: UnregisterSystemHealthAgent failed with NAP_E_STILL_BOUND; stop 'SDKSHA /execute' prior to attempting Unregister.");
         else
             wprintf(L"UnregisterSdkSha: Failed to unregister SdkSha from NapAgent -unknown (error = %x)\n", hr);
-            
+
         goto Cleanup;
-    }        
+    }
 
     wprintf(L"UnregisterSdkSha: SdkSha unregistration from NapAgent returned SUCCESS");
 
@@ -100,7 +100,7 @@ HRESULT CSdkShaModule::FillShaComponentRegistrationInfo (NapComponentRegistratio
 {
     HRESULT hr = S_OK;
     agentInfo->id = QuarSampleSystemHealthId;
-    agentInfo->infoClsid = CLSID_INFO; 
+    agentInfo->infoClsid = CLSID_INFO;
 
     hr = FillCountedString( SHA_FRIENDLY_NAME, &(agentInfo->friendlyName) );
     if (FAILED(hr))

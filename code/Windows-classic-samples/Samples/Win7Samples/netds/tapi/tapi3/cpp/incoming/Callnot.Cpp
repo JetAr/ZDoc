@@ -1,4 +1,4 @@
-/*++
+﻿/*++
 
 Copyright (c) 1999 - 2000 Microsoft Corporation.  All Rights Reserved.
 
@@ -37,24 +37,25 @@ extern BOOL gfAutoAnswer;
 
 void
 DoMessage(
-          LPWSTR pszMessage
-         );
+    LPWSTR pszMessage
+);
 
 void
 SetStatusMessage(
-                 LPWSTR pszMessage
-                );
+    LPWSTR pszMessage
+);
 
 void
 EnableButton(
-             int ID
-            );
+    int ID
+);
 void
 DisableButton(
-              int ID
-             );
+    int ID
+);
 
-enum {
+enum
+{
     VWP_LEFT = 20,
     VWP_TOP = 100
 };
@@ -71,11 +72,11 @@ enum {
 
 void
 HostWindow(
-           IVideoWindow *pVideoWindow,
-           int iWhere
-          )
+    IVideoWindow *pVideoWindow,
+    int iWhere
+)
 {
-    
+
     pVideoWindow->put_Owner( (LONG_PTR)ghDlg );
     pVideoWindow->put_WindowStyle( WS_CHILDWINDOW | WS_BORDER );
 
@@ -103,10 +104,10 @@ HostWindow(
 
 HRESULT
 GetVideoRenderTerminalFromStreamEvent(
-                                      ITCallMediaEvent  * pCallMediaEvent,
-                                      ITTerminal       ** ppTerminal,
-                                      BOOL              * pfRenderStream
-                                     )
+    ITCallMediaEvent  * pCallMediaEvent,
+    ITTerminal       ** ppTerminal,
+    BOOL              * pfRenderStream
+)
 {
     HRESULT hr;
 
@@ -117,7 +118,7 @@ GetVideoRenderTerminalFromStreamEvent(
     ITStream * pStream;
 
     hr = pCallMediaEvent->get_Stream( &pStream );
-    
+
     if ( FAILED(hr) || (pStream == NULL) )
     {
         return E_FAIL;
@@ -131,7 +132,7 @@ GetVideoRenderTerminalFromStreamEvent(
     long lMediaType;
 
     hr = pStream->get_MediaType(&lMediaType);
-    
+
     if ( FAILED(hr) )
     {
         pStream->Release();
@@ -154,7 +155,7 @@ GetVideoRenderTerminalFromStreamEvent(
     TERMINAL_DIRECTION td;
 
     hr = pStream->get_Direction(&td);
-    
+
     if ( FAILED(hr) )
     {
         pStream->Release();
@@ -171,9 +172,9 @@ GetVideoRenderTerminalFromStreamEvent(
     IEnumTerminal * pEnumTerminal;
 
     hr = pStream->EnumerateTerminals( &pEnumTerminal );
-    
+
     pStream->Release();
-    
+
     if ( FAILED(hr) )
     {
         return hr;
@@ -205,7 +206,7 @@ GetVideoRenderTerminalFromStreamEvent(
 
     return E_FAIL; // no terminal found
 }
-                
+
 ///////////////////////////////////////////////////////////////////
 // CallEventNotification
 //
@@ -219,9 +220,9 @@ GetVideoRenderTerminalFromStreamEvent(
 HRESULT
 STDMETHODCALLTYPE
 CTAPIEventNotification::Event(
-                              TAPI_EVENT TapiEvent,
-                              IDispatch * pEvent
-                             )
+    TAPI_EVENT TapiEvent,
+    IDispatch * pEvent
+)
 {
     //
     // Addref the event so it doesn't go away.
@@ -234,11 +235,11 @@ CTAPIEventNotification::Event(
     //
 
     PostMessage(
-                ghDlg,
-                WM_PRIVATETAPIEVENT,
-                (WPARAM) TapiEvent,
-                (LPARAM) pEvent
-               );
+        ghDlg,
+        WM_PRIVATETAPIEVENT,
+        (WPARAM) TapiEvent,
+        (LPARAM) pEvent
+    );
 
     return S_OK;
 }
@@ -253,299 +254,299 @@ CTAPIEventNotification::Event(
 
 HRESULT
 OnTapiEvent(
-            TAPI_EVENT TapiEvent,
-            IDispatch * pEvent
-           )
+    TAPI_EVENT TapiEvent,
+    IDispatch * pEvent
+)
 {
     HRESULT hr;
 
     switch ( TapiEvent )
     {
-        case TE_CALLNOTIFICATION:
+    case TE_CALLNOTIFICATION:
+    {
+        //
+        // TE_CALLNOTIFICATION means that the application is being notified
+        // of a new call.
+        //
+        // Note that we don't answer to call at this point.  The application
+        // should wait for a CS_OFFERING CallState message before answering
+        // the call.
+        //
+
+        ITCallNotificationEvent         * pNotify;
+
+        hr = pEvent->QueryInterface( IID_ITCallNotificationEvent, (void **)&pNotify );
+
+        if (S_OK != hr)
         {
-            //
-            // TE_CALLNOTIFICATION means that the application is being notified
-            // of a new call.
-            //
-            // Note that we don't answer to call at this point.  The application
-            // should wait for a CS_OFFERING CallState message before answering
-            // the call.
-            //
-
-            ITCallNotificationEvent         * pNotify;
-            
-            hr = pEvent->QueryInterface( IID_ITCallNotificationEvent, (void **)&pNotify );
-
-            if (S_OK != hr)
-            {
-                DoMessage( L"Incoming call, but failed to get the interface");
-            }
-            else
-            {
-                CALL_PRIVILEGE          cp;
-                ITCallInfo *            pCall;
-
-                //
-                // get the call
-                //
-
-                hr = pNotify->get_Call( &pCall );
-
-                pNotify->Release();
-
-                if ( SUCCEEDED(hr) )
-                {
-                    //
-                    // check to see if we own the call
-                    //
-
-                    hr = pCall->get_Privilege( &cp );
-
-                    if ( FAILED(hr) || (CP_OWNER != cp) )
-                    {
-                        //
-                        // just ignore it if we don't own it
-                        //
-
-                        pCall->Release();
-
-                        pEvent->Release(); // we addrefed it CTAPIEventNotification::Event()
-
-                        return S_OK;
-                    }
-
-                    //
-                    // Get the ITBasicCallControl interface 
-                    //
-
-                    //
-                    // If we're already in a call, disconnect the new call.  Otherwise,
-                    // save it in our global variable.
-                    //
-
-                    ITBasicCallControl * pCallControl;
-
-                    hr = pCall->QueryInterface( IID_ITBasicCallControl,
-                                                (void**)&pCallControl );
-
-                    pCall->Release();
-
-                  
-                    if ( SUCCEEDED(hr) )
-                    {
-                        if (gpCall == NULL)
-                        {
-                            gpCall = pCallControl;
-                
-                            //
-                            // update UI
-                            //
-                
-                            EnableButton( IDC_ANSWER );
-                            DisableButton( IDC_DISCONNECT );
-                            SetStatusMessage(L"Incoming Owner Call");
-                        }
-                        else
-                        {
-                            //
-                            // Reject this call since we're already in a call
-                            //
-
-                            hr = pCallControl->Disconnect(DC_REJECTED);
-
-                            pCallControl->Release();
-
-                            if (FAILED(hr))
-                            {
-                                break;
-                            }
-                        }
-                    }
-
-                }
-            }
-            
-            break;
+            DoMessage( L"Incoming call, but failed to get the interface");
         }
-        
-        case TE_CALLSTATE:
+        else
         {
-            // TE_CALLSTATE is a call state event.  pEvent is
-            // an ITCallStateEvent
-
-            CALL_STATE           cs;
-            ITCallStateEvent   * pCallStateEvent;
-            ITCallInfo *         pCall;
-            ITBasicCallControl * pCallControl;
-
-            // Get the interface
-            hr = pEvent->QueryInterface( IID_ITCallStateEvent, (void **)&pCallStateEvent );
-
-            if ( FAILED(hr) )
-            {
-                break;
-            }
-
-            // get the CallInfo interface
-            hr = pCallStateEvent->get_Call( &pCall );
-
-            if ( FAILED(hr) )
-            {
-                pCallStateEvent->Release();
-                break;
-            }
-
-            //get the ITBasicCallControl interface and compare it to our existing call
-            hr = pCall->QueryInterface( IID_ITBasicCallControl,(void**)&pCallControl );
-
-            pCall->Release();
-
-            if (FAILED(hr))
-            {
-                pCallStateEvent->Release();
-                break;
-            }
-
-            //ignore call state events for other calls
-            if (pCallControl != gpCall)
-            {
-                pCallControl->Release();
-                pCallStateEvent->Release();
-                break;
-            }
-            pCallControl->Release();
+            CALL_PRIVILEGE          cp;
+            ITCallInfo *            pCall;
 
             //
-            // This is a call state event for our call
+            // get the call
             //
 
-            // get the CallState that we are being notified of.
-            hr = pCallStateEvent->get_State( &cs );
+            hr = pNotify->get_Call( &pCall );
 
-            // Release the interface
-            pCallStateEvent->Release();
-
-            if ( FAILED(hr) )
-            {
-                break;
-            }
-
-            // if it's offering, update our UI
-            if (CS_OFFERING == cs)
-            {
-                if (gfAutoAnswer)
-                {
-                    PostMessage(ghDlg, WM_COMMAND, IDC_ANSWER, 0); 
-                }
-                else
-                {
-                    SetStatusMessage(L"Click the Answer button");
-                }
-            }
-            else if (CS_DISCONNECTED == cs)
-            {
-                PostMessage(ghDlg, WM_COMMAND, IDC_DISCONNECTED, 0);
-            }
-            else if (CS_CONNECTED == cs)
-            {
-                // nothing to do -- we handle connection synchronously
-            }
-                
-            break;
-        }
-
-        case TE_CALLMEDIA:
-        {
-            // TE_CALLMEDIA is a media event.  pEvent is
-            // an ITCallMediaEvent
-
-            CALL_MEDIA_EVENT    cme;
-            ITCallMediaEvent  * pCallMediaEvent;
-
-            // Get the interface
-            hr = pEvent->QueryInterface( IID_ITCallMediaEvent, (void **)&pCallMediaEvent );
-
-            if ( FAILED(hr) )
-            {
-                break;
-            }
-
-            // get the CALL_MEDIA_EVENT that we are being notified of.
-            hr = pCallMediaEvent->get_Event( &cme );
+            pNotify->Release();
 
             if ( SUCCEEDED(hr) )
             {
-                switch ( cme )
-                {
-                case CME_STREAM_NOT_USED:
-                case CME_STREAM_INACTIVE:
-                case CME_NEW_STREAM:
-                    break;
+                //
+                // check to see if we own the call
+                //
 
-                case CME_STREAM_FAIL:
-                    DoMessage( L"Call media event: stream failed");
-                    break;
-    
-                case CME_TERMINAL_FAIL:
-                    DoMessage( L"Call media event: terminal failed");
-                    break;
+                hr = pCall->get_Privilege( &cp );
 
-                case CME_STREAM_ACTIVE:
+                if ( FAILED(hr) || (CP_OWNER != cp) )
                 {
                     //
-                    // Find out if this stream has a video render terminal. If not,
-                    // we don't need to do anything with this stream. Also note
-                    // if this is the video capture stream or the video render
-                    // stream.
+                    // just ignore it if we don't own it
                     //
 
-                    ITTerminal * pTerminal;
-                    BOOL         fRenderStream;
+                    pCall->Release();
 
-                    hr = GetVideoRenderTerminalFromStreamEvent(
-                                                               pCallMediaEvent,
-                                                               &pTerminal,
-                                                               &fRenderStream
-                                                              );
-                
-                    if ( SUCCEEDED(hr) )
+                    pEvent->Release(); // we addrefed it CTAPIEventNotification::Event()
+
+                    return S_OK;
+                }
+
+                //
+                // Get the ITBasicCallControl interface
+                //
+
+                //
+                // If we're already in a call, disconnect the new call.  Otherwise,
+                // save it in our global variable.
+                //
+
+                ITBasicCallControl * pCallControl;
+
+                hr = pCall->QueryInterface( IID_ITBasicCallControl,
+                                            (void**)&pCallControl );
+
+                pCall->Release();
+
+
+                if ( SUCCEEDED(hr) )
+                {
+                    if (gpCall == NULL)
                     {
-                        // Get the video window interface for the terminal
-                        IVideoWindow *pVideoWindow = NULL;
+                        gpCall = pCallControl;
 
-                        hr = pTerminal->QueryInterface( IID_IVideoWindow, (void**)&pVideoWindow );
-                
-                        pTerminal->Release();
-            
-                        if ( SUCCEEDED(hr) )
+                        //
+                        // update UI
+                        //
+
+                        EnableButton( IDC_ANSWER );
+                        DisableButton( IDC_DISCONNECT );
+                        SetStatusMessage(L"Incoming Owner Call");
+                    }
+                    else
+                    {
+                        //
+                        // Reject this call since we're already in a call
+                        //
+
+                        hr = pCallControl->Disconnect(DC_REJECTED);
+
+                        pCallControl->Release();
+
+                        if (FAILED(hr))
                         {
-                            // Put this window in our dialog
-                            HostWindow(pVideoWindow, fRenderStream);
-            
-                            pVideoWindow->Release();
+                            break;
                         }
                     }
+                }
 
-                    break;
-                }
-            
-                default:
-                    break;
-                }
             }
+        }
 
-            // We no longer need this interface.
-            pCallMediaEvent->Release();
+        break;
+    }
 
+    case TE_CALLSTATE:
+    {
+        // TE_CALLSTATE is a call state event.  pEvent is
+        // an ITCallStateEvent
+
+        CALL_STATE           cs;
+        ITCallStateEvent   * pCallStateEvent;
+        ITCallInfo *         pCall;
+        ITBasicCallControl * pCallControl;
+
+        // Get the interface
+        hr = pEvent->QueryInterface( IID_ITCallStateEvent, (void **)&pCallStateEvent );
+
+        if ( FAILED(hr) )
+        {
             break;
         }
 
-        default:
+        // get the CallInfo interface
+        hr = pCallStateEvent->get_Call( &pCall );
+
+        if ( FAILED(hr) )
+        {
+            pCallStateEvent->Release();
             break;
+        }
+
+        //get the ITBasicCallControl interface and compare it to our existing call
+        hr = pCall->QueryInterface( IID_ITBasicCallControl,(void**)&pCallControl );
+
+        pCall->Release();
+
+        if (FAILED(hr))
+        {
+            pCallStateEvent->Release();
+            break;
+        }
+
+        //ignore call state events for other calls
+        if (pCallControl != gpCall)
+        {
+            pCallControl->Release();
+            pCallStateEvent->Release();
+            break;
+        }
+        pCallControl->Release();
+
+        //
+        // This is a call state event for our call
+        //
+
+        // get the CallState that we are being notified of.
+        hr = pCallStateEvent->get_State( &cs );
+
+        // Release the interface
+        pCallStateEvent->Release();
+
+        if ( FAILED(hr) )
+        {
+            break;
+        }
+
+        // if it's offering, update our UI
+        if (CS_OFFERING == cs)
+        {
+            if (gfAutoAnswer)
+            {
+                PostMessage(ghDlg, WM_COMMAND, IDC_ANSWER, 0);
+            }
+            else
+            {
+                SetStatusMessage(L"Click the Answer button");
+            }
+        }
+        else if (CS_DISCONNECTED == cs)
+        {
+            PostMessage(ghDlg, WM_COMMAND, IDC_DISCONNECTED, 0);
+        }
+        else if (CS_CONNECTED == cs)
+        {
+            // nothing to do -- we handle connection synchronously
+        }
+
+        break;
+    }
+
+    case TE_CALLMEDIA:
+    {
+        // TE_CALLMEDIA is a media event.  pEvent is
+        // an ITCallMediaEvent
+
+        CALL_MEDIA_EVENT    cme;
+        ITCallMediaEvent  * pCallMediaEvent;
+
+        // Get the interface
+        hr = pEvent->QueryInterface( IID_ITCallMediaEvent, (void **)&pCallMediaEvent );
+
+        if ( FAILED(hr) )
+        {
+            break;
+        }
+
+        // get the CALL_MEDIA_EVENT that we are being notified of.
+        hr = pCallMediaEvent->get_Event( &cme );
+
+        if ( SUCCEEDED(hr) )
+        {
+            switch ( cme )
+            {
+            case CME_STREAM_NOT_USED:
+            case CME_STREAM_INACTIVE:
+            case CME_NEW_STREAM:
+                break;
+
+            case CME_STREAM_FAIL:
+                DoMessage( L"Call media event: stream failed");
+                break;
+
+            case CME_TERMINAL_FAIL:
+                DoMessage( L"Call media event: terminal failed");
+                break;
+
+            case CME_STREAM_ACTIVE:
+            {
+                //
+                // Find out if this stream has a video render terminal. If not,
+                // we don't need to do anything with this stream. Also note
+                // if this is the video capture stream or the video render
+                // stream.
+                //
+
+                ITTerminal * pTerminal;
+                BOOL         fRenderStream;
+
+                hr = GetVideoRenderTerminalFromStreamEvent(
+                         pCallMediaEvent,
+                         &pTerminal,
+                         &fRenderStream
+                     );
+
+                if ( SUCCEEDED(hr) )
+                {
+                    // Get the video window interface for the terminal
+                    IVideoWindow *pVideoWindow = NULL;
+
+                    hr = pTerminal->QueryInterface( IID_IVideoWindow, (void**)&pVideoWindow );
+
+                    pTerminal->Release();
+
+                    if ( SUCCEEDED(hr) )
+                    {
+                        // Put this window in our dialog
+                        HostWindow(pVideoWindow, fRenderStream);
+
+                        pVideoWindow->Release();
+                    }
+                }
+
+                break;
+            }
+
+            default:
+                break;
+            }
+        }
+
+        // We no longer need this interface.
+        pCallMediaEvent->Release();
+
+        break;
+    }
+
+    default:
+        break;
     }
 
     pEvent->Release(); // we addrefed it CTAPIEventNotification::Event()
-    
+
     return S_OK;
 }
 

@@ -1,4 +1,4 @@
-#include "Activate.h"
+﻿#include "Activate.h"
 
 HRESULT DX11VideoRenderer::CActivate::CreateInstance(HWND hwnd, IMFActivate** ppActivate)
 {

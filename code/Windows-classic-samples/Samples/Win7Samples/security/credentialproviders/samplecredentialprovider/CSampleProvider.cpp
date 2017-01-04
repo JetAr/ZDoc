@@ -1,4 +1,4 @@
-//
+﻿//
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -14,8 +14,8 @@
 // users who will use your method to log on?  Or is it better
 // to provide a tile where they can type in their username?
 // Does the user need to interact with something other than the
-// keyboard before you can recognize which user it is (such as insert 
-// a smartcard)?  We call these "event driven" credential providers.  
+// keyboard before you can recognize which user it is (such as insert
+// a smartcard)?  We call these "event driven" credential providers.
 // We suggest that such credential providers first provide one basic tile which
 // tells the user what to do ("insert your smartcard").  Once the
 // user performs the action, then you can callback into LogonUI to
@@ -71,13 +71,13 @@ void CSampleProvider::_CleanupSetSerialization()
 
 
 // SetUsageScenario is the provider's cue that it's going to be asked for tiles
-// in a subsequent call.  
+// in a subsequent call.
 //
 // This sample only handles the logon and unlock scenarios as those are the most common.
 HRESULT CSampleProvider::SetUsageScenario(
     __in CREDENTIAL_PROVIDER_USAGE_SCENARIO cpus,
     __in DWORD dwFlags
-    )
+)
 {
     UNREFERENCED_PARAMETER(dwFlags);
     HRESULT hr;
@@ -89,7 +89,7 @@ HRESULT CSampleProvider::SetUsageScenario(
     switch (cpus)
     {
     case CPUS_LOGON:
-    case CPUS_UNLOCK_WORKSTATION:       
+    case CPUS_UNLOCK_WORKSTATION:
         // A more advanced credprov might only enumerate tiles for the user whose owns the locked
         // session, since those are the only creds that wil work
         if (!s_bCredsEnumerated)
@@ -125,7 +125,7 @@ HRESULT CSampleProvider::SetUsageScenario(
 //
 // SetSerialization is called for two main scenarios.  The first scenario is in the credui case
 // where it is prepopulating a tile with credentials that the user chose to store in the OS.
-// The second situation is in a remote logon case where the remote client may wish to 
+// The second situation is in a remote logon case where the remote client may wish to
 // prepopulate a tile with a username, or in some cases, completely populate the tile and
 // use it to logon without showing any UI.
 //
@@ -133,7 +133,7 @@ HRESULT CSampleProvider::SetUsageScenario(
 // pieces of this function.  For information on that, please see the credUI sample.
 HRESULT CSampleProvider::SetSerialization(
     __in const CREDENTIAL_PROVIDER_CREDENTIAL_SERIALIZATION* pcpcs
-    )
+)
 {
     HRESULT hr = E_INVALIDARG;
 
@@ -146,7 +146,7 @@ HRESULT CSampleProvider::SetSerialization(
         if (SUCCEEDED(hr))
         {
             if ((ulAuthPackage == pcpcs->ulAuthenticationPackage) &&
-                (0 < pcpcs->cbSerialization && pcpcs->rgbSerialization))
+                    (0 < pcpcs->cbSerialization && pcpcs->rgbSerialization))
             {
                 KERB_INTERACTIVE_UNLOCK_LOGON* pkil = (KERB_INTERACTIVE_UNLOCK_LOGON*) pcpcs->rgbSerialization;
                 if (KerbInteractiveLogon == pkil->Logon.MessageType)
@@ -163,7 +163,7 @@ HRESULT CSampleProvider::SetSerialization(
                         if (_pkiulSetSerialization)
                         {
                             HeapFree(GetProcessHeap(), 0, _pkiulSetSerialization);
-                            
+
                             // For this sample, we know that _dwSetSerializationCred is always in the last slot
                             if (_dwSetSerializationCred != CREDENTIAL_PROVIDER_NO_DEFAULT && _dwSetSerializationCred == _dwNumCreds - 1)
                             {
@@ -192,7 +192,7 @@ HRESULT CSampleProvider::SetSerialization(
 HRESULT CSampleProvider::Advise(
     __in ICredentialProviderEvents* pcpe,
     __in UINT_PTR upAdviseContext
-    )
+)
 {
     UNREFERENCED_PARAMETER(pcpe);
     UNREFERENCED_PARAMETER(upAdviseContext);
@@ -210,11 +210,11 @@ HRESULT CSampleProvider::UnAdvise()
 // does mean that all your tiles must have the same number of fields.
 // This number must include both visible and invisible fields. If you want a tile
 // to have different fields from the other tiles you enumerate for a given usage
-// scenario you must include them all in this count and then hide/show them as desired 
+// scenario you must include them all in this count and then hide/show them as desired
 // using the field descriptors.
 HRESULT CSampleProvider::GetFieldDescriptorCount(
     __out DWORD* pdwCount
-    )
+)
 {
     *pdwCount = SFI_NUM_FIELDS;
 
@@ -223,10 +223,10 @@ HRESULT CSampleProvider::GetFieldDescriptorCount(
 
 // Gets the field descriptor for a particular field
 HRESULT CSampleProvider::GetFieldDescriptorAt(
-    __in DWORD dwIndex, 
+    __in DWORD dwIndex,
     __deref_out CREDENTIAL_PROVIDER_FIELD_DESCRIPTOR** ppcpfd
-    )
-{    
+)
+{
     HRESULT hr;
 
     // Verify dwIndex is a valid field.
@@ -235,7 +235,7 @@ HRESULT CSampleProvider::GetFieldDescriptorAt(
         hr = FieldDescriptorCoAllocCopy(s_rgCredProvFieldDescriptors[dwIndex], ppcpfd);
     }
     else
-    { 
+    {
         hr = E_INVALIDARG;
     }
 
@@ -245,7 +245,7 @@ HRESULT CSampleProvider::GetFieldDescriptorAt(
 // Sets pdwCount to the number of tiles that we wish to show at this time.
 // Sets pdwDefault to the index of the tile which should be used as the default.
 //
-// The default tile is the tile which will be shown in the zoomed view by default. If 
+// The default tile is the tile which will be shown in the zoomed view by default. If
 // more than one provider specifies a default tile the behavior is the last used cred
 // prov gets to specify the default tile to be displayed
 //
@@ -256,7 +256,7 @@ HRESULT CSampleProvider::GetCredentialCount(
     __out DWORD* pdwCount,
     __out_range(<,*pdwCount) DWORD* pdwDefault,
     __out BOOL* pbAutoLogonWithDefault
-    )
+)
 {
     HRESULT hr = S_OK;
 
@@ -265,8 +265,8 @@ HRESULT CSampleProvider::GetCredentialCount(
         //haven't yet made a cred from the SetSerialization info
         _EnumerateSetSerialization();  //ignore failure, we can still produce our other tiles
     }
-    
-    *pdwCount = _dwNumCreds; 
+
+    *pdwCount = _dwNumCreds;
     if (*pdwCount > 0)
     {
         if (_dwSetSerializationCred != CREDENTIAL_PROVIDER_NO_DEFAULT)
@@ -296,9 +296,9 @@ HRESULT CSampleProvider::GetCredentialCount(
 // Returns the credential at the index specified by dwIndex. This function is called by logonUI to enumerate
 // the tiles.
 HRESULT CSampleProvider::GetCredentialAt(
-    __in DWORD dwIndex, 
+    __in DWORD dwIndex,
     __deref_out ICredentialProviderCredential** ppcpc
-    )
+)
 {
     HRESULT hr;
 
@@ -311,7 +311,7 @@ HRESULT CSampleProvider::GetCredentialAt(
     {
         hr = E_INVALIDARG;
     }
-        
+
     return hr;
 }
 
@@ -319,20 +319,20 @@ HRESULT CSampleProvider::GetCredentialAt(
 HRESULT CSampleProvider::_EnumerateOneCredential(
     __in DWORD dwCredentialIndex,
     __in PCWSTR pwzUsername
-    )
+)
 {
     HRESULT hr;
 
     // Allocate memory for the new credential.
     CSampleCredential* ppc = new CSampleCredential();
-    
+
     if (ppc)
     {
         // Set the Field State Pair and Field Descriptors for ppc's fields
         // to the defaults (s_rgCredProvFieldDescriptors, and s_rgFieldStatePairs) and the value of SFI_USERNAME
         // to pwzUsername.
         hr = ppc->Initialize(_cpus, s_rgCredProvFieldDescriptors, s_rgFieldStatePairs, pwzUsername);
-        
+
         if (SUCCEEDED(hr))
         {
             _rgpCredentials[dwCredentialIndex] = ppc;
@@ -352,7 +352,7 @@ HRESULT CSampleProvider::_EnumerateOneCredential(
     return hr;
 }
 
-// Sets up all the credentials for this provider. Since we always show the same tiles, 
+// Sets up all the credentials for this provider. Since we always show the same tiles,
 // we just set it up once.
 HRESULT CSampleProvider::_EnumerateCredentials()
 {
@@ -380,7 +380,7 @@ HRESULT CSample_CreateInstance(__in REFIID riid, __deref_out void** ppv)
     {
         hr = E_OUTOFMEMORY;
     }
-    
+
     return hr;
 }
 
@@ -393,7 +393,7 @@ HRESULT CSampleProvider::_EnumerateSetSerialization()
     _bAutoSubmitSetSerializationCred = false;
 
     // Since this provider only enumerates local users (not domain users) we are ignoring the domain passed in.
-    // However, please note that if you receive a serialized cred of just a domain name, that domain name is meant 
+    // However, please note that if you receive a serialized cred of just a domain name, that domain name is meant
     // to be the default domain for the tiles (or for the empty tile if you have one).  Also, depending on your scenario,
     // the presence of a domain other than what you're expecting might be a clue that you shouldn't handle
     // the SetSerialization.  For example, in this sample, we could choose to not accept a serialization for a cred

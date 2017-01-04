@@ -1,15 +1,15 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
 //
-// Copyright � Microsoft Corporation. All rights reserved
+// Copyright © Microsoft Corporation. All rights reserved
 
 #ifndef __TTSAPP_GLOBALS_H__
 #define __TTSAPP_GLOBALS_H__
 
 // App includes
-#include "TtsApplication.h"         
+#include "TtsApplication.h"
 
 
 // Other global variables
@@ -21,5 +21,5 @@ extern const int            g_aMapVisemeToImage[22];
 extern const SPSTREAMFORMAT g_aOutputFormat[NUM_OUTPUTFORMATS];
 extern TCHAR*               g_aszOutputFormat[NUM_OUTPUTFORMATS];
 
-  
+
 #endif // __TTSAPP_GLOBALS_H__

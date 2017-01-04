@@ -1,4 +1,4 @@
-/*++
+﻿/*++
 
 Copyright (c) 1999 - 2000 Microsoft Corporation.  All Rights Reserved.
 
@@ -6,7 +6,7 @@ Module Name:
     callnot.h
 
 Abstract:
-    
+
     Declaration of the CTAPIEventNotification object
 
 --*/
@@ -18,9 +18,9 @@ Abstract:
 
 HRESULT
 OnTapiEvent(
-            TAPI_EVENT TapiEvent,
-            IDispatch * pEvent
-           );
+    TAPI_EVENT TapiEvent,
+    IDispatch * pEvent
+);
 
 /////////////////////////////////////////////////////////////////////////////
 // CTAPIEventNotification
@@ -35,10 +35,10 @@ public:
     // CTAPIEventNotification implements ITTAPIEventNotification
     //  Declare ITTAPIEventNotification methods here
     HRESULT STDMETHODCALLTYPE Event(
-                                    TAPI_EVENT TapiEvent,
-                                    IDispatch * pEvent
-                                   );
-    
+        TAPI_EVENT TapiEvent,
+        IDispatch * pEvent
+    );
+
 // other COM stuff:
 public:
 
@@ -61,7 +61,7 @@ public:
     }
 
     // IUnknown implementation
-	HRESULT STDMETHODCALLTYPE QueryInterface(REFIID iid, void **ppvObject)
+    HRESULT STDMETHODCALLTYPE QueryInterface(REFIID iid, void **ppvObject)
     {
         if (iid == IID_ITTAPIEventNotification)
         {
@@ -83,14 +83,14 @@ public:
     //
     // reference counting needs to be thread safe
     //
-    
+
     ULONG STDMETHODCALLTYPE AddRef()
     {
         ULONG l = InterlockedIncrement(&m_dwRefCount);
         return l;
     }
-    
-	ULONG STDMETHODCALLTYPE Release()
+
+    ULONG STDMETHODCALLTYPE Release()
     {
         ULONG l = InterlockedDecrement(&m_dwRefCount);
 
@@ -98,7 +98,7 @@ public:
         {
             delete this;
         }
-        
+
         return l;
     }
 

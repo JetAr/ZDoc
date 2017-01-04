@@ -1,4 +1,4 @@
-/******************************************************************************\
+﻿/******************************************************************************\
 *       This is a part of the Microsoft Source Code Samples.
 *       Copyright 1996 - 2000 Microsoft Corporation.
 *       All rights reserved.
@@ -39,7 +39,8 @@ Revision History:
 #include <stdio.h>
 #include <time.h>
 
-void __cdecl main(void) {
+void __cdecl main(void)
+{
 
     DWORD Err;
 
@@ -53,7 +54,7 @@ void __cdecl main(void) {
     UINT i;
 
     struct tm newtime;
-    char buffer[32];    
+    char buffer[32];
     errno_t error;
 
     //
@@ -89,27 +90,28 @@ void __cdecl main(void) {
         printf("\tNode Type . . . . . . . . . : ");
         switch (pFixedInfo->NodeType)
         {
-            case 1:
-                printf("%s\n", "Broadcast");
-                break;
-            case 2:
-                printf("%s\n", "Peer to peer");
-                break;
-            case 4:
-                printf("%s\n", "Mixed");
-                break;
-            case 8:
-                printf("%s\n", "Hybrid");
-                break;
-            default:
-                printf("\n");
+        case 1:
+            printf("%s\n", "Broadcast");
+            break;
+        case 2:
+            printf("%s\n", "Peer to peer");
+            break;
+        case 4:
+            printf("%s\n", "Mixed");
+            break;
+        case 8:
+            printf("%s\n", "Hybrid");
+            break;
+        default:
+            printf("\n");
         }
 
         printf("\tNetBIOS Scope ID. . . . . . : %s\n", pFixedInfo->ScopeId);
         printf("\tIP Routing Enabled. . . . . : %s\n", (pFixedInfo->EnableRouting ? "yes" : "no"));
         printf("\tWINS Proxy Enabled. . . . . : %s\n", (pFixedInfo->EnableProxy ? "yes" : "no"));
         printf("\tNetBIOS Resolution Uses DNS : %s\n", (pFixedInfo->EnableDns ? "yes" : "no"));
-    } else
+    }
+    else
     {
         printf("GetNetworkParams failed with error %d\n", Err);
         return;
@@ -149,41 +151,41 @@ void __cdecl main(void) {
     {
         switch (pAdapt->Type)
         {
-            case MIB_IF_TYPE_ETHERNET:
-                printf("\nEthernet adapter ");
-                break;
-            case MIB_IF_TYPE_TOKENRING:
-                printf("\nToken Ring adapter ");
-                break;
-            case MIB_IF_TYPE_FDDI:
-                printf("\nFDDI adapter ");
-                break;
-            case MIB_IF_TYPE_PPP:
-                printf("\nPPP adapter ");
-                break;
-            case MIB_IF_TYPE_LOOPBACK:
-                printf("\nLoopback adapter ");
-                break;
-            case MIB_IF_TYPE_SLIP:
-                printf("\nSlip adapter ");
-                break;
-            case MIB_IF_TYPE_OTHER:
-            default:
-                printf("\nOther adapter ");
+        case MIB_IF_TYPE_ETHERNET:
+            printf("\nEthernet adapter ");
+            break;
+        case MIB_IF_TYPE_TOKENRING:
+            printf("\nToken Ring adapter ");
+            break;
+        case MIB_IF_TYPE_FDDI:
+            printf("\nFDDI adapter ");
+            break;
+        case MIB_IF_TYPE_PPP:
+            printf("\nPPP adapter ");
+            break;
+        case MIB_IF_TYPE_LOOPBACK:
+            printf("\nLoopback adapter ");
+            break;
+        case MIB_IF_TYPE_SLIP:
+            printf("\nSlip adapter ");
+            break;
+        case MIB_IF_TYPE_OTHER:
+        default:
+            printf("\nOther adapter ");
         }
         printf("%s:\n\n", pAdapt->AdapterName);
 
-        printf("\tDescription . . . . . . . . : %s\n", pAdapt->Description); 
+        printf("\tDescription . . . . . . . . : %s\n", pAdapt->Description);
 
         printf("\tPhysical Address. . . . . . : ");
-	 
+
         for (i=0; i<pAdapt->AddressLength; i++)
         {
             if (i == (pAdapt->AddressLength - 1))
                 printf("%.2X\n",(int)pAdapt->Address[i]);
             else
                 printf("%.2X-",(int)pAdapt->Address[i]);
-        }        
+        }
 
         printf("\tDHCP Enabled. . . . . . . . : %s\n", (pAdapt->DhcpEnabled ? "yes" : "no"));
 
@@ -207,41 +209,49 @@ void __cdecl main(void) {
         printf("\tPrimary WINS Server . . . . : %s\n", pAdapt->PrimaryWinsServer.IpAddress.String);
         printf("\tSecondary WINS Server . . . : %s\n", pAdapt->SecondaryWinsServer.IpAddress.String);
 
-        // Display coordinated universal time - GMT 
+        // Display coordinated universal time - GMT
 #ifdef WIN64
         error = _localtime64_s(&newtime, &pAdapt->LeaseObtained);
 #else
         error = _localtime32_s(&newtime, &pAdapt->LeaseObtained);
-#endif 
+#endif
         if (error)
         {
             printf("Invalid Argument to _localtime32_s.");
-        } else {
-            // Convert to an ASCII representation 
+        }
+        else
+        {
+            // Convert to an ASCII representation
             error = asctime_s(buffer, 32, &newtime);
             if (error)
             {
                 printf("Invalid Argument to asctime_s.");
-            } else {  
+            }
+            else
+            {
                 printf( "\tLease Obtained. . . . . . . : %s", buffer);
             }
         }
 
 #ifdef WIN64
-        error = _localtime64_s(&newtime, &pAdapt->LeaseExpires); 
+        error = _localtime64_s(&newtime, &pAdapt->LeaseExpires);
 #else
-        error = _localtime32_s(&newtime, &pAdapt->LeaseExpires); 
-#endif 
+        error = _localtime32_s(&newtime, &pAdapt->LeaseExpires);
+#endif
         if (error)
         {
             printf("Invalid Argument to _localtime32_s.");
-        } else {
-            // Convert to an ASCII representation 
+        }
+        else
+        {
+            // Convert to an ASCII representation
             error = asctime_s(buffer, 32, &newtime);
             if (error)
             {
                 printf("Invalid Argument to asctime_s.");
-            } else { 
+            }
+            else
+            {
                 printf( "\tLease Expires . . . . . . . : %s", buffer);
             }
         }

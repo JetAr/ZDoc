@@ -1,11 +1,11 @@
-//*****************************************************************************
+﻿//*****************************************************************************
 //
 // Microsoft Windows Media
 // Copyright (C) Microsoft Corporation. All rights reserved.
 //
 // FileName:            ProxyPluginImpl.cpp
 //
-// Abstract:            
+// Abstract:
 //
 //*****************************************************************************
 
@@ -20,7 +20,7 @@
 #include "ProxyPluginImpl.h"
 
 
-// Since the plugin supports protocol rollver, we have a hard-coded list of the 
+// Since the plugin supports protocol rollver, we have a hard-coded list of the
 // protocols which are supported.  The last entry signifies the end of the array.
 LPWSTR g_ProxyProtocols[] = { L"HTTP", L"RTSP", NULL };
 
@@ -53,12 +53,12 @@ CProxyPlugin::~CProxyPlugin()
 // [InitializePlugin]
 //
 /////////////////////////////////////////////////////////////////////////////
-HRESULT STDMETHODCALLTYPE 
-CProxyPlugin::InitializePlugin( 
-                        IWMSContext *pServerContext,
-                        IWMSNamedValues *pNamedValues,
-                        IWMSClassObject *pClassFactory
-                        )
+HRESULT STDMETHODCALLTYPE
+CProxyPlugin::InitializePlugin(
+    IWMSContext *pServerContext,
+    IWMSNamedValues *pNamedValues,
+    IWMSClassObject *pClassFactory
+)
 {
     HRESULT hr = S_OK;
 
@@ -71,12 +71,12 @@ CProxyPlugin::InitializePlugin(
     // passed into the plugin when it is initialized.  The plugin will need to
     // query for this value and store it.
 
-    hr = pServerContext->GetAndQueryIUnknownValue( 
-                                    WMS_SERVER_CACHE_MANAGER,
-                                    WMS_SERVER_CACHE_MANAGER_ID,
-                                    IID_IWMSCacheProxyServer,
-                                    ( IUnknown ** ) &m_pICacheProxyServer,
-                                    0 );
+    hr = pServerContext->GetAndQueryIUnknownValue(
+             WMS_SERVER_CACHE_MANAGER,
+             WMS_SERVER_CACHE_MANAGER_ID,
+             IID_IWMSCacheProxyServer,
+             ( IUnknown ** ) &m_pICacheProxyServer,
+             0 );
     if( ( FAILED( hr ) ) || ( NULL == m_pICacheProxyServer ) )
     {
         hr = FAILED( hr ) ? hr : E_FAIL;
@@ -94,7 +94,7 @@ abort:
 // [EnablePlugin]
 //
 /////////////////////////////////////////////////////////////////////////////
-HRESULT STDMETHODCALLTYPE 
+HRESULT STDMETHODCALLTYPE
 CProxyPlugin::EnablePlugin( long *pdwFlags, long *pdwHeartbeatPeriod )
 {
     if( ( NULL == pdwFlags ) || ( NULL == pdwHeartbeatPeriod ) )
@@ -115,7 +115,7 @@ CProxyPlugin::EnablePlugin( long *pdwFlags, long *pdwHeartbeatPeriod )
 // [DisablePlugin]
 //
 /////////////////////////////////////////////////////////////////////////////
-HRESULT STDMETHODCALLTYPE 
+HRESULT STDMETHODCALLTYPE
 CProxyPlugin::DisablePlugin()
 {
     return( S_OK );
@@ -128,7 +128,7 @@ CProxyPlugin::DisablePlugin()
 // [ShutdownPlugin]
 //
 /////////////////////////////////////////////////////////////////////////////
-HRESULT STDMETHODCALLTYPE 
+HRESULT STDMETHODCALLTYPE
 CProxyPlugin::ShutdownPlugin()
 {
     if( NULL != m_pICacheProxyServer )
@@ -147,7 +147,7 @@ CProxyPlugin::ShutdownPlugin()
 // [GetCustomAdminInterface]
 //
 /////////////////////////////////////////////////////////////////////////////
-HRESULT STDMETHODCALLTYPE 
+HRESULT STDMETHODCALLTYPE
 CProxyPlugin::GetCustomAdminInterface( IDispatch **ppValue )
 {
     if( NULL == ppValue )
@@ -166,7 +166,7 @@ CProxyPlugin::GetCustomAdminInterface( IDispatch **ppValue )
 // [OnHeartbeat]
 //
 /////////////////////////////////////////////////////////////////////////////
-HRESULT STDMETHODCALLTYPE 
+HRESULT STDMETHODCALLTYPE
 CProxyPlugin::OnHeartbeat()
 {
     return( S_OK );
@@ -178,35 +178,35 @@ CProxyPlugin::OnHeartbeat()
 // [QueryCache]
 //
 /////////////////////////////////////////////////////////////////////////////
-HRESULT STDMETHODCALLTYPE 
+HRESULT STDMETHODCALLTYPE
 CProxyPlugin::QueryCache( BSTR bstrOriginUrl,
                           IWMSContext *pUserContext,
                           IWMSCommandContext *pCommandContext,
                           IWMSContext *pPresentationContext,
-                          long QueryType, 
+                          long QueryType,
                           IWMSCacheProxyCallback *pCallback,
                           VARIANT varContext
-                          )
+                        )
 {
     HRESULT hr = S_OK;
     COpState *pOpState = NULL;
     LPWSTR pszHostName = NULL;
 
     if( ( NULL == bstrOriginUrl) ||
-        ( NULL == pCommandContext ) ||
-        ( NULL == pPresentationContext ) ||
-        ( NULL == pCallback ) )
+            ( NULL == pCommandContext ) ||
+            ( NULL == pPresentationContext ) ||
+            ( NULL == pCallback ) )
     {
         return( E_INVALIDARG );
     }
 
     // Since this plugin just supports proxy, we always return (in the callback)
-    // WMS_CACHE_QUERY_MISS.  If this plugin were also to do caching, this is 
+    // WMS_CACHE_QUERY_MISS.  If this plugin were also to do caching, this is
     // where the cache database would be queried.  If a hit is made, then the
-    // expiration of the cache entry will be checked, and if it expired a 
+    // expiration of the cache entry will be checked, and if it expired a
     // freshness check would need to be done.  A freshness check is done
     // through CompareContentInformation, an async call.  Rather than waiting
-    // for the response, the plugin should return from this method and 
+    // for the response, the plugin should return from this method and
     // call the callback (OnQueryCache) in OnCompareContentInformation.
     //
     // If OnCompareContentInformation reports the cached entry is up-to-date,
@@ -229,26 +229,26 @@ CProxyPlugin::QueryCache( BSTR bstrOriginUrl,
 // [QueryCacheMissPolicy]
 //
 /////////////////////////////////////////////////////////////////////////////
-HRESULT STDMETHODCALLTYPE 
+HRESULT STDMETHODCALLTYPE
 CProxyPlugin::QueryCacheMissPolicy( BSTR bstrOriginUrl,
                                     IWMSContext *pUserContext,
                                     IWMSCommandContext *pCommandContext,
                                     IWMSContext *pPresentationContext,
                                     IUnknown *pCachePluginContext,
-                                    long QueryType, 
+                                    long QueryType,
                                     IWMSCacheProxyCallback *pCallback,
                                     VARIANT varContext
-                                    )
+                                  )
 {
     VARIANT varContext2;
     COpState *pOpState = NULL;
     HRESULT hr = S_OK;
-    BOOL fRet;    
+    BOOL fRet;
 
     if( ( NULL == bstrOriginUrl) ||
-        ( NULL == pCommandContext ) ||
-        ( NULL == pPresentationContext ) ||
-        ( NULL == pCallback ) )
+            ( NULL == pCommandContext ) ||
+            ( NULL == pPresentationContext ) ||
+            ( NULL == pCallback ) )
     {
         return( E_INVALIDARG );
     }
@@ -264,15 +264,15 @@ CProxyPlugin::QueryCacheMissPolicy( BSTR bstrOriginUrl,
         return( hr );
     }
 
-    if( ( QueryType & WMS_CACHE_QUERY_CACHE_EVENT ) || 
-        ( QueryType & WMS_CACHE_QUERY_GET_CONTENT_INFO ) )
+    if( ( QueryType & WMS_CACHE_QUERY_CACHE_EVENT ) ||
+            ( QueryType & WMS_CACHE_QUERY_GET_CONTENT_INFO ) )
     {
         hr = pCallback->OnQueryCacheMissPolicy( S_OK,
                                                 WMS_CACHE_QUERY_MISS_FORWARD_REQUEST,
                                                 NULL,
                                                 NULL,
                                                 NULL,
-                                                varContext );         
+                                                varContext );
         return( hr );
     }
 
@@ -308,7 +308,7 @@ CProxyPlugin::QueryCacheMissPolicy( BSTR bstrOriginUrl,
         pOpState->Release();
         return( E_FAIL );
     }
-    
+
     // Initiate protocol rollover by calling OnGetContentInformation with an
     // appropriate HRESULT
 
@@ -330,12 +330,12 @@ CProxyPlugin::QueryCacheMissPolicy( BSTR bstrOriginUrl,
 // IWMSCacheProxyServerCallback
 //
 /////////////////////////////////////////////////////////////////////////////
-HRESULT STDMETHODCALLTYPE 
+HRESULT STDMETHODCALLTYPE
 CProxyPlugin::OnGetContentInformation(
-                    long lHr,
-                    IWMSContext *pContentInfo,
-                    VARIANT varContext
-                    )
+    long lHr,
+    IWMSContext *pContentInfo,
+    VARIANT varContext
+)
 {
     HRESULT returnHr = (HRESULT) lHr;
     HRESULT hr = S_OK;
@@ -348,8 +348,8 @@ CProxyPlugin::OnGetContentInformation(
     DWORD dwCacheFlags;
     WCHAR szPort[ 20 ];
 
-    if( ( VT_UNKNOWN != V_VT( &varContext ) ) || 
-        ( NULL == V_UNKNOWN( &varContext ) ) )
+    if( ( VT_UNKNOWN != V_VT( &varContext ) ) ||
+            ( NULL == V_UNKNOWN( &varContext ) ) )
     {
         return( E_INVALIDARG );
     }
@@ -373,14 +373,14 @@ CProxyPlugin::OnGetContentInformation(
             bstrUrl = g_ProxyProtocols[ pOpState->m_dwProtocolIndex ];
             bstrUrl.Append( L"://" );
             bstrUrl.Append( pOpState->m_bstrHost );
-            
+
             // if we we are using the same protocol requested by the client, then we should
             // also use the port specified by the client (if one was specified)
             if( ( 0 != pOpState->m_wPort ) &&
-                ( 0 == _wcsicmp( g_ProxyProtocols[ pOpState->m_dwProtocolIndex ], pOpState->m_bstrProtocol ) ) )
+                    ( 0 == _wcsicmp( g_ProxyProtocols[ pOpState->m_dwProtocolIndex ], pOpState->m_bstrProtocol ) ) )
             {
                 bstrUrl.Append( L":" );
-				_itow_s( pOpState->m_wPort, szPort,sizeof(szPort)/sizeof(WCHAR), 10 );
+                _itow_s( pOpState->m_wPort, szPort,sizeof(szPort)/sizeof(WCHAR), 10 );
                 bstrUrl.Append( szPort );
             }
 
@@ -388,13 +388,13 @@ CProxyPlugin::OnGetContentInformation(
             bstrUrl.Append( pOpState->m_bstrPath );
 
             hr = m_pICacheProxyServer->GetContentInformation(
-                                            bstrUrl,
-                                            pOpState->m_pPresentationContext,
-                                            this,
-                                            NULL,
-                                            (IWMSCacheProxyServerCallback *) this,
-                                            varContext
-                                            );
+                     bstrUrl,
+                     pOpState->m_pPresentationContext,
+                     this,
+                     NULL,
+                     (IWMSCacheProxyServerCallback *) this,
+                     varContext
+                 );
             if( FAILED( hr ) )
             {
                 goto abort;
@@ -426,14 +426,14 @@ CProxyPlugin::OnGetContentInformation(
         {
             goto abort;
         }
-        
+
         if( WMS_CACHE_CONTENT_TYPE_BROADCAST & lContentType )
         {
             hr = pContentInfo->GetAndQueryIUnknownValue( WMS_CACHE_CONTENT_INFORMATION_DATA_CONTAINER_VERSION,
-                                                         WMS_CACHE_CONTENT_INFORMATION_DATA_CONTAINER_VERSION_ID,
-                                                         IID_IWMSDataContainerVersion,
-                                                         (IUnknown **) &pContentVersion,
-                                                         0 );
+                    WMS_CACHE_CONTENT_INFORMATION_DATA_CONTAINER_VERSION_ID,
+                    IID_IWMSDataContainerVersion,
+                    (IUnknown **) &pContentVersion,
+                    0 );
             if( ( FAILED( hr ) ) || ( NULL == pContentVersion ) )
             {
                 hr = FAILED( hr ) ? hr : E_UNEXPECTED;
@@ -466,14 +466,14 @@ CProxyPlugin::OnGetContentInformation(
     bstrUrl = g_ProxyProtocols[ pOpState->m_dwProtocolIndex ];
     bstrUrl.Append( L"://" );
     bstrUrl.Append( pOpState->m_bstrHost );
-    
+
     // if we we are using the same protocol requested by the client, then we should
     // also use the port specified by the client (if one was specified)
     if( ( 0 != pOpState->m_wPort ) &&
-        ( 0 == _wcsicmp( g_ProxyProtocols[ pOpState->m_dwProtocolIndex ], pOpState->m_bstrProtocol ) ) )
+            ( 0 == _wcsicmp( g_ProxyProtocols[ pOpState->m_dwProtocolIndex ], pOpState->m_bstrProtocol ) ) )
     {
         bstrUrl.Append( L":" );
-		_itow_s( pOpState->m_wPort, szPort,sizeof(szPort)/sizeof(WCHAR), 10 );
+        _itow_s( pOpState->m_wPort, szPort,sizeof(szPort)/sizeof(WCHAR), 10 );
         bstrUrl.Append( szPort );
     }
 
@@ -482,11 +482,11 @@ CProxyPlugin::OnGetContentInformation(
 
 abort:
     hr = pOpState->m_pCacheProxyCallback->OnQueryCacheMissPolicy( hr,
-                                                                  CacheMissPolicy,
-                                                                  bstrUrl,
-                                                                  NULL,
-                                                                  pContentInfo,
-                                                                  pOpState->m_varContext );
+            CacheMissPolicy,
+            bstrUrl,
+            NULL,
+            pContentInfo,
+            pOpState->m_varContext );
     if( FAILED( hr ) )
     {
         hr = S_OK;
@@ -517,7 +517,7 @@ CProxyPlugin::ParseUrl( BSTR bstrUrl,
                         BSTR *pbstrHost,
                         BSTR *pbstrPath,
                         WORD *pwPort
-                        )
+                      )
 {
     LPWSTR pszSchemeless;
     LPWSTR pszProtocol = L"";
@@ -529,10 +529,10 @@ CProxyPlugin::ParseUrl( BSTR bstrUrl,
     BOOL fRet = TRUE;
 
     if( ( NULL == bstrUrl ) ||
-        ( NULL == pbstrProtocol ) ||
-        ( NULL == pbstrHost ) ||
-        ( NULL == pbstrPath ) ||
-        ( NULL == pwPort ) )
+            ( NULL == pbstrProtocol ) ||
+            ( NULL == pbstrHost ) ||
+            ( NULL == pbstrPath ) ||
+            ( NULL == pwPort ) )
     {
         return( FALSE );
     }
@@ -540,7 +540,7 @@ CProxyPlugin::ParseUrl( BSTR bstrUrl,
     *pbstrProtocol = NULL;
     *pbstrHost = NULL;
     *pbstrPath = NULL;
-    
+
     pszUrlCopy = new WCHAR[ wcslen( bstrUrl ) + 1 ];
     if( NULL == pszUrlCopy )
     {
@@ -595,21 +595,21 @@ CProxyPlugin::ParseUrl( BSTR bstrUrl,
             break;
         }
     }
-    
+
     *pbstrProtocol = SysAllocString( pszProtocol );
     if( NULL == *pbstrProtocol )
     {
         fRet = FALSE;
         goto done;
     }
-    
+
     *pbstrHost = SysAllocString( pszHost );
     if( NULL == *pbstrHost )
     {
         fRet = FALSE;
         goto done;
     }
-    
+
     *pbstrPath = SysAllocString( pszPath );
     if( NULL == *pbstrPath )
     {
@@ -618,7 +618,7 @@ CProxyPlugin::ParseUrl( BSTR bstrUrl,
     }
 
 done:
-    
+
     if( NULL != pszUrlCopy )
     {
         delete [] pszUrlCopy;
@@ -654,12 +654,12 @@ done:
 // [OnCacheClientClose]
 //
 /////////////////////////////////////////////////////////////////////////////
-HRESULT STDMETHODCALLTYPE 
-CProxyPlugin::OnCacheClientClose( 
-                        HRESULT resultHr,
-                        IWMSContext *pUserContext,
-                        IWMSContext *pPresentationContext
-                        )
+HRESULT STDMETHODCALLTYPE
+CProxyPlugin::OnCacheClientClose(
+    HRESULT resultHr,
+    IWMSContext *pUserContext,
+    IWMSContext *pPresentationContext
+)
 {
     return( S_OK );
 } // OnCacheClientClose

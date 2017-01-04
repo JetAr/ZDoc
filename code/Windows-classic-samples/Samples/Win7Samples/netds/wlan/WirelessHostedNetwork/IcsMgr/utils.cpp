@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -22,15 +22,15 @@ AssertFunc
     HRESULT hr                  =   S_OK;
 
     hr =
-    StringCchPrintfA
-    (
-        szMsgString,
-        sizeof( szMsgString ) - 1,
-        "\n\nAssert hit:\n\tFile     : %s\n\tFunction : %s\n\tLine     : %d\n\n",
-        pszFile,
-        pszFunc,
-        dwLine
-    );
+        StringCchPrintfA
+        (
+            szMsgString,
+            sizeof( szMsgString ) - 1,
+            "\n\nAssert hit:\n\tFile     : %s\n\tFunction : %s\n\tLine     : %d\n\n",
+            pszFile,
+            pszFunc,
+            dwLine
+        );
 
     if ( S_OK == hr )
     {
@@ -88,13 +88,13 @@ NSModInit
     }
     g_NsMod.bNSModInited    =   TRUE;
 
-    g_NsMod.lpfnFreeNetConProperties = 
-    (FREE_NETCON_PROPERTIES_HANDLER)
-    GetProcAddress
-    (
-        g_NsMod.hNetshModule,
-        "NcFreeNetconProperties"
-    );
+    g_NsMod.lpfnFreeNetConProperties =
+        (FREE_NETCON_PROPERTIES_HANDLER)
+        GetProcAddress
+        (
+            g_NsMod.hNetshModule,
+            "NcFreeNetconProperties"
+        );
     if (NULL == g_NsMod.lpfnFreeNetConProperties)
     {
         dwError = GetLastError( );
@@ -236,8 +236,8 @@ LPCWSTR GetNetConMediaTypeStr(NETCON_MEDIATYPE MediaType)
         CASE_ENTRY(NCM_SHAREDACCESSHOST_LAN);
         CASE_ENTRY(NCM_SHAREDACCESSHOST_RAS);
 
-        default:
-            break;
+    default:
+        break;
 
     }
 
@@ -265,8 +265,8 @@ LPCWSTR GetNetConStatusStr(NETCON_STATUS Status)
         CASE_ENTRY(NCS_INVALID_ADDRESS);
         CASE_ENTRY(NCS_CREDENTIALS_REQUIRED);
 
-        default:
-            break;
+    default:
+        break;
 
     }
 

@@ -1,4 +1,4 @@
-//
+﻿//
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -9206,20 +9206,20 @@ static MI_MethodDecl MI_CONST* MI_CONST MSFT_WindowsProcess_meths[] =
 
 static MI_CONST MI_ProviderFT MSFT_WindowsProcess_funcs =
 {
-  (MI_ProviderFT_Load)MSFT_WindowsProcess_Load,
-  (MI_ProviderFT_Unload)MSFT_WindowsProcess_Unload,
-  (MI_ProviderFT_GetInstance)MSFT_WindowsProcess_GetInstance,
-  (MI_ProviderFT_EnumerateInstances)MSFT_WindowsProcess_EnumerateInstances,
-  (MI_ProviderFT_CreateInstance)MSFT_WindowsProcess_CreateInstance,
-  (MI_ProviderFT_ModifyInstance)MSFT_WindowsProcess_ModifyInstance,
-  (MI_ProviderFT_DeleteInstance)MSFT_WindowsProcess_DeleteInstance,
-  (MI_ProviderFT_AssociatorInstances)NULL,
-  (MI_ProviderFT_ReferenceInstances)NULL,
-  (MI_ProviderFT_EnableIndications)NULL,
-  (MI_ProviderFT_DisableIndications)NULL,
-  (MI_ProviderFT_Subscribe)NULL,
-  (MI_ProviderFT_Unsubscribe)NULL,
-  (MI_ProviderFT_Invoke)NULL,
+    (MI_ProviderFT_Load)MSFT_WindowsProcess_Load,
+    (MI_ProviderFT_Unload)MSFT_WindowsProcess_Unload,
+    (MI_ProviderFT_GetInstance)MSFT_WindowsProcess_GetInstance,
+    (MI_ProviderFT_EnumerateInstances)MSFT_WindowsProcess_EnumerateInstances,
+    (MI_ProviderFT_CreateInstance)MSFT_WindowsProcess_CreateInstance,
+    (MI_ProviderFT_ModifyInstance)MSFT_WindowsProcess_ModifyInstance,
+    (MI_ProviderFT_DeleteInstance)MSFT_WindowsProcess_DeleteInstance,
+    (MI_ProviderFT_AssociatorInstances)NULL,
+    (MI_ProviderFT_ReferenceInstances)NULL,
+    (MI_ProviderFT_EnableIndications)NULL,
+    (MI_ProviderFT_DisableIndications)NULL,
+    (MI_ProviderFT_Subscribe)NULL,
+    (MI_ProviderFT_Unsubscribe)NULL,
+    (MI_ProviderFT_Invoke)NULL,
 };
 
 static MI_CONST MI_Char* MSFT_WindowsProcess_UMLPackagePath_qual_value = MI_T("CIM::System::Processing");
@@ -10278,18 +10278,18 @@ static void MI_CALL MSFT_WindowsServiceProcess_AssociatorInstances(
 {
     if (CIM_Service_IsA(instanceName))
     {
-        if (_Match(role, MI_T("Service")) && 
-            _Match(resultRole, MI_T("Process")))
+        if (_Match(role, MI_T("Service")) &&
+                _Match(resultRole, MI_T("Process")))
         {
             MSFT_WindowsServiceProcess_AssociatorInstancesService(
-                self, 
-                context, 
-                nameSpace, 
-                className, 
-                (CIM_Service*)instanceName, 
-                resultClass, 
-                propertySet, 
-                keysOnly, 
+                self,
+                context,
+                nameSpace,
+                className,
+                (CIM_Service*)instanceName,
+                resultClass,
+                propertySet,
+                keysOnly,
                 filter);
             return;
         }
@@ -10297,18 +10297,18 @@ static void MI_CALL MSFT_WindowsServiceProcess_AssociatorInstances(
 
     if (CIM_Process_IsA(instanceName))
     {
-        if (_Match(role, MI_T("Process")) && 
-            _Match(resultRole, MI_T("Service")))
+        if (_Match(role, MI_T("Process")) &&
+                _Match(resultRole, MI_T("Service")))
         {
             MSFT_WindowsServiceProcess_AssociatorInstancesProcess(
-                self, 
-                context, 
-                nameSpace, 
-                className, 
-                (CIM_Process*)instanceName, 
-                resultClass, 
-                propertySet, 
-                keysOnly, 
+                self,
+                context,
+                nameSpace,
+                className,
+                (CIM_Process*)instanceName,
+                resultClass,
+                propertySet,
+                keysOnly,
                 filter);
             return;
         }
@@ -10333,13 +10333,13 @@ static void MI_CALL MSFT_WindowsServiceProcess_ReferenceInstances(
         if (_Match(role, MI_T("Service")))
         {
             MSFT_WindowsServiceProcess_ReferenceInstancesService(
-                self, 
-                context, 
-                nameSpace, 
-                className, 
-                (CIM_Service*)instanceName, 
-                propertySet, 
-                keysOnly, 
+                self,
+                context,
+                nameSpace,
+                className,
+                (CIM_Service*)instanceName,
+                propertySet,
+                keysOnly,
                 filter);
             return;
         }
@@ -10350,13 +10350,13 @@ static void MI_CALL MSFT_WindowsServiceProcess_ReferenceInstances(
         if (_Match(role, MI_T("Process")))
         {
             MSFT_WindowsServiceProcess_ReferenceInstancesProcess(
-                self, 
-                context, 
-                nameSpace, 
-                className, 
-                (CIM_Process*)instanceName, 
-                propertySet, 
-                keysOnly, 
+                self,
+                context,
+                nameSpace,
+                className,
+                (CIM_Process*)instanceName,
+                propertySet,
+                keysOnly,
                 filter);
             return;
         }
@@ -10367,20 +10367,20 @@ static void MI_CALL MSFT_WindowsServiceProcess_ReferenceInstances(
 
 static MI_CONST MI_ProviderFT MSFT_WindowsServiceProcess_funcs =
 {
-  (MI_ProviderFT_Load)MSFT_WindowsServiceProcess_Load,
-  (MI_ProviderFT_Unload)MSFT_WindowsServiceProcess_Unload,
-  (MI_ProviderFT_GetInstance)MSFT_WindowsServiceProcess_GetInstance,
-  (MI_ProviderFT_EnumerateInstances)MSFT_WindowsServiceProcess_EnumerateInstances,
-  (MI_ProviderFT_CreateInstance)MSFT_WindowsServiceProcess_CreateInstance,
-  (MI_ProviderFT_ModifyInstance)MSFT_WindowsServiceProcess_ModifyInstance,
-  (MI_ProviderFT_DeleteInstance)MSFT_WindowsServiceProcess_DeleteInstance,
-  (MI_ProviderFT_AssociatorInstances)MSFT_WindowsServiceProcess_AssociatorInstances,
-  (MI_ProviderFT_ReferenceInstances)MSFT_WindowsServiceProcess_ReferenceInstances,
-  (MI_ProviderFT_EnableIndications)NULL,
-  (MI_ProviderFT_DisableIndications)NULL,
-  (MI_ProviderFT_Subscribe)NULL,
-  (MI_ProviderFT_Unsubscribe)NULL,
-  (MI_ProviderFT_Invoke)NULL,
+    (MI_ProviderFT_Load)MSFT_WindowsServiceProcess_Load,
+    (MI_ProviderFT_Unload)MSFT_WindowsServiceProcess_Unload,
+    (MI_ProviderFT_GetInstance)MSFT_WindowsServiceProcess_GetInstance,
+    (MI_ProviderFT_EnumerateInstances)MSFT_WindowsServiceProcess_EnumerateInstances,
+    (MI_ProviderFT_CreateInstance)MSFT_WindowsServiceProcess_CreateInstance,
+    (MI_ProviderFT_ModifyInstance)MSFT_WindowsServiceProcess_ModifyInstance,
+    (MI_ProviderFT_DeleteInstance)MSFT_WindowsServiceProcess_DeleteInstance,
+    (MI_ProviderFT_AssociatorInstances)MSFT_WindowsServiceProcess_AssociatorInstances,
+    (MI_ProviderFT_ReferenceInstances)MSFT_WindowsServiceProcess_ReferenceInstances,
+    (MI_ProviderFT_EnableIndications)NULL,
+    (MI_ProviderFT_DisableIndications)NULL,
+    (MI_ProviderFT_Subscribe)NULL,
+    (MI_ProviderFT_Unsubscribe)NULL,
+    (MI_ProviderFT_Invoke)NULL,
 };
 
 static MI_CONST MI_Boolean MSFT_WindowsServiceProcess_Association_qual_value = 1;
@@ -10501,7 +10501,8 @@ MI_SchemaDecl schemaDecl =
 */
 
 MI_Result MI_CALL MI_Server_GetVersion(
-    MI_Uint32* version){
+    MI_Uint32* version)
+{
     return __mi_server->serverFT->GetVersion(version);
 }
 

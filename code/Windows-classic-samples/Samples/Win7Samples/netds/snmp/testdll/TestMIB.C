@@ -1,4 +1,4 @@
-/*++ BUILD Version: 0001    // Increment this if a change has global effects
+﻿/*++ BUILD Version: 0001    // Increment this if a change has global effects
 
 Copyright (c) 1992 - 2000  Microsoft Corporation
 
@@ -10,8 +10,8 @@ Abstract:
 
     Sample SNMP Extension Agent for Windows NT.
 
-    These files (testdll.c, testmib.c, and testmib.h) provide an example of 
-    how to structure an Extension Agent DLL which works in conjunction with 
+    These files (testdll.c, testmib.c, and testmib.h) provide an example of
+    how to structure an Extension Agent DLL which works in conjunction with
     the SNMP Extendible Agent for Windows NT.
 
     Extensive comments have been included to describe its structure and
@@ -20,7 +20,7 @@ Abstract:
 --*/
 
 
-// This Extension Agent implements the Internet toaster MIB.  It's 
+// This Extension Agent implements the Internet toaster MIB.  It's
 // definition follows here:
 //
 //
@@ -65,9 +65,9 @@ Abstract:
 //             ACCESS  read-write
 //             STATUS  mandatory
 //             DESCRIPTION
-//                     "This variable controls the current state of the 
-//                      toaster. To begin toasting, set it to down(2). To 
-//                      abort toasting (perhaps in the event of an 
+//                     "This variable controls the current state of the
+//                      toaster. To begin toasting, set it to down(2). To
+//                      abort toasting (perhaps in the event of an
 //                      emergency), set it to up(2)."
 //             ::= { toaster 3 }
 //
@@ -76,9 +76,9 @@ Abstract:
 //             ACCESS  read-write
 //             STATUS  mandatory
 //             DESCRIPTION
-//                     "This variable controls how well done ensuing toast 
-//                      should be on a scale of 1 to 10. Toast made at 10 
-//                      is generally considered unfit for human consumption; 
+//                     "This variable controls how well done ensuing toast
+//                      should be on a scale of 1 to 10. Toast made at 10
+//                      is generally considered unfit for human consumption;
 //                      toast made at 1 is lightly warmed."
 //             ::= { toaster 4 }
 //
@@ -95,10 +95,10 @@ Abstract:
 //             ACCESS  read-write
 //             STATUS  mandatory
 //             DESCRIPTION
-//                     "This variable informs the toaster of the type of 
-//                      material being toasted. The toaster uses this 
-//                      information combined with toasterToastDoneness to 
-//                      compute how long the material must be toasted for 
+//                     "This variable informs the toaster of the type of
+//                      material being toasted. The toaster uses this
+//                      information combined with toasterToastDoneness to
+//                      compute how long the material must be toasted for
 //                      to achieve the desired doneness."
 //             ::= { toaster 5 }
 //
@@ -160,8 +160,8 @@ UINT MIB_toasterToastType[]        = { 2, 5, 0 };
 //                             //
 
 char       MIB_toasterManStor[]     = "Microsoft Corporation";
-char       MIB_toasterModelStor[]   = 
-               "Example SNMP Extension Agent for Windows/NT (TOASTER-MIB).";
+char       MIB_toasterModelStor[]   =
+    "Example SNMP Extension Agent for Windows/NT (TOASTER-MIB).";
 AsnInteger MIB_toasterControlStor   = 1;
 AsnInteger MIB_toasterDonenessStor  = 2;
 AsnInteger MIB_toasterToastTypeStor = 3;
@@ -170,27 +170,33 @@ AsnInteger MIB_toasterToastTypeStor = 3;
 
 // MIB definiton
 
-MIB_ENTRY Mib[] = {
-      { { OID_SIZEOF(MIB_toasterManufacturer), MIB_toasterManufacturer },
+MIB_ENTRY Mib[] =
+{
+    {   { OID_SIZEOF(MIB_toasterManufacturer), MIB_toasterManufacturer },
         &MIB_toasterManStor, ASN_RFC1213_DISPSTRING,
-        MIB_ACCESS_READ, MIB_leaf_func, &Mib[1] },
+        MIB_ACCESS_READ, MIB_leaf_func, &Mib[1]
+    },
 
-      { { OID_SIZEOF(MIB_toasterModelNumber), MIB_toasterModelNumber },
+    {   { OID_SIZEOF(MIB_toasterModelNumber), MIB_toasterModelNumber },
         &MIB_toasterModelStor, ASN_RFC1213_DISPSTRING,
-        MIB_ACCESS_READ, MIB_leaf_func, &Mib[2] },
+        MIB_ACCESS_READ, MIB_leaf_func, &Mib[2]
+    },
 
-      { { OID_SIZEOF(MIB_toasterControl), MIB_toasterControl },
+    {   { OID_SIZEOF(MIB_toasterControl), MIB_toasterControl },
         &MIB_toasterControlStor, ASN_INTEGER,
-        MIB_ACCESS_READWRITE, MIB_control_func, &Mib[3] },
+        MIB_ACCESS_READWRITE, MIB_control_func, &Mib[3]
+    },
 
-      { { OID_SIZEOF(MIB_toasterDoneness), MIB_toasterDoneness },
+    {   { OID_SIZEOF(MIB_toasterDoneness), MIB_toasterDoneness },
         &MIB_toasterDonenessStor, ASN_INTEGER,
-        MIB_ACCESS_READWRITE, MIB_doneness_func, &Mib[4] },
+        MIB_ACCESS_READWRITE, MIB_doneness_func, &Mib[4]
+    },
 
-      { { OID_SIZEOF(MIB_toasterToastType), MIB_toasterToastType },
+    {   { OID_SIZEOF(MIB_toasterToastType), MIB_toasterToastType },
         &MIB_toasterToastTypeStor, ASN_INTEGER,
-        MIB_ACCESS_READWRITE, MIB_toasttype_func, NULL }
-      };
+        MIB_ACCESS_READWRITE, MIB_toasttype_func, NULL
+    }
+};
 
 UINT MIB_num_variables = sizeof Mib / sizeof( MIB_ENTRY );
 
@@ -210,80 +216,80 @@ UINT MIB_num_variables = sizeof Mib / sizeof( MIB_ENTRY );
 //    None.
 //
 UINT ResolveVarBind(
-        IN OUT RFC1157VarBind *VarBind, // Variable Binding to resolve
-	IN UINT PduAction               // Action specified in PDU
-	)
+    IN OUT RFC1157VarBind *VarBind, // Variable Binding to resolve
+    IN UINT PduAction               // Action specified in PDU
+)
 
 {
-MIB_ENTRY            *MibPtr;
-AsnObjectIdentifier  TempOid;
-int                  CompResult;
-UINT                 I;
-UINT                 nResult;
+    MIB_ENTRY            *MibPtr;
+    AsnObjectIdentifier  TempOid;
+    int                  CompResult;
+    UINT                 I;
+    UINT                 nResult;
 
 
-   // Search for var bind name in the MIB
-   I      = 0;
-   MibPtr = NULL;
-   while ( MibPtr == NULL && I < MIB_num_variables )
-      {
-      // Construct OID with complete prefix for comparison purposes
-      SnmpUtilOidCpy( &TempOid, &MIB_OidPrefix );
-      SnmpUtilOidAppend( &TempOid, &Mib[I].Oid );
+    // Search for var bind name in the MIB
+    I      = 0;
+    MibPtr = NULL;
+    while ( MibPtr == NULL && I < MIB_num_variables )
+    {
+        // Construct OID with complete prefix for comparison purposes
+        SnmpUtilOidCpy( &TempOid, &MIB_OidPrefix );
+        SnmpUtilOidAppend( &TempOid, &Mib[I].Oid );
 
-      // Check for OID in MIB - On a GET-NEXT the OID does not have to exactly
-      // match a variable in the MIB, it must only fall under the MIB root.
-      CompResult = SnmpUtilOidCmp( &VarBind->name, &TempOid );
-      if ( 0 > CompResult )
-	 {
-	 // Since there is not an exact match, the only valid action is GET-NEXT
-	 if ( MIB_ACTION_GETNEXT != PduAction )
-	    {
-	    nResult = SNMP_ERRORSTATUS_NOSUCHNAME;
-	    goto Exit;
-	    }
-
-	 // Since the match was not exact, but var bind name is within MIB,
-	 // we are at the NEXT MIB variable down from the one specified.
-	 PduAction = MIB_ACTION_GET;
-	 MibPtr = &Mib[I];
-
-         // Replace var bind name with new name
-         SnmpUtilOidFree( &VarBind->name );
-         SnmpUtilOidCpy( &VarBind->name, &MIB_OidPrefix );
-         SnmpUtilOidAppend( &VarBind->name, &MibPtr->Oid );
-	 }
-      else
-         {
-	 // An exact match was found.
-         if ( 0 == CompResult )
+        // Check for OID in MIB - On a GET-NEXT the OID does not have to exactly
+        // match a variable in the MIB, it must only fall under the MIB root.
+        CompResult = SnmpUtilOidCmp( &VarBind->name, &TempOid );
+        if ( 0 > CompResult )
+        {
+            // Since there is not an exact match, the only valid action is GET-NEXT
+            if ( MIB_ACTION_GETNEXT != PduAction )
             {
-	    MibPtr = &Mib[I];
-	    }
-	 }
+                nResult = SNMP_ERRORSTATUS_NOSUCHNAME;
+                goto Exit;
+            }
 
-      // Free OID memory before checking another variable
-      SnmpUtilOidFree( &TempOid );
+            // Since the match was not exact, but var bind name is within MIB,
+            // we are at the NEXT MIB variable down from the one specified.
+            PduAction = MIB_ACTION_GET;
+            MibPtr = &Mib[I];
 
-      I++;
-      } // while
+            // Replace var bind name with new name
+            SnmpUtilOidFree( &VarBind->name );
+            SnmpUtilOidCpy( &VarBind->name, &MIB_OidPrefix );
+            SnmpUtilOidAppend( &VarBind->name, &MibPtr->Oid );
+        }
+        else
+        {
+            // An exact match was found.
+            if ( 0 == CompResult )
+            {
+                MibPtr = &Mib[I];
+            }
+        }
 
-   // If OID not within scope of MIB, then no such name
-   if ( MibPtr == NULL )
-      {
-      nResult = SNMP_ERRORSTATUS_NOSUCHNAME;
-      goto Exit;
-      }
+        // Free OID memory before checking another variable
+        SnmpUtilOidFree( &TempOid );
 
-   // Call function to process request.  Each MIB entry has a function pointer
-   // that knows how to process its MIB variable.
-   nResult = (*MibPtr->MibFunc)( PduAction, MibPtr, VarBind );
+        I++;
+    } // while
 
-   // Free temp memory
-   SnmpUtilOidFree( &TempOid );
+    // If OID not within scope of MIB, then no such name
+    if ( MibPtr == NULL )
+    {
+        nResult = SNMP_ERRORSTATUS_NOSUCHNAME;
+        goto Exit;
+    }
+
+    // Call function to process request.  Each MIB entry has a function pointer
+    // that knows how to process its MIB variable.
+    nResult = (*MibPtr->MibFunc)( PduAction, MibPtr, VarBind );
+
+    // Free temp memory
+    SnmpUtilOidFree( &TempOid );
 
 Exit:
-   return nResult;
+    return nResult;
 } // ResolveVarBind
 
 
@@ -301,134 +307,134 @@ Exit:
 //    None.
 //
 UINT MIB_leaf_func(
-        IN UINT Action,
-	IN MIB_ENTRY *MibPtr,
-	IN RFC1157VarBind *VarBind
-	)
+    IN UINT Action,
+    IN MIB_ENTRY *MibPtr,
+    IN RFC1157VarBind *VarBind
+)
 
 {
-UINT   ErrStat;
+    UINT   ErrStat;
 
-   switch ( Action )
-      {
-      case MIB_ACTION_GETNEXT:
-	 // If there is no GET-NEXT pointer, this is the end of this MIB
-	 if ( MibPtr->MibNext == NULL )
-	    {
-	    ErrStat = SNMP_ERRORSTATUS_NOSUCHNAME;
-	    goto Exit;
-	    }
-
-         // Setup var bind name of NEXT MIB variable
-         SnmpUtilOidFree( &VarBind->name );
-         SnmpUtilOidCpy( &VarBind->name, &MIB_OidPrefix );
-         SnmpUtilOidAppend( &VarBind->name, &MibPtr->MibNext->Oid );
-
-         // Call function to process request.  Each MIB entry has a function
-	 // pointer that knows how to process its MIB variable.
-         ErrStat = (*MibPtr->MibNext->MibFunc)( MIB_ACTION_GET,
-	                                        MibPtr->MibNext, VarBind );
-         break;
-
-      case MIB_ACTION_GET:
-         // Make sure that this variable's ACCESS is GET'able
-	 if ( MibPtr->Access != MIB_ACCESS_READ &&
-	      MibPtr->Access != MIB_ACCESS_READWRITE )
-	    {
-	    ErrStat = SNMP_ERRORSTATUS_NOSUCHNAME;
-	    goto Exit;
-	    }
-
-	 // Setup varbind's return value
-	 VarBind->value.asnType = MibPtr->Type;
-	 switch ( VarBind->value.asnType )
-	    {
-            case ASN_RFC1155_COUNTER:
-            case ASN_RFC1155_GAUGE:
-            case ASN_INTEGER:
-               VarBind->value.asnValue.number = *(AsnInteger *)(MibPtr->Storage);
-	       break;
-
-            case ASN_OCTETSTRING: // This entails ASN_RFC1213_DISPSTRING also
-	       VarBind->value.asnValue.string.length =
-                                 (int)(strlen( (LPSTR)MibPtr->Storage ));
-
-	       if ( NULL == 
-                    (VarBind->value.asnValue.string.stream =
-                    SnmpUtilMemAlloc(VarBind->value.asnValue.string.length *
-                           sizeof(char))) )
-	          {
-	          ErrStat = SNMP_ERRORSTATUS_GENERR;
-	          goto Exit;
-	          }
-
-	       memcpy( VarBind->value.asnValue.string.stream,
-	               (LPSTR)MibPtr->Storage,
-	               VarBind->value.asnValue.string.length );
-	       VarBind->value.asnValue.string.dynamic = TRUE;
-
-	       break;
-
-	    default:
-	       ErrStat = SNMP_ERRORSTATUS_GENERR;
-	       goto Exit;
-	    }
-
-	 break;
-
-      case MIB_ACTION_SET:
-         // Make sure that this variable's ACCESS is SET'able
-	 if ( MibPtr->Access != MIB_ACCESS_READWRITE &&
-	      MibPtr->Access != MIB_ACCESS_WRITE )
-	    {
-	    ErrStat = SNMP_ERRORSTATUS_NOSUCHNAME;
+    switch ( Action )
+    {
+    case MIB_ACTION_GETNEXT:
+        // If there is no GET-NEXT pointer, this is the end of this MIB
+        if ( MibPtr->MibNext == NULL )
+        {
+            ErrStat = SNMP_ERRORSTATUS_NOSUCHNAME;
             goto Exit;
-	    }
+        }
 
-         // Check for proper type before setting
-         if ( MibPtr->Type != VarBind->value.asnType )
-	    {
-	    ErrStat = SNMP_ERRORSTATUS_BADVALUE;
-	    goto Exit;
-	    }
+        // Setup var bind name of NEXT MIB variable
+        SnmpUtilOidFree( &VarBind->name );
+        SnmpUtilOidCpy( &VarBind->name, &MIB_OidPrefix );
+        SnmpUtilOidAppend( &VarBind->name, &MibPtr->MibNext->Oid );
 
-	 // Save value in MIB
-	 switch ( VarBind->value.asnType )
-	    {
-            case ASN_RFC1155_COUNTER:
-            case ASN_RFC1155_GAUGE:
-            case ASN_INTEGER:
-               *(AsnInteger *)(MibPtr->Storage) = VarBind->value.asnValue.number;
-	       break;
+        // Call function to process request.  Each MIB entry has a function
+        // pointer that knows how to process its MIB variable.
+        ErrStat = (*MibPtr->MibNext->MibFunc)( MIB_ACTION_GET,
+                                               MibPtr->MibNext, VarBind );
+        break;
 
-            case ASN_OCTETSTRING: // This entails ASN_RFC1213_DISPSTRING also
-               // The storage must be adequate to contain the new string
-               // including a NULL terminator.
-               memcpy( (LPSTR)MibPtr->Storage,
-                       VarBind->value.asnValue.string.stream,
-                       VarBind->value.asnValue.string.length );
+    case MIB_ACTION_GET:
+        // Make sure that this variable's ACCESS is GET'able
+        if ( MibPtr->Access != MIB_ACCESS_READ &&
+                MibPtr->Access != MIB_ACCESS_READWRITE )
+        {
+            ErrStat = SNMP_ERRORSTATUS_NOSUCHNAME;
+            goto Exit;
+        }
 
-	       ((LPSTR)MibPtr->Storage)[VarBind->value.asnValue.string.length] =
-                                                                          '\0';
-	       break;
+        // Setup varbind's return value
+        VarBind->value.asnType = MibPtr->Type;
+        switch ( VarBind->value.asnType )
+        {
+        case ASN_RFC1155_COUNTER:
+        case ASN_RFC1155_GAUGE:
+        case ASN_INTEGER:
+            VarBind->value.asnValue.number = *(AsnInteger *)(MibPtr->Storage);
+            break;
 
-	    default:
-	       ErrStat = SNMP_ERRORSTATUS_GENERR;
-	       goto Exit;
-	    }
+        case ASN_OCTETSTRING: // This entails ASN_RFC1213_DISPSTRING also
+            VarBind->value.asnValue.string.length =
+                (int)(strlen( (LPSTR)MibPtr->Storage ));
 
-         break;
+            if ( NULL ==
+                    (VarBind->value.asnValue.string.stream =
+                         SnmpUtilMemAlloc(VarBind->value.asnValue.string.length *
+                                          sizeof(char))) )
+            {
+                ErrStat = SNMP_ERRORSTATUS_GENERR;
+                goto Exit;
+            }
 
-      default:
-	 ErrStat = SNMP_ERRORSTATUS_GENERR;
-	 goto Exit;
-      } // switch
+            memcpy( VarBind->value.asnValue.string.stream,
+                    (LPSTR)MibPtr->Storage,
+                    VarBind->value.asnValue.string.length );
+            VarBind->value.asnValue.string.dynamic = TRUE;
 
-   // Signal no error occurred
-   ErrStat = SNMP_ERRORSTATUS_NOERROR;
+            break;
+
+        default:
+            ErrStat = SNMP_ERRORSTATUS_GENERR;
+            goto Exit;
+        }
+
+        break;
+
+    case MIB_ACTION_SET:
+        // Make sure that this variable's ACCESS is SET'able
+        if ( MibPtr->Access != MIB_ACCESS_READWRITE &&
+                MibPtr->Access != MIB_ACCESS_WRITE )
+        {
+            ErrStat = SNMP_ERRORSTATUS_NOSUCHNAME;
+            goto Exit;
+        }
+
+        // Check for proper type before setting
+        if ( MibPtr->Type != VarBind->value.asnType )
+        {
+            ErrStat = SNMP_ERRORSTATUS_BADVALUE;
+            goto Exit;
+        }
+
+        // Save value in MIB
+        switch ( VarBind->value.asnType )
+        {
+        case ASN_RFC1155_COUNTER:
+        case ASN_RFC1155_GAUGE:
+        case ASN_INTEGER:
+            *(AsnInteger *)(MibPtr->Storage) = VarBind->value.asnValue.number;
+            break;
+
+        case ASN_OCTETSTRING: // This entails ASN_RFC1213_DISPSTRING also
+            // The storage must be adequate to contain the new string
+            // including a NULL terminator.
+            memcpy( (LPSTR)MibPtr->Storage,
+                    VarBind->value.asnValue.string.stream,
+                    VarBind->value.asnValue.string.length );
+
+            ((LPSTR)MibPtr->Storage)[VarBind->value.asnValue.string.length] =
+                '\0';
+            break;
+
+        default:
+            ErrStat = SNMP_ERRORSTATUS_GENERR;
+            goto Exit;
+        }
+
+        break;
+
+    default:
+        ErrStat = SNMP_ERRORSTATUS_GENERR;
+        goto Exit;
+    } // switch
+
+    // Signal no error occurred
+    ErrStat = SNMP_ERRORSTATUS_NOERROR;
 
 Exit:
-   return ErrStat;
+    return ErrStat;
 } // MIB_leaf_func
 
 
@@ -446,56 +452,56 @@ Exit:
 //    None.
 //
 UINT MIB_control_func(
-        IN UINT Action,
-	IN MIB_ENTRY *MibPtr,
-	IN RFC1157VarBind *VarBind
-	)
+    IN UINT Action,
+    IN MIB_ENTRY *MibPtr,
+    IN RFC1157VarBind *VarBind
+)
 
 {
-UINT   ErrStat;
+    UINT   ErrStat;
 
-   switch ( Action )
-      {
-      case MIB_ACTION_SET:
-         // Make sure that this variable's ACCESS is SET'able
-	 if ( MibPtr->Access != MIB_ACCESS_READWRITE &&
-	      MibPtr->Access != MIB_ACCESS_WRITE )
-	    {
-	    ErrStat = SNMP_ERRORSTATUS_NOSUCHNAME;
+    switch ( Action )
+    {
+    case MIB_ACTION_SET:
+        // Make sure that this variable's ACCESS is SET'able
+        if ( MibPtr->Access != MIB_ACCESS_READWRITE &&
+                MibPtr->Access != MIB_ACCESS_WRITE )
+        {
+            ErrStat = SNMP_ERRORSTATUS_NOSUCHNAME;
             goto Exit;
-	    }
+        }
 
-         // Check for proper type before setting
-         if ( MibPtr->Type != VarBind->value.asnType )
-	    {
-	    ErrStat = SNMP_ERRORSTATUS_BADVALUE;
-	    goto Exit;
-	    }
+        // Check for proper type before setting
+        if ( MibPtr->Type != VarBind->value.asnType )
+        {
+            ErrStat = SNMP_ERRORSTATUS_BADVALUE;
+            goto Exit;
+        }
 
-         // Make sure the value is valid
-         if ( MIB_TOASTER_UP > VarBind->value.asnValue.number ||
-              MIB_TOASTER_DOWN < VarBind->value.asnValue.number )
-            {
-	    ErrStat = SNMP_ERRORSTATUS_BADVALUE;
-	    goto Exit;
-            }
+        // Make sure the value is valid
+        if ( MIB_TOASTER_UP > VarBind->value.asnValue.number ||
+                MIB_TOASTER_DOWN < VarBind->value.asnValue.number )
+        {
+            ErrStat = SNMP_ERRORSTATUS_BADVALUE;
+            goto Exit;
+        }
 
-         // Let fall through purposefully for further processing by
-         // generic leaf function.
+    // Let fall through purposefully for further processing by
+    // generic leaf function.
 
-      case MIB_ACTION_GETNEXT:
-      case MIB_ACTION_GET:
-	 // Call the more generic function to perform the action
-         ErrStat = MIB_leaf_func( Action, MibPtr, VarBind );
-         break;
+    case MIB_ACTION_GETNEXT:
+    case MIB_ACTION_GET:
+        // Call the more generic function to perform the action
+        ErrStat = MIB_leaf_func( Action, MibPtr, VarBind );
+        break;
 
-      default:
-	 ErrStat = SNMP_ERRORSTATUS_GENERR;
-	 goto Exit;
-      } // switch
+    default:
+        ErrStat = SNMP_ERRORSTATUS_GENERR;
+        goto Exit;
+    } // switch
 
 Exit:
-   return ErrStat;
+    return ErrStat;
 } // MIB_control_func
 
 
@@ -513,56 +519,56 @@ Exit:
 //    None.
 //
 UINT MIB_doneness_func(
-        IN UINT Action,
-	IN MIB_ENTRY *MibPtr,
-	IN RFC1157VarBind *VarBind
-	)
+    IN UINT Action,
+    IN MIB_ENTRY *MibPtr,
+    IN RFC1157VarBind *VarBind
+)
 
 {
-UINT   ErrStat;
+    UINT   ErrStat;
 
-   switch ( Action )
-      {
-      case MIB_ACTION_SET:
-         // Make sure that this variable's ACCESS is SET'able
-	 if ( MibPtr->Access != MIB_ACCESS_READWRITE &&
-	      MibPtr->Access != MIB_ACCESS_WRITE )
-	    {
-	    ErrStat = SNMP_ERRORSTATUS_NOSUCHNAME;
+    switch ( Action )
+    {
+    case MIB_ACTION_SET:
+        // Make sure that this variable's ACCESS is SET'able
+        if ( MibPtr->Access != MIB_ACCESS_READWRITE &&
+                MibPtr->Access != MIB_ACCESS_WRITE )
+        {
+            ErrStat = SNMP_ERRORSTATUS_NOSUCHNAME;
             goto Exit;
-	    }
+        }
 
-         // Check for proper type before setting
-         if ( MibPtr->Type != VarBind->value.asnType )
-	    {
-	    ErrStat = SNMP_ERRORSTATUS_BADVALUE;
-	    goto Exit;
-	    }
+        // Check for proper type before setting
+        if ( MibPtr->Type != VarBind->value.asnType )
+        {
+            ErrStat = SNMP_ERRORSTATUS_BADVALUE;
+            goto Exit;
+        }
 
-         // Make sure the value is valid
-         if ( MIB_TOASTER_LIGHTLYWARM > VarBind->value.asnValue.number ||
-              MIB_TOASTER_BURNT < VarBind->value.asnValue.number )
-            {
-	    ErrStat = SNMP_ERRORSTATUS_BADVALUE;
-	    goto Exit;
-            }
+        // Make sure the value is valid
+        if ( MIB_TOASTER_LIGHTLYWARM > VarBind->value.asnValue.number ||
+                MIB_TOASTER_BURNT < VarBind->value.asnValue.number )
+        {
+            ErrStat = SNMP_ERRORSTATUS_BADVALUE;
+            goto Exit;
+        }
 
-         // Let fall through purposefully for further processing by
-         // generic leaf function.
+    // Let fall through purposefully for further processing by
+    // generic leaf function.
 
-      case MIB_ACTION_GETNEXT:
-      case MIB_ACTION_GET:
-	 // Call the more generic function to perform the action
-         ErrStat = MIB_leaf_func( Action, MibPtr, VarBind );
-         break;
+    case MIB_ACTION_GETNEXT:
+    case MIB_ACTION_GET:
+        // Call the more generic function to perform the action
+        ErrStat = MIB_leaf_func( Action, MibPtr, VarBind );
+        break;
 
-      default:
-	 ErrStat = SNMP_ERRORSTATUS_GENERR;
-	 goto Exit;
-      } // switch
+    default:
+        ErrStat = SNMP_ERRORSTATUS_GENERR;
+        goto Exit;
+    } // switch
 
 Exit:
-   return ErrStat;
+    return ErrStat;
 } // MIB_doneness_func
 
 
@@ -580,55 +586,55 @@ Exit:
 //    None.
 //
 UINT MIB_toasttype_func(
-        IN UINT Action,
-	IN MIB_ENTRY *MibPtr,
-	IN RFC1157VarBind *VarBind
-	)
+    IN UINT Action,
+    IN MIB_ENTRY *MibPtr,
+    IN RFC1157VarBind *VarBind
+)
 
 {
-UINT   ErrStat;
+    UINT   ErrStat;
 
-   switch ( Action )
-      {
-      case MIB_ACTION_SET:
-         // Make sure that this variable's ACCESS is SET'able
-	 if ( MibPtr->Access != MIB_ACCESS_READWRITE &&
-	      MibPtr->Access != MIB_ACCESS_WRITE )
-	    {
-	    ErrStat = SNMP_ERRORSTATUS_NOSUCHNAME;
+    switch ( Action )
+    {
+    case MIB_ACTION_SET:
+        // Make sure that this variable's ACCESS is SET'able
+        if ( MibPtr->Access != MIB_ACCESS_READWRITE &&
+                MibPtr->Access != MIB_ACCESS_WRITE )
+        {
+            ErrStat = SNMP_ERRORSTATUS_NOSUCHNAME;
             goto Exit;
-	    }
+        }
 
-         // Check for proper type before setting
-         if ( MibPtr->Type != VarBind->value.asnType )
-	    {
-	    ErrStat = SNMP_ERRORSTATUS_BADVALUE;
-	    goto Exit;
-	    }
+        // Check for proper type before setting
+        if ( MibPtr->Type != VarBind->value.asnType )
+        {
+            ErrStat = SNMP_ERRORSTATUS_BADVALUE;
+            goto Exit;
+        }
 
-         // Make sure the value is valid
-         if ( MIB_TOASTER_WHITEBREAD > VarBind->value.asnValue.number ||
-              MIB_TOASTER_OTHERBREAD < VarBind->value.asnValue.number )
-            {
-	    ErrStat = SNMP_ERRORSTATUS_BADVALUE;
-	    goto Exit;
-            }
+        // Make sure the value is valid
+        if ( MIB_TOASTER_WHITEBREAD > VarBind->value.asnValue.number ||
+                MIB_TOASTER_OTHERBREAD < VarBind->value.asnValue.number )
+        {
+            ErrStat = SNMP_ERRORSTATUS_BADVALUE;
+            goto Exit;
+        }
 
-         // Let fall through purposefully for further processing by
-         // generic leaf function.
+    // Let fall through purposefully for further processing by
+    // generic leaf function.
 
-      case MIB_ACTION_GETNEXT:
-      case MIB_ACTION_GET:
-	 // Call the more generic function to perform the action
-         ErrStat = MIB_leaf_func( Action, MibPtr, VarBind );
-         break;
+    case MIB_ACTION_GETNEXT:
+    case MIB_ACTION_GET:
+        // Call the more generic function to perform the action
+        ErrStat = MIB_leaf_func( Action, MibPtr, VarBind );
+        break;
 
-      default:
-	 ErrStat = SNMP_ERRORSTATUS_GENERR;
-	 goto Exit;
-      } // switch
+    default:
+        ErrStat = SNMP_ERRORSTATUS_GENERR;
+        goto Exit;
+    } // switch
 
 Exit:
-   return ErrStat;
+    return ErrStat;
 } // MIB_toasttype_func
 

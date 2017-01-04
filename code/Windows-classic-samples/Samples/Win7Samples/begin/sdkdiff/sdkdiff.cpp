@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -211,7 +211,8 @@ BOOL __BERR;
  * case (executing command line instructions) (in WIN16 case,
  * the worker thread function is called synchronously with these args).
  */
-typedef struct {
+typedef struct
+{
     LPSTR first;
     LPSTR second;
     LPSTR savelist;
@@ -222,8 +223,8 @@ typedef struct {
     VIEW view;
     BOOL fDeep;
     BOOL fExit;
-    BOOL fOpenedFiles;                  
-    BOOL fDescribeFiles;                
+    BOOL fOpenedFiles;
+    BOOL fDescribeFiles;
     BOOL fInputFile;                    // TRUE means read file list from input file
     BOOL fInputFileSingle;              // TRUE means input file has one filename per line
 } THREADARGS, FAR * PTHREADARGS;
@@ -232,7 +233,8 @@ typedef struct {
 /* structure containing all the arguments we'd like to give to do_editfile
    Need a structure because CreateThread only allows for one argument.
 */
-typedef struct {
+typedef struct
+{
     VIEW view;
     int option;
     long selection;
@@ -464,9 +466,9 @@ HACCEL haccel;
 int status_height;
 
 #if 0
-    #ifndef HINSTANCE
-        #define HINSTANCE HANDLE
-    #endif
+#ifndef HINSTANCE
+#define HINSTANCE HANDLE
+#endif
 #endif
 
 HINSTANCE hInst;   /* handle to current app instance */
@@ -561,7 +563,7 @@ static HANDLE ghThread = NULL;
 /* Some DOGMA about threads:
    When we spin off threads and then while they are still running, try to Exit
    we get race conditions with one thread allocating and the other freeing the
-   storage. 
+   storage.
    It might be that given a final structure of A->B->C we have A->B with NULL
    pointers in B when the Exit comes in.  The cleanup thread will clear out
    B and A and THEN the worker thread might try to attach C to B which is no
@@ -600,24 +602,26 @@ void sdkdiff_UI(BOOL bAttach)
 
 int WINAPI
 WinMain(
-        HINSTANCE hInstance,
-        HINSTANCE hPrevInstance,
-        LPSTR lpCmdLine,
-        int nCmdShow
-        )
+    HINSTANCE hInstance,
+    HINSTANCE hPrevInstance,
+    LPSTR lpCmdLine,
+    int nCmdShow
+)
 {
     MSG msg;
-	int len = 0;
+    int len = 0;
 
-	// Get working directory.
-	memset(pszWorkingDirectoryName, 0, MAX_PATH);
-	len = GetModuleFileName(hInstance, pszWorkingDirectoryName, MAX_PATH);
-	if (len != 0) {
-		while (pszWorkingDirectoryName[len-1] != '\\' ) {
-			len--;
-		}
-		pszWorkingDirectoryName[len] = 0;
-	}	
+    // Get working directory.
+    memset(pszWorkingDirectoryName, 0, MAX_PATH);
+    len = GetModuleFileName(hInstance, pszWorkingDirectoryName, MAX_PATH);
+    if (len != 0)
+    {
+        while (pszWorkingDirectoryName[len-1] != '\\' )
+        {
+            len--;
+        }
+        pszWorkingDirectoryName[len] = 0;
+    }
 
     InitGutils(GetModuleHandle(NULL), DLL_PROCESS_ATTACH, NULL);
 
@@ -639,14 +643,16 @@ WinMain(
     ParseArgs(lpCmdLine);
 
     /* message loop */
-    while (GetMessage(&msg, NULL, 0, 0)) {
-        if (!TranslateAccelerator(hwndClient, haccel, &msg)) {
+    while (GetMessage(&msg, NULL, 0, 0))
+    {
+        if (!TranslateAccelerator(hwndClient, haccel, &msg))
+        {
             TranslateMessage(&msg);
             DispatchMessage(&msg);
         }
     }
 
-    Trace_Close();     
+    Trace_Close();
     return (msg.wParam ? 1 : 0);
 }
 
@@ -656,8 +662,8 @@ WinMain(
  */
 BOOL
 InitApplication(
-                HINSTANCE hInstance
-                )
+    HINSTANCE hInstance
+)
 {
     WNDCLASS    wc;
     BOOL resp;
@@ -694,9 +700,9 @@ InitApplication(
  */
 BOOL
 InitInstance(
-             HINSTANCE hInstance,
-             int nCmdShow
-             )
+    HINSTANCE hInstance,
+    int nCmdShow
+)
 {
     RECT rect;
     HANDLE hstatus;
@@ -729,7 +735,8 @@ InitInstance(
 
 
 
-    if (!hwndClient) {
+    if (!hwndClient)
+    {
         return(FALSE);
     }
 
@@ -745,7 +752,7 @@ InitInstance(
     hstatus = StatusAlloc(3);
     StatusAddItem(hstatus, 0, SF_STATIC, SF_LEFT|SF_VAR|SF_SZMIN, IDL_STATLAB, 14, NULL);
     StatusAddItem(hstatus, 1, SF_BUTTON, SF_RIGHT|SF_RAISE, IDM_ABORT, 8,
-                LoadRcString(IDS_EXIT));
+                  LoadRcString(IDS_EXIT));
     StatusAddItem(hstatus, 2, SF_STATIC, SF_LOWER|SF_LEFT|SF_VAR,
                   IDL_NAMES, 60, NULL);
 
@@ -799,13 +806,14 @@ InitInstance(
      */
     ShowWindow(hwndBar, SW_HIDE);
 
-    if (GetProfileInt(APPNAME, szOutlineSaved, 0)) {
+    if (GetProfileInt(APPNAME, szOutlineSaved, 0))
+    {
         WINDOWPLACEMENT wp;
         /* restore the previous expanded size and position */
         wp.length = sizeof(wp);
         wp.flags                   = 0;
         wp.showCmd                 = GetProfileInt( APPNAME, szOutlineShowCmd,
-                                                    SW_SHOWNORMAL);
+                                     SW_SHOWNORMAL);
         wp.ptMaxPosition.x         = GetProfileInt( APPNAME, szOutlineMaxX,       0);
         wp.ptMaxPosition.y         = GetProfileInt( APPNAME, szOutlineMaxY,       0);
         wp.rcNormalPosition.left   = (int)GetProfileInt( APPNAME, szOutlineNormLeft,  (UINT)(-1));
@@ -813,10 +821,12 @@ InitInstance(
         wp.rcNormalPosition.right  = (int)GetProfileInt( APPNAME, szOutlineNormRight, (UINT)(-1));
         wp.rcNormalPosition.bottom = (int)GetProfileInt( APPNAME, szOutlineNormBottom,(UINT)(-1));
 
-        if (!SetWindowPlacement(hwndClient,&wp)) {
+        if (!SetWindowPlacement(hwndClient,&wp))
+        {
             ShowWindow(hwndClient, nMinMax);
         }
-    } else ShowWindow(hwndClient, nMinMax);
+    }
+    else ShowWindow(hwndClient, nMinMax);
 
 
     /* initialise busy flag and status line to show we are idle
@@ -826,14 +836,17 @@ InitInstance(
 
     /* initialise the colour globals */
     hc.cbSize = sizeof(hc);
-    SystemParametersInfo(SPI_GETHIGHCONTRAST,0 ,&hc, 0);
+    SystemParametersInfo(SPI_GETHIGHCONTRAST,0,&hc, 0);
     mono_colours = (hc.dwFlags & HCF_HIGHCONTRASTON);
-    if (mono_colours) {
+    if (mono_colours)
+    {
         SetMonoColours();
-    } else {
+    }
+    else
+    {
         SetColours();
     }
-    PostMessage(hwndClient, WM_SYSCOLORCHANGE, 0 , 0);
+    PostMessage(hwndClient, WM_SYSCOLORCHANGE, 0, 0);
     UpdateWindow(hwndClient);
 
     return(TRUE);
@@ -894,78 +907,78 @@ INT_PTR FAR PASCAL UsageDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM l
     switch (message)
     {
     case WM_INITDIALOG:
+    {
+        HWND hwnd = GetDlgItem(hDlg, IDC_USAGE_TEXT);
+        if (hwnd)
         {
-            HWND hwnd = GetDlgItem(hDlg, IDC_USAGE_TEXT);
-            if (hwnd)
+            const UsageStringInfo *p;
+            int c;
+            PARAFORMAT pf;
+            CHARFORMAT cf;
+            int pos;
+
+            pf.cbSize = sizeof(pf);
+
+            SendMessage(hwnd, EM_SETBKGNDCOLOR, 0, GetSysColor(COLOR_BTNFACE));
+            SendMessage(hwnd, EM_SETMARGINS, EC_LEFTMARGIN|EC_RIGHTMARGIN, MAKELONG(4, 4));
+
+            for (p = c_rg, c = NUMELMS(c_rg); c--; p++)
             {
-                const UsageStringInfo *p;
-                int c;
-                PARAFORMAT pf;
-                CHARFORMAT cf;
-                int pos;
+                LPCSTR psz;
+                psz=LoadRcString(p->m_ids);
+                if (p->m_fExternalOnly)
+                    continue;
+                if (p->m_fInternalOnly)
+                    continue;
 
-                pf.cbSize = sizeof(pf);
-
-                SendMessage(hwnd, EM_SETBKGNDCOLOR, 0, GetSysColor(COLOR_BTNFACE));
-                SendMessage(hwnd, EM_SETMARGINS, EC_LEFTMARGIN|EC_RIGHTMARGIN, MAKELONG(4, 4));
-
-                for (p = c_rg, c = NUMELMS(c_rg); c--; p++)
-                {
-                    LPCSTR psz;
-					psz=LoadRcString(p->m_ids);
-                    if (p->m_fExternalOnly)
-                        continue;
-                    if (p->m_fInternalOnly) 
-                        continue;
-
-                    pos = LOWORD(SendMessage(hwnd, EM_GETSEL, 0, 0));
-                    SendMessage(hwnd, EM_REPLACESEL, FALSE, (LPARAM)psz);
-                    SendMessage(hwnd, EM_SETSEL, pos, -1);
-
-                    SendMessage(hwnd, EM_GETPARAFORMAT, 0, (LPARAM)&pf);
-                    if (p->m_cIndent >= 0)
-                    {
-                        static const int c_rgIndents[] = { 320*1, 320*5, 320*6 };
-                        static const int c_rgOffsets[] = { 320*4, 0, 0 };
-
-                        pf.dwMask |= PFM_STARTINDENT|PFM_OFFSET|PFM_TABSTOPS;
-                        pf.dxStartIndent = 0;
-                        pf.dxOffset = 0;
-                        if (p->m_cIndent)
-                        {
-                            pf.dxStartIndent = c_rgIndents[p->m_cIndent - 1];
-                            pf.dxOffset = c_rgOffsets[p->m_cIndent - 1];
-                        }
-                        pf.cTabCount = 2;
-                        pf.rgxTabs[0] = c_rgIndents[0];
-                        pf.rgxTabs[1] = c_rgIndents[1];
-                    }
-                    else
-                    {
-                        pf.dwMask |= PFM_STARTINDENT|PFM_OFFSET|PFM_NUMBERING;
-                        pf.dxStartIndent = 320;
-                        pf.dxOffset = 180;
-                        pf.wNumbering = PFN_BULLET;
-                    }
-                    SendMessage(hwnd, EM_SETPARAFORMAT, 0, (LPARAM)&pf);
-
-                    SendMessage(hwnd, EM_SETSEL, (WPARAM)-1, -1);
-                }
-
-                cf.cbSize = sizeof(cf);
-                cf.dwMask = CFM_COLOR;
-                cf.dwEffects = 0;
-                cf.crTextColor = GetSysColor(COLOR_BTNTEXT);
-                SendMessage(hwnd, EM_SETSEL, 0, -1);
-                SendMessage(hwnd, EM_SETCHARFORMAT, SCF_SELECTION, (LPARAM)&cf);
-                SendMessage(hwnd, EM_SETSEL, (WPARAM)-1, -1);
                 pos = LOWORD(SendMessage(hwnd, EM_GETSEL, 0, 0));
-                SendMessage(hwnd, EM_SETSEL, pos - 1, pos);
-                SendMessage(hwnd, EM_REPLACESEL, 0, (LPARAM)"");
-                SendMessage(hwnd, EM_SETSEL, 0, 0);
+                SendMessage(hwnd, EM_REPLACESEL, FALSE, (LPARAM)psz);
+                SendMessage(hwnd, EM_SETSEL, pos, -1);
+
+                SendMessage(hwnd, EM_GETPARAFORMAT, 0, (LPARAM)&pf);
+                if (p->m_cIndent >= 0)
+                {
+                    static const int c_rgIndents[] = { 320*1, 320*5, 320*6 };
+                    static const int c_rgOffsets[] = { 320*4, 0, 0 };
+
+                    pf.dwMask |= PFM_STARTINDENT|PFM_OFFSET|PFM_TABSTOPS;
+                    pf.dxStartIndent = 0;
+                    pf.dxOffset = 0;
+                    if (p->m_cIndent)
+                    {
+                        pf.dxStartIndent = c_rgIndents[p->m_cIndent - 1];
+                        pf.dxOffset = c_rgOffsets[p->m_cIndent - 1];
+                    }
+                    pf.cTabCount = 2;
+                    pf.rgxTabs[0] = c_rgIndents[0];
+                    pf.rgxTabs[1] = c_rgIndents[1];
+                }
+                else
+                {
+                    pf.dwMask |= PFM_STARTINDENT|PFM_OFFSET|PFM_NUMBERING;
+                    pf.dxStartIndent = 320;
+                    pf.dxOffset = 180;
+                    pf.wNumbering = PFN_BULLET;
+                }
+                SendMessage(hwnd, EM_SETPARAFORMAT, 0, (LPARAM)&pf);
+
+                SendMessage(hwnd, EM_SETSEL, (WPARAM)-1, -1);
             }
+
+            cf.cbSize = sizeof(cf);
+            cf.dwMask = CFM_COLOR;
+            cf.dwEffects = 0;
+            cf.crTextColor = GetSysColor(COLOR_BTNTEXT);
+            SendMessage(hwnd, EM_SETSEL, 0, -1);
+            SendMessage(hwnd, EM_SETCHARFORMAT, SCF_SELECTION, (LPARAM)&cf);
+            SendMessage(hwnd, EM_SETSEL, (WPARAM)-1, -1);
+            pos = LOWORD(SendMessage(hwnd, EM_GETSEL, 0, 0));
+            SendMessage(hwnd, EM_SETSEL, pos - 1, pos);
+            SendMessage(hwnd, EM_REPLACESEL, 0, (LPARAM)"");
+            SendMessage(hwnd, EM_SETSEL, 0, 0);
         }
-        break;
+    }
+    break;
 
     case WM_COMMAND:
         switch (wParam)
@@ -985,12 +998,12 @@ INT_PTR FAR PASCAL UsageDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM l
 }
 
 // --------------------------------------------------------------- //
-// 
+//
 // Function: OurLoadLibrary
 //
 // Purpose: Load the Kernel32.dll into memory
 //          Ensuring we load from the system32 directory
-// 
+//
 // --------------------------------------------------------------- //
 HMODULE OurLoadLibrary(LPSTR lpDll)
 {
@@ -1028,12 +1041,12 @@ HMODULE OurLoadLibrary(LPSTR lpDll)
 }
 void
 sdkdiff_usage(
-              LPSTR msg
-              )
+    LPSTR msg
+)
 {
     INT_PTR retval;
     UINT fuStyle =  MB_ICONINFORMATION|MB_OKCANCEL;
-	HRESULT hr;
+    HRESULT hr;
 
 
     if (NULL != msg)
@@ -1043,9 +1056,9 @@ sdkdiff_usage(
         // since msg may be a pointer returned by LoadRcString, copy it off so
         // we don't stomp on the string when we load IDS_SDKDIFF_USAGE.
         hr = StringCchCopy(Usage, 4096, msg);
-		if (FAILED(hr))
+        if (FAILED(hr))
         {
-			OutputError(hr, IDS_SAFE_COPY);
+            OutputError(hr, IDS_SAFE_COPY);
         }
         msg = Usage;
 
@@ -1093,19 +1106,19 @@ sdkdiff_usage(
 */
 char *
 GetNextToken(
-             char * Tok
-             )
+    char * Tok
+)
 {
     static char * Source;     // The address of the original source string
-                              // which gets progressively mangled
+    // which gets progressively mangled
 
     static char RetBuff[512]; // We will build results in here
     static char *Ret;         // We build the results here (in RetBuff)
-                              // but moved along each time.
+    // but moved along each time.
 
     static char * p;       // the next char to parse in Source
-                           // NULL if none left.
-	HRESULT hr;
+    // NULL if none left.
+    HRESULT hr;
 
     // Quotes are a nuisance (they are the whole reason why strtok
     // wouldn't work).  If the string starts with quotes then we potentially
@@ -1120,14 +1133,19 @@ GetNextToken(
 
 
     // cache the Source if a "first time" call.  Kill the "finished" case.
-    if (Tok!=NULL) {
+    if (Tok!=NULL)
+    {
         Source = Tok;
         Ret = RetBuff;
         RetBuff[0] = '\0';
         p = Source;
-    } else if (p==NULL) {
+    }
+    else if (p==NULL)
+    {
         return NULL;          // finished
-    } else {
+    }
+    else
+    {
         Ret +=strlen(Ret)+1;  // slide it past last time's stuff
     }
 
@@ -1136,48 +1154,62 @@ GetNextToken(
     // from here on Tok is used as a temporary.
 
     // keep taking sections and adding them to the start of Source
-    for (; ; ) {
+    for (; ; )
+    {
 
         // for each possibility we grow Ret and move p on.
-        if (*p=='\"') {
+        if (*p=='\"')
+        {
             ++p;
             Tok = My_mbschr(p, '"');
-            if (Tok==NULL) {
+            if (Tok==NULL)
+            {
                 hr = StringCchCat(Ret, 512, p);
-				if (FAILED(hr)) {
-					OutputError(hr, IDS_SAFE_CAT);
-					return(NULL);
-				}
+                if (FAILED(hr))
+                {
+                    OutputError(hr, IDS_SAFE_CAT);
+                    return(NULL);
+                }
                 p = NULL;
                 return Ret;
-            } else {
+            }
+            else
+            {
                 *Tok = '\0';    // split the section off, replaceing the "
                 hr = StringCchCat(Ret, 512, p); // add it to the result
-				if (FAILED(hr)) {
-					OutputError(hr, IDS_SAFE_CAT);
-					return (NULL);
-				}
+                if (FAILED(hr))
+                {
+                    OutputError(hr, IDS_SAFE_CAT);
+                    return (NULL);
+                }
                 p = Tok+1;      // move past the quote
             }
-        } else {
+        }
+        else
+        {
             int i = (int)strcspn(p," \"");   // search for space or quote
-            if (p[i]=='\0') {
+            if (p[i]=='\0')
+            {
                 // It's fallen off the end
                 hr = StringCchCat(Ret, 512, p);
-				if (FAILED(hr)) {
-					OutputError(hr, IDS_SAFE_CAT);
-					return (NULL);
-				}
+                if (FAILED(hr))
+                {
+                    OutputError(hr, IDS_SAFE_CAT);
+                    return (NULL);
+                }
                 p = NULL;
                 return Ret;
-            } else if (p[i]==' ') {
+            }
+            else if (p[i]==' ')
+            {
                 // We've hit a genuine delimiting space
                 p[i] = '\0';
                 hr = StringCchCat(Ret,512, p);
-				if (FAILED(hr)) {
-					OutputError(hr, IDS_SAFE_CAT);
-					return (NULL);
-				}
+                if (FAILED(hr))
+                {
+                    OutputError(hr, IDS_SAFE_CAT);
+                    return (NULL);
+                }
                 p +=i+1;
 
                 // strip trailing spaces (leading spaces for next time)
@@ -1187,14 +1219,17 @@ GetNextToken(
                     p = NULL;
 
                 return Ret;
-            } else {
+            }
+            else
+            {
                 // we've hit a quote
                 p[i] = '\0';
                 hr = StringCchCat(Ret, 512, p);
-				if (FAILED(hr)) {
-					OutputError(hr, IDS_SAFE_CAT);
-					return (NULL);
-				}
+                if (FAILED(hr))
+                {
+                    OutputError(hr, IDS_SAFE_CAT);
+                    return (NULL);
+                }
                 p[i] = '\"';     // put it back so that we can find it again
                 p +=i;           // aim at it and iterate
             }
@@ -1228,11 +1263,11 @@ GetNextToken(
  */
 void
 ParseArgs(
-          char * lpCmdLine
-          )
+    char * lpCmdLine
+)
 {
     PTHREADARGS ta;
- 
+
     BOOL fAllowTwoPaths = TRUE;         // FALSE means -l or -lr was used
     BOOL fReverse = FALSE;              // -lr means reverse
     BOOL fDeepDefault = TRUE;
@@ -1246,9 +1281,9 @@ ParseArgs(
      */
     ta = (PTHREADARGS) HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(THREADARGS));
     if (ta == NULL)
-		return;
+        return;
 
-	ta->first = NULL;
+    ta->first = NULL;
     ta->second = NULL;
     ta->savelist = NULL;
     ta->savecomp = NULL;
@@ -1260,7 +1295,8 @@ ParseArgs(
 
     tok = GetNextToken(lpCmdLine);
 
-    while ((tok!=NULL) && (lstrlen(tok) > 0)) {
+    while ((tok!=NULL) && (lstrlen(tok) > 0))
+    {
 
         if (tok[0] == '/' && tok[1] == '/')
         {
@@ -1268,206 +1304,237 @@ ParseArgs(
         }
 
         /* is this an option ? */
-        if ((tok[0] == '-') || (tok[0] == '/')) {
-            switch (tok[1]) {
-                case 's':
-                case 'S':
-                    /* read letters for the save option: s,l,r,d */
-                    for (tok+=2; *tok != '\0'; ++tok) {
-                        switch (*tok) {
-                            case 's':
-                            case 'S':
-                                ta->listopts |= INCLUDE_SAME;
-                                break;
-                            case 'l':
-                            case 'L':
-                                ta->listopts |= INCLUDE_LEFTONLY;
-                                break;
-                            case 'r':
-                            case 'R':
-                                ta->listopts |= INCLUDE_RIGHTONLY;
-                                break;
-                            case 'd':
-                            case 'D':
-                                ta->listopts |= INCLUDE_DIFFER;
-                                break;
-                            case 'x':
-                            case 'X':
-                                ta->fExit = TRUE;
-                                break;
-                            default:
-                                idsError = 0;
-                                goto LUsage;
-                        }
-                    }
-
-                    if (ta->listopts == 0) {
-                        /* default to left and differ */
-                        ta->listopts = (INCLUDE_LEFTONLY) | (INCLUDE_DIFFER);
-                    }
-                    ta->savelist = GetNextToken(NULL);
-                    break;
-                case 'f':
-                case 'F':
-					/* read letters for the save option: s,l,r,d,e,i */
-                    for(tok = &tok[2]; *tok != '\0'; ++tok) {
-                        switch(*tok) {
-                        case 'i':
-                        case 'I':
-                                ta->compopts |= INCLUDE_SAME;
-                                break;
-                        case 'l':
-                        case 'L':
-                                ta->compopts |= INCLUDE_LEFTONLY;
-                                break;
-                        case 'r':
-                        case 'R':
-                                ta->compopts |= INCLUDE_RIGHTONLY;
-                                break;
-                        case 'f':
-                        case 'F':
-                                ta->compopts |= INCLUDE_MOVEDLEFT;
-                                break;
-                        case 'g':
-                        case 'G':
-                                ta->compopts |= INCLUDE_MOVEDRIGHT;
-                                break;
-                        case 's':
-                        case 'S':
-                                ta->compopts |= INCLUDE_SIMILARLEFT;
-                                break;
-                        case 'a':
-                        case 'A':
-                                ta->compopts |= INCLUDE_SIMILARRIGHT;
-                                break;
-                        case 'x':
-                        case 'X':
-                                ta->fExit = TRUE;
-                                break;
-                        default:
-                                idsError = 0;
-                                goto LUsage;
-                        }
-                    }
-
-                    if (ta->compopts == 0) {
-                            /* default to showing all diffs (everything but same) */
-                            ta->compopts = INCLUDE_LEFTONLY | INCLUDE_RIGHTONLY
-                                         | INCLUDE_DIFFER | INCLUDE_MOVEDLEFT
-                                         | INCLUDE_MOVEDRIGHT;
-                    }
-                    ta->savecomp = GetNextToken(NULL);
-                    break;
-                case 'i':
-                case 'I':
-                    ta->fInputFile = TRUE;
-                    if (tok[2] == '1')
+        if ((tok[0] == '-') || (tok[0] == '/'))
+        {
+            switch (tok[1])
+            {
+            case 's':
+            case 'S':
+                /* read letters for the save option: s,l,r,d */
+                for (tok+=2; *tok != '\0'; ++tok)
+                {
+                    switch (*tok)
                     {
-                        ta->fInputFileSingle = TRUE;
-                        tok++;
-                    }
-                    tok += 2;
-                    // allow (but don't require) a space between '-I' and the
-                    // 'inputfilename' argument.
-                    if (!*tok)
-                        tok = GetNextToken(NULL);
-                    if (!tok || !*tok)
-                    {
-                        idsError = IDS_ERROR_IARGS;
+                    case 's':
+                    case 'S':
+                        ta->listopts |= INCLUDE_SAME;
+                        break;
+                    case 'l':
+                    case 'L':
+                        ta->listopts |= INCLUDE_LEFTONLY;
+                        break;
+                    case 'r':
+                    case 'R':
+                        ta->listopts |= INCLUDE_RIGHTONLY;
+                        break;
+                    case 'd':
+                    case 'D':
+                        ta->listopts |= INCLUDE_DIFFER;
+                        break;
+                    case 'x':
+                    case 'X':
+                        ta->fExit = TRUE;
+                        break;
+                    default:
+                        idsError = 0;
                         goto LUsage;
                     }
-                    break;
-                case 'n':
-                case 'N':
-                    ta->notify = GetNextToken(NULL);
-                    break;
-                case 't':
-                case 'T':
-                    ta->fDeep = TRUE;
-                    break;
-                case 'd':
-                case 'D':
-                    ta->fDeep = FALSE;     // This directory only
-                    fDeepDefault = FALSE;
-                    break;
-                case 'o':
-                case 'O':
-                    fAutoExpand = FALSE;
-                    break;
-                case 'p':
-                case 'P':
-                    gbPerverseCompare = TRUE;
-                    break;
-                case 'x':
-                case 'X':
+                }
+
+                if (ta->listopts == 0)
+                {
+                    /* default to left and differ */
+                    ta->listopts = (INCLUDE_LEFTONLY) | (INCLUDE_DIFFER);
+                }
+                ta->savelist = GetNextToken(NULL);
+                break;
+            case 'f':
+            case 'F':
+                /* read letters for the save option: s,l,r,d,e,i */
+                for(tok = &tok[2]; *tok != '\0'; ++tok)
+                {
+                    switch(*tok)
                     {
-                        BOOL track;
-                        char *c = &tok[2];
-                        if (*c == '\0') {
-                            TrackLeftOnly = FALSE;
-                            TrackRightOnly = FALSE;
-                            TrackSame = FALSE;
-                            TrackDifferent = TRUE;
-                            TrackReadonly = TRUE;
-                            break;
-                        }
-                        track = FALSE;
-                        while (*c != '\0') {
-                            if (toupper(*c) == 'L') {
-                                TrackLeftOnly = track;
-                                track = FALSE;
-                            } else if (toupper(*c) == 'R') {
-                                TrackRightOnly = track;
-                                track = FALSE;
-                            } else if (toupper(*c) == 'S') {
-                                TrackSame = track;
-                                track = FALSE;
-                            } else if (toupper(*c) == 'D') {
-                                TrackDifferent = track;
-                                track = FALSE;
-                            } else if (toupper(*c) == 'O') {
-                                TrackReadonly = track;
-                                track = FALSE;
-                            } else if (toupper(*c) == 'I') {
-                                track = FALSE;
-                            } else if (toupper(*c) == '-') {
-                                track = TRUE;
-                            } else {
-                                idsError = 0;
-                                goto LUsage;
-                            }
-                            c++;
-                        }
+                    case 'i':
+                    case 'I':
+                        ta->compopts |= INCLUDE_SAME;
                         break;
+                    case 'l':
+                    case 'L':
+                        ta->compopts |= INCLUDE_LEFTONLY;
+                        break;
+                    case 'r':
+                    case 'R':
+                        ta->compopts |= INCLUDE_RIGHTONLY;
+                        break;
+                    case 'f':
+                    case 'F':
+                        ta->compopts |= INCLUDE_MOVEDLEFT;
+                        break;
+                    case 'g':
+                    case 'G':
+                        ta->compopts |= INCLUDE_MOVEDRIGHT;
+                        break;
+                    case 's':
+                    case 'S':
+                        ta->compopts |= INCLUDE_SIMILARLEFT;
+                        break;
+                    case 'a':
+                    case 'A':
+                        ta->compopts |= INCLUDE_SIMILARRIGHT;
+                        break;
+                    case 'x':
+                    case 'X':
+                        ta->fExit = TRUE;
+                        break;
+                    default:
+                        idsError = 0;
+                        goto LUsage;
                     }
+                }
+
+                if (ta->compopts == 0)
+                {
+                    /* default to showing all diffs (everything but same) */
+                    ta->compopts = INCLUDE_LEFTONLY | INCLUDE_RIGHTONLY
+                                   | INCLUDE_DIFFER | INCLUDE_MOVEDLEFT
+                                   | INCLUDE_MOVEDRIGHT;
+                }
+                ta->savecomp = GetNextToken(NULL);
+                break;
+            case 'i':
+            case 'I':
+                ta->fInputFile = TRUE;
+                if (tok[2] == '1')
+                {
+                    ta->fInputFileSingle = TRUE;
+                    tok++;
+                }
+                tok += 2;
+                // allow (but don't require) a space between '-I' and the
+                // 'inputfilename' argument.
+                if (!*tok)
+                    tok = GetNextToken(NULL);
+                if (!tok || !*tok)
+                {
+                    idsError = IDS_ERROR_IARGS;
+                    goto LUsage;
+                }
+                break;
+            case 'n':
+            case 'N':
+                ta->notify = GetNextToken(NULL);
+                break;
+            case 't':
+            case 'T':
+                ta->fDeep = TRUE;
+                break;
+            case 'd':
+            case 'D':
+                ta->fDeep = FALSE;     // This directory only
+                fDeepDefault = FALSE;
+                break;
+            case 'o':
+            case 'O':
+                fAutoExpand = FALSE;
+                break;
+            case 'p':
+            case 'P':
+                gbPerverseCompare = TRUE;
+                break;
+            case 'x':
+            case 'X':
+            {
+                BOOL track;
+                char *c = &tok[2];
+                if (*c == '\0')
+                {
+                    TrackLeftOnly = FALSE;
+                    TrackRightOnly = FALSE;
+                    TrackSame = FALSE;
+                    TrackDifferent = TRUE;
+                    TrackReadonly = TRUE;
+                    break;
+                }
+                track = FALSE;
+                while (*c != '\0')
+                {
+                    if (toupper(*c) == 'L')
+                    {
+                        TrackLeftOnly = track;
+                        track = FALSE;
+                    }
+                    else if (toupper(*c) == 'R')
+                    {
+                        TrackRightOnly = track;
+                        track = FALSE;
+                    }
+                    else if (toupper(*c) == 'S')
+                    {
+                        TrackSame = track;
+                        track = FALSE;
+                    }
+                    else if (toupper(*c) == 'D')
+                    {
+                        TrackDifferent = track;
+                        track = FALSE;
+                    }
+                    else if (toupper(*c) == 'O')
+                    {
+                        TrackReadonly = track;
+                        track = FALSE;
+                    }
+                    else if (toupper(*c) == 'I')
+                    {
+                        track = FALSE;
+                    }
+                    else if (toupper(*c) == '-')
+                    {
+                        track = TRUE;
+                    }
+                    else
+                    {
+                        idsError = 0;
+                        goto LUsage;
+                    }
+                    c++;
+                }
+                break;
+            }
 
 #ifdef DEBUG
-                case '!':
-                    DebugBreak();
-                    break;
+            case '!':
+                DebugBreak();
+                break;
 #endif
 
-                case '?':
-                    {
-                        int j = 0;
-                        sdkdiff_usage(NULL);
-                        for (++tok; tok[1] != '\0'; ++tok)
-                            if ('?'==*tok) ++j;
+            case '?':
+            {
+                int j = 0;
+                sdkdiff_usage(NULL);
+                for (++tok; tok[1] != '\0'; ++tok)
+                    if ('?'==*tok) ++j;
 
-                        if (2==j) {
-                            WriteProfileString(APPNAME, "SYSUK", "1");
-                        }
-                        return;
-                    }
-                default:
-                    idsError = 0;
-                    goto LUsage;
+                if (2==j)
+                {
+                    WriteProfileString(APPNAME, "SYSUK", "1");
+                }
+                return;
             }
-        } else {
-        LFile:
-            if (ta->first == NULL) {
+            default:
+                idsError = 0;
+                goto LUsage;
+            }
+        }
+        else
+        {
+LFile:
+            if (ta->first == NULL)
+            {
                 ta->first = tok;
-            } else {
+            }
+            else
+            {
                 ta->second = tok;
             }
         }
@@ -1483,7 +1550,7 @@ ParseArgs(
     /* set the correct depth */
     if (ta->fDeep)
         ;                       /* explicitly set -- leave it alone */
-   
+
     else ta->fDeep = fDeepDefault;  /* global default */
 
     if (!ta->fInputFile)
@@ -1503,7 +1570,8 @@ ParseArgs(
     SetBusy();
 
     /* minimise the window if -s flag given */
-    if (ta->savelist != NULL || ta->savecomp != NULL) {
+    if (ta->savelist != NULL || ta->savecomp != NULL)
+    {
         ShowWindow(hwndClient, SW_MINIMIZE);
     }
 
@@ -1518,7 +1586,7 @@ ParseArgs(
     ghThread = CreateThread(NULL, 0, wd_initial, (LPVOID) ta,
                             0, &threadid);
     if (ghThread == NULL)
-	{
+    {
         wd_initial( (LPVOID) ta);
     }
 
@@ -1608,8 +1676,10 @@ Poll(void)
      */
 
     /* message loop */
-    while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE)) {
-        if (!TranslateAccelerator(hwndClient, haccel, &msg)) {
+    while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
+    {
+        if (!TranslateAccelerator(hwndClient, haccel, &msg))
+        {
             TranslateMessage(&msg);
             DispatchMessage(&msg);
         }
@@ -1622,8 +1692,8 @@ Poll(void)
 
 void
 DoResize(
-         HWND hWnd
-         )
+    HWND hWnd
+)
 {
     RECT rc;
     int bar_width;
@@ -1634,14 +1704,17 @@ DoResize(
     bar_width = (rc.right - rc.left) * BAR_WIN_WIDTH / 100;
 
     /* bar window is hidden unless in expand mode */
-    if ((DisplayMode == MODE_EXPAND) && (picture_mode)) {
+    if ((DisplayMode == MODE_EXPAND) && (picture_mode))
+    {
         MoveWindow(hwndBar, 0, status_height,
                    bar_width, rc.bottom - status_height, TRUE);
         MoveWindow(hwndRCD, bar_width, status_height,
                    (rc.right - rc.left) - bar_width,
                    rc.bottom - status_height, TRUE);
         ShowWindow(hwndBar, SW_SHOW);
-    } else {
+    }
+    else
+    {
         MoveWindow(hwndRCD, 0, status_height, (rc.right - rc.left),
                    rc.bottom - status_height, TRUE);
         ShowWindow(hwndBar, SW_HIDE);
@@ -1652,31 +1725,33 @@ DoResize(
 INT_PTR
 APIENTRY
 AboutBox(
-         HWND hDlg,
-         unsigned message,
-         WPARAM wParam,
-         LPARAM lParam
-         )
+    HWND hDlg,
+    unsigned message,
+    WPARAM wParam,
+    LPARAM lParam
+)
 {
     char ch[256];
-	HRESULT hr;
+    HRESULT hr;
 
-    switch (message) {
+    switch (message)
+    {
 
-        case WM_INITDIALOG:
-            hr = StringCchPrintf(ch, 256, "%d.%02d", Version, SubVersion);
-			if (FAILED(hr))
-				OutputError(hr, IDS_SAFE_PRINTF);
-            SetDlgItemText(hDlg, IDD_VERSION, ch);
+    case WM_INITDIALOG:
+        hr = StringCchPrintf(ch, 256, "%d.%02d", Version, SubVersion);
+        if (FAILED(hr))
+            OutputError(hr, IDS_SAFE_PRINTF);
+        SetDlgItemText(hDlg, IDD_VERSION, ch);
+        return(TRUE);
+
+    case WM_COMMAND:
+        switch (GET_WM_COMMAND_ID(wParam, lParam))
+        {
+        case IDOK:
+            EndDialog(hDlg, 0);
             return(TRUE);
-
-        case WM_COMMAND:
-            switch (GET_WM_COMMAND_ID(wParam, lParam)) {
-                case IDOK:
-                    EndDialog(hDlg, 0);
-                    return(TRUE);
-            }
-            break;
+        }
+        break;
     }
     return(FALSE);
 }
@@ -1692,7 +1767,7 @@ DoPrint(void)
     PrintContext context;
     TCHAR szPage[50];
     TCHAR szTitle[20];
-	HRESULT hr;
+    HRESULT hr;
 
     /* print context contains the header and footer. Use the
      * default margins and printer selection
@@ -1710,9 +1785,12 @@ DoPrint(void)
     context.id = TABID_PRINTER;
 
     /* header is filenames or just SdkDiff if no names known*/
-    if (strlen(AppTitle) > 0) {
+    if (strlen(AppTitle) > 0)
+    {
         head.ptext = AppTitle;
-    } else {
+    }
+    else
+    {
         head.ptext = (LPSTR)szSdkDiff;
     }
 
@@ -1722,21 +1800,24 @@ DoPrint(void)
     head.props.valid = P_ALIGN;
     head.props.alignment = P_CENTRE;
     hr = StringCchCopy(szPage, 50, LoadRcString(IDS_PAGE));
-	if (FAILED(hr))
-		OutputError(hr, IDS_SAFE_COPY);
+    if (FAILED(hr))
+        OutputError(hr, IDS_SAFE_COPY);
     foot.ptext = (LPSTR)szPage;
     foot.props.valid = P_ALIGN;
     foot.props.alignment = P_RIGHT;
 
-    if ( SendMessage(hwndRCD, TM_PRINT, 0, (LPARAM) &context)) {
+    if ( SendMessage(hwndRCD, TM_PRINT, 0, (LPARAM) &context))
+    {
         Trace_Status(LoadRcString(IDS_SENT_TO_PRINTER));
-    } else {
+    }
+    else
+    {
         sdkdiff_UI(TRUE);
         hr = StringCchCopy(szTitle, 20, LoadRcString(IDS_SDKDIFF_ERROR));
-		if (FAILED(hr))
-			OutputError(hr, IDS_SAFE_COPY);
-		MessageBox(hwndClient, LoadRcString(IDS_UNABLE_TO_PRINT),
-                szTitle, MB_ICONEXCLAMATION);
+        if (FAILED(hr))
+            OutputError(hr, IDS_SAFE_COPY);
+        MessageBox(hwndClient, LoadRcString(IDS_UNABLE_TO_PRINT),
+                   szTitle, MB_ICONEXCLAMATION);
         sdkdiff_UI(FALSE);
     }
 }
@@ -1771,10 +1852,13 @@ _FindNextChange(BOOL fErrorPopup, BOOL fForceAutoCenter)
 
     /* find the next 'interesting' line */
     row = view_findchange(current_view, row, TRUE);
-    if (row >= 0) {
+    if (row >= 0)
+    {
         SetSelection(row, 1, dyRowsFromTop);
         return(TRUE);
-    } else if (fErrorPopup) {
+    }
+    else if (fErrorPopup)
+    {
         sdkdiff_UI(TRUE);
         MessageBox(hwndClient, LoadRcString(IDS_NO_MORE_CHANGES), szSdkDiff,
                    MB_ICONINFORMATION|MB_OK);
@@ -1807,10 +1891,13 @@ _FindPrevChange(BOOL fErrorPopup, BOOL fForceAutoCenter)
 
     /* find the previous 'interesting' line */
     row = view_findchange(current_view, row, FALSE);
-    if (row >= 0) {
+    if (row >= 0)
+    {
         SetSelection(row, 1, dyRowsFromTop);
         return(TRUE);
-    } else if (fErrorPopup) {
+    }
+    else if (fErrorPopup)
+    {
         sdkdiff_UI(TRUE);
         MessageBox(hwndClient, LoadRcString(IDS_NO_PREV_CHANGES), szSdkDiff,
                    MB_ICONINFORMATION|MB_OK);
@@ -1824,14 +1911,15 @@ _FindPrevChange(BOOL fErrorPopup, BOOL fForceAutoCenter)
 // mapping is not in use
 BOOL
 WriteProfileInt(
-                LPSTR AppName,
-                LPSTR Key,
-                int Int
-                )
-{       char Str[40];
+    LPSTR AppName,
+    LPSTR Key,
+    int Int
+)
+{
+    char Str[40];
     HRESULT hr = StringCchPrintf(Str, 40, szD, Int);
-	if (FAILED(hr))
-		OutputError(hr, IDS_SAFE_PRINTF);
+    if (FAILED(hr))
+        OutputError(hr, IDS_SAFE_PRINTF);
     return WriteProfileString(AppName, Key, Str);
 
 } /* WriteProfileInt */
@@ -1841,17 +1929,19 @@ WriteProfileInt(
 /* switch to expand view of the selected line */
 BOOL
 ToExpand(
-         HWND hwnd
-         )
+    HWND hwnd
+)
 {
 
 
-    if (selection < 0) {
+    if (selection < 0)
+    {
         return(FALSE);
     }
 
     // nothing to do if already expanded
-    if (view_isexpanded(current_view)) {
+    if (view_isexpanded(current_view))
+    {
         return(FALSE);
     }
 
@@ -1861,13 +1951,15 @@ ToExpand(
     view_expandstart(current_view);
 
 
-    if (!view_isexpanded(current_view)) {
+    if (!view_isexpanded(current_view))
+    {
         /* save the current outline size and position */
         WINDOWPLACEMENT wp;
 
         wp.length = sizeof(wp);
 
-        if (GetWindowPlacement(hwndClient,&wp)) {
+        if (GetWindowPlacement(hwndClient,&wp))
+        {
             WriteProfileInt(APPNAME, szOutlineShowCmd, wp.showCmd);
             WriteProfileInt(APPNAME, szOutlineMaxX, wp.ptMaxPosition.x);
             WriteProfileInt(APPNAME, szOutlineMaxY, wp.ptMaxPosition.y);
@@ -1879,33 +1971,36 @@ ToExpand(
         }
 
         /* restore the previous expanded size and position, if any */
-        if (GetProfileInt(APPNAME, szExpandedSaved, 0)) {
+        if (GetProfileInt(APPNAME, szExpandedSaved, 0))
+        {
             wp.flags                   = 0;
             wp.showCmd
-            = GetProfileInt( APPNAME, szExpandShowCmd
-                             , SW_SHOWMAXIMIZED);
+                = GetProfileInt( APPNAME, szExpandShowCmd
+                                 , SW_SHOWMAXIMIZED);
             wp.ptMaxPosition.x
-            = GetProfileInt( APPNAME, szExpandMaxX, 0);
+                = GetProfileInt( APPNAME, szExpandMaxX, 0);
             wp.ptMaxPosition.y
-            = GetProfileInt( APPNAME, szExpandMaxY, 0);
+                = GetProfileInt( APPNAME, szExpandMaxY, 0);
             wp.rcNormalPosition.left
-            = GetProfileInt( APPNAME, szExpandNormLeft
-                             , wp.rcNormalPosition.left);
+                = GetProfileInt( APPNAME, szExpandNormLeft
+                                 , wp.rcNormalPosition.left);
             wp.rcNormalPosition.top
-            = GetProfileInt( APPNAME, szExpandNormTop
-                             , wp.rcNormalPosition.top);
+                = GetProfileInt( APPNAME, szExpandNormTop
+                                 , wp.rcNormalPosition.top);
             wp.rcNormalPosition.right
-            = GetProfileInt( APPNAME, szExpandNormRight
-                             , wp.rcNormalPosition.right);
+                = GetProfileInt( APPNAME, szExpandNormRight
+                                 , wp.rcNormalPosition.right);
             wp.rcNormalPosition.bottom
-            = GetProfileInt( APPNAME, szExpandNormBottom
-                             , wp.rcNormalPosition.bottom);
+                = GetProfileInt( APPNAME, szExpandNormBottom
+                                 , wp.rcNormalPosition.bottom);
             SetWindowPlacement(hwndClient,&wp);
-        } else ShowWindow(hwndClient, SW_SHOWMAXIMIZED);
+        }
+        else ShowWindow(hwndClient, SW_SHOWMAXIMIZED);
     }
 
     /*change the view mapping to expand mode */
-    if (view_expand(current_view, selection)) {
+    if (view_expand(current_view, selection))
+    {
 
         /* ok - we now have an expanded view - change status
          * to show this
@@ -1918,7 +2013,8 @@ ToExpand(
 
 
         /* change button,status text-if we are not still busy*/
-        if (!fBusy) {
+        if (!fBusy)
+        {
             TCHAR szBuf[10];
             /* the status field when we are expanded shows the
              * tag field (normally the file name) for the
@@ -1926,15 +2022,16 @@ ToExpand(
              */
             SetStatus(view_getcurrenttag(current_view) );
             HRESULT hr = StringCchCopy(szBuf, 10, LoadRcString(IDS_OUTLINE));
-			if (FAILED(hr))
-				OutputError(hr, IDS_SAFE_COPY);
+            if (FAILED(hr))
+                OutputError(hr, IDS_SAFE_COPY);
             SetButtonText(szBuf);
         }
 
         // Skip to the first change.  (But don't do this if the first
         // line of the file itself has changed; otherwise we would skip
         // over it!)
-        if (view_getrowstate(current_view, 0) == STATE_SAME) {
+        if (view_getrowstate(current_view, 0) == STATE_SAME)
+        {
             _FindNextChange(FALSE, TRUE);
         }
 
@@ -1947,8 +2044,8 @@ ToExpand(
  */
 void
 ToOutline(
-          HWND hwnd
-          )
+    HWND hwnd
+)
 {
     // if current_view is NULL, don't access it with view_xxx functions.
     if (!current_view)
@@ -1958,16 +2055,19 @@ ToOutline(
      * if we are in the middle of expanding, ignore the
      * key stroke - user can try again later
      */
-    if (view_expanding(current_view)) {
+    if (view_expanding(current_view))
+    {
         return;
     }
 
-    if (view_isexpanded(current_view)) {
+    if (view_isexpanded(current_view))
+    {
         /* save the current expanded size and position */
         WINDOWPLACEMENT wp;
 
         wp.length = sizeof(wp);
-        if (GetWindowPlacement(hwndClient,&wp)) {
+        if (GetWindowPlacement(hwndClient,&wp))
+        {
             WriteProfileInt(APPNAME, szExpandShowCmd, wp.showCmd);
             WriteProfileInt(APPNAME, szExpandMaxX, wp.ptMaxPosition.x);
             WriteProfileInt(APPNAME, szExpandMaxY, wp.ptMaxPosition.y);
@@ -1979,29 +2079,32 @@ ToOutline(
         }
 
         /* restore the previous expanded size and position, if any */
-        if (GetProfileInt(APPNAME, szOutlineSaved, 0)) {
+        if (GetProfileInt(APPNAME, szOutlineSaved, 0))
+        {
             wp.flags = 0;
             wp.showCmd
-            = GetProfileInt( APPNAME, szOutlineShowCmd
-                             , SW_SHOWNORMAL);
+                = GetProfileInt( APPNAME, szOutlineShowCmd
+                                 , SW_SHOWNORMAL);
             wp.ptMaxPosition.x
-            = GetProfileInt( APPNAME, szOutlineMaxX, 0);
+                = GetProfileInt( APPNAME, szOutlineMaxX, 0);
             wp.ptMaxPosition.y
-            = GetProfileInt( APPNAME, szOutlineMaxY, 0);
+                = GetProfileInt( APPNAME, szOutlineMaxY, 0);
             wp.rcNormalPosition.left
-            = GetProfileInt( APPNAME, szOutlineNormLeft
-                             , wp.rcNormalPosition.left);
+                = GetProfileInt( APPNAME, szOutlineNormLeft
+                                 , wp.rcNormalPosition.left);
             wp.rcNormalPosition.top
-            = GetProfileInt( APPNAME, szOutlineNormTop
-                             , wp.rcNormalPosition.top);
+                = GetProfileInt( APPNAME, szOutlineNormTop
+                                 , wp.rcNormalPosition.top);
             wp.rcNormalPosition.right
-            = GetProfileInt( APPNAME, szOutlineNormRight
-                             , wp.rcNormalPosition.right);
+                = GetProfileInt( APPNAME, szOutlineNormRight
+                                 , wp.rcNormalPosition.right);
             wp.rcNormalPosition.bottom
-            = GetProfileInt( APPNAME, szOutlineNormBottom
-                             , wp.rcNormalPosition.bottom);
+                = GetProfileInt( APPNAME, szOutlineNormBottom
+                                 , wp.rcNormalPosition.bottom);
             SetWindowPlacement(hwndClient,&wp);
-        } else {
+        }
+        else
+        {
             ShowWindow(hwndClient, SW_SHOWNORMAL);
         }
     }
@@ -2016,11 +2119,12 @@ ToOutline(
 
 
     /* change label on button */
-    if (!fBusy) {
+    if (!fBusy)
+    {
         TCHAR szBuf[8];
         HRESULT hr = StringCchCopy(szBuf, 8, LoadRcString(IDS_EXPAND));
-		if (FAILED(hr))
-			OutputError(hr, IDS_SAFE_COPY);
+        if (FAILED(hr))
+            OutputError(hr, IDS_SAFE_COPY);
         SetButtonText(szBuf);
         SetStatus(NULL);
     }
@@ -2035,49 +2139,64 @@ ToOutline(
  */
 BOOL
 ToMoved(
-        HWND hwnd,
-        BOOL bMove
-        )
+    HWND hwnd,
+    BOOL bMove
+)
 {
     BOOL bIsLeft;
     int linenr, state;
     long i, total;
 
-    if (DisplayMode != MODE_EXPAND) {
+    if (DisplayMode != MODE_EXPAND)
+    {
         return(FALSE);
     }
-    if (selection < 0) {
+    if (selection < 0)
+    {
         return(FALSE);
     }
 
     state = view_getstate(current_view, selection);
-    if (state == STATE_MOVEDLEFT || state == STATE_SIMILARLEFT) {
+    if (state == STATE_MOVEDLEFT || state == STATE_SIMILARLEFT)
+    {
         bIsLeft = TRUE;
         /* get the linenr of the other copy */
         linenr = abs(view_getlinenr_right(current_view, selection));
-    } else if (state == STATE_MOVEDRIGHT || state == STATE_SIMILARRIGHT) {
+    }
+    else if (state == STATE_MOVEDRIGHT || state == STATE_SIMILARRIGHT)
+    {
         bIsLeft = FALSE;
         /* get the linenr of the other copy */
         linenr = abs(view_getlinenr_left(current_view, selection));
-    } else {
+    }
+    else
+    {
         /* not a moved line - so we can't find another copy */
         return(FALSE);
     }
 
     /* search the view for this line nr */
     total = view_getrowcount(current_view);
-    for (i = 0; i < total; i++) {
-        if (bIsLeft) {
-            if (linenr == view_getlinenr_right(current_view, i)) {
+    for (i = 0; i < total; i++)
+    {
+        if (bIsLeft)
+        {
+            if (linenr == view_getlinenr_right(current_view, i))
+            {
                 /* found it */
-                if (bMove) {
+                if (bMove)
+                {
                     SetSelection(i, 1, -1);
                 }
                 return(TRUE);
             }
-        } else {
-            if (linenr == view_getlinenr_left(current_view, i)) {
-                if (bMove) {
+        }
+        else
+        {
+            if (linenr == view_getlinenr_left(current_view, i))
+            {
+                if (bMove)
+                {
                     SetSelection(i, 1, -1);
                 }
                 return(TRUE);
@@ -2090,29 +2209,37 @@ ToMoved(
 
 void
 RescanFile(
-           HWND hwnd
-           )
+    HWND hwnd
+)
 {
     COMPITEM ci=NULL;
     int iStart;
     int iEnd;
     int i;
 
-    if (selection_nrows > 0 || DisplayMode == MODE_EXPAND) {
-        if (DisplayMode == MODE_EXPAND) {
+    if (selection_nrows > 0 || DisplayMode == MODE_EXPAND)
+    {
+        if (DisplayMode == MODE_EXPAND)
+        {
             iStart = 0;
             iEnd = 1;
-        } else {
+        }
+        else
+        {
             iStart = selection;
             iEnd = iStart + selection_nrows;
         }
-        for (i = iStart; i < iEnd; i++) {
+        for (i = iStart; i < iEnd; i++)
+        {
             ci = view_getitem(current_view, i);
-            if (ci != NULL) {
+            if (ci != NULL)
+            {
                 compitem_rescan(ci);
             }
         }
-    } else {
+    }
+    else
+    {
         sdkdiff_UI(TRUE);
         MessageBox(hwndClient, LoadRcString(IDS_NOTHING_RESCANNED),
                    szSdkDiff, MB_ICONSTOP|MB_OK);
@@ -2133,8 +2260,8 @@ RescanFile(
  */
 LONG WINAPI
 do_editfile(
-            PEDITARGS pe
-            )
+    PEDITARGS pe
+)
 {
     VIEW view = pe->view;
     int option = pe->option;
@@ -2148,10 +2275,11 @@ do_editfile(
     char * pIn = editor_cmdline;
     STARTUPINFO si;
     PROCESS_INFORMATION pi;
-	HRESULT hr;
+    HRESULT hr;
 
     item = view_getitem(view, L_selection);
-    if (item == NULL) {
+    if (item == NULL)
+    {
         sdkdiff_UI(TRUE);
         MessageBox(hwndClient, LoadRcString(IDS_NOTHING_TO_EDIT),
                    szSdkDiff, MB_ICONSTOP|MB_OK);
@@ -2162,7 +2290,8 @@ do_editfile(
 
     fname = compitem_getfilename(view, item, option);
 
-    if ( 0 == fname ) {
+    if ( 0 == fname )
+    {
         sdkdiff_UI(TRUE);
         MessageBox(hwndClient, LoadRcString(IDS_FILE_DOESNT_EXIST),
                    szSdkDiff, MB_ICONSTOP|MB_OK);
@@ -2171,93 +2300,109 @@ do_editfile(
     }
 
     // convert the selected line into a line number within the file
-    if (L_selection > 0) {
+    if (L_selection > 0)
+    {
         selline = L_selection;
-    } else {
+    }
+    else
+    {
         // if no current selection, look for the line at top of window
         selline = (long) SendMessage(hwndRCD, TM_TOPROW, FALSE, 0);
     }
 
-    switch ( option ) {
-        case CI_LEFT:
-            do {
-                currentline = view_getlinenr_left( view, selline);
+    switch ( option )
+    {
+    case CI_LEFT:
+        do
+        {
+            currentline = view_getlinenr_left( view, selline);
 
-                // if the selected line is not in the left file,
-                // backup one line and try again until we hit the top of
-                // file or find a line that is within the left file
+            // if the selected line is not in the left file,
+            // backup one line and try again until we hit the top of
+            // file or find a line that is within the left file
 
-                if (selline > 0) {
-                    selline--;
-                }
-            } while ((currentline <= 0) && (selline > 0));
+            if (selline > 0)
+            {
+                selline--;
+            }
+        }
+        while ((currentline <= 0) && (selline > 0));
 
-            break;
+        break;
 
-        case CI_RIGHT:
-            do {
-                currentline = view_getlinenr_right( view, selline);
-                if (selline > 0) {
-                    selline--;
-                }
-            } while ((currentline <= 0) && (selline > 0));
-            break;
+    case CI_RIGHT:
+        do
+        {
+            currentline = view_getlinenr_right( view, selline);
+            if (selline > 0)
+            {
+                selline--;
+            }
+        }
+        while ((currentline <= 0) && (selline > 0));
+        break;
 
-        default:
-            currentline = 1;
-            break;
+    default:
+        currentline = 1;
+        break;
     }
 
-    if (currentline <=0) {
+    if (currentline <=0)
+    {
         currentline = 1;
     }
 
 
-    while ( *pIn ) {
-        switch ( *pIn ) {
-            case '%':
-                pIn++;
-                switch ( *pIn ) {
-                    case 'p':
-                        hr = StringCchCopy( pOut, MAX_PATH - (cmdline - pOut), fname);
-						if (FAILED(hr)) 
-                        {
-							OutputError(hr, IDS_SAFE_COPY);
-                        }
-                        while ( *pOut )
-                        {
-                            pOut++;
-                        }
-                        break;
-
-                    case 'l':
-                        hr = StringCchPrintf(pOut, MAX_PATH - (cmdline - pOut),  "%d",currentline);
-                        if (FAILED(hr))
-                        {
-                            goto error;
-                        }
-                        while ( *pOut )
-                        {
-                            pOut++;
-                        }
-                        break;
-
-                    default:
-                        if (IsDBCSLeadByte(*pIn) && *(pIn+1)) {
-                            *pOut++ = *pIn++;
-                        }
-                        *pOut++ = *pIn;
-                        break;
+    while ( *pIn )
+    {
+        switch ( *pIn )
+        {
+        case '%':
+            pIn++;
+            switch ( *pIn )
+            {
+            case 'p':
+                hr = StringCchCopy( pOut, MAX_PATH - (cmdline - pOut), fname);
+                if (FAILED(hr))
+                {
+                    OutputError(hr, IDS_SAFE_COPY);
                 }
-                pIn++;
+                while ( *pOut )
+                {
+                    pOut++;
+                }
+                break;
+
+            case 'l':
+                hr = StringCchPrintf(pOut, MAX_PATH - (cmdline - pOut),  "%d",currentline);
+                if (FAILED(hr))
+                {
+                    goto error;
+                }
+                while ( *pOut )
+                {
+                    pOut++;
+                }
                 break;
 
             default:
-                if (IsDBCSLeadByte(*pIn) && *(pIn+1)) {
+                if (IsDBCSLeadByte(*pIn) && *(pIn+1))
+                {
                     *pOut++ = *pIn++;
                 }
-                *pOut++ = *pIn++;
+                *pOut++ = *pIn;
                 break;
+            }
+            pIn++;
+            break;
+
+        default:
+            if (IsDBCSLeadByte(*pIn) && *(pIn+1))
+            {
+                *pOut++ = *pIn++;
+            }
+            *pOut++ = *pIn++;
+            break;
         }
     }
 
@@ -2269,7 +2414,7 @@ do_editfile(
     si.lpReserved2 = NULL;
     si.cbReserved2 = 0;
     si.lpDesktop = NULL;
-    si.dwFlags = STARTF_FORCEONFEEDBACK;  
+    si.dwFlags = STARTF_FORCEONFEEDBACK;
 
 
     if (!CreateProcess(NULL,
@@ -2281,7 +2426,8 @@ do_editfile(
                        NULL,
                        NULL,
                        &si,
-                       &pi)) {
+                       &pi))
+    {
         sdkdiff_UI(TRUE);
         MessageBox(hwndClient, LoadRcString(IDS_FAILED_TO_LAUNCH_EDT),
                    szSdkDiff, MB_ICONSTOP|MB_OK);
@@ -2322,7 +2468,7 @@ do_editfile(
     compitem_rescan(item);
     PostMessage(hwndClient, WM_COMMAND, IDM_UPDATE, (LPARAM)item);
 
-    error:
+error:
     HeapFree(GetProcessHeap(), NULL, pe);
 
     return 0;
@@ -2336,9 +2482,9 @@ do_editfile(
 */
 void
 do_editthread(
-              VIEW view,
-              int option
-              )
+    VIEW view,
+    int option
+)
 {
     PEDITARGS pe;
     HANDLE thread;
@@ -2346,8 +2492,8 @@ do_editthread(
 
     pe = (PEDITARGS) HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(EDITARGS));
     if (pe == NULL)
-		return;
-	pe->view = view;
+        return;
+    pe->view = view;
     pe->option = option;
     pe->selection = selection;
 
@@ -2374,19 +2520,24 @@ do_editthread(
 // a context menu.
 void
 OnRightClick(
-            HWND hWnd,
-            int x,
-            int y)
+    HWND hWnd,
+    int x,
+    int y)
 {
     HMENU L_hMenu, hSubMenu;
     POINT point;
     UINT uEnable;
 
-    if (DisplayMode == MODE_OUTLINE) {
+    if (DisplayMode == MODE_OUTLINE)
+    {
         L_hMenu = LoadMenu(hInst, szOutlineMenu);
-    } else if (DisplayMode == MODE_EXPAND) {
+    }
+    else if (DisplayMode == MODE_EXPAND)
+    {
         L_hMenu = LoadMenu(hInst, szExpandMenu);
-    } else {
+    }
+    else
+    {
         return;
     }
 
@@ -2399,10 +2550,14 @@ OnRightClick(
     // see the other copy of in this view (and only if there is a single
     // selected line)
 
-    if (DisplayMode == MODE_EXPAND) {
-        if (ToMoved(hWnd, FALSE) && (1 == selection_nrows)) {
+    if (DisplayMode == MODE_EXPAND)
+    {
+        if (ToMoved(hWnd, FALSE) && (1 == selection_nrows))
+        {
             uEnable = MF_ENABLED;
-        } else {
+        }
+        else
+        {
             uEnable = MF_GRAYED;
         }
         EnableMenuItem(L_hMenu, IDM_TOMOVED, MF_BYCOMMAND | uEnable);
@@ -2410,16 +2565,22 @@ OnRightClick(
 
 
     // disable next/prev buttons if no more changes in that direction
-    if (view_findchange(current_view, selection+1, TRUE) >=0) {
+    if (view_findchange(current_view, selection+1, TRUE) >=0)
+    {
         uEnable = MF_ENABLED;
-    } else {
+    }
+    else
+    {
         uEnable = MF_GRAYED;
     }
     EnableMenuItem(hSubMenu, IDM_FCHANGE, MF_BYCOMMAND | uEnable);
 
-    if (view_findchange(current_view, selection-1, FALSE) >=0) {
+    if (view_findchange(current_view, selection-1, FALSE) >=0)
+    {
         uEnable = MF_ENABLED;
-    } else {
+    }
+    else
+    {
         uEnable = MF_GRAYED;
     }
     EnableMenuItem(hSubMenu, IDM_FPCHANGE, MF_BYCOMMAND | uEnable);
@@ -2427,12 +2588,15 @@ OnRightClick(
     // check for left-only and right-only files and disable the appropriate
     // menu item
     // disable all editxxx and Expand if multiple files selected
-    if ((DisplayMode == MODE_OUTLINE) && (selection_nrows > 1)) {
+    if ((DisplayMode == MODE_OUTLINE) && (selection_nrows > 1))
+    {
         EnableMenuItem(hSubMenu, IDM_EDITLEFT, MF_BYCOMMAND|MF_GRAYED);
         EnableMenuItem(hSubMenu, IDM_EDITRIGHT, MF_BYCOMMAND|MF_GRAYED);
         EnableMenuItem(hSubMenu, IDM_EDITCOMP, MF_BYCOMMAND|MF_GRAYED);
         EnableMenuItem(hSubMenu, IDM_EXPAND, MF_BYCOMMAND|MF_GRAYED);
-    } else {
+    }
+    else
+    {
         COMPITEM item = view_getitem(current_view, selection);
         UINT uEnableLeft = MF_ENABLED;
         UINT uEnableRight = MF_ENABLED;
@@ -2442,18 +2606,23 @@ OnRightClick(
 
         state = compitem_getstate(item);
 
-        if (state == STATE_FILERIGHTONLY) {
+        if (state == STATE_FILERIGHTONLY)
+        {
             uEnableLeft = MF_GRAYED;
-        } else if (state == STATE_FILELEFTONLY) {
+        }
+        else if (state == STATE_FILELEFTONLY)
+        {
             uEnableRight = MF_GRAYED;
         }
 
         fd = compitem_getleftfile(item);
-        if (fd && file_IsUnicode(fd)) {
+        if (fd && file_IsUnicode(fd))
+        {
             uEnableComp = MF_GRAYED;
         }
         fd = compitem_getrightfile(item);
-        if (fd && file_IsUnicode(fd)) {
+        if (fd && file_IsUnicode(fd))
+        {
             uEnableComp = MF_GRAYED;
         }
 
@@ -2461,7 +2630,8 @@ OnRightClick(
         EnableMenuItem(hSubMenu, IDM_EDITRIGHT, MF_BYCOMMAND | uEnableRight);
         EnableMenuItem(hSubMenu, IDM_EDITCOMP, MF_BYCOMMAND | uEnableComp);
 
-        if (DisplayMode == MODE_OUTLINE) {
+        if (DisplayMode == MODE_OUTLINE)
+        {
             EnableMenuItem(hSubMenu, IDM_EXPAND, MF_BYCOMMAND|MF_ENABLED);
         }
     }
@@ -2473,12 +2643,12 @@ OnRightClick(
     ClientToScreen(hwndRCD, &point);
 
     TrackPopupMenu(
-                  hSubMenu,
-                  TPM_LEFTALIGN|TPM_RIGHTBUTTON,
-                  point.x, point.y,
-                  0,
-                  hWnd,
-                  NULL);
+        hSubMenu,
+        TPM_LEFTALIGN|TPM_RIGHTBUTTON,
+        point.x, point.y,
+        0,
+        hWnd,
+        NULL);
 
     DestroyMenu(L_hMenu);
 }
@@ -2488,8 +2658,8 @@ OnRightClick(
 // try to maintain existing scroll position and selection.
 void
 OnUpdate(
-         COMPITEM item
-         )
+    COMPITEM item
+)
 {
 
     // save current scroll position
@@ -2529,8 +2699,8 @@ OnUpdate(
 /* set the Text on the statusbar button to reflect the current state */
 void
 SetButtonText(
-              LPSTR cmd
-              )
+    LPSTR cmd
+)
 {
     SendMessage(hwndStatus, SM_SETTEXT, IDM_ABORT, (LPARAM) cmd);
 }
@@ -2538,8 +2708,8 @@ SetButtonText(
 /* set the status field (left-hand part) of the status bar. */
 void
 SetStatus(
-          LPSTR cmd
-          )
+    LPSTR cmd
+)
 {
     SendMessage(hwndStatus, SM_SETTEXT, IDL_STATLAB, (LPARAM) cmd);
 }
@@ -2550,8 +2720,8 @@ SetStatus(
  */
 void
 Trace_Status(
-             LPSTR str
-             )
+    LPSTR str
+)
 {
     SetStatus(str);
 }
@@ -2560,13 +2730,16 @@ Trace_Status(
 /* set the names field - the central box in the status bar */
 void
 SetNames(
-         LPSTR names
-         )
+    LPSTR names
+)
 {
     SendMessage(hwndStatus, SM_SETTEXT, IDL_NAMES, (LPARAM) names);
-    if (names == NULL) {
+    if (names == NULL)
+    {
         AppTitle[0] = '\0';
-    } else {
+    }
+    else
+    {
         My_mbsncpy(AppTitle, names, sizeof(AppTitle));
     }
 }
@@ -2584,7 +2757,8 @@ SetBusy(void)
 
     WDEnter();
 
-    if (fBusy) {
+    if (fBusy)
+    {
         WDLeave();
         return(FALSE);
     }
@@ -2618,7 +2792,7 @@ void
 SetNotBusy(void)
 {
     HMENU hmenu;
-	HRESULT hr;
+    HRESULT hr;
 
     /*
      * this function can be called from the worker thread.
@@ -2631,23 +2805,28 @@ SetNotBusy(void)
      */
 
     /* reset button and status bar (clearing out busy flags) */
-    if (current_view == NULL) {
+    if (current_view == NULL)
+    {
         SetButtonText(LoadRcString(IDS_EXIT));
         SetStatus(NULL);
         DisplayMode = MODE_NULL;
-    } else if (view_isexpanded(current_view)) {
+    }
+    else if (view_isexpanded(current_view))
+    {
         TCHAR szBuf[10];
         hr = StringCchCopy(szBuf, 10, LoadRcString(IDS_OUTLINE));
-		if (FAILED(hr))
-			OutputError(hr, IDS_SAFE_COPY);
+        if (FAILED(hr))
+            OutputError(hr, IDS_SAFE_COPY);
         SetButtonText(szBuf);
         SetStatus(view_getcurrenttag(current_view) );
         DisplayMode = MODE_EXPAND;
-    } else {
+    }
+    else
+    {
         TCHAR szBuf[8];
         hr = StringCchCopy(szBuf,8, LoadRcString(IDS_EXPAND));
-		if (FAILED(hr))
-			OutputError(hr, IDS_SAFE_COPY);
+        if (FAILED(hr))
+            OutputError(hr, IDS_SAFE_COPY);
         SetButtonText(szBuf);
         SetStatus(NULL);
         DisplayMode = MODE_OUTLINE;
@@ -2672,7 +2851,8 @@ SetNotBusy(void)
     fBusy = FALSE;
     bAbort = FALSE;
 
-    if (ghThread!=NULL) {
+    if (ghThread!=NULL)
+    {
         CloseHandle(ghThread);
         ghThread = NULL;
     }
@@ -2712,13 +2892,13 @@ BusyError(void)
  */
 UINT
 StateToColour(
-              int state,
-              BOOL bMarked,
-              int col,
-              DWORD * foreground,
-              DWORD * foregroundws,
-              DWORD * background
-              )
+    int state,
+    BOOL bMarked,
+    int col,
+    DWORD * foreground,
+    DWORD * foregroundws,
+    DWORD * background
+)
 {
 
     /* we always set both colours - allows all the colours to
@@ -2731,81 +2911,83 @@ StateToColour(
 
     // marked compitems are highlighted specially - for now, use the
     // colour scheme used for different lines in expand mode
-    if (bMarked) {
+    if (bMarked)
+    {
         *foreground = rgb_rightfore;
         *background = rgb_rightback;
         return(P_FCOLOUR|P_FCOLOURWS|P_BCOLOUR);
     }
 
 
-    switch (state) {
+    switch (state)
+    {
 
-        case STATE_DIFFER:
-            /* files that differ are picked out in a foreground highlight,
-             * with the default background
-             */
-            *foreground = rgb_outlinehi;
-            return(P_FCOLOUR|P_FCOLOURWS|P_BCOLOUR);
+    case STATE_DIFFER:
+        /* files that differ are picked out in a foreground highlight,
+         * with the default background
+         */
+        *foreground = rgb_outlinehi;
+        return(P_FCOLOUR|P_FCOLOURWS|P_BCOLOUR);
 
-        case STATE_FILELEFTONLY:
-            /* zebra lines in both files - right file version */
-            *foreground = rgb_fileleftfore;
-            *background = rgb_fileleftback;
-            return(P_FCOLOUR|P_FCOLOURWS|P_BCOLOUR);
+    case STATE_FILELEFTONLY:
+        /* zebra lines in both files - right file version */
+        *foreground = rgb_fileleftfore;
+        *background = rgb_fileleftback;
+        return(P_FCOLOUR|P_FCOLOURWS|P_BCOLOUR);
 
-        case STATE_FILERIGHTONLY:
-            /* zebra lines in both files - right file version */
-            *foreground = rgb_filerightfore;
-            *background = rgb_filerightback;
-            return(P_FCOLOUR|P_FCOLOURWS|P_BCOLOUR);
+    case STATE_FILERIGHTONLY:
+        /* zebra lines in both files - right file version */
+        *foreground = rgb_filerightfore;
+        *background = rgb_filerightback;
+        return(P_FCOLOUR|P_FCOLOURWS|P_BCOLOUR);
 
-        case STATE_SIMILAR:
-            /* for files that are same within expand compare options
-             * e.g. differ only in ignorable blanks  (NYI)
-            */
-            *foreground = rgb_similar;
-            return(P_FCOLOUR|P_FCOLOURWS|P_BCOLOUR);
+    case STATE_SIMILAR:
+        /* for files that are same within expand compare options
+         * e.g. differ only in ignorable blanks  (NYI)
+        */
+        *foreground = rgb_similar;
+        return(P_FCOLOUR|P_FCOLOURWS|P_BCOLOUR);
 
-        case STATE_LEFTONLY:
-            /* lines only in the left file */
-            *foreground = rgb_leftfore;
-            *background = rgb_leftback;
-            return(P_FCOLOUR|P_FCOLOURWS|P_BCOLOUR);
+    case STATE_LEFTONLY:
+        /* lines only in the left file */
+        *foreground = rgb_leftfore;
+        *background = rgb_leftback;
+        return(P_FCOLOUR|P_FCOLOURWS|P_BCOLOUR);
 
-        case STATE_RIGHTONLY:
-            /* lines only in the right file */
-            *foreground = rgb_rightfore;
-            *background = rgb_rightback;
-            return(P_FCOLOUR|P_FCOLOURWS|P_BCOLOUR);
+    case STATE_RIGHTONLY:
+        /* lines only in the right file */
+        *foreground = rgb_rightfore;
+        *background = rgb_rightback;
+        return(P_FCOLOUR|P_FCOLOURWS|P_BCOLOUR);
 
-        case STATE_MOVEDLEFT:
-            /* displaced lines in both files - left file version */
-            *foreground = rgb_mleftfore;
-            *background = rgb_mleftback;
-            return(P_FCOLOUR|P_FCOLOURWS|P_BCOLOUR);
+    case STATE_MOVEDLEFT:
+        /* displaced lines in both files - left file version */
+        *foreground = rgb_mleftfore;
+        *background = rgb_mleftback;
+        return(P_FCOLOUR|P_FCOLOURWS|P_BCOLOUR);
 
-        case STATE_MOVEDRIGHT:
-            /* displaced lines in both files - right file version */
-            *foreground = rgb_mrightfore;
-            *background = rgb_mrightback;
-            return(P_FCOLOUR|P_FCOLOURWS|P_BCOLOUR);
+    case STATE_MOVEDRIGHT:
+        /* displaced lines in both files - right file version */
+        *foreground = rgb_mrightfore;
+        *background = rgb_mrightback;
+        return(P_FCOLOUR|P_FCOLOURWS|P_BCOLOUR);
 
-        case STATE_SIMILARLEFT:
-            /* zebra lines in both files - left file version */
-            *foreground = rgb_similarleft;
-            *background = rgb_leftback;
-            return(P_FCOLOUR|P_FCOLOURWS|P_BCOLOUR);
+    case STATE_SIMILARLEFT:
+        /* zebra lines in both files - left file version */
+        *foreground = rgb_similarleft;
+        *background = rgb_leftback;
+        return(P_FCOLOUR|P_FCOLOURWS|P_BCOLOUR);
 
-        case STATE_SIMILARRIGHT:
-            /* zebra lines in both files - right file version */
-            *foreground = rgb_similarright;
-            *background = rgb_rightback;
-            return(P_FCOLOUR|P_FCOLOURWS|P_BCOLOUR);
+    case STATE_SIMILARRIGHT:
+        /* zebra lines in both files - right file version */
+        *foreground = rgb_similarright;
+        *background = rgb_rightback;
+        return(P_FCOLOUR|P_FCOLOURWS|P_BCOLOUR);
 
-        default:
+    default:
 
-            /* no highlighting - default colours */
-            return(P_FCOLOUR|P_FCOLOURWS|P_BCOLOUR);
+        /* no highlighting - default colours */
+        return(P_FCOLOUR|P_FCOLOURWS|P_BCOLOUR);
     }
 
 }
@@ -2815,10 +2997,10 @@ StateToColour(
 /* set a given row as the selected row in the table window */
 void
 SetSelection(
-             long rownr,
-             long nrows,
-             long dyRowsFromTop
-             )
+    long rownr,
+    long nrows,
+    long dyRowsFromTop
+)
 {
     TableSelection select;
 
@@ -2839,20 +3021,24 @@ SetSelection(
  */
 long
 do_gethdr(
-          HWND hwnd,
-          lpTableHdr phdr
-          )
+    HWND hwnd,
+    lpTableHdr phdr
+)
 {
     VIEW view;
     BOOL bIsPrinter = FALSE;
 
-    if (phdr->id == TABID_PRINTER) {
+    if (phdr->id == TABID_PRINTER)
+    {
         view = current_view;
         bIsPrinter = TRUE;
-    } else {
+    }
+    else
+    {
         view = (VIEW) phdr->id;
     }
-    if (view == NULL) {
+    if (view == NULL)
+    {
         return(FALSE);
     }
 
@@ -2864,10 +3050,13 @@ do_gethdr(
      * if IDM_NONRS (no line numbers) is selected, suppress the
      * line-nr column entirely to save screen space
      */
-    if (line_numbers == IDM_NONRS) {
+    if (line_numbers == IDM_NONRS)
+    {
         phdr->ncols = 2;
         phdr->fixedcols = 0;
-    } else {
+    }
+    else
+    {
         phdr->ncols = 3;
         phdr->fixedcols = 1;
     }
@@ -2881,20 +3070,24 @@ do_gethdr(
     /*
      * find if we are in expand mode - ask for the item we are expanding.
      */
-    if (view_isexpanded(view) == TRUE) {
+    if (view_isexpanded(view) == TRUE)
+    {
 
         /* use focus rect as selection mode in expand mode
          * so as not to interfere with background colours.
          */
         phdr->selectmode |= TM_FOCUS;
-    } else {
+    }
+    else
+    {
         /* use default solid inversion when possible as it is clearer.*/
         phdr->selectmode |= TM_SOLID;
     }
 
     /* please send TQ_SCROLL notifications when the table is scrolled */
     phdr->sendscroll = TRUE;
-    if (g_hFont) {
+    if (g_hFont)
+    {
         phdr->props.valid = P_FONT;
         phdr->props.hFont = g_hFont;
     }
@@ -2908,9 +3101,9 @@ do_gethdr(
  */
 long
 do_getprops(
-            HWND hwnd,
-            lpColPropsList propslist
-            )
+    HWND hwnd,
+    lpColPropsList propslist
+)
 {
     int i, cell;
     BOOL bIsPrinter = FALSE;
@@ -2918,13 +3111,17 @@ do_getprops(
     HFONT hfontSystem = (HFONT)GetStockObject(SYSTEM_FONT);
     HFONT hfontFixed = g_hFont ? g_hFont : (HFONT)GetStockObject(SYSTEM_FIXED_FONT);
 
-    if (propslist->id == TABID_PRINTER) {
+    if (propslist->id == TABID_PRINTER)
+    {
         view = current_view;
         bIsPrinter = TRUE;
-    } else {
+    }
+    else
+    {
         view = (VIEW) propslist->id;
     }
-    if (view == NULL) {
+    if (view == NULL)
+    {
         return(FALSE);
     }
 
@@ -2956,7 +3153,8 @@ do_getprops(
      * to loop through, looking at each column in the table and
      * seeing which it is.
      */
-    for (i = 0; i < propslist->ncols; i++) {
+    for (i = 0; i < propslist->ncols; i++)
+    {
         cell = i + propslist->startcol;
         propslist->plist[i].props.valid = 0;
 
@@ -2965,25 +3163,31 @@ do_getprops(
         /*
          * skip the line nr column if IDM_NONRS
          */
-        if (line_numbers == IDM_NONRS) {
+        if (line_numbers == IDM_NONRS)
+        {
             cell++;
         }
 
-        if (cell == 0) {
+        if (cell == 0)
+        {
             /* properties for line nr column */
 
             propslist->plist[i].nchars = view_getwidth(view, 0)+1;
             propslist->plist[i].props.valid |= P_ALIGN | P_FONT;
             propslist->plist[i].props.alignment = P_CENTRE;
             propslist->plist[i].props.hFont = hfontSystem;
-        } else if (cell == 1) {
+        }
+        else if (cell == 1)
+        {
 
             /* properties for tag field */
             propslist->plist[i].nchars = view_getwidth(view, 1)+1;
             propslist->plist[i].props.valid |= P_ALIGN | P_FONT;
             propslist->plist[i].props.alignment = P_LEFT;
             propslist->plist[i].props.hFont = hfontSystem;
-        } else {
+        }
+        else
+        {
             /* properties for main text column -
              * use a fixed font unless printing (if
              * printing, best to use the default font, because
@@ -2995,7 +3199,8 @@ do_getprops(
             propslist->plist[i].nchars = view_getwidth(view, 2)+1;
             propslist->plist[i].props.valid |= P_ALIGN;
             propslist->plist[i].props.alignment = P_LEFT;
-            if (!bIsPrinter) {
+            if (!bIsPrinter)
+            {
                 propslist->plist[i].props.valid |= P_FONT;
                 propslist->plist[i].props.hFont = hfontFixed;
             }
@@ -3011,9 +3216,9 @@ do_getprops(
  */
 long
 do_getdata(
-           HWND hwnd,
-           lpCellDataList cdlist
-           )
+    HWND hwnd,
+    lpCellDataList cdlist
+)
 {
     int start, endcell, col, i;
     int state, markedstate;
@@ -3023,10 +3228,13 @@ do_getdata(
     LPWSTR pwzText;
     BOOL bIsPrinter = FALSE;
 
-    if (cdlist->id == TABID_PRINTER) {
+    if (cdlist->id == TABID_PRINTER)
+    {
         view = current_view;
         bIsPrinter = TRUE;
-    } else {
+    }
+    else
+    {
         view = (VIEW) cdlist->id;
     }
 
@@ -3035,17 +3243,22 @@ do_getdata(
     markedstate = view_getmarkstate(view, cdlist->row);
     start = cdlist->startcell;
     endcell = cdlist->ncells + start;
-    if (cdlist->row >= view_getrowcount(view)) {
+    if (cdlist->row >= view_getrowcount(view))
+    {
         return(FALSE);
     }
-    for (i = start; i < endcell; i++) {
+    for (i = start; i < endcell; i++)
+    {
         cd = &cdlist->plist[i - start];
 
 
         /* skip the line number column if IDM_NONRS */
-        if (line_numbers == IDM_NONRS) {
+        if (line_numbers == IDM_NONRS)
+        {
             col = i+1;
-        } else {
+        }
+        else
+        {
             col = i;
         }
 
@@ -3056,27 +3269,32 @@ do_getdata(
          */
 
         if ( !bIsPrinter
-          || (GetProfileInt(APPNAME, szColourPrinting, 0) > 0)) {
+                || (GetProfileInt(APPNAME, szColourPrinting, 0) > 0))
+        {
 
             /* convert the state of the requested row into a
              * colour scheme. returns P_FCOLOUR and/or
              * P_BCOLOUR if it sets either of the colours
              */
             cd->props.valid |=
-            StateToColour(
-                         state,
-                         markedstate,
-                         col,
-                         &cd->props.forecolour,
-                         &cd->props.forecolourws,
-                         &cd->props.backcolour);
+                StateToColour(
+                    state,
+                    markedstate,
+                    col,
+                    &cd->props.forecolour,
+                    &cd->props.forecolourws,
+                    &cd->props.backcolour);
         }
 
         textp = view_gettext(view, cdlist->row, col);
-        if (cd->nchars != 0) {
-            if (textp == NULL) {
+        if (cd->nchars != 0)
+        {
+            if (textp == NULL)
+            {
                 cd->ptext[0] = '\0';
-            } else {
+            }
+            else
+            {
                 My_mbsncpy(cd->ptext, textp, cd->nchars -1);
                 cd->ptext[cd->nchars - 1] = '\0';
             }
@@ -3088,7 +3306,7 @@ do_getdata(
             HRESULT hr;
             cd->pwzText = (WCHAR*)HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, cd->nchars * sizeof(*cd->pwzText));
             if (cd->pwzText == NULL)
-				return (FALSE);
+                return (FALSE);
             hr = StringCchCopyNW(cd->pwzText, cd->nchars, pwzText, cd->nchars -1);
             if (FAILED(hr))
             {
@@ -3125,7 +3343,8 @@ SvrClose(void)
      * then leave the status bar alone, otherwise
      * we should clean up the state of the status bar
      */
-    if (!fBusy) {
+    if (!fBusy)
+    {
         SetButtonText(LoadRcString(IDS_EXIT));
         SetNames(NULL);
         SetStatus(NULL);
@@ -3138,102 +3357,114 @@ SvrClose(void)
 /* handle callbacks and notifications from the table class */
 long
 TableServer(
-            HWND hwnd,
-            WPARAM cmd,
-            LPARAM lParam
-            )
+    HWND hwnd,
+    WPARAM cmd,
+    LPARAM lParam
+)
 {
     lpTableHdr phdr;
     lpColPropsList proplist;
     lpCellDataList cdlist;
     lpTableSelection pselect;
 
-    switch (cmd) {
-        case TQ_GETSIZE:
-            /* get the nr of rows and cols in this table */
-            phdr = (lpTableHdr) lParam;
-            return(do_gethdr(hwnd, phdr));
+    switch (cmd)
+    {
+    case TQ_GETSIZE:
+        /* get the nr of rows and cols in this table */
+        phdr = (lpTableHdr) lParam;
+        return(do_gethdr(hwnd, phdr));
 
-        case TQ_GETCOLPROPS:
-            /* get the size and properties of each column */
-            proplist = (lpColPropsList) lParam;
-            return (do_getprops(hwnd, proplist));
+    case TQ_GETCOLPROPS:
+        /* get the size and properties of each column */
+        proplist = (lpColPropsList) lParam;
+        return (do_getprops(hwnd, proplist));
 
-        case TQ_GETDATA:
-            /* get the contents of individual cells */
-            cdlist = (lpCellDataList) lParam;
-            return (do_getdata(hwnd, cdlist));
+    case TQ_GETDATA:
+        /* get the contents of individual cells */
+        cdlist = (lpCellDataList) lParam;
+        return (do_getdata(hwnd, cdlist));
 
 
-        case TQ_SELECT:
-            /* selection has changed */
-        case TQ_ENTER:
-            /* user has double-clicked or pressed enter */
+    case TQ_SELECT:
+    /* selection has changed */
+    case TQ_ENTER:
+        /* user has double-clicked or pressed enter */
 
-            pselect = (lpTableSelection) lParam;
+        pselect = (lpTableSelection) lParam;
 
-            /* store location for use in later search (IDM_FCHANGE) */
+        /* store location for use in later search (IDM_FCHANGE) */
 
-            /*
-             * convert selection so that it always runs forward - we
-             * do not need to know where the anchor vs endpoint is
-             */
-            if (pselect->nrows == 0) {
-                selection = -1;
-                selection_nrows = 0;
-            } else {
-                if (pselect->nrows < 0) {
-                    selection = pselect->startrow + pselect->nrows + 1;
-                    selection_nrows = -pselect->nrows;
-                } else {
-                    selection = (int) pselect->startrow;
-                    selection_nrows = pselect->nrows;
+        /*
+         * convert selection so that it always runs forward - we
+         * do not need to know where the anchor vs endpoint is
+         */
+        if (pselect->nrows == 0)
+        {
+            selection = -1;
+            selection_nrows = 0;
+        }
+        else
+        {
+            if (pselect->nrows < 0)
+            {
+                selection = pselect->startrow + pselect->nrows + 1;
+                selection_nrows = -pselect->nrows;
+            }
+            else
+            {
+                selection = (int) pselect->startrow;
+                selection_nrows = pselect->nrows;
+            }
+            if (cmd == TQ_ENTER)
+            {
+                /* try to expand this row */
+                if (!ToExpand(hwnd))
+                {
+                    /* expand failed - maybe this
+                     * is a moved line- show the other
+                     * copy
+                     */
+                    ToMoved(hwnd, TRUE);
                 }
-                if (cmd == TQ_ENTER) {
-                    /* try to expand this row */
-                    if (!ToExpand(hwnd)) {
-                        /* expand failed - maybe this
-                         * is a moved line- show the other
-                         * copy
-                         */
-                        ToMoved(hwnd, TRUE);
-                    }
 
-                }
             }
-            break;
+        }
+        break;
 
-        case TQ_CLOSE:
-            /* close this table - table class no longer needs data*/
-            SvrClose();
-            break;
+    case TQ_CLOSE:
+        /* close this table - table class no longer needs data*/
+        SvrClose();
+        break;
 
-        case TQ_SCROLL:
-            /* notification that the rows visible in the window
-             * have changed -change the current position lines in
-             * the graphic bar view (the sections picture)
-             */
-            if (picture_mode) {
-                BarDrawPosition(hwndBar, NULL, TRUE);
-            }
-            break;
+    case TQ_SCROLL:
+        /* notification that the rows visible in the window
+         * have changed -change the current position lines in
+         * the graphic bar view (the sections picture)
+         */
+        if (picture_mode)
+        {
+            BarDrawPosition(hwndBar, NULL, TRUE);
+        }
+        break;
 
-        case TQ_TABS:
-            if (lParam != 0) {
-                LONG * pTabs = (LONG *) lParam;
-                *pTabs = g_tabwidth;
-            }
-            return TRUE;
+    case TQ_TABS:
+        if (lParam != 0)
+        {
+            LONG * pTabs = (LONG *) lParam;
+            *pTabs = g_tabwidth;
+        }
+        return TRUE;
 
-        case TQ_SHOWWHITESPACE:
-            if (lParam != 0) {
-                LONG * pbShowWhitespace = (LONG *) lParam;
-                *pbShowWhitespace = (show_whitespace && view_isexpanded(current_view));
-            }
-            return TRUE;
+    case TQ_SHOWWHITESPACE:
+        if (lParam != 0)
+        {
+            LONG * pbShowWhitespace = (LONG *) lParam;
+            *pbShowWhitespace = (show_whitespace && view_isexpanded(current_view));
+        }
+        return TRUE;
 
-        default:
-            return(FALSE);
+    default:
+        return(FALSE);
     }
     return(TRUE);
 }
@@ -3242,15 +3473,15 @@ TableServer(
 
 /*
  * called on worker thread (not UI thread) to handle the work
- * requested on the command line. 
+ * requested on the command line.
  *
  * arg is a pointer to a THREADARGS block allocated using HeapAlloc. This
  * needs to be freed before exiting.
  */
 DWORD WINAPI
 wd_initial(
-           LPVOID arg
-           )
+    LPVOID arg
+)
 {
     PTHREADARGS pta = (PTHREADARGS) arg;
     COMPLIST cl = 0;
@@ -3261,7 +3492,7 @@ wd_initial(
     /* build a complist from these args,
      * and register with the view we have made
      */
- 
+
     {
         cl = complist_args(pta->first, pta->second, pta->view, pta->fDeep);
     }
@@ -3273,7 +3504,8 @@ wd_initial(
      *
      */
 
-    if (cl == NULL || !fOK) {
+    if (cl == NULL || !fOK)
+    {
         view_close(pta->view);
         HeapFree(GetProcessHeap(), NULL, pta);
         SetNotBusy();
@@ -3282,36 +3514,44 @@ wd_initial(
 
 
     /* if savelist or savecomp was selected, write out the list or comp file */
-    if (pta->savelist != NULL || pta->savecomp != NULL) {
-        if (pta->savelist != NULL) {
+    if (pta->savelist != NULL || pta->savecomp != NULL)
+    {
+        if (pta->savelist != NULL)
+        {
             complist_savelist(cl, pta->savelist, pta->listopts);
         }
 
-        if (pta->savecomp != NULL) {
+        if (pta->savecomp != NULL)
+        {
             /* if list item was selected, use that */
-            if (selection >= 0) {
+            if (selection >= 0)
+            {
                 ci = view_getitem(pta->view, selection);
-          }
-          else {
-              /* default to first visible item, if any */
-              if (view_getrowcount(pta->view) > 0) {
-                  ci = view_getitem(pta->view, 0);
-              }
-          }
-          compitem_savecomp(pta->view, ci, pta->savecomp, pta->compopts);
+            }
+            else
+            {
+                /* default to first visible item, if any */
+                if (view_getrowcount(pta->view) > 0)
+                {
+                    ci = view_getitem(pta->view, 0);
+                }
+            }
+            compitem_savecomp(pta->view, ci, pta->savecomp, pta->compopts);
         }
         HeapFree(GetProcessHeap(), NULL, pta);
         SetNotBusy();
 
         /* exit if -x was set */
-        if (pta->fExit) {
+        if (pta->fExit)
+        {
             exit(0);
         }
     }
 
 
     /* if savelist was selected, write out the list and exit if -x was set */
-    if (pta->savelist != NULL) {
+    if (pta->savelist != NULL)
+    {
         complist_savelist(cl, pta->savelist, pta->listopts);
         HeapFree(GetProcessHeap(), NULL, pta);
         SetNotBusy();
@@ -3319,7 +3559,8 @@ wd_initial(
     }
 
     /* if there was only one file, expand it, unless... */
-    if (view_getrowcount(pta->view) == 1) {
+    if (view_getrowcount(pta->view) == 1)
+    {
         /* The interesting case is where there are a bunch of files
            but only one of them is Different.  In this case we do
            NOT expand it even though it is the only one showing.
@@ -3328,7 +3569,8 @@ wd_initial(
         UINT nItems = complist_itemcount(cl);
         /* And even then, don't expand if the option said don't.
         */
-        if (nItems==1 && fAutoExpand) {
+        if (nItems==1 && fAutoExpand)
+        {
             SetSelection(0, 1, -1);
             ToExpand(hwndClient);
         }
@@ -3354,7 +3596,8 @@ wd_dirdialog(LPVOID arg)
     /* make a COMPLIST using the directory dialog,
      * and notify the view
      */
-    if (complist_dirdialog(view) == NULL) {
+    if (complist_dirdialog(view) == NULL)
+    {
         view_close(view);
     }
 
@@ -3365,12 +3608,12 @@ wd_dirdialog(LPVOID arg)
 
 /*
  * called on worker thread to do a copy-files operation
- * 
+ *
  */
 DWORD WINAPI
 wd_copy(
-        LPVOID arg
-        )
+    LPVOID arg
+)
 {
 
     VIEW view = (VIEW) arg;
@@ -3390,1156 +3633,1228 @@ wd_copy(
 INT_PTR
 APIENTRY
 MainWndProc(
-            HWND hWnd,
-            UINT message,
-            WPARAM wParam,
-            LPARAM lParam
-            )
+    HWND hWnd,
+    UINT message,
+    WPARAM wParam,
+    LPARAM lParam
+)
 {
     char str[32];
     long ret;
     DWORD threadid;
-	HRESULT hr;
+    HRESULT hr;
 
-    switch (message) {
+    switch (message)
+    {
 
-        case WM_CREATE:
+    case WM_CREATE:
 
-            /* initialise menu options to default/saved
-             * option settings
-             */
+        /* initialise menu options to default/saved
+         * option settings
+         */
 
 #define CHECKMENU(id, fChecked)  \
           CheckMenuItem(hMenu, (id), (fChecked) ? MF_CHECKED:MF_UNCHECKED)
 
-            /* outline_include options */
-            CHECKMENU(IDM_OUTLINE_INCSAME,   (outline_include & INCLUDE_SAME));
-            CHECKMENU(IDM_OUTLINE_INCLEFT,   (outline_include & INCLUDE_LEFTONLY));
-            CHECKMENU(IDM_OUTLINE_INCRIGHT,  (outline_include & INCLUDE_RIGHTONLY));
-            CHECKMENU(IDM_OUTLINE_INCDIFFER, (outline_include & INCLUDE_DIFFER));
+        /* outline_include options */
+        CHECKMENU(IDM_OUTLINE_INCSAME,   (outline_include & INCLUDE_SAME));
+        CHECKMENU(IDM_OUTLINE_INCLEFT,   (outline_include & INCLUDE_LEFTONLY));
+        CHECKMENU(IDM_OUTLINE_INCRIGHT,  (outline_include & INCLUDE_RIGHTONLY));
+        CHECKMENU(IDM_OUTLINE_INCDIFFER, (outline_include & INCLUDE_DIFFER));
 
-            /* expand_include options */
-            CHECKMENU(IDM_EXPAND_INCSAME,         (expand_include & INCLUDE_SAME));
-            CHECKMENU(IDM_EXPAND_INCLEFT,         (expand_include & INCLUDE_LEFTONLY));
-            CHECKMENU(IDM_EXPAND_INCRIGHT,        (expand_include & INCLUDE_RIGHTONLY));
-            CHECKMENU(IDM_EXPAND_INCMOVEDLEFT,    (expand_include & INCLUDE_MOVEDLEFT));
-            CHECKMENU(IDM_EXPAND_INCMOVEDRIGHT,   (expand_include & INCLUDE_MOVEDRIGHT));
-            CHECKMENU(IDM_EXPAND_INCSIMILARLEFT,  (expand_include & INCLUDE_SIMILARLEFT));
-            CHECKMENU(IDM_EXPAND_INCSIMILARRIGHT, (expand_include & INCLUDE_SIMILARRIGHT));
+        /* expand_include options */
+        CHECKMENU(IDM_EXPAND_INCSAME,         (expand_include & INCLUDE_SAME));
+        CHECKMENU(IDM_EXPAND_INCLEFT,         (expand_include & INCLUDE_LEFTONLY));
+        CHECKMENU(IDM_EXPAND_INCRIGHT,        (expand_include & INCLUDE_RIGHTONLY));
+        CHECKMENU(IDM_EXPAND_INCMOVEDLEFT,    (expand_include & INCLUDE_MOVEDLEFT));
+        CHECKMENU(IDM_EXPAND_INCMOVEDRIGHT,   (expand_include & INCLUDE_MOVEDRIGHT));
+        CHECKMENU(IDM_EXPAND_INCSIMILARLEFT,  (expand_include & INCLUDE_SIMILARLEFT));
+        CHECKMENU(IDM_EXPAND_INCSIMILARRIGHT, (expand_include & INCLUDE_SIMILARRIGHT));
 
-            /* other options */
-            CHECKMENU(line_numbers, TRUE);
-            CHECKMENU(expand_mode, TRUE);
-            CHECKMENU(IDM_IGNBLANKS, ignore_blanks);
-            CHECKMENU(IDM_SHOWWHITESPACE, show_whitespace);
-            CHECKMENU(IDM_ALG2, Algorithm2);
-            CHECKMENU(IDM_MONOCOLS, mono_colours);
-            CHECKMENU(IDM_PICTURE, picture_mode);
-            CHECKMENU(IDM_HIDEMARK, hide_markedfiles);
+        /* other options */
+        CHECKMENU(line_numbers, TRUE);
+        CHECKMENU(expand_mode, TRUE);
+        CHECKMENU(IDM_IGNBLANKS, ignore_blanks);
+        CHECKMENU(IDM_SHOWWHITESPACE, show_whitespace);
+        CHECKMENU(IDM_ALG2, Algorithm2);
+        CHECKMENU(IDM_MONOCOLS, mono_colours);
+        CHECKMENU(IDM_PICTURE, picture_mode);
+        CHECKMENU(IDM_HIDEMARK, hide_markedfiles);
 #undef CHECKMENU
 
-            /* nothing currently displayed */
-            DisplayMode = MODE_NULL;
+        /* nothing currently displayed */
+        DisplayMode = MODE_NULL;
+
+        break;
+
+    case WM_SYSCOLORCHANGE:
+    {
+        HIGHCONTRAST hc;
+
+        hc.cbSize = sizeof(hc);
+        SystemParametersInfo(SPI_GETHIGHCONTRAST,0,&hc, 0);
+
+        mono_colours = (hc.dwFlags & HCF_HIGHCONTRASTON);
+        if (mono_colours)
+        {
+            SetMonoColours();
+        }
+        else
+        {
+            SetColours();
+        }
+
+        CheckMenuItem(hMenu, IDM_MONOCOLS,
+                      mono_colours? MF_CHECKED:MF_UNCHECKED);
+        hr = StringCchPrintf(str, 32, szD, mono_colours);
+        if (FAILED(hr))
+            OutputError(hr, IDS_SAFE_PRINTF);
+        WriteProfileString(APPNAME, szMonoColours, str);
+        SendMessage(hwndRCD, message, wParam, lParam);
+        SendMessage(hwndStatus, message, wParam, lParam);
+        SendMessage(hwndBar, message, wParam, lParam);
+
+        /* The diffs are still valid, but force a re-display
+         * of bar window and main table.
+         */
+        SendMessage(hwndBar, WM_COMMAND, IDM_MONOCOLS, 0);
+        InvalidateRect(hwndBar, NULL, TRUE);
+        view_changeviewoptions(current_view);
+    }
+    break;
+
+    case WM_COMMAND:
+        switch (GET_WM_COMMAND_ID(wParam, lParam))
+        {
+        case IDM_EXIT:
+            if (ghThread!=NULL)
+            {
+                bAbort = TRUE;
+                SetStatus(LoadRcString(IDS_ABORT_PENDING));
+                break;
+            }
+            if (!view_isexpanded(current_view))
+            {
+                /* save the current outline size and position */
+                WINDOWPLACEMENT wp;
+                wp.length = sizeof(wp);
+                if (GetWindowPlacement(hwndClient,&wp))
+                {
+                    WriteProfileInt(APPNAME, szOutlineShowCmd, wp.showCmd);
+                    WriteProfileInt(APPNAME, szOutlineMaxX, wp.ptMaxPosition.x);
+                    WriteProfileInt(APPNAME, szOutlineMaxY, wp.ptMaxPosition.y);
+                    WriteProfileInt(APPNAME, szOutlineNormLeft, wp.rcNormalPosition.left);
+                    WriteProfileInt(APPNAME, szOutlineNormTop, wp.rcNormalPosition.top);
+                    WriteProfileInt(APPNAME, szOutlineNormRight, wp.rcNormalPosition.right);
+                    WriteProfileInt(APPNAME, szOutlineNormBottom, wp.rcNormalPosition.bottom);
+                    WriteProfileInt(APPNAME, szOutlineSaved, 1);
+                }
+            }
+            else
+            {
+                /* save the current expanded size and position */
+                WINDOWPLACEMENT wp;
+                wp.length = sizeof(wp);
+                if (GetWindowPlacement(hwndClient,&wp))
+                {
+                    WriteProfileInt(APPNAME, szExpandShowCmd, wp.showCmd);
+                    WriteProfileInt(APPNAME, szExpandMaxX, wp.ptMaxPosition.x);
+                    WriteProfileInt(APPNAME, szExpandMaxY, wp.ptMaxPosition.y);
+                    WriteProfileInt(APPNAME, szExpandNormLeft, wp.rcNormalPosition.left);
+                    WriteProfileInt(APPNAME, szExpandNormTop, wp.rcNormalPosition.top);
+                    WriteProfileInt(APPNAME, szExpandNormRight, wp.rcNormalPosition.right);
+                    WriteProfileInt(APPNAME, szExpandNormBottom, wp.rcNormalPosition.bottom);
+                    WriteProfileInt(APPNAME, szExpandedSaved, 1);
+                }
+            }
+            DestroyWindow(hWnd);
+            break;
+
+        case IDM_ABORT:
+            /* abort menu item, or status bar button.
+             * the status bar button text gives the appropriate
+             * action depending on our state - abort, outline
+             * or expand. But the command sent is always
+             * IDM_ABORT. Thus we need to check the state
+             * to see what to do. If we are busy, set the abort
+             * flag. If there is nothing to view,
+             * exit, otherwise switch outline<->expand
+             */
+            if (IsBusy())
+            {
+                bAbort = TRUE;
+                SetStatus(LoadRcString(IDS_ABORT_PENDING));
+            }
+            else if (DisplayMode == MODE_NULL)
+            {
+                DestroyWindow(hWnd);
+            }
+            else if (DisplayMode == MODE_EXPAND)
+            {
+                ToOutline(hWnd);
+            }
+            else
+            {
+                ToExpand(hWnd);
+            }
+            break;
+
+        case IDM_FILE:
+            /* select two files and compare them */
+            if (SetBusy())
+            {
+
+
+                /* close the current view */
+                view_close(current_view);
+
+                /* make a new empty view */
+                current_view = view_new(hwndRCD);
+
+                /* make a COMPLIST using the files dialog,
+                 * and notify the view
+                 */
+                if (complist_filedialog(current_view) == NULL)
+                {
+                    view_close(current_view);
+                }
+
+                /* all done! */
+                SetNotBusy();
+            }
+            else
+            {
+                BusyError();
+            }
+            break;
+
+        case IDM_DIR:
+
+            /* read two directory names, scan them and
+             * compare all the files and subdirs.
+             */
+            if (SetBusy())
+            {
+
+                /* close the current view */
+                view_close(current_view);
+
+                /* make a new empty view */
+                current_view = view_new(hwndRCD);
+
+                ghThread = CreateThread(NULL, 0, wd_dirdialog,
+                                        (LPVOID) current_view, 0, &threadid);
+
+                if (ghThread == NULL)
+                {
+
+                    /*
+                     * either we are on WIN16, or the
+                     * thread call failed. continue
+                     * single-threaded.
+                     */
+                    wd_dirdialog( (LPVOID) current_view);
+
+
+                }
+
+            }
+            else
+            {
+                BusyError();
+            }
+            break;
+
+        case IDM_CLOSE:
+            /* close the output list -
+             * discard all results so far
+             */
+            if (!IsBusy())
+            {
+                view_close(current_view);
+            }
+            break;
+
+        case IDM_PRINT:
+            /* print the current view -
+             * either the outline list of filenames,
+             * or the currently expanded file.
+             */
+            if (!IsBusy())
+            {
+                DoPrint();
+            }
+            else
+            {
+                BusyError();
+            }
+            break;
+
+        case IDM_TIME:
+            /* show time it took */
+        {
+            char msg[50];
+            DWORD tim;
+            if (IsBusy())
+            {
+                BusyError();
+            }
+            else
+            {
+                tim = complist_querytime();
+                hr = StringCchPrintf(msg, 50, LoadRcString(IDS_SECONDS), tim/1000, tim%1000);
+                if (FAILED(hr))
+                    OutputError(hr, IDS_SAFE_PRINTF);
+                Trace_Status(msg);
+            }
+        }
+        break;
+
+        case IDM_TRACE:
+            /* enable tracing */
+            bTrace = TRUE;
+            Trace_Status(LoadRcString(IDS_TRACING_ENABLED));
+            break;
+
+        case IDM_TRACEOFF:
+            /* enable tracing */
+            bTrace = FALSE;
+            Trace_Status(LoadRcString(IDS_TRACING_DISABLED));
+            break;
+
+        case IDM_SAVELIST:
+            /* allow user to save list of same/different files
+             * to a text file. dialog box to give filename
+             * and select which types of file to include
+             */
+            if (current_view == NULL)
+            {
+                MessageBox(hWnd,
+                           LoadRcString(IDS_CREATE_DIFF_LIST),
+                           szSdkDiff, MB_OK|MB_ICONSTOP);
+                break;
+            }
+
+            complist_savelist(view_getcomplist(current_view), NULL, outline_include);
+            break;
+
+        case IDM_COPYFILES:
+            /*
+             * copy files that are same/different to a new
+             * root directory. dialog box allows user
+             * to select new root and inclusion options
+             */
+            if (current_view == NULL)
+            {
+                MessageBox(hWnd,
+                           LoadRcString(IDS_CREATE_DIFF_LIST),
+                           szSdkDiff, MB_OK|MB_ICONSTOP);
+                break;
+            }
+
+            if (SetBusy())
+            {
+                ghThread = CreateThread(NULL, 0, wd_copy,
+                                        (LPVOID) current_view, 0, &threadid);
+                if (ghThread == NULL)
+                {
+                    wd_copy( (LPVOID) current_view);
+                }
+
+            }
+            else
+            {
+                BusyError();
+            }
 
             break;
 
-        case WM_SYSCOLORCHANGE:
+        case IDM_ABOUT:
+            ShellAbout( hWnd,
+                        (LPTSTR)szSdkDiff,
+                        LoadRcString(IDS_TOOL_DESCRIPTION),
+                        LoadIcon(hInst, szSdkDiff)
+                      );
+            break;
+
+        case IDM_CONTENTS:
+            /* Help contents */
+            TCHAR pszHelp[MAX_PATH];
+            memset(pszHelp, 0, MAX_PATH);
+            hr = StringCchCopy(pszHelp, MAX_PATH, pszWorkingDirectoryName);
+            if (FAILED(hr))
+                OutputError(hr, IDS_SAFE_COPY);
+            hr = StringCchCat(pszHelp, MAX_PATH, "sdkdiff.chm");
+            if (FAILED(hr))
+                OutputError(hr, IDS_SAFE_CAT);
+
+            HtmlHelp(hWnd, pszHelp, HH_HELP_FINDER, 0);
+            break;
+
+        /* launch an editor on the current item - left, right or
+         * composite view
+         */
+        case IDM_EDITLEFT:
+            do_editthread(current_view, CI_LEFT);
+            break;
+
+        case IDM_EDITRIGHT:
+            do_editthread(current_view, CI_RIGHT);
+            break;
+
+        case IDM_EDITCOMP:
+        {
+            COMPITEM item = view_getitem(current_view, selection);
+            FILEDATA fdLeft;
+            FILEDATA fdRight;
+
+            fdLeft = compitem_getleftfile(item);
+            fdRight = compitem_getrightfile(item);
+            if ((fdLeft && file_IsUnicode(fdLeft)) || (fdRight && file_IsUnicode(fdRight)))
             {
-                HIGHCONTRAST hc;
+                MessageBox(hWnd, LoadRcString(IDS_NOCOMPUNICODE),
+                           szSdkDiff, MB_OK);
+            }
+            else
+            {
+                do_editthread(current_view, CI_COMP);
+            }
+        }
+        break;
 
-                hc.cbSize = sizeof(hc);
-                SystemParametersInfo(SPI_GETHIGHCONTRAST,0 ,&hc, 0);
+        /* allow customisation of the editor command line */
+        case IDM_SETEDIT:
+            if (StringInput(editor_cmdline, sizeof(editor_cmdline),
+                            LoadRcString(IDS_EDITOR_COMMAND),
+                            (LPSTR)szSdkDiff, editor_cmdline))
+            {
+                WriteProfileString(APPNAME, szEditor,
+                                   editor_cmdline);
+            }
+            break;
 
-                mono_colours = (hc.dwFlags & HCF_HIGHCONTRASTON);
-                if (mono_colours) {
-                    SetMonoColours();
-                } else {
-                    SetColours();	
+        case IDM_SETTABWIDTH:
+        {
+            char sz[32];
+            int n;
+
+LTabWidth_tryagain:
+            hr = StringCchPrintf(sz, 32, "%d", g_tabwidth);
+            if (FAILED(hr))
+                OutputError(hr, IDS_SAFE_PRINTF);
+            if (StringInput(sz, sizeof(sz),
+                            LoadRcString(IDS_TABWIDTH),
+                            (LPSTR)szSdkDiff, sz))
+            {
+                n = atoi(sz);
+                if (n <= 0 || n > 100)
+                {
+                    MessageBox(hWnd,
+                               LoadRcString(IDS_BAD_TABWIDTH),
+                               szSdkDiff, MB_OK);
+                    goto LTabWidth_tryagain;
                 }
+                WriteProfileInt(APPNAME, szTabWidth, n);
+                g_tabwidth = n;
+                SendMessage(hwndRCD, TM_SETTABWIDTH, 0, n);
+            }
+        }
+        break;
 
-                CheckMenuItem(hMenu, IDM_MONOCOLS,
-                              mono_colours? MF_CHECKED:MF_UNCHECKED);
-                hr = StringCchPrintf(str, 32, szD, mono_colours);
-				if (FAILED(hr))
-					OutputError(hr, IDS_SAFE_PRINTF);
-                WriteProfileString(APPNAME, szMonoColours, str);
-                SendMessage(hwndRCD, message, wParam, lParam);
-                SendMessage(hwndStatus, message, wParam, lParam);
-                SendMessage(hwndBar, message, wParam, lParam);
+        case IDM_TABWIDTH4:
+        case IDM_TABWIDTH8:
+            g_tabwidth = (GET_WM_COMMAND_ID(wParam, lParam) == IDM_TABWIDTH8) ? 8 : 4;
+            SendMessage(hwndRCD, TM_SETTABWIDTH, 0, g_tabwidth);
+            break;
 
-                /* The diffs are still valid, but force a re-display
-                 * of bar window and main table.
-                 */
-                SendMessage(hwndBar, WM_COMMAND, IDM_MONOCOLS, 0);
-                InvalidateRect(hwndBar, NULL, TRUE);
+        case IDM_SETFONT:
+        {
+            CHOOSEFONT cf;
+            LOGFONT lf;
+            char szFace[LF_FACESIZE];
+
+            hr = StringCchCopy(szFace, LF_FACESIZE, g_szFontFaceName);
+            if (FAILED(hr))
+                OutputError(hr, IDS_SAFE_COPY);
+
+            memset(&lf, 0, sizeof(lf));
+            hr = StringCchCopy(lf.lfFaceName, LF_FACESIZE, szFace);
+            if (FAILED(hr))
+                OutputError(hr, IDS_SAFE_COPY);
+            lf.lfWeight = g_fFontBold ? FW_BOLD : FW_DONTCARE;
+            lf.lfHeight = g_nFontHeight;
+            lf.lfCharSet = g_bFontCharSet;
+
+            memset(&cf, 0, sizeof(cf));
+            cf.lStructSize = sizeof(CHOOSEFONT);
+            cf.hwndOwner = hWnd;
+            cf.lpLogFont = &lf;
+            cf.Flags = CF_INITTOLOGFONTSTRUCT|CF_FORCEFONTEXIST|
+                       CF_SCREENFONTS|CF_LIMITSIZE;
+            cf.nSizeMin = 8;
+            cf.nSizeMax = 36;
+            cf.lpszStyle = szFace;
+            if (ChooseFont(&cf))
+            {
+                hr = StringCchCopy(g_szFontFaceName, LF_FACESIZE, lf.lfFaceName);
+                if (FAILED(hr))
+                    OutputError(hr, IDS_SAFE_COPY);
+                g_fFontBold = (lf.lfWeight == FW_BOLD);
+                g_nFontHeight = lf.lfHeight;
+                g_bFontCharSet = lf.lfCharSet;
+
+                WriteProfileString(APPNAME, szFontFaceName, g_szFontFaceName);
+                WriteProfileInt(APPNAME, szFontHeight, g_nFontHeight);
+                WriteProfileInt(APPNAME, szFontBold, g_fFontBold);
+                WriteProfileInt(APPNAME, szFontCharSet, g_bFontCharSet);
+
+                GetFontPref();
+
+                view_changeviewoptions(current_view);
+            }
+        }
+        break;
+
+
+
+        case IDM_LNRS:
+        case IDM_RNRS:
+        case IDM_NONRS:
+
+            /* option selects whether the line nrs displayed
+             * in expand mode are the line nrs in the left
+             * file, the right file or none
+             */
+
+            CheckMenuItem(GetMenu(hWnd),
+                          line_numbers, MF_UNCHECKED);
+            line_numbers = GET_WM_COMMAND_ID(wParam, lParam);
+            CheckMenuItem(GetMenu(hWnd), line_numbers, MF_CHECKED);
+            hr = StringCchPrintf(str, 32, szD, line_numbers);
+            if (FAILED(hr))
+                OutputError(hr, IDS_SAFE_PRINTF);
+            WriteProfileString(APPNAME, szLineNumbers, str);
+
+            /* change the display to show the line nr style
+             * chosen
+             */
+
+            view_changeviewoptions(current_view);
+            break;
+
+        /*
+         * options selecting which lines to include in the
+         * expand listing, based on their state
+         */
+        case IDM_EXPAND_INCSAME:
+            /* toggle flag in expand_include options */
+            expand_include ^= INCLUDE_SAME;
+
+            /* check/uncheck as necessary */
+            CheckMenuItem(hMenu, IDM_EXPAND_INCSAME,
+                          (expand_include & INCLUDE_SAME) ?
+                          MF_CHECKED:MF_UNCHECKED);
+            hr = StringCchPrintf(str, 32, szD, expand_include);
+            if (FAILED(hr))
+                OutputError(hr, IDS_SAFE_PRINTF);
+            WriteProfileString(APPNAME, szLineInclude, str);
+            view_changeviewoptions(current_view);
+            break;
+
+        case IDM_EXPAND_INCLEFT:
+            /* toggle flag in expand_include options */
+            expand_include ^= INCLUDE_LEFTONLY;
+
+            /* check/uncheck as necessary */
+            CheckMenuItem(hMenu, IDM_EXPAND_INCLEFT,
+                          (expand_include & INCLUDE_LEFTONLY) ?
+                          MF_CHECKED:MF_UNCHECKED);
+            hr = StringCchPrintf(str, 32, szD, expand_include);
+            if (FAILED(hr))
+                OutputError(hr, IDS_SAFE_PRINTF);
+            WriteProfileString(APPNAME, szLineInclude, str);
+            view_changeviewoptions(current_view);
+            break;
+
+        case IDM_EXPAND_INCRIGHT:
+            /* toggle flag in expand_include options */
+            expand_include ^= INCLUDE_RIGHTONLY;
+
+            /* check/uncheck as necessary */
+            CheckMenuItem(hMenu, IDM_EXPAND_INCRIGHT,
+                          (expand_include & INCLUDE_RIGHTONLY) ?
+                          MF_CHECKED:MF_UNCHECKED);
+            hr = StringCchPrintf(str, 32, szD, expand_include);
+            if (FAILED(hr))
+                OutputError(hr, IDS_SAFE_PRINTF);
+            WriteProfileString(APPNAME, szLineInclude, str);
+            view_changeviewoptions(current_view);
+            break;
+
+        case IDM_EXPAND_INCMOVEDLEFT:
+            /* toggle flag in expand_include options */
+            expand_include ^= INCLUDE_MOVEDLEFT;
+
+            /* check/uncheck as necessary */
+            CheckMenuItem(hMenu, IDM_EXPAND_INCMOVEDLEFT,
+                          (expand_include & INCLUDE_MOVEDLEFT) ?
+                          MF_CHECKED:MF_UNCHECKED);
+            hr = StringCchPrintf(str, 32, szD, expand_include);
+            if (FAILED(hr))
+                OutputError(hr, IDS_SAFE_PRINTF);
+            WriteProfileString(APPNAME, szLineInclude, str);
+            view_changeviewoptions(current_view);
+            break;
+
+        case IDM_EXPAND_INCMOVEDRIGHT:
+            /* toggle flag in expand_include options */
+            expand_include ^= INCLUDE_MOVEDRIGHT;
+
+            /* check/uncheck as necessary */
+            CheckMenuItem(hMenu, IDM_EXPAND_INCMOVEDRIGHT,
+                          (expand_include & INCLUDE_MOVEDRIGHT) ?
+                          MF_CHECKED:MF_UNCHECKED);
+            hr = StringCchPrintf(str, 32, szD, expand_include);
+            if (FAILED(hr))
+                OutputError(hr, IDS_SAFE_PRINTF);
+            WriteProfileString(APPNAME, szLineInclude, str);
+            view_changeviewoptions(current_view);
+            break;
+
+        case IDM_EXPAND_INCSIMILARLEFT:
+            /* toggle flag in expand_include options */
+            expand_include ^= INCLUDE_SIMILARLEFT;
+
+            /* check/uncheck as necessary */
+            CheckMenuItem(hMenu, IDM_EXPAND_INCSIMILARLEFT,
+                          (expand_include & INCLUDE_SIMILARLEFT) ?
+                          MF_CHECKED:MF_UNCHECKED);
+            hr = StringCchPrintf(str, 32, szD, expand_include);
+            if (FAILED(hr))
+                OutputError(hr, IDS_SAFE_PRINTF);
+            WriteProfileString(APPNAME, szLineInclude, str);
+            view_changeviewoptions(current_view);
+            break;
+
+        case IDM_EXPAND_INCSIMILARRIGHT:
+            /* toggle flag in expand_include options */
+            expand_include ^= INCLUDE_SIMILARRIGHT;
+
+            /* check/uncheck as necessary */
+            CheckMenuItem(hMenu, IDM_EXPAND_INCSIMILARRIGHT,
+                          (expand_include & INCLUDE_SIMILARRIGHT) ?
+                          MF_CHECKED:MF_UNCHECKED);
+            hr = StringCchPrintf(str, 32, szD, expand_include);
+            if (FAILED(hr))
+                OutputError(hr, IDS_SAFE_PRINTF);
+            WriteProfileString(APPNAME, szLineInclude, str);
+            view_changeviewoptions(current_view);
+            break;
+
+        /*
+         * options selecting which files to include in the
+         * outline listing, based on their state
+         */
+        case IDM_OUTLINE_INCLEFT:
+
+
+            /* toggle flag in outline_include options */
+            outline_include ^= INCLUDE_LEFTONLY;
+
+            /* check/uncheck as necessary */
+            CheckMenuItem(hMenu, IDM_OUTLINE_INCLEFT,
+                          (outline_include & INCLUDE_LEFTONLY) ?
+                          MF_CHECKED:MF_UNCHECKED);
+
+            hr = StringCchPrintf(str, 32, szD, outline_include);
+            if (FAILED(hr))
+                OutputError(hr, IDS_SAFE_PRINTF);
+            WriteProfileString(APPNAME, szFileInclude, str);
+            view_changeviewoptions(current_view);
+
+
+            break;
+
+        case IDM_OUTLINE_INCRIGHT:
+
+
+            outline_include ^= INCLUDE_RIGHTONLY;
+
+            CheckMenuItem(hMenu, IDM_OUTLINE_INCRIGHT,
+                          (outline_include & INCLUDE_RIGHTONLY) ?
+                          MF_CHECKED:MF_UNCHECKED);
+            hr = StringCchPrintf(str, 32, szD, outline_include);
+            if (FAILED(hr))
+                OutputError(hr, IDS_SAFE_PRINTF);
+            WriteProfileString(APPNAME, szFileInclude, str);
+            view_changeviewoptions(current_view);
+
+            break;
+
+        case IDM_OUTLINE_INCSAME:
+
+
+            outline_include ^= INCLUDE_SAME;
+
+            CheckMenuItem(hMenu, IDM_OUTLINE_INCSAME,
+                          (outline_include & INCLUDE_SAME) ?
+                          MF_CHECKED:MF_UNCHECKED);
+            hr = StringCchPrintf(str, 32, szD, outline_include);
+            if (FAILED(hr))
+                OutputError(hr, IDS_SAFE_PRINTF);
+            WriteProfileString(APPNAME, szFileInclude, str);
+            view_changeviewoptions(current_view);
+
+
+            break;
+
+
+        case IDM_OUTLINE_INCDIFFER:
+
+
+
+            outline_include ^= INCLUDE_DIFFER;
+
+            CheckMenuItem(hMenu, IDM_OUTLINE_INCDIFFER,
+                          (outline_include & INCLUDE_DIFFER) ?
+                          MF_CHECKED:MF_UNCHECKED);
+
+            hr = StringCchPrintf(str, 32, szD, outline_include);
+            if (FAILED(hr))
+                OutputError(hr, IDS_SAFE_PRINTF);
+            WriteProfileString(APPNAME, szFileInclude, str);
+            view_changeviewoptions(current_view);
+
+
+            break;
+
+        case IDM_UPDATE:
+            OnUpdate( (COMPITEM) lParam);
+            break;
+
+
+        case IDM_RESCAN:
+            RescanFile(hWnd);
+
+            /* do we need to force any repaints? */
+            // - no, as RescanFile sends a IDM_UPDATE
+            break;
+
+
+        case IDM_LONLY:
+        case IDM_RONLY:
+        case IDM_BOTHFILES:
+            /* option selects whether the expanded file
+             * show is the combined file, or just one
+             * or other of the input files.
+             *
+             * if we are not in expand mode, this also
+             * causes us to expand the selection
+             */
+
+
+            CheckMenuItem(GetMenu(hWnd), expand_mode, MF_UNCHECKED);
+            expand_mode = GET_WM_COMMAND_ID(wParam, lParam);
+            CheckMenuItem(GetMenu(hWnd), expand_mode, MF_CHECKED);
+
+            /* change the current view to show only the lines
+             * of the selected type.
+             */
+            if (DisplayMode == MODE_OUTLINE)
+            {
+                ToExpand(hWnd);
+            }
+            else
+            {
+                view_changeviewoptions(current_view);
+            }
+
+
+            break;
+
+
+        case IDM_IGNBLANKS:
+
+            /* if selected, ignore all spaces and tabs on
+             * comparison - expand view only: outline view
+             * will still show that 'text files differ'
+             */
+
+            ignore_blanks = !ignore_blanks;
+            CheckMenuItem(hMenu, IDM_IGNBLANKS,
+                          ignore_blanks? MF_CHECKED:MF_UNCHECKED);
+            hr = StringCchPrintf(str, 32, szD, ignore_blanks);
+            if (FAILED(hr))
+                OutputError(hr, IDS_SAFE_PRINTF);
+            WriteProfileString(APPNAME, szBlanks, str);
+
+            /* invalidate all diffs since we have
+             * changed diff options, and re-do and display the
+             * current diff if we are in expand mode.
+             */
+            view_changediffoptions(current_view);
+
+            /* force repaint of bar window */
+            InvalidateRect(hwndBar, NULL, TRUE);
+
+            break;
+
+        case IDM_SHOWWHITESPACE:
+
+            /* if selected, display all spaces and tabs in
+               the expanded text view */
+            show_whitespace = !show_whitespace;
+            CheckMenuItem(hMenu, IDM_SHOWWHITESPACE,
+                          show_whitespace ? MF_CHECKED:MF_UNCHECKED);
+            hr = StringCchPrintf(str, 32, szD, show_whitespace);
+            if (FAILED(hr))
+                OutputError(hr, IDS_SAFE_PRINTF);
+            WriteProfileString(APPNAME, szShowWhitespace, str);
+
+            // change the current view to show only the lines
+            // of the selected type.
+            if (DisplayMode == MODE_EXPAND)
+            {
+                view_changeviewoptions(current_view);
+            }
+
+            break;
+
+        case IDM_ALG2:
+
+            /* if selected, do algorithm2 which does not accept
+             * unsafe matches.
+             */
+
+            Algorithm2 = !Algorithm2;
+            CheckMenuItem(hMenu, IDM_ALG2,
+                          Algorithm2? MF_CHECKED:MF_UNCHECKED);
+            hr = StringCchPrintf(str, 32, szD, Algorithm2);
+            if (FAILED(hr))
+                OutputError(hr, IDS_SAFE_PRINTF);
+            WriteProfileString(APPNAME, szAlgorithm2, str);
+
+            /* invalidate all diffs since we have
+             * changed diff options, and re-do and display the
+             * current diff if we are in expand mode.
+             */
+            view_changediffoptions(current_view);
+
+            /* force repaint of bar window */
+            InvalidateRect(hwndBar, NULL, TRUE);
+
+            break;
+
+        case IDM_MONOCOLS:
+
+            /* Use monochrome colours - toggle */
+
+            mono_colours = !mono_colours;
+            CheckMenuItem(hMenu, IDM_MONOCOLS,
+                          mono_colours? MF_CHECKED:MF_UNCHECKED);
+            hr = StringCchPrintf(str, 32, szD, mono_colours);
+            if (FAILED(hr))
+                OutputError(hr, IDS_SAFE_PRINTF);
+            WriteProfileString(APPNAME, szMonoColours, str);
+            if (mono_colours)
+                SetMonoColours();
+            else
+                SetColours();
+
+            /* The diffs are still valid, but force a re-display
+             * of bar window and main table.
+             */
+            SendMessage(hwndBar, WM_COMMAND, IDM_MONOCOLS, 0);
+            InvalidateRect(hwndBar, NULL, TRUE);
+            view_changeviewoptions(current_view);
+
+            break;
+
+        case IDM_PICTURE:
+            picture_mode = !picture_mode;
+            CheckMenuItem(hMenu, IDM_PICTURE,
+                          picture_mode? MF_CHECKED:MF_UNCHECKED);
+            hr = StringCchPrintf(str, 32, szD, picture_mode);
+            if (FAILED(hr))
+                OutputError(hr, IDS_SAFE_PRINTF);
+            WriteProfileString(APPNAME, szPicture, str);
+            DoResize(hWnd);
+            break;
+
+        case IDM_HIDEMARK:
+            // toggle state of marked files hidden or not
+            hide_markedfiles = !hide_markedfiles;
+            CheckMenuItem(hMenu, IDM_HIDEMARK,
+                          hide_markedfiles? MF_CHECKED : MF_UNCHECKED);
+            hr = StringCchPrintf(str, 32, szD, hide_markedfiles);
+            if (FAILED(hr))
+                OutputError(hr, IDS_SAFE_PRINTF);
+            WriteProfileString(APPNAME, szHideMark, str);
+
+            // rebuild view with new global option
+            // - note that marks only affect outline views
+            if (!view_isexpanded(current_view))
+            {
                 view_changeviewoptions(current_view);
             }
             break;
 
-        case WM_COMMAND:
-            switch (GET_WM_COMMAND_ID(wParam, lParam)) {
-                case IDM_EXIT:
-                    if (ghThread!=NULL) {
-                        bAbort = TRUE;
-                        SetStatus(LoadRcString(IDS_ABORT_PENDING));
-                        break;
-                    }
-                    if (!view_isexpanded(current_view)) {
-                        /* save the current outline size and position */
-                        WINDOWPLACEMENT wp;
-                        wp.length = sizeof(wp);
-                        if (GetWindowPlacement(hwndClient,&wp)) {
-                            WriteProfileInt(APPNAME, szOutlineShowCmd, wp.showCmd);
-                            WriteProfileInt(APPNAME, szOutlineMaxX, wp.ptMaxPosition.x);
-                            WriteProfileInt(APPNAME, szOutlineMaxY, wp.ptMaxPosition.y);
-                            WriteProfileInt(APPNAME, szOutlineNormLeft, wp.rcNormalPosition.left);
-                            WriteProfileInt(APPNAME, szOutlineNormTop, wp.rcNormalPosition.top);
-                            WriteProfileInt(APPNAME, szOutlineNormRight, wp.rcNormalPosition.right);
-                            WriteProfileInt(APPNAME, szOutlineNormBottom, wp.rcNormalPosition.bottom);
-                            WriteProfileInt(APPNAME, szOutlineSaved, 1);
-                        }
-                    } else {
-                        /* save the current expanded size and position */
-                        WINDOWPLACEMENT wp;
-                        wp.length = sizeof(wp);
-                        if (GetWindowPlacement(hwndClient,&wp)) {
-                            WriteProfileInt(APPNAME, szExpandShowCmd, wp.showCmd);
-                            WriteProfileInt(APPNAME, szExpandMaxX, wp.ptMaxPosition.x);
-                            WriteProfileInt(APPNAME, szExpandMaxY, wp.ptMaxPosition.y);
-                            WriteProfileInt(APPNAME, szExpandNormLeft, wp.rcNormalPosition.left);
-                            WriteProfileInt(APPNAME, szExpandNormTop, wp.rcNormalPosition.top);
-                            WriteProfileInt(APPNAME, szExpandNormRight, wp.rcNormalPosition.right);
-                            WriteProfileInt(APPNAME, szExpandNormBottom, wp.rcNormalPosition.bottom);
-                            WriteProfileInt(APPNAME, szExpandedSaved, 1);
-                        }
-                    }
-                    DestroyWindow(hWnd);
-                    break;
-
-                case IDM_ABORT:
-                    /* abort menu item, or status bar button.
-                     * the status bar button text gives the appropriate
-                     * action depending on our state - abort, outline
-                     * or expand. But the command sent is always
-                     * IDM_ABORT. Thus we need to check the state
-                     * to see what to do. If we are busy, set the abort
-                     * flag. If there is nothing to view,
-                     * exit, otherwise switch outline<->expand
-                     */
-                    if (IsBusy()) {
-                        bAbort = TRUE;
-                        SetStatus(LoadRcString(IDS_ABORT_PENDING));
-                    } else if (DisplayMode == MODE_NULL) {
-                        DestroyWindow(hWnd);
-                    } else if (DisplayMode == MODE_EXPAND) {
-                        ToOutline(hWnd);
-                    } else {
-                        ToExpand(hWnd);
-                    }
-                    break;
-
-                case IDM_FILE:
-                    /* select two files and compare them */
-                    if (SetBusy()) {
-
-
-                        /* close the current view */
-                        view_close(current_view);
-
-                        /* make a new empty view */
-                        current_view = view_new(hwndRCD);
-
-                        /* make a COMPLIST using the files dialog,
-                         * and notify the view
-                         */
-                        if (complist_filedialog(current_view) == NULL) {
-                            view_close(current_view);
-                        }
-
-                        /* all done! */
-                        SetNotBusy();
-                    } else {
-                        BusyError();
-                    }
-                    break;
-
-                case IDM_DIR:
-
-                    /* read two directory names, scan them and
-                     * compare all the files and subdirs.
-                     */
-                    if (SetBusy()) {
-
-                        /* close the current view */
-                        view_close(current_view);
-
-                        /* make a new empty view */
-                        current_view = view_new(hwndRCD);
-
-                        ghThread = CreateThread(NULL, 0, wd_dirdialog,
-                                                (LPVOID) current_view, 0, &threadid);
-
-                        if (ghThread == NULL)
-                        {
-
-                            /*
-                             * either we are on WIN16, or the
-                             * thread call failed. continue
-                             * single-threaded.
-                             */
-                            wd_dirdialog( (LPVOID) current_view);
-
-
-                        }
-
-                    } else {
-                        BusyError();
-                    }
-                    break;
-
-                case IDM_CLOSE:
-                    /* close the output list -
-                     * discard all results so far
-                     */
-                    if (!IsBusy()) {
-                        view_close(current_view);
-                    }
-                    break;
-
-                case IDM_PRINT:
-                    /* print the current view -
-                     * either the outline list of filenames,
-                     * or the currently expanded file.
-                     */
-                    if (!IsBusy()) {
-                        DoPrint();
-                    } else {
-                        BusyError();
-                    }
-                    break;
-
-                case IDM_TIME:
-                    /* show time it took */
-                    {       char msg[50];
-                        DWORD tim;
-                        if (IsBusy()) {
-                            BusyError();
-                        } else {
-                            tim = complist_querytime();
-                            hr = StringCchPrintf(msg, 50, LoadRcString(IDS_SECONDS), tim/1000, tim%1000);
-							if (FAILED(hr))
-								OutputError(hr, IDS_SAFE_PRINTF);
-                            Trace_Status(msg);
-                        }
-                    }
-                    break;
-
-                case IDM_TRACE:
-                    /* enable tracing */
-                    bTrace = TRUE;
-                    Trace_Status(LoadRcString(IDS_TRACING_ENABLED));
-                    break;
-
-                case IDM_TRACEOFF:
-                    /* enable tracing */
-                    bTrace = FALSE;
-                    Trace_Status(LoadRcString(IDS_TRACING_DISABLED));
-                    break;
-
-                case IDM_SAVELIST:
-                    /* allow user to save list of same/different files
-                     * to a text file. dialog box to give filename
-                     * and select which types of file to include
-                     */
-                    if (current_view == NULL) {
-                        MessageBox(hWnd,
-                                   LoadRcString(IDS_CREATE_DIFF_LIST),
-                                   szSdkDiff, MB_OK|MB_ICONSTOP);
-                        break;
-                    }
-
-                    complist_savelist(view_getcomplist(current_view), NULL, outline_include);
-                    break;
-
-                case IDM_COPYFILES:
-                    /*
-                     * copy files that are same/different to a new
-                     * root directory. dialog box allows user
-                     * to select new root and inclusion options
-                     */
-                    if (current_view == NULL) {
-                        MessageBox(hWnd,
-                                   LoadRcString(IDS_CREATE_DIFF_LIST),
-                                   szSdkDiff, MB_OK|MB_ICONSTOP);
-                        break;
-                    }
-
-                    if (SetBusy()) {
-                        ghThread = CreateThread(NULL, 0, wd_copy,
-                                                (LPVOID) current_view, 0, &threadid);
-                        if (ghThread == NULL)
-                        {
-                            wd_copy( (LPVOID) current_view);
-                        }
-
-                    } else {
-                        BusyError();
-                    }
-
-                    break;
-
-                case IDM_ABOUT:
-                    ShellAbout( hWnd,
-                                (LPTSTR)szSdkDiff,
-                                LoadRcString(IDS_TOOL_DESCRIPTION),
-                                LoadIcon(hInst, szSdkDiff)
-                              );
-                    break;
-
-                case IDM_CONTENTS:
-                    /* Help contents */
-					TCHAR pszHelp[MAX_PATH];
-					memset(pszHelp, 0, MAX_PATH);
-					hr = StringCchCopy(pszHelp, MAX_PATH, pszWorkingDirectoryName);
-					if (FAILED(hr))
-						OutputError(hr, IDS_SAFE_COPY);
-					hr = StringCchCat(pszHelp, MAX_PATH, "sdkdiff.chm");
-					if (FAILED(hr))
-						OutputError(hr, IDS_SAFE_CAT);
-
-					HtmlHelp(hWnd, pszHelp, HH_HELP_FINDER, 0);
-                    break;
-
-                    /* launch an editor on the current item - left, right or
-                     * composite view
-                     */
-                case IDM_EDITLEFT:
-                    do_editthread(current_view, CI_LEFT);
-                    break;
-
-                case IDM_EDITRIGHT:
-                    do_editthread(current_view, CI_RIGHT);
-                    break;
-
-                case IDM_EDITCOMP:
-                    {
-                        COMPITEM item = view_getitem(current_view, selection);
-                        FILEDATA fdLeft;
-                        FILEDATA fdRight;
-
-                        fdLeft = compitem_getleftfile(item);
-                        fdRight = compitem_getrightfile(item);
-                        if ((fdLeft && file_IsUnicode(fdLeft)) || (fdRight && file_IsUnicode(fdRight))) {
-                            MessageBox(hWnd, LoadRcString(IDS_NOCOMPUNICODE),
-                                       szSdkDiff, MB_OK);
-                        } else {
-                            do_editthread(current_view, CI_COMP);
-                        }
-                    }
-                    break;
-
-                    /* allow customisation of the editor command line */
-                case IDM_SETEDIT:
-                    if (StringInput(editor_cmdline, sizeof(editor_cmdline),
-                                    LoadRcString(IDS_EDITOR_COMMAND),
-                                    (LPSTR)szSdkDiff, editor_cmdline)) {
-                        WriteProfileString(APPNAME, szEditor,
-                                           editor_cmdline);
-                    }
-                    break;
-
-                case IDM_SETTABWIDTH:
-                    {
-                        char sz[32];
-                        int n;
-
-LTabWidth_tryagain:
-                        hr = StringCchPrintf(sz, 32, "%d", g_tabwidth);
-						if (FAILED(hr))
-							OutputError(hr, IDS_SAFE_PRINTF);
-                        if (StringInput(sz, sizeof(sz),
-                                        LoadRcString(IDS_TABWIDTH),
-                                        (LPSTR)szSdkDiff, sz))
-                        {
-                            n = atoi(sz);
-                            if (n <= 0 || n > 100)
-                            {
-                                MessageBox(hWnd,
-                                           LoadRcString(IDS_BAD_TABWIDTH),
-                                           szSdkDiff, MB_OK);
-                                goto LTabWidth_tryagain;
-                            }
-                            WriteProfileInt(APPNAME, szTabWidth, n);
-                            g_tabwidth = n;
-                            SendMessage(hwndRCD, TM_SETTABWIDTH, 0, n);
-                        }
-                    }
-                    break;
-
-                case IDM_TABWIDTH4:
-                case IDM_TABWIDTH8:
-                    g_tabwidth = (GET_WM_COMMAND_ID(wParam, lParam) == IDM_TABWIDTH8) ? 8 : 4;
-                    SendMessage(hwndRCD, TM_SETTABWIDTH, 0, g_tabwidth);
-                    break;
-
-                case IDM_SETFONT:
-                    {
-                        CHOOSEFONT cf;
-                        LOGFONT lf;
-                        char szFace[LF_FACESIZE];
-
-                        hr = StringCchCopy(szFace, LF_FACESIZE, g_szFontFaceName);
-						if (FAILED(hr))
-							OutputError(hr, IDS_SAFE_COPY);
-
-                        memset(&lf, 0, sizeof(lf));
-                        hr = StringCchCopy(lf.lfFaceName, LF_FACESIZE, szFace);
-						if (FAILED(hr))
-							OutputError(hr, IDS_SAFE_COPY);
-                        lf.lfWeight = g_fFontBold ? FW_BOLD : FW_DONTCARE;
-                        lf.lfHeight = g_nFontHeight;
-                        lf.lfCharSet = g_bFontCharSet;
-
-                        memset(&cf, 0, sizeof(cf));
-                        cf.lStructSize = sizeof(CHOOSEFONT);
-                        cf.hwndOwner = hWnd;
-                        cf.lpLogFont = &lf;
-                        cf.Flags = CF_INITTOLOGFONTSTRUCT|CF_FORCEFONTEXIST|
-                                CF_SCREENFONTS|CF_LIMITSIZE;
-                        cf.nSizeMin = 8;
-                        cf.nSizeMax = 36;
-                        cf.lpszStyle = szFace;
-                        if (ChooseFont(&cf))
-                            {
-                            hr = StringCchCopy(g_szFontFaceName, LF_FACESIZE, lf.lfFaceName);
-							if (FAILED(hr))
-								OutputError(hr, IDS_SAFE_COPY);
-                            g_fFontBold = (lf.lfWeight == FW_BOLD);
-                            g_nFontHeight = lf.lfHeight;
-                            g_bFontCharSet = lf.lfCharSet;
-
-                            WriteProfileString(APPNAME, szFontFaceName, g_szFontFaceName);
-                            WriteProfileInt(APPNAME, szFontHeight, g_nFontHeight);
-                            WriteProfileInt(APPNAME, szFontBold, g_fFontBold);
-                            WriteProfileInt(APPNAME, szFontCharSet, g_bFontCharSet);
-
-                            GetFontPref();
-
-                            view_changeviewoptions(current_view);
-                            }
-                    }
-                    break;
-
-
-
-                case IDM_LNRS:
-                case IDM_RNRS:
-                case IDM_NONRS:
-
-                    /* option selects whether the line nrs displayed
-                     * in expand mode are the line nrs in the left
-                     * file, the right file or none
-                     */
-
-                    CheckMenuItem(GetMenu(hWnd),
-                                  line_numbers, MF_UNCHECKED);
-                    line_numbers = GET_WM_COMMAND_ID(wParam, lParam);
-                    CheckMenuItem(GetMenu(hWnd), line_numbers, MF_CHECKED);
-                    hr = StringCchPrintf(str, 32, szD, line_numbers);
-					if (FAILED(hr))
-						OutputError(hr, IDS_SAFE_PRINTF);
-                    WriteProfileString(APPNAME, szLineNumbers, str);
-
-                    /* change the display to show the line nr style
-                     * chosen
-                     */
-
-                    view_changeviewoptions(current_view);
-                    break;
-
-                /*
-                 * options selecting which lines to include in the
-                 * expand listing, based on their state
-                 */
-                case IDM_EXPAND_INCSAME:
-                        /* toggle flag in expand_include options */
-                        expand_include ^= INCLUDE_SAME;
-
-                        /* check/uncheck as necessary */
-                        CheckMenuItem(hMenu, IDM_EXPAND_INCSAME,
-                              (expand_include & INCLUDE_SAME) ?
-                                        MF_CHECKED:MF_UNCHECKED);
-                        hr = StringCchPrintf(str, 32, szD, expand_include);
-						if (FAILED(hr))
-							OutputError(hr, IDS_SAFE_PRINTF);
-                        WriteProfileString(APPNAME, szLineInclude, str);
-                        view_changeviewoptions(current_view);
-                        break;
-
-                case IDM_EXPAND_INCLEFT:
-                        /* toggle flag in expand_include options */
-                        expand_include ^= INCLUDE_LEFTONLY;
-
-                        /* check/uncheck as necessary */
-                        CheckMenuItem(hMenu, IDM_EXPAND_INCLEFT,
-                              (expand_include & INCLUDE_LEFTONLY) ?
-                                        MF_CHECKED:MF_UNCHECKED);
-                        hr = StringCchPrintf(str, 32, szD, expand_include);
-						if (FAILED(hr))
-							OutputError(hr, IDS_SAFE_PRINTF);
-                        WriteProfileString(APPNAME, szLineInclude, str);
-                        view_changeviewoptions(current_view);
-                        break;
-
-                case IDM_EXPAND_INCRIGHT:
-                        /* toggle flag in expand_include options */
-                        expand_include ^= INCLUDE_RIGHTONLY;
-
-                        /* check/uncheck as necessary */
-                        CheckMenuItem(hMenu, IDM_EXPAND_INCRIGHT,
-                              (expand_include & INCLUDE_RIGHTONLY) ?
-                                        MF_CHECKED:MF_UNCHECKED);
-                        hr = StringCchPrintf(str, 32, szD, expand_include);
-						if (FAILED(hr))
-							OutputError(hr, IDS_SAFE_PRINTF);
-                        WriteProfileString(APPNAME, szLineInclude, str);
-                        view_changeviewoptions(current_view);
-                        break;
-
-                case IDM_EXPAND_INCMOVEDLEFT:
-                        /* toggle flag in expand_include options */
-                        expand_include ^= INCLUDE_MOVEDLEFT;
-
-                        /* check/uncheck as necessary */
-                        CheckMenuItem(hMenu, IDM_EXPAND_INCMOVEDLEFT,
-                              (expand_include & INCLUDE_MOVEDLEFT) ?
-                                        MF_CHECKED:MF_UNCHECKED);
-                        hr = StringCchPrintf(str, 32, szD, expand_include);
-						if (FAILED(hr))
-							OutputError(hr, IDS_SAFE_PRINTF);
-                        WriteProfileString(APPNAME, szLineInclude, str);
-                        view_changeviewoptions(current_view);
-                        break;
-
-                case IDM_EXPAND_INCMOVEDRIGHT:
-                        /* toggle flag in expand_include options */
-                        expand_include ^= INCLUDE_MOVEDRIGHT;
-
-                        /* check/uncheck as necessary */
-                        CheckMenuItem(hMenu, IDM_EXPAND_INCMOVEDRIGHT,
-                              (expand_include & INCLUDE_MOVEDRIGHT) ?
-                                        MF_CHECKED:MF_UNCHECKED);
-                        hr = StringCchPrintf(str, 32, szD, expand_include);
-						if (FAILED(hr))
-							OutputError(hr, IDS_SAFE_PRINTF);
-                        WriteProfileString(APPNAME, szLineInclude, str);
-                        view_changeviewoptions(current_view);
-                        break;
-
-                case IDM_EXPAND_INCSIMILARLEFT:
-                        /* toggle flag in expand_include options */
-                        expand_include ^= INCLUDE_SIMILARLEFT;
-
-                        /* check/uncheck as necessary */
-                        CheckMenuItem(hMenu, IDM_EXPAND_INCSIMILARLEFT,
-                              (expand_include & INCLUDE_SIMILARLEFT) ?
-                                        MF_CHECKED:MF_UNCHECKED);
-                        hr = StringCchPrintf(str, 32, szD, expand_include);
-						if (FAILED(hr))
-							OutputError(hr, IDS_SAFE_PRINTF);
-                        WriteProfileString(APPNAME, szLineInclude, str);
-                        view_changeviewoptions(current_view);
-                        break;
-
-                case IDM_EXPAND_INCSIMILARRIGHT:
-                        /* toggle flag in expand_include options */
-                        expand_include ^= INCLUDE_SIMILARRIGHT;
-
-                        /* check/uncheck as necessary */
-                        CheckMenuItem(hMenu, IDM_EXPAND_INCSIMILARRIGHT,
-                              (expand_include & INCLUDE_SIMILARRIGHT) ?
-                                        MF_CHECKED:MF_UNCHECKED);
-                        hr = StringCchPrintf(str, 32, szD, expand_include);
-						if (FAILED(hr))
-							OutputError(hr, IDS_SAFE_PRINTF);
-                        WriteProfileString(APPNAME, szLineInclude, str);
-                        view_changeviewoptions(current_view);
-                        break;
-
-                    /*
-                     * options selecting which files to include in the
-                     * outline listing, based on their state
-                     */
-                case IDM_OUTLINE_INCLEFT:
-
-
-                    /* toggle flag in outline_include options */
-                    outline_include ^= INCLUDE_LEFTONLY;
-
-                    /* check/uncheck as necessary */
-                    CheckMenuItem(hMenu, IDM_OUTLINE_INCLEFT,
-                                  (outline_include & INCLUDE_LEFTONLY) ?
-                                  MF_CHECKED:MF_UNCHECKED);
-
-                    hr = StringCchPrintf(str, 32, szD, outline_include);
-					if (FAILED(hr))
-							OutputError(hr, IDS_SAFE_PRINTF);
-                    WriteProfileString(APPNAME, szFileInclude, str);
-                    view_changeviewoptions(current_view);
-
-
-                    break;
-
-                case IDM_OUTLINE_INCRIGHT:
-
-
-                    outline_include ^= INCLUDE_RIGHTONLY;
-
-                    CheckMenuItem(hMenu, IDM_OUTLINE_INCRIGHT,
-                                  (outline_include & INCLUDE_RIGHTONLY) ?
-                                  MF_CHECKED:MF_UNCHECKED);
-                    hr = StringCchPrintf(str, 32, szD, outline_include);
-					if (FAILED(hr))
-							OutputError(hr, IDS_SAFE_PRINTF);
-                    WriteProfileString(APPNAME, szFileInclude, str);
-                    view_changeviewoptions(current_view);
-
-                    break;
-
-                case IDM_OUTLINE_INCSAME:
-
-
-                    outline_include ^= INCLUDE_SAME;
-
-                    CheckMenuItem(hMenu, IDM_OUTLINE_INCSAME,
-                                  (outline_include & INCLUDE_SAME) ?
-                                  MF_CHECKED:MF_UNCHECKED);
-                    hr = StringCchPrintf(str, 32, szD, outline_include);
-					if (FAILED(hr))
-							OutputError(hr, IDS_SAFE_PRINTF);
-                    WriteProfileString(APPNAME, szFileInclude, str);
-                    view_changeviewoptions(current_view);
-
-
-                    break;
-
-
-                case IDM_OUTLINE_INCDIFFER:
-
-
-
-                    outline_include ^= INCLUDE_DIFFER;
-
-                    CheckMenuItem(hMenu, IDM_OUTLINE_INCDIFFER,
-                                  (outline_include & INCLUDE_DIFFER) ?
-                                  MF_CHECKED:MF_UNCHECKED);
-
-                    hr = StringCchPrintf(str, 32, szD, outline_include);
-					if (FAILED(hr))
-							OutputError(hr, IDS_SAFE_PRINTF);
-                    WriteProfileString(APPNAME, szFileInclude, str);
-                    view_changeviewoptions(current_view);
-
-
-                    break;
-
-                case IDM_UPDATE:
-                    OnUpdate( (COMPITEM) lParam);
-                    break;
-
-
-                case IDM_RESCAN:
-                    RescanFile(hWnd);
-
-                    /* do we need to force any repaints? */
-                    // - no, as RescanFile sends a IDM_UPDATE
-                    break;
-
-
-                case IDM_LONLY:
-                case IDM_RONLY:
-                case IDM_BOTHFILES:
-                    /* option selects whether the expanded file
-                     * show is the combined file, or just one
-                     * or other of the input files.
-                     *
-                     * if we are not in expand mode, this also
-                     * causes us to expand the selection
-                     */
-
-
-                    CheckMenuItem(GetMenu(hWnd), expand_mode, MF_UNCHECKED);
-                    expand_mode = GET_WM_COMMAND_ID(wParam, lParam);
-                    CheckMenuItem(GetMenu(hWnd), expand_mode, MF_CHECKED);
-
-                    /* change the current view to show only the lines
-                     * of the selected type.
-                     */
-                    if (DisplayMode == MODE_OUTLINE) {
-                        ToExpand(hWnd);
-                    } else {
-                        view_changeviewoptions(current_view);
-                    }
-
-
-                    break;
-
-
-                case IDM_IGNBLANKS:
-
-                    /* if selected, ignore all spaces and tabs on
-                     * comparison - expand view only: outline view
-                     * will still show that 'text files differ'
-                     */
-
-                    ignore_blanks = !ignore_blanks;
-                    CheckMenuItem(hMenu, IDM_IGNBLANKS,
-                                  ignore_blanks? MF_CHECKED:MF_UNCHECKED);
-                    hr = StringCchPrintf(str, 32, szD, ignore_blanks);
-					if (FAILED(hr))
-							OutputError(hr, IDS_SAFE_PRINTF);
-                    WriteProfileString(APPNAME, szBlanks, str);
-
-                    /* invalidate all diffs since we have
-                     * changed diff options, and re-do and display the
-                     * current diff if we are in expand mode.
-                     */
-                    view_changediffoptions(current_view);
-
-                    /* force repaint of bar window */
-                    InvalidateRect(hwndBar, NULL, TRUE);
-
-                    break;
-
-                case IDM_SHOWWHITESPACE:
-
-                        /* if selected, display all spaces and tabs in
-                           the expanded text view */
-                        show_whitespace = !show_whitespace;
-                        CheckMenuItem(hMenu, IDM_SHOWWHITESPACE,
-                                show_whitespace ? MF_CHECKED:MF_UNCHECKED);
-                        hr = StringCchPrintf(str, 32, szD, show_whitespace);
-						if (FAILED(hr))
-							OutputError(hr, IDS_SAFE_PRINTF);
-                        WriteProfileString(APPNAME, szShowWhitespace, str);
-
-                        // change the current view to show only the lines
-                        // of the selected type.
-                        if (DisplayMode == MODE_EXPAND) {
-                                view_changeviewoptions(current_view);
-                        }
-
-                        break;
-
-                case IDM_ALG2:
-
-                    /* if selected, do algorithm2 which does not accept
-                     * unsafe matches.
-                     */
-
-                    Algorithm2 = !Algorithm2;
-                    CheckMenuItem(hMenu, IDM_ALG2,
-                                  Algorithm2? MF_CHECKED:MF_UNCHECKED);
-                    hr = StringCchPrintf(str, 32, szD, Algorithm2);
-					if (FAILED(hr))
-							OutputError(hr, IDS_SAFE_PRINTF);
-                    WriteProfileString(APPNAME, szAlgorithm2, str);
-
-                    /* invalidate all diffs since we have
-                     * changed diff options, and re-do and display the
-                     * current diff if we are in expand mode.
-                     */
-                    view_changediffoptions(current_view);
-
-                    /* force repaint of bar window */
-                    InvalidateRect(hwndBar, NULL, TRUE);
-
-                    break;
-
-                case IDM_MONOCOLS:
-
-                    /* Use monochrome colours - toggle */
-
-                    mono_colours = !mono_colours;
-                    CheckMenuItem(hMenu, IDM_MONOCOLS,
-                                  mono_colours? MF_CHECKED:MF_UNCHECKED);
-                    hr = StringCchPrintf(str, 32, szD, mono_colours);
-					if (FAILED(hr))
-							OutputError(hr, IDS_SAFE_PRINTF);
-                    WriteProfileString(APPNAME, szMonoColours, str);
-                    if (mono_colours)
-                        SetMonoColours();
-                    else
-                        SetColours();
-
-                    /* The diffs are still valid, but force a re-display
-                     * of bar window and main table.
-                     */
-                    SendMessage(hwndBar, WM_COMMAND, IDM_MONOCOLS, 0);
-                    InvalidateRect(hwndBar, NULL, TRUE);
-                    view_changeviewoptions(current_view);
-
-                    break;
-
-                case IDM_PICTURE:
-                    picture_mode = !picture_mode;
-                    CheckMenuItem(hMenu, IDM_PICTURE,
-                                  picture_mode? MF_CHECKED:MF_UNCHECKED);
-                    hr = StringCchPrintf(str, 32, szD, picture_mode);
-					if (FAILED(hr))
-							OutputError(hr, IDS_SAFE_PRINTF);
-                    WriteProfileString(APPNAME, szPicture, str);
-                    DoResize(hWnd);
-                    break;
-
-                case IDM_HIDEMARK:
-                    // toggle state of marked files hidden or not
-                    hide_markedfiles = !hide_markedfiles;
-                    CheckMenuItem(hMenu, IDM_HIDEMARK,
-                                  hide_markedfiles? MF_CHECKED : MF_UNCHECKED);
-                    hr = StringCchPrintf(str, 32, szD, hide_markedfiles);
-					if (FAILED(hr))
-							OutputError(hr, IDS_SAFE_PRINTF);
-                    WriteProfileString(APPNAME, szHideMark, str);
-
-                    // rebuild view with new global option
-                    // - note that marks only affect outline views
-                    if (!view_isexpanded(current_view)) {
-                        view_changeviewoptions(current_view);
-                    }
-                    break;
-
-                case IDM_FIND:
-                  {
-                  int nRet = IDCANCEL;
-                  DLGPROC lpProc = (DLGPROC) MakeProcInstance((WINPROCTYPE) FindDlgProc, hInst);
-                  if (lpProc)
-                    {
-                    char *pszFind = NULL;
+        case IDM_FIND:
+        {
+            int nRet = IDCANCEL;
+            DLGPROC lpProc = (DLGPROC) MakeProcInstance((WINPROCTYPE) FindDlgProc, hInst);
+            if (lpProc)
+            {
+                char *pszFind = NULL;
+                sdkdiff_UI(TRUE);
+                nRet = (BOOL) DialogBoxParam(hInst, (LPCTSTR) IDD_FIND, hwndClient, lpProc, 0L);
+                sdkdiff_UI(FALSE);
+                FreeProcInstance(lpProc);
+            }
+        }
+        break;
+
+        case IDM_FINDNEXT:
+        {
+            const LONG iCol = (view_isexpanded(current_view)) ? 2 : 1;
+            FindString(hWnd, iCol, NULL, 1, 0);
+            break;
+        }
+
+        case IDM_FINDPREV:
+        {
+            const LONG iCol = (view_isexpanded(current_view)) ? 2 : 1;
+            FindString(hWnd, iCol, NULL, -1, 0);
+            break;
+        }
+
+        case IDM_GOTOLINE:
+        {
+            if (!view_getrowcount(current_view))
+            {
+                MessageBox(hWnd, LoadRcString(IDS_GOTOLINE_NOLINES), szSdkDiff, MB_OK|MB_ICONSTOP|MB_TASKMODAL);
+            }
+            else
+            {
+                DLGPROC lpProc = (DLGPROC) MakeProcInstance((WINPROCTYPE)GoToLineDlgProc, hInst);
+                if (lpProc)
+                {
                     sdkdiff_UI(TRUE);
-                    nRet = (BOOL) DialogBoxParam(hInst, (LPCTSTR) IDD_FIND, hwndClient, lpProc, 0L);
+                    DialogBoxParam(hInst, (LPCTSTR) IDD_GOTOLINE, hwndClient, lpProc, 0L);
                     sdkdiff_UI(FALSE);
                     FreeProcInstance(lpProc);
-                    }
-                  }
-                  break;
+                }
+            }
+        }
+        break;
 
-                case IDM_FINDNEXT:
-                  {
-                  const LONG iCol = (view_isexpanded(current_view)) ? 2 : 1;
-                  FindString(hWnd, iCol, NULL, 1, 0);
-                  break;
-                  }
+        case IDM_EDITCOPY:
+        {
+            unsigned long cb = 0;
+            LPCSTR pszText = NULL;
+            long iRow = 0;
+            const BOOL fOutline = !view_isexpanded(current_view);
 
-                case IDM_FINDPREV:
-                  {
-                  const LONG iCol = (view_isexpanded(current_view)) ? 2 : 1;
-                  FindString(hWnd, iCol, NULL, -1, 0);
-                  break;
-                  }
+            /* first count total data size */
+            for (iRow = 0; iRow < selection_nrows; iRow++)
+            {
+                if (fOutline)
+                {
+                    pszText = view_gettext(current_view, selection + iRow, 1);
+                    if (!pszText)
+                        break;
+                    cb += (lstrlen(pszText) + 3) * sizeof(char);
+                }
 
-                case IDM_GOTOLINE:
-                  {
-                  if (!view_getrowcount(current_view))
+                pszText = view_gettext(current_view, selection + iRow, 2);
+                if (!pszText)
+                    break;
+                cb += (lstrlen(pszText)) * sizeof(char);
+            }
+
+            if (cb && OpenClipboard(NULL))
+            {
+                /* space for trailing nul char */
+                cb++;
+
+                /* copy data to clipboard */
+                if (EmptyClipboard())
+                {
+                    HGLOBAL hData = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY,  cb);
+
+                    if (hData)
                     {
-                    MessageBox(hWnd, LoadRcString(IDS_GOTOLINE_NOLINES), szSdkDiff, MB_OK|MB_ICONSTOP|MB_TASKMODAL);
-                    }
-                  else
-                    {
-                    DLGPROC lpProc = (DLGPROC) MakeProcInstance((WINPROCTYPE)GoToLineDlgProc, hInst);
-                    if (lpProc)
-                      {
-                      sdkdiff_UI(TRUE);
-                      DialogBoxParam(hInst, (LPCTSTR) IDD_GOTOLINE, hwndClient, lpProc, 0L);
-                      sdkdiff_UI(FALSE);
-                      FreeProcInstance(lpProc);
-                      }
-                    }
-                  }
-                  break;
+                        void *pv = hData;
+                        if (!pv)
+                        {
+                            HeapFree(GetProcessHeap(), NULL, hData);
+                        }
+                        else
+                        {
+                            LPSTR pszBuf = (LPSTR) pv;
+                            memset(pv, 0, cb);
 
-                case IDM_EDITCOPY:
-                    {
-                        unsigned long cb = 0;
-                        LPCSTR pszText = NULL;
-                        long iRow = 0;
-                        const BOOL fOutline = !view_isexpanded(current_view);
+                            for (iRow = 0; iRow < selection_nrows; iRow++)
+                            {
+                                if (fOutline)
+                                {
+                                    pszText = view_gettext(current_view, selection + iRow, 1);
+                                    if (!pszText)
+                                        break;
 
-                        /* first count total data size */
-                        for (iRow = 0; iRow < selection_nrows; iRow++) {
-                            if (fOutline) {
-                                pszText = view_gettext(current_view, selection + iRow, 1);
+                                    hr = StringCchCopy(pszBuf, cb, pszText);
+                                    if (FAILED(hr))
+                                        OutputError(hr, IDS_SAFE_COPY);
+                                    pszBuf += lstrlen(pszBuf);
+                                    *(pszBuf++) = '\t';
+                                    *pszBuf = 0;
+                                }
+
+                                pszText = view_gettext(current_view, selection + iRow, 2);
                                 if (!pszText)
                                     break;
-                                cb += (lstrlen(pszText) + 3) * sizeof(char);
-                            }
 
-                            pszText = view_gettext(current_view, selection + iRow, 2);
-                            if (!pszText)
-                                break;
-                            cb += (lstrlen(pszText)) * sizeof(char);
-                        }
+                                hr = StringCchCopy(pszBuf, cb, pszText);
+                                if (FAILED(hr))
+                                    OutputError(hr, IDS_SAFE_COPY);
+                                pszBuf += lstrlen(pszBuf);
 
-                        if (cb && OpenClipboard(NULL)) {
-                            /* space for trailing nul char */
-                            cb++;
-
-                            /* copy data to clipboard */
-                            if (EmptyClipboard()) {
-                                HGLOBAL hData = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY,  cb);
-
-                                if (hData) {
-                                    void *pv = hData;
-                                    if (!pv) {
-                                        HeapFree(GetProcessHeap(), NULL, hData);
-                                    }
-                                    else {
-                                        LPSTR pszBuf = (LPSTR) pv;
-                                        memset(pv, 0, cb);
-
-                                        for (iRow = 0; iRow < selection_nrows; iRow++) {
-                                            if (fOutline) {
-                                                pszText = view_gettext(current_view, selection + iRow, 1);
-                                                if (!pszText)
-                                                    break;
-
-                                                hr = StringCchCopy(pszBuf, cb, pszText);
-												if (FAILED(hr))
-													OutputError(hr, IDS_SAFE_COPY);
-                                                pszBuf += lstrlen(pszBuf);
-                                                *(pszBuf++) = '\t';
-                                                *pszBuf = 0;
-                                            }
-
-                                            pszText = view_gettext(current_view, selection + iRow, 2);
-                                            if (!pszText)
-                                                break;
-
-                                            hr = StringCchCopy(pszBuf, cb, pszText);
-											if (FAILED(hr))
-												OutputError(hr, IDS_SAFE_COPY);
-                                            pszBuf += lstrlen(pszBuf);
-
-                                            if (fOutline) {
-                                                *(pszBuf++) = '\r';
-                                                *(pszBuf++) = '\n';
-                                                *pszBuf = 0;
-                                            }
-                                        }
-
-                                        SetClipboardData(CF_TEXT, hData);
-                                    }
+                                if (fOutline)
+                                {
+                                    *(pszBuf++) = '\r';
+                                    *(pszBuf++) = '\n';
+                                    *pszBuf = 0;
                                 }
                             }
-                            CloseClipboard();
+
+                            SetClipboardData(CF_TEXT, hData);
                         }
                     }
-                    break;
+                }
+                CloseClipboard();
+            }
+        }
+        break;
 
-                case IDM_MARK:
-                    {
-                        BOOL bChanged = FALSE;
-                        int i;
+        case IDM_MARK:
+        {
+            BOOL bChanged = FALSE;
+            int i;
 
-                        // toggle the mark on the current selection
-                        // note that the selection could be multiple rows
-                        for (i = 0; i < selection_nrows; i++) {
+            // toggle the mark on the current selection
+            // note that the selection could be multiple rows
+            for (i = 0; i < selection_nrows; i++)
+            {
 
-                            if (view_setmarkstate(current_view, selection + i,
-                                                  !view_getmarkstate(current_view, selection + i))) {
+                if (view_setmarkstate(current_view, selection + i,
+                                      !view_getmarkstate(current_view, selection + i)))
+                {
 
-                                bChanged = TRUE;
-                            }
-                        }
+                    bChanged = TRUE;
+                }
+            }
 
-                        if (bChanged) {
-                            // yes the mark state was changed - need
-                            // to rebuild the view.
-                            if (!view_isexpanded(current_view)) {
-                                view_changeviewoptions(current_view);
-                            }
-                        }
-                        break;
-                    }
+            if (bChanged)
+            {
+                // yes the mark state was changed - need
+                // to rebuild the view.
+                if (!view_isexpanded(current_view))
+                {
+                    view_changeviewoptions(current_view);
+                }
+            }
+            break;
+        }
 
-                case IDM_TOGGLEMARK:
-                    // toggle the state of all files: unmark all
-                    // marked files and vice versa
-                    complist_togglemark(view_getcomplist(current_view));
+        case IDM_TOGGLEMARK:
+            // toggle the state of all files: unmark all
+            // marked files and vice versa
+            complist_togglemark(view_getcomplist(current_view));
 
-                    // rebuild view
-                    if (!view_isexpanded(current_view)) {
-                        view_changeviewoptions(current_view);
-                    }
-                    break;
-
-                case IDM_MARKPATTERN:
-                    // dialog to query the pattern, then set a mark on
-                    // all compitems whose title matches that pattern
-                    // returns TRUE if anything was changed
-                    if (complist_markpattern(view_getcomplist(current_view))) {
-
-                        // rebuild view
-                        if (!view_isexpanded(current_view)) {
-                            view_changeviewoptions(current_view);
-                        }
-                    }
-                    break;
-
-                case IDM_EXPAND:
-
-                    /* show the expanded view of the
-                     * selected file
-                     */
-                    if (current_view != NULL) {
-                        ToExpand(hWnd);
-                    }
-
-                    break;
-
-                case IDM_OUTLINE:
-                    /* return to the outline view (list of filenames) */
-                    ToOutline(hWnd);
-
-                    break;
-
-                case IDM_FCHANGE:
-                    /* find the next line in the current view
-                     * that is not the same in both files -
-                     * in outline view, finds the next filename that
-                     * is not identical
-                     */
-                    FindNextChange();
-                    break;
-
-                case IDM_FPCHANGE:
-                    /* same as IDM_FCHANGE, but going backwards from
-                     * current position
-                     */
-                    FindPrevChange();
-                    break;
-
-                case IDM_FCHANGE_LAURIE:
-                    /* same as IDM_FCHANGE, but tries to keep cursor on same
-                     * line.
-                     */
-                    _FindNextChange(TRUE, FALSE);
-                    break;
-
-                case IDM_FPCHANGE_LAURIE:
-                    /* same as IDM_FPCHANGE, but tries to keep cursor on same
-                     * line.
-                     */
-                    _FindPrevChange(TRUE, FALSE);
-                    break;
-
-                    // given a line that has been moved, jump to the
-                    // other representation of the same line.
-                    // this used to be available just through double-click
-                    // but now is also available from a context menu
-                case IDM_TOMOVED:
-                    ToMoved(hWnd, TRUE);
-                    break;
+            // rebuild view
+            if (!view_isexpanded(current_view))
+            {
+                view_changeviewoptions(current_view);
             }
             break;
 
-        case WM_SIZE:
-            DoResize(hWnd);
-            break;
+        case IDM_MARKPATTERN:
+            // dialog to query the pattern, then set a mark on
+            // all compitems whose title matches that pattern
+            // returns TRUE if anything was changed
+            if (complist_markpattern(view_getcomplist(current_view)))
+            {
 
-        case WM_SETFOCUS:
-            /* set the focus on the table class so it can process
-             * page-up /pagedown keys etc.
-             */
-            SetFocus(hwndRCD);
-            break;
-
-        case WM_KEYDOWN:
-            /* although the table window has the focus, he passes
-             * back to us any keys he doesn't understand
-             * We handle escape here to mean 'return to outline view'
-             */
-            if (wParam == VK_ESCAPE) {
-                ToOutline(hWnd);
-            } else if (wParam == VK_APPS) {
-                // Handle the context menu keyboard key
-                POINT posCursor;
-                GetCursorPos(&posCursor);
-                ScreenToClient(hwndRCD, &posCursor);
-                OnRightClick(hWnd, posCursor.x, posCursor.y);
+                // rebuild view
+                if (!view_isexpanded(current_view))
+                {
+                    view_changeviewoptions(current_view);
+                }
             }
             break;
 
-        case WM_RBUTTONDOWN:
-            /*
-             * the table window handles this by performing the
-             * selection and then passing the message to us, allowing
-             * us to put up a context menu.
+        case IDM_EXPAND:
+
+            /* show the expanded view of the
+             * selected file
              */
-            OnRightClick(hWnd, LOWORD(lParam), HIWORD(lParam));
+            if (current_view != NULL)
+            {
+                ToExpand(hWnd);
+            }
+
             break;
 
-        case WM_CLOSE:
-            SendMessage(hWnd, WM_COMMAND, IDM_EXIT, 0);    
-            return TRUE;
+        case IDM_OUTLINE:
+            /* return to the outline view (list of filenames) */
+            ToOutline(hWnd);
 
-            /* don't allow close when busy - process this message in
-             * order to ensure this
-             */
             break;
 
-        case WM_DESTROY:
-			TCHAR pszHelp[MAX_PATH];
-			memset(pszHelp, 0, MAX_PATH);
-			hr = StringCchCopy(pszHelp, MAX_PATH, pszWorkingDirectoryName);
-			if (FAILED(hr))
-				OutputError(hr, IDS_SAFE_COPY);
-			hr = StringCchCat(pszHelp, MAX_PATH, "sdkdiff.chm");
-			if (FAILED(hr))
-				OutputError(hr, IDS_SAFE_COPY);
-            DeleteTools();
-            HtmlHelp(hWnd, pszHelp, HH_CLOSE_ALL, 0);
-            PostQuitMessage(0);
+        case IDM_FCHANGE:
+            /* find the next line in the current view
+             * that is not the same in both files -
+             * in outline view, finds the next filename that
+             * is not identical
+             */
+            FindNextChange();
             break;
 
-        case TM_CURRENTVIEW:
-            /* allow other people such as the bar window to query the
-             * current view
+        case IDM_FPCHANGE:
+            /* same as IDM_FCHANGE, but going backwards from
+             * current position
              */
-            return((INT_PTR) current_view);
+            FindPrevChange();
+            break;
+
+        case IDM_FCHANGE_LAURIE:
+            /* same as IDM_FCHANGE, but tries to keep cursor on same
+             * line.
+             */
+            _FindNextChange(TRUE, FALSE);
+            break;
+
+        case IDM_FPCHANGE_LAURIE:
+            /* same as IDM_FPCHANGE, but tries to keep cursor on same
+             * line.
+             */
+            _FindPrevChange(TRUE, FALSE);
+            break;
+
+        // given a line that has been moved, jump to the
+        // other representation of the same line.
+        // this used to be available just through double-click
+        // but now is also available from a context menu
+        case IDM_TOMOVED:
+            ToMoved(hWnd, TRUE);
+            break;
+        }
+        break;
+
+    case WM_SIZE:
+        DoResize(hWnd);
+        break;
+
+    case WM_SETFOCUS:
+        /* set the focus on the table class so it can process
+         * page-up /pagedown keys etc.
+         */
+        SetFocus(hwndRCD);
+        break;
+
+    case WM_KEYDOWN:
+        /* although the table window has the focus, he passes
+         * back to us any keys he doesn't understand
+         * We handle escape here to mean 'return to outline view'
+         */
+        if (wParam == VK_ESCAPE)
+        {
+            ToOutline(hWnd);
+        }
+        else if (wParam == VK_APPS)
+        {
+            // Handle the context menu keyboard key
+            POINT posCursor;
+            GetCursorPos(&posCursor);
+            ScreenToClient(hwndRCD, &posCursor);
+            OnRightClick(hWnd, posCursor.x, posCursor.y);
+        }
+        break;
+
+    case WM_RBUTTONDOWN:
+        /*
+         * the table window handles this by performing the
+         * selection and then passing the message to us, allowing
+         * us to put up a context menu.
+         */
+        OnRightClick(hWnd, LOWORD(lParam), HIWORD(lParam));
+        break;
+
+    case WM_CLOSE:
+        SendMessage(hWnd, WM_COMMAND, IDM_EXIT, 0);
+        return TRUE;
+
+        /* don't allow close when busy - process this message in
+         * order to ensure this
+         */
+        break;
+
+    case WM_DESTROY:
+        TCHAR pszHelp[MAX_PATH];
+        memset(pszHelp, 0, MAX_PATH);
+        hr = StringCchCopy(pszHelp, MAX_PATH, pszWorkingDirectoryName);
+        if (FAILED(hr))
+            OutputError(hr, IDS_SAFE_COPY);
+        hr = StringCchCat(pszHelp, MAX_PATH, "sdkdiff.chm");
+        if (FAILED(hr))
+            OutputError(hr, IDS_SAFE_COPY);
+        DeleteTools();
+        HtmlHelp(hWnd, pszHelp, HH_CLOSE_ALL, 0);
+        PostQuitMessage(0);
+        break;
+
+    case TM_CURRENTVIEW:
+        /* allow other people such as the bar window to query the
+         * current view
+         */
+        return((INT_PTR) current_view);
 
 #ifdef LATER
 #ifdef WM_MOUSEWHEEL
-        case WM_MOUSEWHEEL:
-            if (LOWORD(wParam) & MK_MBUTTON) {
-                if ((short)HIWORD(wParam) < 0) {
-                    // The next occurence
-                    _FindNextChange(FALSE, TRUE);
-                }
-                else {
-                    _FindPrevChange(FALSE, TRUE);
-                }
+    case WM_MOUSEWHEEL:
+        if (LOWORD(wParam) & MK_MBUTTON)
+        {
+            if ((short)HIWORD(wParam) < 0)
+            {
+                // The next occurence
+                _FindNextChange(FALSE, TRUE);
             }
-            break;
+            else
+            {
+                _FindPrevChange(FALSE, TRUE);
+            }
+        }
+        break;
 #endif
 #endif
 
-        case WM_QUERYENDSESSION:
-            if (IsBusy())
-                return FALSE;
-            return TRUE;
+    case WM_QUERYENDSESSION:
+        if (IsBusy())
+            return FALSE;
+        return TRUE;
 
-        case WM_ENDSESSION:
-            SendMessage(hWnd, WM_CLOSE, 0, 0);
-            break;
+    case WM_ENDSESSION:
+        SendMessage(hWnd, WM_CLOSE, 0, 0);
+        break;
 
-        default:
-            /* handle registered table messages */
-            if (message == table_msgcode) {
-                ret = TableServer(hWnd, wParam, lParam);
-                return(ret);
-            }
-            return(DefWindowProc(hWnd, message, wParam, lParam));
+    default:
+        /* handle registered table messages */
+        if (message == table_msgcode)
+        {
+            ret = TableServer(hWnd, wParam, lParam);
+            return(ret);
+        }
+        return(DefWindowProc(hWnd, message, wParam, lParam));
     }
     return(0);
 }
@@ -4554,15 +4869,18 @@ LTabWidth_tryagain:
  */
 PUCHAR
 My_mbspbrk(
-          PUCHAR psz,
-          PUCHAR pszSep
-          )
+    PUCHAR psz,
+    PUCHAR pszSep
+)
 {
     PUCHAR pszSepT;
-    while (*psz != '\0') {
+    while (*psz != '\0')
+    {
         pszSepT = pszSep;
-        while (*pszSepT != '\0') {
-            if (*pszSepT == *psz) {
+        while (*pszSepT != '\0')
+        {
+            if (*pszSepT == *psz)
+            {
                 return psz;
             }
             pszSepT = (PUCHAR)CharNext((LPCSTR)pszSepT);
@@ -4582,45 +4900,45 @@ My_mbspbrk(
  */
 PUCHAR
 My_mbsstr(
-         PUCHAR str1,
-         PUCHAR str2,
-         PUCHAR *pstrEnd
-         )
+    PUCHAR str1,
+    PUCHAR str2,
+    PUCHAR *pstrEnd
+)
 {
-  PUCHAR cp = (PUCHAR) str1;
-  PUCHAR s1, s2;
+    PUCHAR cp = (PUCHAR) str1;
+    PUCHAR s1, s2;
 
-  if (!*str2)
-    return ((PUCHAR) str1);
+    if (!*str2)
+        return ((PUCHAR) str1);
 
-  while (*cp)
+    while (*cp)
     {
-    s1 = cp;
-    s2 = (PUCHAR) str2;
+        s1 = cp;
+        s2 = (PUCHAR) str2;
 
-    while (*s1 && *s2)
-      {
-      if (*s1 - *s2)
-        break;
+        while (*s1 && *s2)
+        {
+            if (*s1 - *s2)
+                break;
 
-      if (IsDBCSLeadByte(*s1) && (++(*s1) - ++(*s2)))
-        break;
+            if (IsDBCSLeadByte(*s1) && (++(*s1) - ++(*s2)))
+                break;
 
-      s1++;
-      s2++;
-      }
+            s1++;
+            s2++;
+        }
 
-    if (!*s2)
-      {
-      if (pstrEnd)
-        *pstrEnd = s1;
-      return cp;
-      }
+        if (!*s2)
+        {
+            if (pstrEnd)
+                *pstrEnd = s1;
+            return cp;
+        }
 
-    cp = (PUCHAR)CharNext((LPCSTR)cp);
+        cp = (PUCHAR)CharNext((LPCSTR)cp);
     }
 
-  return NULL;
+    return NULL;
 }
 
 /***************************************************************************
@@ -4633,49 +4951,49 @@ My_mbsstr(
  */
 PUCHAR
 My_mbsistr(
-          PUCHAR str1,
-          PUCHAR str2,
-          PUCHAR *pstrEnd
-          )
+    PUCHAR str1,
+    PUCHAR str2,
+    PUCHAR *pstrEnd
+)
 {
-  PUCHAR cp = (PUCHAR) str1;
-  PUCHAR s1, s2;
+    PUCHAR cp = (PUCHAR) str1;
+    PUCHAR s1, s2;
 
-  if (!*str2)
-    return ((PUCHAR) str1);
+    if (!*str2)
+        return ((PUCHAR) str1);
 
-  while (*cp)
+    while (*cp)
     {
-    s1 = cp;
-    s2 = (PUCHAR) str2;
+        s1 = cp;
+        s2 = (PUCHAR) str2;
 
-    while (*s1 && *s2)
-      {
-      if (IsDBCSLeadByte(*s1))
+        while (*s1 && *s2)
         {
-        if ((*s1 - *s2) || (++(*s1) - ++(*s2)))
-          break;
+            if (IsDBCSLeadByte(*s1))
+            {
+                if ((*s1 - *s2) || (++(*s1) - ++(*s2)))
+                    break;
+            }
+            else if (toupper(*s1) - toupper(*s2))
+            {
+                break;
+            }
+
+            s1++;
+            s2++;
         }
-      else if (toupper(*s1) - toupper(*s2))
+
+        if (!*s2)
         {
-        break;
+            if (pstrEnd)
+                *pstrEnd = s1;
+            return cp;
         }
 
-      s1++;
-      s2++;
-      }
-
-    if (!*s2)
-      {
-      if (pstrEnd)
-        *pstrEnd = s1;
-      return cp;
-      }
-
-    cp = (PUCHAR)CharNext((LPCSTR)cp);
+        cp = (PUCHAR)CharNext((LPCSTR)cp);
     }
 
-  return NULL;
+    return NULL;
 }
 
 /***************************************************************************
@@ -4688,11 +5006,12 @@ My_mbsistr(
  */
 LPSTR
 My_mbschr(
-          LPCSTR psz,
-          unsigned short uiSep
-          )
+    LPCSTR psz,
+    unsigned short uiSep
+)
 {
-    while (*psz != '\0' && *psz != uiSep) {
+    while (*psz != '\0' && *psz != uiSep)
+    {
         psz = CharNext(psz);
     }
     return (LPSTR)(*psz == uiSep ? psz : NULL);
@@ -4708,27 +5027,36 @@ My_mbschr(
  */
 LPSTR
 My_mbsncpy(
-           LPSTR psz1,
-           LPCSTR psz2,
-           size_t nLen
-           )
+    LPSTR psz1,
+    LPCSTR psz2,
+    size_t nLen
+)
 {
     LPSTR pszSv = psz1;
     int Length = (int)nLen;
 
-    while (0 < Length) {
-        if (*psz2 == '\0') {
+    while (0 < Length)
+    {
+        if (*psz2 == '\0')
+        {
             *psz1++ = '\0';
             Length--;
-        } else if (IsDBCSLeadByte(*psz2)) {
-            if (Length == 1) {
+        }
+        else if (IsDBCSLeadByte(*psz2))
+        {
+            if (Length == 1)
+            {
                 *psz1 = '\0';
-            } else {
+            }
+            else
+            {
                 *psz1++ = *psz2++;
                 *psz1++ = *psz2++;
             }
             Length -= 2;
-        } else {
+        }
+        else
+        {
             *psz1++ = *psz2++;
             Length--;
         }
@@ -4746,24 +5074,28 @@ My_mbsncpy(
  */
 LPSTR
 My_mbsrchr(
-           LPCSTR psz,
-           unsigned short uiSep
-           )
+    LPCSTR psz,
+    unsigned short uiSep
+)
 {
     unsigned const char *pszHead;
 
     pszHead = (unsigned char *)psz;
 
-    while (*psz != '\0') {
+    while (*psz != '\0')
+    {
         psz++;
     }
-    if (uiSep == '\0') {
+    if (uiSep == '\0')
+    {
         return (LPSTR)psz;
     }
 
-    while ((LPCSTR)psz > (LPCSTR)pszHead) {
+    while ((LPCSTR)psz > (LPCSTR)pszHead)
+    {
         psz = CharPrev((LPCSTR)pszHead, psz);
-        if (*psz == uiSep) {
+        if (*psz == uiSep)
+        {
             break;
         }
     }
@@ -4781,26 +5113,33 @@ My_mbsrchr(
  */
 int
 My_mbsncmp(
-           LPCSTR psz1,
-           LPCSTR psz2,
-           size_t nLen
-           )
+    LPCSTR psz1,
+    LPCSTR psz2,
+    size_t nLen
+)
 {
     int Length = (int)nLen;
 
-    while (0 < Length) {
-        if ('\0' == *psz1 || '\0' == *psz2) {
+    while (0 < Length)
+    {
+        if ('\0' == *psz1 || '\0' == *psz2)
+        {
             return *psz1 - *psz2;
         }
-        if (IsDBCSLeadByte(*psz1) || IsDBCSLeadByte(*psz2)) {
-            if (*psz1 != *psz2 || *(psz1+1) != *(psz2+1)) {
+        if (IsDBCSLeadByte(*psz1) || IsDBCSLeadByte(*psz2))
+        {
+            if (*psz1 != *psz2 || *(psz1+1) != *(psz2+1))
+            {
                 return *psz1 - *psz2;
             }
             psz1 += 2;
             psz2 += 2;
             Length -= 2;
-        } else {
-            if (*psz1 != *psz2) {
+        }
+        else
+        {
+            if (*psz1 != *psz2)
+            {
                 return *psz1 - *psz2;
             }
             psz1++;
@@ -4822,26 +5161,33 @@ My_mbsncmp(
  */
 int
 My_mbsnicmp(
-           PUCHAR psz1,
-           PUCHAR psz2,
-           size_t nLen
-           )
+    PUCHAR psz1,
+    PUCHAR psz2,
+    size_t nLen
+)
 {
     int Length = (int)nLen;
 
-    while (0 < Length) {
-        if ('\0' == *psz1 || '\0' == *psz2) {
+    while (0 < Length)
+    {
+        if ('\0' == *psz1 || '\0' == *psz2)
+        {
             return *psz1 - *psz2;
         }
-        if (IsDBCSLeadByte(*psz1) || IsDBCSLeadByte(*psz2)) {
-            if (*psz1 != *psz2 || *(psz1+1) != *(psz2+1)) {
+        if (IsDBCSLeadByte(*psz1) || IsDBCSLeadByte(*psz2))
+        {
+            if (*psz1 != *psz2 || *(psz1+1) != *(psz2+1))
+            {
                 return *psz1 - *psz2;
             }
             psz1 += 2;
             psz2 += 2;
             Length -= 2;
-        } else {
-            if (toupper(*psz1) != toupper(*psz2)) {
+        }
+        else
+        {
+            if (toupper(*psz1) != toupper(*psz2))
+            {
                 return *psz1 - *psz2;
             }
             psz1++;
@@ -4865,8 +5211,8 @@ My_mbsnicmp(
 LPTSTR
 APIENTRY
 LoadRcString(
-             UINT wID
-             )
+    UINT wID
+)
 {
     static TCHAR szBuf[512];
 

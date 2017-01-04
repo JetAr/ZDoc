@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -14,7 +14,7 @@
 //  A simple WASAPI Capture client.
 //
 
-CWASAPICapture::CWASAPICapture(IMMDevice *Endpoint, bool EnableStreamSwitch, ERole EndpointRole) : 
+CWASAPICapture::CWASAPICapture(IMMDevice *Endpoint, bool EnableStreamSwitch, ERole EndpointRole) :
     _RefCount(1),
     _Endpoint(Endpoint),
     _AudioClient(NULL),
@@ -37,13 +37,13 @@ CWASAPICapture::CWASAPICapture(IMMDevice *Endpoint, bool EnableStreamSwitch, ERo
 //
 //  Empty destructor - everything should be released in the Shutdown() call.
 //
-CWASAPICapture::~CWASAPICapture(void) 
+CWASAPICapture::~CWASAPICapture(void)
 {
 }
 
 
 //
-//  Initialize WASAPI in event driven mode, associate the audio client with our samples ready event handle, retrieve 
+//  Initialize WASAPI in event driven mode, associate the audio client with our samples ready event handle, retrieve
 //  a capture client for the transport, create the capture thread and start the audio engine.
 //
 bool CWASAPICapture::InitializeAudioEngine()
@@ -250,7 +250,7 @@ void CWASAPICapture::Stop()
     HRESULT hr;
 
     //
-    //  Tell the capture thread to shut down, wait for the thread to complete then clean up all the stuff we 
+    //  Tell the capture thread to shut down, wait for the thread to complete then clean up all the stuff we
     //  allocated in Start().
     //
     if (_ShutdownEvent)
@@ -311,7 +311,7 @@ DWORD CWASAPICapture::DoCaptureThread()
         //
         //  In Timer Driven mode, we want to wait for half the desired latency in milliseconds.
         //
-        //  That way we'll wake up half way through the processing period to pull the 
+        //  That way we'll wake up half way through the processing period to pull the
         //  next set of samples from the engine.
         //
         DWORD waitResult = WaitForMultipleObjects(2, waitArray, FALSE, _EngineLatencyInMS / 2);
@@ -416,7 +416,7 @@ bool CWASAPICapture::InitializeStreamSwitch()
         return false;
     }
     //
-    //  Register for session and endpoint change notifications.  
+    //  Register for session and endpoint change notifications.
     //
     //  A stream switch is initiated when we receive a session disconnect notification or we receive a default device changed notification.
     //
@@ -467,11 +467,11 @@ void CWASAPICapture::TerminateStreamSwitch()
 //  When a stream switch happens, we want to do several things in turn:
 //
 //  1) Stop the current capturer.
-//  2) Release any resources we have allocated (the _AudioClient, _AudioSessionControl (after unregistering for notifications) and 
+//  2) Release any resources we have allocated (the _AudioClient, _AudioSessionControl (after unregistering for notifications) and
 //        _CaptureClient).
 //  3) Wait until the default device has changed (or 500ms has elapsed).  If we time out, we need to abort because the stream switch can't happen.
 //  4) Retrieve the new default endpoint for our role.
-//  5) Re-instantiate the audio client on that new endpoint.  
+//  5) Re-instantiate the audio client on that new endpoint.
 //  6) Retrieve the mix format for the new endpoint.  If the mix format doesn't match the old endpoint's mix format, we need to abort because the stream
 //      switch can't happen.
 //  7) Re-initialize the _AudioClient.
@@ -510,15 +510,15 @@ bool CWASAPICapture::HandleStreamSwitchEvent()
     //
     //  Step 3.  Wait for the default device to change.
     //
-    //  There is a race between the session disconnect arriving and the new default device 
-    //  arriving (if applicable).  Wait the shorter of 500 milliseconds or the arrival of the 
-    //  new default device, then attempt to switch to the default device.  In the case of a 
+    //  There is a race between the session disconnect arriving and the new default device
+    //  arriving (if applicable).  Wait the shorter of 500 milliseconds or the arrival of the
+    //  new default device, then attempt to switch to the default device.  In the case of a
     //  format change (i.e. the default device does not change), we artificially generate  a
-    //  new default device notification so the code will not needlessly wait 500ms before 
-    //  re-opening on the new format.  (However, note below in step 6 that in this SDK 
-    //  sample, we are unlikely to actually successfully absorb a format change, but a 
-    //  real audio application implementing stream switching would re-format their 
-    //  pipeline to deliver the new format).  
+    //  new default device notification so the code will not needlessly wait 500ms before
+    //  re-opening on the new format.  (However, note below in step 6 that in this SDK
+    //  sample, we are unlikely to actually successfully absorb a format change, but a
+    //  real audio application implementing stream switching would re-format their
+    //  pipeline to deliver the new format).
     //
     DWORD waitResult = WaitForSingleObject(_StreamSwitchCompleteEvent, 500);
     if (waitResult == WAIT_TIMEOUT)
@@ -616,9 +616,9 @@ ErrorExit:
 }
 
 //
-//  Called when an audio session is disconnected.  
+//  Called when an audio session is disconnected.
 //
-//  When a session is disconnected because of a device removal or format change event, we just want 
+//  When a session is disconnected because of a device removal or format change event, we just want
 //  to let the capture thread know that the session's gone away
 //
 HRESULT CWASAPICapture::OnSessionDisconnected(AudioSessionDisconnectReason DisconnectReason)
@@ -651,7 +651,7 @@ HRESULT CWASAPICapture::OnSessionDisconnected(AudioSessionDisconnectReason Disco
     return S_OK;
 }
 //
-//  Called when the default capture device changed.  We just want to set an event which lets the stream switch logic know that it's ok to 
+//  Called when the default capture device changed.  We just want to set an event which lets the stream switch logic know that it's ok to
 //  continue with the stream switch.
 //
 HRESULT CWASAPICapture::OnDefaultDeviceChanged(EDataFlow Flow, ERole Role, LPCWSTR /*NewDefaultDeviceId*/)
@@ -659,9 +659,9 @@ HRESULT CWASAPICapture::OnDefaultDeviceChanged(EDataFlow Flow, ERole Role, LPCWS
     if (Flow == eCapture && Role == _EndpointRole)
     {
         //
-        //  The default capture device for our configuredf role was changed.  
+        //  The default capture device for our configuredf role was changed.
         //
-        //  If we're not in a stream switch already, we want to initiate a stream switch event.  
+        //  If we're not in a stream switch already, we want to initiate a stream switch event.
         //  We also we want to set the stream switch complete event.  That will signal the capture thread that it's ok to re-initialize the
         //  audio capturer.
         //

@@ -1,14 +1,14 @@
-/////////////////////////////////////////////////////////////////////////
-// Copyright © Microsoft Corporation. All rights reserved.
-// 
-//  This file may contain preliminary information or inaccuracies, 
-//  and may not correctly represent any associated Microsoft 
-//  Product as commercially released. All Materials are provided entirely 
-//  ìAS IS.î To the extent permitted by law, MICROSOFT MAKES NO 
-//  WARRANTY OF ANY KIND, DISCLAIMS ALL EXPRESS, IMPLIED AND STATUTORY 
-//  WARRANTIES, AND ASSUMES NO LIABILITY TO YOU FOR ANY DAMAGES OF 
-//  ANY TYPE IN CONNECTION WITH THESE MATERIALS OR ANY INTELLECTUAL PROPERTY IN THEM. 
-// 
+Ôªø/////////////////////////////////////////////////////////////////////////
+// Copyright ¬© Microsoft Corporation. All rights reserved.
+//
+//  This file may contain preliminary information or inaccuracies,
+//  and may not correctly represent any associated Microsoft
+//  Product as commercially released. All Materials are provided entirely
+//  ‚ÄúAS IS.‚Äù To the extent permitted by law, MICROSOFT MAKES NO
+//  WARRANTY OF ANY KIND, DISCLAIMS ALL EXPRESS, IMPLIED AND STATUTORY
+//  WARRANTIES, AND ASSUMES NO LIABILITY TO YOU FOR ANY DAMAGES OF
+//  ANY TYPE IN CONNECTION WITH THESE MATERIALS OR ANY INTELLECTUAL PROPERTY IN THEM.
+//
 
 
 #pragma once
@@ -55,7 +55,7 @@
 
 
 
-// Max buffer size for logging/tracing 
+// Max buffer size for logging/tracing
 const int MAX_VPRINTF_BUFFER_SIZE = 4096;
 
 
@@ -88,7 +88,7 @@ const int MAX_VPRINTF_BUFFER_SIZE = 4096;
 //
 
 #ifdef _DEBUG
-    #define _ASSERTE(x) {                               \
+#define _ASSERTE(x) {                               \
         if (!(x))                                       \
         {                                           \
             wprintf(L"\nASSERTION FAILED: %S\n", #x);       \
@@ -98,7 +98,7 @@ const int MAX_VPRINTF_BUFFER_SIZE = 4096;
         }                                           \
     }
 #else
-    #define _ASSERTE(x)
+#define _ASSERTE(x)
 #endif
 
 
@@ -108,13 +108,13 @@ const int MAX_VPRINTF_BUFFER_SIZE = 4096;
 //
 
 //
-//  Macro to execute a COM API and to test its result. 
+//  Macro to execute a COM API and to test its result.
 //  - The macro will execute the call given in its parameter
 //  - The macro will examine the returned HRESULT
-//  - If an failed HRESULT is returned, an explanatory text is written to the console 
+//  - If an failed HRESULT is returned, an explanatory text is written to the console
 //  and an error is thrown. VSHADOW.EXE will then terminate
 //
-//  Example 
+//  Example
 //  - API: HRESULT CoCreateInstance()
 //  - Sample Usage: CHECK_COM( CoCreateInstance() )
 //
@@ -137,10 +137,10 @@ const int MAX_VPRINTF_BUFFER_SIZE = 4096;
 
 
 //
-//  Macro to execute a Win32 API and to test its result. 
+//  Macro to execute a Win32 API and to test its result.
 //  - The macro will execute the call given in its parameter
-//  - The macro will examine the returned BOOL (we assume that the API returns a BOOL. 
-//  - If FALSE is returned, an explanatory text is written to the console 
+//  - The macro will examine the returned BOOL (we assume that the API returns a BOOL.
+//  - If FALSE is returned, an explanatory text is written to the console
 //  and an error is thrown. VSHADOW.EXE will then terminate.
 //
 #define CHECK_WIN32( Call )                                                                 \

@@ -1,4 +1,4 @@
-/*
+﻿/*
 THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED
 TO THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -22,12 +22,13 @@ Copyright (C) 1997 - 2000.  Microsoft Corporation.  All rights reserved.
 
 #define ACCESS_ALL  ACCESS_READ | ACCESS_MODIFY | ACCESS_DELETE
 
-typedef struct tagObject {
-   PSECURITY_DESCRIPTOR pSD;
-   BOOL                 fContainer;
-   struct tagObject     *Parent;
-   struct tagObject     *Objects;
-   HTREEITEM            hTreeItem;
+typedef struct tagObject
+{
+    PSECURITY_DESCRIPTOR pSD;
+    BOOL                 fContainer;
+    struct tagObject     *Parent;
+    struct tagObject     *Objects;
+    HTREEITEM            hTreeItem;
 } OBJECT, *POBJECT;
 
 
@@ -52,7 +53,7 @@ BOOL NewLogon( HINSTANCE, WORD );
 void GetLogonName( WORD wIndex, WCHAR szUser[], SIZE_T cchUser );
 BOOL DefaultUser( void );
 BOOL CALLBACK LogonDlgProc (HWND hwnd, UINT msg,
-                     WPARAM wParam,  LPARAM lParam);
+                            WPARAM wParam,  LPARAM lParam);
 
 // PrivOjSI.cpp
 extern "C"

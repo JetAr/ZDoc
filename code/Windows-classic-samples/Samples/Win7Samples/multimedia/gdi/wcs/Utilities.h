@@ -1,4 +1,4 @@
-//+--------------------------------------------------------------------------
+﻿//+--------------------------------------------------------------------------
 //
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
@@ -59,4 +59,4 @@ HRESULT SafeULongMult(
     __in ULONG ulMultiplicand,
     __in ULONG ulMultiplier,
     __out ULONG *pulResult
-    );
+);

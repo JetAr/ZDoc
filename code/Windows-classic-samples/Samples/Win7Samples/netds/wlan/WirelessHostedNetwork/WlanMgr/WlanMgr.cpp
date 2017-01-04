@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -10,11 +10,11 @@
 //
 // WLAN notification callback
 //
-VOID WINAPI 
+VOID WINAPI
 CWlanManager::WlanNotificationCallback(
     PWLAN_NOTIFICATION_DATA pNotifData,
     PVOID pContext
-    )
+)
 {
     CWlanManager* pWlanManager = (CWlanManager *)pContext;
 
@@ -22,7 +22,7 @@ CWlanManager::WlanNotificationCallback(
 }
 
 // CWlanManager
-CWlanManager::CWlanManager() : 
+CWlanManager::CWlanManager() :
     m_WlanHandle(NULL),
     m_NotificationSink(NULL),
     m_CallbackComplete(NULL),
@@ -42,7 +42,7 @@ CWlanManager::~CWlanManager()
         WlanCloseHandle(m_WlanHandle, NULL);
         m_WlanHandle = NULL;
     }
-    
+
     if (m_CallbackComplete != NULL)
     {
         CloseHandle(m_CallbackComplete);
@@ -52,7 +52,7 @@ CWlanManager::~CWlanManager()
     DeleteCriticalSection(&m_CriticalSection);
 }
 
-HRESULT 
+HRESULT
 CWlanManager::Init()
 {
     HRESULT hr = S_OK;
@@ -76,24 +76,24 @@ CWlanManager::Init()
 
     // open a wlan handle first
     retCode = WlanOpenHandle(
-                WLAN_API_VERSION,
-                NULL,           // reserved
-                &m_ServerVersion,
-                &m_WlanHandle
-                );
+                  WLAN_API_VERSION,
+                  NULL,           // reserved
+                  &m_ServerVersion,
+                  &m_WlanHandle
+              );
 
     BAIL_ON_WIN32_ERROR(retCode, hr);
 
     // register notifications
     retCode = WlanRegisterNotification(
-                m_WlanHandle,
-                WLAN_NOTIFICATION_SOURCE_HNWK,
-                TRUE,
-                &CWlanManager::WlanNotificationCallback,
-                this,
-                NULL,       // reserved
-                NULL
-                );
+                  m_WlanHandle,
+                  WLAN_NOTIFICATION_SOURCE_HNWK,
+                  TRUE,
+                  &CWlanManager::WlanNotificationCallback,
+                  this,
+                  NULL,       // reserved
+                  NULL
+              );
     BAIL_ON_WIN32_ERROR(retCode, hr);
 
     //
@@ -102,59 +102,59 @@ CWlanManager::Init()
     // Bail out if it fails.
     //
     retCode = WlanHostedNetworkInitSettings(
-                m_WlanHandle,
-                NULL,
-                NULL        // reserved
-                );
+                  m_WlanHandle,
+                  NULL,
+                  NULL        // reserved
+              );
     BAIL_ON_WIN32_ERROR(retCode, hr);
 
     //
     // Is hosted network enabled?
     //
     retCode = WlanHostedNetworkQueryProperty(
-                m_WlanHandle,
-                wlan_hosted_network_opcode_enable,
-                &dwDataSize,
-                (PVOID *)&pbMode,
-                &valueType,
-                NULL        // reserved
-                );
+                  m_WlanHandle,
+                  wlan_hosted_network_opcode_enable,
+                  &dwDataSize,
+                  (PVOID *)&pbMode,
+                  &valueType,
+                  NULL        // reserved
+              );
     BAIL_ON_WIN32_ERROR(retCode, hr);
 
     if(!pbMode || dwDataSize < sizeof(BOOL))
     {
         BAIL_ON_WIN32_ERROR(ERROR_INVALID_DATA, hr);
-    }    
+    }
 
     //
     // get the hosted network connectivity settings
     //
     retCode = WlanHostedNetworkQueryProperty(
-                m_WlanHandle,
-                wlan_hosted_network_opcode_connection_settings,
-                &dwDataSize,
-                (PVOID *)&pConnSettings,
-                &valueType,
-                NULL        // reserved
-                );
+                  m_WlanHandle,
+                  wlan_hosted_network_opcode_connection_settings,
+                  &dwDataSize,
+                  (PVOID *)&pConnSettings,
+                  &valueType,
+                  NULL        // reserved
+              );
     BAIL_ON_WIN32_ERROR(retCode, hr);
 
     if( !pConnSettings || dwDataSize < sizeof(WLAN_HOSTED_NETWORK_CONNECTION_SETTINGS))
     {
         BAIL_ON_WIN32_ERROR(ERROR_INVALID_DATA, hr);
     }
-    
+
     //
     // get the hosted network seucrity settings
     //
     retCode = WlanHostedNetworkQueryProperty(
-                m_WlanHandle,
-                wlan_hosted_network_opcode_security_settings,
-                &dwDataSize,
-                (PVOID *)&pSecSettings,
-                &valueType,
-                NULL        // reserved
-                );
+                  m_WlanHandle,
+                  wlan_hosted_network_opcode_security_settings,
+                  &dwDataSize,
+                  (PVOID *)&pSecSettings,
+                  &valueType,
+                  NULL        // reserved
+              );
     BAIL_ON_WIN32_ERROR(retCode, hr);
 
     if( !pSecSettings || dwDataSize < sizeof(WLAN_HOSTED_NETWORK_SECURITY_SETTINGS))
@@ -166,10 +166,10 @@ CWlanManager::Init()
     // get the hosted network status
     //
     retCode = WlanHostedNetworkQueryStatus(
-                m_WlanHandle,
-                &pAPStatus,
-                NULL        // reserved
-                );
+                  m_WlanHandle,
+                  &pAPStatus,
+                  NULL        // reserved
+              );
     BAIL_ON_WIN32_ERROR(retCode, hr);
 
     //
@@ -235,10 +235,10 @@ error:
 }
 
 // process the notifications received from hosted network
-VOID 
+VOID
 CWlanManager::Notify(
     const PWLAN_NOTIFICATION_DATA pNotifData
-    )
+)
 {
     if (pNotifData != NULL && WLAN_NOTIFICATION_SOURCE_HNWK == pNotifData->NotificationSource)
     {
@@ -251,7 +251,7 @@ CWlanManager::Notify(
             if (sizeof(WLAN_HOSTED_NETWORK_STATE_CHANGE) == pNotifData->dwDataSize && pNotifData->pData != NULL)
             {
                 PWLAN_HOSTED_NETWORK_STATE_CHANGE pStateChange = (PWLAN_HOSTED_NETWORK_STATE_CHANGE)pNotifData->pData;
-                
+
                 switch (pStateChange->NewState)
                 {
                 case wlan_hosted_network_active:
@@ -289,7 +289,7 @@ CWlanManager::Notify(
             if (sizeof(WLAN_HOSTED_NETWORK_DATA_PEER_STATE_CHANGE) == pNotifData->dwDataSize && pNotifData->pData != NULL)
             {
                 PWLAN_HOSTED_NETWORK_DATA_PEER_STATE_CHANGE pPeerStateChange = (PWLAN_HOSTED_NETWORK_DATA_PEER_STATE_CHANGE)pNotifData->pData;
-                
+
                 if (wlan_hosted_network_peer_state_authenticated == pPeerStateChange->NewState.PeerAuthState)
                 {
                     //
@@ -320,7 +320,7 @@ CWlanManager::Notify(
                 _ASSERT(FALSE);
             }
             break;
-        
+
         case wlan_hosted_network_radio_state_change:
             if (sizeof(WLAN_HOSTED_NETWORK_RADIO_STATE) == pNotifData->dwDataSize && pNotifData->pData != NULL)
             {
@@ -342,7 +342,7 @@ CWlanManager::Notify(
     }
 }
 
-VOID 
+VOID
 CWlanManager::OnHostedNetworkStarted()
 {
     CHostedNetworkNotificationSink * pSink = NULL;
@@ -373,8 +373,8 @@ CWlanManager::OnHostedNetworkStarted()
         SetEvent(m_CallbackComplete);
     }
 }
-                             
-VOID 
+
+VOID
 CWlanManager::OnHostedNetworkStopped()
 {
     CHostedNetworkNotificationSink * pSink = NULL;
@@ -424,7 +424,7 @@ CWlanManager::OnHostedNetworkStopped()
     }
 }
 
-VOID 
+VOID
 CWlanManager::OnHostedNetworkNotAvailable()
 {
     CHostedNetworkNotificationSink * pSink = NULL;
@@ -456,7 +456,7 @@ CWlanManager::OnHostedNetworkNotAvailable()
     }
 }
 
-VOID 
+VOID
 CWlanManager::OnHostedNetworkAvailable()
 {
     CHostedNetworkNotificationSink * pSink = NULL;
@@ -488,10 +488,10 @@ CWlanManager::OnHostedNetworkAvailable()
     }
 }
 
-VOID 
+VOID
 CWlanManager::OnStationJoin(
     const WLAN_HOSTED_NETWORK_PEER_STATE& StationState
-    )
+)
 {
     CHostedNetworkNotificationSink * pSink = NULL;
     CWlanStation * pStation = new(std::nothrow) CWlanStation(StationState);
@@ -532,10 +532,10 @@ CWlanManager::OnStationJoin(
     }
 }
 
-VOID 
+VOID
 CWlanManager::OnStationLeave(
     DOT11_MAC_ADDRESS MacAddress
-    )
+)
 {
     CHostedNetworkNotificationSink * pSink = NULL;
     CWlanStation * pStation = NULL;
@@ -594,10 +594,10 @@ CWlanManager::OnStationLeave(
     }
 }
 
-VOID 
+VOID
 CWlanManager::OnStationStateChange(
     const WLAN_HOSTED_NETWORK_PEER_STATE&
-    )
+)
 {
     //
     // It shall NOT happen for now
@@ -605,10 +605,10 @@ CWlanManager::OnStationStateChange(
     _ASSERT(FALSE);
 }
 
-HRESULT 
+HRESULT
 CWlanManager::SetHostedNetworkName(
     CAtlString& strSsid
-    )
+)
 {
     HRESULT hr = S_OK;
     DWORD dwError = ERROR_SUCCESS;
@@ -625,18 +625,18 @@ CWlanManager::SetHostedNetworkName(
     {
         // save old SSID
         oldSsid = m_HostedNetworkConnSettings.hostedNetworkSSID;
-                
+
         m_HostedNetworkConnSettings.hostedNetworkSSID = ssid;
 
         // set the new connection setttings
         dwError = WlanHostedNetworkSetProperty(
-                    m_WlanHandle,
-                    wlan_hosted_network_opcode_connection_settings,
-                    sizeof( WLAN_HOSTED_NETWORK_CONNECTION_SETTINGS),
-                    (PVOID)&m_HostedNetworkConnSettings,
-                    NULL,
-                    NULL
-                    );
+                      m_WlanHandle,
+                      wlan_hosted_network_opcode_connection_settings,
+                      sizeof( WLAN_HOSTED_NETWORK_CONNECTION_SETTINGS),
+                      (PVOID)&m_HostedNetworkConnSettings,
+                      NULL,
+                      NULL
+                  );
         if (dwError != ERROR_SUCCESS)
         {
             // revert back to old SSID
@@ -649,16 +649,16 @@ CWlanManager::SetHostedNetworkName(
         hr = HRESULT_FROM_WIN32(ERROR_INVALID_STATE);
     }
     Unlock();
-    
+
 error:
 
     return hr;
 }
 
-HRESULT 
+HRESULT
 CWlanManager::GetHostedNetworkName(
     CAtlString& strSsid
-    )
+)
 {
     DWORD dwError = ERROR_SUCCESS;
     WCHAR wszSsid[WLAN_MAX_NAME_LENGTH];
@@ -672,11 +672,11 @@ CWlanManager::GetHostedNetworkName(
         // Convert SSID to string
         //
         dwError = SsidToDisplayName(
-                    &m_HostedNetworkConnSettings.hostedNetworkSSID,
-                    TRUE,
-                    wszSsid,
-                    &dwSsidStrLen
-                    );
+                      &m_HostedNetworkConnSettings.hostedNetworkSSID,
+                      TRUE,
+                      wszSsid,
+                      &dwSsidStrLen
+                  );
 
         if (ERROR_SUCCESS == dwError)
         {
@@ -694,10 +694,10 @@ CWlanManager::GetHostedNetworkName(
     return HRESULT_FROM_WIN32(dwError);
 }
 
-HRESULT 
+HRESULT
 CWlanManager::SetHostedNetworkKey(
     CAtlString& strKey
-    )
+)
 {
     HRESULT hr = S_OK;
     DWORD dwError = ERROR_SUCCESS;
@@ -705,12 +705,12 @@ CWlanManager::SetHostedNetworkKey(
     DWORD dwKeyBufLen = WLAN_MAX_NAME_LENGTH;
 
     dwError = ConvertPassPhraseKeyStringToBuffer(
-                strKey,
-                strKey.GetLength(),
-                DOT11_AUTH_ALGO_RSNA_PSK,
-                strKeyBuf,
-                &dwKeyBufLen
-                );
+                  strKey,
+                  strKey.GetLength(),
+                  DOT11_AUTH_ALGO_RSNA_PSK,
+                  strKeyBuf,
+                  &dwKeyBufLen
+              );
 
     BAIL_ON_WIN32_ERROR(dwError, hr);
 
@@ -720,14 +720,14 @@ CWlanManager::SetHostedNetworkKey(
     }
 
     dwError = WlanHostedNetworkSetSecondaryKey(
-                m_WlanHandle,
-                dwKeyBufLen,
-                strKeyBuf,
-                TRUE,           // passphrase
-                TRUE,           // persistent
-                NULL,           // not interested in failure reason
-                NULL            // reserved
-                );
+                  m_WlanHandle,
+                  dwKeyBufLen,
+                  strKeyBuf,
+                  TRUE,           // passphrase
+                  TRUE,           // persistent
+                  NULL,           // not interested in failure reason
+                  NULL            // reserved
+              );
 
     BAIL_ON_WIN32_ERROR(dwError, hr);
 
@@ -735,10 +735,10 @@ error:
     return hr;
 }
 
-HRESULT 
+HRESULT
 CWlanManager::GetHostedNetworkKey(
     CAtlString& strKey
-    )
+)
 {
     HRESULT hr = S_OK;
     DWORD dwError = ERROR_SUCCESS;
@@ -748,17 +748,17 @@ CWlanManager::GetHostedNetworkKey(
     PUCHAR pucSecondaryKey = NULL;
     DWORD dwSecondaryKeyLength = 0;
     WCHAR strSecondaryKey[WLAN_MAX_NAME_LENGTH];
-    
+
     // get the user security key
     dwError = WlanHostedNetworkQuerySecondaryKey(
-                m_WlanHandle,
-                &dwSecondaryKeyLength,
-                &pucSecondaryKey,
-                &bIsPassPhrase,
-                &bPersistent,
-                NULL,
-                NULL
-                );
+                  m_WlanHandle,
+                  &dwSecondaryKeyLength,
+                  &pucSecondaryKey,
+                  &bIsPassPhrase,
+                  &bPersistent,
+                  NULL,
+                  NULL
+              );
 
     BAIL_ON_WIN32_ERROR(dwError, hr);
 
@@ -770,15 +770,15 @@ CWlanManager::GetHostedNetworkKey(
         // convert the key
         if (bIsPassPhrase)
         {
-            #pragma prefast(suppress:26035, "If the key is a pass phrase, it is guaranteed to be null-terminated.")
+#pragma prefast(suppress:26035, "If the key is a pass phrase, it is guaranteed to be null-terminated.")
             cchKey = MultiByteToWideChar(
-                        CP_ACP, 
-                        MB_ERR_INVALID_CHARS,
-                        (LPCSTR)pucSecondaryKey,
-                        dwSecondaryKeyLength,
-                        strSecondaryKey, 
-                        sizeof(strSecondaryKey) / sizeof(strSecondaryKey[0]) -1
-                        );
+                         CP_ACP,
+                         MB_ERR_INVALID_CHARS,
+                         (LPCSTR)pucSecondaryKey,
+                         dwSecondaryKeyLength,
+                         strSecondaryKey,
+                         sizeof(strSecondaryKey) / sizeof(strSecondaryKey[0]) -1
+                     );
         }
     }
 
@@ -798,7 +798,7 @@ CWlanManager::GetHostedNetworkKey(
         strKey = strSecondaryKey;
     }
 
-error:    
+error:
     if (pucSecondaryKey != NULL)
     {
         WlanFreeMemory(pucSecondaryKey);
@@ -808,7 +808,7 @@ error:
     return hr;
 }
 
-HRESULT 
+HRESULT
 CWlanManager::StartHostedNetwork()
 {
     HRESULT hr = S_OK;
@@ -830,10 +830,10 @@ CWlanManager::StartHostedNetwork()
     // Start hosted network
     //
     dwError = WlanHostedNetworkStartUsing(
-                m_WlanHandle,
-                NULL,
-                NULL
-                );
+                  m_WlanHandle,
+                  NULL,
+                  NULL
+              );
     BAIL_ON_WIN32_ERROR(dwError, hr);
 
 error:
@@ -842,7 +842,7 @@ error:
     return hr;
 }
 
-HRESULT 
+HRESULT
 CWlanManager::StopHostedNetwork()
 {
     HRESULT hr = S_OK;
@@ -865,10 +865,10 @@ CWlanManager::StopHostedNetwork()
     // Stop hosted network
     //
     dwError = WlanHostedNetworkStopUsing(
-                m_WlanHandle,
-                NULL,
-                NULL
-                );
+                  m_WlanHandle,
+                  NULL,
+                  NULL
+              );
     BAIL_ON_WIN32_ERROR(dwError, hr);
 
 error:
@@ -877,7 +877,7 @@ error:
     return hr;
 }
 
-HRESULT 
+HRESULT
 CWlanManager::ForceStopHostedNetwork()
 {
     HRESULT hr = S_OK;
@@ -900,10 +900,10 @@ CWlanManager::ForceStopHostedNetwork()
     // Stop hosted network
     //
     dwError = WlanHostedNetworkForceStop(
-                m_WlanHandle,
-                NULL,
-                NULL
-                );
+                  m_WlanHandle,
+                  NULL,
+                  NULL
+              );
     BAIL_ON_WIN32_ERROR(dwError, hr);
 
 error:
@@ -913,10 +913,10 @@ error:
 
 }
 
-HRESULT 
+HRESULT
 CWlanManager::GetStaionList(
     CRefObjList<CWlanStation*>& StationList
-    )
+)
 {
     HRESULT hr = S_OK;
 
@@ -955,10 +955,10 @@ error:
     return hr;
 }
 
-HRESULT 
+HRESULT
 CWlanManager::GetHostedNetworkInterfaceGuid(
     GUID& InterfaceGuid
-    )
+)
 {
     HRESULT hr = S_OK;
     DWORD dwError = ERROR_SUCCESS;
@@ -968,10 +968,10 @@ CWlanManager::GetHostedNetworkInterfaceGuid(
     // get the hosted network status
     //
     dwError = WlanHostedNetworkQueryStatus(
-                m_WlanHandle,
-                &pAPStatus,
-                NULL        // reserved
-                );
+                  m_WlanHandle,
+                  &pAPStatus,
+                  NULL        // reserved
+              );
     BAIL_ON_WIN32_ERROR(dwError, hr);
 
     InterfaceGuid = pAPStatus->IPDeviceID;
@@ -986,10 +986,10 @@ error:
     return hr;
 }
 
-HRESULT 
+HRESULT
 CWlanManager::AdviseHostedNetworkNotification(
     CHostedNetworkNotificationSink * pSink
-    )
+)
 {
     HRESULT hr = S_OK;
 
@@ -1016,23 +1016,23 @@ CWlanManager::AdviseHostedNetworkNotification(
     if (NULL == m_CallbackComplete)
     {
         m_CallbackComplete = CreateEvent(
-                                    NULL,
-                                    FALSE,        // manual reset
-                                    TRUE,        // initial state
-                                    NULL
-                                    );
+                                 NULL,
+                                 FALSE,        // manual reset
+                                 TRUE,        // initial state
+                                 NULL
+                             );
 
         if (NULL == m_CallbackComplete)
         {
             BAIL_ON_LAST_ERROR(hr);
         }
     }
-    
+
     //
     // Set notification sink
     //
     m_NotificationSink = pSink;
-    
+
     //
     // check if hosted network is supported
     //
@@ -1062,7 +1062,7 @@ error:
     return hr;
 }
 
-HRESULT 
+HRESULT
 CWlanManager::UnadviseHostedNetworkNotification()
 {
     HRESULT hr = S_OK;
@@ -1081,7 +1081,7 @@ CWlanManager::UnadviseHostedNetworkNotification()
     {
         hr = E_FAIL;
     }
-    
+
     Unlock();
 
     //
@@ -1095,15 +1095,15 @@ CWlanManager::UnadviseHostedNetworkNotification()
     return hr;
 }
 
-HRESULT 
+HRESULT
 CWlanManager::IsHostedNetworkStarted(
     bool & fStarted
-    )
+)
 {
     HRESULT hr = S_OK;
 
     Lock();
-    
+
     if (m_Initialized)
     {
         fStarted = (wlan_hosted_network_active == m_HostedNetworkState);

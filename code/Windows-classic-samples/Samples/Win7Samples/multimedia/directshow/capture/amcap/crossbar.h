@@ -1,4 +1,4 @@
-//------------------------------------------------------------------------------
+﻿//------------------------------------------------------------------------------
 // File: Crossbar.h
 //
 // Desc: DirectShow sample code - definition of class for controlling
@@ -16,7 +16,8 @@
 // Name: class CClass
 // Desc: This class contains routing information for the capture data
 //------------------------------------------------------------------------------
-class CRouting {
+class CRouting
+{
 public:
     class CRouting       *pLeftRouting;
     class CRouting       *pRightRouting;
@@ -51,23 +52,23 @@ private:
     int                      m_CurrentRoutingIndex;
 
     HRESULT BuildRoutingList (
-                IPin     *pStartingInputPin,
-                CRouting *pCRouting,
-                int       Depth);
+        IPin     *pStartingInputPin,
+        CRouting *pCRouting,
+        int       Depth);
     HRESULT SaveRouting (CRouting *pRoutingNew);
     HRESULT DestroyRoutingList();
     BOOL    StringFromPinType (TCHAR *pc, int nSize, long lType);
-    
+
     HRESULT GetCrossbarIPinAtIndex(
-                IAMCrossbar *pXbar,
-                LONG PinIndex,
-                BOOL IsInputPin,
-                IPin ** ppPin);
+        IAMCrossbar *pXbar,
+        LONG PinIndex,
+        BOOL IsInputPin,
+        IPin ** ppPin);
     HRESULT GetCrossbarIndexFromIPin (
-                IAMCrossbar * pXbar,
-                LONG * PinIndex,
-                BOOL IsInputPin,
-                IPin * pPin);
+        IAMCrossbar * pXbar,
+        LONG * PinIndex,
+        BOOL IsInputPin,
+        IPin * pPin);
 
 public:
 

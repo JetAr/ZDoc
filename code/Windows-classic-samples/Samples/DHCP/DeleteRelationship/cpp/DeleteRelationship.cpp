@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -15,19 +15,19 @@
 void FreeSubnetInfoVQ(LPDHCP_SUBNET_INFO_VQ pSubnetInfoVQ)
 {
     // Frees NetBios Name
-    if(pSubnetInfoVQ->PrimaryHost.NetBiosName) 
+    if(pSubnetInfoVQ->PrimaryHost.NetBiosName)
         DhcpRpcFreeMemory(pSubnetInfoVQ->PrimaryHost.NetBiosName);
 
     //Frees host name
-    if(pSubnetInfoVQ->PrimaryHost.HostName) 
+    if(pSubnetInfoVQ->PrimaryHost.HostName)
         DhcpRpcFreeMemory(pSubnetInfoVQ->PrimaryHost.HostName);
 
     // Frees Subnet Name
-    if(pSubnetInfoVQ->SubnetName) 
-        DhcpRpcFreeMemory(pSubnetInfoVQ->SubnetName);    
+    if(pSubnetInfoVQ->SubnetName)
+        DhcpRpcFreeMemory(pSubnetInfoVQ->SubnetName);
 
     // Frees subnet comment
-    if(pSubnetInfoVQ->SubnetComment) 
+    if(pSubnetInfoVQ->SubnetComment)
         DhcpRpcFreeMemory(pSubnetInfoVQ->SubnetComment);
 
     DhcpRpcFreeMemory(pSubnetInfoVQ);
@@ -36,7 +36,7 @@ void FreeSubnetInfoVQ(LPDHCP_SUBNET_INFO_VQ pSubnetInfoVQ)
 // This routine frees  LPDHCP_FAILOVER_RELATIONSHIP and its internal elements.
 VOID FreeRelationshipMemory(LPDHCP_FAILOVER_RELATIONSHIP pFailRel)
 {
-    if (NULL != pFailRel) 
+    if (NULL != pFailRel)
     {
         // Frees relationship name
         if (NULL != pFailRel->RelationshipName)
@@ -62,7 +62,7 @@ VOID FreeRelationshipMemory(LPDHCP_FAILOVER_RELATIONSHIP pFailRel)
             {
                 DhcpRpcFreeMemory(pFailRel->pScopes->Elements);
             }
-             DhcpRpcFreeMemory(pFailRel->pScopes);
+            DhcpRpcFreeMemory(pFailRel->pScopes);
         }
         //Frees the relationship
         DhcpRpcFreeMemory(pFailRel);
@@ -80,7 +80,7 @@ DWORD DeactivateScopes(_In_ LPWSTR pServer, _Inout_ LPDHCP_IP_ARRAY pArray)
         dwError = DhcpGetSubnetInfoVQ(pServer,pArray->Elements[dwIndex],&pSubnetInfoVQ);
         if(ERROR_SUCCESS != dwError)
             return dwError;
-        
+
         // set the scope to deactivated
         pSubnetInfoVQ->SubnetState= DhcpSubnetDisabled;
         dwError = DhcpSetSubnetInfoVQ(pServer,pArray->Elements[dwIndex],pSubnetInfoVQ);
@@ -103,9 +103,9 @@ int __cdecl main(void)
     DWORD                        dwError              = ERROR_SUCCESS;
 
     dwError = DhcpV4FailoverGetRelationship(
-                        pwszServer,
-                        pwszRelationshipName,
-                        &pRelationShip);
+                  pwszServer,
+                  pwszRelationshipName,
+                  &pRelationShip);
     if( ERROR_SUCCESS != dwError)
     {
         wprintf(L"DhcpV4FailoverGetRelationship failed with Error = %d\n",dwError);
@@ -128,8 +128,8 @@ int __cdecl main(void)
 
     //Delete relationship from partner server
     dwError = DhcpV4FailoverDeleteRelationship(
-                        pRelationShip->SecondaryServerName,
-                        pwszRelationshipName);
+                  pRelationShip->SecondaryServerName,
+                  pwszRelationshipName);
     if( ERROR_SUCCESS != dwError)
     {
         wprintf(L"DhcpV4FailoverDeleteRelationship failed with Error = %d\n",dwError);
@@ -140,8 +140,8 @@ int __cdecl main(void)
 
     //Delete relationship from primary server
     dwError = DhcpV4FailoverDeleteRelationship(
-                        pwszServer,
-                        pwszRelationshipName);
+                  pwszServer,
+                  pwszRelationshipName);
     if( ERROR_SUCCESS != dwError)
     {
         wprintf(L"DhcpV4FailoverDeleteRelationship failed with Error = %d\n",dwError);

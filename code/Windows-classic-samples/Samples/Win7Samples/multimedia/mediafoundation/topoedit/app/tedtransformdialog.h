@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -9,13 +9,13 @@
 
 #include "resource.h"
 
-struct DMOCategory 
+struct DMOCategory
 {
     GUID m_GUID;
     UINT m_nID; // string resource ID
 };
 
-class CTedTransformDialog 
+class CTedTransformDialog
     : public CDialogImpl<CTedTransformDialog>
 {
 public:
@@ -34,13 +34,13 @@ protected:
 
     void PopulateCategory(DMOCategory& category);
 
-BEGIN_MSG_MAP( CTedTransformDialog )
-   MESSAGE_HANDLER( WM_INITDIALOG, OnInitDialog )
-   MESSAGE_HANDLER( WM_CLOSE, OnClose )
+    BEGIN_MSG_MAP( CTedTransformDialog )
+    MESSAGE_HANDLER( WM_INITDIALOG, OnInitDialog )
+    MESSAGE_HANDLER( WM_CLOSE, OnClose )
 
-   COMMAND_HANDLER(IDOK, 0, OnOK)
-   COMMAND_HANDLER(IDCANCEL, 0, OnCancel)
-END_MSG_MAP()
+    COMMAND_HANDLER(IDOK, 0, OnOK)
+    COMMAND_HANDLER(IDCANCEL, 0, OnCancel)
+    END_MSG_MAP()
 
 private:
     HWND m_hList;

@@ -1,4 +1,4 @@
-//------------------------------------------------------------------------------
+﻿//------------------------------------------------------------------------------
 // File: SampleCGB.h
 //
 // Desc: DirectShow sample code - definition of sample capture graph builder
@@ -49,8 +49,8 @@ public:
     {
         AudPID_ = 0xC0;
         VidPID_ = 0xE0;
-        HRESULT hr = CoCreateInstance(CLSID_CaptureGraphBuilder2, NULL, CLSCTX_INPROC_SERVER, 
-			IID_ICaptureGraphBuilder2, (void**)&graphBuilder2_ ); 
+        HRESULT hr = CoCreateInstance(CLSID_CaptureGraphBuilder2, NULL, CLSCTX_INPROC_SERVER,
+                                      IID_ICaptureGraphBuilder2, (void**)&graphBuilder2_ );
         ASSERT( S_OK == hr );
     }
 
@@ -73,56 +73,56 @@ public:
     STDMETHOD(AllocCapFile)( LPCOLESTR lpwstr, DWORDLONG dwlSize );
 
     STDMETHOD(ControlStream)( const GUID *pCategory,
-                          const GUID *pType,
-                          IBaseFilter *pFilter,
-                          REFERENCE_TIME *pstart,
-                          REFERENCE_TIME *pstop,
-                          WORD wStartCookie,
-                          WORD wStopCookie
-                          );
+                              const GUID *pType,
+                              IBaseFilter *pFilter,
+                              REFERENCE_TIME *pstart,
+                              REFERENCE_TIME *pstop,
+                              WORD wStartCookie,
+                              WORD wStopCookie
+                            );
 
     STDMETHOD(CopyCaptureFile)(  LPOLESTR lpwstrOld,
-                              LPOLESTR lpwstrNew,
-                              int fAllowEscAbort,
-                              IAMCopyCaptureFileProgress *pCallback
+                                 LPOLESTR lpwstrNew,
+                                 int fAllowEscAbort,
+                                 IAMCopyCaptureFileProgress *pCallback
                               );
 
     STDMETHOD(FindInterface)(const GUID *pCategory,
-                          const GUID *pType,
-                          IBaseFilter *pf,
-                          REFIID riid,
-                          void **ppint
-                          );
+                             const GUID *pType,
+                             IBaseFilter *pf,
+                             REFIID riid,
+                             void **ppint
+                            );
 
     STDMETHOD(FindPin)( IUnknown *pSource,
-                      PIN_DIRECTION pindir,
-                      const GUID *pCategory,
-                      const GUID *pType,
-                      BOOL fUnconnected,
-                      int num,
-                      IPin **ppPin
+                        PIN_DIRECTION pindir,
+                        const GUID *pCategory,
+                        const GUID *pType,
+                        BOOL fUnconnected,
+                        int num,
+                        IPin **ppPin
                       );
 
 
     STDMETHOD(GetFiltergraph)( IGraphBuilder **ppfg );
 
     STDMETHOD(RenderStream)( const GUID *pCategory,
-                          const GUID *pType,
-                          IUnknown *pSource,
-                          IBaseFilter *pIntermediate,
-                          IBaseFilter *pSink
-                          );
+                             const GUID *pType,
+                             IUnknown *pSource,
+                             IBaseFilter *pIntermediate,
+                             IBaseFilter *pSink
+                           );
 
 
     STDMETHOD(SetFiltergraph)( IGraphBuilder *pfg );
 
 
     STDMETHOD(SetOutputFileName)(
-                                const GUID *pType,
-                                LPCOLESTR lpwstrFile,
-                                IBaseFilter **ppf,
-                                IFileSinkFilter **pSink
-                                );
+        const GUID *pType,
+        LPCOLESTR lpwstrFile,
+        IBaseFilter **ppf,
+        IFileSinkFilter **pSink
+    );
 
 
 protected:
@@ -134,23 +134,23 @@ protected:
     HRESULT ConfigureMPEG2Demux( IBaseFilter *pFilter);
 
     HRESULT FindMPEG2Pin( IBaseFilter *pFilter, IPin** ppPin );
-    HRESULT FindPin( 
-                IBaseFilter *pFilter, 
-                const REGPINMEDIUM& regPinMedium, 
-                PIN_DIRECTION direction, 
-                BOOL video,             
-                IPin **ppPin);
+    HRESULT FindPin(
+        IBaseFilter *pFilter,
+        const REGPINMEDIUM& regPinMedium,
+        PIN_DIRECTION direction,
+        BOOL video,
+        IPin **ppPin);
 
     HRESULT GetMedium( IPin *pPin, REGPINMEDIUM& regPinMedium );
     HRESULT AddMPEG2Demux( );
 
-    HRESULT FindEncoder( IEnumMoniker *pEncoders, REGPINMEDIUM pinMedium, 
+    HRESULT FindEncoder( IEnumMoniker *pEncoders, REGPINMEDIUM pinMedium,
                          IBaseFilter **ppEncoder );
 
     BOOL IsMPEG2Pin( IPin *pPin );
     BOOL IsVideoPin( IPin *pPin );
     BOOL IsAudioPin( IPin *pPin );
-    
+
     BOOL HasMediaType( IPin *pPin, REFGUID majorType );
 
     HRESULT FindAudioPin( IBaseFilter *pFilter, IPin **ppPin  );
@@ -167,35 +167,35 @@ protected:
     //
     //  renders pin pPin with pinMedium to an encoder
     //
-    HRESULT RenderToMPEG2Demux( IPin *pPin, const REGPINMEDIUM& pinMedium,  
+    HRESULT RenderToMPEG2Demux( IPin *pPin, const REGPINMEDIUM& pinMedium,
                                 IEnumMoniker *pEncoders );
     //
-    //  renders pPin to a MPEG2 demux; there is no special medium, the encoder will be 
+    //  renders pPin to a MPEG2 demux; there is no special medium, the encoder will be
     //  serched in the encoder category
     //
     HRESULT RenderToMPEG2Demux( IPin *pPin, IEnumMoniker *pEncoders  );
     //
     //  renders the encoder to a MPEG2 demux
     //
-    HRESULT ConnectEncoderToMPEG2Demux( IBaseFilter *pEncoder, 
+    HRESULT ConnectEncoderToMPEG2Demux( IBaseFilter *pEncoder,
                                         const REGPINMEDIUM& pinMedium );
     //
     //  renders the demux to a MPEG2 demux
     //
-    HRESULT ConnectMultiplexerToMPEG2Demux( IBaseFilter *pEncoder, 
+    HRESULT ConnectMultiplexerToMPEG2Demux( IBaseFilter *pEncoder,
                                             IEnumMoniker *pMultiplexers );
     //
     //  helper methods; connects a pin to a filter and a filter to another one
     //
     HRESULT ConnectPin( IPin *pPin, IBaseFilter *pFilter );
-    HRESULT ConnectFilters(IBaseFilter *pUpFilter, 
+    HRESULT ConnectFilters(IBaseFilter *pUpFilter,
                            IBaseFilter *pDownFilter);
 
     //
     //  for audio pin; the multiplexer has already beem chosen
     //  if there is no encoder, the method fails
     //
-    HRESULT ConnectAudioPinToMultiplexer(IPin *pPin, 
+    HRESULT ConnectAudioPinToMultiplexer(IPin *pPin,
                                          IBaseFilter *pMultiplexer);
 
 
@@ -203,17 +203,17 @@ protected:
     //  helper methods - get the encoders using SystemDeviceEnum or IFilterMapper2
     //
     HRESULT GetEncodersByCategory( IEnumMoniker **ppEncoders );
-    HRESULT GetEncodersByEnumerating( IPin *pPin, const REGPINMEDIUM& pinMedium, 
+    HRESULT GetEncodersByEnumerating( IPin *pPin, const REGPINMEDIUM& pinMedium,
                                       IEnumMoniker **ppEncoders );
 
     //
     //  helper methods - get the multiplexers using SystemDeviceEnum or IFilterMapper2
     //
     HRESULT GetMultiplexersByCategory( IEnumMoniker **ppMultiplexers);
-    HRESULT GetMultiplexersByFilterMapper( IEnumMoniker **ppMultiplexers, 
+    HRESULT GetMultiplexersByFilterMapper( IEnumMoniker **ppMultiplexers,
                                            const REGPINMEDIUM& pinMedium );
 
-    
+
     SmartPtr<IBaseFilter> pMultiplexer_;
     SmartPtr<IBaseFilter> pEncoder_;
     SmartPtr<IBaseFilter> pMPEG2Demux_;
@@ -224,7 +224,7 @@ protected:
     SmartPtr<IGraphBuilder> graph_;
     SmartPtr<IMediaControl> pMediaControl_;
 
-    ULONG   VidPID_, 
+    ULONG   VidPID_,
             AudPID_;
 
 private:

@@ -1,4 +1,4 @@
-//
+﻿//
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -93,7 +93,7 @@ MI_INLINE MI_Result MI_CALL CIM_ManagedElement_Construct(
     _In_ MI_Context* context)
 {
     return MI_Context_ConstructInstance(context, &CIM_ManagedElement_rtti,
-        (MI_Instance*)&self->__instance);
+                                        (MI_Instance*)&self->__instance);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_ManagedElement_Clone(
@@ -101,7 +101,7 @@ MI_INLINE MI_Result MI_CALL CIM_ManagedElement_Clone(
     _Outptr_ CIM_ManagedElement** newInstance)
 {
     return MI_Instance_Clone(
-        &self->__instance, (MI_Instance**)newInstance);
+               &self->__instance, (MI_Instance**)newInstance);
 }
 
 MI_INLINE MI_Boolean MI_CALL CIM_ManagedElement_IsA(
@@ -133,11 +133,11 @@ MI_INLINE MI_Result MI_CALL CIM_ManagedElement_Set_InstanceID(
     _In_z_ const MI_Char* str)
 {
     return self->__instance.ft->SetElementAt(
-        (MI_Instance*)&self->__instance,
-        0,
-        (MI_Value*)&str,
-        MI_STRING,
-        0);
+               (MI_Instance*)&self->__instance,
+               0,
+               (MI_Value*)&str,
+               MI_STRING,
+               0);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_ManagedElement_SetPtr_InstanceID(
@@ -145,19 +145,19 @@ MI_INLINE MI_Result MI_CALL CIM_ManagedElement_SetPtr_InstanceID(
     _In_z_ const MI_Char* str)
 {
     return self->__instance.ft->SetElementAt(
-        (MI_Instance*)&self->__instance,
-        0,
-        (MI_Value*)&str,
-        MI_STRING,
-        MI_FLAG_BORROW);
+               (MI_Instance*)&self->__instance,
+               0,
+               (MI_Value*)&str,
+               MI_STRING,
+               MI_FLAG_BORROW);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_ManagedElement_Clear_InstanceID(
     _Inout_ CIM_ManagedElement* self)
 {
     return self->__instance.ft->ClearElementAt(
-        (MI_Instance*)&self->__instance,
-        0);
+               (MI_Instance*)&self->__instance,
+               0);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_ManagedElement_Set_Caption(
@@ -165,11 +165,11 @@ MI_INLINE MI_Result MI_CALL CIM_ManagedElement_Set_Caption(
     _In_z_ const MI_Char* str)
 {
     return self->__instance.ft->SetElementAt(
-        (MI_Instance*)&self->__instance,
-        1,
-        (MI_Value*)&str,
-        MI_STRING,
-        0);
+               (MI_Instance*)&self->__instance,
+               1,
+               (MI_Value*)&str,
+               MI_STRING,
+               0);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_ManagedElement_SetPtr_Caption(
@@ -177,19 +177,19 @@ MI_INLINE MI_Result MI_CALL CIM_ManagedElement_SetPtr_Caption(
     _In_z_ const MI_Char* str)
 {
     return self->__instance.ft->SetElementAt(
-        (MI_Instance*)&self->__instance,
-        1,
-        (MI_Value*)&str,
-        MI_STRING,
-        MI_FLAG_BORROW);
+               (MI_Instance*)&self->__instance,
+               1,
+               (MI_Value*)&str,
+               MI_STRING,
+               MI_FLAG_BORROW);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_ManagedElement_Clear_Caption(
     _Inout_ CIM_ManagedElement* self)
 {
     return self->__instance.ft->ClearElementAt(
-        (MI_Instance*)&self->__instance,
-        1);
+               (MI_Instance*)&self->__instance,
+               1);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_ManagedElement_Set_Description(
@@ -197,11 +197,11 @@ MI_INLINE MI_Result MI_CALL CIM_ManagedElement_Set_Description(
     _In_z_ const MI_Char* str)
 {
     return self->__instance.ft->SetElementAt(
-        (MI_Instance*)&self->__instance,
-        2,
-        (MI_Value*)&str,
-        MI_STRING,
-        0);
+               (MI_Instance*)&self->__instance,
+               2,
+               (MI_Value*)&str,
+               MI_STRING,
+               0);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_ManagedElement_SetPtr_Description(
@@ -209,19 +209,19 @@ MI_INLINE MI_Result MI_CALL CIM_ManagedElement_SetPtr_Description(
     _In_z_ const MI_Char* str)
 {
     return self->__instance.ft->SetElementAt(
-        (MI_Instance*)&self->__instance,
-        2,
-        (MI_Value*)&str,
-        MI_STRING,
-        MI_FLAG_BORROW);
+               (MI_Instance*)&self->__instance,
+               2,
+               (MI_Value*)&str,
+               MI_STRING,
+               MI_FLAG_BORROW);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_ManagedElement_Clear_Description(
     _Inout_ CIM_ManagedElement* self)
 {
     return self->__instance.ft->ClearElementAt(
-        (MI_Instance*)&self->__instance,
-        2);
+               (MI_Instance*)&self->__instance,
+               2);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_ManagedElement_Set_ElementName(
@@ -229,11 +229,11 @@ MI_INLINE MI_Result MI_CALL CIM_ManagedElement_Set_ElementName(
     _In_z_ const MI_Char* str)
 {
     return self->__instance.ft->SetElementAt(
-        (MI_Instance*)&self->__instance,
-        3,
-        (MI_Value*)&str,
-        MI_STRING,
-        0);
+               (MI_Instance*)&self->__instance,
+               3,
+               (MI_Value*)&str,
+               MI_STRING,
+               0);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_ManagedElement_SetPtr_ElementName(
@@ -241,19 +241,19 @@ MI_INLINE MI_Result MI_CALL CIM_ManagedElement_SetPtr_ElementName(
     _In_z_ const MI_Char* str)
 {
     return self->__instance.ft->SetElementAt(
-        (MI_Instance*)&self->__instance,
-        3,
-        (MI_Value*)&str,
-        MI_STRING,
-        MI_FLAG_BORROW);
+               (MI_Instance*)&self->__instance,
+               3,
+               (MI_Value*)&str,
+               MI_STRING,
+               MI_FLAG_BORROW);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_ManagedElement_Clear_ElementName(
     _Inout_ CIM_ManagedElement* self)
 {
     return self->__instance.ft->ClearElementAt(
-        (MI_Instance*)&self->__instance,
-        3);
+               (MI_Instance*)&self->__instance,
+               3);
 }
 
 

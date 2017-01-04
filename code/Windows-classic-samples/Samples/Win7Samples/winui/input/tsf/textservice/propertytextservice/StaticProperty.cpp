@@ -1,4 +1,4 @@
-//////////////////////////////////////////////////////////////////////
+﻿//////////////////////////////////////////////////////////////////////
 //
 //  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 //  ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED
@@ -56,7 +56,7 @@ STDAPI CStaticPropertyEditSession::DoEditSession(TfEditCookie ec)
     if (_pContext->GetProperty(c_guidPropStatic, &pProperty) == S_OK)
     {
         VARIANT var;
-        var.vt = VT_BSTR; 
+        var.vt = VT_BSTR;
         var.bstrVal = SysAllocString(_sz);
         pProperty->SetValue(ec, tfSelection.range, &var);
         pProperty->Release();
@@ -79,7 +79,7 @@ void CTextService::_AttachStaticProperty(WCHAR *psz)
     ITfContext *pContext;
 
     if ((_pThreadMgr->GetFocus(&pDocMgrFocus) == S_OK) &&
-        (pDocMgrFocus != NULL))
+            (pDocMgrFocus != NULL))
     {
         if (pDocMgrFocus->GetTop(&pContext) == S_OK)
         {

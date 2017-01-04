@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -15,7 +15,7 @@ class CComSpy;
 
 ////////////////////////////////////////////////////////////////////////////
 // CSysLCESub
-class ATL_NO_VTABLE CSysLCESub : 
+class ATL_NO_VTABLE CSysLCESub :
     public CComObjectRootEx<CComSingleThreadModel>,
     public ICOMSysLCE
 {
@@ -28,8 +28,8 @@ protected:
 
 public:
     CSysLCESub() :
-      m_bstrSubscriptionID(NULL),
-      m_pSpy(NULL)
+        m_bstrSubscriptionID(NULL),
+        m_pSpy(NULL)
     {
     }
 
@@ -38,11 +38,11 @@ public:
         m_pSpy = pSpy;
     }
 
-DECLARE_GET_CONTROLLING_UNKNOWN()
+    DECLARE_GET_CONTROLLING_UNKNOWN()
 
-BEGIN_COM_MAP(CSysLCESub)
+    BEGIN_COM_MAP(CSysLCESub)
     COM_INTERFACE_ENTRY(ICOMSysLCE)
-END_COM_MAP()
+    END_COM_MAP()
 
     // Virtual Methods
 public:
@@ -52,8 +52,16 @@ public:
 
     // ICOMSysLCESub Methods
 public:
-    STDMETHOD(GetEventType)(__out EventEnum* e) { *e = EventType(); return S_OK; }
-    STDMETHOD(GetEventClass)(__out LPGUID guid) { *guid = EventCLSID(); return S_OK; }
+    STDMETHOD(GetEventType)(__out EventEnum* e)
+    {
+        *e = EventType();
+        return S_OK;
+    }
+    STDMETHOD(GetEventClass)(__out LPGUID guid)
+    {
+        *guid = EventCLSID();
+        return S_OK;
+    }
     STDMETHOD(Install)(__in BSTR* PropertyName, __in VARIANT PropertyValue);
     STDMETHOD(Uninstall)();
 };

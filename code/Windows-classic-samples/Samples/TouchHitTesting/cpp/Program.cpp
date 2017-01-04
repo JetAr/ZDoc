@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -89,8 +89,8 @@ void CProgram::_MoveToFront(_Inout_ ShapeRecord *pShapeRec)
         // Otherwise, move it to the top after all controls
         ShapeRecord *pShapeRecNewPrev = _pShapes;
         while (pShapeRecNewPrev != nullptr &&
-               pShapeRecNewPrev->pNext != nullptr &&
-               (pShapeRecNewPrev->pNext->pShape->GetObjectType() == OBJECT_TYPE_CONTROL))
+                pShapeRecNewPrev->pNext != nullptr &&
+                (pShapeRecNewPrev->pNext->pShape->GetObjectType() == OBJECT_TYPE_CONTROL))
         {
             pShapeRecNewPrev = pShapeRecNewPrev->pNext;
         }
@@ -488,7 +488,7 @@ LRESULT CProgram::OnTouchHitTesting(_In_ TOUCH_HIT_TESTING_INPUT const *pHitTest
     // Stop early if there's no chance to find better target.
     ShapeRecord *pShapeRec = _pShapes;
     while (pShapeRec != nullptr &&
-        (bestResult.score > TOUCH_HIT_TESTING_PROXIMITY_CLOSEST))
+            (bestResult.score > TOUCH_HIT_TESTING_PROXIMITY_CLOSEST))
     {
         BOOL retVal;
         POLYGON *poly = pShapeRec->pShape->GetPolygon();
@@ -505,14 +505,14 @@ LRESULT CProgram::OnTouchHitTesting(_In_ TOUCH_HIT_TESTING_INPUT const *pHitTest
 
         // Does the shape intersect touch contact and is it the best target so far?
         if (retVal &&
-            (currentResult.score < bestResult.score))
+                (currentResult.score < bestResult.score))
         {
             // Even if this shape has better score than the score of the shape with higher z-order,
             // don't select this shape if previous adjusted point belongs to this shape.
             // In other words, if this shape overlaps shape with higher z-order, favor the shape with
             // higher z-order.
             if ((bestTarget == nullptr) ||
-                !pShapeRec->pShape->InRegion(bestResult.adjustedPoint.x, bestResult.adjustedPoint.y))
+                    !pShapeRec->pShape->InRegion(bestResult.adjustedPoint.x, bestResult.adjustedPoint.y))
             {
                 // Finally, don't select target if adjusted touch point is not on the control.
                 // That may happen if another shape with higher z-order overlaps this shape at adjusted touch

@@ -1,4 +1,4 @@
-/**********************************************************************/
+﻿/**********************************************************************/
 /*                                                                    */
 /*      PAINT.C                                                       */
 /*                                                                    */
@@ -19,42 +19,42 @@ void SetAttrColor(HDC hDC, BYTE bAttr)
 {
     switch (bAttr)
     {
-        case ATTR_INPUT:
-            SetTextColor(hDC,RGB(0,0,0));
-            SetBkMode(hDC,TRANSPARENT);
-            break;
-            
-        case ATTR_TARGET_CONVERTED:
-            SetTextColor(hDC,RGB(255,255,255));
-            SetBkMode(hDC,OPAQUE);
-            SetBkColor(hDC,RGB(0,0,255));
-            break;
-            
-        case ATTR_CONVERTED:
-            SetTextColor(hDC,RGB(0,0,255));
-            SetBkMode(hDC,TRANSPARENT);
-            break;
-            
-        case ATTR_TARGET_NOTCONVERTED:
-            SetTextColor(hDC,RGB(255,255,255));
-            SetBkMode(hDC,OPAQUE);
-            SetBkColor(hDC,RGB(0,255,0));
-            break;
-            
-        case ATTR_INPUT_ERROR:
-            SetTextColor(hDC,RGB(255,255,0));
-            SetBkMode(hDC,TRANSPARENT);
-            break;
-            
-        case ATTR_FIXEDCONVERTED:
-            SetTextColor(hDC,RGB(255,0,0));
-            SetBkMode(hDC,TRANSPARENT);
-            break;
-            
-        default:
-            SetTextColor(hDC,RGB(0,0,0));
-            SetBkMode(hDC,TRANSPARENT);
-            break;
+    case ATTR_INPUT:
+        SetTextColor(hDC,RGB(0,0,0));
+        SetBkMode(hDC,TRANSPARENT);
+        break;
+
+    case ATTR_TARGET_CONVERTED:
+        SetTextColor(hDC,RGB(255,255,255));
+        SetBkMode(hDC,OPAQUE);
+        SetBkColor(hDC,RGB(0,0,255));
+        break;
+
+    case ATTR_CONVERTED:
+        SetTextColor(hDC,RGB(0,0,255));
+        SetBkMode(hDC,TRANSPARENT);
+        break;
+
+    case ATTR_TARGET_NOTCONVERTED:
+        SetTextColor(hDC,RGB(255,255,255));
+        SetBkMode(hDC,OPAQUE);
+        SetBkColor(hDC,RGB(0,255,0));
+        break;
+
+    case ATTR_INPUT_ERROR:
+        SetTextColor(hDC,RGB(255,255,0));
+        SetBkMode(hDC,TRANSPARENT);
+        break;
+
+    case ATTR_FIXEDCONVERTED:
+        SetTextColor(hDC,RGB(255,0,0));
+        SetBkMode(hDC,TRANSPARENT);
+        break;
+
+    default:
+        SetTextColor(hDC,RGB(0,0,0));
+        SetBkMode(hDC,TRANSPARENT);
+        break;
     }
 }
 
@@ -184,7 +184,7 @@ LRESULT HandlePaint(HWND hWnd, WPARAM wParam, LPARAM lParam)
         {
             dwCompCls[127] = 0;
             i = 1;
-          
+
             while (dwCompCls[i] && dwCompCls[i-1] < dwCompStrLen)
             {
                 DWORD dwTextLen = dwCompCls[i] - dwCompCls[i-1];
@@ -344,28 +344,28 @@ LRESULT HandleCandPaint(HWND hWnd,WPARAM wParam, LPARAM lParam)
 
     switch (lpCandList->dwStyle)
     {
-        case IME_CAND_READ:
-            TextOut(hDC,ORG_X,y,szCandRead,lstrlen(szCandRead));
-            break;
+    case IME_CAND_READ:
+        TextOut(hDC,ORG_X,y,szCandRead,lstrlen(szCandRead));
+        break;
 
-        case IME_CAND_CODE:
-            TextOut(hDC,ORG_X,y,szCandCode,lstrlen(szCandCode));
-            break;
+    case IME_CAND_CODE:
+        TextOut(hDC,ORG_X,y,szCandCode,lstrlen(szCandCode));
+        break;
 
-        case IME_CAND_MEANING:
-            TextOut(hDC,ORG_X,y,szCandMean,lstrlen(szCandMean));
-            break;
+    case IME_CAND_MEANING:
+        TextOut(hDC,ORG_X,y,szCandMean,lstrlen(szCandMean));
+        break;
 
-        case IME_CAND_RADICAL:
-            TextOut(hDC,ORG_X,y,szCandRadi,lstrlen(szCandRadi));
-            break;
+    case IME_CAND_RADICAL:
+        TextOut(hDC,ORG_X,y,szCandRadi,lstrlen(szCandRadi));
+        break;
 
-        case IME_CAND_STROKE:
-            TextOut(hDC,ORG_X,y,szCandStrk,lstrlen(szCandStrk));
-            break;
+    case IME_CAND_STROKE:
+        TextOut(hDC,ORG_X,y,szCandStrk,lstrlen(szCandStrk));
+        break;
 
-        default:
-            break;
+    default:
+        break;
 
     }
     y += defheight;
@@ -380,9 +380,9 @@ LRESULT HandleCandPaint(HWND hWnd,WPARAM wParam, LPARAM lParam)
     lpdwOffset += lpCandList->dwPageStart;
 
     for (i = lpCandList->dwPageStart;
-         (i < lpCandList->dwCount) && 
-         (i < lpCandList->dwPageStart + lpCandList->dwPageSize) &&
-         (y <= rect.bottom + height); i++)
+            (i < lpCandList->dwCount) &&
+            (i < lpCandList->dwPageStart + lpCandList->dwPageSize) &&
+            (y <= rect.bottom + height); i++)
     {
         LPTSTR lpstr = (LPTSTR)((BYTE *)lpCandList + *lpdwOffset++);
 

@@ -1,4 +1,4 @@
-//*****************************************************************************
+﻿//*****************************************************************************
 //
 // Microsoft Windows Media
 // Copyright (C) Microsoft Corporation. All rights reserved.
@@ -13,7 +13,7 @@
 //////////////////////////////////////////////////////////////////////
 //    The CWriter object is fed with stream data samples by the CReader object
 //    by calls to its WriteStreamSample method. It sends data to the output
-//    defined by a file or network sink. Data has to be compressed. All attributes 
+//    defined by a file or network sink. Data has to be compressed. All attributes
 //    have to be set up by CReader according to its input stream attributes
 //    The GetStats method enables you to get current output stream
 //    statistics at any time during data transmission.
@@ -30,7 +30,7 @@ CWriter::CWriter()
     m_pWriterAdvanced3 = NULL;
     m_pWriterHeaderInfo = NULL;
     m_pFileSink = NULL;
-	m_pNetSink = NULL;
+    m_pNetSink = NULL;
     m_fWriterStarted = FALSE;
 
     m_pStreamNumList = NULL;
@@ -46,7 +46,7 @@ CWriter::~CWriter()
     {
         RemoveFileSink();
     }
-	if( NULL != m_pNetSink )
+    if( NULL != m_pNetSink )
     {
         RemoveNetSink();
     }
@@ -55,7 +55,7 @@ CWriter::~CWriter()
     SAFE_RELEASE( m_pWriterAdvanced ) ;
     SAFE_RELEASE( m_pWriterAdvanced3 ) ;
     SAFE_RELEASE( m_pFileSink );
-	SAFE_RELEASE( m_pNetSink );
+    SAFE_RELEASE( m_pNetSink );
     SAFE_RELEASE( m_pWriter ) ;
 
     if ( NULL != m_pStreamNumList )
@@ -106,7 +106,8 @@ HRESULT CWriter::Init()
             _tprintf( _T( "Could not QI for IWMHeaderInfo (hr=0x%08x).\n" ), hr );
             break;
         }
-    }while ( FALSE );
+    }
+    while ( FALSE );
 
     if (FAILED( hr ) )
     {
@@ -221,8 +222,8 @@ HRESULT CWriter::Stop()
             return( hr );
         }
     }
-	
-	if( NULL != m_pNetSink )
+
+    if( NULL != m_pNetSink )
     {
         hr = RemoveNetSink();
         if ( FAILED( hr ) )
@@ -261,7 +262,7 @@ HRESULT CWriter::CreateFileSink( __in LPWSTR pwszFileName )
         //
         // Configure the File Sink
         //
-        
+
         hr = m_pFileSink->Open( pwszFileName );
         if ( FAILED( hr ) )
         {
@@ -280,7 +281,8 @@ HRESULT CWriter::CreateFileSink( __in LPWSTR pwszFileName )
             break;
         }
 
-    } while( FALSE );
+    }
+    while( FALSE );
 
     if (FAILED( hr ) )
     {
@@ -297,7 +299,7 @@ HRESULT CWriter::CreateFileSink( __in LPWSTR pwszFileName )
 HRESULT CWriter::RemoveFileSink()
 {
     HRESULT hr = S_OK ;
-    
+
     if ( NULL == m_pWriterAdvanced || NULL == m_pFileSink || m_fWriterStarted)
     {
         return( E_FAIL );
@@ -321,7 +323,7 @@ HRESULT CWriter::RemoveFileSink()
 ///////////////////////////////////////////////////////////////
 //    Create and attach a network sink
 //        dwPortNumber      - port number
-//        nMaxClient        - maximum number of connected clients    
+//        nMaxClient        - maximum number of connected clients
 //
 HRESULT CWriter::CreateNetSink( DWORD dwPortNumber, UINT nMaxClient )
 {
@@ -351,7 +353,7 @@ HRESULT CWriter::CreateNetSink( DWORD dwPortNumber, UINT nMaxClient )
             _tprintf( _T( "Could not Set Network protocol (hr=0x%08x).\n" ), hr );
             break;
         }
-        
+
         hr = m_pNetSink->Open( &dwPortNumber);
         if ( FAILED( hr ) )
         {
@@ -381,7 +383,8 @@ HRESULT CWriter::CreateNetSink( DWORD dwPortNumber, UINT nMaxClient )
             break;
         }
 
-    } while( FALSE );
+    }
+    while( FALSE );
 
     if (FAILED( hr ) )
     {
@@ -398,7 +401,7 @@ HRESULT CWriter::CreateNetSink( DWORD dwPortNumber, UINT nMaxClient )
 HRESULT CWriter::RemoveNetSink()
 {
     HRESULT hr = S_OK ;
-    
+
     if ( NULL == m_pWriterAdvanced || NULL == m_pNetSink || m_fWriterStarted)
     {
         return( E_FAIL );
@@ -434,10 +437,10 @@ HRESULT CWriter::RemoveNetSink()
 HRESULT CWriter::GetStats( DWORD &dwClientNum, int &nStatsNum, CWriterStats **pStats, CWriterStatsEx **pStatsEx )
 {
     HRESULT                 hr = S_OK;
-    WM_WRITER_STATISTICS    Stats; 
+    WM_WRITER_STATISTICS    Stats;
     WM_WRITER_STATISTICS_EX StatsEx;
     CWriterStats*           pLocalStats = NULL;
-	CWriterStatsEx*         pLocalStatsEx = NULL;
+    CWriterStatsEx*         pLocalStatsEx = NULL;
 
     if ( NULL == pStats )
         return E_INVALIDARG;
@@ -494,16 +497,16 @@ HRESULT CWriter::GetStats( DWORD &dwClientNum, int &nStatsNum, CWriterStats **pS
 
     *pStats = pLocalStats;
 
-	pLocalStatsEx = new CWriterStatsEx;
+    pLocalStatsEx = new CWriterStatsEx;
     if ( NULL == pLocalStatsEx )
     {
         return E_OUTOFMEMORY;
     }
 
     *pStatsEx = pLocalStatsEx;
-	pLocalStatsEx->m_nStreamNum = 0;
-	*pLocalStatsEx = StatsEx;
-	
+    pLocalStatsEx->m_nStreamNum = 0;
+    *pLocalStatsEx = StatsEx;
+
 
     // Copy summary statistics
     pLocalStats->m_nStreamNum = 0; // all streams;
@@ -513,8 +516,8 @@ HRESULT CWriter::GetStats( DWORD &dwClientNum, int &nStatsNum, CWriterStats **pS
     DWORD nStreamsCount = m_nStreamNumListCount;
     WORD *pStreamNumList = m_pStreamNumList;
 
-    while( 0 != nStreamsCount-- 
-        && SUCCEEDED( hr = m_pWriterAdvanced->GetStatistics( *pStreamNumList, &Stats ) ) )
+    while( 0 != nStreamsCount--
+            && SUCCEEDED( hr = m_pWriterAdvanced->GetStatistics( *pStreamNumList, &Stats ) ) )
     {
         pLocalStats->m_nStreamNum = *pStreamNumList++;
         *pLocalStats++ = Stats;
@@ -533,11 +536,11 @@ HRESULT CWriter::WriteStreamSample(WORD wStreamNum, QWORD cnsSampleTime, DWORD m
 
     if (m_pWriterAdvanced && m_fWriterStarted)
         hr = m_pWriterAdvanced->WriteStreamSample( wStreamNum,
-                                          cnsSampleTime,
-                                          msSampleSendTime,
-                                          cnsSampleDuration,
-                                          dwFlags,
-                                          pSample ) ;
+                cnsSampleTime,
+                msSampleSendTime,
+                cnsSampleDuration,
+                dwFlags,
+                pSample ) ;
     return hr ;
 
 }
@@ -552,8 +555,8 @@ HRESULT CWriter::AddScript(__in LPWSTR pwszType, __in LPWSTR pwszCommand, QWORD 
     if (!m_pWriterHeaderInfo)
         return E_FAIL;
 
-    hr = m_pWriterHeaderInfo->AddScript( pwszType ,
-                                         pwszCommand ,
+    hr = m_pWriterHeaderInfo->AddScript( pwszType,
+                                         pwszCommand,
                                          cnsScriptTime ) ;
     if ( FAILED( hr ) )
     {
@@ -651,7 +654,7 @@ HRESULT CWriter::CreateStreamNumList(IWMProfile*    pProfile)
         if ( FAILED( hr = pProfile->GetStream( i, &pStream )))
         {
             _tprintf( _T(  "Could not get Stream %d of %d from IWMProfile (hr=0x%08x).\n" ),
-                    i, m_nStreamNumListCount, hr );
+                      i, m_nStreamNumListCount, hr );
             break;
         }
 
@@ -661,7 +664,7 @@ HRESULT CWriter::CreateStreamNumList(IWMProfile*    pProfile)
         if ( FAILED( hr = pStream->GetStreamNumber( pStreamNumList )))
         {
             _tprintf( _T(  "Could not get stream number from IWMStreamConfig %d of %d (hr=0x%08x).\n" ),
-                    i, m_nStreamNumListCount, hr );
+                      i, m_nStreamNumListCount, hr );
             break;
         }
 
@@ -688,13 +691,13 @@ const CWriterStats &CWriterStats::operator= (const WM_WRITER_STATISTICS &right)
     dwCurrentSampleRate = right.dwCurrentSampleRate;
     dwAverageSampleRate = right.dwAverageSampleRate;
     dwExpectedSampleRate = right.dwExpectedSampleRate;
- 
+
     return *this;
 }
 
 const CWriterStatsEx &CWriterStatsEx::operator= (const WM_WRITER_STATISTICS_EX &right)
 {
-	dwBitratePlusOverhead = right.dwBitratePlusOverhead ;
+    dwBitratePlusOverhead = right.dwBitratePlusOverhead ;
     dwCurrentSampleDropRateInQueue = right.dwCurrentSampleDropRateInQueue ;
     dwCurrentSampleDropRateInCodec = right.dwCurrentSampleDropRateInCodec ;
     dwCurrentSampleDropRateInMultiplexer = right.dwCurrentSampleDropRateInMultiplexer ;
@@ -702,7 +705,7 @@ const CWriterStatsEx &CWriterStatsEx::operator= (const WM_WRITER_STATISTICS_EX &
     dwTotalSampleDropsInCodec = right.dwTotalSampleDropsInCodec ;
     dwTotalSampleDropsInMultiplexer = right.dwTotalSampleDropsInMultiplexer ;
 
- 
+
     return *this;
 }
 

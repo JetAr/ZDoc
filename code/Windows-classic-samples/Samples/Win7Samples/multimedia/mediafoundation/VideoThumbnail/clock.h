@@ -1,7 +1,7 @@
-//////////////////////////////////////////////////////////////////////////
+﻿//////////////////////////////////////////////////////////////////////////
 //
-// Simple timer class. 
-// 
+// Simple timer class.
+//
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -23,9 +23,9 @@ class Timer
 
 public:
 
-    Timer() : 
-        m_hTimer(NULL), 
-        m_bBeginPeriod(FALSE), 
+    Timer() :
+        m_hTimer(NULL),
+        m_bBeginPeriod(FALSE),
         m_StartSysTime(0),
         m_lPeriodMsec(0),
         m_PreviousTime(0)
@@ -49,13 +49,13 @@ public:
         LARGE_INTEGER li = {0};
 
         if (!SetWaitableTimer(
-            m_hTimer,
-            &li,
-            lPeriodMsec,
-            NULL,
-            NULL,
-            FALSE
-            ))
+                    m_hTimer,
+                    &li,
+                    lPeriodMsec,
+                    NULL,
+                    NULL,
+                    FALSE
+                ))
         {
             return FALSE;
         }

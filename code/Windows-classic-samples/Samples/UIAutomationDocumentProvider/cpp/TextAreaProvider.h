@@ -1,12 +1,12 @@
-// Copyright (c) Microsoft Corporation
+﻿// Copyright (c) Microsoft Corporation
 //
 #pragma once
 
 
 // A Class representing the top level frame of the AnnotatedTextControl
 class TextAreaProvider : public IRawElementProviderSimple,
-                         public IRawElementProviderFragment,
-                         public ITextProvider2
+    public IRawElementProviderFragment,
+    public ITextProvider2
 {
 public:
     TextAreaProvider(_In_ HWND hwnd, _In_ AnnotatedTextControl *control);
@@ -16,7 +16,7 @@ public:
     ULONG STDMETHODCALLTYPE AddRef();
     ULONG STDMETHODCALLTYPE Release();
     HRESULT STDMETHODCALLTYPE QueryInterface(_In_ REFIID riid, _Outptr_ void**ppInterface);
-    
+
     // IRawElementProviderSimple methods
     HRESULT STDMETHODCALLTYPE get_ProviderOptions(_Out_ ProviderOptions * retVal);
     HRESULT STDMETHODCALLTYPE GetPatternProvider(PATTERNID iid, _Outptr_result_maybenull_ IUnknown * * retVal );
@@ -53,7 +53,7 @@ private:
 
 // A text range for the TextArea control
 class __declspec(uuid("d6558c5c-71dc-4b83-8ee6-06cab27612fd"))
-TextAreaTextRange:
+    TextAreaTextRange:
     public ITextRangeProvider
 {
 public:

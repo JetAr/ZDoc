@@ -1,4 +1,4 @@
-#include "FileStreamWithEPending.hpp"
+﻿#include "FileStreamWithEPending.hpp"
 
 HRESULT FileStreamWithEPending::OpenFile(LPCWSTR pName, IStream ** ppStream, bool fWrite)
 {
@@ -11,7 +11,7 @@ HRESULT FileStreamWithEPending::OpenFile(LPCWSTR pName, IStream ** ppStream, boo
     (*ppStream) = NULL;
 
     hFile = ::CreateFile(pName, fWrite ? GENERIC_WRITE : GENERIC_READ, FILE_SHARE_READ,
-        NULL, fWrite ? CREATE_ALWAYS : OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+                         NULL, fWrite ? CREATE_ALWAYS : OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 
     if (INVALID_HANDLE_VALUE == hFile)
         HR(HRESULT_FROM_WIN32(GetLastError()));
@@ -33,16 +33,16 @@ HRESULT STDMETHODCALLTYPE FileStreamWithEPending::QueryInterface(REFIID iid, __R
     (*ppvObject) = nullptr;
 
     if (iid == __uuidof(IUnknown)
-        || iid == __uuidof(IStream)
-        || iid == __uuidof(ISequentialStream))
+            || iid == __uuidof(IStream)
+            || iid == __uuidof(ISequentialStream))
     {
         *ppvObject = static_cast<IStream*>(this);
         AddRef();
         return S_OK;
-    } 
+    }
     else
     {
-        return E_NOINTERFACE; 
+        return E_NOINTERFACE;
     }
 }
 
@@ -150,42 +150,42 @@ HRESULT STDMETHODCALLTYPE FileStreamWithEPending::Write(_In_reads_bytes_(cb) con
 
 // IStream Interface
 HRESULT STDMETHODCALLTYPE FileStreamWithEPending::SetSize(ULARGE_INTEGER)
-{ 
+{
     return E_NOTIMPL;
 }
 
 HRESULT STDMETHODCALLTYPE FileStreamWithEPending::CopyTo(_In_ IStream*, ULARGE_INTEGER, _Out_opt_ ULARGE_INTEGER*, _Out_opt_ ULARGE_INTEGER*)
-{ 
+{
     return E_NOTIMPL;
 }
-    
+
 HRESULT STDMETHODCALLTYPE FileStreamWithEPending::Commit(DWORD)
-{ 
-    return E_NOTIMPL;   
+{
+    return E_NOTIMPL;
 }
-    
+
 HRESULT STDMETHODCALLTYPE FileStreamWithEPending::Revert(void)
-{ 
+{
     return E_NOTIMPL;
 }
-    
+
 HRESULT STDMETHODCALLTYPE FileStreamWithEPending::LockRegion(ULARGE_INTEGER, ULARGE_INTEGER, DWORD)
-{ 
+{
     return E_NOTIMPL;
 }
-    
+
 HRESULT STDMETHODCALLTYPE FileStreamWithEPending::UnlockRegion(ULARGE_INTEGER, ULARGE_INTEGER, DWORD)
-{ 
+{
     return E_NOTIMPL;
 }
-    
+
 HRESULT STDMETHODCALLTYPE FileStreamWithEPending::Clone(__RPC__deref_out_opt IStream **)
-{ 
+{
     return E_NOTIMPL;
 }
 
 HRESULT STDMETHODCALLTYPE FileStreamWithEPending::Seek(LARGE_INTEGER liDistanceToMove, DWORD dwOrigin, _Out_opt_ ULARGE_INTEGER* lpNewFilePointer)
-{ 
+{
     DWORD dwMoveMethod;
 
     switch(dwOrigin)
@@ -199,7 +199,7 @@ HRESULT STDMETHODCALLTYPE FileStreamWithEPending::Seek(LARGE_INTEGER liDistanceT
     case STREAM_SEEK_END:
         dwMoveMethod = FILE_END;
         break;
-    default:   
+    default:
         return STG_E_INVALIDFUNCTION;
         break;
     }
@@ -209,7 +209,7 @@ HRESULT STDMETHODCALLTYPE FileStreamWithEPending::Seek(LARGE_INTEGER liDistanceT
     return S_OK;
 }
 
-HRESULT STDMETHODCALLTYPE FileStreamWithEPending::Stat(__RPC__out STATSTG* pStatstg, DWORD grfStatFlag) 
+HRESULT STDMETHODCALLTYPE FileStreamWithEPending::Stat(__RPC__out STATSTG* pStatstg, DWORD grfStatFlag)
 {
     if (!pStatstg || (grfStatFlag != STATFLAG_DEFAULT && grfStatFlag != STATFLAG_NONAME))
         return E_INVALIDARG;

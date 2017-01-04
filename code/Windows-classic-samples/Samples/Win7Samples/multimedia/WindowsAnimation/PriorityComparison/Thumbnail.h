@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -21,17 +21,17 @@ public:
 
     HRESULT Initialize(
         ID2D1Bitmap *pBitmap,
-        IUIAnimationManager *pAnimationManager, 
+        IUIAnimationManager *pAnimationManager,
         DOUBLE x,
         DOUBLE y
-        );
+    );
 
     D2D1_SIZE_F GetSize();
 
     HRESULT Render(
         ID2D1HwndRenderTarget* pRT,
         ID2D1Brush *pBrushOutline
-        );
+    );
 
     // X and Y Animation Variables
 
@@ -41,7 +41,7 @@ public:
 private:
 
     // Animation objects
-    
+
     IUIAnimationManager *m_pAnimationManager;
 
     // D2D bitmap

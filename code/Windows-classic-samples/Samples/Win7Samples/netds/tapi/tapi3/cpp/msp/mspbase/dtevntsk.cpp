@@ -1,10 +1,10 @@
-/*++
+﻿/*++
 
 Copyright (c) 1998-1999  Microsoft Corporation
 
 Module Name:
 
-    DTEvntSk.cpp 
+    DTEvntSk.cpp
 
 Abstract:
 
@@ -28,88 +28,88 @@ HRESULT FreeEventInfo( MSP_EVENT_INFO * pEvent )
     switch ( pEvent->Event )
     {
 
-        case ME_ADDRESS_EVENT:
+    case ME_ADDRESS_EVENT:
 
-            if (NULL != pEvent->MSP_ADDRESS_EVENT_INFO.pTerminal)
-            {
-                (pEvent->MSP_ADDRESS_EVENT_INFO.pTerminal)->Release();
-            }
+        if (NULL != pEvent->MSP_ADDRESS_EVENT_INFO.pTerminal)
+        {
+            (pEvent->MSP_ADDRESS_EVENT_INFO.pTerminal)->Release();
+        }
 
-            break;
-    
-        case ME_CALL_EVENT:
+        break;
 
-            if (NULL != pEvent->MSP_CALL_EVENT_INFO.pTerminal)
-            {
-                (pEvent->MSP_CALL_EVENT_INFO.pTerminal)->Release();
-            }
-    
-            if (NULL != pEvent->MSP_CALL_EVENT_INFO.pStream)
-            {
-                (pEvent->MSP_CALL_EVENT_INFO.pStream)->Release();
-            }
-    
-            break;
-    
-        case ME_TSP_DATA:
+    case ME_CALL_EVENT:
 
-            break;
+        if (NULL != pEvent->MSP_CALL_EVENT_INFO.pTerminal)
+        {
+            (pEvent->MSP_CALL_EVENT_INFO.pTerminal)->Release();
+        }
 
-        case ME_PRIVATE_EVENT:
-    
-            if ( NULL != pEvent->MSP_PRIVATE_EVENT_INFO.pEvent )
-            {
-                (pEvent->MSP_PRIVATE_EVENT_INFO.pEvent)->Release();
-            }
+        if (NULL != pEvent->MSP_CALL_EVENT_INFO.pStream)
+        {
+            (pEvent->MSP_CALL_EVENT_INFO.pStream)->Release();
+        }
 
-            break;
+        break;
 
-        case ME_FILE_TERMINAL_EVENT:
+    case ME_TSP_DATA:
 
-            if( NULL != pEvent->MSP_FILE_TERMINAL_EVENT_INFO.pParentFileTerminal)
-            {
-                (pEvent->MSP_FILE_TERMINAL_EVENT_INFO.pParentFileTerminal)->Release();
-                pEvent->MSP_FILE_TERMINAL_EVENT_INFO.pParentFileTerminal = NULL;
-            }
+        break;
 
-            if( NULL != pEvent->MSP_FILE_TERMINAL_EVENT_INFO.pFileTrack )
-            {
-                (pEvent->MSP_FILE_TERMINAL_EVENT_INFO.pFileTrack)->Release();
-                pEvent->MSP_FILE_TERMINAL_EVENT_INFO.pFileTrack = NULL;
-            }
+    case ME_PRIVATE_EVENT:
 
-            break;
+        if ( NULL != pEvent->MSP_PRIVATE_EVENT_INFO.pEvent )
+        {
+            (pEvent->MSP_PRIVATE_EVENT_INFO.pEvent)->Release();
+        }
 
-        case ME_ASR_TERMINAL_EVENT:
+        break;
 
-            if( NULL != pEvent->MSP_ASR_TERMINAL_EVENT_INFO.pASRTerminal)
-            {
-                (pEvent->MSP_ASR_TERMINAL_EVENT_INFO.pASRTerminal)->Release();
-            }
+    case ME_FILE_TERMINAL_EVENT:
 
-            break;
+        if( NULL != pEvent->MSP_FILE_TERMINAL_EVENT_INFO.pParentFileTerminal)
+        {
+            (pEvent->MSP_FILE_TERMINAL_EVENT_INFO.pParentFileTerminal)->Release();
+            pEvent->MSP_FILE_TERMINAL_EVENT_INFO.pParentFileTerminal = NULL;
+        }
 
-        case ME_TTS_TERMINAL_EVENT:
+        if( NULL != pEvent->MSP_FILE_TERMINAL_EVENT_INFO.pFileTrack )
+        {
+            (pEvent->MSP_FILE_TERMINAL_EVENT_INFO.pFileTrack)->Release();
+            pEvent->MSP_FILE_TERMINAL_EVENT_INFO.pFileTrack = NULL;
+        }
 
-            if( NULL != pEvent->MSP_TTS_TERMINAL_EVENT_INFO.pTTSTerminal)
-            {
-                (pEvent->MSP_TTS_TERMINAL_EVENT_INFO.pTTSTerminal)->Release();
-            }
+        break;
 
-            break;
+    case ME_ASR_TERMINAL_EVENT:
 
-        case ME_TONE_TERMINAL_EVENT:
+        if( NULL != pEvent->MSP_ASR_TERMINAL_EVENT_INFO.pASRTerminal)
+        {
+            (pEvent->MSP_ASR_TERMINAL_EVENT_INFO.pASRTerminal)->Release();
+        }
 
-            if( NULL != pEvent->MSP_TONE_TERMINAL_EVENT_INFO.pToneTerminal)
-            {
-                (pEvent->MSP_TONE_TERMINAL_EVENT_INFO.pToneTerminal)->Release();
-            }
+        break;
 
-            break;
+    case ME_TTS_TERMINAL_EVENT:
 
-        default:
+        if( NULL != pEvent->MSP_TTS_TERMINAL_EVENT_INFO.pTTSTerminal)
+        {
+            (pEvent->MSP_TTS_TERMINAL_EVENT_INFO.pTTSTerminal)->Release();
+        }
 
-            break;
+        break;
+
+    case ME_TONE_TERMINAL_EVENT:
+
+        if( NULL != pEvent->MSP_TONE_TERMINAL_EVENT_INFO.pToneTerminal)
+        {
+            (pEvent->MSP_TONE_TERMINAL_EVENT_INFO.pToneTerminal)->Release();
+        }
+
+        break;
+
+    default:
+
+        break;
     }
 
 
@@ -139,11 +139,11 @@ FireEvent
 
 Parameters:
 
-    IN MSPEVENTITEM * pEventItem pointer to the structure that describes the 
-    event. all the pointers contained in the structure must be addreffed by 
+    IN MSPEVENTITEM * pEventItem pointer to the structure that describes the
+    event. all the pointers contained in the structure must be addreffed by
     the caller, and then released by the caller if FireEvent fails
 
-    FireEvent makes a (shallow) copy of the structure, so the caller can 
+    FireEvent makes a (shallow) copy of the structure, so the caller can
     delete the structure when the function returns
 
 
@@ -152,13 +152,13 @@ Returns:
     E_FAIL & other - something was wrong
 
 Description:
-  This method is called by the dynamic terminals to 
+  This method is called by the dynamic terminals to
   signal a new event
 --*/
 
 STDMETHODIMP CPTEventSink::FireEvent(
     IN const MSP_EVENT_INFO * pEventInfo
-    )
+)
 {
     LOG((MSP_TRACE, "CPTEventSink::FireEvent enter"));
 
@@ -170,7 +170,7 @@ STDMETHODIMP CPTEventSink::FireEvent(
     if( ! (void*)pEventInfo)
     {
         LOG((MSP_ERROR, "CPTEventSink::FireEvent -"
-            "pEventItem is bad, returns E_POINTER"));
+             "pEventItem is bad, returns E_POINTER"));
         return E_POINTER;
     }
 
@@ -184,7 +184,7 @@ STDMETHODIMP CPTEventSink::FireEvent(
     if (NULL == pEventItem)
     {
         LOG((MSP_ERROR, "CPTEventSink::FireEvent -"
-            "failed to create MSPEVENTITEM. returning E_OUTOFMEMORY "));
+             "failed to create MSPEVENTITEM. returning E_OUTOFMEMORY "));
 
         return E_OUTOFMEMORY;
     }
@@ -203,7 +203,7 @@ STDMETHODIMP CPTEventSink::FireEvent(
 
     if (NULL != m_pMSPStream)
     {
-    
+
         //
         // nicely ask stream to process our event
         //
@@ -215,8 +215,8 @@ STDMETHODIMP CPTEventSink::FireEvent(
 
         if (NULL == pAsyncEvent)
         {
-            LOG((MSP_ERROR, 
-                "CPTEventSink::FireEvent - failed to allocate memory for AsyncEventStruct"));
+            LOG((MSP_ERROR,
+                 "CPTEventSink::FireEvent - failed to allocate memory for AsyncEventStruct"));
 
             hr = E_OUTOFMEMORY;
         }
@@ -224,7 +224,7 @@ STDMETHODIMP CPTEventSink::FireEvent(
         {
 
             //
-            // stuff the structure with the addref'fed stream on which the 
+            // stuff the structure with the addref'fed stream on which the
             // event will be fired and the actual event to fire
             //
 
@@ -233,19 +233,19 @@ STDMETHODIMP CPTEventSink::FireEvent(
             if (1 == ulRC)
             {
                 //
-                // this is a workaround for a timing window: the stream could 
-                // be in its desctructor while we are doing the addref. this 
+                // this is a workaround for a timing window: the stream could
+                // be in its desctructor while we are doing the addref. this
                 // condition is very-vary rare, as the timing window is very
                 // narrow.
                 //
-                // the good thing is that stream destructor will not finish 
-                // while we are here, because it will try to get event sink's 
-                // critical section in its call to SetSinkStream() to set our 
+                // the good thing is that stream destructor will not finish
+                // while we are here, because it will try to get event sink's
+                // critical section in its call to SetSinkStream() to set our
                 // stream pointer to NULL.
-                // 
-                // so if we detect that the refcount after our addref is 1, 
+                //
+                // so if we detect that the refcount after our addref is 1,
                 // that would mean that the stream is in (or is about to start
-                // executing its desctructor). in which case we should do 
+                // executing its desctructor). in which case we should do
                 // nothing.
                 //
                 // cleanup and return a failure.
@@ -253,8 +253,8 @@ STDMETHODIMP CPTEventSink::FireEvent(
 
                 Unlock();
 
-                LOG((MSP_ERROR, 
-                    "CPTEventSink::FireEvent - stream is going away"));
+                LOG((MSP_ERROR,
+                     "CPTEventSink::FireEvent - stream is going away"));
 
                 delete pAsyncEvent;
                 pAsyncEvent = NULL;
@@ -273,26 +273,26 @@ STDMETHODIMP CPTEventSink::FireEvent(
 
 
             //
-            // now use thread pool api to schedule the event for future async 
+            // now use thread pool api to schedule the event for future async
             // processing
             //
 
             BOOL bQueueSuccess = QueueUserWorkItem(
-                CPTEventSink::FireEventCallBack,
-                (void *)pAsyncEvent,
-                WT_EXECUTEDEFAULT);
+                                     CPTEventSink::FireEventCallBack,
+                                     (void *)pAsyncEvent,
+                                     WT_EXECUTEDEFAULT);
 
             if (!bQueueSuccess)
             {
-                
+
                 DWORD dwLastError = GetLastError();
 
-                LOG((MSP_ERROR, 
-                    "CPTEventSink::FireEvent - QueueUserWorkItem failed. LastError = %ld", dwLastError));
+                LOG((MSP_ERROR,
+                     "CPTEventSink::FireEvent - QueueUserWorkItem failed. LastError = %ld", dwLastError));
 
 
                 //
-                // undo the addref we did on the stream object. the event will 
+                // undo the addref we did on the stream object. the event will
                 // be freed later
                 //
 
@@ -315,28 +315,28 @@ STDMETHODIMP CPTEventSink::FireEvent(
             }
             else
             {
-                
+
                 //
-                // log the event we have submitted, so we can match submission 
+                // log the event we have submitted, so we can match submission
                 // with processing from the log
                 //
 
                 LOG((MSP_TRACE,
-                    "CPTEventSink::FireEvent - submitted event [%p]", pAsyncEvent));
+                     "CPTEventSink::FireEvent - submitted event [%p]", pAsyncEvent));
 
                 hr = S_OK;
 
             } // async event structure submitted
 
-        } // async event structure allocated 
+        } // async event structure allocated
 
     } // msp stream exists
     else
     {
         hr = TAPI_E_INVALIDSTREAM;
 
-        LOG((MSP_ERROR, 
-            "CPTEventSink::FireEvent - stream pointer is NULL"));
+        LOG((MSP_ERROR,
+             "CPTEventSink::FireEvent - stream pointer is NULL"));
     }
 
 
@@ -344,7 +344,7 @@ STDMETHODIMP CPTEventSink::FireEvent(
 
 
     //
-    // if we don't have a stream, or if the stream refused to process the 
+    // if we don't have a stream, or if the stream refused to process the
     // event, cleanup and return an error
     //
 
@@ -372,25 +372,25 @@ STDMETHODIMP CPTEventSink::FireEvent(
 // CPTEventSink::FireEventCallBack
 //
 // the callback function that is called by thread pool api to asyncronously to
-// process events fired by the terminals. 
-// 
-// the argument should point to the structure that contains the pointer to the 
+// process events fired by the terminals.
+//
+// the argument should point to the structure that contains the pointer to the
 // stream on which to fire the event and the pointer to the event to fire.
 //
-// the dll is guaranteed to not go away, since the structure passed in holds a 
+// the dll is guaranteed to not go away, since the structure passed in holds a
 // reference to the stream object on which to process the event
 //
 
 // static
 DWORD WINAPI CPTEventSink::FireEventCallBack(LPVOID lpParameter)
 {
-    LOG((MSP_TRACE, "CPTEventSink::FireEventCallBack - enter. Argument [%p]", 
-        lpParameter));
+    LOG((MSP_TRACE, "CPTEventSink::FireEventCallBack - enter. Argument [%p]",
+         lpParameter));
 
 
     AsyncEventStruct *pEventStruct = (AsyncEventStruct *)lpParameter;
 
-    
+
     //
     // make sure the structure is valid
     //
@@ -399,12 +399,12 @@ DWORD WINAPI CPTEventSink::FireEventCallBack(LPVOID lpParameter)
     {
 
         //
-        // complain and exit. should not happen, unless there is a problem in 
+        // complain and exit. should not happen, unless there is a problem in
         // thread pool api or memory corruption
         //
 
-        LOG((MSP_ERROR, 
-            "CPTEventSink::FireEventCallBack - Argument does not point to a valid AsyncEventStruct"));
+        LOG((MSP_ERROR,
+             "CPTEventSink::FireEventCallBack - Argument does not point to a valid AsyncEventStruct"));
 
         return FALSE;
     }
@@ -413,7 +413,7 @@ DWORD WINAPI CPTEventSink::FireEventCallBack(LPVOID lpParameter)
     BOOL bBadDataPassedIn = FALSE;
 
     //
-    // the structure contains an addref'fed stream pointer. extract it and 
+    // the structure contains an addref'fed stream pointer. extract it and
     // make sure it is still valid
     //
 
@@ -423,12 +423,12 @@ DWORD WINAPI CPTEventSink::FireEventCallBack(LPVOID lpParameter)
     {
 
         //
-        // should not happen, unless there is a problem in thread pool api or 
+        // should not happen, unless there is a problem in thread pool api or
         // memory corruption, or someone is over-releasing the stream object
         //
 
-        LOG((MSP_ERROR, 
-            "CPTEventSink::FireEventCallBack - stream pointer is bad"));
+        LOG((MSP_ERROR,
+             "CPTEventSink::FireEventCallBack - stream pointer is bad"));
 
         pMSPStream = NULL;
 
@@ -448,13 +448,13 @@ DWORD WINAPI CPTEventSink::FireEventCallBack(LPVOID lpParameter)
     {
 
         //
-        // should not happen, unless there is a problem in thread pool api or 
-        // memory corruption, or we didn't check success of allocation when we 
+        // should not happen, unless there is a problem in thread pool api or
+        // memory corruption, or we didn't check success of allocation when we
         // created the event (which we did!)
         //
 
-        LOG((MSP_ERROR, 
-            "CPTEventSink::FireEventCallBack - event is bad"));
+        LOG((MSP_ERROR,
+             "CPTEventSink::FireEventCallBack - event is bad"));
 
         pEventItem = NULL;
 
@@ -502,7 +502,7 @@ DWORD WINAPI CPTEventSink::FireEventCallBack(LPVOID lpParameter)
         return FALSE;
     }
 
-   
+
     //
     // we have both the stream and the event, fire the event on the stream
     //
@@ -511,15 +511,15 @@ DWORD WINAPI CPTEventSink::FireEventCallBack(LPVOID lpParameter)
 
 
     //
-    // if HandleSinkEvent succeeded, pEventItem will be released by whoever 
+    // if HandleSinkEvent succeeded, pEventItem will be released by whoever
     // will handle the event, otherwise we need to release eventitem here
     //
 
     if (FAILED(hr))
     {
-        LOG((MSP_ERROR, 
-            "CPTEventSink::FireEventCallBack - HandleSinkEvent not called or failed. hr = %lx",
-            hr));
+        LOG((MSP_ERROR,
+             "CPTEventSink::FireEventCallBack - HandleSinkEvent not called or failed. hr = %lx",
+             hr));
 
         //
         // need to free all the resources held by event info
@@ -533,12 +533,12 @@ DWORD WINAPI CPTEventSink::FireEventCallBack(LPVOID lpParameter)
 
 
     //
-    // release the stream pointer that is a part of the structure -- 
+    // release the stream pointer that is a part of the structure --
     // we don't want any reference leaks.
     //
 
     //
-    // note that the dll may go away at this point (if we are holding the last 
+    // note that the dll may go away at this point (if we are holding the last
     // reference to the last object from the dll)
     //
 
@@ -547,7 +547,7 @@ DWORD WINAPI CPTEventSink::FireEventCallBack(LPVOID lpParameter)
 
 
     //
-    // at this point we release the stream pointer and either submitted the 
+    // at this point we release the stream pointer and either submitted the
     // event or freed it. we no longer need the event structure.
     //
 
@@ -555,7 +555,7 @@ DWORD WINAPI CPTEventSink::FireEventCallBack(LPVOID lpParameter)
     pEventStruct = NULL;
 
     LOG((MSP_(hr), "CPTEventSink::FireEventCallBack - exit. hr = %lx", hr));
-    
+
     return SUCCEEDED(hr);
 }
 
@@ -566,19 +566,19 @@ SetSinkStream
 
 Parameters:
 
-    CMSPStream *pStream 
-    
-      the stream that will be processing our events, or NULL when no stream is 
+    CMSPStream *pStream
+
+      the stream that will be processing our events, or NULL when no stream is
       available to process our events
 
 Returns:
-    S_OK - 
+    S_OK -
 
 Description:
 
     this method is called by the stream that is going to process our events
 
-    when the stream is going away and is no longer available to process our 
+    when the stream is going away and is no longer available to process our
     messages, it will call SetSinkStream with NULL.
 
 --*/
@@ -591,13 +591,13 @@ HRESULT CPTEventSink::SetSinkStream( CMSPStream *pStream )
     Lock();
 
 
-    LOG((MSP_TRACE, 
-        "CPTEventSink::SetSinkStream - replacing sink stream [%p] with [%p]", 
-        m_pMSPStream, pStream));
+    LOG((MSP_TRACE,
+         "CPTEventSink::SetSinkStream - replacing sink stream [%p] with [%p]",
+         m_pMSPStream, pStream));
 
 
     //
-    // we don't keep a reference to the stream -- the stream keeps a reference 
+    // we don't keep a reference to the stream -- the stream keeps a reference
     // to us. when the stream goes away, it will let us know.
     //
 

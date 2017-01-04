@@ -1,4 +1,4 @@
-#include "stdafx.h"
+﻿#include "stdafx.h"
 
 #include "tedtestsink.h"
 
@@ -49,7 +49,7 @@ HRESULT CTedTestSink::GetPresentationClock(IMFPresentationClock** ppPresentation
     {
         return MF_E_SHUTDOWN;
     }
-    
+
     if(NULL == m_spPresentationClock.p)
     {
         return MF_E_NO_CLOCK;
@@ -171,7 +171,7 @@ HRESULT CTedTestSink::InitAudioStream()
     InternalAddRef();
     /*IMFMediaSink* pMediaSink;
     InternalQueryInterface(this, CTedTestSink::_GetEntries(), IID_IMFMediaSink, (void**) &pMediaSink);*/
-    
+
     CComPtr<IMFMediaType> spAudioType;
     IFC( MFCreateMediaType(&spAudioType) );
     IFC( spAudioType->SetGUID(MF_MT_MAJOR_TYPE, MFMediaType_Audio) );
@@ -205,7 +205,7 @@ HRESULT CTedTestSink::InitVideoStream()
     InternalAddRef();
     /*IMFMediaSink* pMediaSink;
     InternalQueryInterface(this, CTedTestSink::_GetEntries(), IID_IMFMediaSink, (void**) &pMediaSink);*/
-    
+
     CComPtr<IMFMediaType> spVideoType;
     IFC( MFCreateMediaType(&spVideoType) );
     IFC( spVideoType->SetGUID(MF_MT_MAJOR_TYPE, MFMediaType_Video) );
@@ -291,7 +291,7 @@ HRESULT CTedTestStreamSink::Init(CTedTestSink* pSink, IMFMediaTypeHandler* pMTH,
 
     m_pMTH = pMTH;
     m_pMTH->AddRef();
-    
+
     m_dwIdentifier = dwIdentifier;
 
     return S_OK;
@@ -322,7 +322,7 @@ HRESULT CTedTestStreamSink::GetMediaSink(IMFMediaSink** ppMediaSink)
     }
 
     //m_pSink->QueryInterface(IID_IMFMediaSink, (void**) ppMediaSink);
-    
+
     *ppMediaSink = m_pSink;
     (*ppMediaSink)->AddRef();
 
@@ -354,7 +354,7 @@ HRESULT CTedTestStreamSink::ProcessSample(IMFSample* pSample)
 
 STDMETHODIMP CTedTestStreamSink::BeginGetEvent(IMFAsyncCallback* pCallback, IUnknown* punkState)
 {
-    return m_spMEQ->BeginGetEvent(pCallback, punkState);    
+    return m_spMEQ->BeginGetEvent(pCallback, punkState);
 }
 
 STDMETHODIMP CTedTestStreamSink::EndGetEvent(IMFAsyncResult* pResult, IMFMediaEvent** ppEvent)
@@ -440,7 +440,7 @@ HRESULT CTedTestMediaTypeHandler::GetMediaTypeCount(DWORD* pdwTypeCount)
     if(NULL == pdwTypeCount)
     {
         return E_POINTER;
-    }    
+    }
 
     *pdwTypeCount = (DWORD) m_arrAvailableTypes.GetCount();
 
@@ -453,7 +453,7 @@ HRESULT CTedTestMediaTypeHandler::IsMediaTypeSupported(IMFMediaType* pMediaType,
     {
         *ppMediaType = NULL;
     }
-    
+
     for(size_t i = 0; i < m_arrAvailableTypes.GetCount(); i++)
     {
         DWORD dwFlags;
@@ -466,7 +466,7 @@ HRESULT CTedTestMediaTypeHandler::IsMediaTypeSupported(IMFMediaType* pMediaType,
     }
 
     return MF_E_INVALIDMEDIATYPE;
-    
+
 }
 
 HRESULT CTedTestMediaTypeHandler::SetCurrentMediaType(IMFMediaType* pMediaType)
@@ -497,7 +497,7 @@ HRESULT CTedTestMediaTypeHandler::SetMajorType(GUID gidMajorType)
 HRESULT CTedTestMediaTypeHandler::AddAvailableType(IMFMediaType* pType)
 {
     pType->AddRef();
-    
+
     m_arrAvailableTypes.Add(pType);
 
     return S_OK;

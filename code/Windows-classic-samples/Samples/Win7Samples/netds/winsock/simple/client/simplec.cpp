@@ -1,6 +1,6 @@
-/******************************************************************************\
+﻿/******************************************************************************\
 * simplec.c - Simple TCP/UDP client using Winsock 1.1
-* 
+*
 *       This is a part of the Microsoft Source Code Samples.
 *       Copyright 1996 - 2000 Microsoft Corporation.
 *       All rights reserved.
@@ -10,8 +10,8 @@
 *       Microsoft samples programs.
 \******************************************************************************/
 #ifdef _IA64_
-    #pragma warning(disable:4127)
-#endif 
+#pragma warning(disable:4127)
+#endif
 
 #ifndef WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN
@@ -31,11 +31,11 @@
 
 //
 // Function: Usage
-// 
+//
 // Description:
 //    Print the parameters and exit.
 //
-void Usage(char *progname) 
+void Usage(char *progname)
 {
     fprintf(stderr, "Usage\n%s -p [protocol] -n [server] -e [endpoint] -l [iterations] [-4] [-6]\n"
             "Where:\n"
@@ -68,25 +68,25 @@ void Usage(char *progname)
 //    UDP socket to and endpoint and issuing the requested number of
 //    datagram sends and receives.
 //
-int __cdecl main(int argc, char **argv) 
+int __cdecl main(int argc, char **argv)
 {
     WSADATA          wsaData;
     SOCKET           conn_socket = INVALID_SOCKET;
     struct addrinfo *results = NULL,
-    *addrptr = NULL,
-    hints;
+                         *addrptr = NULL,
+                          hints;
     char            *server_name = "localhost",
-    *port = DEFAULT_PORT,
-    Buffer[DEFAULT_BUFFER_LEN],
-    hoststr[NI_MAXHOST],
-    servstr[NI_MAXSERV];
+                     *port = DEFAULT_PORT,
+                      Buffer[DEFAULT_BUFFER_LEN],
+                      hoststr[NI_MAXHOST],
+                      servstr[NI_MAXSERV];
     int              address_family = AF_UNSPEC,
-    socket_type = DEFAULT_PROTO;
-    int              retval, 
-    loopflag = 0,
-    loopcount,
-    maxloop = -1,
-    i;
+                     socket_type = DEFAULT_PROTO;
+    int              retval,
+                     loopflag = 0,
+                     loopcount,
+                     maxloop = -1,
+                     i;
 
     // Parse the command line
     if (argc >1)
@@ -165,11 +165,11 @@ int __cdecl main(int argc, char **argv)
     hints.ai_protocol = ((socket_type == SOCK_STREAM) ? IPPROTO_TCP : IPPROTO_UDP);
 
     retval = getaddrinfo(
-                        server_name,
-                        port,
-                        &hints,
-                        &results
-                        );
+                 server_name,
+                 port,
+                 &hints,
+                 &results
+             );
     if (retval != 0)
     {
         fprintf(stderr, "getaddrinfo failed: %d\n", retval);
@@ -198,10 +198,10 @@ int __cdecl main(int argc, char **argv)
         }
 
         //
-        // Notice that nothing in this code is specific to whether we 
+        // Notice that nothing in this code is specific to whether we
         // are using UDP or TCP.
         // We achieve this by using a simple trick.
-        //    When connect() is called on a datagram socket, it does not 
+        //    When connect() is called on a datagram socket, it does not
         //    actually establish the connection as a stream (TCP) socket
         //    would. Instead, TCP/IP establishes the remote half of the
         //    ( LocalIPAddress, LocalPort, RemoteIP, RemotePort) mapping.
@@ -209,14 +209,14 @@ int __cdecl main(int argc, char **argv)
         //    instead of recvfrom() and sendto()
 
         retval = getnameinfo(
-                            addrptr->ai_addr,
-                            (socklen_t)addrptr->ai_addrlen,
-                            hoststr,
-                            NI_MAXHOST,
-                            servstr,
-                            NI_MAXSERV,
-                            NI_NUMERICHOST | NI_NUMERICSERV
-                            );
+                     addrptr->ai_addr,
+                     (socklen_t)addrptr->ai_addrlen,
+                     hoststr,
+                     NI_MAXHOST,
+                     servstr,
+                     NI_MAXSERV,
+                     NI_NUMERICHOST | NI_NUMERICSERV
+                 );
         if (retval != 0)
         {
             fprintf(stderr, "getnameinfo failed: %d\n", retval);
@@ -259,10 +259,10 @@ int __cdecl main(int argc, char **argv)
     loopcount = 0;
     for (;;)
     {
-        StringCbPrintf(Buffer, sizeof(Buffer), 
-                  "This is a small test message [number %d]",
-                  loopcount++
-                 );
+        StringCbPrintf(Buffer, sizeof(Buffer),
+                       "This is a small test message [number %d]",
+                       loopcount++
+                      );
 
         // Send the data
         retval = send(conn_socket, Buffer, lstrlen(Buffer)+1, 0);
@@ -283,7 +283,7 @@ int __cdecl main(int argc, char **argv)
         }
         //
         // We are not likely to see this with UDP, since there is no
-        // 'connection' established. 
+        // 'connection' established.
         //
         if (retval == 0)
         {
@@ -306,7 +306,7 @@ int __cdecl main(int argc, char **argv)
         }
     }
 
-    cleanup:
+cleanup:
 
     //
     // clean up the client connection

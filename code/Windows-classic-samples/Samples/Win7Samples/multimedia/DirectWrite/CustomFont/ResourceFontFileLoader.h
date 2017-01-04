@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -32,7 +32,7 @@ public:
         void const* fontFileReferenceKey,       // [fontFileReferenceKeySize] in bytes
         UINT32 fontFileReferenceKeySize,
         OUT IDWriteFontFileStream** fontFileStream
-        );
+    );
 
     // Gets the singleton loader instance.
     static IDWriteFontFileLoader* GetLoader()

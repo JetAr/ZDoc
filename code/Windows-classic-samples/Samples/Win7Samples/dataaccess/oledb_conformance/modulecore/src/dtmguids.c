@@ -1,4 +1,4 @@
-/* this file contains the actual definitions of */
+﻿/* this file contains the actual definitions of */
 /* the IIDs and CLSIDs */
 
 /* link this file in with the server and any clients */
@@ -9,12 +9,12 @@
  */
 /* Compiler settings for DTMCommon.idl:
     Os (OptLev=s), W1, Zp8, env=Win32, ms_ext, c_ext
-    error checks: allocation ref bounds_check enum stub_data 
+    error checks: allocation ref bounds_check enum stub_data
 */
 //@@MIDL_FILE_HEADING(  )
 #ifdef __cplusplus
-extern "C"{
-#endif 
+extern "C" {
+#endif
 
 
 #ifndef __IID_DEFINED__

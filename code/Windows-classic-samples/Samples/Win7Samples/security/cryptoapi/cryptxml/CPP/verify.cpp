@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -16,7 +16,7 @@
 HRESULT
 HrVerify(
     LPCWSTR         wszFileIn
-    )
+)
 {
     HRESULT     hr = S_FALSE;
     HCRYPTXML   hDoc = NULL;
@@ -36,32 +36,32 @@ HrVerify(
     CRYPT_XML_BLOB   Encoded = { CRYPT_XML_CHARSET_AUTO, 0, NULL };
 
     hr = HrLoadFile(
-                                        wszFileIn,
-                                        &Encoded.pbData,
-                                        &Encoded.cbData
-                                        );
+             wszFileIn,
+             &Encoded.pbData,
+             &Encoded.cbData
+         );
     if( FAILED(hr) )
     {
         goto CleanUp;
     }
 
     hr = CryptXmlOpenToDecode(
-                                        NULL,               // no custom transforms
-                                        0,
-                                        NULL,
-                                        0,
-                                        &Encoded,
-                                        &hDoc
-                                        );
+             NULL,               // no custom transforms
+             0,
+             NULL,
+             0,
+             &Encoded,
+             &hDoc
+         );
     if( FAILED(hr) )
     {
         goto CleanUp;
     }
 
-    hr = CryptXmlGetDocContext( 
-                                        hDoc, 
-                                        &pDoc 
-                                        );
+    hr = CryptXmlGetDocContext(
+             hDoc,
+             &pDoc
+         );
     if( FAILED(hr) )
     {
         goto CleanUp;
@@ -92,7 +92,7 @@ HrVerify(
         for( ULONG ki=0; ki<pDoc->rgpSignature[i]->pKeyInfo->cKeyInfo && NULL == hKey; ki++ )
         {
             if( CRYPT_XML_KEYINFO_TYPE_X509DATA ==
-                pDoc->rgpSignature[i]->pKeyInfo->rgKeyInfo[ki].dwType )
+                    pDoc->rgpSignature[i]->pKeyInfo->rgKeyInfo[ki].dwType )
             {
                 for( ULONG x=0; x<pDoc->rgpSignature[i]->pKeyInfo->rgKeyInfo[ki].X509Data.cX509Data; x++ )
                 {
@@ -104,12 +104,12 @@ HrVerify(
                         //         In production code, implement the full logic
                         //          to find the signer's cert, from a set of multiple X.509 data elements
                         //
-                        
-                        pCert = CertCreateCertificateContext( 
-                                        X509_ASN_ENCODING,
-                                        pX->Certificate.pbData,
-                                        pX->Certificate.cbData
-                                        );
+
+                        pCert = CertCreateCertificateContext(
+                                    X509_ASN_ENCODING,
+                                    pX->Certificate.pbData,
+                                    pX->Certificate.cbData
+                                );
 
                         if( NULL != pCert )
                         {
@@ -118,8 +118,8 @@ HrVerify(
                                         &pCert->pCertInfo->SubjectPublicKeyInfo,
                                         CRYPT_OID_INFO_PUBKEY_SIGN_KEY_FLAG,
                                         NULL,
-                                        &hKeyAlloc 
-                                        ))
+                                        &hKeyAlloc
+                                    ))
                             {
                                 hKey = hKeyAlloc;
                                 break;
@@ -132,10 +132,10 @@ HrVerify(
 
         if( NULL == hKey )
         {
-            wprintf( L"ERROR: Unable to find signer's key to verify signature [%d] Id='%s'\r\n",  
-                        i,
-                        pDoc->rgpSignature[i]->wszId 
-                        );
+            wprintf( L"ERROR: Unable to find signer's key to verify signature [%d] Id='%s'\r\n",
+                     i,
+                     pDoc->rgpSignature[i]->wszId
+                   );
 
             hr = CRYPT_XML_E_SIGNER;
             goto CleanUp;
@@ -148,42 +148,42 @@ HrVerify(
             //
             // TODO: Use CertGetCertificateChain() to build the chain and verify the trust.
             //
-            
+
             //
             // TODO: Accept only strong cryptographic algorithms and key strengths.
             // Also, place max key length on key size to avoid Denial of Service (DoS)
-            // attacks on verification key operations. 
+            // attacks on verification key operations.
             //
         }
 
         hr = CryptXmlVerifySignature(
-                                        pDoc->rgpSignature[i]->hSignature,
-                                        hKey,
-                                        0
-                                        );
+                 pDoc->rgpSignature[i]->hSignature,
+                 hKey,
+                 0
+             );
         if( FAILED(hr) )
         {
-            wprintf( L"FAIL: CryptXmlVerifySignature() returned 0x%08x error on signature [%d] Id='%s'\r\n",  
-                        hr,
-                        i,
-                        pDoc->rgpSignature[i]->wszId 
-                        );
+            wprintf( L"FAIL: CryptXmlVerifySignature() returned 0x%08x error on signature [%d] Id='%s'\r\n",
+                     hr,
+                     i,
+                     pDoc->rgpSignature[i]->wszId
+                   );
             goto CleanUp;
         }
 
-        wprintf( L"Signature Value on signature [%d] Id='%s' is valid.\r\n",  
-                        i,
-                        pDoc->rgpSignature[i]->wszId 
-                        );
+        wprintf( L"Signature Value on signature [%d] Id='%s' is valid.\r\n",
+                 i,
+                 pDoc->rgpSignature[i]->wszId
+               );
 
         //
         // Verify References
         //
 
         hr = CryptXmlGetSignature(
-                                        pDoc->rgpSignature[i]->hSignature,
-                                        &pSig
-                                        );
+                 pDoc->rgpSignature[i]->hSignature,
+                 &pSig
+             );
         if( FAILED(hr) )
         {
             goto CleanUp;
@@ -192,18 +192,18 @@ HrVerify(
         for( ULONG r=0; r<pSig->SignedInfo.cReference; r++ )
         {
             hr = CryptXmlGetReference(
-                                        pSig->SignedInfo.rgpReference[r]->hReference,
-                                        &pRef
-                                        );
+                     pSig->SignedInfo.rgpReference[r]->hReference,
+                     &pRef
+                 );
             if( FAILED(hr) )
             {
                 goto CleanUp;
             }
 
             hr = CryptXmlGetStatus(
-                                        pSig->SignedInfo.rgpReference[r]->hReference,
-                                        &Status
-                                        );
+                     pSig->SignedInfo.rgpReference[r]->hReference,
+                     &Status
+                 );
             if( FAILED(hr) )
             {
                 goto CleanUp;
@@ -219,13 +219,13 @@ HrVerify(
                 if( 0 == ( Status.dwInfoStatus & CRYPT_XML_STATUS_INTERNAL_REFERENCE ))
                 {
                     //
-                    // TODO:  Verify the scope of the Reference Target URI prior to resolving 
+                    // TODO:  Verify the scope of the Reference Target URI prior to resolving
                     //
 
                     hr = HrSampleResolveExternalXmlReference(
-                                        pRef->wszUri,
-                                        &DataProvider
-                                        );
+                             pRef->wszUri,
+                             &DataProvider
+                         );
                     if( FAILED(hr) )
                     {
                         goto CleanUp;
@@ -243,10 +243,10 @@ HrVerify(
                 //
 
                 hr = CryptXmlDigestReference(
-                                        pSig->SignedInfo.rgpReference[r]->hReference,
-                                        0,
-                                        &DataProvider
-                                        );
+                         pSig->SignedInfo.rgpReference[r]->hReference,
+                         0,
+                         &DataProvider
+                     );
 
                 ZeroMemory( &DataProvider, sizeof DataProvider );
 
@@ -255,30 +255,30 @@ HrVerify(
                 //
 
                 hr = CryptXmlGetStatus(
-                                        pSig->SignedInfo.rgpReference[r]->hReference,
-                                        &Status
-                                        );
+                         pSig->SignedInfo.rgpReference[r]->hReference,
+                         &Status
+                     );
             }
 
             if( 0 != ( Status.dwErrorStatus & CRYPT_XML_STATUS_ERROR_DIGEST_INVALID ))
             {
-                wprintf( L"Digest Value on reference[%d] Id='%s' is not valid.\r\n",  
-                                        r,
-                                        pSig->SignedInfo.rgpReference[r]->wszId );
+                wprintf( L"Digest Value on reference[%d] Id='%s' is not valid.\r\n",
+                         r,
+                         pSig->SignedInfo.rgpReference[r]->wszId );
             }
             else
             {
                 if( 0 != ( Status.dwErrorStatus & CRYPT_XML_STATUS_ERROR_NOT_RESOLVED ))
                 {
-                    wprintf( L"Reference[%d] Id='%s' is not resolved\r\n",  
-                                        r,
-                                        pSig->SignedInfo.rgpReference[r]->wszId );
+                    wprintf( L"Reference[%d] Id='%s' is not resolved\r\n",
+                             r,
+                             pSig->SignedInfo.rgpReference[r]->wszId );
                 }
                 else
                 {
-                    wprintf( L"Digest Value on reference[%d] Id='%s' is valid\r\n",  
-                                        r,
-                                        pSig->SignedInfo.rgpReference[r]->wszId );
+                    wprintf( L"Digest Value on reference[%d] Id='%s' is valid\r\n",
+                             r,
+                             pSig->SignedInfo.rgpReference[r]->wszId );
                 }
             }
         }

@@ -1,4 +1,4 @@
-//
+﻿//
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -15,7 +15,7 @@ Module Name:
 
 Abstract:
 
-    This module contains the implementation of how to change the max size of a 
+    This module contains the implementation of how to change the max size of a
     specified channel.
 
 Environment:
@@ -33,7 +33,7 @@ ULONG
 SetChannelMaxSize (
     __in PCWSTR ChannelPath,
     __in UINT64 MaxSize
-    )
+)
 
 /*++
 
@@ -63,13 +63,14 @@ Return Value:
     //
 
     ChannelConfig = EvtOpenChannelConfig(NULL, ChannelPath, 0);
-    if (ChannelConfig == NULL) {
+    if (ChannelConfig == NULL)
+    {
         return GetLastError();
     }
 
     //
     // Set the channel max size property.
-    // 
+    //
 
     Size.UInt64Val = MaxSize;
     Size.Type = EvtVarTypeUInt64;
@@ -78,7 +79,8 @@ Return Value:
     if (EvtSetChannelConfigProperty(ChannelConfig,
                                     EvtChannelLoggingConfigMaxSize,
                                     0,
-                                    &Size) == FALSE) {
+                                    &Size) == FALSE)
+    {
 
         Status = GetLastError();
         goto Exit;
@@ -88,7 +90,8 @@ Return Value:
     // Try to save the config to data store.
     //
 
-    if (EvtSaveChannelConfig(ChannelConfig, 0) == FALSE) {
+    if (EvtSaveChannelConfig(ChannelConfig, 0) == FALSE)
+    {
         Status = GetLastError();
         goto Exit;
     }
@@ -105,7 +108,7 @@ Exit:
 void
 ShowHelp (
     __in PCWSTR ExeFile
-    )
+)
 
 /*++
 
@@ -132,7 +135,7 @@ int __cdecl
 wmain (
     __in int argc,
     __in_ecount(argc) PWSTR* argv
-    )
+)
 
 /*++
 
@@ -155,13 +158,15 @@ Return Value:
 {
     ULONG Status;
 
-    if (argc < 3) {
+    if (argc < 3)
+    {
         ShowHelp(argv[0]);
         return ERROR_SUCCESS;
     }
 
     Status = SetChannelMaxSize(argv[1], _wcstoui64(argv[2], NULL, 10));
-    if (Status != ERROR_SUCCESS) {
+    if (Status != ERROR_SUCCESS)
+    {
         wprintf(L"Error: %u\n", Status);
     }
 

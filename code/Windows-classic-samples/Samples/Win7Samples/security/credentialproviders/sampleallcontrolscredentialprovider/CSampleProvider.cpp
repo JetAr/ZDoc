@@ -1,4 +1,4 @@
-//
+﻿//
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -42,7 +42,7 @@ CSampleProvider::~CSampleProvider()
 HRESULT CSampleProvider::SetUsageScenario(
     __in CREDENTIAL_PROVIDER_USAGE_SCENARIO cpus,
     __in DWORD dwFlags
-    )
+)
 {
     UNREFERENCED_PARAMETER(dwFlags);
     HRESULT hr;
@@ -52,7 +52,7 @@ HRESULT CSampleProvider::SetUsageScenario(
     switch (cpus)
     {
     case CPUS_LOGON:
-    case CPUS_UNLOCK_WORKSTATION:       
+    case CPUS_UNLOCK_WORKSTATION:
         _cpus = cpus;
 
         // Create and initialize our credential.
@@ -94,7 +94,7 @@ HRESULT CSampleProvider::SetUsageScenario(
 //
 // SetSerialization is called for two main scenarios.  The first scenario is in the credui case
 // where it is prepopulating a tile with credentials that the user chose to store in the OS.
-// The second situation is in a remote logon case where the remote client may wish to 
+// The second situation is in a remote logon case where the remote client may wish to
 // prepopulate a tile with a username, or in some cases, completely populate the tile and
 // use it to logon without showing any UI.
 //
@@ -103,11 +103,11 @@ HRESULT CSampleProvider::SetUsageScenario(
 // this was built on top of didn't have SetSerialization.  And when we decided SetSerialization was
 // important enough to have in the sample, it ended up being a non-trivial amount of work to integrate
 // it into the main sample.  We felt it was more important to get these samples out to you quickly than to
-// hold them in order to do the work to integrate the SetSerialization changes from SampleCredentialProvider 
+// hold them in order to do the work to integrate the SetSerialization changes from SampleCredentialProvider
 // into this sample.]
 HRESULT CSampleProvider::SetSerialization(
     __in const CREDENTIAL_PROVIDER_CREDENTIAL_SERIALIZATION* pcpcs
-    )
+)
 {
     UNREFERENCED_PARAMETER(pcpcs);
     return E_NOTIMPL;
@@ -118,7 +118,7 @@ HRESULT CSampleProvider::SetSerialization(
 HRESULT CSampleProvider::Advise(
     __in ICredentialProviderEvents* pcpe,
     __in UINT_PTR upAdviseContext
-    )
+)
 {
     UNREFERENCED_PARAMETER(pcpe);
     UNREFERENCED_PARAMETER(upAdviseContext);
@@ -136,11 +136,11 @@ HRESULT CSampleProvider::UnAdvise()
 // does mean that all your tiles must have the same number of fields.
 // This number must include both visible and invisible fields. If you want a tile
 // to have different fields from the other tiles you enumerate for a given usage
-// scenario you must include them all in this count and then hide/show them as desired 
+// scenario you must include them all in this count and then hide/show them as desired
 // using the field descriptors.
 HRESULT CSampleProvider::GetFieldDescriptorCount(
     __out DWORD* pdwCount
-    )
+)
 {
     *pdwCount = SFI_NUM_FIELDS;
     return S_OK;
@@ -148,10 +148,10 @@ HRESULT CSampleProvider::GetFieldDescriptorCount(
 
 // Gets the field descriptor for a particular field.
 HRESULT CSampleProvider::GetFieldDescriptorAt(
-    __in DWORD dwIndex, 
+    __in DWORD dwIndex,
     __deref_out CREDENTIAL_PROVIDER_FIELD_DESCRIPTOR** ppcpfd
-    )
-{    
+)
+{
     HRESULT hr;
 
     // Verify dwIndex is a valid field.
@@ -160,7 +160,7 @@ HRESULT CSampleProvider::GetFieldDescriptorAt(
         hr = FieldDescriptorCoAllocCopy(s_rgCredProvFieldDescriptors[dwIndex], ppcpfd);
     }
     else
-    { 
+    {
         hr = E_INVALIDARG;
     }
 
@@ -169,16 +169,16 @@ HRESULT CSampleProvider::GetFieldDescriptorAt(
 
 // Sets pdwCount to the number of tiles that we wish to show at this time.
 // Sets pdwDefault to the index of the tile which should be used as the default.
-// The default tile is the tile which will be shown in the zoomed view by default. If 
-// more than one provider specifies a default the last used cred prov gets to pick 
-// the default. If *pbAutoLogonWithDefault is TRUE, LogonUI will immediately call 
-// GetSerialization on the credential you've specified as the default and will submit 
+// The default tile is the tile which will be shown in the zoomed view by default. If
+// more than one provider specifies a default the last used cred prov gets to pick
+// the default. If *pbAutoLogonWithDefault is TRUE, LogonUI will immediately call
+// GetSerialization on the credential you've specified as the default and will submit
 // that credential for authentication without showing any further UI.
 HRESULT CSampleProvider::GetCredentialCount(
     __out DWORD* pdwCount,
     __out_range(<,*pdwCount) DWORD* pdwDefault,
     __out BOOL* pbAutoLogonWithDefault
-    )
+)
 {
     *pdwCount = 1;
     *pdwDefault = 0;
@@ -189,9 +189,9 @@ HRESULT CSampleProvider::GetCredentialCount(
 // Returns the credential at the index specified by dwIndex. This function is called by logonUI to enumerate
 // the tiles.
 HRESULT CSampleProvider::GetCredentialAt(
-    __in DWORD dwIndex, 
+    __in DWORD dwIndex,
     __deref_out ICredentialProviderCredential** ppcpc
-    )
+)
 {
     HRESULT hr;
     if((dwIndex == 0) && ppcpc)
@@ -222,6 +222,6 @@ HRESULT CSample_CreateInstance(__in REFIID riid, __deref_out void** ppv)
     {
         hr = E_OUTOFMEMORY;
     }
-    
+
     return hr;
 }

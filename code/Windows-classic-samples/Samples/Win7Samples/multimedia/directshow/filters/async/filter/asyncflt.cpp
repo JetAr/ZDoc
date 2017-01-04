@@ -1,4 +1,4 @@
-//------------------------------------------------------------------------------
+﻿//------------------------------------------------------------------------------
 // File: AsyncFlt.cpp
 //
 // Desc: DirectShow sample code - implementation of CAsyncFilter.
@@ -19,37 +19,46 @@
 // Setup data for filter registration
 //
 const AMOVIESETUP_MEDIATYPE sudOpPinTypes =
-{ &MEDIATYPE_Stream     // clsMajorType
-, &MEDIASUBTYPE_NULL }; // clsMinorType
+{
+    &MEDIATYPE_Stream     // clsMajorType
+    , &MEDIASUBTYPE_NULL
+}; // clsMinorType
 
 const AMOVIESETUP_PIN sudOpPin =
-{ L"Output"          // strName
-, FALSE              // bRendered
-, TRUE               // bOutput
-, FALSE              // bZero
-, FALSE              // bMany
-, &CLSID_NULL        // clsConnectsToFilter
-, L"Input"           // strConnectsToPin
-, 1                  // nTypes
-, &sudOpPinTypes };  // lpTypes
+{
+    L"Output"          // strName
+    , FALSE              // bRendered
+    , TRUE               // bOutput
+    , FALSE              // bZero
+    , FALSE              // bMany
+    , &CLSID_NULL        // clsConnectsToFilter
+    , L"Input"           // strConnectsToPin
+    , 1                  // nTypes
+    , &sudOpPinTypes
+};  // lpTypes
 
 const AMOVIESETUP_FILTER sudAsync =
-{ &CLSID_AsyncSample              // clsID
-, L"Sample File Source (Async.)"  // strName
-, MERIT_UNLIKELY                  // dwMerit
-, 1                               // nPins
-, &sudOpPin };                    // lpPin
+{
+    &CLSID_AsyncSample              // clsID
+    , L"Sample File Source (Async.)"  // strName
+    , MERIT_UNLIKELY                  // dwMerit
+    , 1                               // nPins
+    , &sudOpPin
+};                    // lpPin
 
 
 //
 //  Object creation template
 //
-CFactoryTemplate g_Templates[1] = {
-    { L"Sample File Source (Async.)"
-    , &CLSID_AsyncSample
-    , CAsyncFilter::CreateInstance
-    , NULL
-    , &sudAsync }
+CFactoryTemplate g_Templates[1] =
+{
+    {
+        L"Sample File Source (Async.)"
+        , &CLSID_AsyncSample
+        , CAsyncFilter::CreateInstance
+        , NULL
+        , &sudAsync
+    }
 };
 
 int g_cTemplates = sizeof(g_Templates) / sizeof(g_Templates[0]);
@@ -57,7 +66,7 @@ int g_cTemplates = sizeof(g_Templates) / sizeof(g_Templates[0]);
 
 ////////////////////////////////////////////////////////////////////////
 //
-// Exported entry points for registration and unregistration 
+// Exported entry points for registration and unregistration
 // (in this case they only call through to default implementations).
 //
 ////////////////////////////////////////////////////////////////////////
@@ -77,11 +86,11 @@ STDAPI DllUnregisterServer()
 //
 extern "C" BOOL WINAPI DllEntryPoint(HINSTANCE, ULONG, LPVOID);
 
-BOOL APIENTRY DllMain(HANDLE hModule, 
-                      DWORD  dwReason, 
+BOOL APIENTRY DllMain(HANDLE hModule,
+                      DWORD  dwReason,
                       LPVOID lpReserved)
 {
-	return DllEntryPoint((HINSTANCE)(hModule), dwReason, lpReserved);
+    return DllEntryPoint((HINSTANCE)(hModule), dwReason, lpReserved);
 }
 
 
@@ -109,7 +118,7 @@ BOOL CAsyncFilter::ReadTheFile(LPCTSTR lpszFileName)
                               OPEN_EXISTING,
                               0,
                               NULL);
-    if (hFile == INVALID_HANDLE_VALUE) 
+    if (hFile == INVALID_HANDLE_VALUE)
     {
         DbgLog((LOG_TRACE, 2, TEXT("Could not open %s\n"), lpszFileName));
         return FALSE;
@@ -120,7 +129,7 @@ BOOL CAsyncFilter::ReadTheFile(LPCTSTR lpszFileName)
     uliSize.LowPart = GetFileSize(hFile, &uliSize.HighPart);
 
     PBYTE pbMem = new BYTE[uliSize.LowPart];
-    if (pbMem == NULL) 
+    if (pbMem == NULL)
     {
         CloseHandle(hFile);
         return FALSE;
@@ -132,7 +141,7 @@ BOOL CAsyncFilter::ReadTheFile(LPCTSTR lpszFileName)
                   uliSize.LowPart,
                   &dwBytesRead,
                   NULL) ||
-        (dwBytesRead != uliSize.LowPart))
+            (dwBytesRead != uliSize.LowPart))
     {
         DbgLog((LOG_TRACE, 1, TEXT("Could not read file\n")));
 

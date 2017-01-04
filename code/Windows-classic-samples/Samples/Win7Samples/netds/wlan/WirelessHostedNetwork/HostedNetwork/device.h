@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -25,7 +25,7 @@ class CWlanDevice : public CRefObject
 {
 private:
     DOT11_MAC_ADDRESS m_MacAddress;
-    
+
     // Don't allow to create an empty CWlanDevice object
     CWlanDevice() {};
 
@@ -45,15 +45,27 @@ public:
     BOOL operator==(const CWlanDevice &);
     BOOL operator==(const DOT11_MAC_ADDRESS);
 
-    VOID GetFriendlyName(CAtlString& strName) {strName = m_FriendlyName;};
+    VOID GetFriendlyName(CAtlString& strName)
+    {
+        strName = m_FriendlyName;
+    };
 
-    VOID SetFriendlyName(__in LPWSTR strName) {m_FriendlyName = strName;};
+    VOID SetFriendlyName(__in LPWSTR strName)
+    {
+        m_FriendlyName = strName;
+    };
 
-    VOID SetType(DEVICE_TYPE Type) {m_Type = Type;};
+    VOID SetType(DEVICE_TYPE Type)
+    {
+        m_Type = Type;
+    };
 
     VOID GetDisplayMacAddress(CAtlString&);
 
-    VOID GetMacAddress(DOT11_MAC_ADDRESS & MacAddress) {memcpy(MacAddress, m_MacAddress, sizeof(DOT11_MAC_ADDRESS));};
+    VOID GetMacAddress(DOT11_MAC_ADDRESS & MacAddress)
+    {
+        memcpy(MacAddress, m_MacAddress, sizeof(DOT11_MAC_ADDRESS));
+    };
 
     int GetImageIndex();
 

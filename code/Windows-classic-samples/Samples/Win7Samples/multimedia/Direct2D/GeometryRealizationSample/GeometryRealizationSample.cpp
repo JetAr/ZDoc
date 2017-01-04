@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -48,7 +48,7 @@ int WINAPI WinMain(
     HINSTANCE /*hPrevInstance*/,
     LPSTR /*lpCmdLine*/,
     int /*nCmdShow*/
-    )
+)
 {
     // Ignore the return value because we want to continue running even in the
     // unlikely event that HeapSetInformation fails.
@@ -163,18 +163,18 @@ HRESULT DemoApp::Initialize()
         m_pD2DFactory->GetDesktopDpi(&dpiX, &dpiY);
 
         m_hwnd = CreateWindow(
-            L"D2DDemoApp",
-            L"D2D Demo App",
-            WS_OVERLAPPEDWINDOW,
-            CW_USEDEFAULT,
-            CW_USEDEFAULT,
-            static_cast<UINT>(ceil(640.f * dpiX / 96.f)),
-            static_cast<UINT>(ceil(480.f * dpiY / 96.f)),
-            NULL,
-            NULL,
-            HINST_THISCOMPONENT,
-            this
-            );
+                     L"D2DDemoApp",
+                     L"D2D Demo App",
+                     WS_OVERLAPPEDWINDOW,
+                     CW_USEDEFAULT,
+                     CW_USEDEFAULT,
+                     static_cast<UINT>(ceil(640.f * dpiX / 96.f)),
+                     static_cast<UINT>(ceil(480.f * dpiY / 96.f)),
+                     NULL,
+                     NULL,
+                     HINST_THISCOMPONENT,
+                     this
+                 );
 
         hr = m_hwnd ? S_OK : E_FAIL;
         if (SUCCEEDED(hr))
@@ -211,37 +211,37 @@ HRESULT DemoApp::CreateDeviceIndependentResources()
     {
         // Create a WIC factory.
         hr = CoCreateInstance(
-            CLSID_WICImagingFactory,
-            NULL,
-            CLSCTX_INPROC_SERVER,
-            IID_IWICImagingFactory,
-            reinterpret_cast<void **>(&m_pWICFactory)
-            );
+                 CLSID_WICImagingFactory,
+                 NULL,
+                 CLSCTX_INPROC_SERVER,
+                 IID_IWICImagingFactory,
+                 reinterpret_cast<void **>(&m_pWICFactory)
+             );
     }
 
     if (SUCCEEDED(hr))
     {
         // Create a DirectWrite factory.
         hr = DWriteCreateFactory(
-            DWRITE_FACTORY_TYPE_SHARED,
-            __uuidof(m_pDWriteFactory),
-            reinterpret_cast<IUnknown **>(&m_pDWriteFactory)
-            );
+                 DWRITE_FACTORY_TYPE_SHARED,
+                 __uuidof(m_pDWriteFactory),
+                 reinterpret_cast<IUnknown **>(&m_pDWriteFactory)
+             );
     }
 
     if (SUCCEEDED(hr))
     {
         // Create a DirectWrite text format object.
         hr = m_pDWriteFactory->CreateTextFormat(
-            sc_fontName,
-            NULL,
-            DWRITE_FONT_WEIGHT_NORMAL,
-            DWRITE_FONT_STYLE_NORMAL,
-            DWRITE_FONT_STRETCH_NORMAL,
-            static_cast<FLOAT>(sc_fontSize),
-            L"", //locale
-            &m_pTextFormat
-            );
+                 sc_fontName,
+                 NULL,
+                 DWRITE_FONT_WEIGHT_NORMAL,
+                 DWRITE_FONT_STYLE_NORMAL,
+                 DWRITE_FONT_STRETCH_NORMAL,
+                 static_cast<FLOAT>(sc_fontSize),
+                 L"", //locale
+                 &m_pTextFormat
+             );
     }
 
     return hr;
@@ -270,31 +270,31 @@ HRESULT DemoApp::CreateDeviceResources()
         GetClientRect(m_hwnd, &rc);
 
         D2D1_SIZE_U size = D2D1::SizeU(
-            rc.right - rc.left,
-            rc.bottom - rc.top
-            );
+                               rc.right - rc.left,
+                               rc.bottom - rc.top
+                           );
 
         // Create a Direct2D render target.
         hr = m_pD2DFactory->CreateHwndRenderTarget(
-            D2D1::RenderTargetProperties(),
-            D2D1::HwndRenderTargetProperties(m_hwnd, size),
-            &m_pRT
-            );
+                 D2D1::RenderTargetProperties(),
+                 D2D1::HwndRenderTargetProperties(m_hwnd, size),
+                 &m_pRT
+             );
         if (SUCCEEDED(hr))
         {
             // Create brushes.
             hr = m_pRT->CreateSolidColorBrush(
-                D2D1::ColorF(D2D1::ColorF::White),
-                &m_pSolidColorBrush
-                );
+                     D2D1::ColorF(D2D1::ColorF::White),
+                     &m_pSolidColorBrush
+                 );
         }
         if (SUCCEEDED(hr))
         {
             hr = CreateGeometryRealizationFactory(
-                m_pRT,
-                sc_maxRealizationDimension,
-                &pRealizationFactory
-                );
+                     m_pRT,
+                     sc_maxRealizationDimension,
+                     &pRealizationFactory
+                 );
         }
         if (SUCCEEDED(hr))
         {
@@ -379,7 +379,7 @@ HRESULT DemoApp::CreateGeometries()
         hr = m_pD2DFactory->CreatePathGeometry(&pPathGeometry);
         if (SUCCEEDED(hr))
         {
-            // Write to the path geometry using the geometry sink to 
+            // Write to the path geometry using the geometry sink to
             // create an hour glass shape.
             hr = pPathGeometry->Open(&pSink);
         }
@@ -390,7 +390,7 @@ HRESULT DemoApp::CreateGeometries()
             pSink->BeginFigure(
                 D2D1::Point2F(0, 0),
                 D2D1_FIGURE_BEGIN_FILLED
-                );
+            );
 
             pSink->AddLine(D2D1::Point2F(1.0f, 0));
 
@@ -399,7 +399,7 @@ HRESULT DemoApp::CreateGeometries()
                     D2D1::Point2F(0.75f, 0.25f),
                     D2D1::Point2F(0.75f, 0.75f),
                     D2D1::Point2F(1.0f, 1.0f))
-                );
+            );
 
             pSink->AddLine(D2D1::Point2F(0, 1.0f));
 
@@ -408,7 +408,7 @@ HRESULT DemoApp::CreateGeometries()
                     D2D1::Point2F(0.25f, 0.75f),
                     D2D1::Point2F(0.25f, 0.25f),
                     D2D1::Point2F(0, 0))
-                );
+            );
 
             pSink->EndFigure(D2D1_FIGURE_END_CLOSED);
 
@@ -421,10 +421,10 @@ HRESULT DemoApp::CreateGeometries()
             D2D1_MATRIX_3X2_F translation = D2D1::Matrix3x2F::Translation(-squareWidth / 2, -squareWidth / 2);
 
             hr = m_pD2DFactory->CreateTransformedGeometry(
-                    pPathGeometry,
-                    scale * translation,
-                    &pGeometry
-                    );
+                     pPathGeometry,
+                     scale * translation,
+                     &pGeometry
+                 );
         }
 
         if (SUCCEEDED(hr))
@@ -468,7 +468,7 @@ HRESULT DemoApp::RenderMainContent(float time)
         D2D1::Matrix3x2F::Translation(
             0.5f*(rtSize.width - squareWidth*m_numSquares),
             0.5f*(rtSize.height - squareWidth*m_numSquares)
-            ) * currentTransform;
+        ) * currentTransform;
 
     for (UINT i = 0; SUCCEEDED(hr) && (i < m_numSquares); ++i)
     {
@@ -491,14 +491,14 @@ HRESULT DemoApp::RenderMainContent(float time)
             D2D1_MATRIX_3X2_F rotateTransform =
                 D2D1::Matrix3x2F::Rotation(
                     (intensity * sc_rotationSpeed * time * 360.0f) * ((float)M_PI / 180.0f)
-                    );
+                );
 
             D2D1_MATRIX_3X2_F newWorldTransform =
                 rotateTransform *
                 D2D1::Matrix3x2F::Translation(
                     (i+0.5f)*squareWidth,
                     (j+0.5f)*squareWidth
-                    ) * worldTransform;
+                ) * worldTransform;
 
             if (m_updateRealization)
             {
@@ -518,18 +518,18 @@ HRESULT DemoApp::RenderMainContent(float time)
                 // a regeneration.
                 //
                 hr = m_pRealization->Update(
-                    m_pGeometry,
-                    static_cast<REALIZATION_CREATION_OPTIONS>(
-                        REALIZATION_CREATION_OPTIONS_ANTI_ALIASED |
-                        REALIZATION_CREATION_OPTIONS_ALIASED |
-                        REALIZATION_CREATION_OPTIONS_FILLED |
-                        REALIZATION_CREATION_OPTIONS_STROKED |
-                        REALIZATION_CREATION_OPTIONS_UNREALIZED
-                        ),
-                    &newWorldTransform,
-                    sc_strokeWidth,
-                    NULL //pIStrokeStyle
-                    );
+                         m_pGeometry,
+                         static_cast<REALIZATION_CREATION_OPTIONS>(
+                             REALIZATION_CREATION_OPTIONS_ANTI_ALIASED |
+                             REALIZATION_CREATION_OPTIONS_ALIASED |
+                             REALIZATION_CREATION_OPTIONS_FILLED |
+                             REALIZATION_CREATION_OPTIONS_STROKED |
+                             REALIZATION_CREATION_OPTIONS_UNREALIZED
+                         ),
+                         &newWorldTransform,
+                         sc_strokeWidth,
+                         NULL //pIStrokeStyle
+                     );
                 if (SUCCEEDED(hr))
                 {
                     m_updateRealization = false;
@@ -544,27 +544,27 @@ HRESULT DemoApp::RenderMainContent(float time)
                         0.0f,
                         intensity,
                         1.0f - intensity
-                        ));
+                    ));
 
                 hr = m_pRealization->Fill(
-                        m_pRT,
-                        m_pSolidColorBrush,
-                        m_useRealizations ?
-                            REALIZATION_RENDER_MODE_DEFAULT :
-                            REALIZATION_RENDER_MODE_FORCE_UNREALIZED
-                        );
+                         m_pRT,
+                         m_pSolidColorBrush,
+                         m_useRealizations ?
+                         REALIZATION_RENDER_MODE_DEFAULT :
+                         REALIZATION_RENDER_MODE_FORCE_UNREALIZED
+                     );
 
                 if (SUCCEEDED(hr) && m_drawStroke)
                 {
                     m_pSolidColorBrush->SetColor(D2D1::ColorF(D2D1::ColorF::White));
 
                     hr = m_pRealization->Draw(
-                            m_pRT,
-                            m_pSolidColorBrush,
-                            m_useRealizations ?
-                                REALIZATION_RENDER_MODE_DEFAULT :
-                                REALIZATION_RENDER_MODE_FORCE_UNREALIZED
-                            );
+                             m_pRT,
+                             m_pSolidColorBrush,
+                             m_useRealizations ?
+                             REALIZATION_RENDER_MODE_DEFAULT :
+                             REALIZATION_RENDER_MODE_FORCE_UNREALIZED
+                         );
                 }
             }
         }
@@ -649,7 +649,7 @@ HRESULT DemoApp::OnRender()
                 m_currentZoomFactor,
                 m_currentZoomFactor,
                 m_mousePos)
-            );
+        );
 
         hr = CreateGeometries();
 
@@ -708,33 +708,33 @@ HRESULT DemoApp::RenderTextInfo()
     if (m_times.GetCount() > 0)
     {
         fps = (m_times.GetCount()-1) * frequency.QuadPart /
-                static_cast<float>((m_times.GetLast() - m_times.GetFirst()));
+              static_cast<float>((m_times.GetLast() - m_times.GetFirst()));
 
         primsPerSecond = fps * numPrimitives;
     }
 
     hr = StringCchPrintf(
-        textBuffer,
-        400,
-        L"%s\n"
-        L"%s\n"
-        L"%s\n"
-        L"# primitives: %d x %d%s = %d\n"
-        L"Fps: %.2f\n"
-        L"Primitives / sec : %.0f\n",
-        m_antialiasMode == D2D1_ANTIALIAS_MODE_ALIASED ?
+             textBuffer,
+             400,
+             L"%s\n"
+             L"%s\n"
+             L"%s\n"
+             L"# primitives: %d x %d%s = %d\n"
+             L"Fps: %.2f\n"
+             L"Primitives / sec : %.0f\n",
+             m_antialiasMode == D2D1_ANTIALIAS_MODE_ALIASED ?
              L"Aliased" : L"PerPrimitive",
-        m_useRealizations ?
-            L"Realized"  : L"Unrealized",
-        m_autoGeometryRegen?
-            L"Auto Realization Regeneration"  : L"No Auto Realization Regeneration",
-        m_numSquares,
-        m_numSquares,
-        m_drawStroke ? L" x 2" : L"",
-        numPrimitives,
-        fps,
-        primsPerSecond
-        );
+             m_useRealizations ?
+             L"Realized"  : L"Unrealized",
+             m_autoGeometryRegen?
+             L"Auto Realization Regeneration"  : L"No Auto Realization Regeneration",
+             m_numSquares,
+             m_numSquares,
+             m_drawStroke ? L" x 2" : L"",
+             numPrimitives,
+             fps,
+             primsPerSecond
+         );
     if (SUCCEEDED(hr))
     {
         m_pRT->SetTransform(D2D1::Matrix3x2F::Identity());
@@ -747,7 +747,7 @@ HRESULT DemoApp::RenderTextInfo()
                 sc_textInfoBoxInset,
                 sc_textInfoBoxInset),
             m_pSolidColorBrush
-            );
+        );
 
         m_pSolidColorBrush->SetColor(D2D1::ColorF(D2D1::ColorF::White));
 
@@ -762,7 +762,7 @@ HRESULT DemoApp::RenderTextInfo()
                 sc_textInfoBox.bottom - sc_textInfoBoxInset),
             m_pSolidColorBrush,
             D2D1_DRAW_TEXT_OPTIONS_NONE
-            );
+        );
     }
 
     return hr;
@@ -805,8 +805,8 @@ void DemoApp::OnKeyDown(SHORT vkey)
     case 'A':
         m_antialiasMode =
             (m_antialiasMode == D2D1_ANTIALIAS_MODE_ALIASED) ?
-                D2D1_ANTIALIAS_MODE_PER_PRIMITIVE :
-                D2D1_ANTIALIAS_MODE_ALIASED;
+            D2D1_ANTIALIAS_MODE_PER_PRIMITIVE :
+            D2D1_ANTIALIAS_MODE_ALIASED;
         break;
 
     case 'R':
@@ -876,9 +876,9 @@ void DemoApp::OnMouseMove(LPARAM lParam)
     }
 
     m_mousePos = D2D1::Point2F(
-        LOWORD(lParam) * 96.0f / dpiX,
-        HIWORD(lParam) * 96.0f / dpiY
-        );
+                     LOWORD(lParam) * 96.0f / dpiX,
+                     HIWORD(lParam) * 96.0f / dpiY
+                 );
 }
 
 /******************************************************************
@@ -893,9 +893,9 @@ void DemoApp::OnWheel(WPARAM wParam)
         pow(sc_zoomStep, GET_WHEEL_DELTA_WPARAM(wParam) / 120.0f);
 
     m_targetZoomFactor = min(
-        max(m_targetZoomFactor, sc_minZoom),
-        sc_maxZoom
-        );
+                             max(m_targetZoomFactor, sc_minZoom),
+                             sc_maxZoom
+                         );
 }
 
 /******************************************************************
@@ -919,17 +919,17 @@ LRESULT CALLBACK DemoApp::WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM
             hwnd,
             GWLP_USERDATA,
             PtrToUlong(pDemoApp)
-            );
+        );
 
         result = 1;
     }
     else
     {
         DemoApp *pDemoApp = reinterpret_cast<DemoApp *>(static_cast<LONG_PTR>(
-            ::GetWindowLongPtrW(
-                hwnd,
-                GWLP_USERDATA
-                )));
+                                ::GetWindowLongPtrW(
+                                    hwnd,
+                                    GWLP_USERDATA
+                                )));
 
         bool wasHandled = false;
 
@@ -938,61 +938,61 @@ LRESULT CALLBACK DemoApp::WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM
             switch (message)
             {
             case WM_SIZE:
-                {
-                    UINT width = LOWORD(lParam);
-                    UINT height = HIWORD(lParam);
-                    pDemoApp->OnResize(width, height);
-                }
-                result = 0;
-                wasHandled = true;
-                break;
+            {
+                UINT width = LOWORD(lParam);
+                UINT height = HIWORD(lParam);
+                pDemoApp->OnResize(width, height);
+            }
+            result = 0;
+            wasHandled = true;
+            break;
 
             case WM_PAINT:
             case WM_DISPLAYCHANGE:
-                {
-                    PAINTSTRUCT ps;
-                    BeginPaint(hwnd, &ps);
+            {
+                PAINTSTRUCT ps;
+                BeginPaint(hwnd, &ps);
 
-                    pDemoApp->OnRender();
-                    EndPaint(hwnd, &ps);
+                pDemoApp->OnRender();
+                EndPaint(hwnd, &ps);
 
-                    InvalidateRect(hwnd, NULL, FALSE);
-                }
-                result = 0;
-                wasHandled = true;
-                break;
+                InvalidateRect(hwnd, NULL, FALSE);
+            }
+            result = 0;
+            wasHandled = true;
+            break;
 
             case WM_KEYDOWN:
-                {
-                    pDemoApp->OnKeyDown(static_cast<SHORT>(wParam));
-                }
-                result = 0;
-                wasHandled = true;
-                break;
+            {
+                pDemoApp->OnKeyDown(static_cast<SHORT>(wParam));
+            }
+            result = 0;
+            wasHandled = true;
+            break;
 
             case WM_MOUSEMOVE:
-                {
-                    pDemoApp->OnMouseMove(lParam);
-                }
-                result = 0;
-                wasHandled = true;
-                break;
+            {
+                pDemoApp->OnMouseMove(lParam);
+            }
+            result = 0;
+            wasHandled = true;
+            break;
 
             case WM_MOUSEWHEEL:
-                {
-                    pDemoApp->OnWheel(wParam);
-                }
-                result = 0;
-                wasHandled = true;
-                break;
+            {
+                pDemoApp->OnWheel(wParam);
+            }
+            result = 0;
+            wasHandled = true;
+            break;
 
             case WM_DESTROY:
-                {
-                    PostQuitMessage(0);
-                }
-                result = 1;
-                wasHandled = true;
-                break;
+            {
+                PostQuitMessage(0);
+            }
+            result = 1;
+            wasHandled = true;
+            break;
             }
         }
 

@@ -1,8 +1,8 @@
-//////////////////////////////////////////////////////////////////////////
+﻿//////////////////////////////////////////////////////////////////////////
 //
 // decoder.h
 // Implements the MPEG-1 decoder.
-// 
+//
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -53,12 +53,12 @@ private:
 
     DWORD m_cbBytes;    // Number of valid bytes of start code so far
 
-    struct 
+    struct
     {
         bool           bValid;
         REFERENCE_TIME rt;
     } m_arTS[4];        // Array of all the timestamps.
-                        // m_cbBytes+1 entries are valid.
+    // m_cbBytes+1 entries are valid.
 
     REFERENCE_TIME m_rt;
 
@@ -91,11 +91,11 @@ public:
 // CDecoder
 //
 // Implements the MPEG-1 "decoder" MFT.
-// 
+//
 // The decoder outputs RGB-32 only.
 //
 // Note: This MFT is derived from a sample that used to ship in the
-// DirectX SDK. 
+// DirectX SDK.
 //-------------------------------------------------------------------
 
 class CDecoder : public IMFTransform
@@ -110,13 +110,13 @@ public:
     STDMETHODIMP_(ULONG) Release();
 
     // IMFTransform methods
-    STDMETHODIMP GetStreamLimits( 
+    STDMETHODIMP GetStreamLimits(
         DWORD   *pdwInputMinimum,
         DWORD   *pdwInputMaximum,
         DWORD   *pdwOutputMinimum,
         DWORD   *pdwOutputMaximum
     );
-    
+
     STDMETHODIMP GetStreamCount(
         DWORD   *pcInputStreams,
         DWORD   *pcOutputStreams
@@ -128,15 +128,15 @@ public:
         DWORD   dwOutputIDArraySize,
         DWORD   *pdwOutputIDs
     );
-    
+
     STDMETHODIMP GetInputStreamInfo(
         DWORD                     dwInputStreamID,
         MFT_INPUT_STREAM_INFO *   pStreamInfo
     );
-    
+
     STDMETHODIMP GetOutputStreamInfo(
-        DWORD                     dwOutputStreamID, 
-        MFT_OUTPUT_STREAM_INFO *  pStreamInfo      
+        DWORD                     dwOutputStreamID,
+        MFT_OUTPUT_STREAM_INFO *  pStreamInfo
     );
 
     STDMETHODIMP GetAttributes(IMFAttributes** pAttributes);
@@ -153,7 +153,7 @@ public:
 
     STDMETHODIMP DeleteInputStream(DWORD dwStreamID);
 
-    STDMETHODIMP AddInputStreams( 
+    STDMETHODIMP AddInputStreams(
         DWORD   cStreams,
         DWORD   *adwStreamIDs
     );
@@ -173,13 +173,13 @@ public:
     STDMETHODIMP SetInputType(
         DWORD           dwInputStreamID,
         IMFMediaType    *pType,
-        DWORD           dwFlags 
+        DWORD           dwFlags
     );
 
     STDMETHODIMP SetOutputType(
         DWORD           dwOutputStreamID,
         IMFMediaType    *pType,
-        DWORD           dwFlags 
+        DWORD           dwFlags
     );
 
     STDMETHODIMP GetInputCurrentType(
@@ -194,7 +194,7 @@ public:
 
     STDMETHODIMP GetInputStatus(
         DWORD           dwInputStreamID,
-        DWORD           *pdwFlags 
+        DWORD           *pdwFlags
     );
 
     STDMETHODIMP GetOutputStatus(DWORD *pdwFlags);
@@ -206,25 +206,25 @@ public:
 
     STDMETHODIMP ProcessEvent(
         DWORD              dwInputStreamID,
-        IMFMediaEvent      *pEvent 
+        IMFMediaEvent      *pEvent
     );
 
     STDMETHODIMP ProcessMessage(
         MFT_MESSAGE_TYPE    eMessage,
         ULONG_PTR           ulParam
     );
-        
+
     STDMETHODIMP ProcessInput(
         DWORD               dwInputStreamID,
-        IMFSample           *pSample, 
-        DWORD               dwFlags 
+        IMFSample           *pSample,
+        DWORD               dwFlags
     );
 
     STDMETHODIMP ProcessOutput(
-        DWORD                   dwFlags, 
+        DWORD                   dwFlags,
         DWORD                   cOutputBufferCount,
         MFT_OUTPUT_DATA_BUFFER  *pOutputSamples, // one per stream
-        DWORD                   *pdwStatus  
+        DWORD                   *pdwStatus
     );
 
 protected:
@@ -233,10 +233,13 @@ protected:
     ~CDecoder();
 
     // HasPendingOutput: Returns TRUE if the MFT is holding an input sample.
-    BOOL HasPendingOutput() const { return m_pBuffer != NULL; }
+    BOOL HasPendingOutput() const
+    {
+        return m_pBuffer != NULL;
+    }
 
     // IsValidInputStream: Returns TRUE if dwInputStreamID is a valid input stream identifier.
-    BOOL IsValidInputStream(DWORD dwInputStreamID) const 
+    BOOL IsValidInputStream(DWORD dwInputStreamID) const
     {
         return dwInputStreamID == 0;
     }

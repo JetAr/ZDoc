@@ -1,4 +1,4 @@
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+﻿/* this ALWAYS GENERATED file contains the definitions for the interfaces */
 
 
 /* File created by MIDL compiler version 5.01.0164 */
@@ -6,7 +6,7 @@
  */
 /* Compiler settings for DTMCommon.idl:
     Os (OptLev=s), W1, Zp8, env=Win32, ms_ext, c_ext
-    error checks: allocation ref bounds_check enum stub_data 
+    error checks: allocation ref bounds_check enum stub_data
 */
 //@@MIDL_FILE_HEADING(  )
 
@@ -32,10 +32,10 @@
 #define __DTMCommon_h__
 
 #ifdef __cplusplus
-extern "C"{
-#endif 
+extern "C" {
+#endif
 
-/* Forward Declarations */ 
+/* Forward Declarations */
 
 #ifndef __ILTMSink_FWD_DEFINED__
 #define __ILTMSink_FWD_DEFINED__
@@ -48,58 +48,59 @@ typedef interface ILTMSink ILTMSink;
 #include "ModuleCore.h"
 
 void __RPC_FAR * __RPC_USER MIDL_user_allocate(size_t);
-void __RPC_USER MIDL_user_free( void __RPC_FAR * ); 
+void __RPC_USER MIDL_user_free( void __RPC_FAR * );
 
 #ifndef __ILTMSink_INTERFACE_DEFINED__
 #define __ILTMSink_INTERFACE_DEFINED__
 
 /* interface ILTMSink */
-/* [uuid][object] */ 
+/* [uuid][object] */
 
 
 EXTERN_C const IID IID_ILTMSink;
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
-    
-    MIDL_INTERFACE("1D9D6DF4-5DCC-11d0-82B1-00C04FC2CABA")
-    ILTMSink : public IUnknown
-    {
-    public:
-        virtual HRESULT STDMETHODCALLTYPE NotifyText( 
-            /* [string][in] */ BSTR __MIDL_0010) = 0;
-        
-    };
-    
+
+MIDL_INTERFACE("1D9D6DF4-5DCC-11d0-82B1-00C04FC2CABA")
+ILTMSink :
+public IUnknown
+{
+public:
+    virtual HRESULT STDMETHODCALLTYPE NotifyText(
+        /* [string][in] */ BSTR __MIDL_0010) = 0;
+
+};
+
 #else 	/* C style interface */
 
-    typedef struct ILTMSinkVtbl
-    {
-        BEGIN_INTERFACE
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            ILTMSink __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
-        
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            ILTMSink __RPC_FAR * This);
-        
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            ILTMSink __RPC_FAR * This);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *NotifyText )( 
-            ILTMSink __RPC_FAR * This,
-            /* [string][in] */ BSTR __MIDL_0010);
-        
-        END_INTERFACE
-    } ILTMSinkVtbl;
+typedef struct ILTMSinkVtbl
+{
+    BEGIN_INTERFACE
 
-    interface ILTMSink
-    {
-        CONST_VTBL struct ILTMSinkVtbl __RPC_FAR *lpVtbl;
-    };
+    HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )(
+        ILTMSink __RPC_FAR * This,
+        /* [in] */ REFIID riid,
+        /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
 
-    
+    ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )(
+        ILTMSink __RPC_FAR * This);
+
+    ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )(
+        ILTMSink __RPC_FAR * This);
+
+    HRESULT ( STDMETHODCALLTYPE __RPC_FAR *NotifyText )(
+        ILTMSink __RPC_FAR * This,
+        /* [string][in] */ BSTR __MIDL_0010);
+
+    END_INTERFACE
+} ILTMSinkVtbl;
+
+interface ILTMSink
+{
+    CONST_VTBL struct ILTMSinkVtbl __RPC_FAR *lpVtbl;
+};
+
+
 
 #ifdef COBJMACROS
 
@@ -124,7 +125,7 @@ EXTERN_C const IID IID_ILTMSink;
 
 
 
-HRESULT STDMETHODCALLTYPE ILTMSink_NotifyText_Proxy( 
+HRESULT STDMETHODCALLTYPE ILTMSink_NotifyText_Proxy(
     ILTMSink __RPC_FAR * This,
     /* [string][in] */ BSTR __MIDL_0010);
 
@@ -142,10 +143,10 @@ void __RPC_STUB ILTMSink_NotifyText_Stub(
 
 /* Additional Prototypes for ALL interfaces */
 
-unsigned long             __RPC_USER  BSTR_UserSize(     unsigned long __RPC_FAR *, unsigned long            , BSTR __RPC_FAR * ); 
-unsigned char __RPC_FAR * __RPC_USER  BSTR_UserMarshal(  unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, BSTR __RPC_FAR * ); 
-unsigned char __RPC_FAR * __RPC_USER  BSTR_UserUnmarshal(unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, BSTR __RPC_FAR * ); 
-void                      __RPC_USER  BSTR_UserFree(     unsigned long __RPC_FAR *, BSTR __RPC_FAR * ); 
+unsigned long             __RPC_USER  BSTR_UserSize(     unsigned long __RPC_FAR *, unsigned long, BSTR __RPC_FAR * );
+unsigned char __RPC_FAR * __RPC_USER  BSTR_UserMarshal(  unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, BSTR __RPC_FAR * );
+unsigned char __RPC_FAR * __RPC_USER  BSTR_UserUnmarshal(unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, BSTR __RPC_FAR * );
+void                      __RPC_USER  BSTR_UserFree(     unsigned long __RPC_FAR *, BSTR __RPC_FAR * );
 
 /* end of Additional Prototypes */
 

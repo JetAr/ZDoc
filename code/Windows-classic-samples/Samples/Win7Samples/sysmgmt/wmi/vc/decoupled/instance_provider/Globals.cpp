@@ -1,4 +1,4 @@
-/*++
+﻿/*++
 
 Copyright (C)  Microsoft Corporation
 
@@ -43,7 +43,7 @@ LONG Provider_Globals :: s_ObjectsInProgress ;
  *
  *	Name:	Global_Startup ()
  *
- *	
+ *
  *  Description:
  *
  *		Global function to handle initialization.
@@ -53,15 +53,15 @@ LONG Provider_Globals :: s_ObjectsInProgress ;
 
 HRESULT Provider_Globals :: Global_Startup ()
 {
-	HRESULT t_Result = S_OK ;
-	return t_Result ;
+    HRESULT t_Result = S_OK ;
+    return t_Result ;
 }
 
 /******************************************************************************
  *
  *	Name:	Global_Shutdown ()
  *
- *	
+ *
  *  Description:
  *
  *		Global function to handle uninitialization.
@@ -71,15 +71,15 @@ HRESULT Provider_Globals :: Global_Startup ()
 
 HRESULT Provider_Globals :: Global_Shutdown ()
 {
-	HRESULT t_Result = S_OK ;
-	return t_Result ;
+    HRESULT t_Result = S_OK ;
+    return t_Result ;
 }
 
 /******************************************************************************
  *
  *	Name:	CreateInstance
  *
- *	
+ *
  *  Description:
  *
  *			Wrapper function for CoCreateInstance/CoGetClassObject.
@@ -87,51 +87,51 @@ HRESULT Provider_Globals :: Global_Shutdown ()
  *
  *****************************************************************************/
 
-HRESULT Provider_Globals :: CreateInstance ( 
+HRESULT Provider_Globals :: CreateInstance (
 
-	const CLSID &a_ReferenceClsid ,
-	LPUNKNOWN a_OuterUnknown ,
-	const DWORD &a_ClassContext ,
-	const UUID &a_ReferenceInterfaceId ,
-	void **a_ObjectInterface
+    const CLSID &a_ReferenceClsid,
+    LPUNKNOWN a_OuterUnknown,
+    const DWORD &a_ClassContext,
+    const UUID &a_ReferenceInterfaceId,
+    void **a_ObjectInterface
 )
 {
-	HRESULT t_Result = S_OK ;
+    HRESULT t_Result = S_OK ;
 
 #if 1
 
-/*
- *	Use standard implementation
- */
+    /*
+     *	Use standard implementation
+     */
 
-	 t_Result = CoCreateInstance (
-  
-		a_ReferenceClsid ,
-		a_OuterUnknown ,
-		a_ClassContext ,
-		a_ReferenceInterfaceId ,
-		( void ** )  a_ObjectInterface
-	);
+    t_Result = CoCreateInstance (
+
+                   a_ReferenceClsid,
+                   a_OuterUnknown,
+                   a_ClassContext,
+                   a_ReferenceInterfaceId,
+                   ( void ** )  a_ObjectInterface
+               );
 
 #else
 
-/*
- *	Tweak configuration settings for call.
- */
+    /*
+     *	Tweak configuration settings for call.
+     */
 
-	COAUTHIDENTITY t_AuthenticationIdentity ;
-	ZeroMemory ( & t_AuthenticationIdentity , sizeof ( t_AuthenticationIdentity ) ) ;
+    COAUTHIDENTITY t_AuthenticationIdentity ;
+    ZeroMemory ( & t_AuthenticationIdentity, sizeof ( t_AuthenticationIdentity ) ) ;
 
-	t_AuthenticationIdentity.User = NULL ; 
-	t_AuthenticationIdentity.UserLength = 0 ;
-	t_AuthenticationIdentity.Domain = NULL ; 
-	t_AuthenticationIdentity.DomainLength = 0 ; 
-	t_AuthenticationIdentity.Password = NULL ; 
-	t_AuthenticationIdentity.PasswordLength = 0 ; 
-	t_AuthenticationIdentity.Flags = SEC_WINNT_AUTH_IDENTITY_UNICODE ; 
+    t_AuthenticationIdentity.User = NULL ;
+    t_AuthenticationIdentity.UserLength = 0 ;
+    t_AuthenticationIdentity.Domain = NULL ;
+    t_AuthenticationIdentity.DomainLength = 0 ;
+    t_AuthenticationIdentity.Password = NULL ;
+    t_AuthenticationIdentity.PasswordLength = 0 ;
+    t_AuthenticationIdentity.Flags = SEC_WINNT_AUTH_IDENTITY_UNICODE ;
 
-	COAUTHINFO t_AuthenticationInfo ;
-	ZeroMemory ( & t_AuthenticationInfo , sizeof ( t_AuthenticationInfo ) ) ;
+    COAUTHINFO t_AuthenticationInfo ;
+    ZeroMemory ( & t_AuthenticationInfo, sizeof ( t_AuthenticationInfo ) ) ;
 
     t_AuthenticationInfo.dwAuthnSvc = RPC_C_AUTHN_DEFAULT ;
     t_AuthenticationInfo.dwAuthzSvc = RPC_C_AUTHZ_DEFAULT ;
@@ -141,38 +141,38 @@ HRESULT Provider_Globals :: CreateInstance (
     t_AuthenticationInfo.dwCapabilities = EOAC_NONE ;
     t_AuthenticationInfo.pAuthIdentityData = NULL ;
 
-	COSERVERINFO t_ServerInfo ;
-	ZeroMemory ( & t_ServerInfo , sizeof ( t_ServerInfo ) ) ;
+    COSERVERINFO t_ServerInfo ;
+    ZeroMemory ( & t_ServerInfo, sizeof ( t_ServerInfo ) ) ;
 
-	t_ServerInfo.pwszName = NULL ;
+    t_ServerInfo.pwszName = NULL ;
     t_ServerInfo.dwReserved2 = 0 ;
     t_ServerInfo.pAuthInfo = & t_AuthenticationInfo ;
 
-	IClassFactory *t_ClassFactory = NULL ;
+    IClassFactory *t_ClassFactory = NULL ;
 
-	t_Result = CoGetClassObject (
+    t_Result = CoGetClassObject (
 
-		a_ReferenceClsid ,
-		a_ClassContext ,
-		& t_ServerInfo ,
-		IID_IClassFactory ,
-		( void ** )  & t_ClassFactory
-	) ;
- 
-	if ( SUCCEEDED ( t_Result ) )
-	{
-		t_Result = t_ClassFactory->CreateInstance (
+                   a_ReferenceClsid,
+                   a_ClassContext,
+                   & t_ServerInfo,
+                   IID_IClassFactory,
+                   ( void ** )  & t_ClassFactory
+               ) ;
 
-			a_OuterUnknown ,
-			a_ReferenceInterfaceId ,
-			a_ObjectInterface 
-		);	
+    if ( SUCCEEDED ( t_Result ) )
+    {
+        t_Result = t_ClassFactory->CreateInstance (
 
-		t_ClassFactory->Release () ;
-	}
+                       a_OuterUnknown,
+                       a_ReferenceInterfaceId,
+                       a_ObjectInterface
+                   );
+
+        t_ClassFactory->Release () ;
+    }
 
 #endif
 
-	return t_Result ;
+    return t_Result ;
 }
 

@@ -1,9 +1,9 @@
-// Copyright (c)  Microsoft Corporation, All Rights Reserved
+﻿// Copyright (c)  Microsoft Corporation, All Rights Reserved
 ///////////////////////////////////////////////////////////////////
 //
 //	RefClint.cpp : Refresher client implementation file
 //
-//	CRefClient encapsulates the basic functionality of using a 
+//	CRefClient encapsulates the basic functionality of using a
 //	WMI high performance refresher.
 //
 ///////////////////////////////////////////////////////////////////
@@ -17,7 +17,7 @@
 //
 //	Counter data
 //
-//	These structures are used as a matter of convienience and 
+//	These structures are used as a matter of convienience and
 //	clarity.  A real client should enumerate the properties
 //	of an object in order to determine the number and names
 //	of the counter properties.
@@ -26,29 +26,29 @@
 
 // The number of counter properties for Win32_BasicHiPerf
 
-enum 
+enum
 {
-	Ctr1,
-	Ctr2,
-	Ctr3,
-	Ctr4,
-	Ctr5,
-	NumCtrs
+    Ctr1,
+    Ctr2,
+    Ctr3,
+    Ctr4,
+    Ctr5,
+    NumCtrs
 };
 
 // The names and handles (set by SetHandles()) for a Win32_BasicHiPerf object
 
 struct CCounterData
 {
-	WCHAR	m_wcsName[256];
-	long	m_lHandle;
+    WCHAR	m_wcsName[256];
+    long	m_lHandle;
 } g_aCounters[] =
 {
-	L"Counter1", 0,
-	L"Counter2", 0,
-	L"Counter3", 0,
-	L"Counter4", 0,
-	L"Counter5", 0,
+    L"Counter1", 0,
+    L"Counter2", 0,
+    L"Counter3", 0,
+    L"Counter4", 0,
+    L"Counter5", 0,
 };
 
 
@@ -59,25 +59,25 @@ struct CCounterData
 ///////////////////////////////////////////////////////////////////
 
 
-CRefClient::CRefClient() : 
-	m_pNameSpace(NULL), m_pRefresher(NULL), m_pConfig(NULL)
+CRefClient::CRefClient() :
+    m_pNameSpace(NULL), m_pRefresher(NULL), m_pConfig(NULL)
 {
 }
 
 CRefClient::~CRefClient()
 {
-	// Release the COM interfaces (if refresher members have not been manually
-	// removed, the refresher destructor should do so automatically)
-	// =======================================================================
+    // Release the COM interfaces (if refresher members have not been manually
+    // removed, the refresher destructor should do so automatically)
+    // =======================================================================
 
-	if (NULL != m_pNameSpace)
-		m_pNameSpace->Release();
+    if (NULL != m_pNameSpace)
+        m_pNameSpace->Release();
 
-	if (NULL != m_pRefresher)
-		m_pRefresher->Release();
+    if (NULL != m_pRefresher)
+        m_pRefresher->Release();
 
-	if (NULL != m_pConfig)
-		m_pConfig->Release();
+    if (NULL != m_pConfig)
+        m_pConfig->Release();
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -89,7 +89,7 @@ CRefClient::~CRefClient()
 HRESULT CRefClient::SetHandles()
 ///////////////////////////////////////////////////////////////////
 //
-//	SetHandles will initialize the IWbemObjectAccess handle values 
+//	SetHandles will initialize the IWbemObjectAccess handle values
 //	in the counter array.
 //
 //	Returns a status code. Use the SUCCEEDED() and FAILED() macros
@@ -98,73 +98,73 @@ HRESULT CRefClient::SetHandles()
 ///////////////////////////////////////////////////////////////////
 //ok
 {
-	HRESULT hRes = WBEM_NO_ERROR;
-	IWbemClassObject*	pObj = NULL;
-	IWbemObjectAccess*	pAccess = NULL;
-	long lIndex;
+    HRESULT hRes = WBEM_NO_ERROR;
+    IWbemClassObject*	pObj = NULL;
+    IWbemObjectAccess*	pAccess = NULL;
+    long lIndex;
 
 // Get an IWbemObjectAccess interface to one of the sample objects
 // ===============================================================
-	// Create a sample object 
-	// ======================
-	BSTR strObj = SysAllocString( cwcsObjectPath );
-	if (strObj == NULL)
-	{
-		hRes = E_OUTOFMEMORY;
-		goto cleanup;
-	}
+    // Create a sample object
+    // ======================
+    BSTR strObj = SysAllocString( cwcsObjectPath );
+    if (strObj == NULL)
+    {
+        hRes = E_OUTOFMEMORY;
+        goto cleanup;
+    }
 
-	hRes = m_pNameSpace->GetObject( strObj, 0, NULL, &pObj, NULL );
+    hRes = m_pNameSpace->GetObject( strObj, 0, NULL, &pObj, NULL );
 
-	SysFreeString( strObj );
+    SysFreeString( strObj );
 
-	if ( FAILED( hRes ) ) 
-		goto cleanup;
+    if ( FAILED( hRes ) )
+        goto cleanup;
 
-	// Get the alternate interface
-	// ===========================
+    // Get the alternate interface
+    // ===========================
 
-	hRes = pObj->QueryInterface( IID_IWbemObjectAccess, ( LPVOID* )&pAccess );
+    hRes = pObj->QueryInterface( IID_IWbemObjectAccess, ( LPVOID* )&pAccess );
 
-	if ( FAILED( hRes ) ) 
-		goto cleanup;
+    if ( FAILED( hRes ) )
+        goto cleanup;
 
 // Set the access handles for all of the counter properties
 // ========================================================
 
-	for ( lIndex = Ctr1; lIndex < NumCtrs; lIndex++ )
-	{	
-		long lHandle;
+    for ( lIndex = Ctr1; lIndex < NumCtrs; lIndex++ )
+    {
+        long lHandle;
 
-		hRes = pAccess->GetPropertyHandle( g_aCounters[lIndex].m_wcsName, NULL, &lHandle );
+        hRes = pAccess->GetPropertyHandle( g_aCounters[lIndex].m_wcsName, NULL, &lHandle );
 
-		if ( FAILED( hRes ) )
-			goto cleanup;
+        if ( FAILED( hRes ) )
+            goto cleanup;
 
-		g_aCounters[lIndex].m_lHandle = lHandle;
-	}
+        g_aCounters[lIndex].m_lHandle = lHandle;
+    }
 // Cleanup the object pointers
 // ===========================
 
 cleanup:
-	if ( NULL != pObj )
-	{
-		pObj->Release();
-		pObj = NULL;
-	}
+    if ( NULL != pObj )
+    {
+        pObj->Release();
+        pObj = NULL;
+    }
 
-	if ( NULL != pAccess )
-	{
-		pAccess->Release();
-		pAccess = NULL;
-	}
+    if ( NULL != pAccess )
+    {
+        pAccess->Release();
+        pAccess = NULL;
+    }
 
-	if ( FAILED( hRes ) )
-	{
-		printf( "SetHandles() failed, 0x%x\n", hRes );
-	}
+    if ( FAILED( hRes ) )
+    {
+        printf( "SetHandles() failed, 0x%x\n", hRes );
+    }
 
-	return hRes;
+    return hRes;
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -185,57 +185,57 @@ HRESULT CRefClient::Initialize(IWbemServices* pNameSpace)
 //
 ///////////////////////////////////////////////////////////////////
 {
-	HRESULT hRes = WBEM_NO_ERROR;
+    HRESULT hRes = WBEM_NO_ERROR;
 
-	// Copy the namespace pointer
-	// ==========================
+    // Copy the namespace pointer
+    // ==========================
 
-	if ( NULL == pNameSpace )
-		return WBEM_E_INVALID_PARAMETER;
+    if ( NULL == pNameSpace )
+        return WBEM_E_INVALID_PARAMETER;
 
-	//Cleanup: in case this method nas been called more than once
-	if (m_pNameSpace != NULL)
-		m_pNameSpace->Release();
-	if (m_pRefresher != NULL)
-		m_pRefresher->Release();
-	if (m_pConfig != NULL)
-		m_pConfig->Release();
+    //Cleanup: in case this method nas been called more than once
+    if (m_pNameSpace != NULL)
+        m_pNameSpace->Release();
+    if (m_pRefresher != NULL)
+        m_pRefresher->Release();
+    if (m_pConfig != NULL)
+        m_pConfig->Release();
 
-	m_pNameSpace = pNameSpace;
-	m_pNameSpace->AddRef();
+    m_pNameSpace = pNameSpace;
+    m_pNameSpace->AddRef();
 
-	// Create the refresher and refresher manager
-	// ==========================================
+    // Create the refresher and refresher manager
+    // ==========================================
 
-	hRes = CoCreateInstance( CLSID_WbemRefresher, 
-							 NULL, 
-							 CLSCTX_INPROC_SERVER, 
-							 IID_IWbemRefresher, 
-							 (void**) &m_pRefresher );
-	if ( FAILED( hRes ) )
-		return hRes;
+    hRes = CoCreateInstance( CLSID_WbemRefresher,
+                             NULL,
+                             CLSCTX_INPROC_SERVER,
+                             IID_IWbemRefresher,
+                             (void**) &m_pRefresher );
+    if ( FAILED( hRes ) )
+        return hRes;
 
-	hRes = m_pRefresher->QueryInterface( IID_IWbemConfigureRefresher, 
-										 (void**) &m_pConfig );
-	if ( FAILED( hRes ) )
-	{
-		m_pRefresher->Release();
-		return hRes;
-	}
+    hRes = m_pRefresher->QueryInterface( IID_IWbemConfigureRefresher,
+                                         (void**) &m_pConfig );
+    if ( FAILED( hRes ) )
+    {
+        m_pRefresher->Release();
+        return hRes;
+    }
 
-	// Set the access handles
-	// ======================
+    // Set the access handles
+    // ======================
 
-	hRes = SetHandles();
+    hRes = SetHandles();
 
-	return hRes;
+    return hRes;
 }
 
 HRESULT CRefClient::AddObjects()
 ///////////////////////////////////////////////////////////////////
 //
-//	AddObject will add a set of objects to the refresher.  The 
-//	method will update m_aInstances with the instance data. 
+//	AddObject will add a set of objects to the refresher.  The
+//	method will update m_aInstances with the instance data.
 //
 //	Returns a status code. Use the SUCCEEDED() and FAILED() macros
 //	to interpret results.
@@ -243,58 +243,58 @@ HRESULT CRefClient::AddObjects()
 ///////////////////////////////////////////////////////////////////
 //ok
 {
-	HRESULT hRes = WBEM_NO_ERROR;
+    HRESULT hRes = WBEM_NO_ERROR;
 
-	long	lIndex = 0;
-	WCHAR	wcsObjName[MAX_PATH + 50];
+    long	lIndex = 0;
+    WCHAR	wcsObjName[MAX_PATH + 50];
 
 // Loop through all instances of Win32_BasicHiPerf and add them to the refresher
 // =============================================================================
 
-	for ( lIndex = 0; lIndex < clNumInstances; lIndex++ )
-	{
-		IWbemClassObject*	pObj = NULL;
-		IWbemObjectAccess*	pAccess = NULL;
-		long lID;
+    for ( lIndex = 0; lIndex < clNumInstances; lIndex++ )
+    {
+        IWbemClassObject*	pObj = NULL;
+        IWbemObjectAccess*	pAccess = NULL;
+        long lID;
 
-		// Set the object path (e.g. Win32_BasicHiPerf=1)
-		// ==============================================
+        // Set the object path (e.g. Win32_BasicHiPerf=1)
+        // ==============================================
 
-		StringCbPrintfW(wcsObjName, sizeof(wcsObjName), L"%s=%i", cwcsObjectPath, lIndex );
-	
-		// Add the object
-		// ==============
+        StringCbPrintfW(wcsObjName, sizeof(wcsObjName), L"%s=%i", cwcsObjectPath, lIndex );
 
-		hRes = m_pConfig->AddObjectByPath( m_pNameSpace, wcsObjName, 0, NULL, &pObj, &lID );
+        // Add the object
+        // ==============
 
-		if ( FAILED( hRes ) )
-		{
-			printf( "AddObjectByPath() failed, 0x%x\n", hRes );
-			return hRes;
-		}
+        hRes = m_pConfig->AddObjectByPath( m_pNameSpace, wcsObjName, 0, NULL, &pObj, &lID );
 
-		// Save the IWbemObjectAccess interface
-		// ====================================
-		
-		hRes = pObj->QueryInterface( IID_IWbemObjectAccess, (void**) &pAccess );
+        if ( FAILED( hRes ) )
+        {
+            printf( "AddObjectByPath() failed, 0x%x\n", hRes );
+            return hRes;
+        }
 
-		pObj->Release();
+        // Save the IWbemObjectAccess interface
+        // ====================================
 
-		m_Instances[lIndex].Set(pAccess, lID);
+        hRes = pObj->QueryInterface( IID_IWbemObjectAccess, (void**) &pAccess );
 
-		// Set does it's own AddRef()
-		// ==========================
+        pObj->Release();
 
-		pAccess->Release();
-	}
-	
-	return hRes;
+        m_Instances[lIndex].Set(pAccess, lID);
+
+        // Set does it's own AddRef()
+        // ==========================
+
+        pAccess->Release();
+    }
+
+    return hRes;
 }
 
 HRESULT CRefClient::RemoveObjects()
 ///////////////////////////////////////////////////////////////////
 //
-//	RemoveObjects calls Remove() on the refresher's configuration 
+//	RemoveObjects calls Remove() on the refresher's configuration
 //	manager to remove all of the objects from the refresher.
 //
 //	Returns a status code. Use the SUCCEEDED() and FAILED() macros
@@ -302,23 +302,23 @@ HRESULT CRefClient::RemoveObjects()
 //
 ///////////////////////////////////////////////////////////////////
 {
-	HRESULT hRes = WBEM_NO_ERROR;
+    HRESULT hRes = WBEM_NO_ERROR;
 
-	long lInstance = 0;
+    long lInstance = 0;
 
-	// Remove the instances
-	// ====================
+    // Remove the instances
+    // ====================
 
-	if (m_pConfig)
-	{
-		for ( lInstance = 0; lInstance < clNumInstances; lInstance++ )
-		{
-			m_pConfig->Remove( m_Instances[lInstance].GetID(), 0L );
-			m_Instances[lInstance].Reset();
-		}
-	}
+    if (m_pConfig)
+    {
+        for ( lInstance = 0; lInstance < clNumInstances; lInstance++ )
+        {
+            m_pConfig->Remove( m_Instances[lInstance].GetID(), 0L );
+            m_Instances[lInstance].Reset();
+        }
+    }
 
-	return hRes;
+    return hRes;
 }
 
 HRESULT CRefClient::ShowObjectData()
@@ -332,58 +332,58 @@ HRESULT CRefClient::ShowObjectData()
 //
 ///////////////////////////////////////////////////////////////////
 {
-	HRESULT hRes = WBEM_NO_ERROR;
+    HRESULT hRes = WBEM_NO_ERROR;
 
-	long lInstance;
-	long lCounter;
+    long lInstance;
+    long lCounter;
 
 // Cycle through all of the instances and print all the counter data
 // =================================================================
 
-	// Instance loop
-	// =============
+    // Instance loop
+    // =============
 
-	for (lInstance = 0; lInstance < clNumInstances; lInstance++)
-	{
-		printf("  Instance %i:\n", lInstance);
+    for (lInstance = 0; lInstance < clNumInstances; lInstance++)
+    {
+        printf("  Instance %i:\n", lInstance);
 
-		// Counter loop
-		// ============
+        // Counter loop
+        // ============
 
-		for (lCounter = Ctr1; lCounter < NumCtrs; lCounter++)
-		{
-			DWORD dwVal;
-			IWbemObjectAccess* pAccess = m_Instances[lInstance].GetMember();
+        for (lCounter = Ctr1; lCounter < NumCtrs; lCounter++)
+        {
+            DWORD dwVal;
+            IWbemObjectAccess* pAccess = m_Instances[lInstance].GetMember();
 
-			// Read the counter property value using the high performance IWbemObjectAccess->ReadDWORD().
-			// NOTE: Remember to never to this while a refresh is in process!
-			// ==========================================================================================
+            // Read the counter property value using the high performance IWbemObjectAccess->ReadDWORD().
+            // NOTE: Remember to never to this while a refresh is in process!
+            // ==========================================================================================
 
-			hRes = pAccess->ReadDWORD( g_aCounters[lCounter].m_lHandle, &dwVal);
-			if (FAILED(hRes))
-			{
-				pAccess->Release();
+            hRes = pAccess->ReadDWORD( g_aCounters[lCounter].m_lHandle, &dwVal);
+            if (FAILED(hRes))
+            {
+                pAccess->Release();
 
-				printf("ShowInstanceData() failed, 0x%x", hRes);
-				return hRes;
-			}
+                printf("ShowInstanceData() failed, 0x%x", hRes);
+                return hRes;
+            }
 
-			printf("    %i ", dwVal);
+            printf("    %i ", dwVal);
 
-			pAccess->Release();
-		}
+            pAccess->Release();
+        }
 
-		printf("\n");
-	}
+        printf("\n");
+    }
 
-	return hRes;
+    return hRes;
 }
 
 HRESULT CRefClient::AddEnum()
 ///////////////////////////////////////////////////////////////////
 //
-//	AddEnum will add an enumerator to the refresher.  The 
-//	function will return a status code.  The enumerator class member 
+//	AddEnum will add an enumerator to the refresher.  The
+//	function will return a status code.  The enumerator class member
 //	will updated.
 //
 //	Returns a status code. Use the SUCCEEDED() and FAILED() macros
@@ -392,37 +392,37 @@ HRESULT CRefClient::AddEnum()
 ///////////////////////////////////////////////////////////////////
 //ok
 {
-	HRESULT hRes = WBEM_NO_ERROR;
+    HRESULT hRes = WBEM_NO_ERROR;
 
-	IWbemHiPerfEnum*	pEnum = NULL;
-	long lID;
+    IWbemHiPerfEnum*	pEnum = NULL;
+    long lID;
 
 // Add an enumerator to the refresher
 // ==================================
 
-	hRes = m_pConfig->AddEnum( m_pNameSpace, cwcsObjectPath, 0, NULL, &pEnum, &lID );
+    hRes = m_pConfig->AddEnum( m_pNameSpace, cwcsObjectPath, 0, NULL, &pEnum, &lID );
 
-	if ( FAILED(hRes))
-	{
-		printf( "AddEnum() failed, 0x%x\n", hRes );
-	}
+    if ( FAILED(hRes))
+    {
+        printf( "AddEnum() failed, 0x%x\n", hRes );
+    }
 
-	if (pEnum)
-	{
-		m_Enum.Set(pEnum, lID);
-		// Set does it's own AddRef
+    if (pEnum)
+    {
+        m_Enum.Set(pEnum, lID);
+        // Set does it's own AddRef
 
-		pEnum->Release();
-	}
-	
+        pEnum->Release();
+    }
 
-	return hRes;
+
+    return hRes;
 }
 
 HRESULT CRefClient::RemoveEnum()
 ///////////////////////////////////////////////////////////////////
 //
-//	RemoveEnum calls Remove() on the refresher's configuration 
+//	RemoveEnum calls Remove() on the refresher's configuration
 //	manager to remove the enumerator from the refresher.
 //
 //	Returns a status code. Use the SUCCEEDED() and FAILED() macros
@@ -430,23 +430,23 @@ HRESULT CRefClient::RemoveEnum()
 //
 ///////////////////////////////////////////////////////////////////
 {
-	HRESULT hRes = WBEM_NO_ERROR;
-	// Remove the enumerator
-	// =====================
-	if ( m_pConfig)
-	{
-		hRes = m_pConfig->Remove( m_Enum.GetID(), 0L );
-	}
-	m_Enum.Reset();
+    HRESULT hRes = WBEM_NO_ERROR;
+    // Remove the enumerator
+    // =====================
+    if ( m_pConfig)
+    {
+        hRes = m_pConfig->Remove( m_Enum.GetID(), 0L );
+    }
+    m_Enum.Reset();
 
 
-	return hRes;
+    return hRes;
 }
 
 HRESULT CRefClient::ShowEnumeratorData()
 ///////////////////////////////////////////////////////////////////
 //
-//	ShowEnumeratorData will output the number of instances within 
+//	ShowEnumeratorData will output the number of instances within
 //	an enumerator.  Property values from the instances may obtained
 //	using the standard WMI methods.
 //
@@ -454,87 +454,87 @@ HRESULT CRefClient::ShowEnumeratorData()
 //	to interpret results.
 /////////////////////////////////////////////////////////////////////
 {
-	HRESULT hRes = WBEM_NO_ERROR;
+    HRESULT hRes = WBEM_NO_ERROR;
 
-	DWORD	dwNumReturned = clNumInstances;
-	DWORD	dwNumObjects = 0;
+    DWORD	dwNumReturned = clNumInstances;
+    DWORD	dwNumObjects = 0;
 
-	IWbemObjectAccess**	apEnumAccess = NULL;
+    IWbemObjectAccess**	apEnumAccess = NULL;
 
-	IWbemHiPerfEnum*	pEnum = m_Enum.GetMember();
-	if (pEnum == NULL)
-	{
+    IWbemHiPerfEnum*	pEnum = m_Enum.GetMember();
+    if (pEnum == NULL)
+    {
         return WBEM_E_FAILED;
-	}
+    }
 // Fetch the instances from the enumerator
 // =======================================
 
-	// Try to get the instances from the enumerator
-	// ============================================
+    // Try to get the instances from the enumerator
+    // ============================================
 
-	hRes = pEnum->GetObjects( 0L, dwNumObjects, apEnumAccess, &dwNumReturned );
+    hRes = pEnum->GetObjects( 0L, dwNumObjects, apEnumAccess, &dwNumReturned );
 
-	// Is the buffer too small?
-	// ========================
+    // Is the buffer too small?
+    // ========================
 
-	if ( WBEM_E_BUFFER_TOO_SMALL == hRes )
-	{
-		// Increase the buffer size
-		// ========================
+    if ( WBEM_E_BUFFER_TOO_SMALL == hRes )
+    {
+        // Increase the buffer size
+        // ========================
 
-		delete [] apEnumAccess;
+        delete [] apEnumAccess;
 
-		apEnumAccess = new IWbemObjectAccess*[dwNumReturned];
-		dwNumObjects = dwNumReturned; 
-		memset( apEnumAccess, 0, sizeof( apEnumAccess ));
+        apEnumAccess = new IWbemObjectAccess*[dwNumReturned];
+        dwNumObjects = dwNumReturned;
+        memset( apEnumAccess, 0, sizeof( apEnumAccess ));
 
-		if ( NULL != apEnumAccess )
-		{
-			hRes = pEnum->GetObjects( 0L, dwNumObjects, apEnumAccess, &dwNumReturned );
-		}
-		else
-		{
-			hRes = WBEM_E_OUT_OF_MEMORY;
-		}
+        if ( NULL != apEnumAccess )
+        {
+            hRes = pEnum->GetObjects( 0L, dwNumObjects, apEnumAccess, &dwNumReturned );
+        }
+        else
+        {
+            hRes = WBEM_E_OUT_OF_MEMORY;
+        }
 
-	}	
+    }
 
-	// Print the result
-	// ================
+    // Print the result
+    // ================
 
-	if ( SUCCEEDED( hRes ) )
-	{
-		printf( "\tThe enumerator returned %i instances\n", dwNumReturned );
-	}
-	else
-	{
-		printf( "ShowEnumeratorData failed, 0x%x\n", hRes );
-	}
+    if ( SUCCEEDED( hRes ) )
+    {
+        printf( "\tThe enumerator returned %i instances\n", dwNumReturned );
+    }
+    else
+    {
+        printf( "ShowEnumeratorData failed, 0x%x\n", hRes );
+    }
 
-	// Release the objects from the enumerator's object array
-	// ======================================================
-	
-	for ( DWORD nCtr = 0; nCtr < dwNumReturned; nCtr++ )
-	{
-		if (NULL != apEnumAccess[nCtr])
-		{
-			apEnumAccess[nCtr]->Release();
-			apEnumAccess[nCtr] = NULL;
-		}
-	}
+    // Release the objects from the enumerator's object array
+    // ======================================================
 
-	if ( NULL != apEnumAccess )
-		delete [] apEnumAccess;
+    for ( DWORD nCtr = 0; nCtr < dwNumReturned; nCtr++ )
+    {
+        if (NULL != apEnumAccess[nCtr])
+        {
+            apEnumAccess[nCtr]->Release();
+            apEnumAccess[nCtr] = NULL;
+        }
+    }
 
-	pEnum->Release();
+    if ( NULL != apEnumAccess )
+        delete [] apEnumAccess;
 
-	return hRes;
+    pEnum->Release();
+
+    return hRes;
 }
 
 HRESULT CRefClient::Refresh()
 ///////////////////////////////////////////////////////////////////
 //
-//	Refresh simply calls the IWbemRefresher->Refresh() method to 
+//	Refresh simply calls the IWbemRefresher->Refresh() method to
 //	update all members of the refresher.
 //
 //	Returns a status code. Use the SUCCEEDED() and FAILED() macros
@@ -542,5 +542,5 @@ HRESULT CRefClient::Refresh()
 //
 ///////////////////////////////////////////////////////////////////
 {
-	return m_pRefresher->Refresh( 0L );
+    return m_pRefresher->Refresh( 0L );
 }

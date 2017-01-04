@@ -1,24 +1,24 @@
-
+﻿
 /************************************************************************
  *
  * File: GdiInterop.cpp
  *
- * Description: 
- * 
- * 
+ * Description:
+ *
+ *
  *  This file is part of the Microsoft Windows SDK Code Samples.
- * 
+ *
  *  Copyright (C) Microsoft Corporation.  All rights reserved.
- * 
+ *
  * This source code is intended only as a supplement to Microsoft
  * Development Tools and/or on-line documentation.  See these other
  * materials for detailed information regarding Microsoft code samples.
- * 
+ *
  * THIS CODE AND INFORMATION ARE PROVIDED AS IS WITHOUT WARRANTY OF ANY
  * KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
  * PARTICULAR PURPOSE.
- * 
+ *
  ************************************************************************/
 
 #include "GdiInterop.h"
@@ -67,14 +67,14 @@ void OnPaint(HDC hdc)
     long height = 0;
     HDC memoryHdc = NULL;
     SIZE size = {};
-    
+
     // Set the height, equivalent to 50 em for DirectWrite.
     height = -MulDiv(50, GetDeviceCaps(hdc, LOGPIXELSY), 96);
 
     hfont = CreateFontW(height, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, L"Times New Roman");
 
-    wchar_t dwriteText[ ] = L"Sample text using DirectWrite.";  
-    wchar_t gdiText[ ] = L"Sample text using GDI TextOut."; 
+    wchar_t dwriteText[ ] = L"Sample text using DirectWrite.";
+    wchar_t gdiText[ ] = L"Sample text using GDI TextOut.";
 
     // The DirectWrite objects need only be created once and can be reused each time the window paints
     hr = DWriteCreateResources(hdc, dwriteText, hfont);
@@ -119,9 +119,9 @@ void OnPaint(HDC hdc)
         0, 0,
         size.cx + 1, size.cy + 1,
         memoryHdc,
-        0, 0, 
+        0, 0,
         SRCCOPY
-        );
+    );
 
     // If the DirectWrite drawing failed, exit and display an error.
     if (FAILED(hr))
@@ -150,8 +150,8 @@ void GdiOnPaint(HDC hdc, wchar_t *text, HFONT hfont)
     HFONT hf;
     UINT32 textLength;
 
-    textLength = UINT32(wcslen(text));    
-    
+    textLength = UINT32(wcslen(text));
+
     hf = (HFONT) SelectObject(hdc, hfont);
 
     SetTextColor(hdc, RGB(0, 200, 255));
@@ -174,7 +174,7 @@ void GdiOnPaint(HDC hdc, wchar_t *text, HFONT hfont)
 HRESULT DWriteOnPaint(HDC hdc, wchar_t *text, HFONT hfont)
 {
     HRESULT hr = S_OK;
-    
+
     // Draw the text below the GDI text
     if (SUCCEEDED(hr))
     {
@@ -213,7 +213,7 @@ HRESULT DWriteCreateResources(HDC hdc, wchar_t *text, HFONT hfont)
         IDWriteFontFamily* pFontFamily = NULL;
         IDWriteFont* pFont = NULL;
         IDWriteLocalizedStrings* pFamilyNames = NULL;
-        
+
         // Logical (GDI) font.
         LOGFONT lf = {};
 
@@ -235,17 +235,17 @@ HRESULT DWriteCreateResources(HDC hdc, wchar_t *text, HFONT hfont)
 
         // Create the DirectWrite factory.
         hr = DWriteCreateFactory(
-            DWRITE_FACTORY_TYPE_SHARED,
-            __uuidof(IDWriteFactory),
-            reinterpret_cast<IUnknown**>(&g_pDWriteFactory)
-            );
+                 DWRITE_FACTORY_TYPE_SHARED,
+                 __uuidof(IDWriteFactory),
+                 reinterpret_cast<IUnknown**>(&g_pDWriteFactory)
+             );
 
         // Create a GDI interop interface.
         if (SUCCEEDED(hr))
         {
             hr = g_pDWriteFactory->GetGdiInterop(&g_pGdiInterop);
         }
-        
+
         if (SUCCEEDED(hr))
         {
             // Get a logical font from the font handle.
@@ -257,7 +257,7 @@ HRESULT DWriteCreateResources(HDC hdc, wchar_t *text, HFONT hfont)
         {
             hr = g_pGdiInterop->CreateFontFromLOGFONT(&lf, &pFont);
         }
-        
+
         // Get the font family.
         if (SUCCEEDED(hr))
         {
@@ -272,7 +272,7 @@ HRESULT DWriteCreateResources(HDC hdc, wchar_t *text, HFONT hfont)
 
         // Select the first locale.  This is OK, because we are not displaying the family name.
         index = 0;
-        
+
         // Get the length of the family name.
         if (SUCCEEDED(hr))
         {
@@ -283,9 +283,9 @@ HRESULT DWriteCreateResources(HDC hdc, wchar_t *text, HFONT hfont)
         {
             // Allocate a new string.
             name = new (std::nothrow) wchar_t[length+1];
-		    if (name == NULL)
+            if (name == NULL)
             {
-			    hr = E_OUTOFMEMORY;
+                hr = E_OUTOFMEMORY;
             }
         }
 
@@ -305,28 +305,28 @@ HRESULT DWriteCreateResources(HDC hdc, wchar_t *text, HFONT hfont)
         if (SUCCEEDED(hr))
         {
             hr = g_pDWriteFactory->CreateTextFormat(
-                name,                // Font family name.
-                NULL,                        
-                pFont->GetWeight(),
-                pFont->GetStyle(),
-                pFont->GetStretch(),
-                fontSize,
-                L"en-us",
-                &g_pTextFormat
-                );
+                     name,                // Font family name.
+                     NULL,
+                     pFont->GetWeight(),
+                     pFont->GetStyle(),
+                     pFont->GetStretch(),
+                     fontSize,
+                     L"en-us",
+                     &g_pTextFormat
+                 );
         }
 
         // Create a text layout.
         if (SUCCEEDED(hr))
         {
             hr = g_pDWriteFactory->CreateTextLayout(
-                text,
-                textLength,
-                g_pTextFormat,
-                1024.0f,
-                480.0f,
-                &g_pTextLayout
-                );
+                     text,
+                     textLength,
+                     g_pTextFormat,
+                     1024.0f,
+                     480.0f,
+                     &g_pTextLayout
+                 );
         }
 
         // Underline and strikethrough are part of a LOGFONT structure, but are not
@@ -342,13 +342,13 @@ HRESULT DWriteCreateResources(HDC hdc, wchar_t *text, HFONT hfont)
             DWRITE_TEXT_RANGE textRange = {0, textLength};
             g_pTextLayout->SetStrikethrough(true, textRange);
         }
-        
+
         // Create a bitmap render target for our custom renderer.
         if (SUCCEEDED(hr))
         {
             hr = g_pGdiInterop->CreateBitmapRenderTarget(hdc, r.right, r.bottom, &g_pBitmapRenderTarget);
         }
-        
+
         // Create default rendering params for our custom renderer.
         if (SUCCEEDED(hr))
         {
@@ -358,7 +358,7 @@ HRESULT DWriteCreateResources(HDC hdc, wchar_t *text, HFONT hfont)
         if (SUCCEEDED(hr))
         {
             // Initialize the custom renderer class.
-		    g_pGdiTextRenderer = new (std::nothrow) GdiTextRenderer(g_pBitmapRenderTarget, g_pRenderingParams);
+            g_pGdiTextRenderer = new (std::nothrow) GdiTextRenderer(g_pBitmapRenderTarget, g_pRenderingParams);
         }
 
         // Clean up local interfaces.
@@ -372,9 +372,9 @@ HRESULT DWriteCreateResources(HDC hdc, wchar_t *text, HFONT hfont)
 
 
 int APIENTRY wWinMain(HINSTANCE hInstance,
-                     HINSTANCE hPrevInstance,
-                     LPWSTR    lpCmdLine,
-                     int       nCmdShow)
+                      HINSTANCE hPrevInstance,
+                      LPWSTR    lpCmdLine,
+                      int       nCmdShow)
 {
     UNREFERENCED_PARAMETER(hPrevInstance);
     UNREFERENCED_PARAMETER(lpCmdLine);
@@ -451,22 +451,22 @@ ATOM MyRegisterClass(HINSTANCE hInstance)
 //
 BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 {
-   HWND hWnd;
+    HWND hWnd;
 
-   hInst = hInstance; // Store instance handle in our global variable
+    hInst = hInstance; // Store instance handle in our global variable
 
-   hWnd = CreateWindow(szWindowClass, szTitle, WS_OVERLAPPEDWINDOW,
-      CW_USEDEFAULT, 0, CW_USEDEFAULT, 0, NULL, NULL, hInstance, NULL);
+    hWnd = CreateWindow(szWindowClass, szTitle, WS_OVERLAPPEDWINDOW,
+                        CW_USEDEFAULT, 0, CW_USEDEFAULT, 0, NULL, NULL, hInstance, NULL);
 
-   if (!hWnd)
-   {
-      return FALSE;
-   }
+    if (!hWnd)
+    {
+        return FALSE;
+    }
 
-   ShowWindow(hWnd, nCmdShow);
-   UpdateWindow(hWnd);
+    ShowWindow(hWnd, nCmdShow);
+    UpdateWindow(hWnd);
 
-   return TRUE;
+    return TRUE;
 }
 
 //

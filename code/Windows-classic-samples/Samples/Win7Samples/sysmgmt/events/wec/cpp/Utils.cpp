@@ -1,4 +1,4 @@
-#include "Subscription.h"
+﻿#include "Subscription.h"
 
 std::wstring ConvertEcConfigurationMode( DWORD code )
 {
@@ -54,7 +54,7 @@ std::wstring ConvertEcDateTime( ULONGLONG code )
 {
     FILETIME ft;
     SYSTEMTIME utcTime;
-    SYSTEMTIME localTime; 
+    SYSTEMTIME localTime;
     std::wstring timeString;
     std::vector<WCHAR> buffer(30);
 
@@ -70,21 +70,21 @@ std::wstring ConvertEcDateTime( ULONGLONG code )
 
     if(!SystemTimeToTzSpecificLocalTime(NULL, &utcTime, &localTime))
     {
-		return timeString;
+        return timeString;
     }
 
-    HRESULT hr = StringCchPrintfW( (LPWSTR) &buffer[0], 
-                  buffer.size(), 
-                  L"%4.4hd-%2.2hd-%2.2hdT%2.2hd:%2.2hd:%2.2hd.%3.3hdZ",
-                  localTime.wYear,
-                  localTime.wMonth,
-                  localTime.wDay,
-                  localTime.wHour,
-                  localTime.wMinute,
-                  localTime.wSecond,
-                  localTime.wMilliseconds );
+    HRESULT hr = StringCchPrintfW( (LPWSTR) &buffer[0],
+                                   buffer.size(),
+                                   L"%4.4hd-%2.2hd-%2.2hdT%2.2hd:%2.2hd:%2.2hd.%3.3hdZ",
+                                   localTime.wYear,
+                                   localTime.wMonth,
+                                   localTime.wDay,
+                                   localTime.wHour,
+                                   localTime.wMinute,
+                                   localTime.wSecond,
+                                   localTime.wMilliseconds );
 
-    if(FAILED(hr)) 
+    if(FAILED(hr))
     {
         return timeString;
     }

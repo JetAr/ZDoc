@@ -1,6 +1,6 @@
-//////////////////////////////////////////////////////////////////////////
+﻿//////////////////////////////////////////////////////////////////////////
 // Slider.h: Custom slider control.
-// 
+//
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -26,17 +26,18 @@ const UINT WM_SLIDER_SET_POSITION = WM_USER + 5;			// wparam = position
 
 // lparam = LPNMSLIDER_INFO
 
-const int SLIDER_NOTIFY_SELECT = 0;	
-const int SLIDER_NOTIFY_RELEASE = 1;	
-const int SLIDER_NOTIFY_DRAG = 2;	
+const int SLIDER_NOTIFY_SELECT = 0;
+const int SLIDER_NOTIFY_RELEASE = 1;
+const int SLIDER_NOTIFY_DRAG = 2;
 
 // NMSLIDER_INFO:
 // Custom notification structure.
 
-typedef struct tag_NMSLIDER_INFO {
+typedef struct tag_NMSLIDER_INFO
+{
     NMHDR hdr;
-    BOOL  bSelected;    
-	LONG  position;
+    BOOL  bSelected;
+    LONG  position;
 } NMSLIDER_INFO, *LPNMSLIDER_INFO;
 
 
@@ -45,9 +46,9 @@ class Slider : public Control
 {
 public:
 
-	HRESULT Create(HWND hParent, const Rect& rcSize, DWORD_PTR id);
-	HRESULT SetThumbBitmap(UINT nId);
-	HRESULT SetBackground(HBRUSH hBackground);
+    HRESULT Create(HWND hParent, const Rect& rcSize, DWORD_PTR id);
+    HRESULT SetThumbBitmap(UINT nId);
+    HRESULT SetBackground(HBRUSH hBackground);
     LONG GetPosition() const;
     HRESULT SetPosition(LONG pos);
     HRESULT SetRange(LONG min, LONG max);

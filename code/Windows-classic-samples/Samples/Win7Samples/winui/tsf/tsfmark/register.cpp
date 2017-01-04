@@ -1,4 +1,4 @@
-//
+﻿//
 // register.cpp
 //
 // Server registration code.
@@ -22,7 +22,7 @@ c_rgCategories[] =
     { &GUID_TFCAT_TIP_KEYBOARD, &c_clsidMarkTextService },
     { &GUID_TFCAT_DISPLAYATTRIBUTEPROVIDER, &c_clsidMarkTextService },
     { &GUID_TFCAT_PROPSTYLE_STATICCOMPACT, &c_guidCaseProperty },
-    { &GUID_TFCAT_PROPSTYLE_CUSTOM, &c_guidCustomProperty },    
+    { &GUID_TFCAT_PROPSTYLE_CUSTOM, &c_guidCustomProperty },
 };
 
 static const TCHAR c_szInfoKeyPrefix[] = TEXT("CLSID\\");
@@ -65,13 +65,13 @@ BOOL CMarkTextService::RegisterProfiles()
     achIconFile[cchIconFile] = '\0';
 
     hr = pInputProcessProfiles->AddLanguageProfile(c_clsidMarkTextService,
-                                  MARK_LANGID, 
-                                  c_guidMarkProfile, 
-                                  c_szMarkDescW, 
-                                  ARRAYSIZE(c_szMarkDescW) - 1,
-                                  achIconFile,
-                                  cchIconFile,
-                                  MARK_ICON_INDEX);
+            MARK_LANGID,
+            c_guidMarkProfile,
+            c_szMarkDescW,
+            ARRAYSIZE(c_szMarkDescW) - 1,
+            achIconFile,
+            cchIconFile,
+            MARK_ICON_INDEX);
 
 Exit:
     pInputProcessProfiles->Release();
@@ -111,7 +111,7 @@ BOOL CMarkTextService::RegisterCategories(BOOL fRegister)
     int i;
     HRESULT hr;
 
-    hr = CoCreateInstance(CLSID_TF_CategoryMgr, NULL, CLSCTX_INPROC_SERVER, 
+    hr = CoCreateInstance(CLSID_TF_CategoryMgr, NULL, CLSCTX_INPROC_SERVER,
                           IID_ITfCategoryMgr, (void**)&pCategoryMgr);
 
     if (hr != S_OK)
@@ -122,12 +122,12 @@ BOOL CMarkTextService::RegisterCategories(BOOL fRegister)
         if (fRegister)
         {
             hr = pCategoryMgr->RegisterCategory(c_clsidMarkTextService,
-                   *c_rgCategories[i].pguidCategory, *c_rgCategories[i].pguid);
+                                                *c_rgCategories[i].pguidCategory, *c_rgCategories[i].pguid);
         }
         else
         {
             hr = pCategoryMgr->UnregisterCategory(c_clsidMarkTextService,
-                   *c_rgCategories[i].pguidCategory, *c_rgCategories[i].pguid);
+                                                  *c_rgCategories[i].pguidCategory, *c_rgCategories[i].pguid);
         }
 
         if (hr != S_OK)
@@ -145,7 +145,8 @@ BOOL CMarkTextService::RegisterCategories(BOOL fRegister)
 //----------------------------------------------------------------------------
 
 static const BYTE GuidMap[] = {3, 2, 1, 0, '-', 5, 4, '-', 7, 6, '-',
-    8, 9, '-', 10, 11, 12, 13, 14, 15};
+                               8, 9, '-', 10, 11, 12, 13, 14, 15
+                              };
 
 static const char szDigits[] = "0123456789ABCDEF";
 static const WCHAR wszDigits[] = L"0123456789ABCDEF";
@@ -264,13 +265,13 @@ BOOL CMarkTextService::RegisterServer()
     memcpy(achIMEKey, c_szInfoKeyPrefix, sizeof(c_szInfoKeyPrefix)-sizeof(TCHAR));
 
     if (fRet = RegCreateKeyEx(HKEY_CLASSES_ROOT, achIMEKey, 0, NULL, REG_OPTION_NON_VOLATILE, KEY_WRITE, NULL, &hKey, &dw)
-            == ERROR_SUCCESS)
+               == ERROR_SUCCESS)
     {
         fRet &= RegSetValueEx(hKey, NULL, 0, REG_SZ, (BYTE *)c_szMarkDesc, sizeof(c_szMarkDesc))
-            == ERROR_SUCCESS;
+                == ERROR_SUCCESS;
 
         if (fRet &= RegCreateKeyEx(hKey, c_szInProcSvr32, 0, NULL, REG_OPTION_NON_VOLATILE, KEY_WRITE, NULL, &hSubKey, &dw)
-            == ERROR_SUCCESS)
+                    == ERROR_SUCCESS)
         {
             dw = GetModuleFileName(g_hInst, achFileName, ARRAYSIZE(achFileName));
             dw = min(dw, (ARRAYSIZE(achFileName) - 1));

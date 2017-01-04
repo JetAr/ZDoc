@@ -1,5 +1,5 @@
-//--------------------------------------------------------------------
-// Microsoft OLE DB Sample Provider 
+﻿//--------------------------------------------------------------------
+// Microsoft OLE DB Sample Provider
 // (C) Copyright 1991 - 1999 Microsoft Corporation. All Rights Reserved.
 //
 // @doc
@@ -13,12 +13,12 @@
 
 //-----------  structs and #defines -------------------------------------------
 
-// @struct PROPSTRUCT  | simple table used to store property information. Used in 
+// @struct PROPSTRUCT  | simple table used to store property information. Used in
 // our read-only implementation of IDBProperties::GetPropertyInfo and IRowsetInfo::GetProperties
 typedef struct _tagPROPSTRUCT
-    {
+{
     DBPROPID	dwPropertyID;
-	DBPROPFLAGS dwFlags;
+    DBPROPFLAGS dwFlags;
     VARTYPE     vtType;
     BOOL        boolVal;
 #ifdef _WIN64
@@ -28,8 +28,8 @@ typedef struct _tagPROPSTRUCT
 #endif
     PWSTR       pwstrVal;
     PWSTR		pwstrDescBuffer;
-    } PROPSTRUCT;
-								   
+} PROPSTRUCT;
+
 
 // Number of supported properties per property set
 #define	NUMBER_OF_SUPPORTED_PROPERTY_SETS	4
@@ -69,91 +69,91 @@ const DWORD		PROPSET_ROWSET	= 0x0008;
 // Classes -------------------------------------------------------------------
 
 //----------------------------------------------------------------------------
-// @class CUtilProp | Containing class for all interfaces on the UtilProp 
+// @class CUtilProp | Containing class for all interfaces on the UtilProp
 // Object
 //
 class CUtilProp
 {
-	private:
-		size_t	m_cwchNamePool;
-		LPWSTR	m_pwchNamePool;	
+private:
+    size_t	m_cwchNamePool;
+    LPWSTR	m_pwchNamePool;
 
-	protected: //@access protected
-		PROPSTRUCT	m_rgproperties[NUMBER_OF_SUPPORTED_PROPERTIES];
-		WCHAR		m_wszFilePath[MAX_PATH];
-        
-		//@cmember Gets index of entry for a given property in global property table
-        BOOL GetPropIndex
-        	(
-		       	DBPROPID	dwPropertyID,
-			 	ULONG*		pulIndex
-        	);
+protected: //@access protected
+    PROPSTRUCT	m_rgproperties[NUMBER_OF_SUPPORTED_PROPERTIES];
+    WCHAR		m_wszFilePath[MAX_PATH];
 
-        //@cmember Loads fields of DBPROPINFO struct. Helper for GetPropertyInfo            
-        void LoadDBPROPINFO
-            (
-				PROPSTRUCT*		pPropStruct,
-				DBPROPINFO*		pPropInfo
-            );
+    //@cmember Gets index of entry for a given property in global property table
+    BOOL GetPropIndex
+    (
+        DBPROPID	dwPropertyID,
+        ULONG*		pulIndex
+    );
 
-        //@cmember Loads fields of DBPROP struct. Helper for GetProperties
-        HRESULT LoadDBPROP
-            (
-				PROPSTRUCT*	pPropStruct,
-				DBPROP*		pPropSupport
-            );
+    //@cmember Loads fields of DBPROPINFO struct. Helper for GetPropertyInfo
+    void LoadDBPROPINFO
+    (
+        PROPSTRUCT*		pPropStruct,
+        DBPROPINFO*		pPropInfo
+    );
 
-        //@cmember Checks to see if the value is valid. Helper for SetProperties
-		HRESULT IsValidValue
-			(
-			DBPROP*		pDBProp
-			);
+    //@cmember Loads fields of DBPROP struct. Helper for GetProperties
+    HRESULT LoadDBPROP
+    (
+        PROPSTRUCT*	pPropStruct,
+        DBPROP*		pPropSupport
+    );
 
-	public: //@access public
-		//@cmember Constructor		 
-		 CUtilProp(void);
-		//@cmember Destructor
-		~CUtilProp(void);
+    //@cmember Checks to see if the value is valid. Helper for SetProperties
+    HRESULT IsValidValue
+    (
+        DBPROP*		pDBProp
+    );
 
-		static HRESULT CUtilProp::GetPropertiesArgChk
-			(
-			DWORD					dwBitMask,
-			const ULONG				cPropertySets,
-			const DBPROPIDSET		rgPropertySets[],
-			ULONG*					pcProperties,
-			DBPROPSET**				prgProperties
-			);
+public: //@access public
+    //@cmember Constructor
+    CUtilProp(void);
+    //@cmember Destructor
+    ~CUtilProp(void);
 
-		STDMETHODIMP GetProperties
-		    (
-				DWORD				dwBitMask,
-			    ULONG				cPropertySets,
-			    const DBPROPIDSET	rgPropertySets[],
-			    ULONG*              pcProperties,
-			    DBPROPSET**			prgProperties
-		    );
+    static HRESULT CUtilProp::GetPropertiesArgChk
+    (
+        DWORD					dwBitMask,
+        const ULONG				cPropertySets,
+        const DBPROPIDSET		rgPropertySets[],
+        ULONG*					pcProperties,
+        DBPROPSET**				prgProperties
+    );
 
-		STDMETHODIMP GetPropertyInfo
-		    (
-				BOOL				fDSOInitialized,
-			    ULONG				cPropertySets,		
-			    const DBPROPIDSET	rgPropertySets[],	
-				ULONG*				pcPropertyInfoSets,	
-				DBPROPINFOSET**		prgPropertyInfoSets,
-				WCHAR**				ppDescBuffer		
-		    );
+    STDMETHODIMP GetProperties
+    (
+        DWORD				dwBitMask,
+        ULONG				cPropertySets,
+        const DBPROPIDSET	rgPropertySets[],
+        ULONG*              pcProperties,
+        DBPROPSET**			prgProperties
+    );
 
-		static HRESULT	SetPropertiesArgChk
-			(	const ULONG			cProperties, 
-				const DBPROPSET		rgProperties[]
-			);
+    STDMETHODIMP GetPropertyInfo
+    (
+        BOOL				fDSOInitialized,
+        ULONG				cPropertySets,
+        const DBPROPIDSET	rgPropertySets[],
+        ULONG*				pcPropertyInfoSets,
+        DBPROPINFOSET**		prgPropertyInfoSets,
+        WCHAR**				ppDescBuffer
+    );
 
-		STDMETHODIMP SetProperties
-			(
-				DWORD				dwBitMask,
-				ULONG				cProperties,
-				DBPROPSET			rgProperties[]
-			);
+    static HRESULT	SetPropertiesArgChk
+    (	const ULONG			cProperties,
+        const DBPROPSET		rgProperties[]
+    );
+
+    STDMETHODIMP SetProperties
+    (
+        DWORD				dwBitMask,
+        ULONG				cProperties,
+        DBPROPSET			rgProperties[]
+    );
 
 };
 

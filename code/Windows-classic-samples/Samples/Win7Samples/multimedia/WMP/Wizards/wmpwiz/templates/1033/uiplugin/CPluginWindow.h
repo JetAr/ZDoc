@@ -1,4 +1,4 @@
-/////////////////////////////////////////////////////////////////////////////
+﻿/////////////////////////////////////////////////////////////////////////////
 //
 // CPluginWindow.h : Declaration of the CPluginWindow
 //
@@ -12,8 +12,8 @@ class CPluginWindow : public CWindowImpl<CPluginWindow>
 {
 public:
     BEGIN_MSG_MAP(CPluginWindow)
-        MESSAGE_HANDLER(WM_PAINT, OnPaint)
-        MESSAGE_HANDLER(WM_ERASEBKGND, OnEraseBackground)
+    MESSAGE_HANDLER(WM_PAINT, OnPaint)
+    MESSAGE_HANDLER(WM_ERASEBKGND, OnEraseBackground)
     END_MSG_MAP()
 
     CPluginWindow(C[!output Safe_root] *pPlugin)
@@ -21,15 +21,15 @@ public:
         m_pPlugin = pPlugin;
     }
 
-    LRESULT OnEraseBackground(UINT nMsg, WPARAM wParam, 
-                   LPARAM lParam, BOOL& bHandled)
+    LRESULT OnEraseBackground(UINT nMsg, WPARAM wParam,
+                              LPARAM lParam, BOOL& bHandled)
     {
         // avoid erasing background to reduce flicker on resize
         return 1;
     }
 
-    LRESULT OnPaint(UINT nMsg, WPARAM wParam, 
-                   LPARAM lParam, BOOL& bHandled)
+    LRESULT OnPaint(UINT nMsg, WPARAM wParam,
+                    LPARAM lParam, BOOL& bHandled)
     {
         PAINTSTRUCT ps;
 
@@ -39,19 +39,19 @@ public:
         GetClientRect(&rc);
 
         HBRUSH hNewBrush = ::CreateSolidBrush( RGB(0, 0, 0) );
-        
+
         if (hNewBrush)
         {
-[!if HASPROPERTYPAGE]
+            [!if HASPROPERTYPAGE]
             WCHAR *wszDisplayString = m_pPlugin->m_wszPluginText;
-[!else]
+            [!else]
             WCHAR *wszDisplayString = L"[!output root] Plugin";
-[!endif]
+            [!endif]
             ::FillRect(hDC, &rc, hNewBrush );
             ::DeleteObject( hNewBrush );
             ::DrawText(hDC, wszDisplayString, lstrlen(wszDisplayString), &rc, DT_SINGLELINE | DT_VCENTER | DT_CENTER);
         }
-        
+
         EndPaint(&ps);
         return 0;
     }

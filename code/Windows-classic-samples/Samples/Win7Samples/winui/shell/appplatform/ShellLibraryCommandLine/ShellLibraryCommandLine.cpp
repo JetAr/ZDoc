@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -273,7 +273,10 @@ public:
 
 protected:
     // derived classes override these functions to process arguments, execute operations on the library, and print usage instructions
-    virtual HRESULT v_ProcessLibArguments(PCWSTR*, int) { return S_OK; }
+    virtual HRESULT v_ProcessLibArguments(PCWSTR*, int)
+    {
+        return S_OK;
+    }
     virtual HRESULT v_ExecuteLibCommand() = 0;
     virtual void v_PrintLibInstructions() const {}
 
@@ -655,7 +658,10 @@ public:
     }
 
 protected:
-    virtual HRESULT v_ProcessFolderArguments(PCWSTR*, int) { return S_OK; }
+    virtual HRESULT v_ProcessFolderArguments(PCWSTR*, int)
+    {
+        return S_OK;
+    }
 
     IShellItem *_psiFolder;
     PWSTR _pszFolderPath;
@@ -855,7 +861,10 @@ public:
     }
 
     // This is not used since CShlibCommandBase::v_ExecuteCommand has been overridden directly.
-    HRESULT v_ExecuteLibCommand() { return E_NOTIMPL; }
+    HRESULT v_ExecuteLibCommand()
+    {
+        return E_NOTIMPL;
+    }
 };
 
 
@@ -917,7 +926,10 @@ public:
     }
 
     // This is not used since CShlibCommandBase::v_ExecuteCommand has been overridden directly.
-    HRESULT v_ExecuteLibCommand() { return E_NOTIMPL; }
+    HRESULT v_ExecuteLibCommand()
+    {
+        return E_NOTIMPL;
+    }
 
     ~CManageCommand()
     {

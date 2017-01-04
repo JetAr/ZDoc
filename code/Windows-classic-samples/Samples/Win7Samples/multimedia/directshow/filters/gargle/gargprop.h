@@ -1,4 +1,4 @@
-//------------------------------------------------------------------------------
+﻿//------------------------------------------------------------------------------
 // File: GargProp.h
 //
 // Desc: DirectShow sample code - definition of CGargleProperties class,
@@ -48,10 +48,10 @@ private:
     HWND        m_hwndSlider;   // handle of slider
 
     IGargle   *m_pGargle;       // pointer to the IGargle interface of the
-                                // gargle filter.  Set up in OnConnect.
+    // gargle filter.  Set up in OnConnect.
 
     int        m_iGargleRate;   // Remember gargle rate between
-                                // Deactivate / Activate calls.
+    // Deactivate / Activate calls.
     int        m_iGargleShape;  // 0 = triangle (default), 1 = square wave.
 
 };  // class CGargleProperties

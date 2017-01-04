@@ -1,4 +1,4 @@
-//
+﻿//
 // langbar.cpp
 //
 // Language bar ui code.
@@ -26,7 +26,7 @@ c_rgMenuItems[] =
 };
 
 class CLangBarItemButton : public ITfLangBarItemButton,
-                           public ITfSource
+    public ITfSource
 {
 public:
     CLangBarItemButton(CMarkTextService *pMark);
@@ -110,8 +110,8 @@ STDAPI CLangBarItemButton::QueryInterface(REFIID riid, void **ppvObj)
     *ppvObj = NULL;
 
     if (IsEqualIID(riid, IID_IUnknown) ||
-        IsEqualIID(riid, IID_ITfLangBarItem) ||
-        IsEqualIID(riid, IID_ITfLangBarItemButton))
+            IsEqualIID(riid, IID_ITfLangBarItem) ||
+            IsEqualIID(riid, IID_ITfLangBarItemButton))
     {
         *ppvObj = (ITfLangBarItemButton *)this;
     }

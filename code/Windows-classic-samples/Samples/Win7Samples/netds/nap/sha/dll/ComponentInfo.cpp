@@ -1,4 +1,4 @@
-// ComponentInfo.cpp : Implementation of CComponentInfo
+﻿// ComponentInfo.cpp : Implementation of CComponentInfo
 
 #include "stdafx.h"
 #include "ComponentInfo.h"
@@ -99,17 +99,17 @@ GetIcon(
     dllModuleHandle = GetModuleHandleW(SHA_SDK_SAMPLE_DLL_FILE_NAME);
     if (NULL == dllModuleHandle)
     {
-      // Failed to get the module handle
-      hr = HRESULT_FROM_WIN32(GetLastError());
-      DebugPrintfW(L" ---          GetModuleHandleW failed to get the module handle (error = 0x%08x)",hr);
-      goto Cleanup;
+        // Failed to get the module handle
+        hr = HRESULT_FROM_WIN32(GetLastError());
+        DebugPrintfW(L" ---          GetModuleHandleW failed to get the module handle (error = 0x%08x)",hr);
+        goto Cleanup;
     }
 
     DWORD fileNameLength = 0;
     fileNameLength = GetModuleFileNameW(
-                                        dllModuleHandle,
-                                        (*ppDllFilePath)->string,
-                                        (MAX_PATH+1));
+                         dllModuleHandle,
+                         (*ppDllFilePath)->string,
+                         (MAX_PATH+1));
 
     if (fileNameLength == (MAX_PATH+1) && ERROR_INSUFFICIENT_BUFFER == GetLastError())
     {
@@ -131,12 +131,12 @@ GetIcon(
     *pIconResourceId = IDI_ICON1; // Defined in Resource.h
 
 
-    Cleanup:
-        if (FAILED(hr) && (*ppDllFilePath))
-        {
-            FreeMemory(*ppDllFilePath);
-        }
-        return hr;
+Cleanup:
+    if (FAILED(hr) && (*ppDllFilePath))
+    {
+        FreeMemory(*ppDllFilePath);
+    }
+    return hr;
 }
 
 STDMETHODIMP CComponentInfo::ConvertErrorCodeToMessageId(HRESULT errorCode, MessageId * pMsgId)
@@ -152,18 +152,18 @@ STDMETHODIMP CComponentInfo::ConvertErrorCodeToMessageId(HRESULT errorCode, Mess
     // The following cases are examples, add more error codes here
     switch (errorCode)
     {
-        case QUAR_E_NOTPATCHED:
-            *pMsgId = SDK_SAMPLE_CLIENT_NOT_PATCHED_MSG_ID;
-            break;
-        case S_OK:
-            *pMsgId = SDK_SAMPLE_COMPLIANT_CLIENT_MSG_ID;
-            break;
-        default:
-            // return an error
-            hr = E_UNEXPECTED;
-            DebugPrintfW(L" ---          Unknown error code (error = 0x%08x)",
-            hr);
-            break;
+    case QUAR_E_NOTPATCHED:
+        *pMsgId = SDK_SAMPLE_CLIENT_NOT_PATCHED_MSG_ID;
+        break;
+    case S_OK:
+        *pMsgId = SDK_SAMPLE_COMPLIANT_CLIENT_MSG_ID;
+        break;
+    default:
+        // return an error
+        hr = E_UNEXPECTED;
+        DebugPrintfW(L" ---          Unknown error code (error = 0x%08x)",
+                     hr);
+        break;
 
     }
 
@@ -183,7 +183,7 @@ STDMETHODIMP CComponentInfo::GetLocalizedString(MessageId msgId, CountedString *
     *ppString = NULL;
 
     // Allocate memory for string
-    hr = AllocateMemory(*ppString, MAX_PATH_WCHAR_SIZE);  
+    hr = AllocateMemory(*ppString, MAX_PATH_WCHAR_SIZE);
     if (FAILED(hr))
     {
         goto Cleanup;
@@ -192,26 +192,26 @@ STDMETHODIMP CComponentInfo::GetLocalizedString(MessageId msgId, CountedString *
     dllModuleHandle = GetModuleHandleW(SHA_SDK_SAMPLE_DLL_FILE_NAME);
     if (NULL == dllModuleHandle)
     {
-      // Failed to get the module handle
-      hr = HRESULT_FROM_WIN32(GetLastError());
-      DebugPrintfW(L" ---          GetModuleHandleW failed to get the module handle (error = 0x%08x)",hr);
-      goto Cleanup;
+        // Failed to get the module handle
+        hr = HRESULT_FROM_WIN32(GetLastError());
+        DebugPrintfW(L" ---          GetModuleHandleW failed to get the module handle (error = 0x%08x)",hr);
+        goto Cleanup;
     }
-	
+
     // Read from the resource file
     DWORD stringLength = 0;
     stringLength = FormatMessageW(FORMAT_MESSAGE_FROM_HMODULE,
-                            dllModuleHandle,
-                            msgId,
-                            LANG_ID,
-                            (*ppString)->string,
-                            (MAX_PATH+1) ,
-                            NULL);
+                                  dllModuleHandle,
+                                  msgId,
+                                  LANG_ID,
+                                  (*ppString)->string,
+                                  (MAX_PATH+1),
+                                  NULL);
 
-    // if failed to read from the mc file, return error    
-    if (stringLength == 0)  
+    // if failed to read from the mc file, return error
+    if (stringLength == 0)
     {
-	hr = HRESULT_FROM_WIN32(GetLastError());        
+        hr = HRESULT_FROM_WIN32(GetLastError());
         DebugPrintfW(L" ---          Error getting FormatMessageW (error = 0x%08x)", hr);
         goto Cleanup;
     }

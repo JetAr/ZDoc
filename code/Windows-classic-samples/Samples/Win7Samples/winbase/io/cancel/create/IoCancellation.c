@@ -1,6 +1,6 @@
-//======================================================================
+﻿//======================================================================
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-// KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE 
+// KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
 // IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
 // PURPOSE.
 //
@@ -16,7 +16,7 @@
     Abstract:
 
         Implementation of the safe IO cancellation interface
-                
+
 --*/
 
 #include <windows.h>
@@ -27,7 +27,7 @@
 DWORD
 IoCancellationCreate(
     PIO_CANCELLATION_OBJECT* ppObject
-	)
+)
 /*++
 
 Routine Description:
@@ -39,7 +39,7 @@ Arguments:
     ppObject - Pointer to receive new cancellation object.
 
 Return values:
- 
+
     ERROR_NOT_SUPPORTED if the OS does not support synchronous cancellation.
 	ERROR_SUCCESS if the creation was successful.
 	Otherwise an appropriate error code is returned.
@@ -57,7 +57,8 @@ Return values:
     // Load CancelSynchronousIo dynamically from kernel32.dll
     //
     hKernel32 = GetModuleHandleW(L"kernel32.dll");
-    if (!hKernel32) {
+    if (!hKernel32)
+    {
         err = GetLastError();
         goto cleanup;
     }
@@ -66,10 +67,12 @@ Return values:
     // Return ERROR_NOT_SUPPORTED CancelSynchronousIo not found
     //
     pfnCancel = (PFN_CancelSynchronousIo)
-        GetProcAddress(hKernel32, "CancelSynchronousIo");
-    if (!pfnCancel) {
+                GetProcAddress(hKernel32, "CancelSynchronousIo");
+    if (!pfnCancel)
+    {
         err = GetLastError();
-        if (err == ERROR_PROC_NOT_FOUND) {
+        if (err == ERROR_PROC_NOT_FOUND)
+        {
             err = ERROR_NOT_SUPPORTED;
         }
 
@@ -80,14 +83,16 @@ Return values:
     // Allocate and initialize the object
     //
     pObject = (PIO_CANCELLATION_OBJECT)
-        HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(*pObject));
-    if (!pObject) {
+              HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(*pObject));
+    if (!pObject)
+    {
         err = ERROR_OUTOFMEMORY;
         goto cleanup;
     }
 
     fCS = InitializeCriticalSectionAndSpinCount(&pObject->aCS, 0);
-    if (!fCS) {
+    if (!fCS)
+    {
         err = GetLastError();
         goto cleanup;
     }
@@ -105,9 +110,11 @@ Return values:
     pObject   = NULL;
 
 cleanup:
-    
-    if (pObject) {
-        if (fCS) {
+
+    if (pObject)
+    {
+        if (fCS)
+        {
             DeleteCriticalSection(&pObject->aCS);
         }
 
@@ -139,7 +146,8 @@ Arguments:
 
     assert(!pObject->fPendingIo);
 
-    if (pObject->hThread) {
+    if (pObject->hThread)
+    {
         CloseHandle(pObject->hThread);
     }
 
@@ -153,12 +161,12 @@ Arguments:
 DWORD
 IoCancellationSectionEnter(
     PIO_CANCELLATION_OBJECT pObject
-	)
+)
 /*++
 
 Routine Description:
 
-    Used to indicate the start of a portion of code in which a 
+    Used to indicate the start of a portion of code in which a
 	synchronous operation can be cancelled.
 	.
 
@@ -180,7 +188,8 @@ Arguments:
     //
     // Check if already canceled
     //
-    if (pObject->fCanceled) {
+    if (pObject->fCanceled)
+    {
         err = ERROR_OPERATION_ABORTED;
         goto cleanup;
     }
@@ -188,7 +197,8 @@ Arguments:
     //
     // Replace the thread handle if needed
     //
-    if (pObject->hThread && pObject->dwThreadId != GetCurrentThreadId()) {
+    if (pObject->hThread && pObject->dwThreadId != GetCurrentThreadId())
+    {
 
         CloseHandle(pObject->hThread);
         pObject->hThread    = NULL;
@@ -197,25 +207,27 @@ Arguments:
 
     //
     // GetCurrentThread returns pseudo handle for the calling thread
-    // and it always refers to the current thread; therefore it can't 
-	// be used for CancelSynchronousIo.
+    // and it always refers to the current thread; therefore it can't
+    // be used for CancelSynchronousIo.
     // DuplicateHandle will return a normal handle that can
     // be used cross thread.
     //
-    if (!pObject->hThread) {
+    if (!pObject->hThread)
+    {
         //
         // CancelSynchronousIo actually requires only THREAD_TERMINATE
         //
         BOOL fOK =  DuplicateHandle(
-            GetCurrentProcess(), 
-            GetCurrentThread(), 
-            GetCurrentProcess(),
-            &pObject->hThread, 
-            THREAD_ALL_ACCESS,
-            FALSE,   // not inherited
-            0
-        );
-        if (!fOK) {
+                        GetCurrentProcess(),
+                        GetCurrentThread(),
+                        GetCurrentProcess(),
+                        &pObject->hThread,
+                        THREAD_ALL_ACCESS,
+                        FALSE,   // not inherited
+                        0
+                    );
+        if (!fOK)
+        {
             err = GetLastError();
             goto cleanup;
         }
@@ -236,12 +248,12 @@ cleanup:
 DWORD
 IoCancellationSectionLeave(
     PIO_CANCELLATION_OBJECT pObject
-	)
+)
 /*++
 
 Routine Description:
 
-    Used to indicate the end of a portion of code in which a 
+    Used to indicate the end of a portion of code in which a
 	synchronous operation can be cancelled.
 	.
 
@@ -267,13 +279,14 @@ Return Value:
     assert(pObject->hThread != NULL);
     assert(pObject->dwThreadId == GetCurrentThreadId());
     assert(pObject->fPendingIo);
-    
+
     //
     // Clearing the pending flag always succeeds
     //
     pObject->fPendingIo = FALSE;
 
-    if (pObject->fCanceled) {
+    if (pObject->fCanceled)
+    {
 
         err = ERROR_OPERATION_ABORTED;
         goto cleanup;
@@ -290,7 +303,7 @@ cleanup:
 VOID
 IoCancellationSignal(
     PIO_CANCELLATION_OBJECT pObject
-	)
+)
 /*++
 
 Routine Description:
@@ -313,13 +326,14 @@ Arguments:
 
     //
     // Retry 3 times in case that the IO has not yet made it to
-	// the driver and CancelSynchronousIo returns ERROR_NOT_FOUND
+    // the driver and CancelSynchronousIo returns ERROR_NOT_FOUND
     //
     for (dwRetryCount = 0 ; dwRetryCount < 3 ; ++dwRetryCount)
     {
         BOOL fOK = FALSE;
 
-        if (!pObject->fPendingIo) {
+        if (!pObject->fPendingIo)
+        {
             break;
         }
 
@@ -328,15 +342,16 @@ Arguments:
         //
         // Ignore cancel errors since it's only optional for drivers
         //
-        fOK = pObject->pfnCancelSynchronousIo(pObject->hThread);        
+        fOK = pObject->pfnCancelSynchronousIo(pObject->hThread);
 
-        if (fOK || GetLastError() != ERROR_NOT_FOUND) {
+        if (fOK || GetLastError() != ERROR_NOT_FOUND)
+        {
             break;
         }
 
         //
-        // There is small window in which CancelSynchronousIo can be called before (or after) 
-        // the actual IO operation and in this case we can retry to cancel after a short delay 
+        // There is small window in which CancelSynchronousIo can be called before (or after)
+        // the actual IO operation and in this case we can retry to cancel after a short delay
         // in which it's probable that we'll not miss the operation.
         //
 
@@ -365,12 +380,12 @@ CancelableCreateFileW(
     DWORD                   dwCreationDisposition,
     DWORD                   dwFlagsAndAttributes,
     HANDLE                  hTemplateFile
-	)
+)
 /*++
 
 Routine Description:
 
-    Function that calls CreateFileW in a cancellation section and therefore 
+    Function that calls CreateFileW in a cancellation section and therefore
 	can be canceled using IoCancellationSignal from another thread.
 
 Arguments:
@@ -379,7 +394,7 @@ Arguments:
 	    On failure this will be INVALID_HANDLE_VALUE.
 
 
-    pCancellationObject - Pointer to cancellation object created with 
+    pCancellationObject - Pointer to cancellation object created with
 	    IoCancellationCreate.
 
     wszFileName - File name to open.
@@ -410,7 +425,8 @@ Return value:
     *phFile = INVALID_HANDLE_VALUE;
 
     err = IoCancellationSectionEnter(pCancellationObject);
-    if (err) {
+    if (err)
+    {
         goto cleanup;
     }
 
@@ -418,16 +434,17 @@ Return value:
     // Cancellation section contains a single call to CreateFileW
     //
     hFile = CreateFileW(
-        wszFileName,
-        dwDesiredAccess,
-        dwShareMode,
-        lpSecurityAttributes,
-        dwCreationDisposition,
-        dwFlagsAndAttributes,
-        hTemplateFile
-    );
+                wszFileName,
+                dwDesiredAccess,
+                dwShareMode,
+                lpSecurityAttributes,
+                dwCreationDisposition,
+                dwFlagsAndAttributes,
+                hTemplateFile
+            );
 
-    if (hFile == INVALID_HANDLE_VALUE) {
+    if (hFile == INVALID_HANDLE_VALUE)
+    {
         err = GetLastError();
     }
 
@@ -435,11 +452,13 @@ Return value:
     // Leave must be called after successful Enter
     //
     err = IoCancellationSectionLeave(pCancellationObject);
-    if (err) {
+    if (err)
+    {
         goto cleanup;
     }
 
-    if (hFile == INVALID_HANDLE_VALUE) {
+    if (hFile == INVALID_HANDLE_VALUE)
+    {
         err = GetLastError();
         goto cleanup;
     }
@@ -449,7 +468,8 @@ Return value:
 
 cleanup:
 
-    if (hFile != INVALID_HANDLE_VALUE) {
+    if (hFile != INVALID_HANDLE_VALUE)
+    {
         CloseHandle(hFile);
     }
 

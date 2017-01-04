@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -43,12 +43,12 @@ int CApplication::Run()
 
     if (SUCCEEDED(Initialize()))
     {
-       result = EnterMessageLoop();
+        result = EnterMessageLoop();
     }
 
     else
     {
-       MessageBoxW(NULL, L"An error occuring when running the sample", NULL, MB_OK);
+        MessageBoxW(NULL, L"An error occuring when running the sample", NULL, MB_OK);
     }
 
     Destroy();
@@ -138,7 +138,7 @@ HRESULT CApplication::InitializeMainWindow()
                                    NULL,                                            // Class menu
                                    GetModuleHandle(NULL),                           // Handle to application instance
                                    NULL                                             // Window-creation data
-                                   );
+                                  );
 
     if (!m_hMainWindow)
     {
@@ -454,16 +454,16 @@ HRESULT CApplication::CreateD3D11Device()
         CComPtr<ID3D11DeviceContext> d3d11DeviceContext;
 
         hr = D3D11CreateDevice(
-            nullptr,
-            driverTypes[i],
-            NULL,
-            D3D11_CREATE_DEVICE_BGRA_SUPPORT,
-            NULL,
-            0,
-            D3D11_SDK_VERSION,
-            &d3d11Device,
-            &featureLevelSupported,
-            &d3d11DeviceContext);
+                 nullptr,
+                 driverTypes[i],
+                 NULL,
+                 D3D11_CREATE_DEVICE_BGRA_SUPPORT,
+                 NULL,
+                 0,
+                 D3D11_SDK_VERSION,
+                 &d3d11Device,
+                 &featureLevelSupported,
+                 &d3d11DeviceContext);
 
         if (SUCCEEDED(hr))
         {
@@ -1016,32 +1016,32 @@ LRESULT CALLBACK CApplication::WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, L
 
     switch (uMsg)
     {
-        case WM_COMMAND:
-            result = s_application->OnCommand(wParam);
-            break;
+    case WM_COMMAND:
+        result = s_application->OnCommand(wParam);
+        break;
 
-        case WM_RBUTTONUP:
-            result = s_application->OnRightClick();
-            break;
+    case WM_RBUTTONUP:
+        result = s_application->OnRightClick();
+        break;
 
-        case WM_TIMER:
-            result = s_application->OnTimer();
-            break;
+    case WM_TIMER:
+        result = s_application->OnTimer();
+        break;
 
-        case WM_PAINT:
-            result = s_application->OnPaint(hwnd);
-            break;
+    case WM_PAINT:
+        result = s_application->OnPaint(hwnd);
+        break;
 
-        case WM_CLOSE:
-            result = s_application->OnClose(hwnd);
-            break;
+    case WM_CLOSE:
+        result = s_application->OnClose(hwnd);
+        break;
 
-        case WM_DESTROY:
-            result = s_application->OnDestroy(hwnd);
-            break;
+    case WM_DESTROY:
+        result = s_application->OnDestroy(hwnd);
+        break;
 
-        default:
-            result = DefWindowProc(hwnd, uMsg, wParam, lParam);
+    default:
+        result = DefWindowProc(hwnd, uMsg, wParam, lParam);
     }
 
     return result;
@@ -1055,43 +1055,43 @@ HRESULT CApplication::OnCommand(int id)
 
     switch (id)
     {
-        case ID_ROTATE:
-            hr = s_application->OnRotate();
-            break;
+    case ID_ROTATE:
+        hr = s_application->OnRotate();
+        break;
 
-        case ID_SCALE:
-            hr = s_application->OnScale();
-            break;
+    case ID_SCALE:
+        hr = s_application->OnScale();
+        break;
 
-        case ID_SKEW:
-            hr = s_application->OnSkew();
-            break;
+    case ID_SKEW:
+        hr = s_application->OnSkew();
+        break;
 
-        case ID_PLAYSTOP:
-            // Play/Stop the video.
-            if (!s_pPlayer)
+    case ID_PLAYSTOP:
+        // Play/Stop the video.
+        if (!s_pPlayer)
+        {
+            PlayMediaFile();
+        }
+        else
+        {
+            MFP_MEDIAPLAYER_STATE state = MFP_MEDIAPLAYER_STATE_EMPTY;
+
+            hr = s_pPlayer->GetState(&state);
+
+            if (SUCCEEDED(hr))
             {
-                PlayMediaFile();
-            }
-            else
-            {
-                MFP_MEDIAPLAYER_STATE state = MFP_MEDIAPLAYER_STATE_EMPTY;
-
-                hr = s_pPlayer->GetState(&state);
-
-                if (SUCCEEDED(hr))
+                if (state == MFP_MEDIAPLAYER_STATE_PAUSED || state == MFP_MEDIAPLAYER_STATE_STOPPED)
                 {
-                    if (state == MFP_MEDIAPLAYER_STATE_PAUSED || state == MFP_MEDIAPLAYER_STATE_STOPPED)
-                    {
-                        hr = s_pPlayer->Play();
-                    }
-                    else if (state == MFP_MEDIAPLAYER_STATE_PLAYING)
-                    {
-                        hr = s_pPlayer->Pause();
-                    }
+                    hr = s_pPlayer->Play();
+                }
+                else if (state == MFP_MEDIAPLAYER_STATE_PLAYING)
+                {
+                    hr = s_pPlayer->Pause();
                 }
             }
-            break;
+        }
+        break;
     }
 
     return hr;
@@ -1366,8 +1366,8 @@ VOID CApplication::DestroyMainWindow()
 {
     if (m_hMainWindow != NULL)
     {
-       DestroyWindow(m_hMainWindow);
-       m_hMainWindow = NULL;
+        DestroyWindow(m_hMainWindow);
+        m_hMainWindow = NULL;
     }
 }
 
@@ -1375,20 +1375,20 @@ VOID CApplication::DestroyLayeredChildWindows()
 {
     if (m_hControlChildWindow != NULL)
     {
-       DestroyWindow(m_hControlChildWindow);
-       m_hControlChildWindow = NULL;
+        DestroyWindow(m_hControlChildWindow);
+        m_hControlChildWindow = NULL;
     }
 
     if (m_hTextChildWindow != NULL)
     {
-       DestroyWindow(m_hTextChildWindow);
-       m_hTextChildWindow = NULL;
+        DestroyWindow(m_hTextChildWindow);
+        m_hTextChildWindow = NULL;
     }
 
     if (m_hVideoChildWindow != NULL)
     {
-       DestroyWindow(m_hVideoChildWindow);
-       m_hVideoChildWindow = NULL;
+        DestroyWindow(m_hVideoChildWindow);
+        m_hVideoChildWindow = NULL;
     }
 }
 
@@ -1462,7 +1462,7 @@ HRESULT CApplication::PlayMediaFile()
                                   s_pPlayerCB,          // Callback pointer
                                   m_hVideoChildWindow,  // Video window
                                   &s_pPlayer
-                                  );
+                                 );
     }
 
     // Create a new media item for this URL.

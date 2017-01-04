@@ -1,4 +1,4 @@
-//------------------------------------------------------------
+﻿//------------------------------------------------------------
 // Copyright (c) Microsoft Corporation.  All rights reserved.
 //------------------------------------------------------------
 
@@ -13,7 +13,7 @@
 
 // Print out rich error info
 void PrintError(
-    __in HRESULT errorCode, 
+    __in HRESULT errorCode,
     __in_opt WS_ERROR* error)
 {
     wprintf(L"Failure: errorCode=0x%lx\n", errorCode);
@@ -62,75 +62,75 @@ struct SEND_STATE
 };
 
 HRESULT CALLBACK Send1(
-    __in HRESULT hr, 
-    __in WS_CALLBACK_MODEL callbackModel, 
-    __in void* state, 
+    __in HRESULT hr,
+    __in WS_CALLBACK_MODEL callbackModel,
+    __in void* state,
     __inout WS_ASYNC_OPERATION* next,
-    __in_opt const WS_ASYNC_CONTEXT* asyncContext, 
+    __in_opt const WS_ASYNC_CONTEXT* asyncContext,
     __in_opt WS_ERROR* error);
-    
+
 HRESULT CALLBACK Send2(
-    __in HRESULT hr, 
-    __in WS_CALLBACK_MODEL callbackModel, 
-    __in void* state, 
+    __in HRESULT hr,
+    __in WS_CALLBACK_MODEL callbackModel,
+    __in void* state,
     __inout WS_ASYNC_OPERATION* next,
-    __in_opt const WS_ASYNC_CONTEXT* asyncContext, 
+    __in_opt const WS_ASYNC_CONTEXT* asyncContext,
     __in_opt WS_ERROR* error);
-    
+
 HRESULT CALLBACK Send3(
-    __in HRESULT hr, 
-    __in WS_CALLBACK_MODEL callbackModel, 
-    __in void* state, 
+    __in HRESULT hr,
+    __in WS_CALLBACK_MODEL callbackModel,
+    __in void* state,
     __inout WS_ASYNC_OPERATION* next,
-    __in_opt const WS_ASYNC_CONTEXT* asyncContext, 
+    __in_opt const WS_ASYNC_CONTEXT* asyncContext,
     __in_opt WS_ERROR* error);
-    
+
 HRESULT CALLBACK Send4(
-    __in HRESULT hr, 
-    __in WS_CALLBACK_MODEL callbackModel, 
-    __in void* state, 
+    __in HRESULT hr,
+    __in WS_CALLBACK_MODEL callbackModel,
+    __in void* state,
     __inout WS_ASYNC_OPERATION* next,
-    __in_opt const WS_ASYNC_CONTEXT* asyncContext, 
+    __in_opt const WS_ASYNC_CONTEXT* asyncContext,
     __in_opt WS_ERROR* error);
-    
+
 HRESULT CALLBACK Send5(
-    __in HRESULT hr, 
-    __in WS_CALLBACK_MODEL callbackModel, 
-    __in void* state, 
+    __in HRESULT hr,
+    __in WS_CALLBACK_MODEL callbackModel,
+    __in void* state,
     __inout WS_ASYNC_OPERATION* next,
-    __in_opt const WS_ASYNC_CONTEXT* asyncContext, 
+    __in_opt const WS_ASYNC_CONTEXT* asyncContext,
     __in_opt WS_ERROR* error);
-    
+
 HRESULT CALLBACK Send6(
-    __in HRESULT hr, 
-    __in WS_CALLBACK_MODEL callbackModel, 
-    __in void* state, 
+    __in HRESULT hr,
+    __in WS_CALLBACK_MODEL callbackModel,
+    __in void* state,
     __inout WS_ASYNC_OPERATION* next,
-    __in_opt const WS_ASYNC_CONTEXT* asyncContext, 
+    __in_opt const WS_ASYNC_CONTEXT* asyncContext,
     __in_opt WS_ERROR* error);
-    
+
 HRESULT CALLBACK Send7(
-    __in HRESULT hr, 
-    __in WS_CALLBACK_MODEL callbackModel, 
-    __in void* state, 
+    __in HRESULT hr,
+    __in WS_CALLBACK_MODEL callbackModel,
+    __in void* state,
     __inout WS_ASYNC_OPERATION* next,
-    __in_opt const WS_ASYNC_CONTEXT* asyncContext, 
+    __in_opt const WS_ASYNC_CONTEXT* asyncContext,
     __in_opt WS_ERROR* error);
-    
+
 HRESULT CALLBACK Send8(
-    __in HRESULT hr, 
-    __in WS_CALLBACK_MODEL callbackModel, 
-    __in void* state, 
+    __in HRESULT hr,
+    __in WS_CALLBACK_MODEL callbackModel,
+    __in void* state,
     __inout WS_ASYNC_OPERATION* next,
-    __in_opt const WS_ASYNC_CONTEXT* asyncContext, 
+    __in_opt const WS_ASYNC_CONTEXT* asyncContext,
     __in_opt WS_ERROR* error);
-    
+
 HRESULT CALLBACK Send1(
-    __in HRESULT hr, 
-    __in WS_CALLBACK_MODEL callbackModel, 
-    __in void* state, 
+    __in HRESULT hr,
+    __in WS_CALLBACK_MODEL callbackModel,
+    __in void* state,
     __inout WS_ASYNC_OPERATION* next,
-    __in_opt const WS_ASYNC_CONTEXT* asyncContext, 
+    __in_opt const WS_ASYNC_CONTEXT* asyncContext,
     __in_opt WS_ERROR* error)
 {
     UNREFERENCED_PARAMETER(callbackModel);
@@ -141,18 +141,18 @@ HRESULT CALLBACK Send1(
 
     // Create a TCP duplex session channel
     hr = WsCreateChannel(
-        WS_CHANNEL_TYPE_DUPLEX_SESSION, 
-        WS_TCP_CHANNEL_BINDING, 
-        NULL, 
-        0, 
-        NULL, 
-        &sendState->channel, 
-        error);
+             WS_CHANNEL_TYPE_DUPLEX_SESSION,
+             WS_TCP_CHANNEL_BINDING,
+             NULL,
+             0,
+             NULL,
+             &sendState->channel,
+             error);
     if (FAILED(hr))
     {
         goto Exit;
     }
-    
+
     // Initialize address of service
     WS_ENDPOINT_ADDRESS address;
     address.url.chars = L"net.tcp://localhost/example";
@@ -160,13 +160,13 @@ HRESULT CALLBACK Send1(
     address.headers = NULL;
     address.extensions = NULL;
     address.identity = NULL;
-    
+
     // Open channel to address
     hr = WsOpenChannel(
-        sendState->channel, 
-        &address, 
-        asyncContext, 
-        error);
+             sendState->channel,
+             &address,
+             asyncContext,
+             error);
     if (FAILED(hr))
     {
         goto Exit;
@@ -176,11 +176,11 @@ Exit:
 }
 
 HRESULT CALLBACK Send2(
-    __in HRESULT hr, 
-    __in WS_CALLBACK_MODEL callbackModel, 
-    __in void* state, 
+    __in HRESULT hr,
+    __in WS_CALLBACK_MODEL callbackModel,
+    __in void* state,
     __inout WS_ASYNC_OPERATION* next,
-    __in_opt const WS_ASYNC_CONTEXT* asyncContext, 
+    __in_opt const WS_ASYNC_CONTEXT* asyncContext,
     __in_opt WS_ERROR* error)
 {
     UNREFERENCED_PARAMETER(callbackModel);
@@ -204,11 +204,11 @@ HRESULT CALLBACK Send2(
 }
 
 HRESULT CALLBACK Send3(
-    __in HRESULT hr, 
-    __in WS_CALLBACK_MODEL callbackModel, 
-    __in void* state, 
+    __in HRESULT hr,
+    __in WS_CALLBACK_MODEL callbackModel,
+    __in void* state,
     __inout WS_ASYNC_OPERATION* next,
-    __in_opt const WS_ASYNC_CONTEXT* asyncContext, 
+    __in_opt const WS_ASYNC_CONTEXT* asyncContext,
     __in_opt WS_ERROR* error)
 {
     UNREFERENCED_PARAMETER(callbackModel);
@@ -234,13 +234,13 @@ HRESULT CALLBACK Send3(
 
     // Add the action header
     hr = WsSetHeader(
-        sendState->message, 
-        WS_ACTION_HEADER, 
-        WS_XML_STRING_TYPE,
-        WS_WRITE_REQUIRED_VALUE,
-        PurchaseOrder_wsdl.messages.PurchaseOrder.action, 
-        sizeof(*PurchaseOrder_wsdl.messages.PurchaseOrder.action),
-        error);
+             sendState->message,
+             WS_ACTION_HEADER,
+             WS_XML_STRING_TYPE,
+             WS_WRITE_REQUIRED_VALUE,
+             PurchaseOrder_wsdl.messages.PurchaseOrder.action,
+             sizeof(*PurchaseOrder_wsdl.messages.PurchaseOrder.action),
+             error);
 
     if (FAILED(hr))
     {
@@ -254,11 +254,11 @@ HRESULT CALLBACK Send3(
 }
 
 HRESULT CALLBACK Send4(
-    __in HRESULT hr, 
-    __in WS_CALLBACK_MODEL callbackModel, 
-    __in void* state, 
+    __in HRESULT hr,
+    __in WS_CALLBACK_MODEL callbackModel,
+    __in void* state,
     __inout WS_ASYNC_OPERATION* next,
-    __in_opt const WS_ASYNC_CONTEXT* asyncContext, 
+    __in_opt const WS_ASYNC_CONTEXT* asyncContext,
     __in_opt WS_ERROR* error)
 {
     UNREFERENCED_PARAMETER(callbackModel);
@@ -268,7 +268,7 @@ HRESULT CALLBACK Send4(
     {
         return hr;
     }
-    
+
     // Get the writer for the body
     WS_XML_WRITER* writer;
     hr = WsGetMessageProperty(sendState->message, WS_MESSAGE_PROPERTY_BODY_WRITER, &writer, sizeof(writer), error);
@@ -290,12 +290,12 @@ HRESULT CALLBACK Send4(
 
     // Write body data
     hr = WsWriteElement(
-        writer, 
-        &PurchaseOrder_wsdl.globalElements.PurchaseOrderType, 
-        WS_WRITE_REQUIRED_VALUE,
-        &purchaseOrder, 
-        sizeof(purchaseOrder), 
-        error);
+             writer,
+             &PurchaseOrder_wsdl.globalElements.PurchaseOrderType,
+             WS_WRITE_REQUIRED_VALUE,
+             &purchaseOrder,
+             sizeof(purchaseOrder),
+             error);
 
     if (FAILED(hr))
     {
@@ -307,11 +307,11 @@ HRESULT CALLBACK Send4(
 }
 
 HRESULT CALLBACK Send5(
-    __in HRESULT hr, 
-    __in WS_CALLBACK_MODEL callbackModel, 
-    __in void* state, 
+    __in HRESULT hr,
+    __in WS_CALLBACK_MODEL callbackModel,
+    __in void* state,
     __inout WS_ASYNC_OPERATION* next,
-    __in_opt const WS_ASYNC_CONTEXT* asyncContext, 
+    __in_opt const WS_ASYNC_CONTEXT* asyncContext,
     __in_opt WS_ERROR* error)
 {
     UNREFERENCED_PARAMETER(callbackModel);
@@ -330,11 +330,11 @@ HRESULT CALLBACK Send5(
 }
 
 HRESULT CALLBACK Send6(
-    __in HRESULT hr, 
-    __in WS_CALLBACK_MODEL callbackModel, 
-    __in void* state, 
+    __in HRESULT hr,
+    __in WS_CALLBACK_MODEL callbackModel,
+    __in void* state,
     __inout WS_ASYNC_OPERATION* next,
-    __in_opt const WS_ASYNC_CONTEXT* asyncContext, 
+    __in_opt const WS_ASYNC_CONTEXT* asyncContext,
     __in_opt WS_ERROR* error)
 {
     UNREFERENCED_PARAMETER(callbackModel);
@@ -351,11 +351,11 @@ HRESULT CALLBACK Send6(
 }
 
 HRESULT CALLBACK Send7(
-    __in HRESULT hr, 
-    __in WS_CALLBACK_MODEL callbackModel, 
-    __in void* state, 
+    __in HRESULT hr,
+    __in WS_CALLBACK_MODEL callbackModel,
+    __in void* state,
     __inout WS_ASYNC_OPERATION* next,
-    __in_opt const WS_ASYNC_CONTEXT* asyncContext, 
+    __in_opt const WS_ASYNC_CONTEXT* asyncContext,
     __in_opt WS_ERROR* error)
 {
     UNREFERENCED_PARAMETER(callbackModel);
@@ -380,11 +380,11 @@ HRESULT CALLBACK Send7(
 }
 
 HRESULT CALLBACK Send8(
-    __in HRESULT hr, 
-    __in WS_CALLBACK_MODEL callbackModel, 
-    __in void* state, 
+    __in HRESULT hr,
+    __in WS_CALLBACK_MODEL callbackModel,
+    __in void* state,
     __inout WS_ASYNC_OPERATION* next,
-    __in_opt const WS_ASYNC_CONTEXT* asyncContext, 
+    __in_opt const WS_ASYNC_CONTEXT* asyncContext,
     __in_opt WS_ERROR* error)
 {
     UNREFERENCED_PARAMETER(callbackModel);
@@ -407,8 +407,8 @@ struct THREAD_INFO
 };
 
 static void CALLBACK OnSendComplete(
-    __in HRESULT hr, 
-    __in WS_CALLBACK_MODEL callbackModel, 
+    __in HRESULT hr,
+    __in WS_CALLBACK_MODEL callbackModel,
     __in void* state)
 {
     UNREFERENCED_PARAMETER(callbackModel);
@@ -421,48 +421,48 @@ static void CALLBACK OnSendComplete(
 // Main entry point
 int __cdecl wmain()
 {
-    
+
     HRESULT hr = S_OK;
     WS_ERROR* error = NULL;
-    
+
     WS_ASYNC_STATE asyncState;
     SEND_STATE sendState;
     sendState.channel = NULL;
     sendState.message = NULL;
     sendState.messageCount = 0;
     sendState.orderCount = 0;
-    
+
     THREAD_INFO threadInfo;
     threadInfo.hr = S_OK;
     threadInfo.handle = NULL;
-        
-    
+
+
     // Create an error object for storing rich error information
     hr = WsCreateError(
-        NULL, 
-        0, 
-        &error);
+             NULL,
+             0,
+             &error);
     if (FAILED(hr))
     {
         goto Exit;
     }
-    
+
     threadInfo.handle = CreateEvent(NULL, TRUE, FALSE, NULL);
     if (threadInfo.handle == NULL)
     {
         goto Exit;
     }
-    
+
     WS_ASYNC_CONTEXT sendComplete;
     sendComplete.callback = OnSendComplete;
     sendComplete.callbackState = &threadInfo;
-    
+
     hr = WsAsyncExecute(&asyncState, Send1, WS_LONG_CALLBACK, &sendState, &sendComplete, error);
     if (FAILED(hr))
     {
         goto Exit;
     }
-    
+
     if (hr == WS_S_ASYNC)
     {
         WaitForSingleObject(threadInfo.handle, INFINITE);
@@ -472,19 +472,19 @@ int __cdecl wmain()
             goto Exit;
         }
     }
-        
+
 Exit:
     if (FAILED(hr))
     {
         // Print out the error
         PrintError(hr, error);
     }
-    
+
     if (threadInfo.handle != NULL)
     {
         CloseHandle(threadInfo.handle);
     }
-        
+
     if (sendState.channel != NULL)
     {
         // Close the channel
@@ -502,8 +502,8 @@ Exit:
     {
         WsFreeError(error);
     }
-    
-    
+
+
     fflush(stdout);
     return SUCCEEDED(hr) ? 0 : -1;
 }

@@ -1,4 +1,4 @@
-//------------------------------------------------------------------------------
+﻿//------------------------------------------------------------------------------
 // File: Ticker.cpp
 //
 // Desc: DirectShow sample code - a simple static image display app.
@@ -40,9 +40,9 @@
 HWND      ghApp=0;
 HMENU     ghMenu=0;
 HINSTANCE ghInst=0;
-TCHAR     g_szFileName[MAX_PATH]={0};
+TCHAR     g_szFileName[MAX_PATH]= {0};
 DWORD     g_dwGraphRegister=0;
-RECT      g_rcDest={0};
+RECT      g_rcDest= {0};
 
 // DirectShow interfaces
 IGraphBuilder *pGB = NULL;
@@ -64,7 +64,7 @@ HRESULT PlayMovieInWindow(LPTSTR szFile)
     UpdateWindow(ghApp);
 
     // Get the interface for DirectShow's GraphBuilder
-    JIF(CoCreateInstance(CLSID_FilterGraph, NULL, CLSCTX_INPROC_SERVER, 
+    JIF(CoCreateInstance(CLSID_FilterGraph, NULL, CLSCTX_INPROC_SERVER,
                          IID_IGraphBuilder, (void **)&pGB));
 
     if(SUCCEEDED(hr))
@@ -302,7 +302,7 @@ void OpenClip()
 
 BOOL GetClipFileName(LPTSTR szName)
 {
-    static OPENFILENAME ofn={0};
+    static OPENFILENAME ofn= {0};
     static BOOL bSetInitialDir = FALSE;
 
     // Reset filename
@@ -386,7 +386,7 @@ void CloseInterfaces(void)
 HRESULT HandleGraphEvent(void)
 {
     LONG evCode;
-	LONG_PTR evParam1, evParam2;
+    LONG_PTR evParam1, evParam2;
     HRESULT hr=S_OK;
 
     // Make sure that we don't access the media event interface
@@ -406,7 +406,7 @@ HRESULT HandleGraphEvent(void)
             LONGLONG pos=0;
 
             // Reset to first frame of movie
-            hr = pMS->SetPositions(&pos, AM_SEEKING_AbsolutePositioning ,
+            hr = pMS->SetPositions(&pos, AM_SEEKING_AbsolutePositioning,
                                    NULL, AM_SEEKING_NoPositioning);
             if (FAILED(hr))
             {
@@ -450,16 +450,16 @@ LRESULT CALLBACK AboutDlgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPa
 {
     switch (message)
     {
-        case WM_INITDIALOG:
-            return TRUE;
+    case WM_INITDIALOG:
+        return TRUE;
 
-        case WM_COMMAND:
-            if (wParam == IDOK)
-            {
-                EndDialog(hWnd, TRUE);
-                return TRUE;
-            }
-            break;
+    case WM_COMMAND:
+        if (wParam == IDOK)
+        {
+            EndDialog(hWnd, TRUE);
+            return TRUE;
+        }
+        break;
     }
 
     return FALSE;
@@ -468,54 +468,54 @@ LRESULT CALLBACK AboutDlgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPa
 
 LRESULT CALLBACK TextDlgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
-    static TCHAR szSaveText[DYNAMIC_TEXT_SIZE]={0};
+    static TCHAR szSaveText[DYNAMIC_TEXT_SIZE]= {0};
 
     switch (message)
     {
-        case WM_INITDIALOG:
-            // Save current dynamic text so that we can temporarily modify
-            // the dynamic text during font adjustment
-            (void)StringCchCopy(szSaveText, NUMELMS(szSaveText), g_szAppText);
-            SendMessage(GetDlgItem(hWnd, IDC_EDIT_TEXT), EM_LIMITTEXT, DYNAMIC_TEXT_SIZE, 0L);
-            SetWindowText(GetDlgItem(hWnd, IDC_EDIT_TEXT), g_szAppText);
+    case WM_INITDIALOG:
+        // Save current dynamic text so that we can temporarily modify
+        // the dynamic text during font adjustment
+        (void)StringCchCopy(szSaveText, NUMELMS(szSaveText), g_szAppText);
+        SendMessage(GetDlgItem(hWnd, IDC_EDIT_TEXT), EM_LIMITTEXT, DYNAMIC_TEXT_SIZE, 0L);
+        SetWindowText(GetDlgItem(hWnd, IDC_EDIT_TEXT), g_szAppText);
+        return TRUE;
+
+    case WM_COMMAND:
+        switch (wParam)
+        {
+        case IDOK:
+        {
+            TCHAR szText[DYNAMIC_TEXT_SIZE];
+            GetWindowText(GetDlgItem(hWnd, IDC_EDIT_TEXT), szText, DYNAMIC_TEXT_SIZE);
+            (void)StringCchCopy(g_szAppText, NUMELMS(g_szAppText)-1, szText);
+            BlendApplicationText(ghApp, g_szAppText);
+            EndDialog(hWnd, TRUE);
             return TRUE;
+        }
+        break;
 
-        case WM_COMMAND:
-            switch (wParam)
-            {
-                case IDOK:
-                {
-                    TCHAR szText[DYNAMIC_TEXT_SIZE];
-                    GetWindowText(GetDlgItem(hWnd, IDC_EDIT_TEXT), szText, DYNAMIC_TEXT_SIZE);
-                    (void)StringCchCopy(g_szAppText, NUMELMS(g_szAppText)-1, szText);
-                    BlendApplicationText(ghApp, g_szAppText);
-                    EndDialog(hWnd, TRUE);
-                    return TRUE;
-                }
-                break;
-
-                case IDCANCEL:
-                    // Restore the original text in case it was modified
-                    // and previewed while adjusting the font
-                    (void)StringCchCopy(g_szAppText, NUMELMS(g_szAppText)-1, szSaveText);
-                    BlendApplicationText(ghApp, g_szAppText);
-                    EndDialog(hWnd, TRUE);
-                    break;
-
-                case IDC_SET_FONT:
-                {
-                    TCHAR szTempText[DYNAMIC_TEXT_SIZE]={0};
-
-                    // Change the current font
-                    g_hFont = UserSelectFont();   
-
-                    // Start displaying the text that is currently in the edit box
-                    GetWindowText(GetDlgItem(hWnd, IDC_EDIT_TEXT), szTempText, DYNAMIC_TEXT_SIZE);
-                    BlendApplicationText(ghApp, szTempText);
-                }
-                break;
-            }
+        case IDCANCEL:
+            // Restore the original text in case it was modified
+            // and previewed while adjusting the font
+            (void)StringCchCopy(g_szAppText, NUMELMS(g_szAppText)-1, szSaveText);
+            BlendApplicationText(ghApp, g_szAppText);
+            EndDialog(hWnd, TRUE);
             break;
+
+        case IDC_SET_FONT:
+        {
+            TCHAR szTempText[DYNAMIC_TEXT_SIZE]= {0};
+
+            // Change the current font
+            g_hFont = UserSelectFont();
+
+            // Start displaying the text that is currently in the edit box
+            GetWindowText(GetDlgItem(hWnd, IDC_EDIT_TEXT), szTempText, DYNAMIC_TEXT_SIZE);
+            BlendApplicationText(ghApp, szTempText);
+        }
+        break;
+        }
+        break;
     }
     return FALSE;
 }
@@ -525,128 +525,129 @@ LRESULT CALLBACK WndMainProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
 {
     switch(message)
     {
-        case WM_PAINT:
-            OnPaint(hWnd);
+    case WM_PAINT:
+        OnPaint(hWnd);
+        break;
+
+    case WM_DISPLAYCHANGE:
+        if (pWC)
+            pWC->DisplayModeChanged();
+        break;
+
+    // Resize the video when the window changes
+    case WM_MOVE:
+    case WM_SIZE:
+        if (hWnd == ghApp)
+            MoveVideoWindow();
+        break;
+
+    // Enforce a minimum size
+    case WM_GETMINMAXINFO:
+    {
+        LPMINMAXINFO lpmm = (LPMINMAXINFO) lParam;
+        if (lpmm)
+        {
+            lpmm->ptMinTrackSize.x = MINIMUM_VIDEO_WIDTH;
+            lpmm->ptMinTrackSize.y = MINIMUM_VIDEO_HEIGHT;
+        }
+    }
+    break;
+
+    case WM_KEYDOWN:
+
+        switch(toupper((int) wParam))
+        {
+        case VK_ESCAPE:
+        case VK_F12:
+            CloseClip();
+            break;
+        }
+        break;
+
+    case WM_COMMAND:
+
+        switch(wParam)
+        {
+        // Menus
+
+        case ID_FILE_OPENCLIP:
+            // If we have ANY file open, close it and shut down DirectShow
+            CloseClip();
+            OpenClip();   // Open the new clip
             break;
 
-        case WM_DISPLAYCHANGE:
-            if (pWC)
-                pWC->DisplayModeChanged();
-            break;
-        
-        // Resize the video when the window changes
-        case WM_MOVE:
-        case WM_SIZE:
-            if (hWnd == ghApp)
-                MoveVideoWindow();
+        case ID_FILE_INITCLIP:
+            OpenClip();   // Open the new clip
             break;
 
-        // Enforce a minimum size
-        case WM_GETMINMAXINFO:
-            {
-                LPMINMAXINFO lpmm = (LPMINMAXINFO) lParam;
-                if (lpmm)
-                {
-                    lpmm->ptMinTrackSize.x = MINIMUM_VIDEO_WIDTH;
-                    lpmm->ptMinTrackSize.y = MINIMUM_VIDEO_HEIGHT;
-                }
-            }
-            break;
-
-        case WM_KEYDOWN:
-
-            switch(toupper((int) wParam))
-            {
-                case VK_ESCAPE:
-                case VK_F12:
-                    CloseClip();
-                    break;
-            }
-            break;
-
-        case WM_COMMAND:
-
-            switch(wParam)
-            { // Menus
-
-                case ID_FILE_OPENCLIP:
-                    // If we have ANY file open, close it and shut down DirectShow
-                    CloseClip();                   
-                    OpenClip();   // Open the new clip
-                    break;
-
-                case ID_FILE_INITCLIP:
-                    OpenClip();   // Open the new clip
-                    break;
-
-                case ID_FILE_EXIT:
-                    CloseClip();
-                    PostQuitMessage(0);
-                    break;
-
-                case ID_FILE_CLOSE:
-                    CloseClip();
-                    break;
-
-                case ID_DISABLE:
-                    FlipFlag(MARK_DISABLE);
-                    DisableTicker(g_dwTickerFlags);
-                    break;
-
-                case ID_SLIDE:
-                    FlipFlag(MARK_SLIDE);
-                    SlideTicker(g_dwTickerFlags);
-                    break;
-
-                case ID_TICKER_STATIC_IMAGE:
-                    g_dwTickerFlags |= MARK_STATIC_IMAGE;
-                    g_dwTickerFlags &= ~(MARK_DYNAMIC_TEXT);
-                    BlendApplicationImage(ghApp);
-                    CheckMenuItem(ghMenu, ID_TICKER_STATIC_IMAGE, MF_CHECKED);
-                    CheckMenuItem(ghMenu, ID_TICKER_DYNAMIC_TEXT, MF_UNCHECKED);
-                    break;
-
-                case ID_TICKER_DYNAMIC_TEXT:
-                    g_dwTickerFlags |= MARK_DYNAMIC_TEXT;
-                    g_dwTickerFlags &= ~(MARK_STATIC_IMAGE);
-                    BlendApplicationText(ghApp, g_szAppText);
-                    CheckMenuItem(ghMenu, ID_TICKER_STATIC_IMAGE, MF_UNCHECKED);
-                    CheckMenuItem(ghMenu, ID_TICKER_DYNAMIC_TEXT, MF_CHECKED);
-                    break;
-
-                case ID_SET_FONT:
-                    g_hFont = UserSelectFont();   // Change the current font
-                    PostMessage(ghApp, WM_COMMAND, ID_TICKER_DYNAMIC_TEXT, 0);
-                    break;
-
-                case ID_SET_TEXT:
-                    DialogBox(ghInst, MAKEINTRESOURCE(IDD_DIALOG_TEXT),
-                              ghApp,  (DLGPROC) TextDlgProc);
-                    break;
-
-                case ID_HELP_ABOUT:
-                    DialogBox(ghInst, MAKEINTRESOURCE(IDD_HELP_ABOUT),
-                              ghApp,  (DLGPROC) AboutDlgProc);
-                    break;
-
-            } // Menus
-            break;
-
-
-        case WM_GRAPHNOTIFY:
-            HandleGraphEvent();
-            break;
-
-        case WM_CLOSE:
-            SendMessage(ghApp, WM_COMMAND, ID_FILE_EXIT, 0);
-            break;
-
-        case WM_DESTROY:
+        case ID_FILE_EXIT:
+            CloseClip();
             PostQuitMessage(0);
             break;
 
-        default:
-            return DefWindowProc(hWnd, message, wParam, lParam);
+        case ID_FILE_CLOSE:
+            CloseClip();
+            break;
+
+        case ID_DISABLE:
+            FlipFlag(MARK_DISABLE);
+            DisableTicker(g_dwTickerFlags);
+            break;
+
+        case ID_SLIDE:
+            FlipFlag(MARK_SLIDE);
+            SlideTicker(g_dwTickerFlags);
+            break;
+
+        case ID_TICKER_STATIC_IMAGE:
+            g_dwTickerFlags |= MARK_STATIC_IMAGE;
+            g_dwTickerFlags &= ~(MARK_DYNAMIC_TEXT);
+            BlendApplicationImage(ghApp);
+            CheckMenuItem(ghMenu, ID_TICKER_STATIC_IMAGE, MF_CHECKED);
+            CheckMenuItem(ghMenu, ID_TICKER_DYNAMIC_TEXT, MF_UNCHECKED);
+            break;
+
+        case ID_TICKER_DYNAMIC_TEXT:
+            g_dwTickerFlags |= MARK_DYNAMIC_TEXT;
+            g_dwTickerFlags &= ~(MARK_STATIC_IMAGE);
+            BlendApplicationText(ghApp, g_szAppText);
+            CheckMenuItem(ghMenu, ID_TICKER_STATIC_IMAGE, MF_UNCHECKED);
+            CheckMenuItem(ghMenu, ID_TICKER_DYNAMIC_TEXT, MF_CHECKED);
+            break;
+
+        case ID_SET_FONT:
+            g_hFont = UserSelectFont();   // Change the current font
+            PostMessage(ghApp, WM_COMMAND, ID_TICKER_DYNAMIC_TEXT, 0);
+            break;
+
+        case ID_SET_TEXT:
+            DialogBox(ghInst, MAKEINTRESOURCE(IDD_DIALOG_TEXT),
+                      ghApp,  (DLGPROC) TextDlgProc);
+            break;
+
+        case ID_HELP_ABOUT:
+            DialogBox(ghInst, MAKEINTRESOURCE(IDD_HELP_ABOUT),
+                      ghApp,  (DLGPROC) AboutDlgProc);
+            break;
+
+        } // Menus
+        break;
+
+
+    case WM_GRAPHNOTIFY:
+        HandleGraphEvent();
+        break;
+
+    case WM_CLOSE:
+        SendMessage(ghApp, WM_COMMAND, ID_FILE_EXIT, 0);
+        break;
+
+    case WM_DESTROY:
+        PostQuitMessage(0);
+        break;
+
+    default:
+        return DefWindowProc(hWnd, message, wParam, lParam);
 
     } // Window msgs handling
 
@@ -656,7 +657,7 @@ LRESULT CALLBACK WndMainProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
 
 int PASCAL wWinMain(HINSTANCE hInstC, HINSTANCE hInstP, wchar_t * lpCmdLine, int nCmdShow)
 {
-    MSG msg={0};
+    MSG msg= {0};
     WNDCLASS wc;
 
     // Initialize COM
@@ -673,7 +674,7 @@ int PASCAL wWinMain(HINSTANCE hInstC, HINSTANCE hInstP, wchar_t * lpCmdLine, int
     // Was a filename specified on the command line?
     if(lpCmdLine[0] != '\0')
     {
-        (void)StringCchCopy(g_szFileName, NUMELMS(g_szFileName), lpCmdLine);        
+        (void)StringCchCopy(g_szFileName, NUMELMS(g_szFileName), lpCmdLine);
     }
 
     // Register the window class
@@ -743,11 +744,11 @@ HRESULT InitializeWindowlessVMR(IBaseFilter **ppVmr9)
 
     // Create the VMR and add it to the filter graph.
     HRESULT hr = CoCreateInstance(CLSID_VideoMixingRenderer9, NULL,
-                     CLSCTX_INPROC, IID_IBaseFilter, (void**)&pVmr);
-    if (SUCCEEDED(hr)) 
+                                  CLSCTX_INPROC, IID_IBaseFilter, (void**)&pVmr);
+    if (SUCCEEDED(hr))
     {
         hr = pGB->AddFilter(pVmr, L"Video Mixing Renderer 9");
-        if (SUCCEEDED(hr)) 
+        if (SUCCEEDED(hr))
         {
             // Set the rendering mode and number of streams
             SmartPtr <IVMRFilterConfig9> pConfig;
@@ -756,7 +757,7 @@ HRESULT InitializeWindowlessVMR(IBaseFilter **ppVmr9)
             JIF(pConfig->SetRenderingMode(VMR9Mode_Windowless));
 
             hr = pVmr->QueryInterface(IID_IVMRWindowlessControl9, (void**)&pWC);
-            if( SUCCEEDED(hr)) 
+            if( SUCCEEDED(hr))
             {
                 hr = pWC->SetVideoClippingWindow(ghApp);
                 hr = pWC->SetBorderColor(RGB(0,0,0));
@@ -764,13 +765,13 @@ HRESULT InitializeWindowlessVMR(IBaseFilter **ppVmr9)
 
 #ifndef BILINEAR_FILTERING
             // Request point filtering (instead of bilinear filtering)
-            // to improve the text quality.  In general, if you are 
+            // to improve the text quality.  In general, if you are
             // not scaling the app Image, you should use point filtering.
             // This is very important if you are doing source color keying.
             IVMRMixerControl9 *pMix;
 
             hr = pVmr->QueryInterface(IID_IVMRMixerControl9, (void**)&pMix);
-            if( SUCCEEDED(hr)) 
+            if( SUCCEEDED(hr))
             {
                 DWORD dwPrefs=0;
                 hr = pMix->GetMixingPrefs(&dwPrefs);
@@ -799,37 +800,37 @@ HRESULT InitializeWindowlessVMR(IBaseFilter **ppVmr9)
     else
         Msg(TEXT("Failed to create VMR!  hr=0x%x\r\n"), hr);
 
-   return hr;
+    return hr;
 }
 
 
-void OnPaint(HWND hwnd) 
+void OnPaint(HWND hwnd)
 {
     HRESULT hr;
-    PAINTSTRUCT ps; 
-    HDC         hdc; 
-    RECT        rcClient; 
+    PAINTSTRUCT ps;
+    HDC         hdc;
+    RECT        rcClient;
 
-    GetClientRect(hwnd, &rcClient); 
-    hdc = BeginPaint(hwnd, &ps); 
+    GetClientRect(hwnd, &rcClient);
+    hdc = BeginPaint(hwnd, &ps);
 
-    if(pWC) 
-    { 
+    if(pWC)
+    {
         // When using VMR Windowless mode, you must explicitly tell the
         // renderer when to repaint the video in response to WM_PAINT
         // messages.  This is most important when the video is stopped
         // or paused, since the VMR won't be automatically updating the
         // window as the video plays.
         if (pWC)
-            hr = pWC->RepaintVideo(hwnd, hdc);  
-    } 
-    else  // No video image. Just paint the whole client area. 
-    { 
-        FillRect(hdc, &rcClient, (HBRUSH)(COLOR_BTNFACE + 1)); 
-    } 
+            hr = pWC->RepaintVideo(hwnd, hdc);
+    }
+    else  // No video image. Just paint the whole client area.
+    {
+        FillRect(hdc, &rcClient, (HBRUSH)(COLOR_BTNFACE + 1));
+    }
 
-    EndPaint(hwnd, &ps); 
-} 
+    EndPaint(hwnd, &ps);
+}
 
 
 
@@ -861,15 +862,15 @@ BOOL VerifyVMR9(void)
     else
     {
         MessageBox(NULL,
-            TEXT("This application requires the VMR-9.\r\n\r\n")
+                   TEXT("This application requires the VMR-9.\r\n\r\n")
 
-            TEXT("The VMR-9 is not enabled when viewing through a Remote\r\n")
-            TEXT(" Desktop session. You can run VMR-enabled applications only\r\n") 
-            TEXT("on your local computer.\r\n\r\n")
+                   TEXT("The VMR-9 is not enabled when viewing through a Remote\r\n")
+                   TEXT(" Desktop session. You can run VMR-enabled applications only\r\n")
+                   TEXT("on your local computer.\r\n\r\n")
 
-            TEXT("\r\nThis sample will now exit."),
+                   TEXT("\r\nThis sample will now exit."),
 
-            TEXT("Video Mixing Renderer (VMR9) capabilities are required"), MB_OK);
+                   TEXT("Video Mixing Renderer (VMR9) capabilities are required"), MB_OK);
 
         return FALSE;
     }

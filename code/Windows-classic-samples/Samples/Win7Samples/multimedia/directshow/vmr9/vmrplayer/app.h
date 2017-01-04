@@ -1,4 +1,4 @@
-//------------------------------------------------------------------------------
+﻿//------------------------------------------------------------------------------
 // File: app.h
 //
 // Desc: DirectShow sample code
@@ -19,28 +19,28 @@ typedef TCHAR RECENTFILES[MAX_PATH];
 int
 DoMainLoop(
     void
-    );
+);
 
 BOOL
 InitApplication(
     HINSTANCE hInstance
-    );
+);
 
 BOOL
 InitInstance(
     HINSTANCE hInstance,
     int nCmdShow
-    );
+);
 
 BOOL
 LoadWindowPos(
     LPRECT lprc
-    );
+);
 
 BOOL
 SaveWindowPos(
     HWND hwnd
-    );
+);
 
 void
 PatB(
@@ -50,49 +50,49 @@ PatB(
     int dx,
     int dy,
     DWORD rgb
-    );
+);
 
 void
 GetAdjustedClientRect(
     RECT *prc
-    );
+);
 
 BOOL
 DrawStats(
     HDC hdc
-    );
+);
 
 void
 CalcMovieRect(
     LPRECT lprc
-    );
+);
 
 LPCTSTR
 IdStr(
     int idResource
-    );
+);
 
 void
 UpdateSystemColors(
     void
-    );
+);
 
 void
 SetDurationLength(
     REFTIME rt
-    );
+);
 
 void
 SetCurrentPosition(
     REFTIME rt
-    );
+);
 
 TCHAR *
 FormatRefTime(
     TCHAR *sz,
-    size_t len, 
+    size_t len,
     REFTIME rt
-    );
+);
 
 
 /* -------------------------------------------------------------------------
@@ -103,7 +103,7 @@ void
 ProfileStringOut (
     LPTSTR  szKey,
     LPTSTR  sz
-    );
+);
 
 UINT
 ProfileStringIn (
@@ -111,35 +111,35 @@ ProfileStringIn (
     LPTSTR  szDef,
     LPTSTR  sz,
     DWORD   cb
-    );
+);
 
 BOOL
 LoadWindowPos(
     LPRECT lprc
-    );
+);
 
 BOOL
 SaveWindowPos(
     HWND hwnd
-    );
+);
 
 HKEY
 GetAppKey(
     BOOL fCreate
-    );
+);
 
 int
 GetRecentFiles(
     int iLastCount,
     int iMenuPosition   // Menu position of start of MRU list
-    );
+);
 
 int
 SetRecentFiles(
     TCHAR *FileName,    // File name to add
     int iCount,         // Current count of files
     int iMenuPosition   // Menu position of start of MRU list
-    );
+);
 
 /* -------------------------------------------------------------------------
 ** Message crackers
@@ -165,22 +165,22 @@ VideoCdWndProc(
     UINT message,
     WPARAM wParam,
     LPARAM lParam
-    );
+);
 
 void
 VideoCd_OnClose(
     HWND hwnd
-    );
+);
 
 BOOL
 VideoCd_OnQueryEndSession(
     HWND hwnd
-    );
+);
 
 void
 VideoCd_OnDestroy(
     HWND hwnd
-    );
+);
 
 void
 VideoCd_OnCommand(
@@ -188,24 +188,24 @@ VideoCd_OnCommand(
     int id,
     HWND hwndCtl,
     UINT codeNotify
-    );
+);
 
 void
 VideoCd_OnPaint(
     HWND hwnd
-    );
+);
 
 void
 VideoCd_OnTimer(
     HWND hwnd,
     UINT id
-    );
+);
 
 BOOL
 VideoCd_OnCreate(
     HWND hwnd,
     LPCREATESTRUCT lpCreateStruct
-    );
+);
 
 void
 VideoCd_OnSize(
@@ -213,14 +213,14 @@ VideoCd_OnSize(
     UINT state,
     int cx,
     int cy
-    );
+);
 
 void
 VideoCd_OnActivate(
     HWND hwnd,
     WPARAM wParam,
     LPARAM lParam
-    );
+);
 
 void
 VideoCd_OnHScroll(
@@ -228,19 +228,19 @@ VideoCd_OnHScroll(
     HWND hwndCtl,
     UINT code,
     int pos
-    );
+);
 
 void
 VideoCd_OnUser(
     HWND hwnd,
     WPARAM wParam,
     LPARAM lParam
-    );
+);
 
 void
 VideoCd_OnSysColorChange(
     HWND hwnd
-    );
+);
 
 void
 VideoCd_OnMenuSelect(
@@ -249,7 +249,7 @@ VideoCd_OnMenuSelect(
     int item,
     HMENU hmenuPopup,
     UINT flags
-    );
+);
 
 void
 VideoCd_OnInitMenuPopup(
@@ -257,7 +257,7 @@ VideoCd_OnInitMenuPopup(
     HMENU hMenu,
     UINT item,
     BOOL fSystemMenu
-    );
+);
 
 #ifdef WM_NOTIFY
 LRESULT
@@ -265,19 +265,19 @@ VideoCd_OnNotify(
     HWND hwnd,
     int idFrom,
     NMHDR FAR* pnmhdr
-    );
+);
 #endif
 
 
 void
 VideoCd_OnGraphNotify(
     void
-    );
+);
 
 void
 SetPlayButtonsEnableState(
     void
-    );
+);
 
 
 
@@ -288,63 +288,63 @@ SetPlayButtonsEnableState(
 BOOL
 VcdPlyerCaptureImage(
     LPCTSTR szFile
-    );
+);
 
 BOOL
 VcdPlyerDisplayCapturedImage(
     LPCTSTR szFile
-    );
+);
 
 BOOL
 VcdPlayerOpenCmd(
     int i
-    );
+);
 
 BOOL
 VcdPlayerCloseCmd(
     void
-    );
+);
 
 BOOL
 VcdPlayerPlayCmd(
     void
-    );
+);
 
 BOOL
 VcdPlayerStopCmd(
     void
-    );
+);
 
 BOOL
 VcdPlayerRewindCmd(
     void
-    );
+);
 
 BOOL
 VcdPlayerPauseCmd(
     void
-    );
+);
 
 BOOL
 VcdPlayerStepCmd(
     void
-    );
+);
 
 void
 VcdPlayerSeekCmd(
     REFTIME rtSeekBy
-    );
+);
 
 void
 ProcessOpen(
     TCHAR *achFileName,
     BOOL bPlay = FALSE
-    );
+);
 
 int
 VcdPlayerChangeTimeFormat(
     int id
-    );
+);
 
 BOOL CALLBACK TransDlgProc(HWND hwnd,UINT uMsg,WPARAM wParam,LPARAM lParam);
 BOOL CALLBACK AppImgDlgProc(HWND hwnd,UINT uMsg,WPARAM wParam,LPARAM lParam);

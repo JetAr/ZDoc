@@ -1,4 +1,4 @@
-/********************************************************************++
+﻿/********************************************************************++
 THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED
 TO THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -7,12 +7,12 @@ PARTICULAR PURPOSE.
 Copyright (c) Microsoft Corporation. All Rights Reserved.
 
 Abstract:
-    This C++ file includes sample code that registers itself with the 
+    This C++ file includes sample code that registers itself with the
 	Windows Firewall using the Microsoft Windows Firewall APIs but does
 	not take ownership of any NET_FW_RULE_CATEGORY.
-    The API to Register for NET_FW_RULE_CATEGORY_FIREWALL 
+    The API to Register for NET_FW_RULE_CATEGORY_FIREWALL
 	needs the binary that is making this call to be linked
-	with /integritycheck option to ensure code integrity. Failure 
+	with /integritycheck option to ensure code integrity. Failure
 	to do so can lead to error SEC_E_CANNOT_INSTALL at runtime
     For more details on code integrity read
 	http://msdn2.microsoft.com/en-us/library/ms680339.aspx
@@ -36,36 +36,36 @@ Abstract:
 
 // Forward declarations
 DWORD ArrayOfLongsToVariant(
-                            __in unsigned long numItems,
-                            __in_ecount(numItems) const long* items,
-                            __out VARIANT* dst
-                            );
+    __in unsigned long numItems,
+    __in_ecount(numItems) const long* items,
+    __out VARIANT* dst
+);
 //
-// Purpose: 
+// Purpose:
 //   Entry point for the process
 //
 // Parameters:
 //   None
-// 
+//
 // Return value:
 //   None
 //
-void __cdecl main() 
-{ 
+void __cdecl main()
+{
     DWORD result = NO_ERROR;
-	HRESULT hr = S_OK;
+    HRESULT hr = S_OK;
     INetFwProduct* product = NULL;
     INetFwProducts* products = NULL;
     IUnknown* registration = NULL;
     BSTR displayName = NULL;
     VARIANT varCategories = { VT_EMPTY };
-   
+
     long count=0;
     BOOL comInit =  FALSE;
 
-    
 
-	displayName = SysAllocString(L"@RegisterWithoutCategoryOwnership.exe,-127");
+
+    displayName = SysAllocString(L"@RegisterWithoutCategoryOwnership.exe,-127");
     BAIL_ON_ALLOC_FAILURE(displayName, SysAllocString);
 
     hr = CoInitializeEx(NULL, COINIT_MULTITHREADED);
@@ -120,7 +120,7 @@ void __cdecl main()
         //Failed to Register Products
         wprintf(L"Register failed: 0x%08lx\n", hr);
         goto CLEANUP;
-    }			
+    }
 
     hr = products->get_Count( &count);
     if (FAILED(hr))
@@ -128,37 +128,37 @@ void __cdecl main()
         //Failed to get Count of Products
         wprintf(L"Get count failed: 0x%08lx\n", hr);
         goto CLEANUP;
-    }		
+    }
     wprintf(L"INetFwProducts_Count returned %ld.\n", count);
 
     wprintf(L"Hit any key to unregister.\n");
-    
-	_getch();
+
+    _getch();
 
 
 
 CLEANUP:
-	if (registration != NULL)
-   {
-      registration->Release();
-   }
-   if (products != NULL)
-   {
-      products->Release();
-   }
-   if (product != NULL)
-   {
-      product->Release();
-   }
-   if (comInit)
-   {
-      CoUninitialize();
-   }
-   
-   SysFreeString(displayName);
-   VariantClear(&varCategories);
-   return;
-} 
+    if (registration != NULL)
+    {
+        registration->Release();
+    }
+    if (products != NULL)
+    {
+        products->Release();
+    }
+    if (product != NULL)
+    {
+        product->Release();
+    }
+    if (comInit)
+    {
+        CoUninitialize();
+    }
+
+    SysFreeString(displayName);
+    VariantClear(&varCategories);
+    return;
+}
 
 
 
@@ -166,10 +166,10 @@ CLEANUP:
 //This Function Converts and Array of Longs to Variant
 
 DWORD ArrayOfLongsToVariant(
-                            __in unsigned long numItems,
-                            __in_ecount(numItems) const long* items,
-                            __out VARIANT* dst
-                            )
+    __in unsigned long numItems,
+    __in_ecount(numItems) const long* items,
+    __out VARIANT* dst
+)
 {
     DWORD result = NO_ERROR;
     SAFEARRAYBOUND bound[1];

@@ -1,9 +1,9 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
 //
-// Copyright � Microsoft Corporation. All rights reserved
+// Copyright © Microsoft Corporation. All rights reserved
 
 /******************************************************************************
 *           CoffeeShop0.cpp
@@ -18,7 +18,7 @@
 #include "common.h"                             // Contains common defines
 #include "CoffeeShop0.h"                             // Forward declarations and constants
 #include "cofgram.h"                            // This header is created by the grammar
-                                                // compiler and has our rule ids
+// compiler and has our rule ids
 
 /******************************************************************************
 * WinMain *
@@ -34,29 +34,29 @@ int APIENTRY WinMain(__in HINSTANCE hInstance,
                      __in_opt LPSTR     lpCmdLine,
                      __in int       nCmdShow)
 {
-	MSG msg;
+    MSG msg;
 
     // Register the main window class
-	MyRegisterClass(hInstance, WndProc);
+    MyRegisterClass(hInstance, WndProc);
 
     // Initialize pane handler state
     g_fpCurrentPane = EntryPaneProc;
 
-	// Only continue if COM is successfully initialized
+    // Only continue if COM is successfully initialized
     if ( SUCCEEDED( CoInitialize( NULL ) ) )
     {
         // Perform application initialization:
-	    if (!InitInstance( hInstance, nCmdShow )) 
-	    {
-	    	return FALSE;
-	    }
+        if (!InitInstance( hInstance, nCmdShow ))
+        {
+            return FALSE;
+        }
 
-	    // Main message loop:
-	    while (GetMessage(&msg, NULL, 0, 0)) 
-	    {
-        	TranslateMessage(&msg);
-	    	DispatchMessage(&msg);
-	    }
+        // Main message loop:
+        while (GetMessage(&msg, NULL, 0, 0))
+        {
+            TranslateMessage(&msg);
+            DispatchMessage(&msg);
+        }
         CoUninitialize();
 
         return (int)msg.wParam;
@@ -76,71 +76,71 @@ int APIENTRY WinMain(__in HINSTANCE hInstance,
 ******************************************************************************/
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
-    switch (message) 
-	{
-        case WM_CREATE:
-            // Try to initialize, quit with error message if we can't
-            if ( FAILED( InitSAPI( hWnd ) ) )
-            {
-                const int iMaxTitleLength = 64;
-                TCHAR tszBuf[ MAX_PATH ];
-                LoadString( g_hInst, IDS_FAILEDINIT, tszBuf, MAX_PATH );
-                TCHAR tszName[ iMaxTitleLength ];
-                LoadString( g_hInst, IDS_APP_TITLE, tszName, iMaxTitleLength );
-
-                MessageBox( hWnd, tszBuf, tszName, MB_OK|MB_ICONWARNING );
-                return( -1 );
-            }
-            break;
-            
-        // This is our application defined window message to let us know that a
-        // speech recognition event has occurred.
-        case WM_RECOEVENT:
-            ProcessRecoEvent( hWnd );
-            break;
-
-        case WM_ERASEBKGND:
-            EraseBackground( (HDC) wParam );
-            return ( 1 );
-
-        case WM_GETMINMAXINFO:
+    switch (message)
+    {
+    case WM_CREATE:
+        // Try to initialize, quit with error message if we can't
+        if ( FAILED( InitSAPI( hWnd ) ) )
         {
-            LPMINMAXINFO lpMM = (LPMINMAXINFO) lParam;
+            const int iMaxTitleLength = 64;
+            TCHAR tszBuf[ MAX_PATH ];
+            LoadString( g_hInst, IDS_FAILEDINIT, tszBuf, MAX_PATH );
+            TCHAR tszName[ iMaxTitleLength ];
+            LoadString( g_hInst, IDS_APP_TITLE, tszName, iMaxTitleLength );
 
-            lpMM->ptMaxSize.x = MINMAX_WIDTH;
-            lpMM->ptMaxSize.y = MINMAX_HEIGHT;
-            lpMM->ptMinTrackSize.x = MINMAX_WIDTH;
-            lpMM->ptMinTrackSize.y = MINMAX_HEIGHT;
-            lpMM->ptMaxTrackSize.x = MINMAX_WIDTH;
-            lpMM->ptMaxTrackSize.y = MINMAX_HEIGHT;
-            return ( 0 );
+            MessageBox( hWnd, tszBuf, tszName, MB_OK|MB_ICONWARNING );
+            return( -1 );
         }
+        break;
 
-		// Release remaining SAPI related COM references before application exits
-        case WM_DESTROY:
-            KillTimer( hWnd, 0 );
-            CleanupGDIObjects();
-            CleanupSAPI();
-			PostQuitMessage(0);
-			break;
+    // This is our application defined window message to let us know that a
+    // speech recognition event has occurred.
+    case WM_RECOEVENT:
+        ProcessRecoEvent( hWnd );
+        break;
 
-		default:
+    case WM_ERASEBKGND:
+        EraseBackground( (HDC) wParam );
+        return ( 1 );
+
+    case WM_GETMINMAXINFO:
+    {
+        LPMINMAXINFO lpMM = (LPMINMAXINFO) lParam;
+
+        lpMM->ptMaxSize.x = MINMAX_WIDTH;
+        lpMM->ptMaxSize.y = MINMAX_HEIGHT;
+        lpMM->ptMinTrackSize.x = MINMAX_WIDTH;
+        lpMM->ptMinTrackSize.y = MINMAX_HEIGHT;
+        lpMM->ptMaxTrackSize.x = MINMAX_WIDTH;
+        lpMM->ptMaxTrackSize.y = MINMAX_HEIGHT;
+        return ( 0 );
+    }
+
+    // Release remaining SAPI related COM references before application exits
+    case WM_DESTROY:
+        KillTimer( hWnd, 0 );
+        CleanupGDIObjects();
+        CleanupSAPI();
+        PostQuitMessage(0);
+        break;
+
+    default:
+    {
+        _ASSERTE( g_fpCurrentPane );
+        if ( g_fpCurrentPane == NULL)
         {
-            _ASSERTE( g_fpCurrentPane );
-            if ( g_fpCurrentPane == NULL)
-            {
-                return 0;
-            }
-            // Send unhandled messages to pane specific procedure for potential action
-            LRESULT lRet = (*g_fpCurrentPane)(hWnd, message, wParam, lParam);
-            if ( 0 == lRet )
-            {
-			    lRet = DefWindowProc(hWnd, message, wParam, lParam);
-            }
-            return ( lRet );
+            return 0;
         }
-   }
-   return ( 0 );
+        // Send unhandled messages to pane specific procedure for potential action
+        LRESULT lRet = (*g_fpCurrentPane)(hWnd, message, wParam, lParam);
+        if ( 0 == lRet )
+        {
+            lRet = DefWindowProc(hWnd, message, wParam, lParam);
+        }
+        return ( lRet );
+    }
+    }
+    return ( 0 );
 }
 
 /******************************************************************************
@@ -163,7 +163,7 @@ HRESULT InitSAPI( HWND hWnd )
         {
             break;
         }
-       
+
         // create the command recognition context
         hr = g_cpEngine->CreateRecoContext( &g_cpRecoCtxt );
         if ( FAILED( hr ) )
@@ -179,7 +179,7 @@ HRESULT InitSAPI( HWND hWnd )
             break;
         }
 
-	    // Tell SR what types of events interest us.  Here we only care about command
+        // Tell SR what types of events interest us.  Here we only care about command
         // recognition.
         hr = g_cpRecoCtxt->SetInterest( SPFEI(SPEI_RECOGNITION), SPFEI(SPEI_RECOGNITION) );
         if ( FAILED( hr ) )
@@ -195,8 +195,8 @@ HRESULT InitSAPI( HWND hWnd )
             break;
         }
         hr = g_cpCmdGrammar->LoadCmdFromResource(NULL, MAKEINTRESOURCEW(IDR_CMD_CFG),
-                                                 L"SRGRAMMAR", MAKELANGID(LANG_NEUTRAL, SUBLANG_NEUTRAL),
-                                                 SPLO_DYNAMIC);
+                L"SRGRAMMAR", MAKELANGID(LANG_NEUTRAL, SUBLANG_NEUTRAL),
+                SPLO_DYNAMIC);
         if ( FAILED( hr ) )
         {
             break;
@@ -242,10 +242,10 @@ void CleanupSAPI( void )
         g_cpRecoCtxt.Release();
     }
     // Release recognition engine instance, if created
-	if ( g_cpEngine )
-	{
-		g_cpEngine.Release();
-	}
+    if ( g_cpEngine )
+    {
+        g_cpEngine.Release();
+    }
 }
 
 /******************************************************************************
@@ -266,9 +266,9 @@ void ProcessRecoEvent( HWND hWnd )
         // Look at recognition event only
         switch (event.eEventId)
         {
-            case SPEI_RECOGNITION:
-                ExecuteCommand(event.RecoResult(), hWnd);
-                break;
+        case SPEI_RECOGNITION:
+            ExecuteCommand(event.RecoResult(), hWnd);
+            break;
 
         }
     }
@@ -288,19 +288,19 @@ void ExecuteCommand(ISpPhrase *pPhrase, HWND hWnd)
     // Get the phrase elements, one of which is the rule id we specified in
     // the grammar.  Switch on it to figure out which command was recognized.
     if (SUCCEEDED(pPhrase->GetPhrase(&pElements)))
-    {        
+    {
         switch ( pElements->Rule.ulId )
         {
-            case VID_Navigation:
+        case VID_Navigation:
+        {
+            switch( pElements->pProperties->vValue.ulVal )
             {
-                switch( pElements->pProperties->vValue.ulVal )
-                {
-                    case VID_Counter:
-                        PostMessage( hWnd, WM_GOTOCOUNTER, NULL, NULL );                        
-                    break;
-                }
+            case VID_Counter:
+                PostMessage( hWnd, WM_GOTOCOUNTER, NULL, NULL );
+                break;
             }
-            break;
+        }
+        break;
         }
         // Free the pElements memory which was allocated for us
         ::CoTaskMemFree(pElements);
@@ -319,16 +319,16 @@ LRESULT EntryPaneProc( HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam )
 {
     switch ( message )
     {
-        case WM_GOTOCOUNTER:
-            // Set the right message handler and repaint
-            g_fpCurrentPane = CounterPaneProc;
-            PostMessage( hWnd, WM_INITPANE, NULL, NULL );
-            InvalidateRect( hWnd, NULL, TRUE );
-            return ( 1 );
+    case WM_GOTOCOUNTER:
+        // Set the right message handler and repaint
+        g_fpCurrentPane = CounterPaneProc;
+        PostMessage( hWnd, WM_INITPANE, NULL, NULL );
+        InvalidateRect( hWnd, NULL, TRUE );
+        return ( 1 );
 
-        case WM_PAINT:
-            EntryPanePaint( hWnd );
-            return ( 1 );
+    case WM_PAINT:
+        EntryPanePaint( hWnd );
+        return ( 1 );
     }
     return ( 0 );
 }
@@ -344,13 +344,13 @@ LRESULT CounterPaneProc( HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam )
 {
     switch ( message )
     {
-        case WM_PAINT:
-            CounterPanePaint( hWnd, g_szCounterDisplay );
-            return ( 1 );
+    case WM_PAINT:
+        CounterPanePaint( hWnd, g_szCounterDisplay );
+        return ( 1 );
 
-        case WM_INITPANE:
-            LoadString( g_hInst, IDS_PLEASEORDER, g_szCounterDisplay, MAX_LOADSTRING );
-            return ( 1 );
+    case WM_INITPANE:
+        LoadString( g_hInst, IDS_PLEASEORDER, g_szCounterDisplay, MAX_LOADSTRING );
+        return ( 1 );
 
     }
     return ( 0 );

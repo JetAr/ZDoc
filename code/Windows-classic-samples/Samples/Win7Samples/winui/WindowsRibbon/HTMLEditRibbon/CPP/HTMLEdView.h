@@ -1,4 +1,4 @@
-// HTMLEdView.h : interface of the CHTMLEdView class
+﻿// HTMLEdView.h : interface of the CHTMLEdView class
 //
 // This is a part of the Microsoft Foundation Classes C++ library.
 // Copyright (c) Microsoft Corporation.  All rights reserved.
@@ -28,7 +28,10 @@ public:
     {
         m_sa.RemoveAll();
     }
-    CStringArray& GetStringArray(){ return m_sa; }
+    CStringArray& GetStringArray()
+    {
+        return m_sa;
+    }
 private:
     CStringArray m_sa;
 };
@@ -50,9 +53,9 @@ public:
 // Overrides
     // ClassWizard generated virtual function overrides
     //{{AFX_VIRTUAL(CHTMLEdView)
-    public:
+public:
     virtual void OnInitialUpdate();
-    protected:
+protected:
     virtual void OnActivateView(BOOL bActivate, CView* pActivateView, CView* pDeactiveView);
     //}}AFX_VIRTUAL
 
@@ -66,9 +69,9 @@ public:
     void OnDocumentComplete();
     void OnDisplayChanged();
     virtual HRESULT OnShowContextMenu(DWORD dwID,
-                              LPPOINT ppt,
-                              LPUNKNOWN pcmdtReserved,
-                              LPDISPATCH pdispReserved);
+                                      LPPOINT ppt,
+                                      LPUNKNOWN pcmdtReserved,
+                                      LPDISPATCH pdispReserved);
     virtual HRESULT OnUpdateUI();
     void OnContextMenuAction(long itemIndex);
     void UpdateView();
@@ -103,7 +106,9 @@ private:
 
 #ifndef _DEBUG  // debug version in HTMLEdView.cpp
 inline CHTMLEdDoc* CHTMLEdView::GetDocument()
-   { return (CHTMLEdDoc*)m_pDocument; }
+{
+    return (CHTMLEdDoc*)m_pDocument;
+}
 #endif
 
 /////////////////////////////////////////////////////////////////////////////

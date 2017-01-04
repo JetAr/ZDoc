@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -20,7 +20,7 @@ int WINAPI WinMain(
     HINSTANCE /* hPrevInstance */,
     LPSTR /* lpCmdLine */,
     int /* nCmdShow */
-    )
+)
 {
     // Ignoring the return value because we want to continue running even in the
     // unlikely event that HeapSetInformation fails.
@@ -117,27 +117,27 @@ HRESULT DemoApp::Initialize()
         m_pD2DFactory->GetDesktopDpi(&dpiX, &dpiY);
 
         m_hwnd = CreateWindow(
-            L"D2DDemoApp",
-            L"D2D Simple Path Animation Sample",
-            WS_OVERLAPPEDWINDOW,
-            CW_USEDEFAULT,
-            CW_USEDEFAULT,
-            static_cast<UINT>(ceil(512.f * dpiX / 96.f)),
-            static_cast<UINT>(ceil(512.f * dpiY / 96.f)),
-            NULL,
-            NULL,
-            HINST_THISCOMPONENT,
-            this
-            );
+                     L"D2DDemoApp",
+                     L"D2D Simple Path Animation Sample",
+                     WS_OVERLAPPEDWINDOW,
+                     CW_USEDEFAULT,
+                     CW_USEDEFAULT,
+                     static_cast<UINT>(ceil(512.f * dpiX / 96.f)),
+                     static_cast<UINT>(ceil(512.f * dpiY / 96.f)),
+                     NULL,
+                     NULL,
+                     HINST_THISCOMPONENT,
+                     this
+                 );
         hr = m_hwnd ? S_OK : E_FAIL;
         if (SUCCEEDED(hr))
         {
             float length = 0;
 
             hr = m_pPathGeometry->ComputeLength(
-                NULL, //no transform
-                &length
-                );
+                     NULL, //no transform
+                     &length
+                 );
             if (SUCCEEDED(hr))
             {
                 m_Animation.SetStart(0);        //start at beginning of path
@@ -216,8 +216,8 @@ HRESULT DemoApp::CreateDeviceIndependentResources()
                     0.0f, // rotation angle
                     D2D1_SWEEP_DIRECTION_CLOCKWISE,
                     D2D1_ARC_SIZE_SMALL
-                    )
-                );
+                )
+            );
 
             locDelta = D2D1::Point2F(-locDelta.y, locDelta.x);
 
@@ -244,7 +244,7 @@ HRESULT DemoApp::CreateDeviceIndependentResources()
         pSink->BeginFigure(
             D2D1::Point2F(0.0f, 0.0f),
             D2D1_FIGURE_BEGIN_FILLED
-            );
+        );
 
         const D2D1_POINT_2F ptTriangle[] = {{-10.0f, -10.0f}, {-10.0f, 10.0f}, {0.0f, 0.0f}};
         pSink->AddLines(ptTriangle, 3);
@@ -280,31 +280,31 @@ HRESULT DemoApp::CreateDeviceResources()
         GetClientRect(m_hwnd, &rc);
 
         D2D1_SIZE_U size = D2D1::SizeU(
-            rc.right - rc.left,
-            rc.bottom - rc.top
-            );
+                               rc.right - rc.left,
+                               rc.bottom - rc.top
+                           );
 
         // Create a Direct2D render target
         hr = m_pD2DFactory->CreateHwndRenderTarget(
-            D2D1::RenderTargetProperties(),
-            D2D1::HwndRenderTargetProperties(m_hwnd, size),
-            &m_pRT
-            );
+                 D2D1::RenderTargetProperties(),
+                 D2D1::HwndRenderTargetProperties(m_hwnd, size),
+                 &m_pRT
+             );
         if (SUCCEEDED(hr))
         {
             // Create a red brush.
             hr = m_pRT->CreateSolidColorBrush(
-                D2D1::ColorF(D2D1::ColorF::Red),
-                &m_pRedBrush
-                );
+                     D2D1::ColorF(D2D1::ColorF::Red),
+                     &m_pRedBrush
+                 );
         }
         if (SUCCEEDED(hr))
         {
             // Create a yellow brush.
             hr = m_pRT->CreateSolidColorBrush(
-                D2D1::ColorF(D2D1::ColorF::Yellow),
-                &m_pYellowBrush
-                );
+                     D2D1::ColorF(D2D1::ColorF::Yellow),
+                     &m_pYellowBrush
+                 );
         }
     }
 
@@ -376,14 +376,14 @@ HRESULT DemoApp::OnRender()
         float minWidthHeightScale = min(rtSize.width, rtSize.height) / 512;
 
         D2D1::Matrix3x2F scale = D2D1::Matrix3x2F::Scale(
-            minWidthHeightScale,
-            minWidthHeightScale
-            );
+                                     minWidthHeightScale,
+                                     minWidthHeightScale
+                                 );
 
         D2D1::Matrix3x2F translation = D2D1::Matrix3x2F::Translation(
-            rtSize.width / 2,
-            rtSize.height / 2
-            );
+                                           rtSize.width / 2,
+                                           rtSize.height / 2
+                                       );
 
         // Prepare to draw.
         m_pRT->BeginDraw();
@@ -413,10 +413,10 @@ HRESULT DemoApp::OnRender()
         // Reorient the triangle so that it follows the
         // direction of the path.
         triangleMatrix = D2D1::Matrix3x2F(
-            tangent.x, tangent.y,
-            -tangent.y, tangent.x,
-            point.x, point.y
-            );
+                             tangent.x, tangent.y,
+                             -tangent.y, tangent.x,
+                             point.x, point.y
+                         );
 
         m_pRT->SetTransform(triangleMatrix * scale * translation);
 
@@ -494,17 +494,17 @@ LRESULT CALLBACK DemoApp::WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM
             hwnd,
             GWLP_USERDATA,
             PtrToUlong(pDemoApp)
-            );
+        );
 
         result = 1;
     }
     else
     {
         DemoApp *pDemoApp = reinterpret_cast<DemoApp *>(static_cast<LONG_PTR>(
-            ::GetWindowLongPtrW(
-                hwnd,
-                GWLP_USERDATA
-                )));
+                                ::GetWindowLongPtrW(
+                                    hwnd,
+                                    GWLP_USERDATA
+                                )));
 
         bool wasHandled = false;
 
@@ -513,35 +513,35 @@ LRESULT CALLBACK DemoApp::WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM
             switch(message)
             {
             case WM_SIZE:
-                {
-                    UINT width = LOWORD(lParam);
-                    UINT height = HIWORD(lParam);
-                    pDemoApp->OnResize(width, height);
-                }
-                result = 0;
-                wasHandled = true;
-                break;
+            {
+                UINT width = LOWORD(lParam);
+                UINT height = HIWORD(lParam);
+                pDemoApp->OnResize(width, height);
+            }
+            result = 0;
+            wasHandled = true;
+            break;
 
             case WM_PAINT:
             case WM_DISPLAYCHANGE:
-                {
-                    PAINTSTRUCT ps;
-                    BeginPaint(hwnd, &ps);
+            {
+                PAINTSTRUCT ps;
+                BeginPaint(hwnd, &ps);
 
-                    pDemoApp->OnRender();
-                    EndPaint(hwnd, &ps);
-                }
-                result = 0;
-                wasHandled = true;
-                break;
+                pDemoApp->OnRender();
+                EndPaint(hwnd, &ps);
+            }
+            result = 0;
+            wasHandled = true;
+            break;
 
             case WM_DESTROY:
-                {
-                    PostQuitMessage(0);
-                }
-                result = 1;
-                wasHandled = true;
-                break;
+            {
+                PostQuitMessage(0);
+            }
+            result = 1;
+            wasHandled = true;
+            break;
             }
         }
 

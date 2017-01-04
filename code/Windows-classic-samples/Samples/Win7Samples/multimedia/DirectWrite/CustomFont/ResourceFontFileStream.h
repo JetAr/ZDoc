@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -31,19 +31,19 @@ public:
         UINT64 fileOffset,
         UINT64 fragmentSize,
         OUT void** fragmentContext
-        );
+    );
 
     virtual void STDMETHODCALLTYPE ReleaseFileFragment(
         void* fragmentContext
-        );
+    );
 
     virtual HRESULT STDMETHODCALLTYPE GetFileSize(
         OUT UINT64* fileSize
-        );
+    );
 
     virtual HRESULT STDMETHODCALLTYPE GetLastWriteTime(
         OUT UINT64* lastWriteTime
-        );
+    );
 
     bool IsInitialized()
     {

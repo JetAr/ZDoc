@@ -1,4 +1,4 @@
-//
+﻿//
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -9,10 +9,10 @@
 #ifndef __COMMON__
 #define __COMMON__
 
-#ifndef _WIN32_WINNT            
+#ifndef _WIN32_WINNT
 // Specifies that the minimum required platform is Windows Vista.
 // Change this to the appropriate value to target other versions of Windows.
-#define _WIN32_WINNT 0x0600     
+#define _WIN32_WINNT 0x0600
 #endif
 
 #pragma warning(disable:4201)   // nameless struct/union
@@ -99,43 +99,43 @@ typedef struct _HTTP_IO_RESPONSE
 //
 
 VOID SendCompletionCallback(
-                            PHTTP_IO_CONTEXT pIoContext,
-                            PTP_IO Io,
-                            ULONG IoResult
-                            );
+    PHTTP_IO_CONTEXT pIoContext,
+    PTP_IO Io,
+    ULONG IoResult
+);
 
 VOID ReceiveCompletionCallback(
-                               PHTTP_IO_CONTEXT pIoContext,
-                               PTP_IO Io,
-                               ULONG IoResult
-                               );
+    PHTTP_IO_CONTEXT pIoContext,
+    PTP_IO Io,
+    ULONG IoResult
+);
 
 VOID ProcessReceiveAndPostResponse(
-                                   PHTTP_IO_REQUEST pIoRequest,
-                                   PTP_IO Io,
-                                   ULONG IoResult
-                                   );
+    PHTTP_IO_REQUEST pIoRequest,
+    PTP_IO Io,
+    ULONG IoResult
+);
 
 BOOL GetFilePathName(
-                     PCWSTR BasePath, 
-                     PCWSTR AbsPath, 
-                     PWCHAR Buffer,
-                     ULONG BufferSize
-                     );
+    PCWSTR BasePath,
+    PCWSTR AbsPath,
+    PWCHAR Buffer,
+    ULONG BufferSize
+);
 
 PHTTP_IO_REQUEST AllocateHttpIoRequest(
-                                       PSERVER_CONTEXT pServerContext
-                                       );
+    PSERVER_CONTEXT pServerContext
+);
 
 PHTTP_IO_RESPONSE AllocateHttpIoResponse(
-                                         PSERVER_CONTEXT pServerContext
-                                         );
+    PSERVER_CONTEXT pServerContext
+);
 
 VOID CleanupHttpIoResponse(
-                           PHTTP_IO_RESPONSE pIoResponse
-                           );
+    PHTTP_IO_RESPONSE pIoResponse
+);
 
 VOID CleanupHttpIoRequest(
-                          PHTTP_IO_REQUEST pIoRequest
-                          );
+    PHTTP_IO_REQUEST pIoRequest
+);
 #endif

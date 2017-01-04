@@ -1,6 +1,6 @@
-// WinHttpFormSubmitSample.cpp : Defines the entry point for the console application.
+﻿// WinHttpFormSubmitSample.cpp : Defines the entry point for the console application.
 //
-// Copyright (c) Microsoft Corporation. All rights reserved. 
+// Copyright (c) Microsoft Corporation. All rights reserved.
 
 
 #include "stdio.h"
@@ -12,7 +12,7 @@
 #error "This sample was written as a Unicode only application."
 #endif
 
-BOOL WinHttpFormSubmitSample( LPCWSTR szServer, INTERNET_PORT dwPort, LPWSTR szPath, 
+BOOL WinHttpFormSubmitSample( LPCWSTR szServer, INTERNET_PORT dwPort, LPWSTR szPath,
                               BOOL fUseSSL, LPWSTR szPostFilename);
 
 int _tmain(int argc, _TCHAR* argv[])
@@ -35,7 +35,7 @@ int _tmain(int argc, _TCHAR* argv[])
     urlComponents.dwStructSize = sizeof(urlComponents);
     urlComponents.dwHostNameLength = 1;
     urlComponents.dwUrlPathLength = 1;
-    
+
     if (!WinHttpCrackUrl( szUrl, 0, NULL, &urlComponents))
     {
         printf("\n\nThere was a problem with the URL given, \"%S\".", szUrl);
@@ -47,16 +47,16 @@ int _tmain(int argc, _TCHAR* argv[])
     szAllocPath = new WCHAR[urlComponents.dwUrlPathLength+1];
 
     if (szAllocHost == NULL
-        || szAllocPath == NULL)
+            || szAllocPath == NULL)
     {
         SetLastError(ERROR_OUTOFMEMORY);
         goto done;
     }
 
-    memcpy(szAllocHost, urlComponents.lpszHostName, 
+    memcpy(szAllocHost, urlComponents.lpszHostName,
            urlComponents.dwHostNameLength*sizeof(WCHAR));
     szAllocHost[urlComponents.dwHostNameLength] = L'\0';
-    memcpy(szAllocPath, urlComponents.lpszUrlPath, 
+    memcpy(szAllocPath, urlComponents.lpszUrlPath,
            urlComponents.dwUrlPathLength*sizeof(WCHAR));
     szAllocPath[urlComponents.dwUrlPathLength] = L'\0';
 
@@ -68,14 +68,14 @@ int _tmain(int argc, _TCHAR* argv[])
     }
 
     if (!WinHttpFormSubmitSample(
-          szAllocHost, urlComponents.nPort, szAllocPath,
-          (urlComponents.nScheme == INTERNET_SCHEME_HTTPS) ? TRUE : FALSE, szFilename))
+                szAllocHost, urlComponents.nPort, szAllocPath,
+                (urlComponents.nScheme == INTERNET_SCHEME_HTTPS) ? TRUE : FALSE, szFilename))
     {
         goto done;
     }
 
     SetLastError(NO_ERROR);
-done:    
+done:
     if (GetLastError() != NO_ERROR)
     {
         DWORD dwLastError = GetLastError();
@@ -113,7 +113,7 @@ BOOL GetFileHandleAndSize(LPWSTR szFilename, OUT HANDLE* pHandle, OUT DWORD* pdw
     liSize.LowPart = 0;
     liSize.HighPart = 0;
 
-    hFile = CreateFile(szFilename, GENERIC_READ, FILE_SHARE_READ, NULL, 
+    hFile = CreateFile(szFilename, GENERIC_READ, FILE_SHARE_READ, NULL,
                        OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 
     if (hFile == INVALID_HANDLE_VALUE)
@@ -121,9 +121,9 @@ BOOL GetFileHandleAndSize(LPWSTR szFilename, OUT HANDLE* pHandle, OUT DWORD* pdw
 
     if (!GetFileSizeEx(hFile, &liSize))
         goto done;
-    
-    if (liSize.HighPart != 0 
-        || liSize.LowPart > 0x7FFFFFFF)
+
+    if (liSize.HighPart != 0
+            || liSize.LowPart > 0x7FFFFFFF)
     {
         //  Lets not try to send anything larger than 2 gigs
         SetLastError(ERROR_OPEN_FAILED);
@@ -131,7 +131,7 @@ BOOL GetFileHandleAndSize(LPWSTR szFilename, OUT HANDLE* pHandle, OUT DWORD* pdw
 
     returnValue = TRUE;
 done:
-    
+
     if (returnValue)
     {
         *pHandle = hFile;
@@ -147,8 +147,8 @@ done:
     }
 }
 
-    
-BOOL WinHttpFormSubmitSample( LPCWSTR szServer, INTERNET_PORT dwPort, LPWSTR szPath, 
+
+BOOL WinHttpFormSubmitSample( LPCWSTR szServer, INTERNET_PORT dwPort, LPWSTR szPath,
                               BOOL fUseSSL, LPWSTR szPostFilename)
 {
     DWORD dwStatusCode = 0;
@@ -161,7 +161,7 @@ BOOL WinHttpFormSubmitSample( LPCWSTR szServer, INTERNET_PORT dwPort, LPWSTR szP
     DWORD dwFileSize = 0;
     BYTE byteBuffer[2048];
 
-    HINTERNET  hSession = NULL, 
+    HINTERNET  hSession = NULL,
                hConnect = NULL,
                hRequest = NULL;
 
@@ -173,9 +173,9 @@ BOOL WinHttpFormSubmitSample( LPCWSTR szServer, INTERNET_PORT dwPort, LPWSTR szP
         goto done;
 
     // Use WinHttpOpen to obtain a session handle.
-    hSession = WinHttpOpen( L"WinHttpFormSubmitSample",  
+    hSession = WinHttpOpen( L"WinHttpFormSubmitSample",
                             WINHTTP_ACCESS_TYPE_DEFAULT_PROXY,
-                            WINHTTP_NO_PROXY_NAME, 
+                            WINHTTP_NO_PROXY_NAME,
                             WINHTTP_NO_PROXY_BYPASS, 0);
     if (hSession == NULL)
         goto done;
@@ -187,15 +187,15 @@ BOOL WinHttpFormSubmitSample( LPCWSTR szServer, INTERNET_PORT dwPort, LPWSTR szP
 
     // Create an HTTP request handle.
     hRequest = WinHttpOpenRequest( hConnect, L"POST", szPath,
-               NULL, WINHTTP_NO_REFERER, WINHTTP_DEFAULT_ACCEPT_TYPES, 
-               fUseSSL ? WINHTTP_FLAG_SECURE : 0);
+                                   NULL, WINHTTP_NO_REFERER, WINHTTP_DEFAULT_ACCEPT_TYPES,
+                                   fUseSSL ? WINHTTP_FLAG_SECURE : 0);
     if (hRequest == NULL)
         goto done;
 
     //  Add the "Content-Type" header
 
-    if (!WinHttpAddRequestHeaders(hRequest, szContentType, (DWORD)-1, 
-               WINHTTP_ADDREQ_FLAG_ADD & WINHTTP_ADDREQ_FLAG_REPLACE))
+    if (!WinHttpAddRequestHeaders(hRequest, szContentType, (DWORD)-1,
+                                  WINHTTP_ADDREQ_FLAG_ADD & WINHTTP_ADDREQ_FLAG_REPLACE))
         goto done;
 
     bResults = WinHttpSendRequest( hRequest,
@@ -225,7 +225,7 @@ BOOL WinHttpFormSubmitSample( LPCWSTR szServer, INTERNET_PORT dwPort, LPWSTR szP
         }
 
         if (!WinHttpWriteData( hRequest, byteBuffer, dwTemp, &dwTemp2)
-            || dwTemp != dwTemp2)
+                || dwTemp != dwTemp2)
         {
             goto done;
         }
@@ -241,9 +241,9 @@ BOOL WinHttpFormSubmitSample( LPCWSTR szServer, INTERNET_PORT dwPort, LPWSTR szP
         goto done;
 
     // Check the status code.
-    bResults = WinHttpQueryHeaders( hRequest, 
+    bResults = WinHttpQueryHeaders( hRequest,
                                     WINHTTP_QUERY_STATUS_CODE|
-                                    WINHTTP_QUERY_FLAG_NUMBER, NULL, 
+                                    WINHTTP_QUERY_FLAG_NUMBER, NULL,
                                     &dwStatusCode, &dwSize, NULL);
     if (!bResults)
         goto done;
@@ -252,7 +252,7 @@ BOOL WinHttpFormSubmitSample( LPCWSTR szServer, INTERNET_PORT dwPort, LPWSTR szP
     {
         switch (dwStatusCode)
         {
-        case 200: 
+        case 200:
             //  The resource was successfully retrieved.
             //  You could use WinHttpReadData to read the contents of the server's response.
             printf("\nSuccessfuly posted to %S.", szServer);
@@ -268,18 +268,18 @@ BOOL WinHttpFormSubmitSample( LPCWSTR szServer, INTERNET_PORT dwPort, LPWSTR szP
 
 done:
     dwTemp = GetLastError();
-    
+
     // Close any open handles.
-    if (hRequest) 
+    if (hRequest)
         WinHttpCloseHandle(hRequest);
-    
-    if (hConnect) 
+
+    if (hConnect)
         WinHttpCloseHandle(hConnect);
-    
-    if (hSession) 
+
+    if (hSession)
         WinHttpCloseHandle(hSession);
-    
-    if (hFile != INVALID_HANDLE_VALUE) 
+
+    if (hFile != INVALID_HANDLE_VALUE)
         CloseHandle(hFile);
 
     SetLastError(dwTemp);

@@ -1,10 +1,10 @@
-/*++
+﻿/*++
 
 Copyright (c) 1998-1999  Microsoft Corporation
 
 Module Name:
 
-    mspaddr.cpp 
+    mspaddr.cpp
 
 Abstract:
 
@@ -28,12 +28,12 @@ Abstract:
 //
 //  AllocateEventItem
 //
-//  allocate an MSPEVENTITEM. Since the structure is of variable size, the 
-//  number of extra bytes to be allocated (in addition to the size of 
+//  allocate an MSPEVENTITEM. Since the structure is of variable size, the
+//  number of extra bytes to be allocated (in addition to the size of
 //  MSPEVENTITEM) is optionally passed as the function's argument
 //
-//  the function returns a pointer to the newly created structure or NULL in 
-//  the case of failure. the caller can then call GetLastError to get more 
+//  the function returns a pointer to the newly created structure or NULL in
+//  the case of failure. the caller can then call GetLastError to get more
 //  information on the failure
 //
 
@@ -51,8 +51,8 @@ MSPEVENTITEM *AllocateEventItem(SIZE_T nExtraBytes)
     {
         SetLastError(ERROR_OUTOFMEMORY);
 
-        LOG((MSP_ERROR, 
-            "AllocateEventItem - the caller requested an unreasonably large memory block"));
+        LOG((MSP_ERROR,
+             "AllocateEventItem - the caller requested an unreasonably large memory block"));
 
         return NULL;
     }
@@ -72,9 +72,9 @@ MSPEVENTITEM *AllocateEventItem(SIZE_T nExtraBytes)
         // this will cause a leak.
         //
 
-        LOG((MSP_ERROR, 
-            "AllocateEventItem - failed to get current process heap. LastError [%ld]", 
-            GetLastError()));
+        LOG((MSP_ERROR,
+             "AllocateEventItem - failed to get current process heap. LastError [%ld]",
+             GetLastError()));
 
         return NULL;
     }
@@ -90,17 +90,17 @@ MSPEVENTITEM *AllocateEventItem(SIZE_T nExtraBytes)
     //
     // attempt to allocate memory and return result of the allocation
     //
-    
-    MSPEVENTITEM *pMspEventItem = 
-         (MSPEVENTITEM *)HeapAlloc(hHeapHandle, 0, nTotalAllocationSize);
+
+    MSPEVENTITEM *pMspEventItem =
+        (MSPEVENTITEM *)HeapAlloc(hHeapHandle, 0, nTotalAllocationSize);
 
 
     if (NULL == pMspEventItem)
     {
 
         LOG((MSP_ERROR,
-            "AllocateEventItem - failed to allocate [0x%p] bytes. Heap Handle [%p] LastError [%ld]",
-            nTotalAllocationSize, hHeapHandle, GetLastError()));
+             "AllocateEventItem - failed to allocate [0x%p] bytes. Heap Handle [%p] LastError [%ld]",
+             nTotalAllocationSize, hHeapHandle, GetLastError()));
     }
     else
     {
@@ -119,15 +119,15 @@ MSPEVENTITEM *AllocateEventItem(SIZE_T nExtraBytes)
 //  deallocate the MSPEVENTITEM passed as an argument. The memory must have
 //  been previously allocated by AllocateEventItem.
 //
-//  the function eturns FALSE in case of failure. The caller can use 
+//  the function eturns FALSE in case of failure. The caller can use
 //  GetLastError to get a more specific error code.
 //
 
 BOOL FreeEventItem(MSPEVENTITEM *pEventItemToBeFreed)
 {
 
-    LOG((MSP_TRACE, "FreeEventItem - enter. pEventItemToBeFreed = [%p]", 
-        pEventItemToBeFreed));
+    LOG((MSP_TRACE, "FreeEventItem - enter. pEventItemToBeFreed = [%p]",
+         pEventItemToBeFreed));
 
 
     //
@@ -157,9 +157,9 @@ BOOL FreeEventItem(MSPEVENTITEM *pEventItemToBeFreed)
         // this will cause a leak.
         //
 
-        LOG((MSP_ERROR, 
-            "FreeEventItem - failed to get current process heap. LastError = %ld", 
-            GetLastError()));
+        LOG((MSP_ERROR,
+             "FreeEventItem - failed to get current process heap. LastError = %ld",
+             GetLastError()));
 
         return FALSE;
     }
@@ -168,16 +168,16 @@ BOOL FreeEventItem(MSPEVENTITEM *pEventItemToBeFreed)
     //
     // attempt to free memory and return result of the operation
     //
-    
+
     BOOL bFreeSuccess = HeapFree( hHeapHandle, 0, pEventItemToBeFreed );
 
     if (bFreeSuccess)
     {
-         LOG((MSP_TRACE, "FreeEventItem - exit."));
+        LOG((MSP_TRACE, "FreeEventItem - exit."));
     }
     else
     {
-         LOG((MSP_ERROR, 
+        LOG((MSP_ERROR,
              "FreeEventItem - failed to free. Heap Handle [%p] LastError = %ld",
              hHeapHandle, GetLastError()));
     }
@@ -195,12 +195,12 @@ HRESULT CPlugTerminalClassInfo::FinalConstruct(void)
     LOG((MSP_TRACE, "CPlugTerminalClassInfo::FinalConstruct - enter"));
 
     HRESULT hr = CoCreateFreeThreadedMarshaler( GetControllingUnknown(),
-                                                & m_pFTM );
+                 & m_pFTM );
 
     if ( FAILED(hr) )
     {
         LOG((MSP_ERROR, "CPlugTerminalClassInfo::FinalConstruct - "
-            "create FTM returned 0x%08x; exit", hr));
+             "create FTM returned 0x%08x; exit", hr));
 
         return hr;
     }
@@ -215,7 +215,7 @@ HRESULT CPlugTerminalClassInfo::FinalConstruct(void)
 
 STDMETHODIMP CPlugTerminalClassInfo::get_Name(
     /*[out, retval]*/ BSTR*     pName
-    )
+)
 {
     //
     // Critical section
@@ -232,7 +232,7 @@ STDMETHODIMP CPlugTerminalClassInfo::get_Name(
     if( ! pName)
     {
         LOG((MSP_ERROR, "CPlugTerminalClassInfo::get_Name exit -"
-            "pName invalid, returns E_POINTER"));
+             "pName invalid, returns E_POINTER"));
         return E_POINTER;
     }
 
@@ -243,7 +243,7 @@ STDMETHODIMP CPlugTerminalClassInfo::get_Name(
     if( ! m_bstrName)
     {
         LOG((MSP_ERROR, "CPlugTerminalClassInfo::get_Name exit -"
-            "m_bstrName invalid, returns E_UNEXPECTED"));
+             "m_bstrName invalid, returns E_UNEXPECTED"));
         return E_UNEXPECTED;
     }
 
@@ -260,7 +260,7 @@ STDMETHODIMP CPlugTerminalClassInfo::get_Name(
     if( *pName == NULL )
     {
         LOG((MSP_ERROR, "CPlugTerminalClassInfo::get_Name exit -"
-            "SysAllocString failed, returns E_OUTOFMEMORY"));
+             "SysAllocString failed, returns E_OUTOFMEMORY"));
         return E_OUTOFMEMORY;
     }
 
@@ -274,7 +274,7 @@ STDMETHODIMP CPlugTerminalClassInfo::get_Name(
 
 STDMETHODIMP CPlugTerminalClassInfo::put_Name(
     /*[in]*/    BSTR            bstrName
-    )
+)
 {
     //
     // Critical section
@@ -291,7 +291,7 @@ STDMETHODIMP CPlugTerminalClassInfo::put_Name(
     if(! bstrName)
     {
         LOG((MSP_ERROR, "CPlugTerminalClassInfo::put_Name exit -"
-            "bstrName invalid, returns E_POINTER"));
+             "bstrName invalid, returns E_POINTER"));
         return E_POINTER;
     }
 
@@ -318,7 +318,7 @@ STDMETHODIMP CPlugTerminalClassInfo::put_Name(
     if( NULL == m_bstrName )
     {
         LOG((MSP_ERROR, "CPlugTerminalClassInfo::put_Name exit -"
-            "SysAllocString failed, returns E_OUTOFMEMORY"));
+             "SysAllocString failed, returns E_OUTOFMEMORY"));
         return E_OUTOFMEMORY;
     }
 
@@ -332,7 +332,7 @@ STDMETHODIMP CPlugTerminalClassInfo::put_Name(
 
 STDMETHODIMP CPlugTerminalClassInfo::get_Company(
     /*[out, retval]*/ BSTR*     pCompany
-    )
+)
 {
     //
     // Critical section
@@ -349,7 +349,7 @@ STDMETHODIMP CPlugTerminalClassInfo::get_Company(
     if( ! pCompany)
     {
         LOG((MSP_ERROR, "CPlugTerminalClassInfo::get_Company exit -"
-            "pCompany invalid, returns E_POINTER"));
+             "pCompany invalid, returns E_POINTER"));
         return E_POINTER;
     }
 
@@ -360,7 +360,7 @@ STDMETHODIMP CPlugTerminalClassInfo::get_Company(
     if( ! m_bstrCompany)
     {
         LOG((MSP_ERROR, "CPlugTerminalClassInfo::get_Company exit -"
-            "m_bstrName invalid, returns E_UNEXPECTED"));
+             "m_bstrName invalid, returns E_UNEXPECTED"));
         return E_UNEXPECTED;
     }
 
@@ -377,7 +377,7 @@ STDMETHODIMP CPlugTerminalClassInfo::get_Company(
     if( *pCompany == NULL )
     {
         LOG((MSP_ERROR, "CPlugTerminalClassInfo::get_Company exit -"
-            "SysAllocString failed, returns E_OUTOFMEMORY"));
+             "SysAllocString failed, returns E_OUTOFMEMORY"));
         return E_OUTOFMEMORY;
     }
 
@@ -391,7 +391,7 @@ STDMETHODIMP CPlugTerminalClassInfo::get_Company(
 
 STDMETHODIMP CPlugTerminalClassInfo::put_Company(
     /*[in]*/    BSTR            bstrCompany
-    )
+)
 {
     //
     // Critical section
@@ -408,7 +408,7 @@ STDMETHODIMP CPlugTerminalClassInfo::put_Company(
     if(! bstrCompany)
     {
         LOG((MSP_ERROR, "CPlugTerminalClassInfo::put_Company exit -"
-            "bstrCompany invalid, returns E_POINTER"));
+             "bstrCompany invalid, returns E_POINTER"));
         return E_POINTER;
     }
 
@@ -435,7 +435,7 @@ STDMETHODIMP CPlugTerminalClassInfo::put_Company(
     if( NULL == m_bstrCompany )
     {
         LOG((MSP_ERROR, "CPlugTerminalClassInfo::put_Company exit -"
-            "SysAllocString failed, returns E_OUTOFMEMORY"));
+             "SysAllocString failed, returns E_OUTOFMEMORY"));
         return E_OUTOFMEMORY;
     }
 
@@ -449,7 +449,7 @@ STDMETHODIMP CPlugTerminalClassInfo::put_Company(
 
 STDMETHODIMP CPlugTerminalClassInfo::get_Version(
     /*[out, retval]*/ BSTR*     pVersion
-    )
+)
 {
     //
     // Critical section
@@ -466,7 +466,7 @@ STDMETHODIMP CPlugTerminalClassInfo::get_Version(
     if( ! pVersion)
     {
         LOG((MSP_ERROR, "CPlugTerminalClassInfo::get_Version exit -"
-            "pVersion invalid, returns E_POINTER"));
+             "pVersion invalid, returns E_POINTER"));
         return E_POINTER;
     }
 
@@ -477,7 +477,7 @@ STDMETHODIMP CPlugTerminalClassInfo::get_Version(
     if( ! m_bstrVersion)
     {
         LOG((MSP_ERROR, "CPlugTerminalClassInfo::get_Version exit -"
-            "m_bstrName invalid, returns E_UNEXPECTED"));
+             "m_bstrName invalid, returns E_UNEXPECTED"));
         return E_UNEXPECTED;
     }
 
@@ -494,7 +494,7 @@ STDMETHODIMP CPlugTerminalClassInfo::get_Version(
     if( *pVersion == NULL )
     {
         LOG((MSP_ERROR, "CPlugTerminalClassInfo::get_Version exit -"
-            "SysAllocString failed, returns E_OUTOFMEMORY"));
+             "SysAllocString failed, returns E_OUTOFMEMORY"));
         return E_OUTOFMEMORY;
     }
 
@@ -508,7 +508,7 @@ STDMETHODIMP CPlugTerminalClassInfo::get_Version(
 
 STDMETHODIMP CPlugTerminalClassInfo::put_Version(
     /*[in]*/    BSTR            bstrVersion
-    )
+)
 {
     //
     // Critical section
@@ -525,7 +525,7 @@ STDMETHODIMP CPlugTerminalClassInfo::put_Version(
     if(! bstrVersion)
     {
         LOG((MSP_ERROR, "CPlugTerminalClassInfo::put_Version exit -"
-            "bstrVersion invalid, returns E_POINTER"));
+             "bstrVersion invalid, returns E_POINTER"));
         return E_POINTER;
     }
 
@@ -552,7 +552,7 @@ STDMETHODIMP CPlugTerminalClassInfo::put_Version(
     if( NULL == m_bstrVersion )
     {
         LOG((MSP_ERROR, "CPlugTerminalClassInfo::put_Version exit -"
-            "SysAllocString failed, returns E_OUTOFMEMORY"));
+             "SysAllocString failed, returns E_OUTOFMEMORY"));
         return E_OUTOFMEMORY;
     }
 
@@ -566,7 +566,7 @@ STDMETHODIMP CPlugTerminalClassInfo::put_Version(
 
 STDMETHODIMP CPlugTerminalClassInfo::get_TerminalClass(
     /*[out, retval]*/ BSTR*     pTerminalClass
-    )
+)
 {
     //
     // Critical section
@@ -583,7 +583,7 @@ STDMETHODIMP CPlugTerminalClassInfo::get_TerminalClass(
     if( ! pTerminalClass)
     {
         LOG((MSP_ERROR, "CPlugTerminalClassInfo::get_TerminalClass exit -"
-            "pVersion invalid, returns E_POINTER"));
+             "pVersion invalid, returns E_POINTER"));
         return E_POINTER;
     }
 
@@ -594,7 +594,7 @@ STDMETHODIMP CPlugTerminalClassInfo::get_TerminalClass(
     if( ! m_bstrTerminalClass)
     {
         LOG((MSP_ERROR, "CPlugTerminalClassInfo::get_TerminalClass exit -"
-            "m_bstrName invalid, returns E_UNEXPECTED"));
+             "m_bstrName invalid, returns E_UNEXPECTED"));
         return E_UNEXPECTED;
     }
 
@@ -611,7 +611,7 @@ STDMETHODIMP CPlugTerminalClassInfo::get_TerminalClass(
     if( *pTerminalClass == NULL )
     {
         LOG((MSP_ERROR, "CPlugTerminalClassInfo::get_TerminalClass exit -"
-            "SysAllocString failed, returns E_OUTOFMEMORY"));
+             "SysAllocString failed, returns E_OUTOFMEMORY"));
         return E_OUTOFMEMORY;
     }
 
@@ -625,7 +625,7 @@ STDMETHODIMP CPlugTerminalClassInfo::get_TerminalClass(
 
 STDMETHODIMP CPlugTerminalClassInfo::put_TerminalClass(
     /*[in]*/    BSTR            bstrTerminalClass
-    )
+)
 {
     //
     // Critical section
@@ -642,7 +642,7 @@ STDMETHODIMP CPlugTerminalClassInfo::put_TerminalClass(
     if(! bstrTerminalClass)
     {
         LOG((MSP_ERROR, "CPlugTerminalClassInfo::put_TerminalClass exit -"
-            "bstrTerminalClass invalid, returns E_POINTER"));
+             "bstrTerminalClass invalid, returns E_POINTER"));
         return E_POINTER;
     }
 
@@ -655,7 +655,7 @@ STDMETHODIMP CPlugTerminalClassInfo::put_TerminalClass(
     if( FAILED(hr) )
     {
         LOG((MSP_ERROR, "CPlugTerminalClassInfo::put_TerminalClass exit -"
-            "bstrTerminalClass is not a CLSID, returns E_INVALIDARG"));
+             "bstrTerminalClass is not a CLSID, returns E_INVALIDARG"));
         return E_INVALIDARG;
     }
 
@@ -683,7 +683,7 @@ STDMETHODIMP CPlugTerminalClassInfo::put_TerminalClass(
     if( NULL == m_bstrTerminalClass )
     {
         LOG((MSP_ERROR, "CPlugTerminalClassInfo::put_TerminalClass exit -"
-            "SysAllocString failed, returns E_OUTOFMEMORY"));
+             "SysAllocString failed, returns E_OUTOFMEMORY"));
         return E_OUTOFMEMORY;
     }
 
@@ -697,7 +697,7 @@ STDMETHODIMP CPlugTerminalClassInfo::put_TerminalClass(
 
 STDMETHODIMP CPlugTerminalClassInfo::get_CLSID(
     /*[out, retval]*/ BSTR*     pCLSID
-    )
+)
 {
     //
     // Critical section
@@ -714,7 +714,7 @@ STDMETHODIMP CPlugTerminalClassInfo::get_CLSID(
     if( ! pCLSID)
     {
         LOG((MSP_ERROR, "CPlugTerminalClassInfo::get_CLSID exit -"
-            "pVersion invalid, returns E_POINTER"));
+             "pVersion invalid, returns E_POINTER"));
         return E_POINTER;
     }
 
@@ -725,7 +725,7 @@ STDMETHODIMP CPlugTerminalClassInfo::get_CLSID(
     if( ! m_bstrCLSID)
     {
         LOG((MSP_ERROR, "CPlugTerminalClassInfo::get_CLSID exit -"
-            "m_bstrName invalid, returns E_UNEXPECTED"));
+             "m_bstrName invalid, returns E_UNEXPECTED"));
         return E_UNEXPECTED;
     }
 
@@ -742,7 +742,7 @@ STDMETHODIMP CPlugTerminalClassInfo::get_CLSID(
     if( *pCLSID == NULL )
     {
         LOG((MSP_ERROR, "CPlugTerminalClassInfo::get_CLSID exit -"
-            "SysAllocString failed, returns E_OUTOFMEMORY"));
+             "SysAllocString failed, returns E_OUTOFMEMORY"));
         return E_OUTOFMEMORY;
     }
 
@@ -756,7 +756,7 @@ STDMETHODIMP CPlugTerminalClassInfo::get_CLSID(
 
 STDMETHODIMP CPlugTerminalClassInfo::put_CLSID(
     /*[in]*/    BSTR            bstrCLSID
-    )
+)
 {
     //
     // Critical section
@@ -773,7 +773,7 @@ STDMETHODIMP CPlugTerminalClassInfo::put_CLSID(
     if(! bstrCLSID)
     {
         LOG((MSP_ERROR, "CPlugTerminalClassInfo::put_CLSID exit -"
-            "bstrCLSID invalid, returns E_POINTER"));
+             "bstrCLSID invalid, returns E_POINTER"));
         return E_POINTER;
     }
 
@@ -786,7 +786,7 @@ STDMETHODIMP CPlugTerminalClassInfo::put_CLSID(
     if( FAILED(hr) )
     {
         LOG((MSP_ERROR, "CPlugTerminalClassInfo::put_CLSID exit -"
-            "bstrCLSID is not a CLSID, returns E_INVALIDARG"));
+             "bstrCLSID is not a CLSID, returns E_INVALIDARG"));
         return E_INVALIDARG;
     }
 
@@ -814,7 +814,7 @@ STDMETHODIMP CPlugTerminalClassInfo::put_CLSID(
     if( NULL == m_bstrCLSID )
     {
         LOG((MSP_ERROR, "CPlugTerminalClassInfo::put_CLSID exit -"
-            "SysAllocString failed, returns E_OUTOFMEMORY"));
+             "SysAllocString failed, returns E_OUTOFMEMORY"));
         return E_OUTOFMEMORY;
     }
 
@@ -828,7 +828,7 @@ STDMETHODIMP CPlugTerminalClassInfo::put_CLSID(
 
 STDMETHODIMP CPlugTerminalClassInfo::get_Direction(
     /*[out, retval]*/ TERMINAL_DIRECTION*  pDirection
-    )
+)
 {
     //
     // Critical section
@@ -845,7 +845,7 @@ STDMETHODIMP CPlugTerminalClassInfo::get_Direction(
     if( ! pDirection)
     {
         LOG((MSP_ERROR, "CPlugTerminalClassInfo::get_Direction exit -"
-            "pDirection invalid, returns E_POINTER"));
+             "pDirection invalid, returns E_POINTER"));
         return E_POINTER;
     }
 
@@ -865,7 +865,7 @@ STDMETHODIMP CPlugTerminalClassInfo::get_Direction(
 
 STDMETHODIMP CPlugTerminalClassInfo::put_Direction(
     /*[in]*/    TERMINAL_DIRECTION  nDirection
-    )
+)
 {
     //
     // Critical section
@@ -891,7 +891,7 @@ STDMETHODIMP CPlugTerminalClassInfo::put_Direction(
 
 STDMETHODIMP CPlugTerminalClassInfo::get_MediaTypes(
     /*[out, retval]*/ long*     pMediaTypes
-    )
+)
 {
     //
     // Critical section
@@ -908,7 +908,7 @@ STDMETHODIMP CPlugTerminalClassInfo::get_MediaTypes(
     if( ! pMediaTypes)
     {
         LOG((MSP_ERROR, "CPlugTerminalClassInfo::get_MediaTypes exit -"
-            "pMediaTypes invalid, returns E_POINTER"));
+             "pMediaTypes invalid, returns E_POINTER"));
         return E_POINTER;
     }
 
@@ -928,7 +928,7 @@ STDMETHODIMP CPlugTerminalClassInfo::get_MediaTypes(
 
 STDMETHODIMP CPlugTerminalClassInfo::put_MediaTypes(
     /*[in]*/    long            nMediaTypes
-    )
+)
 {
     //
     // Critical section
@@ -956,12 +956,12 @@ HRESULT CPlugTerminalSuperclassInfo::FinalConstruct(void)
     LOG((MSP_TRACE, "CPlugTerminalSuperclassInfo::FinalConstruct - enter"));
 
     HRESULT hr = CoCreateFreeThreadedMarshaler( GetControllingUnknown(),
-                                                & m_pFTM );
+                 & m_pFTM );
 
     if ( FAILED(hr) )
     {
         LOG((MSP_ERROR, "CPlugTerminalSuperclassInfo::FinalConstruct - "
-            "create FTM returned 0x%08x; exit", hr));
+             "create FTM returned 0x%08x; exit", hr));
 
         return hr;
     }
@@ -976,7 +976,7 @@ HRESULT CPlugTerminalSuperclassInfo::FinalConstruct(void)
 
 STDMETHODIMP CPlugTerminalSuperclassInfo::get_Name(
     /*[out, retval]*/ BSTR*          pName
-    )
+)
 {
     //
     // Critical section
@@ -993,7 +993,7 @@ STDMETHODIMP CPlugTerminalSuperclassInfo::get_Name(
     if( ! pName)
     {
         LOG((MSP_ERROR, "CPlugTerminalSuperclassInfo::get_Name exit -"
-            "pVersion invalid, returns E_POINTER"));
+             "pVersion invalid, returns E_POINTER"));
         return E_POINTER;
     }
 
@@ -1004,7 +1004,7 @@ STDMETHODIMP CPlugTerminalSuperclassInfo::get_Name(
     if( ! m_bstrName)
     {
         LOG((MSP_ERROR, "CPlugTerminalSuperclassInfo::get_Name exit -"
-            "m_bstrName invalid, returns E_UNEXPECTED"));
+             "m_bstrName invalid, returns E_UNEXPECTED"));
         return E_UNEXPECTED;
     }
 
@@ -1021,7 +1021,7 @@ STDMETHODIMP CPlugTerminalSuperclassInfo::get_Name(
     if( *pName == NULL )
     {
         LOG((MSP_ERROR, "CPlugTerminalSuperclassInfo::get_Name exit -"
-            "SysAllocString failed, returns E_OUTOFMEMORY"));
+             "SysAllocString failed, returns E_OUTOFMEMORY"));
         return E_OUTOFMEMORY;
     }
 
@@ -1034,7 +1034,7 @@ STDMETHODIMP CPlugTerminalSuperclassInfo::get_Name(
 
 STDMETHODIMP CPlugTerminalSuperclassInfo::put_Name(
     /*[in]*/          BSTR            bstrName
-    )
+)
 {
     //
     // Critical section
@@ -1051,7 +1051,7 @@ STDMETHODIMP CPlugTerminalSuperclassInfo::put_Name(
     if(! bstrName)
     {
         LOG((MSP_ERROR, "CPlugTerminalSuperclassInfo::put_Name exit -"
-            "bstrName invalid, returns E_POINTER"));
+             "bstrName invalid, returns E_POINTER"));
         return E_POINTER;
     }
 
@@ -1078,7 +1078,7 @@ STDMETHODIMP CPlugTerminalSuperclassInfo::put_Name(
     if( NULL == m_bstrName )
     {
         LOG((MSP_ERROR, "CPlugTerminalSuperclassInfo::put_Name exit -"
-            "SysAllocString failed, returns E_OUTOFMEMORY"));
+             "SysAllocString failed, returns E_OUTOFMEMORY"));
         return E_OUTOFMEMORY;
     }
 
@@ -1091,7 +1091,7 @@ STDMETHODIMP CPlugTerminalSuperclassInfo::put_Name(
 
 STDMETHODIMP CPlugTerminalSuperclassInfo::get_CLSID(
     /*[out, retval]*/ BSTR*           pCLSID
-    )
+)
 {
     //
     // Critical section
@@ -1108,7 +1108,7 @@ STDMETHODIMP CPlugTerminalSuperclassInfo::get_CLSID(
     if( ! pCLSID)
     {
         LOG((MSP_ERROR, "CPlugTerminalSuperclassInfo::get_CLSID exit -"
-            "pVersion invalid, returns E_POINTER"));
+             "pVersion invalid, returns E_POINTER"));
         return E_POINTER;
     }
 
@@ -1119,7 +1119,7 @@ STDMETHODIMP CPlugTerminalSuperclassInfo::get_CLSID(
     if( ! m_bstrCLSID)
     {
         LOG((MSP_ERROR, "CPlugTerminalSuperclassInfo::get_CLSID exit -"
-            "m_bstrName invalid, returns E_UNEXPECTED"));
+             "m_bstrName invalid, returns E_UNEXPECTED"));
         return E_UNEXPECTED;
     }
 
@@ -1136,7 +1136,7 @@ STDMETHODIMP CPlugTerminalSuperclassInfo::get_CLSID(
     if( *pCLSID == NULL )
     {
         LOG((MSP_ERROR, "CPlugTerminalSuperclassInfo::get_CLSID exit -"
-            "SysAllocString failed, returns E_OUTOFMEMORY"));
+             "SysAllocString failed, returns E_OUTOFMEMORY"));
         return E_OUTOFMEMORY;
     }
 
@@ -1150,7 +1150,7 @@ STDMETHODIMP CPlugTerminalSuperclassInfo::get_CLSID(
 
 STDMETHODIMP CPlugTerminalSuperclassInfo::put_CLSID(
     /*[in]*/         BSTR            bstrCLSID
-    )
+)
 {
     //
     // Critical section
@@ -1167,7 +1167,7 @@ STDMETHODIMP CPlugTerminalSuperclassInfo::put_CLSID(
     if(! bstrCLSID)
     {
         LOG((MSP_ERROR, "CPlugTerminalClassInfo::put_CLSID exit -"
-            "bstrCLSID invalid, returns E_POINTER"));
+             "bstrCLSID invalid, returns E_POINTER"));
         return E_POINTER;
     }
 
@@ -1180,7 +1180,7 @@ STDMETHODIMP CPlugTerminalSuperclassInfo::put_CLSID(
     if( FAILED(hr) )
     {
         LOG((MSP_ERROR, "CPlugTerminalSuperclassInfo::put_CLSID exit -"
-            "bstrCLSID is not a CLSID, returns E_INVALIDARG"));
+             "bstrCLSID is not a CLSID, returns E_INVALIDARG"));
         return E_INVALIDARG;
     }
 
@@ -1208,7 +1208,7 @@ STDMETHODIMP CPlugTerminalSuperclassInfo::put_CLSID(
     if( NULL == m_bstrCLSID )
     {
         LOG((MSP_ERROR, "CPlugTerminalSuperclassInfo::put_CLSID exit -"
-            "SysAllocString failed, returns E_OUTOFMEMORY"));
+             "SysAllocString failed, returns E_OUTOFMEMORY"));
         return E_OUTOFMEMORY;
     }
 
@@ -1244,7 +1244,7 @@ const STATIC_TERMINAL_TYPE CMSPAddress::m_saTerminalTypes[] =
 };
 
 const DWORD CMSPAddress::m_sdwTerminalTypesCount = sizeof(m_saTerminalTypes)
-                                              / sizeof (STATIC_TERMINAL_TYPE);
+        / sizeof (STATIC_TERMINAL_TYPE);
 
 /////////////////////////////////////////////////////////////////////////////
 // CMSPAddress
@@ -1274,18 +1274,18 @@ CMSPAddress::CMSPAddress()
 
     LOG((MSP_TRACE, "CMSPAddress::CMSPAddress - finished"));
 }
-      
-CMSPAddress::~CMSPAddress() 
+
+CMSPAddress::~CMSPAddress()
 {
     LOG((MSP_TRACE, "CMSPAddress::~CMSPAddress[%p] - enter", this));
 
 
     //
     // this should have been taken care of in Shutdown,
-    // but just in case shutdown was never called, do this again, since 
-    // we need to make sure the thread does not have any stale entries in 
+    // but just in case shutdown was never called, do this again, since
+    // we need to make sure the thread does not have any stale entries in
     // its pnp notification list
-    // 
+    //
     // the call is likely to return error (since the object is likely to have been
     // unregisted earlier) -- so ignore return code
     //
@@ -1298,12 +1298,12 @@ CMSPAddress::~CMSPAddress()
 
 STDMETHODIMP CMSPAddress::Initialize(
     IN      MSP_HANDLE          htEvent
-    )
+)
 /*++
 
 Routine Description:
 
-This method is called by TAPI3 when this MSP is first created. The method 
+This method is called by TAPI3 when this MSP is first created. The method
 initiailzes data members and creates the terminal manager. It also tells
 the global thread object to Start().
 
@@ -1312,7 +1312,7 @@ Arguments:
 htEvent
     Event the MSP signals when passing an event structure back to TAPI.
 
-  
+
 Return Value:
 
     S_OK
@@ -1322,9 +1322,9 @@ Return Value:
 
 --*/
 {
-    LOG((MSP_TRACE, 
-        "MSP address %x initialize entered, htEvent:%x",
-        this, htEvent));
+    LOG((MSP_TRACE,
+         "MSP address %x initialize entered, htEvent:%x",
+         this, htEvent));
 
     if ( htEvent == NULL )
     {
@@ -1346,7 +1346,7 @@ Return Value:
 
     // save handles.
     m_htEvent   = htEvent;
-    
+
     InitializeListHead(&m_EventList);
 
     HRESULT hr;
@@ -1360,44 +1360,44 @@ Return Value:
 
     // Create the terminal manager.
     hr = CoCreateInstance(
-        CLSID_TerminalManager,
-        NULL,
-        CLSCTX_INPROC_SERVER,
-        IID_ITTerminalManager,
-        (void **) &m_pITTerminalManager
-        );
+             CLSID_TerminalManager,
+             NULL,
+             CLSCTX_INPROC_SERVER,
+             IID_ITTerminalManager,
+             (void **) &m_pITTerminalManager
+         );
 
     if (FAILED(hr))
     {
-        LOG((MSP_ERROR, 
-            "Creating terminal manager failed. return: %x", hr));
+        LOG((MSP_ERROR,
+             "Creating terminal manager failed. return: %x", hr));
 
         return hr;
     }
 
-    hr = g_Thread.Start();    
+    hr = g_Thread.Start();
 
     if (FAILED(hr))
     {
-        LOG((MSP_ERROR, 
-            "Creating thread failed. return: %x", hr));
+        LOG((MSP_ERROR,
+             "Creating thread failed. return: %x", hr));
 
         return hr;
     }
 
     hr = g_Thread.RegisterPnpNotification(this);
-    
+
     if (FAILED(hr))
     {
         LOG((MSP_ERROR,
-            "Unable to register for PNP notification. return: %x", hr));
+             "Unable to register for PNP notification. return: %x", hr));
     }
 
-    LOG((MSP_TRACE, 
-        "MSP address %x initialize exited S_OK, htEvent:%x",
-        this, htEvent));
+    LOG((MSP_TRACE,
+         "MSP address %x initialize exited S_OK, htEvent:%x",
+         this, htEvent));
 
-    return S_OK;   
+    return S_OK;
 }
 
 STDMETHODIMP CMSPAddress::Shutdown ()
@@ -1405,7 +1405,7 @@ STDMETHODIMP CMSPAddress::Shutdown ()
 
 Routine Description:
 
-This method is called by TAPI3 when this address in not in use any more. 
+This method is called by TAPI3 when this address in not in use any more.
 This function releases the terminals and releases the terminal manager.
 It releases all unprocessed events, and also stops the worker thread.
 When this functions is called, no call should be alive. However, bugs in
@@ -1422,7 +1422,7 @@ Return Value:
 --*/
 {
     LOG((MSP_TRACE, "CMSPAddress::Shutdown - "
-        "MSP address %x is shutting down", this));
+         "MSP address %x is shutting down", this));
 
     HRESULT hr;
 
@@ -1435,14 +1435,14 @@ Return Value:
     if (FAILED(hr))
     {
         LOG((MSP_ERROR,
-            "Unable to unregister for PNP notification. return: %x", hr));
+             "Unable to unregister for PNP notification. return: %x", hr));
     }
 
     //
     // Tell the worker thread to stop.
     //
 
-    g_Thread.Stop();    
+    g_Thread.Stop();
 
     LOG((MSP_INFO, "CMSPAddress::Shutdown - thread has stopped"));
 
@@ -1476,11 +1476,11 @@ Return Value:
 
     // acquire the lock on the event data because we are writing to it.
     m_EventDataLock.Lock();
-    
+
     m_htEvent = NULL;
 
     // release all the unprocessed events in the list.
-    while (!IsListEmpty(&m_EventList)) 
+    while (!IsListEmpty(&m_EventList))
     {
         // retrieve first entry
         PLIST_ENTRY pLE = RemoveHeadList(&m_EventList);
@@ -1489,9 +1489,9 @@ Return Value:
         PMSPEVENTITEM pItem = CONTAINING_RECORD(pLE, MSPEVENTITEM, Link);
 
         // release the refcount in the event.
-        LOG((MSP_INFO, 
-            "CMSPAddress::Shutdown:releasing event still in the queue: %x",
-            pItem->MSPEventInfo.Event
+        LOG((MSP_INFO,
+             "CMSPAddress::Shutdown:releasing event still in the queue: %x",
+             pItem->MSPEventInfo.Event
             ));
 
         switch (pItem->MSPEventInfo.Event)
@@ -1571,7 +1571,7 @@ Return Value:
 
         default:
             LOG((MSP_WARN, "CMSPAddress::Shutdown: unknown event type: %x",
-                pItem->MSPEventInfo.Event));            
+                 pItem->MSPEventInfo.Event));
 
             break;
         }
@@ -1592,12 +1592,12 @@ STDMETHODIMP CMSPAddress::ReceiveTSPData(
     IN      IUnknown        *   pMSPCall,
     IN      LPBYTE              pBuffer,
     IN      DWORD               dwBufferSize
-    )
+)
 /*++
 
 Routine Description:
 
-This method is called by TAPI3 when the TSP address sends data to this 
+This method is called by TAPI3 when the TSP address sends data to this
 MSP address object. The semantics of the data passed in the buffer are
 specific to each  TSP - MSP pair. This method dispatches the received
 buffer to the address (call == NULL) or call (call != NULL).
@@ -1605,7 +1605,7 @@ buffer to the address (call == NULL) or call (call != NULL).
 Arguments:
 
 pMSPCall
-    The call object that the data is for. If it is NULL, the data is for 
+    The call object that the data is for. If it is NULL, the data is for
     this address.
 
 pBuffer
@@ -1615,7 +1615,7 @@ dwBufferSize
     Size in bytes of pBuffer
 
 
-    
+
 Return Value:
 
     S_OK
@@ -1623,13 +1623,13 @@ Return Value:
 --*/
 {
     LOG((MSP_TRACE, "CMSPAddress::ReceiveTSPData entered. pMSPCall:%x",
-        pMSPCall));
+         pMSPCall));
 
     _ASSERTE(dwBufferSize > 0);
     _ASSERTE(!!pBuffer);
 
     HRESULT hr;
-    
+
     if ( NULL == pMSPCall )
     {
         hr = ReceiveTSPAddressData(pBuffer, dwBufferSize);
@@ -1637,13 +1637,13 @@ Return Value:
         if ( FAILED(hr) )
         {
             LOG((MSP_ERROR, "CMSPAddress::ReceiveTSPData - "
-                "ReceiveTSPAddressData failed - exit 0x%08x", hr));
+                 "ReceiveTSPAddressData failed - exit 0x%08x", hr));
 
             return hr;
         }
 
         LOG((MSP_TRACE, "CMSPAddress::ReceiveTSPData - "
-            "exit S_OK (dispatched to address)"));
+             "exit S_OK (dispatched to address)"));
 
         return S_OK;
     }
@@ -1653,7 +1653,7 @@ Return Value:
     //
 
     _ASSERTE(!!pMSPCall);
-    
+
     ITStreamControl * pIStreamControl;
 
     hr = pMSPCall->QueryInterface(IID_ITStreamControl,
@@ -1662,7 +1662,7 @@ Return Value:
     if ( FAILED(hr) )
     {
         LOG((MSP_ERROR, "CMSPAddress::ReceiveTSPData - "
-            "can't get the ITStream Control interface - exit 0x%08x", hr));
+             "can't get the ITStream Control interface - exit 0x%08x", hr));
 
         return hr;
     }
@@ -1672,13 +1672,13 @@ Return Value:
     if (pCall == NULL)
     {
         LOG((MSP_ERROR, "CMSPAddress::ReceiveTSPData - "
-            "invalid msp call pointer: %x", pMSPCall));
+             "invalid msp call pointer: %x", pMSPCall));
 
         pIStreamControl->Release();
 
         return E_UNEXPECTED;
     }
-    
+
     hr = pCall->ReceiveTSPCallData(pBuffer, dwBufferSize);
 
     pIStreamControl->Release();
@@ -1686,13 +1686,13 @@ Return Value:
     if ( FAILED(hr) )
     {
         LOG((MSP_ERROR, "CMSPAddress::ReceiveTSPData - "
-            "method on call failed - exit 0x%08x", hr));
+             "method on call failed - exit 0x%08x", hr));
 
         return hr;
     }
 
     LOG((MSP_TRACE, "CMSPAddress::ReceiveTSPData - "
-        "exit S_OK (dispatched to call)"));
+         "exit S_OK (dispatched to call)"));
 
     return S_OK;
 }
@@ -1701,32 +1701,32 @@ Return Value:
 HRESULT CMSPAddress::GetStaticTerminals(
     IN OUT  DWORD *             pdwNumTerminals,
     OUT     ITTerminal **       ppTerminals
-    )
+)
 /*++
 
 Routine Description:
 
-This method is called by TAPI3 to get a list of static terminals that can 
-be used on this address. If our list is not empty, just return the list. 
+This method is called by TAPI3 to get a list of static terminals that can
+be used on this address. If our list is not empty, just return the list.
 If our list is still empty, create the static terminals and return the list.
-Derived class can override this method to have their own terminals. Locks 
+Derived class can override this method to have their own terminals. Locks
 the terminal lists.
 
 Arguments:
 
 pdwNumTerminals
-    Pointer to a DWORD.  On entry, indicates the size of the buffer pointed 
+    Pointer to a DWORD.  On entry, indicates the size of the buffer pointed
     to in ppTerminals. On success, it will be filled in with the actual number
-    of terminals returned.  If the buffer is not big enough, the method will 
+    of terminals returned.  If the buffer is not big enough, the method will
     return TAPI_E_NOTENOUGHMEMORY, and it will be filled in the with number
-    of terminals needed. 
+    of terminals needed.
 
 ppTerminals
-    On success, filled in with an array of terminals object pointers that are 
-    supported by the MSP for this address.  This value may be NULL, in which 
+    On success, filled in with an array of terminals object pointers that are
+    supported by the MSP for this address.  This value may be NULL, in which
     case pdwNumTerminals will return the needed buffer size.
 
-    
+
 Return Value:
 
 S_OK
@@ -1735,9 +1735,9 @@ TAPI_E_NOTENOUGHMEMORY
 
 --*/
 {
-    LOG((MSP_TRACE, 
-        "GetStaticTerminals entered. NumTerminals:%x, ppTerminals:%x",
-        *pdwNumTerminals, ppTerminals
+    LOG((MSP_TRACE,
+         "GetStaticTerminals entered. NumTerminals:%x, ppTerminals:%x",
+         *pdwNumTerminals, ppTerminals
         ));
 
     // lock the terminal related data. This is a auto lock that will unlock
@@ -1751,8 +1751,8 @@ TAPI_E_NOTENOUGHMEMORY
         if (FAILED(hr))
         {
             LOG((MSP_ERROR,
-                "CMSPAddress::GetStaticTerminals - "
-                "UpdateTerminalList failed - returning 0x%08x", hr));
+                 "CMSPAddress::GetStaticTerminals - "
+                 "UpdateTerminalList failed - returning 0x%08x", hr));
 
             return hr;
         }
@@ -1765,7 +1765,7 @@ TAPI_E_NOTENOUGHMEMORY
     if ( m_htEvent == NULL )
     {
         LOG((MSP_ERROR, "CMSPAddress::GetStaticTerminals - "
-            "not initialized - returning E_UNEXPECTED"));
+             "not initialized - returning E_UNEXPECTED"));
 
         return E_UNEXPECTED;
     }
@@ -1777,17 +1777,17 @@ TAPI_E_NOTENOUGHMEMORY
     if ( !pdwNumTerminals)
     {
         LOG((MSP_ERROR, "CMSPAddress::GetStaticTerminals - "
-            "bad pdwNumTerminals pointer - exit E_POINTER"));
+             "bad pdwNumTerminals pointer - exit E_POINTER"));
 
         return E_POINTER;
     }
-    
+
     if ( ppTerminals != NULL )
     {
         if (!ppTerminals)
         {
             LOG((MSP_ERROR, "CMSPAddress::GetStaticTerminals - "
-                "bad ppTerminals pointer - exit E_POINTER"));
+                 "bad ppTerminals pointer - exit E_POINTER"));
 
             return E_POINTER;
         }
@@ -1807,7 +1807,7 @@ TAPI_E_NOTENOUGHMEMORY
     //
 
     if ( ( ppTerminals != NULL ) &&
-         ( (DWORD) iSize <= *pdwNumTerminals ) )
+            ( (DWORD) iSize <= *pdwNumTerminals ) )
     {
         //
         // For each terminal in the list of terminals we created,
@@ -1821,49 +1821,49 @@ TAPI_E_NOTENOUGHMEMORY
             ppTerminals[i] = m_Terminals[i];
         }
     }
-    
+
     //
     // If there was no output list then we just have to report the number
     // of terminals available.
     //
-    
+
     if ( ppTerminals == NULL )
     {
         *pdwNumTerminals = (DWORD) iSize;
 
         LOG((MSP_TRACE,
-            "CMSPAddress::GetStaticTerminals - just returned number of "
-            "terminals available - exit S_OK"));
+             "CMSPAddress::GetStaticTerminals - just returned number of "
+             "terminals available - exit S_OK"));
 
         return S_OK;
     }
-    
+
     //
     // If there was an output list but it was not large enough, then
     // return the appropriate error.
     //
-    
+
     if ( (DWORD) iSize > *pdwNumTerminals )
     {
         *pdwNumTerminals = (DWORD) iSize;
 
         LOG((MSP_ERROR,
-            "CMSPAddress::GetStaticTerminals - passed-in array not "
-            "large enough - exit TAPI_E_NOTENOUGHMEMORY"));
+             "CMSPAddress::GetStaticTerminals - passed-in array not "
+             "large enough - exit TAPI_E_NOTENOUGHMEMORY"));
 
         return TAPI_E_NOTENOUGHMEMORY;
     }
-    
+
     //
     // Otherwise, everything was fine. We just need to report the actual
     // number of terminals we copied and return S_OK.
     //
-    
+
     *pdwNumTerminals = (DWORD) iSize;
-    
+
     LOG((MSP_TRACE,
-        "CMSPAddress::GetStaticTerminals - "
-        "returned terminals - exit S_OK"));
+         "CMSPAddress::GetStaticTerminals - "
+         "returned terminals - exit S_OK"));
 
     return S_OK;
 }
@@ -1891,7 +1891,7 @@ HRESULT CMSPAddress::IsMonikerInTerminalList(IMoniker* pMoniker)
         if ( pCSingleFilterStaticTerminal->CompareMoniker( pMoniker ) == S_OK )
         {
             LOG((MSP_TRACE, "CMSPAddress::IsMonikerInTerminalList - "
-                "moniker found in terminal list"));
+                 "moniker found in terminal list"));
 
             pCSingleFilterStaticTerminal->m_bMark = TRUE;  // mark this terminal so we don't remove it
 
@@ -1901,13 +1901,13 @@ HRESULT CMSPAddress::IsMonikerInTerminalList(IMoniker* pMoniker)
     }
 
     LOG((MSP_TRACE, "CMSPAddress::IsMonikerInTerminalList - "
-                "moniker not found in terminal list"));
+         "moniker not found in terminal list"));
     return S_FALSE;
 }
 
 HRESULT CMSPAddress::UpdateTerminalListForPnp(
-        IN  BOOL    bDeviceArrival
-        )
+    IN  BOOL    bDeviceArrival
+)
 {
     CSingleFilterStaticTerminal *pCSingleFilterStaticTerminal;
 
@@ -1923,9 +1923,9 @@ HRESULT CMSPAddress::UpdateTerminalListForPnp(
         pCSingleFilterStaticTerminal = static_cast<CSingleFilterStaticTerminal *>(m_Terminals[i]);
 
         if (pCSingleFilterStaticTerminal == NULL)
-        {           
+        {
             LOG((MSP_ERROR, "CMSPAddress::IsMonikerInTerminalList - "
-                    "bad terminal pointer"));
+                 "bad terminal pointer"));
             return E_FAIL;
         }
 
@@ -1945,12 +1945,12 @@ HRESULT CMSPAddress::UpdateTerminalListForPnp(
                           IID_ICreateDevEnum,
                           (void**)&pCreateDevEnum);
 
-    if (FAILED(hr)) 
+    if (FAILED(hr))
     {
         LOG((MSP_ERROR, "CMSPAddress::UpdateTerminalListForPnp "
-               "can't CoCreate DevEnum - returning  0x%08x", hr));
+             "can't CoCreate DevEnum - returning  0x%08x", hr));
         return hr;
-    }    
+    }
 
     IEnumMoniker  * pCatEnum;
     int i=0;
@@ -1961,8 +1961,8 @@ HRESULT CMSPAddress::UpdateTerminalListForPnp(
         // modes.
         //
 
-        if ( ! IsValidSingleMediaType( 
-            m_saTerminalTypes[i].dwMediaType, GetCallMediaTypes() ) )
+        if ( ! IsValidSingleMediaType(
+                    m_saTerminalTypes[i].dwMediaType, GetCallMediaTypes() ) )
         {
             continue;
         }
@@ -1973,14 +1973,14 @@ HRESULT CMSPAddress::UpdateTerminalListForPnp(
         //
 
         hr = pCreateDevEnum->CreateClassEnumerator(
-                                *(m_saTerminalTypes[i].clsidClassManager),
-                                &pCatEnum,
-                                0);
+                 *(m_saTerminalTypes[i].clsidClassManager),
+                 &pCatEnum,
+                 0);
 
         if ( hr != S_OK ) // S_FALSE means the category does not exist!
         {
             LOG((MSP_ERROR, "CMSPAddress::UpdateTerminalListForPnp "
-                   "can't create class enumerator - returning 0x%08x", hr));
+                 "can't create class enumerator - returning 0x%08x", hr));
 
             continue;
         }
@@ -1997,8 +1997,8 @@ HRESULT CMSPAddress::UpdateTerminalListForPnp(
 
                 ITTerminal * pTerminal;
                 hr = (m_saTerminalTypes[i].pfnCreateTerm)(pMoniker,
-                                                          (MSP_HANDLE) this,
-                                                          &pTerminal);
+                        (MSP_HANDLE) this,
+                        &pTerminal);
 
                 //
                 // The terminal keeps a reference to the moniker if it needs to.
@@ -2021,7 +2021,7 @@ HRESULT CMSPAddress::UpdateTerminalListForPnp(
                         pTerminal->Release();
 
                         LOG((MSP_ERROR, "CMSPAddress::UpdateTerminalListForPnp - "
-                            "can't add terminal to list; returning E_OUTOFMEMORY"));
+                             "can't add terminal to list; returning E_OUTOFMEMORY"));
 
                         return E_OUTOFMEMORY;
                     }
@@ -2038,9 +2038,9 @@ HRESULT CMSPAddress::UpdateTerminalListForPnp(
                     pCSingleFilterStaticTerminal = static_cast<CSingleFilterStaticTerminal *>(pTerminal);
 
                     if (pCSingleFilterStaticTerminal == NULL)
-                    {           
+                    {
                         LOG((MSP_ERROR, "CMSPAddress::UpdateTerminalListForPnp - "
-                                "bad terminal pointer"));
+                             "bad terminal pointer"));
                         return E_FAIL;
                     }
 
@@ -2059,7 +2059,7 @@ HRESULT CMSPAddress::UpdateTerminalListForPnp(
                     if (pEventItem == NULL)
                     {
                         LOG((MSP_ERROR, "CMSPAddress::UpdateTerminalListForPnp - "
-                        "can't allocate event item; returning E_OUTOFMEMORY"));
+                             "can't allocate event item; returning E_OUTOFMEMORY"));
 
                         pTerminal->Release();
                         return E_OUTOFMEMORY;
@@ -2075,12 +2075,12 @@ HRESULT CMSPAddress::UpdateTerminalListForPnp(
                     if (FAILED(hr))
                     {
                         LOG((MSP_ERROR, "CMSPAddress::UpdateTerminalListForPnp - "
-                        "post event failed"));
+                             "post event failed"));
 
                         pTerminal->Release();
                         FreeEventItem(pEventItem);
-                    } 
-                    
+                    }
+
                 }
             }
 
@@ -2117,20 +2117,20 @@ HRESULT CMSPAddress::UpdateTerminalListForPnp(
         pCSingleFilterStaticTerminal = static_cast<CSingleFilterStaticTerminal *>(m_Terminals[i]);
 
         if (pCSingleFilterStaticTerminal == NULL)
-        {           
+        {
             LOG((MSP_ERROR, "CMSPAddress::UpdateTerminalListForPnp - "
-                    "bad terminal pointer"));
+                 "bad terminal pointer"));
             return E_FAIL;
         }
 
         if (!pCSingleFilterStaticTerminal->m_bMark)
-        {        
+        {
             //
             // This terminal has is no longer present, lets remove it from the list
             //
 
             LOG((MSP_TRACE, "CMSPAddress::UpdateTerminalListForPnp "
-                   "found a terminal to be removed"));
+                 "found a terminal to be removed"));
 
             ITTerminal * pTerminal = m_Terminals[i];
 
@@ -2140,7 +2140,7 @@ HRESULT CMSPAddress::UpdateTerminalListForPnp(
                 // Clear its CMSPAddress pointer
                 //
                 CBaseTerminal * pCTerminal = static_cast<CBaseTerminal *> (pTerminal);
-                
+
                 //
                 // We don't release the terminal here even though we are removing
                 // it from the terminal list because TAPI3.dll will release it
@@ -2158,7 +2158,7 @@ HRESULT CMSPAddress::UpdateTerminalListForPnp(
                 if (pEventItem == NULL)
                 {
                     LOG((MSP_ERROR, "CMSPAddress::UpdateTerminalListForPnp - "
-                    "can't allocate event item; returning E_OUTOFMEMORY"));
+                         "can't allocate event item; returning E_OUTOFMEMORY"));
 
                     pTerminal->Release();
                     return E_OUTOFMEMORY;
@@ -2174,16 +2174,16 @@ HRESULT CMSPAddress::UpdateTerminalListForPnp(
                 if (FAILED(hr))
                 {
                     LOG((MSP_ERROR, "CMSPAddress::UpdateTerminalListForPnp - "
-                    "post event failed"));
+                         "post event failed"));
 
                     pTerminal->Release();
                     FreeEventItem(pEventItem);
                 }
-            
+
                 //
                 // fix up our search indices to account for a removal
                 //
-            
+
                 iSize--;
                 i--;
             }
@@ -2195,7 +2195,7 @@ HRESULT CMSPAddress::UpdateTerminalListForPnp(
     //
 
     m_fTerminalsUpToDate = TRUE;
-    
+
     LOG((MSP_TRACE, "CMSPAddress::UpdateTerminalListForPnp - exit S_OK"));
 
     return S_OK;
@@ -2217,12 +2217,12 @@ HRESULT CMSPAddress::UpdateTerminalList(void)
                           IID_ICreateDevEnum,
                           (void**)&pCreateDevEnum);
 
-    if (FAILED(hr)) 
+    if (FAILED(hr))
     {
         LOG((MSP_ERROR, "CMSPAddress::UpdateTerminalList "
-               "can't CoCreate DevEnum - returning  0x%08x", hr));
+             "can't CoCreate DevEnum - returning  0x%08x", hr));
         return hr;
-    }    
+    }
 
     IEnumMoniker  * pCatEnum;
 
@@ -2233,8 +2233,8 @@ HRESULT CMSPAddress::UpdateTerminalList(void)
         // modes.
         //
 
-        if ( ! IsValidSingleMediaType( 
-            m_saTerminalTypes[i].dwMediaType, GetCallMediaTypes() ) )
+        if ( ! IsValidSingleMediaType(
+                    m_saTerminalTypes[i].dwMediaType, GetCallMediaTypes() ) )
         {
             continue;
         }
@@ -2245,14 +2245,14 @@ HRESULT CMSPAddress::UpdateTerminalList(void)
         //
 
         hr = pCreateDevEnum->CreateClassEnumerator(
-                                *(m_saTerminalTypes[i].clsidClassManager),
-                                &pCatEnum,
-                                0);
+                 *(m_saTerminalTypes[i].clsidClassManager),
+                 &pCatEnum,
+                 0);
 
         if ( hr != S_OK ) // S_FALSE means the category does not exist!
         {
             LOG((MSP_ERROR, "CMSPAddress::UpdateTerminalList "
-                   "can't create class enumerator - returning 0x%08x", hr));
+                 "can't create class enumerator - returning 0x%08x", hr));
 
             continue;
         }
@@ -2267,8 +2267,8 @@ HRESULT CMSPAddress::UpdateTerminalList(void)
 
             ITTerminal * pTerminal;
             hr = (m_saTerminalTypes[i].pfnCreateTerm)(pMoniker,
-                                                      (MSP_HANDLE) this,
-                                                      &pTerminal);
+                    (MSP_HANDLE) this,
+                    &pTerminal);
 
             //
             // The terminal keeps a reference to the moniker if it needs to.
@@ -2290,7 +2290,7 @@ HRESULT CMSPAddress::UpdateTerminalList(void)
                     pCatEnum->Release();
 
                     LOG((MSP_ERROR, "CMSPAddress::UpdateTerminalList - "
-                        "can't add terminal to list; returning E_OUTOFMEMORY"));
+                         "can't add terminal to list; returning E_OUTOFMEMORY"));
 
                     return E_OUTOFMEMORY;
                 }
@@ -2327,7 +2327,7 @@ HRESULT CMSPAddress::UpdateTerminalList(void)
     //
 
     m_fTerminalsUpToDate = TRUE;
-    
+
     LOG((MSP_TRACE, "CMSPAddress::UpdateTerminalList - exit S_OK"));
 
     return S_OK;
@@ -2336,32 +2336,32 @@ HRESULT CMSPAddress::UpdateTerminalList(void)
 HRESULT CMSPAddress::GetDynamicTerminalClasses(
     IN OUT  DWORD *             pdwNumClasses,
     OUT     IID *               pTerminalClasses
-    )
+)
 /*++
 
 Routine Description:
 
-This method is called by TAPI3 to get a list of dynamic terminal guids 
-that can be used on this address. It asks the terminal manager for the 
-list of guids and returns them. Derived class can override this method 
+This method is called by TAPI3 to get a list of dynamic terminal guids
+that can be used on this address. It asks the terminal manager for the
+list of guids and returns them. Derived class can override this method
 to have their own guids.
 
 
 Arguments:
 
 pdwNumClasses
-    Pointer to a DWORD.  On entry, indicates the size of the buffer 
-    pointed to in pTerminalClasses. On success, it will be filled in 
-    with the actual number of class IIDs returned.  If the buffer is 
-    not big enough, the method will return TAPI_E_NOTENOUGHMEMORY, 
-    and it will be filled in the with number of IIDs needed. 
+    Pointer to a DWORD.  On entry, indicates the size of the buffer
+    pointed to in pTerminalClasses. On success, it will be filled in
+    with the actual number of class IIDs returned.  If the buffer is
+    not big enough, the method will return TAPI_E_NOTENOUGHMEMORY,
+    and it will be filled in the with number of IIDs needed.
 
 pTerminalClasses
 
-    On success, filled in with an array of terminal class IIDs that 
-    are supported by the MSP for this address.  This value may be NULL, 
+    On success, filled in with an array of terminal class IIDs that
+    are supported by the MSP for this address.  This value may be NULL,
     in which case pdwNumClasses will return the needed buffer size.
-    
+
 Return Value:
 
 S_OK
@@ -2371,7 +2371,7 @@ TAPI_E_NOTENOUGHMEMORY
 --*/
 {
     LOG((MSP_TRACE,
-        "CMSPAddress::GetDynamicTerminalClasses - enter"));
+         "CMSPAddress::GetDynamicTerminalClasses - enter"));
 
     //
     // Check if initialized.
@@ -2386,8 +2386,8 @@ TAPI_E_NOTENOUGHMEMORY
         m_EventDataLock.Unlock();
 
         LOG((MSP_ERROR,
-            "CMSPAddress::GetDynamicTerminalClasses - "
-            "not initialized - returning E_UNEXPECTED"));
+             "CMSPAddress::GetDynamicTerminalClasses - "
+             "not initialized - returning E_UNEXPECTED"));
 
         return E_UNEXPECTED;
     }
@@ -2404,13 +2404,13 @@ TAPI_E_NOTENOUGHMEMORY
     HRESULT hr;
 
     hr = m_pITTerminalManager->GetDynamicTerminalClasses(
-                                                  GetCallMediaTypes(),
-                                                  pdwNumClasses,
-                                                  pTerminalClasses);
+             GetCallMediaTypes(),
+             pdwNumClasses,
+             pTerminalClasses);
 
 
     LOG((MSP_TRACE,
-        "CMSPAddress::GetDynamicTerminalClasses - exit 0x%08x", hr));
+         "CMSPAddress::GetDynamicTerminalClasses - exit 0x%08x", hr));
 
     return hr;
 }
@@ -2420,12 +2420,12 @@ STDMETHODIMP CMSPAddress::CreateTerminal(
     IN      long                lMediaType,
     IN      TERMINAL_DIRECTION  Direction,
     OUT     ITTerminal **       ppTerminal
-    )
+)
 /*++
 
 Routine Description:
 
-This method is called by TAPI3 to create a dynamic terminal. It asks the 
+This method is called by TAPI3 to create a dynamic terminal. It asks the
 terminal manager to create a dynamic terminal. Derived class can
 override this method to have their own way of creating a dynamic terminal.
 
@@ -2442,7 +2442,7 @@ Direction
 
 ppTerminal
     Returned created terminal object
-    
+
 Return Value:
 
 S_OK
@@ -2455,7 +2455,7 @@ TAPI_E_INVALIDTERMINALCLASS
 --*/
 {
     LOG((MSP_TRACE,
-        "CMSPAddress::CreateTerminal - enter"));
+         "CMSPAddress::CreateTerminal - enter"));
 
     //
     // Check if initialized.
@@ -2470,8 +2470,8 @@ TAPI_E_INVALIDTERMINALCLASS
         m_EventDataLock.Unlock();
 
         LOG((MSP_ERROR,
-            "CMSPAddress::CreateTerminal - "
-            "not initialized - returning E_UNEXPECTED"));
+             "CMSPAddress::CreateTerminal - "
+             "not initialized - returning E_UNEXPECTED"));
 
         return E_UNEXPECTED;
     }
@@ -2491,19 +2491,19 @@ TAPI_E_INVALIDTERMINALCLASS
     if ( FAILED(hr) )
     {
         LOG((MSP_ERROR, "CMSPAddress::CreateTerminal - "
-            "bad CLSID string - returning E_INVALIDARG"));
+             "bad CLSID string - returning E_INVALIDARG"));
 
         return E_INVALIDARG;
     }
 
     //
     // Make sure we support the requested media type.
-    // The terminal manager checks the terminal class, terminal direction, 
+    // The terminal manager checks the terminal class, terminal direction,
     // and return pointer.
     //
 
 
-    
+
     //
     // requested media type may be aggregated, but it must still be valid
     //
@@ -2511,7 +2511,7 @@ TAPI_E_INVALIDTERMINALCLASS
     if ( !IsValidAggregatedMediaType(lMediaType) )
     {
         LOG((MSP_ERROR, "CMSPAddress::CreateTerminal - "
-            "unrecognized media type requested - returning E_INVALIDARG"));
+             "unrecognized media type requested - returning E_INVALIDARG"));
 
         return E_INVALIDARG;
     }
@@ -2523,16 +2523,16 @@ TAPI_E_INVALIDTERMINALCLASS
     _ASSERTE( m_pITTerminalManager != NULL );
 
     hr = m_pITTerminalManager->CreateDynamicTerminal(NULL,
-                                                     iidTerminalClass,
-                                                     (DWORD) lMediaType,
-                                                     Direction,
-                                                     (MSP_HANDLE) this,
-                                                     ppTerminal);
+            iidTerminalClass,
+            (DWORD) lMediaType,
+            Direction,
+            (MSP_HANDLE) this,
+            ppTerminal);
 
     if ( FAILED(hr) )
     {
         LOG((MSP_ERROR, "CMSPAddress::CreateTerminal - "
-            "create dynamic terminal failed - returning 0x%08x", hr));
+             "create dynamic terminal failed - returning 0x%08x", hr));
 
         return hr;
     }
@@ -2546,16 +2546,16 @@ STDMETHODIMP CMSPAddress::GetDefaultStaticTerminal(
     IN      long                lMediaType,
     IN      TERMINAL_DIRECTION  Direction,
     OUT     ITTerminal **       ppTerminal
-    )
+)
 /*++
 
 Routine Description:
 
-This method is called by TAPI3 to get the default static terminal 
+This method is called by TAPI3 to get the default static terminal
 for a certain type and direction. It updates the list if needed, then
 figures out which terminal is the first of the appropriate type in our
-list. Derived classes can override this method to have 
-their own way of deciding which terminal is the default. Locks the 
+list. Derived classes can override this method to have
+their own way of deciding which terminal is the default. Locks the
 terminal lists.
 
 
@@ -2570,7 +2570,7 @@ Direction
 ppTerminal
     Default terminal returned
 
-    
+
 Return Value:
 
 S_OK
@@ -2584,7 +2584,7 @@ TAPI_E_INVALIDTERMINALDIRECTION
 --*/
 {
     LOG((MSP_TRACE,
-        "CMSPAddress::GetDefaultStaticTerminal - enter"));
+         "CMSPAddress::GetDefaultStaticTerminal - enter"));
 
     //
     // Check if initialized.
@@ -2599,8 +2599,8 @@ TAPI_E_INVALIDTERMINALDIRECTION
         m_EventDataLock.Unlock();
 
         LOG((MSP_ERROR,
-            "CMSPAddress::GetDefaultStaticTerminal - "
-            "not initialized - returning E_UNEXPECTED"));
+             "CMSPAddress::GetDefaultStaticTerminal - "
+             "not initialized - returning E_UNEXPECTED"));
 
         return E_UNEXPECTED;
     }
@@ -2614,8 +2614,8 @@ TAPI_E_INVALIDTERMINALDIRECTION
     if ( ! IsValidSingleMediaType( (DWORD) lMediaType, GetCallMediaTypes() ) )
     {
         LOG((MSP_ERROR,
-            "CMSPAddress::GetDefaultStaticTerminal - "
-            "non-audio terminal requested - returning E_INVALIDARG"));
+             "CMSPAddress::GetDefaultStaticTerminal - "
+             "non-audio terminal requested - returning E_INVALIDARG"));
 
         return E_INVALIDARG;
     }
@@ -2627,8 +2627,8 @@ TAPI_E_INVALIDTERMINALDIRECTION
     if ( ( Direction != TD_CAPTURE ) && ( Direction != TD_RENDER ) )
     {
         LOG((MSP_ERROR,
-            "CMSPAddress::GetDefaultStaticTerminal - "
-            "invalid direction - returning E_INVALIDARG"));
+             "CMSPAddress::GetDefaultStaticTerminal - "
+             "invalid direction - returning E_INVALIDARG"));
 
         return E_INVALIDARG;
     }
@@ -2640,8 +2640,8 @@ TAPI_E_INVALIDTERMINALDIRECTION
     if ( !ppTerminal)
     {
         LOG((MSP_ERROR,
-            "CMSPAddress::GetDefaultStaticTerminal - "
-            "bad terminal return pointer - returning E_POINTER"));
+             "CMSPAddress::GetDefaultStaticTerminal - "
+             "bad terminal return pointer - returning E_POINTER"));
 
         return E_POINTER;
     }
@@ -2652,13 +2652,13 @@ TAPI_E_INVALIDTERMINALDIRECTION
 
     if (!m_fTerminalsUpToDate)
     {
-       HRESULT hr = UpdateTerminalList();
+        HRESULT hr = UpdateTerminalList();
 
         if (FAILED(hr))
         {
             LOG((MSP_ERROR,
-                "CMSPAddress::GetDefaultStaticTerminal - "
-                "UpdateTerminalList failed - returning 0x%08x", hr));
+                 "CMSPAddress::GetDefaultStaticTerminal - "
+                 "UpdateTerminalList failed - returning 0x%08x", hr));
 
             return hr;
         }
@@ -2678,7 +2678,7 @@ TAPI_E_INVALIDTERMINALDIRECTION
 
         //
         // Make sure this is the right direction.
-        // 
+        //
 
         TERMINAL_DIRECTION dir;
 
@@ -2687,8 +2687,8 @@ TAPI_E_INVALIDTERMINALDIRECTION
         if (FAILED(hr))
         {
             LOG((MSP_WARN,
-                "CMSPAddress::GetDefaultStaticTerminal - "
-                "could not get terminal direction - skipping"));
+                 "CMSPAddress::GetDefaultStaticTerminal - "
+                 "could not get terminal direction - skipping"));
 
             continue;
         }
@@ -2709,8 +2709,8 @@ TAPI_E_INVALIDTERMINALDIRECTION
         if (FAILED(hr))
         {
             LOG((MSP_WARN,
-                "CMSPAddress::GetDefaultStaticTerminal - "
-                "could not get terminal media type - skipping"));
+                 "CMSPAddress::GetDefaultStaticTerminal - "
+                 "could not get terminal media type - skipping"));
 
             continue;
         }
@@ -2730,29 +2730,29 @@ TAPI_E_INVALIDTERMINALDIRECTION
         *ppTerminal = pTerminal;
 
         LOG((MSP_TRACE,
-            "CMSPAddress::GetDefaultStaticTerminal - "
-            "returned a terminal - exit S_OK"));
+             "CMSPAddress::GetDefaultStaticTerminal - "
+             "returned a terminal - exit S_OK"));
 
         return S_OK;
     }
-    
+
     //
     // If we get here then we did not find any matching terminals.
     //
 
     LOG((MSP_TRACE,
-        "CMSPAddress::GetDefaultStaticTerminal - "
-        "no match - exit TAPI_E_NOITEMS"));
+         "CMSPAddress::GetDefaultStaticTerminal - "
+         "no match - exit TAPI_E_NOITEMS"));
 
     return TAPI_E_NOITEMS;
 }
 
-STDMETHODIMP CMSPAddress::get_PluggableSuperclasses( 
+STDMETHODIMP CMSPAddress::get_PluggableSuperclasses(
     OUT VARIANT * pVariant
-    )
+)
 {
     LOG((MSP_TRACE,
-        "CMSPAddress::get_PluggableSuperclasses - enter"));
+         "CMSPAddress::get_PluggableSuperclasses - enter"));
 
     //
     // Check parameters.
@@ -2761,7 +2761,7 @@ STDMETHODIMP CMSPAddress::get_PluggableSuperclasses(
     if ( !pVariant)
     {
         LOG((MSP_ERROR, "CMSPAddress::get_PluggableSuperclasses - "
-            "bad pointer argument - exit E_POINTER"));
+             "bad pointer argument - exit E_POINTER"));
 
         return E_POINTER;
     }
@@ -2773,13 +2773,13 @@ STDMETHODIMP CMSPAddress::get_PluggableSuperclasses(
     ITTerminalManager2* pTermMgr2 = NULL;
     HRESULT hr = E_FAIL;
     hr = m_pITTerminalManager->QueryInterface(
-        IID_ITTerminalManager2, (void**)&pTermMgr2);
+             IID_ITTerminalManager2, (void**)&pTermMgr2);
 
     if( FAILED(hr) )
     {
         LOG((MSP_ERROR,
-            "CMSPAddress::get_PluggableSuperclasses - "
-            "QI for ITTerminalManager2 failed - returning 0x%08x", hr));
+             "CMSPAddress::get_PluggableSuperclasses - "
+             "QI for ITTerminalManager2 failed - returning 0x%08x", hr));
         return hr;
     }
 
@@ -2797,7 +2797,7 @@ STDMETHODIMP CMSPAddress::get_PluggableSuperclasses(
         pTermMgr2->Release();
 
         LOG((MSP_ERROR, "CMSPAddress::get_PluggableSuperclasses - "
-            "can't create collection - exit 0x%08x", hr));
+             "can't create collection - exit 0x%08x", hr));
 
         return hr;
     }
@@ -2808,8 +2808,8 @@ STDMETHODIMP CMSPAddress::get_PluggableSuperclasses(
 
     IDispatch * pDispatch;
     hr = pCollection->_InternalQueryInterface(
-        IID_IDispatch,
-        (void **) &pDispatch );
+             IID_IDispatch,
+             (void **) &pDispatch );
 
     if ( FAILED(hr) )
     {
@@ -2818,7 +2818,7 @@ STDMETHODIMP CMSPAddress::get_PluggableSuperclasses(
         delete pCollection;
 
         LOG((MSP_ERROR, "CMSPAddress::get_PluggableSuperclasses - "
-            "QI for IDispatch on collection failed - exit 0x%08x", hr));
+             "QI for IDispatch on collection failed - exit 0x%08x", hr));
         return hr;
     }
 
@@ -2829,13 +2829,13 @@ STDMETHODIMP CMSPAddress::get_PluggableSuperclasses(
     DWORD   dwNumSuperclasses = 0;
 
     hr = pTermMgr2->GetPluggableSuperclasses(
-            &dwNumSuperclasses,
-            NULL);
+             &dwNumSuperclasses,
+             NULL);
 
     if ( FAILED(hr) )
     {
         LOG((MSP_ERROR, "CMSPAddress::get_PluggableSuperclasses - "
-            "can't get number of terminals - exit 0x%08x", hr));
+             "can't get number of terminals - exit 0x%08x", hr));
 
         //Clean-up
         pTermMgr2->Release();
@@ -2852,7 +2852,7 @@ STDMETHODIMP CMSPAddress::get_PluggableSuperclasses(
     if ( pSuperclassesIID == NULL )
     {
         LOG((MSP_ERROR, "CMSPAddress::get_PluggableSuperclasses - "
-            "can't allocate IIDs array - exit E_OUTOFMEMORY"));
+             "can't allocate IIDs array - exit E_OUTOFMEMORY"));
 
         //Clean-up
         pTermMgr2->Release();
@@ -2865,12 +2865,12 @@ STDMETHODIMP CMSPAddress::get_PluggableSuperclasses(
     // Fill in the array with actual pointers. We must do this before
     // initializing the enumerator, because the enumerator may want to
     // addref the interface pointers during initialize.
-    // 
+    //
 
     hr = pTermMgr2->GetPluggableSuperclasses(
-            &dwNumSuperclasses,
-            pSuperclassesIID
-            );
+             &dwNumSuperclasses,
+             pSuperclassesIID
+         );
 
     //
     // Clean-up
@@ -2881,7 +2881,7 @@ STDMETHODIMP CMSPAddress::get_PluggableSuperclasses(
     if ( FAILED(hr) )
     {
         LOG((MSP_ERROR, "CMSPAddress::get_PluggableSuperclasses - "
-            "can't get IIDs - exit 0x%08x", hr));
+             "can't get IIDs - exit 0x%08x", hr));
 
         //Clean-up
         pDispatch->Release();
@@ -2898,7 +2898,7 @@ STDMETHODIMP CMSPAddress::get_PluggableSuperclasses(
     if ( ppSuperclassesInfo == NULL )
     {
         LOG((MSP_ERROR, "CMSPAddress::get_PluggableSuperclasses - "
-            "can't allocate SuperclassPtr array - exit E_OUTOFMEMORY"));
+             "can't allocate SuperclassPtr array - exit E_OUTOFMEMORY"));
 
         //Clean-up
         pDispatch->Release();
@@ -2913,16 +2913,16 @@ STDMETHODIMP CMSPAddress::get_PluggableSuperclasses(
 
     ITPluggableTerminalSuperclassRegistration* pSuperclassReg = NULL;
     hr = CoCreateInstance(
-        CLSID_PluggableSuperclassRegistration,
-        NULL,
-        CLSCTX_INPROC_SERVER,
-        IID_ITPluggableTerminalSuperclassRegistration,
-        (void**)&pSuperclassReg
-        );
+             CLSID_PluggableSuperclassRegistration,
+             NULL,
+             CLSCTX_INPROC_SERVER,
+             IID_ITPluggableTerminalSuperclassRegistration,
+             (void**)&pSuperclassReg
+         );
     if( FAILED(hr) )
     {
         LOG((MSP_ERROR, "CMSPAddress::get_PluggableSuperclasses - "
-            "QI for ITPluggableTerminalSuperclassRegistration - exit 0x%08x",hr));
+             "QI for ITPluggableTerminalSuperclassRegistration - exit 0x%08x",hr));
 
         //Clean-up
         pDispatch->Release();
@@ -2946,7 +2946,7 @@ STDMETHODIMP CMSPAddress::get_PluggableSuperclasses(
         if( FAILED(hr) )
         {
             LOG((MSP_ERROR, "CMSPAddress::get_PluggableSuperclasses - "
-                "StringFromIID failed - exit 0x%08x",hr));
+                 "StringFromIID failed - exit 0x%08x",hr));
 
             //Clean-up
             pDispatch->Release();
@@ -2965,7 +2965,7 @@ STDMETHODIMP CMSPAddress::get_PluggableSuperclasses(
         if( NULL == bstrCLSID)
         {
             LOG((MSP_ERROR, "CMSPAddress::get_PluggableSuperclasses - "
-                "SysAllocString failed - exit E_OUTOFMEMORY"));
+                 "SysAllocString failed - exit E_OUTOFMEMORY"));
 
             // Clean-up
             pDispatch->Release();
@@ -2985,7 +2985,7 @@ STDMETHODIMP CMSPAddress::get_PluggableSuperclasses(
         if( FAILED(hr) )
         {
             LOG((MSP_ERROR, "CMSPAddress::get_PluggableSuperclasses - "
-                "GetTerminalSuperclassInfo failed - exit 0x%08x",hr));
+                 "GetTerminalSuperclassInfo failed - exit 0x%08x",hr));
 
             // Clean-up
             pDispatch->Release();
@@ -3011,7 +3011,7 @@ STDMETHODIMP CMSPAddress::get_PluggableSuperclasses(
         if( FAILED(hr) )
         {
             LOG((MSP_ERROR, "CMSPAddress::get_PluggableSuperclasses - "
-                "CreateInstance failed - exit 0x%08x", hr));
+                 "CreateInstance failed - exit 0x%08x", hr));
 
             //Clean-up
             pDispatch->Release();
@@ -3029,9 +3029,9 @@ STDMETHODIMP CMSPAddress::get_PluggableSuperclasses(
         //
 
         pSuperclassInfo->QueryInterface(
-            IID_ITPluggableTerminalSuperclassInfo, 
+            IID_ITPluggableTerminalSuperclassInfo,
             (void**)&ppSuperclassesInfo[dwIndex]
-            );
+        );
 
         //
         // Set the fields
@@ -3068,7 +3068,7 @@ STDMETHODIMP CMSPAddress::get_PluggableSuperclasses(
     if( FAILED(hr) )
     {
         LOG((MSP_ERROR, "CMSPAddress::get_PluggableSuperclasses - exit "
-            "pCollection->Initialize failed. returns 0x%08x", hr));
+             "pCollection->Initialize failed. returns 0x%08x", hr));
 
         delete[] ppSuperclassesInfo;
         pDispatch->Release();
@@ -3081,7 +3081,7 @@ STDMETHODIMP CMSPAddress::get_PluggableSuperclasses(
     //
 
     LOG((MSP_INFO, "CMSPAddress::get_PluggableSuperclasses - "
-        "placing IDispatch value %08x in variant", pDispatch));
+         "placing IDispatch value %08x in variant", pDispatch));
 
     VariantInit(pVariant);
     pVariant->vt = VT_DISPATCH;
@@ -3092,12 +3092,12 @@ STDMETHODIMP CMSPAddress::get_PluggableSuperclasses(
     return S_OK;
 }
 
-STDMETHODIMP CMSPAddress::EnumeratePluggableSuperclasses( 
-    OUT IEnumPluggableSuperclassInfo** ppSuperclassEnumerator 
-    )
+STDMETHODIMP CMSPAddress::EnumeratePluggableSuperclasses(
+    OUT IEnumPluggableSuperclassInfo** ppSuperclassEnumerator
+)
 {
     LOG((MSP_TRACE,
-        "CMSPAddress::EnumeratePluggableSuperclasses - enter"));
+         "CMSPAddress::EnumeratePluggableSuperclasses - enter"));
 
     //
     // Check parameters.
@@ -3106,7 +3106,7 @@ STDMETHODIMP CMSPAddress::EnumeratePluggableSuperclasses(
     if ( !ppSuperclassEnumerator)
     {
         LOG((MSP_ERROR, "CMSPAddress::EnumeratePluggableSuperclasses - "
-            "bad pointer argument - exit E_POINTER"));
+             "bad pointer argument - exit E_POINTER"));
 
         return E_POINTER;
     }
@@ -3118,13 +3118,13 @@ STDMETHODIMP CMSPAddress::EnumeratePluggableSuperclasses(
     ITTerminalManager2* pTermMgr2 = NULL;
     HRESULT hr = E_FAIL;
     hr = m_pITTerminalManager->QueryInterface(
-        IID_ITTerminalManager2, (void**)&pTermMgr2);
+             IID_ITTerminalManager2, (void**)&pTermMgr2);
 
     if( FAILED(hr) )
     {
         LOG((MSP_ERROR,
-            "CMSPAddress::EnumeratePluggableSuperclasses - "
-            "QI for ITTerminalManager2 failed - returning 0x%08x", hr));
+             "CMSPAddress::EnumeratePluggableSuperclasses - "
+             "QI for ITTerminalManager2 failed - returning 0x%08x", hr));
         return hr;
     }
 
@@ -3135,8 +3135,8 @@ STDMETHODIMP CMSPAddress::EnumeratePluggableSuperclasses(
     DWORD   dwNumSuperclasses = 0;
 
     hr = pTermMgr2->GetPluggableSuperclasses(
-            &dwNumSuperclasses,
-            NULL);
+             &dwNumSuperclasses,
+             NULL);
 
     if ( FAILED(hr) )
     {
@@ -3144,7 +3144,7 @@ STDMETHODIMP CMSPAddress::EnumeratePluggableSuperclasses(
         pTermMgr2->Release();
 
         LOG((MSP_ERROR, "CMSPAddress::EnumeratePluggableSuperclasses - "
-            "can't get number of terminals - exit 0x%08x", hr));
+             "can't get number of terminals - exit 0x%08x", hr));
 
         return hr;
     }
@@ -3160,7 +3160,7 @@ STDMETHODIMP CMSPAddress::EnumeratePluggableSuperclasses(
         pTermMgr2->Release();
 
         LOG((MSP_ERROR, "CMSPAddress::EnumeratePluggableSuperclasses - "
-            "can't allocate IIDs array - exit E_OUTOFMEMORY"));
+             "can't allocate IIDs array - exit E_OUTOFMEMORY"));
 
         return E_OUTOFMEMORY;
     }
@@ -3169,12 +3169,12 @@ STDMETHODIMP CMSPAddress::EnumeratePluggableSuperclasses(
     // Fill in the array with actual pointers. We must do this before
     // initializing the enumerator, because the enumerator may want to
     // addref the interface pointers during initialize.
-    // 
+    //
 
     hr = pTermMgr2->GetPluggableSuperclasses(
-            &dwNumSuperclasses,
-            pSuperclassesIID
-            );
+             &dwNumSuperclasses,
+             pSuperclassesIID
+         );
 
     //
     // Clean-up
@@ -3188,7 +3188,7 @@ STDMETHODIMP CMSPAddress::EnumeratePluggableSuperclasses(
         delete[] pSuperclassesIID;
 
         LOG((MSP_ERROR, "CMSPAddress::EnumeratePluggableSuperclasses - "
-            "can't get IIDs - exit 0x%08x", hr));
+             "can't get IIDs - exit 0x%08x", hr));
 
         return hr;
     }
@@ -3204,7 +3204,7 @@ STDMETHODIMP CMSPAddress::EnumeratePluggableSuperclasses(
         delete[] pSuperclassesIID;
 
         LOG((MSP_ERROR, "CMSPAddress::EnumeratePluggableSuperclasses - "
-            "can't allocate SuperclassPtr array - exit E_OUTOFMEMORY"));
+             "can't allocate SuperclassPtr array - exit E_OUTOFMEMORY"));
 
         return E_OUTOFMEMORY;
     }
@@ -3215,12 +3215,12 @@ STDMETHODIMP CMSPAddress::EnumeratePluggableSuperclasses(
 
     ITPluggableTerminalSuperclassRegistration* pSuperclassReg = NULL;
     hr = CoCreateInstance(
-        CLSID_PluggableSuperclassRegistration,
-        NULL,
-        CLSCTX_INPROC_SERVER,
-        IID_ITPluggableTerminalSuperclassRegistration,
-        (void**)&pSuperclassReg
-        );
+             CLSID_PluggableSuperclassRegistration,
+             NULL,
+             CLSCTX_INPROC_SERVER,
+             IID_ITPluggableTerminalSuperclassRegistration,
+             (void**)&pSuperclassReg
+         );
     if( FAILED(hr) )
     {
         // Clean-up
@@ -3228,7 +3228,7 @@ STDMETHODIMP CMSPAddress::EnumeratePluggableSuperclasses(
         delete[] ppSuperclassesInfo;
 
         LOG((MSP_ERROR, "CMSPAddress::EnumeratePluggableSuperclasses - "
-            "QI for ITPluggableTerminalSuperclassRegistration - exit 0x%08x",hr));
+             "QI for ITPluggableTerminalSuperclassRegistration - exit 0x%08x",hr));
 
         return hr;
     }
@@ -3252,7 +3252,7 @@ STDMETHODIMP CMSPAddress::EnumeratePluggableSuperclasses(
             pSuperclassReg->Release();
 
             LOG((MSP_ERROR, "CMSPAddress::EnumeratePluggableSuperclasses - "
-                "StringFromIID failed - exit 0x%08x",hr));
+                 "StringFromIID failed - exit 0x%08x",hr));
 
             return hr;
         }
@@ -3270,7 +3270,7 @@ STDMETHODIMP CMSPAddress::EnumeratePluggableSuperclasses(
             pSuperclassReg->Release();
 
             LOG((MSP_ERROR, "CMSPAddress::EnumeratePluggableSuperclasses - "
-                "SysAllocString failed - exit E_OUTOFMEMORY"));
+                 "SysAllocString failed - exit E_OUTOFMEMORY"));
 
             return E_OUTOFMEMORY;
         }
@@ -3284,7 +3284,7 @@ STDMETHODIMP CMSPAddress::EnumeratePluggableSuperclasses(
         if( FAILED(hr) )
         {
             LOG((MSP_ERROR, "CMSPAddress::EnumeratePluggableSuperclasses - "
-                "GetTerminalSuperclassInfo failed - exit 0x%08x",hr));
+                 "GetTerminalSuperclassInfo failed - exit 0x%08x",hr));
 
             // Clean-up
             delete[] pSuperclassesIID;
@@ -3309,7 +3309,7 @@ STDMETHODIMP CMSPAddress::EnumeratePluggableSuperclasses(
         if( FAILED(hr) )
         {
             LOG((MSP_ERROR, "CMSPAddress::EnumeratePluggableSuperclasses - "
-                "CreateInstance failed - exit 0x%08x", hr));
+                 "CreateInstance failed - exit 0x%08x", hr));
 
             // Clean-up
             delete[] pSuperclassesIID;
@@ -3326,9 +3326,9 @@ STDMETHODIMP CMSPAddress::EnumeratePluggableSuperclasses(
         //
 
         pSuperclassInfo->QueryInterface(
-            IID_ITPluggableTerminalSuperclassInfo, 
+            IID_ITPluggableTerminalSuperclassInfo,
             (void**)&ppSuperclassesInfo[dwIndex]
-            );
+        );
 
         //
         // Set the fields
@@ -3357,9 +3357,9 @@ STDMETHODIMP CMSPAddress::EnumeratePluggableSuperclasses(
     //
 
     typedef CSafeComEnum<IEnumPluggableSuperclassInfo,
-                     &IID_IEnumPluggableSuperclassInfo,
-                     ITPluggableTerminalSuperclassInfo*, 
-                     _CopyInterface<ITPluggableTerminalSuperclassInfo> > CEnumerator;
+            &IID_IEnumPluggableSuperclassInfo,
+            ITPluggableTerminalSuperclassInfo*,
+            _CopyInterface<ITPluggableTerminalSuperclassInfo> > CEnumerator;
 
     CComObject<CEnumerator> *pEnum = NULL;
 
@@ -3368,7 +3368,7 @@ STDMETHODIMP CMSPAddress::EnumeratePluggableSuperclasses(
     if ( FAILED(hr) )
     {
         LOG((MSP_ERROR, "CMSPAddress::EnumeratePluggableSuperclasses - "
-            "can't create enumerator - exit 0x%08x", hr));
+             "can't create enumerator - exit 0x%08x", hr));
 
         delete[] ppSuperclassesInfo;
         return hr;
@@ -3379,18 +3379,18 @@ STDMETHODIMP CMSPAddress::EnumeratePluggableSuperclasses(
     //
 
     hr = pEnum->_InternalQueryInterface(
-        IID_IEnumPluggableSuperclassInfo, 
-        (void**) ppSuperclassEnumerator
-        );
+             IID_IEnumPluggableSuperclassInfo,
+             (void**) ppSuperclassEnumerator
+         );
 
     if ( FAILED(hr) )
     {
         LOG((MSP_ERROR, "CMSPAddress::EnumeratePluggableSuperclasses - "
-            "can't get enumerator interface - exit 0x%08x", hr));
+             "can't get enumerator interface - exit 0x%08x", hr));
 
         delete pEnum;
         delete[] ppSuperclassesInfo;
-        
+
         return hr;
     }
 
@@ -3401,32 +3401,32 @@ STDMETHODIMP CMSPAddress::EnumeratePluggableSuperclasses(
     hr = pEnum->Init(ppSuperclassesInfo,
                      ppSuperclassesInfo + dwNumSuperclasses,
                      NULL,
-                     AtlFlagTakeOwnership); 
+                     AtlFlagTakeOwnership);
 
     if ( FAILED(hr) )
     {
         LOG((MSP_ERROR, "CMSPAddress::EnumeratePluggableSuperclasses - "
-            "can't init enumerator - exit 0x%08x", hr));
+             "can't init enumerator - exit 0x%08x", hr));
 
         (*ppSuperclassEnumerator)->Release();
         delete[] ppSuperclassesInfo;
-        
+
         return hr;
     }
-    
+
     LOG((MSP_TRACE, "CMSPAddress::EnumeratePluggableSuperclasses - exit S_OK"));
 
     return S_OK;
 }
 
-STDMETHODIMP CMSPAddress::get_PluggableTerminalClasses( 
+STDMETHODIMP CMSPAddress::get_PluggableTerminalClasses(
     IN  BSTR bstrTerminalSuperclass,
     IN  long lMediaType,
     OUT VARIANT * pVariant
-    )
+)
 {
     LOG((MSP_TRACE,
-        "CMSPAddress::get_PluggableTerminalClasses - enter"));
+         "CMSPAddress::get_PluggableTerminalClasses - enter"));
 
     //
     // Check parameters.
@@ -3435,7 +3435,7 @@ STDMETHODIMP CMSPAddress::get_PluggableTerminalClasses(
     if ( !pVariant)
     {
         LOG((MSP_ERROR, "CMSPAddress::get_PluggableTerminalClasses - "
-            "bad pointer argument - exit E_POINTER"));
+             "bad pointer argument - exit E_POINTER"));
 
         return E_POINTER;
     }
@@ -3443,7 +3443,7 @@ STDMETHODIMP CMSPAddress::get_PluggableTerminalClasses(
     if( ! bstrTerminalSuperclass)
     {
         LOG((MSP_ERROR, "CMSPAddress::get_PluggableTerminalClasses - "
-            "bad pointer argument - exit E_INVALIDARG"));
+             "bad pointer argument - exit E_INVALIDARG"));
 
         return E_INVALIDARG;
     }
@@ -3453,7 +3453,7 @@ STDMETHODIMP CMSPAddress::get_PluggableTerminalClasses(
     if( FAILED(hr) )
     {
         LOG((MSP_ERROR, "CMSPAddress::get_PluggableTerminalClasses - "
-            "bad pointer argument - exit E_INVALIDARG"));
+             "bad pointer argument - exit E_INVALIDARG"));
 
         return E_INVALIDARG;
     }
@@ -3464,13 +3464,13 @@ STDMETHODIMP CMSPAddress::get_PluggableTerminalClasses(
 
     ITTerminalManager2* pTermMgr2 = NULL;
     hr = m_pITTerminalManager->QueryInterface(
-        IID_ITTerminalManager2, (void**)&pTermMgr2);
+             IID_ITTerminalManager2, (void**)&pTermMgr2);
 
     if( FAILED(hr) )
     {
         LOG((MSP_ERROR,
-            "CMSPAddress::get_PluggableTerminalClasses - "
-            "QI for ITTerminalManager2 failed - returning 0x%08x", hr));
+             "CMSPAddress::get_PluggableTerminalClasses - "
+             "QI for ITTerminalManager2 failed - returning 0x%08x", hr));
         return hr;
     }
 
@@ -3488,7 +3488,7 @@ STDMETHODIMP CMSPAddress::get_PluggableTerminalClasses(
         pTermMgr2->Release();
 
         LOG((MSP_ERROR, "CMSPAddress::get_PluggableTerminalClasses - "
-            "can't create collection - exit 0x%08x", hr));
+             "can't create collection - exit 0x%08x", hr));
 
         return hr;
     }
@@ -3499,8 +3499,8 @@ STDMETHODIMP CMSPAddress::get_PluggableTerminalClasses(
 
     IDispatch * pDispatch;
     hr = pCollection->_InternalQueryInterface(
-        IID_IDispatch,
-        (void **) &pDispatch );
+             IID_IDispatch,
+             (void **) &pDispatch );
 
     if ( FAILED(hr) )
     {
@@ -3509,7 +3509,7 @@ STDMETHODIMP CMSPAddress::get_PluggableTerminalClasses(
         delete pCollection;
 
         LOG((MSP_ERROR, "CMSPAddress::get_PluggableTerminalClasses - "
-            "QI for IDispatch on collection failed - exit 0x%08x", hr));
+             "QI for IDispatch on collection failed - exit 0x%08x", hr));
 
         return hr;
     }
@@ -3521,10 +3521,10 @@ STDMETHODIMP CMSPAddress::get_PluggableTerminalClasses(
     DWORD   dwNumClasses = 0;
 
     hr = pTermMgr2->GetPluggableTerminalClasses(
-            iidSuperclass,
-            lMediaType,
-            &dwNumClasses,
-            NULL);
+             iidSuperclass,
+             lMediaType,
+             &dwNumClasses,
+             NULL);
 
     if ( FAILED(hr) )
     {
@@ -3533,7 +3533,7 @@ STDMETHODIMP CMSPAddress::get_PluggableTerminalClasses(
         pDispatch->Release();
 
         LOG((MSP_ERROR, "CMSPAddress::get_PluggableTerminalClasses - "
-            "can't get number of terminals - exit 0x%08x", hr));
+             "can't get number of terminals - exit 0x%08x", hr));
 
         return hr;
     }
@@ -3550,7 +3550,7 @@ STDMETHODIMP CMSPAddress::get_PluggableTerminalClasses(
         pDispatch->Release();
 
         LOG((MSP_ERROR, "CMSPAddress::get_PluggableTerminalClasses - "
-            "can't allocate IIDs array - exit E_OUTOFMEMORY"));
+             "can't allocate IIDs array - exit E_OUTOFMEMORY"));
 
         return E_OUTOFMEMORY;
     }
@@ -3559,14 +3559,14 @@ STDMETHODIMP CMSPAddress::get_PluggableTerminalClasses(
     // Fill in the array with actual pointers. We must do this before
     // initializing the enumerator, because the enumerator may want to
     // addref the interface pointers during initialize.
-    // 
+    //
 
     hr = pTermMgr2->GetPluggableTerminalClasses(
-            iidSuperclass,
-            lMediaType,
-            &dwNumClasses,
-            pClassesIID
-            );
+             iidSuperclass,
+             lMediaType,
+             &dwNumClasses,
+             pClassesIID
+         );
 
     //
     // Clean-up
@@ -3581,7 +3581,7 @@ STDMETHODIMP CMSPAddress::get_PluggableTerminalClasses(
         delete[] pClassesIID;
 
         LOG((MSP_ERROR, "CMSPAddress::get_PluggableTerminalClasses - "
-            "can't get IIDs - exit 0x%08x", hr));
+             "can't get IIDs - exit 0x%08x", hr));
 
         return hr;
     }
@@ -3598,7 +3598,7 @@ STDMETHODIMP CMSPAddress::get_PluggableTerminalClasses(
         delete[] pClassesIID;
 
         LOG((MSP_ERROR, "CMSPAddress::get_PluggableTerminalClasses - "
-            "can't allocate ClassPtr array - exit E_OUTOFMEMORY"));
+             "can't allocate ClassPtr array - exit E_OUTOFMEMORY"));
 
         return E_OUTOFMEMORY;
     }
@@ -3609,12 +3609,12 @@ STDMETHODIMP CMSPAddress::get_PluggableTerminalClasses(
 
     ITPluggableTerminalClassRegistration* pClassReg = NULL;
     hr = CoCreateInstance(
-        CLSID_PluggableTerminalRegistration,
-        NULL,
-        CLSCTX_INPROC_SERVER,
-        IID_ITPluggableTerminalClassRegistration,
-        (void**)&pClassReg
-        );
+             CLSID_PluggableTerminalRegistration,
+             NULL,
+             CLSCTX_INPROC_SERVER,
+             IID_ITPluggableTerminalClassRegistration,
+             (void**)&pClassReg
+         );
     if( FAILED(hr) )
     {
         //Clean-up
@@ -3623,7 +3623,7 @@ STDMETHODIMP CMSPAddress::get_PluggableTerminalClasses(
         delete[] ppClassesInfo;
 
         LOG((MSP_ERROR, "CMSPAddress::get_PluggableTerminalClasses - "
-            "QI for ITPluggableTerminalClassRegistration - exit 0x%08x",hr));
+             "QI for ITPluggableTerminalClassRegistration - exit 0x%08x",hr));
 
         return hr;
     }
@@ -3648,7 +3648,7 @@ STDMETHODIMP CMSPAddress::get_PluggableTerminalClasses(
             pClassReg->Release();
 
             LOG((MSP_ERROR, "CMSPAddress::get_PluggableTerminalClasses - "
-                "StringFromIID failed - exit 0x%08x",hr));
+                 "StringFromIID failed - exit 0x%08x",hr));
 
             return hr;
         }
@@ -3667,7 +3667,7 @@ STDMETHODIMP CMSPAddress::get_PluggableTerminalClasses(
             pClassReg->Release();
 
             LOG((MSP_ERROR, "CMSPAddress::get_PluggableTerminalClasses - "
-                "SysAllocString failed - exit E_OUTOFMEMORY"));
+                 "SysAllocString failed - exit E_OUTOFMEMORY"));
 
             return E_OUTOFMEMORY;
         }
@@ -3678,7 +3678,7 @@ STDMETHODIMP CMSPAddress::get_PluggableTerminalClasses(
 
         pClassReg->put_TerminalClass( bstrPublicCLSID);
         hr = pClassReg->GetTerminalClassInfo(
-            bstrTerminalSuperclass);
+                 bstrTerminalSuperclass);
         if( FAILED(hr) )
         {
             // Clean-up
@@ -3689,7 +3689,7 @@ STDMETHODIMP CMSPAddress::get_PluggableTerminalClasses(
             SysFreeString( bstrPublicCLSID);
 
             LOG((MSP_ERROR, "CMSPAddress::get_PluggableTerminalClasses - "
-                "GetTerminalInfo failed - exit 0x%08x",hr));
+                 "GetTerminalInfo failed - exit 0x%08x",hr));
 
             return hr;
         }
@@ -3729,7 +3729,7 @@ STDMETHODIMP CMSPAddress::get_PluggableTerminalClasses(
             SysFreeString( bstrCLSID );
 
             LOG((MSP_ERROR, "CMSPAddress::get_PluggableTerminalClasses - "
-                "CreateInstance failed - exit 0x%08x", hr));
+                 "CreateInstance failed - exit 0x%08x", hr));
 
             return hr;
         }
@@ -3739,9 +3739,9 @@ STDMETHODIMP CMSPAddress::get_PluggableTerminalClasses(
         //
 
         pClassInfo->QueryInterface(
-            IID_ITPluggableTerminalClassInfo, 
+            IID_ITPluggableTerminalClassInfo,
             (void**)&ppClassesInfo[dwIndex]
-            );
+        );
 
         //
         // Set the fields
@@ -3819,7 +3819,7 @@ STDMETHODIMP CMSPAddress::get_PluggableTerminalClasses(
     if( FAILED(hr) )
     {
         LOG((MSP_ERROR, "CMSPAddress::get_PluggableTerminalClasses - exit "
-            "pCollection->Initialize failed. returns 0x%08x", hr));
+             "pCollection->Initialize failed. returns 0x%08x", hr));
 
         delete[] ppClassesInfo;
         pDispatch->Release();
@@ -3832,7 +3832,7 @@ STDMETHODIMP CMSPAddress::get_PluggableTerminalClasses(
     //
 
     LOG((MSP_INFO, "CMSPAddress::get_PluggableTerminalClasses - "
-        "placing IDispatch value %08x in variant", pDispatch));
+         "placing IDispatch value %08x in variant", pDispatch));
 
     VariantInit(pVariant);
     pVariant->vt = VT_DISPATCH;
@@ -3846,11 +3846,11 @@ STDMETHODIMP CMSPAddress::get_PluggableTerminalClasses(
 STDMETHODIMP CMSPAddress::EnumeratePluggableTerminalClasses(
     IN  CLSID iidTerminalSuperclass,
     IN  long lMediaType,
-    OUT IEnumPluggableTerminalClassInfo ** ppClassEnumerator 
-    )
+    OUT IEnumPluggableTerminalClassInfo ** ppClassEnumerator
+)
 {
     LOG((MSP_TRACE,
-        "CMSPAddress::EnumeratePluggableTerminalClasses - enter"));
+         "CMSPAddress::EnumeratePluggableTerminalClasses - enter"));
 
     //
     // Check parameters.
@@ -3859,7 +3859,7 @@ STDMETHODIMP CMSPAddress::EnumeratePluggableTerminalClasses(
     if ( !ppClassEnumerator)
     {
         LOG((MSP_ERROR, "CMSPAddress::EnumeratePluggableTerminalClasses - "
-            "bad pointer argument - exit E_POINTER"));
+             "bad pointer argument - exit E_POINTER"));
 
         return E_POINTER;
     }
@@ -3868,8 +3868,8 @@ STDMETHODIMP CMSPAddress::EnumeratePluggableTerminalClasses(
     HRESULT hr = StringFromCLSID( iidTerminalSuperclass, &lpszCLSID);
     if( FAILED(hr) )
     {
-         LOG((MSP_ERROR, "CMSPAddress::EnumeratePluggableTerminalClasses - "
-            "StringFromCLSID failed - exit 0x%08x", hr));
+        LOG((MSP_ERROR, "CMSPAddress::EnumeratePluggableTerminalClasses - "
+             "StringFromCLSID failed - exit 0x%08x", hr));
 
         return hr;
     }
@@ -3883,8 +3883,8 @@ STDMETHODIMP CMSPAddress::EnumeratePluggableTerminalClasses(
 
     if( NULL == bstrTerminalSuperclass )
     {
-         LOG((MSP_ERROR, "CMSPAddress::EnumeratePluggableTerminalClasses - "
-            "SysAllocString failed - exit E_OUTOFMEMORY"));
+        LOG((MSP_ERROR, "CMSPAddress::EnumeratePluggableTerminalClasses - "
+             "SysAllocString failed - exit E_OUTOFMEMORY"));
 
         return E_OUTOFMEMORY;
     }
@@ -3895,7 +3895,7 @@ STDMETHODIMP CMSPAddress::EnumeratePluggableTerminalClasses(
 
     ITTerminalManager2* pTermMgr2 = NULL;
     hr = m_pITTerminalManager->QueryInterface(
-        IID_ITTerminalManager2, (void**)&pTermMgr2);
+             IID_ITTerminalManager2, (void**)&pTermMgr2);
 
     if( FAILED(hr) )
     {
@@ -3903,8 +3903,8 @@ STDMETHODIMP CMSPAddress::EnumeratePluggableTerminalClasses(
         SysFreeString( bstrTerminalSuperclass );
 
         LOG((MSP_ERROR,
-            "CMSPAddress::EnumeratePluggableTerminalClasses - "
-            "QI for ITTerminalManager2 failed - returning 0x%08x", hr));
+             "CMSPAddress::EnumeratePluggableTerminalClasses - "
+             "QI for ITTerminalManager2 failed - returning 0x%08x", hr));
         return hr;
     }
 
@@ -3915,15 +3915,15 @@ STDMETHODIMP CMSPAddress::EnumeratePluggableTerminalClasses(
     DWORD   dwNumClasses = 0;
 
     hr = pTermMgr2->GetPluggableTerminalClasses(
-            iidTerminalSuperclass,
-            lMediaType,
-            &dwNumClasses,
-            NULL);
+             iidTerminalSuperclass,
+             lMediaType,
+             &dwNumClasses,
+             NULL);
 
     if ( FAILED(hr) )
     {
         LOG((MSP_ERROR, "CMSPAddress::EnumeratePluggableTerminalClasses - "
-            "can't get number of terminals - exit 0x%08x", hr));
+             "can't get number of terminals - exit 0x%08x", hr));
 
         // Clean-up
         SysFreeString( bstrTerminalSuperclass );
@@ -3940,7 +3940,7 @@ STDMETHODIMP CMSPAddress::EnumeratePluggableTerminalClasses(
     if ( pClassesIID == NULL )
     {
         LOG((MSP_ERROR, "CMSPAddress::EnumeratePluggableTerminalClasses - "
-            "can't allocate IIDs array - exit E_OUTOFMEMORY"));
+             "can't allocate IIDs array - exit E_OUTOFMEMORY"));
 
         // Clean-up
         SysFreeString( bstrTerminalSuperclass );
@@ -3953,14 +3953,14 @@ STDMETHODIMP CMSPAddress::EnumeratePluggableTerminalClasses(
     // Fill in the array with actual pointers. We must do this before
     // initializing the enumerator, because the enumerator may want to
     // addref the interface pointers during initialize.
-    // 
+    //
 
     hr = pTermMgr2->GetPluggableTerminalClasses(
-            iidTerminalSuperclass,
-            lMediaType,
-            &dwNumClasses,
-            pClassesIID
-            );
+             iidTerminalSuperclass,
+             lMediaType,
+             &dwNumClasses,
+             pClassesIID
+         );
 
     //
     // Clean-up
@@ -3971,7 +3971,7 @@ STDMETHODIMP CMSPAddress::EnumeratePluggableTerminalClasses(
     if ( FAILED(hr) )
     {
         LOG((MSP_ERROR, "CMSPAddress::EnumeratePluggableTerminalClasses - "
-            "can't get IIDs - exit 0x%08x", hr));
+             "can't get IIDs - exit 0x%08x", hr));
 
         // Clean-up
         SysFreeString( bstrTerminalSuperclass );
@@ -3988,7 +3988,7 @@ STDMETHODIMP CMSPAddress::EnumeratePluggableTerminalClasses(
     if ( ppClassesInfo == NULL )
     {
         LOG((MSP_ERROR, "CMSPAddress::EnumeratePluggableTerminalClasses - "
-            "can't allocate ClassPtr array - exit E_OUTOFMEMORY"));
+             "can't allocate ClassPtr array - exit E_OUTOFMEMORY"));
 
         // Clean-up
         SysFreeString( bstrTerminalSuperclass );
@@ -4003,16 +4003,16 @@ STDMETHODIMP CMSPAddress::EnumeratePluggableTerminalClasses(
 
     ITPluggableTerminalClassRegistration* pClassReg = NULL;
     hr = CoCreateInstance(
-        CLSID_PluggableTerminalRegistration,
-        NULL,
-        CLSCTX_INPROC_SERVER,
-        IID_ITPluggableTerminalClassRegistration,
-        (void**)&pClassReg
-        );
+             CLSID_PluggableTerminalRegistration,
+             NULL,
+             CLSCTX_INPROC_SERVER,
+             IID_ITPluggableTerminalClassRegistration,
+             (void**)&pClassReg
+         );
     if( FAILED(hr) )
     {
         LOG((MSP_ERROR, "CMSPAddress::EnumeratePluggableTerminalClasses - "
-            "QI for ITPluggableTerminalClassRegistration - exit 0x%08x",hr));
+             "QI for ITPluggableTerminalClassRegistration - exit 0x%08x",hr));
 
         // Clean-up
         SysFreeString( bstrTerminalSuperclass );
@@ -4036,7 +4036,7 @@ STDMETHODIMP CMSPAddress::EnumeratePluggableTerminalClasses(
         if( FAILED(hr) )
         {
             LOG((MSP_ERROR, "CMSPAddress::EnumeratePluggableTerminalClasses - "
-                "StringFromIID failed - exit 0x%08x",hr));
+                 "StringFromIID failed - exit 0x%08x",hr));
 
             // Clean-up
             SysFreeString( bstrTerminalSuperclass );
@@ -4055,7 +4055,7 @@ STDMETHODIMP CMSPAddress::EnumeratePluggableTerminalClasses(
         if( NULL == bstrPublicCLSID)
         {
             LOG((MSP_ERROR, "CMSPAddress::EnumeratePluggableTerminalClasses - "
-                "SysAllocString failed - exit E_OUTOFMEMORY"));
+                 "SysAllocString failed - exit E_OUTOFMEMORY"));
 
 
             // Clean-up
@@ -4073,11 +4073,11 @@ STDMETHODIMP CMSPAddress::EnumeratePluggableTerminalClasses(
 
         pClassReg->put_TerminalClass( bstrPublicCLSID);
         hr = pClassReg->GetTerminalClassInfo(
-            bstrTerminalSuperclass);
+                 bstrTerminalSuperclass);
         if( FAILED(hr) )
         {
             LOG((MSP_ERROR, "CMSPAddress::EnumeratePluggableTerminalClasses - "
-                "GetTerminalInfo failed - exit 0x%08x",hr));
+                 "GetTerminalInfo failed - exit 0x%08x",hr));
 
             // Clean-up
             SysFreeString( bstrTerminalSuperclass );
@@ -4113,7 +4113,7 @@ STDMETHODIMP CMSPAddress::EnumeratePluggableTerminalClasses(
         if( FAILED(hr) )
         {
             LOG((MSP_ERROR, "CMSPAddress::EnumeratePluggableTerminalClasses - "
-                "CreateInstance failed - exit 0x%08x", hr));
+                 "CreateInstance failed - exit 0x%08x", hr));
 
             // Clean-up
             SysFreeString( bstrTerminalSuperclass );
@@ -4134,9 +4134,9 @@ STDMETHODIMP CMSPAddress::EnumeratePluggableTerminalClasses(
         //
 
         pClassInfo->QueryInterface(
-            IID_ITPluggableTerminalClassInfo, 
+            IID_ITPluggableTerminalClassInfo,
             (void**)&ppClassesInfo[dwIndex]
-            );
+        );
 
         //
         // Set the fields
@@ -4207,9 +4207,9 @@ STDMETHODIMP CMSPAddress::EnumeratePluggableTerminalClasses(
     //
 
     typedef CSafeComEnum<IEnumPluggableTerminalClassInfo,
-                     &IID_IEnumPluggableTerminalClassInfo,
-                     ITPluggableTerminalClassInfo*, 
-                     _CopyInterface<ITPluggableTerminalClassInfo> > CEnumerator;
+            &IID_IEnumPluggableTerminalClassInfo,
+            ITPluggableTerminalClassInfo*,
+            _CopyInterface<ITPluggableTerminalClassInfo> > CEnumerator;
 
     CComObject<CEnumerator> *pEnum = NULL;
 
@@ -4218,7 +4218,7 @@ STDMETHODIMP CMSPAddress::EnumeratePluggableTerminalClasses(
     if ( FAILED(hr) )
     {
         LOG((MSP_ERROR, "CMSPAddress::EnumeratePluggableTerminalClasses - "
-            "can't create enumerator - exit 0x%08x", hr));
+             "can't create enumerator - exit 0x%08x", hr));
 
         delete[] ppClassesInfo;
         return hr;
@@ -4229,18 +4229,18 @@ STDMETHODIMP CMSPAddress::EnumeratePluggableTerminalClasses(
     //
 
     hr = pEnum->_InternalQueryInterface(
-        IID_IEnumPluggableTerminalClassInfo, 
-        (void**) ppClassEnumerator
-        );
+             IID_IEnumPluggableTerminalClassInfo,
+             (void**) ppClassEnumerator
+         );
 
     if ( FAILED(hr) )
     {
         LOG((MSP_ERROR, "CMSPAddress::EnumeratePluggableTerminalClasses - "
-            "can't get enumerator interface - exit 0x%08x", hr));
+             "can't get enumerator interface - exit 0x%08x", hr));
 
         delete pEnum;
         delete[] ppClassesInfo;
-        
+
         return hr;
     }
 
@@ -4251,19 +4251,19 @@ STDMETHODIMP CMSPAddress::EnumeratePluggableTerminalClasses(
     hr = pEnum->Init(ppClassesInfo,
                      ppClassesInfo + dwNumClasses,
                      NULL,
-                     AtlFlagTakeOwnership); 
+                     AtlFlagTakeOwnership);
 
     if ( FAILED(hr) )
     {
         LOG((MSP_ERROR, "CMSPAddress::EnumeratePluggableTerminalClasses - "
-            "can't init enumerator - exit 0x%08x", hr));
+             "can't init enumerator - exit 0x%08x", hr));
 
         (*ppClassEnumerator)->Release();
         delete[] ppClassesInfo;
-        
+
         return hr;
     }
-    
+
     LOG((MSP_TRACE, "CMSPAddress::EnumeratePluggableTerminalClasses - exit S_OK"));
 
     return S_OK;
@@ -4272,13 +4272,13 @@ STDMETHODIMP CMSPAddress::EnumeratePluggableTerminalClasses(
 STDMETHODIMP CMSPAddress::GetEvent(
     IN OUT  DWORD *             pdwSize,
     OUT     BYTE *              pBuffer
-    )
+)
 /*++
 
 Routine Description:
 
-This method is called by TAPI3 to get detailed information about the 
-event that just happened. TAPI3 will normally do this after its event 
+This method is called by TAPI3 to get detailed information about the
+event that just happened. TAPI3 will normally do this after its event
 is signaled. Locks the event list.
 
 Arguments:
@@ -4287,15 +4287,15 @@ pMSPEvent
     The MSP_EVENT
 
 pdwSize
-    Pointer to a DWORD.  On entry, indicates the size in bytes of the 
-    buffer pointed to in pbuffer. On success, it will be filled in with 
-    the actual number of bytes returned.  If the buffer is not big enough, 
-    the method will return TAPI_E_NOTENOUGHMEMORY, and it will be filled 
-    in the with number of bytes needed. 
+    Pointer to a DWORD.  On entry, indicates the size in bytes of the
+    buffer pointed to in pbuffer. On success, it will be filled in with
+    the actual number of bytes returned.  If the buffer is not big enough,
+    the method will return TAPI_E_NOTENOUGHMEMORY, and it will be filled
+    in the with number of bytes needed.
 
 pBuffer
     Event buffer filled in by MSP with the relevant events
-    
+
 Return Value:
 
 S_OK
@@ -4307,8 +4307,8 @@ TAPI_E_NOTENOUGHMEMORY
 {
     // We trust TAPI3 not to give us bad pointers.
     _ASSERTE(!!pdwSize);
-    _ASSERTE((*pdwSize == 0) ? TRUE : 
-        !!pBuffer);
+    _ASSERTE((*pdwSize == 0) ? TRUE :
+             !!pBuffer);
 
     LOG((MSP_TRACE, "CMSPAddress::GetEvent"));
 
@@ -4330,7 +4330,7 @@ TAPI_E_NOTENOUGHMEMORY
         *pdwSize = pItem->MSPEventInfo.dwSize;
         return TAPI_E_NOTENOUGHMEMORY;
     }
-    
+
     CopyMemory(pBuffer, &pItem->MSPEventInfo, pItem->MSPEventInfo.dwSize);
     *pdwSize = pItem->MSPEventInfo.dwSize;
 
@@ -4344,14 +4344,14 @@ TAPI_E_NOTENOUGHMEMORY
 }
 
 HRESULT CMSPAddress::PostEvent(
-        IN      MSPEVENTITEM *      pEventItem
-        )
+    IN      MSPEVENTITEM *      pEventItem
+)
 /*++
 
 Routine Description:
 
-This method is called by MSPCalls to post an event to TAPI3. This method 
-puts the event at the end of the event list and singals TAPI3. 
+This method is called by MSPCalls to post an event to TAPI3. This method
+puts the event at the end of the event list and singals TAPI3.
 Locks the event list.
 
 
@@ -4359,7 +4359,7 @@ Arguments:
 
 EventItem
     The event to be queued.
-    
+
 Return Value:
 
 S_OK
@@ -4390,8 +4390,8 @@ E_OUTOFMEMORY
 
 
 STDMETHODIMP CMSPAddress::get_StaticTerminals (
-        OUT  VARIANT * pVariant
-        )
+    OUT  VARIANT * pVariant
+)
 {
     LOG((MSP_TRACE, "CMSPAddress::get_StaticTerminals - enter"));
 
@@ -4402,7 +4402,7 @@ STDMETHODIMP CMSPAddress::get_StaticTerminals (
     if ( !pVariant)
     {
         LOG((MSP_ERROR, "CMSPAddress::get_StaticTerminals - "
-            "bad pointer argument - exit E_POINTER"));
+             "bad pointer argument - exit E_POINTER"));
 
         return E_POINTER;
     }
@@ -4418,7 +4418,7 @@ STDMETHODIMP CMSPAddress::get_StaticTerminals (
     if ( FAILED(hr) )
     {
         LOG((MSP_ERROR, "CMSPAddress::get_StaticTerminals - "
-            "can't create collection - exit 0x%08x", hr));
+             "can't create collection - exit 0x%08x", hr));
 
         return hr;
     }
@@ -4430,12 +4430,12 @@ STDMETHODIMP CMSPAddress::get_StaticTerminals (
     IDispatch * pDispatch;
 
     hr = pCollection->_InternalQueryInterface(IID_IDispatch,
-                                              (void **) &pDispatch );
+            (void **) &pDispatch );
 
     if ( FAILED(hr) )
     {
         LOG((MSP_ERROR, "CMSPAddress::get_StaticTerminals - "
-            "QI for IDispatch on collection failed - exit 0x%08x", hr));
+             "QI for IDispatch on collection failed - exit 0x%08x", hr));
 
         delete pCollection;
 
@@ -4454,7 +4454,7 @@ STDMETHODIMP CMSPAddress::get_StaticTerminals (
     if ( FAILED(hr) )
     {
         LOG((MSP_ERROR, "CMSPAddress::get_StaticTerminals - "
-            "can't get number of terminals - exit 0x%08x", hr));
+             "can't get number of terminals - exit 0x%08x", hr));
 
         pDispatch->Release();
 
@@ -4471,7 +4471,7 @@ STDMETHODIMP CMSPAddress::get_StaticTerminals (
     if ( ppTerminals == NULL )
     {
         LOG((MSP_ERROR, "CMSPAddress::get_StaticTerminals - "
-            "can't allocate terminals array - exit E_OUTOFMEMORY"));
+             "can't allocate terminals array - exit E_OUTOFMEMORY"));
 
         pDispatch->Release();
 
@@ -4482,7 +4482,7 @@ STDMETHODIMP CMSPAddress::get_StaticTerminals (
     // Fill in the array with actual pointers. We must do this before
     // initializing the enumerator, because the enumerator may want to
     // addref the interface pointers during initialize.
-    // 
+    //
 
     hr = GetStaticTerminals(&dwNumTerminals,
                             ppTerminals);
@@ -4490,7 +4490,7 @@ STDMETHODIMP CMSPAddress::get_StaticTerminals (
     if ( FAILED(hr) )
     {
         LOG((MSP_ERROR, "CMSPAddress::get_StaticTerminals - "
-            "can't get terminals - exit 0x%08x", hr));
+             "can't get terminals - exit 0x%08x", hr));
 
         pDispatch->Release();
         delete ppTerminals;
@@ -4519,12 +4519,12 @@ STDMETHODIMP CMSPAddress::get_StaticTerminals (
     }
 
     delete ppTerminals;
-    
+
     if (FAILED(hr))
     {
         LOG((MSP_ERROR, "CMSPAddress::get_StaticTerminals - "
-            "Initialize on collection failed - exit 0x%08x", hr));
-        
+             "Initialize on collection failed - exit 0x%08x", hr));
+
         pDispatch->Release();
 
         return hr;
@@ -4535,14 +4535,14 @@ STDMETHODIMP CMSPAddress::get_StaticTerminals (
     //
 
     LOG((MSP_ERROR, "CMSPAddress::get_StaticTerminals - "
-        "placing IDispatch value %08x in variant", pDispatch));
+         "placing IDispatch value %08x in variant", pDispatch));
 
     VariantInit(pVariant);
     pVariant->vt = VT_DISPATCH;
     pVariant->pdispVal = pDispatch;
 
     LOG((MSP_TRACE, "CMSPAddress::get_StaticTerminals - exit S_OK"));
- 
+
     return S_OK;
 }
 
@@ -4550,11 +4550,11 @@ STDMETHODIMP CMSPAddress::get_StaticTerminals (
 //////////////////////////////////////////////////////////////////////////////
 
 STDMETHODIMP CMSPAddress::EnumerateStaticTerminals (
-        OUT  IEnumTerminal ** ppTerminalEnumerator
-        )
+    OUT  IEnumTerminal ** ppTerminalEnumerator
+)
 {
     LOG((MSP_TRACE, "CMSPAddress::EnumerateStaticTerminals - "
-        "enter"));
+         "enter"));
 
     //
     // Check the return pointer.
@@ -4563,7 +4563,7 @@ STDMETHODIMP CMSPAddress::EnumerateStaticTerminals (
     if ( !ppTerminalEnumerator)
     {
         LOG((MSP_ERROR, "CMSPAddress::EnumerateStaticTerminals - "
-            "bad return pointer - exit E_POINTER"));
+             "bad return pointer - exit E_POINTER"));
 
         return E_POINTER;
     }
@@ -4574,7 +4574,7 @@ STDMETHODIMP CMSPAddress::EnumerateStaticTerminals (
 
     typedef _CopyInterface<ITTerminal> CCopy;
     typedef CSafeComEnum<IEnumTerminal, &IID_IEnumTerminal,
-        ITTerminal *, CCopy> CEnumerator;
+            ITTerminal *, CCopy> CEnumerator;
 
     HRESULT hr;
 
@@ -4585,7 +4585,7 @@ STDMETHODIMP CMSPAddress::EnumerateStaticTerminals (
     if ( FAILED(hr) )
     {
         LOG((MSP_ERROR, "CMSPAddress::EnumerateStaticTerminals - "
-            "can't create enumerator - exit 0x%08x", hr));
+             "can't create enumerator - exit 0x%08x", hr));
 
         return hr;
     }
@@ -4600,7 +4600,7 @@ STDMETHODIMP CMSPAddress::EnumerateStaticTerminals (
     if ( FAILED(hr) )
     {
         LOG((MSP_ERROR, "CMSPAddress::EnumerateStaticTerminals - "
-            "can't get enumerator interface - exit 0x%08x", hr));
+             "can't get enumerator interface - exit 0x%08x", hr));
 
         delete pEnum;
 
@@ -4619,7 +4619,7 @@ STDMETHODIMP CMSPAddress::EnumerateStaticTerminals (
     if ( FAILED(hr) )
     {
         LOG((MSP_ERROR, "CMSPAddress::EnumerateStaticTerminals - "
-            "can't get number of terminals - exit 0x%08x", hr));
+             "can't get number of terminals - exit 0x%08x", hr));
 
         (*ppTerminalEnumerator)->Release();
 
@@ -4636,7 +4636,7 @@ STDMETHODIMP CMSPAddress::EnumerateStaticTerminals (
     if ( ppTerminals == NULL )
     {
         LOG((MSP_ERROR, "CMSPAddress::EnumerateStaticTerminals - "
-            "can't allocate terminals array - exit E_OUTOFMEMORY"));
+             "can't allocate terminals array - exit E_OUTOFMEMORY"));
 
         (*ppTerminalEnumerator)->Release();
 
@@ -4647,7 +4647,7 @@ STDMETHODIMP CMSPAddress::EnumerateStaticTerminals (
     // Fill in the array with actual pointers. We must do this before
     // initializing the enumerator, because the enumerator may want to
     // addref the interface pointers during initialize.
-    // 
+    //
 
     hr = GetStaticTerminals(&dwNumTerminals,
                             ppTerminals);
@@ -4655,7 +4655,7 @@ STDMETHODIMP CMSPAddress::EnumerateStaticTerminals (
     if ( FAILED(hr) )
     {
         LOG((MSP_ERROR, "CMSPAddress::EnumerateStaticTerminals - "
-            "can't get terminals - exit 0x%08x", hr));
+             "can't get terminals - exit 0x%08x", hr));
 
         (*ppTerminalEnumerator)->Release();
         delete ppTerminals;
@@ -4675,13 +4675,13 @@ STDMETHODIMP CMSPAddress::EnumerateStaticTerminals (
     if (FAILED(hr))
     {
         LOG((MSP_ERROR, "CMSPCallBase::EnumerateStaticTerminals - "
-            "init enumerator failed - exit 0x%08x", hr));
+             "init enumerator failed - exit 0x%08x", hr));
 
         for (DWORD i = 0; i < dwNumTerminals; i++)
         {
             ppTerminals[i]->Release();
         }
-        
+
         delete ppTerminals;
         (*ppTerminalEnumerator)->Release();
 
@@ -4698,8 +4698,8 @@ STDMETHODIMP CMSPAddress::EnumerateStaticTerminals (
 //////////////////////////////////////////////////////////////////////////////
 
 STDMETHODIMP CMSPAddress::get_DynamicTerminalClasses (
-        OUT  VARIANT * pVariant
-        )
+    OUT  VARIANT * pVariant
+)
 {
     LOG((MSP_TRACE, "CMSPAddress::get_DynamicTerminalClasses - enter"));
 
@@ -4710,7 +4710,7 @@ STDMETHODIMP CMSPAddress::get_DynamicTerminalClasses (
     if ( !pVariant)
     {
         LOG((MSP_ERROR, "CMSPAddress::get_DynamicTerminalClasses - "
-            "bad pointer argument - exit E_POINTER"));
+             "bad pointer argument - exit E_POINTER"));
 
         return E_POINTER;
     }
@@ -4725,7 +4725,7 @@ STDMETHODIMP CMSPAddress::get_DynamicTerminalClasses (
     if ( FAILED(hr) )
     {
         LOG((MSP_ERROR, "CMSPAddress::get_DynamicTerminalClasses - "
-            "can't create collection - exit 0x%08x", hr));
+             "can't create collection - exit 0x%08x", hr));
 
         return hr;
     }
@@ -4737,12 +4737,12 @@ STDMETHODIMP CMSPAddress::get_DynamicTerminalClasses (
     IDispatch * pDispatch;
 
     hr = pCollection->_InternalQueryInterface(IID_IDispatch,
-                                              (void **) &pDispatch );
+            (void **) &pDispatch );
 
     if ( FAILED(hr) )
     {
         LOG((MSP_ERROR, "CMSPAddress::get_DynamicTerminalClasses - "
-            "QI for IDispatch on collection failed - exit 0x%08x", hr));
+             "QI for IDispatch on collection failed - exit 0x%08x", hr));
 
         delete pCollection;
 
@@ -4761,7 +4761,7 @@ STDMETHODIMP CMSPAddress::get_DynamicTerminalClasses (
     if ( FAILED(hr) )
     {
         LOG((MSP_ERROR, "CMSPAddress::EnumerateDynamicTerminalClasses - "
-            "can't get number of terminal classes - exit 0x%08x", hr));
+             "can't get number of terminal classes - exit 0x%08x", hr));
 
         pDispatch->Release();
 
@@ -4777,7 +4777,7 @@ STDMETHODIMP CMSPAddress::get_DynamicTerminalClasses (
     if ( pClassGuids == NULL )
     {
         LOG((MSP_ERROR, "CMSPAddress::EnumerateDynamicTerminalClasses - "
-            "can't allocate class guids array - exit E_OUTOFMEMORY"));
+             "can't allocate class guids array - exit E_OUTOFMEMORY"));
 
         pDispatch->Release();
 
@@ -4786,7 +4786,7 @@ STDMETHODIMP CMSPAddress::get_DynamicTerminalClasses (
 
     //
     // Fill in the array with actual pointers.
-    // 
+    //
 
     hr = GetDynamicTerminalClasses(&dwNumClasses,
                                    pClassGuids);
@@ -4794,7 +4794,7 @@ STDMETHODIMP CMSPAddress::get_DynamicTerminalClasses (
     if ( FAILED(hr) )
     {
         LOG((MSP_ERROR, "CMSPAddress::EnumerateDynamicTerminalClasses - "
-            "can't get terminal class guids - exit 0x%08x", hr));
+             "can't get terminal class guids - exit 0x%08x", hr));
 
         pDispatch->Release();
 
@@ -4812,7 +4812,7 @@ STDMETHODIMP CMSPAddress::get_DynamicTerminalClasses (
     if ( pClassBstrs == NULL )
     {
         LOG((MSP_ERROR, "CMSPAddress::EnumerateDynamicTerminalClasses - "
-            "can't allocate class bstrs array - exit E_OUTOFMEMORY"));
+             "can't allocate class bstrs array - exit E_OUTOFMEMORY"));
 
         pDispatch->Release();
 
@@ -4840,7 +4840,7 @@ STDMETHODIMP CMSPAddress::get_DynamicTerminalClasses (
         if ( pClassBstrs[i] == NULL )
         {
             LOG((MSP_ERROR, "CMSPAddress::EnumerateDynamicTerminalClasses - "
-                "can't allocate a bstr - exit E_OUTOFMEMORY"));
+                 "can't allocate a bstr - exit E_OUTOFMEMORY"));
 
             for (DWORD j = 0; j < i; j++)
             {
@@ -4851,7 +4851,7 @@ STDMETHODIMP CMSPAddress::get_DynamicTerminalClasses (
             delete pClassGuids;
 
             pDispatch->Release();
-    
+
             return E_OUTOFMEMORY;
         }
     }
@@ -4870,15 +4870,15 @@ STDMETHODIMP CMSPAddress::get_DynamicTerminalClasses (
     if ( FAILED(hr) )
     {
         LOG((MSP_ERROR, "CMSPAddress::get_DynamicTerminalClasses - "
-            "Initialize on collection failed - exit 0x%08x", hr));
-        
+             "Initialize on collection failed - exit 0x%08x", hr));
+
         pDispatch->Release();
 
         for (DWORD k = 0; k < dwNumClasses; k++)
         {
             SysFreeString(pClassBstrs[k]);
         }
-        
+
         delete pClassBstrs;
 
         return hr;
@@ -4891,14 +4891,14 @@ STDMETHODIMP CMSPAddress::get_DynamicTerminalClasses (
     //
 
     LOG((MSP_ERROR, "CMSPAddress::get_DynamicTerminalClasses - "
-        "placing IDispatch value %08x in variant", pDispatch));
+         "placing IDispatch value %08x in variant", pDispatch));
 
     VariantInit(pVariant);
     pVariant->vt = VT_DISPATCH;
     pVariant->pdispVal = pDispatch;
 
     LOG((MSP_TRACE, "CMSPAddress::get_DynamicTerminalClasses - exit S_OK"));
- 
+
     return S_OK;
 }
 
@@ -4906,8 +4906,8 @@ STDMETHODIMP CMSPAddress::get_DynamicTerminalClasses (
 //////////////////////////////////////////////////////////////////////////////
 
 STDMETHODIMP CMSPAddress::EnumerateDynamicTerminalClasses (
-        OUT  IEnumTerminalClass ** ppTerminalClassEnumerator
-        )
+    OUT  IEnumTerminalClass ** ppTerminalClassEnumerator
+)
 {
     LOG((MSP_TRACE, "CMSPAddress::EnumerateDynamicTerminalClasses - enter"));
 
@@ -4918,7 +4918,7 @@ STDMETHODIMP CMSPAddress::EnumerateDynamicTerminalClasses (
     if (!ppTerminalClassEnumerator)
     {
         LOG((MSP_ERROR, "CMSPAddress::EnumerateDynamicTerminalClasses - "
-            "bad return pointer - exit E_POINTER"));
+             "bad return pointer - exit E_POINTER"));
 
         return E_POINTER;
     }
@@ -4936,7 +4936,7 @@ STDMETHODIMP CMSPAddress::EnumerateDynamicTerminalClasses (
     if ( FAILED(hr) )
     {
         LOG((MSP_ERROR, "CMSPAddress::EnumerateDynamicTerminalClasses - "
-            "can't get number of terminal classes - exit 0x%08x", hr));
+             "can't get number of terminal classes - exit 0x%08x", hr));
 
         return hr;
     }
@@ -4950,14 +4950,14 @@ STDMETHODIMP CMSPAddress::EnumerateDynamicTerminalClasses (
     if ( pClassGuids == NULL )
     {
         LOG((MSP_ERROR, "CMSPAddress::EnumerateDynamicTerminalClasses - "
-            "can't allocate class guids array - exit E_OUTOFMEMORY"));
+             "can't allocate class guids array - exit E_OUTOFMEMORY"));
 
         return E_OUTOFMEMORY;
     }
 
     //
     // Fill in the array with actual pointers.
-    // 
+    //
 
     hr = GetDynamicTerminalClasses(&dwNumClasses,
                                    pClassGuids);
@@ -4965,7 +4965,7 @@ STDMETHODIMP CMSPAddress::EnumerateDynamicTerminalClasses (
     if ( FAILED(hr) )
     {
         LOG((MSP_ERROR, "CMSPAddress::EnumerateDynamicTerminalClasses - "
-            "can't get terminal class guids - exit 0x%08x", hr));
+             "can't get terminal class guids - exit 0x%08x", hr));
 
         delete pClassGuids;
 
@@ -4984,8 +4984,8 @@ STDMETHODIMP CMSPAddress::EnumerateDynamicTerminalClasses (
     //
 
     typedef CSafeComEnum<IEnumTerminalClass,
-                     &IID_IEnumTerminalClass,
-                     GUID, _Copy<GUID> > CEnumerator;
+            &IID_IEnumTerminalClass,
+            GUID, _Copy<GUID> > CEnumerator;
 
     CComObject<CEnumerator> *pEnum = NULL;
 
@@ -4994,7 +4994,7 @@ STDMETHODIMP CMSPAddress::EnumerateDynamicTerminalClasses (
     if ( FAILED(hr) )
     {
         LOG((MSP_ERROR, "CMSPAddress::EnumerateDynamicTerminalClasses - "
-            "can't create enumerator - exit 0x%08x", hr));
+             "can't create enumerator - exit 0x%08x", hr));
 
         delete pClassGuids;
 
@@ -5005,17 +5005,17 @@ STDMETHODIMP CMSPAddress::EnumerateDynamicTerminalClasses (
     // Query for the desired interface.
     //
 
-    hr = pEnum->_InternalQueryInterface(IID_IEnumTerminalClass, 
+    hr = pEnum->_InternalQueryInterface(IID_IEnumTerminalClass,
                                         (void**) ppTerminalClassEnumerator);
 
     if ( FAILED(hr) )
     {
         LOG((MSP_ERROR, "CMSPAddress::EnumerateDynamicTerminalClasses - "
-            "can't get enumerator interface - exit 0x%08x", hr));
+             "can't get enumerator interface - exit 0x%08x", hr));
 
         delete pEnum;
         delete pClassGuids;
-        
+
         return hr;
     }
 
@@ -5026,16 +5026,16 @@ STDMETHODIMP CMSPAddress::EnumerateDynamicTerminalClasses (
     hr = pEnum->Init(pClassGuids,
                      pClassGuids + dwNumClasses,
                      NULL,
-                     AtlFlagTakeOwnership); 
+                     AtlFlagTakeOwnership);
 
     if ( FAILED(hr) )
     {
         LOG((MSP_ERROR, "CMSPAddress::EnumerateDynamicTerminalClasses - "
-            "can't init enumerator - exit 0x%08x", hr));
+             "can't init enumerator - exit 0x%08x", hr));
 
         (*ppTerminalClassEnumerator)->Release();
         delete pClassGuids;
-        
+
         return hr;
     }
 
@@ -5045,9 +5045,9 @@ STDMETHODIMP CMSPAddress::EnumerateDynamicTerminalClasses (
 }
 
 HRESULT CMSPAddress::ReceiveTSPAddressData(
-        IN      PBYTE               pBuffer,
-        IN      DWORD               dwSize
-        )
+    IN      PBYTE               pBuffer,
+    IN      DWORD               dwSize
+)
 /*++
 
 Routine Description:
@@ -5058,7 +5058,7 @@ Routine Description:
 
 Arguments:
 
-  
+
 Return Value:
 
 S_OK
@@ -5073,8 +5073,8 @@ S_OK
 }
 
 HRESULT CMSPAddress::PnpNotifHandler(
-        IN      BOOL                bDeviceArrival
-        )
+    IN      BOOL                bDeviceArrival
+)
 {
     LOG((MSP_TRACE, "CMSPAddress::PnpNotifHandler - enter"));
 
@@ -5095,8 +5095,8 @@ HRESULT CMSPAddress::PnpNotifHandler(
         if (FAILED(hr))
         {
             LOG((MSP_ERROR,
-                "CMSPAddress::PnpNotifHandler - "
-                "UpdateTerminalList failed - returning 0x%08x", hr));
+                 "CMSPAddress::PnpNotifHandler - "
+                 "UpdateTerminalList failed - returning 0x%08x", hr));
 
             return hr;
         }

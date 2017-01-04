@@ -1,12 +1,12 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
 //
-// Copyright � Microsoft Corporation. All rights reserved
+// Copyright © Microsoft Corporation. All rights reserved
 
 /******************************************************************************
-*   Display.cpp 
+*   Display.cpp
 *       This module contains the UI specifc code for the CoffeeShop1 application
 ******************************************************************************/
 
@@ -31,35 +31,35 @@ extern HINSTANCE    g_hInst;		// current instance
 ******************************************************************************/
 ATOM MyRegisterClass(HINSTANCE hInstance, WNDPROC WndProc)
 {
-	WNDCLASSEX wcex;
+    WNDCLASSEX wcex;
     TCHAR szWindowClass[NORMAL_LOADSTRING];
 
     s_hBmp = LoadBitmap( hInstance, MAKEINTRESOURCE( IDB_BITMAP1 ) );
     s_hDrawingFont = NULL;
-	LoadString(hInstance, IDC_COFFEE, szWindowClass, NORMAL_LOADSTRING);
+    LoadString(hInstance, IDC_COFFEE, szWindowClass, NORMAL_LOADSTRING);
 
-    wcex.cbSize = sizeof(WNDCLASSEX); 
+    wcex.cbSize = sizeof(WNDCLASSEX);
 
-	wcex.style			= CS_HREDRAW | CS_VREDRAW;
-	wcex.lpfnWndProc	= (WNDPROC)WndProc;
-	wcex.cbClsExtra		= 0;
-	wcex.cbWndExtra		= 0;
-	wcex.hInstance		= hInstance;
-	wcex.hIcon			= LoadIcon(hInstance, (LPCTSTR)IDI_COFFEE);
-	wcex.hCursor		= LoadCursor(NULL, IDC_ARROW);
-	wcex.hbrBackground	= NULL;
-	wcex.lpszMenuName	= NULL;
-	wcex.lpszClassName	= szWindowClass;
-	wcex.hIconSm		= LoadIcon(wcex.hInstance, (LPCTSTR)IDI_SMALL);
+    wcex.style			= CS_HREDRAW | CS_VREDRAW;
+    wcex.lpfnWndProc	= (WNDPROC)WndProc;
+    wcex.cbClsExtra		= 0;
+    wcex.cbWndExtra		= 0;
+    wcex.hInstance		= hInstance;
+    wcex.hIcon			= LoadIcon(hInstance, (LPCTSTR)IDI_COFFEE);
+    wcex.hCursor		= LoadCursor(NULL, IDC_ARROW);
+    wcex.hbrBackground	= NULL;
+    wcex.lpszMenuName	= NULL;
+    wcex.lpszClassName	= szWindowClass;
+    wcex.hIconSm		= LoadIcon(wcex.hInstance, (LPCTSTR)IDI_SMALL);
 
-	return RegisterClassEx(&wcex);
+    return RegisterClassEx(&wcex);
 }
 
 /******************************************************************************
 * InitInstance *
 *--------------*
 *   Description:
-*       Save the instance handle in a global variable and create and display 
+*       Save the instance handle in a global variable and create and display
 *       the main program window.
 *
 ******************************************************************************/
@@ -69,23 +69,23 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
     TCHAR szTitle[NORMAL_LOADSTRING];
     TCHAR szWindowClass[NORMAL_LOADSTRING];
 
-    g_hInst = hInstance; 
+    g_hInst = hInstance;
 
-	// Initialize label strings
-	LoadString(hInstance, IDS_APP_TITLE, szTitle, NORMAL_LOADSTRING);
-	LoadString(hInstance, IDC_COFFEE, szWindowClass, NORMAL_LOADSTRING);
+    // Initialize label strings
+    LoadString(hInstance, IDS_APP_TITLE, szTitle, NORMAL_LOADSTRING);
+    LoadString(hInstance, IDC_COFFEE, szWindowClass, NORMAL_LOADSTRING);
 
     hWnd = CreateWindow(szWindowClass, szTitle, WS_OVERLAPPEDWINDOW,
                         CW_USEDEFAULT, 0, MINMAX_WIDTH, MINMAX_HEIGHT, NULL, NULL, hInstance, NULL);
-    
+
     if (!hWnd)
     {
         return FALSE;
     }
-    
+
     ShowWindow(hWnd, nCmdShow);
     UpdateWindow(hWnd);
-    
+
     return TRUE;
 }
 
@@ -102,7 +102,7 @@ void EraseBackground( HDC hDC )
     HBITMAP hOldBmp = (HBITMAP) SelectObject( hMemDC, s_hBmp );
     int i = 0;
     int j = 0;
-    
+
     while ( i < MINMAX_WIDTH )
     {
         j = 0;
@@ -113,31 +113,31 @@ void EraseBackground( HDC hDC )
         }
         i += 128;
     }
-    
+
     if ( !s_hDrawingFont )
     {
         LOGFONT lf;
-        
-        lf.lfHeight = -MulDiv(12, GetDeviceCaps(hDC, LOGPIXELSY), 72);; 
-        lf.lfWidth = 0; 
-        lf.lfEscapement = 0; 
-        lf.lfOrientation = 0; 
-        lf.lfWeight = 0; 
-        lf.lfItalic = 0; 
-        lf.lfUnderline = 0; 
-        lf.lfStrikeOut = 0; 
-        lf.lfCharSet = DEFAULT_CHARSET; 
-        lf.lfOutPrecision = OUT_TT_ONLY_PRECIS; 
-        lf.lfClipPrecision = CLIP_DEFAULT_PRECIS; 
-        lf.lfQuality = DEFAULT_QUALITY; 
-        lf.lfPitchAndFamily = VARIABLE_PITCH | FF_MODERN; 
+
+        lf.lfHeight = -MulDiv(12, GetDeviceCaps(hDC, LOGPIXELSY), 72);;
+        lf.lfWidth = 0;
+        lf.lfEscapement = 0;
+        lf.lfOrientation = 0;
+        lf.lfWeight = 0;
+        lf.lfItalic = 0;
+        lf.lfUnderline = 0;
+        lf.lfStrikeOut = 0;
+        lf.lfCharSet = DEFAULT_CHARSET;
+        lf.lfOutPrecision = OUT_TT_ONLY_PRECIS;
+        lf.lfClipPrecision = CLIP_DEFAULT_PRECIS;
+        lf.lfQuality = DEFAULT_QUALITY;
+        lf.lfPitchAndFamily = VARIABLE_PITCH | FF_MODERN;
         _tcscpy_s( lf.lfFaceName, _countof(lf.lfFaceName), _T("Kristen ITC") );
         s_hDrawingFont = CreateFontIndirect( &lf );
         if (!s_hDrawingFont )
         {
             s_hDrawingFont = (HFONT) GetStockObject( DEFAULT_GUI_FONT );
         }
-        
+
     }
     SelectObject( hMemDC, hOldBmp );
     DeleteDC( hMemDC );
@@ -181,11 +181,11 @@ void EntryPanePaint( HWND hWnd )
         HFONT hOldFont = (HFONT) SelectObject( hDC, s_hDrawingFont );
         COLORREF sOldColor = SetTextColor( hDC, RGB( 255, 255, 255 ) );
         SetBkMode(hDC, TRANSPARENT);
-        
+
         RECT rc;
         RECT clientRC;
         GetClientRect( hWnd, &clientRC );
-        
+
         rc.left = 0;
         rc.right = 100;
         LoadString( g_hInst, IDS_ENTERSTORE, tBuf, MAX_LOADSTRING );
@@ -195,7 +195,7 @@ void EntryPanePaint( HWND hWnd )
         rc.top = ( clientRC.bottom - iHeight ) / 2;
         rc.bottom = rc.top + iHeight + 1;
         DrawText( hDC, tBuf, -1, &rc, DT_WORDBREAK );
-        
+
         LoadString( g_hInst, IDS_WELCOME, tBuf, MAX_LOADSTRING );
         rc.left = 0;
         rc.right = 450;
@@ -206,7 +206,7 @@ void EntryPanePaint( HWND hWnd )
         rc.top = 25;
         rc.bottom = rc.top + iHeight + 1;
         DrawText( hDC, tBuf, -1, &rc, DT_WORDBREAK );
-        
+
         SetTextColor( hDC, sOldColor );
         SelectObject( hDC, hOldFont );
         EndPaint( hWnd, &ps );
@@ -231,11 +231,11 @@ void CounterPanePaint( HWND hWnd, LPCTSTR szCounterDisplay )
         HFONT hOldFont = (HFONT) SelectObject( hDC, s_hDrawingFont );
         COLORREF sOldColor = SetTextColor( hDC, RGB( 255, 255, 255 ) );
         SetBkMode(hDC, TRANSPARENT);
-        
+
         RECT rc;
         RECT clientRC;
         GetClientRect( hWnd, &clientRC );
-        
+
         rc.left = 0;
         rc.right = 450;
         int iHeight = DrawText( hDC, szCounterDisplay, -1, &rc, DT_CALCRECT | DT_WORDBREAK );
@@ -245,7 +245,7 @@ void CounterPanePaint( HWND hWnd, LPCTSTR szCounterDisplay )
         rc.top = 100;
         rc.bottom = rc.top + iHeight + 1;
         DrawText( hDC, szCounterDisplay, -1, &rc, DT_WORDBREAK );
-        
+
         SetTextColor( hDC, sOldColor );
         SelectObject( hDC, hOldFont );
         EndPaint( hWnd, &ps );

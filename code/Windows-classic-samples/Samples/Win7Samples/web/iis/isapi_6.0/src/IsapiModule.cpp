@@ -1,4 +1,4 @@
-/*++
+﻿/*++
 
 Copyright (c) 2003  Microsoft Corporation
 
@@ -25,7 +25,7 @@ CHAR    g_szModuleName[MAX_PATH+1] = "*UnknownIsapi*";
 VOID
 InitializeIsapiTools(
     CHAR *  szModuleName
-    )
+)
 /*++
 
 Purpose:

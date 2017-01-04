@@ -1,4 +1,4 @@
-// **************************************************************************
+﻿// **************************************************************************
 
 // Copyright (c)  Microsoft Corporation, All Rights Reserved
 //
@@ -60,58 +60,66 @@ void PrintErrorAndExit(char *pszFailureReason, SCODE sc, DWORD dwMode);
 void PrintErrorAndAsk(char *pszFailureReason, SCODE sc, DWORD dwMode);
 void PrintError(char *pszFailureReason, SCODE sc, DWORD dwMode);
 
-class MyString {
+class MyString
+{
 private:
-   WCHAR *pwszString;
+    WCHAR *pwszString;
 
 public:
-   MyString::MyString() 
-   {
-	   pwszString = (WCHAR *)calloc(1, sizeof(WCHAR));
-   }
-   MyString::~MyString() 
-   {
-	   free(pwszString);
-   }
-   WCHAR *GetString() {return pwszString;}
-   void Empty() {free(pwszString);pwszString = (WCHAR *)calloc(1, sizeof(WCHAR));}
-   WCHAR *GetCloneString()
-   {
-      WCHAR *buf = NULL;
-	  if (pwszString)
-	  {
-		  int ibufSize = (wcslen(pwszString) + 1) * sizeof(WCHAR);
-		  buf = (WCHAR *)malloc(ibufSize);
-		  if (buf)
-			StringCbCopyW(buf, ibufSize, pwszString);
-	  }
-      return buf;
-   }
-   const MyString& operator+=(const WCHAR *arg1) 
-      {
-		 size_t iHave;
-         size_t iNeed;
-		 WCHAR *pwsString;
-         if (arg1)
-         {
-             iHave = wcslen(pwszString);
-             iNeed = wcslen(arg1);
-			 pwsString =pwszString;
-             pwszString = (WCHAR *)realloc(pwszString, (iHave + iNeed + 1) * sizeof(WCHAR));
-			 if (pwszString)
-			  {
-			     StringCbCatW(&pwszString[iHave], 
-							((iHave + iNeed + 1) * sizeof(WCHAR)) - iHave,
-							arg1);
-			  }
-			  else
-			  {
-				pwszString = pwsString;
-			  }			
+    MyString::MyString()
+    {
+        pwszString = (WCHAR *)calloc(1, sizeof(WCHAR));
+    }
+    MyString::~MyString()
+    {
+        free(pwszString);
+    }
+    WCHAR *GetString()
+    {
+        return pwszString;
+    }
+    void Empty()
+    {
+        free(pwszString);
+        pwszString = (WCHAR *)calloc(1, sizeof(WCHAR));
+    }
+    WCHAR *GetCloneString()
+    {
+        WCHAR *buf = NULL;
+        if (pwszString)
+        {
+            int ibufSize = (wcslen(pwszString) + 1) * sizeof(WCHAR);
+            buf = (WCHAR *)malloc(ibufSize);
+            if (buf)
+                StringCbCopyW(buf, ibufSize, pwszString);
+        }
+        return buf;
+    }
+    const MyString& operator+=(const WCHAR *arg1)
+    {
+        size_t iHave;
+        size_t iNeed;
+        WCHAR *pwsString;
+        if (arg1)
+        {
+            iHave = wcslen(pwszString);
+            iNeed = wcslen(arg1);
+            pwsString =pwszString;
+            pwszString = (WCHAR *)realloc(pwszString, (iHave + iNeed + 1) * sizeof(WCHAR));
+            if (pwszString)
+            {
+                StringCbCatW(&pwszString[iHave],
+                             ((iHave + iNeed + 1) * sizeof(WCHAR)) - iHave,
+                             arg1);
+            }
+            else
+            {
+                pwszString = pwsString;
+            }
 
-         }
-         return *this;
-      }
+        }
+        return *this;
+    }
 
 };
 

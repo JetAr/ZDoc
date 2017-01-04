@@ -1,4 +1,4 @@
-//////////////////////////////////////////////////////////////////////
+﻿//////////////////////////////////////////////////////////////////////
 //
 //  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 //  ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED
@@ -25,12 +25,17 @@ VOID Send(HWND hwnd,
     // Attempt to post the message
 
     BOOL fResult = PostMessage(hwnd, uMsg, wParam, lParam);
-    if (fExpectedSuccess) {
-        if (!fResult) {
+    if (fExpectedSuccess)
+    {
+        if (!fResult)
+        {
             wprintf(L"\nUnexpected: PostMessage failed with %lu", GetLastError());
         }
-    } else {
-        if (fResult) {
+    }
+    else
+    {
+        if (fResult)
+        {
             wprintf(L"\nUnexpected: PostMessage succeeded");
         }
     }
@@ -38,12 +43,17 @@ VOID Send(HWND hwnd,
     // Attempt to send the message
 
     LRESULT lResult = SendMessage(hwnd, uMsg, wParam, lParam);
-    if (fExpectedSuccess) {
-        if (CWMFEX_ACK != lResult) {
+    if (fExpectedSuccess)
+    {
+        if (CWMFEX_ACK != lResult)
+        {
             wprintf(L"\nUnexpected: SendMessage failed");
         }
-    } else {
-        if (CWMFEX_ACK == lResult) {
+    }
+    else
+    {
+        if (CWMFEX_ACK == lResult)
+        {
             wprintf(L"\nUnexpected: SendMessage succeeded");
         }
     }
@@ -51,7 +61,7 @@ VOID Send(HWND hwnd,
 
 
 int __cdecl wmain (
-    int argc, 
+    int argc,
     wchar_t *argv[])
 {
     UNREFERENCED_PARAMETER(argc);
@@ -60,7 +70,8 @@ int __cdecl wmain (
     // Find the target window
 
     HWND hwnd = FindWindow(WNDCLASSNAME, WNDCLASSNAME);
-    if (hwnd == NULL) {
+    if (hwnd == NULL)
+    {
         wprintf(L"\nFindWindow failed with %ld", GetLastError());
         return 0;
     }

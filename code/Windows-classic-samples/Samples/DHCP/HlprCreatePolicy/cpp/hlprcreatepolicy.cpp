@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -21,15 +21,15 @@ int __cdecl main(void)
 
     //Helper routine is invoked to create/fill the policy structure.
     dwError=DhcpHlprCreateV4Policy(
-        pwszName,        // Policy Name
-        (dwSubnet == 0), // fGloabalPolicy, if scope is zero, this means it is a global policy else it is for a specific scope
-        dwSubnet,        // Scope
-        0,               // Processing order
-        policyOperator,  // Logical operator, possible values are: DhcpLogicalOr, DhcpLogicalAnd
-        pwszDescription, // Policy description
-        TRUE,            // Policy active or not
-        &pPolicy         // This is the actual structure that holds the policy
-    );
+                pwszName,        // Policy Name
+                (dwSubnet == 0), // fGloabalPolicy, if scope is zero, this means it is a global policy else it is for a specific scope
+                dwSubnet,        // Scope
+                0,               // Processing order
+                policyOperator,  // Logical operator, possible values are: DhcpLogicalOr, DhcpLogicalAnd
+                pwszDescription, // Policy description
+                TRUE,            // Policy active or not
+                &pPolicy         // This is the actual structure that holds the policy
+            );
     if(ERROR_SUCCESS != dwError)
     {
         wprintf(L"DhcpHlprCreateV4Policy failed with Error = %d\n", dwError);

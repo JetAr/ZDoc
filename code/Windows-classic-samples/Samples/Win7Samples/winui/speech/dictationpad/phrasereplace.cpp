@@ -1,14 +1,14 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
 //
-// Copyright � Microsoft Corporation. All rights reserved
+// Copyright © Microsoft Corporation. All rights reserved
 
 /******************************************************************************
-*	phrasereplace.cpp 
-*       Implementation details for the CPhraseReplacement object which 
-*       does the bookkeeping to translate between a phrase as 
+*	phrasereplace.cpp
+*       Implementation details for the CPhraseReplacement object which
+*       does the bookkeeping to translate between a phrase as
 *       displayed with ITN replacements and a phrase as seen
 *       by the associated RecoResult.
 ******************************************************************************/
@@ -22,12 +22,12 @@
 *       Constructor for the CPhraseReplacement class
 *******************************************************************************/
 CPhraseReplacement::CPhraseReplacement() :  m_fUseMaps( false ),
-                                            m_fSuccessfulSetup( false ),
-                                            m_pPhrase( NULL ),
-                                            m_cReplacementElements( 0 ),
-                                            m_pulPreToPostTable( NULL ),
-                                            m_pulPostToPreTable( NULL ),
-                                            m_pulPostToReplacementTable( NULL )
+    m_fSuccessfulSetup( false ),
+    m_pPhrase( NULL ),
+    m_cReplacementElements( 0 ),
+    m_pulPreToPostTable( NULL ),
+    m_pulPostToPreTable( NULL ),
+    m_pulPostToReplacementTable( NULL )
 {}  /* CPhraseReplacement::CPhraseReplacement */
 
 /*****************************************************************************
@@ -59,7 +59,7 @@ CPhraseReplacement::~CPhraseReplacement()
 *   Description:
 *       Gets the phrase from the ISpPhrase object and calls SetUpMaps().
 *       This initialization routine can be called either from a
-*       client with a new CPhraseReplacement object or  
+*       client with a new CPhraseReplacement object or
 *       when an alternate is committed (or the recoresult has
 *       otherwise changed).
 *   Return:
@@ -118,49 +118,49 @@ HRESULT CPhraseReplacement::SetUpMaps()
     // For instance, in the phrase "I have three dollars", pulPreToReplacementTable[2]
     // would indicate that "three" starts off a replacement; there is one replacement
     // ($3), so pulPreToReplacementTable[2] would have the value 0.
-    ULONG *pulPreToReplacementTable = 
+    ULONG *pulPreToReplacementTable =
         new ULONG[ m_pPhrase->Rule.ulCountOfElements ];
     if ( !pulPreToReplacementTable )
     {
         return E_OUTOFMEMORY;
     }
 
-    // Set the value to that will indicate that no replacement starts with this element: 
-    // Since there are m_pPhrase->cReplacements replacements, 
+    // Set the value to that will indicate that no replacement starts with this element:
+    // Since there are m_pPhrase->cReplacements replacements,
     // no replacement is going to have the index m_pPhrase->cReplacements
     m_ulNoReplacementValue = m_pPhrase->cReplacements;
 
-    // Initialize this array to indicate that no elements kick off replacements 
+    // Initialize this array to indicate that no elements kick off replacements
     for ( ULONG ul = 0; ul < m_pPhrase->Rule.ulCountOfElements; ul++ )
     {
         pulPreToReplacementTable[ul] = m_ulNoReplacementValue;
     }
 
-    // Fill in the temporary array that maps pre-replacement elements to the 
+    // Fill in the temporary array that maps pre-replacement elements to the
     // replacements they start (if any).
     // Count up the number of elements that get replaced.
     ULONG cReplacedElements = 0;
-    for ( ULONG ulReplacement = 0; 
-        ulReplacement < m_pPhrase->cReplacements;
-        ulReplacement++ )
+    for ( ULONG ulReplacement = 0;
+            ulReplacement < m_pPhrase->cReplacements;
+            ulReplacement++ )
     {
         // Record the replacement's index in the ulFirstElement'th position in the
         // temporary array
-        pulPreToReplacementTable[(m_pPhrase->pReplacements[ulReplacement]).ulFirstElement] 
+        pulPreToReplacementTable[(m_pPhrase->pReplacements[ulReplacement]).ulFirstElement]
             = ulReplacement;
-        
+
         // Bump the number of replaced elements
-        cReplacedElements += 
+        cReplacedElements +=
             (m_pPhrase->pReplacements[ulReplacement]).ulCountOfElements;
     }
-  
-    // Calculate how many phrase elements there will be after replacement.
-    // Note that each replacement will be counted as only one element ("$3" is 
-    // one element, as is "June 28, 1977")
-    m_cReplacementElements = m_pPhrase->Rule.ulCountOfElements 
-        + m_pPhrase->cReplacements - cReplacedElements ;
 
-    // Allocate the appropriate amount of space for the tables.  
+    // Calculate how many phrase elements there will be after replacement.
+    // Note that each replacement will be counted as only one element ("$3" is
+    // one element, as is "June 28, 1977")
+    m_cReplacementElements = m_pPhrase->Rule.ulCountOfElements
+                             + m_pPhrase->cReplacements - cReplacedElements ;
+
+    // Allocate the appropriate amount of space for the tables.
     // Note that a CPhraseReplace object may be initialized more than once
     // in its lifetime, so we may need to free up memory previously
     // allocated for these tables.
@@ -171,7 +171,7 @@ HRESULT CPhraseReplacement::SetUpMaps()
     // This table maps from pre-replacement elements to post-replacement elements
     // There are ulCountOfElements elements in the pre-replacement phrase
     m_pulPreToPostTable = new ULONG[ m_pPhrase->Rule.ulCountOfElements ];
-    
+
     // This table maps from post-replacement elements to pre-replacement elements
     // There are m_cReplacementElements elements in the post-replacement phrase
     m_pulPostToPreTable = new ULONG[ m_cReplacementElements ];
@@ -204,27 +204,27 @@ HRESULT CPhraseReplacement::SetUpMaps()
     // Usually with replacements, a post-replacement elements ($3) corresponds to more
     // than one pre-replacement element ("three dollars")
     ULONG ulPreReplElement = 0;
-    for ( ULONG ulPostReplElement = 0; 
-        ulPostReplElement < m_cReplacementElements &&
-        ulPreReplElement < m_pPhrase->Rule.ulCountOfElements; 
-        ulPostReplElement++ )
+    for ( ULONG ulPostReplElement = 0;
+            ulPostReplElement < m_cReplacementElements &&
+            ulPreReplElement < m_pPhrase->Rule.ulCountOfElements;
+            ulPostReplElement++ )
     {
-        // Right now, ulPreReplElement and upPostReplElement are referring to the 
+        // Right now, ulPreReplElement and upPostReplElement are referring to the
         // same element (though they may have different values, of course)
         m_pulPostToPreTable[ulPostReplElement] = ulPreReplElement;
-        m_pulPostToReplacementTable[ulPostReplElement] = 
+        m_pulPostToReplacementTable[ulPostReplElement] =
             pulPreToReplacementTable[ulPreReplElement];
 
         if ( m_pulPostToReplacementTable[ulPostReplElement] < m_ulNoReplacementValue )
         {
-            // This is a replaced element; so several of the pre-replacement 
+            // This is a replaced element; so several of the pre-replacement
             // elements will correspond to this post-replacement element.
-            
+
             // Use the element-to-replacement info to determine which one, so that
             // we know how many pre-replacement elements to grab.
-            const SPPHRASEREPLACEMENT *pRepl = m_pPhrase->pReplacements + 
-                m_pulPostToReplacementTable[ulPostReplElement];
-            
+            const SPPHRASEREPLACEMENT *pRepl = m_pPhrase->pReplacements +
+                                               m_pulPostToReplacementTable[ulPostReplElement];
+
             // For each element covered by the replacement, make another pre-replacement
             // element map to this post-replacement element and increment
             // ulPreReplElement.
@@ -312,16 +312,16 @@ ULONG CPhraseReplacement::GetNumReplacementElements()
 *       Hands back the text associated with the given phrase "element"
 *       If bUseReplacedElements is false or this phrase has no replacements,
 *       simply returns the display text for the appropriate element.
-*       Otherwise, consults the element mappings and returns  the 
+*       Otherwise, consults the element mappings and returns  the
 *       replacement text or the display text for the ulElement'th pre-
 *       replacement element, as appropriate.
-*   Return: 
+*   Return:
 *       Pointer to a text buffer containing the display text
 *       NULL if failed
 **********************************************************************************/
-const WCHAR * CPhraseReplacement::GetDisplayText( ULONG ulElement, 
-                                                 BYTE *pbDisplayAttributes,
-                                                 bool bUseReplacedElements )
+const WCHAR * CPhraseReplacement::GetDisplayText( ULONG ulElement,
+        BYTE *pbDisplayAttributes,
+        bool bUseReplacedElements )
 {
     if ( !m_fSuccessfulSetup )
     {
@@ -338,7 +338,7 @@ const WCHAR * CPhraseReplacement::GetDisplayText( ULONG ulElement,
         // element
         if ( ulElement < m_pPhrase->Rule.ulCountOfElements )
         {
-            bDisplayAttributes = 
+            bDisplayAttributes =
                 m_pPhrase->pElements[ulElement].bDisplayAttributes;
             pwszRetText = m_pPhrase->pElements[ulElement].pszDisplayText;
         }
@@ -353,19 +353,19 @@ const WCHAR * CPhraseReplacement::GetDisplayText( ULONG ulElement,
             {
                 // This is a replaced element; hand back the replacement text
                 // and attributes
-                const SPPHRASEREPLACEMENT *pRepl = m_pPhrase->pReplacements + 
-                    m_pulPostToReplacementTable[ulElement];
+                const SPPHRASEREPLACEMENT *pRepl = m_pPhrase->pReplacements +
+                                                   m_pulPostToReplacementTable[ulElement];
                 pwszRetText = pRepl->pszReplacementText;
                 bDisplayAttributes = pRepl->bDisplayAttributes;
             }
             else
             {
                 // This element has not been replaced; hand back the text
-                // and attributes corresponding to the appropriate 
+                // and attributes corresponding to the appropriate
                 // pre-replacement element
                 ULONG ulPreReplElement = m_pulPostToPreTable[ulElement];
                 pwszRetText = m_pPhrase->pElements[ulPreReplElement].pszDisplayText;
-                bDisplayAttributes = 
+                bDisplayAttributes =
                     m_pPhrase->pElements[ulPreReplElement].bDisplayAttributes;
             }
         }
@@ -387,16 +387,16 @@ const WCHAR * CPhraseReplacement::GetDisplayText( ULONG ulElement,
 *   Description:
 *       Converts from a pre-replacement index to a with-replacement index.
 *       If ulSPPHRASEIndex is equal to the number of (pre-replacement) elements
-*       will return the number of post-replacement elements in 
+*       will return the number of post-replacement elements in
 *       *pulReplacedPhraseIndex
-*   Return: 
+*   Return:
 *       S_OK
 *       E_POINTER
 *       E_FAIL
 *       E_INVALIDARG if ulSPPHRASEIndex is out-of-bounds
 **********************************************************************************/
 HRESULT CPhraseReplacement::PreToPostReplacementIndex( ULONG ulSPPHRASEIndex,
-                                                    ULONG *pulReplacedPhraseIndex)
+        ULONG *pulReplacedPhraseIndex)
 {
     if ( !m_fSuccessfulSetup )
     {
@@ -416,15 +416,15 @@ HRESULT CPhraseReplacement::PreToPostReplacementIndex( ULONG ulSPPHRASEIndex,
 
     if ( ulSPPHRASEIndex == m_pPhrase->Rule.ulCountOfElements )
     {
-        *pulReplacedPhraseIndex = m_fUseMaps ? 
-            m_cReplacementElements : m_pPhrase->Rule.ulCountOfElements;
+        *pulReplacedPhraseIndex = m_fUseMaps ?
+                                  m_cReplacementElements : m_pPhrase->Rule.ulCountOfElements;
     }
     else
     {
-        // If the maps are valid, do a lookup; 
+        // If the maps are valid, do a lookup;
         // otherwise just return the original index
-        *pulReplacedPhraseIndex = m_fUseMaps ? 
-            m_pulPreToPostTable[ulSPPHRASEIndex] : ulSPPHRASEIndex;
+        *pulReplacedPhraseIndex = m_fUseMaps ?
+                                  m_pulPreToPostTable[ulSPPHRASEIndex] : ulSPPHRASEIndex;
     }
 
     return S_OK;
@@ -435,17 +435,17 @@ HRESULT CPhraseReplacement::PreToPostReplacementIndex( ULONG ulSPPHRASEIndex,
 *-----------------------------------------------*
 *   Description:
 *       Converts from a with-replacement index to a pre-replacement index
-*       If ulReplacedPhraseIndex is equal to the number of (post-replacement) 
-*       elements, will return the number of pre-replacement elements in 
+*       If ulReplacedPhraseIndex is equal to the number of (post-replacement)
+*       elements, will return the number of pre-replacement elements in
 *       *pulSPPHRASEIndex
-*   Return: 
+*   Return:
 *       S_OK
 *       E_POINTER
 *       E_FAIL
 *       E_INVALIDARG if ulReplacedPhraseIndex is out-of-bounds
 **********************************************************************************/
 HRESULT CPhraseReplacement::PostToPreReplacementIndex( ULONG ulReplacedPhraseIndex,
-                                                      ULONG *pulSPPHRASEIndex )
+        ULONG *pulSPPHRASEIndex )
 {
     if ( !m_fSuccessfulSetup )
     {
@@ -469,34 +469,34 @@ HRESULT CPhraseReplacement::PostToPreReplacementIndex( ULONG ulReplacedPhraseInd
     }
     else
     {
-        // If the maps are valid, do a lookup; 
+        // If the maps are valid, do a lookup;
         //otherwise just return the original index
-        *pulSPPHRASEIndex = m_fUseMaps ? 
-            m_pulPostToPreTable[ulReplacedPhraseIndex] : ulReplacedPhraseIndex;
+        *pulSPPHRASEIndex = m_fUseMaps ?
+                            m_pulPostToPreTable[ulReplacedPhraseIndex] : ulReplacedPhraseIndex;
     }
 
     return S_OK;
 }   /* CPhraseReplacement::PostToPreReplacementIndex */
-    
+
 /********************************************************************************
 * CPhraseReplacement::ExpandToIncludeWholeReplacements *
 *------------------------------------------------------*
 *   Description:
 *       Takes pre-replacement indices in the in/out params pulPreReplStart and
-*       pcPreReplElts and expands them, if necessary, to contain entire 
-*       replacements.  
+*       pcPreReplElts and expands them, if necessary, to contain entire
+*       replacements.
 *       Example: "Thirty nine is the first uninteresting number."
 *       If *pulPreReplStart = 1 and *pcPreReplElts = 4, then when this
 *       function returns *pulPreReplStart = 0 and *pcPreReplElts = 5 (in order
 *       to include "thirty" at the beginning)
-*   Return: 
+*   Return:
 *       S_OK
 *       E_POINTER
 *       E_INVALIDARG if *pulPreReplStart and *pcPreReplElts indicate an
 *           out-of-bounds range or if *pcPreReplElts is 0
 **********************************************************************************/
 HRESULT CPhraseReplacement::ExpandToIncludeWholeReplacements( ULONG *pulPreReplStart,
-                                                             ULONG *pcPreReplElts )
+        ULONG *pcPreReplElts )
 {
     if ( !m_fSuccessfulSetup )
     {
@@ -516,9 +516,9 @@ HRESULT CPhraseReplacement::ExpandToIncludeWholeReplacements( ULONG *pulPreReplS
     }
 
     // Validate params
-    if ( (*pulPreReplStart >= GetNumNoReplacementElements()) || 
-        (0 == *pcPreReplElts) ||
-        ((*pulPreReplStart + *pcPreReplElts) > GetNumNoReplacementElements()) )
+    if ( (*pulPreReplStart >= GetNumNoReplacementElements()) ||
+            (0 == *pcPreReplElts) ||
+            ((*pulPreReplStart + *pcPreReplElts) > GetNumNoReplacementElements()) )
     {
         // Out-of-bounds range or degenerate element range
         return E_INVALIDARG;
@@ -566,6 +566,6 @@ HRESULT CPhraseReplacement::ExpandToIncludeWholeReplacements( ULONG *pulPreReplS
 
     // Adjust the count of elements
     *pcPreReplElts = ulPreReplLast - *pulPreReplStart + 1;
-    
+
     return S_OK;
 }   /* CPhraseReplacement::ExpandToIncludeWholeReplacements */

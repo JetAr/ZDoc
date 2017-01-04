@@ -1,4 +1,4 @@
-//+--------------------------------------------------------------------------
+﻿//+--------------------------------------------------------------------------
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -12,9 +12,9 @@
 
 #pragma once
 
-// 
+//
 // Implementation of IDWriteTextRenderer interface which builds XPS canvas with multiple Glyphs
-// 
+//
 class LayoutToCanvasBuilder : public IDWriteTextRenderer
 {
 private:
@@ -24,13 +24,13 @@ private:
     static
     HRESULT
     ClusterMapToMappingArray(
-        const UINT16 *clusterMap, 
+        const UINT16 *clusterMap,
         UINT32 mapLen, // number of elements in clusterMap array
         UINT32 glyphsArrayLen, // number of elements in glyphs array
         UINT32 resultMaxCount, // size of output buffer resultGlyphMapping (max number of elements)
-        XPS_GLYPH_MAPPING* resultGlyphMapping, // output buffer 
+        XPS_GLYPH_MAPPING* resultGlyphMapping, // output buffer
         UINT32* resultGlyphMappingCount // number of elements returned in resultGlyphMapping
-        );
+    );
 
     ULONG _refCount;
 
@@ -42,7 +42,7 @@ private:
     IXpsOMPartResources* _xpsResources;
 
     // This maps COM identity of IDWriteFontFace object to IXpsOMFontResource object
-    struct FontMapEntry 
+    struct FontMapEntry
     {
         UINT_PTR key;
         IXpsOMFontResource* fontResource;
@@ -54,11 +54,11 @@ private:
     // Instance of this object may be created only by CreateInstance static method.
     // It may be deleted only by Release.
     LayoutToCanvasBuilder();
-    
-    explicit 
+
+    explicit
     LayoutToCanvasBuilder(
         IXpsOMObjectFactory* xpsFactory
-        );
+    );
 
     ~LayoutToCanvasBuilder();
 
@@ -66,42 +66,42 @@ private:
     HRESULT
     CreateRootCanvasAndResources();
 
-    HRESULT 
-    FindOrCreateFontResource( 
+    HRESULT
+    FindOrCreateFontResource(
         IDWriteFontFace *fontFace,
         IXpsOMFontResource** xpsFontResource
-        );
-    
-    HRESULT 
+    );
+
+    HRESULT
     GenerateNewFontPartUri(
         IOpcPartUri** partUri
-        );
-    
-    HRESULT 
+    );
+
+    HRESULT
     AddLinePath(
         const XPS_POINT *begin,
         const XPS_POINT *end,
         FLOAT thickness
-        );
+    );
 
 public:
-    static 
-    HRESULT 
+    static
+    HRESULT
     CreateInstance(
         IXpsOMObjectFactory* xpsFactory,
         LayoutToCanvasBuilder** ppNewInstance
-        );
+    );
 
-    // getter methods for accessing generated XPS canvas and resources. 
+    // getter methods for accessing generated XPS canvas and resources.
     // NOTE: Returned pointer is NOT AddRef'ed by method!
     IXpsOMCanvas* GetCanvas();
     IXpsOMPartResources* GetResources();
 
     // IUnknown methods
-    STDMETHOD(QueryInterface)( 
+    STDMETHOD(QueryInterface)(
         REFIID riid,
         void** ppvObject
-        );
+    );
 
     ULONG STDMETHODCALLTYPE AddRef();
 
@@ -111,17 +111,17 @@ public:
     STDMETHOD(IsPixelSnappingDisabled)(
         void* clientDrawingContext,
         BOOL* isDisabled
-        );
+    );
 
     STDMETHOD(GetCurrentTransform)(
         void* clientDrawingContext,
         DWRITE_MATRIX* transform
-        );
+    );
 
     STDMETHOD(GetPixelsPerDip)(
         void* clientDrawingContext,
         FLOAT* pixelsPerDip
-        );
+    );
 
     // IDWriteTextRenderer methods
     STDMETHOD(DrawGlyphRun)(
@@ -132,7 +132,7 @@ public:
         DWRITE_GLYPH_RUN const* glyphRun,
         DWRITE_GLYPH_RUN_DESCRIPTION const* glyphRunDescription,
         IUnknown* clientDrawingEffect
-        );
+    );
 
     STDMETHOD(DrawUnderline)(
         void* clientDrawingContext,
@@ -140,7 +140,7 @@ public:
         FLOAT baselineOriginY,
         DWRITE_UNDERLINE const* underline,
         IUnknown* clientDrawingEffect
-        );
+    );
 
     STDMETHOD(DrawStrikethrough)(
         void* clientDrawingContext,
@@ -148,7 +148,7 @@ public:
         FLOAT baselineOriginY,
         DWRITE_STRIKETHROUGH const* strikethrough,
         IUnknown* clientDrawingEffect
-        );
+    );
 
     STDMETHOD(DrawInlineObject)(
         void* clientDrawingContext,
@@ -158,5 +158,5 @@ public:
         BOOL isSideways,
         BOOL isRightToLeft,
         IUnknown* clientDrawingEffect
-        );
+    );
 };

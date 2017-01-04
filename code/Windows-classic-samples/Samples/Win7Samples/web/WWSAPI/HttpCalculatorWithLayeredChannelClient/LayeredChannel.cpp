@@ -1,4 +1,4 @@
-//------------------------------------------------------------
+﻿//------------------------------------------------------------
 // Copyright (c) Microsoft Corporation.  All rights reserved.
 //------------------------------------------------------------
 
@@ -12,10 +12,10 @@
 #include "LayeredChannel.h"
 
 HRESULT CALLBACK CustomCreateChannel(
-    __in WS_CHANNEL_TYPE channelType, 
-    __in_bcount(channelParametersSize) const void* channelParameters, 
-    __in ULONG channelParametersSize, 
-    __deref_out void** channelInstance, 
+    __in WS_CHANNEL_TYPE channelType,
+    __in_bcount(channelParametersSize) const void* channelParameters,
+    __in ULONG channelParametersSize,
+    __deref_out void** channelInstance,
     __in_opt WS_ERROR* error)
 {
     HRESULT hr;
@@ -38,13 +38,13 @@ HRESULT CALLBACK CustomCreateChannel(
 
     // Create the underlying channel using the passed in parameters
     hr = WsCreateChannel(
-        channelType,
-        layeredChannelParameters->channelBinding,
-        layeredChannelParameters->channelProperties,
-        layeredChannelParameters->channelPropertyCount,
-        layeredChannelParameters->securityDescription,
-        &customChannel->channel,
-        error);
+             channelType,
+             layeredChannelParameters->channelBinding,
+             layeredChannelParameters->channelProperties,
+             layeredChannelParameters->channelPropertyCount,
+             layeredChannelParameters->securityDescription,
+             &customChannel->channel,
+             error);
     if (FAILED(hr))
     {
         goto Exit;
@@ -73,7 +73,7 @@ Exit:
         HeapFree(GetProcessHeap(), 0, customChannel);
     }
 
-    return hr;  
+    return hr;
 }
 
 void CALLBACK CustomFreeChannel(
@@ -89,7 +89,7 @@ void CALLBACK CustomFreeChannel(
 }
 
 HRESULT CALLBACK CustomResetChannel(
-    __in void* channelInstance, 
+    __in void* channelInstance,
     __in_opt WS_ERROR* error)
 {
     // Delegate to the underlying channel
@@ -98,7 +98,7 @@ HRESULT CALLBACK CustomResetChannel(
 }
 
 HRESULT CALLBACK CustomAbortChannel(
-    __in void* channelInstance, 
+    __in void* channelInstance,
     __in_opt WS_ERROR* error)
 {
     // Delegate to the underlying channel
@@ -107,9 +107,9 @@ HRESULT CALLBACK CustomAbortChannel(
 }
 
 HRESULT CALLBACK CustomOpenChannel(
-    __in void* channelInstance, 
-    __in const WS_ENDPOINT_ADDRESS* endpointAddress, 
-    __in_opt const WS_ASYNC_CONTEXT* asyncContext, 
+    __in void* channelInstance,
+    __in const WS_ENDPOINT_ADDRESS* endpointAddress,
+    __in_opt const WS_ASYNC_CONTEXT* asyncContext,
     __in_opt WS_ERROR* error)
 {
     // Delegate to the underlying channel
@@ -118,8 +118,8 @@ HRESULT CALLBACK CustomOpenChannel(
 }
 
 HRESULT CALLBACK CustomCloseChannel(
-    __in void* channelInstance, 
-    __in_opt const WS_ASYNC_CONTEXT* asyncContext, 
+    __in void* channelInstance,
+    __in_opt const WS_ASYNC_CONTEXT* asyncContext,
     __in_opt WS_ERROR* error)
 {
     // Delegate to the underlying channel
@@ -128,10 +128,10 @@ HRESULT CALLBACK CustomCloseChannel(
 }
 
 HRESULT CALLBACK CustomSetChannelProperty(
-    __in void* channelInstance, 
-    __in WS_CHANNEL_PROPERTY_ID id, 
-    __in_bcount(valueSize) const void* value, 
-    __in ULONG valueSize, 
+    __in void* channelInstance,
+    __in WS_CHANNEL_PROPERTY_ID id,
+    __in_bcount(valueSize) const void* value,
+    __in ULONG valueSize,
     __in_opt WS_ERROR* error)
 {
     // Delegate to the underlying channel
@@ -140,10 +140,10 @@ HRESULT CALLBACK CustomSetChannelProperty(
 }
 
 HRESULT CALLBACK CustomGetChannelProperty(
-    __in void* channelInstance, 
-    __in WS_CHANNEL_PROPERTY_ID id, 
-    __out_bcount(valueSize) void* value, 
-    __in ULONG valueSize, 
+    __in void* channelInstance,
+    __in WS_CHANNEL_PROPERTY_ID id,
+    __out_bcount(valueSize) void* value,
+    __in ULONG valueSize,
     __in_opt WS_ERROR* error)
 {
     CustomChannel* customChannel = (CustomChannel*)channelInstance;
@@ -168,9 +168,9 @@ HRESULT CALLBACK CustomGetChannelProperty(
 }
 
 HRESULT CALLBACK CustomReadMessageStart(
-    __in void* channelInstance, 
-    __in WS_MESSAGE* message, 
-    __in_opt const WS_ASYNC_CONTEXT* asyncContext, 
+    __in void* channelInstance,
+    __in WS_MESSAGE* message,
+    __in_opt const WS_ASYNC_CONTEXT* asyncContext,
     __in_opt WS_ERROR* error)
 {
     // Delegate to the underlying channel
@@ -179,9 +179,9 @@ HRESULT CALLBACK CustomReadMessageStart(
 }
 
 HRESULT CALLBACK CustomReadMessageEnd(
-    __in void* channelInstance, 
-    __in WS_MESSAGE* message, 
-    __in_opt const WS_ASYNC_CONTEXT* asyncContext, 
+    __in void* channelInstance,
+    __in WS_MESSAGE* message,
+    __in_opt const WS_ASYNC_CONTEXT* asyncContext,
     __in_opt WS_ERROR* error)
 {
     // Delegate to the underlying channel
@@ -190,9 +190,9 @@ HRESULT CALLBACK CustomReadMessageEnd(
 }
 
 HRESULT CALLBACK CustomWriteMessageStart(
-    __in void* channelInstance, 
-    __in WS_MESSAGE* message, 
-    __in_opt const WS_ASYNC_CONTEXT* asyncContext, 
+    __in void* channelInstance,
+    __in WS_MESSAGE* message,
+    __in_opt const WS_ASYNC_CONTEXT* asyncContext,
     __in_opt WS_ERROR* error)
 {
     // Delegate to the underlying channel
@@ -201,9 +201,9 @@ HRESULT CALLBACK CustomWriteMessageStart(
 }
 
 HRESULT CALLBACK CustomWriteMessageEnd(
-    __in void* channelInstance, 
-    __in WS_MESSAGE* message, 
-    __in_opt const WS_ASYNC_CONTEXT* asyncContext, 
+    __in void* channelInstance,
+    __in WS_MESSAGE* message,
+    __in_opt const WS_ASYNC_CONTEXT* asyncContext,
     __in_opt WS_ERROR* error)
 {
     // Delegate to the underlying channel
@@ -212,8 +212,8 @@ HRESULT CALLBACK CustomWriteMessageEnd(
 }
 
 HRESULT CALLBACK CustomAbandonMessage(
-    __in void* channelInstance, 
-    __in WS_MESSAGE* message, 
+    __in void* channelInstance,
+    __in WS_MESSAGE* message,
     __in_opt WS_ERROR* error)
 {
     // Delegate to the underlying channel
@@ -222,8 +222,8 @@ HRESULT CALLBACK CustomAbandonMessage(
 }
 
 HRESULT CALLBACK CustomShutdownSessionChannel(
-    __in void* channelInstance, 
-    __in_opt const WS_ASYNC_CONTEXT* asyncContext, 
+    __in void* channelInstance,
+    __in_opt const WS_ASYNC_CONTEXT* asyncContext,
     __in_opt WS_ERROR* error)
 {
     // Delegate to the underlying channel
@@ -234,18 +234,18 @@ HRESULT CALLBACK CustomShutdownSessionChannel(
 // Initialize the callbacks that will implement the custom channel
 WS_CUSTOM_CHANNEL_CALLBACKS layeredChannelCallbacks =
 {
-    &CustomCreateChannel, 
-    &CustomFreeChannel, 
-    &CustomResetChannel, 
-    &CustomOpenChannel, 
-    &CustomCloseChannel, 
-    &CustomAbortChannel, 
-    &CustomGetChannelProperty, 
-    &CustomSetChannelProperty, 
-    &CustomWriteMessageStart, 
-    &CustomWriteMessageEnd, 
-    &CustomReadMessageStart, 
-    &CustomReadMessageEnd, 
-    &CustomAbandonMessage, 
+    &CustomCreateChannel,
+    &CustomFreeChannel,
+    &CustomResetChannel,
+    &CustomOpenChannel,
+    &CustomCloseChannel,
+    &CustomAbortChannel,
+    &CustomGetChannelProperty,
+    &CustomSetChannelProperty,
+    &CustomWriteMessageStart,
+    &CustomWriteMessageEnd,
+    &CustomReadMessageStart,
+    &CustomReadMessageEnd,
+    &CustomAbandonMessage,
     &CustomShutdownSessionChannel,
 };

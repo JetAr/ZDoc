@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -18,7 +18,7 @@ using namespace SDK_SAMPLE_QEC;
 
 
 // Helper Function for displaying selection menu.
-void showSdkQecInterfaceOptions() 
+void showSdkQecInterfaceOptions()
 {
     wprintf(L"\n x : To Quit");
     wprintf(L"\nOption: \n");
@@ -81,7 +81,7 @@ Cleanup:
 void DoQECRegistration (_In_ CSdkQecModule * sdkQecModule)
 {
     HRESULT hr = S_OK;
-    
+
     // Register QEC with NapAgent
     hr = sdkQecModule->RegisterSdkQec();
     if (FAILED(hr))
@@ -141,9 +141,9 @@ void DoQECExecution()
     hr = pBinding->Initialize(NapSdkQecId, pCallback);
     if (FAILED(hr))
     {
-         wprintf(L"\nQEC DoQECExecution: Failed to call NapEnforcementClientBinding::Initialize (error = %x)\n", hr);
-         wprintf(L"\n\tIs the SDKQEC enabled ?  (enable via netsh or the NAP Client Configuration console) \n");
-         goto Cleanup;
+        wprintf(L"\nQEC DoQECExecution: Failed to call NapEnforcementClientBinding::Initialize (error = %x)\n", hr);
+        wprintf(L"\n\tIs the SDKQEC enabled ?  (enable via netsh or the NAP Client Configuration console) \n");
+        goto Cleanup;
     }
 
     // SDK Note:
@@ -165,8 +165,8 @@ void DoQECExecution()
     hr = pBinding->Uninitialize();
     if (FAILED(hr))
     {
-         wprintf(L"\nQEC DoQECExecution: Failed to call QuarSystemHealthAgentBinding-> Uninitialize (error = %x)\n", hr);
-         goto Cleanup;
+        wprintf(L"\nQEC DoQECExecution: Failed to call QuarSystemHealthAgentBinding-> Uninitialize (error = %x)\n", hr);
+        goto Cleanup;
     }
 
     wprintf(L"\nQEC DoQECExecution: QEC stopped successfully \n");
@@ -179,8 +179,8 @@ Cleanup:
 
 // Main function
 DWORD __cdecl wmain(
-    _In_ DWORD argc, 
-    _In_reads_(argc) WCHAR * pArgv[]) 
+    _In_ DWORD argc,
+    _In_reads_(argc) WCHAR * pArgv[])
 {
     HRESULT hr = S_OK;
     QecActionCode actionCode = NOACTION;
@@ -203,7 +203,7 @@ DWORD __cdecl wmain(
         goto Cleanup;
     }
     comInitialized = TRUE;
-    
+
     // setting security on COM
     hr = InitializeSecurity();
     if (FAILED(hr))
@@ -216,25 +216,25 @@ DWORD __cdecl wmain(
     actionCode = GetActionFromParams( pArgv[1] );
     switch (actionCode)
     {
-        case DOREGISTER:
-                wprintf(L"\nQEC main: Action code is DOREGISTER, proceeding\n");
-                DoQECRegistration(&module);
-                break;
+    case DOREGISTER:
+        wprintf(L"\nQEC main: Action code is DOREGISTER, proceeding\n");
+        DoQECRegistration(&module);
+        break;
 
-        case DOUNREGISTER:
-                wprintf(L"\nQEC main: Action code is DOUNREGISTER, proceeding\n");
-                DoQECUnRegistration(&module);
-                break;
+    case DOUNREGISTER:
+        wprintf(L"\nQEC main: Action code is DOUNREGISTER, proceeding\n");
+        DoQECUnRegistration(&module);
+        break;
 
-        case DOEXECUTE:
-                wprintf(L"\nQEC main: Action code is DOEXECUTE, proceeding\n");
-                DoQECExecution();
-                break;
+    case DOEXECUTE:
+        wprintf(L"\nQEC main: Action code is DOEXECUTE, proceeding\n");
+        DoQECExecution();
+        break;
 
-        default:
-                wprintf(L"\nQEC main: No action code, or unrecognized, proceeding\n");
-                showSdkQecExecutionOptions();
-                break;
+    default:
+        wprintf(L"\nQEC main: No action code, or unrecognized, proceeding\n");
+        showSdkQecExecutionOptions();
+        break;
     }
 
 Cleanup:

@@ -1,7 +1,7 @@
-//////////////////////////////////////////////////////////////////////////
+﻿//////////////////////////////////////////////////////////////////////////
 //
 // device.cpp: Manages the Direct3D device
-// 
+//
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -23,7 +23,7 @@ void TransformImage_RGB24(
     LONG        lSrcStride,
     DWORD       dwWidthInPixels,
     DWORD       dwHeightInPixels
-    );
+);
 
 void TransformImage_RGB32(
     BYTE*       pDest,
@@ -32,7 +32,7 @@ void TransformImage_RGB32(
     LONG        lSrcStride,
     DWORD       dwWidthInPixels,
     DWORD       dwHeightInPixels
-    );
+);
 
 void TransformImage_YUY2(
     BYTE*       pDest,
@@ -41,16 +41,16 @@ void TransformImage_YUY2(
     LONG        lSrcStride,
     DWORD       dwWidthInPixels,
     DWORD       dwHeightInPixels
-    );
+);
 
 void TransformImage_NV12(
-    BYTE* pDst, 
-    LONG dstStride, 
-    const BYTE* pSrc, 
+    BYTE* pDst,
+    LONG dstStride,
+    const BYTE* pSrc,
     LONG srcStride,
     DWORD dwWidthInPixels,
     DWORD dwHeightInPixels
-    );
+);
 
 
 RECT    LetterBoxRect(const RECT& rcSrc, const RECT& rcDst);
@@ -81,7 +81,7 @@ ConversionFunction   g_FormatConversions[] =
 {
     { MFVideoFormat_RGB32, TransformImage_RGB32 },
     { MFVideoFormat_RGB24, TransformImage_RGB24 },
-    { MFVideoFormat_YUY2,  TransformImage_YUY2  },      
+    { MFVideoFormat_YUY2,  TransformImage_YUY2  },
     { MFVideoFormat_NV12,  TransformImage_NV12  }
 };
 
@@ -92,7 +92,7 @@ const DWORD   g_cFormats = ARRAYSIZE(g_FormatConversions);
 // Constructor
 //-------------------------------------------------------------------
 
-DrawDevice::DrawDevice() : 
+DrawDevice::DrawDevice() :
     m_hwnd(NULL),
     m_pD3D(NULL),
     m_pDevice(NULL),
@@ -104,7 +104,7 @@ DrawDevice::DrawDevice() :
     m_interlace(MFVideoInterlace_Unknown),
     m_convertFn(NULL)
 {
-    m_PixelAR.Denominator = m_PixelAR.Numerator = 1; 
+    m_PixelAR.Denominator = m_PixelAR.Numerator = 1;
 
     ZeroMemory(&m_d3dpp, sizeof(m_d3dpp));
 }
@@ -188,38 +188,47 @@ HRESULT DrawDevice::CreateDevice(HWND hwnd)
     D3DDISPLAYMODE mode = { 0 };
 
     hr = m_pD3D->GetAdapterDisplayMode(
-        D3DADAPTER_DEFAULT, 
-        &mode
-        );
+             D3DADAPTER_DEFAULT,
+             &mode
+         );
 
-    if (FAILED(hr)) { goto done; }
+    if (FAILED(hr))
+    {
+        goto done;
+    }
 
     hr = m_pD3D->CheckDeviceType(
-        D3DADAPTER_DEFAULT,
-        D3DDEVTYPE_HAL,
-        mode.Format,
-        D3DFMT_X8R8G8B8,
-        TRUE    // windowed
-        );
+             D3DADAPTER_DEFAULT,
+             D3DDEVTYPE_HAL,
+             mode.Format,
+             D3DFMT_X8R8G8B8,
+             TRUE    // windowed
+         );
 
-    if (FAILED(hr)) { goto done; }
+    if (FAILED(hr))
+    {
+        goto done;
+    }
 
     pp.BackBufferFormat = D3DFMT_X8R8G8B8;
     pp.SwapEffect = D3DSWAPEFFECT_COPY;
-    pp.PresentationInterval = D3DPRESENT_INTERVAL_IMMEDIATE;  
+    pp.PresentationInterval = D3DPRESENT_INTERVAL_IMMEDIATE;
     pp.Windowed = TRUE;
     pp.hDeviceWindow = hwnd;
 
     hr = m_pD3D->CreateDevice(
-        D3DADAPTER_DEFAULT,
-        D3DDEVTYPE_HAL,
-        hwnd,
-        D3DCREATE_HARDWARE_VERTEXPROCESSING | D3DCREATE_FPU_PRESERVE,
-        &pp,
-        &m_pDevice
-        );
+             D3DADAPTER_DEFAULT,
+             D3DDEVTYPE_HAL,
+             hwnd,
+             D3DCREATE_HARDWARE_VERTEXPROCESSING | D3DCREATE_FPU_PRESERVE,
+             &pp,
+             &m_pDevice
+         );
 
-    if (FAILED(hr)) { goto done; }
+    if (FAILED(hr))
+    {
+        goto done;
+    }
 
     m_hwnd = hwnd;
     m_d3dpp = pp;
@@ -254,7 +263,7 @@ HRESULT DrawDevice::SetConversionFunction(REFGUID subtype)
 //-------------------------------------------------------------------
 // SetVideoType
 //
-// Set the video format.  
+// Set the video format.
 //-------------------------------------------------------------------
 
 HRESULT DrawDevice::SetVideoType(IMFMediaType *pType)
@@ -266,14 +275,20 @@ HRESULT DrawDevice::SetVideoType(IMFMediaType *pType)
     // Find the video subtype.
     hr = pType->GetGUID(MF_MT_SUBTYPE, &subtype);
 
-    if (FAILED(hr)) { goto done; }
+    if (FAILED(hr))
+    {
+        goto done;
+    }
 
     // Choose a conversion function.
     // (This also validates the format type.)
 
-    hr = SetConversionFunction(subtype); 
-    
-    if (FAILED(hr)) { goto done; }
+    hr = SetConversionFunction(subtype);
+
+    if (FAILED(hr))
+    {
+        goto done;
+    }
 
     //
     // Get some video attributes.
@@ -281,29 +296,35 @@ HRESULT DrawDevice::SetVideoType(IMFMediaType *pType)
 
     // Get the frame size.
     hr = MFGetAttributeSize(pType, MF_MT_FRAME_SIZE, &m_width, &m_height);
-    
-    if (FAILED(hr)) { goto done; }
 
-    
+    if (FAILED(hr))
+    {
+        goto done;
+    }
+
+
     // Get the interlace mode. Default: assume progressive.
     m_interlace = (MFVideoInterlaceMode)MFGetAttributeUINT32(
-        pType,
-        MF_MT_INTERLACE_MODE, 
-        MFVideoInterlace_Progressive
-        );
+                      pType,
+                      MF_MT_INTERLACE_MODE,
+                      MFVideoInterlace_Progressive
+                  );
 
     // Get the image stride.
     hr = GetDefaultStride(pType, &m_lDefaultStride);
 
-    if (FAILED(hr)) { goto done; }
+    if (FAILED(hr))
+    {
+        goto done;
+    }
 
     // Get the pixel aspect ratio. Default: Assume square pixels (1:1)
     hr = MFGetAttributeRatio(
-        pType, 
-        MF_MT_PIXEL_ASPECT_RATIO, 
-        (UINT32*)&PAR.Numerator, 
-        (UINT32*)&PAR.Denominator
-        );
+             pType,
+             MF_MT_PIXEL_ASPECT_RATIO,
+             (UINT32*)&PAR.Numerator,
+             (UINT32*)&PAR.Denominator
+         );
 
     if (SUCCEEDED(hr))
     {
@@ -320,7 +341,10 @@ HRESULT DrawDevice::SetVideoType(IMFMediaType *pType)
 
     hr = CreateSwapChains();
 
-    if (FAILED(hr)) { goto done; }
+    if (FAILED(hr))
+    {
+        goto done;
+    }
 
 
     // Update the destination rectangle for the correct
@@ -341,7 +365,7 @@ done:
 //  UpdateDestinationRect
 //
 //  Update the destination rectangle for the current window size.
-//  The destination rectangle is letterboxed to preserve the 
+//  The destination rectangle is letterboxed to preserve the
 //  aspect ratio of the video image.
 //-------------------------------------------------------------------
 
@@ -378,7 +402,7 @@ HRESULT DrawDevice::CreateSwapChains()
     pp.SwapEffect = D3DSWAPEFFECT_FLIP;
     pp.hDeviceWindow = m_hwnd;
     pp.BackBufferFormat = D3DFMT_X8R8G8B8;
-    pp.Flags = 
+    pp.Flags =
         D3DPRESENTFLAG_VIDEO | D3DPRESENTFLAG_DEVICECLIP |
         D3DPRESENTFLAG_LOCKABLE_BACKBUFFER;
     pp.PresentationInterval = D3DPRESENT_INTERVAL_IMMEDIATE;
@@ -420,28 +444,40 @@ HRESULT DrawDevice::DrawFrame(IMFMediaBuffer *pBuffer)
 
     hr = TestCooperativeLevel();
 
-    if (FAILED(hr)) { goto done; }
+    if (FAILED(hr))
+    {
+        goto done;
+    }
 
     // Lock the video buffer. This method returns a pointer to the first scan
     // line in the image, and the stride in bytes.
 
     hr = buffer.LockBuffer(m_lDefaultStride, m_height, &pbScanline0, &lStride);
 
-    if (FAILED(hr)) { goto done; }
+    if (FAILED(hr))
+    {
+        goto done;
+    }
 
     // Get the swap-chain surface.
     hr = m_pSwapChain->GetBackBuffer(0, D3DBACKBUFFER_TYPE_MONO, &pSurf);
 
-    if (FAILED(hr)) { goto done; }
+    if (FAILED(hr))
+    {
+        goto done;
+    }
 
     // Lock the swap-chain surface.
     hr = pSurf->LockRect(&lr, NULL, D3DLOCK_NOSYSLOCK );
 
-    if (FAILED(hr)) { goto done; }
+    if (FAILED(hr))
+    {
+        goto done;
+    }
 
 
     // Convert the frame. This also copies it to the Direct3D surface.
-    
+
     m_convertFn(
         (BYTE*)lr.pBits,
         lr.Pitch,
@@ -449,34 +485,46 @@ HRESULT DrawDevice::DrawFrame(IMFMediaBuffer *pBuffer)
         lStride,
         m_width,
         m_height
-        );
+    );
 
     hr = pSurf->UnlockRect();
 
-    if (FAILED(hr)) { goto done; }
+    if (FAILED(hr))
+    {
+        goto done;
+    }
 
 
     // Color fill the back buffer.
     hr = m_pDevice->GetBackBuffer(0, 0, D3DBACKBUFFER_TYPE_MONO, &pBB);
 
-    if (FAILED(hr)) { goto done; }
+    if (FAILED(hr))
+    {
+        goto done;
+    }
 
     hr = m_pDevice->ColorFill(pBB, NULL, D3DCOLOR_XRGB(0, 0, 0x80));
 
-    if (FAILED(hr)) { goto done; }
+    if (FAILED(hr))
+    {
+        goto done;
+    }
 
 
     // Blit the frame.
 
     hr = m_pDevice->StretchRect(pSurf, NULL, pBB, &m_rcDest, D3DTEXF_LINEAR);
-    
-    if (FAILED(hr)) { goto done; }
+
+    if (FAILED(hr))
+    {
+        goto done;
+    }
 
 
     // Present the frame.
-    
+
     hr = m_pDevice->Present(NULL, NULL, NULL, NULL);
-    
+
 
 done:
     SafeRelease(&pBB);
@@ -549,26 +597,32 @@ HRESULT DrawDevice::ResetDevice()
     {
         hr = CreateDevice(m_hwnd);
 
-        if (FAILED(hr)) { goto done; }
+        if (FAILED(hr))
+        {
+            goto done;
+        }
     }
 
     if ((m_pSwapChain == NULL) && (m_format != D3DFMT_UNKNOWN))
     {
         hr = CreateSwapChains();
-        
-        if (FAILED(hr)) { goto done; }
+
+        if (FAILED(hr))
+        {
+            goto done;
+        }
 
         UpdateDestinationRect();
     }
 
 done:
 
-   return hr;
+    return hr;
 }
 
 
 //-------------------------------------------------------------------
-// DestroyDevice 
+// DestroyDevice
 //
 // Release all Direct3D resources.
 //-------------------------------------------------------------------
@@ -597,7 +651,7 @@ __forceinline RGBQUAD ConvertYCrCbToRGB(
     int y,
     int cr,
     int cb
-    )
+)
 {
     RGBQUAD rgbq;
 
@@ -614,7 +668,7 @@ __forceinline RGBQUAD ConvertYCrCbToRGB(
 
 
 //-------------------------------------------------------------------
-// TransformImage_RGB24 
+// TransformImage_RGB24
 //
 // RGB-24 to RGB-32
 //-------------------------------------------------------------------
@@ -626,7 +680,7 @@ void TransformImage_RGB24(
     LONG        lSrcStride,
     DWORD       dwWidthInPixels,
     DWORD       dwHeightInPixels
-    )
+)
 {
     for (DWORD y = 0; y < dwHeightInPixels; y++)
     {
@@ -636,10 +690,10 @@ void TransformImage_RGB24(
         for (DWORD x = 0; x < dwWidthInPixels; x++)
         {
             pDestPel[x] = D3DCOLOR_XRGB(
-                pSrcPel[x].rgbtRed,
-                pSrcPel[x].rgbtGreen,
-                pSrcPel[x].rgbtBlue
-                );
+                              pSrcPel[x].rgbtRed,
+                              pSrcPel[x].rgbtGreen,
+                              pSrcPel[x].rgbtBlue
+                          );
         }
 
         pSrc += lSrcStride;
@@ -650,7 +704,7 @@ void TransformImage_RGB24(
 //-------------------------------------------------------------------
 // TransformImage_RGB32
 //
-// RGB-32 to RGB-32 
+// RGB-32 to RGB-32
 //
 // Note: This function is needed to copy the image from system
 // memory to the Direct3D surface.
@@ -663,13 +717,13 @@ void TransformImage_RGB32(
     LONG        lSrcStride,
     DWORD       dwWidthInPixels,
     DWORD       dwHeightInPixels
-    )
+)
 {
     MFCopyImage(pDest, lDestStride, pSrc, lSrcStride, dwWidthInPixels * 4, dwHeightInPixels);
 }
 
 //-------------------------------------------------------------------
-// TransformImage_YUY2 
+// TransformImage_YUY2
 //
 // YUY2 to RGB-32
 //-------------------------------------------------------------------
@@ -681,7 +735,7 @@ void TransformImage_YUY2(
     LONG        lSrcStride,
     DWORD       dwWidthInPixels,
     DWORD       dwHeightInPixels
-    )
+)
 {
     for (DWORD y = 0; y < dwHeightInPixels; y++)
     {
@@ -692,7 +746,7 @@ void TransformImage_YUY2(
         {
             // Byte order is U0 Y0 V0 Y1
 
-            int y0 = (int)LOBYTE(pSrcPel[x]); 
+            int y0 = (int)LOBYTE(pSrcPel[x]);
             int u0 = (int)HIBYTE(pSrcPel[x]);
             int y1 = (int)LOBYTE(pSrcPel[x + 1]);
             int v0 = (int)HIBYTE(pSrcPel[x + 1]);
@@ -715,13 +769,13 @@ void TransformImage_YUY2(
 //-------------------------------------------------------------------
 
 void TransformImage_NV12(
-    BYTE* pDst, 
-    LONG dstStride, 
-    const BYTE* pSrc, 
+    BYTE* pDst,
+    LONG dstStride,
+    const BYTE* pSrc,
     LONG srcStride,
     DWORD dwWidthInPixels,
     DWORD dwHeightInPixels
-    )
+)
 {
     const BYTE* lpBitsY = pSrc;
     const BYTE* lpBitsCb = lpBitsY  + (dwHeightInPixels * srcStride);;
@@ -790,11 +844,11 @@ void TransformImage_NV12(
 //-------------------------------------------------------------------
 // LetterBoxDstRect
 //
-// Takes a src rectangle and constructs the largest possible 
-// destination rectangle within the specifed destination rectangle 
+// Takes a src rectangle and constructs the largest possible
+// destination rectangle within the specifed destination rectangle
 // such thatthe video maintains its current shape.
 //
-// This function assumes that pels are the same shape within both the 
+// This function assumes that pels are the same shape within both the
 // source and destination rectangles.
 //
 //-------------------------------------------------------------------
@@ -811,14 +865,16 @@ RECT    LetterBoxRect(const RECT& rcSrc, const RECT& rcDst)
     int iDstLBWidth;
     int iDstLBHeight;
 
-    if (MulDiv(iSrcWidth, iDstHeight, iSrcHeight) <= iDstWidth) {
+    if (MulDiv(iSrcWidth, iDstHeight, iSrcHeight) <= iDstWidth)
+    {
 
         // Column letter boxing ("pillar box")
 
         iDstLBWidth  = MulDiv(iDstHeight, iSrcWidth, iSrcHeight);
         iDstLBHeight = iDstHeight;
     }
-    else {
+    else
+    {
 
         // Row letter boxing.
 
@@ -846,8 +902,8 @@ RECT    LetterBoxRect(const RECT& rcSrc, const RECT& rcDst)
 // Converts a rectangle from the source's pixel aspect ratio (PAR) to 1:1 PAR.
 // Returns the corrected rectangle.
 //
-// For example, a 720 x 486 rect with a PAR of 9:10, when converted to 1x1 PAR,  
-// is stretched to 720 x 540. 
+// For example, a 720 x 486 rect with a PAR of 9:10, when converted to 1x1 PAR,
+// is stretched to 720 x 540.
 //-----------------------------------------------------------------------------
 
 RECT CorrectAspectRatio(const RECT& src, const MFRatio& srcPAR)

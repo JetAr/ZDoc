@@ -1,7 +1,7 @@
-//////////////////////////////////////////////////////////////////////////
+﻿//////////////////////////////////////////////////////////////////////////
 //
 // CDecoder.h : CDecoder class declaration.
-// 
+//
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -25,12 +25,12 @@ public:
 
     CDecoder();
     ~CDecoder();
-    HRESULT Initialize(CLSID clsid, 
-                               IMFMediaType *pMediaType);
+    HRESULT Initialize(CLSID clsid,
+                       IMFMediaType *pMediaType);
 
 
     HRESULT ProcessAudio(IMFSample *pSample);
-    
+
     HRESULT ProcessVideo(IMFSample *pSample);
 
     HRESULT StartDecoding(void);
@@ -84,7 +84,7 @@ public:
     {
         return InterlockedIncrement(&m_nRefCount);
     }
-        
+
     STDMETHODIMP_(ULONG) Release()
     {
         ULONG uCount = InterlockedDecrement(&m_nRefCount);
@@ -95,7 +95,7 @@ public:
         // For thread safety, return a temporary variable.
         return uCount;
     }
-        
+
 
 
 private:

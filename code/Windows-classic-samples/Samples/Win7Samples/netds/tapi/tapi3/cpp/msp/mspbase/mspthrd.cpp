@@ -1,4 +1,4 @@
-/*++
+﻿/*++
 
 Copyright (c) 1998-1999 Microsoft Corporation
 
@@ -35,7 +35,7 @@ Routine Description:
     we only stop the thread when all of these have been paired with a stop.
 
 Arguments:
-    
+
 Return Value:
 
     HRESULT.
@@ -64,8 +64,8 @@ Return Value:
         TCHAR tszEventName[MAX_PATH];
 
         _stprintf_s(tszEventName,
-            _T("CMSPThread_CommandEvent_pid[0x%lx]CMSPThread[%p]"),
-            GetCurrentProcessId(), this);
+                    _T("CMSPThread_CommandEvent_pid[0x%lx]CMSPThread[%p]"),
+                    GetCurrentProcessId(), this);
 
         LOG((MSP_TRACE, "CMSPThread::Start - creating event[%S]", tszEventName));
 
@@ -75,11 +75,11 @@ Return Value:
 
 
         if ((m_hCommandEvent = ::CreateEvent(
-            NULL, 
-            FALSE,          // flag for manual-reset event
-            FALSE,          // initial state is not set.
-            ptczEventName   // No name in release builds, named in debug builds
-            )) == NULL)
+                                   NULL,
+                                   FALSE,          // flag for manual-reset event
+                                   FALSE,          // initial state is not set.
+                                   ptczEventName   // No name in release builds, named in debug builds
+                               )) == NULL)
         {
             LOG((MSP_ERROR, "Can't create the command event"));
             return E_FAIL;
@@ -109,7 +109,7 @@ Routine Description:
     Stop the thread.
 
 Arguments:
-    
+
 Return Value:
 
     HRESULT.
@@ -127,7 +127,7 @@ Return Value:
     if ( m_iStartCount == 0 )
     {
         LOG((MSP_ERROR, "CMSPThread::Stop - thread already stopped - "
-            "exit E_FAIL"));
+             "exit E_FAIL"));
         return E_FAIL;
     }
 
@@ -184,7 +184,7 @@ Return Value:
         if (SignalThreadProc() == 0)
         {
             LOG((MSP_ERROR, "CMSPThread::Stop - can't signal the thread - "
-                "exit E_FAIL"));
+                 "exit E_FAIL"));
 
             return E_FAIL;
         }
@@ -196,7 +196,7 @@ Return Value:
         if (::WaitForSingleObject(m_hThread, INFINITE) != WAIT_OBJECT_0)
         {
             LOG((MSP_ERROR, "CMSPThread::Stop - timeout while waiting for the "
-                "thread to stop"));
+                 "thread to stop"));
         }
 
         //
@@ -225,7 +225,7 @@ Routine Description:
     calls because of some other issue.
 
 Arguments:
-    
+
 Return Value:
 
     HRESULT.
@@ -243,8 +243,8 @@ Return Value:
     if ( m_iStartCount == 0 )
     {
         LOG((MSP_ERROR, "CMSPThread::Shutdown - thread already stopped - "
-            "exit S_OK"));
- 
+             "exit S_OK"));
+
         return S_OK;
     }
 
@@ -256,7 +256,7 @@ Return Value:
     m_iStartCount = 1;
 
     HRESULT hr = Stop();
-    
+
     LOG((MSP_(hr), "CMSPThread::Shutodwn - exit 0x%08x", hr));
 
     return hr;
@@ -270,7 +270,7 @@ Routine Description:
     the main loop of this thread.
 
 Arguments:
-    
+
 Return Value:
 
     HRESULT.
@@ -293,18 +293,18 @@ Return Value:
     if (FAILED(hr = ::CoInitializeEx(NULL, COINIT_MULTITHREADED)))
     {
         LOG((MSP_ERROR, "CMSPThread::ThreadProc - ConinitialzeEx failed:%x",
-            hr));
+             hr));
 
         return hr;
     }
 
 
     //
-    // Create a window to receive PNP device notifications. 
+    // Create a window to receive PNP device notifications.
     //
-    // since this is a base class that is used by more than one msp, we want 
+    // since this is a base class that is used by more than one msp, we want
     // to make sure that each msp registers a window class with a unique name
-    // 
+    //
     // for this reason window class name is derived from threadid.
     //
 
@@ -312,7 +312,7 @@ Return Value:
 
 
     //
-    // the string needs to be big enough to hold max dword number in hex + 
+    // the string needs to be big enough to hold max dword number in hex +
     // terminating zero. 20 is more than enough.
     //
 
@@ -332,7 +332,7 @@ Return Value:
     wc.lpfnWndProc = NotifWndProc;
     wc.lpszClassName = szWindowClassName;
 
-    
+
     //
     // perform the actual registration
     //
@@ -343,21 +343,21 @@ Return Value:
 
     if (0 == atomClassRegistration)
     {
-        LOG((MSP_ERROR, 
-            "CMSPThread::ThreadProc - RegisterClass failed, last error %ld", 
-            GetLastError()));
-        
+        LOG((MSP_ERROR,
+             "CMSPThread::ThreadProc - RegisterClass failed, last error %ld",
+             GetLastError()));
+
         hr = E_FAIL;
         goto exit;
     }
-    
+
 
     //
     // create window that will receive pnp notifications
     //
 
     m_hWndNotif = CreateWindow(szWindowClassName, _T("MSP PNP Notification Window"), 0,
-            CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, NULL, NULL, NULL, this);
+                               CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, NULL, NULL, NULL, this);
 
     if (m_hWndNotif == NULL)
     {
@@ -380,15 +380,15 @@ Return Value:
     DEV_BROADCAST_DEVICEINTERFACE NotificationFilter;
 
     ZeroMemory( &NotificationFilter, sizeof(NotificationFilter) );
-    NotificationFilter.dbcc_size = 
+    NotificationFilter.dbcc_size =
         sizeof(DEV_BROADCAST_DEVICEINTERFACE);
     NotificationFilter.dbcc_devicetype = DBT_DEVTYP_DEVICEINTERFACE;
     NotificationFilter.dbcc_classguid = AM_KSCATEGORY_VIDEO;
 
-    if ((m_hDevNotifyVideo = RegisterDeviceNotification( m_hWndNotif, 
-        &NotificationFilter,
-        DEVICE_NOTIFY_WINDOW_HANDLE
-        )) == NULL)
+    if ((m_hDevNotifyVideo = RegisterDeviceNotification( m_hWndNotif,
+                             &NotificationFilter,
+                             DEVICE_NOTIFY_WINDOW_HANDLE
+                                                       )) == NULL)
     {
         LOG((MSP_ERROR, "CMSPThread::ThreadProc - can't register for video device notification"));
         hr = E_FAIL;
@@ -397,16 +397,16 @@ Return Value:
 
     NotificationFilter.dbcc_classguid = AM_KSCATEGORY_AUDIO;
 
-    if ((m_hDevNotifyAudio = RegisterDeviceNotification( m_hWndNotif, 
-        &NotificationFilter,
-        DEVICE_NOTIFY_WINDOW_HANDLE
-        )) == NULL)
+    if ((m_hDevNotifyAudio = RegisterDeviceNotification( m_hWndNotif,
+                             &NotificationFilter,
+                             DEVICE_NOTIFY_WINDOW_HANDLE
+                                                       )) == NULL)
     {
         LOG((MSP_ERROR, "CMSPThread::ThreadProc - can't register for audio device notification"));
         hr = E_FAIL;
         goto exit;
     }
-    
+
     LOG((MSP_TRACE, "CMSPThread::ThreadProc - registered for PNP device notifications"));
 
     while (!bExitFlag)
@@ -416,28 +416,28 @@ Return Value:
         // Multiple: We only use 1, but Msg and Ex only exist with Multiple.
         // Ex:       Allow flags, so we can pass in MWMO_ALERTABLE.
         //
-        
+
         DWORD dwResult = ::MsgWaitForMultipleObjectsEx(
-            1,                // wait for one event
-            &m_hCommandEvent, // array of events to wait for
-            INFINITE,         // wait forever
-            QS_ALLINPUT,      // get all window messages
-            MWMO_ALERTABLE    // get APC requests (in case this MSP uses them)
-            );
+                             1,                // wait for one event
+                             &m_hCommandEvent, // array of events to wait for
+                             INFINITE,         // wait forever
+                             QS_ALLINPUT,      // get all window messages
+                             MWMO_ALERTABLE    // get APC requests (in case this MSP uses them)
+                         );
 
         if ( ( dwResult == WAIT_OBJECT_0 ) || ( dwResult == WAIT_OBJECT_0 + 1 ) )
         {
             LOG((MSP_TRACE, "thread is signaled"));
 
             m_QueueLock.Lock();
-            
+
             while ( ! IsListEmpty(&m_CommandQueue) )
             {
 
                 LIST_ENTRY * links = RemoveHeadList( &m_CommandQueue );
-                
+
                 m_QueueLock.Unlock();
-            
+
                 COMMAND_QUEUE_ITEM * pItem =
                     CONTAINING_RECORD(links,
                                       COMMAND_QUEUE_ITEM,
@@ -449,9 +449,9 @@ Return Value:
                 {
 
                 case WORK_ITEM:
-                
+
                     LOG((MSP_TRACE, "CMSPThread::ThreadProc - "
-                        "got command WORK_ITEM"));
+                         "got command WORK_ITEM"));
 
                     pNode->pfn( pNode->pContext );
 
@@ -460,28 +460,28 @@ Return Value:
                         if ( SetEvent( pNode->hEvent ) == 0 )
                         {
                             LOG((MSP_ERROR, "CMSPThread::ThreadProc - "
-                                "can't signal event for synchronous work "
-                                "item"));
+                                 "can't signal event for synchronous work "
+                                 "item"));
                         }
                     }
                     break;
 
                 case STOP:
-                    
+
                     LOG((MSP_TRACE, "CMSPThread::ThreadProc - "
-                        "thread is exiting"));
+                         "thread is exiting"));
 
                     bExitFlag = TRUE;
                     break;
                 }
 
                 delete pItem;
-            
+
                 m_QueueLock.Lock();
 
             }
             m_QueueLock.Unlock();
-            
+
 
             //
             // We have processed all commands and unblocked everyone
@@ -511,7 +511,7 @@ Return Value:
         else
         {
             LOG((MSP_ERROR, "CMSPThread::ThreadProc - "
-                "WaitForMultipleObjects failed  %ld", GetLastError()));
+                 "WaitForMultipleObjects failed  %ld", GetLastError()));
 
             break;
         }
@@ -521,10 +521,10 @@ Return Value:
 
 exit:
 
-    
+
 
     //
-    //  cleanup: 
+    //  cleanup:
     //
     //  Unregister from PNP device notifications
     //  destroy window
@@ -545,12 +545,12 @@ exit:
         {
 
             LOG((MSP_ERROR,
-                "CMSPThread::ThreadProc - UnregisterDeviceNotification failed for video events. "
-                "hr = %lx", hr2));
+                 "CMSPThread::ThreadProc - UnregisterDeviceNotification failed for video events. "
+                 "hr = %lx", hr2));
         }
     }
 
-    
+
     //
     // unregister from audio pnp events if needed
     //
@@ -563,27 +563,27 @@ exit:
         if (FAILED(hr2))
         {
 
-            LOG((MSP_ERROR, 
-                "CMSPThread::ThreadProc - UnregisterDeviceNotification failed for audio events. "
-                "hr = %lx", hr2));
+            LOG((MSP_ERROR,
+                 "CMSPThread::ThreadProc - UnregisterDeviceNotification failed for audio events. "
+                 "hr = %lx", hr2));
         }
     }
 
-    
+
     //
     // destroy window if needed
     //
 
     if ( NULL != m_hWndNotif )
     {
-        
+
         BOOL bDestroyWindowSuccess = DestroyWindow(m_hWndNotif);
 
         if ( ! bDestroyWindowSuccess )
         {
-            LOG((MSP_ERROR, 
-                "CMSPThread::ThreadProc - DestroyWindow failed. LastError = %ld",
-                GetLastError()));
+            LOG((MSP_ERROR,
+                 "CMSPThread::ThreadProc - DestroyWindow failed. LastError = %ld",
+                 GetLastError()));
         }
     }
 
@@ -599,9 +599,9 @@ exit:
 
         if ( ! bUnregisterSuccess )
         {
-            LOG((MSP_ERROR, 
-                "CMSPThread::ThreadProc - UnregisterClass failed. LastError = %ld", 
-                GetLastError()));
+            LOG((MSP_ERROR,
+                 "CMSPThread::ThreadProc - UnregisterClass failed. LastError = %ld",
+                 GetLastError()));
         }
     }
 
@@ -617,7 +617,7 @@ HRESULT CMSPThread::QueueWorkItem(
     LPTHREAD_START_ROUTINE Function,
     PVOID Context,
     BOOL  fSynchronous
-    )
+)
 {
     LOG((MSP_TRACE, "CMSPThread::QueueWorkItem - enter"));
 
@@ -631,7 +631,7 @@ HRESULT CMSPThread::QueueWorkItem(
     if ( ! pItem )
     {
         LOG((MSP_ERROR, "CMSPThread::QueueWorkItem - "
-            "can't allocate new queue item - exit E_OUTOFMEMORY"));
+             "can't allocate new queue item - exit E_OUTOFMEMORY"));
 
         return E_OUTOFMEMORY;
     }
@@ -660,13 +660,13 @@ HRESULT CMSPThread::QueueWorkItem(
 
 
     //
-    // identify events by the address of the correspoding queue item, and by 
+    // identify events by the address of the correspoding queue item, and by
     // the sequence number
     //
 
     _stprintf_s(tszEventName,
-        _T("CMSPThread_QueueWorkitemEvent_pid[0x%lx]_CMSPThread[%p]_Event[%p]_eventNumber[%lu]"),
-        GetCurrentProcessId(), this, pItem, lSequenceNumber);
+                _T("CMSPThread_QueueWorkitemEvent_pid[0x%lx]_CMSPThread[%p]_Event[%p]_eventNumber[%lu]"),
+                GetCurrentProcessId(), this, pItem, lSequenceNumber);
 
     LOG((MSP_TRACE, "CMSPThread::QueueWorkItem - creating event[%S]", tszEventName));
 
@@ -679,15 +679,15 @@ HRESULT CMSPThread::QueueWorkItem(
 
     if (fSynchronous)
     {
-        hEvent = ::CreateEvent(NULL, 
-                               FALSE,           // flag for manual-reset event 
+        hEvent = ::CreateEvent(NULL,
+                               FALSE,           // flag for manual-reset event
                                FALSE,           // initial state is not set.
                                ptczEventName);  // No name in release, named in debug
 
         if ( hEvent == NULL )
         {
             LOG((MSP_ERROR, "CMSPThread::QueueWorkItem - "
-                "Can't create the Job Done event"));
+                 "Can't create the Job Done event"));
 
             delete pItem;
             pItem = NULL;
@@ -728,7 +728,7 @@ HRESULT CMSPThread::QueueWorkItem(
         // cleanup and return error
         //
 
-        
+
         //
         // remove the queue entry we have submitted
         //
@@ -744,7 +744,7 @@ HRESULT CMSPThread::QueueWorkItem(
 
 
         //
-        // close handle and delete pItem that we have created -- 
+        // close handle and delete pItem that we have created --
         // no one else is going to do this for us
         //
 
@@ -759,14 +759,14 @@ HRESULT CMSPThread::QueueWorkItem(
 
 
         LOG((MSP_ERROR, "CMSPThread::QueueWorkItem - "
-            "can't signal the thread"));
+             "can't signal the thread"));
 
         return E_FAIL;
     }
 
 
     //
-    // unlock the event queue, so it can be used by processing and other 
+    // unlock the event queue, so it can be used by processing and other
     // threads
     //
 
@@ -784,8 +784,8 @@ HRESULT CMSPThread::QueueWorkItem(
     if (fSynchronous)
     {
         LOG((MSP_TRACE, "CMSPThread::QueueWorkItem - "
-            "blocked waiting for synchronous work item to complete"));
-        
+             "blocked waiting for synchronous work item to complete"));
+
         // Wait for the synchronous work item to complete.
 
         HANDLE hEvents[2];
@@ -794,11 +794,11 @@ HRESULT CMSPThread::QueueWorkItem(
         hEvents[0] = hEvent;
         hEvents[1] = m_hThread;
 
-        dwEvent = WaitForMultipleObjects( 
-            2,
-            hEvents,
-            FALSE,
-            INFINITE);
+        dwEvent = WaitForMultipleObjects(
+                      2,
+                      hEvents,
+                      FALSE,
+                      INFINITE);
 
         switch (dwEvent)
         {
@@ -807,15 +807,15 @@ HRESULT CMSPThread::QueueWorkItem(
 
         case WAIT_OBJECT_0 + 1:
             LOG((MSP_ERROR, "CMSPThread::QueueWorkItem - "
-                "thread exited"));
+                 "thread exited"));
 
             //
-            // if the item is still in the queue, remove it (since the thread 
+            // if the item is still in the queue, remove it (since the thread
             // won't)
             //
 
             m_QueueLock.Lock();
-            
+
             if (IsNodeOnList(&m_CommandQueue, &(pItem->link)))
             {
                 RemoveEntryList(&(pItem->link));
@@ -823,7 +823,7 @@ HRESULT CMSPThread::QueueWorkItem(
             }
 
             m_QueueLock.Unlock();
-          
+
 
             //
             // time to close event and fail
@@ -831,11 +831,11 @@ HRESULT CMSPThread::QueueWorkItem(
 
             ::CloseHandle(hEvent);
 
-            return E_FAIL;        
+            return E_FAIL;
 
         default:
             LOG((MSP_ERROR, "CMSPThread::QueueWorkItem - "
-                "WaitForSingleObject failed"));
+                 "WaitForSingleObject failed"));
         }
 
         ::CloseHandle(hEvent);
@@ -847,7 +847,7 @@ HRESULT CMSPThread::QueueWorkItem(
 }
 
 LRESULT CALLBACK CMSPThread::NotifWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
-{ 
+{
     PNOTIF_LIST pnl;
 
     if (uMsg == WM_CREATE)
@@ -867,53 +867,53 @@ LRESULT CALLBACK CMSPThread::NotifWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, L
     {
         CMSPThread *me = (CMSPThread*)GetWindowLongPtr(hwnd, GWLP_USERDATA);
 
-        switch (uMsg) 
-        { 
-            case WM_DEVICECHANGE: 
-                switch(wParam)
+        switch (uMsg)
+        {
+        case WM_DEVICECHANGE:
+            switch(wParam)
+            {
+            case DBT_DEVICEARRIVAL:
+                LOG((MSP_TRACE, "CMSPThread::NotifWndProc - DBT_DEVICEARRIVAL"));
+
+                me->m_NotifLock.Lock();
+
+                pnl = me->m_NotifList;
+                while (pnl != NULL)
                 {
-                case DBT_DEVICEARRIVAL:
-                    LOG((MSP_TRACE, "CMSPThread::NotifWndProc - DBT_DEVICEARRIVAL"));
-
-                    me->m_NotifLock.Lock();
-                
-                    pnl = me->m_NotifList;
-                    while (pnl != NULL)
-                    {
-                        pnl->addr->PnpNotifHandler(TRUE);
-                        pnl = pnl->next;
-                    }
-
-                    me->m_NotifLock.Unlock();
-                    break;
-
-                case DBT_DEVICEREMOVECOMPLETE:
-                    LOG((MSP_TRACE, "CMSPThread::NotifWndProc - DBT_DEVICEREMOVECOMPLETE"));
-
-                    me->m_NotifLock.Lock();
-                
-                    pnl = me->m_NotifList;
-                    while (pnl != NULL)
-                    {
-                        pnl->addr->PnpNotifHandler(FALSE);
-                        pnl = pnl->next;
-                    }
-
-                    me->m_NotifLock.Unlock();
-                    break;
+                    pnl->addr->PnpNotifHandler(TRUE);
+                    pnl = pnl->next;
                 }
 
-                return 0; 
- 
-            case WM_DESTROY: 
-                return 0; 
- 
-            default: 
-                return DefWindowProc(hwnd, uMsg, wParam, lParam); 
-        } 
+                me->m_NotifLock.Unlock();
+                break;
+
+            case DBT_DEVICEREMOVECOMPLETE:
+                LOG((MSP_TRACE, "CMSPThread::NotifWndProc - DBT_DEVICEREMOVECOMPLETE"));
+
+                me->m_NotifLock.Lock();
+
+                pnl = me->m_NotifList;
+                while (pnl != NULL)
+                {
+                    pnl->addr->PnpNotifHandler(FALSE);
+                    pnl = pnl->next;
+                }
+
+                me->m_NotifLock.Unlock();
+                break;
+            }
+
+            return 0;
+
+        case WM_DESTROY:
+            return 0;
+
+        default:
+            return DefWindowProc(hwnd, uMsg, wParam, lParam);
+        }
     }
-    return 0; 
-} 
+    return 0;
+}
 
 HRESULT CMSPThread::RegisterPnpNotification(CMSPAddress *pCMSPAddress)
 {
@@ -925,7 +925,7 @@ HRESULT CMSPThread::RegisterPnpNotification(CMSPAddress *pCMSPAddress)
         LOG((MSP_ERROR, "CMSPThread::RegisterPnpNotification - bad address pointer"));
         return E_POINTER;
     }
-    
+
     m_NotifLock.Lock();
 
     // Add a new node to the list
@@ -941,8 +941,8 @@ HRESULT CMSPThread::RegisterPnpNotification(CMSPAddress *pCMSPAddress)
 
 
         //
-        // note that we don't keep addref the address -- it is the 
-        // caller's responsibility to ensure we are notified through 
+        // note that we don't keep addref the address -- it is the
+        // caller's responsibility to ensure we are notified through
         // UnregisterPnpNotification when the address is going away
         //
 
@@ -966,7 +966,7 @@ HRESULT CMSPThread::UnregisterPnpNotification(CMSPAddress *pCMSPAddress)
         LOG((MSP_ERROR, "CMSPThread::UnregisterPnpNotification - bad address pointer"));
         return E_POINTER;
     }
-    
+
     m_NotifLock.Lock();
 
     pnl = m_NotifList;
@@ -980,21 +980,21 @@ HRESULT CMSPThread::UnregisterPnpNotification(CMSPAddress *pCMSPAddress)
         hr = S_OK;
     }
     else while (pnl != NULL)
-    {
-        pnlLast = pnl;
-        pnl = pnl->next;
-
-        if ((pnl != NULL) && (pnl->addr == pCMSPAddress))
         {
-            // Found it in the list, remove it
-            pnlLast->next = pnl->next;
-            delete pnl;
+            pnlLast = pnl;
+            pnl = pnl->next;
 
-            hr = S_OK;
+            if ((pnl != NULL) && (pnl->addr == pCMSPAddress))
+            {
+                // Found it in the list, remove it
+                pnlLast->next = pnl->next;
+                delete pnl;
 
-            break;
+                hr = S_OK;
+
+                break;
+            }
         }
-    }
 
     if (pnl == NULL)
     {

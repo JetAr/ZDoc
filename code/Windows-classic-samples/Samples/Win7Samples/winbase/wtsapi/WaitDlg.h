@@ -1,4 +1,4 @@
-#if !defined(AFX_WAITDLG_H__5D915AC2_3390_11D1_8312_00C04FBEFCDA__INCLUDED_)
+﻿#if !defined(AFX_WAITDLG_H__5D915AC2_3390_11D1_8312_00C04FBEFCDA__INCLUDED_)
 #define AFX_WAITDLG_H__5D915AC2_3390_11D1_8312_00C04FBEFCDA__INCLUDED_
 
 //  Copyright 1995-1999, Citrix Systems Inc.
@@ -17,29 +17,29 @@ class CWaitDlg : public CDialog
 {
 // Construction
 public:
-	CWaitDlg(CWnd* pParent = NULL);   // standard constructor
+    CWaitDlg(CWnd* pParent = NULL);   // standard constructor
 
 // Dialog Data
-	//{{AFX_DATA(CWaitDlg)
-	enum { IDD = IDD_DIALOG1 };
-		// NOTE: the ClassWizard will add data members here
-	//}}AFX_DATA
+    //{{AFX_DATA(CWaitDlg)
+    enum { IDD = IDD_DIALOG1 };
+    // NOTE: the ClassWizard will add data members here
+    //}}AFX_DATA
 
 
 // Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CWaitDlg)
-	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+    // ClassWizard generated virtual function overrides
+    //{{AFX_VIRTUAL(CWaitDlg)
+protected:
+    virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
+    //}}AFX_VIRTUAL
 
 // Implementation
 protected:
 
-	// Generated message map functions
-	//{{AFX_MSG(CWaitDlg)
-	//}}AFX_MSG
-	DECLARE_MESSAGE_MAP()
+    // Generated message map functions
+    //{{AFX_MSG(CWaitDlg)
+    //}}AFX_MSG
+    DECLARE_MESSAGE_MAP()
 };
 
 //{{AFX_INSERT_LOCATION}}

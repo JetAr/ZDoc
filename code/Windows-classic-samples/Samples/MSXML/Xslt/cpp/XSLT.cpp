@@ -1,4 +1,4 @@
-// XSLT.cpp : Defines the entry point for the console application.
+﻿// XSLT.cpp : Defines the entry point for the console application.
 //
 
 #include <stdio.h>
@@ -14,7 +14,7 @@
 // Macro that releases a COM object if not NULL.
 #define SAFE_RELEASE(p)     do { if ((p)) { (p)->Release(); (p) = NULL; } } while(0)
 
-// Helper function to create a VT_BSTR variant from a null terminated string. 
+// Helper function to create a VT_BSTR variant from a null terminated string.
 HRESULT VariantFromString(PCWSTR wszValue, VARIANT &Variant)
 {
     HRESULT hr = S_OK;
@@ -28,21 +28,21 @@ CleanUp:
     return hr;
 }
 
-// Helper function to create a DOM instance. 
+// Helper function to create a DOM instance.
 HRESULT CreateAndInitDOM(IXMLDOMDocument **ppDoc)
 {
     HRESULT hr = CoCreateInstance(__uuidof(DOMDocument60), NULL, CLSCTX_INPROC_SERVER, IID_PPV_ARGS(ppDoc));
     if (SUCCEEDED(hr))
     {
         // these methods should not fail so don't inspect result
-        (*ppDoc)->put_async(VARIANT_FALSE);  
+        (*ppDoc)->put_async(VARIANT_FALSE);
         (*ppDoc)->put_validateOnParse(VARIANT_FALSE);
         (*ppDoc)->put_resolveExternals(VARIANT_FALSE);
     }
     return hr;
 }
 
-// Helper function to load xml from file. 
+// Helper function to load xml from file.
 HRESULT LoadXMLFile(IXMLDOMDocument *pXMLDom, LPCWSTR lpszXMLFile)
 {
     HRESULT hr = S_OK;
@@ -71,7 +71,7 @@ CleanUp:
     return hr;
 }
 
-// Helper function to transform DOM to a string. 
+// Helper function to transform DOM to a string.
 HRESULT TransformDOM2Str(IXMLDOMDocument *pXMLDom, IXMLDOMDocument *pXSLDoc)
 {
     HRESULT hr = S_OK;
@@ -84,7 +84,7 @@ CleanUp:
     return hr;
 }
 
-// Helper function to transform DOM to an object. 
+// Helper function to transform DOM to an object.
 HRESULT TransformDOM2Obj(IXMLDOMDocument *pXMLDom, IXMLDOMDocument *pXSLDoc)
 {
     HRESULT hr = S_OK;

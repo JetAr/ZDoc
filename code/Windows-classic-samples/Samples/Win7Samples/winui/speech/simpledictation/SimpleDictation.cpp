@@ -1,9 +1,9 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
 //
-// Copyright � Microsoft Corporation. All rights reserved
+// Copyright © Microsoft Corporation. All rights reserved
 
 /****************************************************************************
 *   SimpleDictation.cpp
@@ -34,8 +34,8 @@ int APIENTRY WinMain(__in HINSTANCE hInstance,
         // NOTE:  Extra scope provided so DlgInfo is destroyed before CoUninitialize is called.
         {
             CSimpleDict SimpleDictClass( hInstance );
-            ::DialogBoxParam( hInstance, MAKEINTRESOURCE( IDD_SIMPLEDICTDLG ), NULL, 
-                (DLGPROC) CSimpleDict::SimpleDictDlgProc, (LPARAM) &SimpleDictClass );
+            ::DialogBoxParam( hInstance, MAKEINTRESOURCE( IDD_SIMPLEDICTDLG ), NULL,
+                              (DLGPROC) CSimpleDict::SimpleDictDlgProc, (LPARAM) &SimpleDictClass );
         }
         ::CoUninitialize();
     }
@@ -50,51 +50,51 @@ int APIENTRY WinMain(__in HINSTANCE hInstance,
 *       At initialization time, LPARAM is the CSimpleDict object, to which the
 *       window long is set.
 **********************************************************************************************/
-LRESULT CALLBACK CSimpleDict::SimpleDictDlgProc(HWND hDlg, 
-                                                   UINT message, 
-                                                   WPARAM wParam, 
-                                                   LPARAM lParam)
+LRESULT CALLBACK CSimpleDict::SimpleDictDlgProc(HWND hDlg,
+        UINT message,
+        WPARAM wParam,
+        LPARAM lParam)
 {
     CSimpleDict *pThis = (CSimpleDict *)(LONG_PTR) ::GetWindowLongPtr( hDlg, GWLP_USERDATA );
     switch( message )
     {
-        case WM_INITDIALOG:
-            ::SetWindowLongPtr( hDlg, GWLP_USERDATA, (LONG_PTR)lParam );
-            pThis = (CSimpleDict *) lParam;
-            if ( !pThis->InitDialog( hDlg ) )
-            {
-                ::DestroyWindow( hDlg );
-            }
-            break;
+    case WM_INITDIALOG:
+        ::SetWindowLongPtr( hDlg, GWLP_USERDATA, (LONG_PTR)lParam );
+        pThis = (CSimpleDict *) lParam;
+        if ( !pThis->InitDialog( hDlg ) )
+        {
+            ::DestroyWindow( hDlg );
+        }
+        break;
 
-        case WM_RECOEVENT:
-            // All recognition events send this message, because that is how we
-            // specified we should be notified
-            pThis->RecoEvent();
-            return TRUE;
-            break;
+    case WM_RECOEVENT:
+        // All recognition events send this message, because that is how we
+        // specified we should be notified
+        pThis->RecoEvent();
+        return TRUE;
+        break;
 
-        case WM_COMMAND:
-            if ( LOWORD( wParam ) == IDC_BUTTON_EXIT )
-            {
-                ::EndDialog( hDlg, TRUE );
-            }
-            break;
-
-        case WM_CLOSE:
+    case WM_COMMAND:
+        if ( LOWORD( wParam ) == IDC_BUTTON_EXIT )
+        {
             ::EndDialog( hDlg, TRUE );
-            break;
-         
-        case WM_DESTROY:
-            // Release the recognition context and the dictation grammar
-            pThis->m_cpRecoCtxt.Release();
-            pThis->m_cpDictationGrammar.Release();
+        }
+        break;
 
-            break;
+    case WM_CLOSE:
+        ::EndDialog( hDlg, TRUE );
+        break;
 
-        default:
-            return FALSE;
-            break;
+    case WM_DESTROY:
+        // Release the recognition context and the dictation grammar
+        pThis->m_cpRecoCtxt.Release();
+        pThis->m_cpDictationGrammar.Release();
+
+        break;
+
+    default:
+        return FALSE;
+        break;
     }
 
     return TRUE;
@@ -102,13 +102,13 @@ LRESULT CALLBACK CSimpleDict::SimpleDictDlgProc(HWND hDlg,
 
 /*********************************************************************************************
 * CSimpleDict::InitDialog()
-*   Creates the recognition context and activates the grammar.  
+*   Creates the recognition context and activates the grammar.
 *   Returns TRUE iff successful.
 **********************************************************************************************/
 bool CSimpleDict::InitDialog( HWND hDlg )
 {
     m_hDlg = hDlg;
-    
+
     HRESULT hr = S_OK;
     CComPtr<ISpRecognizer> cpRecoEngine;
     hr = cpRecoEngine.CoCreateInstance(CLSID_SpInprocRecognizer);
@@ -124,8 +124,8 @@ bool CSimpleDict::InitDialog( HWND hDlg )
     {
         hr = m_cpRecoCtxt->SetNotifyWindowMessage( hDlg, WM_RECOEVENT, 0, 0 );
     }
-    
-    
+
+
     if (SUCCEEDED(hr))
     {
         // This specifies which of the recognition events are going to trigger notifications.
@@ -146,7 +146,7 @@ bool CSimpleDict::InitDialog( HWND hDlg )
 
 
 
-    
+
     if (SUCCEEDED(hr))
     {
         // Specifies that the grammar we want is a dictation grammar.
@@ -172,7 +172,7 @@ bool CSimpleDict::InitDialog( HWND hDlg )
 /*****************************************************************************************
 * CSimpleDict::RecoEvent()
 *   Called whenever the dialog process is notified of a recognition event.
-*   Inserts whatever is recognized into the edit box.  
+*   Inserts whatever is recognized into the edit box.
 ******************************************************************************************/
 void CSimpleDict::RecoEvent()
 {
@@ -183,48 +183,48 @@ void CSimpleDict::RecoEvent()
     {
         switch (event.eEventId)
         {
-            case SPEI_SOUND_START:
-                m_bInSound = TRUE;
-                break;
+        case SPEI_SOUND_START:
+            m_bInSound = TRUE;
+            break;
 
-            case SPEI_SOUND_END:
-                if (m_bInSound)
+        case SPEI_SOUND_END:
+            if (m_bInSound)
+            {
+                m_bInSound = FALSE;
+                if (!m_bGotReco)
                 {
-                    m_bInSound = FALSE;
-                    if (!m_bGotReco)
-                    {
-                        // The sound has started and ended, 
-                        // but the engine has not succeeded in recognizing anything
-						const TCHAR szNoise[] = _T("<noise>");
-                        ::SendDlgItemMessage( m_hDlg, IDC_EDIT_DICT, 
-							EM_REPLACESEL, TRUE, (LPARAM) szNoise );
-                    }
-                    m_bGotReco = FALSE;
+                    // The sound has started and ended,
+                    // but the engine has not succeeded in recognizing anything
+                    const TCHAR szNoise[] = _T("<noise>");
+                    ::SendDlgItemMessage( m_hDlg, IDC_EDIT_DICT,
+                                          EM_REPLACESEL, TRUE, (LPARAM) szNoise );
                 }
-                break;
+                m_bGotReco = FALSE;
+            }
+            break;
 
-            case SPEI_RECOGNITION:
-                // There may be multiple recognition results, so get all of them
-                {
-                    m_bGotReco = TRUE;
-                    static const WCHAR wszUnrecognized[] = L"<Unrecognized>";
+        case SPEI_RECOGNITION:
+            // There may be multiple recognition results, so get all of them
+        {
+            m_bGotReco = TRUE;
+            static const WCHAR wszUnrecognized[] = L"<Unrecognized>";
 
-                    CSpDynamicString dstrText;
-                    if (FAILED(event.RecoResult()->GetText(SP_GETWHOLEPHRASE, SP_GETWHOLEPHRASE, TRUE, 
-                                                            &dstrText, NULL)))
-                    {
-                        dstrText = wszUnrecognized;
-                    }
+            CSpDynamicString dstrText;
+            if (FAILED(event.RecoResult()->GetText(SP_GETWHOLEPHRASE, SP_GETWHOLEPHRASE, TRUE,
+                                                   &dstrText, NULL)))
+            {
+                dstrText = wszUnrecognized;
+            }
 
-                    // Concatenate a space onto the end of the recognized word
-                    dstrText.Append(L" ");
+            // Concatenate a space onto the end of the recognized word
+            dstrText.Append(L" ");
 
-                    ::SendDlgItemMessage( m_hDlg, IDC_EDIT_DICT, EM_REPLACESEL, TRUE, (LPARAM)(LPTSTR)CW2T(dstrText) );
+            ::SendDlgItemMessage( m_hDlg, IDC_EDIT_DICT, EM_REPLACESEL, TRUE, (LPARAM)(LPTSTR)CW2T(dstrText) );
 
-                }
-                break;
+        }
+        break;
 
         }
     }
-} 
+}
 

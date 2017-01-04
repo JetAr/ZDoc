@@ -1,4 +1,4 @@
-//////////////////////////////////////////////////////////////////////
+﻿//////////////////////////////////////////////////////////////////////
 //
 //  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 //  ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED
@@ -32,7 +32,7 @@ IStream* CreateMemoryStream()
         HRESULT hr ;
         if (FAILED(hr = CreateStreamOnHGlobal(hGlobal, TRUE, &lpStream)))
         {
-             GlobalFree(hGlobal);
+            GlobalFree(hGlobal);
         }
     }
 

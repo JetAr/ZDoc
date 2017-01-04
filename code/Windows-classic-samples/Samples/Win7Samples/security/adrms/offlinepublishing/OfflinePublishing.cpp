@@ -1,4 +1,4 @@
-/*=====================================================================
+﻿/*=====================================================================
 File:      OfflinePublishing.cpp
 
 THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
@@ -11,8 +11,8 @@ Copyright (C) Microsoft Corporation.  All rights reserved.
 
 //
 // This sample demonstrates offline publishing.  It acquires the appropriate
-// licenses and certificates, initializes the environment, and signs the 
-// publishing license offline.  See the comments at the beginning of wmain() 
+// licenses and certificates, initializes the environment, and signs the
+// publishing license offline.  See the comments at the beginning of wmain()
 // for a more detailed description.
 //
 
@@ -45,7 +45,7 @@ Copyright (C) Microsoft Corporation.  All rights reserved.
 //
 // Time to wait for "downloads" to complete
 //
-static const DWORD DW_WAIT_TIME_SECONDS = 60 * 1000;  
+static const DWORD DW_WAIT_TIME_SECONDS = 60 * 1000;
 
 //
 // Length of a GUID string
@@ -71,7 +71,7 @@ typedef struct Drm_Context
 //
 // Print the correct usage of this application
 //
-void 
+void
 PrintUsage()
 {
     wprintf( L"Usage:\n" );
@@ -83,22 +83,22 @@ PrintUsage()
     wprintf( L"        example: manifest.xml\n" );
     wprintf( L"    -A: specifies the Activation Server. (optional)\n" );
     wprintf( L"        example: http://localhost/_wmcs/certification\n" );
-	wprintf( L"    -L: specifies the Licensing Server. (optional)\n" );
-	wprintf( L"        example: http://localhost/_wmcs/licensing\n" );
+    wprintf( L"    -L: specifies the Licensing Server. (optional)\n" );
+    wprintf( L"        example: http://localhost/_wmcs/licensing\n" );
 }
 
 //
 // Parse the values passed in through the command line
 //
-HRESULT 
-ParseCommandLine( 
-                 int argc, 
-                 __in_ecount( argc )WCHAR **argv, 
-                 __deref_out_opt PWCHAR *pwszUserID,
-                 __deref_out PWCHAR *pwszActivationSvr,
-                 __deref_out PWCHAR *pwszLicensingSvr,
-                 __deref_out_opt PWCHAR *pwszManifestFile
-                 )
+HRESULT
+ParseCommandLine(
+    int argc,
+    __in_ecount( argc )WCHAR **argv,
+    __deref_out_opt PWCHAR *pwszUserID,
+    __deref_out PWCHAR *pwszActivationSvr,
+    __deref_out PWCHAR *pwszLicensingSvr,
+    __deref_out_opt PWCHAR *pwszManifestFile
+)
 {
     HRESULT hr                   = S_OK;
     size_t  uiUserIDLength       = 0;
@@ -127,8 +127,8 @@ ParseCommandLine(
             hr = E_INVALIDARG;
             break;
         }
-        else if ( ( '-' == argv[ i + 1 ][ 0 ] ) || 
-            ( '/' == argv[ i + 1 ][ 0 ] ) )
+        else if ( ( '-' == argv[ i + 1 ][ 0 ] ) ||
+                  ( '/' == argv[ i + 1 ][ 0 ] ) )
         {
             hr = E_INVALIDARG;
             break;
@@ -136,10 +136,10 @@ ParseCommandLine(
 
         switch( toupper( argv[ i ][ 1 ] ) )
         {
-            //
-            // User ID
-            //
-        case 'U': 
+        //
+        // User ID
+        //
+        case 'U':
             if ( wcsstr( argv[ i + 1 ], ( wchar_t* )L"@\0" ) == NULL )
             {
                 //
@@ -151,10 +151,10 @@ ParseCommandLine(
             //
             // Retrieve the length of the user ID
             //
-            hr = StringCchLengthW( argv[ i + 1 ], 
-                STRSAFE_MAX_CCH, 
-                &uiUserIDLength 
-                );
+            hr = StringCchLengthW( argv[ i + 1 ],
+                                   STRSAFE_MAX_CCH,
+                                   &uiUserIDLength
+                                 );
             if ( FAILED( hr ) )
             {
                 wprintf( L"\nStringCchLengthW failed.  hr = 0x%x\n", hr );
@@ -164,7 +164,7 @@ ParseCommandLine(
             // Allocate memory for the user ID
             //
             *pwszUserID = new WCHAR[ uiUserIDLength + 1 ];
-            if ( NULL == *pwszUserID ) 
+            if ( NULL == *pwszUserID )
             {
                 wprintf( L"\nFailed to allocate memory for pwszUserID.\n" );
                 hr = E_OUTOFMEMORY;
@@ -173,20 +173,20 @@ ParseCommandLine(
             //
             // Copy the user ID into the pwszUserID buffer
             //
-            hr = StringCchCopyW( ( wchar_t* )*pwszUserID, 
-                uiUserIDLength + 1 , 
-                argv[ i + 1 ] 
-                );
-                if ( FAILED( hr ) )
-                {
-                    wprintf( L"\nStringCchCopyW failed.  hr = 0x%x\n", hr );
-                    break;
-                }
-                i++;
+            hr = StringCchCopyW( ( wchar_t* )*pwszUserID,
+                                 uiUserIDLength + 1,
+                                 argv[ i + 1 ]
+                               );
+            if ( FAILED( hr ) )
+            {
+                wprintf( L"\nStringCchCopyW failed.  hr = 0x%x\n", hr );
                 break;
+            }
+            i++;
+            break;
         case 'A':
-            if ( ( _wcsnicmp( argv[ i + 1 ], L"http://", 7 ) != 0 ) && 
-                ( _wcsnicmp( argv[ i + 1 ], L"https://", 8 ) != 0 ) )
+            if ( ( _wcsnicmp( argv[ i + 1 ], L"http://", 7 ) != 0 ) &&
+                    ( _wcsnicmp( argv[ i + 1 ], L"https://", 8 ) != 0 ) )
             {
                 wprintf( L"\nInvalid activation URL provided.\n" );
                 hr = E_INVALIDARG;
@@ -195,10 +195,10 @@ ParseCommandLine(
             //
             // Retrieve the length of the activation server URL
             //
-            hr = StringCchLengthW( argv[ i + 1 ], 
-                STRSAFE_MAX_CCH, 
-                &uiActSvrUrlLength 
-                );
+            hr = StringCchLengthW( argv[ i + 1 ],
+                                   STRSAFE_MAX_CCH,
+                                   &uiActSvrUrlLength
+                                 );
             if ( FAILED( hr ) )
             {
                 wprintf( L"\nStringCchLengthW failed.  hr = 0x%x\n", hr );
@@ -208,30 +208,30 @@ ParseCommandLine(
             // Allocate memory for the URL
             //
             *pwszActivationSvr = new WCHAR[ uiActSvrUrlLength + 1 ];
-            if( NULL == *pwszActivationSvr ) 
+            if( NULL == *pwszActivationSvr )
             {
                 wprintf( L"\nFailed to allocate memory "\
-                    L"for pwszActivationSvr.\n" );
+                         L"for pwszActivationSvr.\n" );
                 hr = E_OUTOFMEMORY;
                 break;
             }
             //
             // Copy the URL into the pwszActivationSvr buffer
             //
-            hr = StringCchCopyW( ( wchar_t* )*pwszActivationSvr, 
-                uiActSvrUrlLength + 1 , 
-                argv[ i + 1 ] 
-                );
-                if ( FAILED( hr ) )
-                {
-                    wprintf( L"\nStringCchCopyW failed.  hr = 0x%x\n", hr );
-                    break;
-                }
-                i++;
+            hr = StringCchCopyW( ( wchar_t* )*pwszActivationSvr,
+                                 uiActSvrUrlLength + 1,
+                                 argv[ i + 1 ]
+                               );
+            if ( FAILED( hr ) )
+            {
+                wprintf( L"\nStringCchCopyW failed.  hr = 0x%x\n", hr );
                 break;
+            }
+            i++;
+            break;
         case 'L':
-            if ( ( _wcsnicmp( argv[ i + 1 ], L"http://", 7 ) != 0 ) && 
-                ( _wcsnicmp( argv[ i + 1 ], L"https://", 8 ) != 0 ) )
+            if ( ( _wcsnicmp( argv[ i + 1 ], L"http://", 7 ) != 0 ) &&
+                    ( _wcsnicmp( argv[ i + 1 ], L"https://", 8 ) != 0 ) )
             {
                 wprintf( L"\nInvalid licensing URL provided.\n" );
                 hr = E_INVALIDARG;
@@ -240,10 +240,10 @@ ParseCommandLine(
             //
             // Retrieve the length of the licensing server URL
             //
-            hr = StringCchLengthW( argv[ i + 1 ], 
-                STRSAFE_MAX_CCH, 
-                &uiLicSvrUrlLength 
-                );
+            hr = StringCchLengthW( argv[ i + 1 ],
+                                   STRSAFE_MAX_CCH,
+                                   &uiLicSvrUrlLength
+                                 );
             if ( FAILED( hr ) )
             {
                 wprintf( L"\nStringCchLengthW failed.  hr = 0x%x\n", hr );
@@ -253,30 +253,30 @@ ParseCommandLine(
             // Allocate memory for the URL
             //
             *pwszLicensingSvr = new WCHAR[ uiLicSvrUrlLength + 1 ];
-            if( NULL == *pwszLicensingSvr ) 
+            if( NULL == *pwszLicensingSvr )
             {
                 wprintf( L"\nFailed to allocate memory "\
-                    L"for pwszLicensingSvr.\n" );
+                         L"for pwszLicensingSvr.\n" );
                 hr = E_OUTOFMEMORY;
                 break;
             }
             //
             // Copy the URL into the pwszLicensingSvr buffer
             //
-            hr = StringCchCopyW( ( wchar_t* )*pwszLicensingSvr, 
-                uiLicSvrUrlLength + 1 , 
-                argv[ i + 1 ] 
-                );
-                if ( FAILED( hr ) )
-                {
-                    wprintf( L"\nStringCchCopyW failed.  hr = 0x%x\n", hr );
-                    break;
-                }
-                i++;
+            hr = StringCchCopyW( ( wchar_t* )*pwszLicensingSvr,
+                                 uiLicSvrUrlLength + 1,
+                                 argv[ i + 1 ]
+                               );
+            if ( FAILED( hr ) )
+            {
+                wprintf( L"\nStringCchCopyW failed.  hr = 0x%x\n", hr );
                 break;
+            }
+            i++;
+            break;
         case 'M':
-            if ( ( wcsstr( argv[ i + 1 ], L".xml" ) == NULL ) && 
-                ( wcsstr( argv[ i + 1 ], L".XML" ) == NULL ) )
+            if ( ( wcsstr( argv[ i + 1 ], L".xml" ) == NULL ) &&
+                    ( wcsstr( argv[ i + 1 ], L".XML" ) == NULL ) )
             {
                 wprintf( L"\nInvalid manifest file name provided.\n" );
                 hr = E_INVALIDARG;
@@ -285,10 +285,10 @@ ParseCommandLine(
             //
             // Retrieve the length of the manifest name
             //
-            hr = StringCchLengthW( argv[ i + 1 ], 
-                STRSAFE_MAX_CCH, 
-                &uiManifestFileLength 
-                );
+            hr = StringCchLengthW( argv[ i + 1 ],
+                                   STRSAFE_MAX_CCH,
+                                   &uiManifestFileLength
+                                 );
             if ( FAILED( hr ) )
             {
                 wprintf( L"\nStringCchLengthW failed.  hr = 0x%x\n", hr );
@@ -298,20 +298,20 @@ ParseCommandLine(
             // Allocate memory for the manifest file name
             //
             *pwszManifestFile = new WCHAR[ uiManifestFileLength + 1 ];
-            if( NULL == *pwszManifestFile ) 
+            if( NULL == *pwszManifestFile )
             {
                 wprintf( L"\nFailed to allocate memory "\
-                    L"for pwszActivationSvr.\n" );
+                         L"for pwszActivationSvr.\n" );
                 hr = E_OUTOFMEMORY;
                 break;
             }
             //
             // Copy the manifest name into the pwszManifestFile buffer
             //
-            hr = StringCchCopyW( ( wchar_t* )*pwszManifestFile, 
-                uiManifestFileLength + 1 , 
-                argv[ i + 1 ] 
-            );
+            hr = StringCchCopyW( ( wchar_t* )*pwszManifestFile,
+                                 uiManifestFileLength + 1,
+                                 argv[ i + 1 ]
+                               );
             if ( FAILED( hr ) )
             {
                 wprintf( L"\nStringCchCopyW failed.  hr = 0x%x\n", hr );
@@ -342,9 +342,9 @@ ParseCommandLine(
 //
 HRESULT
 ReadFileToWideString(
-                     __in PWSTR szFileName,
-                     __deref_out PWCHAR *pwszManifestString
-                     )
+    __in PWSTR szFileName,
+    __deref_out PWCHAR *pwszManifestString
+)
 {
     HRESULT                    hr            = S_OK;
     HANDLE                     hFile         = INVALID_HANDLE_VALUE;
@@ -352,15 +352,15 @@ ReadFileToWideString(
     UINT                          uiUnicode      = 0;
     BYTE                          bBOMValue[UTF16_BOM_LENGTH];
 
-	
+
     BY_HANDLE_FILE_INFORMATION fileInfo;
 
     //
     // Validate the parameters
     //
     if ( ( NULL == szFileName ) ||
-         ( FAILED( StringCchLengthW( szFileName, MAX_PATH, NULL ) ) ) ||
-         ( NULL == pwszManifestString ) )
+            ( FAILED( StringCchLengthW( szFileName, MAX_PATH, NULL ) ) ) ||
+            ( NULL == pwszManifestString ) )
     {
         hr = E_INVALIDARG;
         goto e_Exit;
@@ -369,14 +369,14 @@ ReadFileToWideString(
     //
     // Get a handle to the file
     //
-    hFile = CreateFileW( szFileName, 
-                         GENERIC_READ, 
-                         0, 
-                         NULL, 
-                         OPEN_EXISTING, 
-                         0, 
-                         NULL 
-                         );
+    hFile = CreateFileW( szFileName,
+                         GENERIC_READ,
+                         0,
+                         NULL,
+                         OPEN_EXISTING,
+                         0,
+                         NULL
+                       );
     if ( INVALID_HANDLE_VALUE == hFile )
     {
         wprintf( L"\nCreateFileW failed. hFile == INVALID_HANDLE_VALUE\n" );
@@ -394,8 +394,8 @@ ReadFileToWideString(
     //
     // Check for files that are too long and unsigned integer overflow
     //
-    if ( ( 0 != fileInfo.nFileSizeHigh ) || 
-         ( fileInfo.nFileSizeLow + sizeof( WCHAR ) < fileInfo.nFileSizeLow ) )
+    if ( ( 0 != fileInfo.nFileSizeHigh ) ||
+            ( fileInfo.nFileSizeLow + sizeof( WCHAR ) < fileInfo.nFileSizeLow ) )
     {
         wprintf(L"\nFile too long.\n");
         hr = E_FAIL;
@@ -403,42 +403,45 @@ ReadFileToWideString(
     }
 
 
-   memset(bBOMValue, 0, sizeof(bBOMValue) );
-	
+    memset(bBOMValue, 0, sizeof(bBOMValue) );
 
-   //
-   // First check to see if the file is in UTF-16 format
-   //
-   if (0 == ReadFile( hFile, 
-   	                         (LPVOID)bBOMValue,
-   	                         UTF16_BOM_LENGTH,
-                                &dwBytesRead,
-                                0
-                                ) )
+
+    //
+    // First check to see if the file is in UTF-16 format
+    //
+    if (0 == ReadFile( hFile,
+                       (LPVOID)bBOMValue,
+                       UTF16_BOM_LENGTH,
+                       &dwBytesRead,
+                       0
+                     ) )
     {
         hr = HRESULT_FROM_WIN32( GetLastError() );
         goto e_Exit;
     }
-   				     
-    if( (bBOMValue[0] == 0xFF ) && ( bBOMValue[1] == 0xFE ) ) {
 
-	 uiUnicode = UTF16_BOM_LENGTH;
-	 
-    } else {
+    if( (bBOMValue[0] == 0xFF ) && ( bBOMValue[1] == 0xFE ) )
+    {
 
-	 //
-    	 //Reset the pointer if this file is not in UTF-16 format
-    	 //
+        uiUnicode = UTF16_BOM_LENGTH;
+
+    }
+    else
+    {
+
+        //
+        //Reset the pointer if this file is not in UTF-16 format
+        //
         if(0 == SetFilePointer( hFile,
-                                          0,
-                                          NULL,
-                                          FILE_BEGIN
-                                          ) )
+                                0,
+                                NULL,
+                                FILE_BEGIN
+                              ) )
         {
-             hr = HRESULT_FROM_WIN32( GetLastError() );
-	      goto e_Exit;
+            hr = HRESULT_FROM_WIN32( GetLastError() );
+            goto e_Exit;
         }
-						
+
     }
 
     *pwszManifestString = new WCHAR[ fileInfo.nFileSizeLow + sizeof(WCHAR) ];
@@ -450,24 +453,24 @@ ReadFileToWideString(
     }
 
 
-    memset(*pwszManifestString, 0, (fileInfo.nFileSizeLow + sizeof(WCHAR) ) * sizeof(WCHAR) );	
+    memset(*pwszManifestString, 0, (fileInfo.nFileSizeLow + sizeof(WCHAR) ) * sizeof(WCHAR) );
 
 
     //
     // Put the contents of the file into pwszManifestString
     //
     if(0 == ReadFile( hFile,
-			           *pwszManifestString,
-			           fileInfo.nFileSizeLow - uiUnicode,
-			           &dwBytesRead,
-			           0
-			           ) )
+                      *pwszManifestString,
+                      fileInfo.nFileSizeLow - uiUnicode,
+                      &dwBytesRead,
+                      0
+                    ) )
     {
         hr = HRESULT_FROM_WIN32( GetLastError() );
         goto e_Exit;
     }
 
-  
+
 
 e_Exit:
     if ( INVALID_HANDLE_VALUE != hFile )
@@ -480,17 +483,17 @@ e_Exit:
 //
 // Callback function for asynchronous ADRMS client functions
 //
-HRESULT __stdcall 
-StatusCallback( 
-               DRM_STATUS_MSG msg, 
-               HRESULT hr, 
-               void *pvParam, 
-               void *pvContext 
-               )
+HRESULT __stdcall
+StatusCallback(
+    DRM_STATUS_MSG msg,
+    HRESULT hr,
+    void *pvParam,
+    void *pvContext
+)
 {
     size_t       uiSignedILLength = 0;
     PDRM_CONTEXT pContext         = ( PDRM_CONTEXT )pvContext;
-    
+
     if ( pContext )
     {
         pContext->hr = hr;
@@ -520,12 +523,12 @@ StatusCallback(
     case DRM_MSG_ACTIVATE_GROUPIDENTITY:
         wprintf( L"\nCallback status msg = DRM_MSG_ACTIVATE_GROUPIDENTITY " );
         break;
-	case DRM_MSG_ACQUIRE_CLIENTLICENSOR:
-		wprintf( L"\nCallback status msg = DRM_MSG_ACQUIRE_CLIENTLICENSOR " );
-		break;
-	case DRM_MSG_SIGN_ISSUANCE_LICENSE:
-		wprintf( L"\nCallback status msg = DRM_MSG_SIGN_ISSUANCE_LICENSE " );
-		break;
+    case DRM_MSG_ACQUIRE_CLIENTLICENSOR:
+        wprintf( L"\nCallback status msg = DRM_MSG_ACQUIRE_CLIENTLICENSOR " );
+        break;
+    case DRM_MSG_SIGN_ISSUANCE_LICENSE:
+        wprintf( L"\nCallback status msg = DRM_MSG_SIGN_ISSUANCE_LICENSE " );
+        break;
     default:
         wprintf( L"\nDefault callback status msg = 0x%x ", msg );
         break;
@@ -558,10 +561,10 @@ StatusCallback(
                 //
                 // Retrieve the length of the signed issuance license
                 //
-                hr = StringCchLengthW( ( PWSTR )pvParam, 
-                                       STRSAFE_MAX_CCH, 
+                hr = StringCchLengthW( ( PWSTR )pvParam,
+                                       STRSAFE_MAX_CCH,
                                        &uiSignedILLength
-                                       );
+                                     );
                 if ( FAILED( hr ) )
                 {
                     wprintf( L"\nStringCchLengthW failed.  hr = 0x%x\n", hr );
@@ -571,32 +574,32 @@ StatusCallback(
                 // Allocate memory for the signed issuance license
                 //
                 pContext->wszData = new WCHAR[ uiSignedILLength + 1 ];
-                if( NULL == pContext->wszData ) 
+                if( NULL == pContext->wszData )
                 {
                     wprintf( L"\nFailed to allocate memory "\
-                        L"for the signed issuance license.\n" );
+                             L"for the signed issuance license.\n" );
                     hr = E_OUTOFMEMORY;
                     break;
                 }
                 //
-                // Copy the signed issuance license into the 
+                // Copy the signed issuance license into the
                 // pContext->wszData buffer
                 //
-                hr = StringCchCopyW( ( wchar_t* )pContext->wszData, 
-                    uiSignedILLength + 1 , 
-                    ( PWSTR )pvParam 
-                    );
+                hr = StringCchCopyW( ( wchar_t* )pContext->wszData,
+                                     uiSignedILLength + 1,
+                                     ( PWSTR )pvParam
+                                   );
                 if ( FAILED( hr ) )
                 {
                     wprintf( L"\nStringCchCopyW failed.  hr = 0x%x\n", hr );
                     break;
                 }
             }
-		}
-		if ( pContext->hEvent )
-		{
-			SetEvent( ( HANDLE )pContext->hEvent );
-		}
+        }
+        if ( pContext->hEvent )
+        {
+            SetEvent( ( HANDLE )pContext->hEvent );
+        }
         break;
     case E_DRM_ACTIVATIONFAILED:
         wprintf( L"Callback hr = E_DRM_ACTIVATIONFAILED\n" );
@@ -684,11 +687,11 @@ StatusCallback(
 //    4.  Activate the machine
 //    5. Wait for the callback to return
 //    6. Clean up and free memory
-HRESULT __stdcall 
+HRESULT __stdcall
 DoMachineActivation(
-                    DRMHSESSION hClient,
-                    __in PWCHAR wszActivationSvr
-                    )
+    DRMHSESSION hClient,
+    __in PWCHAR wszActivationSvr
+)
 {
     HRESULT           hr               = E_FAIL;
     DRM_ACTSERV_INFO *pdasi            = NULL;
@@ -732,17 +735,17 @@ DoMachineActivation(
 
     //
     // 3. Copy the activation server URL into the wszURL member
-    //    of the DRM_ACTSERV_INFO struct 
+    //    of the DRM_ACTSERV_INFO struct
     //
     if ( NULL != wszActivationSvr )
     {
         //
         // 3(a). Use the URL provided through the command line argument
         //
-        hr = StringCchLengthW( wszActivationSvr, 
-            STRSAFE_MAX_CCH, 
-            &cchActivationSvr 
-            );
+        hr = StringCchLengthW( wszActivationSvr,
+                               STRSAFE_MAX_CCH,
+                               &cchActivationSvr
+                             );
         if ( FAILED( hr ) )
         {
             wprintf( L"\nStringCchLengthW failed. hr = 0x%x.\n", hr );
@@ -750,7 +753,7 @@ DoMachineActivation(
         }
 
         //
-        // Allocate memory for the URL member of 
+        // Allocate memory for the URL member of
         // the DRM_ACTSERV_INFO structure
         //
         pdasi->wszURL = new WCHAR[ cchActivationSvr + 1 ];
@@ -761,10 +764,10 @@ DoMachineActivation(
             hr = E_OUTOFMEMORY;
             goto e_Exit;
         }
-        hr = StringCchCopyW( pdasi->wszURL, 
-            cchActivationSvr + 1, 
-            wszActivationSvr 
-            );
+        hr = StringCchCopyW( pdasi->wszURL,
+                             cchActivationSvr + 1,
+                             wszActivationSvr
+                           );
         if ( FAILED( hr ) )
         {
             wprintf( L"\nStringCchCopyW failed. hr = 0x%x.\n", hr );
@@ -775,20 +778,20 @@ DoMachineActivation(
     else
     {
         //
-        // 3(b). Try to find the service location where activation 
+        // 3(b). Try to find the service location where activation
         //       is available.
         //       The first call is to get -
-        //       (a) whether there is a service location and 
-        //       (b) if so, the size needed for a buffer to 
+        //       (a) whether there is a service location and
+        //       (b) if so, the size needed for a buffer to
         //           hold the URL for the service.
         //
         hr = DRMGetServiceLocation( hClient,
-            DRM_SERVICE_TYPE_ACTIVATION,
-            DRM_SERVICE_LOCATION_ENTERPRISE,
-            NULL,
-            &uiStrLen,
-            NULL 
-            );
+                                    DRM_SERVICE_TYPE_ACTIVATION,
+                                    DRM_SERVICE_LOCATION_ENTERPRISE,
+                                    NULL,
+                                    &uiStrLen,
+                                    NULL
+                                  );
 
         if ( SUCCEEDED( hr ) )
         {
@@ -810,26 +813,26 @@ DoMachineActivation(
             // copied into the URL.
             //
             hr = DRMGetServiceLocation( hClient,
-                DRM_SERVICE_TYPE_ACTIVATION,
-                DRM_SERVICE_LOCATION_ENTERPRISE,
-                NULL,
-                &uiStrLen,
-                pdasi->wszURL
-                );
+                                        DRM_SERVICE_TYPE_ACTIVATION,
+                                        DRM_SERVICE_LOCATION_ENTERPRISE,
+                                        NULL,
+                                        &uiStrLen,
+                                        pdasi->wszURL
+                                      );
 
             if ( FAILED( hr ) )
             {
                 wprintf( L"\nDRMGetServiceLocation (ENTERPRISE) failed. "\
-                    L"hr = 0x%x\n", hr );
+                         L"hr = 0x%x\n", hr );
                 goto e_Exit;
             }
             wprintf( L"\nDRMGetServiceLocation (ENTERPRISE) succeeded.\n\n"\
-                L"Machine Activation server URL:\n%s\n", pdasi->wszURL );
+                     L"Machine Activation server URL:\n%s\n", pdasi->wszURL );
         }
         else
         {
             wprintf( L"\nDRMGetServiceLocation failed. hr = 0x%x. "\
-                L"\nPassing NULL server info to DRMActivate.\n", hr );
+                     L"\nPassing NULL server info to DRMActivate.\n", hr );
         }
     }
 
@@ -837,16 +840,16 @@ DoMachineActivation(
     // 4. Activate the machine
     //
     hr = DRMActivate( hClient,
-        DRM_ACTIVATE_MACHINE | DRM_ACTIVATE_SILENT,
-        0,
-        pdasi,
-        ( VOID* )&context,
-        NULL 
-        );
+                      DRM_ACTIVATE_MACHINE | DRM_ACTIVATE_SILENT,
+                      0,
+                      pdasi,
+                      ( VOID* )&context,
+                      NULL
+                    );
     if ( FAILED( hr ) )
     {
         wprintf( L"\nDRMActivate (DRM_ACTIVATE_MACHINE) "\
-            L"failed. hr = 0x%x\n", hr );
+                 L"failed. hr = 0x%x\n", hr );
         goto e_Exit;
     }
 
@@ -866,7 +869,7 @@ DoMachineActivation(
         // note it also.
         //
         wprintf( L"\nThe callback function returned a failure "\
-            L"code. hr = 0x%x\n", context.hr );
+                 L"code. hr = 0x%x\n", context.hr );
         hr = context.hr;
         goto e_Exit;
     }
@@ -904,11 +907,11 @@ e_Exit:
 //    4. Activate the user
 //    5. Wait for the callback to return
 //    6. Clean up and free memory
-HRESULT __stdcall 
+HRESULT __stdcall
 DoUserActivation(
-                    DRMHSESSION hClient,
-                    __in PWCHAR wszActivationSvr
-                    )
+    DRMHSESSION hClient,
+    __in PWCHAR wszActivationSvr
+)
 {
     HRESULT           hr               = E_FAIL;
     DRM_ACTSERV_INFO *pdasi            = NULL;
@@ -952,17 +955,17 @@ DoUserActivation(
 
     //
     // 3. Copy the activation server URL into the wszURL member
-    //    of the DRM_ACTSERV_INFO struct 
+    //    of the DRM_ACTSERV_INFO struct
     //
     if ( NULL != wszActivationSvr )
     {
         //
         // 3(a). Use the URL provided through the command line argument
         //
-        hr = StringCchLengthW( wszActivationSvr, 
-            STRSAFE_MAX_CCH, 
-            &cchActivationSvr 
-            );
+        hr = StringCchLengthW( wszActivationSvr,
+                               STRSAFE_MAX_CCH,
+                               &cchActivationSvr
+                             );
         if ( FAILED( hr ) )
         {
             wprintf( L"\nStringCchLengthW failed. hr = 0x%x.\n", hr );
@@ -970,21 +973,21 @@ DoUserActivation(
         }
 
         //
-        // Allocate memory for the URL member of 
+        // Allocate memory for the URL member of
         // the DRM_ACTSERV_INFO structure
         //
         pdasi->wszURL = new WCHAR[ cchActivationSvr + 1 ];
         if ( NULL == pdasi->wszURL )
         {
             wprintf( L"\nMemory allocation failed for user "\
-				     L"activation URL string.\n" );
+                     L"activation URL string.\n" );
             hr = E_OUTOFMEMORY;
             goto e_Exit;
         }
-        hr = StringCchCopyW( pdasi->wszURL, 
-            cchActivationSvr + 1, 
-            wszActivationSvr 
-            );
+        hr = StringCchCopyW( pdasi->wszURL,
+                             cchActivationSvr + 1,
+                             wszActivationSvr
+                           );
         if ( FAILED( hr ) )
         {
             wprintf( L"\nStringCchCopyW failed. hr = 0x%x.\n", hr );
@@ -995,20 +998,20 @@ DoUserActivation(
     else
     {
         //
-        // 3(b). Try to find the service location where user activation 
+        // 3(b). Try to find the service location where user activation
         //       is available.
         //       The first call is to get -
-        //       (a) whether there is a service location and 
-        //       (b) if so, the size needed for a buffer to 
+        //       (a) whether there is a service location and
+        //       (b) if so, the size needed for a buffer to
         //           hold the URL for the service.
         //
         hr = DRMGetServiceLocation( hClient,
-            DRM_SERVICE_TYPE_CERTIFICATION,
-            DRM_SERVICE_LOCATION_ENTERPRISE,
-            NULL,
-            &uiStrLen,
-            NULL 
-            );
+                                    DRM_SERVICE_TYPE_CERTIFICATION,
+                                    DRM_SERVICE_LOCATION_ENTERPRISE,
+                                    NULL,
+                                    &uiStrLen,
+                                    NULL
+                                  );
 
         if ( SUCCEEDED( hr ) )
         {
@@ -1030,26 +1033,26 @@ DoUserActivation(
             // copied into the URL.
             //
             hr = DRMGetServiceLocation( hClient,
-                DRM_SERVICE_TYPE_CERTIFICATION,
-                DRM_SERVICE_LOCATION_ENTERPRISE,
-                NULL,
-                &uiStrLen,
-                pdasi->wszURL
-                );
+                                        DRM_SERVICE_TYPE_CERTIFICATION,
+                                        DRM_SERVICE_LOCATION_ENTERPRISE,
+                                        NULL,
+                                        &uiStrLen,
+                                        pdasi->wszURL
+                                      );
 
             if ( FAILED( hr ) )
             {
                 wprintf( L"\nDRMGetServiceLocation (ENTERPRISE) failed. "\
-                    L"hr = 0x%x\n", hr );
+                         L"hr = 0x%x\n", hr );
                 goto e_Exit;
             }
             wprintf( L"\nDRMGetServiceLocation (ENTERPRISE) succeeded.\n\n"\
-                L"User Activation server URL:\n%s\n", pdasi->wszURL );
+                     L"User Activation server URL:\n%s\n", pdasi->wszURL );
         }
         else
         {
             wprintf( L"\nDRMGetServiceLocation failed. hr = 0x%x. "\
-                L"\nPassing NULL server info to DRMActivate.\n", hr );
+                     L"\nPassing NULL server info to DRMActivate.\n", hr );
         }
     }
 
@@ -1057,16 +1060,16 @@ DoUserActivation(
     // 4. Activate the user
     //
     hr = DRMActivate( hClient,
-        DRM_ACTIVATE_GROUPIDENTITY | DRM_ACTIVATE_SILENT,
-        0,
-        pdasi,
-        ( VOID* )&context,
-        NULL 
-        );
+                      DRM_ACTIVATE_GROUPIDENTITY | DRM_ACTIVATE_SILENT,
+                      0,
+                      pdasi,
+                      ( VOID* )&context,
+                      NULL
+                    );
     if ( FAILED( hr ) )
     {
         wprintf( L"\nDRMActivate (DRM_ACTIVATE_GROUPIDENTITY) "\
-            L"failed. hr = 0x%x\n", hr );
+                 L"failed. hr = 0x%x\n", hr );
         goto e_Exit;
     }
 
@@ -1086,7 +1089,7 @@ DoUserActivation(
         // note it also.
         //
         wprintf( L"\nThe callback function returned a failure "\
-            L"code. hr = 0x%x\n", context.hr );
+                 L"code. hr = 0x%x\n", context.hr );
         hr = context.hr;
         goto e_Exit;
     }
@@ -1126,12 +1129,12 @@ e_Exit:
 //    7. Clean up and free memory
 //
 HRESULT
-DoAcquireClientLicensorCertificate( 
-                                   DRMHSESSION hClient,
-                                   __in PWCHAR wszLicensingSvr, 
-                                   __in PWCHAR wszUserId, 
-                                   __deref_out PWCHAR *wszClientLicensorCert 
-                                   )
+DoAcquireClientLicensorCertificate(
+    DRMHSESSION hClient,
+    __in PWCHAR wszLicensingSvr,
+    __in PWCHAR wszUserId,
+    __deref_out PWCHAR *wszClientLicensorCert
+)
 {
     HRESULT     hr                         = E_FAIL;
     UINT        uiStrLen                   = 0;
@@ -1153,10 +1156,10 @@ DoAcquireClientLicensorCertificate(
     }
 
     //
-    // 2. Create an event for the callback function.  This event will be 
-    // passed as a void pointer to DRMAcquireLicense.  DRMAcquireLicense 
-    // simply passes back this pointer to the StatusCallback callback 
-    // function which knows that it is an event and will thus signal it 
+    // 2. Create an event for the callback function.  This event will be
+    // passed as a void pointer to DRMAcquireLicense.  DRMAcquireLicense
+    // simply passes back this pointer to the StatusCallback callback
+    // function which knows that it is an event and will thus signal it
     // when completed.
     //
     if ( NULL == ( context.hEvent = CreateEvent( NULL, FALSE, FALSE, NULL ) ) )
@@ -1166,23 +1169,23 @@ DoAcquireClientLicensorCertificate(
     }
 
     //
-    // 3. If the licensing URL was not passed in via the command line, 
+    // 3. If the licensing URL was not passed in via the command line,
     //    find the licensing URL through service discovery
     //
     if ( NULL == wszLicensingSvr )
     {
         //       The first call is to get -
-        //       (a) whether there is a service location and 
-        //       (b) if so, the size needed for a buffer to 
+        //       (a) whether there is a service location and
+        //       (b) if so, the size needed for a buffer to
         //           hold the URL for the service.
         //
-        hr = DRMGetServiceLocation( hClient, 
-                                    DRM_SERVICE_TYPE_CLIENTLICENSOR, 
+        hr = DRMGetServiceLocation( hClient,
+                                    DRM_SERVICE_TYPE_CLIENTLICENSOR,
                                     DRM_SERVICE_LOCATION_ENTERPRISE,
                                     NULL,
                                     &uiStrLen,
                                     NULL
-                                    );
+                                  );
         if ( FAILED( hr ) )
         {
             wprintf( L"\nDRMGetServiceLocation failed. hr = 0x%x\n", hr );
@@ -1204,7 +1207,7 @@ DoAcquireClientLicensorCertificate(
                                     NULL,
                                     &uiStrLen,
                                     wszLicensingSvr
-                                    );
+                                  );
         if ( FAILED( hr ) )
         {
             wprintf( L"\nDRMGetServiceLocation failed. hr = 0x%x\n", hr );
@@ -1217,14 +1220,14 @@ DoAcquireClientLicensorCertificate(
     //
     // 4. Acquire the client licensor certificate
     //
-    hr = DRMAcquireLicense( hClient, 
-                            0, 
-                            NULL, 
-                            NULL, 
-                            NULL, 
-                            wszLicensingSvr, 
-                            ( VOID* )&context 
-                            );
+    hr = DRMAcquireLicense( hClient,
+                            0,
+                            NULL,
+                            NULL,
+                            NULL,
+                            wszLicensingSvr,
+                            ( VOID* )&context
+                          );
     if ( FAILED( hr ) )
     {
         wprintf( L"\nDRMAcquireLicense failed. hr = 0x%x\n", hr );
@@ -1248,22 +1251,22 @@ DoAcquireClientLicensorCertificate(
         //
         hr = context.hr;
         wprintf( L"\nThe callback function returned a failure "\
-            L"code. hr = 0x%x\n", context.hr );
+                 L"code. hr = 0x%x\n", context.hr );
         goto e_Exit;
     }
 
     wprintf( L"\nA client licensor certificate has been acquired.\n" );
 
-    // 
+    //
     // 6. Enumerate the client licensor certificate to return it
     //
-    hr = DRMEnumerateLicense( hClient, 
-                              DRM_EL_SPECIFIED_CLIENTLICENSOR, 
-                              0, 
-                              &fShared, 
+    hr = DRMEnumerateLicense( hClient,
+                              DRM_EL_SPECIFIED_CLIENTLICENSOR,
+                              0,
+                              &fShared,
                               &uiClientLicensorCertLength,
                               NULL
-                              );
+                            );
     if ( FAILED( hr ) )
     {
         wprintf( L"\nDRMEnumerateLicense (DRM_EL_SPECIFIED_CLIENTLICENSOR) "\
@@ -1279,17 +1282,17 @@ DoAcquireClientLicensorCertificate(
         goto e_Exit;
     }
 
-    hr = DRMEnumerateLicense( hClient, 
-        DRM_EL_SPECIFIED_CLIENTLICENSOR,
-        0,
-        &fShared,
-        &uiClientLicensorCertLength,
-        *wszClientLicensorCert
-        );
+    hr = DRMEnumerateLicense( hClient,
+                              DRM_EL_SPECIFIED_CLIENTLICENSOR,
+                              0,
+                              &fShared,
+                              &uiClientLicensorCertLength,
+                              *wszClientLicensorCert
+                            );
     if ( FAILED( hr ) )
     {
         wprintf( L"\nDRMEnumerateLicense(DRM_EL_SPECIFIED_CLIENTLICENSOR)"\
-            L" failed. hr = 0x%x\n", hr );
+                 L" failed. hr = 0x%x\n", hr );
         goto e_Exit;
     }
 
@@ -1314,7 +1317,7 @@ e_Exit:
 //    6.  Call DoUserActivation if the user needs to be activated
 //    7.  Enumerate the client licensor certificates to determine if one
 //        has already been acquired
-//    8.  If there are no client licensor certificates, call 
+//    8.  If there are no client licensor certificates, call
 //        DoAcquireClientLicensorCertificate to acquire one
 //    9.  Read the manifest file into a buffer
 //    10. Get the security provider
@@ -1322,17 +1325,17 @@ e_Exit:
 //    12. Create an unsigned issuance license from scratch
 //    13. Set the metadata, application specific data, interval time,
 //        and usage policy in the unsigned issuance license
-//    14. Create a user and right and add those to the 
+//    14. Create a user and right and add those to the
 //        unsigned issuance license
 //    15. Sign the unsigned issuance license offline
 //    16. Wait for the callback to return
 //    17.  Clean up and free memory
 //
-int __cdecl 
-wmain( 
-      int argc, 
-      __in_ecount( argc )WCHAR **argv 
-      )
+int __cdecl
+wmain(
+    int argc,
+    __in_ecount( argc )WCHAR **argv
+)
 {
     HRESULT                   hr                           = E_FAIL;
     DRMHSESSION               hClient                      = NULL;
@@ -1365,13 +1368,13 @@ wmain(
     context.hEvent = NULL;
     context.wszData = NULL;
 
-    if ( FAILED ( ParseCommandLine( argc, 
-                                    argv, 
-                                    &wszUserId, 
-                                    &wszActivationSvr, 
-                                    &wszLicensingSvr, 
+    if ( FAILED ( ParseCommandLine( argc,
+                                    argv,
+                                    &wszUserId,
+                                    &wszActivationSvr,
+                                    &wszLicensingSvr,
                                     &wszManifestFileName
-                                    ) ) )
+                                  ) ) )
     {
         PrintUsage();
         goto e_Exit;
@@ -1382,12 +1385,12 @@ wmain(
     //
     // 1. Create a client session
     //
-    hr = DRMCreateClientSession( &StatusCallback, 
-        0, 
-        DRM_DEFAULTGROUPIDTYPE_WINDOWSAUTH, 
-        wszUserId, 
-        &hClient 
-        );
+    hr = DRMCreateClientSession( &StatusCallback,
+                                 0,
+                                 DRM_DEFAULTGROUPIDTYPE_WINDOWSAUTH,
+                                 wszUserId,
+                                 &hClient
+                               );
     if ( FAILED( hr ) )
     {
         wprintf( L"\nDRMCreateClientSession failed. hr = 0x%x\n", hr );
@@ -1397,16 +1400,16 @@ wmain(
     //
     // 2. Call DRMIsActivated to determine if the machine is already activated
     //
-    hr = DRMIsActivated( hClient, 
-        DRM_ACTIVATE_MACHINE, 
-        NULL 
-        );
+    hr = DRMIsActivated( hClient,
+                         DRM_ACTIVATE_MACHINE,
+                         NULL
+                       );
     if ( E_DRM_NEEDS_MACHINE_ACTIVATION == hr )
     {
         //
-        // 3.  Call DoMachineActivation to activate the machine if 
-		//     it's not activated
-		//
+        // 3.  Call DoMachineActivation to activate the machine if
+        //     it's not activated
+        //
         hr = DoMachineActivation( hClient, wszActivationSvr );
         if ( FAILED( hr ) )
         {
@@ -1421,20 +1424,20 @@ wmain(
     else
     {
         wprintf( L"\nDRMIsActivated returned an unexpected failure: 0x%x.  "\
-            L"E_DRM_NEEDS_MACHINE_ACTIVATION was expected.\n", hr );
+                 L"E_DRM_NEEDS_MACHINE_ACTIVATION was expected.\n", hr );
         goto e_Exit;
     }
 
     //
     // 4. Enumerate the machine certificate
     //
-    hr = DRMEnumerateLicense( hClient, 
-                              DRM_EL_MACHINE, 
-                              0, 
-                              &fShared, 
-                              &uiMachineCertLength, 
-                              NULL 
-                              );
+    hr = DRMEnumerateLicense( hClient,
+                              DRM_EL_MACHINE,
+                              0,
+                              &fShared,
+                              &uiMachineCertLength,
+                              NULL
+                            );
     if ( FAILED( hr ) )
     {
         wprintf( L"\nDRMEnumerateLicense failed. hr = 0x%x\n", hr );
@@ -1449,13 +1452,13 @@ wmain(
         goto e_Exit;
     }
 
-    hr = DRMEnumerateLicense( hClient, 
-                              DRM_EL_MACHINE, 
-                              0, 
-                              &fShared, 
-                              &uiMachineCertLength, 
-                              wszMachineCertificate 
-                              );
+    hr = DRMEnumerateLicense( hClient,
+                              DRM_EL_MACHINE,
+                              0,
+                              &fShared,
+                              &uiMachineCertLength,
+                              wszMachineCertificate
+                            );
     if ( FAILED( hr ) )
     {
         wprintf( L"\nDRMEnumerateLicense failed. hr = 0x%x\n", hr );
@@ -1463,35 +1466,35 @@ wmain(
     }
 
     //
-    // 5. Call DRMIsActivated to determine if the user is 
-    //    already activated.  
+    // 5. Call DRMIsActivated to determine if the user is
+    //    already activated.
     //
-    hr = DRMIsActivated( hClient, 
-        DRM_ACTIVATE_GROUPIDENTITY, 
-        NULL 
-        );
+    hr = DRMIsActivated( hClient,
+                         DRM_ACTIVATE_GROUPIDENTITY,
+                         NULL
+                       );
     if ( SUCCEEDED( hr ) )
     {
         wprintf( L"\nThe user is already activated.\n" );
     }
-	else if ( E_DRM_NEEDS_GROUPIDENTITY_ACTIVATION == hr )
-	{
-		//
-		// 6. Call DoUserActivation to activate the user if the user 
-		//    is not activated
-		//
-		hr = DoUserActivation( hClient, wszActivationSvr );
-		if ( FAILED( hr ) )
-		{
-			wprintf( L"\nDoUserActivation failed. hr = 0x%x\n", hr );
-			goto e_Exit;
-		}
-	}
+    else if ( E_DRM_NEEDS_GROUPIDENTITY_ACTIVATION == hr )
+    {
+        //
+        // 6. Call DoUserActivation to activate the user if the user
+        //    is not activated
+        //
+        hr = DoUserActivation( hClient, wszActivationSvr );
+        if ( FAILED( hr ) )
+        {
+            wprintf( L"\nDoUserActivation failed. hr = 0x%x\n", hr );
+            goto e_Exit;
+        }
+    }
     else if ( E_DRM_NEEDS_GROUPIDENTITY_ACTIVATION != hr )
     {
         wprintf( L"\nDRMIsActivated returned an unexpected failure: 0x%x.  "\
-            L"E_DRM_NEEDS_GROUPIDENTITY_ACTIVATION "\
-            L"was expected.\n", hr );
+                 L"E_DRM_NEEDS_GROUPIDENTITY_ACTIVATION "\
+                 L"was expected.\n", hr );
         goto e_Exit;
     }
 
@@ -1499,13 +1502,13 @@ wmain(
     // 7. Enumerate the client licensor certificates to determine if one
     //    has already been acquired.  If not, get a client licensor cert.
     //
-    hr = DRMEnumerateLicense( hClient, 
-                              DRM_EL_SPECIFIED_CLIENTLICENSOR, 
-                              0, 
-                              &fShared, 
+    hr = DRMEnumerateLicense( hClient,
+                              DRM_EL_SPECIFIED_CLIENTLICENSOR,
+                              0,
+                              &fShared,
                               &uiClientLicensorCertLength,
                               NULL
-                              );
+                            );
     if ( FAILED( hr ) && ( E_DRM_NO_MORE_DATA != hr ) )
     {
         wprintf( L"\nDRMEnumerateLicense (DRM_EL_SPECIFIED_CLIENTLICENSOR) "\
@@ -1514,13 +1517,13 @@ wmain(
     }
     else if ( E_DRM_NO_MORE_DATA == hr )
     {
-        //    8.  If there are no client licensor certificates, call 
+        //    8.  If there are no client licensor certificates, call
         //        DoAcquireClientLicensorCertificate to acquire one
         hr = DoAcquireClientLicensorCertificate( hClient,
-                                                 wszLicensingSvr, 
-                                                 wszUserId, 
-                                                 &wszClientLicensorCert 
-                                                 );
+                wszLicensingSvr,
+                wszUserId,
+                &wszClientLicensorCert
+                                               );
         if ( FAILED( hr ) )
         {
             wprintf( L"\nDoAcquireClientLicensorCertificate failed. "\
@@ -1542,17 +1545,17 @@ wmain(
             goto e_Exit;
         }
 
-        hr = DRMEnumerateLicense( hClient, 
+        hr = DRMEnumerateLicense( hClient,
                                   DRM_EL_SPECIFIED_CLIENTLICENSOR,
                                   0,
                                   &fShared,
                                   &uiClientLicensorCertLength,
                                   wszClientLicensorCert
-                                  );
+                                );
         if ( FAILED( hr ) )
         {
             wprintf( L"\nDRMEnumerateLicense(DRM_EL_SPECIFIED_CLIENTLICENSOR)"\
-                L" failed. hr = 0x%x\n", hr );
+                     L" failed. hr = 0x%x\n", hr );
             goto e_Exit;
         }
     }
@@ -1575,7 +1578,7 @@ wmain(
                                  NULL,
                                  &uiSecurityProviderPathLength,
                                  NULL
-                                 );
+                               );
     if ( FAILED( hr ) )
     {
         wprintf( L"\nDRMGetSecurityProvider failed. hr = 0x%x\n", hr );
@@ -1605,13 +1608,13 @@ wmain(
                                  wszSecurityProviderType,
                                  &uiSecurityProviderPathLength,
                                  wszSecurityProviderPath
-                                 );
+                               );
     if ( FAILED( hr ) )
     {
         wprintf( L"\nDRMGetSecurityProvider failed. hr = 0x%x\n", hr );
         goto e_Exit;
     }
-                           
+
     //
     // 11. Initialize an environment
     //
@@ -1622,7 +1625,7 @@ wmain(
                              wszMachineCertificate,
                              &hEnv,
                              &hLib
-                             );
+                           );
     if ( FAILED( hr ) )
     {
         wprintf( L"\nDRMInitEnvironment failed. hr = 0x%x.\n", hr );
@@ -1642,14 +1645,14 @@ wmain(
     // 12. Create an unsigned issuance license from scratch
     //
     hr = DRMCreateIssuanceLicense( &stTimeFrom,
-        &stTimeUntil,
-        NULL,
-        NULL,
-        NULL,
-        NULL,
-        NULL,
-        &hIssuanceLicense 
-        );
+                                   &stTimeUntil,
+                                   NULL,
+                                   NULL,
+                                   NULL,
+                                   NULL,
+                                   NULL,
+                                   &hIssuanceLicense
+                                 );
     if ( FAILED( hr ) )
     {
         wprintf( L"\nDRMCreateIssuanceLicense failed. hr = 0x%x\n", hr );
@@ -1686,14 +1689,14 @@ wmain(
     // 13. Set the metadata, application specific data, interval time, and
     //     usage policy in the unsigned issuance license
     //
-    hr = DRMSetMetaData( hIssuanceLicense, 
-                         wszGUID, 
-                         L"MS-GUID", 
-                         SKU_ID, 
-                         SKU_ID_TYPE, 
-                         CONTENT_TYPE, 
-                         CONTENT_NAME 
-                         );
+    hr = DRMSetMetaData( hIssuanceLicense,
+                         wszGUID,
+                         L"MS-GUID",
+                         SKU_ID,
+                         SKU_ID_TYPE,
+                         CONTENT_TYPE,
+                         CONTENT_NAME
+                       );
     if ( FAILED( hr ) )
     {
         wprintf( L"\nDRMSetMetaData failed. hr = 0x%x\n", hr );
@@ -1707,7 +1710,7 @@ wmain(
                                         false,
                                         APP_SPECIFIC_DATA_NAME,
                                         APP_SPECIFIC_DATA_VALUE
-                                        );
+                                      );
     if ( FAILED( hr ) )
     {
         wprintf( L"\nDRMSetApplicationSpecificData failed. hr = 0x%x\n", hr );
@@ -1727,18 +1730,18 @@ wmain(
     //
     // Set the usage policy
     //
-    hr = DRMSetUsagePolicy( hIssuanceLicense, 
+    hr = DRMSetUsagePolicy( hIssuanceLicense,
                             DRM_USAGEPOLICY_TYPE_BYNAME,
-                            false, 
-                            true, 
+                            false,
+                            true,
                             USAGE_POLICY_APPLICATION_NAME,
-                            USAGE_POLICY_MIN_VERSION, 
+                            USAGE_POLICY_MIN_VERSION,
                             USAGE_POLICY_MAX_VERSION,
-                            NULL, 
-                            NULL, 
-                            NULL, 
-                            NULL 
-                            );
+                            NULL,
+                            NULL,
+                            NULL,
+                            NULL
+                          );
     if ( FAILED( hr ) )
     {
         wprintf( L"\nDRMSetUsagePolicy failed. hr = 0x%x\n", hr );
@@ -1746,7 +1749,7 @@ wmain(
     }
 
     //
-    // 14. Create a user and right and add that to 
+    // 14. Create a user and right and add that to
     //     the unsigned issuance license
     //
     hr = DRMCreateUser( wszUserId, NULL, L"Windows", &hUser );
@@ -1756,14 +1759,14 @@ wmain(
         goto e_Exit;
     }
 
-    hr = DRMCreateRight( RIGHT_NAME, 
-                         &stTimeFrom, 
-                         &stTimeUntil, 
-                         0, 
-                         NULL, 
-                         NULL, 
-                         &hRight 
-                         );
+    hr = DRMCreateRight( RIGHT_NAME,
+                         &stTimeFrom,
+                         &stTimeUntil,
+                         0,
+                         NULL,
+                         NULL,
+                         &hRight
+                       );
     if ( FAILED( hr ) )
     {
         wprintf( L"\nDRMCreateRight failed. hr = 0x%x\n", hr );
@@ -1780,17 +1783,17 @@ wmain(
     //
     // 15. Sign the issuance license offline
     //
-    hr = DRMGetSignedIssuanceLicense( hEnv, 
-                                      hIssuanceLicense, 
-                                      DRM_SIGN_OFFLINE | DRM_AUTO_GENERATE_KEY, 
+    hr = DRMGetSignedIssuanceLicense( hEnv,
+                                      hIssuanceLicense,
+                                      DRM_SIGN_OFFLINE | DRM_AUTO_GENERATE_KEY,
                                       NULL,
-                                      0, 
-                                      L"AES", 
-                                      wszClientLicensorCert, 
-                                      &StatusCallback, 
+                                      0,
+                                      L"AES",
+                                      wszClientLicensorCert,
+                                      &StatusCallback,
                                       wszLicensingSvr,
                                       ( VOID* )&context
-                                      );
+                                    );
     if ( FAILED( hr ) )
     {
         wprintf( L"\nDRMGetSignedIssuanceLicense failed. hr = 0x%x\n", hr );
@@ -1813,7 +1816,7 @@ wmain(
         // note it also.
         //
         wprintf( L"\nThe callback function returned a failure "\
-            L"code. hr = 0x%x\n", context.hr );
+                 L"code. hr = 0x%x\n", context.hr );
         hr = context.hr;
         goto e_Exit;
     }
@@ -1832,7 +1835,7 @@ e_Exit:
         if ( FAILED( hr ) )
         {
             wprintf( L"\nDRMCloseSession failed while closing "\
-                L"hClient.  hr = 0x%x\n", hr );
+                     L"hClient.  hr = 0x%x\n", hr );
         }
     }
     if ( NULL != context.wszData )
@@ -1849,7 +1852,7 @@ e_Exit:
         if ( FAILED( hr ) )
         {
             wprintf( L"\nDRMClosePubHandle failed while closing "\
-                L"hIssuanceLicense.  hr = 0x%x\n", hr );
+                     L"hIssuanceLicense.  hr = 0x%x\n", hr );
         }
     }
     if ( NULL != hUser )
@@ -1858,7 +1861,7 @@ e_Exit:
         if ( FAILED( hr ) )
         {
             wprintf( L"\nDRMClosePubHandle failed while closing "\
-                L"hUser.  hr = 0x%x\n", hr );
+                     L"hUser.  hr = 0x%x\n", hr );
         }
     }
     if ( NULL != hRight )
@@ -1867,7 +1870,7 @@ e_Exit:
         if ( FAILED( hr ) )
         {
             wprintf( L"\nDRMClosePubHandle failed while closing "\
-                L"hRight.  hr = 0x%x\n", hr );
+                     L"hRight.  hr = 0x%x\n", hr );
         }
     }
     if ( NULL != hLib )
@@ -1876,7 +1879,7 @@ e_Exit:
         if ( FAILED( hr ) )
         {
             wprintf( L"\nDRMCloseHandle failed while closing "\
-                L"hLib.  hr = 0x%x\n", hr );
+                     L"hLib.  hr = 0x%x\n", hr );
         }
     }
     if ( NULL != hEnv )
@@ -1885,7 +1888,7 @@ e_Exit:
         if ( FAILED( hr ) )
         {
             wprintf( L"\nDRMCloseEnvironmentHandle failed while closing "\
-                L"hEnv.  hr = 0x%x\n", hr );
+                     L"hEnv.  hr = 0x%x\n", hr );
         }
     }
     if ( NULL != wszGUID )

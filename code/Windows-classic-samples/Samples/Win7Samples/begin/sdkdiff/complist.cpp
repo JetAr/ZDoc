@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -47,7 +47,8 @@ extern bTrace;                  /* in sdkdiff.cpp  Read only here */
  * the COMPLIST handle is typedef-ed to be a pointer to one
  * of these struct complist
  */
-struct complist {
+struct complist
+{
     DIRLIST left;           /* left list of files */
     DIRLIST right;          /* right list of files */
     LIST items;             /* list of COMPITEMs */
@@ -58,7 +59,7 @@ struct complist {
 /* data for communicating between the SaveList dlg and complist_savelist() */
 
 char dlg_file[MAX_PATH];                /* filename to save to */
-BOOL dlg_sums = TRUE;                   
+BOOL dlg_sums = TRUE;
 
 // have we read the dialog names yet?
 BOOL SeenDialogNames = FALSE;
@@ -112,24 +113,28 @@ complist_filedialog(VIEW view)
     char szPath1[MAX_PATH * 2];
     char szPath2[MAX_PATH * 2];
     char fname[MAX_PATH], FileExt[5], FileOpenSpec[15];
-	HRESULT hr;
+    HRESULT hr;
 
     /* ask for the filenames - using gfile standard dialogs */
     hr = StringCchCopy(FileExt, 5, ".c");
-	if (FAILED(hr)) {
-		OutputError(hr, IDS_SAFE_COPY);
-		goto LError;
-	}
+    if (FAILED(hr))
+    {
+        OutputError(hr, IDS_SAFE_COPY);
+        goto LError;
+    }
     hr = StringCchCopy(FileOpenSpec, 5, "*.*");
-	if (FAILED(hr)) {
-		OutputError(hr, IDS_SAFE_COPY);
-		goto LError;
-	}
-    if (!gfile_open(hwndClient, LoadRcString(IDS_SELECT_FIRST_FILE), FileExt, FileOpenSpec, szPath1, NUMELMS(szPath1), fname) ){
+    if (FAILED(hr))
+    {
+        OutputError(hr, IDS_SAFE_COPY);
+        goto LError;
+    }
+    if (!gfile_open(hwndClient, LoadRcString(IDS_SELECT_FIRST_FILE), FileExt, FileOpenSpec, szPath1, NUMELMS(szPath1), fname) )
+    {
         goto LError;
     }
 
-    if (!gfile_open(hwndClient, LoadRcString(IDS_SELECT_SECOND_FILE), FileExt, FileOpenSpec, szPath2, NUMELMS(szPath2), fname) ){
+    if (!gfile_open(hwndClient, LoadRcString(IDS_SELECT_SECOND_FILE), FileExt, FileOpenSpec, szPath2, NUMELMS(szPath2), fname) )
+    {
         goto LError;
     }
 
@@ -152,18 +157,18 @@ LError:
 
 void
 complist_setdialogdefault(
-                         LPSTR left,
-                         LPSTR right,
-                         BOOL fDeep)
+    LPSTR left,
+    LPSTR right,
+    BOOL fDeep)
 {
-	HRESULT hr;
+    HRESULT hr;
     dialog_recursive = fDeep;
     hr = StringCchCopy(dialog_leftname, MAX_PATH, left);
-	if (FAILED(hr))
-		OutputError(hr, IDS_SAFE_COPY);
+    if (FAILED(hr))
+        OutputError(hr, IDS_SAFE_COPY);
     hr = StringCchCopy(dialog_rightname, MAX_PATH, right);
-	if (FAILED(hr))
-		OutputError(hr, IDS_SAFE_COPY);
+    if (FAILED(hr))
+        OutputError(hr, IDS_SAFE_COPY);
     SeenDialogNames = TRUE;
 }
 
@@ -187,7 +192,8 @@ complist_dirdialog(VIEW view)
     sdkdiff_UI(FALSE);
     FreeProcInstance(lpProc);
 
-    if (!fOK) {
+    if (!fOK)
+    {
         return(NULL);
     }
 
@@ -205,7 +211,7 @@ complist_args(LPSTR p1, LPSTR p2, VIEW view, BOOL fDeep)
 {
     COMPLIST cl;
     char msg[MAX_PATH+20];
-	HRESULT hr;
+    HRESULT hr;
 
     /* alloc a new complist */
     cl = complist_new();
@@ -218,10 +224,11 @@ complist_args(LPSTR p1, LPSTR p2, VIEW view, BOOL fDeep)
         cl->left = dir_buildlist(p1, FALSE, TRUE);
     }
     /* check that we could find the paths, and report if not */
-    if (cl->left == NULL) {
+    if (cl->left == NULL)
+    {
         hr = StringCchPrintf(msg, (MAX_PATH+20), LoadRcString(IDS_COULDNT_FIND), p1);
-		if (FAILED(hr)) 
-			OutputError(hr, IDS_SAFE_PRINTF);
+        if (FAILED(hr))
+            OutputError(hr, IDS_SAFE_PRINTF);
         TRACE_ERROR(msg, FALSE);
         complist_delete(cl);
         cl = NULL;
@@ -231,20 +238,23 @@ complist_args(LPSTR p1, LPSTR p2, VIEW view, BOOL fDeep)
         cl->right = dir_buildlist(p2, FALSE, TRUE);
     }
     /* check that we could find the paths, and report if not */
-    if (cl->right == NULL) {
+    if (cl->right == NULL)
+    {
         hr = StringCchPrintf(msg, (MAX_PATH+20), LoadRcString(IDS_COULDNT_FIND), p2);
-		if (FAILED(hr))
-			OutputError(hr, IDS_SAFE_PRINTF);
+        if (FAILED(hr))
+            OutputError(hr, IDS_SAFE_PRINTF);
         TRACE_ERROR(msg, FALSE);
         complist_delete(cl);
         cl = NULL;
         goto LError;
     }
 
-    if (!TrackLeftOnly) {
+    if (!TrackLeftOnly)
+    {
         dir_setotherdirlist(cl->left, cl->right);
     }
-    if (!TrackRightOnly) {
+    if (!TrackRightOnly)
+    {
         dir_setotherdirlist(cl->right, cl->left);
     }
     {
@@ -298,7 +308,7 @@ complist_appendfinished(COMPLIST *pcl, LPCSTR pszLeft, LPCSTR pszRight, VIEW vie
     BOOL fSuccess = FALSE;
     COMPLIST cl;
     char msg[MAX_PATH+20] = {0};
-	HRESULT hr;
+    HRESULT hr;
 
     if (!*pcl)
         goto LError;
@@ -307,8 +317,8 @@ complist_appendfinished(COMPLIST *pcl, LPCSTR pszLeft, LPCSTR pszRight, VIEW vie
     if (!cl->left || !cl->right)
     {
         hr = StringCchCatN(msg, (MAX_PATH+20), LoadRcString(IDS_COULDNT_FIND_ANYTHING), sizeof(msg)-1);
-		if (FAILED(hr))
-			OutputError(hr, IDS_SAFE_CAT);
+        if (FAILED(hr))
+            OutputError(hr, IDS_SAFE_CAT);
         TRACE_ERROR(msg, FALSE);
         goto LError;
     }
@@ -338,7 +348,8 @@ LError:
 LIST
 complist_getitems(COMPLIST cl)
 {
-    if (cl == NULL) {
+    if (cl == NULL)
+    {
         return(NULL);
     }
 
@@ -353,7 +364,8 @@ complist_delete(COMPLIST cl)
 {
     COMPITEM item;
 
-    if (cl == NULL) {
+    if (cl == NULL)
+    {
         return;
     }
 
@@ -362,7 +374,8 @@ complist_delete(COMPLIST cl)
     dir_delete(cl->right);
 
     /* delete the compitems in the list */
-	for( item=(COMPITEM)List_First(cl->items);  item!=NULL;  item = (COMPITEM)List_Next((LPVOID)item)) {
+    for( item=(COMPITEM)List_First(cl->items);  item!=NULL;  item = (COMPITEM)List_Next((LPVOID)item))
+    {
         compitem_delete(item);
     }
 
@@ -397,9 +410,10 @@ complist_savelist(COMPLIST cl, LPSTR savename, UINT options)
     COMPITEM ci;
     LPSTR pstr, lhead;
     int nFiles = 0;
-	HRESULT hr;
+    HRESULT hr;
 
-    if (!done_init) {
+    if (!done_init)
+    {
         /* init the options once round - but keep the same options
          * for the rest of the session.
          */
@@ -416,25 +430,27 @@ complist_savelist(COMPLIST cl, LPSTR savename, UINT options)
         done_init = TRUE;
     }
 
-    if (cl == NULL) {
+    if (cl == NULL)
+    {
         return;
     }
 
-    if (savename == NULL) {
+    if (savename == NULL)
+    {
 
         /* store the left and right rootnames so that dodlg_savelist
          * can display them in the dialog.
          */
         pstr = dir_getrootdescription(cl->left);
         hr = StringCchCopy(dialog_leftname, MAX_PATH, pstr);
-		if (FAILED(hr))
-			OutputError(hr, IDS_SAFE_COPY);
+        if (FAILED(hr))
+            OutputError(hr, IDS_SAFE_COPY);
         dir_freerootdescription(cl->left, pstr);
 
         pstr = dir_getrootdescription(cl->right);
         hr = StringCchCopy(dialog_rightname, MAX_PATH, pstr);
-		if (FAILED(hr))
-			OutputError(hr, IDS_SAFE_COPY);
+        if (FAILED(hr))
+            OutputError(hr, IDS_SAFE_COPY);
         dir_freerootdescription(cl->right, pstr);
 
 
@@ -444,13 +460,16 @@ complist_savelist(COMPLIST cl, LPSTR savename, UINT options)
         sdkdiff_UI(FALSE);
         FreeProcInstance(lpProc);
 
-        if (!bOK) {
+        if (!bOK)
+        {
             /* user cancelled from dialog box */
             return;
         }
         savename = dlg_file;
 
-    } else {
+    }
+    else
+    {
         dlg_identical = (options & INCLUDE_SAME);
         dlg_differ = (options & INCLUDE_DIFFER);
         dlg_left = (options & INCLUDE_LEFTONLY);
@@ -461,11 +480,12 @@ complist_savelist(COMPLIST cl, LPSTR savename, UINT options)
 
     /* try to open the file */
     fh = CreateFile(savename, GENERIC_WRITE, FILE_SHARE_READ, NULL, CREATE_ALWAYS, 0, NULL);
-    if (fh == INVALID_HANDLE_VALUE) {
+    if (fh == INVALID_HANDLE_VALUE)
+    {
         hr = StringCchPrintf(msg, (2*MAX_PATH+100),LoadRcString(IDS_CANT_OPEN), savename);
         if (FAILED(hr))
-			OutputError(hr, IDS_SAFE_PRINTF);
-		sdkdiff_UI(TRUE);
+            OutputError(hr, IDS_SAFE_PRINTF);
+        sdkdiff_UI(TRUE);
         MessageBox(hwndClient, msg, "Sdkdiff", MB_ICONSTOP|MB_OK);
         sdkdiff_UI(FALSE);
         return;
@@ -478,21 +498,21 @@ complist_savelist(COMPLIST cl, LPSTR savename, UINT options)
     {
         TCHAR szBuf1[20],szBuf2[20],szBuf3[20],szBuf4[20];
         hr = StringCchCopy(szBuf1,20,(LPSTR)(dlg_identical ? LoadRcString(IDS_IDENTICAL_COMMA) : ""));
-		if(FAILED(hr))
-			OutputError(hr, IDS_SAFE_COPY);
+        if(FAILED(hr))
+            OutputError(hr, IDS_SAFE_COPY);
         hr = StringCchCopy(szBuf2,20,(LPSTR)(dlg_left ? LoadRcString(IDS_LEFT_ONLY_COMMA) : ""));
         if(FAILED(hr))
-			OutputError(hr, IDS_SAFE_COPY);
-		hr = StringCchCopy(szBuf3,20,(LPSTR)(dlg_right ? LoadRcString(IDS_RIGHT_ONLY_COMMA) : ""));
+            OutputError(hr, IDS_SAFE_COPY);
+        hr = StringCchCopy(szBuf3,20,(LPSTR)(dlg_right ? LoadRcString(IDS_RIGHT_ONLY_COMMA) : ""));
         if(FAILED(hr))
-			OutputError(hr, IDS_SAFE_COPY);
-		hr = StringCchCopy(szBuf4,20,(LPSTR)(dlg_differ ? LoadRcString(IDS_DIFFERING) : ""));
+            OutputError(hr, IDS_SAFE_COPY);
+        hr = StringCchCopy(szBuf4,20,(LPSTR)(dlg_differ ? LoadRcString(IDS_DIFFERING) : ""));
         if(FAILED(hr))
-			OutputError(hr, IDS_SAFE_COPY);
-		hr = StringCchPrintf(msg, (2*MAX_PATH+100), LoadRcString(IDS_HEADER_LINE_STR),
-                lhead, szBuf1, szBuf2, szBuf3, szBuf4);
-		if(FAILED(hr))
-			OutputError(hr, IDS_SAFE_PRINTF);
+            OutputError(hr, IDS_SAFE_COPY);
+        hr = StringCchPrintf(msg, (2*MAX_PATH+100), LoadRcString(IDS_HEADER_LINE_STR),
+                             lhead, szBuf1, szBuf2, szBuf3, szBuf4);
+        if(FAILED(hr))
+            OutputError(hr, IDS_SAFE_PRINTF);
     }
     WriteFile(fh, msg, lstrlen(msg), &cbWritten, NULL);
     complist_freedescription(cl, lhead);
@@ -501,20 +521,29 @@ complist_savelist(COMPLIST cl, LPSTR savename, UINT options)
     /* traverse the list of compitems looking for the
      * ones we are supposed to include
      */
-    for( ci=(COMPITEM)List_First(cl->items);  ci!=NULL;  ci = (COMPITEM)List_Next((LPVOID)ci)) {
+    for( ci=(COMPITEM)List_First(cl->items);  ci!=NULL;  ci = (COMPITEM)List_Next((LPVOID)ci))
+    {
         /* check if files of this type are to be listed */
         state = compitem_getstate(ci);
 
-        if ((state == STATE_SAME) && (!dlg_identical)) {
-            continue;
-        } else if ((state == STATE_DIFFER) && (!dlg_differ)) {
-            continue;
-        } else if ((state == STATE_FILELEFTONLY) && (!dlg_left)) {
-            continue;
-        } else if ((state == STATE_FILERIGHTONLY) && (!dlg_right)) {
+        if ((state == STATE_SAME) && (!dlg_identical))
+        {
             continue;
         }
-        if (dlg_IgnoreMarks && compitem_getmark(ci)) {
+        else if ((state == STATE_DIFFER) && (!dlg_differ))
+        {
+            continue;
+        }
+        else if ((state == STATE_FILELEFTONLY) && (!dlg_left))
+        {
+            continue;
+        }
+        else if ((state == STATE_FILERIGHTONLY) && (!dlg_right))
+        {
+            continue;
+        }
+        if (dlg_IgnoreMarks && compitem_getmark(ci))
+        {
             continue;
         }
 
@@ -524,76 +553,88 @@ complist_savelist(COMPLIST cl, LPSTR savename, UINT options)
         ZeroMemory(msg, sizeof(msg));
         hr = StringCchCatN(msg, (2*MAX_PATH+100), compitem_gettext_tag(ci), sizeof(msg) - 1);
         if(FAILED(hr))
-			OutputError(hr, IDS_SAFE_CAT);
-		WriteFile(fh, msg, lstrlen(msg), &cbWritten, NULL);
+            OutputError(hr, IDS_SAFE_CAT);
+        WriteFile(fh, msg, lstrlen(msg), &cbWritten, NULL);
 
         /* write out the result of the comparison */
-        {       LPSTR p;
+        {
+            LPSTR p;
             p = compitem_gettext_result(ci);
             hr = StringCchPrintf( msg, (2*MAX_PATH+100), "\t%s"
-                      , p ? p : "sdkdiff error"
-                    );
-			if(FAILED(hr))
-				OutputError(hr, IDS_SAFE_PRINTF);
+                                  , p ? p : "sdkdiff error"
+                                );
+            if(FAILED(hr))
+                OutputError(hr, IDS_SAFE_PRINTF);
         }
         WriteFile(fh, msg, lstrlen(msg), &cbWritten, NULL);
 
-        if (dlg_sums) {
-            if (compitem_getleftfile(ci) != NULL) {
+        if (dlg_sums)
+        {
+            if (compitem_getleftfile(ci) != NULL)
+            {
                 BOOL bValid;
                 DWORD cksum;
                 cksum = file_retrievechecksum(compitem_getleftfile(ci),&bValid);
 
-				if (bValid) {
-					hr = StringCchPrintf(msg, (2*MAX_PATH+100), "\t%8lx", cksum);
-					if (FAILED(hr))
-						OutputError(hr, IDS_SAFE_PRINTF);
-				}
-				else {
-					hr = StringCchPrintf(msg, (2*MAX_PATH+100), "\t????????");
-					if(FAILED(hr))
-						OutputError(hr, IDS_SAFE_PRINTF);
-				}
-            } else {
+                if (bValid)
+                {
+                    hr = StringCchPrintf(msg, (2*MAX_PATH+100), "\t%8lx", cksum);
+                    if (FAILED(hr))
+                        OutputError(hr, IDS_SAFE_PRINTF);
+                }
+                else
+                {
+                    hr = StringCchPrintf(msg, (2*MAX_PATH+100), "\t????????");
+                    if(FAILED(hr))
+                        OutputError(hr, IDS_SAFE_PRINTF);
+                }
+            }
+            else
+            {
                 hr = StringCchPrintf(msg, (2*MAX_PATH+100), "\t--------");
-				if(FAILED(hr))
-					OutputError(hr, IDS_SAFE_PRINTF);
+                if(FAILED(hr))
+                    OutputError(hr, IDS_SAFE_PRINTF);
             }
             WriteFile(fh, msg, lstrlen(msg), &cbWritten, NULL);
 
-            if (compitem_getrightfile(ci) != NULL) {
+            if (compitem_getrightfile(ci) != NULL)
+            {
                 BOOL bValid;
                 DWORD cksum;
                 cksum = file_retrievechecksum(compitem_getrightfile(ci),&bValid);
-				if (bValid) {
-					hr = StringCchPrintf(msg, (2*MAX_PATH+100), "\t%8lx", cksum);
-					if(FAILED(hr))
-						OutputError(hr, IDS_SAFE_PRINTF);
-				}
-				else {
-					hr = StringCchPrintf(msg, (2*MAX_PATH+100), "\t????????");
-					if(FAILED(hr))
-						OutputError(hr, IDS_SAFE_PRINTF);
-				}
-            } else {
+                if (bValid)
+                {
+                    hr = StringCchPrintf(msg, (2*MAX_PATH+100), "\t%8lx", cksum);
+                    if(FAILED(hr))
+                        OutputError(hr, IDS_SAFE_PRINTF);
+                }
+                else
+                {
+                    hr = StringCchPrintf(msg, (2*MAX_PATH+100), "\t????????");
+                    if(FAILED(hr))
+                        OutputError(hr, IDS_SAFE_PRINTF);
+                }
+            }
+            else
+            {
                 hr = StringCchPrintf(msg, (2*MAX_PATH+100), "\t--------");
-				if(FAILED(hr))
-					OutputError(hr, IDS_SAFE_PRINTF);
+                if(FAILED(hr))
+                    OutputError(hr, IDS_SAFE_PRINTF);
             }
             WriteFile(fh, msg, lstrlen(msg), &cbWritten, NULL);
 
         }
 
         hr = StringCchPrintf(msg, (2*MAX_PATH+100), "\r\n");
-		if(FAILED(hr))
-			OutputError(hr, IDS_SAFE_PRINTF);
-        WriteFile(fh, msg, (DWORD)strlen(msg), &cbWritten, NULL);   
-	}
+        if(FAILED(hr))
+            OutputError(hr, IDS_SAFE_PRINTF);
+        WriteFile(fh, msg, (DWORD)strlen(msg), &cbWritten, NULL);
+    }
 
     /* write tail line */
     hr = StringCchPrintf(msg, (2*MAX_PATH+100), LoadRcString(IDS_FILES_LISTED), nFiles);
-	if(FAILED(hr))
-			OutputError(hr, IDS_SAFE_PRINTF);
+    if(FAILED(hr))
+        OutputError(hr, IDS_SAFE_PRINTF);
     WriteFile(fh, msg, (DWORD)lstrlen(msg), &cbWritten, NULL);
 
     /* - close file and we are finished */
@@ -627,9 +668,10 @@ complist_copyfiles(COMPLIST cl, LPSTR newroot, UINT options)
     int state;
     BOOL HitReadOnly = ((options&COPY_HITREADONLY)==COPY_HITREADONLY);
     BOOL CopyNoAttributes;
-	HRESULT hr;
+    HRESULT hr;
 
-    if (!done_init) {
+    if (!done_init)
+    {
         /*
          * one-time initialisation of dialog defaults
          */
@@ -644,12 +686,14 @@ complist_copyfiles(COMPLIST cl, LPSTR newroot, UINT options)
         done_init = TRUE;
     }
 
-    if (cl == NULL) {
+    if (cl == NULL)
+    {
         return;
     }
 
 
-    if (newroot == NULL) {
+    if (newroot == NULL)
+    {
         /*
          * put up dialog to query rootname and options
          */
@@ -659,44 +703,50 @@ complist_copyfiles(COMPLIST cl, LPSTR newroot, UINT options)
          */
         pstr = dir_getrootdescription(cl->left);
         hr = StringCchCopy(dialog_leftname, MAX_PATH, pstr);
-		if(FAILED(hr))
-			OutputError(hr, IDS_SAFE_COPY);
+        if(FAILED(hr))
+            OutputError(hr, IDS_SAFE_COPY);
         dir_freerootdescription(cl->left, pstr);
 
         pstr = dir_getrootdescription(cl->right);
         hr = StringCchCopy(dialog_rightname, MAX_PATH, pstr);
         if(FAILED(hr))
-			OutputError(hr, IDS_SAFE_COPY);
-		dir_freerootdescription(cl->right, pstr);
+            OutputError(hr, IDS_SAFE_COPY);
+        dir_freerootdescription(cl->right, pstr);
 
 
-        do {
+        do
+        {
             lpProc = (DLGPROC)MakeProcInstance((WINPROCTYPE)complist_dodlg_copyfiles, hInst);
             sdkdiff_UI(TRUE);
             bOK = (BOOL)DialogBox(hInst, "CopyFiles", hwndClient, lpProc);
             sdkdiff_UI(FALSE);
             FreeProcInstance(lpProc);
 
-            if (!bOK) {
+            if (!bOK)
+            {
                 /* user cancelled from dialog box */
                 return;
             }
-            if (lstrlen(dlg_root) == 0) {
+            if (lstrlen(dlg_root) == 0)
+            {
                 sdkdiff_UI(TRUE);
                 MessageBox( hwndClient, LoadRcString(IDS_ENTER_DIR_NAME),
                             "Sdkdiff", MB_ICONSTOP|MB_OK);
                 sdkdiff_UI(FALSE);
             }
-        } while (lstrlen(dlg_root) == 0);
+        }
+        while (lstrlen(dlg_root) == 0);
 
-    } else {
+    }
+    else
+    {
         // no dialog - all options passed in (eg from command line).
         // note that in this case the dlg_IgnoreMarks is left as
         // whatever the hide_markedfiles menu option is set to.
         dlg_options = options;
         hr = StringCchCopy(dlg_root, MAX_PATH, newroot);
-		if(FAILED(hr))
-			OutputError(hr, IDS_SAFE_COPY);
+        if(FAILED(hr))
+            OutputError(hr, IDS_SAFE_COPY);
     }
 
     TickCount = GetTickCount();
@@ -706,10 +756,13 @@ complist_copyfiles(COMPLIST cl, LPSTR newroot, UINT options)
        that it doesn't change (within ss_client).  If it turns out to be a local
        copy these things turn into no-ops somewhere below us.
     */
-    if (dlg_options & COPY_FROMLEFT) {
+    if (dlg_options & COPY_FROMLEFT)
+    {
         if (!dir_startcopy(cl->left))
             return;
-    } else {
+    }
+    else
+    {
         if (!dir_startcopy(cl->right))
             return;
     }
@@ -719,77 +772,99 @@ complist_copyfiles(COMPLIST cl, LPSTR newroot, UINT options)
     /*
      * traverse the list of compitems copying files as necessary
      */
-    for( ci=(COMPITEM)List_First(cl->items);  ci!=NULL;  ci = (COMPITEM)List_Next((LPVOID)ci)) {
-        if (bAbort) {
+    for( ci=(COMPITEM)List_First(cl->items);  ci!=NULL;  ci = (COMPITEM)List_Next((LPVOID)ci))
+    {
+        if (bAbort)
+        {
             break;  /* fall into end_copy processing */
         }
 
         // ignore marked files totally if the option was
         // set in the dialog.
-        if (dlg_IgnoreMarks && compitem_getmark(ci)) {
+        if (dlg_IgnoreMarks && compitem_getmark(ci))
+        {
             continue;
         }
 
         /* check if files of this type are to be copied */
         state = compitem_getstate(ci);
 
-        if ((state == STATE_SAME) && !(dlg_options & INCLUDE_SAME)) {
+        if ((state == STATE_SAME) && !(dlg_options & INCLUDE_SAME))
+        {
             continue;
-        } else if ((state == STATE_DIFFER) && !(dlg_options & INCLUDE_DIFFER)) {
+        }
+        else if ((state == STATE_DIFFER) && !(dlg_options & INCLUDE_DIFFER))
+        {
             continue;
-        } else if (state == STATE_FILELEFTONLY) {
-            if (dlg_options & COPY_FROMRIGHT) {
+        }
+        else if (state == STATE_FILELEFTONLY)
+        {
+            if (dlg_options & COPY_FROMRIGHT)
+            {
                 continue;
             }
-            if ((dlg_options & (INCLUDE_LEFTONLY | INCLUDE_RIGHTONLY)) == 0) {
+            if ((dlg_options & (INCLUDE_LEFTONLY | INCLUDE_RIGHTONLY)) == 0)
+            {
                 continue;
             }
-        } else if (state == STATE_FILERIGHTONLY) {
-            if (dlg_options & COPY_FROMLEFT) {
+        }
+        else if (state == STATE_FILERIGHTONLY)
+        {
+            if (dlg_options & COPY_FROMLEFT)
+            {
                 continue;
             }
-            if ((dlg_options & (INCLUDE_LEFTONLY | INCLUDE_RIGHTONLY)) == 0) {
+            if ((dlg_options & (INCLUDE_LEFTONLY | INCLUDE_RIGHTONLY)) == 0)
+            {
                 continue;
             }
         }
 
-        if (dlg_options & COPY_FROMLEFT) {
+        if (dlg_options & COPY_FROMLEFT)
+        {
             diritem = file_getdiritem(compitem_getleftfile(ci));
-        } else {
+        }
+        else
+        {
             diritem = file_getdiritem(compitem_getrightfile(ci));
         }
 
         /*
          * copy the file to the new root directory
          */
-        if (dir_copy(diritem, dlg_root, HitReadOnly, CopyNoAttributes) == FALSE) {
+        if (dir_copy(diritem, dlg_root, HitReadOnly, CopyNoAttributes) == FALSE)
+        {
             nFails++;
             pstr = dir_getrelname(diritem);
             hr = StringCchPrintf(buffer, (MAX_PATH+20), LoadRcString(IDS_FAILED_TO_COPY), pstr);
-			if(FAILED(hr))
-				OutputError(hr, IDS_SAFE_PRINTF);
+            if(FAILED(hr))
+                OutputError(hr, IDS_SAFE_PRINTF);
             dir_freerelname(diritem, pstr);
 
-            if (!TRACE_ERROR(buffer, TRUE)) {
+            if (!TRACE_ERROR(buffer, TRUE))
+            {
                 /* user pressed cancel - abort current operation*/
                 /* fall through to end-copy processing */
                 break;
             }
 
-        } else {
+        }
+        else
+        {
             nFiles++;
         }
 
         hr = StringCchPrintf(buffer, (MAX_PATH+20), LoadRcString(IDS_COPYING), nFiles);
-		if(FAILED(hr))
-			OutputError(hr, IDS_SAFE_PRINTF);
+        if(FAILED(hr))
+            OutputError(hr, IDS_SAFE_PRINTF);
         SetStatus(buffer);
 
 
         /*
          * allow user interface to continue
          */
-        if (Poll()) {
+        if (Poll())
+        {
             /* abort requested */
             TickCount = GetTickCount()-TickCount;
             sdkdiff_UI(TRUE);
@@ -801,24 +876,30 @@ complist_copyfiles(COMPLIST cl, LPSTR newroot, UINT options)
 
     } /* traverse */
     hr = StringCchPrintf(buffer, (MAX_PATH+20), LoadRcString(IDS_COPYING_NFILES), nFiles);
-	if(FAILED(hr))
-		OutputError(hr, IDS_SAFE_PRINTF);
+    if(FAILED(hr))
+        OutputError(hr, IDS_SAFE_PRINTF);
     SetStatus(buffer);
-    if (dlg_options & COPY_FROMLEFT) {
+    if (dlg_options & COPY_FROMLEFT)
+    {
         nFails = dir_endcopy(cl->left);
-    } else {
+    }
+    else
+    {
         nFails = dir_endcopy(cl->right);
     }
     TickCount = GetTickCount()-TickCount;
 
-    if (nFails<0) {
+    if (nFails<0)
+    {
         hr = StringCchPrintf(buffer, (MAX_PATH+20), LoadRcString(IDS_COPY_FAILED), -nFails);
-		if(FAILED(hr))
-			OutputError(hr, IDS_SAFE_PRINTF);
-    } else {
+        if(FAILED(hr))
+            OutputError(hr, IDS_SAFE_PRINTF);
+    }
+    else
+    {
         hr = StringCchPrintf(buffer, (MAX_PATH+20), LoadRcString(IDS_COPY_COMPLETE), nFails);
-		if(FAILED(hr))
-			OutputError(hr, IDS_SAFE_PRINTF);
+        if(FAILED(hr))
+            OutputError(hr, IDS_SAFE_PRINTF);
     }
     sdkdiff_UI(TRUE);
     MessageBox(hwndClient, buffer, "SdkDiff", MB_OK|MB_ICONINFORMATION);
@@ -840,7 +921,8 @@ complist_togglemark(COMPLIST cl)
 {
     COMPITEM ci;
 
-    if (cl == NULL) {
+    if (cl == NULL)
+    {
         return;
     }
 
@@ -848,7 +930,8 @@ complist_togglemark(COMPLIST cl)
     /*
      * traverse the list of compitems copying files as necessary
      */
-    for( ci=(COMPITEM)List_First(cl->items);  ci!=NULL;  ci = (COMPITEM)List_Next((LPVOID)ci)) {
+    for( ci=(COMPITEM)List_First(cl->items);  ci!=NULL;  ci = (COMPITEM)List_Next((LPVOID)ci))
+    {
         compitem_setmark(ci, !compitem_getmark(ci));
 
     }
@@ -864,7 +947,8 @@ complist_itemcount(COMPLIST cl)
 {
     UINT n = 0;
 
-    if (cl == NULL) {
+    if (cl == NULL)
+    {
         return 0;
     }
 
@@ -875,7 +959,7 @@ complist_itemcount(COMPLIST cl)
 }
 
 #ifdef USE_REGEXP
-    #include "regexp.h"
+#include "regexp.h"
 
 /*
  * query the user for a pattern to match.
@@ -891,7 +975,7 @@ complist_markpattern(COMPLIST cl)
     char achPattern[MAX_PATH];
     BOOL bOK = FALSE;
     LPSTR ptag;
-	HRESULT hr;
+    HRESULT hr;
 
     regexp  *prog;
     static  char    previous_pat[256]; /* allow for a big pattern ! */
@@ -899,11 +983,12 @@ complist_markpattern(COMPLIST cl)
     TCHAR   szBuff[40];
 
     hr = StringCchCopy(szBuff, 40, LoadRcString(IDS_MARK_FILES));
-	if(FAILED(hr))
-		OutputError(hr, IDS_SAFE_COPY);
+    if(FAILED(hr))
+        OutputError(hr, IDS_SAFE_COPY);
 
     sdkdiff_UI(TRUE);
-    if ( fInit ) {
+    if ( fInit )
+    {
         GetProfileString(APPNAME, "Pattern", "\\.obj$", previous_pat, 256);
         fInit = FALSE;
     }
@@ -913,14 +998,16 @@ complist_markpattern(COMPLIST cl)
                       szBuff, previous_pat );
     sdkdiff_UI(FALSE);
 
-    if (!bOK) {
+    if (!bOK)
+    {
         return(FALSE);
     }
 
     /*
     ** Compile the specified regular expression
     */
-    if ((prog = regcomp(achPattern)) == NULL) {
+    if ((prog = regcomp(achPattern)) == NULL)
+    {
         return(FALSE);
     }
 
@@ -928,17 +1015,21 @@ complist_markpattern(COMPLIST cl)
     ** only overwrite previous pattern with a known good pattern
     */
     hr = StringCchCopy( previous_pat, 256, achPattern );
-	if(FAILED(hr))
-		OutputError(hr, IDS_SAFE_COPY);
+    if(FAILED(hr))
+        OutputError(hr, IDS_SAFE_COPY);
     WriteProfileString(APPNAME, "Pattern", previous_pat);
 
     bOK = FALSE;
 
-    if (cl) {
-		for( ci=(COMPITEM)List_First(cl->items);  ci!=NULL;  ci = (COMPITEM)List_Next((LPVOID)ci)) {
+    if (cl)
+    {
+        for( ci=(COMPITEM)List_First(cl->items);  ci!=NULL;  ci = (COMPITEM)List_Next((LPVOID)ci))
+        {
             ptag = compitem_gettext_tag(ci);
-            if ( regexec( prog, ptag, 0 ) ) {  /* got a match */
-                if (!compitem_getmark(ci)) {
+            if ( regexec( prog, ptag, 0 ) )    /* got a match */
+            {
+                if (!compitem_getmark(ci))
+                {
                     bOK = TRUE;
                     compitem_setmark(ci, TRUE);
                 }
@@ -982,25 +1073,29 @@ complist_markpattern(COMPLIST cl)
     TCHAR   szBuff[40];
 
     HRESULT hr = StringCchCopy(szBuff,40, LoadRcString(IDS_MARK_FILES));
-	if(FAILED(hr))
-			OutputError(hr, IDS_SAFE_COPY);
+    if(FAILED(hr))
+        OutputError(hr, IDS_SAFE_COPY);
 
     sdkdiff_UI(TRUE);
     bOK = StringInput(achPattern, sizeof(achPattern), LoadRcString(IDS_ENTER_SUBSTRING2),
-            szBuff, "obj");
+                      szBuff, "obj");
     sdkdiff_UI(FALSE);
 
-    if (!bOK) {
+    if (!bOK)
+    {
         return(FALSE);
     }
 
     bOK = FALSE;
 
-   
-	for( ci=(COMPITEM)List_First(cl->items);  ci!=NULL;  ci = (COMPITEM)List_Next((LPVOID)ci)) {
+
+    for( ci=(COMPITEM)List_First(cl->items);  ci!=NULL;  ci = (COMPITEM)List_Next((LPVOID)ci))
+    {
         ptag = compitem_gettext_tag(ci);
-        if (strstr(ptag, achPattern) != NULL) {
-            if (!compitem_getmark(ci)) {
+        if (strstr(ptag, achPattern) != NULL)
+        {
+            if (!compitem_getmark(ci))
+            {
                 bOK = TRUE;
                 compitem_setmark(ci, TRUE);
             }
@@ -1036,12 +1131,13 @@ complist_getdescription(COMPLIST cl)
          */
         desc = (char*)HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, lstrlen(pl) + lstrlen(pr) + 4);
         if (desc == NULL)
-			return NULL;
-		HRESULT hr = StringCchPrintf(desc, (lstrlen(pl)+lstrlen(pr)+4), "%s : %s", pl, pr);
-		if(FAILED(hr)) {
-			OutputError(hr, IDS_SAFE_PRINTF);
-			return NULL;
-		}
+            return NULL;
+        HRESULT hr = StringCchPrintf(desc, (lstrlen(pl)+lstrlen(pr)+4), "%s : %s", pl, pr);
+        if(FAILED(hr))
+        {
+            OutputError(hr, IDS_SAFE_PRINTF);
+            return NULL;
+        }
     }
 
     dir_freerootdescription(cl->left, pl);
@@ -1093,9 +1189,11 @@ complist_match(COMPLIST cl, VIEW view, BOOL fDeep, BOOL fExact)
 
     TickCount = GetTickCount();
 
-    if (dir_isfile(cl->left) ) {
+    if (dir_isfile(cl->left) )
+    {
 
-        if (dir_isfile(cl->right)) {
+        if (dir_isfile(cl->right))
+        {
             /* two files */
 
             /* there should be one item in each list - make
@@ -1115,12 +1213,14 @@ complist_match(COMPLIST cl, VIEW view, BOOL fDeep, BOOL fExact)
         leftitem = dir_firstitem(cl->left);
         rightitem = dir_firstitem(cl->right);
         lname = dir_getrelname(leftitem);
-        while (rightitem != NULL) {
+        while (rightitem != NULL)
+        {
             rname = dir_getrelname(rightitem);
             cmpvalue = lstrcmpi(lname, rname);
             dir_freerelname(rightitem, rname);
 
-            if (cmpvalue == 0) {
+            if (cmpvalue == 0)
+            {
                 /* this is the match */
                 compitem_new( leftitem, rightitem
                               , cl->items, fExact);
@@ -1141,7 +1241,9 @@ complist_match(COMPLIST cl, VIEW view, BOOL fDeep, BOOL fExact)
         TickCount = GetTickCount() - TickCount;
         return(TRUE);
 
-    } else if (dir_isfile(cl->right)) {
+    }
+    else if (dir_isfile(cl->right))
+    {
 
         /* left is dir, right is file */
 
@@ -1152,12 +1254,14 @@ complist_match(COMPLIST cl, VIEW view, BOOL fDeep, BOOL fExact)
         leftitem = dir_firstitem(cl->left);
         rightitem = dir_firstitem(cl->right);
         rname = dir_getrelname(rightitem);
-        while (leftitem != NULL) {
+        while (leftitem != NULL)
+        {
             lname = dir_getrelname(leftitem);
             cmpvalue = lstrcmpi(lname, rname);
             dir_freerelname(leftitem, lname);
 
-            if (cmpvalue == 0) {
+            if (cmpvalue == 0)
+            {
                 /* this is the match */
                 compitem_new(leftitem, rightitem
                              , cl->items, fExact);
@@ -1185,7 +1289,8 @@ complist_match(COMPLIST cl, VIEW view, BOOL fDeep, BOOL fExact)
 
     leftitem = dir_firstitem(cl->left);
     rightitem = dir_firstitem(cl->right);
-    while ((leftitem != NULL) && (rightitem != NULL)) {
+    while ((leftitem != NULL) && (rightitem != NULL))
+    {
 
         lname = dir_getrelname(leftitem);
         rname = dir_getrelname(rightitem);
@@ -1198,43 +1303,50 @@ complist_match(COMPLIST cl, VIEW view, BOOL fDeep, BOOL fExact)
         }
 
 #ifdef trace
-        {       
-			char msg[2*MAX_PATH+30];
+        {
+            char msg[2*MAX_PATH+30];
             hr = StringCchPrintf( msg, (2*MAX_PATH+30), "complist_match: %s %s %s\n"
-                      , lname
-                      , ( cmpvalue<0 ? "<"
-                          : (cmpvalue==0 ? "=" : ">")
-                        )
-                      , rname
-                    );
-			if(FAILED(hr))
-				OutputError(hr, IDS_SAFE_PRINTF);
+                                  , lname
+                                  , ( cmpvalue<0 ? "<"
+                                      : (cmpvalue==0 ? "=" : ">")
+                                    )
+                                  , rname
+                                );
+            if(FAILED(hr))
+                OutputError(hr, IDS_SAFE_PRINTF);
             if (bTrace) Trace_File(msg);
         }
 #endif
         dir_freerelname(leftitem, lname);
         dir_freerelname(rightitem, rname);
 
-        if (cmpvalue == 0) {
+        if (cmpvalue == 0)
+        {
             BOOL trackThese = TrackSame || TrackDifferent;
-            if (!TrackReadonly) {
+            if (!TrackReadonly)
+            {
                 BOOL bothReadonly = (BOOL)((dir_getattr(leftitem) &
                                             dir_getattr(rightitem) &
                                             FILE_ATTRIBUTE_READONLY) != 0);
-                if (bothReadonly) {
+                if (bothReadonly)
+                {
                     trackThese = FALSE;
                 }
             }
-            if (trackThese) {
+            if (trackThese)
+            {
                 compitem_new( leftitem, rightitem
                               , cl->items, fExact);
-                if (view_newitem(view)) {
+                if (view_newitem(view))
+                {
                     TickCount = GetTickCount() - TickCount;
                     return(FALSE);
                 }
                 leftitem = dir_nextitem(cl->left, leftitem, fDeep);
                 rightitem = dir_nextitem(cl->right, rightitem, fDeep);
-            } else {
+            }
+            else
+            {
                 nextitem = dir_nextitem(cl->left, leftitem, fDeep);
                 List_Delete(leftitem);
                 leftitem = nextitem;
@@ -1243,28 +1355,40 @@ complist_match(COMPLIST cl, VIEW view, BOOL fDeep, BOOL fExact)
                 rightitem = nextitem;
             }
 
-        } else if (cmpvalue < 0) {
-            if (TrackLeftOnly) {
+        }
+        else if (cmpvalue < 0)
+        {
+            if (TrackLeftOnly)
+            {
                 compitem_new(leftitem, NULL, cl->items, fExact);
-                if (view_newitem(view)) {
+                if (view_newitem(view))
+                {
                     TickCount = GetTickCount() - TickCount;
                     return(FALSE);
                 }
                 leftitem = dir_nextitem(cl->left, leftitem, fDeep);
-            } else {
+            }
+            else
+            {
                 nextitem = dir_nextitem(cl->left, leftitem, fDeep);
                 List_Delete(leftitem);
                 leftitem = nextitem;
             }
-        } else {
-            if (TrackRightOnly) {
+        }
+        else
+        {
+            if (TrackRightOnly)
+            {
                 compitem_new(NULL, rightitem, cl->items, fExact);
-                if (view_newitem(view)) {
+                if (view_newitem(view))
+                {
                     TickCount = GetTickCount() - TickCount;
                     return(FALSE);
                 }
                 rightitem = dir_nextitem(cl->right, rightitem, fDeep);
-            } else {
+            }
+            else
+            {
                 nextitem = dir_nextitem(cl->right, rightitem, fDeep);
                 List_Delete(rightitem);
                 rightitem = nextitem;
@@ -1274,20 +1398,26 @@ complist_match(COMPLIST cl, VIEW view, BOOL fDeep, BOOL fExact)
 
 
     /* any left over are unmatched */
-    if (TrackLeftOnly) {
-        while (leftitem != NULL) {
+    if (TrackLeftOnly)
+    {
+        while (leftitem != NULL)
+        {
             compitem_new(leftitem, NULL, cl->items, fExact);
-            if (view_newitem(view)) {
+            if (view_newitem(view))
+            {
                 TickCount = GetTickCount() - TickCount;
                 return(FALSE);
             }
             leftitem = dir_nextitem(cl->left, leftitem, fDeep);
         }
     }
-    if (TrackRightOnly) {
-        while (rightitem != NULL) {
+    if (TrackRightOnly)
+    {
+        while (rightitem != NULL)
+        {
             compitem_new(NULL, rightitem, cl->items, fExact);
-            if (view_newitem(view)) {
+            if (view_newitem(view))
+            {
                 TickCount = GetTickCount() - TickCount;
                 return(FALSE);
             }
@@ -1300,7 +1430,8 @@ complist_match(COMPLIST cl, VIEW view, BOOL fDeep, BOOL fExact)
 
 /* return time last operation took in milliseconds */
 DWORD complist_querytime(void)
-{       return TickCount;
+{
+    return TickCount;
 }
 
 
@@ -1312,53 +1443,55 @@ DWORD complist_querytime(void)
 int FAR PASCAL
 complist_dodlg_savelist(HWND hDlg, UINT message, UINT wParam, long lParam)
 {
-    switch (message) {
-        case WM_INITDIALOG:
-            SendDlgItemMessage(hDlg, IDD_IDENTICAL, BM_SETCHECK,
-                               dlg_identical ? 1 : 0, 0);
-            SendDlgItemMessage(hDlg, IDD_DIFFER, BM_SETCHECK,
-                               dlg_differ ? 1 : 0, 0);
-            SendDlgItemMessage(hDlg, IDD_LEFT, BM_SETCHECK,
-                               dlg_left ? 1 : 0, 0);
-            SendDlgItemMessage(hDlg, IDD_RIGHT, BM_SETCHECK,
-                               dlg_right ? 1 : 0, 0);
-            SendDlgItemMessage(hDlg, IDD_SUMS, BM_SETCHECK,
-                               dlg_sums ? 1 : 0, 0);
-            CheckDlgButton(hDlg, IDD_IGNOREMARK, dlg_IgnoreMarks ? 1 : 0);
+    switch (message)
+    {
+    case WM_INITDIALOG:
+        SendDlgItemMessage(hDlg, IDD_IDENTICAL, BM_SETCHECK,
+                           dlg_identical ? 1 : 0, 0);
+        SendDlgItemMessage(hDlg, IDD_DIFFER, BM_SETCHECK,
+                           dlg_differ ? 1 : 0, 0);
+        SendDlgItemMessage(hDlg, IDD_LEFT, BM_SETCHECK,
+                           dlg_left ? 1 : 0, 0);
+        SendDlgItemMessage(hDlg, IDD_RIGHT, BM_SETCHECK,
+                           dlg_right ? 1 : 0, 0);
+        SendDlgItemMessage(hDlg, IDD_SUMS, BM_SETCHECK,
+                           dlg_sums ? 1 : 0, 0);
+        CheckDlgButton(hDlg, IDD_IGNOREMARK, dlg_IgnoreMarks ? 1 : 0);
 
-            SetDlgItemText(hDlg, IDD_FILE, dlg_file);
+        SetDlgItemText(hDlg, IDD_FILE, dlg_file);
 
-            return(TRUE);
+        return(TRUE);
 
-        case WM_COMMAND:
-            switch (GET_WM_COMMAND_ID(wParam, lParam)) {
+    case WM_COMMAND:
+        switch (GET_WM_COMMAND_ID(wParam, lParam))
+        {
 
-                case IDOK:
-                    dlg_identical = (SendDlgItemMessage(hDlg, IDD_IDENTICAL,
-                                                        BM_GETCHECK, 0, 0) == 1);
-                    dlg_differ = (SendDlgItemMessage(hDlg, IDD_DIFFER,
-                                                     BM_GETCHECK, 0, 0) == 1);
-                    dlg_left = (SendDlgItemMessage(hDlg, IDD_LEFT,
-                                                   BM_GETCHECK, 0, 0) == 1);
-                    dlg_right = (SendDlgItemMessage(hDlg, IDD_RIGHT,
-                                                    BM_GETCHECK, 0, 0) == 1);
-                    dlg_sums = (SendDlgItemMessage(hDlg, IDD_SUMS,
-                                                   BM_GETCHECK, 0, 0) == 1);
-                    dlg_IgnoreMarks =
-                    (SendDlgItemMessage(
-                                       hDlg,
-                                       IDD_IGNOREMARK,
-                                       BM_GETCHECK, 0, 0) == 1);
+        case IDOK:
+            dlg_identical = (SendDlgItemMessage(hDlg, IDD_IDENTICAL,
+                                                BM_GETCHECK, 0, 0) == 1);
+            dlg_differ = (SendDlgItemMessage(hDlg, IDD_DIFFER,
+                                             BM_GETCHECK, 0, 0) == 1);
+            dlg_left = (SendDlgItemMessage(hDlg, IDD_LEFT,
+                                           BM_GETCHECK, 0, 0) == 1);
+            dlg_right = (SendDlgItemMessage(hDlg, IDD_RIGHT,
+                                            BM_GETCHECK, 0, 0) == 1);
+            dlg_sums = (SendDlgItemMessage(hDlg, IDD_SUMS,
+                                           BM_GETCHECK, 0, 0) == 1);
+            dlg_IgnoreMarks =
+                (SendDlgItemMessage(
+                     hDlg,
+                     IDD_IGNOREMARK,
+                     BM_GETCHECK, 0, 0) == 1);
 
-                    GetDlgItemText(hDlg, IDD_FILE, dlg_file, sizeof(dlg_file));
+            GetDlgItemText(hDlg, IDD_FILE, dlg_file, sizeof(dlg_file));
 
-                    EndDialog(hDlg, TRUE);
-                    break;
+            EndDialog(hDlg, TRUE);
+            break;
 
-                case IDCANCEL:
-                    EndDialog(hDlg, FALSE);
-                    break;
-            }
+        case IDCANCEL:
+            EndDialog(hDlg, FALSE);
+            break;
+        }
     }
     return(FALSE);
 } /* complist_dodlg_savelist */
@@ -1371,88 +1504,99 @@ complist_dodlg_savelist(HWND hDlg, UINT message, UINT wParam, long lParam)
 int FAR PASCAL
 complist_dodlg_copyfiles(HWND hDlg, UINT message, UINT wParam, long lParam)
 {
-    switch (message) {
-        case WM_INITDIALOG:
-            /*
-             * set checkboxes and directory field to defaults
-             */
-            CheckDlgButton(hDlg, IDD_IDENTICAL,
-                           (dlg_options & INCLUDE_SAME) ? 1 : 0);
+    switch (message)
+    {
+    case WM_INITDIALOG:
+        /*
+         * set checkboxes and directory field to defaults
+         */
+        CheckDlgButton(hDlg, IDD_IDENTICAL,
+                       (dlg_options & INCLUDE_SAME) ? 1 : 0);
 
-            CheckDlgButton(hDlg, IDD_DIFFER,
-                           (dlg_options & INCLUDE_DIFFER) ? 1 : 0);
+        CheckDlgButton(hDlg, IDD_DIFFER,
+                       (dlg_options & INCLUDE_DIFFER) ? 1 : 0);
 
-            CheckDlgButton(hDlg, IDD_LEFT,
-                           (dlg_options & (INCLUDE_LEFTONLY|INCLUDE_RIGHTONLY)) ? 1 : 0);
+        CheckDlgButton(hDlg, IDD_LEFT,
+                       (dlg_options & (INCLUDE_LEFTONLY|INCLUDE_RIGHTONLY)) ? 1 : 0);
 
-            CheckDlgButton(hDlg, IDD_IGNOREMARK, dlg_IgnoreMarks ? 1 : 0);
+        CheckDlgButton(hDlg, IDD_IGNOREMARK, dlg_IgnoreMarks ? 1 : 0);
 
-            CheckDlgButton(hDlg, IDD_ATTRIBUTES, dlg_IgnoreAttributes ? 0 : 1);
+        CheckDlgButton(hDlg, IDD_ATTRIBUTES, dlg_IgnoreAttributes ? 0 : 1);
 
-            SetDlgItemText(hDlg, IDD_DIR1, dlg_root);
+        SetDlgItemText(hDlg, IDD_DIR1, dlg_root);
 
-            /*
-             * set default radio button for copy from
-             */
-            CheckRadioButton(hDlg, IDD_FROMLEFT, IDD_FROMRIGHT,
-                             (dlg_options & COPY_FROMLEFT) ? IDD_FROMLEFT : IDD_FROMRIGHT);
+        /*
+         * set default radio button for copy from
+         */
+        CheckRadioButton(hDlg, IDD_FROMLEFT, IDD_FROMRIGHT,
+                         (dlg_options & COPY_FROMLEFT) ? IDD_FROMLEFT : IDD_FROMRIGHT);
 
-            return(TRUE);
+        return(TRUE);
 
-        case WM_COMMAND:
-            switch (GET_WM_COMMAND_ID(wParam, lParam)) {
+    case WM_COMMAND:
+        switch (GET_WM_COMMAND_ID(wParam, lParam))
+        {
 
-                case IDD_FROMLEFT:
-                    dlg_options &= ~(COPY_FROMRIGHT);
-                    dlg_options |= COPY_FROMLEFT;
-                    break;
+        case IDD_FROMLEFT:
+            dlg_options &= ~(COPY_FROMRIGHT);
+            dlg_options |= COPY_FROMLEFT;
+            break;
 
-                case IDD_FROMRIGHT:
-                    dlg_options &= ~(COPY_FROMLEFT);
-                    dlg_options |= COPY_FROMRIGHT;
-                    break;
+        case IDD_FROMRIGHT:
+            dlg_options &= ~(COPY_FROMLEFT);
+            dlg_options |= COPY_FROMRIGHT;
+            break;
 
-                case IDOK:
-                    if (SendDlgItemMessage(hDlg, IDD_IDENTICAL,
-                                           BM_GETCHECK, 0, 0) == 1) {
-                        dlg_options |= INCLUDE_SAME;
-                    } else {
-                        dlg_options &= ~INCLUDE_SAME;
-                    }
-                    if (SendDlgItemMessage(hDlg, IDD_DIFFER,
-                                           BM_GETCHECK, 0, 0) == 1) {
-                        dlg_options |= INCLUDE_DIFFER;
-                    } else {
-                        dlg_options &= ~INCLUDE_DIFFER;
-                    }
-                    if (SendDlgItemMessage(hDlg, IDD_LEFT,
-                                           BM_GETCHECK, 0, 0) == 1) {
-                        dlg_options |= INCLUDE_LEFTONLY;
-                    } else {
-                        dlg_options &= ~INCLUDE_LEFTONLY;
-                    }
-
-                    dlg_IgnoreMarks =
-                    (SendDlgItemMessage(
-                                       hDlg,
-                                       IDD_IGNOREMARK,
-                                       BM_GETCHECK, 0, 0) == 1);
-
-                    dlg_IgnoreAttributes =
-                    (SendDlgItemMessage(
-                                       hDlg,
-                                       IDD_ATTRIBUTES,
-                                       BM_GETCHECK, 0, 0) == 0);
-
-                    GetDlgItemText(hDlg, IDD_DIR1, dlg_root, sizeof(dlg_root));
-
-                    EndDialog(hDlg, TRUE);
-                    break;
-
-                case IDCANCEL:
-                    EndDialog(hDlg, FALSE);
-                    break;
+        case IDOK:
+            if (SendDlgItemMessage(hDlg, IDD_IDENTICAL,
+                                   BM_GETCHECK, 0, 0) == 1)
+            {
+                dlg_options |= INCLUDE_SAME;
             }
+            else
+            {
+                dlg_options &= ~INCLUDE_SAME;
+            }
+            if (SendDlgItemMessage(hDlg, IDD_DIFFER,
+                                   BM_GETCHECK, 0, 0) == 1)
+            {
+                dlg_options |= INCLUDE_DIFFER;
+            }
+            else
+            {
+                dlg_options &= ~INCLUDE_DIFFER;
+            }
+            if (SendDlgItemMessage(hDlg, IDD_LEFT,
+                                   BM_GETCHECK, 0, 0) == 1)
+            {
+                dlg_options |= INCLUDE_LEFTONLY;
+            }
+            else
+            {
+                dlg_options &= ~INCLUDE_LEFTONLY;
+            }
+
+            dlg_IgnoreMarks =
+                (SendDlgItemMessage(
+                     hDlg,
+                     IDD_IGNOREMARK,
+                     BM_GETCHECK, 0, 0) == 1);
+
+            dlg_IgnoreAttributes =
+                (SendDlgItemMessage(
+                     hDlg,
+                     IDD_ATTRIBUTES,
+                     BM_GETCHECK, 0, 0) == 0);
+
+            GetDlgItemText(hDlg, IDD_DIR1, dlg_root, sizeof(dlg_root));
+
+            EndDialog(hDlg, TRUE);
+            break;
+
+        case IDCANCEL:
+            EndDialog(hDlg, FALSE);
+            break;
+        }
     }
     return(FALSE);
 } /* complist_dodlg_copyfiles */
@@ -1465,8 +1609,8 @@ complist_new(void)
 
     cl = (COMPLIST) HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(struct complist));
     if (cl == NULL)
-		return NULL;
-	cl->left = NULL;
+        return NULL;
+    cl->left = NULL;
     cl->right = NULL;
     cl->items = List_Create();
 
@@ -1493,95 +1637,98 @@ complist_dodlg_dir(HWND hDlg, unsigned message, UINT wParam, LONG lParam)
 
     int id;
 
-    switch (message) {
+    switch (message)
+    {
 
-        case WM_INITDIALOG:
+    case WM_INITDIALOG:
 
-            /* fill the edit fields with the current
-             * directory as a good starting point - if there isn't
-             * already a saved path.
-             *
-             * set the current directory as a label so that the
-             * user can select relative paths such as ..
-             *
-             */
-            if (NULL == _getcwd(path, sizeof(path)))
+        /* fill the edit fields with the current
+         * directory as a good starting point - if there isn't
+         * already a saved path.
+         *
+         * set the current directory as a label so that the
+         * user can select relative paths such as ..
+         *
+         */
+        if (NULL == _getcwd(path, sizeof(path)))
+        {
+            return (FALSE);
+        }
+
+        AnsiLowerBuff(path, (DWORD)strlen(path));
+        SetDlgItemText(hDlg, IDD_LAB3, path);
+
+        if (!SeenDialogNames)
+            GetProfileString(APPNAME, "NameLeft", path, dialog_leftname, MAX_PATH);
+        SetDlgItemText(hDlg, IDD_DIR1, dialog_leftname);
+        if (!SeenDialogNames)
+            GetProfileString(APPNAME, "NameRight", path, dialog_rightname, MAX_PATH);
+        SetDlgItemText(hDlg, IDD_DIR2, dialog_rightname);
+        if (!SeenDialogNames)
+            dialog_recursive = GetProfileInt(APPNAME, "Recursive", 1);
+        SendDlgItemMessage( hDlg
+                            , IDD_RECURSIVE
+                            , BM_SETCHECK
+                            , (WPARAM)dialog_recursive
+                            , 0
+                          );
+
+        SeenDialogNames = TRUE;
+        return(TRUE);
+
+    case WM_COMMAND:
+        id = GET_WM_COMMAND_ID(wParam, lParam);
+
+        switch (id)
+        {
+        case IDD_DIR1:
+        case IDD_DIR2:
+            if (GET_WM_COMMAND_CMD(wParam, lParam) == EN_CHANGE)
             {
-                return (FALSE);
-            }
 
-            AnsiLowerBuff(path, (DWORD)strlen(path));
-            SetDlgItemText(hDlg, IDD_LAB3, path);
+                int idother = (id == IDD_DIR1) ? IDD_DIR2 : IDD_DIR1;
 
-            if (!SeenDialogNames)
-                GetProfileString(APPNAME, "NameLeft", path, dialog_leftname, MAX_PATH);
-            SetDlgItemText(hDlg, IDD_DIR1, dialog_leftname);
-            if (!SeenDialogNames)
-                GetProfileString(APPNAME, "NameRight", path, dialog_rightname, MAX_PATH);
-            SetDlgItemText(hDlg, IDD_DIR2, dialog_rightname);
-            if (!SeenDialogNames)
-                dialog_recursive = GetProfileInt(APPNAME, "Recursive", 1);
-            SendDlgItemMessage( hDlg
-                                , IDD_RECURSIVE
-                                , BM_SETCHECK
-                                , (WPARAM)dialog_recursive
-                                , 0
-                              );
-
-            SeenDialogNames = TRUE;
-            return(TRUE);
-
-        case WM_COMMAND:
-            id = GET_WM_COMMAND_ID(wParam, lParam);
-
-            switch (id) {
-                case IDD_DIR1:
-                case IDD_DIR2:
-                    if (GET_WM_COMMAND_CMD(wParam, lParam) == EN_CHANGE) {
-
-                        int idother = (id == IDD_DIR1) ? IDD_DIR2 : IDD_DIR1;
-
-                    }
-                    break;
-
-                case IDCANCEL:
-                    EndDialog(hDlg, FALSE);
-                    return(TRUE);
-
-                case IDOK:
-                    {
-                        LPSTR pszThis = 0;
-                        LPSTR pszOther = 0;
-
-                        /* fetch the text from the dialog, and remember
-                         * it in win.ini
-                         */
-
-                        GetDlgItemText(hDlg, IDD_DIR1,
-                                       dialog_leftname, sizeof(dialog_leftname));
-                        GetDlgItemText(hDlg, IDD_DIR2,
-                                       dialog_rightname, sizeof(dialog_rightname));
-
-
-                        WriteProfileString(APPNAME, "NameLeft", dialog_leftname);
-                        WriteProfileString(APPNAME, "NameRight", dialog_rightname);
-
-                        dialog_recursive =  ( 1 == SendDlgItemMessage( hDlg
-                                                                       , IDD_RECURSIVE
-                                                                       , BM_GETCHECK
-                                                                       , 0
-                                                                       , 0
-                                                                     )
-                                            );
-                        WriteProfileString( APPNAME
-                                            , "Recursive"
-                                            , dialog_recursive ? "1" : "0"
-                                          );
-                        EndDialog(hDlg, TRUE);
-                    }
-                    return(TRUE);
             }
             break;
+
+        case IDCANCEL:
+            EndDialog(hDlg, FALSE);
+            return(TRUE);
+
+        case IDOK:
+        {
+            LPSTR pszThis = 0;
+            LPSTR pszOther = 0;
+
+            /* fetch the text from the dialog, and remember
+             * it in win.ini
+             */
+
+            GetDlgItemText(hDlg, IDD_DIR1,
+                           dialog_leftname, sizeof(dialog_leftname));
+            GetDlgItemText(hDlg, IDD_DIR2,
+                           dialog_rightname, sizeof(dialog_rightname));
+
+
+            WriteProfileString(APPNAME, "NameLeft", dialog_leftname);
+            WriteProfileString(APPNAME, "NameRight", dialog_rightname);
+
+            dialog_recursive =  ( 1 == SendDlgItemMessage( hDlg
+                                  , IDD_RECURSIVE
+                                  , BM_GETCHECK
+                                  , 0
+                                  , 0
+                                                         )
+                                );
+            WriteProfileString( APPNAME
+                                , "Recursive"
+                                , dialog_recursive ? "1" : "0"
+                              );
+            EndDialog(hDlg, TRUE);
+        }
+        return(TRUE);
+        }
+        break;
     }
     return(FALSE);
 } /* complist_dodlg_dir */

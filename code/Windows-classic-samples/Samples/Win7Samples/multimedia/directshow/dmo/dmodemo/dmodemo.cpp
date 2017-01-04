@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -66,13 +66,14 @@ VOID    ResetSoundBuffer();
 
 
 // struct holding DMOs registered as DMOCATEGORY_AUDIO_EFFECT
-typedef struct tagDMOINFO {
+typedef struct tagDMOINFO
+{
     TCHAR szName[MAX_NUM];
     CLSID clsidDMO;
 } DMOINFO;
 
-DMOINFO             g_rgDmoInfo[MAX_PATH]={0};
-TCHAR               g_szInputFileName[MAX_PATH]={0};
+DMOINFO             g_rgDmoInfo[MAX_PATH]= {0};
+TCHAR               g_szInputFileName[MAX_PATH]= {0};
 CSoundManager*      g_pSoundManager = NULL;
 CSound*             g_pSound = NULL;
 
@@ -102,75 +103,75 @@ INT_PTR CALLBACK MainDlgProc( HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam 
 
     switch( msg )
     {
-        case WM_INITDIALOG:
-            OnInitDialog( hDlg );
+    case WM_INITDIALOG:
+        OnInitDialog( hDlg );
+        break;
+
+    case WM_COMMAND:
+        switch( LOWORD(wParam) )
+        {
+        case IDC_SOUNDFILE:
+            OnOpenSoundFile( hDlg );
             break;
 
-        case WM_COMMAND:
-            switch( LOWORD(wParam) )
+        case IDCANCEL:
+            EndDialog( hDlg, IDCANCEL );
+            break;
+
+        case IDC_PLAY:
+            iSelectedDMOIndex = ComboBox_GetCurSel( GetDlgItem( hDlg, IDC_DMOCOMBO ) );
+            if( iSelectedDMOIndex < 0 )
             {
-                case IDC_SOUNDFILE:
-                    OnOpenSoundFile( hDlg );
-                    break;
-
-                case IDCANCEL:
-                    EndDialog( hDlg, IDCANCEL );
-                    break;
-
-                case IDC_PLAY:
-                    iSelectedDMOIndex = ComboBox_GetCurSel( GetDlgItem( hDlg, IDC_DMOCOMBO ) );
-                    if( iSelectedDMOIndex < 0 )
-                    {
-                        MessageBox( hDlg, TEXT("Selecting DMO failed."), TEXT(DEMO_NAME),
-                                    MB_OK | MB_ICONERROR );
-                        break;
-                    }
-
-                    // Very large files may take some time to stream, so update the
-                    // window title to indicate progress.
-                    SetWindowText( hDlg, TEXT("Reading file...") );
-                    hr = StreamData( hDlg, g_szInputFileName, g_rgDmoInfo[iSelectedDMOIndex].clsidDMO );
-                    if( FAILED( hr ) )
-                    {
-                        break;
-                    }
-
-                    SetWindowText( hDlg, APPNAME );
-                    hr = g_pSound->Play( 0,     // lowest priority
-                                         0 );   // no flag is set
-                    if( FAILED( hr ) )
-                    {
-                        MessageBox( hDlg, TEXT("Error playing DirectSound buffer."),
-                                    TEXT(DEMO_NAME),
-                                    MB_OK | MB_ICONERROR );
-                    }
-
-                    EnablePlayUI( hDlg, FALSE );
-                    break;
-
-                case IDC_STOP:
-                    ResetSoundBuffer();
-                    EnablePlayUI( hDlg, TRUE );
-                    break;
-
-                default:
-                    return FALSE; // Didn't handle message
+                MessageBox( hDlg, TEXT("Selecting DMO failed."), TEXT(DEMO_NAME),
+                            MB_OK | MB_ICONERROR );
+                break;
             }
+
+            // Very large files may take some time to stream, so update the
+            // window title to indicate progress.
+            SetWindowText( hDlg, TEXT("Reading file...") );
+            hr = StreamData( hDlg, g_szInputFileName, g_rgDmoInfo[iSelectedDMOIndex].clsidDMO );
+            if( FAILED( hr ) )
+            {
+                break;
+            }
+
+            SetWindowText( hDlg, APPNAME );
+            hr = g_pSound->Play( 0,     // lowest priority
+                                 0 );   // no flag is set
+            if( FAILED( hr ) )
+            {
+                MessageBox( hDlg, TEXT("Error playing DirectSound buffer."),
+                            TEXT(DEMO_NAME),
+                            MB_OK | MB_ICONERROR );
+            }
+
+            EnablePlayUI( hDlg, FALSE );
             break;
 
-        case WM_TIMER:
-            OnTimer( hDlg );
-            break;
-
-        case WM_DESTROY:
-            // Cleanup everything
-            SAFE_DELETE( g_pSound );
-            SAFE_DELETE( g_pSoundManager );
-            KillTimer(hDlg, 1);
+        case IDC_STOP:
+            ResetSoundBuffer();
+            EnablePlayUI( hDlg, TRUE );
             break;
 
         default:
             return FALSE; // Didn't handle message
+        }
+        break;
+
+    case WM_TIMER:
+        OnTimer( hDlg );
+        break;
+
+    case WM_DESTROY:
+        // Cleanup everything
+        SAFE_DELETE( g_pSound );
+        SAFE_DELETE( g_pSoundManager );
+        KillTimer(hDlg, 1);
+        break;
+
+    default:
+        return FALSE; // Didn't handle message
     }
 
     return TRUE; // Handled message
@@ -196,7 +197,8 @@ VOID OnInitDialog( HWND hDlg )
 
     // Enumerate registered DMOs and add them to a global structure
     hr = InitializeAudioEffectDMOList( hDlg, &iNumDmo);
-    if( FAILED( hr ) ) {
+    if( FAILED( hr ) )
+    {
 
         MessageBox( hDlg, TEXT("Error enumerating DMOs. "), TEXT(DEMO_NAME),
                     MB_OK | MB_ICONERROR );
@@ -217,7 +219,7 @@ VOID OnInitDialog( HWND hDlg )
     if( g_pSoundManager == NULL )
     {
         MessageBox( hDlg, TEXT("Creating CSoundManager failed."),
-                          TEXT(DEMO_NAME), MB_OK | MB_ICONERROR );
+                    TEXT(DEMO_NAME), MB_OK | MB_ICONERROR );
         EndDialog( hDlg, IDCANCEL );
     }
 
@@ -225,7 +227,7 @@ VOID OnInitDialog( HWND hDlg )
     if( FAILED( hr ) )
     {
         MessageBox( hDlg, TEXT("Error initializing DirectSound."),
-                          TEXT(DEMO_NAME), MB_OK | MB_ICONERROR );
+                    TEXT(DEMO_NAME), MB_OK | MB_ICONERROR );
         EndDialog( hDlg, IDCANCEL );
     }
 
@@ -233,7 +235,7 @@ VOID OnInitDialog( HWND hDlg )
     if( FAILED( hr ) )
     {
         MessageBox( hDlg, TEXT("Error initializing DirectSound."),
-                          TEXT(DEMO_NAME), MB_OK | MB_ICONERROR );
+                    TEXT(DEMO_NAME), MB_OK | MB_ICONERROR );
         EndDialog( hDlg, IDCANCEL );
     }
 
@@ -285,7 +287,7 @@ VOID OnOpenSoundFile( HWND hDlg )
         if( uResult == 0 )
         {
             MessageBox( hDlg, TEXT("GetWindowsDirectory() failed."),
-                              TEXT(DEMO_NAME), MB_OK | MB_ICONERROR );
+                        TEXT(DEMO_NAME), MB_OK | MB_ICONERROR );
             return;
         }
 
@@ -327,7 +329,7 @@ VOID OnOpenSoundFile( HWND hDlg )
 // Comparison callback used by qsort()
 int CompareStrings( const void *str1, const void *str2 )
 {
-   // Compare all of both strings
+    // Compare all of both strings
     return _tcsicmp( (TCHAR *) str1, (TCHAR *) str2);
 }
 
@@ -377,7 +379,8 @@ HRESULT InitializeAudioEffectDMOList( HWND hDlg, int* iNumDmo)
             (*iNumDmo)++;
         }
 
-    } while( (S_OK == hrNext) && (*iNumDmo < MAX_NUM) );
+    }
+    while( (S_OK == hrNext) && (*iNumDmo < MAX_NUM) );
 
     // Now that the global DMO list is completed, sort it alphabetically
     qsort(g_rgDmoInfo, *iNumDmo, sizeof(DMOINFO), CompareStrings);
@@ -400,9 +403,10 @@ HRESULT StreamData( HWND hDlg, LPTSTR lpszInputFile, REFGUID rclsid )
     LPWAVEFORMATEX  pwfx = NULL;        // pointer to waveformatex structure.
 
     hr = CoInitializeEx( NULL, COINIT_APARTMENTTHREADED );
-    if( FAILED ( hr ) ) {
+    if( FAILED ( hr ) )
+    {
         MessageBox( hDlg, TEXT("Could not initialize COM library."),
-                          TEXT(DEMO_NAME), MB_OK | MB_ICONERROR );
+                    TEXT(DEMO_NAME), MB_OK | MB_ICONERROR );
         return hr;
     }
 
@@ -417,7 +421,7 @@ HRESULT StreamData( HWND hDlg, LPTSTR lpszInputFile, REFGUID rclsid )
                               &uDataSize,
                               &pwfx );
     if ( FAILED( hr ) )
-       return hr;
+        return hr;
 
     // Free any previous sound, and make a new one
     SAFE_DELETE( g_pSound );
@@ -428,7 +432,7 @@ HRESULT StreamData( HWND hDlg, LPTSTR lpszInputFile, REFGUID rclsid )
     {
         // Not a critical failure, so just update the status
         MessageBox( hDlg, TEXT("Could not create sound buffer."),
-                          TEXT(DEMO_NAME), MB_OK | MB_ICONERROR );
+                    TEXT(DEMO_NAME), MB_OK | MB_ICONERROR );
         SetDlgItemText( hDlg, IDC_FILENAME, TEXT("Could not create sound buffer.") );
         return hr;
     }

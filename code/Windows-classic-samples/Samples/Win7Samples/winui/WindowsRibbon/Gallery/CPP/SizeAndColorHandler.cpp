@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -20,15 +20,15 @@ extern CRenderer   g_renderer;
 //  PURPOSE: Called by the Ribbon framework when the user executes an action on the size and color gallery.
 //
 //  COMMENTS:
-//    When a button in a Commands gallery is clicked, the Execute events are sent to the handler for the 
+//    When a button in a Commands gallery is clicked, the Execute events are sent to the handler for the
 //    button, not the handler for the gallery. This function will never actually be called.
 //
 //
 STDMETHODIMP CSizeAndColorHandler::Execute(UINT nCmdID,
-                   UI_EXECUTIONVERB verb, 
-                   __in_opt const PROPERTYKEY* key,
-                   __in_opt const PROPVARIANT* ppropvarValue,
-                   __in_opt IUISimplePropertySet* pCommandExecutionProperties)
+        UI_EXECUTIONVERB verb,
+        __in_opt const PROPERTYKEY* key,
+        __in_opt const PROPVARIANT* ppropvarValue,
+        __in_opt IUISimplePropertySet* pCommandExecutionProperties)
 {
     UNREFERENCED_PARAMETER(nCmdID);
     UNREFERENCED_PARAMETER(verb);
@@ -50,9 +50,9 @@ STDMETHODIMP CSizeAndColorHandler::Execute(UINT nCmdID,
 //
 //
 STDMETHODIMP CSizeAndColorHandler::UpdateProperty(UINT nCmdID,
-                              __in REFPROPERTYKEY key,
-                              __in_opt const PROPVARIANT* ppropvarCurrentValue,
-                              __out PROPVARIANT* ppropvarNewValue)
+        __in REFPROPERTYKEY key,
+        __in_opt const PROPVARIANT* ppropvarCurrentValue,
+        __out PROPVARIANT* ppropvarNewValue)
 {
     UNREFERENCED_PARAMETER(nCmdID);
     UNREFERENCED_PARAMETER(ppropvarNewValue);
@@ -105,7 +105,7 @@ STDMETHODIMP CSizeAndColorHandler::UpdateProperty(UINT nCmdID,
 
         // Initialize the property set with the label that was just loaded and a category id of 1.
         pColor->InitializeCategoryProperties(wszColorLabel, 1);
-        
+
         // Add the newly-created property set to the collection supplied by the framework.
         pCollection->Add(pColor);
 
@@ -168,7 +168,7 @@ HRESULT CSizeAndColorHandler::CreateInstance(__deref_out CSizeAndColorHandler **
     if (pHandler != NULL)
     {
         *ppHandler = pHandler;
-        
+
     }
     else
     {
@@ -210,7 +210,7 @@ STDMETHODIMP CSizeAndColorHandler::QueryInterface(REFIID iid, void** ppv)
     {
         *ppv = static_cast<IUICommandHandler*>(this);
     }
-    else 
+    else
     {
         *ppv = NULL;
         return E_NOINTERFACE;

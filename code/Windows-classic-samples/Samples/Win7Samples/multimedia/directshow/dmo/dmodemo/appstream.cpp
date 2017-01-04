@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -66,14 +66,16 @@ HRESULT CAppStream::StreamData( LPTSTR lpszInputFile,
 {
     HRESULT hr;
     hr = Init( lpszInputFile, rclsid, hDlg );
-    if ( FAILED( hr ) ) {
-       return hr;
+    if ( FAILED( hr ) )
+    {
+        return hr;
     }
 
     hr = Stream( ppbOutData, pbDataSize, ppwfx );
-    if ( FAILED( hr )) {
+    if ( FAILED( hr ))
+    {
         MessageBox( hDlg, TEXT("Streaming data failed."), TEXT(DEMO_NAME),
-                                    MB_OK | MB_ICONERROR );
+                    MB_OK | MB_ICONERROR );
         return hr;
     }
 
@@ -90,11 +92,12 @@ HRESULT CAppStream::Init(LPTSTR lpszInputFile, REFGUID rclsid, HWND hDlg)
 {
     // create DMO
     HRESULT hr = CoCreateInstance(rclsid,
-                         NULL,
-                         CLSCTX_INPROC,
-                         IID_IMediaObject,
-                         (void **) &m_pObject);
-    if ( FAILED( hr ) ){
+                                  NULL,
+                                  CLSCTX_INPROC,
+                                  IID_IMediaObject,
+                                  (void **) &m_pObject);
+    if ( FAILED( hr ) )
+    {
         MessageBox( hDlg, TEXT("Can't create this DMO."), TEXT(DEMO_NAME),MB_OK|MB_ICONERROR );
         return hr;
     }
@@ -102,12 +105,14 @@ HRESULT CAppStream::Init(LPTSTR lpszInputFile, REFGUID rclsid, HWND hDlg)
     hr = m_pObject->QueryInterface(IID_IMediaObjectInPlace, (void**)&m_pObjectInPlace);
 
     // read wave file
-    if( WaveLoadFile( lpszInputFile, (UINT*) &m_uDataSize, &m_pwfx, &m_pbInData ) != 0 ){
+    if( WaveLoadFile( lpszInputFile, (UINT*) &m_uDataSize, &m_pwfx, &m_pbInData ) != 0 )
+    {
         MessageBox( hDlg, TEXT("Can't load input file."), TEXT(DEMO_NAME),MB_OK|MB_ICONERROR );
         return E_FAIL;
     }
 
-    if( m_pwfx->wFormatTag != WAVE_FORMAT_PCM ) {
+    if( m_pwfx->wFormatTag != WAVE_FORMAT_PCM )
+    {
         MessageBox( hDlg, TEXT("Can't process compressed data."), TEXT(DEMO_NAME),MB_OK|MB_ICONERROR );
         return E_FAIL;
     }
@@ -122,7 +127,8 @@ HRESULT CAppStream::Init(LPTSTR lpszInputFile, REFGUID rclsid, HWND hDlg)
     hr = m_pObject->SetInputType( 0,    //Input Stream index
                                   &m_mt,
                                   0 );  // No flags specified
-    if ( FAILED( hr ) ){
+    if ( FAILED( hr ) )
+    {
         MessageBox( hDlg, TEXT("Can't set input type."), TEXT(DEMO_NAME),MB_OK | MB_ICONERROR );
         return hr;
     }
@@ -130,9 +136,10 @@ HRESULT CAppStream::Init(LPTSTR lpszInputFile, REFGUID rclsid, HWND hDlg)
     hr = m_pObject->SetOutputType( 0,       // Output Stream Index
                                    &m_mt,
                                    0);  // No flags specified
-    if ( FAILED( hr ) ){
-       MessageBox( hDlg, TEXT("Can't set output type."), TEXT(DEMO_NAME),MB_OK | MB_ICONERROR );
-       return hr;
+    if ( FAILED( hr ) )
+    {
+        MessageBox( hDlg, TEXT("Can't set output type."), TEXT(DEMO_NAME),MB_OK | MB_ICONERROR );
+        return hr;
     }
 
     return S_OK;
@@ -152,11 +159,13 @@ HRESULT CAppStream::Stream( BYTE **ppbOutData, ULONG *pbDataSize, LPWAVEFORMATEX
     *pbDataSize     = m_uDataSize;
     *ppwfx          = m_pwfx;
 
-    if ( m_pObjectInPlace ){
+    if ( m_pObjectInPlace )
+    {
 
         pOut = new BYTE [m_uDataSize];
 
-        if( pOut == 0 ){
+        if( pOut == 0 )
+        {
             return E_OUTOFMEMORY;
         }
         CopyMemory(pOut, m_pbInData, m_uDataSize);
@@ -166,7 +175,8 @@ HRESULT CAppStream::Stream( BYTE **ppbOutData, ULONG *pbDataSize, LPWAVEFORMATEX
                                         pOut,
                                         0,
                                         DMO_INPLACE_NORMAL);
-        if( FAILED( hr ) ){
+        if( FAILED( hr ) )
+        {
             return hr;
         }
         *ppbOutData = pOut;
@@ -182,28 +192,32 @@ HRESULT CAppStream::Stream( BYTE **ppbOutData, ULONG *pbDataSize, LPWAVEFORMATEX
 
         // create and fill CMediaBuffer
         hr = CreateBuffer(m_uDataSize, &pInputBuffer);
-        if( FAILED( hr ) ){
+        if( FAILED( hr ) )
+        {
             return hr;
         }
 
         hr = pInputBuffer->GetBufferAndLength( &pBuffer, &dwLength );
-        if( FAILED( hr ) ){
+        if( FAILED( hr ) )
+        {
             return hr;
         }
         CopyMemory(pBuffer, m_pbInData, m_uDataSize);
 
         hr = pInputBuffer->SetLength( m_uDataSize );
-        if( FAILED( hr ) ){
+        if( FAILED( hr ) )
+        {
             return hr;
         }
 
         // call processInput
         hr = m_pObject->ProcessInput( 0,
-                                pInputBuffer,
-                                DMO_INPUT_DATA_BUFFERF_SYNCPOINT,
-                                rtStart,
-                                rtStop - rtStart);
-        if( FAILED( hr ) ){
+                                      pInputBuffer,
+                                      DMO_INPUT_DATA_BUFFERF_SYNCPOINT,
+                                      rtStart,
+                                      rtStop - rtStart);
+        if( FAILED( hr ) )
+        {
             return hr;
         }
 
@@ -211,12 +225,16 @@ HRESULT CAppStream::Stream( BYTE **ppbOutData, ULONG *pbDataSize, LPWAVEFORMATEX
         SAFE_RELEASE( pInputBuffer );
 
         // retrieve the output data from DMO and put into pOut
-        if(S_FALSE == hr){
+        if(S_FALSE == hr)
+        {
             return E_FAIL;
-        } else {
+        }
+        else
+        {
             pOut = NULL;
             hr = ProcessOutputs( &pOut );
-            if( FAILED( hr ) ){
+            if( FAILED( hr ) )
+            {
                 delete [] pOut;
                 return hr;
             }
@@ -246,7 +264,8 @@ HRESULT CAppStream::ProcessOutputs( BYTE **ppbOutData )
     DMO_OUTPUT_DATA_BUFFER  dataBufferStruct;
 
     hr = CreateBuffer( m_uDataSize,&pOutputBuffer );
-    if ( FAILED( hr ) ) {
+    if ( FAILED( hr ) )
+    {
         return hr;
     }
 
@@ -256,42 +275,50 @@ HRESULT CAppStream::ProcessOutputs( BYTE **ppbOutData )
     dataBufferStruct.rtTimelength = 0;  // not used in ProcessOutput()
 
     *ppbOutData = new BYTE[m_uDataSize];
-    if( *ppbOutData == 0 ){
-       return E_OUTOFMEMORY;
+    if( *ppbOutData == 0 )
+    {
+        return E_OUTOFMEMORY;
     }
 
     //process until no more data
-    if (SUCCEEDED(hr)) do {
-        hr = m_pObject->ProcessOutput(  DMO_PROCESS_OUTPUT_DISCARD_WHEN_NO_BUFFER,
-                                        1, //output buffer count
-                                        &dataBufferStruct,
-                                        &dwStatus );
-        if ( FAILED( hr ) ) {
-            return hr;
-        }
-
-        if( SUCCEEDED(hr) && (hr != S_FALSE) ) {
-            hr = dataBufferStruct.pBuffer->GetBufferAndLength(&pOut, &ulSize);
-            if ( FAILED( hr ) ) {
+    if (SUCCEEDED(hr)) do
+        {
+            hr = m_pObject->ProcessOutput(  DMO_PROCESS_OUTPUT_DISCARD_WHEN_NO_BUFFER,
+                                            1, //output buffer count
+                                            &dataBufferStruct,
+                                            &dwStatus );
+            if ( FAILED( hr ) )
+            {
                 return hr;
             }
 
-            CopyMemory(*ppbOutData, pOut, m_uDataSize);
+            if( SUCCEEDED(hr) && (hr != S_FALSE) )
+            {
+                hr = dataBufferStruct.pBuffer->GetBufferAndLength(&pOut, &ulSize);
+                if ( FAILED( hr ) )
+                {
+                    return hr;
+                }
 
-            hr = dataBufferStruct.pBuffer->SetLength( 0 );
-            if( FAILED( hr ) ) {
-                break;
+                CopyMemory(*ppbOutData, pOut, m_uDataSize);
+
+                hr = dataBufferStruct.pBuffer->SetLength( 0 );
+                if( FAILED( hr ) )
+                {
+                    break;
+                }
             }
-        }
 
-    } while ( dataBufferStruct.dwStatus & DMO_OUTPUT_DATA_BUFFERF_INCOMPLETE );
+        }
+        while ( dataBufferStruct.dwStatus & DMO_OUTPUT_DATA_BUFFERF_INCOMPLETE );
 
     // free output buffer allocated:
     SAFE_RELEASE( pOutputBuffer );
 
     // Send Discontinuity on output stream
     hr = m_pObject->Discontinuity( 0 );
-    if ( FAILED( hr ) ) {
+    if ( FAILED( hr ) )
+    {
         return hr;
     }
 
@@ -308,7 +335,8 @@ HRESULT CreateBuffer(DWORD cbMaxLength, CMediaBuffer **ppBuffer)
 {
     CMediaBuffer *pBuffer = new CMediaBuffer( cbMaxLength );
 
-    if ( pBuffer == NULL || FAILED( pBuffer->Init() ) ) {
+    if ( pBuffer == NULL || FAILED( pBuffer->Init() ) )
+    {
         delete pBuffer;
         *ppBuffer = NULL;
 

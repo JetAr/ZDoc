@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -9,7 +9,7 @@
 #include "TipCandidateString.h"
 
 HRESULT CTipCandidateString::CreateInstance(_Outptr_ CTipCandidateString **ppobj)
-{  
+{
     if (ppobj == nullptr)
     {
         return E_INVALIDARG;
@@ -17,7 +17,7 @@ HRESULT CTipCandidateString::CreateInstance(_Outptr_ CTipCandidateString **ppobj
     *ppobj = nullptr;
 
     *ppobj = new (std::nothrow) CTipCandidateString();
-    if (*ppobj == nullptr) 
+    if (*ppobj == nullptr)
     {
         return E_OUTOFMEMORY;
     }
@@ -26,7 +26,7 @@ HRESULT CTipCandidateString::CreateInstance(_Outptr_ CTipCandidateString **ppobj
 }
 
 HRESULT CTipCandidateString::CreateInstance(REFIID riid, _Outptr_ void **ppvObj)
-{ 
+{
     if (ppvObj == nullptr)
     {
         return E_INVALIDARG;
@@ -34,7 +34,7 @@ HRESULT CTipCandidateString::CreateInstance(REFIID riid, _Outptr_ void **ppvObj)
     *ppvObj = nullptr;
 
     *ppvObj = new (std::nothrow) CTipCandidateString();
-    if (*ppvObj == nullptr) 
+    if (*ppvObj == nullptr)
     {
         return E_OUTOFMEMORY;
     }

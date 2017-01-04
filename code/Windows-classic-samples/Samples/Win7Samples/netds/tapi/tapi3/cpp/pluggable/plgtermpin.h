@@ -1,4 +1,4 @@
-/*++
+﻿/*++
 
 Copyright (c) 1999-2001 Microsoft Corporation
 
@@ -29,13 +29,13 @@ class CPlgPin :
 {
 public:
     // -- Constructor / Destructor
-	CPlgPin(
+    CPlgPin(
         CPlgFilter*  pFilter,
         HRESULT*    phr,
         LPCWSTR     pPinName
-        );
+    );
 
-	virtual ~CPlgPin();
+    virtual ~CPlgPin();
 
     // --- IUnknown ---
     DECLARE_IUNKNOWN;

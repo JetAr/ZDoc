@@ -1,4 +1,4 @@
-//
+﻿//
 // Definitions of symbolic constants used in GargProp.rc and gargprop.cpp.
 //
 

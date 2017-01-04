@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -26,10 +26,10 @@ extern CRenderer   g_renderer;
 //
 //
 STDMETHODIMP CBorderSizeHandler::Execute(UINT nCmdID,
-                   UI_EXECUTIONVERB verb, 
-                   __in_opt const PROPERTYKEY* key,
-                   __in_opt const PROPVARIANT* ppropvarValue,
-                   __in_opt IUISimplePropertySet* pCommandExecutionProperties)
+        UI_EXECUTIONVERB verb,
+        __in_opt const PROPERTYKEY* key,
+        __in_opt const PROPVARIANT* ppropvarValue,
+        __in_opt IUISimplePropertySet* pCommandExecutionProperties)
 {
     UNREFERENCED_PARAMETER(nCmdID);
 
@@ -58,12 +58,12 @@ STDMETHODIMP CBorderSizeHandler::Execute(UINT nCmdID,
                 {
                     PROPVARIANT var;
                     pCommandExecutionProperties->GetValue(UI_PKEY_Label, &var); // The text entered by the user is contained in the property set with the pkey UI_PKEY_Label.
-                    
+
                     BSTR bstr = var.bstrVal;
                     ULONG newSize;
 
                     hr = VarUI4FromStr(bstr,GetUserDefaultLCID(),0,&newSize);
-                    
+
                     if (FAILED(hr) || newSize < 1 || newSize > 15)
                     {
                         WCHAR wszErrorMessage[MAX_RESOURCE_LENGTH];
@@ -95,14 +95,14 @@ STDMETHODIMP CBorderSizeHandler::Execute(UINT nCmdID,
 //
 //  COMMENTS:
 //
-//    Depending on the value of key, this will populate the gallery, update the selected item or 
+//    Depending on the value of key, this will populate the gallery, update the selected item or
 //    text, or enable/disable the gallery.
 //
 //
 STDMETHODIMP CBorderSizeHandler::UpdateProperty(UINT nCmdID,
-                              __in REFPROPERTYKEY key,
-                              __in_opt const PROPVARIANT* ppropvarCurrentValue,
-                              __out PROPVARIANT* ppropvarNewValue)
+        __in REFPROPERTYKEY key,
+        __in_opt const PROPVARIANT* ppropvarCurrentValue,
+        __out PROPVARIANT* ppropvarNewValue)
 {
     UNREFERENCED_PARAMETER(nCmdID);
 
@@ -130,7 +130,7 @@ STDMETHODIMP CBorderSizeHandler::UpdateProperty(UINT nCmdID,
                 pCollection->Release();
                 return hr;
             }
-            
+
             // Load the label for each size from the resource file.
             WCHAR wszLabel[MAX_RESOURCE_LENGTH];
             LoadString(GetModuleHandle(NULL), labelIds[i], wszLabel, MAX_RESOURCE_LENGTH);
@@ -169,7 +169,7 @@ STDMETHODIMP CBorderSizeHandler::UpdateProperty(UINT nCmdID,
         {
             return hr;
         }
-        
+
         hr = UIInitPropertyFromString(UI_PKEY_StringValue, bstr, ppropvarNewValue);
         SysFreeString(bstr);
     }
@@ -200,7 +200,7 @@ HRESULT CBorderSizeHandler::CreateInstance(__deref_out CBorderSizeHandler **ppHa
     if (pHandler != NULL)
     {
         *ppHandler = pHandler;
-        
+
     }
     else
     {
@@ -242,7 +242,7 @@ STDMETHODIMP CBorderSizeHandler::QueryInterface(REFIID iid, void** ppv)
     {
         *ppv = static_cast<IUICommandHandler*>(this);
     }
-    else 
+    else
     {
         *ppv = NULL;
         return E_NOINTERFACE;

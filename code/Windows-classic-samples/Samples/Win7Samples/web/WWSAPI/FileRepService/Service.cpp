@@ -1,4 +1,4 @@
-// This is the main function of the executable hosting the service.
+﻿// This is the main function of the executable hosting the service.
 // It parses the command line and passes the parameters to the service.
 // From a Sapphire perspective there is not much to see here.
 
@@ -9,12 +9,12 @@
 #include "intsafe.h"
 
 HRESULT ParseCommandLine(
-    __in int argc, 
+    __in int argc,
     __in_ecount(argc) wchar_t** argv,
     __out MESSAGE_ENCODING* messageEncoding,
-    __out DWORD* chunkSize, 
+    __out DWORD* chunkSize,
     __out long* maxConnections,
-    __out REPORTING_LEVEL* reportingLevel, 
+    __out REPORTING_LEVEL* reportingLevel,
     __in bool server)
 {
     *messageEncoding = DEFAULT_ENCODING;
@@ -108,11 +108,11 @@ HRESULT ParseCommandLine(
                 return E_FAIL;
             }
 
-            *chunkSize = wcstoul(&arg[7], NULL, 10);    
+            *chunkSize = wcstoul(&arg[7], NULL, 10);
         }
         else if (!_wcsnicmp(arg, L"-connections:", 13) || !_wcsnicmp(arg, L"/connections:", 13))
         {
-            *maxConnections = wcstol(&arg[13], NULL, 10);    
+            *maxConnections = wcstol(&arg[13], NULL, 10);
         }
         else
         {
@@ -125,7 +125,7 @@ HRESULT ParseCommandLine(
 }
 
 int __cdecl wmain(
-    __in int argc, 
+    __in int argc,
     __in_ecount(argc) wchar_t** argv)
 {
     bool server = true;
@@ -159,13 +159,13 @@ int __cdecl wmain(
     REPORTING_LEVEL reportingLevel = REPORT_ERROR;
 
     if (argc > 3)
-    {        
+    {
         if (FAILED(ParseCommandLine(argc - 3, &argv[3], &messageEncoding, &chunkSize, &maxConnections, &reportingLevel, server)))
         {
             return -1;
         }
-    }  
-    
+    }
+
     if (FAILED(ParseTransport( url, &transport, &securityMode)))
     {
         wprintf(L"Illegal protocol.\n");
@@ -183,7 +183,7 @@ int __cdecl wmain(
         return -1;
     }
 
-    if (maxConnections < 1) 
+    if (maxConnections < 1)
     {
         wprintf(L"You must allow at least one connection.\n");
         return -1;
@@ -193,11 +193,11 @@ int __cdecl wmain(
 
     if (server)
     {
-        fileServer = new CFileRepServer(reportingLevel, maxConnections, transport, securityMode, messageEncoding, chunkSize); 
+        fileServer = new CFileRepServer(reportingLevel, maxConnections, transport, securityMode, messageEncoding, chunkSize);
     }
     else
     {
-        fileServer = new CFileRepClient(reportingLevel, maxConnections, transport, securityMode, messageEncoding); 
+        fileServer = new CFileRepClient(reportingLevel, maxConnections, transport, securityMode, messageEncoding);
     }
 
     if (!fileServer)
@@ -212,15 +212,15 @@ int __cdecl wmain(
         wprintf(L"url string too long. Exiting.\n");
         return -1;
     }
-    
+
     if (FAILED(fileServer->Start(url, urlSize)))
     {
         wprintf(L"Service startup failed. Exiting.\n");
         return -1;
     }
-    
+
     wprintf(L"Startup complete. Press any key to exit.\n");
-    
+
     (void)getchar();
 
     fileServer->Stop();

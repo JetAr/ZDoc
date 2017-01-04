@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -66,7 +66,7 @@ const CTedTranscodeTopologyBuilder::StringAttributeMap CTedTranscodeTopologyBuil
 #define AudioAttributeMapSize (sizeof(m_kaAudioAttributeMap) / sizeof(StringAttributeMap))
 
 const CTedTranscodeTopologyBuilder::StringAttributeMap CTedTranscodeTopologyBuilder::m_kaVideoAttributeMap[] =
-{ 
+{
     { L"VideoFormat", NULL, MF_MT_SUBTYPE, AttributeType_VideoSubtype },
     { L"VideoBitrate", NULL, MF_MT_AVG_BITRATE, AttributeType_UINT32 },
     { L"VideoEncodeComplexity", NULL, MF_TRANSCODE_QUALITYVSSPEED, AttributeType_UINT32 },
@@ -89,10 +89,10 @@ CTedTranscodeTopologyBuilder::CTedTranscodeTopologyBuilder(LPCWSTR szSource, HRE
     CComPtr<IMFSourceResolver> spResolver;
     CComPtr<IUnknown> spSourceUnk;
     MF_OBJECT_TYPE ObjectType;
-    
+
     IFC( MFCreateSourceResolver(&spResolver) );
     IFC( spResolver->CreateObjectFromURL(szSource, MF_RESOLUTION_MEDIASOURCE,
-                                        NULL, &ObjectType, &spSourceUnk) );
+                                         NULL, &ObjectType, &spSourceUnk) );
     hr = spSourceUnk->QueryInterface(IID_IMFMediaSource, (void**) &m_spSource);
     if(E_NOINTERFACE == hr)
     {
@@ -176,7 +176,7 @@ HRESULT CTedTranscodeTopologyBuilder::LoadTranscodeProfiles()
 
         IFC( spLoader->HasNextObject(&fHasNext) );
     }
-    
+
 Cleanup:
     if(FAILED(hr))
     {
@@ -287,7 +287,7 @@ HRESULT CTedTranscodeTopologyBuilder::LoadContainerAttributes(ITedDataLoader* pL
     GUID gidContainerType;
 
     IFC( MFCreateAttributes(&spAttributes, 1) );
-    
+
     IFC( pLoader->LoadData(L"ContainerType", &szData, 0) );
     IFC( StringToContainerType(szData, &gidContainerType) );
     IFC( spAttributes->SetGUID(MF_TRANSCODE_CONTAINERTYPE, gidContainerType) );
@@ -516,7 +516,7 @@ HRESULT CTedTranscodeTopologyBuilder::GetSourceMediaType(REFGUID gidMajorType, I
 
     IFC( m_spSource->CreatePresentationDescriptor(&spPD) );
     IFC( spPD->GetStreamDescriptorCount(&cSDs) );
-    
+
     for(DWORD i = 0; i < cSDs; i++)
     {
         CComPtr<IMFStreamDescriptor> spSD;

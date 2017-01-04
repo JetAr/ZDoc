@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -17,7 +17,7 @@
 //    corresponding lower layer's socket. It also keeps track of the current
 //    state and what operations are pending on the socket. The routines in this
 //    file are for allocating, linked list management, etc.
-//    
+//
 
 #include "lspdef.h"
 
@@ -26,7 +26,7 @@ SOCK_INFO *
 FindSockInfoFromProviderSocket(
     PROVIDER   *provider,
     SOCKET      socket
-    );
+);
 
 //
 // Function: FindAndRefSocketContext
@@ -38,9 +38,9 @@ FindSockInfoFromProviderSocket(
 //
 SOCK_INFO *
 FindAndRefSocketContext(
-    SOCKET  s, 
+    SOCKET  s,
     int    *lpErrno
-    )
+)
 {
     SOCK_INFO *SocketContext = NULL;
     int        ret;
@@ -50,10 +50,10 @@ FindAndRefSocketContext(
     ASSERT( gMainUpCallTable.lpWPUQuerySocketHandleContext );
 
     ret = gMainUpCallTable.lpWPUQuerySocketHandleContext(
-            s,
-            (PDWORD_PTR) &SocketContext,
-            lpErrno
-            );
+              s,
+              (PDWORD_PTR) &SocketContext,
+              lpErrno
+          );
     if ( SOCKET_ERROR == ret )
     {
         dbgprint("FindAndRefSocketContext: WPUQuerySocketHandleContext failed: %d", *lpErrno);
@@ -79,11 +79,11 @@ FindAndRefSocketContext(
 //    and one calls closesocket. We don't want to remove the context from under
 //    the second thread so it is marked as closing instead.
 //
-void 
+void
 DerefSocketContext(
-    SOCK_INFO  *context, 
+    SOCK_INFO  *context,
     int        *lpErrno
-    )
+)
 {
     LONG    newval;
     int     ret = NO_ERROR;
@@ -92,9 +92,9 @@ DerefSocketContext(
 
     // Decrement the ref count and see if someone closed this socket (from another thread)
     newval = InterlockedDecrement(&context->RefCount);
-    if ( ( 0 == newval ) && 
-         ( 0 == context->dwOutstandingAsync ) && 
-         ( TRUE == context->bClosing ) 
+    if ( ( 0 == newval ) &&
+            ( 0 == context->dwOutstandingAsync ) &&
+            ( TRUE == context->bClosing )
        )
     {
         ASSERT( gMainUpCallTable.lpWPUCloseSocketHandle );
@@ -110,8 +110,8 @@ DerefSocketContext(
 
         RemoveSocketInfo(context->Provider, context);
 
-        dbgprint("Closing socket %d Bytes Sent [%lu] Bytes Recv [%lu]", 
-                context->LayeredSocket, context->BytesSent, context->BytesRecv);
+        dbgprint("Closing socket %d Bytes Sent [%lu] Bytes Recv [%lu]",
+                 context->LayeredSocket, context->BytesSent, context->BytesRecv);
 
         FreeSockInfo( context );
         context = NULL;
@@ -122,17 +122,17 @@ DerefSocketContext(
 
 //
 // Function: AcquireSocketLock
-// 
+//
 // Description:
-//    This routine acquires the critical section which is a member of the 
+//    This routine acquires the critical section which is a member of the
 //    socket's context structure. This is held when modifying the socket
 //    context outside of looking up the context (which is performed by
 //    FindAndRefSocketContext).
 //
-void 
+void
 AcquireSocketLock(
     SOCK_INFO  *SockInfo
-    )
+)
 {
     EnterCriticalSection( &SockInfo->SockCritSec );
 }
@@ -143,10 +143,10 @@ AcquireSocketLock(
 // Description:
 //    This routine releases the socket context critical section.
 //
-void 
+void
 ReleaseSocketLock(
     SOCK_INFO  *SockInfo
-    )
+)
 {
     LeaveCriticalSection( &SockInfo->SockCritSec );
 }
@@ -169,23 +169,23 @@ ReleaseSocketLock(
 //
 SOCK_INFO *
 CreateSockInfo(
-    PROVIDER  *Provider, 
-    SOCKET     ProviderSocket, 
-    SOCK_INFO *Inherit, 
+    PROVIDER  *Provider,
+    SOCKET     ProviderSocket,
+    SOCK_INFO *Inherit,
     BOOL       Insert,
     int       *lpErrno
-    )
+)
 {
     SOCK_INFO   *NewInfo = NULL;
 
     NewInfo = (SOCK_INFO *) LspAlloc(
-            sizeof( SOCK_INFO ),
-            lpErrno
-            );
+                  sizeof( SOCK_INFO ),
+                  lpErrno
+              );
     if ( NULL == NewInfo )
     {
         dbgprint("HeapAlloc() failed: %d", GetLastError());
-       *lpErrno = WSAENOBUFS;
+        *lpErrno = WSAENOBUFS;
         goto cleanup;
     }
 
@@ -230,10 +230,10 @@ cleanup:
 // Description:
 //    This routine frees the socket context structure.
 //
-void 
+void
 FreeSockInfo(
     SOCK_INFO *info
-    )
+)
 {
     DeleteCriticalSection( &info->SockCritSec );
     LspFree( info );
@@ -249,11 +249,11 @@ FreeSockInfo(
 //    This routine inserts a newly created socket (and its SOCK_INFO) into
 //    the list.
 //
-void 
+void
 InsertSocketInfo(
-    PROVIDER  *provider, 
+    PROVIDER  *provider,
     SOCK_INFO *sock
-    )
+)
 {
     if ( ( NULL == provider ) || ( NULL == sock ) )
     {
@@ -274,19 +274,19 @@ cleanup:
     return;
 }
 
-// 
+//
 // Function: RemoveSocketInfo
 //
 // Description:
 //    This function removes a given SOCK_INFO structure from the referenced
-//    provider. It doesn't free the structure, it just removes it from the 
+//    provider. It doesn't free the structure, it just removes it from the
 //    list.
 //
-void 
+void
 RemoveSocketInfo(
-    PROVIDER  *provider, 
+    PROVIDER  *provider,
     SOCK_INFO *si
-    )
+)
 {
     EnterCriticalSection( &provider->ProviderCritSec );
 
@@ -302,19 +302,19 @@ RemoveSocketInfo(
 //
 // Description:
 //    Closes all sockets belonging to the specified provider and frees
-//    the context information. If the lower provider socket is still 
+//    the context information. If the lower provider socket is still
 //    valid, set an abortive linger, and close the socket.
 //
-void 
+void
 CloseAndFreeSocketInfo(
     PROVIDER *provider,
     BOOL      processDetach
-    )
+)
 {
     LIST_ENTRY   *entry = NULL;
     SOCK_INFO    *si = NULL;
     struct linger linger;
-    int           Error, 
+    int           Error,
                   ret;
 
     ASSERT( provider );
@@ -331,30 +331,30 @@ CloseAndFreeSocketInfo(
 
         si = CONTAINING_RECORD( entry, SOCK_INFO, Link );
 
-        if ( ( !processDetach ) || 
-             ( provider->NextProvider.ProtocolChain.ChainLen == BASE_PROTOCOL ) )
+        if ( ( !processDetach ) ||
+                ( provider->NextProvider.ProtocolChain.ChainLen == BASE_PROTOCOL ) )
         {
 
             ASSERT( provider->NextProcTable.lpWSPSetSockOpt );
 
             // Set the abortive linger
             ret = provider->NextProcTable.lpWSPSetSockOpt(
-                    si->ProviderSocket,
-                    SOL_SOCKET,
-                    SO_LINGER,
-                    (char *) &linger,
-                    sizeof(linger),
-                    &Error
-                    );
+                      si->ProviderSocket,
+                      SOL_SOCKET,
+                      SO_LINGER,
+                      (char *) &linger,
+                      sizeof(linger),
+                      &Error
+                  );
             if ( SOCKET_ERROR != ret )
             {
                 ASSERT( provider->NextProcTable.lpWSPCloseSocket );
 
                 // Close the lower provider socket
                 ret = provider->NextProcTable.lpWSPCloseSocket(
-                        si->ProviderSocket,
-                        &Error
-                        );
+                          si->ProviderSocket,
+                          &Error
+                      );
                 if ( SOCKET_ERROR == ret )
                 {
                     dbgprint("WSPCloseSocket() on handle %d failed: %d", si->ProviderSocket, Error);
@@ -378,9 +378,9 @@ CloseAndFreeSocketInfo(
 
         // Close the layered handle
         gMainUpCallTable.lpWPUCloseSocketHandle(
-                si->LayeredSocket, 
-               &Error
-                );
+            si->LayeredSocket,
+            &Error
+        );
 
         // Free the context structure
         FreeSockInfo( si );
@@ -401,7 +401,7 @@ SOCK_INFO *
 FindSockInfoFromProviderSocket(
     PROVIDER   *provider,
     SOCKET      socket
-    )
+)
 {
     LIST_ENTRY *lptr = NULL;
     SOCK_INFO  *si = NULL;
@@ -442,9 +442,9 @@ cleanup:
 //
 SOCK_INFO *
 GetCallerSocket(
-    PROVIDER *provider, 
+    PROVIDER *provider,
     SOCKET    ProviderSock
-    )
+)
 {
     SOCK_INFO *si = NULL;
 
@@ -458,7 +458,7 @@ GetCallerSocket(
     else
     {
         // Don't know the provider so we must search all of them
-        for(INT i=0; i < gLayerCount ;i++)
+        for(INT i=0; i < gLayerCount ; i++)
         {
             si = FindSockInfoFromProviderSocket( &gBaseInfo[ i ], ProviderSock );
             if ( NULL != si )

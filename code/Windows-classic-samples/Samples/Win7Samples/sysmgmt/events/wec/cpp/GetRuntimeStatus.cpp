@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -29,43 +29,43 @@ DWORD GetRuntimeStatus ( LPCWSTR subscriptionName)
     }
 
     dwRetVal = GetProperty(hSubscription, EcSubscriptionEventSources, 0,buffer, vProperty);
-    
+
     if ( ERROR_SUCCESS != dwRetVal )
         goto Cleanup;
-        
 
-   //Ensure that we have obtained handle to the Array Property
+
+    //Ensure that we have obtained handle to the Array Property
     if ( vProperty->Type != EcVarTypeNull && vProperty->Type!= EcVarObjectArrayPropertyHandle)
     {
         dwRetVal = ERROR_INVALID_DATA;
         goto Cleanup;
     }
-    
+
     hArray = (vProperty->Type == EcVarTypeNull) ? NULL: vProperty->PropertyHandleVal ;
 
     if( !hArray)
     {
-		dwRetVal = ERROR_INVALID_DATA;
-		goto Cleanup;
+        dwRetVal = ERROR_INVALID_DATA;
+        goto Cleanup;
     }
-	
-    // Get the EventSources array size (number of elements) 
+
+    // Get the EventSources array size (number of elements)
     if ( !EcGetObjectArraySize(hArray,
-                                        &dwEventSourceCount ) )
+                               &dwEventSourceCount ) )
     {
         dwRetVal = GetLastError();
         goto Cleanup;
     }
-    
+
     for ( DWORD i = 0; i < dwEventSourceCount ; i++)
     {
 
-        dwRetVal = GetArrayProperty( hArray, 
-                                                 EcSubscriptionEventSourceAddress,
-                                                 i,
-                                                 0,
-                                                 eventSourceBuffer,
-                                                 vEventSource);
+        dwRetVal = GetArrayProperty( hArray,
+                                     EcSubscriptionEventSourceAddress,
+                                     i,
+                                     0,
+                                     eventSourceBuffer,
+                                     vEventSource);
 
         if (ERROR_SUCCESS != dwRetVal)
         {
@@ -82,15 +82,15 @@ DWORD GetRuntimeStatus ( LPCWSTR subscriptionName)
 
         if (!eventSource)
             continue;
-        
-        
-        dwRetVal = GetStatus( subscriptionName, 
-                                        eventSource,
-                                        EcSubscriptionRunTimeStatusActive, 
-                                        0, 
-                                        buffer, 
-                                        vStatus);
-    
+
+
+        dwRetVal = GetStatus( subscriptionName,
+                              eventSource,
+                              EcSubscriptionRunTimeStatusActive,
+                              0,
+                              buffer,
+                              vStatus);
+
         if( ERROR_SUCCESS != dwRetVal )
             goto Cleanup;
 
@@ -103,30 +103,30 @@ DWORD GetRuntimeStatus ( LPCWSTR subscriptionName)
 
         switch (vStatus->UInt32Val)
         {
-            case EcRuntimeStatusActiveStatusActive:
-                  runtimeStatus.ActiveStatus = L"Active";
-                  break;
-            case EcRuntimeStatusActiveStatusDisabled:
-                  runtimeStatus.ActiveStatus = L"Disabled";
-                  break;
-           case EcRuntimeStatusActiveStatusInactive:
-                  runtimeStatus.ActiveStatus = L"Inactive";
-                  break;
-            case EcRuntimeStatusActiveStatusTrying:
-                  runtimeStatus.ActiveStatus = L"Trying";
-                  break;
-            default:
-                  runtimeStatus.ActiveStatus = L"Unknown Status";
-                  break;
-       }
+        case EcRuntimeStatusActiveStatusActive:
+            runtimeStatus.ActiveStatus = L"Active";
+            break;
+        case EcRuntimeStatusActiveStatusDisabled:
+            runtimeStatus.ActiveStatus = L"Disabled";
+            break;
+        case EcRuntimeStatusActiveStatusInactive:
+            runtimeStatus.ActiveStatus = L"Inactive";
+            break;
+        case EcRuntimeStatusActiveStatusTrying:
+            runtimeStatus.ActiveStatus = L"Trying";
+            break;
+        default:
+            runtimeStatus.ActiveStatus = L"Unknown Status";
+            break;
+        }
 
         //Get Subscription Last Error
-        dwRetVal = GetStatus( subscriptionName, 
-                                        eventSource, 
-                                        EcSubscriptionRunTimeStatusLastError , 
-                                        0, 
-                                        buffer, 
-                                        vStatus);
+        dwRetVal = GetStatus( subscriptionName,
+                              eventSource,
+                              EcSubscriptionRunTimeStatusLastError,
+                              0,
+                              buffer,
+                              vStatus);
 
         if( ERROR_SUCCESS != dwRetVal)
         {
@@ -138,91 +138,91 @@ DWORD GetRuntimeStatus ( LPCWSTR subscriptionName)
             dwRetVal = ERROR_INVALID_DATA;
             goto Cleanup;
         }
-        
+
         runtimeStatus.LastError = vStatus->UInt32Val;
 
         //Obtain the associated Error Message
-        dwRetVal = GetStatus( subscriptionName, 
-                                        eventSource, 
-                                        EcSubscriptionRunTimeStatusLastErrorMessage , 
-                                        0, 
-                                        buffer, 
-                                        vStatus);
+        dwRetVal = GetStatus( subscriptionName,
+                              eventSource,
+                              EcSubscriptionRunTimeStatusLastErrorMessage,
+                              0,
+                              buffer,
+                              vStatus);
 
         if( ERROR_SUCCESS != dwRetVal)
         {
             goto Cleanup;
         }
-         
-         if ( vStatus->Type != EcVarTypeNull && vStatus->Type!= EcVarTypeString)
-         {
-             dwRetVal = ERROR_INVALID_DATA;
-             goto Cleanup;
-         }
-          
-         if( vStatus->Type != EcVarTypeNull)
-         {
+
+        if ( vStatus->Type != EcVarTypeNull && vStatus->Type!= EcVarTypeString)
+        {
+            dwRetVal = ERROR_INVALID_DATA;
+            goto Cleanup;
+        }
+
+        if( vStatus->Type != EcVarTypeNull)
+        {
             runtimeStatus.LastErrorMessage = vStatus->StringVal;
-         }
-         else
-         {
+        }
+        else
+        {
             runtimeStatus.LastErrorMessage = L"";
-         }
+        }
 
         //Obtain the Next Retry Time
-        dwRetVal = GetStatus( subscriptionName, 
-                                        eventSource, 
-                                        EcSubscriptionRunTimeStatusNextRetryTime, 
-                                        0, 
-                                        buffer, 
-                                        vStatus);
+        dwRetVal = GetStatus( subscriptionName,
+                              eventSource,
+                              EcSubscriptionRunTimeStatusNextRetryTime,
+                              0,
+                              buffer,
+                              vStatus);
 
         if( ERROR_SUCCESS != dwRetVal)
         {
             goto Cleanup;
         }
-         
-         if ( vStatus->Type != EcVarTypeNull && vStatus->Type!= EcVarTypeDateTime)
-         {
-             dwRetVal = ERROR_INVALID_DATA;
-             goto Cleanup;
-         }
-          
-         if( vStatus->Type != EcVarTypeNull)
-         {
-            runtimeStatus.NextRetryTime = ConvertEcDateTime(vStatus->DateTimeVal);
-         }
-         else
-         {
-            runtimeStatus.NextRetryTime = L"";
-         }
 
-	
-         wprintf(L"\nEventSource[%u]\n",  i);
-         wprintf(L"    Address: %s\n", eventSource);
-         wprintf(L"    Runtime Status: %s\n", runtimeStatus.ActiveStatus.c_str());
-         wprintf(L"    Last Error: %u\n", runtimeStatus.LastError);
-         
-         if( 0 != runtimeStatus.LastError )
-         {
+        if ( vStatus->Type != EcVarTypeNull && vStatus->Type!= EcVarTypeDateTime)
+        {
+            dwRetVal = ERROR_INVALID_DATA;
+            goto Cleanup;
+        }
+
+        if( vStatus->Type != EcVarTypeNull)
+        {
+            runtimeStatus.NextRetryTime = ConvertEcDateTime(vStatus->DateTimeVal);
+        }
+        else
+        {
+            runtimeStatus.NextRetryTime = L"";
+        }
+
+
+        wprintf(L"\nEventSource[%u]\n",  i);
+        wprintf(L"    Address: %s\n", eventSource);
+        wprintf(L"    Runtime Status: %s\n", runtimeStatus.ActiveStatus.c_str());
+        wprintf(L"    Last Error: %u\n", runtimeStatus.LastError);
+
+        if( 0 != runtimeStatus.LastError )
+        {
             wprintf(L"    Last Error Message: %s\n", runtimeStatus.LastErrorMessage.c_str());
-         }
-         else
-         {
+        }
+        else
+        {
             wprintf(L"    Last Error Message: No Error\n");
-         }
-		 
-         wprintf(L"    Next Retry Time: %s\n", runtimeStatus.NextRetryTime.c_str());
-		 
+        }
+
+        wprintf(L"    Next Retry Time: %s\n", runtimeStatus.NextRetryTime.c_str());
+
     }
 
 Cleanup:
 
-   if(hArray)
-   	EcClose(hArray);
-   
-   EcClose(hSubscription);
-   return dwRetVal;
+    if(hArray)
+        EcClose(hArray);
+
+    EcClose(hSubscription);
+    return dwRetVal;
 }
 
 //Helper function to obtain the actual data for the specified EC_SUBSCRIPTION_RUNTIME_STATUS_INFO_ID
@@ -233,14 +233,14 @@ DWORD GetStatus(LPCWSTR subscriptionName, LPCWSTR eventSource, EC_SUBSCRIPTION_R
 
     buffer.clear();
     buffer.resize(sizeof(EC_VARIANT));
-    
+
     if ( !EcGetSubscriptionRunTimeStatus( subscriptionName,
-                                                        statusInfoID,
-                                                        eventSource,
-                                                        flags,
-                                                        (DWORD) buffer.size(),
-                                                        (PEC_VARIANT) &buffer[0],
-                                                        &dwBufferSize))
+                                          statusInfoID,
+                                          eventSource,
+                                          flags,
+                                          (DWORD) buffer.size(),
+                                          (PEC_VARIANT) &buffer[0],
+                                          &dwBufferSize))
     {
         dwRetVal = GetLastError();
 
@@ -249,12 +249,12 @@ DWORD GetStatus(LPCWSTR subscriptionName, LPCWSTR eventSource, EC_SUBSCRIPTION_R
             dwRetVal = ERROR_SUCCESS;
             buffer.resize(dwBufferSize);
             if(!EcGetSubscriptionRunTimeStatus( subscriptionName,
-                                                              statusInfoID,
-                                                              eventSource,
-                                                              flags,
-                                                              (DWORD) buffer.size(),
-                                                              (PEC_VARIANT) &buffer[0],
-                                                              &dwBufferSize))
+                                                statusInfoID,
+                                                eventSource,
+                                                flags,
+                                                (DWORD) buffer.size(),
+                                                (PEC_VARIANT) &buffer[0],
+                                                &dwBufferSize))
             {
                 dwRetVal = GetLastError();
             }

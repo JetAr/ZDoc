@@ -1,7 +1,7 @@
-//////////////////////////////////////////////////////////////////////////
+﻿//////////////////////////////////////////////////////////////////////////
 //
 // WavByteStreamHandler.cpp: Bytestream handler for .wav files.
-// 
+//
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -68,7 +68,7 @@ CWavByteStreamHandler::CWavByteStreamHandler(HRESULT &hr) : m_nRefCount(0)
 
     hr = S_OK;
 }
-   
+
 
 //-------------------------------------------------------------------
 // CWavByteStreamHandler destructor
@@ -104,7 +104,7 @@ ULONG  CWavByteStreamHandler::Release()
 
 HRESULT CWavByteStreamHandler::QueryInterface(REFIID iid, void** ppv)
 {
-    static const QITAB qit[] = 
+    static const QITAB qit[] =
     {
         QITABENT(CWavByteStreamHandler, IMFByteStreamHandler),
         { 0 }
@@ -115,15 +115,15 @@ HRESULT CWavByteStreamHandler::QueryInterface(REFIID iid, void** ppv)
 
 // IMFByteStreamHandler methods
 
-HRESULT CWavByteStreamHandler::BeginCreateObject( 
-        /* [in] */ IMFByteStream *pByteStream,
-        /* [in] */ LPCWSTR pwszURL,
-        /* [in] */ DWORD /*dwFlags*/,
-        /* [in] */ IPropertyStore * /*pProps*/,              // Can be NULL.
-        /* [out] */ IUnknown ** ppIUnknownCancelCookie,  // Can be NULL.
-        /* [in] */ IMFAsyncCallback *pCallback,
-        /* [in] */ IUnknown *punkState                  // Can be NULL
-        )
+HRESULT CWavByteStreamHandler::BeginCreateObject(
+    /* [in] */ IMFByteStream *pByteStream,
+    /* [in] */ LPCWSTR pwszURL,
+    /* [in] */ DWORD /*dwFlags*/,
+    /* [in] */ IPropertyStore * /*pProps*/,              // Can be NULL.
+    /* [out] */ IUnknown ** ppIUnknownCancelCookie,  // Can be NULL.
+    /* [in] */ IMFAsyncCallback *pCallback,
+    /* [in] */ IUnknown *punkState                  // Can be NULL
+)
 {
     if ((pByteStream == NULL) || (pwszURL == NULL) || (pCallback == NULL))
     {
@@ -161,11 +161,11 @@ HRESULT CWavByteStreamHandler::BeginCreateObject(
 
     return hr;
 }
-    
-HRESULT CWavByteStreamHandler::EndCreateObject( 
-        /* [in] */ IMFAsyncResult *pResult,
-        /* [out] */ MF_OBJECT_TYPE *pObjectType,
-        /* [out] */ IUnknown **ppObject)
+
+HRESULT CWavByteStreamHandler::EndCreateObject(
+    /* [in] */ IMFAsyncResult *pResult,
+    /* [out] */ MF_OBJECT_TYPE *pObjectType,
+    /* [out] */ IUnknown **ppObject)
 {
     HRESULT hr = S_OK;
 

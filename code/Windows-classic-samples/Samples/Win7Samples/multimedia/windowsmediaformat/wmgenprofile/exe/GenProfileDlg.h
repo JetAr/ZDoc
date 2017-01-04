@@ -1,4 +1,4 @@
-//*****************************************************************************
+﻿//*****************************************************************************
 //
 // Microsoft Windows Media
 // Copyright (C) Microsoft Corporation. All rights reserved.
@@ -31,13 +31,13 @@ public:
 
 // Dialog Data
     //{{AFX_DATA(CGenProfileDlg)
-	enum { IDD = IDD_GENPROFILEEXE_DIALOG };
-	CEdit	m_txtProfileName;
-	CComboBox	m_cbLanguage;
-	CComboBox	m_cbPixelFormat;
-	CButton	m_chkStreamIsUncompressed;
-	CEdit	m_txtBandwidthBufferWindow;
-	CEdit	m_txtStreamVideoVBRQuality;
+    enum { IDD = IDD_GENPROFILEEXE_DIALOG };
+    CEdit	m_txtProfileName;
+    CComboBox	m_cbLanguage;
+    CComboBox	m_cbPixelFormat;
+    CButton	m_chkStreamIsUncompressed;
+    CEdit	m_txtBandwidthBufferWindow;
+    CEdit	m_txtStreamVideoVBRQuality;
     CButton    m_chkSMPTE;
     CEdit    m_txtStreamVideoMaxBufferWindow;
     CEdit    m_txtStreamVideoMaxBitrate;
@@ -68,13 +68,13 @@ public:
     CButton m_rbBandwidthSharingTypePartial;
     CListBox    m_lstMutexStreams;
     CListBox    m_lstProfileObjects;
-	//}}AFX_DATA
+    //}}AFX_DATA
 
     // ClassWizard generated virtual function overrides
     //{{AFX_VIRTUAL(CGenProfileDlg)
-    public:
+public:
     virtual BOOL DestroyWindow();
-    protected:
+protected:
     virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
     //}}AFX_VIRTUAL
 
@@ -122,18 +122,18 @@ protected:
     afx_msg void OnChkSMPTE();
     afx_msg void OnRBBandwidthTypeExclusive();
     afx_msg void OnRBBandwidthTypePartial();
-	afx_msg void OnKillfocusTXTStreamVideoVBRQuality();
-	afx_msg void OnKillfocusTXTBandwidthBufferWindow();
-	afx_msg void OnCHKStreamUncompressed();
-	afx_msg void OnSelchangeCBPixelFormat();
-	afx_msg void OnSelchangeCBLanguage();
-	//}}AFX_MSG
+    afx_msg void OnKillfocusTXTStreamVideoVBRQuality();
+    afx_msg void OnKillfocusTXTBandwidthBufferWindow();
+    afx_msg void OnCHKStreamUncompressed();
+    afx_msg void OnSelchangeCBPixelFormat();
+    afx_msg void OnSelchangeCBLanguage();
+    //}}AFX_MSG
     DECLARE_MESSAGE_MAP()
 
 protected:
-	HRESULT SetProfileDescription( IWMProfile* pProfile );
-	void DisableVideoVBRControls();
-	HRESULT SelectItemWithData( CComboBox* pcbComboBox, DWORD dwRequestedItemData );
+    HRESULT SetProfileDescription( IWMProfile* pProfile );
+    void DisableVideoVBRControls();
+    HRESULT SelectItemWithData( CComboBox* pcbComboBox, DWORD dwRequestedItemData );
     void DisplayMessage( UINT nStringResourceIndex );
     void DisplayMessageAndTerminate( LPCTSTR tszMessage );
 

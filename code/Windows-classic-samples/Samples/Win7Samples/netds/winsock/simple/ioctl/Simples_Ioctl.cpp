@@ -1,4 +1,4 @@
-/******************************************************************************\
+﻿/******************************************************************************\
 * Simples_ioctl.c - TCP server
 *
 *       This is a part of the Microsoft Source Code Samples.
@@ -11,7 +11,7 @@
 \******************************************************************************/
 #ifdef _IA64_
 #pragma warning(disable:4127)
-#endif 
+#endif
 
 #ifndef WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN
@@ -38,20 +38,20 @@ void FreeSocket(SOCKET s, int rc);
 // Description
 //    Display usage information and exit.
 //
-void Usage(char *progname) 
+void Usage(char *progname)
 {
-	fprintf(stderr, "Usage\n%s -e [endpoint] -i [interface] [-4] [-6]\n"
-	                "Where:\n"
-                    "\t-e endpoint   - is the port to listen on\n"
-	                "\t-i interface  - is the local string address to bind to\n"
-                    "\t-4            - force IPv4\n"
-                    "\t-6            - force IPv6\n"
-                    "\n"
-	                "Defaults are 5001 and INADDR_ANY and IN6ADDR_ANY (if IPv6 present)\n",
-                    progname
-                    );
-	WSACleanup();
-	exit(1);
+    fprintf(stderr, "Usage\n%s -e [endpoint] -i [interface] [-4] [-6]\n"
+            "Where:\n"
+            "\t-e endpoint   - is the port to listen on\n"
+            "\t-i interface  - is the local string address to bind to\n"
+            "\t-4            - force IPv4\n"
+            "\t-6            - force IPv6\n"
+            "\n"
+            "Defaults are 5001 and INADDR_ANY and IN6ADDR_ANY (if IPv6 present)\n",
+            progname
+           );
+    WSACleanup();
+    exit(1);
 }
 
 //
@@ -69,11 +69,11 @@ void Usage(char *progname)
 //    of connected client sockets and handle them accordingly. See the Accept
 //    Winsock sample for an example.
 //
-int __cdecl main(int argc, char **argv) 
+int __cdecl main(int argc, char **argv)
 {
     struct addrinfo hints,
-                   *results = NULL,
-                   *addrptr = NULL;
+               *results = NULL,
+                *addrptr = NULL;
     SOCKADDR_STORAGE client;
 
     WSADATA       wsaData;
@@ -83,9 +83,9 @@ int __cdecl main(int argc, char **argv)
     char          buffer[DEFAULT_BUFFER_LEN],
                   hoststr[NI_MAXHOST],
                   servstr[NI_MAXSERV],
-                 *pbuffer = NULL,
-                 *interface = NULL,
-                 *port = DEFAULT_PORT;
+                  *pbuffer = NULL,
+                   *interface = NULL,
+                    *port = DEFAULT_PORT;
     int           address_family = AF_UNSPEC,
                   socket_count=0,
                   clientlen,
@@ -93,35 +93,35 @@ int __cdecl main(int argc, char **argv)
                   retval,
                   err,
                   i;
-    struct fd_set readfds, 
-                  writefds;
+    struct fd_set readfds,
+               writefds;
 
     // Parse the command line
-    for(i=1;i <argc;i++) 
+    for(i=1; i <argc; i++)
     {
         if ( (strlen(argv[i]) == 2) && ( (argv[i][0] == '-') || (argv[i][0] == '/') ) )
         {
-            switch(tolower(argv[i][1])) 
+            switch(tolower(argv[i][1]))
             {
-                case '4':           // Force IPv4
-                    address_family = AF_INET;
-                    break;
+            case '4':           // Force IPv4
+                address_family = AF_INET;
+                break;
 
-                case '6':           // Force IPv6
-                    address_family = AF_INET6;
-                    break;
+            case '6':           // Force IPv6
+                address_family = AF_INET6;
+                break;
 
-                case 'i':           // Local interface to bind to
-                    interface = argv[++i];
-                    break;
+            case 'i':           // Local interface to bind to
+                interface = argv[++i];
+                break;
 
-                case 'e':           // Local port to bind to
-                    port = argv[++i];
-                    break;
+            case 'e':           // Local port to bind to
+                port = argv[++i];
+                break;
 
-                default:
-                    Usage(argv[0]);
-                    break;
+            default:
+                Usage(argv[0]);
+                break;
             }
         }
         else
@@ -129,7 +129,7 @@ int __cdecl main(int argc, char **argv)
     }
 
     // Load Winsock
-    if ((retval = WSAStartup(MAKEWORD(2,2), &wsaData)) != 0) 
+    if ((retval = WSAStartup(MAKEWORD(2,2), &wsaData)) != 0)
     {
         fprintf(stderr, "WSAStartup failed with error %d\n", retval);
         WSACleanup();
@@ -150,11 +150,11 @@ int __cdecl main(int argc, char **argv)
     // Resolve the address to bind to. If AF_UNSPEC was specified, interface is NULL,
     //    and IPv6 is installed, this call will return two addresses: 0.0.0.0 and ::
     retval = getaddrinfo(
-            interface,
-            port,
-           &hints,
-           &results
-            );
+                 interface,
+                 port,
+                 &hints,
+                 &results
+             );
     if (retval != 0)
     {
         fprintf(stderr, "getaddrinfo failed: %d\n", retval);
@@ -179,10 +179,10 @@ int __cdecl main(int argc, char **argv)
 
     // Allocate the server sockets
     server_sockets = (SOCKET *)HeapAlloc(
-            GetProcessHeap(),
-            HEAP_ZERO_MEMORY,
-            sizeof(SOCKET) * socket_count
-            );
+                         GetProcessHeap(),
+                         HEAP_ZERO_MEMORY,
+                         sizeof(SOCKET) * socket_count
+                     );
     if (server_sockets == NULL)
     {
         fprintf(stderr, "HeapAlloc failed: %d\n", GetLastError());
@@ -190,7 +190,7 @@ int __cdecl main(int argc, char **argv)
     }
 
     // Initialize the socket array
-    for(i=0; i < socket_count ;i++)
+    for(i=0; i < socket_count ; i++)
         server_sockets[i] = INVALID_SOCKET;
 
     // Setup the server sockets
@@ -214,7 +214,7 @@ int __cdecl main(int argc, char **argv)
             goto cleanup;
         }
 
-        // For TCP make the socket listening 
+        // For TCP make the socket listening
         retval = listen(server_sockets[socket_count], 7);
         if (retval == SOCKET_ERROR)
         {
@@ -232,14 +232,14 @@ int __cdecl main(int argc, char **argv)
 
         // Display the address we bound to
         retval = getnameinfo(
-                addrptr->ai_addr,
-                (socklen_t)addrptr->ai_addrlen,
-                hoststr,
-                NI_MAXHOST,
-                servstr,
-                NI_MAXSERV,
-                NI_NUMERICHOST | NI_NUMERICSERV
-                            );
+                     addrptr->ai_addr,
+                     (socklen_t)addrptr->ai_addrlen,
+                     hoststr,
+                     NI_MAXHOST,
+                     servstr,
+                     NI_MAXSERV,
+                     NI_NUMERICHOST | NI_NUMERICSERV
+                 );
         if (retval != 0)
         {
             fprintf(stderr, "getnameinfo failed: %d\n", retval);
@@ -247,7 +247,7 @@ int __cdecl main(int argc, char **argv)
         }
 
         printf("Server socket 0x%x listening on %s and port %s\n",
-                server_sockets[socket_count], hoststr, servstr);
+               server_sockets[socket_count], hoststr, servstr);
 
         // Increment counters and pointers
         socket_count++;
@@ -260,7 +260,7 @@ int __cdecl main(int argc, char **argv)
     FD_ZERO(&writefds);
 
     // Set the server sockets
-    for(i=0; i < socket_count ;i++)
+    for(i=0; i < socket_count ; i++)
     {
 #pragma warning (push)
 #pragma warning (disable: 4127)
@@ -290,7 +290,7 @@ int __cdecl main(int argc, char **argv)
         //
 
         retval = select(0, &readfds, &writefds, NULL, NULL);
-        if (i == SOCKET_ERROR) 
+        if (i == SOCKET_ERROR)
         {
             fprintf(stderr, "select failed %d\n", WSAGetLastError());
             goto cleanup;
@@ -303,7 +303,7 @@ int __cdecl main(int argc, char **argv)
             if (retval == 0)
             {
                 // A successful recv of zero indicates graceful socket closure
-               
+
                 // Close the socket
                 FreeSocket(client_socket, retval);
                 client_socket = INVALID_SOCKET;
@@ -312,7 +312,7 @@ int __cdecl main(int argc, char **argv)
                 FD_ZERO(&readfds);
                 FD_ZERO(&writefds);
 
-                for(i=0; i < socket_count ;i++)
+                for(i=0; i < socket_count ; i++)
 #pragma warning (push)
 #pragma warning (disable: 4127)
                     FD_SET(server_sockets[i], &readfds);
@@ -332,12 +332,12 @@ int __cdecl main(int argc, char **argv)
                     // Close the socket
                     FreeSocket(client_socket, retval);
                     client_socket = INVALID_SOCKET;
-                
+
                     // Add the listening sockets back to the read set
                     FD_ZERO(&readfds);
                     FD_ZERO(&writefds);
 
-                    for(i=0; i < socket_count ;i++)
+                    for(i=0; i < socket_count ; i++)
 #pragma warning (push)
 #pragma warning (disable:4127)
                         FD_SET(server_sockets[i], &readfds);
@@ -380,7 +380,7 @@ int __cdecl main(int argc, char **argv)
                 // Connection was closed so put the server sockets back in the readfds set
                 FD_ZERO(&readfds);
                 FD_ZERO(&writefds);
-                for(i=0; i < socket_count ;i++)
+                for(i=0; i < socket_count ; i++)
 #pragma warning (push)
 #pragma warning (disable:4127)
                     FD_SET(server_sockets[i], &readfds);
@@ -390,14 +390,14 @@ int __cdecl main(int argc, char **argv)
             {
                 // If we got a WSAEWOULDBLOCK we need to try to send again. Note that
                 //    client_socket is already in the writefds.
-               
+
                 if ((err = WSAGetLastError()) != WSAEWOULDBLOCK)
                 {
                     // A fatal error occured so close the socket and put the listening
                     //    sockets back into the readfds
-                  
+
                     fprintf(stderr, "send failed: %d\n", err);
-                    
+
                     // Close the socket
                     FreeSocket(client_socket, retval);
                     client_socket = INVALID_SOCKET;
@@ -405,7 +405,7 @@ int __cdecl main(int argc, char **argv)
                     // Connection was closed so put the server sockets back in the readfds set
                     FD_ZERO(&readfds);
                     FD_ZERO(&writefds);
-                    for(i=0; i < socket_count ;i++)
+                    for(i=0; i < socket_count ; i++)
 #pragma warning (push)
 #pragma warning (disable:4127)
                         FD_SET(server_sockets[i], &readfds);
@@ -420,7 +420,7 @@ int __cdecl main(int argc, char **argv)
                 if (bytesread != retval)
                 {
                     // We didn't send all the data that was read (e.g. 10 bytes were
-                    //    read but this send call send less then 10 bytes). We need 
+                    //    read but this send call send less then 10 bytes). We need
                     //    to try to send again so increment the buffer pointer to the
                     //    data remaining and adjust the byte count. The client_socket
                     //    is already in writefds so just continue;
@@ -449,7 +449,7 @@ int __cdecl main(int argc, char **argv)
         else
         {
             // See which listening socket has a connection
-            for(i=0; i < socket_count ;i++)
+            for(i=0; i < socket_count ; i++)
             {
                 if (FD_ISSET(server_sockets[i], &readfds))
                 {
@@ -464,14 +464,14 @@ int __cdecl main(int argc, char **argv)
 
                     // Print the client's address out
                     retval = getnameinfo(
-                            (SOCKADDR *)&client,
-                            clientlen,
-                            hoststr,
-                            NI_MAXHOST,
-                            servstr,
-                            NI_MAXSERV,
-                            NI_NUMERICHOST | NI_NUMERICSERV
-                            );
+                                 (SOCKADDR *)&client,
+                                 clientlen,
+                                 hoststr,
+                                 NI_MAXHOST,
+                                 servstr,
+                                 NI_MAXSERV,
+                                 NI_NUMERICHOST | NI_NUMERICSERV
+                             );
                     if (retval != 0)
                     {
                         fprintf(stderr, "getnameinfo failed: %d\n", retval);
@@ -479,7 +479,7 @@ int __cdecl main(int argc, char **argv)
                     }
 
                     printf("Accepted client connection from %s and port %s\n",
-                            hoststr, servstr);
+                           hoststr, servstr);
 
                     FD_ZERO(&readfds);
 #pragma warning (push)
@@ -515,7 +515,7 @@ cleanup:
 
     if (server_sockets)
     {
-        for(i=0; i < socket_count ;i++)
+        for(i=0; i < socket_count ; i++)
         {
             if (server_sockets[i] != INVALID_SOCKET)
             {
@@ -536,7 +536,7 @@ cleanup:
 // Function: FreeSocket
 //
 // Description:
-//    If the socket closed without error shut it down and then close the 
+//    If the socket closed without error shut it down and then close the
 //    socket handle.
 //
 void FreeSocket(SOCKET s, int rc)

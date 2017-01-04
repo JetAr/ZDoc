@@ -1,7 +1,7 @@
-//////////////////////////////////////////////////////////////////////////
-// 
+﻿//////////////////////////////////////////////////////////////////////////
+//
 // player.cpp : Playback helper class.
-// 
+//
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -19,25 +19,25 @@
 
 HRESULT CreateSourceStreamNode(
     IMFMediaSource *pSource,
-    IMFPresentationDescriptor *pSourcePD, 
+    IMFPresentationDescriptor *pSourcePD,
     IMFStreamDescriptor *pSourceSD,
     IMFTopologyNode **ppNode
-    );
+);
 
 HRESULT CreateOutputNode(
-    IMFStreamDescriptor *pSourceSD, 
+    IMFStreamDescriptor *pSourceSD,
     HWND hwndVideo,
     IMFTopologyNode **ppNode
-    );
+);
 
 
 ///////////////////////////////////////////////////////////////////////
 //  Name: CreateInstance
 //  Description:  Static class method to create the CPlayer object.
-//  
+//
 //  hVideo:   Handle to the video window.
 //  hEvent:   Handle to the window to receive notifications.
-//  ppPlayer: Receives an AddRef's pointer to the CPlayer object. 
+//  ppPlayer: Receives an AddRef's pointer to the CPlayer object.
 //            The caller must release the pointer.
 /////////////////////////////////////////////////////////////////////////
 
@@ -84,7 +84,7 @@ HRESULT CPlayer::CreateInstance(HWND hVideo, HWND hEvent, CPlayer **ppPlayer)
 //  CPlayer constructor
 /////////////////////////////////////////////////////////////////////////
 
-CPlayer::CPlayer(HWND hVideo, HWND hEvent) : 
+CPlayer::CPlayer(HWND hVideo, HWND hEvent) :
     m_pSession(NULL),
     m_pSource(NULL),
     m_pVideoDisplay(NULL),
@@ -105,15 +105,15 @@ CPlayer::~CPlayer()
 {
     assert(m_pSession == NULL);  // If FALSE, the app did not call Shutdown().
 
-    // Note: The application must call Shutdown() because the media 
+    // Note: The application must call Shutdown() because the media
     // session holds a reference count on the CPlayer object. (This happens
     // when CPlayer calls IMediaEventGenerator::BeginGetEvent on the
     // media session.) As a result, there is a circular reference count
     // between the CPlayer object and the media session. Calling Shutdown()
     // breaks the circular reference count.
 
-    // Note: If CreateInstance failed, the application will not call 
-    // Shutdown(). To handle that case, we must call Shutdown() in the 
+    // Note: If CreateInstance failed, the application will not call
+    // Shutdown(). To handle that case, we must call Shutdown() in the
     // destructor. The circular ref-count problem does not occcur if
     // CreateInstance has failed. Also, calling Shutdown() twice is
     // harmless.
@@ -243,7 +243,7 @@ HRESULT CPlayer::OpenURL(const WCHAR *sURL)
     // Set our state to "open pending"
     m_state = OpenPending;
 
-    // If SetTopology succeeded, the media session will queue an 
+    // If SetTopology succeeded, the media session will queue an
     // MESessionTopologySet event.
 
 done:
@@ -357,7 +357,7 @@ HRESULT CPlayer::ResizeVideo(WORD width, WORD height)
 ///////////////////////////////////////////////////////////////////////
 //  Name: Invoke
 //  Description:  Callback for asynchronous BeginGetEvent method.
-//  
+//
 //  pAsyncResult: Pointer to the result.
 /////////////////////////////////////////////////////////////////////////
 
@@ -371,11 +371,11 @@ HRESULT CPlayer::Invoke(IMFAsyncResult *pResult)
     // Get the event from the event queue.
     CHECK_HR(hr = m_pSession->EndGetEvent(pResult, &pEvent));
 
-    // Get the event type. 
+    // Get the event type.
     CHECK_HR(hr = pEvent->GetType(&meType));
 
     // If the session is closed, the application is waiting on the
-    // m_hCloseEvent event handle. Also, do not get any more 
+    // m_hCloseEvent event handle. Also, do not get any more
     // events from the session.
 
     if (meType == MESessionClosed)
@@ -393,8 +393,8 @@ HRESULT CPlayer::Invoke(IMFAsyncResult *pResult)
     // application. This lets the application process the event on it's
     // main thread.
 
-    // However, if call to IMFMediaSession::Close is pending, it means the 
-    // application is waiting on the m_hCloseEvent event handle. (Blocking 
+    // However, if call to IMFMediaSession::Close is pending, it means the
+    // application is waiting on the m_hCloseEvent event handle. (Blocking
     // call.) In that case, we simply discard the event.
 
     // NOTE: When IMFMediaSession::Close is called, MESessionClosed is NOT
@@ -417,12 +417,12 @@ done:
 //  HandleEvent
 //
 //  Called by the application when it receives a WM_APP_PLAYER_EVENT
-//  message. 
+//  message.
 //
 //  This method is used to process media session events on the
 //  application's main thread.
 //
-//  pUnkPtr: Pointer to the IUnknown interface of a media session 
+//  pUnkPtr: Pointer to the IUnknown interface of a media session
 //  event (IMFMediaEvent).
 //-------------------------------------------------------------------
 
@@ -431,7 +431,7 @@ HRESULT CPlayer::HandleEvent(UINT_PTR pUnkPtr)
     HRESULT hr = S_OK;
     HRESULT hrStatus = S_OK;            // Event status
     MediaEventType meType = MEUnknown;  // Event type
-    MF_TOPOSTATUS TopoStatus = MF_TOPOSTATUS_INVALID; // Used with MESessionTopologyStatus event.    
+    MF_TOPOSTATUS TopoStatus = MF_TOPOSTATUS_INVALID; // Used with MESessionTopologyStatus event.
 
     IUnknown *pUnk = NULL;
     IMFMediaEvent *pEvent = NULL;
@@ -466,12 +466,12 @@ HRESULT CPlayer::HandleEvent(UINT_PTR pUnkPtr)
             CHECK_HR(hr = pEvent->GetUINT32(MF_EVENT_TOPOLOGY_STATUS, (UINT32*)&TopoStatus));
             switch (TopoStatus)
             {
-            case MF_TOPOSTATUS_READY: 
+            case MF_TOPOSTATUS_READY:
                 hr = OnTopologyReady(pEvent);
                 break;
-            default: 
+            default:
                 // Nothing to do.
-                break;  
+                break;
             }
             break;
 
@@ -560,9 +560,9 @@ HRESULT  CPlayer::GetContentProtectionManager(ContentProtectionManager **ppManag
 //  Name: OnTopologyReady
 //  Description:  Handler for MESessionTopologyReady event.
 //
-//  Note: 
-//  - The MESessionTopologySet event means the session queued the 
-//    topology, but the topology is not ready yet. Generally, the 
+//  Note:
+//  - The MESessionTopologySet event means the session queued the
+//    topology, but the topology is not ready yet. Generally, the
 //    applicationno need to respond to this event unless there is an
 //    error.
 //  - The MESessionTopologyReady event means the new topology is
@@ -586,7 +586,7 @@ HRESULT CPlayer::OnTopologyReady(IMFMediaEvent *pEvent)
         MR_VIDEO_RENDER_SERVICE,
         __uuidof(IMFVideoDisplayControl),
         (void**)&m_pVideoDisplay
-        );
+    );
 
     HRESULT hr = StartPlayback();
 
@@ -633,36 +633,36 @@ HRESULT CPlayer::CreateSession()
     assert(m_pContentProtectionManager == NULL); // Was released in CloseSession
 
     CHECK_HR(hr = ContentProtectionManager::CreateInstance(
-            m_hwndEvent, 
-            &m_pContentProtectionManager
-            ));
+                      m_hwndEvent,
+                      &m_pContentProtectionManager
+                  ));
 
     // Set the MF_SESSION_CONTENT_PROTECTION_MANAGER attribute with a pointer
     // to the content protection manager.
     CHECK_HR(hr = pAttributes->SetUnknown(
-            MF_SESSION_CONTENT_PROTECTION_MANAGER, 
-            (IMFContentProtectionManager*)m_pContentProtectionManager
-            ));
+                      MF_SESSION_CONTENT_PROTECTION_MANAGER,
+                      (IMFContentProtectionManager*)m_pContentProtectionManager
+                  ));
 
     // Create the PMP media session.
     CHECK_HR(hr = MFCreatePMPMediaSession(
-            0, // Can use this flag: MFPMPSESSION_UNPROTECTED_PROCESS
-            pAttributes, 
-            &m_pSession,
-            &pEnablerActivate
-            ));
+                      0, // Can use this flag: MFPMPSESSION_UNPROTECTED_PROCESS
+                      pAttributes,
+                      &m_pSession,
+                      &pEnablerActivate
+                  ));
 
 
     // TODO:
 
     // If MFCreatePMPMediaSession fails it might return an IMFActivate pointer.
     // This indicates that a trusted binary failed to load in the protected process.
-    // An application can use the IMFActivate pointer to create an enabler object, which 
+    // An application can use the IMFActivate pointer to create an enabler object, which
     // provides revocation and renewal information for the component that failed to
-    // load. 
+    // load.
 
     // This sample does not demonstrate that feature. Instead, we simply treat this
-    // case as a playback failure. 
+    // case as a playback failure.
 
 
     // Start pulling events from the media session
@@ -677,11 +677,11 @@ done:
 
 ///////////////////////////////////////////////////////////////////////
 //  Name: CloseSession
-//  Description:  Closes the media session. 
+//  Description:  Closes the media session.
 //
 //  Note: The IMFMediaSession::Close method is asynchronous, but the
 //        CPlayer::CloseSession method waits on the MESessionClosed event.
-//        The MESessionClosed event is guaranteed to be the last event 
+//        The MESessionClosed event is guaranteed to be the last event
 //        that the media session fires.
 /////////////////////////////////////////////////////////////////////////
 
@@ -696,11 +696,11 @@ HRESULT CPlayer::CloseSession()
         DWORD dwWaitResult = 0;
 
         m_state = Closing;
-           
+
         CHECK_HR(hr = m_pSession->Close());
 
         // Wait for the close operation to complete
-        
+
         dwWaitResult = WaitForSingleObject(m_hCloseEvent, 5000);
 
         if (dwWaitResult == WAIT_TIMEOUT)
@@ -738,7 +738,7 @@ done:
 
 ///////////////////////////////////////////////////////////////////////
 //  Name: StartPlayback
-//  Description:  Starts playback from the current position. 
+//  Description:  Starts playback from the current position.
 /////////////////////////////////////////////////////////////////////////
 
 HRESULT CPlayer::StartPlayback()
@@ -796,18 +796,18 @@ HRESULT CPlayer::CreateMediaSource(const WCHAR *sURL)
     // Use the source resolver to create the media source.
 
     // Note: For simplicity this sample uses the synchronous method on
-    // IMFSourceResolver to create the media source. However, creating a 
+    // IMFSourceResolver to create the media source. However, creating a
     // media source can take a noticeable amount of time, especially for
     // a network source. For a more responsive UI, use the asynchronous
     // BeginCreateObjectFromURL method.
 
     CHECK_HR(hr = pSourceResolver->CreateObjectFromURL(
-                sURL,                       // URL of the source.
-                MF_RESOLUTION_MEDIASOURCE,  // Create a source object.
-                NULL,                       // Optional property store.
-                &ObjectType,                // Receives the created object type. 
-                &pSource                    // Receives a pointer to the media source.
-            ));
+                      sURL,                       // URL of the source.
+                      MF_RESOLUTION_MEDIASOURCE,  // Create a source object.
+                      NULL,                       // Optional property store.
+                      &ObjectType,                // Receives the created object type.
+                      &pSource                    // Receives a pointer to the media source.
+                  ));
 
     // Get the IMFMediaSource interface from the media source.
     CHECK_HR(hr = pSource->QueryInterface(__uuidof(IMFMediaSource), (void**)&m_pSource));
@@ -876,7 +876,7 @@ done:
 
 
 ///////////////////////////////////////////////////////////////////////
-//  Name:  AddBranchToPartialTopology 
+//  Name:  AddBranchToPartialTopology
 //  Description:  Adds a topology branch for one stream.
 //
 //  pTopology: Pointer to the topology object.
@@ -886,8 +886,8 @@ done:
 //  Pre-conditions: The topology must be created already.
 //
 //  Notes: For each stream, we must do the following:
-//    1. Create a source node associated with the stream. 
-//    2. Create an output node for the renderer. 
+//    1. Create a source node associated with the stream.
+//    2. Create an output node for the renderer.
 //    3. Connect the two nodes.
 //  The media session will resolve the topology, so we do not have
 //  to worry about decoders or other transforms.
@@ -942,7 +942,7 @@ done:
 //-------------------------------------------------------------------
 //  Name: CreateSourceStreamNode
 //  Description:  Creates a source-stream node for a stream.
-// 
+//
 //  pSource: Pointer to the media source that contains the stream.
 //  pSourcePD: Presentation descriptor for the media source.
 //  pSourceSD: Stream descriptor for the stream.
@@ -951,10 +951,10 @@ done:
 
 HRESULT CreateSourceStreamNode(
     IMFMediaSource *pSource,
-    IMFPresentationDescriptor *pSourcePD, 
+    IMFPresentationDescriptor *pSourcePD,
     IMFStreamDescriptor *pSourceSD,
     IMFTopologyNode **ppNode
-    )
+)
 {
     if (!pSource || !pSourcePD || !pSourceSD || !ppNode)
     {
@@ -964,7 +964,7 @@ HRESULT CreateSourceStreamNode(
     IMFTopologyNode *pNode = NULL;
     HRESULT hr = S_OK;
 
-    // Create the source-stream node. 
+    // Create the source-stream node.
     CHECK_HR(hr = MFCreateTopologyNode(MF_TOPOLOGY_SOURCESTREAM_NODE, &pNode));
 
     // Set attribute: Pointer to the media source.
@@ -1004,11 +1004,11 @@ done:
 //-------------------------------------------------------------------
 
 HRESULT CreateOutputNode(
-    IMFStreamDescriptor *pSourceSD, 
+    IMFStreamDescriptor *pSourceSD,
     HWND hwndVideo,
     IMFTopologyNode **ppNode
-    )
-{   
+)
+{
 
     IMFTopologyNode *pNode = NULL;
     IMFMediaTypeHandler *pHandler = NULL;
@@ -1023,7 +1023,7 @@ HRESULT CreateOutputNode(
 
     // Get the media type handler for the stream.
     CHECK_HR(hr = pSourceSD->GetMediaTypeHandler(&pHandler));
-    
+
     // Get the major media type.
     CHECK_HR(hr = pHandler->GetMajorType(&guidMajorType));
 

@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -22,14 +22,16 @@
 //  Returns:    None
 //
 //  Notes:
-//				
+//
 //
 
 
-void ReleaseObj(_In_ IUnknown* pInterface){
-	if(pInterface){
-		pInterface->Release();
-	}
+void ReleaseObj(_In_ IUnknown* pInterface)
+{
+    if(pInterface)
+    {
+        pInterface->Release();
+    }
 }
 
 
@@ -46,172 +48,174 @@ void ReleaseObj(_In_ IUnknown* pInterface){
 //
 //  Notes:
 //				The upnp error codes are from upnp.h
-//				
+//
 
-void PrintErrorText(_In_ HRESULT hr){
+void PrintErrorText(_In_ HRESULT hr)
+{
 
     // First check whether it is a UPnP error
     WCHAR wszErrorString[1024] = {0};
-    switch(hr){
-        // All the upnp error codes are from upnp.h 
-        case UPNP_E_ROOT_ELEMENT_EXPECTED:
+    switch(hr)
+    {
+    // All the upnp error codes are from upnp.h
+    case UPNP_E_ROOT_ELEMENT_EXPECTED:
+        SafeStrCopy(
+            wszErrorString,
+            L"Root Element Expected",
+            1024
+        );
+        break;
+    case UPNP_E_DEVICE_ELEMENT_EXPECTED:
+        SafeStrCopy(
+            wszErrorString,
+            L"Device Element Expected",
+            1024
+        );
+        break;
+    case UPNP_E_SERVICE_ELEMENT_EXPECTED:
+        SafeStrCopy(
+            wszErrorString,
+            L"Service Element Expected",
+            1024
+        );
+        break;
+    case UPNP_E_SERVICE_NODE_INCOMPLETE:
+        SafeStrCopy(
+            wszErrorString,
+            L"Service Node Incomplete",
+            1024
+        );
+        break;
+    case UPNP_E_DEVICE_NODE_INCOMPLETE:
+        SafeStrCopy(
+            wszErrorString,
+            L"Device Node Incomplete",
+            1024
+        );
+        break;
+    case UPNP_E_ICON_ELEMENT_EXPECTED:
+        SafeStrCopy(
+            wszErrorString,
+            L"Icon Element Expected",
+            1024
+        );
+        break;
+    case UPNP_E_ICON_NODE_INCOMPLETE:
+        SafeStrCopy(
+            wszErrorString,
+            L"Icon Node Incomplete",
+            1024
+        );
+        break;
+    case UPNP_E_INVALID_ACTION:
+        SafeStrCopy(
+            wszErrorString,
+            L"Invalid Action",
+            1024
+        );
+        break;
+    case UPNP_E_INVALID_ARGUMENTS:
+        SafeStrCopy(
+            wszErrorString,
+            L"Invalid Arguments",
+            1024
+        );
+        break;
+    case UPNP_E_OUT_OF_SYNC:
+        SafeStrCopy(
+            wszErrorString,
+            L"Out of Sync",
+            1024
+        );
+        break;
+    case UPNP_E_ACTION_REQUEST_FAILED:
+        SafeStrCopy(
+            wszErrorString,
+            L"Action Request Failed",
+            1024
+        );
+        break;
+    case UPNP_E_TRANSPORT_ERROR:
+        SafeStrCopy(
+            wszErrorString,
+            L"Transport Error",
+            1024
+        );
+        break;
+    case UPNP_E_VARIABLE_VALUE_UNKNOWN:
+        SafeStrCopy(
+            wszErrorString,
+            L"Variable Value Unknown",
+            1024
+        );
+        break;
+    case UPNP_E_INVALID_VARIABLE:
+        SafeStrCopy(
+            wszErrorString,
+            L"Invalid Variable",
+            1024
+        );
+        break;
+    case UPNP_E_DEVICE_ERROR:
+        SafeStrCopy(
+            wszErrorString,
+            L"Device Error",
+            1024
+        );
+        break;
+    case UPNP_E_PROTOCOL_ERROR:
+        SafeStrCopy(
+            wszErrorString,
+            L"Protocol Error",
+            1024
+        );
+        break;
+    case UPNP_E_ERROR_PROCESSING_RESPONSE:
+        SafeStrCopy(
+            wszErrorString,
+            L"Error Processing Response",
+            1024
+        );
+        break;
+    case UPNP_E_DEVICE_TIMEOUT:
+        SafeStrCopy(
+            wszErrorString,
+            L"Device Timeout",
+            1024
+        );
+        break;
+    case UPNP_E_INVALID_DOCUMENT:
+        SafeStrCopy(
+            wszErrorString,
+            L"Invalid Document",
+            1024
+        );
+        break;
+    case UPNP_E_EVENT_SUBSCRIPTION_FAILED:
+        SafeStrCopy(
+            wszErrorString,
+            L"Event Subscription Failed",
+            1024
+        );
+        break;
+    default:
+        if ((hr>=UPNP_E_ACTION_SPECIFIC_BASE) &&
+                (hr <= UPNP_E_ACTION_SPECIFIC_MAX))
+        {
             SafeStrCopy(
-                            wszErrorString, 
-                            L"Root Element Expected",
-                            1024 
-                            );
-            break;
-        case UPNP_E_DEVICE_ELEMENT_EXPECTED:
-            SafeStrCopy(
-                            wszErrorString, 
-                            L"Device Element Expected",
-                            1024 
-                            );
-            break;
-        case UPNP_E_SERVICE_ELEMENT_EXPECTED:
-            SafeStrCopy(
-                            wszErrorString, 
-                            L"Service Element Expected",
-                            1024 
-                            );
-            break;
-        case UPNP_E_SERVICE_NODE_INCOMPLETE:
-            SafeStrCopy(
-                            wszErrorString, 
-                            L"Service Node Incomplete",
-                            1024 
-                            );
-            break;
-        case UPNP_E_DEVICE_NODE_INCOMPLETE:
-            SafeStrCopy(
-                            wszErrorString, 
-                            L"Device Node Incomplete",
-                            1024 
-                            );
-            break;
-        case UPNP_E_ICON_ELEMENT_EXPECTED:
-            SafeStrCopy(
-                            wszErrorString, 
-                            L"Icon Element Expected",
-                            1024 
-                            );
-            break;
-        case UPNP_E_ICON_NODE_INCOMPLETE:
-            SafeStrCopy(
-                            wszErrorString, 
-                            L"Icon Node Incomplete",
-                            1024 
-                            );
-            break;
-        case UPNP_E_INVALID_ACTION:
-            SafeStrCopy(
-                           wszErrorString, 
-                           L"Invalid Action",
-                           1024 
-                           );
-            break;
-        case UPNP_E_INVALID_ARGUMENTS:
-            SafeStrCopy(
-                           wszErrorString, 
-                           L"Invalid Arguments",
-                           1024 
-                           );
-            break;
-        case UPNP_E_OUT_OF_SYNC:
-            SafeStrCopy(
-                            wszErrorString, 
-                            L"Out of Sync",
-                            1024 
-                            );
-            break;
-        case UPNP_E_ACTION_REQUEST_FAILED:
-            SafeStrCopy(
-                            wszErrorString, 
-                            L"Action Request Failed",
-                            1024 
-                            );
-            break;
-        case UPNP_E_TRANSPORT_ERROR:
-            SafeStrCopy(
-                            wszErrorString, 
-                            L"Transport Error",
-                            1024 
-                            );
-            break;
-        case UPNP_E_VARIABLE_VALUE_UNKNOWN:
-            SafeStrCopy(
-                            wszErrorString, 
-                            L"Variable Value Unknown",
-                            1024 
-                            );
-            break;
-        case UPNP_E_INVALID_VARIABLE:
-            SafeStrCopy(
-                            wszErrorString, 
-                            L"Invalid Variable",
-                            1024
-                            );
-            break;
-        case UPNP_E_DEVICE_ERROR:
-            SafeStrCopy(
-                            wszErrorString, 
-                            L"Device Error",
-                           1024 
-                            );
-            break;
-        case UPNP_E_PROTOCOL_ERROR:
-            SafeStrCopy(
-                            wszErrorString, 
-                            L"Protocol Error",
-                            1024 
-                            );
-            break;
-        case UPNP_E_ERROR_PROCESSING_RESPONSE:
-            SafeStrCopy(
-                            wszErrorString, 
-                            L"Error Processing Response",
-                            1024 
-                            );
-            break;
-        case UPNP_E_DEVICE_TIMEOUT:
-            SafeStrCopy(
-                            wszErrorString, 
-                            L"Device Timeout",
-                            1024 
-                            );
-            break;
-        case UPNP_E_INVALID_DOCUMENT:
-            SafeStrCopy(
-                            wszErrorString, 
-                            L"Invalid Document",
-                            1024 
-                            );
-            break;
-        case UPNP_E_EVENT_SUBSCRIPTION_FAILED:
-            SafeStrCopy(
-                            wszErrorString, 
-                            L"Event Subscription Failed",
-                            1024 
-                            );
-            break;
-        default:
-                   if ((hr>=UPNP_E_ACTION_SPECIFIC_BASE) && 
-                       (hr <= UPNP_E_ACTION_SPECIFIC_MAX))
-                   {
-            SafeStrCopy(
-                            wszErrorString, 
-                            L"Action Specific Error",
-                            1024 
-                            );
+                wszErrorString,
+                L"Action Specific Error",
+                1024
+            );
             break;
         }
         _snwprintf_s(
-                   wszErrorString,
-                   1024, 
-                   _TRUNCATE,
-                   L"An error has occured.\n\nError Code: 0x%x", 
-                   hr
-                   );                        
+            wszErrorString,
+            1024,
+            _TRUNCATE,
+            L"An error has occured.\n\nError Code: 0x%x",
+            hr
+        );
     }
     MessageBox( NULL, (LPCWSTR)wszErrorString, L"Error", MB_OK );
 }
@@ -232,23 +236,26 @@ void PrintErrorText(_In_ HRESULT hr){
 //  Returns:    S_OK or E_OUTOFMEMORY
 //
 //  Notes:
-//				
-//				
+//
+//
 HRESULT HrCreateSafeArray(_In_ VARTYPE vt, _In_ int nArgs, _Outptr_ SAFEARRAY **ppsa)
 {
-    SAFEARRAYBOUND    aDim[1]; 
+    SAFEARRAYBOUND    aDim[1];
 
-	if(0 == nArgs){
-        aDim[0].lLbound = 0; 
-        aDim[0].cElements = 0; 
+    if(0 == nArgs)
+    {
+        aDim[0].lLbound = 0;
+        aDim[0].cElements = 0;
     }
-    else{
-        aDim[0].lLbound = 1; 
-        aDim[0].cElements = nArgs; 
+    else
+    {
+        aDim[0].lLbound = 1;
+        aDim[0].cElements = nArgs;
     }
-        
+
     *ppsa = SafeArrayCreate(vt, 1, aDim);
-    if(NULL == *ppsa){
+    if(NULL == *ppsa)
+    {
         return E_OUTOFMEMORY;
     }
 
@@ -268,8 +275,8 @@ HRESULT HrCreateSafeArray(_In_ VARTYPE vt, _In_ int nArgs, _Outptr_ SAFEARRAY **
 //  Returns:    S_OK or E_OUTOFMEMORY
 //
 //  Notes:
-//				
-//				
+//
+//
 
 _When_(dwArgs == 0, _At_(*pppVars, _Post_null_))
 _When_(dwArgs > 0, _At_(*pppVars, _Post_notnull_))
@@ -277,18 +284,21 @@ HRESULT HrCreateArgVariants(_In_ DWORD dwArgs, _Outptr_result_buffer_maybenull_(
 {
     HRESULT             hr = S_OK;
     DWORD               i = 0;
-    
-	if(0 == dwArgs){
+
+    if(0 == dwArgs)
+    {
         *pppVars = NULL;
         return hr;
     }
     *pppVars = new VARIANT* [dwArgs];
-    if(NULL == *pppVars){
-		return E_OUTOFMEMORY;
+    if(NULL == *pppVars)
+    {
+        return E_OUTOFMEMORY;
     }
-	ZeroMemory(*pppVars, dwArgs*sizeof(VARIANT *));
-    
-	for(i = 0; i < dwArgs; i++){
+    ZeroMemory(*pppVars, dwArgs*sizeof(VARIANT *));
+
+    for(i = 0; i < dwArgs; i++)
+    {
         (*pppVars)[i] = new VARIANT;
         if(NULL == (*pppVars)[i])
         {
@@ -332,15 +342,15 @@ exit:
 //  Returns:    S_OK
 //
 //  Notes:
-//				
-//				
+//
+//
 
 HRESULT HrDestroyArgVariants(_In_ DWORD dwArgs, _Inout_ _At_(*pppVars, _Pre_writable_size_(dwArgs) _Post_maybenull_) VARIANT*** pppVars)
 {
     HRESULT             hr = S_OK;
     VARIANT             *pVar = NULL;
 
-	ASSERT(pppVars && *pppVars);
+    ASSERT(pppVars && *pppVars);
     if(0 == dwArgs)
     {
         return hr;
@@ -376,8 +386,8 @@ HRESULT HrDestroyArgVariants(_In_ DWORD dwArgs, _Inout_ _At_(*pppVars, _Pre_writ
 //  Returns:    None
 //
 //  Notes:
-//				
-//				
+//
+//
 
 
 void VariantSetVar(_In_ VARIANT* pvarToSet, _Inout_ VARIANT& va)
@@ -395,14 +405,14 @@ void VariantSetVar(_In_ VARIANT* pvarToSet, _Inout_ VARIANT& va)
 //  Purpose:    Sets the variant value to given array
 //
 //  Arguments:
-//				psa		[in]		SafeArray 
+//				psa		[in]		SafeArray
 //				va		[in,out]	Variant which is being set
 //
 //  Returns:    None
 //
 //  Notes:
-//				
-//				
+//
+//
 void VariantSetArray(_In_ SAFEARRAY* psa, _Inout_ VARIANT& va)
 {
     VariantInit(&va);
@@ -425,8 +435,8 @@ void VariantSetArray(_In_ SAFEARRAY* psa, _Inout_ VARIANT& va)
 //  Returns:    HRESULT
 //
 //  Notes:
-//				
-//				
+//
+//
 
 HRESULT HrGetSafeArrayBounds(_In_ SAFEARRAY *psa, _Out_ long* plLBound, _Out_ long* plUBound)
 {
@@ -461,15 +471,15 @@ HRESULT HrGetSafeArrayBounds(_In_ SAFEARRAY *psa, _Out_ long* plLBound, _Out_ lo
 //  Returns:    HRESULT
 //
 //  Notes:
-//				
-//				
+//
+//
 
 HRESULT HrGetVariantElement(_In_ SAFEARRAY *psa, _In_ int lPosition, _Out_ VARIANT* pvar)
 {
     HRESULT hr = S_OK;
     long    alPos[1];
 
-    if(NULL == psa) 
+    if(NULL == psa)
     {
         return E_POINTER;
     }
@@ -490,7 +500,7 @@ HRESULT HrGetVariantElement(_In_ SAFEARRAY *psa, _In_ int lPosition, _Out_ VARIA
 //  Purpose : Does a Safe string copy using wcsncpy. We will always get a NULL
 //            terminated string with this.
 //
-//  Argument: 
+//  Argument:
 //           src  [in/out] Buffer into which string is to be copied.
 //           dst  [in] Buffer to copy from.
 //           srcBufLen [in] Size of the source buffer.
@@ -503,10 +513,10 @@ HRESULT HrGetVariantElement(_In_ SAFEARRAY *psa, _In_ int lPosition, _Out_ VARIA
 
 void SafeStrCopy(_Out_writes_(srcBufLen) LPWSTR src, _In_ LPCWSTR dst, _In_ size_t srcBufLen)
 {
-   ASSERT(src != NULL);
-   ASSERT(dst != NULL);
-   ASSERT(srcBufLen != 0);
+    ASSERT(src != NULL);
+    ASSERT(dst != NULL);
+    ASSERT(srcBufLen != 0);
 
-   wcsncpy_s(src, srcBufLen, dst, (srcBufLen - 1));
+    wcsncpy_s(src, srcBufLen, dst, (srcBufLen - 1));
 
 }

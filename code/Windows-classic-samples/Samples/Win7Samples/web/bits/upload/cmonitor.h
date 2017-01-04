@@ -1,16 +1,16 @@
-//+---------------------------------------------------------------------------
+﻿//+---------------------------------------------------------------------------
 //
-//  Copyright (c) Microsoft Corporation. All rights reserved. 
+//  Copyright (c) Microsoft Corporation. All rights reserved.
 //
 //
 //  BITS Upload sample
 //  ==================
 //
-//  Module name: 
+//  Module name:
 //  cdialog.h
 //
 //  Purpose:
-//  Defines the class CSimpleDialog, which implements the 
+//  Defines the class CSimpleDialog, which implements the
 //  IBackgroundCopyCallback interface.
 //
 //----------------------------------------------------------------------------
@@ -24,7 +24,10 @@ class CMonitor : public IBackgroundCopyCallback
     LONG m_lRefCount;
 
 public:
-    CMonitor() { m_lRefCount = 0;};
+    CMonitor()
+    {
+        m_lRefCount = 0;
+    };
     ~CMonitor() {};
 
     // IUnknown

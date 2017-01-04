@@ -1,4 +1,4 @@
-/*++
+﻿/*++
 
     THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
     ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
@@ -26,7 +26,7 @@ Abstract:
 BOOLEAN
 FormatDateTime(
     __in PSYSTEMTIME SystemTime
-    )
+)
 
 /*++
 
@@ -52,26 +52,28 @@ Return Value:
     LONG StrLen;
 
     StrLen = GetDateFormatW(LOCALE_USER_DEFAULT,
-                           0,
-                           SystemTime,
-                           FORMAT_STRING_DATE,
-                           DateTime,
-                           STRLEN_UTC_DATETIME);
+                            0,
+                            SystemTime,
+                            FORMAT_STRING_DATE,
+                            DateTime,
+                            STRLEN_UTC_DATETIME);
 
-    if (StrLen == 0) {
+    if (StrLen == 0)
+    {
         return FALSE;
     }
 
     wprintf(L"%s", DateTime);
 
     StrLen = GetTimeFormatW(LOCALE_USER_DEFAULT,
-                           0,
-                           SystemTime,
-                           FORMAT_STRING_TIME,
-                           DateTime,
-                           STRLEN_UTC_DATETIME);
+                            0,
+                            SystemTime,
+                            FORMAT_STRING_TIME,
+                            DateTime,
+                            STRLEN_UTC_DATETIME);
 
-    if (StrLen == 0) {
+    if (StrLen == 0)
+    {
         return FALSE;
     }
 
@@ -87,7 +89,7 @@ PrintWPPProperty(
     __in USHORT InType,
     __in PWSTR PropertyName,
     __inout PPROCESSING_CONTEXT LogContext
-    )
+)
 
 /*++
 
@@ -134,15 +136,19 @@ Return Value:
     PropertyData.ArrayIndex = ULONG_MAX;
     PropertyData.PropertyName = (ULONGLONG)PropertyName;
 
-    do {
+    do
+    {
 
-        if (Status == ERROR_INSUFFICIENT_BUFFER) {
+        if (Status == ERROR_INSUFFICIENT_BUFFER)
+        {
 
-            if (LogContext->Buffer != NULL) {
+            if (LogContext->Buffer != NULL)
+            {
                 free(LogContext->Buffer);
             }
             LogContext->Buffer = (PBYTE)malloc(LogContext->BufferSize * 2);
-            if (LogContext->Buffer == NULL) {
+            if (LogContext->Buffer == NULL)
+            {
                 return;
             }
             LogContext->BufferSize *= 2;
@@ -156,92 +162,102 @@ Return Value:
                                 LogContext->BufferSize,
                                 LogContext->Buffer);
 
-    } while (Status == ERROR_INSUFFICIENT_BUFFER);
+    }
+    while (Status == ERROR_INSUFFICIENT_BUFFER);
 
-    if (Status != ERROR_SUCCESS) {
+    if (Status != ERROR_SUCCESS)
+    {
         return;
     }
 
-    switch(InType) {
+    switch(InType)
+    {
 
-        case TDH_INTYPE_UNICODESTRING:
-        {
-            wprintf(L"%s", (PWSTR)LogContext->Buffer);
-            break;
-        }
-        case TDH_INTYPE_UINT32:
-        {
-            ULONG Data;
+    case TDH_INTYPE_UNICODESTRING:
+    {
+        wprintf(L"%s", (PWSTR)LogContext->Buffer);
+        break;
+    }
+    case TDH_INTYPE_UINT32:
+    {
+        ULONG Data;
 
-            CopyMemory(&Data, LogContext->Buffer, sizeof(ULONG));
-            wprintf(L"%u", Data);
+        CopyMemory(&Data, LogContext->Buffer, sizeof(ULONG));
+        wprintf(L"%u", Data);
 
-            break;
-        }
-        case TDH_INTYPE_GUID:
-        {
-            GUID GuidValue;
-            WCHAR GuidStr[STRLEN_GUID];
+        break;
+    }
+    case TDH_INTYPE_GUID:
+    {
+        GUID GuidValue;
+        WCHAR GuidStr[STRLEN_GUID];
 
-            CopyMemory(&GuidValue, LogContext->Buffer, sizeof(GUID));
-            StringFromGUID2(GuidValue, GuidStr, STRLEN_GUID);
-            wprintf(L"%s", GuidStr);
+        CopyMemory(&GuidValue, LogContext->Buffer, sizeof(GUID));
+        StringFromGUID2(GuidValue, GuidStr, STRLEN_GUID);
+        wprintf(L"%s", GuidStr);
 
-            break;
-        }
-        case TDH_INTYPE_FILETIME:
-        {
-            FILETIME FileTime;
-            SYSTEMTIME SystemTime;
-            ULARGE_INTEGER Time;
-            ULONGLONG NanoSeconds;
+        break;
+    }
+    case TDH_INTYPE_FILETIME:
+    {
+        FILETIME FileTime;
+        SYSTEMTIME SystemTime;
+        ULARGE_INTEGER Time;
+        ULONGLONG NanoSeconds;
 
-            CopyMemory(&FileTime, LogContext->Buffer, sizeof(FILETIME));
+        CopyMemory(&FileTime, LogContext->Buffer, sizeof(FILETIME));
 
-            if (FileTimeToSystemTime(&FileTime, &SystemTime) &&
+        if (FileTimeToSystemTime(&FileTime, &SystemTime) &&
                 (SystemTime.wMonth <= 12) &&
-                FormatDateTime(&SystemTime)) {
-
-                CopyMemory(&Time, &FileTime, sizeof(FILETIME));
-                NanoSeconds = (Time.QuadPart % ONE_HUNDRED_NANOSECONDS_PER_SECOND) * 100;
-                wprintf(L".%09I64uZ", NanoSeconds);
-
-            } else {
-
-                wprintf(L"%u:%u", FileTime.dwLowDateTime, FileTime.dwHighDateTime);
-            }
-
-            break;
-        }
-        case TDH_INTYPE_SYSTEMTIME:
+                FormatDateTime(&SystemTime))
         {
-            SYSTEMTIME SystemTime;
 
-            CopyMemory(&SystemTime, LogContext->Buffer, sizeof(SYSTEMTIME));
+            CopyMemory(&Time, &FileTime, sizeof(FILETIME));
+            NanoSeconds = (Time.QuadPart % ONE_HUNDRED_NANOSECONDS_PER_SECOND) * 100;
+            wprintf(L".%09I64uZ", NanoSeconds);
 
-            if (SystemTime.wMonth <= 12) {
+        }
+        else
+        {
 
-                if (FormatDateTime(&SystemTime)) {
-                    wprintf(L".%03uZ", SystemTime.wMilliseconds);
-                }
+            wprintf(L"%u:%u", FileTime.dwLowDateTime, FileTime.dwHighDateTime);
+        }
 
-            } else {
+        break;
+    }
+    case TDH_INTYPE_SYSTEMTIME:
+    {
+        SYSTEMTIME SystemTime;
 
-                wprintf(L"%u:%u:%u:%u:%u:%u:%u:%u",
-                        SystemTime.wYear,
-                        SystemTime.wMonth,
-                        SystemTime.wDayOfWeek,
-                        SystemTime.wDay,
-                        SystemTime.wHour,
-                        SystemTime.wMinute,
-                        SystemTime.wSecond,
-                        SystemTime.wMilliseconds);
+        CopyMemory(&SystemTime, LogContext->Buffer, sizeof(SYSTEMTIME));
+
+        if (SystemTime.wMonth <= 12)
+        {
+
+            if (FormatDateTime(&SystemTime))
+            {
+                wprintf(L".%03uZ", SystemTime.wMilliseconds);
             }
 
-            break;
         }
-        default:
-            break;
+        else
+        {
+
+            wprintf(L"%u:%u:%u:%u:%u:%u:%u:%u",
+                    SystemTime.wYear,
+                    SystemTime.wMonth,
+                    SystemTime.wDayOfWeek,
+                    SystemTime.wDay,
+                    SystemTime.wHour,
+                    SystemTime.wMinute,
+                    SystemTime.wSecond,
+                    SystemTime.wMilliseconds);
+        }
+
+        break;
+    }
+    default:
+        break;
     }
 }
 
@@ -250,7 +266,7 @@ VOID
 ProcessWPPEvent(
     __in PEVENT_RECORD Event,
     __inout PPROCESSING_CONTEXT LogContext
-    )
+)
 
 /*++
 
@@ -320,7 +336,7 @@ VOID
 ProcessHeaderEvent(
     __in PEVENT_RECORD Event,
     __inout PPROCESSING_CONTEXT LogContext
-    )
+)
 
 /*++
 
@@ -361,7 +377,8 @@ Return Value:
                             sizeof(ULONG),
                             (PBYTE)&PointerSize);
 
-    if (Status == ERROR_SUCCESS) {
+    if (Status == ERROR_SUCCESS)
+    {
         LogContext->TdhContexts[1].ParameterValue = (ULONGLONG)PointerSize;
     }
 }
@@ -371,7 +388,7 @@ VOID
 WINAPI
 EventCallback(
     __in PEVENT_RECORD Event
-    )
+)
 
 /*++
 
@@ -394,7 +411,8 @@ Return Value:
     PPROCESSING_CONTEXT LogContext = (PPROCESSING_CONTEXT)Event->UserContext;
 
     if ((Event->EventHeader.ProviderId == EventTraceGuid) &&
-        (Event->EventHeader.EventDescriptor.Opcode == EVENT_TRACE_TYPE_INFO)) {
+            (Event->EventHeader.EventDescriptor.Opcode == EVENT_TRACE_TYPE_INFO))
+    {
 
         //
         // Header event is the special first event in every ETL file. We will
@@ -408,7 +426,8 @@ Return Value:
         return;
     }
 
-    if ((Event->EventHeader.Flags & EVENT_HEADER_FLAG_TRACE_MESSAGE) == 0) {
+    if ((Event->EventHeader.Flags & EVENT_HEADER_FLAG_TRACE_MESSAGE) == 0)
+    {
 
         //
         // This sample only understands WPP events, ignore the rest.
@@ -418,12 +437,13 @@ Return Value:
     }
 
     //
-    // Prior to Win7, TdhGetEventInformation() needs to be called before 
+    // Prior to Win7, TdhGetEventInformation() needs to be called before
     // TdhGetProperty(), although the return value of TdhGetEventInformation
     // is ignored. This call to TdhGetEventInformation() is not required on Win7.
     //
-    
-    if (LogContext->OSPriorWin7 != FALSE) {
+
+    if (LogContext->OSPriorWin7 != FALSE)
+    {
 
         ULONG BufferSize = 0;
         TdhGetEventInformation(Event,
@@ -431,7 +451,7 @@ Return Value:
                                LogContext->TdhContexts,
                                NULL,
                                &BufferSize);
-    } 
+    }
 
     ProcessWPPEvent(Event, LogContext);
 
@@ -443,7 +463,7 @@ ULONG
 WINAPI
 BufferCallback(
     __in PEVENT_TRACE_LOGFILE LogFile
-    )
+)
 
 /*++
 
@@ -481,7 +501,7 @@ ULONG
 DecodeFile(
     __in LPWSTR FileName,
     __inout PPROCESSING_CONTEXT LogContext
-    )
+)
 
 /*++
 
@@ -515,19 +535,22 @@ Return Value:
     LogFile.Context = (PVOID)LogContext;
 
     Handle = OpenTrace(&LogFile);
-    if (Handle == INVALID_PROCESSTRACE_HANDLE) {
+    if (Handle == INVALID_PROCESSTRACE_HANDLE)
+    {
         Status = GetLastError();
         wprintf(L"\nOpenTrace failed. Error code: %u.\n", Status);
         return Status;
     }
 
     Status = ProcessTrace(&Handle, 1, NULL, NULL);
-    if (Status != ERROR_SUCCESS) {
+    if (Status != ERROR_SUCCESS)
+    {
         wprintf(L"\nProcessTrace failed. Error code: %u.\n", Status);
     }
 
     Status = CloseTrace(Handle);
-    if (Status != ERROR_SUCCESS) {
+    if (Status != ERROR_SUCCESS)
+    {
         wprintf(L"\nCloseTrace failed. Error code: %u.\n", Status);
     }
 
@@ -539,7 +562,7 @@ LONG
 wmain(
     __in INT argc,
     __in_ecount(argc) LPWSTR* argv
-    )
+)
 
 /*++
 
@@ -566,8 +589,9 @@ Return Value:
 {
     ULONG Status;
     PROCESSING_CONTEXT LogContext;
-    
-    if (argc != 3) {
+
+    if (argc != 3)
+    {
         wprintf(L"Usage: %s <etl file> <tmf file>", argv[0]);
         return 1;
     }
@@ -586,7 +610,8 @@ Return Value:
 
     Status = DecodeFile(argv[1], &LogContext);
 
-    if (Status == ERROR_SUCCESS) {
+    if (Status == ERROR_SUCCESS)
+    {
 
         wprintf(L"\n\nSummary:");
         wprintf(L"\n---------");

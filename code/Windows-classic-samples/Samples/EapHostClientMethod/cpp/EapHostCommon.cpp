@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 
@@ -174,7 +174,7 @@ AddAttribute(
     IN     EapAttributeType eaType,
     IN     DWORD dwLength,
     IN     PVOID pValue
-    )
+)
 {
     DWORD retCode = NO_ERROR;
     DWORD i = 0;
@@ -297,9 +297,9 @@ AppendAttributeToList(
         {
             pEapAttrib = &((*ppAttributesList)->pAttribs)[dwIndex];
             retCode = AddAttribute(pNewAttributesList,
-                                 pEapAttrib->eaType,
-                                 pEapAttrib->dwLength,
-                                 pEapAttrib->pValue);
+                                   pEapAttrib->eaType,
+                                   pEapAttrib->dwLength,
+                                   pEapAttrib->pValue);
             if (retCode != NO_ERROR)
                 goto Cleanup;
         }
@@ -358,7 +358,7 @@ DWORD AllocateandFillEapError(
     IN LPCGUID pHelpLinkGuid,
     IN _In_opt_ LPWSTR pRootCauseString,
     IN _In_opt_ LPWSTR pRepairString
-    )
+)
 {
     DWORD retCode = NO_ERROR;
 
@@ -611,8 +611,8 @@ DWORD GetFullPath(
     CopyMemory(pathName + bufferLength + 1, dllName, sizeofDllNameInBytes);
 
 Cleanup:
-    if((pathName != NULL) && 
-        ((retCode != ERROR_SUCCESS) || (bufferLength == 0)))
+    if((pathName != NULL) &&
+            ((retCode != ERROR_SUCCESS) || (bufferLength == 0)))
         FreeMemory((PVOID *)&pathName);
 
     return retCode;
@@ -648,9 +648,9 @@ EapTrace(
     DWORD g_DefaultTraceLevel = 0x00010000;
 
     TraceVprintfExA(g_dwEapTraceId,
-        g_DefaultTraceLevel | TRACE_USE_MASK | TRACE_USE_MSEC,
-        Format,
-        arglist);
+                    g_DefaultTraceLevel | TRACE_USE_MASK | TRACE_USE_MSEC,
+                    Format,
+                    arglist);
 
     va_end(arglist);
 }

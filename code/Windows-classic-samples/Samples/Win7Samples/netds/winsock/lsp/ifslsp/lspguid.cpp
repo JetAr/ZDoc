@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -11,11 +11,11 @@
 //
 //      This module defines the GUID under which the LSP's hidden dummy
 //      entry is to be installed under. This GUID must be hard coded in
-//      this file so that the DLL instance can find itself in the Winsock 
+//      this file so that the DLL instance can find itself in the Winsock
 //      catalog. Once it finds the dummy hidden entry, it can then find
 //      the layered protocol entries belonging to the LSP (since these
 //      entries will reference the catalog ID of the hidden dummy entry).
-//      
+//
 //      It is possible to create multiple LSPs by simply copying this project
 //      to another directory, changing the GUID in this file, and changing
 //      the DLL name. The LSP installer (instlsp.exe) can then install each
@@ -34,7 +34,8 @@
 //
 // This is the hardcoded guid for our dummy (hidden) catalog entry
 //
-GUID gProviderGuid = { //f345d288-21e2-441d-a7d1-eb4c6e001e3d
+GUID gProviderGuid =   //f345d288-21e2-441d-a7d1-eb4c6e001e3d
+{
     0xf345d288,
     0x21e2,
     0x441d,
@@ -56,7 +57,7 @@ void
 WSPAPI
 GetLspGuid(
     LPGUID lpGuid
-    )
+)
 {
     memcpy( lpGuid, &gProviderGuid, sizeof( GUID ) );
 }

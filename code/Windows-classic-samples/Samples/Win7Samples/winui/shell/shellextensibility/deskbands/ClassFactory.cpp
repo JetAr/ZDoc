@@ -1,4 +1,4 @@
-#include "ClassFactory.h"
+﻿#include "ClassFactory.h"
 #include "Deskband.h"
 
 extern long g_cDllRef;

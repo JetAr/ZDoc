@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -36,9 +36,9 @@ HRESULT CSdkQecModule::RegisterSdkQec()
     if(FAILED(hr))
     {
         wprintf(L"RegisterSdkQec:: FillQecComponentRegistrationInfo Failed with %#x",hr);
-		ZeroMemory(&qecInfo, sizeof(qecInfo));
-		goto Cleanup;
-	}
+        ZeroMemory(&qecInfo, sizeof(qecInfo));
+        goto Cleanup;
+    }
 
     hr = pQECMgmt->RegisterEnforcementClient(&qecInfo);
     if ( FAILED(hr) )
@@ -69,10 +69,10 @@ HRESULT CSdkQecModule::UnregisterSdkQec()
 
     // create an instance of the Management interface
     hr = CoCreateInstance(CLSID_NapClientManagement,
-                           NULL,
-                           CLSCTX_INPROC_SERVER,
-                           IID_INapClientManagement,
-                           reinterpret_cast<void**>(&pQECMgmt));
+                          NULL,
+                          CLSCTX_INPROC_SERVER,
+                          IID_INapClientManagement,
+                          reinterpret_cast<void**>(&pQECMgmt));
     if (FAILED(hr))
     {
         wprintf(L"UnregisterSdkQec: CoCreateInstance Failed with %#x",hr);
@@ -103,41 +103,41 @@ HRESULT CSdkQecModule::FillQecComponentRegistrationInfo (
 {
     HRESULT hr = S_OK;
     agentInfo->id = NapSdkQecId;
-    agentInfo->infoClsid = CLSID_INFO; 
+    agentInfo->infoClsid = CLSID_INFO;
 
     hr = FillCountedString( QEC_FRIENDLY_NAME, &(agentInfo->friendlyName) );
     if (FAILED(hr))
     {
         wprintf(L"SdkQec::FillQecComponentRegistrationInfo(): AllocCountedString for friendlyName returned error %#x!",hr);
-		goto Cleanup;
+        goto Cleanup;
     }
 
     hr = FillCountedString( QEC_DESCRIPTION, &(agentInfo->description) );
     if (FAILED(hr))
     {
         wprintf(L"SdkQec::FillQecComponentRegistrationInfo(): AllocCountedString for description returned error %#x!",hr);
-		goto Cleanup;
+        goto Cleanup;
     }
 
     hr = FillCountedString( QEC_VERSION, &(agentInfo->version) );
     if (FAILED(hr))
     {
         wprintf(L"SdkQec::FillQecComponentRegistrationInfo(): AllocCountedString for version returned error %#x!",hr);
-		goto Cleanup;
+        goto Cleanup;
     }
 
     hr = FillCountedString( QEC_VENDOR_NAME, &(agentInfo->vendorName) );
     if (FAILED(hr))
     {
         wprintf(L"SdkQec::FillQecComponentRegistrationInfo(): AllocCountedString for vendorName returned error %#x!",hr);
-		goto Cleanup;
+        goto Cleanup;
     }
 
-	return hr;
+    return hr;
 
 Cleanup:
-	FreeComponentRegistration(agentInfo);
-	return hr;
+    FreeComponentRegistration(agentInfo);
+    return hr;
 }
 
 

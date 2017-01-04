@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -10,8 +10,8 @@
 DWORD WINAPI DDProc(_In_ void* Param);
 
 THREADMANAGER::THREADMANAGER() : m_ThreadCount(0),
-                                 m_ThreadHandles(nullptr),
-                                 m_ThreadData(nullptr)
+    m_ThreadHandles(nullptr),
+    m_ThreadData(nullptr)
 {
     RtlZeroMemory(&m_PtrInfo, sizeof(m_PtrInfo));
 }
@@ -177,7 +177,7 @@ DUPL_RETURN THREADMANAGER::InitializeDx(_Out_ DX_RESOURCES* Data)
     for (UINT DriverTypeIndex = 0; DriverTypeIndex < NumDriverTypes; ++DriverTypeIndex)
     {
         hr = D3D11CreateDevice(nullptr, DriverTypes[DriverTypeIndex], nullptr, 0, FeatureLevels, NumFeatureLevels,
-                                D3D11_SDK_VERSION, &Data->Device, &FeatureLevel, &Data->Context);
+                               D3D11_SDK_VERSION, &Data->Device, &FeatureLevel, &Data->Context);
         if (SUCCEEDED(hr))
         {
             // Device creation success, no need to loop anymore

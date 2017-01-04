@@ -1,23 +1,23 @@
-//*****************************************************************************
+﻿//*****************************************************************************
 //
 // Microsoft Windows Media
 // Copyright (C) Microsoft Corporation. All rights reserved.
 //
 // FileName:            ExtensionData.h
 //
-// Abstract:            Definition for CExtensionData class 
+// Abstract:            Definition for CExtensionData class
 //
 //*****************************************************************************
 
 #if !defined(AFX_CExtensionData_H__21A57EE3_8C94_4E10_8092_4C171BCBA68E__INCLUDED_)
 #define AFX_CExtensionData_H__21A57EE3_8C94_4E10_8092_4C171BCBA68E__INCLUDED_
-class CExtensionData 
+class CExtensionData
 {
 public :
 
     CExtensionData( GUID guidDUExt, BYTE *pbExtensionSystemInfo,
                     WORD cbExtensionDataSize, DWORD cbExtensionSystemInfo, WORD wStreamNum );
-	~CExtensionData();
+    ~CExtensionData();
 
     GUID            m_guidDUExt;
     BYTE            *m_pbExtensionSystemInfo;
@@ -27,7 +27,7 @@ public :
     void            *m_pValue;
     CExtensionData  *m_pNext;
 
-    
+
 
     HRESULT DisplayData();
 
@@ -39,7 +39,7 @@ public :
 // List of data extensions
 ///////////////////////////////////////////////////////////////
 
-class CExtDataList  
+class CExtDataList
 {
 
 private :
@@ -48,7 +48,7 @@ private :
     WORD m_wSearchStreamNum;
 
 public:
-	CExtDataList()
+    CExtDataList()
     {
         m_pStart = m_pCur = m_pIter = m_pEnd = NULL;
         m_wSize = 0;
@@ -65,12 +65,18 @@ public:
     }
 
 public :
-    WORD Size() { return m_wSize; };
+    WORD Size()
+    {
+        return m_wSize;
+    };
     HRESULT Create( IWMProfile*    pProfile );
     bool Find( WORD wStreamNum, CExtensionData **pExtensionData );
 private :
     bool Append( CExtensionData *pCExtensionData );
-    CExtensionData *GetStart() { return m_pStart; };
+    CExtensionData *GetStart()
+    {
+        return m_pStart;
+    };
 
 };
 

@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -10,11 +10,12 @@
 
 #define SHAPE_MARGIN    5
 
-COLORREF CRenderer::s_aColors[3] = {
-                        RGB(255, 0, 0), // Red 
-                        RGB(0, 255, 0), // Green
-                        RGB(0, 0, 255), // Blue
-                       };
+COLORREF CRenderer::s_aColors[3] =
+{
+    RGB(255, 0, 0), // Red
+    RGB(0, 255, 0), // Green
+    RGB(0, 0, 255), // Blue
+};
 
 void CRenderer::Initialize(HWND hWnd)
 {
@@ -48,21 +49,21 @@ void CRenderer::DrawShapes(HDC hdc, RECT& rect)
     HBRUSH hBrush = CreateSolidBrush(s_aColors[m_param.eShapeColor]);
 
     HGDIOBJ hOldBrush = ::SelectObject(hdc, hBrush);
-    
+
     int nPenStyle;
     int nBorderSize = m_param.uBorderSize;
     switch (m_param.eBorderStyle)
     {
-        case DASH:
-            nPenStyle = PS_DASH;
-            nBorderSize = 1;// Dash pen only works with a width of 1
-            break;
-        case SOLID:
-            nPenStyle = PS_SOLID;
-            break;
-        default:
-            nPenStyle = PS_NULL;
-            break;
+    case DASH:
+        nPenStyle = PS_DASH;
+        nBorderSize = 1;// Dash pen only works with a width of 1
+        break;
+    case SOLID:
+        nPenStyle = PS_SOLID;
+        break;
+    default:
+        nPenStyle = PS_NULL;
+        break;
     }
 
     HPEN hPen = CreatePen(nPenStyle, nBorderSize, RGB(0, 0, 0));
@@ -72,7 +73,7 @@ void CRenderer::DrawShapes(HDC hdc, RECT& rect)
     int nLength = ( size.cx < size.cy ? size.cx : size.cy) / nCount;
 
     // Take margin into count
-    nLength -= SHAPE_MARGIN;   
+    nLength -= SHAPE_MARGIN;
 
     if (nLength > 0)
     {
@@ -94,16 +95,16 @@ void CRenderer::DrawShapes(HDC hdc, RECT& rect)
 
             switch (eShapeType)
             {
-                case RECTANGLE:
-                case ROUNDED_RECTANGLE:
-                    DrawRectangle(hdc, ptCenter, nLength, eShapeType == ROUNDED_RECTANGLE);
-                    break;
-                case ELLIPSE:
-                    DrawEllipse(hdc, ptCenter, nLength);
-                    break;
-                case DIAMOND:
-                    DrawDiamond(hdc, ptCenter, nLength);
-                    break;
+            case RECTANGLE:
+            case ROUNDED_RECTANGLE:
+                DrawRectangle(hdc, ptCenter, nLength, eShapeType == ROUNDED_RECTANGLE);
+                break;
+            case ELLIPSE:
+                DrawEllipse(hdc, ptCenter, nLength);
+                break;
+            case DIAMOND:
+                DrawDiamond(hdc, ptCenter, nLength);
+                break;
             }
         }
     }
@@ -127,20 +128,20 @@ void CRenderer::DrawRectangle(HDC hdc, POINT& ptCenter, int nBoundingBoxLength, 
         }
 
         RoundRect(hdc, ptCenter.x - nBoundingBoxLength / 2, ptCenter.y - nBoundingBoxLength / 2,
-                    ptCenter.x + nBoundingBoxLength / 2, ptCenter.y + nBoundingBoxLength / 2, 
-                    nRoundLength, nRoundLength);
+                  ptCenter.x + nBoundingBoxLength / 2, ptCenter.y + nBoundingBoxLength / 2,
+                  nRoundLength, nRoundLength);
     }
     else
     {
         Rectangle(hdc, ptCenter.x - nBoundingBoxLength / 2, ptCenter.y - nBoundingBoxLength / 2,
-                    ptCenter.x + nBoundingBoxLength / 2, ptCenter.y + nBoundingBoxLength / 2);
+                  ptCenter.x + nBoundingBoxLength / 2, ptCenter.y + nBoundingBoxLength / 2);
     }
 }
 
 void CRenderer::DrawEllipse(HDC hdc, POINT& ptCenter, int nBoundingBoxLength)
 {
     Ellipse(hdc, ptCenter.x - nBoundingBoxLength / 2, ptCenter.y - nBoundingBoxLength / 2,
-                ptCenter.x + nBoundingBoxLength / 2, ptCenter.y + nBoundingBoxLength / 2);
+            ptCenter.x + nBoundingBoxLength / 2, ptCenter.y + nBoundingBoxLength / 2);
 }
 
 void CRenderer::DrawDiamond(HDC hdc, POINT& ptCenter, int nBoundingBoxLength)

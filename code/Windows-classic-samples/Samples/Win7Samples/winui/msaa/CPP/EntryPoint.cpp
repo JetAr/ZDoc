@@ -1,25 +1,25 @@
-/*************************************************************************************************
-* Description: Entry point for a sample application that implements a custom control with a 
+﻿/*************************************************************************************************
+* Description: Entry point for a sample application that implements a custom control with a
 * Microsoft Active Accessibility (MSAA) server.
 *
-* The control itself has been kept simple. It does not support scrolling and therefore an arbitrary 
-* limit has been set on the number of items it can contain. For convenience, list items are stored 
+* The control itself has been kept simple. It does not support scrolling and therefore an arbitrary
+* limit has been set on the number of items it can contain. For convenience, list items are stored
 * in a deque (from the Standard Template Library).
-* 
+*
 * The accessible object consists of the root element (a list box) and its children (the list items.)
 *
 *
 *  Copyright (C) Microsoft Corporation.  All rights reserved.
-* 
+*
 * This source code is intended only as a supplement to Microsoft
 * Development Tools and/or on-line documentation.  See these other
 * materials for detailed information regarding Microsoft code samples.
-* 
+*
 * THIS CODE AND INFORMATION ARE PROVIDED AS IS WITHOUT WARRANTY OF ANY
 * KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
 * IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 * PARTICULAR PURPOSE.
-* 
+*
 *************************************************************************************************/
 
 #pragma once
@@ -58,7 +58,7 @@ INT_PTR CALLBACK DlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM /*lParam
 
         // Initialize radio buttons.
         SendDlgItemMessage(hDlg, IDC_ONLINE, BM_SETCHECK, 1, 0);
-        
+
         // Add some sample contacts to the custom control.
         SendDlgItemMessage(hDlg, IDC_CUSTOMLISTBOX, CUSTOMLB_ADDITEM, Status_Online, (LPARAM)L"Frank");
         SendDlgItemMessage(hDlg, IDC_CUSTOMLISTBOX, CUSTOMLB_ADDITEM, Status_Online, (LPARAM)L"Sandra");
@@ -96,7 +96,7 @@ INT_PTR CALLBACK DlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM /*lParam
                 break;
             }
             // Get the status
-            ContactStatus status; 
+            ContactStatus status;
             if (BST_CHECKED == SendDlgItemMessage(hDlg, IDC_ONLINE, BM_GETCHECK, 0, 0))
             {
                 status = Status_Online;

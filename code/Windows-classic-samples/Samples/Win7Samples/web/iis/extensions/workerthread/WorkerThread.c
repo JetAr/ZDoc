@@ -1,4 +1,4 @@
-/* Copyright (c) 1997-2002  Microsoft Corporation
+﻿/* Copyright (c) 1997-2002  Microsoft Corporation
 
 	Module Name:
 
@@ -29,9 +29,9 @@ DWORD g_dwThreadCount = 0;
 
 /* local functions prototypes */
 
-DWORD WINAPI WorkerFunction(LPVOID); 
+DWORD WINAPI WorkerFunction(LPVOID);
 
-BOOL SendHttpHeaders(EXTENSION_CONTROL_BLOCK *, LPCSTR , LPCSTR, BOOL);
+BOOL SendHttpHeaders(EXTENSION_CONTROL_BLOCK *, LPCSTR, LPCSTR, BOOL);
 
 /*
 	Purpose:
@@ -40,7 +40,7 @@ BOOL SendHttpHeaders(EXTENSION_CONTROL_BLOCK *, LPCSTR , LPCSTR, BOOL);
 
 	Arguments:
 
-		pVer - poins to extension version info structure 
+		pVer - poins to extension version info structure
 
 	Returns:
 
@@ -49,25 +49,25 @@ BOOL SendHttpHeaders(EXTENSION_CONTROL_BLOCK *, LPCSTR , LPCSTR, BOOL);
 
 BOOL WINAPI GetExtensionVersion(OUT HSE_VERSION_INFO *pVer)
 {
-	/* tell the server our version number and extension description */
+    /* tell the server our version number and extension description */
 
-	pVer->dwExtensionVersion = MAKELONG(HSE_VERSION_MINOR, HSE_VERSION_MAJOR);
+    pVer->dwExtensionVersion = MAKELONG(HSE_VERSION_MINOR, HSE_VERSION_MAJOR);
 
-	strncpy_s(pVer->lpszExtensionDesc, sizeof(pVer->lpszExtensionDesc), "ISAPI Worker Thread Extension Sample", HSE_MAX_EXT_DLL_NAME_LEN - 1);
+    strncpy_s(pVer->lpszExtensionDesc, sizeof(pVer->lpszExtensionDesc), "ISAPI Worker Thread Extension Sample", HSE_MAX_EXT_DLL_NAME_LEN - 1);
 
-	return TRUE;
+    return TRUE;
 }
 
 /*
 	Purpose:
 
-		Create a thread to handle extended processing. It will be passed 
-		the address of a function ("WorkerFunction") to run, and the address 
+		Create a thread to handle extended processing. It will be passed
+		the address of a function ("WorkerFunction") to run, and the address
 		of the ECB associated with this session.
 
 	Arguments:
 
-		pECB - pointer to the extenstion control block 
+		pECB - pointer to the extenstion control block
 
 	Returns:
 
@@ -76,30 +76,30 @@ BOOL WINAPI GetExtensionVersion(OUT HSE_VERSION_INFO *pVer)
 
 DWORD WINAPI HttpExtensionProc(IN EXTENSION_CONTROL_BLOCK *pECB)
 {
-	DWORD dwThreadID;
+    DWORD dwThreadID;
 
-	/* NOTE: in production environment you'd probably want to limit the number of threads created */
+    /* NOTE: in production environment you'd probably want to limit the number of threads created */
 
-	CreateThread(	NULL,              // Pointer to thread security attributes 
-								0,                 // Initial thread stack size, in bytes 
-								WorkerFunction,    // Pointer to thread function 
-								pECB,              // The ECB is the argument for the new thread
-								0,                 // Creation flags 
-								&dwThreadID);      // Pointer to returned thread identifier 
+    CreateThread(	NULL,              // Pointer to thread security attributes
+                    0,                 // Initial thread stack size, in bytes
+                    WorkerFunction,    // Pointer to thread function
+                    pECB,              // The ECB is the argument for the new thread
+                    0,                 // Creation flags
+                    &dwThreadID);      // Pointer to returned thread identifier
 
-	/* update global thread count */
+    /* update global thread count */
 
-	InterlockedIncrement(&g_dwThreadCount);
+    InterlockedIncrement(&g_dwThreadCount);
 
-	/* Return HSE_STATUS_PENDING to release IIS pool thread without losing connection */
+    /* Return HSE_STATUS_PENDING to release IIS pool thread without losing connection */
 
-	return HSE_STATUS_PENDING;
+    return HSE_STATUS_PENDING;
 }
 
 /*
 	Purpose:
 
-		Show how to perform extended processing in ISAPI DLL without tying IIS threads. 
+		Show how to perform extended processing in ISAPI DLL without tying IIS threads.
 
 	Arguments:
 
@@ -107,42 +107,42 @@ DWORD WINAPI HttpExtensionProc(IN EXTENSION_CONTROL_BLOCK *pECB)
 
 	Returns:
 
-		returns 0 
+		returns 0
 */
 
 DWORD WINAPI WorkerFunction(IN LPVOID vECB)
 {
-	char szHeader[] = "Content-type: text/html\r\n\r\n";
-	char szContent[] = "<html> <form method=get action=WorkerThread.dll><h1>Worker Thread Sample</h1><hr>"
-										 "<input type=submit value=\"Send Request\"> </form></html>";
+    char szHeader[] = "Content-type: text/html\r\n\r\n";
+    char szContent[] = "<html> <form method=get action=WorkerThread.dll><h1>Worker Thread Sample</h1><hr>"
+                       "<input type=submit value=\"Send Request\"> </form></html>";
 
-	/* Initialize local ECB pointer to void pointer passed to thread */
+    /* Initialize local ECB pointer to void pointer passed to thread */
 
-	EXTENSION_CONTROL_BLOCK *pECB = vECB;
+    EXTENSION_CONTROL_BLOCK *pECB = vECB;
 
-	DWORD dwSize = strlen(szContent);
+    DWORD dwSize = strlen(szContent);
 
-	/* Send outgoing header */
+    /* Send outgoing header */
 
-	SendHttpHeaders(pECB, "200 OK", szHeader, FALSE);
+    SendHttpHeaders(pECB, "200 OK", szHeader, FALSE);
 
-	/* Simulate extended processing for 5 seconds */
+    /* Simulate extended processing for 5 seconds */
 
-	Sleep(5000);
+    Sleep(5000);
 
-	/* Send content */
+    /* Send content */
 
-	pECB->WriteClient(pECB->ConnID, szContent, &dwSize, 0);
+    pECB->WriteClient(pECB->ConnID, szContent, &dwSize, 0);
 
-	/* Inform server that the request has been satisfied, and the connection may now be dropped */
+    /* Inform server that the request has been satisfied, and the connection may now be dropped */
 
-	pECB->ServerSupportFunction(pECB->ConnID, HSE_REQ_DONE_WITH_SESSION, NULL, NULL, NULL);
+    pECB->ServerSupportFunction(pECB->ConnID, HSE_REQ_DONE_WITH_SESSION, NULL, NULL, NULL);
 
-	/* update global thread count */
-	
-	InterlockedDecrement(&g_dwThreadCount);
+    /* update global thread count */
 
-	return 0;
+    InterlockedDecrement(&g_dwThreadCount);
+
+    return 0;
 }
 
 /*
@@ -155,7 +155,7 @@ DWORD WINAPI WorkerFunction(IN LPVOID vECB)
 
 		pECB - pointer to the extension control block
 		pszStatus - HTTP status string (e.g. "200 OK")
-		pszHeaders - any additional headers, separated by CRLFs and 
+		pszHeaders - any additional headers, separated by CRLFs and
 								terminated by empty line
 
 	Returns:
@@ -166,19 +166,19 @@ DWORD WINAPI WorkerFunction(IN LPVOID vECB)
 
 BOOL SendHttpHeaders(EXTENSION_CONTROL_BLOCK *pECB, LPCSTR pszStatus, LPCSTR pszHeaders, BOOL fKeepConnection)
 {
-	HSE_SEND_HEADER_EX_INFO header_ex_info;
+    HSE_SEND_HEADER_EX_INFO header_ex_info;
 
-	BOOL success;
+    BOOL success;
 
-	header_ex_info.pszStatus = pszStatus;
-	header_ex_info.pszHeader = pszHeaders;
-	header_ex_info.cchStatus = strlen(pszStatus);
-	header_ex_info.cchHeader = strlen(pszHeaders);
-	header_ex_info.fKeepConn = fKeepConnection;
+    header_ex_info.pszStatus = pszStatus;
+    header_ex_info.pszHeader = pszHeaders;
+    header_ex_info.cchStatus = strlen(pszStatus);
+    header_ex_info.cchHeader = strlen(pszHeaders);
+    header_ex_info.fKeepConn = fKeepConnection;
 
-	success = pECB->ServerSupportFunction(pECB->ConnID,	HSE_REQ_SEND_RESPONSE_HEADER_EX, &header_ex_info,	NULL,	NULL);
+    success = pECB->ServerSupportFunction(pECB->ConnID,	HSE_REQ_SEND_RESPONSE_HEADER_EX, &header_ex_info,	NULL,	NULL);
 
-	return success;
+    return success;
 }
 
 /*
@@ -197,18 +197,18 @@ BOOL SendHttpHeaders(EXTENSION_CONTROL_BLOCK *pECB, LPCSTR pszStatus, LPCSTR psz
 
 BOOL WINAPI TerminateExtension(IN DWORD dwFlags)
 {
-	/* Our threads are deterministic and will complete not much later than 5 seconds from now */
+    /* Our threads are deterministic and will complete not much later than 5 seconds from now */
 
-	/* wait for all threads to terminate, sleeping for 1 sec */
+    /* wait for all threads to terminate, sleeping for 1 sec */
 
-	while (g_dwThreadCount > 0)
-		SleepEx(1000, FALSE);
-	
-	/* make sure the last thread indeed exited */
+    while (g_dwThreadCount > 0)
+        SleepEx(1000, FALSE);
 
-	SleepEx(1000, FALSE);
+    /* make sure the last thread indeed exited */
 
-	return TRUE;
+    SleepEx(1000, FALSE);
+
+    return TRUE;
 }
 
 

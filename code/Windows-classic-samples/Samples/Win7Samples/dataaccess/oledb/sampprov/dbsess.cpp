@@ -1,4 +1,4 @@
-//--------------------------------------------------------------------
+﻿//--------------------------------------------------------------------
 // Microsoft OLE DB Sample Provider
 // (C) Copyright 1991 - 1999 Microsoft Corporation. All Rights Reserved.
 //
@@ -22,16 +22,16 @@
 // @rdesc NONE
 //
 CDBSession::CDBSession
-	(
+(
     LPUNKNOWN pUnkOuter         //@parm IN | Outer Unkown Pointer
-	)	// invoke ctor for base class
-	: CBaseObj( BOT_SESSION )
+)	// invoke ctor for base class
+    : CBaseObj( BOT_SESSION )
 {
     //
-	// Initialize simple member vars
-	//
+    // Initialize simple member vars
+    //
     m_cRef                = 0L;
-	m_pUnkOuter			  = pUnkOuter ? pUnkOuter : this;
+    m_pUnkOuter			  = pUnkOuter ? pUnkOuter : this;
     m_pUtilProp			  = NULL;
 
     //
@@ -39,14 +39,14 @@ CDBSession::CDBSession
     //
     m_pIGetDataSource	  = NULL;
     m_pIOpenRowset		  = NULL;
-	m_pISessionProperties = NULL;
-	m_pIDBCreateCommand	  = NULL;
-	m_pIBindResource      = NULL;	
+    m_pISessionProperties = NULL;
+    m_pIDBCreateCommand	  = NULL;
+    m_pIBindResource      = NULL;
 
     //
-	// Pointer to parent object
+    // Pointer to parent object
     //
-	m_pCDataSource		  = NULL;
+    m_pCDataSource		  = NULL;
 
     //
     // Increment global object count.
@@ -67,11 +67,11 @@ CDBSession:: ~CDBSession
     void
 )
 {
-	//
-	// Asserts
     //
-	assert(m_pCDataSource);
-	assert(m_pCDataSource->m_pUnkOuter);
+    // Asserts
+    //
+    assert(m_pCDataSource);
+    assert(m_pCDataSource->m_pUnkOuter);
 
     //
     // Free properties management object
@@ -84,14 +84,14 @@ CDBSession:: ~CDBSession
     SAFE_DELETE(m_pIGetDataSource);
     SAFE_DELETE(m_pIOpenRowset);
     SAFE_DELETE(m_pISessionProperties);
-	SAFE_DELETE(m_pIDBCreateCommand);
-	SAFE_DELETE(m_pIBindResource);
+    SAFE_DELETE(m_pIDBCreateCommand);
+    SAFE_DELETE(m_pIBindResource);
 
     //
     // Release the Data Source Object
     //
-	m_pCDataSource->RemoveSession();
-	m_pCDataSource->m_pUnkOuter->Release();	
+    m_pCDataSource->RemoveSession();
+    m_pCDataSource->m_pUnkOuter->Release();
 
     //
     // Decrement global object count.
@@ -111,35 +111,35 @@ CDBSession:: ~CDBSession
 //
 BOOL CDBSession::FInit
 (
-	CDataSource	* pCDataSource
+    CDataSource	* pCDataSource
 )
 {
-	//
-	// Asserts
     //
-	assert(pCDataSource);
+    // Asserts
+    //
+    assert(pCDataSource);
 
-	//
-	// Establish parent object pointer
-	//
-	m_pCDataSource = pCDataSource;
-	m_pCDataSource->m_pUnkOuter->AddRef();
+    //
+    // Establish parent object pointer
+    //
+    m_pCDataSource = pCDataSource;
+    m_pCDataSource->m_pUnkOuter->AddRef();
 
- 	//
+    //
     // Allocate properties management object
-	//
+    //
     m_pUtilProp = new CUtilProp();
 
     // Allocate contained interface objects
     m_pIOpenRowset		  = new CImpIOpenRowset(this, m_pUnkOuter);
     m_pIGetDataSource	  = new CImpIGetDataSource(this, m_pUnkOuter);
-	m_pIDBCreateCommand	  = new CImpIDBCreateCommand(this, m_pUnkOuter);
+    m_pIDBCreateCommand	  = new CImpIDBCreateCommand(this, m_pUnkOuter);
     m_pISessionProperties = new CImpISessionProperties(this, m_pUnkOuter);
-	m_pIBindResource	  = new CImpIBindResource(this, m_pUnkOuter);
+    m_pIBindResource	  = new CImpIBindResource(this, m_pUnkOuter);
 
     return (BOOL)(m_pUtilProp && m_pIGetDataSource && m_pIOpenRowset &&
-		          m_pISessionProperties && m_pIDBCreateCommand && 
-				  m_pIBindResource);
+                  m_pISessionProperties && m_pIDBCreateCommand &&
+                  m_pIBindResource);
 }
 
 
@@ -178,16 +178,17 @@ STDMETHODIMP CDBSession::QueryInterface
         *ppv = (LPVOID) m_pIOpenRowset;
     else if( riid == IID_ISessionProperties )
         *ppv = (LPVOID) m_pISessionProperties;
-	else if( riid == IID_IDBCreateCommand )
-		*ppv = (LPVOID) m_pIDBCreateCommand;
-	else if( riid == IID_IBindResource )
-		*ppv = (LPVOID) m_pIBindResource;
-    else {
+    else if( riid == IID_IDBCreateCommand )
+        *ppv = (LPVOID) m_pIDBCreateCommand;
+    else if( riid == IID_IBindResource )
+        *ppv = (LPVOID) m_pIBindResource;
+    else
+    {
         *ppv = NULL;
         return (E_NOINTERFACE);
     }
 
-	((LPUNKNOWN) *ppv)->AddRef();
+    ((LPUNKNOWN) *ppv)->AddRef();
     return (S_OK);
 }
 
@@ -200,7 +201,7 @@ STDMETHODIMP CDBSession::QueryInterface
 //
 STDMETHODIMP_( DBREFCOUNT ) CDBSession::AddRef
 (
-	void
+    void
 )
 {
     return ++m_cRef;
@@ -216,58 +217,58 @@ STDMETHODIMP_( DBREFCOUNT ) CDBSession::AddRef
 //
 STDMETHODIMP_( DBREFCOUNT ) CDBSession::Release
 (
-	void
+    void
 )
 {
     if( !--m_cRef )
-	{
-		delete this;
-		return 0;
-	}
+    {
+        delete this;
+        return 0;
+    }
 
     return m_cRef;
 }
 
 
 //-----------------------------------------------------------------------------
-// CImpIGetDataSource::GetDataSource 
+// CImpIGetDataSource::GetDataSource
 //
 // @mfunc Retrieve an interface pointer on the session object
 //
-// @rdesc 
+// @rdesc
 //		@flag S_OK | Session Object Interface returned
 //		@flag E_INVALIDARG | ppDataSource was NULL
 //		@flag E_NOINTERFACE | IID not supported
 //
 STDMETHODIMP CImpIGetDataSource::GetDataSource
 (
-	REFIID		riid,			// @parm IN  | IID desired
-	IUnknown**	ppDataSource	// @parm OUT | ptr to interface
+    REFIID		riid,			// @parm IN  | IID desired
+    IUnknown**	ppDataSource	// @parm OUT | ptr to interface
 )
 {
-	//
-	// Asserts
     //
-	assert(m_pObj);
-	assert(m_pObj->m_pCDataSource);
-	assert(m_pObj->m_pCDataSource->m_pUnkOuter);
+    // Asserts
+    //
+    assert(m_pObj);
+    assert(m_pObj->m_pCDataSource);
+    assert(m_pObj->m_pCDataSource->m_pUnkOuter);
 
     //
     // Check in-params and NULL out-params in case of error
     //
-	if( !ppDataSource )
-		return (E_INVALIDARG);
+    if( !ppDataSource )
+        return (E_INVALIDARG);
 
-	//
-	// Handle Aggregated DataSource (if aggregated)
-	//
-	return m_pObj->m_pCDataSource->m_pUnkOuter->QueryInterface(riid, (LPVOID*)ppDataSource);
+    //
+    // Handle Aggregated DataSource (if aggregated)
+    //
+    return m_pObj->m_pCDataSource->m_pUnkOuter->QueryInterface(riid, (LPVOID*)ppDataSource);
 }
 
 
 // ISessionProperties::GetProperties ----------------------------------------------------
 //
-// @mfunc Returns current settings of all properties in the DBPROPFLAGS_SESSION property 
+// @mfunc Returns current settings of all properties in the DBPROPFLAGS_SESSION property
 //			group
 // @rdesc HRESULT
 //      @flag S_OK          | The method succeeded
@@ -277,33 +278,33 @@ STDMETHODIMP CImpIGetDataSource::GetDataSource
 STDMETHODIMP CImpISessionProperties::GetProperties
 (
     ULONG				cPropertySets,		//@parm IN | count of restiction guids
-	const DBPROPIDSET	rgPropertySets[],	//@parm IN | restriction guids
-	ULONG*              pcProperties,		//@parm OUT | count of properties returned
-	DBPROPSET**			prgProperties		//@parm OUT | property information returned
+    const DBPROPIDSET	rgPropertySets[],	//@parm IN | restriction guids
+    ULONG*              pcProperties,		//@parm OUT | count of properties returned
+    DBPROPSET**			prgProperties		//@parm OUT | property information returned
 )
 {
     HRESULT hr;
 
-	//
-	// Asserts
     //
-	assert(m_pObj);
+    // Asserts
+    //
+    assert(m_pObj);
     assert(m_pObj->m_pUtilProp);
 
     //
     // Check in-params and NULL out-params in case of error
     //
-	hr = m_pObj->m_pUtilProp->GetPropertiesArgChk(PROPSET_SESSION, 
-				cPropertySets, rgPropertySets, pcProperties, prgProperties);
-	
-	if( FAILED(hr) )
-		return hr;
+    hr = m_pObj->m_pUtilProp->GetPropertiesArgChk(PROPSET_SESSION,
+            cPropertySets, rgPropertySets, pcProperties, prgProperties);
+
+    if( FAILED(hr) )
+        return hr;
 
     //
     // Just pass this call on to the utility object that manages our properties
     //
-    return m_pObj->m_pUtilProp->GetProperties(PROPSET_SESSION, cPropertySets, 
-								  rgPropertySets, pcProperties, prgProperties);
+    return m_pObj->m_pUtilProp->GetProperties(PROPSET_SESSION, cPropertySets,
+            rgPropertySets, pcProperties, prgProperties);
 }
 
 
@@ -316,38 +317,38 @@ STDMETHODIMP CImpISessionProperties::GetProperties
 //      @flag E_NOTIMPL		| this method is not implemented
 //
 STDMETHODIMP    CImpISessionProperties::SetProperties
-	(
-	ULONG		cPropertySets,		//@parm IN | Count of structs returned
-	DBPROPSET	rgPropertySets[]    //@parm IN | Array of Properties
-	)
+(
+    ULONG		cPropertySets,		//@parm IN | Count of structs returned
+    DBPROPSET	rgPropertySets[]    //@parm IN | Array of Properties
+)
 {
     HRESULT hr = E_FAIL;
 
     //
-	// Asserts
+    // Asserts
     //
-	assert( m_pObj );
+    assert( m_pObj );
     assert( m_pObj->m_pUtilProp );
 
     //
-	// Quick return if the Count of cPropertySets is 0
+    // Quick return if the Count of cPropertySets is 0
     //
-	if( cPropertySets == 0 )
-		return S_OK;
+    if( cPropertySets == 0 )
+        return S_OK;
 
     //
     // Check in-params and NULL out-params in case of error
     //
-	hr=m_pObj->m_pUtilProp->SetPropertiesArgChk(cPropertySets, rgPropertySets);
-	
-	if( FAILED(hr) )
-		return hr;
+    hr=m_pObj->m_pUtilProp->SetPropertiesArgChk(cPropertySets, rgPropertySets);
+
+    if( FAILED(hr) )
+        return hr;
 
     //
     // Just pass this call on to the utility object that manages our properties
     //
-    return m_pObj->m_pUtilProp->SetProperties(PROPSET_SESSION, 
-											  cPropertySets, rgPropertySets);
+    return m_pObj->m_pUtilProp->SetProperties(PROPSET_SESSION,
+            cPropertySets, rgPropertySets);
 }
 
 
@@ -364,42 +365,42 @@ STDMETHODIMP    CImpISessionProperties::SetProperties
 
 STDMETHODIMP CImpIDBCreateCommand::CreateCommand
 (
-	IUnknown *pUnkOuter,		//@parm IN | Outer unknown for new Command
-	REFIID   riid,				//@parm IN | Desired interface on new Command
-	IUnknown **ppCommand		//@parm OUT | New Command object
+    IUnknown *pUnkOuter,		//@parm IN | Outer unknown for new Command
+    REFIID   riid,				//@parm IN | Desired interface on new Command
+    IUnknown **ppCommand		//@parm OUT | New Command object
 )
 {
     //
     // Check in-params and NULL out-params in case of error
     //
-	if( !ppCommand )
-		return (E_INVALIDARG);
+    if( !ppCommand )
+        return (E_INVALIDARG);
 
-	*ppCommand = NULL;
-	
+    *ppCommand = NULL;
+
     //
-	// We do not allow any other iid than IID_IUnknown for aggregation
+    // We do not allow any other iid than IID_IUnknown for aggregation
     //
-	if( pUnkOuter && riid != IID_IUnknown )
-		return (DB_E_NOAGGREGATION);
+    if( pUnkOuter && riid != IID_IUnknown )
+        return (DB_E_NOAGGREGATION);
 
-	//
-	// This is the outer unknown from the user, for the new Command,
-	// not to be confused with the outer unknown of this DBSession object.
-	//
-	HRESULT	hr = E_OUTOFMEMORY;
-	CCommand* pCCommand = new CCommand(m_pObj, pUnkOuter);
-	
-	if( !pCCommand || FAILED(hr=pCCommand->FInit()) )
-	{
-		SAFE_DELETE(pCCommand);
-		return (hr);
-	}
+    //
+    // This is the outer unknown from the user, for the new Command,
+    // not to be confused with the outer unknown of this DBSession object.
+    //
+    HRESULT	hr = E_OUTOFMEMORY;
+    CCommand* pCCommand = new CCommand(m_pObj, pUnkOuter);
 
-	hr = pCCommand->QueryInterface(riid, (void **) ppCommand);
+    if( !pCCommand || FAILED(hr=pCCommand->FInit()) )
+    {
+        SAFE_DELETE(pCCommand);
+        return (hr);
+    }
 
-    if( FAILED(hr) ) 
+    hr = pCCommand->QueryInterface(riid, (void **) ppCommand);
+
+    if( FAILED(hr) )
         SAFE_DELETE(pCCommand);
 
-	return (hr);
+    return (hr);
 }

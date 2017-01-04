@@ -1,6 +1,6 @@
-//////////////////////////////////////////////////////////////////////////
+﻿//////////////////////////////////////////////////////////////////////////
 // MainWindow.h: Main application window.
-// 
+//
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -32,48 +32,57 @@ class MainWindow : public BaseWindow, public GraphEventCallback
 {
 
 public:
-	MainWindow();
-	~MainWindow();
-	LRESULT OnReceiveMessage(UINT msg, WPARAM wparam, LPARAM lparam);
+    MainWindow();
+    ~MainWindow();
+    LRESULT OnReceiveMessage(UINT msg, WPARAM wparam, LPARAM lparam);
 
-	void OnGraphEvent(long eventCode, LONG_PTR param1, LONG_PTR param2);
+    void OnGraphEvent(long eventCode, LONG_PTR param1, LONG_PTR param2);
 
 private:
-	LPCTSTR ClassName() const { return TEXT("DSHOWPLAYER"); }
-	LPCTSTR MenuName() const { return MAKEINTRESOURCE(IDC_DSHOWPLAYER); }
-	LPCTSTR WindowName() const { return TEXT("Dshow Player"); }
+    LPCTSTR ClassName() const
+    {
+        return TEXT("DSHOWPLAYER");
+    }
+    LPCTSTR MenuName() const
+    {
+        return MAKEINTRESOURCE(IDC_DSHOWPLAYER);
+    }
+    LPCTSTR WindowName() const
+    {
+        return TEXT("Dshow Player");
+    }
 
-	// Message handlers
-	HRESULT OnCreate();
-	void	OnPaint();
-	void	OnSize();
-	void	OnTimer();
+    // Message handlers
+    HRESULT OnCreate();
+    void	OnPaint();
+    void	OnSize();
+    void	OnTimer();
 
-	// Commands
-	void	OnFileOpen();
-	void	OnPlay();
-	void	OnStop();
-	void	OnPause();
-	void	OnMute();
+    // Commands
+    void	OnFileOpen();
+    void	OnPlay();
+    void	OnStop();
+    void	OnPause();
+    void	OnMute();
 
-	// WM_NOTIFY handlers
+    // WM_NOTIFY handlers
     void    OnWmNotify(const NMHDR *pHdr);
-	void	OnSeekbarNotify(const NMSLIDER_INFO *pInfo);
-	void	OnVolumeSliderNotify(const NMSLIDER_INFO *pInfo);
+    void	OnSeekbarNotify(const NMSLIDER_INFO *pInfo);
+    void	OnVolumeSliderNotify(const NMSLIDER_INFO *pInfo);
 
-	void	UpdateUI();
-	void	UpdateSeekBar();
-	void    StopTimer();
+    void	UpdateUI();
+    void	UpdateSeekBar();
+    void    StopTimer();
 
-	Rebar		rebar;
-	Toolbar		toolbar;
-	Slider 		seekbar;
-	Slider 		volumeSlider;
+    Rebar		rebar;
+    Toolbar		toolbar;
+    Slider 		seekbar;
+    Slider 		volumeSlider;
 
-	HBRUSH		brush;
-	UINT_PTR	m_timerID; 
+    HBRUSH		brush;
+    UINT_PTR	m_timerID;
 
-	DShowPlayer	*m_pPlayer;
+    DShowPlayer	*m_pPlayer;
 };
 
 

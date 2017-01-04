@@ -1,4 +1,4 @@
-//*********************************************************
+﻿//*********************************************************
 //
 // Copyright (c) Microsoft. All rights reserved.
 // THIS CODE IS PROVIDED *AS IS* WITHOUT WARRANTY OF
@@ -47,7 +47,7 @@ public:
 
     // The destructor will free the security descriptor if necessary
     ~Resource();
-    
+
     // Adds to childIndices
     void AddChild(int index);
 

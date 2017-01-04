@@ -1,7 +1,7 @@
-//////////////////////////////////////////////////////////////////////////
+﻿//////////////////////////////////////////////////////////////////////////
 //
 // winmain.cpp : Defines the entry point for the application.
-// 
+//
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -22,7 +22,7 @@
 #include <evr.h>
 
 
-// This sample implements a Media Foundation transform (MFT) that 
+// This sample implements a Media Foundation transform (MFT) that
 // converts YUV video frames to grayscale. The conversion is done
 // simply by setting all of the U and V bytes to zero (0x80).
 
@@ -32,24 +32,24 @@
 // Formats: UYVY, YUY2, NV12
 
 // Assumptions:
-// 1. If the MFT is holding an input sample, SetInputType and SetOutputType 
+// 1. If the MFT is holding an input sample, SetInputType and SetOutputType
 //    return MF_E_UNSUPPORTED_MEDIATYPE
 // 2. If the input type is set, the output type must match (and vice versa).
-// 3. If both types are set, no type can be set until the current type is 
+// 3. If both types are set, no type can be set until the current type is
 //    cleared.
-// 4. Preferred input types: 
+// 4. Preferred input types:
 //    (a) If the output type is set, that's the preferred type.
-//    (b) Otherwise. the preferred types are partial types, constructed from 
-//        a list of supported video subtypes. 
+//    (b) Otherwise. the preferred types are partial types, constructed from
+//        a list of supported video subtypes.
 // 5. Preferred output types: As above.
- 
+
 // Video FOURCC codes.
 const FOURCC FOURCC_YUY2 = MAKEFOURCC('Y', 'U', 'Y', '2');
 const FOURCC FOURCC_UYVY = MAKEFOURCC('U', 'Y', 'V', 'Y');
 const FOURCC FOURCC_NV12 = MAKEFOURCC('N', 'V', '1', '2');
 
 // Static array of media types (preferred and accepted).
-const GUID* g_MediaSubtypes[] = 
+const GUID* g_MediaSubtypes[] =
 {
     & MEDIASUBTYPE_NV12,
     & MEDIASUBTYPE_YUY2,
@@ -83,19 +83,19 @@ void TransformImage_UYVY(
     LONG        lSrcStride,
     DWORD       dwWidthInPixels,
     DWORD       dwHeightInPixels
-    )
+)
 {
     for (DWORD y = 0; y < dwHeightInPixels; y++)
     {
         WORD *pSrc_Pixel = (WORD*)pSrc;
         WORD *pDest_Pixel = (WORD*)pDest;
-        
+
         for (DWORD x = 0; x < dwWidthInPixels; x++)
         {
             // Byte order is U0 Y0 V0 Y1
             // Each WORD is a byte pair (U/V, Y)
             // Windows is little-endian so the order appears reversed.
-            
+
             WORD pixel = pSrc_Pixel[x] & 0xFF00;
             pixel |= 0x0080;
             pDest_Pixel[x] = pixel;
@@ -118,19 +118,19 @@ void TransformImage_YUY2(
     LONG        lSrcStride,
     DWORD       dwWidthInPixels,
     DWORD       dwHeightInPixels
-    )
+)
 {
     for (DWORD y = 0; y < dwHeightInPixels; y++)
     {
         WORD *pSrc_Pixel = (WORD*)pSrc;
         WORD *pDest_Pixel = (WORD*)pDest;
-        
+
         for (DWORD x = 0; x < dwWidthInPixels; x++)
         {
-            // Byte order is Y0 U0 Y1 V0 
+            // Byte order is Y0 U0 Y1 V0
             // Each WORD is a byte pair (Y, U/V)
             // Windows is little-endian so the order appears reversed.
-            
+
             WORD pixel = pSrc_Pixel[x] & 0x00FF;
             pixel |= 0x8000;
             pDest_Pixel[x] = pixel;
@@ -154,7 +154,7 @@ void TransformImage_NV12(
     LONG        lSrcStride,
     DWORD       dwWidthInPixels,
     DWORD       dwHeightInPixels
-    )
+)
 {
     // NV12 is planar: Y plane, followed by packed U-V plane.
 
@@ -217,7 +217,7 @@ done:
 //-------------------------------------------------------------------
 
 CGrayscale::CGrayscale(HRESULT& hr) :
-    m_nRefCount(1),     
+    m_nRefCount(1),
     m_pSample(NULL),
     m_pInputType(NULL),
     m_pOutputType(NULL),
@@ -291,7 +291,7 @@ HRESULT CGrayscale::QueryInterface(REFIID iid, void** ppv)
 // Returns the minimum and maximum number of streams.
 //-------------------------------------------------------------------
 
-HRESULT CGrayscale::GetStreamLimits( 
+HRESULT CGrayscale::GetStreamLimits(
     DWORD   *pdwInputMinimum,
     DWORD   *pdwInputMaximum,
     DWORD   *pdwOutputMinimum,
@@ -300,9 +300,9 @@ HRESULT CGrayscale::GetStreamLimits(
 {
 
     if ((pdwInputMinimum == NULL) ||
-        (pdwInputMaximum == NULL) ||
-        (pdwOutputMinimum == NULL) ||
-        (pdwOutputMaximum == NULL))
+            (pdwInputMaximum == NULL) ||
+            (pdwOutputMinimum == NULL) ||
+            (pdwOutputMaximum == NULL))
     {
         return E_POINTER;
     }
@@ -329,7 +329,7 @@ HRESULT CGrayscale::GetStreamCount(
 )
 {
     if ((pcInputStreams == NULL) || (pcOutputStreams == NULL))
-        
+
     {
         return E_POINTER;
     }
@@ -355,15 +355,15 @@ HRESULT CGrayscale::GetStreamIDs(
     DWORD   *pdwOutputIDs
 )
 {
-    // Do not need to implement, because this MFT has a fixed number of 
+    // Do not need to implement, because this MFT has a fixed number of
     // streams and the stream IDs match the stream indexes.
-    return E_NOTIMPL;   
+    return E_NOTIMPL;
 }
 
 
 //-------------------------------------------------------------------
 // Name: GetInputStreamInfo
-// Returns information about an input stream. 
+// Returns information about an input stream.
 //-------------------------------------------------------------------
 
 HRESULT CGrayscale::GetInputStreamInfo(
@@ -374,19 +374,19 @@ HRESULT CGrayscale::GetInputStreamInfo(
     TRACE((L"GetInputStreamInfo\n"));
 
     AutoLock lock(m_critSec);
-    
+
     if (pStreamInfo == NULL)
     {
         return E_POINTER;
     }
-    
+
     if (!IsValidInputStream(dwInputStreamID))
     {
         return MF_E_INVALIDSTREAMNUMBER;
     }
 
     // NOTE: This method should succeed even when there is no media type on the
-    //       stream. If there is no media type, we only need to fill in the dwFlags 
+    //       stream. If there is no media type, we only need to fill in the dwFlags
     //       member of MFT_INPUT_STREAM_INFO. The other members depend on having a
     //       a valid media type.
 
@@ -412,12 +412,12 @@ HRESULT CGrayscale::GetInputStreamInfo(
 
 //-------------------------------------------------------------------
 // Name: GetOutputStreamInfo
-// Returns information about an output stream. 
+// Returns information about an output stream.
 //-------------------------------------------------------------------
 
 HRESULT CGrayscale::GetOutputStreamInfo(
-    DWORD                     dwOutputStreamID, 
-    MFT_OUTPUT_STREAM_INFO *  pStreamInfo      
+    DWORD                     dwOutputStreamID,
+    MFT_OUTPUT_STREAM_INFO *  pStreamInfo
 )
 {
     AutoLock lock(m_critSec);
@@ -433,12 +433,12 @@ HRESULT CGrayscale::GetOutputStreamInfo(
     }
 
     // NOTE: This method should succeed even when there is no media type on the
-    //       stream. If there is no media type, we only need to fill in the dwFlags 
+    //       stream. If there is no media type, we only need to fill in the dwFlags
     //       member of MFT_OUTPUT_STREAM_INFO. The other members depend on having a
     //       a valid media type.
 
-    pStreamInfo->dwFlags = 
-        MFT_OUTPUT_STREAM_WHOLE_SAMPLES | 
+    pStreamInfo->dwFlags =
+        MFT_OUTPUT_STREAM_WHOLE_SAMPLES |
         MFT_OUTPUT_STREAM_SINGLE_SAMPLE_PER_BUFFER |
         MFT_OUTPUT_STREAM_FIXED_SAMPLE_SIZE ;
 
@@ -450,7 +450,7 @@ HRESULT CGrayscale::GetOutputStreamInfo(
     {
         pStreamInfo->cbSize = m_cbImageSize;
     }
-    
+
     pStreamInfo->cbAlignment = 0;
 
     return S_OK;
@@ -466,7 +466,7 @@ HRESULT CGrayscale::GetOutputStreamInfo(
 HRESULT CGrayscale::GetAttributes(IMFAttributes** pAttributes)
 {
     // This MFT does not support any attributes, so the method is not implemented.
-    return E_NOTIMPL;   
+    return E_NOTIMPL;
 }
 
 
@@ -510,7 +510,7 @@ HRESULT CGrayscale::GetOutputStreamAttributes(
 HRESULT CGrayscale::DeleteInputStream(DWORD dwStreamID)
 {
     // This MFT has a fixed number of input streams, so the method is not implemented.
-    return E_NOTIMPL; 
+    return E_NOTIMPL;
 }
 
 
@@ -519,13 +519,13 @@ HRESULT CGrayscale::DeleteInputStream(DWORD dwStreamID)
 // Name: AddInputStreams
 //-------------------------------------------------------------------
 
-HRESULT CGrayscale::AddInputStreams( 
+HRESULT CGrayscale::AddInputStreams(
     DWORD   cStreams,
     DWORD   *adwStreamIDs
 )
 {
     // This MFT has a fixed number of output streams, so the method is not implemented.
-    return E_NOTIMPL; 
+    return E_NOTIMPL;
 }
 
 
@@ -634,7 +634,7 @@ HRESULT CGrayscale::GetOutputAvailableType(
 HRESULT CGrayscale::SetInputType(
     DWORD           dwInputStreamID,
     IMFMediaType    *pType, // Can be NULL to clear the input type.
-    DWORD           dwFlags 
+    DWORD           dwFlags
 )
 {
     TRACE((L"CGrayscale::SetInputType\n"));
@@ -669,7 +669,7 @@ HRESULT CGrayscale::SetInputType(
         CHECK_HR(hr = OnCheckInputType(pType));
     }
 
-    // The type is OK. 
+    // The type is OK.
     // Set the type, unless the caller was just testing.
     if (bReallySet)
     {
@@ -689,7 +689,7 @@ done:
 HRESULT CGrayscale::SetOutputType(
     DWORD           dwOutputStreamID,
     IMFMediaType    *pType, // Can be NULL to clear the output type.
-    DWORD           dwFlags 
+    DWORD           dwFlags
 )
 {
     TRACE((L"CGrayscale::SetOutputType\n"));
@@ -711,7 +711,7 @@ HRESULT CGrayscale::SetOutputType(
 
 
     // Does the caller want us to set the type, or just test it?
-     BOOL bReallySet = ((dwFlags & MFT_SET_TYPE_TEST_ONLY) == 0);
+    BOOL bReallySet = ((dwFlags & MFT_SET_TYPE_TEST_ONLY) == 0);
 
     // If we have an input sample, the client cannot change the type now.
     if (HasPendingOutput())
@@ -727,7 +727,7 @@ HRESULT CGrayscale::SetOutputType(
 
     if (bReallySet)
     {
-        // The type is OK. 
+        // The type is OK.
         // Set the type, unless the caller was just testing.
         CHECK_HR(hr = OnSetOutputType(pType));
     }
@@ -817,7 +817,7 @@ HRESULT CGrayscale::GetOutputCurrentType(
 
 HRESULT CGrayscale::GetInputStatus(
     DWORD           dwInputStreamID,
-    DWORD           *pdwFlags 
+    DWORD           *pdwFlags
 )
 {
     TRACE((L"GetInputStatus\n"));
@@ -892,7 +892,7 @@ HRESULT CGrayscale::SetOutputBounds(
     LONGLONG        hnsUpperBound
 )
 {
-    // Implementation of this method is optional. 
+    // Implementation of this method is optional.
     return E_NOTIMPL;
 }
 
@@ -905,11 +905,11 @@ HRESULT CGrayscale::SetOutputBounds(
 
 HRESULT CGrayscale::ProcessEvent(
     DWORD              dwInputStreamID,
-    IMFMediaEvent      *pEvent 
+    IMFMediaEvent      *pEvent
 )
 {
-    // This MFT does not handle any stream events, so the method can 
-    // return E_NOTIMPL. This tells the pipeline that it can stop 
+    // This MFT does not handle any stream events, so the method can
+    // return E_NOTIMPL. This tells the pipeline that it can stop
     // sending any more events to this MFT.
     return E_NOTIMPL;
 }
@@ -937,10 +937,10 @@ HRESULT CGrayscale::ProcessMessage(
         break;
 
     case MFT_MESSAGE_COMMAND_DRAIN:
-        // Drain: Tells the MFT not to accept any more input until 
-        // all of the pending output has been processed. That is our 
+        // Drain: Tells the MFT not to accept any more input until
+        // all of the pending output has been processed. That is our
         // default behevior already, so there is nothing to do.
-    break;
+        break;
 
     case MFT_MESSAGE_SET_D3D_MANAGER:
         // The pipeline should never send this message unless the MFT
@@ -953,13 +953,13 @@ HRESULT CGrayscale::ProcessMessage(
     case MFT_MESSAGE_NOTIFY_BEGIN_STREAMING:
     case MFT_MESSAGE_NOTIFY_END_STREAMING:
     case MFT_MESSAGE_NOTIFY_END_OF_STREAM:
-    case MFT_MESSAGE_NOTIFY_START_OF_STREAM: 
+    case MFT_MESSAGE_NOTIFY_START_OF_STREAM:
         break;
     }
 
     return hr;
 }
-    
+
 
 
 //-------------------------------------------------------------------
@@ -969,8 +969,8 @@ HRESULT CGrayscale::ProcessMessage(
 
 HRESULT CGrayscale::ProcessInput(
     DWORD               dwInputStreamID,
-    IMFSample           *pSample, 
-    DWORD               dwFlags 
+    IMFSample           *pSample,
+    DWORD               dwFlags
 )
 {
     AutoLock lock(m_critSec);
@@ -1003,7 +1003,7 @@ HRESULT CGrayscale::ProcessInput(
     HRESULT hr = S_OK;
     DWORD dwBufferCount = 0;
 
-    // Validate the number of buffers. There should only be a single buffer to hold the video frame. 
+    // Validate the number of buffers. There should only be a single buffer to hold the video frame.
     CHECK_HR(hr = pSample->GetBufferCount(&dwBufferCount));
 
     if (dwBufferCount == 0)
@@ -1031,10 +1031,10 @@ done:
 //-------------------------------------------------------------------
 
 HRESULT CGrayscale::ProcessOutput(
-    DWORD                   dwFlags, 
+    DWORD                   dwFlags,
     DWORD                   cOutputBufferCount,
     MFT_OUTPUT_DATA_BUFFER  *pOutputSamples, // one per stream
-    DWORD                   *pdwStatus  
+    DWORD                   *pdwStatus
 )
 {
     AutoLock lock(m_critSec);
@@ -1042,7 +1042,7 @@ HRESULT CGrayscale::ProcessOutput(
     // Check input parameters...
 
     // There are no flags that we accept in this MFT.
-    // The only defined flag is MFT_PROCESS_OUTPUT_DISCARD_WHEN_NO_BUFFER. This 
+    // The only defined flag is MFT_PROCESS_OUTPUT_DISCARD_WHEN_NO_BUFFER. This
     // flag only applies when the MFT marks an output stream as lazy or optional.
     // However there are no lazy or optional streams on this MFT, so the flag is
     // not valid.
@@ -1089,13 +1089,13 @@ HRESULT CGrayscale::ProcessOutput(
     CHECK_HR(hr = OnProcessOutput(pInput, pOutput));
 
     // Set status flags.
-    pOutputSamples[0].dwStatus = 0; 
+    pOutputSamples[0].dwStatus = 0;
     *pdwStatus = 0;
 
 
     // Copy the duration and time stamp from the input sample,
     // if present.
-     
+
     LONGLONG hnsDuration = 0;
     LONGLONG hnsTime = 0;
 
@@ -1110,7 +1110,7 @@ HRESULT CGrayscale::ProcessOutput(
     }
 
 done:
-    
+
     SAFE_RELEASE(m_pSample);   // Release our input sample.
     SAFE_RELEASE(pInput);
     SAFE_RELEASE(pOutput);
@@ -1224,7 +1224,7 @@ HRESULT CGrayscale::OnCheckOutputType(IMFMediaType *pmt)
         hr = OnCheckMediaType(pmt);
     }
 
-    return hr;    
+    return hr;
 }
 
 
@@ -1272,7 +1272,7 @@ HRESULT CGrayscale::OnCheckMediaType(IMFMediaType *pmt)
     if (!bFoundMatchingSubtype)
     {
         CHECK_HR(hr = MF_E_INVALIDMEDIATYPE);
-    }       
+    }
 
     // Video must be progressive frames.
     CHECK_HR(hr = pmt->GetUINT32(MF_MT_INTERLACE_MODE, (UINT32*)&interlace));
@@ -1332,7 +1332,7 @@ HRESULT CGrayscale::OnSetOutputType(IMFMediaType *pmt)
 
     // if pmt is NULL, clear the type.
     // if pmt is non-NULL, set the type.
-    
+
     SAFE_RELEASE(m_pOutputType);
     m_pOutputType = pmt;
     if (m_pOutputType)
@@ -1367,7 +1367,7 @@ HRESULT CGrayscale::OnProcessOutput(IMFMediaBuffer *pIn, IMFMediaBuffer *pOut)
 
     // Stride if the buffer does not support IMF2DBuffer
     LONG lDefaultStride = 0;
-    
+
     CHECK_HR(hr = GetDefaultStride(m_pInputType, &lDefaultStride));
 
     // Lock the input buffer.
@@ -1377,11 +1377,11 @@ HRESULT CGrayscale::OnProcessOutput(IMFMediaBuffer *pIn, IMFMediaBuffer *pOut)
     CHECK_HR(hr = outputLock.LockBuffer(lDefaultStride, m_imageHeightInPixels, &pDest, &lDestStride));
 
     // Invoke the image transform function.
-    assert (m_pTransformFn != NULL); 
+    assert (m_pTransformFn != NULL);
     if (m_pTransformFn)
     {
-        (*m_pTransformFn)( pDest, lDestStride, pSrc, lSrcStride, 
-            m_imageWidthInPixels, m_imageHeightInPixels);
+        (*m_pTransformFn)( pDest, lDestStride, pSrc, lSrcStride,
+                           m_imageWidthInPixels, m_imageHeightInPixels);
     }
     else
     {
@@ -1415,7 +1415,7 @@ HRESULT CGrayscale::OnFlush()
 
 //-------------------------------------------------------------------
 // Name: UpdateFormatInfo
-// Description: After the input type is set, update our format 
+// Description: After the input type is set, update our format
 //              information.
 //-------------------------------------------------------------------
 
@@ -1457,11 +1457,11 @@ HRESULT CGrayscale::UpdateFormatInfo()
         }
 
         CHECK_HR(hr = MFGetAttributeSize(
-                m_pInputType, 
-                MF_MT_FRAME_SIZE, 
-                &m_imageWidthInPixels, 
-                &m_imageHeightInPixels
-                ));
+                          m_pInputType,
+                          MF_MT_FRAME_SIZE,
+                          &m_imageWidthInPixels,
+                          &m_imageHeightInPixels
+                      ));
 
         TRACE((L"Frame size: %d x %d\n", m_imageWidthInPixels, m_imageHeightInPixels));
 
@@ -1476,7 +1476,7 @@ done:
 
 //-------------------------------------------------------------------
 // Name: GetImageSize
-// Description: 
+// Description:
 // Calculates the buffer size needed, based on the video format.
 //-------------------------------------------------------------------
 
@@ -1490,7 +1490,7 @@ HRESULT GetImageSize(FOURCC fcc, UINT32 width, UINT32 height, DWORD* pcbImage)
     case FOURCC_UYVY:
         // check overflow
         if ((width > MAXDWORD / 2) ||
-            (width * 2 > MAXDWORD / height))
+                (width * 2 > MAXDWORD / height))
         {
             hr = E_INVALIDARG;
         }
@@ -1500,12 +1500,12 @@ HRESULT GetImageSize(FOURCC fcc, UINT32 width, UINT32 height, DWORD* pcbImage)
             *pcbImage = width * height * 2;
         }
         break;
-        
+
 
     case FOURCC_NV12:
         // check overflow
         if ((height/2 > MAXDWORD - height) ||
-            ((height + height/2) > MAXDWORD / width))
+                ((height + height/2) > MAXDWORD / width))
         {
             hr = E_INVALIDARG;
         }

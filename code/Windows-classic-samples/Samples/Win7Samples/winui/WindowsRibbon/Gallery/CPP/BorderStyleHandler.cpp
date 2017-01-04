@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -26,10 +26,10 @@ extern CRenderer   g_renderer;
 //
 //
 STDMETHODIMP CBorderStyleHandler::Execute(UINT nCmdID,
-                   UI_EXECUTIONVERB verb, 
-                   __in_opt const PROPERTYKEY* key,
-                   __in_opt const PROPVARIANT* ppropvarValue,
-                   __in_opt IUISimplePropertySet* pCommandExecutionProperties)
+        UI_EXECUTIONVERB verb,
+        __in_opt const PROPERTYKEY* key,
+        __in_opt const PROPVARIANT* ppropvarValue,
+        __in_opt IUISimplePropertySet* pCommandExecutionProperties)
 {
     UNREFERENCED_PARAMETER(nCmdID);
     UNREFERENCED_PARAMETER(pCommandExecutionProperties);
@@ -59,7 +59,7 @@ STDMETHODIMP CBorderStyleHandler::Execute(UINT nCmdID,
             hr = S_OK;
         }
         else if ( key && *key == UI_PKEY_SelectedItem)
-        {      
+        {
             UINT selected;
             hr = UIPropertyToUInt32(*key, *ppropvarValue, &selected);
 
@@ -81,14 +81,14 @@ STDMETHODIMP CBorderStyleHandler::Execute(UINT nCmdID,
 //
 //  COMMENTS:
 //
-//    Depending on the value of key, this will populate the gallery, update the selection, or 
+//    Depending on the value of key, this will populate the gallery, update the selection, or
 //    toggle the state of the button.
 //
 //
 STDMETHODIMP CBorderStyleHandler::UpdateProperty(UINT nCmdID,
-                              __in REFPROPERTYKEY key,
-                              __in_opt const PROPVARIANT* ppropvarCurrentValue,
-                              __out PROPVARIANT* ppropvarNewValue)
+        __in REFPROPERTYKEY key,
+        __in_opt const PROPVARIANT* ppropvarCurrentValue,
+        __out PROPVARIANT* ppropvarNewValue)
 {
     UNREFERENCED_PARAMETER(nCmdID);
 
@@ -181,7 +181,7 @@ STDMETHODIMP CBorderStyleHandler::UpdateProperty(UINT nCmdID,
         // Use the current border style as the selection.
         RenderParam param;
         g_renderer.GetRenderParam(&param);
-     
+
         hr = UIInitPropertyFromUInt32(UI_PKEY_SelectedItem, param.eBorderStyle, ppropvarNewValue);
     }
     else if (key == UI_PKEY_BooleanValue)
@@ -286,7 +286,7 @@ STDMETHODIMP CBorderStyleHandler::QueryInterface(REFIID iid, void** ppv)
     {
         *ppv = static_cast<IUICommandHandler*>(this);
     }
-    else 
+    else
     {
         *ppv = NULL;
         return E_NOINTERFACE;

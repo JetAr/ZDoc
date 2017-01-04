@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -24,10 +24,10 @@ extern CRenderer   g_renderer;
 //
 //
 STDMETHODIMP CLayoutHandler::Execute(UINT nCmdID,
-                   UI_EXECUTIONVERB verb, 
-                   __in_opt const PROPERTYKEY* key,
-                   __in_opt const PROPVARIANT* ppropvarValue,
-                   __in_opt IUISimplePropertySet* pCommandExecutionProperties)
+                                     UI_EXECUTIONVERB verb,
+                                     __in_opt const PROPERTYKEY* key,
+                                     __in_opt const PROPVARIANT* ppropvarValue,
+                                     __in_opt IUISimplePropertySet* pCommandExecutionProperties)
 {
     UNREFERENCED_PARAMETER(nCmdID);
     UNREFERENCED_PARAMETER(pCommandExecutionProperties);
@@ -43,7 +43,7 @@ STDMETHODIMP CLayoutHandler::Execute(UINT nCmdID,
             g_renderer.GetRenderParam(&param);
 
             UINT selected = ppropvarValue->uintVal;
-            
+
             param.eViewLayout = (VIEW_LAYOUT)selected;
             g_renderer.UpdateRenderParam(param);
 
@@ -64,9 +64,9 @@ STDMETHODIMP CLayoutHandler::Execute(UINT nCmdID,
 //
 //
 STDMETHODIMP CLayoutHandler::UpdateProperty(UINT nCmdID,
-                              __in REFPROPERTYKEY key,
-                              __in_opt const PROPVARIANT* ppropvarCurrentValue,
-                              __out PROPVARIANT* ppropvarNewValue)
+        __in REFPROPERTYKEY key,
+        __in_opt const PROPVARIANT* ppropvarCurrentValue,
+        __out PROPVARIANT* ppropvarNewValue)
 {
     UNREFERENCED_PARAMETER(nCmdID);
 
@@ -95,7 +95,7 @@ STDMETHODIMP CLayoutHandler::UpdateProperty(UINT nCmdID,
                 pCollection->Release();
                 return hr;
             }
-  
+
             // Load the label from the resource file.
             WCHAR wszLabel[MAX_RESOURCE_LENGTH];
             LoadString(GetModuleHandle(NULL), labelIds[i], wszLabel, MAX_RESOURCE_LENGTH);
@@ -138,7 +138,7 @@ HRESULT CLayoutHandler::CreateInstance(__deref_out CLayoutHandler **ppHandler)
     if (pHandler != NULL)
     {
         *ppHandler = pHandler;
-        
+
     }
     else
     {
@@ -180,7 +180,7 @@ STDMETHODIMP CLayoutHandler::QueryInterface(REFIID iid, void** ppv)
     {
         *ppv = static_cast<IUICommandHandler*>(this);
     }
-    else 
+    else
     {
         *ppv = NULL;
         return E_NOINTERFACE;

@@ -1,4 +1,4 @@
-#ifndef _PRIVATE_H_
+﻿#ifndef _PRIVATE_H_
 #define _PRIVATE_H_
 
 #define _OLEAUT32_

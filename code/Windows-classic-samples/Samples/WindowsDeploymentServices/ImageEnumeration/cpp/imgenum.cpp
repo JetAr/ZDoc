@@ -1,4 +1,4 @@
-/*++
+﻿/*++
 Copyright (c) Microsoft Corporation
 
 Module Name:
@@ -70,7 +70,7 @@ wmain(
            hFind = NULL;
 
     WCHAR wszMsg[1024] = { 0 },
-          wszArchitecture[20] = { 0 };
+                         wszArchitecture[20] = { 0 };
 
     UNREFERENCED_PARAMETER(envp);
 
@@ -85,7 +85,7 @@ wmain(
     //
     // Initialize the Credentials stucture with the passed in data.
     //
-    
+
     ZeroMemory( &Cred, sizeof( Cred ) );
     Cred.pwszUserName = argv[1];
     Cred.pwszDomain = NULL;
@@ -164,9 +164,9 @@ wmain(
 
         switch ( dwArchitecture )
         {
-        
+
         case PROCESSOR_ARCHITECTURE_INTEL:
-            
+
             hr = MyLoadStringW( NULL, IDS_STRING_ARCH_X86, wszArchitecture, ARRAYSIZE( wszArchitecture ) );
             CLEANUP_ON_HR_FAIL( hr, Cleanup );
 
@@ -214,7 +214,8 @@ wmain(
 
         wprintf( wszMsg, pwszName, pwszDescription, pwszPath, dwIndex, pwszArchitecture );
 
-    } while ( SUCCEEDED( hr = WdsCliFindNextImage( hFind ) ) );
+    }
+    while ( SUCCEEDED( hr = WdsCliFindNextImage( hFind ) ) );
 
     //
     // WdsCliFindNextImage returns ERROR_NO_MORE_FILES when it reaches the end of the enumeration.
@@ -261,7 +262,7 @@ Cleanup:
     else
     {
         hrCleanup = MyLoadStringW( NULL, IDS_STRING_FAILURE, wszMsg, ARRAYSIZE( wszMsg ) );
-        
+
         if ( SUCCEEDED( hrCleanup ) )
         {
             wprintf( wszMsg, hr );
@@ -270,7 +271,7 @@ Cleanup:
             // Try to get the string representation of this error message.
             //
 
-            FormatMessageW( 
+            FormatMessageW(
                 FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM,
                 NULL,
                 hr,

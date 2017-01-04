@@ -1,4 +1,4 @@
-
+﻿
 
 HRESULT  VariantToStringList(  VARIANT& refvar, CStringList& refstringlist);
 HRESULT StringListToVariant( VARIANT& refvar, const CStringList& refstringlist);
@@ -15,4 +15,4 @@ CString GetADSIError( HRESULT hr );
 HRESULT OctetVariantToString(  VARIANT& refvar, CString &sResult);
 
 
-#define RETURN_ON_FAILURE(hr) if (!SUCCEEDED(hr)) { ReportError(hr); return; } 
+#define RETURN_ON_FAILURE(hr) if (!SUCCEEDED(hr)) { ReportError(hr); return; }

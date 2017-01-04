@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -37,7 +37,7 @@ CTopoViewerWindow::CTopoViewerWindow(HRESULT& hr)
     , m_fEditable(TRUE)
 {
     m_pTree = new CVisualTree();
-    
+
     if(m_pTree == NULL)
     {
         hr = E_OUTOFMEMORY;
@@ -61,7 +61,7 @@ void CTopoViewerWindow::Init(ITedTopoView* pController, CTedTopologyEditor* pEdi
     m_pEditor = pEditor;
 }
 
-void CTopoViewerWindow::ClearView() 
+void CTopoViewerWindow::ClearView()
 {
     delete m_pTree;
     m_pTree = new CVisualTree;
@@ -82,14 +82,14 @@ LRESULT CTopoViewerWindow::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOO
 
 LRESULT CTopoViewerWindow::OnDestroy(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
-	bHandled = TRUE;
-	return 0;
+    bHandled = TRUE;
+    return 0;
 }
 
 LRESULT CTopoViewerWindow::OnSize(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
     ResizeScrollBars();
-    
+
     bHandled = true;
     return 0;
 }
@@ -118,8 +118,8 @@ LRESULT CTopoViewerWindow::OnMouseMove(UINT uMsg, WPARAM wParam, LPARAM lParam, 
         POINT pt;
         CVisualPoint visPt;
 
-        pt.x = GET_X_LPARAM(lParam); 
-        pt.y = GET_Y_LPARAM(lParam); 
+        pt.x = GET_X_LPARAM(lParam);
+        pt.y = GET_Y_LPARAM(lParam);
         visPt  = m_Transform.ScreenToVisual(pt);
 
         if(!m_pFocus->GetHandler()->OnMouseMove(m_pFocus, visPt))
@@ -146,7 +146,7 @@ LRESULT CTopoViewerWindow::OnMouseMove(UINT uMsg, WPARAM wParam, LPARAM lParam, 
             InvalidateRect(NULL);
         }
     }
-    
+
     bHandled = TRUE;
     return 0;
 }
@@ -157,17 +157,19 @@ LRESULT CTopoViewerWindow::OnLButtonDown(UINT uMsg, WPARAM wParam, LPARAM lParam
     CVisualPoint visPt;
     CVisualObject * pHitObj;
 
-    pt.x = GET_X_LPARAM(lParam); 
-    pt.y = GET_Y_LPARAM(lParam); 
+    pt.x = GET_X_LPARAM(lParam);
+    pt.y = GET_Y_LPARAM(lParam);
     visPt  = m_Transform.ScreenToVisual(pt);
 
-    if(m_pSelected) {
+    if(m_pSelected)
+    {
         m_pSelected->Select(false);
         m_pSelected = NULL;
     }
 
     BOOL found = m_pTree->HitTest(visPt, &pHitObj);
-    if(found) {
+    if(found)
+    {
         m_pSelected = pHitObj;
         m_pSelected->Select(true);
         if(m_pSelected->GetHandler()) m_pSelected->GetHandler()->OnFocus(m_pSelected);
@@ -175,7 +177,8 @@ LRESULT CTopoViewerWindow::OnLButtonDown(UINT uMsg, WPARAM wParam, LPARAM lParam
 
     if(!m_pFocus)
     {
-        if(found && pHitObj->GetHandler()) {
+        if(found && pHitObj->GetHandler())
+        {
             m_pFocus = pHitObj;
         }
     }
@@ -197,8 +200,8 @@ LRESULT CTopoViewerWindow::OnLButtonUp(UINT uMsg, WPARAM wParam, LPARAM lParam, 
     CVisualPoint visPt;
     CVisualObject * pHitObj;
 
-    pt.x = GET_X_LPARAM(lParam); 
-    pt.y = GET_Y_LPARAM(lParam); 
+    pt.x = GET_X_LPARAM(lParam);
+    pt.y = GET_Y_LPARAM(lParam);
     visPt  = m_Transform.ScreenToVisual(pt);
 
     if(!m_pFocus)
@@ -230,7 +233,8 @@ Cleanup:
     return 0;
 }
 
-LRESULT CTopoViewerWindow::OnLButtonDoubleClick(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled) {
+LRESULT CTopoViewerWindow::OnLButtonDoubleClick(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+{
     POINT pt;
     CVisualPoint visPt;
     CVisualObject* pHitObj;
@@ -256,94 +260,94 @@ Cleanup:
 LRESULT CTopoViewerWindow::OnEraseBkgnd(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
     bHandled = true;
-    
+
     return 1;
 }
 
 LRESULT CTopoViewerWindow::OnHScroll(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
     SCROLLINFO si;
-    
-     si.cbSize = sizeof (si);
-     si.fMask  = SIF_ALL;
 
-     GetScrollInfo(SB_HORZ, &si);
+    si.cbSize = sizeof (si);
+    si.fMask  = SIF_ALL;
 
-     switch (LOWORD (wParam))
-     {
-     case SB_LINELEFT: 
-          si.nPos -= 1;
-          break;
-     case SB_LINERIGHT: 
-          si.nPos += 1;
-          break;
-     case SB_PAGELEFT:
-          si.nPos -= si.nPage;
-          break;
-     case SB_PAGERIGHT:
-          si.nPos += si.nPage;
-          break;
-     case SB_THUMBTRACK: 
-          si.nPos = si.nTrackPos;
-          break;
-     default:
-          break;
-     }
+    GetScrollInfo(SB_HORZ, &si);
 
-     si.fMask = SIF_POS;
-     SetScrollInfo(SB_HORZ, &si, TRUE);
-     GetScrollInfo(SB_HORZ, &si);
-     
-     m_iLeftViewStart = si.nPos;
+    switch (LOWORD (wParam))
+    {
+    case SB_LINELEFT:
+        si.nPos -= 1;
+        break;
+    case SB_LINERIGHT:
+        si.nPos += 1;
+        break;
+    case SB_PAGELEFT:
+        si.nPos -= si.nPage;
+        break;
+    case SB_PAGERIGHT:
+        si.nPos += si.nPage;
+        break;
+    case SB_THUMBTRACK:
+        si.nPos = si.nTrackPos;
+        break;
+    default:
+        break;
+    }
 
-     m_Transform.SetPointOffset(-double(m_iLeftViewStart), -double(m_iTopViewStart));
-     InvalidateRect(NULL);
-     
-     bHandled = true;
-     return 0;
+    si.fMask = SIF_POS;
+    SetScrollInfo(SB_HORZ, &si, TRUE);
+    GetScrollInfo(SB_HORZ, &si);
+
+    m_iLeftViewStart = si.nPos;
+
+    m_Transform.SetPointOffset(-double(m_iLeftViewStart), -double(m_iTopViewStart));
+    InvalidateRect(NULL);
+
+    bHandled = true;
+    return 0;
 }
 
 LRESULT CTopoViewerWindow::OnVScroll(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
     SCROLLINFO si;
-    
-     si.cbSize = sizeof (si);
-     si.fMask  = SIF_ALL;
 
-     GetScrollInfo(SB_VERT, &si);
+    si.cbSize = sizeof (si);
+    si.fMask  = SIF_ALL;
 
-     switch (LOWORD (wParam))
-     {
-     case SB_LINELEFT: 
-          si.nPos -= 1;
-          break;
-     case SB_LINERIGHT: 
-          si.nPos += 1;
-          break;
-     case SB_PAGELEFT:
-          si.nPos -= si.nPage;
-          break;
-     case SB_PAGERIGHT:
-          si.nPos += si.nPage;
-          break;
-     case SB_THUMBTRACK: 
-          si.nPos = si.nTrackPos;
-          break;
-     default:
-          break;
-     }
+    GetScrollInfo(SB_VERT, &si);
 
-     si.fMask = SIF_POS;
-     SetScrollInfo(SB_VERT, &si, TRUE);
-     GetScrollInfo(SB_VERT, &si);
-     
-     m_iTopViewStart = si.nPos;
+    switch (LOWORD (wParam))
+    {
+    case SB_LINELEFT:
+        si.nPos -= 1;
+        break;
+    case SB_LINERIGHT:
+        si.nPos += 1;
+        break;
+    case SB_PAGELEFT:
+        si.nPos -= si.nPage;
+        break;
+    case SB_PAGERIGHT:
+        si.nPos += si.nPage;
+        break;
+    case SB_THUMBTRACK:
+        si.nPos = si.nTrackPos;
+        break;
+    default:
+        break;
+    }
 
-     m_Transform.SetPointOffset(-double(m_iLeftViewStart), -double(m_iTopViewStart));
-     InvalidateRect(NULL);
-     
-     bHandled = true;
-     return 0;
+    si.fMask = SIF_POS;
+    SetScrollInfo(SB_VERT, &si, TRUE);
+    GetScrollInfo(SB_VERT, &si);
+
+    m_iTopViewStart = si.nPos;
+
+    m_Transform.SetPointOffset(-double(m_iLeftViewStart), -double(m_iTopViewStart));
+    InvalidateRect(NULL);
+
+    bHandled = true;
+    return 0;
 }
 
 LRESULT CTopoViewerWindow::OnIsSaved(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
@@ -369,7 +373,7 @@ LRESULT CTopoViewerWindow::OnShowTopology(UINT uMsg, WPARAM wParam, LPARAM lPara
         return 1;
     }
 
-   return 0;
+    return 0;
 }
 
 LRESULT CTopoViewerWindow::OnMergeTopology(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
@@ -383,7 +387,7 @@ LRESULT CTopoViewerWindow::OnMergeTopology(UINT uMsg, WPARAM wParam, LPARAM lPar
         return 1;
     }
 
-   return 0;
+    return 0;
 }
 
 LRESULT CTopoViewerWindow::OnLoadTopology(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
@@ -418,7 +422,7 @@ LRESULT CTopoViewerWindow::OnAddSource(UINT uMsg, WPARAM wParam, LPARAM lParam, 
     IFC( pNodeCreator->CreateSource(szSourceURL, NULL, &pSourceNode) );
     IFC( m_pEditor->AddNode(pSourceNode) );
 
-Cleanup:    
+Cleanup:
     return (LRESULT) hr;
 }
 
@@ -456,7 +460,7 @@ LRESULT CTopoViewerWindow::OnAddTransform(UINT uMsg, WPARAM wParam, LPARAM lPara
     CTedNodeCreator* pNodeCreator = CTedNodeCreator::GetSingleton();
     IFC( pNodeCreator->CreateTransform(gidTransformID, szTransformName, &pTransformNode) );
     IFC( m_pEditor->AddNode(pTransformNode) );
-    
+
 Cleanup:
     return (LRESULT) hr;
 }
@@ -470,7 +474,7 @@ LRESULT CTopoViewerWindow::OnAddCustomSink(UINT uMsg, WPARAM wParam, LPARAM lPar
     CTedNodeCreator* pNodeCreator = CTedNodeCreator::GetSingleton();
     IFC( pNodeCreator->CreateCustomSink(gidSinkID, &pSinkNode) );
     IFC( m_pEditor->AddNode(pSinkNode) );
-    
+
 Cleanup:
     return (LRESULT) hr;
 }
@@ -482,7 +486,7 @@ LRESULT CTopoViewerWindow::OnAddTee(UINT uMsg, WPARAM wParam, LPARAM lParam, BOO
     CTedNodeCreator* pNodeCreator = CTedNodeCreator::GetSingleton();
     IFC( pNodeCreator->CreateTee(&pTeeNode) );
     IFC( m_pEditor->AddNode(pTeeNode) );
-    
+
 Cleanup:
     return (LRESULT) hr;
 }
@@ -504,7 +508,7 @@ CVisualObject* CTopoViewerWindow::GetSelectedVisual()
     return m_pSelected;
 }
 
-void CTopoViewerWindow::HandleDelete() 
+void CTopoViewerWindow::HandleDelete()
 {
     if(!m_pSelected)
     {
@@ -515,7 +519,7 @@ void CTopoViewerWindow::HandleDelete()
     {
         m_pTree->RemoveVisual(m_pSelected->GetContainer());
     }
-    else if(m_pSelected->Type() == CVisualObject::PIN) 
+    else if(m_pSelected->Type() == CVisualObject::PIN)
     {
         CVisualPin* pin = static_cast<CVisualPin*>(m_pSelected);
         CVisualConnector* connector = pin->GetConnector();
@@ -527,7 +531,7 @@ void CTopoViewerWindow::HandleDelete()
     {
         m_pTree->RemoveVisual(m_pSelected);
     }
-    else 
+    else
     {
         m_pTree->RemoveVisual(m_pSelected);
     }
@@ -556,28 +560,28 @@ void CTopoViewerWindow::ResizeScrollBars()
     {
         iScrollWidth = m_iTopologyWidth - (rect.right - rect.left) + 10;
     }
-    
-   // Set the horizontal scrolling range and page size. 
+
+    // Set the horizontal scrolling range and page size.
     SCROLLINFO si;
-    si.cbSize = sizeof(si); 
-    si.fMask  = SIF_RANGE | SIF_PAGE; 
-    si.nMin   = 0; 
-    si.nMax   = iScrollWidth; 
-    si.nPage  = 20; 
-    SetScrollInfo(SB_HORZ, &si, TRUE); 
+    si.cbSize = sizeof(si);
+    si.fMask  = SIF_RANGE | SIF_PAGE;
+    si.nMin   = 0;
+    si.nMax   = iScrollWidth;
+    si.nPage  = 20;
+    SetScrollInfo(SB_HORZ, &si, TRUE);
 
     UINT32 iScrollHeight = 0;
     if(m_iTopologyHeight > UINT32(rect.bottom - rect.top))
     {
         iScrollHeight = m_iTopologyHeight - (rect.bottom - rect.top) + 10;
     }
-    // Set the horizontal scrolling range and page size. 
-    si.cbSize = sizeof(si); 
-    si.fMask  = SIF_RANGE | SIF_PAGE; 
-    si.nMin   = 0; 
-    si.nMax   = iScrollHeight; 
-    si.nPage  = 20; 
-    SetScrollInfo(SB_VERT, &si, TRUE); 
+    // Set the horizontal scrolling range and page size.
+    si.cbSize = sizeof(si);
+    si.fMask  = SIF_RANGE | SIF_PAGE;
+    si.nMin   = 0;
+    si.nMax   = iScrollHeight;
+    si.nPage  = 20;
+    SetScrollInfo(SB_VERT, &si, TRUE);
 }
 
 void CTopoViewerWindow::NotifyNewVisuals()

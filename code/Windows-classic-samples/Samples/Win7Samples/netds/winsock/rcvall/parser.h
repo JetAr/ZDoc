@@ -1,4 +1,4 @@
-#ifndef _RCVALL_H_
+﻿#ifndef _RCVALL_H_
 #define _RCVALL_H_
 
 //
@@ -22,37 +22,37 @@
 #define FILTER_MASK_DESTINATION_PORT    0x08
 
 // Prints a sequence of raw bytes to the display
-void 
+void
 PrintRawBytes(
-    BYTE *ptr, 
+    BYTE *ptr,
     DWORD len
-    );
+);
 
-int  
+int
 DecodeIGMPHeader(
-    char *buf, 
+    char *buf,
     DWORD iphdrlen
-    );
+);
 
-int  
+int
 DecodeUDPHeader(
-    char *buf, 
+    char *buf,
     DWORD iphdrlen
-    );
+);
 
-int 
+int
 DecodeTCPHeader(
-    char *buf, 
+    char *buf,
     DWORD iphdrlen
-    );
+);
 
-int 
+int
 DecodeIPHeader(
-    char *buf, 
+    char *buf,
     int buflen,
-    unsigned long filtermask, 
-    SOCKADDR *srcfilter, 
+    unsigned long filtermask,
+    SOCKADDR *srcfilter,
     SOCKADDR *destfilter
-    );
+);
 
 #endif

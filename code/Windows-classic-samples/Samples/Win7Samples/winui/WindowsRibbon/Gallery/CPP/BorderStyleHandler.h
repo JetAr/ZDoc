@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -13,7 +13,7 @@
 //
 //  CLASS: CBorderStyleHandler : IUICommandHandler
 //
-//  PURPOSE: Implements interface IUICommandHandler. 
+//  PURPOSE: Implements interface IUICommandHandler.
 //
 //  COMMENTS:
 //
@@ -25,7 +25,7 @@ class CBorderStyleHandler
 {
 public:
     STDMETHOD(Execute)(UINT nCmdID,
-                       UI_EXECUTIONVERB verb, 
+                       UI_EXECUTIONVERB verb,
                        __in_opt const PROPERTYKEY* key,
                        __in_opt const PROPVARIANT* ppropvarValue,
                        __in_opt IUISimplePropertySet* pCommandExecutionProperties);

@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -21,7 +21,7 @@
 //
 //
 STDMETHODIMP CApplication::OnViewChanged(UINT32 nViewID, __in UI_VIEWTYPE typeID,
-__in IUnknown* pView, UI_VIEWVERB verb, INT32 uReasonCode)
+        __in IUnknown* pView, UI_VIEWVERB verb, INT32 uReasonCode)
 {
     UNREFERENCED_PARAMETER(nViewID);
     UNREFERENCED_PARAMETER(typeID);
@@ -55,7 +55,7 @@ __in IUnknown* pView, UI_VIEWVERB verb, INT32 uReasonCode)
 //
 //
 STDMETHODIMP CApplication::OnCreateUICommand(UINT32 nCmdID, __in UI_COMMANDTYPE typeID,
-__deref_out IUICommandHandler** ppCommandHandler)
+        __deref_out IUICommandHandler** ppCommandHandler)
 {
     UNREFERENCED_PARAMETER(typeID);
 
@@ -144,7 +144,7 @@ __deref_out IUICommandHandler** ppCommandHandler)
 //
 //
 STDMETHODIMP CApplication::OnDestroyUICommand(UINT32 commandId, __in UI_COMMANDTYPE typeID,
-__in_opt IUICommandHandler* pCommandHandler)
+        __in_opt IUICommandHandler* pCommandHandler)
 {
     UNREFERENCED_PARAMETER(commandId);
     UNREFERENCED_PARAMETER(typeID);
@@ -173,7 +173,7 @@ HRESULT CApplication::CreateInstance(__deref_out CApplication **ppApplication, H
     {
         pApplication->m_hwnd = hwnd;
         *ppApplication = pApplication;
-        
+
     }
     else
     {
@@ -215,7 +215,7 @@ STDMETHODIMP CApplication::QueryInterface(REFIID iid, void** ppv)
     {
         *ppv = static_cast<IUIApplication*>(this);
     }
-    else 
+    else
     {
         *ppv = NULL;
         return E_NOINTERFACE;

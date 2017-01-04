@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -32,7 +32,7 @@ CBaseClient::~CBaseClient()
         // Be sure to Release the reference to the COM interface!
         //
         if (NULL != m_pContentList->m_pContent)
-        {          
+        {
             m_pContentList->m_pContent->Release();
         }
 
@@ -49,9 +49,9 @@ void CBaseClient::Register()
     //
     HRESULT hr = S_OK;
 
-    if (NULL == m_pSession && 
-        NULL == m_pContentMgr &&
-        NULL == m_pNotificationMgr)
+    if (NULL == m_pSession &&
+            NULL == m_pContentMgr &&
+            NULL == m_pNotificationMgr)
     {
         ::CoCreateInstance(CLSID_SideShowSession,
                            NULL,
@@ -122,13 +122,13 @@ void CBaseClient::Register()
                 // Have you added the proper information to the registry for this application?
                 //
             }
-            else 
+            else
             {
                 //
                 // ISideShowSession::RegisterContent failed
                 //
             }
-        }       
+        }
     }
     else
     {
@@ -158,7 +158,7 @@ void CBaseClient::Unregister()
     }
 
     if (NULL != m_pSession)
-    {       
+    {
         m_pSession->Release();
         m_pSession = NULL;
     }

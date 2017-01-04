@@ -1,4 +1,4 @@
-#include "CHWMFT.h"
+﻿#include "CHWMFT.h"
 #include "IMYMFT.h"
 
 ULONG CHWMFT::AddRef(void)
@@ -59,7 +59,8 @@ HRESULT CHWMFT::QueryInterface(
         }
 
         AddRef();
-    }while(false);
+    }
+    while(false);
 
     return hr;
 }
@@ -67,7 +68,7 @@ HRESULT CHWMFT::QueryInterface(
 ULONG CHWMFT::Release(void)
 {
     ULONG   ulRef = 0;
-    
+
     if(m_ulRef > 0)
     {
         ulRef = InterlockedDecrement(&m_ulRef);

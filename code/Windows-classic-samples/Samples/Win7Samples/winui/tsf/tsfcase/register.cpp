@@ -1,4 +1,4 @@
-//
+﻿//
 // register.cpp
 //
 // Server registration code.
@@ -62,13 +62,13 @@ BOOL CCaseTextService::RegisterProfiles()
     achIconFile[cchIconFile] = '\0';
 
     hr = pInputProcessProfiles->AddLanguageProfile(c_clsidCaseTextService,
-                                  CASE_LANGID, 
-                                  c_guidCaseProfile, 
-                                  c_szCaseDescW, 
-                                  ARRAYSIZE(c_szCaseDescW) - 1,
-                                  achIconFile,
-                                  cchIconFile,
-                                  CASE_ICON_INDEX);
+            CASE_LANGID,
+            c_guidCaseProfile,
+            c_szCaseDescW,
+            ARRAYSIZE(c_szCaseDescW) - 1,
+            achIconFile,
+            cchIconFile,
+            CASE_ICON_INDEX);
 
 Exit:
     pInputProcessProfiles->Release();
@@ -108,7 +108,7 @@ BOOL CCaseTextService::RegisterCategories(BOOL fRegister)
     int i;
     HRESULT hr;
 
-    hr = CoCreateInstance(CLSID_TF_CategoryMgr, NULL, CLSCTX_INPROC_SERVER, 
+    hr = CoCreateInstance(CLSID_TF_CategoryMgr, NULL, CLSCTX_INPROC_SERVER,
                           IID_ITfCategoryMgr, (void**)&pCategoryMgr);
 
     if (hr != S_OK)
@@ -119,12 +119,12 @@ BOOL CCaseTextService::RegisterCategories(BOOL fRegister)
         if (fRegister)
         {
             hr = pCategoryMgr->RegisterCategory(c_clsidCaseTextService,
-                   *c_rgCategories[i].pguidCategory, *c_rgCategories[i].pguid);
+                                                *c_rgCategories[i].pguidCategory, *c_rgCategories[i].pguid);
         }
         else
         {
             hr = pCategoryMgr->UnregisterCategory(c_clsidCaseTextService,
-                   *c_rgCategories[i].pguidCategory, *c_rgCategories[i].pguid);
+                                                  *c_rgCategories[i].pguidCategory, *c_rgCategories[i].pguid);
         }
 
         if (hr != S_OK)
@@ -142,7 +142,8 @@ BOOL CCaseTextService::RegisterCategories(BOOL fRegister)
 //----------------------------------------------------------------------------
 
 static const BYTE GuidMap[] = {3, 2, 1, 0, '-', 5, 4, '-', 7, 6, '-',
-    8, 9, '-', 10, 11, 12, 13, 14, 15};
+                               8, 9, '-', 10, 11, 12, 13, 14, 15
+                              };
 
 static const char szDigits[] = "0123456789ABCDEF";
 static const WCHAR wszDigits[] = L"0123456789ABCDEF";
@@ -261,13 +262,13 @@ BOOL CCaseTextService::RegisterServer()
     memcpy(achIMEKey, c_szInfoKeyPrefix, sizeof(c_szInfoKeyPrefix)-sizeof(TCHAR));
 
     if (fRet = RegCreateKeyEx(HKEY_CLASSES_ROOT, achIMEKey, 0, NULL, REG_OPTION_NON_VOLATILE, KEY_WRITE, NULL, &hKey, &dw)
-            == ERROR_SUCCESS)
+               == ERROR_SUCCESS)
     {
         fRet &= RegSetValueEx(hKey, NULL, 0, REG_SZ, (BYTE *)c_szCaseDesc, sizeof(c_szCaseDesc))
-            == ERROR_SUCCESS;
+                == ERROR_SUCCESS;
 
         if (fRet &= RegCreateKeyEx(hKey, c_szInProcSvr32, 0, NULL, REG_OPTION_NON_VOLATILE, KEY_WRITE, NULL, &hSubKey, &dw)
-            == ERROR_SUCCESS)
+                    == ERROR_SUCCESS)
         {
             dw = GetModuleFileName(g_hInst, achFileName, ARRAYSIZE(achFileName));
             dw = min(dw, (ARRAYSIZE(achFileName) - 1));

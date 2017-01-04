@@ -1,9 +1,9 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
 //
-// Copyright � Microsoft Corporation. All rights reserved
+// Copyright © Microsoft Corporation. All rights reserved
 
 /////////////////////////////////////////////////////////////////////////
 //  DlgMain.CPP
@@ -39,32 +39,32 @@ LRESULT CALLBACK CTTSApp::DlgProcMain(HWND hwnd, UINT uMsg, WPARAM wParam, LPARA
     CTTSApp* pThis = (CTTSApp *)(LONG_PTR)::GetWindowLongPtr( hwnd, GWLP_USERDATA );
 
     // Call the appropriate function to handle the messages
-    switch(uMsg)                                                    
+    switch(uMsg)
     {
-        case WM_INITDIALOG:
-            ::SetWindowLongPtr( hwnd, GWLP_USERDATA, (LONG_PTR)lParam );
-            pThis = (CTTSApp *)lParam;
-            return pThis->OnInitDialog( hwnd );
+    case WM_INITDIALOG:
+        ::SetWindowLongPtr( hwnd, GWLP_USERDATA, (LONG_PTR)lParam );
+        pThis = (CTTSApp *)lParam;
+        return pThis->OnInitDialog( hwnd );
 
-        case WM_TTSAPPCUSTOMEVENT:
-            pThis->MainHandleSynthEvent();
-            return TRUE;
+    case WM_TTSAPPCUSTOMEVENT:
+        pThis->MainHandleSynthEvent();
+        return TRUE;
 
-        case WM_HSCROLL:
-            pThis->HandleScroll( (HWND) lParam );
-            return TRUE;
+    case WM_HSCROLL:
+        pThis->HandleScroll( (HWND) lParam );
+        return TRUE;
 
-        case WM_COMMAND:
-            if( pThis )
-            {
-                pThis->MainHandleCommand( (int)(LOWORD(wParam)), (HWND)lParam, 
-                                 (UINT)HIWORD(wParam) );
-            }
-            return TRUE;
+    case WM_COMMAND:
+        if( pThis )
+        {
+            pThis->MainHandleCommand( (int)(LOWORD(wParam)), (HWND)lParam,
+                                      (UINT)HIWORD(wParam) );
+        }
+        return TRUE;
 
-        case WM_CLOSE:
-            pThis->MainHandleClose();
-            return TRUE;
+    case WM_CLOSE:
+        pThis->MainHandleClose();
+        return TRUE;
     }
 
     return FALSE;
@@ -75,7 +75,7 @@ HRESULT CTTSApp::InitSapi()
 /////////////////////////////////////////////////////////////////
 {
     HRESULT                 hr;
-    
+
     hr = m_cpVoice.CoCreateInstance( CLSID_SpVoice );
 
     return hr;
@@ -175,7 +175,7 @@ BOOL CTTSApp::OnInitDialog( HWND hWnd )
 /////////////////////////////////////////////////////////////////
 {
     HRESULT                         hr          = S_OK;
-        
+
     // Store this as the "Main Dialog"
     m_hWnd  = hWnd;
 
@@ -191,10 +191,10 @@ BOOL CTTSApp::OnInitDialog( HWND hWnd )
     for( i=0; i<NUM_OUTPUTFORMATS; i++ )
     {
         SendDlgItemMessage( hWnd, IDC_COMBO_OUTPUT, CB_ADDSTRING, 0,
-                    (LPARAM)g_aszOutputFormat[i] );
+                            (LPARAM)g_aszOutputFormat[i] );
 
-        SendDlgItemMessage( hWnd, IDC_COMBO_OUTPUT, CB_SETITEMDATA, i, 
-                    (LPARAM)g_aOutputFormat[i] );
+        SendDlgItemMessage( hWnd, IDC_COMBO_OUTPUT, CB_SETITEMDATA, i,
+                            (LPARAM)g_aOutputFormat[i] );
     }
 
     if ( !m_cpVoice )
@@ -236,13 +236,13 @@ BOOL CTTSApp::OnInitDialog( HWND hWnd )
     {
         hr = SpInitTokenComboBox( GetDlgItem( hWnd, IDC_COMBO_VOICES ), SPCAT_VOICES );
     }
-    
+
     if ( SUCCEEDED( hr ) )
     {
         SpCreateDefaultObjectFromCategoryId( SPCAT_AUDIOOUT, &m_cpOutAudio );
     }
 
-    // Set default voice data 
+    // Set default voice data
     VoiceChange();
 
     // Set Range for Skip Edit Box...
@@ -291,7 +291,7 @@ BOOL CTTSApp::OnInitDialog( HWND hWnd )
         MessageBox( NULL, _T("Error initializing speech objects. Shutting down."), _T("Error"), MB_OK );
         SendMessage( hWnd, WM_CLOSE, 0, 0 );
         return(FALSE);
-        
+
     }
     else
     {
@@ -304,18 +304,18 @@ BOOL CTTSApp::OnInitDialog( HWND hWnd )
         GetClientRect(hCharWnd, &rc);
         rc.left = (rc.right - CHARACTER_WIDTH) / 2;
         rc.top = (rc.bottom - CHARACTER_HEIGHT) / 2;
-        m_hChildWnd = CreateWindow( CHILD_CLASS, NULL, 
-                            WS_CHILDWINDOW | WS_VISIBLE,
-                            rc.left, rc.top,
-                            rc.left + CHARACTER_WIDTH, rc.top + CHARACTER_HEIGHT,
-                            hCharWnd, NULL, m_hInst, NULL );
+        m_hChildWnd = CreateWindow( CHILD_CLASS, NULL,
+                                    WS_CHILDWINDOW | WS_VISIBLE,
+                                    rc.left, rc.top,
+                                    rc.left + CHARACTER_WIDTH, rc.top + CHARACTER_HEIGHT,
+                                    hCharWnd, NULL, m_hInst, NULL );
 
         if ( !m_hChildWnd )
         {
             MessageBox( hWnd, _T("Error initializing speech objects. Shutting down."), _T("Error"), MB_OK );
             SendMessage( hWnd, WM_CLOSE, 0, 0 );
             return(FALSE);
-            
+
         }
         else
         {
@@ -325,13 +325,13 @@ BOOL CTTSApp::OnInitDialog( HWND hWnd )
         }
     }
     return(TRUE);
-    
+
 }
 
 /////////////////////////////////////////////////////////////////
 void CTTSApp::Stop()
 /////////////////////////////////////////////////////////////////
-// 
+//
 // Resets global audio state to stopped, updates the Pause/Resume button
 // and repaints the mouth in a closed position
 //
@@ -346,7 +346,7 @@ void CTTSApp::Stop()
 
     SetWindowText( GetDlgItem( m_hWnd, IDB_PAUSE ), _T("Pause") );
     m_bPause = FALSE;
-    m_bStop = TRUE;             
+    m_bStop = TRUE;
     // Mouth closed
     g_iBmp = 0;
     SendMessage( m_hChildWnd, WM_PAINT, 0, 0 );
@@ -377,278 +377,278 @@ void CTTSApp::MainHandleCommand( int id, HWND hWndControl, UINT codeNotify )
 
     switch(id)
     {
-        // About Box display
-        case IDC_ABOUT:
-            ::DialogBox( m_hInst, (LPCTSTR)IDD_ABOUT, m_hWnd, (DLGPROC)About );
-            break;
+    // About Box display
+    case IDC_ABOUT:
+        ::DialogBox( m_hInst, (LPCTSTR)IDD_ABOUT, m_hWnd, (DLGPROC)About );
+        break;
 
-        // Any change to voices is sent to VoiceChange() function
-        case IDC_COMBO_VOICES:
-            if( codeNotify == CBN_SELCHANGE )
+    // Any change to voices is sent to VoiceChange() function
+    case IDC_COMBO_VOICES:
+        if( codeNotify == CBN_SELCHANGE )
+        {
+            hr = VoiceChange();
+        }
+
+        if( FAILED( hr ) )
+        {
+            TTSAppStatusMessage( m_hWnd, _T("Error changing voices\r\n") );
+        }
+
+        break;
+
+    // If user wants to speak a file pop the standard windows open file
+    // dialog box and load the text into a global buffer (m_pszwFileText)
+    // which will be used when the user hits speak.
+    case IDB_OPEN:
+        bFileOpened = CallOpenFileDialog( szAFileName,
+                                          _T("TXT (*.txt)\0*.txt\0XML (*.xml)\0*.xml\0All Files (*.*)\0*.*\0") );
+        if( bFileOpened )
+        {
+            DWORD   dwFileSize = 0;
+
+            wcscpy_s( m_szWFileName, _countof(m_szWFileName), CT2W( szAFileName ) );
+            ReadTheFile( szAFileName, &bIsUnicode, &m_pszwFileText );
+
+            if( bIsUnicode )
             {
-                hr = VoiceChange();
+                // Unicode source
+                UpdateEditCtlW( m_pszwFileText );
+            }
+            else
+            {
+                // MBCS source
+#ifdef _UNICODE
+                LPTSTR pszFileText = _tcsdup( m_pszwFileText );
+#else
+                // We're compiling ANSI, so we need to convert the string to MBCS
+                // Note that a W2T may not be good here, since this string might
+                // be very big
+                LPTSTR pszFileText = NULL;
+                int iNeeded = ::WideCharToMultiByte( CP_ACP, 0, m_pszwFileText, -1, NULL, 0, NULL, NULL );
+                pszFileText = (LPTSTR) ::malloc( sizeof( TCHAR ) * ( iNeeded + 1 ) );
+                ::WideCharToMultiByte( CP_ACP, 0, m_pszwFileText, -1, pszFileText, iNeeded + 1, NULL, NULL );
+#endif
+                if ( pszFileText )
+                {
+                    SetDlgItemText( m_hWnd, IDE_EDITBOX, pszFileText );
+                    free( pszFileText );
+                }
+
+            }
+        }
+        else
+        {
+            wcscpy_s( m_szWFileName, _countof(m_szWFileName), L"" );
+        }
+        // Always SetFocus back to main edit window so text highlighting will work
+        SetFocus( hwndEdit );
+        break;
+
+    // Handle speak
+    case IDB_SPEAK:
+        HandleSpeak();
+        break;
+
+    case IDB_PAUSE:
+        if( !m_bStop )
+        {
+            if( !m_bPause )
+            {
+                SetWindowText( GetDlgItem( m_hWnd, IDB_PAUSE ), _T("Resume") );
+                // Pause the voice...
+                m_cpVoice->Pause();
+                m_bPause = TRUE;
+                TTSAppStatusMessage( m_hWnd, _T("Pause\r\n") );
+            }
+            else
+            {
+                SetWindowText( GetDlgItem( m_hWnd, IDB_PAUSE ), _T("Pause") );
+                m_cpVoice->Resume();
+                m_bPause = FALSE;
+            }
+        }
+        SetFocus( hwndEdit );
+        break;
+
+    case IDB_STOP:
+        TTSAppStatusMessage( m_hWnd, _T("Stop\r\n") );
+        // Set the global audio state to stop
+        Stop();
+        SetFocus( hwndEdit );
+        break;
+
+    case IDB_SKIP:
+    {
+        SetFocus( hwndEdit );
+        int fSuccess = false;
+        int SkipNum = GetDlgItemInt( m_hWnd, IDC_SKIP_EDIT, &fSuccess, true );
+        ULONG ulGarbage = 0;
+        WCHAR szGarbage[] = L"Sentence";
+        if ( fSuccess )
+        {
+            TTSAppStatusMessage( m_hWnd, _T("Skip\r\n") );
+            m_cpVoice->Skip( szGarbage, SkipNum, &ulGarbage );
+        }
+        else
+        {
+            TTSAppStatusMessage( m_hWnd, _T("Skip failed\r\n") );
+        }
+        break;
+    }
+
+    case IDE_EDITBOX:
+        // Set the global audio state to stop if user has changed contents of edit control
+        if( codeNotify == EN_CHANGE )
+        {
+            Stop();
+        }
+        break;
+
+    case IDB_SPEAKWAV:
+        bWavFileOpened = CallOpenFileDialog( szAFileName,
+                                             _T("WAV (*.wav)\0*.wav\0All Files (*.*)\0*.*\0") );
+        // Speak the wav file using SpeakStream
+        if( bWavFileOpened )
+        {
+            WCHAR                       szwWavFileName[NORM_SIZE] = L"";;
+
+            wcscpy_s( szwWavFileName, _countof(szwWavFileName), CT2W( szAFileName ) );
+
+            // User helper function found in sphelper.h to open the wav file and
+            // get back an IStream pointer to pass to SpeakStream
+            hr = SPBindToFile( szwWavFileName, SPFM_OPEN_READONLY, &cpWavStream );
+
+            if( SUCCEEDED( hr ) )
+            {
+                hr = m_cpVoice->SpeakStream( cpWavStream, SPF_ASYNC, NULL );
             }
 
             if( FAILED( hr ) )
             {
-                TTSAppStatusMessage( m_hWnd, _T("Error changing voices\r\n") );
+                TTSAppStatusMessage( m_hWnd, _T("Speak error\r\n") );
             }
+        }
+        break;
 
-            break;
+    // Reset all values to defaults
+    case IDB_RESET:
+        TTSAppStatusMessage( m_hWnd, _T("Reset\r\n") );
+        SendDlgItemMessage( m_hWnd, IDC_VOLUME_SLIDER, TBM_SETPOS, TRUE, m_DefaultVolume );
+        SendDlgItemMessage( m_hWnd, IDC_RATE_SLIDER, TBM_SETPOS, TRUE, m_DefaultRate );
+        SendDlgItemMessage( m_hWnd, IDC_SAVETOWAV, BM_SETCHECK, BST_UNCHECKED, 0 );
+        SendDlgItemMessage( m_hWnd, IDC_EVENTS, BM_SETCHECK, BST_UNCHECKED, 0 );
+        SetDlgItemText( m_hWnd, IDE_EDITBOX, _T("Enter text you wish spoken here.") );
 
-        // If user wants to speak a file pop the standard windows open file
-        // dialog box and load the text into a global buffer (m_pszwFileText)
-        // which will be used when the user hits speak.
-        case IDB_OPEN:
-            bFileOpened = CallOpenFileDialog( szAFileName,
-                        _T("TXT (*.txt)\0*.txt\0XML (*.xml)\0*.xml\0All Files (*.*)\0*.*\0") );
-            if( bFileOpened )
-            {
-                DWORD   dwFileSize = 0;
-                
-                wcscpy_s( m_szWFileName, _countof(m_szWFileName), CT2W( szAFileName ) );
-                ReadTheFile( szAFileName, &bIsUnicode, &m_pszwFileText );
-                
-                if( bIsUnicode )
-                {
-                    // Unicode source
-                    UpdateEditCtlW( m_pszwFileText );
-                }
-                else
-                {
-                    // MBCS source
-#ifdef _UNICODE
-                    LPTSTR pszFileText = _tcsdup( m_pszwFileText );
-#else
-                    // We're compiling ANSI, so we need to convert the string to MBCS
-                    // Note that a W2T may not be good here, since this string might 
-                    // be very big
-                    LPTSTR pszFileText = NULL;
-                    int iNeeded = ::WideCharToMultiByte( CP_ACP, 0, m_pszwFileText, -1, NULL, 0, NULL, NULL );
-                    pszFileText = (LPTSTR) ::malloc( sizeof( TCHAR ) * ( iNeeded + 1 ) );
-                    ::WideCharToMultiByte( CP_ACP, 0, m_pszwFileText, -1, pszFileText, iNeeded + 1, NULL, NULL );
-#endif
-                    if ( pszFileText )
-                    {
-                        SetDlgItemText( m_hWnd, IDE_EDITBOX, pszFileText );
-                        free( pszFileText );
-                    }
+        // reset output format
+        SendDlgItemMessage( m_hWnd, IDC_COMBO_OUTPUT, CB_SETCURSEL, m_DefaultFormatIndex, 0 );
+        SendMessage( m_hWnd, WM_COMMAND, MAKEWPARAM(IDC_COMBO_OUTPUT, CBN_SELCHANGE), 0 );
 
-                }
-            }
-            else
-            {
-                wcscpy_s( m_szWFileName, _countof(m_szWFileName), L"" );
-            }
-            // Always SetFocus back to main edit window so text highlighting will work
-            SetFocus( hwndEdit );
-            break;
-        
-        // Handle speak
-        case IDB_SPEAK:
-            HandleSpeak();
-            break;
+        // Change the volume and the rate to reflect what the UI says
+        HandleScroll( ::GetDlgItem( m_hWnd, IDC_VOLUME_SLIDER ) );
+        HandleScroll( ::GetDlgItem( m_hWnd, IDC_RATE_SLIDER ) );
 
-        case IDB_PAUSE:
-            if( !m_bStop )
-            {
-                if( !m_bPause )
-                {
-                    SetWindowText( GetDlgItem( m_hWnd, IDB_PAUSE ), _T("Resume") );
-                    // Pause the voice...
-                    m_cpVoice->Pause();
-                    m_bPause = TRUE;
-                    TTSAppStatusMessage( m_hWnd, _T("Pause\r\n") );
-                }
-                else
-                {
-                    SetWindowText( GetDlgItem( m_hWnd, IDB_PAUSE ), _T("Pause") );
-                    m_cpVoice->Resume();
-                    m_bPause = FALSE;
-                }
-            }
-            SetFocus( hwndEdit );
-            break;
+        SetFocus( hwndEdit );
+        break;
 
-        case IDB_STOP:
-            TTSAppStatusMessage( m_hWnd, _T("Stop\r\n") );
-            // Set the global audio state to stop
-            Stop();
-            SetFocus( hwndEdit );
-            break;
-
-        case IDB_SKIP:
-            {
-                SetFocus( hwndEdit );
-                int fSuccess = false;
-                int SkipNum = GetDlgItemInt( m_hWnd, IDC_SKIP_EDIT, &fSuccess, true );
-                ULONG ulGarbage = 0;
-                WCHAR szGarbage[] = L"Sentence";
-                if ( fSuccess )
-                {
-                    TTSAppStatusMessage( m_hWnd, _T("Skip\r\n") );
-                    m_cpVoice->Skip( szGarbage, SkipNum, &ulGarbage );
-                }
-                else
-                {
-                    TTSAppStatusMessage( m_hWnd, _T("Skip failed\r\n") );
-                }
-                break;
-            }
-
-        case IDE_EDITBOX:
-            // Set the global audio state to stop if user has changed contents of edit control
-            if( codeNotify == EN_CHANGE )
-            {
-                Stop();
-            }
-            break;
-
-        case IDB_SPEAKWAV:
-            bWavFileOpened = CallOpenFileDialog( szAFileName,
-                         _T("WAV (*.wav)\0*.wav\0All Files (*.*)\0*.*\0") );
-            // Speak the wav file using SpeakStream
-            if( bWavFileOpened )
-            {
-                WCHAR                       szwWavFileName[NORM_SIZE] = L"";;
-
-                wcscpy_s( szwWavFileName, _countof(szwWavFileName), CT2W( szAFileName ) );
-
-                // User helper function found in sphelper.h to open the wav file and
-                // get back an IStream pointer to pass to SpeakStream
-                hr = SPBindToFile( szwWavFileName, SPFM_OPEN_READONLY, &cpWavStream );
-
-                if( SUCCEEDED( hr ) )
-                {
-                    hr = m_cpVoice->SpeakStream( cpWavStream, SPF_ASYNC, NULL );
-                }
-
-                if( FAILED( hr ) )
-                {
-                    TTSAppStatusMessage( m_hWnd, _T("Speak error\r\n") );
-                }
-            }
-            break;
-
-        // Reset all values to defaults
-        case IDB_RESET:
-            TTSAppStatusMessage( m_hWnd, _T("Reset\r\n") );
-            SendDlgItemMessage( m_hWnd, IDC_VOLUME_SLIDER, TBM_SETPOS, TRUE, m_DefaultVolume );
-            SendDlgItemMessage( m_hWnd, IDC_RATE_SLIDER, TBM_SETPOS, TRUE, m_DefaultRate );
-            SendDlgItemMessage( m_hWnd, IDC_SAVETOWAV, BM_SETCHECK, BST_UNCHECKED, 0 );
-            SendDlgItemMessage( m_hWnd, IDC_EVENTS, BM_SETCHECK, BST_UNCHECKED, 0 );
-            SetDlgItemText( m_hWnd, IDE_EDITBOX, _T("Enter text you wish spoken here.") );
-
-            // reset output format
-            SendDlgItemMessage( m_hWnd, IDC_COMBO_OUTPUT, CB_SETCURSEL, m_DefaultFormatIndex, 0 );
-            SendMessage( m_hWnd, WM_COMMAND, MAKEWPARAM(IDC_COMBO_OUTPUT, CBN_SELCHANGE), 0 );
-
-            // Change the volume and the rate to reflect what the UI says
-            HandleScroll( ::GetDlgItem( m_hWnd, IDC_VOLUME_SLIDER ) );
-            HandleScroll( ::GetDlgItem( m_hWnd, IDC_RATE_SLIDER ) );
-
-            SetFocus( hwndEdit );
-            break;
-
-        case IDC_COMBO_OUTPUT:
-            if( codeNotify == CBN_SELCHANGE )
-            {
-                // Get the audio output format and set it's GUID
-                iFormat  = SendDlgItemMessage( m_hWnd, IDC_COMBO_OUTPUT, CB_GETCURSEL, 0, 0 );
-                SPSTREAMFORMAT eFmt = (SPSTREAMFORMAT)SendDlgItemMessage( m_hWnd, IDC_COMBO_OUTPUT,
-                                                        CB_GETITEMDATA, iFormat, 0 );
-                CSpStreamFormat Fmt;
-                Fmt.AssignFormat(eFmt);
-                if ( m_cpOutAudio )
-                {
-                    hr = m_cpOutAudio->SetFormat( Fmt.FormatId(), Fmt.WaveFormatExPtr() );
-                }
-                else
-                {
-                    hr = E_FAIL;
-                }
-
-                if( SUCCEEDED( hr ) )
-                {
-                    hr = m_cpVoice->SetOutput( m_cpOutAudio, FALSE );
-                }
-
-                if( FAILED( hr ) )
-                {
-                    TTSAppStatusMessage( m_hWnd, _T("Format rejected\r\n") );
-                }
-
-                EnableSpeakButtons( SUCCEEDED( hr ) );
-            }
-            break;
-
-        case IDC_SAVETOWAV:
+    case IDC_COMBO_OUTPUT:
+        if( codeNotify == CBN_SELCHANGE )
         {
-            TCHAR szFileName[256];
-            _tcscpy_s(szFileName, _countof(szFileName), _T("\0"));
-
-            bFileOpened = CallSaveFileDialog( szFileName,
-                        _T("WAV (*.wav)\0*.wav\0All Files (*.*)\0*.*\0") );
-
-            if (bFileOpened == FALSE) break;
-
-            wcscpy_s( m_szWFileName, _countof(m_szWFileName), CT2W(szFileName) );
-
-            CSpStreamFormat OriginalFmt;
-            hr = m_cpVoice->GetOutputStream( &cpOldStream );
-            if (hr == S_OK)
+            // Get the audio output format and set it's GUID
+            iFormat  = SendDlgItemMessage( m_hWnd, IDC_COMBO_OUTPUT, CB_GETCURSEL, 0, 0 );
+            SPSTREAMFORMAT eFmt = (SPSTREAMFORMAT)SendDlgItemMessage( m_hWnd, IDC_COMBO_OUTPUT,
+                                  CB_GETITEMDATA, iFormat, 0 );
+            CSpStreamFormat Fmt;
+            Fmt.AssignFormat(eFmt);
+            if ( m_cpOutAudio )
             {
-                hr = OriginalFmt.AssignFormat(cpOldStream);
+                hr = m_cpOutAudio->SetFormat( Fmt.FormatId(), Fmt.WaveFormatExPtr() );
             }
             else
             {
                 hr = E_FAIL;
             }
-            // User SAPI helper function in sphelper.h to create a wav file
-            if (SUCCEEDED(hr))
-            {
-                hr = SPBindToFile( m_szWFileName, SPFM_CREATE_ALWAYS, &cpWavStream, &OriginalFmt.FormatId(), OriginalFmt.WaveFormatExPtr() ); 
-            }
+
             if( SUCCEEDED( hr ) )
             {
-                // Set the voice's output to the wav file instead of the speakers
-                hr = m_cpVoice->SetOutput(cpWavStream, TRUE);
+                hr = m_cpVoice->SetOutput( m_cpOutAudio, FALSE );
             }
 
-            if ( SUCCEEDED( hr ) )
+            if( FAILED( hr ) )
             {
-                // Do the Speak
-                HandleSpeak();
+                TTSAppStatusMessage( m_hWnd, _T("Format rejected\r\n") );
             }
 
-            // Set output back to original stream
-            // Wait until the speak is finished if saving to a wav file so that
-            // the smart pointer cpWavStream doesn't get released before its
-            // finished writing to the wav.
-            m_cpVoice->WaitUntilDone( INFINITE );
-            cpWavStream.Release();
-            
-            // Reset output
-            m_cpVoice->SetOutput( cpOldStream, FALSE );
-            
-            TCHAR   szTitle[MAX_PATH];
-            TCHAR   szConfString[MAX_PATH];
-            if ( SUCCEEDED( hr ) )
-            {
-                LoadString( m_hInst, IDS_SAVE_NOTIFY, szConfString, MAX_PATH );
-                LoadString( m_hInst, IDS_NOTIFY_TITLE, szTitle, MAX_PATH );
-                MessageBox( m_hWnd, szConfString, szTitle, MB_OK | MB_ICONINFORMATION );
-            }
-            else
-            {
-                LoadString( m_hInst, IDS_SAVE_ERROR, szConfString, MAX_PATH );
-                MessageBox( m_hWnd, szConfString, NULL, MB_ICONEXCLAMATION );
-            }
-
-            break;
+            EnableSpeakButtons( SUCCEEDED( hr ) );
         }
+        break;
+
+    case IDC_SAVETOWAV:
+    {
+        TCHAR szFileName[256];
+        _tcscpy_s(szFileName, _countof(szFileName), _T("\0"));
+
+        bFileOpened = CallSaveFileDialog( szFileName,
+                                          _T("WAV (*.wav)\0*.wav\0All Files (*.*)\0*.*\0") );
+
+        if (bFileOpened == FALSE) break;
+
+        wcscpy_s( m_szWFileName, _countof(m_szWFileName), CT2W(szFileName) );
+
+        CSpStreamFormat OriginalFmt;
+        hr = m_cpVoice->GetOutputStream( &cpOldStream );
+        if (hr == S_OK)
+        {
+            hr = OriginalFmt.AssignFormat(cpOldStream);
+        }
+        else
+        {
+            hr = E_FAIL;
+        }
+        // User SAPI helper function in sphelper.h to create a wav file
+        if (SUCCEEDED(hr))
+        {
+            hr = SPBindToFile( m_szWFileName, SPFM_CREATE_ALWAYS, &cpWavStream, &OriginalFmt.FormatId(), OriginalFmt.WaveFormatExPtr() );
+        }
+        if( SUCCEEDED( hr ) )
+        {
+            // Set the voice's output to the wav file instead of the speakers
+            hr = m_cpVoice->SetOutput(cpWavStream, TRUE);
+        }
+
+        if ( SUCCEEDED( hr ) )
+        {
+            // Do the Speak
+            HandleSpeak();
+        }
+
+        // Set output back to original stream
+        // Wait until the speak is finished if saving to a wav file so that
+        // the smart pointer cpWavStream doesn't get released before its
+        // finished writing to the wav.
+        m_cpVoice->WaitUntilDone( INFINITE );
+        cpWavStream.Release();
+
+        // Reset output
+        m_cpVoice->SetOutput( cpOldStream, FALSE );
+
+        TCHAR   szTitle[MAX_PATH];
+        TCHAR   szConfString[MAX_PATH];
+        if ( SUCCEEDED( hr ) )
+        {
+            LoadString( m_hInst, IDS_SAVE_NOTIFY, szConfString, MAX_PATH );
+            LoadString( m_hInst, IDS_NOTIFY_TITLE, szTitle, MAX_PATH );
+            MessageBox( m_hWnd, szConfString, szTitle, MB_OK | MB_ICONINFORMATION );
+        }
+        else
+        {
+            LoadString( m_hInst, IDS_SAVE_ERROR, szConfString, MAX_PATH );
+            MessageBox( m_hWnd, szConfString, NULL, MB_ICONEXCLAMATION );
+        }
+
+        break;
     }
-    
+    }
+
     return;
 }
 
@@ -666,7 +666,7 @@ void CTTSApp::HandleSpeak()
     TTSAppStatusMessage( m_hWnd, _T("Speak\r\n") );
     SetFocus( hwndEdit );
     m_bStop = FALSE;
-    
+
     // only get the string if we're not paused
     if( !m_bPause )
     {
@@ -678,13 +678,13 @@ void CTTSApp::HandleSpeak()
         szWTextString = new WCHAR[ lTextLen + 1 ];
 
         GETTEXTEX   GetText;
-        
+
         GetText.cb            = (DWORD)((lTextLen + 1) * sizeof( WCHAR ));
         GetText.codepage      = 1200;
         GetText.flags         = GT_DEFAULT;
         GetText.lpDefaultChar = NULL;
         GetText.lpUsedDefChar = NULL;
-        
+
         // Get the string in a unicode buffer
         SendDlgItemMessage( m_hWnd, IDE_EDITBOX, EM_GETTEXTEX, (WPARAM)&GetText, (LPARAM)szWTextString );
 
@@ -702,7 +702,7 @@ void CTTSApp::HandleSpeak()
     SetWindowText( GetDlgItem( m_hWnd, IDB_PAUSE ), _T("Pause") );
     SetFocus( hwndEdit );
     // Set state to run
-    hr = m_cpVoice->Resume();            
+    hr = m_cpVoice->Resume();
 
     if( FAILED( hr ) )
     {
@@ -719,8 +719,8 @@ void CTTSApp::MainHandleSynthEvent()
 //
 {
 
-    CSpEvent        event;  // helper class in sphelper.h for events that releases any 
-                            // allocated memory in it's destructor - SAFER than SPEVENT
+    CSpEvent        event;  // helper class in sphelper.h for events that releases any
+    // allocated memory in it's destructor - SAFER than SPEVENT
     SPVOICESTATUS   Stat;
     WPARAM          nStart;
     LPARAM          nEnd;
@@ -731,120 +731,120 @@ void CTTSApp::MainHandleSynthEvent()
     {
         switch( event.eEventId )
         {
-            case SPEI_START_INPUT_STREAM:
-                if( IsDlgButtonChecked( m_hWnd, IDC_EVENTS ) )
-                {
-                    TTSAppStatusMessage( m_hWnd, _T("StartStream event\r\n") );
-                }
-                break; 
+        case SPEI_START_INPUT_STREAM:
+            if( IsDlgButtonChecked( m_hWnd, IDC_EVENTS ) )
+            {
+                TTSAppStatusMessage( m_hWnd, _T("StartStream event\r\n") );
+            }
+            break;
 
-            case SPEI_END_INPUT_STREAM:
-                // Set global boolean stop to TRUE when finished speaking
-                m_bStop = TRUE; 
-                // Highlight entire text
-                nStart = 0;
-                nEnd = SendDlgItemMessage( m_hWnd, IDE_EDITBOX, WM_GETTEXTLENGTH, 0, 0 );
-                SendDlgItemMessage( m_hWnd, IDE_EDITBOX, EM_SETSEL, nStart, nEnd );
-                // Mouth closed
-                g_iBmp = 0;
-                InvalidateRect( m_hChildWnd, NULL, FALSE );
-                if( IsDlgButtonChecked( m_hWnd, IDC_EVENTS ) )
-                {
-                    TTSAppStatusMessage( m_hWnd, _T("EndStream event\r\n") );
-                }
-                break;     
-                
-            case SPEI_VOICE_CHANGE:
-                if( IsDlgButtonChecked( m_hWnd, IDC_EVENTS ) )
-                {
-                    TTSAppStatusMessage( m_hWnd, _T("Voicechange event\r\n") );
-                }
-                break;
+        case SPEI_END_INPUT_STREAM:
+            // Set global boolean stop to TRUE when finished speaking
+            m_bStop = TRUE;
+            // Highlight entire text
+            nStart = 0;
+            nEnd = SendDlgItemMessage( m_hWnd, IDE_EDITBOX, WM_GETTEXTLENGTH, 0, 0 );
+            SendDlgItemMessage( m_hWnd, IDE_EDITBOX, EM_SETSEL, nStart, nEnd );
+            // Mouth closed
+            g_iBmp = 0;
+            InvalidateRect( m_hChildWnd, NULL, FALSE );
+            if( IsDlgButtonChecked( m_hWnd, IDC_EVENTS ) )
+            {
+                TTSAppStatusMessage( m_hWnd, _T("EndStream event\r\n") );
+            }
+            break;
 
-            case SPEI_TTS_BOOKMARK:
-                if( IsDlgButtonChecked( m_hWnd, IDC_EVENTS ) )
+        case SPEI_VOICE_CHANGE:
+            if( IsDlgButtonChecked( m_hWnd, IDC_EVENTS ) )
+            {
+                TTSAppStatusMessage( m_hWnd, _T("Voicechange event\r\n") );
+            }
+            break;
+
+        case SPEI_TTS_BOOKMARK:
+            if( IsDlgButtonChecked( m_hWnd, IDC_EVENTS ) )
+            {
+                // Get the string associated with the bookmark
+                // and add the null terminator.
+                TCHAR szBuff2[MAX_PATH] = _T("Bookmark event: ");
+
+                size_t cEventString = wcslen( event.String() ) + 1;
+                WCHAR *pwszEventString = new WCHAR[ cEventString ];
+                if ( pwszEventString )
                 {
-                    // Get the string associated with the bookmark
-                    // and add the null terminator.
-                    TCHAR szBuff2[MAX_PATH] = _T("Bookmark event: ");
-
-                    size_t cEventString = wcslen( event.String() ) + 1;
-                    WCHAR *pwszEventString = new WCHAR[ cEventString ];
-                    if ( pwszEventString )
-                    {
-                        wcscpy_s( pwszEventString, cEventString, event.String() );
-                        _tcscat_s( szBuff2, _countof(szBuff2), CW2T(pwszEventString) );
-                        delete[] pwszEventString;
-                    }
-
-                    _tcscat_s( szBuff2, _countof(szBuff2), _T("\r\n") );
-                    TTSAppStatusMessage( m_hWnd, szBuff2 );
-                }
-                break;
-
-            case SPEI_WORD_BOUNDARY:
-                hr = m_cpVoice->GetStatus( &Stat, NULL );
-                if( FAILED( hr ) )
-                {
-                    TTSAppStatusMessage( m_hWnd, _T("Voice GetStatus error\r\n") );
+                    wcscpy_s( pwszEventString, cEventString, event.String() );
+                    _tcscat_s( szBuff2, _countof(szBuff2), CW2T(pwszEventString) );
+                    delete[] pwszEventString;
                 }
 
-                // Highlight word
-                nStart = (LPARAM)( Stat.ulInputWordPos / sizeof(char) );
-                nEnd = nStart + Stat.ulInputWordLen;
-                SendDlgItemMessage( m_hWnd, IDE_EDITBOX, EM_SETSEL, nStart, nEnd );
-                if( IsDlgButtonChecked( m_hWnd, IDC_EVENTS ) )
-                {
-                    
-                    TTSAppStatusMessage( m_hWnd, _T("Wordboundary event\r\n") );
-                }
-                break;
+                _tcscat_s( szBuff2, _countof(szBuff2), _T("\r\n") );
+                TTSAppStatusMessage( m_hWnd, szBuff2 );
+            }
+            break;
 
-            case SPEI_PHONEME:
-                if( IsDlgButtonChecked( m_hWnd, IDC_EVENTS ) )
-                {
-                    TTSAppStatusMessage( m_hWnd, _T("Phoneme event\r\n") );
-                }
-                break;
+        case SPEI_WORD_BOUNDARY:
+            hr = m_cpVoice->GetStatus( &Stat, NULL );
+            if( FAILED( hr ) )
+            {
+                TTSAppStatusMessage( m_hWnd, _T("Voice GetStatus error\r\n") );
+            }
 
-            case SPEI_VISEME:
-                // Get the current mouth viseme position and map it to one of the 
-                // 7 mouth bitmaps. 
-                g_iBmp = g_aMapVisemeToImage[event.Viseme()]; // current viseme
+            // Highlight word
+            nStart = (LPARAM)( Stat.ulInputWordPos / sizeof(char) );
+            nEnd = nStart + Stat.ulInputWordLen;
+            SendDlgItemMessage( m_hWnd, IDE_EDITBOX, EM_SETSEL, nStart, nEnd );
+            if( IsDlgButtonChecked( m_hWnd, IDC_EVENTS ) )
+            {
 
-                InvalidateRect( m_hChildWnd, NULL, FALSE );
-                if( IsDlgButtonChecked( m_hWnd, IDC_EVENTS ) )
-                {
-                    TTSAppStatusMessage( m_hWnd, _T("Viseme event\r\n") );
-                }
-                break;
+                TTSAppStatusMessage( m_hWnd, _T("Wordboundary event\r\n") );
+            }
+            break;
 
-            case SPEI_SENTENCE_BOUNDARY:
-                if( IsDlgButtonChecked( m_hWnd, IDC_EVENTS ) )
-                {
-                    TTSAppStatusMessage( m_hWnd, _T("Sentence event\r\n") );
-                }
-                break;
+        case SPEI_PHONEME:
+            if( IsDlgButtonChecked( m_hWnd, IDC_EVENTS ) )
+            {
+                TTSAppStatusMessage( m_hWnd, _T("Phoneme event\r\n") );
+            }
+            break;
 
-            case SPEI_TTS_AUDIO_LEVEL:
-                if( IsDlgButtonChecked( m_hWnd, IDC_EVENTS ) )
-                {
-                    WCHAR wszBuff[MAX_PATH];
-                    swprintf_s(wszBuff, _countof(wszBuff), L"Audio level: %d\r\n", (ULONG)event.wParam);
-                    TTSAppStatusMessage( m_hWnd, CW2T(wszBuff) );
-                }
-                break;
+        case SPEI_VISEME:
+            // Get the current mouth viseme position and map it to one of the
+            // 7 mouth bitmaps.
+            g_iBmp = g_aMapVisemeToImage[event.Viseme()]; // current viseme
 
-            case SPEI_TTS_PRIVATE:
-                if( IsDlgButtonChecked( m_hWnd, IDC_EVENTS ) )
-                {
-                    TTSAppStatusMessage( m_hWnd, _T("Private engine event\r\n") );
-                }
-                break;
+            InvalidateRect( m_hChildWnd, NULL, FALSE );
+            if( IsDlgButtonChecked( m_hWnd, IDC_EVENTS ) )
+            {
+                TTSAppStatusMessage( m_hWnd, _T("Viseme event\r\n") );
+            }
+            break;
 
-            default:
-                TTSAppStatusMessage( m_hWnd, _T("Unknown message\r\n") );
-                break;
+        case SPEI_SENTENCE_BOUNDARY:
+            if( IsDlgButtonChecked( m_hWnd, IDC_EVENTS ) )
+            {
+                TTSAppStatusMessage( m_hWnd, _T("Sentence event\r\n") );
+            }
+            break;
+
+        case SPEI_TTS_AUDIO_LEVEL:
+            if( IsDlgButtonChecked( m_hWnd, IDC_EVENTS ) )
+            {
+                WCHAR wszBuff[MAX_PATH];
+                swprintf_s(wszBuff, _countof(wszBuff), L"Audio level: %d\r\n", (ULONG)event.wParam);
+                TTSAppStatusMessage( m_hWnd, CW2T(wszBuff) );
+            }
+            break;
+
+        case SPEI_TTS_PRIVATE:
+            if( IsDlgButtonChecked( m_hWnd, IDC_EVENTS ) )
+            {
+                TTSAppStatusMessage( m_hWnd, _T("Private engine event\r\n") );
+            }
+            break;
+
+        default:
+            TTSAppStatusMessage( m_hWnd, _T("Unknown message\r\n") );
+            break;
         }
     }
 }
@@ -863,7 +863,7 @@ void CTTSApp::HandleScroll( HWND hCtl )
     // Get the Handle for the scroll bar so it can be associated with an edit box
     hVolume = GetDlgItem( m_hWnd, IDC_VOLUME_SLIDER );
     hRate = GetDlgItem( m_hWnd, IDC_RATE_SLIDER );
-    
+
     if( hCtl == hVolume )
     {
         hr = m_cpVoice->SetVolume((USHORT)hpos);
@@ -872,7 +872,7 @@ void CTTSApp::HandleScroll( HWND hCtl )
     {
         hr = m_cpVoice->SetRate(hpos);
     }
-    
+
     if( FAILED( hr ) )
     {
         TTSAppStatusMessage( m_hWnd, _T("Error setting volume / rate\r\n") );
@@ -888,7 +888,7 @@ void CTTSApp::MainHandleClose()
     // Call helper functions from sphelper.h to destroy combo boxes
     // created with SpInitTokenComboBox
     SpDestroyTokenComboBox( GetDlgItem( m_hWnd, IDC_COMBO_VOICES ) );
-    
+
     // Terminate the app
     PostQuitMessage(0);
 
@@ -900,12 +900,12 @@ void CTTSApp::MainHandleClose()
 HRESULT CTTSApp::VoiceChange()
 /////////////////////////////////////////////////////////////////
 //
-// This function is called during initialization and whenever the 
-// selection for the voice combo box changes. 
+// This function is called during initialization and whenever the
+// selection for the voice combo box changes.
 // It gets the token pointer associated with the voice.
-// If the new voice is different from the one that's currently 
+// If the new voice is different from the one that's currently
 // selected, it first stops any synthesis that is going on and
-// sets the new voice on the global voice object. 
+// sets the new voice on the global voice object.
 //
 {
     HRESULT         hr = S_OK;
@@ -913,7 +913,7 @@ HRESULT CTTSApp::VoiceChange()
 
     // Get the token associated with the selected voice
     ISpObjectToken* pToken = SpGetCurSelComboBoxToken( GetDlgItem( m_hWnd, IDC_COMBO_VOICES ) );
-    
+
     //Determine if it is the current voice
     CComPtr<ISpObjectToken> pOldToken;
     hr = m_cpVoice->GetVoice( &pOldToken );
@@ -921,7 +921,7 @@ HRESULT CTTSApp::VoiceChange()
     if (SUCCEEDED(hr))
     {
         if (pOldToken != pToken)
-        {        
+        {
             // Stop speaking. This is not necesary, for the next call to work,
             // but just to show that we are changing voices.
             hr = m_cpVoice->Speak( NULL, SPF_PURGEBEFORESPEAK, 0);
@@ -939,10 +939,10 @@ HRESULT CTTSApp::VoiceChange()
 }
 
 /////////////////////////////////////////////////////////////////
-BOOL CTTSApp::CallOpenFileDialog( __in LPTSTR szFileName, LPCTSTR szFilter )  
+BOOL CTTSApp::CallOpenFileDialog( __in LPTSTR szFileName, LPCTSTR szFilter )
 /////////////////////////////////////////////////////////////////
 //
-// Display the open dialog box to retrieve the user-selected 
+// Display the open dialog box to retrieve the user-selected
 // .txt or .xml file for synthisizing
 {
     OPENFILENAME    ofn;
@@ -953,9 +953,9 @@ BOOL CTTSApp::CallOpenFileDialog( __in LPTSTR szFileName, LPCTSTR szFilter )
     DWORD           size = 256;
 
     // Open the last directory used by this app (stored in registry)
-    lRetVal = RegCreateKeyEx( HKEY_CURRENT_USER, 
-                        _T("SOFTWARE\\Microsoft\\Speech\\AppData\\TTSApp"), 0, NULL, 0,
-                        KEY_ALL_ACCESS, NULL, &hkResult, NULL );
+    lRetVal = RegCreateKeyEx( HKEY_CURRENT_USER,
+                              _T("SOFTWARE\\Microsoft\\Speech\\AppData\\TTSApp"), 0, NULL, 0,
+                              KEY_ALL_ACCESS, NULL, &hkResult, NULL );
 
     if( lRetVal == ERROR_SUCCESS )
     {
@@ -967,15 +967,15 @@ BOOL CTTSApp::CallOpenFileDialog( __in LPTSTR szFileName, LPCTSTR szFilter )
 
 
     ofn.lStructSize       = (DWORD)ofnsize;
-    ofn.hwndOwner         = m_hWnd;    
+    ofn.hwndOwner         = m_hWnd;
     ofn.lpstrFilter       = szFilter;
-    ofn.lpstrCustomFilter = NULL;    
-    ofn.nFilterIndex      = 1;    
+    ofn.lpstrCustomFilter = NULL;
+    ofn.nFilterIndex      = 1;
     ofn.lpstrInitialDir   = szPath;
-    ofn.lpstrFile         = szFileName;  
+    ofn.lpstrFile         = szFileName;
     ofn.nMaxFile          = 256;
     ofn.lpstrTitle        = NULL;
-    ofn.lpstrFileTitle    = NULL;    
+    ofn.lpstrFileTitle    = NULL;
     ofn.lpstrDefExt       = NULL;
     ofn.Flags             = OFN_FILEMUSTEXIST | OFN_READONLY | OFN_PATHMUSTEXIST | OFN_HIDEREADONLY;
 
@@ -986,7 +986,7 @@ BOOL CTTSApp::CallOpenFileDialog( __in LPTSTR szFileName, LPCTSTR szFilter )
     TCHAR   pathstr[256] = _T("");
     _tcscpy_s( pathstr, _countof(pathstr), szFileName );
 
-    int i=0; 
+    int i=0;
     while( pathstr[i] != NULL )
     {
         i++;
@@ -1006,7 +1006,7 @@ BOOL CTTSApp::CallOpenFileDialog( __in LPTSTR szFileName, LPCTSTR szFilter )
 }
 
 /////////////////////////////////////////////////////////////////
-BOOL CTTSApp::CallSaveFileDialog( __in LPTSTR szFileName, LPCTSTR szFilter )  
+BOOL CTTSApp::CallSaveFileDialog( __in LPTSTR szFileName, LPCTSTR szFilter )
 /////////////////////////////////////////////////////////////////
 //
 // Display the save dialog box to save the wav file
@@ -1020,12 +1020,12 @@ BOOL CTTSApp::CallSaveFileDialog( __in LPTSTR szFileName, LPCTSTR szFilter )
 
     // Open the last directory used by this app (stored in registry)
     lRetVal = RegCreateKeyEx( HKEY_CLASSES_ROOT, _T("PathTTSDataFiles"), 0, NULL, 0,
-                        KEY_ALL_ACCESS, NULL, &hkResult, NULL );
+                              KEY_ALL_ACCESS, NULL, &hkResult, NULL );
 
     if( lRetVal == ERROR_SUCCESS )
     {
         RegQueryValueEx( hkResult, _T("TTSFiles"), NULL, NULL, (PBYTE)szPath, &size );
-    
+
         RegCloseKey( hkResult );
     }
 
@@ -1033,15 +1033,15 @@ BOOL CTTSApp::CallSaveFileDialog( __in LPTSTR szFileName, LPCTSTR szFilter )
     ZeroMemory( &ofn, ofnsize);
 
     ofn.lStructSize       = (DWORD)ofnsize;
-    ofn.hwndOwner         = m_hWnd;    
+    ofn.hwndOwner         = m_hWnd;
     ofn.lpstrFilter       = szFilter;
-    ofn.lpstrCustomFilter = NULL;    
-    ofn.nFilterIndex      = 1;    
+    ofn.lpstrCustomFilter = NULL;
+    ofn.nFilterIndex      = 1;
     ofn.lpstrInitialDir   = szPath;
-    ofn.lpstrFile         = szFileName;  
+    ofn.lpstrFile         = szFileName;
     ofn.nMaxFile          = 256;
     ofn.lpstrTitle        = NULL;
-    ofn.lpstrFileTitle    = NULL;    
+    ofn.lpstrFileTitle    = NULL;
     ofn.lpstrDefExt       = _T("wav");
     ofn.Flags             = OFN_OVERWRITEPROMPT;
 
@@ -1057,7 +1057,7 @@ BOOL CTTSApp::CallSaveFileDialog( __in LPTSTR szFileName, LPCTSTR szFilter )
         _tcscat_s( pathstr, _countof(pathstr), _T(".wav") );
     }
 
-    int i=0; 
+    int i=0;
     while( pathstr[i] != NULL )
     {
         i++;
@@ -1070,12 +1070,12 @@ BOOL CTTSApp::CallSaveFileDialog( __in LPTSTR szFileName, LPCTSTR szFilter )
 
     // Now write the string to the registry
     lRetVal = RegCreateKeyEx( HKEY_CLASSES_ROOT, _T("PathTTSDataFiles"), 0, NULL, 0,
-                        KEY_ALL_ACCESS, NULL, &hkResult, NULL );
+                              KEY_ALL_ACCESS, NULL, &hkResult, NULL );
 
     if( lRetVal == ERROR_SUCCESS )
     {
         RegSetValueEx( hkResult, _T("TTSFiles"), NULL, REG_EXPAND_SZ, (PBYTE)pathstr, (DWORD)_tcslen(pathstr)+1 );
-    
+
         RegCloseKey( hkResult );
     }
 
@@ -1088,7 +1088,7 @@ HRESULT CTTSApp::ReadTheFile( LPCTSTR szFileName, BOOL* bIsUnicode, __deref_out 
 //
 // This file opens and reads the contents of a file. It
 // returns a pointer to the string.
-// Warning, this function allocates memory for the string on 
+// Warning, this function allocates memory for the string on
 // the heap so the caller must free it with 'delete'.
 //
 {
@@ -1097,7 +1097,7 @@ HRESULT CTTSApp::ReadTheFile( LPCTSTR szFileName, BOOL* bIsUnicode, __deref_out 
     HANDLE      hFile;
     DWORD       dwSize = 0;
     DWORD       dwBytesRead = 0;
-        
+
     // First delete any memory previously allocated by this function
     if( m_pszwFileText )
     {
@@ -1105,7 +1105,7 @@ HRESULT CTTSApp::ReadTheFile( LPCTSTR szFileName, BOOL* bIsUnicode, __deref_out 
     }
 
     hFile = CreateFile( szFileName, GENERIC_READ,
-        FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_HIDDEN | FILE_ATTRIBUTE_READONLY, NULL );
+                        FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_HIDDEN | FILE_ATTRIBUTE_READONLY, NULL );
     if( hFile == INVALID_HANDLE_VALUE )
     {
         *ppszwBuff = NULL;
@@ -1118,10 +1118,10 @@ HRESULT CTTSApp::ReadTheFile( LPCTSTR szFileName, BOOL* bIsUnicode, __deref_out 
         if( dwSize == INVALID_FILE_SIZE )
         {
             *ppszwBuff = NULL;
-            hr = HRESULT_FROM_WIN32(GetLastError());        
+            hr = HRESULT_FROM_WIN32(GetLastError());
         }
     }
- 
+
     if( SUCCEEDED( hr ) )
     {
         // Read the file contents into a wide buffer and then determine
@@ -1129,7 +1129,7 @@ HRESULT CTTSApp::ReadTheFile( LPCTSTR szFileName, BOOL* bIsUnicode, __deref_out 
         WCHAR   Signature = 0;
 
         if( ReadFile( hFile, &Signature, 2, &dwBytesRead, NULL ) )
-        {            
+        {
             // Check to see if its a unicode file by looking at the signature of the first character.
             if( 0xFEFF == Signature )
             {
@@ -1147,7 +1147,7 @@ HRESULT CTTSApp::ReadTheFile( LPCTSTR szFileName, BOOL* bIsUnicode, __deref_out 
                     hr = HRESULT_FROM_WIN32(GetLastError());
                 }
 
-            }           
+            }
             else  // MBCS source
             {
                 char*   pszABuff = new char [dwSize+1];
@@ -1194,7 +1194,7 @@ void CTTSApp::UpdateEditCtlW( LPCWSTR pszwText )
     if( SendDlgItemMessage( m_hWnd, IDE_EDITBOX, EM_GETOLEINTERFACE, 0, (LPARAM)(LPVOID FAR *)&cpRichEdit ) )
     {
         hr = cpRichEdit.QueryInterface( &cpTextDocument );
-        
+
         if( SUCCEEDED( hr ) )
         {
             hr = cpTextDocument->QueryInterface( IID_ITextServices, (void**)&pTextServices );
@@ -1203,7 +1203,7 @@ void CTTSApp::UpdateEditCtlW( LPCWSTR pszwText )
         if (SUCCEEDED(hr))
         {
             BSTR bstr = SysAllocString( pszwText );
-            
+
             hr = pTextServices->TxSetText( bstr );
 
             pTextServices->Release();
@@ -1214,7 +1214,7 @@ void CTTSApp::UpdateEditCtlW( LPCWSTR pszwText )
 
     // Add text the old fashon way by converting it to ansi. Note information
     // loss will occur because of the WC2MB conversion.
-    if( !cpRichEdit || FAILED( hr ) )  
+    if( !cpRichEdit || FAILED( hr ) )
     {
         CW2CT pszFileText(pszwText);
         SetDlgItemText( m_hWnd, IDE_EDITBOX, pszFileText );
@@ -1242,7 +1242,7 @@ inline void TTSAppStatusMessage( HWND hWnd, LPCTSTR szMessage )
 {
     static TCHAR            szDebugText[MAX_SIZE]=_T("");
     static int              i = 0;
-    
+
     // Clear out the buffer after 100 lines of text have been written
     // to the debug window since it can only hold 4096 characters.
     if( i == 100 )
@@ -1271,18 +1271,18 @@ LRESULT CALLBACK About( HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam )
 {
     switch( message )
     {
-        case WM_COMMAND:
+    case WM_COMMAND:
+    {
+        WORD wId    = LOWORD(wParam);
+
+        switch( wId )
         {
-            WORD wId    = LOWORD(wParam); 
-            
-            switch( wId )
-            {
-                case IDOK:
-                case IDCANCEL:
-                    EndDialog( hDlg, LOWORD(wParam) );
-                    return TRUE;
-            }
+        case IDOK:
+        case IDCANCEL:
+            EndDialog( hDlg, LOWORD(wParam) );
+            return TRUE;
         }
+    }
     }
     return FALSE;
 }   /* About */

@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -25,29 +25,29 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     switch (message)
     {
     case WM_PAINT:
+    {
+        PAINTSTRUCT ps;
+        HDC hdc = BeginPaint(hWnd, &ps);
+
+        // The GDI+ objects provide an operator new implementation (in GdiplusBase) and that does
+        // not throw. Thus clients must check the return value from new rather than catch this failure
+        // as an exception
+        Gdiplus::Graphics *pGraphics = new Gdiplus::Graphics(hdc);
+        if (pGraphics)
         {
-            PAINTSTRUCT ps;
-            HDC hdc = BeginPaint(hWnd, &ps);
-
-            // The GDI+ objects provide an operator new implementation (in GdiplusBase) and that does
-            // not throw. Thus clients must check the return value from new rather than catch this failure
-            // as an exception
-            Gdiplus::Graphics *pGraphics = new Gdiplus::Graphics(hdc);
-            if (pGraphics)
+            Gdiplus::Bitmap * pBitmap = Gdiplus::Bitmap::FromHBITMAP(g_hThumbnail, NULL);
+            if (pBitmap)
             {
-                Gdiplus::Bitmap * pBitmap = Gdiplus::Bitmap::FromHBITMAP(g_hThumbnail, NULL);
-                if (pBitmap)
-                {
-                    pGraphics->DrawImage(pBitmap, 0, 0);
-                    delete pBitmap;
-                }
-                pBitmap = NULL;
-                delete pGraphics;
+                pGraphics->DrawImage(pBitmap, 0, 0);
+                delete pBitmap;
             }
-
-            EndPaint(hWnd, &ps);
+            pBitmap = NULL;
+            delete pGraphics;
         }
-        break;
+
+        EndPaint(hWnd, &ps);
+    }
+    break;
 
     case WM_DESTROY:
         PostQuitMessage(0);
@@ -99,8 +99,8 @@ int APIENTRY wWinMain(HINSTANCE hInstance, HINSTANCE, PWSTR pszCmdLine, int nCmd
                         RegisterClassEx(&wcex);
 
                         HWND hWnd = CreateWindowEx(0, wcex.lpszClassName, L"Thumbnail Provider SDK Sample",
-                            WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT,
-                            nSize, nSize, NULL, NULL, hInstance, NULL);
+                                                   WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT,
+                                                   nSize, nSize, NULL, NULL, hInstance, NULL);
                         if (hWnd)
                         {
                             ShowWindow(hWnd, nCmdShow);

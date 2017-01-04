@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -20,7 +20,7 @@
 // dump a string with a parameter value to debug output
 #define BUFSIZE 512
 
-TCHAR dbgsup_tszDump[BUFSIZE]={0};
+TCHAR dbgsup_tszDump[BUFSIZE]= {0};
 const size_t NUMCHARS = sizeof(dbgsup_tszDump) / sizeof(dbgsup_tszDump[0]);
 const int LASTCHAR = NUMCHARS - 1;
 
@@ -38,7 +38,7 @@ const int LASTCHAR = NUMCHARS - 1;
         return hr;                              \
     }                                           \
 }
-    
+
 #ifndef DBGSUPAPI
 #define DBGSUPAPI __declspec(dllimport)
 #endif

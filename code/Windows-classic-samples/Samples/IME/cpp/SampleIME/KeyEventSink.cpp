@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -221,14 +221,14 @@ BOOL CSampleIME::_IsKeyboardDisabled()
     BOOL isDisabled = FALSE;
 
     if ((_pThreadMgr->GetFocus(&pDocMgrFocus) != S_OK) ||
-        (pDocMgrFocus == nullptr))
+            (pDocMgrFocus == nullptr))
     {
-        // if there is no focus document manager object, the keyboard 
+        // if there is no focus document manager object, the keyboard
         // is disabled.
         isDisabled = TRUE;
     }
     else if ((pDocMgrFocus->GetTop(&pContext) != S_OK) ||
-        (pContext == nullptr))
+             (pContext == nullptr))
     {
         // if there is no context object, the keyboard is disabled.
         isDisabled = TRUE;
@@ -264,7 +264,7 @@ BOOL CSampleIME::_IsKeyboardDisabled()
 
 STDAPI CSampleIME::OnSetFocus(BOOL fForeground)
 {
-	fForeground;
+    fForeground;
 
     return S_OK;
 }
@@ -401,7 +401,7 @@ STDAPI CSampleIME::OnKeyUp(ITfContext *pContext, WPARAM wParam, LPARAM lParam, B
 
 STDAPI CSampleIME::OnPreservedKey(ITfContext *pContext, REFGUID rguid, BOOL *pIsEaten)
 {
-	pContext;
+    pContext;
 
     CCompositionProcessorEngine *pCompositionProcessorEngine;
     pCompositionProcessorEngine = _pCompositionProcessorEngine;

@@ -1,7 +1,7 @@
-//////////////////////////////////////////////////////////////////////////
+﻿//////////////////////////////////////////////////////////////////////////
 //
 // Application entry-point
-// 
+//
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -49,19 +49,19 @@ HRESULT OpenVideoFile(HWND hwnd, const WCHAR *sURL);
 void    SelectSprite(int iSelection);
 void    UnselectAllSprites();
 
-// Constants 
+// Constants
 
 const WCHAR CLASS_NAME[]  = L"Video Thumbnail Sample - Window Class";
 const WCHAR WINDOW_NAME[] = L"Video Thumbnail Sample";
 
-const D2D1_COLOR_F      BACKGROUND_COLOR = D2D1::ColorF(D2D1::ColorF::DarkSlateGray); 
-const DWORD             MAX_SPRITES = 4;    
+const D2D1_COLOR_F      BACKGROUND_COLOR = D2D1::ColorF(D2D1::ColorF::DarkSlateGray);
+const DWORD             MAX_SPRITES = 4;
 const float             ANIMATION_DURATION = 0.4f;
 
 
 // Global variables
 
-ThumbnailGenerator      g_ThumbnailGen;     
+ThumbnailGenerator      g_ThumbnailGen;
 Timer                   g_Timer;
 
 Sprite                  g_pSprites[ MAX_SPRITES ];
@@ -77,16 +77,17 @@ float g_fDPIScaleY = 1.0f;
 
 
 
-// The following rectangles define the small (unselected) and 
+// The following rectangles define the small (unselected) and
 // big (selected) locations for the sprites.
 
-const D2D1_RECT_F g_rcSmall[] = { 
+const D2D1_RECT_F g_rcSmall[] =
+{
 
     //    left   top    right  bottom
-    D2D1::RectF(0.05f, 0.0f,  0.2f,  0.25f), 
-    D2D1::RectF(0.05f, 0.25f, 0.2f,  0.50f), 
-    D2D1::RectF(0.05f, 0.50f, 0.2f,  0.75f), 
-    D2D1::RectF(0.05f, 0.75f, 0.2f,  1.00f) 
+    D2D1::RectF(0.05f, 0.0f,  0.2f,  0.25f),
+    D2D1::RectF(0.05f, 0.25f, 0.2f,  0.50f),
+    D2D1::RectF(0.05f, 0.50f, 0.2f,  0.75f),
+    D2D1::RectF(0.05f, 0.75f, 0.2f,  1.00f)
 };
 
 const D2D1_RECT_F g_rcBig = D2D1::RectF(0.25f, 0.05f, 0.95f, 0.95f);
@@ -219,18 +220,18 @@ BOOL InitializeWindow(HWND *pHwnd)
     }
 
     HWND hwnd = CreateWindow(
-        CLASS_NAME,
-        WINDOW_NAME,
-        WS_OVERLAPPEDWINDOW,
-        CW_USEDEFAULT,
-        CW_USEDEFAULT,
-        CW_USEDEFAULT,
-        CW_USEDEFAULT,
-        NULL,
-        NULL,
-        GetModuleHandle(NULL),
-        NULL
-        );
+                    CLASS_NAME,
+                    WINDOW_NAME,
+                    WS_OVERLAPPEDWINDOW,
+                    CW_USEDEFAULT,
+                    CW_USEDEFAULT,
+                    CW_USEDEFAULT,
+                    CW_USEDEFAULT,
+                    NULL,
+                    NULL,
+                    GetModuleHandle(NULL),
+                    NULL
+                );
 
     if (!hwnd)
     {
@@ -267,14 +268,14 @@ INT MessageLoop(HWND hwnd)
 
         // Wait until the timer expires or any message is posted.
         if (WAIT_OBJECT_0 == MsgWaitForMultipleObjects(
-                1,
-                &g_Timer.Handle(),
-                FALSE,
-                INFINITE,
-                QS_ALLINPUT
+                    1,
+                    &g_Timer.Handle(),
+                    FALSE,
+                    INFINITE,
+                    QS_ALLINPUT
                 ))
         {
-            RenderFrame(hwnd);  
+            RenderFrame(hwnd);
         }
     }
 
@@ -402,7 +403,7 @@ void OnLButtonDown(HWND /*hwnd*/, BOOL /*fDoubleClick*/, int x, int y, UINT /*ke
 //-------------------------------------------------------------------
 
 void OnFileOpen(HWND hwnd)
-{    
+{
     HRESULT hr = S_OK;
 
     IFileDialog *pDialog = NULL;
@@ -412,16 +413,22 @@ void OnFileOpen(HWND hwnd)
 
     // Create the FileOpenDialog object.
     hr = CoCreateInstance(
-        __uuidof(FileOpenDialog), 
-        NULL, 
-        CLSCTX_INPROC_SERVER, 
-        IID_PPV_ARGS(&pDialog)
-        );
+             __uuidof(FileOpenDialog),
+             NULL,
+             CLSCTX_INPROC_SERVER,
+             IID_PPV_ARGS(&pDialog)
+         );
 
-    if (FAILED(hr)) { goto done; }
+    if (FAILED(hr))
+    {
+        goto done;
+    }
 
     hr = pDialog->SetTitle(L"Select a File to Play");
-    if (FAILED(hr)) { goto done; }
+    if (FAILED(hr))
+    {
+        goto done;
+    }
 
     // Show the file-open dialog.
     hr = pDialog->Show(hwnd);
@@ -433,15 +440,24 @@ void OnFileOpen(HWND hwnd)
         goto done;
     }
 
-    if (FAILED(hr)) { goto done; }
+    if (FAILED(hr))
+    {
+        goto done;
+    }
 
     hr = pDialog->GetResult(&pItem);
 
-    if (FAILED(hr)) { goto done; }
+    if (FAILED(hr))
+    {
+        goto done;
+    }
 
     hr = pItem->GetDisplayName(SIGDN_FILESYSPATH, &pwszFilePath);
 
-    if (FAILED(hr)) { goto done; }
+    if (FAILED(hr))
+    {
+        goto done;
+    }
 
     // Open the file and create bitmaps.
     hr = OpenVideoFile(hwnd, pwszFilePath);
@@ -468,9 +484,9 @@ HRESULT OpenVideoFile(HWND hwnd, const WCHAR *sURL)
 
     hr = g_ThumbnailGen.OpenFile(sURL);
 
-    if (FAILED(hr)) 
-    { 
-        return hr; 
+    if (FAILED(hr))
+    {
+        return hr;
     }
 
     // Clear all the sprites.
@@ -579,7 +595,7 @@ void SelectSprite(int iSelection)
     // NOTE: If the sprite is already selected, this call is still used
     // to apply "wobble" to the sprite.
 
-    g_pSprites[iSelection].AnimateBoundingBox(g_rcBig, time, ANIMATION_DURATION ); 
+    g_pSprites[iSelection].AnimateBoundingBox(g_rcBig, time, ANIMATION_DURATION );
 
     // Unselect the current selection.
     if ((g_Selection != -1) && (g_Selection != iSelection))
@@ -620,21 +636,21 @@ HRESULT CreateDrawingResources(HWND hwnd)
     GetClientRect(hwnd, &rcClient);
 
     hr = D2D1CreateFactory(
-        D2D1_FACTORY_TYPE_SINGLE_THREADED,
-        &pFactory
-        );
+             D2D1_FACTORY_TYPE_SINGLE_THREADED,
+             &pFactory
+         );
 
 
     if (SUCCEEDED(hr))
     {
         hr = pFactory->CreateHwndRenderTarget(
-            D2D1::RenderTargetProperties(),
-            D2D1::HwndRenderTargetProperties(
-                hwnd,
-                D2D1::SizeU(rcClient.right, rcClient.bottom)
-                ),
-            &pRenderTarget
-            );
+                 D2D1::RenderTargetProperties(),
+                 D2D1::HwndRenderTargetProperties(
+                     hwnd,
+                     D2D1::SizeU(rcClient.right, rcClient.bottom)
+                 ),
+                 &pRenderTarget
+             );
     }
 
     if (SUCCEEDED(hr))

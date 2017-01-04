@@ -1,4 +1,4 @@
-//--------------------------------------------------------------------
+﻿//--------------------------------------------------------------------
 // Microsoft OLE DB Sample Consumer
 // (C) Copyright 1991 - 2000 Microsoft Corporation. All Rights Reserved.
 //
@@ -6,8 +6,8 @@
 //
 //      Declaration file for a simple OLE DB consumer.
 //
-//      See OLE DB SDK Guide for information on building and running 
-//		this sample, as well as notes concerning the implementation of 
+//      See OLE DB SDK Guide for information on building and running
+//		this sample, as well as notes concerning the implementation of
 //		a simple OLE DB consumer.
 //
 
@@ -31,7 +31,7 @@
 
 
 //-----------------------------------
-//	constants 
+//	constants
 //------------------------------------
 
 // Alignment for placement of each column within memory.
@@ -54,7 +54,7 @@
 
 
 //-----------------------------------
-//	macros 
+//	macros
 //------------------------------------
 
 
@@ -71,24 +71,25 @@
 
 
 //-----------------------------------
-//	type and structure definitions 
+//	type and structure definitions
 //------------------------------------
 
 // How to lay out each column in memory.
 // Issue? we depend on the dwLength field being first in memory (see assert)
 // is there another way to handle this?
-struct COLUMNDATA 
+struct COLUMNDATA
 {
-	DBLENGTH	uLength;	// length of data (not space allocated)
-	DWORD		dwStatus;	// status of column
-	BYTE		bData[1];	// data here and beyond
+    DBLENGTH	uLength;	// length of data (not space allocated)
+    DWORD		dwStatus;	// status of column
+    BYTE		bData[1];	// data here and beyond
 };
 
 
 // Lists of value/string pairs.
-typedef struct {
-	DWORD dwFlag;
-	char *szText;
+typedef struct
+{
+    DWORD dwFlag;
+    char *szText;
 } Note;
 
 #define NOTE(s) { (DWORD) s, #s }
@@ -97,7 +98,7 @@ typedef struct {
 
 
 //-----------------------------------
-//	global variables and functions that are private to the file 
+//	global variables and functions that are private to the file
 //------------------------------------
 
 
@@ -120,192 +121,192 @@ HRESULT DoTests();
 
 
 HRESULT GetSampprovDataSource
-	(
-	IDBInitialize**	ppIDBInitialize_out
-	);
+(
+    IDBInitialize**	ppIDBInitialize_out
+);
 
 
 HRESULT GetDBSessionFromDataSource
-    (
-    IDBInitialize*      pIDBInitialize,     
-    IOpenRowset**       ppIOpenRowset_out   
-    );
+(
+    IDBInitialize*      pIDBInitialize,
+    IOpenRowset**       ppIOpenRowset_out
+);
 
 
 HRESULT GetRowsetFromDBSession
-    (
-    IOpenRowset*   pIOpenRowset,   
-    LPWSTR         pwszTableName,      
-    IRowset**      ppIRowset_out       
-    );
+(
+    IOpenRowset*   pIOpenRowset,
+    LPWSTR         pwszTableName,
+    IRowset**      ppIRowset_out
+);
 
-    
+
 HRESULT GetDataFromRowset
-	(
-	IRowset*	pIRowset
-	);
-    
-    
+(
+    IRowset*	pIRowset
+);
+
+
 HRESULT GetColumnsInfo
-	(
-	IRowset*		pIRowset,
-	DBORDINAL*		pcCol_out,
-	DBCOLUMNINFO**	ppColumnInfo_out,
-	WCHAR**			ppStringsBuffer_out
-	);
+(
+    IRowset*		pIRowset,
+    DBORDINAL*		pcCol_out,
+    DBCOLUMNINFO**	ppColumnInfo_out,
+    WCHAR**			ppStringsBuffer_out
+);
 
-   
+
 HRESULT SetupBindings
-	(
-	DBORDINAL		cCol,
-	DBCOLUMNINFO*	pColumnInfo,
-	DBBINDING*		rgBind_out,
-	DBCOUNTITEM*	cBind_out,
+(
+    DBORDINAL		cCol,
+    DBCOLUMNINFO*	pColumnInfo,
+    DBBINDING*		rgBind_out,
+    DBCOUNTITEM*	cBind_out,
     DBLENGTH*		pcMaxRowSize_out
-	);
+);
 
-    
+
 HRESULT CreateAccessor
-	(
-	IRowset*	pIRowset,
-	DBBINDING*	rgBind,
-	DBCOUNTITEM	cBind,
-	HACCESSOR*	phAccessor_out
-	);
+(
+    IRowset*	pIRowset,
+    DBBINDING*	rgBind,
+    DBCOUNTITEM	cBind,
+    HACCESSOR*	phAccessor_out
+);
 
-    
+
 HRESULT GetData
-	(
-	IRowset*	pIRowset,
-	DBLENGTH   	cMaxRowSize,
+(
+    IRowset*	pIRowset,
+    DBLENGTH   	cMaxRowSize,
     HACCESSOR	hAccessor,
     DBBINDING*	    rgBind,			// needed for pretty printing
     DBCOUNTITEM	    cBind,	    	// for pretty printing
     DBCOLUMNINFO*	pColumnInfo, 	// for pretty printing
-    DBORDINAL		cCol			// for pretty printing		
-	);
+    DBORDINAL		cCol			// for pretty printing
+);
 
 
 HRESULT CleanupRowset
-	(
-	IRowset*	pIRowset,
-	HACCESSOR 	hAccessor
-	);
-    
-    
-    
+(
+    IRowset*	pIRowset,
+    HACCESSOR 	hAccessor
+);
+
+
+
 // function prototypes, dump.cpp
 
 void DumpErrorMsg
-	(
+(
     const char* format,
     ...
-	);
+);
 
 
 void DumpStatusMsg
-	(
+(
     const char* format,
     ...
-	);
+);
 
 
 HRESULT DumpErrorHResult
-	(
-	HRESULT      hr_return,
-	const char  *format,
-	... 
-	);
+(
+    HRESULT      hr_return,
+    const char  *format,
+    ...
+);
 
 
 void DumpColumnsInfo
-	(
+(
     DBCOLUMNINFO*	pColInfo,
     DBORDINAL		cCol
-    );
+);
 
 
 
 void WriteColumnInfo
-	(
-	FILE*			fp,
-	DBCOLUMNINFO*	p 
-	);
-    
+(
+    FILE*			fp,
+    DBCOLUMNINFO*	p
+);
+
 
 char* GetNoteString
-    ( 
-	Note * rgNote, 
-	int    cNote,
-	DWORD  dwValue 
-	);
+(
+    Note * rgNote,
+    int    cNote,
+    DWORD  dwValue
+);
 
 
-    
+
 char* GetNoteStringBitvals
-	(
-	Note* 	rgNote,
-	int     cNote,
-	DWORD   dwValue 
-	);
+(
+    Note* 	rgNote,
+    int     cNote,
+    DWORD   dwValue
+);
 
 
 DBLENGTH CalcPrettyPrintMaxColWidth
-    (
+(
     DBBINDING*	rgBind,
     DBCOUNTITEM	cBind
-    );
- 
-    
+);
+
+
 void DumpColumnHeadings
-	(
-	DBBINDING*		rgBind, 
-	DBCOUNTITEM		cBind, 
-	DBCOLUMNINFO* 	pColInfo, 
-	DBORDINAL		cCol,
+(
+    DBBINDING*		rgBind,
+    DBCOUNTITEM		cBind,
+    DBCOLUMNINFO* 	pColInfo,
+    DBORDINAL		cCol,
     DBLENGTH		cMaxColWidth
-	);
+);
 
 
 WCHAR* LookupColumnName
-	(
-	DBCOLUMNINFO*	rgColInfo,
-	DBORDINAL 			cCol,
-	DBORDINAL 			iCol 
-	);
+(
+    DBCOLUMNINFO*	rgColInfo,
+    DBORDINAL 			cCol,
+    DBORDINAL 			iCol
+);
 
 void DumpRow
-	(
+(
     DBBINDING* 	rgBind,
     DBCOUNTITEM	cBind,
     DBLENGTH	cMaxColWidth,
     BYTE* 		pData
-    );
+);
 
 
 void PrintColumn
-	(
-	COLUMNDATA		*pColumn,
-	DBBINDING		*rgBind,
-	DBCOUNTITEM		iBind,
-	DBLENGTH		cMaxColWidth 
-	);
+(
+    COLUMNDATA		*pColumn,
+    DBBINDING		*rgBind,
+    DBCOUNTITEM		iBind,
+    DBLENGTH		cMaxColWidth
+);
 
-    
+
 void tfprintf
-	(
-	FILE*		fp,
-	const char* format,
-	... 
-	);
+(
+    FILE*		fp,
+    const char* format,
+    ...
+);
 
 
 void tvfprintf
-	(
-	FILE*		fp,
-	const char* format,
-	va_list		argptr 
-	);
+(
+    FILE*		fp,
+    const char* format,
+    va_list		argptr
+);
 
 
 

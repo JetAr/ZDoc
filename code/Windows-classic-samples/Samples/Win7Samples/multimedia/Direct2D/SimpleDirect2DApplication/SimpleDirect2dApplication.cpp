@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -17,7 +17,7 @@ int WINAPI WinMain(
     HINSTANCE /* hPrevInstance */,
     LPSTR /* lpCmdLine */,
     int /* nCmdShow */
-    )
+)
 {
     // Ignore the return value because we want to continue running even in the
     // unlikely event that HeapSetInformation fails.
@@ -113,18 +113,18 @@ HRESULT DemoApp::Initialize()
 
         // Create the application window.
         m_hwnd = CreateWindow(
-            L"D2DDemoApp",
-            L"Direct2D Demo Application",
-            WS_OVERLAPPEDWINDOW,
-            CW_USEDEFAULT,
-            CW_USEDEFAULT,
-            static_cast<UINT>(ceil(640.f * dpiX / 96.f)),
-            static_cast<UINT>(ceil(480.f * dpiY / 96.f)),
-            NULL,
-            NULL,
-            HINST_THISCOMPONENT,
-            this
-            );
+                     L"D2DDemoApp",
+                     L"Direct2D Demo Application",
+                     WS_OVERLAPPEDWINDOW,
+                     CW_USEDEFAULT,
+                     CW_USEDEFAULT,
+                     static_cast<UINT>(ceil(640.f * dpiX / 96.f)),
+                     static_cast<UINT>(ceil(480.f * dpiY / 96.f)),
+                     NULL,
+                     NULL,
+                     HINST_THISCOMPONENT,
+                     this
+                 );
         hr = m_hwnd ? S_OK : E_FAIL;
         if (SUCCEEDED(hr))
         {
@@ -158,35 +158,35 @@ HRESULT DemoApp::CreateDeviceIndependentResources()
     {
         // Create WIC factory.
         hr = CoCreateInstance(
-            CLSID_WICImagingFactory,
-            NULL,
-            CLSCTX_INPROC_SERVER,
-            IID_IWICImagingFactory,
-            reinterpret_cast<void **>(&m_pWICFactory)
-            );
+                 CLSID_WICImagingFactory,
+                 NULL,
+                 CLSCTX_INPROC_SERVER,
+                 IID_IWICImagingFactory,
+                 reinterpret_cast<void **>(&m_pWICFactory)
+             );
     }
     if (SUCCEEDED(hr))
     {
         // Create a DirectWrite factory.
         hr = DWriteCreateFactory(
-            DWRITE_FACTORY_TYPE_SHARED,
-            __uuidof(m_pDWriteFactory),
-            reinterpret_cast<IUnknown **>(&m_pDWriteFactory)
-            );
+                 DWRITE_FACTORY_TYPE_SHARED,
+                 __uuidof(m_pDWriteFactory),
+                 reinterpret_cast<IUnknown **>(&m_pDWriteFactory)
+             );
     }
     if (SUCCEEDED(hr))
     {
         // Create a DirectWrite text format object.
         hr = m_pDWriteFactory->CreateTextFormat(
-            msc_fontName,
-            NULL,
-            DWRITE_FONT_WEIGHT_NORMAL,
-            DWRITE_FONT_STYLE_NORMAL,
-            DWRITE_FONT_STRETCH_NORMAL,
-            msc_fontSize,
-            L"", //locale
-            &m_pTextFormat
-            );
+                 msc_fontName,
+                 NULL,
+                 DWRITE_FONT_WEIGHT_NORMAL,
+                 DWRITE_FONT_STYLE_NORMAL,
+                 DWRITE_FONT_STRETCH_NORMAL,
+                 msc_fontSize,
+                 L"", //locale
+                 &m_pTextFormat
+             );
     }
     if (SUCCEEDED(hr))
     {
@@ -210,7 +210,7 @@ HRESULT DemoApp::CreateDeviceIndependentResources()
         pSink->BeginFigure(
             D2D1::Point2F(0, 0),
             D2D1_FIGURE_BEGIN_FILLED
-            );
+        );
 
         pSink->AddLine(D2D1::Point2F(200, 0));
 
@@ -219,7 +219,7 @@ HRESULT DemoApp::CreateDeviceIndependentResources()
                 D2D1::Point2F(150, 50),
                 D2D1::Point2F(150, 150),
                 D2D1::Point2F(200, 200))
-            );
+        );
 
         pSink->AddLine(D2D1::Point2F(0, 200));
 
@@ -228,7 +228,7 @@ HRESULT DemoApp::CreateDeviceIndependentResources()
                 D2D1::Point2F(50, 150),
                 D2D1::Point2F(50, 50),
                 D2D1::Point2F(0, 0))
-            );
+        );
 
         pSink->EndFigure(D2D1_FIGURE_END_CLOSED);
 
@@ -256,23 +256,23 @@ HRESULT DemoApp::CreateDeviceResources()
         GetClientRect(m_hwnd, &rc);
 
         D2D1_SIZE_U size = D2D1::SizeU(
-            rc.right - rc.left,
-            rc.bottom - rc.top
-            );
+                               rc.right - rc.left,
+                               rc.bottom - rc.top
+                           );
 
         // Create a Direct2D render target.
         hr = m_pD2DFactory->CreateHwndRenderTarget(
-            D2D1::RenderTargetProperties(),
-            D2D1::HwndRenderTargetProperties(m_hwnd, size),
-            &m_pRenderTarget
-            );
+                 D2D1::RenderTargetProperties(),
+                 D2D1::HwndRenderTargetProperties(m_hwnd, size),
+                 &m_pRenderTarget
+             );
         if (SUCCEEDED(hr))
         {
             // Create a black brush.
             hr = m_pRenderTarget->CreateSolidColorBrush(
-                D2D1::ColorF(D2D1::ColorF::Black),
-                &m_pBlackBrush
-                );
+                     D2D1::ColorF(D2D1::ColorF::Black),
+                     &m_pBlackBrush
+                 );
         }
         if (SUCCEEDED(hr))
         {
@@ -285,45 +285,45 @@ HRESULT DemoApp::CreateDeviceResources()
             };
 
             hr = m_pRenderTarget->CreateGradientStopCollection(
-                stops,
-                ARRAYSIZE(stops),
-                &pGradientStops
-                );
+                     stops,
+                     ARRAYSIZE(stops),
+                     &pGradientStops
+                 );
             if (SUCCEEDED(hr))
             {
                 hr = m_pRenderTarget->CreateLinearGradientBrush(
-                    D2D1::LinearGradientBrushProperties(
-                        D2D1::Point2F(100, 0),
-                        D2D1::Point2F(100, 200)),
-                    D2D1::BrushProperties(),
-                    pGradientStops,
-                    &m_pLinearGradientBrush
-                    );
+                         D2D1::LinearGradientBrushProperties(
+                             D2D1::Point2F(100, 0),
+                             D2D1::Point2F(100, 200)),
+                         D2D1::BrushProperties(),
+                         pGradientStops,
+                         &m_pLinearGradientBrush
+                     );
                 pGradientStops->Release();
             }
         }
 
         // Create a bitmap from an application resource.
         hr = LoadResourceBitmap(
-            m_pRenderTarget,
-            m_pWICFactory,
-            L"SampleImage",
-            L"Image",
-            100,
-            0,
-            &m_pBitmap
-            );
+                 m_pRenderTarget,
+                 m_pWICFactory,
+                 L"SampleImage",
+                 L"Image",
+                 100,
+                 0,
+                 &m_pBitmap
+             );
         if (SUCCEEDED(hr))
         {
             // Create a bitmap by loading it from a file.
             hr = LoadBitmapFromFile(
-                m_pRenderTarget,
-                m_pWICFactory,
-                L".\\sampleImage.jpg",
-                100,
-                0,
-                &m_pAnotherBitmap
-                );
+                     m_pRenderTarget,
+                     m_pWICFactory,
+                     L".\\sampleImage.jpg",
+                     100,
+                     0,
+                     &m_pAnotherBitmap
+                 );
         }
         if (SUCCEEDED(hr))
         {
@@ -340,24 +340,24 @@ HRESULT DemoApp::CreateDeviceResources()
 HRESULT DemoApp::CreateGridPatternBrush(
     ID2D1RenderTarget *pRenderTarget,
     ID2D1BitmapBrush **ppBitmapBrush
-    )
+)
 {
     HRESULT hr = S_OK;
 
     // Create a compatible render target.
     ID2D1BitmapRenderTarget *pCompatibleRenderTarget = NULL;
     hr = pRenderTarget->CreateCompatibleRenderTarget(
-        D2D1::SizeF(10.0f, 10.0f),
-        &pCompatibleRenderTarget
-        );
+             D2D1::SizeF(10.0f, 10.0f),
+             &pCompatibleRenderTarget
+         );
     if (SUCCEEDED(hr))
     {
         // Draw a pattern.
         ID2D1SolidColorBrush *pGridBrush = NULL;
         hr = pCompatibleRenderTarget->CreateSolidColorBrush(
-            D2D1::ColorF(D2D1::ColorF(0.93f, 0.94f, 0.96f, 1.0f)),
-            &pGridBrush
-            );
+                 D2D1::ColorF(D2D1::ColorF(0.93f, 0.94f, 0.96f, 1.0f)),
+                 &pGridBrush
+             );
         if (SUCCEEDED(hr))
         {
             pCompatibleRenderTarget->BeginDraw();
@@ -453,7 +453,7 @@ HRESULT DemoApp::OnRender()
         m_pRenderTarget->FillRectangle(
             D2D1::RectF(0.0f, 0.0f, renderTargetSize.width, renderTargetSize.height),
             m_pGridPatternBitmapBrush
-            );
+        );
 
         D2D1_SIZE_F size = m_pBitmap->GetSize();
 
@@ -461,7 +461,7 @@ HRESULT DemoApp::OnRender()
         m_pRenderTarget->DrawBitmap(
             m_pBitmap,
             D2D1::RectF(0.0f, 0.0f, size.width, size.height)
-            );
+        );
 
 
         // Draw a bitmap at the lower-right corner of the window.
@@ -473,7 +473,7 @@ HRESULT DemoApp::OnRender()
                 renderTargetSize.height - size.height,
                 renderTargetSize.width,
                 renderTargetSize.height)
-            );
+        );
 
         // Set the world transform to a 45 degree rotation at the center of the render target
         // and write "Hello, World".
@@ -483,7 +483,7 @@ HRESULT DemoApp::OnRender()
                 D2D1::Point2F(
                     renderTargetSize.width / 2,
                     renderTargetSize.height / 2))
-            );
+        );
 
         m_pRenderTarget->DrawText(
             sc_helloWorld,
@@ -491,21 +491,21 @@ HRESULT DemoApp::OnRender()
             m_pTextFormat,
             D2D1::RectF(0, 0, renderTargetSize.width, renderTargetSize.height),
             m_pBlackBrush
-            );
+        );
 
         //
         // Reset back to the identity transform
         //
         m_pRenderTarget->SetTransform(
             D2D1::Matrix3x2F::Translation(0, renderTargetSize.height - 200)
-            );
+        );
 
         // Fill the hour glass geometry with a gradient.
         m_pRenderTarget->FillGeometry(m_pPathGeometry, m_pLinearGradientBrush);
 
         m_pRenderTarget->SetTransform(
             D2D1::Matrix3x2F::Translation(renderTargetSize.width - 200, 0)
-            );
+        );
 
         // Fill the hour glass geometry with a gradient.
         m_pRenderTarget->FillGeometry(m_pPathGeometry, m_pLinearGradientBrush);
@@ -558,17 +558,17 @@ LRESULT CALLBACK DemoApp::WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM
             hwnd,
             GWLP_USERDATA,
             PtrToUlong(pDemoApp)
-            );
+        );
 
         result = 1;
     }
     else
     {
         DemoApp *pDemoApp = reinterpret_cast<DemoApp *>(static_cast<LONG_PTR>(
-            ::GetWindowLongPtrW(
-                hwnd,
-                GWLP_USERDATA
-                )));
+                                ::GetWindowLongPtrW(
+                                    hwnd,
+                                    GWLP_USERDATA
+                                )));
 
         bool wasHandled = false;
 
@@ -577,34 +577,34 @@ LRESULT CALLBACK DemoApp::WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM
             switch (message)
             {
             case WM_SIZE:
-                {
-                    UINT width = LOWORD(lParam);
-                    UINT height = HIWORD(lParam);
-                    pDemoApp->OnResize(width, height);
-                }
-                result = 0;
-                wasHandled = true;
-                break;
+            {
+                UINT width = LOWORD(lParam);
+                UINT height = HIWORD(lParam);
+                pDemoApp->OnResize(width, height);
+            }
+            result = 0;
+            wasHandled = true;
+            break;
 
             case WM_PAINT:
             case WM_DISPLAYCHANGE:
-                {
-                    PAINTSTRUCT ps;
-                    BeginPaint(hwnd, &ps);
-                    pDemoApp->OnRender();
-                    EndPaint(hwnd, &ps);
-                }
-                result = 0;
-                wasHandled = true;
-                break;
+            {
+                PAINTSTRUCT ps;
+                BeginPaint(hwnd, &ps);
+                pDemoApp->OnRender();
+                EndPaint(hwnd, &ps);
+            }
+            result = 0;
+            wasHandled = true;
+            break;
 
             case WM_DESTROY:
-                {
-                    PostQuitMessage(0);
-                }
-                result = 1;
-                wasHandled = true;
-                break;
+            {
+                PostQuitMessage(0);
+            }
+            result = 1;
+            wasHandled = true;
+            break;
             }
         }
 
@@ -629,7 +629,7 @@ HRESULT DemoApp::LoadResourceBitmap(
     UINT destinationWidth,
     UINT destinationHeight,
     ID2D1Bitmap **ppBitmap
-    )
+)
 {
     HRESULT hr = S_OK;
     IWICBitmapDecoder *pDecoder = NULL;
@@ -677,19 +677,19 @@ HRESULT DemoApp::LoadResourceBitmap(
     {
         // Initialize the stream with the memory pointer and size.
         hr = pStream->InitializeFromMemory(
-            reinterpret_cast<BYTE*>(pImageFile),
-            imageFileSize
-            );
+                 reinterpret_cast<BYTE*>(pImageFile),
+                 imageFileSize
+             );
     }
     if (SUCCEEDED(hr))
     {
         // Create a decoder for the stream.
         hr = pIWICFactory->CreateDecoderFromStream(
-            pStream,
-            NULL,
-            WICDecodeMetadataCacheOnLoad,
-            &pDecoder
-            );
+                 pStream,
+                 NULL,
+                 WICDecodeMetadataCacheOnLoad,
+                 &pDecoder
+             );
     }
     if (SUCCEEDED(hr))
     {
@@ -727,21 +727,21 @@ HRESULT DemoApp::LoadResourceBitmap(
                 if (SUCCEEDED(hr))
                 {
                     hr = pScaler->Initialize(
-                            pSource,
-                            destinationWidth,
-                            destinationHeight,
-                            WICBitmapInterpolationModeCubic
-                            );
+                             pSource,
+                             destinationWidth,
+                             destinationHeight,
+                             WICBitmapInterpolationModeCubic
+                         );
                     if (SUCCEEDED(hr))
                     {
                         hr = pConverter->Initialize(
-                            pScaler,
-                            GUID_WICPixelFormat32bppPBGRA,
-                            WICBitmapDitherTypeNone,
-                            NULL,
-                            0.f,
-                            WICBitmapPaletteTypeMedianCut
-                            );
+                                 pScaler,
+                                 GUID_WICPixelFormat32bppPBGRA,
+                                 WICBitmapDitherTypeNone,
+                                 NULL,
+                                 0.f,
+                                 WICBitmapPaletteTypeMedianCut
+                             );
                     }
                 }
             }
@@ -749,23 +749,23 @@ HRESULT DemoApp::LoadResourceBitmap(
         else
         {
             hr = pConverter->Initialize(
-                pSource,
-                GUID_WICPixelFormat32bppPBGRA,
-                WICBitmapDitherTypeNone,
-                NULL,
-                0.f,
-                WICBitmapPaletteTypeMedianCut
-                );
+                     pSource,
+                     GUID_WICPixelFormat32bppPBGRA,
+                     WICBitmapDitherTypeNone,
+                     NULL,
+                     0.f,
+                     WICBitmapPaletteTypeMedianCut
+                 );
         }
     }
     if (SUCCEEDED(hr))
     {
         //create a Direct2D bitmap from the WIC bitmap.
         hr = pRenderTarget->CreateBitmapFromWicBitmap(
-            pConverter,
-            NULL,
-            ppBitmap
-            );
+                 pConverter,
+                 NULL,
+                 ppBitmap
+             );
     }
 
     SafeRelease(&pDecoder);
@@ -788,7 +788,7 @@ HRESULT DemoApp::LoadBitmapFromFile(
     UINT destinationWidth,
     UINT destinationHeight,
     ID2D1Bitmap **ppBitmap
-    )
+)
 {
     HRESULT hr = S_OK;
 
@@ -799,12 +799,12 @@ HRESULT DemoApp::LoadBitmapFromFile(
     IWICBitmapScaler *pScaler = NULL;
 
     hr = pIWICFactory->CreateDecoderFromFilename(
-        uri,
-        NULL,
-        GENERIC_READ,
-        WICDecodeMetadataCacheOnLoad,
-        &pDecoder
-        );
+             uri,
+             NULL,
+             GENERIC_READ,
+             WICDecodeMetadataCacheOnLoad,
+             &pDecoder
+         );
     if (SUCCEEDED(hr))
     {
 
@@ -843,45 +843,45 @@ HRESULT DemoApp::LoadBitmapFromFile(
                 if (SUCCEEDED(hr))
                 {
                     hr = pScaler->Initialize(
-                            pSource,
-                            destinationWidth,
-                            destinationHeight,
-                            WICBitmapInterpolationModeCubic
-                            );
+                             pSource,
+                             destinationWidth,
+                             destinationHeight,
+                             WICBitmapInterpolationModeCubic
+                         );
                 }
                 if (SUCCEEDED(hr))
                 {
                     hr = pConverter->Initialize(
-                        pScaler,
-                        GUID_WICPixelFormat32bppPBGRA,
-                        WICBitmapDitherTypeNone,
-                        NULL,
-                        0.f,
-                        WICBitmapPaletteTypeMedianCut
-                        );
+                             pScaler,
+                             GUID_WICPixelFormat32bppPBGRA,
+                             WICBitmapDitherTypeNone,
+                             NULL,
+                             0.f,
+                             WICBitmapPaletteTypeMedianCut
+                         );
                 }
             }
         }
         else // Don't scale the image.
         {
             hr = pConverter->Initialize(
-                pSource,
-                GUID_WICPixelFormat32bppPBGRA,
-                WICBitmapDitherTypeNone,
-                NULL,
-                0.f,
-                WICBitmapPaletteTypeMedianCut
-                );
+                     pSource,
+                     GUID_WICPixelFormat32bppPBGRA,
+                     WICBitmapDitherTypeNone,
+                     NULL,
+                     0.f,
+                     WICBitmapPaletteTypeMedianCut
+                 );
         }
     }
     if (SUCCEEDED(hr))
     {
         // Create a Direct2D bitmap from the WIC bitmap.
         hr = pRenderTarget->CreateBitmapFromWicBitmap(
-            pConverter,
-            NULL,
-            ppBitmap
-            );
+                 pConverter,
+                 NULL,
+                 ppBitmap
+             );
     }
 
     SafeRelease(&pDecoder);

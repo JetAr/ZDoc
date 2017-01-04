@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -19,7 +19,7 @@ Assumptions:
 // This routine frees  LPDHCP_POLICY and its internal elements.
 VOID FreeDhcpPolicyMemory(LPDHCP_POLICY pDhcpPolicy)
 {
-    if (NULL != pDhcpPolicy) 
+    if (NULL != pDhcpPolicy)
     {
         // Frees the policy description
         if( NULL != pDhcpPolicy->Description)
@@ -76,12 +76,12 @@ int __cdecl main(void)
     LPWSTR          pwszServer         = NULL;             //Server IP Address, NULL signifies the current server (where the program is executed)
 
     dwError = DhcpV4GetPolicy(
-                        pwszServer,      // Server IP Address, NULL signifies the current server (where the program is executed)
-                        (dwSubnet == 0), // fGlobalPolicy, TRUE means a global policy, for a global policy SubnetAddress is 0.
-                        dwSubnet,        // Subnet address, if it is a global policy, its value is 0
-                        pwszName,        // Name of the policy
-                        &pPolicy         // Policy structure obtained from the server
-                        );
+                  pwszServer,      // Server IP Address, NULL signifies the current server (where the program is executed)
+                  (dwSubnet == 0), // fGlobalPolicy, TRUE means a global policy, for a global policy SubnetAddress is 0.
+                  dwSubnet,        // Subnet address, if it is a global policy, its value is 0
+                  pwszName,        // Name of the policy
+                  &pPolicy         // Policy structure obtained from the server
+              );
     if(ERROR_SUCCESS != dwError)
     {
         //DhcpV4GetPolicy returned error.
@@ -96,7 +96,7 @@ int __cdecl main(void)
 
     // DhcpV4SetPolicy reads the value for "dwFieldsModified" and whichever fields from DHCP_POLICY are getting modified,
     // are taken from "pPolicy" and the necessary modification is performed.
-    // For example, "dwFieldsModified" has values "DhcpUpdatePolicyName". This means the "Name" field of DHCP_POLICY 
+    // For example, "dwFieldsModified" has values "DhcpUpdatePolicyName". This means the "Name" field of DHCP_POLICY
     // need to be modified. In that case, during modification, "Name" field is queried from "pPolicy" and necessary modification
     // is performed.
     dwError=DhcpV4SetPolicy(
@@ -106,7 +106,7 @@ int __cdecl main(void)
                 dwSubnet,         // Subnet Address
                 pwszName,         // Name of the policy
                 pPolicy           // policy structure whose values will form the modified policy
-                );
+            );
     if(ERROR_SUCCESS != dwError)
     {
         wprintf(L"DhcpV4SetPolicy failed with Error = %d\n", dwError);

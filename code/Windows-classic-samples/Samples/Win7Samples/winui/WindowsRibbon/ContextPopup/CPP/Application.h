@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -44,18 +44,18 @@ public:
 
     // IUIApplication methods.
     STDMETHOD(OnCreateUICommand)(UINT nCmdID,
-        __in UI_COMMANDTYPE typeID,
-        __deref_out IUICommandHandler** ppCommandHandler);
+                                 __in UI_COMMANDTYPE typeID,
+                                 __deref_out IUICommandHandler** ppCommandHandler);
 
     STDMETHOD(OnViewChanged)(UINT viewId,
-    __in UI_VIEWTYPE typeId,
-    __in IUnknown* pView,
-    UI_VIEWVERB verb,
-    INT uReasonCode);
+                             __in UI_VIEWTYPE typeId,
+                             __in IUnknown* pView,
+                             UI_VIEWVERB verb,
+                             INT uReasonCode);
 
-    STDMETHOD(OnDestroyUICommand)(UINT32 commandId, 
-        __in UI_COMMANDTYPE typeID,
-        __in_opt IUICommandHandler* commandHandler);
+    STDMETHOD(OnDestroyUICommand)(UINT32 commandId,
+                                  __in UI_COMMANDTYPE typeID,
+                                  __in_opt IUICommandHandler* commandHandler);
 
     // Helper functions.
     __checkReturn int GetCurrentContext();

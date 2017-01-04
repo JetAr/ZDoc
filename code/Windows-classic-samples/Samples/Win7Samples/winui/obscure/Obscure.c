@@ -1,4 +1,4 @@
-/*****************************************************************************
+﻿/*****************************************************************************
  *
  *  Obscure.c
  *
@@ -103,7 +103,8 @@ GetClientObscuredness(HWND hwnd)
 void
 Obscure_EnsureTimerStopped(HWND hwnd)
 {
-    if (g_fTimerActive) {
+    if (g_fTimerActive)
+    {
         KillTimer(hwnd, 1);
         g_fTimerActive = FALSE;
         InvalidateRect(hwnd, NULL, FALSE);
@@ -130,13 +131,19 @@ Obscure_TimerProc(HWND hwnd, UINT uiMsg, UINT_PTR idTimer, DWORD tm)
      *  so we don't waste any more CPU.
      */
     int iState = GetClientObscuredness(hwnd);
-    if (iState == OBS_COMPLETELYCOVERED) {
+    if (iState == OBS_COMPLETELYCOVERED)
+    {
         Obscure_EnsureTimerStopped(hwnd);
-    } else {
+    }
+    else
+    {
         InvalidateRect(hwnd, NULL, FALSE);
-        if (iState == OBS_PARTIALLYVISIBLE) {
+        if (iState == OBS_PARTIALLYVISIBLE)
+        {
             SetWindowText(hwnd, TEXT("Partially Visible"));
-        } else if (iState == OBS_COMPLETELYVISIBLE) {
+        }
+        else if (iState == OBS_COMPLETELYVISIBLE)
+        {
             SetWindowText(hwnd, TEXT("Completely Visible"));
         }
     }
@@ -153,7 +160,8 @@ Obscure_TimerProc(HWND hwnd, UINT uiMsg, UINT_PTR idTimer, DWORD tm)
 void
 Obscure_EnsureTimerRunning(HWND hwnd)
 {
-    if (!g_fTimerActive) {
+    if (!g_fTimerActive)
+    {
         SetTimer(hwnd, 1, 100, Obscure_TimerProc);
         g_fTimerActive = TRUE;
     }
@@ -174,18 +182,22 @@ Obscure_OnPaint(HWND hwnd)
     HDC hdc;
 
     hdc = BeginPaint(hwnd, &ps);
-    if (hdc) {
+    if (hdc)
+    {
         TCHAR sz[64];
         RECT rc;
         HFONT hfOld;
         COLORREF crTextOld, crBkOld;
         int cch;
 
-        if (IsRectEmpty(&ps.rcPaint)) {
+        if (IsRectEmpty(&ps.rcPaint))
+        {
             /*
              *  Nothing to do.  Don't wake up either.
              */
-        } else {
+        }
+        else
+        {
             hfOld = SelectObject(hdc, GetStockObject(ANSI_FIXED_FONT));
             crTextOld = SetTextColor(hdc, GetSysColor(COLOR_WINDOWTEXT));
             crBkOld = SetBkColor(hdc, GetSysColor(COLOR_WINDOW));
@@ -216,7 +228,8 @@ Obscure_OnPaint(HWND hwnd)
 LRESULT CALLBACK
 Obscure_WndProc(HWND hwnd, UINT uiMsg, WPARAM wParam, LPARAM lParam)
 {
-    switch (uiMsg) {
+    switch (uiMsg)
+    {
 
     case WM_CREATE:
         Obscure_EnsureTimerRunning(hwnd);
@@ -267,19 +280,20 @@ WinMain(HINSTANCE hinst, HINSTANCE hinstPrev, LPSTR pszCmdLine, int nCmdShow)
     RegisterClass(&wc);
 
     hwnd = CreateWindow(
-        TEXT("Obscure"),                /* Class Name */
-        TEXT("Obscure"),                /* Title */
-        WS_OVERLAPPEDWINDOW,            /* Style */
-        CW_USEDEFAULT, CW_USEDEFAULT,   /* Position */
-        CW_USEDEFAULT, CW_USEDEFAULT,   /* Size */
-        NULL,                           /* Parent */
-        NULL,                           /* Use class menu */
-        hinst,                          /* Instance */
-        0);                             /* No special parameters */
+               TEXT("Obscure"),                /* Class Name */
+               TEXT("Obscure"),                /* Title */
+               WS_OVERLAPPEDWINDOW,            /* Style */
+               CW_USEDEFAULT, CW_USEDEFAULT,   /* Position */
+               CW_USEDEFAULT, CW_USEDEFAULT,   /* Size */
+               NULL,                           /* Parent */
+               NULL,                           /* Use class menu */
+               hinst,                          /* Instance */
+               0);                             /* No special parameters */
 
     ShowWindow(hwnd, nCmdShow);
 
-    while (GetMessage(&msg, NULL, 0, 0)) {
+    while (GetMessage(&msg, NULL, 0, 0))
+    {
         TranslateMessage(&msg);
         DispatchMessage(&msg);
     }

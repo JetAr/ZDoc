@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -36,12 +36,12 @@ SampleCompactVirtualDisk(
     DWORD opStatus;
 
     vhdHandle = INVALID_HANDLE_VALUE;
-    
+
     //
     // Specify UNKNOWN for both device and vendor so the system will use the
     // file extension to determine the correct VHD format.
     //
-    
+
     storageType.DeviceId = VIRTUAL_STORAGE_TYPE_DEVICE_UNKNOWN;
     storageType.VendorId = VIRTUAL_STORAGE_TYPE_VENDOR_UNKNOWN;
 
@@ -54,14 +54,14 @@ SampleCompactVirtualDisk(
 
     memset(&openParameters, 0, sizeof(openParameters));
     openParameters.Version = OPEN_VIRTUAL_DISK_VERSION_2;
-    
+
     opStatus = OpenVirtualDisk(
-        &storageType,
-        VirtualDiskPath,
-        VIRTUAL_DISK_ACCESS_NONE,
-        OPEN_VIRTUAL_DISK_FLAG_NONE,
-        &openParameters,
-        &vhdHandle);
+                   &storageType,
+                   VirtualDiskPath,
+                   VIRTUAL_DISK_ACCESS_NONE,
+                   OPEN_VIRTUAL_DISK_FLAG_NONE,
+                   &openParameters,
+                   &vhdHandle);
 
     if (opStatus != ERROR_SUCCESS)
     {
@@ -80,10 +80,10 @@ SampleCompactVirtualDisk(
     compactParmaters.Version = COMPACT_VIRTUAL_DISK_VERSION_1;
 
     opStatus = CompactVirtualDisk(
-        vhdHandle,
-        COMPACT_VIRTUAL_DISK_FLAG_NONE,
-        &compactParmaters,
-        NULL);
+                   vhdHandle,
+                   COMPACT_VIRTUAL_DISK_FLAG_NONE,
+                   &compactParmaters,
+                   NULL);
 
     if (opStatus != ERROR_SUCCESS)
     {
@@ -100,7 +100,7 @@ Cleanup:
     {
         wprintf(L"error = %u\n", opStatus);
     }
-    
+
     if (vhdHandle != INVALID_HANDLE_VALUE)
     {
         CloseHandle(vhdHandle);

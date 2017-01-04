@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -17,21 +17,21 @@
 #include <mmsystem.h>
 #include <memory.h>
 #include <strsafe.h>
-#include "muldiv32.h" 
+#include "muldiv32.h"
 #include "smf.h"
 #include "smfi.h"
 #include "debug.h"
 
 PRIVATE SMFRESULT FNLOCAL smfInsertParmData(
     PSMF                    pSmf,
-    TICKS                   tkDelta,                                            
+    TICKS                   tkDelta,
     LPMIDIHDR               lpmh);
 
 /*****************************************************************************
 *
 * smfOpenFile
 *
-* This function opens a MIDI file for access. 
+* This function opens a MIDI file for access.
 *
 * psofs                     - Specifies the file to open and associated
 *                             parameters. Contains a valid HSMF handle
@@ -44,12 +44,12 @@ PRIVATE SMFRESULT FNLOCAL smfInsertParmData(
 *     did not exist or could not be created on the disk.
 *
 *   SMF_INVALID_FILE The specified file was corrupt or not a MIDI file.
-* 
+*
 *   SMF_NO_MEMORY There was insufficient memory to open the file.
 *
 *   SMF_INVALID_PARM The given flags or time division in the
 *     SMFOPENFILESTRUCT were invalid.
-* 
+*
 *****************************************************************************/
 SMFRESULT FNLOCAL smfOpenFile(
     PSMFOPENFILESTRUCT      psofs)
@@ -63,7 +63,7 @@ SMFRESULT FNLOCAL smfOpenFile(
 
     assert(psofs != NULL);
     assert(psofs->pstrName != NULL);
-    
+
     /* Verify that the file can be opened or created
     */
     _fmemset(&mmioinfo, 0, sizeof(mmioinfo));
@@ -89,15 +89,15 @@ SMFRESULT FNLOCAL smfOpenFile(
     pSmf->fdwSMF = 0;
     pSmf->pTempoMap = NULL;
 
-    /* Pull the entire file into a block of memory. 
+    /* Pull the entire file into a block of memory.
     */
     _fmemset(&ckRIFF, 0, sizeof(ckRIFF));
-    
+
     if (0 == mmioDescend(hmmio, &ckRIFF, NULL, MMIO_FINDRIFF) &&
-        ckRIFF.fccType == FOURCC_RMID)
+            ckRIFF.fccType == FOURCC_RMID)
     {
         ckDATA.ckid = FOURCC_data;
-        
+
         if (0 == mmioDescend(hmmio, &ckDATA, &ckRIFF, MMIO_FINDCHUNK))
         {
             pSmf->cbImage   = ckDATA.cksize;
@@ -112,18 +112,18 @@ SMFRESULT FNLOCAL smfOpenFile(
     else
     {
         mmioSeek(hmmio, 0L, SEEK_SET);
-        
+
         pSmf->cbImage = mmioSeek(hmmio, 0L, SEEK_END);
         mmioSeek(hmmio, 0L, SEEK_SET);
     }
-    
+
     if (NULL == (pSmf->hpbImage = GlobalAllocPtr(GMEM_MOVEABLE|GMEM_SHARE, pSmf->cbImage)))
     {
         DPF(1, "smfOpenFile: No memory for image! [%08lX]", pSmf->cbImage);
         smfrc = SMF_NO_MEMORY;
         goto smf_Open_File_Cleanup;
     }
- 
+
     if (pSmf->cbImage != (DWORD)mmioRead(hmmio, pSmf->hpbImage, pSmf->cbImage))
     {
         DPF(1, "smfOpenFile: Read error on image!");
@@ -152,7 +152,7 @@ smf_Open_File_Cleanup:
             {
                 GlobalFreePtr(pSmf->hpbImage);
             }
-            
+
             LocalFree((HLOCAL)pSmf);
         }
     }
@@ -160,7 +160,7 @@ smf_Open_File_Cleanup:
     {
         psofs->hSmf = (HSMF)pSmf;
     }
-    
+
     return smfrc;
 }
 
@@ -178,24 +178,24 @@ smf_Open_File_Cleanup:
 *
 * Any track handles opened from this file handle are invalid after this
 * call.
-*        
+*
 *****************************************************************************/
 SMFRESULT FNLOCAL smfCloseFile(
     HSMF                    hSmf)
 {
     PSMF                    pSmf        = (PSMF)hSmf;
-    
+
     assert(pSmf != NULL);
-    
+
     /*
-    ** Free up handle memory 
+    ** Free up handle memory
     */
-    
+
     if (NULL != pSmf->hpbImage)
         GlobalFreePtr(pSmf->hpbImage);
-    
+
     LocalFree((HLOCAL)pSmf);
-    
+
     return SMF_SUCCESS;
 }
 
@@ -222,14 +222,14 @@ SMFRESULT FNLOCAL smfGetFileInfo(
     assert(pSmf != NULL);
     assert(psfi != NULL);
 
-    /* 
+    /*
     ** Just fill in the structure with useful information.
     */
     psfi->dwTracks      = pSmf->dwTracks;
     psfi->dwFormat      = pSmf->dwFormat;
     psfi->dwTimeDivision= pSmf->dwTimeDivision;
     psfi->tkLength      = pSmf->tkLength;
-    
+
     return SMF_SUCCESS;
 }
 
@@ -281,20 +281,20 @@ DWORD FNLOCAL smfTicksToMillisecs(
         uSMPTE = -(int)(char)((pSmf->dwTimeDivision >> 8)&0xFF);
         if (29 == uSMPTE)
             uSMPTE = 30;
-        
+
         dwTicksPerSec = (DWORD)uSMPTE *
                         (DWORD)(BYTE)(pSmf->dwTimeDivision & 0xFF);
-        
+
         return (DWORD)muldiv32(tkOffset, 1000L, dwTicksPerSec);
     }
-       
+
     /* Walk the tempo map and find the nearest tick position. Linearly
     ** calculate the rest (using MATH.ASM)
     */
 
     pTempo = pSmf->pTempoMap;
     assert(pTempo != NULL);
-    
+
     for (idx = 0; idx < pSmf->cTempoMap; idx++, pTempo++)
         if (tkOffset < pTempo->tkTempo)
             break;
@@ -306,7 +306,7 @@ DWORD FNLOCAL smfTicksToMillisecs(
     return pTempo->msBase + muldiv32(tkOffset-pTempo->tkTempo,
                                      pTempo->dwTempo,
                                      1000L*pSmf->dwTimeDivision);
-    
+
 }
 
 
@@ -344,7 +344,7 @@ TICKS FNLOCAL smfMillisecsToTicks(
     TICKS                   tkOffset;
 
     assert(pSmf != NULL);
-    
+
     /* SMPTE time is easy -- no tempo map, just linear conversion
     ** Note that 30-Drop means nothing to us here since we're not
     ** converting to a colonized format, which is where dropping
@@ -355,19 +355,19 @@ TICKS FNLOCAL smfMillisecsToTicks(
         uSMPTE = -(int)(char)((pSmf->dwTimeDivision >> 8)&0xFF);
         if (29 == uSMPTE)
             uSMPTE = 30;
-        
+
         dwTicksPerSec = (DWORD)uSMPTE *
                         (DWORD)(BYTE)(pSmf->dwTimeDivision & 0xFF);
 
         return (DWORD)muldiv32(msOffset, dwTicksPerSec, 1000L);
     }
-    
+
     /* Walk the tempo map and find the nearest millisecond position. Linearly
     ** calculate the rest (using MATH.ASM)
     */
     pTempo = pSmf->pTempoMap;
     assert(pTempo != NULL);
-    
+
     for (idx = 0; idx < pSmf->cTempoMap; idx++, pTempo++)
         if (msOffset < pTempo->msBase)
             break;
@@ -377,9 +377,9 @@ TICKS FNLOCAL smfMillisecsToTicks(
     */
 
     tkOffset = pTempo->tkTempo + muldiv32(msOffset-pTempo->msBase,
-                                     1000L*pSmf->dwTimeDivision,
-                                     pTempo->dwTempo);
-    
+                                          1000L*pSmf->dwTimeDivision,
+                                          pTempo->dwTempo);
+
     if (tkOffset > pSmf->tkLength)
     {
         DPF(1, "sMTT: Clipping ticks to file length!");
@@ -400,13 +400,13 @@ TICKS FNLOCAL smfMillisecsToTicks(
 * lpmh                      - Contains information about the buffer to fill.
 *
 * tkMax                     - Specifies a cutoff point in the stream
-*                             beyond which events will not be read.        
+*                             beyond which events will not be read.
 *
 * Return@rdes
 *   SMF_SUCCESS The events were successfully read.
 *   SMF_END_OF_TRACK There are no more events to read in this track.
 *   SMF_INVALID_FILE A disk error occured on the file.
-* 
+*
 * @xref <f smfWriteEvents>
 *****************************************************************************/
 SMFRESULT FNLOCAL smfReadEvents(
@@ -423,12 +423,12 @@ SMFRESULT FNLOCAL smfReadEvents(
     assert(pSmf != NULL);
     assert(lpmh != NULL);
 
-    /* 
+    /*
     ** Read events from the track and pack them into the buffer in polymsg
     ** format.
-    ** 
+    **
     ** If a SysEx or meta would go over a buffer boundry, split it.
-    */ 
+    */
     lpmh->dwBytesRecorded = 0;
     if (pSmf->dwPendingUserEvent)
     {
@@ -439,7 +439,7 @@ SMFRESULT FNLOCAL smfReadEvents(
             return smfrc;
         }
     }
-    
+
     lpdw = (LPDWORD)(lpmh->lpData + lpmh->dwBytesRecorded);
 
     if (pSmf->fdwSMF & SMF_F_EOF)
@@ -450,7 +450,7 @@ SMFRESULT FNLOCAL smfReadEvents(
     while(TRUE)
     {
         assert(lpmh->dwBytesRecorded <= lpmh->dwBufferLength);
-        
+
         /* If we know ahead of time we won't have room for the
         ** event, just break out now. We need 2 DWORD's for the
         ** terminator event and at least 2 DWORD's for any
@@ -478,12 +478,12 @@ SMFRESULT FNLOCAL smfReadEvents(
             {
                 pSmf->fdwSMF |= SMF_F_EOF;
             }
-            
+
             DPF(1, "smfReadEvents: smfGetNextEvent() -> %u", (UINT)smfrc);
             break;
         }
 
-        
+
         if (MIDI_SYSEX > EVENT_TYPE(event))
         {
             *lpdw++ = (DWORD)event.tkDelta;
@@ -492,7 +492,7 @@ SMFRESULT FNLOCAL smfReadEvents(
                       ((DWORD)EVENT_TYPE(event)) |
                       (((DWORD)EVENT_CH_B1(event)) << 8) |
                       (((DWORD)EVENT_CH_B2(event)) << 16);
-            
+
             lpmh->dwBytesRecorded += 3*sizeof(DWORD);
         }
         else if (MIDI_META == EVENT_TYPE(event) &&
@@ -533,17 +533,17 @@ SMFRESULT FNLOCAL smfReadEvents(
 
             switch(EVENT_TYPE(event))
             {
-                case MIDI_SYSEX:
-                    pSmf->fdwSMF |= SMF_F_INSERTSYSEX;
-            
-                    ++pSmf->cbPendingUserEvent;
+            case MIDI_SYSEX:
+                pSmf->fdwSMF |= SMF_F_INSERTSYSEX;
 
-                    /* Falling through...
-                    */
+                ++pSmf->cbPendingUserEvent;
 
-                case MIDI_SYSEXEND:
-                    pSmf->dwPendingUserEvent = ((DWORD)MEVT_LONGMSG) << 24;
-                    break;
+            /* Falling through...
+            */
+
+            case MIDI_SYSEXEND:
+                pSmf->dwPendingUserEvent = ((DWORD)MEVT_LONGMSG) << 24;
+                break;
             }
 
             smfrc = smfInsertParmData(pSmf, event.tkDelta, lpmh);
@@ -575,7 +575,7 @@ SMFRESULT FNLOCAL smfReadEvents(
 * Returns
 *   SMF_SUCCESS The events were successfully read.
 *   SMF_INVALID_FILE A disk error occured on the file.
-* 
+*
 * Fills as much data as will fit while leaving room for the buffer
 * terminator.
 *
@@ -585,7 +585,7 @@ SMFRESULT FNLOCAL smfReadEvents(
 *****************************************************************************/
 PRIVATE SMFRESULT FNLOCAL smfInsertParmData(
     PSMF                    pSmf,
-    TICKS                   tkDelta,                                            
+    TICKS                   tkDelta,
     LPMIDIHDR               lpmh)
 {
     DWORD                   dwLength;
@@ -594,12 +594,12 @@ PRIVATE SMFRESULT FNLOCAL smfInsertParmData(
 
     assert(pSmf != NULL);
     assert(lpmh != NULL);
-    
+
     /* Can't fit 4 DWORD's? (tkDelta + stream-id + event + some data)
     ** Can't do anything.
     */
     assert(lpmh->dwBufferLength >= lpmh->dwBytesRecorded);
-    
+
     if (lpmh->dwBufferLength - lpmh->dwBytesRecorded < 4*sizeof(DWORD))
     {
         if (0 == tkDelta)
@@ -622,7 +622,7 @@ PRIVATE SMFRESULT FNLOCAL smfInsertParmData(
     *lpdw++ = (pSmf->dwPendingUserEvent & 0xFF000000L) | (dwLength & 0x00FFFFFFL);
 
     dwRounded = (dwLength + 3) & (~3L);
-    
+
     if (pSmf->fdwSMF & SMF_F_INSERTSYSEX)
     {
         *((LPBYTE)lpdw)++ = MIDI_SYSEX;
@@ -659,7 +659,7 @@ PRIVATE SMFRESULT FNLOCAL smfInsertParmData(
 * hSmf                      - Handle of file to seek within
 *
 * tkPosition                - The position to seek to in the track.
-*         
+*
 * lpmh                      - A buffer to contain the state information.
 *
 * Returns
@@ -671,7 +671,7 @@ PRIVATE SMFRESULT FNLOCAL smfInsertParmData(
 *     contain all of the state data.
 *
 * The state information in the buffer includes patch changes, tempo changes,
-* time signature, key signature, 
+* time signature, key signature,
 * and controller information. Only the most recent of these paramters before
 * the current position will be stored. The state buffer will be returned
 * in polymsg format so that it may be directly transmitted over the MIDI
@@ -685,7 +685,7 @@ PRIVATE SMFRESULT FNLOCAL smfInsertParmData(
 *
 * The meta events (tempo, time signature, key signature) will be the
 * first events in the buffer if they exist.
-* 
+*
 * Use smfGetStateMaxSize to determine the maximum size of the state
 * information buffer. State information that will not fit into the given
 * buffer will be lost.
@@ -708,7 +708,7 @@ typedef struct tag_keyframe
     BYTE        rbProgram[16];
     BYTE        rbControl[16*120];
 }   KEYFRAME,
-    FAR *PKEYFRAME;
+FAR *PKEYFRAME;
 
 #define KF_EMPTY ((BYTE)0xFF)
 
@@ -727,14 +727,14 @@ SMFRESULT FNLOCAL smfSeek(
     UINT                    idx;
     UINT                    idxChannel;
     UINT                    idxController;
-    
+
     static KEYFRAME         kf;
 
     _fmemset(&kf, 0xFF, sizeof(kf));
-    
+
     pSmf->tkPosition = 0;
     pSmf->fdwSMF &= ~SMF_F_EOF;
-    
+
     for (ptrk = pSmf->rTracks, idxTrack = pSmf->dwTracks; idxTrack--; ptrk++)
     {
         ptrk->pSmf              = pSmf;
@@ -758,7 +758,7 @@ SMFRESULT FNLOCAL smfSeek(
             }
         }
         else switch(bEvent & 0xF0)
-        {
+            {
             case MIDI_PROGRAMCHANGE:
                 kf.rbProgram[bEvent & 0x0F] = EVENT_CH_B1(event);
                 break;
@@ -767,7 +767,7 @@ SMFRESULT FNLOCAL smfSeek(
                 kf.rbControl[(((WORD)bEvent & 0x0F)*120) + EVENT_CH_B1(event)] =
                     EVENT_CH_B2(event);
                 break;
-        }
+            }
     }
 
     if (SMF_REACHED_TKMAX != smfrc)
@@ -783,8 +783,8 @@ SMFRESULT FNLOCAL smfSeek(
     /* Tempo change event?
     */
     if (KF_EMPTY != kf.rbTempo[0] ||
-        KF_EMPTY != kf.rbTempo[1] ||
-        KF_EMPTY != kf.rbTempo[2])
+            KF_EMPTY != kf.rbTempo[1] ||
+            KF_EMPTY != kf.rbTempo[2])
     {
         if (lpmh->dwBufferLength - lpmh->dwBytesRecorded < 3*sizeof(DWORD))
             return SMF_NO_MEMORY;
@@ -834,10 +834,10 @@ SMFRESULT FNLOCAL smfSeek(
                 *lpdw++ = 0;
                 *lpdw++ = 0;
                 *lpdw++ = (((DWORD)MEVT_SHORTMSG << 24)     |
-                          ((DWORD)MIDI_CONTROLCHANGE)       |
-                          ((DWORD)idxChannel)               |
-                          (((DWORD)idxController) << 8)     |
-                          (((DWORD)kf.rbControl[idx]) << 16));
+                           ((DWORD)MIDI_CONTROLCHANGE)       |
+                           ((DWORD)idxChannel)               |
+                           (((DWORD)idxController) << 8)     |
+                           (((DWORD)kf.rbControl[idx]) << 16));
 
 
                 lpmh->dwBytesRecorded += 3*sizeof(DWORD);
@@ -857,7 +857,7 @@ SMFRESULT FNLOCAL smfSeek(
     {
         ptrk->tkPosition        = tkPosition;
     }
-    
+
     return SMF_SUCCESS;
 }
 
@@ -878,7 +878,7 @@ DWORD FNLOCAL smfGetStateMaxSize(
     VOID)
 {
     return  3*sizeof(DWORD) +           /* Tempo                */
-            3*16*sizeof(DWORD) +        /* Patch changes        */  
+            3*16*sizeof(DWORD) +        /* Patch changes        */
             3*16*120*sizeof(DWORD) +    /* Controller changes   */
             3*sizeof(DWORD);            /* Time alignment NOP   */
 }

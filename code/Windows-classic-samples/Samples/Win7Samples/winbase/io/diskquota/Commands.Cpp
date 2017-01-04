@@ -1,4 +1,4 @@
-/*----------------------------------------------------------------------------
+﻿/*----------------------------------------------------------------------------
 THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED
 TO THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -167,7 +167,7 @@ BOOL GetDefaultHardLimit(IDiskQuotaControl* lpDiskQuotaControl)
 
     // Get the default hard quota limit in text format
     hr = lpDiskQuotaControl->
-        GetDefaultQuotaLimitText(szDefaultHardLimitText, MAX_PATH);
+         GetDefaultQuotaLimitText(szDefaultHardLimitText, MAX_PATH);
 
     if (FAILED(hr))
     {
@@ -203,7 +203,7 @@ BOOL GetDefaultThreshold(IDiskQuotaControl* lpDiskQuotaControl)
 
     // Get the default threshold
     hr = lpDiskQuotaControl->
-        GetDefaultQuotaThresholdText(szDefaultThresholdText, MAX_PATH);
+         GetDefaultQuotaThresholdText(szDefaultThresholdText, MAX_PATH);
 
     if (FAILED(hr))
     {
@@ -216,7 +216,7 @@ BOOL GetDefaultThreshold(IDiskQuotaControl* lpDiskQuotaControl)
     wprintf(L"\n\nDefault Quota Threshold: %s\n", szDefaultThresholdText);
 
     WaitForKeyPress();
-    
+
     return TRUE;
 }
 
@@ -247,7 +247,7 @@ BOOL SetDefaultHardLimit(IDiskQuotaControl* lpDiskQuotaControl)
     ReadConsole(hStdIn, szLimit, MAX_PATH, &dwCharsRead, NULL);
     LfcrToNull(szLimit);
     llLimit = _wtoi64(szLimit);
-    
+
     if (llLimit < -1)
     {
         wprintf(L"\nInvalid limit!");
@@ -475,7 +475,7 @@ BOOL GetUserQuotaInfo(IDiskQuotaControl* lpDiskQuotaControl)
     wprintf(L"\n\nEnter the logon name of the user");
     wprintf(L"(ie. DOMAIN\\USERNAME): ");
 
-    // Get the user for which to get quota information 
+    // Get the user for which to get quota information
     ReadConsole(hStdIn, szUser, MAX_PATH, &dwCharsRead, NULL);
     szUser[MAX_PATH-1] = L'\0'; // make sure szUser is NULL terminated
     LfcrToNull(szUser);
@@ -489,11 +489,11 @@ BOOL GetUserQuotaInfo(IDiskQuotaControl* lpDiskQuotaControl)
         WCHAR    szQuotaThresholdText[MAX_PATH] = {0};
 
         if (SUCCEEDED(hr = lpDiskQuotaUser->GetQuotaThresholdText(
-                                    szQuotaThresholdText, MAX_PATH))         &&
-            SUCCEEDED(hr = lpDiskQuotaUser->GetQuotaLimitText(
-                                    szQuotaLimitText, MAX_PATH))             &&
-            SUCCEEDED(hr = lpDiskQuotaUser->GetQuotaUsedText(
-                                    szQuotaUsedText, MAX_PATH)))
+                               szQuotaThresholdText, MAX_PATH))         &&
+                SUCCEEDED(hr = lpDiskQuotaUser->GetQuotaLimitText(
+                                   szQuotaLimitText, MAX_PATH))             &&
+                SUCCEEDED(hr = lpDiskQuotaUser->GetQuotaUsedText(
+                                   szQuotaUsedText, MAX_PATH)))
         {
             szQuotaUsedText[MAX_PATH-1] = L'\0'; // make sure szQuotaUsedText is NULL terminated
             szQuotaLimitText[MAX_PATH-1] = L'\0'; // make sure szQuotaLimitText is NULL terminated
@@ -545,14 +545,14 @@ BOOL AddUser(IDiskQuotaControl* lpDiskQuotaControl)
 
     wprintf(L"\n\nEnter the logon name of the user (ie. DOMAIN\\USERNAME): ");
 
-    // Get the user for which to track quota information 
+    // Get the user for which to track quota information
     ReadConsole(hStdIn, szUser, MAX_PATH, &dwCharsRead, NULL);
     LfcrToNull(szUser);
 
     // Add the user
     hr = lpDiskQuotaControl->AddUserName(szUser,
-                                DISKQUOTA_USERNAME_RESOLVE_SYNC,
-                                &lpDiskQuotaUser);
+                                         DISKQUOTA_USERNAME_RESOLVE_SYNC,
+                                         &lpDiskQuotaUser);
 
     if (FAILED(hr))
     {
@@ -586,7 +586,7 @@ BOOL DeleteUser(IDiskQuotaControl* lpDiskQuotaControl)
 
     wprintf(L"\n\nEnter the logon name of the user (ie. DOMAIN\\USERNAME): ");
 
-    // Get the user for which to track quota information 
+    // Get the user for which to track quota information
     ReadConsole(hStdIn, szUser, MAX_PATH, &dwCharsRead, NULL);
     LfcrToNull(szUser);
 
@@ -632,10 +632,10 @@ BOOL EnumerateUsers(IDiskQuotaControl* lpDiskQuotaControl)
     IDiskQuotaUser*      lpDiskQuotaUser;
     DWORD                dwUsersFetched;
 
-    // Create an enumerator object to enumerate quota users on the volume. 
+    // Create an enumerator object to enumerate quota users on the volume.
     hr = lpDiskQuotaControl->CreateEnumUsers(NULL, 0,
-                                             DISKQUOTA_USERNAME_RESOLVE_SYNC,
-                                             &lpEnumDiskQuotaUsers);
+            DISKQUOTA_USERNAME_RESOLVE_SYNC,
+            &lpEnumDiskQuotaUsers);
     if (SUCCEEDED(hr))
     {
         WCHAR szLogonName[MAX_PATH];
@@ -645,13 +645,13 @@ BOOL EnumerateUsers(IDiskQuotaControl* lpDiskQuotaControl)
 
         // Enumerate through all of the quota users
         while(SUCCEEDED(hr) &&
-              S_OK == lpEnumDiskQuotaUsers->
-                      Next(1, &lpDiskQuotaUser, &dwUsersFetched))
+                S_OK == lpEnumDiskQuotaUsers->
+                Next(1, &lpDiskQuotaUser, &dwUsersFetched))
         {
             // Retrieve the name strings associated with this disk quota user.
             if (SUCCEEDED(hr = lpDiskQuotaUser->GetName(NULL, 0, szLogonName,
-                                                        MAX_PATH, NULL, 0)))
-            { 
+                               MAX_PATH, NULL, 0)))
+            {
                 szLogonName[MAX_PATH-1] = L'\0'; // make sure szLogonName is NULL terminated
                 wprintf(L"%s\n", szLogonName);
                 lpDiskQuotaUser->Release();
@@ -683,10 +683,10 @@ BOOL EnumerateUserQuotas(IDiskQuotaControl* lpDiskQuotaControl)
     HRESULT              hr;
     IEnumDiskQuotaUsers* lpEnumDiskQuotaUsers;
 
-    // Create an enumerator object to enumerate quota users on the volume. 
+    // Create an enumerator object to enumerate quota users on the volume.
     hr = lpDiskQuotaControl->CreateEnumUsers(NULL, 0,
-                                             DISKQUOTA_USERNAME_RESOLVE_SYNC,
-                                             &lpEnumDiskQuotaUsers);
+            DISKQUOTA_USERNAME_RESOLVE_SYNC,
+            &lpEnumDiskQuotaUsers);
     if (SUCCEEDED(hr))
     {
         IDiskQuotaUser*      lpDiskQuotaUser;
@@ -704,20 +704,20 @@ BOOL EnumerateUserQuotas(IDiskQuotaControl* lpDiskQuotaControl)
 
         // Enumerate through all of the quota users
         while(SUCCEEDED(hr) &&
-              S_OK == lpEnumDiskQuotaUsers->
-                        Next(1, &lpDiskQuotaUser, &dwUsersFetched))
+                S_OK == lpEnumDiskQuotaUsers->
+                Next(1, &lpDiskQuotaUser, &dwUsersFetched))
         {
             if (SUCCEEDED(hr = lpDiskQuotaUser->
-                    GetName(NULL, 0, szLogonName, MAX_PATH, NULL, 0))      &&
-                SUCCEEDED(hr = lpDiskQuotaUser->
-                    GetQuotaThresholdText(szQuotaThresholdText, MAX_PATH)) &&
-                SUCCEEDED(hr = lpDiskQuotaUser->
-                    GetQuotaLimitText(szQuotaLimitText, MAX_PATH))         &&
-                SUCCEEDED(hr = lpDiskQuotaUser->
-                    GetQuotaUsedText(szQuotaUsedText, MAX_PATH))           &&
-                SUCCEEDED(hr = lpDiskQuotaUser->
-                    GetQuotaInformation((LPVOID)&dqUserInfo,
-                        sizeof(DISKQUOTA_USER_INFORMATION))))
+                               GetName(NULL, 0, szLogonName, MAX_PATH, NULL, 0))      &&
+                    SUCCEEDED(hr = lpDiskQuotaUser->
+                                   GetQuotaThresholdText(szQuotaThresholdText, MAX_PATH)) &&
+                    SUCCEEDED(hr = lpDiskQuotaUser->
+                                   GetQuotaLimitText(szQuotaLimitText, MAX_PATH))         &&
+                    SUCCEEDED(hr = lpDiskQuotaUser->
+                                   GetQuotaUsedText(szQuotaUsedText, MAX_PATH))           &&
+                    SUCCEEDED(hr = lpDiskQuotaUser->
+                                   GetQuotaInformation((LPVOID)&dqUserInfo,
+                                           sizeof(DISKQUOTA_USER_INFORMATION))))
             {
                 szLogonName[MAX_PATH - 1] = L'\0'; // Make sure szLogonName is NULL terminated
                 szQuotaUsedText[MAX_PATH - 1] = L'\0'; // Make sure szQuotaUsedText is NULL terminated
@@ -726,7 +726,7 @@ BOOL EnumerateUserQuotas(IDiskQuotaControl* lpDiskQuotaControl)
 
                 // Check if the user is exceeding their threshold
                 if ((dqUserInfo.QuotaUsed > dqUserInfo.QuotaThreshold) &&
-                    (dqUserInfo.QuotaThreshold >= 0))
+                        (dqUserInfo.QuotaThreshold >= 0))
                 {
                     wprintf(L"Warning ");
                 }
@@ -746,7 +746,7 @@ BOOL EnumerateUserQuotas(IDiskQuotaControl* lpDiskQuotaControl)
                 szLogonName[MAX_PATH - 1] = L'\0'; // Make sure szLogonName is NULL terminated
 
                 wprintf(L"Could not retrieve %s's quota information\n",
-                         szLogonName);
+                        szLogonName);
             }
             lpDiskQuotaUser->Release();
         }
@@ -775,17 +775,17 @@ Return Value
 void PrintError(HRESULT hr)
 {
     LPVOID lpMsgBuf;
-    
+
     // Format the error message
-    if (!FormatMessageW(FORMAT_MESSAGE_ALLOCATE_BUFFER | 
-                  FORMAT_MESSAGE_FROM_SYSTEM     |
-                  FORMAT_MESSAGE_IGNORE_INSERTS,
-                  NULL,
-                  hr,
-                  MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Defaut lang
-                  (LPWSTR) &lpMsgBuf,
-                  0,
-                  NULL ))
+    if (!FormatMessageW(FORMAT_MESSAGE_ALLOCATE_BUFFER |
+                        FORMAT_MESSAGE_FROM_SYSTEM     |
+                        FORMAT_MESSAGE_IGNORE_INSERTS,
+                        NULL,
+                        hr,
+                        MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Defaut lang
+                        (LPWSTR) &lpMsgBuf,
+                        0,
+                        NULL ))
     {
         wprintf(L"Unknown error occured\n");
         return;
@@ -836,10 +836,10 @@ void WaitForKeyPress()
     DWORD        dwInputEvents;
 
     wprintf(L"\nPress any key to continue: ");
-    ReadConsoleInput(hStdIn,&sInputRecord,1 ,&dwInputEvents);
+    ReadConsoleInput(hStdIn,&sInputRecord,1,&dwInputEvents);
     while (!((sInputRecord.EventType == KEY_EVENT) &&             (sInputRecord.Event.KeyEvent.bKeyDown)))
     {
         FlushConsoleInputBuffer(hStdIn);
-        ReadConsoleInput(hStdIn,&sInputRecord,1 ,&dwInputEvents);
+        ReadConsoleInput(hStdIn,&sInputRecord,1,&dwInputEvents);
     }
 }

@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -59,7 +59,7 @@ inline int QuickCompareEndpoints(_In_ EndPoint endpoint1, _In_ EndPoint endpoint
     {
         return 2;
     }
-    else 
+    else
     {
         if (endpoint1.character < endpoint2.character)
         {

@@ -1,6 +1,6 @@
-//////////////////////////////////////////////////////////////////////////
+﻿//////////////////////////////////////////////////////////////////////////
 // Slider.h: Custom slider control.
-// 
+//
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -12,7 +12,7 @@
 
 
 // GOALS of the slider class:
-// 
+//
 // - Application can get/set the logical position.
 // - When the usser clicks on the client area, the slider jumps to the clicked position.
 //   (This behavior is different from the slider control in the Windows common controls,
@@ -50,16 +50,17 @@ const UINT WM_SLIDER_SET_POSITION = WM_USER + 5;            // wparam = position
 
 // lparam = LPNMSLIDER_INFO
 
-const int SLIDER_NOTIFY_SELECT = 0; 
-const int SLIDER_NOTIFY_RELEASE = 1;    
-const int SLIDER_NOTIFY_DRAG = 2;   
+const int SLIDER_NOTIFY_SELECT = 0;
+const int SLIDER_NOTIFY_RELEASE = 1;
+const int SLIDER_NOTIFY_DRAG = 2;
 
 // NMSLIDER_INFO:
 // Custom notification structure.
 
-typedef struct tag_NMSLIDER_INFO {
+typedef struct tag_NMSLIDER_INFO
+{
     NMHDR hdr;
-    BOOL  bSelected;    
+    BOOL  bSelected;
     LONG  position;
 } NMSLIDER_INFO, *LPNMSLIDER_INFO;
 

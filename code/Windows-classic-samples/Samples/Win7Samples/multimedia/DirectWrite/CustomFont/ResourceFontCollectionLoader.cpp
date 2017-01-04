@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -13,7 +13,7 @@
 
 IDWriteFontCollectionLoader* ResourceFontCollectionLoader::instance_(
     new(std::nothrow) ResourceFontCollectionLoader()
-    );
+);
 
 HRESULT STDMETHODCALLTYPE ResourceFontCollectionLoader::QueryInterface(REFIID iid, void** ppvObject)
 {
@@ -49,7 +49,7 @@ HRESULT STDMETHODCALLTYPE ResourceFontCollectionLoader::CreateEnumeratorFromKey(
     void const* collectionKey,                      // [collectionKeySize] in bytes
     UINT32 collectionKeySize,
     OUT IDWriteFontFileEnumerator** fontFileEnumerator
-    )
+)
 {
     *fontFileEnumerator = NULL;
 
@@ -60,7 +60,7 @@ HRESULT STDMETHODCALLTYPE ResourceFontCollectionLoader::CreateEnumeratorFromKey(
 
     ResourceFontFileEnumerator* enumerator = new(std::nothrow) ResourceFontFileEnumerator(
         factory
-        );
+    );
     if (enumerator == NULL)
         return E_OUTOFMEMORY;
 
@@ -68,9 +68,9 @@ HRESULT STDMETHODCALLTYPE ResourceFontCollectionLoader::CreateEnumeratorFromKey(
     UINT32 const resourceCount = collectionKeySize / sizeof(UINT);
 
     hr = enumerator->Initialize(
-            resourceIDs, 
-            resourceCount
-            );
+             resourceIDs,
+             resourceCount
+         );
 
     if (FAILED(hr))
     {

@@ -1,24 +1,24 @@
-
+﻿
 /************************************************************************
  *
  * File: DemoApp.cpp
  *
- * Description: 
- * 
- * 
+ * Description:
+ *
+ *
  *  This file is part of the Microsoft Windows SDK Code Samples.
- * 
+ *
  *  Copyright (C) Microsoft Corporation.  All rights reserved.
- * 
+ *
  * This source code is intended only as a supplement to Microsoft
  * Development Tools and/or on-line documentation.  See these other
  * materials for detailed information regarding Microsoft code samples.
- * 
+ *
  * THIS CODE AND INFORMATION ARE PROVIDED AS IS WITHOUT WARRANTY OF ANY
  * KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
  * PARTICULAR PURPOSE.
- * 
+ *
  ************************************************************************/
 
 #include "SimpleHelloWorld.h"
@@ -78,7 +78,7 @@ HRESULT DemoApp::Initialize()
     dpiScaleX_ = GetDeviceCaps(screen, LOGPIXELSX) / 96.0f;
     dpiScaleY_ = GetDeviceCaps(screen, LOGPIXELSY) / 96.0f;
     ReleaseDC(0, screen);
-    
+
     // Return failure unless CreateDeviceIndependentResources returns SUCCEEDED.
     HRESULT hr = S_OK;
 
@@ -94,20 +94,20 @@ HRESULT DemoApp::Initialize()
     wcex.hbrBackground = NULL;
     wcex.lpszMenuName  = NULL;
     wcex.hIcon         = LoadIcon(
-                            NULL,
-                            IDI_APPLICATION);
+                             NULL,
+                             IDI_APPLICATION);
     wcex.hCursor       = LoadCursor(
-                            NULL,
-                            IDC_ARROW);
+                             NULL,
+                             IDC_ARROW);
     wcex.lpszClassName = TEXT("DemoApp");
     wcex.hIconSm       = LoadIcon(
-                            NULL,
-                            IDI_APPLICATION
-                            );
+                             NULL,
+                             IDI_APPLICATION
+                         );
 
     atom = RegisterClassEx(
-        &wcex
-        );
+               &wcex
+           );
 
     hr = atom ? S_OK : E_FAIL;
 
@@ -115,29 +115,29 @@ HRESULT DemoApp::Initialize()
     {
         // Create window.
         hwnd_ = CreateWindow(
-            TEXT("DemoApp"),
-            TEXT("Simple DirectWrite Hello World"),
-            WS_OVERLAPPEDWINDOW,
-            CW_USEDEFAULT,
-            CW_USEDEFAULT,
-            static_cast<int>(640.0f / dpiScaleX_),
-            static_cast<int>(480.0f / dpiScaleY_),
-            NULL,
-            NULL,
-            HINST_THISCOMPONENT,
-            this
-            );
+                    TEXT("DemoApp"),
+                    TEXT("Simple DirectWrite Hello World"),
+                    WS_OVERLAPPEDWINDOW,
+                    CW_USEDEFAULT,
+                    CW_USEDEFAULT,
+                    static_cast<int>(640.0f / dpiScaleX_),
+                    static_cast<int>(480.0f / dpiScaleY_),
+                    NULL,
+                    NULL,
+                    HINST_THISCOMPONENT,
+                    this
+                );
     }
-   
+
     if (SUCCEEDED(hr))
     {
         hr = hwnd_ ? S_OK : E_FAIL;
     }
-    
+
     if (SUCCEEDED(hr))
     {
         hr = CreateDeviceIndependentResources(
-            );
+             );
     }
 
     if (SUCCEEDED(hr))
@@ -145,12 +145,12 @@ HRESULT DemoApp::Initialize()
         ShowWindow(
             hwnd_,
             SW_SHOWNORMAL
-            );
+        );
 
 
         UpdateWindow(
             hwnd_
-            );
+        );
     }
 
     if (SUCCEEDED(hr))
@@ -180,18 +180,18 @@ HRESULT DemoApp::CreateDeviceIndependentResources()
 
     // Create Direct2D factory.
     hr = D2D1CreateFactory(
-        D2D1_FACTORY_TYPE_SINGLE_THREADED,
-        &pD2DFactory_
-        );
+             D2D1_FACTORY_TYPE_SINGLE_THREADED,
+             &pD2DFactory_
+         );
 
     // Create a shared DirectWrite factory.
     if (SUCCEEDED(hr))
     {
         hr = DWriteCreateFactory(
-            DWRITE_FACTORY_TYPE_SHARED,
-            __uuidof(IDWriteFactory),
-            reinterpret_cast<IUnknown**>(&pDWriteFactory_)
-            );
+                 DWRITE_FACTORY_TYPE_SHARED,
+                 __uuidof(IDWriteFactory),
+                 reinterpret_cast<IUnknown**>(&pDWriteFactory_)
+             );
     }
 
     // The string to display.
@@ -203,15 +203,15 @@ HRESULT DemoApp::CreateDeviceIndependentResources()
     if (SUCCEEDED(hr))
     {
         hr = pDWriteFactory_->CreateTextFormat(
-            L"Gabriola",                // Font family name.
-            NULL,                       // Font collection (NULL sets it to use the system font collection).
-            DWRITE_FONT_WEIGHT_REGULAR,
-            DWRITE_FONT_STYLE_NORMAL,
-            DWRITE_FONT_STRETCH_NORMAL,
-            72.0f,
-            L"en-us",
-            &pTextFormat_
-            );
+                 L"Gabriola",                // Font family name.
+                 NULL,                       // Font collection (NULL sets it to use the system font collection).
+                 DWRITE_FONT_WEIGHT_REGULAR,
+                 DWRITE_FONT_STYLE_NORMAL,
+                 DWRITE_FONT_STRETCH_NORMAL,
+                 72.0f,
+                 L"en-us",
+                 &pTextFormat_
+             );
     }
 
     // Center align (horizontally) the text.
@@ -252,21 +252,21 @@ HRESULT DemoApp::CreateDeviceResources()
     {
         // Create a Direct2D render target.
         hr = pD2DFactory_->CreateHwndRenderTarget(
-                D2D1::RenderTargetProperties(),
-                D2D1::HwndRenderTargetProperties(
-                    hwnd_,
-                    size
-                    ),
-                &pRT_
-                );
+                 D2D1::RenderTargetProperties(),
+                 D2D1::HwndRenderTargetProperties(
+                     hwnd_,
+                     size
+                 ),
+                 &pRT_
+             );
 
         // Create a black brush.
         if (SUCCEEDED(hr))
         {
             hr = pRT_->CreateSolidColorBrush(
-                D2D1::ColorF(D2D1::ColorF::Black),
-                &pBlackBrush_
-                );
+                     D2D1::ColorF(D2D1::ColorF::Black),
+                     &pBlackBrush_
+                 );
         }
 
     }
@@ -306,15 +306,15 @@ HRESULT DemoApp::DrawText()
     GetClientRect(
         hwnd_,
         &rc
-        );
+    );
 
     // Create a D2D rect that is the same size as the window.
     D2D1_RECT_F layoutRect = D2D1::RectF(
-        static_cast<FLOAT>(rc.top) / dpiScaleY_,
-        static_cast<FLOAT>(rc.left) / dpiScaleX_,
-        static_cast<FLOAT>(rc.right - rc.left) / dpiScaleX_,
-        static_cast<FLOAT>(rc.bottom - rc.top) / dpiScaleY_
-        );
+                                 static_cast<FLOAT>(rc.top) / dpiScaleY_,
+                                 static_cast<FLOAT>(rc.left) / dpiScaleX_,
+                                 static_cast<FLOAT>(rc.right - rc.left) / dpiScaleX_,
+                                 static_cast<FLOAT>(rc.bottom - rc.top) / dpiScaleY_
+                             );
 
     // Use the DrawText method of the D2D render target interface to draw.
     pRT_->DrawText(
@@ -323,7 +323,7 @@ HRESULT DemoApp::DrawText()
         pTextFormat_,    // The text format.
         layoutRect,       // The region of the window where the text will be rendered.
         pBlackBrush_     // The brush used to draw the text.
-        );
+    );
 
     return S_OK;
 }
@@ -365,7 +365,7 @@ HRESULT DemoApp::DrawD2DContent()
         if (SUCCEEDED(hr))
         {
             hr = pRT_->EndDraw(
-                );
+                 );
         }
     }
 
@@ -422,41 +422,41 @@ LRESULT CALLBACK DemoApp::WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM
     }
 
     DemoApp *pDemoApp = reinterpret_cast<DemoApp *>(static_cast<LONG_PTR>(
-                ::GetWindowLongPtrW(hwnd, GWLP_USERDATA)));
+                            ::GetWindowLongPtrW(hwnd, GWLP_USERDATA)));
 
     if (pDemoApp)
     {
         switch(message)
         {
         case WM_SIZE:
-            {
-                UINT width = LOWORD(lParam);
-                UINT height = HIWORD(lParam);
-                pDemoApp->OnResize(width, height);
-            }
-            return 0;
+        {
+            UINT width = LOWORD(lParam);
+            UINT height = HIWORD(lParam);
+            pDemoApp->OnResize(width, height);
+        }
+        return 0;
 
         case WM_PAINT:
         case WM_DISPLAYCHANGE:
-            {
-                ValidateRect(hwnd, NULL);
-                pDemoApp->DrawD2DContent();
-            }
-            return 0;
+        {
+            ValidateRect(hwnd, NULL);
+            pDemoApp->DrawD2DContent();
+        }
+        return 0;
 
         case WM_DESTROY:
-            {
-                PostQuitMessage(0);
-            }
-            return 1;
+        {
+            PostQuitMessage(0);
+        }
+        return 1;
         }
     }
     return DefWindowProc(
-        hwnd,
-        message,
-        wParam,
-        lParam
-        );
+               hwnd,
+               message,
+               wParam,
+               lParam
+           );
 }
 
 

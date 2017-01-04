@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -158,7 +158,8 @@ LRESULT CInkInputWnd::OnPaint(UINT /*uMsg*/, WPARAM /*wParam*/,
     // Calculate the grid rectangle. Assume that if there are any guides,
     // they are either boxes or horizontal lines.
     RECT rcGrid = {m_ptGridLT.x, m_ptGridLT.y, 0,
-                   m_ptGridLT.y + m_szWritingBox.cy * m_cRows};
+                   m_ptGridLT.y + m_szWritingBox.cy * m_cRows
+                  };
     if (0 == m_cColumns && 0 != m_cRows)
     {
         rcGrid.right = rcClip.right;
@@ -171,7 +172,7 @@ LRESULT CInkInputWnd::OnPaint(UINT /*uMsg*/, WPARAM /*wParam*/,
     // Draw the guide grid, if it's visible and not empty.
     RECT rcVisible;
     if (FALSE == ::IsRectEmpty(&rcGrid)
-         && TRUE == ::IntersectRect(&rcVisible, &rcGrid, &rcClip))
+            && TRUE == ::IntersectRect(&rcVisible, &rcGrid, &rcClip))
     {
 
         // Create a thin lightgray pen to draw the guides.
@@ -180,11 +181,11 @@ LRESULT CInkInputWnd::OnPaint(UINT /*uMsg*/, WPARAM /*wParam*/,
 
         if (0 == m_cColumns)
         {
-             // Draw horizontal lines at the bottom side of the guide's DrawnBox
+            // Draw horizontal lines at the bottom side of the guide's DrawnBox
             int iY = rcClip.top - ((rcClip.top - m_ptGridLT.y) % m_szWritingBox.cy) + m_rcDrawnBox.bottom;
             for (int iRow = (rcClip.top - m_ptGridLT.y) / m_szWritingBox.cy;
-                 (iRow < m_cRows) && (iY < rcClip.bottom);
-                 iRow++, iY += m_szWritingBox.cy)
+                    (iRow < m_cRows) && (iY < rcClip.bottom);
+                    iRow++, iY += m_szWritingBox.cy)
             {
                 ::MoveToEx(hdc, rcClip.left, iY, NULL);
                 ::LineTo(hdc, rcClip.right, iY);
@@ -195,15 +196,15 @@ LRESULT CInkInputWnd::OnPaint(UINT /*uMsg*/, WPARAM /*wParam*/,
             // Draw boxes
             int iY = rcClip.top - ((rcClip.top - m_ptGridLT.y) % m_szWritingBox.cy);
             for (int iRow = (rcClip.top - m_ptGridLT.y) / m_szWritingBox.cy;
-                 (iRow < m_cRows) && (iY < rcClip.bottom);
-                 iRow++, iY += m_szWritingBox.cy)
+                    (iRow < m_cRows) && (iY < rcClip.bottom);
+                    iRow++, iY += m_szWritingBox.cy)
             {
                 int iX = rcClip.left - ((rcClip.left - m_ptGridLT.x) % m_szWritingBox.cx);
                 RECT rcBox = m_rcDrawnBox;
                 ::OffsetRect(&rcBox, iX, iY);
                 for (int iCol = (rcClip.left - m_ptGridLT.x) / m_szWritingBox.cx;
-                     (iCol < m_cColumns) && (rcBox.left < rcClip.right);
-                     iCol++)
+                        (iCol < m_cColumns) && (rcBox.left < rcClip.right);
+                        iCol++)
                 {
                     ::Rectangle(hdc, rcBox.left, rcBox.top, rcBox.right, rcBox.bottom);
                     ::OffsetRect(&rcBox, m_szWritingBox.cx, 0);
@@ -236,7 +237,7 @@ LRESULT CInkInputWnd::OnPaint(UINT /*uMsg*/, WPARAM /*wParam*/,
 //
 /////////////////////////////////////////////////////////
 CRecoOutputWnd::CRecoOutputWnd()
-        : m_hFont(NULL), m_iFontName(-1), m_nGesture(0), m_bNewGesture(false)
+    : m_hFont(NULL), m_iFontName(-1), m_nGesture(0), m_bNewGesture(false)
 {
     UpdateFont(::GetUserDefaultLangID());
 }
@@ -404,32 +405,33 @@ int CRecoOutputWnd::GetBestHeight()
 bool CRecoOutputWnd::UpdateFont(LANGID wLangId)
 {
     static LPCTSTR pszFontNames[] = { TEXT("MS Shell Dlg"), TEXT("MS Mincho"),
-                                      TEXT("Mingliu"), TEXT("Gullim") };
+                                      TEXT("Mingliu"), TEXT("Gullim")
+                                    };
     bool bOk = true;
     int i;
     DWORD dwCharSet;
     // Select a font by the primary language id (the lower byte)
     switch(wLangId & 0xFF)
     {
-        default:
-            i = 0;
-            dwCharSet = DEFAULT_CHARSET;
-            break;
+    default:
+        i = 0;
+        dwCharSet = DEFAULT_CHARSET;
+        break;
 
-        case LANG_JAPANESE:
-            i = 1;
-            dwCharSet = SHIFTJIS_CHARSET;
-            break;
+    case LANG_JAPANESE:
+        i = 1;
+        dwCharSet = SHIFTJIS_CHARSET;
+        break;
 
-        case LANG_CHINESE:
-            i = 2;
-            dwCharSet = CHINESEBIG5_CHARSET;
-            break;
+    case LANG_CHINESE:
+        i = 2;
+        dwCharSet = CHINESEBIG5_CHARSET;
+        break;
 
-        case LANG_KOREAN:
-            i = 3;
-            dwCharSet = JOHAB_CHARSET;
-            break;
+    case LANG_KOREAN:
+        i = 3;
+        dwCharSet = JOHAB_CHARSET;
+        break;
     }
     if (i != m_iFontName)
     {
@@ -437,7 +439,7 @@ bool CRecoOutputWnd::UpdateFont(LANGID wLangId)
                                    dwCharSet,
                                    0, 0, 0, 0,
                                    pszFontNames[i] // typeface name
-                                   );
+                                  );
         if (NULL != hFont)
         {
             if (NULL != m_hFont)

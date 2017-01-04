@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -17,7 +17,7 @@
 
 // Print out rich error info
 void PrintError(
-    _In_ HRESULT errorCode, 
+    _In_ HRESULT errorCode,
     _In_opt_ WS_ERROR* error)
 {
     wprintf(L"Failure: errorCode=0x%lx\n", errorCode);
@@ -67,13 +67,13 @@ HRESULT CALLBACK AddSessionHeader(
     _OrderSession* orderSession = (_OrderSession*) state;
     // Add reply sessionID
     return WsAddCustomHeader(
-        message, 
-        &OrderSessionHeader_xsd.globalElements.OrderSession, 
-        WS_WRITE_REQUIRED_VALUE,
-        orderSession, 
-        sizeof(*orderSession), 
-        0, 
-        error);
+               message,
+               &OrderSessionHeader_xsd.globalElements.OrderSession,
+               WS_WRITE_REQUIRED_VALUE,
+               orderSession,
+               sizeof(*orderSession),
+               0,
+               error);
 }
 
 HRESULT CALLBACK RetrieveSessionHeader(
@@ -88,26 +88,26 @@ HRESULT CALLBACK RetrieveSessionHeader(
     _OrderSession* outputOrderSession = NULL;
 
     HRESULT hr = WsGetCustomHeader(
-        message, 
-        &OrderSessionHeader_xsd.globalElements.OrderSession, 
-        WS_SINGLETON_HEADER,
-        0,
-        WS_READ_REQUIRED_POINTER, 
-        NULL, 
-        &outputOrderSession, 
-        sizeof(outputOrderSession), 
-        NULL, 
-        error);
+                     message,
+                     &OrderSessionHeader_xsd.globalElements.OrderSession,
+                     WS_SINGLETON_HEADER,
+                     0,
+                     WS_READ_REQUIRED_POINTER,
+                     NULL,
+                     &outputOrderSession,
+                     sizeof(outputOrderSession),
+                     NULL,
+                     error);
     if (FAILED(hr))
     {
         return hr;
     }
-    
-    wprintf(L"%s == %s\n", 
-        outputOrderSession->sessionId,
-        inputOrderSession->sessionId);
+
+    wprintf(L"%s == %s\n",
+            outputOrderSession->sessionId,
+            inputOrderSession->sessionId);
     fflush(stdout);
-    
+
     return S_OK;
 }
 
@@ -116,7 +116,7 @@ HRESULT CALLBACK RetrieveSessionHeader(
 // Main entry point
 int __cdecl wmain()
 {
-    
+
     HRESULT hr = S_OK;
     WS_ERROR* error = NULL;
     WS_SERVICE_PROXY* serviceProxy = NULL;
@@ -129,106 +129,106 @@ int __cdecl wmain()
     orderSession.sessionId = L"ExampleSession";
     WS_PROXY_MESSAGE_CALLBACK_CONTEXT inputMessageContext = {0};
     WS_PROXY_MESSAGE_CALLBACK_CONTEXT outputMessageContext = {0};
-    
+
     // Create an error object for storing rich error information
     hr = WsCreateError(
-        NULL, 
-        0, 
-        &error);
+             NULL,
+             0,
+             &error);
     if (FAILED(hr))
     {
         goto Exit;
     }
     // Create a heap to store deserialized data
     hr = WsCreateHeap(
-        /*maxSize*/ 2048, 
-        /*trimSize*/ 512, 
-        NULL, 
-        0, 
-        &heap, 
-        error);
+             /*maxSize*/ 2048,
+             /*trimSize*/ 512,
+             NULL,
+             0,
+             &heap,
+             error);
     if (FAILED(hr))
     {
         goto Exit;
     }
-    
+
     hr = WsCreateServiceProxy(
-        WS_CHANNEL_TYPE_REQUEST, 
-        WS_HTTP_CHANNEL_BINDING, 
-        NULL, 
-        NULL,
-        0,
-        NULL, 
-        0, 
-        &serviceProxy, 
-        error);
+             WS_CHANNEL_TYPE_REQUEST,
+             WS_HTTP_CHANNEL_BINDING,
+             NULL,
+             NULL,
+             0,
+             NULL,
+             0,
+             &serviceProxy,
+             error);
     if (FAILED(hr))
     {
         goto Exit;
     }
-    
-    
+
+
     // Open channel to address
     hr = WsOpenServiceProxy(
-        serviceProxy, 
-        &address, 
-        NULL, 
-        error);
+             serviceProxy,
+             &address,
+             NULL,
+             error);
     if (FAILED(hr))
     {
         goto Exit;
     }
-    
+
     inputMessageContext.callback = AddSessionHeader;
     inputMessageContext.state = &orderSession;
     outputMessageContext.callback = RetrieveSessionHeader;
     outputMessageContext.state = &orderSession;
-    
+
     callProperties[0].id = WS_CALL_PROPERTY_SEND_MESSAGE_CONTEXT;
     callProperties[0].value = &inputMessageContext;
     callProperties[0].valueSize = sizeof(inputMessageContext);
-    
+
     callProperties[1].id = WS_CALL_PROPERTY_RECEIVE_MESSAGE_CONTEXT;
     callProperties[1].value = &outputMessageContext;
     callProperties[1].valueSize = sizeof(outputMessageContext);
-    
+
     for (int i = 0; i < 100; i++)
     {
         static const WCHAR* productName = L"Pencil";
         WCHAR* expectedShipDate = {0};
         unsigned int orderID;
-    
+
         hr = PurchaseOrderBinding_Order(
-            serviceProxy, 
-            100, 
-            (WCHAR*)productName, 
-            &orderID, 
-            &expectedShipDate, 
-            heap, 
-            callProperties, 
-            WsCountOf(callProperties), 
-            NULL, 
-            error);
+                 serviceProxy,
+                 100,
+                 (WCHAR*)productName,
+                 &orderID,
+                 &expectedShipDate,
+                 heap,
+                 callProperties,
+                 WsCountOf(callProperties),
+                 NULL,
+                 error);
         if (FAILED(hr))
         {
             goto Exit;
         }
-    
+
         // Print out confirmation contents
         wprintf(L"Expected ship date for order %lu is %s\n",
-            orderID,
-            expectedShipDate);
-    
+                orderID,
+                expectedShipDate);
+
         hr = WsResetHeap(heap, error);
         if (FAILED(hr))
         {
             goto Exit;
         }
-    
-    
-        
+
+
+
     }
-    
+
 Exit:
     if (FAILED(hr))
     {
@@ -240,8 +240,8 @@ Exit:
         WsCloseServiceProxy(serviceProxy, NULL, NULL);
         WsFreeServiceProxy(serviceProxy);
     }
-    
-    
+
+
     if (heap != NULL)
     {
         WsFreeHeap(heap);

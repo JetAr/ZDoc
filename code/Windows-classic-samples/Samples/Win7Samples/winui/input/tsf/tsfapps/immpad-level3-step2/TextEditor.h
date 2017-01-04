@@ -1,4 +1,4 @@
-
+﻿
 #pragma once
 
 #include "TextLayout.h"
@@ -13,7 +13,7 @@
 class CTextEditor : public CTextContainer
 {
 public:
-    CTextEditor() 
+    CTextEditor()
     {
         _nSelStart = 0;
         _nSelEnd = 0;
@@ -26,15 +26,15 @@ public:
         _lClauseInfo = 0;
     }
 
-    ~CTextEditor() 
+    ~CTextEditor()
     {
         if (_prgAttr)
-           LocalFree(_prgAttr);
+            LocalFree(_prgAttr);
 
         if (_prgClauseInfo)
-           LocalFree(_prgClauseInfo);
+            LocalFree(_prgClauseInfo);
     }
-    
+
     void MoveSelection(UINT nSelStart, UINT nSelEnd);
     BOOL MoveSelectionAtPoint(POINT pt);
     BOOL InsertAtSelection(LPCWSTR psz);
@@ -57,14 +57,23 @@ public:
     void Render(HDC hdc, const LOGFONT *plf);
     void UpdateLayout(const LOGFONT *plf);
 
-    UINT GetSelectionStart() {return _nSelStart;}
-    UINT GetSelectionEnd() {return _nSelEnd;}
+    UINT GetSelectionStart()
+    {
+        return _nSelStart;
+    }
+    UINT GetSelectionEnd()
+    {
+        return _nSelEnd;
+    }
     void BlinkCaret(HDC hdc)
     {
-         _layout.BlinkCaret(hdc);
+        _layout.BlinkCaret(hdc);
     }
 
-    void SetWnd(HWND hwnd) {_hwnd = hwnd;}
+    void SetWnd(HWND hwnd)
+    {
+        _hwnd = hwnd;
+    }
 
     // Level 2 support
     void SetCompositionForm();

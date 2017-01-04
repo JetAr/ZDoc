@@ -1,4 +1,4 @@
-//*****************************************************************************
+﻿//*****************************************************************************
 //
 // Microsoft Windows Media
 // Copyright (C) Microsoft Corporation. All rights reserved.
@@ -42,12 +42,12 @@ CSDKSamplePlaylistParserPlugin::~CSDKSamplePlaylistParserPlugin()
 // [InitializePlugin]
 //
 /////////////////////////////////////////////////////////////////////////////
-HRESULT STDMETHODCALLTYPE 
-CSDKSamplePlaylistParserPlugin::InitializePlugin( 
-                                IWMSContext *pServerContext,
-                                IWMSNamedValues *pNamedValues,
-                                IWMSClassObject *pClassFactory
-                                )
+HRESULT STDMETHODCALLTYPE
+CSDKSamplePlaylistParserPlugin::InitializePlugin(
+    IWMSContext *pServerContext,
+    IWMSNamedValues *pNamedValues,
+    IWMSClassObject *pClassFactory
+)
 {
     //
     // We don't really use any of these parameters later on.
@@ -69,10 +69,10 @@ CSDKSamplePlaylistParserPlugin::InitializePlugin(
 // [GetCustomAdminInterface]
 //
 /////////////////////////////////////////////////////////////////////////////
-HRESULT STDMETHODCALLTYPE 
-CSDKSamplePlaylistParserPlugin::GetCustomAdminInterface( 
-                    IDispatch **ppValue
-                    )
+HRESULT STDMETHODCALLTYPE
+CSDKSamplePlaylistParserPlugin::GetCustomAdminInterface(
+    IDispatch **ppValue
+)
 {
     if ( NULL == ppValue )
     {
@@ -95,7 +95,7 @@ CSDKSamplePlaylistParserPlugin::GetCustomAdminInterface(
 // [OnHeartbeat]
 //
 /////////////////////////////////////////////////////////////////////////////
-HRESULT STDMETHODCALLTYPE 
+HRESULT STDMETHODCALLTYPE
 CSDKSamplePlaylistParserPlugin::OnHeartbeat()
 {
     return( S_OK );
@@ -108,7 +108,7 @@ CSDKSamplePlaylistParserPlugin::OnHeartbeat()
 // [EnablePlugin]
 //
 /////////////////////////////////////////////////////////////////////////////
-STDMETHODIMP 
+STDMETHODIMP
 CSDKSamplePlaylistParserPlugin::EnablePlugin( long *pdwFlags, long *pdwHeartbeatPeriod )
 {
     if ( ( NULL == pdwFlags ) || ( NULL == pdwHeartbeatPeriod ) )
@@ -119,7 +119,7 @@ CSDKSamplePlaylistParserPlugin::EnablePlugin( long *pdwFlags, long *pdwHeartbeat
     *pdwFlags = 0;
     // We don't need to get OnHeartbeat() called.
     *pdwHeartbeatPeriod = 0;
-    
+
     return ( S_OK );
 }
 
@@ -129,7 +129,7 @@ CSDKSamplePlaylistParserPlugin::EnablePlugin( long *pdwFlags, long *pdwHeartbeat
 // [DisablePlugin]
 //
 /////////////////////////////////////////////////////////////////////////////
-STDMETHODIMP 
+STDMETHODIMP
 CSDKSamplePlaylistParserPlugin::DisablePlugin()
 {
     return ( S_OK );
@@ -143,11 +143,11 @@ CSDKSamplePlaylistParserPlugin::DisablePlugin()
 // [Shutdown]
 //
 /////////////////////////////////////////////////////////////////////////////
-HRESULT STDMETHODCALLTYPE 
+HRESULT STDMETHODCALLTYPE
 CSDKSamplePlaylistParserPlugin::ShutdownPlugin()
 {
     m_spNamedValues.Release();
-    m_spServerContext.Release(); 
+    m_spServerContext.Release();
     m_spClassFactory.Release();
     return( S_OK );
 } // ShutdownPlugin.
@@ -160,20 +160,20 @@ CSDKSamplePlaylistParserPlugin::ShutdownPlugin()
 // [CreatePlaylistParser]
 //
 /////////////////////////////////////////////////////////////////////////////
-HRESULT STDMETHODCALLTYPE 
+HRESULT STDMETHODCALLTYPE
 CSDKSamplePlaylistParserPlugin::CreatePlaylistParser(
-                            IWMSCommandContext *pCommandContext,
-                            IWMSContext *pUserContext,
-                            IWMSContext *pPresentationContext,
-                            DWORD dwFlags,
-                            IWMSClassObject *pFactory,
-                            IWMSBufferAllocator *pBufferAllocator,
-                            IWMSPlaylistParserPluginCallback *pCallback,
-                            QWORD qwContext
-                            )
+    IWMSCommandContext *pCommandContext,
+    IWMSContext *pUserContext,
+    IWMSContext *pPresentationContext,
+    DWORD dwFlags,
+    IWMSClassObject *pFactory,
+    IWMSBufferAllocator *pBufferAllocator,
+    IWMSPlaylistParserPluginCallback *pCallback,
+    QWORD qwContext
+)
 {
     HRESULT hr = S_OK;
-    
+
     CComPtr<CComSDKSamplePlaylistParser> spParser;
 
     if ( NULL == pCallback )
@@ -188,14 +188,14 @@ CSDKSamplePlaylistParserPlugin::CreatePlaylistParser(
     }
 
     hr = spParser->Initialize(
-                    pCommandContext,
-                    pUserContext,
-                    pPresentationContext,
-                    m_spServerContext,
-                    m_spNamedValues,
-                    dwFlags,
-                    pFactory
-                    );
+             pCommandContext,
+             pUserContext,
+             pPresentationContext,
+             m_spServerContext,
+             m_spNamedValues,
+             dwFlags,
+             pFactory
+         );
     if ( FAILED( hr ) )
     {
         // When we return a failed HRESULT, we should not make the callback
@@ -255,7 +255,7 @@ CSDKSamplePlaylistParser::Initialize(
     IWMSNamedValues *pNamedValues,
     DWORD dwFlags,
     IWMSClassObject *pClassFactory
-    )
+)
 {
     //
     // We don't really use any of these parameters later on.
@@ -292,7 +292,7 @@ CSDKSamplePlaylistParser::Shutdown()
     m_spServerContext.Release();
     m_spNamedValues.Release();
     m_spClassFactory.Release();
-    
+
     return( S_OK );
 } // Shutdown.
 
@@ -306,13 +306,13 @@ CSDKSamplePlaylistParser::Shutdown()
 // [ReadPlaylist]
 //
 /////////////////////////////////////////////////////////////////////////////
-HRESULT STDMETHODCALLTYPE 
-CSDKSamplePlaylistParser::ReadPlaylist( 
-                                INSSBuffer *pIBuffer,
-                                IXMLDOMDocument *pPlayList,
-                                IWMSPlaylistParserCallback *pCallback,
-                                QWORD qwContext
-                                )
+HRESULT STDMETHODCALLTYPE
+CSDKSamplePlaylistParser::ReadPlaylist(
+    INSSBuffer *pIBuffer,
+    IXMLDOMDocument *pPlayList,
+    IWMSPlaylistParserCallback *pCallback,
+    QWORD qwContext
+)
 {
     HRESULT hr = S_OK;
     BYTE *pbBuffer = NULL;
@@ -324,15 +324,15 @@ CSDKSamplePlaylistParser::ReadPlaylist(
     DWORD dwLength = 0;
     BYTE bPrevious = '\0';
     BSTR bstrUrl = NULL;
-    
+
     CComPtr<IXMLDOMNode> spWsxNode;
     CComPtr<IXMLDOMElement> spPlayListMediaEntry;
     CComPtr<IXMLDOMElement> spPlayListTopEntry;
     CComPtr<IXMLDOMNode> spOldPlayListEntry;
 
-    if ( ( NULL == pIBuffer ) 
-        || ( NULL == pPlayList )
-        || ( NULL == pCallback ) )
+    if ( ( NULL == pIBuffer )
+            || ( NULL == pPlayList )
+            || ( NULL == pCallback ) )
     {
         return( E_INVALIDARG );
     }
@@ -350,11 +350,11 @@ CSDKSamplePlaylistParser::ReadPlaylist(
     BSTR bstrAttrName = SysAllocString( L"src" );
 
     if ( ( NULL == bstrWsx )
-        || ( NULL == bstrEmpty )
-        || ( NULL == bstrVersion )
-        || ( NULL == bstrSmil )
-        || ( NULL == bstrTagName )
-        || ( NULL == bstrAttrName ) )
+            || ( NULL == bstrEmpty )
+            || ( NULL == bstrVersion )
+            || ( NULL == bstrSmil )
+            || ( NULL == bstrTagName )
+            || ( NULL == bstrAttrName ) )
     {
         hr = E_OUTOFMEMORY;
         goto done;
@@ -364,14 +364,14 @@ CSDKSamplePlaylistParser::ReadPlaylist(
     VariantInit( &varNodeType );
     V_VT( &varNodeType ) = VT_I4;
     V_I4( &varNodeType ) = NODE_PROCESSING_INSTRUCTION;
-    
+
     hr = pPlayList->createNode(
-                        varNodeType,
-                        bstrWsx,
-                        bstrEmpty,
-                        &spWsxNode
-                        );
-    
+             varNodeType,
+             bstrWsx,
+             bstrEmpty,
+             &spWsxNode
+         );
+
     VariantClear( &varNodeType );
 
     if ( FAILED(hr) )
@@ -473,19 +473,19 @@ CSDKSamplePlaylistParser::ReadPlaylist(
         pbEndUrl = pbLineEnd;
 
         while( ( pbUrl < pbEndUrl )
-            && isspace( pbEndUrl[-1] ) )
+                && isspace( pbEndUrl[-1] ) )
         {
             --pbEndUrl;
         }
 
         if( ( pbUrl < pbEndUrl )
-            && ( ',' == pbEndUrl[-1] ) )
+                && ( ',' == pbEndUrl[-1] ) )
         {
             --pbEndUrl;
         }
 
         while( ( pbUrl < pbEndUrl )
-            && isspace( pbEndUrl[-1] ) )
+                && isspace( pbEndUrl[-1] ) )
         {
             --pbEndUrl;
         }
@@ -505,13 +505,13 @@ CSDKSamplePlaylistParser::ReadPlaylist(
         //
 
         int cchNeeded = MultiByteToWideChar(
-                                CP_ACP,
-                                0,
-                                (LPCSTR)pbUrl,
-                                (int)( pbEndUrl - pbUrl ),
-                                NULL,
-                                0
-                                );
+                            CP_ACP,
+                            0,
+                            (LPCSTR)pbUrl,
+                            (int)( pbEndUrl - pbUrl ),
+                            NULL,
+                            0
+                        );
         if( 0 >= cchNeeded )
         {
             hr = HRESULT_FROM_WIN32( GetLastError() );
@@ -526,13 +526,13 @@ CSDKSamplePlaylistParser::ReadPlaylist(
         }
 
         int cchConverted = MultiByteToWideChar(
-                                    CP_ACP,
-                                    0,
-                                    (LPCSTR)pbUrl,
-                                    (int)( pbEndUrl - pbUrl ),
-                                    bstrUrl,
-                                    cchNeeded
-                                    );
+                               CP_ACP,
+                               0,
+                               (LPCSTR)pbUrl,
+                               (int)( pbEndUrl - pbUrl ),
+                               bstrUrl,
+                               cchNeeded
+                           );
         if( cchConverted != cchNeeded )
         {
             hr = HRESULT_FROM_WIN32( ERROR_NO_UNICODE_TRANSLATION );
@@ -544,9 +544,9 @@ CSDKSamplePlaylistParser::ReadPlaylist(
         //
 
         hr = pPlayList->createElement(
-                            bstrTagName,
-                            &spPlayListMediaEntry
-                            );
+                 bstrTagName,
+                 &spPlayListMediaEntry
+             );
         if ( FAILED( hr ) )
         {
             goto done;
@@ -560,7 +560,7 @@ CSDKSamplePlaylistParser::ReadPlaylist(
         VariantInit( &varAttribute );
         V_VT( &varAttribute ) = VT_BSTR;
         V_BSTR( &varAttribute ) = bstrUrl;
-        
+
         hr = spPlayListMediaEntry->setAttribute( bstrAttrName, varAttribute );
 
         V_BSTR( &varAttribute ) = NULL;
@@ -577,7 +577,7 @@ CSDKSamplePlaylistParser::ReadPlaylist(
         //
 
         spOldPlayListEntry = NULL;
-        hr = spPlayListTopEntry->appendChild( spPlayListMediaEntry, &spOldPlayListEntry );            
+        hr = spPlayListTopEntry->appendChild( spPlayListMediaEntry, &spOldPlayListEntry );
         if ( FAILED( hr ) )
         {
             goto done;
@@ -599,7 +599,7 @@ CSDKSamplePlaylistParser::ReadPlaylist(
     pCallback->OnReadPlaylist( S_OK, qwContext );
 
 done:
-    
+
     if ( NULL != bstrWsx )
     {
         SysFreeString( bstrWsx );
@@ -652,12 +652,12 @@ done:
 // [WritePlaylist]
 //
 /////////////////////////////////////////////////////////////////////////////
-HRESULT STDMETHODCALLTYPE 
-CSDKSamplePlaylistParser::WritePlaylist( 
-                        IXMLDOMDocument *pPlayList,
-                        IWMSPlaylistParserCallback *pCallback,
-                        QWORD qwContext
-                        )
+HRESULT STDMETHODCALLTYPE
+CSDKSamplePlaylistParser::WritePlaylist(
+    IXMLDOMDocument *pPlayList,
+    IWMSPlaylistParserCallback *pCallback,
+    QWORD qwContext
+)
 {
     return( E_NOTIMPL );
 } // WritePlaylist.
@@ -665,14 +665,14 @@ CSDKSamplePlaylistParser::WritePlaylist(
 
 
 /////////////////////////////////////////////////////////////////////////////
-HRESULT STDMETHODCALLTYPE 
-CSDKSamplePlaylistParser::ReadPlaylistFromDirectory( 
-                                IWMSDirectory __RPC_FAR *pDirectory,
-                                LPWSTR pszwFilePattern,
-                                IXMLDOMDocument __RPC_FAR *pPlaylist,
-                                IWMSPlaylistParserCallback __RPC_FAR *pCallback,
-                                QWORD qwContext
-                                )
+HRESULT STDMETHODCALLTYPE
+CSDKSamplePlaylistParser::ReadPlaylistFromDirectory(
+    IWMSDirectory __RPC_FAR *pDirectory,
+    LPWSTR pszwFilePattern,
+    IXMLDOMDocument __RPC_FAR *pPlaylist,
+    IWMSPlaylistParserCallback __RPC_FAR *pCallback,
+    QWORD qwContext
+)
 {
     return( E_NOTIMPL );
 } // ReadPlaylistFromDirectory.

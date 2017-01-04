@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -22,7 +22,7 @@ __checkReturn HRESULT CCommandHandler::CreateInstance(__deref_out IUICommandHand
     *ppCommandHandler = NULL;
 
     HRESULT hr = S_OK;
-   
+
     CCommandHandler* pCommandHandler = new CCommandHandler();
 
     if (pCommandHandler != NULL)
@@ -64,7 +64,7 @@ STDMETHODIMP CCommandHandler::QueryInterface(REFIID iid, void** ppv)
     {
         *ppv = static_cast<IUICommandHandler*>(this);
     }
-    else 
+    else
     {
         *ppv = NULL;
         return E_NOINTERFACE;
@@ -82,8 +82,8 @@ STDMETHODIMP CCommandHandler::QueryInterface(REFIID iid, void** ppv)
 //  COMMENTS:
 //
 //    This function is used to provide new command property values, such as labels, icons, or
-//    tooltip information, when requested by the Ribbon framework.  
-//    
+//    tooltip information, when requested by the Ribbon framework.
+//
 //
 STDMETHODIMP CCommandHandler::UpdateProperty(
     UINT nCmdID,
@@ -137,68 +137,68 @@ STDMETHODIMP CCommandHandler::Execute(
         // Font properties have changed.
         switch (verb)
         {
-            case UI_EXECUTIONVERB_EXECUTE:
+        case UI_EXECUTIONVERB_EXECUTE:
+        {
+            hr = E_POINTER;
+            if (pCommandExecutionProperties != NULL)
             {
-                hr = E_POINTER;
-                if (pCommandExecutionProperties != NULL)
+                // Get the changed properties.
+                PROPVARIANT varChanges;
+                hr = pCommandExecutionProperties->GetValue(UI_PKEY_FontProperties_ChangedProperties, &varChanges);
+                if (SUCCEEDED(hr))
                 {
-                    // Get the changed properties.
-                    PROPVARIANT varChanges;
-                    hr = pCommandExecutionProperties->GetValue(UI_PKEY_FontProperties_ChangedProperties, &varChanges);
+                    IPropertyStore *pChanges;
+                    hr = UIPropertyToInterface(UI_PKEY_FontProperties, varChanges, &pChanges);
                     if (SUCCEEDED(hr))
                     {
-                        IPropertyStore *pChanges;
-                        hr = UIPropertyToInterface(UI_PKEY_FontProperties, varChanges, &pChanges);
-                        if (SUCCEEDED(hr))
-                        {
-                            // Using the changed properties, set the new font on the selection on RichEdit control.
-                            g_pFCSampleAppManager->SetValues(pChanges);
-                            pChanges->Release();
-                        }
-                        PropVariantClear(&varChanges);
+                        // Using the changed properties, set the new font on the selection on RichEdit control.
+                        g_pFCSampleAppManager->SetValues(pChanges);
+                        pChanges->Release();
                     }
+                    PropVariantClear(&varChanges);
                 }
-                break;
             }
-            case UI_EXECUTIONVERB_PREVIEW:
+            break;
+        }
+        case UI_EXECUTIONVERB_PREVIEW:
+        {
+            hr = E_POINTER;
+            if (pCommandExecutionProperties != NULL)
             {
-                hr = E_POINTER;
-                if (pCommandExecutionProperties != NULL)
+                // Get the changed properties for the preview event.
+                PROPVARIANT varChanges;
+                hr = pCommandExecutionProperties->GetValue(UI_PKEY_FontProperties_ChangedProperties, &varChanges);
+                if (SUCCEEDED(hr))
                 {
-                    // Get the changed properties for the preview event.
-                    PROPVARIANT varChanges;
-                    hr = pCommandExecutionProperties->GetValue(UI_PKEY_FontProperties_ChangedProperties, &varChanges);
+                    IPropertyStore *pChanges;
+                    hr = UIPropertyToInterface(UI_PKEY_FontProperties, varChanges, &pChanges);
                     if (SUCCEEDED(hr))
                     {
-                        IPropertyStore *pChanges;
-                        hr = UIPropertyToInterface(UI_PKEY_FontProperties, varChanges, &pChanges);
-                        if (SUCCEEDED(hr))
-                        {
-                            // Set the previewed values on the RichEdit control.
-                            g_pFCSampleAppManager->SetPreviewValues(pChanges);
-                            pChanges->Release();
-                        }
-                        PropVariantClear(&varChanges);
+                        // Set the previewed values on the RichEdit control.
+                        g_pFCSampleAppManager->SetPreviewValues(pChanges);
+                        pChanges->Release();
                     }
+                    PropVariantClear(&varChanges);
                 }
-                break;
             }
-            case UI_EXECUTIONVERB_CANCELPREVIEW:
+            break;
+        }
+        case UI_EXECUTIONVERB_CANCELPREVIEW:
+        {
+            hr = E_POINTER;
+            if (ppropvarValue != NULL)
             {
-                hr = E_POINTER;
-                if (ppropvarValue != NULL)
+                // Cancel the preview.
+                IPropertyStore *pValues;
+                hr = UIPropertyToInterface(UI_PKEY_FontProperties, *ppropvarValue, &pValues);
+                if (SUCCEEDED(hr))
                 {
-                    // Cancel the preview.
-                    IPropertyStore *pValues;
-                    hr = UIPropertyToInterface(UI_PKEY_FontProperties, *ppropvarValue, &pValues);
-                    if (SUCCEEDED(hr))
-                    {   
-                        g_pFCSampleAppManager->CancelPreview(pValues);
-                        pValues->Release();
-                    }
+                    g_pFCSampleAppManager->CancelPreview(pValues);
+                    pValues->Release();
                 }
-                break;
             }
+            break;
+        }
         }
     }
 

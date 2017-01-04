@@ -1,4 +1,4 @@
-//------------------------------------------------------------------------------
+﻿//------------------------------------------------------------------------------
 // File: WXList.cpp
 //
 // Desc: DirectShow base classes - implements a non-MFC based generic list
@@ -155,7 +155,8 @@ void CBaseList::RemoveAll()
        which point the cache will be deleted anway */
 
     CNode *pn = m_pFirst;
-    while (pn) {
+    while (pn)
+    {
         CNode *op = pn;
         pn = pn->Next();
         delete op;
@@ -218,7 +219,8 @@ __out void *CBaseList::GetNextI(__inout POSITION& rp) const
 {
     /* have we reached the end of the list */
 
-    if (rp == NULL) {
+    if (rp == NULL)
+    {
         return NULL;
     }
 
@@ -250,7 +252,8 @@ __out void *CBaseList::GetNextI(__inout POSITION& rp) const
 */
 __out_opt void *CBaseList::GetI(__in_opt POSITION p) const
 {
-    if (p == NULL) {
+    if (p == NULL)
+    {
         return NULL;
     }
 
@@ -275,8 +278,10 @@ __out void *CBaseList::GetValidI(__in POSITION p) const
 __out_opt POSITION CBaseList::FindI( __in void * pObj) const
 {
     POSITION pn;
-    INTERNALTRAVERSELIST(*this, pn){
-        if (GetI(pn)==pObj) {
+    INTERNALTRAVERSELIST(*this, pn)
+    {
+        if (GetI(pn)==pObj)
+        {
             return pn;
         }
     }
@@ -343,18 +348,24 @@ __out_opt void *CBaseList::RemoveI(__in_opt POSITION pos)
     /* Update the previous node */
 
     CNode *pNode = pCurrent->Prev();
-    if (pNode == NULL) {
+    if (pNode == NULL)
+    {
         m_pFirst = pCurrent->Next();
-    } else {
+    }
+    else
+    {
         pNode->SetNext(pCurrent->Next());
     }
 
     /* Update the following node */
 
     pNode = pCurrent->Next();
-    if (pNode == NULL) {
+    if (pNode == NULL)
+    {
         m_pLast = pCurrent->Prev();
-    } else {
+    }
+    else
+    {
         pNode->SetPrev(pCurrent->Prev());
     }
 
@@ -401,13 +412,15 @@ __out_opt POSITION CBaseList::AddTailI(__in void *pObject)
        that otherwise we will have to create a new one */
 
     pNode = (CNode *) m_Cache.RemoveFromCache();
-    if (pNode == NULL) {
+    if (pNode == NULL)
+    {
         pNode = new CNode;
     }
 
     /* Check we have a valid object */
 
-    if (pNode == NULL) {
+    if (pNode == NULL)
+    {
         return NULL;
     }
 
@@ -419,9 +432,12 @@ __out_opt POSITION CBaseList::AddTailI(__in void *pObject)
     pNode->SetNext(NULL);
     pNode->SetPrev(m_pLast);
 
-    if (m_pLast == NULL) {
+    if (m_pLast == NULL)
+    {
         m_pFirst = pNode;
-    } else {
+    }
+    else
+    {
         m_pLast->SetNext(pNode);
     }
 
@@ -450,13 +466,15 @@ __out_opt POSITION CBaseList::AddHeadI(__in void *pObject)
        that otherwise we will have to create a new one */
 
     pNode = (CNode *) m_Cache.RemoveFromCache();
-    if (pNode == NULL) {
+    if (pNode == NULL)
+    {
         pNode = new CNode;
     }
 
     /* Check we have a valid object */
 
-    if (pNode == NULL) {
+    if (pNode == NULL)
+    {
         return NULL;
     }
 
@@ -470,9 +488,12 @@ __out_opt POSITION CBaseList::AddHeadI(__in void *pObject)
     pNode->SetPrev(NULL);
     pNode->SetNext(m_pFirst);
 
-    if (m_pFirst == NULL) {
+    if (m_pFirst == NULL)
+    {
         m_pLast = pNode;
-    } else {
+    }
+    else
+    {
         m_pFirst->SetPrev(pNode);
     }
     m_pFirst = pNode;
@@ -497,10 +518,12 @@ BOOL CBaseList::AddTail(__in CBaseList *pList)
     */
     POSITION pos = pList->GetHeadPositionI();
 
-    while (pos) {
-       if (NULL == AddTailI(pList->GetNextI(pos))) {
-           return FALSE;
-       }
+    while (pos)
+    {
+        if (NULL == AddTailI(pList->GetNextI(pos)))
+        {
+            return FALSE;
+        }
     }
     return TRUE;
 } // AddTail(list)
@@ -523,8 +546,10 @@ BOOL CBaseList::AddHead(__in CBaseList *pList)
 
     POSITION pos;
 
-    INTERNALREVERSETRAVERSELIST(*pList, pos) {
-        if (NULL== AddHeadI(pList->GetValidI(pos))){
+    INTERNALREVERSETRAVERSELIST(*pList, pos)
+    {
+        if (NULL== AddHeadI(pList->GetValidI(pos)))
+        {
             return FALSE;
         }
     }
@@ -554,13 +579,15 @@ __out_opt POSITION  CBaseList::AddAfterI(__in_opt POSITION pos, __in void * pObj
     /* set pnode to point to a new node, preferably from the cache */
 
     CNode *pNode = (CNode *) m_Cache.RemoveFromCache();
-    if (pNode == NULL) {
+    if (pNode == NULL)
+    {
         pNode = new CNode;
     }
 
     /* Check we have a valid object */
 
-    if (pNode == NULL) {
+    if (pNode == NULL)
+    {
         return NULL;
     }
 
@@ -593,7 +620,8 @@ __out_opt POSITION  CBaseList::AddAfterI(__in_opt POSITION pos, __in void * pObj
 BOOL CBaseList::AddAfter(__in_opt POSITION p, __in CBaseList *pList)
 {
     POSITION pos;
-    INTERNALTRAVERSELIST(*pList, pos) {
+    INTERNALTRAVERSELIST(*pList, pos)
+    {
         /* p follows along the elements being added */
         p = AddAfterI(p, pList->GetValidI(pos));
         if (p==NULL) return FALSE;
@@ -621,13 +649,15 @@ __out_opt POSITION CBaseList::AddBeforeI(__in_opt POSITION pos, __in void * pObj
         return AddHeadI(pObj);
 
     CNode * pNode = (CNode *) m_Cache.RemoveFromCache();
-    if (pNode == NULL) {
+    if (pNode == NULL)
+    {
         pNode = new CNode;
     }
 
     /* Check we have a valid object */
 
-    if (pNode == NULL) {
+    if (pNode == NULL)
+    {
         return NULL;
     }
 
@@ -661,7 +691,8 @@ __out_opt POSITION CBaseList::AddBeforeI(__in_opt POSITION pos, __in void * pObj
 BOOL CBaseList::AddBefore(__in_opt POSITION p, __in CBaseList *pList)
 {
     POSITION pos;
-    INTERNALREVERSETRAVERSELIST(*pList, pos) {
+    INTERNALREVERSETRAVERSELIST(*pList, pos)
+    {
         /* p follows along the elements being added */
         p = AddBeforeI(p, pList->GetValidI(pos));
         if (p==NULL) return FALSE;
@@ -688,7 +719,7 @@ BOOL CBaseList::AddBefore(__in_opt POSITION p, __in CBaseList *pList)
        MoveElementsFromHeadThroughPositionToOtherTail
 */
 BOOL CBaseList::MoveToTail
-        (__in_opt POSITION pos, __in CBaseList *pList)
+(__in_opt POSITION pos, __in CBaseList *pList)
 {
     /* Algorithm:
        Note that the elements (including their order) in the concatenation
@@ -707,9 +738,10 @@ BOOL CBaseList::MoveToTail
     /* Make cMove the number of nodes to move */
     CNode * p = (CNode *)pos;
     int cMove = 0;            // number of nodes to move
-    while(p!=NULL) {
-       p = p->Prev();
-       ++cMove;
+    while(p!=NULL)
+    {
+        p = p->Prev();
+        ++cMove;
     }
 
 
@@ -762,7 +794,7 @@ BOOL CBaseList::MoveToTail
           concatenates foo onto the start of bar and empties foo.
 */
 BOOL CBaseList::MoveToHead
-        (__in_opt POSITION pos, __in CBaseList *pList)
+(__in_opt POSITION pos, __in CBaseList *pList)
 {
 
     /* See the comments on the algorithm in MoveToTail */
@@ -772,9 +804,10 @@ BOOL CBaseList::MoveToHead
     /* Make cMove the number of nodes to move */
     CNode * p = (CNode *)pos;
     int cMove = 0;            // number of nodes to move
-    while(p!=NULL) {
-       p = p->Next();
-       ++cMove;
+    while(p!=NULL)
+    {
+        p = p->Next();
+        ++cMove;
     }
 
 
@@ -840,7 +873,8 @@ void CBaseList::Reverse()
 
     // Yes we COULD use a traverse, but it would look funny!
     p = m_pFirst;
-    while (p!=NULL) {
+    while (p!=NULL)
+    {
         CNode * q;
         q = p->Next();
         p->SetNext(p->Prev());
@@ -861,9 +895,10 @@ void CBaseList::Reverse()
 
     /* run along forward chain */
     for ( p = m_pFirst
-        ; p!=NULL
-        ; p = p->Next()
-        ){
+              ; p!=NULL
+            ; p = p->Next()
+        )
+    {
         p->SetPrev(p->Next());
     }
 
@@ -874,9 +909,10 @@ void CBaseList::Reverse()
 
     /* run along new reverse chain i.e. old forward chain again */
     for ( p = m_pFirst           // start at the old first element
-        ; p->Prev()!=NULL        // while there's a node still to be set
-        ; p = p->Prev()          // work in the same direction as before
-        ){
+              ; p->Prev()!=NULL        // while there's a node still to be set
+            ; p = p->Prev()          // work in the same direction as before
+        )
+    {
         p->Prev()->SetNext(p);
     }
 

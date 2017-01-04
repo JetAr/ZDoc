@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -367,50 +367,50 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     switch (message)
     {
     case WM_COMMAND:
+    {
+        int wmId = LOWORD(wParam);
+        // Parse the menu selections
+        switch (wmId)
         {
-            int wmId = LOWORD(wParam);
-            // Parse the menu selections
-            switch (wmId)
+        case IDM_EXIT:
+            DestroyWindow(hWnd);
+            break;
+
+        case IDM_FILE_CREATECUSTOMJUMPLIST:
+            CreateJumpList();
+            break;
+
+        case IDM_FILE_DELETECUSTOMJUMPLIST:
+            DeleteJumpList();
+            break;
+
+        case IDM_FILE_DEREGISTERFILETYPES:
+        {
+            CleanupSampleFiles();
+
+            PCWSTR pszMessage;
+            HRESULT hr = UnRegisterFileTypeHandlers();
+            if (E_ACCESSDENIED == hr)
             {
-            case IDM_EXIT:
-                DestroyWindow(hWnd);
-                break;
-
-            case IDM_FILE_CREATECUSTOMJUMPLIST:
-                CreateJumpList();
-                break;
-
-            case IDM_FILE_DELETECUSTOMJUMPLIST:
-                DeleteJumpList();
-                break;
-
-            case IDM_FILE_DEREGISTERFILETYPES:
-                {
-                    CleanupSampleFiles();
-
-                    PCWSTR pszMessage;
-                    HRESULT hr = UnRegisterFileTypeHandlers();
-                    if (E_ACCESSDENIED == hr)
-                    {
-                        pszMessage = L"Please run this application as an administrator to remove file type registrations.";
-                    }
-                    else if (FAILED(hr))
-                    {
-                        pszMessage = L"Unable to remove file type registrations.";
-                    }
-                    else
-                    {
-                        pszMessage = L"File type registrations were successfully removed.";
-                    }
-
-                    MessageBox(hWnd, pszMessage, c_szTitle, MB_OK);
-                    break;
-                }
-            default:
-                return DefWindowProc(hWnd, message, wParam, lParam);
+                pszMessage = L"Please run this application as an administrator to remove file type registrations.";
             }
+            else if (FAILED(hr))
+            {
+                pszMessage = L"Unable to remove file type registrations.";
+            }
+            else
+            {
+                pszMessage = L"File type registrations were successfully removed.";
+            }
+
+            MessageBox(hWnd, pszMessage, c_szTitle, MB_OK);
+            break;
         }
-        break;
+        default:
+            return DefWindowProc(hWnd, message, wParam, lParam);
+        }
+    }
+    break;
 
     case WM_DESTROY:
         PostQuitMessage(0);

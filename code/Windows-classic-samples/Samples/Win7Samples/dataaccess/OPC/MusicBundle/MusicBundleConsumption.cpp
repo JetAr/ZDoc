@@ -1,4 +1,4 @@
-//<SnippetMusicBundle_cppConsumptionWholePage>
+﻿//<SnippetMusicBundle_cppConsumptionWholePage>
 /*****************************************************************************
 *
 * File: MusicBundleConsumption.cpp
@@ -20,13 +20,13 @@
 * ------------------------------------
 *
 *  This file is part of the Microsoft Windows SDK Code Samples.
-* 
+*
 *  Copyright (C) Microsoft Corporation.  All rights reserved.
-* 
+*
 * This source code is intended only as a supplement to Microsoft
 * Development Tools and/or on-line documentation.  See these other
 * materials for detailed information regarding Microsoft code samples.
-* 
+*
 * THIS CODE AND INFORMATION ARE PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
 * KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
 * IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -60,42 +60,42 @@ ReadPartFromBundle(
     LPCWSTR  relationshipType,            // Relationship type of relationship targeting the part.
     LPCWSTR  contentType,                 // Content type of the part.
     LPCWSTR  outputDirectory,             // Part content is serialized as the content of a file in
-                                          // this directory.
+    // this directory.
     LPCWSTR  displayTitle = NULL,         // Title to display with file contents. Optional; set to
-                                          // NULL if displaying content is not required.
+    // NULL if displaying content is not required.
     IOpcPart **partRead = NULL            // The part to be read. Optional; caller must release the
-                                          // object.
-    )
+                          // object.
+)
 {
     HRESULT hr = S_OK;
     IOpcPart * part = NULL;
     IOpcRelationship * relationship = NULL;
     IStream * stream = NULL;
 
-    // Get relationships of the specified type. 
+    // Get relationships of the specified type.
     hr = GetRelationshipByType(
-            relationshipSet,
-            relationshipType,
-            &relationship
-            );
+             relationshipSet,
+             relationshipType,
+             &relationship
+         );
 
     if (SUCCEEDED(hr))
     {
         // Get the part targetted by the relationship.
         hr = GetRelationshipTargetPart(
-                packagePartSet,
-                relationship,
-                contentType,
-                &part
-                );
+                 packagePartSet,
+                 relationship,
+                 contentType,
+                 &part
+             );
     }
-    
+
     if (SUCCEEDED(hr) && displayTitle)
     {
         // Get part content stream.
         hr = part->GetContentStream(&stream);
-    
-        
+
+
         if (SUCCEEDED(hr))
         {
             // Display the content to the console.
@@ -134,7 +134,7 @@ ReadPartFromBundle(
         stream->Release();
         stream = NULL;
     }
-    
+
     return hr;
 }
 
@@ -142,7 +142,7 @@ ReadPartFromBundle(
 // Description:
 // Method does the following:
 // 1. Reads a specified Track part in the Music Bundle and writes the part to
-//    a file in the output directory. 
+//    a file in the output directory.
 // 2. Reads the Lyrics part for the Track part.
 ///////////////////////////////////////////////////////////////////////////////
 HRESULT
@@ -151,8 +151,8 @@ ReadTrackAndLyricsFromBundle(
     IOpcPartSet  *packagePartSet,// Set of all parts in the package.
     IOpcPart  *trackPart,        // Track part to read.
     LPCWSTR  outputDirectory     // Write part content to a file in this directory.
-    
-    )
+
+)
 {
     HRESULT hr = S_OK;
     IOpcRelationshipSet * trackRelationshipSet = NULL;
@@ -170,14 +170,14 @@ ReadTrackAndLyricsFromBundle(
     if (SUCCEEDED(hr))
     {
         hr = ReadPartFromBundle(
-                opcFactory,
-                trackRelationshipSet,
-                packagePartSet,
-                g_lyricsRelationshipType,
-                g_lyricsContentType,
-                outputDirectory,
-                L"Lyrics"
-                );
+                 opcFactory,
+                 trackRelationshipSet,
+                 packagePartSet,
+                 g_lyricsRelationshipType,
+                 g_lyricsContentType,
+                 outputDirectory,
+                 L"Lyrics"
+             );
     }
 
     // Release resources
@@ -199,21 +199,21 @@ HRESULT
 EnumerateTracksFromBundle(
     IOpcFactory  *opcFactory,
     IOpcRelationshipSet  *trackListRelationshipSet,// Set of all relationships whose source
-                                                   // is the Track List part.
+    // is the Track List part.
     IOpcPartSet *packagePartSet,                   // Set of all parts in the package.
     LPCWSTR outputDirectory                        // Write part content to a file in this directory.
-    )
+)
 {
     HRESULT hr = S_OK;
     BOOL bNext = FALSE;
     IOpcRelationshipEnumerator * relationshipEnumerator = NULL;
-    
+
     // Get enumerator of relationships in the set that are the track
     // relationship type.
     hr = trackListRelationshipSet->GetEnumeratorForType(
-            g_trackRelationshipType,
-            &relationshipEnumerator
-            );
+             g_trackRelationshipType,
+             &relationshipEnumerator
+         );
 
     // For each relationship in the enumerator, get the targetted Track part,
     // read the part and read the Lyrics part linked to the current Track part.
@@ -223,31 +223,31 @@ EnumerateTracksFromBundle(
         {
             IOpcRelationship * trackRelationship = NULL;
             IOpcPart * trackPart = NULL;
-            
+
             // Get current enumerator relationship.
             hr = relationshipEnumerator->GetCurrent(&trackRelationship);
-        
+
             // Get the Track part targetted by the relationship.
             if (SUCCEEDED(hr))
             {
                 hr = GetRelationshipTargetPart(
-                        packagePartSet,
-                        trackRelationship,
-                        g_trackContentType,
-                        &trackPart
-                        );
+                         packagePartSet,
+                         trackRelationship,
+                         g_trackContentType,
+                         &trackPart
+                     );
             }
-            
+
             if (SUCCEEDED(hr))
             {
                 // Read contents of the Track part and of the Lyrics part that
                 // is linked to the current Track part.
                 hr = ReadTrackAndLyricsFromBundle(
-                        opcFactory,
-                        packagePartSet,
-                        trackPart,
-                        outputDirectory
-                        );
+                         opcFactory,
+                         packagePartSet,
+                         trackPart,
+                         outputDirectory
+                     );
             }
 
             // Release resources
@@ -280,7 +280,7 @@ EnumerateTracksFromBundle(
 // Method does the following:
 // 1. Reads the Track List in the Music Bundle, displays it to
 //    the console.
-// 2. Writes the part to a file in the output directory. 
+// 2. Writes the part to a file in the output directory.
 // 3. Enumerates the Track List relationships and reads all the
 //    Tracks in the Music Bundle.
 ///////////////////////////////////////////////////////////////////////////////
@@ -290,23 +290,23 @@ ReadTrackListFromBundle(
     IOpcRelationshipSet  *packageRelationshipSet,// Package relationship set.
     IOpcPartSet  *packagePartSet,                // Set of all parts in the package.
     LPCWSTR  outputDirectory                     // Write part content to a file in this directory.
-    )
+)
 {
     HRESULT hr = S_OK;
     IOpcPart * trackListPart = NULL;
     IOpcRelationshipSet * trackListRelationshipSet = NULL;
-    
+
     // Find the Track List part by using the track list relationship type.
     hr = ReadPartFromBundle(
-            opcFactory,
-            packageRelationshipSet,
-            packagePartSet,
-            g_trackListRelationshipType,
-            g_trackListContentType,
-            outputDirectory,
-            L"TrackList",
-            &trackListPart
-            );
+             opcFactory,
+             packageRelationshipSet,
+             packagePartSet,
+             g_trackListRelationshipType,
+             g_trackListContentType,
+             outputDirectory,
+             L"TrackList",
+             &trackListPart
+         );
 
     if (SUCCEEDED(hr))
     {
@@ -314,16 +314,16 @@ ReadTrackListFromBundle(
         hr = trackListPart->GetRelationshipSet(&trackListRelationshipSet);
     }
 
-    
+
     if (SUCCEEDED(hr))
     {
         // Enumerate tracks in the bundle.
         hr = EnumerateTracksFromBundle(
-                opcFactory,
-                trackListRelationshipSet,
-                packagePartSet,
-                outputDirectory
-                );
+                 opcFactory,
+                 trackListRelationshipSet,
+                 packagePartSet,
+                 outputDirectory
+             );
     }
 
     // Release resources
@@ -338,7 +338,7 @@ ReadTrackListFromBundle(
         trackListRelationshipSet->Release();
         trackListRelationshipSet = NULL;
     }
-        
+
     return hr;
 }
 
@@ -353,19 +353,19 @@ ReadAlbumArtFromBundle(
     IOpcRelationshipSet  *packageRelationshipSet,// Package relationship set.
     IOpcPartSet  *packagePartSet,                // Set of all parts in the package.
     LPCWSTR  outputDirectory                     // Write part content to a file in this directory.
-    )
+)
 {
     HRESULT hr = S_OK;
-    
+
     // Find the Album Art part by using the album art relationship type.
     hr = ReadPartFromBundle(
-            opcFactory,
-            packageRelationshipSet,
-            packagePartSet,
-            g_albumArtRelationshipType,
-            g_albumArtContentType,
-            outputDirectory
-            );
+             opcFactory,
+             packageRelationshipSet,
+             packagePartSet,
+             g_albumArtRelationshipType,
+             g_albumArtContentType,
+             outputDirectory
+         );
 
     return hr;
 }
@@ -377,7 +377,7 @@ ReadAlbumArtFromBundle(
 HRESULT
 ReadAlbumWebsiteFromBundle(
     IOpcRelationshipSet  *packageRelationshipSet // Package relationship set.
-    )
+)
 {
     HRESULT hr = S_OK;
     IOpcRelationship * opcRelationship = NULL;
@@ -387,10 +387,10 @@ ReadAlbumWebsiteFromBundle(
 
     // Find the Album Website part by using the album website relationship type.
     hr = GetRelationshipByType(
-            packageRelationshipSet,
-            g_albumWebsiteRelationshipType,
-            &opcRelationship
-            );
+             packageRelationshipSet,
+             g_albumWebsiteRelationshipType,
+             &opcRelationship
+         );
 
     if (SUCCEEDED(hr))
     {
@@ -408,14 +408,14 @@ ReadAlbumWebsiteFromBundle(
                 stderr,
                 L"Invalid music bundle package: relationship with type %s must have External target mode.\n",
                 g_albumWebsiteRelationshipType
-                );
+            );
 
             // Set the return code to an error.
             hr = E_FAIL;
         }
     }
 
-    
+
     if (SUCCEEDED(hr))
     {
         // Get the target URI, which is the album website URL.
@@ -466,7 +466,7 @@ HRESULT
 ConsumeMusicBundle(
     LPCWSTR  inputPackageName,// Name of music bundle.
     LPCWSTR  outputDirectory  // Directory into which music bundle parts are written as files.
-    )
+)
 {
     HRESULT hr = S_OK;
     IOpcFactory * opcFactory = NULL;
@@ -477,34 +477,34 @@ ConsumeMusicBundle(
 
     // Create a new factory.
     hr = CoCreateInstance(
-            __uuidof(OpcFactory),
-            NULL,
-            CLSCTX_INPROC_SERVER,
-            __uuidof(IOpcFactory),
-            (LPVOID*)&opcFactory
-            );
+             __uuidof(OpcFactory),
+             NULL,
+             CLSCTX_INPROC_SERVER,
+             __uuidof(IOpcFactory),
+             (LPVOID*)&opcFactory
+         );
 
     if (SUCCEEDED(hr))
     {
         // Open a read-only stream over the input package.
         hr = opcFactory->CreateStreamOnFile(
-                inputPackageName,
-                OPC_STREAM_IO_READ, // Read-only.
-                NULL,
-                FILE_ATTRIBUTE_NORMAL,
-                &packageStream
-                );
+                 inputPackageName,
+                 OPC_STREAM_IO_READ, // Read-only.
+                 NULL,
+                 FILE_ATTRIBUTE_NORMAL,
+                 &packageStream
+             );
     }
 
     if (SUCCEEDED(hr))
     {
-        // Create a package object to represent the pacakge being read, allowing 
+        // Create a package object to represent the pacakge being read, allowing
         // package components to be accessed through Packaging API objects.
         hr = opcFactory->ReadPackageFromStream(
-                packageStream,
-                OPC_READ_DEFAULT, // Validate package component when it is accessed.
-                &opcPackage
-                );
+                 packageStream,
+                 OPC_READ_DEFAULT, // Validate package component when it is accessed.
+                 &opcPackage
+             );
     }
 
     if (SUCCEEDED(hr))
@@ -525,11 +525,11 @@ ConsumeMusicBundle(
     {
         // Read and display album art.
         hr = ReadAlbumArtFromBundle(
-                opcFactory,
-                packageRelationshipSet,
-                packagePartSet,
-                outputDirectory
-                );
+                 opcFactory,
+                 packageRelationshipSet,
+                 packagePartSet,
+                 outputDirectory
+             );
     }
     if (SUCCEEDED(hr))
     {
@@ -541,11 +541,11 @@ ConsumeMusicBundle(
         // Read and unpack as files in the output directory: the track list,
         // tracks and lyrics. Display the track list and corresponding lyrics.
         hr = ReadTrackListFromBundle(
-                opcFactory,
-                packageRelationshipSet,
-                packagePartSet,
-                outputDirectory
-                );
+                 opcFactory,
+                 packageRelationshipSet,
+                 packagePartSet,
+                 outputDirectory
+             );
     }
 
     // Release resources

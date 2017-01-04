@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -7,9 +7,9 @@
 //
 // CManipulationEventSink.h
 //
-// The CManipulationEventSink class implements the _IManipulationEvents interface 
-// for eventing. The events from this class will be called by the 
-// ManipulationProcessor object. 
+// The CManipulationEventSink class implements the _IManipulationEvents interface
+// for eventing. The events from this class will be called by the
+// ManipulationProcessor object.
 
 #pragma once
 
@@ -36,8 +36,8 @@ public:
     virtual HRESULT STDMETHODCALLTYPE ManipulationStarted(
         FLOAT x,
         FLOAT y);
-    
-    virtual HRESULT STDMETHODCALLTYPE ManipulationDelta( 
+
+    virtual HRESULT STDMETHODCALLTYPE ManipulationDelta(
         FLOAT x,
         FLOAT y,
         FLOAT translationDeltaX,
@@ -50,8 +50,8 @@ public:
         FLOAT cumulativeScale,
         FLOAT cumulativeExpansion,
         FLOAT cumulativeRotation);
-    
-    virtual HRESULT STDMETHODCALLTYPE ManipulationCompleted( 
+
+    virtual HRESULT STDMETHODCALLTYPE ManipulationCompleted(
         FLOAT x,
         FLOAT y,
         FLOAT cumulativeTranslationX,
@@ -69,7 +69,7 @@ private:
     // Reference count of the COM object.
     LONG m_cRefCount;
 
-    // The IConnectionPoint interface supports connection points for 
+    // The IConnectionPoint interface supports connection points for
     // connectable objects.
     IConnectionPoint* m_pConnection;
 
@@ -78,5 +78,5 @@ private:
 
     // Pointer to the CDrawingObject (contains the rectangle information)
     CDrawingObject* m_pcDrawingObject;
-};     
-    
+};
+

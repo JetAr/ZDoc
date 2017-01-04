@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -15,15 +15,15 @@ class MainWindow
 {
 public:
     MainWindow()
-    :   hwnd_(NULL),
-        hmonitor_(NULL),
-        textMode_(CommandIdTextLatin),
-        dwriteFactory_(),
-        renderingParams_(),
-        renderTarget_(),
-        flowLayoutSource_(),
-        flowLayoutSink_(),
-        flowLayout_()
+        :   hwnd_(NULL),
+            hmonitor_(NULL),
+            textMode_(CommandIdTextLatin),
+            dwriteFactory_(),
+            renderingParams_(),
+            renderTarget_(),
+            flowLayoutSource_(),
+            flowLayoutSink_(),
+            flowLayout_()
     { }
 
     ~MainWindow()

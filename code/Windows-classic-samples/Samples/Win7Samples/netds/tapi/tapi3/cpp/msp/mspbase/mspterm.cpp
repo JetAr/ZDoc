@@ -1,4 +1,4 @@
-/*++
+﻿/*++
 
 Copyright (c) 1998-1999 Microsoft Corporation
 
@@ -20,16 +20,16 @@ Abstract:
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 CBaseTerminal::CBaseTerminal()
-            : m_TerminalDirection(TD_CAPTURE)
-            , m_TerminalType(TT_STATIC)
-            , m_TerminalState(TS_NOTINUSE)
-            , m_TerminalClassID(CLSID_NULL)
-            , m_pFTM(NULL)
+    : m_TerminalDirection(TD_CAPTURE)
+    , m_TerminalType(TT_STATIC)
+    , m_TerminalState(TS_NOTINUSE)
+    , m_TerminalClassID(CLSID_NULL)
+    , m_pFTM(NULL)
 {
     LOG((MSP_TRACE, "CBaseTerminal::CBaseTerminal() called"));
 
     HRESULT hr = CoCreateFreeThreadedMarshaler(
-            GetControllingUnknown(), &m_pFTM);
+                     GetControllingUnknown(), &m_pFTM);
 
     if ( FAILED(hr) )
     {
@@ -44,9 +44,9 @@ CBaseTerminal::~CBaseTerminal()
 {
     if (NULL != m_pFTM)
     {
-         m_pFTM->Release();
+        m_pFTM->Release();
     }
-    
+
     LOG((MSP_TRACE, "CBaseTerminal::~CBaseTerminal() finished"));
 }
 
@@ -61,13 +61,13 @@ CBaseTerminal::~CBaseTerminal()
 //
 // Static terminals normally just call this in their CreateTerminal().
 //
-    
+
 HRESULT CBaseTerminal::Initialize(
-            IN  IID                   iidTerminalClass,
-            IN  DWORD                 dwMediaType,
-            IN  TERMINAL_DIRECTION    Direction,
-            IN  MSP_HANDLE            htAddress
-            )
+    IN  IID                   iidTerminalClass,
+    IN  DWORD                 dwMediaType,
+    IN  TERMINAL_DIRECTION    Direction,
+    IN  MSP_HANDLE            htAddress
+)
 {
     CLock lock(m_CritSec);
 
@@ -80,7 +80,7 @@ HRESULT CBaseTerminal::Initialize(
     if ( ! MediaTypeSupported( (long) dwMediaType) )
     {
         LOG((MSP_ERROR, "CBaseTerminal::Initialize - "
-            "media type not supported - returning E_INVALIDARG"));
+             "media type not supported - returning E_INVALIDARG"));
         return E_INVALIDARG;
     }
 
@@ -101,8 +101,8 @@ HRESULT CBaseTerminal::Initialize(
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 STDMETHODIMP CBaseTerminal::get_AddressHandle (
-        OUT     MSP_HANDLE    * phtAddress
-        )
+    OUT     MSP_HANDLE    * phtAddress
+)
 {
     CLock lock(m_CritSec);
 
@@ -110,7 +110,7 @@ STDMETHODIMP CBaseTerminal::get_AddressHandle (
 
     if ( ! phtAddress)
     {
-        LOG((MSP_ERROR, "CBaseTerminal::get_AddressHandle - returning E_POINTER")); 
+        LOG((MSP_ERROR, "CBaseTerminal::get_AddressHandle - returning E_POINTER"));
         return E_POINTER;
     }
 
@@ -132,7 +132,7 @@ STDMETHODIMP CBaseTerminal::get_Name(BSTR * pbsName)
     if ( ! pbsName)
     {
         LOG((MSP_ERROR, "CBaseTerminal::get_Name - "
-            "bad BSTR passed in - returning E_POINTER")); 
+             "bad BSTR passed in - returning E_POINTER"));
 
         return E_POINTER;
     }
@@ -142,7 +142,7 @@ STDMETHODIMP CBaseTerminal::get_Name(BSTR * pbsName)
     if ( *pbsName == NULL )
     {
         LOG((MSP_ERROR, "CBaseTerminal::get_Name - "
-            "can't sysallocstring - returning E_OUTOFMEMORY")); 
+             "can't sysallocstring - returning E_OUTOFMEMORY"));
 
         return E_OUTOFMEMORY;
     }
@@ -162,7 +162,7 @@ STDMETHODIMP CBaseTerminal::get_State(TERMINAL_STATE * pVal)
 
     if ( ! pVal)
     {
-        LOG((MSP_ERROR, "CBaseTerminal::get_State - returning E_POINTER")); 
+        LOG((MSP_ERROR, "CBaseTerminal::get_State - returning E_POINTER"));
         return E_POINTER;
     }
 
@@ -180,10 +180,10 @@ STDMETHODIMP CBaseTerminal::get_TerminalType(TERMINAL_TYPE * pVal)
     CLock lock(m_CritSec);
 
     LOG((MSP_TRACE, "CBaseTerminal::get_TerminalType - enter"));
-    
+
     if ( ! pVal)
     {
-        LOG((MSP_ERROR, "CBaseTerminal::get_TerminalType - returning E_POINTER")); 
+        LOG((MSP_ERROR, "CBaseTerminal::get_TerminalType - returning E_POINTER"));
         return E_POINTER;
     }
 
@@ -204,7 +204,7 @@ STDMETHODIMP CBaseTerminal::get_TerminalClass(BSTR * pbsClassID)
 
     if ( ! pbsClassID)
     {
-        LOG((MSP_ERROR, "CBaseTerminal::get_TerminalClass - returning E_POINTER")); 
+        LOG((MSP_ERROR, "CBaseTerminal::get_TerminalClass - returning E_POINTER"));
         return E_POINTER;
     }
 
@@ -247,8 +247,8 @@ STDMETHODIMP CBaseTerminal::get_TerminalClass(BSTR * pbsClassID)
 
 STDMETHODIMP CBaseTerminal::get_Direction(
     OUT  TERMINAL_DIRECTION *pDirection
-    )
-{   
+)
+{
     CLock lock(m_CritSec);
 
     LOG((MSP_TRACE, "CBaseTerminal::get_Direction - enter"));
@@ -272,14 +272,14 @@ STDMETHODIMP CBaseTerminal::get_Direction(
 // connects the internal filters together (if applicable)
 // and returns all the filters to be used as connection points
 STDMETHODIMP CBaseTerminal::ConnectTerminal(
-        IN      IGraphBuilder  * pGraph,
-        IN      DWORD            dwTerminalDirection,
-        IN OUT  DWORD          * pdwNumPins,
-        OUT     IPin          ** ppPins
-        )
+    IN      IGraphBuilder  * pGraph,
+    IN      DWORD            dwTerminalDirection,
+    IN OUT  DWORD          * pdwNumPins,
+    OUT     IPin          ** ppPins
+)
 {
     LOG((MSP_TRACE, "CBaseTerminal::ConnectTerminal - enter"));
-    
+
     //
     // Check parameters.
     //
@@ -287,15 +287,15 @@ STDMETHODIMP CBaseTerminal::ConnectTerminal(
     if ( !pGraph)
     {
         LOG((MSP_ERROR, "CBaseTerminal::ConnectTerminal - "
-            "bad graph pointer; exit E_POINTER"));
-        
+             "bad graph pointer; exit E_POINTER"));
+
         return E_POINTER;
     }
 
     if ( !pdwNumPins)
     {
         LOG((MSP_ERROR, "CBaseTerminal::ConnectTerminal - "
-            "bad numpins pointer; exit E_POINTER"));
+             "bad numpins pointer; exit E_POINTER"));
 
         return E_POINTER;
     }
@@ -315,7 +315,7 @@ STDMETHODIMP CBaseTerminal::ConnectTerminal(
     if ( FAILED(hr) )
     {
         LOG((MSP_ERROR, "CBaseTerminal::ConnectTerminal - "
-            "GetNumExposedPins failed - exit 0x%08x", hr));
+             "GetNumExposedPins failed - exit 0x%08x", hr));
 
         return hr;
     }
@@ -328,10 +328,10 @@ STDMETHODIMP CBaseTerminal::ConnectTerminal(
     if ( ppPins == NULL )
     {
         LOG((MSP_TRACE, "CBaseTerminal::ConnectTerminal - "
-            "returned number of exposed pins - exit S_OK"));
+             "returned number of exposed pins - exit S_OK"));
 
         *pdwNumPins = dwActualNumPins;
-        
+
         return S_OK;
     }
 
@@ -344,17 +344,17 @@ STDMETHODIMP CBaseTerminal::ConnectTerminal(
     if ( *pdwNumPins < dwActualNumPins )
     {
         LOG((MSP_ERROR, "CBaseTerminal::ConnectTerminal - "
-            "not enough space to place pins; exit TAPI_E_NOTENOUGHMEMORY"));
+             "not enough space to place pins; exit TAPI_E_NOTENOUGHMEMORY"));
 
         *pdwNumPins = dwActualNumPins;
-        
+
         return TAPI_E_NOTENOUGHMEMORY;
     }
 
     if ( !ppPins)
     {
         LOG((MSP_ERROR, "CBaseTerminal::ConnectTerminal - "
-            "bad pins array pointer; exit E_POINTER"));
+             "bad pins array pointer; exit E_POINTER"));
 
         return E_POINTER;
     }
@@ -378,7 +378,7 @@ STDMETHODIMP CBaseTerminal::ConnectTerminal(
         if (TS_INUSE == m_TerminalState)
         {
             LOG((MSP_ERROR, "CBaseTerminal::ConnectTerminal - "
-                "terminal already in use; exit TAPI_E_TERMINALINUSE"));
+                 "terminal already in use; exit TAPI_E_TERMINALINUSE"));
 
             return TAPI_E_TERMINALINUSE;
         }
@@ -398,7 +398,7 @@ STDMETHODIMP CBaseTerminal::ConnectTerminal(
     if ( FAILED(hr) )
     {
         LOG((MSP_ERROR, "CBaseTerminal::ConnectTerminal - "
-            "can't add filters to graph"));
+             "can't add filters to graph"));
         goto disconnect_terminal;
     }
 
@@ -407,7 +407,7 @@ STDMETHODIMP CBaseTerminal::ConnectTerminal(
     if ( FAILED(hr) )
     {
         LOG((MSP_ERROR, "CBaseTerminal::ConnectTerminal - "
-            "can't do internal filter connection"));
+             "can't do internal filter connection"));
         goto disconnect_terminal;
     }
 
@@ -422,7 +422,7 @@ STDMETHODIMP CBaseTerminal::ConnectTerminal(
     if ( FAILED(hr) )
     {
         LOG((MSP_ERROR, "CBaseTerminal::ConnectTerminal - "
-            "can't get exposed pins"));
+             "can't get exposed pins"));
         goto disconnect_terminal;
     }
 
@@ -444,7 +444,7 @@ disconnect_terminal:
     //
 
     m_pGraph        = NULL;          // this releases the CComPtr
-    
+
     m_TerminalState = TS_NOTINUSE;
 
     LOG((MSP_TRACE, "CBaseTerminal::ConnectTerminal - exit 0x%08x", hr));
@@ -454,7 +454,7 @@ disconnect_terminal:
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-STDMETHODIMP 
+STDMETHODIMP
 CBaseTerminal::CompleteConnectTerminal(void)
 {
     LOG((MSP_TRACE, "CBaseTerminal::CompleteConnectTerminal - enter"));
@@ -473,11 +473,11 @@ CBaseTerminal::CompleteConnectTerminal(void)
 // is disconnected from the same graph that it was originally connected to.
 
 
-STDMETHODIMP 
+STDMETHODIMP
 CBaseTerminal::DisconnectTerminal(
-        IN      IGraphBuilder  * pGraph,
-        IN      DWORD            dwReserved
-        )
+    IN      IGraphBuilder  * pGraph,
+    IN      DWORD            dwReserved
+)
 {
     CLock lock(m_CritSec);
 
@@ -487,7 +487,7 @@ CBaseTerminal::DisconnectTerminal(
     // If not in use, then there is nothing to be done.
     //
 
-    if ( TS_INUSE != m_TerminalState ) 
+    if ( TS_INUSE != m_TerminalState )
     {
         _ASSERTE(m_pGraph == NULL);
 
@@ -502,8 +502,8 @@ CBaseTerminal::DisconnectTerminal(
     if ( m_pGraph != pGraph )
     {
         LOG((MSP_TRACE, "CBaseTerminal::DisconnectTerminal - "
-            "wrong graph; returning E_INVALIDARG"));
-        
+             "wrong graph; returning E_INVALIDARG"));
+
         return E_INVALIDARG;
     }
 
@@ -514,8 +514,8 @@ CBaseTerminal::DisconnectTerminal(
     if ( m_pGraph == NULL )
     {
         LOG((MSP_TRACE, "CBaseTerminal::DisconnectTerminal - "
-            "no graph; returning E_UNEXPECTED"));
-        
+             "no graph; returning E_UNEXPECTED"));
+
         return E_UNEXPECTED;
     }
 
@@ -530,7 +530,7 @@ CBaseTerminal::DisconnectTerminal(
     if ( FAILED(hr) )
     {
         LOG((MSP_ERROR, "CBaseTerminal::DisconnectTerminal - "
-            "remove filters from graph failed; returning 0x%08x", hr));
+             "remove filters from graph failed; returning 0x%08x", hr));
 
         return hr;
     }
@@ -540,7 +540,7 @@ CBaseTerminal::DisconnectTerminal(
     //
 
     m_pGraph        = NULL;          // this releases the CComPtr
-    
+
     m_TerminalState = TS_NOTINUSE;
 
     LOG((MSP_TRACE, "CBaseTerminal::DisconnectTerminal success"));
@@ -562,7 +562,7 @@ STDMETHODIMP CBaseTerminal::get_MediaType(long * plMediaType)
         LOG((MSP_ERROR, "CBaseTerminal::get_MediaType - returning E_POINTER"));
         return E_POINTER;
     }
-    
+
     *plMediaType = (long) m_dwMediaType;
 
     LOG((MSP_TRACE, "CBaseTerminal::get_MediaType - exit S_OK"));
@@ -594,8 +594,8 @@ BOOL CBaseTerminal::MediaTypeSupported(long lMediaType)
 
 
 HRESULT CSingleFilterTerminal::GetNumExposedPins(
-        IN   IGraphBuilder * pGraph,
-        OUT  DWORD         * pdwNumPins)
+    IN   IGraphBuilder * pGraph,
+    OUT  DWORD         * pdwNumPins)
 {
     LOG((MSP_TRACE, "CSingleFilterTerminal::GetNumExposedPins - enter"));
 
@@ -605,7 +605,7 @@ HRESULT CSingleFilterTerminal::GetNumExposedPins(
     //
 
     *pdwNumPins = 1;
-    
+
     LOG((MSP_TRACE, "CSingleFilterTerminal::GetNumExposedPins - exit S_OK"));
 
     return S_OK;
@@ -615,8 +615,8 @@ HRESULT CSingleFilterTerminal::GetNumExposedPins(
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 HRESULT CSingleFilterTerminal::GetExposedPins(
-        OUT    IPin  ** ppPins
-        )
+    OUT    IPin  ** ppPins
+)
 {
     LOG((MSP_TRACE, "CSingleFilterTerminal::GetExposedPins - enter"));
 
@@ -664,7 +664,7 @@ STDMETHODIMP CSingleFilterTerminal::StopRenderFilter(void)
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-HRESULT 
+HRESULT
 CSingleFilterTerminal::RemoveFiltersFromGraph(void)
 {
     LOG((MSP_TRACE, "CSingleFilterTerminal::RemoveFiltersFromGraph - enter"));
@@ -672,14 +672,14 @@ CSingleFilterTerminal::RemoveFiltersFromGraph(void)
     if (m_pGraph == NULL)
     {
         LOG((MSP_ERROR, "CSingleFilterTerminal::RemoveFiltersFromGraph - "
-            "no graph; returning E_UNEXPECTED"));
+             "no graph; returning E_UNEXPECTED"));
         return E_UNEXPECTED;
     }
 
     if (m_pIFilter == NULL)
     {
         LOG((MSP_ERROR, "CSingleFilterTerminal::RemoveFiltersFromGraph - "
-            "no filter; returning E_UNEXPECTED"));
+             "no filter; returning E_UNEXPECTED"));
         return E_UNEXPECTED;
     }
 
@@ -694,55 +694,55 @@ CSingleFilterTerminal::RemoveFiltersFromGraph(void)
     return hr;
 }
 
-HRESULT 
+HRESULT
 CSingleFilterStaticTerminal::CompareMoniker(
-                                             IMoniker *pMoniker
-                                           )
+    IMoniker *pMoniker
+)
 {
     IMoniker    *pReducedMoniker;
     IMoniker    *pReducedNewMoniker;
-    IBindCtx    *pbc; 
+    IBindCtx    *pbc;
     HRESULT     hr;
 
-    hr = CreateBindCtx( 0, &pbc ); 
+    hr = CreateBindCtx( 0, &pbc );
 
     if (FAILED(hr))
     {
         LOG((MSP_ERROR, "CSingleFilterStaticTerminal::CompareMoniker - "
-            "unable to create bind context"));
+             "unable to create bind context"));
         return hr;
     }
 
-    hr = m_pMoniker->Reduce(pbc ,MKRREDUCE_ALL, NULL, &pReducedMoniker);
-    
+    hr = m_pMoniker->Reduce(pbc,MKRREDUCE_ALL, NULL, &pReducedMoniker);
+
     if (FAILED(hr) || !pReducedMoniker)
     {
         LOG((MSP_ERROR, "CSingleFilterStaticTerminal::CompareMoniker - "
-            "unable to reduce moniker"));
-        pbc->Release();  // release the bind context              
+             "unable to reduce moniker"));
+        pbc->Release();  // release the bind context
         return hr;
     }
 
-    hr = pMoniker->Reduce(pbc ,MKRREDUCE_ALL, NULL, &pReducedNewMoniker);
-    
+    hr = pMoniker->Reduce(pbc,MKRREDUCE_ALL, NULL, &pReducedNewMoniker);
+
     if (FAILED(hr) || !pReducedNewMoniker)
     {
         LOG((MSP_ERROR, "CSingleFilterStaticTerminal::CompareMoniker - "
-            "unable to reduce moniker"));
+             "unable to reduce moniker"));
         pbc->Release();  // release the bind context
         pReducedMoniker->Release();   // release the reduced moniker
         return hr;
     }
 
     pbc->Release();  // release the bind context
-   
+
     if (pReducedMoniker->IsEqual(pReducedNewMoniker) == S_OK)
     {
         LOG((MSP_TRACE, "CSingleFilterStaticTerminal::CompareMoniker - "
-            "exit - return S_OK"));
+             "exit - return S_OK"));
 
         pReducedMoniker->Release();   // release the reduced monikers
-        pReducedNewMoniker->Release();  
+        pReducedNewMoniker->Release();
         return S_OK;
     }
 
@@ -750,7 +750,7 @@ CSingleFilterStaticTerminal::CompareMoniker(
     pReducedNewMoniker->Release();
 
     LOG((MSP_TRACE, "CSingleFilterStaticTerminal::CompareMoniker - "
-            "exit - return S_FALSE"));
+         "exit - return S_FALSE"));
     return S_FALSE;
 }
 

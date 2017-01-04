@@ -1,4 +1,4 @@
-// --------------------------------------------------------------------
+﻿// --------------------------------------------------------------------
 //
 //  Copyright (c) Microsoft Corporation.  All rights reserved
 //
@@ -30,7 +30,7 @@
 #define MAX_FORMAT   300
 #define MAX_BUFFER   500
 
-#define DIRECT         1 
+#define DIRECT         1
 #define STANDARD       0
 
 #define DS_ENABLED     1
@@ -59,7 +59,7 @@ char mbsMachineName[MAX_COMPUTERNAME_LENGTH + 1];
 // Check whether the local computer is enabled to access
 // the directory service (DS-enabled).
 //
-//----------------------------------------------------- 
+//-----------------------------------------------------
 int DetectDsConnection(void)
 {
 
@@ -69,40 +69,40 @@ int DetectDsConnection(void)
     HRESULT        aStatus[MAX_VAR];
 
     DWORD          cProp;
-    
+
     HRESULT        hr;
 
 
     //
     // Specify the PROPID_PC_DS_ENABLED property, which
-	// indicates whether the local computer can access the DS.
+    // indicates whether the local computer can access the DS.
     //
     cProp = 0;
 
     aPropId[cProp] = PROPID_PC_DS_ENABLED;
     aPropVar[cProp].vt = VT_NULL;
-    ++cProp;	
+    ++cProp;
 
     // Create a PRIVATEPROPS structure.
     PrivateProps.cProp = cProp;
-	PrivateProps.aPropID = aPropId;
-	PrivateProps.aPropVar = aPropVar;
+    PrivateProps.aPropID = aPropId;
+    PrivateProps.aPropVar = aPropVar;
     PrivateProps.aStatus = aStatus;
     //
     // Retrieve the information.
     //
-	hr = MQGetPrivateComputerInformation(
-				     NULL,
-					 &PrivateProps);
-	if(FAILED(hr))
-	{
+    hr = MQGetPrivateComputerInformation(
+             NULL,
+             &PrivateProps);
+    if(FAILED(hr))
+    {
         Error("A DS connection cannot be detected", hr);
     }
-	
-    
+
+
     if(PrivateProps.aPropVar[0].boolVal == 0)
         return DS_DISABLED;
-    
+
 
     return DS_ENABLED;
 }
@@ -110,7 +110,7 @@ int DetectDsConnection(void)
 
 //-----------------------------------------------------
 //
-//  Allow a DS-enabled client to connect with a 
+//  Allow a DS-enabled client to connect with a
 //  DS-disabled one.
 //
 //-----------------------------------------------------
@@ -129,38 +129,38 @@ int SetConnectionMode(void)
 
     if(DetectDsConnection() == DS_ENABLED)
     {
-            printf("Do you want to connect to a DS-disabled client (y or n) ? ");
-			iRes = scanf_s("%c", &cDirectMode);
-			if (iRes == 0 || iRes == EOF)
-			{
-				printf("\nInvalid input.\n");
-				exit(1);
-			}
+        printf("Do you want to connect to a DS-disabled client (y or n) ? ");
+        iRes = scanf_s("%c", &cDirectMode);
+        if (iRes == 0 || iRes == EOF)
+        {
+            printf("\nInvalid input.\n");
+            exit(1);
+        }
 
-			//
-			// Flushing stdin to get rid of the new line entered earlier.
-			//
-			fflush(stdin);
-            
-            switch(tolower(cDirectMode))
-            {
-                case 'y':
-                    return DIRECT;
+        //
+        // Flushing stdin to get rid of the new line entered earlier.
+        //
+        fflush(stdin);
 
-                case 'n':
-                    return STANDARD;
+        switch(tolower(cDirectMode))
+        {
+        case 'y':
+            return DIRECT;
 
-                default:
-                    printf("Bye.\n");
-                    exit(1);
-            }
-            
+        case 'n':
+            return STANDARD;
+
+        default:
+            printf("Bye.\n");
+            exit(1);
+        }
+
     }
 
-    
+
     return DIRECT;     // Local computer is DS-disabled
 }
-    
+
 
 //--------------------------------------------------------
 //
@@ -200,7 +200,7 @@ void Receiver(int dDirectMode)
     QUEUEHANDLE   qh;
 
     HRESULT       hr;
-	int			  nPos;
+    int			  nPos;
 
     printf("\nReceiver Mode on Machine: %s\n\n", mbsMachineName);
 
@@ -213,34 +213,34 @@ void Receiver(int dDirectMode)
     // Set the path name.
     if(dDirectMode == DIRECT)  // Private queue path name
     {
-		nPos = _snwprintf_s(
-                           wcsPathName, 
-                           sizeof(wcsPathName)/sizeof(wcsPathName[0]), 
-                           sizeof(wcsPathName)/sizeof(wcsPathName[0]) - 1, 
-                           L"%S\\private$\\MSMQTest", 
-                           mbsMachineName
-                           );
-		if(nPos < 0)
-		{
-			printf("The path name is too long for the buffer. Exiting...\n");
-			exit(1);
-		}	
+        nPos = _snwprintf_s(
+                   wcsPathName,
+                   sizeof(wcsPathName)/sizeof(wcsPathName[0]),
+                   sizeof(wcsPathName)/sizeof(wcsPathName[0]) - 1,
+                   L"%S\\private$\\MSMQTest",
+                   mbsMachineName
+               );
+        if(nPos < 0)
+        {
+            printf("The path name is too long for the buffer. Exiting...\n");
+            exit(1);
+        }
 
     }
     else                       // Public queue path name
-    {    
-		nPos = _snwprintf_s(
-                           wcsPathName, 
-                           sizeof(wcsPathName)/sizeof(wcsPathName[0]), 
-                           sizeof(wcsPathName)/sizeof(wcsPathName[0]) - 1, 
-                           L"%S\\MSMQTest", 
-                           mbsMachineName
-                           );
-		if(nPos < 0)
-		{
-			printf("The path name is too long for the buffer. Exiting...\n");
-			exit(1);
-		}	
+    {
+        nPos = _snwprintf_s(
+                   wcsPathName,
+                   sizeof(wcsPathName)/sizeof(wcsPathName[0]),
+                   sizeof(wcsPathName)/sizeof(wcsPathName[0]) - 1,
+                   L"%S\\MSMQTest",
+                   mbsMachineName
+               );
+        if(nPos < 0)
+        {
+            printf("The path name is too long for the buffer. Exiting...\n");
+            exit(1);
+        }
 
     }
 
@@ -275,10 +275,10 @@ void Receiver(int dDirectMode)
     //
     dwNumChars = MAX_FORMAT;
     hr = MQCreateQueue(
-            NULL,           // IN:     Default security
-            &qprops,        // IN/OUT: Queue properties
-            wcsFormat,      // OUT:    Format name
-            &dwNumChars);   // IN/OUT: Size of the format name
+             NULL,           // IN:     Default security
+             &qprops,        // IN/OUT: Queue properties
+             wcsFormat,      // OUT:    Format name
+             &dwNumChars);   // IN/OUT: Size of the format name
 
     if (FAILED(hr))
     {
@@ -294,29 +294,29 @@ void Receiver(int dDirectMode)
         printf("The queue already exists. Open it anyway.\n");
 
         if(dDirectMode == DIRECT)
-        // It's a private queue, so we know its direct format name.
+            // It's a private queue, so we know its direct format name.
         {
-			int n = _snwprintf_s(
-                                    wcsFormat, 
-                                    sizeof(wcsFormat)/sizeof(wcsFormat[0]), 
-                                    sizeof(wcsFormat)/sizeof(wcsFormat[0]) - 1, 
-                                    L"DIRECT=OS:%s", 
-                                    wcsPathName);
-			if(n < 0)
-			{
-				printf("The format name is too long for the buffer. Exiting...\n");
-				exit(1);
-			}	
+            int n = _snwprintf_s(
+                        wcsFormat,
+                        sizeof(wcsFormat)/sizeof(wcsFormat[0]),
+                        sizeof(wcsFormat)/sizeof(wcsFormat[0]) - 1,
+                        L"DIRECT=OS:%s",
+                        wcsPathName);
+            if(n < 0)
+            {
+                printf("The format name is too long for the buffer. Exiting...\n");
+                exit(1);
+            }
 
         }
         else
-        // It's a public queue, so we must get its format name from the DS.
+            // It's a public queue, so we must get its format name from the DS.
         {
             dwNumChars = sizeof(wcsFormat)/sizeof(wcsFormat[0]);
             hr = MQPathNameToFormatName(
-                       wcsPathName,     // IN:     Queue path name
-                       wcsFormat,       // OUT:    Format name
-                       &dwNumChars);    // IN/OUT: Size of the format name
+                     wcsPathName,     // IN:     Queue path name
+                     wcsFormat,       // OUT:    Format name
+                     &dwNumChars);    // IN/OUT: Size of the format name
 
             if (FAILED(hr))
                 Error("The format name cannot be retrieved", hr);
@@ -334,7 +334,7 @@ void Receiver(int dDirectMode)
              &qh);               // OUT: Handle of open queue
 
     //
-    // Things are a little bit tricky. MQCreateQueue succeeded, but in the 
+    // Things are a little bit tricky. MQCreateQueue succeeded, but in the
     // case of a public queue, this does not mean that MQOpenQueue
     // will succeed, because replication delays are possible. The queue is
     // registered in the DS, but it might take a replication interval
@@ -349,17 +349,17 @@ void Receiver(int dDirectMode)
     //
     while (hr == MQ_ERROR_QUEUE_NOT_FOUND)
     {
-       printf(".");
+        printf(".");
 
-       // Wait a bit.
-       Sleep(500);
+        // Wait a bit.
+        Sleep(500);
 
-       // Retry.
-       hr = MQOpenQueue(wcsFormat, MQ_RECEIVE_ACCESS, 0, &qh);
+        // Retry.
+        hr = MQOpenQueue(wcsFormat, MQ_RECEIVE_ACCESS, 0, &qh);
     }
 
     if (FAILED(hr))
-         Error("The queue cannot be opened", hr);
+        Error("The queue cannot be opened", hr);
 
 
     //
@@ -370,7 +370,7 @@ void Receiver(int dDirectMode)
         printf("\n* Working in workgroup (direct) mode.\n");
     }
     printf("\n* Waiting for messages...\n");
-    
+
     for(;;)
     {
         //
@@ -408,14 +408,14 @@ void Receiver(int dDirectMode)
         // Receive the message.
         //
         hr = MQReceiveMessage(
-               qh,                // IN:     Queue handle
-               INFINITE,          // IN:     Time-out
-               MQ_ACTION_RECEIVE, // IN:     Read operation
-               &msgprops,         // IN/OUT: Message properties to retrieve
-               NULL,              // IN/OUT: No OVERLAPPED structure
-               NULL,              // IN:     No callback
-               NULL,              // IN:     No cursor
-               NULL);             // IN:     Not part of a transaction
+                 qh,                // IN:     Queue handle
+                 INFINITE,          // IN:     Time-out
+                 MQ_ACTION_RECEIVE, // IN:     Read operation
+                 &msgprops,         // IN/OUT: Message properties to retrieve
+                 NULL,              // IN/OUT: No OVERLAPPED structure
+                 NULL,              // IN:     No callback
+                 NULL,              // IN:     No cursor
+                 NULL);             // IN:     Not part of a transaction
 
         if (FAILED(hr))
             Error("MQReceiveMessage failed", hr);
@@ -441,8 +441,8 @@ void Receiver(int dDirectMode)
 
     //
     // In the concluding stage, we delete the queue from the directory
-    // service. (We don't need to do this. In case of a public queue, 
-    // leaving it in the DS enables sender applications to send messages 
+    // service. (We don't need to do this. In case of a public queue,
+    // leaving it in the DS enables sender applications to send messages
     // even if the receiver is not available.)
     //
     hr = MQDeleteQueue(wcsFormat);
@@ -504,7 +504,7 @@ void StandardSender(void)
     QUEUEHANDLE   aqh[MAX_VAR];
 
     HRESULT       hr;
-	int			  nPos;
+    int			  nPos;
 
 
     printf("\nSender mode on the computer %s\n\n", mbsMachineName);
@@ -591,9 +591,9 @@ void StandardSender(void)
         // Convert the queue GUID to a format name.
         dwNumChars = MAX_FORMAT;
         hr = MQInstanceToFormatName(
-                  aPropVar[i].puuid,    // IN:     Queue GUID
-                  wcsFormat,            // OUT:    Format name
-                  &dwNumChars);         // IN/OUT: Size of format name
+                 aPropVar[i].puuid,    // IN:     Queue GUID
+                 wcsFormat,            // OUT:    Format name
+                 &dwNumChars);         // IN/OUT: Size of format name
 
         if (FAILED(hr))
             Error("MQInstanceToFormatName failed", hr);
@@ -623,18 +623,18 @@ void StandardSender(void)
     //
     // Construct the message label.
     //
-	nPos = _snwprintf_s(
-                   wcsMsgLabel, 
-                   sizeof(wcsMsgLabel)/sizeof(wcsMsgLabel[0]), 
-                   sizeof(wcsMsgLabel)/sizeof(wcsMsgLabel[0]) - 1, 
-                   L"Message from %S", 
-                   mbsMachineName
-                   );
-	if(nPos < 0)
-	{
-		printf("The label is too long for the buffer. Exiting...\n");
-		exit(1);
-	}	
+    nPos = _snwprintf_s(
+               wcsMsgLabel,
+               sizeof(wcsMsgLabel)/sizeof(wcsMsgLabel[0]),
+               sizeof(wcsMsgLabel)/sizeof(wcsMsgLabel[0]) - 1,
+               L"Message from %S",
+               mbsMachineName
+           );
+    if(nPos < 0)
+    {
+        printf("The label is too long for the buffer. Exiting...\n");
+        exit(1);
+    }
 
     //
     // Main sender loop
@@ -645,17 +645,17 @@ void StandardSender(void)
         // Get a string from the console.
         //
         printf("Enter a string: ");
-		if (fgets(Buffer, MAX_BUFFER - 1, stdin) == NULL)
+        if (fgets(Buffer, MAX_BUFFER - 1, stdin) == NULL)
             break;
-		
-		Buffer[MAX_BUFFER-1] = '\0';
-		//
-		// Deleting the new-line character.
-		//
-		if(Buffer[strlen(Buffer) - 1] == '\n')
-		{
-			Buffer[strlen(Buffer)-1] = '\0'; 
-		}
+
+        Buffer[MAX_BUFFER-1] = '\0';
+        //
+        // Deleting the new-line character.
+        //
+        if(Buffer[strlen(Buffer) - 1] == '\n')
+        {
+            Buffer[strlen(Buffer)-1] = '\0';
+        }
 
 
         //
@@ -689,9 +689,9 @@ void StandardSender(void)
         for (i = 0; i < cQueue; i++)
         {
             hr = MQSendMessage(
-                    aqh[i],     // IN: Queue handle
-                    &msgprops,  // IN: Message properties to send
-                    NULL);      // IN: Not part of a transaction
+                     aqh[i],     // IN: Queue handle
+                     &msgprops,  // IN: Message properties to send
+                     NULL);      // IN: Not part of a transaction
 
             if (FAILED(hr))
                 Error("MQSendMessage failed", hr);
@@ -738,26 +738,26 @@ void DirectSender(void)
     QUEUEHANDLE   qhSend;
 
     HRESULT       hr;
-	int			  nPos;
+    int			  nPos;
 
     //
     // Get the receiver computer name.
     //
     printf("Enter receiver computer name: ");
-	if (fgetws(wcsReceiverComputer, MAX_COMPUTERNAME_LENGTH, stdin) == NULL)
-	{
+    if (fgetws(wcsReceiverComputer, MAX_COMPUTERNAME_LENGTH, stdin) == NULL)
+    {
         printf("An invalid parameter was entered. Exiting...\n");
         exit(1);
-	}
-	wcsReceiverComputer[MAX_COMPUTERNAME_LENGTH] = L'\0';
-	//
-	// Deleting the new-line character.
-	//
-	if(wcsReceiverComputer[wcslen(wcsReceiverComputer) - 1] == L'\n')
-	{
-		wcsReceiverComputer[wcslen(wcsReceiverComputer) - 1] = L'\0'; 
-	}
-    
+    }
+    wcsReceiverComputer[MAX_COMPUTERNAME_LENGTH] = L'\0';
+    //
+    // Deleting the new-line character.
+    //
+    if(wcsReceiverComputer[wcslen(wcsReceiverComputer) - 1] == L'\n')
+    {
+        wcsReceiverComputer[wcslen(wcsReceiverComputer) - 1] = L'\0';
+    }
+
     if(wcsReceiverComputer[0] == 0)
     {
         printf("An invalid parameter was entered. Exiting...\n");
@@ -767,18 +767,18 @@ void DirectSender(void)
     //
     // Open the queue with send access.
     //
-	nPos = _snwprintf_s(
-                   wcsFormat, 
-                   sizeof(wcsFormat)/sizeof(wcsFormat[0]), 
-                   sizeof(wcsFormat)/sizeof(wcsFormat[0]) - 1, 
-                   L"DIRECT=OS:%s\\private$\\MSMQTest", 
-                   wcsReceiverComputer
-                   );
-	if(nPos < 0)
-	{
-		printf("The format name is too long for the buffer. Exiting...\n");
-		exit(1);
-	}	
+    nPos = _snwprintf_s(
+               wcsFormat,
+               sizeof(wcsFormat)/sizeof(wcsFormat[0]),
+               sizeof(wcsFormat)/sizeof(wcsFormat[0]) - 1,
+               L"DIRECT=OS:%s\\private$\\MSMQTest",
+               wcsReceiverComputer
+           );
+    if(nPos < 0)
+    {
+        printf("The format name is too long for the buffer. Exiting...\n");
+        exit(1);
+    }
 
     hr = MQOpenQueue(
              wcsFormat,           // IN:  Queue format name
@@ -796,19 +796,19 @@ void DirectSender(void)
     //
     // Construct the message label.
     //
-	nPos = _snwprintf_s(
-                   wcsMsgLabel, 
-                   sizeof(wcsMsgLabel)/sizeof(wcsMsgLabel[0]), 
-                   sizeof(wcsMsgLabel)/sizeof(wcsMsgLabel[0]) - 1, 
-                   L"Message from %S", 
-                   mbsMachineName);
-	if(nPos < 0)
-	{
-		printf("The label is too long for the buffer. Exiting...\n");
-		exit(1);
-	}	
-	
-    
+    nPos = _snwprintf_s(
+               wcsMsgLabel,
+               sizeof(wcsMsgLabel)/sizeof(wcsMsgLabel[0]),
+               sizeof(wcsMsgLabel)/sizeof(wcsMsgLabel[0]) - 1,
+               L"Message from %S",
+               mbsMachineName);
+    if(nPos < 0)
+    {
+        printf("The label is too long for the buffer. Exiting...\n");
+        exit(1);
+    }
+
+
     fflush(stdin);
 
     //
@@ -823,14 +823,14 @@ void DirectSender(void)
         if (fgets(Buffer, MAX_BUFFER - 1, stdin) == NULL)
             break;
 
-		Buffer[MAX_BUFFER-1] = '\0';
-		//
-		// Delete the new-line character.
-		//
-		if(Buffer[strlen(Buffer) - 1] == '\n')
-		{
-			Buffer[strlen(Buffer) - 1] = '\0'; 
-		}
+        Buffer[MAX_BUFFER-1] = '\0';
+        //
+        // Delete the new-line character.
+        //
+        if(Buffer[strlen(Buffer) - 1] == '\n')
+        {
+            Buffer[strlen(Buffer) - 1] = '\0';
+        }
 
         //
         // Set the message properties for sending messages.
@@ -849,7 +849,7 @@ void DirectSender(void)
         aPropVar[cProps].vt         = VT_LPWSTR;
         aPropVar[cProps].pwszVal    = wcsMsgLabel;
         cProps++;
-        
+
         // Create a MSGPROPS structure.
         msgprops.cProp    = cProps;
         msgprops.aPropID  = amPropId;
@@ -861,9 +861,9 @@ void DirectSender(void)
         // Send the message.
         //
         hr = MQSendMessage(
-                qhSend,     // IN: Queue handle
-                &msgprops,  // IN: Message properties to send
-                NULL);      // IN: Not part of a transaction
+                 qhSend,     // IN: Queue handle
+                 &msgprops,  // IN: Message properties to send
+                 NULL);      // IN: Not part of a transaction
 
         if (FAILED(hr))
             Error("MQSendMessage failed", hr);
@@ -923,20 +923,20 @@ main(int argc, char *argv[])
     //
     dwNumChars = MAX_COMPUTERNAME_LENGTH;
     if(!GetComputerName(mbsMachineName, &dwNumChars))
-	{
-		printf("Failed to get computer name. Exiting...\n");
-		exit(1);
-	}
+    {
+        printf("Failed to get computer name. Exiting...\n");
+        exit(1);
+    }
 
     //
     // Detect a DS connection and determine the working mode.
     //
-    
+
     dDirectMode = SetConnectionMode();
 
     if(strcmp(argv[1], "-s") == 0)
         Sender(dDirectMode);
-    
+
     else if (strcmp(argv[1], "-r") == 0)
         Receiver(dDirectMode);
 

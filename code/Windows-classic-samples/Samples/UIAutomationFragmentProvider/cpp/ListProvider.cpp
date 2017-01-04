@@ -1,22 +1,22 @@
-
+﻿
 /*************************************************************************************************
- * Description: Implementation of the ListProvider class, which implements a 
+ * Description: Implementation of the ListProvider class, which implements a
  * UI Automation provider for a custom list control.
  *
  * See EntryPoint.cpp for a full description of this sample.
- *   
- * 
+ *
+ *
  *  Copyright (C) Microsoft Corporation.  All rights reserved.
- * 
+ *
  * This source code is intended only as a supplement to Microsoft
  * Development Tools and/or on-line documentation.  See these other
  * materials for detailed information regarding Microsoft code samples.
- * 
+ *
  * THIS CODE AND INFORMATION ARE PROVIDED AS IS WITHOUT WARRANTY OF ANY
  * KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
  * PARTICULAR PURPOSE.
- * 
+ *
  *************************************************************************************************/
 
 #define INITGUID
@@ -30,7 +30,7 @@
 
 HFONT GetFont(LONG ht);
 
-ListProvider::ListProvider(CustomListControl* pControl): 
+ListProvider::ListProvider(CustomListControl* pControl):
     m_refCount(1), m_pControl(pControl)
 {
     m_controlHwnd = pControl->GetHwnd();
@@ -55,7 +55,7 @@ ListItemProvider* ListProvider::GetItemProviderByIndex(int index)
     {
         return NULL;
     }
-    return pItem->GetListItemProvider();  
+    return pItem->GetListItemProvider();
 }
 
 // Raises an event when a list item is selected.
@@ -112,10 +112,10 @@ IFACEMETHODIMP ListProvider::get_ProviderOptions(ProviderOptions* pRetVal)
 IFACEMETHODIMP ListProvider::GetPatternProvider(PATTERNID patternId, IUnknown** pRetVal)
 {
     *pRetVal = NULL;
-    if (patternId == UIA_SelectionPatternId) 
+    if (patternId == UIA_SelectionPatternId)
     {
         *pRetVal =static_cast<IRawElementProviderSimple*>(this);
-        AddRef();  
+        AddRef();
     }
     return S_OK;
 }
@@ -125,8 +125,8 @@ IFACEMETHODIMP ListProvider::GetPatternProvider(PATTERNID patternId, IUnknown** 
 //
 IFACEMETHODIMP ListProvider::GetPropertyValue(PROPERTYID propertyId, VARIANT* pRetVal)
 {
-    // Although it is hard-coded for the purposes of this sample, localizable 
-    // text should be stored in, and loaded from, the resource file (.rc). 
+    // Although it is hard-coded for the purposes of this sample, localizable
+    // text should be stored in, and loaded from, the resource file (.rc).
     if (propertyId == UIA_LocalizedControlTypePropertyId)
     {
         pRetVal->vt = VT_BSTR;
@@ -135,16 +135,16 @@ IFACEMETHODIMP ListProvider::GetPropertyValue(PROPERTYID propertyId, VARIANT* pR
     else if (propertyId == UIA_ControlTypePropertyId)
     {
         pRetVal->vt = VT_I4;
-        pRetVal->lVal = UIA_ListControlTypeId; 
+        pRetVal->lVal = UIA_ListControlTypeId;
     }
-    else if (propertyId == UIA_IsKeyboardFocusablePropertyId) 
+    else if (propertyId == UIA_IsKeyboardFocusablePropertyId)
     {
         pRetVal->vt = VT_BOOL;
         pRetVal->boolVal = VARIANT_TRUE;
     }
     // else pRetVal is empty, and UI Automation will attempt to get the property from
     //  the HostRawElementProvider, which is the default provider for the HWND.
-    // Note that the Name property comes from the Caption property of the control window, 
+    // Note that the Name property comes from the Caption property of the control window,
     //  if it has one.
     else
     {
@@ -154,7 +154,7 @@ IFACEMETHODIMP ListProvider::GetPropertyValue(PROPERTYID propertyId, VARIANT* pR
 }
 
 // Implementation of IRawElementProviderSimple::get_HostRawElementProvider.
-// Gets the default UI Automation provider for the host window. This provider 
+// Gets the default UI Automation provider for the host window. This provider
 // supplies many properties.
 //
 IFACEMETHODIMP ListProvider::get_HostRawElementProvider(IRawElementProviderSimple** pRetVal)
@@ -163,7 +163,7 @@ IFACEMETHODIMP ListProvider::get_HostRawElementProvider(IRawElementProviderSimpl
     {
         return UIA_E_ELEMENTNOTAVAILABLE;
     }
-    HRESULT hr = UiaHostProviderFromHwnd(m_controlHwnd, pRetVal); 
+    HRESULT hr = UiaHostProviderFromHwnd(m_controlHwnd, pRetVal);
     return hr;
 }
 
@@ -182,20 +182,20 @@ IFACEMETHODIMP ListProvider::Navigate(NavigateDirection direction, IRawElementPr
     LISTITERATOR iter;
     switch(direction)
     {
-      case NavigateDirection_FirstChild:  
-          iter = pListControl->GetItemAt(0);
-          pDest = (CustomListItem*)(*iter);
-          pFrag = pDest->GetListItemProvider();
-          break;
-      case NavigateDirection_LastChild:  
-          iter = pListControl->GetItemAt(pListControl->GetCount()-1);
-          pDest = (CustomListItem*)(*iter);
-          pFrag = pDest->GetListItemProvider();
-          break;
+    case NavigateDirection_FirstChild:
+        iter = pListControl->GetItemAt(0);
+        pDest = (CustomListItem*)(*iter);
+        pFrag = pDest->GetListItemProvider();
+        break;
+    case NavigateDirection_LastChild:
+        iter = pListControl->GetItemAt(pListControl->GetCount()-1);
+        pDest = (CustomListItem*)(*iter);
+        pFrag = pDest->GetListItemProvider();
+        break;
     }
-    if (pFrag != NULL) 
+    if (pFrag != NULL)
     {
-        pFrag->AddRef();   
+        pFrag->AddRef();
     }
     *pRetVal = pFrag;
     return S_OK;
@@ -226,7 +226,7 @@ IFACEMETHODIMP ListProvider::get_BoundingRectangle(UiaRect* pRetVal)
     GetClientRect(m_controlHwnd, &rect);
     InflateRect(&rect, -2, -2);
     POINT upperLeft;
-    upperLeft.x = rect.left;  
+    upperLeft.x = rect.left;
     upperLeft.y = rect.top;
     ClientToScreen(m_controlHwnd, &upperLeft);
 
@@ -261,14 +261,14 @@ IFACEMETHODIMP ListProvider::SetFocus()
 IFACEMETHODIMP ListProvider::get_FragmentRoot(IRawElementProviderFragmentRoot** pRetVal)
 {
     *pRetVal = static_cast<IRawElementProviderFragmentRoot*>(this);
-    AddRef();  
+    AddRef();
     return S_OK;
 }
 
 // IRawElementProviderFragmentRoot implementation
 //
 // Implementation of IRawElementProviderFragmentRoot::ElementProviderFromPoint.
-// Retrieves the IRawElementProviderFragment interface for the item at the specified 
+// Retrieves the IRawElementProviderFragment interface for the item at the specified
 // point (in client coordinates).
 // UI Spy uses this to determine what element is under the cursor when Ctrl is pressed.
 //
@@ -279,13 +279,13 @@ IFACEMETHODIMP ListProvider::ElementProviderFromPoint(double x, double y, IRawEl
     pt.y = (LONG)y;
     ScreenToClient(m_controlHwnd, &pt);
     int itemIndex = m_pControl->IndexFromY(pt.y);
-    ListItemProvider* pItem = GetItemProviderByIndex(itemIndex);  
+    ListItemProvider* pItem = GetItemProviderByIndex(itemIndex);
     if (pItem != NULL)
     {
         *pRetVal = static_cast<IRawElementProviderFragment*>(pItem);
         pItem->AddRef();
     }
-    else 
+    else
     {
         *pRetVal = NULL;
     }
@@ -298,7 +298,7 @@ IFACEMETHODIMP ListProvider::ElementProviderFromPoint(double x, double y, IRawEl
 IFACEMETHODIMP ListProvider::GetFocus(IRawElementProviderFragment** pRetVal)
 {
     *pRetVal = NULL;
-    ListItemProvider* pItem = GetItemProviderByIndex(m_pControl->GetSelectedIndex()); 
+    ListItemProvider* pItem = GetItemProviderByIndex(m_pControl->GetSelectedIndex());
     if (pItem != NULL)
     {
         pItem->AddRef();
@@ -311,14 +311,14 @@ IFACEMETHODIMP ListProvider::GetFocus(IRawElementProviderFragment** pRetVal)
 // ISelectionProvider implementation
 //
 // Implementation of ISelectionProvider::GetSelection.
-// Gets the provider(s) for the items(s) selected in the list box. 
+// Gets the provider(s) for the items(s) selected in the list box.
 // In this case, only a single item can be selected.
 //
 IFACEMETHODIMP ListProvider::GetSelection(SAFEARRAY** pRetVal)
 {
     SAFEARRAY *psa = SafeArrayCreateVector(VT_UNKNOWN, 0, 1);
-    int index = m_pControl->GetSelectedIndex(); 
-    ListItemProvider* pItem = GetItemProviderByIndex(index); 
+    int index = m_pControl->GetSelectedIndex();
+    ListItemProvider* pItem = GetItemProviderByIndex(index);
     if (pItem != NULL)
     {
         LONG i = 0;
@@ -339,7 +339,7 @@ IFACEMETHODIMP ListProvider::get_CanSelectMultiple(BOOL *pRetVal)
 //
 IFACEMETHODIMP ListProvider::get_IsSelectionRequired(BOOL *pRetVal)
 {
-   *pRetVal = TRUE;
-   return S_OK;
+    *pRetVal = TRUE;
+    return S_OK;
 }
 

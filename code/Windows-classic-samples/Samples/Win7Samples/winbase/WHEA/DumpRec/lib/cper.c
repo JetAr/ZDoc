@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -23,7 +23,7 @@ Abstract:
 BOOL
 CperIsValidErrorRecordSignature (
     __in PWHEA_ERROR_RECORD Record
-    )
+)
 
 /*++
 
@@ -47,8 +47,9 @@ Return Value:
 {
 
     if ((Record->Header.Signature != WHEA_ERROR_RECORD_SIGNATURE) ||
-        (Record->Header.Revision.AsUSHORT > WHEA_ERROR_RECORD_REVISION) ||
-        (Record->Header.SignatureEnd != WHEA_ERROR_RECORD_SIGNATURE_END)) {
+            (Record->Header.Revision.AsUSHORT > WHEA_ERROR_RECORD_REVISION) ||
+            (Record->Header.SignatureEnd != WHEA_ERROR_RECORD_SIGNATURE_END))
+    {
 
         return FALSE;
     }
@@ -62,7 +63,7 @@ CperGetFirstSection (
     __out ULONG *Context,
     __out PWHEA_ERROR_RECORD_SECTION_DESCRIPTOR *SectionDescriptor,
     __out_opt PVOID *SectionData
-    )
+)
 
 /*++
 
@@ -100,7 +101,8 @@ Return Value:
 
     Next = 0;
     Result = CperGetNextSection(Record, &Next, SectionDescriptor, SectionData);
-    if (Result != FALSE) {
+    if (Result != FALSE)
+    {
         *Context = Next;
     }
 
@@ -113,7 +115,7 @@ CperGetNextSection (
     __inout ULONG *Context,
     __out PWHEA_ERROR_RECORD_SECTION_DESCRIPTOR *SectionDescriptor,
     __out_opt PVOID *SectionData
-    )
+)
 
 /*++
 
@@ -155,10 +157,11 @@ Return Value:
     Result = TRUE;
     Error = NO_ERROR;
     if ((Record == NULL) ||
-        (Context == NULL) ||
-        (SectionDescriptor == NULL) ||
-        (CperIsValidErrorRecordSignature(Record) == FALSE) ||
-        (Record->Header.SectionCount == 0)) {
+            (Context == NULL) ||
+            (SectionDescriptor == NULL) ||
+            (CperIsValidErrorRecordSignature(Record) == FALSE) ||
+            (Record->Header.SectionCount == 0))
+    {
 
         Result = FALSE;
         Error = ERROR_INVALID_PARAMETER;
@@ -171,10 +174,11 @@ Return Value:
     //
 
     MinimumLength = sizeof(WHEA_ERROR_RECORD_HEADER) +
-        (Record->Header.SectionCount *
-         sizeof(WHEA_ERROR_RECORD_SECTION_DESCRIPTOR));
+                    (Record->Header.SectionCount *
+                     sizeof(WHEA_ERROR_RECORD_SECTION_DESCRIPTOR));
 
-    if (Record->Header.Length < MinimumLength) {
+    if (Record->Header.Length < MinimumLength)
+    {
         Result = FALSE;
         Error = ERROR_INVALID_PARAMETER;
         goto GetNextSectionEnd;
@@ -188,13 +192,15 @@ Return Value:
     //
 
     Index = *Context;
-    if (Index > Record->Header.SectionCount) {
+    if (Index > Record->Header.SectionCount)
+    {
         Result = FALSE;
         Error = ERROR_INVALID_PARAMETER;
         goto GetNextSectionEnd;
     }
 
-    if (Index == Record->Header.SectionCount) {
+    if (Index == Record->Header.SectionCount)
+    {
         Result = FALSE;
         Error = ERROR_NOT_FOUND;
         goto GetNextSectionEnd;
@@ -208,7 +214,8 @@ Return Value:
     //
 
     if ((Descriptor->SectionOffset + Descriptor->SectionLength) >
-        Record->Header.Length) {
+            Record->Header.Length)
+    {
 
         Result = FALSE;
         Error = ERROR_INVALID_PARAMETER;
@@ -217,12 +224,14 @@ Return Value:
 
     *Context = Index + 1;
     *SectionDescriptor = Descriptor;
-    if (SectionData != NULL) {
+    if (SectionData != NULL)
+    {
         *SectionData = (PVOID)(((PUCHAR)Record) + Descriptor->SectionOffset);
     }
 
 GetNextSectionEnd:
-    if (Result == FALSE) {
+    if (Result == FALSE)
+    {
         SetLastError(Error);
     }
 
@@ -234,7 +243,7 @@ CperFindPrimarySection (
     __in PWHEA_ERROR_RECORD Record,
     __out PWHEA_ERROR_RECORD_SECTION_DESCRIPTOR *SectionDescriptor,
     __out PVOID *SectionData
-    )
+)
 
 /*++
 
@@ -274,17 +283,19 @@ Return Value:
                                  &Descriptor,
                                  &Data);
 
-    while (Result != FALSE) {
-        if (Descriptor->Flags.Primary == 1) {
+    while (Result != FALSE)
+    {
+        if (Descriptor->Flags.Primary == 1)
+        {
             *SectionDescriptor = Descriptor;
             *SectionData = Data;
             break;
         }
 
         Result = CperGetNextSection(Record,
-                                     &Context,
-                                     &Descriptor,
-                                     &Data);
+                                    &Context,
+                                    &Descriptor,
+                                    &Data);
     }
 
     //
@@ -292,7 +303,8 @@ Return Value:
     // that.
     //
 
-    if ((Result == FALSE) && (GetLastError() == ERROR_NOT_FOUND)) {
+    if ((Result == FALSE) && (GetLastError() == ERROR_NOT_FOUND))
+    {
         Result = CperGetFirstSection(Record,
                                      &Context,
                                      SectionDescriptor,
@@ -308,7 +320,7 @@ CperFindSection (
     __in const GUID *SectionType,
     __out PWHEA_ERROR_RECORD_SECTION_DESCRIPTOR *SectionDescriptor,
     __out PVOID *SectionData
-    )
+)
 
 /*++
 
@@ -351,8 +363,10 @@ Return Value:
                                  &Descriptor,
                                  &Data);
 
-    while (Result != FALSE) {
-        if (IsEqualGUID(&Descriptor->SectionType, SectionType)) {
+    while (Result != FALSE)
+    {
+        if (IsEqualGUID(&Descriptor->SectionType, SectionType))
+        {
             break;
         }
 
@@ -362,7 +376,8 @@ Return Value:
                                     &Data);
     }
 
-    if (Result != FALSE) {
+    if (Result != FALSE)
+    {
         *SectionDescriptor = Descriptor;
         *SectionData = Data;
     }

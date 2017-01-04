@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -127,16 +127,16 @@ DemoApp::~DemoApp()
 
 HRESULT DemoApp::Initialize(HINSTANCE hInstance)
 {
-    
+
     HRESULT hr = S_OK;
 
     // Create WIC factory
     hr = CoCreateInstance(
-        CLSID_WICImagingFactory,
-        NULL,
-        CLSCTX_INPROC_SERVER,
-        IID_PPV_ARGS(&m_pIWICFactory)
-        );
+             CLSID_WICImagingFactory,
+             NULL,
+             CLSCTX_INPROC_SERVER,
+             IID_PPV_ARGS(&m_pIWICFactory)
+         );
 
     if (SUCCEEDED(hr))
     {
@@ -171,18 +171,18 @@ HRESULT DemoApp::Initialize(HINSTANCE hInstance)
     {
         // Create window
         HWND hWnd = CreateWindow(
-            L"WICViewerD2D",
-            L"WIC Viewer D2D Sample",
-            WS_OVERLAPPEDWINDOW | WS_VISIBLE,
-            CW_USEDEFAULT,
-            CW_USEDEFAULT,
-            640,
-            480,
-            NULL,
-            NULL,
-            hInstance,
-            this
-            );
+                        L"WICViewerD2D",
+                        L"WIC Viewer D2D Sample",
+                        WS_OVERLAPPEDWINDOW | WS_VISIBLE,
+                        CW_USEDEFAULT,
+                        CW_USEDEFAULT,
+                        640,
+                        480,
+                        NULL,
+                        NULL,
+                        hInstance,
+                        this
+                    );
 
         hr = hWnd ? S_OK : E_FAIL;
     }
@@ -209,12 +209,12 @@ HRESULT DemoApp::CreateD2DBitmapFromFile(HWND hWnd)
         IWICBitmapDecoder *pDecoder = NULL;
 
         hr = m_pIWICFactory->CreateDecoderFromFilename(
-            szFileName,                      // Image to be decoded
-            NULL,                            // Do not prefer a particular vendor
-            GENERIC_READ,                    // Desired read access to the file
-            WICDecodeMetadataCacheOnDemand,  // Cache metadata when needed
-            &pDecoder                        // Pointer to the decoder
-            );
+                 szFileName,                      // Image to be decoded
+                 NULL,                            // Do not prefer a particular vendor
+                 GENERIC_READ,                    // Desired read access to the file
+                 WICDecodeMetadataCacheOnDemand,  // Cache metadata when needed
+                 &pDecoder                        // Pointer to the decoder
+             );
 
         // Retrieve the first frame of the image from the decoder
         IWICBitmapFrameDecode *pFrame = NULL;
@@ -234,13 +234,13 @@ HRESULT DemoApp::CreateD2DBitmapFromFile(HWND hWnd)
         if (SUCCEEDED(hr))
         {
             hr = m_pConvertedSourceBitmap->Initialize(
-                pFrame,                          // Input bitmap to convert
-                GUID_WICPixelFormat32bppPBGRA,   // Destination pixel format
-                WICBitmapDitherTypeNone,         // Specified dither pattern
-                NULL,                            // Specify a particular palette 
-                0.f,                             // Alpha threshold
-                WICBitmapPaletteTypeCustom       // Palette translation type
-                );
+                     pFrame,                          // Input bitmap to convert
+                     GUID_WICPixelFormat32bppPBGRA,   // Destination pixel format
+                     WICBitmapDitherTypeNone,         // Specified dither pattern
+                     NULL,                            // Specify a particular palette
+                     0.f,                             // Alpha threshold
+                     WICBitmapPaletteTypeCustom       // Palette translation type
+                 );
         }
 
         //Step 4: Create render target and D2D bitmap from IWICBitmapSource
@@ -291,7 +291,7 @@ BOOL DemoApp::LocateImageFile(HWND hWnd, LPWSTR pszFileName, DWORD cchFileName)
     ofn.lpstrTitle      = L"Open Image";
     ofn.Flags           = OFN_FILEMUSTEXIST | OFN_PATHMUSTEXIST;
 
-    // Display the Open dialog box. 
+    // Display the Open dialog box.
     return GetOpenFileName(&ofn);
 }
 
@@ -326,10 +326,10 @@ HRESULT DemoApp::CreateDeviceResources(HWND hWnd)
             D2D1_SIZE_U size = D2D1::SizeU(rc.right - rc.left, rc.bottom - rc.top);
 
             hr = m_pD2DFactory->CreateHwndRenderTarget(
-                renderTargetProperties,
-                D2D1::HwndRenderTargetProperties(hWnd, size),
-                &m_pRT
-                );
+                     renderTargetProperties,
+                     D2D1::HwndRenderTargetProperties(hWnd, size),
+                     &m_pRT
+                 );
         }
     }
 
@@ -376,58 +376,58 @@ LRESULT DemoApp::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     switch (uMsg)
     {
-        case WM_COMMAND:
+    case WM_COMMAND:
+    {
+        // Parse the menu selections:
+        switch (LOWORD(wParam))
         {
-            // Parse the menu selections:
-            switch (LOWORD(wParam))
+        case IDM_FILE:
+        {
+            if (SUCCEEDED(CreateD2DBitmapFromFile(hWnd)))
             {
-                case IDM_FILE:
-                {
-                    if (SUCCEEDED(CreateD2DBitmapFromFile(hWnd)))
-                    {
-                        InvalidateRect(hWnd, NULL, TRUE);
-                    }
-                    else
-                    {
-                        MessageBox(hWnd, L"Failed to load image, select a new one.", L"Application Error", MB_ICONEXCLAMATION | MB_OK);
-                    }
-                    break;
-                }
-                case IDM_EXIT:
-                {
-                    PostMessage(hWnd, WM_CLOSE, 0, 0);
-                    break;
-                }
+                InvalidateRect(hWnd, NULL, TRUE);
+            }
+            else
+            {
+                MessageBox(hWnd, L"Failed to load image, select a new one.", L"Application Error", MB_ICONEXCLAMATION | MB_OK);
             }
             break;
         }
-        case WM_SIZE:
+        case IDM_EXIT:
         {
-            D2D1_SIZE_U size = D2D1::SizeU(LOWORD(lParam), HIWORD(lParam));
+            PostMessage(hWnd, WM_CLOSE, 0, 0);
+            break;
+        }
+        }
+        break;
+    }
+    case WM_SIZE:
+    {
+        D2D1_SIZE_U size = D2D1::SizeU(LOWORD(lParam), HIWORD(lParam));
 
-            if (m_pRT)
+        if (m_pRT)
+        {
+            // If we couldn't resize, release the device and we'll recreate it
+            // during the next render pass.
+            if (FAILED(m_pRT->Resize(size)))
             {
-                // If we couldn't resize, release the device and we'll recreate it
-                // during the next render pass.
-                if (FAILED(m_pRT->Resize(size)))
-                {
-                    SafeRelease(m_pRT);
-                    SafeRelease(m_pD2DBitmap);
-                }
+                SafeRelease(m_pRT);
+                SafeRelease(m_pD2DBitmap);
             }
-            break;
         }
-        case WM_PAINT:
-        {
-            return OnPaint(hWnd);
-        }
-        case WM_DESTROY:
-        {
-            PostQuitMessage(0);
-            return 0;
-        }
-        default:
-            return DefWindowProc(hWnd, uMsg, wParam, lParam);
+        break;
+    }
+    case WM_PAINT:
+    {
+        return OnPaint(hWnd);
+    }
+    case WM_DESTROY:
+    {
+        PostQuitMessage(0);
+        return 0;
+    }
+    default:
+        return DefWindowProc(hWnd, uMsg, wParam, lParam);
     }
 
     return 0;
@@ -460,7 +460,7 @@ LRESULT DemoApp::OnPaint(HWND hWnd)
             // Create a rectangle same size of current window
             D2D1_RECT_F rectangle = D2D1::RectF(0.0f, 0.0f, rtSize.width, rtSize.height);
 
-            // D2DBitmap may have been released due to device loss. 
+            // D2DBitmap may have been released due to device loss.
             // If so, re-create it from the source bitmap
             if (m_pConvertedSourceBitmap && !m_pD2DBitmap)
             {
@@ -490,4 +490,4 @@ LRESULT DemoApp::OnPaint(HWND hWnd)
     }
 
     return SUCCEEDED(hr) ? 0 : 1;
-}  
+}

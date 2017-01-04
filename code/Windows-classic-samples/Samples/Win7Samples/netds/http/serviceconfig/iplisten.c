@@ -1,4 +1,4 @@
-/*++
+﻿/*++
  Copyright (c) 2002 - 2002 Microsoft Corporation.  All Rights Reserved.
 
  THIS CODE AND INFORMATION IS PROVIDED "AS-IS" WITHOUT WARRANTY OF
@@ -6,7 +6,7 @@
  THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
  PARTICULAR PURPOSE.
 
- THIS CODE IS NOT SUPPORTED BY MICROSOFT. 
+ THIS CODE IS NOT SUPPORTED BY MICROSOFT.
 
 --*/
 
@@ -33,7 +33,7 @@ Return Value:
 void
 PrintIpListenRecords(
     IN PUCHAR pOutput
-    )
+)
 {
     PHTTP_SERVICE_CONFIG_IP_LISTEN_QUERY pListenQuery;
     ULONG                                i;
@@ -50,8 +50,8 @@ PrintIpListenRecords(
 
         dwIpAddrLen = sizeof(IpAddr)/sizeof(WCHAR);
 
-        pSockAddrIn = (PSOCKADDR_IN) 
-                    &pListenQuery->AddrList[i];
+        pSockAddrIn = (PSOCKADDR_IN)
+                      &pListenQuery->AddrList[i];
 
         // Convert address to string.
         //
@@ -67,16 +67,16 @@ PrintIpListenRecords(
         else
         {
             Status = ERROR_REGISTRY_CORRUPT;
-            break; 
+            break;
         }
 
         Status = WSAAddressToString(
-                            (LPSOCKADDR)&pListenQuery->AddrList[i],
-                            dwSockAddrLength,
-                            NULL,
-                            (LPWSTR) IpAddr,
-                            &dwIpAddrLen
-                            );
+                     (LPSOCKADDR)&pListenQuery->AddrList[i],
+                     dwSockAddrLength,
+                     NULL,
+                     (LPWSTR) IpAddr,
+                     &dwIpAddrLen
+                 );
 
         if(SOCKET_ERROR == Status)
         {
@@ -108,37 +108,37 @@ Return Value:
 --***************************************************************************/
 int DoIpSet(
     __in_opt PWSTR pIp
-    )
+)
 {
     HTTP_SERVICE_CONFIG_IP_LISTEN_PARAM SetParam;
     DWORD                               Status;
     SOCKADDR_STORAGE                    TempSockAddr;
 
     // convert IP to a SOCKADDR.
-    if((Status = GetAddress(pIp, 
+    if((Status = GetAddress(pIp,
                             &TempSockAddr,
                             sizeof(TempSockAddr)
-                            )) != NO_ERROR)
+                           )) != NO_ERROR)
     {
         wprintf(L"%s is not a valid IP address.", pIp);
         return Status;
     }
 
-    SetParam.AddrLength = sizeof(TempSockAddr); 
+    SetParam.AddrLength = sizeof(TempSockAddr);
     SetParam.pAddress   = (LPSOCKADDR)&TempSockAddr;
 
     // Call the API
     Status = HttpSetServiceConfiguration(
-                NULL,
-                HttpServiceConfigIPListenList,
-                (PVOID)&SetParam,
-                sizeof(SetParam),
-                NULL
-                );
+                 NULL,
+                 HttpServiceConfigIPListenList,
+                 (PVOID)&SetParam,
+                 sizeof(SetParam),
+                 NULL
+             );
 
     wprintf(L"HttpSetServiceConfiguration completed with %d", Status);
 
-              
+
     return Status;
 }
 
@@ -155,7 +155,7 @@ Return Value:
 
 --***************************************************************************/
 int DoIpQuery(
-    )
+)
 {
     DWORD    Status;
     PUCHAR   pOutput = NULL;
@@ -167,29 +167,29 @@ int DoIpQuery(
         // First get the size of the output buffer that is required.
         //
         Status = HttpQueryServiceConfiguration(
-                    NULL,
-                    HttpServiceConfigIPListenList,
-                    NULL,
-                    0,
-                    pOutput,
-                    OutputLength,
-                    &ReturnLength,
-                    NULL
-                    );
+                     NULL,
+                     HttpServiceConfigIPListenList,
+                     NULL,
+                     0,
+                     pOutput,
+                     OutputLength,
+                     &ReturnLength,
+                     NULL
+                 );
 
         if(ERROR_INSUFFICIENT_BUFFER == Status)
         {
             // If the API completes with ERROR_INSUFFICIENT_BUFFER, we'll
             // allocate memory for it & continue with the loop where we'll
             // call it again.
-            
+
             if(pOutput)
             {
                 // If there was an existing buffer, free it.
                 LocalFree(pOutput);
             }
 
-            // 
+            //
             // Allocate a new buffer.
             //
             pOutput = LocalAlloc(LMEM_FIXED, ReturnLength);
@@ -225,33 +225,33 @@ int DoIpQuery(
 
 int DoIpDelete(
     __in_opt PWSTR pIp
-    )
+)
 {
     HTTP_SERVICE_CONFIG_IP_LISTEN_PARAM SetParam;
     DWORD                               Status;
     SOCKADDR_STORAGE                    TempSockAddr;
 
-    if((Status = GetAddress(pIp, 
+    if((Status = GetAddress(pIp,
                             &TempSockAddr,
                             sizeof(TempSockAddr)
-                            )) != NO_ERROR)
+                           )) != NO_ERROR)
     {
         wprintf(L"%s is not a valid IP address. ", pIp);
         return Status;
     }
 
-    SetParam.AddrLength = sizeof(TempSockAddr); 
+    SetParam.AddrLength = sizeof(TempSockAddr);
     SetParam.pAddress   = (LPSOCKADDR) &TempSockAddr;
 
     Status = HttpDeleteServiceConfiguration(
-                NULL,
-                HttpServiceConfigIPListenList,
-                (PVOID)&SetParam,
-                sizeof(SetParam),
-                NULL
-                );
-	
-    wprintf(L"HttpDeleteServiceConfiguration completed with %d", Status);       
+                 NULL,
+                 HttpServiceConfigIPListenList,
+                 (PVOID)&SetParam,
+                 sizeof(SetParam),
+                 NULL
+             );
+
+    wprintf(L"HttpDeleteServiceConfiguration completed with %d", Status);
     return Status;
 }
 
@@ -260,26 +260,26 @@ int DoIpDelete(
 //
 
 int DoIpListen(
-    int   argc, 
-    __in_ecount(argc) WCHAR      **argv, 
+    int   argc,
+    __in_ecount(argc) WCHAR      **argv,
     HTTPCFG_TYPE Type
-    )
+)
 {
     PWSTR   pIp = NULL;
-    WCHAR   **argvSaved = argv; 
+    WCHAR   **argvSaved = argv;
 
     while(argc>=2 && (argv[0][0] == '-' || argv[0][0]== '/'))
     {
         switch(toupper(argv[0][1]))
         {
-            case 'I':
-                pIp = argv[1];
-                break;
-    
-            default:
-  	         wprintf(L"%s is not a valid command. ", argv[0]);
+        case 'I':
+            pIp = argv[1];
+            break;
 
-                return ERROR_INVALID_PARAMETER;
+        default:
+            wprintf(L"%s is not a valid command. ", argv[0]);
+
+            return ERROR_INVALID_PARAMETER;
         }
         argc -=2;
         argv +=2;
@@ -287,17 +287,17 @@ int DoIpListen(
 
     switch(Type)
     {
-        case HttpCfgTypeSet:
-            return DoIpSet(pIp);
+    case HttpCfgTypeSet:
+        return DoIpSet(pIp);
 
-        case HttpCfgTypeQuery:
-            return DoIpQuery();
+    case HttpCfgTypeQuery:
+        return DoIpQuery();
 
-        case HttpCfgTypeDelete:
-            return DoIpDelete(pIp);
+    case HttpCfgTypeDelete:
+        return DoIpDelete(pIp);
 
-        default: 
-	     wprintf(L"%s is not a valid command. ", argvSaved[0]);
-            return ERROR_INVALID_PARAMETER;
+    default:
+        wprintf(L"%s is not a valid command. ", argvSaved[0]);
+        return ERROR_INVALID_PARAMETER;
     }
 }

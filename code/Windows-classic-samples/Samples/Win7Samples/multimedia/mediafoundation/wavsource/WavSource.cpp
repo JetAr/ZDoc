@@ -1,7 +1,7 @@
-//////////////////////////////////////////////////////////////////////
+﻿//////////////////////////////////////////////////////////////////////
 //
 // WavSource.cpp : Sample media source for Media Foundation
-// 
+//
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -14,12 +14,12 @@
 
 // Misc implementation notes.
 //
-// Locking: 
-//     The source and stream objects both have critical sections. If you 
-//     hold both locks, the source lock must be held FIRST, to avoid 
-//     deadlocks. 
+// Locking:
+//     The source and stream objects both have critical sections. If you
+//     hold both locks, the source lock must be held FIRST, to avoid
+//     deadlocks.
 //
-// Shutdown: 
+// Shutdown:
 //     Most methods start by calling CheckShutdown(). This method
 //     fails if the source was shut down.
 //
@@ -90,14 +90,14 @@ HRESULT WavSource::CreateInstance(REFIID iid, void **ppSource)
 // hr: If the constructor fails, this value is set to a failure code.
 //-------------------------------------------------------------------
 
-WavSource::WavSource(HRESULT& hr) 
-  : m_nRefCount(1),
-    m_pEventQueue(NULL),
-    m_pPresentationDescriptor(NULL),
-    m_IsShutdown(FALSE),
-    m_state(STATE_STOPPED),
-    m_pStream(NULL),
-    m_pRiff(NULL)
+WavSource::WavSource(HRESULT& hr)
+    : m_nRefCount(1),
+      m_pEventQueue(NULL),
+      m_pPresentationDescriptor(NULL),
+      m_IsShutdown(FALSE),
+      m_state(STATE_STOPPED),
+      m_pStream(NULL),
+      m_pRiff(NULL)
 {
     DllAddRef();
 
@@ -144,7 +144,7 @@ ULONG  WavSource::Release()
 
 HRESULT WavSource::QueryInterface(REFIID iid, void** ppv)
 {
-    static const QITAB qit[] = 
+    static const QITAB qit[] =
     {
         QITABENT(WavSource, IMFMediaEventGenerator),
         QITABENT(WavSource, IMFMediaSource),
@@ -169,7 +169,7 @@ HRESULT WavSource::BeginGetEvent(IMFAsyncCallback* pCallback, IUnknown* punkStat
     hr = CheckShutdown();
 
     if (SUCCEEDED(hr))
-    {   
+    {
         hr = m_pEventQueue->BeginGetEvent(pCallback, punkState);
     }
 
@@ -187,7 +187,7 @@ HRESULT WavSource::EndGetEvent(IMFAsyncResult* pResult, IMFMediaEvent** ppEvent)
     hr = CheckShutdown();
 
     if (SUCCEEDED(hr))
-    {   
+    {
         hr = m_pEventQueue->EndGetEvent(pResult, ppEvent);
     }
 
@@ -220,7 +220,7 @@ HRESULT WavSource::GetEvent(DWORD dwFlags, IMFMediaEvent** ppEvent)
     LeaveCriticalSection(&m_critSec);
 
     if (SUCCEEDED(hr))
-    {   
+    {
         hr = pQueue->GetEvent(dwFlags, ppEvent);
     }
 
@@ -237,7 +237,7 @@ HRESULT WavSource::QueueEvent(MediaEventType met, REFGUID guidExtendedType, HRES
     hr = CheckShutdown();
 
     if (SUCCEEDED(hr))
-    {   
+    {
         hr = m_pEventQueue->QueueEventParamVar(met, guidExtendedType, hrStatus, pvValue);
     }
 
@@ -269,7 +269,7 @@ HRESULT WavSource::CreatePresentationDescriptor(IMFPresentationDescriptor** ppPr
     hr = CheckShutdown();
 
     if (SUCCEEDED(hr))
-    {   
+    {
         if (m_pPresentationDescriptor == NULL)
         {
             hr = CreatePresentationDescriptor();
@@ -278,7 +278,7 @@ HRESULT WavSource::CreatePresentationDescriptor(IMFPresentationDescriptor** ppPr
 
     // Clone our default presentation descriptor.
     if (SUCCEEDED(hr))
-    {   
+    {
         hr = m_pPresentationDescriptor->Clone(ppPresentationDescriptor);
     }
 
@@ -303,11 +303,11 @@ HRESULT WavSource::GetCharacteristics(DWORD* pdwCharacteristics)
     EnterCriticalSection(&m_critSec);
 
     HRESULT hr = S_OK;
-    
+
     hr = CheckShutdown();
 
     if (SUCCEEDED(hr))
-    {   
+    {
         *pdwCharacteristics =  MFMEDIASOURCE_CAN_PAUSE | MFMEDIASOURCE_CAN_SEEK;
     }
 
@@ -325,12 +325,12 @@ HRESULT WavSource::Start(
     IMFPresentationDescriptor* pPresentationDescriptor,
     const GUID* pguidTimeFormat,
     const PROPVARIANT* pvarStartPosition
-    )
+)
 {
     HRESULT hr = S_OK;
     LONGLONG llStartOffset = 0;
-    BOOL bIsSeek = FALSE;    
-    BOOL bIsRestartFromCurrentPosition = FALSE;     
+    BOOL bIsSeek = FALSE;
+    BOOL bIsRestartFromCurrentPosition = FALSE;
     BOOL bQueuedStartEvent = FALSE;
 
     IMFMediaEvent *pEvent = NULL;
@@ -338,7 +338,7 @@ HRESULT WavSource::Start(
     PROPVARIANT var;
     PropVariantInit(&var);
 
-    // Check parameters. 
+    // Check parameters.
     // Start position and presentation descriptor cannot be NULL.
     if (pvarStartPosition == NULL || pPresentationDescriptor == NULL)
     {
@@ -357,7 +357,10 @@ HRESULT WavSource::Start(
     // Fail if the source is shut down.
     hr = CheckShutdown();
 
-    if (FAILED(hr)) { goto done; }
+    if (FAILED(hr))
+    {
+        goto done;
+    }
 
     // Check the start position.
     if (pvarStartPosition->vt == VT_I8)
@@ -373,7 +376,7 @@ HRESULT WavSource::Start(
     }
     else if (pvarStartPosition->vt == VT_EMPTY)
     {
-        // Start position is "current position". 
+        // Start position is "current position".
         // For stopped, that means 0. Otherwise, use the current position.
         if (m_state == STATE_STOPPED)
         {
@@ -395,19 +398,28 @@ HRESULT WavSource::Start(
     // Validate the caller's presentation descriptor.
     hr = ValidatePresentationDescriptor(pPresentationDescriptor);
 
-    if (FAILED(hr)) { goto done; }
+    if (FAILED(hr))
+    {
+        goto done;
+    }
 
     // Sends the MENewStream or MEUpdatedStream event.
     hr = QueueNewStreamEvent(pPresentationDescriptor);
 
-    if (FAILED(hr)) { goto done; }
+    if (FAILED(hr))
+    {
+        goto done;
+    }
 
     // Notify the stream of the new start time.
     hr = m_pStream->SetPosition(llStartOffset);
 
-    if (FAILED(hr)) { goto done; }
+    if (FAILED(hr))
+    {
+        goto done;
+    }
 
-    // Send Started or Seeked events. 
+    // Send Started or Seeked events.
 
     var.vt = VT_I8;
     var.hVal.QuadPart = llStartOffset;
@@ -417,31 +429,43 @@ HRESULT WavSource::Start(
     {
         hr = QueueEvent(MESourceSeeked, GUID_NULL, hr, &var);
 
-        if (FAILED(hr)) { goto done; }
+        if (FAILED(hr))
+        {
+            goto done;
+        }
     }
     else
     {
-        // For starting, if we are RESTARTING from the current position and our 
-        // previous state was running/paused, then we need to add the 
+        // For starting, if we are RESTARTING from the current position and our
+        // previous state was running/paused, then we need to add the
         // MF_EVENT_SOURCE_ACTUAL_START attribute to the event. This requires
         // creating the event object first.
 
         // Create the event.
         hr = MFCreateMediaEvent(MESourceStarted, GUID_NULL, hr, &var, &pEvent);
 
-        if (FAILED(hr)) { goto done; }
+        if (FAILED(hr))
+        {
+            goto done;
+        }
 
         // For restarts, set the actual start time as an attribute.
         if (bIsRestartFromCurrentPosition)
         {
             hr = pEvent->SetUINT64(MF_EVENT_SOURCE_ACTUAL_START, llStartOffset);
-            if (FAILED(hr)) { goto done; }
+            if (FAILED(hr))
+            {
+                goto done;
+            }
         }
-        
+
         // Now  queue the event.
         hr = m_pEventQueue->QueueEvent(pEvent);
 
-        if (FAILED(hr)) { goto done; }
+        if (FAILED(hr))
+        {
+            goto done;
+        }
     }
 
     bQueuedStartEvent = TRUE;
@@ -457,8 +481,11 @@ HRESULT WavSource::Start(
         {
             hr = m_pStream->QueueEvent(MEStreamStarted, GUID_NULL, hr, &var);
         }
-    
-        if (FAILED(hr)) { goto done; }
+
+        if (FAILED(hr))
+        {
+            goto done;
+        }
     }
 
     if (bIsSeek)
@@ -471,18 +498,21 @@ HRESULT WavSource::Start(
         // Otherwise, deliver any queued samples.
         hr = m_pStream->DeliverQueuedSamples();
     }
-    
-    if (FAILED(hr)) { goto done; }
+
+    if (FAILED(hr))
+    {
+        goto done;
+    }
 
     m_state = STATE_STARTED;
 
 done:
 
-    // If a failure occurred and we have not sent the 
-    // MESourceStarted/MESourceSeeked event yet, then it is 
+    // If a failure occurred and we have not sent the
+    // MESourceStarted/MESourceSeeked event yet, then it is
     // OK just to return an error code from Start().
 
-    // If a failure occurred and we have already sent the 
+    // If a failure occurred and we have already sent the
     // event (with a success code), then we need to raise an
     // MEError event.
 
@@ -510,12 +540,12 @@ HRESULT WavSource::Pause()
     EnterCriticalSection(&m_critSec);
 
     HRESULT hr = S_OK;
-    
+
     hr = CheckShutdown();
 
     // Pause is only allowed from started state.
     if (SUCCEEDED(hr))
-    {   
+    {
         if (m_state != STATE_STARTED)
         {
             hr = MF_E_INVALID_STATE_TRANSITION;
@@ -524,7 +554,7 @@ HRESULT WavSource::Pause()
 
     // Send the appropriate events.
     if (SUCCEEDED(hr))
-    {   
+    {
         if (m_pStream)
         {
             hr = m_pStream->QueueEvent(MEStreamPaused, GUID_NULL, S_OK, NULL);
@@ -532,13 +562,13 @@ HRESULT WavSource::Pause()
     }
 
     if (SUCCEEDED(hr))
-    {   
+    {
         hr = QueueEvent(MESourcePaused, GUID_NULL, S_OK, NULL);
     }
 
-    // Update our state. 
+    // Update our state.
     if (SUCCEEDED(hr))
-    {   
+    {
         m_state = STATE_PAUSED;
     }
 
@@ -558,12 +588,12 @@ HRESULT WavSource::Stop()
     EnterCriticalSection(&m_critSec);
 
     HRESULT hr = S_OK;
-    
+
     hr = CheckShutdown();
 
     if (SUCCEEDED(hr))
-    {   
-        // Update our state. 
+    {
+        // Update our state.
         m_state = STATE_STOPPED;
 
         // Flush all queued samples.
@@ -575,14 +605,14 @@ HRESULT WavSource::Stop()
     //
 
     if (SUCCEEDED(hr))
-    {   
+    {
         if (m_pStream)
         {
             hr = m_pStream->QueueEvent(MEStreamStopped, GUID_NULL, S_OK, NULL);
         }
     }
     if (SUCCEEDED(hr))
-    {   
+    {
         hr = QueueEvent(MESourceStopped, GUID_NULL, S_OK, NULL);
     }
 
@@ -606,11 +636,11 @@ HRESULT WavSource::Shutdown()
     EnterCriticalSection(&m_critSec);
 
     HRESULT hr = S_OK;
-    
+
     hr = CheckShutdown();
 
     if (SUCCEEDED(hr))
-    {   
+    {
         // Shut down the stream object.
         if (m_pStream)
         {
@@ -623,7 +653,7 @@ HRESULT WavSource::Shutdown()
             (void)m_pEventQueue->Shutdown();
         }
 
-        // Release objects. 
+        // Release objects.
         SafeRelease(&m_pStream);
         SafeRelease(&m_pEventQueue);
         SafeRelease(&m_pPresentationDescriptor);
@@ -648,10 +678,10 @@ HRESULT WavSource::Shutdown()
 // Name: Open
 // Description: Opens the source from a bytestream.
 //
-// The bytestream handler calls this method after it creates the 
-// source. 
+// The bytestream handler calls this method after it creates the
+// source.
 //
-// Note: This method is not a public API. It is a custom method on 
+// Note: This method is not a public API. It is a custom method on
 // for our bytestream class to use.
 //-------------------------------------------------------------------
 
@@ -669,20 +699,20 @@ HRESULT WavSource::Open(IMFByteStream *pStream)
 
     // Create a new WAVE RIFF parser object to parse the stream.
     if (SUCCEEDED(hr))
-    {   
+    {
         hr = CWavRiffParser::Create(pStream, &m_pRiff);
     }
 
     // Parse the WAVE header. This fails if the header is not
     // well-formed.
     if (SUCCEEDED(hr))
-    {   
+    {
         hr = m_pRiff->ParseWAVEHeader();
     }
 
     // Validate the WAVEFORMATEX structure from the file header.
     if (SUCCEEDED(hr))
-    {   
+    {
         hr = ValidateWaveFormat(m_pRiff->Format(), m_pRiff->FormatSize());
     }
 
@@ -706,13 +736,13 @@ HRESULT WavSource::Open(IMFByteStream *pStream)
 
 //-------------------------------------------------------------------
 // Name: WaveFormat
-// Description: 
+// Description:
 // Returns a pointer to the WAVEFORMATEX structure that describes the
 // audio format. Returns NULL if no format is set.
 //-------------------------------------------------------------------
 
-const WAVEFORMATEX* WavSource::WaveFormat() const 
-{ 
+const WAVEFORMATEX* WavSource::WaveFormat() const
+{
     if (m_pRiff)
     {
         return m_pRiff->Format();
@@ -725,12 +755,12 @@ const WAVEFORMATEX* WavSource::WaveFormat() const
 
 //-------------------------------------------------------------------
 // Name: WaveFormatSize
-// Description: 
+// Description:
 // Returns the size of the WAVEFORMATEX structure.
 //-------------------------------------------------------------------
 
-DWORD WavSource::WaveFormatSize() const 
-{  
+DWORD WavSource::WaveFormatSize() const
+{
     if (m_pRiff)
     {
         return m_pRiff->FormatSize();
@@ -764,51 +794,51 @@ HRESULT WavSource::CreatePresentationDescriptor()
 
     // Initialize the media type from the WAVEFORMATEX structure.
     if (SUCCEEDED(hr))
-    {   
+    {
         hr = MFInitMediaTypeFromWaveFormatEx(pMediaType, WaveFormat(), WaveFormatSize());
     }
 
     // Create the stream descriptor.
     if (SUCCEEDED(hr))
-    {   
+    {
         hr = MFCreateStreamDescriptor(
-            0,          // stream identifier
-            1,          // Number of media types.
-            &pMediaType, // Array of media types
-            &pStreamDescriptor
-            );
+                 0,          // stream identifier
+                 1,          // Number of media types.
+                 &pMediaType, // Array of media types
+                 &pStreamDescriptor
+             );
     }
 
     // Set the default media type on the media type handler.
     if (SUCCEEDED(hr))
-    {   
+    {
         hr = pStreamDescriptor->GetMediaTypeHandler(&pHandler);
     }
 
     if (SUCCEEDED(hr))
-    {   
+    {
         hr = pHandler->SetCurrentMediaType(pMediaType);
     }
 
     // Create the presentation descriptor.
     if (SUCCEEDED(hr))
-    {   
+    {
         hr = MFCreatePresentationDescriptor(
-            1,                      // Number of stream descriptors
-            &pStreamDescriptor,     // Array of stream descriptors
-            &m_pPresentationDescriptor
-            );
+                 1,                      // Number of stream descriptors
+                 &pStreamDescriptor,     // Array of stream descriptors
+                 &m_pPresentationDescriptor
+             );
     }
 
     // Select the first stream
     if (SUCCEEDED(hr))
-    {   
+    {
         hr = m_pPresentationDescriptor->SelectStream(0);
     }
 
     // Set the file duration as an attribute on the presentation descriptor.
     if (SUCCEEDED(hr))
-    {   
+    {
         duration = m_pRiff->FileDuration();
         hr = m_pPresentationDescriptor->SetUINT64(MF_PD_DURATION, (UINT64)duration);
     }
@@ -828,10 +858,10 @@ HRESULT WavSource::CreatePresentationDescriptor()
 // This method is called when Start() is called with a non-NULL
 // presentation descriptor. The caller is supposed to give us back
 // the same PD that we gave out in CreatePresentationDescriptor().
-// This method performs a sanity check on the caller's PD to make 
+// This method performs a sanity check on the caller's PD to make
 // sure it matches ours.
 //
-// Note: Because this media source has one stream with single, fixed 
+// Note: Because this media source has one stream with single, fixed
 //       media type, there is not much for the caller to decide. In
 //       a more complicated source, the caller might select different
 //       streams, or select from a list of media types.
@@ -856,7 +886,7 @@ HRESULT WavSource::ValidatePresentationDescriptor(IMFPresentationDescriptor *pPD
     hr = pPD->GetStreamDescriptorCount(&cStreamDescriptors);
 
     if (SUCCEEDED(hr))
-    {   
+    {
         if (cStreamDescriptors != 1)
         {
             hr = MF_E_UNSUPPORTED_REPRESENTATION;
@@ -865,14 +895,14 @@ HRESULT WavSource::ValidatePresentationDescriptor(IMFPresentationDescriptor *pPD
 
     // Get the stream descriptor.
     if (SUCCEEDED(hr))
-    {   
+    {
         hr = pPD->GetStreamDescriptorByIndex(0, &fSelected, &pStreamDescriptor);
     }
 
     // Make sure it's selected. (This media source has only one stream, so it
     // is not useful to deselect the only stream.)
     if (SUCCEEDED(hr))
-    {   
+    {
         if (!fSelected)
         {
             hr = MF_E_UNSUPPORTED_REPRESENTATION;
@@ -881,25 +911,25 @@ HRESULT WavSource::ValidatePresentationDescriptor(IMFPresentationDescriptor *pPD
 
     // Get the media type handler, so that we can get the media type.
     if (SUCCEEDED(hr))
-    {   
+    {
         hr = pStreamDescriptor->GetMediaTypeHandler(&pHandler);
     }
 
     if (SUCCEEDED(hr))
-    {   
+    {
         hr = pHandler->GetCurrentMediaType(&pMediaType);
     }
 
     if (SUCCEEDED(hr))
-    {   
+    {
         hr = MFCreateWaveFormatExFromMFMediaType(
-            pMediaType, 
-            &pFormat,
-            &cbWaveFormat);
+                 pMediaType,
+                 &pFormat,
+                 &cbWaveFormat);
     }
 
     if (SUCCEEDED(hr))
-    {   
+    {
         assert(this->WaveFormat() != NULL);
 
         if (cbWaveFormat < this->WaveFormatSize())
@@ -909,7 +939,7 @@ HRESULT WavSource::ValidatePresentationDescriptor(IMFPresentationDescriptor *pPD
     }
 
     if (SUCCEEDED(hr))
-    {   
+    {
         if (memcmp(pFormat, WaveFormat(), WaveFormatSize()) != 0)
         {
             hr = MF_E_INVALIDMEDIATYPE;
@@ -928,12 +958,12 @@ HRESULT WavSource::ValidatePresentationDescriptor(IMFPresentationDescriptor *pPD
 
 //-------------------------------------------------------------------
 // Name: QueueNewStreamEvent
-// Description: 
+// Description:
 // Queues an MENewStream or MEUpdatedStream event during Start.
 //
 // pPD: The presentation descriptor.
 //
-// Precondition: The presentation descriptor is assumed to be valid. 
+// Precondition: The presentation descriptor is assumed to be valid.
 // Call ValidatePresentationDescriptor before calling this method.
 //-------------------------------------------------------------------
 
@@ -945,11 +975,11 @@ HRESULT WavSource::QueueNewStreamEvent(IMFPresentationDescriptor *pPD)
     IMFStreamDescriptor *pSD = NULL;
 
     BOOL fSelected = FALSE;
-    
+
     hr = pPD->GetStreamDescriptorByIndex(0, &fSelected, &pSD);
 
     if (SUCCEEDED(hr))
-    {   
+    {
         // The stream must be selected, because we don't allow the app
         // to de-select the stream. See ValidatePresentationDescriptor.
         assert(fSelected);
@@ -958,7 +988,7 @@ HRESULT WavSource::QueueNewStreamEvent(IMFPresentationDescriptor *pPD)
         {
             // The stream already exists, and is still selected.
             // Send the MEUpdatedStream event.
-            hr = QueueEventWithIUnknown(this, MEUpdatedStream, S_OK, m_pStream); 
+            hr = QueueEventWithIUnknown(this, MEUpdatedStream, S_OK, m_pStream);
         }
         else
         {
@@ -968,7 +998,7 @@ HRESULT WavSource::QueueNewStreamEvent(IMFPresentationDescriptor *pPD)
             hr = CreateWavStream(pSD);
 
             if (SUCCEEDED(hr))
-            {   
+            {
                 // CreateWavStream creates the stream, so m_pStream is no longer NULL.
                 assert(m_pStream != NULL);
 
@@ -1094,7 +1124,7 @@ ULONG  WavStream::Release()
 
 HRESULT WavStream::QueryInterface(REFIID iid, void** ppv)
 {
-    static const QITAB qit[] = 
+    static const QITAB qit[] =
     {
         QITABENT(WavStream, IMFMediaEventGenerator),
         QITABENT(WavStream, IMFMediaStream),
@@ -1115,7 +1145,7 @@ HRESULT WavStream::BeginGetEvent(IMFAsyncCallback* pCallback, IUnknown* punkStat
 
     hr = CheckShutdown();
     if (SUCCEEDED(hr))
-    {   
+    {
         hr = m_pEventQueue->BeginGetEvent(pCallback, punkState);
     }
 
@@ -1131,7 +1161,7 @@ HRESULT WavStream::EndGetEvent(IMFAsyncResult* pResult, IMFMediaEvent** ppEvent)
 
     hr = CheckShutdown();
     if (SUCCEEDED(hr))
-    {   
+    {
         hr = m_pEventQueue->EndGetEvent(pResult, ppEvent);
     }
 
@@ -1144,13 +1174,13 @@ HRESULT WavStream::GetEvent(DWORD dwFlags, IMFMediaEvent** ppEvent)
     HRESULT hr = S_OK;
 
     IMFMediaEventQueue *pQueue = NULL;
-    
+
     EnterCriticalSection(&m_critSec);
 
     hr = CheckShutdown();
 
     if (SUCCEEDED(hr))
-    {   
+    {
         pQueue = m_pEventQueue;
         pQueue->AddRef();
     }
@@ -1158,7 +1188,7 @@ HRESULT WavStream::GetEvent(DWORD dwFlags, IMFMediaEvent** ppEvent)
     LeaveCriticalSection(&m_critSec);
 
     if (SUCCEEDED(hr))
-    {   
+    {
         hr = pQueue->GetEvent(dwFlags, ppEvent);
     }
 
@@ -1174,7 +1204,7 @@ HRESULT WavStream::QueueEvent(MediaEventType met, REFGUID guidExtendedType, HRES
 
     hr = CheckShutdown();
     if (SUCCEEDED(hr))
-    {   
+    {
         hr = m_pEventQueue->QueueEventParamVar(met, guidExtendedType, hrStatus, pvValue);
     }
 
@@ -1201,14 +1231,14 @@ HRESULT WavStream::GetMediaSource(IMFMediaSource** ppMediaSource)
     EnterCriticalSection(&m_critSec);
 
     HRESULT hr = S_OK;
-    
+
     // If called after shutdown, them m_pSource is NULL.
     // Otherwise, m_pSource should not be NULL.
 
     hr = CheckShutdown();
 
     if (SUCCEEDED(hr))
-    {   
+    {
         if (m_pSource == NULL)
         {
             hr = E_UNEXPECTED;
@@ -1216,7 +1246,7 @@ HRESULT WavStream::GetMediaSource(IMFMediaSource** ppMediaSource)
     }
 
     if (SUCCEEDED(hr))
-    {   
+    {
         hr = m_pSource->QueryInterface(IID_PPV_ARGS(ppMediaSource));
     }
 
@@ -1245,11 +1275,11 @@ HRESULT WavStream::GetStreamDescriptor(IMFStreamDescriptor** ppStreamDescriptor)
     EnterCriticalSection(&m_critSec);
 
     HRESULT hr = S_OK;
-    
+
     hr = CheckShutdown();
 
     if (SUCCEEDED(hr))
-    {   
+    {
         *ppStreamDescriptor = m_pStreamDescriptor;
         (*ppStreamDescriptor)->AddRef();
     }
@@ -1264,7 +1294,7 @@ HRESULT WavStream::GetStreamDescriptor(IMFStreamDescriptor** ppStreamDescriptor)
 //-------------------------------------------------------------------
 // Name: RequestSample
 // Description: Requests a new sample.
-// 
+//
 // pToken: Token object. Can be NULL.
 //-------------------------------------------------------------------
 
@@ -1287,7 +1317,7 @@ HRESULT WavStream::RequestSample(IUnknown* pToken)
 
     // Check if we already reached the end of the stream.
     if (SUCCEEDED(hr))
-    {   
+    {
         if (m_EOS)
         {
             hr = MF_E_END_OF_STREAM;
@@ -1297,7 +1327,7 @@ HRESULT WavStream::RequestSample(IUnknown* pToken)
     // Check the source is stopped.
     // GetState does not hold the source's critical section. Safe to call.
     if (SUCCEEDED(hr))
-    {   
+    {
         if (m_pSource->GetState() == WavSource::STATE_STOPPED)
         {
             hr = MF_E_INVALIDREQUEST;
@@ -1305,15 +1335,15 @@ HRESULT WavStream::RequestSample(IUnknown* pToken)
     }
 
     if (SUCCEEDED(hr))
-    {   
+    {
         // Create a new audio sample.
         hr = CreateAudioSample(&pSample);
     }
 
     if (SUCCEEDED(hr))
-    {   
+    {
         // If the caller provided a token, attach it to the sample as
-        // an attribute. 
+        // an attribute.
 
         // NOTE: If we processed sample requests asynchronously, we would
         // need to call AddRef on the token and put the token onto a FIFO
@@ -1326,7 +1356,7 @@ HRESULT WavStream::RequestSample(IUnknown* pToken)
 
     // If paused, queue the sample for later delivery. Otherwise, deliver the sample now.
     if (SUCCEEDED(hr))
-    {   
+    {
         if (m_pSource->GetState() == WavSource::STATE_PAUSED)
         {
             hr = m_sampleQueue.Queue(pSample);
@@ -1339,7 +1369,7 @@ HRESULT WavStream::RequestSample(IUnknown* pToken)
 
     // Cache a pointer to the source, prior to leaving the critical section.
     if (SUCCEEDED(hr))
-    {   
+    {
         pSource = m_pSource;
         pSource->AddRef();
     }
@@ -1348,14 +1378,14 @@ HRESULT WavStream::RequestSample(IUnknown* pToken)
 
 
     // We only have one stream, so the end of the stream is also the end of the
-    // presentation. Therefore, when we reach the end of the stream, we need to 
-    // queue the end-of-presentation event from the source. Logically we would do 
+    // presentation. Therefore, when we reach the end of the stream, we need to
+    // queue the end-of-presentation event from the source. Logically we would do
     // this inside the CheckEndOfStream method. However, we cannot hold the
     // source's critical section while holding the stream's critical section, at
-    // risk of deadlock. 
+    // risk of deadlock.
 
     if (SUCCEEDED(hr))
-    {   
+    {
         if (m_EOS)
         {
             hr = pSource->QueueEvent(MEEndOfPresentation, GUID_NULL, S_OK, NULL);
@@ -1400,55 +1430,55 @@ HRESULT WavStream::CreateAudioSample(IMFSample **ppSample)
 
     // Get a pointer to the buffer memory.
     if (SUCCEEDED(hr))
-    {   
+    {
         hr = pBuffer->Lock(&pData, NULL, NULL);
     }
 
     // Fill the buffer
     if (SUCCEEDED(hr))
-    {   
+    {
         hr = m_pRiff->ReadDataFromChunk(pData, cbBuffer);
     }
 
     // Unlock the buffer.
     if (SUCCEEDED(hr))
-    {   
+    {
         hr = pBuffer->Unlock();
         pData = NULL;
     }
 
     // Set the size of the valid data in the buffer.
     if (SUCCEEDED(hr))
-    {   
+    {
         hr = pBuffer->SetCurrentLength(cbBuffer);
     }
 
     // Create a new sample and add the buffer to it.
     if (SUCCEEDED(hr))
-    {   
+    {
         hr = MFCreateSample(&pSample);
     }
 
     if (SUCCEEDED(hr))
-    {   
+    {
         hr = pSample->AddBuffer(pBuffer);
     }
 
     // Set the time stamps, duration, and sample flags.
     if (SUCCEEDED(hr))
-    {   
+    {
         hr = pSample->SetSampleTime(m_rtCurrentPosition);
     }
 
     if (SUCCEEDED(hr))
-    {   
+    {
         duration = AudioDurationFromBufferSize(m_pRiff->Format(), cbBuffer);
         hr = pSample->SetSampleDuration(duration);
     }
 
     // Set the discontinuity flag.
     if (SUCCEEDED(hr))
-    {   
+    {
         if (m_discontinuity)
         {
             hr = pSample->SetUINT32(MFSampleExtension_Discontinuity, TRUE);
@@ -1456,7 +1486,7 @@ HRESULT WavStream::CreateAudioSample(IMFSample **ppSample)
     }
 
     if (SUCCEEDED(hr))
-    {   
+    {
         // Update our current position.
         m_rtCurrentPosition += duration;
 
@@ -1484,11 +1514,11 @@ HRESULT WavStream::DeliverSample(IMFSample *pSample)
     HRESULT hr = S_OK;
 
     // Send the MEMediaSample event with the new sample.
-    hr = QueueEventWithIUnknown(this, MEMediaSample, hr, pSample); 
+    hr = QueueEventWithIUnknown(this, MEMediaSample, hr, pSample);
 
     // See if we reached the end of the stream.
     if (SUCCEEDED(hr))
-    {   
+    {
         hr = CheckEndOfStream();    // This method sends MEEndOfStream if needed.
     }
 
@@ -1499,9 +1529,9 @@ HRESULT WavStream::DeliverSample(IMFSample *pSample)
 // Name: DeliverQueuedSamples
 // Description: Delivers any samples waiting in the queue.
 //
-// Note: If the client requests a sample while the source is paused, 
+// Note: If the client requests a sample while the source is paused,
 // the sample is queued and delivered on the next non-seeking call
-// to Start(). The queue is flushed if the source is seeked or 
+// to Start(). The queue is flushed if the source is seeked or
 // stopped.
 //-------------------------------------------------------------------
 
@@ -1512,7 +1542,7 @@ HRESULT WavStream::DeliverQueuedSamples()
 
     EnterCriticalSection(&m_critSec);
 
-    // If we already reached the end of the stream, send the MEEndStream 
+    // If we already reached the end of the stream, send the MEEndStream
     // event again.
     if (m_EOS)
     {
@@ -1520,8 +1550,8 @@ HRESULT WavStream::DeliverQueuedSamples()
     }
 
     if (SUCCEEDED(hr))
-    {   
-        // Deliver any queued samples. 
+    {
+        // Deliver any queued samples.
         while (!m_sampleQueue.IsEmpty())
         {
             hr = m_sampleQueue.Dequeue(&pSample);
@@ -1545,7 +1575,7 @@ HRESULT WavStream::DeliverQueuedSamples()
     // If we reached the end of the stream, send the end-of-presentation event from
     // the media source.
     if (SUCCEEDED(hr))
-    {   
+    {
         if (m_EOS)
         {
             hr = m_pSource->QueueEvent(MEEndOfPresentation, GUID_NULL, S_OK, NULL);
@@ -1594,7 +1624,7 @@ HRESULT WavStream::Shutdown()
     SafeRelease(&m_pEventQueue);
     SafeRelease(&m_pSource);
     SafeRelease(&m_pStreamDescriptor);
-   
+
     m_pRiff = NULL;
 
     m_IsShutdown = TRUE;
@@ -1629,13 +1659,13 @@ HRESULT WavStream::SetPosition(LONGLONG rtNewPosition)
         LONGLONG offset = BufferSizeFromAudioDuration(m_pRiff->Format(), rtNewPosition);
 
         // The chunk size is a DWORD. So if our calculations are correct, there is no
-        // way that the maximum valid seek position can be larger than a DWORD. 
+        // way that the maximum valid seek position can be larger than a DWORD.
         assert(offset <= MAXDWORD);
 
         hr = m_pRiff->MoveToChunkOffset((DWORD)offset);
 
         if (SUCCEEDED(hr))
-        {   
+        {
             m_rtCurrentPosition = rtNewPosition;
             m_discontinuity = TRUE;
             m_EOS = FALSE;
@@ -1660,7 +1690,7 @@ HRESULT WavStream::CheckEndOfStream()
         // Send the end-of-stream event,
         hr = QueueEvent(MEEndOfStream, GUID_NULL, S_OK, NULL);
     }
-    return hr; 
+    return hr;
 }
 
 
@@ -1705,14 +1735,14 @@ HRESULT QueueEventWithIUnknown(
 
 //-------------------------------------------------------------------
 // Name: ValidateWaveFormat
-// Description: Validates a WAVEFORMATEX structure. 
+// Description: Validates a WAVEFORMATEX structure.
 //
 // This method is called when the byte stream handler opens the
-// source. The WAVEFORMATEX structure is copied directly from the 
+// source. The WAVEFORMATEX structure is copied directly from the
 // .wav file. Therefore the source should not trust any of the
 // values in the format header.
 //
-// Just to keep the sample as simple as possible, we only accept 
+// Just to keep the sample as simple as possible, we only accept
 // uncompressed PCM formats in this media source.
 //-------------------------------------------------------------------
 
@@ -1746,7 +1776,7 @@ HRESULT ValidateWaveFormat(const WAVEFORMATEX *pWav, DWORD cbSize)
 
     // Make sure block alignment was calculated correctly.
     if (pWav->nBlockAlign != pWav->nChannels * (pWav->wBitsPerSample / 8))
-    {   
+    {
         return MF_E_INVALIDMEDIATYPE;
     }
 
@@ -1783,8 +1813,8 @@ LONGLONG BufferSizeFromAudioDuration(const WAVEFORMATEX *pWav, LONGLONG duration
 
     ULONG ulRemainder = (ULONG)(cbSize % pWav->nBlockAlign);
 
-    // Round up to the next block. 
-    if(ulRemainder) 
+    // Round up to the next block.
+    if(ulRemainder)
     {
         cbSize += pWav->nBlockAlign - ulRemainder;
     }

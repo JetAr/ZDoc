@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -40,7 +40,7 @@ static const PurchaseOrderDictionary purchaseOrderDictionary =
 
 // Print out rich error info
 void PrintError(
-    _In_ HRESULT errorCode, 
+    _In_ HRESULT errorCode,
     _In_opt_ WS_ERROR* error)
 {
     wprintf(L"Failure: errorCode=0x%lx\n", errorCode);
@@ -80,7 +80,7 @@ Exit:
 
 // Main entry point
 int __cdecl wmain(
-    _In_ int argc, 
+    _In_ int argc,
     _In_reads_(argc) wchar_t **argv)
 {
     HRESULT hr = S_OK;
@@ -90,7 +90,7 @@ int __cdecl wmain(
     WS_XML_WRITER* xmlWriter = NULL;
     WS_XML_READER* xmlReader = NULL;
     static const WCHAR* staticProductName = L"Pencil";
-    
+
     // Command line parameter specifies whether to use typed or untyped api
     BOOL typed;
     if (argc == 2)
@@ -115,65 +115,65 @@ int __cdecl wmain(
         wprintf(L"usage : WsReadWriteXml.exe [typed|untyped]\n");
         return 1;
     }
-    
+
     // Create an error object for storing rich error information
     hr = WsCreateError(
-        NULL, 
-        0, 
-        &error);
+             NULL,
+             0,
+             &error);
     if (FAILED(hr))
     {
         goto Exit;
     }
-    
+
     // Create a heap to store deserialized data
     hr = WsCreateHeap(
-        /*maxSize*/ 2048, 
-        /*trimSize*/ 512, 
-        NULL, 
-        0, 
-        &heap, 
-        error);
+             /*maxSize*/ 2048,
+             /*trimSize*/ 512,
+             NULL,
+             0,
+             &heap,
+             error);
     if (FAILED(hr))
     {
         goto Exit;
     }
-    
+
     // Create an XML writer
     hr = WsCreateWriter(
-        NULL, 
-        0, 
-        &xmlWriter, 
-        error);
+             NULL,
+             0,
+             &xmlWriter,
+             error);
     if (FAILED(hr))
     {
         goto Exit;
     }
-    
+
     // Create an XML buffer on the specified heap
     hr = WsCreateXmlBuffer(
-        heap, 
-        NULL, 
-        0, 
-        &xmlBuffer, 
-        error);
+             heap,
+             NULL,
+             0,
+             &xmlBuffer,
+             error);
     if (FAILED(hr))
     {
         goto Exit;
     }
-    
+
     // Set the writer to output to the XML buffer
     hr = WsSetOutputToBuffer(
-        xmlWriter, 
-        xmlBuffer, 
-        NULL, 
-        0, 
-        error);
+             xmlWriter,
+             xmlBuffer,
+             NULL,
+             0,
+             error);
     if (FAILED(hr))
     {
         goto Exit;
     }
-    
+
     // Write xml into the buffer
     if (typed)
     {
@@ -181,16 +181,16 @@ int __cdecl wmain(
         _PurchaseOrderType purchaseOrder;
         purchaseOrder.quantity = 1;
         purchaseOrder.productName = (WCHAR*)staticProductName;
-    
+
         // Write purchase order
         hr = WsWriteElement(
-            xmlWriter,
-            &PurchaseOrder_wsdl.globalElements.PurchaseOrderType,
-            WS_WRITE_REQUIRED_VALUE,
-            &purchaseOrder,
-            sizeof(purchaseOrder),
-            error);
-    
+                 xmlWriter,
+                 &PurchaseOrder_wsdl.globalElements.PurchaseOrderType,
+                 WS_WRITE_REQUIRED_VALUE,
+                 &purchaseOrder,
+                 sizeof(purchaseOrder),
+                 error);
+
         if (FAILED(hr))
         {
             goto Exit;
@@ -204,7 +204,7 @@ int __cdecl wmain(
         {
             goto Exit;
         }
-    
+
         // Write quantity element
         int quantity = 1;
         hr = WsWriteStartElement(xmlWriter, NULL, &purchaseOrderDictionary.quantity, &purchaseOrderDictionary.purchaseOrderNamespace, error);
@@ -212,40 +212,40 @@ int __cdecl wmain(
         {
             goto Exit;
         }
-    
+
         hr = WsWriteValue(xmlWriter, WS_INT32_VALUE_TYPE, &quantity, sizeof(quantity), error);
         if (FAILED(hr))
         {
             goto Exit;
         }
-    
+
         hr = WsWriteEndElement(xmlWriter, error);
         if (FAILED(hr))
         {
             goto Exit;
         }
-    
+
         // Write product name start element
         hr = WsWriteStartElement(xmlWriter, NULL, &purchaseOrderDictionary.productName, &purchaseOrderDictionary.purchaseOrderNamespace, error);
         if (FAILED(hr))
         {
             goto Exit;
         }
-    
+
         // Write product name
         hr = WsWriteChars(xmlWriter, staticProductName, (ULONG)wcslen(staticProductName), error);
         if (FAILED(hr))
         {
             goto Exit;
         }
-    
+
         // Write product name end element
         hr = WsWriteEndElement(xmlWriter, error);
         if (FAILED(hr))
         {
             goto Exit;
         }
-    
+
         // Write purchase order end element
         hr = WsWriteEndElement(xmlWriter, error);
         if (FAILED(hr))
@@ -253,44 +253,44 @@ int __cdecl wmain(
             goto Exit;
         }
     }
-    
+
     // Flush writer so all XML content is put in the buffer
     hr = WsFlushWriter(xmlWriter, 0, NULL, error);
     if (FAILED(hr))
     {
         goto Exit;
     }
-    
+
     // Create an XML reader
     hr = WsCreateReader(NULL, 0, &xmlReader, error);
     if (FAILED(hr))
     {
         goto Exit;
     }
-    
+
     // Set the reader input to current position of XML buffer
     hr = WsSetInputToBuffer(xmlReader, xmlBuffer, NULL, 0, error);
     if (FAILED(hr))
     {
         goto Exit;
     }
-    
+
     if (typed)
     {
         // Read purchase order into heap
         _PurchaseOrderType* purchaseOrder;
         hr = WsReadElement(xmlReader, &PurchaseOrder_wsdl.globalElements.PurchaseOrderType,
-            WS_READ_REQUIRED_POINTER, heap, &purchaseOrder, sizeof(purchaseOrder), error);
+                           WS_READ_REQUIRED_POINTER, heap, &purchaseOrder, sizeof(purchaseOrder), error);
         if (FAILED(hr))
         {
             goto Exit;
         }
-    
+
         // Print out purchase order contents
         wprintf(L"%ld, %s\n",
-            purchaseOrder->quantity,
-            purchaseOrder->productName);
-    
+                purchaseOrder->quantity,
+                purchaseOrder->productName);
+
         // Done with purchase order
         WsResetHeap(heap, NULL);
     }
@@ -302,21 +302,21 @@ int __cdecl wmain(
         {
             goto Exit;
         }
-    
+
         // Read purchase order element
         hr = WsReadStartElement(xmlReader, error);
         if (FAILED(hr))
         {
             goto Exit;
         }
-    
+
         // Read to quantity element
         hr = WsReadToStartElement(xmlReader, &purchaseOrderDictionary.quantity, &purchaseOrderDictionary.purchaseOrderNamespace, NULL, error);
         if (FAILED(hr))
         {
             goto Exit;
         }
-    
+
         // Read quantity element as integer
         long quantity;
         hr = WsReadStartElement(xmlReader, error);
@@ -324,33 +324,33 @@ int __cdecl wmain(
         {
             goto Exit;
         }
-    
+
         hr = WsReadValue(xmlReader, WS_INT32_VALUE_TYPE, &quantity, sizeof(quantity), error);
         if (FAILED(hr))
         {
             goto Exit;
         }
-    
+
         hr = WsReadEndElement(xmlReader, error);
         if (FAILED(hr))
         {
             goto Exit;
         }
-    
+
         // Read to product name element
         hr = WsReadToStartElement(xmlReader, &purchaseOrderDictionary.productName, &purchaseOrderDictionary.purchaseOrderNamespace, NULL, error);
         if (FAILED(hr))
         {
             goto Exit;
         }
-    
+
         // Read product name start element
         hr = WsReadStartElement(xmlReader, error);
         if (FAILED(hr))
         {
             goto Exit;
         }
-    
+
         // Read product name into buffer
         WCHAR productName[100];
         ULONG length = 0;
@@ -364,38 +364,38 @@ int __cdecl wmain(
             {
                 goto Exit;
             }
-    
+
             if (charsRead == 0)
             {
                 // No more chars
                 break;
             }
-    
+
             length += charsRead;
             available -= charsRead;
-    
+
             if (available == 0)
             {
                 hr = WS_E_INVALID_FORMAT;
                 goto Exit;
             }
         }
-    
+
         // Zero terminate product name string
         productName[length] = L'\0';
-    
+
         // Print out purchase order contents
         wprintf(L"%ld, %s\n",
-            quantity,
-            productName);
-    
+                quantity,
+                productName);
+
         // Read product name end element
         hr = WsReadEndElement(xmlReader, error);
         if (FAILED(hr))
         {
             goto Exit;
         }
-    
+
         // Read purchase order end element
         hr = WsReadEndElement(xmlReader, error);
         if (FAILED(hr))
@@ -403,14 +403,14 @@ int __cdecl wmain(
             goto Exit;
         }
     }
-    
+
 Exit:
     if (FAILED(hr))
     {
         // Print out the error
         PrintError(hr, error);
     }
-    
+
     if (heap != NULL)
     {
         WsFreeHeap(heap);

@@ -1,4 +1,4 @@
-/**************************************************************************
+﻿/**************************************************************************
     THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
    ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
    THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -52,7 +52,8 @@ CFolderViewImplCategoryProvider::~CFolderViewImplCategoryProvider()
 
 HRESULT CFolderViewImplCategoryProvider::QueryInterface(REFIID riid, void **ppv)
 {
-    static const QITAB qit[] = {
+    static const QITAB qit[] =
+    {
         QITABENT (CFolderViewImplCategoryProvider, ICategoryProvider),
         { 0 },
     };
@@ -80,9 +81,9 @@ HRESULT CFolderViewImplCategoryProvider::CanCategorizeOnSCID(const PROPERTYKEY *
     HRESULT hr = S_FALSE;
 
     if (IsEqualPropertyKey(*pkey, PKEY_ItemNameDisplay) ||
-        IsEqualPropertyKey(*pkey, PKEY_Microsoft_SDKSample_AreaSize) ||
-        IsEqualPropertyKey(*pkey, PKEY_Microsoft_SDKSample_NumberOfSides) ||
-        IsEqualPropertyKey(*pkey, PKEY_Microsoft_SDKSample_DirectoryLevel))
+            IsEqualPropertyKey(*pkey, PKEY_Microsoft_SDKSample_AreaSize) ||
+            IsEqualPropertyKey(*pkey, PKEY_Microsoft_SDKSample_NumberOfSides) ||
+            IsEqualPropertyKey(*pkey, PKEY_Microsoft_SDKSample_DirectoryLevel))
     {
         hr = S_OK;
     }
@@ -143,7 +144,7 @@ HRESULT CFolderViewImplCategoryProvider::EnumCategories(IEnumGUID **penum)
 //  Retrieves a globally unique identifier (GUID) that represents
 //  the categorizer to use for the specified Shell column.
 HRESULT CFolderViewImplCategoryProvider::GetCategoryForSCID(const PROPERTYKEY *pkey,
-                                                            GUID *pguid)
+        GUID *pguid)
 {
     HRESULT hr = S_OK;
     if (IsEqualPropertyKey(*pkey, PKEY_ItemNameDisplay))
@@ -182,8 +183,8 @@ HRESULT CFolderViewImplCategoryProvider::GetCategoryForSCID(const PROPERTYKEY *p
 //  additional categories that appear under the column
 //  related categories in the UI, get their display names.
 HRESULT CFolderViewImplCategoryProvider::GetCategoryName(const GUID* pguid,
-                                                         PWSTR pszName,
-                                                         UINT cch)
+        PWSTR pszName,
+        UINT cch)
 {
     HRESULT hr = E_FAIL;
     if (IsEqualGUID(*pguid, CAT_GUID_VALUE))
@@ -195,7 +196,7 @@ HRESULT CFolderViewImplCategoryProvider::GetCategoryName(const GUID* pguid,
 
 //  Enables the folder to override the default grouping.
 HRESULT CFolderViewImplCategoryProvider::GetDefaultCategory(GUID *pguid,
-                                                            PROPERTYKEY *pkey)
+        PROPERTYKEY *pkey)
 {
     *pguid = CAT_GUID_LEVEL;
     pkey = NULL;
@@ -214,7 +215,8 @@ CFolderViewImplEnumGUID::~CFolderViewImplEnumGUID()
 
 HRESULT CFolderViewImplEnumGUID::QueryInterface(REFIID riid, void **ppv)
 {
-    static const QITAB qit[] = {
+    static const QITAB qit[] =
+    {
         QITABENT (CFolderViewImplEnumGUID, IEnumGUID),
         { 0 },
     };
@@ -297,7 +299,8 @@ CFolderViewImplCategorizer_Name::~CFolderViewImplCategorizer_Name()
 
 HRESULT CFolderViewImplCategorizer_Name::QueryInterface(REFIID riid, void **ppv)
 {
-    static const QITAB qit[] = {
+    static const QITAB qit[] =
+    {
         QITABENT (CFolderViewImplCategorizer_Name, ICategorizer),
         { 0 },
     };
@@ -325,8 +328,8 @@ ULONG CFolderViewImplCategorizer_Name::Release()
 //
 
 HRESULT CFolderViewImplCategorizer_Name::CompareCategory(CATSORT_FLAGS /* csfFlags */,
-                                                         DWORD dwCategoryId1,
-                                                         DWORD dwCategoryId2)
+        DWORD dwCategoryId1,
+        DWORD dwCategoryId2)
 {
     return ResultFromShort((short)(dwCategoryId1 - dwCategoryId2));
 }
@@ -337,8 +340,8 @@ HRESULT CFolderViewImplCategorizer_Name::CompareCategory(CATSORT_FLAGS /* csfFla
 //
 
 HRESULT CFolderViewImplCategorizer_Name::GetCategory(UINT cidl,
-                                                     PCUITEMID_CHILD_ARRAY apidl,
-                                                     DWORD *rgCategoryIds)
+        PCUITEMID_CHILD_ARRAY apidl,
+        DWORD *rgCategoryIds)
 {
     HRESULT hr = E_INVALIDARG; // cidl == 0
     for (UINT i = 0; i < cidl; i++)
@@ -361,7 +364,7 @@ HRESULT CFolderViewImplCategorizer_Name::GetCategory(UINT cidl,
 //  Retrieves information about a category, such as the default
 //  display and the text to display in the user interface.
 HRESULT CFolderViewImplCategorizer_Name::GetCategoryInfo(DWORD dwCategoryId,
-                                                         CATEGORY_INFO *pci)
+        CATEGORY_INFO *pci)
 {
     return StringCchPrintf(pci->wszName, ARRAYSIZE(pci->wszName), L"%C", (WCHAR)dwCategoryId);
 }
@@ -386,7 +389,8 @@ CFolderViewImplCategorizer_Size::~CFolderViewImplCategorizer_Size()
 
 HRESULT CFolderViewImplCategorizer_Size::QueryInterface(REFIID riid, void **ppv)
 {
-    static const QITAB qit[] = {
+    static const QITAB qit[] =
+    {
         QITABENT (CFolderViewImplCategorizer_Size, ICategorizer),
         { 0 },
     };
@@ -411,16 +415,16 @@ ULONG CFolderViewImplCategorizer_Size::Release()
 
 //  Determines the relative order of two items in their item identifier lists.
 HRESULT CFolderViewImplCategorizer_Size::CompareCategory(CATSORT_FLAGS /* csfFlags */,
-                                                         DWORD dwCategoryId1,
-                                                         DWORD dwCategoryId2)
+        DWORD dwCategoryId1,
+        DWORD dwCategoryId2)
 {
     return ResultFromShort((short)(dwCategoryId1 - dwCategoryId2));
 }
 
 //  Retrieves a list of categories associated with a list of identifiers.
 HRESULT CFolderViewImplCategorizer_Size::GetCategory(UINT cidl,
-                                                     PCUITEMID_CHILD_ARRAY apidl,
-                                                     DWORD *rgCategoryIds)
+        PCUITEMID_CHILD_ARRAY apidl,
+        DWORD *rgCategoryIds)
 {
     HRESULT hr = E_INVALIDARG; //cidl == 0
     for (UINT i = 0; i < cidl; i++)
@@ -461,7 +465,7 @@ HRESULT CFolderViewImplCategorizer_Size::GetCategory(UINT cidl,
 //  Retrieves information about a category, such as the default
 //  display and the text to display in the user interface.
 HRESULT CFolderViewImplCategorizer_Size::GetCategoryInfo(DWORD dwCategoryId,
-                                                         CATEGORY_INFO *pci)
+        CATEGORY_INFO *pci)
 {
     return LoadString(g_hInst, dwCategoryId, pci->wszName, ARRAYSIZE(pci->wszName)) ? S_OK : E_FAIL;
 }
@@ -485,7 +489,8 @@ CFolderViewImplCategorizer_Sides::~CFolderViewImplCategorizer_Sides()
 
 HRESULT CFolderViewImplCategorizer_Sides::QueryInterface(REFIID riid, void **ppv)
 {
-    static const QITAB qit[] = {
+    static const QITAB qit[] =
+    {
         QITABENT (CFolderViewImplCategorizer_Sides, ICategorizer),
         { 0 },
     };
@@ -510,17 +515,17 @@ ULONG CFolderViewImplCategorizer_Sides::Release()
 
 //  Determines the relative order of two items in their item identifier lists.
 HRESULT CFolderViewImplCategorizer_Sides::CompareCategory(CATSORT_FLAGS /* csfFlags */,
-                                                          DWORD dwCategoryId1,
-                                                          DWORD dwCategoryId2)
+        DWORD dwCategoryId1,
+        DWORD dwCategoryId2)
 {
-   return ResultFromShort((short)(dwCategoryId1 - dwCategoryId2));
+    return ResultFromShort((short)(dwCategoryId1 - dwCategoryId2));
 }
 
 
 //  Retrieves a list of categories associated with a list of identifiers.
 HRESULT CFolderViewImplCategorizer_Sides::GetCategory(UINT cidl,
-                                                      PCUITEMID_CHILD_ARRAY apidl,
-                                                      DWORD *rgCategoryIds)
+        PCUITEMID_CHILD_ARRAY apidl,
+        DWORD *rgCategoryIds)
 {
     HRESULT hr = E_INVALIDARG;  //cidl == 0
 
@@ -564,7 +569,7 @@ HRESULT CFolderViewImplCategorizer_Sides::GetCategory(UINT cidl,
 //  Retrieves information about a category, such as the default
 //  display and the text to display in the user interface.
 HRESULT CFolderViewImplCategorizer_Sides::GetCategoryInfo(DWORD dwCategoryId,
-                                                          CATEGORY_INFO *pci)
+        CATEGORY_INFO *pci)
 {
     return LoadString(g_hInst, dwCategoryId, pci->wszName, ARRAYSIZE(pci->wszName)) ? S_OK : E_FAIL;
 }
@@ -589,7 +594,8 @@ CFolderViewImplCategorizer_Level::~CFolderViewImplCategorizer_Level()
 
 HRESULT CFolderViewImplCategorizer_Level::QueryInterface(REFIID riid, void **ppv)
 {
-    static const QITAB qit[] = {
+    static const QITAB qit[] =
+    {
         QITABENT (CFolderViewImplCategorizer_Level, ICategorizer),
         { 0 },
     };
@@ -613,8 +619,8 @@ ULONG CFolderViewImplCategorizer_Level::Release()
 
 //  Determines the relative order of two items in their item identifier lists.
 HRESULT CFolderViewImplCategorizer_Level::CompareCategory(CATSORT_FLAGS /* csfFlags */,
-                                                          DWORD dwCategoryId1,
-                                                          DWORD dwCategoryId2)
+        DWORD dwCategoryId1,
+        DWORD dwCategoryId2)
 {
     return ResultFromShort((short)(dwCategoryId1 - dwCategoryId2));
 }
@@ -622,8 +628,8 @@ HRESULT CFolderViewImplCategorizer_Level::CompareCategory(CATSORT_FLAGS /* csfFl
 
 //  Retrieves a list of categories associated with a list of identifiers.
 HRESULT CFolderViewImplCategorizer_Level::GetCategory(UINT cidl,
-                                                      PCUITEMID_CHILD_ARRAY apidl,
-                                                      DWORD *rgCategoryIds)
+        PCUITEMID_CHILD_ARRAY apidl,
+        DWORD *rgCategoryIds)
 {
     HRESULT hr = E_INVALIDARG;  // cidl == 0
     for (UINT i = 0; i < cidl; i++)
@@ -646,7 +652,7 @@ HRESULT CFolderViewImplCategorizer_Level::GetCategory(UINT cidl,
 //  Retrieves information about a category, such as the default
 //  display and the text to display in the user interface.
 HRESULT CFolderViewImplCategorizer_Level::GetCategoryInfo(DWORD dwCategoryId,
-                                                          CATEGORY_INFO *pci)
+        CATEGORY_INFO *pci)
 {
     return StringCchPrintf(pci->wszName, ARRAYSIZE(pci->wszName), L"%d", dwCategoryId);
 }
@@ -671,7 +677,8 @@ CFolderViewImplCategorizer_Value::~CFolderViewImplCategorizer_Value()
 
 HRESULT CFolderViewImplCategorizer_Value::QueryInterface(REFIID riid, void **ppv)
 {
-    static const QITAB qit[] = {
+    static const QITAB qit[] =
+    {
         QITABENT (CFolderViewImplCategorizer_Value, ICategorizer),
         { 0 },
     };
@@ -696,8 +703,8 @@ ULONG CFolderViewImplCategorizer_Value::Release()
 
 //  Determines the relative order of two items in their item identifier lists.
 HRESULT CFolderViewImplCategorizer_Value::CompareCategory(CATSORT_FLAGS /* csfFlags */,
-                                                          DWORD dwCategoryId1,
-                                                          DWORD dwCategoryId2)
+        DWORD dwCategoryId1,
+        DWORD dwCategoryId2)
 {
     return ResultFromShort((short)(dwCategoryId1 - dwCategoryId2));
 }
@@ -705,8 +712,8 @@ HRESULT CFolderViewImplCategorizer_Value::CompareCategory(CATSORT_FLAGS /* csfFl
 
 //  Retrieves a list of categories associated with a list of identifiers.
 HRESULT CFolderViewImplCategorizer_Value::GetCategory(UINT cidl,
-                                                      PCUITEMID_CHILD_ARRAY apidl,
-                                                      DWORD *rgCategoryIds)
+        PCUITEMID_CHILD_ARRAY apidl,
+        DWORD *rgCategoryIds)
 {
     HRESULT hr = S_OK;
     for (UINT i = 0; i < cidl; i++)
@@ -757,7 +764,7 @@ HRESULT CFolderViewImplCategorizer_Value::GetCategory(UINT cidl,
 //  Retrieves information about a category, such as the default
 //  display and the text to display in the user interface.
 HRESULT CFolderViewImplCategorizer_Value::GetCategoryInfo(DWORD dwCategoryId,
-                                                          CATEGORY_INFO *pci)
+        CATEGORY_INFO *pci)
 {
     HRESULT hr = S_OK;
     switch (dwCategoryId)

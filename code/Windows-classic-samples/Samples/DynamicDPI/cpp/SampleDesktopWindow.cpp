@@ -1,4 +1,4 @@
-//// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿//// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 //// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 //// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 //// PARTICULAR PURPOSE.
@@ -12,7 +12,7 @@
 CSampleDesktopWindow::CSampleDesktopWindow()
 {
     // Set member variables to zero or NULL defaults.
-    m_visible = FALSE; 
+    m_visible = FALSE;
     m_occlusion = DWORD(0.0);
 }
 
@@ -33,7 +33,7 @@ HRESULT
 CSampleDesktopWindow::Initialize(
     _In_    RECT bounds,
     _In_    std::wstring title
-    )
+)
 {
     // Create device resources required to render content.
     m_deviceResources = std::make_shared<DeviceResources>();
@@ -52,7 +52,7 @@ CSampleDesktopWindow::Initialize(
     }
 
     // Initialize member variables with default values.
-    m_visible = TRUE; 
+    m_visible = TRUE;
     m_occlusion = DWORD(0.0);
 
     // Enable mouse to act as pointing device for this application.
@@ -97,11 +97,12 @@ CSampleDesktopWindow::Run()
 
         while (PeekMessage(&message, nullptr, 0, 0, PM_REMOVE))
         {
-			TranslateMessage(&message);
-            
+            TranslateMessage(&message);
+
             DispatchMessage(&message);
         }
-    } while (message.message != WM_QUIT);
+    }
+    while (message.message != WM_QUIT);
 
     return hr;
 }
@@ -156,18 +157,18 @@ CSampleDesktopWindow::OnCreate(
     _In_ WPARAM,
     _In_ LPARAM lParam,
     _Out_ BOOL &bHandled
-    )
+)
 {
     auto cs = reinterpret_cast<CREATESTRUCT *>(lParam);
 
     auto monitor = MonitorFromWindow(m_hWnd, MONITOR_DEFAULTTONEAREST);
-	UINT dpix;
-	UINT dpiy;
-	if (FAILED(GetDpiForMonitor(monitor, MONITOR_DPI_TYPE::MDT_EFFECTIVE_DPI, &dpix, &dpiy)))
-	{
-		dpix = 96;
-		dpiy = 96;
-	}
+    UINT dpix;
+    UINT dpiy;
+    if (FAILED(GetDpiForMonitor(monitor, MONITOR_DPI_TYPE::MDT_EFFECTIVE_DPI, &dpix, &dpiy)))
+    {
+        dpix = 96;
+        dpiy = 96;
+    }
     auto windowDpi = static_cast<float>(dpix);
 
     // Store a reference to the hWnd so DirectX can render to this surface.
@@ -176,21 +177,21 @@ CSampleDesktopWindow::OnCreate(
     // Set styles needed to avoid drawing over any child or sibling windows.
     cs->style |= ( WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN | WS_CLIPSIBLINGS );
 
-    // Set styles required to avoid overdraw. 
+    // Set styles required to avoid overdraw.
     cs->dwExStyle |= ( WS_EX_LAYERED | WS_EX_NOREDIRECTIONBITMAP );
 
     // Apply selected styles.
     SetWindowLong(GWL_STYLE, cs->style);
     SetWindowLong(GWL_EXSTYLE, cs->dwExStyle);
     ASSERT(SetWindowPos(nullptr, 0, 0, 0, 0,
-        SWP_FRAMECHANGED | SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER));
+                        SWP_FRAMECHANGED | SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER));
 
     bHandled = TRUE;
     return 0;
 }
 
 //
-// Destroying this window will also quit the application. 
+// Destroying this window will also quit the application.
 //
 LRESULT
 CSampleDesktopWindow::OnDestroy(
@@ -198,7 +199,7 @@ CSampleDesktopWindow::OnDestroy(
     _In_ WPARAM,
     _In_ LPARAM,
     _Out_ BOOL &bHandled
-    )
+)
 {
     PostQuitMessage(0);
 
@@ -212,7 +213,7 @@ CSampleDesktopWindow::OnPaint(
     _In_ WPARAM,
     _In_ LPARAM,
     _Out_ BOOL &bHandled
-    )
+)
 {
     HDC hDC;
     PAINTSTRUCT ps;
@@ -241,7 +242,7 @@ CSampleDesktopWindow::OnWindowPosChanged(
     _In_ WPARAM,
     _In_ LPARAM lparam,
     _Out_ BOOL &bHandled
-    )
+)
 {
     RECT clientRect;
     auto windowPos = reinterpret_cast<WINDOWPOS *>(lparam);
@@ -265,7 +266,7 @@ CSampleDesktopWindow::OnDisplayChange(
     _In_ WPARAM,
     _In_ LPARAM,
     _Out_ BOOL &bHandled
-    )
+)
 {
     Render();
     OnDisplayChange();
@@ -279,7 +280,7 @@ CSampleDesktopWindow::OnGetMinMaxInfo(
     _In_ WPARAM,
     _In_ LPARAM lparam,
     _Out_ BOOL &bHandled
-    )
+)
 {
     auto minMaxInfo = reinterpret_cast<MINMAXINFO *>(lparam);
 
@@ -291,11 +292,11 @@ CSampleDesktopWindow::OnGetMinMaxInfo(
 
 LRESULT
 CSampleDesktopWindow::OnActivate(
-    _In_ UINT, 
-    _In_ WPARAM wparam, 
-    _In_ LPARAM, 
+    _In_ UINT,
+    _In_ WPARAM wparam,
+    _In_ LPARAM,
     _Out_ BOOL &bHandled
-    )
+)
 {
     m_visible = !HIWORD(wparam);
 
@@ -309,7 +310,7 @@ CSampleDesktopWindow::OnPowerBroadcast(
     _In_ WPARAM,
     _In_ LPARAM lparam,
     _Out_ BOOL &bHandled
-    )
+)
 {
     if (lparam > 0)
     {
@@ -337,7 +338,7 @@ CSampleDesktopWindow::OnOcclusion(
     _In_ WPARAM,
     _In_ LPARAM,
     _Out_ BOOL &bHandled
-    )
+)
 {
     ASSERT(m_occlusion);
 
@@ -358,7 +359,7 @@ CSampleDesktopWindow::OnPointerDown(
     _In_ WPARAM,
     _In_ LPARAM lparam,
     _Out_ BOOL &bHandled
-    )
+)
 {
     auto x = GET_X_LPARAM(lparam);
     auto y = GET_Y_LPARAM(lparam);
@@ -385,7 +386,7 @@ CSampleDesktopWindow::OnPointerUp(
     _In_ WPARAM,
     _In_ LPARAM lparam,
     _Out_ BOOL &bHandled
-    )
+)
 {
     auto x = GET_X_LPARAM(lparam);
     auto y = GET_Y_LPARAM(lparam);
@@ -412,7 +413,7 @@ CSampleDesktopWindow::OnEnterSizeMove(
     _In_ WPARAM,
     _In_ LPARAM,
     _Out_ BOOL &bHandled
-    )
+)
 {
     // Call handler implemented by derived class for WM_ENTERSIZEMOVE message.
     OnEnterSizeMove();
@@ -427,7 +428,7 @@ CSampleDesktopWindow::OnExitSizeMove(
     _In_ WPARAM,
     _In_ LPARAM,
     _Out_ BOOL &bHandled
-    )
+)
 {
     // Call handler implemented by derived class for WM_EXITSIZEMOVE message.
     OnExitSizeMove();
@@ -442,7 +443,7 @@ CSampleDesktopWindow::OnDpiChange(
     _In_ WPARAM wparam,
     _In_ LPARAM lparam,
     _Out_ BOOL &bHandled
-    )
+)
 {
     auto lprcNewScale = reinterpret_cast<LPRECT>(lparam);
 
@@ -454,12 +455,12 @@ CSampleDesktopWindow::OnDpiChange(
 }
 
 LRESULT
- CSampleDesktopWindow::OnPointerUpdate(
+CSampleDesktopWindow::OnPointerUpdate(
     _In_ UINT,
     _In_ WPARAM,
     _In_ LPARAM lparam,
     _Out_ BOOL &bHandled
-    )
+)
 {
     auto x = GET_X_LPARAM(lparam);
     auto y = GET_Y_LPARAM(lparam);

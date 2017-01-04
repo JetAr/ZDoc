@@ -1,16 +1,16 @@
-
+﻿
 
 /* this ALWAYS GENERATED file contains the definitions for the interfaces */
 
 
- /* File created by MIDL compiler version 7.00.0553 */
+/* File created by MIDL compiler version 7.00.0553 */
 /* at Mon Feb 16 07:11:56 2009
  */
 /* Compiler settings for .\FsrmSampleClassificationModule.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run), target_arch=X86 7.00.0553 
+    Oicf, W1, Zp8, env=Win32 (32b run), target_arch=X86 7.00.0553
     protocol : dce , ms_ext, c_ext
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
+    error checks: allocation ref bounds_check enum stub_data
+    VC __declspec() decoration level:
          __declspec(uuid()), __declspec(selectany), __declspec(novtable)
          DECLSPEC_UUID(), MIDL_INTERFACE()
 */
@@ -34,7 +34,7 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+/* Forward Declarations */
 
 #ifndef __FsrmSampleClassifier_FWD_DEFINED__
 #define __FsrmSampleClassifier_FWD_DEFINED__
@@ -53,8 +53,8 @@ typedef struct FsrmSampleClassifier FsrmSampleClassifier;
 #include "ocidl.h"
 
 #ifdef __cplusplus
-extern "C"{
-#endif 
+extern "C" {
+#endif
 
 
 
@@ -62,7 +62,7 @@ extern "C"{
 #define __FsrmSampleClassificationModuleLib_LIBRARY_DEFINED__
 
 /* library FsrmSampleClassificationModuleLib */
-/* [helpstring][version][uuid] */ 
+/* [helpstring][version][uuid] */
 
 
 EXTERN_C const IID LIBID_FsrmSampleClassificationModuleLib;
@@ -72,7 +72,7 @@ EXTERN_C const CLSID CLSID_FsrmSampleClassifier;
 #ifdef __cplusplus
 
 class DECLSPEC_UUID("0F5F3806-2DAD-4050-9D30-50C35FB7ED0E")
-FsrmSampleClassifier;
+    FsrmSampleClassifier;
 #endif
 #endif /* __FsrmSampleClassificationModuleLib_LIBRARY_DEFINED__ */
 

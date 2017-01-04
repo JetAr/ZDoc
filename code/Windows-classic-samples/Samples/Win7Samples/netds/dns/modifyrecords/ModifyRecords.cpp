@@ -1,10 +1,10 @@
-/************************************************************\
+﻿/************************************************************\
     THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
     ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
     THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
     PARTICULAR PURPOSE.
 
-  Copyright � 2000  Microsoft Corporation.  All Rights Reserved.
+  Copyright © 2000  Microsoft Corporation.  All Rights Reserved.
 
 /***************************************************************/
 
@@ -12,16 +12,16 @@
 /*
    FILE:          ModifyRecords.cpp
    DESCRIPTION:   This sample illustrates how to add Host Address( A) and CNAME resource records
-                   to DNS server using DNSModifyRecordsInSet() API.             
-    
+                   to DNS server using DNSModifyRecordsInSet() API.
+
    PLATFORM:      Windows 2000
-   WRITTEN BY:    Rashmi Anoop 
+   WRITTEN BY:    Rashmi Anoop
    DATE:          3/22/2000
-   
+
 
 */
 
-/* 
+/*
   includes
 */
 
@@ -34,18 +34,19 @@
 #define BUFFER_LEN 255
 
 //Usage of the program
-void Usage(char *progname) {
+void Usage(char *progname)
+{
     fprintf(stderr,"Usage\n%s -n [OwnerName] - t [Type] -l [Ttl] -d [Data] -s [DnsServerIp]\n",
             progname);
     fprintf(stderr,"Where:\n\tOwnerName is the owner field to be added\n");
     fprintf(stderr,"\tType is the type of resource record to be added A or CNAME\n");
-    fprintf(stderr,"\tData is the data corresponding to RR to be added\n"); 
+    fprintf(stderr,"\tData is the data corresponding to RR to be added\n");
     fprintf(stderr,"\tTtl is the time to live value in seconds \n");
     fprintf(stderr,"\tDnsServerIp is the ipaddress of DNS server (in dotted decimal notation)\n");
     exit(1);
 }
 
-//  the main function 
+//  the main function
 void __cdecl main(int argc, char *argv[])
 
 {
@@ -65,22 +66,27 @@ void __cdecl main(int argc, char *argv[])
 
     pmyDnsRecord = (PDNS_RECORD) LocalAlloc( LPTR, sizeof( DNS_RECORD ) );
 
-    if (!pmyDnsRecord) {
+    if (!pmyDnsRecord)
+    {
         printf("Memory allocaltion failed\n");
         exit(1);
     }
 
-    if (argc > 8) {
+    if (argc > 8)
+    {
 
-        for (int i = 1; i < argc ; i++) {
+        for (int i = 1; i < argc ; i++)
+        {
 
-            if ( (argv[i][0] == '-') || (argv[i][0] == '/') ) {
+            if ( (argv[i][0] == '-') || (argv[i][0] == '/') )
+            {
 
-                switch (tolower(argv[i][1])) {
-                
+                switch (tolower(argv[i][1]))
+                {
+
                 case 'n':
                     pOwnerName = argv[++i];
-                    pmyDnsRecord->pName = pOwnerName; //copy the Owner name information 
+                    pmyDnsRecord->pName = pOwnerName; //copy the Owner name information
                     break;
 
                 case 't':
@@ -97,18 +103,21 @@ void __cdecl main(int argc, char *argv[])
                     pmyDnsRecord->dwTtl = atoi(argv[++i]); // time to live value in seconds
                     break;
                 case 'd':
-                    if (pmyDnsRecord->wType == DNS_TYPE_A) {
+                    if (pmyDnsRecord->wType == DNS_TYPE_A)
+                    {
                         pmyDnsRecord->wDataLength = sizeof(DNS_A_DATA); //data structure for A records
                         strncpy_s(HostipAddress, _countof(HostipAddress), argv[++i], _TRUNCATE);
                         HostipAddress[sizeof(HostipAddress)-1] = '\0';
                         pmyDnsRecord->Data.A.IpAddress = inet_addr(HostipAddress); //convert string to proper address
-                        if ( pmyDnsRecord->Data.A.IpAddress == INADDR_NONE ) {
+                        if ( pmyDnsRecord->Data.A.IpAddress == INADDR_NONE )
+                        {
                             printf("Invalid IP address in A record data \n");
                             Usage(argv[0]);
                         }
                         break;
                     }
-                    else {
+                    else
+                    {
                         pmyDnsRecord->wDataLength = sizeof(DNS_PTR_DATA); //data structure for CNAME records
                         pNameData = argv[++i];
                         pmyDnsRecord->Data.Cname.pNameHost = pNameData;
@@ -117,20 +126,23 @@ void __cdecl main(int argc, char *argv[])
                 case 's':
                     // Allocate memory for IP4_ARRAY structure
                     pSrvList = (PIP4_ARRAY) LocalAlloc(LPTR,sizeof(IP4_ARRAY));
-                    if (!pSrvList) {
+                    if (!pSrvList)
+                    {
                         printf("Memory allocation failed \n");
                         exit(1);
                     }
-                    if (argv[++i]) {
+                    if (argv[++i])
+                    {
                         strncpy_s(DnsServIp, _countof(DnsServIp), argv[i], _TRUNCATE);
                         DnsServIp[sizeof(DnsServIp)-1] = '\0';
                         pSrvList->AddrCount = 1;
                         pSrvList->AddrArray[0] = inet_addr(DnsServIp); //DNS server IP address
-                        if ( pSrvList->AddrArray[0] == INADDR_NONE ) {
+                        if ( pSrvList->AddrArray[0] == INADDR_NONE )
+                        {
                             printf("Invalid DNS server IP address\n");
                             Usage(argv[0]);
                         }
-                        break; 
+                        break;
                     }
 
                 default:
@@ -142,36 +154,39 @@ void __cdecl main(int argc, char *argv[])
                 Usage(argv[0]);
 
 
-        }   
+        }
 
     }
-    else {
+    else
+    {
         Usage(argv[0]);
     }
 
 
 
-    // Calling function DNSModifyRecordsInSet_A to add Host or CNAME records    
+    // Calling function DNSModifyRecordsInSet_A to add Host or CNAME records
 
     status = DnsModifyRecordsInSet_A(pmyDnsRecord,                     //pointer to DNS_RECORD
-                                     NULL,                      
+                                     NULL,
                                      DNS_UPDATE_SECURITY_USE_DEFAULT,  //do not attempt secure dynamic updates
                                      NULL,                             //use default credentials
                                      pSrvList,                         //contains DNS server IP address
                                      NULL);                            //reserved for future use
 
-    if (status) {
+    if (status)
+    {
         if (pmyDnsRecord->wType == DNS_TYPE_A)
             printf("Failed to add the host record for %s and the error is %d \n", pOwnerName, status);
         else
             printf("Failed to add the Cname record for %s and the error is %d \n", pOwnerName, status);
     }
-    else {
+    else
+    {
         if (pmyDnsRecord->wType == DNS_TYPE_A)
             printf("Successfully added the host record for %s \n", pOwnerName);
         else
             printf("Successfully added the Cname record for %s \n", pOwnerName);
-    }           
+    }
 
 
     LocalFree(pmyDnsRecord); // Free the memory allocated for DNS_RECORD structure

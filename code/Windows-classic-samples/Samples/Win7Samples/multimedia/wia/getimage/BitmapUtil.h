@@ -1,4 +1,4 @@
-/*++
+﻿/*++
 
 Copyright (c) Microsoft Corporation. All rights reserved.
 
@@ -7,7 +7,7 @@ Copyright (c) Microsoft Corporation. All rights reserved.
 #ifndef __BITMAPUTIL__
 #define __BITMAPUTIL__
 
-namespace BitmapUtil 
+namespace BitmapUtil
 {
 
 //////////////////////////////////////////////////////////////////////////
@@ -20,7 +20,7 @@ namespace BitmapUtil
     The GetBitmapHeaderSize function returns the size of the DIB header
 
 
-    ULONG 
+    ULONG
     GetBitmapHeaderSize(
         LPCVOID pDib
     );
@@ -33,13 +33,13 @@ Parameters
 
 
 Return Values
-    
+
     Returns the size of the DIB header in bytes or 0 if the header is
     not recognized.
 
 --*/
 
-ULONG 
+ULONG
 GetBitmapHeaderSize(
     LPCVOID pDib
 );
@@ -56,9 +56,9 @@ GetBitmapHeaderSize(
     in one scan line of the image
 
 
-    ULONG 
+    ULONG
     GetBitmapLineWidthInBytes(
-        ULONG nWidthInPixels, 
+        ULONG nWidthInPixels,
         ULONG nBitCount
     );
 
@@ -72,14 +72,14 @@ Parameters
 
 
 Return Values
-    
+
     Returns the size one scan line of the image in bytes.
 
 --*/
 
-ULONG 
+ULONG
 GetBitmapLineWidthInBytes(
-    ULONG nWidthInPixels, 
+    ULONG nWidthInPixels,
     ULONG nBitCount
 );
 
@@ -94,10 +94,10 @@ GetBitmapLineWidthInBytes(
     The GetBitmapDimensions function returns the width and height of a DIB
 
 
-    BOOL  
+    BOOL
     GetBitmapDimensions(
-        LPCVOID  pDib, 
-        UINT    *pWidth, 
+        LPCVOID  pDib,
+        UINT    *pWidth,
         UINT    *pHeight
     );
 
@@ -116,15 +116,15 @@ Parameters
 
 
 Return Values
-    
+
     Returns TRUE if the header is recognized, FALSE otherwise.
 
 --*/
 
-BOOL  
+BOOL
 GetBitmapDimensions(
-    LPCVOID  pDib, 
-    UINT    *pWidth, 
+    LPCVOID  pDib,
+    UINT    *pWidth,
     UINT    *pHeight
 );
 
@@ -137,11 +137,11 @@ GetBitmapDimensions(
 /*++
 
     The GetBitmapSize function returns total size of the DIB. The size is
-    the sum of the bitmap header, the color palette (if present), the color 
+    the sum of the bitmap header, the color palette (if present), the color
     profile data (if present) and the pixel data.
 
 
-    ULONG 
+    ULONG
     GetBitmapSize(
         LPCVOID pDib
     );
@@ -155,13 +155,13 @@ Parameters
 
 
 Return Values
-    
-    Returns the size of the image in bytes or 0 if the header is not 
+
+    Returns the size of the image in bytes or 0 if the header is not
     recognized.
 
 --*/
 
-ULONG 
+ULONG
 GetBitmapSize(
     LPCVOID pDib
 );
@@ -174,11 +174,11 @@ GetBitmapSize(
 
 /*++
 
-    The GetBitmapOffsetBits function returns the offset, in bytes, from the 
+    The GetBitmapOffsetBits function returns the offset, in bytes, from the
     beginning of the DIB data block to the bitmap bits.
 
 
-    ULONG 
+    ULONG
     GetBitmapOffsetBits(
         LPCVOID pDib
     );
@@ -192,13 +192,13 @@ Parameters
 
 
 Return Values
-    
-    Returns the offset from the beginning of the DIB data block to the bitmap 
+
+    Returns the offset from the beginning of the DIB data block to the bitmap
     pixels in bytes or 0 if the header is not recognized.
 
 --*/
 
-ULONG 
+ULONG
 GetBitmapOffsetBits(
     LPCVOID pDib
 );
@@ -211,15 +211,15 @@ GetBitmapOffsetBits(
 
 /*++
 
-    The FixBitmapHeight function calculates the height of the DIB if the 
-    height is not specified in the header and fills in the biSizeImage and 
+    The FixBitmapHeight function calculates the height of the DIB if the
+    height is not specified in the header and fills in the biSizeImage and
     biHeight fields of the header.
 
 
-    BOOL  
+    BOOL
     FixBitmapHeight(
-        PVOID pDib, 
-        ULONG nSize, 
+        PVOID pDib,
+        ULONG nSize,
         BOOL  bTopDown
     );
 
@@ -234,20 +234,20 @@ Parameters
         [in] The total size of the image in bytes.
 
     bTopDown
-        [in] TRUE if the first scan line in the memory corresponds to the top 
+        [in] TRUE if the first scan line in the memory corresponds to the top
         line of the image, FALSE if it corresponds to the bottom line.
 
 
 Return Values
-    
+
     Returns TRUE if the header is recognized, FALSE otherwise.
 
 --*/
 
-BOOL  
+BOOL
 FixBitmapHeight(
-    PVOID pDib, 
-    ULONG nSize, 
+    PVOID pDib,
+    ULONG nSize,
     BOOL  bTopDown
 );
 
@@ -259,14 +259,14 @@ FixBitmapHeight(
 
 /*++
 
-    The FillBitmapFileHeader function fills in a BITMAPFILEHEADER structure 
+    The FillBitmapFileHeader function fills in a BITMAPFILEHEADER structure
     according to the values specified in the DIB.
 
 
-    BOOL  
+    BOOL
     FillBitmapFileHeader(
         LPCVOID           pDib,
-        PBITMAPFILEHEADER pbmfh 
+        PBITMAPFILEHEADER pbmfh
     );
 
 
@@ -282,15 +282,15 @@ Parameters
 
 
 Return Values
-    
+
     Returns TRUE if the header is recognized, FALSE otherwise.
 
 --*/
 
-BOOL  
+BOOL
 FillBitmapFileHeader(
     LPCVOID           pDib,
-    PBITMAPFILEHEADER pbmfh 
+    PBITMAPFILEHEADER pbmfh
 );
 
 }; // namespace BitmapUtil

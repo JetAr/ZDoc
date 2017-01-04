@@ -1,4 +1,4 @@
-/////////////////////////////////////////////////////////////////////////////
+﻿/////////////////////////////////////////////////////////////////////////////
 //
 // [!output root].cpp : Implementation of C[!output Safe_root]
 // Copyright (c) Microsoft Corporation. All rights reserved.
@@ -172,7 +172,7 @@ LRESULT CAllowBaseDialog<T>::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lPara
                     {
                         // Add the URL to the listbox that we will display
                         int iIndex = ::SendMessage(hwndControl, LB_ADDSTRING, 0, reinterpret_cast<LPARAM>(static_cast<WCHAR*>(cbstr)));
-                        
+
                         // Store a pointer to our media object with the listbox item (note this a weak reference
                         // to the media object since we know the playlist will live as long as the dialog lives)
                         ::SendMessage(hwndControl, LB_SETITEMDATA, iIndex, reinterpret_cast<LPARAM>(spMedia.p));

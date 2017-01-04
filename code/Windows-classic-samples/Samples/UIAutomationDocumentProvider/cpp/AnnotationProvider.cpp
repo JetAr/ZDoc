@@ -1,4 +1,4 @@
-// Copyright (c) Microsoft Corporation
+﻿// Copyright (c) Microsoft Corporation
 //
 #include <windows.h>
 #include <ole2.h>
@@ -16,8 +16,8 @@ AnnotationProvider::AnnotationProvider(_In_ HWND hwnd, _In_ AnnotatedTextControl
 {
     _hwnd = hwnd;
     _control = control;
-     _annotationId = annotationId;
-     _annotation = NULL;
+    _annotationId = annotationId;
+    _annotation = NULL;
 }
 
 AnnotationProvider::~AnnotationProvider()
@@ -122,17 +122,17 @@ HRESULT STDMETHODCALLTYPE AnnotationProvider::GetPropertyValue(PROPERTYID idProp
         if (retVal->bstrVal != NULL)
         {
             retVal->vt = VT_BSTR;
-        } 
+        }
     }
     else if (idProp == UIA_AutomationIdPropertyId)
     {
-         WCHAR autoId[100];
-         StringCchPrintf(autoId, ARRAYSIZE(autoId), L"Annotation_%d", _annotation->id);
-         retVal->bstrVal = SysAllocString(autoId);
-         if (retVal->bstrVal != NULL)
-         {
+        WCHAR autoId[100];
+        StringCchPrintf(autoId, ARRAYSIZE(autoId), L"Annotation_%d", _annotation->id);
+        retVal->bstrVal = SysAllocString(autoId);
+        if (retVal->bstrVal != NULL)
+        {
             retVal->vt = VT_BSTR;
-         } 
+        }
     }
     else if (idProp == UIA_IsControlElementPropertyId)
     {
@@ -200,18 +200,24 @@ HRESULT STDMETHODCALLTYPE AnnotationProvider::Navigate(NavigateDirection directi
     switch(direction)
     {
     case NavigateDirection_Parent:
+    {
+        *retVal = new FrameProvider(_hwnd, _control);
+        if (*retVal == NULL)
         {
-            *retVal = new FrameProvider(_hwnd, _control);
-            if (*retVal == NULL)
-            {
-                hr = E_OUTOFMEMORY;
-            }
-            break;
+            hr = E_OUTOFMEMORY;
         }
-    case NavigateDirection_NextSibling:       destination = _annotationId + 1; break;
-    case NavigateDirection_PreviousSibling:   destination = _annotationId - 1; break;
-    case NavigateDirection_FirstChild:        break;
-    case NavigateDirection_LastChild:         break;
+        break;
+    }
+    case NavigateDirection_NextSibling:
+        destination = _annotationId + 1;
+        break;
+    case NavigateDirection_PreviousSibling:
+        destination = _annotationId - 1;
+        break;
+    case NavigateDirection_FirstChild:
+        break;
+    case NavigateDirection_LastChild:
+        break;
     }
 
     if (destination == -1)
@@ -268,8 +274,9 @@ HRESULT STDMETHODCALLTYPE AnnotationProvider::get_BoundingRectangle(_Out_ UiaRec
     RECT rc = {static_cast<int>(rectClient.X),
                static_cast<int>(rectClient.Y),
                static_cast<int>(rectClient.X + rectClient.Width),
-               static_cast<int>(rectClient.Y + rectClient.Height)};
-    
+               static_cast<int>(rectClient.Y + rectClient.Height)
+              };
+
     // Limit the bounding rect to inside the control
     HRESULT hr = S_OK;
     RECT winRect;
@@ -378,10 +385,10 @@ HRESULT STDMETHODCALLTYPE AnnotationProvider::get_DateTime(_Outptr_result_mayben
     WCHAR dateTime[200];
     HRESULT hr = S_OK;
     if (GetTimeFormatEx(LOCALE_NAME_USER_DEFAULT, TIME_NOSECONDS,
-        &_annotation->time, NULL, formattedTime, ARRAYSIZE(formattedTime)) != 0 &&
-        GetDateFormatEx(LOCALE_NAME_USER_DEFAULT, DATE_LONGDATE,
-        &_annotation->time, NULL, formattedDate, ARRAYSIZE(formattedDate), NULL) != 0 &&
-        SUCCEEDED(StringCchPrintf(dateTime, ARRAYSIZE(dateTime), L"%s %s", formattedDate, formattedTime)))
+                        &_annotation->time, NULL, formattedTime, ARRAYSIZE(formattedTime)) != 0 &&
+            GetDateFormatEx(LOCALE_NAME_USER_DEFAULT, DATE_LONGDATE,
+                            &_annotation->time, NULL, formattedDate, ARRAYSIZE(formattedDate), NULL) != 0 &&
+            SUCCEEDED(StringCchPrintf(dateTime, ARRAYSIZE(dateTime), L"%s %s", formattedDate, formattedTime)))
     {
         *retVal = SysAllocString(dateTime);
         if (*retVal == NULL)

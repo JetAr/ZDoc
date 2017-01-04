@@ -1,4 +1,4 @@
-//
+﻿//
 // precomp.cpp
 //
 // Stub for vc precompiled header.

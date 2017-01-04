@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -10,7 +10,7 @@
 
 #ifndef UNICODE
 #define UNICODE
-#endif 
+#endif
 
 #if !defined( NTDDI_VERSION )
 #define NTDDI_VERSION NTDDI_WIN8
@@ -119,7 +119,7 @@ class CaptureManager
         STDMETHODIMP QueryInterface(REFIID riid, void** ppv);
         STDMETHODIMP_(ULONG) AddRef();
         STDMETHODIMP_(ULONG) Release();
-    
+
         // IMFCaptureEngineOnEventCallback
         STDMETHODIMP OnEvent( _In_ IMFMediaEvent* pEvent);
 
@@ -144,8 +144,8 @@ class CaptureManager
     HANDLE                  m_hpwrRequest;
     bool                    m_fPowerRequestSet;
 
-    CaptureManager(HWND hwnd) : 
-        m_hwndEvent(hwnd), m_hwndPreview(NULL), m_pEngine(NULL), m_pPreview(NULL), 
+    CaptureManager(HWND hwnd) :
+        m_hwndEvent(hwnd), m_hwndPreview(NULL), m_pEngine(NULL), m_pPreview(NULL),
         m_pCallback(NULL), m_bRecording(false), m_bPreviewing(false), m_bPhotoPending(false), m_errorID(0),m_hEvent(NULL)
         ,m_hpwrRequest(INVALID_HANDLE_VALUE)
         ,m_fPowerRequestSet(false)
@@ -194,7 +194,7 @@ public:
         *ppEngine = pEngine;
         pEngine = NULL;
 
-    Exit:
+Exit:
         if (NULL != pEngine)
         {
             delete pEngine;
@@ -224,17 +224,29 @@ public:
         m_bPreviewing = false;
         m_bRecording = false;
         m_bPhotoPending = false;
-        m_errorID = 0;  
+        m_errorID = 0;
     }
 
 
 
-    bool    IsPreviewing() const { return m_bPreviewing; }
-    bool    IsRecording() const { return m_bRecording; }
-    bool    IsPhotoPending() const { return m_bPhotoPending; }
-    UINT    ErrorID() const { return m_errorID; }
+    bool    IsPreviewing() const
+    {
+        return m_bPreviewing;
+    }
+    bool    IsRecording() const
+    {
+        return m_bRecording;
+    }
+    bool    IsPhotoPending() const
+    {
+        return m_bPhotoPending;
+    }
+    UINT    ErrorID() const
+    {
+        return m_errorID;
+    }
 
-    HRESULT OnCaptureEvent(WPARAM wParam, LPARAM lParam); 
+    HRESULT OnCaptureEvent(WPARAM wParam, LPARAM lParam);
     HRESULT SetVideoDevice(IUnknown *pUnk);
     HRESULT StartPreview();
     HRESULT StopPreview();

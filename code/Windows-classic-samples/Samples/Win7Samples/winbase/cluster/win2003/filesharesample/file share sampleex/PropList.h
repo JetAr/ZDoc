@@ -1,4 +1,4 @@
-/////////////////////////////////////////////////////////////////////////////
+﻿/////////////////////////////////////////////////////////////////////////////
 //
 //  Copyright (c) 2003 <company name>
 //
@@ -61,43 +61,43 @@ class CClusPropList;
 
 int
 IBSTRCompareW(
-      BSTR  bstrString1In
+    BSTR  bstrString1In
     , BSTR  bstrString2In
-    );
+);
 
 int
 BSTRCompareW(
-      BSTR  bstrString1In
+    BSTR  bstrString1In
     , BSTR  bstrString2In
-    );
+);
 
 int
 IStringCompareW(
-      LPCWSTR pcwszString1In
+    LPCWSTR pcwszString1In
     , LPCWSTR pcwszString2In
-    );
+);
 
 int
 StringCompareW(
-      LPCWSTR pcwszString1In
+    LPCWSTR pcwszString1In
     , LPCWSTR pcwszString2In
-    );
+);
 
 int
 IStringCompareW(
-      LPCWSTR   pcwszString1In
+    LPCWSTR   pcwszString1In
     , size_t    cch1In
     , LPCWSTR   pcwszString2In
     , size_t    cch2In
-    );
+);
 
 int
 StringCompareW(
-      LPCWSTR   pcwszString1In
+    LPCWSTR   pcwszString1In
     , size_t    cch1In
     , LPCWSTR   pcwszString2In
     , size_t    cch2In
-    );
+);
 
 //
 // Partial string compares.  They use whichever one's length is shortest
@@ -106,45 +106,45 @@ StringCompareW(
 
 int
 NIBSTRCompareW(
-      BSTR  bstrString1In
+    BSTR  bstrString1In
     , BSTR  bstrString2In
-    );
+);
 
 int
 NBSTRCompareW(
-      BSTR  bstrString1In
+    BSTR  bstrString1In
     , BSTR  bstrString2In
-    );
+);
 
 int
 NIStringCompareW(
-      LPCWSTR   pcwszString1In
+    LPCWSTR   pcwszString1In
     , LPCWSTR   pcwszString2In
     , size_t    cchIn
-    );
+);
 
 int
 NStringCompareW(
-      LPCWSTR   pcwszString1In
+    LPCWSTR   pcwszString1In
     , LPCWSTR   pcwszString2In
     , size_t    cchIn
-    );
+);
 
 int
 NIStringCompareW(
-      LPCWSTR   pcwszString1In
+    LPCWSTR   pcwszString1In
     , size_t    cch1In
     , LPCWSTR   pcwszString2In
     , size_t    cch2In
-    );
+);
 
 int
 NStringCompareW(
-      LPCWSTR   pcwszString1In
+    LPCWSTR   pcwszString1In
     , size_t    cch1In
     , LPCWSTR   pcwszString2In
     , size_t    cch2In
-    );
+);
 
 /////////////////////////////////////////////////////////////////////////////
 //++
@@ -205,11 +205,11 @@ public:
 
     void
     Set(
-          LPCWSTR   pwszNameIn
+        LPCWSTR   pwszNameIn
         , CString & rstrValueInout
         , CString & rstrPrevValueInout
         , DWORD     dwFlagsIn = 0
-        )
+    )
     {
         m_pwszName = pwszNameIn;
         m_propFormat = CLUSPROP_FORMAT_SZ;
@@ -225,11 +225,11 @@ public:
 
     void
     SetExpandSz(
-          LPCWSTR   pwszNameIn
+        LPCWSTR   pwszNameIn
         , CString & rstrValueInout
         , CString & rstrPrevValueInout
         , DWORD     dwFlagsIn = 0
-        )
+    )
     {
         m_pwszName = pwszNameIn;
         m_propFormat = CLUSPROP_FORMAT_EXPAND_SZ;
@@ -246,12 +246,12 @@ public:
     // Set() to get extra EXPANDED_SZ value
     void
     Set(
-          LPCWSTR   pwszNameIn
+        LPCWSTR   pwszNameIn
         , CString & rstrValueInout
         , CString & rstrPrevValueInout
         , CString & rstrValueEx
         , DWORD     dwFlagsIn = 0
-        )
+    )
     {
         m_pwszName = pwszNameIn;
         m_propFormat = CLUSPROP_FORMAT_SZ;
@@ -268,12 +268,12 @@ public:
     // Set() to get extra EXPANDED_SZ value
     void
     SetExpandSz(
-          LPCWSTR   pwszNameIn
+        LPCWSTR   pwszNameIn
         , CString & rstrValueInout
         , CString & rstrPrevValueInout
         , CString & rstrValueEx
         , DWORD     dwFlagsIn = 0
-        )
+    )
     {
         m_pwszName = pwszNameIn;
         m_propFormat = CLUSPROP_FORMAT_EXPAND_SZ;
@@ -289,11 +289,11 @@ public:
 
     void
     Set(
-          LPCWSTR   pwszNameIn
+        LPCWSTR   pwszNameIn
         , LONG &    rnValueInout
         , LONG &    rnPrevValueInout
         , DWORD     dwFlagsIn = 0
-        )
+    )
     {
         m_pwszName = pwszNameIn;
         m_propFormat = CLUSPROP_FORMAT_LONG;
@@ -309,11 +309,11 @@ public:
 
     void
     Set(
-          LPCWSTR   pwszNameIn
+        LPCWSTR   pwszNameIn
         , DWORD &   rdwValueInout
         , DWORD &   rdwPrevValueInout
         , DWORD     dwFlagsIn = 0
-        )
+    )
     {
         m_pwszName = pwszNameIn;
         m_propFormat = CLUSPROP_FORMAT_DWORD;
@@ -329,11 +329,11 @@ public:
 
     void
     Set(
-          LPCWSTR   pwszNameIn
+        LPCWSTR   pwszNameIn
         , BOOL &    rbValueInout
         , BOOL &    rbPrevValueInout
         , DWORD     dwFlagsIn = 0
-        )
+    )
     {
         m_pwszName = pwszNameIn;
         m_propFormat = CLUSPROP_FORMAT_DWORD;
@@ -349,13 +349,13 @@ public:
 
     void
     Set(
-          LPCWSTR   pwszNameIn
+        LPCWSTR   pwszNameIn
         , PBYTE &   rpbValueInoout
         , DWORD &   rcbValueInout
         , PBYTE &   rpbPrevValueInout
         , DWORD &   rcbPrevValueInout
         , DWORD     dwFlagsIn = 0
-        )
+    )
     {
         m_pwszName = pwszNameIn;
         m_propFormat = CLUSPROP_FORMAT_BINARY;
@@ -371,13 +371,13 @@ public:
 
     void
     Set(
-          LPCWSTR   pwszNameIn
+        LPCWSTR   pwszNameIn
         , LPWSTR &  rpwszValue
         , DWORD &   rcbValueInout
         , LPWSTR &  rpwszPrevValue
         , DWORD &   rcbPrevValueInout
         , DWORD     dwFlagsIn = 0
-        )
+    )
     {
         m_pwszName = pwszNameIn;
         m_propFormat = CLUSPROP_FORMAT_MULTI_SZ;
@@ -440,7 +440,7 @@ public:
     //  Copy constructor.
     CClusPropValueList(
         const CClusPropValueList & rcpvlInout
-        )
+    )
         : m_cbBufferSize( 0 )
         , m_fAtEnd( FALSE )
     {
@@ -450,9 +450,9 @@ public:
 
     //  Buffer helper constructor.
     CClusPropValueList(
-          CLUSPROP_BUFFER_HELPER    cbhValueListIn
+        CLUSPROP_BUFFER_HELPER    cbhValueListIn
         , size_t                    cbDataSizeIn
-        )
+    )
         : m_cbBufferSize( 0 )
         , m_fAtEnd( FALSE )
     {
@@ -471,7 +471,7 @@ public:
     void
     Init(
         const CClusPropValueList & rcpvlInout
-        )
+    )
     {
         ASSERT( m_cbBufferSize == 0 );
 
@@ -486,9 +486,9 @@ public:
     //  Initialize the value list from a buffer helper
     void
     Init(
-          const CLUSPROP_BUFFER_HELPER  cbhValueListIn
+        const CLUSPROP_BUFFER_HELPER  cbhValueListIn
         , size_t                        cbDataSizeIn
-        )
+    )
     {
         ASSERT( m_cbBufferSize == 0 );
 
@@ -636,22 +636,22 @@ public:
     // Get a value list from a resource
     DWORD
     ScGetResourceValueList(
-          HRESOURCE hResourceIn
+        HRESOURCE hResourceIn
         , DWORD     dwControlCodeIn
         , HNODE     hHostNodeIn = NULL
-        , LPVOID    lpBufferIn = NULL
-        , size_t    cbBufferIn = 0
-        );
+                                  , LPVOID    lpBufferIn = NULL
+                                          , size_t    cbBufferIn = 0
+    );
 
     // Get a value list from a resource type
     DWORD ScGetResourceTypeValueList(
-          HCLUSTER  hClusterIn
+        HCLUSTER  hClusterIn
         , LPCWSTR   pwszResTypeNameIn
         , DWORD     dwControlCodeIn
         , HNODE     hHostNodeIn = NULL
-        , LPVOID    lpBufferIn = NULL
-        , size_t    cbBufferIn = 0
-        );
+                                  , LPVOID    lpBufferIn = NULL
+                                          , size_t    cbBufferIn = 0
+    );
 
 private:
     CLUSPROP_BUFFER_HELPER  m_cbhValueList;     // Pointer to the value list for parsing.
@@ -695,7 +695,7 @@ public:
     // Default constructor
     CClusPropList(
         BOOL bAlwaysAddPropIn = FALSE
-        )
+    )
         : m_fAlwaysAddProp( bAlwaysAddPropIn )
         , m_cbBufferSize( 0 )
         , m_cbDataSize( 0 )
@@ -984,12 +984,12 @@ public:
     DWORD ScSetPropToDefault( LPCWSTR pwszNameIn, CLUSTER_PROPERTY_FORMAT propFormatIn );
 
     DWORD ScAddProp(
-              LPCWSTR               pwszNameIn
-            , const unsigned char * pbValueIn
-            , size_t                cbValueIn
-            , const unsigned char * pbPrevValueIn
-            , size_t                cbPrevValueIn
-            );
+        LPCWSTR               pwszNameIn
+        , const unsigned char * pbValueIn
+        , size_t                cbValueIn
+        , const unsigned char * pbPrevValueIn
+        , size_t                cbPrevValueIn
+    );
 
     DWORD ScAddProp( LPCWSTR pwszNameIn, LPCWSTR pwszValueIn )
     {
@@ -1010,126 +1010,126 @@ public:
     //
 
     DWORD ScGetNodeProperties(
-          HNODE     hNodeIn
+        HNODE     hNodeIn
         , DWORD     dwControlCodeIn
         , HNODE     hHostNodeIn = NULL
-        , LPVOID    lpBufferIn = NULL
-        , size_t    cbBufferIn = 0
-        );
+                                  , LPVOID    lpBufferIn = NULL
+                                          , size_t    cbBufferIn = 0
+    );
 
     DWORD ScGetGroupProperties(
-          HGROUP   hGroupIn
+        HGROUP   hGroupIn
         , DWORD    dwControlCodeIn
         , HNODE    hHostNodeIn = NULL
-        , LPVOID   lpBufferIn = NULL
-        , size_t   cbBufferIn = 0
-        );
+                                 , LPVOID   lpBufferIn = NULL
+                                         , size_t   cbBufferIn = 0
+    );
 
     DWORD ScGetResourceProperties(
-          HRESOURCE    hResourceIn
+        HRESOURCE    hResourceIn
         , DWORD        dwControlCodeIn
         , HNODE        hHostNodeIn = NULL
-        , LPVOID       lpBufferIn = NULL
-        , size_t       cbBufferIn = 0
-        );
+                                     , LPVOID       lpBufferIn = NULL
+                                             , size_t       cbBufferIn = 0
+    );
 
     DWORD ScGetResourceTypeProperties(
-          HCLUSTER hClusterIn
+        HCLUSTER hClusterIn
         , LPCWSTR  pwszResTypeNameIn
         , DWORD    dwControlCodeIn
         , HNODE    hHostNodeIn = NULL
-        , LPVOID   lpBufferIn = NULL
-        , size_t   cbBufferIn = 0
-        );
+                                 , LPVOID   lpBufferIn = NULL
+                                         , size_t   cbBufferIn = 0
+    );
 
     DWORD ScGetNetworkProperties(
-          HNETWORK hNetworkIn
+        HNETWORK hNetworkIn
         , DWORD    dwControlCodeIn
         , HNODE    hHostNodeIn = NULL
-        , LPVOID   lpBufferIn = NULL
-        , size_t   cbBufferIn = 0
-        );
+                                 , LPVOID   lpBufferIn = NULL
+                                         , size_t   cbBufferIn = 0
+    );
 
     DWORD ScGetNetInterfaceProperties(
-          HNETINTERFACE    hNetInterfaceIn
+        HNETINTERFACE    hNetInterfaceIn
         , DWORD            dwControlCodeIn
         , HNODE            hHostNodeIn  = NULL
-        , LPVOID           lpBufferIn = NULL
-        , size_t           cbBufferIn = 0
-        );
+                                          , LPVOID           lpBufferIn = NULL
+                                                  , size_t           cbBufferIn = 0
+    );
 
     DWORD ScGetClusterProperties(
-          HCLUSTER hClusterIn
+        HCLUSTER hClusterIn
         , DWORD    dwControlCodeIn
         , HNODE    hHostNodeIn = NULL
-        , LPVOID   lpBufferIn = NULL
-        , size_t   cbBufferIn = 0
-        );
+                                 , LPVOID   lpBufferIn = NULL
+                                         , size_t   cbBufferIn = 0
+    );
 
 // Implementation
 protected:
     void CopyProp(
-          PCLUSPROP_SZ             ppropIn
+        PCLUSPROP_SZ             ppropIn
         , CLUSTER_PROPERTY_TYPE    cptPropTypeIn
         , LPCWSTR                  pszIn
         , size_t                   cbszIn = 0
-        );
+    );
 
     void CopyExpandSzProp(
-          PCLUSPROP_SZ             ppropIn
+        PCLUSPROP_SZ             ppropIn
         , CLUSTER_PROPERTY_TYPE    cptPropTypeIn
         , LPCWSTR                  pszIn
         , size_t                   cbszIn = 0
-        );
+    );
 
     void CopyMultiSzProp(
-          PCLUSPROP_MULTI_SZ       ppropIn
+        PCLUSPROP_MULTI_SZ       ppropIn
         , CLUSTER_PROPERTY_TYPE    cptPropTypeIn
         , LPCWSTR                  pszIn
         , size_t                   cbszIn = 0
-        );
+    );
 
     void CopyProp(
-          PCLUSPROP_DWORD          ppropIn
+        PCLUSPROP_DWORD          ppropIn
         , CLUSTER_PROPERTY_TYPE    cptPropTypeIn
         , DWORD                    nValueIn
-        );
+    );
 
     void CopyProp(
-          PCLUSPROP_LONG           ppropIn
+        PCLUSPROP_LONG           ppropIn
         , CLUSTER_PROPERTY_TYPE    cptPropTypeIn
         , LONG                     nValueIn
-        );
+    );
 
     void CopyProp(
-          PCLUSPROP_ULARGE_INTEGER  ppropOut
+        PCLUSPROP_ULARGE_INTEGER  ppropOut
         , CLUSTER_PROPERTY_TYPE     cptPropTypeIn
         , ULONGLONG                 ullValueIn
-        );
+    );
 
     void CopyProp(
-          PCLUSPROP_LARGE_INTEGER  ppropOut
+        PCLUSPROP_LARGE_INTEGER  ppropOut
         , CLUSTER_PROPERTY_TYPE    cptPropTypeIn
         , LONGLONG                 llValueIn
-        );
+    );
 
     void CopyProp(
-          PCLUSPROP_ULARGE_INTEGER  ppropOut
+        PCLUSPROP_ULARGE_INTEGER  ppropOut
         , CLUSTER_PROPERTY_TYPE     cptPropTypeIn
         , LONGLONG                  llValueIn
-        );
+    );
     void CopyProp(
-          PCLUSPROP_BINARY      ppropOut
+        PCLUSPROP_BINARY      ppropOut
         , CLUSTER_PROPERTY_TYPE cptPropTypeIn
         , const unsigned char * pbValueIn
         , size_t                cbValueIn
-        );
+    );
 
     void CopyEmptyProp(
-          PCLUSPROP_VALUE           ppropOut
+        PCLUSPROP_VALUE           ppropOut
         , CLUSTER_PROPERTY_TYPE     cptPropTypeIn
         , CLUSTER_PROPERTY_FORMAT   propFormatIn
-        );
+    );
 
 }; //*** class CClusPropList
 

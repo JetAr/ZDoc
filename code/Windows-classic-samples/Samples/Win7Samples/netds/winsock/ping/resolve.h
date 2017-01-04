@@ -1,6 +1,6 @@
-// From Network Programming for Microsoft Windows, Second Edition by 
-// Anthony Jones and James Ohlund.  
-// Copyright 2002.   Reproduced by permission of Microsoft Press.  
+﻿// From Network Programming for Microsoft Windows, Second Edition by
+// Anthony Jones and James Ohlund.
+// Copyright 2002.   Reproduced by permission of Microsoft Press.
 // All rights reserved.
 //
 //
@@ -26,10 +26,10 @@
 extern "C" {
 #endif
 
-int              PrintAddress(SOCKADDR *sa, int salen);
-int              FormatAddress(SOCKADDR *sa, int salen, char *addrbuf, int addrbuflen);
-int              ReverseLookup(SOCKADDR *sa, int salen, char *namebuf, int namebuflen);
-struct addrinfo *ResolveAddress(char *addr, char *port, int af, int type, int proto);
+    int              PrintAddress(SOCKADDR *sa, int salen);
+    int              FormatAddress(SOCKADDR *sa, int salen, char *addrbuf, int addrbuflen);
+    int              ReverseLookup(SOCKADDR *sa, int salen, char *namebuf, int namebuflen);
+    struct addrinfo *ResolveAddress(char *addr, char *port, int af, int type, int proto);
 
 #ifdef _cplusplus
 }

@@ -1,4 +1,4 @@
-/* Unicode/Ansi stubs */
+﻿/* Unicode/Ansi stubs */
 #ifdef USEWAPI
 typedef LPWSTR            LPMYSTR;
 typedef WCHAR             MYCHAR;

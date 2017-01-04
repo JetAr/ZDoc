@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include <unknwn.h> // for IClassFactory
 #include <windows.h>

@@ -1,4 +1,4 @@
-//*****************************************************************************
+﻿//*****************************************************************************
 //
 // Microsoft Windows Media
 // Copyright (C) Microsoft Corporation. All rights reserved.
@@ -37,10 +37,10 @@ CROStream::~CROStream()
 // Implementation of IUnknown methods.
 //------------------------------------------------------------------------------
 HRESULT STDMETHODCALLTYPE CROStream::QueryInterface( /* [in] */ REFIID riid,
-                                                     /* [out] */ void __RPC_FAR *__RPC_FAR *ppvObject ) 
+        /* [out] */ void __RPC_FAR *__RPC_FAR *ppvObject )
 {
     if( ( IID_IStream == riid ) ||
-        ( IID_IUnknown == riid ) )
+            ( IID_IUnknown == riid ) )
     {
         *ppvObject = static_cast< IStream* >( this );
         AddRef();
@@ -77,13 +77,13 @@ HRESULT CROStream::Open( LPCTSTR ptszURL )
     // Open the file
     //
     m_hFile = CreateFile(
-                    ptszURL,
-                    GENERIC_READ,
-                    FILE_SHARE_READ,
-                    NULL,
-                    OPEN_EXISTING,
-                    FILE_ATTRIBUTE_NORMAL,
-                    NULL );
+                  ptszURL,
+                  GENERIC_READ,
+                  FILE_SHARE_READ,
+                  NULL,
+                  OPEN_EXISTING,
+                  FILE_ATTRIBUTE_NORMAL,
+                  NULL );
 
     if( INVALID_HANDLE_VALUE == m_hFile )
     {
@@ -140,20 +140,20 @@ HRESULT CROStream::Seek( LARGE_INTEGER dlibMove,
 
     switch( dwOrigin )
     {
-        case STREAM_SEEK_SET:
-            dwMoveMethod = FILE_BEGIN;
-            break;
+    case STREAM_SEEK_SET:
+        dwMoveMethod = FILE_BEGIN;
+        break;
 
-        case STREAM_SEEK_CUR:
-            dwMoveMethod = FILE_CURRENT;
-            break;
+    case STREAM_SEEK_CUR:
+        dwMoveMethod = FILE_CURRENT;
+        break;
 
-        case STREAM_SEEK_END:
-            dwMoveMethod = FILE_END;
-            break;
+    case STREAM_SEEK_END:
+        dwMoveMethod = FILE_END;
+        break;
 
-        default:
-            return( E_INVALIDARG );
+    default:
+        return( E_INVALIDARG );
     };
 
     DWORD dwPos = SetFilePointer( m_hFile, dlibMove.LowPart, NULL, dwMoveMethod );

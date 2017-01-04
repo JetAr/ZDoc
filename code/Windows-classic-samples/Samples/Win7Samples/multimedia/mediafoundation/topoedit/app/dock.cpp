@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -62,10 +62,14 @@ CDock::CArea* CDock::GetStockArea(STOCK_AREA AreaType)
 {
     switch(AreaType)
     {
-        case STOCK_AREA_LEFT: return &m_StockLeft;
-        case STOCK_AREA_RIGHT: return &m_StockRight;
-        case STOCK_AREA_TOP: return &m_StockTop;
-        case STOCK_AREA_BOTTOM: return &m_StockBottom;
+    case STOCK_AREA_LEFT:
+        return &m_StockLeft;
+    case STOCK_AREA_RIGHT:
+        return &m_StockRight;
+    case STOCK_AREA_TOP:
+        return &m_StockTop;
+    case STOCK_AREA_BOTTOM:
+        return &m_StockBottom;
     }
 
     return NULL;
@@ -75,7 +79,7 @@ void CDock::RemoveAllAreas()
 {
     DWORD n;
     CArea* pArea;
-    
+
     for(n = 0; n < m_Areas.GetCount(); n++)
     {
         pArea = m_Areas.GetAt(n);
@@ -96,17 +100,17 @@ void CDock::UpdateDock()
 void CDock::MoveSplitter(CWindow* pSplitter, LONG x, LONG y)
 {
     // Find the splitter area and move it to the new position
-    for(size_t i = 0; i < m_Areas.GetCount(); i++) 
+    for(size_t i = 0; i < m_Areas.GetCount(); i++)
     {
         CArea* pArea = m_Areas.GetAt(i);
-        if(pArea->m_pWindow == pSplitter) 
+        if(pArea->m_pWindow == pSplitter)
         {
-            if(pArea->m_MoveType == MOVE_HOR) 
+            if(pArea->m_MoveType == MOVE_HOR)
             {
                 LONG newY = pArea->m_rc.top + y;
                 pArea->m_posFixed.top = double(newY) / m_nHeight;
             }
-            else 
+            else
             {
                 LONG newX = pArea->m_rc.left + x;
                 pArea->m_posFixed.left = double(newX) / m_nWidth;
@@ -125,8 +129,8 @@ void CDock::ResizeDock(long nWidth, long nHeight)
 
     m_nHeight = nHeight;
     m_nWidth = nWidth;
-    
-    // cleanup resize iteration    
+
+    // cleanup resize iteration
     // update fixed position
     for(n = 0; n < m_Areas.GetCount(); n++)
     {
@@ -145,15 +149,15 @@ void CDock::ResizeDock(long nWidth, long nHeight)
         }
     }
 
-    
+
     // resize stock panes
     m_StockLeft.m_rc.bottom = nHeight;
 
     m_StockRight.m_rc.left = m_StockRight.m_rc.right = nWidth;
     m_StockRight.m_rc.bottom = nHeight;
-    
+
     m_StockTop.m_rc.right = nWidth;
-    
+
     m_StockBottom.m_rc.right = nWidth;
     m_StockBottom.m_rc.bottom = m_StockBottom.m_rc.top = nHeight;
 
@@ -163,7 +167,7 @@ void CDock::ResizeDock(long nWidth, long nHeight)
         for(n = 0; n < m_Areas.GetCount(); n++)
         {
             pArea = m_Areas.GetAt(n);
-            
+
             if(pArea->m_nResizeIter >= nCurIter)
             {
                 // we can resize if we already resized all attached
@@ -175,7 +179,7 @@ void CDock::ResizeDock(long nWidth, long nHeight)
                 {
                     pArea->m_nResizeIter = nCurIter+1;
                 }
-                
+
             }
         }
     }
@@ -202,7 +206,7 @@ void CDock::ResizePane(CDock::CArea* pArea)
     {
         pArea->m_rc.right = pArea->m_Attach.pRight->m_rc.left;
     }
-    
+
     if(pArea->m_Attach.pTop)
     {
         pArea->m_rc.top = pArea->m_Attach.pTop->m_rc.bottom;
@@ -239,15 +243,15 @@ BOOL CDock::CanResize(CDock::CArea* pArea)
 LRESULT CDock::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
     bHandled = TRUE;
-    
+
     return 0;
 }
 
 LRESULT CDock::OnSize(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
-    ResizeDock(LOWORD(lParam), HIWORD(lParam)); 
+    ResizeDock(LOWORD(lParam), HIWORD(lParam));
 
     bHandled = TRUE;
-    
+
     return 0;
 }

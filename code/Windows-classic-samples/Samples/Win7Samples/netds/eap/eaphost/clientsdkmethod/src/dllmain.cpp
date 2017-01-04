@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 
@@ -37,44 +37,44 @@ HINSTANCE   g_hInstance;
 BOOL
 WINAPI
 DllMain(
-   HINSTANCE hInstance,
-   DWORD dwReason,
-   LPVOID lpReserved
-   )
+    HINSTANCE hInstance,
+    DWORD dwReason,
+    LPVOID lpReserved
+)
 {
-	DWORD retCode = ERROR_SUCCESS;
+    DWORD retCode = ERROR_SUCCESS;
 
-	// We don't use this parameter, so hide it from PREfast and Lint.
-	UNREFERENCED_PARAMETER(lpReserved);
+    // We don't use this parameter, so hide it from PREfast and Lint.
+    UNREFERENCED_PARAMETER(lpReserved);
 
-	if (dwReason == DLL_PROCESS_ATTACH)
-	{
-		//"SampleEapPeer.log" - the trace file that will be generated.
-		g_dwEapTraceId = TraceRegister(L"SampleEapPeer");
+    if (dwReason == DLL_PROCESS_ATTACH)
+    {
+        //"SampleEapPeer.log" - the trace file that will be generated.
+        g_dwEapTraceId = TraceRegister(L"SampleEapPeer");
 
-		g_hInstance = hInstance;
+        g_hInstance = hInstance;
 
-		// Create the heap we'll be using for memory allocations.
-		retCode = InitializeHeap();
-		if(retCode != ERROR_SUCCESS)
-			goto Cleanup;
-	}
-	else if (dwReason == DLL_PROCESS_DETACH)
-	{
-		TraceDeregister(g_dwEapTraceId);
-		g_dwEapTraceId = INVALID_TRACEID;
+        // Create the heap we'll be using for memory allocations.
+        retCode = InitializeHeap();
+        if(retCode != ERROR_SUCCESS)
+            goto Cleanup;
+    }
+    else if (dwReason == DLL_PROCESS_DETACH)
+    {
+        TraceDeregister(g_dwEapTraceId);
+        g_dwEapTraceId = INVALID_TRACEID;
 
-		// Clean up our internal heap.
-		retCode = CleanupHeap();
-		if(retCode != ERROR_SUCCESS)
-			goto Cleanup;
-	}
+        // Clean up our internal heap.
+        retCode = CleanupHeap();
+        if(retCode != ERROR_SUCCESS)
+            goto Cleanup;
+    }
 
 Cleanup:
-	if(retCode != ERROR_SUCCESS)
-		return FALSE;
-	else
-		return TRUE;
+    if(retCode != ERROR_SUCCESS)
+        return FALSE;
+    else
+        return TRUE;
 }
 
 
@@ -82,7 +82,7 @@ Cleanup:
   * Implementation of the DllRegisterServer API function.
   *
   * This function is called by "regsvr32 filename.dll". This DLL uses this API
-  * function to register itself with EAP Host and to create its default registry 
+  * function to register itself with EAP Host and to create its default registry
   * configuration.
   *
   * @return An HRESULT value indicating success or failure.
@@ -90,114 +90,114 @@ Cleanup:
 STDAPI
 DllRegisterServer( VOID )
 {
-	DWORD dwDisp = 0;
-	DWORD retCode = 0;
-	HKEY hkeapHost = 0;
-	HKEY hkeapMethod = 0;
-	wchar_t *dllpathValue = NULL;
-	DWORD dllPathValueLength = 0;
-	DWORD peerDialogValue = 0;
+    DWORD dwDisp = 0;
+    DWORD retCode = 0;
+    HKEY hkeapHost = 0;
+    HKEY hkeapMethod = 0;
+    wchar_t *dllpathValue = NULL;
+    DWORD dllPathValueLength = 0;
+    DWORD peerDialogValue = 0;
 
-	// Check if the key -- "HKLM\System\CurrentControlSet\Services\EapHost\Methods"
-	// exist. The absence of key implies EapHost is not properly installed.
-	retCode = RegCreateKeyExW(HKEY_LOCAL_MACHINE, eapHostKeyName, 
-							0, NULL, REG_OPTION_NON_VOLATILE,
-							KEY_ALL_ACCESS, NULL, &hkeapHost, &dwDisp);
-	if(retCode != ERROR_SUCCESS)
-	{
-		// Trace Error --- EapHost not properly installed.
-		goto Cleanup;
-	}
+    // Check if the key -- "HKLM\System\CurrentControlSet\Services\EapHost\Methods"
+    // exist. The absence of key implies EapHost is not properly installed.
+    retCode = RegCreateKeyExW(HKEY_LOCAL_MACHINE, eapHostKeyName,
+                              0, NULL, REG_OPTION_NON_VOLATILE,
+                              KEY_ALL_ACCESS, NULL, &hkeapHost, &dwDisp);
+    if(retCode != ERROR_SUCCESS)
+    {
+        // Trace Error --- EapHost not properly installed.
+        goto Cleanup;
+    }
 
-	// Create the subkey -- "311\40" which is the MethodId of the Sample.
-	retCode = RegCreateKeyExW(hkeapHost, eapMethodName, 
-							0, NULL, REG_OPTION_NON_VOLATILE,
-							KEY_ALL_ACCESS, NULL, &hkeapMethod, &dwDisp);
-	if(retCode != ERROR_SUCCESS)
-	{
-		// Trace Error --- EapMethod Key could not be created properly.
-		goto Cleanup;
-	}
+    // Create the subkey -- "311\40" which is the MethodId of the Sample.
+    retCode = RegCreateKeyExW(hkeapHost, eapMethodName,
+                              0, NULL, REG_OPTION_NON_VOLATILE,
+                              KEY_ALL_ACCESS, NULL, &hkeapMethod, &dwDisp);
+    if(retCode != ERROR_SUCCESS)
+    {
+        // Trace Error --- EapMethod Key could not be created properly.
+        goto Cleanup;
+    }
 
-	// Set the Value --- "PeerFriendlyName" = "SdkPeerEapMethod"
-	retCode = RegSetValueExW(hkeapMethod,
-					peerFriendlyName, 
-					0,
-					REG_SZ,
-					(LPBYTE)peerFriendlyNameValue,
-					(DWORD)sizeof(peerFriendlyNameValue));
-	if(retCode != ERROR_SUCCESS)
-	{
-		// Trace Error --- Could not set Peer Friendly Name
-		goto Cleanup;
-	}
+    // Set the Value --- "PeerFriendlyName" = "SdkPeerEapMethod"
+    retCode = RegSetValueExW(hkeapMethod,
+                             peerFriendlyName,
+                             0,
+                             REG_SZ,
+                             (LPBYTE)peerFriendlyNameValue,
+                             (DWORD)sizeof(peerFriendlyNameValue));
+    if(retCode != ERROR_SUCCESS)
+    {
+        // Trace Error --- Could not set Peer Friendly Name
+        goto Cleanup;
+    }
 
-	// Get the complete location of the Peer Eap Method Dll Path.
-	// Location = Current Directory + Dll Name
-	retCode = GetFullPath(dllpathValue, dllPathValueLength, (LPWSTR)peerMethodDllName, sizeof(peerMethodDllName));
-	if(retCode != ERROR_SUCCESS)
-		goto Cleanup;
+    // Get the complete location of the Peer Eap Method Dll Path.
+    // Location = Current Directory + Dll Name
+    retCode = GetFullPath(dllpathValue, dllPathValueLength, (LPWSTR)peerMethodDllName, sizeof(peerMethodDllName));
+    if(retCode != ERROR_SUCCESS)
+        goto Cleanup;
 
-	// Set the Value --- "PeerDllPath" = "CurrentDirectory + DllName"
-	retCode = RegSetValueExW(hkeapMethod,
-				peerDllPath,
-				0, 
-				REG_EXPAND_SZ, 
-				(LPBYTE)dllpathValue,
-				dllPathValueLength);
-	if(retCode != ERROR_SUCCESS)
-	{
-		// Trace Error --- Could not set Peer Dll Path
-		goto Cleanup;
-	} 
+    // Set the Value --- "PeerDllPath" = "CurrentDirectory + DllName"
+    retCode = RegSetValueExW(hkeapMethod,
+                             peerDllPath,
+                             0,
+                             REG_EXPAND_SZ,
+                             (LPBYTE)dllpathValue,
+                             dllPathValueLength);
+    if(retCode != ERROR_SUCCESS)
+    {
+        // Trace Error --- Could not set Peer Dll Path
+        goto Cleanup;
+    }
 
-	// Set the Value --- "Properties"
-	retCode = RegSetValueExW(hkeapMethod,
-					properties,
-					0,
-					REG_DWORD,
-					(LPBYTE) &propertiesValue, 
-					sizeof(DWORD));
-	if(retCode != ERROR_SUCCESS)
-	{
-		// Trace Error --- Could not set Properties 
-		goto Cleanup;
-	}
+    // Set the Value --- "Properties"
+    retCode = RegSetValueExW(hkeapMethod,
+                             properties,
+                             0,
+                             REG_DWORD,
+                             (LPBYTE) &propertiesValue,
+                             sizeof(DWORD));
+    if(retCode != ERROR_SUCCESS)
+    {
+        // Trace Error --- Could not set Properties
+        goto Cleanup;
+    }
 
-	// Set the Value --- "PeerInvokeUsernameDialog" = 0
-	retCode = RegSetValueExW(hkeapMethod,
-					peerInvokeUserNameDialog,
-					0, 
-					REG_DWORD, 
-					(LPBYTE) &peerDialogValue, 
-					sizeof(DWORD));
-	if(retCode != ERROR_SUCCESS)
-	{
-		// Trace Error --- Could not set peerInvokeUserNameDialog 
-		goto Cleanup;
-	}
+    // Set the Value --- "PeerInvokeUsernameDialog" = 0
+    retCode = RegSetValueExW(hkeapMethod,
+                             peerInvokeUserNameDialog,
+                             0,
+                             REG_DWORD,
+                             (LPBYTE) &peerDialogValue,
+                             sizeof(DWORD));
+    if(retCode != ERROR_SUCCESS)
+    {
+        // Trace Error --- Could not set peerInvokeUserNameDialog
+        goto Cleanup;
+    }
 
-	// Set the Value --- "PeerInvokePasswordDialog" = 0
-	retCode = RegSetValueExW(hkeapMethod,
-					peerInvokePasswordDialog,
-					0,
-					REG_DWORD, 
-					(LPBYTE) &peerDialogValue,
-					sizeof(DWORD));
-	if(retCode != ERROR_SUCCESS)
-	{
-		// Trace Error --- Could not set peerInvokePasswordDialog 
-		goto Cleanup;
-	}
+    // Set the Value --- "PeerInvokePasswordDialog" = 0
+    retCode = RegSetValueExW(hkeapMethod,
+                             peerInvokePasswordDialog,
+                             0,
+                             REG_DWORD,
+                             (LPBYTE) &peerDialogValue,
+                             sizeof(DWORD));
+    if(retCode != ERROR_SUCCESS)
+    {
+        // Trace Error --- Could not set peerInvokePasswordDialog
+        goto Cleanup;
+    }
 
 Cleanup:
-	if(hkeapMethod)
-		RegCloseKey(hkeapMethod);
-	if(hkeapHost)
-		RegCloseKey(hkeapHost);
-	FreeMemory((PVOID *)&dllpathValue);
+    if(hkeapMethod)
+        RegCloseKey(hkeapMethod);
+    if(hkeapHost)
+        RegCloseKey(hkeapHost);
+    FreeMemory((PVOID *)&dllpathValue);
 
-	return HRESULT_FROM_WIN32(retCode);
+    return HRESULT_FROM_WIN32(retCode);
 }
 
 
@@ -214,30 +214,30 @@ Cleanup:
 STDAPI
 DllUnregisterServer( VOID )
 {
-	DWORD retCode = ERROR_SUCCESS;
-	HKEY hkeapHostMethod = 0;
+    DWORD retCode = ERROR_SUCCESS;
+    HKEY hkeapHostMethod = 0;
 
-	// Check if the key -- "HKLM\System\CurrentControlSet\Services\EapHost\Methods\311"
-	// exist. The absence of key implies EapHost or SdkEapMethod is not properly installed.
-	retCode = RegOpenKeyEx(HKEY_LOCAL_MACHINE, eapHostMethodKeyName,
-					0, KEY_ALL_ACCESS, &hkeapHostMethod);
-	if(retCode != ERROR_SUCCESS)
-	{
-		//  Trace Error --- EapHost or EapMethod not properly installed.
-		goto Cleanup;
-	}
+    // Check if the key -- "HKLM\System\CurrentControlSet\Services\EapHost\Methods\311"
+    // exist. The absence of key implies EapHost or SdkEapMethod is not properly installed.
+    retCode = RegOpenKeyEx(HKEY_LOCAL_MACHINE, eapHostMethodKeyName,
+                           0, KEY_ALL_ACCESS, &hkeapHostMethod);
+    if(retCode != ERROR_SUCCESS)
+    {
+        //  Trace Error --- EapHost or EapMethod not properly installed.
+        goto Cleanup;
+    }
 
-	// Delete the subkey - "40" which is the MethodId of Sample Eap.
-	retCode = RegDeleteKeyW(hkeapHostMethod, eapMethodId);
-	if(retCode != ERROR_SUCCESS)
-	{
-		//  Trace Error --- EapHost or EapMethod not properly installed.
-		goto Cleanup;
-	}
+    // Delete the subkey - "40" which is the MethodId of Sample Eap.
+    retCode = RegDeleteKeyW(hkeapHostMethod, eapMethodId);
+    if(retCode != ERROR_SUCCESS)
+    {
+        //  Trace Error --- EapHost or EapMethod not properly installed.
+        goto Cleanup;
+    }
 
 Cleanup:
-	if(hkeapHostMethod)
-		RegCloseKey(hkeapHostMethod);
-	
-	return HRESULT_FROM_WIN32(retCode);
+    if(hkeapHostMethod)
+        RegCloseKey(hkeapHostMethod);
+
+    return HRESULT_FROM_WIN32(retCode);
 }

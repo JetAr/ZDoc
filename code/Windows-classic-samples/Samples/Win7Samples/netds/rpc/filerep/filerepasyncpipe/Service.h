@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -7,14 +7,14 @@
 
 
 /*
-   
+
     File Replication Sample
     Server System Service
 
     FILE: Service.h
-    
+
     PURPOSE: Provides file replication service function declarations.
-    
+
     FUNCTIONS:
 
     COMMENTS: These funtions may be used by the main service routines
@@ -103,7 +103,7 @@ extern BOOL bNoFileIO;
 
 extern PSID pSystemSID;
 extern PSID pAdminSID;
-extern PSID pAnonSID;    
+extern PSID pAnonSID;
 
 /*
     Prototypes for shared service functions.

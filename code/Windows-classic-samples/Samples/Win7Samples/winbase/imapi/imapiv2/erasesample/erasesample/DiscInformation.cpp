@@ -1,4 +1,4 @@
-/*--
+﻿/*--
 
 Copyright (C) Microsoft Corporation, 2006
 
@@ -18,8 +18,8 @@ CDiscInformation::CDiscInformation() :
 
 CDiscInformation::~CDiscInformation()
 {
-    LocalFreeAndNull(m_DiscInfo); 
-    m_DiscInfoSize = 0; 
+    LocalFreeAndNull(m_DiscInfo);
+    m_DiscInfoSize = 0;
     m_DiscInfoAvailableSize = 0;
     return;
 }
@@ -111,8 +111,8 @@ HRESULT CDiscInformation::ValidateInitData(__in_bcount(BufferSize) BYTE* Buffer,
     if (SUCCEEDED(hr))
     {
         ULONG realBufferSize =
-                            (Buffer[0] << (8*1)) |
-                            (Buffer[1] << (8*0)) ;
+            (Buffer[0] << (8*1)) |
+            (Buffer[1] << (8*0)) ;
         realBufferSize += 2; // sizeof ( Buffer[0..1] )
         if ((ULONG)BufferSize != realBufferSize)
         {

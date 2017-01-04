@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 
@@ -18,8 +18,8 @@
 /// The user credentials dialog box.
 #define IDD_CONFIG_IDENTITY_DIALOG	1001
 
-/// The Username text field. 
+/// The Username text field.
 #define IDC_EDIT_NAME                   1002
 
-/// The Password text field. 
+/// The Password text field.
 #define IDC_EDIT_PASSWD               1003

@@ -1,4 +1,4 @@
-/**************************************************************************
+﻿/**************************************************************************
    THIS CODE AND INFORMATION IS PROVIDED 'AS IS' WITHOUT WARRANTY OF
    ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
    THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -43,7 +43,7 @@ typedef struct
     IUnknown                *punkID;
     ITextStoreACPSink       *pTextStoreACPSink;
     DWORD                   dwMask;
-}ADVISE_SINK, *PADVISE_SINK;
+} ADVISE_SINK, *PADVISE_SINK;
 
 #define NUM_SUPPORTED_ATTRS 3
 
@@ -63,7 +63,7 @@ typedef struct
     const TS_ATTRID *attrid;
     VARIANT varValue;
     VARIANT varDefaultValue;
-}ATTRIBUTES, *PATTRIBUTES;
+} ATTRIBUTES, *PATTRIBUTES;
 
 /**************************************************************************
 
@@ -72,8 +72,8 @@ typedef struct
 **************************************************************************/
 
 class CTSFEditWnd : public ITextStoreACP,
-                    public ITfContextOwnerCompositionSink,
-                    public ITfFunctionProvider
+    public ITfContextOwnerCompositionSink,
+    public ITfFunctionProvider
 {
 private:
     DWORD                   m_ObjRefCount;
@@ -106,11 +106,11 @@ private:
     BOOL                    m_fLayoutChanged;
     BOOL                    m_fNotify;
     ULONG                   m_cchOldLength;
-   
+
 public:
     CTSFEditWnd(HINSTANCE hInstance, HWND hwndParent);
     ~CTSFEditWnd();
-   
+
     //public utility methods
     BOOL _Initialize(ITfThreadMgr *pThreadMgr, TfClientId tfcId);
     void _Uninitialize();
@@ -133,7 +133,7 @@ public:
     STDMETHOD (QueryInterface)(REFIID, LPVOID*);
     STDMETHOD_ (DWORD, AddRef)();
     STDMETHOD_ (DWORD, Release)();
-   
+
     //ITextStoreACP methods
     STDMETHODIMP AdviseSink(REFIID riid, IUnknown *punk, DWORD dwMask);
     STDMETHODIMP UnadviseSink(IUnknown *punk);

@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -26,12 +26,13 @@ Note: This sample relies on FMAPI, which can only be used in the Windows Preinst
 
 typedef PVOID PFILE_RESTORE_CONTEXT;
 
-typedef enum  {
-  ContextFlagVolume                   = 0x00000001,
-  ContextFlagDisk                     = 0x00000002,
-  FlagScanRemovedFiles                = 0x00000004,
-  FlagScanRegularFiles                = 0x00000008,
-  FlagScanIncludeRemovedDirectories   = 0x00000010 
+typedef enum
+{
+    ContextFlagVolume                   = 0x00000001,
+    ContextFlagDisk                     = 0x00000002,
+    FlagScanRemovedFiles                = 0x00000004,
+    FlagScanRegularFiles                = 0x00000008,
+    FlagScanIncludeRemovedDirectories   = 0x00000010
 } RESTORE_CONTEXT_FLAGS;
 
 typedef BOOL (WINAPI *FuncCreateFileRestoreContext) (
@@ -41,10 +42,10 @@ typedef BOOL (WINAPI *FuncCreateFileRestoreContext) (
     _In_  LONGLONG              BootSector,
     _In_  DWORD                 Version,
     _Out_ PFILE_RESTORE_CONTEXT* Context
-    );
+);
 
 typedef BOOL (WINAPI *FuncCloseFileRestoreContext) (
-  _In_  PFILE_RESTORE_CONTEXT Context
+    _In_  PFILE_RESTORE_CONTEXT Context
 );
 
 //
@@ -53,26 +54,26 @@ typedef BOOL (WINAPI *FuncCloseFileRestoreContext) (
 void __cdecl wmain(void)
 {
     HMODULE hLib;
-    
-    HeapSetInformation(NULL, HeapEnableTerminationOnCorruption, NULL, 0); 
+
+    HeapSetInformation(NULL, HeapEnableTerminationOnCorruption, NULL, 0);
 
     //Load the FMAPI DLL
-    hLib = ::LoadLibraryEx(L"fmapi.dll", NULL, NULL);    
+    hLib = ::LoadLibraryEx(L"fmapi.dll", NULL, NULL);
     if ( !hLib )
     {
         wprintf(L"Could not load fmapi.dll, Error #%d.\n", GetLastError());
         return;
     }
-    
+
     //Dynamically link to the needed FMAPI functions
     FuncCreateFileRestoreContext CreateFileRestoreContext;
     CreateFileRestoreContext = reinterpret_cast<FuncCreateFileRestoreContext>( GetProcAddress( hLib, "CreateFileRestoreContext" ) );
-    
+
     FuncCloseFileRestoreContext CloseFileRestoreContext;
     CloseFileRestoreContext = reinterpret_cast<FuncCloseFileRestoreContext>( GetProcAddress( hLib, "CloseFileRestoreContext" ) );
 
     //Call CreateFileRestoreContext with the FMAPI version number we are expecting to use
-    PFILE_RESTORE_CONTEXT context = NULL;    
+    PFILE_RESTORE_CONTEXT context = NULL;
     RESTORE_CONTEXT_FLAGS flags = (RESTORE_CONTEXT_FLAGS)(ContextFlagVolume | FlagScanRemovedFiles);
     if (CreateFileRestoreContext(VOLUME, flags, 0, 0, FILE_RESTORE_VERSION_2, &context))
     {
@@ -80,17 +81,17 @@ void __cdecl wmain(void)
     }
     else
     {
-        DWORD err = GetLastError();        
+        DWORD err = GetLastError();
         if (ERROR_INVALID_PARAMETER == err)
         {
             wprintf(L"Version Check Failed.");
-        } 
+        }
         else
         {
             wprintf(L"Failed to Create FileRestoreContext, Error #%d.\n", err);
         }
     }
-    
+
     //Close the context
     if (context)
     {

@@ -1,4 +1,4 @@
-/**********************************************************************
+﻿/**********************************************************************
 THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED
 TO THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -16,12 +16,12 @@ Abstract:
     People Picker dialog.
 
 Feedback:
-    If you have any questions or feedback, please contact us using 
+    If you have any questions or feedback, please contact us using
     any of the mechanisms below:
 
-    Email: peerfb@microsoft.com 
-    Newsgroup: Microsoft.public.win32.programmer.networks 
-    Website: http://www.microsoft.com/p2p 
+    Email: peerfb@microsoft.com
+    Newsgroup: Microsoft.public.win32.programmer.networks
+    Website: http://www.microsoft.com/p2p
 
 --********************************************************************/
 
@@ -59,12 +59,12 @@ HRESULT InitPeoplePickerModel(HWND hDlg)
 
     if (SUCCEEDED(hr))
     {
-        // Enumerate the people near me 
+        // Enumerate the people near me
         //
         hr = EnumPeopleNearMe();
         return hr;
     }
-    
+
     MessageBox(g_hModelDlgOwner, L"Error", L"Error monitoring PNM", MB_OK);
 
     return hr;
@@ -83,7 +83,7 @@ HRESULT DuplicatePeerPeopleNearMe(PEER_PEOPLE_NEAR_ME ** ppPersonDestination, PE
     size_t cbNickName = 0;
     size_t cbEndpointName = 0;
     PEER_PEOPLE_NEAR_ME * pTempDestination = NULL;
-    
+
     //Get size of NickName
     //
     cbNickName = (wcslen(pPersonSource->pwzNickName) * sizeof(WCHAR)) + sizeof(WCHAR);
@@ -92,10 +92,10 @@ HRESULT DuplicatePeerPeopleNearMe(PEER_PEOPLE_NEAR_ME ** ppPersonDestination, PE
     //Allocate nick name and PEER_PEOPLE_NEAR_ME structure
     //
     pTempDestination = (PEER_PEOPLE_NEAR_ME *) malloc(sizeof(PEER_PEOPLE_NEAR_ME));
-    
+
     if (NULL == pTempDestination)
         return E_OUTOFMEMORY;
-    
+
     ZeroMemory(pTempDestination, sizeof(PEER_PEOPLE_NEAR_ME));
 
     pTempDestination->pwzNickName = (PWSTR) malloc(cbNickName);
@@ -121,7 +121,7 @@ HRESULT DuplicatePeerPeopleNearMe(PEER_PEOPLE_NEAR_ME ** ppPersonDestination, PE
         PeoplePickerModelFreePerson(pTempDestination);
         return E_OUTOFMEMORY;
     }
-    
+
     //Copy the relevant fields into the PEER_PEOPLE_NEAR_ME structure
     //
     memcpy(pTempDestination->endpoint.pwzEndpointName, pPersonSource->endpoint.pwzEndpointName, cbEndpointName);
@@ -137,7 +137,7 @@ HRESULT DuplicatePeerPeopleNearMe(PEER_PEOPLE_NEAR_ME ** ppPersonDestination, PE
 // Function:    PeoplePickerModelFreePerson
 //
 // Purpose:     Frees a PEER_PEOPLE_NEAR_ME structure allocated by the model
-//              
+//
 // Returns:        VOID
 //
 VOID PeoplePickerModelFreePerson(PEER_PEOPLE_NEAR_ME * pPersonNearMe)
@@ -154,7 +154,7 @@ VOID PeoplePickerModelFreePerson(PEER_PEOPLE_NEAR_ME * pPersonNearMe)
 // Function:    PeoplePickerModelDestroy
 //
 // Purpose:     Frees up all the resources needed by the model
-//              
+//
 // Returns:        VOID
 //
 VOID PeoplePickerModelDestroy()
@@ -182,7 +182,7 @@ VOID CALLBACK ProcessUpdateCallBack(LPVOID lpContext, BOOLEAN fTimer)
     fTimer;
 
     while (SUCCEEDED(PeerCollabGetEventData(g_hModelPeerEvent, &pEventData)) && pEventData)
-    {   
+    {
         // NULL for the PPEER_PEOPLE_NEAR_ME means this event is for the local person
         //
         if (pEventData->peopleNearMeChangedData.pPeopleNearMe == NULL)
@@ -240,7 +240,7 @@ HRESULT MonitorPeopleNearMe()
 {
     HRESULT hr = S_OK;
     PEER_COLLAB_EVENT_REGISTRATION  eventReg = {0};
-   
+
     // Create the event handle for the model
     //
     g_hModelEvent = CreateEvent(NULL, FALSE, FALSE, NULL);
@@ -265,11 +265,11 @@ HRESULT MonitorPeopleNearMe()
         // whenever a PEER_EVENT_PEOPLE_NEAR_ME_CHANGED is received.
         //
         if (!RegisterWaitForSingleObject(&g_hModelWaitObject,
-                                    g_hModelEvent, 
-                                    ProcessUpdateCallBack,
-                                    NULL,
-                                    INFINITE,
-                                    0))
+                                         g_hModelEvent,
+                                         ProcessUpdateCallBack,
+                                         NULL,
+                                         INFINITE,
+                                         0))
         {
             hr = HRESULT_FROM_WIN32(GetLastError());
         }
@@ -300,7 +300,7 @@ HRESULT EnumPeopleNearMe()
     HPEERENUM                hEnum = NULL;
     ULONG                    count = 0;
     ULONG                     index = 0;
- 
+
     // Enumerate the people near me and setup the enumeration
     //
     hr = PeerCollabEnumPeopleNearMe(&hEnum);
@@ -320,7 +320,7 @@ HRESULT EnumPeopleNearMe()
         }
 
         if (SUCCEEDED(hr))
-        {    
+        {
             // Add people to dialog
             //
             while (index < count)
@@ -340,7 +340,7 @@ HRESULT EnumPeopleNearMe()
 
         // End the PEER enumeration
         //
-        PeerEndEnumeration(hEnum);     
+        PeerEndEnumeration(hEnum);
     }
     return hr;
 }

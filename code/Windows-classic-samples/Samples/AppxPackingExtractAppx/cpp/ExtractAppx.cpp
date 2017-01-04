@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -19,13 +19,15 @@
 
 // Types of footprint files in an Appx package
 const int FootprintFilesCount = 4;
-const APPX_FOOTPRINT_FILE_TYPE FootprintFilesType[FootprintFilesCount] = {
+const APPX_FOOTPRINT_FILE_TYPE FootprintFilesType[FootprintFilesCount] =
+{
     APPX_FOOTPRINT_FILE_TYPE_MANIFEST,
     APPX_FOOTPRINT_FILE_TYPE_BLOCKMAP,
     APPX_FOOTPRINT_FILE_TYPE_SIGNATURE,
     APPX_FOOTPRINT_FILE_TYPE_CODEINTEGRITY
 };
-const LPCWSTR FootprintFilesName[FootprintFilesCount] = {
+const LPCWSTR FootprintFilesName[FootprintFilesCount] =
+{
     L"manifest",
     L"block map",
     L"digital signature",
@@ -102,12 +104,12 @@ HRESULT GetOutputStream(
     if (SUCCEEDED(hr))
     {
         hr = SHCreateStreamOnFileEx(
-                fullFileName,
-                STGM_CREATE | STGM_WRITE | STGM_SHARE_EXCLUSIVE,
-                0, // default file attributes
-                TRUE, // create new file if it does not exist
-                NULL, // no template
-                stream);
+                 fullFileName,
+                 STGM_CREATE | STGM_WRITE | STGM_SHARE_EXCLUSIVE,
+                 0, // default file attributes
+                 TRUE, // create new file if it does not exist
+                 NULL, // no template
+                 stream);
     }
     return hr;
 }
@@ -303,30 +305,30 @@ HRESULT GetPackageReader(
 
     // Create a new Appx factory
     hr = CoCreateInstance(
-            __uuidof(AppxFactory),
-            NULL,
-            CLSCTX_INPROC_SERVER,
-            __uuidof(IAppxFactory),
-            (LPVOID*)(&appxFactory));
+             __uuidof(AppxFactory),
+             NULL,
+             CLSCTX_INPROC_SERVER,
+             __uuidof(IAppxFactory),
+             (LPVOID*)(&appxFactory));
 
     // Create a stream over the input Appx package
     if (SUCCEEDED(hr))
     {
         hr = SHCreateStreamOnFileEx(
-                inputFileName,
-                STGM_READ | STGM_SHARE_EXCLUSIVE,
-                0, // default file attributes
-                FALSE, // do not create new file
-                NULL, // no template
-                &inputStream);
+                 inputFileName,
+                 STGM_READ | STGM_SHARE_EXCLUSIVE,
+                 0, // default file attributes
+                 FALSE, // do not create new file
+                 NULL, // no template
+                 &inputStream);
     }
 
     // Create a new package reader using the factory.
     if (SUCCEEDED(hr))
     {
         hr = appxFactory->CreatePackageReader(
-                inputStream,
-                reader);
+                 inputStream,
+                 reader);
     }
 
     // Clean up allocated resources

@@ -1,8 +1,8 @@
-//////////////////////////////////////////////////////////////////////////
+﻿//////////////////////////////////////////////////////////////////////////
 //
 // OpQueue.h
 // Async operation queue.
-// 
+//
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -19,39 +19,39 @@
 
 
 /*
-    This header file defines an object to help queue and serialize 
-    asynchronous operations. 
+    This header file defines an object to help queue and serialize
+    asynchronous operations.
 
-    Background: 
+    Background:
 
     To perform an operation asynchronously in Media Foundation, an object
     does one of the following:
 
-        1. Calls MFPutWorkItem(Ex), using either a standard work queue 
-           identifier or a caller-allocated work queue. The work-queue 
+        1. Calls MFPutWorkItem(Ex), using either a standard work queue
+           identifier or a caller-allocated work queue. The work-queue
            thread invokes the object's callback.
 
-        2. Creates an async result object (IMFAsyncResult) and calls 
+        2. Creates an async result object (IMFAsyncResult) and calls
            MFInvokeCallback to invoke the object's callback.
 
     Ultimately, either of these cause the object's callback to be invoked
-    from a work-queue thread. The object can then complete the operation 
+    from a work-queue thread. The object can then complete the operation
     inside the callback.
 
-    However, the Media Foundation platform may dispatch async callbacks in 
-    parallel on several threads. Putting an item on a work queue does NOT 
-    guarantee that one operation will complete before the next one starts, 
+    However, the Media Foundation platform may dispatch async callbacks in
+    parallel on several threads. Putting an item on a work queue does NOT
+    guarantee that one operation will complete before the next one starts,
     or even that work items will be dispatched in the same order they were
     called.
 
-    To serialize async operations that should not overlap, an object should 
+    To serialize async operations that should not overlap, an object should
     use a queue. While one operation is pending, subsequent operations are
     put on the queue, and only dispatched after the previous operation is
     complete.
 
     The granularity of a single "operation" depends on the requirements of
-    that particular object. A single operation might involve several 
-    asynchronous calls before the object dispatches the next operation on 
+    that particular object. A single operation might involve several
+    asynchronous calls before the object dispatches the next operation on
     the queue.
 
 
@@ -69,7 +69,7 @@
 //
 // The OpQueue class is an abstract class. The derived class must
 // implement the following pure-virtual methods:
-// 
+//
 // - IUnknown methods (AddRef, Release, QI)
 // - DispatchOperation
 // - ValidateOperation
@@ -81,7 +81,7 @@ class OpQueue : public IUnknown
 {
 public:
 
-    typedef ComPtrList<OP_TYPE>   OpList;   
+    typedef ComPtrList<OP_TYPE>   OpList;
 
     //-------------------------------------------------------------------
     // QueueOperation:
@@ -162,12 +162,12 @@ done:
     // Performs the asynchronous operation indicated by pOp.
     // This method is pure-virtual; the derived class must implement it.
     //
-    // At the end of each operation, the derived class must call 
+    // At the end of each operation, the derived class must call
     // ProcessQueue to process the next operation in the queue.
     //
     // NOTE: An operation is not required to complete inside the
     // DispatchOperation method. A single operation might consist of
-    // several asynchronous method calls.  
+    // several asynchronous method calls.
     //-------------------------------------------------------------------
 
     virtual HRESULT DispatchOperation(OP_TYPE *pOp) = 0;
@@ -178,8 +178,8 @@ done:
     // Checks whether the object can perform the operation indicated
     // by pOp at this time.
     //
-    // If the object cannot perform the operation now (e.g., because 
-    // another operation is still in progress) the method should returns 
+    // If the object cannot perform the operation now (e.g., because
+    // another operation is still in progress) the method should returns
     // MF_E_NOTACCEPTING.
     //
     // This method is pure-virtual; the derived class must implement it.
@@ -193,7 +193,7 @@ done:
     // critsec: Critical section owned by the derived class.
     //-------------------------------------------------------------------
 
-    OpQueue(CritSec& critsec) 
+    OpQueue(CritSec& critsec)
         : m_OnProcessQueue(this, &OpQueue::ProcessQueueAsync), m_critsec(critsec)
     {
     }

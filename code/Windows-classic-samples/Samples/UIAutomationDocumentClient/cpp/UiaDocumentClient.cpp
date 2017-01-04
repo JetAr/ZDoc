@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -259,7 +259,7 @@ public:
 
     // This will extract the comments from an IUIAutomationElementArray, adding any new ones to the comments array
     HRESULT GetNewCommentsFromArray(_In_ IUIAutomationElementArray *commentElements, _Inout_updates_to_(commentCount, *foundCommentCount) Comment **comments,
-        _In_ int commentCount, _Inout_ int *foundCommentCount)
+                                    _In_ int commentCount, _Inout_ int *foundCommentCount)
     {
         HRESULT hr = S_OK;
         int count;
@@ -326,13 +326,13 @@ public:
                 _Analysis_assume_((*foundCommentCount) <= commentCount);
             }
         }
-       
+
         return hr;
     }
 
     // This call will move the range argument, so don't pass in a range you don't want moved, clone it first
     HRESULT WalkForCommentsInRange(_In_ IUIAutomationTextRange *range, _Inout_updates_to_(commentCount, *foundCommentCount) Comment **comments,
-        _In_ int commentCount, _Inout_ int *foundCommentCount)
+                                   _In_ int commentCount, _Inout_ int *foundCommentCount)
     {
         HRESULT hr = S_OK;
 
@@ -538,7 +538,7 @@ public:
         }
         else
         {
-           
+
             VARIANT var;
             HRESULT hr = _range->GetAttributeValue(UIA_IsActiveAttributeId, &var);
             if (FAILED(hr))
@@ -563,7 +563,7 @@ public:
                     }
                 }
             }
-           
+
             hr = _range->GetAttributeValue(UIA_CaretPositionAttributeId, &var);
             if (FAILED(hr))
             {
@@ -705,8 +705,8 @@ public:
                         }
                         else
                         {
-                            wprintf(L"Caret range bounding rect is left: %d, top: %d, right: %d, bottom: %d\n", 
-                                pRectArray[0].left, pRectArray[0].top, pRectArray[0].right, pRectArray[0].bottom);
+                            wprintf(L"Caret range bounding rect is left: %d, top: %d, right: %d, bottom: %d\n",
+                                    pRectArray[0].left, pRectArray[0].top, pRectArray[0].right, pRectArray[0].bottom);
                         }
 
                         ::CoTaskMemFree(pRectArray);
@@ -771,7 +771,8 @@ private:
     IUIAutomationTextRange *_range;
 };
 
-enum CommandId {
+enum CommandId
+{
     CommandId_Invalid   = -1,
     CommandId_Help      =  0,
     CommandId_Print     =  1,
@@ -787,7 +788,8 @@ enum CommandId {
     CommandId_Caret     =  11
 };
 
-PCWSTR CommandText[] = {
+PCWSTR CommandText[] =
+{
     L"help\n",
     L"print\n",
     L"document\n",
@@ -846,71 +848,71 @@ public:
                 switch(cmdId)
                 {
                 case CommandId_Help:
-                    {
-                        Welcome();
-                        break;
-                    }
+                {
+                    Welcome();
+                    break;
+                }
                 case CommandId_Print:
-                    {
-                        currentRange->Print(false);
-                        break;
-                    }
+                {
+                    currentRange->Print(false);
+                    break;
+                }
                 case CommandId_Document:
                 case CommandId_Selection:
                 case CommandId_Visible:
-                    {
-                        delete currentRange;
-                        currentRange = GetRange(cmdId, NULL);
-                        break;
-                    }
+                {
+                    delete currentRange;
+                    currentRange = GetRange(cmdId, NULL);
+                    break;
+                }
                 case CommandId_Caret:
+                {
+                    wprintf(L"Pausing for 2 seconds to allow you to focus the text control if desired...\n");
+                    Sleep(2000);
+                    delete currentRange;
+                    bool isActive;
+                    currentRange = GetRange(cmdId, &isActive);
+                    if (currentRange != NULL)
                     {
-                        wprintf(L"Pausing for 2 seconds to allow you to focus the text control if desired...\n");
-                        Sleep(2000);
-                        delete currentRange;
-                        bool isActive;
-                        currentRange = GetRange(cmdId, &isActive);
-                        if (currentRange != NULL)
-                        {
-                            wprintf(L"Got Caret Range (%s):\n", isActive ? L"active" : L"inactive" );
-                            currentRange->PrintCaretInfo();
-                        }
-                        break;
+                        wprintf(L"Got Caret Range (%s):\n", isActive ? L"active" : L"inactive" );
+                        currentRange->PrintCaretInfo();
                     }
+                    break;
+                }
                 case CommandId_Headers:
-                    {
-                        currentRange->FindAndPrintHeaders();
-                        break;
-                    }
+                {
+                    currentRange->FindAndPrintHeaders();
+                    break;
+                }
                 case CommandId_Comment:
-                    {
-                        SelectComment(input, currentRange, &currentComment);
-                        break;
-                    }
+                {
+                    SelectComment(input, currentRange, &currentComment);
+                    break;
+                }
                 case CommandId_Comments:
-                    {
-                        currentRange->FindAndPrintComments();
-                        break;
-                    }
+                {
+                    currentRange->FindAndPrintComments();
+                    break;
+                }
                 case CommandId_CommentRange:
-                    {
-                        RangeFromComment(currentComment, &currentRange);
-                        break;
-                    }
+                {
+                    RangeFromComment(currentComment, &currentRange);
+                    break;
+                }
                 case CommandId_PrintComment:
+                {
+                    if (currentComment != NULL)
                     {
-                        if (currentComment != NULL)
-                        {
-                            currentComment->Print(false);
-                        }
-                        break;
+                        currentComment->Print(false);
                     }
+                    break;
+                }
                 case CommandId_Exit:
-                    {
-                        delete currentRange;
-                        currentRange = NULL;
-                        break;
-                    }
+                {
+                    delete currentRange;
+                    currentRange = NULL;
+                    break;
+                }
                 default:
                     wprintf(L"Invalid command, type help to see a list of valid commands.\n");
                 }
@@ -1064,8 +1066,8 @@ private:
 
         if (FAILED(hr))
         {
-             wprintf(L"Failed to Get the Requested Range, HR: 0x%08x\n", hr);
-             uiaRange = NULL;
+            wprintf(L"Failed to Get the Requested Range, HR: 0x%08x\n", hr);
+            uiaRange = NULL;
         }
 
         // We can validly get a NULL range, if the selection is Empty, or nothing is Visible
@@ -1089,12 +1091,12 @@ private:
         HRESULT hr = _element->GetCurrentPatternAs(UIA_TextPattern2Id, IID_PPV_ARGS(&_textPattern));
         if (FAILED(hr))
         {
-             wprintf(L"Failed to Get Text Pattern, HR: 0x%08x\n", hr);
+            wprintf(L"Failed to Get Text Pattern, HR: 0x%08x\n", hr);
         }
         else if (_textPattern == NULL)
         {
-             wprintf(L"Element does not actually support Text Pattern 2\n");
-             hr = E_FAIL;
+            wprintf(L"Element does not actually support Text Pattern 2\n");
+            hr = E_FAIL;
         }
         return hr;
     }
@@ -1168,7 +1170,7 @@ int _cdecl wmain(_In_ int argc, _In_reads_(argc) WCHAR* argv[])
         else
         {
             hr = CoCreateInstance(__uuidof(CUIAutomation8), NULL,
-                CLSCTX_INPROC_SERVER, IID_PPV_ARGS(&_automation));
+                                  CLSCTX_INPROC_SERVER, IID_PPV_ARGS(&_automation));
             if (FAILED(hr))
             {
                 wprintf(L"Failed to create a CUIAutomation8, HR: 0x%08x\n", hr);

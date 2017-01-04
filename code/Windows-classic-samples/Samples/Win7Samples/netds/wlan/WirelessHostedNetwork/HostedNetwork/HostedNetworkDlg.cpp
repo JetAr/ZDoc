@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -30,7 +30,7 @@ public:
 // Dialog Data
     enum { IDD = IDD_ABOUTBOX };
 
-    protected:
+protected:
     virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
 
 // Implementation
@@ -55,7 +55,7 @@ END_MESSAGE_MAP()
 
 CHostedNetworkDlg::CHostedNetworkDlg(
     CWnd* pParent /*=NULL*/
-    )
+)
     : CDialog(CHostedNetworkDlg::IDD, pParent),
       m_NotificationSink(NULL),
       m_fProcessNotifications(false),
@@ -84,10 +84,10 @@ CHostedNetworkDlg::~CHostedNetworkDlg()
     _ASSERT(m_IcsMgr == NULL);
 }
 
-void 
+void
 CHostedNetworkDlg::DoDataExchange(
     CDataExchange* pDX
-    )
+)
 {
     CDialog::DoDataExchange(pDX);
     DDX_Control(pDX, IDC_EDIT_NAME, m_NameEdit);
@@ -115,7 +115,7 @@ END_MESSAGE_MAP()
 
 // CHostedNetworkDlg message handlers
 
-BOOL 
+BOOL
 CHostedNetworkDlg::OnInitDialog()
 {
     BOOL fRetCode = TRUE;
@@ -188,7 +188,7 @@ CHostedNetworkDlg::OnInitDialog()
     m_bIsICSAllowed = IsICSAllowed();
 
     if (!m_bIsAdmin || !m_bIsICSAllowed)
-    {    
+    {
         // Disable ICS controls
         // For Enable ICS
         m_EnableIcsCheck.EnableWindow(FALSE);
@@ -218,7 +218,7 @@ CHostedNetworkDlg::OnInitDialog()
         {
             // Post a notificatoin
             PostNotification(L"Failed to initialize ICS manager.");
-            
+
             fRetCode = FALSE;
             BAIL();
         }
@@ -272,11 +272,11 @@ error:
     return fRetCode;
 }
 
-void 
+void
 CHostedNetworkDlg::OnSysCommand(
-    UINT nID, 
+    UINT nID,
     LPARAM lParam
-    )
+)
 {
     if ((nID & 0xFFF0) == IDM_ABOUTBOX)
     {
@@ -293,7 +293,7 @@ CHostedNetworkDlg::OnSysCommand(
 //  to draw the icon.  For MFC applications using the document/view model,
 //  this is automatically done for you by the framework.
 
-void 
+void
 CHostedNetworkDlg::OnPaint()
 {
     if (IsIconic())
@@ -327,14 +327,14 @@ CHostedNetworkDlg::OnClose()
 
 // The system calls this function to obtain the cursor to display while the user drags
 //  the minimized window.
-HCURSOR 
+HCURSOR
 CHostedNetworkDlg::OnQueryDragIcon()
 {
     return static_cast<HCURSOR>(m_hIcon);
 }
 
 
-void 
+void
 CHostedNetworkDlg::OnBnClickedCheckEnableIcs()
 {
     // TODO: Add your control notification handler code here
@@ -352,7 +352,7 @@ CHostedNetworkDlg::OnBnClickedCheckEnableIcs()
     }
 }
 
-void 
+void
 CHostedNetworkDlg::OnBnClickedButtonHostednetwork()
 {
     HRESULT     hr            = S_OK;
@@ -380,7 +380,7 @@ CHostedNetworkDlg::OnBnClickedButtonHostednetwork()
         hr = StartHostedNetwork();
         sOperation = TEXT("Failed to start the hosted network");
     }
-    
+
     if (FAILED(hr))
     {
         // Post an error message
@@ -396,12 +396,12 @@ CHostedNetworkDlg::OnBnClickedButtonHostednetwork()
     }
 }
 
-LRESULT 
+LRESULT
 CHostedNetworkDlg::WindowProc(
-    UINT message, 
-    WPARAM wParam, 
+    UINT message,
+    WPARAM wParam,
     LPARAM lParam
-    )
+)
 {
     if (WM_NEW_HN_NOTIFICATION == message)
     {
@@ -420,7 +420,7 @@ CHostedNetworkDlg::WindowProc(
     }
 }
 
-HRESULT 
+HRESULT
 CHostedNetworkDlg::InitWlan()
 {
     HRESULT hr                      = S_OK;
@@ -438,7 +438,7 @@ CHostedNetworkDlg::InitWlan()
         BAIL();
     }
 
-    // 
+    //
     // Initialize WLAN manager
     //
     hr = m_WlanMgr.Init();
@@ -447,10 +447,10 @@ CHostedNetworkDlg::InitWlan()
     //
     // Set notification sink
     //
-    hr = m_WlanMgr.AdviseHostedNetworkNotification(m_NotificationSink); 
+    hr = m_WlanMgr.AdviseHostedNetworkNotification(m_NotificationSink);
     BAIL_ON_FAILURE(hr);
 
-    hr = m_WlanMgr.IsHostedNetworkStarted(bIsHostedNetworkStarted); 
+    hr = m_WlanMgr.IsHostedNetworkStarted(bIsHostedNetworkStarted);
     BAIL_ON_FAILURE(hr);
 
     if (bIsHostedNetworkStarted)
@@ -472,18 +472,18 @@ error:
 // Process all notifications in the queue.
 // No lock is required because calls are serialized.
 //
-void 
+void
 CHostedNetworkDlg::ProcessNotifications()
 {
     CHostedNetworkNotification * pNotification = NULL;
     CWlanDevice * pDevice = NULL;
-    // 
+    //
     // Get the first notification
     //
     pNotification = m_NotificationSink->GetNextNotification();
 
     // pNotification could be NULL
-    
+
     while (pNotification != NULL)
     {
         pDevice = (CWlanDevice *)pNotification->GetNotificationData();
@@ -499,13 +499,13 @@ CHostedNetworkDlg::ProcessNotifications()
             _ASSERT(NULL == pDevice);
             OnHostedNetworkAvailable();
             break;
-        
+
         case CHostedNetworkNotification::HostedNetworkStarted:
             _ASSERT(NULL == pDevice);
             PostNotification(L"Hosted network is now started.");
             m_HostedNetworkStatusTxt.SetWindowText(L"The hosted network is active");
             break;
-        
+
         case CHostedNetworkNotification::HostedNetworkStopped:
             _ASSERT(NULL == pDevice);
             PostNotification(L"Hosted network is now stopped.");
@@ -552,7 +552,7 @@ CHostedNetworkDlg::ProcessNotifications()
 //
 // Get hosted network info and set controls accordingly
 //
-void 
+void
 CHostedNetworkDlg::GetHostedNetworkInfo()
 {
     HRESULT hr = S_OK;
@@ -586,7 +586,7 @@ CHostedNetworkDlg::GetHostedNetworkInfo()
 
     // Set network name
     m_NameEdit.SetWindowTextW(m_CurrentName);
-    
+
     // Set network key
     m_KeyEdit.SetWindowTextW(m_CurrentKey);
 
@@ -624,9 +624,9 @@ CHostedNetworkDlg::GetWlanDeviceInfo()
         while ( 0 != stationList.GetCount() )
         {
             CWlanStation* pStation = stationList.RemoveHead();
-            
+
             // OnDeviceAdd(pStation);
-            
+
             pStation->Release();
 
             pStation = NULL;
@@ -692,9 +692,9 @@ CHostedNetworkDlg::OnHostedNetworkNotAvailable()
     // Set button text and disable it -- we cannot enable hosted network now.
     m_HostedNetworkButton.SetWindowTextW(m_strStartHostedNetwork);
     m_HostedNetworkButton.EnableWindow(FALSE);
-    
+
     // Enable ICS: We cannot do this since hosted network cannot be started
-    m_EnableIcsCheck.EnableWindow(FALSE);    
+    m_EnableIcsCheck.EnableWindow(FALSE);
     // Connection List
     m_ConnectionComboBox.EnableWindow(FALSE);
 }
@@ -704,7 +704,7 @@ CHostedNetworkDlg::OnHostedNetworkAvailable()
 {
     // Post a notificatoin
     PostNotification(L"Hosted network is available on current NIC(s).");
-    
+
     m_HostedNetworkStatusTxt.SetWindowText(L"The hosted network is idle");
 
     // Set state
@@ -730,7 +730,7 @@ CHostedNetworkDlg::OnHostedNetworkAvailable()
 void
 CHostedNetworkDlg::OnDeviceAdd(
     CWlanDevice * pDevice
-    )
+)
 {
     _ASSERT(pDevice != NULL);
 
@@ -755,7 +755,7 @@ CHostedNetworkDlg::OnDeviceAdd(
 void
 CHostedNetworkDlg::OnDeviceRemove(
     CWlanDevice * pDevice
-    )
+)
 {
     _ASSERT(pDevice != NULL);
     CWlanDevice * pRemovedDevice = NULL;
@@ -794,7 +794,7 @@ CHostedNetworkDlg::OnDeviceRemove(
 void
 CHostedNetworkDlg::OnDeviceUpdate(
     CWlanDevice * pDevice
-    )
+)
 {
     _ASSERT(pDevice != NULL);
     CWlanDevice * pRemovedDevice = NULL;
@@ -832,7 +832,7 @@ CHostedNetworkDlg::OnDeviceUpdate(
     }
 }
 
-HRESULT 
+HRESULT
 CHostedNetworkDlg::StartHostedNetwork()
 {
     HRESULT     hr                    = S_OK;
@@ -848,7 +848,7 @@ CHostedNetworkDlg::StartHostedNetwork()
     // Set name
     m_NameEdit.GetWindowTextW(strName);
     name = strName;
-    
+
     if (m_CurrentName != name)
     {
         // Set name only when needed
@@ -873,7 +873,7 @@ CHostedNetworkDlg::StartHostedNetwork()
     if (m_IcsNeeded)
     {
         m_IcsMgr->CacheICSIntfIndex();
-        
+
         // Start ICS if:
         // 1. User has selected that softAP starts with full ICS, and
         // 2. the current ICS setting is different from the new setting
@@ -882,7 +882,7 @@ CHostedNetworkDlg::StartHostedNetwork()
 
         // Force stop the currently running hosted network,
         // if there is any
-        // this step is taken no matter  whether the start ICS 
+        // this step is taken no matter  whether the start ICS
         // succeeds or fails
         m_WlanMgr.IsHostedNetworkStarted(bHostedNetworkStarted);
         if (bHostedNetworkStarted)
@@ -896,7 +896,7 @@ CHostedNetworkDlg::StartHostedNetwork()
 
     // Start hosted network
     hr = m_WlanMgr.StartHostedNetwork();
-    
+
     // if start hosted network fails, bail out
     BAIL_ON_FAILURE(hr);
 
@@ -916,12 +916,12 @@ error:
     return hr;
 }
 
-HRESULT 
+HRESULT
 CHostedNetworkDlg::StopHostedNetwork()
 {
     HRESULT hr = S_OK;
     bool bIcsStopped = false;
-    
+
     // Disable the button of Start/Stop hosted network
     m_HostedNetworkButton.EnableWindow(FALSE);
 
@@ -999,7 +999,7 @@ CHostedNetworkDlg::UpdateIcsConnectionList()
     // Empty the ICS connection combo box.
     for (int i = m_ConnectionComboBox.GetCount() - 1; i >= 0; i--)
     {
-       m_ConnectionComboBox.DeleteString(i);
+        m_ConnectionComboBox.DeleteString(i);
     }
 
     for (size_t i = 0; i < m_ConnectionList.GetCount(); i++)
@@ -1013,7 +1013,7 @@ CHostedNetworkDlg::UpdateIcsConnectionList()
             nConnections++;
 
             int index = m_ConnectionComboBox.AddString(pConn->m_Name);
-            
+
             // Set data pointer for the item.
             m_ConnectionComboBox.SetItemDataPtr(index, pConn);
 
@@ -1050,9 +1050,9 @@ CHostedNetworkDlg::InitIcs()
 
     // initialize COM
     hr = ::CoInitializeEx(
-            NULL,
-            COINIT_MULTITHREADED
-            );
+             NULL,
+             COINIT_MULTITHREADED
+         );
     BAIL_ON_FAILURE(hr);
 
     fDeinitCom = true;
@@ -1113,14 +1113,14 @@ CHostedNetworkDlg::DeinitIcs()
     }
 }
 
-void 
+void
 CHostedNetworkDlg::OnBnClickedButtonClearNotifications()
 {
     // TODO: Add your control notification handler code here
     ClearNotifications();
 }
 
-HRESULT 
+HRESULT
 CHostedNetworkDlg::StartIcsIfNeeded()
 {
     HRESULT hr            = S_OK;
@@ -1203,7 +1203,7 @@ CHostedNetworkDlg::StopIcsIfNeeded()
 void
 CHostedNetworkDlg::AddWlanDevice(
     CWlanDevice *pDevice
-    )
+)
 {
     _ASSERT(pDevice != NULL);
 
@@ -1223,10 +1223,10 @@ CHostedNetworkDlg::AddWlanDevice(
 void
 CHostedNetworkDlg::RemoveWlanDevice(
     CWlanDevice *pDevice
-    )
+)
 {
     _ASSERT(pDevice != NULL);
-    
+
     int nItem = -1;
 
     do
@@ -1250,16 +1250,17 @@ CHostedNetworkDlg::RemoveWlanDevice(
             break;
         }
 
-    } while (true);
+    }
+    while (true);
 }
 
 void
 CHostedNetworkDlg::UpdateWlanDevice(
     CWlanDevice *pDevice
-    )
+)
 {
     _ASSERT(pDevice != NULL);
-    
+
     int nItem = -1;
 
     do
@@ -1294,7 +1295,8 @@ CHostedNetworkDlg::UpdateWlanDevice(
             break;
         }
 
-    } while (true);
+    }
+    while (true);
 }
 
 void
@@ -1336,7 +1338,7 @@ CHostedNetworkDlg::EnableAllControls()
     m_HostedNetworkButton.EnableWindow();
 }
 
-void 
+void
 CHostedNetworkDlg::OnEnKillfocusEditName()
 {
     // TODO: Add your control notification handler code here
@@ -1408,11 +1410,11 @@ bool CHostedNetworkDlg::CheckValidSSIDKeyLen()
     return bCheckPassed;
 }
 
-void 
+void
 CHostedNetworkDlg::PostDeviceNotification(
-    CWlanDevice * pDevice, 
+    CWlanDevice * pDevice,
     int Event
-    )
+)
 {
     _ASSERT(pDevice != NULL);
     bool fPostNotification = true;
@@ -1442,33 +1444,33 @@ CHostedNetworkDlg::PostDeviceNotification(
 
     if (fPostNotification)
     {
-        PostNotification(msg.GetString());    
+        PostNotification(msg.GetString());
     }
 }
 
 #define MAX_NOTIFICATION_LENGTH 1024
 
-void 
+void
 CHostedNetworkDlg::PostNotification(
     LPCWSTR msg
-    ) 
+)
 {
     // Get current time
     CTime currTime = CTime::GetCurrentTime();
     WCHAR strNotification[MAX_NOTIFICATION_LENGTH + 1] = {0};
 
     if (SUCCEEDED(StringCchPrintf(
-            strNotification,
-            MAX_NOTIFICATION_LENGTH,
-            L"[%02d/%02d/%04d:%02d:%2d:%02d] %ws",
-            currTime.GetMonth(),
-            currTime.GetDay(),
-            currTime.GetYear(),
-            currTime.GetHour(),
-            currTime.GetMinute(),
-            currTime.GetSecond(),
-            msg
-            )))
+                      strNotification,
+                      MAX_NOTIFICATION_LENGTH,
+                      L"[%02d/%02d/%04d:%02d:%2d:%02d] %ws",
+                      currTime.GetMonth(),
+                      currTime.GetDay(),
+                      currTime.GetYear(),
+                      currTime.GetHour(),
+                      currTime.GetMinute(),
+                      currTime.GetSecond(),
+                      msg
+                  )))
     {
         m_NotificationOutputList.AddString(strNotification);
     }
@@ -1478,34 +1480,34 @@ CHostedNetworkDlg::PostNotification(
     }
 };
 
-BOOL 
+BOOL
 CHostedNetworkDlg::IsUserAdmin()
 {
     BOOL                     bIsAdmin              = FALSE;
     SID_IDENTIFIER_AUTHORITY NtAuthority           = SECURITY_NT_AUTHORITY;
-    PSID                     AdministratorsGroup; 
+    PSID                     AdministratorsGroup;
 
     bIsAdmin = AllocateAndInitializeSid(
-           &NtAuthority,
-           2,
-           SECURITY_BUILTIN_DOMAIN_RID,
-           DOMAIN_ALIAS_RID_ADMINS,
-           0, 
-           0, 
-           0, 
-           0, 
-           0, 
-           0,
-           &AdministratorsGroup
-           ); 
+                   &NtAuthority,
+                   2,
+                   SECURITY_BUILTIN_DOMAIN_RID,
+                   DOMAIN_ALIAS_RID_ADMINS,
+                   0,
+                   0,
+                   0,
+                   0,
+                   0,
+                   0,
+                   &AdministratorsGroup
+               );
 
-    if(bIsAdmin) 
+    if(bIsAdmin)
     {
-        if (!CheckTokenMembership( NULL, AdministratorsGroup, &bIsAdmin)) 
+        if (!CheckTokenMembership( NULL, AdministratorsGroup, &bIsAdmin))
         {
             bIsAdmin = FALSE;
-        } 
-        FreeSid(AdministratorsGroup); 
+        }
+        FreeSid(AdministratorsGroup);
     }
 
     return(bIsAdmin);
@@ -1515,18 +1517,18 @@ bool
 CHostedNetworkDlg::IsICSAllowed()
 {
     bool  bIsIcsAllowed = false;
-    HKEY  hAllowIcs     = NULL; 
+    HKEY  hAllowIcs     = NULL;
     DWORD dwError       = ERROR_SUCCESS;
     DWORD   ValLen = sizeof(DWORD);
     DWORD   dwAllowIcs = 1;
 
     dwError = RegOpenKeyEx(
-        HKEY_LOCAL_MACHINE,
-        L"SOFTWARE\\Policies\\Microsoft\\Windows\\Network Connections",
-        NULL,
-        KEY_READ,
-        &hAllowIcs
-        );
+                  HKEY_LOCAL_MACHINE,
+                  L"SOFTWARE\\Policies\\Microsoft\\Windows\\Network Connections",
+                  NULL,
+                  KEY_READ,
+                  &hAllowIcs
+              );
 
     if (ERROR_SUCCESS != dwError || !hAllowIcs)
     {
@@ -1534,14 +1536,14 @@ CHostedNetworkDlg::IsICSAllowed()
     }
 
     dwError = RegGetValue(
-        hAllowIcs,
-        NULL,
-        L"NC_ShowSharedAccessUI",
-        RRF_RT_DWORD,
-        NULL,
-        &dwAllowIcs,
-        &ValLen
-        );
+                  hAllowIcs,
+                  NULL,
+                  L"NC_ShowSharedAccessUI",
+                  RRF_RT_DWORD,
+                  NULL,
+                  &dwAllowIcs,
+                  &ValLen
+              );
     if( dwError == ERROR_SUCCESS && dwAllowIcs == 0)
     {
         bIsIcsAllowed = false;

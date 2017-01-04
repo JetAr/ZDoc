@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -15,7 +15,7 @@
 
 // Print out rich error info
 void PrintError(
-    _In_ HRESULT errorCode, 
+    _In_ HRESULT errorCode,
     _In_opt_ WS_ERROR* error)
 {
     wprintf(L"Failure: errorCode=0x%lx\n", errorCode);
@@ -64,7 +64,7 @@ struct ColorDictionary
 
 ColorDictionary colorDictionary =
 {
-    { 
+    {
         { /* fd7d93f6-a9ec-40a5-a492-8bb45b1e3a5f */
             0xfd7d93f6,
             0xa9ec,
@@ -72,7 +72,7 @@ ColorDictionary colorDictionary =
             {0xa4, 0x92, 0x8b, 0xb4, 0x5b, 0x1e, 0x3a, 0x5f}
         },
         &colorDictionary.red,
-        4, 
+        4,
         TRUE
     },
     WS_XML_STRING_DICTIONARY_VALUE("red", &colorDictionary.dictionary, 0),
@@ -92,7 +92,7 @@ struct ShapeDictionary
 
 ShapeDictionary shapeDictionary =
 {
-    { 
+    {
         { /* 4eab536f-d3a9-418c-b6d4-26b2b926eafe */
             0x4eab536f,
             0xd3a9,
@@ -100,7 +100,7 @@ ShapeDictionary shapeDictionary =
             {0xb6, 0xd4, 0x26, 0xb2, 0xb9, 0x26, 0xea, 0xfe}
         },
         &colorDictionary.red,
-        3, 
+        3,
         TRUE
     },
     WS_XML_STRING_DICTIONARY_VALUE("circle", &shapeDictionary.dictionary, 0),
@@ -119,7 +119,7 @@ struct ObjectsDictionary
 
 ObjectsDictionary objectsDictionary =
 {
-    { 
+    {
         { /* 34065de6-b672-417f-96dc-c4436a055bf1 */
             0x34065de6,
             0xb672,
@@ -175,7 +175,7 @@ HRESULT CALLBACK DynamicStringCallback(
         for (ULONG i = 0; i < mergedDictionary.dictionary.stringCount; i++)
         {
             if (value->length == mergedDictionary.strings[i].length &&
-                memcmp(value->bytes, mergedDictionary.strings[i].bytes, value->length) == 0)
+                    memcmp(value->bytes, mergedDictionary.strings[i].bytes, value->length) == 0)
             {
                 (*found) = TRUE;
                 (*id) = mergedDictionary.strings[i].id;
@@ -203,52 +203,52 @@ HRESULT CALLBACK DynamicStringCallback(
 // Main entry point
 int __cdecl wmain()
 {
-    
+
     HRESULT hr = S_OK;
     WS_ERROR* error = NULL;
     WS_XML_WRITER* writer = NULL;
     WS_XML_READER* reader = NULL;
     WS_HEAP* heap = NULL;
-    
+
     // Create an error object for storing rich error information
     hr = WsCreateError(
-        NULL, 
-        0, 
-        &error);
+             NULL,
+             0,
+             &error);
     if (FAILED(hr))
     {
         goto Exit;
     }
-    
+
     // Create a heap to store deserialized data
     hr = WsCreateHeap(
-        /*maxSize*/ 2048, 
-        /*trimSize*/ 512, 
-        NULL, 
-        0, 
-        &heap, 
-        error);
+             /*maxSize*/ 2048,
+             /*trimSize*/ 512,
+             NULL,
+             0,
+             &heap,
+             error);
     if (FAILED(hr))
     {
         goto Exit;
     }
-    
+
     // Create an XML writer
     hr = WsCreateWriter(
-        NULL, 
-        0, 
-        &writer, 
-        error);
+             NULL,
+             0,
+             &writer,
+             error);
     if (FAILED(hr))
     {
         goto Exit;
     }
-    
+
     // Setup the output
     WS_XML_WRITER_BUFFER_OUTPUT bufferOutput;
     ZeroMemory(&bufferOutput, sizeof(bufferOutput));
     bufferOutput.output.outputType = WS_XML_WRITER_OUTPUT_TYPE_BUFFER;
-    
+
     // Setup the encoding
     WS_XML_WRITER_BINARY_ENCODING writerEncoding;
     ZeroMemory(&writerEncoding, sizeof(writerEncoding));
@@ -256,275 +256,275 @@ int __cdecl wmain()
     writerEncoding.staticDictionary = &objectsDictionary.dictionary;
     writerEncoding.dynamicStringCallback = DynamicStringCallback;
     writerEncoding.dynamicStringCallbackState = NULL;
-    
+
     // Setup the writer
     hr = WsSetOutput(
-        writer,
-        &writerEncoding.encoding,
-        &bufferOutput.output,
-        NULL,
-        0,
-        error);
+             writer,
+             &writerEncoding.encoding,
+             &bufferOutput.output,
+             NULL,
+             0,
+             error);
     if (FAILED(hr))
     {
         goto Exit;
     }
-    
+
     hr = WsWriteStartElement(
-        writer,
-        NULL,
-        &objectsDictionary.objects,
-        &objectsDictionary.ns,
-        error);
+             writer,
+             NULL,
+             &objectsDictionary.objects,
+             &objectsDictionary.ns,
+             error);
     if (FAILED(hr))
     {
         goto Exit;
     }
-    
+
     // Write some xml using strings from all the dictionaries
     static const WS_XML_STRING* shapes[3] = { &shapeDictionary.triangle, &shapeDictionary.square, &shapeDictionary.circle };
     static const WS_XML_STRING* colors[3] = { &colorDictionary.green, &colorDictionary.blue, &colorDictionary.red };
     for (ULONG i = 0; i < 3; i++)
     {
         hr = WsWriteStartElement(
-            writer,
-            NULL,
-            shapes[i],
-            &objectsDictionary.ns,
-            error);
+                 writer,
+                 NULL,
+                 shapes[i],
+                 &objectsDictionary.ns,
+                 error);
         if (FAILED(hr))
         {
             goto Exit;
         }
-    
+
         hr = WsWriteStartAttribute(
-            writer,
-            NULL,
-            &objectsDictionary.color,
-            &objectsDictionary.ns,
-            FALSE,
-            error);
+                 writer,
+                 NULL,
+                 &objectsDictionary.color,
+                 &objectsDictionary.ns,
+                 FALSE,
+                 error);
         if (FAILED(hr))
         {
             goto Exit;
         }
-    
+
         hr = WsWriteType(
-            writer,
-            WS_ATTRIBUTE_TYPE_MAPPING,
-            WS_XML_STRING_TYPE, NULL,
-            WS_WRITE_REQUIRED_VALUE,
-            colors[i],
-            sizeof(*colors[i]),
-            error);
+                 writer,
+                 WS_ATTRIBUTE_TYPE_MAPPING,
+                 WS_XML_STRING_TYPE, NULL,
+                 WS_WRITE_REQUIRED_VALUE,
+                 colors[i],
+                 sizeof(*colors[i]),
+                 error);
         if (FAILED(hr))
         {
             goto Exit;
         }
-    
+
         hr = WsWriteEndAttribute(
-            writer,
-            error);
+                 writer,
+                 error);
         if (FAILED(hr))
         {
             goto Exit;
         }
-    
+
         hr = WsWriteEndElement(
-            writer,
-            error);
+                 writer,
+                 error);
         if (FAILED(hr))
         {
             goto Exit;
         }
     }
-    
+
     hr = WsWriteEndElement(
-        writer,
-        error);
+             writer,
+             error);
     if (FAILED(hr))
     {
         goto Exit;
     }
-    
+
     WS_BYTES bytes;
     hr = WsGetWriterProperty(
-        writer,
-        WS_XML_WRITER_PROPERTY_BYTES,
-        &bytes,
-        sizeof(bytes),
-        error);
+             writer,
+             WS_XML_WRITER_PROPERTY_BYTES,
+             &bytes,
+             sizeof(bytes),
+             error);
     if (FAILED(hr))
     {
         goto Exit;
     }
-    
+
     // Create an XML reader
     hr = WsCreateReader(
-        NULL,
-        0, 
-        &reader, 
-        error);
+             NULL,
+             0,
+             &reader,
+             error);
     if (FAILED(hr))
     {
         goto Exit;
     }
-    
+
     // Setup the input
     WS_XML_READER_BUFFER_INPUT bufferInput;
     ZeroMemory(&bufferInput, sizeof(bufferInput));
     bufferInput.input.inputType = WS_XML_READER_INPUT_TYPE_BUFFER;
     bufferInput.encodedData = bytes.bytes;
     bufferInput.encodedDataSize = bytes.length;
-    
+
     // Setup the encoding
     WS_XML_READER_BINARY_ENCODING readerEncoding;
     ZeroMemory(
         &readerEncoding,
         sizeof(readerEncoding));
-    
+
     readerEncoding.encoding.encodingType = WS_XML_READER_ENCODING_TYPE_BINARY;
     readerEncoding.staticDictionary = &objectsDictionary.dictionary;
     readerEncoding.dynamicDictionary = &mergedDictionary.dictionary;
-    
+
     // Setup the reader
     hr = WsSetInput(
-        reader,
-        &readerEncoding.encoding,
-        &bufferInput.input,
-        NULL,
-        0,
-        error);
+             reader,
+             &readerEncoding.encoding,
+             &bufferInput.input,
+             NULL,
+             0,
+             error);
     if (FAILED(hr))
     {
         goto Exit;
     }
-    
+
     hr = WsReadToStartElement(
-        reader,
-        &objectsDictionary.objects,
-        &objectsDictionary.ns,
-        NULL,
-        error);
+             reader,
+             &objectsDictionary.objects,
+             &objectsDictionary.ns,
+             NULL,
+             error);
     if (FAILED(hr))
     {
         goto Exit;
     }
     hr = WsReadStartElement(
-        reader,
-        error);
+             reader,
+             error);
     if (FAILED(hr))
     {
         goto Exit;
     }
-    
+
     for (;;)
     {
         BOOL found;
         hr = WsReadToStartElement(
-            reader,
-            NULL,
-            NULL,
-            &found,
-            error);
+                 reader,
+                 NULL,
+                 NULL,
+                 &found,
+                 error);
         if (FAILED(hr))
         {
             goto Exit;
         }
-    
+
         if (!found)
         {
             break;
         }
-    
+
         const WS_XML_NODE* node;
         hr = WsGetReaderNode(
-            reader,
-            &node,
-            error);
+                 reader,
+                 &node,
+                 error);
         if (FAILED(hr))
         {
             goto Exit;
         }
-    
+
         const WS_XML_ELEMENT_NODE* elementNode = (WS_XML_ELEMENT_NODE*)node;
         printf("%.*s: ", elementNode->localName->length, elementNode->localName->bytes);
-    
+
         ULONG index;
         hr = WsFindAttribute(
-            reader,
-            &objectsDictionary.color,
-            &objectsDictionary.ns,
-            TRUE,
-            &index,
-            error);
+                 reader,
+                 &objectsDictionary.color,
+                 &objectsDictionary.ns,
+                 TRUE,
+                 &index,
+                 error);
         if (FAILED(hr))
         {
             goto Exit;
         }
-    
+
         hr = WsReadStartAttribute(
-            reader,
-            index,
-            error);
+                 reader,
+                 index,
+                 error);
         if (FAILED(hr))
         {
             goto Exit;
         }
-    
+
         WS_XML_STRING color;
         hr = WsReadType(
-            reader,
-            WS_ATTRIBUTE_TYPE_MAPPING,
-            WS_XML_STRING_TYPE,
-            NULL,
-            WS_READ_REQUIRED_VALUE,
-            heap,
-            &color,
-            sizeof(color),
-            error);
+                 reader,
+                 WS_ATTRIBUTE_TYPE_MAPPING,
+                 WS_XML_STRING_TYPE,
+                 NULL,
+                 WS_READ_REQUIRED_VALUE,
+                 heap,
+                 &color,
+                 sizeof(color),
+                 error);
         if (FAILED(hr))
         {
             goto Exit;
         }
-    
+
         printf(
             "%.*s\n",
             color.length,
             color.bytes);
-    
+
         hr = WsReadEndAttribute(
-            reader,
-            error);
+                 reader,
+                 error);
         if (FAILED(hr))
         {
             goto Exit;
         }
-    
+
         hr = WsSkipNode(
-            reader,
-            error);
+                 reader,
+                 error);
         if (FAILED(hr))
         {
             goto Exit;
         }
     }
-    
+
     hr = WsReadEndElement(
-        reader,
-        error);
+             reader,
+             error);
     if (FAILED(hr))
     {
         goto Exit;
     }
-    
+
 Exit:
     if (FAILED(hr))
     {
         // Print out the error
         PrintError(hr, error);
     }
-    
+
     if (writer != NULL)
     {
         WsFreeWriter(writer);

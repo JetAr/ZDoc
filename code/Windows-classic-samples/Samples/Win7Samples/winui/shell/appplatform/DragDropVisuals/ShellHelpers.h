@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -26,7 +26,11 @@
 // set up common controls v6 the easy way
 #pragma comment(linker,"/manifestdependency:\"type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' processorArchitecture='*' publicKeyToken='6595b64144ccf1df' language='*'\"")
 
-__inline HRESULT ResultFromKnownLastError() { const DWORD err = GetLastError(); return err == ERROR_SUCCESS ? E_FAIL : HRESULT_FROM_WIN32(err); }
+__inline HRESULT ResultFromKnownLastError()
+{
+    const DWORD err = GetLastError();
+    return err == ERROR_SUCCESS ? E_FAIL : HRESULT_FROM_WIN32(err);
+}
 
 // map Win32 APIs that follow the return BOOL/set last error protocol
 // into HRESULT
@@ -176,7 +180,11 @@ __inline HRESULT ShellAttributesToString(SFGAOF sfgaof, PWSTR *ppsz)
 {
     *ppsz = NULL;
 
-    static const struct { PCWSTR pszName; SFGAOF sfgaof; } c_rgItemAttributes[] =
+    static const struct
+    {
+        PCWSTR pszName;
+        SFGAOF sfgaof;
+    } c_rgItemAttributes[] =
     {
         // note, SFGAO_HASSUBFOLDER is too expesnive to compute
         // and has been excluded from this list
@@ -274,4 +282,7 @@ __inline void GetWindowRectInClient(HWND hwnd, RECT *prc)
 // the linker provides for every module, avoids the need for a global HINSTANCE variable
 // and provides access to this value for static libraries
 EXTERN_C IMAGE_DOS_HEADER __ImageBase;
-__inline HINSTANCE GetModuleHINSTANCE() { return (HINSTANCE)&__ImageBase; }
+__inline HINSTANCE GetModuleHINSTANCE()
+{
+    return (HINSTANCE)&__ImageBase;
+}

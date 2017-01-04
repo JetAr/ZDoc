@@ -1,4 +1,4 @@
-//////////////////////////////////////////////////////////////////////////////
+﻿//////////////////////////////////////////////////////////////////////////////
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -37,7 +37,7 @@ public:
     // Methods to make this class act like a COM object
     //////////////////////////////////////////////////////////////////////////
     HRESULT STDMETHODCALLTYPE QueryInterface(
-        REFIID riid, 
+        REFIID riid,
         void **ppvObject);
 
     ULONG STDMETHODCALLTYPE AddRef();
@@ -83,7 +83,7 @@ public:
     // Methods to make this class act like a COM object
     //////////////////////////////////////////////////////////////////////////
     HRESULT STDMETHODCALLTYPE QueryInterface(
-        REFIID riid, 
+        REFIID riid,
         void **ppvObject);
 
     ULONG STDMETHODCALLTYPE AddRef();

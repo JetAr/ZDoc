@@ -1,4 +1,4 @@
-/*--
+﻿/*--
 
 Copyright (C) Microsoft Corporation, 2006
 
@@ -24,11 +24,11 @@ class  CTestEraseEvent :
 
     // This is the list of all interfaces supported by the object
     BEGIN_COM_MAP(CTestEraseEvent)
-        COM_INTERFACE_ENTRY(IDispatch)
+    COM_INTERFACE_ENTRY(IDispatch)
     END_COM_MAP()
 
     BEGIN_SINK_MAP(CTestEraseEvent)
-        SINK_ENTRY_INFO(1, IID_DEraseSampleEvents, DISPID_IERASESAMPLEEVENTS_UPDATE, &Update, &g_EraseIDispatchEventInfo)
+    SINK_ENTRY_INFO(1, IID_DEraseSampleEvents, DISPID_IERASESAMPLEEVENTS_UPDATE, &Update, &g_EraseIDispatchEventInfo)
     END_SINK_MAP()
 
 public: // DDEraseSampleEvents

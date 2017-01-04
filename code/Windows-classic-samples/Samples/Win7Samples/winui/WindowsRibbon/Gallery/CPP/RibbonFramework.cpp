@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -18,7 +18,7 @@ IUIFramework* g_pFramework = NULL;
 //
 //  COMMENTS:
 //
-//    To get a Ribbon to display, the Ribbon framework must be initialized. 
+//    To get a Ribbon to display, the Ribbon framework must be initialized.
 //    This involves three important steps:
 //      1) Instantiating the Ribbon framework object (CLSID_UIRibbonFramework).
 //      2) Passing the host HWND and IUIApplication object to the framework.
@@ -28,14 +28,14 @@ IUIFramework* g_pFramework = NULL;
 bool InitializeFramework(HWND hWindowFrame)
 {
     // Here we instantiate the Ribbon framework object.
-    HRESULT hr = ::CoCreateInstance(CLSID_UIRibbonFramework, NULL, 
-        CLSCTX_INPROC_SERVER, IID_PPV_ARGS(&g_pFramework));
+    HRESULT hr = ::CoCreateInstance(CLSID_UIRibbonFramework, NULL,
+                                    CLSCTX_INPROC_SERVER, IID_PPV_ARGS(&g_pFramework));
     if (FAILED(hr))
     {
         return false;
     }
 
-    // Next, we create the application object (IUIApplication) and call the framework Initialize method, 
+    // Next, we create the application object (IUIApplication) and call the framework Initialize method,
     // passing the application object and the host HWND that the Ribbon will attach itself to.
     CApplication *pApplication = NULL;
     hr = CApplication::CreateInstance(&pApplication, hWindowFrame);
@@ -51,7 +51,7 @@ bool InitializeFramework(HWND hWindowFrame)
         return false;
     }
 
-    // Finally, we load the binary markup.  This will initiate callbacks to the IUIApplication object 
+    // Finally, we load the binary markup.  This will initiate callbacks to the IUIApplication object
     // that was provided to the framework earlier, allowing command handlers to be bound to individual
     // commands.
     hr = g_pFramework->LoadUI(GetModuleHandle(NULL), L"APPLICATION_RIBBON");
@@ -92,9 +92,9 @@ UINT GetRibbonHeight()
     UINT ribbonHeight = 0;
     if (g_pFramework)
     {
-        IUIRibbon* pRibbon;    
+        IUIRibbon* pRibbon;
         g_pFramework->GetView(0, IID_PPV_ARGS(&pRibbon));
-        pRibbon->GetHeight(&ribbonHeight);    
+        pRibbon->GetHeight(&ribbonHeight);
         pRibbon->Release();
     }
     return ribbonHeight;

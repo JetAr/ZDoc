@@ -1,4 +1,4 @@
-//<SnippetMusicBundleSig_hSignWholePage>
+﻿//<SnippetMusicBundleSig_hSignWholePage>
 /*****************************************************************************
 *
 * File: Sign.h
@@ -12,32 +12,32 @@
 * ------------------------------------
 *
 *  This file is part of the Microsoft Windows SDK Code Samples.
-* 
+*
 *  Copyright (C) Microsoft Corporation.  All rights reserved.
-* 
+*
 * This source code is intended only as a supplement to Microsoft
 * Development Tools and/or on-line documentation.  See these other
 * materials for detailed information regarding Microsoft code samples.
-* 
+*
 * THIS CODE AND INFORMATION ARE PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
 * KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
 * IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 * PARTICULAR PURPOSE.
-* 
+*
 ****************************************************************************/
 
 #pragma once
 
 //  ============================= Signing Policy ==================================
 //
-//  A signing policy defines what parts and relationships shall be signed and how they 
-//  should be signed for a package so the signature can be considered "compliant" to 
-//  a custom file format. OPC itself is a platform for users to build custom file formats, 
-//  thus it does not define any signing policy. Users using OPC Digital Signature APIs 
+//  A signing policy defines what parts and relationships shall be signed and how they
+//  should be signed for a package so the signature can be considered "compliant" to
+//  a custom file format. OPC itself is a platform for users to build custom file formats,
+//  thus it does not define any signing policy. Users using OPC Digital Signature APIs
 //  shall define the signing policy for their custom file formats. In this example we define
-//  the signing policy for the custom file format - a media bundle, as follows: 
+//  the signing policy for the custom file format - a media bundle, as follows:
 //
-//      Parts need to be signed:	
+//      Parts need to be signed:
 //  ---------------------------------------------
 //  Part                Canonicalization Method
 //  ---------------------------------------------
@@ -61,8 +61,8 @@
 //  Track part              http://schemas.example.com/package/2008/relationships/media-bundle/song-lryic
 //  Signature origin part   http://schemas.openxmlformats.org/package/2006/relationships/digital-signature/signature
 //
-//  We sign the signature origin part�s signature relationships to prevent any other 
-//  signatures to be added to the signed package later (no countersignature is allowed 
+//  We sign the signature origin part’s signature relationships to prevent any other
+//  signatures to be added to the signed package later (no countersignature is allowed
 //  in this policy). If you want to allow new signature(s) to be added to an already signed
 //  package, you should not sign the signature relationships in your policy.
 //
@@ -75,6 +75,6 @@ extern const WCHAR g_signedFilePath[];
 HRESULT
 SignMusicBundle(
     IOpcFactory* opcFactory
-    );
+);
 
 //</SnippetMusicBundleSig_hSignWholePage>

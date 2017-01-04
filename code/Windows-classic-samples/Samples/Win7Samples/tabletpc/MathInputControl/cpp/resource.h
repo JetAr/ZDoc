@@ -1,4 +1,4 @@
-//{{NO_DEPENDENCIES}}
+﻿//{{NO_DEPENDENCIES}}
 //
 #define IDR_MENU                        101
 #define ID_SHOW                         40001

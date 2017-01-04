@@ -1,17 +1,17 @@
-/************************************************************************
+﻿/************************************************************************
  *  This file is part of the Microsoft Windows SDK Code Samples.
- * 
+ *
  *  Copyright (C) Microsoft Corporation.  All rights reserved.
- * 
+ *
  * This source code is intended only as a supplement to Microsoft
  * Development Tools and/or on-line documentation.  See these other
  * materials for detailed information regarding Microsoft code samples.
- * 
+ *
  * THIS CODE AND INFORMATION ARE PROVIDED AS IS WITHOUT WARRANTY OF ANY
  * KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
  * PARTICULAR PURPOSE.
- * 
+ *
  ************************************************************************/
 
 
@@ -35,10 +35,10 @@ void wmain()
     IDWriteFactory* pDWriteFactory = NULL;
 
     HRESULT hr = DWriteCreateFactory(
-            DWRITE_FACTORY_TYPE_SHARED,
-            __uuidof(IDWriteFactory),
-            reinterpret_cast<IUnknown**>(&pDWriteFactory)
-            );
+                     DWRITE_FACTORY_TYPE_SHARED,
+                     __uuidof(IDWriteFactory),
+                     reinterpret_cast<IUnknown**>(&pDWriteFactory)
+                 );
 
     IDWriteFontCollection* pFontCollection = NULL;
 
@@ -67,7 +67,7 @@ void wmain()
         }
 
         IDWriteLocalizedStrings* pFamilyNames = NULL;
-        
+
         // Get a list of localized strings for the family name.
         if (SUCCEEDED(hr))
         {
@@ -76,7 +76,7 @@ void wmain()
 
         UINT32 index = 0;
         BOOL exists = false;
-        
+
         wchar_t localeName[LOCALE_NAME_MAX_LENGTH];
 
         if (SUCCEEDED(hr))
@@ -94,7 +94,7 @@ void wmain()
                 hr = pFamilyNames->FindLocaleName(L"en-us", &index, &exists);
             }
         }
-        
+
         // If the specified locale doesn't exist, select the first on the list.
         if (!exists)
             index = 0;
@@ -109,9 +109,9 @@ void wmain()
 
         // Allocate a string big enough to hold the name.
         wchar_t* name = new (std::nothrow) wchar_t[length+1];
-		if (name == NULL)
+        if (name == NULL)
         {
-			hr = E_OUTOFMEMORY;
+            hr = E_OUTOFMEMORY;
         }
 
         // Get the family name.
@@ -125,13 +125,13 @@ void wmain()
             wprintf(L"%s\n", name);
         }
 
-		SafeRelease(&pFontFamily);
-		SafeRelease(&pFamilyNames);
+        SafeRelease(&pFontFamily);
+        SafeRelease(&pFamilyNames);
 
         delete [] name;
     }
 
-	SafeRelease(&pFontCollection);
-	SafeRelease(&pDWriteFactory);
+    SafeRelease(&pFontCollection);
+    SafeRelease(&pDWriteFactory);
 }
 

@@ -1,5 +1,5 @@
-//////////////////////////////////////////////////////////////////////
-// 
+﻿//////////////////////////////////////////////////////////////////////
+//
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -11,11 +11,11 @@
 
 #include "DXVAHD_Sample.h"
 
-/* 
+/*
 
 Command line options:
 
-    [ -hh | -hs | -ss ] 
+    [ -hh | -hs | -ss ]
 
         -hh : Hardware Direct3D device and hardware DXVA-HD device.
         -hs : Hardware Direct3D device and software DXVA-HD device.
@@ -23,7 +23,7 @@ Command line options:
 
     -u [0 | 1 | 2]
 
-        Specifies the DXVA-HD device usage. 
+        Specifies the DXVA-HD device usage.
 
         0 = Normal video playback
         1 = Optimal speed
@@ -119,7 +119,7 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
         pApp = (Application*) (((LPCREATESTRUCT) lParam)->lpCreateParams);
         break;
 
-    case WM_DESTROY:    
+    case WM_DESTROY:
         PostQuitMessage(0);
         break;
 
@@ -154,18 +154,18 @@ HWND InitializeWindow(LPVOID lpParam)
     }
 
     HWND hwnd = CreateWindow(
-        CLASS_NAME,
-        WINDOW_NAME,
-        WS_OVERLAPPEDWINDOW,
-        CW_USEDEFAULT,
-        CW_USEDEFAULT,
-        CW_USEDEFAULT,
-        CW_USEDEFAULT,
-        NULL,
-        NULL,
-        GetModuleHandle(NULL),
-        lpParam
-        );
+                    CLASS_NAME,
+                    WINDOW_NAME,
+                    WS_OVERLAPPEDWINDOW,
+                    CW_USEDEFAULT,
+                    CW_USEDEFAULT,
+                    CW_USEDEFAULT,
+                    CW_USEDEFAULT,
+                    NULL,
+                    NULL,
+                    GetModuleHandle(NULL),
+                    lpParam
+                );
 
     if (!hwnd)
     {

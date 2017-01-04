@@ -1,4 +1,4 @@
-//////////////////////////////////////////////////////////////////////////////
+﻿//////////////////////////////////////////////////////////////////////////////
 //
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
@@ -60,7 +60,10 @@ public:
 
     // IUnknown
     IFACEMETHODIMP QueryInterface(__in REFIID riid, __deref_out void **ppv);
-    IFACEMETHODIMP_(ULONG) AddRef()     { return InterlockedIncrement(&_cRef); }
+    IFACEMETHODIMP_(ULONG) AddRef()
+    {
+        return InterlockedIncrement(&_cRef);
+    }
     IFACEMETHODIMP_(ULONG) Release();
 
     // ISyncMgrSyncItem
@@ -90,10 +93,19 @@ private:
 
     // Accessor methods for accessing private data directly so it doesn't
     // have to be copied.
-    LPCWSTR GetItemIDPointer()      { return _szItemID; }
-    LPCWSTR GetNamePointer()    { return _szItemName; }
+    LPCWSTR GetItemIDPointer()
+    {
+        return _szItemID;
+    }
+    LPCWSTR GetNamePointer()
+    {
+        return _szItemName;
+    }
 
-    UINT GetSyncTextID()  { return _uSyncTextID; }
+    UINT GetSyncTextID()
+    {
+        return _uSyncTextID;
+    }
     HRESULT GetShellItemObject(__in REFIID riid, __deref_out void **ppv);
 
     HRESULT _OpenIconLocationRegKey(__out HKEY *phkey);

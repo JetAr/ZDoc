@@ -1,8 +1,8 @@
-// **************************************************************************
+﻿// **************************************************************************
 
 // Copyright (c)  Microsoft Corporation, All Rights Reserved
 //
-// File:  PermEvents.h 
+// File:  PermEvents.h
 //
 // Description:
 //    main header file for the PermEvents application
@@ -19,7 +19,7 @@
 #endif // _MSC_VER >= 1000
 
 #ifndef __AFXWIN_H__
-	#error include 'stdafx.h' before including this file for PCH
+#error include 'stdafx.h' before including this file for PCH
 #endif
 
 #include "resource.h"		// main symbols
@@ -33,31 +33,31 @@
 class CPermEventsApp : public CWinApp
 {
 public:
-	CPermEventsApp();
+    CPermEventsApp();
 
 // Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CPermEventsApp)
-	public:
-	virtual BOOL InitInstance();
-	//}}AFX_VIRTUAL
+    // ClassWizard generated virtual function overrides
+    //{{AFX_VIRTUAL(CPermEventsApp)
+public:
+    virtual BOOL InitInstance();
+    //}}AFX_VIRTUAL
 
-	int ExitInstance();
+    int ExitInstance();
 
 // Implementation
 
-	//{{AFX_MSG(CPermEventsApp)
-		// NOTE - the ClassWizard will add and remove member functions here.
-		//    DO NOT EDIT what you see in these blocks of generated code !
-	//}}AFX_MSG
-	DECLARE_MESSAGE_MAP()
+    //{{AFX_MSG(CPermEventsApp)
+    // NOTE - the ClassWizard will add and remove member functions here.
+    //    DO NOT EDIT what you see in these blocks of generated code !
+    //}}AFX_MSG
+    DECLARE_MESSAGE_MAP()
 
 private:
-	DWORD m_clsReg;
-	CProviderFactory *m_factory;
+    DWORD m_clsReg;
+    CProviderFactory *m_factory;
 
-	void RegisterServer(void);
-	void UnregisterServer(void);
+    void RegisterServer(void);
+    void UnregisterServer(void);
 };
 
 

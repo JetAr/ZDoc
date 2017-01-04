@@ -1,4 +1,4 @@
-//-----------------------------------------------------------------------------
+﻿//-----------------------------------------------------------------------------
 // Microsoft OLE DB TABLECOPY Sample
 // Copyright (C) 1995-2000 Microsoft Corporation
 //
@@ -40,7 +40,7 @@ CDataSource::CDataSource()
     m_pwszProviderOLEDBVer	= NULL; //DBPROP_PROVIDEROLEDBVER
 
     //Enumerator ProvierInfo
-    m_cProviderInfo			= 0;	
+    m_cProviderInfo			= 0;
     m_rgProviderInfo		= NULL;
     m_pIParseDisplayName	= NULL; //Enumerator
 
@@ -76,7 +76,7 @@ CDataSource::~CDataSource()
     Disconnect();
 
     //Enumerator ProviderInfo
-    m_cProviderInfo			= 0;	
+    m_cProviderInfo			= 0;
     SAFE_FREE(m_rgProviderInfo);
     SAFE_RELEASE(m_pIParseDisplayName);
 }
@@ -99,17 +99,17 @@ BOOL CDataSource::IsConnected()
 BOOL CDataSource::IsSimilar(CDataSource* pCDataSource)
 {
     ASSERT(pCDataSource);
-    
+
     //Must be Connected to compare
     if(!IsConnected() || !pCDataSource->IsConnected())
         return FALSE;
 
     ASSERT(m_pwszDBMS && pCDataSource->m_pwszDBMS);
     ASSERT(m_pwszDBMSVer && pCDataSource->m_pwszDBMSVer);
-    
+
     //Similiar: Must be the same DBMS and Version
     if(wcscmp(m_pwszDBMS, pCDataSource->m_pwszDBMS)==0 &&
-        wcscmp(m_pwszDBMSVer, pCDataSource->m_pwszDBMSVer)==0)
+            wcscmp(m_pwszDBMSVer, pCDataSource->m_pwszDBMSVer)==0)
         return TRUE;
 
     return FALSE;
@@ -123,7 +123,7 @@ BOOL CDataSource::IsSimilar(CDataSource* pCDataSource)
 BOOL CDataSource::IsEqual(CDataSource* pCDataSource)
 {
     ASSERT(pCDataSource);
-    
+
     //Must be Connected to compare
     if(!IsConnected() || !pCDataSource->IsConnected())
         return FALSE;
@@ -131,14 +131,14 @@ BOOL CDataSource::IsEqual(CDataSource* pCDataSource)
     ASSERT(m_pwszCatalog && pCDataSource->m_pwszCatalog);
     ASSERT(m_pwszDBMS && pCDataSource->m_pwszDBMS);
     ASSERT(m_pwszDBMSVer && pCDataSource->m_pwszDBMSVer);
-    
-    //Equal: 
+
+    //Equal:
     //Must have same Catalog, DBMS, Version
     //Note, Don't have to have the same DataSource Name (an access
     //database can have multiple names for the same file)
     if(wcscmp(m_pwszCatalog, pCDataSource->m_pwszCatalog)==0 &&
-        wcscmp(m_pwszDBMS, pCDataSource->m_pwszDBMS)==0 &&
-        wcscmp(m_pwszDBMSVer, pCDataSource->m_pwszDBMSVer)==0)
+            wcscmp(m_pwszDBMS, pCDataSource->m_pwszDBMS)==0 &&
+            wcscmp(m_pwszDBMSVer, pCDataSource->m_pwszDBMSVer)==0)
         return TRUE;
 
     return FALSE;
@@ -189,7 +189,7 @@ HRESULT CDataSource::Connect(HWND hWnd, CDataSource* pCDataSource)
     HRESULT				hr;
     ULONG               cPropSets = 0;
     DBPROPSET*			rgPropSets = NULL;
-    
+
     IDBProperties*		pIDBProperties = NULL;
     IDBCreateSession*   pIDBCreateSession = NULL;
 
@@ -202,7 +202,7 @@ HRESULT CDataSource::Connect(HWND hWnd, CDataSource* pCDataSource)
     ULONG chEaten = 0;
     IMoniker* pIMoniker = NULL;
 
-    
+
     //if there is no provider chosen pick something from the enumerator
     if(pCDataSource == NULL)
     {
@@ -249,13 +249,13 @@ HRESULT CDataSource::Connect(HWND hWnd, CDataSource* pCDataSource)
 
     //DBPROP_INIT_HWND
     if(IsSettableProperty(pIDBInitialize, DBPROP_INIT_HWND, DBPROPSET_DBINIT))
-	{
+    {
 #ifdef _WIN64
         SetProperty(DBPROP_INIT_HWND, DBPROPSET_DBINIT, &cPropSets, &rgPropSets, DBTYPE_I8, (LONG_PTR)hWnd);
 #else
         SetProperty(DBPROP_INIT_HWND, DBPROPSET_DBINIT, &cPropSets, &rgPropSets, DBTYPE_I4, (LONG_PTR)hWnd);
 #endif
-	}
+    }
 
     //DBPROP_INIT_PROMPT
     if(IsSettableProperty(pIDBInitialize, DBPROP_INIT_PROMPT, DBPROPSET_DBINIT))
@@ -268,7 +268,7 @@ HRESULT CDataSource::Connect(HWND hWnd, CDataSource* pCDataSource)
     //IDBProperties is a MANDATORY interface, if error try and Initialize anyway
     XTEST(hr = pIDBInitialize->QueryInterface(IID_IDBProperties, (void **)&pIDBProperties));
     XTEST(hr = pIDBProperties->SetProperties(cPropSets, rgPropSets));
-        
+
     //Initailize
     XTESTC(hr = pIDBInitialize->Initialize());
 
@@ -284,8 +284,8 @@ HRESULT CDataSource::Connect(HWND hWnd, CDataSource* pCDataSource)
 
     //Do away with any previous connections
     Disconnect();
-    
-    //If we have made it this far, we are successfully connected, 
+
+    //If we have made it this far, we are successfully connected,
     m_fConnected = TRUE;
 
     //Save the new connection interfaces
@@ -330,14 +330,14 @@ HRESULT CDataSource::GetConnectionProps()
 {
     HRESULT hr = S_OK;
     DWORD dwSqlSupport = 0;
-    
+
     //DBPROP_CURRENTCATALOG
-    hr = GetProperty(m_pIDBInitialize, DBPROP_CURRENTCATALOG, 
-                            DBPROPSET_DATASOURCE, &m_pwszCatalog); 
+    hr = GetProperty(m_pIDBInitialize, DBPROP_CURRENTCATALOG,
+                     DBPROPSET_DATASOURCE, &m_pwszCatalog);
 
     //DBPROP_CATALOGTERM
-    hr = GetProperty(m_pIDBInitialize, DBPROP_CATALOGTERM, 
-                            DBPROPSET_DATASOURCEINFO, &m_pwszCatalogTerm); 
+    hr = GetProperty(m_pIDBInitialize, DBPROP_CATALOGTERM,
+                     DBPROPSET_DATASOURCEINFO, &m_pwszCatalogTerm);
     if(!m_pwszCatalogTerm[0])
     {
         SAFE_FREE(m_pwszCatalogTerm);
@@ -346,12 +346,12 @@ HRESULT CDataSource::GetConnectionProps()
 
 
     //DBPROP_CATALOGLOCATION
-    hr = GetProperty(m_pIDBInitialize, DBPROP_CATALOGLOCATION, 
-                            DBPROPSET_DATASOURCEINFO, &m_pwszCatalogLocation); 
+    hr = GetProperty(m_pIDBInitialize, DBPROP_CATALOGLOCATION,
+                     DBPROPSET_DATASOURCEINFO, &m_pwszCatalogLocation);
 
     //DBPROP_SCHEMATERM
-    hr = GetProperty(m_pIDBInitialize, DBPROP_SCHEMATERM, 
-                            DBPROPSET_DATASOURCEINFO, &m_pwszSchemaTerm); 
+    hr = GetProperty(m_pIDBInitialize, DBPROP_SCHEMATERM,
+                     DBPROPSET_DATASOURCEINFO, &m_pwszSchemaTerm);
     if(!m_pwszSchemaTerm[0])
     {
         SAFE_FREE(m_pwszSchemaTerm);
@@ -359,8 +359,8 @@ HRESULT CDataSource::GetConnectionProps()
     }
 
     //DBPROP_TABLETERM
-    hr = GetProperty(m_pIDBInitialize, DBPROP_TABLETERM, 
-                            DBPROPSET_DATASOURCEINFO, &m_pwszTableTerm); 
+    hr = GetProperty(m_pIDBInitialize, DBPROP_TABLETERM,
+                     DBPROPSET_DATASOURCEINFO, &m_pwszTableTerm);
     if(!m_pwszTableTerm[0])
     {
         SAFE_FREE(m_pwszTableTerm);
@@ -368,48 +368,48 @@ HRESULT CDataSource::GetConnectionProps()
     }
 
     //DBPROP_ACTIVESESSIONS
-    hr = GetProperty(m_pIDBInitialize, DBPROP_ACTIVESESSIONS, 
-                            DBPROPSET_DATASOURCEINFO, &m_ulActiveSessions);
+    hr = GetProperty(m_pIDBInitialize, DBPROP_ACTIVESESSIONS,
+                     DBPROPSET_DATASOURCEINFO, &m_ulActiveSessions);
 
     //DBPROP_DATASOURCENAME
-    hr = GetProperty(m_pIDBInitialize, DBPROP_DATASOURCENAME, 
-                            DBPROPSET_DATASOURCEINFO, &m_pwszDataSource);
+    hr = GetProperty(m_pIDBInitialize, DBPROP_DATASOURCENAME,
+                     DBPROPSET_DATASOURCEINFO, &m_pwszDataSource);
 
     //DBPROP_DBMSNAME
-    hr = GetProperty(m_pIDBInitialize, DBPROP_DBMSNAME, 
-                            DBPROPSET_DATASOURCEINFO, &m_pwszDBMS);
+    hr = GetProperty(m_pIDBInitialize, DBPROP_DBMSNAME,
+                     DBPROPSET_DATASOURCEINFO, &m_pwszDBMS);
 
     //DBPROP_DBMSVER
-    hr = GetProperty(m_pIDBInitialize, DBPROP_DBMSVER, 
-                            DBPROPSET_DATASOURCEINFO, &m_pwszDBMSVer);
+    hr = GetProperty(m_pIDBInitialize, DBPROP_DBMSVER,
+                     DBPROPSET_DATASOURCEINFO, &m_pwszDBMSVer);
 
-    //DBPROP_DATASOURCEREADONLY 
-    hr = GetProperty(m_pIDBInitialize, DBPROP_DATASOURCEREADONLY, 
-                            DBPROPSET_DATASOURCEINFO, &m_fReadOnly);
+    //DBPROP_DATASOURCEREADONLY
+    hr = GetProperty(m_pIDBInitialize, DBPROP_DATASOURCEREADONLY,
+                     DBPROPSET_DATASOURCEINFO, &m_fReadOnly);
 
     //DBPROP_PROVIDERNAME
-    hr = GetProperty(m_pIDBInitialize, DBPROP_PROVIDERNAME, 
-                            DBPROPSET_DATASOURCEINFO, &m_pwszProviderFileName);
+    hr = GetProperty(m_pIDBInitialize, DBPROP_PROVIDERNAME,
+                     DBPROPSET_DATASOURCEINFO, &m_pwszProviderFileName);
 
-    //DBPROP_PROVIDERVER 
-    hr = GetProperty(m_pIDBInitialize, DBPROP_PROVIDERVER, 
-                            DBPROPSET_DATASOURCEINFO, &m_pwszProviderVer);
+    //DBPROP_PROVIDERVER
+    hr = GetProperty(m_pIDBInitialize, DBPROP_PROVIDERVER,
+                     DBPROPSET_DATASOURCEINFO, &m_pwszProviderVer);
 
-    //DBPROP_PROVIDEROLEDBVER 
-    hr = GetProperty(m_pIDBInitialize, DBPROP_PROVIDEROLEDBVER, 
-                            DBPROPSET_DATASOURCEINFO, &m_pwszProviderOLEDBVer);
+    //DBPROP_PROVIDEROLEDBVER
+    hr = GetProperty(m_pIDBInitialize, DBPROP_PROVIDEROLEDBVER,
+                     DBPROPSET_DATASOURCEINFO, &m_pwszProviderOLEDBVer);
 
-    //DBPROP_MULTIPLEPARAMSETS 
-    hr = GetProperty(m_pIDBInitialize, DBPROP_MULTIPLEPARAMSETS, 
-                            DBPROPSET_DATASOURCEINFO, &m_fMultipleParamSets);
+    //DBPROP_MULTIPLEPARAMSETS
+    hr = GetProperty(m_pIDBInitialize, DBPROP_MULTIPLEPARAMSETS,
+                     DBPROPSET_DATASOURCEINFO, &m_fMultipleParamSets);
 
     //DBPROP_STRUCTUREDSTORAGE
-    hr = GetProperty(m_pIDBInitialize, DBPROP_STRUCTUREDSTORAGE, 
-                            DBPROPSET_DATASOURCEINFO, &m_dwStorageObjects);
-    
-    //DBPROP_SQLSUPPORT 
-    hr = GetProperty(m_pIDBInitialize, DBPROP_SQLSUPPORT, 
-                            DBPROPSET_DATASOURCEINFO, &dwSqlSupport);
+    hr = GetProperty(m_pIDBInitialize, DBPROP_STRUCTUREDSTORAGE,
+                     DBPROPSET_DATASOURCEINFO, &m_dwStorageObjects);
+
+    //DBPROP_SQLSUPPORT
+    hr = GetProperty(m_pIDBInitialize, DBPROP_SQLSUPPORT,
+                     DBPROPSET_DATASOURCEINFO, &dwSqlSupport);
 
     //Are PrimaryKeys supported
     m_fPrimaryKeysSupported = dwSqlSupport & DBPROPVAL_SQL_ANSI89_IEF;
@@ -435,7 +435,7 @@ HRESULT CDataSource::GetConnectionProps()
 HRESULT CDataSource::GetProviders()
 {
     HRESULT hr;
-    
+
     HROW*		rghRows = NULL;
     DBCOUNTITEM cRowsObtained = 0;
     IRowset*	pIRowset = NULL;
@@ -447,74 +447,74 @@ HRESULT CDataSource::GetProviders()
     m_cProviderInfo = 0;
     SAFE_FREE(m_rgProviderInfo);
     ISourcesRowset* pISourcesRowset = NULL;
-    
+
     // Bind the user and table name for the list
     const static ULONG cBindings = 4;
-    const static DBBINDING rgBindings[cBindings] = 
-        {
-            1,	 			
-            offsetof(PROVIDERINFO, wszName),
-            0,
-            0,	
-            NULL,			
-            NULL, 		
-            NULL,		
-            DBPART_VALUE,
-            DBMEMOWNER_CLIENTOWNED,		
-            DBPARAMIO_NOTPARAM, 
-            MAX_NAME_LEN, 		
-            0, 				
-            DBTYPE_WSTR, 	
-            0,	
-            0, 				
+    const static DBBINDING rgBindings[cBindings] =
+    {
+        1,
+        offsetof(PROVIDERINFO, wszName),
+        0,
+        0,
+        NULL,
+        NULL,
+        NULL,
+        DBPART_VALUE,
+        DBMEMOWNER_CLIENTOWNED,
+        DBPARAMIO_NOTPARAM,
+        MAX_NAME_LEN,
+        0,
+        DBTYPE_WSTR,
+        0,
+        0,
 
-            2,	 			
-            offsetof(PROVIDERINFO, wszParseName),
-            0,
-            0,	
-            NULL,			
-            NULL, 		
-            NULL,		
-            DBPART_VALUE,
-            DBMEMOWNER_CLIENTOWNED,		
-            DBPARAMIO_NOTPARAM, 
-            MAX_NAME_LEN, 		
-            0, 				
-            DBTYPE_WSTR, 	
-            0,	
-            0, 				
+        2,
+        offsetof(PROVIDERINFO, wszParseName),
+        0,
+        0,
+        NULL,
+        NULL,
+        NULL,
+        DBPART_VALUE,
+        DBMEMOWNER_CLIENTOWNED,
+        DBPARAMIO_NOTPARAM,
+        MAX_NAME_LEN,
+        0,
+        DBTYPE_WSTR,
+        0,
+        0,
 
-            3,	 			
-            offsetof(PROVIDERINFO, wszDescription),
-            0,
-            0,	
-            NULL,			
-            NULL, 		
-            NULL,		
-            DBPART_VALUE,
-            DBMEMOWNER_CLIENTOWNED,		
-            DBPARAMIO_NOTPARAM, 
-            MAX_NAME_LEN, 		
-            0, 				
-            DBTYPE_WSTR, 	
-            0,	
-            0, 				
-    
-            4,	 			
-            offsetof(PROVIDERINFO, wType),
-            0,
-            0,	
-            NULL,			
-            NULL, 		
-            NULL,		
-            DBPART_VALUE,
-            DBMEMOWNER_CLIENTOWNED,		
-            DBPARAMIO_NOTPARAM, 
-            sizeof(DBTYPE), 		
-            0, 				
-            DBTYPE_UI2, 	
-            0,	
-            0, 				
+        3,
+        offsetof(PROVIDERINFO, wszDescription),
+        0,
+        0,
+        NULL,
+        NULL,
+        NULL,
+        DBPART_VALUE,
+        DBMEMOWNER_CLIENTOWNED,
+        DBPARAMIO_NOTPARAM,
+        MAX_NAME_LEN,
+        0,
+        DBTYPE_WSTR,
+        0,
+        0,
+
+        4,
+        offsetof(PROVIDERINFO, wType),
+        0,
+        0,
+        NULL,
+        NULL,
+        NULL,
+        DBPART_VALUE,
+        DBMEMOWNER_CLIENTOWNED,
+        DBPARAMIO_NOTPARAM,
+        sizeof(DBTYPE),
+        0,
+        DBTYPE_UI2,
+        0,
+        0,
     };
 
 
@@ -557,18 +557,18 @@ HRESULT CDataSource::GetProviders()
     while(TRUE)
     {
         XTESTC(hr = pIRowset->GetNextRows(NULL, 0, MAX_BLOCK_SIZE, &cRowsObtained, &rghRows));
-        
+
         //ENDOFROWSET
-        if(cRowsObtained==0) 
+        if(cRowsObtained==0)
             break;
-        
+
         //Alloc room for ProviderInfo (in chunks)
         SAFE_REALLOC(m_rgProviderInfo, PROVIDERINFO, m_cProviderInfo + cRowsObtained);
         memset(&m_rgProviderInfo[m_cProviderInfo], 0, sizeof(PROVIDERINFO)*cRowsObtained);
 
         //Loop over rows obtained and get ProviderInfo
-        for(ULONG i=0; i<cRowsObtained; i++) 
-        {	
+        for(ULONG i=0; i<cRowsObtained; i++)
+        {
             //Get the Data
             XTESTC(hr = pIRowset->GetData(rghRows[i], hAccessor, (void*)&m_rgProviderInfo[m_cProviderInfo]));
 
@@ -576,7 +576,7 @@ HRESULT CDataSource::GetProviders()
             if(m_rgProviderInfo[m_cProviderInfo].wType == DBSOURCETYPE_DATASOURCE)
                 m_cProviderInfo++;
         }
-            
+
         //Release all the rows
         XTESTC(hr = pIRowset->ReleaseRows(cRowsObtained, rghRows, NULL, NULL, NULL));
         SAFE_FREE(rghRows);

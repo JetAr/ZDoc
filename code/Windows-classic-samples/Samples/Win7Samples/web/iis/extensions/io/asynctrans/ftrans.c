@@ -1,4 +1,4 @@
-/* Copyright (c) 1995-2002 Microsoft Corporation
+﻿/* Copyright (c) 1995-2002 Microsoft Corporation
 
 	Module Name:
 
@@ -20,8 +20,9 @@ CRITICAL_SECTION g_csWorkItems;
 #define USE_WORK_QUEUE 0
 # define MAX_BUFFER_SIZE 400
 
-typedef struct _AIO_WORK_ITEM {
-    
+typedef struct _AIO_WORK_ITEM
+{
+
     LIST_ENTRY    listEntry;
     EXTENSION_CONTROL_BLOCK *pecb;
     HSE_TF_INFO   hseTf;
@@ -53,48 +54,49 @@ DWORD SendFileOver(IN EXTENSION_CONTROL_BLOCK *pecb, IN HANDLE hFile, IN LPCSTR 
 
 BOOL WINAPI DllMain(IN HINSTANCE hinstDll, IN DWORD fdwReason, IN LPVOID lpvContext OPTIONAL)
 {
-	BOOL fReturn = TRUE;
+    BOOL fReturn = TRUE;
 
-	switch (fdwReason) {
+    switch (fdwReason)
+    {
 
-		case DLL_PROCESS_ATTACH :
-				
-			OutputDebugString(" Initializing the global data in ftrans.dll\n");
+    case DLL_PROCESS_ATTACH :
 
-			/* Initialize various data and modules. */
-			
-			InitializeCriticalSection(&g_csWorkItems);
-			InitializeListHead(&g_lWorkItems);
-			InitFileHandleCache();
+        OutputDebugString(" Initializing the global data in ftrans.dll\n");
 
-			break;
+        /* Initialize various data and modules. */
 
-		case DLL_PROCESS_DETACH :
-		
-			/*
-				Only cleanup when we are called because of a FreeLibrary() (i.e., when lpvContext == NULL)
-				If we are called because of a process termination, dont free anything. System will free resources and memory for us.
-			*/
+        InitializeCriticalSection(&g_csWorkItems);
+        InitializeListHead(&g_lWorkItems);
+        InitFileHandleCache();
 
-			CleanupFileHandleCache();
+        break;
 
-			if (lpvContext != NULL)
-				DeleteCriticalSection(&g_csWorkItems);
+    case DLL_PROCESS_DETACH :
 
-			break;
+        /*
+        	Only cleanup when we are called because of a FreeLibrary() (i.e., when lpvContext == NULL)
+        	If we are called because of a process termination, dont free anything. System will free resources and memory for us.
+        */
 
-		default :
+        CleanupFileHandleCache();
 
-				break;
-	}
+        if (lpvContext != NULL)
+            DeleteCriticalSection(&g_csWorkItems);
 
-	return fReturn;
+        break;
+
+    default :
+
+        break;
+    }
+
+    return fReturn;
 }
 
 /*
 	Description:
 
-		This function performs the necessary action to send response for the 
+		This function performs the necessary action to send response for the
 		request received from the client. It picks up the name of a file from
 		the pecb->lpszQueryString and transmits that file to the client.
 
@@ -109,14 +111,14 @@ BOOL WINAPI DllMain(IN HINSTANCE hinstDll, IN DWORD fdwReason, IN LPVOID lpvCont
 
 DWORD WINAPI HttpExtensionProc(EXTENSION_CONTROL_BLOCK *pecb)
 {
-	DWORD hseStatus;
+    DWORD hseStatus;
 
-	if (pecb->lpszQueryString == NULL || *pecb->lpszQueryString == '\0')
-		hseStatus = SendHeaderToClient( pecb, "File Not Specified");
-	else
-		hseStatus = SendFileToClient( pecb, pecb->lpszQueryString);
-	
-	return hseStatus;
+    if (pecb->lpszQueryString == NULL || *pecb->lpszQueryString == '\0')
+        hseStatus = SendHeaderToClient( pecb, "File Not Specified");
+    else
+        hseStatus = SendFileToClient( pecb, pecb->lpszQueryString);
+
+    return hseStatus;
 }
 
 /*
@@ -135,11 +137,11 @@ DWORD WINAPI HttpExtensionProc(EXTENSION_CONTROL_BLOCK *pecb)
 
 BOOL WINAPI GetExtensionVersion(HSE_VERSION_INFO *pVer)
 {
-	pVer->dwExtensionVersion = MAKELONG(HSE_VERSION_MINOR, HSE_VERSION_MAJOR);
+    pVer->dwExtensionVersion = MAKELONG(HSE_VERSION_MINOR, HSE_VERSION_MAJOR);
 
-	strncpy_s((LPSTR) pVer->lpszExtensionDesc, sizeof(pVer->lpszExtensionDesc), "File Transfer using TransmitFile", HSE_MAX_EXT_DLL_NAME_LEN);
+    strncpy_s((LPSTR) pVer->lpszExtensionDesc, sizeof(pVer->lpszExtensionDesc), "File Transfer using TransmitFile", HSE_MAX_EXT_DLL_NAME_LEN);
 
-	return TRUE;
+    return TRUE;
 }
 
 /*
@@ -160,107 +162,114 @@ BOOL WINAPI GetExtensionVersion(HSE_VERSION_INFO *pVer)
 
 BOOL WINAPI TerminateExtension(DWORD dwFlags)
 {
-	return TRUE;
+    return TRUE;
 }
 
 DWORD SendHeaderToClient(IN EXTENSION_CONTROL_BLOCK *pecb, IN LPCSTR pszErrorMsg)
 {
-	HSE_SEND_HEADER_EX_INFO	SendHeaderExInfo;
-	char szStatus[]     = "200 OK";
-	char szHeader[1024];
+    HSE_SEND_HEADER_EX_INFO	SendHeaderExInfo;
+    char szStatus[]     = "200 OK";
+    char szHeader[1024];
 
-	/*  Note the HTTP header block is terminated by a blank '\r\n' pair, followed by the document body */
+    /*  Note the HTTP header block is terminated by a blank '\r\n' pair, followed by the document body */
 
-	sprintf_s(szHeader, sizeof(szHeader), "Content-Type: text/html\r\n\r\n<head><title>Simple File Transfer (Transmit File)</title></head>\n<body><h1>%s</h1>\n", pszErrorMsg);
+    sprintf_s(szHeader, sizeof(szHeader), "Content-Type: text/html\r\n\r\n<head><title>Simple File Transfer (Transmit File)</title></head>\n<body><h1>%s</h1>\n", pszErrorMsg);
 
-	/* Populate SendHeaderExInfo struct */
+    /* Populate SendHeaderExInfo struct */
 
-	SendHeaderExInfo.pszStatus = szStatus;
-	SendHeaderExInfo.pszHeader = szHeader;
-	SendHeaderExInfo.cchStatus = lstrlen(szStatus);
-	SendHeaderExInfo.cchHeader = lstrlen(szHeader);
-	SendHeaderExInfo.fKeepConn = FALSE;
+    SendHeaderExInfo.pszStatus = szStatus;
+    SendHeaderExInfo.pszHeader = szHeader;
+    SendHeaderExInfo.cchStatus = lstrlen(szStatus);
+    SendHeaderExInfo.cchHeader = lstrlen(szHeader);
+    SendHeaderExInfo.fKeepConn = FALSE;
 
-	/* Send header - use the EX Version to send the header blob */
+    /* Send header - use the EX Version to send the header blob */
 
-	if (!pecb->ServerSupportFunction(pecb->ConnID, HSE_REQ_SEND_RESPONSE_HEADER_EX, &SendHeaderExInfo, NULL, NULL))
-		return HSE_STATUS_ERROR;
+    if (!pecb->ServerSupportFunction(pecb->ConnID, HSE_REQ_SEND_RESPONSE_HEADER_EX, &SendHeaderExInfo, NULL, NULL))
+        return HSE_STATUS_ERROR;
 
-	return HSE_STATUS_SUCCESS;
+    return HSE_STATUS_SUCCESS;
 }
-    
+
 DWORD SendFileToClient(IN EXTENSION_CONTROL_BLOCK *pecb, IN LPCSTR pszFile)
 {
-	CHAR    pchBuffer[1024];
-	HANDLE  hFile;
-	DWORD   hseStatus = HSE_STATUS_SUCCESS;
+    CHAR    pchBuffer[1024];
+    HANDLE  hFile;
+    DWORD   hseStatus = HSE_STATUS_SUCCESS;
 
-	hFile = FcOpenFile(pecb, pszFile);
+    hFile = FcOpenFile(pecb, pszFile);
 
-	if (INVALID_HANDLE_VALUE == hFile) {
+    if (INVALID_HANDLE_VALUE == hFile)
+    {
 
-		sprintf_s(pchBuffer, sizeof(pchBuffer), "OpenFailed: Error (%d) while opening the file %s.\n", GetLastError(), pszFile);
-		hseStatus = SendHeaderToClient(pecb, pchBuffer);
+        sprintf_s(pchBuffer, sizeof(pchBuffer), "OpenFailed: Error (%d) while opening the file %s.\n", GetLastError(), pszFile);
+        hseStatus = SendHeaderToClient(pecb, pchBuffer);
 
-	} else {
+    }
+    else
+    {
 
-		#if SEPARATE_HEADERS
-			hseStatus = SendHeaderToClient(pecb, "File Transfer begins");
-		#else 
-			hseStatus = HSE_STATUS_SUCCESS;
-		#endif
+#if SEPARATE_HEADERS
+        hseStatus = SendHeaderToClient(pecb, "File Transfer begins");
+#else
+        hseStatus = HSE_STATUS_SUCCESS;
+#endif
 
-		if (hseStatus == HSE_STATUS_SUCCESS) {
+        if (hseStatus == HSE_STATUS_SUCCESS)
+        {
 
-			hseStatus = SendFileOver(pecb, hFile, pszFile);
-	    
-			if (hseStatus != HSE_STATUS_PENDING) {
+            hseStatus = SendFileOver(pecb, hFile, pszFile);
 
-				/* assume that the data is transmitted. */
-	      
-				if (hseStatus != HSE_STATUS_SUCCESS) {
-	          
-					/* Error in transmitting the file. Send error message. */
-		        
-					sprintf_s(pchBuffer, sizeof(pchBuffer), "Send Failed: Error (%d) for file %s.\n", GetLastError(), pszFile);
-	        
-					SendHeaderToClient(pecb, pchBuffer);
-				}
-			}
-		}
+            if (hseStatus != HSE_STATUS_PENDING)
+            {
 
-		if (hseStatus != HSE_STATUS_PENDING) {
-	        
-			/* file handle is closed for all non-pending cases if the status is pending, file handle is cleaned up in callback */
-			
-			FcCloseFile(hFile);
-		}
-	}
+                /* assume that the data is transmitted. */
 
-	return hseStatus;
+                if (hseStatus != HSE_STATUS_SUCCESS)
+                {
+
+                    /* Error in transmitting the file. Send error message. */
+
+                    sprintf_s(pchBuffer, sizeof(pchBuffer), "Send Failed: Error (%d) for file %s.\n", GetLastError(), pszFile);
+
+                    SendHeaderToClient(pecb, pchBuffer);
+                }
+            }
+        }
+
+        if (hseStatus != HSE_STATUS_PENDING)
+        {
+
+            /* file handle is closed for all non-pending cases if the status is pending, file handle is cleaned up in callback */
+
+            FcCloseFile(hFile);
+        }
+    }
+
+    return hseStatus;
 }
 
 VOID CleanupAW(IN PAWI paw, IN BOOL fDoneWithSession)
 {
-	DWORD err = GetLastError();
+    DWORD err = GetLastError();
 
-	if (paw->hseTf.hFile != INVALID_HANDLE_VALUE)
-	  FcCloseFile(paw->hseTf.hFile);
+    if (paw->hseTf.hFile != INVALID_HANDLE_VALUE)
+        FcCloseFile(paw->hseTf.hFile);
 
-	if (fDoneWithSession)
-		paw->pecb->ServerSupportFunction( paw->pecb->ConnID, HSE_REQ_DONE_WITH_SESSION, NULL, NULL, NULL);
+    if (fDoneWithSession)
+        paw->pecb->ServerSupportFunction( paw->pecb->ConnID, HSE_REQ_DONE_WITH_SESSION, NULL, NULL, NULL);
 
-	SetLastError(err);
+    SetLastError(err);
 
-	/* Remove from work items list */
+    /* Remove from work items list */
 
-	#if USE_WORK_QUEUE
-		EnterCriticalSection(&g_csWorkItems);
-		RemoveEntryList(&paw->listEntry);
-		LeaveCriticalSection(&g_csWorkItems);
-	# endif 
+#if USE_WORK_QUEUE
+    EnterCriticalSection(&g_csWorkItems);
+    RemoveEntryList(&paw->listEntry);
+    LeaveCriticalSection(&g_csWorkItems);
+# endif
 
-	LocalFree(paw);
+    LocalFree(paw);
 }
 
 /*
@@ -268,7 +277,7 @@ VOID CleanupAW(IN PAWI paw, IN BOOL fDoneWithSession)
 
 		This is the callback function for handling completions of asynchronous IO.
 		This function performs necessary cleanup and resubmits additional IO
-		(if required). In this case, this function is called at the end of a 
+		(if required). In this case, this function is called at the end of a
 		successful TransmitFile() operation. This function primarily cleans up
 		the data and worker queue item and exits.
 
@@ -286,75 +295,77 @@ VOID CleanupAW(IN PAWI paw, IN BOOL fDoneWithSession)
 
 VOID WINAPI HseIoCompletion(IN EXTENSION_CONTROL_BLOCK *pECB, IN PVOID pContext, IN DWORD cbIO, IN DWORD dwError)
 {
-	PAWI paw = (PAWI)pContext;
-	EXTENSION_CONTROL_BLOCK *pecb = paw->pecb;
+    PAWI paw = (PAWI)pContext;
+    EXTENSION_CONTROL_BLOCK *pecb = paw->pecb;
 
-	CleanupAW(paw, TRUE);
+    CleanupAW(paw, TRUE);
 }
 
 DWORD SendFileOver(IN EXTENSION_CONTROL_BLOCK *pecb, IN HANDLE hFile, IN LPCSTR pszFile)
 {
-	PAWI paw;
-	DWORD hseStatus = HSE_STATUS_PENDING;
+    PAWI paw;
+    DWORD hseStatus = HSE_STATUS_PENDING;
 
-	paw = (PAWI)LocalAlloc(LMEM_FIXED, sizeof(AIO_WORK_ITEM));
+    paw = (PAWI)LocalAlloc(LMEM_FIXED, sizeof(AIO_WORK_ITEM));
 
-	if (NULL == paw) {
+    if (NULL == paw)
+    {
 
-		SetLastError(ERROR_NOT_ENOUGH_MEMORY);
+        SetLastError(ERROR_NOT_ENOUGH_MEMORY);
 
-		return HSE_STATUS_ERROR;
-	}
+        return HSE_STATUS_ERROR;
+    }
 
-	/* Fill in all the data in AIO_WORK_ITEM */
+    /* Fill in all the data in AIO_WORK_ITEM */
 
-	paw->pecb = pecb;
+    paw->pecb = pecb;
 
-	InitializeListHead(&paw->listEntry);
+    InitializeListHead(&paw->listEntry);
 
-	paw->hseTf.pfnHseIO = HseIoCompletion;
-	paw->hseTf.pContext = paw;
-	paw->hseTf.dwFlags = (HSE_IO_ASYNC | HSE_IO_DISCONNECT_AFTER_SEND);
+    paw->hseTf.pfnHseIO = HseIoCompletion;
+    paw->hseTf.pContext = paw;
+    paw->hseTf.dwFlags = (HSE_IO_ASYNC | HSE_IO_DISCONNECT_AFTER_SEND);
 
-	paw->hseTf.hFile = hFile;
-	paw->hseTf.BytesToWrite = GetFileSize(hFile, NULL);
-	paw->hseTf.Offset = 0;
-	paw->hseTf.pTail = NULL;
-	paw->hseTf.TailLength = 0;
+    paw->hseTf.hFile = hFile;
+    paw->hseTf.BytesToWrite = GetFileSize(hFile, NULL);
+    paw->hseTf.Offset = 0;
+    paw->hseTf.pTail = NULL;
+    paw->hseTf.TailLength = 0;
 
-	/* Set up the header to be sentout for the file */
+    /* Set up the header to be sentout for the file */
 
-	#if SEPARATE_HEADERS
-		paw->hseTf.HeadLength = 0;
-		paw->hseTf.pHead = NULL;
-	#else 
-		paw->hseTf.HeadLength = sprintf_s(paw->pchBuffer, sizeof(paw->pchBuffer), "HTTP/1.1 200 OK\r\nContent-Type: text/html\r\n\r\n<head><title>Simple File Transfer (TransmitFile) </title></head>\n<h1> Transferred file contains...</h1>\n");
-		
-		paw->hseTf.pHead = paw->pchBuffer;
-	#endif 
+#if SEPARATE_HEADERS
+    paw->hseTf.HeadLength = 0;
+    paw->hseTf.pHead = NULL;
+#else
+    paw->hseTf.HeadLength = sprintf_s(paw->pchBuffer, sizeof(paw->pchBuffer), "HTTP/1.1 200 OK\r\nContent-Type: text/html\r\n\r\n<head><title>Simple File Transfer (TransmitFile) </title></head>\n<h1> Transferred file contains...</h1>\n");
 
-	/* Add to the list */
+    paw->hseTf.pHead = paw->pchBuffer;
+#endif
 
-	#if USE_WORK_QUEUE
-		EnterCriticalSection(&g_csWorkItems);
-		InsertTailList(&g_lWorkItems, &paw->listEntry);
-		LeaveCriticalSection(&g_csWorkItems);
-	#endif 
+    /* Add to the list */
 
-	/* Setup the Async TransmitFile */
+#if USE_WORK_QUEUE
+    EnterCriticalSection(&g_csWorkItems);
+    InsertTailList(&g_lWorkItems, &paw->listEntry);
+    LeaveCriticalSection(&g_csWorkItems);
+#endif
 
-	if (!pecb->ServerSupportFunction(pecb->ConnID, HSE_REQ_TRANSMIT_FILE, &paw->hseTf, NULL, NULL)) {
+    /* Setup the Async TransmitFile */
 
-		/* Do cleanup and return error */
+    if (!pecb->ServerSupportFunction(pecb->ConnID, HSE_REQ_TRANSMIT_FILE, &paw->hseTf, NULL, NULL))
+    {
 
-		/* File handle will be freed by the caller for errors */
+        /* Do cleanup and return error */
 
-		paw->hseTf.hFile = INVALID_HANDLE_VALUE;
+        /* File handle will be freed by the caller for errors */
 
-		CleanupAW(paw, FALSE);
+        paw->hseTf.hFile = INVALID_HANDLE_VALUE;
 
-		hseStatus =  HSE_STATUS_ERROR;
-	}
+        CleanupAW(paw, FALSE);
 
-	return hseStatus;
+        hseStatus =  HSE_STATUS_ERROR;
+    }
+
+    return hseStatus;
 }

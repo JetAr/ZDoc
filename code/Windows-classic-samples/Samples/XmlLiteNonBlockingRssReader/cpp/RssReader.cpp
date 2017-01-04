@@ -1,4 +1,4 @@
-#include "RssReader.hpp"
+﻿#include "RssReader.hpp"
 
 CRssReader::CRssReader()
 {
@@ -27,21 +27,21 @@ HRESULT CRssReader::ReadAsync(LPCWSTR pwszUrl)
     CHKHR(::CreateXmlReader(IID_IXmlReader, (void**) &_spXmlReader, NULL));
 
     // Kicks off the binding.
-    #pragma warning(suppress: 6011) //spMoniker wouldn't be null if CreateURLMonikerEx() succeeds.
+#pragma warning(suppress: 6011) //spMoniker wouldn't be null if CreateURLMonikerEx() succeeds.
     CHKHR(spMoniker->BindToStorage(spBindCtx, NULL, IID_IStream, (void **)&spStream));
 
     // Pumps message until the download is finished.
     MSG msg;
     while (_bCompleted == false)
     {
-        if (::PeekMessage(&msg, 0, 0 ,0, PM_REMOVE))
+        if (::PeekMessage(&msg, 0, 0,0, PM_REMOVE))
         {
             ::TranslateMessage(&msg);
             ::DispatchMessage(&msg);
         }
     }
 
-    CHKHR(::RevokeBindStatusCallback(spBindCtx, static_cast<IBindStatusCallback*>(this)));  
+    CHKHR(::RevokeBindStatusCallback(spBindCtx, static_cast<IBindStatusCallback*>(this)));
 
 CleanUp:
     SAFE_RELEASE(spBindCtx);
@@ -64,7 +64,7 @@ HRESULT CRssReader::ReadSync(LPCWSTR pwszUrl)
     CHKHR(URLOpenBlockingStream(NULL, pwszUrl, &spStream, NULL, NULL));
     CHKHR(::CreateXmlReader(IID_IXmlReader, (void**) &_spXmlReader, NULL));
     CHKHR(_spXmlReader->SetInput(spStream));
-    
+
     CHKHR(Parse());
 
 CleanUp:
@@ -106,7 +106,7 @@ ULONG STDMETHODCALLTYPE CRssReader::Release(void)
     return _ulRef;
 }
 
-HRESULT STDMETHODCALLTYPE CRssReader::OnStartBinding(DWORD , __RPC__in_opt IBinding*)
+HRESULT STDMETHODCALLTYPE CRssReader::OnStartBinding(DWORD, __RPC__in_opt IBinding*)
 {
     _bCompleted = false;
 
@@ -125,12 +125,12 @@ HRESULT STDMETHODCALLTYPE CRssReader::OnLowResource(DWORD )
     return S_OK;
 }
 
-HRESULT STDMETHODCALLTYPE CRssReader::OnProgress(ULONG , ULONG , ULONG , __RPC__in_opt LPCWSTR )
+HRESULT STDMETHODCALLTYPE CRssReader::OnProgress(ULONG, ULONG, ULONG, __RPC__in_opt LPCWSTR )
 {
     return S_OK;
 }
 
-HRESULT STDMETHODCALLTYPE CRssReader::OnStopBinding(HRESULT , __RPC__in_opt LPCWSTR )
+HRESULT STDMETHODCALLTYPE CRssReader::OnStopBinding(HRESULT, __RPC__in_opt LPCWSTR )
 {
     _bCompleted = true;
 
@@ -155,9 +155,9 @@ HRESULT STDMETHODCALLTYPE CRssReader::GetBindInfo(DWORD *grfBINDF, BINDINFO *pbi
     return S_OK;
 }
 
-HRESULT STDMETHODCALLTYPE CRssReader::OnDataAvailable(DWORD , DWORD , FORMATETC *, STGMEDIUM *pstgmed)
+HRESULT STDMETHODCALLTYPE CRssReader::OnDataAvailable(DWORD, DWORD, FORMATETC *, STGMEDIUM *pstgmed)
 {
-    HRESULT hr = S_OK; 
+    HRESULT hr = S_OK;
     static BOOL firstDataNotification = TRUE;
     if (firstDataNotification)
     {
@@ -165,7 +165,7 @@ HRESULT STDMETHODCALLTYPE CRssReader::OnDataAvailable(DWORD , DWORD , FORMATETC 
         if (SUCCEEDED(hr))
         {
             firstDataNotification = FALSE;
-        
+
             hr = Parse();
             // Expects only partial data is available.
             if (hr == E_PENDING)
@@ -184,7 +184,7 @@ HRESULT STDMETHODCALLTYPE CRssReader::OnDataAvailable(DWORD , DWORD , FORMATETC 
     return hr;
 }
 
-HRESULT STDMETHODCALLTYPE CRssReader::OnObjectAvailable(__RPC__in REFIID , __RPC__in_opt IUnknown* )
+HRESULT STDMETHODCALLTYPE CRssReader::OnObjectAvailable(__RPC__in REFIID, __RPC__in_opt IUnknown* )
 {
     return S_OK;
 }

@@ -1,4 +1,4 @@
-//// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿//// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 //// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 //// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 //// PARTICULAR PURPOSE.
@@ -24,9 +24,9 @@ void DisplayPackageInfo(Windows::ApplicationModel::Package^ package)
 {
     wcout << L"Name: " << package->Id->Name->Data() << endl;
     wcout << L"FullName: " << package->Id->FullName->Data() << endl;
-    wcout << L"Version: " << package->Id->Version.Major << "." << 
-        package->Id->Version.Minor << "." << package->Id->Version.Build << 
-        "." << package->Id->Version.Revision << endl;
+    wcout << L"Version: " << package->Id->Version.Major << "." <<
+          package->Id->Version.Minor << "." << package->Id->Version.Build <<
+          "." << package->Id->Version.Revision << endl;
     wcout << L"Publisher: " << package->Id->Publisher->Data() << endl;
     wcout << L"PublisherId: " << package->Id->PublisherId->Data() << endl;
     wcout << L"Installed Location: " << package->InstalledLocation->Path->Data() << endl;
@@ -103,8 +103,8 @@ int __cdecl main(Platform::Array<String^>^ args)
         auto packages = packageManager->FindPackages(inputPackageName, inputPublisherName);
 
         int packageCount = 0;
-        std::for_each(Windows::Foundation::Collections::begin(packages), Windows::Foundation::Collections::end(packages), 
-            [&packageManager, &packageCount](Windows::ApplicationModel::Package^ package)
+        std::for_each(Windows::Foundation::Collections::begin(packages), Windows::Foundation::Collections::end(packages),
+                      [&packageManager, &packageCount](Windows::ApplicationModel::Package^ package)
         {
             DisplayPackageInfo(package);
             DisplayPackageUsers(packageManager, package);

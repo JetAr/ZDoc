@@ -1,4 +1,4 @@
-//<SnippetMusicBundleSig_hUtilWholePage>
+﻿//<SnippetMusicBundleSig_hUtilWholePage>
 /*****************************************************************************
 *
 * File: Util.h
@@ -9,18 +9,18 @@
 * ------------------------------------
 *
 *  This file is part of the Microsoft Windows SDK Code Samples.
-* 
+*
 *  Copyright (C) Microsoft Corporation.  All rights reserved.
-* 
+*
 * This source code is intended only as a supplement to Microsoft
 * Development Tools and/or on-line documentation.  See these other
 * materials for detailed information regarding Microsoft code samples.
-* 
+*
 * THIS CODE AND INFORMATION ARE PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
 * KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
 * IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 * PARTICULAR PURPOSE.
-* 
+*
 ****************************************************************************/
 
 #pragma once
@@ -40,7 +40,7 @@ public:
             for (UINT32 i=0; i<m_count; i++)
             {
                 IOpcPart* part = m_container[i];
-                
+
                 if (part)
                 {
                     part->Release();
@@ -55,7 +55,7 @@ public:
     HRESULT
     Init(
         UINT32 numberOfElementsWantToStore
-        )
+    )
     {
         HRESULT hr = S_OK;
 
@@ -77,7 +77,7 @@ public:
         if (SUCCEEDED(hr))
         {
             ZeroMemory(m_container, numberOfElementsWantToStore*sizeof(m_container[0]));
-        
+
             m_bufferSize = numberOfElementsWantToStore;
         }
 
@@ -86,12 +86,15 @@ public:
 
     // Get number of elements in the array.
     UINT32
-    GetCount() { return m_count; }
+    GetCount()
+    {
+        return m_count;
+    }
 
     HRESULT
     Append(
         IOpcPart* part
-        )
+    )
     {
         HRESULT hr = S_OK;
 
@@ -114,7 +117,7 @@ public:
     GetAt(
         UINT32 index,
         IOpcPart** part
-        )
+    )
     {
         HRESULT hr = S_OK;
 
@@ -154,7 +157,7 @@ GetRelationshipTargetPart(
     IOpcRelationship* relationship,
     LPCWSTR expectedContentType,
     IOpcPart** targetedPart
-    );
+);
 
 // Gets the target part of a relationship with a specific relationship type, out of the
 // given set of relationships. It requires the given relationship set to have only one
@@ -175,7 +178,7 @@ GetPartByRelationshipType(
     LPCWSTR relationshipType,
     LPCWSTR expectedContentType,
     IOpcPart** targetedPart
-    );
+);
 
 // Reads a package from a file.
 HRESULT
@@ -183,7 +186,7 @@ ReadPackageFromFile(
     LPCWSTR filename,
     IOpcFactory* opcFactory,
     IOpcPackage** opcPackage
-    );
+);
 
 // Writes a package to a file.
 HRESULT
@@ -191,12 +194,12 @@ WritePackageToFile(
     LPCWSTR filename,
     IOpcPackage* opcPackage,
     IOpcFactory* opcFactory
-    );
+);
 
 // Saves a certificate to a file.
 HRESULT
 SaveCertificateToFile(
     PCCERT_CONTEXT cert,
     LPCWSTR filename
-    );
+);
 //</SnippetMusicBundleSig_hUtilWholePage>

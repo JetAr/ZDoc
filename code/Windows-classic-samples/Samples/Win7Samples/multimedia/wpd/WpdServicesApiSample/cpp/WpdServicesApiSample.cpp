@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -65,49 +65,49 @@ void DoMenu()
             uiSelection = (UINT) atoi(szSelection);
             switch (uiSelection)
             {
-                case 0:
-                {
-                    CAtlArray<PWSTR> ContactsServicesArray;
-                    EumerateContactsServices(ContactsServicesArray);
-                    FreeServicePnPIDs(ContactsServicesArray);
-                    break;
-                }
-                case 1:
-                    // Release the old IPortableDeviceService interface before
-                    // obtaining a new one.
-                    pIPortableDeviceService = NULL;
-                    ChooseDeviceService(&pIPortableDeviceService);
-                    break;
-                case 2:
-                    EnumerateAllContent(pIPortableDeviceService);
-                    break;
-                case 3:
-                    ListSupportedFormats(pIPortableDeviceService);
-                    break;
-                case 4:
-                    ListSupportedEvents(pIPortableDeviceService);
-                    break;
-                case 5:
-                    ListSupportedMethods(pIPortableDeviceService);
-                    break;
-                case 6:
-                    ListAbstractServices(pIPortableDeviceService);
-                    break;
-                case 7:
-                    ReadContentProperties(pIPortableDeviceService);
-                    break;
-                case 8:
-                    WriteContentProperties(pIPortableDeviceService);
-                    break;
-                case 9:
-                    InvokeMethods(pIPortableDeviceService);
-                    break;
-                case 10:
-                    InvokeMethodsAsync(pIPortableDeviceService);
-                    break;
-                default:
-                    break;
-            }            
+            case 0:
+            {
+                CAtlArray<PWSTR> ContactsServicesArray;
+                EumerateContactsServices(ContactsServicesArray);
+                FreeServicePnPIDs(ContactsServicesArray);
+                break;
+            }
+            case 1:
+                // Release the old IPortableDeviceService interface before
+                // obtaining a new one.
+                pIPortableDeviceService = NULL;
+                ChooseDeviceService(&pIPortableDeviceService);
+                break;
+            case 2:
+                EnumerateAllContent(pIPortableDeviceService);
+                break;
+            case 3:
+                ListSupportedFormats(pIPortableDeviceService);
+                break;
+            case 4:
+                ListSupportedEvents(pIPortableDeviceService);
+                break;
+            case 5:
+                ListSupportedMethods(pIPortableDeviceService);
+                break;
+            case 6:
+                ListAbstractServices(pIPortableDeviceService);
+                break;
+            case 7:
+                ReadContentProperties(pIPortableDeviceService);
+                break;
+            case 8:
+                WriteContentProperties(pIPortableDeviceService);
+                break;
+            case 9:
+                InvokeMethods(pIPortableDeviceService);
+                break;
+            case 10:
+                InvokeMethodsAsync(pIPortableDeviceService);
+                break;
+            default:
+                break;
+            }
         }
         else
         {

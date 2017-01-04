@@ -1,4 +1,4 @@
-//------------------------------------------------------------
+﻿//------------------------------------------------------------
 // Copyright (c) Microsoft Corporation.  All rights reserved.
 //------------------------------------------------------------
 
@@ -14,13 +14,13 @@
 // to be changed in that case. This is only used for the command line.
 // For more advanced parsing, WsDecodeUrl should be used.
 HRESULT ParseTransport(
-    __in_z const LPWSTR url, 
-    __out TRANSPORT_MODE* transport, 
+    __in_z const LPWSTR url,
+    __out TRANSPORT_MODE* transport,
     __out SECURITY_MODE* securityMode)
 {
     if (wcsstr(url, L"http:") == url)
     {
-        *transport = HTTP_TRANSPORT;    
+        *transport = HTTP_TRANSPORT;
         *securityMode = NO_SECURITY;
         return S_OK;
     }
@@ -42,7 +42,7 @@ HRESULT ParseTransport(
 
 // Print out rich error info
 void PrintError(
-    __in HRESULT errorCode, 
+    __in HRESULT errorCode,
     __in_opt WS_ERROR* error)
 {
     wprintf(L"Failure: errorCode=0x%lx\n", errorCode);
@@ -82,16 +82,16 @@ Exit:
 }
 
 CFileRep::CFileRep(
-    __in REPORTING_LEVEL errorReporting, 
-    __in long maxChannels, 
-    __in TRANSPORT_MODE transport, 
-    __in SECURITY_MODE security, 
+    __in REPORTING_LEVEL errorReporting,
+    __in long maxChannels,
+    __in TRANSPORT_MODE transport,
+    __in SECURITY_MODE security,
     __in MESSAGE_ENCODING encoding)
 {
     assert(maxChannels >=1);
     this->errorReporting = errorReporting;
     this->maxChannels = maxChannels;
-    
+
     this->started = false;
     this->transportMode = transport;
     this->encoding = encoding;
@@ -103,13 +103,13 @@ CFileRep::CFileRep(
 
 CFileRep::~CFileRep()
 {
-    Stop();    
+    Stop();
 }
 
 HRESULT CFileRep::Start(
-    __in_ecount(uriLength) const LPWSTR uri, 
+    __in_ecount(uriLength) const LPWSTR uri,
     __in DWORD uriLength)
-{    
+{
     PrintVerbose(L"Entering CFileRep::Start");
     assert(!started); // Should not be called twice without calling stop first.
 
@@ -125,14 +125,14 @@ HRESULT CFileRep::Start(
     DWORD bytes = 0;
 
     IfFailedExit(DWordAdd(uriLength, 1, &newLength));
-    IfFailedExit(DWordMult(newLength, sizeof (WCHAR), &bytes));        
+    IfFailedExit(DWordMult(newLength, sizeof (WCHAR), &bytes));
 
     // Make local copy of the URI.
     this->uri.chars = (LPWSTR)HeapAlloc(GetProcessHeap(), 0, bytes);
     IfNullExit(this->uri.chars);
 
     IfFailedExit(StringCchCopyNW(this->uri.chars, newLength, uri, uriLength));
-    
+
     this->uri.length = uriLength;
 
     // We are ready to start listening.
@@ -140,24 +140,24 @@ HRESULT CFileRep::Start(
     IfFailedExit(InitializeListener());
 
     PrintInfo(L"Service startup succeeded.\n");
-    PrintVerbose(L"Leaving CFileRep::Start");    
+    PrintVerbose(L"Leaving CFileRep::Start");
 
     return S_OK;
 
-    
+
     ERROR_EXIT
 
-    PrintError(L"Service startup failed.\n", true);        
-        
-    Stop();  
+    PrintError(L"Service startup failed.\n", true);
+
+    Stop();
 
     if (NULL != this->uri.chars)
     {
         HeapFree(GetProcessHeap(), 0, this->uri.chars);
         this->uri.chars = NULL;
-    } 
-    
-    PrintVerbose(L"Leaving CFileRep::Start");    
+    }
+
+    PrintVerbose(L"Leaving CFileRep::Start");
     return hr;
 }
 
@@ -182,17 +182,17 @@ HRESULT CFileRep::Stop()
 
     if (NULL != listener)
     {
-        // This aborts the main service loop that waits for incoming requests.        
-        // WsCloseListener can fail but will still close the listener in that case. 
+        // This aborts the main service loop that waits for incoming requests.
+        // WsCloseListener can fail but will still close the listener in that case.
         // So we can ignore the error.
-        WsCloseListener(listener, NULL, NULL);            
+        WsCloseListener(listener, NULL, NULL);
     }
 
     if (NULL != channelManager)
     {
         channelManager->WaitForCleanup();
         delete channelManager;
-        channelManager = NULL;        
+        channelManager = NULL;
     }
 
     if (NULL != listener)
@@ -205,7 +205,7 @@ HRESULT CFileRep::Stop()
     {
         HeapFree(GetProcessHeap(), 0, uri.chars);
         uri.chars = NULL;
-    }    
+    }
 
     PrintVerbose(L"Leaving CFileRep::Stop");
 
@@ -216,10 +216,10 @@ HRESULT CFileRep::Stop()
 void CFileRep::PrintVerbose(
     __in_z const WCHAR message[])
 {
-    if (REPORT_VERBOSE <= errorReporting) 
+    if (REPORT_VERBOSE <= errorReporting)
     {
-        wprintf(L"FileRep: ");    
-        
+        wprintf(L"FileRep: ");
+
         wprintf(message);
         wprintf(L"\n");
     }
@@ -228,18 +228,18 @@ void CFileRep::PrintVerbose(
 void CFileRep::PrintInfo(
     __in_z const WCHAR message[])
 {
-    if (REPORT_INFO <= errorReporting) 
+    if (REPORT_INFO <= errorReporting)
     {
-        wprintf(L"FileRep: ");    
-        
+        wprintf(L"FileRep: ");
+
         wprintf(message);
         wprintf(L"\n");
     }
 }
 
 void CFileRep::PrintError(
-    __in HRESULT hr, 
-    __in_opt WS_ERROR* error, 
+    __in HRESULT hr,
+    __in_opt WS_ERROR* error,
     __in bool displayAlways)
 {
     // We don't alyways display errors since in during shutdown certain
@@ -249,14 +249,14 @@ void CFileRep::PrintError(
         return;
     }
 
-    if (REPORT_ERROR <= errorReporting) 
+    if (REPORT_ERROR <= errorReporting)
     {
-        ::PrintError(hr, error); 
+        ::PrintError(hr, error);
     }
 }
 
 void CFileRep::PrintError(
-    __in_z const WCHAR message[], 
+    __in_z const WCHAR message[],
     __in bool displayAlways)
 {
     if (!(displayAlways || started))
@@ -264,22 +264,22 @@ void CFileRep::PrintError(
         return;
     }
 
-    if (REPORT_ERROR <= errorReporting) 
+    if (REPORT_ERROR <= errorReporting)
     {
-        wprintf(L"FileRep ERROR: ");                    
+        wprintf(L"FileRep ERROR: ");
         wprintf(message);
         wprintf(L"\n");
     }
 }
 
 void CFileRep::GetEncoding(
-    __out WS_ENCODING* encodingProperty, 
+    __out WS_ENCODING* encodingProperty,
     __out ULONG* propertyCount)
 {
     *propertyCount = 1;
-    
+
     if (TEXT_ENCODING == encoding)
-    {        
+    {
         *encodingProperty = WS_ENCODING_XML_UTF8;
     }
     else if (BINARY_ENCODING == encoding)
@@ -298,7 +298,7 @@ void CFileRep::GetEncoding(
 
 // Set up the listener. Each service has exactly one. Accept channels and start the processing.
 HRESULT CFileRep::InitializeListener()
-{    
+{
     PrintVerbose(L"Entering CFileRep::InitializeListener");
 
     HRESULT hr = S_OK;
@@ -317,8 +317,8 @@ HRESULT CFileRep::InitializeListener()
 
     assert(NULL == channelManager);
 
-    IfFailedExit(WsCreateError(NULL, 0, &error));  
-   
+    IfFailedExit(WsCreateError(NULL, 0, &error));
+
     if (SSL_SECURITY == securityMode)
     {
         // Initialize a security description for SSL.
@@ -330,19 +330,19 @@ HRESULT CFileRep::InitializeListener()
     }
 
     if (TCP_TRANSPORT == transportMode) // Create a TCP listener
-    {   
-        IfFailedExit(WsCreateListener(WS_CHANNEL_TYPE_DUPLEX_SESSION, WS_TCP_CHANNEL_BINDING, 
-            listenerProperties, WsCountOf(listenerProperties), pSecurityDescription, &listener, error));
+    {
+        IfFailedExit(WsCreateListener(WS_CHANNEL_TYPE_DUPLEX_SESSION, WS_TCP_CHANNEL_BINDING,
+                                      listenerProperties, WsCountOf(listenerProperties), pSecurityDescription, &listener, error));
     }
     else // Create an HTTP listener
-    {        
-        IfFailedExit(WsCreateListener(WS_CHANNEL_TYPE_REPLY, WS_HTTP_CHANNEL_BINDING, 
-            listenerProperties, WsCountOf(listenerProperties), pSecurityDescription, &listener, error));
-    }        
-    
-    IfFailedExit(WsOpenListener(listener, &uri, NULL, error));    
+    {
+        IfFailedExit(WsCreateListener(WS_CHANNEL_TYPE_REPLY, WS_HTTP_CHANNEL_BINDING,
+                                      listenerProperties, WsCountOf(listenerProperties), pSecurityDescription, &listener, error));
+    }
 
-    // We put fixed values here to not overly complicate the command line. 
+    IfFailedExit(WsOpenListener(listener, &uri, NULL, error));
+
+    // We put fixed values here to not overly complicate the command line.
     long maxIdleChannels = 20;
     long minIdleChannels = 10;
     if (maxChannels < maxIdleChannels)
@@ -371,8 +371,8 @@ HRESULT CFileRep::InitializeListener()
     ERROR_EXIT
 
     PrintError(L"CFileRep::InitializeListener", true);
-    PrintError(hr, error, true); 
-        
+    PrintError(hr, error, true);
+
     // Class state is cleaned up in Stop so only clean up locals even in case of failure.
     if (NULL != error)
     {
@@ -380,7 +380,7 @@ HRESULT CFileRep::InitializeListener()
     }
 
     PrintVerbose(L"Leaving CFileRep::InitializeListener");
-    
+
     return hr;
 }
 

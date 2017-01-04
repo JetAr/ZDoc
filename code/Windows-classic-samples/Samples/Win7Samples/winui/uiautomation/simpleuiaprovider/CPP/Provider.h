@@ -1,23 +1,23 @@
-/*************************************************************************************************
+﻿/*************************************************************************************************
  *
  * Description: Declaration of the Provider class.
  *
  *  Copyright (C) Microsoft Corporation.  All rights reserved.
- * 
+ *
  * This source code is intended only as a supplement to Microsoft
  * Development Tools and/or on-line documentation.  See these other
  * materials for detailed information regarding Microsoft code samples.
- * 
+ *
  * THIS CODE AND INFORMATION ARE PROVIDED AS IS WITHOUT WARRANTY OF ANY
  * KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
  * PARTICULAR PURPOSE.
- * 
+ *
  *************************************************************************************************/
 
 
-class Provider : public IRawElementProviderSimple, 
-        public IInvokeProvider
+class Provider : public IRawElementProviderSimple,
+    public IInvokeProvider
 {
 public:
     Provider(HWND hwnd);
@@ -28,7 +28,7 @@ public:
     IFACEMETHODIMP_(ULONG) AddRef();
     IFACEMETHODIMP_(ULONG) Release();
     IFACEMETHODIMP QueryInterface(REFIID riid, void**);
-    
+
     // IRawElementProviderSimple methods
     IFACEMETHODIMP get_ProviderOptions(ProviderOptions * pRetVal);
     IFACEMETHODIMP GetPatternProvider(PATTERNID patternId, IUnknown ** pRetVal);

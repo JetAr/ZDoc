@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -18,13 +18,13 @@ public:
     virtual ~CBaseDictionaryEngine();
 
     virtual VOID CollectWord(_In_ CStringRange *psrgKeyCode, _Out_ CSampleImeArray<CStringRange> *pasrgWordString)
-    { 
-        psrgKeyCode; 
+    {
+        psrgKeyCode;
         pasrgWordString = nullptr;
     }
 
     virtual VOID CollectWord(_In_ CStringRange *psrgKeyCode, _Out_ CSampleImeArray<CCandidateListItem> *pItemList)
-    { 
+    {
         psrgKeyCode;
         pItemList = nullptr;
     }

@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -138,89 +138,89 @@ void CKeyStateCategory::Release()
 // _HandleCompositionInput
 HRESULT CKeyStateCategory::HandleKeyInput(KeyHandlerEditSessionDTO dto)
 {
-	dto;
+    dto;
     return E_NOTIMPL;
 }
 
 // HandleKeyFinalizeTextStore
 HRESULT CKeyStateCategory::HandleKeyFinalizeTextStore(KeyHandlerEditSessionDTO dto)
 {
-	dto;
+    dto;
     return E_NOTIMPL;
 }
 // HandleKeyCompositionFinalizeTextStoreAndInput
 HRESULT CKeyStateCategory::HandleKeyFinalizeTextStoreAndInput(KeyHandlerEditSessionDTO dto)
 {
-	dto;
+    dto;
     return E_NOTIMPL;
 }
 
 // HandleKeyCompositionFinalizeCandidatelistAndInput
 HRESULT CKeyStateCategory::HandleKeyFinalizeCandidatelistAndInput(KeyHandlerEditSessionDTO dto)
 {
-	dto;
+    dto;
     return E_NOTIMPL;
 }
 
 // HandleKeyCompositionFinalizeCandidatelist
 HRESULT CKeyStateCategory::HandleKeyFinalizeCandidatelist(KeyHandlerEditSessionDTO dto)
 {
-	dto;
+    dto;
     return E_NOTIMPL;
 }
 
 // HandleKeyConvert
 HRESULT CKeyStateCategory::HandleKeyConvert(KeyHandlerEditSessionDTO dto)
 {
-	dto;
+    dto;
     return E_NOTIMPL;
 }
 
 // HandleKeyConvertWildCard
 HRESULT CKeyStateCategory::HandleKeyConvertWildCard(KeyHandlerEditSessionDTO dto)
 {
-	dto;
+    dto;
     return E_NOTIMPL;
 }
 
 //_HandleCancel
 HRESULT CKeyStateCategory::HandleKeyCancel(KeyHandlerEditSessionDTO dto)
 {
-	dto;
+    dto;
     return E_NOTIMPL;
 }
 
 //_HandleCompositionBackspace
 HRESULT CKeyStateCategory::HandleKeyBackspace(KeyHandlerEditSessionDTO dto)
 {
-	dto;
+    dto;
     return E_NOTIMPL;
 }
 
 //_HandleCompositionArrowKey
 HRESULT CKeyStateCategory::HandleKeyArrow(KeyHandlerEditSessionDTO dto)
 {
-	dto;
+    dto;
     return E_NOTIMPL;
 }
 
 //_HandleCompositionDoubleSingleByte
 HRESULT CKeyStateCategory::HandleKeyDoubleSingleByte(KeyHandlerEditSessionDTO dto)
 {
-	dto;
+    dto;
     return E_NOTIMPL;
 }
 
 //_HandleCompositionPunctuation
 HRESULT CKeyStateCategory::HandleKeyPunctuation(KeyHandlerEditSessionDTO dto)
 {
-	dto;
+    dto;
     return E_NOTIMPL;
 }
 
 HRESULT CKeyStateCategory::HandleKeySelectByNumber(KeyHandlerEditSessionDTO dto)
 {
-	dto;
+    dto;
     return E_NOTIMPL;
 }
 
@@ -320,7 +320,7 @@ HRESULT CKeyStateCandidate::HandleKeyConvert(KeyHandlerEditSessionDTO dto)
 }
 
 //_HandleCancel
-HRESULT CKeyStateCandidate::HandleKeyCancel(KeyHandlerEditSessionDTO dto)    
+HRESULT CKeyStateCandidate::HandleKeyCancel(KeyHandlerEditSessionDTO dto)
 {
     return _pTextService->_HandleCancel(dto.ec, dto.pContext);
 }

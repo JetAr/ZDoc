@@ -1,4 +1,4 @@
-//------------------------------------------------------------------------------
+﻿//------------------------------------------------------------------------------
 // File: AsyncIo.cpp
 //
 // Desc: DirectShow sample code - base library with I/O functionality.
@@ -95,16 +95,16 @@ CAsyncRequest::Complete()
 // note - all events created manual reset
 
 CAsyncIo::CAsyncIo(CAsyncStream *pStream)
-         : m_hThread(NULL),
-           m_evWork(TRUE),
-           m_evDone(TRUE),
-           m_evStop(TRUE),
-           m_listWork(NAME("Work list")),
-           m_listDone(NAME("Done list")),
-           m_bFlushing(FALSE),
-           m_cItemsOut(0),
-           m_bWaiting(FALSE),
-           m_pStream(pStream)
+    : m_hThread(NULL),
+      m_evWork(TRUE),
+      m_evDone(TRUE),
+      m_evStop(TRUE),
+      m_listWork(NAME("Work list")),
+      m_listDone(NAME("Done list")),
+      m_bFlushing(FALSE),
+      m_cItemsOut(0),
+      m_bWaiting(FALSE),
+      m_pStream(pStream)
 {
 
 }
@@ -155,18 +155,18 @@ CAsyncIo::AsyncInactive(void)
 // add a request to the queue.
 HRESULT
 CAsyncIo::Request(
-                LONGLONG llPos,
-                LONG lLength,
-                BOOL bAligned,
-                BYTE * pBuffer,
-                LPVOID pContext,
-                DWORD_PTR dwUser)
+    LONGLONG llPos,
+    LONG lLength,
+    BOOL bAligned,
+    BYTE * pBuffer,
+    LPVOID pContext,
+    DWORD_PTR dwUser)
 {
     if(bAligned)
     {
         if(!IsAligned(llPos) ||
-            !IsAligned(lLength) ||
-            !IsAligned((LONG_PTR) pBuffer))
+                !IsAligned(lLength) ||
+                !IsAligned((LONG_PTR) pBuffer))
         {
             return VFW_E_BADALIGN;
         }
@@ -238,7 +238,7 @@ CAsyncIo::WaitForNext(
                 // this means the actual length was less than
                 // requested - may be ok if he aligned the end of file
                 if((pRequest->GetActualLength() +
-                    pRequest->GetStart()) == Size())
+                        pRequest->GetStart()) == Size())
                 {
                     hr = S_OK;
                 }
@@ -284,17 +284,17 @@ CAsyncIo::WaitForNext(
 // Need to hold m_csFile while doing this (done in request object)
 HRESULT
 CAsyncIo::SyncReadAligned(
-                        LONGLONG llPos,
-                        LONG lLength,
-                        BYTE * pBuffer,
-                        LONG * pcbActual,
-                        PVOID pvContext)
+    LONGLONG llPos,
+    LONG lLength,
+    BYTE * pBuffer,
+    LONG * pcbActual,
+    PVOID pvContext)
 {
     CheckPointer(pcbActual,E_POINTER);
 
     if(!IsAligned(llPos) ||
-        !IsAligned(lLength) ||
-        !IsAligned((LONG_PTR) pBuffer))
+            !IsAligned(lLength) ||
+            !IsAligned((LONG_PTR) pBuffer))
     {
         return VFW_E_BADALIGN;
     }
@@ -302,13 +302,13 @@ CAsyncIo::SyncReadAligned(
     CAsyncRequest request;
 
     HRESULT hr = request.Request(this,
-                                m_pStream,
-                                llPos,
-                                lLength,
-                                TRUE,
-                                pBuffer,
-                                pvContext,
-                                0);
+                                 m_pStream,
+                                 llPos,
+                                 lLength,
+                                 TRUE,
+                                 pBuffer,
+                                 pvContext,
+                                 0);
     if(FAILED(hr))
         return hr;
 
@@ -457,11 +457,11 @@ CAsyncIo::StartThread(void)
 
     DWORD dwThreadID;
     m_hThread = CreateThread(NULL,
-                            0,
-                            InitialThreadProc,
-                            this,
-                            0,
-                            &dwThreadID);
+                             0,
+                             InitialThreadProc,
+                             this,
+                             0,
+                             &dwThreadID);
     if(!m_hThread)
     {
         DWORD dwErr = GetLastError();
@@ -528,7 +528,7 @@ CAsyncIo::GetDoneItem()
     // cItemsOut is 0 (which is guaranteed by m_bWaiting being TRUE).
 
     if(m_listDone.GetCount() == 0 &&
-        (!m_bFlushing || m_bWaiting))
+            (!m_bFlushing || m_bWaiting))
     {
         m_evDone.Reset();
     }
@@ -660,13 +660,13 @@ CAsyncIo::ThreadProc(void)
 // may not be aligned - so we will have to buffer.
 HRESULT
 CAsyncIo::SyncRead(
-                LONGLONG llPos,
-                LONG lLength,
-                BYTE * pBuffer)
+    LONGLONG llPos,
+    LONG lLength,
+    BYTE * pBuffer)
 {
     if(IsAligned(llPos) &&
-        IsAligned(lLength) &&
-        IsAligned((LONG_PTR) pBuffer))
+            IsAligned(lLength) &&
+            IsAligned((LONG_PTR) pBuffer))
     {
         LONG cbUnused;
         return SyncReadAligned(llPos, lLength, pBuffer, &cbUnused, NULL);
@@ -678,13 +678,13 @@ CAsyncIo::SyncRead(
     CAsyncRequest request;
 
     HRESULT hr = request.Request(this,
-                                m_pStream,
-                                llPos,
-                                lLength,
-                                FALSE,
-                                pBuffer,
-                                NULL,
-                                0);
+                                 m_pStream,
+                                 llPos,
+                                 lLength,
+                                 FALSE,
+                                 pBuffer,
+                                 NULL,
+                                 0);
 
     if(FAILED(hr))
     {

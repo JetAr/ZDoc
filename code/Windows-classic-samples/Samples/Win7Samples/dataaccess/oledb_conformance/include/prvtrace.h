@@ -1,9 +1,9 @@
-//--------------------------------------------------------------------
+﻿//--------------------------------------------------------------------
 // Microsoft OLE DB Test
 //
-// Copyright 1995-2000 Microsoft Corporation.  
+// Copyright 1995-2000 Microsoft Corporation.
 //
-// @doc 
+// @doc
 //
 // @module PRVTRACE.H | TRACING support
 //
@@ -12,7 +12,7 @@
 //
 // <nl><nl>
 // Revision History:<nl>
-//	
+//
 //	[00] MM-DD-YY	EMAIL_NAME	ACTION PERFORMED... <nl>
 //	[01] 10-05-95	Microsoft	Created <nl>
 //	[02] 12-01-96	Microsoft	Updated for release <nl>

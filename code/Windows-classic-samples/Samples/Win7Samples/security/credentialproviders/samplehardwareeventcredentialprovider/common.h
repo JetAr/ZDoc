@@ -1,4 +1,4 @@
-//
+﻿//
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -7,7 +7,7 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 //
 // This file contains some global variables that describe what our
-// sample tile looks like.  For example, it defines what fields a tile has 
+// sample tile looks like.  For example, it defines what fields a tile has
 // and which fields show in which states of LogonUI.
 
 #pragma once
@@ -20,19 +20,19 @@
 #define MAX_ULONG  ((ULONG)(-1))
 
 // The indexes of each of the fields in our credential provider's tiles.
-enum SAMPLE_FIELD_ID 
+enum SAMPLE_FIELD_ID
 {
     SFI_TILEIMAGE       = 0,
     SFI_USERNAME        = 1,
     SFI_PASSWORD        = 2,
-    SFI_SUBMIT_BUTTON   = 3, 
+    SFI_SUBMIT_BUTTON   = 3,
     SFI_NUM_FIELDS      = 4,  // Note: if new fields are added, keep NUM_FIELDS last.  This is used as a count of the number of fields
 };
 
 // Same as SAMPLE_FIELD_ID above, but for the CMessageCredential.
-enum SAMPLE_MESSAGE_FIELD_ID 
+enum SAMPLE_MESSAGE_FIELD_ID
 {
-    SMFI_MESSAGE        = 0, 
+    SMFI_MESSAGE        = 0,
     SMFI_NUM_FIELDS     = 1,  // Note: if new fields are added, keep NUM_FIELDS last.  This is used as a count of the number of fields
 };
 
@@ -45,22 +45,22 @@ struct FIELD_STATE_PAIR
 };
 
 // These two arrays are seperate because a credential provider might
-// want to set up a credential with various combinations of field state pairs 
+// want to set up a credential with various combinations of field state pairs
 // and field descriptors.
 
 // The field state value indicates whether the field is displayed
 // in the selected tile, the deselected tile, or both.
-// The Field interactive state indicates when 
-static const FIELD_STATE_PAIR s_rgFieldStatePairs[] = 
+// The Field interactive state indicates when
+static const FIELD_STATE_PAIR s_rgFieldStatePairs[] =
 {
     { CPFS_DISPLAY_IN_BOTH, CPFIS_NONE },                   // SFI_TILEIMAGE
     { CPFS_DISPLAY_IN_BOTH, CPFIS_NONE },                   // SFI_USERNAME
     { CPFS_DISPLAY_IN_SELECTED_TILE, CPFIS_FOCUSED },       // SFI_PASSWORD
-    { CPFS_DISPLAY_IN_SELECTED_TILE, CPFIS_NONE    },       // SFI_SUBMIT_BUTTON   
+    { CPFS_DISPLAY_IN_SELECTED_TILE, CPFIS_NONE    },       // SFI_SUBMIT_BUTTON
 };
 
 // Same as s_rgFieldStatePairs above, but for the CMessageCredential.
-static const FIELD_STATE_PAIR s_rgMessageFieldStatePairs[] = 
+static const FIELD_STATE_PAIR s_rgMessageFieldStatePairs[] =
 {
     { CPFS_DISPLAY_IN_BOTH, CPFIS_NONE },                   // SMFI_MESSAGE
 };

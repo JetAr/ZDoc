@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -137,7 +137,7 @@ void ReadContentProperties(
 
     // 3) CoCreate an IPortableDeviceKeyCollection interface to hold the the property keys
     // we wish to read.
-	//<SnippetContentProp1>
+    //<SnippetContentProp1>
     hr = CoCreateInstance(CLSID_PortableDeviceKeyCollection,
                           NULL,
                           CLSCTX_INPROC_SERVER,
@@ -181,9 +181,9 @@ void ReadContentProperties(
             }
         }
     }
-	//</SnippetContentProp1>
-	// 5) Call GetValues() passing the collection of specified PROPERTYKEYs.
-	//<SnippetContentProp2>
+    //</SnippetContentProp1>
+    // 5) Call GetValues() passing the collection of specified PROPERTYKEYs.
+    //<SnippetContentProp2>
     if (SUCCEEDED(hr))
     {
         hr = pProperties->GetValues(szSelection,         // The object whose properties we are reading
@@ -194,7 +194,7 @@ void ReadContentProperties(
             printf("! Failed to get all properties for object '%ws', hr= 0x%lx\n", szSelection, hr);
         }
     }
-	//</SnippetContentProp2>
+    //</SnippetContentProp2>
     // 6) Display the returned property values to the user
     if (SUCCEEDED(hr))
     {
@@ -215,7 +215,7 @@ void WriteContentProperties(
         printf("! A NULL IPortableDevice interface pointer was received\n");
         return;
     }
-	//<SnippetContentProp3>
+    //<SnippetContentProp3>
     HRESULT                               hr                   = S_OK;
     WCHAR                                 szSelection[81]      = {0};
     WCHAR                                 szNewObjectName[81]  = {0};
@@ -233,10 +233,10 @@ void WriteContentProperties(
     {
         printf("An invalid object identifier was specified, aborting property reading\n");
     }
-	//</SnippetContentProp3>
+    //</SnippetContentProp3>
     // 1) Get an IPortableDeviceContent interface from the IPortableDevice interface to
     // access the content-specific methods.
-	//<SnippetContentProp4>
+    //<SnippetContentProp4>
     if (SUCCEEDED(hr))
     {
         hr = pDevice->Content(&pContent);
@@ -283,11 +283,11 @@ void WriteContentProperties(
             }
         }
     }
-	//</SnippetContentProp4>
+    //</SnippetContentProp4>
 
     // 4) Prompt the user for the new value of the WPD_OBJECT_NAME property only if the property attributes report
     // that it can be changed/updated.
-	//<SnippetContentProp5>
+    //<SnippetContentProp5>
     if (bCanWrite)
     {
         printf("Enter the new WPD_OBJECT_NAME for the object '%ws'.\n>",szSelection);
@@ -317,9 +317,9 @@ void WriteContentProperties(
                 }
             }
         }
-		//</SnippetContentProp5>
+        //</SnippetContentProp5>
         // 6) Call SetValues() passing the collection of specified PROPERTYKEYs.
-		//<SnippetContentProp6>
+        //<SnippetContentProp6>
         if (SUCCEEDED(hr))
         {
             hr = pProperties->SetValues(szSelection,                // The object whose properties we are reading
@@ -334,7 +334,7 @@ void WriteContentProperties(
                 printf("The WPD_OBJECT_NAME property on object '%ws' was written successfully (Read the properties again to see the updated value)\n", szSelection);
             }
         }
-		//</SnippetContentProp6>
+        //</SnippetContentProp6>
     }
 }
 
@@ -353,7 +353,7 @@ void GetObjectIdentifierFromPersistentUniqueIdentifier(
     CComPtr<IPortableDeviceContent>                 pContent;
     CComPtr<IPortableDevicePropVariantCollection>   pPersistentUniqueIDs;
     CComPtr<IPortableDevicePropVariantCollection>   pObjectIDs;
-	//<SnippetContentProp7>
+    //<SnippetContentProp7>
     // Prompt user to enter an unique identifier to convert to an object idenifier.
     printf("Enter the Persistant Unique Identifier of the object you wish to convert into an object identifier.\n>");
     hr = StringCbGetsW(szSelection,sizeof(szSelection));
@@ -361,10 +361,10 @@ void GetObjectIdentifierFromPersistentUniqueIdentifier(
     {
         printf("An invalid persistent object identifier was specified, aborting the query operation\n");
     }
-	//</SnippetContentProp7>
+    //</SnippetContentProp7>
     // 1) Get an IPortableDeviceContent interface from the IPortableDevice interface to
     // access the content-specific methods.
-	//<SnippetContentProp8>
+    //<SnippetContentProp8>
     if (SUCCEEDED(hr))
     {
         hr = pDevice->Content(&pContent);
@@ -373,20 +373,20 @@ void GetObjectIdentifierFromPersistentUniqueIdentifier(
             printf("! Failed to get IPortableDeviceContent from IPortableDevice, hr = 0x%lx\n",hr);
         }
     }
-	//</SnippetContentProp8>
+    //</SnippetContentProp8>
 
     // 2) CoCreate an IPortableDevicePropVariantCollection interface to hold the the Unique Identifiers
     // to query for Object Identifiers.
     //
     // NOTE: This is a collection interface so more than 1 identifier can be requested at a time.
     //       This sample only requests a single unique identifier.
-	//<SnippetContentProp9>
+    //<SnippetContentProp9>
     hr = CoCreateInstance(CLSID_PortableDevicePropVariantCollection,
                           NULL,
                           CLSCTX_INPROC_SERVER,
                           IID_PPV_ARGS(&pPersistentUniqueIDs));
-	//</SnippetContentProp9>
-	//<SnippetContentProp10>
+    //</SnippetContentProp9>
+    //<SnippetContentProp10>
     if (SUCCEEDED(hr))
     {
         if (pPersistentUniqueIDs != NULL)
@@ -409,7 +409,7 @@ void GetObjectIdentifierFromPersistentUniqueIdentifier(
                 {
                     // 3) Attempt to get the unique idenifier for the object from the device
                     hr = pContent->GetObjectIDsFromPersistentUniqueIDs(pPersistentUniqueIDs,
-                                                                       &pObjectIDs);
+                            &pObjectIDs);
                     if (SUCCEEDED(hr))
                     {
                         PROPVARIANT pvId = {0};
@@ -446,7 +446,7 @@ void GetObjectIdentifierFromPersistentUniqueIdentifier(
             PropVariantClear(&pv);
         }
     }
-	//</SnippetContentProp10>
+    //</SnippetContentProp10>
 }
 
 // IPortableDevicePropertiesBulkCallback implementation for use with
@@ -476,7 +476,7 @@ public:
         }
 
         if ((riid == IID_IUnknown) ||
-            (riid == IID_IPortableDevicePropertiesBulkCallback))
+                (riid == IID_IPortableDevicePropertiesBulkCallback))
         {
             AddRef();
             *ppvObj = this;
@@ -603,7 +603,7 @@ public:
         }
 
         if ((riid == IID_IUnknown) ||
-            (riid == IID_IPortableDevicePropertiesBulkCallback))
+                (riid == IID_IPortableDevicePropertiesBulkCallback))
         {
             AddRef();
             *ppvObj = this;
@@ -763,7 +763,7 @@ void ReadContentPropertiesBulk(
         {
             printf("! Failed to CoCreate IPortableDeviceKeyCollection to hold the property keys to read, hr = 0x%lx\n",hr);
         }
-    }                              
+    }
 
     if (SUCCEEDED(hr))
     {
@@ -822,7 +822,7 @@ void ReadContentPropertiesBulk(
     if (SUCCEEDED(hr))
     {
         hr = CreateIPortableDevicePropVariantCollectionWithAllObjectIDs(pContent,
-                                                                        &pObjectIDs);
+                &pObjectIDs);
     }
 
 
@@ -831,9 +831,9 @@ void ReadContentPropertiesBulk(
     if (SUCCEEDED(hr))
     {
         hr = pPropertiesBulk->QueueGetValuesByObjectList(pObjectIDs,
-                                                         pPropertiesToRead,
-                                                         pCallback,
-                                                         &guidContext);
+                pPropertiesToRead,
+                pCallback,
+                &guidContext);
         // 9) Call Start() to actually being the property operation
         if(SUCCEEDED(hr))
         {
@@ -978,7 +978,7 @@ void WriteContentPropertiesBulk(
     if (SUCCEEDED(hr))
     {
         hr = CreateIPortableDevicePropVariantCollectionWithAllObjectIDs(pContent,
-                                                                        &pObjectIDs);
+                &pObjectIDs);
     }
 
     if (SUCCEEDED(hr))
@@ -1059,8 +1059,8 @@ void WriteContentPropertiesBulk(
     if (SUCCEEDED(hr))
     {
         hr = pPropertiesBulk->QueueSetValuesByObjectList(pPropertiesToWrite,
-                                                         pCallback,
-                                                         &guidContext);
+                pCallback,
+                &guidContext);
         // 10) Call Start() to actually being the property operation
         if(SUCCEEDED(hr))
         {
@@ -1242,11 +1242,11 @@ void ReadContentPropertiesBulkFilteringByFormat(
     if (SUCCEEDED(hr))
     {
         hr = pPropertiesBulk->QueueGetValuesByObjectFormat(WPD_OBJECT_FORMAT_WMA,
-                                                           WPD_DEVICE_OBJECT_ID,
-                                                           100,
-                                                           pPropertiesToRead,
-                                                           pCallback,
-                                                           &guidContext);
+                WPD_DEVICE_OBJECT_ID,
+                100,
+                pPropertiesToRead,
+                pCallback,
+                &guidContext);
         // 9) Call Start() to actually being the property operation
         if(SUCCEEDED(hr))
         {

@@ -1,4 +1,4 @@
-/*++
+﻿/*++
 THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED
 TO THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -57,26 +57,26 @@ Abstract:
 NTSTATUS
 DisplayAudit(
     LSA_HANDLE PolicyHandle
-    );
+);
 
 void
 DisplayAuditEventOption(
     DWORD EventTypeIndex,
     POLICY_AUDIT_EVENT_OPTIONS EventOption
-    );
+);
 
 NTSTATUS
 SetAuditEvent(
     LSA_HANDLE PolicyHandle,
     POLICY_AUDIT_EVENT_TYPE EventType,
     POLICY_AUDIT_EVENT_OPTIONS EventOption
-    );
+);
 
 NTSTATUS
 SetAuditMode(
     LSA_HANDLE PolicyHandle,
     BOOL bEnable
-    );
+);
 
 //
 // helper functions
@@ -87,25 +87,25 @@ OpenPolicy(
     LPWSTR ServerName,
     DWORD DesiredAccess,
     PLSA_HANDLE PolicyHandle
-    );
+);
 
 void
 InitLsaString(
     PLSA_UNICODE_STRING LsaString,
     LPWSTR String
-    );
+);
 
 void
 DisplayNtStatus(
     LPSTR szAPI,        // pointer to Ansi function name
     NTSTATUS Status     // NTSTATUS error value
-    );
+);
 
 void
 DisplayWinError(
     LPSTR szAPI,    // pointer to Ansi function name
     DWORD dwError   // DWORD WinError
-    );
+);
 
 //
 // unicode entry point and argv
@@ -115,7 +115,7 @@ __cdecl
 wmain(
     int argc,
     wchar_t *argv[]
-    )
+)
 {
     LPWSTR wComputerName;
     LSA_HANDLE PolicyHandle;
@@ -134,12 +134,13 @@ wmain(
     //
 
     Status = OpenPolicy(
-                wComputerName,
-                POLICY_VIEW_AUDIT_INFORMATION,
-                &PolicyHandle
-                );
+                 wComputerName,
+                 POLICY_VIEW_AUDIT_INFORMATION,
+                 &PolicyHandle
+             );
 
-    if(Status == STATUS_SUCCESS) {
+    if(Status == STATUS_SUCCESS)
+    {
         //
         // display current auditing status
         //
@@ -147,11 +148,14 @@ wmain(
 
         LsaClose(PolicyHandle);
 
-        if(Status != STATUS_SUCCESS) {
+        if(Status != STATUS_SUCCESS)
+        {
             DisplayNtStatus("DisplayAudit", Status);
             return RTN_ERROR;
         }
-    } else {
+    }
+    else
+    {
         DisplayNtStatus("OpenPolicy", Status);
         return RTN_ERROR;
     }
@@ -161,22 +165,23 @@ wmain(
     //
 
     Status = OpenPolicy(
-                wComputerName,
-                POLICY_VIEW_AUDIT_INFORMATION |
-                POLICY_SET_AUDIT_REQUIREMENTS,
-                &PolicyHandle
-                );
+                 wComputerName,
+                 POLICY_VIEW_AUDIT_INFORMATION |
+                 POLICY_SET_AUDIT_REQUIREMENTS,
+                 &PolicyHandle
+             );
 
-    if(Status == STATUS_SUCCESS) {
+    if(Status == STATUS_SUCCESS)
+    {
 
         //
         // enable success and failure auditing of logon/logoff
         //
         Status = SetAuditEvent(
-            PolicyHandle,
-            AuditCategoryLogon,
-            POLICY_AUDIT_EVENT_SUCCESS | POLICY_AUDIT_EVENT_FAILURE
-            );
+                     PolicyHandle,
+                     AuditCategoryLogon,
+                     POLICY_AUDIT_EVENT_SUCCESS | POLICY_AUDIT_EVENT_FAILURE
+                 );
 
         //
         // enable audits
@@ -186,11 +191,14 @@ wmain(
 
         LsaClose(PolicyHandle);
 
-        if(Status != STATUS_SUCCESS) {
+        if(Status != STATUS_SUCCESS)
+        {
             DisplayNtStatus("SetAuditMode", Status);
             return RTN_ERROR;
         }
-    } else {
+    }
+    else
+    {
         DisplayNtStatus("OpenPolicy", Status);
         return RTN_ERROR;
     }
@@ -202,7 +210,7 @@ wmain(
 NTSTATUS
 DisplayAudit(
     LSA_HANDLE PolicyHandle
-    )
+)
 {
     PPOLICY_AUDIT_EVENTS_INFO AuditEvents;
     NTSTATUS Status;
@@ -212,23 +220,27 @@ DisplayAudit(
     // obtain AuditEvents
     //
     Status = LsaQueryInformationPolicy(
-                PolicyHandle,
-                PolicyAuditEventsInformation,
-                &AuditEvents
-                );
+                 PolicyHandle,
+                 PolicyAuditEventsInformation,
+                 &AuditEvents
+             );
 
     if(Status != STATUS_SUCCESS) return Status;
 
     //
     // successfully obtained AuditEventsInformation.  Now display.
     //
-    if(AuditEvents->AuditingMode) {
+    if(AuditEvents->AuditingMode)
+    {
         printf("Auditing Enabled\n");
-    } else {
+    }
+    else
+    {
         printf("Auditing Disabled\n");
     }
 
-    for(i = 0 ; i < AuditEvents->MaximumAuditEventCount ; i++) {
+    for(i = 0 ; i < AuditEvents->MaximumAuditEventCount ; i++)
+    {
         DisplayAuditEventOption(i, AuditEvents->EventAuditingOptions[i]);
     }
 
@@ -244,40 +256,41 @@ void
 DisplayAuditEventOption(
     DWORD EventTypeIndex,
     POLICY_AUDIT_EVENT_OPTIONS EventOption
-    )
+)
 {
     printf("AuditCategory");
 
-    switch (EventTypeIndex) {
-        case AuditCategorySystem:
+    switch (EventTypeIndex)
+    {
+    case AuditCategorySystem:
         printf("System");
         break;
 
-        case AuditCategoryLogon:
+    case AuditCategoryLogon:
         printf("Logon");
         break;
 
-        case AuditCategoryObjectAccess:
+    case AuditCategoryObjectAccess:
         printf("ObjectAccess");
         break;
 
-        case AuditCategoryPrivilegeUse:
+    case AuditCategoryPrivilegeUse:
         printf("PrivilegeUse");
         break;
 
-        case AuditCategoryDetailedTracking:
+    case AuditCategoryDetailedTracking:
         printf("DetailedTracking");
         break;
 
-        case AuditCategoryPolicyChange:
+    case AuditCategoryPolicyChange:
         printf("PolicyChange");
         break;
 
-        case AuditCategoryAccountManagement:
+    case AuditCategoryAccountManagement:
         printf("AccountManagement");
         break;
 
-        default:
+    default:
         printf("Unknown");
     }
 
@@ -295,7 +308,7 @@ SetAuditEvent(
     LSA_HANDLE PolicyHandle,
     POLICY_AUDIT_EVENT_TYPE EventType,
     POLICY_AUDIT_EVENT_OPTIONS EventOption
-    )
+)
 {
     PPOLICY_AUDIT_EVENTS_INFO pae;
     NTSTATUS Status;
@@ -305,10 +318,10 @@ SetAuditEvent(
     // obtain AuditEvents
     //
     Status = LsaQueryInformationPolicy(
-                PolicyHandle,
-                PolicyAuditEventsInformation,
-                &pae
-                );
+                 PolicyHandle,
+                 PolicyAuditEventsInformation,
+                 &pae
+             );
 
     if(Status != STATUS_SUCCESS) return Status;
 
@@ -316,7 +329,8 @@ SetAuditEvent(
     // insure we were passed a valid EventType and EventOption
     //
     if((ULONG)EventType > pae->MaximumAuditEventCount ||
-      (!EventOption & POLICY_AUDIT_EVENT_MASK) ) {
+            (!EventOption & POLICY_AUDIT_EVENT_MASK) )
+    {
         LsaFreeMemory(pae);
         return STATUS_INVALID_PARAMETER;
     }
@@ -324,7 +338,8 @@ SetAuditEvent(
     //
     // set all auditevents to the unchanged status...
     //
-    for(i = 0 ; i < pae->MaximumAuditEventCount ; i++) {
+    for(i = 0 ; i < pae->MaximumAuditEventCount ; i++)
+    {
         pae->EventAuditingOptions[i] = POLICY_AUDIT_EVENT_UNCHANGED;
     }
 
@@ -337,10 +352,10 @@ SetAuditEvent(
     // set the new AuditEvents
     //
     Status = LsaSetInformationPolicy(
-                PolicyHandle,
-                PolicyAuditEventsInformation,
-                pae
-                );
+                 PolicyHandle,
+                 PolicyAuditEventsInformation,
+                 pae
+             );
 
     //
     // free allocated memory
@@ -354,7 +369,7 @@ NTSTATUS
 SetAuditMode(
     LSA_HANDLE PolicyHandle,
     BOOL bEnable
-    )
+)
 {
     PPOLICY_AUDIT_EVENTS_INFO AuditEvents;
     NTSTATUS Status;
@@ -364,10 +379,10 @@ SetAuditMode(
     // obtain current AuditEvents
     //
     Status = LsaQueryInformationPolicy(
-                PolicyHandle,
-                PolicyAuditEventsInformation,
-                &AuditEvents
-                );
+                 PolicyHandle,
+                 PolicyAuditEventsInformation,
+                 &AuditEvents
+             );
 
     if(Status != STATUS_SUCCESS) return Status;
 
@@ -379,7 +394,8 @@ SetAuditMode(
     //
     // set all auditevents to the unchanged status...
     //
-    for(i = 0 ; i < AuditEvents->MaximumAuditEventCount ; i++) {
+    for(i = 0 ; i < AuditEvents->MaximumAuditEventCount ; i++)
+    {
         AuditEvents->EventAuditingOptions[i] = POLICY_AUDIT_EVENT_UNCHANGED;
     }
 
@@ -387,10 +403,10 @@ SetAuditMode(
     // set the new auditing mode (enabled or disabled)
     //
     Status = LsaSetInformationPolicy(
-                PolicyHandle,
-                PolicyAuditEventsInformation,
-                AuditEvents
-                );
+                 PolicyHandle,
+                 PolicyAuditEventsInformation,
+                 AuditEvents
+             );
 
     LsaFreeMemory(AuditEvents);
 
@@ -401,11 +417,12 @@ void
 InitLsaString(
     PLSA_UNICODE_STRING LsaString,
     LPWSTR String
-    )
+)
 {
     DWORD StringLength;
 
-    if(String == NULL) {
+    if(String == NULL)
+    {
         LsaString->Buffer = NULL;
         LsaString->Length = 0;
         LsaString->MaximumLength = 0;
@@ -417,7 +434,7 @@ InitLsaString(
     LsaString->Buffer = String;
     LsaString->Length = (USHORT) StringLength * sizeof(WCHAR);
     LsaString->MaximumLength = (USHORT) (StringLength + 1) *
-        sizeof(WCHAR);
+                               sizeof(WCHAR);
 }
 
 NTSTATUS
@@ -425,7 +442,7 @@ OpenPolicy(
     LPWSTR ServerName,
     DWORD DesiredAccess,
     PLSA_HANDLE PolicyHandle
-    )
+)
 {
     PLSA_UNICODE_STRING Server;
     LSA_OBJECT_ATTRIBUTES ObjectAttributes;
@@ -436,13 +453,16 @@ OpenPolicy(
     //
     ZeroMemory(&ObjectAttributes, sizeof(ObjectAttributes));
 
-    if(ServerName != NULL) {
+    if(ServerName != NULL)
+    {
         //
         // Make a LSA_UNICODE_STRING out of the LPWSTR passed in
         //
         InitLsaString(&ServerString, ServerName);
         Server = &ServerString;
-    } else {
+    }
+    else
+    {
         Server = NULL; // default to local machine
     }
 
@@ -450,18 +470,18 @@ OpenPolicy(
     // Attempt to open the policy and return NTSTATUS
     //
     return LsaOpenPolicy(
-                Server,
-                &ObjectAttributes,
-                DesiredAccess,
-                PolicyHandle
-                );
+               Server,
+               &ObjectAttributes,
+               DesiredAccess,
+               PolicyHandle
+           );
 }
 
 void
 DisplayNtStatus(
     LPSTR szAPI,
     NTSTATUS Status
-    )
+)
 {
     //
     // convert the NTSTATUS to Winerror and DisplayWinError()
@@ -473,7 +493,7 @@ void
 DisplayWinError(
     LPSTR szAPI,    // pointer to Ansi function name
     DWORD dwError   // DWORD WinError
-    )
+)
 {
     LPSTR MessageBuffer;
     DWORD dwBufferLength;
@@ -484,15 +504,15 @@ DisplayWinError(
     fprintf(stderr,"%s error!\n", szAPI);
 
     if(dwBufferLength=FormatMessageA(
-            FORMAT_MESSAGE_ALLOCATE_BUFFER |
-            FORMAT_MESSAGE_FROM_SYSTEM,
-            NULL,
-            dwError,
-            MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
-            (LPSTR) &MessageBuffer,
-            0,
-            NULL
-            ))
+                          FORMAT_MESSAGE_ALLOCATE_BUFFER |
+                          FORMAT_MESSAGE_FROM_SYSTEM,
+                          NULL,
+                          dwError,
+                          MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
+                          (LPSTR) &MessageBuffer,
+                          0,
+                          NULL
+                      ))
     {
         DWORD dwBytesWritten; // unused
 
@@ -500,12 +520,12 @@ DisplayWinError(
         // Output message string on stderr
         //
         WriteFile(
-                GetStdHandle(STD_ERROR_HANDLE),
-                MessageBuffer,
-                dwBufferLength,
-                &dwBytesWritten,
-                NULL
-                );
+            GetStdHandle(STD_ERROR_HANDLE),
+            MessageBuffer,
+            dwBufferLength,
+            &dwBytesWritten,
+            NULL
+        );
 
         //
         // free the buffer allocated by the system

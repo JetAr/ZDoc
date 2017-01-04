@@ -1,4 +1,4 @@
-#include <Windows.h>
+﻿#include <Windows.h>
 #include <Websocket.h>
 #include <Assert.h>
 #include <StdIo.h>
@@ -99,15 +99,15 @@ HRESULT PerformHandshake(
     // Start a client side of the handshake - 'additionalHeaders' will hold an array of websocket specific headers.
     // Production applications must add these headers to the outgoing HTTP request.
     hr = WebSocketBeginClientHandshake(
-        clientHandle,
-        NULL,
-        0,
-        NULL,
-        0,
-        NULL,
-        0,
-        &clientAdditionalHeaders,
-        &clientAdditionalHeaderCount);
+             clientHandle,
+             NULL,
+             0,
+             NULL,
+             0,
+             NULL,
+             0,
+             &clientAdditionalHeaders,
+             &clientAdditionalHeaderCount);
     if (FAILED(hr))
     {
         goto quit;
@@ -133,14 +133,14 @@ HRESULT PerformHandshake(
     // HTTP request and pass all headers to the function. The function will return an array websocket
     // specific headers that must be added to the outgoing HTTP response.
     hr = WebSocketBeginServerHandshake(
-        serverHandle,
-        NULL,
-        NULL,
-        0,
-        clientHeaders,
-        clientHeaderCount,
-        &serverAdditionalHeaders,
-        &serverAdditionalHeaderCount);
+             serverHandle,
+             NULL,
+             NULL,
+             0,
+             clientHeaders,
+             clientHeaderCount,
+             &serverAdditionalHeaders,
+             &serverAdditionalHeaderCount);
     if (FAILED(hr))
     {
         goto quit;
@@ -152,12 +152,12 @@ HRESULT PerformHandshake(
     // Finish handshake. Once the client/server handshake is completed, memory allocated by
     // the *Begin* functions is reclaimed and must not be used by the application.
     hr = WebSocketEndClientHandshake(
-        clientHandle,
-        serverAdditionalHeaders,
-        serverAdditionalHeaderCount,
-        NULL,
-        0,
-        NULL);
+             clientHandle,
+             serverAdditionalHeaders,
+             serverAdditionalHeaderCount,
+             NULL,
+             0,
+             NULL);
     if (FAILED(hr))
     {
         goto quit;
@@ -201,14 +201,14 @@ HRESULT RunLoop(
 
         // Get an action to process.
         hr = WebSocketGetAction(
-            handle,
-            WEB_SOCKET_ALL_ACTION_QUEUE,
-            buffers,
-            &bufferCount,
-            &action,
-            &bufferType,
-            NULL,
-            &actionContext);
+                 handle,
+                 WEB_SOCKET_ALL_ACTION_QUEUE,
+                 buffers,
+                 &bufferCount,
+                 &action,
+                 &bufferType,
+                 NULL,
+                 &actionContext);
         if (FAILED(hr))
         {
             // If we cannot get an action, abort the handle but continue processing until all operations are completed.
@@ -217,82 +217,82 @@ HRESULT RunLoop(
 
         switch (action)
         {
-            case WEB_SOCKET_NO_ACTION:
+        case WEB_SOCKET_NO_ACTION:
 
-                // No action to perform - just exit the loop.
-                break;
+            // No action to perform - just exit the loop.
+            break;
 
-            case WEB_SOCKET_RECEIVE_FROM_NETWORK_ACTION:
+        case WEB_SOCKET_RECEIVE_FROM_NETWORK_ACTION:
 
-                wprintf(L"Receiving data from a network:\n");
+            wprintf(L"Receiving data from a network:\n");
 
-                assert(bufferCount >= 1);
-                for (ULONG i = 0; i < bufferCount; i++)
+            assert(bufferCount >= 1);
+            for (ULONG i = 0; i < bufferCount; i++)
+            {
+                // Read data from a transport (in production application this may be a socket).
+                hr = transport->ReadData(buffers[i].Data.ulBufferLength, &bytesTransferred, buffers[i].Data.pbBuffer);
+                if (FAILED(hr))
                 {
-                    // Read data from a transport (in production application this may be a socket).
-                    hr = transport->ReadData(buffers[i].Data.ulBufferLength, &bytesTransferred, buffers[i].Data.pbBuffer);
-                    if (FAILED(hr))
-                    {
-                        break;
-                    }
-
-                    DumpData(buffers[i].Data.pbBuffer, bytesTransferred);
-
-                    // Exit the loop if there were not enough data to fill this buffer.
-                    if (buffers[i].Data.ulBufferLength > bytesTransferred)
-                    {
-                        break;
-                    }
+                    break;
                 }
 
-                break;
+                DumpData(buffers[i].Data.pbBuffer, bytesTransferred);
 
-            case WEB_SOCKET_INDICATE_RECEIVE_COMPLETE_ACTION:
-
-                wprintf(L"Receive operation completed with a buffer:\n");
-
-                if (bufferCount != 1)
+                // Exit the loop if there were not enough data to fill this buffer.
+                if (buffers[i].Data.ulBufferLength > bytesTransferred)
                 {
-                    assert(!"This should never happen.");
-                    hr = E_FAIL;
-                    goto quit;
+                    break;
                 }
+            }
 
-                DumpData(buffers[0].Data.pbBuffer, buffers[0].Data.ulBufferLength);
+            break;
 
-                break;
+        case WEB_SOCKET_INDICATE_RECEIVE_COMPLETE_ACTION:
 
-            case WEB_SOCKET_SEND_TO_NETWORK_ACTION:
+            wprintf(L"Receive operation completed with a buffer:\n");
 
-                wprintf(L"Sending data to a network:\n");
-
-                for (ULONG i = 0; i < bufferCount; i++)
-                {
-                    DumpData(buffers[i].Data.pbBuffer, buffers[i].Data.ulBufferLength);
-
-                    // Write data to a transport (in production application this may be a socket).
-                    hr = transport->WriteData(buffers[i].Data.pbBuffer, buffers[i].Data.ulBufferLength);
-                    if (FAILED(hr))
-                    {
-                        break;
-                    }
-
-                    bytesTransferred += buffers[i].Data.ulBufferLength;
-                }
-                break;
-
-
-            case WEB_SOCKET_INDICATE_SEND_COMPLETE_ACTION:
-
-                wprintf(L"Send operation completed\n");
-                break;
-
-            default:
-
-                // This should never happen.
-                assert(!"Invalid switch");
+            if (bufferCount != 1)
+            {
+                assert(!"This should never happen.");
                 hr = E_FAIL;
                 goto quit;
+            }
+
+            DumpData(buffers[0].Data.pbBuffer, buffers[0].Data.ulBufferLength);
+
+            break;
+
+        case WEB_SOCKET_SEND_TO_NETWORK_ACTION:
+
+            wprintf(L"Sending data to a network:\n");
+
+            for (ULONG i = 0; i < bufferCount; i++)
+            {
+                DumpData(buffers[i].Data.pbBuffer, buffers[i].Data.ulBufferLength);
+
+                // Write data to a transport (in production application this may be a socket).
+                hr = transport->WriteData(buffers[i].Data.pbBuffer, buffers[i].Data.ulBufferLength);
+                if (FAILED(hr))
+                {
+                    break;
+                }
+
+                bytesTransferred += buffers[i].Data.ulBufferLength;
+            }
+            break;
+
+
+        case WEB_SOCKET_INDICATE_SEND_COMPLETE_ACTION:
+
+            wprintf(L"Send operation completed\n");
+            break;
+
+        default:
+
+            // This should never happen.
+            assert(!"Invalid switch");
+            hr = E_FAIL;
+            goto quit;
         }
 
         if (FAILED(hr))

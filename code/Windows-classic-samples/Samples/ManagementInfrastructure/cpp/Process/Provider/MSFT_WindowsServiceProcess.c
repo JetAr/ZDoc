@@ -1,4 +1,4 @@
-//
+﻿//
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -146,14 +146,14 @@ void MI_CALL MSFT_WindowsServiceProcess_AssociatorInstancesService(
     {
         MI_Context_PostResult(context, result);
         return;
-    }    
+    }
 
     if( serviceType != MI_STRING)
     {
         MI_Context_PostResult(context, MI_RESULT_INVALID_PARAMETER);
         return;
-    }        
-    
+    }
+
     GetProcessInstances(context, nameSpace, serviceName.string, NULL);
 }
 
@@ -169,7 +169,7 @@ void MI_CALL MSFT_WindowsServiceProcess_AssociatorInstancesProcess(
     _In_opt_ const MI_Filter* filter)
 {
     MI_Result result = MI_RESULT_OK;
-    MI_Value tempHandleID;    
+    MI_Value tempHandleID;
     MI_Type handleType;
     MI_Uint32 handleID;
     MI_UNREFERENCED_PARAMETER(self);
@@ -192,8 +192,8 @@ void MI_CALL MSFT_WindowsServiceProcess_AssociatorInstancesProcess(
     {
         MI_Context_PostResult(context, MI_RESULT_INVALID_PARAMETER);
         return;
-    }    
-    
+    }
+
     handleID =_wtol(tempHandleID.string);
     if( handleID == 0 )
     {
@@ -212,7 +212,7 @@ void MI_CALL MSFT_WindowsServiceProcess_ReferenceInstancesService(
     _In_opt_ const MI_PropertySet* propertySet,
     _In_ MI_Boolean keysOnly,
     _In_opt_ const MI_Filter* filter)
-{   
+{
     MI_Result result = MI_RESULT_OK;
     MI_Value serviceName;
     MI_Type serviceType;
@@ -224,20 +224,20 @@ void MI_CALL MSFT_WindowsServiceProcess_ReferenceInstancesService(
     MI_UNREFERENCED_PARAMETER(propertySet);
     MI_UNREFERENCED_PARAMETER(keysOnly);
     MI_UNREFERENCED_PARAMETER(filter);
-    
+
     result = MI_Instance_GetElement(&instanceName->__instance, L"Name", &serviceName, &serviceType, NULL, NULL);
     if( result != MI_RESULT_OK)
     {
         MI_Context_PostResult(context, result);
         return;
-    }    
+    }
 
     if( serviceType != MI_STRING)
     {
         MI_Context_PostResult(context, MI_RESULT_INVALID_PARAMETER);
         return;
-    }        
-    
+    }
+
     GetProcessInstances(context, nameSpace, serviceName.string, &instanceName->__instance);
 
 }
@@ -251,11 +251,11 @@ void MI_CALL MSFT_WindowsServiceProcess_ReferenceInstancesProcess(
     _In_opt_ const MI_PropertySet* propertySet,
     _In_ MI_Boolean keysOnly,
     _In_opt_ const MI_Filter* filter)
-{   
+{
     MI_Result result = MI_RESULT_OK;
-    MI_Value tempHandleID;    
+    MI_Value tempHandleID;
     MI_Type handleType;
-    MI_Uint32 handleID;    
+    MI_Uint32 handleID;
     MI_UNREFERENCED_PARAMETER(self);
     MI_UNREFERENCED_PARAMETER(nameSpace);
     MI_UNREFERENCED_PARAMETER(className);
@@ -276,7 +276,7 @@ void MI_CALL MSFT_WindowsServiceProcess_ReferenceInstancesProcess(
         MI_Context_PostResult(context, MI_RESULT_INVALID_PARAMETER);
         return;
     }
-    
+
     handleID =_wtol(tempHandleID.string);
     if( handleID == 0 )
     {

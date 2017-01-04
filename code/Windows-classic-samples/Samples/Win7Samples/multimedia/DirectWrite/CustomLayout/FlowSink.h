@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -12,8 +12,8 @@
 
 class DECLSPEC_UUID("7712E74A-C7E0-4664-B58E-854394F2ACB4") FlowLayoutSink
     :   public ComBase<
-            QiListSelf<FlowLayoutSink,
-            QiList<IUnknown
+        QiListSelf<FlowLayoutSink,
+        QiList<IUnknown
         > > >
 {
 public:
@@ -35,13 +35,13 @@ public:
         float fontEmSize,
         UINT8 bidiLevel,
         bool isSideways
-        );
+    );
 
     STDMETHODIMP DrawGlyphRuns(
         IDWriteBitmapRenderTarget* renderTarget,
         IDWriteRenderingParams* renderingParams,
         COLORREF textColor
-        ) const;
+    ) const;
 
 protected:
     // This glyph run is based off DWRITE_GLYPH_RUN
@@ -54,14 +54,14 @@ protected:
     struct CustomGlyphRun
     {
         CustomGlyphRun()
-        :   fontFace(),
-            fontEmSize(),
-            glyphStart(),
-            glyphCount(),
-            bidiLevel(),
-            isSideways(),
-            x(),
-            y()
+            :   fontFace(),
+                fontEmSize(),
+                glyphStart(),
+                glyphCount(),
+                bidiLevel(),
+                isSideways(),
+                x(),
+                y()
         { }
 
         CustomGlyphRun(const CustomGlyphRun& b)
@@ -101,7 +101,7 @@ protected:
             const float* glyphAdvances,                 // [glyphCount]
             const DWRITE_GLYPH_OFFSET* glyphOffsets,    // [glyphCount]
             OUT DWRITE_GLYPH_RUN* glyphRun
-            ) const throw();
+        ) const throw();
     };
 
     std::vector<CustomGlyphRun>         glyphRuns_;

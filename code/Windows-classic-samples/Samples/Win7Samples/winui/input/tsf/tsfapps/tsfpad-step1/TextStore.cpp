@@ -1,4 +1,4 @@
-#include "private.h"
+﻿#include "private.h"
 #include "TextStore.h"
 #include "TextEditor.h"
 #include "initguid.h"
@@ -16,7 +16,7 @@ STDAPI CTextStore::QueryInterface(REFIID riid, void **ppvObj)
     *ppvObj = NULL;
 
     if (IsEqualIID(riid, IID_IUnknown) ||
-        IsEqualIID(riid, IID_ITextStoreACP))
+            IsEqualIID(riid, IID_ITextStoreACP))
     {
         *ppvObj = (ITextStoreACP *)this;
     }
@@ -159,7 +159,7 @@ STDAPI CTextStore::GetSelection(ULONG ulIndex, ULONG ulCount, TS_SELECTION_ACP *
 STDAPI CTextStore::SetSelection(ULONG ulCount, const TS_SELECTION_ACP *pSelection)
 {
     if (ulCount > 0)
-    { 
+    {
         _pEditor->MoveSelection(pSelection[0].acpStart, pSelection[0].acpEnd);
         _pEditor->InvalidateRect();
     }
@@ -187,7 +187,7 @@ STDAPI CTextStore::GetText(LONG acpStart, LONG acpEnd, __out_ecount(cchPlainReq)
     acpEnd = min(acpEnd, acpStart + (int)cchPlainReq);
 
     if ((acpStart != acpEnd) &&
-        !_pEditor->GetText(acpStart, pchPlain, acpEnd - acpStart))
+            !_pEditor->GetText(acpStart, pchPlain, acpEnd - acpStart))
     {
         return E_FAIL;
     }
@@ -384,7 +384,7 @@ STDAPI CTextStore::GetTextExt(TsViewCookie vcView, LONG acpStart, LONG acpEnd, R
     RECT rcEnd;
 
     if (_pEditor->GetLayout()->RectFromCharPos(acpStart, &rcStart) &&
-        _pEditor->GetLayout()->RectFromCharPos(acpEnd, &rcEnd))
+            _pEditor->GetLayout()->RectFromCharPos(acpEnd, &rcEnd))
     {
         if (rcStart.top == rcEnd.top)
         {
@@ -476,7 +476,7 @@ STDAPI CTextStore::InsertTextAtSelection(DWORD dwFlags, __in_ecount(cch) const W
     if (pchText && !_pEditor->InsertText(acpStart, pchText, cch))
         return E_FAIL;
 
-    
+
     if (pacpStart)
     {
         *pacpStart = acpStart;
@@ -505,7 +505,7 @@ STDAPI CTextStore::InsertTextAtSelection(DWORD dwFlags, __in_ecount(cch) const W
 //
 //----------------------------------------------------------------------------
 
-STDAPI CTextStore::InsertEmbeddedAtSelection(DWORD dwFlags, IDataObject *pDataObject, LONG *pacpStart, 
+STDAPI CTextStore::InsertEmbeddedAtSelection(DWORD dwFlags, IDataObject *pDataObject, LONG *pacpStart,
         LONG *pacpEnd, TS_TEXTCHANGE *pChange)
 {
     return E_NOTIMPL;
@@ -525,7 +525,8 @@ const GUID *c_rgSupportedAttr[7] = {&GUID_PROP_INPUTSCOPE,
                                     &TSATTRID_Font_SizePts,
                                     &TSATTRID_Text_ReadOnly,
                                     &TSATTRID_Text_Orientation,
-                                    &TSATTRID_Text_VerticalWriting};
+                                    &TSATTRID_Text_VerticalWriting
+                                   };
 
 void CTextStore::PrepareAttributes(ULONG cFilterAttrs, const TS_ATTRID *paFilterAttrs)
 {
@@ -557,40 +558,40 @@ void CTextStore::PrepareAttributes(ULONG cFilterAttrs, const TS_ATTRID *paFilter
 
         switch (i + 1)
         {
-            case IF_ATTR_INPUTSCOPE:
-                _attrval[_nAttrVals].varValue.vt = VT_UNKNOWN;
-                _attrval[_nAttrVals].varValue.punkVal = NULL;
-                break;
+        case IF_ATTR_INPUTSCOPE:
+            _attrval[_nAttrVals].varValue.vt = VT_UNKNOWN;
+            _attrval[_nAttrVals].varValue.punkVal = NULL;
+            break;
 
-            case IF_ATTR_FONT_STYLE_HEIGHT:
-                _attrval[_nAttrVals].varValue.vt = VT_I4;
-                _attrval[_nAttrVals].varValue.lVal = _pEditor->GetLineHeight();
-                break;
+        case IF_ATTR_FONT_STYLE_HEIGHT:
+            _attrval[_nAttrVals].varValue.vt = VT_I4;
+            _attrval[_nAttrVals].varValue.lVal = _pEditor->GetLineHeight();
+            break;
 
-            case IF_ATTR_FONT_FACENAME:
-                _attrval[_nAttrVals].varValue.vt = VT_BSTR;
-                _attrval[_nAttrVals].varValue.bstrVal = NULL;
-                break;
+        case IF_ATTR_FONT_FACENAME:
+            _attrval[_nAttrVals].varValue.vt = VT_BSTR;
+            _attrval[_nAttrVals].varValue.bstrVal = NULL;
+            break;
 
-            case IF_ATTR_FONT_SIZEPTS:
-                _attrval[_nAttrVals].varValue.vt = VT_I4;
-                _attrval[_nAttrVals].varValue.lVal = (int)((double)_pEditor->GetLineHeight() / 96.0 * 72.0);
-                break;
+        case IF_ATTR_FONT_SIZEPTS:
+            _attrval[_nAttrVals].varValue.vt = VT_I4;
+            _attrval[_nAttrVals].varValue.lVal = (int)((double)_pEditor->GetLineHeight() / 96.0 * 72.0);
+            break;
 
-            case IF_ATTR_TEXT_READONLY:
-                _attrval[_nAttrVals].varValue.vt = VT_BOOL;
-                _attrval[_nAttrVals].varValue.bVal = FALSE;
-                break;
+        case IF_ATTR_TEXT_READONLY:
+            _attrval[_nAttrVals].varValue.vt = VT_BOOL;
+            _attrval[_nAttrVals].varValue.bVal = FALSE;
+            break;
 
-            case IF_ATTR_TEXT_ORIENTATION:
-                _attrval[_nAttrVals].varValue.vt = VT_I4;
-                _attrval[_nAttrVals].varValue.lVal = 0;
-                break;
+        case IF_ATTR_TEXT_ORIENTATION:
+            _attrval[_nAttrVals].varValue.vt = VT_I4;
+            _attrval[_nAttrVals].varValue.lVal = 0;
+            break;
 
-            case IF_ATTR_TEXT_VERTICALWRITING:
-                _attrval[_nAttrVals].varValue.vt = VT_BOOL;
-                _attrval[_nAttrVals].varValue.bVal = FALSE;
-                break;
+        case IF_ATTR_TEXT_VERTICALWRITING:
+            _attrval[_nAttrVals].varValue.vt = VT_BOOL;
+            _attrval[_nAttrVals].varValue.bVal = FALSE;
+            break;
         }
 
         _nAttrVals++;

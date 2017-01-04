@@ -1,4 +1,4 @@
-/*=====================================================================
+﻿/*=====================================================================
 File:      PublishingACL.cpp
 
 THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
@@ -10,10 +10,10 @@ Copyright (C) Microsoft Corporation.  All rights reserved.
 =====================================================================*/
 
 //
-// This sample shows how to create an issuance license. See the 
+// This sample shows how to create an issuance license. See the
 // comments at the beginning of wmain() for a more detailed description.
-// Note: To retrieve an object's DACL, you must be the object's owner or 
-// have READ_CONTROL access to the object. To run this sample, you must 
+// Note: To retrieve an object's DACL, you must be the object's owner or
+// have READ_CONTROL access to the object. To run this sample, you must
 // have READ_CONTROL on the path you provide on the command line.
 //
 
@@ -42,7 +42,7 @@ Copyright (C) Microsoft Corporation.  All rights reserved.
 //
 // Time to wait for "downloads" to complete
 //
-static const DWORD DW_WAIT_TIME_SECONDS = 60 * 1000;  
+static const DWORD DW_WAIT_TIME_SECONDS = 60 * 1000;
 
 //
 // Length of a GUID string
@@ -69,25 +69,25 @@ static const UINT GUID_STRING_LENGTH = 128;
 //
 // Print the correct usage of this application
 //
-void 
+void
 PrintUsage()
 {
     wprintf( L"Usage:\n" );
     wprintf( L"\n  PublishingACL -P Path\n" );
     wprintf( L"    -P: Path to the directory to use for the "\
-        L"issuance license's rights.\n" );
+             L"issuance license's rights.\n" );
     wprintf( L"        example: c:\\myDir\n" );
 }
 
 //
 // Parse the values passed in through the command line
 //
-HRESULT 
-ParseCommandLine( 
-                 int argc, 
-                 __in_ecount( argc )WCHAR **argv, 
-                 __deref_out PWCHAR *pwszPath
-                 )
+HRESULT
+ParseCommandLine(
+    int argc,
+    __in_ecount( argc )WCHAR **argv,
+    __deref_out PWCHAR *pwszPath
+)
 {
     HRESULT hr = S_OK;
     size_t uiPathLength = 0;
@@ -107,8 +107,8 @@ ParseCommandLine(
             hr = E_INVALIDARG;
             break;
         }
-        else if ( ( '-' == argv[ i + 1 ][ 0 ] ) || 
-            ( '/' == argv[ i + 1 ][ 0 ] ) )
+        else if ( ( '-' == argv[ i + 1 ][ 0 ] ) ||
+                  ( '/' == argv[ i + 1 ][ 0 ] ) )
         {
             hr = E_INVALIDARG;
             break;
@@ -122,10 +122,10 @@ ParseCommandLine(
             //
             // Retrieve the length of the path
             //
-            hr = StringCchLengthW( argv[ i + 1 ], 
-                STRSAFE_MAX_CCH, 
-                &uiPathLength 
-                );
+            hr = StringCchLengthW( argv[ i + 1 ],
+                                   STRSAFE_MAX_CCH,
+                                   &uiPathLength
+                                 );
             if ( FAILED( hr ) )
             {
                 wprintf( L"StringCchLengthW failed.  hr = 0x%x\n", hr );
@@ -135,7 +135,7 @@ ParseCommandLine(
             // Allocate memory for the path
             //
             *pwszPath = new WCHAR[ uiPathLength + 1 ];
-            if ( NULL == *pwszPath ) 
+            if ( NULL == *pwszPath )
             {
                 wprintf( L"Failed to allocate memory for pwszPath\n" );
                 hr = E_OUTOFMEMORY;
@@ -144,16 +144,16 @@ ParseCommandLine(
             //
             // Copy the URL into the pwszPath buffer
             //
-            hr = StringCchCopyW( ( wchar_t* )*pwszPath, 
-                uiPathLength + 1, 
-                argv[ i + 1 ] 
-                );
-                if ( FAILED( hr ) )
-                {
-                    wprintf( L"StringCchCopyW failed.  hr = 0x%x\n", hr );
-                    break;
-                }
-                i++;
+            hr = StringCchCopyW( ( wchar_t* )*pwszPath,
+                                 uiPathLength + 1,
+                                 argv[ i + 1 ]
+                               );
+            if ( FAILED( hr ) )
+            {
+                wprintf( L"StringCchCopyW failed.  hr = 0x%x\n", hr );
+                break;
+            }
+            i++;
         }
         else
         {
@@ -174,9 +174,9 @@ ParseCommandLine(
 //
 HRESULT
 WriteTemplateToUnicodeFile(
-                           __in LPCWSTR szFileName,
-                           __in PWSTR wszTemplateString
-                           )
+    __in LPCWSTR szFileName,
+    __in PWSTR wszTemplateString
+)
 {
     HRESULT hr              = E_FAIL;
     HANDLE  hFile           = INVALID_HANDLE_VALUE;
@@ -186,9 +186,9 @@ WriteTemplateToUnicodeFile(
     //
     // Validate the parameters
     //
-    if ( ( NULL == szFileName ) || 
-        ( FAILED( StringCchLengthW( ( LPCWSTR )szFileName, MAX_PATH, NULL ) ) ) ||
-        ( NULL == wszTemplateString ) )
+    if ( ( NULL == szFileName ) ||
+            ( FAILED( StringCchLengthW( ( LPCWSTR )szFileName, MAX_PATH, NULL ) ) ) ||
+            ( NULL == wszTemplateString ) )
     {
         hr = E_INVALIDARG;
         goto e_Exit;
@@ -204,14 +204,14 @@ WriteTemplateToUnicodeFile(
     //
     // Create a handle to the file to write to
     //
-    hFile = CreateFileW( szFileName, 
-        GENERIC_WRITE, 
-        0, 
-        NULL, 
-        CREATE_ALWAYS, 
-        0, 
-        NULL 
-        );
+    hFile = CreateFileW( szFileName,
+                         GENERIC_WRITE,
+                         0,
+                         NULL,
+                         CREATE_ALWAYS,
+                         0,
+                         NULL
+                       );
     if ( INVALID_HANDLE_VALUE == hFile )
     {
         hr = HRESULT_FROM_WIN32( GetLastError() );
@@ -222,12 +222,12 @@ WriteTemplateToUnicodeFile(
     //
     // Write the template string to the file
     //
-    if ( !WriteFile( hFile, 
-        wszTemplateString, 
-        ( DWORD )( sizeof( wchar_t ) * cchTemplate), 
-        &dwBytesWritten,
-        NULL
-        ) )
+    if ( !WriteFile( hFile,
+                     wszTemplateString,
+                     ( DWORD )( sizeof( wchar_t ) * cchTemplate),
+                     &dwBytesWritten,
+                     NULL
+                   ) )
     {
         hr = HRESULT_FROM_WIN32( GetLastError() );
         wprintf( L"\nWriteFile failed. hr = 0x%x\n", hr );
@@ -272,11 +272,11 @@ IsDomainController()
     //
     // Set general COM security levels.
     // NOTE: If you are using Windows 2000, you need to specify the default
-    // authentication credentials for a user by using a 
+    // authentication credentials for a user by using a
     // SOLE_AUTHENTICATION_LIST structure in the pAuthList parameter
     //
     hr = CoInitializeSecurity( NULL, -1, NULL, NULL, RPC_C_AUTHN_LEVEL_DEFAULT,
-        RPC_C_IMP_LEVEL_IMPERSONATE, NULL, EOAC_NONE, NULL );
+                               RPC_C_IMP_LEVEL_IMPERSONATE, NULL, EOAC_NONE, NULL );
     if ( FAILED( hr ) )
     {
         wprintf( L"CoInitializeSecurity failed. hr = 0x%x\n", hr );
@@ -288,7 +288,7 @@ IsDomainController()
     // Obtain the initial locator to WMI
     //
     hr = CoCreateInstance( CLSID_WbemLocator, 0, CLSCTX_INPROC_SERVER,
-        IID_IWbemLocator, ( LPVOID* )&pLocator );
+                           IID_IWbemLocator, ( LPVOID* )&pLocator );
     if ( FAILED( hr ) )
     {
         wprintf( L"CoCreateInstance failed. hr = 0x%x\n", hr );
@@ -298,7 +298,7 @@ IsDomainController()
 
     //
     // Connect to WMI through the IWbemLocator::ConnectServer method
-    // 
+    //
     // Connect to the root\cimv2 namespace with the current user and obtain
     // pointer pSvc to make IWbemServices calls.
     //
@@ -309,7 +309,7 @@ IsDomainController()
     }
 
     hr = pLocator->ConnectServer( _bstr_t( L"ROOT\\CIMV2" ), NULL, NULL, 0,
-        NULL, 0, 0, &pSvc );
+                                  NULL, 0, 0, &pSvc );
     if ( FAILED( hr ) )
     {
         wprintf( L"ConnectServer failed. hr = 0x%x\n", hr );
@@ -321,8 +321,8 @@ IsDomainController()
     // Set security levels on the proxy
     //
     hr = CoSetProxyBlanket( pSvc, RPC_C_AUTHN_WINNT, RPC_C_AUTHZ_NONE, NULL,
-        RPC_C_AUTHN_LEVEL_CALL, RPC_C_IMP_LEVEL_IMPERSONATE,
-        NULL, EOAC_NONE );
+                            RPC_C_AUTHN_LEVEL_CALL, RPC_C_IMP_LEVEL_IMPERSONATE,
+                            NULL, EOAC_NONE );
     if ( FAILED( hr ) )
     {
         wprintf( L"CoSetProxyBlanket failed. hr = 0x%x\n", hr );
@@ -333,12 +333,12 @@ IsDomainController()
     //
     // Use the IWbemServices pointer to make requests of WMI
     //
-    hr = pSvc->ExecQuery( _bstr_t( L"WQL" ), 
-        _bstr_t( L"SELECT * FROM Win32_ComputerSystem" ),
-        WBEM_FLAG_FORWARD_ONLY | WBEM_FLAG_RETURN_IMMEDIATELY,
-        NULL,
-        &pEnumerator
-        );
+    hr = pSvc->ExecQuery( _bstr_t( L"WQL" ),
+                          _bstr_t( L"SELECT * FROM Win32_ComputerSystem" ),
+                          WBEM_FLAG_FORWARD_ONLY | WBEM_FLAG_RETURN_IMMEDIATELY,
+                          NULL,
+                          &pEnumerator
+                        );
     if ( FAILED( hr ) )
     {
         wprintf( L"ExecQuery failed. hr = 0x%x\n", hr );
@@ -416,11 +416,11 @@ e_Exit:
 //    5. Generate a template from the issuance license
 //    6.  Clean up and free memory
 //
-int __cdecl 
-wmain( 
-      int argc, 
-      __in_ecount( argc )WCHAR **argv 
-      )
+int __cdecl
+wmain(
+    int argc,
+    __in_ecount( argc )WCHAR **argv
+)
 {
     HRESULT                   hr                 = E_FAIL;
     int                       iDaclPresent, iDaclDefault, iMask;
@@ -474,14 +474,14 @@ wmain(
     // 1. Create an unsigned issuance license from scratch
     //
     hr = DRMCreateIssuanceLicense( &stTimeFrom,
-        &stTimeUntil,
-        NULL,
-        NULL,
-        NULL,
-        NULL,
-        NULL,
-        &hIssuanceLicense 
-        );
+                                   &stTimeUntil,
+                                   NULL,
+                                   NULL,
+                                   NULL,
+                                   NULL,
+                                   NULL,
+                                   &hIssuanceLicense
+                                 );
     if ( FAILED( hr ) )
     {
         wprintf( L"\nDRMCreateIssuanceLicense failed. hr = 0x%x\n", hr );
@@ -489,18 +489,18 @@ wmain(
     }
 
     //
-    //  2.  Determine what the ACLs are on the directory passed in as 
+    //  2.  Determine what the ACLs are on the directory passed in as
     //      the command line argument
 
     //
     // Get the DACL information from the path from the command line argument.
     //
-    if ( GetFileSecurityW( wszPath, 
-        DACL_SECURITY_INFORMATION, 
-        NULL, 
-        NULL, 
-        &dwSize 
-        ) )
+    if ( GetFileSecurityW( wszPath,
+                           DACL_SECURITY_INFORMATION,
+                           NULL,
+                           NULL,
+                           &dwSize
+                         ) )
     {
         wprintf( L"GetFileSecurityW should not have returned true\n" );
         goto e_Exit;
@@ -516,15 +516,15 @@ wmain(
     {
         hr = E_OUTOFMEMORY;
         wprintf( L"Failed to allocate memory for the "\
-            L"SECURITY_DESCRIPTOR: hr = 0x%x\n", hr );
+                 L"SECURITY_DESCRIPTOR: hr = 0x%x\n", hr );
         goto e_Exit;
     }
 
-    if ( !GetFileSecurityW( wszPath, 
-        DACL_SECURITY_INFORMATION, 
-        pSD, 
-        dwSize, 
-        &dwSize ) )
+    if ( !GetFileSecurityW( wszPath,
+                            DACL_SECURITY_INFORMATION,
+                            pSD,
+                            dwSize,
+                            &dwSize ) )
     {
         wprintf( L"GetFileSecurityW failed.  Error: %d\n", GetLastError() );
         goto e_Exit;
@@ -533,18 +533,18 @@ wmain(
     //
     // Get the Dacl from the SECURITY_DESCRIPTOR
     //
-    if ( !GetSecurityDescriptorDacl( pSD, 
-        &iDaclPresent, 
-        &pDacl, 
-        &iDaclDefault ) )
+    if ( !GetSecurityDescriptorDacl( pSD,
+                                     &iDaclPresent,
+                                     &pDacl,
+                                     &iDaclDefault ) )
     {
         wprintf( L"GetSecurityDescriptorDacl failed.  "\
-            L"Error: %d\n", GetLastError() );
+                 L"Error: %d\n", GetLastError() );
         goto e_Exit;
     }
 
-    // 
-    // If there was no Dacl present, then fail since no user/right 
+    //
+    // If there was no Dacl present, then fail since no user/right
     // information will be put into the issuance license
     //
     if ( !iDaclPresent )
@@ -554,13 +554,13 @@ wmain(
         goto e_Exit;
     }
 
-    // 
+    //
     // Get Acl information from the Dacl
     //
-    if ( !GetAclInformation( pDacl, 
-        ( void* ) &asi, 
-        sizeof( asi ), 
-        AclSizeInformation ) )
+    if ( !GetAclInformation( pDacl,
+                             ( void* ) &asi,
+                             sizeof( asi ),
+                             AclSizeInformation ) )
     {
         wprintf( L"GetAclInformation failed.  Error: %d\n", GetLastError() );
         goto e_Exit;
@@ -570,14 +570,14 @@ wmain(
     // Get the machine name
     //
     if ( !GetComputerNameExW( ComputerNamePhysicalDnsHostname,
-        NULL,
-        &dwMachNameLength
-        ) )
+                              NULL,
+                              &dwMachNameLength
+                            ) )
     {
         if ( ERROR_MORE_DATA != GetLastError() )
         {
             wprintf( L"GetComputerNameExW failed. "\
-                L"Error = %d\n", GetLastError() );
+                     L"Error = %d\n", GetLastError() );
             goto e_Exit;
         }
         wszMachineName = new WCHAR[ dwMachNameLength ];
@@ -589,12 +589,12 @@ wmain(
     }
 
     if ( !GetComputerNameExW( ComputerNamePhysicalDnsHostname,
-        wszMachineName,
-        &dwMachNameLength
-        ) )
+                              wszMachineName,
+                              &dwMachNameLength
+                            ) )
     {
         wprintf( L"GetComputerNameExW failed. "\
-            L"Error = %d\n", GetLastError() );
+                 L"Error = %d\n", GetLastError() );
         goto e_Exit;
     }
 
@@ -614,7 +614,7 @@ wmain(
     //
 
     //
-    // Parse each Acl and create the appropriate user and 
+    // Parse each Acl and create the appropriate user and
     // right for the issuance license
     //
     for ( int i = 0; i < ( int )asi.AceCount; i++ )
@@ -640,8 +640,8 @@ wmain(
         //
         // If the Ace was an ACCESS_ALLOWED_ACE_TYPE
         //
-        if ( ( ( ACCESS_ALLOWED_ACE* )pAce )->Header.AceType == 
-            ACCESS_ALLOWED_ACE_TYPE )
+        if ( ( ( ACCESS_ALLOWED_ACE* )pAce )->Header.AceType ==
+                ACCESS_ALLOWED_ACE_TYPE )
         {
             pAccessAllowed = ( ACCESS_ALLOWED_ACE* )pAce;
             pSid = ( SID* ) &pAccessAllowed->SidStart;
@@ -661,16 +661,16 @@ wmain(
                 //
                 // Lookup the account name and domain associated with the SID
                 //
-                if ( LookupAccountSidW( 0, 
-                    pSid, 
-                    ( wchar_t* )wszName, 
-                    &pdwNameLength, 
-                    ( wchar_t* )wszDomain, 
-                    &pdwDomainLength, 
-                    &sidNameUse ) )
+                if ( LookupAccountSidW( 0,
+                                        pSid,
+                                        ( wchar_t* )wszName,
+                                        &pdwNameLength,
+                                        ( wchar_t* )wszDomain,
+                                        &pdwDomainLength,
+                                        &sidNameUse ) )
                 {
                     wprintf( L"LookupAccountSidW passed when it "\
-                        L"should have failed." );
+                             L"should have failed." );
                     goto e_Exit;
                 }
                 if ( ERROR_INSUFFICIENT_BUFFER != GetLastError() )
@@ -683,7 +683,7 @@ wmain(
                         continue;
                     }
                     wprintf( L"LookUpAccountSidW failed. "\
-                        L"Error: %d\n", GetLastError() );
+                             L"Error: %d\n", GetLastError() );
                     goto e_Exit;
                 }
                 wszName = new WCHAR[ pdwNameLength ];
@@ -692,35 +692,35 @@ wmain(
                 if ( NULL == wszName || NULL == wszDomain )
                 {
                     wprintf( L"Memory allocation failed for wszName "\
-                        L"or wszDomain\n" );
+                             L"or wszDomain\n" );
                     goto e_Exit;
                 }
 
-                if ( !LookupAccountSidW( 0, 
-                    pSid, 
-                    ( wchar_t* )wszName, 
-                    &pdwNameLength, 
-                    ( wchar_t* )wszDomain,
-                    &pdwDomainLength, 
-                    &sidNameUse ) )
+                if ( !LookupAccountSidW( 0,
+                                         pSid,
+                                         ( wchar_t* )wszName,
+                                         &pdwNameLength,
+                                         ( wchar_t* )wszDomain,
+                                         &pdwDomainLength,
+                                         &sidNameUse ) )
                 {
                     wprintf( L"LookupAccountSidW failed.  "\
-                        L"Error: %d\n", GetLastError() );
+                             L"Error: %d\n", GetLastError() );
                     goto e_Exit;
                 }
 
                 //
                 // 3(b) Determine if the user should be added to the issuance
-                //     license. If the SID is not a SID we want to put into 
-                //     the issuance license, then clean up memory and 
+                //     license. If the SID is not a SID we want to put into
+                //     the issuance license, then clean up memory and
                 //     continue through the for loop
                 //
                 if ( ( wcscmp( ( wchar_t* )wszDomain, NT_AUTHORITY ) == 0 ) ||
-                    ( wcscmp( ( wchar_t* )wszDomain, BUILTIN ) == 0 ) ||
-                    ( wcscmp( ( wchar_t* )wszDomain, L"" ) == 0 ) ||
-					( wcscmp( ( wchar_t* )wszDomain, L"NT SERVICE" ) == 0 ) ||
-                    ( ( !IsDomainController() && 
-                    wcscmp( ( wchar_t* )wszDomain, ( wchar_t* )wszMachineName ) == 0 ) ) )
+                        ( wcscmp( ( wchar_t* )wszDomain, BUILTIN ) == 0 ) ||
+                        ( wcscmp( ( wchar_t* )wszDomain, L"" ) == 0 ) ||
+                        ( wcscmp( ( wchar_t* )wszDomain, L"NT SERVICE" ) == 0 ) ||
+                        ( ( !IsDomainController() &&
+                            wcscmp( ( wchar_t* )wszDomain, ( wchar_t* )wszMachineName ) == 0 ) ) )
                 {
                     if ( NULL != wszName )
                     {
@@ -741,7 +741,7 @@ wmain(
                 if ( !ConvertSidToStringSidW( pSid, &wszSid ) )
                 {
                     wprintf( L"ConvertSidToStringSidW failed.  "\
-                        L"Error: %d\n", GetLastError() );
+                             L"Error: %d\n", GetLastError() );
                     goto e_Exit;
                 }
 
@@ -750,18 +750,18 @@ wmain(
                 //
 
                 //
-                // If the access allowed is a "write" access, then that will 
+                // If the access allowed is a "write" access, then that will
                 // be considered an EDIT_RIGHT for the purposes of this sample
                 //
                 if ( iMask & FILE_SHARE_WRITE )
                 {
-                    hr = StringCchLengthW( EDIT_RIGHT, 
-                        STRSAFE_MAX_CCH, 
-                        &uiRightLength );
+                    hr = StringCchLengthW( EDIT_RIGHT,
+                                           STRSAFE_MAX_CCH,
+                                           &uiRightLength );
                     if ( FAILED( hr ) )
                     {
                         wprintf( L"StringCchLengthW failed.  "\
-                            L"hr = 0x%x\n", hr );
+                                 L"hr = 0x%x\n", hr );
                         goto e_Exit;
                     }
 
@@ -769,17 +769,17 @@ wmain(
                     // Allocate memory for the right
                     //
                     wszRight = new WCHAR[ uiRightLength + 1 ];
-                    if ( NULL == wszRight ) 
+                    if ( NULL == wszRight )
                     {
                         wprintf( L"Failed to allocate memory for "\
-                            L"wszRight.\n" );
+                                 L"wszRight.\n" );
                         hr = E_OUTOFMEMORY;
                         goto e_Exit;
                     }
 
-                    hr = StringCchCopyW( ( wchar_t* )wszRight, 
-                        uiRightLength + 1, 
-                        EDIT_RIGHT );
+                    hr = StringCchCopyW( ( wchar_t* )wszRight,
+                                         uiRightLength + 1,
+                                         EDIT_RIGHT );
                     if ( FAILED( hr ) )
                     {
                         wprintf( L"StringCchCopyW failed.  hr = 0x%x\n", hr );
@@ -792,13 +792,13 @@ wmain(
                 //
                 else if ( iMask & FILE_SHARE_READ )
                 {
-                    hr = StringCchLengthW( VIEW_RIGHT, 
-                        STRSAFE_MAX_CCH, 
-                        &uiRightLength );
+                    hr = StringCchLengthW( VIEW_RIGHT,
+                                           STRSAFE_MAX_CCH,
+                                           &uiRightLength );
                     if ( FAILED( hr ) )
                     {
                         wprintf( L"StringCchLengthW failed.  "\
-                            L"hr = 0x%x\n", hr );
+                                 L"hr = 0x%x\n", hr );
                         goto e_Exit;
                     }
 
@@ -806,17 +806,17 @@ wmain(
                     // Allocate memory for the right
                     //
                     wszRight = new WCHAR[ uiRightLength + 1 ];
-                    if ( NULL == wszRight ) 
+                    if ( NULL == wszRight )
                     {
                         wprintf( L"Failed to allocate memory "\
-                            L"for wszRight.\n" );
+                                 L"for wszRight.\n" );
                         hr = E_OUTOFMEMORY;
                         goto e_Exit;
                     }
 
-                    hr = StringCchCopyW( ( wchar_t* )wszRight, 
-                        uiRightLength + 1, 
-                        VIEW_RIGHT );
+                    hr = StringCchCopyW( ( wchar_t* )wszRight,
+                                         uiRightLength + 1,
+                                         VIEW_RIGHT );
                     if ( FAILED( hr ) )
                     {
                         wprintf( L"StringCchCopyW failed.  hr = 0x%x\n", hr );
@@ -826,7 +826,7 @@ wmain(
                 else
                 {
                     wprintf( L"An unknown right was encountered. "\
-                        L"Continuing...\n" );
+                             L"Continuing...\n" );
                     if ( NULL != wszName )
                     {
                         delete [] wszName;
@@ -855,13 +855,13 @@ wmain(
         //
         // 3(f). Create a right based on the ACL
         //
-        hr = DRMCreateRight( wszRight, 
-            &stTimeFrom, 
-            &stTimeUntil, 
-            NULL, 
-            NULL, 
-            NULL, 
-            &hRight );
+        hr = DRMCreateRight( wszRight,
+                             &stTimeFrom,
+                             &stTimeUntil,
+                             NULL,
+                             NULL,
+                             NULL,
+                             &hRight );
         if ( FAILED( hr ) )
         {
             wprintf( L"\nDRMCreateRight failed. hr = 0x%x\n", hr );
@@ -879,7 +879,7 @@ wmain(
         }
 
         //
-        // Clean up the memory and variables before 
+        // Clean up the memory and variables before
         // continuing through the loop
         //
         if ( NULL != wszName )
@@ -908,7 +908,7 @@ wmain(
             if ( FAILED( hr ) )
             {
                 wprintf( L"DRMClosePubHandle failed while closing hUser.  "\
-                    L"hr = 0x%x\n", hr );
+                         L"hr = 0x%x\n", hr );
                 hr = E_FAIL;
             }
             hUser = NULL;
@@ -919,7 +919,7 @@ wmain(
             if ( FAILED( hr ) )
             {
                 wprintf( L"DRMClosePubHandle failed while closing hRight.  "\
-                    L"hr = 0x%x\n", hr );
+                         L"hr = 0x%x\n", hr );
                 hr = E_FAIL;
             }
             hRight = NULL;
@@ -955,22 +955,22 @@ wmain(
     //
     // 4. Set the metadata in the issuance license
     //
-    hr = DRMSetMetaData( hIssuanceLicense, 
-        wszGUID, 
-        L"MS-GUID", 
-        NULL, 
-        NULL, 
-        NULL, 
-        NULL 
-        );
+    hr = DRMSetMetaData( hIssuanceLicense,
+                         wszGUID,
+                         L"MS-GUID",
+                         NULL,
+                         NULL,
+                         NULL,
+                         NULL
+                       );
     if ( FAILED( hr ) )
     {
         wprintf( L"DRMSetMetaData failed. hr = 0x%x\n", hr );
         goto e_Exit;
     }
 
-    // 
-    // If there were no valid SIDs, then fail since no users/rights will be 
+    //
+    // If there were no valid SIDs, then fail since no users/rights will be
     // added to the issuance license
     //
     if ( 0 == count )
@@ -983,10 +983,10 @@ wmain(
     //
     // 5. Generate a template from the issuance license
     //
-    hr = DRMGetIssuanceLicenseTemplate( hIssuanceLicense, 
-        &uiTemplateLength, 
-        NULL 
-        );
+    hr = DRMGetIssuanceLicenseTemplate( hIssuanceLicense,
+                                        &uiTemplateLength,
+                                        NULL
+                                      );
     if ( FAILED( hr ) )
     {
         wprintf( L"\nDRMGetIssuanceLicenseTemplate failed. hr = 0x%x\n", hr );
@@ -1002,10 +1002,10 @@ wmain(
     }
 
 
-    hr = DRMGetIssuanceLicenseTemplate( hIssuanceLicense, 
-        &uiTemplateLength, 
-        wszTemplate 
-        );
+    hr = DRMGetIssuanceLicenseTemplate( hIssuanceLicense,
+                                        &uiTemplateLength,
+                                        wszTemplate
+                                      );
     if ( FAILED( hr ) )
     {
         wprintf( L"\nDRMGetIssuanceLicenseTemplate failed. hr = 0x%x\n", hr );
@@ -1068,7 +1068,7 @@ e_Exit:
         if ( FAILED( hr ) )
         {
             wprintf( L"DRMClosePubHandle failed while closing "\
-                L"hIssuanceLicense.  hr = 0x%x\n", hr );
+                     L"hIssuanceLicense.  hr = 0x%x\n", hr );
             hr = E_FAIL;
         }
     }
@@ -1078,7 +1078,7 @@ e_Exit:
         if ( FAILED( hr ) )
         {
             wprintf( L"DRMClosePubHandle failed while closing hUser.  "\
-                L"hr = 0x%x\n", hr );
+                     L"hr = 0x%x\n", hr );
             hr = E_FAIL;
         }
     }
@@ -1088,7 +1088,7 @@ e_Exit:
         if ( FAILED( hr ) )
         {
             wprintf( L"DRMClosePubHandle failed while closing hRight.  "\
-                L"hr = 0x%x\n", hr );
+                     L"hr = 0x%x\n", hr );
             hr = E_FAIL;
         }
     }

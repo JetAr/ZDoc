@@ -1,5 +1,5 @@
-//////////////////////////////////////////////////////////////////////
-// 
+﻿//////////////////////////////////////////////////////////////////////
+//
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -38,7 +38,7 @@ struct D3DHelper
     HMODULE             m_hSWRastDLL;
     PVOID               m_pfnD3D9GetSWInfo;
 
-    D3DHelper() : 
+    D3DHelper() :
         m_bWindowed(TRUE),
         m_bInModeChange(FALSE),
         m_bAllowSWDevice(TRUE),

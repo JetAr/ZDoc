@@ -1,7 +1,7 @@
-//-------------------------------------------------------------------------
+﻿//-------------------------------------------------------------------------
 // File: AecKsBinder.cpp
-// 
-// Desciption: Definition of audio devices binding functions 
+//
+// Desciption: Definition of audio devices binding functions
 //
 // Copyright (c) 2004-2006, Microsoft Corporation. All rights reserved.
 //---------------------------------------------------------------------------
@@ -12,11 +12,11 @@
 
 #ifndef IF_FAILED_JUMP
 #define IF_FAILED_JUMP(hr, label) if(FAILED(hr)) goto label;
-#endif 
+#endif
 
 #ifndef IF_FAILED_RETURN
 #define IF_FAILED_RETURN(hr) if(FAILED(hr)) return hr;
-#endif 
+#endif
 
 
 ///////////////////////////////////////////////////////////////////////////
@@ -29,7 +29,7 @@
 //
 //  Parameters:
 //      eDataFlow: eRender for render device, eCapture for capture device
-//      iDevIdx: Index of device in the enumeration list. If it is -1, use default device 
+//      iDevIdx: Index of device in the enumeration list. If it is -1, use default device
 //      ppVoid: pointer pointer to IAudioClient interface.
 //      ppszEndpointDeviceId: Device ID. Caller is responsible for freeing memeory
 //              using CoTaskMemoryFree. If can be NULL if called doesn't need this info.
@@ -39,22 +39,22 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 HRESULT DeviceBindTo(
-        EDataFlow eDataFlow,    // eCapture/eRender
-        INT iDevIdx,        // Device Index. -1 - default device. 
-        IAudioClient **ppAudioClient,    // pointer pointer to IAudioClient interface
-        IAudioEndpointVolume **ppEndpointVolume,
-        WCHAR** ppszEndpointDeviceId)   // Device ID. Need to be freed in caller with CoTaskMemoryFree if it is not NULL
+    EDataFlow eDataFlow,    // eCapture/eRender
+    INT iDevIdx,        // Device Index. -1 - default device.
+    IAudioClient **ppAudioClient,    // pointer pointer to IAudioClient interface
+    IAudioEndpointVolume **ppEndpointVolume,
+    WCHAR** ppszEndpointDeviceId)   // Device ID. Need to be freed in caller with CoTaskMemoryFree if it is not NULL
 {
     HRESULT hResult;
 
     CComPtr<IMMDeviceEnumerator> spEnumerator;
-    CComPtr<IMMDeviceCollection> spEndpoints;    
+    CComPtr<IMMDeviceCollection> spEndpoints;
     CComPtr<IMMDevice> spDevice;
     WCHAR *pszDeviceId = NULL;
 
-    if (ppAudioClient == NULL) 
+    if (ppAudioClient == NULL)
         return E_POINTER;
-    
+
     *ppAudioClient = NULL;
 
     hResult = spEnumerator.CoCreateInstance(__uuidof(MMDeviceEnumerator));
@@ -65,7 +65,9 @@ HRESULT DeviceBindTo(
     {
         hResult = spEnumerator->GetDefaultAudioEndpoint(eDataFlow, eConsole, &spDevice);
         IF_FAILED_JUMP(hResult, Exit);
-    }else{
+    }
+    else
+    {
         // User selected device
         hResult = spEnumerator->EnumAudioEndpoints(eDataFlow, DEVICE_STATE_ACTIVE, &spEndpoints);
         IF_FAILED_JUMP(hResult, Exit);
@@ -87,13 +89,13 @@ HRESULT DeviceBindTo(
         hResult = spDevice->Activate(__uuidof(IAudioEndpointVolume), CLSCTX_INPROC_SERVER, NULL, (void **)ppEndpointVolume);
         IF_FAILED_JUMP(hResult, Exit);
     }
-    
+
 Exit:
     if (ppszEndpointDeviceId)
         *ppszEndpointDeviceId = pszDeviceId;
     else if (pszDeviceId)
         CoTaskMemFree(pszDeviceId);
-    
+
     return hResult;
 }
 
@@ -119,7 +121,7 @@ HRESULT GetDeviceNum(EDataFlow eDataFlow, UINT &uDevCount)
     HRESULT hResult = S_OK;
 
     CComPtr<IMMDeviceEnumerator> spEnumerator;
-    CComPtr<IMMDeviceCollection> spEndpoints;    
+    CComPtr<IMMDeviceCollection> spEndpoints;
 
     hResult = spEnumerator.CoCreateInstance(__uuidof(MMDeviceEnumerator));
     IF_FAILED_RETURN(hResult);
@@ -162,7 +164,7 @@ HRESULT EnumDevice(EDataFlow eDataFlow, UINT uNumElements, AUDIO_DEVICE_INFO *pD
     bool IsMicArrayDevice;
 
     CComPtr<IMMDeviceEnumerator> spEnumerator;
-    CComPtr<IMMDeviceCollection> spEndpoints;    
+    CComPtr<IMMDeviceCollection> spEndpoints;
 
     hResult = spEnumerator.CoCreateInstance(__uuidof(MMDeviceEnumerator));
     IF_FAILED_JUMP(hResult, Exit);
@@ -177,7 +179,7 @@ HRESULT EnumDevice(EDataFlow eDataFlow, UINT uNumElements, AUDIO_DEVICE_INFO *pD
         return E_INVALIDARG;
 
     ZeroMemory(pDevicInfo, sizeof(AUDIO_DEVICE_INFO)*uNumElements);
-    
+
     for (index = 0; index < dwCount; index++)
     {
         CComPtr<IMMDevice> spDevice;
@@ -187,7 +189,7 @@ HRESULT EnumDevice(EDataFlow eDataFlow, UINT uNumElements, AUDIO_DEVICE_INFO *pD
 
         hResult = spEndpoints->Item(index, &spDevice);
         IF_FAILED_JUMP(hResult, Exit);
-         
+
         hResult = spDevice->GetId(&pszDeviceId);
         IF_FAILED_JUMP(hResult, Exit);
 
@@ -202,7 +204,7 @@ HRESULT EnumDevice(EDataFlow eDataFlow, UINT uNumElements, AUDIO_DEVICE_INFO *pD
         StringCchCopy(pDevicInfo[index].szDeviceID, MAX_STR_LEN-1, pszDeviceId);
         StringCchCopy(pDevicInfo[index].szDeviceName, MAX_STR_LEN-1, value.pwszVal);
         pDevicInfo[index].bIsMicArrayDevice = IsMicArrayDevice;
-        
+
         PropVariantClear(&value);
         CoTaskMemFree(pszDeviceId);
         pszDeviceId = NULL;
@@ -226,10 +228,10 @@ Exit:
 HRESULT DeviceIsMicArray(wchar_t szDeviceId[], bool &bIsMicArray)
 {
     HRESULT hr = S_OK;
-    
+
     if (szDeviceId == NULL)
         return E_INVALIDARG;
-   
+
     CComPtr<IMMDeviceEnumerator> spEnumerator;
     CComPtr<IMMDevice> spDevice;
 
@@ -277,7 +279,7 @@ HRESULT EndpointIsMicArray(IMMDevice* pEndpoint, bool & isMicrophoneArray)
 // Description:
 //      Gets the subtype of the jack that the specified endpoint device
 //      is plugged into.  e.g. if the endpoint is for an array mic, then
-//      we would expect the subtype of the jack to be 
+//      we would expect the subtype of the jack to be
 //      KSNODETYPE_MICROPHONE_ARRAY
 //
 // Return:
@@ -290,15 +292,15 @@ HRESULT GetJackSubtypeForEndpoint(IMMDevice* pEndpoint, GUID* pgSubtype)
 
     if (pEndpoint == NULL)
         return E_POINTER;
-   
+
     CComPtr<IDeviceTopology>    spEndpointTopology;
     CComPtr<IConnector>         spPlug;
     CComPtr<IConnector>         spJack;
     CComQIPtr<IPart>            spJackAsPart;
 
     // Get the Device Topology interface
-    hr = pEndpoint->Activate(__uuidof(IDeviceTopology), CLSCTX_INPROC_SERVER, 
-                            NULL, (void**)&spEndpointTopology);
+    hr = pEndpoint->Activate(__uuidof(IDeviceTopology), CLSCTX_INPROC_SERVER,
+                             NULL, (void**)&spEndpointTopology);
     IF_FAILED_JUMP(hr, Exit);
 
     hr = spEndpointTopology->GetConnector(0, &spPlug);
@@ -312,7 +314,7 @@ HRESULT GetJackSubtypeForEndpoint(IMMDevice* pEndpoint, GUID* pgSubtype)
     hr = spJackAsPart->GetSubType(pgSubtype);
 
 Exit:
-   return hr;
+    return hr;
 }//GetJackSubtypeForEndpoint()
 
 
@@ -332,9 +334,9 @@ HRESULT GetInputJack(IMMDevice* pDevice, CComPtr<IPart>& spPart)
     CComPtr<IConnector>         spJack = NULL;
 
     // Get the Device Topology interface
-    hr = pDevice->Activate(__uuidof(IDeviceTopology), 
-                                  CLSCTX_INPROC_SERVER, NULL,
-                                  reinterpret_cast<void**>(&spTopology));
+    hr = pDevice->Activate(__uuidof(IDeviceTopology),
+                           CLSCTX_INPROC_SERVER, NULL,
+                           reinterpret_cast<void**>(&spTopology));
     IF_FAILED_RETURN(hr);
 
     hr = spTopology->GetConnector(0, &spPlug);
@@ -347,7 +349,7 @@ HRESULT GetInputJack(IMMDevice* pDevice, CComPtr<IPart>& spPart)
     spPart = spJack;
     if (spPart == NULL)
         return E_NOINTERFACE;
-    
+
     return hr;
 }// GetInputJack()
 
@@ -361,8 +363,8 @@ HRESULT GetInputJack(IMMDevice* pDevice, CComPtr<IPart>& spPart)
 //
 // Parameters:  szDeviceId -- The requested device ID, which can be obtained
 //                            from calling EnumAudioCaptureDevices()
-//              
-//              ppGeometry -- Address of the pointer to the mic-array gemometry.  
+//
+//              ppGeometry -- Address of the pointer to the mic-array gemometry.
 //                            Caller is ressponsible for calling CoTaskMemFree()
 //                            if the call is successfull.
 //
@@ -378,7 +380,7 @@ HRESULT GetMicArrayGeometry(wchar_t szDeviceId[], KSAUDIO_MIC_ARRAY_GEOMETRY** p
         return E_INVALIDARG;
     if (ppGeometry == NULL)
         return E_POINTER;
-   
+
     cbSize = 0;
     CComPtr<IMMDeviceEnumerator> spEnumerator;
     CComPtr<IMMDevice>           spDevice;
@@ -396,7 +398,7 @@ HRESULT GetMicArrayGeometry(wchar_t szDeviceId[], KSAUDIO_MIC_ARRAY_GEOMETRY** p
 
     if (!bIsMicArray)
         return E_FAIL;
-    
+
     UINT nPartId = 0;
     hr = GetInputJack(spDevice, spPart);
     IF_FAILED_RETURN(hr);
@@ -426,8 +428,8 @@ HRESULT GetMicArrayGeometry(wchar_t szDeviceId[], KSAUDIO_MIC_ARRAY_GEOMETRY** p
     IF_FAILED_JUMP(hr, Exit);
 
     // Activate IKsControl on the IMMDevice
-    hr = spJackDevice->Activate(__uuidof(IKsControl), CLSCTX_INPROC_SERVER, 
-                               NULL, reinterpret_cast<void**>(&spKsControl));
+    hr = spJackDevice->Activate(__uuidof(IKsControl), CLSCTX_INPROC_SERVER,
+                                NULL, reinterpret_cast<void**>(&spKsControl));
     IF_FAILED_JUMP(hr, Exit);
 
     // At this point we can use IKsControl just as we would use DeviceIoControl
@@ -440,31 +442,31 @@ HRESULT GetMicArrayGeometry(wchar_t szDeviceId[], KSAUDIO_MIC_ARRAY_GEOMETRY** p
     ksp.Property.Set     = KSPROPSETID_Audio;
     ksp.Property.Id      = KSPROPERTY_AUDIO_MIC_ARRAY_GEOMETRY;
     ksp.Property.Flags   = KSPROPERTY_TYPE_GET;
-    ksp.PinId            = nPartId & PARTID_MASK;  
+    ksp.PinId            = nPartId & PARTID_MASK;
 
     // Get data size by passing NULL
-    hr = spKsControl->KsProperty(reinterpret_cast<PKSPROPERTY>(&ksp), 
-                                sizeof(ksp), NULL, 0, &cbGeometry);
+    hr = spKsControl->KsProperty(reinterpret_cast<PKSPROPERTY>(&ksp),
+                                 sizeof(ksp), NULL, 0, &cbGeometry);
     IF_FAILED_JUMP(hr, Exit);
-   
+
     // Allocate memory for the microphone array geometry
     *ppGeometry = reinterpret_cast<KSAUDIO_MIC_ARRAY_GEOMETRY*>
-                                   (::CoTaskMemAlloc(cbGeometry));
+                  (::CoTaskMemAlloc(cbGeometry));
 
     if(*ppGeometry == 0)
     {
         hr = E_OUTOFMEMORY;
     }
     IF_FAILED_JUMP(hr, Exit);
-   
+
     // Now retriev the mic-array structure...
     DWORD cbOut = 0;
-    hr = spKsControl->KsProperty(reinterpret_cast<PKSPROPERTY>(&ksp), 
-                                sizeof(ksp), *ppGeometry, cbGeometry,
-                                &cbOut);
+    hr = spKsControl->KsProperty(reinterpret_cast<PKSPROPERTY>(&ksp),
+                                 sizeof(ksp), *ppGeometry, cbGeometry,
+                                 &cbOut);
     IF_FAILED_JUMP(hr, Exit);
     cbSize = cbGeometry;
-   
+
 Exit:
     if(pwstrDevice != 0)
     {

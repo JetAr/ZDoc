@@ -1,4 +1,4 @@
-/**************************************************************************
+﻿/**************************************************************************
     THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
    ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
    THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -48,7 +48,7 @@ typedef UNALIGNED FVITEMID *PFVITEMID;
 typedef const UNALIGNED FVITEMID *PCFVITEMID;
 
 class CFolderViewImplFolder : public IShellFolder2,
-                              public IPersistFolder2
+    public IPersistFolder2
 {
 public:
     CFolderViewImplFolder(UINT nLevel);
@@ -213,7 +213,7 @@ ULONG CFolderViewImplFolder::Release()
 
 //  Translates a display name into an item identifier list.
 HRESULT CFolderViewImplFolder::ParseDisplayName(HWND hwnd, IBindCtx *pbc, PWSTR pszName,
-                                                ULONG *pchEaten, PIDLIST_RELATIVE *ppidl, ULONG *pdwAttributes)
+        ULONG *pchEaten, PIDLIST_RELATIVE *ppidl, ULONG *pdwAttributes)
 {
     HRESULT hr = E_INVALIDARG;
 
@@ -310,7 +310,7 @@ HRESULT CFolderViewImplFolder::EnumObjects(HWND /* hwnd */, DWORD grfFlags, IEnu
 
 //  Factory for handlers for the specified item.
 HRESULT CFolderViewImplFolder::BindToObject(PCUIDLIST_RELATIVE pidl,
-                                            IBindCtx *pbc, REFIID riid, void **ppv)
+        IBindCtx *pbc, REFIID riid, void **ppv)
 {
     *ppv = NULL;
     HRESULT hr = _ValidatePidl(pidl);
@@ -356,7 +356,7 @@ HRESULT CFolderViewImplFolder::BindToObject(PCUIDLIST_RELATIVE pidl,
 }
 
 HRESULT CFolderViewImplFolder::BindToStorage(PCUIDLIST_RELATIVE pidl,
-                                             IBindCtx *pbc, REFIID riid, void **ppv)
+        IBindCtx *pbc, REFIID riid, void **ppv)
 {
     return BindToObject(pidl, pbc, riid, ppv);
 }
@@ -471,93 +471,93 @@ HRESULT CFolderViewImplFolder::CompareIDs(LPARAM lParam, PCUIDLIST_RELATIVE pidl
         hr = ResultFromShort(0);
         switch (lParam & SHCIDS_COLUMNMASK)
         {
-            case 0: // Column one, Name.
+        case 0: // Column one, Name.
+        {
+            // Load the strings that represent the names
+            if (!m_rgNames[0])
             {
-                // Load the strings that represent the names
-                if (!m_rgNames[0])
-                {
-                    hr = LoadFolderViewImplDisplayStrings(m_rgNames, ARRAYSIZE(m_rgNames));
-                }
+                hr = LoadFolderViewImplDisplayStrings(m_rgNames, ARRAYSIZE(m_rgNames));
+            }
+            if (SUCCEEDED(hr))
+            {
+                PWSTR psz1;
+                hr = _GetName(pidl1, &psz1);
                 if (SUCCEEDED(hr))
                 {
-                    PWSTR psz1;
-                    hr = _GetName(pidl1, &psz1);
+                    PWSTR psz2;
+                    hr = _GetName(pidl2, &psz2);
                     if (SUCCEEDED(hr))
                     {
-                        PWSTR psz2;
-                        hr = _GetName(pidl2, &psz2);
-                        if (SUCCEEDED(hr))
+                        // Find their place in the array.
+                        // This is a display sort so we want to sort by "one" "two" "three" instead of alphabetically.
+                        int nPidlOne = 0, nPidlTwo = 0;
+                        for (int i = 0; i < ARRAYSIZE(m_rgNames); i++)
                         {
-                            // Find their place in the array.
-                            // This is a display sort so we want to sort by "one" "two" "three" instead of alphabetically.
-                            int nPidlOne = 0, nPidlTwo = 0;
-                            for (int i = 0; i < ARRAYSIZE(m_rgNames); i++)
+                            if (0 == StrCmp(psz1, m_rgNames[i]))
                             {
-                                if (0 == StrCmp(psz1, m_rgNames[i]))
-                                {
-                                    nPidlOne = i;
-                                }
-
-                                if (0 == StrCmp(psz2, m_rgNames[i]))
-                                {
-                                    nPidlTwo = i;
-                                }
+                                nPidlOne = i;
                             }
 
-                            hr = ResultFromShort(nPidlOne - nPidlTwo);
-                            CoTaskMemFree(psz2);
+                            if (0 == StrCmp(psz2, m_rgNames[i]))
+                            {
+                                nPidlTwo = i;
+                            }
                         }
-                        CoTaskMemFree(psz1);
+
+                        hr = ResultFromShort(nPidlOne - nPidlTwo);
+                        CoTaskMemFree(psz2);
                     }
+                    CoTaskMemFree(psz1);
                 }
-                break;
             }
-            case 1: // Column two, Size.
+            break;
+        }
+        case 1: // Column two, Size.
+        {
+            int nSize1 = 0, nSize2 = 0;
+            hr = _GetSize(pidl1, &nSize1);
+            if (SUCCEEDED(hr))
             {
-                int nSize1 = 0, nSize2 = 0;
-                hr = _GetSize(pidl1, &nSize1);
+                hr = _GetSize(pidl2, &nSize2);
                 if (SUCCEEDED(hr))
                 {
-                    hr = _GetSize(pidl2, &nSize2);
-                    if (SUCCEEDED(hr))
-                    {
-                        hr = ResultFromShort(nSize1 - nSize2);
-                    }
+                    hr = ResultFromShort(nSize1 - nSize2);
                 }
-                break;
             }
-            case 2: // Column Three, Sides.
+            break;
+        }
+        case 2: // Column Three, Sides.
+        {
+            int nSides1 = 0, nSides2 = 0;
+            hr = _GetSides(pidl1, &nSides1);
+            if (SUCCEEDED(hr))
             {
-                int nSides1 = 0, nSides2 = 0;
-                hr = _GetSides(pidl1, &nSides1);
+                hr = _GetSides(pidl2, &nSides2);
                 if (SUCCEEDED(hr))
                 {
-                    hr = _GetSides(pidl2, &nSides2);
-                    if (SUCCEEDED(hr))
-                    {
-                        hr = ResultFromShort(nSides1 - nSides2);
-                    }
+                    hr = ResultFromShort(nSides1 - nSides2);
                 }
-                break;
             }
-            case 3: // Column four, Level.
+            break;
+        }
+        case 3: // Column four, Level.
+        {
+            int cLevel1 = 0, cLevel2 = 0;
+            hr = _GetLevel(pidl1, &cLevel1);
+            if (SUCCEEDED(hr))
             {
-                int cLevel1 = 0, cLevel2 = 0;
-                hr = _GetLevel(pidl1, &cLevel1);
+                hr = _GetLevel(pidl2, &cLevel2);
                 if (SUCCEEDED(hr))
                 {
-                    hr = _GetLevel(pidl2, &cLevel2);
-                    if (SUCCEEDED(hr))
-                    {
-                        hr = ResultFromShort(cLevel1 - cLevel2);
-                    }
+                    hr = ResultFromShort(cLevel1 - cLevel2);
                 }
-                break;
             }
-            default:
-            {
-                hr = ResultFromShort(1);
-            }
+            break;
+        }
+        default:
+        {
+            hr = ResultFromShort(1);
+        }
         }
     }
 
@@ -657,7 +657,7 @@ HRESULT CFolderViewImplFolder::GetAttributesOf(UINT cidl, PCUITEMID_CHILD_ARRAY 
 //  Retrieves an OLE interface that can be used to carry out
 //  actions on the specified file objects or folders.
 HRESULT CFolderViewImplFolder::GetUIObjectOf(HWND hwnd, UINT cidl, PCUITEMID_CHILD_ARRAY apidl,
-                                             REFIID riid, UINT * /* prgfInOut */, void **ppv)
+        REFIID riid, UINT * /* prgfInOut */, void **ppv)
 {
     *ppv = NULL;
     HRESULT hr;
@@ -667,7 +667,8 @@ HRESULT CFolderViewImplFolder::GetUIObjectOf(HWND hwnd, UINT cidl, PCUITEMID_CHI
         // The default context menu will call back for IQueryAssociations to determine the
         // file associations with which to populate the menu.
         DEFCONTEXTMENU const dcm = { hwnd, NULL, m_pidl, static_cast<IShellFolder2 *>(this),
-                               cidl, apidl, NULL, 0, NULL };
+                                     cidl, apidl, NULL, 0, NULL
+                                   };
         hr = SHCreateDefaultContextMenu(&dcm, riid, ppv);
     }
     else if (riid == IID_IExtractIconW)
@@ -780,7 +781,7 @@ HRESULT CFolderViewImplFolder::GetDisplayNameOf(PCUITEMID_CHILD pidl, SHGDNF shg
 //  Sets the display name of a file object or subfolder, changing
 //  the item identifier in the process.
 HRESULT CFolderViewImplFolder::SetNameOf(HWND /* hwnd */, PCUITEMID_CHILD /* pidl */,
-                                         PCWSTR /* pszName */,  DWORD /* uFlags */, PITEMID_CHILD *ppidlOut)
+        PCWSTR /* pszName */,  DWORD /* uFlags */, PITEMID_CHILD *ppidlOut)
 {
     HRESULT hr = E_NOTIMPL;
     *ppidlOut = NULL;
@@ -810,8 +811,8 @@ HRESULT CFolderViewImplFolder::EnumSearches(IEnumExtraSearch **ppEnum)
 
 //  Retrieves the default sorting and display column (indices from GetDetailsOf).
 HRESULT CFolderViewImplFolder::GetDefaultColumn(DWORD /* dwRes */,
-                                                ULONG *pSort,
-                                                ULONG *pDisplay)
+        ULONG *pSort,
+        ULONG *pDisplay)
 {
     *pSort = 0;
     *pDisplay = 0;
@@ -838,10 +839,10 @@ HRESULT CFolderViewImplFolder::GetDefaultSearchGUID(GUID * /* pguid */)
 //  Helper function for getting the display name for a column.
 //  IMPORTANT: If cch is set to 0 the value is returned in the VARIANT.
 HRESULT CFolderViewImplFolder::_GetColumnDisplayName(PCUITEMID_CHILD pidl,
-                                                     const PROPERTYKEY *pkey,
-                                                     VARIANT *pv,
-                                                     PWSTR pszRet,
-                                                     UINT cch)
+        const PROPERTYKEY *pkey,
+        VARIANT *pv,
+        PWSTR pszRet,
+        UINT cch)
 {
     BOOL fIsFolder = FALSE;
     HRESULT hr = _GetFolderness(pidl, &fIsFolder);
@@ -943,8 +944,8 @@ HRESULT CFolderViewImplFolder::_GetColumnDisplayName(PCUITEMID_CHILD pidl,
 //  property set ID (FMTID) and property ID (PID),
 //  on an item in a Shell folder.
 HRESULT CFolderViewImplFolder::GetDetailsEx(PCUITEMID_CHILD pidl,
-                                            const PROPERTYKEY *pkey,
-                                            VARIANT *pv)
+        const PROPERTYKEY *pkey,
+        VARIANT *pv)
 {
     BOOL pfIsFolder = FALSE;
     HRESULT hr = _GetFolderness(pidl, &pfIsFolder);
@@ -968,8 +969,8 @@ HRESULT CFolderViewImplFolder::GetDetailsEx(PCUITEMID_CHILD pidl,
 //  Retrieves detailed information, identified by a
 //  column index, on an item in a Shell folder.
 HRESULT CFolderViewImplFolder::GetDetailsOf(PCUITEMID_CHILD pidl,
-                                            UINT iColumn,
-                                            SHELLDETAILS *pDetails)
+        UINT iColumn,
+        SHELLDETAILS *pDetails)
 {
     PROPERTYKEY key;
     HRESULT hr = MapColumnToSCID(iColumn, &key);
@@ -1222,7 +1223,8 @@ CFolderViewImplEnumIDList::~CFolderViewImplEnumIDList()
 
 HRESULT CFolderViewImplEnumIDList::QueryInterface(REFIID riid, void **ppv)
 {
-    static const QITAB qit[] = {
+    static const QITAB qit[] =
+    {
         QITABENT (CFolderViewImplEnumIDList, IEnumIDList),
         { 0 },
     };
@@ -1343,7 +1345,7 @@ HRESULT CFolderViewImplEnumIDList::Clone(IEnumIDList **ppenum)
 
 
 class CFolderViewCB : public IShellFolderViewCB,
-                      public IFolderViewSettings
+    public IFolderViewSettings
 {
 public:
     CFolderViewCB() : _cRef(1) { }
@@ -1360,7 +1362,10 @@ public:
         return QISearch(this, qit, riid, ppv);
     }
 
-    IFACEMETHODIMP_(ULONG) AddRef() { return InterlockedIncrement(&_cRef); }
+    IFACEMETHODIMP_(ULONG) AddRef()
+    {
+        return InterlockedIncrement(&_cRef);
+    }
     IFACEMETHODIMP_(ULONG) Release()
     {
         long cRef = InterlockedDecrement(&_cRef);
@@ -1373,24 +1378,39 @@ public:
 
     // IShellFolderViewCB
     IFACEMETHODIMP MessageSFVCB(UINT /* uMsg */, WPARAM /* wParam */, LPARAM /* lParam */)
-        { return E_NOTIMPL; }
+    {
+        return E_NOTIMPL;
+    }
 
     // IFolderViewSettings
     IFACEMETHODIMP GetColumnPropertyList(REFIID /* riid */, void **ppv)
-        { *ppv = NULL; return E_NOTIMPL; }
+    {
+        *ppv = NULL;
+        return E_NOTIMPL;
+    }
     IFACEMETHODIMP GetGroupByProperty(PROPERTYKEY * /* pkey */, BOOL * /* pfGroupAscending */)
-        { return E_NOTIMPL; }
+    {
+        return E_NOTIMPL;
+    }
     IFACEMETHODIMP GetViewMode(FOLDERLOGICALVIEWMODE * /* plvm */)
-        { return E_NOTIMPL; }
+    {
+        return E_NOTIMPL;
+    }
     IFACEMETHODIMP GetIconSize(UINT * /* puIconSize */)
-        { return E_NOTIMPL; }
+    {
+        return E_NOTIMPL;
+    }
 
     IFACEMETHODIMP GetFolderFlags(FOLDERFLAGS *pfolderMask, FOLDERFLAGS *pfolderFlags);
 
     IFACEMETHODIMP GetSortColumns(SORTCOLUMN * /* rgSortColumns */, UINT /* cColumnsIn */, UINT * /* pcColumnsOut */)
-        { return E_NOTIMPL; }
+    {
+        return E_NOTIMPL;
+    }
     IFACEMETHODIMP GetGroupSubsetCount(UINT * /* pcVisibleRows */)
-        { return E_NOTIMPL; }
+    {
+        return E_NOTIMPL;
+    }
 
 private:
     ~CFolderViewCB() { };

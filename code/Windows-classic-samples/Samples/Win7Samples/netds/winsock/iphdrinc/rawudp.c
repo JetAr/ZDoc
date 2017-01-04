@@ -1,4 +1,4 @@
-//
+﻿//
 // Sample: Raw IPv4/IPv6 UDP with IP_HDRINCL option
 //
 // Files:
@@ -9,29 +9,29 @@
 //
 //
 // Description:
-//    This is a simple app that demonstrates the usage of the 
+//    This is a simple app that demonstrates the usage of the
 //    IP_HDRINCL socket option. A raw socket is created of the
 //    UDP protocol where we will build our own IP and UDP header
-//    that we submit to sendto(). 
+//    that we submit to sendto().
 //
-//    For IPv4 this is fairly simple. Create a raw socket, set the 
+//    For IPv4 this is fairly simple. Create a raw socket, set the
 //    IP_HDRINCL option, build the IPv4 and UDP headers, and do a
 //    sendto. The IPv4 stack will fragment the data as necessary and
 //    generally leaves the packet unmodified -- it performs fragmentation
 //    and sets the IPv4 ID field.
 //
-//    For IPv6 its a bit more involved as it does not perform any 
+//    For IPv6 its a bit more involved as it does not perform any
 //    fragmentation, you have to do it and build the headers yourself.
-//    
+//
 //    The IP_HDRINCL option only works on Windows 2000 or greater.
 //
 // NOTE:
-//    From Network Programming for Microsoft Windows, Second Edition 
-//    by Anthony Jones and James Ohlund.  Copyright 2002.  
-//    Reproduced by permission of Microsoft Press.  All rights reserved. 
+//    From Network Programming for Microsoft Windows, Second Edition
+//    by Anthony Jones and James Ohlund.  Copyright 2002.
+//    Reproduced by permission of Microsoft Press.  All rights reserved.
 //
 #ifndef WIN32_LEAN_AND_MEAN
-#define WIN32_LEAN_AND_MEAN 
+#define WIN32_LEAN_AND_MEAN
 #endif
 
 #pragma warning(push)
@@ -48,7 +48,7 @@
 #include "iphdr.h"
 
 //
-// Setup some default values 
+// Setup some default values
 //
 #define DEFAULT_MTU           1496          // default MTU size
 #define DEFAULT_TTL           8             // default TTL value
@@ -68,10 +68,10 @@
 // Global variables
 //
 char     *gSrcAddress=NULL,          // IP address to send from
-         *gDestAddress=NULL,         // IP address to send to
-         *gSrcPort=NULL,             // port to send from
-         *gDestPort=NULL,            // port to send to
-         *gMessage=NULL;             // Message to send as UDP payload
+          *gDestAddress=NULL,         // IP address to send to
+           *gSrcPort=NULL,             // port to send from
+            *gDestPort=NULL,            // port to send to
+             *gMessage=NULL;             // Message to send as UDP payload
 int       gAddressFamily=AF_UNSPEC,
           gSocketType=SOCK_DGRAM,    // Socket type to pass to name resolution routines
           gProtocol=IPPROTO_UDP,     // Protocol value that we're sending
@@ -103,7 +103,7 @@ void usage(char *progname)
            "    -t  mtu    MTU size (required for fragmentation)\n"
            "    -z  int    Size of message to send\n",
            progname
-           );
+          );
     ExitProcess(1);
 }
 
@@ -119,93 +119,93 @@ void ValidateArgs(int argc, char **argv)
     int                i;
 
     gMessage = DEFAULT_MESSAGE;
-    for(i=1; i < argc ;i++)
+    for(i=1; i < argc ; i++)
     {
         if ((argv[i][0] == '-') || (argv[i][0] == '/'))
         {
             switch (tolower(argv[i][1]))
             {
-                case 'a':                   // Address family
-                    if (i+1 > argc)
-                        usage(argv[0]);
-                    if (argv[i+1][0] == '4')
-                        gAddressFamily = AF_INET;
-                    else if (argv[i+1][0] == '6')
-                        gAddressFamily = AF_INET6;
-                    else
-                        usage(argv[0]);
-                    i++;
-                    break;
-                case 's':                   // source address
-                    if (i+1 > argc)
-                        usage(argv[0]);
-                    if (tolower(argv[i][2]) == 'a')
-                    {
-                        gSrcAddress = argv[++i];
-                    }
-                    else if (tolower(argv[i][2]) == 'p')
-                    {
-                        gSrcPort = argv[++i];
-                    }
-                    else
-                    {
-                        usage(argv[0]);
-                        break;
-                    }    
-                    break;
-                case 'd':                   // destination address
-                    if (i+1 > argc)
-                        usage(argv[0]);
-                    if (tolower(argv[i][2]) == 'a')
-                    {
-                        gDestAddress = argv[++i];
-                    }
-                    else if (tolower(argv[i][2]) == 'p')
-                    {
-                        gDestPort = argv[++i];
-                    }
-                    else
-                    {
-                        usage(argv[0]);
-                        break;
-                    }
-                    break;
-                case 'n':                   // number of times to send message
-                    if (i+1 >= argc)
-                        usage(argv[0]);
-                    gSendCount = atol(argv[++i]);
-                    break;
-                case 'm':                   // String message to copy into payload
-                    if (i+1 >= argc)
-                        usage(argv[0]);
-                    gMessage = argv[++i];
-                    break;
-                case 'p':                   // Protocol value
-                    if (i+1 >= argc)
-                        usage(argv[0]);
-                    gProtocol = atoi(argv[++i]);
-                    break;
-                case 'r':                   // Port to receive data on
-                    if (i+1 >= argc)
-                        usage(argv[0]);
-                    if (strlen(argv[i]) == 3)
-                        gReadRaw = FALSE;
+            case 'a':                   // Address family
+                if (i+1 > argc)
+                    usage(argv[0]);
+                if (argv[i+1][0] == '4')
+                    gAddressFamily = AF_INET;
+                else if (argv[i+1][0] == '6')
+                    gAddressFamily = AF_INET6;
+                else
+                    usage(argv[0]);
+                i++;
+                break;
+            case 's':                   // source address
+                if (i+1 > argc)
+                    usage(argv[0]);
+                if (tolower(argv[i][2]) == 'a')
+                {
+                    gSrcAddress = argv[++i];
+                }
+                else if (tolower(argv[i][2]) == 'p')
+                {
                     gSrcPort = argv[++i];
-                    gSender = FALSE;
-                    break;
-                case 't':                   // MTU size
-                    if (i+1 >= argc)
-                        usage(argv[0]);
-                    gMtuSize = atoi(argv[++i]);
-                    break;
-                case 'z':                   // Send size
-                    if (i+1 >= argc)
-                        usage(argv[0]);
-                    gSendSize = atoi(argv[++i]);
-                    break;
-                default:
+                }
+                else
+                {
                     usage(argv[0]);
                     break;
+                }
+                break;
+            case 'd':                   // destination address
+                if (i+1 > argc)
+                    usage(argv[0]);
+                if (tolower(argv[i][2]) == 'a')
+                {
+                    gDestAddress = argv[++i];
+                }
+                else if (tolower(argv[i][2]) == 'p')
+                {
+                    gDestPort = argv[++i];
+                }
+                else
+                {
+                    usage(argv[0]);
+                    break;
+                }
+                break;
+            case 'n':                   // number of times to send message
+                if (i+1 >= argc)
+                    usage(argv[0]);
+                gSendCount = atol(argv[++i]);
+                break;
+            case 'm':                   // String message to copy into payload
+                if (i+1 >= argc)
+                    usage(argv[0]);
+                gMessage = argv[++i];
+                break;
+            case 'p':                   // Protocol value
+                if (i+1 >= argc)
+                    usage(argv[0]);
+                gProtocol = atoi(argv[++i]);
+                break;
+            case 'r':                   // Port to receive data on
+                if (i+1 >= argc)
+                    usage(argv[0]);
+                if (strlen(argv[i]) == 3)
+                    gReadRaw = FALSE;
+                gSrcPort = argv[++i];
+                gSender = FALSE;
+                break;
+            case 't':                   // MTU size
+                if (i+1 >= argc)
+                    usage(argv[0]);
+                gMtuSize = atoi(argv[++i]);
+                break;
+            case 'z':                   // Send size
+                if (i+1 >= argc)
+                    usage(argv[0]);
+                gSendSize = atoi(argv[++i]);
+                break;
+            default:
+                usage(argv[0]);
+                break;
             }
         }
     }
@@ -237,7 +237,7 @@ void ValidateArgs(int argc, char **argv)
     return;
 }
 
-// 
+//
 // Function: checksum
 //
 // Description:
@@ -251,19 +251,19 @@ USHORT checksum(USHORT *buffer, int size)
     while (size > 1)
     {
         cksum += *buffer++;
-        size  -= sizeof(USHORT);   
+        size  -= sizeof(USHORT);
     }
     // If the buffer was not a multiple of 16-bits, add the last byte
     if (size)
     {
-        cksum += *(UCHAR*)buffer;   
+        cksum += *(UCHAR*)buffer;
     }
     // Add the low order 16-bits to the high order 16-bits
     cksum = (cksum >> 16) + (cksum & 0xffff);
-    cksum += (cksum >>16); 
+    cksum += (cksum >>16);
 
     // Take the 1's complement
-    return (USHORT)(~cksum); 
+    return (USHORT)(~cksum);
 }
 
 //
@@ -275,13 +275,13 @@ USHORT checksum(USHORT *buffer, int size)
 //    addresses.
 //
 int InitIpv4Header(
-    char *buf, 
-    SOCKADDR *src, 
-    SOCKADDR *dest, 
+    char *buf,
+    SOCKADDR *src,
+    SOCKADDR *dest,
     int ttl,
     int proto,
     int payloadlen
-    )
+)
 {
     IPV4_HDR    *v4hdr=NULL;
 
@@ -299,7 +299,7 @@ int InitIpv4Header(
     v4hdr->ip_destaddr    = ((SOCKADDR_IN *)dest)->sin_addr.s_addr;
 
     v4hdr->ip_checksum    = checksum((unsigned short *)v4hdr, sizeof(IPV4_HDR));
-    
+
     return sizeof(IPV4_HDR);
 }
 
@@ -311,17 +311,17 @@ int InitIpv4Header(
 //    hop protocol, TTL, and source and destination addresses.
 //
 int InitIpv6Header(
-    char *buf, 
-    SOCKADDR *src, 
-    SOCKADDR *dest, 
+    char *buf,
+    SOCKADDR *src,
+    SOCKADDR *dest,
     int ttl,
     int proto,
     int payloadlen
-    )
+)
 {
     IPV6_HDR    *v6hdr=NULL;
 
-	v6hdr = (IPV6_HDR *)buf;
+    v6hdr = (IPV6_HDR *)buf;
 
     // We don't explicitly set the traffic class or flow label fields
     v6hdr->ipv6_vertcflow    = htonl(6 << 28);
@@ -353,7 +353,7 @@ int InitIpv6FragmentHeader(
     int nextproto,
     int id,
     int lastfragment
-    )
+)
 {
     IPV6_FRAGMENT_HDR *frag=NULL;
 
@@ -373,7 +373,7 @@ int InitIpv6FragmentHeader(
     return sizeof(IPV6_FRAGMENT_HDR);
 }
 
-// 
+//
 // Function: InitUdpHeader
 //
 // Description:
@@ -381,11 +381,11 @@ int InitIpv6FragmentHeader(
 //    stick in the total payload length.
 //
 int InitUdpHeader(
-    char *buf, 
+    char *buf,
     SOCKADDR *src,
-    SOCKADDR *dest, 
+    SOCKADDR *dest,
     int       payloadlen
-    )
+)
 {
     UDP_HDR *udphdr=NULL;
 
@@ -433,58 +433,58 @@ void ComputeUdpPseudoHeaderChecksumV4(
     UDP_HDR *udphdr,
     char    *payload,
     int      payloadlen
-    )
+)
 {
     IPV4_HDR     *v4hdr=NULL;
     unsigned long zero=0;
     char         *ptr=NULL;
     int           chksumlen=0,
                   i;
-    
+
     ptr = pseudobuf;
 
     v4hdr = (IPV4_HDR *)iphdr;
 
     // Include the source and destination IP addresses
-    memcpy(ptr, &v4hdr->ip_srcaddr,  sizeof(v4hdr->ip_srcaddr));  
+    memcpy(ptr, &v4hdr->ip_srcaddr,  sizeof(v4hdr->ip_srcaddr));
     ptr += sizeof(v4hdr->ip_srcaddr);
     chksumlen += sizeof(v4hdr->ip_srcaddr);
 
-    memcpy(ptr, &v4hdr->ip_destaddr, sizeof(v4hdr->ip_destaddr)); 
+    memcpy(ptr, &v4hdr->ip_destaddr, sizeof(v4hdr->ip_destaddr));
     ptr += sizeof(v4hdr->ip_destaddr);
     chksumlen += sizeof(v4hdr->ip_destaddr);
-    
+
     // Include the 8 bit zero field
     memcpy(ptr, &zero, 1);
     ptr++;
     chksumlen += 1;
 
     // Protocol
-    memcpy(ptr, &v4hdr->ip_protocol, sizeof(v4hdr->ip_protocol)); 
+    memcpy(ptr, &v4hdr->ip_protocol, sizeof(v4hdr->ip_protocol));
     ptr += sizeof(v4hdr->ip_protocol);
     chksumlen += sizeof(v4hdr->ip_protocol);
 
     // UDP length
-    memcpy(ptr, &udphdr->udp_length, sizeof(udphdr->udp_length)); 
+    memcpy(ptr, &udphdr->udp_length, sizeof(udphdr->udp_length));
     ptr += sizeof(udphdr->udp_length);
     chksumlen += sizeof(udphdr->udp_length);
-    
+
     // UDP source port
-    memcpy(ptr, &udphdr->src_portno, sizeof(udphdr->src_portno)); 
+    memcpy(ptr, &udphdr->src_portno, sizeof(udphdr->src_portno));
     ptr += sizeof(udphdr->src_portno);
     chksumlen += sizeof(udphdr->src_portno);
 
     // UDP destination port
-    memcpy(ptr, &udphdr->dst_portno, sizeof(udphdr->dst_portno)); 
+    memcpy(ptr, &udphdr->dst_portno, sizeof(udphdr->dst_portno));
     ptr += sizeof(udphdr->dst_portno);
     chksumlen += sizeof(udphdr->dst_portno);
 
     // UDP length again
-    memcpy(ptr, &udphdr->udp_length, sizeof(udphdr->udp_length)); 
+    memcpy(ptr, &udphdr->udp_length, sizeof(udphdr->udp_length));
     ptr += sizeof(udphdr->udp_length);
     chksumlen += sizeof(udphdr->udp_length);
-   
-    // 16-bit UDP checksum, zero 
+
+    // 16-bit UDP checksum, zero
     memcpy(ptr, &zero, sizeof(unsigned short));
     ptr += sizeof(unsigned short);
     chksumlen += sizeof(unsigned short);
@@ -536,26 +536,26 @@ void ComputeUdpPseudoHeaderChecksumV6(
     UDP_HDR *udphdr,
     char    *payload,
     int      payloadlen
-    )
+)
 {
     IPV6_HDR     *v6hdr=NULL;
     unsigned long length=0;
     char          proto,
-                 *ptr=NULL;
+                  *ptr=NULL;
     int           chksumlen=0,
                   i;
-    
+
     ptr = pseudobuf;
 
     v6hdr = (IPV6_HDR *)iphdr;
 
     // 128-bit source address
-    memcpy(ptr, &v6hdr->ipv6_srcaddr,  sizeof(v6hdr->ipv6_srcaddr));  
+    memcpy(ptr, &v6hdr->ipv6_srcaddr,  sizeof(v6hdr->ipv6_srcaddr));
     ptr += sizeof(v6hdr->ipv6_srcaddr);
     chksumlen += sizeof(v6hdr->ipv6_srcaddr);
 
     // 128-bit destination address
-    memcpy(ptr, &v6hdr->ipv6_destaddr,  sizeof(v6hdr->ipv6_destaddr));  
+    memcpy(ptr, &v6hdr->ipv6_destaddr,  sizeof(v6hdr->ipv6_destaddr));
     ptr += sizeof(v6hdr->ipv6_destaddr);
     chksumlen += sizeof(v6hdr->ipv6_destaddr);
 
@@ -578,23 +578,23 @@ void ComputeUdpPseudoHeaderChecksumV6(
     memcpy(ptr, &proto, sizeof(proto));
     ptr += sizeof(proto);
     chksumlen += sizeof(proto);
-   
+
     // UDP source port
-    memcpy(ptr, &udphdr->src_portno, sizeof(udphdr->src_portno)); 
+    memcpy(ptr, &udphdr->src_portno, sizeof(udphdr->src_portno));
     ptr += sizeof(udphdr->src_portno);
     chksumlen += sizeof(udphdr->src_portno);
 
     // UDP destination port
-    memcpy(ptr, &udphdr->dst_portno, sizeof(udphdr->dst_portno)); 
+    memcpy(ptr, &udphdr->dst_portno, sizeof(udphdr->dst_portno));
     ptr += sizeof(udphdr->dst_portno);
     chksumlen += sizeof(udphdr->dst_portno);
 
     // UDP length again
-    memcpy(ptr, &udphdr->udp_length, sizeof(udphdr->udp_length)); 
+    memcpy(ptr, &udphdr->udp_length, sizeof(udphdr->udp_length));
     ptr += sizeof(udphdr->udp_length);
     chksumlen += sizeof(udphdr->udp_length);
-   
-    // 16-bit UDP checksum, zero 
+
+    // 16-bit UDP checksum, zero
     memset(ptr, 0, sizeof(unsigned short));
     ptr += sizeof(unsigned short);
     chksumlen += sizeof(unsigned short);
@@ -630,7 +630,7 @@ void memfill(
     int   destlen,
     char *data,
     int   datalen
-    )
+)
 {
     char *ptr=NULL;
     int   copylen;
@@ -663,16 +663,16 @@ PacketizeIpv4(
     char   *PseudoBuffer,
     struct addrinfo *src,
     struct addrinfo *dest,
-    char   *payload, 
+    char   *payload,
     int    payloadlen
-    )
+)
 {
     int           iphdrlen,
                   udphdrlen;
 
     // Check the parameters
-    if ((Packets == NULL) || (PacketCount == NULL) || (src == NULL) || 
-        (dest == NULL) || (payload == NULL) || (*PacketCount < 1))
+    if ((Packets == NULL) || (PacketCount == NULL) || (src == NULL) ||
+            (dest == NULL) || (payload == NULL) || (*PacketCount < 1))
     {
         WSASetLastError(WSAEINVAL);
         return SOCKET_ERROR;
@@ -690,30 +690,30 @@ PacketizeIpv4(
 
     // Initialize the v4 header
     iphdrlen = InitIpv4Header(
-            Packets[0].buf, 
-            src->ai_addr, 
-            dest->ai_addr, 
-            DEFAULT_TTL, 
-            gProtocol, 
-            sizeof(UDP_HDR) + payloadlen
-            );
- 
+                   Packets[0].buf,
+                   src->ai_addr,
+                   dest->ai_addr,
+                   DEFAULT_TTL,
+                   gProtocol,
+                   sizeof(UDP_HDR) + payloadlen
+               );
+
     // Initialize the UDP header
     udphdrlen = InitUdpHeader(
-           &Packets[0].buf[iphdrlen], 
-            src->ai_addr, 
-            dest->ai_addr, 
-            payloadlen
-            );
+                    &Packets[0].buf[iphdrlen],
+                    src->ai_addr,
+                    dest->ai_addr,
+                    payloadlen
+                );
 
     // Compute the UDP checksum
     ComputeUdpPseudoHeaderChecksumV4(
-            PseudoBuffer,
-            Packets[0].buf, 
-            (UDP_HDR *)&Packets[0].buf[iphdrlen], 
-            payload, 
-            payloadlen
-            );
+        PseudoBuffer,
+        Packets[0].buf,
+        (UDP_HDR *)&Packets[0].buf[iphdrlen],
+        payload,
+        payloadlen
+    );
 
     // Copy the payload to the end of the header
     memcpy(&Packets[0].buf[iphdrlen + udphdrlen], payload, payloadlen);
@@ -740,17 +740,17 @@ PacketizeIpv6(
     char   *PseudoBuffer,
     struct addrinfo *src,
     struct addrinfo *dest,
-    char   *payload, 
+    char   *payload,
     int    payloadlen
-    )
+)
 {
     static ULONG  fragid=1;
-    int           offset=0,        // offset into payload 
+    int           offset=0,        // offset into payload
                   datalen,         // length of the payload
                   hdrlen,          // length of the header(s)
                   fragment,        // is this a fragment?
                   lastfragment,    // is this the last fragment?
-                  iphdrlen,        // length of ip header 
+                  iphdrlen,        // length of ip header
                   udphdrlen,       // length of the udp header
                   plushdrs,        // IPv6 length field includes encapsulated headers
                   numpackets=0,    // number of fragments
@@ -758,7 +758,7 @@ PacketizeIpv6(
 
     // Check the parameters
     if ((Packets == NULL) || (PacketCount == NULL) || (src == NULL) ||
-        (dest == NULL) || (payload == NULL))
+            (dest == NULL) || (payload == NULL))
         return SOCKET_ERROR;
 
     originalpayload = payloadlen;
@@ -818,7 +818,7 @@ PacketizeIpv6(
         }
 
         // Build packet
- 
+
         // Allocate buffer for this fragment
         printf("numpackets = %d; hdrlen = %d; datlen = %d\n", numpackets, hdrlen, datalen);
         Packets[numpackets].buf = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, hdrlen + datalen);
@@ -836,43 +836,43 @@ PacketizeIpv6(
         //    the v6 header is that of the fragmentation header. Also the payload
         //    length includes the headers (UDP + fragmentation) and the payload itself.
         iphdrlen = InitIpv6Header(
-                Packets[numpackets].buf, 
-                src->ai_addr, 
-                dest->ai_addr, 
-                DEFAULT_TTL, 
-                (fragment ? FRAGMENT_HEADER_PROTOCOL : gProtocol),
-                datalen + plushdrs
-                );
+                       Packets[numpackets].buf,
+                       src->ai_addr,
+                       dest->ai_addr,
+                       DEFAULT_TTL,
+                       (fragment ? FRAGMENT_HEADER_PROTOCOL : gProtocol),
+                       datalen + plushdrs
+                   );
 
         // Build the fragmentation header if necessary
         if (fragment)
         {
             iphdrlen += InitIpv6FragmentHeader(
-                   &Packets[numpackets].buf[iphdrlen],
-                    offset,         // offset from start of packet
-                    gProtocol,
-                    fragid,
-                    lastfragment
-                    );
+                            &Packets[numpackets].buf[iphdrlen],
+                            offset,         // offset from start of packet
+                            gProtocol,
+                            fragid,
+                            lastfragment
+                        );
         }
 
         // The first fragment includes the UDP header, subsequent fragments don't
         if (numpackets == 0)
         {
             udphdrlen = InitUdpHeader(
-                   &Packets[numpackets].buf[iphdrlen], 
-                    src->ai_addr, 
-                    dest->ai_addr, 
-                    originalpayload //payloadlen
-                    );
+                            &Packets[numpackets].buf[iphdrlen],
+                            src->ai_addr,
+                            dest->ai_addr,
+                            originalpayload //payloadlen
+                        );
 
             // Compute the checksum
             ComputeUdpPseudoHeaderChecksumV6(
-                    PseudoBuffer,
-                    Packets[numpackets].buf, 
-                    (UDP_HDR *)&Packets[numpackets].buf[iphdrlen], 
-                    payload, 
-                    payloadlen);
+                PseudoBuffer,
+                Packets[numpackets].buf,
+                (UDP_HDR *)&Packets[numpackets].buf[iphdrlen],
+                payload,
+                payloadlen);
         }
         else
         {
@@ -887,7 +887,8 @@ PacketizeIpv6(
         offset += datalen;
         numpackets++;
 
-    } while (payloadlen > 0);
+    }
+    while (payloadlen > 0);
 
     fragid++;
 
@@ -897,11 +898,11 @@ PacketizeIpv6(
     return NO_ERROR;
 }
 
-// 
+//
 // Function: main
 //
 // Description:
-//    First, parse command line arguments and load Winsock. Then 
+//    First, parse command line arguments and load Winsock. Then
 //    create the raw socket and then set the IP_HDRINCL option.
 //    Following this assemble the IP and UDP packet headers by
 //    assigning the correct values and calculating the checksums.
@@ -915,10 +916,10 @@ int _cdecl main(int argc, char **argv)
     WSABUF            *fragments=NULL;
     int                fragmentcount=0;
     char              *buffer=NULL,     // Used as receive buffer or
-                                        // to compute pseudo header
-                      *payload=NULL;    // Buffer containing payload
+                       // to compute pseudo header
+                       *payload=NULL;    // Buffer containing payload
     struct addrinfo   *ressrc=NULL,
-                      *resdest=NULL;
+                           *resdest=NULL;
     int                rc,
                        i, j;
 
@@ -937,7 +938,7 @@ int _cdecl main(int argc, char **argv)
     ressrc = ResolveAddress(gSrcAddress, gSrcPort, gAddressFamily, gSocketType, gProtocol);
     if (ressrc == NULL)
     {
-        fprintf(stderr, "Unable to resolve address '%s' and port '%s'\n", 
+        fprintf(stderr, "Unable to resolve address '%s' and port '%s'\n",
                 gSrcAddress, gSrcPort);
         goto cleanup;
     }
@@ -952,7 +953,7 @@ int _cdecl main(int argc, char **argv)
         resdest = ResolveAddress(gDestAddress, gDestPort, ressrc->ai_family, ressrc->ai_socktype, ressrc->ai_protocol);
         if (resdest == NULL)
         {
-            fprintf(stderr, "Unable to resolve address '%s' and port '%s'\n", 
+            fprintf(stderr, "Unable to resolve address '%s' and port '%s'\n",
                     gDestAddress, gDestPort);
             goto cleanup;
         }
@@ -975,10 +976,10 @@ int _cdecl main(int argc, char **argv)
 
     //  BUG - For IPv6 if we create the raw socket with IPPROTO_UDP then the Ipv6
     //  stack will thow away our IPv6 and UDP headers and put "valid" ones in their
-    //  place. As a workaround, create the socket with a protocol value of an 
-    //  unhandled protocol. Of course the IPv6 header should still indicate that 
+    //  place. As a workaround, create the socket with a protocol value of an
+    //  unhandled protocol. Of course the IPv6 header should still indicate that
     //  the encapsulated protocol is UDP.
-  
+
     if (gSender)
         s = socket(ressrc->ai_family, SOCK_RAW, ((ressrc->ai_family == AF_INET6) ? 3 : ressrc->ai_protocol));
     else if (!gSender && gReadRaw)
@@ -1023,7 +1024,7 @@ int _cdecl main(int argc, char **argv)
             goto cleanup;
         }
 
-        // Enable the IP header include option 
+        // Enable the IP header include option
         optval = 1;
         if (ressrc->ai_family == AF_INET)
         {
@@ -1037,7 +1038,7 @@ int _cdecl main(int argc, char **argv)
         }
         else
         {
-            fprintf(stderr, "Address family returned is unsupported: %d\n", 
+            fprintf(stderr, "Address family returned is unsupported: %d\n",
                     ressrc->ai_family);
             goto cleanup;
         }
@@ -1053,26 +1054,26 @@ int _cdecl main(int argc, char **argv)
         if (ressrc->ai_family == AF_INET)
         {
             rc = PacketizeIpv4(
-                fragments,
-               &fragmentcount,
-                buffer,
-                ressrc,
-                resdest,
-                payload,
-                gSendSize
-                );
+                     fragments,
+                     &fragmentcount,
+                     buffer,
+                     ressrc,
+                     resdest,
+                     payload,
+                     gSendSize
+                 );
         }
         else if (ressrc->ai_family == AF_INET6)
         {
             rc = PacketizeIpv6(
-                fragments,
-               &fragmentcount,
-                buffer,
-                ressrc,
-                resdest,
-                payload,
-                gSendSize
-                );
+                     fragments,
+                     &fragmentcount,
+                     buffer,
+                     ressrc,
+                     resdest,
+                     payload,
+                     gSendSize
+                 );
         }
 
         // Verify packetization succeeded
@@ -1088,18 +1089,18 @@ int _cdecl main(int argc, char **argv)
         // Whatever we put as the destination IP addr in the IP
         // header is what goes. Specifying a different dest in remote
         // will be ignored.
-        for(i=0; i < (int)gSendCount ;i++)
+        for(i=0; i < (int)gSendCount ; i++)
         {
-            for(j=0; j < fragmentcount ;j++)
+            for(j=0; j < fragmentcount ; j++)
             {
                 rc = sendto(
-                        s,
-                        fragments[j].buf,
-                        fragments[j].len,
-                        0,
-                        resdest->ai_addr,
-                        (int) resdest->ai_addrlen
-                        );
+                         s,
+                         fragments[j].buf,
+                         fragments[j].len,
+                         0,
+                         resdest->ai_addr,
+                         (int) resdest->ai_addrlen
+                     );
                 bytes = rc;
                 if (rc == SOCKET_ERROR)
                 {
@@ -1122,10 +1123,10 @@ int _cdecl main(int argc, char **argv)
 
         // Bind the socket to the receiving address
         rc = bind(
-                s, 
-                ressrc->ai_addr,
-                (int) ressrc->ai_addrlen
-                );
+                 s,
+                 ressrc->ai_addr,
+                 (int) ressrc->ai_addrlen
+             );
         if (rc == SOCKET_ERROR)
         {
             fprintf(stderr, "bind failed: %d\n", WSAGetLastError());
@@ -1171,13 +1172,13 @@ int _cdecl main(int argc, char **argv)
 
             fromlen = sizeof(safrom);
             rc = recvfrom(
-                    s, 
-                    buffer, 
-                    MAX_PACKET, 
-                    0, 
-                    (SOCKADDR *)&safrom, 
-                   &fromlen
-                   );
+                     s,
+                     buffer,
+                     MAX_PACKET,
+                     0,
+                     (SOCKADDR *)&safrom,
+                     &fromlen
+                 );
             if (rc == SOCKET_ERROR)
             {
                 fprintf(stderr, "recvfrom failed: %d\n", WSAGetLastError());
@@ -1196,7 +1197,7 @@ cleanup:
     //
     // Cleanup allocations and sockets
     //
- 
+
     if (ressrc)
         freeaddrinfo(ressrc);
 
@@ -1208,11 +1209,11 @@ cleanup:
 
     if (payload)
         HeapFree(GetProcessHeap(), 0, payload);
-      
+
     // Free the packet buffers
     if (fragments)
     {
-        for(i=0; i < fragmentcount ;i++)
+        for(i=0; i < fragmentcount ; i++)
         {
             if (fragments[i].buf != NULL)
             {

@@ -1,4 +1,4 @@
-#ifndef __STATICASYNCCALLBACK__
+﻿#ifndef __STATICASYNCCALLBACK__
 #define __STATICASYNCCALLBACK__
 
 ////////////////////////////////////////////////////////
@@ -34,9 +34,9 @@ public: \
         Callback( pResult ); \
         return S_OK; \
     } \
-} m_x##Callback; 
+} m_x##Callback;
 
-   
+
 ////////////////////////////////////////////////////////
 //
 //
@@ -86,13 +86,13 @@ protected: \
     { \
         return ((Parent*)((BYTE*)this - offsetof(Parent, m_x##Callback))); \
     } \
-} m_x##Callback; 
+} m_x##Callback;
 
 ////////////////////////////////////////////////////////
 //
 #define METHODFASTCALLBACK(Callback, Parent) \
     METHODASYNCCALLBACKEX(Callback, Parent, MFASYNC_FAST_IO_PROCESSING_CALLBACK, MFASYNC_CALLBACK_QUEUE_STANDARD)
-    
+
 #define METHODASYNCCALLBACK(Callback, Parent) \
     METHODASYNCCALLBACKEX(Callback, Parent, 0, MFASYNC_CALLBACK_QUEUE_STANDARD)
 

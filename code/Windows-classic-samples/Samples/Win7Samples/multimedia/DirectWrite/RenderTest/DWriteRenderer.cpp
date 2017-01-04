@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -14,12 +14,12 @@
 
 namespace
 {
-    DWRITE_MATRIX const g_identityTransform =
-    {
-        1, 0,
-        0, 1,
-        0, 0
-    };
+DWRITE_MATRIX const g_identityTransform =
+{
+    1, 0,
+    0, 1,
+    0, 0
+};
 }
 
 IRenderer* CreateDWriteRenderer(
@@ -28,15 +28,15 @@ IRenderer* CreateDWriteRenderer(
     UINT height,
     IDWriteTextFormat* textFormat,
     wchar_t const* text
-    )
+)
 {
     return new(std::nothrow) DWriteRenderer(
-        hwnd,
-        width,
-        height,
-        textFormat,
-        text
-        );
+               hwnd,
+               width,
+               height,
+               textFormat,
+               text
+           );
 }
 
 DWriteRenderer::DWriteRenderer(
@@ -45,9 +45,9 @@ DWriteRenderer::DWriteRenderer(
     UINT height,
     IDWriteTextFormat* textFormat,
     wchar_t const* text
-    ) : 
+) :
     hwnd_(hwnd),
-    width_(width), 
+    width_(width),
     height_(height),
     measuringMode_(DWRITE_MEASURING_MODE_NATURAL),
     transform_(g_identityTransform),
@@ -165,11 +165,11 @@ HRESULT DWriteRenderer::Draw(HDC hdc)
         // Render the text. The Draw method will call back to the IDWriteTextRenderer
         // methods implemented by this class.
         hr = textLayout_->Draw(
-            NULL,           // optional client drawing context
-            this,           // renderer callback
-            textOriginX_,
-            textOriginY_
-            );
+                 NULL,           // optional client drawing context
+                 this,           // renderer callback
+                 textOriginX_,
+                 textOriginY_
+             );
     }
 
     if (SUCCEEDED(hr))
@@ -263,8 +263,8 @@ void DWriteRenderer::DrawMagnifier()
     case MagnifierInfo::Vector:
         // We rendered the text at the larger scale; just copy it.
         BitBlt(
-            memoryDC, 
-            magnifier_.magnifierPos.x, 
+            memoryDC,
+            magnifier_.magnifierPos.x,
             magnifier_.magnifierPos.y,
             magnifier_.magnifierSize.cx,
             magnifier_.magnifierSize.cy,
@@ -272,14 +272,14 @@ void DWriteRenderer::DrawMagnifier()
             0,
             0,
             SRCCOPY | NOMIRRORBITMAP
-            );
+        );
         break;
 
     case MagnifierInfo::Pixel:
         // We rendered the text at normal size; copy and scale up.
         StretchBlt(
-            memoryDC, 
-            magnifier_.magnifierPos.x, 
+            memoryDC,
+            magnifier_.magnifierPos.x,
             magnifier_.magnifierPos.y,
             magnifier_.magnifierSize.cx,
             magnifier_.magnifierSize.cy,
@@ -289,7 +289,7 @@ void DWriteRenderer::DrawMagnifier()
             magnifier_.magnifierSize.cx / magnifier_.scale,
             magnifier_.magnifierSize.cy / magnifier_.scale,
             SRCCOPY | NOMIRRORBITMAP
-            );
+        );
         break;
 
     case MagnifierInfo::Subpixel:
@@ -307,20 +307,20 @@ void DWriteRenderer::DrawMagnifier()
     HGDIOBJ oldPen = SelectObject(memoryDC, borderPen_);
 
     Rectangle(
-        memoryDC, 
-        magnifier_.magnifierPos.x, 
-        magnifier_.magnifierPos.y, 
+        memoryDC,
+        magnifier_.magnifierPos.x,
+        magnifier_.magnifierPos.y,
         magnifier_.magnifierPos.x + magnifier_.magnifierSize.cx,
         magnifier_.magnifierPos.y + magnifier_.magnifierSize.cy
-        );
+    );
 
     Rectangle(
-        memoryDC, 
+        memoryDC,
         magnifier_.focusPos.x,
-        magnifier_.focusPos.y, 
+        magnifier_.focusPos.y,
         magnifier_.focusPos.x + magnifier_.magnifierSize.cx / magnifier_.scale,
         magnifier_.focusPos.y + magnifier_.magnifierSize.cy / magnifier_.scale
-        );
+    );
 
     SelectObject(memoryDC, oldPen);
     SelectObject(memoryDC, oldBrush);
@@ -413,7 +413,7 @@ void DWriteRenderer::SubpixelZoom()
                 }
             }
 
-            // Copy the destination row we just initialized to the remaining 
+            // Copy the destination row we just initialized to the remaining
             // destination rows for this scan line.
             UINT32* dstRow = firstDstRow + dstWidth;
 
@@ -423,7 +423,7 @@ void DWriteRenderer::SubpixelZoom()
                     dstRow + magnifier_.magnifierPos.x,
                     firstDstRow + magnifier_.magnifierPos.x,
                     (dstX - magnifier_.magnifierPos.x) * sizeof(UINT32)
-                    );
+                );
             }
         }
     }
@@ -438,29 +438,29 @@ HRESULT DWriteRenderer::InitializeTextLayout()
         if (measuringMode_ == DWRITE_MEASURING_MODE_NATURAL)
         {
             hr = g_dwriteFactory->CreateTextLayout(
-                    text_,
-                    lstrlenW(text_),
-                    textFormat_,
-                    g_formatWidth,
-                    0, // max height
-                    &textLayout_
-                    );
+                     text_,
+                     lstrlenW(text_),
+                     textFormat_,
+                     g_formatWidth,
+                     0, // max height
+                     &textLayout_
+                 );
         }
         else
         {
             BOOL useGdiNatural = (measuringMode_ == DWRITE_MEASURING_MODE_GDI_NATURAL);
 
             hr = g_dwriteFactory->CreateGdiCompatibleTextLayout(
-                    text_,
-                    lstrlenW(text_),
-                    textFormat_,
-                    g_formatWidth,
-                    0, // max height
-                    g_dpiY / 96.0f, // pixels per DIP
-                    &transform_,
-                    useGdiNatural,
-                    &textLayout_
-                    );
+                     text_,
+                     lstrlenW(text_),
+                     textFormat_,
+                     g_formatWidth,
+                     0, // max height
+                     g_dpiY / 96.0f, // pixels per DIP
+                     &transform_,
+                     useGdiNatural,
+                     &textLayout_
+                 );
         }
 
         if (SUCCEEDED(hr))
@@ -501,10 +501,10 @@ void DWriteRenderer::FreeTextLayout()
 //      These methods are never called in this scenario so we just use stub
 //      implementations.
 //
-HRESULT STDMETHODCALLTYPE DWriteRenderer::QueryInterface( 
+HRESULT STDMETHODCALLTYPE DWriteRenderer::QueryInterface(
     REFIID riid,
     void** ppvObject
-    )
+)
 {
     *ppvObject = NULL;
     return E_NOTIMPL;
@@ -526,7 +526,7 @@ ULONG STDMETHODCALLTYPE DWriteRenderer::Release()
 HRESULT STDMETHODCALLTYPE DWriteRenderer::IsPixelSnappingDisabled(
     void* clientDrawingContext,
     OUT BOOL* isDisabled
-    )
+)
 {
     *isDisabled = FALSE;
     return S_OK;
@@ -538,7 +538,7 @@ HRESULT STDMETHODCALLTYPE DWriteRenderer::IsPixelSnappingDisabled(
 HRESULT STDMETHODCALLTYPE DWriteRenderer::GetCurrentTransform(
     void* clientDrawingContext,
     OUT DWRITE_MATRIX* transform
-    )
+)
 {
     *transform = transform_;
     return S_OK;
@@ -550,7 +550,7 @@ HRESULT STDMETHODCALLTYPE DWriteRenderer::GetCurrentTransform(
 HRESULT STDMETHODCALLTYPE DWriteRenderer::GetPixelsPerDip(
     void* clientDrawingContext,
     OUT FLOAT* pixelsPerDip
-    )
+)
 {
     *pixelsPerDip = g_dpiY / 96.0f;
     return S_OK;
@@ -564,29 +564,29 @@ HRESULT STDMETHODCALLTYPE DWriteRenderer::DrawGlyphRun(
     DWRITE_GLYPH_RUN const* glyphRun,
     DWRITE_GLYPH_RUN_DESCRIPTION const* glyphRunDescription,
     IUnknown* clientDrawingEffect
-    )
+)
 {
     HRESULT hr = S_OK;
 
     hr = renderTarget_->DrawGlyphRun(
-            baselineOriginX,
-            baselineOriginY,
-            measuringMode,
-            glyphRun,
-            renderingParams_,
-            GetSysColor(COLOR_WINDOWTEXT)
-            );
+             baselineOriginX,
+             baselineOriginY,
+             measuringMode,
+             glyphRun,
+             renderingParams_,
+             GetSysColor(COLOR_WINDOWTEXT)
+         );
 
     if (SUCCEEDED(hr) && magnifierTarget_ != NULL)
     {
         hr = magnifierTarget_->DrawGlyphRun(
-                baselineOriginX,
-                baselineOriginY,
-                measuringMode,
-                glyphRun,
-                renderingParams_,
-                GetSysColor(COLOR_WINDOWTEXT)
-                );
+                 baselineOriginX,
+                 baselineOriginY,
+                 measuringMode,
+                 glyphRun,
+                 renderingParams_,
+                 GetSysColor(COLOR_WINDOWTEXT)
+             );
     }
 
     return hr;
@@ -598,7 +598,7 @@ HRESULT STDMETHODCALLTYPE DWriteRenderer::DrawUnderline(
     FLOAT baselineOriginY,
     DWRITE_UNDERLINE const* underline,
     IUnknown* clientDrawingEffect
-    )
+)
 {
     // We don't use underline in this application.
     return E_NOTIMPL;
@@ -610,7 +610,7 @@ HRESULT STDMETHODCALLTYPE DWriteRenderer::DrawStrikethrough(
     FLOAT baselineOriginY,
     DWRITE_STRIKETHROUGH const* strikethrough,
     IUnknown* clientDrawingEffect
-    )
+)
 {
     // We don't use strikethrough in this application.
     return E_NOTIMPL;
@@ -624,7 +624,7 @@ HRESULT STDMETHODCALLTYPE DWriteRenderer::DrawInlineObject(
     BOOL isSideways,
     BOOL isRightToLeft,
     IUnknown* clientDrawingEffect
-    )
+)
 {
     // We don't use inline objects in this application.
     return E_NOTIMPL;

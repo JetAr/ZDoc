@@ -1,4 +1,4 @@
-//------------------------------------------------------------------------------
+﻿//------------------------------------------------------------------------------
 // File: WavDest.cpp
 //
 // Desc: DirectShow sample code - a filter for writing WAV audio files (based
@@ -9,7 +9,7 @@
 
 
 //
-// To use this filter to write audio data into a WAV file: 
+// To use this filter to write audio data into a WAV file:
 //
 // Use GraphEdit (or a custom DirectShow app) to build a filter graph
 // with an audio stream connected to this filter's input pin and the File Writer
@@ -41,7 +41,8 @@ const AMOVIESETUP_FILTER sudWavDest =
 
 
 // Global data
-CFactoryTemplate g_Templates[]= {
+CFactoryTemplate g_Templates[]=
+{
     {L"WAV Dest", &CLSID_WavDest, CWavDestFilter::CreateInstance, NULL, &sudWavDest},
 };
 
@@ -55,9 +56,9 @@ int g_cTemplates = sizeof(g_Templates) / sizeof(g_Templates[0]);
 
 
 CWavDestFilter::CWavDestFilter(LPUNKNOWN pUnk, HRESULT *phr) :
-                CTransformFilter(NAME("WavDest filter"), pUnk, CLSID_WavDest),
-                m_cbWavData(0),
-                m_cbHeader(0)
+    CTransformFilter(NAME("WavDest filter"), pUnk, CLSID_WavDest),
+    m_cbWavData(0),
+    m_cbHeader(0)
 {
     ASSERT(m_pOutput == 0);
     ASSERT(phr);
@@ -86,13 +87,13 @@ CWavDestFilter::CWavDestFilter(LPUNKNOWN pUnk, HRESULT *phr) :
 
         //
         // NOTE!: If we've created our own output pin we must also create
-        // the input pin ourselves because the CTransformFilter base class 
-        // will create an extra output pin if the input pin wasn't created.        
+        // the input pin ourselves because the CTransformFilter base class
+        // will create an extra output pin if the input pin wasn't created.
         //
         CTransformInputPin *pIn = new CTransformInputPin(NAME("Transform input pin"),
-                                        this,              // Owner filter
-                                        phr,               // Result code
-                                        L"In");            // Pin name
+                this,              // Owner filter
+                phr,               // Result code
+                L"In");            // Pin name
         // a failed return code should delete the object
         if(pIn)
         {
@@ -186,11 +187,11 @@ HRESULT CWavDestFilter::Transform(IMediaSample *pIn, IMediaSample *pOut)
         return hr;
     }
 
-    // Prepare it for writing    
+    // Prepare it for writing
     LONG lActual = pOut->GetActualDataLength();
 
     if(m_cbWavData + m_cbHeader + lActual < m_cbWavData + m_cbHeader)
-    { 
+    {
         return E_FAIL;      // overflow
     }
 
@@ -219,7 +220,7 @@ HRESULT CWavDestFilter::Copy(IMediaSample *pSource, IMediaSample *pDest) const
     BYTE *pSourceBuffer, *pDestBuffer;
     long lSourceSize = pSource->GetActualDataLength();
 
-#ifdef DEBUG    
+#ifdef DEBUG
     long lDestSize = pDest->GetSize();
     ASSERT(lDestSize >= lSourceSize);
 #endif
@@ -298,7 +299,7 @@ HRESULT CWavDestFilter::GetMediaType(int iPosition, CMediaType *pMediaType)
 // require. Can only do this when the input is connected
 //
 HRESULT CWavDestFilter::DecideBufferSize(IMemAllocator *pAlloc,
-                                         ALLOCATOR_PROPERTIES *pProperties)
+        ALLOCATOR_PROPERTIES *pProperties)
 {
     HRESULT hr = NOERROR;
 
@@ -348,7 +349,7 @@ HRESULT CWavDestFilter::DecideBufferSize(IMemAllocator *pAlloc,
     ASSERT(Actual.cBuffers == 1);
 
     if(pProperties->cBuffers > Actual.cBuffers ||
-        pProperties->cbBuffer > Actual.cbBuffer)
+            pProperties->cbBuffer > Actual.cbBuffer)
     {
         return E_FAIL;
     }
@@ -371,9 +372,9 @@ HRESULT CWavDestFilter::DecideBufferSize(IMemAllocator *pAlloc,
 HRESULT CWavDestFilter::StartStreaming()
 {
     // leave space for the header
-    m_cbHeader = sizeof(RIFFLIST) + 
-                 sizeof(RIFFCHUNK) + 
-                 m_pInput->CurrentMediaType().FormatLength() + 
+    m_cbHeader = sizeof(RIFFLIST) +
+                 sizeof(RIFFCHUNK) +
+                 m_pInput->CurrentMediaType().FormatLength() +
                  sizeof(RIFFCHUNK);
 
     m_cbWavData = 0;
@@ -397,16 +398,16 @@ HRESULT CWavDestFilter::StopStreaming()
     if(!pDwnstrmInputPin)
         return E_FAIL;
 
-    HRESULT hr = ((IMemInputPin *) pDwnstrmInputPin)->QueryInterface(IID_IStream, 
-                                                                    (void **)&pStream);
+    HRESULT hr = ((IMemInputPin *) pDwnstrmInputPin)->QueryInterface(IID_IStream,
+                 (void **)&pStream);
     if(SUCCEEDED(hr))
     {
         BYTE *pb = (BYTE *)_alloca(m_cbHeader);
 
         RIFFLIST  *pRiffWave = (RIFFLIST *)pb;
         RIFFCHUNK *pRiffFmt  = (RIFFCHUNK *)(pRiffWave + 1);
-        RIFFCHUNK *pRiffData = (RIFFCHUNK *)(((BYTE *)(pRiffFmt + 1)) + 
-                               m_pInput->CurrentMediaType().FormatLength());
+        RIFFCHUNK *pRiffData = (RIFFCHUNK *)(((BYTE *)(pRiffFmt + 1)) +
+                                             m_pInput->CurrentMediaType().FormatLength());
 
         pRiffData->fcc = FCC('data');
         pRiffData->cb = m_cbWavData;
@@ -434,10 +435,10 @@ HRESULT CWavDestFilter::StopStreaming()
 }
 
 //
-// CWavDestOutputPin::CWavDestOutputPin 
+// CWavDestOutputPin::CWavDestOutputPin
 //
 CWavDestOutputPin::CWavDestOutputPin(CTransformFilter *pFilter, HRESULT * phr) :
-        CTransformOutputPin(NAME("WavDest output pin"), pFilter, phr, L"Out")
+    CTransformOutputPin(NAME("WavDest output pin"), pFilter, phr, L"Out")
 {
     // Empty
 }
@@ -469,7 +470,7 @@ HRESULT CWavDestOutputPin::CheckMediaType(const CMediaType* pmt)
 
 ////////////////////////////////////////////////////////////////////////
 //
-// Exported entry points for registration and unregistration 
+// Exported entry points for registration and unregistration
 // (in this case they only call through to default implementations).
 //
 ////////////////////////////////////////////////////////////////////////
@@ -489,11 +490,11 @@ STDAPI DllUnregisterServer()
 //
 extern "C" BOOL WINAPI DllEntryPoint(HINSTANCE, ULONG, LPVOID);
 
-BOOL APIENTRY DllMain(HANDLE hModule, 
-                      DWORD  dwReason, 
+BOOL APIENTRY DllMain(HANDLE hModule,
+                      DWORD  dwReason,
                       LPVOID lpReserved)
 {
-	return DllEntryPoint((HINSTANCE)(hModule), dwReason, lpReserved);
+    return DllEntryPoint((HINSTANCE)(hModule), dwReason, lpReserved);
 }
 
 

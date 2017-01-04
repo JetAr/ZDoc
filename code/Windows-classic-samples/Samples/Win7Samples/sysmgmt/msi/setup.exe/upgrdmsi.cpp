@@ -1,4 +1,4 @@
-//+-------------------------------------------------------------------------
+﻿//+-------------------------------------------------------------------------
 //
 //  Copyright (c) Microsoft Corporation.  All rights reserved.
 //
@@ -42,7 +42,7 @@ bool IsMsiUpgradeNecessary(ULONG ulReqMsiMinVer)
     }
 
     if (FAILED(StringCchCopy(szSysMsiDll, sizeof(szSysMsiDll)/sizeof(szSysMsiDll[0]), szSystemFolder))
-        || FAILED(StringCchCat(szSysMsiDll, sizeof(szSysMsiDll)/sizeof(szSysMsiDll[0]), "\\MSI.DLL")))
+            || FAILED(StringCchCat(szSysMsiDll, sizeof(szSysMsiDll)/sizeof(szSysMsiDll[0]), "\\MSI.DLL")))
     {
         // failure to get path to msi.dll; assume upgrade is necessary
         DebugMsg("[Info] Can't obtain msi.dll path; assuming upgrade is necessary");
@@ -332,8 +332,8 @@ UINT DownloadAndUpgradeMsi(HINSTANCE hInst, CDownloadUI *piDownloadUI, LPCSTR sz
     // digital signatures on msi files. At this point, it is quite likely that
     // the SIP callbacks have not been registered. So we don't want to load
     // wintrust.dll into this process's image yet, otherwise it will remain unaware
-    // of the sip callbacks registered by WindowsInstaller-KB884016-x86.exe and will 
-    // fail later when it tries to verify the signature on the msi file downloaded 
+    // of the sip callbacks registered by WindowsInstaller-KB884016-x86.exe and will
+    // fail later when it tries to verify the signature on the msi file downloaded
     // from the web.
     //
     Status = ExecuteVerifyUpdate(szModuleFile, szUpdateCacheFile);
@@ -392,7 +392,7 @@ bool IsUpdateRequiredVersion(__in LPSTR szFilename, ULONG ulMinVer)
         // source version won't get us to our minimum version
         char szDebugOutput[MAX_STR_LENGTH] = {0};
         DebugMsg("[Info] The update package is improper version for upgrade. Update package Version = %d, Minimum Version = %d.\n", ulSourceVer, ulMinVer);
-        
+
         return false;
     }
 
@@ -422,23 +422,23 @@ UINT ValidateUpdate(HINSTANCE hInst, CDownloadUI *piDownloadUI, LPCSTR szAppTitl
     switch (uiRet)
     {
     case ERROR_SUCCESS:
-    case ERROR_SUCCESS_REBOOT_REQUIRED:    
-        {
-            // nothing required at this time
-            break;
-        }
+    case ERROR_SUCCESS_REBOOT_REQUIRED:
+    {
+        // nothing required at this time
+        break;
+    }
     case ERROR_FILE_NOT_FOUND:
-        {
-            // Update executable not found
-            PostFormattedError(hInst, piDownloadUI->GetCurrentWindow(), szAppTitle, IDS_NOUPDATE, szUpdatePath);
-            break;
-        }
+    {
+        // Update executable not found
+        PostFormattedError(hInst, piDownloadUI->GetCurrentWindow(), szAppTitle, IDS_NOUPDATE, szUpdatePath);
+        break;
+    }
     default: // failure
-        {
-            // report error
-            PostError(hInst, piDownloadUI->GetCurrentWindow(), szAppTitle, IDS_FAILED_TO_UPGRADE_MSI);
-            break;
-        }
+    {
+        // report error
+        PostError(hInst, piDownloadUI->GetCurrentWindow(), szAppTitle, IDS_FAILED_TO_UPGRADE_MSI);
+        break;
+    }
     }
     return uiRet;
 }
@@ -474,11 +474,11 @@ DWORD ExecuteUpgradeMsi(__in LPSTR szUpgradeMsi)
         dwResult = ERROR_OUTOFMEMORY;
         goto Return_ExecuteUpgradeMsi;
     }
-    
+
     if (FAILED(StringCchCopy(szCommandLine, cchCommandLine, "\""))
-        || FAILED(StringCchCat(szCommandLine, cchCommandLine, szUpgradeMsi))
-        || FAILED(StringCchCat(szCommandLine, cchCommandLine, "\""))
-        || FAILED(StringCchCat(szCommandLine, cchCommandLine, szDelayReboot)))
+            || FAILED(StringCchCat(szCommandLine, cchCommandLine, szUpgradeMsi))
+            || FAILED(StringCchCat(szCommandLine, cchCommandLine, "\""))
+            || FAILED(StringCchCat(szCommandLine, cchCommandLine, szDelayReboot)))
     {
         dwResult = ERROR_INSTALL_FAILURE;
         goto Return_ExecuteUpgradeMsi;
@@ -547,16 +547,16 @@ DWORD ExecuteVerifyUpdate(LPCSTR szModuleFile, LPCSTR szUpdateCachePath)
     }
 
     if (FAILED(StringCchCopy(szCommandLine, cchCommandLine, "\""))
-        || FAILED(StringCchCat(szCommandLine, cchCommandLine, szModuleFile))
-        || FAILED(StringCchCat(szCommandLine, cchCommandLine, "\""))
-        || FAILED(StringCchCat(szCommandLine, cchCommandLine, " /v \""))
-        || FAILED(StringCchCat(szCommandLine, cchCommandLine, szUpdateCachePath))
-        || FAILED(StringCchCat(szCommandLine, cchCommandLine, "\"")))
+            || FAILED(StringCchCat(szCommandLine, cchCommandLine, szModuleFile))
+            || FAILED(StringCchCat(szCommandLine, cchCommandLine, "\""))
+            || FAILED(StringCchCat(szCommandLine, cchCommandLine, " /v \""))
+            || FAILED(StringCchCat(szCommandLine, cchCommandLine, szUpdateCachePath))
+            || FAILED(StringCchCat(szCommandLine, cchCommandLine, "\"")))
     {
         dwResult = ERROR_INSTALL_FAILURE;
         goto Return_ExecuteVerifyUpdate;
     }
-    
+
     //
     // Run the verification process. We use a copy of ourselves to do this.
     //
@@ -610,21 +610,21 @@ DWORD WaitForProcess(HANDLE handle)
 
         //not the process that we're waiting for
         case (WAIT_OBJECT_0 + 1):
+        {
+            if (WIN::PeekMessage(&msg, NULL, NULL, NULL, PM_REMOVE))
             {
-                if (WIN::PeekMessage(&msg, NULL, NULL, NULL, PM_REMOVE))
-                {
-                    WIN::TranslateMessage(&msg);
-                    WIN::DispatchMessage(&msg);
-                }
-
-                break;
+                WIN::TranslateMessage(&msg);
+                WIN::DispatchMessage(&msg);
             }
+
+            break;
+        }
         //did not return an OK; return error status
         default:
-            {
-                dwResult = WIN::GetLastError();
-                goto Finish;
-            }
+        {
+            dwResult = WIN::GetLastError();
+            goto Finish;
+        }
         }
     }
 

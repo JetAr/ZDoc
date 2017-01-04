@@ -1,4 +1,4 @@
-/****************************************************************************
+﻿/****************************************************************************
                    Microsoft RPC Version 2.0
            Copyright Microsoft Corp. 1992 - 2000
                        xmit Example
@@ -67,7 +67,7 @@ void Usage(char * pszProgramName)
     fprintf(stderr, " -p protocol_sequence\n");
     fprintf(stderr, " -n network_address\n");
     fprintf(stderr, " -e endpoint\n");
-    fprintf(stderr, " -a server principal name\n");	
+    fprintf(stderr, " -a server principal name\n");
     fprintf(stderr, " -o options\n");
     fprintf(stderr, " -c count_of_elements\n");
     fprintf(stderr, " -v value\n");
@@ -82,10 +82,10 @@ void __cdecl main(int argc, char **argv)
     unsigned char * pszProtocolSequence = "ncacn_np";
     unsigned char * pszNetworkAddress   = NULL;
     unsigned char * pszEndpoint         = "\\pipe\\xmit";
-    unsigned char * pszSpn              = NULL;	
+    unsigned char * pszSpn              = NULL;
     unsigned char * pszOptions          = NULL;
     unsigned char * pszStringBinding    = NULL;
-	RPC_SECURITY_QOS SecQos;
+    RPC_SECURITY_QOS SecQos;
     int i;
     int cElements = 10;
     short sValue = 100;
@@ -94,9 +94,12 @@ void __cdecl main(int argc, char **argv)
     DOUBLE_LINK_TYPE *pFirst, *pCurrent;
 
     /* allow the user to override settings with command line switches */
-    for (i = 1; i < argc; i++) {
-        if ((*argv[i] == '-') || (*argv[i] == '/')) {
-            switch (tolower(*(argv[i]+1))) {
+    for (i = 1; i < argc; i++)
+    {
+        if ((*argv[i] == '-') || (*argv[i] == '/'))
+        {
+            switch (tolower(*(argv[i]+1)))
+            {
             case 'p':  // protocol sequence
                 pszProtocolSequence = argv[++i];
                 break;
@@ -138,7 +141,8 @@ void __cdecl main(int argc, char **argv)
     pCurrent = pFirst;   // assign some values to the list nodes
     sValue += sDelta;    // make them different values
 
-    for (i = 1; i < cElements; i++) {
+    for (i = 1; i < cElements; i++)
+    {
         pCurrent = InsertNewNode(sValue, pCurrent);
         sValue += sDelta;
     }
@@ -154,7 +158,8 @@ void __cdecl main(int argc, char **argv)
                                      &pszStringBinding);
     printf("RpcStringBindingCompose returned 0x%x\n", status);
     printf("pszStringBinding = %s\n", pszStringBinding);
-    if (status) {
+    if (status)
+    {
         exit(status);
     }
 
@@ -162,12 +167,14 @@ void __cdecl main(int argc, char **argv)
     status = RpcBindingFromStringBinding(pszStringBinding,
                                          &hXmit);
     printf("RpcBindingFromStringBinding returned 0x%x\n", status);
-    if (status) {
+    if (status)
+    {
         exit(status);
     }
-	
+
     /* User did not specify spn, construct one. */
-    if (pszSpn == NULL) {
+    if (pszSpn == NULL)
+    {
         MakeSpn(&pszSpn);
     }
 
@@ -185,20 +192,23 @@ void __cdecl main(int argc, char **argv)
                                      NULL,
                                      RPC_C_AUTHZ_NONE,
                                      &SecQos);
-	
+
     printf_s("RpcBindingSetAuthInfoEx returned 0x%x\n", status);
-    if (status) {
+    if (status)
+    {
         exit(status);
-    }	
-		
-    RpcTryExcept {
+    }
+
+    RpcTryExcept
+    {
         printf("Calling the remote procedure 'ModifyListProc'\n");
         ModifyListProc(pFirst);  // call the remote procedure
 
         printf("Calling the remote procedure 'Shutdown'\n");
         Shutdown();  // shut down the server side
     }
-    RpcExcept(1) {
+    RpcExcept(1)
+    {
         printf("Runtime reported exception %ld\n", RpcExceptionCode() );
     }
     RpcEndExcept
@@ -210,13 +220,15 @@ void __cdecl main(int argc, char **argv)
     /* Free the string and the binding handle using RPC API calls. */
     status = RpcStringFree(&pszStringBinding);
     printf("RpcStringFree returned 0x%x\n", status);
-    if (status) {
+    if (status)
+    {
         exit(status);
     }
 
     status = RpcBindingFree(&hXmit);
     printf("RpcBindingFree returned 0x%x\n", status);
-    if (status) {
+    if (status)
+    {
         exit(status);
     }
 

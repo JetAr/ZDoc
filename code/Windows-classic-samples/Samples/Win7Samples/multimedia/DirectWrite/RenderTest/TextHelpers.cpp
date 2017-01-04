@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -26,7 +26,7 @@ HRESULT CreateTextFormatFromLOGFONT(
     LOGFONT const& logFont,
     float fontSize,
     OUT IDWriteTextFormat** textFormat
-    )
+)
 {
     HRESULT hr = S_OK;
 
@@ -89,8 +89,8 @@ HRESULT CreateTextFormatFromLOGFONT(
                 font->GetMetrics(&fontMetrics);
 
                 // Convert the cell height (ascent + descent) from design units to ems.
-                float cellHeight = static_cast<float>(fontMetrics.ascent + fontMetrics.descent) / 
-                    fontMetrics.designUnitsPerEm;
+                float cellHeight = static_cast<float>(fontMetrics.ascent + fontMetrics.descent) /
+                                   fontMetrics.designUnitsPerEm;
 
                 // Divide the font size by the cell height to get the font em size.
                 fontSize /= cellHeight;
@@ -112,15 +112,15 @@ HRESULT CreateTextFormatFromLOGFONT(
     {
         // Create the text format object.
         hr = g_dwriteFactory->CreateTextFormat(
-            familyName,
-            NULL, // no custom font collection
-            font->GetWeight(),
-            font->GetStyle(),
-            font->GetStretch(),
-            fontSize,
-            localeName,
-            textFormat
-            );
+                 familyName,
+                 NULL, // no custom font collection
+                 font->GetWeight(),
+                 font->GetStyle(),
+                 font->GetStretch(),
+                 fontSize,
+                 localeName,
+                 textFormat
+             );
     }
 
     SafeRelease(&localizedFamilyNames);
@@ -136,7 +136,7 @@ DWRITE_MATRIX MakeRotateTransform(
     float angle,    // angle in degrees
     float x,        // x coordinate of the center of rotation
     float y         // y coordinate of the center of rotation
-    )
+)
 {
     DWRITE_MATRIX matrix;
 

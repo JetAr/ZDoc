@@ -1,4 +1,4 @@
-#include "CAutoLock.h"
+﻿#include "CAutoLock.h"
 
 _When_(pcs != NULL, _Acquires_lock_(*this->m_pcs) _Post_same_lock_(*pcs, *this->m_pcs)) _Post_satisfies_(this->m_pcs == pcs)
 CAutoLock::CAutoLock(CRITICAL_SECTION* pcs)

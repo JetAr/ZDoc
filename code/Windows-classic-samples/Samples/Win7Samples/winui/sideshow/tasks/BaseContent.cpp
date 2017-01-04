@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -26,10 +26,10 @@ CBaseContent::~CBaseContent()
 HRESULT CBaseContent::QueryInterface(
     REFIID riid,
     LPVOID* ppvObject
-    )
+)
 {
-    if (IID_IUnknown == riid || 
-        IID_ISideShowContent == riid)
+    if (IID_IUnknown == riid ||
+            IID_ISideShowContent == riid)
     {
         *ppvObject = this;
         AddRef();
@@ -38,12 +38,12 @@ HRESULT CBaseContent::QueryInterface(
 
     return E_NOINTERFACE;
 }
-            
+
 ULONG CBaseContent::AddRef()
 {
     return ::InterlockedIncrement(&m_nRef);
 }
-            
+
 ULONG CBaseContent::Release()
 {
     LONG nRef = ::InterlockedDecrement(&m_nRef);

@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -15,7 +15,8 @@ CTfInputProcessorProfile::CTfInputProcessorProfile()
 
 CTfInputProcessorProfile::~CTfInputProcessorProfile()
 {
-    if (_pInputProcessorProfile) {
+    if (_pInputProcessorProfile)
+    {
         _pInputProcessorProfile->Release();
         _pInputProcessorProfile = nullptr;
     }
@@ -24,7 +25,7 @@ CTfInputProcessorProfile::~CTfInputProcessorProfile()
 HRESULT CTfInputProcessorProfile::CreateInstance()
 {
     HRESULT	hr = CoCreateInstance(CLSID_TF_InputProcessorProfiles, nullptr, CLSCTX_INPROC_SERVER,
-        IID_ITfInputProcessorProfiles, (void**)&_pInputProcessorProfile);
+                                  IID_ITfInputProcessorProfiles, (void**)&_pInputProcessorProfile);
 
     return hr;
 }

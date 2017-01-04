@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -43,7 +43,7 @@ template<class Interface>
 inline void
 SafeRelease(
     Interface **ppInterfaceToRelease
-    )
+)
 {
     if (*ppInterfaceToRelease != NULL)
     {
@@ -89,14 +89,14 @@ private:
 
     HRESULT OnRender(
         const PAINTSTRUCT &ps
-        );
+    );
 
     static LRESULT CALLBACK WndProc(
         HWND hWnd,
         UINT message,
         WPARAM wParam,
         LPARAM lParam
-        );
+    );
 
 private:
     HWND m_hwnd;

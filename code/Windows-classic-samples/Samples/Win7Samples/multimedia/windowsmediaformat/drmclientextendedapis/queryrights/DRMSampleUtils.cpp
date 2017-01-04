@@ -1,6 +1,6 @@
-///////////////////////////////////////////////////////////////////////////////
+﻿///////////////////////////////////////////////////////////////////////////////
 //
-// DRMSampleUtils.cpp : Contains implementation of common functions for 
+// DRMSampleUtils.cpp : Contains implementation of common functions for
 //  DRM samples.
 //
 // Copyright (c) Microsoft Corporation. All rights reserved.
@@ -14,7 +14,7 @@
 // Description: Displays a specified error string.
 // Parameters: ErrorCode - HRESULT error code.
 //             pwszMessage - Message to display.
-// Notes: This function is proveded so that chages can be made to the way 
+// Notes: This function is proveded so that chages can be made to the way
 //  errors are reported without an impact on the reporting code.
 //
 ///////////////////////////////////////////////////////////////////////////////
@@ -40,7 +40,7 @@ void DisplayError(HRESULT ErrorCode, const wchar_t* pwszMessage)
 // n
 // <KIDString>
 // ...
-// 
+//
 // Where n is the number of KID strings in the file.
 ///////////////////////////////////////////////////////////////////////////////
 HRESULT ParseKIDFile(WCHAR* pwszInFile, WCHAR*** pppKIDStrings, int* pNumStrings)
@@ -70,7 +70,7 @@ HRESULT ParseKIDFile(WCHAR* pwszInFile, WCHAR*** pppKIDStrings, int* pNumStrings
             hr = E_FAIL;
             DisplayError(hr, L"The specified filename is invalid.");
         }
-    }    
+    }
 
     // Read the first token of the KID file.
     if (SUCCEEDED(hr))
@@ -83,7 +83,7 @@ HRESULT ParseKIDFile(WCHAR* pwszInFile, WCHAR*** pppKIDStrings, int* pNumStrings
             DisplayError(hr, L"KID file is improperly formatted.");
         }
     }
-      
+
     // Check the read token against the expected file header.
     if (SUCCEEDED(hr))
     {
@@ -91,10 +91,10 @@ HRESULT ParseKIDFile(WCHAR* pwszInFile, WCHAR*** pppKIDStrings, int* pNumStrings
         cchString = wcsnlen(pwszTempString, g_TempStringSize);
 
         // Compare the strings.
-        StringCompareCode = wcsncmp(pwszTempString, 
-                                    g_wszKIDFileHeaderString, 
+        StringCompareCode = wcsncmp(pwszTempString,
+                                    g_wszKIDFileHeaderString,
                                     (cchString));
-        
+
         if (StringCompareCode != 0)
         {
             hr = E_FAIL;
@@ -129,7 +129,7 @@ HRESULT ParseKIDFile(WCHAR* pwszInFile, WCHAR*** pppKIDStrings, int* pNumStrings
         if (*pppKIDStrings != NULL)
         {
             // Initialize the array.
-            ZeroMemory(*pppKIDStrings, *pNumStrings * sizeof(WCHAR*)); 
+            ZeroMemory(*pppKIDStrings, *pNumStrings * sizeof(WCHAR*));
         }
         else
         {

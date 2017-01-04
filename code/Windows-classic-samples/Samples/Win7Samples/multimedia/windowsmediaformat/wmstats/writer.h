@@ -1,4 +1,4 @@
-//*****************************************************************************
+﻿//*****************************************************************************
 //
 // Microsoft Windows Media
 // Copyright (C) Microsoft Corporation. All rights reserved.
@@ -29,7 +29,7 @@ public :
     const CWriterStatsEx &operator= ( const WM_WRITER_STATISTICS_EX &right );
 };
 
-class CWriter 
+class CWriter
 {
 public:
     CWriter();

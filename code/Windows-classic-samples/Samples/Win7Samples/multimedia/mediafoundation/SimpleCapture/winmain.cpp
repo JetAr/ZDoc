@@ -1,4 +1,4 @@
-//////////////////////////////////////////////////////////////////////////
+﻿//////////////////////////////////////////////////////////////////////////
 //
 // Media Foundation video capture sample.
 //
@@ -9,7 +9,7 @@
 //
 // Copyright (c) Microsoft Corporation. All rights reserved.
 //
-////////////////////////////////////////////////////////////////////////// 
+//////////////////////////////////////////////////////////////////////////
 
 #include <windows.h>
 #include <windowsx.h>
@@ -80,7 +80,7 @@ void    OnDeviceLost(HWND hwnd, DEV_BROADCAST_HDR *pHdr);
 // Command handlers
 void    OnChooseDevice(HWND hwnd);
 
-// Constants 
+// Constants
 const WCHAR CLASS_NAME[]  = L"SimpleCapture Window Class";
 const WCHAR WINDOW_NAME[] = L"SimpleCapture Sample Application";
 
@@ -184,18 +184,18 @@ BOOL InitializeWindow(HWND *pHwnd)
     }
 
     HWND hwnd = CreateWindow(
-        CLASS_NAME,
-        WINDOW_NAME,
-        WS_OVERLAPPEDWINDOW,
-        CW_USEDEFAULT,
-        CW_USEDEFAULT,
-        CW_USEDEFAULT,
-        CW_USEDEFAULT,
-        NULL,
-        NULL,
-        GetModuleHandle(NULL),
-        NULL
-        );
+                    CLASS_NAME,
+                    WINDOW_NAME,
+                    WS_OVERLAPPEDWINDOW,
+                    CW_USEDEFAULT,
+                    CW_USEDEFAULT,
+                    CW_USEDEFAULT,
+                    CW_USEDEFAULT,
+                    NULL,
+                    NULL,
+                    GetModuleHandle(NULL),
+                    NULL
+                );
 
     if (!hwnd)
     {
@@ -241,21 +241,21 @@ BOOL OnCreate(HWND hwnd, LPCREATESTRUCT /*lpCreateStruct*/)
     DEV_BROADCAST_DEVICEINTERFACE di = { 0 };
     di.dbcc_size = sizeof(di);
     di.dbcc_devicetype  = DBT_DEVTYP_DEVICEINTERFACE;
-    di.dbcc_classguid  = KSCATEGORY_CAPTURE; 
+    di.dbcc_classguid  = KSCATEGORY_CAPTURE;
 
     g_hdevnotify = RegisterDeviceNotification(
-        hwnd,
-        &di,
-        DEVICE_NOTIFY_WINDOW_HANDLE
-        );
+                       hwnd,
+                       &di,
+                       DEVICE_NOTIFY_WINDOW_HANDLE
+                   );
 
     if (g_hdevnotify == NULL)
     {
         ShowErrorMessage(
-            hwnd, 
-            L"RegisterDeviceNotification failed.", 
+            hwnd,
+            L"RegisterDeviceNotification failed.",
             HRESULT_FROM_WIN32(GetLastError())
-            );
+        );
         return FALSE;
     }
 
@@ -265,7 +265,7 @@ BOOL OnCreate(HWND hwnd, LPCREATESTRUCT /*lpCreateStruct*/)
 
 
 //-------------------------------------------------------------------
-// OnClose: Handler for WM_CLOSE 
+// OnClose: Handler for WM_CLOSE
 //-------------------------------------------------------------------
 
 void OnClose(HWND /*hwnd*/)
@@ -330,15 +330,15 @@ void OnCommand(HWND hwnd, int id, HWND /*hwndCtl*/, UINT /*codeNotify*/)
 {
     switch (id)
     {
-        case ID_FILE_CHOOSEDEVICE:
-            OnChooseDevice(hwnd);
-            break;
+    case ID_FILE_CHOOSEDEVICE:
+        OnChooseDevice(hwnd);
+        break;
     }
 }
 
 //-------------------------------------------------------------------
 // OnChooseDevice
-// 
+//
 // Displays a dialog for the user to select a capture device.
 //-------------------------------------------------------------------
 
@@ -371,11 +371,11 @@ void OnChooseDevice(HWND hwnd)
     if (SUCCEEDED(hr))
     {
         hr = pAttributes->SetGUID(
-            MF_DEVSOURCE_ATTRIBUTE_SOURCE_TYPE, 
-            MF_DEVSOURCE_ATTRIBUTE_SOURCE_TYPE_VIDCAP_GUID
-            );
+                 MF_DEVSOURCE_ATTRIBUTE_SOURCE_TYPE,
+                 MF_DEVSOURCE_ATTRIBUTE_SOURCE_TYPE_VIDCAP_GUID
+             );
     }
-    
+
     // Enumerate devices.
 
     if (SUCCEEDED(hr))
@@ -387,12 +387,12 @@ void OnChooseDevice(HWND hwnd)
     {
         // Ask the user to select one.
         INT_PTR result = DialogBoxParam(
-            GetModuleHandle(NULL),
-            MAKEINTRESOURCE(IDD_CHOOSE_DEVICE),
-            hwnd,
-            DlgProc,
-            (LPARAM)&param
-            );
+                             GetModuleHandle(NULL),
+                             MAKEINTRESOURCE(IDD_CHOOSE_DEVICE),
+                             hwnd,
+                             DlgProc,
+                             (LPARAM)&param
+                         );
 
         if ((result == IDOK) && (param.selection != (UINT32)-1))
         {
@@ -402,7 +402,7 @@ void OnChooseDevice(HWND hwnd)
             {
                 hr = E_UNEXPECTED;
             }
-			else
+            else
             {
                 // Give this source to the CPreview object for preview.
                 hr = g_pPreview->SetDevice(param.ppDevices[iDevice]);
@@ -502,14 +502,14 @@ HRESULT OnInitDialog(HWND hwnd, ChooseDeviceParam *pParam)
         WCHAR *szFriendlyName = NULL;
 
         hr = pParam->ppDevices[i]->GetAllocatedString(
-            MF_DEVSOURCE_ATTRIBUTE_FRIENDLY_NAME, 
-            &szFriendlyName, 
-            NULL
-            );
+                 MF_DEVSOURCE_ATTRIBUTE_FRIENDLY_NAME,
+                 &szFriendlyName,
+                 NULL
+             );
 
-        if (FAILED(hr)) 
-        { 
-            break; 
+        if (FAILED(hr))
+        {
+            break;
         }
 
         int index = ListBox_AddString(hList, szFriendlyName);

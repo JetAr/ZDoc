@@ -1,4 +1,4 @@
-//*****************************************************************************
+﻿//*****************************************************************************
 //
 // Microsoft Windows Media
 // Copyright ( C) Microsoft Corporation. All rights reserved.
@@ -23,7 +23,7 @@
 HRESULT ConvertTCharToWChar( LPCTSTR ptszInput, __out LPWSTR * pwszOutput )
 {
     int cchOutput = 0;
-    
+
     if( NULL == ptszInput || NULL == pwszOutput )
     {
         return( E_INVALIDARG );
@@ -56,7 +56,7 @@ HRESULT ConvertTCharToWChar( LPCTSTR ptszInput, __out LPWSTR * pwszOutput )
     {
         SAFE_ARRAYDELETE( *pwszOutput );
         return( HRESULT_FROM_WIN32( GetLastError() ) );
-    }        
+    }
 #endif // UNICODE
 
     return( S_OK );
@@ -87,11 +87,11 @@ int __cdecl _tmain( int argc, __in_ecount(argc) LPTSTR argv[] )
     HRESULT         hr = S_OK;
     WCHAR           * pwszInFile = NULL;
     WCHAR           * pwszOutFile = NULL;
-    QWORD           qwMaxDuration = 0;  // Maximum duration of output file 
+    QWORD           qwMaxDuration = 0;  // Maximum duration of output file
     BOOL            fMoveScriptStream = FALSE;
     BOOL            fValidArgument = FALSE;
     CWMVCopy        * pWMVCopy = NULL;
-        
+
     //
     // Initialize COM library
     //

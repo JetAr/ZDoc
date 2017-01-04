@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -79,13 +79,13 @@
 class CRefObject
 {
 public:
-    CRefObject() 
-    : m_RefCount(1) 
+    CRefObject()
+        : m_RefCount(1)
     {}
 
     virtual ~CRefObject() {};
 
-    ULONG AddRef() 
+    ULONG AddRef()
     {
         if ( 0 != m_RefCount )
         {
@@ -116,7 +116,7 @@ class CRefObjList : public CAtlList<T>
 
 public:
     CRefObjList(UINT nBlockSize = 10)
-    :CAtlList<T>(nBlockSize)
+        :CAtlList<T>(nBlockSize)
     {
     }
 
@@ -143,7 +143,7 @@ public:
 
     T GetElement(T pCheck)
     {
-        
+
         for (size_t i = 0; i < GetCount(); i++)
         {
             T pObj = GetAt(FindIndex(i));
@@ -155,7 +155,7 @@ public:
 
         return NULL;
     }
-    
+
     BOOL IsInArray(T pCheck)
     {
         return GetElement(pCheck) != NULL;

@@ -1,4 +1,4 @@
-//
+﻿//
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -91,7 +91,7 @@ Return Value:
     //
 
     if (wcChar >= 9 &&
-        wcChar <= 13)
+            wcChar <= 13)
     {
         fResults = TRUE;
         goto quit;
@@ -302,8 +302,8 @@ Return Value:
     //
 
     if (m_fReturnedLastProxy ||
-        !m_fProxyFailOverValid ||
-        m_wpiProxyInfo.lpszProxy == NULL)
+            !m_fProxyFailOverValid ||
+            m_wpiProxyInfo.lpszProxy == NULL)
     {
 
         //
@@ -327,8 +327,8 @@ Return Value:
     //
 
     while(*pwszCursor != L'\0' &&
-          *pwszCursor != L';' &&
-          !IsWhitespace(*pwszCursor))
+            *pwszCursor != L';' &&
+            !IsWhitespace(*pwszCursor))
     {
         pwszCursor++;
     }
@@ -338,7 +338,7 @@ Return Value:
     //
 
     while(*pwszCursor == L';' ||
-          IsWhitespace(*pwszCursor))
+            IsWhitespace(*pwszCursor))
     {
         pwszCursor++;
     }

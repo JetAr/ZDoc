@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -13,12 +13,12 @@ DWORD
 StringToSsid(
     __in LPCWSTR strSsid,
     __out PDOT11_SSID pDot11Ssid
-    )
+)
 {
     DWORD dwError = NO_ERROR;
     BYTE  pbSsid[DOT11_SSID_MAX_LENGTH + 1];
     DWORD dwBytes;
- 
+
     if (strSsid == NULL || pDot11Ssid == NULL || wcslen(strSsid) == 0)
     {
         dwError = ERROR_INVALID_PARAMETER;
@@ -26,13 +26,13 @@ StringToSsid(
     }
 
     dwBytes = WideCharToMultiByte(CP_ACP, WC_NO_BEST_FIT_CHARS,
-        strSsid, -1, (LPSTR)pbSsid, sizeof(pbSsid), NULL, NULL);
+                                  strSsid, -1, (LPSTR)pbSsid, sizeof(pbSsid), NULL, NULL);
 
     if (dwBytes == 0)
     {
         // Conversion failed.
         dwError = GetLastError();
-        
+
         if (dwError == ERROR_INSUFFICIENT_BUFFER)
         {
             dwError = ERROR_BAD_LENGTH;
@@ -52,20 +52,20 @@ StringToSsid(
         pDot11Ssid->uSSIDLength = dwBytes - 1;
         memcpy(pDot11Ssid->ucSSID, pbSsid, pDot11Ssid->uSSIDLength);
     }
-    
+
 error:
 
     return dwError;
 }
 
- __success(ERROR_SUCCESS)
+__success(ERROR_SUCCESS)
 DWORD
 SsidToDisplayName(
     __in PDOT11_SSID pDot11Ssid,
     __in BOOL bHexFallback,
     __out_ecount_opt(*pcchDisplayName) LPWSTR strDisplayName,
     __inout DWORD *pcchDisplayName
-    )
+)
 {
     DWORD dwError = NO_ERROR;
     DWORD cchDisplayName, i, j;
@@ -75,10 +75,10 @@ SsidToDisplayName(
     WCHAR strSSID[WLAN_MAX_NAME_LENGTH];
     LPWSTR pszArgs[1] = {NULL};
 
-    if (pDot11Ssid == NULL || 
-        pcchDisplayName == NULL ||
-        (strDisplayName == NULL && *pcchDisplayName != 0) ||
-        pDot11Ssid->uSSIDLength > DOT11_SSID_MAX_LENGTH)
+    if (pDot11Ssid == NULL ||
+            pcchDisplayName == NULL ||
+            (strDisplayName == NULL && *pcchDisplayName != 0) ||
+            pDot11Ssid->uSSIDLength > DOT11_SSID_MAX_LENGTH)
     {
         dwError = ERROR_INVALID_PARAMETER;
         goto error;
@@ -99,15 +99,15 @@ SsidToDisplayName(
     {
         // Convert to get length, not including null.
         cchDisplayName = MultiByteToWideChar(CP_ACP, 0,
-            (LPCSTR)pDot11Ssid->ucSSID, pDot11Ssid->uSSIDLength, 
-            NULL, 0);
+                                             (LPCSTR)pDot11Ssid->ucSSID, pDot11Ssid->uSSIDLength,
+                                             NULL, 0);
     }
 
     if (pDot11Ssid->uSSIDLength ==0 || cchDisplayName > 0)
     {
         // Length including null.
         cchDisplayName ++;
-        
+
         // Conversion succeeded.
         if (*pcchDisplayName < cchDisplayName)
         {
@@ -121,11 +121,11 @@ SsidToDisplayName(
             if (pDot11Ssid->uSSIDLength > 0)
             {
                 cchDisplayName = MultiByteToWideChar(CP_ACP, 0,
-                    (LPCSTR)pDot11Ssid->ucSSID, pDot11Ssid->uSSIDLength, 
-                    strDisplayName, *pcchDisplayName);
+                                                     (LPCSTR)pDot11Ssid->ucSSID, pDot11Ssid->uSSIDLength,
+                                                     strDisplayName, *pcchDisplayName);
 
                 if (cchDisplayName == 0)
-                {                
+                {
                     dwError = GetLastError();
                     goto error;
                 }
@@ -151,10 +151,10 @@ SsidToDisplayName(
     else if (bHexFallback)
     {
         // ACP Conversion failed. Try Hex conversion.
-        
+
         // Display name length including null.
         cchDisplayName = cchHexResource + 2 * pDot11Ssid->uSSIDLength + 1;
-        
+
         if (*pcchDisplayName < cchDisplayName)
         {
             // Insufficient buffer.
@@ -175,14 +175,14 @@ SsidToDisplayName(
 
             pszArgs[0] = strSSID;
             cchDisplayName = FormatMessage(
-                              FORMAT_MESSAGE_FROM_STRING 
-                              | FORMAT_MESSAGE_ARGUMENT_ARRAY,
-                              strHexResource,
-                              0,
-                              0,
-                              strDisplayName,
-                              *pcchDisplayName,
-                              (va_list *)pszArgs
+                                 FORMAT_MESSAGE_FROM_STRING
+                                 | FORMAT_MESSAGE_ARGUMENT_ARRAY,
+                                 strHexResource,
+                                 0,
+                                 0,
+                                 strDisplayName,
+                                 *pcchDisplayName,
+                                 (va_list *)pszArgs
                              );
             if (cchDisplayName == 0)
             {
@@ -190,21 +190,21 @@ SsidToDisplayName(
                 goto error;
             }
             *pcchDisplayName = cchDisplayName;
-        }                    
-    }    
+        }
+    }
 
 error:
     return dwError;
 }
 
-DWORD 
+DWORD
 ConvertPassPhraseKeyStringToBuffer(
-    __in_ecount(dwLength) LPCWSTR strPassKeyString,     // Unicode string 
+    __in_ecount(dwLength) LPCWSTR strPassKeyString,     // Unicode string
     __in DWORD dwLength,
     __in DOT11_AUTH_ALGORITHM dot11Auth,
     __out_ecount_opt(*pdwBufLen) UCHAR* strPassKeyBuf,  // NULL to get length required
     __inout DWORD *pdwBufLen                            // in: length of buffer; out: chars copied/required
-    )
+)
 
 {
     DWORD dwError = NO_ERROR;
@@ -234,21 +234,21 @@ ConvertPassPhraseKeyStringToBuffer(
     }
 
     dwAllocLen = WideCharToMultiByte(
-        CP_ACP,
-        WC_NO_BEST_FIT_CHARS,
-        strPassKeyString,
-        dwLength,
-        NULL,
-        0,
-        NULL,
-        NULL
-        );
+                     CP_ACP,
+                     WC_NO_BEST_FIT_CHARS,
+                     strPassKeyString,
+                     dwLength,
+                     NULL,
+                     0,
+                     NULL,
+                     NULL
+                 );
     if (!dwAllocLen)
     {
         dwError = GetLastError();
         BAIL_ON_ERROR(dwError);
     }
-    
+
     lpstrKeyMaterial = (UCHAR *)WlanAllocateMemory(dwAllocLen);
     if (NULL == lpstrKeyMaterial)
     {
@@ -262,16 +262,16 @@ ConvertPassPhraseKeyStringToBuffer(
     );
 
     dwKeyBytes = WideCharToMultiByte(
-        CP_ACP,
-        WC_NO_BEST_FIT_CHARS,
-        strPassKeyString,
-        dwLength,
-        (LPSTR)lpstrKeyMaterial,
-        dwAllocLen,
-        NULL,
-        &bUnmappableChar
-        );
-    
+                     CP_ACP,
+                     WC_NO_BEST_FIT_CHARS,
+                     strPassKeyString,
+                     dwLength,
+                     (LPSTR)lpstrKeyMaterial,
+                     dwAllocLen,
+                     NULL,
+                     &bUnmappableChar
+                 );
+
     if (!dwKeyBytes)
     {
         dwError = GetLastError();
@@ -292,21 +292,21 @@ ConvertPassPhraseKeyStringToBuffer(
     _ASSERT(DOT11_AUTH_ALGO_RSNA_PSK == dot11Auth);
     switch (dot11Auth)
     {
-        case DOT11_AUTH_ALGO_RSNA_PSK:
-            if ((dwKeyBytes > 63) ||    // Max length
+    case DOT11_AUTH_ALGO_RSNA_PSK:
+        if ((dwKeyBytes > 63) ||    // Max length
                 (dwKeyBytes < 8))       // Min length
-            {
-                dwError = ERROR_BAD_FORMAT;
-                BAIL_ON_ERROR(dwError);
-            }
-
-            // Include an extra byte for the NULL terminator in a passphrase
-            dwReqdBytes = dwKeyBytes + 1;
-            break;
-
-        default:
-            dwError = ERROR_INVALID_PARAMETER;
+        {
+            dwError = ERROR_BAD_FORMAT;
             BAIL_ON_ERROR(dwError);
+        }
+
+        // Include an extra byte for the NULL terminator in a passphrase
+        dwReqdBytes = dwKeyBytes + 1;
+        break;
+
+    default:
+        dwError = ERROR_INVALID_PARAMETER;
+        BAIL_ON_ERROR(dwError);
     }
 
     if (!strPassKeyBuf || (*pdwBufLen < dwReqdBytes))
@@ -318,13 +318,13 @@ ConvertPassPhraseKeyStringToBuffer(
     ZeroMemory(
         strPassKeyBuf,
         dwReqdBytes
-        );
+    );
 
     CopyMemory(
         strPassKeyBuf,
         lpstrKeyMaterial,
         dwKeyBytes
-        );
+    );
 error:
     if (pdwBufLen)
     {
@@ -336,6 +336,6 @@ error:
         WlanFreeMemory(lpstrKeyMaterial);
     }
 
-    
+
     return dwError;
 }

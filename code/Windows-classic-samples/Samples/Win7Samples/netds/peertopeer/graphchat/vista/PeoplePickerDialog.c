@@ -1,4 +1,4 @@
-/**********************************************************************
+﻿/**********************************************************************
 THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED
 TO THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -15,12 +15,12 @@ Abstract:
     This C file includes a sample, simple People Picker dialog.
 
 Feedback:
-    If you have any questions or feedback, please contact us using 
+    If you have any questions or feedback, please contact us using
     any of the mechanisms below:
 
-    Email: peerfb@microsoft.com 
-    Newsgroup: Microsoft.public.win32.programmer.networks 
-    Website: http://www.microsoft.com/p2p 
+    Email: peerfb@microsoft.com
+    Newsgroup: Microsoft.public.win32.programmer.networks
+    Website: http://www.microsoft.com/p2p
 
 --********************************************************************/
 
@@ -98,11 +98,11 @@ HRESULT InitPeoplePickerDialog(HWND hDlg)
         MessageBox(NULL, L"Critical error", L"Critical error", MB_OK);
         return E_UNEXPECTED;
     }
-    
+
     // Init the data model
     //
     hr = InitPeoplePickerModel(hDlg);
-    
+
     if (FAILED(hr))
     {
         return hr;
@@ -114,7 +114,7 @@ HRESULT InitPeoplePickerDialog(HWND hDlg)
 //-----------------------------------------------------------------------------
 // Function: AddPersonToListView
 //
-// Purpose:  Creates the list view item associating the 
+// Purpose:  Creates the list view item associating the
 //             person added with the LPARAM of the list view item.
 //
 // Returns:  VOID
@@ -127,15 +127,15 @@ VOID AddPersonToListView(HWND hDlg, LPARAM lParam)
 
     // Setup listview item & unpack person near me info
     //
-    lvItem.mask = LVIF_TEXT | LVIF_PARAM;  
+    lvItem.mask = LVIF_TEXT | LVIF_PARAM;
     lvItem.cchTextMax = 256;
-    lvItem.iItem = 0; 
+    lvItem.iItem = 0;
     lvItem.iSubItem = 0;
     lvItem.pszText = pPerson->pwzNickName;
     lvItem.lParam = (LPARAM) pPerson;
 
     // Get the list from the dialog to insert the item
-    // 
+    //
     hList = GetDlgItem(hDlg, IDC_PEOPLELIST);
 
     if (ListView_InsertItem(hList, &lvItem) == -1)
@@ -165,13 +165,13 @@ VOID RemovePersonFromListView(HWND hDlg, LPARAM lParam)
     //
     lvItemToFind.flags = LVFI_STRING;
     lvItemToFind.psz = pPerson->pwzNickName;
-    
+
     // Setup the LVITEM info wanted
     //
     lvItem.mask = LVIF_PARAM;
 
     hList = GetDlgItem(hDlg, IDC_PEOPLELIST);
-    
+
     // Get the list and find the item
     //
     index = ListView_FindItem(hList, index, &lvItemToFind);
@@ -185,9 +185,9 @@ VOID RemovePersonFromListView(HWND hDlg, LPARAM lParam)
             pTempPerson = (PEER_PEOPLE_NEAR_ME *) lvItem.lParam;
 
             if (0 == memcmp(&(pPerson->id), &(pTempPerson->id), sizeof(GUID)))
-            {            
+            {
                 // Free the person we associated with the list view and delete it from the list view
-                // 
+                //
                 PeoplePickerModelFreePerson((PEER_PEOPLE_NEAR_ME *)lvItem.lParam);
                 ListView_DeleteItem(hList, index);
                 PeoplePickerModelFreePerson(pPerson);
@@ -310,82 +310,82 @@ INT_PTR CALLBACK PeoplePicker(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPa
 
     switch (message)
     {
-        case WM_INITDIALOG:
-            // Save the PEER_PEOPLE_NEAR_ME output param received from ShowPeoplePicker
+    case WM_INITDIALOG:
+        // Save the PEER_PEOPLE_NEAR_ME output param received from ShowPeoplePicker
+        //
+        SetWindowLongPtr(hDlg, DWLP_USER, (LONG) lParam);
+        InitPeoplePickerDialog(hDlg);
+        return (INT_PTR)TRUE;
+
+    case WM_ADDPERSON:
+        AddPersonToListView(hDlg, lParam);
+        return (INT_PTR)TRUE;
+
+    case WM_REMOVEPERSON:
+        RemovePersonFromListView(hDlg, lParam);
+        return (INT_PTR)TRUE;
+
+    case WM_CLEARPEOPLE:
+        ClearPeopleFromListView(hDlg);
+        return (INT_PTR)TRUE;
+
+    case WM_NOTIFY:
+        // Check the list to see if something is selected
+        // If so, enable the "OK" button, if not disable the "OK" button.
+        //
+        if (((LPNMHDR)lParam)->code == LVN_ITEMCHANGED)
+        {
+            hList = GetDlgItem(hDlg,IDC_PEOPLELIST);
+
+            if (ListView_GetSelectedCount(hList))
+            {
+                EnableWindow(GetDlgItem(hDlg, IDOK), TRUE);
+            }
+            else
+            {
+                EnableWindow(GetDlgItem(hDlg, IDOK), FALSE);
+            }
+        }
+
+        if (((LPNMHDR)lParam)->code == NM_DBLCLK)
+        {
+            index = ((LPNMITEMACTIVATE)lParam)->iItem;
+
+            if (index >= 0)
+            {
+                AcceptSelectedItem(hDlg, index);
+            }
+        }
+
+        return (INT_PTR)TRUE;
+
+    case WM_COMMAND:
+        if (LOWORD(wParam) == IDOK)
+        {
+            hList = GetDlgItem(hDlg, IDC_PEOPLELIST);
+
+            //Get the index of the first selected item
             //
-            SetWindowLongPtr(hDlg, DWLP_USER, (LONG) lParam);
-            InitPeoplePickerDialog(hDlg);
-            return (INT_PTR)TRUE;
+            index = ListView_GetNextItem(hList, -1, LVNI_SELECTED);
 
-        case WM_ADDPERSON:
-            AddPersonToListView(hDlg, lParam);
-            return (INT_PTR)TRUE;
-        
-        case WM_REMOVEPERSON:
-            RemovePersonFromListView(hDlg, lParam);
-            return (INT_PTR)TRUE;
+            if (index >= 0)
+            {
+                AcceptSelectedItem(hDlg, index);
+            }
 
-        case WM_CLEARPEOPLE:
+            return (INT_PTR)TRUE;
+        }
+
+        if (LOWORD(wParam) == IDCANCEL)
+        {
+            // Clean up the dialog and associated model
+            //
             ClearPeopleFromListView(hDlg);
+            PeoplePickerModelDestroy();
+            EndDialog(hDlg, LOWORD(wParam));
             return (INT_PTR)TRUE;
-
-        case WM_NOTIFY:
-            // Check the list to see if something is selected
-            // If so, enable the "OK" button, if not disable the "OK" button.
-            //
-            if (((LPNMHDR)lParam)->code == LVN_ITEMCHANGED)
-            {
-                hList = GetDlgItem(hDlg,IDC_PEOPLELIST);
-
-                if (ListView_GetSelectedCount(hList))
-                {
-                    EnableWindow(GetDlgItem(hDlg, IDOK), TRUE);
-                }
-                else
-                {
-                    EnableWindow(GetDlgItem(hDlg, IDOK), FALSE);
-                }
-            }
-
-            if (((LPNMHDR)lParam)->code == NM_DBLCLK)
-            {
-                index = ((LPNMITEMACTIVATE)lParam)->iItem;
-
-                if (index >= 0)
-                {
-                    AcceptSelectedItem(hDlg, index);
-                }
-            }
-
-            return (INT_PTR)TRUE;
-
-        case WM_COMMAND:
-            if (LOWORD(wParam) == IDOK)
-            {
-                hList = GetDlgItem(hDlg, IDC_PEOPLELIST);
-
-                //Get the index of the first selected item
-                //
-                index = ListView_GetNextItem(hList, -1, LVNI_SELECTED);
-
-                if (index >= 0)
-                {
-                    AcceptSelectedItem(hDlg, index);
-                }
-
-                return (INT_PTR)TRUE;
-            }
-
-            if (LOWORD(wParam) == IDCANCEL)
-            {
-                // Clean up the dialog and associated model
-                //
-                ClearPeopleFromListView(hDlg);
-                PeoplePickerModelDestroy();
-                EndDialog(hDlg, LOWORD(wParam));
-                return (INT_PTR)TRUE;
-            }
-            break;
+        }
+        break;
     }
     return (INT_PTR)FALSE;
 }

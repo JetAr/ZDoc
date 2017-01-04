@@ -1,4 +1,4 @@
-//------------------------------------------------------------------------------
+﻿//------------------------------------------------------------------------------
 // File: Allocator.cpp
 //
 // Desc: DirectShow sample code - implementation of the CAllocator class
@@ -15,10 +15,10 @@
 //////////////////////////////////////////////////////////////////////
 
 CAllocator::CAllocator(HRESULT& hr, HWND wnd, IDirect3D9* d3d, IDirect3DDevice9* d3dd)
-: m_refCount(1)
-, m_D3D(d3d)
-, m_D3DDev(d3dd)
-, m_window( wnd )
+    : m_refCount(1)
+    , m_D3D(d3d)
+    , m_D3DDev(d3dd)
+    , m_window( wnd )
 {
     CAutoLock Lock(&m_ObjectLock);
     hr = E_FAIL;
@@ -31,10 +31,11 @@ CAllocator::CAllocator(HRESULT& hr, HWND wnd, IDirect3D9* d3d, IDirect3DDevice9*
 
     if( m_D3D == NULL )
     {
-        ASSERT( d3dd ==  NULL ); 
+        ASSERT( d3dd ==  NULL );
 
         m_D3D.Attach( Direct3DCreate9(D3D_SDK_VERSION) );
-        if (m_D3D == NULL) {
+        if (m_D3D == NULL)
+        {
             hr = E_FAIL;
             return;
         }
@@ -68,12 +69,12 @@ HRESULT CAllocator::CreateDevice()
     FAIL_RET( m_D3D->CreateDevice(  D3DADAPTER_DEFAULT,
                                     D3DDEVTYPE_HAL,
                                     m_window,
-                                    D3DCREATE_SOFTWARE_VERTEXPROCESSING | 
+                                    D3DCREATE_SOFTWARE_VERTEXPROCESSING |
                                     D3DCREATE_MULTITHREADED,
                                     &pp,
                                     &m_D3DDev) );
 
-    m_renderTarget = NULL; 
+    m_renderTarget = NULL;
     return m_D3DDev->GetRenderTarget( 0, & m_renderTarget );
 }
 
@@ -85,7 +86,7 @@ void CAllocator::DeleteSurfaces()
     // clear out the private texture
     m_privateTexture = NULL;
 
-    for( size_t i = 0; i < m_surfaces.size(); ++i ) 
+    for( size_t i = 0; i < m_surfaces.size(); ++i )
     {
         m_surfaces[i] = NULL;
     }
@@ -93,10 +94,10 @@ void CAllocator::DeleteSurfaces()
 
 
 //IVMRSurfaceAllocator9
-HRESULT CAllocator::InitializeDevice( 
-            /* [in] */ DWORD_PTR dwUserID,
-            /* [in] */ VMR9AllocationInfo *lpAllocInfo,
-            /* [out][in] */ DWORD *lpNumBuffers)
+HRESULT CAllocator::InitializeDevice(
+    /* [in] */ DWORD_PTR dwUserID,
+    /* [in] */ VMR9AllocationInfo *lpAllocInfo,
+    /* [out][in] */ DWORD *lpNumBuffers)
 {
     D3DCAPS9 d3dcaps;
     DWORD dwWidth = 1;
@@ -139,32 +140,32 @@ HRESULT CAllocator::InitializeDevice(
     DeleteSurfaces();
     m_surfaces.resize(*lpNumBuffers);
     hr = m_lpIVMRSurfAllocNotify->AllocateSurfaceHelper(lpAllocInfo, lpNumBuffers, & m_surfaces.at(0) );
-    
-    // If we couldn't create a texture surface and 
+
+    // If we couldn't create a texture surface and
     // the format is not an alpha format,
     // then we probably cannot create a texture.
     // So what we need to do is create a private texture
     // and copy the decoded images onto it.
     if(FAILED(hr) && !(lpAllocInfo->dwFlags & VMR9AllocFlag_3DRenderTarget))
     {
-        DeleteSurfaces();            
+        DeleteSurfaces();
 
         // is surface YUV ?
-        if (lpAllocInfo->Format > '0000') 
-        {           
-            D3DDISPLAYMODE dm; 
+        if (lpAllocInfo->Format > '0000')
+        {
+            D3DDISPLAYMODE dm;
             FAIL_RET( m_D3DDev->GetDisplayMode(NULL,  & dm ) );
 
             // create the private texture
             FAIL_RET( m_D3DDev->CreateTexture(lpAllocInfo->dwWidth, lpAllocInfo->dwHeight,
-                                    1, 
-                                    D3DUSAGE_RENDERTARGET, 
-                                    dm.Format, 
-                                    D3DPOOL_DEFAULT /* default pool - usually video memory */, 
-                                    & m_privateTexture, NULL ) );
+                                              1,
+                                              D3DUSAGE_RENDERTARGET,
+                                              dm.Format,
+                                              D3DPOOL_DEFAULT /* default pool - usually video memory */,
+                                              & m_privateTexture, NULL ) );
         }
 
-        
+
         lpAllocInfo->dwFlags &= ~VMR9AllocFlag_TextureSurface;
         lpAllocInfo->dwFlags |= VMR9AllocFlag_OffscreenSurface;
 
@@ -173,26 +174,26 @@ HRESULT CAllocator::InitializeDevice(
 
     return m_scene.Init(m_D3DDev);
 }
-            
-HRESULT CAllocator::TerminateDevice( 
-        /* [in] */ DWORD_PTR dwID)
+
+HRESULT CAllocator::TerminateDevice(
+    /* [in] */ DWORD_PTR dwID)
 {
     DeleteSurfaces();
     return S_OK;
 }
-    
-HRESULT CAllocator::GetSurface( 
-        /* [in] */ DWORD_PTR dwUserID,
-        /* [in] */ DWORD SurfaceIndex,
-        /* [in] */ DWORD SurfaceFlags,
-        /* [out] */ IDirect3DSurface9 **lplpSurface)
+
+HRESULT CAllocator::GetSurface(
+    /* [in] */ DWORD_PTR dwUserID,
+    /* [in] */ DWORD SurfaceIndex,
+    /* [in] */ DWORD SurfaceFlags,
+    /* [out] */ IDirect3DSurface9 **lplpSurface)
 {
     if( lplpSurface == NULL )
     {
         return E_POINTER;
     }
 
-    if (SurfaceIndex >= m_surfaces.size() ) 
+    if (SurfaceIndex >= m_surfaces.size() )
     {
         return E_FAIL;
     }
@@ -205,9 +206,9 @@ HRESULT CAllocator::GetSurface(
     return S_OK;
 //    return m_surfaces[SurfaceIndex].CopyTo(lplpSurface) ;
 }
-    
-HRESULT CAllocator::AdviseNotify( 
-        /* [in] */ IVMRSurfaceAllocatorNotify9 *lpIVMRSurfAllocNotify)
+
+HRESULT CAllocator::AdviseNotify(
+    /* [in] */ IVMRSurfaceAllocatorNotify9 *lpIVMRSurfAllocNotify)
 {
     CAutoLock Lock(&m_ObjectLock);
 
@@ -221,7 +222,7 @@ HRESULT CAllocator::AdviseNotify(
     return hr;
 }
 
-HRESULT CAllocator::StartPresenting( 
+HRESULT CAllocator::StartPresenting(
     /* [in] */ DWORD_PTR dwUserID)
 {
     CAutoLock Lock(&m_ObjectLock);
@@ -235,13 +236,13 @@ HRESULT CAllocator::StartPresenting(
     return S_OK;
 }
 
-HRESULT CAllocator::StopPresenting( 
+HRESULT CAllocator::StopPresenting(
     /* [in] */ DWORD_PTR dwUserID)
 {
     return S_OK;
 }
 
-HRESULT CAllocator::PresentImage( 
+HRESULT CAllocator::PresentImage(
     /* [in] */ DWORD_PTR dwUserID,
     /* [in] */ VMR9PresentationInfo *lpPresInfo)
 {
@@ -251,7 +252,7 @@ HRESULT CAllocator::PresentImage(
     // if we are in the middle of the display change
     if( NeedToHandleDisplayChange() )
     {
-        // NOTE: this piece of code is left as a user exercise.  
+        // NOTE: this piece of code is left as a user exercise.
         // The D3DDevice here needs to be switched
         // to the device that is using another adapter
     }
@@ -263,7 +264,7 @@ HRESULT CAllocator::PresentImage(
     // We need to restore our video memory after that
     if( hr == D3DERR_DEVICELOST)
     {
-        if (m_D3DDev->TestCooperativeLevel() == D3DERR_DEVICENOTRESET) 
+        if (m_D3DDev->TestCooperativeLevel() == D3DERR_DEVICENOTRESET)
         {
             DeleteSurfaces();
             FAIL_RET( CreateDevice() );
@@ -299,22 +300,22 @@ HRESULT CAllocator::PresentHelper(VMR9PresentationInfo *lpPresInfo)
     // if we created a  private texture
     // blt the decoded image onto the texture.
     if( m_privateTexture != NULL )
-    {   
+    {
         SmartPtr<IDirect3DSurface9> surface;
-        FAIL_RET( m_privateTexture->GetSurfaceLevel( 0 , & surface ) );
+        FAIL_RET( m_privateTexture->GetSurfaceLevel( 0, & surface ) );
 
         // copy the full surface onto the texture's surface
         FAIL_RET( m_D3DDev->StretchRect( lpPresInfo->lpSurf, NULL,
-                             surface, NULL,
-                             D3DTEXF_NONE ) );
+                                         surface, NULL,
+                                         D3DTEXF_NONE ) );
 
         FAIL_RET( m_scene.DrawScene(m_D3DDev, m_privateTexture ) );
     }
     else // this is the case where we have got the textures allocated by VMR
-         // all we need to do is to get them from the surface
+        // all we need to do is to get them from the surface
     {
         SmartPtr<IDirect3DTexture9> texture;
-        FAIL_RET( lpPresInfo->lpSurf->GetContainer( __uuidof(IDirect3DTexture9), (LPVOID*) & texture ) );    
+        FAIL_RET( lpPresInfo->lpSurf->GetContainer( __uuidof(IDirect3DTexture9), (LPVOID*) & texture ) );
         FAIL_RET( m_scene.DrawScene(m_D3DDev, texture ) );
     }
 
@@ -348,31 +349,35 @@ bool CAllocator::NeedToHandleDisplayChange()
 
 
 // IUnknown
-HRESULT CAllocator::QueryInterface( 
-        REFIID riid,
-        void** ppvObject)
+HRESULT CAllocator::QueryInterface(
+    REFIID riid,
+    void** ppvObject)
 {
     HRESULT hr = E_NOINTERFACE;
 
-    if( ppvObject == NULL ) {
+    if( ppvObject == NULL )
+    {
         hr = E_POINTER;
-    } 
-    else if( riid == IID_IVMRSurfaceAllocator9 ) {
+    }
+    else if( riid == IID_IVMRSurfaceAllocator9 )
+    {
         *ppvObject = static_cast<IVMRSurfaceAllocator9*>( this );
         AddRef();
         hr = S_OK;
-    } 
-    else if( riid == IID_IVMRImagePresenter9 ) {
+    }
+    else if( riid == IID_IVMRImagePresenter9 )
+    {
         *ppvObject = static_cast<IVMRImagePresenter9*>( this );
         AddRef();
         hr = S_OK;
-    } 
-    else if( riid == IID_IUnknown ) {
-        *ppvObject = 
-            static_cast<IUnknown*>( 
-            static_cast<IVMRSurfaceAllocator9*>( this ) );
+    }
+    else if( riid == IID_IUnknown )
+    {
+        *ppvObject =
+            static_cast<IUnknown*>(
+                static_cast<IVMRSurfaceAllocator9*>( this ) );
         AddRef();
-        hr = S_OK;    
+        hr = S_OK;
     }
 
     return hr;

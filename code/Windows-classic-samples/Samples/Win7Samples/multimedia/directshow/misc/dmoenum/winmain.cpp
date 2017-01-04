@@ -1,4 +1,4 @@
-//------------------------------------------------------------------------------
+﻿//------------------------------------------------------------------------------
 //
 // File: AMCap2.cpp
 //
@@ -21,7 +21,7 @@ int WINAPI _tWinMain(HINSTANCE  hInstance,
 
     g_hInstance = hInstance;
 
-	HRESULT hr =    CoInitializeEx(NULL, COINIT_APARTMENTTHREADED);
+    HRESULT hr =    CoInitializeEx(NULL, COINIT_APARTMENTTHREADED);
 
     if (FAILED(hr))
     {
@@ -30,28 +30,28 @@ int WINAPI _tWinMain(HINSTANCE  hInstance,
     }
 
     // Initialize the common control library
-	//INITCOMMONCONTROLSEX iccx;
- //   iccx.dwSize = sizeof(INITCOMMONCONTROLSEX);
- //   iccx.dwICC = ICC_COOL_CLASSES | ICC_BAR_CLASSES;
- //   BOOL bResult = InitCommonControlsEx(&iccx);
- //   if (!bResult)
- //   {
- //       MessageBox(NULL, TEXT("InitCommonControlsEx failed."), NULL, MB_ICONSTOP);
- //       CoUninitialize();
- //       return 1;
- //   }
+    //INITCOMMONCONTROLSEX iccx;
+//   iccx.dwSize = sizeof(INITCOMMONCONTROLSEX);
+//   iccx.dwICC = ICC_COOL_CLASSES | ICC_BAR_CLASSES;
+//   BOOL bResult = InitCommonControlsEx(&iccx);
+//   if (!bResult)
+//   {
+//       MessageBox(NULL, TEXT("InitCommonControlsEx failed."), NULL, MB_ICONSTOP);
+//       CoUninitialize();
+//       return 1;
+//   }
 
-	MainDialog *pDlg = new MainDialog();
-	if (pDlg == NULL)
-	{
+    MainDialog *pDlg = new MainDialog();
+    if (pDlg == NULL)
+    {
         MessageBox(NULL, TEXT("Out of memory."), NULL, MB_ICONSTOP);
-	}
-	else
-	{
-		pDlg->ShowDialog(hInstance, NULL);
+    }
+    else
+    {
+        pDlg->ShowDialog(hInstance, NULL);
 
-		delete pDlg;
-	}
+        delete pDlg;
+    }
 
 
 

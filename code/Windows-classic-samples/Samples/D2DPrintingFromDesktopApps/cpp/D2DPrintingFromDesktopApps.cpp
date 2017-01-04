@@ -1,4 +1,4 @@
-//// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿//// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 //// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 //// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 //// PARTICULAR PURPOSE.
@@ -25,7 +25,7 @@ int WINAPI WinMain(
     _In_opt_    HINSTANCE /* hPrevInstance */,
     _In_        LPSTR /* lpCmdLine */,
     _In_        int /* nCmdShow */
-    )
+)
 {
     // Ignore the return value because we want to continue running even in the
     // unlikely event that HeapSetInformation fails.
@@ -157,18 +157,18 @@ HRESULT DemoApp::Initialize()
 
         // Create the parent window.
         m_parentHwnd = CreateWindow(
-            L"DemoAppWindow",
-            L"Direct2D desktop app printing sample - Press 'p' to print, press <Tab> to toggle multi-page mode",
-            WS_OVERLAPPEDWINDOW | WS_VSCROLL,
-            CW_USEDEFAULT,
-            CW_USEDEFAULT,
-            static_cast<UINT>(ceil(640.f * dpiX / 96.f)),
-            static_cast<UINT>(ceil(480.f * dpiY / 96.f)),
-            nullptr,
-            nullptr,
-            HINST_THISCOMPONENT,
-            this
-            );
+                           L"DemoAppWindow",
+                           L"Direct2D desktop app printing sample - Press 'p' to print, press <Tab> to toggle multi-page mode",
+                           WS_OVERLAPPEDWINDOW | WS_VSCROLL,
+                           CW_USEDEFAULT,
+                           CW_USEDEFAULT,
+                           static_cast<UINT>(ceil(640.f * dpiX / 96.f)),
+                           static_cast<UINT>(ceil(480.f * dpiY / 96.f)),
+                           nullptr,
+                           nullptr,
+                           HINST_THISCOMPONENT,
+                           this
+                       );
 
         hr = m_parentHwnd ? S_OK : E_FAIL;
 
@@ -199,18 +199,18 @@ HRESULT DemoApp::Initialize()
 
         // Create the child window.
         m_d2dHwnd = CreateWindow(
-            L"D2DDemoApp",
-            L"",
-            WS_CHILDWINDOW | WS_VISIBLE,
-            0,
-            0,
-            d2dWindowSize.width,
-            d2dWindowSize.height,
-            m_parentHwnd,
-            nullptr,
-            HINST_THISCOMPONENT,
-            this
-            );
+                        L"D2DDemoApp",
+                        L"",
+                        WS_CHILDWINDOW | WS_VISIBLE,
+                        0,
+                        0,
+                        d2dWindowSize.width,
+                        d2dWindowSize.height,
+                        m_parentHwnd,
+                        nullptr,
+                        HINST_THISCOMPONENT,
+                        this
+                    );
 
         hr = m_d2dHwnd ? S_OK : E_FAIL;
     }
@@ -228,7 +228,7 @@ HRESULT DemoApp::Initialize()
             L"Failed to initialize the application. Sample will exit.",
             L"Sample initialization error",
             MB_OK | MB_ICONSTOP
-            );
+        );
     }
 
     return hr;
@@ -268,43 +268,43 @@ HRESULT DemoApp::CreateDeviceIndependentResources()
 #endif
 
         hr = D2D1CreateFactory(
-            D2D1_FACTORY_TYPE_SINGLE_THREADED,
-            options,
-            &m_d2dFactory
-            );
+                 D2D1_FACTORY_TYPE_SINGLE_THREADED,
+                 options,
+                 &m_d2dFactory
+             );
     }
     if (SUCCEEDED(hr))
     {
         // Create a WIC factory.
         hr = CoCreateInstance(
-            CLSID_WICImagingFactory,
-            nullptr,
-            CLSCTX_INPROC_SERVER,
-            IID_PPV_ARGS(&m_wicFactory)
-            );
+                 CLSID_WICImagingFactory,
+                 nullptr,
+                 CLSCTX_INPROC_SERVER,
+                 IID_PPV_ARGS(&m_wicFactory)
+             );
     }
     if (SUCCEEDED(hr))
     {
         // Create a DirectWrite factory.
         hr = DWriteCreateFactory(
-            DWRITE_FACTORY_TYPE_SHARED,
-            __uuidof(IDWriteFactory),
-            reinterpret_cast<IUnknown **>(&m_dwriteFactory)
-            );
+                 DWRITE_FACTORY_TYPE_SHARED,
+                 __uuidof(IDWriteFactory),
+                 reinterpret_cast<IUnknown **>(&m_dwriteFactory)
+             );
     }
     if (SUCCEEDED(hr))
     {
         // Create a DirectWrite text format object.
         hr = m_dwriteFactory->CreateTextFormat(
-            L"Verdana",
-            nullptr,
-            DWRITE_FONT_WEIGHT_NORMAL,
-            DWRITE_FONT_STYLE_NORMAL,
-            DWRITE_FONT_STRETCH_NORMAL,
-            50.0f,
-            L"en-us",
-            &m_textFormat
-            );
+                 L"Verdana",
+                 nullptr,
+                 DWRITE_FONT_WEIGHT_NORMAL,
+                 DWRITE_FONT_STYLE_NORMAL,
+                 DWRITE_FONT_STRETCH_NORMAL,
+                 50.0f,
+                 L"en-us",
+                 &m_textFormat
+             );
     }
     if (SUCCEEDED(hr))
     {
@@ -320,15 +320,15 @@ HRESULT DemoApp::CreateDeviceIndependentResources()
     {
         // Create a second DirectWrite text format for the multi-page text
         hr = m_dwriteFactory->CreateTextFormat(
-            L"Verdana",
-            nullptr,
-            DWRITE_FONT_WEIGHT_NORMAL,
-            DWRITE_FONT_STYLE_NORMAL,
-            DWRITE_FONT_STRETCH_NORMAL,
-            12.0f,
-            L"en-us",
-            &m_smallTextFormat
-            );
+                 L"Verdana",
+                 nullptr,
+                 DWRITE_FONT_WEIGHT_NORMAL,
+                 DWRITE_FONT_STYLE_NORMAL,
+                 DWRITE_FONT_STRETCH_NORMAL,
+                 12.0f,
+                 L"en-us",
+                 &m_smallTextFormat
+             );
     }
 
     // Create a path geometry for an hourglass shape.
@@ -350,25 +350,25 @@ HRESULT DemoApp::CreateDeviceIndependentResources()
         sink->BeginFigure(
             D2D1::Point2F(0.0f, 0.0f),
             D2D1_FIGURE_BEGIN_FILLED
-            );
+        );
 
         sink->AddLine(D2D1::Point2F(HOURGLASS_SIZE, 0.0f));
 
         sink->AddBezier(
             D2D1::BezierSegment(
-            D2D1::Point2F(HOURGLASS_SIZE / 4.0f * 3.0f, HOURGLASS_SIZE / 4.0f),
-            D2D1::Point2F(HOURGLASS_SIZE / 4.0f * 3.0f, HOURGLASS_SIZE / 4.0f * 3.0f),
-            D2D1::Point2F(HOURGLASS_SIZE, HOURGLASS_SIZE))
-            );
+                D2D1::Point2F(HOURGLASS_SIZE / 4.0f * 3.0f, HOURGLASS_SIZE / 4.0f),
+                D2D1::Point2F(HOURGLASS_SIZE / 4.0f * 3.0f, HOURGLASS_SIZE / 4.0f * 3.0f),
+                D2D1::Point2F(HOURGLASS_SIZE, HOURGLASS_SIZE))
+        );
 
         sink->AddLine(D2D1::Point2F(0.0f, HOURGLASS_SIZE));
 
         sink->AddBezier(
             D2D1::BezierSegment(
-            D2D1::Point2F(HOURGLASS_SIZE / 4.0f, HOURGLASS_SIZE / 4.0f * 3.0f),
-            D2D1::Point2F(HOURGLASS_SIZE / 4.0f, HOURGLASS_SIZE / 4.0f),
-            D2D1::Point2F(0.0f, 0.0f))
-            );
+                D2D1::Point2F(HOURGLASS_SIZE / 4.0f, HOURGLASS_SIZE / 4.0f * 3.0f),
+                D2D1::Point2F(HOURGLASS_SIZE / 4.0f, HOURGLASS_SIZE / 4.0f),
+                D2D1::Point2F(0.0f, 0.0f))
+        );
 
         sink->EndFigure(D2D1_FIGURE_END_CLOSED);
 
@@ -419,19 +419,19 @@ HRESULT DemoApp::CreateDeviceContext()
     for (UINT driverTypeIndex = 0; driverTypeIndex < countOfDriverTypes; driverTypeIndex++)
     {
         hr = D3D11CreateDeviceAndSwapChain(
-            nullptr,       // use default adapter
-            driverTypes[driverTypeIndex],
-            nullptr,       // no external software rasterizer
-            createDeviceFlags,
-            nullptr,       // use default set of feature levels
-            0,
-            D3D11_SDK_VERSION,
-            &swapDescription,
-            &m_swapChain,
-            &d3dDevice,
-            nullptr,       // do not care about what feature level is chosen
-            nullptr        // do not retain D3D device context
-            );
+                 nullptr,       // use default adapter
+                 driverTypes[driverTypeIndex],
+                 nullptr,       // no external software rasterizer
+                 createDeviceFlags,
+                 nullptr,       // use default set of feature levels
+                 0,
+                 D3D11_SDK_VERSION,
+                 &swapDescription,
+                 &m_swapChain,
+                 &d3dDevice,
+                 nullptr,       // do not care about what feature level is chosen
+                 nullptr        // do not retain D3D device context
+             );
 
         if (SUCCEEDED(hr))
         {
@@ -449,17 +449,17 @@ HRESULT DemoApp::CreateDeviceContext()
     {
         // Create a D2D device from the DXGI device.
         hr = m_d2dFactory->CreateDevice(
-            dxgiDevice,
-            &m_d2dDevice
-            );
+                 dxgiDevice,
+                 &m_d2dDevice
+             );
     }
     if (SUCCEEDED(hr))
     {
         // Create a device context from the D2D device.
         hr = m_d2dDevice->CreateDeviceContext(
-            D2D1_DEVICE_CONTEXT_OPTIONS_NONE,
-            &m_d2dContext
-            );
+                 D2D1_DEVICE_CONTEXT_OPTIONS_NONE,
+                 &m_d2dContext
+             );
     }
 
     SafeRelease(&dxgiDevice);
@@ -487,9 +487,9 @@ HRESULT DemoApp::CreateDeviceResources()
         {
             // Get a surface from the swap chain.
             hr = m_swapChain->GetBuffer(
-                0,
-                IID_PPV_ARGS(&surface)
-                );
+                     0,
+                     IID_PPV_ARGS(&surface)
+                 );
         }
         ID2D1Bitmap1* bitmap = nullptr;
         if (SUCCEEDED(hr))
@@ -499,20 +499,20 @@ HRESULT DemoApp::CreateDeviceResources()
 
             // Create a bitmap pointing to the surface.
             D2D1_BITMAP_PROPERTIES1 properties = D2D1::BitmapProperties1(
-                D2D1_BITMAP_OPTIONS_TARGET | D2D1_BITMAP_OPTIONS_CANNOT_DRAW,
-                D2D1::PixelFormat(
-                    DXGI_FORMAT_B8G8R8A8_UNORM,
-                    D2D1_ALPHA_MODE_IGNORE
+                    D2D1_BITMAP_OPTIONS_TARGET | D2D1_BITMAP_OPTIONS_CANNOT_DRAW,
+                    D2D1::PixelFormat(
+                        DXGI_FORMAT_B8G8R8A8_UNORM,
+                        D2D1_ALPHA_MODE_IGNORE
                     ),
-                dpiX,
-                dpiY
-                );
+                    dpiX,
+                    dpiY
+                                                 );
 
             hr = m_d2dContext->CreateBitmapFromDxgiSurface(
-                surface,
-                &properties,
-                &bitmap
-                );
+                     surface,
+                     &properties,
+                     &bitmap
+                 );
         }
         if (SUCCEEDED(hr))
         {
@@ -523,9 +523,9 @@ HRESULT DemoApp::CreateDeviceResources()
         {
             // Create a black brush.
             hr = m_d2dContext->CreateSolidColorBrush(
-                D2D1::ColorF(D2D1::ColorF::Black),
-                &m_blackBrush
-                );
+                     D2D1::ColorF(D2D1::ColorF::Black),
+                     &m_blackBrush
+                 );
         }
         // Create a linear gradient for the hourglasses.
         ID2D1GradientStopCollection* gradientStops = nullptr;
@@ -538,34 +538,34 @@ HRESULT DemoApp::CreateDeviceResources()
             };
 
             hr = m_d2dContext->CreateGradientStopCollection(
-                stops,
-                ARRAYSIZE(stops),
-                &gradientStops
-                );
+                     stops,
+                     ARRAYSIZE(stops),
+                     &gradientStops
+                 );
         }
         if (SUCCEEDED(hr))
         {
             hr = m_d2dContext->CreateLinearGradientBrush(
-                D2D1::LinearGradientBrushProperties(
-                D2D1::Point2F(HOURGLASS_SIZE/2, 0),
-                D2D1::Point2F(HOURGLASS_SIZE/2, HOURGLASS_SIZE)),
-                D2D1::BrushProperties(),
-                gradientStops,
-                &m_linearGradientBrush
-                );
+                     D2D1::LinearGradientBrushProperties(
+                         D2D1::Point2F(HOURGLASS_SIZE/2, 0),
+                         D2D1::Point2F(HOURGLASS_SIZE/2, HOURGLASS_SIZE)),
+                     D2D1::BrushProperties(),
+                     gradientStops,
+                     &m_linearGradientBrush
+                 );
         }
         SafeRelease(&gradientStops);
         if (SUCCEEDED(hr))
         {
             // Create a bitmap by loading it from a file.
             hr = LoadBitmapFromFile(
-                m_d2dContext,
-                m_wicFactory,
-                L".\\sampleImage.jpg",
-                100,
-                0,
-                &m_customBitmap
-                );
+                     m_d2dContext,
+                     m_wicFactory,
+                     L".\\sampleImage.jpg",
+                     100,
+                     0,
+                     &m_customBitmap
+                 );
         }
         if (SUCCEEDED(hr))
         {
@@ -597,7 +597,7 @@ HRESULT DemoApp::CreateDeviceResources()
 // background in the scene.
 HRESULT DemoApp::CreateGridPatternBrush(
     _Outptr_ ID2D1ImageBrush** imageBrush
-    )
+)
 {
     HRESULT hr = S_OK;
 
@@ -612,9 +612,9 @@ HRESULT DemoApp::CreateGridPatternBrush(
     {
         // Create a brush with which to draw the grid pattern.
         hr = m_d2dContext->CreateSolidColorBrush(
-            D2D1::ColorF(D2D1::ColorF(0.93f, 0.94f, 0.96f, 1.0f)),
-            &gridBrush
-            );
+                 D2D1::ColorF(D2D1::ColorF(0.93f, 0.94f, 0.96f, 1.0f)),
+                 &gridBrush
+             );
     }
     ID2D1Image* originalTarget = nullptr;
     if (SUCCEEDED(hr))
@@ -642,14 +642,14 @@ HRESULT DemoApp::CreateGridPatternBrush(
     {
         // Create image brush with the grid command list.
         hr = m_d2dContext->CreateImageBrush(
-            gridCommandList,
-            D2D1::ImageBrushProperties(
-                D2D1::RectF(0, 0, 10, 10),
-                D2D1_EXTEND_MODE_WRAP,
-                D2D1_EXTEND_MODE_WRAP
-                ),
-            imageBrush
-            );
+                 gridCommandList,
+                 D2D1::ImageBrushProperties(
+                     D2D1::RectF(0, 0, 10, 10),
+                     D2D1_EXTEND_MODE_WRAP,
+                     D2D1_EXTEND_MODE_WRAP
+                 ),
+                 imageBrush
+             );
     }
 
     SafeRelease(&gridBrush);
@@ -683,7 +683,7 @@ HRESULT DemoApp::DrawToContext(
     _In_ ID2D1DeviceContext* d2dContext,
     UINT pageNumber,
     BOOL printing
-    )
+)
 {
     HRESULT hr = S_OK;
 
@@ -708,14 +708,14 @@ HRESULT DemoApp::DrawToContext(
 
     // Compute the size of the gridded background rectangle.
     D2D1_SIZE_F frameSize = D2D1::SizeF(
-        targetSize.width,
-        FRAME_HEIGHT_IN_DIPS
-        );
+                                targetSize.width,
+                                FRAME_HEIGHT_IN_DIPS
+                            );
 
     // Compute the translation matrix that simulates scrolling or printing.
     D2D1_MATRIX_3X2_F scrollTransform = printing ?
-        D2D1::Matrix3x2F::Translation(margin, margin) :
-        D2D1::Matrix3x2F::Translation(0.0f, static_cast<FLOAT>(-m_currentScrollPosition));
+                                        D2D1::Matrix3x2F::Translation(margin, margin) :
+                                        D2D1::Matrix3x2F::Translation(0.0f, static_cast<FLOAT>(-m_currentScrollPosition));
 
     d2dContext->BeginDraw();
 
@@ -731,14 +731,14 @@ HRESULT DemoApp::DrawToContext(
         d2dContext->FillRectangle(
             D2D1::RectF(0.0f, 0.0f, frameSize.width, frameSize.height),
             m_gridPatternBrush
-            );
+        );
 
         // Draw a bitmap in the upper-left corner of the window.
         D2D1_SIZE_F bitmapSize = m_customBitmap->GetSize();
         d2dContext->DrawBitmap(
             m_customBitmap,
             D2D1::RectF(0.0f, 0.0f, bitmapSize.width, bitmapSize.height)
-            );
+        );
 
         // Draw a bitmap at the lower-right corner of the window.
         d2dContext->DrawBitmap(
@@ -748,17 +748,17 @@ HRESULT DemoApp::DrawToContext(
                 frameSize.height - bitmapSize.height,
                 frameSize.width,
                 frameSize.height
-                )
-            );
+            )
+        );
 
         // Draw the rotated "Hello world" message.
         D2D1_MATRIX_3X2_F sidewaysTransform = D2D1::Matrix3x2F::Rotation(
-            45,
-            D2D1::Point2F(
-                frameSize.width / 2,
-                frameSize.height / 2
+                45,
+                D2D1::Point2F(
+                    frameSize.width / 2,
+                    frameSize.height / 2
                 )
-            );
+                                              );
 
         d2dContext->SetTransform(sidewaysTransform * scrollTransform);
 
@@ -773,9 +773,9 @@ HRESULT DemoApp::DrawToContext(
                 0.0f,
                 frameSize.width,
                 frameSize.height
-                ),
+            ),
             m_blackBrush
-            );
+        );
 
         // Draw the hour glass in the bottom-left.
         D2D1_MATRIX_3X2_F hourglassTransform = D2D1::Matrix3x2F::Translation(0.0f, frameSize.height - HOURGLASS_SIZE);
@@ -785,7 +785,7 @@ HRESULT DemoApp::DrawToContext(
         d2dContext->FillGeometry(
             m_pathGeometry,
             m_linearGradientBrush
-            );
+        );
 
         // Draw the hour glass in the upper-right.
         hourglassTransform = D2D1::Matrix3x2F::Translation(frameSize.width - HOURGLASS_SIZE, 0.0f);
@@ -795,7 +795,7 @@ HRESULT DemoApp::DrawToContext(
         d2dContext->FillGeometry(
             m_pathGeometry,
             m_linearGradientBrush
-            );
+        );
     }
 
     if (m_multiPageMode)
@@ -825,9 +825,9 @@ HRESULT DemoApp::DrawToContext(
                         frameSize.height + 5.0f,
                         frameSize.width,
                         targetSize.height
-                        ),
+                    ),
                     m_blackBrush
-                    );
+                );
             }
             else if (pageNumber == 2)
             {
@@ -840,9 +840,9 @@ HRESULT DemoApp::DrawToContext(
                         0.0f,
                         frameSize.width,
                         targetSize.height
-                        ),
+                    ),
                     m_blackBrush
-                    );
+                );
             }
         }
         else
@@ -857,9 +857,9 @@ HRESULT DemoApp::DrawToContext(
                     frameSize.height + 5.0f,
                     targetSize.width,
                     targetSize.height
-                    ),
+                ),
                 m_blackBrush
-                );
+            );
         }
     }
 
@@ -954,9 +954,9 @@ HRESULT DemoApp::OnPrint()
     {
         // Create a D2D Device Context dedicated for the print job.
         hr = m_d2dDevice->CreateDeviceContext(
-            D2D1_DEVICE_CONTEXT_OPTIONS_NONE,
-            &d2dContextForPrint
-            );
+                 D2D1_DEVICE_CONTEXT_OPTIONS_NONE,
+                 &d2dContextForPrint
+             );
     }
 
     if (SUCCEEDED(hr))
@@ -1029,7 +1029,7 @@ HRESULT DemoApp::InitializePrintJob()
             ARRAYSIZE(messageBuffer),
             L"Error 0x%4X occured during printer selection and/or setup.",
             hrPrintDlgEx
-            );
+        );
         MessageBox(m_parentHwnd, messageBuffer, L"Message", MB_OK);
         hr = hrPrintDlgEx;
     }
@@ -1105,11 +1105,11 @@ HRESULT DemoApp::InitializePrintJob()
     if (SUCCEEDED(hr))
     {
         hr = GetPrintTicketFromDevmode(
-            printerName,
-            devMode,
-            devMode->dmSize + devMode->dmDriverExtra, // Size of DEVMODE in bytes, including private driver data.
-            &m_jobPrintTicketStream
-            );
+                 printerName,
+                 devMode,
+                 devMode->dmSize + devMode->dmDriverExtra, // Size of DEVMODE in bytes, including private driver data.
+                 &m_jobPrintTicketStream
+             );
     }
 
     // Create a factory for document print job.
@@ -1117,34 +1117,34 @@ HRESULT DemoApp::InitializePrintJob()
     if (SUCCEEDED(hr))
     {
         hr = ::CoCreateInstance(
-            __uuidof(PrintDocumentPackageTargetFactory),
-            nullptr,
-            CLSCTX_INPROC_SERVER,
-            IID_PPV_ARGS(&documentTargetFactory)
-            );
+                 __uuidof(PrintDocumentPackageTargetFactory),
+                 nullptr,
+                 CLSCTX_INPROC_SERVER,
+                 IID_PPV_ARGS(&documentTargetFactory)
+             );
     }
 
     // Initialize the print subsystem and get a package target.
     if (SUCCEEDED(hr))
     {
         hr = documentTargetFactory->CreateDocumentPackageTargetForPrintJob(
-            printerName,                                // printer name
-            L"Direct2D desktop app printing sample",    // job name
-            nullptr,                                    // job output stream; when nullptr, send to printer
-            m_jobPrintTicketStream,                     // job print ticket
-            &m_documentTarget                           // result IPrintDocumentPackageTarget object
-            );
+                 printerName,                                // printer name
+                 L"Direct2D desktop app printing sample",    // job name
+                 nullptr,                                    // job output stream; when nullptr, send to printer
+                 m_jobPrintTicketStream,                     // job print ticket
+                 &m_documentTarget                           // result IPrintDocumentPackageTarget object
+             );
     }
 
     // Create a new print control linked to the package target.
     if (SUCCEEDED(hr))
     {
         hr = m_d2dDevice->CreatePrintControl(
-            m_wicFactory,
-            m_documentTarget,
-            nullptr,
-            &m_printControl
-            );
+                 m_wicFactory,
+                 m_documentTarget,
+                 nullptr,
+                 &m_printControl
+             );
     }
 
     // Create and register a print job checker.
@@ -1260,12 +1260,12 @@ void DemoApp::OnResize()
         if (SUCCEEDED(hr))
         {
             hr = m_swapChain->ResizeBuffers(
-                0,
-                newSize.width,
-                newSize.height,
-                DXGI_FORMAT_B8G8R8A8_UNORM,
-                0
-                );
+                     0,
+                     newSize.width,
+                     newSize.height,
+                     DXGI_FORMAT_B8G8R8A8_UNORM,
+                     0
+                 );
         }
 
         // Get a surface from the swap chain.
@@ -1273,9 +1273,9 @@ void DemoApp::OnResize()
         if (SUCCEEDED(hr))
         {
             hr = m_swapChain->GetBuffer(
-                0,
-                IID_PPV_ARGS(&surface)
-                );
+                     0,
+                     IID_PPV_ARGS(&surface)
+                 );
         }
 
         // Create a bitmap pointing to the surface.
@@ -1285,19 +1285,19 @@ void DemoApp::OnResize()
             FLOAT dpiX, dpiY;
             m_d2dFactory->GetDesktopDpi(&dpiX, &dpiY);
             D2D1_BITMAP_PROPERTIES1 properties = D2D1::BitmapProperties1(
-                D2D1_BITMAP_OPTIONS_TARGET | D2D1_BITMAP_OPTIONS_CANNOT_DRAW,
-                D2D1::PixelFormat(
-                    DXGI_FORMAT_B8G8R8A8_UNORM,
-                    D2D1_ALPHA_MODE_IGNORE
+                    D2D1_BITMAP_OPTIONS_TARGET | D2D1_BITMAP_OPTIONS_CANNOT_DRAW,
+                    D2D1::PixelFormat(
+                        DXGI_FORMAT_B8G8R8A8_UNORM,
+                        D2D1_ALPHA_MODE_IGNORE
                     ),
-                dpiX,
-                dpiY
-                );
+                    dpiX,
+                    dpiY
+                                                 );
             hr = m_d2dContext->CreateBitmapFromDxgiSurface(
-                surface,
-                &properties,
-                &bitmap
-                );
+                     surface,
+                     &properties,
+                     &bitmap
+                 );
         }
 
         // Set bitmap back onto device context.
@@ -1330,15 +1330,15 @@ LRESULT CALLBACK DemoApp::ParentWndProc(HWND hwnd, UINT message, WPARAM wParam, 
             hwnd,
             GWLP_USERDATA,
             reinterpret_cast<ULONG_PTR>(demoApp)
-            );
+        );
 
         result = 1;
     }
     else
     {
         DemoApp* demoApp = reinterpret_cast<DemoApp*>(
-            static_cast<LONG_PTR>(::GetWindowLongPtrW(hwnd, GWLP_USERDATA))
-            );
+                               static_cast<LONG_PTR>(::GetWindowLongPtrW(hwnd, GWLP_USERDATA))
+                           );
 
         bool wasHandled = false;
 
@@ -1347,12 +1347,12 @@ LRESULT CALLBACK DemoApp::ParentWndProc(HWND hwnd, UINT message, WPARAM wParam, 
             switch (message)
             {
             case WM_CHAR:
-                {
-                    demoApp->OnChar(static_cast<SHORT>(wParam));
-                }
-                result = 0;
-                wasHandled = true;
-                break;
+            {
+                demoApp->OnChar(static_cast<SHORT>(wParam));
+            }
+            result = 0;
+            wasHandled = true;
+            break;
 
             case WM_SIZE:
                 if (wParam == SIZE_MAXIMIZED || wParam == SIZE_RESTORED)
@@ -1364,35 +1364,35 @@ LRESULT CALLBACK DemoApp::ParentWndProc(HWND hwnd, UINT message, WPARAM wParam, 
                 break;
 
             case WM_VSCROLL:
-                {
-                    demoApp->OnVScroll(wParam, lParam);
-                }
-                result = 0;
-                wasHandled = true;
-                break;
+            {
+                demoApp->OnVScroll(wParam, lParam);
+            }
+            result = 0;
+            wasHandled = true;
+            break;
 
             case WM_MOUSEWHEEL:
-                {
-                    demoApp->OnMouseWheel(wParam, lParam);
-                }
-                result = 0;
-                wasHandled = true;
-                break;
+            {
+                demoApp->OnMouseWheel(wParam, lParam);
+            }
+            result = 0;
+            wasHandled = true;
+            break;
 
             case WM_CLOSE:
-                {
-                    result = demoApp->OnClose();
-                }
-                wasHandled = true;
-                break;
+            {
+                result = demoApp->OnClose();
+            }
+            wasHandled = true;
+            break;
 
             case WM_DESTROY:
-                {
-                    PostQuitMessage(0);
-                }
-                result = 1;
-                wasHandled = true;
-                break;
+            {
+                PostQuitMessage(0);
+            }
+            result = 1;
+            wasHandled = true;
+            break;
             }
         }
 
@@ -1419,17 +1419,17 @@ LRESULT CALLBACK DemoApp::ChildWndProc(HWND hwnd, UINT message, WPARAM wParam, L
             hwnd,
             GWLP_USERDATA,
             reinterpret_cast<ULONG_PTR>(demoApp)
-            );
+        );
 
         result = 1;
     }
     else
     {
         DemoApp* demoApp = reinterpret_cast<DemoApp*>(
-            static_cast<LONG_PTR>(
-                ::GetWindowLongPtrW(hwnd, GWLP_USERDATA)
-                )
-            );
+                               static_cast<LONG_PTR>(
+                                   ::GetWindowLongPtrW(hwnd, GWLP_USERDATA)
+                               )
+                           );
 
         bool wasHandled = false;
 
@@ -1438,31 +1438,31 @@ LRESULT CALLBACK DemoApp::ChildWndProc(HWND hwnd, UINT message, WPARAM wParam, L
             switch (message)
             {
             case WM_DISPLAYCHANGE:
-                {
-                    InvalidateRect(hwnd, nullptr, FALSE);
-                }
-                result = 0;
-                wasHandled = true;
-                break;
+            {
+                InvalidateRect(hwnd, nullptr, FALSE);
+            }
+            result = 0;
+            wasHandled = true;
+            break;
 
             case WM_PAINT:
-                {
-                    PAINTSTRUCT paintStruct;
-                    BeginPaint(hwnd, &paintStruct);
-                    demoApp->OnRender();
-                    EndPaint(hwnd, &paintStruct);
-                }
-                result = 0;
-                wasHandled = true;
-                break;
+            {
+                PAINTSTRUCT paintStruct;
+                BeginPaint(hwnd, &paintStruct);
+                demoApp->OnRender();
+                EndPaint(hwnd, &paintStruct);
+            }
+            result = 0;
+            wasHandled = true;
+            break;
 
             case WM_DESTROY:
-                {
-                    PostQuitMessage(0);
-                }
-                result = 1;
-                wasHandled = true;
-                break;
+            {
+                PostQuitMessage(0);
+            }
+            result = 1;
+            wasHandled = true;
+            break;
             }
         }
 
@@ -1483,16 +1483,16 @@ HRESULT DemoApp::LoadBitmapFromFile(
     UINT destinationWidth,
     UINT destinationHeight,
     _Outptr_ ID2D1Bitmap** bitmap
-    )
+)
 {
     IWICBitmapDecoder* bitmapDecoder = nullptr;
     HRESULT hr = wicFactory->CreateDecoderFromFilename(
-        uri,
-        nullptr,
-        GENERIC_READ,
-        WICDecodeMetadataCacheOnLoad,
-        &bitmapDecoder
-        );
+                     uri,
+                     nullptr,
+                     GENERIC_READ,
+                     WICDecodeMetadataCacheOnLoad,
+                     &bitmapDecoder
+                 );
 
     IWICBitmapFrameDecode* frameDecode = nullptr;
     if (SUCCEEDED(hr))
@@ -1516,13 +1516,13 @@ HRESULT DemoApp::LoadBitmapFromFile(
         {
             // Don't scale the image.
             hr = formatConverter->Initialize(
-                frameDecode,
-                GUID_WICPixelFormat32bppPBGRA,
-                WICBitmapDitherTypeNone,
-                nullptr,
-                0.0f,
-                WICBitmapPaletteTypeMedianCut
-                );
+                     frameDecode,
+                     GUID_WICPixelFormat32bppPBGRA,
+                     WICBitmapDitherTypeNone,
+                     nullptr,
+                     0.0f,
+                     WICBitmapPaletteTypeMedianCut
+                 );
         }
         else
         {
@@ -1550,23 +1550,23 @@ HRESULT DemoApp::LoadBitmapFromFile(
                 if (SUCCEEDED(hr))
                 {
                     hr = bitmapScaler->Initialize(
-                        frameDecode,
-                        destinationWidth,
-                        destinationHeight,
-                        WICBitmapInterpolationModeCubic
-                        );
+                             frameDecode,
+                             destinationWidth,
+                             destinationHeight,
+                             WICBitmapInterpolationModeCubic
+                         );
                 }
 
                 if (SUCCEEDED(hr))
                 {
                     hr = formatConverter->Initialize(
-                        bitmapScaler,
-                        GUID_WICPixelFormat32bppPBGRA,
-                        WICBitmapDitherTypeNone,
-                        nullptr,
-                        0.f,
-                        WICBitmapPaletteTypeMedianCut
-                        );
+                             bitmapScaler,
+                             GUID_WICPixelFormat32bppPBGRA,
+                             WICBitmapDitherTypeNone,
+                             nullptr,
+                             0.f,
+                             WICBitmapPaletteTypeMedianCut
+                         );
                 }
             }
         }
@@ -1576,10 +1576,10 @@ HRESULT DemoApp::LoadBitmapFromFile(
     {
         // Create a Direct2D bitmap from the WIC bitmap.
         hr = d2dContext->CreateBitmapFromWicBitmap(
-            formatConverter,
-            nullptr,
-            bitmap
-            );
+                 formatConverter,
+                 nullptr,
+                 bitmap
+             );
     }
 
     SafeRelease(&bitmapDecoder);
@@ -1616,18 +1616,18 @@ void DemoApp::OnVScroll(WPARAM wParam, LPARAM /* lParam */)
         break;
 
     case SB_THUMBTRACK:
+    {
+        SCROLLINFO scrollInfo = {0};
+        scrollInfo.fMask = SIF_PAGE | SIF_POS | SIF_RANGE | SIF_TRACKPOS;
+        BOOL succeeded = GetScrollInfo(m_parentHwnd, SB_VERT, &scrollInfo);
+        if (!succeeded)
         {
-            SCROLLINFO scrollInfo = {0};
-            scrollInfo.fMask = SIF_PAGE | SIF_POS | SIF_RANGE | SIF_TRACKPOS;
-            BOOL succeeded = GetScrollInfo(m_parentHwnd, SB_VERT, &scrollInfo);
-            if (!succeeded)
-            {
-                Assert(succeeded);
-                return;
-            }
-            newScrollPosition = scrollInfo.nTrackPos;
+            Assert(succeeded);
+            return;
         }
-        break;
+        newScrollPosition = scrollInfo.nTrackPos;
+    }
+    break;
 
     default:
         break;
@@ -1708,30 +1708,30 @@ LRESULT DemoApp::OnClose()
         if (status.Completion == PrintDocumentPackageCompletion_InProgress)
         {
             int selection = MessageBox(
-                m_d2dHwnd,
-                L"Print job still in progress.\nYES to force to exit;\nNO to exit after print job is complete;\nCANCEL to return to sample.",
-                L"Sample exit error",
-                MB_YESNOCANCEL | MB_ICONSTOP
-                );
+                                m_d2dHwnd,
+                                L"Print job still in progress.\nYES to force to exit;\nNO to exit after print job is complete;\nCANCEL to return to sample.",
+                                L"Sample exit error",
+                                MB_YESNOCANCEL | MB_ICONSTOP
+                            );
             switch (selection)
             {
-                case IDYES:
-                    // Force to exit.
-                    break;
+            case IDYES:
+                // Force to exit.
+                break;
 
-                case IDNO:
-                    // Exit after print job is complete.
-                    m_printJobChecker->WaitForCompletion();
-                    break;
+            case IDNO:
+                // Exit after print job is complete.
+                m_printJobChecker->WaitForCompletion();
+                break;
 
-                case IDCANCEL:
-                    // Return to sample.
-                    close = false;
-                    break;
+            case IDCANCEL:
+                // Return to sample.
+                close = false;
+                break;
 
-                default:
-                    close = false;
-                    break;
+            default:
+                close = false;
+                break;
             }
         }
     }

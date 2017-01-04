@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -99,120 +99,120 @@ DWORD LoadMprApiLibrary();
 VOID ReleaseMprApiLibrary();
 
 //
-// Connects to the RRAS server for configuration and administration 
+// Connects to the RRAS server for configuration and administration
 //
 DWORD RemoteAccessServerConenct(
-    _In_opt_ LPWSTR serverName, 
+    _In_opt_ LPWSTR serverName,
     _Out_ MPR_SERVER_HANDLE* serverHandleAdmin,
     _Out_ HANDLE* serverHandleConfig
-    );
+);
 //
 // Disconnects the connection with remote access server made in RemoteAccessServerConenct.
 //
 VOID RemoteAccessServerDisconenct(
     _In_ MPR_SERVER_HANDLE serverHandleAdmin,
     _In_ HANDLE serverHandleConfig
-    );
+);
 
-// 
+//
 // Retrieves the firsts certificate from the system certificate store and returns it's certificate name  and Hash blob.
 //
 DWORD GetCertificateNameAndHashBlob(
     _Out_ CERT_NAME_BLOB* certName,
     _Out_ CERT_NAME_BLOB* certHash
-    );
+);
 
 //
-// Prints the specified integrity method in string format 
+// Prints the specified integrity method in string format
 //
 VOID PrintIntegrityMethod(
     _In_ DWORD integrityMethod
-    );
+);
 
 //
-// Prints the specified encryption method in string format 
+// Prints the specified encryption method in string format
 //
 VOID PrintEncryptionMethod(
     _In_ DWORD encryptionMethod
-    );
+);
 
 //
-// Prints the specified cipher transform constant in string format 
+// Prints the specified cipher transform constant in string format
 //
 VOID PrintCipherTransformConstant(
     _In_ DWORD cipherTransformConstant
-    );
+);
 
 //
-// Prints the specified auth transform constant in string format 
+// Prints the specified auth transform constant in string format
 //
 VOID PrintAuthTransformConstant(
     _In_ DWORD authTransformConstant
-    );
+);
 //
-// Prints the specified PFS group in string format 
+// Prints the specified PFS group in string format
 //
 VOID PrintPfsGroup(
     _In_ DWORD pfsGroup
-    );
+);
 
 //
-// Prints the specified DH group in string format 
+// Prints the specified DH group in string format
 //
 VOID PrintDHGroup(
     _In_ DWORD dhGroup
-    );
+);
 
 //
-// Prints various fields of the specified ROUTER_CUSTOM_IKEv2_POLICY0 structure 
+// Prints various fields of the specified ROUTER_CUSTOM_IKEv2_POLICY0 structure
 // in string format
 //
 VOID PrintCustomIkev2Policy(
-    _In_ LPWSTR prefix, 
+    _In_ LPWSTR prefix,
     _In_ ROUTER_CUSTOM_IKEv2_POLICY0* customIkev2Policy
-    );
+);
 
 //
-// Prints the specified interface type in string format  
+// Prints the specified interface type in string format
 //
 VOID PrintInterfaceType(
     _In_ ROUTER_INTERFACE_TYPE ifType
-    );
+);
 
 //
-// Prints the specified connection state in string format  
+// Prints the specified connection state in string format
 //
 VOID PrintConnectionState(
     _In_ ROUTER_CONNECTION_STATE connState
-    );
+);
 
 //
-// Prints the specified encryption type in string format  
+// Prints the specified encryption type in string format
 //
 VOID PrintEncryptionType(
     _In_ DWORD encryptionType
-    );
+);
 
 //
-// Prints the specified entry type in string format  
+// Prints the specified entry type in string format
 //
 VOID PrintEntryType(
     _In_ DWORD entryType
-    );
+);
 
 //
-// Prints the specified VPN strategy in string format  
+// Prints the specified VPN strategy in string format
 //
 VOID PrintVpnStrategy(
     _In_ DWORD vpnStrategy
-    );
+);
 
 //
 // Converts file time to local time, to display to the user
 //
 VOID PrintFileTime(
     _In_ FILETIME* time
-    );
+);
 
 //
 // Clears any input lingering in the STDIN buffer
@@ -224,27 +224,27 @@ VOID FlushCurrentLine();
 //
 VOID DisplayError(
     _In_ DWORD error
-    );
+);
 
 
 //********************************************************************************************
-//              EKU related methods               
+//              EKU related methods
 //********************************************************************************************
 
 // Defining a structure for storing EKU information
-    typedef struct _EKU_Info
-    {
-        const WCHAR       *Name;
-        bool              IsOid;
-    } EKU_Info;
+typedef struct _EKU_Info
+{
+    const WCHAR       *Name;
+    bool              IsOid;
+} EKU_Info;
 
-// 
+//
 // Gets some basic certificate EKUs and returns it's EKUs  and number of EKU.
 //
 DWORD GetCertificateEkus(
     _Out_ PMPR_CERT_EKU*    certEKUs,
     _Out_ DWORD*            TotalEKUs
-    );
+);
 
 //
 //This method frees the memory allocated for EKUs
@@ -252,6 +252,6 @@ DWORD GetCertificateEkus(
 VOID FreeCertificateEKU(
     _In_ PMPR_CERT_EKU      certificateEKUs,
     _In_ DWORD              dwTotalEkus
-    );
+);
 
 

@@ -1,12 +1,12 @@
-//---------------------------------------------------------------------
+﻿//---------------------------------------------------------------------
 //  This file is part of the Microsoft .NET Framework SDK Code Samples.
-// 
+//
 //  Copyright (C) Microsoft Corporation.  All rights reserved.
-// 
+//
 //This source code is intended only as a supplement to Microsoft
 //Development Tools and/or on-line documentation.  See these other
 //materials for detailed information regarding Microsoft code samples.
-// 
+//
 //THIS CODE AND INFORMATION ARE PROVIDED AS IS WITHOUT WARRANTY OF ANY
 //KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
 //IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -14,7 +14,7 @@
 //---------------------------------------------------------------------
 
 
-// InstallResponse for a PFX file  
+// InstallResponse for a PFX file
 
 #include <stdio.h>
 #include <certenroll.h>
@@ -30,7 +30,7 @@ void Usage()
     wprintf(L"Example: installResponseFromPFX cert.pfx 1111\n");
 }
 
-HRESULT __cdecl wmain(__in int argc, __in_ecount(argc) wchar_t *argv[])	
+HRESULT __cdecl wmain(__in int argc, __in_ecount(argc) wchar_t *argv[])
 {
     HRESULT hr = S_OK;
     bool fCoInit = false;
@@ -41,9 +41,10 @@ HRESULT __cdecl wmain(__in int argc, __in_ecount(argc) wchar_t *argv[])
     BSTR strResponse = NULL;
     BYTE *pbReq = NULL;
     DWORD cbReq;
-    
+
     // Process command line arguments
-    if (argc !=  3) {
+    if (argc !=  3)
+    {
         Usage();
         hr = E_INVALIDARG;
         _JumpError(hr, error, "invalid arg");
@@ -82,13 +83,13 @@ HRESULT __cdecl wmain(__in int argc, __in_ecount(argc) wchar_t *argv[])
         _JumpError(hr, error, "convertWszToBstr");
     }
 
-     // Create IX509Enrollment
+    // Create IX509Enrollment
     hr = CoCreateInstance(
-            __uuidof(CX509Enrollment),
-            NULL,       // pUnkOuter
-            CLSCTX_INPROC_SERVER,
-            __uuidof(IX509Enrollment),
-            (void **) &pEnroll);
+             __uuidof(CX509Enrollment),
+             NULL,       // pUnkOuter
+             CLSCTX_INPROC_SERVER,
+             __uuidof(IX509Enrollment),
+             (void **) &pEnroll);
     _JumpIfError(hr, error, "CoCreateInstance");
 
     // Initialize IX509Enrollment
@@ -97,9 +98,9 @@ HRESULT __cdecl wmain(__in int argc, __in_ecount(argc) wchar_t *argv[])
 
     // Install the PFX file
     hr =pEnroll->InstallResponse(
-            AllowNone, 
-            strResponse, 
-            XCN_CRYPT_STRING_ANY, 
+            AllowNone,
+            strResponse,
+            XCN_CRYPT_STRING_ANY,
             strPassword);
     _JumpIfError(hr, error, "InstallResponse");
 

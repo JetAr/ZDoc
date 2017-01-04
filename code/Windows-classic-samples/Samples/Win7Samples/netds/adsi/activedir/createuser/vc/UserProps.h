@@ -1,4 +1,4 @@
-
+﻿
 #ifndef __USERPROPS_H
 #define __USERPROPS_H
 
@@ -10,6 +10,6 @@ ADSTYPE MapAdsTypeFromString(LPWSTR pwszAdsType);
 
 ADSTYPE MapTypeToADSTYPE(LPWSTR pwszName);
 
- 
+
 
 #endif

@@ -1,15 +1,15 @@
-//*****************************************************************************
+﻿//*****************************************************************************
 //
 // Microsoft Windows Media
 // Copyright ( C) Microsoft Corporation. All rights reserved.
 //
 // FileName:            main.cpp
-//      
-// Abstract:            Entry point for WMVNetWrite sample. This sample 
-//                      demonstrates how to stream a Windows Media file over 
-//                      the network to other clients by sending ("Netwriting")its 
+//
+// Abstract:            Entry point for WMVNetWrite sample. This sample
+//                      demonstrates how to stream a Windows Media file over
+//                      the network to other clients by sending ("Netwriting")its
 //                      compressed samples.
-//                      
+//
 //
 //*****************************************************************************
 
@@ -24,7 +24,7 @@
 // Desc: Helper function to convert a TCHAR string to a WCHAR string.
 //
 // ptszInput: Contains the input string.
-// ppwszOutput: Receives the output string. 
+// ppwszOutput: Receives the output string.
 //
 // The caller must delete the returned WCHAR string.
 //----------------------------------------------------------------------------
@@ -32,7 +32,7 @@
 HRESULT ConvertTCharToWChar( LPCTSTR ptszInput, __out LPWSTR * ppwszOutput )
 {
     int cchOutput = 0;
-    
+
     if( NULL == ptszInput || NULL == ppwszOutput )
     {
         return( E_INVALIDARG );
@@ -58,7 +58,7 @@ HRESULT ConvertTCharToWChar( LPCTSTR ptszInput, __out LPWSTR * ppwszOutput )
         return( E_OUTOFMEMORY );
     }
 
-    // Convert the input string. 
+    // Convert the input string.
 
 #ifdef UNICODE
     wcsncpy_s( *ppwszOutput, cchOutput, ptszInput, cchOutput - 1 );
@@ -72,7 +72,7 @@ HRESULT ConvertTCharToWChar( LPCTSTR ptszInput, __out LPWSTR * ppwszOutput )
         }
 
         return( HRESULT_FROM_WIN32( GetLastError() ) );
-    }        
+    }
 #endif// UNICODE
 
     return( S_OK );
@@ -86,11 +86,11 @@ HRESULT ConvertTCharToWChar( LPCTSTR ptszInput, __out LPWSTR * ppwszOutput )
 
 void Usage()
 {
-   _tprintf( _T( "wmvnetwrite -i <infile> [-p <portnum>] [-c <maxclient>] [-s <server URL>]\n" ) );
-   _tprintf( _T( "\tinfile\t= Input WMV file name\n" ) );
-   _tprintf( _T( "\tportnum\t= Port Number (for incoming connections)\n" ) );
-   _tprintf( _T( "\tmaxclient = Maximum Clients allowed to connect\n" ) );
-   _tprintf( _T( "\tserver URL = URL of Server for Push Distribution\n" ) );
+    _tprintf( _T( "wmvnetwrite -i <infile> [-p <portnum>] [-c <maxclient>] [-s <server URL>]\n" ) );
+    _tprintf( _T( "\tinfile\t= Input WMV file name\n" ) );
+    _tprintf( _T( "\tportnum\t= Port Number (for incoming connections)\n" ) );
+    _tprintf( _T( "\tmaxclient = Maximum Clients allowed to connect\n" ) );
+    _tprintf( _T( "\tserver URL = URL of Server for Push Distribution\n" ) );
 }
 
 
@@ -114,13 +114,13 @@ int __cdecl _tmain( int argc, __in_ecount(argc) LPTSTR argv[] )
         if( 0 == _tcsicmp( argv[i], _T( "-p" ) ) )
         {
             i++;
-            
+
             if( i == argc )
             {
                 Usage();
                 return( E_INVALIDARG );
             }
-            
+
             int retval = _stscanf_s( argv[i], _T( "%d" ), &dwPortNum );
             if( retval == 0 )
             {
@@ -128,33 +128,33 @@ int __cdecl _tmain( int argc, __in_ecount(argc) LPTSTR argv[] )
                 return( E_INVALIDARG );
             }
             continue;
-            
+
         }
-        
+
         if( 0 == _tcsicmp( argv[i], _T( "-i" ) ) )
         {
             i++;
-            
+
             if( i == argc )
             {
                 Usage();
                 return( E_INVALIDARG );
             }
-            
+
             ptszFileName = argv[i];
             continue;
         }
-        
-        if( 0 == _tcsicmp( argv[i] , _T( "-c" ) ) )
+
+        if( 0 == _tcsicmp( argv[i], _T( "-c" ) ) )
         {
             i++;
-            
+
             if(i == argc)
             {
                 Usage();
                 return ( E_INVALIDARG );
             }
-            
+
             int retval = _stscanf_s( argv[i], _T( "%d" ), &nMaxClient );
             if( 0 == retval )
             {
@@ -167,18 +167,18 @@ int __cdecl _tmain( int argc, __in_ecount(argc) LPTSTR argv[] )
         if( 0 == _tcsicmp( argv[i], _T( "-s" ) ) )
         {
             i++;
-            
+
             if( i == argc )
             {
                 Usage();
                 return( E_INVALIDARG );
             }
-            
+
             ptszServerURL = argv[i];
             continue;
         }
     }
-    
+
     if( NULL == ptszFileName )
     {
         Usage();
@@ -186,7 +186,7 @@ int __cdecl _tmain( int argc, __in_ecount(argc) LPTSTR argv[] )
     }
 
     CNetWrite netWriter;  // Helper object that broadcasts the file.
-     
+
     WCHAR *pwszFile = NULL;
     WCHAR *pwszServerURL = NULL;
 
@@ -198,7 +198,7 @@ int __cdecl _tmain( int argc, __in_ecount(argc) LPTSTR argv[] )
         if( FAILED( hr ) )
             break;
 
-        
+
         // The server URL is optional, so it might be NULL.
         if( ptszServerURL != NULL )
         {
@@ -232,10 +232,10 @@ int __cdecl _tmain( int argc, __in_ecount(argc) LPTSTR argv[] )
 
     }
     while(FALSE);  // Go through the dummy loop one time only.
-    
-    // Free memory. 
+
+    // Free memory.
     SAFE_ARRAYDELETE( pwszFile );
     SAFE_ARRAYDELETE( pwszServerURL );
-    
+
     return hr;
 }

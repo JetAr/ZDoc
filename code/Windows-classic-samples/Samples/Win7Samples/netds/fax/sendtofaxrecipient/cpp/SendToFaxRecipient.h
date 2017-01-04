@@ -1,4 +1,4 @@
-#ifndef __FAX_SENTOFAX_SAMPLE
+﻿#ifndef __FAX_SENTOFAX_SAMPLE
 //==========================================================================
 //
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF

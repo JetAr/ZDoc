@@ -1,16 +1,16 @@
-/*---------------------------------------------------------------------------
+﻿/*---------------------------------------------------------------------------
     Copyright (c) 1998 - 2000  Microsoft Corporation
-    Module Name: IpRoute.exe   
+    Module Name: IpRoute.exe
     File       : IpRoute.cpp
     Description: This file demonstrates the use of IP Helper APIs to
                  manipulate routing table.
     Author:
     Frank Li            April 18, 1998
-    
+
     Revision History:
     Who         When        What
     --------    --------    ----------------------------------
-    Frank Li    04-18-98    created   
+    Frank Li    04-18-98    created
 ---------------------------------------------------------------------------*/
 
 #include "IpRoute.h"
@@ -23,12 +23,12 @@ void Usage(char * pszProgramName)
     printf("%s -a destination netmask gateway interface [metric]...Adds a route.\n", pszProgramName);
     printf("%s -d destination                                   ...Deletes routes to\n", pszProgramName);
     printf("                                                            destination.\n\n");
-    
+
     printf("destination  Specifies the destination host.\n\n");
 
     printf("netmask      Specifies a subnet mask value to be associated\n");
     printf("             with this route entry.\n\n");
-    
+
     printf("gateway      Specifies gateway.\n\n");
 
     printf("interface    Specifies the interface ip.\n\n");
@@ -62,24 +62,24 @@ void _cdecl main(int argc, char **argv)
 
     nRet = WSAStartup(wVersionRequested, &wsaData);
     if (wsaData.wVersion != wVersionRequested)
-    {    
+    {
         fprintf(stderr,"\n Wrong version\n");
         return;
     }
 
-    if ((argc < 2) || (argv[1][0] != '-'))        
+    if ((argc < 2) || (argv[1][0] != '-'))
         Usage("IpRoute");
-    if (strlen(argv[1]) > 2)     
-        Usage("IpRoute");  
+    if (strlen(argv[1]) > 2)
+        Usage("IpRoute");
 
-    switch(argv[1][1]) 
-    {    
+    switch(argv[1][1])
+    {
     case 'p':
         // Print routing table
         DoGetIpForwardTable();
         break;
-    case 'a':   
-        //Adds an entry into routing table   
+    case 'a':
+        //Adds an entry into routing table
         if (argc == 6)
             DoSetIpForwardEntry(argv[2], argv[3], argv[4], argv[5]); // dest mask gateway if
         else if (argc == 7)
@@ -92,19 +92,19 @@ void _cdecl main(int argc, char **argv)
         }
         else
             Usage("IpRoute");
-        break;    
-         
-    case 'd':       
-        //Delete an entry from the routing table    
+        break;
+
+    case 'd':
+        //Delete an entry from the routing table
         if (argc == 3)
             DoDeleteIpForwardEntry(argv[2]);
         else
-            Usage("IpRoute");                
-        break;  
-    default:    
+            Usage("IpRoute");
+        break;
+    default:
         // help
-        Usage("IpRoute");        
-        break;    
+        Usage("IpRoute");
+        break;
     }
     WSACleanup();
 }
@@ -113,7 +113,7 @@ void DoGetIpForwardTable()
 {
     DWORD dwStatus;
     PMIB_IPFORWARDTABLE pIpRouteTab = NULL; // Ip routing table
-    
+
 
     if ( (dwStatus = MyGetIpForwardTable(pIpRouteTab, TRUE)) == NO_ERROR)
     {
@@ -143,12 +143,12 @@ void DoSetIpForwardEntry(char* pszDest, char* pszNetMask, char* pszGateway, char
 
     MIB_IPFORWARDROW routeEntry;            // Ip routing table row entry
     PMIB_IPADDRTABLE pIpAddrTable = NULL;   // Ip Addr Table
-    DWORD dwIfIndex;                        // Interface index number  
+    DWORD dwIfIndex;                        // Interface index number
     DWORD dwIfMask;                         // Interface Subnet Mask
     DWORD dwIfIpAddr;                       // Interface Ip Address
-    
+
     memset(&routeEntry, 0, sizeof(MIB_IPFORWARDROW));
-    
+
 
     // converting and checking input arguments...
     if (pszDest == NULL || pszNetMask == NULL || pszGateway == NULL)
@@ -165,8 +165,8 @@ void DoSetIpForwardEntry(char* pszDest, char* pszNetMask, char* pszGateway, char
     }
 
     routeEntry.dwForwardMask = inet_addr(pszNetMask);
-    if ( (routeEntry.dwForwardMask == INADDR_NONE) && 
-         (strcmp("255.255.255.255", pszNetMask) != 0) )
+    if ( (routeEntry.dwForwardMask == INADDR_NONE) &&
+            (strcmp("255.255.255.255", pszNetMask) != 0) )
     {
         printf("IpRoute: Bad Mask %s\n", pszNetMask);
         return;
@@ -183,7 +183,7 @@ void DoSetIpForwardEntry(char* pszDest, char* pszNetMask, char* pszGateway, char
     {
         printf("IpRoute: Invalid Mask %s\n", pszNetMask);
         return;
-        
+
     }
 
     dwIfIpAddr = inet_addr(pszInterface);
@@ -218,7 +218,7 @@ void DoSetIpForwardEntry(char* pszDest, char* pszNetMask, char* pszGateway, char
     }
 
     routeEntry.dwForwardIfIndex = dwIfIndex;
-    
+
     routeEntry.dwForwardMetric1 = dwMetric;
 
     // some default values
@@ -226,12 +226,12 @@ void DoSetIpForwardEntry(char* pszDest, char* pszNetMask, char* pszGateway, char
     routeEntry.dwForwardMetric2 = (DWORD)-1;
     routeEntry.dwForwardMetric3 = (DWORD)-1;
     routeEntry.dwForwardMetric4 = (DWORD)-1;
-    
-    dwStatus = SetIpForwardEntry(&routeEntry); 
+
+    dwStatus = SetIpForwardEntry(&routeEntry);
     if (dwStatus != NO_ERROR)
     {
         printf("IpRoute: couldn't add (%s), dwStatus = %lu.\n",
-                    pszDest, dwStatus);
+               pszDest, dwStatus);
     }
 
 }
@@ -244,7 +244,7 @@ void DoDeleteIpForwardEntry(char* pszDest)
     MIB_IPFORWARDROW routeEntry;            // Ip routing table row entry
     DWORD dwForwardDest = 0;
     bool fDeleted = FALSE;
-    
+
 
     memset(&routeEntry, 0, sizeof(MIB_IPFORWARDROW));
     dwForwardDest = inet_addr(pszDest); // convert dotted ip addr. to ip addr.
@@ -262,11 +262,11 @@ void DoDeleteIpForwardEntry(char* pszDest)
             if (dwForwardDest == pIpRouteTab->table[i].dwForwardDest)
             {
                 memcpy(&routeEntry, &(pIpRouteTab->table[i]), sizeof(MIB_IPFORWARDROW));
-                dwDelStatus = DeleteIpForwardEntry(&routeEntry); 
+                dwDelStatus = DeleteIpForwardEntry(&routeEntry);
                 if (dwDelStatus != NO_ERROR)
                 {
                     printf("IpRoute: couldn't delete (%s), dwStatus = %lu.\n",
-                            pszDest, dwDelStatus);
+                           pszDest, dwDelStatus);
                     return;
                 }
                 else
@@ -306,7 +306,7 @@ DWORD MyGetIpForwardTable(PMIB_IPFORWARDTABLE& pIpRouteTab, BOOL fOrder)
     DWORD status = NO_ERROR;
     DWORD statusRetry = NO_ERROR;
     DWORD dwActualSize = 0;
-    
+
     // query for buffer size needed
     status = GetIpForwardTable(pIpRouteTab, &dwActualSize, fOrder);
 
@@ -321,7 +321,7 @@ DWORD MyGetIpForwardTable(PMIB_IPFORWARDTABLE& pIpRouteTab, BOOL fOrder)
 
         pIpRouteTab = (PMIB_IPFORWARDTABLE) malloc(dwActualSize);
         assert(pIpRouteTab);
-        
+
         statusRetry = GetIpForwardTable(pIpRouteTab, &dwActualSize, fOrder);
         return statusRetry;
     }
@@ -350,7 +350,7 @@ void PrintIpForwardTable(PMIB_IPFORWARDTABLE pIpRouteTable)
     DWORD i, dwStatus, dwCurrIndex;
     struct in_addr inadDest;
     struct in_addr inadMask;
-    struct in_addr inadGateway;  
+    struct in_addr inadGateway;
     char szIpAddr[128];          // ip address of an interface index
     PMIB_IPADDRTABLE pIpAddrTable = NULL;
 
@@ -372,8 +372,8 @@ void PrintIpForwardTable(PMIB_IPFORWARDTABLE pIpRouteTable)
         return;
     }
     assert(pIpAddrTable);
-    
-    
+
+
     printf("Active Routes:\n\n");
 
     printf("  Network Address          Netmask  Gateway Address        Interface  Metric\n");
@@ -387,21 +387,21 @@ void PrintIpForwardTable(PMIB_IPFORWARDTABLE pIpRouteTable)
                 free(pIpAddrTable);
             return;
         }
-        
+
         inadDest.s_addr = pIpRouteTable->table[i].dwForwardDest;
         inadMask.s_addr = pIpRouteTable->table[i].dwForwardMask;
         inadGateway.s_addr = pIpRouteTable->table[i].dwForwardNextHop;
-        
+
         strcpy_s(szDestIp, sizeof(szDestIp), inet_ntoa(inadDest));
         strcpy_s(szMaskIp, sizeof(szDestIp), inet_ntoa(inadMask));
         strcpy_s(szGatewayIp, sizeof(szDestIp), inet_ntoa(inadGateway));
-        printf("  %15s %16s %16s %16s %7d\n", 
-                szDestIp, 
-                szMaskIp, 
-                szGatewayIp, 
-                szIpAddr, 
-                pIpRouteTable->table[i].dwForwardMetric1);
-        
+        printf("  %15s %16s %16s %16s %7d\n",
+               szDestIp,
+               szMaskIp,
+               szGatewayIp,
+               szIpAddr,
+               pIpRouteTable->table[i].dwForwardMetric1);
+
     }
 
     if (pIpAddrTable)
@@ -479,7 +479,7 @@ DWORD MyGetIpAddrTable(PMIB_IPADDRTABLE& pIpAddrTable, BOOL fOrder)
     DWORD status = NO_ERROR;
     DWORD statusRetry = NO_ERROR;
     DWORD dwActualSize = 0;
-    
+
     // query for buffer size needed
     status = GetIpAddrTable(pIpAddrTable, &dwActualSize, fOrder);
 
@@ -494,7 +494,7 @@ DWORD MyGetIpAddrTable(PMIB_IPADDRTABLE& pIpAddrTable, BOOL fOrder)
 
         pIpAddrTable = (PMIB_IPADDRTABLE) malloc(dwActualSize);
         assert(pIpAddrTable);
-        
+
         statusRetry = GetIpAddrTable(pIpAddrTable, &dwActualSize, fOrder);
         return statusRetry;
     }

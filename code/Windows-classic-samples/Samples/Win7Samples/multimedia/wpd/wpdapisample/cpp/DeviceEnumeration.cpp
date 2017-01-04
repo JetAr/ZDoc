@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -168,7 +168,7 @@ DWORD EnumerateAllDevices()
 
     // CoCreate the IPortableDeviceManager interface to enumerate
     // portable devices and to get information about them.
-	//<SnippetDeviceEnum1>
+    //<SnippetDeviceEnum1>
     HRESULT hr = CoCreateInstance(CLSID_PortableDeviceManager,
                                   NULL,
                                   CLSCTX_INPROC_SERVER,
@@ -177,11 +177,11 @@ DWORD EnumerateAllDevices()
     {
         printf("! Failed to CoCreateInstance CLSID_PortableDeviceManager, hr = 0x%lx\n",hr);
     }
-	//</SnippetDeviceEnum1>
+    //</SnippetDeviceEnum1>
 
     // First, pass NULL as the PWSTR array pointer to get the total number
     // of devices found on the system.
-	//<SnippetDeviceEnum2>
+    //<SnippetDeviceEnum2>
     if (SUCCEEDED(hr))
     {
         hr = pPortableDeviceManager->GetDevices(NULL, &cPnPDeviceIDs);
@@ -195,7 +195,7 @@ DWORD EnumerateAllDevices()
     // occured.
 
     printf("\n%d Windows Portable Device(s) found on the system\n\n", cPnPDeviceIDs);
-	//</SnippetDeviceEnum2>
+    //</SnippetDeviceEnum2>
     // Second, allocate an array to hold the PnPDeviceID strings returned from
     // the IPortableDeviceManager::GetDevices method
     if (SUCCEEDED(hr) && (cPnPDeviceIDs > 0))
@@ -228,7 +228,7 @@ DWORD EnumerateAllDevices()
             // Free all returned PnPDeviceID strings by using CoTaskMemFree.
             // NOTE: CoTaskMemFree can handle NULL pointers, so no NULL
             //       check is needed.
-			//<SnippetDeviceEnum3>
+            //<SnippetDeviceEnum3>
             for (dwIndex = 0; dwIndex < cPnPDeviceIDs; dwIndex++)
             {
                 CoTaskMemFree(pPnpDeviceIDs[dwIndex]);
@@ -238,7 +238,7 @@ DWORD EnumerateAllDevices()
             // Delete the array of PWSTR pointers
             delete [] pPnpDeviceIDs;
             pPnpDeviceIDs = NULL;
-			//</SnippetDeviceEnum3>
+            //</SnippetDeviceEnum3>
         }
         else
         {
@@ -262,13 +262,13 @@ void GetClientInformation(
     // bundled software.)
 
     // CoCreate an IPortableDeviceValues interface to hold the client information.
-	//<SnippetDeviceEnum7>
+    //<SnippetDeviceEnum7>
     HRESULT hr = CoCreateInstance(CLSID_PortableDeviceValues,
                                   NULL,
                                   CLSCTX_INPROC_SERVER,
                                   IID_PPV_ARGS(ppClientInformation));
-	//</SnippetDeviceEnum7>
-	//<SnippetDeviceEnum8>
+    //</SnippetDeviceEnum7>
+    //<SnippetDeviceEnum8>
     if (SUCCEEDED(hr))
     {
         // Attempt to set all bits of client information
@@ -308,7 +308,7 @@ void GetClientInformation(
     {
         printf("! Failed to CoCreateInstance CLSID_PortableDeviceValues, hr = 0x%lx\n",hr);
     }
-	//</SnippetDeviceEnum8>
+    //</SnippetDeviceEnum8>
 }
 
 // Calls EnumerateDevices() function to display devices on the system
@@ -393,7 +393,7 @@ void ChooseDevice(
                 hr = pPortableDeviceManager->GetDevices(pPnpDeviceIDs, &cPnPDeviceIDs);
                 if (SUCCEEDED(hr))
                 {
-					//<SnippetDeviceEnum5>
+                    //<SnippetDeviceEnum5>
                     // CoCreate the IPortableDevice interface and call Open() with
                     // the chosen PnPDeviceID string.
                     hr = CoCreateInstance(CLSID_PortableDeviceFTM,
@@ -433,7 +433,7 @@ void ChooseDevice(
                     {
                         printf("! Failed to CoCreateInstance CLSID_PortableDeviceFTM, hr = 0x%lx\n",hr);
                     }
-					//</SnippetDeviceEnum5>
+                    //</SnippetDeviceEnum5>
                 }
                 else
                 {
@@ -443,7 +443,7 @@ void ChooseDevice(
                 // Free all returned PnPDeviceID strings by using CoTaskMemFree.
                 // NOTE: CoTaskMemFree can handle NULL pointers, so no NULL
                 //       check is needed.
-				//<SnippetDeviceEnum4>
+                //<SnippetDeviceEnum4>
                 for (dwIndex = 0; dwIndex < cPnPDeviceIDs; dwIndex++)
                 {
                     CoTaskMemFree(pPnpDeviceIDs[dwIndex]);
@@ -453,7 +453,7 @@ void ChooseDevice(
                 // Delete the array of PWSTR pointers
                 delete [] pPnpDeviceIDs;
                 pPnpDeviceIDs = NULL;
-				//</SnippetDeviceEnum4>
+                //</SnippetDeviceEnum4>
             }
             else
             {

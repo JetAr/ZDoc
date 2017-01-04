@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -27,12 +27,12 @@ class CLocationEvents :
 {
 public:
     CLocationEvents() : m_previousTime(0) {}
-    virtual ~CLocationEvents(){}
+    virtual ~CLocationEvents() {}
 
     DECLARE_NOT_AGGREGATABLE(CLocationEvents)
 
     BEGIN_COM_MAP(CLocationEvents)
-        COM_INTERFACE_ENTRY(ILocationEvents)
+    COM_INTERFACE_ENTRY(ILocationEvents)
     END_COM_MAP()
 
     // ILocationEvents

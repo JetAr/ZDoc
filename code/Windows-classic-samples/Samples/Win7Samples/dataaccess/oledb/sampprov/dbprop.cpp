@@ -1,4 +1,4 @@
-//--------------------------------------------------------------------
+﻿//--------------------------------------------------------------------
 // Microsoft OLE DB Sample Provider
 // (C) Copyright 1991 - 1999 Microsoft Corporation. All Rights Reserved.
 //
@@ -24,12 +24,12 @@
 //      @flag E_UNEXPECTED	| Can not be called unless initialized
 //
 STDMETHODIMP    CImpIDBInfo::GetKeywords
-    (
-	    LPWSTR*	ppwszKeywords
-    )
+(
+    LPWSTR*	ppwszKeywords
+)
 {
     //
-	// Asserts
+    // Asserts
     //
     assert(m_pObj);
 
@@ -37,15 +37,15 @@ STDMETHODIMP    CImpIDBInfo::GetKeywords
     // Check in-params and NULL out-params in case of error
     //
     if( !ppwszKeywords )
-		return E_INVALIDARG;
+        return E_INVALIDARG;
 
-	*ppwszKeywords = NULL;
+    *ppwszKeywords = NULL;
 
     //
-	// Check to see if initialized
+    // Check to see if initialized
     //
-	if( !m_pObj->m_fDSOInitialized )
-		return E_UNEXPECTED;
+    if( !m_pObj->m_fDSOInitialized )
+        return E_UNEXPECTED;
 
     return S_OK;
 }
@@ -62,79 +62,79 @@ STDMETHODIMP    CImpIDBInfo::GetKeywords
 //		@flag DB_E_ERRORSOCCURRED | None of the requested literals are supported
 //
 STDMETHODIMP    CImpIDBInfo::GetLiteralInfo
-    (
-	    ULONG           cLiterals,      //@parm IN | # of literals
-		const DBLITERAL rgLiterals[],   //@parm IN | Array of literals
-		ULONG*          pcLiteralInfo,  //@parm OUT | # of literals returned
-		DBLITERALINFO** prgLiteralInfo, //@parm OUT | Array of info structures
-		WCHAR**         ppCharBuffer    //@parm OUT | Buffer for characters
-    )
+(
+    ULONG           cLiterals,      //@parm IN | # of literals
+    const DBLITERAL rgLiterals[],   //@parm IN | Array of literals
+    ULONG*          pcLiteralInfo,  //@parm OUT | # of literals returned
+    DBLITERALINFO** prgLiteralInfo, //@parm OUT | Array of info structures
+    WCHAR**         ppCharBuffer    //@parm OUT | Buffer for characters
+)
 {
     HRESULT	hr = DB_E_ERRORSOCCURRED;
-	ULONG   ulIndex = 0;
+    ULONG   ulIndex = 0;
 
     //
-	// Asserts
+    // Asserts
     //
     assert(m_pObj);
 
     //
     // Check in-params and NULL out-params in case of error
     //
-	if( pcLiteralInfo )
-		*pcLiteralInfo = 0;
-	
-	if( prgLiteralInfo )
-		*prgLiteralInfo = NULL;
-	
-	if( ppCharBuffer )
-		*ppCharBuffer = NULL;
+    if( pcLiteralInfo )
+        *pcLiteralInfo = 0;
+
+    if( prgLiteralInfo )
+        *prgLiteralInfo = NULL;
+
+    if( ppCharBuffer )
+        *ppCharBuffer = NULL;
 
     //
-	// Check input and output values pointers
+    // Check input and output values pointers
     //
     if( cLiterals && !rgLiterals )
         return E_INVALIDARG;
 
     if( !pcLiteralInfo || !prgLiteralInfo || !ppCharBuffer )
         return E_INVALIDARG;
-    
-    //
-	// Check to see if initialized
-    //
-	if( !m_pObj->m_fDSOInitialized )
-		return E_UNEXPECTED;
-	
-    //
-	// If cLiterals is 0, ignore rgLiterals
-	// return all supported values
-    //
-	if( cLiterals == 0 ) 
-		return S_OK;
 
     //
-	// Allocate memory for DBLITERALINFO array
+    // Check to see if initialized
+    //
+    if( !m_pObj->m_fDSOInitialized )
+        return E_UNEXPECTED;
+
+    //
+    // If cLiterals is 0, ignore rgLiterals
+    // return all supported values
+    //
+    if( cLiterals == 0 )
+        return S_OK;
+
+    //
+    // Allocate memory for DBLITERALINFO array
     //
     SAFE_ALLOC(*prgLiteralInfo, DBLITERALINFO, cLiterals);
 
     //
-	// Process each of the DBLITERAL values that are in the restriction array
+    // Process each of the DBLITERAL values that are in the restriction array
     //
-	*pcLiteralInfo = cLiterals;
+    *pcLiteralInfo = cLiterals;
 
-	for(ulIndex=0; ulIndex < cLiterals; ulIndex++)
-	{
-		(*prgLiteralInfo)[ulIndex].lt = rgLiterals[ulIndex];
-		(*prgLiteralInfo)[ulIndex].fSupported = FALSE;
-		(*prgLiteralInfo)[ulIndex].pwszLiteralValue = NULL;
-		(*prgLiteralInfo)[ulIndex].pwszInvalidChars = NULL;
-		(*prgLiteralInfo)[ulIndex].pwszInvalidStartingChars = NULL;
-		(*prgLiteralInfo)[ulIndex].cchMaxLen = 0;
-	}
-	
+    for(ulIndex=0; ulIndex < cLiterals; ulIndex++)
+    {
+        (*prgLiteralInfo)[ulIndex].lt = rgLiterals[ulIndex];
+        (*prgLiteralInfo)[ulIndex].fSupported = FALSE;
+        (*prgLiteralInfo)[ulIndex].pwszLiteralValue = NULL;
+        (*prgLiteralInfo)[ulIndex].pwszInvalidChars = NULL;
+        (*prgLiteralInfo)[ulIndex].pwszInvalidStartingChars = NULL;
+        (*prgLiteralInfo)[ulIndex].cchMaxLen = 0;
+    }
+
 CLEANUP:
 
-	return hr;
+    return hr;
 }
 
 
@@ -152,36 +152,36 @@ CLEANUP:
 //      @flag E_OUTOFMEMORY | Out of memory
 //
 STDMETHODIMP    CImpIDBProperties::GetPropertyInfo
-    (
-	    ULONG				cPropertySets,		//@parm IN  | # of properties
-	    const DBPROPIDSET	rgPropertySets[],	//@parm IN  | Array of properties
-	    ULONG*				pcPropertyInfoSets,	//@parm OUT | # of properties returned
-	    DBPROPINFOSET**		prgPropertyInfoSets,//@parm OUT | Property values returned
-		WCHAR**				ppDescBuffer		//@parm OUT	| Description Buffer
-    )
+(
+    ULONG				cPropertySets,		//@parm IN  | # of properties
+    const DBPROPIDSET	rgPropertySets[],	//@parm IN  | Array of properties
+    ULONG*				pcPropertyInfoSets,	//@parm OUT | # of properties returned
+    DBPROPINFOSET**		prgPropertyInfoSets,//@parm OUT | Property values returned
+    WCHAR**				ppDescBuffer		//@parm OUT	| Description Buffer
+)
 {
     //
-	// Asserts
+    // Asserts
     //
-	assert(m_pObj);
+    assert(m_pObj);
     assert(m_pObj->m_pUtilProp);
 
     //
     // Just pass this call on to the utility object that manages our properties
     //
     return m_pObj->m_pUtilProp->GetPropertyInfo(
-									m_pObj->m_fDSOInitialized,
-									cPropertySets, 
-									rgPropertySets,
-									pcPropertyInfoSets, 
-									prgPropertyInfoSets,
-									ppDescBuffer );
+               m_pObj->m_fDSOInitialized,
+               cPropertySets,
+               rgPropertySets,
+               pcPropertyInfoSets,
+               prgPropertyInfoSets,
+               ppDescBuffer );
 }
 
 
 // IDBProperties::GetProperties ----------------------------------------------------
 //
-// @mfunc Returns current settings of all properties in the FLAGS_DATASRCINF 
+// @mfunc Returns current settings of all properties in the FLAGS_DATASRCINF
 //			property group
 //
 // @rdesc HRESULT
@@ -190,46 +190,46 @@ STDMETHODIMP    CImpIDBProperties::GetPropertyInfo
 //      @flag E_OUTOFMEMORY | Out of memory
 //
 STDMETHODIMP CImpIDBProperties::GetProperties
-    (
-	    ULONG				cPropertySets,		//@parm IN | count of restiction guids
-		const DBPROPIDSET	rgPropertySets[],	//@parm IN | restriction guids
-		ULONG*              pcProperties,		//@parm OUT | count of properties returned
-		DBPROPSET**			prgProperties		//@parm OUT | property information returned
-    )
+(
+    ULONG				cPropertySets,		//@parm IN | count of restiction guids
+    const DBPROPIDSET	rgPropertySets[],	//@parm IN | restriction guids
+    ULONG*              pcProperties,		//@parm OUT | count of properties returned
+    DBPROPSET**			prgProperties		//@parm OUT | property information returned
+)
 {
     HRESULT hr = E_FAIL;
 
     //
-	// Asserts
+    // Asserts
     //
-	assert(m_pObj);
+    assert(m_pObj);
     assert(m_pObj->m_pUtilProp);
 
     //
     // Check in-params and NULL out-params in case of error
     //
-	hr = m_pObj->m_pUtilProp->GetPropertiesArgChk(
-									m_pObj->m_fDSOInitialized ? 
-									PROPSET_DSOINIT : 
-									PROPSET_DSO, 
-									cPropertySets, 
-									rgPropertySets, 
-									pcProperties, 
-									prgProperties );
-	if( FAILED(hr) )
-		return hr;
+    hr = m_pObj->m_pUtilProp->GetPropertiesArgChk(
+             m_pObj->m_fDSOInitialized ?
+             PROPSET_DSOINIT :
+             PROPSET_DSO,
+             cPropertySets,
+             rgPropertySets,
+             pcProperties,
+             prgProperties );
+    if( FAILED(hr) )
+        return hr;
 
     //
     // Just pass this call on to the utility object that manages our properties
     //
     return m_pObj->m_pUtilProp->GetProperties(
-									m_pObj->m_fDSOInitialized ? 
-									PROPSET_DSOINIT : 
-									PROPSET_DSO, 
-									cPropertySets, 
-									rgPropertySets,
-									pcProperties, 
-									prgProperties );
+               m_pObj->m_fDSOInitialized ?
+               PROPSET_DSOINIT :
+               PROPSET_DSO,
+               cPropertySets,
+               rgPropertySets,
+               pcProperties,
+               prgProperties );
 }
 
 
@@ -242,41 +242,41 @@ STDMETHODIMP CImpIDBProperties::GetProperties
 //      @flag E_INVALIDARG  | cProperties was not equal to 0 and rgProperties was NULL
 //
 STDMETHODIMP    CImpIDBProperties::SetProperties
-    (
-	ULONG		cPropertySets,		//@parm IN | Count of structs returned
-	DBPROPSET	rgPropertySets[]    //@parm IN | Array of Properties
-	)
+(
+    ULONG		cPropertySets,		//@parm IN | Count of structs returned
+    DBPROPSET	rgPropertySets[]    //@parm IN | Array of Properties
+)
 {
     HRESULT hr = E_FAIL;
 
     //
-	// Asserts
+    // Asserts
     //
-	assert(m_pObj);
+    assert(m_pObj);
     assert(m_pObj->m_pUtilProp);
 
     //
-	// No-op if cPropertySets is 0
+    // No-op if cPropertySets is 0
     //
-	if( cPropertySets == 0 )
-		return S_OK;
+    if( cPropertySets == 0 )
+        return S_OK;
 
     //
     // Check in-params and NULL out-params in case of error
     //
-	hr=m_pObj->m_pUtilProp->SetPropertiesArgChk(cPropertySets, rgPropertySets);
-	
-	if( FAILED(hr) )
-		return hr;
+    hr=m_pObj->m_pUtilProp->SetPropertiesArgChk(cPropertySets, rgPropertySets);
+
+    if( FAILED(hr) )
+        return hr;
 
     //
     // Just pass this call on to the utility object that manages our properties
     //
     return m_pObj->m_pUtilProp->SetProperties(
-									m_pObj->m_fDSOInitialized ? 
-									PROPSET_DSOINIT : PROPSET_DSO, 
-									cPropertySets, 
-									rgPropertySets );
+               m_pObj->m_fDSOInitialized ?
+               PROPSET_DSOINIT : PROPSET_DSO,
+               cPropertySets,
+               rgPropertySets );
 }
 
 

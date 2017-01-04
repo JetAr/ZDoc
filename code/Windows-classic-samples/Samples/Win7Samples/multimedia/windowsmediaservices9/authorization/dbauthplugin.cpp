@@ -1,4 +1,4 @@
-//*****************************************************************************
+﻿//*****************************************************************************
 //
 // Microsoft Windows Media
 // Copyright (C) Microsoft Corporation. All rights reserved.
@@ -62,8 +62,8 @@ STDMETHODIMP CDBAuthPlugin::InitializePlugin
 )
 {
     if( ( NULL == pServerContext )
-        || ( NULL == pNamedValues )
-        || ( NULL == pClassFactory ) )
+            || ( NULL == pNamedValues )
+            || ( NULL == pClassFactory ) )
     {
         return( E_INVALIDARG );
     }
@@ -78,7 +78,7 @@ STDMETHODIMP CDBAuthPlugin::InitializePlugin
     do
     {
         hr = pServerContext->GetAndQueryIUnknownValue( const_cast<LPWSTR>( WMS_SERVER ), WMS_SERVER_ID,
-                                                   IID_IWMSServer, (IUnknown**)&pWMSServer, 0 );
+                IID_IWMSServer, (IUnknown**)&pWMSServer, 0 );
         if( FAILED( hr ) )
         {
             break;
@@ -784,7 +784,7 @@ BOOL CSids::MatchSid( PSID pSid, DWORD *pdwIndex )
         for( DWORD dwIndex = 0; dwIndex < m_cItems; dwIndex ++ )
         {
             if( ( NULL != m_pSidList[ dwIndex ] )
-                && EqualSid( m_pSidList[ dwIndex], pSid ) )
+                    && EqualSid( m_pSidList[ dwIndex], pSid ) )
             {
                 bFound = TRUE;
                 *pdwIndex = dwIndex;
@@ -1192,13 +1192,13 @@ HRESULT CSids::GetUsers( BSTR *pbstrUserNames )
                 DWORD cbDomainName = 0;
                 SID_NAME_USE eUse;
                 BOOL fOk = LookupAccountSid( NULL,      // name of local or remote computer
-                                m_pSidList[ dwIndex ],  // security identifier
-                                NULL,                   // account name buffer
-                                &cbUserName,            // size of account name buffer
-                                NULL,                   // domain name
-                                &cbDomainName,          // size of domain name buffer
-                                &eUse                   // SID type
-                                );
+                                             m_pSidList[ dwIndex ],  // security identifier
+                                             NULL,                   // account name buffer
+                                             &cbUserName,            // size of account name buffer
+                                             NULL,                   // domain name
+                                             &cbDomainName,          // size of domain name buffer
+                                             &eUse                   // SID type
+                                           );
                 dwBufSize = dwBufSize + cbUserName + cbDomainName;
             }
         }
@@ -1224,22 +1224,22 @@ HRESULT CSids::GetUsers( BSTR *pbstrUserNames )
                 DWORD cbDomainName = 0;
                 SID_NAME_USE eUse;
                 BOOL fOk = LookupAccountSid( NULL,      // name of local or remote computer
-                                m_pSidList[ dwIndex ],  // security identifier
-                                NULL,                   // account name buffer
-                                &cbUserName,            // size of account name buffer
-                                NULL,                   // domain name
-                                &cbDomainName,          // size of domain name buffer
-                                &eUse                   // SID type
-                                );
+                                             m_pSidList[ dwIndex ],  // security identifier
+                                             NULL,                   // account name buffer
+                                             &cbUserName,            // size of account name buffer
+                                             NULL,                   // domain name
+                                             &cbDomainName,          // size of domain name buffer
+                                             &eUse                   // SID type
+                                           );
 
                 fOk = LookupAccountSid( NULL,           // name of local or remote computer
-                                m_pSidList[ dwIndex ],  // security identifier
-                                p + cbDomainName,       // account name buffer
-                                &cbUserName,            // size of account name buffer
-                                p,                      // domain name
-                                &cbDomainName,          // size of domain name buffer
-                                &eUse                   // SID type
-                                );
+                                        m_pSidList[ dwIndex ],  // security identifier
+                                        p + cbDomainName,       // account name buffer
+                                        &cbUserName,            // size of account name buffer
+                                        p,                      // domain name
+                                        &cbDomainName,          // size of domain name buffer
+                                        &eUse                   // SID type
+                                      );
                 if( !fOk )
                 {
                     continue;

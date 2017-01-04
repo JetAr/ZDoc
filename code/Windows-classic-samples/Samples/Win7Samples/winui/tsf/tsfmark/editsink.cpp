@@ -1,4 +1,4 @@
-//
+﻿//
 // editsink.cpp
 //
 // ITfTextEditSink implementation.
@@ -54,7 +54,7 @@ STDAPI CMarkTextService::OnEndEdit(ITfContext *pContext, TfEditCookie ecReadOnly
     if (pEditRecord->GetSelectionStatus(&fResult) == S_OK && fResult)
     {
         if (pContext->GetSelection(ecReadOnly, TF_DEFAULT_SELECTION, 1, &tfSelection, &cFetched) == S_OK &&
-            cFetched == 1)
+                cFetched == 1)
         {
             if (_pComposition->GetRange(&pRangeComposition) == S_OK)
             {

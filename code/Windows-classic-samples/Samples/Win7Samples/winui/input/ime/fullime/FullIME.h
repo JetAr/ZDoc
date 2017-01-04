@@ -1,4 +1,4 @@
-#define MAXROW          12
+﻿#define MAXROW          12
 #define MAXCOL          60
 #define FIRSTROW         0
 #define FIRSTCOL         0
@@ -39,7 +39,8 @@
 	goto call_defwinproc;					\
 }
 
-typedef struct _IMEUIDATA {
+typedef struct _IMEUIDATA
+{
     int        ImeState;   // Current Ime state.
     UINT       uCompLen;   // To save previous composition string length.
     DWORD      fdwProperty;
@@ -88,8 +89,8 @@ extern char szSteCandTitle[];
 extern char szCandClass[];
 
 extern UINT   cxMetrics,
-              cxOverTypeCaret,
-              cyMetrics;
+       cxOverTypeCaret,
+       cyMetrics;
 
 extern int    xPos, yPos;
 extern HFONT  hfntFixed;

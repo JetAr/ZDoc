@@ -1,5 +1,5 @@
-//--------------------------------------------------------------------
-// Microsoft OLE DB Sample Provider 
+﻿//--------------------------------------------------------------------
+// Microsoft OLE DB Sample Provider
 // (C) Copyright 1991 - 1999 Microsoft Corporation. All Rights Reserved.
 //
 // @doc
@@ -23,7 +23,7 @@
 // Basic Windows and OLE everything
 #include <windows.h>
 #include <windowsx.h>
-#include <limits.h>				
+#include <limits.h>
 #include <stdio.h>				// vsnprintf, etc.
 #include <stddef.h>				// offsetof, etc.
 #include <wchar.h>				// swprintf

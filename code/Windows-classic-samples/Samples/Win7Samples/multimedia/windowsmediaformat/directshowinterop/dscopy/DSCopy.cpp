@@ -1,4 +1,4 @@
-//*****************************************************************************
+﻿//*****************************************************************************
 //
 // Microsoft Windows Media
 // Copyright (C) Microsoft Corporation. All rights reserved.
@@ -27,7 +27,7 @@
 
 #pragma warning(disable: 4100)
 
-// 
+//
 // Constants
 //
 #define DEFAULT_PROFILE_VERSION     WMT_VER_8_0
@@ -59,7 +59,7 @@ _T("source files must have exactly one video stream and one audio stream.\n")   
 // Macros
 //
 #ifndef NUMELMS
-   #define NUMELMS(aa) (sizeof(aa)/sizeof((aa)[0]))
+#define NUMELMS(aa) (sizeof(aa)/sizeof((aa)[0]))
 #endif
 
 //
@@ -97,40 +97,40 @@ public:
         hEvent = NULL;
     }
 
-    ~CIndexCallback(){}
+    ~CIndexCallback() {}
 
     virtual HRESULT STDMETHODCALLTYPE OnStatus(
-                          /* [in] */ WMT_STATUS Status,
-                          /* [in] */ HRESULT hr,
-                          /* [in] */ WMT_ATTR_DATATYPE dwType,
-                          /* [in] */ BYTE __RPC_FAR *pValue,
-                          /* [in] */ void __RPC_FAR *pvContext)
+        /* [in] */ WMT_STATUS Status,
+        /* [in] */ HRESULT hr,
+        /* [in] */ WMT_ATTR_DATATYPE dwType,
+        /* [in] */ BYTE __RPC_FAR *pValue,
+        /* [in] */ void __RPC_FAR *pvContext)
     {
         switch ( Status )
         {
-            case WMT_INDEX_PROGRESS:
-                // Display the indexing progress as a percentage.
-                // Use "carriage return" (\r) to reuse the status line.
-                _tprintf(_T("Indexing in progress (%d%%)\r"), *pValue);
-                break ;
+        case WMT_INDEX_PROGRESS:
+            // Display the indexing progress as a percentage.
+            // Use "carriage return" (\r) to reuse the status line.
+            _tprintf(_T("Indexing in progress (%d%%)\r"), *pValue);
+            break ;
 
-            case WMT_CLOSED:
-                *phr = hr;
-                SetEvent(hEvent) ;
-                _tprintf(_T("\n"));   // Move to new line (past progress line)
-                break;
+        case WMT_CLOSED:
+            *phr = hr;
+            SetEvent(hEvent) ;
+            _tprintf(_T("\n"));   // Move to new line (past progress line)
+            break;
 
-            case WMT_ERROR:
-                *phr = hr;
-                SetEvent(hEvent) ;
-                _tprintf(_T("\nError during indexing operation! hr=0x%x\n"), hr);
-                break;
+        case WMT_ERROR:
+            *phr = hr;
+            SetEvent(hEvent) ;
+            _tprintf(_T("\nError during indexing operation! hr=0x%x\n"), hr);
+            break;
 
-            // Ignore these messages
-            case WMT_OPENED:
-            case WMT_STARTED:
-            case WMT_STOPPED:
-                break;
+        // Ignore these messages
+        case WMT_OPENED:
+        case WMT_STARTED:
+        case WMT_STOPPED:
+            break;
         }
         return S_OK;
     }
@@ -149,8 +149,8 @@ public:
     }
 
     HRESULT STDMETHODCALLTYPE QueryInterface(
-                        /* [in] */ REFIID riid,
-                        /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject)
+        /* [in] */ REFIID riid,
+        /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject)
     {
         if ( riid == IID_IWMStatusCallback )
         {
@@ -209,7 +209,7 @@ void ListProfiles(WMT_VERSION ProfileVersion)
     }
 
     CComQIPtr<IWMProfileManager2, &IID_IWMProfileManager2> pIPM2(pIWMProfileManager);
-    if(!pIPM2) 
+    if(!pIPM2)
     {
         _tprintf(_T("ListProfiles: Failed to QI IWMProfileManager2!  hr=0x%x\n"), hr);
         return;
@@ -217,7 +217,7 @@ void ListProfiles(WMT_VERSION ProfileVersion)
 
     // Set to the requested system profile version
     hr = pIPM2->SetSystemProfileVersion( ProfileVersion );
-    if(FAILED(hr)) 
+    if(FAILED(hr))
     {
         _tprintf(_T("ListProfiles: Failed to set system profile version!  hr=0x%x\n"), hr);
         return;
@@ -225,7 +225,7 @@ void ListProfiles(WMT_VERSION ProfileVersion)
 
     // Read back the current version to verify and save it to global variable
     hr = pIPM2->GetSystemProfileVersion( &g_WMTVersion );
-    if(FAILED(hr)) 
+    if(FAILED(hr))
     {
         _tprintf(_T("ListProfiles: Failed to set system profile version!  hr=0x%x\n"), hr);
         return;
@@ -239,8 +239,8 @@ void ListProfiles(WMT_VERSION ProfileVersion)
         return;
     }
     else
-        _tprintf(_T("There are %d system profiles available for version %d.\n"), 
-               cProfiles, g_WMTVersion >> 16);
+        _tprintf(_T("There are %d system profiles available for version %d.\n"),
+                 cProfiles, g_WMTVersion >> 16);
 
     // Load the profile strings
     for(int i = 0; i < (int) cProfiles; ++i)
@@ -418,19 +418,19 @@ HRESULT MapProfileIdToProfile(int iProfile, IWMProfile **ppProfile)
 
     if (!ppProfile)
         return E_POINTER;
-        
+
     *ppProfile = 0;
-    
+
     CComPtr <IWMProfileManager> pIWMProfileManager;
     HRESULT hr = WMCreateProfileManager( &pIWMProfileManager );
-    if(FAILED(hr)) 
+    if(FAILED(hr))
     {
         _tprintf(_T("MapProfile: Failed to create profile manager!  hr=0x%x\n"), hr);
         return hr;
     }
 
     CComQIPtr<IWMProfileManager2, &IID_IWMProfileManager2> pIPM2(pIWMProfileManager);
-    if(!pIPM2) 
+    if(!pIPM2)
     {
         _tprintf(_T("MapProfile: Failed to QI IWMProfileManager2!\n"));
         return E_UNEXPECTED;
@@ -446,7 +446,7 @@ HRESULT MapProfileIdToProfile(int iProfile, IWMProfile **ppProfile)
 
     // Read back the current version to verify
     hr = pIPM2->GetSystemProfileVersion( &g_WMTVersion );
-    if(FAILED(hr)) 
+    if(FAILED(hr))
     {
         _tprintf(_T("ListProfiles: Failed to read system profile version!  hr=0x%x\n"), hr);
         return hr;
@@ -461,7 +461,7 @@ HRESULT MapProfileIdToProfile(int iProfile, IWMProfile **ppProfile)
     }
 
     // Invalid profile requested?
-    if( (DWORD)iProfile >= cProfiles ) 
+    if( (DWORD)iProfile >= cProfiles )
     {
         _tprintf(_T("Invalid profile: %d\n"), iProfile);
         return E_INVALIDARG;
@@ -488,7 +488,7 @@ HRESULT FindPinOnFilter( IBaseFilter * pFilter, PIN_DIRECTION PinDir,
 
     if (!pFilter || !ppPin)
         return E_POINTER;
-        
+
     *ppPin = NULL;
 
     // Get a pin enumerator for the filter's pins
@@ -507,12 +507,12 @@ HRESULT FindPinOnFilter( IBaseFilter * pFilter, PIN_DIRECTION PinDir,
             }
 
             if ( ( ( VFW_E_NOT_CONNECTED == hr ) && !fConnected ) ||
-                 ( ( SUCCEEDED(hr) ) && fConnected ) )
+                    ( ( SUCCEEDED(hr) ) && fConnected ) )
             {
                 hr = (*ppPin)->QueryDirection( &PinDirection );
                 if ( ( SUCCEEDED(hr) ) && ( PinDirection == PinDir ) )
                 {
-                    if ( nFound == dwPin ) 
+                    if ( nFound == dwPin )
                         break;
 
                     nFound++;
@@ -526,7 +526,7 @@ HRESULT FindPinOnFilter( IBaseFilter * pFilter, PIN_DIRECTION PinDir,
         pEnumPin->Release();
     }
 
-    return hr;   
+    return hr;
 }
 
 //------------------------------------------------------------------------------
@@ -542,27 +542,27 @@ LONG WaitForCompletion( IGraphBuilder *pGraph )
 
     if (!pGraph)
         return -1;
-        
+
     hr = pGraph->QueryInterface(IID_IMediaEvent, (void **) &pME);
     if (SUCCEEDED(hr))
     {
         _tprintf(_T("Waiting for completion...\n  This could take several minutes, ")
                  _T("depending on file size and selected profile.\n"));
         HANDLE hEvent;
-        
+
         hr = pME->GetEventHandle((OAEVENT *)&hEvent);
-        if(SUCCEEDED(hr)) 
+        if(SUCCEEDED(hr))
         {
             // Wait for completion and dispatch messages for any windows
             // created on our thread.
             for(;;)
             {
                 while(MsgWaitForMultipleObjects(
-                    1,
-                    &hEvent,
-                    FALSE,
-                    INFINITE,
-                    QS_ALLINPUT) != WAIT_OBJECT_0)
+                            1,
+                            &hEvent,
+                            FALSE,
+                            INFINITE,
+                            QS_ALLINPUT) != WAIT_OBJECT_0)
                 {
                     MSG Message;
 
@@ -579,14 +579,14 @@ LONG WaitForCompletion( IGraphBuilder *pGraph )
                 if(pME->GetEvent(&levCode, &lp1, &lp2, 0) == S_OK)
                 {
                     pME->FreeEventParams(levCode, lp1, lp2);
-                
+
                     if(EC_COMPLETE == levCode)
                     {
                         // Display received event information
                         if (fVerbose)
                         {
                             _tprintf(_T("WaitForCompletion: Received EC_COMPLETE.\n"));
-                        }                            
+                        }
                         break;
                     }
                     else if(EC_ERRORABORT == levCode)
@@ -594,7 +594,7 @@ LONG WaitForCompletion( IGraphBuilder *pGraph )
                         if (fVerbose)
                         {
                             _tprintf(_T("WaitForCompletion: Received EC_ERRORABORT.\n"));
-                        }                            
+                        }
                         break;
                     }
                     else if(EC_USERABORT == levCode)
@@ -606,7 +606,7 @@ LONG WaitForCompletion( IGraphBuilder *pGraph )
                         break;
                     }
                     else if( EC_PREPROCESS_COMPLETE == levCode)
-                    {        
+                    {
                         if (fVerbose)
                         {
                             _tprintf(_T("WaitForCompletion: Received EC_PREPROCESS_COMPLETE.\n"));
@@ -614,7 +614,7 @@ LONG WaitForCompletion( IGraphBuilder *pGraph )
                         break;
                     }
                     else
-                    {        
+                    {
                         if (fVerbose)
                         {
                             _tprintf(_T("WaitForCompletion: Received event %d.\n"), levCode);
@@ -627,7 +627,7 @@ LONG WaitForCompletion( IGraphBuilder *pGraph )
         {
             _tprintf(_T("Unexpected failure (GetEventHandle failed)...\n"));
         }
-    }        
+    }
     else
         _tprintf(_T("QI failed for IMediaEvent interface!\n"));
 
@@ -649,7 +649,7 @@ HRESULT IndexFileByFrames(__in LPWSTR wszTargetFile)
         // Get an IWMIndexer2 interface to configure for frame indexing
         CComQIPtr<IWMIndexer2, &IID_IWMIndexer2> pIndexer2(pIndexer);
 
-        if(!pIndexer2) 
+        if(!pIndexer2)
         {
             _tprintf(_T("CopyASF: Failed to QI for IWMIndexer2!  hr=0x%x\n"), hr);
             return hr;
@@ -717,7 +717,7 @@ HRESULT IndexFileByFrames(__in LPWSTR wszTargetFile)
 //------------------------------------------------------------------------------
 HRESULT CopyASF(int argc, __in_ecount(argc) LPTSTR argv[])
 {
-    HRESULT hr;    
+    HRESULT hr;
     WCHAR wszSourceFile[MAX_PATH];
     WCHAR wszTargetFile[MAX_PATH];
     DWORD dwRequestedProfile=0;
@@ -764,7 +764,7 @@ HRESULT CopyASF(int argc, __in_ecount(argc) LPTSTR argv[])
             dwRequestedProfile = _ttoi(argv[i+1]);
             _tprintf(_T("Requesting profile #%d.\n"), dwRequestedProfile);
             i++;  // skip two args here
-        } 
+        }
 
         // Select a system profile version
         else if((i+1 < argc) && lstrcmpi(argv[i] + 1, _T("n")) == 0)
@@ -773,10 +773,10 @@ HRESULT CopyASF(int argc, __in_ecount(argc) LPTSTR argv[])
 
             // If this is a valid request, save the version number
             if (dwRequestedVersion == 4 || dwRequestedVersion == 7 ||
-                dwRequestedVersion == 8)
+                    dwRequestedVersion == 8)
             {
-                _tprintf(_T("Requesting Windows Media System Profile version %d.\n"), 
-                        dwRequestedVersion);
+                _tprintf(_T("Requesting Windows Media System Profile version %d.\n"),
+                         dwRequestedVersion);
                 g_WMTVersion = (WMT_VERSION) (dwRequestedVersion << 16);
             }
             else
@@ -787,7 +787,7 @@ HRESULT CopyASF(int argc, __in_ecount(argc) LPTSTR argv[])
             }
 
             i++;  // skip two args here
-        } 
+        }
 
         i++;
     }
@@ -815,7 +815,7 @@ HRESULT CopyASF(int argc, __in_ecount(argc) LPTSTR argv[])
         return -1;
     }
 
-    
+
     //
     // Command-line processing is complete.
     // Create the interfaces needed to copy and configure the ASF file.
@@ -829,7 +829,7 @@ HRESULT CopyASF(int argc, __in_ecount(argc) LPTSTR argv[])
 
     // Convert target filename to a wide character string
 #ifndef UNICODE
-    MultiByteToWideChar(CP_ACP, 0, argv[argc - 1], -1, 
+    MultiByteToWideChar(CP_ACP, 0, argv[argc - 1], -1,
                         wszTargetFile, NUMELMS(wszTargetFile));
 #else
     wcsncpy_s(wszTargetFile, MAX_PATH, argv[argc-1], NUMELMS(wszTargetFile));
@@ -889,7 +889,8 @@ HRESULT CopyASF(int argc, __in_ecount(argc) LPTSTR argv[])
 
         // Convert the numerical profile index into a IWMProfile interface pointer
         hr = MapProfileIdToProfile(dwRequestedProfile, &pProfile);
-        if(FAILED(hr)) {
+        if(FAILED(hr))
+        {
             _tprintf(_T("Failed to map profile ID!  hr=0x%x\n"), hr);
             return hr;
         }
@@ -897,20 +898,22 @@ HRESULT CopyASF(int argc, __in_ecount(argc) LPTSTR argv[])
         // Note that the ASF writer will not run if the number of streams
         // does not match the profile.
         hr = pConfigAsfWriter->ConfigureFilterUsingProfile(pProfile);
-        if(FAILED(hr)) {
+        if(FAILED(hr))
+        {
             _tprintf(_T("Failed to configure filter to use profile!  hr=0x%x\n"), hr);
             return hr;
-        }       
+        }
 
         // If frame-based indexing was requested, disable the default
         // time-based (temporal) indexing
         if (fFrameIndexing)
         {
             hr = pConfigAsfWriter->SetIndexMode(FALSE);
-            if(FAILED(hr)) {
+            if(FAILED(hr))
+            {
                 _tprintf(_T("Failed to disable time-based indexing!  hr=0x%x\n"), hr);
                 return hr;
-            }       
+            }
         }
     }
     else
@@ -931,12 +934,12 @@ HRESULT CopyASF(int argc, __in_ecount(argc) LPTSTR argv[])
     if (fMultipassEncode)
     {
         // Verify that QIs were successful
-        if(!pConfigAsfWriter2) 
+        if(!pConfigAsfWriter2)
         {
             _tprintf(_T("ListProfiles: Failed to QI IConfigAsfWriter2!  hr=0x%x\n"), hr);
             return E_FAIL;
         }
-        if(!pPreprocess) 
+        if(!pPreprocess)
         {
             _tprintf(_T("ListProfiles: Failed to QI IWMWriterPreprocess!  hr=0x%x\n"), hr);
             return E_FAIL;
@@ -969,8 +972,8 @@ HRESULT CopyASF(int argc, __in_ecount(argc) LPTSTR argv[])
         wcsncpy_s(wszSourceFile, MAX_PATH, argv[i], NUMELMS(wszSourceFile));
 #endif
 
-        _tprintf(_T("\nCopying [%ls] to [%ls] with profile #%d\n"), 
-                wszSourceFile, wszTargetFile, dwRequestedProfile);
+        _tprintf(_T("\nCopying [%ls] to [%ls] with profile #%d\n"),
+                 wszSourceFile, wszTargetFile, dwRequestedProfile);
 
         // Let DirectShow render the source file
         hr = pGraph->RenderFile(wszSourceFile, NULL);
@@ -1014,13 +1017,13 @@ HRESULT CopyASF(int argc, __in_ecount(argc) LPTSTR argv[])
         hr = pMC->Stop();
         if (FAILED(hr))
             _tprintf(_T("Failed to stop filter graph!  hr=0x%x\n"), hr);
-        
+
         if (fMultipassEncode && (nEvent != EC_PREPROCESS_COMPLETE))
         {
             _tprintf(_T("ERROR: Failed to recieve expected EC_PREPROCESSCOMPLETE.\n"));
-            return E_FAIL;        
+            return E_FAIL;
         }
-                
+
         // If we're using multipass encode, run again
         if (fMultipassEncode)
         {
@@ -1032,7 +1035,7 @@ HRESULT CopyASF(int argc, __in_ecount(argc) LPTSTR argv[])
             {
                 LONGLONG pos=0;
 
-                hr = pMS->SetPositions(&pos, AM_SEEKING_AbsolutePositioning ,
+                hr = pMS->SetPositions(&pos, AM_SEEKING_AbsolutePositioning,
                                        NULL, AM_SEEKING_NoPositioning);
 
                 // Now that preprocessing is done, write the file normally
@@ -1042,7 +1045,7 @@ HRESULT CopyASF(int argc, __in_ecount(argc) LPTSTR argv[])
                 }
                 if (SUCCEEDED(hr))
                 {
-                    WaitForCompletion(pGraph);           
+                    WaitForCompletion(pGraph);
 
                     hr = pMC->Stop();
                     if (FAILED(hr))
@@ -1057,7 +1060,7 @@ HRESULT CopyASF(int argc, __in_ecount(argc) LPTSTR argv[])
             {
                 _tprintf(_T("Failed to QI for IMediaSeeking!\n"));
             }
-            
+
             // Turn off multipass encoding
             hr = pConfigAsfWriter2->SetParam(AM_CONFIGASFWRITER_PARAM_MULTIPASS, FALSE, 0);
             if (FAILED(hr))

@@ -1,4 +1,4 @@
-//////////////////////////////////////////////////////////////////////
+﻿//////////////////////////////////////////////////////////////////////
 //
 //  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 //  ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED
@@ -17,8 +17,8 @@
 #define TEXTSERVICE_H
 
 class CTextService : public ITfTextInputProcessor,
-                     public ITfThreadMgrEventSink,
-                     public ITfTextEditSink
+    public ITfThreadMgrEventSink,
+    public ITfTextEditSink
 {
 public:
     CTextService();
@@ -46,7 +46,10 @@ public:
     // CClassFactory factory callback
     static HRESULT CreateInstance(IUnknown *pUnkOuter, REFIID riid, void **ppvObj);
 
-    ITfThreadMgr *_GetThreadMgr() { return _pThreadMgr; }
+    ITfThreadMgr *_GetThreadMgr()
+    {
+        return _pThreadMgr;
+    }
 
 private:
     // initialize and uninitialize ThreadMgrEventSink.

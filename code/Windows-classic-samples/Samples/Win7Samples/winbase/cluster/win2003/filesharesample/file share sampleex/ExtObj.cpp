@@ -1,4 +1,4 @@
-/////////////////////////////////////////////////////////////////////////////
+﻿/////////////////////////////////////////////////////////////////////////////
 //
 //  Copyright (c) 2003 <company name>
 //
@@ -144,13 +144,13 @@ CExtObject::~CExtObject( void )
 STDMETHODIMP
 CExtObject::InterfaceSupportsErrorInfo(
     REFIID riid
-    )
+)
 {
     HRESULT hr = S_FALSE;
     int iiid = 0;
     static const IID * rgiid[] =
     {
-          &IID_IWEExtendPropertySheet
+        &IID_IWEExtendPropertySheet
         , &IID_IWEExtendWizard
         , &IID_IWEExtendContextMenu
     };
@@ -203,9 +203,9 @@ Cleanup:
 /////////////////////////////////////////////////////////////////////////////
 STDMETHODIMP
 CExtObject::CreatePropertySheetPages(
-      IUnknown *                   piDataIn
+    IUnknown *                   piDataIn
     , IWCPropertySheetCallback *   piCallbackIn
-    )
+)
 {
     HRESULT             hr = S_OK;
     CRuntimeClass **    pprtc = NULL;
@@ -392,9 +392,9 @@ Cleanup:
 /////////////////////////////////////////////////////////////////////////////
 STDMETHODIMP
 CExtObject::CreateWizardPages(
-      IUnknown *           piDataIn
+    IUnknown *           piDataIn
     , IWCWizardCallback *  piCallbackIn
-    )
+)
 {
     HRESULT             hr = S_OK;
     CRuntimeClass **    pprtc = NULL;
@@ -605,9 +605,9 @@ Cleanup:
 /////////////////////////////////////////////////////////////////////////////
 STDMETHODIMP
 CExtObject::AddContextMenuItems(
-      IUnknown *               piDataIn
+    IUnknown *               piDataIn
     , IWCContextMenuCallback * piCallbackIn
-    )
+)
 {
     HRESULT     hr = S_OK;
 
@@ -725,9 +725,9 @@ Cleanup:
 /////////////////////////////////////////////////////////////////////////////
 HRESULT
 CExtObject::InvokeCommand(
-      ULONG        nCommandIDIn
+    ULONG        nCommandIDIn
     , IUnknown *   piDataIn
-    )
+)
 {
     HRESULT hr = S_OK;
 
@@ -838,7 +838,7 @@ Cleanup:
 HRESULT
 CExtObject::HrGetUIInfo(
     IUnknown * piDataIn
-    )
+)
 {
     ASSERT( piDataIn != NULL );
 
@@ -900,7 +900,7 @@ Cleanup:
 HRESULT
 CExtObject::HrSaveData(
     IUnknown * piDataIn
-    )
+)
 {
     ASSERT( piDataIn != NULL );
 

@@ -1,4 +1,4 @@
-/*++
+﻿/*++
 
     THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
     ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
@@ -57,7 +57,8 @@ wmain (
     //      C:\SomeDirectory\HandlerDll.dll
     //
     rc = GetModuleFileName (NULL, ModulePath, MAX_PATH);
-    if (!rc || (rc == MAX_PATH && ERROR_INSUFFICIENT_BUFFER == GetLastError ())) {
+    if (!rc || (rc == MAX_PATH && ERROR_INSUFFICIENT_BUFFER == GetLastError ()))
+    {
         return 1;
     }
 
@@ -66,9 +67,12 @@ wmain (
     //
     ModulePath[MAX_PATH-1] = 0;
 
-    for (i = wcslen (ModulePath); i >= 0; --i) {
-        if (ModulePath[i] == L'\\') {
-            if (0 != wcscpy_s (&ModulePath[i + 1], MAX_PATH - i - 1, L"HandlerDll.dll")) {
+    for (i = wcslen (ModulePath); i >= 0; --i)
+    {
+        if (ModulePath[i] == L'\\')
+        {
+            if (0 != wcscpy_s (&ModulePath[i + 1], MAX_PATH - i - 1, L"HandlerDll.dll"))
+            {
                 return 1;
             }
 
@@ -87,7 +91,8 @@ wmain (
 
     hr = WerRegisterRuntimeExceptionModule (ModulePath, NULL);
 
-    if (FAILED(hr)) {
+    if (FAILED(hr))
+    {
         wprintf (L"Failed to register a custom exception handler: 0x%08X\n", hr);
         goto End;
     }

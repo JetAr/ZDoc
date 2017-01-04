@@ -1,4 +1,4 @@
-// wmphost.cpp : Main window procedure
+﻿// wmphost.cpp : Main window procedure
 //
 // Copyright (c) Microsoft Corporation. All rights reserved.
 //
@@ -17,7 +17,7 @@ END_OBJECT_MAP()
 /////////////////////////////////////////////////////////////////////////////
 //
 extern "C" int WINAPI wWinMain(HINSTANCE hInstance,
-    HINSTANCE /*hPrevInstance*/, __in LPWSTR lpCmdLine, int /*nShowCmd*/)
+                               HINSTANCE /*hPrevInstance*/, __in LPWSTR lpCmdLine, int /*nShowCmd*/)
 {
     lpCmdLine = GetCommandLine(); //this line necessary for _ATL_MIN_CRT
 

@@ -1,5 +1,5 @@
-//////////////////////////////////////////////////////////////////////
-// 
+﻿//////////////////////////////////////////////////////////////////////
+//
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -35,7 +35,7 @@ BOOL D3DHelper::InitializeD3D9(HWND hwnd)
     {
         m_bAllowSWDevice = RegisterSoftwareRasterizer();
     }
-    
+
     ZeroMemory(&m_d3dpp, sizeof(m_d3dpp));
 
     if (m_bWindowed)
@@ -67,16 +67,16 @@ BOOL D3DHelper::InitializeD3D9(HWND hwnd)
     {
         // First try to create a hardware D3D9 device.
         hr = m_pD3D->CreateDeviceEx(
-            D3DADAPTER_DEFAULT,
-            D3DDEVTYPE_HAL,
-            hwnd,
-            D3DCREATE_FPU_PRESERVE |
-            D3DCREATE_MULTITHREADED |
-            D3DCREATE_SOFTWARE_VERTEXPROCESSING,
-            &m_d3dpp,
-            NULL,
-            &m_pDevice
-            );
+                 D3DADAPTER_DEFAULT,
+                 D3DDEVTYPE_HAL,
+                 hwnd,
+                 D3DCREATE_FPU_PRESERVE |
+                 D3DCREATE_MULTITHREADED |
+                 D3DCREATE_SOFTWARE_VERTEXPROCESSING,
+                 &m_d3dpp,
+                 NULL,
+                 &m_pDevice
+             );
 
         if (FAILED(hr))
         {
@@ -90,16 +90,16 @@ BOOL D3DHelper::InitializeD3D9(HWND hwnd)
 
         // Next try to create a software D3D9 device.
         hr = m_pD3D->CreateDeviceEx(
-            D3DADAPTER_DEFAULT,
-            D3DDEVTYPE_SW,
-            hwnd,
-            D3DCREATE_FPU_PRESERVE |
-            D3DCREATE_MULTITHREADED |
-            D3DCREATE_SOFTWARE_VERTEXPROCESSING,
-            &m_d3dpp,
-            NULL,
-            &m_pDevice
-            );
+                 D3DADAPTER_DEFAULT,
+                 D3DDEVTYPE_SW,
+                 hwnd,
+                 D3DCREATE_FPU_PRESERVE |
+                 D3DCREATE_MULTITHREADED |
+                 D3DCREATE_SOFTWARE_VERTEXPROCESSING,
+                 &m_d3dpp,
+                 NULL,
+                 &m_pDevice
+             );
 
         if (FAILED(hr))
         {
@@ -127,7 +127,7 @@ BOOL D3DHelper::RegisterSoftwareRasterizer()
 
     if (m_hSWRastDLL == NULL)
     {
-        // Try to load the SW rasterizer. 
+        // Try to load the SW rasterizer.
         m_hSWRastDLL = LoadLibrary(L"rgb9rast.dll");
 
         if (m_hSWRastDLL == NULL)
@@ -168,7 +168,7 @@ BOOL D3DHelper::RegisterSoftwareRasterizer()
 BOOL D3DHelper::ResetDevice(BOOL bChangeWindowMode)
 {
     HRESULT hr;
-    
+
     if (bChangeWindowMode)
     {
         if (!SetWindowedMode(!m_bWindowed))
@@ -226,9 +226,9 @@ BOOL D3DHelper::SetWindowedMode(BOOL bWindowMode)
         return TRUE; // no-op
     }
 
-    // The API calls below generate WM_SIZE messages. Therefore, mark 
-    // the mode change in progress, to prevent the device from being 
-    // reset in the WM_SIZE handler. 
+    // The API calls below generate WM_SIZE messages. Therefore, mark
+    // the mode change in progress, to prevent the device from being
+    // reset in the WM_SIZE handler.
 
     m_bInModeChange = TRUE;
 
@@ -295,7 +295,7 @@ BOOL D3DHelper::SetWindowedMode(BOOL bWindowMode)
 
 //-------------------------------------------------------------------
 // TestCooperativeLevel
-// 
+//
 // Test the device's cooperative level.
 //-------------------------------------------------------------------
 

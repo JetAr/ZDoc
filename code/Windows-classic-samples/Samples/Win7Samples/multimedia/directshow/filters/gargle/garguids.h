@@ -1,4 +1,4 @@
-//------------------------------------------------------------------------------
+﻿//------------------------------------------------------------------------------
 // File: GargUIDs.h
 //
 // Desc: DirectShow sample code - definition of CLSIDs.
@@ -19,14 +19,14 @@ extern "C" {
 // Gargle filter object
 // {d616f350-d622-11ce-aac5-0020af0b99a3}
 DEFINE_GUID(CLSID_Gargle,
-0xd616f350, 0xd622, 0x11ce, 0xaa, 0xc5, 0x00, 0x20, 0xaf, 0x0b, 0x99, 0xa3);
+            0xd616f350, 0xd622, 0x11ce, 0xaa, 0xc5, 0x00, 0x20, 0xaf, 0x0b, 0x99, 0xa3);
 
 
 //
 // Gargle filter property page
 // {d616f351-d622-11ce-aac5-0020af0b99a3}
 DEFINE_GUID(CLSID_GargProp,
-0xd616f351, 0xd622, 0x11ce, 0xaa, 0xc5, 0x00, 0x20, 0xaf, 0x0b, 0x99, 0xa3);
+            0xd616f351, 0xd622, 0x11ce, 0xaa, 0xc5, 0x00, 0x20, 0xaf, 0x0b, 0x99, 0xa3);
 
 //
 //  Note: IGargle's uuid is defined with the interface (see igargle.h)

@@ -1,4 +1,4 @@
-/**************************************************************************
+﻿/**************************************************************************
    THIS CODE AND INFORMATION IS PROVIDED 'AS IS' WITHOUT WARRANTY OF
    ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
    THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -11,7 +11,7 @@
 
    File:          ADEvent.h
 
-   Description:   
+   Description:
 
 **************************************************************************/
 
@@ -63,7 +63,7 @@ protected:
     DWORD       m_ObjRefCount;
     IDataObject *m_pdoFrom;
     IDataObject *m_pdoTo;
-   
+
 public:
     CAdminNotifyHandler();
     ~CAdminNotifyHandler();
@@ -76,8 +76,8 @@ public:
     //IDsAdminNotifyHandler methods
     STDMETHOD(Initialize)(IDataObject* pExtraInfo, ULONG* puEventFlags);
     STDMETHOD(Begin)(ULONG uEvent, IDataObject* pArg1, IDataObject* pArg2, ULONG* puFlags, BSTR* pBstr);
-    STDMETHOD(Notify)(ULONG nItem, ULONG uFlags); 
-    STDMETHOD(End)(void); 
+    STDMETHOD(Notify)(ULONG nItem, ULONG uFlags);
+    STDMETHOD(End)(void);
 
 
 private:

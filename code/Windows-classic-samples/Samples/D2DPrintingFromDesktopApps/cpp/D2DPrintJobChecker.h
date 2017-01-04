@@ -1,4 +1,4 @@
-//// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿//// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 //// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 //// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 //// PARTICULAR PURPOSE.
@@ -29,31 +29,31 @@ public:
     virtual
     HRESULT STDMETHODCALLTYPE
     QueryInterface(
-                REFIID  iid,
+        REFIID  iid,
         _Out_   void**  ppvObject
-        );
+    );
     virtual ULONG STDMETHODCALLTYPE AddRef();
     virtual ULONG STDMETHODCALLTYPE Release();
 
     // Implement virtual functions from interface IDispatch.
     virtual STDMETHODIMP
-        GetTypeInfoCount(
-            _Out_ UINT *pctinfo
-        );
+    GetTypeInfoCount(
+        _Out_ UINT *pctinfo
+    );
     virtual STDMETHODIMP
     GetTypeInfo(
         UINT iTInfo,
         LCID lcid,
         _Outptr_result_maybenull_ ITypeInfo **ppTInfo
-        );
+    );
     virtual STDMETHODIMP
     GetIDsOfNames(
         _In_                        REFIID      riid,
         _In_reads_(cNames)          LPOLESTR*   rgszNames,
         _In_range_(0, 16384)        UINT        cNames,
-                                    LCID        lcid,
+        LCID        lcid,
         __out_ecount_full(cNames)   DISPID*     rgDispId
-        );
+    );
     virtual STDMETHODIMP
     Invoke(
         DISPID          dispIdMember,
@@ -64,23 +64,23 @@ public:
         VARIANT*        pVarResult,
         EXCEPINFO*      pExcepInfo,
         UINT*           puArgErr
-        );
+    );
 
     // Implement virtual functions from interface IPrintDocumentPackageStatusEvent.
     virtual STDMETHODIMP
     PackageStatusUpdated(
         _In_ PrintDocumentPackageStatus* packageStatus
-        );
+    );
 
     // New functions in D2DPrintJobChecker.
     HRESULT Initialize(
         _In_ IPrintDocumentPackageTarget* documentPackageTarget
-        );
+    );
     PrintDocumentPackageStatus GetStatus();
     HRESULT WaitForCompletion();
     static void OutputPackageStatus(
         _In_ PrintDocumentPackageStatus packageStatus
-        );
+    );
 
 private:
     void ReleaseResources();

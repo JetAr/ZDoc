@@ -1,4 +1,4 @@
-//
+﻿//
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -52,16 +52,16 @@ void MI_CALL MSFT_WindowsProcess_EnumerateInstances(
     if (result == MI_RESULT_ACCESS_DENIED)
     {
         MI_Context_PostError(context,
-            result,
-            MI_RESULT_TYPE_MI,
-            MI_T("Access denied. Please try to run client process with elevated priviledge."));
+                             result,
+                             MI_RESULT_TYPE_MI,
+                             MI_T("Access denied. Please try to run client process with elevated priviledge."));
     }
     else if (result != MI_RESULT_OK)
     {
         MI_Context_PostError(context,
-            result,
-            MI_RESULT_TYPE_MI,
-            MI_T(""));
+                             result,
+                             MI_RESULT_TYPE_MI,
+                             MI_T(""));
     }
     else
     {
@@ -175,7 +175,7 @@ void MI_CALL MSFT_WindowsProcess_Invoke_SetPriority(
     MI_UNREFERENCED_PARAMETER(methodName);
 
     result = Invoke_SetPriority(context, instanceName, in);
-    
+
     MI_Context_PostResult(context, result);
 }
 

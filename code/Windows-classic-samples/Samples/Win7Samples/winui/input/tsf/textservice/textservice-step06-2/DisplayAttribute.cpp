@@ -1,4 +1,4 @@
-//////////////////////////////////////////////////////////////////////
+﻿//////////////////////////////////////////////////////////////////////
 //
 //  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 //  ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED
@@ -68,7 +68,7 @@ BOOL CTextService::_SetCompositionDisplayAttributes(TfEditCookie ec, ITfContext 
         // set the value over the range
         // the application will use this guid atom to lookup the acutal rendering information
         var.vt = VT_I4; // we're going to set a TfGuidAtom
-        var.lVal = gaDisplayAttribute; 
+        var.lVal = gaDisplayAttribute;
 
         hr = pDisplayAttributeProperty->SetValue(ec, pRangeComposition, &var);
 
@@ -93,9 +93,9 @@ BOOL CTextService::_InitDisplayAttributeGuidAtom()
     HRESULT hr;
 
     if (CoCreateInstance(CLSID_TF_CategoryMgr,
-                         NULL, 
-                         CLSCTX_INPROC_SERVER, 
-                         IID_ITfCategoryMgr, 
+                         NULL,
+                         CLSCTX_INPROC_SERVER,
+                         IID_ITfCategoryMgr,
                          (void**)&pCategoryMgr) != S_OK)
     {
         return FALSE;
@@ -108,6 +108,6 @@ BOOL CTextService::_InitDisplayAttributeGuidAtom()
     hr = pCategoryMgr->RegisterGUID(c_guidDisplayAttributeConverted, &_gaDisplayAttributeConverted);
 
     pCategoryMgr->Release();
-        
+
     return (hr == S_OK);
 }

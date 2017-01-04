@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -7,9 +7,9 @@
 
 // ---------------------------------------------------------------------------
 // File: CDVGraph.cpp
-// 
+//
 // Desc: CDVGraph Class definition, it supports DV Graph Building
-//       This is the class to build all AVC graphs using 
+//       This is the class to build all AVC graphs using
 //       MSTape.sys
 //----------------------------------------------------------------------------
 
@@ -22,9 +22,9 @@ BOOL IsDeviceOutputDV(IBaseFilter * pFilter);
 
 /*-----------------------------------------------------------------------------
 |   Function:   CDVGraph::CDVGraph
-|   Purpose:    Constructor for digital tv graph class.  
-|   Arguments:  None 
-|   Returns:    None 
+|   Purpose:    Constructor for digital tv graph class.
+|   Arguments:  None
+|   Returns:    None
 |   Notes:      initializes the digital tv graph components
 \----------------------------------------------------------------------------*/
 CDVGraph::CDVGraph(void)
@@ -48,20 +48,20 @@ CDVGraph::CDVGraph(void)
 
 /*-----------------------------------------------------------------------------
 |   Function:   CDVGraph::~CDVGraph
-|   Purpose:    Destructor for the graph info class.  
+|   Purpose:    Destructor for the graph info class.
 |   Arguments:  None
-|   Returns:    None 
+|   Returns:    None
 |   Notes:      Any clean up needed should be put here.
 \----------------------------------------------------------------------------*/
 CDVGraph::~CDVGraph(void)
 {
     if(m_pVideoWindow != NULL)
     {
-        //Otherwise, a video image remains on the screen and the user cannot get rid of it. 
+        //Otherwise, a video image remains on the screen and the user cannot get rid of it.
         m_pVideoWindow->put_Visible(OAFALSE);
 
         //Otherwise, messages are sent to the wrong window, likely causing errors.
-        m_pVideoWindow->put_Owner(NULL);  
+        m_pVideoWindow->put_Owner(NULL);
     }
 
     FreeFilters();
@@ -70,18 +70,18 @@ CDVGraph::~CDVGraph(void)
 
 /*-----------------------------------------------------------------------------
 |   Function:   CDVGraph::FreeFilters
-|   Purpose:    Destructor for the graph info class.  
+|   Purpose:    Destructor for the graph info class.
 |   Arguments:  None
-|   Returns:    None 
+|   Returns:    None
 |   Notes:      Any clean up needed should be put here.
 \----------------------------------------------------------------------------*/
 void CDVGraph::FreeFilters()
 {
-    // Release the DirectShow interfaces created 
-    SAFE_RELEASE(m_pGraph) 
-    SAFE_RELEASE(m_pCaptureGraphBuilder) 
+    // Release the DirectShow interfaces created
+    SAFE_RELEASE(m_pGraph)
+    SAFE_RELEASE(m_pCaptureGraphBuilder)
     SAFE_RELEASE(m_pMediaEvent);
-    SAFE_RELEASE(m_pMediaControl) 
+    SAFE_RELEASE(m_pMediaControl)
     SAFE_RELEASE(m_pInputFileFilter);
     SAFE_RELEASE(m_pDeviceFilter);
     SAFE_RELEASE(m_pIAMExtDevice);
@@ -93,7 +93,7 @@ void CDVGraph::FreeFilters()
 
 /*-----------------------------------------------------------------------------
 |   Function:   CAVCGraph::GraphInitialize
-|   Purpose:    Initializing the graph class members.  
+|   Purpose:    Initializing the graph class members.
 |   Arguments:  None
 |   Returns:    Boolean TRUE if successfull or throws exception detailing the error
 |   Notes:      Initializes the required DirectShow interfaces
@@ -104,21 +104,21 @@ HRESULT CDVGraph::InitializeGraph()
     Dump1( TEXT(" CDVGraph::InitializeGraph().hr = %x\0"), hr );
 
     // All DirectShow FilterGraphs need this
-    hr = CoCreateInstance(CLSID_FilterGraph, NULL, CLSCTX_INPROC, 
+    hr = CoCreateInstance(CLSID_FilterGraph, NULL, CLSCTX_INPROC,
                           IID_IGraphBuilder, (LPVOID *)&m_pGraph );
     CHECK_ERROR( TEXT(" Failed to create FilterGraph."), hr);
 
     // Helps the building all Graphs
-    hr = CoCreateInstance((REFCLSID)CLSID_CaptureGraphBuilder2, NULL, CLSCTX_INPROC, 
-                          (REFIID)IID_ICaptureGraphBuilder2, 
+    hr = CoCreateInstance((REFCLSID)CLSID_CaptureGraphBuilder2, NULL, CLSCTX_INPROC,
+                          (REFIID)IID_ICaptureGraphBuilder2,
                           (void **)&m_pCaptureGraphBuilder);
     CHECK_ERROR( TEXT(" Failed to create CaptureGraphBuilder2."), hr);
 
     hr = m_pCaptureGraphBuilder->SetFiltergraph(m_pGraph);
     CHECK_ERROR( TEXT(" Failed to SetFiltergraph."), hr);
 
-    hr = m_pGraph->QueryInterface(IID_IMediaEventEx, 
-                                  reinterpret_cast<PVOID *>(&m_pMediaEvent)); 
+    hr = m_pGraph->QueryInterface(IID_IMediaEventEx,
+                                  reinterpret_cast<PVOID *>(&m_pMediaEvent));
     CHECK_ERROR( TEXT(" Failed to QI IMediaEventEx."), hr);
 
     // DirectShow Interface for Run, Stop, Pause the flow of the streams through the filter graph
@@ -133,10 +133,10 @@ HRESULT CDVGraph::InitializeGraph()
 
 /*-----------------------------------------------------------------------------
 |   Function:   CDVGraph::BuildBasicGraph
-|   Purpose:    Add device filter to the graph 
-|   Arguments:  None 
+|   Purpose:    Add device filter to the graph
+|   Arguments:  None
 |   Returns:    HRESULT
-|   Notes:      
+|   Notes:
 \----------------------------------------------------------------------------*/
 HRESULT CDVGraph::BuildBasicGraph()
 {
@@ -150,10 +150,10 @@ HRESULT CDVGraph::BuildBasicGraph()
 
     ASSERT(m_pDeviceFilter);
 
-    hr = m_pDeviceFilter->QueryInterface(IID_IAMExtTransport, 
-                                        (void **) &m_pIAMExtTransport);
+    hr = m_pDeviceFilter->QueryInterface(IID_IAMExtTransport,
+                                         (void **) &m_pIAMExtTransport);
     CHECK_ERROR( TEXT(" Failed to  QI IAMExtTransport."), hr);
-  
+
     hr = m_pDeviceFilter->QueryInterface(IID_IAMExtDevice, (void **) &m_pIAMExtDevice);
     CHECK_ERROR( TEXT(" Failed to  QI IAMExtDevice."), hr);
 
@@ -169,9 +169,9 @@ HRESULT CDVGraph::BuildBasicGraph()
 
 /*-----------------------------------------------------------------------------
 |   Function:   CDVGraph::AddDeviceFilter
-|   Purpose:    Load (not add) a filter of the name "Microsoft DV Camera and VCR" 
+|   Purpose:    Load (not add) a filter of the name "Microsoft DV Camera and VCR"
 |               which connects to the specified filter
-|   Arguments:  None 
+|   Arguments:  None
 |   Returns:    HRESULT
 |   Notes:      This method adds the device filter to the filtergraph
 \----------------------------------------------------------------------------*/
@@ -184,22 +184,23 @@ HRESULT CDVGraph::AddDeviceFilter()
     ULONG            nFetched = 0;
 
     // Create Device Enumerator
-    hr = CoCreateInstance(CLSID_SystemDeviceEnum, NULL, CLSCTX_INPROC_SERVER, 
+    hr = CoCreateInstance(CLSID_SystemDeviceEnum, NULL, CLSCTX_INPROC_SERVER,
                           IID_ICreateDevEnum, reinterpret_cast<PVOID *>(&pCreateDevEnum));
     CHECK_ERROR( TEXT(" Failed to create SystemDeviceEnum."), hr);
-    
-    // Create the enumerator of the monikers for the specified Device Class & reset them 
+
+    // Create the enumerator of the monikers for the specified Device Class & reset them
     hr = pCreateDevEnum->CreateClassEnumerator(CLSID_VideoInputDeviceCategory, &pEnumMoniker, 0);
     if(SUCCEEDED(hr) && pEnumMoniker)
         pEnumMoniker->Reset();
-    else   {
+    else
+    {
         Dump( TEXT(" Failed to CreateClassEnumerator.") );
         return hr;
     }
 
 
     // Loop through to the last moniker
-    while(SUCCEEDED(pEnumMoniker->Next( 1, &pMoniker, &nFetched )) && pMoniker)    
+    while(SUCCEEDED(pEnumMoniker->Next( 1, &pMoniker, &nFetched )) && pMoniker)
     {
 
         // get the device friendly name:
@@ -213,11 +214,11 @@ HRESULT CDVGraph::AddDeviceFilter()
         hr = pPropBag->Read( L"FriendlyName", &varFriendlyName, 0 );
         CHECK_ERROR( TEXT(" Failed to read friendlyname."), hr);
 
-#ifdef UNICODE      
+#ifdef UNICODE
         (void)StringCchCopy( m_DeviceName, NUMELMS(m_DeviceName), varFriendlyName.bstrVal );
 #else
         WideCharToMultiByte( CP_ACP, 0, varFriendlyName.bstrVal, -1, m_DeviceName, sizeof(m_DeviceName), 0, 0 );
-#endif      
+#endif
 
         VariantClear( &varFriendlyName );
 
@@ -244,7 +245,7 @@ HRESULT CDVGraph::AddDeviceFilter()
         }
         else
             hr = E_FAIL;
-            
+
         SAFE_RELEASE(pMoniker);
         SAFE_RELEASE(pDeviceFilter);
     }//end of while
@@ -252,7 +253,7 @@ HRESULT CDVGraph::AddDeviceFilter()
     SAFE_RELEASE( pEnumMoniker );
     SAFE_RELEASE( pCreateDevEnum );
 
-    return hr; 
+    return hr;
 }
 
 /*-------------------------------------------------------------------------
@@ -260,7 +261,7 @@ Routine:        CDVGraph::GetTapeInfo
 Purpose:        Get Frame rate and availability of dvcr tape
 Arguments:      None
 Returns:        HRESULT as appropriate
-Notes:          
+Notes:
 ------------------------------------------------------------------------*/
 HRESULT CDVGraph::GetTapeInfo(void)
 {
@@ -275,49 +276,49 @@ HRESULT CDVGraph::GetTapeInfo(void)
     if (ED_MEDIA_NOT_PRESENT == lMediaType)
     {
         // Return failure if there is no tape installed
-        hr = S_FALSE;  
-    } 
+        hr = S_FALSE;
+    }
     else
     {
         // Tape type should always be DVC
         ASSERT(ED_MEDIA_DVC == lMediaType);
 
         // Now lets query for the signal mode of the tape.
-        hr = m_pIAMExtTransport->GetTransportBasicParameters(ED_TRANSBASIC_INPUT_SIGNAL, 
-                                                             &lInSignalMode, NULL);
+        hr = m_pIAMExtTransport->GetTransportBasicParameters(ED_TRANSBASIC_INPUT_SIGNAL,
+                &lInSignalMode, NULL);
         CHECK_ERROR( TEXT(" GetTransportBasicParameters failed."), hr);
 
         // determine whether the camcorder supports ntsc or pal
         switch (lInSignalMode)
         {
-            case ED_TRANSBASIC_SIGNAL_525_60_SD :
-                m_AvgTimePerFrame = 33;  // 33 milliseconds (29.97 FPS)
-                m_VideoFormat = DVENCODERVIDEOFORMAT_NTSC;
-                break;
+        case ED_TRANSBASIC_SIGNAL_525_60_SD :
+            m_AvgTimePerFrame = 33;  // 33 milliseconds (29.97 FPS)
+            m_VideoFormat = DVENCODERVIDEOFORMAT_NTSC;
+            break;
 
-            case ED_TRANSBASIC_SIGNAL_525_60_SDL :
-                m_AvgTimePerFrame = 33;  // 33 milliseconds (29.97 FPS)
-                m_VideoFormat = DVENCODERVIDEOFORMAT_NTSC;
-                break;
+        case ED_TRANSBASIC_SIGNAL_525_60_SDL :
+            m_AvgTimePerFrame = 33;  // 33 milliseconds (29.97 FPS)
+            m_VideoFormat = DVENCODERVIDEOFORMAT_NTSC;
+            break;
 
-            case ED_TRANSBASIC_SIGNAL_625_50_SD :
-                m_AvgTimePerFrame = 40;  // 40 milliseconds (25 FPS)
-                m_VideoFormat = DVENCODERVIDEOFORMAT_PAL;
-                break;
+        case ED_TRANSBASIC_SIGNAL_625_50_SD :
+            m_AvgTimePerFrame = 40;  // 40 milliseconds (25 FPS)
+            m_VideoFormat = DVENCODERVIDEOFORMAT_PAL;
+            break;
 
-            case ED_TRANSBASIC_SIGNAL_625_50_SDL :
-                m_AvgTimePerFrame = 40;  // 40 milliseconds (25 FPS)
-                m_VideoFormat = DVENCODERVIDEOFORMAT_PAL;
-                break;
+        case ED_TRANSBASIC_SIGNAL_625_50_SDL :
+            m_AvgTimePerFrame = 40;  // 40 milliseconds (25 FPS)
+            m_VideoFormat = DVENCODERVIDEOFORMAT_PAL;
+            break;
 
-            default : 
-                Dump(TEXT("Unsupported or unrecognized tape format type."));
-                m_AvgTimePerFrame = 33;  // 33 milli-sec (29.97 FPS); default
-                break;
+        default :
+            Dump(TEXT("Unsupported or unrecognized tape format type."));
+            m_AvgTimePerFrame = 33;  // 33 milli-sec (29.97 FPS); default
+            break;
         }
         Dump1(TEXT("Avg time per frame is %d FPS\0"), m_AvgTimePerFrame);
     }
- 
+
     return hr;
 }
 
@@ -326,7 +327,7 @@ Routine:        CDVGraph::DV_GetDVMode
 Purpose:        Determines camera mode using IAMExtDevice::GetCapability()
 Arguments:      None
 Returns:        Subunit mode of camera device
-Notes:          
+Notes:
 ------------------------------------------------------------------------*/
 HRESULT CDVGraph::GetDVMode(DV_MODE *pSubunitMode)
 {
@@ -344,36 +345,36 @@ HRESULT CDVGraph::GetDVMode(DV_MODE *pSubunitMode)
     //  Query the Device Type Capability
     hr = m_pIAMExtDevice->GetCapability(ED_DEVCAP_DEVICE_TYPE, &lDeviceType, 0);
     CHECK_ERROR( TEXT(" m_pIAMExtDevice->GetCapability() failed."), hr);
-    
+
     switch (lDeviceType)
     {
-        case 0 :
-            //device type is unknown
-            *pSubunitMode = UnknownMode;
-            break;
+    case 0 :
+        //device type is unknown
+        *pSubunitMode = UnknownMode;
+        break;
 
-        case ED_DEVTYPE_VCR :
-            *pSubunitMode = VcrMode;
-            break;
+    case ED_DEVTYPE_VCR :
+        *pSubunitMode = VcrMode;
+        break;
 
-        case ED_DEVTYPE_CAMERA :
-            *pSubunitMode = CameraMode;
-            break;
+    case ED_DEVTYPE_CAMERA :
+        *pSubunitMode = CameraMode;
+        break;
 
-        default :
-            Dump(TEXT("GetCapability returned an unknown device type!"));
-            break;
-    } 
-    
+    default :
+        Dump(TEXT("GetCapability returned an unknown device type!"));
+        break;
+    }
+
     return hr;
-} 
+}
 
 /*-------------------------------------------------------------------------
 Routine:        DV_SaveGraph
 Purpose:        Save the filter graph into a *.grf file
 Arguments:      FileName
 Returns:        HRESULT as appropriate
-Notes:          
+Notes:
 ------------------------------------------------------------------------*/
 HRESULT CDVGraph::SaveGraphToFile(TCHAR* sGraphFile)
 {
@@ -386,14 +387,14 @@ HRESULT CDVGraph::SaveGraphToFile(TCHAR* sGraphFile)
         return E_FAIL;
 
     // Either Open or Create the *.GRF file
-    hr = StgOpenStorage( sGraphFile, NULL, STGM_TRANSACTED | STGM_READWRITE | STGM_SHARE_DENY_WRITE, 
+    hr = StgOpenStorage( sGraphFile, NULL, STGM_TRANSACTED | STGM_READWRITE | STGM_SHARE_DENY_WRITE,
                          NULL, NULL, &pStorage );
     if ( STG_E_FILENOTFOUND == hr )
-        hr = StgCreateDocfile( sGraphFile, STGM_CREATE | STGM_TRANSACTED | STGM_READWRITE | STGM_SHARE_EXCLUSIVE , 
-                         NULL , &pStorage);
+        hr = StgCreateDocfile( sGraphFile, STGM_CREATE | STGM_TRANSACTED | STGM_READWRITE | STGM_SHARE_EXCLUSIVE,
+                               NULL, &pStorage);
     CHECK_ERROR( TEXT(" StgCreateDocfile failed."), hr);
-    
-    hr = pStorage->CreateStream( L"ActiveMovieGraph", STGM_WRITE | STGM_CREATE | STGM_SHARE_EXCLUSIVE, 
+
+    hr = pStorage->CreateStream( L"ActiveMovieGraph", STGM_WRITE | STGM_CREATE | STGM_SHARE_EXCLUSIVE,
                                  NULL, NULL, &pStream );
     CHECK_ERROR( TEXT(" CreateStream failed."), hr);
 
@@ -419,7 +420,7 @@ Routine:        CDVGraph::MakePreviewGraph()
 Purpose:        Builds the DV preview graph
 Arguments:      None
 Returns:        HRESULT as apropriate
-Notes:          This is a  preview graph for DV :           
+Notes:          This is a  preview graph for DV :
                     DV_Cam(AV Out)->DVSplitter(vid)->DVCodec->VideoWindow
                                     DVSplitter(aud)->Default DirectSound device
 ---------------------------------------------------------------------------------------------------------*/
@@ -427,10 +428,10 @@ HRESULT CDVGraph::MakePreviewGraph()
 {
     m_iGraphType = GRAPH_PREVIEW;
 
-    HRESULT hr = m_pCaptureGraphBuilder->RenderStream(&PIN_CATEGORY_PREVIEW, 
-                                                      &MEDIATYPE_Interleaved, 
-                                                      m_pDeviceFilter,  
-                                                      NULL, NULL);
+    HRESULT hr = m_pCaptureGraphBuilder->RenderStream(&PIN_CATEGORY_PREVIEW,
+                 &MEDIATYPE_Interleaved,
+                 m_pDeviceFilter,
+                 NULL, NULL);
     return hr;
 }
 
@@ -439,7 +440,7 @@ Routine:        CDVGraph::MakeDvToFileGraph_Type1
 Purpose:        Builds and runs the DV to File graph
 Arguments:      None
 Returns:        HRESULT as apropriate
-Notes:          This is a capture & preview graph for DV Type 1 AVI files           
+Notes:          This is a capture & preview graph for DV Type 1 AVI files
                     This graph is a bit more complex.  It looks like this:
                     DV_Cam(AV Out)->SmartTee(capture)->AviMux->FileWriter
                                     SmartTee(preview)->DVSplitter(vid)->DVCodec->VideoWindow
@@ -451,18 +452,18 @@ HRESULT CDVGraph::MakeDvToFileGraph_Type1(TCHAR* OutputFileName)
     HRESULT hr = S_OK;
 
     ASSERT(OutputFileName[0]);
-    
+
     SmartPtr<IBaseFilter>        ppf;
-    SmartPtr<IFileSinkFilter>    pSink;     
+    SmartPtr<IFileSinkFilter>    pSink;
     hr = m_pCaptureGraphBuilder->SetOutputFileName(&MEDIASUBTYPE_Avi, OutputFileName, &ppf, &pSink);
     CHECK_ERROR( TEXT(" CDVGraph::MakeDvToFileGraph_Type1::m_pCaptureGraphBuilder->SetOutputFileName() failed."), hr);
 
     hr = SetAviOptions(ppf, INTERLEAVE_NONE);
     CHECK_ERROR( TEXT(" CDVGraph::MakeDvToFileGraph_Type1::m_pCaptureGraphBuilder->SetAviOptions() failed."), hr);
-    
+
     // The graph we're making is:   MSDV --> Smart Tee --> AVI Mux --> File Writer
     //                                 --> DV Splitter --> DV Decoder --> Video Renderer
-    //                                 --> Audio Renderer       
+    //                                 --> Audio Renderer
     // Connect interleaved stream of MSDV to the AVI Mux/FW
     hr = m_pCaptureGraphBuilder->RenderStream(&PIN_CATEGORY_CAPTURE, &MEDIATYPE_Interleaved, m_pDeviceFilter, NULL, ppf);
     CHECK_ERROR( TEXT(" CDVGraph::MakeDvToFileGraph_Type1::m_pCaptureGraphBuilder->RenderStream() failed."), hr);
@@ -470,7 +471,7 @@ HRESULT CDVGraph::MakeDvToFileGraph_Type1(TCHAR* OutputFileName)
     // Build a preview graph off of it too
     hr = m_pCaptureGraphBuilder->RenderStream(&PIN_CATEGORY_PREVIEW, &MEDIATYPE_Interleaved, m_pDeviceFilter, NULL, NULL);
     CHECK_ERROR( TEXT(" CDVGraph::MakeDvToFileGraph_Type1::m_pCaptureGraphBuilder->RenderStream() failed."), hr);
-   
+
     return hr;
 }
 
@@ -479,7 +480,7 @@ Routine:        DV_MakeDvToFileGraph_NoPre
 Purpose:        Builds and runs the DV to File graph with no preview
 Arguments:      None
 Returns:        HRESULT as apropriate
-Notes:          This is a capture only graph for DV Type 1 AVI files            
+Notes:          This is a capture only graph for DV Type 1 AVI files
                     This graph is not too complex.  It looks like this:
                     DV_Cam(AV Out)->AviMux->FileWriter
 ---------------------------------------------------------------------------------------------------------*/
@@ -488,8 +489,8 @@ HRESULT CDVGraph::MakeDvToFileGraph_NoPre_Type1(TCHAR* OutputFileName)
     m_iGraphType = GRAPH_DV_TO_FILE_NOPRE;
     HRESULT hr = S_OK;
     ASSERT(OutputFileName[0]) ;
-    
-    //add the avimux, and file writer to the graph 
+
+    //add the avimux, and file writer to the graph
     SmartPtr<IBaseFilter>        ppf = NULL;
     SmartPtr<IFileSinkFilter>    pSink = NULL;
 
@@ -500,12 +501,12 @@ HRESULT CDVGraph::MakeDvToFileGraph_NoPre_Type1(TCHAR* OutputFileName)
     CHECK_ERROR( TEXT(" CDVGraph::MakeDvToFileGraph_NoPre_Type1::m_pCaptureGraphBuilder->RenderStream() failed."), hr);
 
     // the graph we're making is:  MSDV --> AVI Mux --> File Writer
-    // Set the AVI Options like interleaving mode etc...       
+    // Set the AVI Options like interleaving mode etc...
     // Build the graph
-    hr = m_pCaptureGraphBuilder->RenderStream(&PIN_CATEGORY_CAPTURE, &MEDIATYPE_Interleaved, m_pDeviceFilter, 
-                                              NULL, ppf);
+    hr = m_pCaptureGraphBuilder->RenderStream(&PIN_CATEGORY_CAPTURE, &MEDIATYPE_Interleaved, m_pDeviceFilter,
+            NULL, ppf);
     CHECK_ERROR( TEXT(" CDVGraph::MakeDvToFileGraph_NoPre_Type1::m_pCaptureGraphBuilder->RenderStream() failed."), hr);
-         
+
     return hr;
 }
 
@@ -514,7 +515,7 @@ Routine:        DV_MakeFileToDvGraph
 Purpose:        Builds and runs the File to DV graph
 Arguments:      None
 Returns:        HRESULT as apropriate
-Notes:          This is a transmit & playback graph for DV Type 1 AVI files         
+Notes:          This is a transmit & playback graph for DV Type 1 AVI files
                 This graph is a bit more complex.  It looks like this:
                     FileSource->AVI_Splitter->InfPinTee->DV_Camera
                                               InfPinTee->DVSplitter(vid)->DVDecoder->VideoWIndow
@@ -550,14 +551,14 @@ HRESULT CDVGraph::MakeFileToDvGraph_Type1(TCHAR* InputFileName)
     CHECK_ERROR( TEXT(" CDVGraph::MakeDvToFileGraph_NoPre_Type1::m_pCaptureGraphBuilder->RenderStream failed."), hr);
 
     // Add an infinite Tee
-    hr = m_pGraph->AddFilter(pInfTee, L"Infinite Tee"); 
+    hr = m_pGraph->AddFilter(pInfTee, L"Infinite Tee");
     CHECK_ERROR( TEXT(" CDVGraph::MakeDvToFileGraph_NoPre_Type1::m_pGraph->AddFilter() failed."), hr);
 
     // Connect the Splitter to the Tee
     hr = m_pCaptureGraphBuilder->RenderStream(NULL, &MEDIATYPE_Interleaved, pAviSplitter, NULL, pInfTee);
     CHECK_ERROR( TEXT(" CDVGraph::MakeDvToFileGraph_NoPre_Type1::m_pCaptureGraphBuilder->RenderStream() failed."), hr);
 
-    // Connect one branch of the tee to MSDV 
+    // Connect one branch of the tee to MSDV
     hr = m_pCaptureGraphBuilder->RenderStream(NULL, NULL, pInfTee, NULL, m_pDeviceFilter);
     CHECK_ERROR( TEXT("CDVGraph::MakeDvToFileGraph_NoPre_Type1::m_pCaptureGraphBuilder->RenderStream() failed."), hr);
 
@@ -573,7 +574,7 @@ Routine:        DV_MakeFileToDvGraph_NoPre
 Purpose:        Builds and runs the File to DV graph without preview
 Arguments:      None
 Returns:        HRESULT as apropriate
-Notes:          This is a transmit only graph for DV Type 1 AVI files           
+Notes:          This is a transmit only graph for DV Type 1 AVI files
                     This graph is a bit simplex.  It looks like this:
                     FileSource->AVI_Splitter->DV_Camera
 ---------------------------------------------------------------------------------------------------------*/
@@ -587,10 +588,10 @@ HRESULT CDVGraph::MakeFileToDvGraph_NoPre_Type1(TCHAR* InputFileName)
     hr = m_pGraph->AddSourceFilter(InputFileName, InputFileName, &m_pInputFileFilter);
     CHECK_ERROR( TEXT("CDVGraph::MakeFileToDVGraph_NoPre_Type1::m_pGraph->AddSourceFilter() failed."), hr);
 
-    // the graph we're making is:    Async Reader --> AVI Splitter --> MSDV 
+    // the graph we're making is:    Async Reader --> AVI Splitter --> MSDV
     hr = m_pCaptureGraphBuilder->RenderStream(NULL, NULL, m_pInputFileFilter, NULL, m_pDeviceFilter);
     CHECK_ERROR( TEXT("CDVGraph::MakeFileToDVGraph_NoPre_Type1::m_pCaptureGraphBuilder->RenderStream() failed."), hr);
-              
+
     return hr;
 }
 
@@ -599,7 +600,7 @@ Routine:        DV_MakeDvToFileGraph_Type2
 Purpose:        Builds and runs the DV to File graph
 Arguments:      None
 Returns:        HRESULT as apropriate
-Notes:          This is a capture & preview graph for DV Type 2 AVI files           
+Notes:          This is a capture & preview graph for DV Type 2 AVI files
                     This graph is a bit more complex.  It looks like this:
                     DV_Cam(AV Out)->DVSplitter(vid)->SmartTee(capture)->AviMux->FileWriter
                                                      SmartTee(preview)->DVCodec->VideoWindow
@@ -611,7 +612,7 @@ HRESULT CDVGraph::MakeDvToFileGraph_Type2(TCHAR* OutputFileName)
     m_iGraphType = GRAPH_DV_TO_FILE_TYPE2;
     HRESULT hr = S_OK;
 
-	// making sure there is a output file selected
+    // making sure there is a output file selected
     ASSERT(OutputFileName[0]);
 
     SmartPtr<IBaseFilter>    pDVSplitter          = NULL;
@@ -622,7 +623,7 @@ HRESULT CDVGraph::MakeDvToFileGraph_Type2(TCHAR* OutputFileName)
     CHECK_ERROR( TEXT("CDVGraph::MakeDVToFileGraph_Type2::m_pGraph->AddFilter() failed."), hr);
 
 
-    //add the avimux, and file writer to the graph 
+    //add the avimux, and file writer to the graph
     SmartPtr<IBaseFilter> ppf = NULL;
     SmartPtr<IFileSinkFilter> pSink = NULL;
     hr = m_pCaptureGraphBuilder->SetOutputFileName(&MEDIASUBTYPE_Avi, OutputFileName, &ppf, &pSink);
@@ -631,10 +632,10 @@ HRESULT CDVGraph::MakeDvToFileGraph_Type2(TCHAR* OutputFileName)
     // Set the AVI Options like interleaving mode etc...
     hr = SetAviOptions(ppf, INTERLEAVE_NONE);
     CHECK_ERROR( TEXT("CDVGraph::MakeDVToFileGraph_Type2::SetAviOptions() failed."), hr);
-             
+
     // the graph we're making is:   MSDV --> Smart Tee --> DV SPLITTER --> AVI MUX --> File Writer
     //                                                 --> DV SPLITTER --> DV DEC  --> Video Renderer
-    //                                                                             --> Audio Renderer 
+    //                                                                             --> Audio Renderer
 
     // Connect MSDV Interleave stream through DV Splitter to AVI MUX/FW
     hr = m_pCaptureGraphBuilder->RenderStream(&PIN_CATEGORY_CAPTURE, &MEDIATYPE_Interleaved, m_pDeviceFilter, pDVSplitter, ppf);
@@ -656,7 +657,7 @@ Routine:        DV_MakeDvToFileGraph_NoPre_Type2
 Purpose:        Builds and runs the DV to File graph
 Arguments:      None
 Returns:        HRESULT as apropriate
-Notes:          This is a capture only graph for DV Type 2 AVI files            
+Notes:          This is a capture only graph for DV Type 2 AVI files
                     This graph is a bit simplex .  It looks like this:
                     DV_Cam(AV Out)->DVSplitter(vid)->AviMux->FileWriter
                                                 DVSplitter(aud)->AviMux->FileWriter
@@ -666,24 +667,24 @@ HRESULT CDVGraph::MakeDvToFileGraph_NoPre_Type2(TCHAR* OutputFileName)
     m_iGraphType = GRAPH_DV_TO_FILE_NOPRE_TYPE2;
     HRESULT hr = S_OK;
 
-	// making sure there is a output file selected
+    // making sure there is a output file selected
     ASSERT(OutputFileName[0]);
 
     SmartPtr<IBaseFilter> pDVSplitter = NULL;
 
     hr = CoCreateInstance(CLSID_DVSplitter, NULL, CLSCTX_INPROC_SERVER, IID_IBaseFilter, reinterpret_cast<PVOID *>(&pDVSplitter));
     CHECK_ERROR( TEXT("CDVGraph::MakeDvToFileGraph_NoPre_Type2::create DVSplitter failed."), hr);
-   
+
     hr = m_pGraph->AddFilter(pDVSplitter, L"DV Splitter");
     CHECK_ERROR( TEXT("CDVGraph::MakeDvToFileGraph_NoPre_Type2::m_pGraph->AddFilter failed."), hr);
 
-    //add the avimux, and file writer to the graph 
+    //add the avimux, and file writer to the graph
     SmartPtr<IBaseFilter>        ppf = NULL;
     SmartPtr<IFileSinkFilter>    pSink = NULL;
 
     hr = m_pCaptureGraphBuilder->SetOutputFileName(&MEDIASUBTYPE_Avi, OutputFileName, &ppf, &pSink);
     CHECK_ERROR( TEXT("CDVGraph::MakeDvToFileGraph_NoPre_Type2::m_pCaptureGraphBuilder->SetOutputFileName failed."), hr);
-              
+
     // the graph we're making is:   MSDV --> Smart Tee --> DV SPLITTER --> AVI MUX --> File Writer
     //
     // connect MSDV interleaved pin through DV Splitter to AVI MUX/FW
@@ -693,7 +694,7 @@ HRESULT CDVGraph::MakeDvToFileGraph_NoPre_Type2(TCHAR* OutputFileName)
     // connect the other DV Splitter output to the AVI MUX/FW
     hr = m_pCaptureGraphBuilder->RenderStream(NULL, NULL, pDVSplitter, NULL, ppf);
     CHECK_ERROR( TEXT("CDVGraph::MakeDvToFileGraph_NoPre_Type2::m_pCaptureGraphBuilder->RenderStream failed."), hr);
-                      
+
     // Set the AVI Options like interleaving mode etc...
     hr = SetAviOptions(ppf, INTERLEAVE_NONE);
     CHECK_ERROR( TEXT("CDVGraph::MakeDvToFileGraph_NoPre_Type2::SetAviOptions failed."), hr);
@@ -703,10 +704,10 @@ HRESULT CDVGraph::MakeDvToFileGraph_NoPre_Type2(TCHAR* OutputFileName)
 
 /*---------------------------------------------------------------------------------------------------------
 Routine:        DV_MakeFileToDvGraph_Type2
-Purpose:        Builds and runs the File to DV graph 
+Purpose:        Builds and runs the File to DV graph
 Arguments:      None
 Returns:        HRESULT as apropriate
-Notes:          This is a transmit & playback graph for DV Type 2 AVI files         
+Notes:          This is a transmit & playback graph for DV Type 2 AVI files
                     This graph is a bit complex.  It looks like this:
                      FileSource->AVI_Splitter(vid) ->DVMuxer(vid)---------->InfPinTee->DV_Camera
                                         AVI_Splitter(aud)->DVMuxer(aud)     InfPinTee->DVSplitter(vid)->DVDecoder->VideoWIndow
@@ -717,7 +718,7 @@ HRESULT CDVGraph::MakeFileToDvGraph_Type2(TCHAR* InputFileName)
     m_iGraphType = GRAPH_FILE_TO_DV_TYPE2;
     HRESULT hr = S_OK;
 
-	ASSERT(InputFileName[0] );
+    ASSERT(InputFileName[0] );
 
     SmartPtr<IBaseFilter>  pDVMux   = NULL;
     SmartPtr<IBaseFilter>  pInfTee  = NULL;
@@ -725,7 +726,7 @@ HRESULT CDVGraph::MakeFileToDvGraph_Type2(TCHAR* InputFileName)
     CHECK_ERROR( TEXT("CDVGraph::MakeFileToDvGraph_Type2::create DVMux failed."), hr);
 
     hr = CoCreateInstance(CLSID_InfTee, NULL, CLSCTX_INPROC_SERVER, IID_IBaseFilter, reinterpret_cast<PVOID *>(&pInfTee));
-    CHECK_ERROR( TEXT("CDVGraph::MakeFileToDvGraph_Type2::CoCreate InfTeefailed."), hr); 
+    CHECK_ERROR( TEXT("CDVGraph::MakeFileToDvGraph_Type2::CoCreate InfTeefailed."), hr);
 
     // Add the file as source filter to the graph
     hr =m_pGraph->AddSourceFilter(InputFileName, InputFileName, &m_pInputFileFilter);
@@ -736,7 +737,7 @@ HRESULT CDVGraph::MakeFileToDvGraph_Type2(TCHAR* InputFileName)
     CHECK_ERROR( TEXT("CDVGraph::MakeFileToDvGraph_Type2::m_pGraph->AddFilter failed."), hr);
 
     //Add the infinite pin tee filter to the graph and connect it downstream to the dv muxer
-    hr = m_pGraph->AddFilter(pInfTee, L"Infinite Tee"); 
+    hr = m_pGraph->AddFilter(pInfTee, L"Infinite Tee");
     CHECK_ERROR( TEXT("CDVGraph::MakeFileToDvGraph_Type2::m_pGraph->AddFilter failed."), hr);
 
     // the graph we need to build is:    ASYNC reader --> AVI SPLITTER --> DV MUX --> TEE --> MSDV
@@ -771,25 +772,25 @@ HRESULT CDVGraph::MakeFileToDvGraph_Type2(TCHAR* InputFileName)
 
 /*---------------------------------------------------------------------------------------------------------
 Routine:        DV_MakeFileToDvGraph_NoPre_Type2
-Purpose:        Builds and runs the File to DV graph 
+Purpose:        Builds and runs the File to DV graph
 Arguments:      None
 Returns:        HRESULT as apropriate
-Notes:          This is a transmit only graph for DV Type 2 AVI files           
+Notes:          This is a transmit only graph for DV Type 2 AVI files
                     This graph looks like this:
                      FileSource->AVI_Splitter(vid) ->DVMuxer(vid)----->DV_Camera
-                                        AVI_Splitter(aud)->DVMuxer(aud)                 
+                                        AVI_Splitter(aud)->DVMuxer(aud)
 ---------------------------------------------------------------------------------------------------------*/
 HRESULT CDVGraph::MakeFileToDvGraph_NoPre_Type2(TCHAR* InputFileName)
 {
     m_iGraphType = GRAPH_FILE_TO_DV_NOPRE_TYPE2;
     HRESULT hr = S_OK;
 
-	ASSERT(InputFileName[0]);
+    ASSERT(InputFileName[0]);
 
     SmartPtr< IBaseFilter > pDVMux = NULL;
     hr = CoCreateInstance(CLSID_DVMux, NULL, CLSCTX_INPROC_SERVER, IID_IBaseFilter, reinterpret_cast<PVOID *>(&pDVMux));
     CHECK_ERROR( TEXT("CDVGraph::MakeFileToDvGraph_NoPre_Type2::CoCreate DVMux failed."), hr);
-  
+
     // Add the file as source filter to the graph
     hr = m_pGraph->AddSourceFilter(InputFileName, InputFileName, &m_pInputFileFilter);
     CHECK_ERROR( TEXT("CDVGraph::MakeFileToDvGraph_NoPre_Type2::m_pGraph->AddSourceFilter failed."), hr);
@@ -817,13 +818,13 @@ HRESULT CDVGraph::MakeFileToDvGraph_NoPre_Type2(TCHAR* InputFileName)
 
 /*-------------------------------------------------------------------------
 Routine:        DV_SetAviOptions
-Purpose:        Routine for changing AVI Mux properties.  In this sample, 
-                we just set a few options.  
-                These options could be set through the Avi Mux property sheet, 
+Purpose:        Routine for changing AVI Mux properties.  In this sample,
+                we just set a few options.
+                These options could be set through the Avi Mux property sheet,
                 or through a separate dialog.
 Arguments:      Pointer to the AVI renderer (from SetOutputFileName())
 Returns:        HRESULT as appropriate
-Notes:          
+Notes:
 ------------------------------------------------------------------------*/
 HRESULT CDVGraph::SetAviOptions(IBaseFilter *ppf, InterleavingMode INTERLEAVE_MODE)
 {
@@ -849,15 +850,15 @@ HRESULT CDVGraph::SetAviOptions(IBaseFilter *ppf, InterleavingMode INTERLEAVE_MO
     // put the interleaving mode (full, none, half)
     hr = pInterleaving->put_Mode(INTERLEAVE_MODE);
     CHECK_ERROR( TEXT("CDVGraph::SetAviOptions::pInterleaving->put_Mode failed."), hr);
-   
+
     return hr;
-} 
+}
 
 /*-----------------------------------------------------------------------------
 |   Function:   CAVCGraph::RemoveFilters
-|   Purpose:    Tears downs the graph from the specified filter onwards.  
+|   Purpose:    Tears downs the graph from the specified filter onwards.
 |   Arguments:  Filter to be removed downstream from
-|   Returns:    None 
+|   Returns:    None
 |   Notes:      The filter specified in the argument is not removed from the filtergraph; This is a recursively calling function
 \----------------------------------------------------------------------------*/
 HRESULT CDVGraph::RemoveFilters(IBaseFilter *pFilter, BOOL bRemoveDownStream)
@@ -870,7 +871,7 @@ HRESULT CDVGraph::RemoveFilters(IBaseFilter *pFilter, BOOL bRemoveDownStream)
     PIN_INFO PinInfo;
 
     ASSERT(m_pGraph);
-    
+
     // Validating the the pointer to the Filter is not null
     if(!pFilter)
     {
@@ -882,18 +883,18 @@ HRESULT CDVGraph::RemoveFilters(IBaseFilter *pFilter, BOOL bRemoveDownStream)
     // reset the enumerator to the first pin
     hr = pFilter->EnumPins(&pEnumPins);
     CHECK_ERROR( TEXT("CAVCGraph::RemoveFilters():: Could not enumerate pins on the filter to be removed.hr=%#x"), hr);
-    pEnumPins->Reset(); 
-   
+    pEnumPins->Reset();
+
     // Loop through all the pins of the filter
     while( SUCCEEDED(pEnumPins->Next(1, &pPin, &uFetched)) && pPin )
     {
-        // Get the pin & its pin_info struct that this filter's pin is connected to 
+        // Get the pin & its pin_info struct that this filter's pin is connected to
         hr = pPin->ConnectedTo(&pToPin);
         if(SUCCEEDED(hr) &&pToPin )
         {
             hr = pToPin->QueryPinInfo(&PinInfo);
             CHECK_ERROR( TEXT("pToPin->QueryPinInfo failed.hr=%#x"), hr);
-                   
+
             // Check that this ConnectedTo Pin is a input pin thus validating that our filter's pin is an output pin
             if(PinInfo.dir == PINDIR_INPUT && bRemoveDownStream)
             {
@@ -905,15 +906,15 @@ HRESULT CDVGraph::RemoveFilters(IBaseFilter *pFilter, BOOL bRemoveDownStream)
 
                 //always leave the Camera filter in the graph
                 if (PinInfo.pFilter != m_pDeviceFilter)
-                {           
+                {
                     hr = m_pGraph->RemoveFilter(PinInfo.pFilter);
                 }
             }
 
-            SAFE_RELEASE(PinInfo.pFilter);                 
+            SAFE_RELEASE(PinInfo.pFilter);
             SAFE_RELEASE(pToPin);
         }
-        SAFE_RELEASE(pPin);       
+        SAFE_RELEASE(pPin);
     }
 
     SAFE_RELEASE(pEnumPins);
@@ -922,10 +923,10 @@ HRESULT CDVGraph::RemoveFilters(IBaseFilter *pFilter, BOOL bRemoveDownStream)
 
 /*-------------------------------------------------------------------------
 Routine:        DV_StartGraph
-Purpose:        Starts the Filter Graph 
+Purpose:        Starts the Filter Graph
 Arguments:      None
 Returns:        HResult as appropriate
-Notes:          
+Notes:
 ------------------------------------------------------------------------*/
 HRESULT CDVGraph::StartGraph(void)
 {
@@ -945,10 +946,10 @@ HRESULT CDVGraph::StartGraph(void)
 
 /*-------------------------------------------------------------------------
 Routine:        DV_PauseGraph
-Purpose:        Starts the Filter Graph 
+Purpose:        Starts the Filter Graph
 Arguments:      None
 Returns:        HResult as appropriate
-Notes:          
+Notes:
 ------------------------------------------------------------------------*/
 HRESULT CDVGraph::PauseGraph(void)
 {
@@ -959,7 +960,7 @@ HRESULT CDVGraph::PauseGraph(void)
     if ( FAILED(hr))
     {
         Dump(TEXT("CDVGraph::StartGraph::m_pMediaControl->Pause() Failed!"));
-         // stop parts that ran
+        // stop parts that ran
         m_pMediaControl->Stop();
     }
 
@@ -969,10 +970,10 @@ HRESULT CDVGraph::PauseGraph(void)
 
 /*-------------------------------------------------------------------------
 Routine:        DV_StopGraph
-Purpose:        Starts the Filter Graph 
+Purpose:        Starts the Filter Graph
 Arguments:      None
 Returns:        HResult as appropriate
-Notes:          
+Notes:
 ------------------------------------------------------------------------*/
 HRESULT CDVGraph::StopGraph(void)
 {
@@ -996,18 +997,18 @@ HRESULT CDVGraph::getDroppedFrameNum( BOOL *bIsModeTransmit, long* pDropped, lon
 
     SAFE_RELEASE(m_pDroppedFrames);
     ASSERT(bIsModeTransmit != NULL);
-    
+
     if (!bIsModeTransmit)
         return E_POINTER;
 
     // capture
     if (GRAPH_DV_TO_FILE == m_iGraphType || GRAPH_DV_TO_FILE_NOPRE == m_iGraphType ||
-        GRAPH_DV_TO_FILE_TYPE2 == m_iGraphType || GRAPH_DV_TO_FILE_NOPRE_TYPE2 == m_iGraphType)
+            GRAPH_DV_TO_FILE_TYPE2 == m_iGraphType || GRAPH_DV_TO_FILE_NOPRE_TYPE2 == m_iGraphType)
         *bIsModeTransmit = FALSE;
 
     // transmit
     else if (GRAPH_FILE_TO_DV == m_iGraphType || GRAPH_FILE_TO_DV_NOPRE == m_iGraphType ||
-        GRAPH_FILE_TO_DV_TYPE2 == m_iGraphType || GRAPH_FILE_TO_DV_NOPRE_TYPE2 == m_iGraphType)
+             GRAPH_FILE_TO_DV_TYPE2 == m_iGraphType || GRAPH_FILE_TO_DV_NOPRE_TYPE2 == m_iGraphType)
         *bIsModeTransmit = TRUE;
 
     if( *bIsModeTransmit)
@@ -1018,24 +1019,24 @@ HRESULT CDVGraph::getDroppedFrameNum( BOOL *bIsModeTransmit, long* pDropped, lon
             Dump(TEXT("CDVGraph::getDroppedFrameNum::m_pCaptureGraphBuilder->FindPin Failed!"));
             return hr;
         }
-        
+
         hr = pAVIn->QueryInterface(IID_IAMDroppedFrames, reinterpret_cast<PVOID *>(&m_pDroppedFrames));
-        CHECK_ERROR( TEXT("CDVGraph::getDroppedFrameNum::QI IAMDroppedFrames failed."), hr);        
+        CHECK_ERROR( TEXT("CDVGraph::getDroppedFrameNum::QI IAMDroppedFrames failed."), hr);
     }
     else
     {
-        hr = m_pCaptureGraphBuilder->FindInterface(&PIN_CATEGORY_CAPTURE, 
-                                                   &MEDIATYPE_Interleaved, 
-                                                   m_pDeviceFilter, IID_IAMDroppedFrames, 
-                                                   reinterpret_cast<PVOID *>(&m_pDroppedFrames));
-        CHECK_ERROR( TEXT("CDVGraph::getDroppedFrameNum::m_pCaptureGraphBuilder->FindInterface failed."), hr);        
+        hr = m_pCaptureGraphBuilder->FindInterface(&PIN_CATEGORY_CAPTURE,
+                &MEDIATYPE_Interleaved,
+                m_pDeviceFilter, IID_IAMDroppedFrames,
+                reinterpret_cast<PVOID *>(&m_pDroppedFrames));
+        CHECK_ERROR( TEXT("CDVGraph::getDroppedFrameNum::m_pCaptureGraphBuilder->FindInterface failed."), hr);
     }
-     
+
     hr = m_pDroppedFrames->GetNumDropped(pDropped);
-    CHECK_ERROR( TEXT("CDVGraph::getDroppedFrameNum::m_pDroppedFrames->GetNumDropped failed."), hr);        
+    CHECK_ERROR( TEXT("CDVGraph::getDroppedFrameNum::m_pDroppedFrames->GetNumDropped failed."), hr);
 
     hr = m_pDroppedFrames->GetNumNotDropped(pNotdropped);
-    CHECK_ERROR( TEXT("CDVGraph::getDroppedFrameNum::m_pDroppedFrames->GetNumDropped failed."), hr);        
+    CHECK_ERROR( TEXT("CDVGraph::getDroppedFrameNum::m_pDroppedFrames->GetNumDropped failed."), hr);
 
     return hr;
 }
@@ -1045,7 +1046,7 @@ Routine:        ChangeFrameRate
 Purpose:        Controls discard or not half of the frames in the video stream
 Arguments:      None
 Returns:        HRESULT
-Notes:          For NTSC, the frame rate is reduced from 30 frames per second (fps) to 15 fps. 
+Notes:          For NTSC, the frame rate is reduced from 30 frames per second (fps) to 15 fps.
                 For PAL, the frame rate is reduced from 25 fps to 12.5 fps.
 ------------------------------------------------------------------------*/
 HRESULT CDVGraph::ChangeFrameRate(BOOL bHalfFrameRate)
@@ -1056,17 +1057,17 @@ HRESULT CDVGraph::ChangeFrameRate(BOOL bHalfFrameRate)
 
     /* Obtain the dv docoder's IBaseFilter interface. */
     hr = m_pGraph->FindFilterByName(L"DV Splitter", &pDVSplitter) ;
-    CHECK_ERROR( TEXT("CDVGraph::ChangeFrameRate()::m_pGraph->FindFilterByName failed."), hr);        
+    CHECK_ERROR( TEXT("CDVGraph::ChangeFrameRate()::m_pGraph->FindFilterByName failed."), hr);
 
     hr = pDVSplitter->QueryInterface(IID_IDVSplitter, reinterpret_cast<PVOID *>(&pIDVSplitter));
-    CHECK_ERROR( TEXT("CDVGraph::ChangeFrameRate()::QI IDVSplitter failed."), hr);        
-    
+    CHECK_ERROR( TEXT("CDVGraph::ChangeFrameRate()::QI IDVSplitter failed."), hr);
+
     if(bHalfFrameRate)
-        hr = pIDVSplitter->DiscardAlternateVideoFrames(1);  // if the value is non-zero, discards alternate frames. 
-    else 
+        hr = pIDVSplitter->DiscardAlternateVideoFrames(1);  // if the value is non-zero, discards alternate frames.
+    else
         hr = pIDVSplitter->DiscardAlternateVideoFrames(0);  // If the value is zero, the filter delivers every frame.
-    CHECK_ERROR( TEXT("CDVGraph::ChangeFrameRate()::pIDVSplitter->DiscardAlternateVideoFrames failed."), hr);        
-    
+    CHECK_ERROR( TEXT("CDVGraph::ChangeFrameRate()::pIDVSplitter->DiscardAlternateVideoFrames failed."), hr);
+
     return hr;
 }
 
@@ -1075,7 +1076,7 @@ Routine:        CDVGraph::GetResolutionFromDVDecoderPropertyPage
 Purpose:        controls discard or not half of the frames in the video stream
 Arguments:      None
 Returns:        HRESULT
-Notes:          For NTSC, the frame rate is reduced from 30 frames per second (fps) to 15 fps. 
+Notes:          For NTSC, the frame rate is reduced from 30 frames per second (fps) to 15 fps.
                 For PAL, the frame rate is reduced from 25 fps to 12.5 fps.
 ---------------------------------------------------------------------------------*/
 HRESULT CDVGraph::GetResolutionFromDVDecoderPropertyPage( HWND hwndApp, BOOL bChangeResolution)
@@ -1086,18 +1087,18 @@ HRESULT CDVGraph::GetResolutionFromDVDecoderPropertyPage( HWND hwndApp, BOOL bCh
 
     /* Obtain the dv docoder's IBaseFilter interface. */
     hr = m_pGraph->FindFilterByName(L"DV Video Decoder", &pDVDecoder) ;
-    CHECK_ERROR( TEXT("CDVGraph::GetResolutionFromDVDecoderPropertyPage()::m_pGraph->FindFilterByName failed."), hr);        
+    CHECK_ERROR( TEXT("CDVGraph::GetResolutionFromDVDecoderPropertyPage()::m_pGraph->FindFilterByName failed."), hr);
 
     SmartPtr<ISpecifyPropertyPages> pProp;
     hr = pDVDecoder->QueryInterface(IID_ISpecifyPropertyPages, (void **)&pProp);
-    CHECK_ERROR( TEXT("CDVGraph::GetResolutionFromDVDecoderPropertyPage()::QI ISpecifyPropertyPages failed."), hr);        
-    
+    CHECK_ERROR( TEXT("CDVGraph::GetResolutionFromDVDecoderPropertyPage()::QI ISpecifyPropertyPages failed."), hr);
+
     // Get the filter's name and IUnknown pointer.
     FILTER_INFO FilterInfo;
-    hr = pDVDecoder->QueryFilterInfo(&FilterInfo); 
-    CHECK_ERROR( TEXT("CDVGraph::GetResolutionFromDVDecoderPropertyPage()::pDVDecoder->QueryFilterInfo failed."), hr);        
+    hr = pDVDecoder->QueryFilterInfo(&FilterInfo);
+    CHECK_ERROR( TEXT("CDVGraph::GetResolutionFromDVDecoderPropertyPage()::pDVDecoder->QueryFilterInfo failed."), hr);
 
-    // Show the page. 
+    // Show the page.
     if(bChangeResolution)
     {
         CAUUID caGUID;
@@ -1108,7 +1109,7 @@ HRESULT CDVGraph::GetResolutionFromDVDecoderPropertyPage( HWND hwndApp, BOOL bCh
             0, 0,                   // (Reserved)
             FilterInfo.achName,     // Caption for the dialog box
             1,                      // Number of objects (just the filter)
-            (IUnknown **)&pDVDecoder,            // Array of object pointers. 
+            (IUnknown **)&pDVDecoder,            // Array of object pointers.
             caGUID.cElems,          // Number of property pages
             caGUID.pElems,          // Array of property page CLSIDs
             0,                      // Locale identifier
@@ -1118,14 +1119,14 @@ HRESULT CDVGraph::GetResolutionFromDVDecoderPropertyPage( HWND hwndApp, BOOL bCh
     }
 
     // Clean up.
-    FilterInfo.pGraph->Release(); 
-   
+    FilterInfo.pGraph->Release();
+
     hr = pDVDecoder->QueryInterface(IID_IIPDVDec, reinterpret_cast<PVOID *>(&pIPDVDec));
-    CHECK_ERROR( TEXT("CDVGraph::GetResolutionFromDVDecoderPropertyPage()::QI IIPDVDec failed."), hr);        
+    CHECK_ERROR( TEXT("CDVGraph::GetResolutionFromDVDecoderPropertyPage()::QI IIPDVDec failed."), hr);
 
     hr = pIPDVDec->get_IPDisplay(reinterpret_cast <int *>(&m_DVResolution));
-    CHECK_ERROR( TEXT("CDVGraph::GetResolutionFromDVDecoderPropertyPage()::pIPDVDec->get_IPDisplay failed."), hr);        
-  
+    CHECK_ERROR( TEXT("CDVGraph::GetResolutionFromDVDecoderPropertyPage()::pIPDVDec->get_IPDisplay failed."), hr);
+
     SAFE_RELEASE( pDVDecoder );
     SAFE_RELEASE( pIPDVDec );
 
@@ -1137,7 +1138,7 @@ Routine:        CDVGraph::GetResolutionFromDVDecoderPropertyPage
 Purpose:        controls discard or not half of the frames in the video stream
 Arguments:      None
 Returns:        HRESULT
-Notes:          For NTSC, the frame rate is reduced from 30 frames per second (fps) to 15 fps. 
+Notes:          For NTSC, the frame rate is reduced from 30 frames per second (fps) to 15 fps.
                 For PAL, the frame rate is reduced from 25 fps to 12.5 fps.
 ------------------------------------------------------------------------*/
 HRESULT CDVGraph::GetVideoWindowDimensions (int* pWidth, int *pHeight, BOOL bChangeResolution,HWND hwndApp)
@@ -1150,41 +1151,41 @@ HRESULT CDVGraph::GetVideoWindowDimensions (int* pWidth, int *pHeight, BOOL bCha
         return E_POINTER;
 
     hr = GetResolutionFromDVDecoderPropertyPage( hwndApp, bChangeResolution );
-    CHECK_ERROR( TEXT("CDVGraph::GetVideoWindowDimensions()::GetResolutionFromDVDecoderPropertyPage() failed."), hr); 
+    CHECK_ERROR( TEXT("CDVGraph::GetVideoWindowDimensions()::GetResolutionFromDVDecoderPropertyPage() failed."), hr);
 
     switch (m_DVResolution)
     {
-        case DVRESOLUTION_FULL:
-            *pWidth = DVENCODER_WIDTH;
-            if (DVENCODERVIDEOFORMAT_PAL == m_VideoFormat)
-                *pHeight = PAL_DVENCODER_HEIGHT;
-            else if (DVENCODERVIDEOFORMAT_NTSC == m_VideoFormat)
-                *pHeight = NTSC_DVENCODER_HEIGHT;
-            break;
+    case DVRESOLUTION_FULL:
+        *pWidth = DVENCODER_WIDTH;
+        if (DVENCODERVIDEOFORMAT_PAL == m_VideoFormat)
+            *pHeight = PAL_DVENCODER_HEIGHT;
+        else if (DVENCODERVIDEOFORMAT_NTSC == m_VideoFormat)
+            *pHeight = NTSC_DVENCODER_HEIGHT;
+        break;
 
-        case DVRESOLUTION_HALF:
-            *pWidth = DVENCODER_WIDTH/2;
-            if (DVENCODERVIDEOFORMAT_PAL == m_VideoFormat)
-                *pHeight = PAL_DVENCODER_HEIGHT/2;
-            else if (DVENCODERVIDEOFORMAT_NTSC == m_VideoFormat)
-                *pHeight = NTSC_DVENCODER_HEIGHT/2;
-            break;
+    case DVRESOLUTION_HALF:
+        *pWidth = DVENCODER_WIDTH/2;
+        if (DVENCODERVIDEOFORMAT_PAL == m_VideoFormat)
+            *pHeight = PAL_DVENCODER_HEIGHT/2;
+        else if (DVENCODERVIDEOFORMAT_NTSC == m_VideoFormat)
+            *pHeight = NTSC_DVENCODER_HEIGHT/2;
+        break;
 
-        case DVRESOLUTION_QUARTER:
-            *pWidth = DVENCODER_WIDTH/4;
-            if (DVENCODERVIDEOFORMAT_PAL == m_VideoFormat)
-                *pHeight = PAL_DVENCODER_HEIGHT/4;
-            else if (DVENCODERVIDEOFORMAT_NTSC == m_VideoFormat)
-                *pHeight = NTSC_DVENCODER_HEIGHT/4;
-            break;
+    case DVRESOLUTION_QUARTER:
+        *pWidth = DVENCODER_WIDTH/4;
+        if (DVENCODERVIDEOFORMAT_PAL == m_VideoFormat)
+            *pHeight = PAL_DVENCODER_HEIGHT/4;
+        else if (DVENCODERVIDEOFORMAT_NTSC == m_VideoFormat)
+            *pHeight = NTSC_DVENCODER_HEIGHT/4;
+        break;
 
-        case DVRESOLUTION_DC:
-            *pWidth = 88;
-            if (DVENCODERVIDEOFORMAT_PAL == m_VideoFormat)
-               *pHeight = PAL_DVENCODER_HEIGHT/8;
-            else if (DVENCODERVIDEOFORMAT_NTSC == m_VideoFormat)
-               *pHeight = NTSC_DVENCODER_HEIGHT/8;
-            break;
+    case DVRESOLUTION_DC:
+        *pWidth = 88;
+        if (DVENCODERVIDEOFORMAT_PAL == m_VideoFormat)
+            *pHeight = PAL_DVENCODER_HEIGHT/8;
+        else if (DVENCODERVIDEOFORMAT_NTSC == m_VideoFormat)
+            *pHeight = NTSC_DVENCODER_HEIGHT/8;
+        break;
     }
 
     return hr;
@@ -1192,10 +1193,10 @@ HRESULT CDVGraph::GetVideoWindowDimensions (int* pWidth, int *pHeight, BOOL bCha
 
 /*-------------------------------------------------------------------------
 Routine:      DV_SeekATN
-Purpose:      ATN Seek function - uses GetTransportBasicParameters to send RAW AVC command 
+Purpose:      ATN Seek function - uses GetTransportBasicParameters to send RAW AVC command
 Arguments:    None
 Returns:      TRUE if successful
-Notes:        This is Absolute Track Number Seek not TimeCode Seek but 
+Notes:        This is Absolute Track Number Seek not TimeCode Seek but
               uses the timecode display as input
 ------------------------------------------------------------------------*/
 HRESULT CDVGraph::SeekATN(int iHr, int iMn, int iSc, int iFr)
@@ -1210,25 +1211,25 @@ HRESULT CDVGraph::SeekATN(int iHr, int iMn, int iSc, int iFr)
         Dump(TEXT("Invalid Parameter - Frame should be less than 25 for PAL"));
         return E_FAIL;
     }
-    
+
     if (DVENCODERVIDEOFORMAT_NTSC == m_VideoFormat && (iFr > 30) )
     {
         Dump(TEXT("Invalid Parameter - Frame should be less than 30 for NTSC"));
         return E_FAIL;
-    }   
-    
+    }
 
-    // ATN Seek Raw AVC Command 
+
+    // ATN Seek Raw AVC Command
     BYTE RawAVCPkt[8] = {0x00, 0x20, 0x52, 0x20, 0xff, 0xff, 0xff, 0xff};
 
     if ((iHr < 24) && (iHr >= 0) && (iMn < 60) && (iMn >= 0) && (iSc < 60) && (iSc >= 0))
     {
         //Calculate the ATN
-        if (m_AvgTimePerFrame == 40) 
+        if (m_AvgTimePerFrame == 40)
         {
             ulTrackNumToSearch = ((iMn * 60 + iSc) * 25 + iFr) * 12 * 2;
-        } 
-        else 
+        }
+        else
         {
             // Drop two frame every minutes
             ulTrackNumToSearch = ((iMn * 60 + iSc) * 30 + iFr - ((iMn - (iMn / 10)) * 2)) * 10 * 2;
@@ -1237,9 +1238,9 @@ HRESULT CDVGraph::SeekATN(int iHr, int iMn, int iSc, int iFr)
         RawAVCPkt[4] = (BYTE)  (ulTrackNumToSearch & 0x000000ff);
         RawAVCPkt[5] = (BYTE) ((ulTrackNumToSearch & 0x0000ff00) >> 8);
         RawAVCPkt[6] = (BYTE) ((ulTrackNumToSearch & 0x00ff0000) >> 16);
-        
+
         // RAW AVC Call
-        hr = m_pIAMExtTransport->GetTransportBasicParameters(ED_RAW_EXT_DEV_CMD, &iCnt, (LPOLESTR *)RawAVCPkt);     
+        hr = m_pIAMExtTransport->GetTransportBasicParameters(ED_RAW_EXT_DEV_CMD, &iCnt, (LPOLESTR *)RawAVCPkt);
         if ((HRESULT) ERROR_TIMEOUT == hr)
             OutputDebugString(TEXT(" ATN Seek returns ERROR_TIMEOUT"));
         else if ((HRESULT) ERROR_REQ_NOT_ACCEP == hr)
@@ -1247,19 +1248,19 @@ HRESULT CDVGraph::SeekATN(int iHr, int iMn, int iSc, int iFr)
         else if ((HRESULT) ERROR_NOT_SUPPORTED == hr)
             OutputDebugString(TEXT(" ATN Seek returns ERROR_NOT_SUPPORTED"));
         else if ((HRESULT) ERROR_REQUEST_ABORTED == hr)
-            OutputDebugString(TEXT(" ATN Seek returns ERROR_REQUEST_ABORTED "));       
+            OutputDebugString(TEXT(" ATN Seek returns ERROR_REQUEST_ABORTED "));
     }
     else
     {
         Dump(TEXT("Invalid Parameter - Time entered should be:\nHour:Minute:Second:Frame"));
         hr = E_FAIL;
-    } 
+    }
 
     return hr;
-} 
+}
 
 // helper function
-BOOL IsDeviceOutputDV(IBaseFilter * pFilter) 
+BOOL IsDeviceOutputDV(IBaseFilter * pFilter)
 {
     if (!pFilter) return FALSE;
 
@@ -1276,7 +1277,8 @@ BOOL IsDeviceOutputDV(IBaseFilter * pFilter)
         // See if this pin matches the specified direction.
         PIN_DIRECTION ThisPinDir;
         hr = pPin->QueryDirection(&ThisPinDir);
-        if (FAILED(hr))        {
+        if (FAILED(hr))
+        {
             SAFE_RELEASE(pPin);
             break;
         }
@@ -1288,31 +1290,35 @@ BOOL IsDeviceOutputDV(IBaseFilter * pFilter)
 
             AM_MEDIA_TYPE* pMediaType;
             // Loop thru' media type list for a match
-            do {
+            do
+            {
                 hr = pTypeEnum->Next(1, &pMediaType, &ul) ;
-                if (FAILED(hr) || 0 == ul) {
+                if (FAILED(hr) || 0 == ul)
+                {
                     SAFE_RELEASE(pPin);
                     break ;
                 }
-        
+
                 if (pMediaType->subtype == MEDIASUBTYPE_dvsd  ||
-                    pMediaType->subtype == MEDIASUBTYPE_DVSD) {  
+                        pMediaType->subtype == MEDIASUBTYPE_DVSD)
+                {
                     bFound = TRUE;
                     SAFE_RELEASE(pPin);
                     DeleteMediaType( pMediaType );
-                
+
                     pTypeEnum->Release();
                     SAFE_RELEASE(pEnum);
 
                     return TRUE;
                 }
-                
+
                 DeleteMediaType( pMediaType );
 
-            } while (!bFound) ;  // until the reqd one is found
+            }
+            while (!bFound) ;    // until the reqd one is found
 
-            pTypeEnum->Release();                      
-        } 
+            pTypeEnum->Release();
+        }
     }
 
     SAFE_RELEASE(pPin);

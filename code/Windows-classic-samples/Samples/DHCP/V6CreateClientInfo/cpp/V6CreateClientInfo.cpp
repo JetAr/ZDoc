@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -55,13 +55,14 @@ int __cdecl main(void)
 
     //Creates a DHCPv4 client lease record in the DHCP server database
     dwError = DhcpV6CreateClientInfo(
-                          pwszServer,    //ServerIpAddress, if this is NULL, it means the current server on which the program is run
-                          &clientInfo
-                          );
+                  pwszServer,    //ServerIpAddress, if this is NULL, it means the current server on which the program is run
+                  &clientInfo
+              );
     if(ERROR_SUCCESS != dwError)
     {
         wprintf(L"DhcpV6CreateClientInfo failed with Error = %d\n",dwError);
-    }else
+    }
+    else
     {
         wprintf(L"DhcpV6CreateClientInfo returned success\n");
     }

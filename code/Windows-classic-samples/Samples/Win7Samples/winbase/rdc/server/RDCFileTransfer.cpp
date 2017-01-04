@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -43,9 +43,9 @@ DebugHresult CRdcFileTransfer::FinalConstruct()
 
 /*---------------------------------------------------------------------------
 Name:     CRdcFileTransfer::FinalRelease
- 
+
 Close all open file handles.
- 
+
 ----------------------------------------------------------------------------*/
 void CRdcFileTransfer::FinalRelease()
 {
@@ -58,12 +58,12 @@ void CRdcFileTransfer::FinalRelease()
 
 /*---------------------------------------------------------------------------
 Name:     CRdcFileTransfer::RdcOpenFile
- 
+
 Open the file.
 Open existing signature files, or create new ones.
 Create internal FileHandleImpl to track all the allocated resources, and
 add it to our list of handles.
- 
+
 Arguments:
    fileName          The path of the file to open.
    fileInfo          Information about the file to return to the client.
@@ -145,15 +145,15 @@ STDMETHODIMP CRdcFileTransfer::RdcOpenFile (
 
 /*---------------------------------------------------------------------------
 Name:     CRdcFileTransfer::ReadData
- 
+
 Read file or signature data from the given file handle.
- 
+
 Signature generation is done on-demand -- so the first call
 to ReadData() can take a long time.
- 
+
 FUTURE: Put signature generation into a seperate thread, and
 have it started by RdcOpenFile().
- 
+
 Arguments:
    fileHandle               The filehandle, returned by RdcOpenFile.
    signatureLevel           0==The file data, 1 == first level of signatures, etc...
@@ -161,9 +161,9 @@ Arguments:
    bytesToRead              The number of bytes to read
    bytesActuallyRead        The number of bytes actually read
    data                     The buffer to store the data in.
- 
+
 Returns:
- 
+
 ----------------------------------------------------------------------------*/
 STDMETHODIMP CRdcFileTransfer::ReadData (
     RdcFileHandle * fileHandle,
@@ -268,7 +268,7 @@ STDMETHODIMP CRdcFileTransfer::Close (
     if ( fileHandle->m_HandleValue )
     {
         CComCritSecLock<CComAutoCriticalSection> lock ( m_HandlesLock )
-            ;
+        ;
         if ( m_RdcFileHandles.Size() >= fileHandle->m_HandleValue )
         {
             fileHandleImpl = m_RdcFileHandles[ fileHandle->m_HandleValue - 1 ];

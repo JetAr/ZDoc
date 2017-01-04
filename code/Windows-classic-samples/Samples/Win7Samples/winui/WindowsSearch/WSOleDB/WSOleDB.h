@@ -1,4 +1,4 @@
-#include <stdio.h>
+﻿#include <stdio.h>
 #include <tchar.h>
 #include <windows.h>
 #include <searchapi.h>

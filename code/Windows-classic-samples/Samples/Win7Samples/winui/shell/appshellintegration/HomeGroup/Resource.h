@@ -1,4 +1,4 @@
-#define IDD_MAIN          100
+﻿#define IDD_MAIN          100
 #define IDI_ICON          101
 #define IDC_STATIC        1000
 #define IDC_USERLIST      1001

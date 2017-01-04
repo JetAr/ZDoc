@@ -1,4 +1,4 @@
-//
+﻿//
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -20,26 +20,26 @@
 // Function: RemoveIdFromChain
 //
 // Description:
-//    This function removes the given CatalogId from the protocol chain 
+//    This function removes the given CatalogId from the protocol chain
 //    for pinfo.
 //
-BOOL 
+BOOL
 RemoveIdFromChain(
-    WSAPROTOCOL_INFOW *pInfo, 
+    WSAPROTOCOL_INFOW *pInfo,
     DWORD              dwCatalogId
-    )
+)
 {
-    int     i, 
+    int     i,
             j;
 
-    for(i=0; i < pInfo->ProtocolChain.ChainLen ;i++)
+    for(i=0; i < pInfo->ProtocolChain.ChainLen ; i++)
     {
         if ( pInfo->ProtocolChain.ChainEntries[ i ] == dwCatalogId )
         {
             for(j=i; j < pInfo->ProtocolChain.ChainLen-1 ; j++)
             {
-                pInfo->ProtocolChain.ChainEntries[ j ] = 
-                        pInfo->ProtocolChain.ChainEntries[ j+1 ];
+                pInfo->ProtocolChain.ChainEntries[ j ] =
+                    pInfo->ProtocolChain.ChainEntries[ j+1 ];
             }
             pInfo->ProtocolChain.ChainLen--;
             return TRUE;
@@ -55,14 +55,14 @@ RemoveIdFromChain(
 //    This function determines whether the given catalog id is referenced
 //    in the protocol chain of pinfo.
 //
-BOOL 
+BOOL
 IsIdInChain(
-    WSAPROTOCOL_INFOW *pInfo, 
+    WSAPROTOCOL_INFOW *pInfo,
     DWORD              dwId)
 {
     int     i;
 
-    for(i=0; i < pInfo->ProtocolChain.ChainLen ;i++)
+    for(i=0; i < pInfo->ProtocolChain.ChainLen ; i++)
     {
         if ( pInfo->ProtocolChain.ChainEntries[ i ] == dwId )
             return TRUE;
@@ -84,12 +84,12 @@ GetProviderCount(
     WSAPROTOCOL_INFOW *pProviders,
     int                iProviderCount,
     int                iProviderType
-    )
+)
 {
     int Count, i;
 
     Count = 0;
-    for(i=0; i < iProviderCount ;i++)
+    for(i=0; i < iProviderCount ; i++)
     {
         if ( ( LAYERED_CHAIN == iProviderType ) && ( pProviders[ i ].ProtocolChain.ChainLen > 1 ) )
             Count++;
@@ -103,7 +103,7 @@ GetProviderCount(
 // Function: GetLayeredEntriesByGuid
 //
 // Description:
-//    This routine is used by the uninstaller when WSCUpdateProvider is not 
+//    This routine is used by the uninstaller when WSCUpdateProvider is not
 //    available. If after an LSP is removed, there are other LSPs which depend
 //    on that LSP, the uninstaller must remove and reinstall all LSPs and fix up
 //    the catalog ID references within the protocol chain. This routine is used
@@ -118,18 +118,18 @@ int
 GetLayeredEntriesByGuid(
     WSAPROTOCOL_INFOW *pMatchLayers,
     int               *iLayeredCount,
-    WSAPROTOCOL_INFOW *pEntries, 
+    WSAPROTOCOL_INFOW *pEntries,
     int                iEntryCount,
     GUID              *MatchGuid
-    )
+)
 {
-    int                count, 
+    int                count,
                        err = SOCKET_ERROR,
                        i;
 
     // First count how many entries belong to this GUID
     count = 0;
-    for(i=0; i < iEntryCount ;i++)
+    for(i=0; i < iEntryCount ; i++)
     {
         if ( 0 == memcmp( MatchGuid, &pEntries[i].ProviderId, sizeof( GUID ) ) )
             count++;
@@ -144,7 +144,7 @@ GetLayeredEntriesByGuid(
 
     // Go back and copy the matching providers into our array
     count = 0;
-    for(i=0; i < iEntryCount ;i++)
+    for(i=0; i < iEntryCount ; i++)
     {
         if ( 0 == memcmp( MatchGuid, &pEntries[ i ].ProviderId, sizeof( GUID ) ) )
         {
@@ -165,7 +165,7 @@ cleanup:
 // Function: IsEqualProtocolEntries
 //
 // Description:
-//    This routine compares two WSAPROTOCOL_INFOW structures to determine 
+//    This routine compares two WSAPROTOCOL_INFOW structures to determine
 //    whether they are equal. This is done when a provider is uninstalled
 //    and then reinstalled. After reinstallation we need to match the old
 //    provider to the new (after reenumerating the catalog) so we can find
@@ -177,24 +177,24 @@ BOOL
 IsEqualProtocolEntries(
     WSAPROTOCOL_INFOW *pInfo1,
     WSAPROTOCOL_INFOW *pInfo2
-    )
+)
 {
     if ( (memcmp(&pInfo1->ProviderId, &pInfo2->ProviderId, sizeof(GUID)) == 0) &&
-         (pInfo1->dwServiceFlags1 == pInfo2->dwServiceFlags1) &&
-         (pInfo1->dwServiceFlags2 == pInfo2->dwServiceFlags2) &&
-         (pInfo1->dwServiceFlags3 == pInfo2->dwServiceFlags3) &&
-         (pInfo1->dwServiceFlags4 == pInfo2->dwServiceFlags4) &&
-         (pInfo1->ProtocolChain.ChainLen == pInfo2->ProtocolChain.ChainLen) &&
-         (pInfo1->iVersion == pInfo2->iVersion) &&
-         (pInfo1->iAddressFamily == pInfo2->iAddressFamily) &&
-         (pInfo1->iMaxSockAddr == pInfo2->iMaxSockAddr) &&
-         (pInfo1->iMinSockAddr == pInfo2->iMinSockAddr) &&
-         (pInfo1->iSocketType == pInfo2->iSocketType) &&
-         (pInfo1->iProtocol == pInfo2->iProtocol) &&
-         (pInfo1->iProtocolMaxOffset == pInfo2->iProtocolMaxOffset) &&
-         (pInfo1->iNetworkByteOrder == pInfo2->iNetworkByteOrder) &&
-         (pInfo1->iSecurityScheme == pInfo2->iSecurityScheme) &&
-         (pInfo1->dwMessageSize == pInfo2->dwMessageSize)
+            (pInfo1->dwServiceFlags1 == pInfo2->dwServiceFlags1) &&
+            (pInfo1->dwServiceFlags2 == pInfo2->dwServiceFlags2) &&
+            (pInfo1->dwServiceFlags3 == pInfo2->dwServiceFlags3) &&
+            (pInfo1->dwServiceFlags4 == pInfo2->dwServiceFlags4) &&
+            (pInfo1->ProtocolChain.ChainLen == pInfo2->ProtocolChain.ChainLen) &&
+            (pInfo1->iVersion == pInfo2->iVersion) &&
+            (pInfo1->iAddressFamily == pInfo2->iAddressFamily) &&
+            (pInfo1->iMaxSockAddr == pInfo2->iMaxSockAddr) &&
+            (pInfo1->iMinSockAddr == pInfo2->iMinSockAddr) &&
+            (pInfo1->iSocketType == pInfo2->iSocketType) &&
+            (pInfo1->iProtocol == pInfo2->iProtocol) &&
+            (pInfo1->iProtocolMaxOffset == pInfo2->iProtocolMaxOffset) &&
+            (pInfo1->iNetworkByteOrder == pInfo2->iNetworkByteOrder) &&
+            (pInfo1->iSecurityScheme == pInfo2->iSecurityScheme) &&
+            (pInfo1->dwMessageSize == pInfo2->dwMessageSize)
        )
     {
         return TRUE;
@@ -218,7 +218,7 @@ int
 RetrieveLspGuid(
     __in_z char    *LspPath,
     GUID    *Guid
-    )
+)
 {
     HMODULE         hMod = NULL;
     LPFN_GETLSPGUID fnGetLspGuid = NULL;
@@ -263,7 +263,7 @@ cleanup:
 // Description:
 //      This routine searches the catalog for a given provider (based on catalog ID)
 //      and returns whether or not it is an IFS provider. This routine is used when
-//      installing an IFS provider since all IFS providers have to appear in the 
+//      installing an IFS provider since all IFS providers have to appear in the
 //      protocol chain beneath any non-IFS providers.
 //
 BOOL
@@ -271,18 +271,18 @@ IsNonIfsProvider(
     WSAPROTOCOL_INFOW  *pProvider,
     int                 iProviderCount,
     DWORD               dwProviderId
-    )
+)
 {
     int     i;
 
-    for(i=0; i < iProviderCount ;i++)
+    for(i=0; i < iProviderCount ; i++)
     {
         if ( pProvider[ i ].dwCatalogEntryId == dwProviderId )
         {
             return !( pProvider[ i ].dwServiceFlags1 & XP1_IFS_HANDLES );
         }
     }
-    
+
     return FALSE;
 }
 
@@ -322,7 +322,7 @@ LoadUpdateProviderFunction()
 
         if ( ExpandEnvironmentStringsA( WinsockLibraryPath, szExpandPath, MAX_PATH+1 ) == 0 )
         {
-            fprintf(stderr, "LoadUpdateProviderFunctions: Unable to expand environment string: %d\n", 
+            fprintf(stderr, "LoadUpdateProviderFunctions: Unable to expand environment string: %d\n",
                     GetLastError()
                    );
             goto cleanup;
@@ -339,9 +339,9 @@ LoadUpdateProviderFunction()
     hModule = LoadLibraryA( WinsockLibraryPath );
     if (hModule == NULL)
     {
-        fprintf(stderr, "LoadUpdateProviderFunctions: Unable to load %s: %d\n", 
+        fprintf(stderr, "LoadUpdateProviderFunctions: Unable to load %s: %d\n",
                 WinsockLibraryPath, GetLastError()
-                );
+               );
         goto cleanup;
     }
 #ifdef _WIN64
@@ -369,7 +369,7 @@ cleanup:
 // Function: CountOrphanedChainEntries
 //
 // Description:
-//      This routne counts how many orphaned layered protocol entries exist. An 
+//      This routne counts how many orphaned layered protocol entries exist. An
 //      orphaned protocol entry is a protocol entry whose chain length greater
 //      than one and whose dummy hidden entry (i.e. index 0 of its protocol chain
 //      array) is missing. When building the LSP map, it normally finds entries
@@ -380,16 +380,16 @@ int
 CountOrphanedChainEntries(
     WSAPROTOCOL_INFOW  *pCatalog,
     int                 iCatalogCount
-    )
+)
 {
     int     orphanCount = 0,
             i, j;
 
-    for(i=0; i < iCatalogCount ;i++)
+    for(i=0; i < iCatalogCount ; i++)
     {
         if ( pCatalog[ i ].ProtocolChain.ChainLen > 1 )
         {
-            for(j=0; j < iCatalogCount ;j++)
+            for(j=0; j < iCatalogCount ; j++)
             {
                 if ( i == j )
                     continue;
@@ -418,11 +418,11 @@ FindProviderById(
     DWORD               CatalogId,
     WSAPROTOCOL_INFOW  *Catalog,
     int                 CatalogCount
-    )
+)
 {
     int     i;
 
-    for(i=0; i < CatalogCount ;i++)
+    for(i=0; i < CatalogCount ; i++)
     {
         if ( Catalog[ i ].dwCatalogEntryId == CatalogId )
             return &Catalog[ i ];
@@ -443,11 +443,11 @@ FindProviderByGuid(
     GUID               *Guid,
     WSAPROTOCOL_INFOW  *Catalog,
     int                 CatalogCount
-    )
+)
 {
     int     i;
 
-    for(i=0; i < CatalogCount ;i++)
+    for(i=0; i < CatalogCount ; i++)
     {
         if ( 0 == memcmp( &Catalog[ i ].ProviderId, Guid, sizeof( GUID ) ) )
         {
@@ -470,7 +470,7 @@ GetCatalogIdForProviderGuid(
     GUID               *Guid,
     WSAPROTOCOL_INFOW  *Catalog,
     int                 CatalogCount
-    )
+)
 {
     WSAPROTOCOL_INFOW *match = NULL;
 
@@ -491,7 +491,7 @@ GetCatalogIdForProviderGuid(
 //
 // Description:
 //    This routine searches the catalog for the dummy LSP entry associated
-//    with the given catalog ID. If the catalog ID pass is actually the 
+//    with the given catalog ID. If the catalog ID pass is actually the
 //    dummy entry, that provider is found and returned. If the ID is a
 //    protocol chain, then the first entry in that provider's protocol chain
 //    will reference the dummy ID of the LSP so that entry is then found
@@ -502,11 +502,11 @@ FindDummyIdFromProtocolChainId(
     DWORD               CatalogId,
     WSAPROTOCOL_INFOW  *Catalog,
     int                 CatalogCount
-    )
+)
 {
     int     i;
 
-    for(i=0; i < CatalogCount ;i++)
+    for(i=0; i < CatalogCount ; i++)
     {
         if ( CatalogId == Catalog[ i ].dwCatalogEntryId )
         {
@@ -536,11 +536,11 @@ InsertIdIntoProtocolChain(
     WSAPROTOCOL_INFOW  *Entry,
     int                 Index,
     DWORD               InsertId
-    )
+)
 {
     int     i;
 
-    for(i=Entry->ProtocolChain.ChainLen; i > Index ;i--)
+    for(i=Entry->ProtocolChain.ChainLen; i > Index ; i--)
     {
         Entry->ProtocolChain.ChainEntries[ i ] = Entry->ProtocolChain.ChainEntries[ i - 1 ];
     }
@@ -554,8 +554,8 @@ InsertIdIntoProtocolChain(
 //
 // Description:
 //    This routine takes a portion of an existing protocol chain (from the specified
-//    index to the end) and makes it the new protocol chain while inserting the 
-//    specified DummyId in index 0. For example, 
+//    index to the end) and makes it the new protocol chain while inserting the
+//    specified DummyId in index 0. For example,
 //
 //       Array Indices:    0      1      2      3
 //                      | 1400 | 1301 | 1201 | 1001 |       Len = 4
@@ -571,11 +571,11 @@ BuildSubsetLspChain(
     WSAPROTOCOL_INFOW  *Entry,
     int                 Index,
     DWORD               DummyId
-    )
+)
 {
     int     Idx, i;
 
-    for(i=Index,Idx=1; i < Entry->ProtocolChain.ChainLen ;i++,Idx++)
+    for(i=Index,Idx=1; i < Entry->ProtocolChain.ChainLen ; i++,Idx++)
     {
         Entry->ProtocolChain.ChainEntries[ Idx ] = Entry->ProtocolChain.ChainEntries[ i ];
     }

@@ -1,7 +1,7 @@
-//////////////////////////////////////////////////////////////////////////
+﻿//////////////////////////////////////////////////////////////////////////
 //
 // Sprite: Manages drawing the thumbnail bitmap.
-// 
+//
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -59,9 +59,9 @@ class Sprite
     BOOL            m_bAnimating;
     float           m_timeStart;         // Start time for the animation
     float           m_timeEnd;           // Ending time.
-    D2D1_RECT_F     m_nrcAnimDistance;   // Animation path. 
+    D2D1_RECT_F     m_nrcAnimDistance;   // Animation path.
     D2D1_RECT_F     m_nrcStartPosition;  // Equal to m_nrcBound at m_timeStart.
-    
+
     // Animation path is defined as follows:
     // Final bounding box = m_nrcBound + m_nrcAnimDistance
 
@@ -70,12 +70,15 @@ class Sprite
     float           m_theta;
 
 protected:
-    
+
     // State:
     // Currently two states are defined, BITMAP and CLEAR, simply reflecting
-    // whether the sprite contains a bitmap or not. 
+    // whether the sprite contains a bitmap or not.
 
-    State           GetState() const { return (m_pBitmap ? BITMAP : CLEAR); }
+    State           GetState() const
+    {
+        return (m_pBitmap ? BITMAP : CLEAR);
+    }
 
 public:
     Sprite();
@@ -83,7 +86,7 @@ public:
 
     void    SetBitmap(ID2D1Bitmap *pBitmap, const FormatInfo& format);
 
-    void    AnimateBoundingBox(const D2D1_RECT_F& bound2, float time, float duration); 
+    void    AnimateBoundingBox(const D2D1_RECT_F& bound2, float time, float duration);
     void    Update(ID2D1HwndRenderTarget *pRT, float time);
     void    Draw(ID2D1HwndRenderTarget *pRT);
     BOOL    HitTest(int x, int y);

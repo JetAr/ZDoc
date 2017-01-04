@@ -1,4 +1,4 @@
-//==========================================================================
+﻿//==========================================================================
 //
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
@@ -26,7 +26,7 @@ HRESULT DownloadItem(IWiaItem2* pWiaItem2)
         ReportError(TEXT("Invalid argument passed to DownloadItem()"),hr);
         return hr;
     }
-     // Get the IWiaTransfer interface
+    // Get the IWiaTransfer interface
     IWiaTransfer *pWiaTransfer = NULL;
     HRESULT hr = pWiaItem2->QueryInterface( IID_IWiaTransfer, (void**)&pWiaTransfer );
     if (SUCCEEDED(hr))
@@ -50,33 +50,33 @@ HRESULT DownloadItem(IWiaItem2* pWiaItem2)
                     {
                         ReportError(TEXT("WritePropertyGuid() failed in DownloadItem().Format couldn't be set to BMP"),hr);
                     }
-           
-                    //Get the file extension 
+
+                    //Get the file extension
                     BSTR bstrFileExtension = NULL;
                     ReadPropertyBSTR(pWiaPropertyStorage,WIA_IPA_FILENAME_EXTENSION, &bstrFileExtension);
-            
+
                     //Get the temporary folder path which is the directory where we will download the images
                     TCHAR bufferTempPath[MAX_TEMP_PATH];
-                    GetTempPath(MAX_TEMP_PATH , bufferTempPath);
-            
+                    GetTempPath(MAX_TEMP_PATH, bufferTempPath);
+
                     // Find out item type
                     GUID itemCategory = GUID_NULL;
                     ReadPropertyGuid(pWiaItem2,WIA_IPA_ITEM_CATEGORY,&itemCategory );
-                    
+
                     BOOL bFeederTransfer = FALSE;
-                    
+
                     if(IsEqualGUID(itemCategory,WIA_CATEGORY_FEEDER))
                     {
                         //Set WIA_IPS_PAGES to ALL_PAGES will enable transfer of all pages in the document feeder (multi-page transfer).
-                        //If somebody wants to scan a specific number of pages say N, he should set WIA_IPS_PAGES to N. 
+                        //If somebody wants to scan a specific number of pages say N, he should set WIA_IPS_PAGES to N.
                         WritePropertyLong(pWiaPropertyStorage,WIA_IPS_PAGES,ALL_PAGES);
-                         
+
                         bFeederTransfer = TRUE;
                     }
 
                     //Initialize the callback class with the directory, file extension and feeder flag
                     pWiaClassCallback->InitializeCallback(bufferTempPath,bstrFileExtension,bFeederTransfer,pWiaTransfer);
-                    
+
                     //Now download file item
                     hr = pWiaTransfer->Download(0,pWiaTransferCallback);
                     if(S_OK == hr)
@@ -91,7 +91,7 @@ HRESULT DownloadItem(IWiaItem2* pWiaItem2)
                     {
                         ReportError(TEXT("pWiaTransfer->Download() on file item failed"),hr);
                     }
-            
+
                     //Release pWiaPropertyStorage interface
                     pWiaPropertyStorage->Release();
                     pWiaPropertyStorage = NULL;
@@ -117,7 +117,7 @@ HRESULT DownloadItem(IWiaItem2* pWiaItem2)
         {
             ReportError( TEXT("Unable to create CWiaTransferCallback class instance") );
         }
-            
+
         // Release the IWiaTransfer
         pWiaTransfer->Release();
         pWiaTransfer = NULL;
@@ -129,126 +129,126 @@ HRESULT DownloadItem(IWiaItem2* pWiaItem2)
     return hr;
 }
 
-    //
-    // Constructor and destructor
-    //
-    CWiaTransferCallback::CWiaTransferCallback()
+//
+// Constructor and destructor
+//
+CWiaTransferCallback::CWiaTransferCallback()
+{
+    m_cRef             = 1;  // initializing it to 1 so that when object is created, we can call Release() on it.
+    m_lPageCount       = 0;
+    m_bFeederTransfer  = FALSE;
+    m_bstrFileExtension = NULL;
+    m_bstrDirectoryName = NULL;
+    memset(m_szFileName,0,sizeof(m_szFileName));
+    m_pWiaTransfer = NULL;
+}
+
+CWiaTransferCallback::~CWiaTransferCallback()
+{
+    if(m_bstrDirectoryName)
     {
-        m_cRef             = 1;  // initializing it to 1 so that when object is created, we can call Release() on it.
-        m_lPageCount       = 0;
-        m_bFeederTransfer  = FALSE;
-        m_bstrFileExtension = NULL;
+        SysFreeString(m_bstrDirectoryName);
         m_bstrDirectoryName = NULL;
-        memset(m_szFileName,0,sizeof(m_szFileName));
-        m_pWiaTransfer = NULL;
-    }
-    
-    CWiaTransferCallback::~CWiaTransferCallback()
-    {
-        if(m_bstrDirectoryName)
-        {
-            SysFreeString(m_bstrDirectoryName);
-            m_bstrDirectoryName = NULL;
-        }
-        
-        if(m_bstrFileExtension)
-        {
-            SysFreeString(m_bstrFileExtension);
-            m_bstrFileExtension = NULL;
-        }
-
     }
 
-    // This function initializes various members of class CWiaTransferCallback like directory where images will be downloaded, 
-    // filename extension and feeder transfer flag. It also initializes m_pWiaTransfer.
-    HRESULT CWiaTransferCallback::InitializeCallback(TCHAR* bstrDirectoryName, BSTR bstrExt, BOOL bFeederTransfer, IWiaTransfer* pWiaTransfer )
+    if(m_bstrFileExtension)
     {
-        HRESULT hr = S_OK;
-        m_bFeederTransfer = bFeederTransfer;
-        m_pWiaTransfer = pWiaTransfer;
-
-        if(bstrDirectoryName)
-        {
-            m_bstrDirectoryName = SysAllocString(bstrDirectoryName);
-            if(!m_bstrDirectoryName)
-            {
-                hr = E_OUTOFMEMORY;
-                ReportError(TEXT("Failed to allocate memory for BSTR directory name"),hr);
-                return hr;
-            }
-        }
-        else
-        {
-            _tprintf(TEXT("\nNo directory name was given"));
-            return E_INVALIDARG;
-        }
-
-        if (bstrExt)
-        {
-            m_bstrFileExtension = bstrExt;
-        }
-        
-        return hr;
+        SysFreeString(m_bstrFileExtension);
+        m_bstrFileExtension = NULL;
     }
 
+}
 
-    
-    //
-    // IUnknown functions
-    //
-    HRESULT CALLBACK CWiaTransferCallback::QueryInterface( REFIID riid, void **ppvObject )
+// This function initializes various members of class CWiaTransferCallback like directory where images will be downloaded,
+// filename extension and feeder transfer flag. It also initializes m_pWiaTransfer.
+HRESULT CWiaTransferCallback::InitializeCallback(TCHAR* bstrDirectoryName, BSTR bstrExt, BOOL bFeederTransfer, IWiaTransfer* pWiaTransfer )
+{
+    HRESULT hr = S_OK;
+    m_bFeederTransfer = bFeederTransfer;
+    m_pWiaTransfer = pWiaTransfer;
+
+    if(bstrDirectoryName)
     {
-        // Validate arguments
-        if (NULL == ppvObject)
+        m_bstrDirectoryName = SysAllocString(bstrDirectoryName);
+        if(!m_bstrDirectoryName)
         {
-            return E_INVALIDARG;
+            hr = E_OUTOFMEMORY;
+            ReportError(TEXT("Failed to allocate memory for BSTR directory name"),hr);
+            return hr;
         }
-
-        // Return the appropropriate interface
-        if (IsEqualIID( riid, IID_IUnknown ))
-        {
-            *ppvObject = static_cast<IUnknown*>(this);
-        }
-        else if (IsEqualIID( riid, IID_IWiaTransferCallback ))
-        {
-            *ppvObject = static_cast<IWiaTransferCallback*>(this);
-        }
-        else
-        {
-            *ppvObject = NULL;
-            return (E_NOINTERFACE);
-        }
-
-        // Increment the reference count before we return the interface
-        reinterpret_cast<IUnknown*>(*ppvObject)->AddRef();
-        return S_OK;
     }
-    
-    ULONG CALLBACK CWiaTransferCallback::AddRef()
+    else
     {
-        return InterlockedIncrement((long*)&m_cRef);
-    }    
-    ULONG CALLBACK CWiaTransferCallback::Release()
-    {
-        LONG cRef = InterlockedDecrement((long*)&m_cRef);
-        if (0 == cRef)
-        {
-            delete this;
-        }
-        return cRef;
+        _tprintf(TEXT("\nNo directory name was given"));
+        return E_INVALIDARG;
     }
-    
+
+    if (bstrExt)
+    {
+        m_bstrFileExtension = bstrExt;
+    }
+
+    return hr;
+}
+
+
+
+//
+// IUnknown functions
+//
+HRESULT CALLBACK CWiaTransferCallback::QueryInterface( REFIID riid, void **ppvObject )
+{
+    // Validate arguments
+    if (NULL == ppvObject)
+    {
+        return E_INVALIDARG;
+    }
+
+    // Return the appropropriate interface
+    if (IsEqualIID( riid, IID_IUnknown ))
+    {
+        *ppvObject = static_cast<IUnknown*>(this);
+    }
+    else if (IsEqualIID( riid, IID_IWiaTransferCallback ))
+    {
+        *ppvObject = static_cast<IWiaTransferCallback*>(this);
+    }
+    else
+    {
+        *ppvObject = NULL;
+        return (E_NOINTERFACE);
+    }
+
+    // Increment the reference count before we return the interface
+    reinterpret_cast<IUnknown*>(*ppvObject)->AddRef();
+    return S_OK;
+}
+
+ULONG CALLBACK CWiaTransferCallback::AddRef()
+{
+    return InterlockedIncrement((long*)&m_cRef);
+}
+ULONG CALLBACK CWiaTransferCallback::Release()
+{
+    LONG cRef = InterlockedDecrement((long*)&m_cRef);
+    if (0 == cRef)
+    {
+        delete this;
+    }
+    return cRef;
+}
+
 //
 // IWiaTransferCallback functions
 //
 //
 // This function is used by the application to notify the progress of the transfer.
-// In this sample we will use this function to cancel the data transfer using the pointer to IWiaTransfer 
+// In this sample we will use this function to cancel the data transfer using the pointer to IWiaTransfer
 // stored as member by the callback class.
 HRESULT STDMETHODCALLTYPE CWiaTransferCallback::TransferCallback(LONG lFlags, WiaTransferParams* pWiaTransferParams)
 {
     HRESULT hr = S_OK;
-    
+
     if(pWiaTransferParams == NULL)
     {
         hr = E_INVALIDARG;
@@ -258,47 +258,47 @@ HRESULT STDMETHODCALLTYPE CWiaTransferCallback::TransferCallback(LONG lFlags, Wi
 
     switch (pWiaTransferParams->lMessage)
     {
-        case WIA_TRANSFER_MSG_STATUS:
-            {
-                _tprintf(TEXT("\nWIA_TRANSFER_MSG_STATUS - %ld%% complete"),pWiaTransferParams->lPercentComplete);
-                
-                // We will cancel the transfer of data as soon as WIA service calls the Application callback .ie. the first time 
-                // TransferCallback() function is called.  
-                if(pWiaTransferParams->lPercentComplete >= 0)
-                {
-                    //There are 2 ways of cancelling a data transfer 
-                    // 1. Call IWiaTransfer::cancel() (recommended way)
-                    // 2. Return S_FALSE from TransferCallback().
-                    // Here we are using the 1st method. 
-                    m_pWiaTransfer->Cancel();
-                    _tprintf(TEXT("\nData Tranfer cancelled by user"));
+    case WIA_TRANSFER_MSG_STATUS:
+    {
+        _tprintf(TEXT("\nWIA_TRANSFER_MSG_STATUS - %ld%% complete"),pWiaTransferParams->lPercentComplete);
 
-                    // Alternately we can return S_FALSE from TransferCallback() as shown 
-                    // below in pseudo code:
-                    // 
-                    // if(pWiaTransferParams->lPercentComplete >=0)
-                    // {
-                    //     _tprintf(TEXT("\nData Tranfer cancelled by user"));
-                    //     return S_FALSE;
-                    // }
-                    //
+        // We will cancel the transfer of data as soon as WIA service calls the Application callback .ie. the first time
+        // TransferCallback() function is called.
+        if(pWiaTransferParams->lPercentComplete >= 0)
+        {
+            //There are 2 ways of cancelling a data transfer
+            // 1. Call IWiaTransfer::cancel() (recommended way)
+            // 2. Return S_FALSE from TransferCallback().
+            // Here we are using the 1st method.
+            m_pWiaTransfer->Cancel();
+            _tprintf(TEXT("\nData Tranfer cancelled by user"));
 
-                }
-            }
-            break;
-        case WIA_TRANSFER_MSG_END_OF_STREAM:
-            {
-                _tprintf(TEXT("\nWIA_TRANSFER_MSG_END_OF_STREAM"));
-            }
-            break;
-        case WIA_TRANSFER_MSG_END_OF_TRANSFER:
-            {
-                _tprintf(TEXT("\nWIA_TRANSFER_MSG_END_OF_TRANSFER"));
-                _tprintf(TEXT("\nImage Transferred to file %ws"), m_szFileName);
-            }
-            break;
-        default:
-            break;
+            // Alternately we can return S_FALSE from TransferCallback() as shown
+            // below in pseudo code:
+            //
+            // if(pWiaTransferParams->lPercentComplete >=0)
+            // {
+            //     _tprintf(TEXT("\nData Tranfer cancelled by user"));
+            //     return S_FALSE;
+            // }
+            //
+
+        }
+    }
+    break;
+    case WIA_TRANSFER_MSG_END_OF_STREAM:
+    {
+        _tprintf(TEXT("\nWIA_TRANSFER_MSG_END_OF_STREAM"));
+    }
+    break;
+    case WIA_TRANSFER_MSG_END_OF_TRANSFER:
+    {
+        _tprintf(TEXT("\nWIA_TRANSFER_MSG_END_OF_TRANSFER"));
+        _tprintf(TEXT("\nImage Transferred to file %ws"), m_szFileName);
+    }
+    break;
+    default:
+        break;
     }
     return hr;
 }
@@ -309,7 +309,7 @@ HRESULT STDMETHODCALLTYPE CWiaTransferCallback::GetNextStream(LONG lFlags, BSTR 
 {
     _tprintf(TEXT("\nGetNextStream"));
     HRESULT hr = S_OK;
-    
+
     if ( (!ppDestination) || (!bstrItemName) || (!m_bstrDirectoryName) )
     {
         hr = E_INVALIDARG;
@@ -318,7 +318,7 @@ HRESULT STDMETHODCALLTYPE CWiaTransferCallback::GetNextStream(LONG lFlags, BSTR 
     }
     //Initialize out variables
     *ppDestination = NULL;
-    
+
     if(m_bstrFileExtension)
     {
         //For feeder transfer, append the page count to the filename
@@ -331,13 +331,13 @@ HRESULT STDMETHODCALLTYPE CWiaTransferCallback::GetNextStream(LONG lFlags, BSTR 
             StringCchPrintf(m_szFileName, ARRAYSIZE(m_szFileName), TEXT("%ws\\%ws.%ws"), m_bstrDirectoryName, bstrItemName, m_bstrFileExtension);
         }
     }
-    
+
     else
     {
         // Dont append extension if m_bstrFileExtension = NULL.
         StringCchPrintf(m_szFileName, ARRAYSIZE(m_szFileName), TEXT("%ws\\%ws"), m_bstrDirectoryName, bstrItemName);
     }
-    
+
     hr = SHCreateStreamOnFile(m_szFileName,STGM_CREATE | STGM_READWRITE,ppDestination);
     if (SUCCEEDED(hr))
     {
@@ -377,7 +377,7 @@ HRESULT EnumerateAndDownloadItems( IWiaItem2 *pWiaItem2 )
     //Find the item category
     GUID itemCategory = GUID_NULL;
     ReadPropertyGuid(pWiaItem2,WIA_IPA_ITEM_CATEGORY,&itemCategory );
-     
+
     // If this is an transferrable file(except finished files) , download it.
     // We have deliberately left finished files for simplicity
     if ( (lItemType & WiaItemTypeFile) && (lItemType & WiaItemTypeTransfer) && (itemCategory != WIA_CATEGORY_FINISHED_FILE) )
@@ -475,10 +475,10 @@ HRESULT EnumerateWiaDevices( IWiaDevMgr2 *pWiaDevMgr2 )
                 {
                     // Read some device properties - Device ID,name and descripion and return Device ID needed for creating Device
                     BSTR bstrDeviceID = NULL;
-                    HRESULT hr1 = ReadWiaPropsAndGetDeviceID( pWiaPropertyStorage ,&bstrDeviceID);
+                    HRESULT hr1 = ReadWiaPropsAndGetDeviceID( pWiaPropertyStorage,&bstrDeviceID);
                     if(SUCCEEDED(hr1))
                     {
-                        // Call a function to create the device using device ID 
+                        // Call a function to create the device using device ID
                         IWiaItem2 *pWiaRootItem2 = NULL;
                         hr1 = pWiaDevMgr2->CreateDevice( 0, bstrDeviceID, &pWiaRootItem2 );
                         if(SUCCEEDED(hr1))
@@ -502,7 +502,7 @@ HRESULT EnumerateWiaDevices( IWiaDevMgr2 *pWiaDevMgr2 )
                     {
                         ReportError(TEXT("ReadWiaPropsAndGetDeviceID() failed in EnumerateWiaDevices()"),hr1);
                     }
-                        
+
                     // Release the device's IWiaPropertyStorage*
                     pWiaPropertyStorage->Release();
                     pWiaPropertyStorage = NULL;
@@ -513,7 +513,7 @@ HRESULT EnumerateWiaDevices( IWiaDevMgr2 *pWiaDevMgr2 )
                     ReportError( TEXT("Error calling IEnumWIA_DEV_INFO::Next()"), hr );
                 }
             }
-            
+
             //
             // If the result of the enumeration is S_FALSE, since this
             // is normal, we will change it to S_OK.
@@ -544,7 +544,7 @@ HRESULT EnumerateWiaDevices( IWiaDevMgr2 *pWiaDevMgr2 )
 
 
 // The entry function of the application
-extern "C" 
+extern "C"
 int __cdecl _tmain( int, TCHAR *[] )
 {
     // Initialize COM

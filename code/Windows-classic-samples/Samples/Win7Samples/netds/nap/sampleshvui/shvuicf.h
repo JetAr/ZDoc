@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 
@@ -24,56 +24,56 @@ extern long g_cObjRefCount;
 class SHVUIClassFactoryData
 {
 public:
-	const GUID m_pCLSID;
-	const char* m_RegistryName ;
-	const char* m_szProgID ;
-	const char* m_szVerIndProgID ;
- 	
-	//
-	// Out of process server support
-	//
+    const GUID m_pCLSID;
+    const char* m_RegistryName ;
+    const char* m_szProgID ;
+    const char* m_szVerIndProgID ;
 
-	// Pointer to running class factory for this component
-	IClassFactory* m_pIClassFactory ;
+    //
+    // Out of process server support
+    //
 
-	// Cookie to identify running object
-	DWORD m_dwRegister ;
+    // Pointer to running class factory for this component
+    IClassFactory* m_pIClassFactory ;
 
-	SHVUIClassFactoryData() :  
+    // Cookie to identify running object
+    DWORD m_dwRegister ;
+
+    SHVUIClassFactoryData() :
         m_pCLSID(CLSID_SDK_SHV_UI),
-        m_RegistryName("Reg Name") ,
+        m_RegistryName("Reg Name"),
         m_szProgID("Prog ID"),
         m_szVerIndProgID("Prog ID ver ind"),
         m_pIClassFactory(NULL),
         m_dwRegister(0)
-        {}
+    {}
 
 private:
-	const SHVUIClassFactoryData& operator=(const SHVUIClassFactoryData&);
+    const SHVUIClassFactoryData& operator=(const SHVUIClassFactoryData&);
 } ;
 
 
 // The class factory
 class ShvUIClassFactory: public IClassFactory
 {
-public:    
+public:
 
-    ShvUIClassFactory();    
+    ShvUIClassFactory();
     ~ShvUIClassFactory();
-		
+
     // IUnknown
-    STDMETHODIMP_(ULONG) AddRef(void);   
+    STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
     STDMETHODIMP QueryInterface(REFIID riid, void** ppvObject);
-        
+
     // IClassFactory
-    STDMETHODIMP 
+    STDMETHODIMP
     CreateInstance(
-        IUnknown *pUnkOuter, 
-        REFIID riid, 
+        IUnknown *pUnkOuter,
+        REFIID riid,
         void **ppvObject);
 
-    STDMETHODIMP 
+    STDMETHODIMP
     LockServer(
         BOOL fLock);
     // end IClassFactory
@@ -91,7 +91,7 @@ public:
     static HRESULT
     Unregister();
 
-    static LONG s_cServerLocks ;   
+    static LONG s_cServerLocks ;
     static HMODULE s_hModule ;
 
 private:

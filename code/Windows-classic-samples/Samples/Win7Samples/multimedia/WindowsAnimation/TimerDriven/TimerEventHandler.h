@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -26,15 +26,15 @@ public:
     {
         CTimerEventHandler *pTimerEventHandler;
         HRESULT hr = CUIAnimationCallbackBase::CreateInstance(
-            ppTimerEventHandler,
-            &pTimerEventHandler
-            );
+                         ppTimerEventHandler,
+                         &pTimerEventHandler
+                     );
 
         if (SUCCEEDED(hr))
         {
             pTimerEventHandler->m_pMainWindow = pMainWindow;
         }
-        
+
         return hr;
     }
 
@@ -66,9 +66,9 @@ public:
 protected:
 
     CTimerEventHandler()
-      : m_pMainWindow(NULL)
+        : m_pMainWindow(NULL)
     {
     }
 
-     CMainWindow *m_pMainWindow;
+    CMainWindow *m_pMainWindow;
 };

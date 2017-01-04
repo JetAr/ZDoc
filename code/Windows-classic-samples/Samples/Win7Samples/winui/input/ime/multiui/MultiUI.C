@@ -1,4 +1,4 @@
-/**********************************************************************/
+﻿/**********************************************************************/
 /*                                                                    */
 /*      MULTIUI.C                                                     */
 /*                                                                    */
@@ -20,9 +20,9 @@
 /*                                                                    */
 /**********************************************************************/
 int APIENTRY WinMain (
-    HINSTANCE hInstance, 
-    HINSTANCE hPrevInstance, 
-    LPSTR lpCmdLine, 
+    HINSTANCE hInstance,
+    HINSTANCE hPrevInstance,
+    LPSTR lpCmdLine,
     INT nCmdShow)
 {
     MSG msg = {0};
@@ -41,9 +41,9 @@ int APIENTRY WinMain (
         goto exit_func;
     }
 
-    
+
     while( (bRet = GetMessage( &msg, NULL, 0, 0 )) != 0)
-    { 
+    {
         if (bRet == -1)
         {
             // handle the error and possibly exit
@@ -51,8 +51,8 @@ int APIENTRY WinMain (
         }
         else
         {
-            TranslateMessage(&msg); 
-            DispatchMessage(&msg); 
+            TranslateMessage(&msg);
+            DispatchMessage(&msg);
         }
     }
 
@@ -83,7 +83,7 @@ BOOL InitApplication (
     wc.hInstance     = hInstance;
     wc.hIcon         = LoadIcon(hInstance,TEXT("MyIcon"));
     wc.hCursor       = LoadCursor(NULL, IDC_ARROW);
-    wc.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1); 
+    wc.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
     wc.lpszMenuName  = TEXT("MultiUiMenu");
     wc.lpszClassName = TEXT("MultiUiWClass");
 
@@ -101,7 +101,7 @@ BOOL InitApplication (
     wc.hInstance     = hInstance;
     wc.hIcon         = 0;
     wc.hCursor       = LoadCursor(NULL, IDC_ARROW);
-    wc.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1); 
+    wc.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
     wc.lpszMenuName  = NULL;
     wc.lpszClassName = TEXT("NoUINoIMCWClass");
 
@@ -118,7 +118,7 @@ BOOL InitApplication (
     wc.hInstance     = hInstance;
     wc.hIcon         = 0;
     wc.hCursor       = LoadCursor(NULL, IDC_ARROW);
-    wc.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1); 
+    wc.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
     wc.lpszMenuName  = NULL;
     wc.lpszClassName = TEXT("NoUIOwnIMCWClass");
 
@@ -135,7 +135,7 @@ BOOL InitApplication (
     wc.hInstance     = hInstance;
     wc.hIcon         = 0;
     wc.hCursor       = LoadCursor(NULL, IDC_ARROW);
-    wc.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1); 
+    wc.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
     wc.lpszMenuName  = NULL;
     wc.lpszClassName = TEXT("OwnUIOwnIMCWClass");
 
@@ -155,7 +155,7 @@ exit_func:
 /*                                                                    */
 /**********************************************************************/
 BOOL InitInstance (
-    HANDLE hInstance, 
+    HANDLE hInstance,
     int nCmdShow)
 {
     RECT       rc          = {0};
@@ -199,60 +199,60 @@ BOOL InitInstance (
     DeleteDC(hIC);
 
     if (!(hWndDef1 = CreateWindowEx(
-                        WS_EX_CLIENTEDGE, TEXT("NoUINoIMCWClass"), TEXT(""),
-                        WS_CHILD | WS_VISIBLE,
-                        rc.left, rc.top + iDesc, rc.right, rc.bottom - iDesc,
-                        hWndMain, NULL, hInstance, NULL)))
+                         WS_EX_CLIENTEDGE, TEXT("NoUINoIMCWClass"), TEXT(""),
+                         WS_CHILD | WS_VISIBLE,
+                         rc.left, rc.top + iDesc, rc.right, rc.bottom - iDesc,
+                         hWndMain, NULL, hInstance, NULL)))
     {
         bSuccess = FALSE;
         goto exit_func;
     }
 
     if (!(hWndDef2 = CreateWindowEx(
-                        WS_EX_CLIENTEDGE, TEXT("NoUINoIMCWClass"), TEXT(""),
-                        WS_CHILD | WS_VISIBLE,
-                        rc.right, rc.top + iDesc, rc.right, rc.bottom - iDesc,
-                        hWndMain, NULL, hInstance, NULL)))
+                         WS_EX_CLIENTEDGE, TEXT("NoUINoIMCWClass"), TEXT(""),
+                         WS_CHILD | WS_VISIBLE,
+                         rc.right, rc.top + iDesc, rc.right, rc.bottom - iDesc,
+                         hWndMain, NULL, hInstance, NULL)))
     {
         bSuccess = FALSE;
         goto exit_func;
     }
 
     if (!(hWndIMC1 = CreateWindowEx(
-                        WS_EX_CLIENTEDGE, TEXT("NoUIOwnIMCWClass"), TEXT(""),
-                        WS_CHILD | WS_VISIBLE,
-                        rc.left, rc.bottom + iDesc, rc.right, rc.bottom - iDesc,
-                        hWndMain, NULL, hInstance, NULL)))
+                         WS_EX_CLIENTEDGE, TEXT("NoUIOwnIMCWClass"), TEXT(""),
+                         WS_CHILD | WS_VISIBLE,
+                         rc.left, rc.bottom + iDesc, rc.right, rc.bottom - iDesc,
+                         hWndMain, NULL, hInstance, NULL)))
     {
         bSuccess = FALSE;
         goto exit_func;
     }
 
     if (!(hWndIMC2 = CreateWindowEx(
-                        WS_EX_CLIENTEDGE, TEXT("NoUIOwnIMCWClass"), TEXT(""),
-                        WS_CHILD | WS_VISIBLE,
-                        rc.right, rc.bottom + iDesc, rc.right, rc.bottom - iDesc,
-                        hWndMain, NULL, hInstance, NULL)))
+                         WS_EX_CLIENTEDGE, TEXT("NoUIOwnIMCWClass"), TEXT(""),
+                         WS_CHILD | WS_VISIBLE,
+                         rc.right, rc.bottom + iDesc, rc.right, rc.bottom - iDesc,
+                         hWndMain, NULL, hInstance, NULL)))
     {
         bSuccess = FALSE;
         goto exit_func;
     }
 
     if (!(hWndIMCUI1 = CreateWindowEx(
-                        WS_EX_CLIENTEDGE, TEXT("OwnUIOwnIMCWClass"), TEXT(""),
-                        WS_CHILD | WS_VISIBLE,
-                        rc.left, rc.bottom * 2 + iDesc, rc.right, rc.bottom - iDesc,
-                        hWndMain, NULL, hInstance, NULL)))
+                           WS_EX_CLIENTEDGE, TEXT("OwnUIOwnIMCWClass"), TEXT(""),
+                           WS_CHILD | WS_VISIBLE,
+                           rc.left, rc.bottom * 2 + iDesc, rc.right, rc.bottom - iDesc,
+                           hWndMain, NULL, hInstance, NULL)))
     {
         bSuccess = FALSE;
         goto exit_func;
     }
 
     if (!(hWndIMCUI2 = CreateWindowEx(
-                        WS_EX_CLIENTEDGE, TEXT("OwnUIOwnIMCWClass"), TEXT(""),
-                        WS_CHILD | WS_VISIBLE,
-                        rc.right, rc.bottom * 2 + iDesc, rc.right, rc.bottom - iDesc,
-                        hWndMain, NULL, hInstance, NULL)))
+                           WS_EX_CLIENTEDGE, TEXT("OwnUIOwnIMCWClass"), TEXT(""),
+                           WS_CHILD | WS_VISIBLE,
+                           rc.right, rc.bottom * 2 + iDesc, rc.right, rc.bottom - iDesc,
+                           hWndMain, NULL, hInstance, NULL)))
     {
         bSuccess = FALSE;
         goto exit_func;
@@ -274,9 +274,9 @@ exit_func:
 /*                                                                    */
 /**********************************************************************/
 LRESULT CALLBACK MainWndProc (
-    HWND hWnd, 
-    UINT message, 
-    WPARAM wParam, 
+    HWND hWnd,
+    UINT message,
+    WPARAM wParam,
     LPARAM lParam)
 {
     PAINTSTRUCT ps          = {0};
@@ -292,133 +292,133 @@ LRESULT CALLBACK MainWndProc (
     TCHAR       szDesc[128] = {0};
     BOOL        bRetDWP     = FALSE;
 
-    switch (message) 
+    switch (message)
     {
-        case WM_CREATE:
-            break;
+    case WM_CREATE:
+        break;
 
-        case WM_SIZE:
-            switch (wParam)
-            {
-                case SIZENORMAL: /* fall-through */
-                case SIZEFULLSCREEN:
-                    GetClientRect(hWndMain,&rc);
-                    rc.right  /= 2;
-                    rc.bottom /= 3;
-
-                    hFont = GetDefaultGUIFont();
-                    hIC = CreateIC(TEXT("DISPLAY"), NULL, NULL, NULL);
-
-                    SelectObject(hIC, hFont);
-
-                    GetTextMetrics(hIC,&tm);
-
-                    iDesc = 0;
-                    if (rc.bottom >= tm.tmHeight)
-                    {
-                        iDesc = tm.tmHeight + tm.tmExternalLeading;
-                    }
-
-                    DeleteDC(hIC);
-
-                    MoveWindow(hWndDef1,
-                               rc.left,rc.top + iDesc,
-                               rc.right,rc.bottom - iDesc,TRUE);
-                    MoveWindow(hWndDef2,
-                               rc.right,rc.top + iDesc,
-                               rc.right,rc.bottom - iDesc,TRUE);
-                    MoveWindow(hWndIMC1,
-                               rc.left,rc.bottom + iDesc,
-                               rc.right,rc.bottom - iDesc,TRUE);
-                    MoveWindow(hWndIMC2,
-                               rc.right,rc.bottom + iDesc,
-                               rc.right,rc.bottom - iDesc,TRUE);
-                    MoveWindow(hWndIMCUI1,
-                               rc.left,rc.bottom * 2 + iDesc,
-                               rc.right,rc.bottom - iDesc,TRUE);
-                    MoveWindow(hWndIMCUI2,
-                               rc.right,rc.bottom * 2 + iDesc,
-                               rc.right,rc.bottom - iDesc,TRUE);
-
-                    InvalidateRect(hWnd,NULL,TRUE);
-                    break;
-
-                case SIZEICONIC:
-                    bRetDWP = TRUE;
-                    goto exit_func;
-                    break;
-           
-            }
-            break;
-
-        case WM_PAINT:
-            hDC = BeginPaint (hWnd, &ps);
-            hFont = GetDefaultGUIFont();
-            hOldFont = SelectObject(hDC, hFont);
-
+    case WM_SIZE:
+        switch (wParam)
+        {
+        case SIZENORMAL: /* fall-through */
+        case SIZEFULLSCREEN:
             GetClientRect(hWndMain,&rc);
             rc.right  /= 2;
             rc.bottom /= 3;
 
-            StringCchPrintf(szDesc, sizeof(szDesc)/sizeof(szDesc[0]) - 1, 
-                            TEXT("%08lX Default IMC and Default IME window"),
-                            (DWORD_PTR)hWndDef1);
-            TextOut (hDC, rc.left,rc.top, szDesc, lstrlen(szDesc));
+            hFont = GetDefaultGUIFont();
+            hIC = CreateIC(TEXT("DISPLAY"), NULL, NULL, NULL);
 
-            StringCchPrintf (szDesc, sizeof(szDesc)/sizeof(szDesc[0]) - 1, 
-                        TEXT("%08lX Default IMC and Default IME window"),
-                        (DWORD_PTR)hWndDef2);
-            TextOut (hDC, rc.right, rc.top, szDesc, lstrlen(szDesc));
+            SelectObject(hIC, hFont);
 
-            hIMC = (HIMC)GetWindowLongPtr(hWndIMC1,MYGWL_IMC);
-            StringCchPrintf (szDesc, sizeof(szDesc)/sizeof(szDesc[0]) - 1,
-                        TEXT("%08lX IMC[%08lX] and Default IME window"),
-                        (DWORD_PTR)hWndIMC1, (DWORD_PTR)hIMC);
-            TextOut (hDC, rc.left, rc.bottom, szDesc, lstrlen(szDesc));
+            GetTextMetrics(hIC,&tm);
 
-            hIMC = (HIMC)GetWindowLongPtr(hWndIMC2,MYGWL_IMC);
-            StringCchPrintf (szDesc, sizeof(szDesc)/sizeof(szDesc[0]) - 1,
-                        TEXT("%08lX IMC[%08lX] and Default IME window"),
-                        (DWORD_PTR)hWndIMC2, (DWORD_PTR)hIMC);
-            TextOut (hDC, rc.right, rc.bottom, szDesc, lstrlen(szDesc));
-
-            hIMC = (HIMC)GetWindowLongPtr(hWndIMCUI1,MYGWL_IMC);
-            hIMEWnd = (HWND)GetWindowLongPtr(hWndIMCUI1,MYGWL_IMEWND);
-            StringCchPrintf (szDesc, sizeof(szDesc)/sizeof(szDesc[0]) - 1,
-                        TEXT("%08lX IMC[%08lX] and IME window[%08lX]"),
-                        (DWORD_PTR)hWndIMCUI1, (DWORD_PTR)hIMC ,(DWORD_PTR)hIMEWnd);
-            TextOut (hDC, rc.left, rc.bottom * 2, szDesc, lstrlen(szDesc));
-
-            hIMC = (HIMC)GetWindowLongPtr(hWndIMCUI2,MYGWL_IMC);
-            hIMEWnd = (HWND)GetWindowLongPtr(hWndIMCUI2,MYGWL_IMEWND);
-            StringCchPrintf (szDesc, sizeof(szDesc)/sizeof(szDesc[0]) - 1,
-                        TEXT("%08lX IMC[%08lX] and IME window[%08lX]"),
-                        (DWORD_PTR)hWndIMCUI2, (DWORD_PTR)hIMC ,(DWORD_PTR)hIMEWnd);
-            TextOut (hDC, rc.right, rc.bottom * 2, szDesc, lstrlen(szDesc));
-
-            SelectObject(hDC, hOldFont);
-            EndPaint (hWnd, &ps);
-            break;
-
-        case WM_COMMAND:
-            switch(WMCOMMANDWPARAM(wParam))
+            iDesc = 0;
+            if (rc.bottom >= tm.tmHeight)
             {
-            	case IDM_ABOUT:
-            	    DialogBox(hInst, TEXT("ABOUTBOX"), hWnd, (DLGPROC)AboutDlg);
-            	    break;
+                iDesc = tm.tmHeight + tm.tmExternalLeading;
             }
+
+            DeleteDC(hIC);
+
+            MoveWindow(hWndDef1,
+                       rc.left,rc.top + iDesc,
+                       rc.right,rc.bottom - iDesc,TRUE);
+            MoveWindow(hWndDef2,
+                       rc.right,rc.top + iDesc,
+                       rc.right,rc.bottom - iDesc,TRUE);
+            MoveWindow(hWndIMC1,
+                       rc.left,rc.bottom + iDesc,
+                       rc.right,rc.bottom - iDesc,TRUE);
+            MoveWindow(hWndIMC2,
+                       rc.right,rc.bottom + iDesc,
+                       rc.right,rc.bottom - iDesc,TRUE);
+            MoveWindow(hWndIMCUI1,
+                       rc.left,rc.bottom * 2 + iDesc,
+                       rc.right,rc.bottom - iDesc,TRUE);
+            MoveWindow(hWndIMCUI2,
+                       rc.right,rc.bottom * 2 + iDesc,
+                       rc.right,rc.bottom - iDesc,TRUE);
+
+            InvalidateRect(hWnd,NULL,TRUE);
             break;
 
-        case WM_DESTROY:
-            PostQuitMessage(0);
-            break;
-
-        default:
+        case SIZEICONIC:
             bRetDWP = TRUE;
             goto exit_func;
+            break;
+
+        }
+        break;
+
+    case WM_PAINT:
+        hDC = BeginPaint (hWnd, &ps);
+        hFont = GetDefaultGUIFont();
+        hOldFont = SelectObject(hDC, hFont);
+
+        GetClientRect(hWndMain,&rc);
+        rc.right  /= 2;
+        rc.bottom /= 3;
+
+        StringCchPrintf(szDesc, sizeof(szDesc)/sizeof(szDesc[0]) - 1,
+                        TEXT("%08lX Default IMC and Default IME window"),
+                        (DWORD_PTR)hWndDef1);
+        TextOut (hDC, rc.left,rc.top, szDesc, lstrlen(szDesc));
+
+        StringCchPrintf (szDesc, sizeof(szDesc)/sizeof(szDesc[0]) - 1,
+                         TEXT("%08lX Default IMC and Default IME window"),
+                         (DWORD_PTR)hWndDef2);
+        TextOut (hDC, rc.right, rc.top, szDesc, lstrlen(szDesc));
+
+        hIMC = (HIMC)GetWindowLongPtr(hWndIMC1,MYGWL_IMC);
+        StringCchPrintf (szDesc, sizeof(szDesc)/sizeof(szDesc[0]) - 1,
+                         TEXT("%08lX IMC[%08lX] and Default IME window"),
+                         (DWORD_PTR)hWndIMC1, (DWORD_PTR)hIMC);
+        TextOut (hDC, rc.left, rc.bottom, szDesc, lstrlen(szDesc));
+
+        hIMC = (HIMC)GetWindowLongPtr(hWndIMC2,MYGWL_IMC);
+        StringCchPrintf (szDesc, sizeof(szDesc)/sizeof(szDesc[0]) - 1,
+                         TEXT("%08lX IMC[%08lX] and Default IME window"),
+                         (DWORD_PTR)hWndIMC2, (DWORD_PTR)hIMC);
+        TextOut (hDC, rc.right, rc.bottom, szDesc, lstrlen(szDesc));
+
+        hIMC = (HIMC)GetWindowLongPtr(hWndIMCUI1,MYGWL_IMC);
+        hIMEWnd = (HWND)GetWindowLongPtr(hWndIMCUI1,MYGWL_IMEWND);
+        StringCchPrintf (szDesc, sizeof(szDesc)/sizeof(szDesc[0]) - 1,
+                         TEXT("%08lX IMC[%08lX] and IME window[%08lX]"),
+                         (DWORD_PTR)hWndIMCUI1, (DWORD_PTR)hIMC,(DWORD_PTR)hIMEWnd);
+        TextOut (hDC, rc.left, rc.bottom * 2, szDesc, lstrlen(szDesc));
+
+        hIMC = (HIMC)GetWindowLongPtr(hWndIMCUI2,MYGWL_IMC);
+        hIMEWnd = (HWND)GetWindowLongPtr(hWndIMCUI2,MYGWL_IMEWND);
+        StringCchPrintf (szDesc, sizeof(szDesc)/sizeof(szDesc[0]) - 1,
+                         TEXT("%08lX IMC[%08lX] and IME window[%08lX]"),
+                         (DWORD_PTR)hWndIMCUI2, (DWORD_PTR)hIMC,(DWORD_PTR)hIMEWnd);
+        TextOut (hDC, rc.right, rc.bottom * 2, szDesc, lstrlen(szDesc));
+
+        SelectObject(hDC, hOldFont);
+        EndPaint (hWnd, &ps);
+        break;
+
+    case WM_COMMAND:
+        switch(WMCOMMANDWPARAM(wParam))
+        {
+        case IDM_ABOUT:
+            DialogBox(hInst, TEXT("ABOUTBOX"), hWnd, (DLGPROC)AboutDlg);
+            break;
+        }
+        break;
+
+    case WM_DESTROY:
+        PostQuitMessage(0);
+        break;
+
+    default:
+        bRetDWP = TRUE;
+        goto exit_func;
     }
 
-exit_func: 
+exit_func:
     if (bRetDWP)
     {
         return DefWindowProc(hWnd, message, wParam, lParam);

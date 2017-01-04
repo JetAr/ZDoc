@@ -1,14 +1,14 @@
-/////////////////////////////////////////////////////////////////////////
-// Copyright © 2006 Microsoft Corporation. All rights reserved.
-// 
-//  This file may contain preliminary information or inaccuracies, 
-//  and may not correctly represent any associated Microsoft 
-//  Product as commercially released. All Materials are provided entirely 
-//  ìAS IS.î To the extent permitted by law, MICROSOFT MAKES NO 
-//  WARRANTY OF ANY KIND, DISCLAIMS ALL EXPRESS, IMPLIED AND STATUTORY 
-//  WARRANTIES, AND ASSUMES NO LIABILITY TO YOU FOR ANY DAMAGES OF 
-//  ANY TYPE IN CONNECTION WITH THESE MATERIALS OR ANY INTELLECTUAL PROPERTY IN THEM. 
-// 
+Ôªø/////////////////////////////////////////////////////////////////////////
+// Copyright ¬© 2006 Microsoft Corporation. All rights reserved.
+//
+//  This file may contain preliminary information or inaccuracies,
+//  and may not correctly represent any associated Microsoft
+//  Product as commercially released. All Materials are provided entirely
+//  ‚ÄúAS IS.‚Äù To the extent permitted by law, MICROSOFT MAKES NO
+//  WARRANTY OF ANY KIND, DISCLAIMS ALL EXPRESS, IMPLIED AND STATUTORY
+//  WARRANTIES, AND ASSUMES NO LIABILITY TO YOU FOR ANY DAMAGES OF
+//  ANY TYPE IN CONNECTION WITH THESE MATERIALS OR ANY INTELLECTUAL PROPERTY IN THEM.
+//
 
 
 // Main header
@@ -17,11 +17,11 @@
 
 
 void VssClient::CreateSnapshotSet(
-    vector<wstring> volumeList, 
-    wstring outputXmlFile,     
+    vector<wstring> volumeList,
+    wstring outputXmlFile,
     vector<wstring> excludedWriterList,
     vector<wstring> includedWriterList
-    )
+)
 {
     FunctionTracer ft(DBG_INFO);
 
@@ -42,12 +42,12 @@ void VssClient::CreateSnapshotSet(
     // Add the specified volumes to the shadow set
     AddToSnapshotSet(volumeList);
 
-    // Prepare for backup. 
+    // Prepare for backup.
     // This will internally create the backup components document with the selected components
     if (bSnapshotWithWriters)
         PrepareForBackup();
 
-    // Creates the shadow set 
+    // Creates the shadow set
     DoSnapshotSet();
 
     // Do not attempt to continue with delayed snapshot ...
@@ -93,23 +93,23 @@ void VssClient::AddToSnapshotSet(vector<wstring> volumeList)
 {
     FunctionTracer ft(DBG_INFO);
 
-    // Preserve the list of volumes for script generation 
+    // Preserve the list of volumes for script generation
     m_latestVolumeList = volumeList;
 
     _ASSERTE(m_latestSnapshotIdList.size() == 0);
 
-    // Add volumes to the shadow set 
+    // Add volumes to the shadow set
     for (unsigned i = 0; i < volumeList.size(); i++)
     {
         wstring volume = volumeList[i];
-        ft.WriteLine(L"- Adding volume %s [%s] to the shadow set...", 
-            volume.c_str(),
-            GetDisplayNameForVolume(volume).c_str());
+        ft.WriteLine(L"- Adding volume %s [%s] to the shadow set...",
+                     volume.c_str(),
+                     GetDisplayNameForVolume(volume).c_str());
 
         VSS_ID SnapshotID;
         CHECK_COM(m_pVssObject->AddToSnapshotSet((LPWSTR)volume.c_str(), GUID_NULL, &SnapshotID));
 
-        // Preserve this shadow ID for script generation 
+        // Preserve this shadow ID for script generation
         m_latestSnapshotIdList.push_back(SnapshotID);
     }
 }
@@ -155,7 +155,8 @@ void VssClient::BackupComplete(bool succeeded)
     {
         ft.WriteLine(L"- There were no writer components in this backup");
         return;
-    } else if (succeeded)
+    }
+    else if (succeeded)
         ft.WriteLine(L"- Mark all writers as succesfully backed up... ");
     else
         ft.WriteLine(L"- Backup failed. Mark all writers as not succesfully backed up... ");
@@ -208,7 +209,7 @@ void VssClient::GenerateSetvarScript(wstring stringFileName)
 
     wstring snapshotSetID = Guid2WString(m_latestSnapshotSetID);
     ofile << L"SET SHADOW_SET_ID=" << snapshotSetID.c_str() << L"\n";
-    
+
     // For each added volume add the VSHADOW.EXE exposure command
     for (unsigned i = 0; i < m_latestSnapshotIdList.size(); i++)
     {
@@ -262,7 +263,7 @@ void VssClient::SetBackupSucceeded(bool succeeded)
         // Enumerate components
         for(unsigned iComponent = 0; iComponent < writer.components.size(); iComponent++)
         {
-            VssComponent & component = writer.components[iComponent]; 
+            VssComponent & component = writer.components[iComponent];
 
             // Test that the component is explicitely selected and requires notification
             if (!component.isExplicitlyIncluded)
@@ -270,12 +271,12 @@ void VssClient::SetBackupSucceeded(bool succeeded)
 
             // Call SetBackupSucceeded for this component
             CHECK_COM(m_pVssObject->SetBackupSucceeded(
-                WString2Guid(writer.instanceId),
-                WString2Guid(writer.id),
-                component.type,
-                component.logicalPath.c_str(),
-                component.name.c_str(),
-                succeeded));
+                          WString2Guid(writer.instanceId),
+                          WString2Guid(writer.id),
+                          component.type,
+                          component.logicalPath.c_str(),
+                          component.name.c_str(),
+                          succeeded));
         }
     }
 }

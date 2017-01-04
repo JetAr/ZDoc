@@ -1,4 +1,4 @@
-//+-------------------------------------------------------------------------
+﻿//+-------------------------------------------------------------------------
 //
 //  Microsoft Windows Media Technologies
 //  Copyright (C) Microsoft Corporation. All rights reserved.
@@ -23,7 +23,7 @@ typedef struct ContextNameHint
 
 /////////////////////////////////////////////////////////////////////////////
 // CContextPlugin
-class ATL_NO_VTABLE CContextPlugin : 
+class ATL_NO_VTABLE CContextPlugin :
     public CComObjectRootEx<CComMultiThreadModel>,
     public CComCoClass<CContextPlugin, &CLSID_WMSContextPlugin>,
     public IWMSEventNotificationPlugin,
@@ -35,15 +35,15 @@ public:
     CContextPlugin();
     ~CContextPlugin();
 
-DECLARE_REGISTRY_RESOURCEID(IDR_CONTEXTPLUGIN)
+    DECLARE_REGISTRY_RESOURCEID(IDR_CONTEXTPLUGIN)
 
-DECLARE_PROTECT_FINAL_CONSTRUCT()
+    DECLARE_PROTECT_FINAL_CONSTRUCT()
 
-BEGIN_COM_MAP(CContextPlugin)
-        COM_INTERFACE_ENTRY(IWMSEventNotificationPlugin)
-        COM_INTERFACE_ENTRY(IWMSBasicPlugin)
-        COM_INTERFACE_ENTRY(IWMSContextPlugin)	
-END_COM_MAP()
+    BEGIN_COM_MAP(CContextPlugin)
+    COM_INTERFACE_ENTRY(IWMSEventNotificationPlugin)
+    COM_INTERFACE_ENTRY(IWMSBasicPlugin)
+    COM_INTERFACE_ENTRY(IWMSContextPlugin)
+    END_COM_MAP()
 
 public:
 
@@ -65,7 +65,7 @@ public:
     HRESULT SetContextTypes( WMS_CONTEXT_PLUGIN_CONTEXT_TYPE wmsContexts )
     {
         if( ( 0 > wmsContexts )
-            || ( ( 2 * WMS_CONTEXT_PLUGIN_COMMAND_RESPONSE_CONTEXT ) <= wmsContexts ) )
+                || ( ( 2 * WMS_CONTEXT_PLUGIN_COMMAND_RESPONSE_CONTEXT ) <= wmsContexts ) )
         {
             return( E_INVALIDARG );
         }
@@ -132,8 +132,8 @@ private:
     WMS_CONTEXT_PLUGIN_CONTEXT_TYPE     m_wmsContexts;
     BSTR                                m_bstrOutputPath;
 
-    static const ContextNameHint s_UserContextHintValues[]; 
-    static const ContextNameHint s_PresentationContextHintValues[]; 
+    static const ContextNameHint s_UserContextHintValues[];
+    static const ContextNameHint s_PresentationContextHintValues[];
     static const ContextNameHint s_CommandContextHintValues[];
 
     static WCHAR *s_wstrNamedValueOutputPath;

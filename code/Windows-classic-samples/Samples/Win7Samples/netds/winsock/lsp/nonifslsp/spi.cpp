@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -19,7 +19,7 @@
 //    This file contains the 30 SPI functions you are required to implement in a
 //    service provider. It also contains the two functions that must be exported
 //    from the DLL module DllMain and WSPStartup.
-//    
+//
 
 #include "lspdef.h"
 
@@ -49,11 +49,11 @@ HANDLE              gAddContextEvent=NULL;  // Event to set when adding socket c
 ////////////////////////////////////////////////////////////////////////////////
 
 // Close all open sockets and free any associated resources
-void 
+void
 FreeSocketsAndMemory(
     BOOL processDetach,
     int *lpErrno
-    );
+);
 
 //
 // Need to keep track of which PROVIDERs that are currently executing
@@ -77,7 +77,8 @@ static WSPDATA  gWSPData;
 static BOOL     gDetached = FALSE;      // Indicates if process is detaching from DLL
 
 // Fill out our proc table with our own LSP functions
-static WSPPROC_TABLE       gProcTable = {
+static WSPPROC_TABLE       gProcTable =
+{
     WSPAccept,
     WSPAddressToString,
     WSPAsyncSelect,
@@ -108,7 +109,7 @@ static WSPPROC_TABLE       gProcTable = {
     WSPShutdown,
     WSPSocket,
     WSPStringToAddress
-    };
+};
 
 ////////////////////////////////////////////////////////////////////////////////
 //
@@ -123,12 +124,12 @@ static WSPPROC_TABLE       gProcTable = {
 //    Print the table of function pointers. This can be useful in tracking
 //    down bugs with other LSP being layered over.
 //
-void 
+void
 PrintProcTable(
     LPWSPPROC_TABLE lpProcTable
-    )
+)
 {
-    #ifdef DBG_PRINTPROCTABLE
+#ifdef DBG_PRINTPROCTABLE
     dbgprint("WSPAccept              = 0x%X", lpProcTable->lpWSPAccept);
     dbgprint("WSPAddressToString     = 0x%X", lpProcTable->lpWSPAddressToString);
     dbgprint("WSPAsyncSelect         = 0x%X", lpProcTable->lpWSPAsyncSelect);
@@ -159,9 +160,9 @@ PrintProcTable(
     dbgprint("WSPShutdown            = 0x%X", lpProcTable->lpWSPShutdown);
     dbgprint("WSPSocket              = 0x%X", lpProcTable->lpWSPSocket);
     dbgprint("WSPStringToAddress     = 0x%X", lpProcTable->lpWSPStringToAddress);
-    #else
+#else
     UNREFERENCED_PARAMETER( lpProcTable );  // For W4 compliance
-    #endif
+#endif
 }
 
 //
@@ -171,71 +172,71 @@ PrintProcTable(
 //    Provides initialization when the LSP DLL is loaded. In our case we simply,
 //    initialize some critical sections used throughout the DLL.
 //
-BOOL WINAPI 
+BOOL WINAPI
 DllMain(
-    IN HINSTANCE hinstDll, 
-    IN DWORD dwReason, 
+    IN HINSTANCE hinstDll,
+    IN DWORD dwReason,
     LPVOID lpvReserved
-    )
+)
 {
     switch (dwReason)
     {
 
-        case DLL_PROCESS_ATTACH:
-            gDllInstance = hinstDll;
-            //
-            // Initialize some critical section objects 
-            //
-            __try
+    case DLL_PROCESS_ATTACH:
+        gDllInstance = hinstDll;
+        //
+        // Initialize some critical section objects
+        //
+        __try
+        {
+            InitializeCriticalSection( &gCriticalSection );
+            InitializeCriticalSection( &gOverlappedCS );
+            InitializeCriticalSection( &gDebugCritSec );
+        }
+        __except( EXCEPTION_EXECUTE_HANDLER )
+        {
+            goto cleanup;
+        }
+
+        gTlsIndex = TlsAlloc();
+        break;
+
+    case DLL_THREAD_ATTACH:
+        break;
+
+    case DLL_THREAD_DETACH:
+        break;
+
+    case DLL_PROCESS_DETACH:
+        gDetached = TRUE;
+
+        EnterCriticalSection( &gCriticalSection );
+        if ( NULL != gBaseInfo )
+        {
+            int Error;
+
+            StopAsyncWindowManager();
+            StopOverlappedManager();
+
+            Sleep(200);
+
+            FreeSocketsAndMemory( TRUE, &Error );
+        }
+        LeaveCriticalSection( &gCriticalSection );
+
+        DeleteCriticalSection( &gCriticalSection );
+        DeleteCriticalSection( &gOverlappedCS );
+        DeleteCriticalSection( &gDebugCritSec );
+
+        if ( NULL == lpvReserved )
+        {
+            if ( 0xFFFFFFFF != gTlsIndex )
             {
-                InitializeCriticalSection( &gCriticalSection );
-                InitializeCriticalSection( &gOverlappedCS );
-                InitializeCriticalSection( &gDebugCritSec );
+                TlsFree( gTlsIndex );
+                gTlsIndex = 0xFFFFFFFF;
             }
-            __except( EXCEPTION_EXECUTE_HANDLER )
-            {
-                goto cleanup;
-            }
-
-            gTlsIndex = TlsAlloc();
-            break;
-
-        case DLL_THREAD_ATTACH:
-            break;
-
-        case DLL_THREAD_DETACH:
-            break;
-
-        case DLL_PROCESS_DETACH:
-            gDetached = TRUE;
-
-            EnterCriticalSection( &gCriticalSection );
-            if ( NULL != gBaseInfo )
-            {
-                int Error;
-
-                StopAsyncWindowManager();
-                StopOverlappedManager();
-
-                Sleep(200);
-
-                FreeSocketsAndMemory( TRUE, &Error );
-            }
-            LeaveCriticalSection( &gCriticalSection );
-
-            DeleteCriticalSection( &gCriticalSection );
-            DeleteCriticalSection( &gOverlappedCS );
-            DeleteCriticalSection( &gDebugCritSec );
-
-            if ( NULL == lpvReserved )
-            {
-                if ( 0xFFFFFFFF != gTlsIndex )
-                {
-                    TlsFree( gTlsIndex );
-                    gTlsIndex = 0xFFFFFFFF;
-                }
-            }
-            break;
+        }
+        break;
     }
 
     return TRUE;
@@ -254,15 +255,15 @@ cleanup:
 //    your own callback (you'll need to keep track of the user supplied callback so
 //    you can trigger that once your substituted function is triggered).
 //
-SOCKET WSPAPI 
+SOCKET WSPAPI
 WSPAccept(
-    SOCKET          s,                      
-    struct sockaddr FAR * addr,  
-    LPINT           addrlen,                 
-    LPCONDITIONPROC lpfnCondition,  
-    DWORD_PTR       dwCallbackData,          
+    SOCKET          s,
+    struct sockaddr FAR * addr,
+    LPINT           addrlen,
+    LPCONDITIONPROC lpfnCondition,
+    DWORD_PTR       dwCallbackData,
     LPINT           lpErrno
-    )
+)
 {
     SOCKET     NewProviderSocket;
     SOCKET     NewSocket = INVALID_SOCKET;
@@ -290,11 +291,11 @@ WSPAccept(
 
     SetBlockingProvider(SocketContext->Provider);
     NewProviderSocket = SocketContext->Provider->NextProcTable.lpWSPAccept(
-                            SocketContext->ProviderSocket, 
-                            addr, 
+                            SocketContext->ProviderSocket,
+                            addr,
                             addrlen,
-                            lpfnCondition, 
-                            dwCallbackData, 
+                            lpfnCondition,
+                            dwCallbackData,
                             lpErrno);
     SetBlockingProvider(NULL);
     if ( INVALID_SOCKET != NewProviderSocket )
@@ -303,32 +304,32 @@ WSPAccept(
         //  socket to pass back up to the application.
         //
         NewSocketContext = CreateSockInfo(
-                SocketContext->Provider,
-                NewProviderSocket,
-                SocketContext,
-                FALSE,
-                lpErrno
-                );
+                               SocketContext->Provider,
+                               NewProviderSocket,
+                               SocketContext,
+                               FALSE,
+                               lpErrno
+                           );
         if  ( NULL == NewSocketContext )
         {
             goto cleanup;
         }
-        
+
         NewSocket = NewSocketContext->LayeredSocket = gMainUpCallTable.lpWPUCreateSocketHandle(
-                SocketContext->Provider->LayerProvider.dwCatalogEntryId,
-                (DWORD_PTR) NewSocketContext,
-                lpErrno);
+                        SocketContext->Provider->LayerProvider.dwCatalogEntryId,
+                        (DWORD_PTR) NewSocketContext,
+                        lpErrno);
         if ( INVALID_SOCKET == NewSocket )
         {
             int     tempErr;
 
             dbgprint("WSPAccept(): WPUCreateSocketHandle() failed: %d", *lpErrno);
-            
+
             // Close the lower provider's socket but preserve the original error value
             SocketContext->Provider->NextProcTable.lpWSPCloseSocket(
                 NewProviderSocket,
-               &tempErr
-                );
+                &tempErr
+            );
 
             // Context is not in the list yet so we can just free it
             FreeSockInfo(NewSocketContext);
@@ -353,15 +354,15 @@ cleanup:
 // Description:
 //    Convert an address to string. We simply pass this to the lower provider.
 //
-int WSPAPI 
+int WSPAPI
 WSPAddressToString(
-    LPSOCKADDR          lpsaAddress,            
-    DWORD               dwAddressLength,               
-    LPWSAPROTOCOL_INFOW lpProtocolInfo,   
-    LPWSTR              lpszAddressString,            
-    LPDWORD             lpdwAddressStringLength,   
+    LPSOCKADDR          lpsaAddress,
+    DWORD               dwAddressLength,
+    LPWSAPROTOCOL_INFOW lpProtocolInfo,
+    LPWSTR              lpszAddressString,
+    LPDWORD             lpdwAddressStringLength,
     LPINT               lpErrno
-    )
+)
 {
     WSAPROTOCOL_INFOW *pInfo=NULL;
     PROVIDER          *Provider=NULL;
@@ -371,17 +372,17 @@ WSPAddressToString(
     //
     // First find the appropriate provider
     //
-    for(i=0; i < gLayerCount ;i++)
+    for(i=0; i < gLayerCount ; i++)
     {
         if ((gBaseInfo[i].NextProvider.iAddressFamily == lpProtocolInfo->iAddressFamily) &&
-            (gBaseInfo[i].NextProvider.iSocketType == lpProtocolInfo->iSocketType) && 
-            (gBaseInfo[i].NextProvider.iProtocol   == lpProtocolInfo->iProtocol))
+                (gBaseInfo[i].NextProvider.iSocketType == lpProtocolInfo->iSocketType) &&
+                (gBaseInfo[i].NextProvider.iProtocol   == lpProtocolInfo->iProtocol))
         {
             if ( NULL != lpProtocolInfo )
             {
-                // In case of multiple providers check the provider flags 
-                if ( ( gBaseInfo[i].NextProvider.dwServiceFlags1 & ~XP1_IFS_HANDLES ) != 
-                     ( lpProtocolInfo->dwServiceFlags1 & ~XP1_IFS_HANDLES ) 
+                // In case of multiple providers check the provider flags
+                if ( ( gBaseInfo[i].NextProvider.dwServiceFlags1 & ~XP1_IFS_HANDLES ) !=
+                        ( lpProtocolInfo->dwServiceFlags1 & ~XP1_IFS_HANDLES )
                    )
                 {
                     continue;
@@ -406,7 +407,7 @@ WSPAddressToString(
     {
         pInfo = lpProtocolInfo;
     }
-   
+
     if ( 0 == Provider->StartupCount )
     {
         if ( SOCKET_ERROR == InitializeProvider( Provider, MAKEWORD(2,2), lpProtocolInfo,
@@ -421,13 +422,13 @@ WSPAddressToString(
 
     SetBlockingProvider(Provider);
     ret = Provider->NextProcTable.lpWSPAddressToString(
-            lpsaAddress, 
-            dwAddressLength,               
-            pInfo, 
-            lpszAddressString, 
-            lpdwAddressStringLength, 
-            lpErrno
-            );
+              lpsaAddress,
+              dwAddressLength,
+              pInfo,
+              lpszAddressString,
+              lpdwAddressStringLength,
+              lpErrno
+          );
     SetBlockingProvider(NULL);
 
 cleanup:
@@ -442,14 +443,14 @@ cleanup:
 //    Register specific Winsock events with a socket. We need to substitute
 //    the app socket with the provider socket and use our own hidden window.
 //
-int WSPAPI 
+int WSPAPI
 WSPAsyncSelect(
     SOCKET       s,
     HWND         hWnd,
     unsigned int wMsg,
     long         lEvent,
     LPINT        lpErrno
-    )
+)
 {
     SOCK_INFO *SocketContext = NULL;
     HWND       hWorkerWindow = NULL;
@@ -500,12 +501,12 @@ WSPAsyncSelect(
 
     SetBlockingProvider(SocketContext->Provider);
     ret = SocketContext->Provider->NextProcTable.lpWSPAsyncSelect(
-            SocketContext->ProviderSocket, 
-            hWorkerWindow, 
-            WM_SOCKET, 
-            lEvent, 
-            lpErrno
-            );
+              SocketContext->ProviderSocket,
+              hWorkerWindow,
+              WM_SOCKET,
+              lEvent,
+              lpErrno
+          );
     SetBlockingProvider(NULL);
 
 cleanup:
@@ -523,13 +524,13 @@ cleanup:
 //    Bind the socket to a local address. We just map socket handles and
 //    call the lower provider.
 //
-int WSPAPI 
+int WSPAPI
 WSPBind(
     SOCKET                s,
     const struct sockaddr FAR * name,
     int                   namelen,
     LPINT                 lpErrno
-    )
+)
 {
     SOCK_INFO *SocketContext = NULL;
     INT        ret = SOCKET_ERROR;
@@ -548,11 +549,11 @@ WSPBind(
 
     SetBlockingProvider(SocketContext->Provider);
     ret = SocketContext->Provider->NextProcTable.lpWSPBind(
-            SocketContext->ProviderSocket, 
-            name, 
-            namelen, 
-            lpErrno
-            );
+              SocketContext->ProviderSocket,
+              name,
+              namelen,
+              lpErrno
+          );
     SetBlockingProvider(NULL);
 
 cleanup:
@@ -573,10 +574,10 @@ cleanup:
 //    This is necessary since WSACancelBlockingCall takes no arguments (i.e.
 //    the LSP needs to keep track of what calls are blocking).
 //
-int WSPAPI 
+int WSPAPI
 WSPCancelBlockingCall(
     LPINT lpErrno
-    )
+)
 {
     PROVIDER *Provider = NULL;
     INT       ret = NO_ERROR;
@@ -591,17 +592,17 @@ WSPCancelBlockingCall(
     return ret;
 }
 
-// 
+//
 // Function: WSPCleanup
 //
 // Description:
 //    Decrement the entry count. If equal to zero then we can prepare to have us
 //    unloaded. Close any outstanding sockets and free up allocated memory.
 //
-int WSPAPI 
+int WSPAPI
 WSPCleanup(
-    LPINT lpErrno  
-    )
+    LPINT lpErrno
+)
 {
     int        ret = SOCKET_ERROR;
 
@@ -629,9 +630,9 @@ WSPCleanup(
     //
     gEntryCount--;
 
-    #ifdef DEBUG
+#ifdef DEBUG
     dbgprint("WSPCleanup: %d", gEntryCount);
-    #endif
+#endif
 
     if ( 0 == gEntryCount )
     {
@@ -666,11 +667,11 @@ cleanup:
 //    (with error) will we then close the app socket (this will occur in
 //    the overlapped manager - overlapp.cpp).
 //
-int WSPAPI 
-WSPCloseSocket(  
-    SOCKET s,        
+int WSPAPI
+WSPCloseSocket(
+    SOCKET s,
     LPINT  lpErrno
-    )
+)
 {
     SOCK_INFO *SocketContext = NULL;
     int        ret = SOCKET_ERROR;
@@ -688,7 +689,7 @@ WSPCloseSocket(
     AcquireSocketLock( SocketContext );
 
     dbgprint("WSPCloseSocket: Closing layered socket 0x%p (provider 0x%p)",
-        s, SocketContext->ProviderSocket);
+             s, SocketContext->ProviderSocket);
 
     //
     // If we there are outstanding async calls on this handle don't close the app
@@ -697,14 +698,14 @@ WSPCloseSocket(
     //  hasn't already been called on this socket
     //
 
-    dbgprint("dwOutstanding = %d; RefCount = %d", SocketContext->dwOutstandingAsync, 
-        SocketContext->RefCount);
+    dbgprint("dwOutstanding = %d; RefCount = %d", SocketContext->dwOutstandingAsync,
+             SocketContext->RefCount);
 
     ASSERT( SocketContext->Provider->NextProcTable.lpWSPCloseSocket );
 
-    if ( ( ( 0 != SocketContext->dwOutstandingAsync ) || 
-           ( 1 != SocketContext->RefCount ) ) &&
-         ( TRUE != SocketContext->bClosing )
+    if ( ( ( 0 != SocketContext->dwOutstandingAsync ) ||
+            ( 1 != SocketContext->RefCount ) ) &&
+            ( TRUE != SocketContext->bClosing )
        )
     {
         //
@@ -715,14 +716,14 @@ WSPCloseSocket(
         SocketContext->bClosing = TRUE;
 
         ret = SocketContext->Provider->NextProcTable.lpWSPCloseSocket(
-                SocketContext->ProviderSocket, 
-                lpErrno
-                );
+                  SocketContext->ProviderSocket,
+                  lpErrno
+              );
         if ( SOCKET_ERROR == ret )
         {
             goto cleanup;
         }
-       
+
         dbgprint("Closed lower provider socket: 0x%p", SocketContext->ProviderSocket);
 
         SocketContext->ProviderSocket = INVALID_SOCKET;
@@ -738,18 +739,18 @@ WSPCloseSocket(
         //
         SetBlockingProvider(SocketContext->Provider);
         ret = SocketContext->Provider->NextProcTable.lpWSPCloseSocket(
-                SocketContext->ProviderSocket, 
-                lpErrno
-                );
-        
+                  SocketContext->ProviderSocket,
+                  lpErrno
+              );
+
         SetBlockingProvider(NULL);
-        
+
         if ( SOCKET_ERROR == ret )
         {
             dbgprint("WSPCloseSocket: Provider close failed");
             goto cleanup;
         }
-        
+
 
         SocketContext->ProviderSocket = INVALID_SOCKET;
 
@@ -767,8 +768,8 @@ WSPCloseSocket(
             dbgprint("WPUCloseSocketHandle failed: %d", *lpErrno);
         }
 
-        dbgprint("Closing socket %d Bytes Sent [%lu] Bytes Recv [%lu]", 
-                s, SocketContext->BytesSent, SocketContext->BytesRecv);
+        dbgprint("Closing socket %d Bytes Sent [%lu] Bytes Recv [%lu]",
+                 s, SocketContext->BytesSent, SocketContext->BytesRecv);
 
         ReleaseSocketLock( SocketContext );
 
@@ -779,7 +780,7 @@ WSPCloseSocket(
     }
 
 cleanup:
-    
+
     if ( NULL != SocketContext )
     {
         ReleaseSocketLock(SocketContext);
@@ -796,7 +797,7 @@ cleanup:
 //    Performs a connect call. The only thing we need to do is translate
 //    the socket handle.
 //
-int WSPAPI 
+int WSPAPI
 WSPConnect(
     SOCKET                s,
     const struct sockaddr FAR * name,
@@ -806,7 +807,7 @@ WSPConnect(
     LPQOS                 lpSQOS,
     LPQOS                 lpGQOS,
     LPINT                 lpErrno
-    )
+)
 {
     SOCK_INFO *SocketContext = NULL;
     INT        ret = SOCKET_ERROR;
@@ -825,15 +826,15 @@ WSPConnect(
 
     SetBlockingProvider(SocketContext->Provider);
     ret = SocketContext->Provider->NextProcTable.lpWSPConnect(
-            SocketContext->ProviderSocket, 
-            name, 
-            namelen, 
-            lpCallerData, 
-            lpCalleeData,
-            lpSQOS, 
-            lpGQOS, 
-            lpErrno
-            );
+              SocketContext->ProviderSocket,
+              name,
+              namelen,
+              lpCallerData,
+              lpCalleeData,
+              lpSQOS,
+              lpGQOS,
+              lpErrno
+          );
     SetBlockingProvider(NULL);
 
 cleanup:
@@ -854,13 +855,13 @@ cleanup:
 //    WSPDuplicateSocket. Note that the lpProtocolInfo structure passed into us
 //    is an out parameter only!
 //
-int WSPAPI 
+int WSPAPI
 WSPDuplicateSocket(
     SOCKET              s,
-    DWORD               dwProcessId,                      
-    LPWSAPROTOCOL_INFOW lpProtocolInfo,   
+    DWORD               dwProcessId,
+    LPWSAPROTOCOL_INFOW lpProtocolInfo,
     LPINT               lpErrno
-    )
+)
 {
     PROVIDER          *Provider = NULL;
     SOCK_INFO         *SocketContext = NULL;
@@ -885,11 +886,11 @@ WSPDuplicateSocket(
 
     SetBlockingProvider(Provider);
     ret = Provider->NextProcTable.lpWSPDuplicateSocket(
-            SocketContext->ProviderSocket,
-            dwProcessId,
-            lpProtocolInfo,
-            lpErrno
-            );
+              SocketContext->ProviderSocket,
+              dwProcessId,
+              lpProtocolInfo,
+              lpErrno
+          );
     SetBlockingProvider(NULL);
 
     if ( NO_ERROR == ret )
@@ -904,7 +905,7 @@ WSPDuplicateSocket(
         lpProtocolInfo->dwProviderReserved = dwReserved;
 
         dbgprint("WSPDuplicateSocket: Returning %S provider with reserved %d",
-                lpProtocolInfo->szProtocol, dwReserved );
+                 lpProtocolInfo->szProtocol, dwReserved );
     }
 
 cleanup:
@@ -912,7 +913,7 @@ cleanup:
     if ( NULL != SocketContext )
         DerefSocketContext( SocketContext, lpErrno );
 
-    return ret;    
+    return ret;
 }
 
 //
@@ -922,13 +923,13 @@ cleanup:
 //    Enumerate the network events for a socket. We only need to translate the
 //    socket handle.
 //
-int WSPAPI 
-WSPEnumNetworkEvents(  
+int WSPAPI
+WSPEnumNetworkEvents(
     SOCKET             s,
     WSAEVENT           hEventObject,
     LPWSANETWORKEVENTS lpNetworkEvents,
     LPINT              lpErrno
-    )
+)
 {
     SOCK_INFO *SocketContext = NULL;
     INT        ret = SOCKET_ERROR;
@@ -947,11 +948,11 @@ WSPEnumNetworkEvents(
 
     SetBlockingProvider(SocketContext->Provider);
     ret = SocketContext->Provider->NextProcTable.lpWSPEnumNetworkEvents(
-            SocketContext->ProviderSocket,                             
-            hEventObject, 
-            lpNetworkEvents, 
-            lpErrno
-            );
+              SocketContext->ProviderSocket,
+              hEventObject,
+              lpNetworkEvents,
+              lpErrno
+          );
     SetBlockingProvider(NULL);
 
 cleanup:
@@ -969,13 +970,13 @@ cleanup:
 //    Register the specified events on the socket with the given event handle.
 //    All we need to do is translate the socket handle.
 //
-int WSPAPI 
+int WSPAPI
 WSPEventSelect(
     SOCKET   s,
     WSAEVENT hEventObject,
     long     lNetworkEvents,
     LPINT    lpErrno
-    )
+)
 {
     SOCK_INFO *SocketContext = NULL;
     INT        ret = SOCKET_ERROR;
@@ -989,16 +990,16 @@ WSPEventSelect(
         dbgprint( "WSPEventSelect: FindAndRefSocketContext failed!" );
         goto cleanup;
     }
-    
+
     ASSERT( SocketContext->Provider->NextProcTable.lpWSPEventSelect );
 
     SetBlockingProvider(SocketContext->Provider);
     ret = SocketContext->Provider->NextProcTable.lpWSPEventSelect(
-            SocketContext->ProviderSocket, 
-            hEventObject,
-            lNetworkEvents, 
-            lpErrno
-            );
+              SocketContext->ProviderSocket,
+              hEventObject,
+              lNetworkEvents,
+              lpErrno
+          );
     SetBlockingProvider(NULL);
 
 cleanup:
@@ -1018,7 +1019,7 @@ cleanup:
 //    and fWait is true, wait until completion. Otherwise return an
 //    error immediately.
 //
-BOOL WSPAPI 
+BOOL WSPAPI
 WSPGetOverlappedResult(
     SOCKET          s,
     LPWSAOVERLAPPED lpOverlapped,
@@ -1026,7 +1027,7 @@ WSPGetOverlappedResult(
     BOOL            fWait,
     LPDWORD         lpdwFlags,
     LPINT           lpErrno
-    )
+)
 {
     DWORD ret = FALSE;
 
@@ -1034,9 +1035,9 @@ WSPGetOverlappedResult(
 
     __try
     {
-        if ( WSS_OPERATION_IN_PROGRESS != lpOverlapped->Internal ) 
+        if ( WSS_OPERATION_IN_PROGRESS != lpOverlapped->Internal )
         {
-            // Operation has completed, update the parameters and return 
+            // Operation has completed, update the parameters and return
             //
             *lpcbTransfer = (DWORD)lpOverlapped->InternalHigh;
             *lpdwFlags = (DWORD)lpOverlapped->Offset;
@@ -1070,12 +1071,12 @@ WSPGetOverlappedResult(
             {
                 *lpErrno = WSA_IO_PENDING;
             }
-            else 
+            else
             {
                 *lpErrno = GetLastError();
             }
         }
-        else 
+        else
         {
             // Operation is in progress and we aren't waiting
             *lpErrno = WSA_IO_INCOMPLETE;
@@ -1096,13 +1097,13 @@ WSPGetOverlappedResult(
 //    Returns the address of the peer. The only thing we need to do is translate
 //    the socket handle.
 //
-int WSPAPI 
-WSPGetPeerName(  
+int WSPAPI
+WSPGetPeerName(
     SOCKET          s,
     struct sockaddr FAR * name,
     LPINT           namelen,
     LPINT           lpErrno
-    )
+)
 {
     SOCK_INFO *SocketContext = NULL;
     INT        ret = SOCKET_ERROR;
@@ -1121,10 +1122,10 @@ WSPGetPeerName(
 
     SetBlockingProvider(SocketContext->Provider);
     ret = SocketContext->Provider->NextProcTable.lpWSPGetPeerName(
-                SocketContext->ProviderSocket, 
-                name,
-                namelen, 
-                lpErrno);
+              SocketContext->ProviderSocket,
+              name,
+              namelen,
+              lpErrno);
     SetBlockingProvider(NULL);
 
 cleanup:
@@ -1142,13 +1143,13 @@ cleanup:
 //    Returns the local address of a socket. All we need to do is translate
 //    the socket handle.
 //
-int WSPAPI 
+int WSPAPI
 WSPGetSockName(
     SOCKET          s,
     struct sockaddr FAR * name,
     LPINT           namelen,
     LPINT           lpErrno
-    )
+)
 {
     SOCK_INFO *SocketContext = NULL;
     INT        ret = SOCKET_ERROR;
@@ -1167,11 +1168,11 @@ WSPGetSockName(
 
     SetBlockingProvider(SocketContext->Provider);
     ret = SocketContext->Provider->NextProcTable.lpWSPGetSockName(
-            SocketContext->ProviderSocket, 
-            name,
-            namelen, 
-            lpErrno
-            );
+              SocketContext->ProviderSocket,
+              name,
+              namelen,
+              lpErrno
+          );
     SetBlockingProvider(NULL);
 
 cleanup:
@@ -1189,7 +1190,7 @@ cleanup:
 //    Get the specified socket option. All we need to do is translate the
 //    socket handle.
 //
-int WSPAPI 
+int WSPAPI
 WSPGetSockOpt(
     SOCKET     s,
     int        level,
@@ -1197,7 +1198,7 @@ WSPGetSockOpt(
     char FAR * optval,
     LPINT      optlen,
     LPINT      lpErrno
-    )
+)
 {
     SOCK_INFO *SocketContext = NULL;
     INT        ret = NO_ERROR;
@@ -1225,39 +1226,39 @@ WSPGetSockOpt(
                                           ( SO_PROTOCOL_INFOW == optname ) )
            )
         {
-            if ( ( SO_PROTOCOL_INFOW == optname ) && 
-                 ( sizeof( WSAPROTOCOL_INFOW ) <= *optlen )
+            if ( ( SO_PROTOCOL_INFOW == optname ) &&
+                    ( sizeof( WSAPROTOCOL_INFOW ) <= *optlen )
                )
             {
 
-                    // No conversion necessary, just copy the data
-                    memcpy(optval, 
-                           &SocketContext->Provider->LayerProvider, 
-                           sizeof(WSAPROTOCOL_INFOW));
-       
+                // No conversion necessary, just copy the data
+                memcpy(optval,
+                       &SocketContext->Provider->LayerProvider,
+                       sizeof(WSAPROTOCOL_INFOW));
+
             }
-            else if ( ( SO_PROTOCOL_INFOA == optname ) && 
+            else if ( ( SO_PROTOCOL_INFOA == optname ) &&
                       ( sizeof( WSAPROTOCOL_INFOA ) <= *optlen )
                     )
             {
-             
+
                 // Copy everything but the string
                 memcpy(optval,
                        &SocketContext->Provider->LayerProvider,
                        sizeof(WSAPROTOCOL_INFOW)-WSAPROTOCOL_LEN+1);
                 // Convert our saved UNICODE string to ANSII
                 WideCharToMultiByte(
-                        CP_ACP,
-                        0,
-                        SocketContext->Provider->LayerProvider.szProtocol,
-                        -1,
-                        ((WSAPROTOCOL_INFOA *)optval)->szProtocol,
-                        WSAPROTOCOL_LEN+1,
-                        NULL,
-                        NULL
-                        );
+                    CP_ACP,
+                    0,
+                    SocketContext->Provider->LayerProvider.szProtocol,
+                    -1,
+                    ((WSAPROTOCOL_INFOA *)optval)->szProtocol,
+                    WSAPROTOCOL_LEN+1,
+                    NULL,
+                    NULL
+                );
 
-     
+
             }
             else
             {
@@ -1274,18 +1275,18 @@ WSPGetSockOpt(
         ret = SOCKET_ERROR;
         *lpErrno = WSAEFAULT;
         goto cleanup;
-    }       
-   
+    }
+
     ASSERT( SocketContext->Provider->NextProcTable.lpWSPGetSockOpt );
 
     SetBlockingProvider(SocketContext->Provider);
     ret = SocketContext->Provider->NextProcTable.lpWSPGetSockOpt(
-                SocketContext->ProviderSocket, 
-                level,
-                optname, 
-                optval, 
-                optlen, 
-                lpErrno);
+              SocketContext->ProviderSocket,
+              level,
+              optname,
+              optval,
+              optlen,
+              lpErrno);
     SetBlockingProvider(NULL);
 
 cleanup:
@@ -1303,13 +1304,13 @@ cleanup:
 //    Get a QOS template by name. All we need to do is translate the socket
 //    handle.
 //
-BOOL WSPAPI 
+BOOL WSPAPI
 WSPGetQOSByName(
     SOCKET   s,
     LPWSABUF lpQOSName,
     LPQOS    lpQOS,
     LPINT    lpErrno
-    )
+)
 {
     SOCK_INFO *SocketContext = NULL;
     INT        ret = SOCKET_ERROR;
@@ -1328,11 +1329,11 @@ WSPGetQOSByName(
 
     SetBlockingProvider(SocketContext->Provider);
     ret = SocketContext->Provider->NextProcTable.lpWSPGetQOSByName(
-            SocketContext->ProviderSocket, 
-            lpQOSName,
-            lpQOS, 
-            lpErrno
-            );
+              SocketContext->ProviderSocket,
+              lpQOSName,
+              lpQOS,
+              lpErrno
+          );
     SetBlockingProvider(NULL);
 
 cleanup:
@@ -1352,10 +1353,10 @@ cleanup:
 //    we'll need to intercept this and return our own function pointers when
 //    they're requesting either TransmitFile or AcceptEx. This is necessary so
 //    we can trap these calls. Also for PnP OS's (Win2k) we need to trap calls
-//    to SIO_QUERY_TARGET_PNP_HANDLE. For this ioctl we simply have to return 
+//    to SIO_QUERY_TARGET_PNP_HANDLE. For this ioctl we simply have to return
 //    the provider socket.
 //
-int WSPAPI 
+int WSPAPI
 WSPIoctl(
     SOCKET          s,
     DWORD           dwIoControlCode,
@@ -1368,7 +1369,7 @@ WSPIoctl(
     LPWSAOVERLAPPED_COMPLETION_ROUTINE lpCompletionRoutine,
     LPWSATHREADID   lpThreadId,
     LPINT           lpErrno
-    )
+)
 {
     LPWSAOVERLAPPEDPLUS ProviderOverlapped = NULL;
     SOCK_INFO          *SocketContext = NULL;
@@ -1401,15 +1402,15 @@ WSPIoctl(
 
 
         // Sanity check the buffers
-        
+
         if( cbInBuffer < sizeof(GUID) || lpvInBuffer == NULL ||
-            cbOutBuffer < sizeof(LPVOID) || lpvOutBuffer == NULL )        
+                cbOutBuffer < sizeof(LPVOID) || lpvOutBuffer == NULL )
         {
             ret = SOCKET_ERROR;
             *lpErrno = WSAEFAULT;
-            goto cleanup;            
+            goto cleanup;
         }
-        
+
         __try
         {
             //
@@ -1426,11 +1427,11 @@ WSPIoctl(
                 {
                     SetBlockingProvider(SocketContext->Provider);
                     LoadExtensionFunction(
-                            (FARPROC **) &SocketContext->Provider->NextProcTableExt.lpfnTransmitFile,
-                            TransmitFileGuid,
-                            SocketContext->Provider->NextProcTable.lpWSPIoctl,
-                            SocketContext->ProviderSocket
-                            );
+                        (FARPROC **) &SocketContext->Provider->NextProcTableExt.lpfnTransmitFile,
+                        TransmitFileGuid,
+                        SocketContext->Provider->NextProcTable.lpWSPIoctl,
+                        SocketContext->ProviderSocket
+                    );
                     SetBlockingProvider(NULL);
                 }
             }
@@ -1445,11 +1446,11 @@ WSPIoctl(
                 {
                     SetBlockingProvider(SocketContext->Provider);
                     LoadExtensionFunction(
-                            (FARPROC **) &SocketContext->Provider->NextProcTableExt.lpfnAcceptEx,
-                            AcceptExGuid,
-                            SocketContext->Provider->NextProcTable.lpWSPIoctl,
-                            SocketContext->ProviderSocket
-                            );
+                        (FARPROC **) &SocketContext->Provider->NextProcTableExt.lpfnAcceptEx,
+                        AcceptExGuid,
+                        SocketContext->Provider->NextProcTable.lpWSPIoctl,
+                        SocketContext->ProviderSocket
+                    );
                     SetBlockingProvider(NULL);
                 }
             }
@@ -1464,11 +1465,11 @@ WSPIoctl(
                 {
                     SetBlockingProvider(SocketContext->Provider);
                     LoadExtensionFunction(
-                            (FARPROC **) &SocketContext->Provider->NextProcTableExt.lpfnConnectEx,
-                            ConnectExGuid,
-                            SocketContext->Provider->NextProcTable.lpWSPIoctl,
-                            SocketContext->ProviderSocket
-                            );
+                        (FARPROC **) &SocketContext->Provider->NextProcTableExt.lpfnConnectEx,
+                        ConnectExGuid,
+                        SocketContext->Provider->NextProcTable.lpWSPIoctl,
+                        SocketContext->ProviderSocket
+                    );
                     SetBlockingProvider(NULL);
                 }
             }
@@ -1483,11 +1484,11 @@ WSPIoctl(
                 {
                     SetBlockingProvider(SocketContext->Provider);
                     LoadExtensionFunction(
-                            (FARPROC **) &SocketContext->Provider->NextProcTableExt.lpfnDisconnectEx,
-                            DisconnectExGuid,
-                            SocketContext->Provider->NextProcTable.lpWSPIoctl,
-                            SocketContext->ProviderSocket
-                            );
+                        (FARPROC **) &SocketContext->Provider->NextProcTableExt.lpfnDisconnectEx,
+                        DisconnectExGuid,
+                        SocketContext->Provider->NextProcTable.lpWSPIoctl,
+                        SocketContext->ProviderSocket
+                    );
                     SetBlockingProvider(NULL);
                 }
             }
@@ -1502,11 +1503,11 @@ WSPIoctl(
                 {
                     SetBlockingProvider(SocketContext->Provider);
                     LoadExtensionFunction(
-                            (FARPROC **) &SocketContext->Provider->NextProcTableExt.lpfnTransmitPackets,
-                            TransmitPacketsGuid,
-                            SocketContext->Provider->NextProcTable.lpWSPIoctl,
-                            SocketContext->ProviderSocket
-                            );
+                        (FARPROC **) &SocketContext->Provider->NextProcTableExt.lpfnTransmitPackets,
+                        TransmitPacketsGuid,
+                        SocketContext->Provider->NextProcTable.lpWSPIoctl,
+                        SocketContext->ProviderSocket
+                    );
                     SetBlockingProvider(NULL);
                 }
             }
@@ -1521,11 +1522,11 @@ WSPIoctl(
                 {
                     SetBlockingProvider(SocketContext->Provider);
                     LoadExtensionFunction(
-                            (FARPROC **) &SocketContext->Provider->NextProcTableExt.lpfnWSARecvMsg,
-                            WSARecvMsgGuid,
-                            SocketContext->Provider->NextProcTable.lpWSPIoctl,
-                            SocketContext->ProviderSocket
-                            );
+                        (FARPROC **) &SocketContext->Provider->NextProcTableExt.lpfnWSARecvMsg,
+                        WSARecvMsgGuid,
+                        SocketContext->Provider->NextProcTable.lpWSPIoctl,
+                        SocketContext->ProviderSocket
+                    );
                     SetBlockingProvider(NULL);
                 }
             }
@@ -1534,7 +1535,7 @@ WSPIoctl(
                 // No socket handle translation needed, let the call pass through below
                 // (i.e. we really don't have any need to intercept this call)
             }
-            else 
+            else
             {
                 ret = SOCKET_ERROR;
                 *lpErrno = WSAEINVAL;
@@ -1546,14 +1547,14 @@ WSPIoctl(
             ret = SOCKET_ERROR;
             *lpErrno = WSAEFAULT;
             goto cleanup;
-                    
+
         }
         //
         // Update the output parameters if successful
         //
         if ( NULL != lpFunction )
         {
-            __try 
+            __try
             {
                 *((DWORD_PTR *)lpvOutBuffer) = (DWORD_PTR) lpFunction;
                 *lpcbBytesReturned = dwBytesReturned;
@@ -1573,7 +1574,7 @@ WSPIoctl(
     else if ( SIO_QUERY_TARGET_PNP_HANDLE == dwIoControlCode )
     {
         //
-        // If the next layer is another LSP, keep passing. Otherwise return the 
+        // If the next layer is another LSP, keep passing. Otherwise return the
         //    lower provider's handle so it may be used in PNP event notifications.
         //
         if ( SocketContext->Provider->NextProvider.ProtocolChain.ChainLen != BASE_PROTOCOL )
@@ -1593,15 +1594,15 @@ WSPIoctl(
             if ( NULL != lpOverlapped )
             {
                 ProviderOverlapped = PrepareOverlappedOperation(
-                        SocketContext,
-                        LSP_OP_IOCTL,
-                        NULL,
-                        0,
-                        lpOverlapped,
-                        lpCompletionRoutine,
-                        lpThreadId,
-                        lpErrno
-                        );
+                                         SocketContext,
+                                         LSP_OP_IOCTL,
+                                         NULL,
+                                         0,
+                                         lpOverlapped,
+                                         lpCompletionRoutine,
+                                         lpThreadId,
+                                         lpErrno
+                                     );
                 if ( NULL == ProviderOverlapped )
                     goto cleanup;
 
@@ -1625,10 +1626,10 @@ WSPIoctl(
                 dbgprint("SIO_QUERY_TARGET_PNP_HANDLE overlapped");
 
                 IntermediateCompletionRoutine(
-                        0,
-                        dwBytesReturned,
-                        (WSAOVERLAPPED *)ProviderOverlapped,
-                        0);
+                    0,
+                    dwBytesReturned,
+                    (WSAOVERLAPPED *)ProviderOverlapped,
+                    0);
             }
 
             goto cleanup;
@@ -1702,8 +1703,8 @@ WSPIoctl(
         //
 
         if ( (cbInBuffer < sizeof(WSAPOLLDATA) ) ||
-             (cbInBuffer < (sizeof(WSAPOLLDATA) + (pollData->fds * sizeof(WSAPOLLFD))) )
-             )
+                (cbInBuffer < (sizeof(WSAPOLLDATA) + (pollData->fds * sizeof(WSAPOLLFD))) )
+           )
         {
             *lpErrno = WSAEFAULT;
             ret = SOCKET_ERROR;
@@ -1720,7 +1721,7 @@ WSPIoctl(
         goto cleanup;
 
     }
-    else if ( SIO_BSP_HANDLE_SELECT == dwIoControlCode )  
+    else if ( SIO_BSP_HANDLE_SELECT == dwIoControlCode )
     {
         //
         // Winsock handles the select() function differently on Windows Vista.
@@ -1760,19 +1761,19 @@ WSPIoctl(
 
     //
     // Check for overlapped I/O
-    // 
+    //
     if ( NULL != lpOverlapped )
     {
         ProviderOverlapped = PrepareOverlappedOperation(
-                SocketContext,
-                LSP_OP_IOCTL,
-                NULL,
-                0,
-                lpOverlapped,
-                lpCompletionRoutine,
-                lpThreadId,
-                lpErrno
-                );
+                                 SocketContext,
+                                 LSP_OP_IOCTL,
+                                 NULL,
+                                 0,
+                                 lpOverlapped,
+                                 lpCompletionRoutine,
+                                 lpThreadId,
+                                 lpErrno
+                             );
         if ( NULL == ProviderOverlapped )
         {
             ret = SOCKET_ERROR;
@@ -1813,17 +1814,17 @@ WSPIoctl(
 
         SetBlockingProvider(SocketContext->Provider);
         ret = SocketContext->Provider->NextProcTable.lpWSPIoctl(
-                SocketContext->ProviderSocket, 
-                dwIoControlCode, 
-                lpvInBuffer,
-                cbInBuffer, 
-                lpvOutBuffer, 
-                cbOutBuffer, 
-                lpcbBytesReturned, 
-                lpOverlapped, 
-                lpCompletionRoutine, 
-                lpThreadId, 
-                lpErrno);
+                  SocketContext->ProviderSocket,
+                  dwIoControlCode,
+                  lpvInBuffer,
+                  cbInBuffer,
+                  lpvOutBuffer,
+                  cbOutBuffer,
+                  lpcbBytesReturned,
+                  lpOverlapped,
+                  lpCompletionRoutine,
+                  lpThreadId,
+                  lpErrno);
         SetBlockingProvider(NULL);
     }
 
@@ -1848,7 +1849,7 @@ cleanup:
 //    provider. In this case we do want to create a new user socket and create
 //    a socket context.
 //
-SOCKET WSPAPI 
+SOCKET WSPAPI
 WSPJoinLeaf(
     SOCKET       s,
     const struct sockaddr FAR * name,
@@ -1859,7 +1860,7 @@ WSPJoinLeaf(
     LPQOS        lpGQOS,
     DWORD        dwFlags,
     LPINT        lpErrno
-    )
+)
 {
     SOCK_INFO *SocketContext = NULL;
     SOCKET     NextProviderSocket = INVALID_SOCKET,
@@ -1879,26 +1880,26 @@ WSPJoinLeaf(
 
     SetBlockingProvider(SocketContext->Provider);
     NextProviderSocket = SocketContext->Provider->NextProcTable.lpWSPJoinLeaf(
-            SocketContext->ProviderSocket,                           
-            name, 
-            namelen, 
-            lpCallerData, 
-            lpCalleeData, 
-            lpSQOS, 
-            lpGQOS, 
-            dwFlags,                        
-            lpErrno
-            );
+                             SocketContext->ProviderSocket,
+                             name,
+                             namelen,
+                             lpCallerData,
+                             lpCalleeData,
+                             lpSQOS,
+                             lpGQOS,
+                             dwFlags,
+                             lpErrno
+                         );
     SetBlockingProvider(NULL);
 
-    //    
+    //
     // If the socket returned from the lower provider is the same as the socket
-    //  passed into it then there really isn't a new socket - just return. 
+    //  passed into it then there really isn't a new socket - just return.
     //  Otherwise, a new socket has been created and we need to create the socket
     //  context and create a user socket to pass back.
     //
-    if ( ( INVALID_SOCKET != NextProviderSocket ) && 
-         ( NextProviderSocket != SocketContext->ProviderSocket )
+    if ( ( INVALID_SOCKET != NextProviderSocket ) &&
+            ( NextProviderSocket != SocketContext->ProviderSocket )
        )
     {
         SOCK_INFO   *NewSocketContext = NULL;
@@ -1907,12 +1908,12 @@ WSPJoinLeaf(
         // Create socket context for new socket
         //
         NewSocketContext = CreateSockInfo(
-                SocketContext->Provider,
-                NextProviderSocket,
-                SocketContext,
-                FALSE,
-                lpErrno
-                );
+                               SocketContext->Provider,
+                               NextProviderSocket,
+                               SocketContext,
+                               FALSE,
+                               lpErrno
+                           );
         if  ( NULL == NewSocketContext )
         {
             goto cleanup;
@@ -1922,10 +1923,10 @@ WSPJoinLeaf(
         // Create a socket handle to pass to the app
         //
         NewSocket = NewSocketContext->LayeredSocket = gMainUpCallTable.lpWPUCreateSocketHandle(
-                SocketContext->Provider->LayerProvider.dwCatalogEntryId,
-                (DWORD_PTR) NewSocketContext,
-                lpErrno
-                );
+                        SocketContext->Provider->LayerProvider.dwCatalogEntryId,
+                        (DWORD_PTR) NewSocketContext,
+                        lpErrno
+                    );
         if ( INVALID_SOCKET == NewSocketContext->LayeredSocket )
         {
             int tempErr;
@@ -1934,9 +1935,9 @@ WSPJoinLeaf(
 
             // Close the lower provider's socket
             SocketContext->Provider->NextProcTable.lpWSPCloseSocket(
-                    NextProviderSocket,
-                   &tempErr
-                    );
+                NextProviderSocket,
+                &tempErr
+            );
 
             // Context is not in the list yet so we can just free it
             FreeSockInfo(NewSocketContext);
@@ -1966,12 +1967,12 @@ cleanup:
 //    This function sets the backlog value on a listening socket. All we need to
 //    do is translate the socket handle to the correct provider.
 //
-int WSPAPI 
+int WSPAPI
 WSPListen(
-    SOCKET s,        
-    int    backlog,     
+    SOCKET s,
+    int    backlog,
     LPINT  lpErrno
-    )
+)
 {
     SOCK_INFO *SocketContext = NULL;
     INT        ret = SOCKET_ERROR;
@@ -1990,10 +1991,10 @@ WSPListen(
 
     SetBlockingProvider(SocketContext->Provider);
     ret = SocketContext->Provider->NextProcTable.lpWSPListen(
-            SocketContext->ProviderSocket, 
-            backlog, 
-            lpErrno
-            );
+              SocketContext->ProviderSocket,
+              backlog,
+              lpErrno
+          );
     SetBlockingProvider(NULL);
 
 cleanup:
@@ -2013,7 +2014,7 @@ cleanup:
 //    handle and then make the receive call. If called with overlap, post the operation
 //    to our IOCP or completion routine.
 //
-int WSPAPI 
+int WSPAPI
 WSPRecv(
     SOCKET          s,
     LPWSABUF        lpBuffers,
@@ -2024,7 +2025,7 @@ WSPRecv(
     LPWSAOVERLAPPED_COMPLETION_ROUTINE lpCompletionRoutine,
     LPWSATHREADID   lpThreadId,
     LPINT           lpErrno
-    )
+)
 {
     LPWSAOVERLAPPEDPLUS ProviderOverlapped = NULL;
     SOCK_INFO          *SocketContext = NULL;
@@ -2049,15 +2050,15 @@ WSPRecv(
     if ( NULL != lpOverlapped )
     {
         ProviderOverlapped = PrepareOverlappedOperation(
-                SocketContext,
-                LSP_OP_RECV,
-                lpBuffers,
-                dwBufferCount,
-                lpOverlapped,
-                lpCompletionRoutine,
-                lpThreadId,
-                lpErrno
-                );
+                                 SocketContext,
+                                 LSP_OP_RECV,
+                                 lpBuffers,
+                                 dwBufferCount,
+                                 lpOverlapped,
+                                 lpCompletionRoutine,
+                                 lpThreadId,
+                                 lpErrno
+                             );
         if ( NULL == ProviderOverlapped )
             goto cleanup;
 
@@ -2090,15 +2091,15 @@ WSPRecv(
 
         SetBlockingProvider(SocketContext->Provider);
         ret = SocketContext->Provider->NextProcTable.lpWSPRecv(
-                SocketContext->ProviderSocket, 
-                lpBuffers, 
-                dwBufferCount,
-                lpNumberOfBytesRecvd, 
-                lpFlags, 
-                lpOverlapped, 
-                lpCompletionRoutine, 
-                lpThreadId,
-                lpErrno);
+                  SocketContext->ProviderSocket,
+                  lpBuffers,
+                  dwBufferCount,
+                  lpNumberOfBytesRecvd,
+                  lpFlags,
+                  lpOverlapped,
+                  lpCompletionRoutine,
+                  lpThreadId,
+                  lpErrno);
         SetBlockingProvider(NULL);
         if ( SOCKET_ERROR != ret )
         {
@@ -2121,12 +2122,12 @@ cleanup:
 //    Receive data and disconnect. All we need to do is translate the socket
 //    handle to the lower provider.
 //
-int WSPAPI 
+int WSPAPI
 WSPRecvDisconnect(
     SOCKET   s,
     LPWSABUF lpInboundDisconnectData,
     LPINT    lpErrno
-    )
+)
 {
     SOCK_INFO *SocketContext = NULL;
     INT        ret = SOCKET_ERROR;
@@ -2145,10 +2146,10 @@ WSPRecvDisconnect(
 
     SetBlockingProvider(SocketContext->Provider);
     ret = SocketContext->Provider->NextProcTable.lpWSPRecvDisconnect(
-            SocketContext->ProviderSocket,                           
-            lpInboundDisconnectData, 
-            lpErrno
-            );
+              SocketContext->ProviderSocket,
+              lpInboundDisconnectData,
+              lpErrno
+          );
     SetBlockingProvider(NULL);
 
 cleanup:
@@ -2168,7 +2169,7 @@ cleanup:
 //    handle and then make the receive call. If called with overlap, post the operation
 //    to our IOCP or completion routine.
 //
-int WSPAPI 
+int WSPAPI
 WSPRecvFrom(
     SOCKET          s,
     LPWSABUF        lpBuffers,
@@ -2181,7 +2182,7 @@ WSPRecvFrom(
     LPWSAOVERLAPPED_COMPLETION_ROUTINE lpCompletionRoutine,
     LPWSATHREADID   lpThreadId,
     LPINT           lpErrno
-    )
+)
 {
     LPWSAOVERLAPPEDPLUS ProviderOverlapped = NULL;
     SOCK_INFO          *SocketContext = NULL;
@@ -2205,21 +2206,21 @@ WSPRecvFrom(
     if ( NULL != lpOverlapped )
     {
         ProviderOverlapped = PrepareOverlappedOperation(
-                SocketContext,
-                LSP_OP_RECVFROM,
-                lpBuffers,
-                dwBufferCount,
-                lpOverlapped,
-                lpCompletionRoutine,
-                lpThreadId,
-                lpErrno
-                );
+                                 SocketContext,
+                                 LSP_OP_RECVFROM,
+                                 lpBuffers,
+                                 dwBufferCount,
+                                 lpOverlapped,
+                                 lpCompletionRoutine,
+                                 lpThreadId,
+                                 lpErrno
+                             );
         if ( NULL == ProviderOverlapped )
         {
             goto cleanup;
         }
 
-        __try 
+        __try
         {
             ProviderOverlapped->RecvFromArgs.lpFrom        = lpFrom;
             ProviderOverlapped->RecvFromArgs.lpFromLen     = lpFromLen;
@@ -2249,17 +2250,17 @@ WSPRecvFrom(
         // Make a blocking WSPRecvFrom call
         SetBlockingProvider(SocketContext->Provider);
         ret = SocketContext->Provider->NextProcTable.lpWSPRecvFrom(
-                SocketContext->ProviderSocket, 
-                lpBuffers, 
-                dwBufferCount,
-                lpNumberOfBytesRecvd, 
-                lpFlags, 
-                lpFrom, 
-                lpFromLen, 
-                lpOverlapped, 
-                lpCompletionRoutine, 
-                lpThreadId, 
-                lpErrno);
+                  SocketContext->ProviderSocket,
+                  lpBuffers,
+                  dwBufferCount,
+                  lpNumberOfBytesRecvd,
+                  lpFlags,
+                  lpFrom,
+                  lpFromLen,
+                  lpOverlapped,
+                  lpCompletionRoutine,
+                  lpThreadId,
+                  lpErrno);
         SetBlockingProvider(NULL);
         if ( SOCKET_ERROR != ret )
         {
@@ -2294,14 +2295,14 @@ UnlockFdSets(
     fd_set  *exceptfds,
     FD_MAP  *exceptmap,
     LPINT    lpErrno
-    )
+)
 {
     int     i;
 
     // Unlock socket contexts for the readfds sockets
     if ( NULL != readfds )
     {
-        for(i=0; i < (int)readfds->fd_count ;i++)
+        for(i=0; i < (int)readfds->fd_count ; i++)
         {
             if ( NULL != readmap[i].Context )
             {
@@ -2314,7 +2315,7 @@ UnlockFdSets(
     // Unlock socket contexts for the writefds sockets
     if ( NULL != writefds )
     {
-        for(i=0; i < (int)writefds->fd_count ;i++)
+        for(i=0; i < (int)writefds->fd_count ; i++)
         {
             if ( NULL != writemap[i].Context )
             {
@@ -2327,7 +2328,7 @@ UnlockFdSets(
     // Unlock socket contexts for the except sockets
     if ( NULL != exceptfds )
     {
-        for(i=0; i < (int)exceptfds->fd_count ;i++)
+        for(i=0; i < (int)exceptfds->fd_count ; i++)
         {
             if ( NULL != exceptmap[i].Context )
             {
@@ -2355,7 +2356,7 @@ UnlockFdSets(
 //    that socket and will fail the call. Lastly we hold the context lock on
 //    all sockets passed in until we're done.
 //
-int WSPAPI 
+int WSPAPI
 WSPSelect(
     int          nfds,
     fd_set FAR * readfds,
@@ -2363,7 +2364,7 @@ WSPSelect(
     fd_set FAR * exceptfds,
     const struct timeval FAR * timeout,
     LPINT        lpErrno
-    )
+)
 {
     SOCK_INFO *SocketContext = NULL;
     u_int      count,
@@ -2372,13 +2373,13 @@ WSPSelect(
     int        HandleCount,
                ret SOCKET_ERROR;
 
-    fd_set     ReadFds, 
-               WriteFds, 
+    fd_set     ReadFds,
+               WriteFds,
                ExceptFds;
 
-    FD_MAP    *Read = NULL, 
-              *Write = NULL, 
-              *Except = NULL;
+    FD_MAP    *Read = NULL,
+               *Write = NULL,
+                *Except = NULL;
 
     if ( ( NULL == readfds ) && ( NULL == writefds ) && ( NULL == exceptfds ) )
     {
@@ -2428,9 +2429,9 @@ WSPSelect(
         for (i = 0; i < readfds->fd_count; i++)
         {
             Read[i].Context = FindAndRefSocketContext(
-                    (Read[i].ClientSocket = readfds->fd_array[i]),
-                    lpErrno
-                    );
+                                  (Read[i].ClientSocket = readfds->fd_array[i]),
+                                  lpErrno
+                              );
             if ( NULL == Read[i].Context )
             {
                 // This socket isn't ours -- just pass down in hopes the lower provider
@@ -2463,9 +2464,9 @@ WSPSelect(
         for (i = 0; i < writefds->fd_count; i++)
         {
             Write[i].Context = FindAndRefSocketContext(
-                    (Write[i].ClientSocket = writefds->fd_array[i]), 
-                    lpErrno
-                    );
+                                   (Write[i].ClientSocket = writefds->fd_array[i]),
+                                   lpErrno
+                               );
             if ( NULL == Write[i].Context )
             {
                 // This socket isn't ours -- just pass down in hopes the lower provider
@@ -2498,9 +2499,9 @@ WSPSelect(
         for (i = 0; i < exceptfds->fd_count; i++)
         {
             Except[i].Context = FindAndRefSocketContext(
-                    (Except[i].ClientSocket = exceptfds->fd_array[i]), 
-                    lpErrno
-                    );
+                                    (Except[i].ClientSocket = exceptfds->fd_array[i]),
+                                    lpErrno
+                                );
             if ( NULL == Except[i].Context )
             {
                 // This socket isn't ours -- just pass down in hopes the lower provider
@@ -2534,13 +2535,13 @@ WSPSelect(
 
     SetBlockingProvider(SocketContext->Provider);
     ret = SocketContext->Provider->NextProcTable.lpWSPSelect(
-            nfds, 
-            (readfds ? &ReadFds : NULL), 
-            (writefds ? &WriteFds : NULL), 
-            (exceptfds ? &ExceptFds : NULL), 
-            timeout, 
-            lpErrno
-            );
+              nfds,
+              (readfds ? &ReadFds : NULL),
+              (writefds ? &WriteFds : NULL),
+              (exceptfds ? &ExceptFds : NULL),
+              timeout,
+              lpErrno
+          );
     SetBlockingProvider(NULL);
 
     // Need to unlock the contexts before the original fd_sets are modified
@@ -2628,18 +2629,18 @@ cleanup:
 //    handle and then make the send call. If called with overlap, post the operation
 //    to our IOCP or completion routine.
 //
-int WSPAPI 
+int WSPAPI
 WSPSend(
     SOCKET          s,
     LPWSABUF        lpBuffers,
     DWORD           dwBufferCount,
     LPDWORD         lpNumberOfBytesSent,
     DWORD           dwFlags,
-    LPWSAOVERLAPPED lpOverlapped,                             
-    LPWSAOVERLAPPED_COMPLETION_ROUTINE lpCompletionRoutine,   
-    LPWSATHREADID   lpThreadId,                                 
-    LPINT           lpErrno                                             
-    )
+    LPWSAOVERLAPPED lpOverlapped,
+    LPWSAOVERLAPPED_COMPLETION_ROUTINE lpCompletionRoutine,
+    LPWSATHREADID   lpThreadId,
+    LPINT           lpErrno
+)
 {
     INT                 ret = SOCKET_ERROR;
     SOCK_INFO          *SocketContext = NULL;
@@ -2659,25 +2660,25 @@ WSPSend(
 
     //
     // Check for overlapped I/O
-    // 
+    //
     if ( NULL != lpOverlapped )
     {
         ProviderOverlapped = PrepareOverlappedOperation(
-                SocketContext,
-                LSP_OP_SEND,
-                lpBuffers,
-                dwBufferCount,
-                lpOverlapped,
-                lpCompletionRoutine,
-                lpThreadId,
-                lpErrno
-                );
+                                 SocketContext,
+                                 LSP_OP_SEND,
+                                 lpBuffers,
+                                 dwBufferCount,
+                                 lpOverlapped,
+                                 lpCompletionRoutine,
+                                 lpThreadId,
+                                 lpErrno
+                             );
         if ( NULL == ProviderOverlapped )
         {
             goto cleanup;
         }
 
-        __try 
+        __try
         {
             ProviderOverlapped->SendArgs.dwFlags       = dwFlags;
         }
@@ -2706,16 +2707,16 @@ WSPSend(
         // Make a blocking send call
         SetBlockingProvider(SocketContext->Provider);
         ret = SocketContext->Provider->NextProcTable.lpWSPSend(
-                SocketContext->ProviderSocket, 
-                lpBuffers, 
-                dwBufferCount,
-                lpNumberOfBytesSent, 
-                dwFlags, 
-                lpOverlapped, 
-                lpCompletionRoutine, 
-                lpThreadId, 
-                lpErrno
-                );
+                  SocketContext->ProviderSocket,
+                  lpBuffers,
+                  dwBufferCount,
+                  lpNumberOfBytesSent,
+                  dwFlags,
+                  lpOverlapped,
+                  lpCompletionRoutine,
+                  lpThreadId,
+                  lpErrno
+              );
         SetBlockingProvider(NULL);
         if ( SOCKET_ERROR != ret )
         {
@@ -2738,12 +2739,12 @@ cleanup:
 //    Send data and disconnect. All we need to do is translate the socket
 //    handle to the lower provider.
 //
-int WSPAPI 
+int WSPAPI
 WSPSendDisconnect(
     SOCKET   s,
     LPWSABUF lpOutboundDisconnectData,
     LPINT    lpErrno
-    )
+)
 {
     SOCK_INFO *SocketContext = NULL;
     INT        ret = SOCKET_ERROR;
@@ -2762,10 +2763,10 @@ WSPSendDisconnect(
 
     SetBlockingProvider(SocketContext->Provider);
     ret = SocketContext->Provider->NextProcTable.lpWSPSendDisconnect(
-            SocketContext->ProviderSocket,
-            lpOutboundDisconnectData, 
-            lpErrno
-            );
+              SocketContext->ProviderSocket,
+              lpOutboundDisconnectData,
+              lpErrno
+          );
     SetBlockingProvider(NULL);
 
 cleanup:
@@ -2785,7 +2786,7 @@ cleanup:
 //    handle and then make the send call. If called with overlap, post the operation
 //    to our IOCP or completion routine.
 //
-int WSPAPI 
+int WSPAPI
 WSPSendTo(
     SOCKET          s,
     LPWSABUF        lpBuffers,
@@ -2798,7 +2799,7 @@ WSPSendTo(
     LPWSAOVERLAPPED_COMPLETION_ROUTINE lpCompletionRoutine,
     LPWSATHREADID   lpThreadId,
     LPINT           lpErrno
-    )
+)
 {
     int                 ret = SOCKET_ERROR;
     SOCK_INFO          *SocketContext = NULL;
@@ -2820,19 +2821,19 @@ WSPSendTo(
     if ( NULL != lpOverlapped )
     {
         ProviderOverlapped = PrepareOverlappedOperation(
-                SocketContext,
-                LSP_OP_SENDTO,
-                lpBuffers,
-                dwBufferCount,
-                lpOverlapped,
-                lpCompletionRoutine,
-                lpThreadId,
-                lpErrno
-                );
+                                 SocketContext,
+                                 LSP_OP_SENDTO,
+                                 lpBuffers,
+                                 dwBufferCount,
+                                 lpOverlapped,
+                                 lpCompletionRoutine,
+                                 lpThreadId,
+                                 lpErrno
+                             );
         if ( NULL == ProviderOverlapped )
             goto cleanup;
 
-        __try 
+        __try
         {
             ProviderOverlapped->SendToArgs.dwFlags             = dwFlags;
             ProviderOverlapped->SendToArgs.iToLen              = iToLen;
@@ -2864,18 +2865,18 @@ WSPSendTo(
 
         SetBlockingProvider(SocketContext->Provider);
         ret = SocketContext->Provider->NextProcTable.lpWSPSendTo(
-                SocketContext->ProviderSocket, 
-                lpBuffers, 
-                dwBufferCount,
-                lpNumberOfBytesSent, 
-                dwFlags, 
-                lpTo, 
-                iToLen, 
-                lpOverlapped, 
-                lpCompletionRoutine, 
-                lpThreadId, 
-                lpErrno
-                );
+                  SocketContext->ProviderSocket,
+                  lpBuffers,
+                  dwBufferCount,
+                  lpNumberOfBytesSent,
+                  dwFlags,
+                  lpTo,
+                  iToLen,
+                  lpOverlapped,
+                  lpCompletionRoutine,
+                  lpThreadId,
+                  lpErrno
+              );
         SetBlockingProvider(NULL);
         if ( SOCKET_ERROR != ret )
         {
@@ -2904,13 +2905,13 @@ int WSPAPI WSPSetSockOpt(
     SOCKET     s,
     int        level,
     int        optname,
-    const char FAR * optval,   
+    const char FAR * optval,
     int        optlen,
     LPINT      lpErrno
-    )
+)
 {
     SOCK_INFO *SocketContext = NULL,
-              *AcceptContext = NULL;
+               *AcceptContext = NULL;
     INT        ret = SOCKET_ERROR;
 
     SocketContext = FindAndRefSocketContext(s, lpErrno);
@@ -2937,26 +2938,26 @@ int WSPAPI WSPSetSockOpt(
 
         SetBlockingProvider(SocketContext->Provider);
         ret = SocketContext->Provider->NextProcTable.lpWSPSetSockOpt(
-                SocketContext->ProviderSocket, 
-                level,
-                optname, 
-                (char *)&AcceptContext->ProviderSocket, 
-                optlen, 
-                lpErrno
-                );
+                  SocketContext->ProviderSocket,
+                  level,
+                  optname,
+                  (char *)&AcceptContext->ProviderSocket,
+                  optlen,
+                  lpErrno
+              );
         SetBlockingProvider(NULL);
     }
     else
     {
         SetBlockingProvider(SocketContext->Provider);
         ret = SocketContext->Provider->NextProcTable.lpWSPSetSockOpt(
-                SocketContext->ProviderSocket, 
-                level,                 
-                optname, 
-                optval, 
-                optlen, 
-                lpErrno
-                );
+                  SocketContext->ProviderSocket,
+                  level,
+                  optname,
+                  optval,
+                  optlen,
+                  lpErrno
+              );
         SetBlockingProvider(NULL);
     }
 
@@ -2975,15 +2976,15 @@ cleanup:
 // Function: WSPShutdown
 //
 // Description:
-//    This function performs a shutdown on the socket. All we need to do is 
+//    This function performs a shutdown on the socket. All we need to do is
 //    translate the socket handle to the lower provider.
 //
-int WSPAPI 
+int WSPAPI
 WSPShutdown (
     SOCKET s,
     int    how,
     LPINT  lpErrno
-    )
+)
 {
     SOCK_INFO *SocketContext = NULL;
     INT        ret = SOCKET_ERROR;
@@ -2999,10 +3000,10 @@ WSPShutdown (
 
     SetBlockingProvider(SocketContext->Provider);
     ret = SocketContext->Provider->NextProcTable.lpWSPShutdown(
-            SocketContext->ProviderSocket, 
-            how, 
-            lpErrno
-            );
+              SocketContext->ProviderSocket,
+              how,
+              lpErrno
+          );
     SetBlockingProvider(NULL);
 
 cleanup:
@@ -3019,35 +3020,35 @@ cleanup:
 // Description:
 //    Convert a string to an address (SOCKADDR structure).  We need to translate
 //    the socket handle as well as possibly substitute the lpProtocolInfo structure
-//    passed to the next provider. 
+//    passed to the next provider.
 //
-int WSPAPI 
+int WSPAPI
 WSPStringToAddress(
     LPWSTR              AddressString,
     INT                 AddressFamily,
-    LPWSAPROTOCOL_INFOW lpProtocolInfo,   
+    LPWSAPROTOCOL_INFOW lpProtocolInfo,
     LPSOCKADDR          lpAddress,
     LPINT               lpAddressLength,
     LPINT               lpErrno
-    )
+)
 {
     WSAPROTOCOL_INFOW   *pInfo = NULL;
     PROVIDER            *Provider = NULL;
     INT                  ret = SOCKET_ERROR,
                          i;
 
-    for(i=0; i < gLayerCount ;i++)
+    for(i=0; i < gLayerCount ; i++)
     {
         if ( ( gBaseInfo[i].NextProvider.iAddressFamily == lpProtocolInfo->iAddressFamily ) &&
-             ( gBaseInfo[i].NextProvider.iSocketType == lpProtocolInfo->iSocketType ) && 
-             ( gBaseInfo[i].NextProvider.iProtocol   == lpProtocolInfo->iProtocol )
+                ( gBaseInfo[i].NextProvider.iSocketType == lpProtocolInfo->iSocketType ) &&
+                ( gBaseInfo[i].NextProvider.iProtocol   == lpProtocolInfo->iProtocol )
            )
         {
             if ( NULL != lpProtocolInfo )
             {
-                // In case of multiple providers check the provider flags 
-                if ( ( gBaseInfo[i].NextProvider.dwServiceFlags1 & ~XP1_IFS_HANDLES ) != 
-                     ( lpProtocolInfo->dwServiceFlags1 & ~XP1_IFS_HANDLES ) 
+                // In case of multiple providers check the provider flags
+                if ( ( gBaseInfo[i].NextProvider.dwServiceFlags1 & ~XP1_IFS_HANDLES ) !=
+                        ( lpProtocolInfo->dwServiceFlags1 & ~XP1_IFS_HANDLES )
                    )
                 {
                     continue;
@@ -3088,13 +3089,13 @@ WSPStringToAddress(
 
     SetBlockingProvider(Provider);
     ret = Provider->NextProcTable.lpWSPStringToAddress(
-            AddressString, 
-            AddressFamily,
-            pInfo, 
-            lpAddress, 
-            lpAddressLength, 
-            lpErrno
-            );
+              AddressString,
+              AddressFamily,
+              pInfo,
+              lpAddress,
+              lpAddressLength,
+              lpErrno
+          );
     SetBlockingProvider(NULL);
 
 cleanup:
@@ -3114,7 +3115,7 @@ cleanup:
 //    maintain information on each socket. This context is associated with the
 //    socket handle passed to the application.
 //
-SOCKET WSPAPI 
+SOCKET WSPAPI
 WSPSocket(
     int                 af,
     int                 type,
@@ -3123,12 +3124,12 @@ WSPSocket(
     GROUP               g,
     DWORD               dwFlags,
     LPINT               lpErrno
-    )
+)
 {
     SOCKET              NextProviderSocket = INVALID_SOCKET;
     SOCKET              NewSocket = INVALID_SOCKET;
     SOCK_INFO          *SocketContext = NULL;
-    WSAPROTOCOL_INFOW  *pInfo = NULL, 
+    WSAPROTOCOL_INFOW  *pInfo = NULL,
                         InfoCopy;
     PROVIDER           *Provider = NULL;
     BOOL                bAddressFamilyOkay = FALSE,
@@ -3136,8 +3137,8 @@ WSPSocket(
                         bProtocolOkay = FALSE,
                         bAFTypeMatch = FALSE;
     INT                 iAddressFamily,
-                        iSockType, 
-                        iProtocol, 
+                        iSockType,
+                        iProtocol,
                         i;
 
     *lpErrno = NO_ERROR;
@@ -3150,15 +3151,15 @@ WSPSocket(
     iProtocol      = (lpProtocolInfo ? lpProtocolInfo->iProtocol   : protocol);
     iSockType      = (lpProtocolInfo ? lpProtocolInfo->iSocketType : type);
 
-    #ifdef DEBUG
+#ifdef DEBUG
     if (lpProtocolInfo)
         dbgprint("WSPSocket: Provider: '%S'", lpProtocolInfo->szProtocol);
-    #endif
+#endif
 
-    for(i=0; i < gLayerCount ;i++)
+    for(i=0; i < gLayerCount ; i++)
     {
         if ( ( iAddressFamily == AF_UNSPEC) ||
-             ( iAddressFamily == gBaseInfo[i].NextProvider.iAddressFamily )
+                ( iAddressFamily == gBaseInfo[i].NextProvider.iAddressFamily )
            )
         {
             bAddressFamilyOkay = TRUE;
@@ -3167,10 +3168,10 @@ WSPSocket(
         {
             bSockTypeOkay = TRUE;
         }
-        if ( ( iProtocol == 0) || 
-             ( iProtocol == gBaseInfo[i].NextProvider.iProtocol) ||
-             ( iProtocol == IPPROTO_RAW) || 
-              (iSockType == SOCK_RAW )
+        if ( ( iProtocol == 0) ||
+                ( iProtocol == gBaseInfo[i].NextProvider.iProtocol) ||
+                ( iProtocol == IPPROTO_RAW) ||
+                (iSockType == SOCK_RAW )
            )
         {
             bProtocolOkay = TRUE;
@@ -3198,15 +3199,15 @@ WSPSocket(
     //
     if ( ( AF_UNSPEC == iAddressFamily ) && ( 0 == iProtocol ) )
     {
-        for(i=0; i < gLayerCount ;i++)
+        for(i=0; i < gLayerCount ; i++)
         {
             if ( gBaseInfo[i].NextProvider.iSocketType == iSockType )
             {
                 if ( NULL != lpProtocolInfo )
                 {
-                    // In case of multiple providers check the provider flags 
-                    if ( (gBaseInfo[i].NextProvider.dwServiceFlags1 & ~XP1_IFS_HANDLES) != 
-                         (lpProtocolInfo->dwServiceFlags1 & ~XP1_IFS_HANDLES) )
+                    // In case of multiple providers check the provider flags
+                    if ( (gBaseInfo[i].NextProvider.dwServiceFlags1 & ~XP1_IFS_HANDLES) !=
+                            (lpProtocolInfo->dwServiceFlags1 & ~XP1_IFS_HANDLES) )
                     {
                         continue;
                     }
@@ -3221,17 +3222,17 @@ WSPSocket(
     }
     else if ( ( AF_UNSPEC == iAddressFamily ) && ( 0 != iProtocol ) )
     {
-        for(i=0; i < gLayerCount ;i++)
+        for(i=0; i < gLayerCount ; i++)
         {
             if ( ( gBaseInfo[i].NextProvider.iProtocol == iProtocol ) &&
-                 ( gBaseInfo[i].NextProvider.iSocketType == iSockType ) 
+                    ( gBaseInfo[i].NextProvider.iSocketType == iSockType )
                )
             {
                 if ( NULL != lpProtocolInfo )
                 {
-                    // In case of multiple providers check the provider flags 
-                    if ( (gBaseInfo[i].NextProvider.dwServiceFlags1 & ~XP1_IFS_HANDLES) != 
-                         (lpProtocolInfo->dwServiceFlags1 & ~XP1_IFS_HANDLES) )
+                    // In case of multiple providers check the provider flags
+                    if ( (gBaseInfo[i].NextProvider.dwServiceFlags1 & ~XP1_IFS_HANDLES) !=
+                            (lpProtocolInfo->dwServiceFlags1 & ~XP1_IFS_HANDLES) )
                     {
                         continue;
                     }
@@ -3249,15 +3250,15 @@ WSPSocket(
             goto cleanup;
         }
     }
-    else if ( ( 0 != iProtocol ) && 
-              ( IPPROTO_RAW != iProtocol ) && 
-              ( SOCK_RAW != iSockType ) 
+    else if ( ( 0 != iProtocol ) &&
+              ( IPPROTO_RAW != iProtocol ) &&
+              ( SOCK_RAW != iSockType )
             )
     {
-        for(i=0; i < gLayerCount ;i++)
+        for(i=0; i < gLayerCount ; i++)
         {
             if ((gBaseInfo[i].NextProvider.iAddressFamily == iAddressFamily) &&
-                (gBaseInfo[i].NextProvider.iSocketType == iSockType))
+                    (gBaseInfo[i].NextProvider.iSocketType == iSockType))
             {
                 bAFTypeMatch = TRUE;
 
@@ -3265,9 +3266,9 @@ WSPSocket(
                 {
                     if ( NULL != lpProtocolInfo )
                     {
-                        // In case of multiple providers check the provider flags 
-                        if ( (gBaseInfo[i].NextProvider.dwServiceFlags1 & ~XP1_IFS_HANDLES) != 
-                             (lpProtocolInfo->dwServiceFlags1 & ~XP1_IFS_HANDLES) )
+                        // In case of multiple providers check the provider flags
+                        if ( (gBaseInfo[i].NextProvider.dwServiceFlags1 & ~XP1_IFS_HANDLES) !=
+                                (lpProtocolInfo->dwServiceFlags1 & ~XP1_IFS_HANDLES) )
                         {
                             continue;
                         }
@@ -3280,7 +3281,7 @@ WSPSocket(
                 }
             }
         }
-        
+
         if ( NULL == pInfo && TRUE == bAFTypeMatch )
         {
             *lpErrno = WSAEPROTOTYPE;
@@ -3289,17 +3290,17 @@ WSPSocket(
     }
     else
     {
-        for(i=0; i < gLayerCount ;i++)
+        for(i=0; i < gLayerCount ; i++)
         {
             if ( ( gBaseInfo[i].NextProvider.iAddressFamily == iAddressFamily ) &&
-                 ( gBaseInfo[i].NextProvider.iSocketType == iSockType )
+                    ( gBaseInfo[i].NextProvider.iSocketType == iSockType )
                )
             {
                 if ( NULL != lpProtocolInfo )
                 {
-                    // In case of multiple providers check the provider flags 
-                    if ( (gBaseInfo[i].NextProvider.dwServiceFlags1 & ~XP1_IFS_HANDLES) != 
-                         (lpProtocolInfo->dwServiceFlags1 & ~XP1_IFS_HANDLES) )
+                    // In case of multiple providers check the provider flags
+                    if ( (gBaseInfo[i].NextProvider.dwServiceFlags1 & ~XP1_IFS_HANDLES) !=
+                            (lpProtocolInfo->dwServiceFlags1 & ~XP1_IFS_HANDLES) )
                     {
                         continue;
                     }
@@ -3332,9 +3333,9 @@ WSPSocket(
             dbgprint("WSPSocket: dwProviderReserved = %d", InfoCopy.dwProviderReserved );
     }
 
-    if ( 0 == Provider->StartupCount ) 
+    if ( 0 == Provider->StartupCount )
     {
-        if ( SOCKET_ERROR == InitializeProvider( Provider, MAKEWORD(2,2), lpProtocolInfo, 
+        if ( SOCKET_ERROR == InitializeProvider( Provider, MAKEWORD(2,2), lpProtocolInfo,
                 gMainUpCallTable, lpErrno ) )
         {
             dbgprint("WSPSocket: InitializeProvider failed: %d", *lpErrno );
@@ -3352,14 +3353,14 @@ WSPSocket(
 
     SetBlockingProvider(Provider);
     NextProviderSocket = Provider->NextProcTable.lpWSPSocket(
-            af, 
-            type, 
-            protocol, 
-           &InfoCopy,
-            g, 
-            dwFlags | WSA_FLAG_OVERLAPPED, // Always Or in the overlapped flag
-            lpErrno
-            );
+                             af,
+                             type,
+                             protocol,
+                             &InfoCopy,
+                             g,
+                             dwFlags | WSA_FLAG_OVERLAPPED, // Always Or in the overlapped flag
+                             lpErrno
+                         );
     SetBlockingProvider(NULL);
 
     if ( INVALID_SOCKET == NextProviderSocket )
@@ -3372,12 +3373,12 @@ WSPSocket(
     // Create the context information to be associated with this socket
     //
     SocketContext = CreateSockInfo(
-            Provider,
-            NextProviderSocket,
-            NULL,
-            TRUE,
-            lpErrno
-            );
+                        Provider,
+                        NextProviderSocket,
+                        NULL,
+                        TRUE,
+                        lpErrno
+                    );
     if ( NULL == SocketContext )
     {
         dbgprint( "WSPSocket: CreateSockInfo failed: %d", *lpErrno );
@@ -3386,12 +3387,12 @@ WSPSocket(
 
     //
     // Create a socket handle to pass back to app
-    //  
+    //
     NewSocket = gMainUpCallTable.lpWPUCreateSocketHandle(
-            Provider->LayerProvider.dwCatalogEntryId,
-            (DWORD_PTR) SocketContext, 
-            lpErrno
-            );
+                    Provider->LayerProvider.dwCatalogEntryId,
+                    (DWORD_PTR) SocketContext,
+                    lpErrno
+                );
     if ( INVALID_SOCKET == NewSocket )
     {
         int tempErr;
@@ -3399,9 +3400,9 @@ WSPSocket(
         dbgprint("WSPSocket: WPUCreateSocketHandle() failed: %d", *lpErrno);
 
         Provider->NextProcTable.lpWSPCloseSocket(
-                NextProviderSocket, 
-               &tempErr
-                );
+            NextProviderSocket,
+            &tempErr
+        );
 
         goto cleanup;
     }
@@ -3432,7 +3433,7 @@ cleanup:
 //    This function intializes our LSP. We maintain a ref count to keep track
 //    of how many times this function has been called. On the first call we'll
 //    look at the Winsock catalog to find our catalog ID and find which entries
-//    we are layered over. We'll create a number of structures to keep this 
+//    we are layered over. We'll create a number of structures to keep this
 //    information handy.
 //
 //    NOTE: There are two basic methods of finding an LSPs position in the chain.
@@ -3443,7 +3444,7 @@ cleanup:
 //          to the LSP!
 //
 //          The second option is to enumerate the Winsock catalog and find find
-//          all the entries belonging to this LSP. Then from the layered provider 
+//          all the entries belonging to this LSP. Then from the layered provider
 //          entries, take position 1 in the protocol chain to find out who is next
 //          in your layer and load them.
 //
@@ -3452,14 +3453,14 @@ cleanup:
 //          called it can reliably load the lower provider (unless the bad LSP
 //          modified our LSPs entries and goofed up our chains as well).
 //
-int WSPAPI 
+int WSPAPI
 WSPStartup(
     WORD                wVersion,
     LPWSPDATA           lpWSPData,
     LPWSAPROTOCOL_INFOW lpProtocolInfo,
     WSPUPCALLTABLE      UpCallTable,
     LPWSPPROC_TABLE     lpProcTable
-    )
+)
 {
     PROVIDER           *loadProvider = NULL;
     INT                 ret,
@@ -3505,11 +3506,11 @@ WSPStartup(
     }
 
     loadProvider = FindMatchingLspEntryForProtocolInfo(
-            lpProtocolInfo,
-            gBaseInfo,
-            gLayerCount,
-            TRUE
-            );
+                       lpProtocolInfo,
+                       gBaseInfo,
+                       gLayerCount,
+                       TRUE
+                   );
     if ( NULL == loadProvider )
     {
         dbgprint("WSPStartup: FindMatchingLspEntryForProtocolInfo failed!");
@@ -3519,7 +3520,7 @@ WSPStartup(
 
     if ( 0 == loadProvider->StartupCount )
     {
-        if ( SOCKET_ERROR == InitializeProvider( loadProvider, wVersion, lpProtocolInfo, 
+        if ( SOCKET_ERROR == InitializeProvider( loadProvider, wVersion, lpProtocolInfo,
                 UpCallTable, &Error ) )
         {
             dbgprint("WSPStartup: InitializeProvider failed: %d", Error );
@@ -3561,11 +3562,11 @@ cleanup:
 //    needs to be copied down to the OVERLAPPED structure the LSP passes to the
 //    lower layer. This function copies the offset fields.
 //
-void 
+void
 CopyOffset(
-    WSAOVERLAPPED  *ProviderOverlapped, 
+    WSAOVERLAPPED  *ProviderOverlapped,
     WSAOVERLAPPED  *UserOverlapped
-    )
+)
 {
     ProviderOverlapped->Offset     = UserOverlapped->Offset;
     ProviderOverlapped->OffsetHigh = UserOverlapped->OffsetHigh;
@@ -3580,16 +3581,16 @@ CopyOffset(
 //    must capture all the WSABUF structures and cannot rely on them being persistent.
 //    If we're on NT then we don't have to copy as we immediately call the lower
 //    provider's function (and the lower provider captures the WSABUF array). However
-//    if the LSP is modified to look at the buffers after the operaiton is queued, 
-//    then this routine must ALWAYS copy the WSABUF array.  For Win9x since the 
+//    if the LSP is modified to look at the buffers after the operaiton is queued,
+//    then this routine must ALWAYS copy the WSABUF array.  For Win9x since the
 //    overlapped operation doesn't immediately execute we have to copy the array.
 //
 WSABUF *
 CopyWSABuf(
-    WSABUF *BufferArray, 
-    DWORD   BufferCount, 
+    WSABUF *BufferArray,
+    DWORD   BufferCount,
     int    *lpErrno
-    )
+)
 {
     WSABUF      *buffercopy = NULL;
     DWORD        i;
@@ -3602,18 +3603,18 @@ CopyWSABuf(
         // immediately and the Winsock spec says apps are free to use
         // stack based WSABUF arrays.
         //
-        
+
         buffercopy = (WSABUF *) LspAlloc(
-                sizeof(WSABUF) * BufferCount,
-                lpErrno
-                );
+                         sizeof(WSABUF) * BufferCount,
+                         lpErrno
+                     );
         if ( NULL == buffercopy )
         {
             dbgprint( "CopyWSABuf: HeapAlloc failed: %d", GetLastError() );
             return NULL;
         }
 
-        for(i=0; i < BufferCount ;i++)
+        for(i=0; i < BufferCount ; i++)
         {
             buffercopy[i].buf = BufferArray[i].buf;
             buffercopy[i].len = BufferArray[i].len;
@@ -3638,15 +3639,15 @@ CopyWSABuf(
 //
 // Description:
 //    Read the description for CopyWSABuf first! This routine frees the allocated
-//    array of WSABUF structures. Normally, the array is copied only on Win9x 
+//    array of WSABUF structures. Normally, the array is copied only on Win9x
 //    systems. If your LSP needs to look at the buffers after the overlapped operation
 //    is issued, you must always copy the buffers (therefore you must always delete
 //    them when done).
 //
-void 
+void
 FreeWSABuf(
     WSABUF *BufferArray
-    )
+)
 {
     if ( ( NULL == gIocp ) && ( NULL != BufferArray ) )
     {
@@ -3663,11 +3664,11 @@ FreeWSABuf(
 //    Go through each provider and close all open sockets. Then call each
 //    underlying provider's WSPCleanup and free the reference to its DLL.
 //
-void 
+void
 FreeSocketsAndMemory(
     BOOL processDetach,
     int *lpErrno
-    )
+)
 {
     int     ret,
             i;
@@ -3675,7 +3676,7 @@ FreeSocketsAndMemory(
     if ( NULL != gBaseInfo )
     {
         // Walk through each PROVIDER entry in the array
-        for(i=0; i < gLayerCount ;i++)
+        for(i=0; i < gLayerCount ; i++)
         {
             if ( NULL != gBaseInfo[i].Module )
             {
@@ -3688,8 +3689,8 @@ FreeSocketsAndMemory(
                 // Call the WSPCleanup of the provider's were layered over.
                 //
 
-                if ( ( !processDetach ) || 
-                     ( gBaseInfo[ i ].NextProvider.ProtocolChain.ChainLen == BASE_PROTOCOL ) )
+                if ( ( !processDetach ) ||
+                        ( gBaseInfo[ i ].NextProvider.ProtocolChain.ChainLen == BASE_PROTOCOL ) )
                 {
                     while( 0 != gBaseInfo[ i ].StartupCount )
                     {

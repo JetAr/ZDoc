@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -102,15 +102,15 @@ public:
         return S_OK;
     }
     IFACEMETHODIMP PostMoveItem(DWORD /*dwFlags*/, IShellItem * /*psiItem*/,
-        IShellItem * /*psiDestinationFolder*/, PCWSTR /*pszNewName*/, HRESULT /*hrNewName*/, IShellItem * /*psiNewlyCreated*/)
+                                IShellItem * /*psiDestinationFolder*/, PCWSTR /*pszNewName*/, HRESULT /*hrNewName*/, IShellItem * /*psiNewlyCreated*/)
     {
         return S_OK;
     }
     IFACEMETHODIMP PreCopyItem(DWORD dwFlags, IShellItem *psiItem,
-        IShellItem *psiDestinationFolder, PCWSTR pszNewName);
+                               IShellItem *psiDestinationFolder, PCWSTR pszNewName);
     IFACEMETHODIMP PostCopyItem(DWORD dwFlags, IShellItem *psiItem,
-        IShellItem *psiDestinationFolder, PCWSTR pwszNewName, HRESULT hrCopy,
-        IShellItem *psiNewlyCreated);
+                                IShellItem *psiDestinationFolder, PCWSTR pwszNewName, HRESULT hrCopy,
+                                IShellItem *psiNewlyCreated);
     IFACEMETHODIMP PreDeleteItem(DWORD /*dwFlags*/, IShellItem * /*psiItem*/)
     {
         return S_OK;
@@ -124,7 +124,7 @@ public:
         return S_OK;
     }
     IFACEMETHODIMP PostNewItem(DWORD /*dwFlags*/, IShellItem * /*psiDestinationFolder*/,
-        PCWSTR /*pszNewName*/, PCWSTR /*pszTemplateName*/, DWORD /*dwFileAttributes*/, HRESULT /*hrNew*/, IShellItem * /*psiNewItem*/)
+                               PCWSTR /*pszNewName*/, PCWSTR /*pszTemplateName*/, DWORD /*dwFileAttributes*/, HRESULT /*hrNew*/, IShellItem * /*psiNewItem*/)
     {
         return S_OK;
     }
@@ -150,7 +150,7 @@ public:
 
 private:
 
-    ~CFileOpProgSinkApp(){}
+    ~CFileOpProgSinkApp() {}
 
     static INT_PTR CALLBACK s_DlgProc(HWND hdlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
     {
@@ -226,7 +226,7 @@ IFACEMETHODIMP CFileOpProgSinkApp::PreCopyItem(DWORD dwFlags, IShellItem *psiIte
 
 // IFileOperationProgressSink
 IFACEMETHODIMP CFileOpProgSinkApp::PostCopyItem(DWORD dwFlags, IShellItem *psiItem, IShellItem *psiDestinationFolder,
-                                               PCWSTR, HRESULT hrCopy, IShellItem *)
+        PCWSTR, HRESULT hrCopy, IShellItem *)
 {
     PWSTR pszItem;
     HRESULT hr = psiItem->GetDisplayName(SIGDN_FILESYSPATH, &pszItem);

@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -32,10 +32,10 @@ CBaseEvents::~CBaseEvents()
 HRESULT CBaseEvents::QueryInterface(
     REFIID riid,
     LPVOID* ppvObject
-    )
+)
 {
-    if (IID_IUnknown == riid || 
-        IID_ISideShowEvents == riid)
+    if (IID_IUnknown == riid ||
+            IID_ISideShowEvents == riid)
     {
         *ppvObject = this;
         AddRef();
@@ -44,12 +44,12 @@ HRESULT CBaseEvents::QueryInterface(
 
     return E_NOINTERFACE;
 }
-            
+
 ULONG CBaseEvents::AddRef()
 {
     return ::InterlockedIncrement(&m_nRef);
 }
-            
+
 ULONG CBaseEvents::Release()
 {
     LONG nRef = ::InterlockedDecrement(&m_nRef);
@@ -67,7 +67,7 @@ ULONG CBaseEvents::Release()
 HRESULT CBaseEvents::ContentMissing(
     const CONTENT_ID    contentId,
     ISideShowContent**  ppIContent
-    )
+)
 {
     HRESULT hr = S_OK;
 
@@ -88,7 +88,7 @@ HRESULT CBaseEvents::ApplicationEvent(
     const DWORD dwEventId,
     const DWORD dwEventSize,
     const BYTE* pbEventData
-    )
+)
 {
     HRESULT hr = S_OK;
 
@@ -109,7 +109,7 @@ HRESULT CBaseEvents::ApplicationEvent(
 
 HRESULT CBaseEvents::DeviceAdded(
     ISideShowCapabilities* pIDevice
-    )
+)
 {
     HRESULT hr = S_OK;
 
@@ -127,7 +127,7 @@ HRESULT CBaseEvents::DeviceAdded(
 
 HRESULT CBaseEvents::DeviceRemoved(
     ISideShowCapabilities* pIDevice
-    )
+)
 {
     HRESULT hr = S_OK;
 

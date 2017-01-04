@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -47,12 +47,12 @@ void DebugHelper::DebugVPrintfW(_In_z_ LPCWSTR pFormat, _In_opt_ va_list vl)
     SYSTEMTIME st = {0};
 
     if (debugOutputBuffer &&
-        debugOutputBufferTemp)
+            debugOutputBufferTemp)
     {
         GetLocalTime(&st);
 
         // Print the line's prefix.
-        hr = StringCbPrintfW(debugOutputBufferTemp, 
+        hr = StringCbPrintfW(debugOutputBufferTemp,
                              debugOutputBufferLen,
                              L"[T%lu: %02u/%02u/%02u @ %02u:%02u:%02u.%03u] %s\n",
                              GetCurrentThreadId(),
@@ -70,21 +70,21 @@ void DebugHelper::DebugVPrintfW(_In_z_ LPCWSTR pFormat, _In_opt_ va_list vl)
             goto Cleanup;
         }
 
-		if (vl != NULL)
-		{
-			// Print the given arguments as per the resultant format.
-			hr = StringCbVPrintfW(debugOutputBuffer,
-				debugOutputBufferLen,
-				debugOutputBufferTemp,
-				vl);
-		}
-		else
-		{
-			// If there is no argument return only the timestamp
-			hr = StringCbCopy(debugOutputBuffer,
-				debugOutputBufferLen,
-				debugOutputBufferTemp);
-		}
+        if (vl != NULL)
+        {
+            // Print the given arguments as per the resultant format.
+            hr = StringCbVPrintfW(debugOutputBuffer,
+                                  debugOutputBufferLen,
+                                  debugOutputBufferTemp,
+                                  vl);
+        }
+        else
+        {
+            // If there is no argument return only the timestamp
+            hr = StringCbCopy(debugOutputBuffer,
+                              debugOutputBufferLen,
+                              debugOutputBufferTemp);
+        }
         if (FAILED(hr))
         {
             OutputDebugStringW(L"DebugHelper: Caller attempted to print a debug string that was too long!\n");
@@ -102,9 +102,9 @@ void DebugHelper::DebugVPrintfW(_In_z_ LPCWSTR pFormat, _In_opt_ va_list vl)
         OutputDebugStringW(L"DebugHelper: Bad temporary buffer pointers\n");
         goto Cleanup;
     }
-        
 
-    Cleanup:
+
+Cleanup:
     if (FAILED(hr))
     {
         // Fail in a useful manner -- just display the caller's literal
@@ -119,7 +119,7 @@ void DebugHelper::DebugVPrintfW(_In_z_ LPCWSTR pFormat, _In_opt_ va_list vl)
     return;
 }
 
-    
+
 // Constructor.
 DebugHelper::DebugHelper()
 {
@@ -161,8 +161,8 @@ void DebugHelper::Initialize()
     debugOutputBufferTemp = static_cast<PWCHAR>(HeapAlloc(heapHandle, HEAP_ZERO_MEMORY, debugOutputBufferLen));
 
     // Make sure we either have both buffers, or neither buffer.
-    if (debugOutputBuffer == NULL || 
-        debugOutputBufferTemp == NULL)
+    if (debugOutputBuffer == NULL ||
+            debugOutputBufferTemp == NULL)
     {
         OutputDebugStringW(L"\n"
                            L"DebugHelper::Initialize(): Failed to create formatted output string buffers!\n"
@@ -177,7 +177,7 @@ void DebugHelper::Initialize()
     // Report that the class is completely initialized.
     OutputDebugStringW(L"DebugHelper::Initialize(): Initialization completed successfully.\n");
 
- Cleanup:
+Cleanup:
     return;
 }
 

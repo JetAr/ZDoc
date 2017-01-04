@@ -1,4 +1,4 @@
-// HTMLEdDoc.h : interface of the CHTMLEdDoc class
+﻿// HTMLEdDoc.h : interface of the CHTMLEdDoc class
 //
 // This is a part of the Microsoft Foundation Classes C++ library.
 // Copyright (c) Microsoft Corporation.  All rights reserved.
@@ -23,45 +23,45 @@
 class CHTMLEdDoc : public CHtmlEditDoc
 {
 protected: // create from serialization only
-	CHTMLEdDoc();
-	DECLARE_DYNCREATE(CHTMLEdDoc)
+    CHTMLEdDoc();
+    DECLARE_DYNCREATE(CHTMLEdDoc)
 
 // Attributes
 private:
-	CString m_sSaveFileName;
+    CString m_sSaveFileName;
 public:
-	BOOL m_bDoSaveOnDocCom;
-	BOOL m_bCallNewDocument;
-	BOOL m_bCallCloseDocument;
-	BOOL SaveMyDocument();
-	BOOL OnSaveDocument(LPCTSTR lpszFileName);
-	BOOL OnNewDocument();
-	void OnCloseDocument();
-	BOOL OnOpenDocument(LPCTSTR lpszFileName);
-	BOOL IsModified();
+    BOOL m_bDoSaveOnDocCom;
+    BOOL m_bCallNewDocument;
+    BOOL m_bCallCloseDocument;
+    BOOL SaveMyDocument();
+    BOOL OnSaveDocument(LPCTSTR lpszFileName);
+    BOOL OnNewDocument();
+    void OnCloseDocument();
+    BOOL OnOpenDocument(LPCTSTR lpszFileName);
+    BOOL IsModified();
 // Operations
 public:
 
 // Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CHTMLEdDoc)
-	//}}AFX_VIRTUAL
+    // ClassWizard generated virtual function overrides
+    //{{AFX_VIRTUAL(CHTMLEdDoc)
+    //}}AFX_VIRTUAL
 
 // Implementation
 public:
-	virtual ~CHTMLEdDoc();
+    virtual ~CHTMLEdDoc();
 #ifdef _DEBUG
-	virtual void AssertValid() const;
-	virtual void Dump(CDumpContext& dc) const;
+    virtual void AssertValid() const;
+    virtual void Dump(CDumpContext& dc) const;
 #endif
 
 protected:
 // Generated message map functions
 protected:
-	//{{AFX_MSG(CHTMLEdDoc)
-	afx_msg void OnFileOpenurl();
-	//}}AFX_MSG
-	DECLARE_MESSAGE_MAP()
+    //{{AFX_MSG(CHTMLEdDoc)
+    afx_msg void OnFileOpenurl();
+    //}}AFX_MSG
+    DECLARE_MESSAGE_MAP()
 };
 
 /////////////////////////////////////////////////////////////////////////////

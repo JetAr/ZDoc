@@ -1,4 +1,4 @@
-//+--------------------------------------------------------------------------
+﻿//+--------------------------------------------------------------------------
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -26,8 +26,8 @@
 CComModule _Module;
 
 BEGIN_OBJECT_MAP(ObjectMap)
-    OBJECT_ENTRY(CLSID_CCertPolicySample, CCertPolicySample)
-    OBJECT_ENTRY(CLSID_CCertManagePolicyModuleSample, CCertManagePolicyModuleSample)
+OBJECT_ENTRY(CLSID_CCertPolicySample, CCertPolicySample)
+OBJECT_ENTRY(CLSID_CCertManagePolicyModuleSample, CCertManagePolicyModuleSample)
 END_OBJECT_MAP()
 
 
@@ -40,14 +40,14 @@ DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/)
 {
     switch (dwReason)
     {
-	case DLL_PROCESS_ATTACH:
-	    _Module.Init(ObjectMap, hInstance);
-	    DisableThreadLibraryCalls(hInstance);
-	    break;
+    case DLL_PROCESS_ATTACH:
+        _Module.Init(ObjectMap, hInstance);
+        DisableThreadLibraryCalls(hInstance);
+        break;
 
-        case DLL_PROCESS_DETACH:
-	    _Module.Term();
-            break;
+    case DLL_PROCESS_DETACH:
+        _Module.Term();
+        break;
     }
     return(TRUE);    // ok
 }

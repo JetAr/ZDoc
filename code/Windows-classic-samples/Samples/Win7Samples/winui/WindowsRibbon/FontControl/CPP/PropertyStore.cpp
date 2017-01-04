@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -15,7 +15,7 @@ void GetCharFormat2FromIPropertyStore(__in IPropertyStore* pPropStore, __out CHA
     // Initialize the output parameter.
     ZeroMemory(pCharFormat, sizeof(*pCharFormat));
     pCharFormat->cbSize = sizeof(CHARFORMAT2);
-    
+
     PROPVARIANT propvar;
     PropVariantInit(&propvar);
     UINT uValue;
@@ -69,7 +69,7 @@ void GetCharFormat2FromIPropertyStore(__in IPropertyStore* pPropStore, __out CHA
             pCharFormat->dwMask |= CFM_STRIKEOUT;
             pCharFormat->dwEffects |= ((UI_FONTPROPERTIES) uValue == UI_FONTPROPERTIES_SET) ? CFE_STRIKEOUT : 0;
         }
-    }    
+    }
     PropVariantClear(&propvar);
 
     // Get the vertical positioning value from the property store.
@@ -96,7 +96,7 @@ void GetCharFormat2FromIPropertyStore(__in IPropertyStore* pPropStore, __out CHA
         PWSTR pszFamily;
         UIPropertyToStringAlloc(UI_PKEY_FontProperties_Family, propvar, &pszFamily);
         // Blank string is used as "Not Available" value.
-        if (lstrcmp(pszFamily, L"")) 
+        if (lstrcmp(pszFamily, L""))
         {
             // There is a value assigned, so set the corresponding members in CharFormat2 variable.
             // Copy the string for font family.
@@ -179,7 +179,7 @@ void GetIPropStoreFromCharFormat2(const __in CHARFORMAT2* pCharFormat, __in IPro
 {
     PROPVARIANT propvar;
     PropVariantInit(&propvar);
-    
+
     if (pCharFormat->dwMask & CFM_BOLD)
     {
         // Set the bold value to UI_FONTPROPERTIES_SET or UI_FONTPROPERTIES_NOTSET.
@@ -221,7 +221,7 @@ void GetIPropStoreFromCharFormat2(const __in CHARFORMAT2* pCharFormat, __in IPro
     // Set UI_PKEY_FontProperties_Underline value in property store.
     pPropStore->SetValue(UI_PKEY_FontProperties_Underline, propvar);
     PropVariantClear(&propvar);
-    
+
     if (pCharFormat->dwMask & CFM_STRIKEOUT)
     {
         // Set the strikethrough value to UI_FONTPROPERTIES_SET or UI_FONTPROPERTIES_NOTSET.
@@ -298,7 +298,7 @@ void GetIPropStoreFromCharFormat2(const __in CHARFORMAT2* pCharFormat, __in IPro
         VarDecFromI4(0, &decSize);
     }
     // Set UI_PKEY_FontProperties_Size value in property store.
-    UIInitPropertyFromDecimal(UI_PKEY_FontProperties_Size, decSize, &propvar); 
+    UIInitPropertyFromDecimal(UI_PKEY_FontProperties_Size, decSize, &propvar);
     pPropStore->SetValue(UI_PKEY_FontProperties_Size, propvar);
     PropVariantClear(&propvar);
 
@@ -308,7 +308,7 @@ void GetIPropStoreFromCharFormat2(const __in CHARFORMAT2* pCharFormat, __in IPro
         UIInitPropertyFromUInt32(UI_PKEY_FontProperties_ForegroundColorType, UI_SWATCHCOLORTYPE_RGB, &propvar);
         pPropStore->SetValue(UI_PKEY_FontProperties_ForegroundColorType, propvar);
         PropVariantClear(&propvar);
-        
+
         // Set the color value in property store.
         UIInitPropertyFromUInt32(UI_PKEY_FontProperties_ForegroundColor, pCharFormat->crTextColor, &propvar);
         pPropStore->SetValue(UI_PKEY_FontProperties_ForegroundColor, propvar);
@@ -327,7 +327,7 @@ void GetIPropStoreFromCharFormat2(const __in CHARFORMAT2* pCharFormat, __in IPro
         UIInitPropertyFromUInt32(UI_PKEY_FontProperties_BackgroundColorType, UI_SWATCHCOLORTYPE_RGB, &propvar);
         pPropStore->SetValue(UI_PKEY_FontProperties_BackgroundColorType, propvar);
         PropVariantClear(&propvar);
-        
+
         // Set the color value in property store.
         UIInitPropertyFromUInt32(UI_PKEY_FontProperties_BackgroundColor, pCharFormat->crBackColor, &propvar);
         pPropStore->SetValue(UI_PKEY_FontProperties_BackgroundColor, propvar);

@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -9,7 +9,7 @@
 //
 // Description:
 //
-//    This module is responsible for handling the overlapped IO 
+//    This module is responsible for handling the overlapped IO
 //    passed to us by the upper layer. If the LSP is on NT, then
 //    an IO completion port (IOCP) is created and all overlapped
 //    IO initiated by the upper layer passes through our IOCP.
@@ -32,7 +32,7 @@
 //
 
 static LIST_ENTRY   gPendingOperations;     // list of queued overlapped operations (Win9x)
-    
+
 static LIST_ENTRY   gFreeOverlappedPlus;    // look aside list of free structures
 
 //
@@ -54,56 +54,56 @@ DWORD               gThreadCount = (DWORD)-1;   // Number of worker threads
 ////////////////////////////////////////////////////////////////////////////////
 
 // Either allocates a new structure or returns a free one on a lookaside list
-LPWSAOVERLAPPEDPLUS 
+LPWSAOVERLAPPEDPLUS
 AllocOverlappedStructure(
     SOCK_INFO  *SocketContext
-    );
+);
 
 // Returns the overlapped structure to a list of free structures
-void 
+void
 FreeOverlappedStructure(
     WSAOVERLAPPEDPLUS  *olp
-    );
+);
 
 // Executes an overlapped operation
-int 
+int
 ExecuteOverlappedOperation(
-    WSAOVERLAPPEDPLUS  *lpOverlapped, 
+    WSAOVERLAPPEDPLUS  *lpOverlapped,
     BOOL                bSynchronous
-    );
+);
 
 // On Win9x queues an overlapped operation for later execution. On WinNT, immediately
 // execute the call.
-int 
+int
 EnqueueOverlappedOperation(
     WSAOVERLAPPEDPLUS  *op
-    );
+);
 
 // Sets the overlapped in progress flag in the given OVERLAPPED structure
-void 
+void
 SetOverlappedInProgress(
     OVERLAPPED         *ol
-    );
+);
 
 // Overlapped thread which either handles overlapped completion via completion port
 // or executes overlapped operations with APCs.
-DWORD WINAPI   
+DWORD WINAPI
 OverlappedManagerThread(
     LPVOID              lpParam
-    );
+);
 
 // Invokes the APC associated with an overlapped operation to signal completion
-VOID CALLBACK 
+VOID CALLBACK
 CallUserApcProc(
     ULONG_PTR           Context
-    );
+);
 
 // Checks whether a given socket has been closed in which case all associated resrouces
 // can be freed
-void 
+void
 CheckForContextCleanup(
     WSAOVERLAPPEDPLUS  *ol
-    );
+);
 
 ////////////////////////////////////////////////////////////////////////////////
 //
@@ -123,9 +123,9 @@ CheckForContextCleanup(
 //    completion of the IO. If on Win9x, we'll create a single thread which
 //    will post overlapped IO operations using APCs.
 //
-int 
+int
 InitOverlappedManager(
-    )
+)
 {
     DWORD   i;
     int     ret = NO_ERROR;
@@ -147,10 +147,10 @@ InitOverlappedManager(
     //  fails then we're on Win9x.
     //
     gIocp = CreateIoCompletionPort(
-            INVALID_HANDLE_VALUE,
-            NULL,
-            (ULONG_PTR)0,
-            0
+                INVALID_HANDLE_VALUE,
+                NULL,
+                (ULONG_PTR)0,
+                0
             );
     if ( NULL != gIocp )
     {
@@ -169,11 +169,11 @@ InitOverlappedManager(
         //  wake up the worker thread to service overlapped IO calls.
         //
         gWakeupSemaphore = CreateSemaphore(
-                NULL,
-                0,
-                MAXLONG,
-                NULL
-                );
+                               NULL,
+                               0,
+                               MAXLONG,
+                               NULL
+                           );
         if ( NULL == gWakeupSemaphore )
         {
             dbgprint("InitOverlappedManager: CreateSemaphore() failed: %d", GetLastError());
@@ -190,9 +190,9 @@ InitOverlappedManager(
     dbgprint("Creating %d threads", gThreadCount);
 
     gWorkerThread = (HANDLE *) LspAlloc(
-            sizeof( HANDLE ) * gThreadCount,
-           &ret         // if fails, ret will be WSAENOBUFS
-            );
+                        sizeof( HANDLE ) * gThreadCount,
+                        &ret         // if fails, ret will be WSAENOBUFS
+                    );
     if ( NULL == gWorkerThread )
     {
         goto cleanup;
@@ -201,16 +201,16 @@ InitOverlappedManager(
     //
     // Create our worker threads
     //
-    for(i=0; i < gThreadCount ;i++)
+    for(i=0; i < gThreadCount ; i++)
     {
         gWorkerThread[i] = CreateThread(
-                NULL, 
-                0, 
-                OverlappedManagerThread, 
-                (LPVOID)gIocp, 
-                0, 
-                NULL
-                );
+                               NULL,
+                               0,
+                               OverlappedManagerThread,
+                               (LPVOID)gIocp,
+                               0,
+                               NULL
+                           );
         if ( NULL == gWorkerThread[ i ] )
         {
             dbgprint("InitOverlappedManager: CreateThread() failed: %d", GetLastError());
@@ -234,9 +234,9 @@ cleanup:
 //    shutdown the worker threads gracefully before exiting. It also
 //    frees/closes allocated memory and handles.
 //
-int 
+int
 StopOverlappedManager(
-    )
+)
 {
     DWORD     i;
     int       ret = NO_ERROR;
@@ -248,14 +248,14 @@ StopOverlappedManager(
     //
     if ( NULL != gIocp )
     {
-        for(i=0; i < gThreadCount ;i++)
+        for(i=0; i < gThreadCount ; i++)
         {
             ret = PostQueuedCompletionStatus(
-                    gIocp,
-                    (DWORD)-1,
-                    0,
-                    NULL
-                    );
+                      gIocp,
+                      (DWORD)-1,
+                      0,
+                      NULL
+                  );
             if ( 0 == ret )
             {
                 dbgprint("PostQueuedCompletionStatus() failed: %d", GetLastError());
@@ -272,7 +272,7 @@ StopOverlappedManager(
         //
         // On Win9x we closed the semaphore so the worker thread should fail
         // when waiting for a signal and break out of the loop.
-        // 
+        //
 
         LIST_ENTRY         *entry = NULL;
         WSAOVERLAPPEDPLUS  *olp = NULL;
@@ -294,11 +294,11 @@ StopOverlappedManager(
             dbgprint("StopOverlappedManager: Timed out waiting for IOCP threads to exit!");
         else if ( WAIT_FAILED == ret )
             dbgprint("StopOverlappedManager: WaitForMultipleObjectsEx failed: %d",
-                    GetLastError());
+                     GetLastError());
         else
             dbgprint("StopOverlappedManager: All worker threads stopped!");
 
-        for(i=0; i < gThreadCount ;i++)
+        for(i=0; i < gThreadCount ; i++)
         {
             CloseHandle( gWorkerThread[ i ] );
             gWorkerThread[ i ] = NULL;
@@ -340,11 +340,11 @@ StopOverlappedManager(
 //    and IOCP) or post it to a queue to be executed by the woker thread
 //    via an APC (on Win9x).
 //
-int 
+int
 QueueOverlappedOperation(
-    WSAOVERLAPPEDPLUS  *ol, 
+    WSAOVERLAPPEDPLUS  *ol,
     SOCK_INFO          *SocketContext
-    )
+)
 {
     BOOL    bSynchronous = FALSE;
     int     err;
@@ -356,7 +356,7 @@ QueueOverlappedOperation(
     __try
     {
         SetOverlappedInProgress( ol->lpCallerOverlapped );
-    } 
+    }
     __except( EXCEPTION_EXECUTE_HANDLER )
     {
         return WSAEFAULT;
@@ -373,23 +373,23 @@ QueueOverlappedOperation(
         if ( NULL == SocketContext->hIocp )
         {
             SocketContext->hIocp = CreateIoCompletionPort(
-                    (HANDLE)ol->ProviderSocket,
-                    gIocp,
-                    ol->CallerSocket,
-                    0
-                    );
+                                       (HANDLE)ol->ProviderSocket,
+                                       gIocp,
+                                       ol->CallerSocket,
+                                       0
+                                   );
             if ( NULL == SocketContext->hIocp )
             {
                 if ( ERROR_INVALID_PARAMETER == (err = GetLastError() ) )
                 {
                     //
-                    // If the socket option SO_SYNCHRONOUS_(NON)ALERT is set then 
-                    // no overlapped operation can be performed on that socket and 
-                    // tryiing to associate it with a completion port will fail. 
-                    // The other bad news is that an LSP cannot trap this setsockopt 
-                    // call. In reality we don't have to do anything. If an app sets 
-                    // this option and then makes overlapped calls anyway, then they 
-                    // shouldn't be expecting any overlapped notifications! This 
+                    // If the socket option SO_SYNCHRONOUS_(NON)ALERT is set then
+                    // no overlapped operation can be performed on that socket and
+                    // tryiing to associate it with a completion port will fail.
+                    // The other bad news is that an LSP cannot trap this setsockopt
+                    // call. In reality we don't have to do anything. If an app sets
+                    // this option and then makes overlapped calls anyway, then they
+                    // shouldn't be expecting any overlapped notifications! This
                     // statement is put here in case you want to mark the socket
                     // info structure as synchronous.
                     //
@@ -398,9 +398,9 @@ QueueOverlappedOperation(
                 else
                 {
                     dbgprint("QueueOverlappedOperation: CreateIoCompletionPort() "
-                              "failed: %d (Prov %d Iocp 0x%x Caller 0x%x 0)", 
-                            err, ol->ProviderSocket, 
-                            gIocp, ol->CallerSocket);
+                             "failed: %d (Prov %d Iocp 0x%x Caller 0x%x 0)",
+                             err, ol->ProviderSocket,
+                             gIocp, ol->CallerSocket);
                 }
             }
 
@@ -429,10 +429,10 @@ QueueOverlappedOperation(
 //    Enqueue an overlapped operation to be executed by the worker
 //    thread via an APC.
 //
-int 
+int
 EnqueueOverlappedOperation(
     WSAOVERLAPPEDPLUS  *op
-    )
+)
 {
     int ret = WSA_IO_PENDING;
 
@@ -460,7 +460,7 @@ cleanup:
     return ret;
 }
 
-// 
+//
 // Function: DequeueOverlappedOperation
 //
 // Description:
@@ -470,7 +470,7 @@ cleanup:
 //
 WSAOVERLAPPEDPLUS *
 DequeueOverlappedOperation(
-    )
+)
 {
     WSAOVERLAPPEDPLUS   *op = NULL;
     LIST_ENTRY         *link = NULL;
@@ -508,17 +508,17 @@ DequeueOverlappedOperation(
 //    This function either returns NO_ERROR if the operation succeeds immediately
 //    or the Winsock error code upone failure (or overlapped operation).
 //
-int 
+int
 ExecuteOverlappedOperation(
-    WSAOVERLAPPEDPLUS *ol, 
+    WSAOVERLAPPEDPLUS *ol,
     BOOL bSynchronous
-    )
+)
 {
     LPWSAOVERLAPPED_COMPLETION_ROUTINE   routine = NULL;
     PROVIDER                            *Provider;
     DWORD                               *lpdwFlags = NULL,
-                                        *lpdwBytes = NULL,
-                                         dwBytes;
+                                         *lpdwBytes = NULL,
+                                          dwBytes;
     int                                  ret=SOCKET_ERROR, err=0;
 
     if ( NULL == gIocp)
@@ -529,7 +529,7 @@ ExecuteOverlappedOperation(
     //
     // Reset the event handle if present. The handle is masked with 0xFFFFFFFE in
     //  order to zero out the last bit. If the last bit is one and the socket is
-    //  associated with a compeltion port then when an overlapped operation is 
+    //  associated with a compeltion port then when an overlapped operation is
     //  called, the operation is not posted to the IO completion port.
     //
     if ( NULL != ol->lpCallerOverlapped->hEvent )
@@ -541,262 +541,262 @@ ExecuteOverlappedOperation(
 
     switch ( ol->Operation )
     {
-        case LSP_OP_IOCTL:
-            lpdwFlags = NULL;
-            lpdwBytes = &ol->IoctlArgs.cbBytesReturned;
-            ret = Provider->NextProcTable.lpWSPIoctl(
-                    ol->ProviderSocket,
-                    ol->IoctlArgs.dwIoControlCode,
-                    ol->IoctlArgs.lpvInBuffer,
-                    ol->IoctlArgs.cbInBuffer,
-                    ol->IoctlArgs.lpvOutBuffer,
-                    ol->IoctlArgs.cbOutBuffer,
-                   &ol->IoctlArgs.cbBytesReturned,
-                   &ol->ProviderOverlapped,
-                    routine,
-                   &ol->CallerThreadId,
-                   &err
-                   );
-            break;                         
+    case LSP_OP_IOCTL:
+        lpdwFlags = NULL;
+        lpdwBytes = &ol->IoctlArgs.cbBytesReturned;
+        ret = Provider->NextProcTable.lpWSPIoctl(
+                  ol->ProviderSocket,
+                  ol->IoctlArgs.dwIoControlCode,
+                  ol->IoctlArgs.lpvInBuffer,
+                  ol->IoctlArgs.cbInBuffer,
+                  ol->IoctlArgs.lpvOutBuffer,
+                  ol->IoctlArgs.cbOutBuffer,
+                  &ol->IoctlArgs.cbBytesReturned,
+                  &ol->ProviderOverlapped,
+                  routine,
+                  &ol->CallerThreadId,
+                  &err
+              );
+        break;
 
-        case LSP_OP_RECV:
-            lpdwFlags = &ol->RecvArgs.dwFlags;
-            lpdwBytes = &ol->RecvArgs.dwNumberOfBytesRecvd;
-            ret = Provider->NextProcTable.lpWSPRecv(
-                    ol->ProviderSocket,
-                    ol->RecvArgs.lpBuffers,
-                    ol->RecvArgs.dwBufferCount,
-                   &ol->RecvArgs.dwNumberOfBytesRecvd,
-                   &ol->RecvArgs.dwFlags,
-                   &ol->ProviderOverlapped,
-                    routine,
-                   &ol->CallerThreadId,
-                   &err
-                    );
-            break;
+    case LSP_OP_RECV:
+        lpdwFlags = &ol->RecvArgs.dwFlags;
+        lpdwBytes = &ol->RecvArgs.dwNumberOfBytesRecvd;
+        ret = Provider->NextProcTable.lpWSPRecv(
+                  ol->ProviderSocket,
+                  ol->RecvArgs.lpBuffers,
+                  ol->RecvArgs.dwBufferCount,
+                  &ol->RecvArgs.dwNumberOfBytesRecvd,
+                  &ol->RecvArgs.dwFlags,
+                  &ol->ProviderOverlapped,
+                  routine,
+                  &ol->CallerThreadId,
+                  &err
+              );
+        break;
 
-        case LSP_OP_RECVFROM:
-            lpdwFlags = &ol->RecvFromArgs.dwFlags;
-            lpdwBytes = &ol->RecvFromArgs.dwNumberOfBytesRecvd;
-            ret = Provider->NextProcTable.lpWSPRecvFrom(
-                    ol->ProviderSocket,
-                    ol->RecvFromArgs.lpBuffers,
-                    ol->RecvFromArgs.dwBufferCount,
-                   &ol->RecvFromArgs.dwNumberOfBytesRecvd,
-                   &ol->RecvFromArgs.dwFlags,
-                    ol->RecvFromArgs.lpFrom,
-                    ol->RecvFromArgs.lpFromLen,
-                   &ol->ProviderOverlapped,
-                    routine,
-                   &ol->CallerThreadId,
-                   &err
-                    );
-            break;
+    case LSP_OP_RECVFROM:
+        lpdwFlags = &ol->RecvFromArgs.dwFlags;
+        lpdwBytes = &ol->RecvFromArgs.dwNumberOfBytesRecvd;
+        ret = Provider->NextProcTable.lpWSPRecvFrom(
+                  ol->ProviderSocket,
+                  ol->RecvFromArgs.lpBuffers,
+                  ol->RecvFromArgs.dwBufferCount,
+                  &ol->RecvFromArgs.dwNumberOfBytesRecvd,
+                  &ol->RecvFromArgs.dwFlags,
+                  ol->RecvFromArgs.lpFrom,
+                  ol->RecvFromArgs.lpFromLen,
+                  &ol->ProviderOverlapped,
+                  routine,
+                  &ol->CallerThreadId,
+                  &err
+              );
+        break;
 
-        case LSP_OP_SEND:
-            lpdwFlags = &ol->SendArgs.dwFlags;
-            lpdwBytes = &ol->SendArgs.dwNumberOfBytesSent;
-            ret = Provider->NextProcTable.lpWSPSend(
-                    ol->ProviderSocket,
-                    ol->SendArgs.lpBuffers,
-                    ol->SendArgs.dwBufferCount,
-                   &ol->SendArgs.dwNumberOfBytesSent,
-                    ol->SendArgs.dwFlags,
-                   &ol->ProviderOverlapped,
-                    routine,
-                   &ol->CallerThreadId,
-                   &err
-                   );
-             break;
+    case LSP_OP_SEND:
+        lpdwFlags = &ol->SendArgs.dwFlags;
+        lpdwBytes = &ol->SendArgs.dwNumberOfBytesSent;
+        ret = Provider->NextProcTable.lpWSPSend(
+                  ol->ProviderSocket,
+                  ol->SendArgs.lpBuffers,
+                  ol->SendArgs.dwBufferCount,
+                  &ol->SendArgs.dwNumberOfBytesSent,
+                  ol->SendArgs.dwFlags,
+                  &ol->ProviderOverlapped,
+                  routine,
+                  &ol->CallerThreadId,
+                  &err
+              );
+        break;
 
-        case LSP_OP_SENDTO:
-            lpdwFlags = &ol->SendToArgs.dwFlags;
-            lpdwBytes = &ol->SendToArgs.dwNumberOfBytesSent;
-            ret = Provider->NextProcTable.lpWSPSendTo(
-                    ol->ProviderSocket,
-                    ol->SendToArgs.lpBuffers,
-                    ol->SendToArgs.dwBufferCount,
-                   &ol->SendToArgs.dwNumberOfBytesSent,
-                    ol->SendToArgs.dwFlags,
-                    (SOCKADDR *)&ol->SendToArgs.To,
-                    ol->SendToArgs.iToLen,
-                   &ol->ProviderOverlapped,
-                    routine,
-                   &ol->CallerThreadId,
-                   &err
-                    );
-            break;
+    case LSP_OP_SENDTO:
+        lpdwFlags = &ol->SendToArgs.dwFlags;
+        lpdwBytes = &ol->SendToArgs.dwNumberOfBytesSent;
+        ret = Provider->NextProcTable.lpWSPSendTo(
+                  ol->ProviderSocket,
+                  ol->SendToArgs.lpBuffers,
+                  ol->SendToArgs.dwBufferCount,
+                  &ol->SendToArgs.dwNumberOfBytesSent,
+                  ol->SendToArgs.dwFlags,
+                  (SOCKADDR *)&ol->SendToArgs.To,
+                  ol->SendToArgs.iToLen,
+                  &ol->ProviderOverlapped,
+                  routine,
+                  &ol->CallerThreadId,
+                  &err
+              );
+        break;
 
-        case LSP_OP_TRANSMITFILE:
-            lpdwFlags = &ol->TransmitFileArgs.dwFlags;
-            lpdwBytes = NULL;
-            ret = Provider->NextProcTableExt.lpfnTransmitFile(
-                    ol->ProviderSocket,
-                    ol->TransmitFileArgs.hFile,
-                    ol->TransmitFileArgs.nNumberOfBytesToWrite,
-                    ol->TransmitFileArgs.nNumberOfBytesPerSend,
-                   &ol->ProviderOverlapped,
-                    ol->TransmitFileArgs.lpTransmitBuffers,
-                    ol->TransmitFileArgs.dwFlags
-                    );
-            if ( FALSE == ret )
-            {
-                ret = SOCKET_ERROR;
-                err = WSAGetLastError();
-                WSASetLastError(err);
-            }
-            else
-            {
-                ret = NO_ERROR;
-            }
-            break;
-
-        case LSP_OP_ACCEPTEX:
-            lpdwFlags = NULL;
-            lpdwBytes = &ol->AcceptExArgs.dwBytesReceived;
-            ret = Provider->NextProcTableExt.lpfnAcceptEx(
-                    ol->ProviderSocket,
-                    ol->AcceptExArgs.sProviderAcceptSocket,
-                    ol->AcceptExArgs.lpOutputBuffer,
-                    ol->AcceptExArgs.dwReceiveDataLength,
-                    ol->AcceptExArgs.dwLocalAddressLength,
-                    ol->AcceptExArgs.dwRemoteAddressLength,
-                   &ol->AcceptExArgs.dwBytesReceived,
-                   &ol->ProviderOverlapped
-                    );
-            if ( FALSE == ret )
-            {
-                ret = SOCKET_ERROR;
-                err = WSAGetLastError();
-                WSASetLastError(err);
-            }
-            else
-            {
-                ret = NO_ERROR;
-            }
-            break;
-
-        case LSP_OP_CONNECTEX:
-            lpdwFlags = NULL;
-            lpdwBytes = &ol->ConnectExArgs.dwBytesSent;
-            ret = Provider->NextProcTableExt.lpfnConnectEx(
-                    ol->ProviderSocket,
-                    (SOCKADDR *)&ol->ConnectExArgs.name,
-                    ol->ConnectExArgs.namelen,
-                    ol->ConnectExArgs.lpSendBuffer,
-                    ol->ConnectExArgs.dwSendDataLength,
-                   &ol->ConnectExArgs.dwBytesSent,
-                   &ol->ProviderOverlapped
-                    );
-            if ( FALSE == ret )
-            {
-                ret = SOCKET_ERROR;
-                err = WSAGetLastError();
-                WSASetLastError(err);
-            }
-            else
-            {
-                ret = NO_ERROR;
-            }
-            break;
-
-        case LSP_OP_DISCONNECTEX:
-            lpdwFlags = &ol->DisconnectExArgs.dwFlags;
-            lpdwBytes = NULL;
-            ret = Provider->NextProcTableExt.lpfnDisconnectEx(
-                    ol->ProviderSocket,
-                   &ol->ProviderOverlapped,
-                    ol->DisconnectExArgs.dwFlags,
-                    ol->DisconnectExArgs.dwReserved
-                    );
-            if ( FALSE == ret )
-            {
-                ret = SOCKET_ERROR;
-                err = WSAGetLastError();
-                WSASetLastError(err);
-            }
-            else
-            {
-                ret = NO_ERROR;
-            }
-            break;
-
-        case LSP_OP_TRANSMITPACKETS:
-            lpdwFlags = &ol->TransmitPacketsArgs.dwFlags;
-            lpdwBytes = NULL;
-            ret = Provider->NextProcTableExt.lpfnTransmitPackets(
-                    ol->ProviderSocket,
-                    ol->TransmitPacketsArgs.lpPacketArray,
-                    ol->TransmitPacketsArgs.nElementCount,
-                    ol->TransmitPacketsArgs.nSendSize,
-                   &ol->ProviderOverlapped,
-                    ol->TransmitPacketsArgs.dwFlags
-                    );
-            if ( FALSE == ret )
-            {
-                ret = SOCKET_ERROR;
-                err = WSAGetLastError();
-                WSASetLastError(err);
-            }
-            else
-            {
-                ret = NO_ERROR;
-            }
-            break;
-
-        case LSP_OP_RECVMSG:
-            lpdwFlags = NULL;
-            lpdwBytes = &ol->RecvMsgArgs.dwNumberOfBytesRecvd;
-            ret = Provider->NextProcTableExt.lpfnWSARecvMsg(
-                    ol->ProviderSocket,
-                   &ol->RecvMsgArgs.WsaMsg,
-                   &ol->RecvMsgArgs.dwNumberOfBytesRecvd,
-                   &ol->ProviderOverlapped,
-                    routine
-                    );
-            if ( SOCKET_ERROR == ret )
-            {
-                err = WSAGetLastError();
-                WSASetLastError( err );
-            }
-            else
-            {
-                ret = NO_ERROR;
-            }
-            break;
-
-        case LSP_OP_SENDMSG:
-
-            lpdwFlags = &ol->SendMsgArgs.SendMsg.dwFlags;
-            lpdwBytes =  ol->SendMsgArgs.SendMsg.lpNumberOfBytesSent;
-
-            ret = Provider->NextProcTable.lpWSPIoctl(
-                    ol->ProviderSocket,
-                    SIO_EXT_SENDMSG,
-                   &ol->SendMsgArgs.SendMsg,
-                    sizeof(ol->SendMsgArgs.SendMsg),
-                   &err,
-                    sizeof(err),
-                   &dwBytes,
-                    NULL,
-                    NULL,
-                   &ol->CallerThreadId,
-                   &err
-                    );
-            if (NO_ERROR != err)
-            {
-                ret = SOCKET_ERROR;
-            }
-            else
-            {
-                ret = NO_ERROR;
-            }
-            break;
-
-        default:
-            dbgprint("ExecuteOverlappedOperation: Unknown operation!");
+    case LSP_OP_TRANSMITFILE:
+        lpdwFlags = &ol->TransmitFileArgs.dwFlags;
+        lpdwBytes = NULL;
+        ret = Provider->NextProcTableExt.lpfnTransmitFile(
+                  ol->ProviderSocket,
+                  ol->TransmitFileArgs.hFile,
+                  ol->TransmitFileArgs.nNumberOfBytesToWrite,
+                  ol->TransmitFileArgs.nNumberOfBytesPerSend,
+                  &ol->ProviderOverlapped,
+                  ol->TransmitFileArgs.lpTransmitBuffers,
+                  ol->TransmitFileArgs.dwFlags
+              );
+        if ( FALSE == ret )
+        {
             ret = SOCKET_ERROR;
-            break;
+            err = WSAGetLastError();
+            WSASetLastError(err);
+        }
+        else
+        {
+            ret = NO_ERROR;
+        }
+        break;
+
+    case LSP_OP_ACCEPTEX:
+        lpdwFlags = NULL;
+        lpdwBytes = &ol->AcceptExArgs.dwBytesReceived;
+        ret = Provider->NextProcTableExt.lpfnAcceptEx(
+                  ol->ProviderSocket,
+                  ol->AcceptExArgs.sProviderAcceptSocket,
+                  ol->AcceptExArgs.lpOutputBuffer,
+                  ol->AcceptExArgs.dwReceiveDataLength,
+                  ol->AcceptExArgs.dwLocalAddressLength,
+                  ol->AcceptExArgs.dwRemoteAddressLength,
+                  &ol->AcceptExArgs.dwBytesReceived,
+                  &ol->ProviderOverlapped
+              );
+        if ( FALSE == ret )
+        {
+            ret = SOCKET_ERROR;
+            err = WSAGetLastError();
+            WSASetLastError(err);
+        }
+        else
+        {
+            ret = NO_ERROR;
+        }
+        break;
+
+    case LSP_OP_CONNECTEX:
+        lpdwFlags = NULL;
+        lpdwBytes = &ol->ConnectExArgs.dwBytesSent;
+        ret = Provider->NextProcTableExt.lpfnConnectEx(
+                  ol->ProviderSocket,
+                  (SOCKADDR *)&ol->ConnectExArgs.name,
+                  ol->ConnectExArgs.namelen,
+                  ol->ConnectExArgs.lpSendBuffer,
+                  ol->ConnectExArgs.dwSendDataLength,
+                  &ol->ConnectExArgs.dwBytesSent,
+                  &ol->ProviderOverlapped
+              );
+        if ( FALSE == ret )
+        {
+            ret = SOCKET_ERROR;
+            err = WSAGetLastError();
+            WSASetLastError(err);
+        }
+        else
+        {
+            ret = NO_ERROR;
+        }
+        break;
+
+    case LSP_OP_DISCONNECTEX:
+        lpdwFlags = &ol->DisconnectExArgs.dwFlags;
+        lpdwBytes = NULL;
+        ret = Provider->NextProcTableExt.lpfnDisconnectEx(
+                  ol->ProviderSocket,
+                  &ol->ProviderOverlapped,
+                  ol->DisconnectExArgs.dwFlags,
+                  ol->DisconnectExArgs.dwReserved
+              );
+        if ( FALSE == ret )
+        {
+            ret = SOCKET_ERROR;
+            err = WSAGetLastError();
+            WSASetLastError(err);
+        }
+        else
+        {
+            ret = NO_ERROR;
+        }
+        break;
+
+    case LSP_OP_TRANSMITPACKETS:
+        lpdwFlags = &ol->TransmitPacketsArgs.dwFlags;
+        lpdwBytes = NULL;
+        ret = Provider->NextProcTableExt.lpfnTransmitPackets(
+                  ol->ProviderSocket,
+                  ol->TransmitPacketsArgs.lpPacketArray,
+                  ol->TransmitPacketsArgs.nElementCount,
+                  ol->TransmitPacketsArgs.nSendSize,
+                  &ol->ProviderOverlapped,
+                  ol->TransmitPacketsArgs.dwFlags
+              );
+        if ( FALSE == ret )
+        {
+            ret = SOCKET_ERROR;
+            err = WSAGetLastError();
+            WSASetLastError(err);
+        }
+        else
+        {
+            ret = NO_ERROR;
+        }
+        break;
+
+    case LSP_OP_RECVMSG:
+        lpdwFlags = NULL;
+        lpdwBytes = &ol->RecvMsgArgs.dwNumberOfBytesRecvd;
+        ret = Provider->NextProcTableExt.lpfnWSARecvMsg(
+                  ol->ProviderSocket,
+                  &ol->RecvMsgArgs.WsaMsg,
+                  &ol->RecvMsgArgs.dwNumberOfBytesRecvd,
+                  &ol->ProviderOverlapped,
+                  routine
+              );
+        if ( SOCKET_ERROR == ret )
+        {
+            err = WSAGetLastError();
+            WSASetLastError( err );
+        }
+        else
+        {
+            ret = NO_ERROR;
+        }
+        break;
+
+    case LSP_OP_SENDMSG:
+
+        lpdwFlags = &ol->SendMsgArgs.SendMsg.dwFlags;
+        lpdwBytes =  ol->SendMsgArgs.SendMsg.lpNumberOfBytesSent;
+
+        ret = Provider->NextProcTable.lpWSPIoctl(
+                  ol->ProviderSocket,
+                  SIO_EXT_SENDMSG,
+                  &ol->SendMsgArgs.SendMsg,
+                  sizeof(ol->SendMsgArgs.SendMsg),
+                  &err,
+                  sizeof(err),
+                  &dwBytes,
+                  NULL,
+                  NULL,
+                  &ol->CallerThreadId,
+                  &err
+              );
+        if (NO_ERROR != err)
+        {
+            ret = SOCKET_ERROR;
+        }
+        else
+        {
+            ret = NO_ERROR;
+        }
+        break;
+
+    default:
+        dbgprint("ExecuteOverlappedOperation: Unknown operation!");
+        ret = SOCKET_ERROR;
+        break;
     }
 
     if ( ( NO_ERROR != ret ) && ( WSA_IO_PENDING != err ) )
@@ -817,7 +817,7 @@ ExecuteOverlappedOperation(
     }
     else if ( ( NO_ERROR == ret ) && ( FALSE == bSynchronous ) )
     {
-        // 
+        //
         // NOTE: We could return success from here, but if you want to perform
         //       some post processing on the data buffers before indicating
         //       success to the upper layer (because once success is returned, the
@@ -847,10 +847,10 @@ ExecuteOverlappedOperation(
 //    posted to our IO completion port. Once we receive a completion
 //    we'll complete the operation back to the calling app.
 //
-DWORD WINAPI 
+DWORD WINAPI
 OverlappedManagerThread(
     LPVOID lpParam
-    )
+)
 {
     WSAOVERLAPPEDPLUS *pOverlapPlus = NULL;
     WSAOVERLAPPED     *pOverlap = NULL;
@@ -864,12 +864,12 @@ OverlappedManagerThread(
         if ( NULL != hIocp )
         {
             ret = GetQueuedCompletionStatus(
-                    hIocp,
-                   &dwBytesXfered,
-                   &key,
-                   &pOverlap,
-                    INFINITE
-                    );
+                      hIocp,
+                      &dwBytesXfered,
+                      &key,
+                      &pOverlap,
+                      INFINITE
+                  );
             if ( 0 == ret )
             {
                 // Socket failures could be reported here so we still
@@ -890,19 +890,19 @@ OverlappedManagerThread(
 
             // Handle the IO that completed
             IntermediateCompletionRoutine(
-                    WSA_IO_PENDING,
-                    dwBytesXfered,
-                    pOverlap,
-                    0
-                    );
+                WSA_IO_PENDING,
+                dwBytesXfered,
+                pOverlap,
+                0
+            );
         }
         else
         {
             ret = WaitForSingleObjectEx(
-                    gWakeupSemaphore,
-                    INFINITE, 
-                    TRUE
-                    );
+                      gWakeupSemaphore,
+                      INFINITE,
+                      TRUE
+                  );
             if ( WAIT_IO_COMPLETION == ret )
             {
                 // An APC fired so keep waiting until semaphore is signaled
@@ -919,7 +919,7 @@ OverlappedManagerThread(
             else
             {
                 dbgprint("OverlappedManagerThread: WaitForSingleObjectEx() failed: %d (error = %d)",
-                        ret, GetLastError() );
+                         ret, GetLastError() );
                 goto cleanup;
             }
         }
@@ -938,10 +938,10 @@ cleanup:
 //    of freed structures so that we don't spend too much time allocating and
 //    freeing memory.
 //
-LPWSAOVERLAPPEDPLUS 
+LPWSAOVERLAPPEDPLUS
 AllocOverlappedStructure(
     SOCK_INFO  *SocketContext
-    )
+)
 {
     LPWSAOVERLAPPEDPLUS lpWorkerOverlappedPlus = NULL;
 
@@ -956,12 +956,12 @@ AllocOverlappedStructure(
     AcquireSocketLock( SocketContext );
 
     //
-    // We have to keep track of the number of outstanding overlapped requests 
-    // an application has. Otherwise, if the app were to close a socket that 
-    // had oustanding overlapped ops remaining, we'd start leaking structures 
-    // in gOverlappedPool. The idea here is to force the CallerSocket to remain 
-    // open until the lower provider has processed all the overlapped requests. 
-    // If we closed both the lower socket and the caller socket, we would no 
+    // We have to keep track of the number of outstanding overlapped requests
+    // an application has. Otherwise, if the app were to close a socket that
+    // had oustanding overlapped ops remaining, we'd start leaking structures
+    // in gOverlappedPool. The idea here is to force the CallerSocket to remain
+    // open until the lower provider has processed all the overlapped requests.
+    // If we closed both the lower socket and the caller socket, we would no
     // longer be able to correlate completed requests to any apps sockets.
     //
     (SocketContext->dwOutstandingAsync)++;
@@ -970,10 +970,10 @@ AllocOverlappedStructure(
     {
         int     err;
 
-        lpWorkerOverlappedPlus = (WSAOVERLAPPEDPLUS *) LspAlloc( 
-                sizeof(WSAOVERLAPPEDPLUS), 
-               &err 
-                );
+        lpWorkerOverlappedPlus = (WSAOVERLAPPEDPLUS *) LspAlloc(
+                                     sizeof(WSAOVERLAPPEDPLUS),
+                                     &err
+                                 );
     }
     else
     {
@@ -998,33 +998,33 @@ AllocOverlappedStructure(
 //    Once we're done using a WSAOVERLAPPEDPLUS structure we return it to
 //    a list of free structures for re-use later.
 //
-void 
+void
 FreeOverlappedStructure(
     WSAOVERLAPPEDPLUS  *olp
-    )
+)
 {
     EnterCriticalSection( &gOverlappedCS );
 
     switch ( olp->Operation )
     {
-        case LSP_OP_RECV:
-            FreeWSABuf( olp->RecvArgs.lpBuffers );
-            break;
+    case LSP_OP_RECV:
+        FreeWSABuf( olp->RecvArgs.lpBuffers );
+        break;
 
-        case LSP_OP_RECVFROM:
-            FreeWSABuf( olp->RecvFromArgs.lpBuffers );
-            break;
+    case LSP_OP_RECVFROM:
+        FreeWSABuf( olp->RecvFromArgs.lpBuffers );
+        break;
 
-        case LSP_OP_SEND:
-            FreeWSABuf( olp->SendArgs.lpBuffers );
-            break;
+    case LSP_OP_SEND:
+        FreeWSABuf( olp->SendArgs.lpBuffers );
+        break;
 
-        case LSP_OP_SENDTO:
-            FreeWSABuf( olp->SendToArgs.lpBuffers );
-            break;
+    case LSP_OP_SENDTO:
+        FreeWSABuf( olp->SendToArgs.lpBuffers );
+        break;
 
-        default:
-            break;
+    default:
+        break;
     }
 
     memset( olp, 0, sizeof( WSAOVERLAPPEDPLUS ) );
@@ -1041,10 +1041,10 @@ FreeOverlappedStructure(
 //    Simply set the interal fields of an OVERLAPPED structure to the
 //    "in progress" state.
 //
-void 
+void
 SetOverlappedInProgress(
     OVERLAPPED *ol
-    )
+)
 {
     ol->Internal = WSS_OPERATION_IN_PROGRESS;
     ol->InternalHigh = 0;
@@ -1058,17 +1058,17 @@ SetOverlappedInProgress(
 //    count of the bytes sent/received as well as to complete the operation
 //    to the application.
 //
-void CALLBACK 
+void CALLBACK
 IntermediateCompletionRoutine(
     DWORD dwError,
     DWORD cbTransferred,
     LPWSAOVERLAPPED lpOverlapped,
     DWORD dwFlags
-    )
+)
 {
     LPWSAOVERLAPPEDPLUS olp = NULL;
     SOCK_INFO          *SocketContext = NULL,
-                       *AcceptSocketContext = NULL;
+                        *AcceptSocketContext = NULL;
     int                 Error,
                         ret;
 
@@ -1106,14 +1106,14 @@ IntermediateCompletionRoutine(
 
         dwError = NO_ERROR;
         ret = olp->Provider->NextProcTable.lpWSPGetOverlappedResult(
-                olp->ProviderSocket,
-                lpOverlapped,
-               &cbTransferred,
-                FALSE,
-               &dwFlags,
-                (int *)&dwError
-                );
- 
+                  olp->ProviderSocket,
+                  lpOverlapped,
+                  &cbTransferred,
+                  FALSE,
+                  &dwFlags,
+                  (int *)&dwError
+              );
+
         if ( FALSE == ret )
         {
             dbgprint("IntermediateCompletionRoutine: WSPGetOverlappedResult failed: %d", dwError);
@@ -1121,8 +1121,8 @@ IntermediateCompletionRoutine(
         else
         {
 
-            dbgprint("Bytes transferred on socket 0x%x: %d [op=%d; err=%d]", 
-                    olp->CallerSocket, cbTransferred, olp->Operation, dwError);
+            dbgprint("Bytes transferred on socket 0x%x: %d [op=%d; err=%d]",
+                     olp->CallerSocket, cbTransferred, olp->Operation, dwError);
         }
     }
 
@@ -1146,79 +1146,79 @@ IntermediateCompletionRoutine(
 
         switch ( olp->Operation )
         {
-            case LSP_OP_RECV:
-                SocketContext->BytesRecv += cbTransferred;
-                FreeWSABuf(olp->RecvArgs.lpBuffers);
-                break;
+        case LSP_OP_RECV:
+            SocketContext->BytesRecv += cbTransferred;
+            FreeWSABuf(olp->RecvArgs.lpBuffers);
+            break;
 
-            case LSP_OP_RECVFROM:
-                SocketContext->BytesRecv += cbTransferred;
-                FreeWSABuf(olp->RecvFromArgs.lpBuffers);
-                break;
+        case LSP_OP_RECVFROM:
+            SocketContext->BytesRecv += cbTransferred;
+            FreeWSABuf(olp->RecvFromArgs.lpBuffers);
+            break;
 
-            case LSP_OP_SEND:
-                SocketContext->BytesSent += cbTransferred;
-                FreeWSABuf(olp->SendArgs.lpBuffers);
-                break;
+        case LSP_OP_SEND:
+            SocketContext->BytesSent += cbTransferred;
+            FreeWSABuf(olp->SendArgs.lpBuffers);
+            break;
 
-            case LSP_OP_SENDTO:
-                SocketContext->BytesSent += cbTransferred;
-                FreeWSABuf(olp->SendToArgs.lpBuffers);
-                break;
+        case LSP_OP_SENDTO:
+            SocketContext->BytesSent += cbTransferred;
+            FreeWSABuf(olp->SendToArgs.lpBuffers);
+            break;
 
-            case LSP_OP_TRANSMITFILE:
-                SocketContext->BytesSent += cbTransferred;
-                break;
+        case LSP_OP_TRANSMITFILE:
+            SocketContext->BytesSent += cbTransferred;
+            break;
 
-            case LSP_OP_TRANSMITPACKETS:
-                SocketContext->BytesSent += cbTransferred;
-                break;
+        case LSP_OP_TRANSMITPACKETS:
+            SocketContext->BytesSent += cbTransferred;
+            break;
 
-            case LSP_OP_ACCEPTEX:
+        case LSP_OP_ACCEPTEX:
 
-                ReleaseSocketLock( SocketContext );
+            ReleaseSocketLock( SocketContext );
 
-                AcceptSocketContext = FindAndRefSocketContext(
-                        olp->AcceptExArgs.sAcceptSocket,
-                       &Error
-                       );
-                if (AcceptSocketContext == NULL)
-                {
-                    dbgprint( "IntermediateCompletionRoutine: FindAndRefSocketContext failed! (LSP_OP_ACCEPTEX)" );
-                    dwError = WSAENOTSOCK;
-                    olp->lpCallerOverlapped->OffsetHigh = dwError;
-                }
-                else
-                {
-                    AcquireSocketLock( AcceptSocketContext );
+            AcceptSocketContext = FindAndRefSocketContext(
+                                      olp->AcceptExArgs.sAcceptSocket,
+                                      &Error
+                                  );
+            if (AcceptSocketContext == NULL)
+            {
+                dbgprint( "IntermediateCompletionRoutine: FindAndRefSocketContext failed! (LSP_OP_ACCEPTEX)" );
+                dwError = WSAENOTSOCK;
+                olp->lpCallerOverlapped->OffsetHigh = dwError;
+            }
+            else
+            {
+                AcquireSocketLock( AcceptSocketContext );
 
-                    // Release the reference on the accepted socket object
-                    AcceptSocketContext->dwOutstandingAsync--;
-                    AcceptSocketContext->BytesRecv += cbTransferred;
+                // Release the reference on the accepted socket object
+                AcceptSocketContext->dwOutstandingAsync--;
+                AcceptSocketContext->BytesRecv += cbTransferred;
 
-                    ReleaseSocketLock( AcceptSocketContext );
+                ReleaseSocketLock( AcceptSocketContext );
 
-                    DerefSocketContext(AcceptSocketContext, &Error);
-                }
+                DerefSocketContext(AcceptSocketContext, &Error);
+            }
 
-                break;
+            break;
 
-            case LSP_OP_CONNECTEX:
-                SocketContext->BytesSent += cbTransferred;
-                break;
+        case LSP_OP_CONNECTEX:
+            SocketContext->BytesSent += cbTransferred;
+            break;
 
-            case LSP_OP_RECVMSG:
-                SocketContext->BytesRecv += cbTransferred;
-                FreeWSABuf(olp->RecvMsgArgs.WsaMsg.lpBuffers);
-                break;
+        case LSP_OP_RECVMSG:
+            SocketContext->BytesRecv += cbTransferred;
+            FreeWSABuf(olp->RecvMsgArgs.WsaMsg.lpBuffers);
+            break;
 
-            case LSP_OP_SENDMSG:
-                SocketContext->BytesSent += cbTransferred;
-                FreeWSABuf(olp->SendMsgArgs.SendMsg.lpMsg->lpBuffers);
-                break;
+        case LSP_OP_SENDMSG:
+            SocketContext->BytesSent += cbTransferred;
+            FreeWSABuf(olp->SendMsgArgs.SendMsg.lpMsg->lpBuffers);
+            break;
 
-            default:
-                break;
+        default:
+            break;
         }
         // Already released for AcceptEx operations
         if ( LSP_OP_ACCEPTEX != olp->Operation )
@@ -1238,11 +1238,11 @@ IntermediateCompletionRoutine(
             DebugBreak();
 
         ret = gMainUpCallTable.lpWPUQueueApc(
-               &olp->CallerThreadId,
-               CallUserApcProc,
-               (DWORD_PTR) olp->lpCallerOverlapped,
-              &Error
-               );
+                  &olp->CallerThreadId,
+                  CallUserApcProc,
+                  (DWORD_PTR) olp->lpCallerOverlapped,
+                  &Error
+              );
         if ( SOCKET_ERROR == ret )
         {
             dbgprint("IntermediateCompletionRoutine: WPUQueueApc() failed: %d", Error);
@@ -1254,16 +1254,16 @@ IntermediateCompletionRoutine(
         // Otherwise we signal that the op has completed
         //
         ret = WPUCompleteOverlappedRequest(
-                olp->CallerSocket,
-                olp->lpCallerOverlapped,
-                dwError,
-                cbTransferred,
-               &Error
-                );
+                  olp->CallerSocket,
+                  olp->lpCallerOverlapped,
+                  dwError,
+                  cbTransferred,
+                  &Error
+              );
         if ( SOCKET_ERROR == ret )
         {
-            dbgprint("WPUCompleteOverlappedRequest failed: %d (provider socket 0x%x)", 
-                    Error, olp->CallerSocket );
+            dbgprint("WPUCompleteOverlappedRequest failed: %d (provider socket 0x%x)",
+                     Error, olp->CallerSocket );
         }
     }
 
@@ -1296,24 +1296,24 @@ cleanup:
 // Description:
 //    This function completes an overlapped request that supplied an APC.
 //
-VOID CALLBACK 
+VOID CALLBACK
 CallUserApcProc(
     ULONG_PTR   Context
-    )
+)
 {
     LPOVERLAPPED                        lpOverlapped;
     LPWSAOVERLAPPED_COMPLETION_ROUTINE  UserCompletionRoutine;
 
     lpOverlapped = (LPOVERLAPPED) Context;
     UserCompletionRoutine  = (LPWSAOVERLAPPED_COMPLETION_ROUTINE)lpOverlapped->Internal;
-    lpOverlapped->Internal = 0; // Remove the WSS_OPERATION_IN_PROGRESS value 
+    lpOverlapped->Internal = 0; // Remove the WSS_OPERATION_IN_PROGRESS value
 
     UserCompletionRoutine(
-            (DWORD)lpOverlapped->OffsetHigh,
-            (DWORD)lpOverlapped->InternalHigh,
-            lpOverlapped,
-            (DWORD)lpOverlapped->Offset
-            );
+        (DWORD)lpOverlapped->OffsetHigh,
+        (DWORD)lpOverlapped->InternalHigh,
+        lpOverlapped,
+        (DWORD)lpOverlapped->Offset
+    );
     return;
 }
 
@@ -1326,10 +1326,10 @@ CallUserApcProc(
 //    no one else is referencing it. If so then the associated structures
 //    can be freed and the socket closed.
 //
-void 
+void
 CheckForContextCleanup(
     WSAOVERLAPPEDPLUS  *ol
-    )
+)
 {
     SOCK_INFO  *SocketContext = NULL;
     int         Error,
@@ -1348,9 +1348,9 @@ CheckForContextCleanup(
 
     (ol->SockInfo->dwOutstandingAsync)--;
 
-    if ( ( TRUE == ol->SockInfo->bClosing ) && 
-         ( 0 == ol->SockInfo->dwOutstandingAsync ) &&
-         ( 1 == ol->SockInfo->RefCount )
+    if ( ( TRUE == ol->SockInfo->bClosing ) &&
+            ( 0 == ol->SockInfo->dwOutstandingAsync ) &&
+            ( 1 == ol->SockInfo->RefCount )
        )
     {
         //
@@ -1359,9 +1359,9 @@ CheckForContextCleanup(
         //  we can close the apps socket handle.
         //
         ret = gMainUpCallTable.lpWPUCloseSocketHandle(
-                ol->CallerSocket, 
-               &ol->Error
-                );
+                  ol->CallerSocket,
+                  &ol->Error
+              );
         if ( SOCKET_ERROR == ret )
         {
             dbgprint("CheckForContextClenaup: WPUCloseSocketHandle() failed: %d", ol->Error);
@@ -1371,8 +1371,8 @@ CheckForContextCleanup(
 
         RemoveSocketInfo( ol->SockInfo->Provider, ol->SockInfo );
 
-        dbgprint("CheckForContxtCleanup: Closing socket %d Bytes Sent [%lu] Bytes Recv [%lu]", 
-                ol->CallerSocket, ol->SockInfo->BytesSent, ol->SockInfo->BytesRecv);
+        dbgprint("CheckForContxtCleanup: Closing socket %d Bytes Sent [%lu] Bytes Recv [%lu]",
+                 ol->CallerSocket, ol->SockInfo->BytesSent, ol->SockInfo->BytesRecv);
 
         ReleaseSocketLock( ol->SockInfo );
 
@@ -1412,7 +1412,7 @@ PrepareOverlappedOperation(
     LPWSAOVERLAPPED_COMPLETION_ROUTINE lpCompletionRoutine,
     LPWSATHREADID                      lpThreadId,
     int                               *lpErrno
-    )
+)
 {
     WSAOVERLAPPEDPLUS *ProviderOverlapped = NULL;
     int                ret = SOCKET_ERROR,
@@ -1426,13 +1426,13 @@ PrepareOverlappedOperation(
         goto cleanup;
     }
 
-    __try 
+    __try
     {
         // Check for an event and reset if. Also, copy the offsets from the upper
         // layer's WSAOVERLAPPED structure.
-        if ( ( NULL == lpCompletionRoutine ) && 
-             ( NULL != lpOverlapped->hEvent ) )
-        { 
+        if ( ( NULL == lpCompletionRoutine ) &&
+                ( NULL != lpOverlapped->hEvent ) )
+        {
             ULONG_PTR   ptr = 1;
 
             ret = ResetEvent( (HANDLE) ( (ULONG_PTR) lpOverlapped->hEvent & ~ptr ) );
@@ -1488,84 +1488,84 @@ PrepareOverlappedOperation(
         // Depending on the underlying operation, copy some parameters specific to it
         switch ( operation )
         {
-            case LSP_OP_RECV:
-                ProviderOverlapped->RecvArgs.dwBufferCount = dwBufferCount;
-                ProviderOverlapped->RecvArgs.lpBuffers = CopyWSABuf(
+        case LSP_OP_RECV:
+            ProviderOverlapped->RecvArgs.dwBufferCount = dwBufferCount;
+            ProviderOverlapped->RecvArgs.lpBuffers = CopyWSABuf(
                         lpBuffers,
                         dwBufferCount,
                         lpErrno
-                        );
-                if ( NULL == ProviderOverlapped->RecvArgs.lpBuffers )
-                    goto cleanup;
+                    );
+            if ( NULL == ProviderOverlapped->RecvArgs.lpBuffers )
+                goto cleanup;
 
-                break;
+            break;
 
-            case LSP_OP_RECVFROM:
-                ProviderOverlapped->RecvFromArgs.dwBufferCount = dwBufferCount;
-                ProviderOverlapped->RecvFromArgs.lpBuffers = CopyWSABuf(
+        case LSP_OP_RECVFROM:
+            ProviderOverlapped->RecvFromArgs.dwBufferCount = dwBufferCount;
+            ProviderOverlapped->RecvFromArgs.lpBuffers = CopyWSABuf(
                         lpBuffers,
                         dwBufferCount,
                         lpErrno
-                        );
-                if ( NULL == ProviderOverlapped->RecvFromArgs.lpBuffers )
-                    goto cleanup;
+                    );
+            if ( NULL == ProviderOverlapped->RecvFromArgs.lpBuffers )
+                goto cleanup;
 
-                break;
+            break;
 
-            case LSP_OP_SEND:
-                ProviderOverlapped->SendArgs.dwBufferCount = dwBufferCount;
-                ProviderOverlapped->SendArgs.lpBuffers = CopyWSABuf(
+        case LSP_OP_SEND:
+            ProviderOverlapped->SendArgs.dwBufferCount = dwBufferCount;
+            ProviderOverlapped->SendArgs.lpBuffers = CopyWSABuf(
                         lpBuffers,
                         dwBufferCount,
                         lpErrno
-                        );
-                if ( NULL == ProviderOverlapped->SendArgs.lpBuffers )
-                    goto cleanup;
+                    );
+            if ( NULL == ProviderOverlapped->SendArgs.lpBuffers )
+                goto cleanup;
 
-                break;
-              
-            case LSP_OP_SENDTO:
-                ProviderOverlapped->SendToArgs.dwBufferCount = dwBufferCount;
-                ProviderOverlapped->SendToArgs.lpBuffers = CopyWSABuf(
+            break;
+
+        case LSP_OP_SENDTO:
+            ProviderOverlapped->SendToArgs.dwBufferCount = dwBufferCount;
+            ProviderOverlapped->SendToArgs.lpBuffers = CopyWSABuf(
                         lpBuffers,
                         dwBufferCount,
                         lpErrno
-                        );
-                if ( NULL == ProviderOverlapped->SendToArgs.lpBuffers )
-                    goto cleanup;
+                    );
+            if ( NULL == ProviderOverlapped->SendToArgs.lpBuffers )
+                goto cleanup;
 
-                break;
+            break;
 
-            case LSP_OP_RECVMSG:
-                ProviderOverlapped->RecvMsgArgs.WsaMsg.dwBufferCount = dwBufferCount;
-                ProviderOverlapped->RecvMsgArgs.WsaMsg.lpBuffers = CopyWSABuf(
+        case LSP_OP_RECVMSG:
+            ProviderOverlapped->RecvMsgArgs.WsaMsg.dwBufferCount = dwBufferCount;
+            ProviderOverlapped->RecvMsgArgs.WsaMsg.lpBuffers = CopyWSABuf(
                         lpBuffers,
                         dwBufferCount,
                         lpErrno
-                        );
-                if (NULL == ProviderOverlapped->RecvMsgArgs.WsaMsg.lpBuffers)
-                    goto cleanup;
-                break;
+                    );
+            if (NULL == ProviderOverlapped->RecvMsgArgs.WsaMsg.lpBuffers)
+                goto cleanup;
+            break;
 
-            case LSP_OP_SENDMSG:
+        case LSP_OP_SENDMSG:
 
-                ProviderOverlapped->SendMsgArgs.SendMsg.lpMsg = 
-                    &ProviderOverlapped->SendMsgArgs.WsaMsg;
-                ProviderOverlapped->SendMsgArgs.SendMsg.lpMsg->dwBufferCount = dwBufferCount;
-                ProviderOverlapped->SendMsgArgs.SendMsg.lpOverlapped = &ProviderOverlapped->ProviderOverlapped;
-                ProviderOverlapped->SendMsgArgs.SendMsg.lpMsg->lpBuffers = CopyWSABuf(
+            ProviderOverlapped->SendMsgArgs.SendMsg.lpMsg =
+                &ProviderOverlapped->SendMsgArgs.WsaMsg;
+            ProviderOverlapped->SendMsgArgs.SendMsg.lpMsg->dwBufferCount = dwBufferCount;
+            ProviderOverlapped->SendMsgArgs.SendMsg.lpOverlapped = &ProviderOverlapped->ProviderOverlapped;
+            ProviderOverlapped->SendMsgArgs.SendMsg.lpMsg->lpBuffers = CopyWSABuf(
                         lpBuffers,
                         dwBufferCount,
                         lpErrno
-                        );
-                if (NULL == ProviderOverlapped->SendMsgArgs.SendMsg.lpMsg->lpBuffers)
-                    goto cleanup;
+                    );
+            if (NULL == ProviderOverlapped->SendMsgArgs.SendMsg.lpMsg->lpBuffers)
+                goto cleanup;
 
-                break;
+            break;
 
 
-            default:
-                break;
+        default:
+            break;
         }
     }
 
@@ -1595,10 +1595,10 @@ cleanup:
 //    WSABUF array for those asynchronous calls that use them).
 //
 void
-UndoOverlappedOperation( 
+UndoOverlappedOperation(
     SOCK_INFO         *SocketContext,
     WSAOVERLAPPEDPLUS *ProviderOverlapped
-    )
+)
 {
     AcquireSocketLock( SocketContext );
     (SocketContext->dwOutstandingAsync)--;
@@ -1609,14 +1609,14 @@ UndoOverlappedOperation(
 
 //
 // Function: FreeOverlappedLookasideList
-// 
+//
 // Description:
 //      This routine frees all WSAOVELRAPPEDPLUS structures in the lookaside list.
 //      This function is called when the LSP is unloading.
 //
 void
 FreeOverlappedLookasideList(
-    )
+)
 {
     WSAOVERLAPPEDPLUS  *olp = NULL;
     LIST_ENTRY         *entry = NULL;

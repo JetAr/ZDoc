@@ -1,4 +1,4 @@
-/********************************************************************++
+﻿/********************************************************************++
 THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED
 TO THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -32,7 +32,7 @@ int __cdecl main()
 
     long CurrentProfilesBitMask = 0;
 
-    // The rule name, description, and group are provided as indirect strings for 
+    // The rule name, description, and group are provided as indirect strings for
     // localization purposes. These resource strings can be found in the rc file
 
     BSTR bstrRuleName = SysAllocString(L"@Add_GRE_Rule.exe,-128");
@@ -40,15 +40,27 @@ int __cdecl main()
     BSTR bstrRuleGroup = SysAllocString(L"@Add_GRE_Rule.exe,-127");
 
     // Error checking for BSTR allocations
-    if (NULL == bstrRuleName) { printf("Failed to allocate bstrRuleName\n"); goto Cleanup; }
-    if (NULL == bstrRuleDescription) { printf("Failed to allocate bstrRuleDescription\n"); goto Cleanup; }
-    if (NULL == bstrRuleGroup) { printf("Failed to allocate bstrRuleGroup\n"); goto Cleanup; }
+    if (NULL == bstrRuleName)
+    {
+        printf("Failed to allocate bstrRuleName\n");
+        goto Cleanup;
+    }
+    if (NULL == bstrRuleDescription)
+    {
+        printf("Failed to allocate bstrRuleDescription\n");
+        goto Cleanup;
+    }
+    if (NULL == bstrRuleGroup)
+    {
+        printf("Failed to allocate bstrRuleGroup\n");
+        goto Cleanup;
+    }
 
     // Initialize COM.
     hrComInit = CoInitializeEx(
                     0,
                     COINIT_APARTMENTTHREADED
-                    );
+                );
 
     // Ignore RPC_E_CHANGED_MODE; this just means that COM has already been
     // initialized with a different mode. Since we don't care what the mode is,
@@ -88,18 +100,18 @@ int __cdecl main()
     // When possible we avoid adding firewall rules to the Public profile.
     // If Public is currently active and it is not the only active profile, we remove it from the bitmask
     if ((CurrentProfilesBitMask & NET_FW_PROFILE2_PUBLIC) &&
-        (CurrentProfilesBitMask != NET_FW_PROFILE2_PUBLIC))
+            (CurrentProfilesBitMask != NET_FW_PROFILE2_PUBLIC))
     {
         CurrentProfilesBitMask ^= NET_FW_PROFILE2_PUBLIC;
     }
 
     // Create a new Firewall Rule object.
     hr = CoCreateInstance(
-                __uuidof(NetFwRule),
-                NULL,
-                CLSCTX_INPROC_SERVER,
-                __uuidof(INetFwRule),
-                (void**)&pFwRule);
+             __uuidof(NetFwRule),
+             NULL,
+             CLSCTX_INPROC_SERVER,
+             __uuidof(INetFwRule),
+             (void**)&pFwRule);
     if (FAILED(hr))
     {
         printf("CoCreateInstance for Firewall Rule failed: 0x%08lx\n", hr);
@@ -200,7 +212,7 @@ Cleanup:
     {
         CoUninitialize();
     }
-   
+
     return 0;
 }
 
@@ -211,16 +223,16 @@ HRESULT WFCOMInitialize(INetFwPolicy2** ppNetFwPolicy2)
     HRESULT hr = S_OK;
 
     hr = CoCreateInstance(
-        __uuidof(NetFwPolicy2), 
-        NULL, 
-        CLSCTX_INPROC_SERVER, 
-        __uuidof(INetFwPolicy2), 
-        (void**)ppNetFwPolicy2);
+             __uuidof(NetFwPolicy2),
+             NULL,
+             CLSCTX_INPROC_SERVER,
+             __uuidof(INetFwPolicy2),
+             (void**)ppNetFwPolicy2);
 
     if (FAILED(hr))
     {
         printf("CoCreateInstance for INetFwPolicy2 failed: 0x%08lx\n", hr);
-        goto Cleanup;        
+        goto Cleanup;
     }
 
 Cleanup:

@@ -1,4 +1,4 @@
-#pragma comment(linker,"\"/manifestdependency:type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' processorArchitecture='*' publicKeyToken='6595b64144ccf1df' language='*'\"")
+﻿#pragma comment(linker,"\"/manifestdependency:type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' processorArchitecture='*' publicKeyToken='6595b64144ccf1df' language='*'\"")
 
 #include <SDKDDKVer.h>
 #include <Windows.h>
@@ -17,7 +17,7 @@
 //  Name:     System.AppUserModel.ToastActivatorCLSID -- PKEY_AppUserModel_ToastActivatorCLSID
 //  Type:     Guid -- VT_CLSID
 //  FormatID: {9F4C2855-9F79-4B39-A8D0-E1D42DE1D5F3}, 26
-//  
+//
 //  Used to CoCreate an INotificationActivationCallback interface to notify about toast activations.
 EXTERN_C const PROPERTYKEY DECLSPEC_SELECTANY PKEY_AppUserModel_ToastActivatorCLSID = { { 0x9F4C2855, 0x9F79, 0x4B39, { 0xA8, 0xD0, 0xE1, 0xD4, 0x2D, 0xE1, 0xD5, 0xF3 } }, 26 };
 
@@ -30,9 +30,16 @@ struct CoTaskMemStringTraits
 {
     typedef PWSTR Type;
 
-    inline static bool Close(_In_ Type h) throw() { ::CoTaskMemFree(h); return true; }
+    inline static bool Close(_In_ Type h) throw()
+    {
+        ::CoTaskMemFree(h);
+        return true;
+    }
 
-    inline static Type GetInvalidValue() throw() { return nullptr; }
+    inline static Type GetInvalidValue() throw()
+    {
+        return nullptr;
+    }
 };
 typedef HandleT<CoTaskMemStringTraits> CoTaskMemString;
 
@@ -66,33 +73,33 @@ private:
         _In_ UINT message,
         _In_ WPARAM wParam,
         _In_ LPARAM lParam
-        );
+    );
 
     HRESULT DisplayToast();
 
     HRESULT CreateToastXml(
         _In_ ABI::Windows::UI::Notifications::IToastNotificationManagerStatics* toastManager,
         _COM_Outptr_ ABI::Windows::Data::Xml::Dom::IXmlDocument** xml
-        );
+    );
 
     HRESULT CreateToast(
         _In_ ABI::Windows::UI::Notifications::IToastNotificationManagerStatics* toastManager,
         _In_ ABI::Windows::Data::Xml::Dom::IXmlDocument* xml
-        );
+    );
     HRESULT DesktopToastsApp::SetImageSrc(
         _In_ PCWSTR imagePath,
         _In_ ABI::Windows::Data::Xml::Dom::IXmlDocument* toastXml
-        );
+    );
     HRESULT DesktopToastsApp::SetTextValues(
         _In_reads_(textValuesCount) const PCWSTR* textValues,
         _In_ UINT32 textValuesCount,
         _Inout_ ABI::Windows::Data::Xml::Dom::IXmlDocument* toastXml
-        );
+    );
     HRESULT DesktopToastsApp::SetNodeValueString(
         _In_ HSTRING onputString,
         _Inout_ ABI::Windows::Data::Xml::Dom::IXmlNode* node,
         _In_ ABI::Windows::Data::Xml::Dom::IXmlDocument* xml
-        );
+    );
 
     HWND m_hwnd = nullptr;
     HWND m_hEdit = nullptr;
@@ -109,7 +116,7 @@ DesktopToastsApp* DesktopToastsApp::s_currentInstance = nullptr;
 // OS via its shortcut so that it knows who to call later.
 class DECLSPEC_UUID("23A5B06E-20BB-4E7E-A0AC-6982ED6A6041") NotificationActivator WrlSealed
     : public RuntimeClass < RuntimeClassFlags<ClassicCom>,
-    INotificationActivationCallback > WrlFinal
+      INotificationActivationCallback > WrlFinal
 {
 public:
     virtual HRESULT STDMETHODCALLTYPE Activate(
@@ -254,12 +261,12 @@ HRESULT DesktopToastsApp::RegisterComServer(PCWSTR exePath)
     // Other options might be to launch a background process instead that then decides to launch
     // the UI if needed by that particular notification.
     return HRESULT_FROM_WIN32(::RegSetKeyValue(
-        HKEY_CURRENT_USER,
-        LR"(SOFTWARE\Classes\CLSID\{23A5B06E-20BB-4E7E-A0AC-6982ED6A6041}\LocalServer32)",
-        nullptr,
-        REG_SZ,
-        reinterpret_cast<const BYTE*>(exePath),
-        dataSize));
+                                  HKEY_CURRENT_USER,
+                                  LR"(SOFTWARE\Classes\CLSID\{23A5B06E-20BB-4E7E-A0AC-6982ED6A6041}\LocalServer32)",
+                                  nullptr,
+                                  REG_SZ,
+                                  reinterpret_cast<const BYTE*>(exePath),
+                                  dataSize));
 }
 
 // Register activator for notifications
@@ -308,13 +315,13 @@ HRESULT DesktopToastsApp::Initialize(HINSTANCE hInstance)
 
         // Create window
         m_hwnd = CreateWindow(
-            L"DesktopToastsApp",
-            L"Desktop Toasts Demo App",
-            WS_OVERLAPPEDWINDOW,
-            CW_USEDEFAULT, CW_USEDEFAULT,
-            350, 200,
-            nullptr, nullptr,
-            hInstance, this);
+                     L"DesktopToastsApp",
+                     L"Desktop Toasts Demo App",
+                     WS_OVERLAPPEDWINDOW,
+                     CW_USEDEFAULT, CW_USEDEFAULT,
+                     350, 200,
+                     nullptr, nullptr,
+                     hInstance, this);
 
         hr = m_hwnd ? S_OK : E_FAIL;
         if (SUCCEEDED(hr))
@@ -327,12 +334,12 @@ HRESULT DesktopToastsApp::Initialize(HINSTANCE hInstance)
                 m_hwnd, reinterpret_cast<HMENU>(HM_TEXTBUTTON),
                 hInstance, nullptr);
             m_hEdit = ::CreateWindow(
-                L"EDIT",
-                L"Whatever action you take on the displayed toast will be shown here.",
-                ES_LEFT | ES_MULTILINE | ES_READONLY | WS_CHILD | WS_VISIBLE | WS_BORDER,
-                0, 30, 300, 50,
-                m_hwnd, nullptr,
-                hInstance, nullptr);
+                          L"EDIT",
+                          L"Whatever action you take on the displayed toast will be shown here.",
+                          ES_LEFT | ES_MULTILINE | ES_READONLY | WS_CHILD | WS_VISIBLE | WS_BORDER,
+                          0, 30, 300, 50,
+                          m_hwnd, nullptr,
+                          hInstance, nullptr);
 
             ::ShowWindow(m_hwnd, SW_SHOWNORMAL);
             ::UpdateWindow(m_hwnd);
@@ -373,8 +380,8 @@ HRESULT DesktopToastsApp::DisplayToast()
 {
     ComPtr<IToastNotificationManagerStatics> toastStatics;
     HRESULT hr = Windows::Foundation::GetActivationFactory(
-        HStringReference(RuntimeClass_Windows_UI_Notifications_ToastNotificationManager).Get(),
-        &toastStatics);
+                     HStringReference(RuntimeClass_Windows_UI_Notifications_ToastNotificationManager).Get(),
+                     &toastStatics);
     if (SUCCEEDED(hr))
     {
         ComPtr<IXmlDocument> toastXml;
@@ -404,7 +411,8 @@ HRESULT DesktopToastsApp::CreateToastXml(IToastNotificationManagerStatics* toast
             hr = SetImageSrc(imagePath, *inputXml);
             if (SUCCEEDED(hr))
             {
-                const PCWSTR textValues[] = {
+                const PCWSTR textValues[] =
+                {
                     L"Line 1",
                     L"Line 2",
                     L"Line 3"
@@ -518,8 +526,8 @@ HRESULT DesktopToastsApp::CreateToast(IToastNotificationManagerStatics* toastMan
     {
         ComPtr<IToastNotificationFactory> factory;
         hr = Windows::Foundation::GetActivationFactory(
-            HStringReference(RuntimeClass_Windows_UI_Notifications_ToastNotification).Get(),
-            &factory);
+                 HStringReference(RuntimeClass_Windows_UI_Notifications_ToastNotification).Get(),
+                 &factory);
         if (SUCCEEDED(hr))
         {
             ComPtr<IToastNotification> toast;
@@ -536,9 +544,9 @@ HRESULT DesktopToastsApp::CreateToast(IToastNotificationManagerStatics* toastMan
                 using namespace ABI::Windows::Foundation;
 
                 hr = toast->add_Activated(
-                    Callback < Implements < RuntimeClassFlags<ClassicCom>,
-                    ITypedEventHandler<ToastNotification*, IInspectable* >> >(
-                    [](IToastNotification*, IInspectable*)
+                         Callback < Implements < RuntimeClassFlags<ClassicCom>,
+                         ITypedEventHandler<ToastNotification*, IInspectable* >> >(
+                             [](IToastNotification*, IInspectable*)
                 {
                     // When the user clicks or taps on the toast, the registered
                     // COM object is activated, and the Activated event is raised.
@@ -547,13 +555,13 @@ HRESULT DesktopToastsApp::CreateToast(IToastNotificationManagerStatics* toastMan
                     DesktopToastsApp::GetInstance()->SetMessage(L"The user clicked on the toast.");
                     return S_OK;
                 }).Get(),
-                    &activatedToken);
+                &activatedToken);
 
                 if (SUCCEEDED(hr))
                 {
                     hr = toast->add_Dismissed(Callback < Implements < RuntimeClassFlags<ClassicCom>,
-                        ITypedEventHandler<ToastNotification*, ToastDismissedEventArgs* >> >(
-                        [](IToastNotification*, IToastDismissedEventArgs* e)
+                                              ITypedEventHandler<ToastNotification*, ToastDismissedEventArgs* >> >(
+                                                  [](IToastNotification*, IToastDismissedEventArgs* e)
                     {
                         ToastDismissalReason reason;
                         if (SUCCEEDED(e->get_Reason(&reason)))
@@ -579,17 +587,17 @@ HRESULT DesktopToastsApp::CreateToast(IToastNotificationManagerStatics* toastMan
                         }
                         return S_OK;
                     }).Get(),
-                        &dismissedToken);
+                    &dismissedToken);
                     if (SUCCEEDED(hr))
                     {
                         hr = toast->add_Failed(Callback < Implements < RuntimeClassFlags<ClassicCom>,
-                            ITypedEventHandler<ToastNotification*, ToastFailedEventArgs* >> >(
-                            [](IToastNotification*, IToastFailedEventArgs* /*e */)
+                                               ITypedEventHandler<ToastNotification*, ToastFailedEventArgs* >> >(
+                                                   [](IToastNotification*, IToastFailedEventArgs* /*e */)
                         {
                             DesktopToastsApp::GetInstance()->SetMessage(L"The toast encountered an error.");
                             return S_OK;
                         }).Get(),
-                            &failedToken);
+                        &failedToken);
 
                         if (SUCCEEDED(hr))
                         {
@@ -635,20 +643,20 @@ LRESULT CALLBACK DesktopToastsApp::WndProc(HWND hwnd, UINT32 message, WPARAM wPa
                 return DefWindowProc(hwnd, message, wParam, lParam);
             }
         }
-            break;
+        break;
         case WM_PAINT:
         {
             PAINTSTRUCT ps;
             BeginPaint(hwnd, &ps);
             EndPaint(hwnd, &ps);
         }
-            return 0;
+        return 0;
 
         case WM_DESTROY:
         {
             PostQuitMessage(0);
         }
-            return 1;
+        return 1;
         }
     }
     return DefWindowProc(hwnd, message, wParam, lParam);

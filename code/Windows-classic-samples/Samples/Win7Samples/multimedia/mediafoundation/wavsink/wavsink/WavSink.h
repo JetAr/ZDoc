@@ -1,4 +1,4 @@
-//-----------------------------------------------------------------------------
+﻿//-----------------------------------------------------------------------------
 // File: WaveSink.h
 // Description: Archive sink for creating .wav files.
 //
@@ -33,22 +33,23 @@ class CMarker;
 enum FlushState
 {
     DropSamples = 0,
-    WriteSamples 
+    WriteSamples
 };
 
 
 // IMarker:
 // Custom interface for handling IMFStreamSink::PlaceMarker calls asynchronously.
 
-// A marker consists of a marker type, marker data, and context data. 
+// A marker consists of a marker type, marker data, and context data.
 // By defining this interface, we can store the marker data inside an IUnknown object
-// and keep that object on the same queue that holds the media samples. This is 
+// and keep that object on the same queue that holds the media samples. This is
 // useful because samples and markers must be serialized. That is, we cannot respond
 // to a marker until we have processed all of the samples that came before it.
 
 // Note that IMarker is not a standard Media Foundation interface.
 MIDL_INTERFACE("3AC82233-933C-43a9-AF3D-ADC94EABF406")
-IMarker : public IUnknown
+IMarker :
+public IUnknown
 {
     virtual STDMETHODIMP GetMarkerType(MFSTREAMSINK_MARKER_TYPE *pType) = 0;
     virtual STDMETHODIMP GetMarkerValue(PROPVARIANT *pvar) = 0;
@@ -58,7 +59,7 @@ IMarker : public IUnknown
 
 
 class CWavSink : public IMFFinalizableMediaSink,   // Note: IMFFinalizableMediaSink inherits IMFMediaSink
-                 public IMFClockStateSink
+    public IMFClockStateSink
 {
 
     friend class CWavStream;
@@ -75,7 +76,7 @@ public:
     // IMFMediaSink methods
     STDMETHODIMP GetCharacteristics(DWORD *pdwCharacteristics);
 
-    STDMETHODIMP AddStreamSink( 
+    STDMETHODIMP AddStreamSink(
         /* [in] */ DWORD dwStreamSinkIdentifier,
         /* [in] */ IMFMediaType *pMediaType,
         /* [out] */ IMFStreamSink **ppStreamSink);
@@ -150,12 +151,12 @@ public:
     STDMETHODIMP GetIdentifier(DWORD *pdwIdentifier);
     STDMETHODIMP GetMediaTypeHandler(IMFMediaTypeHandler **ppHandler);
     STDMETHODIMP ProcessSample(IMFSample *pSample);
-    
-    STDMETHODIMP PlaceMarker( 
+
+    STDMETHODIMP PlaceMarker(
         /* [in] */ MFSTREAMSINK_MARKER_TYPE eMarkerType,
         /* [in] */ const PROPVARIANT *pvarMarkerValue,
         /* [in] */ const PROPVARIANT *pvarContextValue);
-    
+
     STDMETHODIMP Flush();
 
     // IMFMediaTypeHandler
@@ -174,7 +175,7 @@ private:
     {
         State_TypeNotSet = 0,    // No media type is set
         State_Ready,             // Media type is set, Start has never been called.
-        State_Started,  
+        State_Started,
         State_Stopped,
         State_Paused,
         State_Finalized,
@@ -201,13 +202,13 @@ private:
     // Used to queue asynchronous operations. When we call MFPutWorkItem, we use this
     // object for the callback state (pState). Then, when the callback is invoked,
     // we can use the object to determine which asynchronous operation to perform.
- 
+
     class CAsyncOperation : public IUnknown
     {
     public:
         CAsyncOperation(StreamOperation op);
 
-        StreamOperation m_op;   // The operation to perform.  
+        StreamOperation m_op;   // The operation to perform.
 
         // IUnknown methods.
         STDMETHODIMP QueryInterface(REFIID iid, void** ppv);
@@ -219,7 +220,7 @@ private:
         virtual ~CAsyncOperation();
     };
 
-    
+
     // ValidStateMatrix: Defines a look-up table that says which operations
     // are valid from which states.
     static BOOL ValidStateMatrix[State_Count][Op_Count];
@@ -253,7 +254,7 @@ private:
     HRESULT     ValidateOperation(StreamOperation op);
 
     HRESULT     QueueAsyncOperation(StreamOperation op);
-    
+
     HRESULT     OnDispatchWorkItem(IMFAsyncResult* pAsyncResult);
     HRESULT     DispatchProcessSample(CAsyncOperation* pOp);
     HRESULT     DispatchFinalize(CAsyncOperation* pOp);
@@ -268,7 +269,7 @@ private:
 
     State                       m_state;
     BOOL                        m_IsShutdown;               // Flag to indicate if Shutdown() method was called.
-    
+
     DWORD                       m_WorkQueueId;              // ID of the work queue for asynchronous operations.
     AsyncCallback<CWavStream>   m_WorkQueueCB;              // Callback for the work queue.
 
@@ -282,7 +283,7 @@ private:
     IMFMediaType                *m_pCurrentType;
 
     ComPtrList<IUnknown>        m_SampleQueue;              // Queue to hold samples and markers.
-                                                            // Applies to: ProcessSample, PlaceMarker, BeginFinalize
+    // Applies to: ProcessSample, PlaceMarker, BeginFinalize
 
     IMFAsyncResult              *m_pFinalizeResult;         // Result object for Finalize operation.
 
@@ -291,7 +292,7 @@ private:
 
 
 
-// Holds marker information for IMFStreamSink::PlaceMarker 
+// Holds marker information for IMFStreamSink::PlaceMarker
 
 class CMarker : public IMarker
 {
@@ -301,7 +302,7 @@ public:
         const PROPVARIANT* pvarMarkerValue,
         const PROPVARIANT* pvarContextValue,
         IMarker **ppMarker
-        );
+    );
 
     // IUnknown methods.
     STDMETHODIMP QueryInterface(REFIID iid, void** ppv);

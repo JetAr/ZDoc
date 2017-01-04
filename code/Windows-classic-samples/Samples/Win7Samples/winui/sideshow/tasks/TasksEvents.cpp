@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -20,8 +20,8 @@ CTasksEvents::~CTasksEvents()
 
 // ISideShowEvents methods
 HRESULT CTasksEvents::ContentMissing(
-        const CONTENT_ID contentId,
-        ISideShowContent** ppIContent)
+    const CONTENT_ID contentId,
+    ISideShowContent** ppIContent)
 {
     HRESULT hr = E_FAIL;
     if (NULL != m_pContent)
@@ -45,22 +45,22 @@ HRESULT CTasksEvents::ContentMissing(
 }
 
 HRESULT CTasksEvents::ApplicationEvent(
-        ISideShowCapabilities* /*pICapabilities*/,
-        const DWORD /*dwEventId*/,
-        const DWORD /*dwEventSize*/,
-        const BYTE* /*pbEventData*/)
+    ISideShowCapabilities* /*pICapabilities*/,
+    const DWORD /*dwEventId*/,
+    const DWORD /*dwEventSize*/,
+    const BYTE* /*pbEventData*/)
 {
     return S_OK;
 }
 
 HRESULT CTasksEvents::DeviceAdded(
-        ISideShowCapabilities* /*pIDevice*/)
+    ISideShowCapabilities* /*pIDevice*/)
 {
     return S_OK;
 }
 
 HRESULT CTasksEvents::DeviceRemoved(
-        ISideShowCapabilities* /*pIDevice*/)
+    ISideShowCapabilities* /*pIDevice*/)
 {
     return S_OK;
 }

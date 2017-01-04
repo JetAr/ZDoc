@@ -1,4 +1,4 @@
-//--------------------------------------------------------------------------------------
+﻿//--------------------------------------------------------------------------------------
 // File: D3D9ExSample.cpp
 //
 // Sample showing how to use D3D9Ex advanced features.
@@ -38,7 +38,7 @@ struct SCREENVERTEX
 HWND					g_hWnd = NULL;			// Window Handle
 IDirect3D9Ex*			g_pD3D9 = NULL;			// Direct3D9Ex object
 IDirect3DDevice9Ex*		g_pDevRealTime = NULL;	// Device for rendering the real-time
-                                                // objects like cursors
+// objects like cursors
 
 D3DPRESENT_PARAMETERS	g_D3DPresentParameters = {0}; // Current present parameters
 
@@ -172,7 +172,7 @@ BOOL InitWindow( HINSTANCE hInstance, int nCmdShow )
     // Register class
     //
     WNDCLASSEX wcex;
-    wcex.cbSize = sizeof(WNDCLASSEX); 
+    wcex.cbSize = sizeof(WNDCLASSEX);
     wcex.style          = CS_CLASSDC;
     wcex.lpfnWndProc    = WndProc;
     wcex.cbClsExtra     = 0;
@@ -211,21 +211,21 @@ HRESULT CreateD3D9VDevice( IDirect3D9Ex* pD3D, IDirect3DDevice9Ex** ppDev9Ex, D3
 
     // Create a d3d9ex device
     DWORD dwFlags = D3DCREATE_SOFTWARE_VERTEXPROCESSING | D3DCREATE_ENABLE_PRESENTSTATS;
-                             
+
     if( !hWnd )
     {
         hWnd = g_hWnd;
         dwFlags = D3DCREATE_SOFTWARE_VERTEXPROCESSING;
     }
 
-    hr = pD3D->CreateDeviceEx( D3DADAPTER_DEFAULT, 
-                               D3DDEVTYPE_HAL, 
+    hr = pD3D->CreateDeviceEx( D3DADAPTER_DEFAULT,
+                               D3DDEVTYPE_HAL,
                                hWnd,
                                dwFlags,
                                pD3DPresentParameters,
                                NULL,
                                ppDev9Ex );
-    
+
     if( SUCCEEDED(hr) )
     {
         // Make sure our formats are OK
@@ -235,8 +235,8 @@ HRESULT CreateD3D9VDevice( IDirect3D9Ex* pD3D, IDirect3DDevice9Ex** ppDev9Ex, D3
 
         // Skip backbuffer formats that don't support alpha blending
         hr = pD3D->CheckDeviceFormat( Caps.AdapterOrdinal, Caps.DeviceType,
-                        pD3DPresentParameters->BackBufferFormat, D3DUSAGE_QUERY_POSTPIXELSHADER_BLENDING, 
-                        D3DRTYPE_TEXTURE, pD3DPresentParameters->BackBufferFormat );
+                                      pD3DPresentParameters->BackBufferFormat, D3DUSAGE_QUERY_POSTPIXELSHADER_BLENDING,
+                                      D3DRTYPE_TEXTURE, pD3DPresentParameters->BackBufferFormat );
         if(FAILED(hr))
         {
             SAFE_RELEASE( *ppDev9Ex );
@@ -266,9 +266,9 @@ HRESULT Reset(IDirect3DDevice9Ex* pDev9Ex)
 
 HRESULT CreateFont()
 {
-    if ( FAILED( D3DXCreateFont( g_pDevRealTime, 16, 0, FW_BOLD, 1, FALSE, DEFAULT_CHARSET, 
-                              OUT_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, 
-                              L"Arial", &g_pFont ) ) )
+    if ( FAILED( D3DXCreateFont( g_pDevRealTime, 16, 0, FW_BOLD, 1, FALSE, DEFAULT_CHARSET,
+                                 OUT_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE,
+                                 L"Arial", &g_pFont ) ) )
     {
         return E_FAIL;
     }
@@ -290,7 +290,7 @@ void Cleanup()
     SAFE_RELEASE(g_pD3D9);
     SAFE_RELEASE(g_pDevRealTime);
     SAFE_RELEASE(g_pCursorVB);
-    SAFE_RELEASE(g_pScreenVB);	
+    SAFE_RELEASE(g_pScreenVB);
     SAFE_RELEASE(g_pSharedBackgroundTexture);
     SAFE_RELEASE(g_pFont);
     SAFE_RELEASE(g_pSprite);
@@ -301,11 +301,11 @@ HRESULT CreateD3DCursor()
 {
     // create the vb
     if( FAILED( g_pDevRealTime->CreateVertexBuffer( 4*sizeof(CURSORVERTEX),
-                                                    D3DUSAGE_DYNAMIC, 
-                                                    D3DFVF_CURSORVERTEX,
-                                                    D3DPOOL_DEFAULT, 
-                                                    &g_pCursorVB, 
-                                                    NULL ) ) )
+                D3DUSAGE_DYNAMIC,
+                D3DFVF_CURSORVERTEX,
+                D3DPOOL_DEFAULT,
+                &g_pCursorVB,
+                NULL ) ) )
     {
         return E_FAIL;
     }
@@ -319,11 +319,11 @@ HRESULT CreateScreenVB( float screenX, float screenY )
 {
     // create the vb
     if( FAILED( g_pDevRealTime->CreateVertexBuffer( 4*sizeof(SCREENVERTEX),
-                                                    D3DUSAGE_DYNAMIC, 
-                                                    D3DFVF_SCREENVERTEX,
-                                                    D3DPOOL_DEFAULT, 
-                                                    &g_pScreenVB, 
-                                                    NULL ) ) )
+                D3DUSAGE_DYNAMIC,
+                D3DFVF_SCREENVERTEX,
+                D3DPOOL_DEFAULT,
+                &g_pScreenVB,
+                NULL ) ) )
     {
         return E_FAIL;
     }
@@ -345,7 +345,7 @@ HRESULT UpdateScreenVB( float screenX, float screenY )
     vertices[0].w = 1.0f;
     vertices[0].u = 0.0f;
     vertices[0].v = 1.0f;
-    
+
     vertices[1].x = 0;
     vertices[1].y = 0;
     vertices[1].z = 0.5f;
@@ -380,13 +380,13 @@ HRESULT CreateSharedTexture()
         hHandle = GetSharedTextureHandle();
 
     HRESULT hr = g_pDevRealTime->CreateTexture( g_RTWidth,
-                                    g_RTHeight,
-                                    1,
-                                    D3DUSAGE_RENDERTARGET,
-                                    D3DFMT_X8R8G8B8,
-                                    D3DPOOL_DEFAULT,
-                                    &g_pSharedBackgroundTexture,
-                                    &hHandle );
+                 g_RTHeight,
+                 1,
+                 D3DUSAGE_RENDERTARGET,
+                 D3DFMT_X8R8G8B8,
+                 D3DPOOL_DEFAULT,
+                 &g_pSharedBackgroundTexture,
+                 &hHandle );
     if( FAILED( hr ) )
         return E_FAIL;
 
@@ -437,111 +437,111 @@ LRESULT CALLBACK WndProc( HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam 
     PAINTSTRUCT ps;
     HDC hdc;
 
-    switch (message) 
+    switch (message)
     {
-        case WM_PAINT:
-            hdc = BeginPaint(hWnd, &ps);
-            EndPaint(hWnd, &ps);
-            break;
+    case WM_PAINT:
+        hdc = BeginPaint(hWnd, &ps);
+        EndPaint(hWnd, &ps);
+        break;
 
-        case WM_DESTROY:
+    case WM_DESTROY:
+        PostQuitMessage(0);
+        break;
+
+    case WM_MOUSEMOVE:
+    {
+        UINT x = LOWORD( lParam );
+        UINT y = HIWORD( lParam );
+        MoveCursor( x,y );
+    }
+
+    break;
+
+    case WM_KEYUP:
+        switch( wParam )
+        {
+        case VK_UP:
+            g_cubeCount = IncreaseCubeCount();
+            break;
+        case VK_DOWN:
+            g_cubeCount = DecreaseCubeCount();
+            break;
+        case VK_ESCAPE:
             PostQuitMessage(0);
             break;
+        };
+        break;
 
-        case WM_MOUSEMOVE:
+    case WM_SYSKEYUP:
+        if( (wParam == VK_RETURN) && (g_pD3D9 != NULL) && (g_pDevRealTime != NULL) )
+        {
+            g_D3DPresentParameters.Windowed = !g_D3DPresentParameters.Windowed;
+
+            DWORD dwStyle;
+            DWORD dwExStyle;
+
+            D3DDISPLAYMODE Mode;
+
+            g_pD3D9->GetAdapterDisplayMode(D3DADAPTER_DEFAULT, &Mode);
+
+            if (g_D3DPresentParameters.Windowed)
             {
-                UINT x = LOWORD( lParam );
-                UINT y = HIWORD( lParam );
-                MoveCursor( x,y );
+                //
+                // Default to using the window client area size
+                //
+                g_D3DPresentParameters.BackBufferWidth = 800;
+                g_D3DPresentParameters.BackBufferHeight = 600;
+
+                //
+                // Window styles for D3D windowed mode
+                //
+                dwStyle = WS_OVERLAPPEDWINDOW;
+                dwExStyle = WS_EX_CLIENTEDGE;
+            }
+            else
+            {
+                g_D3DPresentParameters.BackBufferWidth=Mode.Width;
+                g_D3DPresentParameters.BackBufferHeight=Mode.Height;
+
+                dwStyle = WS_POPUP;
+                dwExStyle = WS_EX_TOPMOST;
             }
 
-            break;
+            SetWindowLong( g_hWnd, GWL_STYLE, dwStyle );
+            SetWindowLong( g_hWnd, GWL_EXSTYLE, dwExStyle );
 
-        case WM_KEYUP:
-            switch( wParam )
+            if (g_D3DPresentParameters.Windowed)
             {
-            case VK_UP:
-                g_cubeCount = IncreaseCubeCount();
-                break;
-            case VK_DOWN:
-                g_cubeCount = DecreaseCubeCount();
-                break;
-            case VK_ESCAPE:
-                PostQuitMessage(0);
-                break;
-            };
-            break;
 
-        case WM_SYSKEYUP:
-            if( (wParam == VK_RETURN) && (g_pD3D9 != NULL) && (g_pDevRealTime != NULL) )
-            {
-                g_D3DPresentParameters.Windowed = !g_D3DPresentParameters.Windowed;
-                
-                DWORD dwStyle;
-                DWORD dwExStyle;
+                RECT rc = { 0, 0, g_D3DPresentParameters.BackBufferWidth, g_D3DPresentParameters.BackBufferHeight };
+                AdjustWindowRectEx( &rc, dwStyle, FALSE, dwExStyle);
 
-                D3DDISPLAYMODE Mode;
-
-                g_pD3D9->GetAdapterDisplayMode(D3DADAPTER_DEFAULT, &Mode);
-
-                if (g_D3DPresentParameters.Windowed)
-                {
-                    //
-                    // Default to using the window client area size
-                    //
-                    g_D3DPresentParameters.BackBufferWidth = 800;
-                    g_D3DPresentParameters.BackBufferHeight = 600;
-
-                    //
-                    // Window styles for D3D windowed mode
-                    //
-                    dwStyle = WS_OVERLAPPEDWINDOW;
-                    dwExStyle = WS_EX_CLIENTEDGE;
-                }
-                else
-                {
-                    g_D3DPresentParameters.BackBufferWidth=Mode.Width;
-                    g_D3DPresentParameters.BackBufferHeight=Mode.Height;
-
-                    dwStyle = WS_POPUP;
-                    dwExStyle = WS_EX_TOPMOST;
-                }
-
-                SetWindowLong( g_hWnd, GWL_STYLE, dwStyle );
-                SetWindowLong( g_hWnd, GWL_EXSTYLE, dwExStyle );
-
-                if (g_D3DPresentParameters.Windowed)
-                {
-
-                    RECT rc = { 0, 0, g_D3DPresentParameters.BackBufferWidth, g_D3DPresentParameters.BackBufferHeight };
-                    AdjustWindowRectEx( &rc, dwStyle, FALSE, dwExStyle);
-
-                    SetWindowPos( g_hWnd, HWND_NOTOPMOST,
-                                  0, 0,
-                                  rc.right - rc.left,
-                                  rc.bottom - rc.top,
-                                  SWP_SHOWWINDOW | SWP_NOMOVE );
-                }
-
-                HRESULT hr;
-
-                hr = g_pDevRealTime->Reset(&g_D3DPresentParameters);
-
-                if (SUCCEEDED( hr ))
-                {
-                    hr = UpdateScreenVB(static_cast<float>(g_D3DPresentParameters.BackBufferWidth),
-                                        static_cast<float>(g_D3DPresentParameters.BackBufferHeight));
-                }
-
-                if (FAILED( hr ))
-                {
-                    return 0;
-                }
+                SetWindowPos( g_hWnd, HWND_NOTOPMOST,
+                              0, 0,
+                              rc.right - rc.left,
+                              rc.bottom - rc.top,
+                              SWP_SHOWWINDOW | SWP_NOMOVE );
             }
-            break;
 
-        default:
-            return DefWindowProc(hWnd, message, wParam, lParam);
+            HRESULT hr;
+
+            hr = g_pDevRealTime->Reset(&g_D3DPresentParameters);
+
+            if (SUCCEEDED( hr ))
+            {
+                hr = UpdateScreenVB(static_cast<float>(g_D3DPresentParameters.BackBufferWidth),
+                                    static_cast<float>(g_D3DPresentParameters.BackBufferHeight));
+            }
+
+            if (FAILED( hr ))
+            {
+                return 0;
+            }
+        }
+        break;
+
+    default:
+        return DefWindowProc(hWnd, message, wParam, lParam);
     }
 
     return 0;
@@ -611,7 +611,7 @@ void Render( IDirect3DDevice9Ex* pDev )
     else if( D3DERR_DEVICELOST == hr )
     {
         if(FAILED( Reset( pDev ) ) )
-            g_bSkipRendering = true;	
+            g_bSkipRendering = true;
     }
     else if( S_PRESENT_MODE_CHANGED == hr )
     {
@@ -629,7 +629,7 @@ void Render( IDirect3DDevice9Ex* pDev )
         UINT ModeCount = g_pD3D9->GetAdapterModeCountEx(D3DADAPTER_DEFAULT, &DisplayModeFilter);
 
         if(FAILED( Reset( pDev ) ) )
-            g_bSkipRendering = true;	
+            g_bSkipRendering = true;
     }
     else if( D3DERR_DEVICEHUNG == hr )
     {
@@ -672,7 +672,7 @@ void RenderText( IDirect3DDevice9Ex* pDev )
 {
     // The helper object simply helps keep track of text position, and color
     // and then it calls pFont->DrawText( m_pSprite, strMsg, -1, &rc, DT_NOCLIP, m_clr );
-    // If NULL is passed in as the sprite object, then it will work fine however the 
+    // If NULL is passed in as the sprite object, then it will work fine however the
     // pFont->DrawText() will not be batched together.  Batching calls will improves perf.
     CTextHelper txtHelper( g_pFont, g_pSprite, 15 );
 

@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -21,9 +21,9 @@ const Color backgroundColorToggled(255,0,30,255);
 HMODULE thisModule;
 
 BOOL APIENTRY DllMain( _In_ HMODULE hModule,
-    _In_ DWORD  ul_reason_for_call,
-    _In_ LPVOID lpReserved
-    )
+                       _In_ DWORD  ul_reason_for_call,
+                       _In_ LPVOID lpReserved
+                     )
 {
     UNREFERENCED_PARAMETER(hModule);
     UNREFERENCED_PARAMETER(lpReserved);
@@ -31,10 +31,10 @@ BOOL APIENTRY DllMain( _In_ HMODULE hModule,
     switch (ul_reason_for_call)
     {
     case DLL_PROCESS_ATTACH:
-        {
-            thisModule = hModule;
-            break;
-        }
+    {
+        thisModule = hModule;
+        break;
+    }
     case DLL_THREAD_ATTACH:
     case DLL_THREAD_DETACH:
     case DLL_PROCESS_DETACH:
@@ -64,8 +64,8 @@ HWND UiaCleanShutdownControl::Create(_In_ HWND parent, _In_ HINSTANCE instance, 
         if (control != NULL)
         {
             control->_hwnd = CreateWindow( L"UiaCleanShutdownControl", L"",
-                WS_CHILD | WS_VISIBLE,
-                x, y, width, height, parent, NULL, instance, static_cast<PVOID>(control));
+                                           WS_CHILD | WS_VISIBLE,
+                                           x, y, width, height, parent, NULL, instance, static_cast<PVOID>(control));
             returnHwnd = control->_hwnd;
         }
     }
@@ -96,9 +96,9 @@ bool UiaCleanShutdownControl::Initialize(_In_ HINSTANCE instance)
 }
 
 UiaCleanShutdownControl::UiaCleanShutdownControl(): _providerCount(0),
-                                                    _providerTotalRefcount(0),
-                                                    _toggled(false),
-                                                    _hwnd(NULL)
+    _providerTotalRefcount(0),
+    _toggled(false),
+    _hwnd(NULL)
 {
     InterlockedIncrement(&_controlCount);
 }
@@ -114,71 +114,71 @@ LRESULT CALLBACK UiaCleanShutdownControl::WndProc(_In_ HWND hwnd, _In_ UINT mess
     switch (message)
     {
     case WM_PAINT:
-        {
-            PAINTSTRUCT ps;
-            BeginPaint(hwnd, &ps);
-            OnPaint(ps.hdc);
-            EndPaint(hwnd, &ps);
-            break;
-        }
+    {
+        PAINTSTRUCT ps;
+        BeginPaint(hwnd, &ps);
+        OnPaint(ps.hdc);
+        EndPaint(hwnd, &ps);
+        break;
+    }
     case WM_GETOBJECT:
+    {
+        IRawElementProviderSimple * provider = new CleanShutdownProvider(hwnd, this);
+        if (provider != NULL)
         {
-            IRawElementProviderSimple * provider = new CleanShutdownProvider(hwnd, this);
-            if (provider != NULL)
-            {
-                // It should be noted that this should be done regardless of lParam.
-                // UiaReturnRawElementProvider checks the lParam for us and ignores, or sends the provider
-                // or activates the Msaa Bridge based on its value.
-                lResult = UiaReturnRawElementProvider(hwnd, wParam, lParam, provider);
-                provider->Release();
-            }
-            break;
+            // It should be noted that this should be done regardless of lParam.
+            // UiaReturnRawElementProvider checks the lParam for us and ignores, or sends the provider
+            // or activates the Msaa Bridge based on its value.
+            lResult = UiaReturnRawElementProvider(hwnd, wParam, lParam, provider);
+            provider->Release();
         }
+        break;
+    }
     case WM_LBUTTONUP:
-        {
-            Toggle();
-            break;
-        }
+    {
+        Toggle();
+        break;
+    }
     case WM_DESTROY:
+    {
+        // When the HWND is destroyed call Disconnect Provider
+        // This will clean up all remote connections to the provider to allow it to
+        // Release cleanly, as opposed to leaving references around that could cause
+        // crashes after the dll is unloaded.
+        IRawElementProviderSimple * provider = new CleanShutdownProvider(hwnd, this);
+        if (provider != NULL)
         {
-            // When the HWND is destroyed call Disconnect Provider
-            // This will clean up all remote connections to the provider to allow it to
-            // Release cleanly, as opposed to leaving references around that could cause
-            // crashes after the dll is unloaded.
-            IRawElementProviderSimple * provider = new CleanShutdownProvider(hwnd, this);
-            if (provider != NULL)
+            // It is noteworthy that this is a new instance of the provider.
+            // UiaDisconnectProvider will actually disconnect ALL providers with the same
+            // runtimeId as this provider, which in this case is based off the HWND associated
+            // with the provider. We do not actually need to pass in the same provider object
+            // as we returned for WM_GETOBJECT, hence using a new instance here.
+            HRESULT hr = UiaDisconnectProvider(provider);
+            provider->Release();
+            if (FAILED(hr))
             {
-                // It is noteworthy that this is a new instance of the provider. 
-                // UiaDisconnectProvider will actually disconnect ALL providers with the same
-                // runtimeId as this provider, which in this case is based off the HWND associated
-                // with the provider. We do not actually need to pass in the same provider object
-                // as we returned for WM_GETOBJECT, hence using a new instance here.
-                HRESULT hr = UiaDisconnectProvider(provider);
-                provider->Release();
-                if (FAILED(hr))
-                {
-                    // We check the HRESULT here specifically to determine if something went wrong with the
-                    // disconnect. This should only actually error if the provider given is unable to resolve
-                    // its Runtime Id properly, which indicates the problem is with the provider. A common
-                    // cause of this is having IRawElementProviderFragment::GetRuntimeId fail when the window is gone,
-                    // or having IRawElementProviderSimple::get_HostHwndProvider fail when the window is gone,
-                    // or either of the two above methods being improperly implemented.
-                    WCHAR errorMsg[200];
-                    StringCchPrintf(errorMsg, ARRAYSIZE(errorMsg), L"UiaDisconnectProvider returned HRESULT 0x%8x", hr);
+                // We check the HRESULT here specifically to determine if something went wrong with the
+                // disconnect. This should only actually error if the provider given is unable to resolve
+                // its Runtime Id properly, which indicates the problem is with the provider. A common
+                // cause of this is having IRawElementProviderFragment::GetRuntimeId fail when the window is gone,
+                // or having IRawElementProviderSimple::get_HostHwndProvider fail when the window is gone,
+                // or either of the two above methods being improperly implemented.
+                WCHAR errorMsg[200];
+                StringCchPrintf(errorMsg, ARRAYSIZE(errorMsg), L"UiaDisconnectProvider returned HRESULT 0x%8x", hr);
 
-                    WCHAR errorTitle[200];
-                    StringCchPrintf(errorTitle, ARRAYSIZE(errorTitle), L"UiaDisconnectProvider failed:");
-                    MessageBox(NULL, errorMsg, errorTitle, MB_OK);
-                }
+                WCHAR errorTitle[200];
+                StringCchPrintf(errorTitle, ARRAYSIZE(errorTitle), L"UiaDisconnectProvider failed:");
+                MessageBox(NULL, errorMsg, errorTitle, MB_OK);
             }
-            delete this;
-            break;
         }
+        delete this;
+        break;
+    }
     default:
         lResult = DefWindowProc(hwnd, message, wParam, lParam);
         break;
     }
-            
+
     return lResult;
 }
 
@@ -192,13 +192,13 @@ LRESULT CALLBACK UiaCleanShutdownControl::StaticWndProc(_In_ HWND hwnd, _In_ UIN
         pThis = reinterpret_cast<UiaCleanShutdownControl*>(createStruct->lpCreateParams);
         SetWindowLongPtr(hwnd, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(pThis));
     }
-    
+
     if (message == WM_NCDESTROY)
     {
         pThis = NULL;
         SetWindowLongPtr(hwnd, GWLP_USERDATA, NULL);
     }
-    
+
     if (pThis != NULL)
     {
         retVal = pThis->WndProc(hwnd, message, wParam, lParam);

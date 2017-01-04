@@ -1,4 +1,4 @@
-/**************************************************************************
+﻿/**************************************************************************
    THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
    ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
    THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -10,7 +10,7 @@
 /******************************************************************************
 
    File:          DataObj.h
-   
+
    Description:   CTSFDataObject definitions.
 
 ******************************************************************************/
@@ -32,7 +32,7 @@ private:
     DWORD       m_ObjRefCount;
     FORMATETC   m_FormatEtc;
     LPWSTR      m_pwszText;
-   
+
 public:
     CTSFDataObject();
     ~CTSFDataObject();

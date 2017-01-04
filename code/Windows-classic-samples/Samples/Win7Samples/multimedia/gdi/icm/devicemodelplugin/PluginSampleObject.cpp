@@ -1,4 +1,4 @@
-//+--------------------------------------------------------------------------
+﻿//+--------------------------------------------------------------------------
 //
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
@@ -27,7 +27,7 @@
 //  Member:
 //      CDeviceModelPluginSample::Initialize
 //
-//  Synopsis: 
+//  Synopsis:
 //      Implementation of IDeviceModelPlugIn::Initialize. This method
 //      does nothing in this sample.
 //
@@ -36,7 +36,7 @@ STDMETHODIMP CDeviceModelPluginSample::Initialize(
     BSTR bstrXML,
     UINT cNumModels,
     UINT iModelPosition )
-{   
+{
     if ( !bstrXML )
     {
         return E_INVALIDARG;
@@ -52,8 +52,8 @@ STDMETHODIMP CDeviceModelPluginSample::Initialize(
 //  Member:
 //      CDeviceModelPluginSample::GetNumChannels
 //
-//  Synopsis: 
-//      Implementation of IDeviceModelPlugIn::GetNumChannels. 
+//  Synopsis:
+//      Implementation of IDeviceModelPlugIn::GetNumChannels.
 //
 //----------------------------------------------------------------------------
 STDMETHODIMP CDeviceModelPluginSample::GetNumChannels(
@@ -68,7 +68,7 @@ STDMETHODIMP CDeviceModelPluginSample::GetNumChannels(
     {
         return E_INVALIDARG;
     }
-    
+
     *pNumChannels = PLUGIN_CHANNELS;
 
     return m_hr;
@@ -79,8 +79,8 @@ STDMETHODIMP CDeviceModelPluginSample::GetNumChannels(
 //  Member:
 //      CDeviceModelPluginSample::DeviceToColorimetricColors
 //
-//  Synopsis: 
-//      Implementation of IDeviceModelPlugIn::DeviceToColorimetricColors. 
+//  Synopsis:
+//      Implementation of IDeviceModelPlugIn::DeviceToColorimetricColors.
 //
 //----------------------------------------------------------------------------
 STDMETHODIMP CDeviceModelPluginSample::DeviceToColorimetricColors(
@@ -98,7 +98,7 @@ STDMETHODIMP CDeviceModelPluginSample::DeviceToColorimetricColors(
     {
         return E_INVALIDARG;
     }
-    
+
     //
     // Convert sRGB colors to CIEXYZ
     //
@@ -107,8 +107,8 @@ STDMETHODIMP CDeviceModelPluginSample::DeviceToColorimetricColors(
         FLOAT RGB[3];
         for ( ULONG j=0; j<PLUGIN_CHANNELS; j++ )
         {
-            RGB[j] = (pDeviceValues[3*i+j] < .04045f) ? (pDeviceValues[3*i+j]/12.92f) : 
-                        pow( (pDeviceValues[3*i+j]+0.055f)/(1.055f), 2.4f );
+            RGB[j] = (pDeviceValues[3*i+j] < .04045f) ? (pDeviceValues[3*i+j]/12.92f) :
+                     pow( (pDeviceValues[3*i+j]+0.055f)/(1.055f), 2.4f );
         }
 
         pXYZColors[i].X = 100.0f*(0.412424f * RGB[0] + 0.357579f * RGB[1] + 0.180464f * RGB[2]);
@@ -124,8 +124,8 @@ STDMETHODIMP CDeviceModelPluginSample::DeviceToColorimetricColors(
 //  Member:
 //      CDeviceModelPluginSample::ColorimetricToDeviceColors
 //
-//  Synopsis: 
-//      Implementation of IDeviceModelPlugIn::ColorimetricToDeviceColors. 
+//  Synopsis:
+//      Implementation of IDeviceModelPlugIn::ColorimetricToDeviceColors.
 //
 //----------------------------------------------------------------------------
 STDMETHODIMP CDeviceModelPluginSample::ColorimetricToDeviceColors(
@@ -143,7 +143,7 @@ STDMETHODIMP CDeviceModelPluginSample::ColorimetricToDeviceColors(
     {
         return E_INVALIDARG;
     }
-    
+
     //
     // Convert CIEXYZ colors to sRGB
     //
@@ -161,7 +161,7 @@ STDMETHODIMP CDeviceModelPluginSample::ColorimetricToDeviceColors(
             pDeviceValues[3*i+j] = ((pDeviceValues[3*i+j] < .0031308)?(12.92f*pDeviceValues[3*i+j]) :
                                     pow( pDeviceValues[3*i+j], 1.0f/2.4f) * 1.055f - .055f);
         }
-    }  
+    }
 
     return m_hr;
 }
@@ -171,8 +171,8 @@ STDMETHODIMP CDeviceModelPluginSample::ColorimetricToDeviceColors(
 //  Member:
 //      CDeviceModelPluginSample::GetPrimarySamples
 //
-//  Synopsis: 
-//      Implementation of IDeviceModelPlugIn::GetPrimarySamples. 
+//  Synopsis:
+//      Implementation of IDeviceModelPlugIn::GetPrimarySamples.
 //
 //----------------------------------------------------------------------------
 STDMETHODIMP CDeviceModelPluginSample::GetPrimarySamples(
@@ -198,8 +198,8 @@ STDMETHODIMP CDeviceModelPluginSample::GetPrimarySamples(
 //  Member:
 //      CDeviceModelPluginSample::GetGamutBoundaryMeshSize
 //
-//  Synopsis: 
-//      Implementation of IDeviceModelPlugIn::GetGamutBoundaryMeshSize. 
+//  Synopsis:
+//      Implementation of IDeviceModelPlugIn::GetGamutBoundaryMeshSize.
 //
 //----------------------------------------------------------------------------
 STDMETHODIMP CDeviceModelPluginSample::GetGamutBoundaryMeshSize(
@@ -224,8 +224,8 @@ STDMETHODIMP CDeviceModelPluginSample::GetGamutBoundaryMeshSize(
 //  Member:
 //      CDeviceModelPluginSample::GetGamutBoundaryMesh
 //
-//  Synopsis: 
-//      Implementation of IDeviceModelPlugIn::GetGamutBoundaryMesh. 
+//  Synopsis:
+//      Implementation of IDeviceModelPlugIn::GetGamutBoundaryMesh.
 //
 //----------------------------------------------------------------------------
 STDMETHODIMP CDeviceModelPluginSample::GetGamutBoundaryMesh(
@@ -253,8 +253,8 @@ STDMETHODIMP CDeviceModelPluginSample::GetGamutBoundaryMesh(
 //  Member:
 //      CDeviceModelPluginSample::GetNeutralAxisSize
 //
-//  Synopsis: 
-//      Implementation of IDeviceModelPlugIn::GetNeutralAxisSize. 
+//  Synopsis:
+//      Implementation of IDeviceModelPlugIn::GetNeutralAxisSize.
 //
 //----------------------------------------------------------------------------
 STDMETHODIMP CDeviceModelPluginSample::GetNeutralAxisSize(
@@ -277,8 +277,8 @@ STDMETHODIMP CDeviceModelPluginSample::GetNeutralAxisSize(
 //  Member:
 //      CDeviceModelPluginSample::GetNeutralAxis
 //
-//  Synopsis: 
-//      Implementation of IDeviceModelPlugIn::GetNeutralAxis. 
+//  Synopsis:
+//      Implementation of IDeviceModelPlugIn::GetNeutralAxis.
 //
 //----------------------------------------------------------------------------
 STDMETHODIMP CDeviceModelPluginSample::GetNeutralAxis(
@@ -295,7 +295,7 @@ STDMETHODIMP CDeviceModelPluginSample::GetNeutralAxis(
         for ( ULONG i=0; i<sizeof(g_sRGBNeutralAxis)/sizeof(FLOAT); i++ )
         {
             ((FLOAT*) pXYZColors)[i] = 100.0f * ((FLOAT*) g_sRGBNeutralAxis)[i];
-        }    
+        }
     }
     return m_hr;
 }
@@ -305,8 +305,8 @@ STDMETHODIMP CDeviceModelPluginSample::GetNeutralAxis(
 //  Member:
 //      CDeviceModelPluginSample::ColorimetricToDeviceColorsWithBlack
 //
-//  Synopsis: 
-//      Implementation of IDeviceModelPlugIn::ColorimetricToDeviceColorsWithBlack. 
+//  Synopsis:
+//      Implementation of IDeviceModelPlugIn::ColorimetricToDeviceColorsWithBlack.
 //
 //----------------------------------------------------------------------------
 STDMETHODIMP CDeviceModelPluginSample::ColorimetricToDeviceColorsWithBlack(
@@ -328,8 +328,8 @@ STDMETHODIMP CDeviceModelPluginSample::ColorimetricToDeviceColorsWithBlack(
 //  Member:
 //      CDeviceModelPluginSample::SetTransformDeviceModelInfo
 //
-//  Synopsis: 
-//      Implementation of IDeviceModelPlugIn::SetTransformDeviceModelInfo. 
+//  Synopsis:
+//      Implementation of IDeviceModelPlugIn::SetTransformDeviceModelInfo.
 //
 //----------------------------------------------------------------------------
 STDMETHODIMP CDeviceModelPluginSample::SetTransformDeviceModelInfo(
@@ -352,9 +352,9 @@ STDMETHODIMP CDeviceModelPluginSample::SetTransformDeviceModelInfo(
         // is not of known type.
         //
         HRESULT hrQueryInterface = pIDeviceModelOther->QueryInterface(
-                                        IID_ISampleDeviceModelPrivateInterface,
-                                        (void**)&m_pOtherDeviceModel
-                                        );    
+                                       IID_ISampleDeviceModelPrivateInterface,
+                                       (void**)&m_pOtherDeviceModel
+                                   );
         if ( SUCCEEDED( hrQueryInterface ) )
         {
             //
@@ -373,8 +373,8 @@ STDMETHODIMP CDeviceModelPluginSample::SetTransformDeviceModelInfo(
 //  Member:
 //      CDeviceModelPluginSample::SamplePrivateMethod
 //
-//  Synopsis: 
-//      Implementation of IDeviceModelPlugIn::SamplePrivateMethod. 
+//  Synopsis:
+//      Implementation of IDeviceModelPlugIn::SamplePrivateMethod.
 //
 //----------------------------------------------------------------------------
 STDMETHODIMP CDeviceModelPluginSample::SamplePrivateMethod()

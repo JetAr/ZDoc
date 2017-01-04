@@ -1,4 +1,4 @@
-/*
+﻿/*
 * THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 * ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -19,7 +19,7 @@
 
 HRESULT GetParentObject(IADs *pObject, //Pointer the object whose parent to bind to.
                         IADs **ppParent //Return a pointer to the parent object.
-                        );
+                       );
 
 HRESULT FindUserByName(IDirectorySearch *pSearchBase, //Container to search
                        LPOLESTR szFindUser, //Name of user to find.
@@ -34,7 +34,7 @@ int __cdecl wmain( int argc, wchar_t *argv[])
     if (NULL == argv[1])
     {
         wprintf(L"This program finds a user in the current Window 2000 domain\n");
-        wprintf(L"and displays its parent container's ADsPath and binds to that container.\n");	
+        wprintf(L"and displays its parent container's ADsPath and binds to that container.\n");
         wprintf(L"Enter Common Name of the user to find:");
         fgetws(szBuffer, ARRAYSIZE(szBuffer), stdin);
 
@@ -50,7 +50,7 @@ int __cdecl wmain( int argc, wchar_t *argv[])
     if (0 == wcscmp(L"", szBuffer))
     {
         wprintf(L"Empty user name.\n");
-        return 1; 
+        return 1;
     }
 
     wprintf(L"\nFinding user: %s...\n",szBuffer);
@@ -76,11 +76,11 @@ int __cdecl wmain( int argc, wchar_t *argv[])
     VariantInit(&var);
 
     hr = ADsOpenObject(L"LDAP://rootDSE",
-        NULL,
-        NULL,
-        ADS_SECURE_AUTHENTICATION, //Use Secure Authentication
-        IID_IADs,
-        (void**)&pObject);
+                       NULL,
+                       NULL,
+                       ADS_SECURE_AUTHENTICATION, //Use Secure Authentication
+                       IID_IADs,
+                       (void**)&pObject);
     if (FAILED(hr))
     {
         wprintf(L"Not Found. Could not bind to the domain. hr=0x%x\n", hr);
@@ -105,17 +105,17 @@ int __cdecl wmain( int argc, wchar_t *argv[])
         goto CleanUp;
     }
 
-    wcscpy_s(szPath, ARRAYSIZE(szPath), L"LDAP://"); // If you're running on NT 4.0 or Win9.x machine, you need to 
+    wcscpy_s(szPath, ARRAYSIZE(szPath), L"LDAP://"); // If you're running on NT 4.0 or Win9.x machine, you need to
     // add the server name e.g L"LDAP://myServer"
     wcscat_s(szPath, ARRAYSIZE(szPath), var.bstrVal);
 
     //Bind to the root of the current domain.
     hr = ADsOpenObject(szPath,
-        NULL,
-        NULL,
-        ADS_SECURE_AUTHENTICATION, //Use Secure Authentication
-        IID_IDirectorySearch,
-        (void**)&pDS);
+                       NULL,
+                       NULL,
+                       ADS_SECURE_AUTHENTICATION, //Use Secure Authentication
+                       IID_IDirectorySearch,
+                       (void**)&pDS);
     if (FAILED(hr))
     {
         wprintf (L"ADsOpenObject failed for path %s. hr=0x%x\n", szPath, hr);
@@ -128,8 +128,8 @@ int __cdecl wmain( int argc, wchar_t *argv[])
         pObject = NULL;
     }
     hr =  FindUserByName(pDS, //Container to search
-        szBuffer, //Name of user to find.
-        &pObject); //Return a pointer to the user
+                         szBuffer, //Name of user to find.
+                         &pObject); //Return a pointer to the user
     if (FAILED(hr))
     {
         wprintf(L"User \"%s\" not Found.\n",szBuffer);
@@ -138,8 +138,8 @@ int __cdecl wmain( int argc, wchar_t *argv[])
     }
 
     hr = GetParentObject(pObject, //Pointer the object whose parent to bind to.
-        &pParent //Return a pointer to the parent object.
-        );
+                         &pParent //Return a pointer to the parent object.
+                        );
     if (FAILED(hr))
     {
         wprintf(L"GetParentObject failed with hr: %x\n",hr);
@@ -223,7 +223,7 @@ CleanUp:
 
 HRESULT GetParentObject(IADs *pObject, //Pointer the object whose parent to bind to.
                         IADs **ppParent //Return a pointer to the parent object.
-                        )
+                       )
 {
     if ((!pObject)||(!ppParent))
         return E_INVALIDARG;
@@ -236,11 +236,11 @@ HRESULT GetParentObject(IADs *pObject, //Pointer the object whose parent to bind
         //Bind to the parent container.
         *ppParent = NULL;
         hr = ADsOpenObject(bstr,
-            NULL,
-            NULL,
-            ADS_SECURE_AUTHENTICATION, //Use Secure Authentication
-            IID_IADs,
-            (void**)ppParent);
+                           NULL,
+                           NULL,
+                           ADS_SECURE_AUTHENTICATION, //Use Secure Authentication
+                           IID_IADs,
+                           (void**)ppParent);
         if(FAILED(hr))
         {
             if ((*ppParent))
@@ -299,36 +299,36 @@ HRESULT FindUserByName(IDirectorySearch *pSearchBase, //Container to search
 
     // Execute the search
     hr = pSearchBase->ExecuteSearch(szSearchFilter,
-        pszAttribute,
-        1,
-        &hSearch
-        );
+                                    pszAttribute,
+                                    1,
+                                    &hSearch
+                                   );
 
-    DWORD noUsersFound = 0; 
+    DWORD noUsersFound = 0;
     if (SUCCEEDED(hr))
-    {    
+    {
 
-        // Call IDirectorySearch::GetNextRow() to retrieve the next row 
+        // Call IDirectorySearch::GetNextRow() to retrieve the next row
         //of data
         while( pSearchBase->GetNextRow( hSearch) != S_ADS_NOMORE_ROWS )
-        {	
+        {
 
             if(noUsersFound>0 && ((*ppUser) != NULL))(*ppUser)->Release();
-            wprintf(L"Found User %s.\n",szFindUser); 
+            wprintf(L"Found User %s.\n",szFindUser);
             // Get the data for this column
             hr = pSearchBase->GetColumn( hSearch, pszAttribute[0], &col );
             if ( SUCCEEDED(hr) )
             {
                 // Print the data for the column and free the column
                 // Note the attribute we asked for is type CaseIgnoreString.
-                wcscpy_s(szADsPath, ARRAYSIZE(szADsPath), col.pADsValues->CaseIgnoreString); 					
-                wprintf(L"%s: %s\r\n",pszAttribute[0],col.pADsValues->CaseIgnoreString); 
+                wcscpy_s(szADsPath, ARRAYSIZE(szADsPath), col.pADsValues->CaseIgnoreString);
+                wprintf(L"%s: %s\r\n",pszAttribute[0],col.pADsValues->CaseIgnoreString);
                 hr = ADsOpenObject(szADsPath,
-                    NULL,
-                    NULL,
-                    ADS_SECURE_AUTHENTICATION, //Use Secure Authentication
-                    IID_IADs,
-                    (void**)ppUser);
+                                   NULL,
+                                   NULL,
+                                   ADS_SECURE_AUTHENTICATION, //Use Secure Authentication
+                                   IID_IADs,
+                                   (void**)ppUser);
                 if(SUCCEEDED(hr)) noUsersFound ++;
 
                 pSearchBase->FreeColumn( &col );
@@ -347,8 +347,8 @@ HRESULT FindUserByName(IDirectorySearch *pSearchBase, //Container to search
     if (noUsersFound>1)
     {
         VARIANT var;
-        wprintf(L"---------------------------------------------------\n"); 
-        wprintf(L"More than one user with CN %s was found.\n",szFindUser); 
+        wprintf(L"---------------------------------------------------\n");
+        wprintf(L"More than one user with CN %s was found.\n",szFindUser);
 
         BSTR bDName = SysAllocString(L"distinguishedName");
         if (NULL == bDName)
@@ -357,12 +357,12 @@ HRESULT FindUserByName(IDirectorySearch *pSearchBase, //Container to search
         (*ppUser)->Get(bDName, &var);
         SysFreeString(bDName);
 
-        wprintf(L"Returning pointer to User (DN): %s\n",var.bstrVal); 
-        wprintf(L"---------------------------------------------------\n"); 
+        wprintf(L"Returning pointer to User (DN): %s\n",var.bstrVal);
+        wprintf(L"---------------------------------------------------\n");
         VariantClear(&var);
     }
 
-    if(0 == noUsersFound) 
+    if(0 == noUsersFound)
         hr = E_FAIL;
 
     return hr;

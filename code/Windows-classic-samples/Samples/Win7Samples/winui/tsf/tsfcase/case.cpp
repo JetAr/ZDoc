@@ -1,4 +1,4 @@
-//
+﻿//
 // case.cpp
 //
 // IUnknown, ITfTextInputProcessor implementation.
@@ -90,7 +90,7 @@ STDAPI CCaseTextService::QueryInterface(REFIID riid, void **ppvObj)
     *ppvObj = NULL;
 
     if (IsEqualIID(riid, IID_IUnknown) ||
-        IsEqualIID(riid, IID_ITfTextInputProcessor))
+            IsEqualIID(riid, IID_ITfTextInputProcessor))
     {
         *ppvObj = (ITfTextInputProcessor *)this;
     }

@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -21,7 +21,10 @@ class DECLSPEC_UUID("9DBD2C50-62AD-11D0-B806-00C04FD706EC") PropertyThumbnailHan
 // utalize the BSTR features of its inputs
 // check with the MSXML guys to see if this is OK
 
-__inline BSTR MAKEBSTR(PCWSTR psz) { return (BSTR)psz; }
+__inline BSTR MAKEBSTR(PCWSTR psz)
+{
+    return (BSTR)psz;
+}
 
 //<smil>
 //  <head>
@@ -40,9 +43,9 @@ struct PROPERTYMAP
 {
     const PROPERTYKEY *pkey;
     BOOL fOverrideMeta;         // normally properties in <meta> are read only and
-                                // prefered over values found in <properties>
-                                // this flag lets them be written by letting the
-                                // a value in <properties> be prefered
+    // prefered over values found in <properties>
+    // this flag lets them be written by letting the
+    // a value in <properties> be prefered
     PCWSTR pszValueNodeName;
     PCWSTR pszMetaNameValue;
 };
@@ -120,7 +123,7 @@ public:
         for (int i = 0; i < ARRAYSIZE(c_rgPROPERTYMAP); i++)
         {
             if (IsEqualPropertyKey(*c_rgPROPERTYMAP[i].pkey, key) &&
-                !c_rgPROPERTYMAP[i].fOverrideMeta)
+                    !c_rgPROPERTYMAP[i].fOverrideMeta)
             {
                 hr = S_FALSE;   // no, not writeable
                 break;
@@ -296,7 +299,7 @@ HRESULT CPlaylistPropertyHandler::_SaveCacheToDom()
     {
         PROPVARIANT propvar;
         if (SUCCEEDED(_pCache->GetValue(*c_rgPROPERTYMAP[i].pkey, &propvar)) &&
-            (propvar.vt != VT_EMPTY))
+                (propvar.vt != VT_EMPTY))
         {
             if (!c_rgPROPERTYMAP[i].pszMetaNameValue)
             {

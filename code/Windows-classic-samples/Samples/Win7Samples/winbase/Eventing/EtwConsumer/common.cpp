@@ -1,4 +1,4 @@
-/*++
+﻿/*++
 
     THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
     ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
@@ -24,7 +24,7 @@ NullToBuffer(
     __out_bcount(BufferSize) PBYTE Buffer,
     __in ULONG BufferSize,
     __out PUSHORT BinDataConsumed
-    )
+)
 
 /*++
 
@@ -35,7 +35,7 @@ Routine Description:
 Arguments:
 
     Buffer - Receives the formatted string.
-    
+
     BufferSize - Supplies the size of Buffer in bytes.
 
     BinDataConsumed - Receives the data consumed from the event payload.
@@ -49,7 +49,8 @@ Return Value:
 --*/
 
 {
-    if (BufferSize < sizeof(WCHAR)) {
+    if (BufferSize < sizeof(WCHAR))
+    {
         return ERROR_INSUFFICIENT_BUFFER;
     }
 
@@ -67,7 +68,7 @@ AnsiStringToBuffer(
     __out_bcount(BufferSize) PBYTE Buffer,
     __in ULONG BufferSize,
     __out PUSHORT BinDataConsumed
-    )
+)
 
 /*++
 
@@ -75,7 +76,7 @@ Routine Description:
 
     This routine decodes an ANSI string and prints it out to a memory
     buffer. If the length is not specified, this routine will take into
-    account the possibility that the string may or may not contain a 
+    account the possibility that the string may or may not contain a
     terminating NULL character.
 
 Arguments:
@@ -107,12 +108,14 @@ Return Value:
     size_t StringByteLength;
     LONG CharsWritten;
 
-    if (DataLentgh == 0) {
+    if (DataLentgh == 0)
+    {
 
         hr = StringCbLengthA((PSTR)BinDataPtr,
                              BinDataLeft,
                              &StringByteLength);
-        if (FAILED(hr)) {
+        if (FAILED(hr))
+        {
 
             //
             // The string was longer than the actual event payload left to consume.
@@ -123,7 +126,8 @@ Return Value:
 
         StringByteLength += sizeof(CHAR);
 
-        if (BufferSize < StringByteLength * sizeof(WCHAR)) {
+        if (BufferSize < StringByteLength * sizeof(WCHAR))
+        {
             return ERROR_INSUFFICIENT_BUFFER;
         }
 
@@ -134,32 +138,40 @@ Return Value:
                                            (PWSTR)Buffer,
                                            (LONG)StringByteLength);
 
-        if (CharsWritten == 0) {
+        if (CharsWritten == 0)
+        {
             return ERROR_EVT_INVALID_EVENT_DATA;
         }
 
-        
+
 
         //
         // If the Ansi string was already null-terminated, that last
         // character is already counted in the consumption data.
         //
 
-        if (BinDataPtr[StringByteLength - 2] == 0) {
+        if (BinDataPtr[StringByteLength - 2] == 0)
+        {
             *BinDataConsumed = (USHORT)StringByteLength - 1;
-        } else {
+        }
+        else
+        {
             *BinDataConsumed = (USHORT)StringByteLength;
         }
 
-    } else {
+    }
+    else
+    {
 
-        if (DataLentgh > BinDataLeft) {
+        if (DataLentgh > BinDataLeft)
+        {
             return ERROR_EVT_INVALID_EVENT_DATA;
         }
 
         StringByteLength = (DataLentgh + 1) * sizeof(WCHAR);
 
-        if (BufferSize < StringByteLength) {
+        if (BufferSize < StringByteLength)
+        {
             return ERROR_INSUFFICIENT_BUFFER;
         }
 
@@ -170,7 +182,8 @@ Return Value:
                                            (PWSTR)Buffer,
                                            (LONG)DataLentgh);
 
-        if (CharsWritten == 0) {
+        if (CharsWritten == 0)
+        {
             return ERROR_EVT_INVALID_EVENT_DATA;
         }
 
@@ -193,14 +206,14 @@ UnicodeStringToBuffer(
     __out_bcount(BufferSize) PBYTE Buffer,
     __in ULONG BufferSize,
     __out PUSHORT BinDataConsumed
-    )
+)
 
 /*++
 
 Routine Description:
 
-    This routine copies a Unicode string to a memory buffer. If length is 
-    not specified, this routine accounts for the possibility that the string may or 
+    This routine copies a Unicode string to a memory buffer. If length is
+    not specified, this routine accounts for the possibility that the string may or
     may not include the terminating NULL character.
 
 Arguments:
@@ -209,7 +222,7 @@ Arguments:
 
     BinDataLeft - Supplies the size of the event payload data left to consume.
 
-    DataLentgh - Length of the string in bytes, if this is a fixed 
+    DataLentgh - Length of the string in bytes, if this is a fixed
                  length string or the length is parameterized by a previous
                  property in the payload. If the string is NULL-terminated,
                  length must include the NULL character.
@@ -235,7 +248,8 @@ Return Value:
     PWSTR EndString;
     PWSTR CurrentString;
 
-    if (DataLength == 0) {
+    if (DataLength == 0)
+    {
 
         StartString = (PWSTR)BinDataPtr;
         EndString = StartString + (BinDataLeft / 2);
@@ -243,36 +257,43 @@ Return Value:
 
         //
         // Get the length of the string, which may be misaligned
-        // with the end of the event payload. If the end is reached without 
+        // with the end of the event payload. If the end is reached without
         // NULL terminating char found, the event data is invalid.
         //
 
-        while ((CurrentString < EndString) && (*CurrentString != UNICODE_NULL)) {
+        while ((CurrentString < EndString) && (*CurrentString != UNICODE_NULL))
+        {
             CurrentString++;
         }
 
-        if (CurrentString == EndString) {
+        if (CurrentString == EndString)
+        {
             return ERROR_EVT_INVALID_EVENT_DATA;
         }
-        
+
         StringLength = (ULONG)(CurrentString - StartString);
         StringByteLength = (StringLength + 1) * sizeof(WCHAR);
 
-        if (BufferSize < StringByteLength) {
+        if (BufferSize < StringByteLength)
+        {
             return ERROR_INSUFFICIENT_BUFFER;
         }
 
         RtlCopyMemory(Buffer, BinDataPtr, StringByteLength);
         *BinDataConsumed = (USHORT)(StringByteLength);
 
-    } else {
+    }
+    else
+    {
         StringByteLength = (DataLength + 1) * sizeof(WCHAR);
 
-        if (DataLength > BinDataLeft) {
+        if (DataLength > BinDataLeft)
+        {
             return ERROR_EVT_INVALID_EVENT_DATA;
         }
 
-        if (BufferSize < StringByteLength) {
+        if (BufferSize < StringByteLength)
+        {
             return ERROR_INSUFFICIENT_BUFFER;
         }
 
@@ -294,13 +315,13 @@ BooleanToBuffer(
     __out_bcount(BufferSize) PBYTE Buffer,
     __in ULONG BufferSize,
     __out PUSHORT BinDataConsumed
-    )
+)
 
 /*++
 
 Routine Description:
 
-    This routine decodes a boolean value and prints it out 
+    This routine decodes a boolean value and prints it out
     to a memory buffer.
 
 Arguments:
@@ -330,7 +351,8 @@ Return Value:
     PWSTR StringValue;
     ULONG StringByteLength;
 
-    if (sizeof(ULONG) > BinDataLeft) {
+    if (sizeof(ULONG) > BinDataLeft)
+    {
         return ERROR_EVT_INVALID_EVENT_DATA;
     }
 
@@ -343,13 +365,14 @@ Return Value:
     StringValue = (Value == 0) ? L"false" : L"true";
     StringByteLength = ((ULONG)wcslen(StringValue) + 1) * sizeof(WCHAR);
 
-    if (BufferSize < StringByteLength) {
+    if (BufferSize < StringByteLength)
+    {
         return ERROR_INSUFFICIENT_BUFFER;
     }
 
     RtlCopyMemory(Buffer, StringValue, StringByteLength);
     *((PWSTR)(Buffer + StringByteLength - sizeof(WCHAR))) = UNICODE_NULL;
-    
+
     //
     // BOOLEAN is same as ULONG.
     //
@@ -364,13 +387,13 @@ ULONG
 FormatDateTime(
     __in PSYSTEMTIME SystemTime,
     __out PBYTE Buffer
-    )
+)
 
 /*++
 
 Routine Description:
 
-    This routine prints out to a memory buffer the date and time 
+    This routine prints out to a memory buffer the date and time
     portions of a SYSTEMTIME structure.
 
 Arguments:
@@ -402,16 +425,17 @@ Return Value:
                             (PWSTR)Buffer,
                             STRLEN_UTC_DATETIME);
 
-    if (StrLen == 0) {
+    if (StrLen == 0)
+    {
         return 0;
     }
-    
-    TotalLength += StrLen;    
+
+    TotalLength += StrLen;
 
     //
     // Append the the time part of SystemTime.
     //
-    
+
     *((PWSTR)(Buffer + (StrLen - 1) * sizeof(WCHAR))) = L'T';
     StrLen = GetTimeFormatW(LOCALE_USER_DEFAULT,
                             0,
@@ -420,7 +444,8 @@ Return Value:
                             (PWSTR)(Buffer + StrLen * sizeof(WCHAR)),
                             STRLEN_UTC_DATETIME);
 
-    if (StrLen == 0) {
+    if (StrLen == 0)
+    {
         return 0;
     }
     TotalLength += StrLen;
@@ -435,13 +460,13 @@ FileTimeToBuffer(
     __out_bcount(BufferSize) PBYTE Buffer,
     __in ULONG BufferSize,
     __out PUSHORT BinDataConsumed
-    )
+)
 
 /*++
 
 Routine Description:
 
-    This routine decodes a FILETIME value and prints it 
+    This routine decodes a FILETIME value and prints it
     out to a memory buffer.
 
 Arguments:
@@ -474,21 +499,25 @@ Return Value:
     USHORT DataSize = sizeof(FILETIME);
     ULONG StringByteLength = STRLEN_UTC_DATETIME * sizeof(WCHAR);
 
-    if (DataSize > BinDataLeft) {
+    if (DataSize > BinDataLeft)
+    {
         return ERROR_EVT_INVALID_EVENT_DATA;
     }
 
-    if (BufferSize < StringByteLength) {
+    if (BufferSize < StringByteLength)
+    {
         return ERROR_INSUFFICIENT_BUFFER;
     }
 
     CopyMemory(&FileTime, BinDataPtr, sizeof(FILETIME));
 
     if ((FileTimeToSystemTime(&FileTime, &SystemTime) != FALSE) &&
-        (SystemTime.wMonth <= 12)) {
+            (SystemTime.wMonth <= 12))
+    {
 
         PrintedBytes = FormatDateTime(&SystemTime, Buffer);
-        if (PrintedBytes == 0) {
+        if (PrintedBytes == 0)
+        {
             return ERROR_EVT_INVALID_EVENT_DATA;
         }
 
@@ -500,10 +529,12 @@ Return Value:
         NanoSeconds = (Time.QuadPart % ONE_HUNDRED_NANOSECONDS_PER_SECOND) * 100;
         Result = StringCchPrintfW((PWSTR)(Buffer + PrintedBytes - sizeof(WCHAR)),
                                   (STRLEN_UTC_DATETIME - PrintedBytes / sizeof(WCHAR)),
-                                   L".%09I64uZ",
-                                   NanoSeconds);
+                                  L".%09I64uZ",
+                                  NanoSeconds);
 
-    } else {
+    }
+    else
+    {
 
         Result = StringCchPrintfW((PWSTR)Buffer,
                                   STRLEN_UTC_DATETIME,
@@ -512,10 +543,11 @@ Return Value:
                                   FileTime.dwHighDateTime);
     }
 
-    if (FAILED(Result)) {
+    if (FAILED(Result))
+    {
         return HRESULT_CODE(Result);
     }
-    
+
     *BinDataConsumed = DataSize;
 
     return ERROR_SUCCESS;
@@ -528,13 +560,13 @@ SystemTimeToBuffer(
     __out_bcount(BufferSize) PBYTE Buffer,
     __in ULONG BufferSize,
     __out PUSHORT BinDataConsumed
-    )
+)
 
 /*++
 
 Routine Description:
 
-    This template method decodes a SYSTEMTIME value and prints it 
+    This template method decodes a SYSTEMTIME value and prints it
     out to a memory buffer.
 
 Arguments:
@@ -564,20 +596,24 @@ Return Value:
     ULONG PrintedBytes;
     ULONG StringByteLength = STRLEN_UTC_DATETIME * sizeof(WCHAR);
 
-    if (DataSize > BinDataLeft) {
+    if (DataSize > BinDataLeft)
+    {
         return ERROR_EVT_INVALID_EVENT_DATA;
     }
 
-    if (BufferSize < StringByteLength) {
+    if (BufferSize < StringByteLength)
+    {
         return ERROR_INSUFFICIENT_BUFFER;
     }
 
     RtlCopyMemory(&SysTime, BinDataPtr, DataSize);
 
-    if (SysTime.wMonth <= 12) {
+    if (SysTime.wMonth <= 12)
+    {
         PrintedBytes = FormatDateTime(&SysTime, Buffer);
 
-        if (PrintedBytes == 0) {
+        if (PrintedBytes == 0)
+        {
             return ERROR_EVT_INVALID_EVENT_DATA;
         }
 
@@ -587,7 +623,9 @@ Return Value:
                                   SysTime.wMilliseconds);
 
 
-    } else {
+    }
+    else
+    {
 
         Result = StringCchPrintfW((PWSTR)Buffer,
                                   STRLEN_UTC_DATETIME,
@@ -602,7 +640,8 @@ Return Value:
                                   SysTime.wMilliseconds);
     }
 
-    if (FAILED(Result)) {
+    if (FAILED(Result))
+    {
         return HRESULT_CODE(Result);
     }
 
@@ -619,7 +658,7 @@ GuidToBuffer(
     __out_bcount(BufferSize) PBYTE Buffer,
     __in ULONG BufferSize,
     __out PUSHORT BinDataConsumed
-    )
+)
 
 /*++
 
@@ -651,13 +690,15 @@ Return Value:
     HRESULT Result;
     GUID Value;
     USHORT DataSize = sizeof(GUID);
-    ULONG StringByteLength = STRLEN_GUID * sizeof(WCHAR); 
+    ULONG StringByteLength = STRLEN_GUID * sizeof(WCHAR);
 
-    if (DataSize > BinDataLeft) {
+    if (DataSize > BinDataLeft)
+    {
         return ERROR_EVT_INVALID_EVENT_DATA;
     }
 
-    if (BufferSize < StringByteLength) {
+    if (BufferSize < StringByteLength)
+    {
         return ERROR_INSUFFICIENT_BUFFER;
     }
 
@@ -677,10 +718,11 @@ Return Value:
                               Value.Data4[5],
                               Value.Data4[6],
                               Value.Data4[7]);
-    if (FAILED(Result)) {
+    if (FAILED(Result))
+    {
         return HRESULT_CODE(Result);
     }
-    
+
     *BinDataConsumed = DataSize;
 
     return ERROR_SUCCESS;
@@ -693,7 +735,7 @@ SidToBuffer(
     __out_bcount(BufferSize) PBYTE Buffer,
     __in ULONG BufferSize,
     __out PUSHORT BinDataConsumed
-    )
+)
 
 /*++
 
@@ -725,18 +767,21 @@ Return Value:
     USHORT SidLength;
     PWSTR SidString;
     ULONG StringByteLength;
-    
-    if (sizeof(SID) > BinDataLeft) {
+
+    if (sizeof(SID) > BinDataLeft)
+    {
         return ERROR_EVT_INVALID_EVENT_DATA;
     }
 
     SidLength = 8 + (4 * BinDataPtr[1]);
 
-    if (ConvertSidToStringSidW((PSID)BinDataPtr, &SidString)) {
+    if (ConvertSidToStringSidW((PSID)BinDataPtr, &SidString))
+    {
 
         StringByteLength = ((ULONG)wcslen(SidString) + 1) * sizeof(WCHAR);
 
-        if (BufferSize < StringByteLength) {
+        if (BufferSize < StringByteLength)
+        {
             LocalFree(SidString);
             return ERROR_INSUFFICIENT_BUFFER;
         }
@@ -744,7 +789,9 @@ Return Value:
         RtlCopyMemory(Buffer, (PBYTE)SidString, StringByteLength);
         LocalFree(SidString);
 
-    } else {
+    }
+    else
+    {
         return ERROR_EVT_INVALID_EVENT_DATA;
     }
 
@@ -762,7 +809,7 @@ HexBinaryToBuffer(
     __out_bcount(BufferSize) PBYTE Buffer,
     __in ULONG BufferSize,
     __out PUSHORT BinDataConsumed
-    )
+)
 
 /*++
 
@@ -797,16 +844,18 @@ Return Value:
     ULONG StringBytesLength;
     ULONG CurrentByteOffset = 0;
 
-    if (PropertyLength == 0) {
+    if (PropertyLength == 0)
+    {
         return NullToBuffer(Buffer, BufferSize, BinDataConsumed);
     }
 
-    if (PropertyLength > BinDataLeft) {
+    if (PropertyLength > BinDataLeft)
+    {
         return ERROR_EVT_INVALID_EVENT_DATA;
     }
 
     //
-    // Need to allocate 2 WCHARs for the hex prefix "0x", 
+    // Need to allocate 2 WCHARs for the hex prefix "0x",
     // (PropertyLength * 2) WCHARs for each member of BinDataPtr
     // and one WCHAR for the NULL terminator.
     //
@@ -815,29 +864,33 @@ Return Value:
                         PropertyLength * 2 * sizeof(WCHAR)
                         + sizeof(WCHAR);
 
-    if (BufferSize < StringBytesLength) {
+    if (BufferSize < StringBytesLength)
+    {
         return ERROR_INSUFFICIENT_BUFFER;
     }
 
     Result = StringCbPrintfW((PWSTR)Buffer, StringBytesLength, L"0x");
-    
-    if (FAILED(Result)) {
+
+    if (FAILED(Result))
+    {
         return HRESULT_CODE(Result);
     }
 
-    CurrentByteOffset += 2 * sizeof(WCHAR); 
+    CurrentByteOffset += 2 * sizeof(WCHAR);
 
     //
     // Append each formatted hex member to Buffer.
     //
 
-    for (USHORT Index = 0; Index < PropertyLength; Index++) {
+    for (USHORT Index = 0; Index < PropertyLength; Index++)
+    {
         HRESULT hr = StringCbPrintfW((PWSTR)(Buffer + CurrentByteOffset),
                                      StringBytesLength - CurrentByteOffset,
                                      L"%02X",
                                      BinDataPtr[Index]);
 
-        if (FAILED(hr)) {
+        if (FAILED(hr))
+        {
             return HRESULT_CODE(hr);
         }
 
@@ -860,7 +913,7 @@ HexDumpToBuffer(
     __out_bcount(BufferSize) PBYTE Buffer,
     __in ULONG BufferSize,
     __out PUSHORT BinDataConsumed
-    )
+)
 
 /*++
 
@@ -898,7 +951,8 @@ Return Value:
     //  Length is in the first ULONG.
     //
 
-    if (sizeof(ULONG) > BinDataLeft) {
+    if (sizeof(ULONG) > BinDataLeft)
+    {
         return ERROR_EVT_INVALID_EVENT_DATA;
     }
 
@@ -910,20 +964,22 @@ Return Value:
     //      than USHORT_MAX.
     //
 
-    if (Length > USHORT_MAX) {
+    if (Length > USHORT_MAX)
+    {
         return ERROR_EVT_INVALID_EVENT_DATA;
     }
 
     PropertyLength = (USHORT)Length;
 
-    if (PropertyLength == 0) {
+    if (PropertyLength == 0)
+    {
 
         Status = NullToBuffer(Buffer, BufferSize, BinDataConsumed);
         *BinDataConsumed = sizeof(ULONG);
 
         return Status;
     }
-    
+
     Status = HexBinaryToBuffer(BinDataPtr,
                                BinDataLeft - sizeof(ULONG),
                                PropertyLength,
@@ -931,7 +987,8 @@ Return Value:
                                BufferSize,
                                BinDataConsumed);
 
-    if (Status != ERROR_SUCCESS) {
+    if (Status != ERROR_SUCCESS)
+    {
         return Status;
     }
 
@@ -947,7 +1004,7 @@ IPV6ToBuffer(
     __out_bcount(BufferSize) PBYTE Buffer,
     __in ULONG BufferSize,
     __out PUSHORT BinDataConsumed
-    )
+)
 
 /*++
 
@@ -957,7 +1014,7 @@ Routine Description:
 
 Arguments:
 
-    BinDataPtr - Pointer to the undecoded payload buffer containing 
+    BinDataPtr - Pointer to the undecoded payload buffer containing
                  the IP Version 6 address data.
 
     BinDataLeft - Supplies the size of the event payload data left to consume.
@@ -979,7 +1036,7 @@ Return Value:
 {
 
     //
-    // Define a function pointer that will point to RtlIpv6AddressToStringW 
+    // Define a function pointer that will point to RtlIpv6AddressToStringW
     // from ntdll.dll. Dynamically load ntdll.dll because the static library
     // is not included in the Microsoft SDK tools.
     //
@@ -987,16 +1044,18 @@ Return Value:
     typedef LPTSTR (__stdcall *RtlIpv6AddressToStringProc)(IN6_ADDR*,LPTSTR);
     HINSTANCE NtDllHandle;
     RtlIpv6AddressToStringProc RtlIpv6AddressToStringW;
-    
+
     IN6_ADDR Value;
     WCHAR IPV6Addr[STRLEN_MAX_IPV6];
     USHORT DataSize = sizeof(IN6_ADDR);
 
-    if (PropertyLength == 0) {
+    if (PropertyLength == 0)
+    {
         return NullToBuffer(Buffer, BufferSize, BinDataConsumed);
     }
 
-    if (DataSize > BinDataLeft) {
+    if (DataSize > BinDataLeft)
+    {
         return ERROR_EVT_INVALID_EVENT_DATA;
     }
 
@@ -1004,17 +1063,20 @@ Return Value:
     // Try to get a handle to ntdll.dll.
     //
 
-    NtDllHandle = LoadLibraryA("ntdll.dll"); 
-    if (NtDllHandle != NULL) { 
+    NtDllHandle = LoadLibraryA("ntdll.dll");
+    if (NtDllHandle != NULL)
+    {
 
         //
         // Make handle to RtlIpv6AddressToStringW method from ntdll.dll.
         //
 
         RtlIpv6AddressToStringW = (RtlIpv6AddressToStringProc)GetProcAddress(NtDllHandle,
-                                                                             "RtlIpv6AddressToStringW");
-        if (RtlIpv6AddressToStringW != NULL)  {
-            if (BufferSize < STRLEN_MAX_IPV6 * sizeof(WCHAR)) {
+                                  "RtlIpv6AddressToStringW");
+        if (RtlIpv6AddressToStringW != NULL)
+        {
+            if (BufferSize < STRLEN_MAX_IPV6 * sizeof(WCHAR))
+            {
                 return ERROR_INSUFFICIENT_BUFFER;
             }
 
@@ -1027,14 +1089,18 @@ Return Value:
             (RtlIpv6AddressToStringW)(&Value, IPV6Addr);
             RtlCopyMemory(Buffer, (PBYTE)IPV6Addr, STRLEN_MAX_IPV6 * sizeof(WCHAR));
 
-        } else {
+        }
+        else
+        {
 
             FreeLibrary(NtDllHandle);
             return ERROR_NOT_SUPPORTED;
         }
 
-        FreeLibrary(NtDllHandle); 
-    } else {
+        FreeLibrary(NtDllHandle);
+    }
+    else
+    {
         return ERROR_NOT_SUPPORTED;
     }
 
@@ -1046,7 +1112,7 @@ Return Value:
 BOOLEAN
 IsOSPriorWin7(
     VOID
-    )
+)
 
 /*++
 
@@ -1069,7 +1135,7 @@ Return Value:
 --*/
 
 {
-    BOOL VersionQuerySuccess; 
+    BOOL VersionQuerySuccess;
     OSVERSIONINFO OperatingSystemInfo;
 
     ZeroMemory(&OperatingSystemInfo, sizeof(OSVERSIONINFO));
@@ -1077,12 +1143,15 @@ Return Value:
 
     VersionQuerySuccess = GetVersionEx(&OperatingSystemInfo);
 
-    if (VersionQuerySuccess != FALSE) {
-        if (OperatingSystemInfo.dwMajorVersion < WIN7_MAJOR_VERSION) {
+    if (VersionQuerySuccess != FALSE)
+    {
+        if (OperatingSystemInfo.dwMajorVersion < WIN7_MAJOR_VERSION)
+        {
             return TRUE;
         }
         if ((OperatingSystemInfo.dwMajorVersion == WIN7_MAJOR_VERSION) &&
-            (OperatingSystemInfo.dwMinorVersion < WIN7_MINOR_VERSION)) {
+                (OperatingSystemInfo.dwMinorVersion < WIN7_MINOR_VERSION))
+        {
 
             return TRUE;
         }

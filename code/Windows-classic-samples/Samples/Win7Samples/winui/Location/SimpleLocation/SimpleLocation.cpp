@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -24,8 +24,8 @@ PCWSTR GUIDToString(REFGUID guid, PWSTR psz, UINT cch)
     return psz;
 }
 
- // Initializes ATL for this application. This also does CoInitialize for us
-class CInitializeATL : public CAtlExeModuleT<CInitializeATL>{};
+// Initializes ATL for this application. This also does CoInitialize for us
+class CInitializeATL : public CAtlExeModuleT<CInitializeATL> {};
 CInitializeATL g_InitializeATL;
 
 int wmain()
@@ -39,7 +39,7 @@ int wmain()
 
         if (SUCCEEDED(spLocation.CoCreateInstance(CLSID_Location))) // Create the Location object
         {
-             // Array of report types of interest. Other ones include IID_ICivicAddressReport
+            // Array of report types of interest. Other ones include IID_ICivicAddressReport
             IID REPORT_TYPES[] = { IID_ILatLongReport };
 
             // Request permissions for this user account to receive location data for all the
@@ -89,7 +89,7 @@ int wmain()
                 // then get the ILatLongReport interface from ILocationReport,
                 // then ensure it isn't NULL
                 if ((SUCCEEDED(spLocation->GetReport(IID_ILatLongReport, &spLocationReport))) &&
-                    (SUCCEEDED(spLocationReport->QueryInterface(&spLatLongReport))))
+                        (SUCCEEDED(spLocationReport->QueryInterface(&spLatLongReport))))
                 {
                     // Print the Report Type GUID
                     wchar_t szGUID[64];
@@ -100,13 +100,13 @@ int wmain()
                     if (SUCCEEDED(spLatLongReport->GetTimestamp(&systemTime)))
                     {
                         wprintf(L"\nTimestamp: YY:%d, MM:%d, DD:%d, HH:%d, MM:%d, SS:%d, MS:%d\n",
-                            systemTime.wYear,
-                            systemTime.wMonth,
-                            systemTime.wDay,
-                            systemTime.wHour,
-                            systemTime.wMinute,
-                            systemTime.wSecond,
-                            systemTime.wMilliseconds);
+                                systemTime.wYear,
+                                systemTime.wMonth,
+                                systemTime.wDay,
+                                systemTime.wHour,
+                                systemTime.wMinute,
+                                systemTime.wSecond,
+                                systemTime.wMilliseconds);
                     }
 
                     // Print the Sensor ID GUID
@@ -166,9 +166,9 @@ int wmain()
                 _getch(); // While there is something in the keyboard buffer, get (and discard) each keypress
             }
         }
-        
+
         CoUninitialize();
     }
-    
+
     return 0;
 }

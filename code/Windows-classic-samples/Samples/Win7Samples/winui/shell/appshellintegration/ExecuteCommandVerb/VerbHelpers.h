@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -46,7 +46,7 @@ public:
     HRESULT Register(CLSCTX classContent, REGCLS classUse)
     {
         return CoRegisterClassObject(__uuidof(TObjectToFactory), static_cast<IClassFactory *>(this),
-            classContent, classUse, &_dwRegisterClass);
+                                     classContent, classUse, &_dwRegisterClass);
     }
 
     // IUnknown

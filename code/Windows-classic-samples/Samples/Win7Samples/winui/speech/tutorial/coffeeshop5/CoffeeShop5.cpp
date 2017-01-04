@@ -1,9 +1,9 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
 //
-// Copyright � Microsoft Corporation. All rights reserved
+// Copyright © Microsoft Corporation. All rights reserved
 
 /******************************************************************************
 *           CoffeeShop5.cpp
@@ -19,7 +19,7 @@
 #include "common.h"                             // Contains common defines
 #include "CoffeeShop5.h"                             // Forward declarations and constants
 #include "cofgram.h"                            // This header is created by the grammar
-                                                // compiler and has our rule ids
+// compiler and has our rule ids
 
 /******************************************************************************
 * WinMain *
@@ -47,13 +47,13 @@ int APIENTRY WinMain(__in HINSTANCE hInstance,
     if ( SUCCEEDED( CoInitialize( NULL ) ) )
     {
         // Perform application initialization:
-        if (!InitInstance( hInstance, nCmdShow )) 
+        if (!InitInstance( hInstance, nCmdShow ))
         {
             return FALSE;
         }
 
         // Main message loop:
-        while (GetMessage(&msg, NULL, 0, 0)) 
+        while (GetMessage(&msg, NULL, 0, 0))
         {
             TranslateMessage(&msg);
             DispatchMessage(&msg);
@@ -77,76 +77,76 @@ int APIENTRY WinMain(__in HINSTANCE hInstance,
 ******************************************************************************/
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
-    switch (message) 
+    switch (message)
     {
-        case WM_CREATE:
-            // Try to initialize, quit with error message if we can't
-            if ( FAILED( InitSAPI( hWnd ) ) )
-            {
-                const int iMaxTitleLength = 64;
-                TCHAR tszBuf[ MAX_PATH ];
-                LoadString( g_hInst, IDS_FAILEDINIT, tszBuf, MAX_PATH );
-                TCHAR tszName[ iMaxTitleLength ];
-                LoadString( g_hInst, IDS_APP_TITLE, tszName, iMaxTitleLength );
-
-                MessageBox( hWnd, tszBuf, tszName, MB_OK|MB_ICONWARNING );
-                return( -1 );
-            }
-            // Let the entry pane know its time to do initialization work
-            PostMessage( hWnd, WM_INITPANE, 0, 0 );
-            break;
-            
-        // This is our application defined window message to let us know that a
-        // speech recognition event has occurred.
-        case WM_RECOEVENT:
-            ProcessRecoEvent( hWnd );
-            break;
-
-        case WM_ERASEBKGND:
-            EraseBackground( (HDC) wParam );
-            return ( 1 );
-
-        case WM_GETMINMAXINFO:
+    case WM_CREATE:
+        // Try to initialize, quit with error message if we can't
+        if ( FAILED( InitSAPI( hWnd ) ) )
         {
-            LPMINMAXINFO lpMM = (LPMINMAXINFO) lParam;
+            const int iMaxTitleLength = 64;
+            TCHAR tszBuf[ MAX_PATH ];
+            LoadString( g_hInst, IDS_FAILEDINIT, tszBuf, MAX_PATH );
+            TCHAR tszName[ iMaxTitleLength ];
+            LoadString( g_hInst, IDS_APP_TITLE, tszName, iMaxTitleLength );
 
-            lpMM->ptMaxSize.x = MINMAX_WIDTH;
-            lpMM->ptMaxSize.y = MINMAX_HEIGHT;
-            lpMM->ptMinTrackSize.x = MINMAX_WIDTH;
-            lpMM->ptMinTrackSize.y = MINMAX_HEIGHT;
-            lpMM->ptMaxTrackSize.x = MINMAX_WIDTH;
-            lpMM->ptMaxTrackSize.y = MINMAX_HEIGHT;
-            return ( 0 );
+            MessageBox( hWnd, tszBuf, tszName, MB_OK|MB_ICONWARNING );
+            return( -1 );
         }
+        // Let the entry pane know its time to do initialization work
+        PostMessage( hWnd, WM_INITPANE, 0, 0 );
+        break;
 
-        // Release remaining SAPI related COM references before application exits
-        case WM_DESTROY:
-            // Call the current pane's handler first
-            (*g_fpCurrentPane)(hWnd, message, wParam, lParam);
+    // This is our application defined window message to let us know that a
+    // speech recognition event has occurred.
+    case WM_RECOEVENT:
+        ProcessRecoEvent( hWnd );
+        break;
 
-            KillTimer( hWnd, 0 );
-            CleanupGDIObjects();
-            CleanupSAPI();
-            PostQuitMessage(0);
-            break;
+    case WM_ERASEBKGND:
+        EraseBackground( (HDC) wParam );
+        return ( 1 );
 
-        default:
+    case WM_GETMINMAXINFO:
+    {
+        LPMINMAXINFO lpMM = (LPMINMAXINFO) lParam;
+
+        lpMM->ptMaxSize.x = MINMAX_WIDTH;
+        lpMM->ptMaxSize.y = MINMAX_HEIGHT;
+        lpMM->ptMinTrackSize.x = MINMAX_WIDTH;
+        lpMM->ptMinTrackSize.y = MINMAX_HEIGHT;
+        lpMM->ptMaxTrackSize.x = MINMAX_WIDTH;
+        lpMM->ptMaxTrackSize.y = MINMAX_HEIGHT;
+        return ( 0 );
+    }
+
+    // Release remaining SAPI related COM references before application exits
+    case WM_DESTROY:
+        // Call the current pane's handler first
+        (*g_fpCurrentPane)(hWnd, message, wParam, lParam);
+
+        KillTimer( hWnd, 0 );
+        CleanupGDIObjects();
+        CleanupSAPI();
+        PostQuitMessage(0);
+        break;
+
+    default:
+    {
+        _ASSERTE( g_fpCurrentPane );
+        if ( g_fpCurrentPane == NULL)
         {
-            _ASSERTE( g_fpCurrentPane );
-            if ( g_fpCurrentPane == NULL)
-            {
-                return 0;
-            }
-            // Send unhandled messages to pane specific procedure for potential action
-            LRESULT lRet = (*g_fpCurrentPane)(hWnd, message, wParam, lParam);
-            if ( 0 == lRet )
-            {
-                lRet = DefWindowProc(hWnd, message, wParam, lParam);
-            }
-            return ( lRet );
+            return 0;
         }
-   }
-   return ( 0 );
+        // Send unhandled messages to pane specific procedure for potential action
+        LRESULT lRet = (*g_fpCurrentPane)(hWnd, message, wParam, lParam);
+        if ( 0 == lRet )
+        {
+            lRet = DefWindowProc(hWnd, message, wParam, lParam);
+        }
+        return ( lRet );
+    }
+    }
+    return ( 0 );
 }
 
 /******************************************************************************
@@ -168,7 +168,7 @@ HRESULT InitSAPI( HWND hWnd )
         {
             break;
         }
-       
+
         // create the command recognition context
         hr = g_cpEngine->CreateRecoContext( &g_cpRecoCtxt );
         if ( FAILED( hr ) )
@@ -200,8 +200,8 @@ HRESULT InitSAPI( HWND hWnd )
             break;
         }
         hr = g_cpCmdGrammar->LoadCmdFromResource(NULL, MAKEINTRESOURCEW(IDR_CMD_CFG),
-                                                 L"SRGRAMMAR", MAKELANGID(LANG_NEUTRAL, SUBLANG_NEUTRAL),
-                                                 SPLO_DYNAMIC);
+                L"SRGRAMMAR", MAKELANGID(LANG_NEUTRAL, SUBLANG_NEUTRAL),
+                SPLO_DYNAMIC);
         if ( FAILED( hr ) )
         {
             break;
@@ -290,12 +290,12 @@ void ProcessRecoEvent( HWND hWnd )
         // Look at recognition event only
         switch (event.eEventId)
         {
-            case SPEI_RECOGNITION:
-                ExecuteCommand(event.RecoResult(), hWnd);
-                break;
-            case SPEI_FALSE_RECOGNITION:
-                HandleFalseReco(event.RecoResult(), hWnd);
-                break;
+        case SPEI_RECOGNITION:
+            ExecuteCommand(event.RecoResult(), hWnd);
+            break;
+        case SPEI_FALSE_RECOGNITION:
+            HandleFalseReco(event.RecoResult(), hWnd);
+            break;
 
         }
     }
@@ -315,103 +315,103 @@ void ExecuteCommand(ISpPhrase *pPhrase, HWND hWnd)
     // Get the phrase elements, one of which is the rule id we specified in
     // the grammar.  Switch on it to figure out which command was recognized.
     if (SUCCEEDED(pPhrase->GetPhrase(&pElements)))
-    {        
+    {
         switch ( pElements->Rule.ulId )
         {
-            case VID_EspressoDrinks:
-            {
-                ID_TEXT *pulIds = new ID_TEXT[MAX_ID_ARRAY];  // This memory will be freed when the WM_ESPRESSOORDER
-                                                              // message is processed
-                const SPPHRASEPROPERTY *pProp = NULL;
-                const SPPHRASERULE *pRule = NULL;
-                ULONG ulFirstElement, ulCountOfElements;
-                int iCnt = 0;
+        case VID_EspressoDrinks:
+        {
+            ID_TEXT *pulIds = new ID_TEXT[MAX_ID_ARRAY];  // This memory will be freed when the WM_ESPRESSOORDER
+            // message is processed
+            const SPPHRASEPROPERTY *pProp = NULL;
+            const SPPHRASERULE *pRule = NULL;
+            ULONG ulFirstElement, ulCountOfElements;
+            int iCnt = 0;
 
-                if ( pulIds )
+            if ( pulIds )
+            {
+                ZeroMemory( pulIds, sizeof( ID_TEXT[MAX_ID_ARRAY] ) );
+                pProp = pElements->pProperties;
+                pRule = pElements->Rule.pFirstChild;
+                // Fill in an array with the drink properties received
+                while ( pProp && iCnt < MAX_ID_ARRAY )
                 {
-                    ZeroMemory( pulIds, sizeof( ID_TEXT[MAX_ID_ARRAY] ) );
-                    pProp = pElements->pProperties;
-                    pRule = pElements->Rule.pFirstChild;
-                    // Fill in an array with the drink properties received
-                    while ( pProp && iCnt < MAX_ID_ARRAY )
+                    // Fill out a structure with all the property ids received as well
+                    // as their corresponding text
+                    pulIds[iCnt].ulId = static_cast< ULONG >(pProp->pFirstChild->vValue.ulVal);
+                    // Get the count of elements from the rule ref, not the actual leaf
+                    // property
+                    if ( pRule )
                     {
-                        // Fill out a structure with all the property ids received as well
-                        // as their corresponding text
-                        pulIds[iCnt].ulId = static_cast< ULONG >(pProp->pFirstChild->vValue.ulVal);
-                        // Get the count of elements from the rule ref, not the actual leaf
-                        // property
-                        if ( pRule )
-                        {
-                            ulFirstElement = pRule->ulFirstElement;
-                            ulCountOfElements = pRule->ulCountOfElements;
-                        }
-                        else
-                        {
-                            ulFirstElement = 0;
-                            ulCountOfElements = 0;
-                        }
-                        // This is the text corresponding to property iCnt - it must be
-                        // released when we are done with it
-                        pPhrase->GetText( ulFirstElement, ulCountOfElements,
-                                          FALSE, &(pulIds[iCnt].pwstrCoMemText), NULL);
-                        // Loop through all properties
-                        pProp = pProp->pNextSibling;
-                        // Loop through rulerefs corresponding to properties
-                        if ( pRule )
-                        {
-                            pRule = pRule->pNextSibling;
-                        }
-                        iCnt++;
+                        ulFirstElement = pRule->ulFirstElement;
+                        ulCountOfElements = pRule->ulCountOfElements;
                     }
-                    PostMessage( hWnd, WM_ESPRESSOORDER, NULL, (LPARAM) pulIds );                   
+                    else
+                    {
+                        ulFirstElement = 0;
+                        ulCountOfElements = 0;
+                    }
+                    // This is the text corresponding to property iCnt - it must be
+                    // released when we are done with it
+                    pPhrase->GetText( ulFirstElement, ulCountOfElements,
+                                      FALSE, &(pulIds[iCnt].pwstrCoMemText), NULL);
+                    // Loop through all properties
+                    pProp = pProp->pNextSibling;
+                    // Loop through rulerefs corresponding to properties
+                    if ( pRule )
+                    {
+                        pRule = pRule->pNextSibling;
+                    }
+                    iCnt++;
                 }
+                PostMessage( hWnd, WM_ESPRESSOORDER, NULL, (LPARAM) pulIds );
             }
-            break;
+        }
+        break;
 
-            case VID_Navigation:
+        case VID_Navigation:
+        {
+            switch( pElements->pProperties->vValue.ulVal )
             {
-                switch( pElements->pProperties->vValue.ulVal )
-                {
-                    case VID_Counter:
-                        PostMessage( hWnd, WM_GOTOCOUNTER, NULL, NULL );                        
-                    break;
-                    case VID_Office:
-                        PostMessage( hWnd, WM_GOTOOFFICE, NULL, NULL );                        
-                    break;
-                }
+            case VID_Counter:
+                PostMessage( hWnd, WM_GOTOCOUNTER, NULL, NULL );
+                break;
+            case VID_Office:
+                PostMessage( hWnd, WM_GOTOOFFICE, NULL, NULL );
+                break;
             }
-            break;
+        }
+        break;
 
-            case VID_Manage:
+        case VID_Manage:
+        {
+            switch( pElements->pProperties->vValue.ulVal )
             {
-                switch( pElements->pProperties->vValue.ulVal )
-                {
-                    case VID_Employees:
-                        PostMessage( hWnd, WM_MANAGEEMPLOYEES, NULL, NULL );                        
-                    break;
-                }
+            case VID_Employees:
+                PostMessage( hWnd, WM_MANAGEEMPLOYEES, NULL, NULL );
+                break;
             }
-            break;
+        }
+        break;
 
-            case VID_HearTheVoice:
-            {
-                PostMessage( hWnd, WM_HEARTHEVOICE, NULL, NULL );                                        
-            }
-            break;
+        case VID_HearTheVoice:
+        {
+            PostMessage( hWnd, WM_HEARTHEVOICE, NULL, NULL );
+        }
+        break;
 
-            case VID_OtherRules:
-            {
-                PostMessage( hWnd, WM_MISCCOMMAND, NULL,
-                             (LPARAM) pElements->pProperties->vValue.ulVal );
-            }
-            break;
+        case VID_OtherRules:
+        {
+            PostMessage( hWnd, WM_MISCCOMMAND, NULL,
+                         (LPARAM) pElements->pProperties->vValue.ulVal );
+        }
+        break;
 
-            case DYN_TTSVOICERULE:
-            {
-                PostMessage( hWnd, WM_TTSVOICESEL, NULL,
-                             (LPARAM) pElements->pProperties->vValue.ulVal );
-            }
-            break;
+        case DYN_TTSVOICERULE:
+        {
+            PostMessage( hWnd, WM_TTSVOICESEL, NULL,
+                         (LPARAM) pElements->pProperties->vValue.ulVal );
+        }
+        break;
 
         }
         // Free the pElements memory which was allocated for us
@@ -431,33 +431,33 @@ LRESULT EntryPaneProc( HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam )
 {
     switch ( message )
     {
-        case WM_INITPANE:
-        {
-            TCHAR tBuf[MAX_LOADSTRING];
+    case WM_INITPANE:
+    {
+        TCHAR tBuf[MAX_LOADSTRING];
 
-            LoadString( g_hInst, IDS_WELCOME, tBuf, MAX_LOADSTRING );
-            // Speak the welcome prompt, and do not wait for the operation to complete
-            g_cpVoice->Speak( CT2W(tBuf), SPF_ASYNC, NULL);
-            return ( 1 );
-        }
+        LoadString( g_hInst, IDS_WELCOME, tBuf, MAX_LOADSTRING );
+        // Speak the welcome prompt, and do not wait for the operation to complete
+        g_cpVoice->Speak( CT2W(tBuf), SPF_ASYNC, NULL);
+        return ( 1 );
+    }
 
-        case WM_GOTOCOUNTER:
-            // Set the right message handler and repaint
-            g_fpCurrentPane = CounterPaneProc;
-            PostMessage( hWnd, WM_INITPANE, NULL, NULL );
-            InvalidateRect( hWnd, NULL, TRUE );
-            return ( 1 );
+    case WM_GOTOCOUNTER:
+        // Set the right message handler and repaint
+        g_fpCurrentPane = CounterPaneProc;
+        PostMessage( hWnd, WM_INITPANE, NULL, NULL );
+        InvalidateRect( hWnd, NULL, TRUE );
+        return ( 1 );
 
-        case WM_GOTOOFFICE:
-            // Set the right message handler and repaint
-            g_fpCurrentPane = OfficePaneProc;
-            PostMessage( hWnd, WM_INITPANE, NULL, NULL );
-            InvalidateRect( hWnd, NULL, TRUE );
-            return ( 1 );
+    case WM_GOTOOFFICE:
+        // Set the right message handler and repaint
+        g_fpCurrentPane = OfficePaneProc;
+        PostMessage( hWnd, WM_INITPANE, NULL, NULL );
+        InvalidateRect( hWnd, NULL, TRUE );
+        return ( 1 );
 
-        case WM_PAINT:
-            EntryPanePaint( hWnd );
-            return ( 1 );
+    case WM_PAINT:
+        EntryPanePaint( hWnd );
+        return ( 1 );
     }
     return ( 0 );
 
@@ -476,155 +476,155 @@ LRESULT CounterPaneProc( HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam )
 
     switch ( message )
     {
-        case WM_ESPRESSOORDER:
+    case WM_ESPRESSOORDER:
+    {
+        ID_TEXT *pulIds = (ID_TEXT *) lParam;
+        _ASSERTE( pulIds );
+        if ( pulIds == NULL )
         {
-            ID_TEXT *pulIds = (ID_TEXT *) lParam;
-            _ASSERTE( pulIds );
-            if ( pulIds == NULL )
-            {
-                return 0;
-            }
-            KillTimer( hWnd, 0 );
-            int i = 0, ilen = 0;
-            TCHAR szTempBuf[NORMAL_LOADSTRING];
-            TCHAR szSpace[] =  _T(" ");
-            int iTemplen;
-            
-            g_szCounterDisplay[0] = '\0';
+            return 0;
+        }
+        KillTimer( hWnd, 0 );
+        int i = 0, ilen = 0;
+        TCHAR szTempBuf[NORMAL_LOADSTRING];
+        TCHAR szSpace[] =  _T(" ");
+        int iTemplen;
 
-            // Sort the array
-            while ( 0 != pulIds[i].ulId )
+        g_szCounterDisplay[0] = '\0';
+
+        // Sort the array
+        while ( 0 != pulIds[i].ulId )
+        {
+            i++;
+        }
+        for ( int j = 0; j < i; j++ )
+        {
+            int iminIndex = j;
+            for ( int k = j; k < i; k++ )
             {
-                i++;
-            }
-            for ( int j = 0; j < i; j++ )
-            {
-                int iminIndex = j;               
-                for ( int k = j; k < i; k++ )
+                if ( pulIds[iminIndex].ulId > pulIds[k].ulId )
                 {
-                    if ( pulIds[iminIndex].ulId > pulIds[k].ulId )
-                    {
-                        iminIndex = k;
-                    }
+                    iminIndex = k;
                 }
-                ULONG ulId = pulIds[iminIndex].ulId;
-                WCHAR *pwstr = pulIds[iminIndex].pwstrCoMemText;
-                pulIds[iminIndex].pwstrCoMemText = pulIds[j].pwstrCoMemText;
-                pulIds[j].pwstrCoMemText = pwstr;
-                pulIds[iminIndex].ulId = pulIds[j].ulId;
-                pulIds[j].ulId = ulId;
             }
-            
-            i = 0;
-            // Put in the first order words if we actually have an order
-            if ( 0 != pulIds[0].ulId )
+            ULONG ulId = pulIds[iminIndex].ulId;
+            WCHAR *pwstr = pulIds[iminIndex].pwstrCoMemText;
+            pulIds[iminIndex].pwstrCoMemText = pulIds[j].pwstrCoMemText;
+            pulIds[j].pwstrCoMemText = pwstr;
+            pulIds[iminIndex].ulId = pulIds[j].ulId;
+            pulIds[j].ulId = ulId;
+        }
+
+        i = 0;
+        // Put in the first order words if we actually have an order
+        if ( 0 != pulIds[0].ulId )
+        {
+            iTemplen = LoadString( g_hInst, IDS_ORDERBEGIN, szTempBuf, NORMAL_LOADSTRING );
+            _tcscat_s( g_szCounterDisplay + ilen, _countof(g_szCounterDisplay) - ilen, szTempBuf );
+            ilen += iTemplen;
+        }
+        while ( i < MAX_ID_ARRAY && 0 != pulIds[i].ulId )
+        {
+            CW2T pTempStr( pulIds[i].pwstrCoMemText );
+
+            iTemplen = lstrlen( pTempStr );
+            // We'll quit now so we dont overrun the buffer
+            if ( ilen + iTemplen >= MAX_LOADSTRING )
             {
-                iTemplen = LoadString( g_hInst, IDS_ORDERBEGIN, szTempBuf, NORMAL_LOADSTRING );                
+                break;
+            }
+            if ( i > 0 )
+            {
+                _tcscat_s( g_szCounterDisplay + ilen, _countof(g_szCounterDisplay) - ilen, szSpace );
+                ilen += 1;
+            }
+            _tcscat_s( g_szCounterDisplay, _countof(g_szCounterDisplay), pTempStr );
+            ilen += iTemplen;
+            i++;
+        }
+        // Put the thank you on this order
+        if ( 0 < i )
+        {
+            iTemplen = LoadString( g_hInst, IDS_ORDEREND, szTempBuf, NORMAL_LOADSTRING );
+            if ( ilen + iTemplen < MAX_LOADSTRING )
+            {
                 _tcscat_s( g_szCounterDisplay + ilen, _countof(g_szCounterDisplay) - ilen, szTempBuf );
                 ilen += iTemplen;
             }
-            while ( i < MAX_ID_ARRAY && 0 != pulIds[i].ulId )
-            {
-                CW2T pTempStr( pulIds[i].pwstrCoMemText );
-
-                iTemplen = lstrlen( pTempStr );
-                // We'll quit now so we dont overrun the buffer
-                if ( ilen + iTemplen >= MAX_LOADSTRING )
-                {
-                    break;
-                }
-                if ( i > 0 )
-                {
-                    _tcscat_s( g_szCounterDisplay + ilen, _countof(g_szCounterDisplay) - ilen, szSpace );
-                    ilen += 1;
-                }
-                _tcscat_s( g_szCounterDisplay, _countof(g_szCounterDisplay), pTempStr );
-                ilen += iTemplen;
-                i++;
-            }
-            // Put the thank you on this order
-            if ( 0 < i )
-            {
-                iTemplen = LoadString( g_hInst, IDS_ORDEREND, szTempBuf, NORMAL_LOADSTRING );                
-                if ( ilen + iTemplen < MAX_LOADSTRING )
-                {
-                    _tcscat_s( g_szCounterDisplay + ilen, _countof(g_szCounterDisplay) - ilen, szTempBuf );
-                    ilen += iTemplen;
-                }
-            }
-
-            InvalidateRect( hWnd, NULL, TRUE );
-            SetTimer( hWnd, 0, TIMEOUT, NULL );
-
-            // Speak the order
-            g_cpVoice->Speak( CT2W(g_szCounterDisplay), SPF_ASYNC, NULL);
-
-            // Delete the CoTaskMem we were given initially by ISpPhrase->GetText
-            i = 0;
-            while ( i < MAX_ID_ARRAY && 0 != pulIds[i].ulId )
-            {
-                CoTaskMemFree( pulIds[i].pwstrCoMemText );
-                i++;
-            }
-            delete [] pulIds;
-            return ( 1 );
-
         }
 
-        case WM_PAINT:
-            CounterPanePaint( hWnd, g_szCounterDisplay );
-            return ( 1 );
+        InvalidateRect( hWnd, NULL, TRUE );
+        SetTimer( hWnd, 0, TIMEOUT, NULL );
 
-        case WM_INITPANE:
-            LoadString( g_hInst, IDS_PLEASEORDER, g_szCounterDisplay, MAX_LOADSTRING );
-            // Set the rule recognizing an espresso order to active, now that we are ready for it
-            g_cpCmdGrammar->SetRuleIdState( VID_EspressoDrinks, SPRS_ACTIVE );
+        // Speak the order
+        g_cpVoice->Speak( CT2W(g_szCounterDisplay), SPF_ASYNC, NULL);
 
-            // Set our interests to include false recognitions
-            hr = g_cpRecoCtxt->SetInterest( SPFEI(SPEI_RECOGNITION)|SPFEI(SPEI_FALSE_RECOGNITION),
-                                                    SPFEI(SPEI_RECOGNITION)|SPFEI(SPEI_FALSE_RECOGNITION) );
-            _ASSERTE( SUCCEEDED( hr ) );
+        // Delete the CoTaskMem we were given initially by ISpPhrase->GetText
+        i = 0;
+        while ( i < MAX_ID_ARRAY && 0 != pulIds[i].ulId )
+        {
+            CoTaskMemFree( pulIds[i].pwstrCoMemText );
+            i++;
+        }
+        delete [] pulIds;
+        return ( 1 );
 
-            // Speak the welcome string
-            g_cpVoice->Speak( CT2W(g_szCounterDisplay), SPF_ASYNC, NULL);
+    }
 
-            return ( 1 );
+    case WM_PAINT:
+        CounterPanePaint( hWnd, g_szCounterDisplay );
+        return ( 1 );
 
-        case WM_TIMER:
-            // Revert back to 'go ahead and order' message
-            LoadString( g_hInst, IDS_PLEASEORDER, g_szCounterDisplay, MAX_LOADSTRING );
-            InvalidateRect( hWnd, NULL, TRUE );
+    case WM_INITPANE:
+        LoadString( g_hInst, IDS_PLEASEORDER, g_szCounterDisplay, MAX_LOADSTRING );
+        // Set the rule recognizing an espresso order to active, now that we are ready for it
+        g_cpCmdGrammar->SetRuleIdState( VID_EspressoDrinks, SPRS_ACTIVE );
 
-            // Speak the welcome string
-            g_cpVoice->Speak( CT2W(g_szCounterDisplay), SPF_ASYNC, NULL);
+        // Set our interests to include false recognitions
+        hr = g_cpRecoCtxt->SetInterest( SPFEI(SPEI_RECOGNITION)|SPFEI(SPEI_FALSE_RECOGNITION),
+                                        SPFEI(SPEI_RECOGNITION)|SPFEI(SPEI_FALSE_RECOGNITION) );
+        _ASSERTE( SUCCEEDED( hr ) );
 
-            KillTimer( hWnd, 0 );
-            return ( 1 );
+        // Speak the welcome string
+        g_cpVoice->Speak( CT2W(g_szCounterDisplay), SPF_ASYNC, NULL);
 
-        case WM_GOTOOFFICE:
-            KillTimer( hWnd, 0 );
-            // Set the rule recognizing an espresso order to inactive
-            // since you cant order from the office
-            g_cpCmdGrammar->SetRuleIdState( VID_EspressoDrinks, SPRS_INACTIVE );
+        return ( 1 );
 
-            // Set our interests to include only recognitions
-            hr = g_cpRecoCtxt->SetInterest( SPFEI(SPEI_RECOGNITION),SPFEI(SPEI_RECOGNITION) );
-            _ASSERTE( SUCCEEDED( hr ) );
+    case WM_TIMER:
+        // Revert back to 'go ahead and order' message
+        LoadString( g_hInst, IDS_PLEASEORDER, g_szCounterDisplay, MAX_LOADSTRING );
+        InvalidateRect( hWnd, NULL, TRUE );
 
-            // Set the right message handler and repaint
-            g_fpCurrentPane = OfficePaneProc;
-            PostMessage( hWnd, WM_INITPANE, NULL, NULL );
-            InvalidateRect( hWnd, NULL, TRUE );
-            return ( 1 );
+        // Speak the welcome string
+        g_cpVoice->Speak( CT2W(g_szCounterDisplay), SPF_ASYNC, NULL);
 
-        case WM_DIDNTUNDERSTAND:
-            KillTimer( hWnd, 0 );
-            LoadString( g_hInst, IDS_DIDNTUNDERSTAND, g_szCounterDisplay, MAX_LOADSTRING );
-            InvalidateRect( hWnd, NULL, TRUE );
-            // Speak the didn't understand string
-            g_cpVoice->Speak( CT2W(g_szCounterDisplay), SPF_ASYNC, NULL);
-            SetTimer( hWnd, 0, TIMEOUT, NULL );
-            return ( 1 );
+        KillTimer( hWnd, 0 );
+        return ( 1 );
+
+    case WM_GOTOOFFICE:
+        KillTimer( hWnd, 0 );
+        // Set the rule recognizing an espresso order to inactive
+        // since you cant order from the office
+        g_cpCmdGrammar->SetRuleIdState( VID_EspressoDrinks, SPRS_INACTIVE );
+
+        // Set our interests to include only recognitions
+        hr = g_cpRecoCtxt->SetInterest( SPFEI(SPEI_RECOGNITION),SPFEI(SPEI_RECOGNITION) );
+        _ASSERTE( SUCCEEDED( hr ) );
+
+        // Set the right message handler and repaint
+        g_fpCurrentPane = OfficePaneProc;
+        PostMessage( hWnd, WM_INITPANE, NULL, NULL );
+        InvalidateRect( hWnd, NULL, TRUE );
+        return ( 1 );
+
+    case WM_DIDNTUNDERSTAND:
+        KillTimer( hWnd, 0 );
+        LoadString( g_hInst, IDS_DIDNTUNDERSTAND, g_szCounterDisplay, MAX_LOADSTRING );
+        InvalidateRect( hWnd, NULL, TRUE );
+        // Speak the didn't understand string
+        g_cpVoice->Speak( CT2W(g_szCounterDisplay), SPF_ASYNC, NULL);
+        SetTimer( hWnd, 0, TIMEOUT, NULL );
+        return ( 1 );
 
     }
     return ( 0 );
@@ -640,40 +640,40 @@ LRESULT CounterPaneProc( HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam )
 LRESULT OfficePaneProc( HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam )
 {
     HRESULT hr;
-    
+
     switch ( message )
     {
-        case WM_GOTOCOUNTER:
-            // Set management rule to inactive
-            hr = g_cpCmdGrammar->SetRuleIdState( VID_Manage, SPRS_INACTIVE );            
-            _ASSERTE( SUCCEEDED( hr ) );
+    case WM_GOTOCOUNTER:
+        // Set management rule to inactive
+        hr = g_cpCmdGrammar->SetRuleIdState( VID_Manage, SPRS_INACTIVE );
+        _ASSERTE( SUCCEEDED( hr ) );
 
-            // Set the right message handler and repaint
-            g_fpCurrentPane = CounterPaneProc;
-            PostMessage( hWnd, WM_INITPANE, NULL, NULL );
-            InvalidateRect( hWnd, NULL, TRUE );
-            return ( 1 );
+        // Set the right message handler and repaint
+        g_fpCurrentPane = CounterPaneProc;
+        PostMessage( hWnd, WM_INITPANE, NULL, NULL );
+        InvalidateRect( hWnd, NULL, TRUE );
+        return ( 1 );
 
-        case WM_MANAGEEMPLOYEES:
-            // Set management rule to inactive
-            hr = g_cpCmdGrammar->SetRuleIdState( VID_Manage, SPRS_INACTIVE );            
-            _ASSERTE( SUCCEEDED( hr ) );
+    case WM_MANAGEEMPLOYEES:
+        // Set management rule to inactive
+        hr = g_cpCmdGrammar->SetRuleIdState( VID_Manage, SPRS_INACTIVE );
+        _ASSERTE( SUCCEEDED( hr ) );
 
-            // Set the right message handler and repaint
-            g_fpCurrentPane = ManageEmployeesPaneProc;
-            PostMessage( hWnd, WM_INITPANE, NULL, 2 );
-            InvalidateRect( hWnd, NULL, TRUE );
-            return ( 1 );
+        // Set the right message handler and repaint
+        g_fpCurrentPane = ManageEmployeesPaneProc;
+        PostMessage( hWnd, WM_INITPANE, NULL, 2 );
+        InvalidateRect( hWnd, NULL, TRUE );
+        return ( 1 );
 
-        case WM_PAINT:
-            OfficePanePaint( hWnd );
-            return ( 1 );
+    case WM_PAINT:
+        OfficePanePaint( hWnd );
+        return ( 1 );
 
-        case WM_INITPANE:
-            // Set management rule to active
-            hr = g_cpCmdGrammar->SetRuleIdState( VID_Manage, SPRS_ACTIVE );            
-            _ASSERTE( SUCCEEDED( hr ) );
-            return ( 1 );
+    case WM_INITPANE:
+        // Set management rule to active
+        hr = g_cpCmdGrammar->SetRuleIdState( VID_Manage, SPRS_ACTIVE );
+        _ASSERTE( SUCCEEDED( hr ) );
+        return ( 1 );
 
     }
     return ( 0 );
@@ -713,285 +713,285 @@ LRESULT ManageEmployeesPaneProc( HWND hWnd, UINT message, WPARAM wParam, LPARAM 
     static WCHAR**  ppszTokenIds;
     static CSpDynamicString*  ppcDescriptionString;     // This is string helper class in sphelper.h
     static UINT iCurEnum;       // Indicates if we should list males, females, or both
-    
+
     switch ( message )
     {
-        case WM_GOTOOFFICE:
+    case WM_GOTOOFFICE:
+    {
+        // Set the right message handler and repaint
+        g_fpCurrentPane = OfficePaneProc;
+        //Cleanup our variables
+        ManageEmployeesPaneCleanup( ppszTokenIds, ppcDescriptionString, ulNumTokens );
+        ppszTokenIds = NULL;
+        ppcDescriptionString = NULL;
+        ulNumTokens = 0;
+
+        // Set the hear voice rule to inactive
+        HRESULT hr = g_cpCmdGrammar->SetRuleIdState( VID_HearTheVoice, SPRS_INACTIVE );
+        _ASSERTE( SUCCEEDED( hr ) );
+        hr = g_cpCmdGrammar->SetRuleIdState( VID_OtherRules, SPRS_INACTIVE );
+        _ASSERTE( SUCCEEDED( hr ) );
+        hr = g_cpCmdGrammar->SetRuleIdState( DYN_TTSVOICERULE, SPRS_ACTIVE );
+        _ASSERTE( SUCCEEDED( hr ) );
+
+        PostMessage( hWnd, WM_INITPANE, NULL, NULL );
+        InvalidateRect( hWnd, NULL, TRUE );
+        return ( 1 );
+    }
+
+    case WM_GOTOCOUNTER:
+    {
+        // Set the right message handler and repaint
+        g_fpCurrentPane = CounterPaneProc;
+        //Cleanup our variables
+        ManageEmployeesPaneCleanup( ppszTokenIds, ppcDescriptionString, ulNumTokens );
+        ppszTokenIds = NULL;
+        ppcDescriptionString = NULL;
+        ulNumTokens = 0;
+
+        // Set the hear voice rule to inactive
+        HRESULT hr = g_cpCmdGrammar->SetRuleIdState( VID_HearTheVoice, SPRS_INACTIVE );
+        _ASSERTE( SUCCEEDED( hr ) );
+        hr = g_cpCmdGrammar->SetRuleIdState( VID_OtherRules, SPRS_INACTIVE );
+        _ASSERTE( SUCCEEDED( hr ) );
+        hr = g_cpCmdGrammar->SetRuleIdState( DYN_TTSVOICERULE, SPRS_ACTIVE );
+        _ASSERTE( SUCCEEDED( hr ) );
+
+        PostMessage( hWnd, WM_INITPANE, NULL, NULL );
+        InvalidateRect( hWnd, NULL, TRUE );
+        return ( 1 );
+    }
+    case WM_PAINT:
+    {
+        // Do the actual UI paint
+        ManageEmployeesPanePaint( hWnd, ulNumTokens, ppcDescriptionString, ulCurToken, iCurEnum );
+        return ( 1 );
+    }
+
+    case WM_INITPANE:
+    {
+        ISpObjectToken                  *pToken = NULL;  // Token interface pointer
+        CComPtr<IEnumSpObjectTokens>    cpEnum;          // Pointer to token enumerator
+        ULONG                           ulIndex = 0;
+        ulCurToken = 0xffffffff;
+        WCHAR *szRequiredAttributes = NULL;
+        SPSTATEHANDLE                   hDynamicRuleHandle;  // Handle to our dynamic rule
+
+        // Set the required attributes field for the enum if we have special needs
+        // based on our LPARAM in
+        if ( 0 == lParam )
         {
-            // Set the right message handler and repaint
-            g_fpCurrentPane = OfficePaneProc;
-            //Cleanup our variables
-            ManageEmployeesPaneCleanup( ppszTokenIds, ppcDescriptionString, ulNumTokens );            
-            ppszTokenIds = NULL;
-            ppcDescriptionString = NULL;
-            ulNumTokens = 0;
-
-            // Set the hear voice rule to inactive
-            HRESULT hr = g_cpCmdGrammar->SetRuleIdState( VID_HearTheVoice, SPRS_INACTIVE );            
-            _ASSERTE( SUCCEEDED( hr ) );
-            hr = g_cpCmdGrammar->SetRuleIdState( VID_OtherRules, SPRS_INACTIVE );            
-            _ASSERTE( SUCCEEDED( hr ) );
-            hr = g_cpCmdGrammar->SetRuleIdState( DYN_TTSVOICERULE, SPRS_ACTIVE );            
-            _ASSERTE( SUCCEEDED( hr ) );
-
-            PostMessage( hWnd, WM_INITPANE, NULL, NULL );
-            InvalidateRect( hWnd, NULL, TRUE );
-            return ( 1 );
+            szRequiredAttributes = L"Gender=Male";
+        }
+        else if ( 1 == lParam )
+        {
+            szRequiredAttributes = L"Gender=Female";
         }
 
-        case WM_GOTOCOUNTER:
+        // Get a token enumerator for tts voices available
+        HRESULT hr = SpEnumTokens(SPCAT_VOICES, szRequiredAttributes, NULL, &cpEnum);
+        if ( S_OK == hr )
         {
-            // Set the right message handler and repaint
-            g_fpCurrentPane = CounterPaneProc;
-            //Cleanup our variables
-            ManageEmployeesPaneCleanup( ppszTokenIds, ppcDescriptionString, ulNumTokens );            
-            ppszTokenIds = NULL;
-            ppcDescriptionString = NULL;
-            ulNumTokens = 0;
+            // Get the numbers of tokens found
+            hr = cpEnum->GetCount( &ulNumTokens );
 
-            // Set the hear voice rule to inactive
-            HRESULT hr = g_cpCmdGrammar->SetRuleIdState( VID_HearTheVoice, SPRS_INACTIVE );            
-            _ASSERTE( SUCCEEDED( hr ) );
-            hr = g_cpCmdGrammar->SetRuleIdState( VID_OtherRules, SPRS_INACTIVE );            
-            _ASSERTE( SUCCEEDED( hr ) );
-            hr = g_cpCmdGrammar->SetRuleIdState( DYN_TTSVOICERULE, SPRS_ACTIVE );            
-            _ASSERTE( SUCCEEDED( hr ) );
-
-            PostMessage( hWnd, WM_INITPANE, NULL, NULL );
-            InvalidateRect( hWnd, NULL, TRUE );
-            return ( 1 );
-        }
-        case WM_PAINT:
-        {
-            // Do the actual UI paint
-            ManageEmployeesPanePaint( hWnd, ulNumTokens, ppcDescriptionString, ulCurToken, iCurEnum );
-            return ( 1 );
-        }
-
-        case WM_INITPANE:
-        {
-            ISpObjectToken                  *pToken = NULL;  // Token interface pointer
-            CComPtr<IEnumSpObjectTokens>    cpEnum;          // Pointer to token enumerator
-            ULONG                           ulIndex = 0;
-            ulCurToken = 0xffffffff;
-            WCHAR *szRequiredAttributes = NULL;
-            SPSTATEHANDLE                   hDynamicRuleHandle;  // Handle to our dynamic rule
-
-            // Set the required attributes field for the enum if we have special needs
-            // based on our LPARAM in
-            if ( 0 == lParam )
+            if ( SUCCEEDED( hr ) && 0 != ulNumTokens )
             {
-                szRequiredAttributes = L"Gender=Male";
-            }
-            else if ( 1 == lParam )
-            {
-                szRequiredAttributes = L"Gender=Female";
-            }
-
-            // Get a token enumerator for tts voices available
-            HRESULT hr = SpEnumTokens(SPCAT_VOICES, szRequiredAttributes, NULL, &cpEnum);
-            if ( S_OK == hr )
-            {
-                // Get the numbers of tokens found
-                hr = cpEnum->GetCount( &ulNumTokens );
-
-                if ( SUCCEEDED( hr ) && 0 != ulNumTokens )
+                // Create arrays we need for storing data
+                ppcDescriptionString = new CSpDynamicString [ulNumTokens];
+                if ( NULL == ppcDescriptionString )
                 {
-                    // Create arrays we need for storing data
-                    ppcDescriptionString = new CSpDynamicString [ulNumTokens];
-                    if ( NULL == ppcDescriptionString )
-                    {
-                        break;
-                    }
-
-                    ppszTokenIds = new WCHAR* [ulNumTokens];
-                    if ( NULL == ppszTokenIds )
-                    {
-                        break;
-                    }
-                    ZeroMemory( ppszTokenIds, ulNumTokens*sizeof( WCHAR* ) );                    
-                    
-                    // Get the next token in the enumeration
-                    // State is maintained in the enumerator
-                    while (cpEnum->Next(1, &pToken, NULL) == S_OK)
-                    {
-                        // Get a string which describes the token, in our case, the voice name
-                        hr = SpGetDescription( pToken, &ppcDescriptionString[ulIndex] );
-                        _ASSERTE( SUCCEEDED( hr ) );
-                        
-                        // Get the token id, for a low overhead way to retrieve the token later
-                        // without holding on to the object itself
-                        hr = pToken->GetId( &ppszTokenIds[ulIndex] );
-                        _ASSERTE( SUCCEEDED( hr ) );
-                        
-                        ulIndex++;
-                        
-                        // Release the token itself
-                        pToken->Release();
-                        pToken = NULL;
-                    }                   
+                    break;
                 }
-                
-                // if we've failed to properly initialize, then we should completely shut-down
-                if ( S_OK != hr )
-                {
-                    if ( pToken )
-                    {
-                        pToken->Release();
-                    }
-                    ManageEmployeesPaneCleanup( ppszTokenIds, ppcDescriptionString, ulNumTokens );
 
-                    ppszTokenIds = NULL;
-                    ppcDescriptionString = NULL;
-                    ulNumTokens = 0;
+                ppszTokenIds = new WCHAR* [ulNumTokens];
+                if ( NULL == ppszTokenIds )
+                {
+                    break;
                 }
-                // Find out which token corresponds to our voice which is currently in use
-                else
-                {
-                    WCHAR *pszCurTokenId = NULL;
+                ZeroMemory( ppszTokenIds, ulNumTokens*sizeof( WCHAR* ) );
 
-                    // Get the token representing the current voice
-                    hr = g_cpVoice->GetVoice( &pToken );
+                // Get the next token in the enumeration
+                // State is maintained in the enumerator
+                while (cpEnum->Next(1, &pToken, NULL) == S_OK)
+                {
+                    // Get a string which describes the token, in our case, the voice name
+                    hr = SpGetDescription( pToken, &ppcDescriptionString[ulIndex] );
+                    _ASSERTE( SUCCEEDED( hr ) );
+
+                    // Get the token id, for a low overhead way to retrieve the token later
+                    // without holding on to the object itself
+                    hr = pToken->GetId( &ppszTokenIds[ulIndex] );
+                    _ASSERTE( SUCCEEDED( hr ) );
+
+                    ulIndex++;
+
+                    // Release the token itself
+                    pToken->Release();
+                    pToken = NULL;
+                }
+            }
+
+            // if we've failed to properly initialize, then we should completely shut-down
+            if ( S_OK != hr )
+            {
+                if ( pToken )
+                {
+                    pToken->Release();
+                }
+                ManageEmployeesPaneCleanup( ppszTokenIds, ppcDescriptionString, ulNumTokens );
+
+                ppszTokenIds = NULL;
+                ppcDescriptionString = NULL;
+                ulNumTokens = 0;
+            }
+            // Find out which token corresponds to our voice which is currently in use
+            else
+            {
+                WCHAR *pszCurTokenId = NULL;
+
+                // Get the token representing the current voice
+                hr = g_cpVoice->GetVoice( &pToken );
+                if ( SUCCEEDED( hr ) )
+                {
+                    // Get the current token ID, and compare it against others to figure out
+                    // which description string is the one currently selected.
+                    hr = pToken->GetId( &pszCurTokenId );
                     if ( SUCCEEDED( hr ) )
                     {
-                        // Get the current token ID, and compare it against others to figure out
-                        // which description string is the one currently selected.
-                        hr = pToken->GetId( &pszCurTokenId );
-                        if ( SUCCEEDED( hr ) )
+                        ulIndex = 0;
+                        while ( ulIndex < ulNumTokens &&
+                                0 != _wcsicmp( pszCurTokenId, ppszTokenIds[ulIndex] ) )
                         {
-                            ulIndex = 0;
-                            while ( ulIndex < ulNumTokens && 
-                                    0 != _wcsicmp( pszCurTokenId, ppszTokenIds[ulIndex] ) )
-                            {
-                                ulIndex++;
-                            }
-
-                            // We found it, so set the current index to that of the current token
-                            if ( ulIndex < ulNumTokens )
-                            {
-                                ulCurToken = ulIndex;
-                            }
-
-                            CoTaskMemFree( pszCurTokenId );
+                            ulIndex++;
                         }
 
-                        pToken->Release();
+                        // We found it, so set the current index to that of the current token
+                        if ( ulIndex < ulNumTokens )
+                        {
+                            ulCurToken = ulIndex;
+                        }
 
-                    }                                       
+                        CoTaskMemFree( pszCurTokenId );
+                    }
+
+                    pToken->Release();
 
                 }
-            
+
             }
 
-            // Initially, we see both genders
-            _ASSERTE( lParam >= 0 && lParam <= 2);
-            iCurEnum = (UINT)lParam;
+        }
 
-            // Create a dynamic rule containing the description strings of the voice tokens
-            hr = g_cpCmdGrammar->GetRule(NULL, DYN_TTSVOICERULE, SPRAF_TopLevel | SPRAF_Active | SPRAF_Dynamic, TRUE, &hDynamicRuleHandle);
-            if ( SUCCEEDED( hr ) )
-            {
-                // Clear the rule first
-                hr = g_cpCmdGrammar->ClearRule( hDynamicRuleHandle );
-                _ASSERTE( SUCCEEDED( hr ) );
+        // Initially, we see both genders
+        _ASSERTE( lParam >= 0 && lParam <= 2);
+        iCurEnum = (UINT)lParam;
 
-                // Commit the changes
-                hr = g_cpCmdGrammar->Commit(0);
-                _ASSERTE( SUCCEEDED( hr ) );
-                
-                // Add description names as the word, ulIndex as id
-                for ( ulIndex = 0; ulIndex < ulNumTokens; ulIndex++ )
-                {
-                    SPPROPERTYINFO prop;
-                    prop.pszName = L"Id";
-                    prop.pszValue = L"Property";
-                    prop.vValue.vt = VT_I4;
-                    prop.vValue.ulVal = ulIndex;
-                    hr = g_cpCmdGrammar->AddWordTransition( hDynamicRuleHandle, NULL, ppcDescriptionString[ulIndex], L" ",
-                                                           SPWT_LEXICAL, 1.0, &prop);
-                    _ASSERTE( SUCCEEDED( hr ) );                   
-                }
-
-                // Commit the changes
-                hr = g_cpCmdGrammar->Commit(0);
-                _ASSERTE( SUCCEEDED( hr ) );
-
-                // Set the dynamic rules to active
-                hr = g_cpCmdGrammar->SetRuleIdState( DYN_TTSVOICERULE, SPRS_ACTIVE );            
-                _ASSERTE( SUCCEEDED( hr ) );
-            }
-
-            // Set the hear voice rule to active
-            hr = g_cpCmdGrammar->SetRuleIdState( VID_HearTheVoice, SPRS_ACTIVE );            
-            _ASSERTE( SUCCEEDED( hr ) );
-            hr = g_cpCmdGrammar->SetRuleIdState( VID_OtherRules, SPRS_ACTIVE );            
+        // Create a dynamic rule containing the description strings of the voice tokens
+        hr = g_cpCmdGrammar->GetRule(NULL, DYN_TTSVOICERULE, SPRAF_TopLevel | SPRAF_Active | SPRAF_Dynamic, TRUE, &hDynamicRuleHandle);
+        if ( SUCCEEDED( hr ) )
+        {
+            // Clear the rule first
+            hr = g_cpCmdGrammar->ClearRule( hDynamicRuleHandle );
             _ASSERTE( SUCCEEDED( hr ) );
 
-            InvalidateRect( hWnd, NULL, TRUE );
-            return ( 1 );
-        }
+            // Commit the changes
+            hr = g_cpCmdGrammar->Commit(0);
+            _ASSERTE( SUCCEEDED( hr ) );
 
-        case WM_DESTROY:
-            // Windows is closing down, so we should cleanup
-            ManageEmployeesPaneCleanup( ppszTokenIds, ppcDescriptionString, ulNumTokens );
-            ppszTokenIds = NULL;
-            ppcDescriptionString = NULL;
-            ulNumTokens = 0;
-            return ( 1 );
-
-        case WM_HEARTHEVOICE:
-            // Set the voice to play
-            LoadString( g_hInst, IDS_VOICESPEAK, g_szCounterDisplay, MAX_LOADSTRING );
-            g_cpVoice->Speak( CT2W(g_szCounterDisplay), SPF_ASYNC | SPF_PURGEBEFORESPEAK, NULL );
-            return ( 1 );
-
-        case WM_MISCCOMMAND:
-        {
-            // Find out the offset from the first property we're interested in, so we can verify that
-            // it's within range.
-            UINT iSelection = (UINT)(lParam - VID_MalesOnly);
-            if ( 2 >= iSelection )
+            // Add description names as the word, ulIndex as id
+            for ( ulIndex = 0; ulIndex < ulNumTokens; ulIndex++ )
             {
-                // If we have a new listing criteria, we basically shutdown the pane and start it again
-                if ( iSelection != iCurEnum )
-                {
-                    HRESULT hr = g_cpCmdGrammar->SetRuleIdState( VID_HearTheVoice, SPRS_INACTIVE );            
-                    _ASSERTE( SUCCEEDED( hr ) );
-                    hr = g_cpCmdGrammar->SetRuleIdState( VID_OtherRules, SPRS_INACTIVE );            
-                    _ASSERTE( SUCCEEDED( hr ) );
-
-                    ManageEmployeesPaneCleanup( ppszTokenIds, ppcDescriptionString, ulNumTokens );
-                    ppszTokenIds = NULL;
-                    ppcDescriptionString = NULL;
-                    ulNumTokens = 0;
-        
-                    PostMessage( hWnd, WM_INITPANE, 0, (LPARAM) iSelection );
-                }
+                SPPROPERTYINFO prop;
+                prop.pszName = L"Id";
+                prop.pszValue = L"Property";
+                prop.vValue.vt = VT_I4;
+                prop.vValue.ulVal = ulIndex;
+                hr = g_cpCmdGrammar->AddWordTransition( hDynamicRuleHandle, NULL, ppcDescriptionString[ulIndex], L" ",
+                                                        SPWT_LEXICAL, 1.0, &prop);
+                _ASSERTE( SUCCEEDED( hr ) );
             }
-            return ( 1 );
+
+            // Commit the changes
+            hr = g_cpCmdGrammar->Commit(0);
+            _ASSERTE( SUCCEEDED( hr ) );
+
+            // Set the dynamic rules to active
+            hr = g_cpCmdGrammar->SetRuleIdState( DYN_TTSVOICERULE, SPRS_ACTIVE );
+            _ASSERTE( SUCCEEDED( hr ) );
         }
 
-        case WM_TTSVOICESEL:
-        {
-            // If we are out of range, it is a programming error
-            _ASSERTE( 0 <= lParam && ulNumTokens > (ULONG) lParam );
+        // Set the hear voice rule to active
+        hr = g_cpCmdGrammar->SetRuleIdState( VID_HearTheVoice, SPRS_ACTIVE );
+        _ASSERTE( SUCCEEDED( hr ) );
+        hr = g_cpCmdGrammar->SetRuleIdState( VID_OtherRules, SPRS_ACTIVE );
+        _ASSERTE( SUCCEEDED( hr ) );
 
-            // The returned Id is an index into our tokenId table, so create a token from the id
-            CComPtr< ISpObjectToken >   pToken;
-            HRESULT hr = SpGetTokenFromId( ppszTokenIds[lParam], &pToken, FALSE);
-            if ( SUCCEEDED( hr ) )
+        InvalidateRect( hWnd, NULL, TRUE );
+        return ( 1 );
+    }
+
+    case WM_DESTROY:
+        // Windows is closing down, so we should cleanup
+        ManageEmployeesPaneCleanup( ppszTokenIds, ppcDescriptionString, ulNumTokens );
+        ppszTokenIds = NULL;
+        ppcDescriptionString = NULL;
+        ulNumTokens = 0;
+        return ( 1 );
+
+    case WM_HEARTHEVOICE:
+        // Set the voice to play
+        LoadString( g_hInst, IDS_VOICESPEAK, g_szCounterDisplay, MAX_LOADSTRING );
+        g_cpVoice->Speak( CT2W(g_szCounterDisplay), SPF_ASYNC | SPF_PURGEBEFORESPEAK, NULL );
+        return ( 1 );
+
+    case WM_MISCCOMMAND:
+    {
+        // Find out the offset from the first property we're interested in, so we can verify that
+        // it's within range.
+        UINT iSelection = (UINT)(lParam - VID_MalesOnly);
+        if ( 2 >= iSelection )
+        {
+            // If we have a new listing criteria, we basically shutdown the pane and start it again
+            if ( iSelection != iCurEnum )
             {
-                // Set our current voice from the returned token
-                hr = g_cpVoice->SetVoice( pToken );
+                HRESULT hr = g_cpCmdGrammar->SetRuleIdState( VID_HearTheVoice, SPRS_INACTIVE );
+                _ASSERTE( SUCCEEDED( hr ) );
+                hr = g_cpCmdGrammar->SetRuleIdState( VID_OtherRules, SPRS_INACTIVE );
                 _ASSERTE( SUCCEEDED( hr ) );
 
-                // Change our current voice index
-                ulCurToken = (UINT)lParam;
-            }
+                ManageEmployeesPaneCleanup( ppszTokenIds, ppcDescriptionString, ulNumTokens );
+                ppszTokenIds = NULL;
+                ppcDescriptionString = NULL;
+                ulNumTokens = 0;
 
-            InvalidateRect( hWnd, NULL, TRUE );
-            return ( 1 );
+                PostMessage( hWnd, WM_INITPANE, 0, (LPARAM) iSelection );
+            }
         }
+        return ( 1 );
+    }
+
+    case WM_TTSVOICESEL:
+    {
+        // If we are out of range, it is a programming error
+        _ASSERTE( 0 <= lParam && ulNumTokens > (ULONG) lParam );
+
+        // The returned Id is an index into our tokenId table, so create a token from the id
+        CComPtr< ISpObjectToken >   pToken;
+        HRESULT hr = SpGetTokenFromId( ppszTokenIds[lParam], &pToken, FALSE);
+        if ( SUCCEEDED( hr ) )
+        {
+            // Set our current voice from the returned token
+            hr = g_cpVoice->SetVoice( pToken );
+            _ASSERTE( SUCCEEDED( hr ) );
+
+            // Change our current voice index
+            ulCurToken = (UINT)lParam;
+        }
+
+        InvalidateRect( hWnd, NULL, TRUE );
+        return ( 1 );
+    }
 
     }
     return ( 0 );
@@ -1009,7 +1009,7 @@ void ManageEmployeesPaneCleanup( __in_ecount_opt(ulNumTokens) WCHAR** ppszTokenI
                                  CSpDynamicString*  ppcDescriptionString, ULONG ulNumTokens)
 {
     ULONG ulIndex;
-   
+
     // Free all allocated token ids
     if ( ppszTokenIds )
     {
@@ -1017,9 +1017,9 @@ void ManageEmployeesPaneCleanup( __in_ecount_opt(ulNumTokens) WCHAR** ppszTokenI
         {
             CoTaskMemFree( ppszTokenIds[ulIndex] );
         }
-        
+
         delete [] ppszTokenIds;
     }
-    
+
     delete [] ppcDescriptionString;
 }

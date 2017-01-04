@@ -1,4 +1,4 @@
-/////////////////////////////////////////////////////////////////////////////
+﻿/////////////////////////////////////////////////////////////////////////////
 //
 //  Copyright (c) 2003 <company name>
 //
@@ -66,13 +66,13 @@ static char THIS_FILE[] = __FILE__;
 /////////////////////////////////////////////////////////////////////////////
 void AFXAPI
 DDX_Number(
-      CDataExchange *   pDXIn
+    CDataExchange *   pDXIn
     , int               nIDCIn
     , DWORD &           rdwValueInout
     , DWORD             dwMinIn
     , DWORD             dwMaxIn
     , BOOL              fSignedIn /* =FALSE */
-    )
+)
 {
     HWND    hwndCtrl = NULL;
     DWORD   dwValue = 0;
@@ -136,17 +136,17 @@ DDX_Number(
         //
 
         if (    ! bTranslated
-            ||  (fSignedIn
-                && (    (static_cast< LONG >( dwValue ) < static_cast< LONG >( dwMinIn ))
-                    ||  (static_cast< LONG >( dwValue ) > static_cast< LONG >( dwMaxIn ))
+                ||  (fSignedIn
+                     && (    (static_cast< LONG >( dwValue ) < static_cast< LONG >( dwMinIn ))
+                             ||  (static_cast< LONG >( dwValue ) > static_cast< LONG >( dwMaxIn ))
+                        )
                     )
-                )
-            ||  (!  fSignedIn
-                &&  (   (dwValue < dwMinIn)
-                    ||  (dwValue > dwMaxIn)
+                ||  (!  fSignedIn
+                     &&  (   (dwValue < dwMinIn)
+                             ||  (dwValue > dwMaxIn)
+                         )
                     )
-                )
-            )
+           )
         {
             TCHAR   szMin[ 32 ];
             TCHAR   szMax[ 32 ];
@@ -244,11 +244,11 @@ DDX_Number(
 /////////////////////////////////////////////////////////////////////////////
 void AFXAPI
 DDV_RequiredText(
-      CDataExchange *   pDXIn
+    CDataExchange *   pDXIn
     , int               nIDCIn
     , int               nIDCLabelIn
     , const CString &   rstrValueIn
-    )
+)
 {
     ASSERT( pDXIn != NULL );
 
@@ -320,8 +320,8 @@ CleanupLabel( LPTSTR pwszLabelIn )
     langid = GetUserDefaultLangID();
     primarylangid = static_cast< WORD >( PRIMARYLANGID( langid ) );
     fFELanguage = ((primarylangid == LANG_JAPANESE)
-                || (primarylangid == LANG_CHINESE)
-                || (primarylangid == LANG_KOREAN) );
+                   || (primarylangid == LANG_CHINESE)
+                   || (primarylangid == LANG_KOREAN) );
 
     //
     // Copy the name sans '&' and ':' chars
@@ -335,10 +335,10 @@ CleanupLabel( LPTSTR pwszLabelIn )
         //
 
         if (    fFELanguage
-            &&  (pin[ 0 ] == _T('('))
-            &&  (pin[ 1 ] == _T('&'))
-            &&  (pin[ 2 ] != _T('\0'))
-            &&  (pin[ 3 ] == _T(')')) )
+                &&  (pin[ 0 ] == _T('('))
+                &&  (pin[ 1 ] == _T('&'))
+                &&  (pin[ 2 ] != _T('\0'))
+                &&  (pin[ 3 ] == _T(')')) )
         {
             pin += 3;
         } // if:  Far East language with accelerator
@@ -346,6 +346,7 @@ CleanupLabel( LPTSTR pwszLabelIn )
         {
             *pout++ = *pin;
         } // else if:  accelerator found
-    } while ( *pin++ != _T('\0') );
+    }
+    while ( *pin++ != _T('\0') );
 
 } //*** CleanupLabel

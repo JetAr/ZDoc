@@ -1,4 +1,4 @@
-/********************************************************************
+﻿/********************************************************************
 THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED
 TO THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -11,18 +11,18 @@ Abstract:
 
     Illustrates how to add firewall rule with the EdgeTraversalOptions.
 
-    Note that in order for Windows Firewall to dynamically allow edge traffic to the application 
+    Note that in order for Windows Firewall to dynamically allow edge traffic to the application
     (i.e allow edge traffic only when the app indicates so, block otherwise) two things must be done:
     1. Application should use the IPV6_PROTECTION_LEVEL socket option on the listening socket
         and set it to PROTECTION_LEVEL_UNRESTRICTED whenever it wants to receive edge traffic. And reset it
         back to other options when edge traffic is not needed.
-    2. The Windows Firewall rule added for the application should set 
+    2. The Windows Firewall rule added for the application should set
             EdgeTraversalOptions = NET_FW_EDGE_TRAVERSAL_TYPE_DEFER_TO_APP
 
-    For help on the IPV6_PROTECTION_LEVEL socket option refer Winsock reference documentation on MSDN. 
+    For help on the IPV6_PROTECTION_LEVEL socket option refer Winsock reference documentation on MSDN.
 
     This sample only illustrates one of the EdgeTraversalOptions values.
-    You can find the complete set of Windows 7 supported EdgeTraversalOptions values by looking up the 
+    You can find the complete set of Windows 7 supported EdgeTraversalOptions values by looking up the
     enumerated type 'NET_FW_EDGE_TRAVERSAL_TYPE' for 'Windows Firewall with Advanced Security' on MSDN.
     Posting values here for quick reference but always check MSDN for correct values:
         NET_FW_EDGE_TRAVERSAL_TYPE_DENY               = 0  'always block edge traffic.
@@ -42,7 +42,7 @@ Abstract:
 #include "resource.h"
 
 
-#define STRING_BUFFER_SIZE  500     
+#define STRING_BUFFER_SIZE  500
 
 
 // Forward declarations
@@ -61,7 +61,7 @@ int __cdecl wmain()
     hrComInit = CoInitializeEx(
                     0,
                     COINIT_APARTMENTTHREADED
-                    );
+                );
 
     // Ignore RPC_E_CHANGED_MODE; this just means that COM has already been
     // initialized with a different mode. Since we don't care what the mode is,
@@ -82,7 +82,7 @@ int __cdecl wmain()
         goto Cleanup;
     }
 
-    // Add firewall rule with EdgeTraversalOption=DeferApp (Windows7+) if available 
+    // Add firewall rule with EdgeTraversalOption=DeferApp (Windows7+) if available
     //   else add with Edge=True (Vista and Server 2008).
     AddFirewallRuleWithEdgeTraversal(pNetFwPolicy2);
 
@@ -96,17 +96,17 @@ Cleanup:
     {
         CoUninitialize();
     }
-   
+
     return 0;
 }
 
-// Add firewall rule with EdgeTraversalOption=DeferApp (Windows7+) if available 
+// Add firewall rule with EdgeTraversalOption=DeferApp (Windows7+) if available
 //   else add with Edge=True (Vista and Server 2008).
 HRESULT    AddFirewallRuleWithEdgeTraversal(__in INetFwPolicy2 *pNetFwPolicy2)
 {
     HRESULT hr = S_OK;
     INetFwRules *pNetFwRules = NULL;
-    
+
     INetFwRule  *pNetFwRule = NULL;
     INetFwRule2 *pNetFwRule2 = NULL;
 
@@ -117,12 +117,12 @@ HRESULT    AddFirewallRuleWithEdgeTraversal(__in INetFwPolicy2 *pNetFwPolicy2)
     BSTR RuleDescription = NULL;
     BSTR RuleAppPath = NULL;
 
-    
+
     hr = StringCchPrintfW(pwszTemp, STRING_BUFFER_SIZE, L"@EdgeTraversalOptions.exe,-%d", RULE_NAME_STRING_ID);
     if (FAILED(hr))
     {
         wprintf(L"Failed to compose a resource identifier string: 0x%08lx\n", hr);
-        goto Cleanup;        
+        goto Cleanup;
     }
     RuleName = SysAllocString(pwszTemp);
     if (NULL == RuleName)
@@ -135,7 +135,7 @@ HRESULT    AddFirewallRuleWithEdgeTraversal(__in INetFwPolicy2 *pNetFwPolicy2)
     if (FAILED(hr))
     {
         wprintf(L"Failed to compose a resource identifier string: 0x%08lx\n", hr);
-        goto Cleanup;        
+        goto Cleanup;
     }
     RuleGroupName = SysAllocString(pwszTemp);  // Used for grouping together multiple rules
     if (NULL == RuleGroupName)
@@ -148,7 +148,7 @@ HRESULT    AddFirewallRuleWithEdgeTraversal(__in INetFwPolicy2 *pNetFwPolicy2)
     if (FAILED(hr))
     {
         wprintf(L"Failed to compose a resource identifier string: 0x%08lx\n", hr);
-        goto Cleanup;        
+        goto Cleanup;
     }
     RuleDescription = SysAllocString(pwszTemp);
     if (NULL == RuleDescription)
@@ -169,20 +169,20 @@ HRESULT    AddFirewallRuleWithEdgeTraversal(__in INetFwPolicy2 *pNetFwPolicy2)
     if (FAILED(hr))
     {
         wprintf(L"Failed to retrieve firewall rules collection : 0x%08lx\n", hr);
-        goto Cleanup;        
+        goto Cleanup;
     }
 
     hr = CoCreateInstance(
-        __uuidof(NetFwRule),    //CLSID of the class whose object is to be created
-        NULL, 
-        CLSCTX_INPROC_SERVER, 
-        __uuidof(INetFwRule),   // Identifier of the Interface used for communicating with the object
-        (void**)&pNetFwRule);
+             __uuidof(NetFwRule),    //CLSID of the class whose object is to be created
+             NULL,
+             CLSCTX_INPROC_SERVER,
+             __uuidof(INetFwRule),   // Identifier of the Interface used for communicating with the object
+             (void**)&pNetFwRule);
 
     if (FAILED(hr))
     {
         wprintf(L"CoCreateInstance for INetFwRule failed: 0x%08lx\n", hr);
-        goto Cleanup;        
+        goto Cleanup;
     }
 
     hr = pNetFwRule->put_Name(RuleName);
@@ -276,13 +276,13 @@ HRESULT    AddFirewallRuleWithEdgeTraversal(__in INetFwPolicy2 *pNetFwPolicy2)
     if (FAILED(hr))
     {
         wprintf(L"Failed to add firewall rule to the firewall rules collection : 0x%08lx\n", hr);
-        goto Cleanup;        
+        goto Cleanup;
     }
 
     wprintf(L"Successfully added firewall rule !\n");
 
 Cleanup:
-   
+
     SysFreeString(RuleName);
     SysFreeString(RuleGroupName);
     SysFreeString(RuleDescription);
@@ -313,16 +313,16 @@ HRESULT WFCOMInitialize(INetFwPolicy2** ppNetFwPolicy2)
     HRESULT hr = S_OK;
 
     hr = CoCreateInstance(
-        __uuidof(NetFwPolicy2), 
-        NULL, 
-        CLSCTX_INPROC_SERVER, 
-        __uuidof(INetFwPolicy2), 
-        (void**)ppNetFwPolicy2);
+             __uuidof(NetFwPolicy2),
+             NULL,
+             CLSCTX_INPROC_SERVER,
+             __uuidof(INetFwPolicy2),
+             (void**)ppNetFwPolicy2);
 
     if (FAILED(hr))
     {
         wprintf(L"CoCreateInstance for INetFwPolicy2 failed: 0x%08lx\n", hr);
-        goto Cleanup;        
+        goto Cleanup;
     }
 
 Cleanup:

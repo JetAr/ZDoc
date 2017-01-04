@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -9,7 +9,7 @@
 #include <strsafe.h>
 
 class CNonDefaultDropMenuVerb : public IContextMenu,
-                                public IShellExtInit
+    public IShellExtInit
 {
 public:
 
@@ -50,7 +50,10 @@ public:
     // IContextMenu
     IFACEMETHODIMP QueryContextMenu(HMENU hmenu, UINT indexMenu, UINT idCmdFirst, UINT idCmdLast, UINT uFlags);
     IFACEMETHODIMP InvokeCommand(LPCMINVOKECOMMANDINFO lpici);
-    IFACEMETHODIMP GetCommandString(UINT_PTR /*idCmd*/, UINT /*uType*/, UINT * /*pRes*/, LPSTR /*pszName*/, UINT /*cchMax*/) { return E_NOTIMPL; }
+    IFACEMETHODIMP GetCommandString(UINT_PTR /*idCmd*/, UINT /*uType*/, UINT * /*pRes*/, LPSTR /*pszName*/, UINT /*cchMax*/)
+    {
+        return E_NOTIMPL;
+    }
 
     // IShellExtInit
     IFACEMETHODIMP Initialize(PCIDLIST_ABSOLUTE pidlFolder, IDataObject *pdtobj, HKEY hkeyProgID);

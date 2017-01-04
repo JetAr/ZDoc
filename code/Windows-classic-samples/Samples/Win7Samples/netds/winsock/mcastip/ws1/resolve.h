@@ -1,4 +1,4 @@
-//
+﻿//
 // This file contains function prototypes for resolve.cpp
 //
 // Description:
@@ -17,10 +17,10 @@
 extern "C" {
 #endif
 
-int              PrintAddress(SOCKADDR *sa, int salen);
-int              FormatAddress(SOCKADDR *sa, int salen, char *addrbuf, int addrbuflen);
-int              ReverseLookup(SOCKADDR *sa, int salen, char *namebuf, int namebuflen);
-struct addrinfo *ResolveAddress(char *addr, char *port, int af, int type, int proto);
+    int              PrintAddress(SOCKADDR *sa, int salen);
+    int              FormatAddress(SOCKADDR *sa, int salen, char *addrbuf, int addrbuflen);
+    int              ReverseLookup(SOCKADDR *sa, int salen, char *namebuf, int namebuflen);
+    struct addrinfo *ResolveAddress(char *addr, char *port, int af, int type, int proto);
 
 #ifdef _cplusplus
 }

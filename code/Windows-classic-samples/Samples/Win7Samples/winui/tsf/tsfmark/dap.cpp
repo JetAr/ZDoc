@@ -1,4 +1,4 @@
-//
+﻿//
 // dap.cpp
 //
 // ITfDisplayAttributeProvider implementation.
@@ -62,7 +62,7 @@ STDAPI CDisplayAttributeInfo::QueryInterface(REFIID riid, void **ppvObj)
     *ppvObj = NULL;
 
     if (IsEqualIID(riid, IID_IUnknown) ||
-        IsEqualIID(riid, IID_ITfDisplayAttributeInfo))
+            IsEqualIID(riid, IID_ITfDisplayAttributeInfo))
     {
         *ppvObj = (ITfDisplayAttributeInfo *)this;
     }
@@ -251,7 +251,7 @@ STDAPI CEnumDisplayAttributeInfo::QueryInterface(REFIID riid, void **ppvObj)
     *ppvObj = NULL;
 
     if (IsEqualIID(riid, IID_IUnknown) ||
-        IsEqualIID(riid, IID_IEnumTfDisplayAttributeInfo))
+            IsEqualIID(riid, IID_IEnumTfDisplayAttributeInfo))
     {
         *ppvObj = (IEnumTfDisplayAttributeInfo *)this;
     }

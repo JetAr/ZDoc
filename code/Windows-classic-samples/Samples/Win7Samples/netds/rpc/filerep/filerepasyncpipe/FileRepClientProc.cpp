@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -12,9 +12,9 @@
     Client System Service
 
     FILE: FileRepClientProc.cpp
-    
+
     PURPOSE: Remote procedures for client system service
-    
+
     FUNCTIONS:
         RequestFile() - receives file replication requests
         ThreadProcRequest() - processes file replication requests
@@ -57,21 +57,24 @@ extern LONG nThreadsAtClientCompletionPort;
 
 
 // The types of IO posted onto the completion port
-typedef enum {
-  IoFileRep, // Posted by FileRep
-  IoPipe, // Posted by the RPC runtime
-  IoFile // Posted by the File IO subsystem
+typedef enum
+{
+    IoFileRep, // Posted by FileRep
+    IoPipe, // Posted by the RPC runtime
+    IoFile // Posted by the File IO subsystem
 } IoCompletionType;
 
 // Action to be taken next for a given request
-typedef enum {
-  Activate,
-  Pull,
-  Wait
+typedef enum
+{
+    Activate,
+    Pull,
+    Wait
 } ActionType;
 
 // The state of the client request.
-typedef enum tReqState {
+typedef enum tReqState
+{
     StateArrived,
     StateQueued,
     StateActive
@@ -86,7 +89,8 @@ unsigned nClientReqs = 0;
 // Packages up the variables to be passed
 // to the processing thread.
 //
-typedef struct tReq{
+typedef struct tReq
+{
 
     // Binding handle to the server
     handle_t hFileRepServer;
@@ -119,7 +123,7 @@ typedef struct tReq{
     RPC_ASYNC_STATE Async;
 
     BYTE pbBuf[PULL_BUFSIZE];
-  
+
     LONG FileWritePos;
     LONG CurrentExtendedSize;
 
@@ -180,7 +184,8 @@ typedef struct tReq{
 // async.  Because of the inner workings of NTFS when writes extend
 // the size of the file they may end up being syncronous.
 //
-VOID SetFileSize (HANDLE hFile, DWORD Size) {
+VOID SetFileSize (HANDLE hFile, DWORD Size)
+{
     SetFilePointer(hFile,
                    Size,
                    NULL,
@@ -192,12 +197,13 @@ VOID SetFileSize (HANDLE hFile, DWORD Size) {
 // Checks request queues in the order of decreasing priority.  If a request is found and
 // there is space in the corresponding quota of active requests, then it is returned.
 //
-Req* FindCReq(void) {
+Req* FindCReq(void)
+{
 
 #ifdef DEBUG2
     TCHAR Msg[MSG_SIZE];
     ULONG bufSize = MSG_SIZE; // Keeps track of remaining size of buffer for _stprintf_s
-    int nCharWritten; 
+    int nCharWritten;
 #endif
 
     Req *pReq = NULL;
@@ -210,81 +216,88 @@ Req* FindCReq(void) {
     // Check if the request queues have anything on them.  If they do,
     // pick a request off the highest priority queue and handle it, but only if we
     // are not handling enough of those requests already.
-    for (UINT pri = NumPriGroups; pri > 0; pri--) {
-      pReq = (Req *) QueueRemove(ClientReqQueues[pri-1]);
-      if (pReq != NULL) {
-        break;
-      }
+    for (UINT pri = NumPriGroups; pri > 0; pri--)
+    {
+        pReq = (Req *) QueueRemove(ClientReqQueues[pri-1]);
+        if (pReq != NULL)
+        {
+            break;
+        }
     }
-    
+
     // We had found a request
-    if (pReq != NULL) {
-      
+    if (pReq != NULL)
+    {
+
 #ifdef DEBUG2
-      nCharWritten = _stprintf_s(Msg, bufSize, TEXT("RequestFile: Took req %p off Req queue %p\n"), pReq, ClientReqQueues[pReq->Pri]);
-      bufSize -= nCharWritten;
-      DbgMsgRecord(Msg);
-#endif
-      
-      if (CounterIncrement(pClientActiveReqCounters[pReq->Pri])) {
-        if (QueueHashIncrementCounter(ClientActiveReqHashCounters[pReq->Pri], pReq->pSID)) {
-#ifdef DEBUG2
-          nCharWritten = _stprintf_s(Msg, bufSize, TEXT("Incremented ClientActiveReqCounters[%d] and ClientActiveReqHashCounters[%d]\n"), pReq->Pri, pReq->Pri);
-          bufSize -= nCharWritten;
-          DbgMsgRecord(Msg);
-#endif
-          // The request now resides on a new queue.
-          CounterDecrement(pClientReqCounters[pReq->Pri]);
-#ifdef DEBUG2
-          nCharWritten = _stprintf_s(Msg, bufSize, TEXT("Decremented ClientReqCounters[%d]\n"), pReq->Pri);
-          bufSize -= nCharWritten;
-          DbgMsgRecord(Msg);
-#endif            
-          pReq->State = StateActive;
-          
-#ifdef DEBUG2
-          nCharWritten = _stprintf_s(Msg, bufSize, TEXT("RequestFile: Handling active req %p\n"), pReq);
-          bufSize -= nCharWritten;
-          DbgMsgRecord(Msg);
+        nCharWritten = _stprintf_s(Msg, bufSize, TEXT("RequestFile: Took req %p off Req queue %p\n"), pReq, ClientReqQueues[pReq->Pri]);
+        bufSize -= nCharWritten;
+        DbgMsgRecord(Msg);
 #endif
 
-          return pReq;
-          
-        }
-        else {
-          // There were too many requests for a given SID, place the request back
-          // onto the queue.
-          
-          // Don't forget to decrement the counter for the group!
-          CounterDecrement(pClientActiveReqCounters[pReq->Pri]);
-          
-          QueueAdd(ClientReqQueues[pReq->Pri], pReq, TRUE);
-          
+        if (CounterIncrement(pClientActiveReqCounters[pReq->Pri]))
+        {
+            if (QueueHashIncrementCounter(ClientActiveReqHashCounters[pReq->Pri], pReq->pSID))
+            {
 #ifdef DEBUG2
-          nCharWritten = _stprintf_s(Msg, bufSize, TEXT("Too many active requests for a SID\n"));
-          bufSize -= nCharWritten;
-          DbgMsgRecord(Msg);
-          nCharWritten = _stprintf_s(Msg, bufSize, TEXT("RequestFile: Put req %p onto Req queue %p\n"), pReq, ClientReqQueues[pReq->Pri]);
-          bufSize -= nCharWritten;
-		  DbgMsgRecord(Msg);
+                nCharWritten = _stprintf_s(Msg, bufSize, TEXT("Incremented ClientActiveReqCounters[%d] and ClientActiveReqHashCounters[%d]\n"), pReq->Pri, pReq->Pri);
+                bufSize -= nCharWritten;
+                DbgMsgRecord(Msg);
+#endif
+                // The request now resides on a new queue.
+                CounterDecrement(pClientReqCounters[pReq->Pri]);
+#ifdef DEBUG2
+                nCharWritten = _stprintf_s(Msg, bufSize, TEXT("Decremented ClientReqCounters[%d]\n"), pReq->Pri);
+                bufSize -= nCharWritten;
+                DbgMsgRecord(Msg);
+#endif
+                pReq->State = StateActive;
+
+#ifdef DEBUG2
+                nCharWritten = _stprintf_s(Msg, bufSize, TEXT("RequestFile: Handling active req %p\n"), pReq);
+                bufSize -= nCharWritten;
+                DbgMsgRecord(Msg);
+#endif
+
+                return pReq;
+
+            }
+            else
+            {
+                // There were too many requests for a given SID, place the request back
+                // onto the queue.
+
+                // Don't forget to decrement the counter for the group!
+                CounterDecrement(pClientActiveReqCounters[pReq->Pri]);
+
+                QueueAdd(ClientReqQueues[pReq->Pri], pReq, TRUE);
+
+#ifdef DEBUG2
+                nCharWritten = _stprintf_s(Msg, bufSize, TEXT("Too many active requests for a SID\n"));
+                bufSize -= nCharWritten;
+                DbgMsgRecord(Msg);
+                nCharWritten = _stprintf_s(Msg, bufSize, TEXT("RequestFile: Put req %p onto Req queue %p\n"), pReq, ClientReqQueues[pReq->Pri]);
+                bufSize -= nCharWritten;
+                DbgMsgRecord(Msg);
+#endif
+            }
+        }
+        else
+        {
+            // There were too many active requests for the user group, place the request back
+            // onto the queue.
+
+            QueueAdd(ClientReqQueues[pReq->Pri], pReq, TRUE);
+
+#ifdef DEBUG2
+            nCharWritten = _stprintf_s(Msg, bufSize, TEXT("Too many active requests for priority %d\n"), pReq->Pri);
+            bufSize -= nCharWritten;
+            DbgMsgRecord(Msg);
+            nCharWritten = _stprintf_s(Msg, bufSize, TEXT("RequestFile: Put req %p onto Req queue %p\n"), pReq, ClientReqQueues[pReq->Pri]);
+            bufSize -= nCharWritten;
+            DbgMsgRecord(Msg);
 #endif
         }
-      }
-      else {
-        // There were too many active requests for the user group, place the request back
-        // onto the queue.
-        
-        QueueAdd(ClientReqQueues[pReq->Pri], pReq, TRUE);
-        
-#ifdef DEBUG2
-        nCharWritten = _stprintf_s(Msg, bufSize, TEXT("Too many active requests for priority %d\n"), pReq->Pri);
-        bufSize -= nCharWritten;
-        DbgMsgRecord(Msg);
-        nCharWritten = _stprintf_s(Msg, bufSize, TEXT("RequestFile: Put req %p onto Req queue %p\n"), pReq, ClientReqQueues[pReq->Pri]);
-        bufSize -= nCharWritten;
-        DbgMsgRecord(Msg);
-#endif
-      }
     }
 
     return NULL;
@@ -294,24 +307,26 @@ Req* FindCReq(void) {
 // Attempts to find a queued request and post an IO completion
 // packet telling the worker threads to begin processing the request.
 //
-VOID FindAndActivateCReq(VOID) {
+VOID FindAndActivateCReq(VOID)
+{
     DWORD status;
 
     tReq *pReq = FindCReq();
 
-    if (pReq) {
+    if (pReq)
+    {
 
 #ifdef DEBUG1
-      QueueAdd(ClientActiveReqQueue, pReq, TRUE);
+        QueueAdd(ClientActiveReqQueue, pReq, TRUE);
 #endif
 
-      // All that is requeired to activate the request is to queue a completion
-      // packet with Activate key and the Req as Overlapped.
-      status = PostQueuedCompletionStatus(ClientCompletionPort,
-                                          0,
-                                          IoFileRep,
-                                          (LPOVERLAPPED)pReq);
-      ASSERT(status);
+        // All that is requeired to activate the request is to queue a completion
+        // packet with Activate key and the Req as Overlapped.
+        status = PostQueuedCompletionStatus(ClientCompletionPort,
+                                            0,
+                                            IoFileRep,
+                                            (LPOVERLAPPED)pReq);
+        ASSERT(status);
     }
 }
 
@@ -321,200 +336,225 @@ VOID FindAndActivateCReq(VOID) {
 //
 // The proc may be called while holding pReq->Lock.  It will release it.
 //
-VOID ClientShutdownRequest(Req *pReq) {
-  DWORD status;
-  RPC_STATUS rpcstatus;
+VOID ClientShutdownRequest(Req *pReq)
+{
+    DWORD status;
+    RPC_STATUS rpcstatus;
 
 #ifdef DEBUG2
-  TCHAR Msg[MSG_SIZE];
-  ULONG bufSize = MSG_SIZE; // Keeps track of remaining size of buffer for _stprintf_s
-  int nCharWritten; 
-  DbgMsgRecord(TEXT("-> ClientShutdownRequest\n"));
+    TCHAR Msg[MSG_SIZE];
+    ULONG bufSize = MSG_SIZE; // Keeps track of remaining size of buffer for _stprintf_s
+    int nCharWritten;
+    DbgMsgRecord(TEXT("-> ClientShutdownRequest\n"));
 #endif
 
-  ASSERT(pReq != NULL);
+    ASSERT(pReq != NULL);
 
 
-  /*
-    The failuire handling for async pipe call is as follows:
+    /*
+      The failuire handling for async pipe call is as follows:
 
-      Pull returned failure:
-      RPC has done all the clenaup. No need to do anything.
+        Pull returned failure:
+        RPC has done all the clenaup. No need to do anything.
 
-      Non-RPC failure occurred:
-      Call RpcAsyncCalncelCall
-      Wait for call-complete notification
-      Call RpcAsyncCompleteCall
+        Non-RPC failure occurred:
+        Call RpcAsyncCalncelCall
+        Wait for call-complete notification
+        Call RpcAsyncCompleteCall
 
-      Received call-complete with failure:
-      Call RpcAsyncCompleteCall         
+        Received call-complete with failure:
+        Call RpcAsyncCompleteCall
 
-  */
+    */
 
-  // Complete or cancel the async call, depending on whether
-  // an error has occurred and whether complete is needed.
-  if (pReq->bCallMade && !pReq->bFailureFromPull) {
+    // Complete or cancel the async call, depending on whether
+    // an error has occurred and whether complete is needed.
+    if (pReq->bCallMade && !pReq->bFailureFromPull)
+    {
 
-    // If we are processing a syncronous failure and the call has not yet
-    // been cancelled, then cancel the call and return.  We will later get a
-    // call-complete event and will complete the call then.
-    if (!pReq->bCallComplete && pReq->Status && !pReq->bAsyncCallFailureReceived && !pReq->bCallCancelled) {
+        // If we are processing a syncronous failure and the call has not yet
+        // been cancelled, then cancel the call and return.  We will later get a
+        // call-complete event and will complete the call then.
+        if (!pReq->bCallComplete && pReq->Status && !pReq->bAsyncCallFailureReceived && !pReq->bCallCancelled)
+        {
 
-      RpcAsyncCancelCall(&(pReq->Async),
-                         TRUE);
-      // After cancelling the RPC we return and wait for a
-      // call-complete notification.  We will continue to clean up afterwards.
-      pReq->bCallCancelled = TRUE;
+            RpcAsyncCancelCall(&(pReq->Async),
+                               TRUE);
+            // After cancelling the RPC we return and wait for a
+            // call-complete notification.  We will continue to clean up afterwards.
+            pReq->bCallCancelled = TRUE;
 
-      if (CriticalSectionOwned(&(pReq->Lock))) {
-        LeaveCriticalSection(&(pReq->Lock));
-      }
-      return;
+            if (CriticalSectionOwned(&(pReq->Lock)))
+            {
+                LeaveCriticalSection(&(pReq->Lock));
+            }
+            return;
+        }
+
+        // Complete a call if either an error has occurred and we already received
+        // a completion notification, or if we had already cancelled it, or
+        // if the request has been handled.
+        else
+        {
+
+            // If there is an outstanding pull, we should wait for it to complete.
+            // This can only happen if WriteFile has failed.
+            ASSERT(!pReq->bPullOutstanding || pReq->bFailureFromWrite);
+            if (pReq->bPullOutstanding)
+            {
+                if (CriticalSectionOwned(&(pReq->Lock)))
+                {
+                    LeaveCriticalSection(&pReq->Lock);
+                }
+                return;
+            }
+
+
+            RpcTryExcept
+            {
+                RpcAsyncCompleteCall(&(pReq->Async),
+                &status);
+            }
+            RpcExcept ( ( (RpcExceptionCode() != STATUS_ACCESS_VIOLATION) &&
+                          (RpcExceptionCode() != STATUS_DATATYPE_MISALIGNMENT) &&
+                          (RpcExceptionCode() != STATUS_PRIVILEGED_INSTRUCTION) &&
+                          (RpcExceptionCode() != STATUS_ILLEGAL_INSTRUCTION) &&
+                          (RpcExceptionCode() != STATUS_BREAKPOINT) )
+                        ? EXCEPTION_EXECUTE_HANDLER : EXCEPTION_CONTINUE_SEARCH )
+            {
+                ASSERT(pReq->Status != RPC_S_OK);
+            }
+            RpcEndExcept;
+        }
     }
 
-    // Complete a call if either an error has occurred and we already received
-    // a completion notification, or if we had already cancelled it, or
-    // if the request has been handled.
-    else {
 
-      // If there is an outstanding pull, we should wait for it to complete.
-      // This can only happen if WriteFile has failed.
-      ASSERT(!pReq->bPullOutstanding || pReq->bFailureFromWrite);
-      if (pReq->bPullOutstanding) {
-        if (CriticalSectionOwned(&(pReq->Lock))) {
-          LeaveCriticalSection(&pReq->Lock);
+    // If there are outstanding writes we should wait for them to complete
+    // before destroying the object.
+    if (pReq->nWritesOutstanding > 0)
+    {
+        if (CriticalSectionOwned(&(pReq->Lock)))
+        {
+            LeaveCriticalSection(&pReq->Lock);
         }
         return;
-      }
-
-
-      RpcTryExcept {
-        RpcAsyncCompleteCall(&(pReq->Async),
-                             &status);
-      }
-      RpcExcept ( ( (RpcExceptionCode() != STATUS_ACCESS_VIOLATION) &&
-                    (RpcExceptionCode() != STATUS_DATATYPE_MISALIGNMENT) &&
-                    (RpcExceptionCode() != STATUS_PRIVILEGED_INSTRUCTION) &&
-                    (RpcExceptionCode() != STATUS_ILLEGAL_INSTRUCTION) &&
-                    (RpcExceptionCode() != STATUS_BREAKPOINT) )
-                  ? EXCEPTION_EXECUTE_HANDLER : EXCEPTION_CONTINUE_SEARCH ) {
-        ASSERT(pReq->Status != RPC_S_OK);
-      }
-      RpcEndExcept;
     }
-  }
+
+    // If there have been no failures, then all the bytes written
+    // should have been written and there must not be any
+    // bytes unaccounted for.
+    ASSERT(pReq->Status != RPC_S_OK || pReq->nBytesOutstanding == 0);
 
 
-  // If there are outstanding writes we should wait for them to complete
-  // before destroying the object.              
-  if (pReq->nWritesOutstanding > 0) {
-    if (CriticalSectionOwned(&(pReq->Lock))) {
-      LeaveCriticalSection(&pReq->Lock);
+    if (CriticalSectionOwned(&(pReq->Lock)))
+    {
+        LeaveCriticalSection(&pReq->Lock);
     }
-    return;
-  }
-
-  // If there have been no failures, then all the bytes written
-  // should have been written and there must not be any
-  // bytes unaccounted for.
-  ASSERT(pReq->Status != RPC_S_OK || pReq->nBytesOutstanding == 0);
-     
-
-  if (CriticalSectionOwned(&(pReq->Lock))) {
-    LeaveCriticalSection(&pReq->Lock);
-  }
 
 #ifdef DEBUG1
-  nClientReqs--;
+    nClientReqs--;
 #endif
 
 
-  // We are actually going to wipe out a request after this point
-  // and need to bring in a new one from the queue.
-  FindAndActivateCReq();
+    // We are actually going to wipe out a request after this point
+    // and need to bring in a new one from the queue.
+    FindAndActivateCReq();
 
-  // Stop impersonating if we are.
-  // The first thing we do in handling a request is impersonating the client.
-  if (pReq->bImpersonating) {
-    if (RevertToSelf() == 0) {
-      AddToMessageLogProcFailure(TEXT("ClientShutdownRequest: RevertToSelf"), GetLastError());
-    }
-    pReq->bImpersonating = FALSE;
-  }
-
-  if(pReq->hFileRepServer != NULL) {
-    rpcstatus = RpcBindingFree(&(pReq->hFileRepServer));
-    ASSERT(rpcstatus == RPC_S_OK);
-  }
-  // Check that hLocalFile has been initialized and that initialization
-  // was successful.
-  if(pReq->hLocalFile != NULL && pReq->hLocalFile != INVALID_HANDLE_VALUE) {
-
-    // The file has been extended, truncate its size:
-    if (pReq->FileWritePos < pReq->CurrentExtendedSize) {
-      SetFileSize(pReq->hLocalFile, pReq->FileWritePos);
+    // Stop impersonating if we are.
+    // The first thing we do in handling a request is impersonating the client.
+    if (pReq->bImpersonating)
+    {
+        if (RevertToSelf() == 0)
+        {
+            AddToMessageLogProcFailure(TEXT("ClientShutdownRequest: RevertToSelf"), GetLastError());
+        }
+        pReq->bImpersonating = FALSE;
     }
 
-    status = CloseHandle(pReq->hLocalFile);
-    ASSERT(status != 0);
-  }
+    if(pReq->hFileRepServer != NULL)
+    {
+        rpcstatus = RpcBindingFree(&(pReq->hFileRepServer));
+        ASSERT(rpcstatus == RPC_S_OK);
+    }
+    // Check that hLocalFile has been initialized and that initialization
+    // was successful.
+    if(pReq->hLocalFile != NULL && pReq->hLocalFile != INVALID_HANDLE_VALUE)
+    {
 
-  // Check if any of the counters need to be decremented
-  // since we are removing the request.
-  if (pReq->State == StateQueued) {
-    CounterDecrement(pClientReqCounters[pReq->Pri]);
+        // The file has been extended, truncate its size:
+        if (pReq->FileWritePos < pReq->CurrentExtendedSize)
+        {
+            SetFileSize(pReq->hLocalFile, pReq->FileWritePos);
+        }
+
+        status = CloseHandle(pReq->hLocalFile);
+        ASSERT(status != 0);
+    }
+
+    // Check if any of the counters need to be decremented
+    // since we are removing the request.
+    if (pReq->State == StateQueued)
+    {
+        CounterDecrement(pClientReqCounters[pReq->Pri]);
 #ifdef DEBUG2
-    nCharWritten = _stprintf_s(Msg, bufSize, TEXT("Decremented ClientReqCounters[%d]\n"), pReq->Pri);
-    bufSize -= nCharWritten;
-    DbgMsgRecord(Msg);
-#endif            
-  }
-  if (pReq->State == StateActive) {
-    CounterDecrement(pClientActiveReqCounters[pReq->Pri]);
-    QueueHashDecrementCounter(ClientActiveReqHashCounters[pReq->Pri], pReq->pSID);
+        nCharWritten = _stprintf_s(Msg, bufSize, TEXT("Decremented ClientReqCounters[%d]\n"), pReq->Pri);
+        bufSize -= nCharWritten;
+        DbgMsgRecord(Msg);
+#endif
+    }
+    if (pReq->State == StateActive)
+    {
+        CounterDecrement(pClientActiveReqCounters[pReq->Pri]);
+        QueueHashDecrementCounter(ClientActiveReqHashCounters[pReq->Pri], pReq->pSID);
 #ifdef DEBUG2
-    nCharWritten = _stprintf_s(Msg, bufSize, TEXT("Decremented ClientActiveReqCounters[%d] and ClientActiveReqHashCounters[%d]\n"), pReq->Pri, pReq->Pri);
-    bufSize -= nCharWritten;
-    DbgMsgRecord(Msg);
+        nCharWritten = _stprintf_s(Msg, bufSize, TEXT("Decremented ClientActiveReqCounters[%d] and ClientActiveReqHashCounters[%d]\n"), pReq->Pri, pReq->Pri);
+        bufSize -= nCharWritten;
+        DbgMsgRecord(Msg);
 #endif
 
 #ifdef DEBUG1
-    QueueRemoveData(ClientActiveReqQueue, pReq);
+        QueueRemoveData(ClientActiveReqQueue, pReq);
 #endif
-  }
+    }
 
-  if (pReq->hTokenHandle != NULL) {
-    status = CloseHandle(pReq->hTokenHandle);
-    ASSERT(status != NULL);
-  }
+    if (pReq->hTokenHandle != NULL)
+    {
+        status = CloseHandle(pReq->hTokenHandle);
+        ASSERT(status != NULL);
+    }
 
-  if (pReq->ServerName != NULL) {
-    AutoHeapFree(pReq->ServerName);
-  }
-  if (pReq->LocalFileName != NULL) {
-    AutoHeapFree(pReq->LocalFileName);
-  }
-  if (pReq->RemoteFileName != NULL) {
-    AutoHeapFree(pReq->RemoteFileName);
-  }
-        
-  if (pReq->pSID != NULL) {
-    AutoHeapFree(pReq->pSID);
-  }
+    if (pReq->ServerName != NULL)
+    {
+        AutoHeapFree(pReq->ServerName);
+    }
+    if (pReq->LocalFileName != NULL)
+    {
+        AutoHeapFree(pReq->LocalFileName);
+    }
+    if (pReq->RemoteFileName != NULL)
+    {
+        AutoHeapFree(pReq->RemoteFileName);
+    }
 
-  // If the critical section has been allocated, free it.
-  if (pReq->Lock.DebugInfo) {
-    DeleteCriticalSection(&pReq->Lock);
-  }
+    if (pReq->pSID != NULL)
+    {
+        AutoHeapFree(pReq->pSID);
+    }
+
+    // If the critical section has been allocated, free it.
+    if (pReq->Lock.DebugInfo)
+    {
+        DeleteCriticalSection(&pReq->Lock);
+    }
 
 #ifdef PROF
-  ProfRecordTime(pReq->nReqId, TEXT("handled"));
+    ProfRecordTime(pReq->nReqId, TEXT("handled"));
 #endif
 
-  AutoHeapFree(pReq);
+    AutoHeapFree(pReq);
 
 #ifdef DEBUG2
-  DbgMsgRecord(TEXT("<- ClientShutdownRequest\n"));
+    DbgMsgRecord(TEXT("<- ClientShutdownRequest\n"));
 #endif
 }
 
@@ -522,13 +562,14 @@ VOID ClientShutdownRequest(Req *pReq) {
 // Handles a request taken off req queue.
 // Returns TRUE on sucess.
 //
-BOOL HandleReq(tReq *pReq) {
+BOOL HandleReq(tReq *pReq)
+{
 
     RPC_STATUS rpcstatus;
 
     // Default connection to server system service is over TCP/IP.
     RPC_STR DefaultProtocolSequence = (RPC_STR)TEXT("ncacn_ip_tcp");
-    
+
     // An empty endpoint string is used, since we are going to
     // connect to the endpoint dynamically generated by the
     // RPC run-time library.  Server calls RpcServerUseProtseq to
@@ -546,52 +587,55 @@ BOOL HandleReq(tReq *pReq) {
     // Then we need to set up binding, bind to the server,
     // and do the initial read.
     //
-                
+
     // We need to impersonate the user that has issued the
     // remote call.
     // We want to impersonate as soon as possible to minimise
     // the amount of resources that can be consumed by an attack.
-    if (ImpersonateLoggedOnUser(pReq->hTokenHandle) == 0) {      
+    if (ImpersonateLoggedOnUser(pReq->hTokenHandle) == 0)
+    {
         pReq->Status = GetLastError();
         ClientShutdownRequest(pReq);
         AddToMessageLogProcFailure(TEXT("HandleReq: ImpersonateLoggedOnUser"), GetLastError());
         return FALSE;
     }
     pReq->bImpersonating = TRUE;
-                
+
     // Prepare the binding information.
     if ((rpcstatus = RpcStringBindingCompose(pszUuid,
-                                             DefaultProtocolSequence,
-                                             pReq->ServerName,
-                                             DefaultEndpoint,
-                                             pszOptions,
-                                             &pszStringBinding)) != RPC_S_OK) {
+                     DefaultProtocolSequence,
+                     pReq->ServerName,
+                     DefaultEndpoint,
+                     pszOptions,
+                     &pszStringBinding)) != RPC_S_OK)
+    {
         pReq->Status = rpcstatus;
         ClientShutdownRequest(pReq);
         AddToMessageLogProcFailureEEInfo(TEXT("HandleReq: RpcStringBindingCompose"), rpcstatus);
         return FALSE;
     }
 
-    if ((rpcstatus = RpcBindingFromStringBinding(pszStringBinding, &(pReq->hFileRepServer))) != RPC_S_OK) {
+    if ((rpcstatus = RpcBindingFromStringBinding(pszStringBinding, &(pReq->hFileRepServer))) != RPC_S_OK)
+    {
         // The binding handle is invalid
         pReq->hFileRepServer = NULL;
-                    
+
         // Deallocate the string binding.
         rpcstatus = RpcStringFree(&pszStringBinding);
         ASSERT(rpcstatus == RPC_S_OK);
-                    
+
         pReq->Status = GetLastError();
         ClientShutdownRequest(pReq);
         AddToMessageLogProcFailureEEInfo(TEXT("HandleReq: RpcBindingFromStringBinding"), rpcstatus);
         return FALSE;
     }
-                
+
     // We need to delete the string binding, since it is no longer
     // necessary.  All the binding information is now contained in the
     // binding handle.
     rpcstatus = RpcStringFree(&pszStringBinding);
-    ASSERT(rpcstatus == RPC_S_OK);    
-                
+    ASSERT(rpcstatus == RPC_S_OK);
+
 #ifndef NO_SEC
     DWORD status;
 
@@ -610,13 +654,14 @@ BOOL HandleReq(tReq *pReq) {
                             0,
                             0,
                             &ulSpn,
-                            szSpn)) != ERROR_SUCCESS) {
+                            szSpn)) != ERROR_SUCCESS)
+    {
         pReq->Status = GetLastError();
         ClientShutdownRequest(pReq);
         AddToMessageLogProcFailure(TEXT("HandleReq: DsMakeSpn"), GetLastError());
         return FALSE;
     }
-    
+
     pszServerPrincipalName = (RPC_STR)szSpn;
 
     // Specify quality of service parameters.
@@ -633,10 +678,11 @@ BOOL HandleReq(tReq *pReq) {
     // files from.  It will also need to obtain client's SID and hence
     // requires impersonation.
     SecurityQOS.ImpersonationType = RPC_C_IMP_LEVEL_IMPERSONATE;
-                
+
     // Set authentification and authorisation information for
     // the binding handle.
-    if ((rpcstatus = RpcBindingSetAuthInfoEx(pReq->hFileRepServer, pszServerPrincipalName, RPC_C_AUTHN_LEVEL_PKT_PRIVACY, RPC_C_AUTHN_GSS_KERBEROS, NULL, RPC_C_AUTHZ_NAME, &SecurityQOS)) != RPC_S_OK) {
+    if ((rpcstatus = RpcBindingSetAuthInfoEx(pReq->hFileRepServer, pszServerPrincipalName, RPC_C_AUTHN_LEVEL_PKT_PRIVACY, RPC_C_AUTHN_GSS_KERBEROS, NULL, RPC_C_AUTHZ_NAME, &SecurityQOS)) != RPC_S_OK)
+    {
 
         pReq->Status = rpcstatus;
         ClientShutdownRequest(pReq);
@@ -679,7 +725,8 @@ BOOL HandleReq(tReq *pReq) {
                                        NULL,
                                        CREATE_ALWAYS,
                                        FILE_FLAG_OVERLAPPED,
-                                       NULL)) == INVALID_HANDLE_VALUE) {
+                                       NULL)) == INVALID_HANDLE_VALUE)
+    {
         pReq->Status = GetLastError();
         ClientShutdownRequest(pReq);
         AddToMessageLogProcFailure(TEXT("HandleReq: CreateFile"), GetLastError());
@@ -690,9 +737,10 @@ BOOL HandleReq(tReq *pReq) {
 
     // Link this file to the client requests's IO completion port:
     if ((ClientCompletionPort = CreateIoCompletionPort (pReq->hLocalFile,
-                                                        ClientCompletionPort,
-                                                        IoFile,
-                                                        0)) == NULL) {
+                                ClientCompletionPort,
+                                IoFile,
+                                0)) == NULL)
+    {
         pReq->Status = GetLastError();
         ClientShutdownRequest(pReq);
         AddToMessageLogProcFailure(TEXT("HandleActiveReq: CreateIoCompletionPort"), GetLastError());
@@ -708,15 +756,17 @@ BOOL HandleReq(tReq *pReq) {
     // set when the call succeeded.  This makes the client service attempt
     // to contact the server even after an exception occured.
     BOOL bRetryCall = TRUE;
-    while (bRetryCall) {
+    while (bRetryCall)
+    {
 #endif
 
         // Attempt to open the remote file.
-        RpcTryExcept {
+        RpcTryExcept
+        {
             c_RemoteReadAsyncPipe(&(pReq->Async),
-                                  pReq->hFileRepServer,
-                                  pReq->RemoteFileName,
-                                  &(pReq->OutPipe));
+            pReq->hFileRepServer,
+            pReq->RemoteFileName,
+            &(pReq->OutPipe));
 
 #ifdef RETRY_EXCEPTION
             bRetryCall = FALSE;
@@ -727,14 +777,16 @@ BOOL HandleReq(tReq *pReq) {
                       (RpcExceptionCode() != STATUS_PRIVILEGED_INSTRUCTION) &&
                       (RpcExceptionCode() != STATUS_ILLEGAL_INSTRUCTION) &&
                       (RpcExceptionCode() != STATUS_BREAKPOINT) )
-                    ? EXCEPTION_EXECUTE_HANDLER : EXCEPTION_CONTINUE_SEARCH ) {
-                        
+                    ? EXCEPTION_EXECUTE_HANDLER : EXCEPTION_CONTINUE_SEARCH )
+        {
+
 #ifdef RETRY_EXCEPTION
             // This code attempts to make aggressive calls, retrying
             // if no endpoints are available.  It is used to put servers
             // under stress.
             if (RpcExceptionCode() != EPT_S_NOT_REGISTERED &&
-                RpcExceptionCode() != RPC_S_SERVER_UNAVAILABLE) {
+                    RpcExceptionCode() != RPC_S_SERVER_UNAVAILABLE)
+            {
 #endif
                 // Deallocate all the thread data before failing.
                 pReq->Status = RpcExceptionCode();
@@ -745,7 +797,7 @@ BOOL HandleReq(tReq *pReq) {
                 return FALSE;
 #ifdef RETRY_EXCEPTION
             }
-#endif                    
+#endif
         }
         RpcEndExcept;
 #ifdef RETRY_EXCEPTION
@@ -756,7 +808,8 @@ BOOL HandleReq(tReq *pReq) {
 
     // We need to stop impersonating before putting this request back into
     // a queue or quitting.
-    if (RevertToSelf() == 0) {
+    if (RevertToSelf() == 0)
+    {
         pReq->bImpersonating = FALSE;
         pReq->Status = GetLastError();
         ClientShutdownRequest(pReq);
@@ -772,7 +825,8 @@ BOOL HandleReq(tReq *pReq) {
 //
 // Handles a request taken off active req queue
 //
-VOID ServiceRequests(VOID) {
+VOID ServiceRequests(VOID)
+{
     DWORD Status;
 
     // The request that we will be processing
@@ -781,7 +835,7 @@ VOID ServiceRequests(VOID) {
 #ifdef DEBUG2
     TCHAR Msg[MSG_SIZE];
     ULONG bufSize = MSG_SIZE; // Keeps track of remaining size of buffer for _stprintf_s
-    int nCharWritten; 
+    int nCharWritten;
 #endif
 
     // Number of bytes read by a pull
@@ -795,459 +849,504 @@ VOID ServiceRequests(VOID) {
     // A worker thread starts of by waiting for IO
     ActionType Action = Wait;
 
-    while(TRUE) {
+    while(TRUE)
+    {
 
-      //
-      // Make a pull to try and receive data.
-      //
-      if (Action == Pull) {
-
-        EnterCriticalSection(&pReq->Lock);
-
-        // This will be set if we have processed an async failure notification.
-        // Do not issue any more pulls and just wait for all file
-        // IO to complete.
-        if (pReq->bAsyncCallFailureReceived) {
-
-          LeaveCriticalSection(&pReq->Lock);
-
-          Action = Wait;
-          continue;
-        }
-
-        // This will be the case if an async write has failed and we want to
-        // terminate the request.
-        // Wait for all the writes to be completed.
-        if (pReq->bFailureFromWrite == TRUE) {
-
-          LeaveCriticalSection(&pReq->Lock);
-
-          Action = Wait;
-          continue;
-        }
-
-        // We did not read anything yet.
-        cbRead = 0;
-
-        RpcTryExcept {
-        
-          WINAPI_MY_PIPE_PULL pPull = (WINAPI_MY_PIPE_PULL)pReq->OutPipe.pull;
-
-          pReq->bPullOutstanding = TRUE;
-
-
-          Status = pPull (pReq->OutPipe.state,
-                          (char *) pReq->pbBuf,
-                          PULL_BUFSIZE,
-                          &cbRead);
-        }
-        RpcExcept ( ( (RpcExceptionCode() != STATUS_ACCESS_VIOLATION) &&
-                      (RpcExceptionCode() != STATUS_DATATYPE_MISALIGNMENT) &&
-                      (RpcExceptionCode() != STATUS_PRIVILEGED_INSTRUCTION) &&
-                      (RpcExceptionCode() != STATUS_ILLEGAL_INSTRUCTION) &&
-                      (RpcExceptionCode() != STATUS_BREAKPOINT))
-                    ? EXCEPTION_EXECUTE_HANDLER : EXCEPTION_CONTINUE_SEARCH ) {
-
-          Status = RpcExceptionCode();
-          ASSERT(Status != RPC_S_OK && Status != RPC_S_ASYNC_CALL_PENDING);
-        }
-        RpcEndExcept;
-
-        // The pull has failed either through and exception or an
-        // error return code.
-        if (Status != RPC_S_OK && Status != RPC_S_ASYNC_CALL_PENDING) {
-
-          AddToMessageLogProcFailureEEInfo(TEXT("HandleActiveReq: c_RemoteRead"), Status);
-          
-          pReq->bFailureFromPull = TRUE;
-          pReq->bAllPullsDone = TRUE;
-          pReq->bPullOutstanding = FALSE;
-          pReq->bCallComplete = TRUE;
-
-          // Dump this request.
-          pReq->Status = Status;
-          ClientShutdownRequest(pReq);
-          
-          Action = Wait;
-        }
-
-        // The pull has succeeded.
-        // We read some data.
-        else if (Status == RPC_S_OK && cbRead > 0) {
-
-          pReq->FileOl.Offset = pReq->FileWritePos;
-
-          pReq->bDataAvailable = FALSE;
-          pReq->bPullOutstanding = FALSE;
-
-          pReq->nWritesOutstanding++;
-          pReq->nBytesOutstanding+=cbRead;
-
-          // Access check was done on opening when we were impersonating.
-          // Thus we do not need to impersonate in this code.
-          Status = WriteFile(pReq->hLocalFile, pReq->pbBuf, cbRead, NULL, &pReq->FileOl);
-
-          // Write has failed.
-          if(!Status && GetLastError() != ERROR_IO_PENDING) {
-
-              AddToMessageLogProcFailure(TEXT("HandleActiveReq: WriteFile"), GetLastError());
-
-              pReq->nWritesOutstanding--;
-
-              pReq->nBytesOutstanding-=cbRead;
-
-              // If we hit a failure on write we will
-              // stop the pulls, wait for all outstanding IO to
-              // complete and then finish.
-              pReq->bFailureFromWrite = TRUE;
-              
-              // Dump this request.
-              pReq->Status = GetLastError();      
-              ClientShutdownRequest(pReq);
-
-              Action = Wait;
-          }
-
-          // Write has suceeded.
-          else {
-
-            pReq->FileWritePos+=cbRead;
-            
-            if (pReq->FileWritePos > pReq->CurrentExtendedSize) {
-              pReq->CurrentExtendedSize+=FILE_SIZE_EXTENSION;
-              SetFileSize(pReq->hLocalFile, pReq->CurrentExtendedSize);
-            }
-            
-            LeaveCriticalSection(&pReq->Lock);
-
-            Action = Pull;
-          }
-        }
-
-        // The pull has suceeded.
-        // We did not get any data.
-        // If the pipe is empty and pull returned 0 bytes, the transfer is complete.           
-        else if (Status == RPC_S_OK && cbRead == 0) {
-          
-          pReq->bDataAvailable = FALSE;
-          pReq->bPullOutstanding = FALSE;
-
-          pReq->bAllPullsDone = TRUE;
-
-          // If we have done all the pulls and received call-complete, finish.
-          if(pReq->bAllPullsDone && pReq->bCallComplete) {
-            ClientShutdownRequest(pReq);
-          }
-          // Otherwise, wait.
-          else {
-            LeaveCriticalSection(&pReq->Lock);
-          }
-
-          // We will either complete this request ot wait for all the file
-          // IO to complete.  In either case, the next action will be Wait.
-          Action = Wait;
-        }
-
-        // No data is present yet.  A notification will be issued later.
-        else if (Status == RPC_S_ASYNC_CALL_PENDING && cbRead == 0) {
-
-          ASSERT(pReq->bDataAvailable == FALSE);
-
-          LeaveCriticalSection(&pReq->Lock);
-
-          Action = Wait;          
-        }
-
-        // Should not get here
-        else {
-
-          LeaveCriticalSection(&pReq->Lock);
-
-          ASSERT(0);
-        }
-      }
-
-      //
-      // Wait for IO completion
-      //
-      else if (Action == Wait) {
-
-        InterlockedIncrement(&nThreadsAtClientCompletionPort);
-
-        ASSERT(nThreadsAtClientCompletionPort >= 0);
-        
-        Status = GetQueuedCompletionStatus(ClientCompletionPort,
-                                           &dwNumberOfBytesTransferred,
-                                           (PULONG_PTR)&dwCompletionKey,
-                                           &lpOverlapped,
-                                           ClientCompletionPortTimeout);
-
-        // Failure to dequeue an IO completion packet.
-        if (!Status && lpOverlapped == NULL) {
-
-          ULONG nThreads = InterlockedDecrement(&nThreadsAtClientCompletionPort);
-
-          // Wait timed out.
-          if (GetLastError() == WAIT_TIMEOUT) {
-
-
-            // If wait timed out and there are other threads waiting on the completion port,
-            // we can exit.
-            if (nThreads != 0) {
-              return;
-            }
-            // If there are no other threads, go back to wait for the IO.
-            else {
-              continue;
-            }
-          }
-
-          // Failure occurred and we were unable to dequeue an IO completion
-          // packet.
-          else {
-            AddToMessageLogProcFailure(TEXT("HandleActiveReq: GetQueuedCompletionStatus"), GetLastError());
-            
-            // Nothing we can do, just wait a little and re-try.
-            Sleep(100);
-            Action = Wait;
-            continue;
-          }
-        }
-
-        // If this is the last thread to come off a completion port,
-        // spin up an extra worker thread.  Thi ensures that there is
-        // always a waiter on the port.
-        if (InterlockedDecrement(&nThreadsAtClientCompletionPort) == 0) {
-
-          HANDLE hThread;
-          ULONG ThreadIdentifier;
-          DWORD status;
-          
-          if ((hThread = CreateThread(NULL,
-                                      0,
-                                      (LPTHREAD_START_ROUTINE) ServiceRequests,
-                                      NULL,
-                                      0,
-                                      &ThreadIdentifier)) == NULL) {
-            
-            // If CreateThread has failed there is nothing that we can do.
-            // Just continue...
-            AddToMessageLogProcFailure(TEXT("ServiceRequests: CreateThread"), GetLastError());
-          }
-          else {
-            // Unless we close a handle to the thread, it will remain in the
-            // system even after its execution has terminated.
-            status = CloseHandle(hThread);
-            ASSERT(status != 0);
-          }
-        }
-
-        ASSERT(nThreadsAtClientCompletionPort >= 0);
-
-        // Dequeued an IO completion packet for a successful operation.
-        // or for an unsucessful operation.  If Status != 0 then the
-        // operation has suceeded.
-
-        // There is at most one async WriteFile outstanding,
-        // so only one thread may be executing here for a given request.      
-        if (dwCompletionKey == IoFile) {
-          pReq = (Req *) ((size_t)lpOverlapped - offsetof(Req, FileOl));
-
-#ifdef DEBUG2
-          nCharWritten = _stprintf_s(Msg, bufSize, TEXT("HandleActiveReq: received File IO for req %p\n"), pReq);
-          bufSize -= nCharWritten;
-          DbgMsgRecord(Msg);
-#endif
-          
-          EnterCriticalSection(&pReq->Lock);
-
-
-          // File IO suceeded.
-          if (Status) {
-          
-            pReq->nWritesOutstanding--;
-
-            pReq->nBytesOutstanding-=dwNumberOfBytesTransferred;
-          
-            ASSERT(pReq->nWritesOutstanding >= 0);
-          
-            Action = Wait;
-          
-            if(pReq->bAllPullsDone &&
-               pReq->nWritesOutstanding <= 0 &&
-               (pReq->bCallComplete || pReq->bAsyncCallFailureReceived || pReq->bFailureFromWrite)) {
-            
-              ClientShutdownRequest(pReq);
-            
-              Action = Wait;
-            }
-            else {
-              LeaveCriticalSection(&pReq->Lock);
-            }
-          }
-
-          // File IO has failed.
-          else {
-            AddToMessageLogProcFailure(TEXT("HandleActiveReq: WriteFile"), GetLastError());
-
-            pReq->nWritesOutstanding--;
-
-            pReq->nBytesOutstanding-=dwNumberOfBytesTransferred;
-
-            pReq->bFailureFromWrite = TRUE;
-
-            // We do not want to pull any more data once file IO has failed.
-            pReq->bAllPullsDone = TRUE;
-
-            ASSERT(pReq->nWritesOutstanding >= 0);
-
-            // If we hit a failure on write we will
-            // wait for the async IO to complete.
-              
-            // Dump this request.
-            pReq->Status = GetLastError();
-            if (pReq->Status == 0) {
-                pReq->Status = ERROR_OPERATION_ABORTED;
-            }
-
-            ClientShutdownRequest(pReq);
-
-            Action = Wait;
-          }
-        }
-        
-        // There is at most one async pull outstanding,
-        // so at most one thread may be executing here for a given request.
-        // The only possibility that we need to syncronize against is a pull and a write
-        // completing simultaneously and racing.
         //
-        // The IO completion packets posted by the RPC runtime correspond to
-        // sucessful IO only.  Failures are reported as call-complete events.
-        else if(dwCompletionKey == IoPipe) {
-          pReq = (Req *) lpOverlapped;
+        // Make a pull to try and receive data.
+        //
+        if (Action == Pull)
+        {
 
-#ifdef DEBUG2
-          nCharWritten = _stprintf_s(Msg, bufSize, TEXT("HandleActiveReq: received Pipe IO for req %p\n"), pReq);
-          bufSize -= nCharWritten;
-          DbgMsgRecord(Msg);
-#endif
+            EnterCriticalSection(&pReq->Lock);
 
-      EnterCriticalSection(&pReq->Lock);  
-          
+            // This will be set if we have processed an async failure notification.
+            // Do not issue any more pulls and just wait for all file
+            // IO to complete.
+            if (pReq->bAsyncCallFailureReceived)
+            {
 
-          //
-          // Received a call-complete notification from the RPC runtime.
-          //
-          if(pReq->Async.Event == RpcCallComplete) {
-            
-            // It is possible that the server terminated the call prematurely.
-            // If this is the case find an error.
-            pReq->Status = RpcAsyncGetCallStatus(&pReq->Async);
-            
-            ASSERT(pReq->bCallComplete == FALSE ||
-                   pReq->Status == RPC_S_SERVER_UNAVAILABLE ||
-                   pReq->Status == RPC_S_CALL_FAILED_DNE ||
-                   pReq->Status == RPC_S_CALL_FAILED ||
-                   pReq->Status == RPC_S_CALL_CANCELLED);
-
-            // The call did in fact fail.            
-            if (pReq->Status != RPC_S_OK) {
-              
-              // If the call has failed, forget about doing
-              // more pulls.
-              pReq->bAllPullsDone = TRUE;
-              pReq->bPullOutstanding = FALSE;
-              pReq->bAsyncCallFailureReceived = TRUE;
-              
-              // Try to dump the request.
-              ClientShutdownRequest(pReq);
-              
-              Action = Wait;
-            }
-
-            // The call did not fail.  We received notification of it's
-            // sucessful completion.
-            else {
-              
-              ASSERT(pReq->bAsyncCallFailureReceived == FALSE);
-              
-              // Call complete should be the last notification
-              // received.  We will note this, and wait for the file
-              // IO to completion if necessary.
-              pReq->bCallComplete = TRUE;
-              
-              Action = Wait;
-              
-              if(pReq->bAllPullsDone) {
-                ClientShutdownRequest(pReq);
-              }
-              else {
                 LeaveCriticalSection(&pReq->Lock);
-              }
-            }
-          }
 
-          //
-          // Got a receive-complete notification from the RPC runtime.
-          //
-          else if(pReq->Async.Event == RpcReceiveComplete){
-            
-            Action = Pull;
-            
-            ASSERT(pReq->bCallComplete == FALSE);
-            ASSERT(pReq->bPullOutstanding == TRUE);
-
-            // If a pull has completed then there are no more
-            // outstanding pulls.
-            pReq->bPullOutstanding = FALSE;
-            
-            // If an async WriteFile has failed, we would have cancelled the
-            // call.  After getting a call-complete notification we
-            // will clean it up.
-            if (pReq->bCallCancelled) {
-              Action = Wait;
-              LeaveCriticalSection(&pReq->Lock);
-              continue;
+                Action = Wait;
+                continue;
             }
 
-            // If the call is still a sucess, then there must be
-            // data for us.
-            pReq->bDataAvailable = TRUE;
-            
-            LeaveCriticalSection(&pReq->Lock);
-          }
+            // This will be the case if an async write has failed and we want to
+            // terminate the request.
+            // Wait for all the writes to be completed.
+            if (pReq->bFailureFromWrite == TRUE)
+            {
 
-          // We should never be here.
-          else {
-            LeaveCriticalSection(&pReq->Lock);
+                LeaveCriticalSection(&pReq->Lock);
 
+                Action = Wait;
+                continue;
+            }
+
+            // We did not read anything yet.
+            cbRead = 0;
+
+            RpcTryExcept
+            {
+
+                WINAPI_MY_PIPE_PULL pPull = (WINAPI_MY_PIPE_PULL)pReq->OutPipe.pull;
+
+                pReq->bPullOutstanding = TRUE;
+
+
+                Status = pPull (pReq->OutPipe.state,
+                (char *) pReq->pbBuf,
+                PULL_BUFSIZE,
+                &cbRead);
+            }
+            RpcExcept ( ( (RpcExceptionCode() != STATUS_ACCESS_VIOLATION) &&
+                          (RpcExceptionCode() != STATUS_DATATYPE_MISALIGNMENT) &&
+                          (RpcExceptionCode() != STATUS_PRIVILEGED_INSTRUCTION) &&
+                          (RpcExceptionCode() != STATUS_ILLEGAL_INSTRUCTION) &&
+                          (RpcExceptionCode() != STATUS_BREAKPOINT))
+                        ? EXCEPTION_EXECUTE_HANDLER : EXCEPTION_CONTINUE_SEARCH )
+            {
+
+                Status = RpcExceptionCode();
+                ASSERT(Status != RPC_S_OK && Status != RPC_S_ASYNC_CALL_PENDING);
+            }
+            RpcEndExcept;
+
+            // The pull has failed either through and exception or an
+            // error return code.
+            if (Status != RPC_S_OK && Status != RPC_S_ASYNC_CALL_PENDING)
+            {
+
+                AddToMessageLogProcFailureEEInfo(TEXT("HandleActiveReq: c_RemoteRead"), Status);
+
+                pReq->bFailureFromPull = TRUE;
+                pReq->bAllPullsDone = TRUE;
+                pReq->bPullOutstanding = FALSE;
+                pReq->bCallComplete = TRUE;
+
+                // Dump this request.
+                pReq->Status = Status;
+                ClientShutdownRequest(pReq);
+
+                Action = Wait;
+            }
+
+            // The pull has succeeded.
+            // We read some data.
+            else if (Status == RPC_S_OK && cbRead > 0)
+            {
+
+                pReq->FileOl.Offset = pReq->FileWritePos;
+
+                pReq->bDataAvailable = FALSE;
+                pReq->bPullOutstanding = FALSE;
+
+                pReq->nWritesOutstanding++;
+                pReq->nBytesOutstanding+=cbRead;
+
+                // Access check was done on opening when we were impersonating.
+                // Thus we do not need to impersonate in this code.
+                Status = WriteFile(pReq->hLocalFile, pReq->pbBuf, cbRead, NULL, &pReq->FileOl);
+
+                // Write has failed.
+                if(!Status && GetLastError() != ERROR_IO_PENDING)
+                {
+
+                    AddToMessageLogProcFailure(TEXT("HandleActiveReq: WriteFile"), GetLastError());
+
+                    pReq->nWritesOutstanding--;
+
+                    pReq->nBytesOutstanding-=cbRead;
+
+                    // If we hit a failure on write we will
+                    // stop the pulls, wait for all outstanding IO to
+                    // complete and then finish.
+                    pReq->bFailureFromWrite = TRUE;
+
+                    // Dump this request.
+                    pReq->Status = GetLastError();
+                    ClientShutdownRequest(pReq);
+
+                    Action = Wait;
+                }
+
+                // Write has suceeded.
+                else
+                {
+
+                    pReq->FileWritePos+=cbRead;
+
+                    if (pReq->FileWritePos > pReq->CurrentExtendedSize)
+                    {
+                        pReq->CurrentExtendedSize+=FILE_SIZE_EXTENSION;
+                        SetFileSize(pReq->hLocalFile, pReq->CurrentExtendedSize);
+                    }
+
+                    LeaveCriticalSection(&pReq->Lock);
+
+                    Action = Pull;
+                }
+            }
+
+            // The pull has suceeded.
+            // We did not get any data.
+            // If the pipe is empty and pull returned 0 bytes, the transfer is complete.
+            else if (Status == RPC_S_OK && cbRead == 0)
+            {
+
+                pReq->bDataAvailable = FALSE;
+                pReq->bPullOutstanding = FALSE;
+
+                pReq->bAllPullsDone = TRUE;
+
+                // If we have done all the pulls and received call-complete, finish.
+                if(pReq->bAllPullsDone && pReq->bCallComplete)
+                {
+                    ClientShutdownRequest(pReq);
+                }
+                // Otherwise, wait.
+                else
+                {
+                    LeaveCriticalSection(&pReq->Lock);
+                }
+
+                // We will either complete this request ot wait for all the file
+                // IO to complete.  In either case, the next action will be Wait.
+                Action = Wait;
+            }
+
+            // No data is present yet.  A notification will be issued later.
+            else if (Status == RPC_S_ASYNC_CALL_PENDING && cbRead == 0)
+            {
+
+                ASSERT(pReq->bDataAvailable == FALSE);
+
+                LeaveCriticalSection(&pReq->Lock);
+
+                Action = Wait;
+            }
+
+            // Should not get here
+            else
+            {
+
+                LeaveCriticalSection(&pReq->Lock);
+
+                ASSERT(0);
+            }
+        }
+
+        //
+        // Wait for IO completion
+        //
+        else if (Action == Wait)
+        {
+
+            InterlockedIncrement(&nThreadsAtClientCompletionPort);
+
+            ASSERT(nThreadsAtClientCompletionPort >= 0);
+
+            Status = GetQueuedCompletionStatus(ClientCompletionPort,
+                                               &dwNumberOfBytesTransferred,
+                                               (PULONG_PTR)&dwCompletionKey,
+                                               &lpOverlapped,
+                                               ClientCompletionPortTimeout);
+
+            // Failure to dequeue an IO completion packet.
+            if (!Status && lpOverlapped == NULL)
+            {
+
+                ULONG nThreads = InterlockedDecrement(&nThreadsAtClientCompletionPort);
+
+                // Wait timed out.
+                if (GetLastError() == WAIT_TIMEOUT)
+                {
+
+
+                    // If wait timed out and there are other threads waiting on the completion port,
+                    // we can exit.
+                    if (nThreads != 0)
+                    {
+                        return;
+                    }
+                    // If there are no other threads, go back to wait for the IO.
+                    else
+                    {
+                        continue;
+                    }
+                }
+
+                // Failure occurred and we were unable to dequeue an IO completion
+                // packet.
+                else
+                {
+                    AddToMessageLogProcFailure(TEXT("HandleActiveReq: GetQueuedCompletionStatus"), GetLastError());
+
+                    // Nothing we can do, just wait a little and re-try.
+                    Sleep(100);
+                    Action = Wait;
+                    continue;
+                }
+            }
+
+            // If this is the last thread to come off a completion port,
+            // spin up an extra worker thread.  Thi ensures that there is
+            // always a waiter on the port.
+            if (InterlockedDecrement(&nThreadsAtClientCompletionPort) == 0)
+            {
+
+                HANDLE hThread;
+                ULONG ThreadIdentifier;
+                DWORD status;
+
+                if ((hThread = CreateThread(NULL,
+                                            0,
+                                            (LPTHREAD_START_ROUTINE) ServiceRequests,
+                                            NULL,
+                                            0,
+                                            &ThreadIdentifier)) == NULL)
+                {
+
+                    // If CreateThread has failed there is nothing that we can do.
+                    // Just continue...
+                    AddToMessageLogProcFailure(TEXT("ServiceRequests: CreateThread"), GetLastError());
+                }
+                else
+                {
+                    // Unless we close a handle to the thread, it will remain in the
+                    // system even after its execution has terminated.
+                    status = CloseHandle(hThread);
+                    ASSERT(status != 0);
+                }
+            }
+
+            ASSERT(nThreadsAtClientCompletionPort >= 0);
+
+            // Dequeued an IO completion packet for a successful operation.
+            // or for an unsucessful operation.  If Status != 0 then the
+            // operation has suceeded.
+
+            // There is at most one async WriteFile outstanding,
+            // so only one thread may be executing here for a given request.
+            if (dwCompletionKey == IoFile)
+            {
+                pReq = (Req *) ((size_t)lpOverlapped - offsetof(Req, FileOl));
+
+#ifdef DEBUG2
+                nCharWritten = _stprintf_s(Msg, bufSize, TEXT("HandleActiveReq: received File IO for req %p\n"), pReq);
+                bufSize -= nCharWritten;
+                DbgMsgRecord(Msg);
+#endif
+
+                EnterCriticalSection(&pReq->Lock);
+
+
+                // File IO suceeded.
+                if (Status)
+                {
+
+                    pReq->nWritesOutstanding--;
+
+                    pReq->nBytesOutstanding-=dwNumberOfBytesTransferred;
+
+                    ASSERT(pReq->nWritesOutstanding >= 0);
+
+                    Action = Wait;
+
+                    if(pReq->bAllPullsDone &&
+                            pReq->nWritesOutstanding <= 0 &&
+                            (pReq->bCallComplete || pReq->bAsyncCallFailureReceived || pReq->bFailureFromWrite))
+                    {
+
+                        ClientShutdownRequest(pReq);
+
+                        Action = Wait;
+                    }
+                    else
+                    {
+                        LeaveCriticalSection(&pReq->Lock);
+                    }
+                }
+
+                // File IO has failed.
+                else
+                {
+                    AddToMessageLogProcFailure(TEXT("HandleActiveReq: WriteFile"), GetLastError());
+
+                    pReq->nWritesOutstanding--;
+
+                    pReq->nBytesOutstanding-=dwNumberOfBytesTransferred;
+
+                    pReq->bFailureFromWrite = TRUE;
+
+                    // We do not want to pull any more data once file IO has failed.
+                    pReq->bAllPullsDone = TRUE;
+
+                    ASSERT(pReq->nWritesOutstanding >= 0);
+
+                    // If we hit a failure on write we will
+                    // wait for the async IO to complete.
+
+                    // Dump this request.
+                    pReq->Status = GetLastError();
+                    if (pReq->Status == 0)
+                    {
+                        pReq->Status = ERROR_OPERATION_ABORTED;
+                    }
+
+                    ClientShutdownRequest(pReq);
+
+                    Action = Wait;
+                }
+            }
+
+            // There is at most one async pull outstanding,
+            // so at most one thread may be executing here for a given request.
+            // The only possibility that we need to syncronize against is a pull and a write
+            // completing simultaneously and racing.
+            //
+            // The IO completion packets posted by the RPC runtime correspond to
+            // sucessful IO only.  Failures are reported as call-complete events.
+            else if(dwCompletionKey == IoPipe)
+            {
+                pReq = (Req *) lpOverlapped;
+
+#ifdef DEBUG2
+                nCharWritten = _stprintf_s(Msg, bufSize, TEXT("HandleActiveReq: received Pipe IO for req %p\n"), pReq);
+                bufSize -= nCharWritten;
+                DbgMsgRecord(Msg);
+#endif
+
+                EnterCriticalSection(&pReq->Lock);
+
+
+                //
+                // Received a call-complete notification from the RPC runtime.
+                //
+                if(pReq->Async.Event == RpcCallComplete)
+                {
+
+                    // It is possible that the server terminated the call prematurely.
+                    // If this is the case find an error.
+                    pReq->Status = RpcAsyncGetCallStatus(&pReq->Async);
+
+                    ASSERT(pReq->bCallComplete == FALSE ||
+                           pReq->Status == RPC_S_SERVER_UNAVAILABLE ||
+                           pReq->Status == RPC_S_CALL_FAILED_DNE ||
+                           pReq->Status == RPC_S_CALL_FAILED ||
+                           pReq->Status == RPC_S_CALL_CANCELLED);
+
+                    // The call did in fact fail.
+                    if (pReq->Status != RPC_S_OK)
+                    {
+
+                        // If the call has failed, forget about doing
+                        // more pulls.
+                        pReq->bAllPullsDone = TRUE;
+                        pReq->bPullOutstanding = FALSE;
+                        pReq->bAsyncCallFailureReceived = TRUE;
+
+                        // Try to dump the request.
+                        ClientShutdownRequest(pReq);
+
+                        Action = Wait;
+                    }
+
+                    // The call did not fail.  We received notification of it's
+                    // sucessful completion.
+                    else
+                    {
+
+                        ASSERT(pReq->bAsyncCallFailureReceived == FALSE);
+
+                        // Call complete should be the last notification
+                        // received.  We will note this, and wait for the file
+                        // IO to completion if necessary.
+                        pReq->bCallComplete = TRUE;
+
+                        Action = Wait;
+
+                        if(pReq->bAllPullsDone)
+                        {
+                            ClientShutdownRequest(pReq);
+                        }
+                        else
+                        {
+                            LeaveCriticalSection(&pReq->Lock);
+                        }
+                    }
+                }
+
+                //
+                // Got a receive-complete notification from the RPC runtime.
+                //
+                else if(pReq->Async.Event == RpcReceiveComplete)
+                {
+
+                    Action = Pull;
+
+                    ASSERT(pReq->bCallComplete == FALSE);
+                    ASSERT(pReq->bPullOutstanding == TRUE);
+
+                    // If a pull has completed then there are no more
+                    // outstanding pulls.
+                    pReq->bPullOutstanding = FALSE;
+
+                    // If an async WriteFile has failed, we would have cancelled the
+                    // call.  After getting a call-complete notification we
+                    // will clean it up.
+                    if (pReq->bCallCancelled)
+                    {
+                        Action = Wait;
+                        LeaveCriticalSection(&pReq->Lock);
+                        continue;
+                    }
+
+                    // If the call is still a sucess, then there must be
+                    // data for us.
+                    pReq->bDataAvailable = TRUE;
+
+                    LeaveCriticalSection(&pReq->Lock);
+                }
+
+                // We should never be here.
+                else
+                {
+                    LeaveCriticalSection(&pReq->Lock);
+
+                    ASSERT(0);
+                }
+            }
+
+            //
+            // We got a FileRep internal packet to activate a new request.
+            //
+            else if(dwCompletionKey == IoFileRep)
+            {
+                pReq = (Req *) lpOverlapped;
+
+
+                if(HandleReq(pReq))
+                {
+                    Action = Pull;
+                }
+                else
+                {
+                    Action = Wait;
+                }
+            }
+
+            else   // dwCompletionKey
+            {
+                ASSERT(0);
+            }
+        }
+
+        else   // Action
+        {
             ASSERT(0);
-          }
         }
-
-        //
-        // We got a FileRep internal packet to activate a new request.
-        //
-        else if(dwCompletionKey == IoFileRep) {
-          pReq = (Req *) lpOverlapped;
-
-          
-          if(HandleReq(pReq)) {
-            Action = Pull;
-          }
-          else {
-            Action = Wait;
-          }
-        }
-
-        else { // dwCompletionKey
-          ASSERT(0);
-        }
-      }
-
-      else { // Action
-        ASSERT(0);
-      }
     }
 }
 
@@ -1262,9 +1361,10 @@ VOID ServiceRequests(VOID) {
         Self-explanatory.
 
     RETURN VALUE: TRUE if YES, FALSE otherwise or on error.
- 
+
 */
-BOOL IsSecureClient(handle_t hFileRepClient, Req *pReq) {
+BOOL IsSecureClient(handle_t hFileRepClient, Req *pReq)
+{
 
 #ifndef NO_SEC
     RPC_AUTHZ_HANDLE hAuth;
@@ -1276,18 +1376,20 @@ BOOL IsSecureClient(handle_t hFileRepClient, Req *pReq) {
                                 NULL,
                                 &ulAuthnLevel,
                                 NULL,
-                                NULL) != RPC_S_OK) {
+                                NULL) != RPC_S_OK)
+    {
         AddRpcEEInfo(GetLastError(), TEXT("RequestFile: RpcBindingInqAuthClient failed"));
         return FALSE;
     }
-    
+
     // Make sure the client has adequate security measures.
     // Since this is LRPC, we get the security level of privacy
     // because it is the only available security level.
-    // We do not interoperate with old versions of FileRep 
+    // We do not interoperate with old versions of FileRep
     // client utilities, since appropriate versions should be
     // available with the local system service.
-    if (ulAuthnLevel != RPC_C_AUTHN_LEVEL_PKT_PRIVACY) {
+    if (ulAuthnLevel != RPC_C_AUTHN_LEVEL_PKT_PRIVACY)
+    {
         AddRpcEEInfo(RPC_S_SEC_PKG_ERROR, TEXT("RequestFile: ulAuthnLevel != RPC_C_AUTHN_LEVEL_PKT_PRIVACY"));
         return FALSE;
     }
@@ -1310,12 +1412,13 @@ BOOL IsSecureClient(handle_t hFileRepClient, Req *pReq) {
         Self-explanatory.
 
     RETURN VALUE: none
- 
+
 */
 VOID RequestFile(handle_t hFileRepClient,
                  LPTSTR ServerName,
                  LPTSTR RemoteFileName,
-                 LPTSTR LocalFileName) {
+                 LPTSTR LocalFileName)
+{
 
     RPC_STATUS rpcstatus;
 
@@ -1324,20 +1427,21 @@ VOID RequestFile(handle_t hFileRepClient,
     // The string binding that is used to make sure clients contact the
     // service via an LRPC call.
     RPC_STR StringBinding;
-    
+
     // The protocol sequence that gets extracted from the string binding.
     RPC_STR ProtSeq;
 
     TCHAR Msg[MSG_SIZE];
     ULONG bufSize = MSG_SIZE; // Keeps track of remaining size of buffer for _stprintf_s
-    int nCharWritten; 
-  
+    int nCharWritten;
+
 #ifdef DEBUG2
     DbgMsgRecord(TEXT("-> RequestFile\n"));
 #endif
 
-    if((pReq = (Req *) AutoHeapAlloc(sizeof(Req))) == NULL) {
-        AddRpcEEInfoAndRaiseException(ERROR_OUTOFMEMORY, TEXT("RequestFile: AutoHeapAlloc failed"));            
+    if((pReq = (Req *) AutoHeapAlloc(sizeof(Req))) == NULL)
+    {
+        AddRpcEEInfoAndRaiseException(ERROR_OUTOFMEMORY, TEXT("RequestFile: AutoHeapAlloc failed"));
         return;
     }
 
@@ -1381,21 +1485,24 @@ VOID RequestFile(handle_t hFileRepClient,
     // It is conceivable that this thread will put the
     // request on the queue and some other thread will
     // handle the request after this thread has exited.
-    if ((pReq->ServerName = (RPC_STR) AutoHeapAlloc((_tcslen(ServerName)+1) * sizeof(TCHAR))) == NULL) {
+    if ((pReq->ServerName = (RPC_STR) AutoHeapAlloc((_tcslen(ServerName)+1) * sizeof(TCHAR))) == NULL)
+    {
         pReq->Status = GetLastError();
         ClientShutdownRequest(pReq);
-        AddRpcEEInfoAndRaiseException(ERROR_OUTOFMEMORY, TEXT("RequestFile: AutoHeapAlloc failed"));            
+        AddRpcEEInfoAndRaiseException(ERROR_OUTOFMEMORY, TEXT("RequestFile: AutoHeapAlloc failed"));
         return;
     }
     CopyMemory(pReq->ServerName, ServerName, (_tcslen(ServerName)+1) * sizeof(TCHAR));
-    if ((pReq->RemoteFileName = (LPTSTR) AutoHeapAlloc((_tcslen(RemoteFileName)+1) * sizeof(TCHAR))) == NULL) {
+    if ((pReq->RemoteFileName = (LPTSTR) AutoHeapAlloc((_tcslen(RemoteFileName)+1) * sizeof(TCHAR))) == NULL)
+    {
         pReq->Status = GetLastError();
         ClientShutdownRequest(pReq);
-        AddRpcEEInfoAndRaiseException(ERROR_OUTOFMEMORY, TEXT("RequestFile: AutoHeapAlloc failed"));            
+        AddRpcEEInfoAndRaiseException(ERROR_OUTOFMEMORY, TEXT("RequestFile: AutoHeapAlloc failed"));
         return;
     }
     CopyMemory(pReq->RemoteFileName, RemoteFileName, (_tcslen(RemoteFileName)+1) * sizeof(TCHAR));
-    if ((pReq->LocalFileName = (LPTSTR) AutoHeapAlloc((_tcslen(LocalFileName)+1) * sizeof(TCHAR))) == NULL) {
+    if ((pReq->LocalFileName = (LPTSTR) AutoHeapAlloc((_tcslen(LocalFileName)+1) * sizeof(TCHAR))) == NULL)
+    {
         pReq->Status = GetLastError();
         ClientShutdownRequest(pReq);
         AddRpcEEInfoAndRaiseException(ERROR_OUTOFMEMORY, TEXT("RequestFile: AutoHeapAlloc failed"));
@@ -1414,22 +1521,24 @@ VOID RequestFile(handle_t hFileRepClient,
     nTotalId++;
 
     LeaveCriticalSection(&ProfCriticalSection);
-    nCharWritten = _stprintf_s(Msg, bufSize, TEXT("name=\"%s\" arrived"), RemoteFileName);	
+    nCharWritten = _stprintf_s(Msg, bufSize, TEXT("name=\"%s\" arrived"), RemoteFileName);
     bufSize -= nCharWritten;
-	
+
     // Record the time of arrival of this request.
     ProfRecordTime(pReq->nReqId, Msg);
 #endif
 
     // Make sure that the client utility is local.
     // Client system service only services LRPC calls.
-    if ((rpcstatus = RpcBindingToStringBinding(pReq->hFileRepClient, &StringBinding)) != RPC_S_OK) {
+    if ((rpcstatus = RpcBindingToStringBinding(pReq->hFileRepClient, &StringBinding)) != RPC_S_OK)
+    {
         pReq->Status = rpcstatus;
         ClientShutdownRequest(pReq);
         AddRpcEEInfoAndRaiseException(rpcstatus, TEXT("RequestFile: RpcBindingToStringBinding failed"));
         return;
     }
-    if ((rpcstatus = RpcStringBindingParse(StringBinding, NULL, &ProtSeq, NULL, NULL, NULL)) != RPC_S_OK) {
+    if ((rpcstatus = RpcStringBindingParse(StringBinding, NULL, &ProtSeq, NULL, NULL, NULL)) != RPC_S_OK)
+    {
         pReq->Status = rpcstatus;
 
         // Free the string binding.
@@ -1441,7 +1550,8 @@ VOID RequestFile(handle_t hFileRepClient,
         AddRpcEEInfoAndRaiseException(rpcstatus, TEXT("RequestFile: RpcStringBindingParse failed"));
         return;
     }
-    if (_tcscmp((LPCTSTR)ProtSeq, TEXT("ncalrpc")) != 0) {
+    if (_tcscmp((LPCTSTR)ProtSeq, TEXT("ncalrpc")) != 0)
+    {
 
         // Free the string binding.
         rpcstatus = RpcStringFree(&StringBinding);
@@ -1464,7 +1574,8 @@ VOID RequestFile(handle_t hFileRepClient,
     ASSERT(rpcstatus == RPC_S_OK);
 
 #ifndef NO_SEC
-    if (!IsSecureClient(hFileRepClient, pReq)) {
+    if (!IsSecureClient(hFileRepClient, pReq))
+    {
         pReq->Status = ERROR_ACCESS_DENIED;
         ClientShutdownRequest(pReq);
         AddRpcEEInfoAndRaiseException(RPC_S_SEC_PKG_ERROR, TEXT("RequestFile: IsSecureClient failed"));
@@ -1483,19 +1594,22 @@ VOID RequestFile(handle_t hFileRepClient,
 #ifdef RETRY_EXCEPTION
     rpcstatus = RPC_S_OK;
     unsigned tries = 0;
-    do {
-      if (rpcstatus != RPC_S_OK) {
-        tries++;
-        Sleep(100);
-      }
-      rpcstatus = RpcImpersonateClient(pReq->hFileRepClient);
+    do
+    {
+        if (rpcstatus != RPC_S_OK)
+        {
+            tries++;
+            Sleep(100);
+        }
+        rpcstatus = RpcImpersonateClient(pReq->hFileRepClient);
     }
     while (rpcstatus != RPC_S_OK && tries < 10);
 #else
     rpcstatus = RpcImpersonateClient(pReq->hFileRepClient);
 #endif
 
-    if (rpcstatus != RPC_S_OK) {      
+    if (rpcstatus != RPC_S_OK)
+    {
         pReq->Status = GetLastError();
         ClientShutdownRequest(pReq);
         AddRpcEEInfoAndRaiseException(rpcstatus, TEXT("RequestFile: RpcImpersonateClient failed"));
@@ -1509,7 +1623,8 @@ VOID RequestFile(handle_t hFileRepClient,
     if (OpenThreadToken(GetCurrentThread(),
                         TOKEN_QUERY | TOKEN_IMPERSONATE,
                         TRUE,
-                        &pReq->hTokenHandle) == 0) {
+                        &pReq->hTokenHandle) == 0)
+    {
 
         pReq->Status = GetLastError();
         ClientShutdownRequest(pReq);
@@ -1523,7 +1638,8 @@ VOID RequestFile(handle_t hFileRepClient,
 
     // Write down the SID for the user.
     pReq->pSID = GetUserSID();
-    if (pReq->pSID == NULL) {        
+    if (pReq->pSID == NULL)
+    {
         pReq->Status = RPC_S_CALL_FAILED;
         ClientShutdownRequest(pReq);
         AddRpcEEInfoAndRaiseException(RPC_S_CALL_FAILED, TEXT("RequestFile: GetUserSID failed"));
@@ -1531,7 +1647,8 @@ VOID RequestFile(handle_t hFileRepClient,
     }
 
     // Stop impersonating.  We got what we wanted.
-    if ((rpcstatus = RpcRevertToSelf()) != RPC_S_OK) {
+    if ((rpcstatus = RpcRevertToSelf()) != RPC_S_OK)
+    {
         pReq->Status = GetLastError();
         pReq->bImpersonating = FALSE;
         ClientShutdownRequest(pReq);
@@ -1541,15 +1658,16 @@ VOID RequestFile(handle_t hFileRepClient,
     pReq->bImpersonating = FALSE;
 
     // Init the critsec.
-    if (InitializeCriticalSectionAndSpinCount(&pReq->Lock, 10) == 0) {
+    if (InitializeCriticalSectionAndSpinCount(&pReq->Lock, 10) == 0)
+    {
         AddRpcEEInfoAndRaiseException(GetLastError(), TEXT("ProfOpenLog: InitializeCriticalSectionAndSpinCount"));
         return;
     }
 
 #ifdef DEBUG2
-   nCharWritten = _stprintf_s(Msg, bufSize, TEXT("RequestFile: Pri=%d for req %p\n"), pReq->Pri, pReq);
-   bufSize -= nCharWritten;
-   DbgMsgRecord(Msg);
+    nCharWritten = _stprintf_s(Msg, bufSize, TEXT("RequestFile: Pri=%d for req %p\n"), pReq->Pri, pReq);
+    bufSize -= nCharWritten;
+    DbgMsgRecord(Msg);
 #endif
 
     HANDLE hThread;
@@ -1557,34 +1675,37 @@ VOID RequestFile(handle_t hFileRepClient,
     DWORD status;
 
     // If the number of worker threads is lower then the maximum, create one.
-    if (nThreadsAtClientCompletionPort < 1) {
+    if (nThreadsAtClientCompletionPort < 1)
+    {
 
-      // Go service some requests, remember that you are
-      // an RPC thread.
-      if ((hThread = CreateThread(NULL,
-                                  0,
-                                  (LPTHREAD_START_ROUTINE) ServiceRequests,
-                                  NULL,
-                                  0,
-                                  &ThreadIdentifier)) == NULL) {
-        
-        pReq->Status = GetLastError();
-        ClientShutdownRequest(pReq);
-        AddToMessageLogProcFailure(TEXT("ServiceRequests: CreateThread"), GetLastError());
-        return;
-      }
-      
-      // Unless we close a handle to the thread, it will remain in the
-      // system even after its execution has terminated.
-      status = CloseHandle(hThread);
-      ASSERT(status != 0);  
+        // Go service some requests, remember that you are
+        // an RPC thread.
+        if ((hThread = CreateThread(NULL,
+                                    0,
+                                    (LPTHREAD_START_ROUTINE) ServiceRequests,
+                                    NULL,
+                                    0,
+                                    &ThreadIdentifier)) == NULL)
+        {
+
+            pReq->Status = GetLastError();
+            ClientShutdownRequest(pReq);
+            AddToMessageLogProcFailure(TEXT("ServiceRequests: CreateThread"), GetLastError());
+            return;
+        }
+
+        // Unless we close a handle to the thread, it will remain in the
+        // system even after its execution has terminated.
+        status = CloseHandle(hThread);
+        ASSERT(status != 0);
     }
 
     // We need to wait putting the request onto the queue untill we know that we could create
     // a worker thread.
 
     // Increment the counter for the number of concurrent requests.
-    if (!CounterIncrement(pClientReqCounters[pReq->Pri])) {
+    if (!CounterIncrement(pClientReqCounters[pReq->Pri]))
+    {
 
         pReq->Status = RPC_S_SERVER_TOO_BUSY;
         ClientShutdownRequest(pReq);
@@ -1596,15 +1717,15 @@ VOID RequestFile(handle_t hFileRepClient,
         AddRpcEEInfoAndRaiseException(RPC_S_SERVER_TOO_BUSY, TEXT("RequestFile: CounterIncrement failed"));
 #ifdef DEBUG2
         DbgMsgRecord(TEXT("<- RequestFile\n"));
-#endif  
+#endif
         return;
     }
 #ifdef DEBUG2
-   nCharWritten =  _stprintf_s(Msg, bufSize, TEXT("Incremented ClientReqCounters[%d]\n"), pReq->Pri);
-   bufSize -= nCharWritten;
-   DbgMsgRecord(Msg);
-#endif            
-    
+    nCharWritten =  _stprintf_s(Msg, bufSize, TEXT("Incremented ClientReqCounters[%d]\n"), pReq->Pri);
+    bufSize -= nCharWritten;
+    DbgMsgRecord(Msg);
+#endif
+
     pReq->State = StateQueued;
 
     // Place the request onto the queue.
@@ -1615,7 +1736,7 @@ VOID RequestFile(handle_t hFileRepClient,
     nCharWritten = _stprintf_s(Msg, bufSize, TEXT("RequestFile: Put req %p onto Req queue %p\n"), pReq, ClientReqQueues[pReq->Pri]);
     bufSize -= nCharWritten;
     DbgMsgRecord(Msg);
-#endif    
+#endif
 
     // Now if we can, find a queued request and activate it.
     FindAndActivateCReq();

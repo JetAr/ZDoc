@@ -1,4 +1,4 @@
-//+--------------------------------------------------------------------------
+﻿//+--------------------------------------------------------------------------
 //
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
@@ -8,7 +8,7 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 //
 //  Abstract:
-//      Header for wrapper of dlldata.c 
+//      Header for wrapper of dlldata.c
 //
 //----------------------------------------------------------------------------
 
@@ -16,14 +16,14 @@
 
 #ifdef _MERGE_PROXYSTUB
 
-extern "C" 
+extern "C"
 {
-BOOL WINAPI PrxDllMain(HINSTANCE hInstance, DWORD dwReason, 
-	LPVOID lpReserved);
-STDAPI PrxDllCanUnloadNow(void);
-STDAPI PrxDllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv);
-STDAPI PrxDllRegisterServer(void);
-STDAPI PrxDllUnregisterServer(void);
+    BOOL WINAPI PrxDllMain(HINSTANCE hInstance, DWORD dwReason,
+                           LPVOID lpReserved);
+    STDAPI PrxDllCanUnloadNow(void);
+    STDAPI PrxDllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv);
+    STDAPI PrxDllRegisterServer(void);
+    STDAPI PrxDllUnregisterServer(void);
 }
 
 #endif

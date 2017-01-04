@@ -1,4 +1,4 @@
-//--------------------------------------------------------------------
+﻿//--------------------------------------------------------------------
 // Microsoft OLE DB Sample OLEDB Simple Provider
 // (C) Copyright 1991 - 1999 Microsoft Corporation.  All Rights Reserved.
 //
@@ -31,10 +31,10 @@ HINSTANCE g_hInstance = NULL;
 
 REGENTRY rgRegInfo[] =
 {
-	//SampleOSProvider
+    //SampleOSProvider
     { HKEY_CLASSES_ROOT, "ospsampc",			NULL,	"Microsoft Sample OLE DB Simple Provider DLL (C++)"							},
 
-	//CLSID
+    //CLSID
     { HKEY_CLASSES_ROOT, "ospsampc\\Clsid",		NULL,	"{1E79B2C1-077B-11d1-B3AE-00AA00C1A924}"									},
     { HKEY_CLASSES_ROOT, "CLSID\\{1E79B2C1-077B-11d1-B3AE-00AA00C1A924}",							NULL,				"ospsampc"	},
     { HKEY_CLASSES_ROOT, "CLSID\\{1E79B2C1-077B-11d1-B3AE-00AA00C1A924}\\ProgID",					NULL,				"ospsampc"	},
@@ -51,12 +51,12 @@ REGENTRY rgRegInfo[] =
 MyClassFactory::MyClassFactory()
 {
     m_cRef = 0;
-	InterlockedIncrement(&g_cObj);
+    InterlockedIncrement(&g_cObj);
 }
 
 MyClassFactory::~MyClassFactory()
 {
-	InterlockedDecrement(&g_cObj);
+    InterlockedDecrement(&g_cObj);
 }
 
 
@@ -67,28 +67,28 @@ STDMETHODIMP MyClassFactory::QueryInterface(REFIID	riid, void** ppv)
 
     // Do we support this interface?
     if (riid == IID_IUnknown ||
-        riid == IID_IClassFactory)
+            riid == IID_IClassFactory)
     {
-		*ppv = this;
-	}
+        *ppv = this;
+    }
     else
-	{
-		*ppv = NULL;
+    {
+        *ppv = NULL;
         return E_NOINTERFACE;
-	}
+    }
 
     if ((IUnknown*)*ppv)
-	{
-		((IUnknown*)*ppv)->AddRef();
-	} 
+    {
+        ((IUnknown*)*ppv)->AddRef();
+    }
     return S_OK;
 }
 
 
 STDMETHODIMP MyClassFactory::CreateInstance(IUnknown* pUnkOuter, REFIID riid, void** ppv)
 {
-	HRESULT hr = S_OK;
-	MyDataSource* pMyDataSource = NULL;
+    HRESULT hr = S_OK;
+    MyDataSource* pMyDataSource = NULL;
 
     if(ppv == NULL)
         return E_INVALIDARG;
@@ -104,23 +104,27 @@ STDMETHODIMP MyClassFactory::CreateInstance(IUnknown* pUnkOuter, REFIID riid, vo
         return E_NOINTERFACE;
 
     //Create a MyDataSource object
-   if(!(pMyDataSource = new MyDataSource()))
+    if(!(pMyDataSource = new MyDataSource()))
     {
-		hr = E_OUTOFMEMORY;
-		goto CLEANUP;
-	}
+        hr = E_OUTOFMEMORY;
+        goto CLEANUP;
+    }
 
     // Initialize it
-	pMyDataSource->AddRef();
-	if(FAILED(hr = pMyDataSource->Init()))
-		goto CLEANUP;
-		
-	//Obtain correct riid
-	hr = pMyDataSource->QueryInterface(riid, ppv);
+    pMyDataSource->AddRef();
+    if(FAILED(hr = pMyDataSource->Init()))
+        goto CLEANUP;
+
+    //Obtain correct riid
+    hr = pMyDataSource->QueryInterface(riid, ppv);
 
 CLEANUP:
-	if((pMyDataSource)) { (pMyDataSource)->Release(); (pMyDataSource) = NULL; }
-	return hr;
+    if((pMyDataSource))
+    {
+        (pMyDataSource)->Release();
+        (pMyDataSource) = NULL;
+    }
+    return hr;
 }
 
 
@@ -141,50 +145,50 @@ STDMETHODIMP MyClassFactory::LockServer(BOOL fLock)
 //
 ////////////////////////////////////////////////////////
 BOOL WINAPI DllMain
-    (
+(
     HINSTANCE   hInstDLL,   //@parm IN | Application Instance Handle
     DWORD       fdwReason,  //@parm IN | Indicated Process or Thread activity
     LPVOID      lpvReserved //@parm IN | Reserved...
-    )
+)
 {
     BOOL	fRetVal = FALSE;
 
     switch(fdwReason)
     {
-		case DLL_PROCESS_ATTACH:
+    case DLL_PROCESS_ATTACH:
 
-			// Assume successfully initialized
-			fRetVal = TRUE;
+        // Assume successfully initialized
+        fRetVal = TRUE;
 
-			// Do one-time initialization when first process attaches
-			if (!g_cAttachedProcesses)
-			{
-				g_hInstance = hInstDLL;
-			}
+        // Do one-time initialization when first process attaches
+        if (!g_cAttachedProcesses)
+        {
+            g_hInstance = hInstDLL;
+        }
 
-			// Do per-process initialization here...
-        
-			// Remember that another process successfully attached
-			g_cAttachedProcesses++;
-			break;
+        // Do per-process initialization here...
 
-		case DLL_PROCESS_DETACH:
-			// Clean up when the last process is going away
-			if (g_cAttachedProcesses == 1)
-			{
-			}
+        // Remember that another process successfully attached
+        g_cAttachedProcesses++;
+        break;
 
-			// Do per-process clean up here...
+    case DLL_PROCESS_DETACH:
+        // Clean up when the last process is going away
+        if (g_cAttachedProcesses == 1)
+        {
+        }
 
-			// Remember that a process has detached
-			g_cAttachedProcesses--;
-			break;
+        // Do per-process clean up here...
 
-		case DLL_THREAD_ATTACH:
-			break;
+        // Remember that a process has detached
+        g_cAttachedProcesses--;
+        break;
 
-		case DLL_THREAD_DETACH:
-			break;
+    case DLL_THREAD_ATTACH:
+        break;
+
+    case DLL_THREAD_DETACH:
+        break;
     }
 
     return fRetVal;
@@ -197,14 +201,14 @@ BOOL WINAPI DllMain
 //
 ////////////////////////////////////////////////////////
 HRESULT CALLBACK DllGetClassObject
-    (
+(
     REFCLSID    rclsid, //@parm IN | CLSID of the object class to be loaded
     REFIID      riid,   //@parm IN | Interface on object to be instantiated
     LPVOID *    ppvObj  //@parm OUT | Pointer to interface that was instantiated
-    )
+)
 {
     MyClassFactory * pClassFactory;
-	HRESULT         hr;
+    HRESULT         hr;
 
     // Check for valid ppvObj pointer
     if (!ppvObj)
@@ -219,7 +223,7 @@ HRESULT CALLBACK DllGetClassObject
 
     // We only support the IUnknown and IClassFactory interfaces
     if (riid != IID_IUnknown &&
-        riid != IID_IClassFactory)
+            riid != IID_IClassFactory)
         return E_NOINTERFACE;
 
     // Create our ClassFactory object
@@ -231,7 +235,7 @@ HRESULT CALLBACK DllGetClassObject
     if(FAILED(hr))
         delete pClassFactory;
 
-	return hr;
+    return hr;
 }
 
 
@@ -263,9 +267,9 @@ STDAPI DllUnregisterServer()
     // Ignore errors.
     for (int i=NUMELEM(rgRegInfo)-1; i>=0; i--)
     {
-		if(FAILED(DelRegEntry(&rgRegInfo[i])))
-			iNumErrors++;
-	}
+        if(FAILED(DelRegEntry(&rgRegInfo[i])))
+            iNumErrors++;
+    }
 
     return iNumErrors ? E_FAIL : S_OK;
 }
@@ -277,10 +281,10 @@ STDAPI DllUnregisterServer()
 ////////////////////////////////////////////////////////
 STDAPI DllRegisterServer()
 {
-	HRESULT		hr;
+    HRESULT		hr;
     HMODULE     hModule;
     CHAR		szBuffer[MAX_NAME_LEN];
-	CHAR		szFullFileName[MAX_PATH+1];
+    CHAR		szFullFileName[MAX_PATH+1];
 
     // Get the full path name for this DLL.
     if (NULL == (hModule = GetModuleHandle( "ospsampc" )))
@@ -297,12 +301,12 @@ STDAPI DllRegisterServer()
     {
         // Fill in any "%s" arguments with the name of this DLL.
         wsprintf(szBuffer, rgRegInfo[i].szValue, szFullFileName );
-		rgRegInfo[i].szValue = szBuffer;
+        rgRegInfo[i].szValue = szBuffer;
 
-		//Set the Registry Entry for this Key
+        //Set the Registry Entry for this Key
         if(FAILED(hr = SetRegEntry(&rgRegInfo[i])))
-			goto CLEANUP;
-	}
+            goto CLEANUP;
+    }
 
 CLEANUP:
     return hr;

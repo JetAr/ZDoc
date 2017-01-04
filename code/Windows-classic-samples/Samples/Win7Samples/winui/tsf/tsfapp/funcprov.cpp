@@ -1,4 +1,4 @@
-/**************************************************************************
+﻿/**************************************************************************
    THIS CODE AND INFORMATION IS PROVIDED 'AS IS' WITHOUT WARRANTY OF
    ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
    THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -31,10 +31,10 @@
 STDMETHODIMP CTSFEditWnd::GetType(GUID *pguid)
 {
     *pguid = GUID_NULL;
-    
+
     return S_OK;
 }
-    
+
 /**************************************************************************
 
 	CTSFEditWnd::GetDescription()
@@ -44,10 +44,10 @@ STDMETHODIMP CTSFEditWnd::GetType(GUID *pguid)
 STDMETHODIMP CTSFEditWnd::GetDescription(BSTR *pbstrDesc)
 {
     *pbstrDesc = SysAllocString(L"TSFApp Function Provider");
-    
+
     return *pbstrDesc ? S_OK : E_OUTOFMEMORY;
 }
-    
+
 /**************************************************************************
 
 	CTSFEditWnd::GetFunction()
@@ -57,13 +57,13 @@ STDMETHODIMP CTSFEditWnd::GetDescription(BSTR *pbstrDesc)
 STDMETHODIMP CTSFEditWnd::GetFunction(REFGUID rguid, REFIID riid, IUnknown **ppunk)
 {
     HRESULT hr = E_NOINTERFACE;
-    
+
     *ppunk = NULL;
 
     if(IsEqualGUID(rguid, GUID_NULL))
     {
     }
-    
+
     return hr;
 }
 
@@ -82,7 +82,7 @@ BOOL CTSFEditWnd::_InitFunctionProvider()
     if(SUCCEEDED(hr))
     {
         hr = pSourceSingle->AdviseSingleSink(m_tfClientID, IID_ITfFunctionProvider, (ITfFunctionProvider*)this);
-        
+
         pSourceSingle->Release();
     }
 

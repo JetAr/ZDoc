@@ -1,4 +1,4 @@
-#include <windows.h>
+﻿#include <windows.h>
 #include <mfapi.h>
 #include <mfidl.h>
 #include <mferror.h>
@@ -23,14 +23,14 @@ HRESULT CreateTopologyBranch(
     IMFPresentationDescriptor *pPD,   // Presentation descriptor.
     IMFStreamDescriptor *pSD,         // Stream descriptor.
     IMFMediaSink *pSink
-    );
+);
 
 HRESULT CreateSourceNode(
     IMFMediaSource *pSource,          // Media source.
     IMFPresentationDescriptor *pPD,   // Presentation descriptor.
     IMFStreamDescriptor *pSD,         // Stream descriptor.
     IMFTopologyNode **ppNode          // Receives the node pointer.
-    );
+);
 
 HRESULT CreateOutputNode(IMFMediaSink *pSink, DWORD iStream, IMFTopologyNode **ppNode);
 
@@ -40,7 +40,7 @@ HRESULT RunMediaSession(IMFTopology *pTopology);
 ///////////////////////////////////////////////////////////////////////
 //  Name: wmain
 //  Description:  Entry point to the application.
-//  
+//
 //  Usage: writewavfile.exe inputfile outputfile
 ///////////////////////////////////////////////////////////////////////
 
@@ -148,7 +148,7 @@ HRESULT CreateWavFile(const WCHAR *sURL, const WCHAR *sOutputFile)
 
 ///////////////////////////////////////////////////////////////////////
 //  Name: RunMediaSession
-//  Description:  
+//  Description:
 //  Queues the specified topology on the media session and runs the
 //  media session until the MESessionEnded event is received.
 ///////////////////////////////////////////////////////////////////////
@@ -176,8 +176,8 @@ HRESULT RunMediaSession(IMFTopology *pTopology)
         IMFMediaEvent *pEvent = NULL;
         MediaEventType meType = MEUnknown;
 
-        MF_TOPOSTATUS TopoStatus = MF_TOPOSTATUS_INVALID; // Used with MESessionTopologyStatus event.    
-    
+        MF_TOPOSTATUS TopoStatus = MF_TOPOSTATUS_INVALID; // Used with MESessionTopologyStatus event.
+
         hr = pSession->GetEvent(0, &pEvent);
 
         if (SUCCEEDED(hr))
@@ -200,7 +200,7 @@ HRESULT RunMediaSession(IMFTopology *pTopology)
                 break;
 
 
-        case MESessionTopologyStatus:
+            case MESessionTopologyStatus:
                 // Get the status code.
                 hr = pEvent->GetUINT32(MF_EVENT_TOPOLOGY_STATUS, (UINT32*)&TopoStatus);
                 if (SUCCEEDED(hr))
@@ -270,7 +270,7 @@ HRESULT RunMediaSession(IMFTopology *pTopology)
 ///////////////////////////////////////////////////////////////////////
 //  Name: CreateTopology
 //  Description:  Creates the topology.
-// 
+//
 //  Note: The first audio stream is conntected to the media sink.
 //        Other streams are deselected.
 ///////////////////////////////////////////////////////////////////////
@@ -339,11 +339,11 @@ HRESULT CreateTopology(IMFMediaSource *pSource, IMFMediaSink *pSink, IMFTopology
                     continue;
                 }
             }
-            
+
             // It's an audio stream, so try to create the topology branch.
             hr = CreateTopologyBranch(pTopology, pSource, pPD, pSD, pSink);
 
-            // Set our status flag. 
+            // Set our status flag.
             if (SUCCEEDED(hr))
             {
                 fConnected = TRUE;
@@ -382,7 +382,7 @@ HRESULT CreateTopology(IMFMediaSource *pSource, IMFMediaSink *pSink, IMFTopology
 
 //////////////////////////////////////////////////////////////////////
 //  Name: CreateSourceNode
-//  Creates a source node for a media stream. 
+//  Creates a source node for a media stream.
 //
 //  pSource:   Pointer to the media source.
 //  pSourcePD: Pointer to the source's presentation descriptor.
@@ -395,15 +395,15 @@ HRESULT CreateSourceNode(
     IMFPresentationDescriptor *pPD,   // Presentation descriptor.
     IMFStreamDescriptor *pSD,         // Stream descriptor.
     IMFTopologyNode **ppNode          // Receives the node pointer.
-    )
+)
 {
     IMFTopologyNode *pNode = NULL;
     HRESULT hr = S_OK;
-    
+
     // Create the node.
     hr = MFCreateTopologyNode(
-        MF_TOPOLOGY_SOURCESTREAM_NODE, 
-        &pNode);
+             MF_TOPOLOGY_SOURCESTREAM_NODE,
+             &pNode);
 
     // Set the attributes.
     if (SUCCEEDED(hr))
@@ -414,15 +414,15 @@ HRESULT CreateSourceNode(
     if (SUCCEEDED(hr))
     {
         hr = pNode->SetUnknown(
-            MF_TOPONODE_PRESENTATION_DESCRIPTOR, 
-            pPD);
+                 MF_TOPONODE_PRESENTATION_DESCRIPTOR,
+                 pPD);
     }
 
     if (SUCCEEDED(hr))
     {
         hr = pNode->SetUnknown(
-            MF_TOPONODE_STREAM_DESCRIPTOR, 
-            pSD);
+                 MF_TOPONODE_STREAM_DESCRIPTOR,
+                 pSD);
     }
 
     // Return the pointer to the caller.
@@ -456,12 +456,12 @@ HRESULT CreateTopologyBranch(
     IMFPresentationDescriptor *pPD,   // Presentation descriptor.
     IMFStreamDescriptor *pSD,         // Stream descriptor.
     IMFMediaSink *pSink
-    )
+)
 {
 
     IMFTopologyNode *pSourceNode = NULL;
     IMFTopologyNode *pOutputNode = NULL;
-    
+
     HRESULT hr = S_OK;
 
     hr = CreateSourceNode(pSource, pPD, pSD, &pSourceNode);
@@ -516,7 +516,7 @@ HRESULT CreateOutputNode(IMFMediaSink *pSink, DWORD iStream, IMFTopologyNode **p
     {
         hr = MFCreateTopologyNode(MF_TOPOLOGY_OUTPUT_NODE, &pNode);
     }
-    
+
     if (SUCCEEDED(hr))
     {
         hr = pNode->SetObject(pStream);
@@ -530,6 +530,6 @@ HRESULT CreateOutputNode(IMFMediaSink *pSink, DWORD iStream, IMFTopologyNode **p
 
     SAFE_RELEASE(pNode);
     SAFE_RELEASE(pStream);
-    
+
     return hr;
 }

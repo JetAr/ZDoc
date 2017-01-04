@@ -1,7 +1,7 @@
-//////////////////////////////////////////////////////////////////////
+﻿//////////////////////////////////////////////////////////////////////
 //
 // WavSource.h : Sample audio media source for Media Foundation
-// 
+//
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -11,14 +11,14 @@
 //
 // Notes:
 // This sample implements a relatively simple audio source
-// to parse .wav files. 
-// 
+// to parse .wav files.
+//
 // Design decisions:
 //
 // - For simplicity, the source performs all methods synchronously.
 // - Also for simplicity, the source only accepts uncompressed PCM audio
 //   formats.
-// - It does not support rate control. 
+// - It does not support rate control.
 //
 //////////////////////////////////////////////////////////////////////
 
@@ -108,7 +108,7 @@ private:
     WavSource(HRESULT &hr);
     virtual ~WavSource();
 
-    HRESULT CheckShutdown() const 
+    HRESULT CheckShutdown() const
     {
         if (m_IsShutdown)
         {
@@ -126,7 +126,10 @@ private:
     HRESULT     ValidatePresentationDescriptor(IMFPresentationDescriptor *pPD);
 
     LONGLONG    GetCurrentPosition() const;
-    State       GetState() const { return m_state; }
+    State       GetState() const
+    {
+        return m_state;
+    }
 
     const WAVEFORMATEX*         WaveFormat() const;         // Returns a pointer to the format.
     DWORD                       WaveFormatSize() const;     // Returns the size of the format, in bytes.
@@ -165,7 +168,10 @@ protected:
             this->item = item;
         }
 
-        IMFSample* Item() const { return item; }
+        IMFSample* Item() const
+        {
+            return item;
+        }
     };
 
 
@@ -203,7 +209,7 @@ public:
         Node *pBefore = m_anchor.prev;
 
         Node *pAfter = pBefore->next;
-        
+
         pBefore->next = pNode;
         pAfter->prev = pNode;
 
@@ -239,7 +245,10 @@ public:
         return S_OK;
     }
 
-    BOOL IsEmpty() const { return m_anchor.next == &m_anchor; }
+    BOOL IsEmpty() const
+    {
+        return m_anchor.next == &m_anchor;
+    }
 
     void Clear()
     {
@@ -273,7 +282,7 @@ public:
 //////////////////////////////////////////////////////////////////////////
 
 
-class WavStream : public IMFMediaStream 
+class WavStream : public IMFMediaStream
 {
     friend class WavSource;
 
@@ -294,7 +303,7 @@ public:
     STDMETHODIMP GetMediaSource(IMFMediaSource** ppMediaSource);
     STDMETHODIMP GetStreamDescriptor(IMFStreamDescriptor** ppStreamDescriptor);
     STDMETHODIMP RequestSample(IUnknown* pToken);
-    
+
 private:
 
     WavStream(WavSource *pSource, CWavRiffParser *pRiff, IMFStreamDescriptor *pSD, HRESULT& hr);
@@ -320,7 +329,10 @@ private:
     HRESULT     DeliverQueuedSamples();
     HRESULT     Flush();
 
-    LONGLONG    GetCurrentPosition() const { return m_rtCurrentPosition; }
+    LONGLONG    GetCurrentPosition() const
+    {
+        return m_rtCurrentPosition;
+    }
     HRESULT     SetPosition(LONGLONG rtNewPosition);
     HRESULT     CheckEndOfStream();
 
@@ -328,7 +340,7 @@ private:
     long                        m_nRefCount;            // reference count
     CRITICAL_SECTION            m_critSec;
     BOOL                        m_IsShutdown;           // Flag to indicate if source's Shutdown() method was called.
-    LONGLONG                    m_rtCurrentPosition;    // Current position in the stream, in 100-ns units 
+    LONGLONG                    m_rtCurrentPosition;    // Current position in the stream, in 100-ns units
     BOOL                        m_discontinuity;        // Is the next sample a discontinuity?
     BOOL                        m_EOS;                  // Did we reach the end of the stream?
 

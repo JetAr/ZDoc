@@ -1,4 +1,4 @@
-/********************************************************************++
+﻿/********************************************************************++
 THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED
 TO THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -35,10 +35,10 @@ Abstract:
 
 // Contants
 #define GRAPHING_PORT       0      // Port to listen on.  Zero means to use a 
-                                   //  a dynamic port.  This is good for using
-                                   //  multiple instances on the same machine,
-                                   //  but bad for getting through firewalls.
-                                  
+//  a dynamic port.  This is good for using
+//  multiple instances on the same machine,
+//  but bad for getting through firewalls.
+
 #define MAX_CHAT_MESSAGE    1024   // Maximum number of characters in a message
 #define MAX_EVENT_MESSAGE   1024   // Maximum number of characters in an event message that we print
 #define MAX_PEERNAME        149    // Maximum number of characters in a <Classifier> of the peername.
@@ -57,7 +57,8 @@ Abstract:
 
 //Structures
 //
-typedef struct graphchat_invitation_tag {
+typedef struct graphchat_invitation_tag
+{
     BOOL        fGlobalScope;
     WCHAR       wzGraphId[MAX_PEERNAME];
 } GRAPHCHAT_INVITATION, * PGRAPHCHAT_INVITATION;

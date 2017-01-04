@@ -1,4 +1,4 @@
-//--------------------------------------------------------------------
+﻿//--------------------------------------------------------------------
 // Microsoft OLE DB Sample Provider
 // (C) Copyright 1991-1999 Microsoft Corporation. All Rights Reserved.
 //
@@ -25,44 +25,44 @@
 //-----------------------------------------------------------------------------------
 
 STDMETHODIMP  CImpIAccessor::FInit
-	(
-	BOOL	fUnderRowset		//@parm IN | Is aggregated within Rowset?   
-	)
+(
+    BOOL	fUnderRowset		//@parm IN | Is aggregated within Rowset?
+)
 {
-	// Create the Extended Buffer array.
+    // Create the Extended Buffer array.
     // This is an array of pointers to malloc'd accessors.
     m_pextbufferAccessor = (LPEXTBUFFER) new CExtBuffer;
     if (m_pextbufferAccessor == NULL || FAILED( m_pextbufferAccessor->FInit( 1, sizeof( PACCESSOR ), g_dwPageSize )))
         return ResultFromScode( E_OUTOFMEMORY );
 
-	// If aggregated under Rowset do the following:
-	if(fUnderRowset)
-	{
-		// For efficiency reasons put a copy of the accessors buffer
-		// directly on the CRowset object.
-		((CRowset *)m_pObj)->m_pextbufferAccessor = m_pextbufferAccessor;
+    // If aggregated under Rowset do the following:
+    if(fUnderRowset)
+    {
+        // For efficiency reasons put a copy of the accessors buffer
+        // directly on the CRowset object.
+        ((CRowset *)m_pObj)->m_pextbufferAccessor = m_pextbufferAccessor;
 
-		HRESULT			hr;
-		CCommand    	*pCCommand;
-		CImpIAccessor	*pIAccessorCommand;
+        HRESULT			hr;
+        CCommand    	*pCCommand;
+        CImpIAccessor	*pIAccessorCommand;
 
-		// See if there are any accessors created on the Command object, and if so
-		// copy their handles so they can be used on the Rowset.
-		pCCommand = ((CRowset *)m_pObj)->m_pCreator;
-		if(pCCommand)
-		{
-			if(SUCCEEDED(pCCommand->QueryInterface(IID_IAccessor, (void **)&pIAccessorCommand)) && pIAccessorCommand)
-			{
-				// Copy handles.
-				hr = pIAccessorCommand->CopyAccessors(m_pextbufferAccessor);
-				pIAccessorCommand->Release();
-				if(FAILED(hr))
-					return hr;
-			}
-		}
-	}
+        // See if there are any accessors created on the Command object, and if so
+        // copy their handles so they can be used on the Rowset.
+        pCCommand = ((CRowset *)m_pObj)->m_pCreator;
+        if(pCCommand)
+        {
+            if(SUCCEEDED(pCCommand->QueryInterface(IID_IAccessor, (void **)&pIAccessorCommand)) && pIAccessorCommand)
+            {
+                // Copy handles.
+                hr = pIAccessorCommand->CopyAccessors(m_pextbufferAccessor);
+                pIAccessorCommand->Release();
+                if(FAILED(hr))
+                    return hr;
+            }
+        }
+    }
 
-	return NOERROR;
+    return NOERROR;
 }
 
 // IAccessor specific methods
@@ -76,10 +76,10 @@ STDMETHODIMP  CImpIAccessor::FInit
 //      @flag E_FAIL                    | Provider specific Error
 //
 STDMETHODIMP CImpIAccessor::AddRefAccessor
-    (
-	HACCESSOR	hAccessor,		//@parm IN | Accessor Handle
-	DBREFCOUNT*	pcRefCounts		//@parm OUT | Reference Count
-    )
+(
+    HACCESSOR	hAccessor,		//@parm IN | Accessor Handle
+    DBREFCOUNT*	pcRefCounts		//@parm OUT | Reference Count
+)
 {
     // Retrieve our accessor structure from the client's hAccessor,
     // free it, then mark accessor ptr as unused.
@@ -90,18 +90,18 @@ STDMETHODIMP CImpIAccessor::AddRefAccessor
     PACCESSOR   pAccessor;
 
     if( pcRefCounts )
-		*pcRefCounts = 0;
+        *pcRefCounts = 0;
 
-	m_pextbufferAccessor->GetItemOfExtBuffer(hAccessor, &pAccessor);
+    m_pextbufferAccessor->GetItemOfExtBuffer(hAccessor, &pAccessor);
     if( !pAccessor )
         return DB_E_BADACCESSORHANDLE;
 
-	InterlockedIncrement((LONG*)&(pAccessor->cRef));
+    InterlockedIncrement((LONG*)&(pAccessor->cRef));
 
-	if( pcRefCounts )
-		*pcRefCounts = (DBREFCOUNT)(pAccessor->cRef);
+    if( pcRefCounts )
+        *pcRefCounts = (DBREFCOUNT)(pAccessor->cRef);
 
-	return ResultFromScode( S_OK );
+    return ResultFromScode( S_OK );
 }
 
 
@@ -123,14 +123,14 @@ STDMETHODIMP CImpIAccessor::AddRefAccessor
 //      @flag OTHER                     | Other HRESULTs returned by called functions
 //
 STDMETHODIMP CImpIAccessor::CreateAccessor
-    (
+(
     DBACCESSORFLAGS dwAccessorFlags,
     DBCOUNTITEM     cBindings,      //@parm IN | Number of Bindings
     const DBBINDING rgBindings[],   //@parm IN | Array of DBBINDINGS
     DBLENGTH        cbRowSize,      //@parm IN | Number of bytes in consumer's buffer
     HACCESSOR*      phAccessor,     //@parm OUT | Accessor Handle
-	DBBINDSTATUS	rgStatus[]		//@parm OUT	| Binding status
-    )
+    DBBINDSTATUS	rgStatus[]		//@parm OUT	| Binding status
+)
 {
     PACCESSOR   pAccessor;
     HACCESSOR   hAccessor;
@@ -146,133 +146,133 @@ STDMETHODIMP CImpIAccessor::CreateAccessor
     // init out params
     *phAccessor = NULL;
 
-	// Check if we have a correct accessor type
+    // Check if we have a correct accessor type
     if ( dwAccessorFlags & DBACCESSOR_PASSBYREF )
         return ResultFromScode( DB_E_BYREFACCESSORNOTSUPPORTED );
 
-	// Only allow DBACCESSOR_ROWDATA and DBACCESSOR_OPTIMIZED
+    // Only allow DBACCESSOR_ROWDATA and DBACCESSOR_OPTIMIZED
     if ( (dwAccessorFlags & ~DBACCESSOR_OPTIMIZED ) != DBACCESSOR_ROWDATA )
         return ResultFromScode( DB_E_BADACCESSORFLAGS );
 
-	// Check for NULL Accessor on the Command Object
-	// Also check for NULL Accessor on a read only rowset
-	if( (m_pObj->GetBaseObjectType() == BOT_COMMAND && !cBindings) ||
-		(m_pObj->GetBaseObjectType() == BOT_ROWSET  && !cBindings && !((CRowset *)m_pObj)->SupportIRowsetChange()) )
-		return ResultFromScode( DB_E_NULLACCESSORNOTSUPPORTED );
+    // Check for NULL Accessor on the Command Object
+    // Also check for NULL Accessor on a read only rowset
+    if( (m_pObj->GetBaseObjectType() == BOT_COMMAND && !cBindings) ||
+            (m_pObj->GetBaseObjectType() == BOT_ROWSET  && !cBindings && !((CRowset *)m_pObj)->SupportIRowsetChange()) )
+        return ResultFromScode( DB_E_NULLACCESSORNOTSUPPORTED );
 
-	// Check for Optimized Accessor on the Rowset Object after Fetch
-	if( (dwAccessorFlags & DBACCESSOR_OPTIMIZED) && 
-		m_pObj->GetBaseObjectType() == BOT_ROWSET && ((CRowset *)m_pObj)->m_cRows )
-		return ResultFromScode( DB_E_BADACCESSORFLAGS );
+    // Check for Optimized Accessor on the Rowset Object after Fetch
+    if( (dwAccessorFlags & DBACCESSOR_OPTIMIZED) &&
+            m_pObj->GetBaseObjectType() == BOT_ROWSET && ((CRowset *)m_pObj)->m_cRows )
+        return ResultFromScode( DB_E_BADACCESSORFLAGS );
 
-	// Initialize the status array to DBBINDSTATUS_OK.
-	if ( rgStatus )
-		memset(rgStatus, 0x00, cBindings * sizeof(DBBINDSTATUS));
+    // Initialize the status array to DBBINDSTATUS_OK.
+    if ( rgStatus )
+        memset(rgStatus, 0x00, cBindings * sizeof(DBBINDSTATUS));
 
     // Check on the bindings the user gave us.
     for (cBind=0, hr=NOERROR; cBind < cBindings; cBind++)
     {
-		// other binding problems forbidden by OLE-DB
+        // other binding problems forbidden by OLE-DB
         const DBTYPE currType = rgBindings[cBind].wType;
         const DBTYPE currTypePtr = currType &
-        					(DBTYPE_BYREF|DBTYPE_ARRAY|DBTYPE_VECTOR);
-		const DBTYPE currTypeBase = currType & 
-							~(DBTYPE_BYREF|DBTYPE_ARRAY|DBTYPE_VECTOR);
+                                   (DBTYPE_BYREF|DBTYPE_ARRAY|DBTYPE_VECTOR);
+        const DBTYPE currTypeBase = currType &
+                                    ~(DBTYPE_BYREF|DBTYPE_ARRAY|DBTYPE_VECTOR);
         const DWORD  currFlags = rgBindings[cBind].dwFlags;
 
         cCols = rgBindings[cBind].iOrdinal;
 
-		// Check for a Bad Ordinal
-		if( m_pObj->GetBaseObjectType() == BOT_ROWSET )
-		{
-			// make sure column number is in range
-			if ( !(0 < cCols && cCols <= ((CRowset *) m_pObj)->m_cCols) )
-			{
-				// Set Bind status to DBBINDSTATUS_BADORDINAL
-				hr = ResultFromScode( DB_E_ERRORSOCCURRED );
-				if ( rgStatus )
-					rgStatus[cBind] = DBBINDSTATUS_BADORDINAL;
-				continue;
-			}
-		}
+        // Check for a Bad Ordinal
+        if( m_pObj->GetBaseObjectType() == BOT_ROWSET )
+        {
+            // make sure column number is in range
+            if ( !(0 < cCols && cCols <= ((CRowset *) m_pObj)->m_cCols) )
+            {
+                // Set Bind status to DBBINDSTATUS_BADORDINAL
+                hr = ResultFromScode( DB_E_ERRORSOCCURRED );
+                if ( rgStatus )
+                    rgStatus[cBind] = DBBINDSTATUS_BADORDINAL;
+                continue;
+            }
+        }
 
-		// At least one of these valid parts has to be set. In SetData I assume it is the case.
+        // At least one of these valid parts has to be set. In SetData I assume it is the case.
         if ( !(rgBindings[cBind].dwPart & (DBPART_VALUE|DBPART_LENGTH|DBPART_STATUS)) )
-		{
-			// Set Bind status to DBBINDSTATUS_BADBINDINFO
+        {
+            // Set Bind status to DBBINDSTATUS_BADBINDINFO
             hr = ResultFromScode( DB_E_ERRORSOCCURRED );
-			if ( rgStatus )
-				rgStatus[cBind] = DBBINDSTATUS_BADBINDINFO;
+            if ( rgStatus )
+                rgStatus[cBind] = DBBINDSTATUS_BADBINDINFO;
         }
 
-		// dwPart is something other than value, length, or status
-		else if ( (rgBindings[cBind].dwPart & ~(DBPART_VALUE|DBPART_LENGTH|DBPART_STATUS)) )
-		{
-			// Set Bind status to DBBINDSTATUS_BADBINDINFO
+        // dwPart is something other than value, length, or status
+        else if ( (rgBindings[cBind].dwPart & ~(DBPART_VALUE|DBPART_LENGTH|DBPART_STATUS)) )
+        {
+            // Set Bind status to DBBINDSTATUS_BADBINDINFO
             hr = ResultFromScode( DB_E_ERRORSOCCURRED );
-			if ( rgStatus )
-				rgStatus[cBind] = DBBINDSTATUS_BADBINDINFO;
+            if ( rgStatus )
+                rgStatus[cBind] = DBBINDSTATUS_BADBINDINFO;
         }
 
-		// wType was DBTYPE_EMPTY or DBTYPE_NULL
-		else if ( (currType==DBTYPE_EMPTY || currType==DBTYPE_NULL) )
-		{
-			// Set Bind status to DBBINDSTATUS_BADBINDINFO
+        // wType was DBTYPE_EMPTY or DBTYPE_NULL
+        else if ( (currType==DBTYPE_EMPTY || currType==DBTYPE_NULL) )
+        {
+            // Set Bind status to DBBINDSTATUS_BADBINDINFO
             hr = ResultFromScode( DB_E_ERRORSOCCURRED );
-			if ( rgStatus )
-				rgStatus[cBind] = DBBINDSTATUS_BADBINDINFO;
+            if ( rgStatus )
+                rgStatus[cBind] = DBBINDSTATUS_BADBINDINFO;
         }
 
-		// wType was DBTYPE_BYREF or'ed with DBTYPE_EMPTY, NULL, or RESERVED
-		else if ( ((currType & DBTYPE_BYREF) && 
-			  (currTypeBase == DBTYPE_EMPTY || currTypeBase == DBTYPE_NULL || 
-			   currType & DBTYPE_RESERVED)) )
-		{
-			// Set Bind status to DBBINDSTATUS_BADBINDINFO
+        // wType was DBTYPE_BYREF or'ed with DBTYPE_EMPTY, NULL, or RESERVED
+        else if ( ((currType & DBTYPE_BYREF) &&
+                   (currTypeBase == DBTYPE_EMPTY || currTypeBase == DBTYPE_NULL ||
+                    currType & DBTYPE_RESERVED)) )
+        {
+            // Set Bind status to DBBINDSTATUS_BADBINDINFO
             hr = ResultFromScode( DB_E_ERRORSOCCURRED );
-			if ( rgStatus )
-				rgStatus[cBind] = DBBINDSTATUS_BADBINDINFO;
+            if ( rgStatus )
+                rgStatus[cBind] = DBBINDSTATUS_BADBINDINFO;
         }
 
-		// dwFlags was DBBINDFLAG_HTML and the type was not a String
-		else if ( currFlags && (currFlags != DBBINDFLAG_HTML || 
-				 (currTypeBase != DBTYPE_STR  &&
-				  currTypeBase != DBTYPE_WSTR &&
-				  currTypeBase != DBTYPE_BSTR)) )
-		{
-			// Set Bind status to DBBINDSTATUS_BADBINDINFO
+        // dwFlags was DBBINDFLAG_HTML and the type was not a String
+        else if ( currFlags && (currFlags != DBBINDFLAG_HTML ||
+                                (currTypeBase != DBTYPE_STR  &&
+                                 currTypeBase != DBTYPE_WSTR &&
+                                 currTypeBase != DBTYPE_BSTR)) )
+        {
+            // Set Bind status to DBBINDSTATUS_BADBINDINFO
             hr = ResultFromScode( DB_E_ERRORSOCCURRED );
-			if ( rgStatus )
-				rgStatus[cBind] = DBBINDSTATUS_BADBINDINFO;
+            if ( rgStatus )
+                rgStatus[cBind] = DBBINDSTATUS_BADBINDINFO;
         }
 
-		// wType was used with more than one type indicators
-		else if ( !(currTypePtr == 0 || currTypePtr == DBTYPE_BYREF ||
-				currTypePtr == DBTYPE_ARRAY || currTypePtr == DBTYPE_VECTOR) )
-		{
-			// Set Bind status to DBBINDSTATUS_BADBINDINFO
+        // wType was used with more than one type indicators
+        else if ( !(currTypePtr == 0 || currTypePtr == DBTYPE_BYREF ||
+                    currTypePtr == DBTYPE_ARRAY || currTypePtr == DBTYPE_VECTOR) )
+        {
+            // Set Bind status to DBBINDSTATUS_BADBINDINFO
             hr = ResultFromScode( DB_E_ERRORSOCCURRED );
-			if ( rgStatus )
-				rgStatus[cBind] = DBBINDSTATUS_BADBINDINFO;
+            if ( rgStatus )
+                rgStatus[cBind] = DBBINDSTATUS_BADBINDINFO;
         }
 
-		// wType was a non pointer type with provider owned memory
-		else if ( !currTypePtr && 
-			 rgBindings[cBind].dwMemOwner==DBMEMOWNER_PROVIDEROWNED )
-		{
-			// Set Bind status to DBBINDSTATUS_BADBINDINFO
+        // wType was a non pointer type with provider owned memory
+        else if ( !currTypePtr &&
+                  rgBindings[cBind].dwMemOwner==DBMEMOWNER_PROVIDEROWNED )
+        {
+            // Set Bind status to DBBINDSTATUS_BADBINDINFO
             hr = ResultFromScode( DB_E_ERRORSOCCURRED );
-			if ( rgStatus )
-				rgStatus[cBind] = DBBINDSTATUS_BADBINDINFO;
+            if ( rgStatus )
+                rgStatus[cBind] = DBBINDSTATUS_BADBINDINFO;
         }
 
-		// we only support client owned memory
-		else if ( rgBindings[cBind].dwMemOwner != DBMEMOWNER_CLIENTOWNED )
-		{
-			// Set Bind status to DBBINDSTATUS_BADBINDINFO
+        // we only support client owned memory
+        else if ( rgBindings[cBind].dwMemOwner != DBMEMOWNER_CLIENTOWNED )
+        {
+            // Set Bind status to DBBINDSTATUS_BADBINDINFO
             hr = ResultFromScode( DB_E_ERRORSOCCURRED );
-			if ( rgStatus )
-				rgStatus[cBind] = DBBINDSTATUS_BADBINDINFO;
+            if ( rgStatus )
+                rgStatus[cBind] = DBBINDSTATUS_BADBINDINFO;
         }
     }
 
@@ -294,18 +294,18 @@ STDMETHODIMP CImpIAccessor::CreateAccessor
     assert( m_pextbufferAccessor );
     hr = m_pextbufferAccessor->InsertIntoExtBuffer(&pAccessor, hAccessor);
     if ( FAILED( hr ) )
-	{
+    {
         SAFE_DELETE( pAccessor );
         return ResultFromScode( E_OUTOFMEMORY );
-	}
+    }
     assert( hAccessor );
 
     // Copy the client's bindings into the ACCESSOR.
     pAccessor->dwAccessorFlags	= dwAccessorFlags;
     pAccessor->cBindings		= cBindings;
     pAccessor->cRef				= 1;		// Establish Reference count.
-	
-	memcpy( &(pAccessor->rgBindings[0]), &rgBindings[0], cBindings*sizeof( DBBINDING ));
+
+    memcpy( &(pAccessor->rgBindings[0]), &rgBindings[0], cBindings*sizeof( DBBINDING ));
 
     // fill out-param and return
     *phAccessor = hAccessor;
@@ -324,12 +324,12 @@ STDMETHODIMP CImpIAccessor::CreateAccessor
 //      @flag DB_E_BADACCESSORHANDLE    | Invalid Accessor given
 //
 STDMETHODIMP CImpIAccessor::GetBindings
-    (
+(
     HACCESSOR        hAccessor,         //@parm IN | Accessor Handle
     DBACCESSORFLAGS* pdwAccessorFlags,  //@parm OUT | Binding Type flag
     DBCOUNTITEM*     pcBindings,        //@parm OUT | Number of Bindings returned
     DBBINDING**      prgBindings        //@parm OUT | Bindings
-    )
+)
 {
     // Retrieve our accessor structure from the client's hAccessor,
     // make a copy of the bindings for the user, then done.
@@ -337,12 +337,12 @@ STDMETHODIMP CImpIAccessor::GetBindings
     DBCOUNTITEM	cBindingSize;
 
     // init out-params
-	if(	pdwAccessorFlags )
-		*pdwAccessorFlags = 0;
-	if( pcBindings )
-		*pcBindings = 0;
-	if ( prgBindings )
-		*prgBindings = NULL;
+    if(	pdwAccessorFlags )
+        *pdwAccessorFlags = 0;
+    if( pcBindings )
+        *pcBindings = 0;
+    if ( prgBindings )
+        *prgBindings = NULL;
 
     // check parameters
     if (!pdwAccessorFlags || !pcBindings || !prgBindings)
@@ -354,12 +354,12 @@ STDMETHODIMP CImpIAccessor::GetBindings
         return DB_E_BADACCESSORHANDLE;
 
     // Allocate and return Array of bindings
-	cBindingSize = pAccessor->cBindings * sizeof( DBBINDING );
-	if ( cBindingSize )
-		*prgBindings = (DBBINDING *) PROVIDER_ALLOC( cBindingSize );
-    
-	// Check the Allocation
-	if ( ( *prgBindings == NULL ) && ( cBindingSize ) )
+    cBindingSize = pAccessor->cBindings * sizeof( DBBINDING );
+    if ( cBindingSize )
+        *prgBindings = (DBBINDING *) PROVIDER_ALLOC( cBindingSize );
+
+    // Check the Allocation
+    if ( ( *prgBindings == NULL ) && ( cBindingSize ) )
         return ResultFromScode( E_OUTOFMEMORY );
 
     *pdwAccessorFlags = pAccessor->dwAccessorFlags;
@@ -381,10 +381,10 @@ STDMETHODIMP CImpIAccessor::GetBindings
 //      @flag DB_E_BADACCESSORHANDLE    | hAccessor was invalid
 //
 STDMETHODIMP CImpIAccessor::ReleaseAccessor
-    (
+(
     HACCESSOR	hAccessor,      //@parm IN | Accessor handle to release
-	DBREFCOUNT*	pcRefCounts		//@parm OUT | Reference Count
-    )
+    DBREFCOUNT*	pcRefCounts		//@parm OUT | Reference Count
+)
 {
     // Retrieve our accessor structure from the client's hAccessor,
     // free it, then mark accessor ptr as unused.
@@ -394,32 +394,32 @@ STDMETHODIMP CImpIAccessor::ReleaseAccessor
 
     PACCESSOR   pAccessor;
 
-	if( pcRefCounts )
-		*pcRefCounts = 0;
+    if( pcRefCounts )
+        *pcRefCounts = 0;
 
     m_pextbufferAccessor->GetItemOfExtBuffer(hAccessor, &pAccessor);
     if( !pAccessor )
         return DB_E_BADACCESSORHANDLE;
 
     // Free the actual structure.
-	InterlockedDecrement((LONG*)&(pAccessor->cRef));
-	
-	if( pAccessor->cRef <= 0 )
-	{
-		SAFE_DELETE( pAccessor );
-		if( pcRefCounts )
-			*pcRefCounts = 0;
+    InterlockedDecrement((LONG*)&(pAccessor->cRef));
 
-	    // Store a null in our array-of-ptrs,
-	    // so we know next time that it is invalid.
-	    // (operator[] returns a ptr to the space where the ptr is stored.)
-	    *(PACCESSOR*) ((*m_pextbufferAccessor)[hAccessor]) = NULL;
-	}
-	else
-	{
-		if( pcRefCounts )
-			*pcRefCounts = (DBREFCOUNT)(pAccessor->cRef);
-	}
+    if( pAccessor->cRef <= 0 )
+    {
+        SAFE_DELETE( pAccessor );
+        if( pcRefCounts )
+            *pcRefCounts = 0;
+
+        // Store a null in our array-of-ptrs,
+        // so we know next time that it is invalid.
+        // (operator[] returns a ptr to the space where the ptr is stored.)
+        *(PACCESSOR*) ((*m_pextbufferAccessor)[hAccessor]) = NULL;
+    }
+    else
+    {
+        if( pcRefCounts )
+            *pcRefCounts = (DBREFCOUNT)(pAccessor->cRef);
+    }
 
     return ResultFromScode( S_OK );
 }
@@ -440,61 +440,61 @@ STDMETHODIMP CImpIAccessor::ReleaseAccessor
 //-----------------------------------------------------------------------------------
 
 STDMETHODIMP CImpIAccessor::CopyAccessors
-	(
-	LPEXTBUFFER   	   pextbufferAccessor//@parm IN  | specifies extended buffer 
-										  // to which accessors should be copied
-	)
+(
+    LPEXTBUFFER   	   pextbufferAccessor//@parm IN  | specifies extended buffer
+    // to which accessors should be copied
+)
 {
-	HACCESSOR	hAccessor, hAccessorFirst, hAccessorLast, hAccessorDup;
-	size_t		cbAccessor;
-	PACCESSOR	paccessor=NULL, paccessorNew=NULL, paccessorNull=NULL;
-	HRESULT		hr;
+    HACCESSOR	hAccessor, hAccessorFirst, hAccessorLast, hAccessorDup;
+    size_t		cbAccessor;
+    PACCESSOR	paccessor=NULL, paccessorNew=NULL, paccessorNull=NULL;
+    HRESULT		hr;
 
-	assert(pextbufferAccessor);
+    assert(pextbufferAccessor);
 
-	if(pextbufferAccessor)
-	{
-		// Get the number of available accessors.
-		m_pextbufferAccessor->GetFirstLastItemH(hAccessorFirst, hAccessorLast);
+    if(pextbufferAccessor)
+    {
+        // Get the number of available accessors.
+        m_pextbufferAccessor->GetFirstLastItemH(hAccessorFirst, hAccessorLast);
 
-		for(hAccessor=hAccessorFirst; hAccessor <= hAccessorLast; hAccessor++)
-		{
-			hr = m_pextbufferAccessor->GetItemOfExtBuffer(hAccessor, &paccessor );
-			if( FAILED(hr) )
-				return hr;
+        for(hAccessor=hAccessorFirst; hAccessor <= hAccessorLast; hAccessor++)
+        {
+            hr = m_pextbufferAccessor->GetItemOfExtBuffer(hAccessor, &paccessor );
+            if( FAILED(hr) )
+                return hr;
 
-			if (paccessor == NULL)
-				paccessorNew = paccessorNull;	
-			else
-			{
-				// Allocate space for the accessor structure.
-				cbAccessor = sizeof(ACCESSOR) 
-								+ (paccessor->cBindings ?
-								  (paccessor->cBindings-1) : 0)
-									* sizeof(DBBINDING);
+            if (paccessor == NULL)
+                paccessorNew = paccessorNull;
+            else
+            {
+                // Allocate space for the accessor structure.
+                cbAccessor = sizeof(ACCESSOR)
+                             + (paccessor->cBindings ?
+                                (paccessor->cBindings-1) : 0)
+                             * sizeof(DBBINDING);
 
-				paccessorNew = (PACCESSOR) new BYTE [cbAccessor];
-				if (paccessorNew == NULL)
-					return ResultFromScode(E_OUTOFMEMORY);
+                paccessorNew = (PACCESSOR) new BYTE [cbAccessor];
+                if (paccessorNew == NULL)
+                    return ResultFromScode(E_OUTOFMEMORY);
 
-				memcpy(	paccessorNew, paccessor, cbAccessor);
+                memcpy(	paccessorNew, paccessor, cbAccessor);
 
-				paccessorNew->cRef = 1;
-			}
+                paccessorNew->cRef = 1;
+            }
 
-			// Insert accessor ptr into the new buffer.
-			hr = pextbufferAccessor->InsertIntoExtBuffer(&paccessorNew, hAccessorDup);
-			
-			// Can fail because of Out-Of-Memory condition.
-			if(FAILED(hr))
-			{
-				SAFE_DELETE(paccessorNew);
-				return hr;
-			}
-		}
-	}
+            // Insert accessor ptr into the new buffer.
+            hr = pextbufferAccessor->InsertIntoExtBuffer(&paccessorNew, hAccessorDup);
 
-	return NOERROR;
+            // Can fail because of Out-Of-Memory condition.
+            if(FAILED(hr))
+            {
+                SAFE_DELETE(paccessorNew);
+                return hr;
+            }
+        }
+    }
+
+    return NOERROR;
 }
 
 

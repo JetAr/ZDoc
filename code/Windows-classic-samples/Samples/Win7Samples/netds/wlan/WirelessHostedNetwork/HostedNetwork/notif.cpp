@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -7,10 +7,10 @@
 
 #include "stdafx.h"
 
-VOID 
+VOID
 CNotificationSink::OnNewNotifcationAvailable(
     CHostedNetworkNotification * pNotification
-    )
+)
 {
     bool fNotifyParent = false;
 
@@ -18,10 +18,10 @@ CNotificationSink::OnNewNotifcationAvailable(
     if (pNotification != NULL)
     {
         Lock();
-        
+
         m_NotificationList.AddTail(pNotification);
 
-        // 
+        //
         // Check whether need to send a message to the parent window
         // Only post a message when the notification list becomes non-empty from empty.
         //
@@ -37,10 +37,10 @@ CNotificationSink::OnNewNotifcationAvailable(
     }
 }
 
-VOID 
+VOID
 CNotificationSink::DiscoverDevice(
     CWlanDevice * pDevice
-    )
+)
 {
     // some higher level methods can be used for device discovery.
 }

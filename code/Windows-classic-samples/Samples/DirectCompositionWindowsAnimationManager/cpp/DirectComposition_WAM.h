@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -18,7 +18,7 @@ enum DIRECTION
 {
     stopForward = -1,
     stopBackward = 1,
-    forward, 
+    forward,
     backward,
 };
 
@@ -34,7 +34,7 @@ public:
     int Run();
 
 private:
-    CApplication(const CApplication &); 
+    CApplication(const CApplication &);
 
 private:
     HRESULT BeforeEnteringMessageLoop();
@@ -44,7 +44,7 @@ private:
     HRESULT CreateApplicationWindow();
     bool ShowApplicationWindow();
     void DestroyApplicationWindow();
-     
+
     HRESULT CreateD3D11Device();
     HRESULT CreateD2D1Factory();
     HRESULT CreateD2D1Device();

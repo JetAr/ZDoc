@@ -1,4 +1,4 @@
-/**************************************************************************
+﻿/**************************************************************************
    THIS CODE AND INFORMATION IS PROVIDED 'AS IS' WITHOUT WARRANTY OF
    ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
    THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -73,7 +73,7 @@ STDAPI CTSFPersistentPropertyLoader::QueryInterface(REFIID riid, void **ppvObj)
     *ppvObj = NULL;
 
     if (IsEqualIID(riid, IID_IUnknown) ||
-        IsEqualIID(riid, IID_ITfPersistentPropertyLoaderACP))
+            IsEqualIID(riid, IID_ITfPersistentPropertyLoaderACP))
     {
         *ppvObj = (ITfPersistentPropertyLoaderACP*)this;
     }
@@ -112,7 +112,7 @@ STDAPI_(ULONG) CTSFPersistentPropertyLoader::Release()
         delete this;
         return 0;
     }
-   
+
     return m_ObjRefCount;
 }
 

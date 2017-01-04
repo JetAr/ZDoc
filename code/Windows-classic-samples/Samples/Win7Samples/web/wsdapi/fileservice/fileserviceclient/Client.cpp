@@ -1,4 +1,4 @@
-//////////////////////////////////////////////////////////////////////////////
+﻿//////////////////////////////////////////////////////////////////////////////
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -25,7 +25,7 @@ void print_result(HRESULT hr)
     {
         _cwprintf(L"[S_FALSE]\r\n");
     }
-    else 
+    else
     {
         _cwprintf(L"[ERROR: %x]\r\n", hr);
     }
@@ -51,9 +51,9 @@ HRESULT STDMETHODCALLTYPE CFileServiceEventNotify::FileChangeEvent(
     }
 
     // Simply print the event and return
-    _cwprintf(L"\r\nReceived event: [%s: %s]\r\n", 
-        pFileChangeEvent->EventType, 
-        pFileChangeEvent->FileName);
+    _cwprintf(L"\r\nReceived event: [%s: %s]\r\n",
+              pFileChangeEvent->EventType,
+              pFileChangeEvent->FileName);
 
     return S_OK;
 }
@@ -62,8 +62,8 @@ HRESULT STDMETHODCALLTYPE CFileServiceEventNotify::FileChangeEvent(
 // CGetFileAsyncCallback methods
 //////////////////////////////////////////////////////////////////////////////
 CGetFileAsyncCallback::CGetFileAsyncCallback()
-:   m_cRef(1)
-,   m_pFileServiceProxy(NULL)
+    :   m_cRef(1)
+    ,   m_pFileServiceProxy(NULL)
 {
 }
 
@@ -77,9 +77,9 @@ CGetFileAsyncCallback::~CGetFileAsyncCallback()
 }
 
 HRESULT CGetFileAsyncCallback::Init(
-        IFileServiceProxy* pFileServiceProxy, 
-        LPCWSTR pszFileName,
-        LPCWSTR pszReceiveDirectory)
+    IFileServiceProxy* pFileServiceProxy,
+    LPCWSTR pszFileName,
+    LPCWSTR pszReceiveDirectory)
 {
     HRESULT hr = S_OK;
 
@@ -118,7 +118,7 @@ HRESULT CGetFileAsyncCallback::Init(
 //                 from the inbound attachment
 //////////////////////////////////////////////////////////////////////////////
 HRESULT CGetFileAsyncCallback::ReceiveBinary(
-    IWSDAttachment* pAttachment, 
+    IWSDAttachment* pAttachment,
     LPCWSTR pszLocalFileName)
 {
     HRESULT hr = S_OK;
@@ -150,14 +150,14 @@ HRESULT CGetFileAsyncCallback::ReceiveBinary(
     // Make sure this attachment is an inbound attachment, and get that
     // interface
     hr = pAttachment->QueryInterface(
-        __uuidof(IWSDInboundAttachment), (void**)&pStream);
+             __uuidof(IWSDInboundAttachment), (void**)&pStream);
 
     // Create a file to write attachment data into
     if( S_OK == hr )
     {
         _cwprintf(L"    Creating local file %s... ", pszLocalFileName);
         hFile = ::CreateFileW( pszLocalFileName, FILE_WRITE_DATA, 0, NULL,
-            CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL );
+                               CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL );
 
         if ( INVALID_HANDLE_VALUE == hFile )
         {
@@ -184,9 +184,9 @@ HRESULT CGetFileAsyncCallback::ReceiveBinary(
         while( (S_OK == hr || S_FALSE == hr) && 0 < cbBytesLeft )
         {
             if( 0 == WriteFile( hFile,
-                        buffer + (cbBytesRead - cbBytesLeft),
-                        cbBytesLeft,
-                        &cbBytesWritten, NULL ) )
+                                buffer + (cbBytesRead - cbBytesLeft),
+                                cbBytesLeft,
+                                &cbBytesWritten, NULL ) )
             {
                 dwErr = ::GetLastError();
                 hr = HRESULT_FROM_WIN32( dwErr );
@@ -213,12 +213,12 @@ HRESULT CGetFileAsyncCallback::ReceiveBinary(
     if( S_OK == hr )
     {
         _cwprintf( L"%s recieved (%d bytes).\r\n", pszLocalFileName,
-                cbBytesTotal );
+                   cbBytesTotal );
     }
     else
     {
         _cwprintf( L"Error receiving %s.  Only recieved (%d bytes).\r\n",
-                pszLocalFileName, cbBytesTotal );
+                   pszLocalFileName, cbBytesTotal );
     }
 
     // cleanup
@@ -323,8 +323,8 @@ HRESULT GetFileList(
 // GetFile - Invoke the GetFile service method
 //////////////////////////////////////////////////////////////////////////////
 HRESULT GetFile(
-    IFileServiceProxy* pFileServiceProxy, 
-    LPCWSTR pszFileName, 
+    IFileServiceProxy* pFileServiceProxy,
+    LPCWSTR pszFileName,
     LPCWSTR pszReceiveDirectory)
 {
     GET_FILE_REQUEST params;
@@ -338,11 +338,11 @@ HRESULT GetFile(
     }
 
     _cwprintf(L"Invoking GetFile method on service (file=%s)...\r\n",
-            pszFileName);
+              pszFileName);
 
     // Prepare parameters for service method
     params.filePath = pszFileName;
-        
+
     //
     // Set up the async callback function.
     // pGetFileCallback->AsyncOperationComplete will get called when the stream
@@ -359,7 +359,7 @@ HRESULT GetFile(
     {
         _cwprintf(L"    Initializing callback structure... ");
         hr = pGetFileCallback->Init( pFileServiceProxy,
-                pszFileName, pszReceiveDirectory );
+                                     pszFileName, pszReceiveDirectory );
         print_result( hr );
     }
 
@@ -368,7 +368,7 @@ HRESULT GetFile(
     {
         _cwprintf(L"    Starting GetFile operation... ");
         hr = pFileServiceProxy->BeginGetFile( &params, NULL,
-                pGetFileCallback, &pAsyncResult );
+                                              pGetFileCallback, &pAsyncResult );
         print_result( hr );
     }
 
@@ -424,7 +424,7 @@ void Usage(LPCWSTR pszAdditionalInformation)
 //      argv[2] = device address
 //////////////////////////////////////////////////////////////////////////////
 int _cdecl wmain(
-    int argc, 
+    int argc,
     __in_ecount(argc) LPWSTR* argv)
 {
     HRESULT hr = S_OK;
@@ -433,7 +433,7 @@ int _cdecl wmain(
     // szLocalAddress 46 bytes to hold UUID plus "urn:uuid:" and trailing 0
     WCHAR szLocalAddress[46];
     LPCWSTR pszDeviceAddress = NULL;
-    size_t cchFileDirectoryLength = 0;            
+    size_t cchFileDirectoryLength = 0;
     HANDLE hDir = NULL;
     UUID uuid = { 0 };
     CFileServiceProxy* pFileServiceProxy = NULL;
@@ -453,14 +453,14 @@ int _cdecl wmain(
     if( S_OK == hr )
     {
         hr = ::StringCbCopyW( szReceiveDirectory, sizeof(szReceiveDirectory),
-                argv[1] );
+                              argv[1] );
     }
 
     // add a backslash to files-directory if it doesn't have one
     if( S_OK == hr )
     {
         hr = ::StringCchLengthW( szReceiveDirectory, sizeof(szReceiveDirectory),
-                &cchFileDirectoryLength );
+                                 &cchFileDirectoryLength );
     }
 
     if( S_OK == hr && cchFileDirectoryLength < 1 )
@@ -474,15 +474,15 @@ int _cdecl wmain(
     if( S_OK == hr && szReceiveDirectory[cchFileDirectoryLength - 1] != L'\\')
     {
         hr = ::StringCbCatW( szReceiveDirectory, sizeof(szReceiveDirectory),
-                L"\\");
+                             L"\\");
     }
 
     // Check if files-directory actually exists
     if( S_OK == hr )
     {
-        hDir = ::CreateFileW( szReceiveDirectory, GENERIC_READ, 
-            FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_FLAG_BACKUP_SEMANTICS,
-            NULL );
+        hDir = ::CreateFileW( szReceiveDirectory, GENERIC_READ,
+                              FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_FLAG_BACKUP_SEMANTICS,
+                              NULL );
 
         if( hDir == INVALID_HANDLE_VALUE )
         {
@@ -539,11 +539,11 @@ int _cdecl wmain(
     if( S_OK == hr )
     {
         hr = ::StringCbPrintfW(
-            szLocalAddress, sizeof(szLocalAddress), 
-            L"urn:uuid:%08x-%04x-%04x-%02x%02x-%02x%02x%02x%02x%02x%02x",
-            uuid.Data1, uuid.Data2, uuid.Data3,
-            uuid.Data4[0], uuid.Data4[1], uuid.Data4[2], uuid.Data4[3], 
-            uuid.Data4[4], uuid.Data4[5], uuid.Data4[6], uuid.Data4[7]); 
+                 szLocalAddress, sizeof(szLocalAddress),
+                 L"urn:uuid:%08x-%04x-%04x-%02x%02x-%02x%02x%02x%02x%02x%02x",
+                 uuid.Data1, uuid.Data2, uuid.Data3,
+                 uuid.Data4[0], uuid.Data4[1], uuid.Data4[2], uuid.Data4[3],
+                 uuid.Data4[4], uuid.Data4[5], uuid.Data4[6], uuid.Data4[7]);
     }
 
     // Build the proxy
@@ -551,7 +551,7 @@ int _cdecl wmain(
     {
         _cwprintf(L"Creating a proxy for device %s... ", pszDeviceAddress );
         hr = CreateCFileServiceProxy( pszDeviceAddress, szLocalAddress,
-                &pFileServiceProxy, NULL );
+                                      &pFileServiceProxy, NULL );
         print_result( hr );
     }
 
@@ -567,7 +567,7 @@ int _cdecl wmain(
         }
         print_result( hr );
     }
-   
+
     // Subscribe to FileChange event
     if( S_OK == hr )
     {
@@ -583,7 +583,7 @@ int _cdecl wmain(
 
     if( S_OK == hr )
     {
-        _cwprintf(L"Proxy creation finished.\r\n");  
+        _cwprintf(L"Proxy creation finished.\r\n");
         Help();
     }
 
@@ -596,7 +596,7 @@ int _cdecl wmain(
         size_t cbSizeRead = 0;
         LPWSTR pszArg = NULL;
 
-        _cwprintf(L"\r\n>");       
+        _cwprintf(L"\r\n>");
 
         // Ignore result of _cgetws_s
         (void)_cgetws_s( szCommand,
@@ -612,7 +612,7 @@ int _cdecl wmain(
 
         // Ignore result of towlower
         (void)towlower( *szCommand );
-       
+
         // Match first character and perform appropriate operation
         if( 0 == wcscmp( szCommand, L"get" ) )
         {
@@ -627,7 +627,7 @@ int _cdecl wmain(
             // Use S_FALSE to break out of the while loop and exit
             hr = S_FALSE;
         }
-        else 
+        else
         {
             // Encountered an unknown command--print help
             Help();

@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -40,7 +40,8 @@
 HWND ghwnd;
 HINSTANCE ghInstance;
 
-struct TimerRec {
+struct TimerRec
+{
     LONGLONG lLast;
     LONGLONG lCount;
     LONGLONG lElapsedMin;
@@ -97,7 +98,8 @@ BOOL Initialize()
 
     // Prepare the high resolution performance counter.
     SetThreadAffinityMask(GetCurrentThread(), 0);
-    if (!QueryPerformanceFrequency(&freq)) {
+    if (!QueryPerformanceFrequency(&freq))
+    {
         return FALSE;
     }
     glFrequency = freq.QuadPart;
@@ -121,7 +123,8 @@ BOOL Initialize()
     wcex.hIconSm       = LoadIcon(NULL, IDI_APPLICATION);
 
     atom = RegisterClassEx(&wcex);
-    if (atom == 0) {
+    if (atom == 0)
+    {
         return FALSE;
     }
 
@@ -129,18 +132,19 @@ BOOL Initialize()
 
     // Create & prepare the main window
     ghwnd = CreateWindow(
-        (LPCTSTR)atom,
-        TEXT("Coalescable Timer Sample"),
-        WS_OVERLAPPEDWINDOW,
-        CW_USEDEFAULT, CW_USEDEFAULT,
-        600,
-        400,
-        NULL,
-        NULL,
-        ghInstance,
-        NULL);
+                (LPCTSTR)atom,
+                TEXT("Coalescable Timer Sample"),
+                WS_OVERLAPPEDWINDOW,
+                CW_USEDEFAULT, CW_USEDEFAULT,
+                600,
+                400,
+                NULL,
+                NULL,
+                ghInstance,
+                NULL);
 
-    if (ghwnd == NULL) {
+    if (ghwnd == NULL)
+    {
         return FALSE;
     }
 
@@ -152,7 +156,8 @@ BOOL Initialize()
 
 __inline LONGLONG MakeItLookNormal(_In_ const LONGLONG l)
 {
-    if (l == MAXLONGLONG) {
+    if (l == MAXLONGLONG)
+    {
         // If the value is initialized but not set yet,
         // give it some reasonable sane value.
         return 0;
@@ -163,7 +168,8 @@ __inline LONGLONG MakeItLookNormal(_In_ const LONGLONG l)
 
 __inline double Average(_In_ const LONGLONG sum, _In_ const LONGLONG count)
 {
-    if (count == 0) {
+    if (count == 0)
+    {
         return 0;
     }
     return (double)sum / count;
@@ -185,31 +191,32 @@ void OnPaint(_In_ HDC hdc, _In_ PRECT prcPaint)
     const TimerRec& coal   = gTimerRec[TIMERID_COALESCING];
 
     hr = StringCchPrintfExW(wzText,
-            ARRAYSIZE(wzText),
-            NULL,
-            NULL,
-            STRSAFE_NULL_ON_FAILURE,
-            L"Timer non-coalesced  Min = %I64d, Avg = %.1f, Max = %I64d, (%I64d / %I64d)\n\n"
-            L"Timer coalesced      Min = %I64d, Avg = %.1f, Max = %I64d, (%I64d / %I64d)\n\n"
-            L"[Elapse = %dms, Coaclescing tolerance = %dms]\n\n"
-            L"Hit space to turn off the monitor",
+                            ARRAYSIZE(wzText),
+                            NULL,
+                            NULL,
+                            STRSAFE_NULL_ON_FAILURE,
+                            L"Timer non-coalesced  Min = %I64d, Avg = %.1f, Max = %I64d, (%I64d / %I64d)\n\n"
+                            L"Timer coalesced      Min = %I64d, Avg = %.1f, Max = %I64d, (%I64d / %I64d)\n\n"
+                            L"[Elapse = %dms, Coaclescing tolerance = %dms]\n\n"
+                            L"Hit space to turn off the monitor",
 
-            MakeItLookNormal(nocoal.lElapsedMin),
-            Average(nocoal.lSum, nocoal.lCount),
-            nocoal.lElapsedMax,
-            nocoal.lSum,
-            nocoal.lCount,
+                            MakeItLookNormal(nocoal.lElapsedMin),
+                            Average(nocoal.lSum, nocoal.lCount),
+                            nocoal.lElapsedMax,
+                            nocoal.lSum,
+                            nocoal.lCount,
 
-            MakeItLookNormal(coal.lElapsedMin),
-            Average(coal.lSum, coal.lCount),
-            coal.lElapsedMax,
-            coal.lSum,
-            coal.lCount,
+                            MakeItLookNormal(coal.lElapsedMin),
+                            Average(coal.lSum, coal.lCount),
+                            coal.lElapsedMax,
+                            coal.lSum,
+                            coal.lCount,
 
-            TIMER_ELAPSE,
-            TIMER_TOLERANCE);
+                            TIMER_ELAPSE,
+                            TIMER_TOLERANCE);
 
-    if (SUCCEEDED(hr)) {
+    if (SUCCEEDED(hr))
+    {
         DrawText(hdc, wzText, -1, prcPaint, DT_TOP | DT_LEFT);
     }
 }
@@ -225,7 +232,8 @@ void OnPaint(_In_ HDC hdc, _In_ PRECT prcPaint)
  *********************************************************************/
 void CALLBACK TimerHandler(_In_ HWND hwnd, _In_ UINT_PTR idEvent)
 {
-    if (idEvent >= ARRAYSIZE(gTimerRec)) {
+    if (idEvent >= ARRAYSIZE(gTimerRec))
+    {
         return;
     }
 
@@ -239,7 +247,8 @@ void CALLBACK TimerHandler(_In_ HWND hwnd, _In_ UINT_PTR idEvent)
     ++t.lCount;
     t.lSum += lElapsed;
 
-    if (t.lCount % TIMER_CONTIGUOUS_RUN == 0) {
+    if (t.lCount % TIMER_CONTIGUOUS_RUN == 0)
+    {
         // Now, let's switch the timer types.
         // First, kill the current timer.
         KillTimer(hwnd, idEvent);
@@ -271,12 +280,14 @@ void CALLBACK TimerHandler(_In_ HWND hwnd, _In_ UINT_PTR idEvent)
  ******************************************************************/
 LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
-    switch (message) {
+    switch (message)
+    {
     case WM_CREATE:
         // Start with non-coalescable timer.
         // Later we switch to the coalescable timer.
         gTimerRec[TIMERID_NOCOALSCING].lLast = GetPerformanceCounter();
-        if (!SetCoalescableTimer(hwnd, TIMERID_NOCOALSCING, TIMER_ELAPSE, NULL, TIMERV_NO_COALESCING)) {
+        if (!SetCoalescableTimer(hwnd, TIMERID_NOCOALSCING, TIMER_ELAPSE, NULL, TIMERV_NO_COALESCING))
+        {
             return -1;
         }
 
@@ -285,29 +296,33 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
         return 0;
 
     case WM_TIMER:
-        if (wParam < ARRAYSIZE(gTimerRec)) {
+        if (wParam < ARRAYSIZE(gTimerRec))
+        {
 
             TimerHandler(hwnd, (UINT_PTR)wParam);
 
-        } else if (wParam == TIMERID_UPDATE_SCREEN) {
-            // Periodically update the results.
-    case WM_MOUSEMOVE:  // Tricky: also update the screen at every mouse move.
+        }
+        else if (wParam == TIMERID_UPDATE_SCREEN)
+        {
+        // Periodically update the results.
+        case WM_MOUSEMOVE:  // Tricky: also update the screen at every mouse move.
             InvalidateRect(hwnd, NULL, FALSE);
         }
         break;
 
     case WM_PAINT:
     case WM_DISPLAYCHANGE:
-        {
-            PAINTSTRUCT ps;
-            HDC hdc = BeginPaint(hwnd, &ps);
-            OnPaint(hdc, &ps.rcPaint);
-            EndPaint(hwnd, &ps);
-        }
-        return 0;
+    {
+        PAINTSTRUCT ps;
+        HDC hdc = BeginPaint(hwnd, &ps);
+        OnPaint(hdc, &ps.rcPaint);
+        EndPaint(hwnd, &ps);
+    }
+    return 0;
 
     case WM_KEYDOWN:
-        if (wParam == VK_SPACE) {
+        if (wParam == VK_SPACE)
+        {
             // Space key to power down the monitor.
             DefWindowProc(GetDesktopWindow(), WM_SYSCOMMAND, SC_MONITORPOWER, 2);
         }
@@ -337,11 +352,13 @@ int CALLBACK WinMain(
 
     ghInstance = hInstance;
 
-    if (!Initialize()) {
+    if (!Initialize())
+    {
         return 0;
     }
 
-    while (GetMessage(&msg, NULL, 0, 0)) {
+    while (GetMessage(&msg, NULL, 0, 0))
+    {
         TranslateMessage(&msg);
         DispatchMessage(&msg);
     }

@@ -1,4 +1,4 @@
-
+﻿
 
 #include "private.h"
 #include "TextContainer.h"
@@ -54,7 +54,7 @@ BOOL CTextContainer::GetText(int nPos, WCHAR *psz, UINT nCnt)
 
     if (nPos + nCnt - 1 > _nTextSize)
         nCnt = _nTextSize - nPos;
-   
+
     memcpy(psz, _psz + nPos, nCnt * sizeof(WCHAR));
 
     return TRUE;
@@ -82,7 +82,7 @@ BOOL CTextContainer::EnsureBuffer(UINT nNewTextSize)
         goto Exit;
 
     if (_psz)
-    { 
+    {
         void *pvNew = LocalReAlloc(_psz, nNewTextSize * sizeof(WCHAR), LMEM_MOVEABLE | LMEM_ZEROINIT);
         if (!pvNew)
             return FALSE;

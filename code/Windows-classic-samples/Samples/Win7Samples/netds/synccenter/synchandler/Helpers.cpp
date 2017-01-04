@@ -1,4 +1,4 @@
-//////////////////////////////////////////////////////////////////////////////
+﻿//////////////////////////////////////////////////////////////////////////////
 //
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
@@ -52,10 +52,10 @@ HRESULT FindStringResourceEx(
     // Strings listed in .rc files are grouped together in
     // bundles of 16, starting with bundle number 1.
     HRSRC hrsrc = FindResourceEx(
-                        hInstance,
-                        RT_STRING,
-                        MAKEINTRESOURCE(uID / 16 + 1),
-                        (WORD) nLangID);
+                      hInstance,
+                      RT_STRING,
+                      MAKEINTRESOURCE(uID / 16 + 1),
+                      (WORD) nLangID);
     HRESULT hr = (hrsrc != NULL) ? S_OK : ResultFromKnownLastError();
     if (SUCCEEDED(hr))
     {
@@ -275,13 +275,13 @@ HRESULT FormatStringVA(__in PCWSTR pwszFormat, __deref_out PWSTR *ppwszOut, __in
     *ppwszOut = NULL;
 
     if (FormatMessageW(
-            (FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_STRING),
-            pwszFormat,
-            0,
-            0,
-            (PWSTR) ppwszOut,
-            0,
-            &vaParamList) == 0)
+                (FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_STRING),
+                pwszFormat,
+                0,
+                0,
+                (PWSTR) ppwszOut,
+                0,
+                &vaParamList) == 0)
     {
         hr = ResultFromKnownLastError();
     }
@@ -329,14 +329,14 @@ HRESULT FormatStringVA(
     if (SUCCEEDED(hr))
     {
         if (FormatMessageW(
-                (FORMAT_MESSAGE_ALLOCATE_BUFFER
-                | FORMAT_MESSAGE_FROM_STRING),
-                pwszFormat,
-                0,
-                0,
-                (PWSTR) ppwszOut,
-                0,
-                &vaParamList) == 0)
+                    (FORMAT_MESSAGE_ALLOCATE_BUFFER
+                     | FORMAT_MESSAGE_FROM_STRING),
+                    pwszFormat,
+                    0,
+                    0,
+                    (PWSTR) ppwszOut,
+                    0,
+                    &vaParamList) == 0)
         {
             hr = ResultFromKnownLastError();
         }
@@ -375,19 +375,19 @@ int CompareSyncMgrID(__in PCWSTR pszFirstID, __in PCWSTR pszSecondID)
     int nResult;
     switch (nCompareResult)
     {
-        case CSTR_EQUAL:
-            nResult = 0;
-            break;
-        case CSTR_GREATER_THAN:
-            nResult = 1;
-            break;
-        case CSTR_LESS_THAN:
-            nResult = -1;
-            break;
-        default:
-            // This should never happen.  If it does, consider them different.
-            nResult = -1;
-            break;
+    case CSTR_EQUAL:
+        nResult = 0;
+        break;
+    case CSTR_GREATER_THAN:
+        nResult = 1;
+        break;
+    case CSTR_LESS_THAN:
+        nResult = -1;
+        break;
+    default:
+        // This should never happen.  If it does, consider them different.
+        nResult = -1;
+        break;
     }
 
     return nResult;

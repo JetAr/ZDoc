@@ -1,9 +1,9 @@
-//--------------------------------------------------------------------
+﻿//--------------------------------------------------------------------
 // Microsoft OLE DB Test
 //
-// Copyright 1998-2000 Microsoft Corporation.  
+// Copyright 1998-2000 Microsoft Corporation.
 //
-// @doc 
+// @doc
 //
 // @module CPropSets Header Module | 	This module contains declaration information
 //			for the CPropInfoSets and CPropSets classes
@@ -28,157 +28,182 @@ void Ident();
 const ULONG		cHTSize = 256;
 
 // defines the structure of an entry in the hash table
-struct INDEX_ENTRY{
-	GUID		dbPropSet;
-	DBPROPID	dbPropID;
-	ULONG		ulSetIndex;
-	ULONG		ulIndex;
+struct INDEX_ENTRY
+{
+    GUID		dbPropSet;
+    DBPROPID	dbPropID;
+    ULONG		ulSetIndex;
+    ULONG		ulIndex;
 };
 
 
-class CPropInfoSets{
- protected:
-	ULONG				m_cPropInfoSets;
-	DBPROPINFOSET		*m_rgPropInfoSets;
-	WCHAR				*m_pwszBuffer;
- 
- public:
-						 CPropInfoSets() : m_cPropInfoSets(0), m_rgPropInfoSets(NULL), m_pwszBuffer(NULL) {}
-						 ~CPropInfoSets() {Free();}
-	
-	void				Free();
+class CPropInfoSets
+{
+protected:
+    ULONG				m_cPropInfoSets;
+    DBPROPINFOSET		*m_rgPropInfoSets;
+    WCHAR				*m_pwszBuffer;
 
-	DBPROPINFOSET		*pPropInfoSets(){
-							return (DBPROPINFOSET*)m_rgPropInfoSets;}
+public:
+    CPropInfoSets() : m_cPropInfoSets(0), m_rgPropInfoSets(NULL), m_pwszBuffer(NULL) {}
+    ~CPropInfoSets()
+    {
+        Free();
+    }
 
-	ULONG				cPropInfoSets() {
-							return m_cPropInfoSets;}
+    void				Free();
 
-	DBPROPINFOSET		&operator [] (ULONG nIndex) {
-							assert(nIndex < cPropInfoSets());
-							return m_rgPropInfoSets[nIndex];}
+    DBPROPINFOSET		*pPropInfoSets()
+    {
+        return (DBPROPINFOSET*)m_rgPropInfoSets;
+    }
 
-	DBPROPINFOSET		&operator [] (GUID guidPropSet); 
-	CPropInfoSets		&operator = (CPropInfoSets&);
+    ULONG				cPropInfoSets()
+    {
+        return m_cPropInfoSets;
+    }
 
-	LONG				GetSetIndex(GUID guidPropSet);
-	
-	HRESULT				CreatePropInfoSet(IUnknown *pIUnknown);
-	
+    DBPROPINFOSET		&operator [] (ULONG nIndex)
+    {
+        assert(nIndex < cPropInfoSets());
+        return m_rgPropInfoSets[nIndex];
+    }
 
-	DBPROPINFO			*FindProperty(DBPROPID PropertyID, GUID guidPropertySet);
-	DBPROPINFO			*FindProperty(WCHAR *pwszDesc, GUID guidPropertySet);
-	BOOL				FindProperty(WCHAR *pwszDesc, DBPROPINFO **ppPropInfo, GUID *pguidPropertySet);
+    DBPROPINFOSET		&operator [] (GUID guidPropSet);
+    CPropInfoSets		&operator = (CPropInfoSets&);
 
-	BOOL				SettableProperty(DBPROPID PropertyID, GUID guidPropertySet);
-	BOOL				SupportedProperty(DBPROPID PropertyID, GUID guidPropertySet);
+    LONG				GetSetIndex(GUID guidPropSet);
 
-	// @ cmember Finds a property of a given type
-	BOOL				FindProperty(
-		VARTYPE			vtType,					// [in]  the type of the sought property
-		DBPROPINFO		**ppPropInfo,			// [out] the property pointer
-		GUID			*pguidPropSet,			// [out] the propset guid
-		ULONG			cExclProp = 0,			// [in]  the number of props to be excluded 
-		DBPROPID		*rgExclPropID = NULL,	// [in]  the props to be excluded
-		GUID			*rgExclPropSet = NULL	// [in]  the propset of the corresponding props
-	);
+    HRESULT				CreatePropInfoSet(IUnknown *pIUnknown);
+
+
+    DBPROPINFO			*FindProperty(DBPROPID PropertyID, GUID guidPropertySet);
+    DBPROPINFO			*FindProperty(WCHAR *pwszDesc, GUID guidPropertySet);
+    BOOL				FindProperty(WCHAR *pwszDesc, DBPROPINFO **ppPropInfo, GUID *pguidPropertySet);
+
+    BOOL				SettableProperty(DBPROPID PropertyID, GUID guidPropertySet);
+    BOOL				SupportedProperty(DBPROPID PropertyID, GUID guidPropertySet);
+
+    // @ cmember Finds a property of a given type
+    BOOL				FindProperty(
+        VARTYPE			vtType,					// [in]  the type of the sought property
+        DBPROPINFO		**ppPropInfo,			// [out] the property pointer
+        GUID			*pguidPropSet,			// [out] the propset guid
+        ULONG			cExclProp = 0,			// [in]  the number of props to be excluded
+        DBPROPID		*rgExclPropID = NULL,	// [in]  the props to be excluded
+        GUID			*rgExclPropSet = NULL	// [in]  the propset of the corresponding props
+    );
 }; //CPropInfoSets
 
 
 
 // Wrapper for property sets
-class CPropSets{
- protected:
-	CVectorExSet<DBPROPSET, DBPROP>					
-							m_PropSets;
+class CPropSets
+{
+protected:
+    CVectorExSet<DBPROPSET, DBPROP>
+    m_PropSets;
 
-	// Hash Table
-
- 
- public:
-	CPropInfoSets			*m_pPropInfoSets; // used to search a prop based on name and to create a string
-
-							CPropSets(ULONG ulASetSizeInc = 1, ULONG ulSizeInc = 5);
-							CPropSets(ULONG cPropSets, DBPROPSET *rgPropSets) {
-								Attach(cPropSets, rgPropSets);
-							}
-							CPropSets(CPropSets &X){
-								*this = X;
-							}
+    // Hash Table
 
 
-							~CPropSets() {Free();}
-	
-	void					Free();
-	void					Attach(ULONG cPropSets, DBPROPSET *rgPropSets);
-	void					Detach();
+public:
+    CPropInfoSets			*m_pPropInfoSets; // used to search a prop based on name and to create a string
 
-	// duplicate the property sets
-	BOOL					Clone(DBORDINAL *pcPropSets, DBPROPSET **prgPropSets);
+    CPropSets(ULONG ulASetSizeInc = 1, ULONG ulSizeInc = 5);
+    CPropSets(ULONG cPropSets, DBPROPSET *rgPropSets)
+    {
+        Attach(cPropSets, rgPropSets);
+    }
+    CPropSets(CPropSets &X)
+    {
+        *this = X;
+    }
 
-	DBPROPSET				*pPropertySets(){
-								return (DBPROPSET*)m_PropSets.GetElements();
-	}
-	ULONG					cPropertySets() {
-								return m_PropSets.GetCount();	
-	}
 
-	CVectorEx<DBPROP>	
-							*GetSetWrapper(ULONG nIndex) {
-								assert(nIndex < cPropertySets());
-								return (CVectorEx<DBPROP>*)m_PropSets + nIndex;
-	}
+    ~CPropSets()
+    {
+        Free();
+    }
 
-	ULONG					GetIndex(GUID guidPropSet);
-	
-	// SetProperty methods check whether property exists and if so they overwrite it
-	HRESULT					SetProperty(DBPROPID PropertyID, GUID guidPropertySet, VARIANT *pv, DBPROPOPTIONS dwOptions = DBPROPOPTIONS_REQUIRED, DBID colid = DB_NULLID);
-	HRESULT					SetProperty(DBPROPID PropertyID, GUID guidPropertySet, DBTYPE wType, ULONG_PTR ulValue, DBPROPOPTIONS dwOptions = DBPROPOPTIONS_REQUIRED, DBID colid = DB_NULLID);
-	HRESULT					SetProperty(DBPROPID PropertyID, GUID guidPropertySet, DBTYPE wType, void* pv, DBPROPOPTIONS dwOptions = DBPROPOPTIONS_REQUIRED, DBID colid = DB_NULLID);
+    void					Free();
+    void					Attach(ULONG cPropSets, DBPROPSET *rgPropSets);
+    void					Detach();
 
-	// do not check whether the property is already in the set; if already exist it will be doubled
-	HRESULT					AddProperty(DBPROPID PropertyID, GUID guidPropertySet, VARIANT *pv, DBPROPOPTIONS dwOptions = DBPROPOPTIONS_REQUIRED, DBID colid = DB_NULLID);
-	HRESULT					AddProperty(DBPROPID PropertyID, GUID guidPropertySet, DBTYPE wType, ULONG_PTR ulValue, DBPROPOPTIONS dwOptions = DBPROPOPTIONS_REQUIRED, DBID colid = DB_NULLID);
-	HRESULT					AddProperty(DBPROPID PropertyID, GUID guidPropertySet, DBTYPE wType, void* pv, DBPROPOPTIONS dwOptions = DBPROPOPTIONS_REQUIRED, DBID colid = DB_NULLID);
+    // duplicate the property sets
+    BOOL					Clone(DBORDINAL *pcPropSets, DBPROPSET **prgPropSets);
 
-	DBPROP					*FindProperty(DBPROPID PropertyID, GUID guidPropertySet);
-	DBPROPSET				*FindPropertySet(GUID guidPropertySet);
+    DBPROPSET				*pPropertySets()
+    {
+        return (DBPROPSET*)m_PropSets.GetElements();
+    }
+    ULONG					cPropertySets()
+    {
+        return m_PropSets.GetCount();
+    }
 
-	HRESULT					RemoveProperty(DBPROPID PropertyID, GUID guidPropertySet);
+    CVectorEx<DBPROP>
+    *GetSetWrapper(ULONG nIndex)
+    {
+        assert(nIndex < cPropertySets());
+        return (CVectorEx<DBPROP>*)m_PropSets + nIndex;
+    }
 
-	// check the property status after the operation
-	// pIDSO helps identifying the supported, settable attributes of the props
-	// pIUnknown if applies allows retrieving the properties from the object, for 
-	//	comparison; sometimes this is not possible (i.e. column properties and table props)
-	HRESULT					CheckPropertyStatus(
-								HRESULT		hrObtained,		// [in] the value returned by the operation 
-								IUnknown	*pIDSO,			// [in] ptr to a DSO to check supported props
-								IUnknown	*pIUnknown		// [in] used to read the set properties
-							);
+    ULONG					GetIndex(GUID guidPropSet);
 
-	HRESULT					PrintPropSets();
-	// converts the properties to a string (e.g. init string)
-	CWString				ConvertToCWString();
+    // SetProperty methods check whether property exists and if so they overwrite it
+    HRESULT					SetProperty(DBPROPID PropertyID, GUID guidPropertySet, VARIANT *pv, DBPROPOPTIONS dwOptions = DBPROPOPTIONS_REQUIRED, DBID colid = DB_NULLID);
+    HRESULT					SetProperty(DBPROPID PropertyID, GUID guidPropertySet, DBTYPE wType, ULONG_PTR ulValue, DBPROPOPTIONS dwOptions = DBPROPOPTIONS_REQUIRED, DBID colid = DB_NULLID);
+    HRESULT					SetProperty(DBPROPID PropertyID, GUID guidPropertySet, DBTYPE wType, void* pv, DBPROPOPTIONS dwOptions = DBPROPOPTIONS_REQUIRED, DBID colid = DB_NULLID);
 
-	BOOL					ArePropsIncluded(DBORDINAL cPropSets, DBPROPSET *rgPropSets);
+    // do not check whether the property is already in the set; if already exist it will be doubled
+    HRESULT					AddProperty(DBPROPID PropertyID, GUID guidPropertySet, VARIANT *pv, DBPROPOPTIONS dwOptions = DBPROPOPTIONS_REQUIRED, DBID colid = DB_NULLID);
+    HRESULT					AddProperty(DBPROPID PropertyID, GUID guidPropertySet, DBTYPE wType, ULONG_PTR ulValue, DBPROPOPTIONS dwOptions = DBPROPOPTIONS_REQUIRED, DBID colid = DB_NULLID);
+    HRESULT					AddProperty(DBPROPID PropertyID, GUID guidPropertySet, DBTYPE wType, void* pv, DBPROPOPTIONS dwOptions = DBPROPOPTIONS_REQUIRED, DBID colid = DB_NULLID);
 
-	BOOL					operator == (CPropSets &PropSets) {
-								return	ArePropsIncluded(PropSets, PropSets) &&
-										ArePropsIncluded(*this, *this);
-	}
+    DBPROP					*FindProperty(DBPROPID PropertyID, GUID guidPropertySet);
+    DBPROPSET				*FindPropertySet(GUID guidPropertySet);
 
-							operator DBPROPSET* () {
-								return (DBPROPSET*)m_PropSets.GetElements();
-							}
-							operator ULONG () {
-								return m_PropSets.GetCount();
-							}
+    HRESULT					RemoveProperty(DBPROPID PropertyID, GUID guidPropertySet);
 
-	DBPROPSET				&operator [] (ULONG nIndex) {
-								assert(nIndex < cPropertySets());
-								return m_PropSets[nIndex];}
+    // check the property status after the operation
+    // pIDSO helps identifying the supported, settable attributes of the props
+    // pIUnknown if applies allows retrieving the properties from the object, for
+    //	comparison; sometimes this is not possible (i.e. column properties and table props)
+    HRESULT					CheckPropertyStatus(
+        HRESULT		hrObtained,		// [in] the value returned by the operation
+        IUnknown	*pIDSO,			// [in] ptr to a DSO to check supported props
+        IUnknown	*pIUnknown		// [in] used to read the set properties
+    );
 
-	CPropSets				&operator = (CPropSets&);
+    HRESULT					PrintPropSets();
+    // converts the properties to a string (e.g. init string)
+    CWString				ConvertToCWString();
+
+    BOOL					ArePropsIncluded(DBORDINAL cPropSets, DBPROPSET *rgPropSets);
+
+    BOOL					operator == (CPropSets &PropSets)
+    {
+        return	ArePropsIncluded(PropSets, PropSets) &&
+                ArePropsIncluded(*this, *this);
+    }
+
+    operator DBPROPSET* ()
+    {
+        return (DBPROPSET*)m_PropSets.GetElements();
+    }
+    operator ULONG ()
+    {
+        return m_PropSets.GetCount();
+    }
+
+    DBPROPSET				&operator [] (ULONG nIndex)
+    {
+        assert(nIndex < cPropertySets());
+        return m_PropSets[nIndex];
+    }
+
+    CPropSets				&operator = (CPropSets&);
 }; // CPropSets - wrapper for property sets
 
 

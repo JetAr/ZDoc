@@ -1,4 +1,4 @@
-/**********************************************************************/
+﻿/**********************************************************************/
 /*                                                                    */
 /*      comp.C                                                        */
 /*                                                                    */
@@ -19,13 +19,13 @@ DWORD GetTargetClause()
     {
         return (DWORD)-1L;
     }
-    
+
     for (nCnt = 0; nCnt < nMaxClause; nCnt++)
     {
         DWORD dwCls = dwCompCls[nCnt];
 
         if ((bCompAttr[dwCompCls[nCnt]] == ATTR_TARGET_CONVERTED) ||
-            (bCompAttr[dwCompCls[nCnt]] == ATTR_TARGET_NOTCONVERTED))
+                (bCompAttr[dwCompCls[nCnt]] == ATTR_TARGET_NOTCONVERTED))
         {
             return nCnt;
         }
@@ -55,7 +55,7 @@ LRESULT HandleChangeAttr(HWND hWnd, BOOL fNext)
 
     if (uClause == (DWORD)-1L)
     {
-         return 0L;
+        return 0L;
     }
 
     if (fNext)
@@ -92,36 +92,36 @@ LRESULT HandleChangeAttr(HWND hWnd, BOOL fNext)
             {
                 switch (bCompAttr[dwCompCls[i]])
                 {
-                    case ATTR_INPUT:
-                        bAt = ATTR_TARGET_NOTCONVERTED;
-                        break;
-                        break;
-                                    
-                    case ATTR_CONVERTED:
-                        bAt = ATTR_TARGET_CONVERTED;
-                        break;
-                        
-                    default:
-                        bAt = bCompAttr[dwCompCls[i]];
-                        break;
+                case ATTR_INPUT:
+                    bAt = ATTR_TARGET_NOTCONVERTED;
+                    break;
+                    break;
+
+                case ATTR_CONVERTED:
+                    bAt = ATTR_TARGET_CONVERTED;
+                    break;
+
+                default:
+                    bAt = bCompAttr[dwCompCls[i]];
+                    break;
                 }
             }
             else
             {
                 switch (bCompAttr[dwCompCls[i]])
                 {
-                    case ATTR_TARGET_CONVERTED:
-                        bAt = ATTR_CONVERTED;
-                        break;
-                        break;
+                case ATTR_TARGET_CONVERTED:
+                    bAt = ATTR_CONVERTED;
+                    break;
+                    break;
 
-                    case ATTR_TARGET_NOTCONVERTED:
-                        bAt = ATTR_INPUT;
-                        break;
-                        
-                    default:
-                        bAt = bCompAttr[dwCompCls[i]];
-                        break;
+                case ATTR_TARGET_NOTCONVERTED:
+                    bAt = ATTR_INPUT;
+                    break;
+
+                default:
+                    bAt = bCompAttr[dwCompCls[i]];
+                    break;
                 }
             }
 
@@ -143,36 +143,36 @@ LRESULT HandleChangeAttr(HWND hWnd, BOOL fNext)
             {
                 switch (bCompReadAttr[dwCompReadCls[i]])
                 {
-                    case ATTR_INPUT:
-                        bAt = ATTR_TARGET_NOTCONVERTED;
-                        break;
-                        break;
-                        
-                    case ATTR_CONVERTED:
-                        bAt = ATTR_TARGET_CONVERTED;
-                        break;
-                        
-                    default:
-                        bAt = bCompReadAttr[dwCompReadCls[i]];
-                        break;
+                case ATTR_INPUT:
+                    bAt = ATTR_TARGET_NOTCONVERTED;
+                    break;
+                    break;
+
+                case ATTR_CONVERTED:
+                    bAt = ATTR_TARGET_CONVERTED;
+                    break;
+
+                default:
+                    bAt = bCompReadAttr[dwCompReadCls[i]];
+                    break;
                 }
             }
             else
             {
                 switch (bCompReadAttr[dwCompReadCls[i]])
                 {
-                    case ATTR_TARGET_CONVERTED:
-                        bAt = ATTR_CONVERTED;
-                        break;
-                        break;
-                        
-                    case ATTR_TARGET_NOTCONVERTED:
-                        bAt = ATTR_INPUT;
-                        break;
-                        
-                    default:
-                        bAt = bCompReadAttr[dwCompReadCls[i]];
-                        break;
+                case ATTR_TARGET_CONVERTED:
+                    bAt = ATTR_CONVERTED;
+                    break;
+                    break;
+
+                case ATTR_TARGET_NOTCONVERTED:
+                    bAt = ATTR_INPUT;
+                    break;
+
+                default:
+                    bAt = bCompReadAttr[dwCompReadCls[i]];
+                    break;
                 }
             }
 
@@ -183,17 +183,17 @@ LRESULT HandleChangeAttr(HWND hWnd, BOOL fNext)
         }
         fAttrReadOK = TRUE;
     }
- 
+
 
     if (fAttrReadOK && fAttrOK)
     {
         hIMC = ImmGetContext(hWndCompStr);
 #ifdef USEWAPI
         bRet = ImmSetCompositionStringW(hIMC,SCS_CHANGEATTR,bAttr,uCnt,
-                                                    bAttrRead,uCntRead);
+                                        bAttrRead,uCntRead);
 #else
         bRet = ImmSetCompositionString(hIMC,SCS_CHANGEATTR,bAttr,uCnt,
-                                                    bAttrRead,uCntRead);
+                                       bAttrRead,uCntRead);
 #endif
         // bRet = ImmSetCompositionString(hIMC,SCS_CHANGEATTR,NULL,0,
         //                                             bAttrRead,uCntRead);

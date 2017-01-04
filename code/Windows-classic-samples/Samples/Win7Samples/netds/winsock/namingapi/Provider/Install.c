@@ -1,4 +1,4 @@
-/********************************************************************++
+﻿/********************************************************************++
 THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED
 TO THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -48,19 +48,19 @@ ULONG GetTotalCch(ULONG cStrings, __in_ecount(cStrings) PCWSTR *prgStrings)
 //  | INSTALL_BLOB | DOMAIN_BLOB1 | DOMAIN_BLOB2 | DomainName1 | DomainName2 |
 //
 INT CreateInstallationBlob(
-        BOOL  fWildcard,
-        ULONG cDomains,
-        __in_ecount(cDomains)  PCWSTR *prgwzDomain,
-        __in_ecount(cDomains)  BOOL  *prgfPrimary,
-        __out ULONG *pcbBuffer,
-        __out PBYTE *ppbBuffer)
+    BOOL  fWildcard,
+    ULONG cDomains,
+    __in_ecount(cDomains)  PCWSTR *prgwzDomain,
+    __in_ecount(cDomains)  BOOL  *prgfPrimary,
+    __out ULONG *pcbBuffer,
+    __out PBYTE *ppbBuffer)
 
 {
     ULONG i = 0;
     ULONG cchDomains = GetTotalCch(cDomains, prgwzDomain);
     NAPI_INSTALL_BLOB  InstallBlob = {0};
     BYTE *pCurrent = NULL;
-    ULONG cbBlob = sizeof(NAPI_INSTALL_BLOB) + cDomains * sizeof(NAPI_DOMAIN_BLOB) + 
+    ULONG cbBlob = sizeof(NAPI_INSTALL_BLOB) + cDomains * sizeof(NAPI_DOMAIN_BLOB) +
                    cchDomains * sizeof(WCHAR);
 
     BYTE *pBlob = malloc(cbBlob);
@@ -81,7 +81,7 @@ INT CreateInstallationBlob(
     pCurrent = pBlob + sizeof(InstallBlob);
 
     cchDomains = 0;
-    
+
     // Serialize information about each domain supported
     //
     for (i = 0; i < cDomains; i++)
@@ -94,7 +94,7 @@ INT CreateInstallationBlob(
         DomainBlob.level = prgfPrimary[i] ? Primary : Secondary;
         DomainBlob.cchDomainName = cchThisDomain;
         DomainBlob.OffsetNextDomainBlob = sizeof(InstallBlob) + (i+1) * sizeof(NAPI_DOMAIN_BLOB);
-        DomainBlob.OffsetThisDomainName = sizeof(InstallBlob) + cDomains * sizeof(NAPI_DOMAIN_BLOB) 
+        DomainBlob.OffsetThisDomainName = sizeof(InstallBlob) + cDomains * sizeof(NAPI_DOMAIN_BLOB)
                                           + cchDomains * sizeof(WCHAR);
 
         // Copy domain blob to current buffer location
@@ -102,7 +102,7 @@ INT CreateInstallationBlob(
         CopyMemory(pCurrent, &DomainBlob, sizeof(DomainBlob));
         pCurrent += sizeof(DomainBlob);
 
-        // copy domain name 
+        // copy domain name
         //
         CopyMemory(pBlob + DomainBlob.OffsetThisDomainName, prgwzDomain[i], cchThisDomain * sizeof(WCHAR));
         cchDomains += cchThisDomain;
@@ -122,7 +122,7 @@ INT DoInstall(GUID ProviderId)
     INT err = NO_ERROR;
     ULONG cbBlob = 0;
     BYTE  *pbBlob = NULL;
-    
+
     // Setup domain arrays such that we are Primary for the domain "sampleprovider.net"
     //
     PWSTR rgDomains[] = { L"sampleprovider.net" };

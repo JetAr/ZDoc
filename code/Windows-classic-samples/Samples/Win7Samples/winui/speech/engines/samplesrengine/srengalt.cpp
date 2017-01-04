@@ -1,12 +1,12 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
 //
-// Copyright � Microsoft Corporation. All rights reserved
+// Copyright © Microsoft Corporation. All rights reserved
 
 /******************************************************************************
-*   srengalt.h 
+*   srengalt.h
 *       This file contains the implementation of the CSrEngineAlternates class.
 *       This implements the interface ISpSRAlternates.
 *       When an app calls GetAlternates or Commit on a result, SAPI will
@@ -29,16 +29,16 @@
 *       inside the results object. This gets returned
 *       as alternates phrases to SAPI. In addition this method can find a private interface to engine
 *       from the context and query the engine for additional result information.
-*       
+*
 *       The engine must have returned info serialised within the results object
 *       allowing us to produce alternatives. This is the case in the sample engine.
 *
-*   Return: 
+*   Return:
 *       S_OK
 *       FAILED(hr)
-*****************************************************************************/   
+*****************************************************************************/
 STDMETHODIMP CSrEngineAlternates::GetAlternates(SPPHRASEALTREQUEST *pAltRequest,
-    SPPHRASEALT **ppAlts, ULONG *pcAlts)
+        SPPHRASEALT **ppAlts, ULONG *pcAlts)
 {
     HRESULT hr = S_OK;
 
@@ -64,10 +64,10 @@ STDMETHODIMP CSrEngineAlternates::GetAlternates(SPPHRASEALTREQUEST *pAltRequest,
     SPPHRASE phrase;
     memset(&phrase, 0, sizeof(phrase));
     phrase.cbSize = sizeof(phrase);
-    // An alternates analyzer should really query its SR engine to find it's lang id. 
+    // An alternates analyzer should really query its SR engine to find it's lang id.
     //  For the sample engine we will just hard-code this
-    phrase.LangID = 1033; 
-    
+    phrase.LangID = 1033;
+
     WCHAR *pAlts = (WCHAR *) pAltRequest->pvResultExtra;
     ULONG nAltChars = pAltRequest->cbResultExtra / sizeof(WCHAR);
     ULONG nWord = 0;
@@ -134,7 +134,7 @@ STDMETHODIMP CSrEngineAlternates::GetAlternates(SPPHRASEALTREQUEST *pAltRequest,
         _freea((void*)pElements[i].pszDisplayText);
     }
     _freea(pElements);
-    
+
     if (FAILED(hr))
     {
         ::CoTaskMemFree(*ppAlts);
@@ -142,20 +142,20 @@ STDMETHODIMP CSrEngineAlternates::GetAlternates(SPPHRASEALTREQUEST *pAltRequest,
 
     return hr;
 }
-    
+
 /****************************************************************************
 * CSrEngineAlternates::Commit *
 *---------------------------*
 *   Description:
-*       Here the engine could use the information from the application 
+*       Here the engine could use the information from the application
 *       about which was the correct alternate in order to do supervised
 *       adaptation.
 *       In this sample we do nothing here.
-*   Return: 
+*   Return:
 *       S_OK
-*****************************************************************************/   
+*****************************************************************************/
 STDMETHODIMP CSrEngineAlternates::Commit(SPPHRASEALTREQUEST *pAltRequest,
-    SPPHRASEALT *pAlt, void **ppvResultExtra, ULONG *pcbResultExtra)
+        SPPHRASEALT *pAlt, void **ppvResultExtra, ULONG *pcbResultExtra)
 {
     return S_OK;
 }

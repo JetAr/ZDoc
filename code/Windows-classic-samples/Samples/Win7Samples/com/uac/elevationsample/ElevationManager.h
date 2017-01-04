@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -17,22 +17,22 @@
 #define CLSIDSize 45									//size required for CLSID
 #define MonikerSize	30									//size required for moniker name
 
-class ElevationManager 
+class ElevationManager
 {
 private:
-	HRESULT CInitHR;
+    HRESULT CInitHR;
 public:
-	ElevationManager(__out HRESULT *);
-	~ElevationManager(void);
+    ElevationManager(__out HRESULT *);
+    ~ElevationManager(void);
 
-	HRESULT RegisterServer(const TCHAR *, HWND);
-	HRESULT UnRegisterServer(const TCHAR *, HWND);
-	LRESULT SetButtonShield(HWND);
+    HRESULT RegisterServer(const TCHAR *, HWND);
+    HRESULT UnRegisterServer(const TCHAR *, HWND);
+    LRESULT SetButtonShield(HWND);
 private:
-	 HRESULT CoCreateInstanceAsAdmin(HWND, REFCLSID, REFIID, __out void **);
-	 BOOL GetAccessPermissionsForLUAServer(SECURITY_DESCRIPTOR **);
-	 BOOL SetAccessPermissions(HKEY, PSECURITY_DESCRIPTOR);
-	 HRESULT RegisterAsExe(const TCHAR *, HWND, BOOL);
-	 HRESULT RegisterAsDll(const TCHAR *, HWND, BOOL);
-	 BOOL IsFileExe(const TCHAR *);
+    HRESULT CoCreateInstanceAsAdmin(HWND, REFCLSID, REFIID, __out void **);
+    BOOL GetAccessPermissionsForLUAServer(SECURITY_DESCRIPTOR **);
+    BOOL SetAccessPermissions(HKEY, PSECURITY_DESCRIPTOR);
+    HRESULT RegisterAsExe(const TCHAR *, HWND, BOOL);
+    HRESULT RegisterAsDll(const TCHAR *, HWND, BOOL);
+    BOOL IsFileExe(const TCHAR *);
 };

@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -26,7 +26,8 @@ const LPCWSTR DataPath = L"Data\\";
 
 // The produced bundle's content consists of these files taken from the data folder
 const int PayloadPackagesCount = 2;
-const LPCWSTR PayloadPackagesName[PayloadPackagesCount] = {
+const LPCWSTR PayloadPackagesName[PayloadPackagesCount] =
+{
     L"MainAppPackage.appx",
     L"ResourcePackage.lang-de.appx"
 };
@@ -68,12 +69,12 @@ HRESULT GetFileStream(
     if (SUCCEEDED(hr))
     {
         hr = SHCreateStreamOnFileEx(
-                fullFileName,
-                STGM_READ | STGM_SHARE_EXCLUSIVE,
-                0, // default file attributes
-                FALSE, // do not create new file
-                NULL, // no template
-                stream);
+                 fullFileName,
+                 STGM_READ | STGM_SHARE_EXCLUSIVE,
+                 0, // default file attributes
+                 FALSE, // do not create new file
+                 NULL, // no template
+                 stream);
     }
     return hr;
 }
@@ -98,32 +99,32 @@ HRESULT GetBundleWriter(
 
     // Create a stream over the output file where the bundle will be written
     hr = SHCreateStreamOnFileEx(
-            outputFileName,
-            STGM_CREATE | STGM_WRITE | STGM_SHARE_EXCLUSIVE,
-            0, // default file attributes
-            TRUE, // create file if it does not exist
-            NULL, // no template
-            &outputStream);
+             outputFileName,
+             STGM_CREATE | STGM_WRITE | STGM_SHARE_EXCLUSIVE,
+             0, // default file attributes
+             TRUE, // create file if it does not exist
+             NULL, // no template
+             &outputStream);
 
     // Create a new Appx Bundle factory
     if (SUCCEEDED(hr))
     {
         hr = CoCreateInstance(
-                __uuidof(AppxBundleFactory),
-                NULL,
-                CLSCTX_INPROC_SERVER,
-                __uuidof(IAppxBundleFactory),
-                (LPVOID*)(&appxBundleFactory));
+                 __uuidof(AppxBundleFactory),
+                 NULL,
+                 CLSCTX_INPROC_SERVER,
+                 __uuidof(IAppxBundleFactory),
+                 (LPVOID*)(&appxBundleFactory));
     }
 
     // Create a new bundle writer using the factory
     if (SUCCEEDED(hr))
     {
         hr = appxBundleFactory->CreateBundleWriter(
-                outputStream,
-                0, // by specifying 0, the bundle will have an automatically
-                   // generated version number based on the current time
-                writer);
+                 outputStream,
+                 0, // by specifying 0, the bundle will have an automatically
+                 // generated version number based on the current time
+                 writer);
     }
 
     // Clean up allocated resources

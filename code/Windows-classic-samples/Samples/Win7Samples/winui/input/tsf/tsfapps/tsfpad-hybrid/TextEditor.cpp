@@ -1,4 +1,4 @@
-
+﻿
 #include "private.h"
 #include "TextEditor.h"
 
@@ -40,7 +40,7 @@ void CTextEditor::MoveSelectionNext()
 {
     UINT nTextLength = GetTextLength();
     if (_nSelEnd < nTextLength)
-       _nSelEnd++;
+        _nSelEnd++;
 
     _nSelStart = _nSelEnd;
     _pTextStore->OnSelectionChange();
@@ -390,7 +390,7 @@ BOOL CTextEditor::AddCompositionRenderInfo(int nStart, int nEnd, TF_DISPLAYATTRI
 {
     if (_pCompositionRenderInfo)
     {
-        void *pvNew = LocalReAlloc(_pCompositionRenderInfo, 
+        void *pvNew = LocalReAlloc(_pCompositionRenderInfo,
                                    (_nCompositionRenderInfo + 1) * sizeof(COMPOSITIONRENDERINFO),
                                    LMEM_MOVEABLE | LMEM_ZEROINIT);
         if (!pvNew)
@@ -401,7 +401,7 @@ BOOL CTextEditor::AddCompositionRenderInfo(int nStart, int nEnd, TF_DISPLAYATTRI
     else
     {
         _pCompositionRenderInfo = (COMPOSITIONRENDERINFO *)LocalAlloc(LPTR,
-                                   (_nCompositionRenderInfo + 1) * sizeof(COMPOSITIONRENDERINFO));
+                                  (_nCompositionRenderInfo + 1) * sizeof(COMPOSITIONRENDERINFO));
         if (!_pCompositionRenderInfo)
             return FALSE;
     }
@@ -452,7 +452,7 @@ void CTextEditor::AleartMouseSink(POINT pt, DWORD dwBtnState, BOOL *pbEaten)
     {
         return;
     }
-    
+
     int nPos = (pt.x - rc.left) * 4 / (rc.right - rc.left) + 2;
     UINT uEdge = nSel + (nPos / 4);
     UINT uQuadrant = nPos % 4;
@@ -529,7 +529,7 @@ BOOL CTextEditor::InsertResultAtComposition(LPCWSTR psz)
     _nCompEnd = _nSelEnd;
 
     ClearCompositionRenderInfo();
- 
+
     return TRUE;
 }
 
@@ -556,7 +556,7 @@ BOOL CTextEditor::UpdateComposition(LPCWSTR psz, LONG lDeltaStart, LONG lCursorP
 
     ClearCompositionRenderInfo();
 
-    
+
     if (prgAttr && prgClauseInfo)
     {
         for (UINT i = 0; i < (lClauseInfo / sizeof(DWORD)) - 1; i++)
@@ -569,23 +569,23 @@ BOOL CTextEditor::UpdateComposition(LPCWSTR psz, LONG lDeltaStart, LONG lCursorP
 
             switch (prgAttr[prgClauseInfo[i]])
             {
-                case ATTR_INPUT:
-                    da.fBoldLine = TRUE;
-                    da.lsStyle = TF_LS_DOT;
-                    break;
+            case ATTR_INPUT:
+                da.fBoldLine = TRUE;
+                da.lsStyle = TF_LS_DOT;
+                break;
 
-                case ATTR_TARGET_CONVERTED:
-                case ATTR_TARGET_NOTCONVERTED:
-                    da.fBoldLine = TRUE;
-                    da.lsStyle = TF_LS_SOLID;
-                    break;
+            case ATTR_TARGET_CONVERTED:
+            case ATTR_TARGET_NOTCONVERTED:
+                da.fBoldLine = TRUE;
+                da.lsStyle = TF_LS_SOLID;
+                break;
 
-                case ATTR_CONVERTED:
-                case ATTR_INPUT_ERROR:
-                case ATTR_FIXEDCONVERTED:
-                default:
-                    da.lsStyle = TF_LS_SOLID;
-                    break;
+            case ATTR_CONVERTED:
+            case ATTR_INPUT_ERROR:
+            case ATTR_FIXEDCONVERTED:
+            default:
+                da.lsStyle = TF_LS_SOLID;
+                break;
             }
             AddCompositionRenderInfo(_nCompStart + prgClauseInfo[i], _nCompStart + prgClauseInfo[i+1], &da);
         }
@@ -613,8 +613,8 @@ void CTextEditor::SetCandidateForm()
         cf.dwStyle = CFS_EXCLUDE;
 
         if (_layout.RectFromCharPos(_nCompStart, &rcStart) &&
-            _layout.RectFromCharPos(_nCompEnd, &rcEnd) &&
-            _layout.RectFromCharPos(_nSelEnd, &rc))
+                _layout.RectFromCharPos(_nCompEnd, &rcEnd) &&
+                _layout.RectFromCharPos(_nSelEnd, &rc))
         {
             cf.ptCurrentPos.x = rc.left;
             cf.ptCurrentPos.y = rc.bottom - 1;
@@ -853,7 +853,7 @@ WPARAM CTextEditor::PointToMouseWPARAM(POINT pt)
     {
         return 0;
     }
-    
+
     int nPos = (pt.x - rc.left) * 4 / (rc.right - rc.left) + 2;
     return (WPARAM)(((nSel - _nCompStart + (nPos / 4)) << 16) + ((nPos % 4) << 8));
 }

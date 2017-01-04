@@ -1,4 +1,4 @@
-//
+﻿//
 // server.cpp
 //
 // COM server exports.
@@ -196,22 +196,22 @@ STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, void **ppvObj)
     {
         EnterCriticalSection(&g_cs);
 
-            // need to check ref again after grabbing mutex
-            if (g_ObjectInfo[0] == NULL)
-            {
-                BuildGlobalObjects();
-            }
+        // need to check ref again after grabbing mutex
+        if (g_ObjectInfo[0] == NULL)
+        {
+            BuildGlobalObjects();
+        }
 
         LeaveCriticalSection(&g_cs);
     }
 
     if (IsEqualIID(riid, IID_IClassFactory) ||
-        IsEqualIID(riid, IID_IUnknown))
+            IsEqualIID(riid, IID_IUnknown))
     {
         for (int i = 0; i < ARRAYSIZE(g_ObjectInfo); i++)
         {
             if (NULL != g_ObjectInfo[i] &&
-                IsEqualGUID(rclsid, g_ObjectInfo[i]->_rclsid))
+                    IsEqualGUID(rclsid, g_ObjectInfo[i]->_rclsid))
             {
                 *ppvObj = (void *)g_ObjectInfo[i];
                 DllAddRef();    // class factory holds DLL ref count
@@ -264,8 +264,8 @@ STDAPI DllRegisterServer(void)
 {
     // register this service's profile with the tsf
     if (!CCaseTextService::RegisterServer() ||
-        !CCaseTextService::RegisterProfiles() ||
-        !CCaseTextService::RegisterCategories(TRUE))
+            !CCaseTextService::RegisterProfiles() ||
+            !CCaseTextService::RegisterCategories(TRUE))
     {
         DllUnregisterServer(); // cleanup any loose ends
         return E_FAIL;

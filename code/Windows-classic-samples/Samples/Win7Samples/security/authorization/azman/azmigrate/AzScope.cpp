@@ -1,4 +1,4 @@
-/****************************************************************************
+﻿/****************************************************************************
 
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
@@ -26,25 +26,27 @@ CAzScope::CAzScope(void):CAzBase<IAzScope>()
 CAzScope::~CAzScope(void)
 {
 }
-CAzScope::CAzScope(IAzScope *pNative,bool pisNew):CAzBase<IAzScope>(pNative,pisNew){
+CAzScope::CAzScope(IAzScope *pNative,bool pisNew):CAzBase<IAzScope>(pNative,pisNew)
+{
 }
 
 /*++
 
 Routine description:
 
-    This method copies properties from the source scope to *this* 
+    This method copies properties from the source scope to *this*
     roscope
 
 Arguments: srcScope - Source scope
 
 Return Value:
 
-    Returns success, appropriate failure value 
+    Returns success, appropriate failure value
 
 --*/
 
-HRESULT CAzScope::Copy(CAzScope &srcScope) {
+HRESULT CAzScope::Copy(CAzScope &srcScope)
+{
 
     CAzLogging::Entering(_TEXT("CAzScope::Copy"));
 
@@ -56,7 +58,8 @@ HRESULT CAzScope::Copy(CAzScope &srcScope) {
 
     CAzLogging::Log(hr,_TEXT("Getting Description for scope"),COLE2T(getName()));
 
-    if (SUCCEEDED(hr)) {
+    if (SUCCEEDED(hr))
+    {
 
         hr=m_native->put_Description(bstrData);
 
@@ -71,7 +74,8 @@ HRESULT CAzScope::Copy(CAzScope &srcScope) {
     CAzLogging::Log(hr,_TEXT("Getting ApplicationData for scope"),COLE2T(getName()));
 
 
-    if (SUCCEEDED(hr)) {
+    if (SUCCEEDED(hr))
+    {
 
         hr=m_native->put_ApplicationData(bstrData);
 
@@ -79,13 +83,15 @@ HRESULT CAzScope::Copy(CAzScope &srcScope) {
 
     }
 
-    if (!CAzGlobalOptions::m_bIgnorePolicyAdmins) {
+    if (!CAzGlobalOptions::m_bIgnorePolicyAdmins)
+    {
 
         hr=srcScope.m_native->get_PolicyAdministrators(&cVVar);
 
         CAzLogging::Log(hr,_TEXT("Getting PolicyAdministrators for scope"),COLE2T(getName()));
 
-        if (SUCCEEDED(hr)) {
+        if (SUCCEEDED(hr))
+        {
 
             hr=InitializeUsingSafeArray(cVVar,&IAzScope::AddPolicyAdministrator );
 
@@ -96,9 +102,10 @@ HRESULT CAzScope::Copy(CAzScope &srcScope) {
 
         hr=srcScope.m_native->get_PolicyReaders(&cVVar);
 
-        CAzLogging::Log(hr,_TEXT("Getting PolicyReaders for scope"),COLE2T(getName()));			
+        CAzLogging::Log(hr,_TEXT("Getting PolicyReaders for scope"),COLE2T(getName()));
 
-        if (SUCCEEDED(hr)) {
+        if (SUCCEEDED(hr))
+        {
 
             hr=InitializeUsingSafeArray(cVVar,&IAzScope::AddPolicyReader );
 

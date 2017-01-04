@@ -1,4 +1,4 @@
-//***************************************************************************
+﻿//***************************************************************************
 
 //
 
@@ -56,7 +56,7 @@ CProvFactory::~CProvFactory(void)
 
 
 STDMETHODIMP CProvFactory::QueryInterface(REFIID riid
-    , PPVOID ppv)
+        , PPVOID ppv)
 {
     *ppv=NULL;
 
@@ -64,10 +64,10 @@ STDMETHODIMP CProvFactory::QueryInterface(REFIID riid
         *ppv=this;
 
     if (NULL!=*ppv)
-        {
+    {
         ((LPUNKNOWN)*ppv)->AddRef();
         return NOERROR;
-        }
+    }
 
     return E_NOINTERFACE;
 }
@@ -82,7 +82,7 @@ STDMETHODIMP_(ULONG) CProvFactory::Release(void)
     ULONG nNewCount = InterlockedDecrement((long *)&m_cRef);
     if (0L == nNewCount)
         delete this;
-    
+
     return nNewCount;
 }
 
@@ -106,7 +106,7 @@ STDMETHODIMP_(ULONG) CProvFactory::Release(void)
 //***************************************************************************
 
 STDMETHODIMP CProvFactory::CreateInstance(LPUNKNOWN pUnkOuter
-    , REFIID riid, PPVOID ppvObj)
+        , REFIID riid, PPVOID ppvObj)
 {
     CClassPro *   pObj;
     HRESULT hr;
@@ -119,7 +119,7 @@ STDMETHODIMP CProvFactory::CreateInstance(LPUNKNOWN pUnkOuter
         return CLASS_E_NOAGGREGATION;
 
     // Create the locator object.
-    
+
     pObj=new CClassPro();
     if (NULL==pObj)
         return E_OUTOFMEMORY;

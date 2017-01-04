@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -7,14 +7,14 @@
 
 
 /*
-   
+
 
     Debugging Routines
 
     FILE: DbgMsg.h
-    
+
     PURPOSE: Routines for debugging system services
-    
+
     FUNCTIONS:
         DbgMsgOpenLog - Opens the profile log.
         DbgMsgRecord - Records and event.
@@ -28,7 +28,7 @@
 // do not get reorded).
 #define DEBUG_LOG_MAX_SIZE (10*1024*1024)
 
-// Used for mutial exclusion when generating and 
+// Used for mutial exclusion when generating and
 // writing the debug information.
 extern CRITICAL_SECTION DbgMsgCriticalSection;
 

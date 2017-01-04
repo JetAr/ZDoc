@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -40,7 +40,7 @@ SampleSetVirtualDiskInformation(
     // Specify UNKNOWN for both device and vendor so the system will use the
     // file extension to determine the correct VHD format.
     //
-    
+
     storageType.DeviceId = VIRTUAL_STORAGE_TYPE_DEVICE_UNKNOWN;
     storageType.VendorId = VIRTUAL_STORAGE_TYPE_VENDOR_UNKNOWN;
 
@@ -61,14 +61,14 @@ SampleSetVirtualDiskInformation(
     // VIRTUAL_DISK_ACCESS_NONE is the only acceptable access mask for V2 handle opens.
     // OPEN_VIRTUAL_DISK_FLAG_NO_PARENTS indicates the parent chain should not be opened.
     //
-    
+
     opStatus = OpenVirtualDisk(
-        &storageType,
-        ParentPath,
-        VIRTUAL_DISK_ACCESS_NONE,
-        OPEN_VIRTUAL_DISK_FLAG_NO_PARENTS,
-        &openParameters,
-        &parentVhdHandle);
+                   &storageType,
+                   ParentPath,
+                   VIRTUAL_DISK_ACCESS_NONE,
+                   OPEN_VIRTUAL_DISK_FLAG_NO_PARENTS,
+                   &openParameters,
+                   &parentVhdHandle);
 
     if (opStatus != ERROR_SUCCESS)
     {
@@ -78,16 +78,16 @@ SampleSetVirtualDiskInformation(
     //
     // Get the disk ID of the parent.
     //
-    
+
     diskInfoSize = sizeof(GET_VIRTUAL_DISK_INFO);
     parentDiskInfo.Version = GET_VIRTUAL_DISK_INFO_IDENTIFIER;
 
     opStatus = GetVirtualDiskInformation(
-        parentVhdHandle,
-        &diskInfoSize,
-        &parentDiskInfo,
-        NULL);
-    
+                   parentVhdHandle,
+                   &diskInfoSize,
+                   &parentDiskInfo,
+                   NULL);
+
     if (opStatus != ERROR_SUCCESS)
     {
         goto Cleanup;
@@ -99,33 +99,33 @@ SampleSetVirtualDiskInformation(
     // VIRTUAL_DISK_ACCESS_NONE is the only acceptable access mask for V2 handle opens.
     // OPEN_VIRTUAL_DISK_FLAG_NO_PARENTS indicates the parent chain should not be opened.
     //
-    
+
     opStatus = OpenVirtualDisk(
-        &storageType,
-        ChildPath,
-        VIRTUAL_DISK_ACCESS_NONE,
-        OPEN_VIRTUAL_DISK_FLAG_NO_PARENTS,
-        &openParameters,
-        &childVhdHandle);
-    
+                   &storageType,
+                   ChildPath,
+                   VIRTUAL_DISK_ACCESS_NONE,
+                   OPEN_VIRTUAL_DISK_FLAG_NO_PARENTS,
+                   &openParameters,
+                   &childVhdHandle);
+
     if (opStatus != ERROR_SUCCESS)
     {
         goto Cleanup;
     }
-    
+
     //
     // Get the disk ID expected for the parent.
     //
-    
+
     childDiskInfo.Version = GET_VIRTUAL_DISK_INFO_PARENT_IDENTIFIER;
     diskInfoSize = sizeof(childDiskInfo);
-    
+
     opStatus = GetVirtualDiskInformation(
-        childVhdHandle,
-        &diskInfoSize,
-        &childDiskInfo,
-        NULL);
-    
+                   childVhdHandle,
+                   &diskInfoSize,
+                   &childDiskInfo,
+                   NULL);
+
     if (opStatus != ERROR_SUCCESS)
     {
         goto Cleanup;
@@ -151,7 +151,7 @@ SampleSetVirtualDiskInformation(
     childVhdHandle = INVALID_HANDLE_VALUE;
 
     //
-    // This cannot be a "GetInfoOnly" handle because the intent is to alter the properties of the 
+    // This cannot be a "GetInfoOnly" handle because the intent is to alter the properties of the
     // VHD/VHDX.
     //
     // VIRTUAL_DISK_ACCESS_NONE is the only acceptable access mask for V2 handle opens.
@@ -161,13 +161,13 @@ SampleSetVirtualDiskInformation(
     openParameters.Version2.GetInfoOnly = FALSE;
 
     opStatus = OpenVirtualDisk(
-        &storageType,
-        ChildPath,
-        VIRTUAL_DISK_ACCESS_NONE,
-        OPEN_VIRTUAL_DISK_FLAG_NO_PARENTS,
-        &openParameters,
-        &childVhdHandle);
-    
+                   &storageType,
+                   ChildPath,
+                   VIRTUAL_DISK_ACCESS_NONE,
+                   OPEN_VIRTUAL_DISK_FLAG_NO_PARENTS,
+                   &openParameters,
+                   &childVhdHandle);
+
     if (opStatus != ERROR_SUCCESS)
     {
         goto Cleanup;
@@ -214,7 +214,7 @@ Cleanup:
     {
         wprintf(L"error = %u\n", opStatus);
     }
-    
+
     if (childVhdHandle != INVALID_HANDLE_VALUE)
     {
         CloseHandle(childVhdHandle);
@@ -226,4 +226,4 @@ Cleanup:
     }
 
     return opStatus;
- }
+}

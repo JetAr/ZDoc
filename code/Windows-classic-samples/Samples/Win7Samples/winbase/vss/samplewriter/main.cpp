@@ -1,4 +1,4 @@
-/*
+﻿/*
     Copyright (c) 2009 Microsoft Corporation
 
     Module Name:
@@ -64,15 +64,15 @@ int __cdecl wmain(int argc, WCHAR *argv[])
     }
 
     hr = ::CoInitializeSecurity(
-        NULL,
-        -1,
-        NULL,
-        NULL,
-        RPC_C_AUTHN_LEVEL_PKT_PRIVACY,
-        RPC_C_IMP_LEVEL_IDENTIFY,
-        NULL,
-        EOAC_NONE,
-        NULL);
+             NULL,
+             -1,
+             NULL,
+             NULL,
+             RPC_C_AUTHN_LEVEL_PKT_PRIVACY,
+             RPC_C_IMP_LEVEL_IDENTIFY,
+             NULL,
+             EOAC_NONE,
+             NULL);
 
     if (FAILED(hr))
     {

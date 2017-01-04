@@ -1,4 +1,4 @@
-//------------------------------------------------------------------------------
+﻿//------------------------------------------------------------------------------
 // File: NamedGuid.cpp
 //
 // Desc: DirectShow sample code - helps in converting GUIDs to strings
@@ -391,12 +391,12 @@ HRESULT GetGUIDString(TCHAR *szString, int cchBuffer, GUID *pGUID)
     int i=0;
     HRESULT hr = E_FAIL;
 
-	if (cchBuffer < 1)
-	{
-		return E_INVALIDARG;
-	}
+    if (cchBuffer < 1)
+    {
+        return E_INVALIDARG;
+    }
 
-	szString[0] = TEXT('\0');
+    szString[0] = TEXT('\0');
 
     // Find format GUID's name in the named guids table
     while (rgng[i].pguid != 0)
@@ -409,19 +409,19 @@ HRESULT GetGUIDString(TCHAR *szString, int cchBuffer, GUID *pGUID)
         i++;
     }
 
-	if (FAILED(hr))
-	{
-	    // No match, use the string representation of the GUID
-		hr = StringFromGUID2(*pGUID, szString, cchBuffer);
-	}
+    if (FAILED(hr))
+    {
+        // No match, use the string representation of the GUID
+        hr = StringFromGUID2(*pGUID, szString, cchBuffer);
+    }
 
-	return hr;
+    return hr;
 }
 
 
 HRESULT GetFormatString(TCHAR *szFormat, int cchBuffer, DMO_MEDIA_TYPE *pType)
 {
-	return GetGUIDString(szFormat, cchBuffer, &pType->formattype);
+    return GetGUIDString(szFormat, cchBuffer, &pType->formattype);
 }
 
 
@@ -430,27 +430,27 @@ HRESULT GetTypeSubtypeString(TCHAR *szString, int cchBuffer, DMO_PARTIAL_MEDIATY
 {
     HRESULT hr;
 
-	const size_t TEMP_BUFFER_SIZE = 128;
-	TCHAR tmp[TEMP_BUFFER_SIZE];
+    const size_t TEMP_BUFFER_SIZE = 128;
+    TCHAR tmp[TEMP_BUFFER_SIZE];
 
-	hr = GetGUIDString(szString, cchBuffer, &aList.type);
+    hr = GetGUIDString(szString, cchBuffer, &aList.type);
 
-	if (SUCCEEDED(hr))
-	{
-		hr = StringCchCat(szString, cchBuffer, TEXT("/"));
-	}
+    if (SUCCEEDED(hr))
+    {
+        hr = StringCchCat(szString, cchBuffer, TEXT("/"));
+    }
 
-	if (SUCCEEDED(hr))
-	{
-		hr = GetGUIDString(tmp, TEMP_BUFFER_SIZE, &aList.subtype);
-	}
+    if (SUCCEEDED(hr))
+    {
+        hr = GetGUIDString(tmp, TEMP_BUFFER_SIZE, &aList.subtype);
+    }
 
-	if (SUCCEEDED(hr))
-	{
-		hr = StringCchCat(szString, cchBuffer, tmp);
-	}
-	
-	return hr;
+    if (SUCCEEDED(hr))
+    {
+        hr = StringCchCat(szString, cchBuffer, tmp);
+    }
+
+    return hr;
 }
 
 

@@ -1,4 +1,4 @@
-//*****************************************************************************
+﻿//*****************************************************************************
 //
 // Microsoft Windows Media
 // Copyright (C) Microsoft Corporation. All rights reserved.
@@ -49,46 +49,46 @@ CSDKSampleStorageSystem::~CSDKSampleStorageSystem()
 // [OpenDataContainer]
 //
 /////////////////////////////////////////////////////////////////////////////
-HRESULT STDMETHODCALLTYPE 
-CSDKSampleStorageSystem::OpenDataContainer( 
-                            IWMSCommandContext *pCommandContext,
-                            IWMSContext *pUserContext,
-                            IWMSContext *pPresentationContext,
-                            LPWSTR pszContainerName,
-                            DWORD dwFlags,
-                            IWMSBufferAllocator *pBufferAllocator,
-                            IWMSDataSourcePluginCallback *pCallback,
-                            QWORD qwContext
-                            )
+HRESULT STDMETHODCALLTYPE
+CSDKSampleStorageSystem::OpenDataContainer(
+    IWMSCommandContext *pCommandContext,
+    IWMSContext *pUserContext,
+    IWMSContext *pPresentationContext,
+    LPWSTR pszContainerName,
+    DWORD dwFlags,
+    IWMSBufferAllocator *pBufferAllocator,
+    IWMSDataSourcePluginCallback *pCallback,
+    QWORD qwContext
+)
 {
     HRESULT hr = S_OK;
     CSampleDataContainer *pDataContainer = NULL;
 
     if ( ( NULL == pszContainerName )
-        || ( NULL == pBufferAllocator )
-        || ( NULL == pCallback ) )
+            || ( NULL == pBufferAllocator )
+            || ( NULL == pCallback ) )
     {
         // We are returning an error, so we cannot call the callback.
         return( E_INVALIDARG );
     }
 
     pDataContainer = new CSampleDataContainer;
-    
+
     if ( NULL == pDataContainer )
     {
         hr = E_OUTOFMEMORY;
         goto abort;
     }
-    
+
     hr = pDataContainer->Initialize(
-                            pUserContext,
-                            pszContainerName, 
-                            dwFlags,
-                            pBufferAllocator,
-                            this,
-                            pCallback,
-                            qwContext
-                            );
+             pUserContext,
+             pszContainerName,
+             dwFlags,
+             pBufferAllocator,
+             this,
+             pCallback,
+             qwContext
+         );
     if ( FAILED( hr ) )
     {
         goto abort;
@@ -103,7 +103,7 @@ abort:
 
     return( hr );
 
-    
+
 } // End of OpenDataContainer.
 
 
@@ -112,23 +112,23 @@ abort:
 
 
 /////////////////////////////////////////////////////////////////////////////
-HRESULT STDMETHODCALLTYPE 
-CSDKSampleStorageSystem::OpenDirectory( 
-                            IWMSCommandContext *pCommandContext,
-                            IWMSContext *pUserContext,
-                            IWMSContext *pPresentationContext,
-                            LPWSTR pszContainerName,
-                            DWORD dwFlags,
-                            IWMSBufferAllocator *pBufferAllocator,
-                            IWMSDataSourcePluginCallback *pCallback,
-                            QWORD qwContext
-                            )
+HRESULT STDMETHODCALLTYPE
+CSDKSampleStorageSystem::OpenDirectory(
+    IWMSCommandContext *pCommandContext,
+    IWMSContext *pUserContext,
+    IWMSContext *pPresentationContext,
+    LPWSTR pszContainerName,
+    DWORD dwFlags,
+    IWMSBufferAllocator *pBufferAllocator,
+    IWMSDataSourcePluginCallback *pCallback,
+    QWORD qwContext
+)
 {
     HRESULT hr = S_OK;
     CSampleDirectory *pDirectory = NULL;
 
     if( ( NULL == pszContainerName )
-        || ( NULL == pCallback ) )
+            || ( NULL == pCallback ) )
     {
         hr = E_INVALIDARG;
         goto abort;
@@ -141,13 +141,13 @@ CSDKSampleStorageSystem::OpenDirectory(
         goto abort;
     }
 
-    hr = pDirectory->Initialize( 
-                            pUserContext,
-                            pszContainerName,
-                            this,
-                            pCallback,
-                            qwContext
-                            );
+    hr = pDirectory->Initialize(
+             pUserContext,
+             pszContainerName,
+             this,
+             pCallback,
+             qwContext
+         );
     if( FAILED( hr ) )
     {
         goto abort;
@@ -172,19 +172,19 @@ abort:
 // [DeleteDataContainer]
 //
 /////////////////////////////////////////////////////////////////////////////
-HRESULT STDMETHODCALLTYPE 
-CSDKSampleStorageSystem::DeleteDataContainer( 
-                        LPWSTR pszContainerName,
-                        DWORD dwFlags,
-                        IWMSDataSourcePluginCallback *pCallback,
-                        QWORD qwContext
-                        )
+HRESULT STDMETHODCALLTYPE
+CSDKSampleStorageSystem::DeleteDataContainer(
+    LPWSTR pszContainerName,
+    DWORD dwFlags,
+    IWMSDataSourcePluginCallback *pCallback,
+    QWORD qwContext
+)
 {
     HRESULT hr = S_OK;
     BOOL fSuccess = TRUE;
 
     if ( ( NULL == pszContainerName )
-        || ( NULL == pCallback ) )
+            || ( NULL == pCallback ) )
     {
         hr = E_INVALIDARG;
         goto abort;
@@ -192,7 +192,7 @@ CSDKSampleStorageSystem::DeleteDataContainer(
 
     fSuccess = DeleteFile( pszContainerName );
     if ( !fSuccess )
-    {            
+    {
         hr = HRESULT_FROM_WIN32( GetLastError() );
         goto abort;
     }
@@ -206,7 +206,7 @@ abort:
     }
 
     return( hr );
-    
+
 } // End of DeleteDataContainer.
 
 
@@ -217,18 +217,18 @@ abort:
 // [GetDataContainerVersion]
 //
 /////////////////////////////////////////////////////////////////////////////
-HRESULT STDMETHODCALLTYPE 
-CSDKSampleStorageSystem::GetDataContainerVersion( 
-                        IWMSCommandContext *pCommandContext,
-                        IWMSContext *pUserContext,
-                        IWMSContext *pPresContext,
-                        LPWSTR pszContainerName,
-                        DWORD dwFlags,
-                        IWMSDataSourcePluginCallback *pCallback,
-                        QWORD qwContext
-                        )
+HRESULT STDMETHODCALLTYPE
+CSDKSampleStorageSystem::GetDataContainerVersion(
+    IWMSCommandContext *pCommandContext,
+    IWMSContext *pUserContext,
+    IWMSContext *pPresContext,
+    LPWSTR pszContainerName,
+    DWORD dwFlags,
+    IWMSDataSourcePluginCallback *pCallback,
+    QWORD qwContext
+)
 {
-    
+
     HRESULT hr = S_OK;
     DATE dateOriginLastModifiedTime;
     WIN32_FILE_ATTRIBUTE_DATA FileAttributeData;
@@ -240,7 +240,7 @@ CSDKSampleStorageSystem::GetDataContainerVersion(
     WCHAR pszFileSize[65];
 
     if ( ( NULL == pszContainerName )
-        || ( NULL == pCallback ) )
+            || ( NULL == pCallback ) )
     {
         // We are returning an error, so we cannot call the callback.
         return( E_INVALIDARG );
@@ -248,7 +248,7 @@ CSDKSampleStorageSystem::GetDataContainerVersion(
 
     if( !GetFileAttributesEx( pszContainerName + URL_SCHEME_LENGTH, GetFileExInfoStandard, &FileAttributeData ) )
     {
-    
+
         hr = HRESULT_FROM_WIN32( GetLastError() );
         goto abort;
     }
@@ -323,12 +323,12 @@ CSDKSampleStorageSystem::GetDataContainerVersion(
 abort:
     // The HRESULT returned by the callback should be ignored.
     pCallback->OnGetDataContainerVersion(
-                                        hr,
-                                        pVersion,
-                                        qwContext
-                                        );
+        hr,
+        pVersion,
+        qwContext
+    );
     hr = S_OK; // any error is passed to the callback
-     
+
     if( NULL != pVersion )
     {
         pVersion->Release();
@@ -351,13 +351,13 @@ abort:
 /////////////////////////////////////////////////////////////////////////////
 //
 /////////////////////////////////////////////////////////////////////////////
-HRESULT STDMETHODCALLTYPE 
-CSDKSampleStorageSystem::GetRootDirectories( 
-                            LPWSTR *pstrRootDirectoryList,
-                            DWORD dwMaxRoots,
-                            IWMSDataSourcePluginCallback *pCallback,
-                            QWORD qwContext
-                            )
+HRESULT STDMETHODCALLTYPE
+CSDKSampleStorageSystem::GetRootDirectories(
+    LPWSTR *pstrRootDirectoryList,
+    DWORD dwMaxRoots,
+    IWMSDataSourcePluginCallback *pCallback,
+    QWORD qwContext
+)
 {
     HRESULT hr = S_OK;
     DWORD dwRootNum = 0;
@@ -373,8 +373,8 @@ CSDKSampleStorageSystem::GetRootDirectories(
     DWORD dwIndex;
 
 
-    if( ( NULL == pstrRootDirectoryList ) 
-        || ( NULL == pCallback ) )
+    if( ( NULL == pstrRootDirectoryList )
+            || ( NULL == pCallback ) )
     {
         return( E_INVALIDARG );
     }
@@ -426,7 +426,7 @@ CSDKSampleStorageSystem::GetRootDirectories(
             if( dwRootNum < dwMaxRoots )
             {
                 dwPathNameLength = (DWORD)(pStopPath - pStartPath);
-                
+
                 pstrFile = (LPWSTR) CoTaskMemAlloc( sizeof(WCHAR) * ( dwPathNameLength + URL_SCHEME_LENGTH + 1 ) );
                 if( NULL == pstrFile )
                 {
@@ -435,16 +435,16 @@ CSDKSampleStorageSystem::GetRootDirectories(
                 }
 
                 pstrFile[ URL_SCHEME_LENGTH + dwPathNameLength ] = L'\0';
-                
-                wcsncpy_s( pstrFile,( dwPathNameLength + URL_SCHEME_LENGTH + 1 ) , URL_SCHEME, URL_SCHEME_LENGTH );
-                wcsncpy_s( pstrFile + URL_SCHEME_LENGTH, ( dwPathNameLength + URL_SCHEME_LENGTH + 1 )-URL_SCHEME_LENGTH , pStartPath, dwPathNameLength );
-                
+
+                wcsncpy_s( pstrFile,( dwPathNameLength + URL_SCHEME_LENGTH + 1 ), URL_SCHEME, URL_SCHEME_LENGTH );
+                wcsncpy_s( pstrFile + URL_SCHEME_LENGTH, ( dwPathNameLength + URL_SCHEME_LENGTH + 1 )-URL_SCHEME_LENGTH, pStartPath, dwPathNameLength );
+
                 if( L'\0' != pstrFile[ URL_SCHEME_LENGTH + dwPathNameLength ] )
                 {
                     hr = HRESULT_FROM_WIN32( ERROR_INSUFFICIENT_BUFFER );
                     goto abort;
                 }
-                
+
                 pstrRootDirectoryList[dwRootNum] = pstrFile;
 
                 dwRootNum++;
@@ -463,12 +463,12 @@ CSDKSampleStorageSystem::GetRootDirectories(
 
 
     // The HRESULT returned by the callback should be ignored.
-    ( void ) pCallback->OnGetRootDirectories( 
-                            hr,
-                            dwRootNum,
-                            dwTotalNumRoots,
-                            qwContext
-                            );
+    ( void ) pCallback->OnGetRootDirectories(
+        hr,
+        dwRootNum,
+        dwTotalNumRoots,
+        qwContext
+    );
     hr = S_OK; // any error is passed to the callback
 
 abort:
@@ -499,10 +499,10 @@ abort:
 /////////////////////////////////////////////////////////////////////////////
 //
 /////////////////////////////////////////////////////////////////////////////
-HRESULT STDMETHODCALLTYPE 
-CSDKSampleStorageSystem::GetDataSourceAttributes( 
-                            DWORD *pdwFlags
-                            )
+HRESULT STDMETHODCALLTYPE
+CSDKSampleStorageSystem::GetDataSourceAttributes(
+    DWORD *pdwFlags
+)
 {
     if ( NULL == pdwFlags )
     {
@@ -517,14 +517,14 @@ CSDKSampleStorageSystem::GetDataSourceAttributes(
 
 
 /////////////////////////////////////////////////////////////////////////////
-HRESULT STDMETHODCALLTYPE 
-CSDKSampleStorageSystem::CreateDataSourceDirectory( 
-                        IWMSCommandContext *pCommandContext,
-                        LPWSTR pszContainerName,
-                        DWORD dwFlags,
-                        IWMSDataSourcePluginCallback *pCallback,
-                        QWORD qwContext
-                        )
+HRESULT STDMETHODCALLTYPE
+CSDKSampleStorageSystem::CreateDataSourceDirectory(
+    IWMSCommandContext *pCommandContext,
+    LPWSTR pszContainerName,
+    DWORD dwFlags,
+    IWMSDataSourcePluginCallback *pCallback,
+    QWORD qwContext
+)
 {
     return( E_NOTIMPL );
 }
@@ -533,13 +533,13 @@ CSDKSampleStorageSystem::CreateDataSourceDirectory(
 
 
 /////////////////////////////////////////////////////////////////////////////
-HRESULT STDMETHODCALLTYPE 
-CSDKSampleStorageSystem::DeleteDirectory( 
-                        LPWSTR pszContainerName,
-                        DWORD dwFlags,
-                        IWMSDataSourcePluginCallback *pCallback,
-                        QWORD qwContext
-                        )
+HRESULT STDMETHODCALLTYPE
+CSDKSampleStorageSystem::DeleteDirectory(
+    LPWSTR pszContainerName,
+    DWORD dwFlags,
+    IWMSDataSourcePluginCallback *pCallback,
+    QWORD qwContext
+)
 {
     return( E_NOTIMPL );
 }
@@ -553,27 +553,27 @@ CSDKSampleStorageSystem::DeleteDirectory(
 // [InitializePlugin]
 //
 /////////////////////////////////////////////////////////////////////////////
-HRESULT STDMETHODCALLTYPE 
-CSDKSampleStorageSystem::InitializePlugin( 
-                        IWMSContext *pServerContext,
-                        IWMSNamedValues *pNamedValues,
-                        IWMSClassObject *pClassFactory
-                        )
+HRESULT STDMETHODCALLTYPE
+CSDKSampleStorageSystem::InitializePlugin(
+    IWMSContext *pServerContext,
+    IWMSNamedValues *pNamedValues,
+    IWMSClassObject *pClassFactory
+)
 {
     HRESULT hr = S_OK;
     SYSTEM_INFO sysInfo;
 
     if ( ( NULL == pServerContext )
-        || ( NULL == pClassFactory ) )
+            || ( NULL == pClassFactory ) )
     {
-        
+
         return( E_INVALIDARG );
     }
 
     // TODO: Initialize all storage system state
     GetSystemInfo( &sysInfo );
     m_dwPageSize = sysInfo.dwPageSize;
-    
+
 
     m_pServerContext = pServerContext;
     m_pServerContext->AddRef();
@@ -623,7 +623,7 @@ CSDKSampleStorageSystem::ShutdownPlugin()
 // [EnablePlugin]
 //
 /////////////////////////////////////////////////////////////////////////////
-STDMETHODIMP 
+STDMETHODIMP
 CSDKSampleStorageSystem::EnablePlugin( long *pdwFlags, long *pdwHeartbeatPeriod )
 {
     if ( NULL == pdwFlags || NULL == pdwHeartbeatPeriod )
@@ -644,7 +644,7 @@ CSDKSampleStorageSystem::EnablePlugin( long *pdwFlags, long *pdwHeartbeatPeriod 
 // [GetCustomAdminInterface]
 //
 /////////////////////////////////////////////////////////////////////////////
-HRESULT STDMETHODCALLTYPE 
+HRESULT STDMETHODCALLTYPE
 CSDKSampleStorageSystem::GetCustomAdminInterface( IDispatch **ppValue )
 {
     if ( NULL == ppValue )
@@ -664,7 +664,7 @@ CSDKSampleStorageSystem::GetCustomAdminInterface( IDispatch **ppValue )
 // [OnHeartbeat]
 //
 /////////////////////////////////////////////////////////////////////////////
-HRESULT STDMETHODCALLTYPE 
+HRESULT STDMETHODCALLTYPE
 CSDKSampleStorageSystem::OnHeartbeat()
 {
     return( S_OK );
@@ -676,7 +676,7 @@ CSDKSampleStorageSystem::OnHeartbeat()
 // [DisablePlugin]
 //
 /////////////////////////////////////////////////////////////////////////////
-STDMETHODIMP 
+STDMETHODIMP
 CSDKSampleStorageSystem::DisablePlugin()
 {
     return ( S_OK );
@@ -729,16 +729,16 @@ CSampleDataContainer::~CSampleDataContainer()
 /////////////////////////////////////////////////////////////////////////////
 
 HRESULT CSampleDataContainer::Initialize(
-                        IWMSContext *pUserContext,
-                        LPWSTR pszContainerName,
-                        DWORD dwFlags,
-                        IWMSBufferAllocator *pBufferAllocator,
-                        CSDKSampleStorageSystem *pOwnerStorageSystem,
-                        IWMSDataSourcePluginCallback *pCallback,
-                        QWORD qwContext
-                        )
+    IWMSContext *pUserContext,
+    LPWSTR pszContainerName,
+    DWORD dwFlags,
+    IWMSBufferAllocator *pBufferAllocator,
+    CSDKSampleStorageSystem *pOwnerStorageSystem,
+    IWMSDataSourcePluginCallback *pCallback,
+    QWORD qwContext
+)
 {
-    
+
     HRESULT hr = S_OK;
     DWORD dwSDKSampleStorageSystemFlags = 0;
     CHAR *pResult =  NULL;
@@ -759,8 +759,8 @@ HRESULT CSampleDataContainer::Initialize(
     }
 
     if ( ( NULL == pszContainerName )
-        || ( NULL == pCallback ) 
-        || ( NULL == pOwnerStorageSystem ) )
+            || ( NULL == pCallback )
+            || ( NULL == pOwnerStorageSystem ) )
     {
         hr = E_INVALIDARG;
         goto abort;
@@ -775,7 +775,7 @@ HRESULT CSampleDataContainer::Initialize(
                         0,
                         NULL,
                         NULL
-                        );
+                    );
     if( 0 >= cchNeeded )
     {
         hr = HRESULT_FROM_WIN32( GetLastError() );
@@ -798,7 +798,7 @@ HRESULT CSampleDataContainer::Initialize(
                             cchNeeded,
                             NULL,
                             NULL
-                            );
+                        );
     if( cchConverted != cchNeeded )
     {
         delete [] m_pszPathName;
@@ -822,24 +822,24 @@ HRESULT CSampleDataContainer::Initialize(
 
     dwFileAccess = GENERIC_READ;
     if ( ( dwFlags & WMS_DATA_CONTAINER_WRITE_ACCESS )
-        || ( dwFlags & WMS_DATA_CONTAINER_CREATE_NEW_CONTAINER ) )
+            || ( dwFlags & WMS_DATA_CONTAINER_CREATE_NEW_CONTAINER ) )
     {
         dwFileAccess |= GENERIC_WRITE;
     }
 
     pszSDKSampleStorageSystemPathname = m_pszPathName + URL_SCHEME_LENGTH;
 
-    m_hFile = CreateFileA( 
-                    pszSDKSampleStorageSystemPathname, 
-                    dwFileAccess, 
-                    FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE,
-                    NULL,
-                    dwOpenStyle, 
-                    dwSDKSampleStorageSystemFlags,
-                    NULL 
-                    );
+    m_hFile = CreateFileA(
+                  pszSDKSampleStorageSystemPathname,
+                  dwFileAccess,
+                  FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE,
+                  NULL,
+                  dwOpenStyle,
+                  dwSDKSampleStorageSystemFlags,
+                  NULL
+              );
     if ( INVALID_HANDLE_VALUE == m_hFile )
-    {   
+    {
         hr = HRESULT_FROM_WIN32( GetLastError() );
         goto abort;
     }
@@ -856,16 +856,16 @@ HRESULT CSampleDataContainer::Initialize(
     }
 
     // Get the file size.
-    dwSizeLow = GetFileSize( m_hFile, & dwSizeHigh ) ; 
- 
-    // If we failed ... 
-    if( ( dwSizeLow == 0xFFFFFFFF ) && 
-        ( ( dwError = GetLastError() ) != NO_ERROR ) )
+    dwSizeLow = GetFileSize( m_hFile, & dwSizeHigh ) ;
+
+    // If we failed ...
+    if( ( dwSizeLow == 0xFFFFFFFF ) &&
+            ( ( dwError = GetLastError() ) != NO_ERROR ) )
     {
         hr = HRESULT_FROM_WIN32( dwError );
         goto abort;
     }
-    m_qwFileSize = MAKEQWORD( dwSizeLow, dwSizeHigh ); 
+    m_qwFileSize = MAKEQWORD( dwSizeLow, dwSizeHigh );
 
     m_dwAlignment = 1;
     m_dwAlignmentLog2 = 0;
@@ -903,7 +903,7 @@ CSampleDataContainer::Shutdown()
     BOOL fSuccess;
 
     EnterCriticalSection( &m_CriticalSection );
-    
+
     if ( NULL != m_pszPathName )
     {
         delete m_pszPathName;
@@ -938,7 +938,7 @@ CSampleDataContainer::Shutdown()
 
 /////////////////////////////////////////////////////////////////////////////
 inline
-STDMETHODIMP_( ULONG ) 
+STDMETHODIMP_( ULONG )
 CSampleDataContainer::AddRef()
 {
     return( InterlockedIncrement( &m_cRef ) );
@@ -949,8 +949,8 @@ CSampleDataContainer::AddRef()
 
 
 /////////////////////////////////////////////////////////////////////////////
-inline 
-STDMETHODIMP_( ULONG ) 
+inline
+STDMETHODIMP_( ULONG )
 CSampleDataContainer::Release()
 {
     if ( 0 == InterlockedDecrement( &m_cRef ) )
@@ -968,7 +968,7 @@ CSampleDataContainer::Release()
 
 /////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
-STDMETHODIMP 
+STDMETHODIMP
 CSampleDataContainer::QueryInterface( REFIID riid, void **ppvObject )
 {
     if ( IID_IWMSDataContainer == riid )
@@ -997,7 +997,7 @@ CSampleDataContainer::QueryInterface( REFIID riid, void **ppvObject )
 // [GetContainerFormat]
 //
 /////////////////////////////////////////////////////////////////////////////
-HRESULT STDMETHODCALLTYPE 
+HRESULT STDMETHODCALLTYPE
 CSampleDataContainer::GetContainerFormat( GUID *pFormat )
 {
     if ( NULL == pFormat )
@@ -1020,23 +1020,23 @@ CSampleDataContainer::GetContainerFormat( GUID *pFormat )
 // [GetDataSourcePlugin]
 //
 /////////////////////////////////////////////////////////////////////////////
-HRESULT STDMETHODCALLTYPE 
-CSampleDataContainer::GetDataSourcePlugin( 
-                        IWMSDataSourcePlugin **ppDataSource
-                        )
+HRESULT STDMETHODCALLTYPE
+CSampleDataContainer::GetDataSourcePlugin(
+    IWMSDataSourcePlugin **ppDataSource
+)
 {
     HRESULT hr = S_OK;
-    
+
     if ( NULL == ppDataSource )
     {
-        
+
         return( E_INVALIDARG );
     }
 
     *ppDataSource = NULL;
 
     EnterCriticalSection( &m_CriticalSection );
-    
+
     if ( NULL != m_pOwnerStorageSystem )
     {
         *ppDataSource = m_pOwnerStorageSystem;
@@ -1048,7 +1048,7 @@ CSampleDataContainer::GetDataSourcePlugin(
     }
 
     LeaveCriticalSection( &m_CriticalSection );
-    
+
     return( hr );
 } // End of GetDataSourcePlugin.
 
@@ -1062,17 +1062,17 @@ CSampleDataContainer::GetDataSourcePlugin(
 // [GetInfo]
 //
 /////////////////////////////////////////////////////////////////////////////
-HRESULT STDMETHODCALLTYPE 
-CSampleDataContainer::GetInfo( 
-                        DWORD dwInfoValueId,
-                        IWMSDataContainerCallback *pCallback,
-                        QWORD qwContext
-                        )
+HRESULT STDMETHODCALLTYPE
+CSampleDataContainer::GetInfo(
+    DWORD dwInfoValueId,
+    IWMSDataContainerCallback *pCallback,
+    QWORD qwContext
+)
 {
     HRESULT hr = S_OK;
 
     if ( NULL == pCallback )
-    {        
+    {
         return( E_INVALIDARG );
     }
     if ( WMS_DATA_CONTAINER_SIZE != dwInfoValueId )
@@ -1081,17 +1081,17 @@ CSampleDataContainer::GetInfo(
     }
 
     EnterCriticalSection( &m_CriticalSection );
-    
+
     // If this data container is not open, then abort.
     if ( INVALID_HANDLE_VALUE != m_hFile )
-    {        
+    {
         // Ignore any error returned by the callback.
-        ( void ) pCallback->OnGetInfo( 
-                        S_OK,
-                        WMS_SEEKABLE_CONTAINER | WMS_LOCAL_DATA_CONTAINER,
-                        m_qwFileSize,
-                        qwContext
-                        );
+        ( void ) pCallback->OnGetInfo(
+            S_OK,
+            WMS_SEEKABLE_CONTAINER | WMS_LOCAL_DATA_CONTAINER,
+            m_qwFileSize,
+            qwContext
+        );
         hr = S_OK; // any error is passed to the callback
     }
     else
@@ -1100,26 +1100,26 @@ CSampleDataContainer::GetInfo(
     }
 
     LeaveCriticalSection( &m_CriticalSection );
-    
+
     return( hr );
 } // End of GetInfo.
 
 /////////////////////////////////////////////////////////////////////////////
 
-HRESULT STDMETHODCALLTYPE 
-CSampleDataContainer::GetTransferParameters( 
-                                QWORD qwDesiredOffset,
-                                DWORD dwDesiredMinSize,
-                                DWORD dwDesiredMaxSize,
-                                QWORD *pqwOffset,
-                                DWORD *pdwSize,
-                                DWORD *pdwBufferAlignment
-                                )
+HRESULT STDMETHODCALLTYPE
+CSampleDataContainer::GetTransferParameters(
+    QWORD qwDesiredOffset,
+    DWORD dwDesiredMinSize,
+    DWORD dwDesiredMaxSize,
+    QWORD *pqwOffset,
+    DWORD *pdwSize,
+    DWORD *pdwBufferAlignment
+)
 {
     HRESULT hr = S_OK;
 
     if( ( NULL == pqwOffset )
-        || ( NULL == pdwSize ) )
+            || ( NULL == pdwSize ) )
     {
         return( E_POINTER );
     }
@@ -1135,7 +1135,7 @@ CSampleDataContainer::GetTransferParameters(
     }
 
     EnterCriticalSection( &m_CriticalSection );
-    
+
     if( pdwBufferAlignment != NULL )
     {
         *pdwBufferAlignment = m_dwAlignment;
@@ -1148,10 +1148,10 @@ CSampleDataContainer::GetTransferParameters(
 
         // We may have backed the offset up to the nearest sector.
         // Make sure we will still read all of the desired bytes.
-        *pdwSize = dwDesiredMinSize + (DWORD) ( qwDesiredOffset - *pqwOffset ); 
+        *pdwSize = dwDesiredMinSize + (DWORD) ( qwDesiredOffset - *pqwOffset );
         *pdwSize = ( ( *pdwSize + m_dwAlignment - 1 ) >> m_dwAlignmentLog2 ) << m_dwAlignmentLog2;
 
-        if( dwDesiredMaxSize != 0 ) 
+        if( dwDesiredMaxSize != 0 )
         {
             if( dwDesiredMaxSize > *pdwSize )
             {
@@ -1183,10 +1183,10 @@ CSampleDataContainer::GetTransferParameters(
         }
         else
         {
-            // we could make pdwSize smaller now if necessary, so that we don't read 
-            // too much information            
+            // we could make pdwSize smaller now if necessary, so that we don't read
+            // too much information
             *pqwOffset = 0;
-            *pdwSize = ( ( (DWORD) qwDesiredOffset + m_dwAlignment - 1 ) >> m_dwAlignmentLog2 ) << m_dwAlignmentLog2; 
+            *pdwSize = ( ( (DWORD) qwDesiredOffset + m_dwAlignment - 1 ) >> m_dwAlignmentLog2 ) << m_dwAlignmentLog2;
         }
     }
     else
@@ -1209,17 +1209,17 @@ abort:
 // [Read]
 //
 /////////////////////////////////////////////////////////////////////////////
-HRESULT STDMETHODCALLTYPE 
-CSampleDataContainer::Read( 
-                        BYTE *pbBuffer,
-                        QWORD qwReadPosition,
-                        DWORD dwMaxDataSize,
-                        DWORD dwFlags,
-                        IWMSDataContainerCallback *pCallback,
-                        QWORD qwContext
-                        )
+HRESULT STDMETHODCALLTYPE
+CSampleDataContainer::Read(
+    BYTE *pbBuffer,
+    QWORD qwReadPosition,
+    DWORD dwMaxDataSize,
+    DWORD dwFlags,
+    IWMSDataContainerCallback *pCallback,
+    QWORD qwContext
+)
 {
-    
+
 
     // The dwChangeType and qwChangeParameter values allow a storage
     // system to send stream signals to the server when a read completes.
@@ -1231,16 +1231,16 @@ CSampleDataContainer::Read(
     //
     // 1. You may call the callback from any thread. You may even call the
     //      callback inside this function before this function returns.
-    // 
-    // 2. If you call the callback, then this method MUST return S_OK. 
+    //
+    // 2. If you call the callback, then this method MUST return S_OK.
     //       This tells the server that the callback will not be called.
     //
     //       Similarly, if this function returns S_OK, then you must call
     //       the callback eventually, either from inside this method or
     //       later as part of an asynchronous action.
     //
-    // 3. If this method returns an error, then it must NOT call the 
-    //       callback. The error tells the server that the callback 
+    // 3. If this method returns an error, then it must NOT call the
+    //       callback. The error tells the server that the callback
     //       will not be called.
 
     HRESULT hr = S_OK;
@@ -1251,16 +1251,16 @@ CSampleDataContainer::Read(
 
 
     if ( ( NULL == pbBuffer )
-        || ( NULL == pCallback ) )
+            || ( NULL == pCallback ) )
     {
         return( E_INVALIDARG );
     }
 
     EnterCriticalSection( &m_CriticalSection );
-    
+
     // If this data container is not open, then abort.
     if ( ( INVALID_HANDLE_VALUE == m_hFile )
-        || ( NULL == m_pOwnerStorageSystem ) )
+            || ( NULL == m_pOwnerStorageSystem ) )
     {
         hr = E_UNEXPECTED;
         goto abort;
@@ -1276,14 +1276,14 @@ CSampleDataContainer::Read(
         hr = HRESULT_FROM_WIN32( dwError );
         goto abort;
     }
- 
-    fSuccess = ReadFile( 
-                    m_hFile, 
-                    pbBuffer,
-                    dwMaxDataSize, 
-                    &dwBytesTransferred,
-                    NULL
-                    );
+
+    fSuccess = ReadFile(
+                   m_hFile,
+                   pbBuffer,
+                   dwMaxDataSize,
+                   &dwBytesTransferred,
+                   NULL
+               );
     if ( !fSuccess )
     {
         dwError = GetLastError();
@@ -1295,14 +1295,14 @@ CSampleDataContainer::Read(
     }
 
     OnIoCompletion(
-            dwError,
-            CSampleDataContainer::IO_READ,
-            qwReadPosition,
-            dwBytesTransferred,
-            pbBuffer,
-            pCallback,
-            qwContext
-            );
+        dwError,
+        CSampleDataContainer::IO_READ,
+        qwReadPosition,
+        dwBytesTransferred,
+        pbBuffer,
+        pCallback,
+        qwContext
+    );
 
     // We called the callback, so we MUST return S_OK.
     hr = S_OK;
@@ -1326,15 +1326,15 @@ abort:
 
 
 /////////////////////////////////////////////////////////////////////////////
-HRESULT STDMETHODCALLTYPE CSampleDataContainer::Write( 
-                        BYTE *pbBuffer,
-                        DWORD dwDataSize,
-                        QWORD qwWritePosition,
-                        IWMSDataContainerCallback *pCallback,
-                        QWORD qwContext
-                        )
+HRESULT STDMETHODCALLTYPE CSampleDataContainer::Write(
+    BYTE *pbBuffer,
+    DWORD dwDataSize,
+    QWORD qwWritePosition,
+    IWMSDataContainerCallback *pCallback,
+    QWORD qwContext
+)
 {
-    
+
     HRESULT hr = S_OK;
     BOOL fSuccess = TRUE;
     DWORD dwOffsetLow = 0, dwOffsetHigh = 0;
@@ -1342,7 +1342,7 @@ HRESULT STDMETHODCALLTYPE CSampleDataContainer::Write(
     DWORD dwBytesTransferred = 0;
 
     if ( ( NULL == pbBuffer )
-        || ( NULL == pCallback ) )
+            || ( NULL == pCallback ) )
     {
         return( E_INVALIDARG );
     }
@@ -1351,7 +1351,7 @@ HRESULT STDMETHODCALLTYPE CSampleDataContainer::Write(
 
     // If this data container is not open, then abort.
     if ( ( INVALID_HANDLE_VALUE == m_hFile )
-        || ( NULL == m_pOwnerStorageSystem ) )
+            || ( NULL == m_pOwnerStorageSystem ) )
     {
         hr = E_UNEXPECTED;
         goto abort;
@@ -1361,16 +1361,16 @@ HRESULT STDMETHODCALLTYPE CSampleDataContainer::Write(
     //
     // 1. You may call the callback from any thread. You may even call the
     //      callback inside this function before this function returns.
-    // 
-    // 2. If you call the callback, then this method MUST return S_OK. 
+    //
+    // 2. If you call the callback, then this method MUST return S_OK.
     //       This tells the server that the callback will not be called.
     //
     //       Similarly, if this function returns S_OK, then you must call
     //       the callback eventually, either from inside this method or
     //       later as part of an asynchronous action.
     //
-    // 3. If this method returns an error, then it must NOT call the 
-    //       callback. The error tells the server that the callback 
+    // 3. If this method returns an error, then it must NOT call the
+    //       callback. The error tells the server that the callback
     //       will not be called.
 
     dwOffsetLow = LODWORD( qwWritePosition );
@@ -1384,13 +1384,13 @@ HRESULT STDMETHODCALLTYPE CSampleDataContainer::Write(
         goto abort;
     }
 
-    fSuccess = WriteFile( 
-                    m_hFile, 
-                    pbBuffer, 
-                    dwDataSize, 
-                    &dwBytesTransferred,
-                    NULL
-                    );
+    fSuccess = WriteFile(
+                   m_hFile,
+                   pbBuffer,
+                   dwDataSize,
+                   &dwBytesTransferred,
+                   NULL
+               );
     if ( !fSuccess )
     {
         dwError = GetLastError();
@@ -1399,12 +1399,12 @@ HRESULT STDMETHODCALLTYPE CSampleDataContainer::Write(
     }
 
     OnIoCompletion( dwError,
-            CSampleDataContainer::IO_WRITE,
-            qwWritePosition,
-            dwBytesTransferred,
-            pbBuffer,
-            pCallback,
-            qwContext );
+                    CSampleDataContainer::IO_WRITE,
+                    qwWritePosition,
+                    dwBytesTransferred,
+                    pbBuffer,
+                    pCallback,
+                    qwContext );
     hr = S_OK;
 
 abort:
@@ -1416,24 +1416,24 @@ abort:
 
 
 /////////////////////////////////////////////////////////////////////////////
-void CSampleDataContainer::OnIoCompletion( 
-                        DWORD dwError,
-                        DWORD dwIoType,
-                        QWORD qwOffset,
-                        DWORD cbTransferred,
-                        BYTE *pbBuffer,
-                        IWMSDataContainerCallback *pCallback,
-                        QWORD qwContext
-                        )
+void CSampleDataContainer::OnIoCompletion(
+    DWORD dwError,
+    DWORD dwIoType,
+    QWORD qwOffset,
+    DWORD cbTransferred,
+    BYTE *pbBuffer,
+    IWMSDataContainerCallback *pCallback,
+    QWORD qwContext
+)
 {
     HRESULT hr = HRESULT_FROM_WIN32( dwError );
-    
+
 
     if ( CSampleDataContainer::IO_READ == dwIoType )
     {
-        if ( ( SUCCEEDED( hr ) ) 
-            && ( qwOffset >= m_qwFileSize ) 
-            && ( 0 == cbTransferred ) )
+        if ( ( SUCCEEDED( hr ) )
+                && ( qwOffset >= m_qwFileSize )
+                && ( 0 == cbTransferred ) )
         {
             hr = HRESULT_FROM_WIN32( ERROR_HANDLE_EOF );
         }
@@ -1446,7 +1446,7 @@ void CSampleDataContainer::OnIoCompletion(
                                0,
                                0,
                                qwContext
-                               );
+                             );
             hr = S_OK; // any error is passed to the callback
         }
     }
@@ -1475,14 +1475,14 @@ void CSampleDataContainer::OnIoCompletion(
 // [DoDataContainerExtendedCommand]
 //
 /////////////////////////////////////////////////////////////////////////////
-HRESULT STDMETHODCALLTYPE 
-CSampleDataContainer::DoDataContainerExtendedCommand( 
-                        LPWSTR szCommandName,
-                        IWMSCommandContext *pCommand,
-                        DWORD dwCallFlags,
-                        IWMSDataContainerCallback *pCallback,
-                        QWORD qwContext
-                        )
+HRESULT STDMETHODCALLTYPE
+CSampleDataContainer::DoDataContainerExtendedCommand(
+    LPWSTR szCommandName,
+    IWMSCommandContext *pCommand,
+    DWORD dwCallFlags,
+    IWMSDataContainerCallback *pCallback,
+    QWORD qwContext
+)
 {
     if ( NULL == pCallback )
     {
@@ -1490,10 +1490,10 @@ CSampleDataContainer::DoDataContainerExtendedCommand(
         return( E_INVALIDARG );
     }
 
-    // TODO: Implement any special commands that may be sent from the 
-    // client or server to plugins that are not part of the current command 
+    // TODO: Implement any special commands that may be sent from the
+    // client or server to plugins that are not part of the current command
     // set. Currently, this method is not used, and is designed for future
-    // growth. 
+    // growth.
 
     // Ignore the result.
     pCallback->OnDoDataContainerExtendedCommand( S_OK, qwContext );
@@ -1507,10 +1507,10 @@ CSampleDataContainer::DoDataContainerExtendedCommand(
 
 
 /////////////////////////////////////////////////////////////////////////////
-HRESULT STDMETHODCALLTYPE 
-CSampleDataContainer::FinishParsingPacketlist( 
-                        IWMSPacketList *pPacketList
-                        )
+HRESULT STDMETHODCALLTYPE
+CSampleDataContainer::FinishParsingPacketlist(
+    IWMSPacketList *pPacketList
+)
 {
     HRESULT hr = S_OK;
 
@@ -1541,7 +1541,7 @@ CSampleDirectory::CSampleDirectory()
     m_pSearchDirName = NULL;
     m_pChildren = NULL;
     m_pRecentChild = NULL;
-    m_dwItemNum = 0;    
+    m_dwItemNum = 0;
 } //End of CSampleDirectory
 
 CSampleDirectory::~CSampleDirectory()
@@ -1557,11 +1557,11 @@ CSampleDirectory::~CSampleDirectory()
 /////////////////////////////////////////////////////////////////////////////
 HRESULT
 CSampleDirectory::Initialize(
-                        IWMSContext *pUserContext,
-                        LPWSTR pszContainerName,
-                        CSDKSampleStorageSystem *pOwnerStorageSystem,
-                        IWMSDataSourcePluginCallback *pCallback,
-                        QWORD qwContext )
+    IWMSContext *pUserContext,
+    LPWSTR pszContainerName,
+    CSDKSampleStorageSystem *pOwnerStorageSystem,
+    IWMSDataSourcePluginCallback *pCallback,
+    QWORD qwContext )
 {
     HRESULT hr = S_OK;
     WCHAR *pszNtfsPathname = NULL;
@@ -1584,8 +1584,8 @@ CSampleDirectory::Initialize(
     //
 
     if( ( NULL == pszContainerName )||
-        ( NULL == pCallback ) ||
-        ( NULL == pOwnerStorageSystem ) )
+            ( NULL == pCallback ) ||
+            ( NULL == pOwnerStorageSystem ) )
     {
         hr = E_INVALIDARG;
         goto abort;
@@ -1627,7 +1627,7 @@ CSampleDirectory::Initialize(
 
     //
     // Make an auxiliary copy of the path, without the scheme
-    // 
+    //
 
     pszNtfsPathname = pszContainerName + URL_SCHEME_LENGTH;
     sFileName = wcslen( pszNtfsPathname );
@@ -1657,7 +1657,7 @@ CSampleDirectory::Initialize(
         cLastCharInPath = m_pSearchDirName[sFileName - 1];
 
         if( ( L'\\' == cLastCharInPath )
-            || ( L'/' == cLastCharInPath ) )
+                || ( L'/' == cLastCharInPath ) )
         {
             --sFileName;
             m_pSearchDirName[sFileName] = L'\0';
@@ -1685,7 +1685,7 @@ CSampleDirectory::Initialize(
     //
     // Append a '\*' mask to the working path and walk through the directory
     //
-    
+
     m_pSearchDirName[ sFileName + DIR_MASK_LENGTH ] = L'\0';
 
     wcsncpy_s( &m_pSearchDirName[sFileName],DIR_MASK_LENGTH +1, DIR_MASK, DIR_MASK_LENGTH );
@@ -1726,16 +1726,16 @@ CSampleDirectory::Initialize(
             }
 
             // This means we hit the end of the directory, which is
-            // not an error. 
+            // not an error.
             hr = S_OK;
             break;
         }
 
         if( ( '\0' == FileInfo.cFileName[0] )
-            || ( ( '.' == FileInfo.cFileName[0] ) && ('\0' == FileInfo.cFileName[1] ) )
-            || ( ( '.' == FileInfo.cFileName[0] ) && ( '.' == FileInfo.cFileName[1] ) && ( '\0' == FileInfo.cFileName[2] ) )
-            || ( FileInfo.dwFileAttributes & FILE_ATTRIBUTE_HIDDEN ) )
-            
+                || ( ( '.' == FileInfo.cFileName[0] ) && ('\0' == FileInfo.cFileName[1] ) )
+                || ( ( '.' == FileInfo.cFileName[0] ) && ( '.' == FileInfo.cFileName[1] ) && ( '\0' == FileInfo.cFileName[2] ) )
+                || ( FileInfo.dwFileAttributes & FILE_ATTRIBUTE_HIDDEN ) )
+
         {
             // if the item is empty or '.' or '..' or hidden file then skip it
             // and grab the next file and start the loop again
@@ -1766,7 +1766,7 @@ CSampleDirectory::Initialize(
 
         pDirInfo->m_pszwName[m_dwPathNameLength] = L'\0';
 
-        wcsncpy_s( pDirInfo->m_pszwName, ( dwUrlLength + 1 ) , m_pPathName, m_dwPathNameLength );
+        wcsncpy_s( pDirInfo->m_pszwName, ( dwUrlLength + 1 ), m_pPathName, m_dwPathNameLength );
 
         if( L'\0' != pDirInfo->m_pszwName[m_dwPathNameLength] )
         {
@@ -1827,13 +1827,13 @@ abort:
     {
         delete pDirInfo;
     }
-    
+
     if( INVALID_HANDLE_VALUE != hFileEnum )
     {
         fSuccess = FindClose( hFileEnum );
         hFileEnum = INVALID_HANDLE_VALUE;
     }
-    
+
     if( NULL != pCallback )
     {
         // The HRESULT returned by the callback should be ignored.
@@ -1855,7 +1855,7 @@ HRESULT
 CSampleDirectory::Shutdown()
 {
     CSampleDirectoryInfo *pChild = NULL;
-    
+
     if( NULL != m_pOwnerStorageSystem )
     {
         m_pOwnerStorageSystem->Release();
@@ -1881,7 +1881,7 @@ CSampleDirectory::Shutdown()
         m_pChildren = m_pChildren->m_pNext;
         delete pChild;
     }
-    
+
     return( S_OK );
 } // End of Shutdown
 
@@ -1892,7 +1892,7 @@ CSampleDirectory::Shutdown()
 //
 /////////////////////////////////////////////////////////////////////////////
 inline
-STDMETHODIMP_( ULONG ) 
+STDMETHODIMP_( ULONG )
 CSampleDirectory::AddRef()
 {
     return( InterlockedIncrement( &m_cRef ) );
@@ -1904,8 +1904,8 @@ CSampleDirectory::AddRef()
 // [Release]
 //
 /////////////////////////////////////////////////////////////////////////////
-inline 
-STDMETHODIMP_( ULONG ) 
+inline
+STDMETHODIMP_( ULONG )
 CSampleDirectory::Release()
 {
     if ( 0 == InterlockedDecrement( &m_cRef ) )
@@ -1923,7 +1923,7 @@ CSampleDirectory::Release()
 // [QueryInterface]
 //
 /////////////////////////////////////////////////////////////////////////////
-STDMETHODIMP 
+STDMETHODIMP
 CSampleDirectory::QueryInterface( REFIID riid, void **ppvObject )
 {
     if ( IID_IWMSDirectory == riid )
@@ -1950,9 +1950,9 @@ CSampleDirectory::QueryInterface( REFIID riid, void **ppvObject )
 //
 /////////////////////////////////////////////////////////////////////////////
 HRESULT STDMETHODCALLTYPE
-CSampleDirectory::GetDataSourcePlugin( 
-                    IWMSDataSourcePlugin **ppDataSource
-                    )
+CSampleDirectory::GetDataSourcePlugin(
+    IWMSDataSourcePlugin **ppDataSource
+)
 {
     HRESULT hr = S_OK;
 
@@ -1983,9 +1983,9 @@ abort:
 //
 /////////////////////////////////////////////////////////////////////////////
 HRESULT STDMETHODCALLTYPE
-CSampleDirectory::GetName( 
-                    LPOLESTR *pstrValue
-                    )
+CSampleDirectory::GetName(
+    LPOLESTR *pstrValue
+)
 {
     HRESULT hr = S_OK;
 
@@ -2019,7 +2019,7 @@ CSampleDirectory::GetName(
     {
         ( *pstrValue )[ 0 ] = L'\0';
     }
-    
+
 abort:
     LeaveCriticalSection( &m_CriticalSection );
 
@@ -2032,10 +2032,10 @@ abort:
 //
 /////////////////////////////////////////////////////////////////////////////
 HRESULT STDMETHODCALLTYPE
-CSampleDirectory::GetChildInfo( 
-                    DWORD dwIndex,
-                    WMSDirectoryEntryInfo *pInfo
-                    )
+CSampleDirectory::GetChildInfo(
+    DWORD dwIndex,
+    WMSDirectoryEntryInfo *pInfo
+)
 {
     HRESULT hr = S_OK;
     DWORD dwUrlLength = 0;
@@ -2063,7 +2063,7 @@ CSampleDirectory::GetChildInfo(
         m_pRecentChild = m_pRecentChild->m_pNext;
         m_dwItemNum++;
     } // advancing to the desired position.
-    
+
 
     if( NULL == m_pRecentChild )
     {
@@ -2083,7 +2083,7 @@ CSampleDirectory::GetChildInfo(
 
     pInfo->pstrName[dwUrlLength] = L'\0';
 
-    wcsncpy_s( pInfo->pstrName,( dwUrlLength + 1 ) , m_pRecentChild->m_pszwName, dwUrlLength );
+    wcsncpy_s( pInfo->pstrName,( dwUrlLength + 1 ), m_pRecentChild->m_pszwName, dwUrlLength );
 
     if( L'\0' != pInfo->pstrName[dwUrlLength] )
     {

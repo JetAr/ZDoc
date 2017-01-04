@@ -1,4 +1,4 @@
-//------------------------------------------------------------------------------
+﻿//------------------------------------------------------------------------------
 // File: vmr9allocator.cpp
 //
 // Desc: DirectShow sample code - main implementation file
@@ -16,9 +16,9 @@
 #define MAX_LOADSTRING 100
 
 // Global Variables:
-HINSTANCE hInst;                       
-TCHAR szTitle[MAX_LOADSTRING];         
-TCHAR szWindowClass[MAX_LOADSTRING];  
+HINSTANCE hInst;
+TCHAR szTitle[MAX_LOADSTRING];
+TCHAR szWindowClass[MAX_LOADSTRING];
 
 // Forward declarations of functions included in this code module:
 BOOL                MyRegisterClass(HINSTANCE hInstance);
@@ -57,7 +57,7 @@ int APIENTRY WinMain(HINSTANCE hInstance,
         return FALSE;
     }
 
-    __try 
+    __try
     {
         MSG msg;
         HACCEL hAccelTable;
@@ -68,7 +68,7 @@ int APIENTRY WinMain(HINSTANCE hInstance,
         MyRegisterClass(hInstance);
 
         // Perform application initialization:
-        if (!InitInstance (hInstance, nCmdShow, g_hWnd)) 
+        if (!InitInstance (hInstance, nCmdShow, g_hWnd))
         {
             // Exit the try block gracefully.  Returning FALSE here would
             // lead to a performance penalty unwinding the stack.
@@ -78,9 +78,9 @@ int APIENTRY WinMain(HINSTANCE hInstance,
         hAccelTable = LoadAccelerators(hInstance, (LPCTSTR)IDC_ALLOCATOR9);
 
         // Main message loop:
-        while (GetMessage(&msg, NULL, 0, 0)) 
+        while (GetMessage(&msg, NULL, 0, 0))
         {
-            if (!TranslateAccelerator(msg.hwnd, hAccelTable, &msg)) 
+            if (!TranslateAccelerator(msg.hwnd, hAccelTable, &msg))
             {
                 TranslateMessage(&msg);
                 DispatchMessage(&msg);
@@ -107,9 +107,9 @@ BSTR GetMoviePath()
     TCHAR  szBuffer[MAX_PATH];
     szBuffer[0] = NULL;
 
-    static const TCHAR szFilter[]  
-                            = TEXT("Video Files (.ASF, .AVI, .MPG, .MPEG, .VOB, .QT, .WMV)\0*.ASF;*.AVI;*.MPG;*.MPEG;*.VOB;*.QT;*.WMV\0") \
-                              TEXT("All Files (*.*)\0*.*\0\0");
+    static const TCHAR szFilter[]
+        = TEXT("Video Files (.ASF, .AVI, .MPG, .MPEG, .VOB, .QT, .WMV)\0*.ASF;*.AVI;*.MPG;*.MPEG;*.VOB;*.QT;*.WMV\0") \
+          TEXT("All Files (*.*)\0*.*\0\0");
     ofn.lStructSize         = sizeof(OPENFILENAME);
     ofn.hwndOwner           = g_hWnd;
     ofn.hInstance           = NULL;
@@ -129,31 +129,33 @@ BSTR GetMoviePath()
     ofn.lpstrDefExt         = TEXT("AVI");
     ofn.lCustData           = 0L;
     ofn.lpfnHook            = NULL;
-    ofn.lpTemplateName  = NULL; 
-    
+    ofn.lpTemplateName  = NULL;
+
     if (GetOpenFileName (&ofn))  // user specified a file
     {
         return SysAllocString( szBuffer );
     }
 
-   return NULL;
+    return NULL;
 }
 
-HRESULT             
+HRESULT
 CloseGraph(HWND window)
 {
-    if( g_mediaControl != NULL ) 
+    if( g_mediaControl != NULL )
     {
         OAFilterState state;
-        do {
+        do
+        {
             g_mediaControl->Stop();
             g_mediaControl->GetState(0, & state );
-        } while( state != State_Stopped ) ;
+        }
+        while( state != State_Stopped ) ;
     }
 
-    g_allocator    = NULL;        
-    g_mediaControl = NULL;        
-    g_filter       = NULL;        
+    g_allocator    = NULL;
+    g_mediaControl = NULL;
+    g_filter       = NULL;
     g_graph        = NULL;
     ::InvalidateRect( window, NULL, true );
     return S_OK;
@@ -174,7 +176,7 @@ HRESULT StartGraph(HWND window)
     }
 
     HRESULT hr;
-    
+
     hr = CoCreateInstance(CLSID_FilterGraph, NULL, CLSCTX_INPROC_SERVER, IID_IGraphBuilder, (void**)&g_graph);
 
     if (SUCCEEDED(hr))
@@ -252,7 +254,7 @@ HRESULT SetAllocatorPresenter( IBaseFilter *filter, HWND window )
     // let the allocator and the notify know about each other
     FAIL_RET( lpIVMRSurfAllocNotify->AdviseSurfaceAllocator( g_userId, g_allocator ) );
     FAIL_RET( g_allocator->AdviseNotify(lpIVMRSurfAllocNotify) );
-    
+
     return hr;
 }
 
@@ -302,19 +304,19 @@ BOOL MyRegisterClass(HINSTANCE hInstance)
 //
 BOOL InitInstance(HINSTANCE hInstance, int nCmdShow, HWND& hWnd)
 {
-   hInst = hInstance; // Store instance handle in our global variable
+    hInst = hInstance; // Store instance handle in our global variable
 
-   hWnd = CreateWindow(szWindowClass, szTitle, WS_OVERLAPPEDWINDOW,
-                       100, 100, 600, 500, 
-                       NULL, NULL, hInstance, NULL);
+    hWnd = CreateWindow(szWindowClass, szTitle, WS_OVERLAPPEDWINDOW,
+                        100, 100, 600, 500,
+                        NULL, NULL, hInstance, NULL);
 
-   if (!hWnd)
-      return FALSE;
+    if (!hWnd)
+        return FALSE;
 
-   ShowWindow(hWnd, nCmdShow);
-   UpdateWindow(hWnd);
+    ShowWindow(hWnd, nCmdShow);
+    UpdateWindow(hWnd);
 
-   return TRUE;
+    return TRUE;
 }
 
 void PaintWindow(HWND hWnd)
@@ -339,7 +341,7 @@ void PaintWindow(HWND hWnd)
         }
     }
 
-    if ( bNeedPaint ) 
+    if ( bNeedPaint )
     {
         RECT rc2;
         GetClientRect(hWnd, &rc2);
@@ -364,52 +366,52 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     HRESULT hr;
     int wmId, wmEvent;
 
-    switch (message) 
+    switch (message)
     {
-        case WM_COMMAND:
-            wmId    = LOWORD(wParam); 
-            wmEvent = HIWORD(wParam); 
+    case WM_COMMAND:
+        wmId    = LOWORD(wParam);
+        wmEvent = HIWORD(wParam);
 
-            // Parse the menu selections:
-            switch (wmId)
+        // Parse the menu selections:
+        switch (wmId)
+        {
+        case IDM_PLAY_FILE:
+            hr = StartGraph(g_hWnd);
+            if( FAILED(hr) )
             {
-                case IDM_PLAY_FILE:
-                    hr = StartGraph(g_hWnd);
-                    if( FAILED(hr) )
-                    {
-                        return 0;
-                    }
-                    break;
-
-                case ID_FILE_CLOSE:
-                    CloseGraph( hWnd );
-                    break;
-
-                case IDM_ABOUT:
-                   DialogBox(hInst, (LPCTSTR)IDD_ABOUTBOX, hWnd, (DLGPROC)About);
-                   break;
-
-                case IDM_EXIT:
-                   DestroyWindow(hWnd);
-                   break;
-
-                default:
-                   return DefWindowProc(hWnd, message, wParam, lParam);
+                return 0;
             }
             break;
 
-        case WM_PAINT:
-            PaintWindow(hWnd);
+        case ID_FILE_CLOSE:
+            CloseGraph( hWnd );
             break;
 
-        case WM_DESTROY:
-            PostQuitMessage(0);
+        case IDM_ABOUT:
+            DialogBox(hInst, (LPCTSTR)IDD_ABOUTBOX, hWnd, (DLGPROC)About);
+            break;
+
+        case IDM_EXIT:
+            DestroyWindow(hWnd);
             break;
 
         default:
             return DefWindowProc(hWnd, message, wParam, lParam);
-   }
-   return 0;
+        }
+        break;
+
+    case WM_PAINT:
+        PaintWindow(hWnd);
+        break;
+
+    case WM_DESTROY:
+        PostQuitMessage(0);
+        break;
+
+    default:
+        return DefWindowProc(hWnd, message, wParam, lParam);
+    }
+    return 0;
 }
 
 // Mesage handler for about box.
@@ -417,16 +419,16 @@ LRESULT CALLBACK About(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
     switch (message)
     {
-        case WM_INITDIALOG:
-                return TRUE;
+    case WM_INITDIALOG:
+        return TRUE;
 
-        case WM_COMMAND:
-            if (LOWORD(wParam) == IDOK || LOWORD(wParam) == IDCANCEL) 
-            {
-                EndDialog(hDlg, LOWORD(wParam));
-                return TRUE;
-            }
-            break;
+    case WM_COMMAND:
+        if (LOWORD(wParam) == IDOK || LOWORD(wParam) == IDCANCEL)
+        {
+            EndDialog(hDlg, LOWORD(wParam));
+            return TRUE;
+        }
+        break;
     }
 
     return FALSE;
@@ -461,15 +463,15 @@ BOOL VerifyVMR9(void)
     else
     {
         MessageBox(NULL,
-            TEXT("This application requires the VMR-9.\r\n\r\n")
+                   TEXT("This application requires the VMR-9.\r\n\r\n")
 
-            TEXT("The VMR-9 is not enabled when viewing through a Remote\r\n")
-            TEXT(" Desktop session. You can run VMR-enabled applications only\r\n") 
-            TEXT("on your local computer.\r\n\r\n")
+                   TEXT("The VMR-9 is not enabled when viewing through a Remote\r\n")
+                   TEXT(" Desktop session. You can run VMR-enabled applications only\r\n")
+                   TEXT("on your local computer.\r\n\r\n")
 
-            TEXT("\r\nThis sample will now exit."),
+                   TEXT("\r\nThis sample will now exit."),
 
-            TEXT("Video Mixing Renderer (VMR9) capabilities are required"), MB_OK);
+                   TEXT("Video Mixing Renderer (VMR9) capabilities are required"), MB_OK);
 
         return FALSE;
     }

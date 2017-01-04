@@ -1,4 +1,4 @@
-//+-------------------------------------------------------------------------
+﻿//+-------------------------------------------------------------------------
 //
 //  Microsoft Windows Media Technologies
 //  Copyright (C) Microsoft Corporation. All rights reserved.
@@ -17,7 +17,7 @@
 
 STDMETHODIMP CContextAdmin::InterfaceSupportsErrorInfo(REFIID riid)
 {
-    static const IID* arr[] = 
+    static const IID* arr[] =
     {
         &IID_IWMSContextAdmin
     };

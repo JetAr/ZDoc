@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -15,10 +15,11 @@ extern BOOL StatusInit(HANDLE);
 
 BOOL WINAPI InitGutils(HANDLE hInstance, DWORD dwReason, LPVOID reserved)
 {
-        if (dwReason == DLL_PROCESS_ATTACH) {
-                hLibInst = hInstance;
-                gtab_init();
-                StatusInit(hLibInst);
-        }
-        return(TRUE);
+    if (dwReason == DLL_PROCESS_ATTACH)
+    {
+        hLibInst = hInstance;
+        gtab_init();
+        StatusInit(hLibInst);
+    }
+    return(TRUE);
 }

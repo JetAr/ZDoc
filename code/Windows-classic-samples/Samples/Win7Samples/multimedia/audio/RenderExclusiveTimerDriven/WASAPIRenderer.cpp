@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -16,7 +16,7 @@
 //  A simple WASAPI Render client.
 //
 
-CWASAPIRenderer::CWASAPIRenderer(IMMDevice *Endpoint) : 
+CWASAPIRenderer::CWASAPIRenderer(IMMDevice *Endpoint) :
     _RefCount(1),
     _Endpoint(Endpoint),
     _AudioClient(NULL),
@@ -32,12 +32,12 @@ CWASAPIRenderer::CWASAPIRenderer(IMMDevice *Endpoint) :
 //
 //  Empty destructor - everything should be released in the Shutdown() call.
 //
-CWASAPIRenderer::~CWASAPIRenderer(void) 
+CWASAPIRenderer::~CWASAPIRenderer(void)
 {
 }
 #define PERIODS_PER_BUFFER 4
 //
-//  Initialize WASAPI in event driven mode, associate the audio client with our samples ready event handle, and retrieve 
+//  Initialize WASAPI in event driven mode, associate the audio client with our samples ready event handle, and retrieve
 //  a render client for the transport.
 //
 bool CWASAPIRenderer::InitializeAudioEngine()
@@ -46,15 +46,15 @@ bool CWASAPIRenderer::InitializeAudioEngine()
     REFERENCE_TIME periodicity = _EngineLatencyInMS*10000;
 
     //
-    //  We initialize the engine with a periodicity of _EngineLatencyInMS and a buffer size of PERIODS_PER_BUFFER times the latency - this ensures 
+    //  We initialize the engine with a periodicity of _EngineLatencyInMS and a buffer size of PERIODS_PER_BUFFER times the latency - this ensures
     //  that we will always have space available for rendering audio.  We only need to do this for exclusive mode timer driven rendering.
     //
-    HRESULT hr = _AudioClient->Initialize(AUDCLNT_SHAREMODE_EXCLUSIVE, 
-        AUDCLNT_STREAMFLAGS_NOPERSIST, 
-        bufferDuration, 
-        periodicity,
-        _MixFormat, 
-        NULL);
+    HRESULT hr = _AudioClient->Initialize(AUDCLNT_SHAREMODE_EXCLUSIVE,
+                                          AUDCLNT_STREAMFLAGS_NOPERSIST,
+                                          bufferDuration,
+                                          periodicity,
+                                          _MixFormat,
+                                          NULL);
     if (FAILED(hr))
     {
         printf("Unable to initialize audio client: %x.\n", hr);
@@ -82,7 +82,7 @@ bool CWASAPIRenderer::InitializeAudioEngine()
 }
 //
 //  That buffer duration is calculated as being PERIODS_PER_BUFFER x the
-//  periodicity, so each period we're going to see 1/PERIODS_PER_BUFFERth 
+//  periodicity, so each period we're going to see 1/PERIODS_PER_BUFFERth
 //  the size of the buffer.
 //
 UINT32 CWASAPIRenderer::BufferSizePerPeriod()
@@ -94,7 +94,7 @@ UINT32 CWASAPIRenderer::BufferSizePerPeriod()
 //  Retrieve the format we'll use to rendersamples.
 //
 //  Start with the mix format and see if the endpoint can render that.  If not, try
-//  the mix format converted to an integer form (most audio solutions don't support floating 
+//  the mix format converted to an integer form (most audio solutions don't support floating
 //  point rendering and the mix format is usually a floating point format).
 //
 bool CWASAPIRenderer::LoadFormat()
@@ -122,8 +122,8 @@ bool CWASAPIRenderer::LoadFormat()
             _MixFormat->nBlockAlign = (_MixFormat->wBitsPerSample / 8) * _MixFormat->nChannels;
             _MixFormat->nAvgBytesPerSec = _MixFormat->nSamplesPerSec*_MixFormat->nBlockAlign;
         }
-        else if (_MixFormat->wFormatTag == WAVE_FORMAT_EXTENSIBLE && 
-            reinterpret_cast<WAVEFORMATEXTENSIBLE *>(_MixFormat)->SubFormat == KSDATAFORMAT_SUBTYPE_IEEE_FLOAT)
+        else if (_MixFormat->wFormatTag == WAVE_FORMAT_EXTENSIBLE &&
+                 reinterpret_cast<WAVEFORMATEXTENSIBLE *>(_MixFormat)->SubFormat == KSDATAFORMAT_SUBTYPE_IEEE_FLOAT)
         {
             WAVEFORMATEXTENSIBLE *waveFormatExtensible = reinterpret_cast<WAVEFORMATEXTENSIBLE *>(_MixFormat);
             waveFormatExtensible->SubFormat = KSDATAFORMAT_SUBTYPE_PCM;
@@ -159,8 +159,8 @@ bool CWASAPIRenderer::LoadFormat()
 //
 bool CWASAPIRenderer::CalculateMixFormatType()
 {
-    if (_MixFormat->wFormatTag == WAVE_FORMAT_PCM || 
-        _MixFormat->wFormatTag == WAVE_FORMAT_EXTENSIBLE &&
+    if (_MixFormat->wFormatTag == WAVE_FORMAT_PCM ||
+            _MixFormat->wFormatTag == WAVE_FORMAT_EXTENSIBLE &&
             reinterpret_cast<WAVEFORMATEXTENSIBLE *>(_MixFormat)->SubFormat == KSDATAFORMAT_SUBTYPE_PCM)
     {
         if (_MixFormat->wBitsPerSample == 16)
@@ -175,11 +175,11 @@ bool CWASAPIRenderer::CalculateMixFormatType()
     }
     else if (_MixFormat->wFormatTag == WAVE_FORMAT_IEEE_FLOAT ||
              (_MixFormat->wFormatTag == WAVE_FORMAT_EXTENSIBLE &&
-               reinterpret_cast<WAVEFORMATEXTENSIBLE *>(_MixFormat)->SubFormat == KSDATAFORMAT_SUBTYPE_IEEE_FLOAT))
+              reinterpret_cast<WAVEFORMATEXTENSIBLE *>(_MixFormat)->SubFormat == KSDATAFORMAT_SUBTYPE_IEEE_FLOAT))
     {
         _RenderSampleType = SampleTypeFloat;
     }
-    else 
+    else
     {
         printf("unrecognized device format.\n");
         return false;
@@ -275,7 +275,7 @@ bool CWASAPIRenderer::Start(RenderBuffer *RenderBufferQueue)
     _RenderBufferQueue = RenderBufferQueue;
 
     //
-    //  We want to pre-roll the first buffer's worth of data into the pipeline.  That way the audio engine won't glitch on startup.  
+    //  We want to pre-roll the first buffer's worth of data into the pipeline.  That way the audio engine won't glitch on startup.
     //
     {
         BYTE *pData;
@@ -349,7 +349,7 @@ void CWASAPIRenderer::Stop()
     HRESULT hr;
 
     //
-    //  Tell the render thread to shut down, wait for the thread to complete then clean up all the stuff we 
+    //  Tell the render thread to shut down, wait for the thread to complete then clean up all the stuff we
     //  allocated in Start().
     //
     if (_ShutdownEvent)
@@ -469,7 +469,7 @@ DWORD CWASAPIRenderer::DoRenderThread()
                     while (_RenderBufferQueue != NULL && (_RenderBufferQueue->_BufferLength <= (framesAvailable *_FrameSize)))
                     {
                         //
-                        //  We know that the buffer at the head of the queue will fit, so remove it and write it into 
+                        //  We know that the buffer at the head of the queue will fit, so remove it and write it into
                         //  the engine buffer.  Continue doing this until we no longer can fit
                         //  the recent buffer into the engine buffer.
                         //
@@ -510,7 +510,7 @@ DWORD CWASAPIRenderer::DoRenderThread()
                         {
                             //
                             //  Calculate the number of frames available.  We'll render
-                            //  that many frames or the number of frames left in the buffer, 
+                            //  that many frames or the number of frames left in the buffer,
                             //  whichever is smaller.
                             //
                             framesAvailable = _BufferSize - padding;

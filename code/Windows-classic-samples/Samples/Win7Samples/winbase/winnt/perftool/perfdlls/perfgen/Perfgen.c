@@ -1,4 +1,4 @@
-/*++ 
+﻿/*++
 
 Copyright (c) 1995 - 2000  Microsoft Corporation
 
@@ -11,7 +11,7 @@ Abstract:
     This file implements an Extensible Performance Object that displays
     generated signals
 
-Created:    
+Created:
 
     Bob Watson  28-Jul-1995
 
@@ -41,7 +41,7 @@ Revision History
 //
 
 extern SIGGEN_DATA_DEFINITION SigGenDataDefinition;
-    
+
 DWORD  dwOpenCount = 0;        // count of "Open" threads
 BOOL   bInitOK     = FALSE;    // true = DLL initialized OK
 
@@ -56,7 +56,8 @@ PM_OPEN_PROC    OpenSigGenPerformanceData;
 PM_COLLECT_PROC CollectSigGenPerformanceData;
 PM_CLOSE_PROC   CloseSigGenPerformanceData;
 
-typedef struct _WAVE_DATA {
+typedef struct _WAVE_DATA
+{
     DWORD   dwPeriod;
     DWORD   dwAmplitude;
     LPWSTR  szInstanceName;
@@ -129,12 +130,13 @@ Return Value:
     //  order to service remote performance queries, this library
     //  must keep track of how many times it has been opened (i.e.
     //  how many threads have accessed it). the registry routines will
-    //  limit access to the initialization routine to only one thread 
-    //  at a time so synchronization (i.e. reentrancy) should not be 
+    //  limit access to the initialization routine to only one thread
+    //  at a time so synchronization (i.e. reentrancy) should not be
     //  a problem
     //
 
-    if (! dwOpenCount) {
+    if (! dwOpenCount)
+    {
         // open Eventlog interface
 
         hEventLog = MonOpenEventLog();
@@ -142,19 +144,20 @@ Return Value:
         // get counter and help index base values from registry
         //      Open key to registry entry
         //      read First Counter and First Help values
-        //      update static data strucutures by adding base to 
+        //      update static data strucutures by adding base to
         //          offset value in structure.
 
         status = RegOpenKeyEx(
-                        HKEY_LOCAL_MACHINE,
-                        "SYSTEM\\CurrentControlSet\\Services\\PerfGen\\Performance",
-                        0L,
-                        KEY_READ,
-                        & hKeyDriverPerf);
-        if (status != ERROR_SUCCESS) {
+                     HKEY_LOCAL_MACHINE,
+                     "SYSTEM\\CurrentControlSet\\Services\\PerfGen\\Performance",
+                     0L,
+                     KEY_READ,
+                     & hKeyDriverPerf);
+        if (status != ERROR_SUCCESS)
+        {
             REPORT_ERROR_DATA (GENPERF_UNABLE_OPEN_DRIVER_KEY, LOG_USER,
-                &status, sizeof(status));
-            // this is fatal, if we can't get the base values of the 
+                               &status, sizeof(status));
+            // this is fatal, if we can't get the base values of the
             // counter or help names, then the names won't be available
             // to the requesting application  so there's not much
             // point in continuing.
@@ -163,16 +166,17 @@ Return Value:
 
         size = sizeof(DWORD);
         status = RegQueryValueEx(
-                        hKeyDriverPerf, 
-                        "First Counter",
-                        0L,
-                        & type,
-                        (LPBYTE) & dwFirstCounter,
-                        & size);
-        if (status != ERROR_SUCCESS) {
+                     hKeyDriverPerf,
+                     "First Counter",
+                     0L,
+                     & type,
+                     (LPBYTE) & dwFirstCounter,
+                     & size);
+        if (status != ERROR_SUCCESS)
+        {
             REPORT_ERROR_DATA (GENPERF_UNABLE_READ_FIRST_COUNTER, LOG_USER,
-                &status, sizeof(status));
-            // this is fatal, if we can't get the base values of the 
+                               &status, sizeof(status));
+            // this is fatal, if we can't get the base values of the
             // counter or help names, then the names won't be available
             // to the requesting application  so there's not much
             // point in continuing.
@@ -181,25 +185,26 @@ Return Value:
 
         size = sizeof(DWORD);
         status = RegQueryValueEx(
-                        hKeyDriverPerf, 
-                        "First Help",
-                        0L,
-                        & type,
-                        (LPBYTE) & dwFirstHelp,
-                        & size);
-        if (status != ERROR_SUCCESS) {
+                     hKeyDriverPerf,
+                     "First Help",
+                     0L,
+                     & type,
+                     (LPBYTE) & dwFirstHelp,
+                     & size);
+        if (status != ERROR_SUCCESS)
+        {
             REPORT_ERROR_DATA (GENPERF_UNABLE_READ_FIRST_HELP, LOG_USER,
-                &status, sizeof(status));
-            // this is fatal, if we can't get the base values of the 
+                               &status, sizeof(status));
+            // this is fatal, if we can't get the base values of the
             // counter or help names, then the names won't be available
             // to the requesting application  so there's not much
             // point in continuing.
             goto OpenExitPoint;
         }
- 
+
         //
         //  NOTE: the initialization program could also retrieve
-        //      LastCounter and LastHelp if they wanted to do 
+        //      LastCounter and LastHelp if they wanted to do
         //      bounds checking on the new number. e.g.
         //
         //      counter->CounterNameTitleIndex += dwFirstCounter;
@@ -252,7 +257,7 @@ Arguments:
          pointer to a wide character string passed by registry.
 
    IN OUT   LPVOID   *lppData
-         IN: pointer to the address of the buffer to receive the completed 
+         IN: pointer to the address of the buffer to receive the completed
             PerfDataBlock and subordinate structures. This routine will
             append its data to the buffer starting at the point referenced
             by *lppData.
@@ -261,15 +266,15 @@ Arguments:
             its data.
 
    IN OUT   LPDWORD  lpcbTotalBytes
-         IN: the address of the DWORD that tells the size in bytes of the 
+         IN: the address of the DWORD that tells the size in bytes of the
             buffer referenced by the lppData argument
-         OUT: the number of bytes added by this routine is writted to the 
+         OUT: the number of bytes added by this routine is writted to the
             DWORD pointed to by this argument
 
    IN OUT   LPDWORD  NumObjectTypes
-         IN: the address of the DWORD to receive the number of objects added 
-            by this routine 
-         OUT: the number of objects added by this routine is writted to the 
+         IN: the address of the DWORD to receive the number of objects added
+            by this routine
+         OUT: the number of objects added by this routine is writted to the
             DWORD pointed to by this argument
 
 Return Value:
@@ -299,18 +304,20 @@ Return Value:
     //
     // before doing anything else, see if Open went OK
     //
-    if (! bInitOK) {
+    if (! bInitOK)
+    {
         // unable to continue because open failed.
         * lpcbTotalBytes   = (DWORD) 0;
         * lpNumObjectTypes = (DWORD) 0;
         return ERROR_SUCCESS; // yes, this is a successful exit
     }
-    
-    // see if this is a foreign (i.e. non-NT) computer data request 
+
+    // see if this is a foreign (i.e. non-NT) computer data request
     //
     dwQueryType = GetQueryType(lpValueName);
-    
-    if ((dwQueryType == QUERY_FOREIGN) || (dwQueryType == QUERY_COSTLY)) {
+
+    if ((dwQueryType == QUERY_FOREIGN) || (dwQueryType == QUERY_COSTLY))
+    {
         // this routine does not service requests for data from
         // Non-NT computers
         * lpcbTotalBytes   = (DWORD) 0;
@@ -318,8 +325,10 @@ Return Value:
         return ERROR_SUCCESS;
     }
 
-    if (dwQueryType == QUERY_ITEMS) {
-    if (! (IsNumberInUnicodeList(SigGenDataDefinition.SigGenObjectType.ObjectNameTitleIndex, lpValueName))) {
+    if (dwQueryType == QUERY_ITEMS)
+    {
+        if (! (IsNumberInUnicodeList(SigGenDataDefinition.SigGenObjectType.ObjectNameTitleIndex, lpValueName)))
+        {
             // request received for data object not provided by this routine
             * lpcbTotalBytes   = (DWORD) 0;
             * lpNumObjectTypes = (DWORD) 0;
@@ -330,11 +339,12 @@ Return Value:
     pSigGenDataDefinition = (SIGGEN_DATA_DEFINITION *) * lppData;
 
     SpaceNeeded = sizeof(SIGGEN_DATA_DEFINITION) +
-                    (NUM_INSTANCES * (sizeof(PERF_INSTANCE_DEFINITION) +
-                    (24) +    // size of instance names
-                    sizeof(SIGGEN_COUNTER)));
+                  (NUM_INSTANCES * (sizeof(PERF_INSTANCE_DEFINITION) +
+                                    (24) +    // size of instance names
+                                    sizeof(SIGGEN_COUNTER)));
 
-    if (* lpcbTotalBytes < SpaceNeeded) {
+    if (* lpcbTotalBytes < SpaceNeeded)
+    {
         * lpcbTotalBytes   = (DWORD) 0;
         * lpNumObjectTypes = (DWORD) 0;
         return ERROR_MORE_DATA;
@@ -353,25 +363,26 @@ Return Value:
     //
     pPerfInstanceDefinition = (PERF_INSTANCE_DEFINITION *) & pSigGenDataDefinition[1];
 
-    for (dwThisInstance = 0; dwThisInstance < NUM_INSTANCES; dwThisInstance ++) {
+    for (dwThisInstance = 0; dwThisInstance < NUM_INSTANCES; dwThisInstance ++)
+    {
         MonBuildInstanceDefinition(
-                        pPerfInstanceDefinition,
-                        (PVOID *) & pSC,
-                        0,
-                        0,
-                        (DWORD) -1, // use name
-                        wdInstance[dwThisInstance].szInstanceName);
+            pPerfInstanceDefinition,
+            (PVOID *) & pSC,
+            0,
+            0,
+            (DWORD) -1, // use name
+            wdInstance[dwThisInstance].szInstanceName);
 
         pSC->CounterBlock.ByteLength = sizeof (SIGGEN_COUNTER);
 
         //**********************************************************
         //
         // for this particular example, the data is "created" here.
-        // normally it would be read from the appropriate device or 
+        // normally it would be read from the appropriate device or
         // application program.
         //
         //**********************************************************
-    
+
         // comput phase for this instance period
         dwPhase = dwTime % wdInstance[dwThisInstance].dwPeriod;
         //
@@ -385,7 +396,7 @@ Return Value:
         dSin = -cos(dPhase);
         // adjust amplitude and add .5 to round to integer correctly
         dSin *= (double)((wdInstance[dwThisInstance].dwAmplitude) / 2.0) + 0.5;
-    
+
         lValue  = (LONG) dSin;
         lValue += wdInstance[dwThisInstance].dwAmplitude / 2;   // to move negative values above 0
 
@@ -394,11 +405,14 @@ Return Value:
 
         // compute triangle wave value here
 
-        if (dwPhase < (wdInstance[dwThisInstance].dwPeriod / 2)) {
+        if (dwPhase < (wdInstance[dwThisInstance].dwPeriod / 2))
+        {
             lValue = (LONG)((dwPhase * wdInstance[dwThisInstance].dwAmplitude) / (wdInstance[dwThisInstance].dwPeriod / 2));
-        } else {
+        }
+        else
+        {
             lValue = (LONG)(((wdInstance[dwThisInstance].dwPeriod - dwPhase) * wdInstance[dwThisInstance].dwAmplitude) /
-                    (wdInstance[dwThisInstance].dwPeriod / 2));
+                            (wdInstance[dwThisInstance].dwPeriod / 2));
         }
         // save triangle value
         pSC->dwTriangleWaveValue = (DWORD) lValue;
@@ -406,9 +420,12 @@ Return Value:
         //
         //  compute square wave value
         //
-        if (dwPhase <= (wdInstance[dwThisInstance].dwPeriod / 2)) {
+        if (dwPhase <= (wdInstance[dwThisInstance].dwPeriod / 2))
+        {
             lValue = 0;
-        } else {
+        }
+        else
+        {
             lValue = (LONG)wdInstance[dwThisInstance].dwAmplitude;
         }
         // save square value
@@ -423,15 +440,15 @@ Return Value:
     // update arguments for return
 
     * lppData = (PVOID) pPerfInstanceDefinition;
-    
+
     * lpNumObjectTypes = 1;
 
-    pSigGenDataDefinition->SigGenObjectType.TotalByteLength = 
-                    * lpcbTotalBytes = (DWORD) ((PBYTE) pPerfInstanceDefinition - (PBYTE) pSigGenDataDefinition);
+    pSigGenDataDefinition->SigGenObjectType.TotalByteLength =
+        * lpcbTotalBytes = (DWORD) ((PBYTE) pPerfInstanceDefinition - (PBYTE) pSigGenDataDefinition);
 
     // update instance count
     pSigGenDataDefinition->SigGenObjectType.NumInstances = NUM_INSTANCES;
-    
+
     return ERROR_SUCCESS;
 }
 
@@ -457,7 +474,8 @@ Return Value:
 --*/
 
 {
-    if (! (-- dwOpenCount)) { // when this is the last thread...
+    if (! (-- dwOpenCount))   // when this is the last thread...
+    {
         MonCloseEventLog();
     }
     return ERROR_SUCCESS;

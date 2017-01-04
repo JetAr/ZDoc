@@ -1,12 +1,12 @@
-//-----------------------------------------------------------------------
+﻿//-----------------------------------------------------------------------
 // This file is part of the Windows SDK Code Samples.
-// 
+//
 // Copyright (C) Microsoft Corporation.  All rights reserved.
-// 
+//
 // This source code is intended only as a supplement to Microsoft
 // Development Tools and/or on-line documentation.  See these other
 // materials for detailed information regarding Microsoft code samples.
-// 
+//
 // THIS CODE AND INFORMATION ARE PROVIDED AS IS WITHOUT WARRANTY OF ANY
 // KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
 // IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -20,7 +20,7 @@
 //implement filestream that derives from IStream
 class FileStream : public IStream
 {
-    FileStream(HANDLE hFile) 
+    FileStream(HANDLE hFile)
     {
         _refcount = 1;
         _hFile = hFile;
@@ -38,41 +38,42 @@ public:
     HRESULT static OpenFile(LPCWSTR pName, IStream ** ppStream, bool fWrite)
     {
         HANDLE hFile = ::CreateFileW(pName, fWrite ? GENERIC_WRITE : GENERIC_READ, FILE_SHARE_READ,
-            NULL, fWrite ? CREATE_ALWAYS : OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+                                     NULL, fWrite ? CREATE_ALWAYS : OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 
         if (hFile == INVALID_HANDLE_VALUE)
             return HRESULT_FROM_WIN32(GetLastError());
-        
+
         *ppStream = new FileStream(hFile);
-        
+
         if(*ppStream == NULL)
             CloseHandle(hFile);
-            
+
         return S_OK;
     }
 
     virtual HRESULT STDMETHODCALLTYPE QueryInterface(REFIID iid, void ** ppvObject)
-    { 
+    {
         if (iid == __uuidof(IUnknown)
-            || iid == __uuidof(IStream)
-            || iid == __uuidof(ISequentialStream))
+                || iid == __uuidof(IStream)
+                || iid == __uuidof(ISequentialStream))
         {
             *ppvObject = static_cast<IStream*>(this);
             AddRef();
             return S_OK;
-        } else
-            return E_NOINTERFACE; 
+        }
+        else
+            return E_NOINTERFACE;
     }
 
-    virtual ULONG STDMETHODCALLTYPE AddRef(void) 
-    { 
-        return (ULONG)InterlockedIncrement(&_refcount); 
+    virtual ULONG STDMETHODCALLTYPE AddRef(void)
+    {
+        return (ULONG)InterlockedIncrement(&_refcount);
     }
 
-    virtual ULONG STDMETHODCALLTYPE Release(void) 
+    virtual ULONG STDMETHODCALLTYPE Release(void)
     {
         ULONG res = (ULONG) InterlockedDecrement(&_refcount);
-        if (res == 0) 
+        if (res == 0)
             delete this;
         return res;
     }
@@ -94,44 +95,44 @@ public:
     // IStream Interface
 public:
     virtual HRESULT STDMETHODCALLTYPE SetSize(ULARGE_INTEGER)
-    { 
-        return E_NOTIMPL;   
+    {
+        return E_NOTIMPL;
     }
-    
+
     virtual HRESULT STDMETHODCALLTYPE CopyTo(IStream*, ULARGE_INTEGER, ULARGE_INTEGER*,
-        ULARGE_INTEGER*) 
-    { 
-        return E_NOTIMPL;   
+            ULARGE_INTEGER*)
+    {
+        return E_NOTIMPL;
     }
-    
-    virtual HRESULT STDMETHODCALLTYPE Commit(DWORD)                                      
-    { 
-        return E_NOTIMPL;   
+
+    virtual HRESULT STDMETHODCALLTYPE Commit(DWORD)
+    {
+        return E_NOTIMPL;
     }
-    
-    virtual HRESULT STDMETHODCALLTYPE Revert(void)                                       
-    { 
-        return E_NOTIMPL;   
+
+    virtual HRESULT STDMETHODCALLTYPE Revert(void)
+    {
+        return E_NOTIMPL;
     }
-    
-    virtual HRESULT STDMETHODCALLTYPE LockRegion(ULARGE_INTEGER, ULARGE_INTEGER, DWORD)              
-    { 
-        return E_NOTIMPL;   
+
+    virtual HRESULT STDMETHODCALLTYPE LockRegion(ULARGE_INTEGER, ULARGE_INTEGER, DWORD)
+    {
+        return E_NOTIMPL;
     }
-    
-    virtual HRESULT STDMETHODCALLTYPE UnlockRegion(ULARGE_INTEGER, ULARGE_INTEGER, DWORD)            
-    { 
-        return E_NOTIMPL;   
+
+    virtual HRESULT STDMETHODCALLTYPE UnlockRegion(ULARGE_INTEGER, ULARGE_INTEGER, DWORD)
+    {
+        return E_NOTIMPL;
     }
-    
-    virtual HRESULT STDMETHODCALLTYPE Clone(IStream **)                                  
-    { 
-        return E_NOTIMPL;   
+
+    virtual HRESULT STDMETHODCALLTYPE Clone(IStream **)
+    {
+        return E_NOTIMPL;
     }
 
     virtual HRESULT STDMETHODCALLTYPE Seek(LARGE_INTEGER liDistanceToMove, DWORD dwOrigin,
-        ULARGE_INTEGER* lpNewFilePointer)
-    { 
+                                           ULARGE_INTEGER* lpNewFilePointer)
+    {
         DWORD dwMoveMethod;
 
         switch(dwOrigin)
@@ -145,7 +146,7 @@ public:
         case STREAM_SEEK_END:
             dwMoveMethod = FILE_END;
             break;
-        default:   
+        default:
             return STG_E_INVALIDFUNCTION;
             break;
         }
@@ -156,7 +157,7 @@ public:
         return S_OK;
     }
 
-    virtual HRESULT STDMETHODCALLTYPE Stat(STATSTG* pStatstg, DWORD grfStatFlag) 
+    virtual HRESULT STDMETHODCALLTYPE Stat(STATSTG* pStatstg, DWORD grfStatFlag)
     {
         if (GetFileSizeEx(_hFile, (PLARGE_INTEGER) &pStatstg->cbSize) == 0)
             return HRESULT_FROM_WIN32(GetLastError());
@@ -195,7 +196,7 @@ int _tmain(int argc, WCHAR* argv[])
     }
 
     if (FAILED(hr = CreateXmlWriterOutputWithEncodingName(pOutFileStream, NULL, L"utf-16",
-        &pWriterOutput)))
+                    &pWriterOutput)))
     {
         wprintf(L"Error creating xml reader with encoding code page, error is %08.8lx", hr);
         return -1;
@@ -218,7 +219,7 @@ int _tmain(int argc, WCHAR* argv[])
         wprintf(L"Error, Method: WriteStartDocument, error is %08.8lx", hr);
         return -1;
     }
-    
+
     if (FAILED(hr = pWriter->WriteStartElement(NULL, L"root", NULL)))
     {
         wprintf(L"Error, Method: WriteStartElement, error is %08.8lx", hr);

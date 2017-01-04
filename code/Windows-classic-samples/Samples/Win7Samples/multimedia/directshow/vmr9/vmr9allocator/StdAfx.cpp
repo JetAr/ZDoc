@@ -1,8 +1,8 @@
-//------------------------------------------------------------------------------
-// File: stdafx.cpp 
+﻿//------------------------------------------------------------------------------
+// File: stdafx.cpp
 //
 // Desc: DirectShow sample code - source file that includes the standard includes
-//      
+//
 //       vmr9allocator.pch will be the precompiled header
 //       stdafx.obj will contain the pre-compiled type information
 //

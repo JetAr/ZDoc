@@ -1,4 +1,4 @@
-//--------------------------------------------------------------------
+﻿//--------------------------------------------------------------------
 // Microsoft OLE DB Sample Provider
 // (C) Copyright 1991 - 1999 Microsoft Corporation. All Rights Reserved.
 //
@@ -23,10 +23,10 @@
 // @rdesc NONE
 //
 CDataSource::CDataSource
-    (
+(
     LPUNKNOWN pUnkOuter         //@parm IN | Outer Unkown Pointer
-    )	// invoke ctor for base class
-	: CBaseObj( BOT_DATASOURCE )
+)	// invoke ctor for base class
+    : CBaseObj( BOT_DATASOURCE )
 {
 
     //  Initialize simple member vars
@@ -41,11 +41,11 @@ CDataSource::CDataSource
     m_pIDBInitialize    = NULL;
     m_pIDBProperties	= NULL;
     m_pIDBInfo			= NULL;
-	m_pIDBCreateSession = NULL;
-	m_pIPersist			= NULL;
-	
-	//Data Links optional pages
-	m_pIServiceProvider	= NULL;
+    m_pIDBCreateSession = NULL;
+    m_pIPersist			= NULL;
+
+    //Data Links optional pages
+    m_pIServiceProvider	= NULL;
 
     // Increment global object count.
     OBJECT_CONSTRUCTED();
@@ -61,21 +61,21 @@ CDataSource::CDataSource
 // @rdesc NONE
 //
 CDataSource:: ~CDataSource
-    (
+(
     void
-    )
+)
 {
-	DBREFCOUNT	ulRefCount;
+    DBREFCOUNT	ulRefCount;
 
-	// Decrement the ref count on the data conversion object
-	if( g_pIDataConvert )
-	{
-		ulRefCount = g_pIDataConvert->Release();
+    // Decrement the ref count on the data conversion object
+    if( g_pIDataConvert )
+    {
+        ulRefCount = g_pIDataConvert->Release();
 
-		// Is it gone for good?
-		if( !ulRefCount )
-			g_pIDataConvert = NULL;
-	}
+        // Is it gone for good?
+        if( !ulRefCount )
+            g_pIDataConvert = NULL;
+    }
 
     // Free properties management object
     SAFE_DELETE( m_pUtilProp );
@@ -84,9 +84,9 @@ CDataSource:: ~CDataSource
     SAFE_DELETE( m_pIDBInitialize );
     SAFE_DELETE( m_pIDBProperties );
     SAFE_DELETE( m_pIDBInfo );
-	SAFE_DELETE( m_pIDBCreateSession );
-	SAFE_DELETE( m_pIPersist );
-	SAFE_DELETE( m_pIServiceProvider );
+    SAFE_DELETE( m_pIDBCreateSession );
+    SAFE_DELETE( m_pIPersist );
+    SAFE_DELETE( m_pIServiceProvider );
 
     // Decrement global object count.
     OBJECT_DESTRUCTED();
@@ -104,58 +104,58 @@ CDataSource:: ~CDataSource
 //      @flag  FALSE | Initialization failed
 //
 BOOL CDataSource::FInit
-    (
+(
     void
-    )
+)
 {
-	// Instantiate the data conversion service object
-	if( !g_pIDataConvert )
-	{
-		CoCreateInstance(CLSID_OLEDB_CONVERSIONLIBRARY,
-						 NULL,
-						 CLSCTX_INPROC_SERVER,
-						 IID_IDataConvert,
-						 (void **)&g_pIDataConvert);
+    // Instantiate the data conversion service object
+    if( !g_pIDataConvert )
+    {
+        CoCreateInstance(CLSID_OLEDB_CONVERSIONLIBRARY,
+                         NULL,
+                         CLSCTX_INPROC_SERVER,
+                         IID_IDataConvert,
+                         (void **)&g_pIDataConvert);
 
-		//
-		// Tell the DC that we are 2.5
-		//
-		if( g_pIDataConvert )
-		{
-			DCINFO rgInfo[] = {{DCINFOTYPE_VERSION,{VT_UI4, 0, 0, 0, 0x0}}};
-			IDCInfo	*pIDCInfo = NULL;
+        //
+        // Tell the DC that we are 2.5
+        //
+        if( g_pIDataConvert )
+        {
+            DCINFO rgInfo[] = {{DCINFOTYPE_VERSION,{VT_UI4, 0, 0, 0, 0x0}}};
+            IDCInfo	*pIDCInfo = NULL;
 
-			if( g_pIDataConvert->QueryInterface(IID_IDCInfo, (void **)&pIDCInfo) == S_OK && 
-				pIDCInfo )
-			{
-				// OLE DB Version 02.50
-				V_UI4(&rgInfo->vData) = 0x250;
-				pIDCInfo->SetInfo(NUMELEM(rgInfo),rgInfo);
-				pIDCInfo->Release();
-			}
-		}
-	}
-	else
-		// Already instantiated, increment reference count
-		g_pIDataConvert->AddRef();
+            if( g_pIDataConvert->QueryInterface(IID_IDCInfo, (void **)&pIDCInfo) == S_OK &&
+                    pIDCInfo )
+            {
+                // OLE DB Version 02.50
+                V_UI4(&rgInfo->vData) = 0x250;
+                pIDCInfo->SetInfo(NUMELEM(rgInfo),rgInfo);
+                pIDCInfo->Release();
+            }
+        }
+    }
+    else
+        // Already instantiated, increment reference count
+        g_pIDataConvert->AddRef();
 
     // Allocate properties management object
     m_pUtilProp = new CUtilProp();
 
     //Allocate contained interface objects
-	//[MANDATORY]
+    //[MANDATORY]
     m_pIDBInitialize    = new CImpIDBInitialize( this, m_pUnkOuter );
     m_pIDBProperties	= new CImpIDBProperties( this, m_pUnkOuter );
     m_pIDBCreateSession = new CImpIDBCreateSession( this, m_pUnkOuter );
-	
-	//[OPTIONAL]
-	m_pIDBInfo			= new CImpIDBInfo( this, m_pUnkOuter );
+
+    //[OPTIONAL]
+    m_pIDBInfo			= new CImpIDBInfo( this, m_pUnkOuter );
     m_pIPersist			= new CImpIPersist( this, m_pUnkOuter );
     m_pIServiceProvider	= new CImpIServiceProvider( this, m_pUnkOuter );
 
     return (BOOL) (m_pUtilProp && m_pIDBInitialize && m_pIDBProperties &&
-				   m_pIDBCreateSession && m_pIDBInfo && m_pIPersist && 
-				   m_pIServiceProvider);
+                   m_pIDBCreateSession && m_pIDBInfo && m_pIPersist &&
+                   m_pIServiceProvider);
 }
 
 
@@ -171,10 +171,10 @@ BOOL CDataSource::FInit
 //      @flag E_INVALIDARG  | One or more arguments are invalid.
 //
 STDMETHODIMP CDataSource::QueryInterface
-    (
+(
     REFIID riid,    //@parm IN | Interface ID of the interface being queried for.
     LPVOID * ppv    //@parm OUT | Pointer to interface that was instantiated
-    )
+)
 {
     // Is the pointer bad?
     if (ppv == NULL)
@@ -188,34 +188,34 @@ STDMETHODIMP CDataSource::QueryInterface
         *ppv = (LPVOID) this;
     else if (riid == IID_IDBInitialize)
         *ppv = (LPVOID) m_pIDBInitialize;
-	else if (riid == IID_IDBProperties)
+    else if (riid == IID_IDBProperties)
         *ppv = (LPVOID) m_pIDBProperties;
     else if (riid == IID_IPersist)
         *ppv = (LPVOID) m_pIPersist;
-	else if (riid == IID_IServiceProvider)
-		*ppv = (LPVOID) m_pIServiceProvider;
-	else
-	{
-		// These are not valid at Uninit state.
-		if( riid == IID_IDBCreateSession )
-			*ppv = (LPVOID)m_pIDBCreateSession;
-		else if (riid == IID_IDBInfo)
-			*ppv = (LPVOID) m_pIDBInfo;
+    else if (riid == IID_IServiceProvider)
+        *ppv = (LPVOID) m_pIServiceProvider;
+    else
+    {
+        // These are not valid at Uninit state.
+        if( riid == IID_IDBCreateSession )
+            *ppv = (LPVOID)m_pIDBCreateSession;
+        else if (riid == IID_IDBInfo)
+            *ppv = (LPVOID) m_pIDBInfo;
 
-		// Special case for uninitialized.
-		if( *ppv && !m_fDSOInitialized )
-		{
-			*ppv = NULL;			
-			return ResultFromScode( E_UNEXPECTED );
-		}
-	}
+        // Special case for uninitialized.
+        if( *ppv && !m_fDSOInitialized )
+        {
+            *ppv = NULL;
+            return ResultFromScode( E_UNEXPECTED );
+        }
+    }
 
     //  If we're going to return an interface, AddRef it first
     if (*ppv)
-        {
+    {
         ((LPUNKNOWN) *ppv)->AddRef();
         return ResultFromScode( S_OK );
-        }
+    }
     else
         return ResultFromScode( E_NOINTERFACE );
 }
@@ -228,9 +228,9 @@ STDMETHODIMP CDataSource::QueryInterface
 // @rdesc Current reference count
 //
 STDMETHODIMP_( DBREFCOUNT ) CDataSource::AddRef
-     (
-     void
-     )
+(
+    void
+)
 {
     return ++m_cRef;
 }
@@ -244,15 +244,15 @@ STDMETHODIMP_( DBREFCOUNT ) CDataSource::AddRef
 // @rdesc Current reference count
 //
 STDMETHODIMP_( DBREFCOUNT ) CDataSource::Release
-     (
-     void
-     )
+(
+    void
+)
 {
     if (!--m_cRef)
-        {
+    {
         delete this;
         return 0;
-        }
+    }
 
     return m_cRef;
 }
@@ -264,45 +264,45 @@ STDMETHODIMP_( DBREFCOUNT ) CDataSource::Release
 ////////////////////////////////////////////////////////
 HRESULT		CDataSource::OpenFile(WCHAR* pwszFileName, CFileIO** ppCFileIO)
 {
-	ASSERT(ppCFileIO);
-	HRESULT hr = S_OK;
-	WCHAR	wszFullPath[_MAX_PATH + _MAX_PATH + 1]=L"";
-	CHAR	szFullPath[_MAX_PATH + _MAX_PATH + 1]= "";
-	
-	//open and initialize a file object
-	CFileIO* pCFileIO = new CFileIO();
-	if(!pCFileIO)
-		return E_OUTOFMEMORY;
+    ASSERT(ppCFileIO);
+    HRESULT hr = S_OK;
+    WCHAR	wszFullPath[_MAX_PATH + _MAX_PATH + 1]=L"";
+    CHAR	szFullPath[_MAX_PATH + _MAX_PATH + 1]= "";
 
-	//Do we have a base directory
-	if(m_wszPath[0])
-	{
-		//Contruct the filename
-		StringCchPrintfW(wszFullPath, 
-						 sizeof(wszFullPath)/sizeof(WCHAR), 
-						 L"%s\\%s",
-						 m_wszPath,
-						 pwszFileName);
+    //open and initialize a file object
+    CFileIO* pCFileIO = new CFileIO();
+    if(!pCFileIO)
+        return E_OUTOFMEMORY;
 
-		//Convert to MBCS (stream operations)
-		ConvertToMBCS(wszFullPath, szFullPath, _MAX_PATH+_MAX_PATH);
-		
-		//Now try to initialize the stream, if successful we are done...
-		if(SUCCEEDED(hr = pCFileIO->fInit(  szFullPath )))
-			goto CLEANUP;
-	}
+    //Do we have a base directory
+    if(m_wszPath[0])
+    {
+        //Contruct the filename
+        StringCchPrintfW(wszFullPath,
+                         sizeof(wszFullPath)/sizeof(WCHAR),
+                         L"%s\\%s",
+                         m_wszPath,
+                         pwszFileName);
 
-	//Otherwise its a full filename...
-	ConvertToMBCS(pwszFileName, szFullPath, _MAX_PATH+_MAX_PATH);
-	
-	//Now try to initialize the stream...
-	hr = pCFileIO->fInit(  szFullPath );
+        //Convert to MBCS (stream operations)
+        ConvertToMBCS(wszFullPath, szFullPath, _MAX_PATH+_MAX_PATH);
+
+        //Now try to initialize the stream, if successful we are done...
+        if(SUCCEEDED(hr = pCFileIO->fInit(  szFullPath )))
+            goto CLEANUP;
+    }
+
+    //Otherwise its a full filename...
+    ConvertToMBCS(pwszFileName, szFullPath, _MAX_PATH+_MAX_PATH);
+
+    //Now try to initialize the stream...
+    hr = pCFileIO->fInit(  szFullPath );
 
 CLEANUP:
-	if(FAILED( hr ))
-		SAFE_DELETE( pCFileIO );
-	*ppCFileIO = pCFileIO;
-	return hr;
+    if(FAILED( hr ))
+        SAFE_DELETE( pCFileIO );
+    *ppCFileIO = pCFileIO;
+    return hr;
 }
 
 
@@ -313,32 +313,32 @@ CLEANUP:
 ////////////////////////////////////////////////////////
 STDMETHODIMP	CImpIServiceProvider::QueryService
 (
-	REFGUID guidService,
-	REFIID riid,
-	void** ppvObject
+    REFGUID guidService,
+    REFIID riid,
+    void** ppvObject
 )
 {
-	HRESULT hr = S_OK;
-	if(!ppvObject)
-		return E_INVALIDARG;
-	*ppvObject = NULL;
+    HRESULT hr = S_OK;
+    if(!ppvObject)
+        return E_INVALIDARG;
+    *ppvObject = NULL;
 
-	//DSL property Pages
-	if(guidService == OLEDB_SVC_DSLPropertyPages)
-	{
-		CImpISpecifyPropertyPages* pCImpISpecifyPropertyPages = new CImpISpecifyPropertyPages;
-		if(!pCImpISpecifyPropertyPages)
-			return E_OUTOFMEMORY;
+    //DSL property Pages
+    if(guidService == OLEDB_SVC_DSLPropertyPages)
+    {
+        CImpISpecifyPropertyPages* pCImpISpecifyPropertyPages = new CImpISpecifyPropertyPages;
+        if(!pCImpISpecifyPropertyPages)
+            return E_OUTOFMEMORY;
 
-		return pCImpISpecifyPropertyPages->QueryInterface(IID_ISpecifyPropertyPages, ppvObject);
-	}
-	else
-	{
+        return pCImpISpecifyPropertyPages->QueryInterface(IID_ISpecifyPropertyPages, ppvObject);
+    }
+    else
+    {
 //		TODO? hr = SVC_E_UNKNOWNSERVICE;
-		hr = E_FAIL;
-	}
+        hr = E_FAIL;
+    }
 
-	return hr;
+    return hr;
 }
 
 
@@ -350,12 +350,12 @@ STDMETHODIMP	CImpIServiceProvider::QueryService
 ////////////////////////////////////////////////////////
 CPropertyPage::CPropertyPage(REFCLSID clsid, INT iDialogID)
 {
-	m_cRef		= 0;
-	m_clsid		= clsid;
-	m_iDialogID	= iDialogID;
-	m_hWnd		= NULL;
+    m_cRef		= 0;
+    m_clsid		= clsid;
+    m_iDialogID	= iDialogID;
+    m_hWnd		= NULL;
 
-	m_pIPropertyPageSite = NULL;
+    m_pIPropertyPageSite = NULL;
 }
 
 ////////////////////////////////////////////////////////
@@ -364,7 +364,7 @@ CPropertyPage::CPropertyPage(REFCLSID clsid, INT iDialogID)
 ////////////////////////////////////////////////////////
 CPropertyPage::~CPropertyPage()
 {
-	SAFE_RELEASE(m_pIPropertyPageSite);
+    SAFE_RELEASE(m_pIPropertyPageSite);
 }
 
 ////////////////////////////////////////////////////////
@@ -373,23 +373,23 @@ CPropertyPage::~CPropertyPage()
 ////////////////////////////////////////////////////////
 STDMETHODIMP	CPropertyPage::QueryInterface(REFIID riid, LPVOID *ppv)
 {
-	if(!ppv)
-		return E_INVALIDARG;
+    if(!ppv)
+        return E_INVALIDARG;
 
-	if(riid == IID_IUnknown)
-		*ppv = (IUnknown*)(IPropertyPage*)this;
-	else if(riid == IID_IPropertyPage)
-		*ppv = (IPropertyPage*)this;
-	else if(riid == IID_IPersistPropertyBag)
-		*ppv = (IPersistPropertyBag*)this;
-	else
-	{
-		*ppv = NULL;
-		return E_NOINTERFACE;
-	}
+    if(riid == IID_IUnknown)
+        *ppv = (IUnknown*)(IPropertyPage*)this;
+    else if(riid == IID_IPropertyPage)
+        *ppv = (IPropertyPage*)this;
+    else if(riid == IID_IPersistPropertyBag)
+        *ppv = (IPersistPropertyBag*)this;
+    else
+    {
+        *ppv = NULL;
+        return E_NOINTERFACE;
+    }
 
-	SAFE_ADDREF(*ppv);
-	return S_OK;
+    SAFE_ADDREF(*ppv);
+    return S_OK;
 }
 
 ////////////////////////////////////////////////////////
@@ -398,70 +398,70 @@ STDMETHODIMP	CPropertyPage::QueryInterface(REFIID riid, LPVOID *ppv)
 ////////////////////////////////////////////////////////
 STDMETHODIMP CPropertyPage::SetPageSite(IPropertyPageSite* pPageSite)
 {
-	//SetPageSite can call with NULL to indicate to release interface.
-	if(!pPageSite)
-	{
-		SAFE_RELEASE(m_pIPropertyPageSite);
-		return S_OK;
-	}
-	
-	//Otherwise...
-	ASSERT(m_pIPropertyPageSite == NULL);
-	return pPageSite->QueryInterface(IID_IPropertyPageSite, (void**)&m_pIPropertyPageSite);
+    //SetPageSite can call with NULL to indicate to release interface.
+    if(!pPageSite)
+    {
+        SAFE_RELEASE(m_pIPropertyPageSite);
+        return S_OK;
+    }
+
+    //Otherwise...
+    ASSERT(m_pIPropertyPageSite == NULL);
+    return pPageSite->QueryInterface(IID_IPropertyPageSite, (void**)&m_pIPropertyPageSite);
 }
 
-		
+
 ////////////////////////////////////////////////////////
 // CPropertyPage::Activate
 //
 ////////////////////////////////////////////////////////
 STDMETHODIMP CPropertyPage::Activate
-( 
-	HWND hWndParent,
-	LPCRECT pRect,
-	BOOL bModal
+(
+    HWND hWndParent,
+    LPCRECT pRect,
+    BOOL bModal
 )
 {
-	//Create a modeless dialog...
-	m_hWnd = CreateDialogParam(g_hInstance, MAKEINTRESOURCE(m_iDialogID), hWndParent, DialogProc, (LPARAM)this);
-	if(m_hWnd)
-	{
-		return Move(pRect);
-	}
+    //Create a modeless dialog...
+    m_hWnd = CreateDialogParam(g_hInstance, MAKEINTRESOURCE(m_iDialogID), hWndParent, DialogProc, (LPARAM)this);
+    if(m_hWnd)
+    {
+        return Move(pRect);
+    }
 
-	return E_FAIL;
+    return E_FAIL;
 }
 
-		
+
 ////////////////////////////////////////////////////////
 // CPropertyPage::Deactivate
 //
 ////////////////////////////////////////////////////////
 STDMETHODIMP CPropertyPage::Deactivate()
 {
-	if(m_hWnd)
-	{
-		DestroyWindow(m_hWnd);
-		m_hWnd = NULL;
-	}
+    if(m_hWnd)
+    {
+        DestroyWindow(m_hWnd);
+        m_hWnd = NULL;
+    }
 
-	return S_OK;
+    return S_OK;
 }
 
-	
+
 ////////////////////////////////////////////////////////
 // CPropertyPage::TranslateAccelerator
 //
 ////////////////////////////////////////////////////////
 STDMETHODIMP CPropertyPage::TranslateAccelerator(MSG* pMsg)
 {
-	ASSERT(pMsg);	
+    ASSERT(pMsg);
 
-	if((pMsg->message < WM_KEYFIRST || pMsg->message > WM_KEYLAST) &&
-		(pMsg->message < WM_MOUSEFIRST || pMsg->message > WM_MOUSELAST))
-		return S_FALSE;
+    if((pMsg->message < WM_KEYFIRST || pMsg->message > WM_KEYLAST) &&
+            (pMsg->message < WM_MOUSEFIRST || pMsg->message > WM_MOUSELAST))
+        return S_FALSE;
 
-	return IsDialogMessage(m_hWnd, pMsg) ? S_OK : S_FALSE;
+    return IsDialogMessage(m_hWnd, pMsg) ? S_OK : S_FALSE;
 }
 
 
@@ -471,19 +471,19 @@ STDMETHODIMP CPropertyPage::TranslateAccelerator(MSG* pMsg)
 ////////////////////////////////////////////////////////
 STDMETHODIMP CPropertyPage::IsPageDirty()
 {
-	//Out page is always dirty since we don't want to go through the overhead of 
-	//determining if the user used any of the controls on the page, S_OK = Dirty...
-	return S_OK;
+    //Out page is always dirty since we don't want to go through the overhead of
+    //determining if the user used any of the controls on the page, S_OK = Dirty...
+    return S_OK;
 }
 
-		
+
 ////////////////////////////////////////////////////////
 // CPropertyPage::Apply
 //
 ////////////////////////////////////////////////////////
 STDMETHODIMP CPropertyPage::Apply()
 {
-	return S_OK;
+    return S_OK;
 }
 
 
@@ -493,8 +493,8 @@ STDMETHODIMP CPropertyPage::Apply()
 ////////////////////////////////////////////////////////
 STDMETHODIMP CPropertyPage::Show(UINT nCmdShow)
 {
-	ShowWindow(m_hWnd, nCmdShow);
-	return S_OK;
+    ShowWindow(m_hWnd, nCmdShow);
+    return S_OK;
 }
 
 
@@ -504,36 +504,36 @@ STDMETHODIMP CPropertyPage::Show(UINT nCmdShow)
 ////////////////////////////////////////////////////////
 STDMETHODIMP CPropertyPage::Move(LPCRECT pRect)
 {
-	ASSERT(pRect);
-	MoveWindow(m_hWnd, pRect->left, pRect->top, pRect->right - pRect->left,	 pRect->bottom - pRect->top, TRUE);
-	return S_OK;
+    ASSERT(pRect);
+    MoveWindow(m_hWnd, pRect->left, pRect->top, pRect->right - pRect->left,	 pRect->bottom - pRect->top, TRUE);
+    return S_OK;
 }
 
-	
+
 ////////////////////////////////////////////////////////
 // CPropertyPage::DialogProc
 //
 ////////////////////////////////////////////////////////
 INT_PTR CALLBACK CPropertyPage::DialogProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
-	switch(message)
-	{
-		case WM_INITDIALOG:
-		{
-			//Save the "this" pointer
-			SetWindowLongPtr(hWnd, GWLP_USERDATA, lParam);
-			return 0;
-		}
+    switch(message)
+    {
+    case WM_INITDIALOG:
+    {
+        //Save the "this" pointer
+        SetWindowLongPtr(hWnd, GWLP_USERDATA, lParam);
+        return 0;
+    }
 
-		case WM_COMMAND:
-		{
-			//Get the "this" pointer
-			CPropertyPage* pThis = (CPropertyPage*)GetWindowLongPtr(hWnd, GWLP_USERDATA);
-			return pThis->HandleMessage(hWnd, message, wParam, lParam);
-		}
-	}
+    case WM_COMMAND:
+    {
+        //Get the "this" pointer
+        CPropertyPage* pThis = (CPropertyPage*)GetWindowLongPtr(hWnd, GWLP_USERDATA);
+        return pThis->HandleMessage(hWnd, message, wParam, lParam);
+    }
+    }
 
-	return 0;
+    return 0;
 }
 
 ////////////////////////////////////////////////////////
@@ -542,7 +542,7 @@ INT_PTR CALLBACK CPropertyPage::DialogProc(HWND hWnd, UINT message, WPARAM wPara
 ////////////////////////////////////////////////////////
 BOOL CPropertyPage::HandleMessage(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
-	return FALSE;
+    return FALSE;
 }
 
 
@@ -551,10 +551,10 @@ BOOL CPropertyPage::HandleMessage(HWND hWnd, UINT message, WPARAM wParam, LPARAM
 // CDSLConnectionPage
 //
 ////////////////////////////////////////////////////////
-CDSLConnectionPage::CDSLConnectionPage()	
-	: CPropertyPage(CLSID_SampProvConnectionPage, IDD_DSL_CONNECTION)
+CDSLConnectionPage::CDSLConnectionPage()
+    : CPropertyPage(CLSID_SampProvConnectionPage, IDD_DSL_CONNECTION)
 {
-	VariantInit(&m_vDataSource);
+    VariantInit(&m_vDataSource);
 }
 
 ////////////////////////////////////////////////////////
@@ -563,7 +563,7 @@ CDSLConnectionPage::CDSLConnectionPage()
 ////////////////////////////////////////////////////////
 CDSLConnectionPage::~CDSLConnectionPage()
 {
-	VariantClear(&m_vDataSource);
+    VariantClear(&m_vDataSource);
 }
 
 
@@ -573,57 +573,57 @@ CDSLConnectionPage::~CDSLConnectionPage()
 ////////////////////////////////////////////////////////
 BOOL CDSLConnectionPage::HandleMessage(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
-	switch (message)
-	{
-		case WM_COMMAND:
-		{
-			//Filter out any Control Notification codes
-			if(GET_WM_COMMAND_CMD(wParam, lParam) > 1)
-			{
-				break;
-			}
+    switch (message)
+    {
+    case WM_COMMAND:
+    {
+        //Filter out any Control Notification codes
+        if(GET_WM_COMMAND_CMD(wParam, lParam) > 1)
+        {
+            break;
+        }
 
-			switch(GET_WM_COMMAND_ID(wParam, lParam))
-			{
-				case IDB_BROWSE_DIRECTORY:
-				{
-					//Obtain the current value for the default
-					CHAR szDirectory[MAX_QUERY_LEN] = {0};
-					SendMessage(GetDlgItem(m_hWnd, IDE_DATASOURCE), WM_GETTEXT, MAX_QUERY_LEN, (LPARAM)szDirectory);
-					
-					//Display Common Dialog to obtain Directory...
-					BROWSEINFO browseInfo;
-					memset( &browseInfo, 0, sizeof(browseInfo));
-					browseInfo.hwndOwner		= m_hWnd; 
-					browseInfo.pidlRoot			= NULL; 
-					browseInfo.pszDisplayName	= szDirectory; 
-					browseInfo.lpszTitle		= "Browse for default directory";; 
-					browseInfo.ulFlags			= 0; 
-					browseInfo.lpfn				= NULL; 
-					browseInfo.lParam			= 0; 
-					browseInfo.iImage			= 0; 
+        switch(GET_WM_COMMAND_ID(wParam, lParam))
+        {
+        case IDB_BROWSE_DIRECTORY:
+        {
+            //Obtain the current value for the default
+            CHAR szDirectory[MAX_QUERY_LEN] = {0};
+            SendMessage(GetDlgItem(m_hWnd, IDE_DATASOURCE), WM_GETTEXT, MAX_QUERY_LEN, (LPARAM)szDirectory);
 
-					//Display Common Dialog to obtain File To Load...
-					LPITEMIDLIST pidl = SHBrowseForFolder(&browseInfo);
-					if(pidl)
-					{
-						//Obtain the file path from the ITemID...
-						if(SHGetPathFromIDList(pidl, szDirectory))
-						{
-							//Update the Property value on the Dialog...
-							SendMessage(GetDlgItem(m_hWnd, IDE_DATASOURCE), WM_SETTEXT, 0, (LPARAM)szDirectory);
-						}
+            //Display Common Dialog to obtain Directory...
+            BROWSEINFO browseInfo;
+            memset( &browseInfo, 0, sizeof(browseInfo));
+            browseInfo.hwndOwner		= m_hWnd;
+            browseInfo.pidlRoot			= NULL;
+            browseInfo.pszDisplayName	= szDirectory;
+            browseInfo.lpszTitle		= "Browse for default directory";;
+            browseInfo.ulFlags			= 0;
+            browseInfo.lpfn				= NULL;
+            browseInfo.lParam			= 0;
+            browseInfo.iImage			= 0;
 
-						SAFE_FREE(pidl);
-					}
-					break;
-				}
-			};
-			break;
-		}
-	};
+            //Display Common Dialog to obtain File To Load...
+            LPITEMIDLIST pidl = SHBrowseForFolder(&browseInfo);
+            if(pidl)
+            {
+                //Obtain the file path from the ITemID...
+                if(SHGetPathFromIDList(pidl, szDirectory))
+                {
+                    //Update the Property value on the Dialog...
+                    SendMessage(GetDlgItem(m_hWnd, IDE_DATASOURCE), WM_SETTEXT, 0, (LPARAM)szDirectory);
+                }
 
-	return FALSE;
+                SAFE_FREE(pidl);
+            }
+            break;
+        }
+        };
+        break;
+    }
+    };
+
+    return FALSE;
 }
 
 
@@ -632,25 +632,25 @@ BOOL CDSLConnectionPage::HandleMessage(HWND hWnd, UINT message, WPARAM wParam, L
 //
 ////////////////////////////////////////////////////////
 STDMETHODIMP	CDSLConnectionPage::Load
-( 
-	IPropertyBag*	pPropBag,
+(
+    IPropertyBag*	pPropBag,
     IErrorLog*	pErrorLog
 )
 {
-	if(!pPropBag)
-		return E_INVALIDARG;
+    if(!pPropBag)
+        return E_INVALIDARG;
 
-	//Delegate
-	HRESULT hr = pPropBag->Read(L"Data Source", &m_vDataSource, pErrorLog);
+    //Delegate
+    HRESULT hr = pPropBag->Read(L"Data Source", &m_vDataSource, pErrorLog);
 
-	//Update our dialog (maybe empty...)
-	if(SUCCEEDED(hr) && V_VT(&m_vDataSource)==VT_BSTR)
-	{
-		//Update the Property value on the Dialog...
-		wSendMessage(GetDlgItem(m_hWnd, IDE_DATASOURCE), WM_SETTEXT, 0, V_BSTR(&m_vDataSource));
-	}
+    //Update our dialog (maybe empty...)
+    if(SUCCEEDED(hr) && V_VT(&m_vDataSource)==VT_BSTR)
+    {
+        //Update the Property value on the Dialog...
+        wSendMessage(GetDlgItem(m_hWnd, IDE_DATASOURCE), WM_SETTEXT, 0, V_BSTR(&m_vDataSource));
+    }
 
-	return hr;
+    return hr;
 }
 
 
@@ -659,30 +659,30 @@ STDMETHODIMP	CDSLConnectionPage::Load
 //
 ////////////////////////////////////////////////////////
 STDMETHODIMP	CDSLConnectionPage::Save
-( 
-	IPropertyBag __RPC_FAR *pPropBag,
-	BOOL fClearDirty,
-	BOOL fSaveAllProperties
+(
+    IPropertyBag __RPC_FAR *pPropBag,
+    BOOL fClearDirty,
+    BOOL fSaveAllProperties
 )
 {
-	if(!pPropBag)
-		return E_INVALIDARG;
+    if(!pPropBag)
+        return E_INVALIDARG;
 
-	//Obtain the Property value from the Dialog...
-	WCHAR wszBuffer[MAX_QUERY_LEN] = {0};
-	wSendMessage(GetDlgItem(m_hWnd, IDE_DATASOURCE), WM_GETTEXT, MAX_QUERY_LEN, wszBuffer);
+    //Obtain the Property value from the Dialog...
+    WCHAR wszBuffer[MAX_QUERY_LEN] = {0};
+    wSendMessage(GetDlgItem(m_hWnd, IDE_DATASOURCE), WM_GETTEXT, MAX_QUERY_LEN, wszBuffer);
 
-	//Indicate this page is dirty...
-	ASSERT(m_pIPropertyPageSite);
-	m_pIPropertyPageSite->OnStatusChange(PROPPAGESTATUS_DIRTY);
+    //Indicate this page is dirty...
+    ASSERT(m_pIPropertyPageSite);
+    m_pIPropertyPageSite->OnStatusChange(PROPPAGESTATUS_DIRTY);
 
-	//Store it into our variant...
-	VariantClear(&m_vDataSource);
-	V_VT(&m_vDataSource)	= VT_BSTR;
-	V_BSTR(&m_vDataSource)	= SysAllocString(wszBuffer);
-	
-	//Delegate
-	return pPropBag->Write(L"Data Source", &m_vDataSource);
+    //Store it into our variant...
+    VariantClear(&m_vDataSource);
+    V_VT(&m_vDataSource)	= VT_BSTR;
+    V_BSTR(&m_vDataSource)	= SysAllocString(wszBuffer);
+
+    //Delegate
+    return pPropBag->Write(L"Data Source", &m_vDataSource);
 }
 
 
@@ -691,8 +691,8 @@ STDMETHODIMP	CDSLConnectionPage::Save
 // CDSLAdvancedPage
 //
 ////////////////////////////////////////////////////////
-CDSLAdvancedPage::CDSLAdvancedPage()	
-	: CPropertyPage(CLSID_SampProvAdvancedPage, IDD_DSL_ADVANCED)
+CDSLAdvancedPage::CDSLAdvancedPage()
+    : CPropertyPage(CLSID_SampProvAdvancedPage, IDD_DSL_ADVANCED)
 {
 }
 
@@ -712,5 +712,5 @@ CDSLAdvancedPage::~CDSLAdvancedPage()
 ////////////////////////////////////////////////////////
 BOOL CDSLAdvancedPage::HandleMessage(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
-	return FALSE;
+    return FALSE;
 }

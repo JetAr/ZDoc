@@ -1,9 +1,9 @@
-//--------------------------------------------------------------------
+﻿//--------------------------------------------------------------------
 // Microsoft OLE DB Test
 //
-// Copyright 1995-2000 Microsoft Corporation.  
+// Copyright 1995-2000 Microsoft Corporation.
 //
-// @doc 
+// @doc
 //
 // @module PRIVSTD.H | Headers to be precompiled for Private Library
 //
@@ -12,7 +12,7 @@
 //
 // <nl><nl>
 // Revision History:<nl>
-//	
+//
 //	[00] MM-DD-YY	EMAIL_NAME	ACTION PERFORMED... <nl>
 //	[01] 10-16-95	Microsoft	Created <nl>
 //	[02] 12-01-96	Microsoft	Updated for release <nl>
@@ -51,7 +51,7 @@ using namespace std;
 
 #include <oledb.h>		// OLE DB Header
 #include <oledberr.h>	// OLE DB Errors 
-#include <transact.h>	
+#include <transact.h>
 #include <msdadc.h>
 #include <oleauto.h>	// Variant APIs
 
@@ -63,25 +63,25 @@ using namespace std;
 #include <winnt.h>
 #include <objbase.h>
 #include <process.h>	// _getpid
- 
+
 
 #include "MODStandard.hpp"// OLE DB Test Public Library
 #include "prvtrace.h"
 #include "privcnst.h"	// All Private Library constants, enums, and defines
 #include "List.h"		// CList implementation without MFC
 
-// For Temp Table 
+// For Temp Table
 #ifdef DBINITCONSTANTS
-	extern const GUID CLSID_MSDATT = {0xc8b522ceL,0x5cf3,0x11ce,{0xad,0xe5,0x00,0xaa,0x00,0x44,0x77,0x3d}};
+extern const GUID CLSID_MSDATT = {0xc8b522ceL,0x5cf3,0x11ce,{0xad,0xe5,0x00,0xaa,0x00,0x44,0x77,0x3d}};
 #else // !DBINITCONSTANTS
-	extern const GUID CLSID_MSDATT;
+extern const GUID CLSID_MSDATT;
 #endif // DBINITCONSTANTS
 
 #include "svcprov.h"
 
 // For Active Data
 #ifdef ACTIVE_DATA
-	const GUID DBGUID_LIKE_SQL  = {0xc8b521f6,0x5cf3,0x11ce,{0xad,0xe5,0x00,0xaa,0x00,0x44,0x77,0x3d}};
+const GUID DBGUID_LIKE_SQL  = {0xc8b521f6,0x5cf3,0x11ce,{0xad,0xe5,0x00,0xaa,0x00,0x44,0x77,0x3d}};
 #endif
 
 #endif // _PRIVSTD_H_

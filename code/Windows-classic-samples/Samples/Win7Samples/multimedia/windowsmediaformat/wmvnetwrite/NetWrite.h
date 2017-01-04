@@ -1,4 +1,4 @@
-//*****************************************************************************
+﻿//*****************************************************************************
 //
 // Microsoft Windows Media
 // Copyright ( C) Microsoft Corporation. All rights reserved.
@@ -6,7 +6,7 @@
 // FileName:            NetWrite.cpp
 //
 // Abstract:            CNetWrite class declaration
-//                      
+//
 //
 //*****************************************************************************
 
@@ -53,72 +53,72 @@ public:
     HRESULT Configure( DWORD dwPortNum, const WCHAR *pwszFile, UINT nMaxClient, const WCHAR *pwszServerURL );
     HRESULT WritetoNet();
     HRESULT Init();
-    
-    
+
+
     //
     //Methods of IWMReaderCallback
     //
     HRESULT STDMETHODCALLTYPE OnSample( /* [in] */ DWORD dwOutputNum,
-        /* [in] */ QWORD cnsSampleTime,
-        /* [in] */ QWORD cnsSampleDuration,
-        /* [in] */ DWORD dwFlags,
-        /* [in] */ INSSBuffer __RPC_FAR *pSample,
-        /* [in] */ void __RPC_FAR *pvContext);
-        
-        HRESULT STDMETHODCALLTYPE OnStatus( /* [in] */ WMT_STATUS Status,
-        /* [in] */ HRESULT hr,
-        /* [in] */ WMT_ATTR_DATATYPE dwType,
-        /* [in] */ BYTE __RPC_FAR *pValue,
-        /* [in] */ void __RPC_FAR *pvContext);
-        //
-        //Methods of IWMReaderCallbackAdvanced
-        //
-        HRESULT STDMETHODCALLTYPE OnStreamSample( /* [in] */ WORD wStreamNum,
-        /* [in] */ QWORD cnsSampleTime,
-        /* [in] */ QWORD cnsSampleDuration,
-        /* [in] */ DWORD dwFlags,
-        /* [in] */ INSSBuffer __RPC_FAR *pSample,
-        /* [in] */ void __RPC_FAR *pvContext);
-        
-        HRESULT STDMETHODCALLTYPE OnTime( /* [in] */ QWORD cnsCurrentTime,
-        /* [in] */ void __RPC_FAR *pvContext);
-        
-        HRESULT STDMETHODCALLTYPE OnStreamSelection( /* [in] */ WORD wStreamCount,
-        /* [in] */ WORD __RPC_FAR *pStreamNumbers,
-        /* [in] */ WMT_STREAM_SELECTION __RPC_FAR *pSelections,
-        /* [in] */ void __RPC_FAR *pvContext)
+            /* [in] */ QWORD cnsSampleTime,
+            /* [in] */ QWORD cnsSampleDuration,
+            /* [in] */ DWORD dwFlags,
+            /* [in] */ INSSBuffer __RPC_FAR *pSample,
+            /* [in] */ void __RPC_FAR *pvContext);
+
+    HRESULT STDMETHODCALLTYPE OnStatus( /* [in] */ WMT_STATUS Status,
+            /* [in] */ HRESULT hr,
+            /* [in] */ WMT_ATTR_DATATYPE dwType,
+            /* [in] */ BYTE __RPC_FAR *pValue,
+            /* [in] */ void __RPC_FAR *pvContext);
+    //
+    //Methods of IWMReaderCallbackAdvanced
+    //
+    HRESULT STDMETHODCALLTYPE OnStreamSample( /* [in] */ WORD wStreamNum,
+            /* [in] */ QWORD cnsSampleTime,
+            /* [in] */ QWORD cnsSampleDuration,
+            /* [in] */ DWORD dwFlags,
+            /* [in] */ INSSBuffer __RPC_FAR *pSample,
+            /* [in] */ void __RPC_FAR *pvContext);
+
+    HRESULT STDMETHODCALLTYPE OnTime( /* [in] */ QWORD cnsCurrentTime,
+            /* [in] */ void __RPC_FAR *pvContext);
+
+    HRESULT STDMETHODCALLTYPE OnStreamSelection( /* [in] */ WORD wStreamCount,
+            /* [in] */ WORD __RPC_FAR *pStreamNumbers,
+            /* [in] */ WMT_STREAM_SELECTION __RPC_FAR *pSelections,
+            /* [in] */ void __RPC_FAR *pvContext)
     {
         return S_OK;
     }
-    
+
     HRESULT STDMETHODCALLTYPE OnOutputPropsChanged( /* [in] */ DWORD dwOutputNum,
-        /* [in] */ WM_MEDIA_TYPE __RPC_FAR *pMediaType,
-        /* [in] */ void __RPC_FAR *pvContext)
+            /* [in] */ WM_MEDIA_TYPE __RPC_FAR *pMediaType,
+            /* [in] */ void __RPC_FAR *pvContext)
     {
         return S_OK;
     }
-    
+
     HRESULT STDMETHODCALLTYPE AllocateForStream( /* [in] */ WORD wStreamNum,
-        /* [in] */ DWORD cbBuffer,
-        /* [out] */ INSSBuffer __RPC_FAR *__RPC_FAR *ppBuffer,
-        /* [in] */ void __RPC_FAR *pvContext)
+            /* [in] */ DWORD cbBuffer,
+            /* [out] */ INSSBuffer __RPC_FAR *__RPC_FAR *ppBuffer,
+            /* [in] */ void __RPC_FAR *pvContext)
     {
         return E_NOTIMPL;
     }
-    
+
     HRESULT STDMETHODCALLTYPE AllocateForOutput( /* [in] */ DWORD dwOutputNum,
-        /* [in] */ DWORD cbBuffer,
-        /* [out] */ INSSBuffer __RPC_FAR *__RPC_FAR *ppBuffer,
-        /* [in] */ void __RPC_FAR *pvContext)
+            /* [in] */ DWORD cbBuffer,
+            /* [out] */ INSSBuffer __RPC_FAR *__RPC_FAR *ppBuffer,
+            /* [in] */ void __RPC_FAR *pvContext)
     {
         return E_NOTIMPL;
     }
-    
+
     //
     //Methods of IUnknown
     //
     HRESULT STDMETHODCALLTYPE QueryInterface( REFIID riid,
-        void __RPC_FAR *__RPC_FAR *ppvObject) 
+            void __RPC_FAR *__RPC_FAR *ppvObject)
     {
         if( riid == IID_IWMReaderCallback )
         {
@@ -139,11 +139,17 @@ public:
         }
         return S_OK;
     }
-    
-    ULONG STDMETHODCALLTYPE AddRef( void ) { return 1; }
-    
-    ULONG STDMETHODCALLTYPE Release( void ) { return 1; }
-    
+
+    ULONG STDMETHODCALLTYPE AddRef( void )
+    {
+        return 1;
+    }
+
+    ULONG STDMETHODCALLTYPE Release( void )
+    {
+        return 1;
+    }
+
 private:
     HRESULT WriteHeader( const WCHAR * pwszName );
     HRESULT WriteScript();

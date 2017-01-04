@@ -1,4 +1,4 @@
-//==========================================================================
+﻿//==========================================================================
 //
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
@@ -43,7 +43,7 @@ void ReportError( LPCTSTR pszMessage, HRESULT hr )
 
 
 // The entry function of the application
-extern "C" 
+extern "C"
 int __cdecl _tmain( int, TCHAR *[] )
 {
     LONG                nFiles;
@@ -53,12 +53,12 @@ int __cdecl _tmain( int, TCHAR *[] )
     BSTR                devName = NULL;
     TCHAR               szFolder[MAX_FOLDER_PATH];
     TCHAR               szFileName[MAX_FILE_PATH];
-    
+
     // Initialize COM
     HRESULT hr = CoInitialize(NULL);
 
-    GetTempPath(MAX_FOLDER_PATH , szFolder);
-    
+    GetTempPath(MAX_FOLDER_PATH, szFolder);
+
     StringCchPrintf(szFileName, ARRAYSIZE(szFileName), TEXT("%ws"), TEXT("ScanDialogFile"));
 
     if (SUCCEEDED(hr))
@@ -69,7 +69,7 @@ int __cdecl _tmain( int, TCHAR *[] )
         if (SUCCEEDED(hr))
         {
             //create a scan dialog and a select device UI
-            hr = pWiaDevMgr2->GetImageDlg(0,NULL,0, szFolder, szFileName, &nFiles, &rFilePaths, &pItem); 
+            hr = pWiaDevMgr2->GetImageDlg(0,NULL,0, szFolder, szFileName, &nFiles, &rFilePaths, &pItem);
             if (FAILED(hr))
             {
                 ReportError( TEXT("Could not create Scan Dialog"), hr );

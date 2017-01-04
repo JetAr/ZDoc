@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -32,8 +32,8 @@ public:
 
     HRESULT Initialize(
         HINSTANCE hInstance
-        );
-    
+    );
+
     HRESULT Invalidate();
 
 protected:
@@ -49,24 +49,24 @@ protected:
     HRESULT DecodeImageFromThumbCache(
         IShellItem *pShellItem,
         ID2D1Bitmap **ppBitmap
-        );
+    );
 
     static LRESULT CALLBACK WndProc(
         HWND hwnd,
         UINT uMsg,
         WPARAM wParam,
         LPARAM lParam
-        );
+    );
 
     HRESULT OnPaint(
         HDC hdc,
         const RECT &rcPaint
-        );
+    );
 
     HRESULT OnResize(
         UINT width,
         UINT height
-        );
+    );
 
     void OnDestroy();
 
@@ -75,7 +75,7 @@ protected:
 private:
 
     HWND m_hwnd;
-    
+
     // D2D components
 
     ID2D1Factory *m_pD2DFactory;

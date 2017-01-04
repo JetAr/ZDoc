@@ -1,4 +1,4 @@
-/********************************************************************++
+﻿/********************************************************************++
 THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED
 TO THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -24,8 +24,9 @@ Abstract:
 
 //Structures
 //
-typedef struct endpoint_invitation_context {
-    PEER_ENDPOINT *pEndpoint; 
+typedef struct endpoint_invitation_context
+{
+    PEER_ENDPOINT *pEndpoint;
     PEER_INVITATION *pInvite;
 } ENDPOINT_INVITATION_CONTEXT, * PENDPOINT_INVITATION_CONTEXT;
 

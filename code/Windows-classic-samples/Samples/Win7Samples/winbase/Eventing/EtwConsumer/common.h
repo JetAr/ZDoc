@@ -1,4 +1,4 @@
-/*++
+﻿/*++
 
     THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
     ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
@@ -56,7 +56,7 @@ VOID
 Move64(
     __in PLARGE_INTEGER Src,
     __out PLARGE_INTEGER Dest
-    )
+)
 {
     Dest->LowPart = Src->LowPart;
     Dest->HighPart = Src->HighPart;
@@ -67,7 +67,7 @@ NullToBuffer(
     __out_bcount(BufferSize) PBYTE Buffer,
     __in ULONG BufferSize,
     __out PUSHORT BinDataConsumed
-    );
+);
 
 ULONG
 AnsiStringToBuffer(
@@ -77,7 +77,7 @@ AnsiStringToBuffer(
     __out_bcount(BufferSize) PBYTE Buffer,
     __in ULONG BufferSize,
     __out PUSHORT BinDataConsumed
-    );
+);
 
 ULONG
 UnicodeStringToBuffer(
@@ -87,7 +87,7 @@ UnicodeStringToBuffer(
     __out_bcount(BufferSize) PBYTE Buffer,
     __in ULONG BufferSize,
     __out PUSHORT BinDataConsumed
-    );
+);
 
 
 ULONG
@@ -98,13 +98,13 @@ BooleanToBuffer(
     __out_bcount(BufferSize) PBYTE Buffer,
     __in ULONG BufferSize,
     __out PUSHORT BinDataConsumed
-    );
+);
 
 ULONG
 FormatDateTime(
     __in PSYSTEMTIME SystemTime,
     __out PBYTE Buffer
-    );
+);
 
 ULONG
 FileTimeToBuffer(
@@ -113,7 +113,7 @@ FileTimeToBuffer(
     __out_bcount(BufferSize) PBYTE Buffer,
     __in ULONG BufferSize,
     __out PUSHORT BinDataConsumed
-    );
+);
 
 ULONG
 SystemTimeToBuffer(
@@ -122,7 +122,7 @@ SystemTimeToBuffer(
     __out_bcount(BufferSize) PBYTE Buffer,
     __in ULONG BufferSize,
     __out PUSHORT BinDataConsumed
-    );
+);
 
 ULONG
 GuidToBuffer(
@@ -131,7 +131,7 @@ GuidToBuffer(
     __out_bcount(BufferSize) PBYTE Buffer,
     __in ULONG BufferSize,
     __out PUSHORT BinDataConsumed
-    );
+);
 
 ULONG
 SidToBuffer(
@@ -140,7 +140,7 @@ SidToBuffer(
     __out_bcount(BufferSize) PBYTE Buffer,
     __in ULONG BufferSize,
     __out PUSHORT BinDataConsumed
-    );
+);
 
 ULONG
 HexBinaryToBuffer(
@@ -150,7 +150,7 @@ HexBinaryToBuffer(
     __out_bcount(BufferSize) PBYTE Buffer,
     __in ULONG BufferSize,
     __out PUSHORT BinDataConsumed
-    );
+);
 
 ULONG
 HexDumpToBuffer(
@@ -159,7 +159,7 @@ HexDumpToBuffer(
     __out_bcount(BufferSize) PBYTE Buffer,
     __in ULONG BufferSize,
     __out PUSHORT BinDataConsumed
-    );
+);
 
 ULONG
 IPV6ToBuffer(
@@ -169,12 +169,12 @@ IPV6ToBuffer(
     __out_bcount(BufferSize) PBYTE Buffer,
     __in ULONG BufferSize,
     __out PUSHORT BinDataConsumed
-    );
+);
 
 BOOLEAN
 IsOSPriorWin7(
     VOID
-    );
+);
 
 
 template <typename T>
@@ -186,18 +186,18 @@ NumberToBuffer(
     __out_bcount(BufferSize) PBYTE Buffer,
     __in ULONG BufferSize,
     __out PUSHORT BinDataConsumed
-    )
+)
 
 /*++
 
 Routine Description:
 
-    This template method decodes an integer value and prints it 
+    This template method decodes an integer value and prints it
     out to a memory buffer.
 
 Arguments :
 
-    BinDataPtr - Pointer to the undecoded payload buffer containing 
+    BinDataPtr - Pointer to the undecoded payload buffer containing
                  the integer value.
 
     BinDataLeft - Supplies the size of the event payload data left to consume.
@@ -213,7 +213,7 @@ Arguments :
 Return Value :
 
     ERROR_INSUFFICIENT_BUFFER - Buffer is not large enough. If this is returned,
-                                the routine should be called again with a larger 
+                                the routine should be called again with a larger
                                 buffer.
 
     ERROR_SUCCESS - Formatting was successful.
@@ -227,8 +227,9 @@ Return Value :
 
     T Value;
     USHORT DataSize = sizeof(T);
-    
-    if (DataSize > BinDataLeft) {
+
+    if (DataSize > BinDataLeft)
+    {
         return ERROR_EVT_INVALID_EVENT_DATA;
     }
 
@@ -245,9 +246,10 @@ Return Value :
                            0,
                            FormatString,
                            Value);
-    
+
     Status = HRESULT_CODE(hr);
-    if (Status == ERROR_INVALID_PARAMETER) {
+    if (Status == ERROR_INVALID_PARAMETER)
+    {
         Status = ERROR_INSUFFICIENT_BUFFER;
     }
 

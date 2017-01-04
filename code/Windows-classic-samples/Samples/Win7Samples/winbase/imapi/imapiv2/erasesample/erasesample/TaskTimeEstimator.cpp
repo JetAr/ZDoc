@@ -1,4 +1,4 @@
-/*--
+﻿/*--
 
 Copyright (C) Microsoft Corporation, 2006
 
@@ -88,7 +88,7 @@ ULONG CTaskTimeEstimator::get_TotalSteps() const throw()
 }
 
 ULONG CTaskTimeEstimator::get_TotalMilliseconds() const throw()
-{     
+{
     TestInvariants();
     return m_ExpectedTotalMilliseconds;
 }
@@ -221,16 +221,16 @@ VOID CTaskTimeEstimator::UpdateTime()
         // This results in the following table:
         //  (0 == good, 100 == bad)       (0 == old, 100 == new good value)
         //    Effect of 1 bad value       Effect of 4 good values (w/change)
-        // pass 1:       50                       50 
-        // pass 2:        8                       58 
-        // pass 3:       10                       68 
-        // pass 4:       11                       78 
-        // pass 5:        5                       79 
-        // pass 6:        4                       84 
-        // pass 7:        3                       89 
-        // pass 8:        2                       92 
-        // pass 9:        2                       94 
-        //                                        
+        // pass 1:       50                       50
+        // pass 2:        8                       58
+        // pass 3:       10                       68
+        // pass 4:       11                       78
+        // pass 5:        5                       79
+        // pass 6:        4                       84
+        // pass 7:        3                       89
+        // pass 8:        2                       92
+        // pass 9:        2                       94
+        //
 
         // I also created a spreadsheet up to 6x.  It looks like a 2x weight
         // to the new number is sufficient to dampen oscillations when converging

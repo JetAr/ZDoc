@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -43,7 +43,7 @@ CXmlElement* CXmlElement::AddElement(LPWSTR pwszName)
     BSTR            bstrName = ::SysAllocString(pwszName);
 
     if (NULL != m_pIDoc)
-    {       
+    {
         hr = m_pIDoc->createElement(bstrName, &pIElement);
         if (SUCCEEDED(hr))
         {
@@ -72,13 +72,13 @@ HRESULT CXmlElement::AddAttributeInternal(LPWSTR pwszName, VARIANT& varValue)
 {
     HRESULT             hr = S_OK;
     IXMLDOMAttribute    *pAttribute = NULL;
-    BSTR                bstrName; 
+    BSTR                bstrName;
 
     bstrName = ::SysAllocString(pwszName);
     if (NULL != bstrName)
     {
         hr = m_pIDoc->createAttribute(bstrName, &pAttribute);
-        ::SysFreeString(bstrName);       
+        ::SysFreeString(bstrName);
     }
     else
     {
@@ -90,7 +90,7 @@ HRESULT CXmlElement::AddAttributeInternal(LPWSTR pwszName, VARIANT& varValue)
         hr = pAttribute->put_value(varValue);
         if (SUCCEEDED(hr))
         {
-            hr = m_pIElement->setAttributeNode(pAttribute, NULL);           
+            hr = m_pIElement->setAttributeNode(pAttribute, NULL);
         }
 
         pAttribute->Release();

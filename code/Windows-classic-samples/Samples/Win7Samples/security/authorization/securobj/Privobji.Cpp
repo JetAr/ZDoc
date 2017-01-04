@@ -1,4 +1,4 @@
-/*++
+﻿/*++
 THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED
 TO THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -70,19 +70,19 @@ SI_INHERIT_TYPE g_siObjInheritTypes[] =
 HRESULT
 LocalAllocString(LPWSTR* ppResult, LPCWSTR pString)
 {
-	SIZE_T cch;
-	SIZE_T maxlen = 1024;
+    SIZE_T cch;
+    SIZE_T maxlen = 1024;
 
     if (!ppResult || !pString)
         return E_INVALIDARG;
 
-	cch = wcsnlen(pString, maxlen) + 1;
+    cch = wcsnlen(pString, maxlen) + 1;
     *ppResult = (LPWSTR)LocalAlloc(LPTR, cch * sizeof(WCHAR));
 
     if (!*ppResult)
         return E_OUTOFMEMORY;
 
-	wcscpy_s(*ppResult, cch, pString);
+    wcscpy_s(*ppResult, cch, pString);
 
     return S_OK;
 }
@@ -280,8 +280,8 @@ CObjSecurity::GetObjectInformation(PSI_OBJECT_INFO pObjectInfo)
 
 STDMETHODIMP
 CObjSecurity::GetSecurity(SECURITY_INFORMATION si,
-                           PSECURITY_DESCRIPTOR *ppSD,
-                           BOOL fDefault)
+                          PSECURITY_DESCRIPTOR *ppSD,
+                          BOOL fDefault)
 {
     DWORD dwLength = 0;
     DWORD dwErr = 0;
@@ -299,7 +299,7 @@ CObjSecurity::GetSecurity(SECURITY_INFORMATION si,
     {
         *ppSD = LocalAlloc(LPTR, dwLength);
         if (*ppSD &&
-            !GetPrivateObjectSecurity(*m_ppSD, si, *ppSD, dwLength, &dwLength))
+                !GetPrivateObjectSecurity(*m_ppSD, si, *ppSD, dwLength, &dwLength))
         {
             dwErr = GetLastError();
             LocalFree(*ppSD);
@@ -315,7 +315,7 @@ CObjSecurity::GetSecurity(SECURITY_INFORMATION si,
 
 STDMETHODIMP
 CObjSecurity::SetSecurity(SECURITY_INFORMATION si,
-                           PSECURITY_DESCRIPTOR pSD)
+                          PSECURITY_DESCRIPTOR pSD)
 {
     DWORD dwErr = 0;
 
@@ -332,10 +332,10 @@ CObjSecurity::SetSecurity(SECURITY_INFORMATION si,
 
 STDMETHODIMP
 CObjSecurity::GetAccessRights(const GUID* /*pguidObjectType*/,
-                               DWORD /*dwFlags*/,
-                               PSI_ACCESS *ppAccesses,
-                               ULONG *pcAccesses,
-                               ULONG *piDefaultAccess)
+                              DWORD /*dwFlags*/,
+                              PSI_ACCESS *ppAccesses,
+                              ULONG *pcAccesses,
+                              ULONG *piDefaultAccess)
 {
     *ppAccesses = g_siObjAccesses;
     *pcAccesses = sizeof(g_siObjAccesses)/sizeof(g_siObjAccesses[0]);
@@ -346,8 +346,8 @@ CObjSecurity::GetAccessRights(const GUID* /*pguidObjectType*/,
 
 STDMETHODIMP
 CObjSecurity::MapGeneric(const GUID* /*pguidObjectType*/,
-                          UCHAR * /*pAceFlags*/,
-                          ACCESS_MASK *pmask)
+                         UCHAR * /*pAceFlags*/,
+                         ACCESS_MASK *pmask)
 {
     MapGenericMask(pmask, &ObjMap);
 
@@ -356,7 +356,7 @@ CObjSecurity::MapGeneric(const GUID* /*pguidObjectType*/,
 
 STDMETHODIMP
 CObjSecurity::GetInheritTypes(PSI_INHERIT_TYPE *ppInheritTypes,
-                               ULONG *pcInheritTypes)
+                              ULONG *pcInheritTypes)
 {
     *ppInheritTypes = g_siObjInheritTypes;
     *pcInheritTypes = sizeof(g_siObjInheritTypes)/sizeof(g_siObjInheritTypes[0]);
@@ -366,8 +366,8 @@ CObjSecurity::GetInheritTypes(PSI_INHERIT_TYPE *ppInheritTypes,
 
 STDMETHODIMP
 CObjSecurity::PropertySheetPageCallback(HWND /*hwnd*/,
-                                         UINT /*uMsg*/,
-                                         SI_PAGE_TYPE /*uPage*/)
+                                        UINT /*uMsg*/,
+                                        SI_PAGE_TYPE /*uPage*/)
 {
     return S_OK;
 }

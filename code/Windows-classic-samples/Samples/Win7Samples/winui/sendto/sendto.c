@@ -1,4 +1,4 @@
-/*****************************************************************************
+﻿/*****************************************************************************
  *
  *  SendTo.c
  *
@@ -109,16 +109,22 @@ GetSpecialFolder(HWND hwnd, int idFolder)
     LPITEMIDLIST pidl;
 
     hres = SHGetSpecialFolderLocation(hwnd, CSIDL_SENDTO, &pidl);
-    if (SUCCEEDED(hres)) {
-		hres = g_psfDesktop->lpVtbl->BindToObject(g_psfDesktop,
-                    pidl, NULL, &IID_IShellFolder, (LPVOID *)&psf);
-        if (SUCCEEDED(hres)) {
+    if (SUCCEEDED(hres))
+    {
+        hres = g_psfDesktop->lpVtbl->BindToObject(g_psfDesktop,
+                pidl, NULL, &IID_IShellFolder, (LPVOID *)&psf);
+        if (SUCCEEDED(hres))
+        {
             /* Woo-hoo, we're done */
-        } else {
+        }
+        else
+        {
             psf = NULL;
         }
         CoTaskMemFree(pidl);
-    } else {
+    }
+    else
+    {
         psf = NULL;
     }
     return psf;
@@ -139,20 +145,23 @@ PidlFromPath(HWND hwnd, LPCTSTR pszPath)
     ULONG ulEaten;
     DWORD dwAttributes;
     HRESULT hres;
-	WCHAR wszName[MAX_PATH];
+    WCHAR wszName[MAX_PATH];
 #ifdef UNICODE
-	if (FAILED(StringCchCopy(wszName, ARRAYSIZE(wszName), pszPath))) {
-		return NULL;
-	}
+    if (FAILED(StringCchCopy(wszName, ARRAYSIZE(wszName), pszPath)))
+    {
+        return NULL;
+    }
 #else
-    if (!MultiByteToWideChar(CP_ACP, 0, pszPath, -1, wszName, ARRAYSIZE(wszName))) {
+    if (!MultiByteToWideChar(CP_ACP, 0, pszPath, -1, wszName, ARRAYSIZE(wszName)))
+    {
         return NULL;
     }
 #endif
 
     hres = g_psfDesktop->lpVtbl->ParseDisplayName(g_psfDesktop, hwnd,
-                         NULL, wszName, &ulEaten, &pidl, &dwAttributes);
-    if (FAILED(hres)) {
+            NULL, wszName, &ulEaten, &pidl, &dwAttributes);
+    if (FAILED(hres))
+    {
         return NULL;
     }
 
@@ -185,11 +194,12 @@ GetUIObjectOfAbsPidl(HWND hwnd, LPITEMIDLIST pidl, REFIID riid, LPVOID *ppvOut)
      */
     *ppvOut = NULL;
 
-	/*
-	 *  Bind to the parent folder of the item we are interested in.
-	 */
-	hres = SHBindToParent(pidl, &IID_IShellFolder, (LPVOID *)&psf, &pidlLast);
-    if (FAILED(hres)) {
+    /*
+     *  Bind to the parent folder of the item we are interested in.
+     */
+    hres = SHBindToParent(pidl, &IID_IShellFolder, (LPVOID *)&psf, &pidlLast);
+    if (FAILED(hres))
+    {
         /*
          *  Couldn't even get to the parent; we have no chance of
          *  getting to the item itself.
@@ -201,7 +211,7 @@ GetUIObjectOfAbsPidl(HWND hwnd, LPITEMIDLIST pidl, REFIID riid, LPVOID *ppvOut)
      *  Now ask the parent for the the UI object of the child.
      */
     hres = psf->lpVtbl->GetUIObjectOf(psf, hwnd, 1, &pidlLast,
-                                riid, NULL, ppvOut);
+                                      riid, NULL, ppvOut);
 
     /*
      *  Regardless of whether or not the GetUIObjectOf succeeded,
@@ -232,7 +242,8 @@ GetUIObjectOfPath(HWND hwnd, LPCTSTR pszPath, REFIID riid, LPVOID *ppvOut)
     *ppvOut = NULL;
 
     pidl = PidlFromPath(hwnd, pszPath);
-    if (!pidl) {
+    if (!pidl)
+    {
         return E_FAIL;
     }
 
@@ -264,14 +275,17 @@ DoDrop(LPDATAOBJECT pdto, LPDROPTARGET pdt)
      */
     dwEffect = DROPEFFECT_COPY | DROPEFFECT_MOVE | DROPEFFECT_LINK;
     hres = pdt->lpVtbl->DragEnter(pdt, pdto, MK_LBUTTON, pt, &dwEffect);
-    if (SUCCEEDED(hres) && dwEffect) {
+    if (SUCCEEDED(hres) && dwEffect)
+    {
         /*
          *  The drop target likes the data object and the effect.
          *  Go drop it.
          */
         hres = pdt->lpVtbl->Drop(pdt, pdto, MK_LBUTTON, pt, &dwEffect);
 
-    } else {
+    }
+    else
+    {
         /*
          *  The drop target didn't like us.  Tell it we're leaving,
          *  sorry to bother you.
@@ -298,7 +312,8 @@ SendTo_OnCreate(HWND hwnd, LPCREATESTRUCT lpCreateStruct)
     mii.fMask = MIIM_SUBMENU;
 
     hmenu = GetMenu(hwnd);
-    if (GetMenuItemInfo(hmenu, IDM_SENDTOPOPUP, FALSE, &mii)) {
+    if (GetMenuItemInfo(hmenu, IDM_SENDTOPOPUP, FALSE, &mii))
+    {
         g_hmenuSendTo = mii.hSubMenu;
     }
 
@@ -321,8 +336,10 @@ SendTo_ResetSendToMenu(HMENU hmenu)
     mii.cbSize = sizeof(mii);
     mii.fMask = MIIM_DATA;
 
-    while (GetMenuItemInfo(hmenu, 0, TRUE, &mii)) {
-        if (mii.dwItemData) {
+    while (GetMenuItemInfo(hmenu, 0, TRUE, &mii))
+    {
+        if (mii.dwItemData)
+        {
             CoTaskMemFree((LPVOID)mii.dwItemData);
         }
         DeleteMenu(hmenu, 0, MF_BYPOSITION);
@@ -351,28 +368,34 @@ SendTo_FillSendToMenu(HWND hwnd, HMENU hmenu)
     UINT idm = IDM_SENDTOFIRST;
 
     psf = GetSpecialFolder(hwnd, CSIDL_SENDTO);
-    if (psf) {
+    if (psf)
+    {
         hres = psf->lpVtbl->EnumObjects(psf, hwnd,
-                    SHCONTF_FOLDERS | SHCONTF_NONFOLDERS,
-                    &peidl);
-        if (SUCCEEDED(hres)) {
+                                        SHCONTF_FOLDERS | SHCONTF_NONFOLDERS,
+                                        &peidl);
+        if (SUCCEEDED(hres))
+        {
             while (peidl->lpVtbl->Next(peidl, 1, &pidl, NULL) == S_OK &&
-                   idm < IDM_SENDTOLAST) {
+                    idm < IDM_SENDTOLAST)
+            {
                 hres = psf->lpVtbl->GetDisplayNameOf(psf, pidl,
-                                    SHGDN_NORMAL, &str);
-                if (SUCCEEDED(hres)) {
-					LPTSTR pszName;
-					hres = StrRetToStr(&str, pidl, &pszName);
-					if (SUCCEEDED(hres)) {
+                                                     SHGDN_NORMAL, &str);
+                if (SUCCEEDED(hres))
+                {
+                    LPTSTR pszName;
+                    hres = StrRetToStr(&str, pidl, &pszName);
+                    if (SUCCEEDED(hres))
+                    {
                         if (AppendMenu(hmenu, MF_ENABLED | MF_STRING,
-                                       idm, pszName)) {
+                                       idm, pszName))
+                        {
                             mii.cbSize = sizeof(mii);
                             mii.fMask = MIIM_DATA;
                             mii.dwItemData = (ULONG_PTR)pidl;
-                           SetMenuItemInfo(hmenu, idm, FALSE, &mii);
+                            SetMenuItemInfo(hmenu, idm, FALSE, &mii);
                             idm++;
-						}
-						CoTaskMemFree(pszName);
+                        }
+                        CoTaskMemFree(pszName);
                     }
                 }
             }
@@ -387,7 +410,8 @@ SendTo_FillSendToMenu(HWND hwnd, HMENU hmenu)
      *  then add a disabled "None" item so we have at least something
      *  to display.
      */
-    if (idm == IDM_SENDTOFIRST) {
+    if (idm == IDM_SENDTOFIRST)
+    {
         AppendMenu(hmenu, MF_GRAYED | MF_DISABLED | MF_STRING,
                    idm, TEXT("(none)"));
     }
@@ -409,7 +433,8 @@ SendTo_OnInitMenuPopup(HWND hwnd, HMENU hmenu, UINT item, BOOL fSystemMenu)
     /*
      *  If it's the SendTo menu, then rebuild it.
      */
-    if (hmenu == g_hmenuSendTo) {
+    if (hmenu == g_hmenuSendTo)
+    {
         SendTo_ResetSendToMenu(hmenu);
         SendTo_FillSendToMenu(hwnd, hmenu);
     }
@@ -441,7 +466,8 @@ SendTo_OnOpen(HWND hwnd)
     ofn.lpstrFileTitle = szTitle;
     ofn.nMaxFileTitle = ARRAYSIZE(szTitle);
     ofn.Flags = OFN_FILEMUSTEXIST | OFN_HIDEREADONLY | OFN_PATHMUSTEXIST;
-    if (GetOpenFileName(&ofn)) {
+    if (GetOpenFileName(&ofn))
+    {
         StringCchCopy(g_szFileName, ARRAYSIZE(g_szFileName), szFileName);
         StringCchPrintf(szFileName, ARRAYSIZE(szFileName), TEXT("%s - SendTo Demo"), szTitle);
         SetWindowText(hwnd, szFileName);
@@ -473,9 +499,10 @@ SendTo_SendToItem(HWND hwnd, int idm)
      *  First convert our filename to a data object.
      */
     hres = GetUIObjectOfPath(hwnd, g_szFileName, &IID_IDataObject,
-                                    (LPVOID *)&pdto);
+                             (LPVOID *)&pdto);
 
-    if (SUCCEEDED(hres)) {
+    if (SUCCEEDED(hres))
+    {
 
         /*
          *  Now go find the item we should send to.
@@ -483,17 +510,20 @@ SendTo_SendToItem(HWND hwnd, int idm)
         mii.cbSize = sizeof(mii);
         mii.fMask = MIIM_DATA;
         if (GetMenuItemInfo(g_hmenuSendTo, idm, FALSE, &mii) &&
-            mii.dwItemData) {
+                mii.dwItemData)
+        {
             pidl = (LPITEMIDLIST)mii.dwItemData;
 
             /*
              *  Now convert the send to pidl to a drop target.
              */
             psf = GetSpecialFolder(hwnd, CSIDL_SENDTO);
-            if (psf) {
+            if (psf)
+            {
                 hres = psf->lpVtbl->GetUIObjectOf(psf, hwnd, 1, &pidl,
-                                    &IID_IDropTarget, NULL, (LPVOID *)&pdt);
-                if (SUCCEEDED(hres)) {
+                                                  &IID_IDropTarget, NULL, (LPVOID *)&pdt);
+                if (SUCCEEDED(hres))
+                {
 
                     /*
                      *  Now drop the file on the drop target.
@@ -525,9 +555,12 @@ SendTo_SendToItem(HWND hwnd, int idm)
 void
 SendTo_OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify)
 {
-    if (id >= IDM_SENDTOFIRST && id <= IDM_SENDTOLAST) {
+    if (id >= IDM_SENDTOFIRST && id <= IDM_SENDTOLAST)
+    {
         SendTo_SendToItem(hwnd, id);
-    } else if (id == IDM_OPEN) {
+    }
+    else if (id == IDM_OPEN)
+    {
         SendTo_OnOpen(hwnd);
     }
 }
@@ -546,7 +579,8 @@ SendTo_OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify)
 void
 SendTo_OnDestroy(HWND hwnd)
 {
-    if (g_hmenuSendTo) {
+    if (g_hmenuSendTo)
+    {
         SendTo_ResetSendToMenu(g_hmenuSendTo);
     }
 
@@ -564,15 +598,16 @@ SendTo_OnDestroy(HWND hwnd)
 LRESULT CALLBACK
 SendTo_WndProc(HWND hwnd, UINT uiMsg, WPARAM wParam, LPARAM lParam)
 {
-    switch (uiMsg) {
+    switch (uiMsg)
+    {
 
-    HANDLE_MSG(hwnd, WM_CREATE, SendTo_OnCreate);
+        HANDLE_MSG(hwnd, WM_CREATE, SendTo_OnCreate);
 
-    HANDLE_MSG(hwnd, WM_COMMAND, SendTo_OnCommand);
+        HANDLE_MSG(hwnd, WM_COMMAND, SendTo_OnCommand);
 
-    HANDLE_MSG(hwnd, WM_INITMENUPOPUP, SendTo_OnInitMenuPopup);
+        HANDLE_MSG(hwnd, WM_INITMENUPOPUP, SendTo_OnInitMenuPopup);
 
-    HANDLE_MSG(hwnd, WM_DESTROY, SendTo_OnDestroy);
+        HANDLE_MSG(hwnd, WM_DESTROY, SendTo_OnDestroy);
 
     }
 
@@ -607,7 +642,8 @@ InitApp(void)
     RegisterClass(&wc);
 
     hr = SHGetDesktopFolder(&g_psfDesktop);
-    if (FAILED(hr)) {
+    if (FAILED(hr))
+    {
         return FALSE;
     }
 
@@ -625,7 +661,8 @@ InitApp(void)
 void
 TermApp(void)
 {
-    if (g_psfDesktop) {
+    if (g_psfDesktop)
+    {
         g_psfDesktop->lpVtbl->Release(g_psfDesktop);
         g_psfDesktop = NULL;
     }
@@ -655,19 +692,20 @@ WinMain(HINSTANCE hinst, HINSTANCE hinstPrev, LPSTR pszCmdLine, int nCmdShow)
     hrInit = CoInitialize(NULL);
 
     hwnd = CreateWindow(
-        TEXT("SendTo"),                 /* Class Name */
-        TEXT("SendTo Demo"),            /* Title */
-        WS_OVERLAPPEDWINDOW,            /* Style */
-        CW_USEDEFAULT, CW_USEDEFAULT,   /* Position */
-        CW_USEDEFAULT, CW_USEDEFAULT,   /* Size */
-        NULL,                           /* Parent */
-        NULL,                           /* No menu */
-        hinst,                          /* Instance */
-        0);                             /* No special parameters */
+               TEXT("SendTo"),                 /* Class Name */
+               TEXT("SendTo Demo"),            /* Title */
+               WS_OVERLAPPEDWINDOW,            /* Style */
+               CW_USEDEFAULT, CW_USEDEFAULT,   /* Position */
+               CW_USEDEFAULT, CW_USEDEFAULT,   /* Size */
+               NULL,                           /* Parent */
+               NULL,                           /* No menu */
+               hinst,                          /* Instance */
+               0);                             /* No special parameters */
 
     ShowWindow(hwnd, nCmdShow);
 
-    while (GetMessage(&msg, NULL, 0, 0)) {
+    while (GetMessage(&msg, NULL, 0, 0))
+    {
         TranslateMessage(&msg);
         DispatchMessage(&msg);
     }

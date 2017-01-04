@@ -1,4 +1,4 @@
-// ComponentInfo.h : Declaration of the CComponentInfo
+﻿// ComponentInfo.h : Declaration of the CComponentInfo
 
 #pragma once
 #include "resource.h"       // main symbols
@@ -15,7 +15,7 @@ typedef struct ComponentInfo ComponentInfo;
 #ifdef __cplusplus
 
 class DECLSPEC_UUID("E19DDEC2-3FBE-4C3B-9317-679760C13AAE")
-ComponentInfo;
+    ComponentInfo;
 #endif
 
 #if defined(_WIN32_WCE) && !defined(_CE_DCOM) && !defined(_CE_ALLOW_SINGLE_THREADED_OBJECTS_IN_MTA)
@@ -30,31 +30,31 @@ static const WORD LANG_ID = MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT);
 // CComponentInfo
 
 class ATL_NO_VTABLE CComponentInfo :
-	public CComObjectRootEx<CComMultiThreadModel>,
-	public CComCoClass<CComponentInfo, &CLSID_ComponentInfo>,
-	public INapComponentInfo
+    public CComObjectRootEx<CComMultiThreadModel>,
+    public CComCoClass<CComponentInfo, &CLSID_ComponentInfo>,
+    public INapComponentInfo
 {
 public:
-	CComponentInfo()
-	{
-	}
+    CComponentInfo()
+    {
+    }
 
-DECLARE_REGISTRY_RESOURCEID(IDR_COMPONENTINFO)
+    DECLARE_REGISTRY_RESOURCEID(IDR_COMPONENTINFO)
 
-BEGIN_COM_MAP(CComponentInfo)
-	COM_INTERFACE_ENTRY(INapComponentInfo)
-END_COM_MAP()
+    BEGIN_COM_MAP(CComponentInfo)
+    COM_INTERFACE_ENTRY(INapComponentInfo)
+    END_COM_MAP()
 
-	DECLARE_PROTECT_FINAL_CONSTRUCT()
+    DECLARE_PROTECT_FINAL_CONSTRUCT()
 
-	HRESULT FinalConstruct()
-	{
-		return S_OK;
-	}
+    HRESULT FinalConstruct()
+    {
+        return S_OK;
+    }
 
-	void FinalRelease()
-	{
-	}
+    void FinalRelease()
+    {
+    }
 
 public:
     STDMETHOD(GetFriendlyName)(MessageId * friendlyName);

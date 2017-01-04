@@ -1,4 +1,4 @@
-//////////////////////////////////////////////////////////////////////
+﻿//////////////////////////////////////////////////////////////////////
 //
 //  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 //  ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED
@@ -33,12 +33,12 @@ STDAPI CTextService::OnEndEdit(ITfContext *pContext, TfEditCookie ecReadOnly, IT
 
     //
     // did the selection change?
-    // The selection change includes the movement of caret as well. 
+    // The selection change includes the movement of caret as well.
     // The caret position is represent as the empty selection range when
     // there is no selection.
     //
     if (pEditRecord->GetSelectionStatus(&fSelectionChanged) == S_OK &&
-        fSelectionChanged)
+            fSelectionChanged)
     {
         // If the selection is moved to out side of the current composition,
         // we terminate the composition. This TextService supports only one
@@ -56,7 +56,7 @@ STDAPI CTextService::OnEndEdit(ITfContext *pContext, TfEditCookie ecReadOnly, IT
                 {
                     if (!IsRangeCovered(ecReadOnly, tfSelection.range, pRangeComposition))
                     {
-                       _EndComposition(pContext);
+                        _EndComposition(pContext);
                     }
 
                     pRangeComposition->Release();

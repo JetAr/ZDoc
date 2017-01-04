@@ -1,4 +1,4 @@
-// ADs.h: interface for the CADs class.
+﻿// ADs.h: interface for the CADs class.
 //
 //////////////////////////////////////////////////////////////////////
 
@@ -18,51 +18,51 @@ class CDlgIADs : public CDialog
 {
 // Construction
 public:
-	CDlgIADs(LPUNKNOWN, CWnd* pParent = NULL);   // standard constructor
-	~CDlgIADs();
+    CDlgIADs(LPUNKNOWN, CWnd* pParent = NULL);   // standard constructor
+    ~CDlgIADs();
 // Dialog Data
-	//{{AFX_DATA(CDlgIADs)
-	enum { IDD = IDD_IADS };
-	CListBox	m_cValueList;
-	CComboBox	m_cAttrList;
-	CString	m_sADsPath;
-	CString	m_sClass;
-	CString	m_sName;
-	CString	m_sParent;
-	CString	m_sSchema;
-	IADs   *m_pADs;
-	CString	m_sGUID;
-	//}}AFX_DATA
+    //{{AFX_DATA(CDlgIADs)
+    enum { IDD = IDD_IADS };
+    CListBox	m_cValueList;
+    CComboBox	m_cAttrList;
+    CString	m_sADsPath;
+    CString	m_sClass;
+    CString	m_sName;
+    CString	m_sParent;
+    CString	m_sSchema;
+    IADs   *m_pADs;
+    CString	m_sGUID;
+    //}}AFX_DATA
 
 
 // Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CDlgIADs)
-	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+    // ClassWizard generated virtual function overrides
+    //{{AFX_VIRTUAL(CDlgIADs)
+protected:
+    virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
+    //}}AFX_VIRTUAL
 
 // Implementation
 protected:
-	
-	// Generated message map functions
-	//{{AFX_MSG(CDlgIADs)
-	virtual BOOL OnInitDialog();
-	afx_msg void OnGet();
-	afx_msg void OnGetEx();
-	afx_msg void OnGetInfo();
-	afx_msg void OnSetInfo();
-	afx_msg void OnGetInfoex();
-	afx_msg void OnPut();
-	afx_msg void OnPutEx();
-	afx_msg void OnParentPath();
-	afx_msg void OnSchemaPath();
-	afx_msg void OnBindGuid();
-	afx_msg void OnSelChangeAttrList();
-	afx_msg void OnDblClkAttrValue();
-	afx_msg void OnCopy();
-	//}}AFX_MSG
-	DECLARE_MESSAGE_MAP()
+
+    // Generated message map functions
+    //{{AFX_MSG(CDlgIADs)
+    virtual BOOL OnInitDialog();
+    afx_msg void OnGet();
+    afx_msg void OnGetEx();
+    afx_msg void OnGetInfo();
+    afx_msg void OnSetInfo();
+    afx_msg void OnGetInfoex();
+    afx_msg void OnPut();
+    afx_msg void OnPutEx();
+    afx_msg void OnParentPath();
+    afx_msg void OnSchemaPath();
+    afx_msg void OnBindGuid();
+    afx_msg void OnSelChangeAttrList();
+    afx_msg void OnDblClkAttrValue();
+    afx_msg void OnCopy();
+    //}}AFX_MSG
+    DECLARE_MESSAGE_MAP()
 };
 
 
@@ -74,32 +74,35 @@ class CGetInfoExDlg : public CDialog
 {
 // Construction
 public:
-	CGetInfoExDlg(CWnd* pParent = NULL);   // standard constructor
-	CString GetAttribute() { return m_sAttr; }
+    CGetInfoExDlg(CWnd* pParent = NULL);   // standard constructor
+    CString GetAttribute()
+    {
+        return m_sAttr;
+    }
 
 // Dialog Data
-	//{{AFX_DATA(CGetInfoExDlg)
-	enum { IDD = IDD_GETINFOEX };
-	CString	m_sAttrText;
-	//}}AFX_DATA
+    //{{AFX_DATA(CGetInfoExDlg)
+    enum { IDD = IDD_GETINFOEX };
+    CString	m_sAttrText;
+    //}}AFX_DATA
 
 
 // Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CGetInfoExDlg)
-	protected:
-		
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+    // ClassWizard generated virtual function overrides
+    //{{AFX_VIRTUAL(CGetInfoExDlg)
+protected:
+
+    virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
+    //}}AFX_VIRTUAL
 
 // Implementation
 protected:
-	CString m_sAttr;
-	// Generated message map functions
-	//{{AFX_MSG(CGetInfoExDlg)
-	virtual void OnOK();
-	//}}AFX_MSG
-	DECLARE_MESSAGE_MAP()
+    CString m_sAttr;
+    // Generated message map functions
+    //{{AFX_MSG(CGetInfoExDlg)
+    virtual void OnOK();
+    //}}AFX_MSG
+    DECLARE_MESSAGE_MAP()
 
-	
+
 };

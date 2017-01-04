@@ -1,4 +1,4 @@
-//////////////////////////////////////////////////////////////////////////////
+﻿//////////////////////////////////////////////////////////////////////////////
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -55,7 +55,7 @@ HRESULT CreateClientNotificationSink
 }
 
 CClientNotificationSink::CClientNotificationSink()
-:   m_cRef( 1 )
+    :   m_cRef( 1 )
 {
     InitializeCriticalSection( &m_printfCriticalSection );
 }
@@ -100,7 +100,7 @@ HRESULT STDMETHODCALLTYPE CClientNotificationSink::Add
         // is not blocked while WSDCreateDeviceProxy is executing.
 
         wprintf( L"Discovered the following service:\r\n" );
-        
+
         // don't care if logging function fails
         (void)PrintDiscoveredService( service, FALSE ); // FALSE - this is not a Bye message
         wprintf( L"\r\n" );
@@ -141,7 +141,7 @@ HRESULT STDMETHODCALLTYPE CClientNotificationSink::Remove
 
 HRESULT STDMETHODCALLTYPE CClientNotificationSink::SearchFailed
 (   _In_ HRESULT hr
-,   _In_opt_ LPCWSTR tag
+    ,   _In_opt_ LPCWSTR tag
 )
 {
     EnterCriticalSection( &m_printfCriticalSection );
@@ -196,7 +196,7 @@ HRESULT STDMETHODCALLTYPE CClientNotificationSink::SearchComplete
 
 HRESULT STDMETHODCALLTYPE CClientNotificationSink::QueryInterface
 (   _In_ REFIID riid
-,   _Outptr_ __RPC__deref_out void __RPC_FAR *__RPC_FAR *object
+    ,   _Outptr_ __RPC__deref_out void __RPC_FAR *__RPC_FAR *object
 )
 {
     HRESULT hr = S_OK;

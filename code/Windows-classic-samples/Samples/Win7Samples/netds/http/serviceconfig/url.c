@@ -1,4 +1,4 @@
-/*++
+﻿/*++
  Copyright (c) 2002 - 2002 Microsoft Corporation.  All Rights Reserved.
 
  THIS CODE AND INFORMATION IS PROVIDED "AS-IS" WITHOUT WARRANTY OF
@@ -6,7 +6,7 @@
  THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
  PARTICULAR PURPOSE.
 
- THIS CODE IS NOT SUPPORTED BY MICROSOFT. 
+ THIS CODE IS NOT SUPPORTED BY MICROSOFT.
 
 --*/
 
@@ -32,14 +32,14 @@ Return Value:
 void
 PrintUrlAclRecord(
     IN PUCHAR pOutput
-    )
+)
 {
     PHTTP_SERVICE_CONFIG_URLACL_SET pSetParam;
 
     pSetParam = (PHTTP_SERVICE_CONFIG_URLACL_SET) pOutput;
 
     wprintf(L"URL : %s", pSetParam->KeyDesc.pUrlPrefix);
-	
+
     wprintf(L"ACL : %s", pSetParam->ParamDesc.pStringSecurityDescriptor);
 
     wprintf(L"------------------------------------------------------------------------------");
@@ -59,11 +59,11 @@ Return Value:
     Success/Failure.
 
 --***************************************************************************/
-int 
+int
 DoUrlAclSet(
     __in_opt PWSTR pUrl,
     __in_opt PWSTR pAcl
-    )
+)
 {
     HTTP_SERVICE_CONFIG_URLACL_SET SetParam;
     DWORD                          Status;
@@ -74,16 +74,16 @@ DoUrlAclSet(
     SetParam.ParamDesc.pStringSecurityDescriptor = pAcl;
 
     Status = HttpSetServiceConfiguration(
-                NULL,
-                HttpServiceConfigUrlAclInfo,
-                &SetParam,
-                sizeof(SetParam),
-                NULL
-                );
+                 NULL,
+                 HttpServiceConfigUrlAclInfo,
+                 &SetParam,
+                 sizeof(SetParam),
+                 NULL
+             );
 
     wprintf(L"HttpSetServiceConfiguration completed with %d", Status);
 
-                
+
     return Status;
 }
 
@@ -102,7 +102,7 @@ Return Value:
 --***************************************************************************/
 int DoUrlAclQuery(
     __in_opt PWSTR pUrl
-    )
+)
 {
     DWORD                             Status;
     PUCHAR                            pOutput = NULL;
@@ -115,40 +115,40 @@ int DoUrlAclQuery(
     if(pUrl)
     {
         // If a URL is specified, we'll Query for an exact entry.
-        // 
+        //
         QueryParam.QueryDesc = HttpServiceConfigQueryExact;
         QueryParam.KeyDesc.pUrlPrefix = pUrl;
     }
     else
     {
         //
-        // No URL is specified, so enumerate the entire store. 
-        // 
+        // No URL is specified, so enumerate the entire store.
+        //
         QueryParam.QueryDesc = HttpServiceConfigQueryNext;
     }
 
     for(;;)
     {
-        // 
+        //
         // First, compute bytes required for querying the first entry.
         //
         Status = HttpQueryServiceConfiguration(
-                    NULL,
-                    HttpServiceConfigUrlAclInfo,
-                    &QueryParam,
-                    sizeof(QueryParam),
-                    pOutput,
-                    OutputLength,
-                    &ReturnLength,
-                    NULL
-                    );
+                     NULL,
+                     HttpServiceConfigUrlAclInfo,
+                     &QueryParam,
+                     sizeof(QueryParam),
+                     pOutput,
+                     OutputLength,
+                     &ReturnLength,
+                     NULL
+                 );
 
         if(Status == ERROR_INSUFFICIENT_BUFFER)
         {
             // If the API completes with ERROR_INSUFFICIENT_BUFFER, we'll
             // allocate memory for it & continue with the loop where we'll
             // call it again.
-            
+
             if(pOutput)
             {
                 // If there was an existing buffer, free it.
@@ -169,7 +169,7 @@ int DoUrlAclQuery(
 
             // The query succeeded! We'll print the record that we just
             // queried.
-            
+
             PrintUrlAclRecord(pOutput);
 
             if(pUrl)
@@ -183,7 +183,7 @@ int DoUrlAclQuery(
             {
                 //
                 // Since we are enumerating, we'll move on to the next
-                // record. This is done by incrementing the cursor, till 
+                // record. This is done by incrementing the cursor, till
                 // we get ERROR_NO_MORE_ITEMS.
                 //
                 QueryParam.dwToken ++;
@@ -191,15 +191,15 @@ int DoUrlAclQuery(
         }
         else if(ERROR_NO_MORE_ITEMS == Status && pUrl == NULL)
         {
-            // We are enumerating and we have reached the end. This is 
-            // indicated by a ERROR_NO_MORE_ITEMS error code. 
-            
+            // We are enumerating and we have reached the end. This is
+            // indicated by a ERROR_NO_MORE_ITEMS error code.
+
             // This is not a real error, since it is used to indicate that
             // we've finished enumeration.
-            
+
             Status = NO_ERROR;
             break;
-        } 
+        }
         else
         {
             //
@@ -209,8 +209,8 @@ int DoUrlAclQuery(
 
             break;
         }
-    } 
-    
+    }
+
     if(pOutput)
     {
         LocalFree(pOutput);
@@ -233,20 +233,20 @@ Return Value:
 --***************************************************************************/
 int DoUrlAclDelete(
     __in_opt PWSTR pUrl
-    )
+)
 {
     HTTP_SERVICE_CONFIG_URLACL_SET SetParam;
     DWORD                          Status;
 
     SetParam.KeyDesc.pUrlPrefix = pUrl;
     Status = HttpDeleteServiceConfiguration(
-                NULL,
-                HttpServiceConfigUrlAclInfo,
-                &SetParam,
-                sizeof(SetParam),
-                NULL
-                );
-                
+                 NULL,
+                 HttpServiceConfigUrlAclInfo,
+                 &SetParam,
+                 sizeof(SetParam),
+                 NULL
+             );
+
     wprintf(L"HttpDeleteServiceConfiguration completed with %d", Status);
     return Status;
 }
@@ -258,7 +258,7 @@ int DoUrlAclDelete(
 /***************************************************************************++
 
 Routine Description:
-    The function that parses parameters specific to URL ACL & 
+    The function that parses parameters specific to URL ACL &
     calls Set, Query or Delete.
 
 Arguments:
@@ -270,12 +270,12 @@ Return Value:
     Success/Failure.
 
 --***************************************************************************/
-int 
+int
 DoUrlAcl(
-    int          argc, 
-    __in_ecount(argc) WCHAR      **argv, 
+    int          argc,
+    __in_ecount(argc) WCHAR      **argv,
     HTTPCFG_TYPE Type
-    )
+)
 {
     PWSTR   pUrl             = NULL;
     PWSTR   pAcl             = NULL;
@@ -285,18 +285,18 @@ DoUrlAcl(
     {
         switch(toupper(argv[0][1]))
         {
-            case 'U':
-                pUrl = argv[1];
-                break;
-    
-            case 'A':
-                pAcl = argv[1];
-                break;
-        
-            default:
-	    	  wprintf(L"%s is not a valid command.", argv[0]);
+        case 'U':
+            pUrl = argv[1];
+            break;
 
-                return ERROR_INVALID_PARAMETER;
+        case 'A':
+            pAcl = argv[1];
+            break;
+
+        default:
+            wprintf(L"%s is not a valid command.", argv[0]);
+
+            return ERROR_INVALID_PARAMETER;
         }
 
         argc -=2;
@@ -305,18 +305,18 @@ DoUrlAcl(
 
     switch(Type)
     {
-        case HttpCfgTypeSet:
-            return DoUrlAclSet(pUrl, pAcl);
+    case HttpCfgTypeSet:
+        return DoUrlAclSet(pUrl, pAcl);
 
-        case HttpCfgTypeQuery:
-            return DoUrlAclQuery(pUrl);
+    case HttpCfgTypeQuery:
+        return DoUrlAclQuery(pUrl);
 
-        case HttpCfgTypeDelete:
-            return DoUrlAclDelete(pUrl);
+    case HttpCfgTypeDelete:
+        return DoUrlAclDelete(pUrl);
 
-        default: 
-	     wprintf(L"%s is not a valid command.", argvSaved[0]);
+    default:
+        wprintf(L"%s is not a valid command.", argvSaved[0]);
 
-            return ERROR_INVALID_PARAMETER;
+        return ERROR_INVALID_PARAMETER;
     }
 }

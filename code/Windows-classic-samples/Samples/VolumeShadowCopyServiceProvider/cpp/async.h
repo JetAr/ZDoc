@@ -1,4 +1,4 @@
-/*++
+﻿/*++
 
 Copyright (c) Microsoft Corporation
 
@@ -48,30 +48,30 @@ void inline VssZeroOut( T* param )
 class ATL_NO_VTABLE CVssAsync :
     public CComObjectRoot,
     public IVssAsync
-    {
+{
 // Constructors& destructors
 public:
-    CVssAsync() : op_hresult(S_OK) 
+    CVssAsync() : op_hresult(S_OK)
     {}
-    ~CVssAsync(){}
+    ~CVssAsync() {}
 private:
-	static const int ASYNC_WAIT_MILISEC = 3000; //Sleep for 3 seconds when IVssAsync::Wait is called from the client, to fake the latency of lun Resync
+    static const int ASYNC_WAIT_MILISEC = 3000; //Sleep for 3 seconds when IVssAsync::Wait is called from the client, to fake the latency of lun Resync
     static const int ASYNC_FAKE_PERSENT = 100;  //Currently percentage is not supported, always return 100%
     HRESULT op_hresult;
 public:
     // ATL Stuff
     BEGIN_COM_MAP( CVssAsync )
-        COM_INTERFACE_ENTRY( IVssAsync )
+    COM_INTERFACE_ENTRY( IVssAsync )
     END_COM_MAP()
 public:
     void SetOpHresult(HRESULT hr)
     {
-      op_hresult = hr;
+        op_hresult = hr;
     }
     static IVssAsync* CreateInstanceAndStartJob(
         HRESULT fakeReturnHr
-        )
-    { 
+    )
+    {
         UNREFERENCED_PARAMETER(fakeReturnHr);
         TRACE_FUNCTION();
         CComPtr<IVssAsync> pAsync;
@@ -92,28 +92,32 @@ public:
         // Querying the IVssAsync interface. Then the ref count becomes 2.
         CComPtr<IUnknown> pUnknown = pObject->GetUnknown();
         hr = pUnknown->QueryInterface(__uuidof(IVssAsync), (void**)&pAsync); // The ref count is 2.
-        if ( FAILED(hr) ) {
+        if ( FAILED(hr) )
+        {
             TraceMsg(L"CComObject<CVssAsync>::CreateInstance(&pObject); failed with %x\n", hr);
             return NULL;
         }
 
         pObject->Release(); // reduce the ref count to 1
 
-        return pAsync.Detach(); // The ref count remains 1.  The client  code has the responsibility to release this reference. 
+        return pAsync.Detach(); // The ref count remains 1.  The client  code has the responsibility to release this reference.
     }
 
     //IVssAsync::Cancel implementation
-    STDMETHOD(Cancel)() {return S_OK;}
+    STDMETHOD(Cancel)()
+    {
+        return S_OK;
+    }
 
     //IVssAsync::Wait implementation
     STDMETHOD(Wait)(
-            DWORD dwMilliseconds = INFINITE
-		)
-	{
-	    UNREFERENCED_PARAMETER(dwMilliseconds);
-		::Sleep(CVssAsync::ASYNC_WAIT_MILISEC);
-		return S_OK;
-	}
+        DWORD dwMilliseconds = INFINITE
+    )
+    {
+        UNREFERENCED_PARAMETER(dwMilliseconds);
+        ::Sleep(CVssAsync::ASYNC_WAIT_MILISEC);
+        return S_OK;
+    }
 
     //IVssAsync::QueryStatus implementation
     STDMETHOD(QueryStatus)(
@@ -133,8 +137,8 @@ public:
         {
             return S_FALSE;
         }
-    } 
+    }
 
 };
 
-    
+

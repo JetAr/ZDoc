@@ -1,4 +1,4 @@
-/////////////////////////////////////////////////////////////////////////////
+﻿/////////////////////////////////////////////////////////////////////////////
 //
 //  Copyright (c) 2003 <company name>
 //
@@ -82,23 +82,23 @@ const int BUFFER_GROWTH_FACTOR = 256;
 /////////////////////////////////////////////////////////////////////////////
 int
 WrapCompareString(
-      BOOL      fCaseSensitive
+    BOOL      fCaseSensitive
     , LPCWSTR   pcwszString1In
     , size_t    cch1In
     , LPCWSTR   pcwszString2In
     , size_t    cch2In
-    )
+)
 {
     int nRet;
 
     nRet = CompareStringW(
-              LOCALE_SYSTEM_DEFAULT
-            , fCaseSensitive ? 0 : NORM_IGNORECASE
-            , pcwszString1In
-            , static_cast< DWORD >( cch1In )
-            , pcwszString2In
-            , static_cast< DWORD >( cch2In )
-            );
+               LOCALE_SYSTEM_DEFAULT
+               , fCaseSensitive ? 0 : NORM_IGNORECASE
+               , pcwszString1In
+               , static_cast< DWORD >( cch1In )
+               , pcwszString2In
+               , static_cast< DWORD >( cch2In )
+           );
 
     return nRet - CSTR_EQUAL; // CSTR_LT < CSTR_EQUAL < CSTR_GT
 
@@ -110,96 +110,96 @@ WrapCompareString(
 
 int
 IBSTRCompareW(
-      BSTR  bstrString1In
+    BSTR  bstrString1In
     , BSTR  bstrString2In
-    )
+)
 {
     return WrapCompareString(
-                  FALSE
-                , static_cast< LPCWSTR >( bstrString1In )
-                , SysStringLen( bstrString1In )
-                , static_cast< LPCWSTR >( bstrString2In )
-                , SysStringLen( bstrString2In )
-                );
+               FALSE
+               , static_cast< LPCWSTR >( bstrString1In )
+               , SysStringLen( bstrString1In )
+               , static_cast< LPCWSTR >( bstrString2In )
+               , SysStringLen( bstrString2In )
+           );
 } //*** IBSTRCompareW
 
 int
 BSTRCompareW(
-      BSTR  bstrString1In
+    BSTR  bstrString1In
     , BSTR  bstrString2In
-    )
+)
 {
     return WrapCompareString(
-                  TRUE
-                , static_cast< LPCWSTR >( bstrString1In )
-                , SysStringLen( bstrString1In )
-                , static_cast< LPCWSTR >( bstrString2In )
-                , SysStringLen( bstrString2In )
-                );
+               TRUE
+               , static_cast< LPCWSTR >( bstrString1In )
+               , SysStringLen( bstrString1In )
+               , static_cast< LPCWSTR >( bstrString2In )
+               , SysStringLen( bstrString2In )
+           );
 } //*** BSTRCompareW
 
 int
 IStringCompareW(
-      LPCWSTR pcwszString1In
+    LPCWSTR pcwszString1In
     , LPCWSTR pcwszString2In
-    )
+)
 {
     return WrapCompareString(
-                  FALSE
-                , pcwszString1In
-                , static_cast< size_t >( -1 )
-                , pcwszString2In
-                , static_cast< size_t >( -1 )
-            );
+               FALSE
+               , pcwszString1In
+               , static_cast< size_t >( -1 )
+               , pcwszString2In
+               , static_cast< size_t >( -1 )
+           );
 } //*** IStringCompareW
 
 int
 StringCompareW(
-      LPCWSTR pcwszString1In
+    LPCWSTR pcwszString1In
     , LPCWSTR pcwszString2In
-    )
+)
 {
     return WrapCompareString(
-                  TRUE
-                , pcwszString1In
-                , static_cast< size_t >( -1 )
-                , pcwszString2In
-                , static_cast< size_t >( -1 )
-                );
+               TRUE
+               , pcwszString1In
+               , static_cast< size_t >( -1 )
+               , pcwszString2In
+               , static_cast< size_t >( -1 )
+           );
 } //*** StringCompareW
 
 int
 IStringCompareW(
-      LPCWSTR   pcwszString1In
+    LPCWSTR   pcwszString1In
     , size_t    cch1In
     , LPCWSTR   pcwszString2In
     , size_t    cch2In
-    )
+)
 {
     return WrapCompareString(
-                  FALSE
-                , pcwszString1In
-                , cch1In
-                , pcwszString2In
-                , cch2In
-                );
+               FALSE
+               , pcwszString1In
+               , cch1In
+               , pcwszString2In
+               , cch2In
+           );
 } //*** IStringCompareW
 
 int
 StringCompareW(
-      LPCWSTR   pcwszString1In
+    LPCWSTR   pcwszString1In
     , size_t    cch1In
     , LPCWSTR   pcwszString2In
     , size_t    cch2In
-    )
+)
 {
     return WrapCompareString(
-                  TRUE
-                , pcwszString1In
-                , cch1In
-                , pcwszString2In
-                , cch2In
-                );
+               TRUE
+               , pcwszString1In
+               , cch1In
+               , pcwszString2In
+               , cch2In
+           );
 } //*** StringCompareW
 
 //
@@ -209,106 +209,106 @@ StringCompareW(
 
 int
 NIBSTRCompareW(
-      BSTR  bstrString1In
+    BSTR  bstrString1In
     , BSTR  bstrString2In
-    )
+)
 {
     size_t cchMin;
-    
+
     cchMin = min( SysStringLen( bstrString1In ), SysStringLen( bstrString2In ) );
 
     return WrapCompareString(
-                  FALSE
-                , static_cast< LPCWSTR >( bstrString1In )
-                , cchMin
-                , static_cast< LPCWSTR >( bstrString2In )
-                , cchMin
-                );
+               FALSE
+               , static_cast< LPCWSTR >( bstrString1In )
+               , cchMin
+               , static_cast< LPCWSTR >( bstrString2In )
+               , cchMin
+           );
 } //*** NIBSTRCompareW
 
 int
 NBSTRCompareW(
-      BSTR  bstrString1In
+    BSTR  bstrString1In
     , BSTR  bstrString2In
-    )
+)
 {
     size_t cchMin;
-    
+
     cchMin = min( SysStringLen( bstrString1In ), SysStringLen( bstrString2In ) );
 
     return WrapCompareString(
-                  TRUE
-                , static_cast< LPCWSTR >( bstrString1In )
-                , cchMin
-                , static_cast< LPCWSTR >( bstrString2In )
-                , cchMin
-                );
+               TRUE
+               , static_cast< LPCWSTR >( bstrString1In )
+               , cchMin
+               , static_cast< LPCWSTR >( bstrString2In )
+               , cchMin
+           );
 } //*** NBSTRCompareW
 
 int
 NIStringCompareW(
-      LPCWSTR   pcwszString1In
+    LPCWSTR   pcwszString1In
     , LPCWSTR   pcwszString2In
     , size_t    cchIn
-    )
+)
 {
     return WrapCompareString(
-                  FALSE
-                , pcwszString1In
-                , cchIn
-                , pcwszString2In
-                , cchIn
-                );
+               FALSE
+               , pcwszString1In
+               , cchIn
+               , pcwszString2In
+               , cchIn
+           );
 } //*** NIStringCompareW
 
 int
 NStringCompareW(
-      LPCWSTR   pcwszString1In
+    LPCWSTR   pcwszString1In
     , LPCWSTR   pcwszString2In
     , size_t    cchIn
-    )
+)
 {
     return WrapCompareString(
-                  TRUE
-                , pcwszString1In
-                , cchIn
-                , pcwszString2In
-                , cchIn
-                );
+               TRUE
+               , pcwszString1In
+               , cchIn
+               , pcwszString2In
+               , cchIn
+           );
 } //*** NIStringCompareW
 
 int
 NIStringCompareW(
-      LPCWSTR   pcwszString1In
+    LPCWSTR   pcwszString1In
     , size_t    cch1In
     , LPCWSTR   pcwszString2In
     , size_t    cch2In
-    )
+)
 {
     return WrapCompareString(
-                  FALSE
-                , pcwszString1In
-                , min( cch1In, cch2In )
-                , pcwszString2In
-                , min( cch1In, cch2In )
-                );
+               FALSE
+               , pcwszString1In
+               , min( cch1In, cch2In )
+               , pcwszString2In
+               , min( cch1In, cch2In )
+           );
 } //*** NIStringCompareW
 
 int
 NStringCompareW(
-      LPCWSTR   pcwszString1In
+    LPCWSTR   pcwszString1In
     , size_t    cch1In
     , LPCWSTR   pcwszString2In
     , size_t    cch2In
-    )
+)
 {
     return WrapCompareString(
-                  TRUE
-                , pcwszString1In
-                , min( cch1In, cch2In )
-                , pcwszString2In
-                , min( cch1In, cch2In )
-                );
+               TRUE
+               , pcwszString1In
+               , min( cch1In, cch2In )
+               , pcwszString2In
+               , min( cch1In, cch2In )
+           );
 } //*** NStringCompareW
 
 /////////////////////////////////////////////////////////////////////////////
@@ -333,7 +333,7 @@ NStringCompareW(
 static size_t
 CchMultiSz(
     LPCWSTR pszIn
-    )
+)
 {
     ASSERT( pszIn != NULL );
 
@@ -374,9 +374,9 @@ CchMultiSz(
 //--
 /////////////////////////////////////////////////////////////////////////////
 static int NCompareMultiSz(
-      LPCWSTR pszSourceIn
+    LPCWSTR pszSourceIn
     , LPCWSTR pszTargetIn
-    )
+)
 {
     ASSERT( pszSourceIn != NULL );
     ASSERT( pszTargetIn != NULL );
@@ -514,7 +514,7 @@ CClusPropValueList::ScMoveToNextValue( void )
     //
 
     cbDataSize = sizeof( *cbhCurrentValue.pValue )
-                + ALIGN_CLUSPROP( cbhCurrentValue.pValue->cbLength );
+                 + ALIGN_CLUSPROP( cbhCurrentValue.pValue->cbLength );
 
     //
     // Make sure the buffer is big enough for the value header,
@@ -609,7 +609,7 @@ CClusPropValueList::ScCheckIfAtLastValue( void )
     //
 
     cbDataSize = sizeof( *cbhCurrentValue.pValue )
-                + ALIGN_CLUSPROP( cbhCurrentValue.pValue->cbLength );
+                 + ALIGN_CLUSPROP( cbhCurrentValue.pValue->cbLength );
 
     //
     // Make sure the buffer is big enough for the value header,
@@ -664,7 +664,7 @@ Cleanup:
 DWORD
 CClusPropValueList::ScAllocValueList(
     size_t cbMinimumIn
-    )
+)
 {
     ASSERT( cbMinimumIn > 0 );
 
@@ -753,12 +753,12 @@ CClusPropValueList::ScAllocValueList(
 /////////////////////////////////////////////////////////////////////////////
 DWORD
 CClusPropValueList::ScGetResourceValueList(
-      HRESOURCE hResourceIn
+    HRESOURCE hResourceIn
     , DWORD     dwControlCodeIn
     , HNODE     hHostNodeIn
     , LPVOID    lpBufferIn
     , size_t    cbBufferIn
-    )
+)
 {
     ASSERT( hResourceIn != NULL );
     ASSERT( ( dwControlCodeIn & ( CLUSCTL_OBJECT_MASK << CLUSCTL_OBJECT_SHIFT ) )
@@ -782,30 +782,30 @@ CClusPropValueList::ScGetResourceValueList(
     if ( sc == ERROR_SUCCESS )
     {
         sc = ClusterResourceControl(
-                        hResourceIn,
-                        hHostNodeIn,
-                        dwControlCodeIn,
-                        lpBufferIn,
-                        static_cast< DWORD >( cbBufferIn ),
-                        m_cbhValueList.pb,
-                        static_cast< DWORD >( m_cbBufferSize ),
-                        &cb
-                        );
+                 hResourceIn,
+                 hHostNodeIn,
+                 dwControlCodeIn,
+                 lpBufferIn,
+                 static_cast< DWORD >( cbBufferIn ),
+                 m_cbhValueList.pb,
+                 static_cast< DWORD >( m_cbBufferSize ),
+                 &cb
+             );
         if ( sc == ERROR_MORE_DATA )
         {
             sc = ScAllocValueList( cb );
             if ( sc == ERROR_SUCCESS )
             {
                 sc = ClusterResourceControl(
-                                hResourceIn,
-                                hHostNodeIn,
-                                dwControlCodeIn,
-                                lpBufferIn,
-                                static_cast< DWORD >( cbBufferIn ),
-                                m_cbhValueList.pb,
-                                static_cast< DWORD >( m_cbBufferSize ),
-                                &cb
-                                );
+                         hResourceIn,
+                         hHostNodeIn,
+                         dwControlCodeIn,
+                         lpBufferIn,
+                         static_cast< DWORD >( cbBufferIn ),
+                         m_cbhValueList.pb,
+                         static_cast< DWORD >( m_cbBufferSize ),
+                         &cb
+                     );
             } // if: ScAllocValueList succeeded
         } // if: buffer too small
     } // if: ScAllocValueList succeeded
@@ -849,13 +849,13 @@ CClusPropValueList::ScGetResourceValueList(
 /////////////////////////////////////////////////////////////////////////////
 DWORD
 CClusPropValueList::ScGetResourceTypeValueList(
-      HCLUSTER  hClusterIn
+    HCLUSTER  hClusterIn
     , LPCWSTR   pwszResTypeNameIn
     , DWORD     dwControlCodeIn
     , HNODE     hHostNodeIn
     , LPVOID    lpBufferIn
     , size_t    cbBufferIn
-    )
+)
 {
     ASSERT( hClusterIn != NULL );
     ASSERT( pwszResTypeNameIn != NULL );
@@ -881,32 +881,32 @@ CClusPropValueList::ScGetResourceTypeValueList(
     if ( sc == ERROR_SUCCESS )
     {
         sc = ClusterResourceTypeControl(
-                        hClusterIn,
-                        pwszResTypeNameIn,
-                        hHostNodeIn,
-                        dwControlCodeIn,
-                        lpBufferIn,
-                        static_cast< DWORD >( cbBufferIn ),
-                        m_cbhValueList.pb,
-                        static_cast< DWORD >( m_cbBufferSize ),
-                        &cb
-                        );
+                 hClusterIn,
+                 pwszResTypeNameIn,
+                 hHostNodeIn,
+                 dwControlCodeIn,
+                 lpBufferIn,
+                 static_cast< DWORD >( cbBufferIn ),
+                 m_cbhValueList.pb,
+                 static_cast< DWORD >( m_cbBufferSize ),
+                 &cb
+             );
         if ( sc == ERROR_MORE_DATA )
         {
             sc = ScAllocValueList( cb );
             if ( sc == ERROR_SUCCESS )
             {
                 sc = ClusterResourceTypeControl(
-                                hClusterIn,
-                                pwszResTypeNameIn,
-                                hHostNodeIn,
-                                dwControlCodeIn,
-                                lpBufferIn,
-                                static_cast< DWORD >( cbBufferIn ),
-                                m_cbhValueList.pb,
-                                static_cast< DWORD >( m_cbBufferSize ),
-                                &cb
-                                );
+                         hClusterIn,
+                         pwszResTypeNameIn,
+                         hHostNodeIn,
+                         dwControlCodeIn,
+                         lpBufferIn,
+                         static_cast< DWORD >( cbBufferIn ),
+                         m_cbhValueList.pb,
+                         static_cast< DWORD >( m_cbBufferSize ),
+                         &cb
+                     );
             } // if: ScAllocValueList succeeded
         } // if: buffer too small
     } // if: ScAllocValueList succeeded
@@ -958,9 +958,9 @@ IMPLEMENT_DYNAMIC( CClusPropList, CObject );
 /////////////////////////////////////////////////////////////////////////////
 DWORD
 CClusPropList::ScCopy(
-      const PCLUSPROP_LIST  pcplPropListIn
+    const PCLUSPROP_LIST  pcplPropListIn
     , size_t                cbPropListIn
-    )
+)
 {
     ASSERT( pcplPropListIn != NULL );
 
@@ -1017,7 +1017,7 @@ CClusPropList::ScCopy(
 DWORD
 CClusPropList::ScAppend(
     const CClusPropList & rclPropListIn
-    )
+)
 {
     DWORD   sc = ERROR_SUCCESS;
     size_t  cbPropertyCountOffset = 0;
@@ -1164,7 +1164,7 @@ CClusPropList::ScMoveToFirstProperty( void )
     //
 
     cbDataSize = sizeof( *m_cbhCurrentPropName.pName )
-                + ALIGN_CLUSPROP( m_cbhCurrentPropName.pName->cbLength );
+                 + ALIGN_CLUSPROP( m_cbhCurrentPropName.pName->cbLength );
 
     //
     // Make sure the buffer is big enough for the name header
@@ -1264,7 +1264,7 @@ CClusPropList::ScMoveToNextProperty( void )
         //
 
         cbDataSize = sizeof( *cbhCurrentValue.pValue )
-                    + ALIGN_CLUSPROP( cbhCurrentValue.pValue->cbLength );
+                     + ALIGN_CLUSPROP( cbhCurrentValue.pValue->cbLength );
         if ( cbDataLeft < cbDataSize + sizeof( *cbhCurrentValue.pSyntax ) )
         {
             sc = ERROR_INVALID_DATA;
@@ -1312,7 +1312,7 @@ CClusPropList::ScMoveToNextProperty( void )
     } // if: not enough data
 
     cbNameSize = sizeof( *cbhPropName.pName )
-                + ALIGN_CLUSPROP( cbhPropName.pName->cbLength );
+                 + ALIGN_CLUSPROP( cbhPropName.pName->cbLength );
 
     if ( cbDataLeft < cbNameSize + sizeof( CLUSPROP_SYNTAX ) )
     {
@@ -1366,7 +1366,7 @@ Cleanup:
 DWORD
 CClusPropList::ScMoveToPropertyByName(
     LPCWSTR pwszPropNameIn
-    )
+)
 {
     ASSERT( m_cbhPropList.pb != NULL );
 
@@ -1392,7 +1392,8 @@ CClusPropList::ScMoveToPropertyByName(
 
             sc = ScMoveToNextProperty();   // No because we expect an error when at the d
 
-        } while ( sc == ERROR_SUCCESS );   // do-while: not end of list
+        }
+        while ( sc == ERROR_SUCCESS );     // do-while: not end of list
     } // if: successfully moved to the first property
 
     return sc;
@@ -1421,7 +1422,7 @@ CClusPropList::ScMoveToPropertyByName(
 DWORD
 CClusPropList::ScAllocPropList(
     size_t cbMinimumIn
-    )
+)
 {
     ASSERT( cbMinimumIn > 0 );
 
@@ -1507,10 +1508,10 @@ CClusPropList::ScAllocPropList(
 /////////////////////////////////////////////////////////////////////////////
 DWORD
 CClusPropList::ScAddProp(
-      LPCWSTR   pwszNameIn
+    LPCWSTR   pwszNameIn
     , LPCWSTR   pwszValueIn
     , LPCWSTR   pwszPrevValueIn
-    )
+)
 {
     ASSERT( pwszNameIn != NULL );
 
@@ -1540,13 +1541,13 @@ CClusPropList::ScAddProp(
         //
 
         cbNameSize = sizeof( CLUSPROP_PROPERTY_NAME )
-                    + ALIGN_CLUSPROP( (lstrlenW( pwszNameIn ) + 1) * sizeof( *pwszNameIn ) );
+                     + ALIGN_CLUSPROP( (lstrlenW( pwszNameIn ) + 1) * sizeof( *pwszNameIn ) );
 
         cbDataSize = (lstrlenW( pwszValueIn ) + 1) * sizeof( *pwszValueIn );
 
         cbValueSize = sizeof( CLUSPROP_SZ )
-                    + ALIGN_CLUSPROP( cbDataSize )
-                    + sizeof( CLUSPROP_SYNTAX ); // value list endmark
+                      + ALIGN_CLUSPROP( cbDataSize )
+                      + sizeof( CLUSPROP_SYNTAX ); // value list endmark
 
         sc = ScAllocPropList( cbNameSize + cbValueSize );
         if ( sc == ERROR_SUCCESS )
@@ -1601,10 +1602,10 @@ CClusPropList::ScAddProp(
 /////////////////////////////////////////////////////////////////////////////
 DWORD
 CClusPropList::ScAddMultiSzProp(
-      LPCWSTR   pwszNameIn
+    LPCWSTR   pwszNameIn
     , LPCWSTR   pwszValueIn
     , LPCWSTR   pwszPrevValueIn
-    )
+)
 {
     ASSERT( pwszNameIn != NULL );
 
@@ -1634,13 +1635,13 @@ CClusPropList::ScAddMultiSzProp(
         //
 
         cbNameSize = sizeof( CLUSPROP_PROPERTY_NAME )
-                    + ALIGN_CLUSPROP( (lstrlenW( pwszNameIn ) + 1) * sizeof( *pwszNameIn ) );
+                     + ALIGN_CLUSPROP( (lstrlenW( pwszNameIn ) + 1) * sizeof( *pwszNameIn ) );
 
         cbDataSize = static_cast< DWORD >( (CchMultiSz( pwszValueIn ) + 1) * sizeof( *pwszValueIn ) );
 
         cbValueSize = sizeof( CLUSPROP_SZ )
-                    + ALIGN_CLUSPROP( cbDataSize )
-                    + sizeof( CLUSPROP_SYNTAX ); // value list endmark
+                      + ALIGN_CLUSPROP( cbDataSize )
+                      + sizeof( CLUSPROP_SYNTAX ); // value list endmark
 
         sc = ScAllocPropList( cbNameSize + cbValueSize );
         if ( sc == ERROR_SUCCESS )
@@ -1694,10 +1695,10 @@ CClusPropList::ScAddMultiSzProp(
 /////////////////////////////////////////////////////////////////////////////
 DWORD
 CClusPropList::ScAddExpandSzProp(
-      LPCWSTR   pwszNameIn
+    LPCWSTR   pwszNameIn
     , LPCWSTR   pwszValueIn
     , LPCWSTR   pwszPrevValueIn
-    )
+)
 {
     ASSERT( pwszNameIn != NULL );
 
@@ -1727,13 +1728,13 @@ CClusPropList::ScAddExpandSzProp(
         //
 
         cbNameSize = sizeof( CLUSPROP_PROPERTY_NAME )
-                    + ALIGN_CLUSPROP( (lstrlenW( pwszNameIn ) + 1) * sizeof( *pwszNameIn ) );
+                     + ALIGN_CLUSPROP( (lstrlenW( pwszNameIn ) + 1) * sizeof( *pwszNameIn ) );
 
         cbDataSize = (lstrlenW( pwszValueIn ) + 1) * sizeof( *pwszValueIn );
 
         cbValueSize = sizeof( CLUSPROP_SZ )
-                    + ALIGN_CLUSPROP( cbDataSize )
-                    + sizeof( CLUSPROP_SYNTAX ); // value list endmark
+                      + ALIGN_CLUSPROP( cbDataSize )
+                      + sizeof( CLUSPROP_SYNTAX ); // value list endmark
 
         sc = ScAllocPropList( cbNameSize + cbValueSize );
         if ( sc == ERROR_SUCCESS )
@@ -1787,10 +1788,10 @@ CClusPropList::ScAddExpandSzProp(
 /////////////////////////////////////////////////////////////////////////////
 DWORD
 CClusPropList::ScAddProp(
-      LPCWSTR   pwszNameIn
+    LPCWSTR   pwszNameIn
     , DWORD     nValueIn
     , DWORD     nPrevValueIn
-    )
+)
 {
     ASSERT( pwszNameIn != NULL );
 
@@ -1808,10 +1809,10 @@ CClusPropList::ScAddProp(
         //
 
         cbNameSize = sizeof( CLUSPROP_PROPERTY_NAME )
-                    + ALIGN_CLUSPROP( (lstrlenW( pwszNameIn ) + 1) * sizeof( *pwszNameIn ) );
+                     + ALIGN_CLUSPROP( (lstrlenW( pwszNameIn ) + 1) * sizeof( *pwszNameIn ) );
 
         cbValueSize = sizeof( CLUSPROP_DWORD )
-                    + sizeof( CLUSPROP_SYNTAX ); // value list endmark
+                      + sizeof( CLUSPROP_SYNTAX ); // value list endmark
 
         sc = ScAllocPropList( cbNameSize + cbValueSize );
         if ( sc == ERROR_SUCCESS )
@@ -1864,10 +1865,10 @@ CClusPropList::ScAddProp(
 //--
 /////////////////////////////////////////////////////////////////////////////
 DWORD CClusPropList::ScAddProp(
-      LPCWSTR  pwszNameIn
+    LPCWSTR  pwszNameIn
     , LONG     nValueIn
     , LONG     nPrevValueIn
-    )
+)
 {
     ASSERT( pwszNameIn != NULL );
 
@@ -1885,10 +1886,10 @@ DWORD CClusPropList::ScAddProp(
         //
 
         cbNameSize = sizeof( CLUSPROP_PROPERTY_NAME )
-                    + ALIGN_CLUSPROP( (lstrlenW( pwszNameIn ) + 1) * sizeof( *pwszNameIn ) );
+                     + ALIGN_CLUSPROP( (lstrlenW( pwszNameIn ) + 1) * sizeof( *pwszNameIn ) );
 
         cbValueSize = sizeof( CLUSPROP_LONG )
-                    + sizeof( CLUSPROP_SYNTAX ); // value list endmark
+                      + sizeof( CLUSPROP_SYNTAX ); // value list endmark
 
         sc = ScAllocPropList( cbNameSize + cbValueSize );
         if ( sc == ERROR_SUCCESS )
@@ -1944,12 +1945,12 @@ DWORD CClusPropList::ScAddProp(
 /////////////////////////////////////////////////////////////////////////////
 DWORD
 CClusPropList::ScAddProp(
-      LPCWSTR               pwszNameIn
+    LPCWSTR               pwszNameIn
     , const unsigned char * pbValueIn
     , size_t                cbValueIn
     , const unsigned char * pbPrevValueIn
     , size_t                cbPrevValueIn
-    )
+)
 {
     ASSERT( pwszNameIn != NULL );
 
@@ -1981,11 +1982,11 @@ CClusPropList::ScAddProp(
         //
 
         cbNameSize = sizeof( CLUSPROP_PROPERTY_NAME )
-                    + ALIGN_CLUSPROP( (lstrlenW( pwszNameIn ) + 1) * sizeof( *pwszNameIn ) );
+                     + ALIGN_CLUSPROP( (lstrlenW( pwszNameIn ) + 1) * sizeof( *pwszNameIn ) );
 
         cbValueSize = sizeof( CLUSPROP_BINARY )
-                    + ALIGN_CLUSPROP( cbValueIn )
-                    + sizeof( CLUSPROP_SYNTAX ); // value list endmark
+                      + ALIGN_CLUSPROP( cbValueIn )
+                      + sizeof( CLUSPROP_SYNTAX ); // value list endmark
 
         sc = ScAllocPropList( cbNameSize + cbValueSize );
         if ( sc == ERROR_SUCCESS )
@@ -2039,10 +2040,10 @@ CClusPropList::ScAddProp(
 /////////////////////////////////////////////////////////////////////////////
 DWORD
 CClusPropList::ScAddProp(
-      LPCWSTR   pwszNameIn
+    LPCWSTR   pwszNameIn
     , ULONGLONG ullValueIn
     , ULONGLONG ullPrevValueIn
-    )
+)
 {
     ASSERT( pwszNameIn != NULL );
 
@@ -2060,10 +2061,10 @@ CClusPropList::ScAddProp(
         //
 
         cbNameSize = sizeof( CLUSPROP_PROPERTY_NAME )
-                    + ALIGN_CLUSPROP( (lstrlenW( pwszNameIn ) + 1) * sizeof( *pwszNameIn ) );
+                     + ALIGN_CLUSPROP( (lstrlenW( pwszNameIn ) + 1) * sizeof( *pwszNameIn ) );
 
         cbValueSize = sizeof( CLUSPROP_ULARGE_INTEGER )
-                    + sizeof( CLUSPROP_SYNTAX ); // value list endmark
+                      + sizeof( CLUSPROP_SYNTAX ); // value list endmark
 
         sc = ScAllocPropList( cbNameSize + cbValueSize );
         if ( sc == ERROR_SUCCESS )
@@ -2117,10 +2118,10 @@ CClusPropList::ScAddProp(
 /////////////////////////////////////////////////////////////////////////////
 DWORD
 CClusPropList::ScAddProp(
-      LPCWSTR      pwszNameIn
+    LPCWSTR      pwszNameIn
     , LONGLONG     llValueIn
     , LONGLONG     llPrevValueIn
-    )
+)
 {
     ASSERT( pwszNameIn != NULL );
 
@@ -2138,10 +2139,10 @@ CClusPropList::ScAddProp(
         //
 
         cbNameSize = sizeof( CLUSPROP_PROPERTY_NAME )
-                    + ALIGN_CLUSPROP( (lstrlenW( pwszNameIn ) + 1) * sizeof( *pwszNameIn ) );
+                     + ALIGN_CLUSPROP( (lstrlenW( pwszNameIn ) + 1) * sizeof( *pwszNameIn ) );
 
         cbValueSize = sizeof( CLUSPROP_LARGE_INTEGER )
-                    + sizeof( CLUSPROP_SYNTAX ); // value list endmark
+                      + sizeof( CLUSPROP_SYNTAX ); // value list endmark
 
         sc = ScAllocPropList( cbNameSize + cbValueSize );
         if ( sc == ERROR_SUCCESS )
@@ -2195,9 +2196,9 @@ CClusPropList::ScAddProp(
 /////////////////////////////////////////////////////////////////////////////
 DWORD
 CClusPropList::ScSetPropToDefault(
-      LPCWSTR                   pwszNameIn
+    LPCWSTR                   pwszNameIn
     , CLUSTER_PROPERTY_FORMAT   cpfPropFormatIn
-    )
+)
 {
     ASSERT( pwszNameIn != NULL );
 
@@ -2212,10 +2213,10 @@ CClusPropList::ScSetPropToDefault(
     //
 
     cbNameSize = sizeof( CLUSPROP_PROPERTY_NAME )
-                + ALIGN_CLUSPROP( (lstrlenW( pwszNameIn ) + 1) * sizeof( *pwszNameIn ) );
+                 + ALIGN_CLUSPROP( (lstrlenW( pwszNameIn ) + 1) * sizeof( *pwszNameIn ) );
 
     cbValueSize = sizeof( CLUSPROP_BINARY )
-                + sizeof( CLUSPROP_SYNTAX ); // value list endmark
+                  + sizeof( CLUSPROP_SYNTAX ); // value list endmark
 
     sc = ScAllocPropList( cbNameSize + cbValueSize );
     if ( sc == ERROR_SUCCESS )
@@ -2270,11 +2271,11 @@ CClusPropList::ScSetPropToDefault(
 /////////////////////////////////////////////////////////////////////////////
 void
 CClusPropList::CopyProp(
-      PCLUSPROP_SZ          ppropOut
+    PCLUSPROP_SZ          ppropOut
     , CLUSTER_PROPERTY_TYPE cptPropTypeIn
     , LPCWSTR               pszIn
     , size_t                cbSzIn        // = 0
-    )
+)
 {
     ASSERT( ppropOut != NULL );
     ASSERT( pszIn != NULL );
@@ -2330,11 +2331,11 @@ CClusPropList::CopyProp(
 /////////////////////////////////////////////////////////////////////////////
 void
 CClusPropList::CopyMultiSzProp(
-      PCLUSPROP_MULTI_SZ    ppropOut
+    PCLUSPROP_MULTI_SZ    ppropOut
     , CLUSTER_PROPERTY_TYPE cptPropTypeIn
     , LPCWSTR               pszIn
     , size_t                cbSzIn
-    )
+)
 {
     ASSERT( ppropOut != NULL );
     ASSERT( pszIn != NULL );
@@ -2385,11 +2386,11 @@ CClusPropList::CopyMultiSzProp(
 /////////////////////////////////////////////////////////////////////////////
 void
 CClusPropList::CopyExpandSzProp(
-      PCLUSPROP_SZ          ppropOut
+    PCLUSPROP_SZ          ppropOut
     , CLUSTER_PROPERTY_TYPE cptPropTypeIn
     , LPCWSTR               pszIn
     , size_t                cbSzIn
-    )
+)
 {
     ASSERT( ppropOut != NULL );
     ASSERT( pszIn != NULL );
@@ -2443,10 +2444,10 @@ CClusPropList::CopyExpandSzProp(
 /////////////////////////////////////////////////////////////////////////////
 void
 CClusPropList::CopyProp(
-      PCLUSPROP_DWORD       ppropOut
+    PCLUSPROP_DWORD       ppropOut
     , CLUSTER_PROPERTY_TYPE cptPropTypeIn
     , DWORD                 nValueIn
-    )
+)
 {
     ASSERT( ppropOut != NULL );
 
@@ -2487,10 +2488,10 @@ CClusPropList::CopyProp(
 /////////////////////////////////////////////////////////////////////////////
 void
 CClusPropList::CopyProp(
-      PCLUSPROP_LONG        ppropOut
+    PCLUSPROP_LONG        ppropOut
     , CLUSTER_PROPERTY_TYPE cptPropTypeIn
     , LONG                  nValueIn
-    )
+)
 {
     ASSERT( ppropOut != NULL );
 
@@ -2531,10 +2532,10 @@ CClusPropList::CopyProp(
 /////////////////////////////////////////////////////////////////////////////
 void
 CClusPropList::CopyProp(
-      PCLUSPROP_ULARGE_INTEGER  ppropOut
+    PCLUSPROP_ULARGE_INTEGER  ppropOut
     , CLUSTER_PROPERTY_TYPE     cptPropTypeIn
     , ULONGLONG                 ullValueIn
-    )
+)
 {
     ASSERT( ppropOut != NULL );
 
@@ -2581,10 +2582,10 @@ CClusPropList::CopyProp(
 /////////////////////////////////////////////////////////////////////////////
 void
 CClusPropList::CopyProp(
-      PCLUSPROP_LARGE_INTEGER   ppropOut
+    PCLUSPROP_LARGE_INTEGER   ppropOut
     , CLUSTER_PROPERTY_TYPE     cptPropTypeIn
     , LONGLONG                  llValueIn
-    )
+)
 {
     ASSERT( ppropOut != NULL );
 
@@ -2632,11 +2633,11 @@ CClusPropList::CopyProp(
 /////////////////////////////////////////////////////////////////////////////
 void
 CClusPropList::CopyProp(
-      PCLUSPROP_BINARY      ppropOut
+    PCLUSPROP_BINARY      ppropOut
     , CLUSTER_PROPERTY_TYPE cptPropTypeIn
     , const unsigned char * pbValueIn
     , size_t                cbValueIn
-    )
+)
 {
     ASSERT( ppropOut != NULL );
 
@@ -2681,10 +2682,10 @@ CClusPropList::CopyProp(
 /////////////////////////////////////////////////////////////////////////////
 void
 CClusPropList::CopyEmptyProp(
-      PCLUSPROP_VALUE           ppropOut
+    PCLUSPROP_VALUE           ppropOut
     , CLUSTER_PROPERTY_TYPE     cptPropTypeIn
     , CLUSTER_PROPERTY_FORMAT   cptPropFmt
-    )
+)
 {
     ASSERT( ppropOut != NULL );
 
@@ -2727,12 +2728,12 @@ CClusPropList::CopyEmptyProp(
 /////////////////////////////////////////////////////////////////////////////
 DWORD
 CClusPropList::ScGetNodeProperties(
-      HNODE     hNodeIn
+    HNODE     hNodeIn
     , DWORD     dwControlCodeIn
     , HNODE     hHostNodeIn
     , LPVOID    lpBufferIn              // = NULL
     , size_t    cbBufferIn              // = 0
-    )
+)
 {
     ASSERT( hNodeIn != NULL );
     ASSERT( ( dwControlCodeIn & ( CLUSCTL_OBJECT_MASK << CLUSCTL_OBJECT_SHIFT ) )
@@ -2756,30 +2757,30 @@ CClusPropList::ScGetNodeProperties(
     if ( sc == ERROR_SUCCESS )
     {
         sc = ClusterNodeControl(
-                          hNodeIn
-                        , hHostNodeIn
-                        , dwControlCodeIn
-                        , lpBufferIn
-                        , static_cast< DWORD >( cbBufferIn )
-                        , m_cbhPropList.pb
-                        , static_cast< DWORD >( m_cbBufferSize )
-                        , &cbProps
-                        );
+                 hNodeIn
+                 , hHostNodeIn
+                 , dwControlCodeIn
+                 , lpBufferIn
+                 , static_cast< DWORD >( cbBufferIn )
+                 , m_cbhPropList.pb
+                 , static_cast< DWORD >( m_cbBufferSize )
+                 , &cbProps
+             );
         if ( sc == ERROR_MORE_DATA )
         {
             sc = ScAllocPropList( cbProps );
             if ( sc == ERROR_SUCCESS )
             {
                 sc = ClusterNodeControl(
-                                  hNodeIn
-                                , hHostNodeIn
-                                , dwControlCodeIn
-                                , lpBufferIn
-                                , static_cast< DWORD >( cbBufferIn )
-                                , m_cbhPropList.pb
-                                , static_cast< DWORD >( m_cbBufferSize )
-                                , &cbProps
-                                );
+                         hNodeIn
+                         , hHostNodeIn
+                         , dwControlCodeIn
+                         , lpBufferIn
+                         , static_cast< DWORD >( cbBufferIn )
+                         , m_cbhPropList.pb
+                         , static_cast< DWORD >( m_cbBufferSize )
+                         , &cbProps
+                     );
             } // if: ScAllocPropList succeeded
         } // if: buffer too small
     } // if: ScAllocPropList succeeded
@@ -2821,12 +2822,12 @@ CClusPropList::ScGetNodeProperties(
 /////////////////////////////////////////////////////////////////////////////
 DWORD
 CClusPropList::ScGetGroupProperties(
-      HGROUP    hGroupIn
+    HGROUP    hGroupIn
     , DWORD     dwControlCodeIn
     , HNODE     hHostNodeIn
     , LPVOID    lpBufferIn          // = NULL
     , size_t    cbBufferIn          // = 0
-    )
+)
 {
     ASSERT( hGroupIn != NULL );
     ASSERT( ( dwControlCodeIn & ( CLUSCTL_OBJECT_MASK << CLUSCTL_OBJECT_SHIFT ) )
@@ -2850,30 +2851,30 @@ CClusPropList::ScGetGroupProperties(
     if ( sc == ERROR_SUCCESS )
     {
         sc = ClusterGroupControl(
-                          hGroupIn
-                        , hHostNodeIn
-                        , dwControlCodeIn
-                        , lpBufferIn
-                        , static_cast< DWORD >( cbBufferIn )
-                        , m_cbhPropList.pb
-                        , static_cast< DWORD >( m_cbBufferSize )
-                        , &cbProps
-                        );
+                 hGroupIn
+                 , hHostNodeIn
+                 , dwControlCodeIn
+                 , lpBufferIn
+                 , static_cast< DWORD >( cbBufferIn )
+                 , m_cbhPropList.pb
+                 , static_cast< DWORD >( m_cbBufferSize )
+                 , &cbProps
+             );
         if ( sc == ERROR_MORE_DATA )
         {
             sc = ScAllocPropList( cbProps );
             if ( sc == ERROR_SUCCESS )
             {
                 sc = ClusterGroupControl(
-                                  hGroupIn
-                                , hHostNodeIn
-                                , dwControlCodeIn
-                                , lpBufferIn
-                                , static_cast< DWORD >( cbBufferIn )
-                                , m_cbhPropList.pb
-                                , static_cast< DWORD >( m_cbBufferSize )
-                                , &cbProps
-                                );
+                         hGroupIn
+                         , hHostNodeIn
+                         , dwControlCodeIn
+                         , lpBufferIn
+                         , static_cast< DWORD >( cbBufferIn )
+                         , m_cbhPropList.pb
+                         , static_cast< DWORD >( m_cbBufferSize )
+                         , &cbProps
+                     );
             } // if: ScAllocPropList succeeded
         } // if: buffer too small
     } // if: ScAllocPropList succeeded
@@ -2915,12 +2916,12 @@ CClusPropList::ScGetGroupProperties(
 /////////////////////////////////////////////////////////////////////////////
 DWORD
 CClusPropList::ScGetResourceProperties(
-      HRESOURCE hResourceIn
+    HRESOURCE hResourceIn
     , DWORD     dwControlCodeIn
     , HNODE     hHostNodeIn
     , LPVOID    lpBufferIn          // = NULL
     , size_t    cbBufferIn          // = 0
-    )
+)
 {
     ASSERT( hResourceIn != NULL );
     ASSERT( ( dwControlCodeIn & (CLUSCTL_OBJECT_MASK << CLUSCTL_OBJECT_SHIFT ) )
@@ -2944,30 +2945,30 @@ CClusPropList::ScGetResourceProperties(
     if ( sc == ERROR_SUCCESS )
     {
         sc = ClusterResourceControl(
-                          hResourceIn
-                        , hHostNodeIn
-                        , dwControlCodeIn
-                        , lpBufferIn
-                        , static_cast< DWORD >( cbBufferIn )
-                        , m_cbhPropList.pb
-                        , static_cast< DWORD >( m_cbBufferSize )
-                        , &cbProps
-                        );
+                 hResourceIn
+                 , hHostNodeIn
+                 , dwControlCodeIn
+                 , lpBufferIn
+                 , static_cast< DWORD >( cbBufferIn )
+                 , m_cbhPropList.pb
+                 , static_cast< DWORD >( m_cbBufferSize )
+                 , &cbProps
+             );
         if ( sc == ERROR_MORE_DATA )
         {
             sc = ScAllocPropList( cbProps );
             if ( sc == ERROR_SUCCESS )
             {
                 sc = ClusterResourceControl(
-                                  hResourceIn
-                                , hHostNodeIn
-                                , dwControlCodeIn
-                                , lpBufferIn
-                                , static_cast< DWORD >( cbBufferIn )
-                                , m_cbhPropList.pb
-                                , static_cast< DWORD >( m_cbBufferSize )
-                                , &cbProps
-                                );
+                         hResourceIn
+                         , hHostNodeIn
+                         , dwControlCodeIn
+                         , lpBufferIn
+                         , static_cast< DWORD >( cbBufferIn )
+                         , m_cbhPropList.pb
+                         , static_cast< DWORD >( m_cbBufferSize )
+                         , &cbProps
+                     );
             } // if: ScAllocPropList succeeded
         } // if: buffer too small
     } // if: ScAllocPropList succeeded
@@ -3011,13 +3012,13 @@ CClusPropList::ScGetResourceProperties(
 /////////////////////////////////////////////////////////////////////////////
 DWORD
 CClusPropList::ScGetResourceTypeProperties(
-      HCLUSTER  hClusterIn
+    HCLUSTER  hClusterIn
     , LPCWSTR   pwszResTypeNameIn
     , DWORD     dwControlCodeIn
     , HNODE     hHostNodeIn
     , LPVOID    lpBufferIn          // = NULL
     , size_t    cbBufferIn          // = 0
-    )
+)
 {
     ASSERT( hClusterIn != NULL );
     ASSERT( pwszResTypeNameIn != NULL );
@@ -3043,32 +3044,32 @@ CClusPropList::ScGetResourceTypeProperties(
     if ( sc == ERROR_SUCCESS )
     {
         sc = ClusterResourceTypeControl(
-                          hClusterIn
-                        , pwszResTypeNameIn
-                        , hHostNodeIn
-                        , dwControlCodeIn
-                        , lpBufferIn
-                        , static_cast< DWORD >( cbBufferIn )
-                        , m_cbhPropList.pb
-                        , static_cast< DWORD >( m_cbBufferSize )
-                        , &cbProps
-                        );
+                 hClusterIn
+                 , pwszResTypeNameIn
+                 , hHostNodeIn
+                 , dwControlCodeIn
+                 , lpBufferIn
+                 , static_cast< DWORD >( cbBufferIn )
+                 , m_cbhPropList.pb
+                 , static_cast< DWORD >( m_cbBufferSize )
+                 , &cbProps
+             );
         if ( sc == ERROR_MORE_DATA )
         {
             sc = ScAllocPropList( cbProps );
             if ( sc == ERROR_SUCCESS )
             {
                 sc = ClusterResourceTypeControl(
-                                  hClusterIn
-                                , pwszResTypeNameIn
-                                , hHostNodeIn
-                                , dwControlCodeIn
-                                , lpBufferIn
-                                , static_cast< DWORD >( cbBufferIn )
-                                , m_cbhPropList.pb
-                                , static_cast< DWORD >( m_cbBufferSize )
-                                , &cbProps
-                                );
+                         hClusterIn
+                         , pwszResTypeNameIn
+                         , hHostNodeIn
+                         , dwControlCodeIn
+                         , lpBufferIn
+                         , static_cast< DWORD >( cbBufferIn )
+                         , m_cbhPropList.pb
+                         , static_cast< DWORD >( m_cbBufferSize )
+                         , &cbProps
+                     );
             } // if: ScAllocPropList succeeded
         } // if: buffer too small
     } // if: ScAllocPropList succeeded
@@ -3110,12 +3111,12 @@ CClusPropList::ScGetResourceTypeProperties(
 /////////////////////////////////////////////////////////////////////////////
 DWORD
 CClusPropList::ScGetNetworkProperties(
-      HNETWORK  hNetworkIn
+    HNETWORK  hNetworkIn
     , DWORD     dwControlCodeIn
     , HNODE     hHostNodeIn
     , LPVOID    lpBufferIn              // = NULL
     , size_t    cbBufferIn              // = 0
-    )
+)
 {
     ASSERT( hNetworkIn != NULL );
     ASSERT( ( dwControlCodeIn & ( CLUSCTL_OBJECT_MASK << CLUSCTL_OBJECT_SHIFT ) )
@@ -3138,30 +3139,30 @@ CClusPropList::ScGetNetworkProperties(
     if ( sc == ERROR_SUCCESS )
     {
         sc = ClusterNetworkControl(
-                          hNetworkIn
-                        , hHostNodeIn
-                        , dwControlCodeIn
-                        , lpBufferIn
-                        , static_cast< DWORD >( cbBufferIn )
-                        , m_cbhPropList.pb
-                        , static_cast< DWORD >( m_cbBufferSize )
-                        , &cbProps
-                        );
+                 hNetworkIn
+                 , hHostNodeIn
+                 , dwControlCodeIn
+                 , lpBufferIn
+                 , static_cast< DWORD >( cbBufferIn )
+                 , m_cbhPropList.pb
+                 , static_cast< DWORD >( m_cbBufferSize )
+                 , &cbProps
+             );
         if ( sc == ERROR_MORE_DATA )
         {
             sc = ScAllocPropList( cbProps );
             if ( sc == ERROR_SUCCESS )
             {
                 sc = ClusterNetworkControl(
-                                  hNetworkIn
-                                , hHostNodeIn
-                                , dwControlCodeIn
-                                , lpBufferIn
-                                , static_cast< DWORD >( cbBufferIn )
-                                , m_cbhPropList.pb
-                                , static_cast< DWORD >( m_cbBufferSize )
-                                , &cbProps
-                                );
+                         hNetworkIn
+                         , hHostNodeIn
+                         , dwControlCodeIn
+                         , lpBufferIn
+                         , static_cast< DWORD >( cbBufferIn )
+                         , m_cbhPropList.pb
+                         , static_cast< DWORD >( m_cbBufferSize )
+                         , &cbProps
+                     );
             } // if: ScAllocPropList succeeded
         } // if: buffer too small
     } // if: ScAllocPropList succeeded
@@ -3203,12 +3204,12 @@ CClusPropList::ScGetNetworkProperties(
 /////////////////////////////////////////////////////////////////////////////
 DWORD
 CClusPropList::ScGetNetInterfaceProperties(
-      HNETINTERFACE hNetInterfaceIn
+    HNETINTERFACE hNetInterfaceIn
     , DWORD         dwControlCodeIn
     , HNODE         hHostNodeIn
     , LPVOID        lpBufferIn              // = NULL
     , size_t        cbBufferIn              // = 0
-    )
+)
 {
     ASSERT( hNetInterfaceIn != NULL );
     ASSERT( ( dwControlCodeIn & ( CLUSCTL_OBJECT_MASK << CLUSCTL_OBJECT_SHIFT ) )
@@ -3232,30 +3233,30 @@ CClusPropList::ScGetNetInterfaceProperties(
     if ( sc == ERROR_SUCCESS )
     {
         sc = ClusterNetInterfaceControl(
-                          hNetInterfaceIn
-                        , hHostNodeIn
-                        , dwControlCodeIn
-                        , lpBufferIn
-                        , static_cast< DWORD >( cbBufferIn )
-                        , m_cbhPropList.pb
-                        , static_cast< DWORD >( m_cbBufferSize )
-                        , &cbProps
-                        );
+                 hNetInterfaceIn
+                 , hHostNodeIn
+                 , dwControlCodeIn
+                 , lpBufferIn
+                 , static_cast< DWORD >( cbBufferIn )
+                 , m_cbhPropList.pb
+                 , static_cast< DWORD >( m_cbBufferSize )
+                 , &cbProps
+             );
         if ( sc == ERROR_MORE_DATA )
         {
             sc = ScAllocPropList( cbProps );
             if ( sc == ERROR_SUCCESS )
             {
                 sc = ClusterNetInterfaceControl(
-                                  hNetInterfaceIn
-                                , hHostNodeIn
-                                , dwControlCodeIn
-                                , lpBufferIn
-                                , static_cast< DWORD >( cbBufferIn )
-                                , m_cbhPropList.pb
-                                , static_cast< DWORD >( m_cbBufferSize )
-                                , &cbProps
-                                );
+                         hNetInterfaceIn
+                         , hHostNodeIn
+                         , dwControlCodeIn
+                         , lpBufferIn
+                         , static_cast< DWORD >( cbBufferIn )
+                         , m_cbhPropList.pb
+                         , static_cast< DWORD >( m_cbBufferSize )
+                         , &cbProps
+                     );
             } // if: ScAllocPropList succeeded
         } // if: buffer too small
     } // if: ScAllocPropList succeeded
@@ -3298,12 +3299,12 @@ CClusPropList::ScGetNetInterfaceProperties(
 /////////////////////////////////////////////////////////////////////////////
 DWORD
 CClusPropList::ScGetClusterProperties(
-      HCLUSTER  hClusterIn
+    HCLUSTER  hClusterIn
     , DWORD     dwControlCodeIn
     , HNODE     hHostNodeIn
     , LPVOID    lpBufferIn              // = NULL
     , size_t    cbBufferIn              // = 0
-    )
+)
 {
     ASSERT( hClusterIn != NULL );
     ASSERT( ( dwControlCodeIn & ( CLUSCTL_OBJECT_MASK << CLUSCTL_OBJECT_SHIFT ) )
@@ -3327,30 +3328,30 @@ CClusPropList::ScGetClusterProperties(
     if ( sc == ERROR_SUCCESS )
     {
         sc = ClusterControl(
-                          hClusterIn
-                        , hHostNodeIn
-                        , dwControlCodeIn
-                        , lpBufferIn
-                        , static_cast< DWORD >( cbBufferIn )
-                        , m_cbhPropList.pb
-                        , static_cast< DWORD >( m_cbBufferSize )
-                        , &cbProps
-                        );
+                 hClusterIn
+                 , hHostNodeIn
+                 , dwControlCodeIn
+                 , lpBufferIn
+                 , static_cast< DWORD >( cbBufferIn )
+                 , m_cbhPropList.pb
+                 , static_cast< DWORD >( m_cbBufferSize )
+                 , &cbProps
+             );
         if ( sc == ERROR_MORE_DATA )
         {
             sc = ScAllocPropList( cbProps );
             if ( sc == ERROR_SUCCESS )
             {
                 sc = ClusterControl(
-                                  hClusterIn
-                                , hHostNodeIn
-                                , dwControlCodeIn
-                                , lpBufferIn
-                                , static_cast< DWORD >( cbBufferIn )
-                                , m_cbhPropList.pb
-                                , static_cast< DWORD >( m_cbBufferSize )
-                                , &cbProps
-                                );
+                         hClusterIn
+                         , hHostNodeIn
+                         , dwControlCodeIn
+                         , lpBufferIn
+                         , static_cast< DWORD >( cbBufferIn )
+                         , m_cbhPropList.pb
+                         , static_cast< DWORD >( m_cbBufferSize )
+                         , &cbProps
+                     );
             } // if: ScAllocPropList succeeded
         } // if: buffer too small
     } // if: ScAllocPropList succeeded

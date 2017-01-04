@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -69,7 +69,7 @@ class CReindexMatchingFileTypeCommand :
 {
 public:
     CReindexMatchingFileTypeCommand(PCWSTR pszName = L"filetype", PCWSTR pszDescription = L"Reindexes all URLs that match the given file extensions") :
-      CCmdBase(pszName, pszDescription, L"<.FILETYPE1> [<.FILETYPE2> ...] (EX. reindex filetype .foo .bar)")
+        CCmdBase(pszName, pszDescription, L"<.FILETYPE1> [<.FILETYPE2> ...] (EX. reindex filetype .foo .bar)")
     {
     }
 
@@ -168,7 +168,7 @@ class CReindexWhereClauseCommand :
 {
 public:
     CReindexWhereClauseCommand(PCWSTR pszName, PCWSTR pszDescription, PCWSTR pszUsage) :
-      CCmdBase(pszName, pszDescription, pszUsage)
+        CCmdBase(pszName, pszDescription, pszUsage)
     {
     }
 
@@ -198,10 +198,13 @@ private:
         WCHAR _szUrl[INTERNET_MAX_URL_LENGTH];
 
     public:
-        PWSTR GetUrl() { return _szUrl; };
+        PWSTR GetUrl()
+        {
+            return _szUrl;
+        };
 
         BEGIN_COLUMN_MAP(CItem)
-            COLUMN_ENTRY(1, _szUrl)
+        COLUMN_ENTRY(1, _szUrl)
         END_COLUMN_MAP()
     };
 
@@ -375,7 +378,7 @@ class CReindexMatchingMimeTypeCommand :
 {
 public:
     CReindexMatchingMimeTypeCommand(PCWSTR pszName = L"mimetype", PCWSTR pszDescription = L"Reindexes all URLs that match the given mimetypes") :
-      CReindexWhereClauseCommand(pszName, pszDescription, L"<MIMETYPE1> [<MIMETYPE2> ...] (EX. reindex mimetype image/jpeg)")
+        CReindexWhereClauseCommand(pszName, pszDescription, L"<MIMETYPE1> [<MIMETYPE2> ...] (EX. reindex mimetype image/jpeg)")
     {
     }
 
@@ -423,7 +426,7 @@ class CReindexMatchingWhereClauseCommand :
 {
 public:
     CReindexMatchingWhereClauseCommand(PCWSTR pszName = L"where", PCWSTR pszDescription = L"Reindexes all URLs that match a given WHERE clause") :
-      CReindexWhereClauseCommand(pszName, pszDescription, L"<WHERE_CLAUSE> (EX. reindex where System.ItemNameDisplay = 'test.txt')")
+        CReindexWhereClauseCommand(pszName, pszDescription, L"<WHERE_CLAUSE> (EX. reindex where System.ItemNameDisplay = 'test.txt')")
     {
     }
 

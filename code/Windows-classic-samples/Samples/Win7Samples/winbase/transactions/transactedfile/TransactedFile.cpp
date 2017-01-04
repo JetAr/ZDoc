@@ -1,12 +1,12 @@
-//---------------------------------------------------------------------
+﻿//---------------------------------------------------------------------
 // This file is part of the Microsoft .NET Framework SDK Code Samples.
-// 
+//
 // Copyright (C) Microsoft Corporation.  All rights reserved.
-// 
+//
 // This source code is intended only as a supplement to Microsoft
 // Development Tools and/or on-line documentation.  See these other
 // materials for detailed information regarding Microsoft code samples.
-// 
+//
 // THIS CODE AND INFORMATION ARE PROVIDED AS IS WITHOUT WARRANTY OF ANY
 // KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
 // IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -29,7 +29,7 @@ HRESULT GetLocalTime(char* localTime, size_t sizeInBytes);
 HRESULT TransactedFileOperation(HANDLE hTransactionHandle);
 HRESULT CommitOrAbortTransaction(ITransaction* pITransaction);
 
-// The sample uses this global boolean variable to determine if 
+// The sample uses this global boolean variable to determine if
 // the transaction will be aborted or committed at the end.
 // The value is set according to the '-abort' command line switch.
 BOOL g_fAbort = FALSE;
@@ -37,7 +37,7 @@ BOOL g_fAbort = FALSE;
 int __cdecl wmain(int argc, WCHAR* argv[])
 {
     HRESULT hr = E_FAIL;
-    
+
     ITransaction* pITransaction = NULL;
     HANDLE hTransactionHandle = INVALID_HANDLE_VALUE;
 
@@ -48,22 +48,22 @@ int __cdecl wmain(int argc, WCHAR* argv[])
 
     // Get a pointer to a new transaction
     hr = CreateTransaction(&pITransaction);
-    if (FAILED(hr)) 
+    if (FAILED(hr))
         goto cleanup;
 
     // Get a transaction handle to use with the transacted file operation
     hr = GetKernelTransactionHandle(pITransaction, &hTransactionHandle);
-    if (FAILED(hr)) 
+    if (FAILED(hr))
         goto cleanup;
 
     // Do a transacted file operation
     hr = TransactedFileOperation(hTransactionHandle);
-    if (FAILED(hr)) 
+    if (FAILED(hr))
         goto cleanup;
 
 
     //-------------------------------------------------------------------------
-    // Here you can do other operations to various Resource Managers as part 
+    // Here you can do other operations to various Resource Managers as part
     // of this transaction using the same ITransaction.
     //-------------------------------------------------------------------------
 
@@ -71,17 +71,17 @@ int __cdecl wmain(int argc, WCHAR* argv[])
     // Commit or abort the transaction depending on the g_fAbort boolean variable
     // which was set by using the -abort command line parameter
     hr = CommitOrAbortTransaction(pITransaction);
-    if (FAILED(hr)) 
+    if (FAILED(hr))
         goto cleanup;
 
 cleanup:
-    
+
     if(INVALID_HANDLE_VALUE != hTransactionHandle)
     {
         CloseHandle(hTransactionHandle);
         hTransactionHandle = INVALID_HANDLE_VALUE;
     }
-    
+
     if(NULL != pITransaction)
     {
         pITransaction->Release();
@@ -98,7 +98,7 @@ void ParseCommandLine(int argc, WCHAR** argv)
     {
         if ( 0 == _wcsnicmp( argv[i], L"-Abort",6) )
         {
-            g_fAbort = TRUE;            
+            g_fAbort = TRUE;
         }
         else
         {
@@ -125,30 +125,30 @@ HRESULT CreateTransaction(ITransaction** ppITransaction)
     HRESULT hr = E_FAIL;
     ITransactionDispenser* pITransactionDispenser = NULL;
     ITransaction* pITransaction = NULL;
-        
+
     wprintf(L"Creating a transaction...\n");
 
     hr = DtcGetTransactionManagerEx(
-        NULL, 
-        NULL, 
-        IID_ITransactionDispenser, 
-        OLE_TM_FLAG_NONE, 
-        NULL, 
-        (void**) &pITransactionDispenser);
+             NULL,
+             NULL,
+             IID_ITransactionDispenser,
+             OLE_TM_FLAG_NONE,
+             NULL,
+             (void**) &pITransactionDispenser);
     if (FAILED(hr))
     {
         wprintf(L"ERROR: Getting a transaction dispenser object failed. HR=0x%x\n", hr);
         goto cleanup;
     }
 
-    // Set the transaction isolation level to ISOLATIONLEVEL_READCOMMITTED, 
+    // Set the transaction isolation level to ISOLATIONLEVEL_READCOMMITTED,
     // since this is the isolation level supported by the transactional file system.
     hr = pITransactionDispenser->BeginTransaction(
-        NULL, 
-        ISOLATIONLEVEL_READCOMMITTED, 
-        ISOFLAG_RETAIN_NONE, 
-        NULL, 
-        &pITransaction);
+             NULL,
+             ISOLATIONLEVEL_READCOMMITTED,
+             ISOFLAG_RETAIN_NONE,
+             NULL,
+             &pITransaction);
     if (FAILED(hr))
     {
         wprintf(L"ERROR: Begin transaction call failed. HR=0x%x\n", hr);
@@ -156,16 +156,16 @@ HRESULT CreateTransaction(ITransaction** ppITransaction)
     }
 
     *ppITransaction = pITransaction;
-    
+
 cleanup:
-    
+
     if(NULL != pITransactionDispenser)
     {
         pITransactionDispenser->Release();
         pITransactionDispenser = NULL;
     }
-    
-    return(hr);    
+
+    return(hr);
 }
 
 HRESULT GetKernelTransactionHandle(ITransaction* pITransaction, HANDLE* pTransactionHandle)
@@ -173,10 +173,10 @@ HRESULT GetKernelTransactionHandle(ITransaction* pITransaction, HANDLE* pTransac
     HRESULT hr = E_FAIL;
     IKernelTransaction* pKernelTransaction = NULL;
     HANDLE hTransactionHandle = INVALID_HANDLE_VALUE;
-    
+
     wprintf(L"Getting a transaction handle to use with transacted file operation...\n");
-    
-    // Query for IKernelTransaction interface for a handle to use with 
+
+    // Query for IKernelTransaction interface for a handle to use with
     // transacted file operation
     hr = pITransaction->QueryInterface(IID_IKernelTransaction, (void**) &pKernelTransaction);
     if (FAILED(hr))
@@ -207,23 +207,23 @@ cleanup:
 HRESULT GetLocalTime(char* localTime, size_t sizeInBytes)
 {
     HRESULT hr = E_FAIL;
-    
+
     struct tm newtime;
-     __int64 ltime;
-    
+    __int64 ltime;
+
     errno_t err;
-    
+
     // Get time
-     _time64( &ltime );
-    
-    // Obtain the coordinated universal time 
+    _time64( &ltime );
+
+    // Obtain the coordinated universal time
     err = _localtime64_s( &newtime, &ltime );
     if (err)
     {
-       wprintf(L"ERROR: Invalid argument to _localtime64_s.");
+        wprintf(L"ERROR: Invalid argument to _localtime64_s.");
     }
-       
-    // Convert the universal time to an ASCII representation 
+
+    // Convert the universal time to an ASCII representation
     err = asctime_s(localTime, sizeInBytes, &newtime);
     if (err)
     {
@@ -254,20 +254,20 @@ HRESULT TransactedFileOperation(HANDLE hTransactionHandle)
     // Any operation done using the handle (hTransactedFile in this case)
     // will be transactional.
     hTransactedFile = CreateFileTransacted(L"test.txt",
-        FILE_APPEND_DATA,       // open for writing
-        FILE_SHARE_READ,        // allow multiple readers
-        NULL,                   // no security
-        OPEN_ALWAYS,            // open or create
-        FILE_ATTRIBUTE_NORMAL,  // normal file
-        NULL,                   // do not set any attributes
-        hTransactionHandle,     // pass the transaction handle
-        NULL,                   // no mini version
-        NULL);                  // reserved
+                                           FILE_APPEND_DATA,       // open for writing
+                                           FILE_SHARE_READ,        // allow multiple readers
+                                           NULL,                   // no security
+                                           OPEN_ALWAYS,            // open or create
+                                           FILE_ATTRIBUTE_NORMAL,  // normal file
+                                           NULL,                   // do not set any attributes
+                                           hTransactionHandle,     // pass the transaction handle
+                                           NULL,                   // no mini version
+                                           NULL);                  // reserved
 
     if (hTransactedFile == INVALID_HANDLE_VALUE)
     {
-       wprintf(L"ERROR: Could not open test.txt.");
-       goto cleanup;
+        wprintf(L"ERROR: Could not open test.txt.");
+        goto cleanup;
     }
 
     // Any operation done using hTransactedFile handle will now be transactional
@@ -297,7 +297,7 @@ cleanup:
         CloseHandle(hTransactedFile);
         hTransactedFile = INVALID_HANDLE_VALUE;
     }
-    return(hr);    
+    return(hr);
 }
 
 HRESULT CommitOrAbortTransaction(ITransaction* pITransaction)
@@ -321,9 +321,9 @@ HRESULT CommitOrAbortTransaction(ITransaction* pITransaction)
     {
         wprintf(L"Aborting transaction...\n");
         hr = pITransaction->Abort(
-            NULL,                       // do not provide a reason for abort
-            FALSE,                      // must be FALSE
-            FALSE);                     // abort synchronous
+                 NULL,                       // do not provide a reason for abort
+                 FALSE,                      // must be FALSE
+                 FALSE);                     // abort synchronous
 
         if (FAILED(hr))
         {
@@ -335,5 +335,5 @@ HRESULT CommitOrAbortTransaction(ITransaction* pITransaction)
         }
     }
 
-    return(hr);    
+    return(hr);
 }

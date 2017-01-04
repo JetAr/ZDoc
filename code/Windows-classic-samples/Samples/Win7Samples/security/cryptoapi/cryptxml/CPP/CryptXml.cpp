@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -10,7 +10,7 @@
 /*****************************************************************************
   HrLoadFile
 
-    Load file into allocated (*ppbData). 
+    Load file into allocated (*ppbData).
     The caller must free the memory by LocalFree().
 *****************************************************************************/
 HRESULT
@@ -18,7 +18,7 @@ HrLoadFile(
     LPCWSTR     wszFileName,
     BYTE        **ppbData,
     DWORD       *pcbData
-    )
+)
 {
     HANDLE      hFile = INVALID_HANDLE_VALUE;
     DWORD       cbRead = 0;
@@ -27,24 +27,24 @@ HrLoadFile(
     *ppbData = NULL;
     *pcbData = 0;
 
-    hFile = CreateFileW( 
-						wszFileName, 
-                        GENERIC_READ,
-                        0,
-                        NULL, 
-                        OPEN_EXISTING, 
-                        0, 
-                        NULL );
+    hFile = CreateFileW(
+                wszFileName,
+                GENERIC_READ,
+                0,
+                NULL,
+                OPEN_EXISTING,
+                0,
+                NULL );
 
     if( INVALID_HANDLE_VALUE == hFile )
     {
         hr = HRESULT_FROM_WIN32( GetLastError() );
-        
+
         goto CleanUp;
     }
 
     *pcbData = GetFileSize( hFile, NULL );
-    if( *pcbData == 0 ) 
+    if( *pcbData == 0 )
     {
         hr = S_FALSE;
         goto CleanUp;
@@ -54,14 +54,14 @@ HrLoadFile(
     if( NULL == *ppbData )
     {
         hr = HRESULT_FROM_WIN32( ERROR_OUTOFMEMORY );
-        
+
         goto CleanUp;
     }
 
     if( !ReadFile( hFile, *ppbData, *pcbData, &cbRead, NULL ))
     {
         hr = HRESULT_FROM_WIN32( GetLastError() );
-        
+
         goto CleanUp;
     }
 
@@ -121,7 +121,7 @@ __cdecl
 wmain(
     int     argc,
     LPWSTR  argv[]
-    )
+)
 {
     HRESULT         hr = S_FALSE;
     int             i=0;
@@ -139,7 +139,7 @@ wmain(
     for( i=1; i<argc; i++ )
     {
         if ( 0 == lstrcmpW (argv[i], L"/?") ||
-             0 == lstrcmpW (argv[i], L"-?") ) 
+                0 == lstrcmpW (argv[i], L"-?") )
         {
             Usage();
             goto CleanUp;
@@ -152,8 +152,7 @@ wmain(
         {
             Para.fKV = TRUE;
         }
-        else
-        if ( 0 == lstrcmpW (argv[i], L"-cm") )
+        else if ( 0 == lstrcmpW (argv[i], L"-cm") )
         {
             if( i+1 >= argc )
             {
@@ -162,8 +161,7 @@ wmain(
 
             Para.wszCanonicalizationMethod = argv[++i];
         }
-        else
-        if ( 0 == lstrcmpW (argv[i], L"-h") )
+        else if ( 0 == lstrcmpW (argv[i], L"-h") )
         {
             if( i+1 >= argc )
             {
@@ -172,8 +170,7 @@ wmain(
 
             Para.wszHashAlgName = argv[++i];
         }
-        else
-        if ( 0 == lstrcmpW (argv[i], L"-n") )
+        else if ( 0 == lstrcmpW (argv[i], L"-n") )
         {
             if( i+1 >= argc )
             {
@@ -182,8 +179,7 @@ wmain(
 
             Para.wszSubject = argv[++i];
         }
-        else
-        if ( 0 == lstrcmpW (argv[i], L"-kid") )
+        else if ( 0 == lstrcmpW (argv[i], L"-kid") )
         {
             if( i+1 >= argc )
             {
@@ -192,8 +188,7 @@ wmain(
 
             Para.wszKeyInfoId = argv[++i];
         }
-        else
-        if ( 0 == lstrcmpW (argv[i], L"-sid") )
+        else if ( 0 == lstrcmpW (argv[i], L"-sid") )
         {
             if( i+1 >= argc )
             {
@@ -223,17 +218,16 @@ wmain(
 
         wszFile = argv[i];
 
-        hr = HrVerify( 
-                                        wszFile 
-                                        );
+        hr = HrVerify(
+                 wszFile
+             );
 
         if( FAILED(hr) )
         {
             goto CleanUp;
         }
     }
-    else
-    if( 0 == lstrcmpW( argv[i], WSZ_CMD_SIGN ))
+    else if( 0 == lstrcmpW( argv[i], WSZ_CMD_SIGN ))
     {
         i++;
         if( i+1 >= argc )
@@ -253,7 +247,7 @@ wmain(
             Para.wszFileIn  = argv[i++];
             Para.wszSignatureLocation = argv[i++];
         }
-        
+
         if( i >= argc )
         {
             goto InvalidCommandLine;
@@ -261,12 +255,12 @@ wmain(
 
         // The rest of the command line must be {#Reference| [File] }
 
-        hr = HrSign( 
-                                        wszFile, 
-                                        &Para, 
-                                        (ULONG)(argc-i),
-                                        &argv[i]
-                                        );
+        hr = HrSign(
+                 wszFile,
+                 &Para,
+                 (ULONG)(argc-i),
+                 &argv[i]
+             );
         if( FAILED(hr) )
         {
             goto CleanUp;

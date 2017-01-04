@@ -1,4 +1,4 @@
-////////////////////////////////////////////////////////////////////////////////
+﻿////////////////////////////////////////////////////////////////////////////////
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -49,7 +49,7 @@ CSimpleThermostatDevice::~CSimpleThermostatDevice()
 // CSimpleThermostatDevice::Initialize
 //      This function is called by the UPnPHost when someone registers this
 //      device with UPnPHost.
-//      
+//
 //      For this implementation, initialize just creates the devices service
 //      object and initializes it.
 //------------------------------------------------------------------------------
@@ -57,11 +57,11 @@ HRESULT CSimpleThermostatDevice::Initialize(
     BSTR bstrXMLDesc,
     BSTR bstrDeviceIdentifier,
     BSTR bstrInitString
-    )
+)
 {
     if( NULL == bstrXMLDesc ||
-        NULL == bstrDeviceIdentifier ||
-        NULL == bstrInitString )
+            NULL == bstrDeviceIdentifier ||
+            NULL == bstrInitString )
     {
         return E_INVALIDARG;
     }
@@ -92,19 +92,19 @@ HRESULT CSimpleThermostatDevice::GetServiceObject(
     BSTR bstrUDN,
     BSTR bstrServiceId,
     IDispatch** ppdispService
-    )
+)
 {
     if( NULL == bstrUDN ||
-        NULL == bstrServiceId ||
-        NULL == ppdispService )
+            NULL == bstrServiceId ||
+            NULL == ppdispService )
     {
         return E_INVALIDARG;
     }
 
     return m_pCSimpleThermostatService->QueryInterface(
-        __uuidof(IDispatch),
-        reinterpret_cast<void**>(ppdispService)
-        );
+               __uuidof(IDispatch),
+               reinterpret_cast<void**>(ppdispService)
+           );
 }// CSimpleThermostatDevice::GetServiceObject
 
 
@@ -116,9 +116,9 @@ HRESULT CSimpleThermostatDevice::GetServiceObject(
 // CSimpleThermostatDevice::QueryInterface
 //------------------------------------------------------------------------------
 HRESULT CSimpleThermostatDevice::QueryInterface(
-    REFIID riid, 
+    REFIID riid,
     void** ppvObject
-    )
+)
 {
     HRESULT hr = S_OK;
 

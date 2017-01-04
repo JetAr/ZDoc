@@ -1,4 +1,4 @@
-//
+﻿//
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -34,7 +34,7 @@ typedef struct _QueryContextStruct
     DNS_QUERY_RESULT    QueryResults;
     DNS_QUERY_CANCEL    QueryCancelContext;
     HANDLE              QueryCompletedEvent;
-}QUERY_CONTEXT, *PQUERY_CONTEXT;
+} QUERY_CONTEXT, *PQUERY_CONTEXT;
 
 DWORD
 ParseArguments(
@@ -44,47 +44,47 @@ ParseArguments(
     _Out_ WORD *QueryType,
     _Out_ ULONG *QueryOptions,
     _Out_writes_(MAX_PATH) PWSTR ServerIp
-    );
+);
 
 VOID
 PrintDnsRecordList(
     _Inout_ PDNS_RECORD DnsRecord
-    );
+);
 
 VOID
 AddReferenceQueryContext(
     _Inout_ PQUERY_CONTEXT QueryContext
-    );
+);
 
 VOID
 DeReferenceQueryContext(
     _Inout_ PQUERY_CONTEXT *QueryContext
-    );
+);
 
 DWORD
 AllocateQueryContext(
     _Out_ PQUERY_CONTEXT *QueryContext
-    );
+);
 
 DWORD
 CreateDnsServerList(
     _In_ PWSTR ServerIp,
     _Out_ PDNS_ADDR_ARRAY DnsServerList
-    );
+);
 
 VOID
 WINAPI
 QueryCompleteCallback(
     _In_ PVOID Context,
     _Inout_ PDNS_QUERY_RESULT QueryResults
-    );
+);
 
 int
 __cdecl
 wmain(
     _In_ int Argc,
     _In_reads_(Argc) PWCHAR Argv[]
-    )
+)
 {
     DWORD Error = ERROR_SUCCESS;
     PQUERY_CONTEXT QueryContext = NULL;
@@ -210,7 +210,7 @@ exit:
 VOID
 AddReferenceQueryContext(
     _Inout_ PQUERY_CONTEXT QueryContext
-    )
+)
 {
     InterlockedIncrement(&QueryContext->RefCount);
 }
@@ -218,7 +218,7 @@ AddReferenceQueryContext(
 VOID
 DeReferenceQueryContext(
     _Inout_ PQUERY_CONTEXT *QueryContext
-    )
+)
 {
     PQUERY_CONTEXT QC = *QueryContext;
 
@@ -239,13 +239,13 @@ DeReferenceQueryContext(
 DWORD
 AllocateQueryContext(
     _Out_ PQUERY_CONTEXT *QueryContext
-    )
+)
 {
     DWORD Error = ERROR_SUCCESS;
 
     *QueryContext = (PQUERY_CONTEXT) HeapAlloc(GetProcessHeap(),
-                                               HEAP_ZERO_MEMORY,
-                                               sizeof(QUERY_CONTEXT));
+                    HEAP_ZERO_MEMORY,
+                    sizeof(QUERY_CONTEXT));
     if (*QueryContext == NULL)
     {
         Error = GetLastError();
@@ -278,7 +278,7 @@ DWORD
 CreateDnsServerList(
     _In_ PWSTR ServerIp,
     _Out_ PDNS_ADDR_ARRAY DnsServerList
-    )
+)
 {
     DWORD  Error = ERROR_SUCCESS;
     SOCKADDR_STORAGE SockAddr;
@@ -339,7 +339,7 @@ WINAPI
 QueryCompleteCallback(
     _In_ PVOID Context,
     _Inout_ PDNS_QUERY_RESULT QueryResults
-    )
+)
 {
     PQUERY_CONTEXT QueryContext = (PQUERY_CONTEXT)Context;
 

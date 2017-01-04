@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -46,7 +46,7 @@ STDAPI CTfTextLayoutSink::QueryInterface(REFIID riid, _Outptr_ void **ppvObj)
     *ppvObj = nullptr;
 
     if (IsEqualIID(riid, IID_IUnknown) ||
-        IsEqualIID(riid, IID_ITfTextLayoutSink))
+            IsEqualIID(riid, IID_ITfTextLayoutSink))
     {
         *ppvObj = (ITfTextLayoutSink *)this;
     }
@@ -96,18 +96,18 @@ STDAPI CTfTextLayoutSink::OnLayoutChange(_In_ ITfContext *pContext, TfLayoutCode
     switch (lcode)
     {
     case TF_LC_CHANGE:
+    {
+        CGetTextExtentEditSession* pEditSession = nullptr;
+        pEditSession = new (std::nothrow) CGetTextExtentEditSession(_pTextService, pContext, pContextView, _pRangeComposition, this);
+        if (nullptr != (pEditSession))
         {
-            CGetTextExtentEditSession* pEditSession = nullptr;
-            pEditSession = new (std::nothrow) CGetTextExtentEditSession(_pTextService, pContext, pContextView, _pRangeComposition, this);
-            if (nullptr != (pEditSession))
-            {
-                HRESULT hr = S_OK;
-                pContext->RequestEditSession(_pTextService->_GetClientId(), pEditSession, TF_ES_SYNC | TF_ES_READ, &hr);
+            HRESULT hr = S_OK;
+            pContext->RequestEditSession(_pTextService->_GetClientId(), pEditSession, TF_ES_SYNC | TF_ES_READ, &hr);
 
-                pEditSession->Release();
-            }
+            pEditSession->Release();
         }
-        break;
+    }
+    break;
 
     case TF_LC_DESTROY:
         _LayoutDestroyNotification();

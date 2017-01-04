@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -8,9 +8,9 @@
 #include "ComTouchDriver.h"
 
 CComTouchDriver::CComTouchDriver(HWND hWnd):
-    m_hWnd(hWnd), 
+    m_hWnd(hWnd),
     m_uNumContacts(0),
-    m_dpiScaleX(1.0f), 
+    m_dpiScaleX(1.0f),
     m_dpiScaleY(1.0f)
 {
 }
@@ -20,9 +20,9 @@ BOOL CComTouchDriver::Initialize()
     BOOL success = TRUE;
 
     // Calculate dpi for high-DPI systems
- 
+
     HDC hdcScreen = GetDC(m_hWnd);
-    
+
     if(hdcScreen)
     {
         // Direct2D automatically does work in logical, so compute the
@@ -32,7 +32,7 @@ BOOL CComTouchDriver::Initialize()
         m_dpiScaleY = (FLOAT)(DEFAULT_PPI / GetDeviceCaps(hdcScreen, LOGPIXELSY));
         DeleteDC(hdcScreen);
     }
-    
+
     // Create and initialize D2DDriver
 
     m_d2dDriver = new (std::nothrow) CD2DDriver(m_hWnd);
@@ -53,19 +53,19 @@ BOOL CComTouchDriver::Initialize()
         for(int i = 0; i < NUM_CORE_OBJECTS; i++)
         {
             CCoreObject* object = NULL;
-            
+
             object = new (std::nothrow) CCoreObject(m_hWnd, i, m_d2dDriver);
 
             if(object == NULL)
             {
                 success = FALSE;
             }
-            
+
             if(success)
             {
                 success = object->Initialize();
             }
-            
+
             // Append core object to the list
             if(success)
             {
@@ -119,9 +119,9 @@ VOID CComTouchDriver::ProcessInputEvent(const TOUCHINPUT* inData)
 {
     DWORD dwCursorID = inData->dwID;
     DWORD dwEvent = inData->dwFlags;
-    BOOL bFoundObj = FALSE;	
+    BOOL bFoundObj = FALSE;
 
-    
+
     // Check if contacts should be incremented
     if((dwEvent & TOUCHEVENTF_DOWN) && (dwCursorID != MOUSE_CURSOR_ID))
     {
@@ -142,8 +142,8 @@ VOID CComTouchDriver::ProcessInputEvent(const TOUCHINPUT* inData)
     if((dwEvent & TOUCHEVENTF_UP) && (dwCursorID != MOUSE_CURSOR_ID))
     {
         m_uNumContacts--;
-    }    
-    
+    }
+
     // Find the object and associate the cursor id with the object
     if(dwEvent & TOUCHEVENTF_DOWN)
     {
@@ -186,7 +186,7 @@ VOID CComTouchDriver::DownEvent(CCoreObject* coRef, const TOUCHINPUT* inData, BO
     {
         // Feed values to the Manipulation Processor
         success = SUCCEEDED(coRef->manipulationProc->ProcessDownWithTime(dwCursorID, (FLOAT)x, (FLOAT)y, dwPTime));
-        
+
         if(success)
         {
             try
@@ -206,9 +206,9 @@ VOID CComTouchDriver::DownEvent(CCoreObject* coRef, const TOUCHINPUT* inData, BO
             // Make the current object the new head of the list
             m_lCoreObjects.remove(coRef);
             m_lCoreObjects.push_front(coRef);
-            
+
             *bFound = TRUE;
-            
+
             // Renders objects to bring new object to front
             RenderObjects();
         }
@@ -285,11 +285,11 @@ VOID CComTouchDriver::ProcessChanges()
 VOID CComTouchDriver::RenderObjects()
 {
     m_d2dDriver->BeginDraw();
-    m_d2dDriver->RenderBackground((FLOAT)m_iCWidth, (FLOAT)m_iCHeight);	
-    
+    m_d2dDriver->RenderBackground((FLOAT)m_iCWidth, (FLOAT)m_iCHeight);
+
     std::list<CCoreObject*>::reverse_iterator it;
 
-    for(it = m_lCoreObjects.rbegin(); it != m_lCoreObjects.rend(); ++it) 
+    for(it = m_lCoreObjects.rbegin(); it != m_lCoreObjects.rend(); ++it)
     {
         (*it)->doDrawing->Paint();
     }
@@ -318,7 +318,7 @@ VOID CComTouchDriver::RenderInitialState(const int iCWidth, const int iCHeight)
     pfObjPos[2].y = heightScaled / 2.0f+5.0f;
     pfObjPos[3].x = widthScaled  / 2.0f+5.0f;
     pfObjPos[3].y = heightScaled / 2.0f+5.0f;
-    
+
     // Defines color for objects
 
     uObjColor[0] = CDrawingObject::Red;

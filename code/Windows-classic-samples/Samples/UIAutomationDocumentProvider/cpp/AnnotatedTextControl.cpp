@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -22,26 +22,30 @@ TextLine sampleLines [] =
     { L"This is a simple introduction to the UI Automation Document Content Provider Sample", TextStyle_Normal },
     { L"Section 1)", TextStyle_Header1 },
     { L"Item b)", TextStyle_Header2 },
-    { L"\
+    {
+        L"\
 This is a long paragraph: Lorem ipsum dolor sit amet, consectetuer adipiscing elit. \
 Maecenas porttitor congue massa. Fusce posuere, magna sed pulvinar ultricies, purus \
 lectus malesuada libero, sit amet commodo magna eros quis urna. Nunc viverra imperdiet \
 enim. Fusce est. Vivamus a tellus. Pellentesque habitant morbi tristique senectus et netus\
 et malesuada fames ac turpis egestas. Proin pharetra nonummy pede. Mauris et orci."
-        , TextStyle_Normal },
+        , TextStyle_Normal
+    },
     { L"And now to Emphasize a point", TextStyle_Bold },
     { L"In conclusion ...", TextStyle_Normal },
-    { L"\
+    {
+        L"\
 Another long paragraph: aaaabbbbbb abbbbb bbbbccccc ddddddd eeeeee ffff ggggggg hhhh \
 iiiijjjj kkklll mmmmnnn ooooppp pqqqqrrr ssssttt uuuvvvv wwwwxxx xxyzzzz. Abcdef abcde \
 12345 aaabbbb bbccc ccccddddd dddddddeee eeeeeefff fffff ggggggg hhhhiiiiiiiii jjjjjkkk\
 lllm mmm mmmmnn nnnooppppp pqqqqqq qqqrrrr ssssssstt tttuuvv wwwwwwxx xxxxxyzz zzzzz."
-        , TextStyle_Normal },
+        , TextStyle_Normal
+    },
 };
 
-Annotation sampleAnnotations [] = 
+Annotation sampleAnnotations [] =
 {
- //   id, line, first, len,     ----- text -----                  author                date
+//   id, line, first, len,     ----- text -----                  author                date
     {  0,    0,     0,  10, L"Is it really that impressive?",    L"Skeptical Reader",  {2011, 2, 2, 8, 14, 30, 0, 0} },
     {  1,    3,     5,   1, L"Where did \"Item a)\" go?",        L"Eagle Eyed Editor", {2011, 4, 1,11, 10, 25, 0, 0} },
     {  2,    4,    84,   8, L"I met Maecenas once... cool guy.", L"Vivamus",           {1776, 7, 4, 4, 17, 00, 0, 0} },
@@ -49,7 +53,8 @@ Annotation sampleAnnotations [] =
     {  4,    6,     15,  9, L"I'm an overlapping comment!",      L"Zealous Tester",    {2015,11, 6,17,  1, 30, 0, 0} }
 };
 
-struct StyleDefinition {
+struct StyleDefinition
+{
     TextStyle style;
     float fontSize;
     float indent;
@@ -74,12 +79,12 @@ const float verticalPadding = 10.0f;
 StyleDefinition styleDefinitions [] =
 {
     // Style,             size, indent, vspacing, font style
-    { TextStyle_Normal,  12.0f,  30.0f,     3.0f, FontStyleRegular                  , StyleId_Normal,   L"Normal" },
-    { TextStyle_Header1, 24.0f,  10.0f,    10.0f, FontStyleRegular                  , StyleId_Heading1, L"Heading 1" },
-    { TextStyle_Header2, 18.0f,  20.0f,     7.0f, FontStyleItalic                   , StyleId_Heading2, L"Heading 2" },
+    { TextStyle_Normal,  12.0f,  30.0f,     3.0f, FontStyleRegular, StyleId_Normal,   L"Normal" },
+    { TextStyle_Header1, 24.0f,  10.0f,    10.0f, FontStyleRegular, StyleId_Heading1, L"Heading 1" },
+    { TextStyle_Header2, 18.0f,  20.0f,     7.0f, FontStyleItalic, StyleId_Heading2, L"Heading 2" },
     { TextStyle_Title,   30.0f,  50.0f,    20.0f, FontStyleBold | FontStyleUnderline, StyleId_Title,    L"Title" },
-    { TextStyle_Bold,    12.0f,  30.0f,     3.0f, FontStyleBold                     , StyleId_Emphasis, L"Emphasis"}
-};  
+    { TextStyle_Bold,    12.0f,  30.0f,     3.0f, FontStyleBold, StyleId_Emphasis, L"Emphasis"}
+};
 
 StyleDefinition* GetStyleDefinition(_In_ TextStyle style)
 {
@@ -111,8 +116,8 @@ HWND AnnotatedTextControl::Create(_In_ HWND parent, _In_ HINSTANCE instance)
         if (control != NULL)
         {
             control->hwnd = CreateWindow( L"AnnotatedTextControl", L"",
-                WS_CHILD | WS_VISIBLE | WS_CLIPCHILDREN | WS_VSCROLL,
-                0, 0, 1, 1, parent, NULL, instance, static_cast<PVOID>(control));
+                                          WS_CHILD | WS_VISIBLE | WS_CLIPCHILDREN | WS_VSCROLL,
+                                          0, 0, 1, 1, parent, NULL, instance, static_cast<PVOID>(control));
             returnHwnd = control->hwnd;
         }
     }
@@ -143,7 +148,7 @@ bool AnnotatedTextControl::Initialize(_In_ HINSTANCE instance)
 }
 
 AnnotatedTextControl::AnnotatedTextControl(_In_reads_(lineCount) TextLine *lines, _In_ int lineCount,
-                         _In_reads_(annotationCount) Annotation *annotations, _In_ int annotationCount)
+        _In_reads_(annotationCount) Annotation *annotations, _In_ int annotationCount)
 {
     hwnd = NULL;
     AnnotatedTextControl::lines = lines;
@@ -163,59 +168,59 @@ LRESULT CALLBACK AnnotatedTextControl::WndProc(_In_ HWND hwndAnnotatedTextContro
     switch (message)
     {
     case WM_PAINT:
-        {
-            PAINTSTRUCT ps;
-            BeginPaint(hwndAnnotatedTextControl, &ps);
-            OnPaint(ps.hdc);
-            EndPaint(hwndAnnotatedTextControl, &ps);
-            break;
-        }
+    {
+        PAINTSTRUCT ps;
+        BeginPaint(hwndAnnotatedTextControl, &ps);
+        OnPaint(ps.hdc);
+        EndPaint(hwndAnnotatedTextControl, &ps);
+        break;
+    }
     case WM_GETOBJECT:
+    {
+        IRawElementProviderSimple * provider = new FrameProvider(hwndAnnotatedTextControl, this);
+        if (provider != NULL)
         {
-            IRawElementProviderSimple * provider = new FrameProvider(hwndAnnotatedTextControl, this);
-            if (provider != NULL)
-            {
-                lResult = UiaReturnRawElementProvider(hwndAnnotatedTextControl, wParam, lParam, provider);
-                provider->Release();
-            }
-            break;
+            lResult = UiaReturnRawElementProvider(hwndAnnotatedTextControl, wParam, lParam, provider);
+            provider->Release();
         }
+        break;
+    }
     case WM_SIZE:
-        {
-            lResult = OnSize(wParam, lParam);
-            break;
-        }
+    {
+        lResult = OnSize(wParam, lParam);
+        break;
+    }
     case WM_VSCROLL:
-        {
-            lResult = OnScroll(wParam, lParam);
-            break;
-        }
+    {
+        lResult = OnScroll(wParam, lParam);
+        break;
+    }
     case WM_SETFOCUS:
-        {
-            lResult = OnSetFocus();
-            break;
-        }
+    {
+        lResult = OnSetFocus();
+        break;
+    }
     case WM_KILLFOCUS:
-        {
-            lResult = OnKillFocus();
-            break;
-        }
+    {
+        lResult = OnKillFocus();
+        break;
+    }
     case WM_KEYDOWN:
-        {
-            lResult = OnKeyDown(wParam, lParam);
-            break;
-        }
+    {
+        lResult = OnKeyDown(wParam, lParam);
+        break;
+    }
     case WM_LBUTTONDOWN:
-        {
-            lResult = OnLButtonDown(wParam, lParam);
-            break;
-        }
+    {
+        lResult = OnLButtonDown(wParam, lParam);
+        break;
+    }
 
     default:
         lResult = DefWindowProc(hwndAnnotatedTextControl, message, wParam, lParam);
         break;
     }
-            
+
     return lResult;
 }
 
@@ -228,18 +233,18 @@ LRESULT CALLBACK AnnotatedTextControl::StaticWndProc(_In_ HWND hwnd, _In_ UINT m
         pThis = reinterpret_cast<AnnotatedTextControl*>(createStruct->lpCreateParams);
         SetWindowLongPtr(hwnd, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(pThis));
     }
-    
+
     if (message == WM_NCDESTROY)
     {
         pThis = NULL;
         SetWindowLongPtr(hwnd, GWLP_USERDATA, NULL);
     }
-    
+
     if (pThis != NULL)
     {
         return pThis->WndProc(hwnd, message, wParam, lParam);
     }
-    
+
     return DefWindowProc(hwnd, message, wParam, lParam);
 }
 
@@ -286,7 +291,7 @@ void AnnotatedTextControl::OnPaint(_In_ HDC hdc)
         {
             Matrix identity; // Identity is the default matrix
             UINT scansCount = region->GetRegionScansCount(&identity);
-            
+
             RectF *regionRects = new RectF[scansCount];
             if (regionRects != NULL)
             {
@@ -325,12 +330,12 @@ LRESULT AnnotatedTextControl::OnSize(_In_ WPARAM wParam, _In_ LPARAM lParam)
     currentScroll = min(maxScroll, currentScroll);
 
     SCROLLINFO si;
-    si.cbSize = sizeof(si); 
+    si.cbSize = sizeof(si);
     si.fMask  = SIF_RANGE | SIF_PAGE | SIF_POS;
-    si.nMin   = 0; 
+    si.nMin   = 0;
     si.nMax   = maxScroll > 0 ? height : 0;
     si.nPage  = clientRect.bottom;
-    si.nPos   = currentScroll; 
+    si.nPos   = currentScroll;
 
     SetScrollInfo(hwnd, SB_VERT, &si, TRUE);
     return 0;
@@ -342,68 +347,68 @@ LRESULT AnnotatedTextControl::OnScroll(_In_ WPARAM wParam, _In_ LPARAM lParam)
 
     SCROLLINFO si;
     si.cbSize = sizeof(si);
-    si.fMask  = SIF_TRACKPOS; 
+    si.fMask  = SIF_TRACKPOS;
     GetScrollInfo(hwnd, SB_VERT, &si);
 
-    int newScrollPosition;    // new position 
+    int newScrollPosition;    // new position
 
-    switch (LOWORD(wParam)) 
-    { 
-        // User clicked the scroll bar shaft above the scroll box. 
-    case SB_PAGEUP: 
-        newScrollPosition = currentScroll - 50; 
-        break; 
+    switch (LOWORD(wParam))
+    {
+    // User clicked the scroll bar shaft above the scroll box.
+    case SB_PAGEUP:
+        newScrollPosition = currentScroll - 50;
+        break;
 
-        // User clicked the scroll bar shaft below the scroll box. 
-    case SB_PAGEDOWN: 
-        newScrollPosition = currentScroll + 50; 
-        break; 
+    // User clicked the scroll bar shaft below the scroll box.
+    case SB_PAGEDOWN:
+        newScrollPosition = currentScroll + 50;
+        break;
 
-        // User clicked the top arrow. 
-    case SB_LINEUP: 
-        newScrollPosition = currentScroll - 5; 
-        break; 
+    // User clicked the top arrow.
+    case SB_LINEUP:
+        newScrollPosition = currentScroll - 5;
+        break;
 
-        // User clicked the bottom arrow. 
-    case SB_LINEDOWN: 
-        newScrollPosition = currentScroll + 5; 
-        break; 
+    // User clicked the bottom arrow.
+    case SB_LINEDOWN:
+        newScrollPosition = currentScroll + 5;
+        break;
 
-        // User dragged the scroll box. 
-    case SB_THUMBPOSITION: 
-        newScrollPosition = si.nTrackPos; 
-        break; 
+    // User dragged the scroll box.
+    case SB_THUMBPOSITION:
+        newScrollPosition = si.nTrackPos;
+        break;
 
-    default: 
-        newScrollPosition = currentScroll; 
-    } 
+    default:
+        newScrollPosition = currentScroll;
+    }
 
-    // New position must be between 0 and the screen height. 
-    newScrollPosition = max(0, newScrollPosition); 
-    newScrollPosition = min(maxScroll, newScrollPosition); 
+    // New position must be between 0 and the screen height.
+    newScrollPosition = max(0, newScrollPosition);
+    newScrollPosition = min(maxScroll, newScrollPosition);
 
     // If the current position does not change, do not scroll.
-    if (newScrollPosition != currentScroll) 
+    if (newScrollPosition != currentScroll)
     {
         int yDelta = newScrollPosition - currentScroll;
 
-        // Reset the current scroll position. 
-        currentScroll = newScrollPosition; 
+        // Reset the current scroll position.
+        currentScroll = newScrollPosition;
 
-        // Scroll the window. (The system repaints most of the 
-        // client area when ScrollWindowEx is called; however, it is 
-        // necessary to call UpdateWindow in order to repaint the 
-        // rectangle of pixels that were invalidated.) 
-        ScrollWindowEx(hwnd, -0, -yDelta, (CONST RECT *) NULL, 
-            (CONST RECT *) NULL, (HRGN) NULL, (PRECT) NULL, 
-            SW_ERASE | SW_INVALIDATE ); 
-        UpdateWindow(hwnd); 
+        // Scroll the window. (The system repaints most of the
+        // client area when ScrollWindowEx is called; however, it is
+        // necessary to call UpdateWindow in order to repaint the
+        // rectangle of pixels that were invalidated.)
+        ScrollWindowEx(hwnd, -0, -yDelta, (CONST RECT *) NULL,
+                       (CONST RECT *) NULL, (HRGN) NULL, (PRECT) NULL,
+                       SW_ERASE | SW_INVALIDATE );
+        UpdateWindow(hwnd);
 
-        // Reset the scroll bar. 
-        si.cbSize = sizeof(si); 
-        si.fMask  = SIF_POS; 
-        si.nPos   = currentScroll; 
-        SetScrollInfo(hwnd, SB_VERT, &si, TRUE); 
+        // Reset the scroll bar.
+        si.cbSize = sizeof(si);
+        si.fMask  = SIF_POS;
+        si.nPos   = currentScroll;
+        SetScrollInfo(hwnd, SB_VERT, &si, TRUE);
     }
     return 0;
 }
@@ -416,7 +421,7 @@ LRESULT AnnotatedTextControl::OnSetFocus()
     SetCaretPos(static_cast<int>(caretScreenPos.X), static_cast<int>(caretScreenPos.Y));
     ShowCaret(hwnd);
     isActive = true;
-    return 0; 
+    return 0;
 }
 
 LRESULT AnnotatedTextControl::OnKillFocus()
@@ -431,38 +436,38 @@ LRESULT AnnotatedTextControl::OnKeyDown(_In_ WPARAM wParam, _In_ LPARAM lParam)
     UNREFERENCED_PARAMETER(lParam);
     bool changed = false;
     EndPoint newCaretPos = caretPosition;
-   
-    switch (wParam) 
-    { 
-    case VK_HOME:       // Home 
+
+    switch (wParam)
+    {
+    case VK_HOME:       // Home
         newCaretPos.line = 0;
         newCaretPos.character = 0;
         changed = true;
-        break; 
+        break;
 
-    case VK_END:        // End 
+    case VK_END:        // End
         newCaretPos.line = GetLineCount() - 1;
         newCaretPos.character = GetLineLength(newCaretPos.line);
         changed = true;
         break;
 
-    case VK_LEFT:       // Left arrow 
+    case VK_LEFT:       // Left arrow
         changed = StepCharacter(caretPosition, false, &newCaretPos);
-        break; 
+        break;
 
-    case VK_RIGHT:      // Right arrow 
-        changed = StepCharacter(caretPosition, true, &newCaretPos); 
-        break; 
+    case VK_RIGHT:      // Right arrow
+        changed = StepCharacter(caretPosition, true, &newCaretPos);
+        break;
 
-    case VK_UP:         // Up arrow 
+    case VK_UP:         // Up arrow
         // Go to the same position in the previous line
         newCaretPos.line--;
         newCaretPos.line = max(newCaretPos.line, 0);
         newCaretPos.character = min(newCaretPos.character, GetLineLength(newCaretPos.line));
         changed = true;
-        break; 
+        break;
 
-    case VK_DOWN:       // Down arrow 
+    case VK_DOWN:       // Down arrow
         // Go to the same position in the next line
         newCaretPos.line++;
         newCaretPos.line = min(newCaretPos.line, GetLineCount() - 1);
@@ -485,8 +490,8 @@ LRESULT AnnotatedTextControl::OnKeyDown(_In_ WPARAM wParam, _In_ LPARAM lParam)
 LRESULT AnnotatedTextControl::OnLButtonDown(_In_ WPARAM wParam, _In_ LPARAM lParam)
 {
     UNREFERENCED_PARAMETER(wParam);
-    float xPos = static_cast<float>(LOWORD(lParam)); 
-    float yPos = static_cast<float>(HIWORD(lParam)); 
+    float xPos = static_cast<float>(LOWORD(lParam));
+    float yPos = static_cast<float>(HIWORD(lParam));
     EndPoint click = SearchForClosestEndPoint(xPos, yPos);
     UpdateCaret(click);
     return 0;
@@ -576,7 +581,7 @@ Region * AnnotatedTextControl::GetLineCharactersPosition(_In_ int line, _In_ int
     StyleDefinition* styleDef = GetStyleDefinition(lines[line].style);
     Font font(textFontFace, styleDef->fontSize, styleDef->fontStyle);
 
-    // Get the number of ranges that have been set, and allocate memory to 
+    // Get the number of ranges that have been set, and allocate memory to
     // store the regions that correspond to the ranges.
     Region *charRangeRegion = new Region;
     if (charRangeRegion != NULL)
@@ -598,7 +603,7 @@ SizeF AnnotatedTextControl::GetAnnotationDimensions(_In_ unsigned int annotation
     {
         return SizeF();
     }
-    
+
     RECT clientRect;
     GetClientRect(hwnd, &clientRect);
 
@@ -619,7 +624,7 @@ RectF AnnotatedTextControl::GetAnnotationPosition(_In_ unsigned int annotation, 
 {
     if (annotation >= annotationCount)
     {
-         return RectF();
+        return RectF();
     }
 
     float yPos = annotationPadding;
@@ -718,7 +723,7 @@ EndPoint AnnotatedTextControl::SearchForClosestEndPoint(_In_ float x, _In_ float
         {
             Matrix identity; // Identity is the default matrix
             UINT scansCount = region->GetRegionScansCount(&identity);
-            
+
             RectF *regionRects = new RectF[scansCount];
             if (regionRects != NULL)
             {
@@ -734,7 +739,7 @@ EndPoint AnnotatedTextControl::SearchForClosestEndPoint(_In_ float x, _In_ float
                             break;
                         }
                     }
-                    
+
                     // If it's past the end, it must be close to the end
                     if (beforeOrInRect < 0)
                     {
@@ -799,7 +804,7 @@ EndPoint AnnotatedTextControl::SearchForClosestEndPoint(_In_ float x, _In_ float
                 }
                 delete region;
             }
-            
+
             int distance = 0;
             if (direction == 1)
             {
@@ -1076,7 +1081,7 @@ VARIANT AnnotatedTextControl::GetAttributeAtPoint(_In_ EndPoint start, _In_ TEXT
             retval.lVal = (style->fontStyle & FontStyleBold) == 0 ? 400 : 700;
         }
         else if ( attribute == UIA_IndentationFirstLineAttributeId ||
-             attribute == UIA_IndentationLeadingAttributeId )
+                  attribute == UIA_IndentationLeadingAttributeId )
         {
             retval.vt = VT_R8;
             retval.dblVal = style->indent;

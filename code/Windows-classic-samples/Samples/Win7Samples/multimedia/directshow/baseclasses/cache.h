@@ -1,4 +1,4 @@
-//------------------------------------------------------------------------------
+﻿//------------------------------------------------------------------------------
 // File: Cache.h
 //
 // Desc: DirectShow base classes - efines a non-MFC generic cache class.
@@ -31,7 +31,8 @@
 #define __CACHE__
 
 
-class CCache : CBaseObject {
+class CCache : CBaseObject
+{
 
     /* Make copy constructor and assignment operator inaccessible */
 
@@ -67,7 +68,10 @@ public:
     void RemoveAll(void);
 
     /* Return the cache size which is set during construction */
-    INT GetCacheSize(void) const {return m_iCacheSize;};
+    INT GetCacheSize(void) const
+    {
+        return m_iCacheSize;
+    };
 };
 
 #endif /* __CACHE__ */

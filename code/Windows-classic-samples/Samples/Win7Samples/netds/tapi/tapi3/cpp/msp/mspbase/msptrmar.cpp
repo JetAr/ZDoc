@@ -1,4 +1,4 @@
-/*++
+﻿/*++
 
 Copyright (c) 1998-1999 Microsoft Corporation
 
@@ -59,10 +59,10 @@ static inline HRESULT TerminalAllowed(IMoniker * pMoniker)
     HRESULT hr;
     CComPtr<IPropertyBag> pBag;
     hr = pMoniker->BindToStorage(0, 0, IID_IPropertyBag, (void **)&pBag);
-    if (FAILED(hr)) 
+    if (FAILED(hr))
     {
         LOG((MSP_ERROR, "audio render TerminalAllowed (IMoniker::BindToStorage) "
-                            "- returning  %8x", hr));
+             "- returning  %8x", hr));
         return hr;
     }
 
@@ -73,44 +73,44 @@ static inline HRESULT TerminalAllowed(IMoniker * pMoniker)
     VariantInit(&var);
     var.vt = VT_BSTR;
     hr = pBag->Read(L"FriendlyName", &var, 0);
-    if (FAILED(hr)) 
+    if (FAILED(hr))
     {
         LOG((MSP_ERROR, "audio render TerminalAllowed "
-            "(IPropertyBag::Read on FriendlyName) - got  %8x; skipping terminal", hr));
+             "(IPropertyBag::Read on FriendlyName) - got  %8x; skipping terminal", hr));
         return hr;
     }
 
     // Fix for memory leak!
     SysFreeString(var.bstrVal);
 
-     // NOTE: Magic code selects only wave devices
+    // NOTE: Magic code selects only wave devices
     VariantInit(&var);
     var.vt = VT_I4;
     hr = pBag->Read(L"WaveOutId", &var, 0);
 
     if (hr != S_OK)
     {
-        #ifndef USE_DIRECT_SOUND
+#ifndef USE_DIRECT_SOUND
 
-            // This is most likely a DirectSound terminal
-            LOG((MSP_WARN, "audio render TerminalAllowed - "
-                "this is a DirectSound terminal "
-                "so we are skipping it - note that this is a routine "
-                "occurance - returning  %8x", hr));
+        // This is most likely a DirectSound terminal
+        LOG((MSP_WARN, "audio render TerminalAllowed - "
+             "this is a DirectSound terminal "
+             "so we are skipping it - note that this is a routine "
+             "occurance - returning  %8x", hr));
 
-        #else  // we do use DirectSound
-            return S_OK;
-        #endif
+#else  // we do use DirectSound
+        return S_OK;
+#endif
     }
     else if (var.lVal == WAVE_MAPPER)
     {
-        // hack: if the value is equal to WAVE_MAPPER then don't use it....    
+        // hack: if the value is equal to WAVE_MAPPER then don't use it....
         hr = E_FAIL; // random failure code :)
 
         LOG((MSP_WARN, "audio render TerminalAllowed - "
-            "this is a WAVE_MAPPER terminal "
-            "so we are skipping it - note that this is a routine "
-            "occurance - returning  %8x", hr));
+             "this is a WAVE_MAPPER terminal "
+             "so we are skipping it - note that this is a routine "
+             "occurance - returning  %8x", hr));
     }
 
     return hr;
@@ -123,7 +123,7 @@ HRESULT CAudioRenderTerminal::CreateTerminal(
     IN  CComPtr<IMoniker>   pMoniker,
     IN  MSP_HANDLE          htAddress,
     OUT ITTerminal        **ppTerm
-    )
+)
 {
     // Enable ATL string conversion macros.
     USES_CONVERSION;
@@ -137,14 +137,14 @@ HRESULT CAudioRenderTerminal::CreateTerminal(
     if ( !ppTerm)
     {
         LOG((MSP_ERROR, "CAudioRenderTerminal::CreateTerminal : "
-            "bad terminal pointer; returning E_POINTER"));
+             "bad terminal pointer; returning E_POINTER"));
         return E_POINTER;
     }
 
     if ( !pMoniker)
     {
         LOG((MSP_ERROR, "CAudioRenderTerminal::CreateTerminal : "
-            "bad moniker pointer; returning E_POINTER"));
+             "bad moniker pointer; returning E_POINTER"));
         return E_POINTER;
     }
 
@@ -165,7 +165,7 @@ HRESULT CAudioRenderTerminal::CreateTerminal(
 
     CComPtr<IPropertyBag> pBag;
     hr = pMoniker->BindToStorage(0, 0, IID_IPropertyBag, (void **)&pBag);
-    if (FAILED(hr)) 
+    if (FAILED(hr))
     {
         LOG((MSP_ERROR, "CAudioRenderTerminal::CreateTerminal (IMoniker::BindToStorage) - returning  %8x", hr));
         return hr;
@@ -176,11 +176,11 @@ HRESULT CAudioRenderTerminal::CreateTerminal(
 
     var.vt = VT_BSTR;
     hr = pBag->Read(L"FriendlyName", &var, 0);
-    if (FAILED(hr)) 
+    if (FAILED(hr))
     {
         LOG((MSP_WARN, "CAudioRenderTerminal::CreateTerminal "
-            "(IPropertyBag::Read) - got  %8x - we are therefore skipping "
-            "this terminal; note that this is fairly routine", hr));
+             "(IPropertyBag::Read) - got  %8x - we are therefore skipping "
+             "this terminal; note that this is fairly routine", hr));
 
         return hr;
     }
@@ -190,7 +190,7 @@ HRESULT CAudioRenderTerminal::CreateTerminal(
     //
 
     CMSPComObject<CAudioRenderTerminal> *pLclTerm = new CMSPComObject<CAudioRenderTerminal>;
-    if (pLclTerm == NULL) 
+    if (pLclTerm == NULL)
     {
         LOG((MSP_ERROR, "CAudioRenderTerminal::CreateTerminal - returning E_OUTOFMEMORY"));
         return E_OUTOFMEMORY;
@@ -199,9 +199,9 @@ HRESULT CAudioRenderTerminal::CreateTerminal(
     //
     // Save some stuff in the terminal.
     //
-    
+
     pLclTerm->m_pMoniker = pMoniker;
-    
+
     wcsncpy_s(pLclTerm->m_szName,MAX_PATH, OLE2T(var.bstrVal), MAX_PATH);
 
     SysFreeString(var.bstrVal);
@@ -209,13 +209,13 @@ HRESULT CAudioRenderTerminal::CreateTerminal(
     //
     // Get the ITTerminal interface that we were asked for.
     //
-    
+
     hr = pLclTerm->_InternalQueryInterface(IID_ITTerminal, (void**)ppTerm);
 
     if ( FAILED(hr) )
     {
         LOG((MSP_ERROR, "CAudioRenderTerminal::CreateTerminal - "
-            "Internal QI failed; returning 0x%08x", hr));
+             "Internal QI failed; returning 0x%08x", hr));
 
         delete pLclTerm;
         *ppTerm = NULL; // just in case
@@ -235,7 +235,7 @@ HRESULT CAudioRenderTerminal::CreateTerminal(
     if ( FAILED(hr) )
     {
         LOG((MSP_ERROR, "CAudioRenderTerminal::CreateTerminal - "
-            "Initialize failed; returning 0x%08x", hr));
+             "Initialize failed; returning 0x%08x", hr));
 
         (*ppTerm)->Release();
         *ppTerm = NULL; // just in case
@@ -269,7 +269,7 @@ HRESULT CAudioRenderTerminal::CreateFilters()
         _ASSERTE( m_pIPin != NULL );
 
         LOG((MSP_TRACE, "CAudioRenderTerminal::CreateFilters - "
-            "filter already created - exit S_OK"));
+             "filter already created - exit S_OK"));
 
         return S_OK;
     }
@@ -283,20 +283,20 @@ HRESULT CAudioRenderTerminal::CreateFilters()
     if ( m_pMoniker == NULL )
     {
         LOG((MSP_ERROR, "CAudioRenderTerminal::CreateFilters - "
-            "no moniker present - returning E_UNEXPECTED"));
+             "no moniker present - returning E_UNEXPECTED"));
 
         return E_UNEXPECTED;
     }
 
     //
-    // Create a new instance of the filter.    
+    // Create a new instance of the filter.
     //
     hr = m_pMoniker->BindToObject(0, 0, IID_IBaseFilter, (void**)&m_pIFilter);
- 
+
     if ( FAILED(hr) )
     {
         LOG((MSP_ERROR, "CAudioRenderTerminal::CreateFilters - "
-            "BindToObject failed; returning  %8x", hr));
+             "BindToObject failed; returning  %8x", hr));
         return hr;
     }
 
@@ -306,11 +306,11 @@ HRESULT CAudioRenderTerminal::CreateFilters()
     //
 
     hr = m_pIFilter->QueryInterface(IID_IBasicAudio,
-                                       (void **) &m_pIBasicAudio);
-    if ( FAILED(hr) ) 
+                                    (void **) &m_pIBasicAudio);
+    if ( FAILED(hr) )
     {
         LOG((MSP_WARN, "CAudioRenderTerminal::CreateFilters - "
-            "QI for IBasicAudio failed: %8x", hr)); 
+             "QI for IBasicAudio failed: %8x", hr));
     }
 
     hr = FindTerminalPin();
@@ -318,7 +318,7 @@ HRESULT CAudioRenderTerminal::CreateFilters()
     if ( FAILED(hr) )
     {
         LOG((MSP_ERROR, "CAudioRenderTerminal::CreateFilters - "
-            "FindTerminalPin failed; returning  0x%08x", hr));
+             "FindTerminalPin failed; returning  0x%08x", hr));
 
         m_pIFilter = NULL; // does an implicit release
 
@@ -326,7 +326,7 @@ HRESULT CAudioRenderTerminal::CreateFilters()
         {
             m_pIBasicAudio = NULL; // does an implicit release
         }
-        
+
         return hr;
     }
 
@@ -338,9 +338,9 @@ HRESULT CAudioRenderTerminal::CreateFilters()
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-HRESULT 
+HRESULT
 CAudioRenderTerminal::FindTerminalPin(
-    )
+)
 {
     LOG((MSP_TRACE, "CAudioRenderTerminal::FindTerminalPin - enter"));
 
@@ -351,21 +351,21 @@ CAudioRenderTerminal::FindTerminalPin(
     if (m_pIPin != NULL)
     {
         LOG((MSP_TRACE, "CAudioRenderTerminal::FindTerminalPin - "
-            "we've already got a pin; exit E_UNEXPECTED"));
+             "we've already got a pin; exit E_UNEXPECTED"));
         return E_UNEXPECTED;
     }
 
     if (m_pIFilter == NULL)
     {
         LOG((MSP_TRACE, "CAudioRenderTerminal::FindTerminalPin - "
-            "we don't have a filter; exit E_UNEXPECTED"));
+             "we don't have a filter; exit E_UNEXPECTED"));
         return E_UNEXPECTED;
     }
 
     HRESULT hr;
     CComPtr<IEnumPins> pIEnumPins;
     ULONG cFetched;
-    
+
     //
     // Find the render pin for the filter.
     //
@@ -374,23 +374,23 @@ CAudioRenderTerminal::FindTerminalPin(
 
     if (FAILED(hr))
     {
-        LOG((MSP_ERROR, 
-            "CAudioRenderTerminal::FindTerminalPin - can't enum pins 0x%08x",
-            hr));
+        LOG((MSP_ERROR,
+             "CAudioRenderTerminal::FindTerminalPin - can't enum pins 0x%08x",
+             hr));
         return hr;
     }
 
     IPin * pIPin;
 
-    // Enumerate all the pins and break on the 
+    // Enumerate all the pins and break on the
     // first pin that meets requirement.
     for (;;)
     {
         if (pIEnumPins->Next(1, &pIPin, &cFetched) != S_OK)
         {
-            LOG((MSP_ERROR, 
-                "CAudioRenderTerminal::FindTerminalPin - can't get a pin %8x",
-                hr));
+            LOG((MSP_ERROR,
+                 "CAudioRenderTerminal::FindTerminalPin - can't get a pin %8x",
+                 hr));
             return (hr == S_FALSE) ? E_FAIL : hr;
         }
 
@@ -404,9 +404,9 @@ CAudioRenderTerminal::FindTerminalPin(
 
         if (FAILED(hr = pIPin->QueryDirection(&dir)))
         {
-            LOG((MSP_ERROR, 
-                "CAudioRenderTerminal::FindTerminalPin - can't query pin direction %8x",
-                hr));
+            LOG((MSP_ERROR,
+                 "CAudioRenderTerminal::FindTerminalPin - can't query pin direction %8x",
+                 hr));
             pIPin->Release();
             return hr;
         }
@@ -422,7 +422,7 @@ CAudioRenderTerminal::FindTerminalPin(
     m_pIPin = pIPin;
 
     LOG((MSP_TRACE, "CAudioRenderTerminal::FindTerminalPin - exit S_OK"));
-  
+
     return S_OK;
 }
 
@@ -431,14 +431,14 @@ CAudioRenderTerminal::FindTerminalPin(
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 HRESULT CAudioRenderTerminal::AddFiltersToGraph(
-    )
+)
 {
     LOG((MSP_TRACE, "CAudioRenderTerminal::AddFiltersToGraph - enter"));
 
     if (m_pGraph == NULL)
     {
         LOG((MSP_ERROR, "CAudioRenderTerminal::AddFiltersToGraph - "
-            "haven't got a filter graph; return E_UNEXPECTED"));
+             "haven't got a filter graph; return E_UNEXPECTED"));
         return E_UNEXPECTED;
     }
 
@@ -451,8 +451,8 @@ HRESULT CAudioRenderTerminal::AddFiltersToGraph(
     if ( FAILED(hr) )
     {
         LOG((MSP_ERROR, "CAudioRenderTerminal::AddFiltersToGraph - "
-            "CreateFilters failed; returning  0x%08x", hr)); 
-        return hr; 
+             "CreateFilters failed; returning  0x%08x", hr));
+        return hr;
     }
 
     //
@@ -470,8 +470,8 @@ HRESULT CAudioRenderTerminal::AddFiltersToGraph(
     if ( FAILED(hr) )
     {
         LOG((MSP_ERROR, "CAudioRenderTerminal::AddFiltersToGraph - "
-            "returning  0x%08x", hr)); 
-        return hr; 
+             "returning  0x%08x", hr));
+        return hr;
     }
 
     LOG((MSP_TRACE, "CAudioRenderTerminal::AddFiltersToGraph - exit S_OK"));
@@ -496,7 +496,7 @@ STDMETHODIMP CAudioRenderTerminal::CompleteConnectTerminal(void)
     if (FAILED(hr))
     {
         LOG((MSP_TRACE, "CAudioRenderTerminal::CompleteConnectTerminal: "
-                "CSingleFilterTerminal method failed"));
+             "CSingleFilterTerminal method failed"));
         return hr;
     }
 
@@ -515,8 +515,8 @@ STDMETHODIMP CAudioRenderTerminal::CompleteConnectTerminal(void)
     hr = m_pIFilter->QueryInterface(IID_IAMResourceControl, (void **) &pIResource);
     if (FAILED(hr))
     {
-        LOG((MSP_ERROR, "CAudioRenderTerminal::CompleteConnectTerminal - QI failed: %8x", hr)); 
-        
+        LOG((MSP_ERROR, "CAudioRenderTerminal::CompleteConnectTerminal - QI failed: %8x", hr));
+
         // This is a nonesential operation so we do not fail.
         return S_OK;
     }
@@ -528,7 +528,7 @@ STDMETHODIMP CAudioRenderTerminal::CompleteConnectTerminal(void)
     if (FAILED(hr))
     {
         LOG((MSP_ERROR, "CAudioRenderTerminal::CompleteConnectTerminal - "
-                            "device reservation failed: %8x", hr));
+             "device reservation failed: %8x", hr));
         return hr;
     }
     else if (hr == S_FALSE)
@@ -538,7 +538,7 @@ STDMETHODIMP CAudioRenderTerminal::CompleteConnectTerminal(void)
         // selected.
 
         LOG((MSP_ERROR, "CAudioRenderTerminal::CompleteConnectTerminal - "
-                "device already in use: %8x", hr));
+             "device already in use: %8x", hr));
         return hr;
 
     } // {if the driver is half-duplex}
@@ -557,9 +557,9 @@ STDMETHODIMP CAudioRenderTerminal::CompleteConnectTerminal(void)
 // if CompleteConnect fails)
 
 STDMETHODIMP CAudioRenderTerminal::DisconnectTerminal(
-            IN      IGraphBuilder  * pGraph,
-            IN      DWORD            dwReserved
-            )
+    IN      IGraphBuilder  * pGraph,
+    IN      DWORD            dwReserved
+)
 {
     LOG((MSP_TRACE, "CAudioRenderTerminal::DisconnectTerminal - enter"));
 
@@ -576,7 +576,7 @@ STDMETHODIMP CAudioRenderTerminal::DisconnectTerminal(
     if (FAILED(hr))
     {
         LOG((MSP_TRACE, "CAudioRenderTerminal::DisconnectTerminal : "
-                "CSingleFilterTerminal method failed; hr = %d", hr));
+             "CSingleFilterTerminal method failed; hr = %d", hr));
         return hr;
     }
 
@@ -586,10 +586,10 @@ STDMETHODIMP CAudioRenderTerminal::DisconnectTerminal(
         CComPtr <IAMResourceControl> pIResource;
 
         hr = m_pIFilter->QueryInterface(IID_IAMResourceControl, (void **) &pIResource);
-        if (FAILED(hr)) 
+        if (FAILED(hr))
         {
-            LOG((MSP_ERROR, "CAudioRenderTerminal::DisconnectTerminal - QI failed: %8x", hr)); 
-        
+            LOG((MSP_ERROR, "CAudioRenderTerminal::DisconnectTerminal - QI failed: %8x", hr));
+
             // This is a nonesential operation so we do not "return hr;" here.
         }
         else
@@ -601,7 +601,7 @@ STDMETHODIMP CAudioRenderTerminal::DisconnectTerminal(
             if (FAILED(hr))
             {
                 LOG((MSP_ERROR, "CAudioRenderTerminal::DisconnectTerminal - "
-                                    "device unreservation failed: %8x", hr));
+                     "device unreservation failed: %8x", hr));
                 // no reason to completely die at this point, so we just continue
             }
 
@@ -636,8 +636,8 @@ static HRESULT RangeConvert(long   lInput,
     if (lInput < lInputMin)
     {
         LOG((MSP_ERROR, "RangeConvert - value out of range - "
-            "%d < %d; returning E_INVALIDARG",
-            lInput, lInputMin));
+             "%d < %d; returning E_INVALIDARG",
+             lInput, lInputMin));
 
         return E_INVALIDARG;
     }
@@ -645,13 +645,13 @@ static HRESULT RangeConvert(long   lInput,
     if (lInput > lInputMax)
     {
         LOG((MSP_ERROR, "RangeConvert - value out of range - "
-            "%d > %d; returning E_INVALIDARG",
-            lInput, lInputMax));
+             "%d > %d; returning E_INVALIDARG",
+             lInput, lInputMax));
 
         return E_INVALIDARG;
     }
 
-    // This is how much we are going to expand the range of the input.    
+    // This is how much we are going to expand the range of the input.
     double dRangeWidthRatio = (double) (lOutputMax - lOutputMin) /
                               (double) (lInputMax  - lInputMin);
 
@@ -676,14 +676,14 @@ STDMETHODIMP CAudioRenderTerminal::get_Volume(long * plVolume)
     if ( !plVolume)
     {
         LOG((MSP_ERROR, "CAudioRenderTerminal::get_Volume - "
-            "bad pointer argument"));
+             "bad pointer argument"));
         return E_POINTER;
     }
 
     if (m_pIBasicAudio == NULL)
     {
         LOG((MSP_ERROR, "CAudioRenderTerminal::get_Volume - "
-            "don't have necessary interface - exit E_FAIL"));
+             "don't have necessary interface - exit E_FAIL"));
         return E_FAIL;
     }
 
@@ -696,7 +696,7 @@ STDMETHODIMP CAudioRenderTerminal::get_Volume(long * plVolume)
     if (FAILED(hr))
     {
         LOG((MSP_ERROR, "CAudioRenderTerminal::get_Volume - "
-            "filter call failed: %08x", hr));
+             "filter call failed: %08x", hr));
         return hr;
     }
 
@@ -711,7 +711,7 @@ STDMETHODIMP CAudioRenderTerminal::get_Volume(long * plVolume)
     if (FAILED(hr))
     {
         LOG((MSP_ERROR, "CAudioRenderTerminal::get_Volume - "
-            "RangeConvert call failed: %08x", hr));
+             "RangeConvert call failed: %08x", hr));
         return hr;
     }
 
@@ -731,7 +731,7 @@ STDMETHODIMP CAudioRenderTerminal::put_Volume(long lVolume)
     if (m_pIBasicAudio == NULL)
     {
         LOG((MSP_ERROR, "CAudioRenderTerminal::put_Volume - "
-            "don't have necessary interface - exit E_FAIL"));
+             "don't have necessary interface - exit E_FAIL"));
         return E_FAIL;
     }
 
@@ -746,7 +746,7 @@ STDMETHODIMP CAudioRenderTerminal::put_Volume(long lVolume)
     if (FAILED(hr))
     {
         LOG((MSP_ERROR, "CAudioRenderTerminal::put_Volume - "
-            "RangeConvert call failed: %08x", hr));
+             "RangeConvert call failed: %08x", hr));
         return hr;
     }
 
@@ -759,7 +759,7 @@ STDMETHODIMP CAudioRenderTerminal::put_Volume(long lVolume)
     if (FAILED(hr))
     {
         LOG((MSP_ERROR, "CAudioRenderTerminal::put_Volume - "
-            "filter call failed: %08x", hr));
+             "filter call failed: %08x", hr));
         return hr;
     }
 
@@ -799,7 +799,7 @@ STDMETHODIMP CAudioRenderTerminal::put_Balance(long lBalance)
 STDMETHODIMP
 CAudioRenderTerminal::get_WaveId(
     OUT long * plWaveId
-    )
+)
 {
     LOG((MSP_TRACE, "CAudioRenderTerminal::get_WaveId - enter"));
 
@@ -812,7 +812,7 @@ CAudioRenderTerminal::get_WaveId(
     if ( !plWaveId)
     {
         LOG((MSP_ERROR, "CAudioRenderTerminal::get_WaveId - "
-            "bad pointer argument"));
+             "bad pointer argument"));
 
         return E_POINTER;
     }
@@ -824,7 +824,7 @@ CAudioRenderTerminal::get_WaveId(
     if ( ! m_pMoniker)
     {
         LOG((MSP_ERROR, "CAudioRenderTerminal::get_WaveId - "
-            "bad moniker pointer - exit E_UNEXPECTED"));
+             "bad moniker pointer - exit E_UNEXPECTED"));
 
         return E_UNEXPECTED;
     }
@@ -839,11 +839,11 @@ CAudioRenderTerminal::get_WaveId(
                                            0,
                                            IID_IPropertyBag,
                                            (void **) &pBag);
-    
-    if ( FAILED(hr) ) 
+
+    if ( FAILED(hr) )
     {
         LOG((MSP_ERROR, "CAudioRenderTerminal::get_WaveId - "
-            "can't get property bag - exit 0x%08x", hr));
+             "can't get property bag - exit 0x%08x", hr));
 
         return hr;
     }
@@ -857,16 +857,16 @@ CAudioRenderTerminal::get_WaveId(
     var.vt = VT_I4;
 
     hr = pBag->Read(
-        L"WaveOutId",
-        &var,
-        0);
+             L"WaveOutId",
+             &var,
+             0);
 
     pBag->Release();
 
-    if ( FAILED(hr) ) 
+    if ( FAILED(hr) )
     {
         LOG((MSP_ERROR, "CAudioRenderTerminal::get_WaveId - "
-            "can't read wave ID - exit 0x%08x", hr));
+             "can't read wave ID - exit 0x%08x", hr));
 
         return hr;
     }

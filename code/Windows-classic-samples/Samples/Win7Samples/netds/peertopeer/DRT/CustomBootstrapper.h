@@ -1,4 +1,4 @@
-// CustomBootstrapper.h - Interface for CustomBootstrapper
+﻿// CustomBootstrapper.h - Interface for CustomBootstrapper
 
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
@@ -40,17 +40,17 @@ public:
     ~CBootStrapResolveContext();
 
     HRESULT Init(
-             BOOL   fSplitDetect,
-             DWORD  dwTimeout,
-             DWORD  dwMaxResults
-             );
+        BOOL   fSplitDetect,
+        DWORD  dwTimeout,
+        DWORD  dwMaxResults
+    );
 
     HRESULT IssueResolve(
-            __in_opt const PVOID pvCallbackContext,
-            __in DRT_BOOTSTRAP_RESOLVE_CALLBACK callback,
-            __in_ecount(32)  PCWSTR szPortString,
-            __in  PWSTR address
-            );
+        __in_opt const PVOID pvCallbackContext,
+        __in DRT_BOOTSTRAP_RESOLVE_CALLBACK callback,
+        __in_ecount(32)  PCWSTR szPortString,
+        __in  PWSTR address
+    );
 
     void EndResolve();
 };
@@ -77,15 +77,15 @@ public:
         __in USHORT port,
         __in PCWSTR pwszAddress,
         __out DRT_BOOTSTRAP_PROVIDER** ppModule
-        );
+    );
 
     static HRESULT Attach(
         __in const PVOID pvContext
-        );
+    );
 
     static VOID Detach(
         __in const PVOID pvContext
-        );
+    );
 
     static HRESULT InitResolve(
         __in_opt const PVOID pvContext,
@@ -94,27 +94,27 @@ public:
         __in DWORD      dwMaxResults,
         __out DRT_BOOTSTRAP_RESOLVE_CONTEXT* ResolveContext,
         __out BOOL* fFatalError
-        );
-        
+    );
+
     static HRESULT IssueResolve(
         __in const      PVOID pvContext,
         __in_opt const PVOID pvCallbackContext,
         __in DRT_BOOTSTRAP_RESOLVE_CALLBACK callback,
         __in DRT_BOOTSTRAP_RESOLVE_CONTEXT ResolveContext,
         __out BOOL* fFatalError
-        );        
+    );
 
     static VOID EndResolve(
         __in const PVOID pContext,
         __in DRT_BOOTSTRAP_RESOLVE_CONTEXT ResolveContext
-        );
+    );
 
     static HRESULT Register(
         __in const PVOID pvContext,
         __in const SOCKET_ADDRESS_LIST* pAddressList
-        );
+    );
 
     static VOID Unregister(
         __in const PVOID pvContext
-        );
+    );
 };

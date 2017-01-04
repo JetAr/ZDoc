@@ -1,4 +1,4 @@
-// **************************************************************************
+﻿// **************************************************************************
 
 //
 
@@ -37,12 +37,12 @@ BOOL WINAPI DllMain(
     HINSTANCE hinstDLL,
     DWORD dwReason,
     LPVOID lpReserved
-    )
+)
 {
     if (dwReason == DLL_PROCESS_ATTACH)
     {
         g_hInstance = hinstDLL;
-        setlocale(LC_ALL, "");    
+        setlocale(LC_ALL, "");
     }
     else if (dwReason == DLL_PROCESS_DETACH)
     {
@@ -107,7 +107,7 @@ HRESULT APIENTRY DllGetClassObject(
     REFCLSID rclsid,
     REFIID riid,
     LPVOID * ppv
-    )
+)
 {
     HRESULT         hr;
 
@@ -117,8 +117,8 @@ HRESULT APIENTRY DllGetClassObject(
     //
     //  Verify the caller is asking for our type of object.
     //
-    if (CLSID_MyEventProvider != rclsid) 
-            return E_FAIL;
+    if (CLSID_MyEventProvider != rclsid)
+        return E_FAIL;
 
     //
     // Check that we can provide the interface.
@@ -273,7 +273,7 @@ STDMETHODIMP CFactory::CreateInstance(
     //
     //  Initialize the object and verify that it can return the
     //  interface in question.
-    //                                         
+    //
     hr = pObj->QueryInterface(riid, ppvObj);
 
     //
@@ -324,38 +324,38 @@ HRESULT APIENTRY DllRegisterServer(void)
 
     // Where are we?
     // =============
-	memset (Path, NULL, sizeof(Path));
+    memset (Path, NULL, sizeof(Path));
     GetModuleFileNameW(g_hInstance, Path, sizeof(Path)/sizeof(wchar_t) - 1);
 
     // Convert CLSID to string.
     // ========================
 
     StringFromCLSID(CLSID_MyEventProvider, &pGuidStr);
-	StringCbPrintfW(KeyPath, sizeof(KeyPath), L"SOFTWARE\\Classes\\CLSID\\\\%s", pGuidStr);
+    StringCbPrintfW(KeyPath, sizeof(KeyPath), L"SOFTWARE\\Classes\\CLSID\\\\%s", pGuidStr);
 
 
     HKEY hKey;
-	LONG lRes = RegCreateKeyExW( HKEY_LOCAL_MACHINE, KeyPath, 0, NULL,
-                    REG_OPTION_NON_VOLATILE, KEY_WRITE, NULL, 
-                    &hKey, NULL );
+    LONG lRes = RegCreateKeyExW( HKEY_LOCAL_MACHINE, KeyPath, 0, NULL,
+                                 REG_OPTION_NON_VOLATILE, KEY_WRITE, NULL,
+                                 &hKey, NULL );
     if (lRes)
         return E_FAIL;
 
     wchar_t *pName = L"WMI Sample Event Provider";
-    RegSetValueExW(hKey, 0, 0, REG_SZ, (const BYTE *) pName, 
-		(DWORD)(wcslen(pName) * sizeof(wchar_t) + sizeof(wchar_t)));
+    RegSetValueExW(hKey, 0, 0, REG_SZ, (const BYTE *) pName,
+                   (DWORD)(wcslen(pName) * sizeof(wchar_t) + sizeof(wchar_t)));
 
     HKEY hSubkey;
-	lRes = RegCreateKeyExW( hKey, L"InprocServer32", 0, NULL,
-                    REG_OPTION_NON_VOLATILE, KEY_WRITE, NULL, 
-                    &hSubkey, NULL );
-	if (lRes)
+    lRes = RegCreateKeyExW( hKey, L"InprocServer32", 0, NULL,
+                            REG_OPTION_NON_VOLATILE, KEY_WRITE, NULL,
+                            &hSubkey, NULL );
+    if (lRes)
         return E_FAIL;
 
-    RegSetValueExW(hSubkey, 0, 0, REG_SZ, (const BYTE *) Path, 		
-		(DWORD)(wcslen(Path) * sizeof(wchar_t) + sizeof(wchar_t)));
-    RegSetValueExW(hSubkey, L"ThreadingModel", 0, REG_SZ, (const BYTE *) L"Both", 
-		(DWORD)(wcslen(L"Both") * sizeof(wchar_t) + sizeof(wchar_t)));
+    RegSetValueExW(hSubkey, 0, 0, REG_SZ, (const BYTE *) Path,
+                   (DWORD)(wcslen(Path) * sizeof(wchar_t) + sizeof(wchar_t)));
+    RegSetValueExW(hSubkey, L"ThreadingModel", 0, REG_SZ, (const BYTE *) L"Both",
+                   (DWORD)(wcslen(L"Both") * sizeof(wchar_t) + sizeof(wchar_t)));
 
 
     RegCloseKey(hSubkey);
@@ -387,7 +387,7 @@ HRESULT APIENTRY DllUnregisterServer(void)
     wchar_t KeyPath[256];
 
     StringFromCLSID(CLSID_MyEventProvider, &pGuidStr);
-	StringCbPrintfW(KeyPath, sizeof(KeyPath), L"SOFTWARE\\Classes\\CLSID\\%s", pGuidStr);
+    StringCbPrintfW(KeyPath, sizeof(KeyPath), L"SOFTWARE\\Classes\\CLSID\\%s", pGuidStr);
 
     // Delete InProcServer32 subkey.
     // =============================

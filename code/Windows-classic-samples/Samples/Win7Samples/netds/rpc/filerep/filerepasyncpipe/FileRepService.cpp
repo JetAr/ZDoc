@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -11,10 +11,10 @@
     Server System Service
 
     FILE: FileRepService.cpp
-    
+
     PURPOSE: Provides file replication services.
-    
-    USAGE: 
+
+    USAGE:
         FileRepService
 
     FUNCTIONS:
@@ -92,18 +92,21 @@ VOID ServiceStop();
 
     COMMENTS:
 */
-VOID _cdecl main(int argc, char **argv){
+VOID _cdecl main(int argc, char **argv)
+{
 
     // Since we provide a single service there is only
     // one entry in the service dispatch table
-    SERVICE_TABLE_ENTRY DispatchTable[] = {
+    SERVICE_TABLE_ENTRY DispatchTable[] =
+    {
         { SERVICENAME, (LPSERVICE_MAIN_FUNCTION)ServiceMain },
         { NULL, NULL }
     };
 
     // The service control manager may be starting the service with
     // this call, so we must call StartServiceCtrlDispatcher.
-    if (!StartServiceCtrlDispatcher(DispatchTable)) {
+    if (!StartServiceCtrlDispatcher(DispatchTable))
+    {
         AddToMessageLog(TEXT("StartServiceCtrlDispatcher failed"));
     }
 }
@@ -126,29 +129,31 @@ VOID _cdecl main(int argc, char **argv){
         the user defined ServiceStart() routine to perform majority
         of the work.
 */
-VOID WINAPI ServiceMain(DWORD dwArgc, LPTSTR *lpszArgv) {
+VOID WINAPI ServiceMain(DWORD dwArgc, LPTSTR *lpszArgv)
+{
 
     // Initial service configuration
-    ssStatus.dwServiceType = SERVICE_WIN32_OWN_PROCESS; 
-    ssStatus.dwCurrentState = SERVICE_START_PENDING; 
+    ssStatus.dwServiceType = SERVICE_WIN32_OWN_PROCESS;
+    ssStatus.dwCurrentState = SERVICE_START_PENDING;
     ssStatus.dwControlsAccepted = SERVICE_ACCEPT_STOP;
-    ssStatus.dwWin32ExitCode = 0; 
-    ssStatus.dwServiceSpecificExitCode = 0; 
-    ssStatus.dwCheckPoint = 0; 
-    ssStatus.dwWaitHint = 0; 
-    
+    ssStatus.dwWin32ExitCode = 0;
+    ssStatus.dwServiceSpecificExitCode = 0;
+    ssStatus.dwCheckPoint = 0;
+    ssStatus.dwWaitHint = 0;
+
     sshStatusHandle = RegisterServiceCtrlHandler(SERVICENAME, ServiceCtrl);
 
     // Tell the SCM that the service is starting up.
-    if (!SetServiceStatus(sshStatusHandle, &ssStatus)) {
+    if (!SetServiceStatus(sshStatusHandle, &ssStatus))
+    {
         AddToMessageLog(TEXT("ServiceMain: SetServiceStatus failed\n"));
-        return; 
-    } 
-    
+        return;
+    }
+
     // Initialize the service and start it.
     ServiceStart(dwArgc, lpszArgv);
 
-    return; 
+    return;
 }
 
 /*
@@ -166,21 +171,23 @@ VOID WINAPI ServiceMain(DWORD dwArgc, LPTSTR *lpszArgv) {
     COMMENTS:
 */
 
-VOID WINAPI ServiceCtrl(DWORD Opcode) { 
+VOID WINAPI ServiceCtrl(DWORD Opcode)
+{
 
     // We only handle the STOP control requsts.
-    switch(Opcode) {
+    switch(Opcode)
+    {
 
-        case SERVICE_CONTROL_STOP: 
-            // Stop the service. 
-            ServiceStop();
-            break;
+    case SERVICE_CONTROL_STOP:
+        // Stop the service.
+        ServiceStop();
+        break;
 
-        default: 
-            AddToMessageLog(TEXT("ServiceCtrl: unrecognized or unimplemented opcode\n"));
+    default:
+        AddToMessageLog(TEXT("ServiceCtrl: unrecognized or unimplemented opcode\n"));
     }
 
-    return; 
+    return;
 }
 
 /*
@@ -199,70 +206,81 @@ VOID WINAPI ServiceCtrl(DWORD Opcode) {
     COMMENTS:
         Starts the service listening for RPC requests.
 */
-VOID ServiceStart (DWORD dwArgc, LPTSTR *szArgList){
-  RPC_STATUS status;
+VOID ServiceStart (DWORD dwArgc, LPTSTR *szArgList)
+{
+    RPC_STATUS status;
 
     // Report the status to the service control manager.
-    if (!ReportStatusToSCMgr(&sshStatusHandle, &ssStatus, SERVICE_START_PENDING, NO_ERROR, 1000)) {
+    if (!ReportStatusToSCMgr(&sshStatusHandle, &ssStatus, SERVICE_START_PENDING, NO_ERROR, 1000))
+    {
         AddToMessageLog(TEXT("ServiceStart: ReportStatusToSCMgr failed\n"));
         ServiceStop();
         return;
     }
 
     // Allow the user to override settings with command line switches.
-    for (unsigned i = 1; i < dwArgc; i++) {
+    for (unsigned i = 1; i < dwArgc; i++)
+    {
         // Well-formed argument switches start with '/' or '-' and are
         // two characters long.
-        if (((*szArgList[i] == TEXT('-')) || (*szArgList[i] == TEXT('/'))) && _tcsclen(szArgList[i]) == 2) {
+        if (((*szArgList[i] == TEXT('-')) || (*szArgList[i] == TEXT('/'))) && _tcsclen(szArgList[i]) == 2)
+        {
 
-            switch (_totlower(*(szArgList[i]+1))) {
+            switch (_totlower(*(szArgList[i]+1)))
+            {
 
-                case TEXT('f'):
-		  bNoFileIO = true;
-		  break;
+            case TEXT('f'):
+                bNoFileIO = true;
+                break;
 
-                default:
-		  AddToMessageLog(TEXT("ServiceStart: bad arguments"));
-		  ServiceStop();
-		  return;
+            default:
+                AddToMessageLog(TEXT("ServiceStart: bad arguments"));
+                ServiceStop();
+                return;
             }
         }
-        else {
-	  AddToMessageLog(TEXT("ServiceStart: bad arguments"));
-	  ServiceStop();
-	  return;
+        else
+        {
+            AddToMessageLog(TEXT("ServiceStart: bad arguments"));
+            ServiceStop();
+            return;
         }
     }
 
 
-    if (!StartFileRepServer()) {
-      ServiceStop();
+    if (!StartFileRepServer())
+    {
+        ServiceStop();
     }
-    else {
-      bServerListening = TRUE;
+    else
+    {
+        bServerListening = TRUE;
 
-      // Tell The SCM that the service is running.
-      if (!ReportStatusToSCMgr(&sshStatusHandle, &ssStatus, SERVICE_RUNNING, NO_ERROR, 0)){
-        AddToMessageLog(TEXT("ServiceStart: ReportStatusToSCMgr failed"));
-        ServiceStop();
-        return;
-      }
+        // Tell The SCM that the service is running.
+        if (!ReportStatusToSCMgr(&sshStatusHandle, &ssStatus, SERVICE_RUNNING, NO_ERROR, 0))
+        {
+            AddToMessageLog(TEXT("ServiceStart: ReportStatusToSCMgr failed"));
+            ServiceStop();
+            return;
+        }
 
-      // RpcMgmtWaitServerListen() will block until the server has
-      // stopped listening.
-      status = RpcMgmtWaitServerListen();
-      if (status != RPC_S_OK){
-        AddToMessageLogProcFailureEEInfo(TEXT("ServiceStart: RpcMgmtWaitServerListen"), status);
-        ServiceStop();
-        return;
-      }
+        // RpcMgmtWaitServerListen() will block until the server has
+        // stopped listening.
+        status = RpcMgmtWaitServerListen();
+        if (status != RPC_S_OK)
+        {
+            AddToMessageLogProcFailureEEInfo(TEXT("ServiceStart: RpcMgmtWaitServerListen"), status);
+            ServiceStop();
+            return;
+        }
     }
 
     return;
 }
 
-VOID ServiceStop(VOID) {
-  ServerStop();
+VOID ServiceStop(VOID)
+{
+    ServerStop();
 }
 
 // end FileRepService.cpp

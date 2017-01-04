@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -16,11 +16,11 @@ public:
     virtual ~CFileMapping();
 
     BOOL CreateFile(_In_ PCWSTR pFileName, DWORD desiredAccess, DWORD creationDisposition,
-        DWORD sharedMode = 0, _Inout_opt_ LPSECURITY_ATTRIBUTES lpSecurityAttributes = nullptr, DWORD flagsAndAttributes = 0, _Inout_opt_ HANDLE templateFileHandle = nullptr)
+                    DWORD sharedMode = 0, _Inout_opt_ LPSECURITY_ATTRIBUTES lpSecurityAttributes = nullptr, DWORD flagsAndAttributes = 0, _Inout_opt_ HANDLE templateFileHandle = nullptr)
 
     {
         return CFile::CreateFile(pFileName, desiredAccess, creationDisposition,
-            sharedMode, lpSecurityAttributes, flagsAndAttributes, templateFileHandle);
+                                 sharedMode, lpSecurityAttributes, flagsAndAttributes, templateFileHandle);
     }
 
     BOOL IsEndOfFile()
@@ -32,10 +32,19 @@ public:
         CFile::NextLine();
     }
 
-    const WCHAR *GetReadBufferPointer() { return CFile::GetReadBufferPointer(); }
-    DWORD_PTR GetFileSize() { return CFile::GetFileSize(); }
+    const WCHAR *GetReadBufferPointer()
+    {
+        return CFile::GetReadBufferPointer();
+    }
+    DWORD_PTR GetFileSize()
+    {
+        return CFile::GetFileSize();
+    }
 
-    LPCWSTR GetFileName() { return CFile::GetFileName(); }
+    LPCWSTR GetFileName()
+    {
+        return CFile::GetFileName();
+    }
 
 protected:
     BOOL SetupReadBuffer();

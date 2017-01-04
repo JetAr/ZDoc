@@ -1,7 +1,7 @@
-//--------------------------------------------------------------------
+﻿//--------------------------------------------------------------------
 // Microsoft OLE DB Test
 //
-// Copyright 1995-2000 Microsoft Corporation.  
+// Copyright 1995-2000 Microsoft Corporation.
 //
 // @doc
 //
@@ -30,19 +30,19 @@ const WCHAR wszVerifyTheseResultsManually[] = L"***************** Verify These R
 //-----------------------------------------------------------------------------
 // Defines
 //-----------------------------------------------------------------------------
-typedef struct 	
+typedef struct
 {
-	IID	iid;	
-	IUnknown * pIUnknown;
-	WCHAR	wszName[30];	
-	BOOL	fSupportsErrors;
+    IID	iid;
+    IUnknown * pIUnknown;
+    WCHAR	wszName[30];
+    BOOL	fSupportsErrors;
 
 } SUPPORTEDINTERFACES;
 
-typedef struct 	
+typedef struct
 {
-	IID	iid;	
-	WCHAR	wszName[30];	
+    IID	iid;
+    WCHAR	wszName[30];
 } TOTALINTERFACES;
 
 #endif 	//_IERROR_H_

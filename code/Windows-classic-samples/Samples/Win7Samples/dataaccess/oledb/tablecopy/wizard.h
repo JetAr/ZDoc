@@ -1,4 +1,4 @@
-//-----------------------------------------------------------------------------
+﻿//-----------------------------------------------------------------------------
 // Microsoft OLE DB TABLECOPY Sample
 // Copyright (C) 1991-2000 Microsoft Corporation
 //
@@ -25,19 +25,19 @@
 /////////////////////////////////////////////////////////////////
 enum WIZ_STEP
 {
-	WIZ_STEP1	= 0,
-	WIZ_STEP2	= 1,
-	WIZ_STEP3	= 2,
-	WIZ_STEP4	= 3,
-	WIZ_TYPES	= 4,
-	END_WIZ		= 5
+    WIZ_STEP1	= 0,
+    WIZ_STEP2	= 1,
+    WIZ_STEP3	= 2,
+    WIZ_STEP4	= 3,
+    WIZ_TYPES	= 4,
+    END_WIZ		= 5
 };
 
 struct TREEINFO
 {
-	ULONG ulIndex;
-	HTREEITEM hParent;
-	HTREEITEM hItem;
+    ULONG ulIndex;
+    HTREEITEM hParent;
+    HTREEITEM hItem;
 };
 
 
@@ -57,17 +57,17 @@ class CProgress;
 class CDialogBase
 {
 public:
-	//constructors
-	CDialogBase(HWND hWnd, HINSTANCE hInst);
-	virtual ~CDialogBase();
+    //constructors
+    CDialogBase(HWND hWnd, HINSTANCE hInst);
+    virtual ~CDialogBase();
 
-	//members
-	virtual INT_PTR Display() = 0;
-	virtual ULONG	Destroy();
+    //members
+    virtual INT_PTR Display() = 0;
+    virtual ULONG	Destroy();
 
-	//Data
-	HWND		m_hWnd;
-	HINSTANCE	m_hInst;
+    //Data
+    HWND		m_hWnd;
+    HINSTANCE	m_hInst;
 };
 
 
@@ -78,31 +78,31 @@ public:
 class CS1Dialog : public CDialogBase
 {
 public:
-	//constructors
-	CS1Dialog(HWND hWnd, HINSTANCE hInst, CTableCopy* pTableCopy);
-	virtual ~CS1Dialog();
+    //constructors
+    CS1Dialog(HWND hWnd, HINSTANCE hInst, CTableCopy* pTableCopy);
+    virtual ~CS1Dialog();
 
-	//abstract members
-	static BOOL WINAPI DlgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
-	virtual INT_PTR Display();
+    //abstract members
+    static BOOL WINAPI DlgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+    virtual INT_PTR Display();
 
-	//members
-	virtual BOOL InitControls();
-	virtual BOOL RefreshControls();
+    //members
+    virtual BOOL InitControls();
+    virtual BOOL RefreshControls();
 
-	virtual BOOL ResetTableList(HWND hWndTable, HWND hWndCol);
-	virtual BOOL ChangeTableName(LONG iIndex);
+    virtual BOOL ResetTableList(HWND hWndTable, HWND hWndCol);
+    virtual BOOL ChangeTableName(LONG iIndex);
 
-	virtual BOOL ResetColInfo(HWND hWndCol);
-	virtual BOOL GetTableColInfo(HWND hWndCol);
-	virtual BOOL CreateTableNode(TREEINFO* rgTreeInfo, ULONG ulNameOffset, LONG iParam = 0, LONG iImage = 0, LONG iSelectedImage = 0);
+    virtual BOOL ResetColInfo(HWND hWndCol);
+    virtual BOOL GetTableColInfo(HWND hWndCol);
+    virtual BOOL CreateTableNode(TREEINFO* rgTreeInfo, ULONG ulNameOffset, LONG iParam = 0, LONG iImage = 0, LONG iSelectedImage = 0);
 
-	//Data
-	CTableCopy* m_pCTableCopy;
-	BOOL		m_fEditing;
+    //Data
+    CTableCopy* m_pCTableCopy;
+    BOOL		m_fEditing;
 
-	ULONG		m_cTables;
-	TABLEINFO*	m_rgTableInfo;
+    ULONG		m_cTables;
+    TABLEINFO*	m_rgTableInfo;
 };
 
 
@@ -113,25 +113,25 @@ public:
 class CS2Dialog : public CDialogBase
 {
 public:
-	//constructors
-	CS2Dialog(HWND hWnd, HINSTANCE hInst, CTableCopy* pTableCopy);
-	virtual ~CS2Dialog();
+    //constructors
+    CS2Dialog(HWND hWnd, HINSTANCE hInst, CTableCopy* pTableCopy);
+    virtual ~CS2Dialog();
 
-	//abstract members
-	static BOOL WINAPI DlgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
-	virtual INT_PTR Display();
+    //abstract members
+    static BOOL WINAPI DlgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+    virtual INT_PTR Display();
 
-	//members
-	virtual BOOL InitControls();
-	virtual BOOL RefreshControls();
+    //members
+    virtual BOOL InitControls();
+    virtual BOOL RefreshControls();
 
-	virtual BOOL GetPrimaryKeys();
+    virtual BOOL GetPrimaryKeys();
 
-	virtual BOOL ResetIndexList(HWND hWnd);
-	virtual BOOL RecordSelectedIndexes(HWND hWnd);
+    virtual BOOL ResetIndexList(HWND hWnd);
+    virtual BOOL RecordSelectedIndexes(HWND hWnd);
 
-	//Data
-	CTableCopy* m_pCTableCopy;
+    //Data
+    CTableCopy* m_pCTableCopy;
 };
 
 
@@ -143,23 +143,23 @@ public:
 class CS3Dialog : public CDialogBase
 {
 public:
-	//constructors
-	CS3Dialog(HWND hWnd, HINSTANCE hInst, CTableCopy* pTableCopy);
-	virtual ~CS3Dialog();
+    //constructors
+    CS3Dialog(HWND hWnd, HINSTANCE hInst, CTableCopy* pTableCopy);
+    virtual ~CS3Dialog();
 
-	//abstract members
-	static BOOL WINAPI DlgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
-	virtual INT_PTR Display();
+    //abstract members
+    static BOOL WINAPI DlgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+    virtual INT_PTR Display();
 
-	//members
-	virtual BOOL InitControls();
-	virtual BOOL RefreshControls();
+    //members
+    virtual BOOL InitControls();
+    virtual BOOL RefreshControls();
 
-	virtual BOOL Connect(CDataSource* pCDataSource = NULL);
-	virtual BOOL EnableTable();
+    virtual BOOL Connect(CDataSource* pCDataSource = NULL);
+    virtual BOOL EnableTable();
 
-	//Data
-	CTableCopy* m_pCTableCopy;
+    //Data
+    CTableCopy* m_pCTableCopy;
 };
 
 
@@ -170,20 +170,20 @@ public:
 class CS4Dialog : public CDialogBase
 {
 public:
-	//constructors
-	CS4Dialog(HWND hWnd, HINSTANCE hInst, CTableCopy* pTableCopy);
-	virtual ~CS4Dialog();
+    //constructors
+    CS4Dialog(HWND hWnd, HINSTANCE hInst, CTableCopy* pTableCopy);
+    virtual ~CS4Dialog();
 
-	//abstract members
-	static BOOL WINAPI DlgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
-	virtual INT_PTR Display();
-	
-	//members
-	virtual BOOL InitControls();
-	virtual BOOL RefreshControls();
+    //abstract members
+    static BOOL WINAPI DlgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+    virtual INT_PTR Display();
 
-	//Data
-	CTableCopy* m_pCTableCopy;
+    //members
+    virtual BOOL InitControls();
+    virtual BOOL RefreshControls();
+
+    //Data
+    CTableCopy* m_pCTableCopy;
 };
 
 
@@ -194,22 +194,22 @@ public:
 class CTypesDialog : public CDialogBase
 {
 public:
-	//constructors
-	CTypesDialog(HWND hWnd, HINSTANCE hInst, CTableCopy* pTableCopy);
-	virtual ~CTypesDialog();
+    //constructors
+    CTypesDialog(HWND hWnd, HINSTANCE hInst, CTableCopy* pTableCopy);
+    virtual ~CTypesDialog();
 
-	//abstract members
-	static BOOL WINAPI DlgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
-	virtual INT_PTR Display();
+    //abstract members
+    static BOOL WINAPI DlgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+    virtual INT_PTR Display();
 
-	//members
-	virtual BOOL InitControls();
-	virtual BOOL RefreshControls();
-	
-	virtual BOOL ResetTypeLists();
+    //members
+    virtual BOOL InitControls();
+    virtual BOOL RefreshControls();
 
-	//Data
-	CTableCopy* m_pCTableCopy;
+    virtual BOOL ResetTypeLists();
+
+    //Data
+    CTableCopy* m_pCTableCopy;
 };
 
 
@@ -220,21 +220,21 @@ public:
 class CWizard : public CDialogBase
 {
 public:
-	//Constructors
-	CWizard(HWND hWnd, HINSTANCE hInst);
-	virtual ~CWizard();
+    //Constructors
+    CWizard(HWND hWnd, HINSTANCE hInst);
+    virtual ~CWizard();
 
-	//Members
-	virtual INT_PTR Display();
-	virtual INT_PTR	DisplayStep(ULONG iStep);
-	virtual ULONG	DestroyPrevStep(ULONG iCurStep);
+    //Members
+    virtual INT_PTR Display();
+    virtual INT_PTR	DisplayStep(ULONG iStep);
+    virtual ULONG	DestroyPrevStep(ULONG iCurStep);
 
-	//Data
-	CTableCopy*	m_pCTableCopy;
-	CProgress*  m_pCProgress;
+    //Data
+    CTableCopy*	m_pCTableCopy;
+    CProgress*  m_pCProgress;
 
-	ULONG		m_iPrevStep;
-	CDialogBase*	m_rgDialogSteps[END_WIZ];
+    ULONG		m_iPrevStep;
+    CDialogBase*	m_rgDialogSteps[END_WIZ];
 };
 
 

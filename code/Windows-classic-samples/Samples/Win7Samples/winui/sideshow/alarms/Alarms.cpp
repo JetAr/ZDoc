@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -28,34 +28,34 @@ INT_PTR CALLBACK AlarmDlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM /*lPara
     switch(msg)
     {
     case WM_INITDIALOG:
-        {
-            bResult = TRUE;
-        }
-        break;
+    {
+        bResult = TRUE;
+    }
+    break;
 
     case WM_COMMAND:
         switch (LOWORD(wParam))
         {
         case IDCANCEL:
-            {
-                EndDialog(hDlg, 0);
-                PostQuitMessage(0);
-                bResult = TRUE;
-            }
-            break;
+        {
+            EndDialog(hDlg, 0);
+            PostQuitMessage(0);
+            bResult = TRUE;
+        }
+        break;
 
         case IDC_BUTTON_SETALARM:
+        {
+            HWND hWndTime = GetDlgItem(hDlg, IDC_DATETIMEPICKER_ALARM);
+            SYSTEMTIME alarmTime;
+            SendMessage(hWndTime, DTM_GETSYSTEMTIME, 0, (LPARAM)&alarmTime);
+            if (g_pAlarmClient != NULL)
             {
-                HWND hWndTime = GetDlgItem(hDlg, IDC_DATETIMEPICKER_ALARM);
-                SYSTEMTIME alarmTime;
-                SendMessage(hWndTime, DTM_GETSYSTEMTIME, 0, (LPARAM)&alarmTime);
-                if (g_pAlarmClient != NULL)
-                {
-                    g_pAlarmClient->SetAlarm(&alarmTime);
-                }
-                bResult = TRUE;
+                g_pAlarmClient->SetAlarm(&alarmTime);
             }
-            break;
+            bResult = TRUE;
+        }
+        break;
         }
         break;
     }
@@ -65,7 +65,7 @@ INT_PTR CALLBACK AlarmDlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM /*lPara
 
 
 int __stdcall WinMain(
-    HINSTANCE hInstance, 
+    HINSTANCE hInstance,
     HINSTANCE /*hPrevInstance*/,
     LPSTR     /*lpCmdLine*/,
     int       /*nCmdShow*/)
@@ -85,13 +85,13 @@ int __stdcall WinMain(
         //new failed, so abort the application.
         return ERROR_OUTOFMEMORY;
     }
-    
+
     //
     // Register this client application with the Windows SideShow
     // platform
     //
     g_pAlarmClient->Register();
-    
+
     //
     // Add content to the display
     //
@@ -101,8 +101,8 @@ int __stdcall WinMain(
     // Show the Alarms dialog
     //
     hDlg = ::CreateDialog(hInstance,
-                          MAKEINTRESOURCE(IDD_DIALOG_ALARM), 
-                          NULL, 
+                          MAKEINTRESOURCE(IDD_DIALOG_ALARM),
+                          NULL,
                           &AlarmDlgProc);
 
     if (NULL != hDlg)
@@ -137,9 +137,9 @@ int __stdcall WinMain(
     //
     g_pAlarmClient->Unregister();
 
-    // 
+    //
     // free g_pAlarmClient
-    // 
+    //
     delete g_pAlarmClient;
 
     //

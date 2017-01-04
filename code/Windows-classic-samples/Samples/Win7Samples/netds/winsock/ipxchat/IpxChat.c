@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -19,11 +19,11 @@
 //    MsgRefreshdisplay - Refills Inbox edit control text contents
 //    MsgDisconnected   - Cleans up connection killed by other side
 //    MsgCommand        - Handle the WM_COMMAND messages for the main window.
-//    MsgDestroy        - Handles the WM_DESTROY message by calling 
+//    MsgDestroy        - Handles the WM_DESTROY message by calling
 //                        PostQuitMessage().
 //    CmdOutbox         - Handles messages from Outbox edit control.
 //    CmdDisconnected   - Disconnects current connection
-//    CmdExit           - Handles the file exit command by calling destroy 
+//    CmdExit           - Handles the file exit command by calling destroy
 //                        window on the main window.
 //
 //  COMMENTS:
@@ -98,9 +98,9 @@ CMDI cmdiMain =
 //    information (msdiMain) and the message specific information.
 //
 
-LRESULT CALLBACK WndProc(HWND   hwnd, 
-                         UINT   uMessage, 
-                         WPARAM wparam, 
+LRESULT CALLBACK WndProc(HWND   hwnd,
+                         UINT   uMessage,
+                         WPARAM wparam,
                          LPARAM lparam)
 {
     return DispMessage(&msdiMain, hwnd, uMessage, wparam, lparam);
@@ -137,25 +137,25 @@ LRESULT MsgCreate(HWND hwnd, UINT uMessage, WPARAM wparam, LPARAM lparam)
 
     // Create Edit control for typing to be sent to server
     if (NULL == (hOutWnd = CreateWindow("EDIT",
-                           NULL,
-                           WS_BORDER | WS_CHILD | WS_VISIBLE | WS_VSCROLL | ES_LEFT | 
-                           ES_MULTILINE | ES_AUTOVSCROLL,
-                           0,0,0,0,
-                           hwnd,
-                           (HMENU) ID_OUTBOX,
-                           (HINSTANCE) GetWindowLongPtr(hwnd, GWLP_HINSTANCE),
-                           NULL)))
+                                        NULL,
+                                        WS_BORDER | WS_CHILD | WS_VISIBLE | WS_VSCROLL | ES_LEFT |
+                                        ES_MULTILINE | ES_AUTOVSCROLL,
+                                        0,0,0,0,
+                                        hwnd,
+                                        (HMENU) ID_OUTBOX,
+                                        (HINSTANCE) GetWindowLongPtr(hwnd, GWLP_HINSTANCE),
+                                        NULL)))
         return FALSE;
     // Create Edit control for typing to be received from server
     if (NULL == (hInWnd = CreateWindow("EDIT",
-                          NULL,
-                          WS_BORDER | WS_CHILD | WS_VISIBLE | WS_VSCROLL | ES_LEFT | 
-                          ES_MULTILINE | ES_AUTOVSCROLL,
-                          0,0,0,0,
-                          hwnd,
-                          (HMENU) ID_INBOX,
-                          (HINSTANCE) GetWindowLongPtr(hwnd, GWLP_HINSTANCE),
-                          NULL)))
+                                       NULL,
+                                       WS_BORDER | WS_CHILD | WS_VISIBLE | WS_VSCROLL | ES_LEFT |
+                                       ES_MULTILINE | ES_AUTOVSCROLL,
+                                       0,0,0,0,
+                                       hwnd,
+                                       (HMENU) ID_INBOX,
+                                       (HINSTANCE) GetWindowLongPtr(hwnd, GWLP_HINSTANCE),
+                                       NULL)))
         return FALSE;
 
     return TRUE;
@@ -189,18 +189,18 @@ LRESULT MsgSize(HWND hwnd, UINT uMessage, WPARAM wparam, LPARAM lparam)
     hwnd;
     // Size OutBox Edit Control
     if (FALSE == MoveWindow(hOutWnd,
-               1,1,                    // Upper Left Corner
-               LOWORD(lparam) - 2,         // Width of Parent Window
-               (HIWORD(lparam) / 2) - 2 ,     // Half the height of Parent
-               TRUE))                  // repaint
+                            1,1,                    // Upper Left Corner
+                            LOWORD(lparam) - 2,         // Width of Parent Window
+                            (HIWORD(lparam) / 2) - 2,      // Half the height of Parent
+                            TRUE))                  // repaint
         return FALSE;
 
     // Size Inbox Edit Control
     if(FALSE == MoveWindow(hInWnd,
-               1, (HIWORD(lparam) / 2) + 1,  // Half Way down right side
-               LOWORD(lparam) - 2,         // Width of Parent Window
-               (HIWORD(lparam) / 2) - 2,      // Half the height of Parent
-               TRUE))                  // repaint
+                           1, (HIWORD(lparam) / 2) + 1,  // Half Way down right side
+                           LOWORD(lparam) - 2,         // Width of Parent Window
+                           (HIWORD(lparam) / 2) - 2,      // Half the height of Parent
+                           TRUE))                  // repaint
         return FALSE;
 
     return TRUE;
@@ -301,7 +301,7 @@ LRESULT MsgRefreshdisplay(HWND hwnd, UINT uMessage, WPARAM wparam, LPARAM lparam
     // Don't bother displaying if there is already another update queued
     if(PeekMessage(&peekmsg, hwnd, MW_DATAREADY, MW_DISPLAYREFRESH, PM_NOREMOVE))
     {
-       return TRUE;                          
+        return TRUE;
     }
     // Put data in szRcvBuf in InBox
     SendDlgItemMessage(hwnd,
@@ -532,11 +532,11 @@ LRESULT CmdDisconnect(HWND hwnd, WORD wCommand, WORD wNotify, HWND hwndCtrl)
 
 LRESULT CmdExit(HWND hwnd, WORD wCommand, WORD wNotify, HWND hwndCtrl)
 {
-    
+
     hwndCtrl;
     wNotify;
     wCommand;
-    
+
     if(FALSE == DestroyWindow(hwnd))
         return 1;
 

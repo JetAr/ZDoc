@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -37,19 +37,19 @@ SampleDeleteUserMetaData(
         status = ERROR_INVALID_PARAMETER;
         goto Cleanup;
     }
-    
+
     //
     // Specify UNKNOWN for both device and vendor so the system will use the
     // file extension to determine the correct VHD format.
     //
-    
+
     storageType.DeviceId = VIRTUAL_STORAGE_TYPE_DEVICE_UNKNOWN;
     storageType.VendorId = VIRTUAL_STORAGE_TYPE_VENDOR_UNKNOWN;
 
     //
     // Only V2 handles can be used to query/set/delete user metadata.
     //
-    
+
     memset(&openParameters, 0, sizeof(openParameters));
     openParameters.Version = OPEN_VIRTUAL_DISK_VERSION_2;
 
@@ -59,20 +59,20 @@ SampleDeleteUserMetaData(
     // VIRTUAL_DISK_ACCESS_NONE is the only acceptable access mask for V2 handle opens.
     // OPEN_VIRTUAL_DISK_FLAG_NO_PARENTS indicates the parent chain should not be opened.
     //
-    
+
     status = OpenVirtualDisk(
-        &storageType,
-        VHDPath,
-        VIRTUAL_DISK_ACCESS_NONE,
-        OPEN_VIRTUAL_DISK_FLAG_NO_PARENTS,
-        &openParameters,
-        &vhdHandle);
-    
+                 &storageType,
+                 VHDPath,
+                 VIRTUAL_DISK_ACCESS_NONE,
+                 OPEN_VIRTUAL_DISK_FLAG_NO_PARENTS,
+                 &openParameters,
+                 &vhdHandle);
+
     if (status != ERROR_SUCCESS)
     {
         goto Cleanup;
     }
-   
+
     //
     // Use the same GUID specified in SampleSetUserMetaData.  This GUID is arbitray and any
     // GUID can be utilized.
@@ -102,11 +102,11 @@ Cleanup:
     {
         wprintf(L"error = %u\n", status);
     }
-    
+
     if (vhdHandle != INVALID_HANDLE_VALUE)
     {
         CloseHandle(vhdHandle);
     }
 
     return status;
- }
+}

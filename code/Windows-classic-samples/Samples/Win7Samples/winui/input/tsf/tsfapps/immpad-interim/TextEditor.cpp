@@ -1,4 +1,4 @@
-
+﻿
 #include "private.h"
 #include "TextEditor.h"
 
@@ -35,7 +35,7 @@ void CTextEditor::MoveSelectionNext()
 {
     UINT nTextLength = GetTextLength();
     if (_nSelEnd < nTextLength)
-       _nSelEnd++;
+        _nSelEnd++;
 
     _nSelStart = _nSelEnd;
 
@@ -294,7 +294,7 @@ BOOL CTextEditor::InsertResultAtComposition(LPCWSTR psz)
     _nCompEnd = _nSelEnd;
 
     ClearAttrAndClauseInfo();
- 
+
     return TRUE;
 }
 
@@ -399,8 +399,8 @@ void CTextEditor::SetCandidateForm()
         cf.dwStyle = CFS_EXCLUDE;
 
         if (_layout.RectFromCharPos(_nCompStart, &rcStart) &&
-            _layout.RectFromCharPos(_nCompEnd, &rcEnd) &&
-            _layout.RectFromCharPos(_nSelEnd, &rc))
+                _layout.RectFromCharPos(_nCompEnd, &rcEnd) &&
+                _layout.RectFromCharPos(_nSelEnd, &rc))
         {
             cf.ptCurrentPos.x = rc.left;
             cf.ptCurrentPos.y = rc.bottom - 1;
@@ -639,7 +639,7 @@ WPARAM CTextEditor::PointToMouseWPARAM(POINT pt)
     {
         return 0;
     }
-    
+
     int nPos = (pt.x - rc.left) * 4 / (rc.right - rc.left) + 2;
     return (WPARAM)(((nSel - _nCompStart + (nPos / 4)) << 16) + ((nPos % 4) << 8));
 }

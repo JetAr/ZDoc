@@ -1,24 +1,24 @@
-//+---------------------------------------------------------------------------
+﻿//+---------------------------------------------------------------------------
 //
-//  Copyright (c) Microsoft Corporation. All rights reserved. 
+//  Copyright (c) Microsoft Corporation. All rights reserved.
 //
 //
 //  BITS Upload sample
 //  ==================
 //
-//  Module name: 
+//  Module name:
 //  cmonitor.cpp
 //
 //  Purpose:
-//  This module implements the CMonitor class, which is 
+//  This module implements the CMonitor class, which is
 //  used in the sample to respond to job callbacks.
-// 
+//
 //  Take special note of the CMonitor::JobTransferred() method. It executes
 //  the important step of calling Job->Complete(), which causes the file
-//  upload to be effectively completed. 
-//  
+//  upload to be effectively completed.
+//
 //  Also note the treatment of Upload-reply jobs. If the job was created
-//  with the type BG_JOB_TYPE_UPLOAD_REPLY, then additional processing is 
+//  with the type BG_JOB_TYPE_UPLOAD_REPLY, then additional processing is
 //  needed to actually read the reply and do something with it.
 //  For the client to see upload replies, the IIS virtual directory
 //  needs to be configured to process notifications, and the processing
@@ -43,10 +43,10 @@
 
 
 //----------------------------------------------------------------------------
-// CMonitor's IUnknown methods 
+// CMonitor's IUnknown methods
 //----------------------------------------------------------------------------
 
-HRESULT CMonitor::QueryInterface(REFIID riid, LPVOID* ppvObj) 
+HRESULT CMonitor::QueryInterface(REFIID riid, LPVOID* ppvObj)
 {
     if (riid == __uuidof(IUnknown) || riid == __uuidof(IBackgroundCopyCallback))
     {
@@ -62,15 +62,15 @@ HRESULT CMonitor::QueryInterface(REFIID riid, LPVOID* ppvObj)
     return NOERROR;
 }
 
-ULONG CMonitor::AddRef() 
+ULONG CMonitor::AddRef()
 {
     if (m_lRefCount == 0) // first time this function is called
     {
-        g_hSafeToExitEvent = CreateEvent( 
-             NULL,   // default security attributes
-             FALSE,  // auto-reset event object
-             FALSE,  // initial state is nonsignaled
-             NULL);  // unnamed object
+        g_hSafeToExitEvent = CreateEvent(
+                                 NULL,   // default security attributes
+                                 FALSE,  // auto-reset event object
+                                 FALSE,  // initial state is nonsignaled
+                                 NULL);  // unnamed object
 
         // in case of failure just act as we didn't create the event
         if (!g_hSafeToExitEvent)
@@ -82,7 +82,7 @@ ULONG CMonitor::AddRef()
     return InterlockedIncrement(&m_lRefCount);
 }
 
-ULONG CMonitor::Release() 
+ULONG CMonitor::Release()
 {
     ULONG ulCount = InterlockedDecrement(&m_lRefCount);
 
@@ -130,7 +130,7 @@ HRESULT CMonitor::JobTransferred(IBackgroundCopyJob* pJob)
     hr = pJob->Complete();
     if (FAILED(hr))
     {
-        // BITS probably was unable to rename one or more of the 
+        // BITS probably was unable to rename one or more of the
         // temporary files. We won't do anything about this
         goto cleanup;
     }
@@ -201,15 +201,15 @@ HRESULT CMonitor::JobError(IBackgroundCopyJob* pJob, IBackgroundCopyError* pErro
     hr = pJob->Cancel();
 
     g_pDialog->AddStatusMessage(L"Notification received (BG_NOTIFY_JOB_ERROR). (Job ID %s)\r\n"
-        L"   Error context: %s"
-        L"   Error id: Ox%X\r\n"
-        L"   Error description: %s"
-        L"   This error is not recoverable and the job will be cancelled.",
-        ConvertGuidToString(guid),
-        pwszContextDescription,
-        hrErrorId,
-        pwszErrorDescription
-    );
+                                L"   Error context: %s"
+                                L"   Error id: Ox%X\r\n"
+                                L"   Error description: %s"
+                                L"   This error is not recoverable and the job will be cancelled.",
+                                ConvertGuidToString(guid),
+                                pwszContextDescription,
+                                hrErrorId,
+                                pwszErrorDescription
+                               );
     g_pDialog->AddStatusMessage(L"END OF UPLOAD PROCESS -- FAILED");
 
 cleanup:
@@ -236,7 +236,7 @@ HRESULT CMonitor::JobModification(IBackgroundCopyJob* pJob, DWORD dwReserved)
     WCHAR        *pwszContextDescription =    NULL;
     HRESULT hrErrorId;
     BG_ERROR_CONTEXT Context;
-    
+
     hr = pJob->GetState(&State);
     if (FAILED(hr))
     {
@@ -279,15 +279,15 @@ HRESULT CMonitor::JobModification(IBackgroundCopyJob* pJob, DWORD dwReserved)
         }
 
         g_pDialog->AddStatusMessage(L"Job entered a transient error state. (Job ID %s)\r\n"
-            L"   Error context: %s"
-            L"   Error id: 0x%X\r\n"
-            L"   Error description: %s"
-            L"   BITS will retry to upload the file.",
-            ConvertGuidToString(guid),
-            pwszContextDescription,
-            hrErrorId,
-            pwszErrorDescription
-        );
+                                    L"   Error context: %s"
+                                    L"   Error id: 0x%X\r\n"
+                                    L"   Error description: %s"
+                                    L"   BITS will retry to upload the file.",
+                                    ConvertGuidToString(guid),
+                                    pwszContextDescription,
+                                    hrErrorId,
+                                    pwszErrorDescription
+                                   );
     }
 
 cleanup:
@@ -314,7 +314,7 @@ HRESULT CMonitor::ProcessReply(IBackgroundCopyJob* pJob)
 
     //
     // Initialize our Job2 smart object. Note the use of the & operator
-    // 
+    //
     hr = pJob->QueryInterface(__uuidof(IBackgroundCopyJob2), (void**)&Job2);
     if (FAILED(hr))
     {
@@ -333,7 +333,7 @@ HRESULT CMonitor::ProcessReply(IBackgroundCopyJob* pJob)
         // check if we got the reply data.
         // As we are expecting to receive a Unicode file as a reply, check that at least
         // 2 bytes were received. 2 bytes is the size of the unicode prologue
-        if (pReply && (ReplySize > 2))   
+        if (pReply && (ReplySize > 2))
         {
             // allocate a buffer to copy the data
             // we need to do this because we need to add a \0 at the end of the

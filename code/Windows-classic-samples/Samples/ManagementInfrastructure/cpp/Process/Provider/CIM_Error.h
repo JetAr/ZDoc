@@ -1,4 +1,4 @@
-//
+﻿//
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -104,7 +104,7 @@ MI_INLINE MI_Result MI_CALL CIM_Error_Construct(
     _In_ MI_Context* context)
 {
     return MI_Context_ConstructInstance(context, &CIM_Error_rtti,
-        (MI_Instance*)&self->__instance);
+                                        (MI_Instance*)&self->__instance);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_Error_Clone(
@@ -112,7 +112,7 @@ MI_INLINE MI_Result MI_CALL CIM_Error_Clone(
     _Outptr_ CIM_Error** newInstance)
 {
     return MI_Instance_Clone(
-        &self->__instance, (MI_Instance**)newInstance);
+               &self->__instance, (MI_Instance**)newInstance);
 }
 
 MI_INLINE MI_Boolean MI_CALL CIM_Error_IsA(
@@ -139,9 +139,9 @@ MI_INLINE MI_Result MI_CALL CIM_Error_Post(
     _In_z_ const MI_Char* bookmark)
 {
     return MI_Context_PostIndication(context,
-        &self->__instance,
-        subscriptionIDCount,
-        bookmark);
+                                     &self->__instance,
+                                     subscriptionIDCount,
+                                     bookmark);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_Error_Set_ErrorType(
@@ -165,11 +165,11 @@ MI_INLINE MI_Result MI_CALL CIM_Error_Set_OtherErrorType(
     _In_z_ const MI_Char* str)
 {
     return self->__instance.ft->SetElementAt(
-        (MI_Instance*)&self->__instance,
-        1,
-        (MI_Value*)&str,
-        MI_STRING,
-        0);
+               (MI_Instance*)&self->__instance,
+               1,
+               (MI_Value*)&str,
+               MI_STRING,
+               0);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_Error_SetPtr_OtherErrorType(
@@ -177,19 +177,19 @@ MI_INLINE MI_Result MI_CALL CIM_Error_SetPtr_OtherErrorType(
     _In_z_ const MI_Char* str)
 {
     return self->__instance.ft->SetElementAt(
-        (MI_Instance*)&self->__instance,
-        1,
-        (MI_Value*)&str,
-        MI_STRING,
-        MI_FLAG_BORROW);
+               (MI_Instance*)&self->__instance,
+               1,
+               (MI_Value*)&str,
+               MI_STRING,
+               MI_FLAG_BORROW);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_Error_Clear_OtherErrorType(
     _Inout_ CIM_Error* self)
 {
     return self->__instance.ft->ClearElementAt(
-        (MI_Instance*)&self->__instance,
-        1);
+               (MI_Instance*)&self->__instance,
+               1);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_Error_Set_OwningEntity(
@@ -197,11 +197,11 @@ MI_INLINE MI_Result MI_CALL CIM_Error_Set_OwningEntity(
     _In_z_ const MI_Char* str)
 {
     return self->__instance.ft->SetElementAt(
-        (MI_Instance*)&self->__instance,
-        2,
-        (MI_Value*)&str,
-        MI_STRING,
-        0);
+               (MI_Instance*)&self->__instance,
+               2,
+               (MI_Value*)&str,
+               MI_STRING,
+               0);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_Error_SetPtr_OwningEntity(
@@ -209,19 +209,19 @@ MI_INLINE MI_Result MI_CALL CIM_Error_SetPtr_OwningEntity(
     _In_z_ const MI_Char* str)
 {
     return self->__instance.ft->SetElementAt(
-        (MI_Instance*)&self->__instance,
-        2,
-        (MI_Value*)&str,
-        MI_STRING,
-        MI_FLAG_BORROW);
+               (MI_Instance*)&self->__instance,
+               2,
+               (MI_Value*)&str,
+               MI_STRING,
+               MI_FLAG_BORROW);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_Error_Clear_OwningEntity(
     _Inout_ CIM_Error* self)
 {
     return self->__instance.ft->ClearElementAt(
-        (MI_Instance*)&self->__instance,
-        2);
+               (MI_Instance*)&self->__instance,
+               2);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_Error_Set_MessageID(
@@ -229,11 +229,11 @@ MI_INLINE MI_Result MI_CALL CIM_Error_Set_MessageID(
     _In_z_ const MI_Char* str)
 {
     return self->__instance.ft->SetElementAt(
-        (MI_Instance*)&self->__instance,
-        3,
-        (MI_Value*)&str,
-        MI_STRING,
-        0);
+               (MI_Instance*)&self->__instance,
+               3,
+               (MI_Value*)&str,
+               MI_STRING,
+               0);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_Error_SetPtr_MessageID(
@@ -241,19 +241,19 @@ MI_INLINE MI_Result MI_CALL CIM_Error_SetPtr_MessageID(
     _In_z_ const MI_Char* str)
 {
     return self->__instance.ft->SetElementAt(
-        (MI_Instance*)&self->__instance,
-        3,
-        (MI_Value*)&str,
-        MI_STRING,
-        MI_FLAG_BORROW);
+               (MI_Instance*)&self->__instance,
+               3,
+               (MI_Value*)&str,
+               MI_STRING,
+               MI_FLAG_BORROW);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_Error_Clear_MessageID(
     _Inout_ CIM_Error* self)
 {
     return self->__instance.ft->ClearElementAt(
-        (MI_Instance*)&self->__instance,
-        3);
+               (MI_Instance*)&self->__instance,
+               3);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_Error_Set_Message(
@@ -261,11 +261,11 @@ MI_INLINE MI_Result MI_CALL CIM_Error_Set_Message(
     _In_z_ const MI_Char* str)
 {
     return self->__instance.ft->SetElementAt(
-        (MI_Instance*)&self->__instance,
-        4,
-        (MI_Value*)&str,
-        MI_STRING,
-        0);
+               (MI_Instance*)&self->__instance,
+               4,
+               (MI_Value*)&str,
+               MI_STRING,
+               0);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_Error_SetPtr_Message(
@@ -273,19 +273,19 @@ MI_INLINE MI_Result MI_CALL CIM_Error_SetPtr_Message(
     _In_z_ const MI_Char* str)
 {
     return self->__instance.ft->SetElementAt(
-        (MI_Instance*)&self->__instance,
-        4,
-        (MI_Value*)&str,
-        MI_STRING,
-        MI_FLAG_BORROW);
+               (MI_Instance*)&self->__instance,
+               4,
+               (MI_Value*)&str,
+               MI_STRING,
+               MI_FLAG_BORROW);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_Error_Clear_Message(
     _Inout_ CIM_Error* self)
 {
     return self->__instance.ft->ClearElementAt(
-        (MI_Instance*)&self->__instance,
-        4);
+               (MI_Instance*)&self->__instance,
+               4);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_Error_Set_MessageArguments(
@@ -297,11 +297,11 @@ MI_INLINE MI_Result MI_CALL CIM_Error_Set_MessageArguments(
     arr.data = (void*)data;
     arr.size = size;
     return self->__instance.ft->SetElementAt(
-        (MI_Instance*)&self->__instance,
-        5,
-        (MI_Value*)&arr,
-        MI_STRINGA,
-        0);
+               (MI_Instance*)&self->__instance,
+               5,
+               (MI_Value*)&arr,
+               MI_STRINGA,
+               0);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_Error_SetPtr_MessageArguments(
@@ -313,19 +313,19 @@ MI_INLINE MI_Result MI_CALL CIM_Error_SetPtr_MessageArguments(
     arr.data = (void*)data;
     arr.size = size;
     return self->__instance.ft->SetElementAt(
-        (MI_Instance*)&self->__instance,
-        5,
-        (MI_Value*)&arr,
-        MI_STRINGA,
-        MI_FLAG_BORROW);
+               (MI_Instance*)&self->__instance,
+               5,
+               (MI_Value*)&arr,
+               MI_STRINGA,
+               MI_FLAG_BORROW);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_Error_Clear_MessageArguments(
     _Inout_ CIM_Error* self)
 {
     return self->__instance.ft->ClearElementAt(
-        (MI_Instance*)&self->__instance,
-        5);
+               (MI_Instance*)&self->__instance,
+               5);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_Error_Set_PerceivedSeverity(
@@ -365,11 +365,11 @@ MI_INLINE MI_Result MI_CALL CIM_Error_Set_ProbableCauseDescription(
     _In_z_ const MI_Char* str)
 {
     return self->__instance.ft->SetElementAt(
-        (MI_Instance*)&self->__instance,
-        8,
-        (MI_Value*)&str,
-        MI_STRING,
-        0);
+               (MI_Instance*)&self->__instance,
+               8,
+               (MI_Value*)&str,
+               MI_STRING,
+               0);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_Error_SetPtr_ProbableCauseDescription(
@@ -377,19 +377,19 @@ MI_INLINE MI_Result MI_CALL CIM_Error_SetPtr_ProbableCauseDescription(
     _In_z_ const MI_Char* str)
 {
     return self->__instance.ft->SetElementAt(
-        (MI_Instance*)&self->__instance,
-        8,
-        (MI_Value*)&str,
-        MI_STRING,
-        MI_FLAG_BORROW);
+               (MI_Instance*)&self->__instance,
+               8,
+               (MI_Value*)&str,
+               MI_STRING,
+               MI_FLAG_BORROW);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_Error_Clear_ProbableCauseDescription(
     _Inout_ CIM_Error* self)
 {
     return self->__instance.ft->ClearElementAt(
-        (MI_Instance*)&self->__instance,
-        8);
+               (MI_Instance*)&self->__instance,
+               8);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_Error_Set_RecommendedActions(
@@ -401,11 +401,11 @@ MI_INLINE MI_Result MI_CALL CIM_Error_Set_RecommendedActions(
     arr.data = (void*)data;
     arr.size = size;
     return self->__instance.ft->SetElementAt(
-        (MI_Instance*)&self->__instance,
-        9,
-        (MI_Value*)&arr,
-        MI_STRINGA,
-        0);
+               (MI_Instance*)&self->__instance,
+               9,
+               (MI_Value*)&arr,
+               MI_STRINGA,
+               0);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_Error_SetPtr_RecommendedActions(
@@ -417,19 +417,19 @@ MI_INLINE MI_Result MI_CALL CIM_Error_SetPtr_RecommendedActions(
     arr.data = (void*)data;
     arr.size = size;
     return self->__instance.ft->SetElementAt(
-        (MI_Instance*)&self->__instance,
-        9,
-        (MI_Value*)&arr,
-        MI_STRINGA,
-        MI_FLAG_BORROW);
+               (MI_Instance*)&self->__instance,
+               9,
+               (MI_Value*)&arr,
+               MI_STRINGA,
+               MI_FLAG_BORROW);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_Error_Clear_RecommendedActions(
     _Inout_ CIM_Error* self)
 {
     return self->__instance.ft->ClearElementAt(
-        (MI_Instance*)&self->__instance,
-        9);
+               (MI_Instance*)&self->__instance,
+               9);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_Error_Set_ErrorSource(
@@ -437,11 +437,11 @@ MI_INLINE MI_Result MI_CALL CIM_Error_Set_ErrorSource(
     _In_z_ const MI_Char* str)
 {
     return self->__instance.ft->SetElementAt(
-        (MI_Instance*)&self->__instance,
-        10,
-        (MI_Value*)&str,
-        MI_STRING,
-        0);
+               (MI_Instance*)&self->__instance,
+               10,
+               (MI_Value*)&str,
+               MI_STRING,
+               0);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_Error_SetPtr_ErrorSource(
@@ -449,19 +449,19 @@ MI_INLINE MI_Result MI_CALL CIM_Error_SetPtr_ErrorSource(
     _In_z_ const MI_Char* str)
 {
     return self->__instance.ft->SetElementAt(
-        (MI_Instance*)&self->__instance,
-        10,
-        (MI_Value*)&str,
-        MI_STRING,
-        MI_FLAG_BORROW);
+               (MI_Instance*)&self->__instance,
+               10,
+               (MI_Value*)&str,
+               MI_STRING,
+               MI_FLAG_BORROW);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_Error_Clear_ErrorSource(
     _Inout_ CIM_Error* self)
 {
     return self->__instance.ft->ClearElementAt(
-        (MI_Instance*)&self->__instance,
-        10);
+               (MI_Instance*)&self->__instance,
+               10);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_Error_Set_ErrorSourceFormat(
@@ -485,11 +485,11 @@ MI_INLINE MI_Result MI_CALL CIM_Error_Set_OtherErrorSourceFormat(
     _In_z_ const MI_Char* str)
 {
     return self->__instance.ft->SetElementAt(
-        (MI_Instance*)&self->__instance,
-        12,
-        (MI_Value*)&str,
-        MI_STRING,
-        0);
+               (MI_Instance*)&self->__instance,
+               12,
+               (MI_Value*)&str,
+               MI_STRING,
+               0);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_Error_SetPtr_OtherErrorSourceFormat(
@@ -497,19 +497,19 @@ MI_INLINE MI_Result MI_CALL CIM_Error_SetPtr_OtherErrorSourceFormat(
     _In_z_ const MI_Char* str)
 {
     return self->__instance.ft->SetElementAt(
-        (MI_Instance*)&self->__instance,
-        12,
-        (MI_Value*)&str,
-        MI_STRING,
-        MI_FLAG_BORROW);
+               (MI_Instance*)&self->__instance,
+               12,
+               (MI_Value*)&str,
+               MI_STRING,
+               MI_FLAG_BORROW);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_Error_Clear_OtherErrorSourceFormat(
     _Inout_ CIM_Error* self)
 {
     return self->__instance.ft->ClearElementAt(
-        (MI_Instance*)&self->__instance,
-        12);
+               (MI_Instance*)&self->__instance,
+               12);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_Error_Set_CIMStatusCode(
@@ -533,11 +533,11 @@ MI_INLINE MI_Result MI_CALL CIM_Error_Set_CIMStatusCodeDescription(
     _In_z_ const MI_Char* str)
 {
     return self->__instance.ft->SetElementAt(
-        (MI_Instance*)&self->__instance,
-        14,
-        (MI_Value*)&str,
-        MI_STRING,
-        0);
+               (MI_Instance*)&self->__instance,
+               14,
+               (MI_Value*)&str,
+               MI_STRING,
+               0);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_Error_SetPtr_CIMStatusCodeDescription(
@@ -545,19 +545,19 @@ MI_INLINE MI_Result MI_CALL CIM_Error_SetPtr_CIMStatusCodeDescription(
     _In_z_ const MI_Char* str)
 {
     return self->__instance.ft->SetElementAt(
-        (MI_Instance*)&self->__instance,
-        14,
-        (MI_Value*)&str,
-        MI_STRING,
-        MI_FLAG_BORROW);
+               (MI_Instance*)&self->__instance,
+               14,
+               (MI_Value*)&str,
+               MI_STRING,
+               MI_FLAG_BORROW);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_Error_Clear_CIMStatusCodeDescription(
     _Inout_ CIM_Error* self)
 {
     return self->__instance.ft->ClearElementAt(
-        (MI_Instance*)&self->__instance,
-        14);
+               (MI_Instance*)&self->__instance,
+               14);
 }
 
 

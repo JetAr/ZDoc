@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -12,71 +12,71 @@ void DisplayVarType(
 {
     switch(vartype)
     {
-        case VT_BOOL:
-            printf("VT_BOOL");
-            break;
-        case VT_UI4:
-            printf("VT_UI4");
-            break;
-        case VT_R4:
-            printf("VT_R4");
-            break;
-        case VT_UI8:
-            printf("VT_UI8");
-            break;
-        case VT_UI1|VT_VECTOR:
-            printf("VT_UI1|VT_VECTOR");
-            break;
-        case VT_DATE:
-            printf("VT_DATE");
-            break;
-        case VT_FILETIME:
-            printf("VT_FILETIME");
-            break;
-        case VT_LPWSTR:
-            printf("VT_LPWSTR");
-            break;
-        case VT_CLSID:
-            printf("VT_CLSID");
-            break;
-        case VT_ERROR:
-            printf("VT_ERROR");
-            break;
-        case VT_UNKNOWN:
-            printf("VT_UNKNOWN");
-            break;
-        // add more VARTYPEs as needed
-        default:
-            printf("%d", vartype);
-            break;
+    case VT_BOOL:
+        printf("VT_BOOL");
+        break;
+    case VT_UI4:
+        printf("VT_UI4");
+        break;
+    case VT_R4:
+        printf("VT_R4");
+        break;
+    case VT_UI8:
+        printf("VT_UI8");
+        break;
+    case VT_UI1|VT_VECTOR:
+        printf("VT_UI1|VT_VECTOR");
+        break;
+    case VT_DATE:
+        printf("VT_DATE");
+        break;
+    case VT_FILETIME:
+        printf("VT_FILETIME");
+        break;
+    case VT_LPWSTR:
+        printf("VT_LPWSTR");
+        break;
+    case VT_CLSID:
+        printf("VT_CLSID");
+        break;
+    case VT_ERROR:
+        printf("VT_ERROR");
+        break;
+    case VT_UNKNOWN:
+        printf("VT_UNKNOWN");
+        break;
+    // add more VARTYPEs as needed
+    default:
+        printf("%d", vartype);
+        break;
     }
 }
 
 void DisplayParameterForm(
-    DWORD   dwForm) 
+    DWORD   dwForm)
 {
     switch(static_cast<WpdParameterAttributeForm>(dwForm))
     {
-        case WPD_PARAMETER_ATTRIBUTE_FORM_RANGE:
-            printf("Range");
-            break;
-            
-        case WPD_PARAMETER_ATTRIBUTE_FORM_ENUMERATION:
-            printf("Enumeration");
-            break;
+    case WPD_PARAMETER_ATTRIBUTE_FORM_RANGE:
+        printf("Range");
+        break;
 
-        case WPD_PARAMETER_ATTRIBUTE_FORM_REGULAR_EXPRESSION:
-            printf("Regular Expression");
-            break;
+    case WPD_PARAMETER_ATTRIBUTE_FORM_ENUMERATION:
+        printf("Enumeration");
+        break;
 
-        case WPD_PARAMETER_ATTRIBUTE_FORM_OBJECT_IDENTIFIER:
-            printf("Object Identifier");
-            break;
+    case WPD_PARAMETER_ATTRIBUTE_FORM_REGULAR_EXPRESSION:
+        printf("Regular Expression");
+        break;
 
-        case WPD_PARAMETER_ATTRIBUTE_FORM_UNSPECIFIED:
-        default:
-            printf("Unspecified");
-            break;
+    case WPD_PARAMETER_ATTRIBUTE_FORM_OBJECT_IDENTIFIER:
+        printf("Object Identifier");
+        break;
+
+    case WPD_PARAMETER_ATTRIBUTE_FORM_UNSPECIFIED:
+    default:
+        printf("Unspecified");
+        break;
     }
 }
 
@@ -132,7 +132,7 @@ void DisplayEventParameters(
                 if (SUCCEEDED(hr))
                 {
                     printf("\t\tPROPERTYKEY: %ws.%d\n", (PWSTR)CGuidToString(parameter.fmtid), parameter.pid);
-            
+
                     DWORD dwAttributeVarType = 0;
                     DWORD dwAttributeForm    = WPD_PARAMETER_ATTRIBUTE_FORM_UNSPECIFIED;
 
@@ -156,7 +156,7 @@ void DisplayEventParameters(
                         printf("\n");
                     }
                 }
-                
+
                 printf("\n");
             }
         }
@@ -193,7 +193,7 @@ void DisplayEvent(
         else
         {
             printf("%ws\n", (PWSTR)CGuidToString(Event));
-        }       
+        }
 
         // Display the event options
         hr = pAttributes->GetIPortableDeviceValuesValue(WPD_EVENT_ATTRIBUTE_OPTIONS, &pOptions);
@@ -204,7 +204,7 @@ void DisplayEvent(
         else
         {
             printf("! Failed to get the event options, hr = 0x%lx\n", hr);
-        }       
+        }
 
         // Display the event parameters
         hr = pAttributes->GetIPortableDeviceKeyCollectionValue(WPD_EVENT_ATTRIBUTE_PARAMETERS, &pParameters);
@@ -215,8 +215,8 @@ void DisplayEvent(
         else
         {
             printf("! Failed to get the event parameters, hr = 0x%lx\n", hr);
-        }       
-        
+        }
+
         CoTaskMemFree(pszFormatName);
         pszFormatName = NULL;
     }
@@ -245,7 +245,7 @@ void DisplayFormat(
         else
         {
             printf("%ws", (PWSTR)CGuidToString(Format));
-        }       
+        }
 
         CoTaskMemFree(pszFormatName);
         pszFormatName = NULL;
@@ -398,7 +398,7 @@ void ListSupportedEvents(
 // List the abstract services implemented by the current service.
 // Abstract services represent functionality that a service supports, and are used by applications to discover
 // that a service supports formats, properties and methods associated with that functionality.
-// For example, a Contacts service may implement an abstract service that represents the synchronization models supported 
+// For example, a Contacts service may implement an abstract service that represents the synchronization models supported
 // on that device, such as the FullEnumerationSync or AnchorSync Device Services
 void ListAbstractServices(
     IPortableDeviceService* pService)
@@ -471,5 +471,5 @@ void ListAbstractServices(
 
             PropVariantClear(&pv);
         }
-    }    
+    }
 }

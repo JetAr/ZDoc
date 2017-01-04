@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -12,7 +12,7 @@
 #include "tededit.h"
 #include "resource.h"
 
-class CTopoViewerController 
+class CTopoViewerController
     : public IDispatchImpl<ITedTopoView, &IID_ITedTopoView, &LIBID_TedUtil>
     , public CComObjectRoot
     , public CComCoClass<CTopoViewerController, &CLSID_CTopoViewerController>
@@ -22,13 +22,13 @@ public:
     ~CTopoViewerController();
 
     BEGIN_COM_MAP(CTopoViewerController)
-        COM_INTERFACE_ENTRY(ITedTopoView)
-        COM_INTERFACE_ENTRY(IDispatch)
+    COM_INTERFACE_ENTRY(ITedTopoView)
+    COM_INTERFACE_ENTRY(IDispatch)
     END_COM_MAP()
 
     DECLARE_REGISTRY_RESOURCEID(IDR_TOPOVIEWERCONTROLLER);
     DECLARE_CLASSFACTORY();
-    
+
     HRESULT STDMETHODCALLTYPE Init(ITedVideoWindowHandler* pVideoWindowHandler, ITedPropertyController* pController, ITedTopoEventHandler* pEventHandler);
 
     HRESULT STDMETHODCALLTYPE CreateTopoWindow(LPCWSTR szTitle, DWORD dwStyle, DWORD x, DWORD y, DWORD width, DWORD height, LONG_PTR hWndParent, LONG_PTR* phWnd);

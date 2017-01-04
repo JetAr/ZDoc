@@ -1,4 +1,4 @@
-//////////////////////////////////////////////////////////////////////////
+﻿//////////////////////////////////////////////////////////////////////////
 //
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
@@ -22,7 +22,7 @@
 //-------------------------------------------------------------------
 
 class VideoBufferLock
-{   
+{
 public:
     VideoBufferLock(IMFMediaBuffer *pBuffer) : m_p2DBuffer(NULL), m_bLocked(FALSE)
     {
@@ -55,7 +55,7 @@ public:
         DWORD dwHeightInPixels,  // Height of the image, in pixels.
         BYTE  **ppbScanLine0,    // Receives a pointer to the start of scan line 0.
         LONG  *plStride          // Receives the actual stride.
-        )
+    )
     {
         HRESULT hr = S_OK;
 

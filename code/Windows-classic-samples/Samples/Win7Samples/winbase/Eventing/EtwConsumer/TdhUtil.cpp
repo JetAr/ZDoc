@@ -1,4 +1,4 @@
-/*++
+﻿/*++
 
     THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
     ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
@@ -13,9 +13,9 @@ Module Name:
 
 Abstract:
 
-   Implementations of the functions for rerouting the binary event data to proper 
-   formatting routines based on operating system version. Also implements some other 
-   utility functions like memory management functions, the printing function, and 
+   Implementations of the functions for rerouting the binary event data to proper
+   formatting routines based on operating system version. Also implements some other
+   utility functions like memory management functions, the printing function, and
    dynamically loading tdh.dll.
 
 --*/
@@ -34,14 +34,14 @@ GetFormattedBuffer(
     __out_bcount(BufferSize) PBYTE Buffer,
     __in ULONG BufferSize,
     __out PUSHORT BinDataConsumed
-    )
+)
 
 /*++
-    
+
 Routine Description:
 
     This routine delegates the raw byte property buffer to the appropriate
-    type-formatting function. It first determines the InType of the property. 
+    type-formatting function. It first determines the InType of the property.
     Depending on the InType, the binary data is re-routed to different functions.
     In some properties, the OutType is also important for correct representation.
 
@@ -68,7 +68,7 @@ Arguments:
 Return Value:
 
     ERROR_SUCCESS - Formatting was successful.
-    
+
     Win32 error code - Formatting the property value failed.
 
 --*/
@@ -78,15 +78,17 @@ Return Value:
 
     //
     // With this switch statement, examine all valid TDH InTypes, and for the
-    // one that matches the suplied parameter InType, re-route the binary data for 
+    // one that matches the suplied parameter InType, re-route the binary data for
     // further formatting.
     //
 
-    switch (InType) {
+    switch (InType)
+    {
 
     case TDH_INTYPE_UNICODESTRING:
     {
-        switch(OutType) {
+        switch(OutType)
+        {
 
         case TDH_OUTTYPE_XML:
         case TDH_OUTTYPE_STRING:
@@ -96,7 +98,8 @@ Return Value:
     }
     case TDH_INTYPE_ANSISTRING:
     {
-        switch(OutType) {
+        switch(OutType)
+        {
 
         case TDH_OUTTYPE_XML:
         case TDH_OUTTYPE_STRING:
@@ -106,18 +109,21 @@ Return Value:
     }
     case TDH_INTYPE_INT8:
     {
-        if (Length != sizeof(INT8)) {
+        if (Length != sizeof(INT8))
+        {
             return ERROR_EVT_INVALID_EVENT_DATA;
         }
         return NumberToBuffer<INT8>(BinDataPtr, BinDataLeft, L"%d", Buffer, BufferSize, BinDataConsumed);
     }
     case TDH_INTYPE_UINT8:
     {
-        if (Length != sizeof(UINT8)) {
+        if (Length != sizeof(UINT8))
+        {
             return ERROR_EVT_INVALID_EVENT_DATA;
         }
 
-        switch(OutType) {
+        switch(OutType)
+        {
 
         case TDH_OUTTYPE_NOPRINT:
             Status = NullToBuffer(Buffer, BufferSize, BinDataConsumed);
@@ -133,28 +139,31 @@ Return Value:
     }
     case TDH_INTYPE_INT16:
     {
-        if (Length != sizeof(INT16)) {
+        if (Length != sizeof(INT16))
+        {
             return ERROR_EVT_INVALID_EVENT_DATA;
         }
         return NumberToBuffer<INT16>(BinDataPtr, BinDataLeft, L"%hd", Buffer, BufferSize, BinDataConsumed);
     }
     case TDH_INTYPE_UINT16:
     {
-        if (Length != sizeof(UINT16)) {
+        if (Length != sizeof(UINT16))
+        {
             return ERROR_EVT_INVALID_EVENT_DATA;
         }
 
-        switch(OutType) {
+        switch(OutType)
+        {
 
         case TDH_OUTTYPE_HEXINT16:
             return NumberToBuffer<UINT16>(BinDataPtr, BinDataLeft, L"0x%hX",  Buffer, BufferSize, BinDataConsumed);
 
         case TDH_OUTTYPE_PORT:
 
-            //
-            // Note: The integer value can be formatted like port number as well. 
-            // For simplicity, in the sample, just the error code is printed.
-            //
+        //
+        // Note: The integer value can be formatted like port number as well.
+        // For simplicity, in the sample, just the error code is printed.
+        //
 
         default:
             return NumberToBuffer<UINT16>(BinDataPtr, BinDataLeft, L"%hu",  Buffer, BufferSize, BinDataConsumed);
@@ -162,50 +171,53 @@ Return Value:
     }
     case TDH_INTYPE_INT32:
     {
-        if (Length != sizeof(INT32)) {
+        if (Length != sizeof(INT32))
+        {
             return ERROR_EVT_INVALID_EVENT_DATA;
         }
 
         //
-        // Note: The integer value can be formatted like error code as well. 
+        // Note: The integer value can be formatted like error code as well.
         // For simplicity, in the sample, just the error code value is printed.
         //
 
         return NumberToBuffer<INT32>(BinDataPtr, BinDataLeft, L"%I32d", Buffer, BufferSize, BinDataConsumed);
-        
+
     }
     case TDH_INTYPE_UINT32:
     {
-        if (Length != sizeof(UINT32)) {
+        if (Length != sizeof(UINT32))
+        {
             return ERROR_EVT_INVALID_EVENT_DATA;
         }
 
-        switch(OutType) {
+        switch(OutType)
+        {
 
         case TDH_OUTTYPE_HEXINT32:
         case TDH_OUTTYPE_ERRORCODE:
             return NumberToBuffer<INT32>(BinDataPtr, BinDataLeft, L"0x%I32X", Buffer, BufferSize, BinDataConsumed);
 
         case TDH_OUTTYPE_IPV4:
-            
-            //
-            // Note: The integer value can be formatted like IPV4 address as well. 
-            // For simplicity, in the sample, just the integer value is printed.
-            //
+
+        //
+        // Note: The integer value can be formatted like IPV4 address as well.
+        // For simplicity, in the sample, just the integer value is printed.
+        //
 
         case TDH_OUTTYPE_WIN32ERROR:
 
-            //
-            // Note: The integer value can be formatted like Win32 error code as well. 
-            // For simplicity, in the sample, just the integer value is printed.
-            //
+        //
+        // Note: The integer value can be formatted like Win32 error code as well.
+        // For simplicity, in the sample, just the integer value is printed.
+        //
 
         case TDH_OUTTYPE_NTSTATUS:
 
-            //
-            // Note: The integer value can be formatted like NT status code as well. 
-            // For simplicity, in the sample, just the integer value is printed.
-            //
+        //
+        // Note: The integer value can be formatted like NT status code as well.
+        // For simplicity, in the sample, just the integer value is printed.
+        //
 
         case TDH_OUTTYPE_PID:
         case TDH_OUTTYPE_TID:
@@ -216,7 +228,8 @@ Return Value:
     }
     case TDH_INTYPE_INT64:
     {
-        if (Length != sizeof(INT64)) {
+        if (Length != sizeof(INT64))
+        {
             return ERROR_EVT_INVALID_EVENT_DATA;
         }
 
@@ -224,19 +237,21 @@ Return Value:
     }
     case TDH_INTYPE_UINT64:
     {
-        if (Length != sizeof(UINT64)) {
+        if (Length != sizeof(UINT64))
+        {
             return ERROR_EVT_INVALID_EVENT_DATA;
         }
 
-        switch(OutType) {
+        switch(OutType)
+        {
 
         case TDH_OUTTYPE_HEXINT64:
             return NumberToBuffer<UINT64>(BinDataPtr, BinDataLeft, L"0x%I64X", Buffer, BufferSize, BinDataConsumed);
 
-            //
-            // Note: The integer value can be formatted like ETWTIME code as well.
-            // For simplicity, in the sample, just the integer value is printed.
-            //
+        //
+        // Note: The integer value can be formatted like ETWTIME code as well.
+        // For simplicity, in the sample, just the integer value is printed.
+        //
 
         case TDH_OUTTYPE_ETWTIME:
 
@@ -246,7 +261,8 @@ Return Value:
     }
     case TDH_INTYPE_FLOAT:
     {
-        if (Length != sizeof(FLOAT)) {
+        if (Length != sizeof(FLOAT))
+        {
             return ERROR_EVT_INVALID_EVENT_DATA;
         }
 
@@ -254,7 +270,8 @@ Return Value:
     }
     case TDH_INTYPE_DOUBLE:
     {
-        if (Length != sizeof(DOUBLE)) {
+        if (Length != sizeof(DOUBLE))
+        {
             return ERROR_EVT_INVALID_EVENT_DATA;
         }
 
@@ -266,17 +283,18 @@ Return Value:
     }
     case TDH_INTYPE_BINARY:
     {
-        switch(OutType) {
+        switch(OutType)
+        {
 
         case TDH_OUTTYPE_IPV6:
             return IPV6ToBuffer(BinDataPtr, BinDataLeft, Length, Buffer, BufferSize, BinDataConsumed);
 
         case TDH_OUTTYPE_SOCKETADDRESS:
 
-            //
-            // Note: The binary data can be formatted like socket address as well. 
-            // For simplicity, in the sample, just the raw binary data is printed.
-            //
+        //
+        // Note: The binary data can be formatted like socket address as well.
+        // For simplicity, in the sample, just the raw binary data is printed.
+        //
 
         case TDH_OUTTYPE_HEXBINARY:
 
@@ -286,7 +304,8 @@ Return Value:
     }
     case TDH_INTYPE_GUID:
     {
-        if (Length < sizeof(GUID)) {
+        if (Length < sizeof(GUID))
+        {
             return ERROR_EVT_INVALID_EVENT_DATA;
         }
 
@@ -295,25 +314,31 @@ Return Value:
     case TDH_INTYPE_POINTER:
     case TDH_INTYPE_SIZET:
     {
-        if (Length != PointerSize) {
+        if (Length != PointerSize)
+        {
             return ERROR_EVT_INVALID_EVENT_DATA;
         }
 
-        if (PointerSize == 4) {
+        if (PointerSize == 4)
+        {
             return NumberToBuffer<UINT32>(BinDataPtr, BinDataLeft, L"0x%I32X", Buffer, BufferSize, BinDataConsumed);
-        } else {
+        }
+        else
+        {
             return NumberToBuffer<UINT64>(BinDataPtr, BinDataLeft, L"0x%I64X", Buffer, BufferSize, BinDataConsumed);
         }
     }
     case TDH_INTYPE_FILETIME:
-        if (Length < sizeof(FILETIME)) {
+        if (Length < sizeof(FILETIME))
+        {
             return ERROR_EVT_INVALID_EVENT_DATA;
         }
 
         return FileTimeToBuffer(BinDataPtr, BinDataLeft,  Buffer, BufferSize, BinDataConsumed);
 
     case TDH_INTYPE_SYSTEMTIME:
-        if (Length < sizeof(SYSTEMTIME)) {
+        if (Length < sizeof(SYSTEMTIME))
+        {
             return ERROR_EVT_INVALID_EVENT_DATA;
         }
 
@@ -324,25 +349,27 @@ Return Value:
 
     case TDH_INTYPE_HEXINT32:
     {
-        if (Length != sizeof(UINT32)) {
+        if (Length != sizeof(UINT32))
+        {
             return ERROR_EVT_INVALID_EVENT_DATA;
         }
 
-        switch(OutType) {
+        switch(OutType)
+        {
 
         case TDH_OUTTYPE_WIN32ERROR:
 
-            //
-            // Note: The integer value can be formatted like Win32 error code as well. 
-            // For simplicity, in the sample, just the integer value is printed.
-            //
+        //
+        // Note: The integer value can be formatted like Win32 error code as well.
+        // For simplicity, in the sample, just the integer value is printed.
+        //
 
         case TDH_OUTTYPE_NTSTATUS:
 
-            //
-            // Note: The integer value can be formatted like NT status as well. 
-            // For simplicity, in the sample, just the integer value is printed.
-            //
+        //
+        // Note: The integer value can be formatted like NT status as well.
+        // For simplicity, in the sample, just the integer value is printed.
+        //
 
         default:
             return NumberToBuffer<UINT32>(BinDataPtr, BinDataLeft, L"0x%I32X", Buffer, BufferSize, BinDataConsumed);
@@ -362,7 +389,7 @@ Return Value:
         //
 
         return ERROR_NOT_SUPPORTED;
-        
+
 
     case TDH_INTYPE_NONNULLTERMINATEDSTRING:
         return UnicodeStringToBuffer(BinDataPtr, BinDataLeft, 0, Buffer, BufferSize, BinDataConsumed);
@@ -372,7 +399,8 @@ Return Value:
 
     case TDH_INTYPE_UNICODECHAR:
     {
-        switch(OutType) {
+        switch(OutType)
+        {
 
         case TDH_OUTTYPE_STRING:
 
@@ -388,7 +416,8 @@ Return Value:
     }
     case TDH_INTYPE_ANSICHAR:
     {
-        switch(OutType) {
+        switch(OutType)
+        {
 
         case TDH_OUTTYPE_STRING:
 
@@ -396,7 +425,7 @@ Return Value:
             //  N.B.: Caller needs to make sure that the count for this property is
             //        treated as length.
             //
-            
+
             return AnsiStringToBuffer(BinDataPtr, BinDataLeft, Length, Buffer, BufferSize, BinDataConsumed);
 
         default:
@@ -405,7 +434,8 @@ Return Value:
     }
     case TDH_INTYPE_HEXDUMP:
     {
-        switch(OutType) {
+        switch(OutType)
+        {
 
         case TDH_OUTTYPE_HEXBINARY:
         default:
@@ -418,7 +448,7 @@ Return Value:
     }
     case TDH_INTYPE_NULL:
     {
-        
+
         return ERROR_EVT_INVALID_EVENT_DATA;
     }
 
@@ -439,10 +469,10 @@ BitMapToString(
     __out_bcount(BufferSize) PBYTE Buffer,
     __in ULONG BufferSize,
     __out PUSHORT BinDataConsumed
-    )
+)
 
 /*++
-    
+
 Routine Description:
 
     This routine maps value to string. Each bit from the value binary representation
@@ -463,7 +493,7 @@ Arguments:
 Return Value:
 
     ERROR_SUCCESS - The formatting was successful.
-    
+
     Win32 error code - Formatting the map value failed.
 
 --*/
@@ -478,31 +508,37 @@ Return Value:
 
     //
     // Iterate through each map entry (the key values), to find out
-    // which ones match key value provided. Thus, one key value can 
-    // point to several map entries. In this case, a search for the 
+    // which ones match key value provided. Thus, one key value can
+    // point to several map entries. In this case, a search for the
     // first match is performed.
     //
 
-    for (ULONG i = 0; i < MapInfo->EntryCount; i++) {
+    for (ULONG i = 0; i < MapInfo->EntryCount; i++)
+    {
 
         MapEntry = &MapInfo->MapEntryArray[i];
 
         //
         // In EVENTMAP_INFO_FLAG_MANIFEST_BITMAP case, if Value matches at
         // least one bit with the MapEntry value, then it is matched.
-        // In EVENTMAP_INFO_FLAG_WBEM_VALUEMAP, the MapEntry value is the 
+        // In EVENTMAP_INFO_FLAG_WBEM_VALUEMAP, the MapEntry value is the
         // position of the bit that would be eventually set in Value.
         //
 
-        if (MapInfo->Flag == EVENTMAP_INFO_FLAG_MANIFEST_BITMAP) {
+        if (MapInfo->Flag == EVENTMAP_INFO_FLAG_MANIFEST_BITMAP)
+        {
             Match = (BOOLEAN)(MapEntry->Value & Value);
-        } else {
+        }
+        else
+        {
             Match = (BOOLEAN)((1 << MapEntry->Value) & Value);
         }
 
-        if (Match != FALSE) {
+        if (Match != FALSE)
+        {
             MapString = EMI_MAP_OUTPUT(MapInfo, MapEntry);
-            if (MapString != NULL) {
+            if (MapString != NULL)
+            {
                 Status = UnicodeStringToBuffer((PBYTE)MapString,
                                                DataLeft,
                                                (USHORT)wcslen(MapString),
@@ -515,7 +551,8 @@ Return Value:
         }
     }
 
-    if (AtLeastOneMatchFound == FALSE) {
+    if (AtLeastOneMatchFound == FALSE)
+    {
         Status = ERROR_EVT_INVALID_EVENT_DATA;
     }
 
@@ -529,10 +566,10 @@ ValueMapToString(
     __out_bcount(BufferSize) PBYTE Buffer,
     __in ULONG BufferSize,
     __out PUSHORT BinDataConsumed
-    )
+)
 
 /*++
-    
+
 Routine Description:
 
     This routine maps an integer value to string.
@@ -552,7 +589,7 @@ Arguments:
 Return Value:
 
     ERROR_SUCCESS - The formatting was successful.
-    
+
     Win32 error code - Formatting the map value failed.
 
 --*/
@@ -569,17 +606,20 @@ Return Value:
     // key that is searched.
     //
 
-    for (ULONG i = 0; i < MapInfo->EntryCount; i++) {
+    for (ULONG i = 0; i < MapInfo->EntryCount; i++)
+    {
         MapEntry = &MapInfo->MapEntryArray[i];
-        if (MapEntry->Value == Value) {
+        if (MapEntry->Value == Value)
+        {
 
             //
             // Get the string value that coresponds to the MapEntry.
             //
 
             MapString = EMI_MAP_OUTPUT(MapInfo, MapEntry);
-            if (MapString != NULL) {
-                
+            if (MapString != NULL)
+            {
+
                 //
                 // Since MapString is not part of the event payload (but its resource), the information
                 // about binary data left is not important in this call. Just pass ULONG_MAX value.
@@ -611,10 +651,10 @@ MapToString(
     __out_bcount(BufferSize) PBYTE Buffer,
     __in ULONG BufferSize,
     __out PUSHORT BinDataConsumed
-    )
+)
 
 /*++
-    
+
 Routine Description:
 
     This routine uses the flag of the map determine its type. There can be
@@ -635,14 +675,15 @@ Arguments:
 Return Value:
 
     ERROR_SUCCESS - The formatting was successful.
-    
+
     Win32 error code - Formatting the map value failed.
 
 --*/
 
 {
 
-    switch (MapInfo->Flag) {
+    switch (MapInfo->Flag)
+    {
 
     case EVENTMAP_INFO_FLAG_MANIFEST_VALUEMAP:
     case EVENTMAP_INFO_FLAG_WBEM_VALUEMAP:
@@ -670,14 +711,14 @@ FormatMap(
     __out_bcount(BufferSize) PBYTE Buffer,
     __in ULONG BufferSize,
     __out PUSHORT BinDataConsumed
-    )
+)
 
 /*++
-    
+
 Routine Description:
 
-    This routine copies the key binary value into a ULONG variable. This 
-    variable is passed to another routine, which gets the map value for 
+    This routine copies the key binary value into a ULONG variable. This
+    variable is passed to another routine, which gets the map value for
     the given key value.
 
 Arguments:
@@ -697,7 +738,7 @@ Arguments:
 Return Value:
 
     ERROR_SUCCESS - The formatting was successful.
-    
+
     Win32 error code - Formatting the map value failed.
 
 --*/
@@ -706,8 +747,9 @@ Return Value:
     ULONG Status = ERROR_SUCCESS;
     T Value;
     USHORT DataSize = sizeof(T);
-    
-    if (BinDataLeft < DataSize) {
+
+    if (BinDataLeft < DataSize)
+    {
         return ERROR_EVT_INVALID_EVENT_DATA;
     }
 
@@ -726,14 +768,14 @@ GetFormattedMapValue(
     __out_bcount(BufferSize) PBYTE Buffer,
     __in ULONG BufferSize,
     __out PUSHORT BinDataConsumed
-    )
+)
 
 /*++
-    
+
 Routine Description:
 
     This routine delegates the raw byte property buffer (which is the key value of the map)
-    to the appropriate map-formatting function. It first determines the InType of the property. 
+    to the appropriate map-formatting function. It first determines the InType of the property.
     Depending on the InType, the binary data is re-routed to different fucntions.
 
 Arguments:
@@ -755,7 +797,7 @@ Arguments:
 Return Value:
 
     ERROR_SUCCESS - The formatting was successful.
-    
+
     Win32 error code - Formatting the map value failed.
 
 --*/
@@ -769,7 +811,8 @@ Return Value:
     // to the template map formatting function.
     //
 
-    switch (InType) {
+    switch (InType)
+    {
 
     case TDH_INTYPE_UINT8:
         Status = FormatMap<UINT8>(BinDataPtr, BinDataLeft, MapInfo, Buffer, BufferSize, BinDataConsumed);
@@ -797,9 +840,9 @@ VOID
 GetFormatPropertyHandle(
     __out HMODULE* TdhLibraryHandle,
     __out FPTR_TDH_FORMATPROPERTY* FormatPropertyPtr
-    )
+)
 /*++
-    
+
 Routine Description:
 
     This routine dynamically loads TdhFormatProperty() from tdh.dll. It is called
@@ -819,38 +862,39 @@ Return Value:
 {
     *TdhLibraryHandle = LoadLibraryW(L"tdh.dll");
 
-    if (*TdhLibraryHandle == NULL) {
+    if (*TdhLibraryHandle == NULL)
+    {
         return;
     }
 
     *FormatPropertyPtr = (FPTR_TDH_FORMATPROPERTY)GetProcAddress(*TdhLibraryHandle,
-                                                                 "TdhFormatProperty");
+                         "TdhFormatProperty");
 }
 
 ULONG
 InitializeProcessingContext(
     __inout PPROCESSING_CONTEXT LogContext
-    )
+)
 
 /*++
-    
+
 Routine Description:
 
     This routine initializes the memory buffers in one processing context, and the
-    data context structure contained in it. Additionally, this routine attempts to 
-    dynamically load TdhFormatProperty() from tdh.dll, if the operating system is 
+    data context structure contained in it. Additionally, this routine attempts to
+    dynamically load TdhFormatProperty() from tdh.dll, if the operating system is
     Windows 7 or above.
 
 Arguments:
 
-    LogContext - Supplies a structure with the buffers that should be allocated and 
-                 the handle and function pointer to tdh.dll and TdhFormatProperty(), 
+    LogContext - Supplies a structure with the buffers that should be allocated and
+                 the handle and function pointer to tdh.dll and TdhFormatProperty(),
                  respectively.
 
 Return Value:
 
     ERROR_SUCCESS - The memory allocations were successful.
-    
+
     ERROR_OUTOFMEMORY - There was insufficient memory.
 
 --*/
@@ -858,20 +902,23 @@ Return Value:
 {
 
     ULONG Status = InitializeDataContext(&LogContext->DataContext);
-    
-    if (Status != ERROR_SUCCESS) {
+
+    if (Status != ERROR_SUCCESS)
+    {
         return Status;
     }
 
     LogContext->PrintBuffer = (PBYTE)malloc(LogContext->PrintBufferSize);
-    if (LogContext->PrintBuffer == NULL) {
+    if (LogContext->PrintBuffer == NULL)
+    {
         Status = ERROR_OUTOFMEMORY;
     }
 
-    if (IsOSPriorWin7() == FALSE) {
+    if (IsOSPriorWin7() == FALSE)
+    {
         GetFormatPropertyHandle(&LogContext->TdhDllHandle, &LogContext->FormatPropertyPtr);
     }
-    
+
     return ERROR_SUCCESS;
 }
 
@@ -879,23 +926,23 @@ Return Value:
 ULONG
 InitializeDataContext(
     __inout PPROCESSING_DATA_CONTEXT DataContext
-    )
+)
 
 /*++
-    
+
 Routine Description:
 
     This routine initializes the memory buffers in one PROCESSING_DATA_CONTEXT structure.
-    
+
 
 Arguments:
 
-    DataContext - Supplies the structure with the buffers that should be allocated. 
+    DataContext - Supplies the structure with the buffers that should be allocated.
 
 Return Value:
 
     ERROR_SUCCESS - The memory allocations were successful.
-    
+
     ERROR_OUTOFMEMORY - There was insufficient memory.
 
 --*/
@@ -903,30 +950,33 @@ Return Value:
 {
 
     DataContext->Buffer = (PBYTE)malloc(DataContext->BufferSize);
-    if (DataContext->Buffer == NULL) {
+    if (DataContext->Buffer == NULL)
+    {
         return ERROR_OUTOFMEMORY;
     }
 
     DataContext->MapInfoBuffer = (PBYTE)malloc(DataContext->MapInfoBufferSize);
-    if (DataContext->MapInfoBuffer == NULL) {
+    if (DataContext->MapInfoBuffer == NULL)
+    {
         return ERROR_OUTOFMEMORY;
     }
 
     DataContext->EventInfoBuffer = (PBYTE)malloc(DataContext->EventInfoBufferSize);
-    if (DataContext->EventInfoBuffer == NULL) {
+    if (DataContext->EventInfoBuffer == NULL)
+    {
         return ERROR_OUTOFMEMORY;
     }
-    
+
     return ERROR_SUCCESS;
 }
 
 VOID
 ResetDataContext(
     __inout PPROCESSING_DATA_CONTEXT DataContext
-    )
+)
 
 /*++
-    
+
 Routine Description:
 
     This routine releases the resources needed for decoding one event.
@@ -946,24 +996,29 @@ Return Value:
 
     //
     // The last top-level index was CurrentTopLevelIndex. If it was -1, that
-    // means that there were no propertires in the event, and nothing has 
+    // means that there were no propertires in the event, and nothing has
     // been allocated.
     //
 
-    if (DataContext->CurrentTopLevelIndex == -1) {
+    if (DataContext->CurrentTopLevelIndex == -1)
+    {
         return;
     }
-    
-    if (DataContext->RenderItems != NULL) {
-        for(LONG Index = 0; Index < DataContext->CurrentTopLevelIndex; Index++) {
-            if (DataContext->RenderItems[Index] != NULL) {
+
+    if (DataContext->RenderItems != NULL)
+    {
+        for(LONG Index = 0; Index < DataContext->CurrentTopLevelIndex; Index++)
+        {
+            if (DataContext->RenderItems[Index] != NULL)
+            {
                 free(DataContext->RenderItems[Index]);
             }
         }
         free(DataContext->RenderItems);
     }
 
-    if (DataContext->ReferenceValues != NULL) {
+    if (DataContext->ReferenceValues != NULL)
+    {
         free(DataContext->ReferenceValues);
     }
 }
@@ -973,10 +1028,10 @@ ResizeBuffer(
     __inout PBYTE* Buffer,
     __out PULONG BufferSize,
     __in ULONG NewBufferSize
-    )
+)
 
 /*++
-    
+
 Routine Description:
 
     This routine resizes the supplied buffer.
@@ -986,25 +1041,27 @@ Arguments:
     Buffer - Supplies buffer that should be resized.
 
     BufferSize - Supplies old size of the buffer that should be resized.
-    
+
     NewBufferSize - Supplies the new size of the buffer.
 
 Return Value:
 
     ERROR_SUCCESS - Resizing was successful.
-    
+
     ERROR_OUTOFMEMORY - There was insufficient memory.
 
 --*/
 
 {
 
-    if (*Buffer != NULL) {
+    if (*Buffer != NULL)
+    {
         free(*Buffer);
     }
 
     *Buffer = (PBYTE)malloc(NewBufferSize);
-    if (*Buffer == NULL) {
+    if (*Buffer == NULL)
+    {
         return ERROR_OUTOFMEMORY;
     }
 
@@ -1016,18 +1073,18 @@ Return Value:
 ULONG
 UpdateRenderItem(
     __inout PPROCESSING_DATA_CONTEXT DataContext
-    )
+)
 
 /*++
-    
+
 Routine Description:
 
-    This routine saves the formatted value of the property identified 
+    This routine saves the formatted value of the property identified
     by CurrentTopLevelIndex.
 
 Arguments:
 
-    DataContext - Supplies the data context of the formatted property 
+    DataContext - Supplies the data context of the formatted property
                   that should be saved.
 
 Return Value:
@@ -1045,14 +1102,16 @@ Return Value:
     //
     // In the case of arrays and structures, there is one render string as well.
     // For simplicity, in the sample, do not accumulate all their members, but just
-    // store the first one. 
+    // store the first one.
     //
 
-    if (*LastIndex != CurrentIndex) {
+    if (*LastIndex != CurrentIndex)
+    {
 
         StringLength = (ULONG)wcslen((PWSTR)DataContext->Buffer) + 1;
         DataContext->RenderItems[CurrentIndex] = (PWSTR)malloc(StringLength * sizeof(WCHAR));
-        if (DataContext->RenderItems[CurrentIndex] == NULL) {
+        if (DataContext->RenderItems[CurrentIndex] == NULL)
+        {
             return ERROR_OUTOFMEMORY;
         }
 
@@ -1060,7 +1119,8 @@ Return Value:
                                   StringLength,
                                   L"%s",
                                   (PWSTR)DataContext->Buffer);
-        if (FAILED(Result)) {
+        if (FAILED(Result))
+        {
             return HRESULT_CODE(Result);
         }
 

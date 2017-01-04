@@ -1,4 +1,4 @@
-/*
+﻿/*
 
 Copyright (c) 1999 - 2000  Microsoft Corporation
 
@@ -11,7 +11,7 @@ Module Name:
 Abstract:
 
     Implementation of CAVIFileReader class
- 
+
 */
 
 #include "common.h"
@@ -26,8 +26,8 @@ Abstract:
 
 CAVIFileReader::CAVIFileReader()
     :m_pAudioStream(NULL),
-    m_pWaveFormat(NULL),
-    m_nSamplesReadSoFar(0)
+     m_pWaveFormat(NULL),
+     m_nSamplesReadSoFar(0)
 {
     LogMessage("CAVIFileReader::CAVIFileReader");
 }
@@ -38,7 +38,7 @@ CAVIFileReader::CAVIFileReader()
 //
 // CAVIFileReader::Initialize
 //
-// open the first audio stream contained in file pszFileName. 
+// open the first audio stream contained in file pszFileName.
 // if successful, also get the stream's format
 //
 // if the file does not exist, is not valid, or does not contain
@@ -51,7 +51,7 @@ HRESULT CAVIFileReader::Initialize(IN char *pszFileName)
 
     HRESULT hr = S_OK;
 
-    
+
     //
     // would do better argument checking in a real-life application
     //
@@ -63,23 +63,23 @@ HRESULT CAVIFileReader::Initialize(IN char *pszFileName)
     // log file name and requested wave format
     //
 
-    LogMessage("CAVIFileReader::Initialize started. file [%s]", 
-                pszFileName);
+    LogMessage("CAVIFileReader::Initialize started. file [%s]",
+               pszFileName);
 
 
     //
-    // initialize avi file library. AVIFileExit should be called on the same 
+    // initialize avi file library. AVIFileExit should be called on the same
     // thread when AVI library is no longer needed
     //
-    // AVIFileExit is called in the destructor. 
+    // AVIFileExit is called in the destructor.
     //
-    // Assuption: instances of CAVIFileReader are initialized and destroyed on 
+    // Assuption: instances of CAVIFileReader are initialized and destroyed on
     // the same thread
     //
-    
+
     AVIFileInit();
 
-    
+
     //
     // open the first audio stream in the file
     //
@@ -123,18 +123,18 @@ HRESULT CAVIFileReader::Initialize(IN char *pszFileName)
 
 
     //
-    // allocate memory for audio format. keep it in a waveformatex structure. 
+    // allocate memory for audio format. keep it in a waveformatex structure.
     // if the structure returned is waveformat, still allocate waveformatex
     //
 
     nFormatSize = max((LONG)sizeof(WAVEFORMATEX), nFormatSize);
-       
+
     m_pWaveFormat = (WAVEFORMATEX*)AllocateMemory(nFormatSize);
 
     if (NULL == m_pWaveFormat)
     {
         LogError("CAVIFileReader::Initialize "
-                 "Failed to allocate memory for wave format, size %ld", 
+                 "Failed to allocate memory for wave format, size %ld",
                  nFormatSize);
 
         m_pAudioStream->Release();
@@ -220,20 +220,20 @@ CAVIFileReader::~CAVIFileReader()
 //
 // CAVIFileReader::Read
 //
-// read the open stream, at the current stream position, 
-// into the supplied buffer of specified length. 
+// read the open stream, at the current stream position,
+// into the supplied buffer of specified length.
 // return the number of bytes read
 //
 // returns: S_OK if succeded, S_FALSE if no more data, failure if failed.
-// 
+//
 ///////////////////////////////////////////////////////////////////////////////
 
 HRESULT CAVIFileReader::Read( IN     BYTE *pBuffer,
-                              IN     LONG nBufferSize, 
+                              IN     LONG nBufferSize,
                               IN OUT LONG *pBytesRead)
 {
-    
-    
+
+
     //
     // don't return garbage
     //
@@ -263,19 +263,19 @@ HRESULT CAVIFileReader::Read( IN     BYTE *pBuffer,
 
 
     //
-    // read data into the user-supplied buffer, starting with the current 
+    // read data into the user-supplied buffer, starting with the current
     // stream position
     //
-    
+
     LONG nSamplesRead = 0;
-    
-    hr = AVIStreamRead(m_pAudioStream, 
-                        m_nSamplesReadSoFar, 
-                        AVISTREAMREAD_CONVENIENT, 
-                        pBuffer,
-                        nBufferSize,
-                        pBytesRead,
-                        &nSamplesRead);
+
+    hr = AVIStreamRead(m_pAudioStream,
+                       m_nSamplesReadSoFar,
+                       AVISTREAMREAD_CONVENIENT,
+                       pBuffer,
+                       nBufferSize,
+                       pBytesRead,
+                       &nSamplesRead);
 
     if (FAILED(hr))
     {
@@ -286,9 +286,9 @@ HRESULT CAVIFileReader::Read( IN     BYTE *pBuffer,
         return hr;
     }
 
-    
+
     //
-    // keep track of how many samples we have read, so we know where 
+    // keep track of how many samples we have read, so we know where
     // to start next time
     //
 
@@ -302,8 +302,8 @@ HRESULT CAVIFileReader::Read( IN     BYTE *pBuffer,
     }
 
 
-    LogMessage("CAVIFileReader::Read read %ld bytes (%ld samples)", 
-                *pBytesRead, nSamplesRead);
+    LogMessage("CAVIFileReader::Read read %ld bytes (%ld samples)",
+               *pBytesRead, nSamplesRead);
 
     return S_OK;
 }
@@ -313,9 +313,9 @@ HRESULT CAVIFileReader::Read( IN     BYTE *pBuffer,
 //
 // CAVIFileReader::GetFormat
 //
-// returns the wave format structure. the caller is responsible for 
+// returns the wave format structure. the caller is responsible for
 // freeing the structure by calling FreeMemory()
-// 
+//
 // returns S_OK if success or E_FAIL if the file failed to open
 //
 ///////////////////////////////////////////////////////////////////////////////
@@ -354,9 +354,9 @@ HRESULT CAVIFileReader::GetFormat(OUT WAVEFORMATEX **ppWaveFormat)
     // allocate memory for wave format structure
     //
 
-    WAVEFORMATEX *pWaveFormat = 
-        (WAVEFORMATEX *)AllocateMemory( sizeof(WAVEFORMATEX) + 
-                                m_pWaveFormat->cbSize);
+    WAVEFORMATEX *pWaveFormat =
+        (WAVEFORMATEX *)AllocateMemory( sizeof(WAVEFORMATEX) +
+                                        m_pWaveFormat->cbSize);
 
     if (NULL == pWaveFormat)
     {
@@ -367,7 +367,7 @@ HRESULT CAVIFileReader::GetFormat(OUT WAVEFORMATEX **ppWaveFormat)
         return E_OUTOFMEMORY;
     }
 
-    
+
     //
     // copy wave format structure into allocated memory
     //

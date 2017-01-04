@@ -1,4 +1,4 @@
-//
+﻿//
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -39,12 +39,12 @@ typedef struct _MYCONTEXT
 VOID
 CancelRequest(
     PMYCONTEXT pContext
-    );
+);
 
 VOID
 FreeMyContext(
     PMYCONTEXT pContext
-    )
+)
 
 /*++
 
@@ -83,7 +83,7 @@ Return Value:
 VOID
 ReferenceContext(
     PMYCONTEXT pContext
-    )
+)
 {
     InterlockedIncrement(&pContext->ReferenceCount);
 }
@@ -91,7 +91,7 @@ ReferenceContext(
 VOID
 DereferenceContext(
     PMYCONTEXT pContext
-    )
+)
 {
     LONG lRefCount;
     lRefCount = InterlockedDecrement(&pContext->ReferenceCount);
@@ -106,15 +106,15 @@ DWORD
 CreateMyContext(
     HINTERNET Request,
     PMYCONTEXT* ppOutContext
-    )
+)
 {
     DWORD dwError = ERROR_SUCCESS;
     PMYCONTEXT pContext = NULL;
 
     *ppOutContext = NULL;
 
-    pContext = (PMYCONTEXT)HeapAlloc(GetProcessHeap(), 
-                                     HEAP_ZERO_MEMORY, 
+    pContext = (PMYCONTEXT)HeapAlloc(GetProcessHeap(),
+                                     HEAP_ZERO_MEMORY,
                                      sizeof(MYCONTEXT));
     if (pContext == NULL)
     {
@@ -157,12 +157,12 @@ Exit:
 DWORD
 LockRequestHandle(
     PMYCONTEXT pContext
-    )
+)
 {
     DWORD dwError = ERROR_SUCCESS;
 
     EnterCriticalSection(&pContext->Lock);
-    
+
     if (pContext->RequestHandle == NULL)
     {
         //
@@ -179,7 +179,7 @@ LockRequestHandle(
 VOID
 UnlockRequestHandle(
     PMYCONTEXT pContext
-    )
+)
 {
     LeaveCriticalSection(&pContext->Lock);
 }
@@ -187,17 +187,17 @@ UnlockRequestHandle(
 DWORD
 StartReadData(
     PMYCONTEXT pContext
-    )
+)
 {
     DWORD dwError = ERROR_SUCCESS;
 
     //
-    // Notice how we're under LockRequestHandle, so it's OK to touch 
+    // Notice how we're under LockRequestHandle, so it's OK to touch
     // pContext->RequestHandle.
     //
 
     if (!WinHttpReadData(pContext->RequestHandle,
-                         pContext->Buffer, 
+                         pContext->Buffer,
                          sizeof(pContext->Buffer),
                          NULL))
     {
@@ -214,7 +214,7 @@ Exit:
 DWORD
 OnHeadersAvailable(
     PMYCONTEXT pContext
-    )
+)
 {
     DWORD dwError = ERROR_SUCCESS;
     DWORD dwFlags = WINHTTP_QUERY_FLAG_NUMBER | WINHTTP_QUERY_STATUS_CODE;
@@ -228,7 +228,7 @@ OnHeadersAvailable(
                              NULL,
                              &StatusCode,
                              &StatusCodeLength,
-                             NULL)) 
+                             NULL))
     {
         dwError = GetLastError();
         printf("OnHeadersAvailable: WinHttpQueryHeaders failed\n");
@@ -250,9 +250,9 @@ Exit:
 
 DWORD
 OnReadComplete(
-    PMYCONTEXT pContext, 
+    PMYCONTEXT pContext,
     DWORD dwStatusInformationLength
-    )
+)
 {
     DWORD dwError = ERROR_SUCCESS;
 
@@ -279,7 +279,7 @@ Exit:
 }
 
 VOID
-CALLBACK 
+CALLBACK
 AsyncCallback(
     HINTERNET hInternet,
     DWORD_PTR dwContext,
@@ -306,7 +306,7 @@ AsyncCallback(
     }
 
     if (dwInternetStatus != WINHTTP_CALLBACK_STATUS_HANDLE_CLOSING &&
-        dwInternetStatus != WINHTTP_CALLBACK_STATUS_REQUEST_ERROR)
+            dwInternetStatus != WINHTTP_CALLBACK_STATUS_REQUEST_ERROR)
     {
         //
         // If we're going to try use the request handle then we'd better lock
@@ -327,7 +327,7 @@ AsyncCallback(
     case WINHTTP_CALLBACK_STATUS_SENDREQUEST_COMPLETE:
         printf("AsyncCallback: WINHTTP_CALLBACK_STATUS_SENDREQUEST_COMPLETE\n");
 
-        if (!WinHttpReceiveResponse(pContext->RequestHandle, NULL)) 
+        if (!WinHttpReceiveResponse(pContext->RequestHandle, NULL))
         {
             dwError = GetLastError();
             printf("AsyncCallback: WinHttpReceiveResponse failed\n");
@@ -354,7 +354,7 @@ AsyncCallback(
     case WINHTTP_CALLBACK_STATUS_HANDLE_CLOSING:
 
         //
-        // Garanteed last callback this context will ever receive. Release 
+        // Garanteed last callback this context will ever receive. Release
         // context when we're done on behalf of all callbacks. (Balances the
         // reference we took when we called WinHttpSendRequest)
         //
@@ -373,7 +373,7 @@ AsyncCallback(
 
 Exit:
 
-    if (dwError != ERROR_SUCCESS) 
+    if (dwError != ERROR_SUCCESS)
     {
         printf("AsyncCallback: dwError = %d\n", dwError);
         if (pContext != NULL)
@@ -400,7 +400,7 @@ Exit:
 DWORD
 InitializeGlobals(
     PCWSTR pwszServer
-    )
+)
 {
     DWORD dwError = ERROR_SUCCESS;
     HINTERNET hSession = NULL;
@@ -411,7 +411,7 @@ InitializeGlobals(
                            WINHTTP_NO_PROXY_NAME,
                            WINHTTP_NO_PROXY_BYPASS,
                            WINHTTP_FLAG_ASYNC);
-    if (hSession == NULL) 
+    if (hSession == NULL)
     {
         dwError = GetLastError();
         goto Exit;
@@ -420,17 +420,17 @@ InitializeGlobals(
     if (WinHttpSetStatusCallback(hSession,
                                  (WINHTTP_STATUS_CALLBACK)AsyncCallback,
                                  WINHTTP_CALLBACK_FLAG_ALL_NOTIFICATIONS,
-                                 0) == WINHTTP_INVALID_STATUS_CALLBACK) 
+                                 0) == WINHTTP_INVALID_STATUS_CALLBACK)
     {
         dwError = GetLastError();
         goto Exit;
     }
 
-    hConnect = WinHttpConnect(hSession, 
+    hConnect = WinHttpConnect(hSession,
                               pwszServer,
                               INTERNET_DEFAULT_HTTP_PORT,
                               0);
-    if (hConnect == NULL) 
+    if (hConnect == NULL)
     {
         dwError = GetLastError();
         goto Exit;
@@ -461,15 +461,15 @@ Exit:
 VOID
 CleanupGlobals(
     VOID
-    )
+)
 {
-    if (g_hConnect != NULL) 
+    if (g_hConnect != NULL)
     {
         WinHttpCloseHandle(g_hConnect);
         g_hConnect = NULL;
     }
 
-    if (g_hSession != NULL) 
+    if (g_hSession != NULL)
     {
         WinHttpCloseHandle(g_hSession);
         g_hSession = NULL;
@@ -480,7 +480,7 @@ DWORD
 BeginRequest(
     PWSTR pwszPath,
     PMYCONTEXT *ppContext
-    )
+)
 
 /*++
 
@@ -518,7 +518,7 @@ Return Value:
                                   NULL,              // referrer
                                   pwszAcceptTypes,
                                   0);                // flags
-    if (hRequest == NULL) 
+    if (hRequest == NULL)
     {
         dwError = GetLastError();
         goto Exit;
@@ -574,7 +574,7 @@ Return Value:
                             NULL,
                             0,
                             0,
-                            0)) 
+                            0))
     {
         dwError = GetLastError();
         printf("WinHttpSendRequest failed\n");
@@ -617,7 +617,7 @@ Exit:
 DWORD
 EndRequest(
     PMYCONTEXT pContext
-    )
+)
 
 /*++
 
@@ -638,7 +638,7 @@ Return Value:
 {
     DWORD dwError = ERROR_SUCCESS;
 
-    if (WaitForSingleObject(pContext->RequestFinishedEvent, 
+    if (WaitForSingleObject(pContext->RequestFinishedEvent,
                             INFINITE) == WAIT_FAILED)
     {
         dwError = GetLastError();
@@ -662,13 +662,13 @@ Exit:
 VOID
 CancelRequest(
     PMYCONTEXT pContext
-    )
+)
 
 /*++
 
 Routine Description:
 
-    A cancel function that is safe to call at any time pContext is valid, from 
+    A cancel function that is safe to call at any time pContext is valid, from
     any thread.
 
 Arguments:
@@ -691,10 +691,10 @@ Return Value:
     // - We do not touch pContext without owning a reference.
     // - We do not use RequestHandle without being under the lock.
     // - We check that the RequestHandle is valid before using. The request may
-    //   have finished successfully, or someone else may have cancelled it, 
-    //   while we were waiting for the lock. (this check is inside 
+    //   have finished successfully, or someone else may have cancelled it,
+    //   while we were waiting for the lock. (this check is inside
     //   LockRequestHandle)
-    // - We NULL the RequestHandle before calling WinHttpCloseHandle, cause 
+    // - We NULL the RequestHandle before calling WinHttpCloseHandle, cause
     //   there are cases where winhttp will call back inside WinHttpCloseHandle.
     //
 
@@ -724,7 +724,7 @@ DWORD
 WINAPI
 DemoCancelThreadFunc(
     LPVOID lpParameter
-    )
+)
 
 /*++
 
@@ -768,7 +768,7 @@ Return Value:
 DWORD
 DemoCancel(
     PMYCONTEXT pContext
-    )
+)
 
 /*++
 
@@ -825,7 +825,7 @@ __cdecl
 wmain(
     int argc,
     wchar_t **argv
-    )
+)
 
 /*++
 
@@ -909,7 +909,7 @@ Return Value:
     if (dwError != ERROR_SUCCESS)
     {
         if (dwError == ERROR_OPERATION_ABORTED ||
-            dwError == ERROR_WINHTTP_OPERATION_CANCELLED)
+                dwError == ERROR_WINHTTP_OPERATION_CANCELLED)
         {
             printf("DemoCancelThreadFunc won the race and cancelled "
                    "pCancelContext\n");
@@ -922,7 +922,7 @@ Return Value:
 
 Exit:
 
-    if (dwError != ERROR_SUCCESS) 
+    if (dwError != ERROR_SUCCESS)
     {
         printf("dwError=%d\n", dwError);
     }

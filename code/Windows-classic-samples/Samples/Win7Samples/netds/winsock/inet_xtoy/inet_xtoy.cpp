@@ -1,12 +1,12 @@
-
+﻿
 /******************************************************************************\
 * inet_xtoy.cpp
 *
 * This sample demonstrates the use of inet_ntop, inet_pton, InetNtopW, and InetPtonW
-* Windows Sockets address/string conversion functions. 
+* Windows Sockets address/string conversion functions.
 *
 * These functions are new to to Windows Sockets in Windows Vista.
-* 
+*
 * This sample requires that TCP/IP version 6 be installed on the system (default
 * configuration for Windows Vista).
 *
@@ -23,8 +23,8 @@
 * Microsoft samples programs.
 \******************************************************************************/
 #ifdef _IA64_
-    #pragma warning (disable: 4311)
-    #pragma warning (disable: 4312)
+#pragma warning (disable: 4311)
+#pragma warning (disable: 4312)
 #endif
 
 #ifndef WIN32_LEAN_AND_MEAN
@@ -41,7 +41,7 @@
 
 // "Safe" macros
 
-        
+
 #define ERR(e) \
         { \
         printf("%s:%s failed: %d [%s@%ld]\n",__FUNCTION__,e,WSAGetLastError(),__FILE__,__LINE__); \
@@ -64,7 +64,7 @@ VOID PrintSockaddr(PSOCKADDR pSockaddr,DWORD dwSize)
                                             NULL,
                                             szString,
                                             &dwStringSize
-                                            ))
+                                           ))
     {
         ERR("WSAAddressToString");
         return;
@@ -92,7 +92,8 @@ int __cdecl main()
         {
             ERR("WSAStartup");
             __leave;
-        } else
+        }
+        else
             nStartup++;
 
         addr.ss_family = AF_INET6;

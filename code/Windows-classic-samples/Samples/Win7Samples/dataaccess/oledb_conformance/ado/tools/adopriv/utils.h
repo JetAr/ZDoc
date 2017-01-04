@@ -1,4 +1,4 @@
-#ifndef __UTIL__H__
+﻿#ifndef __UTIL__H__
 #define __UTIL__H__
 
 #ifdef __USEPRIVLIB
@@ -24,101 +24,101 @@ BOOL	AddCharToNumericVal(WCHAR wLetter,DB_NUMERIC * pNumeric);
 
 
 template<class TYPE>
-class CListPriv 
+class CListPriv
 {
 public:
-	CListPriv(INT nBlockSize = 10);
-	~CListPriv();
+    CListPriv(INT nBlockSize = 10);
+    ~CListPriv();
 
-	INT		GetCount() const;
-	BOOL	IsEmpty() const;
+    INT		GetCount() const;
+    BOOL	IsEmpty() const;
 
-	TYPE*	Item(SHORT iIndex);
-	BOOL	Append(TYPE* pItem);
-	BOOL	RemoveAll();
+    TYPE*	Item(SHORT iIndex);
+    BOOL	Append(TYPE* pItem);
+    BOOL	RemoveAll();
 protected:
-	INT		m_nBlockSize;
-	INT		m_cCount;
-	INT		m_cTotal;
-	ULONG*	m_plData;
+    INT		m_nBlockSize;
+    INT		m_cCount;
+    INT		m_cTotal;
+    ULONG*	m_plData;
 };
 
 template<class TYPE>
-CListPriv<TYPE>::CListPriv(INT nBlockSize) 
+CListPriv<TYPE>::CListPriv(INT nBlockSize)
 {
-	m_nBlockSize = nBlockSize;
-	m_cCount = 0;
-	m_cTotal = 0;
-	m_plData = NULL;
+    m_nBlockSize = nBlockSize;
+    m_cCount = 0;
+    m_cTotal = 0;
+    m_plData = NULL;
 }
 
 template<class TYPE>
-CListPriv<TYPE>::~CListPriv() 
+CListPriv<TYPE>::~CListPriv()
 {
-	//this->RemoveAll();
+    //this->RemoveAll();
 
-	if (m_plData)
-		delete [] m_plData;
+    if (m_plData)
+        delete [] m_plData;
 }
 
 template<class TYPE>
 INT		CListPriv<TYPE>::GetCount() const
 {
-	return(m_cCount);
+    return(m_cCount);
 }
 
 
 template<class TYPE>
 BOOL	CListPriv<TYPE>::IsEmpty() const
 {
-	return(m_cCount == 0);
+    return(m_cCount == 0);
 }
 
 template<class TYPE>
 TYPE*	CListPriv<TYPE>::Item(SHORT iIndex)
 {
-	if (iIndex < m_cCount)
-		return((TYPE *)m_plData[iIndex]);
-	else
-		return(NULL);
+    if (iIndex < m_cCount)
+        return((TYPE *)m_plData[iIndex]);
+    else
+        return(NULL);
 }
 
 template<class TYPE>
 BOOL	CListPriv<TYPE>::Append(TYPE* pItem)
 {
-	if (m_cCount == m_cTotal)
-	{
-		ULONG*	plNewData = new ULONG[m_cTotal + m_nBlockSize];
+    if (m_cCount == m_cTotal)
+    {
+        ULONG*	plNewData = new ULONG[m_cTotal + m_nBlockSize];
 
-		if (!plNewData)
-			return(FALSE);
+        if (!plNewData)
+            return(FALSE);
 
-		memcpy(plNewData, m_plData, sizeof(ULONG) * m_cTotal);
-		m_cTotal += m_nBlockSize;
-		delete [] m_plData;
-		m_plData = plNewData;
+        memcpy(plNewData, m_plData, sizeof(ULONG) * m_cTotal);
+        m_cTotal += m_nBlockSize;
+        delete [] m_plData;
+        m_plData = plNewData;
 
-	}
+    }
 
-	if (m_cCount < m_cTotal)
-	{
-		m_plData[m_cCount++] = (ULONG)pItem;
-	}
-	return(TRUE);
+    if (m_cCount < m_cTotal)
+    {
+        m_plData[m_cCount++] = (ULONG)pItem;
+    }
+    return(TRUE);
 }
 
 template<class TYPE>
 BOOL	CListPriv<TYPE>::RemoveAll()
-{	
-	
- // 	for(INT i=0; i < m_cCount; i++)
- // 	{
- // 		delete (this->Item(i));
- // 	}
+{
 
-	m_cCount = 0;
+// 	for(INT i=0; i < m_cCount; i++)
+// 	{
+// 		delete (this->Item(i));
+// 	}
 
-	return(TRUE);
+    m_cCount = 0;
+
+    return(TRUE);
 }
 
 #endif //__USEPRIVLIB

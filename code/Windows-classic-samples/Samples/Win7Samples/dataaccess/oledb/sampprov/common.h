@@ -1,4 +1,4 @@
-//--------------------------------------------------------------------
+﻿//--------------------------------------------------------------------
 // Microsoft OLE DB Sample Provider
 // (C) Copyright 1991 - 1999 Microsoft Corporation. All Rights Reserved.
 //
@@ -12,10 +12,10 @@
 
 
 BOOL IsEqualDBID
-	(
-	const DBID * px,
-	const DBID * py
-	);
+(
+    const DBID * px,
+    const DBID * py
+);
 
 
 #endif

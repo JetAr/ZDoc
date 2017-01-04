@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -11,7 +11,7 @@
 //
 //  CLASS: CButtonHandler : IUICommandHandler
 //
-//  PURPOSE: Implements interface IUICommandHandler. 
+//  PURPOSE: Implements interface IUICommandHandler.
 //
 //  COMMENTS:
 //
@@ -23,7 +23,7 @@ class CButtonHandler
 {
 public:
     STDMETHOD(Execute)(UINT nCmdID,
-                       UI_EXECUTIONVERB verb, 
+                       UI_EXECUTIONVERB verb,
                        __in_opt const PROPERTYKEY* key,
                        __in_opt const PROPVARIANT* ppropvarValue,
                        __in_opt IUISimplePropertySet* pCommandExecutionProperties);
@@ -32,7 +32,7 @@ public:
                               __in REFPROPERTYKEY key,
                               __in_opt const PROPVARIANT* ppropvarCurrentValue,
                               __out PROPVARIANT* ppropvarNewValue);
-    
+
     static HRESULT CreateInstance(__deref_out CButtonHandler **ppHandler);
 
     STDMETHOD_(ULONG, AddRef)();

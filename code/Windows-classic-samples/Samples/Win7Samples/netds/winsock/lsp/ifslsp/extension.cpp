@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -24,7 +24,7 @@
 //
 // Description:
 //    This function dynamically loads the given extension function from the
-//    underlying provider. Each extension function checks to see if the 
+//    underlying provider. Each extension function checks to see if the
 //    corresponding extension function for the lower provider is loaded
 //    before calling. If not, it will load it as needed. This is necessary
 //    if the app loads the extension function for say TCP and then calls
@@ -33,34 +33,34 @@
 //
 BOOL
 LoadExtensionFunction(
-        FARPROC   **func,
-        GUID        ExtensionGuid,
-        LPWSPIOCTL  fnIoctl,
-        SOCKET      s
-        )
+    FARPROC   **func,
+    GUID        ExtensionGuid,
+    LPWSPIOCTL  fnIoctl,
+    SOCKET      s
+)
 {
     DWORD   dwBytes;
-    int     rc, 
+    int     rc,
             error;
 
     // Use the lower provider's WSPIoctl to load the extension function
     rc = fnIoctl(
-            s,
-            SIO_GET_EXTENSION_FUNCTION_POINTER,
-           &ExtensionGuid,
-            sizeof(GUID),
-            func,
-            sizeof(FARPROC),
-           &dwBytes,
-            NULL,
-            NULL,
-            NULL,
-           &error
-            );
+             s,
+             SIO_GET_EXTENSION_FUNCTION_POINTER,
+             &ExtensionGuid,
+             sizeof(GUID),
+             func,
+             sizeof(FARPROC),
+             &dwBytes,
+             NULL,
+             NULL,
+             NULL,
+             &error
+         );
     if ( SOCKET_ERROR == rc )
     {
         dbgprint("LoadExtensionFunction: WSAIoctl (SIO_GET_EXTENSION_FUNCTION) failed: %d",
-            error);
+                 error);
         return FALSE;
     }
     else
@@ -79,7 +79,7 @@ LoadExtensionFunction(
 //    implementation needs to perform the same proxying check that WSPConnect
 //    does.
 //
-BOOL PASCAL FAR 
+BOOL PASCAL FAR
 ExtConnectEx(
     IN SOCKET s,
     IN const struct sockaddr FAR *name,
@@ -88,7 +88,7 @@ ExtConnectEx(
     IN DWORD dwSendDataLength,
     OUT LPDWORD lpdwBytesSent,
     IN LPOVERLAPPED lpOverlapped
-    )
+)
 {
     SOCKET_CONTEXT *sockContext = NULL;
     SOCKADDR       *proxyAddr = NULL;
@@ -110,11 +110,11 @@ ExtConnectEx(
         GUID    guidConnectEx = WSAID_CONNECTEX;
 
         rc = LoadExtensionFunction(
-                (FARPROC **)&sockContext->Provider->NextProcTableExt.lpfnConnectEx,
-                guidConnectEx,
-                sockContext->Provider->NextProcTable.lpWSPIoctl,
-                s
-                );
+                 (FARPROC **)&sockContext->Provider->NextProcTableExt.lpfnConnectEx,
+                 guidConnectEx,
+                 sockContext->Provider->NextProcTable.lpWSPIoctl,
+                 s
+             );
         if ( FALSE == rc )
         {
             dbgprint("Next proc table ConnectEx == NULL!");
@@ -127,14 +127,14 @@ ExtConnectEx(
     FindDestinationAddress( sockContext, name, namelen, &proxyAddr, &proxyLen );
 
     rc = sockContext->Provider->NextProcTableExt.lpfnConnectEx(
-            s,
-            proxyAddr,
-            proxyLen,
-            lpSendBuffer,
-            dwSendDataLength,
-            lpdwBytesSent,
-            lpOverlapped
-            );
+             s,
+             proxyAddr,
+             proxyLen,
+             lpSendBuffer,
+             dwSendDataLength,
+             lpdwBytesSent,
+             lpOverlapped
+         );
 
 cleanup:
 

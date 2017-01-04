@@ -1,28 +1,28 @@
-//------------------------------------------------------------------------------
+﻿//------------------------------------------------------------------------------
 // File: Crossbar.cpp
 //
-// Desc: A class for controlling video crossbars. 
+// Desc: A class for controlling video crossbars.
 //
 //       This class creates a single object which encapsulates all connected
 //       crossbars, enumerates all unique inputs which can be reached from
 //       a given starting pin, and automatically routes audio when a video
 //       source is selected.
 //
-//       The class supports an arbitrarily complex graph of crossbars, 
-//       which can be cascaded and disjoint, that is not all inputs need 
+//       The class supports an arbitrarily complex graph of crossbars,
+//       which can be cascaded and disjoint, that is not all inputs need
 //       to traverse the same set of crossbars.
 //
 //       Given a starting input pin (typically the analog video input to
-//       the capture filter), the class recursively traces upstream 
+//       the capture filter), the class recursively traces upstream
 //       searching for all viable inputs.  An input is considered viable if
 //       it is a video pin and is either:
 //
-//           - unconnected 
-//           - connects to a filter which does not support IAMCrossbar 
+//           - unconnected
+//           - connects to a filter which does not support IAMCrossbar
 //
 //       Methods:
 //
-//       CCrossbar (IPin *pPin);             
+//       CCrossbar (IPin *pPin);
 //       ~CCrossbar();
 //
 //       HRESULT GetInputCount (LONG *pCount);
@@ -44,9 +44,9 @@
 // Desc: Constructor for the CCrossbar class
 //------------------------------------------------------------------------------
 CCrossbar::CCrossbar(
-        IPin *pStartingInputPin,
-        HRESULT *phr
-    ) 
+    IPin *pStartingInputPin,
+    HRESULT *phr
+)
     : m_pStartingPin (pStartingInputPin)
     , m_CurrentRoutingIndex (0)
     , m_RoutingList (NULL)
@@ -69,7 +69,7 @@ CCrossbar::CCrossbar(
     else
         hr = E_OUTOFMEMORY;
 
-    // Return an error/success code from the constructor        
+    // Return an error/success code from the constructor
     if (phr)
         *phr = hr;
 }
@@ -97,15 +97,15 @@ CCrossbar::~CCrossbar()
 //
 //  S_OK -    Returned on final exit after recursive search if at least
 //            one routing is possible
-//  S_FALSE - Normal return indicating we've reached the end of a 
+//  S_FALSE - Normal return indicating we've reached the end of a
 //            recursive search, so save the current path
 //  E_FAIL -  Unable to route anything
 
 HRESULT CCrossbar::BuildRoutingList (
-   IPin     *pStartingInputPin,
-   CRouting *pRouting,
-   int       Depth
-   )
+    IPin     *pStartingInputPin,
+    CRouting *pRouting,
+    int       Depth
+)
 {
     HRESULT  hr;
     LONG     InputIndexRelated, OutputIndexRelated;
@@ -134,59 +134,59 @@ HRESULT CCrossbar::BuildRoutingList (
         return (Depth == 0) ? E_FAIL : S_FALSE;
 
     //
-    // It is connected, so now find out if the filter supports 
+    // It is connected, so now find out if the filter supports
     // IAMCrossbar
     //
 
-    if (S_OK == pStartingOutputPin->QueryPinInfo(&pinInfo)) 
+    if (S_OK == pStartingOutputPin->QueryPinInfo(&pinInfo))
     {
         ASSERT (pinInfo.dir == PINDIR_OUTPUT);
 
         hr = pinInfo.pFilter->QueryInterface(IID_IAMCrossbar, (void **)&pXbar);
-        if (hr == S_OK) 
+        if (hr == S_OK)
         {
             EXECUTE_ASSERT (S_OK == pXbar->get_PinCounts(&Outputs, &Inputs));
 
             EXECUTE_ASSERT (S_OK == GetCrossbarIndexFromIPin (
-                                    pXbar,
-                                    &OutputIndex,
-                                    FALSE,   // Input ?
-                                    pStartingOutputPin));
+                                pXbar,
+                                &OutputIndex,
+                                FALSE,   // Input ?
+                                pStartingOutputPin));
 
             EXECUTE_ASSERT (S_OK == pXbar->get_CrossbarPinInfo(
-                                    FALSE, // Input ?
-                                    OutputIndex,
-                                    &OutputIndexRelated,
-                                    &OutputPhysicalType));
+                                FALSE, // Input ?
+                                OutputIndex,
+                                &OutputIndexRelated,
+                                &OutputPhysicalType));
 
             //
             // for all input pins
             //
 
-            for (InputIndex = 0; InputIndex < Inputs; InputIndex++) 
+            for (InputIndex = 0; InputIndex < Inputs; InputIndex++)
             {
                 EXECUTE_ASSERT (S_OK == pXbar->get_CrossbarPinInfo(
-                                        TRUE, // Input?
-                                        InputIndex,
-                                        &InputIndexRelated,
-                                        &InputPhysicalType));
+                                    TRUE, // Input?
+                                    InputIndex,
+                                    &InputIndexRelated,
+                                    &InputPhysicalType));
 
                 //
                 // Is the pin a video pin?
                 //
-                if (InputPhysicalType < PhysConn_Audio_Tuner) 
+                if (InputPhysicalType < PhysConn_Audio_Tuner)
                 {
                     //
                     // Can we route it?
                     //
-                    if (S_OK == pXbar->CanRoute(OutputIndex, InputIndex)) 
+                    if (S_OK == pXbar->CanRoute(OutputIndex, InputIndex))
                     {
 
                         EXECUTE_ASSERT (S_OK == GetCrossbarIPinAtIndex (
-                                        pXbar,
-                                        InputIndex,
-                                        TRUE,   // Input
-                                        &pPin));
+                                            pXbar,
+                                            InputIndex,
+                                            TRUE,   // Input
+                                            &pPin));
 
                         //
                         // We've found a route through this crossbar
@@ -209,8 +209,8 @@ HRESULT CCrossbar::BuildRoutingList (
                         pRouting->Depth = Depth;
 
                         hr = BuildRoutingList (pPin, &RoutingNext, Depth + 1);
-                        
-                        if (hr == S_FALSE) 
+
+                        if (hr == S_FALSE)
                         {
                             pRouting->pLeftRouting = NULL;
                             SaveRouting (pRouting);
@@ -223,7 +223,7 @@ HRESULT CCrossbar::BuildRoutingList (
 
             pXbar->Release();
         }
-        else 
+        else
         {
             // The filter doesn't support IAMCrossbar, so this
             // is a terminal pin
@@ -255,7 +255,7 @@ HRESULT CCrossbar::SaveRouting (CRouting *pRoutingNew)
     if (!pRoutingNew || !m_RoutingList)
         return E_POINTER;
 
-    DbgLog((LOG_TRACE,3,TEXT("CCrossbar::SaveRouting, Depth=%d, NumberOfRoutings=%d"), 
+    DbgLog((LOG_TRACE,3,TEXT("CCrossbar::SaveRouting, Depth=%d, NumberOfRoutings=%d"),
             Depth, m_RoutingList->GetCount() + 1));
 
     pr = new CRouting[Depth];
@@ -264,7 +264,7 @@ HRESULT CCrossbar::SaveRouting (CRouting *pRoutingNew)
 
     m_RoutingList->AddTail (pr);
 
-    for (int j = 0; j < Depth; j++, pr++) 
+    for (int j = 0; j < Depth; j++, pr++)
     {
         *pr = *pCurrent;
         ASSERT (pCurrent->pXbar != NULL);
@@ -282,10 +282,12 @@ HRESULT CCrossbar::SaveRouting (CRouting *pRoutingNew)
         pr->pLeftRouting  = pr - 1;
         pr->pRightRouting = pr + 1;
 
-        if (j == 0) {                   // first element
+        if (j == 0)                     // first element
+        {
             pr->pLeftRouting = NULL;
-        } 
-        if (j == (Depth - 1)) {  // last element
+        }
+        if (j == (Depth - 1))    // last element
+        {
             pr->pRightRouting = NULL;
         }
     }
@@ -304,7 +306,7 @@ HRESULT CCrossbar::DestroyRoutingList()
 
     DbgLog((LOG_TRACE,3,TEXT("DestroyRoutingList")));
 
-    while (m_RoutingList->GetCount()) 
+    while (m_RoutingList->GetCount())
     {
         pCurrent = pFirst = m_RoutingList->RemoveHead();
 
@@ -312,7 +314,7 @@ HRESULT CCrossbar::DestroyRoutingList()
         {
             Depth = pCurrent->Depth + 1;
 
-            for (k = 0; k < Depth; k++) 
+            for (k = 0; k < Depth; k++)
             {
                 ASSERT (pCurrent->pXbar != NULL);
 
@@ -323,7 +325,7 @@ HRESULT CCrossbar::DestroyRoutingList()
                 pCurrent = pCurrent->pRightRouting;
             }
         }
-        
+
         delete [] pFirst;
     }
 
@@ -332,13 +334,13 @@ HRESULT CCrossbar::DestroyRoutingList()
 
 
 //
-// Does not AddRef the returned *Pin 
+// Does not AddRef the returned *Pin
 //
 HRESULT CCrossbar::GetCrossbarIPinAtIndex(
-   IAMCrossbar *pXbar,
-   LONG PinIndex,
-   BOOL IsInputPin,
-   IPin ** ppPin)
+    IAMCrossbar *pXbar,
+    LONG PinIndex,
+    BOOL IsInputPin,
+    IPin ** ppPin)
 {
     LONG         cntInPins, cntOutPins;
     IPin        *pP = 0;
@@ -359,15 +361,15 @@ HRESULT CCrossbar::GetCrossbarIPinAtIndex(
 
     hr = pXbar->QueryInterface(IID_IBaseFilter, (void **)&pFilter);
 
-    if (hr == S_OK) 
+    if (hr == S_OK)
     {
-        if(SUCCEEDED(pFilter->EnumPins(&pins))) 
+        if(SUCCEEDED(pFilter->EnumPins(&pins)))
         {
             LONG i=0;
-            while(pins->Next(1, &pP, &n) == S_OK) 
+            while(pins->Next(1, &pP, &n) == S_OK)
             {
                 pP->Release();
-                if (i == TrueIndex) 
+                if (i == TrueIndex)
                 {
                     *ppPin = pP;
                     break;
@@ -378,8 +380,8 @@ HRESULT CCrossbar::GetCrossbarIPinAtIndex(
         }
         pFilter->Release();
     }
-    
-    return *ppPin ? S_OK : E_FAIL; 
+
+    return *ppPin ? S_OK : E_FAIL;
 }
 
 
@@ -408,16 +410,16 @@ HRESULT CCrossbar::GetCrossbarIndexFromIPin (
 
     hr = pXbar->QueryInterface(IID_IBaseFilter, (void **)&pFilter);
 
-    if (hr == S_OK) 
+    if (hr == S_OK)
     {
-        if(SUCCEEDED(pFilter->EnumPins(&pins))) 
+        if(SUCCEEDED(pFilter->EnumPins(&pins)))
         {
             LONG i=0;
-        
-            while(pins->Next(1, &pP, &n) == S_OK) 
+
+            while(pins->Next(1, &pP, &n) == S_OK)
             {
                 pP->Release();
-                if (pPin == pP) 
+                if (pPin == pP)
                 {
                     *PinIndex = IsInputPin ? i : i - cntInPins;
                     fOK = TRUE;
@@ -429,8 +431,8 @@ HRESULT CCrossbar::GetCrossbarIndexFromIPin (
         }
         pFilter->Release();
     }
-    
-    return fOK ? S_OK : E_FAIL; 
+
+    return fOK ? S_OK : E_FAIL;
 }
 
 
@@ -453,7 +455,7 @@ HRESULT CCrossbar::GetInputCount (LONG *pCount)
 // What is the physical type of a given input?
 //
 HRESULT CCrossbar::GetInputType (
-    LONG Index, 
+    LONG Index,
     LONG * plPhysicalType)
 {
     if (!plPhysicalType || !m_RoutingList)
@@ -461,14 +463,16 @@ HRESULT CCrossbar::GetInputType (
 
     CRouting *pCurrent = m_RoutingList->GetHead();
 
-    if (Index >= m_RoutingList->GetCount()) {
+    if (Index >= m_RoutingList->GetCount())
+    {
         return E_FAIL;
     }
 
     POSITION pos = m_RoutingList->GetHeadPosition();
 
-    for (int j = 0; j <= Index; j++) {  
-       pCurrent = m_RoutingList->GetNext(pos);
+    for (int j = 0; j <= Index; j++)
+    {
+        pCurrent = m_RoutingList->GetNext(pos);
     }
     ASSERT (pCurrent != NULL);
 
@@ -489,44 +493,90 @@ BOOL  CCrossbar::StringFromPinType (TCHAR *pc, int nSize, long lType)
     if (!pc || !nSize)
         return FALSE;
 
-    switch (lType) 
-    {   
-        case PhysConn_Video_Tuner:           pcT = TEXT("Video Tuner\0");          break;
-        case PhysConn_Video_Composite:       pcT = TEXT("Video Composite\0");      break;
-        case PhysConn_Video_SVideo:          pcT = TEXT("Video SVideo\0");         break;
-        case PhysConn_Video_RGB:             pcT = TEXT("Video RGB\0");            break;
-        case PhysConn_Video_YRYBY:           pcT = TEXT("Video YRYBY\0");          break;
-        case PhysConn_Video_SerialDigital:   pcT = TEXT("Video SerialDigital\0");  break;
-        case PhysConn_Video_ParallelDigital: pcT = TEXT("Video ParallelDigital\0");break;
-        case PhysConn_Video_SCSI:            pcT = TEXT("Video SCSI\0");           break;
-        case PhysConn_Video_AUX:             pcT = TEXT("Video AUX\0");            break;
-        case PhysConn_Video_1394:            pcT = TEXT("Video 1394\0");           break;
-        case PhysConn_Video_USB:             pcT = TEXT("Video USB\0");            break;
-        case PhysConn_Video_VideoDecoder:    pcT = TEXT("Video Decoder\0");        break;
-        case PhysConn_Video_VideoEncoder:    pcT = TEXT("Video Encoder\0");        break;
-    
-        case PhysConn_Audio_Tuner:           pcT = TEXT("Audio Tuner\0");          break;
-        case PhysConn_Audio_Line:            pcT = TEXT("Audio Line\0");           break;
-        case PhysConn_Audio_Mic:             pcT = TEXT("Audio Mic\0");            break;
-        case PhysConn_Audio_AESDigital:      pcT = TEXT("Audio AESDigital\0");     break;
-        case PhysConn_Audio_SPDIFDigital:    pcT = TEXT("Audio SPDIFDigital\0");   break;
-        case PhysConn_Audio_SCSI:            pcT = TEXT("Audio SCSI\0");           break;
-        case PhysConn_Audio_AUX:             pcT = TEXT("Audio AUX\0");            break;
-        case PhysConn_Audio_1394:            pcT = TEXT("Audio 1394\0");           break;
-        case PhysConn_Audio_USB:             pcT = TEXT("Audio USB\0");            break;
-        case PhysConn_Audio_AudioDecoder:    pcT = TEXT("Audio Decoder\0");        break;
-    
-        default:
-            pcT = TEXT("Unknown\0");
-            break;
+    switch (lType)
+    {
+    case PhysConn_Video_Tuner:
+        pcT = TEXT("Video Tuner\0");
+        break;
+    case PhysConn_Video_Composite:
+        pcT = TEXT("Video Composite\0");
+        break;
+    case PhysConn_Video_SVideo:
+        pcT = TEXT("Video SVideo\0");
+        break;
+    case PhysConn_Video_RGB:
+        pcT = TEXT("Video RGB\0");
+        break;
+    case PhysConn_Video_YRYBY:
+        pcT = TEXT("Video YRYBY\0");
+        break;
+    case PhysConn_Video_SerialDigital:
+        pcT = TEXT("Video SerialDigital\0");
+        break;
+    case PhysConn_Video_ParallelDigital:
+        pcT = TEXT("Video ParallelDigital\0");
+        break;
+    case PhysConn_Video_SCSI:
+        pcT = TEXT("Video SCSI\0");
+        break;
+    case PhysConn_Video_AUX:
+        pcT = TEXT("Video AUX\0");
+        break;
+    case PhysConn_Video_1394:
+        pcT = TEXT("Video 1394\0");
+        break;
+    case PhysConn_Video_USB:
+        pcT = TEXT("Video USB\0");
+        break;
+    case PhysConn_Video_VideoDecoder:
+        pcT = TEXT("Video Decoder\0");
+        break;
+    case PhysConn_Video_VideoEncoder:
+        pcT = TEXT("Video Encoder\0");
+        break;
+
+    case PhysConn_Audio_Tuner:
+        pcT = TEXT("Audio Tuner\0");
+        break;
+    case PhysConn_Audio_Line:
+        pcT = TEXT("Audio Line\0");
+        break;
+    case PhysConn_Audio_Mic:
+        pcT = TEXT("Audio Mic\0");
+        break;
+    case PhysConn_Audio_AESDigital:
+        pcT = TEXT("Audio AESDigital\0");
+        break;
+    case PhysConn_Audio_SPDIFDigital:
+        pcT = TEXT("Audio SPDIFDigital\0");
+        break;
+    case PhysConn_Audio_SCSI:
+        pcT = TEXT("Audio SCSI\0");
+        break;
+    case PhysConn_Audio_AUX:
+        pcT = TEXT("Audio AUX\0");
+        break;
+    case PhysConn_Audio_1394:
+        pcT = TEXT("Audio 1394\0");
+        break;
+    case PhysConn_Audio_USB:
+        pcT = TEXT("Audio USB\0");
+        break;
+    case PhysConn_Audio_AudioDecoder:
+        pcT = TEXT("Audio Decoder\0");
+        break;
+
+    default:
+        pcT = TEXT("Unknown\0");
+        break;
     }
-    
+
     // return TRUE on sucessful copy
     if (SUCCEEDED(StringCbCopy(pc, nSize, pcT)))
         bSuccess = TRUE;
     else
         bSuccess = FALSE;
-    
+
     return (bSuccess);
 }
 
@@ -537,8 +587,8 @@ BOOL  CCrossbar::StringFromPinType (TCHAR *pc, int nSize, long lType)
 // Return S_OK if the buffer is large enough to copy the string name
 //
 HRESULT CCrossbar::GetInputName (
-    LONG   Index, 
-    TCHAR *pName, 
+    LONG   Index,
+    TCHAR *pName,
     LONG   Size)
 {
     if (!m_RoutingList)
@@ -546,14 +596,16 @@ HRESULT CCrossbar::GetInputName (
 
     CRouting *pCurrent = m_RoutingList->GetHead();
 
-    if ((Index >= m_RoutingList->GetCount()) || (pName == NULL)) {
+    if ((Index >= m_RoutingList->GetCount()) || (pName == NULL))
+    {
         return E_FAIL;
     }
 
     POSITION pos = m_RoutingList->GetHeadPosition();
 
-    for (int j = 0; j <= Index; j++) { 
-       pCurrent = m_RoutingList->GetNext(pos);
+    for (int j = 0; j <= Index; j++)
+    {
+        pCurrent = m_RoutingList->GetNext(pos);
     }
     ASSERT (pCurrent != NULL);
 
@@ -563,7 +615,7 @@ HRESULT CCrossbar::GetInputName (
 
 
 //
-// Select an input 
+// Select an input
 //
 HRESULT CCrossbar::SetInputIndex (
     LONG Index)
@@ -580,25 +632,27 @@ HRESULT CCrossbar::SetInputIndex (
         return hr;
 
     POSITION pos = m_RoutingList->GetHeadPosition();
-    for (j = 0; j <= Index; j++) { 
-       pCurrent = m_RoutingList->GetNext(pos);
+    for (j = 0; j <= Index; j++)
+    {
+        pCurrent = m_RoutingList->GetNext(pos);
     }
 
     ASSERT (pCurrent != NULL);
 
     int Depth= pCurrent->Depth + 1;
 
-    for (j = 0; j < Depth; j++) 
+    for (j = 0; j < Depth; j++)
     {
         hr = pCurrent->pXbar->Route (pCurrent->VideoOutputIndex, pCurrent->VideoInputIndex);
         ASSERT (S_OK == hr);
 
-        if ((pCurrent->AudioOutputIndex != -1) && (pCurrent->AudioInputIndex != -1)) {
-            EXECUTE_ASSERT (S_OK == pCurrent->pXbar->Route (pCurrent->AudioOutputIndex, 
+        if ((pCurrent->AudioOutputIndex != -1) && (pCurrent->AudioInputIndex != -1))
+        {
+            EXECUTE_ASSERT (S_OK == pCurrent->pXbar->Route (pCurrent->AudioOutputIndex,
                             pCurrent->AudioInputIndex));
         }
 
-        DbgLog((LOG_TRACE,3,TEXT("CCrossbar::Routing, VideoOutIndex=%d VideoInIndex=%d"), 
+        DbgLog((LOG_TRACE,3,TEXT("CCrossbar::Routing, VideoOutIndex=%d VideoInIndex=%d"),
                 pCurrent->VideoOutputIndex, pCurrent->VideoInputIndex));
 
         pCurrent++;
@@ -617,7 +671,7 @@ HRESULT CCrossbar::GetInputIndex (
     LONG *plIndex)
 {
     if (plIndex)
-    {    
+    {
         *plIndex = m_CurrentRoutingIndex;
         return S_OK;
     }

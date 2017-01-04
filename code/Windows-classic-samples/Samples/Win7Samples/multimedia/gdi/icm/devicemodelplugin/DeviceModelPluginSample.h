@@ -1,16 +1,16 @@
-
+﻿
 
 /* this ALWAYS GENERATED file contains the definitions for the interfaces */
 
 
- /* File created by MIDL compiler version 7.00.0493 */
+/* File created by MIDL compiler version 7.00.0493 */
 /* at Thu Apr 27 12:56:38 2006
  */
 /* Compiler settings for .\DeviceModelPluginSample.idl:
     Oicf, W1, Zp8, env=Win64 (32b run)
     protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
+    error checks: allocation ref bounds_check enum stub_data
+    VC __declspec() decoration level:
          __declspec(uuid()), __declspec(selectany), __declspec(novtable)
          DECLSPEC_UUID(), MIDL_INTERFACE()
 */
@@ -43,7 +43,7 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+/* Forward Declarations */
 
 #ifndef __ISampleDeviceModelPrivateInterface_FWD_DEFINED__
 #define __ISampleDeviceModelPrivateInterface_FWD_DEFINED__
@@ -69,75 +69,76 @@ typedef struct DeviceModelPluginSample DeviceModelPluginSample;
 #include "WcsPlugin.h"
 
 #ifdef __cplusplus
-extern "C"{
-#endif 
+extern "C" {
+#endif
 
 
 #ifndef __ISampleDeviceModelPrivateInterface_INTERFACE_DEFINED__
 #define __ISampleDeviceModelPrivateInterface_INTERFACE_DEFINED__
 
 /* interface ISampleDeviceModelPrivateInterface */
-/* [unique][helpstring][uuid][object] */ 
+/* [unique][helpstring][uuid][object] */
 
 
 EXTERN_C const IID IID_ISampleDeviceModelPrivateInterface;
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
-    
-    MIDL_INTERFACE("94617F91-2C14-4485-9B94-A78579B73523")
-    ISampleDeviceModelPrivateInterface : public IUnknown
-    {
-    public:
-        virtual HRESULT STDMETHODCALLTYPE SamplePrivateMethod( void) = 0;
-        
-    };
-    
+
+MIDL_INTERFACE("94617F91-2C14-4485-9B94-A78579B73523")
+ISampleDeviceModelPrivateInterface :
+public IUnknown
+{
+public:
+    virtual HRESULT STDMETHODCALLTYPE SamplePrivateMethod( void) = 0;
+
+};
+
 #else 	/* C style interface */
 
-    typedef struct ISampleDeviceModelPrivateInterfaceVtbl
-    {
-        BEGIN_INTERFACE
-        
-        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
-            ISampleDeviceModelPrivateInterface * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ 
-            __RPC__deref_out  void **ppvObject);
-        
-        ULONG ( STDMETHODCALLTYPE *AddRef )( 
-            ISampleDeviceModelPrivateInterface * This);
-        
-        ULONG ( STDMETHODCALLTYPE *Release )( 
-            ISampleDeviceModelPrivateInterface * This);
-        
-        HRESULT ( STDMETHODCALLTYPE *SamplePrivateMethod )( 
-            ISampleDeviceModelPrivateInterface * This);
-        
-        END_INTERFACE
-    } ISampleDeviceModelPrivateInterfaceVtbl;
+typedef struct ISampleDeviceModelPrivateInterfaceVtbl
+{
+    BEGIN_INTERFACE
 
-    interface ISampleDeviceModelPrivateInterface
-    {
-        CONST_VTBL struct ISampleDeviceModelPrivateInterfaceVtbl *lpVtbl;
-    };
+    HRESULT ( STDMETHODCALLTYPE *QueryInterface )(
+        ISampleDeviceModelPrivateInterface * This,
+        /* [in] */ REFIID riid,
+        /* [iid_is][out] */
+        __RPC__deref_out  void **ppvObject);
 
-    
+    ULONG ( STDMETHODCALLTYPE *AddRef )(
+        ISampleDeviceModelPrivateInterface * This);
+
+    ULONG ( STDMETHODCALLTYPE *Release )(
+        ISampleDeviceModelPrivateInterface * This);
+
+    HRESULT ( STDMETHODCALLTYPE *SamplePrivateMethod )(
+        ISampleDeviceModelPrivateInterface * This);
+
+    END_INTERFACE
+} ISampleDeviceModelPrivateInterfaceVtbl;
+
+interface ISampleDeviceModelPrivateInterface
+{
+    CONST_VTBL struct ISampleDeviceModelPrivateInterfaceVtbl *lpVtbl;
+};
+
+
 
 #ifdef COBJMACROS
 
 
 #define ISampleDeviceModelPrivateInterface_QueryInterface(This,riid,ppvObject)	\
-    ( (This)->lpVtbl -> QueryInterface(This,riid,ppvObject) ) 
+    ( (This)->lpVtbl -> QueryInterface(This,riid,ppvObject) )
 
 #define ISampleDeviceModelPrivateInterface_AddRef(This)	\
-    ( (This)->lpVtbl -> AddRef(This) ) 
+    ( (This)->lpVtbl -> AddRef(This) )
 
 #define ISampleDeviceModelPrivateInterface_Release(This)	\
-    ( (This)->lpVtbl -> Release(This) ) 
+    ( (This)->lpVtbl -> Release(This) )
 
 
 #define ISampleDeviceModelPrivateInterface_SamplePrivateMethod(This)	\
-    ( (This)->lpVtbl -> SamplePrivateMethod(This) ) 
+    ( (This)->lpVtbl -> SamplePrivateMethod(This) )
 
 #endif /* COBJMACROS */
 
@@ -155,7 +156,7 @@ EXTERN_C const IID IID_ISampleDeviceModelPrivateInterface;
 #define __DeviceModelPluginSampleLib_LIBRARY_DEFINED__
 
 /* library DeviceModelPluginSampleLib */
-/* [helpstring][version][uuid] */ 
+/* [helpstring][version][uuid] */
 
 
 EXTERN_C const IID LIBID_DeviceModelPluginSampleLib;
@@ -165,7 +166,7 @@ EXTERN_C const CLSID CLSID_DeviceModelPluginSample;
 #ifdef __cplusplus
 
 class DECLSPEC_UUID("48D2ACFF-1716-4262-9163-CC8ADB245D58")
-DeviceModelPluginSample;
+    DeviceModelPluginSample;
 #endif
 #endif /* __DeviceModelPluginSampleLib_LIBRARY_DEFINED__ */
 

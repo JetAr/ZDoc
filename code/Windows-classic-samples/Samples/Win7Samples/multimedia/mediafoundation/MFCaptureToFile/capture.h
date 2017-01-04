@@ -1,7 +1,7 @@
-//////////////////////////////////////////////////////////////////////////
+﻿//////////////////////////////////////////////////////////////////////////
 //
 // capture.h: Manages video capture.
-// 
+//
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -29,8 +29,11 @@ public:
     {
         Clear();
     }
-    
-    UINT32  Count() const { return m_cDevices; }
+
+    UINT32  Count() const
+    {
+        return m_cDevices;
+    }
 
     void    Clear();
     HRESULT EnumerateDevices();
@@ -90,14 +93,17 @@ protected:
         State_Ready,
         State_Capturing,
     };
-    
+
     // Constructor is private. Use static CreateInstance method to instantiate.
     CCapture(HWND hwnd);
 
     // Destructor is private. Caller should call Release.
     virtual ~CCapture();
 
-    void    NotifyError(HRESULT hr) { PostMessage(m_hwndEvent, WM_APP_PREVIEW_ERROR, (WPARAM)hr, 0L); }
+    void    NotifyError(HRESULT hr)
+    {
+        PostMessage(m_hwndEvent, WM_APP_PREVIEW_ERROR, (WPARAM)hr, 0L);
+    }
 
     HRESULT OpenMediaSource(IMFMediaSource *pSource);
     HRESULT ConfigureCapture(const EncodingParameters& param);
@@ -106,7 +112,7 @@ protected:
     long                    m_nRefCount;        // Reference count.
     CRITICAL_SECTION        m_critsec;
 
-    HWND                    m_hwndEvent;        // Application window to receive events. 
+    HWND                    m_hwndEvent;        // Application window to receive events.
 
     IMFSourceReader         *m_pReader;
     IMFSinkWriter           *m_pWriter;

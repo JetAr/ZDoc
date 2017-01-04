@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -6,8 +6,8 @@
 // Copyright (c) Microsoft Corporation. All rights reserved
 
 //
-// RichEditMng.h/cpp implement the utility functions that are used for interacting 
-// with the RichEdit control. 
+// RichEditMng.h/cpp implement the utility functions that are used for interacting
+// with the RichEdit control.
 //
 
 #pragma once
@@ -21,13 +21,16 @@
 class CFCSampleAppRichEditManager
 {
 public:
-    
+
     CFCSampleAppRichEditManager(HWND hWnd, HINSTANCE hInst);
 
-    HWND GetRichEditWnd(){return m_hWndEdit;} // Return RichEdit window handle.
+    HWND GetRichEditWnd()
+    {
+        return m_hWndEdit;   // Return RichEdit window handle.
+    }
     HRESULT SetHeight(UINT uHeight); // Set height of the ribbon.
     HRESULT Resize(); // Resize the RichEdit when height changes.
-    
+
     void SetValues(__in IPropertyStore *pps); // Set values for font displayed in the selection.
     void GetValues(__in IPropertyStore *pps); // Get values for font displayed in the selection.
     void SetPreviewValues(__in IPropertyStore *pps); // Set preview font values.

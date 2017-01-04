@@ -1,4 +1,4 @@
-//***************************************************************************
+﻿//***************************************************************************
 
 //
 
@@ -73,19 +73,20 @@ STDMETHODIMP CClassPro::QueryInterface(REFIID riid, PPVOID ppv)
     // Since we have dual inheritance, it is necessary to cast the return type
 
     if(riid== IID_IWbemServices)
-       *ppv=(IWbemServices*)this;
+        *ppv=(IWbemServices*)this;
 
     if(IID_IUnknown==riid || riid== IID_IWbemProviderInit)
-       *ppv=(IWbemProviderInit*)this;
-    
+        *ppv=(IWbemProviderInit*)this;
 
-    if (NULL!=*ppv) {
+
+    if (NULL!=*ppv)
+    {
         AddRef();
         return NOERROR;
-        }
+    }
     else
         return E_NOINTERFACE;
-  
+
 }
 
 
@@ -99,7 +100,7 @@ STDMETHODIMP_(ULONG) CClassPro::Release(void)
     ULONG nNewCount = InterlockedDecrement((long *)&m_cRef);
     if (0L == nNewCount)
         delete this;
-    
+
     return nNewCount;
 }
 
@@ -113,23 +114,23 @@ STDMETHODIMP_(ULONG) CClassPro::Release(void)
 ***********************************************************************/
 
 STDMETHODIMP CClassPro::Initialize(LPWSTR pszUser, LONG lFlags,
-                                    LPWSTR pszNamespace, LPWSTR pszLocale,
-                                    IWbemServices *pNamespace, 
-                                    IWbemContext *pCtx,
-                                    IWbemProviderInitSink *pInitSink)
+                                   LPWSTR pszNamespace, LPWSTR pszLocale,
+                                   IWbemServices *pNamespace,
+                                   IWbemContext *pCtx,
+                                   IWbemProviderInitSink *pInitSink)
 {
-   if(! pNamespace)
-	{
-	    pInitSink->SetStatus(WBEM_E_FAILED , 0);
-	}
-	else
-	{
-		m_pNamespace = pNamespace;
-	    m_pNamespace->AddRef();
-		pInitSink->SetStatus(WBEM_S_INITIALIZED, 0);
-	}
+    if(! pNamespace)
+    {
+        pInitSink->SetStatus(WBEM_E_FAILED, 0);
+    }
+    else
+    {
+        m_pNamespace = pNamespace;
+        m_pNamespace->AddRef();
+        pInitSink->SetStatus(WBEM_S_INITIALIZED, 0);
+    }
 
-    
+
     return WBEM_S_NO_ERROR;
 }
 
@@ -137,53 +138,53 @@ STDMETHODIMP CClassPro::Initialize(LPWSTR pszUser, LONG lFlags,
 //
 // CClassPro::CreateClassEnumAsync
 //
-// Purpose: Asynchronously enumerates the classes this provider supports.  
-// Note that this sample only supports one.  
+// Purpose: Asynchronously enumerates the classes this provider supports.
+// Note that this sample only supports one.
 //
 //***************************************************************************
 
-SCODE CClassPro::CreateClassEnumAsync(const BSTR Superclass, long lFlags, 
-									  IWbemContext  *pCtx, IWbemObjectSink *pHandler)
+SCODE CClassPro::CreateClassEnumAsync(const BSTR Superclass, long lFlags,
+                                      IWbemContext  *pCtx, IWbemObjectSink *pHandler)
 {
     if(pHandler == NULL || m_pNamespace == NULL)
         return WBEM_E_INVALID_PARAMETER;
 
-	SCODE sc = S_OK;
+    SCODE sc = S_OK;
 
-	if(SysStringLen(Superclass) == 0)
-	{
-		IWbemClassObject * pNewClass = NULL;
-		sc = CreateClass(m_pNamespace, &pNewClass, SAMPLE_CLASS_NAME, pCtx);
- 
-		if(sc == S_OK)
-		{
-			// Send the object to the caller
+    if(SysStringLen(Superclass) == 0)
+    {
+        IWbemClassObject * pNewClass = NULL;
+        sc = CreateClass(m_pNamespace, &pNewClass, SAMPLE_CLASS_NAME, pCtx);
 
-			pHandler->Indicate(1,&pNewClass);
-			pNewClass->Release();
-		}
-	}
+        if(sc == S_OK)
+        {
+            // Send the object to the caller
+
+            pHandler->Indicate(1,&pNewClass);
+            pNewClass->Release();
+        }
+    }
     // Set status
 
     pHandler->SetStatus(0,sc,NULL, NULL);
-	return S_OK;
+    return S_OK;
 }
 
 //***************************************************************************
 //
 // CClassPro::CreateInstanceEnumAsync
 //
-// Purpose: Asynchronously enumerates the instances.  
+// Purpose: Asynchronously enumerates the instances.
 //
 //***************************************************************************
 
 SCODE CClassPro::CreateInstanceEnumAsync( const BSTR RefStr, long lFlags, IWbemContext *pCtx,
-       IWbemObjectSink FAR* pHandler)
+        IWbemObjectSink FAR* pHandler)
 {
     SCODE sc;
     int iCnt;
     IWbemClassObject FAR* pNewInst;
-  
+
     // Do a check of arguments and make sure we have pointer to Namespace
 
     if(pHandler == NULL || m_pNamespace == NULL)
@@ -192,8 +193,8 @@ SCODE CClassPro::CreateInstanceEnumAsync( const BSTR RefStr, long lFlags, IWbemC
     for(iCnt=0; iCnt < glNumInst; iCnt++)
     {
         sc = CreateInst(m_pNamespace,MyDefs[iCnt].pwcKey,
-                    MyDefs[iCnt].lValue, &pNewInst, RefStr, pCtx);
- 
+                        MyDefs[iCnt].lValue, &pNewInst, RefStr, pCtx);
+
         if(sc != S_OK)
             break;
 
@@ -222,7 +223,7 @@ SCODE CClassPro::CreateInstanceEnumAsync( const BSTR RefStr, long lFlags, IWbemC
 
 
 SCODE CClassPro::GetObjectAsync(const BSTR ObjectPath, long lFlags,IWbemContext  *pCtx,
-                    IWbemObjectSink FAR* pHandler)
+                                IWbemObjectSink FAR* pHandler)
 {
 
     SCODE sc;
@@ -234,31 +235,31 @@ SCODE CClassPro::GetObjectAsync(const BSTR ObjectPath, long lFlags,IWbemContext 
     if(ObjectPath == NULL || pHandler == NULL || m_pNamespace == NULL)
         return WBEM_E_INVALID_PARAMETER;
 
-	// If we are being asked for our class, get that
-	size_t i1 = SysStringLen(ObjectPath);
-	size_t i2 = wcslen(SAMPLE_CLASS_NAME);
-	if(i1 >= i2 && !_wcsicmp(&ObjectPath[i1-i2], SAMPLE_CLASS_NAME) )
-	{
-		IWbemClassObject * pNewClass = NULL;
-		sc = CreateClass(m_pNamespace, &pNewClass, SAMPLE_CLASS_NAME, pCtx);
- 
-		if(sc == S_OK)
-		{
-			// Send the object to the caller
+    // If we are being asked for our class, get that
+    size_t i1 = SysStringLen(ObjectPath);
+    size_t i2 = wcslen(SAMPLE_CLASS_NAME);
+    if(i1 >= i2 && !_wcsicmp(&ObjectPath[i1-i2], SAMPLE_CLASS_NAME) )
+    {
+        IWbemClassObject * pNewClass = NULL;
+        sc = CreateClass(m_pNamespace, &pNewClass, SAMPLE_CLASS_NAME, pCtx);
 
-			pHandler->Indicate(1,&pNewClass);
-			pNewClass->Release();
-		}
-	}
-	else if(S_OK ==GetByPath(ObjectPath,&pObj, pCtx))
+        if(sc == S_OK)
+        {
+            // Send the object to the caller
+
+            pHandler->Indicate(1,&pNewClass);
+            pNewClass->Release();
+        }
+    }
+    else if(S_OK ==GetByPath(ObjectPath,&pObj, pCtx))
     {
         pHandler->Indicate(1,&pObj);
         pObj->Release();
         bOK = TRUE;
-		sc = S_OK;
+        sc = S_OK;
     }
-	else
-		sc = WBEM_E_NOT_FOUND;
+    else
+        sc = WBEM_E_NOT_FOUND;
 
     // Set Status
 
@@ -266,7 +267,7 @@ SCODE CClassPro::GetObjectAsync(const BSTR ObjectPath, long lFlags,IWbemContext 
 
     return sc;
 }
- 
+
 //***************************************************************************
 //
 // CClassPro::GetByPath
@@ -278,7 +279,7 @@ SCODE CClassPro::GetObjectAsync(const BSTR ObjectPath, long lFlags,IWbemContext 
 SCODE CClassPro::GetByPath(BSTR ObjectPath, IWbemClassObject FAR* FAR* ppObj, IWbemContext  *pCtx)
 {
     SCODE sc = S_OK;
-    
+
     int iCnt;
 
     // do a simple path parse.  The path will look something like
@@ -286,7 +287,7 @@ SCODE CClassPro::GetByPath(BSTR ObjectPath, IWbemClassObject FAR* FAR* ppObj, IW
     // Create a test string with just the part between quotes.
 
     WCHAR wcTest[MAX_PATH+1];
-	StringCbCopyW(wcTest, sizeof(wcTest), ObjectPath);
+    StringCbCopyW(wcTest, sizeof(wcTest), ObjectPath);
     WCHAR * pwcTest, * pwcCompare = NULL;
 
     int iNumQuotes = 0;
@@ -316,60 +317,60 @@ SCODE CClassPro::GetByPath(BSTR ObjectPath, IWbemClassObject FAR* FAR* ppObj, IW
         if(!_wcsicmp(MyDefs[iCnt].pwcKey, pwcCompare))
         {
             sc = CreateInst(m_pNamespace,MyDefs[iCnt].pwcKey,
-                    MyDefs[iCnt].lValue, ppObj, wcTest, pCtx);
+                            MyDefs[iCnt].lValue, ppObj, wcTest, pCtx);
             return sc;
         }
     }
 
     return WBEM_E_NOT_FOUND;
 }
- 
-SCODE CClassPro::PutClassAsync( 
-            /* [in] */ IWbemClassObject __RPC_FAR *pObject,
-            /* [in] */ long lFlags,
-            /* [in] */ IWbemContext __RPC_FAR *pCtx,
-            /* [in] */ IWbemObjectSink __RPC_FAR *pResponseHandler)
+
+SCODE CClassPro::PutClassAsync(
+    /* [in] */ IWbemClassObject __RPC_FAR *pObject,
+    /* [in] */ long lFlags,
+    /* [in] */ IWbemContext __RPC_FAR *pCtx,
+    /* [in] */ IWbemObjectSink __RPC_FAR *pResponseHandler)
 {
 
-	VARIANT var;
-	VariantInit(&var);
-	pObject->Get(L"__Class", 0, &var, NULL, NULL);
-	if(!_wcsicmp(SAMPLE_CLASS_NAME, var.bstrVal))
-		pResponseHandler->SetStatus(0,S_OK,NULL, NULL);
-	else
-		pResponseHandler->SetStatus(0,WBEM_E_NOT_FOUND,NULL, NULL);
-	return S_OK;
+    VARIANT var;
+    VariantInit(&var);
+    pObject->Get(L"__Class", 0, &var, NULL, NULL);
+    if(!_wcsicmp(SAMPLE_CLASS_NAME, var.bstrVal))
+        pResponseHandler->SetStatus(0,S_OK,NULL, NULL);
+    else
+        pResponseHandler->SetStatus(0,WBEM_E_NOT_FOUND,NULL, NULL);
+    return S_OK;
 }
- 
-SCODE CClassPro::DeleteClassAsync( 
-            /* [in] */ const BSTR Class,
-            /* [in] */ long lFlags,
-            /* [in] */ IWbemContext __RPC_FAR *pCtx,
-            /* [in] */ IWbemObjectSink __RPC_FAR *pResponseHandler)
-{
-	if(!_wcsicmp(SAMPLE_CLASS_NAME, Class))
-		pResponseHandler->SetStatus(0,S_OK,NULL, NULL);
-	else
-		pResponseHandler->SetStatus(0,WBEM_E_NOT_FOUND,NULL, NULL);
 
-	return S_OK;
+SCODE CClassPro::DeleteClassAsync(
+    /* [in] */ const BSTR Class,
+    /* [in] */ long lFlags,
+    /* [in] */ IWbemContext __RPC_FAR *pCtx,
+    /* [in] */ IWbemObjectSink __RPC_FAR *pResponseHandler)
+{
+    if(!_wcsicmp(SAMPLE_CLASS_NAME, Class))
+        pResponseHandler->SetStatus(0,S_OK,NULL, NULL);
+    else
+        pResponseHandler->SetStatus(0,WBEM_E_NOT_FOUND,NULL, NULL);
+
+    return S_OK;
 }
-SCODE CClassPro::PutInstanceAsync( 
-            /* [in] */ IWbemClassObject __RPC_FAR *pInst,
-            /* [in] */ long lFlags,
-            /* [in] */ IWbemContext __RPC_FAR *pCtx,
-            /* [in] */ IWbemObjectSink __RPC_FAR *pResponseHandler)
+SCODE CClassPro::PutInstanceAsync(
+    /* [in] */ IWbemClassObject __RPC_FAR *pInst,
+    /* [in] */ long lFlags,
+    /* [in] */ IWbemContext __RPC_FAR *pCtx,
+    /* [in] */ IWbemObjectSink __RPC_FAR *pResponseHandler)
 {
     pResponseHandler->SetStatus(0,S_OK,NULL, NULL);
-	return S_OK;
+    return S_OK;
 }
-SCODE CClassPro::DeleteInstanceAsync( 
-            /* [in] */ const BSTR ObjectPath,
-            /* [in] */ long lFlags,
-            /* [in] */ IWbemContext __RPC_FAR *pCtx,
-            /* [in] */ IWbemObjectSink __RPC_FAR *pResponseHandler)
+SCODE CClassPro::DeleteInstanceAsync(
+    /* [in] */ const BSTR ObjectPath,
+    /* [in] */ long lFlags,
+    /* [in] */ IWbemContext __RPC_FAR *pCtx,
+    /* [in] */ IWbemObjectSink __RPC_FAR *pResponseHandler)
 {
     pResponseHandler->SetStatus(0,S_OK,NULL, NULL);
-	return S_OK;
+    return S_OK;
 }
 

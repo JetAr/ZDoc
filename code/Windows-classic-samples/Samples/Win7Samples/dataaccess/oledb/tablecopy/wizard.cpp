@@ -1,4 +1,4 @@
-//-----------------------------------------------------------------------------
+﻿//-----------------------------------------------------------------------------
 // Microsoft OLE DB TABLECOPY Sample
 // Copyright (C) 1991-2000 Microsoft Corporation
 //
@@ -26,10 +26,10 @@
 /////////////////////////////////////////////////////////////////////
 CDialogBase::CDialogBase(HWND hWnd, HINSTANCE hInst)
 {
-	ASSERT(hInst);
-	
-	m_hWnd	= hWnd;
-	m_hInst = hInst;
+    ASSERT(hInst);
+
+    m_hWnd	= hWnd;
+    m_hInst = hInst;
 }
 
 /////////////////////////////////////////////////////////////////////
@@ -38,7 +38,7 @@ CDialogBase::CDialogBase(HWND hWnd, HINSTANCE hInst)
 /////////////////////////////////////////////////////////////////////
 CDialogBase::~CDialogBase()
 {
-	Destroy();
+    Destroy();
 }
 
 
@@ -48,13 +48,13 @@ CDialogBase::~CDialogBase()
 /////////////////////////////////////////////////////////////////////
 ULONG CDialogBase::Destroy()
 {
-	if(m_hWnd)
-	{
-		EndDialog(m_hWnd, 0);
-		m_hWnd = NULL;
-	}
+    if(m_hWnd)
+    {
+        EndDialog(m_hWnd, 0);
+        m_hWnd = NULL;
+    }
 
-	return 0;
+    return 0;
 }
 
 
@@ -63,17 +63,17 @@ ULONG CDialogBase::Destroy()
 //
 /////////////////////////////////////////////////////////////////
 CWizard::CWizard(HWND hWnd, HINSTANCE hInst)
-	: CDialogBase(hWnd, hInst)
+    : CDialogBase(hWnd, hInst)
 {
-	m_pCTableCopy = new CTableCopy(this);
-	m_pCProgress = new CProgress(hWnd, hInst);
+    m_pCTableCopy = new CTableCopy(this);
+    m_pCProgress = new CProgress(hWnd, hInst);
 
-	m_iPrevStep = WIZ_STEP1;
-	m_rgDialogSteps[WIZ_STEP1] = new CS1Dialog(hWnd, hInst, m_pCTableCopy);
-	m_rgDialogSteps[WIZ_STEP2] = new CS2Dialog(hWnd, hInst, m_pCTableCopy);
-	m_rgDialogSteps[WIZ_STEP3] = new CS3Dialog(hWnd, hInst, m_pCTableCopy);
-	m_rgDialogSteps[WIZ_STEP4] = new CS4Dialog(hWnd, hInst, m_pCTableCopy);
-	m_rgDialogSteps[WIZ_TYPES] = new CTypesDialog(hWnd, hInst, m_pCTableCopy);
+    m_iPrevStep = WIZ_STEP1;
+    m_rgDialogSteps[WIZ_STEP1] = new CS1Dialog(hWnd, hInst, m_pCTableCopy);
+    m_rgDialogSteps[WIZ_STEP2] = new CS2Dialog(hWnd, hInst, m_pCTableCopy);
+    m_rgDialogSteps[WIZ_STEP3] = new CS3Dialog(hWnd, hInst, m_pCTableCopy);
+    m_rgDialogSteps[WIZ_STEP4] = new CS4Dialog(hWnd, hInst, m_pCTableCopy);
+    m_rgDialogSteps[WIZ_TYPES] = new CTypesDialog(hWnd, hInst, m_pCTableCopy);
 }
 
 
@@ -83,14 +83,14 @@ CWizard::CWizard(HWND hWnd, HINSTANCE hInst)
 /////////////////////////////////////////////////////////////////
 CWizard::~CWizard()
 {
-	delete m_pCTableCopy;
-	delete m_pCProgress;
+    delete m_pCTableCopy;
+    delete m_pCProgress;
 
-	delete m_rgDialogSteps[WIZ_STEP1];
-	delete m_rgDialogSteps[WIZ_STEP2];
-	delete m_rgDialogSteps[WIZ_STEP3];
-	delete m_rgDialogSteps[WIZ_STEP4];
-	delete m_rgDialogSteps[WIZ_TYPES];
+    delete m_rgDialogSteps[WIZ_STEP1];
+    delete m_rgDialogSteps[WIZ_STEP2];
+    delete m_rgDialogSteps[WIZ_STEP3];
+    delete m_rgDialogSteps[WIZ_STEP4];
+    delete m_rgDialogSteps[WIZ_TYPES];
 }
 
 
@@ -100,7 +100,7 @@ CWizard::~CWizard()
 /////////////////////////////////////////////////////////////////
 INT_PTR CWizard::Display()
 {
-	return DisplayStep(WIZ_STEP1);
+    return DisplayStep(WIZ_STEP1);
 }
 
 
@@ -110,8 +110,8 @@ INT_PTR CWizard::Display()
 /////////////////////////////////////////////////////////////////
 INT_PTR CWizard::DisplayStep(ULONG iStep)
 {
-	ASSERT(iStep >= WIZ_STEP1 && iStep < END_WIZ);
-	return m_rgDialogSteps[iStep]->Display();
+    ASSERT(iStep >= WIZ_STEP1 && iStep < END_WIZ);
+    return m_rgDialogSteps[iStep]->Display();
 }
 
 
@@ -121,8 +121,8 @@ INT_PTR CWizard::DisplayStep(ULONG iStep)
 /////////////////////////////////////////////////////////////////
 ULONG CWizard::DestroyPrevStep(ULONG iCurStep)
 {
-	if(iCurStep != m_iPrevStep)
-		m_rgDialogSteps[m_iPrevStep]->Destroy();
-	m_iPrevStep = iCurStep;
-	return 0;
+    if(iCurStep != m_iPrevStep)
+        m_rgDialogSteps[m_iPrevStep]->Destroy();
+    m_iPrevStep = iCurStep;
+    return 0;
 }

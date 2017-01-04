@@ -1,4 +1,4 @@
-// --------------------------------------------------------------------
+﻿// --------------------------------------------------------------------
 //
 //  Copyright (c) Microsoft Corporation.  All rights reserved
 //
@@ -29,27 +29,27 @@ static char THIS_FILE[] = __FILE__;
 
 
 CReceiveWaitDialog::CReceiveWaitDialog(CWnd* pParent /*=NULL*/)
-	: CDialog(CReceiveWaitDialog::IDD, pParent)
+    : CDialog(CReceiveWaitDialog::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(CReceiveWaitDialog)
-		// NOTE: the ClassWizard will add member initialization here
-	//}}AFX_DATA_INIT
+    //{{AFX_DATA_INIT(CReceiveWaitDialog)
+    // NOTE: the ClassWizard will add member initialization here
+    //}}AFX_DATA_INIT
 }
 
 
 void CReceiveWaitDialog::DoDataExchange(CDataExchange* pDX)
 {
-	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CReceiveWaitDialog)
-		// NOTE: the ClassWizard will add DDX and DDV calls here
-	//}}AFX_DATA_MAP
+    CDialog::DoDataExchange(pDX);
+    //{{AFX_DATA_MAP(CReceiveWaitDialog)
+    // NOTE: the ClassWizard will add DDX and DDV calls here
+    //}}AFX_DATA_MAP
 }
 
 
 BEGIN_MESSAGE_MAP(CReceiveWaitDialog, CDialog)
-	//{{AFX_MSG_MAP(CReceiveWaitDialog)
-		// NOTE: the ClassWizard will add message map macros here
-	//}}AFX_MSG_MAP
+    //{{AFX_MSG_MAP(CReceiveWaitDialog)
+    // NOTE: the ClassWizard will add message map macros here
+    //}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////

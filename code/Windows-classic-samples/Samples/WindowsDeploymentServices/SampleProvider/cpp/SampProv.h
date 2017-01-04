@@ -1,4 +1,4 @@
-/*++
+﻿/*++
 
     Copyright (c) Microsoft Corporation
 
@@ -49,7 +49,7 @@ Environment:
 #define DHCP_REPLY_PACKET_SIZE              300
 
 //
-// This string is appended to DLL name to get the file name of configuration 
+// This string is appended to DLL name to get the file name of configuration
 // file.
 //
 #define CONFIG_FILE_SUFFIX                  L".sampprov.ini"
@@ -96,22 +96,22 @@ PxeProviderRecvRequest (
     _In_ PXE_ADDRESS *pRemoteAddress,
     _Out_ PXE_BOOT_ACTION *pAction,
     _In_ PVOID pContext
-    );
+);
 
 DWORD
 PXEAPI
 PxeProviderShutdown (
     _In_ PVOID pContext
-    );
+);
 
 DWORD
 InitializeConfiguration (
     VOID
-    );
+);
 
 DWORD
 GetClientMacAddress (
     _In_ PVOID pPacket,
     _Inout_updates_(MAX_MAC_ADDR_STRING_LEN) LPWSTR pwszMacAddress
-    );
+);
 

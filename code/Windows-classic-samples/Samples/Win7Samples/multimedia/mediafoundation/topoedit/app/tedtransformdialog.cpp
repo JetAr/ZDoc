@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -12,7 +12,7 @@
 #include <dmo.h>
 #include <assert.h>
 
-DMOCategory CTedTransformDialog::ms_categories[9] = 
+DMOCategory CTedTransformDialog::ms_categories[9] =
 {
     { MFT_CATEGORY_AUDIO_DECODER,   IDS_CATEGORY_AUDIO_DECODERS },
     { MFT_CATEGORY_AUDIO_EFFECT,    IDS_CATEGORY_AUDIO_EFFECTS },
@@ -33,14 +33,14 @@ CTedTransformDialog::~CTedTransformDialog()
     }
 }
 
-IMFActivate* CTedTransformDialog::GetChosenActivate() const 
+IMFActivate* CTedTransformDialog::GetChosenActivate() const
 {
     assert(m_nChosenIndex < m_Activates.GetCount());
 
     return m_Activates.GetAt(m_nChosenIndex);
 }
 
-CAtlStringW CTedTransformDialog::GetChosenName() const 
+CAtlStringW CTedTransformDialog::GetChosenName() const
 {
     assert(m_nChosenIndex < m_strNames.GetCount());
 
@@ -51,7 +51,7 @@ LRESULT CTedTransformDialog::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lPara
 {
     m_hList = GetDlgItem(IDC_TRANSFORMTREE);
 
-    for(int i = 0; i < 9; i++) 
+    for(int i = 0; i < 9; i++)
     {
         PopulateCategory(ms_categories[i]);
     }
@@ -59,7 +59,7 @@ LRESULT CTedTransformDialog::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lPara
     return 0;
 }
 
-LRESULT CTedTransformDialog::OnClose(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled) 
+LRESULT CTedTransformDialog::OnClose(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
     HTREEITEM hSelectedItem = TreeView_GetSelection(m_hList);
 
@@ -68,13 +68,13 @@ LRESULT CTedTransformDialog::OnClose(UINT uMsg, WPARAM wParam, LPARAM lParam, BO
     selectedItem.hItem = hSelectedItem;
 
     TreeView_GetItem(m_hList, &selectedItem);
-    
+
     m_nChosenIndex = (unsigned int) selectedItem.lParam;
 
     return 0;
 }
 
-LRESULT CTedTransformDialog::OnOK(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled) 
+LRESULT CTedTransformDialog::OnOK(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
     HTREEITEM hSelectedItem = TreeView_GetSelection(m_hList);
 
@@ -83,22 +83,22 @@ LRESULT CTedTransformDialog::OnOK(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL
     selectedItem.hItem = hSelectedItem;
 
     TreeView_GetItem(m_hList, &selectedItem);
-    
+
     m_nChosenIndex = (unsigned int) selectedItem.lParam;
-    
+
     EndDialog(IDOK);
-    
+
     return 0;
 }
 
-LRESULT CTedTransformDialog::OnCancel(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled) 
+LRESULT CTedTransformDialog::OnCancel(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
     EndDialog(IDCANCEL);
 
     return 0;
 }
 
-void CTedTransformDialog::PopulateCategory(DMOCategory& category) 
+void CTedTransformDialog::PopulateCategory(DMOCategory& category)
 {
     TVINSERTSTRUCT treeInserter;
     treeInserter.hParent = TVI_ROOT;
@@ -123,7 +123,7 @@ void CTedTransformDialog::PopulateCategory(DMOCategory& category)
 
     mediaType.type = GUID_NULL;
     mediaType.subtype = GUID_NULL;
-    
+
     IMFActivate** ppActivates = NULL;
     UINT32 cMFTs = 0;
     ::MFTEnumEx(category.m_GUID, MFT_ENUM_FLAG_ALL, NULL, NULL, &ppActivates, &cMFTs);
@@ -134,7 +134,7 @@ void CTedTransformDialog::PopulateCategory(DMOCategory& category)
 
         LPWSTR pszName = NULL;
         ppActivates[i]->GetAllocatedString(MFT_FRIENDLY_NAME_Attribute, &pszName, NULL);
-        
+
         m_strNames.Add(CAtlStringW(pszName));
         item.pszText = m_strNames.GetAt(m_strNames.GetCount() - 1).GetBuffer();
         item.lParam = (LPARAM)  m_Activates.GetCount() - 1;
@@ -142,10 +142,9 @@ void CTedTransformDialog::PopulateCategory(DMOCategory& category)
         treeInserter.item = item;
 
         TreeView_InsertItem(m_hList, &treeInserter);
-        
+
         CoTaskMemFree(pszName);
     }
 
     CoTaskMemFree(ppActivates);
 }
-        

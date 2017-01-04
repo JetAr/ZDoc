@@ -1,4 +1,4 @@
-//--------------------------------------------------------------------
+﻿//--------------------------------------------------------------------
 // Microsoft OLE DB Test
 //
 // Copyright (C) 1999 Microsoft Corporation
@@ -100,19 +100,19 @@ const WCHAR*	URL3 = L"X-RootBinder://TestURL3";
 /////////////////////////////////////////////////////////////////
 enum EOBJECTTYPE
 {
-	DSO				= 0,
-	SESSION			= 1,
-	ROWSET			= 2,
-	ROW				= 3,
-	STREAM			= 4,
-	INVALID_OBJECT	= 5
+    DSO				= 0,
+    SESSION			= 1,
+    ROWSET			= 2,
+    ROW				= 3,
+    STREAM			= 4,
+    INVALID_OBJECT	= 5
 };
 
 enum ETESTCASE
 {
-	TC_ONETHREAD = 1,
-	TC_SINGLERB,
-	TC_MULTIPLERB
+    TC_ONETHREAD = 1,
+    TC_SINGLERB,
+    TC_MULTIPLERB
 };
 
 

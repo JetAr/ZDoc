@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -6,16 +6,16 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 
 //
-// This class handles manipulation of the drawing object (rectangle) as a 
+// This class handles manipulation of the drawing object (rectangle) as a
 // response to multi-touch gestures
 //
-// Initially, we define rectangle to be in the middle of the client area. 
+// Initially, we define rectangle to be in the middle of the client area.
 // Whenever user resizes the window the rectangle is placed in the middle of the
-// client area with the width set to a half of the width of the client area and 
+// client area with the width set to a half of the width of the client area and
 // height set to a half of the height of the client area. The rectangle is placed
-// in the center of the client area. 
+// in the center of the client area.
 //
-// Through the gestures user can zoom in, zoom out, move or rotate the rectangle. 
+// Through the gestures user can zoom in, zoom out, move or rotate the rectangle.
 // By invoking two finger tap the user can add/remove diagonals from the drawing.
 //
 
@@ -24,9 +24,9 @@
 // This macro is used to round double and cast it to LONG
 #define ROUND_DOUBLE_TO_LONG(x) ((LONG)floor(0.5 + (x)))
 
-// This is initialization of colors that we are going to shift through the 
+// This is initialization of colors that we are going to shift through the
 // rectangle object whenever the user invokes press and tap gesture
-const COLORREF CDrawingObject::s_colors[] = 
+const COLORREF CDrawingObject::s_colors[] =
 {
     RGB(0, 0, 0),     // black
     RGB(255, 255, 0), // yellow
@@ -39,7 +39,7 @@ const COLORREF CDrawingObject::s_colors[] =
 CDrawingObject::CDrawingObject()
 {
     // The main window application is responsible to invoke ResetObject function
-    // to initialize variables. 
+    // to initialize variables.
     // It should be done whenever the main window gets WM_SIZE message.
 }
 
@@ -61,7 +61,7 @@ void CDrawingObject::ShiftColor()
     }
 }
 
-// This function resets the rectangle object information and it is called by 
+// This function resets the rectangle object information and it is called by
 // the main app whenever the user resizes the client area
 // in:
 //      cxClient - new width of the client area
@@ -80,7 +80,7 @@ void CDrawingObject::ResetObject(const int cxClient, const int cyClient)
     _dScalingFactor = 1.0;
 
     // Initial rotation angle is 0.0 (no rotation)
-    _dRotationAngle = 0.0; 
+    _dRotationAngle = 0.0;
 
     _bDrawDiagonals = false; // no drawing of the diagonals
 
@@ -88,8 +88,8 @@ void CDrawingObject::ResetObject(const int cxClient, const int cyClient)
     _iColorIndex = 0; // set initial color to black
 }
 
-// This function will be called by the main app whenever WM_PAINT message is 
-// received. It is responsible to redraw the rectangle. Here we calculate the 
+// This function will be called by the main app whenever WM_PAINT message is
+// received. It is responsible to redraw the rectangle. Here we calculate the
 // positon of the rectangle corners.
 // in:
 //      hdc - handle to device context
@@ -101,9 +101,9 @@ void CDrawingObject::Paint(HDC hdc)
     // select new pen for drawing
     HGDIOBJ hPenOld = SelectObject(hdc,hPen);
 
-    // first create a polyline that describes the rectangle scaled by the 
+    // first create a polyline that describes the rectangle scaled by the
     // scaling factor
-    POINT ptRect[5];    
+    POINT ptRect[5];
 
     // upper left cofner
     ptRect[0].x = -(LONG)(_dScalingFactor * _iWidth/2);
@@ -120,7 +120,7 @@ void CDrawingObject::Paint(HDC hdc)
     // lower left corner
     ptRect[3].x = ptRect[0].x;
     ptRect[3].y = ptRect[2].y;
-    
+
     // upper left corner, we are closing the rectangle
     ptRect[4] = ptRect[0];
 
@@ -191,8 +191,8 @@ void CDrawingObject::Zoom(const double dZoomFactor, const LONG iZx, const LONG i
 //      iOx     - x-coordinate of the rotation center
 //      iOy     - y-coordinate of the rotation center
 //
-// Note that during the rotation gesture the user defines center of rotation. 
-// This is going to move the center of the rectangle too. That is why we have to 
+// Note that during the rotation gesture the user defines center of rotation.
+// This is going to move the center of the rectangle too. That is why we have to
 // recalculate new center of the rectangle.
 void CDrawingObject::Rotate(const double dAngle, const LONG iOx, const LONG iOy)
 {

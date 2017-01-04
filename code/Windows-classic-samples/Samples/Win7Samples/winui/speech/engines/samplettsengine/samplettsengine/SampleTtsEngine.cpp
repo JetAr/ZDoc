@@ -1,9 +1,9 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
 //
-// Copyright � Microsoft Corporation. All rights reserved
+// Copyright © Microsoft Corporation. All rights reserved
 
 // SampleTtsEngine.cpp : Implementation of DLL Exports.
 
@@ -19,7 +19,7 @@
 CComModule _Module;
 
 BEGIN_OBJECT_MAP(ObjectMap)
-    OBJECT_ENTRY( CLSID_SampleTTSEngine   , CTTSEngObj    )
+OBJECT_ENTRY( CLSID_SampleTTSEngine, CTTSEngObj    )
 END_OBJECT_MAP()
 
 /////////////////////////////////////////////////////////////////////////////

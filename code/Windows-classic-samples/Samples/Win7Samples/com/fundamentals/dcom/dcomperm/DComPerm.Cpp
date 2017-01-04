@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -16,11 +16,11 @@
 /*---------------------------------------------------------------------------*\
  * NAME: HandleDefaultLaunchOption                                           *
  * --------------------------------------------------------------------------*
- * DESCRIPTION: 
+ * DESCRIPTION:
 \*---------------------------------------------------------------------------*/
 void ShowUsage (
     LPTSTR tszErrorString
-    )
+)
 {
 
     BOOL fLegacy = IsLegacySecurityModel();
@@ -42,24 +42,28 @@ void ShowUsage (
     }
 
     _tprintf (_T("   -da <\"set\" or \"remove\"> <Principal Name> [\"permit\" or \"deny\"] "));
-    if(!fLegacy) _tprintf (_T("[\"level:l,r\"]\n")); else _tprintf (_T("\n"));
-    
+    if(!fLegacy) _tprintf (_T("[\"level:l,r\"]\n"));
+    else _tprintf (_T("\n"));
+
     _tprintf (_T("   -da list\n"));
     _tprintf (_T("       Modify or list the default access permission list\n\n"));
 
     _tprintf (_T("   -dl <\"set\" or \"remove\"> <Principal Name> [\"permit\" or \"deny\"] "));
-    if(!fLegacy) _tprintf (_T("[\"level:l,r,ll,la,rl,ra\"]\n")); else _tprintf (_T("\n"));
+    if(!fLegacy) _tprintf (_T("[\"level:l,r,ll,la,rl,ra\"]\n"));
+    else _tprintf (_T("\n"));
     _tprintf (_T("   -dl list\n"));
     _tprintf (_T("       Modify or list the default launch permission list\n\n"));
 
     _tprintf (_T("   -aa <AppID> <\"set\" or \"remove\"> <Principal Name> [\"permit\" or \"deny\"] "));
-    if(!fLegacy) _tprintf (_T("[\"level:l,r\"]\n")); else _tprintf (_T("\n"));
+    if(!fLegacy) _tprintf (_T("[\"level:l,r\"]\n"));
+    else _tprintf (_T("\n"));
     _tprintf (_T("   -aa <AppID> default\n"));
     _tprintf (_T("   -aa <AppID> list\n"));
     _tprintf (_T("       Modify or list the access permission list for a specific AppID\n\n"));
 
     _tprintf (_T("   -al <AppID> <\"set\" or \"remove\"> <Principal Name> [\"permit\" or \"deny\"] "));
-    if(!fLegacy) _tprintf (_T("[\"level:l,r,ll,la,rl,ra\"]\n")); else _tprintf (_T("\n"));
+    if(!fLegacy) _tprintf (_T("[\"level:l,r,ll,la,rl,ra\"]\n"));
+    else _tprintf (_T("\n"));
     _tprintf (_T("   -al <AppID> default\n"));
     _tprintf (_T("   -al <AppID> list\n"));
     _tprintf (_T("       Modify or list the launch permission list for a specific AppID\n\n"));
@@ -86,9 +90,11 @@ void ShowUsage (
 
     _tprintf (_T("Examples:\n"));
     _tprintf (_T("   dcomperm -da set redmond\\t-miken permit"));
-    if(!fLegacy) _tprintf (_T(" level:r\n")); else _tprintf (_T("\n"));
+    if(!fLegacy) _tprintf (_T(" level:r\n"));
+    else _tprintf (_T("\n"));
     _tprintf (_T("   dcomperm -dl set redmond\\jdoe deny"));
-    if(!fLegacy) _tprintf (_T(" level:rl,ra\n")); else _tprintf (_T("\n"));
+    if(!fLegacy) _tprintf (_T(" level:rl,ra\n"));
+    else _tprintf (_T("\n"));
     _tprintf (_T("   dcomperm -aa {12345678-1234-1234-1234-00aa00bbf7c7} list\n"));
     _tprintf (_T("   dcomperm -al {12345678-1234-1234-1234-00aa00bbf7c7} remove redmond\\t-miken\n"));
     _tprintf (_T("   dcomperm -runas {12345678-1234-1234-1234-00aa00bbf7c7} redmond\\jdoe password\n"));
@@ -99,12 +105,12 @@ void ShowUsage (
 /*---------------------------------------------------------------------------*\
  * NAME: HandleDefaultLaunchOption                                           *
  * --------------------------------------------------------------------------*
- * DESCRIPTION: 
+ * DESCRIPTION:
 \*---------------------------------------------------------------------------*/
 void Error (
     LPTSTR tszErrorMessage,
     DWORD dwErrorCode
-    )
+)
 {
     TCHAR tszMessageBuffer [SIZE_MSG_BUFFER] = {0};
 
@@ -116,13 +122,13 @@ void Error (
 /*---------------------------------------------------------------------------*\
  * NAME: HandleDefaultLaunchOption                                           *
  * --------------------------------------------------------------------------*
- * DESCRIPTION: 
+ * DESCRIPTION:
 \*---------------------------------------------------------------------------*/
 void SetAccessMaskFromCommandLine (
     LPTSTR ptszArg,
     DWORD *pdwAccessMask,
     DWORD dwSDType
-    )
+)
 {
     LPTSTR ptszToken = NULL;
     LPTSTR ptszContext = NULL;
@@ -144,67 +150,69 @@ void SetAccessMaskFromCommandLine (
     }
 
     if(dwSDType & SDTYPE_ACCESS) do
-    {
+        {
 
-        if(_tcsicmp (ptszToken, _T("L")) == 0)
-        {
-            *pdwAccessMask |= COM_RIGHTS_EXECUTE_LOCAL | COM_RIGHTS_EXECUTE;
-        }
-        else if(_tcsicmp (ptszToken, _T("R")) == 0)
-        {
-            *pdwAccessMask |= COM_RIGHTS_EXECUTE_REMOTE | COM_RIGHTS_EXECUTE;
-        }
-        else
-        {
-            ShowUsage(_T("Invalid LEVEL argument"));
-        }
+            if(_tcsicmp (ptszToken, _T("L")) == 0)
+            {
+                *pdwAccessMask |= COM_RIGHTS_EXECUTE_LOCAL | COM_RIGHTS_EXECUTE;
+            }
+            else if(_tcsicmp (ptszToken, _T("R")) == 0)
+            {
+                *pdwAccessMask |= COM_RIGHTS_EXECUTE_REMOTE | COM_RIGHTS_EXECUTE;
+            }
+            else
+            {
+                ShowUsage(_T("Invalid LEVEL argument"));
+            }
 
-    }while(ptszToken = _tcstok_s(NULL, _T(","), &ptszContext));
+        }
+        while(ptszToken = _tcstok_s(NULL, _T(","), &ptszContext));
     else do
-    {
+        {
 
-        if(_tcsicmp (ptszToken, _T("LL")) == 0)
-        {
-            *pdwAccessMask |= COM_RIGHTS_EXECUTE_LOCAL | COM_RIGHTS_EXECUTE;
-        }
-        else if(_tcsicmp (ptszToken, _T("LA")) == 0)
-        {
-            *pdwAccessMask |= COM_RIGHTS_ACTIVATE_LOCAL | COM_RIGHTS_EXECUTE;
-        }
-        else if(_tcsicmp (ptszToken, _T("RL")) == 0)
-        {
-            *pdwAccessMask |= COM_RIGHTS_EXECUTE_REMOTE | COM_RIGHTS_EXECUTE;
-        }
-        else if(_tcsicmp (ptszToken, _T("RA")) == 0)
-        {
-            *pdwAccessMask |= COM_RIGHTS_ACTIVATE_REMOTE | COM_RIGHTS_EXECUTE;
-        }
-        else if(_tcsicmp (ptszToken, _T("L")) == 0)
-        {
-            *pdwAccessMask |= COM_RIGHTS_ACTIVATE_LOCAL | COM_RIGHTS_EXECUTE_LOCAL | COM_RIGHTS_EXECUTE;
-        }
-        else if(_tcsicmp (ptszToken, _T("R")) == 0)
-        {
-            *pdwAccessMask |= COM_RIGHTS_ACTIVATE_REMOTE | COM_RIGHTS_EXECUTE_REMOTE | COM_RIGHTS_EXECUTE;
-        }
-        else
-        {
-            ShowUsage(_T("Invalid LEVEL argument"));
-        }
+            if(_tcsicmp (ptszToken, _T("LL")) == 0)
+            {
+                *pdwAccessMask |= COM_RIGHTS_EXECUTE_LOCAL | COM_RIGHTS_EXECUTE;
+            }
+            else if(_tcsicmp (ptszToken, _T("LA")) == 0)
+            {
+                *pdwAccessMask |= COM_RIGHTS_ACTIVATE_LOCAL | COM_RIGHTS_EXECUTE;
+            }
+            else if(_tcsicmp (ptszToken, _T("RL")) == 0)
+            {
+                *pdwAccessMask |= COM_RIGHTS_EXECUTE_REMOTE | COM_RIGHTS_EXECUTE;
+            }
+            else if(_tcsicmp (ptszToken, _T("RA")) == 0)
+            {
+                *pdwAccessMask |= COM_RIGHTS_ACTIVATE_REMOTE | COM_RIGHTS_EXECUTE;
+            }
+            else if(_tcsicmp (ptszToken, _T("L")) == 0)
+            {
+                *pdwAccessMask |= COM_RIGHTS_ACTIVATE_LOCAL | COM_RIGHTS_EXECUTE_LOCAL | COM_RIGHTS_EXECUTE;
+            }
+            else if(_tcsicmp (ptszToken, _T("R")) == 0)
+            {
+                *pdwAccessMask |= COM_RIGHTS_ACTIVATE_REMOTE | COM_RIGHTS_EXECUTE_REMOTE | COM_RIGHTS_EXECUTE;
+            }
+            else
+            {
+                ShowUsage(_T("Invalid LEVEL argument"));
+            }
 
-    }while(ptszToken = _tcstok_s(NULL, _T(","), &ptszContext));
-    
+        }
+        while(ptszToken = _tcstok_s(NULL, _T(","), &ptszContext));
+
 }
 
 /*---------------------------------------------------------------------------*\
  * NAME: HandleDefaultLaunchOption                                           *
  * --------------------------------------------------------------------------*
- * DESCRIPTION: 
+ * DESCRIPTION:
 \*---------------------------------------------------------------------------*/
 void HandleMachineAccessOption (
     int cArgs,
     TCHAR **pptszArgv
-    )
+)
 {
 
     DWORD dwReturnValue = ERROR_SUCCESS;
@@ -229,7 +237,7 @@ void HandleMachineAccessOption (
     {
         if (cArgs < 5) ShowUsage (_T("Invalid number of arguments."));
 
-        if(cArgs == 6) 
+        if(cArgs == 6)
         {
             SetAccessMaskFromCommandLine(pptszArgv[5], &dwAccessMask, SDTYPE_MACHINE_ACCESS);
         }
@@ -244,7 +252,7 @@ void HandleMachineAccessOption (
         }
         else if (_tcsicmp (pptszArgv [4], _T("DENY")) == 0)
         {
-            dwReturnValue = ChangeMachineAccessACL (pptszArgv [3], TRUE, FALSE, dwAccessMask); 
+            dwReturnValue = ChangeMachineAccessACL (pptszArgv [3], TRUE, FALSE, dwAccessMask);
         }
         else
         {
@@ -255,7 +263,7 @@ void HandleMachineAccessOption (
         {
             Error (_T("ERROR: Cannot add user to machine access ACL."), dwReturnValue);
         }
-    } 
+    }
     else if (_tcsicmp (pptszArgv [2], _T("REMOVE")) == 0)
     {
         dwReturnValue = ChangeMachineAccessACL (pptszArgv[3], FALSE, FALSE, dwAccessMask);
@@ -264,13 +272,13 @@ void HandleMachineAccessOption (
         {
             Error (_T("ERROR: Cannot remove user from machine access ACL."), dwReturnValue);
         }
-    } 
+    }
     else
     {
         ShowUsage (_T("You can only \"set\" or \"remove\" a user."));
     }
 
-     _tprintf (_T("Successfully set the Machine Access ACL.\n"));
+    _tprintf (_T("Successfully set the Machine Access ACL.\n"));
 
     ListMachineAccessACL();
 
@@ -280,12 +288,12 @@ void HandleMachineAccessOption (
 /*---------------------------------------------------------------------------*\
  * NAME: HandleDefaultLaunchOption                                           *
  * --------------------------------------------------------------------------*
- * DESCRIPTION: 
+ * DESCRIPTION:
 \*---------------------------------------------------------------------------*/
 void HandleMachineLaunchAndActivateOption (
     int cArgs,
     TCHAR **pptszArgv
-    )
+)
 {
     DWORD dwReturnValue = ERROR_SUCCESS;
     DWORD dwAccessMask = COM_RIGHTS_EXECUTE;
@@ -312,7 +320,7 @@ void HandleMachineLaunchAndActivateOption (
     {
         if (cArgs < 5) ShowUsage (_T("Invalid number of arguments."));
 
-        if(cArgs == 6) 
+        if(cArgs == 6)
         {
             SetAccessMaskFromCommandLine(pptszArgv[5], &dwAccessMask, SDTYPE_MACHINE_LAUNCH);
         }
@@ -323,11 +331,11 @@ void HandleMachineLaunchAndActivateOption (
 
         if (_tcsicmp (pptszArgv [4], _T("PERMIT")) == 0)
         {
-            dwReturnValue = ChangeMachineLaunchAndActivateACL (pptszArgv [3], TRUE, TRUE, dwAccessMask); 
+            dwReturnValue = ChangeMachineLaunchAndActivateACL (pptszArgv [3], TRUE, TRUE, dwAccessMask);
         }
         else if (_tcsicmp (pptszArgv [4], _T("DENY")) == 0)
         {
-            dwReturnValue = ChangeMachineLaunchAndActivateACL (pptszArgv [3], TRUE, FALSE, dwAccessMask); 
+            dwReturnValue = ChangeMachineLaunchAndActivateACL (pptszArgv [3], TRUE, FALSE, dwAccessMask);
         }
         else
         {
@@ -339,7 +347,7 @@ void HandleMachineLaunchAndActivateOption (
             Error (_T("ERROR: Cannot add user to machine launch ACL."), dwReturnValue);
         }
 
-    } 
+    }
     else if (_tcsicmp (pptszArgv [2], _T("REMOVE")) == 0)
     {
         dwReturnValue = ChangeMachineLaunchAndActivateACL (pptszArgv[3], FALSE, FALSE, dwAccessMask);
@@ -348,13 +356,13 @@ void HandleMachineLaunchAndActivateOption (
         {
             Error (_T("ERROR: Cannot remove user from machine launch ACL."), dwReturnValue);
         }
-    } 
+    }
     else
     {
         ShowUsage (_T("You can only \"set\" or \"remove\" a user."));
     }
-    
-     _tprintf (_T("Successfully set the Machine Launch ACL.\n"));
+
+    _tprintf (_T("Successfully set the Machine Launch ACL.\n"));
 
     ListMachineLaunchACL();
 
@@ -365,12 +373,12 @@ void HandleMachineLaunchAndActivateOption (
 /*---------------------------------------------------------------------------*\
  * NAME: HandleDefaultLaunchOption                                           *
  * --------------------------------------------------------------------------*
- * DESCRIPTION: 
+ * DESCRIPTION:
 \*---------------------------------------------------------------------------*/
 void HandleDefaultAccessOption (
     int cArgs,
     TCHAR **pptszArgv
-    )
+)
 {
     DWORD dwReturnValue = ERROR_SUCCESS;
     DWORD dwAccessMask = COM_RIGHTS_EXECUTE;
@@ -394,7 +402,7 @@ void HandleDefaultAccessOption (
     {
         if (cArgs < 5) ShowUsage (_T("Invalid number of arguments."));
 
-        if(cArgs == 6) 
+        if(cArgs == 6)
         {
             SetAccessMaskFromCommandLine(pptszArgv[5], &dwAccessMask, SDTYPE_DEFAULT_ACCESS);
         }
@@ -409,7 +417,7 @@ void HandleDefaultAccessOption (
         }
         else if (_tcsicmp (pptszArgv [4], _T("DENY")) == 0)
         {
-            dwReturnValue = ChangeDefaultAccessACL (pptszArgv [3], TRUE, FALSE, dwAccessMask); 
+            dwReturnValue = ChangeDefaultAccessACL (pptszArgv [3], TRUE, FALSE, dwAccessMask);
         }
         else
         {
@@ -420,7 +428,7 @@ void HandleDefaultAccessOption (
         {
             Error (_T("ERROR: Cannot add user to default access ACL."), dwReturnValue);
         }
-    } 
+    }
     else if (_tcsicmp (pptszArgv [2], _T("REMOVE")) == 0)
     {
         dwReturnValue = ChangeDefaultAccessACL (pptszArgv[3], FALSE, FALSE, dwAccessMask);
@@ -429,13 +437,13 @@ void HandleDefaultAccessOption (
         {
             Error (_T("ERROR: Cannot remove user from default access ACL."), dwReturnValue);
         }
-    } 
+    }
     else
     {
         ShowUsage (_T("You can only \"set\" or \"remove\" a user."));
     }
 
-     _tprintf (_T("Successfully set the Default Access ACL.\n"));
+    _tprintf (_T("Successfully set the Default Access ACL.\n"));
 
     ListDefaultAccessACL();
 }
@@ -443,12 +451,12 @@ void HandleDefaultAccessOption (
 /*---------------------------------------------------------------------------*\
  * NAME: HandleDefaultLaunchOption                                           *
  * --------------------------------------------------------------------------*
- * DESCRIPTION: 
+ * DESCRIPTION:
 \*---------------------------------------------------------------------------*/
 void HandleDefaultLaunchOption (
     int cArgs,
     TCHAR **pptszArgv
-    )
+)
 {
     DWORD dwReturnValue = ERROR_SUCCESS;
     DWORD dwAccessMask = COM_RIGHTS_EXECUTE;
@@ -474,7 +482,7 @@ void HandleDefaultLaunchOption (
     {
         if (cArgs < 5) ShowUsage (_T("Invalid number of arguments."));
 
-        if(cArgs == 6) 
+        if(cArgs == 6)
         {
             SetAccessMaskFromCommandLine(pptszArgv[5], &dwAccessMask, SDTYPE_DEFAULT_LAUNCH);
         }
@@ -485,11 +493,11 @@ void HandleDefaultLaunchOption (
 
         if (_tcsicmp (pptszArgv [4], _T("PERMIT")) == 0)
         {
-            dwReturnValue = ChangeDefaultLaunchAndActivateACL (pptszArgv [3], TRUE, TRUE, dwAccessMask); 
+            dwReturnValue = ChangeDefaultLaunchAndActivateACL (pptszArgv [3], TRUE, TRUE, dwAccessMask);
         }
         else if (_tcsicmp (pptszArgv [4], _T("DENY")) == 0)
         {
-            dwReturnValue = ChangeDefaultLaunchAndActivateACL (pptszArgv [3], TRUE, FALSE, dwAccessMask); 
+            dwReturnValue = ChangeDefaultLaunchAndActivateACL (pptszArgv [3], TRUE, FALSE, dwAccessMask);
         }
         else
         {
@@ -501,7 +509,7 @@ void HandleDefaultLaunchOption (
             Error (_T("ERROR: Cannot add user to default launch ACL."), dwReturnValue);
         }
 
-    } 
+    }
     else if (_tcsicmp (pptszArgv [2], _T("REMOVE")) == 0)
     {
         dwReturnValue = ChangeDefaultLaunchAndActivateACL (pptszArgv[3], FALSE, FALSE, dwAccessMask);
@@ -510,13 +518,13 @@ void HandleDefaultLaunchOption (
         {
             Error (_T("ERROR: Cannot remove user from default launch ACL."), dwReturnValue);
         }
-    } 
+    }
     else
     {
         ShowUsage (_T("You can only \"set\" or \"remove\" a user."));
     }
 
-     _tprintf (_T("Successfully set the Default Launch ACL.\n"));
+    _tprintf (_T("Successfully set the Default Launch ACL.\n"));
 
     ListDefaultLaunchACL();
 }
@@ -524,7 +532,7 @@ void HandleDefaultLaunchOption (
 void HandleApplicationAccessOption (
     int cArgs,
     TCHAR **pptszArgv
-    )
+)
 {
     DWORD dwReturnValue                 = ERROR_SUCCESS;
     HKEY  hkeyRegistry                  = NULL;
@@ -541,9 +549,9 @@ void HandleApplicationAccessOption (
         if (cArgs < 4) ShowUsage (_T("Invalid number of arguments."));
 
         _tprintf (_T("Access permission list for AppID %s:\n\n"), pptszArgv[2]);
-        
+
         ListAppIDAccessACL (pptszArgv[2]);
-        
+
         return;
     }
 
@@ -568,7 +576,7 @@ void HandleApplicationAccessOption (
         if(hkeyRegistry) RegCloseKey (hkeyRegistry);
 
         _tprintf (_T("Successfully set the Application Access to the machine default.\n"));
-        
+
         return;
     }
 
@@ -576,9 +584,9 @@ void HandleApplicationAccessOption (
 
     if (_tcsicmp (pptszArgv [3], _T("SET")) == 0)
     {
-         if (cArgs < 6) ShowUsage (_T("Invalid number of arguments."));
+        if (cArgs < 6) ShowUsage (_T("Invalid number of arguments."));
 
-        if(cArgs == 7) 
+        if(cArgs == 7)
         {
             SetAccessMaskFromCommandLine(pptszArgv[6], &dwAccessMask, SDTYPE_APPLICATION_ACCESS);
         }
@@ -589,11 +597,11 @@ void HandleApplicationAccessOption (
 
         if (_tcsicmp (pptszArgv [5], _T("PERMIT")) == 0)
         {
-            dwReturnValue = ChangeAppIDAccessACL (pptszArgv[2], pptszArgv [4], TRUE, TRUE, dwAccessMask); 
+            dwReturnValue = ChangeAppIDAccessACL (pptszArgv[2], pptszArgv [4], TRUE, TRUE, dwAccessMask);
         }
         else if (_tcsicmp (pptszArgv [5], _T("DENY")) == 0)
         {
-            dwReturnValue = ChangeAppIDAccessACL (pptszArgv[2], pptszArgv [4], TRUE, FALSE, dwAccessMask); 
+            dwReturnValue = ChangeAppIDAccessACL (pptszArgv[2], pptszArgv [4], TRUE, FALSE, dwAccessMask);
         }
         else
         {
@@ -604,7 +612,7 @@ void HandleApplicationAccessOption (
         {
             Error (_T("ERROR: Cannot add user to application access ACL."), dwReturnValue);
         }
-    } 
+    }
     else if (_tcsicmp (pptszArgv [3], _T("REMOVE")) == 0)
     {
         dwReturnValue = ChangeAppIDAccessACL (pptszArgv[2], pptszArgv[4], FALSE, FALSE, dwAccessMask);
@@ -613,14 +621,14 @@ void HandleApplicationAccessOption (
         {
             Error (_T("ERROR: Cannot remove user from application access ACL."), dwReturnValue);
         }
-        
-    } 
+
+    }
     else
     {
         ShowUsage (_T("You can only \"set\" or \"remove\" a user."));
     }
 
-     _tprintf (_T("Successfully set the Application Access ACL.\n"));
+    _tprintf (_T("Successfully set the Application Access ACL.\n"));
 
     ListAppIDAccessACL(pptszArgv[2]);
 }
@@ -628,7 +636,7 @@ void HandleApplicationAccessOption (
 void HandleApplicationLaunchAndActivateOption (
     int cArgs,
     TCHAR **pptszArgv
-    )
+)
 {
     DWORD dwReturnValue                 = ERROR_SUCCESS;
     HKEY  hkeyRegistry                  = NULL;
@@ -636,7 +644,7 @@ void HandleApplicationLaunchAndActivateOption (
     TCHAR tszKeyName [SIZE_NAME_BUFFER] = {0};
 
     DWORD dwAccessMask = COM_RIGHTS_EXECUTE;
-    
+
     if (cArgs < 4) ShowUsage (_T("Invalid number of arguments."));
 
     if (_tcsicmp (pptszArgv[3], _T("LIST")) == 0)
@@ -681,7 +689,7 @@ void HandleApplicationLaunchAndActivateOption (
     {
         if (cArgs < 6) ShowUsage (_T("Invalid number of arguments."));
 
-        if(cArgs == 7) 
+        if(cArgs == 7)
         {
             SetAccessMaskFromCommandLine(pptszArgv[6], &dwAccessMask, SDTYPE_APPLICATION_LAUNCH);
         }
@@ -705,7 +713,7 @@ void HandleApplicationLaunchAndActivateOption (
 
         if (dwReturnValue != ERROR_SUCCESS)
             Error (_T("ERROR: Cannot add user to application launch ACL."), dwReturnValue);
-    } 
+    }
     else if (_tcsicmp (pptszArgv [3], _T("REMOVE")) == 0)
     {
         dwReturnValue = ChangeAppIDLaunchAndActivateACL (pptszArgv[2], pptszArgv[4], FALSE, FALSE, dwAccessMask);
@@ -714,13 +722,13 @@ void HandleApplicationLaunchAndActivateOption (
         {
             Error (_T("ERROR: Cannot remove user from application launch ACL."), dwReturnValue);
         }
-    } 
+    }
     else
     {
         ShowUsage (_T("You can only \"set\" or \"remove\" a user."));
     }
 
-     _tprintf (_T("Successfully set the Application Launch ACL.\n"));
+    _tprintf (_T("Successfully set the Application Launch ACL.\n"));
 
     ListAppIDLaunchACL(pptszArgv[2]);
 }
@@ -728,7 +736,7 @@ void HandleApplicationLaunchAndActivateOption (
 void HandleRunAsOption (
     int cArgs,
     TCHAR **pptszArgv
-    )
+)
 {
     DWORD dwReturnValue                 = ERROR_SUCCESS;
     HKEY  hkeyRegistry                  = NULL;
@@ -779,26 +787,26 @@ void HandleRunAsOption (
             Error (_T("ERROR: Cannot set RunAs registry value."), dwReturnValue);
         }
     }
-        
+
 
     if(hkeyRegistry) RegCloseKey (hkeyRegistry);
-    
+
 }
 
 extern "C" void _tmain (
     int cArgs,
     TCHAR **pptszArgv
-    )
+)
 {
     if (cArgs < 2) ShowUsage (_T("No option specified."));
 
     if (_tcsicmp (pptszArgv [1], _T("-DA")) == 0)
     {
-        HandleDefaultAccessOption (cArgs, pptszArgv); 
+        HandleDefaultAccessOption (cArgs, pptszArgv);
     }
     else if (_tcsicmp (pptszArgv [1], _T("-DL")) == 0)
     {
-        HandleDefaultLaunchOption (cArgs, pptszArgv); 
+        HandleDefaultLaunchOption (cArgs, pptszArgv);
     }
     else if (_tcsicmp (pptszArgv [1], _T("-AA")) == 0)
     {
@@ -806,7 +814,7 @@ extern "C" void _tmain (
     }
     else if (_tcsicmp (pptszArgv [1], _T("-AL")) == 0)
     {
-        HandleApplicationLaunchAndActivateOption (cArgs, pptszArgv); 
+        HandleApplicationLaunchAndActivateOption (cArgs, pptszArgv);
     }
     else if (_tcsicmp (pptszArgv [1], _T("-MA")) == 0)
     {
@@ -814,15 +822,15 @@ extern "C" void _tmain (
     }
     else if (_tcsicmp (pptszArgv [1], _T("-ML")) == 0)
     {
-        HandleMachineLaunchAndActivateOption (cArgs, pptszArgv); 
+        HandleMachineLaunchAndActivateOption (cArgs, pptszArgv);
     }
     else if (_tcsicmp (pptszArgv [1], _T("-RUNAS")) == 0)
     {
-        HandleRunAsOption (cArgs, pptszArgv); 
+        HandleRunAsOption (cArgs, pptszArgv);
     }
     else
     {
         ShowUsage (_T("Invalid option specified."));
     }
-    
+
 }

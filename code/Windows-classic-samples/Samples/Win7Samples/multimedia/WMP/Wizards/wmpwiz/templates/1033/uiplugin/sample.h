@@ -1,4 +1,4 @@
-/////////////////////////////////////////////////////////////////////////////
+﻿/////////////////////////////////////////////////////////////////////////////
 //
 // [!output root].h : Declaration of the C[!output Safe_root]
 //
@@ -22,28 +22,28 @@ DEFINE_GUID(CLSID_[!output Safe_root], [!output DEFINEGUID]);
 
 /////////////////////////////////////////////////////////////////////////////
 // C[!output Safe_root]
-class ATL_NO_VTABLE C[!output Safe_root] : 
+class ATL_NO_VTABLE C[!output Safe_root] :
     public CComObjectRootEx<CComSingleThreadModel>,
     public CComCoClass<C[!output Safe_root], &CLSID_[!output Safe_root]>,
-[!if LISTENTOEVENTS]
+    [!if LISTENTOEVENTS]
     public IWMPEvents,
-[!endif]
+    [!endif]
     public IWMPPluginUI
 {
 public:
     C[!output Safe_root]();
     ~C[!output Safe_root]();
 
-DECLARE_REGISTRY_RESOURCEID(IDR_[!output SAFE_ROOT])
+    DECLARE_REGISTRY_RESOURCEID(IDR_[!output SAFE_ROOT])
 
-DECLARE_PROTECT_FINAL_CONSTRUCT()
+    DECLARE_PROTECT_FINAL_CONSTRUCT()
 
-BEGIN_COM_MAP(C[!output Safe_root])
-[!if LISTENTOEVENTS]
+    BEGIN_COM_MAP(C[!output Safe_root])
+    [!if LISTENTOEVENTS]
     COM_INTERFACE_ENTRY(IWMPEvents)
-[!endif]
+    [!endif]
     COM_INTERFACE_ENTRY(IWMPPluginUI)
-END_COM_MAP()
+    END_COM_MAP()
 
     // CComCoClass methods
     HRESULT FinalConstruct();
@@ -51,24 +51,36 @@ END_COM_MAP()
 
     // IWMPPluginUI methods
     STDMETHODIMP SetCore(IWMPCore *pCore);
-[!if HASWINDOW]
+    [!if HASWINDOW]
     STDMETHODIMP Create(HWND hwndParent, HWND *phwndWindow);
     STDMETHODIMP Destroy();
     STDMETHODIMP TranslateAccelerator(LPMSG lpmsg);
-[!else]
-    STDMETHODIMP Create(HWND hwndParent, HWND *phwndWindow) { return E_NOTIMPL; }
-    STDMETHODIMP Destroy() { return E_NOTIMPL; }
-    STDMETHODIMP TranslateAccelerator(LPMSG lpmsg) { return E_NOTIMPL; }
-[!endif]
-[!if HASPROPERTYPAGE]
+    [!else]
+    STDMETHODIMP Create(HWND hwndParent, HWND *phwndWindow)
+    {
+        return E_NOTIMPL;
+    }
+    STDMETHODIMP Destroy()
+    {
+        return E_NOTIMPL;
+    }
+    STDMETHODIMP TranslateAccelerator(LPMSG lpmsg)
+    {
+        return E_NOTIMPL;
+    }
+    [!endif]
+    [!if HASPROPERTYPAGE]
     STDMETHODIMP DisplayPropertyPage(HWND hwndParent);
-[!else]
-    STDMETHODIMP DisplayPropertyPage(HWND hwndParent) { return E_NOTIMPL; }
-[!endif]
+    [!else]
+    STDMETHODIMP DisplayPropertyPage(HWND hwndParent)
+    {
+        return E_NOTIMPL;
+    }
+    [!endif]
     STDMETHODIMP GetProperty(const WCHAR *pwszName, VARIANT *pvarProperty);
     STDMETHODIMP SetProperty(const WCHAR *pwszName, const VARIANT *pvarProperty);
 
-[!if LISTENTOEVENTS]
+    [!if LISTENTOEVENTS]
     // IWMPEvents methods
     void STDMETHODCALLTYPE OpenStateChange( long NewState );
     void STDMETHODCALLTYPE PlayStateChange( long NewState );
@@ -116,22 +128,22 @@ END_COM_MAP()
     void STDMETHODCALLTYPE MouseMove( short nButton, short nShiftState, long fX, long fY );
     void STDMETHODCALLTYPE MouseUp( short nButton, short nShiftState, long fX, long fY );
 
-[!endif]
-[!if HASPROPERTYPAGE]
+    [!endif]
+    [!if HASPROPERTYPAGE]
     WCHAR        m_wszPluginText[MAX_PATH];
 
-[!endif]
+    [!endif]
 private:
     void         ReleaseCore();
 
     CComPtr<IWMPCore>           m_spCore;
-[!if HASWINDOW]
+    [!if HASWINDOW]
     CPluginWindow               *m_pPluginWindow;
-[!endif]
-[!if LISTENTOEVENTS]
+    [!endif]
+    [!if LISTENTOEVENTS]
     CComPtr<IConnectionPoint>   m_spConnectionPoint;
     DWORD                       m_dwAdviseCookie;
-[!endif]
+    [!endif]
 };
 
 #endif //__[!output SAFE_ROOT]_H_

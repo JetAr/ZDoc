@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -15,7 +15,7 @@
 // Forward declaration.
 class CMainFrame;
 
-// Declaration of CRibbonBar class which inherits from CToolBar. 
+// Declaration of CRibbonBar class which inherits from CToolBar.
 // This placeholder bar helps the MFC CMainFrame to calculate the view layout whenever the Ribbon is shown or hidden.
 class CRibbonBar: public CToolBar
 {
@@ -27,7 +27,7 @@ public:
 
 
     // WM_NCCALCSIZE handler.
-    void OnNcCalcSize(BOOL /*bCalcValidRects*/, NCCALCSIZE_PARAMS* /*lpncsp*/) 
+    void OnNcCalcSize(BOOL /*bCalcValidRects*/, NCCALCSIZE_PARAMS* /*lpncsp*/)
     {
         // Do nothing.
     }

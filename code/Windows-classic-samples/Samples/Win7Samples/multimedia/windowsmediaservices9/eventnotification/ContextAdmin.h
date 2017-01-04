@@ -1,4 +1,4 @@
-//+-------------------------------------------------------------------------
+﻿//+-------------------------------------------------------------------------
 //
 //  Microsoft Windows Media Technologies
 //  Copyright (C) Microsoft Corporation. All rights reserved.
@@ -15,7 +15,7 @@
 
 /////////////////////////////////////////////////////////////////////////////
 // CContextAdmin
-class ATL_NO_VTABLE CContextAdmin : 
+class ATL_NO_VTABLE CContextAdmin :
     public IDispatchImpl<IWMSContextAdmin, &IID_IWMSContextAdmin, &LIBID_CONTEXTPLUGINLib, 9, 0 >,
     public ISupportErrorInfo,
     public CComObjectRootEx<CComMultiThreadModel>
@@ -29,13 +29,13 @@ public:
     STDMETHOD( Initialize )( CContextPlugin *pPlugin );
 
 
-DECLARE_PROTECT_FINAL_CONSTRUCT()
+    DECLARE_PROTECT_FINAL_CONSTRUCT()
 
-BEGIN_COM_MAP(CContextAdmin)
+    BEGIN_COM_MAP(CContextAdmin)
     COM_INTERFACE_ENTRY(IDispatch)
     COM_INTERFACE_ENTRY(ISupportErrorInfo)
     COM_INTERFACE_ENTRY(IWMSContextAdmin)
-END_COM_MAP()
+    END_COM_MAP()
 
 // ISupportErrorInfo
     STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);

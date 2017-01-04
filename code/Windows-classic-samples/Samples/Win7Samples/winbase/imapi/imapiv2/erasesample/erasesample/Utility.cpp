@@ -1,4 +1,4 @@
-/*--
+﻿/*--
 
 Copyright (C) Microsoft Corporation, 2006
 
@@ -8,7 +8,8 @@ Utility functions
 
 #include "stdafx.h"
 
-SENSE_INFOMATION AllowedSenseForLongOperations[] = {
+SENSE_INFOMATION AllowedSenseForLongOperations[] =
+{
     {SCSI_SENSE_NOT_READY,       SCSI_ADSENSE_LUN_NOT_READY, 0xFF, 0}, // not ready
     {SCSI_SENSE_ILLEGAL_REQUEST, 0xFF, 0xFF, 0},
     {SCSI_SENSE_UNIT_ATTENTION,  SCSI_ADSENSE_INSUFFICIENT_TIME_FOR_OPERATION, 0xFF, 0},
@@ -17,8 +18,8 @@ SENSE_INFOMATION AllowedSenseForLongOperations[] = {
 HRESULT PreventAllowMediumRemoval(__in IDiscRecorder2Ex* recorder, const BOOLEAN lockMedia, const BOOLEAN persistentBit)
 {
     HRESULT     hr = S_OK;
-    CDB         cdb; 
-    SENSE_DATA  sense; 
+    CDB         cdb;
+    SENSE_DATA  sense;
     RtlZeroMemory(&cdb, sizeof(CDB));
     RtlZeroMemory(&sense, sizeof(SENSE_DATA));
 
@@ -34,16 +35,16 @@ HRESULT PreventAllowMediumRemoval(__in IDiscRecorder2Ex* recorder, const BOOLEAN
         cdb.MEDIA_REMOVAL.Persistant    = (persistentBit ? 1 : 0);
 
         hr = recorder->SendCommandNoData((BYTE*)&cdb,
-                                          sizeof(cdb.MEDIA_REMOVAL),
-                                          (BYTE*)&sense,
-                                          IMAPI2_DEFAULT_COMMAND_TIMEOUT
-                                          );
+                                         sizeof(cdb.MEDIA_REMOVAL),
+                                         (BYTE*)&sense,
+                                         IMAPI2_DEFAULT_COMMAND_TIMEOUT
+                                        );
         if (hr == S_IMAPI_COMMAND_HAS_SENSE_DATA)
         {
             if (!TranslateSenseInfoToHResult(&cdb, &sense, &hr))
             {
                 hr = E_FAIL;
-            }            
+            }
         }
     }
 
@@ -55,9 +56,9 @@ HRESULT SendStartStopUnitCommand(IDiscRecorder2Ex* recorder, const START_STOP_OP
     HRESULT hr = S_OK;
 
     if ((option != StopSpinning ) &&
-        (option != StartSpinning) &&
-        (option != EjectMedia   ) &&
-        (option != LoadMedia    ) )
+            (option != StartSpinning) &&
+            (option != EjectMedia   ) &&
+            (option != LoadMedia    ) )
     {
         hr = E_INVALIDARG;
     }
@@ -186,7 +187,7 @@ HRESULT GetCurrentPhysicalMediaType(__in IDiscRecorder2Ex* recorder, __out IMAPI
         *value = IMAPI_MEDIA_TYPE_UNKNOWN;
     }
 
-    // 
+    //
     if ((!mediaTypeDetermined) && SUCCEEDED(hr))
     {
         hr = discInfo.Init(recorder);
@@ -198,10 +199,10 @@ HRESULT GetCurrentPhysicalMediaType(__in IDiscRecorder2Ex* recorder, __out IMAPI
         BYTE*   dvdRead = NULL;
         ULONG   dvdReadSize = 0;
         HRESULT tmpHr = recorder->GetFeaturePage(IMAPI_FEATURE_PAGE_TYPE_DVD_READ,
-                                                 FALSE,
-                                                 &dvdRead,
-                                                 &dvdReadSize
-                                                 );
+                        FALSE,
+                        &dvdRead,
+                        &dvdReadSize
+                                                );
         if (SUCCEEDED(tmpHr))
         {
             // the feature page is supported
@@ -228,7 +229,7 @@ HRESULT GetCurrentPhysicalMediaType(__in IDiscRecorder2Ex* recorder, __out IMAPI
     {
         // discInfo is either initialized or mediaType has already been determined
         if ((discInfo.get_DiscStatus() == 0x02) && // complete, non-appendable
-            !discInfo.get_Erasable())
+                !discInfo.get_Erasable())
         {
             if (readDvdStructureCurrent)
             {
@@ -251,7 +252,7 @@ HRESULT GetCurrentPhysicalMediaType(__in IDiscRecorder2Ex* recorder, __out IMAPI
                                       TRUE,
                                       (BYTE**)&feature,
                                       &featureSize
-                                      );
+                                     );
 
         if (hr == E_IMAPI_RECORDER_GET_CONFIGURATION_NOT_SUPPORTED)
         {
@@ -268,7 +269,7 @@ HRESULT GetCurrentPhysicalMediaType(__in IDiscRecorder2Ex* recorder, __out IMAPI
             mediaTypeDetermined = TRUE;
         }
         CoTaskMemFreeAndNull(feature);
-    }   
+    }
 
     // check for DVD+R dual-layer media
     if ((!mediaTypeDetermined) && SUCCEEDED(hr))
@@ -279,7 +280,7 @@ HRESULT GetCurrentPhysicalMediaType(__in IDiscRecorder2Ex* recorder, __out IMAPI
                                       TRUE,
                                       (BYTE**)&feature,
                                       &featureSize
-                                      );
+                                     );
 
         if (hr == E_IMAPI_RECORDER_GET_CONFIGURATION_NOT_SUPPORTED)
         {
@@ -297,7 +298,7 @@ HRESULT GetCurrentPhysicalMediaType(__in IDiscRecorder2Ex* recorder, __out IMAPI
             mediaTypeDetermined = TRUE;
         }
         CoTaskMemFreeAndNull(feature);
-    }    
+    }
 
     // check for DVD+R media
     if ((!mediaTypeDetermined) && SUCCEEDED(hr))
@@ -308,7 +309,7 @@ HRESULT GetCurrentPhysicalMediaType(__in IDiscRecorder2Ex* recorder, __out IMAPI
                                       TRUE,
                                       (BYTE**)&feature,
                                       &featureSize
-                                      );
+                                     );
 
         if (hr == E_IMAPI_RECORDER_GET_CONFIGURATION_NOT_SUPPORTED)
         {
@@ -326,7 +327,7 @@ HRESULT GetCurrentPhysicalMediaType(__in IDiscRecorder2Ex* recorder, __out IMAPI
             mediaTypeDetermined = TRUE;
         }
         CoTaskMemFreeAndNull(feature);
-    }    
+    }
 
     // Use ReadDvdStructure (ignore errors)
     if ((!mediaTypeDetermined) && SUCCEEDED(hr) && readDvdStructureSupported)
@@ -358,7 +359,7 @@ HRESULT GetCurrentPhysicalMediaType(__in IDiscRecorder2Ex* recorder, __out IMAPI
             else
             {
                 tmpValue = IMAPI_MEDIA_TYPE_DVDDASHR;
-            }    
+            }
             mediaTypeDetermined = TRUE;
         }
         else if (descriptor->BookType == 0x3) // DVD-RW
@@ -381,7 +382,8 @@ HRESULT GetCurrentPhysicalMediaType(__in IDiscRecorder2Ex* recorder, __out IMAPI
             tmpValue = IMAPI_MEDIA_TYPE_DVDPLUSR_DUALLAYER;
             mediaTypeDetermined = TRUE;
         }
-        CoTaskMemFreeAndNull(descriptor); descriptorSize = 0;
+        CoTaskMemFreeAndNull(descriptor);
+        descriptorSize = 0;
     }
 
     // use profiles to allow CD-R, CD-RW, randomly writable media to be detected
@@ -389,11 +391,11 @@ HRESULT GetCurrentPhysicalMediaType(__in IDiscRecorder2Ex* recorder, __out IMAPI
     {
         IMAPI_PROFILE_TYPE* profiles = NULL;
         ULONG               profileCount = 0;
-        
+
         hr = recorder->GetSupportedProfiles(TRUE,
                                             &profiles,
                                             &profileCount
-                                            );
+                                           );
 
         if (hr == E_IMAPI_RECORDER_GET_CONFIGURATION_NOT_SUPPORTED)
         {
@@ -418,82 +420,82 @@ HRESULT GetCurrentPhysicalMediaType(__in IDiscRecorder2Ex* recorder, __out IMAPI
             {
                 switch(profiles[i])
                 {
-                    case IMAPI_PROFILE_TYPE_NON_REMOVABLE_DISK:
-                    case IMAPI_PROFILE_TYPE_REMOVABLE_DISK:
+                case IMAPI_PROFILE_TYPE_NON_REMOVABLE_DISK:
+                case IMAPI_PROFILE_TYPE_REMOVABLE_DISK:
                     //case IMAPI_PROFILE_TYPE_MO_ERASABLE:
                     //case IMAPI_PROFILE_TYPE_MO_WRITE_ONCE:
                     //case IMAPI_PROFILE_TYPE_AS_MO:
-                    {
-                        mediaTypeDetermined = TRUE;
-                        tmpValue = IMAPI_MEDIA_TYPE_DISK;
-                        break;
-                    }
-                    case IMAPI_PROFILE_TYPE_CDROM:
-                    case IMAPI_PROFILE_TYPE_DDCDROM:
-                    {
-                        mediaTypeDetermined = TRUE;
-                        tmpValue = IMAPI_MEDIA_TYPE_CDROM;
-                        break;
-                    }
-                    case IMAPI_PROFILE_TYPE_CD_RECORDABLE:
-                    case IMAPI_PROFILE_TYPE_DDCD_RECORDABLE:
-                    {
-                        mediaTypeDetermined = TRUE;
-                        tmpValue = IMAPI_MEDIA_TYPE_CDR;
-                        break;
-                    }
-                    case IMAPI_PROFILE_TYPE_CD_REWRITABLE:
-                    case IMAPI_PROFILE_TYPE_DDCD_REWRITABLE:
-                    {
-                        mediaTypeDetermined = TRUE;
-                        tmpValue = IMAPI_MEDIA_TYPE_CDRW;
-                        break;
-                    }
-                    case IMAPI_PROFILE_TYPE_DVDROM:
-                    {
-                        mediaTypeDetermined = TRUE;
-                        tmpValue = IMAPI_MEDIA_TYPE_DVDROM;
-                        break;
-                    }
-                    case IMAPI_PROFILE_TYPE_DVD_RAM:
-                    {
-                        mediaTypeDetermined = TRUE;
-                        tmpValue = IMAPI_MEDIA_TYPE_DVDRAM;
-                        break;
-                    }
-                    case IMAPI_PROFILE_TYPE_DVD_PLUS_R:
-                    {
-                        mediaTypeDetermined = TRUE;
-                        tmpValue = IMAPI_MEDIA_TYPE_DVDPLUSR;
-                        break;
-                    }
-                    case IMAPI_PROFILE_TYPE_DVD_PLUS_RW:
-                    {
-                        mediaTypeDetermined = TRUE;
-                        tmpValue = IMAPI_MEDIA_TYPE_DVDPLUSRW;
-                        break;
-                    }
-                    case IMAPI_PROFILE_TYPE_DVD_DASH_RECORDABLE:
-                    {
-                        mediaTypeDetermined = TRUE;
-                        tmpValue = IMAPI_MEDIA_TYPE_DVDDASHR;
-                        break;
-                    }
-                    case IMAPI_PROFILE_TYPE_DVD_DASH_REWRITABLE:
-                    case IMAPI_PROFILE_TYPE_DVD_DASH_RW_SEQUENTIAL:
-                    {
-                        mediaTypeDetermined = TRUE;
-                        tmpValue = IMAPI_MEDIA_TYPE_DVDDASHRW;
-                        break;
-                    }
-                    default:
-                        break;
+                {
+                    mediaTypeDetermined = TRUE;
+                    tmpValue = IMAPI_MEDIA_TYPE_DISK;
+                    break;
+                }
+                case IMAPI_PROFILE_TYPE_CDROM:
+                case IMAPI_PROFILE_TYPE_DDCDROM:
+                {
+                    mediaTypeDetermined = TRUE;
+                    tmpValue = IMAPI_MEDIA_TYPE_CDROM;
+                    break;
+                }
+                case IMAPI_PROFILE_TYPE_CD_RECORDABLE:
+                case IMAPI_PROFILE_TYPE_DDCD_RECORDABLE:
+                {
+                    mediaTypeDetermined = TRUE;
+                    tmpValue = IMAPI_MEDIA_TYPE_CDR;
+                    break;
+                }
+                case IMAPI_PROFILE_TYPE_CD_REWRITABLE:
+                case IMAPI_PROFILE_TYPE_DDCD_REWRITABLE:
+                {
+                    mediaTypeDetermined = TRUE;
+                    tmpValue = IMAPI_MEDIA_TYPE_CDRW;
+                    break;
+                }
+                case IMAPI_PROFILE_TYPE_DVDROM:
+                {
+                    mediaTypeDetermined = TRUE;
+                    tmpValue = IMAPI_MEDIA_TYPE_DVDROM;
+                    break;
+                }
+                case IMAPI_PROFILE_TYPE_DVD_RAM:
+                {
+                    mediaTypeDetermined = TRUE;
+                    tmpValue = IMAPI_MEDIA_TYPE_DVDRAM;
+                    break;
+                }
+                case IMAPI_PROFILE_TYPE_DVD_PLUS_R:
+                {
+                    mediaTypeDetermined = TRUE;
+                    tmpValue = IMAPI_MEDIA_TYPE_DVDPLUSR;
+                    break;
+                }
+                case IMAPI_PROFILE_TYPE_DVD_PLUS_RW:
+                {
+                    mediaTypeDetermined = TRUE;
+                    tmpValue = IMAPI_MEDIA_TYPE_DVDPLUSRW;
+                    break;
+                }
+                case IMAPI_PROFILE_TYPE_DVD_DASH_RECORDABLE:
+                {
+                    mediaTypeDetermined = TRUE;
+                    tmpValue = IMAPI_MEDIA_TYPE_DVDDASHR;
+                    break;
+                }
+                case IMAPI_PROFILE_TYPE_DVD_DASH_REWRITABLE:
+                case IMAPI_PROFILE_TYPE_DVD_DASH_RW_SEQUENTIAL:
+                {
+                    mediaTypeDetermined = TRUE;
+                    tmpValue = IMAPI_MEDIA_TYPE_DVDDASHRW;
+                    break;
+                }
+                default:
+                    break;
                 }
             } // end of loop through all profiles
-        } 
+        }
         CoTaskMemFreeAndNull(profiles);
 
-    }   
+    }
 
     // For the final, last-ditch attempt for legacy drives
     if ((!mediaTypeDetermined) && (!supportsGetConfiguration) && SUCCEEDED(hr))
@@ -579,27 +581,27 @@ HRESULT SendSetCDSpeed(__in IDiscRecorder2* discRecorder, const IMAPI_MEDIA_PHYS
             LONG endLBA = 0x231260;
             LONG time = 0x3E8;
             dataBuffer[0] = (BYTE) (rotationType & 0x3) << 3;
-        
+
             // now set the END LBA
-            dataBuffer[8] = (BYTE)((endLBA & 0xFF000000) >> 24); 
+            dataBuffer[8] = (BYTE)((endLBA & 0xFF000000) >> 24);
             dataBuffer[9] = (BYTE)((endLBA & 0x00FF0000) >> 16);
             dataBuffer[10] = (BYTE)((endLBA & 0x0000FF00) >> 8);
             dataBuffer[11] = (BYTE)(endLBA & 0x000000FF);
 
             // now set the read time
-            dataBuffer[16] = (BYTE)((time & 0xFF000000) >> 24); 
+            dataBuffer[16] = (BYTE)((time & 0xFF000000) >> 24);
             dataBuffer[17] = (BYTE)((time & 0x00FF0000) >> 16);
             dataBuffer[18] = (BYTE)((time & 0x0000FF00) >> 8);
             dataBuffer[19] = (BYTE)(time & 0x000000FF);
 
             // now set the write size
-            dataBuffer[20] = (BYTE)((KBps & 0xFF000000) >> 24); 
+            dataBuffer[20] = (BYTE)((KBps & 0xFF000000) >> 24);
             dataBuffer[21] = (BYTE)((KBps & 0x00FF0000) >> 16);
             dataBuffer[22] = (BYTE)((KBps & 0x0000FF00) >> 8);
             dataBuffer[23] = (BYTE)(KBps & 0x000000FF);
 
             // now set the write time
-            dataBuffer[24] = (BYTE)((time & 0xFF000000) >> 24); 
+            dataBuffer[24] = (BYTE)((time & 0xFF000000) >> 24);
             dataBuffer[25] = (BYTE)((time & 0x00FF0000) >> 16);
             dataBuffer[26] = (BYTE)((time & 0x0000FF00) >> 8);
             dataBuffer[27] = (BYTE)(time & 0x000000FF);
@@ -684,8 +686,8 @@ BOOLEAN BstrIsValidClientName(__in_xcount(SysStringLen(value)) BSTR value)
     // NOTE: SysStringLen does not include NULL termination
     // A NULL or empty client name is not acceptable.
     if (stringLength >= (CDROM_EXCLUSIVE_CALLER_LENGTH-1) ||
-        (stringLength == 0)
-        )
+            (stringLength == 0)
+       )
     {
         return FALSE;
     }
@@ -694,17 +696,17 @@ BOOLEAN BstrIsValidClientName(__in_xcount(SysStringLen(value)) BSTR value)
     for (ULONG i = 0; i < stringLength; i++, t++)
     {
         if (   ((*t >=  (OLECHAR)'0') && (*t <= (OLECHAR)'9'))
-            || ((*t >=  (OLECHAR)'a') && (*t <= (OLECHAR)'z'))
-            || ((*t >=  (OLECHAR)'A') && (*t <= (OLECHAR)'Z'))
-            || (*t == (OLECHAR)' ')
-            || (*t == (OLECHAR)'.')
-            || (*t == (OLECHAR)',')
-            || (*t == (OLECHAR)':')
-            || (*t == (OLECHAR)';')
-            || (*t == (OLECHAR)'_')
-            || (*t == (OLECHAR)'-')
-               )
-               
+                || ((*t >=  (OLECHAR)'a') && (*t <= (OLECHAR)'z'))
+                || ((*t >=  (OLECHAR)'A') && (*t <= (OLECHAR)'Z'))
+                || (*t == (OLECHAR)' ')
+                || (*t == (OLECHAR)'.')
+                || (*t == (OLECHAR)',')
+                || (*t == (OLECHAR)':')
+                || (*t == (OLECHAR)';')
+                || (*t == (OLECHAR)'_')
+                || (*t == (OLECHAR)'-')
+           )
+
         {
             // nothing... this is a valid char
         }
@@ -713,7 +715,7 @@ BOOLEAN BstrIsValidClientName(__in_xcount(SysStringLen(value)) BSTR value)
             return FALSE;
         }
     }
-    
+
     return TRUE;
 }
 
@@ -726,9 +728,9 @@ HRESULT UpdateCurrentDriveProperties(__in IDiscRecorder2* discRecorder, const IM
     bool                writeSpeedSet = false;
 
     if ((discRecorder == NULL) ||
-        (currentSpeedSectorsPerSecond == NULL) ||
-        (currentSpeedKBps == NULL) ||
-        (currentRotationTypeIsPureCAV == NULL))
+            (currentSpeedSectorsPerSecond == NULL) ||
+            (currentSpeedKBps == NULL) ||
+            (currentRotationTypeIsPureCAV == NULL))
     {
         hr = E_POINTER;
     }
@@ -748,13 +750,13 @@ HRESULT UpdateCurrentDriveProperties(__in IDiscRecorder2* discRecorder, const IM
         // retrieve the mode page
         if (SUCCEEDED(hr))
         {
-        
+
             // the drive may not support GET_PERFORMANCE, so just try legacy page
             hr = dr2ex->GetModePage(IMAPI_MODE_PAGE_TYPE_LEGACY_CAPABILITIES,
                                     IMAPI_MODE_PAGE_REQUEST_TYPE_CURRENT_VALUES,
                                     (BYTE**)&page,
                                     &pageSize
-                                    );
+                                   );
         }
 
         // need to check for malicious data (RPC after all...)
@@ -790,12 +792,12 @@ HRESULT UpdateCurrentDriveProperties(__in IDiscRecorder2* discRecorder, const IM
                            (bytePage[21]     ) );
             }
             else if (page->PageLength < 28) // MMC3,4 == pageLength 28, size 30
-            { 
+            {
                 // mmc 2.0 ... everything necessary is marked as obsolete
-                // however, the SET_CD_SPEED section states that the actual 
+                // however, the SET_CD_SPEED section states that the actual
                 // speed will be returned on this page ... so just use it
                 BYTE *bytePage = (BYTE*)page;
-                
+
                 tmpKBps = ((bytePage[20] << 8) |
                            (bytePage[21]     ) );
             }
@@ -808,13 +810,13 @@ HRESULT UpdateCurrentDriveProperties(__in IDiscRecorder2* discRecorder, const IM
 
                 tmpKBps = ((bytePage[28] << 8) |
                            (bytePage[29]     ) );
-                
+
                 // set the current rotation type
-                if ((bytePage[27] & 0x3) == 0) 
+                if ((bytePage[27] & 0x3) == 0)
                 {
                     *currentRotationTypeIsPureCAV = 0;
-                } 
-                else if ((bytePage[27] & 0x3) == 1) 
+                }
+                else if ((bytePage[27] & 0x3) == 1)
                 {
                     *currentRotationTypeIsPureCAV = 1;
                 }
@@ -856,9 +858,9 @@ HRESULT WaitForReadDiscInfo(__in IDiscRecorder2Ex* recorder, const ULONG seconds
     if (SUCCEEDED(hr))
     {
         // prevent division resulting in zero attempts
-        if (attempts == 0) 
-        { 
-            attempts++; 
+        if (attempts == 0)
+        {
+            attempts++;
         }
 
         // Loop for a limited time, or until failure or successful Read Disc Info
@@ -877,15 +879,15 @@ HRESULT WaitForReadDiscInfo(__in IDiscRecorder2Ex* recorder, const ULONG seconds
             cdb.READ_DISC_INFORMATION.OperationCode  = SCSIOP_READ_DISC_INFORMATION;
             cdb.READ_DISC_INFORMATION.AllocationLength[0] = (UCHAR)(sizeof(DISC_INFORMATION) >> (8*1));
             cdb.READ_DISC_INFORMATION.AllocationLength[1] = (UCHAR)(sizeof(DISC_INFORMATION) >> (8*0));
-            
+
             hr = recorder->SendCommandGetDataFromDevice((BYTE*)&cdb,
-                                                        sizeof(cdb.READ_DISC_INFORMATION),
-                                                        (BYTE*)&sense,
-                                                        IMAPI2_DEFAULT_COMMAND_TIMEOUT,
-                                                        (BYTE*)&discInfo,
-                                                        sizeof(DISC_INFORMATION),
-                                                        &bytesReceived
-                                                        );
+                    sizeof(cdb.READ_DISC_INFORMATION),
+                    (BYTE*)&sense,
+                    IMAPI2_DEFAULT_COMMAND_TIMEOUT,
+                    (BYTE*)&discInfo,
+                    sizeof(DISC_INFORMATION),
+                    &bytesReceived
+                                                       );
             if (hr == S_IMAPI_COMMAND_HAS_SENSE_DATA)
             {
                 if (IsSenseDataInTable(AllowedSenseForLongOperations, RTL_NUMBER_OF(AllowedSenseForLongOperations), &sense))
@@ -915,9 +917,9 @@ HRESULT WaitForReadDiscInfo(__in IDiscRecorder2Ex* recorder, const ULONG seconds
 HRESULT ReadMediaCapacity(__in IDiscRecorder2Ex* recorder, __out ULONG* bytesPerBlock, __out ULONG* userSectors)
 {
     HRESULT             hr = S_OK;
-    READ_CAPACITY_DATA  capacity; 
-    CDB                 cdb; 
-    SENSE_DATA          sense; 
+    READ_CAPACITY_DATA  capacity;
+    CDB                 cdb;
+    SENSE_DATA          sense;
     ULONG               retrievedBytes = 0;
 
     RtlZeroMemory(&capacity, sizeof(READ_CAPACITY_DATA));
@@ -927,8 +929,8 @@ HRESULT ReadMediaCapacity(__in IDiscRecorder2Ex* recorder, __out ULONG* bytesPer
     *userSectors   = 0;
 
     if ((recorder == NULL) ||
-        (bytesPerBlock == NULL) ||
-        (userSectors == NULL))
+            (bytesPerBlock == NULL) ||
+            (userSectors == NULL))
     {
         hr = E_POINTER;
     }
@@ -936,22 +938,22 @@ HRESULT ReadMediaCapacity(__in IDiscRecorder2Ex* recorder, __out ULONG* bytesPer
     if (SUCCEEDED(hr))
     {
         cdb.CDB10.OperationCode = SCSIOP_READ_CAPACITY;
-        
+
         hr = recorder->SendCommandGetDataFromDevice((BYTE*)&cdb,
-                                                    sizeof(cdb.CDB10),
-                                                    (BYTE*)&sense,
-                                                    10, // BUGBUG -- different timeout?
-                                                    (BYTE*)&capacity,
-                                                    sizeof(READ_CAPACITY_DATA),
-                                                    &retrievedBytes
-                                                    );
+                sizeof(cdb.CDB10),
+                (BYTE*)&sense,
+                10, // BUGBUG -- different timeout?
+                (BYTE*)&capacity,
+                sizeof(READ_CAPACITY_DATA),
+                &retrievedBytes
+                                                   );
 
         if (hr == S_IMAPI_COMMAND_HAS_SENSE_DATA)
         {
             if (!TranslateSenseInfoToHResult(&cdb, &sense, &hr))
             {
                 hr = E_FAIL;
-            }            
+            }
         }
         else if (FAILED(hr))
         {
@@ -965,14 +967,14 @@ HRESULT ReadMediaCapacity(__in IDiscRecorder2Ex* recorder, __out ULONG* bytesPer
             // swap the byte order
             REVERSE_LONG(&(capacity.LogicalBlockAddress));
             REVERSE_LONG(&(capacity.BytesPerBlock));
-            
+
             // fixup zero-size reporting to be correct
             if ((capacity.LogicalBlockAddress == ((ULONG)-1)) ||
-                (capacity.LogicalBlockAddress == 0))
+                    (capacity.LogicalBlockAddress == 0))
             {
                 capacity.LogicalBlockAddress = ((ULONG)-1);
             }
-            
+
             if (CountOfSetBits(capacity.BytesPerBlock) != 1)
             {
                 hr = E_IMAPI_RECORDER_INVALID_RESPONSE_FROM_DEVICE;
@@ -981,7 +983,7 @@ HRESULT ReadMediaCapacity(__in IDiscRecorder2Ex* recorder, __out ULONG* bytesPer
             {
                 *bytesPerBlock = capacity.BytesPerBlock;
                 *userSectors   = capacity.LogicalBlockAddress + 1;
-            }            
+            }
         }
     }
 
@@ -991,8 +993,8 @@ HRESULT ReadMediaCapacity(__in IDiscRecorder2Ex* recorder, __out ULONG* bytesPer
 HRESULT RequestAutomaticOPC(__in IDiscRecorder2Ex* recorder)
 {
     HRESULT     hr = S_OK;
-    CDB         cdb; 
-    SENSE_DATA  sense; 
+    CDB         cdb;
+    SENSE_DATA  sense;
     RtlZeroMemory(&cdb, sizeof(CDB));
     RtlZeroMemory(&sense, sizeof(SENSE_DATA));
 
@@ -1007,17 +1009,17 @@ HRESULT RequestAutomaticOPC(__in IDiscRecorder2Ex* recorder)
         cdb.SEND_OPC_INFORMATION.DoOpc = 1;
 
         hr = recorder->SendCommandNoData((BYTE*)&cdb,
-                                          sizeof(cdb.SEND_OPC_INFORMATION),
-                                          (BYTE*)&sense,
-                                          DEFAULT_OPC_TIMEOUT
-                                          );
+                                         sizeof(cdb.SEND_OPC_INFORMATION),
+                                         (BYTE*)&sense,
+                                         DEFAULT_OPC_TIMEOUT
+                                        );
 
         if (hr == S_IMAPI_COMMAND_HAS_SENSE_DATA)
         {
             if (!TranslateSenseInfoToHResult(&cdb, &sense, &hr))
             {
                 hr = E_FAIL;
-            }            
+            }
         }
     }
 
@@ -1027,8 +1029,8 @@ HRESULT RequestAutomaticOPC(__in IDiscRecorder2Ex* recorder)
 HRESULT SendSynchronizeCacheCommand(__in IDiscRecorder2Ex* recorder, const ULONG timeout, const BOOLEAN immediate)
 {
     HRESULT     hr = S_OK;
-    CDB         cdb; 
-    SENSE_DATA  sense; 
+    CDB         cdb;
+    SENSE_DATA  sense;
     RtlZeroMemory(&cdb, sizeof(CDB));
     RtlZeroMemory(&sense, sizeof(SENSE_DATA));
 
@@ -1043,16 +1045,16 @@ HRESULT SendSynchronizeCacheCommand(__in IDiscRecorder2Ex* recorder, const ULONG
         cdb.SYNCHRONIZE_CACHE10.Immediate     = (immediate ? 1 : 0);
 
         hr = recorder->SendCommandNoData((BYTE*)&cdb,
-                                          sizeof(cdb.SYNCHRONIZE_CACHE10),
-                                          (BYTE*)&sense,
-                                          timeout
-                                          );
+                                         sizeof(cdb.SYNCHRONIZE_CACHE10),
+                                         (BYTE*)&sense,
+                                         timeout
+                                        );
         if (hr == S_IMAPI_COMMAND_HAS_SENSE_DATA)
         {
             if (!TranslateSenseInfoToHResult(&cdb, &sense, &hr))
             {
                 hr = E_FAIL;
-            }            
+            }
         }
     }
 
@@ -1069,7 +1071,7 @@ HRESULT GetMediaPhysicallyBlank(__in IDiscRecorder2Ex* discRecorder, __out VARIA
     IMAPI_MEDIA_PHYSICAL_TYPE   mediaType = IMAPI_MEDIA_TYPE_UNKNOWN;
 
     if ((discRecorder == NULL) ||
-        (pPhysicallyBlank == NULL))
+            (pPhysicallyBlank == NULL))
     {
         hr = E_POINTER;
     }
@@ -1084,7 +1086,7 @@ HRESULT GetMediaPhysicallyBlank(__in IDiscRecorder2Ex* discRecorder, __out VARIA
     if (SUCCEEDED(hr))
     {
         if ((mediaType == IMAPI_MEDIA_TYPE_CDROM) ||
-            (mediaType == IMAPI_MEDIA_TYPE_DVDROM))
+                (mediaType == IMAPI_MEDIA_TYPE_DVDROM))
         {
             bDiscBlank = FALSE;
             bFound = TRUE;
@@ -1101,7 +1103,7 @@ HRESULT GetMediaPhysicallyBlank(__in IDiscRecorder2Ex* discRecorder, __out VARIA
     if (SUCCEEDED(hr) && !bFound)
     {
         ULONG discStatus = discInfo.get_DiscStatus();
-     
+
         // check disc status is empty
         if (discStatus != 0)
         {
@@ -1140,7 +1142,7 @@ HRESULT GetMediaHeuristicallyBlank(__in IDiscRecorder2Ex* discRecorder, __out VA
     IMAPI_MEDIA_PHYSICAL_TYPE mediaType = IMAPI_MEDIA_TYPE_UNKNOWN;
 
     if ((discRecorder == NULL) ||
-        (pHeuristicallyBlank == NULL))
+            (pHeuristicallyBlank == NULL))
     {
         hr = E_POINTER;
     }
@@ -1190,7 +1192,7 @@ HRESULT GetMediaHeuristicallyBlank(__in IDiscRecorder2Ex* discRecorder, __out VA
         if (SUCCEEDED(hr) && !bAnswerFound)
         {
             ULONG       remainingSectors    = ((2 * 1024 * 1024) / bytesPerSector); // 2MB
-            ULONG       sectorsThisRead     = 0;        
+            ULONG       sectorsThisRead     = 0;
             CDB         readCdb;
             SENSE_DATA  senseData;
             ULONG       bufferLength        = 0;
@@ -1234,23 +1236,24 @@ HRESULT GetMediaHeuristicallyBlank(__in IDiscRecorder2Ex* discRecorder, __out VA
                     readCdb.CDB10.TransferBlocksLsb = LOBYTE( LOWORD( sectorsThisRead));
 
                     hr = discRecorder->SendCommandGetDataFromDevice(
-                                                                    (LPBYTE)&readCdb,
-                                                                    sizeof(readCdb.CDB10),
-                                                                    (LPBYTE)&senseData,
-                                                                    12,
-                                                                    (LPBYTE)pBuffer,    
-                                                                    bufferLength,
-                                                                    &bufferLength
-                                                                    );
+                             (LPBYTE)&readCdb,
+                             sizeof(readCdb.CDB10),
+                             (LPBYTE)&senseData,
+                             12,
+                             (LPBYTE)pBuffer,
+                             bufferLength,
+                             &bufferLength
+                         );
                     if ((hr == S_IMAPI_COMMAND_HAS_SENSE_DATA) ||
-                        (FAILED(hr)))
+                            (FAILED(hr)))
 
                     {
                         // retry the read blindly for now
                         Sleep(MILLISECONDS_FROM_SECONDS(2));
                         retryCnt++;
                     }
-                } while ( (FAILED(hr) || (hr == S_IMAPI_COMMAND_HAS_SENSE_DATA)) && (retryCnt < 5) );
+                }
+                while ( (FAILED(hr) || (hr == S_IMAPI_COMMAND_HAS_SENSE_DATA)) && (retryCnt < 5) );
 
                 // Translate SENSE_DATA into meaningful hr
                 if (hr == S_IMAPI_COMMAND_HAS_SENSE_DATA)
@@ -1284,7 +1287,7 @@ HRESULT GetMediaHeuristicallyBlank(__in IDiscRecorder2Ex* discRecorder, __out VA
                     bDiscBlank = FALSE;
                 }
 
-                // increment the read if we still think the disc is blank                
+                // increment the read if we still think the disc is blank
                 if (SUCCEEDED(hr) && bDiscBlank)
                 {
                     remainingSectors -= sectorsThisRead;
@@ -1320,12 +1323,12 @@ BOOLEAN IsSenseDataInTable(__in_ecount(entries) PSENSE_INFOMATION table, const L
     UCHAR   asc   = senseData->AdditionalSenseCode;
     UCHAR   ascq  = senseData->AdditionalSenseCodeQualifier;
 
-    for (i = 0; i < entries; i++ ) 
+    for (i = 0; i < entries; i++ )
     {
         if (((table[i].Sense == 0xFF) || (table[i].Sense == sense)) &&
-            ((table[i].Ascq  == 0xFF) || (table[i].Ascq  == ascq )) &&
-            ((table[i].Asc   == 0xFF) || (table[i].Asc   == asc  ))
-            ) 
+                ((table[i].Ascq  == 0xFF) || (table[i].Ascq  == ascq )) &&
+                ((table[i].Asc   == 0xFF) || (table[i].Asc   == asc  ))
+           )
         {
             return TRUE;
         }
@@ -1333,7 +1336,8 @@ BOOLEAN IsSenseDataInTable(__in_ecount(entries) PSENSE_INFOMATION table, const L
     return FALSE;
 }
 
-typedef struct _SENSE_ERROR_TABLE {
+typedef struct _SENSE_ERROR_TABLE
+{
     UCHAR   SenseKey;
     UCHAR   Asc;
     UCHAR   AscQ;
@@ -1350,7 +1354,8 @@ typedef struct _SENSE_ERROR_TABLE {
 //
 
 // S_OK is the only allowed SUCCESS table here!
-const SENSE_ERROR_TABLE GenericErrors[] = {
+const SENSE_ERROR_TABLE GenericErrors[] =
+{
     { 0x00, 0x00, 0xFF, 0xFF, S_OK                                       },
     // { 0x08, 0xFF, 0xFF, // Blank check
     { 0xFF, 0x02, 0x06, 0xFF, E_IMAPI_RECORDER_MEDIA_UPSIDE_DOWN         }, // standard-defined error (no reference position found)
@@ -1407,10 +1412,10 @@ const SENSE_ERROR_TABLE GenericErrors[] = {
 };
 
 const BOOLEAN TranslateSenseInfoToHResult(
-        __in_bcount(1)                  const CDB* Cdb,           // some sense codes are cdb-specific
-        __in_bcount(sizeof(SENSE_DATA)) const SENSE_DATA* Sense,  // sense data is key
-        __out                                 HRESULT* HResult   // return the hr
-        )
+    __in_bcount(1)                  const CDB* Cdb,           // some sense codes are cdb-specific
+    __in_bcount(sizeof(SENSE_DATA)) const SENSE_DATA* Sense,  // sense data is key
+    __out                                 HRESULT* HResult   // return the hr
+)
 {
     BOOLEAN translated = FALSE;
     // do not modify HResult unless match is made!
@@ -1418,17 +1423,17 @@ const BOOLEAN TranslateSenseInfoToHResult(
     for ( ULONG i = 0; (!translated) && (i < RTL_NUMBER_OF(GenericErrors)); i++ )
     {
         if ( ((GenericErrors[i].SenseKey == 0xFF) ||
-              (GenericErrors[i].SenseKey == Sense->SenseKey))
-             &&
-             ((GenericErrors[i].Asc      == 0xFF) ||
-              (GenericErrors[i].Asc      == Sense->AdditionalSenseCode))
-             &&
-             ((GenericErrors[i].AscQ     == 0xFF) ||
-              (GenericErrors[i].AscQ     == Sense->AdditionalSenseCodeQualifier))
-             &&
-             ((GenericErrors[i].Opcode   == 0xFF) ||
-              (GenericErrors[i].Opcode   == Cdb->AsByte[0]))
-             )
+                (GenericErrors[i].SenseKey == Sense->SenseKey))
+                &&
+                ((GenericErrors[i].Asc      == 0xFF) ||
+                 (GenericErrors[i].Asc      == Sense->AdditionalSenseCode))
+                &&
+                ((GenericErrors[i].AscQ     == 0xFF) ||
+                 (GenericErrors[i].AscQ     == Sense->AdditionalSenseCodeQualifier))
+                &&
+                ((GenericErrors[i].Opcode   == 0xFF) ||
+                 (GenericErrors[i].Opcode   == Cdb->AsByte[0]))
+           )
         {
             *HResult = GenericErrors[i].Result;
             translated = TRUE;
@@ -1455,7 +1460,7 @@ HRESULT FuzzyConvert_KBps2SectorsPerSecond(const IMAPI_MEDIA_PHYSICAL_TYPE media
         // cd's are harder because we need to determine which data/sector number to use to set it properly
         // 2324: CD-ROM/XA FORM 2
         // 2048: CD-ROM/XA FORM 1
-        // 2352: 
+        // 2352:
         // 2336: MODE2
         // For now, I standardized on the largest and it seems to work pretty well ...
         finalSpeedSPS = (writeSpeedKBps * 1000) / 2352;
@@ -1463,7 +1468,7 @@ HRESULT FuzzyConvert_KBps2SectorsPerSecond(const IMAPI_MEDIA_PHYSICAL_TYPE media
     else if (IS_DVD_MEDIA(mediaType))
     {
         // DVD media ... always the same sector size
-        finalSpeedSPS = (writeSpeedKBps * 1000) / 2048;        
+        finalSpeedSPS = (writeSpeedKBps * 1000) / 2048;
     }
     else if (mediaType == IMAPI_MEDIA_TYPE_UNKNOWN)
     {
@@ -1490,10 +1495,10 @@ HRESULT FuzzyConvert_KBps2SectorsPerSecond(const IMAPI_MEDIA_PHYSICAL_TYPE media
 }
 
 const HRESULT CreateVariantSafeArrayFromEnums(
-        __in_ecount(valueCount)   const LONG * values,
-        __in                      const ULONG valueCount,
-        __deref_out                     SAFEARRAY** result
-        )
+    __in_ecount(valueCount)   const LONG * values,
+    __in                      const ULONG valueCount,
+    __deref_out                     SAFEARRAY** result
+)
 {
     HRESULT     hr = S_OK;
     SAFEARRAY*  tmpSafeArray = NULL;

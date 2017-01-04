@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -46,7 +46,7 @@ template<class Interface>
 inline void
 SafeRelease(
     Interface **ppInterfaceToRelease
-    )
+)
 {
     if (*ppInterfaceToRelease != NULL)
     {
@@ -94,12 +94,12 @@ HRESULT SaveToImageFile()
     IWICStream *pStream = NULL;
 
     hr = CoCreateInstance(
-        CLSID_WICImagingFactory,
-        NULL,
-        CLSCTX_INPROC_SERVER,
-        IID_IWICImagingFactory,
-        reinterpret_cast<void **>(&pWICFactory)
-        );
+             CLSID_WICImagingFactory,
+             NULL,
+             CLSCTX_INPROC_SERVER,
+             IID_IWICImagingFactory,
+             reinterpret_cast<void **>(&pWICFactory)
+         );
 
     if (SUCCEEDED(hr))
     {
@@ -109,10 +109,10 @@ HRESULT SaveToImageFile()
     if (SUCCEEDED(hr))
     {
         hr = DWriteCreateFactory(
-            DWRITE_FACTORY_TYPE_SHARED,
-            __uuidof(pDWriteFactory),
-            reinterpret_cast<IUnknown **>(&pDWriteFactory)
-            );
+                 DWRITE_FACTORY_TYPE_SHARED,
+                 __uuidof(pDWriteFactory),
+                 reinterpret_cast<IUnknown **>(&pDWriteFactory)
+             );
     }
 
     //
@@ -124,21 +124,21 @@ HRESULT SaveToImageFile()
     if (SUCCEEDED(hr))
     {
         hr = pWICFactory->CreateBitmap(
-            sc_bitmapWidth,
-            sc_bitmapHeight,
-            GUID_WICPixelFormat32bppBGR,
-            WICBitmapCacheOnLoad,
-            &pWICBitmap
-            );
+                 sc_bitmapWidth,
+                 sc_bitmapHeight,
+                 GUID_WICPixelFormat32bppBGR,
+                 WICBitmapCacheOnLoad,
+                 &pWICBitmap
+             );
     }
 
     if (SUCCEEDED(hr))
     {
         hr = pD2DFactory->CreateWicBitmapRenderTarget(
-            pWICBitmap,
-            D2D1::RenderTargetProperties(),
-            &pRT
-            );
+                 pWICBitmap,
+                 D2D1::RenderTargetProperties(),
+                 &pRT
+             );
     }
 
     if (SUCCEEDED(hr))
@@ -151,15 +151,15 @@ HRESULT SaveToImageFile()
         static const FLOAT sc_fontSize = 50;
 
         hr = pDWriteFactory->CreateTextFormat(
-            sc_fontName,
-            NULL,
-            DWRITE_FONT_WEIGHT_NORMAL,
-            DWRITE_FONT_STYLE_NORMAL,
-            DWRITE_FONT_STRETCH_NORMAL,
-            sc_fontSize,
-            L"", //locale
-            &pTextFormat
-            );
+                 sc_fontName,
+                 NULL,
+                 DWRITE_FONT_WEIGHT_NORMAL,
+                 DWRITE_FONT_STYLE_NORMAL,
+                 DWRITE_FONT_STRETCH_NORMAL,
+                 sc_fontSize,
+                 L"", //locale
+                 &pTextFormat
+             );
     }
     if (SUCCEEDED(hr))
     {
@@ -184,7 +184,7 @@ HRESULT SaveToImageFile()
         pSink->BeginFigure(
             D2D1::Point2F(0, 0),
             D2D1_FIGURE_BEGIN_FILLED
-            );
+        );
 
         pSink->AddLine(D2D1::Point2F(200, 0));
 
@@ -193,7 +193,7 @@ HRESULT SaveToImageFile()
                 D2D1::Point2F(150, 50),
                 D2D1::Point2F(150, 150),
                 D2D1::Point2F(200, 200))
-            );
+        );
 
         pSink->AddLine(D2D1::Point2F(0, 200));
 
@@ -202,7 +202,7 @@ HRESULT SaveToImageFile()
                 D2D1::Point2F(50, 150),
                 D2D1::Point2F(50, 50),
                 D2D1::Point2F(0, 0))
-            );
+        );
 
         pSink->EndFigure(D2D1_FIGURE_END_CLOSED);
 
@@ -221,28 +221,28 @@ HRESULT SaveToImageFile()
         };
 
         hr = pRT->CreateGradientStopCollection(
-            stops,
-            ARRAYSIZE(stops),
-            &pGradientStops
-            );
+                 stops,
+                 ARRAYSIZE(stops),
+                 &pGradientStops
+             );
     }
     if (SUCCEEDED(hr))
     {
         hr = pRT->CreateLinearGradientBrush(
-            D2D1::LinearGradientBrushProperties(
-                D2D1::Point2F(100, 0),
-                D2D1::Point2F(100, 200)),
-            D2D1::BrushProperties(),
-            pGradientStops,
-            &pLGBrush
-            );
+                 D2D1::LinearGradientBrushProperties(
+                     D2D1::Point2F(100, 0),
+                     D2D1::Point2F(100, 200)),
+                 D2D1::BrushProperties(),
+                 pGradientStops,
+                 &pLGBrush
+             );
     }
     if (SUCCEEDED(hr))
     {
         hr = pRT->CreateSolidColorBrush(
-            D2D1::ColorF(D2D1::ColorF::Black),
-            &pBlackBrush
-            );
+                 D2D1::ColorF(D2D1::ColorF::Black),
+                 &pBlackBrush
+             );
     }
     if (SUCCEEDED(hr))
     {
@@ -264,7 +264,7 @@ HRESULT SaveToImageFile()
                 D2D1::Point2F(
                     rtSize.width / 2,
                     rtSize.height / 2))
-                );
+        );
 
         static const WCHAR sc_helloWorld[] = L"Hello, World!";
         pRT->DrawText(

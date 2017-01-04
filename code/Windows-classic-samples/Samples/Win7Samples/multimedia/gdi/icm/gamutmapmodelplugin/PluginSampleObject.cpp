@@ -1,4 +1,4 @@
-//+--------------------------------------------------------------------------
+﻿//+--------------------------------------------------------------------------
 //
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
@@ -28,15 +28,15 @@ DEFINE_GUID(INTERFACEID_PRIVATEINTERFACE,0x94617F91,0x2C14,0x4485,0x9B,0x94,0xA7
 //  Member:
 //      CGamutMapModelPluginSample::Initialize
 //
-//  Synopsis: 
+//  Synopsis:
 //      Implementation of IGamutMapModelPlugIn::Initialize.
 //
 //----------------------------------------------------------------------------
 STDMETHODIMP CGamutMapModelPluginSample::Initialize(BSTR bstrXml,
-                                        IDeviceModelPlugIn *pDM1,
-                                        IDeviceModelPlugIn *pDM2,
-                                        GamutBoundaryDescription *GBD1,
-                                        GamutBoundaryDescription *GBD2 )
+        IDeviceModelPlugIn *pDM1,
+        IDeviceModelPlugIn *pDM2,
+        GamutBoundaryDescription *GBD1,
+        GamutBoundaryDescription *GBD2 )
 {
     if ( !bstrXml || !GBD1 || !GBD2 )
     {
@@ -53,9 +53,9 @@ STDMETHODIMP CGamutMapModelPluginSample::Initialize(BSTR bstrXml,
     if ( pDM1 )
     {
         HRESULT hrQueryInterface = pDM1->QueryInterface(
-                                    INTERFACEID_PRIVATEINTERFACE,
-                                    (void**)&m_pSourceDeviceModel
-                                    );    
+                                       INTERFACEID_PRIVATEINTERFACE,
+                                       (void**)&m_pSourceDeviceModel
+                                   );
         if ( SUCCEEDED( hrQueryInterface ) )
         {
             //
@@ -67,9 +67,9 @@ STDMETHODIMP CGamutMapModelPluginSample::Initialize(BSTR bstrXml,
     if ( pDM2 && SUCCEEDED( m_hr ) )
     {
         HRESULT hrQueryInterface = pDM2->QueryInterface(
-                            INTERFACEID_PRIVATEINTERFACE,
-                            (void**)&m_pDestinationDeviceModel
-                            );    
+                                       INTERFACEID_PRIVATEINTERFACE,
+                                       (void**)&m_pDestinationDeviceModel
+                                   );
         if ( SUCCEEDED( hrQueryInterface ) )
         {
             //
@@ -86,15 +86,15 @@ STDMETHODIMP CGamutMapModelPluginSample::Initialize(BSTR bstrXml,
 //  Member:
 //      CGamutMapModelPluginSample::SourceToDestinationAppearanceColors
 //
-//  Synopsis: 
-//      Implementation of 
+//  Synopsis:
+//      Implementation of
 //      IGamutMapModelPlugIn::SourceToDestinationAppearanceColors. This method
 //      simply mirrors the data in the sample.
 //
 //----------------------------------------------------------------------------
 STDMETHODIMP CGamutMapModelPluginSample::SourceToDestinationAppearanceColors(UINT cColors,
-                                            const JChColorF *pInputColors,
-                                            JChColorF *pOutputColors )
+        const JChColorF *pInputColors,
+        JChColorF *pOutputColors )
 {
     if ( !pInputColors || !pOutputColors )
     {

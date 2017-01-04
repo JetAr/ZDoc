@@ -1,4 +1,4 @@
-#include <windows.h>
+﻿#include <windows.h>
 #include <uxtheme.h>
 #include "DeskBand.h"
 
@@ -33,10 +33,10 @@ STDMETHODIMP CDeskBand::QueryInterface(REFIID riid, void **ppv)
     HRESULT hr = S_OK;
 
     if (IsEqualIID(IID_IUnknown, riid)       ||
-        IsEqualIID(IID_IOleWindow, riid)     ||
-        IsEqualIID(IID_IDockingWindow, riid) ||
-        IsEqualIID(IID_IDeskBand, riid)      ||
-        IsEqualIID(IID_IDeskBand2, riid))
+            IsEqualIID(IID_IOleWindow, riid)     ||
+            IsEqualIID(IID_IDockingWindow, riid) ||
+            IsEqualIID(IID_IDeskBand, riid)      ||
+            IsEqualIID(IID_IDeskBand2, riid))
     {
         *ppv = static_cast<IOleWindow *>(this);
     }

@@ -1,4 +1,4 @@
-////////////////////////////////////////////////////////////////////////
+﻿////////////////////////////////////////////////////////////////////////
 
 //
 
@@ -10,7 +10,7 @@
 
 //
 
-//	This is the skeleton code implementation of a high performance 
+//	This is the skeleton code implementation of a high performance
 
 //	provider.  This file includes the provider and refresher code.
 
@@ -20,7 +20,7 @@
 
 //
 
-//	
+//
 
 // Copyright (c)  Microsoft Corporation, All Rights Reserved
 //
@@ -48,21 +48,21 @@
 //////////////////////////////////////////////////////////////
 
 // This structure quickly defines the properties and types of
-// the counters.  It is used for simplicity; actual providers 
+// the counters.  It is used for simplicity; actual providers
 // should enumerate the property names and types
 // ==========================================================
 
 struct tagProperties
 {
-	_TCHAR	m_tcsPropertyName[128];
-	DWORD	m_dwType;
+    _TCHAR	m_tcsPropertyName[128];
+    DWORD	m_dwType;
 } g_aCounterProps[] =
 {
-	_T("Counter1"),	PROP_DWORD,
-	_T("Counter2"),	PROP_DWORD,
-	_T("Counter3"),	PROP_DWORD,
-	_T("Counter4"),	PROP_DWORD,
-	_T("Counter5"),	PROP_DWORD
+    _T("Counter1"),	PROP_DWORD,
+    _T("Counter2"),	PROP_DWORD,
+    _T("Counter3"),	PROP_DWORD,
+    _T("Counter4"),	PROP_DWORD,
+    _T("Counter5"),	PROP_DWORD
 };
 
 // The access handle for the object's ID
@@ -73,14 +73,14 @@ long g_hID;
 // The COM object counter (declared in server.cpp)
 // ===============================================
 
-extern long g_lObjects;	
+extern long g_lObjects;
 
 // The mock data source (declared as static in CHiPerfProvider)
 // ============================================================
 
 CSampleDataSource* CHiPerfProvider::m_pSampleDS = NULL;
 
-// The unique ID generator in CCacheMap - values from 0 to 
+// The unique ID generator in CCacheMap - values from 0 to
 // (MAX_ENUMERATORS - 1) are reserved for the enumerators
 // =======================================================
 
@@ -108,149 +108,149 @@ HRESULT CloneAccess(IWbemObjectAccess* pOriginal, IWbemObjectAccess** ppClone)
 //////////////////////////////////////////////////////////////
 //ok
 {
-	HRESULT hRes = WBEM_NO_ERROR;
+    HRESULT hRes = WBEM_NO_ERROR;
 
-	IWbemClassObject*	pOurClassObj = NULL;		
-	IWbemClassObject*	pClonedClassObj = NULL;
-	IWbemObjectAccess*	pClonedAccessObj = NULL;
+    IWbemClassObject*	pOurClassObj = NULL;
+    IWbemClassObject*	pClonedClassObj = NULL;
+    IWbemObjectAccess*	pClonedAccessObj = NULL;
 
-	// Get the IWbemClassObject interface for the object
-	// =================================================
+    // Get the IWbemClassObject interface for the object
+    // =================================================
 
-	hRes = pOriginal->QueryInterface(IID_IWbemClassObject, (PVOID*)&pOurClassObj);
-	if (FAILED(hRes))
-		return hRes;
+    hRes = pOriginal->QueryInterface(IID_IWbemClassObject, (PVOID*)&pOurClassObj);
+    if (FAILED(hRes))
+        return hRes;
 
-	// Clone the object
-	// ================
+    // Clone the object
+    // ================
 
-	hRes = pOurClassObj->Clone(&pClonedClassObj);
-	pOurClassObj->Release();
-	if (FAILED(hRes))
-		return hRes;
+    hRes = pOurClassObj->Clone(&pClonedClassObj);
+    pOurClassObj->Release();
+    if (FAILED(hRes))
+        return hRes;
 
-	// Get the IWbemObjectAccess interface for the cloned object
-	// =========================================================
+    // Get the IWbemObjectAccess interface for the cloned object
+    // =========================================================
 
-	hRes = pClonedClassObj->QueryInterface(IID_IWbemObjectAccess, (PVOID*)&pClonedAccessObj);
-	pClonedClassObj->Release();
-	if (FAILED(hRes))
-		return hRes;
+    hRes = pClonedClassObj->QueryInterface(IID_IWbemObjectAccess, (PVOID*)&pClonedAccessObj);
+    pClonedClassObj->Release();
+    if (FAILED(hRes))
+        return hRes;
 
-	// Copy the cloned object into the returned parameter (refcount == 1)
-	// ==================================================================
+    // Copy the cloned object into the returned parameter (refcount == 1)
+    // ==================================================================
 
-	*ppClone = pClonedAccessObj;
+    *ppClone = pClonedAccessObj;
 
-	return WBEM_NO_ERROR;
+    return WBEM_NO_ERROR;
 }
 
 
 
 
 //////////////////////////////////////////////////////////////
-// 
+//
 //	Name:	GetCurrentImpersonationLevel
 //
-//	
+//
 //  Description:
 //
-//			Get COM impersonation level of caller.	
+//			Get COM impersonation level of caller.
 //
 //////////////////////////////////////////////////////////////
 
 DWORD GetCurrentImpersonationLevel ()
 {
-	DWORD t_ImpersonationLevel = RPC_C_IMP_LEVEL_ANONYMOUS ;
+    DWORD t_ImpersonationLevel = RPC_C_IMP_LEVEL_ANONYMOUS ;
 
     HANDLE t_ThreadToken = NULL ;
 
     BOOL t_Status = OpenThreadToken (
 
-		GetCurrentThread() ,
-		TOKEN_QUERY,
-		TRUE,
-		&t_ThreadToken
-	) ;
+                        GetCurrentThread(),
+                        TOKEN_QUERY,
+                        TRUE,
+                        &t_ThreadToken
+                    ) ;
 
     if ( t_Status )
     {
-		SECURITY_IMPERSONATION_LEVEL t_Level = SecurityAnonymous ;
-		DWORD t_Returned = 0 ;
+        SECURITY_IMPERSONATION_LEVEL t_Level = SecurityAnonymous ;
+        DWORD t_Returned = 0 ;
 
-		t_Status = GetTokenInformation (
+        t_Status = GetTokenInformation (
 
-			t_ThreadToken ,
-			TokenImpersonationLevel ,
-			& t_Level ,
-			sizeof ( SECURITY_IMPERSONATION_LEVEL ) ,
-			& t_Returned
-		) ;
+                       t_ThreadToken,
+                       TokenImpersonationLevel,
+                       & t_Level,
+                       sizeof ( SECURITY_IMPERSONATION_LEVEL ),
+                       & t_Returned
+                   ) ;
 
-		CloseHandle ( t_ThreadToken ) ;
+        CloseHandle ( t_ThreadToken ) ;
 
-		if ( t_Status == FALSE )
-		{
-			t_ImpersonationLevel = RPC_C_IMP_LEVEL_ANONYMOUS ;
-		}
-		else
-		{
-			switch ( t_Level )
-			{
-				case SecurityAnonymous:
-				{
-					t_ImpersonationLevel = RPC_C_IMP_LEVEL_ANONYMOUS ;
-				}
-				break ;
+        if ( t_Status == FALSE )
+        {
+            t_ImpersonationLevel = RPC_C_IMP_LEVEL_ANONYMOUS ;
+        }
+        else
+        {
+            switch ( t_Level )
+            {
+            case SecurityAnonymous:
+            {
+                t_ImpersonationLevel = RPC_C_IMP_LEVEL_ANONYMOUS ;
+            }
+            break ;
 
-				case SecurityIdentification:
-				{
-					t_ImpersonationLevel = RPC_C_IMP_LEVEL_IDENTIFY ;
-				}
-				break ;
+            case SecurityIdentification:
+            {
+                t_ImpersonationLevel = RPC_C_IMP_LEVEL_IDENTIFY ;
+            }
+            break ;
 
-				case SecurityImpersonation:
-				{
-					t_ImpersonationLevel = RPC_C_IMP_LEVEL_IMPERSONATE ;
-				}
-				break ;
+            case SecurityImpersonation:
+            {
+                t_ImpersonationLevel = RPC_C_IMP_LEVEL_IMPERSONATE ;
+            }
+            break ;
 
-				case SecurityDelegation:
-				{
-					t_ImpersonationLevel = RPC_C_IMP_LEVEL_DELEGATE ;
-				}
-				break ;
+            case SecurityDelegation:
+            {
+                t_ImpersonationLevel = RPC_C_IMP_LEVEL_DELEGATE ;
+            }
+            break ;
 
-				default:
-				{
-					t_ImpersonationLevel = RPC_C_IMP_LEVEL_ANONYMOUS ;
-				}
-				break ;
-			}
-		}
-	}
-	else
-	{
+            default:
+            {
+                t_ImpersonationLevel = RPC_C_IMP_LEVEL_ANONYMOUS ;
+            }
+            break ;
+            }
+        }
+    }
+    else
+    {
         ULONG t_LastError = GetLastError () ;
 
         if ( t_LastError == ERROR_NO_IMPERSONATION_TOKEN || t_LastError == ERROR_NO_TOKEN )
         {
             t_ImpersonationLevel = RPC_C_IMP_LEVEL_DELEGATE ;
         }
-        else 
-		{
-			if ( t_LastError == ERROR_CANT_OPEN_ANONYMOUS )
-			{
-				t_ImpersonationLevel = RPC_C_IMP_LEVEL_ANONYMOUS ;
-			}
-			else
-			{
-				t_ImpersonationLevel = RPC_C_IMP_LEVEL_ANONYMOUS ;
-			}
-		}
+        else
+        {
+            if ( t_LastError == ERROR_CANT_OPEN_ANONYMOUS )
+            {
+                t_ImpersonationLevel = RPC_C_IMP_LEVEL_ANONYMOUS ;
+            }
+            else
+            {
+                t_ImpersonationLevel = RPC_C_IMP_LEVEL_ANONYMOUS ;
+            }
+        }
     }
 
-	return t_ImpersonationLevel ;
+    return t_ImpersonationLevel ;
 }
 
 
@@ -271,10 +271,10 @@ CHiPerfProvider::CHiPerfProvider() : m_lRef(0), m_pTemplate(NULL)
 //////////////////////////////////////////////////////////////
 //ok
 {
-	// Increment the global COM object counter
-	// =======================================
+    // Increment the global COM object counter
+    // =======================================
 
-	InterlockedIncrement(&g_lObjects);
+    InterlockedIncrement(&g_lObjects);
 }
 
 CHiPerfProvider::~CHiPerfProvider()
@@ -285,27 +285,27 @@ CHiPerfProvider::~CHiPerfProvider()
 //////////////////////////////////////////////////////////////
 //ok
 {
-	long lObjCount = 0;
+    long lObjCount = 0;
 
     // Release the template
-	// ====================
+    // ====================
 
-	if (NULL != m_pTemplate)
-            m_pTemplate->Release();
+    if (NULL != m_pTemplate)
+        m_pTemplate->Release();
 
-	// Decrement the global COM object counter
-	// =======================================
+    // Decrement the global COM object counter
+    // =======================================
 
-	lObjCount = InterlockedDecrement(&g_lObjects);
+    lObjCount = InterlockedDecrement(&g_lObjects);
 
-	// If this is the last object, delete our data source
-	// ==================================================
+    // If this is the last object, delete our data source
+    // ==================================================
 
-	if ((0 == lObjCount) && (NULL != m_pSampleDS))
-	{
-		delete m_pSampleDS;
-		m_pSampleDS = NULL;
-	}
+    if ((0 == lObjCount) && (NULL != m_pSampleDS))
+    {
+        delete m_pSampleDS;
+        m_pSampleDS = NULL;
+    }
 }
 
 //////////////////////////////////////////////////////////////
@@ -330,12 +330,12 @@ STDMETHODIMP CHiPerfProvider::QueryInterface(REFIID riid, void** ppv)
         *ppv = (LPVOID)(IUnknown*)(IWbemProviderInit*)this;
     else if(riid == IID_IWbemProviderInit)
         *ppv = (LPVOID)(IWbemProviderInit*)this;
-	else if (riid == IID_IWbemHiPerfProvider)
-		*ppv = (LPVOID)(IWbemHiPerfProvider*)this;
-	else return E_NOINTERFACE;
+    else if (riid == IID_IWbemHiPerfProvider)
+        *ppv = (LPVOID)(IWbemHiPerfProvider*)this;
+    else return E_NOINTERFACE;
 
-	((IUnknown*)*ppv)->AddRef();
-	return WBEM_NO_ERROR;
+    ((IUnknown*)*ppv)->AddRef();
+    return WBEM_NO_ERROR;
 }
 
 STDMETHODIMP_(ULONG) CHiPerfProvider::AddRef()
@@ -364,7 +364,7 @@ STDMETHODIMP_(ULONG) CHiPerfProvider::Release()
     return lRef;
 }
 
-STDMETHODIMP CHiPerfProvider::Initialize( 
+STDMETHODIMP CHiPerfProvider::Initialize(
     /* [unique][in] */  LPWSTR wszUser,
     /* [in] */          long lFlags,
     /* [in] */          LPWSTR wszNamespace,
@@ -374,18 +374,18 @@ STDMETHODIMP CHiPerfProvider::Initialize(
     /* [in] */          IWbemProviderInitSink __RPC_FAR *pInitSink)
 //////////////////////////////////////////////////////////////////////
 //
-//  Called once during startup for any one-time initialization.  The 
+//  Called once during startup for any one-time initialization.  The
 //	final call to Release() is for any cleanup.
-//	
-//	The parameters indicate to the provider which namespace it is being 
-//	invoked for and which User.  It also supplies a back pointer to 
+//
+//	The parameters indicate to the provider which namespace it is being
+//	invoked for and which User.  It also supplies a back pointer to
 //	WINMGMT so that class definitions can be retrieved.
 //
-//	Initialize will create a single template object that can be used 
-//	by the provider to spawn instances for QueryInstances.  It will 
-//	also initialize our mock data source and set the global ID access 
+//	Initialize will create a single template object that can be used
+//	by the provider to spawn instances for QueryInstances.  It will
+//	also initialize our mock data source and set the global ID access
 //	handle.
-//	
+//
 //	Parameters:
 //		wszUser			- The current user.
 //		lFlags			- Reserved.
@@ -400,102 +400,102 @@ STDMETHODIMP CHiPerfProvider::Initialize(
 //////////////////////////////////////////////////////////////////////
 //ok
 {
-	HRESULT hRes = WBEM_NO_ERROR;
+    HRESULT hRes = WBEM_NO_ERROR;
 
-    IWbemObjectAccess *pAccess = NULL;		
-	BSTR strObject = NULL;
-	BSTR strPropName = NULL;
+    IWbemObjectAccess *pAccess = NULL;
+    BSTR strObject = NULL;
+    BSTR strPropName = NULL;
 
-	if (wszNamespace == 0 || pNamespace == 0 || pInitSink == 0)
-	{
-	    pInitSink->SetStatus(WBEM_E_FAILED , 0);
-	    return WBEM_NO_ERROR;
-	}
+    if (wszNamespace == 0 || pNamespace == 0 || pInitSink == 0)
+    {
+        pInitSink->SetStatus(WBEM_E_FAILED, 0);
+        return WBEM_NO_ERROR;
+    }
 
     // Get a sample class object for initialization purposes
-	// =====================================================
+    // =====================================================
 
-	strObject = SysAllocString(SAMPLE_CLASS);
-	if (strObject == NULL)
-	{
-	    pInitSink->SetStatus(WBEM_E_OUT_OF_MEMORY , 0);
-	    return WBEM_NO_ERROR;
-	}
+    strObject = SysAllocString(SAMPLE_CLASS);
+    if (strObject == NULL)
+    {
+        pInitSink->SetStatus(WBEM_E_OUT_OF_MEMORY, 0);
+        return WBEM_NO_ERROR;
+    }
 
-	hRes = pNamespace->GetObject(strObject, 0, pCtx, &m_pTemplate, 0);
+    hRes = pNamespace->GetObject(strObject, 0, pCtx, &m_pTemplate, 0);
 
-	SysFreeString(strObject);
+    SysFreeString(strObject);
 
     if (FAILED(hRes))
-	{
-	    pInitSink->SetStatus(WBEM_E_FAILED , 0);
-	    return WBEM_NO_ERROR;
-	}
+    {
+        pInitSink->SetStatus(WBEM_E_FAILED, 0);
+        return WBEM_NO_ERROR;
+    }
 
 
-	// Initialize the datasource.  If the static member 
-	// is not null, then it has already been setup.
-	// ================================================
+    // Initialize the datasource.  If the static member
+    // is not null, then it has already been setup.
+    // ================================================
 
-	if (NULL == m_pSampleDS)
-	{
-		m_pSampleDS = new CSampleDataSource;
+    if (NULL == m_pSampleDS)
+    {
+        m_pSampleDS = new CSampleDataSource;
 
-		if (NULL == m_pSampleDS)
-		{
-			pInitSink->SetStatus(WBEM_E_FAILED , 0);
-			return WBEM_NO_ERROR;
-		}
+        if (NULL == m_pSampleDS)
+        {
+            pInitSink->SetStatus(WBEM_E_FAILED, 0);
+            return WBEM_NO_ERROR;
+        }
 
-		m_pSampleDS->Initialize(m_pTemplate);
-	}
+        m_pSampleDS->Initialize(m_pTemplate);
+    }
 
-	// Initialize the global access handle for the object ID.  
-	// If it is not null, then it has already been setup.
-	// ======================================================
+    // Initialize the global access handle for the object ID.
+    // If it is not null, then it has already been setup.
+    // ======================================================
 
-	if (NULL == g_hID)
-	{
-		// Get the IWbemObjectAccess interface to the object
-		// =================================================
+    if (NULL == g_hID)
+    {
+        // Get the IWbemObjectAccess interface to the object
+        // =================================================
 
-		hRes = m_pTemplate->QueryInterface(IID_IWbemObjectAccess, (PVOID*)&pAccess);
+        hRes = m_pTemplate->QueryInterface(IID_IWbemObjectAccess, (PVOID*)&pAccess);
 
-		if (FAILED(hRes))
-			return hRes;
-		
-		// Get the name property access handle
-		// ===================================
+        if (FAILED(hRes))
+            return hRes;
 
-		strPropName = SysAllocString(L"Name");
-		if (strPropName == NULL)
-		{
-			pInitSink->SetStatus(WBEM_E_OUT_OF_MEMORY , 0);
-			return WBEM_NO_ERROR;
-		}
+        // Get the name property access handle
+        // ===================================
 
-		hRes = pAccess->GetPropertyHandle(strPropName, 0, &g_hID);
+        strPropName = SysAllocString(L"Name");
+        if (strPropName == NULL)
+        {
+            pInitSink->SetStatus(WBEM_E_OUT_OF_MEMORY, 0);
+            return WBEM_NO_ERROR;
+        }
 
-		pAccess->Release();
-		SysFreeString(strPropName);
+        hRes = pAccess->GetPropertyHandle(strPropName, 0, &g_hID);
 
-		if (FAILED(hRes))
-		{
-			pInitSink->SetStatus(WBEM_E_FAILED , 0);
-			return WBEM_NO_ERROR;
-		}
-}
+        pAccess->Release();
+        SysFreeString(strPropName);
 
-    // We now have all the instances ready to go and the name handle 
-	// stored.  Tell WINMGMT that we're ready to start 'providing'
-	// =============================================================
-	
+        if (FAILED(hRes))
+        {
+            pInitSink->SetStatus(WBEM_E_FAILED, 0);
+            return WBEM_NO_ERROR;
+        }
+    }
+
+    // We now have all the instances ready to go and the name handle
+    // stored.  Tell WINMGMT that we're ready to start 'providing'
+    // =============================================================
+
     pInitSink->SetStatus(WBEM_S_INITIALIZED, 0);
 
     return WBEM_NO_ERROR;
 }
 
-STDMETHODIMP CHiPerfProvider::QueryInstances( 
+STDMETHODIMP CHiPerfProvider::QueryInstances(
     /* [in] */          IWbemServices __RPC_FAR *pNamespace,
     /* [string][in] */  WCHAR __RPC_FAR *wszClass,
     /* [in] */          long lFlags,
@@ -524,101 +524,101 @@ STDMETHODIMP CHiPerfProvider::QueryInstances(
 //////////////////////////////////////////////////////////////////////
 //ok
 {
-	HRESULT hRes = WBEM_NO_ERROR;
+    HRESULT hRes = WBEM_NO_ERROR;
 
-	//Impersonate the client
-	hRes = CoImpersonateClient () ;
-	if ( FAILED ( hRes ) && hRes != RPC_E_CALL_COMPLETE)
-	{
-		return hRes ;
-	}	
+    //Impersonate the client
+    hRes = CoImpersonateClient () ;
+    if ( FAILED ( hRes ) && hRes != RPC_E_CALL_COMPLETE)
+    {
+        return hRes ;
+    }
 
-	//	Check to see if call is at lower than RPC_C_IMP_LEVEL_IMPERSONATE level. If that's the case,
-	//  the provider will not be able to impersonate the client to access the protected resources.	
+    //	Check to see if call is at lower than RPC_C_IMP_LEVEL_IMPERSONATE level. If that's the case,
+    //  the provider will not be able to impersonate the client to access the protected resources.
 
-	DWORD t_CurrentImpersonationLevel = GetCurrentImpersonationLevel () ;
-	if ( t_CurrentImpersonationLevel < RPC_C_IMP_LEVEL_IMPERSONATE )
-	{
-		//	Revert before we perform any operations	
-		CoRevertToSelf () ;
+    DWORD t_CurrentImpersonationLevel = GetCurrentImpersonationLevel () ;
+    if ( t_CurrentImpersonationLevel < RPC_C_IMP_LEVEL_IMPERSONATE )
+    {
+        //	Revert before we perform any operations
+        CoRevertToSelf () ;
 
-		hRes = WBEM_E_ACCESS_DENIED;
-		return hRes ;
-	}
+        hRes = WBEM_E_ACCESS_DENIED;
+        return hRes ;
+    }
 
-	IWbemClassObject*	pObjectCopy = NULL;
-	IWbemObjectAccess*	pAccessCopy = NULL;
+    IWbemClassObject*	pObjectCopy = NULL;
+    IWbemObjectAccess*	pAccessCopy = NULL;
 
     if (pNamespace == 0 || wszClass == 0 || pSink == 0)
         return WBEM_E_INVALID_PARAMETER;
 
-	// Loop through all instances, indicating an updated version
-	// to the object sink
-	// =========================================================
+    // Loop through all instances, indicating an updated version
+    // to the object sink
+    // =========================================================
 
     for (int i = 0; i < NUM_INSTANCES; i++)
     {
-		// Create a new instance from the template
-		// =======================================
+        // Create a new instance from the template
+        // =======================================
 
-		hRes = m_pTemplate->SpawnInstance(0, &pObjectCopy);
-		if (FAILED(hRes))
-			break;
+        hRes = m_pTemplate->SpawnInstance(0, &pObjectCopy);
+        if (FAILED(hRes))
+            break;
 
-		// Obtain the IWbemObjectAccess interface
-		// ======================================
+        // Obtain the IWbemObjectAccess interface
+        // ======================================
 
-		hRes = pObjectCopy->QueryInterface(IID_IWbemObjectAccess, (PVOID*)&pAccessCopy);
-		if (FAILED(hRes))
-		{
-			pObjectCopy->Release();
-			break;
-		}
+        hRes = pObjectCopy->QueryInterface(IID_IWbemObjectAccess, (PVOID*)&pAccessCopy);
+        if (FAILED(hRes))
+        {
+            pObjectCopy->Release();
+            break;
+        }
 
-		// Set the ID
-		// ==========
+        // Set the ID
+        // ==========
 
-		WCHAR wszName[20];
-		StringCbPrintfW(wszName, sizeof(wszName), L"%i", i);
+        WCHAR wszName[20];
+        StringCbPrintfW(wszName, sizeof(wszName), L"%i", i);
 
-		pAccessCopy->WritePropertyValue(g_hID, (long)(wcslen(wszName)+1)*sizeof(WCHAR), (byte *)wszName);
+        pAccessCopy->WritePropertyValue(g_hID, (long)(wcslen(wszName)+1)*sizeof(WCHAR), (byte *)wszName);
 
-		// Initialize the counters
-		// =======================
+        // Initialize the counters
+        // =======================
 
-		hRes = m_pSampleDS->UpdateInstance(pAccessCopy);
+        hRes = m_pSampleDS->UpdateInstance(pAccessCopy);
 
-		// Release the IWbemObjectAccess handle (values are maintained in IWbemClassObject interface)
-		// ==========================================================================================
+        // Release the IWbemObjectAccess handle (values are maintained in IWbemClassObject interface)
+        // ==========================================================================================
 
-		pAccessCopy->Release();
+        pAccessCopy->Release();
 
-		if (FAILED(hRes))
-		{
-			pObjectCopy->Release();
-			break;
-		}
+        if (FAILED(hRes))
+        {
+            pObjectCopy->Release();
+            break;
+        }
 
         // Send a copy back to the caller
-		// ==============================
+        // ==============================
 
         pSink->Indicate(1, &pObjectCopy);
 
         pObjectCopy->Release();    // Don't need this any more
     }
-    
+
     // Tell WINMGMT we are all finished supplying objects
-	// ==================================================
+    // ==================================================
 
     pSink->SetStatus(0, WBEM_NO_ERROR, 0, 0);
 
     return WBEM_NO_ERROR;
-}    
+}
 
-STDMETHODIMP CHiPerfProvider::CreateRefresher( 
-     /* [in] */ IWbemServices __RPC_FAR *pNamespace,
-     /* [in] */ long lFlags,
-     /* [out] */ IWbemRefresher __RPC_FAR *__RPC_FAR *ppRefresher )
+STDMETHODIMP CHiPerfProvider::CreateRefresher(
+    /* [in] */ IWbemServices __RPC_FAR *pNamespace,
+    /* [in] */ long lFlags,
+    /* [out] */ IWbemRefresher __RPC_FAR *__RPC_FAR *ppRefresher )
 //////////////////////////////////////////////////////////////////////
 //
 //  Called whenever a new refresher is needed by the client.
@@ -631,48 +631,48 @@ STDMETHODIMP CHiPerfProvider::CreateRefresher(
 //////////////////////////////////////////////////////////////////////
 //ok
 {
-	//Impersonate the client
-	HRESULT hRes = CoImpersonateClient () ;
-	if ( FAILED ( hRes ) && hRes != RPC_E_CALL_COMPLETE)
-	{
-		return hRes ;
-	}	
+    //Impersonate the client
+    HRESULT hRes = CoImpersonateClient () ;
+    if ( FAILED ( hRes ) && hRes != RPC_E_CALL_COMPLETE)
+    {
+        return hRes ;
+    }
 
-	//	Check to see if call is at lower than RPC_C_IMP_LEVEL_IMPERSONATE level. If that's the case,
-	//  the provider will not be able to impersonate the client to access the protected resources.	
+    //	Check to see if call is at lower than RPC_C_IMP_LEVEL_IMPERSONATE level. If that's the case,
+    //  the provider will not be able to impersonate the client to access the protected resources.
 
-	DWORD t_CurrentImpersonationLevel = GetCurrentImpersonationLevel () ;
-	if ( t_CurrentImpersonationLevel < RPC_C_IMP_LEVEL_IMPERSONATE )
-	{
-		//	Revert before we perform any operations	
-		CoRevertToSelf () ;
+    DWORD t_CurrentImpersonationLevel = GetCurrentImpersonationLevel () ;
+    if ( t_CurrentImpersonationLevel < RPC_C_IMP_LEVEL_IMPERSONATE )
+    {
+        //	Revert before we perform any operations
+        CoRevertToSelf () ;
 
-		hRes = WBEM_E_ACCESS_DENIED;
-		return hRes ;
-	}
+        hRes = WBEM_E_ACCESS_DENIED;
+        return hRes ;
+    }
 
     if (pNamespace == 0 || ppRefresher == 0)
         return WBEM_E_INVALID_PARAMETER;
 
     // Construct and initialize a new empty refresher
-	// ==============================================
+    // ==============================================
 
-	CRefresher* pNewRefresher = new CRefresher(this, m_pSampleDS);
-	if (pNewRefresher == NULL)
-		return WBEM_E_OUT_OF_MEMORY;
+    CRefresher* pNewRefresher = new CRefresher(this, m_pSampleDS);
+    if (pNewRefresher == NULL)
+        return WBEM_E_OUT_OF_MEMORY;
 
-	pNewRefresher->Initialize(m_pTemplate);
+    pNewRefresher->Initialize(m_pTemplate);
 
     // Follow COM rules and AddRef() the thing before sending it back
-	// ==============================================================
+    // ==============================================================
 
     pNewRefresher->AddRef();
     *ppRefresher = pNewRefresher;
-    
+
     return WBEM_NO_ERROR;
 }
 
-STDMETHODIMP CHiPerfProvider::CreateRefreshableObject( 
+STDMETHODIMP CHiPerfProvider::CreateRefreshableObject(
     /* [in] */ IWbemServices __RPC_FAR *pNamespace,
     /* [in] */ IWbemObjectAccess __RPC_FAR *pTemplate,
     /* [in] */ IWbemRefresher __RPC_FAR *pRefresher,
@@ -684,53 +684,53 @@ STDMETHODIMP CHiPerfProvider::CreateRefreshableObject(
 //
 //  Called whenever a user wants to include an object in a refresher.
 //
-//	Note that the object returned in ppRefreshable is a clone of the 
+//	Note that the object returned in ppRefreshable is a clone of the
 //	actual instance maintained by the provider.  If refreshers shared
-//	a copy of the same instance, then a refresh call on one of the 
-//	refreshers would impact the state of both refreshers.  This would 
-//	break the refresher rules.	Instances in a refresher are only 
+//	a copy of the same instance, then a refresh call on one of the
+//	refreshers would impact the state of both refreshers.  This would
+//	break the refresher rules.	Instances in a refresher are only
 //	allowed to be updated when 'Refresh' is called.
-//     
+//
 //  Parameters:
 //		pNamespace		- A pointer to the relevant namespace in WINMGMT.
 //		pTemplate		- A pointer to a copy of the object which is to be
 //							added.  This object itself cannot be used, as
-//							it not owned locally.        
+//							it not owned locally.
 //		pRefresher		- The refresher to which to add the object.
 //		lFlags			- Not used.
 //		pContext		- Not used here.
 //		ppRefreshable	- A pointer to the internal object which was added
 //							to the refresher.
-//		plId			- The Object Id (for identification during removal).        
+//		plId			- The Object Id (for identification during removal).
 //
 //////////////////////////////////////////////////////////////////////
 //ok
 {
-   
-	HRESULT hRes = WBEM_NO_ERROR;
 
-	//Impersonate the client
-	hRes = CoImpersonateClient () ;
-	if ( FAILED ( hRes ) && hRes != RPC_E_CALL_COMPLETE)
-	{
-		return hRes ;
-	}	
+    HRESULT hRes = WBEM_NO_ERROR;
 
-	//	Check to see if call is at lower than RPC_C_IMP_LEVEL_IMPERSONATE level. If that's the case,
-	//  the provider will not be able to impersonate the client to access the protected resources.	
+    //Impersonate the client
+    hRes = CoImpersonateClient () ;
+    if ( FAILED ( hRes ) && hRes != RPC_E_CALL_COMPLETE)
+    {
+        return hRes ;
+    }
 
-	DWORD t_CurrentImpersonationLevel = GetCurrentImpersonationLevel () ;
-	if ( t_CurrentImpersonationLevel < RPC_C_IMP_LEVEL_IMPERSONATE )
-	{
-		//	Revert before we perform any operations	
-		CoRevertToSelf () ;
+    //	Check to see if call is at lower than RPC_C_IMP_LEVEL_IMPERSONATE level. If that's the case,
+    //  the provider will not be able to impersonate the client to access the protected resources.
 
-		hRes = WBEM_E_ACCESS_DENIED;
-		return hRes ;
-	}
+    DWORD t_CurrentImpersonationLevel = GetCurrentImpersonationLevel () ;
+    if ( t_CurrentImpersonationLevel < RPC_C_IMP_LEVEL_IMPERSONATE )
+    {
+        //	Revert before we perform any operations
+        CoRevertToSelf () ;
 
- // Find out which instance is being requested for addition
-	// =======================================================
+        hRes = WBEM_E_ACCESS_DENIED;
+        return hRes ;
+    }
+
+// Find out which instance is being requested for addition
+    // =======================================================
 
     if (pNamespace == 0 || pTemplate == 0 || pRefresher == 0)
         return WBEM_E_INVALID_PARAMETER;
@@ -738,45 +738,45 @@ STDMETHODIMP CHiPerfProvider::CreateRefreshableObject(
     // The refresher being supplied by the caller is actually
     // one of our own refreshers, so a simple cast is convenient
     // so that we can access private members.
-	// =========================================================
+    // =========================================================
 
-	CRefresher *pOurRefresher = (CRefresher *) pRefresher;
+    CRefresher *pOurRefresher = (CRefresher *) pRefresher;
 
-	// Add the object to the refresher. The ID is set by AddObject
-	// ===========================================================
+    // Add the object to the refresher. The ID is set by AddObject
+    // ===========================================================
 
     hRes = pOurRefresher->AddObject(pTemplate, ppRefreshable, plId);
 
-	if (FAILED(hRes))
-		return hRes;
+    if (FAILED(hRes))
+        return hRes;
 
     return WBEM_NO_ERROR;
 }
-   
-STDMETHODIMP CHiPerfProvider::CreateRefreshableEnum( 
-	/* [in] */ IWbemServices* pNamespace,
-	/* [in, string] */ LPCWSTR wszClass,
-	/* [in] */ IWbemRefresher* pRefresher,
-	/* [in] */ long lFlags,
-	/* [in] */ IWbemContext* pContext,
-	/* [in] */ IWbemHiPerfEnum* pHiPerfEnum,
-	/* [out] */ long* plId )
+
+STDMETHODIMP CHiPerfProvider::CreateRefreshableEnum(
+    /* [in] */ IWbemServices* pNamespace,
+    /* [in, string] */ LPCWSTR wszClass,
+    /* [in] */ IWbemRefresher* pRefresher,
+    /* [in] */ long lFlags,
+    /* [in] */ IWbemContext* pContext,
+    /* [in] */ IWbemHiPerfEnum* pHiPerfEnum,
+    /* [out] */ long* plId )
 //////////////////////////////////////////////////////////////////////
 //
-//  Called when an enumerator is being added to a refresher.  The 
-//	enumerator will obtain a fresh set of instances of the specified 
+//  Called when an enumerator is being added to a refresher.  The
+//	enumerator will obtain a fresh set of instances of the specified
 //	class every time that refresh is called.
-//     
-//	Since this example provider only provides one class, then any 
-//	enumerator in this refresher will only return instances from this 
-//	class.  In the case where there is more than one class, then 
-//	wszClass must be examined to determine which class the enumerator 
+//
+//	Since this example provider only provides one class, then any
+//	enumerator in this refresher will only return instances from this
+//	class.  In the case where there is more than one class, then
+//	wszClass must be examined to determine which class the enumerator
 //	is being assigned.
 //
 //  Parameters:
-//		pNamespace		- A pointer to the relevant namespace.  
+//		pNamespace		- A pointer to the relevant namespace.
 //		wszClass		- The class name for the requested enumerator.
-//		pRefresher		- The refresher object for which we will add 
+//		pRefresher		- The refresher object for which we will add
 //							the enumerator
 //		lFlags			- Reserved.
 //		pContext		- Not used here.
@@ -787,111 +787,111 @@ STDMETHODIMP CHiPerfProvider::CreateRefreshableEnum(
 //ok
 {
 
-	//Impersonate the client
-	HRESULT hr = CoImpersonateClient () ;
-	if ( FAILED ( hr ) && hr != RPC_E_CALL_COMPLETE)
-	{
-		return hr ;
-	}	
+    //Impersonate the client
+    HRESULT hr = CoImpersonateClient () ;
+    if ( FAILED ( hr ) && hr != RPC_E_CALL_COMPLETE)
+    {
+        return hr ;
+    }
 
-	//	Check to see if call is at lower than RPC_C_IMP_LEVEL_IMPERSONATE level. If that's the case,
-	//  the provider will not be able to impersonate the client to access the protected resources.	
+    //	Check to see if call is at lower than RPC_C_IMP_LEVEL_IMPERSONATE level. If that's the case,
+    //  the provider will not be able to impersonate the client to access the protected resources.
 
-	DWORD t_CurrentImpersonationLevel = GetCurrentImpersonationLevel () ;
-	if ( t_CurrentImpersonationLevel < RPC_C_IMP_LEVEL_IMPERSONATE )
-	{
-		//	Revert before we perform any operations	
-		CoRevertToSelf () ;
+    DWORD t_CurrentImpersonationLevel = GetCurrentImpersonationLevel () ;
+    if ( t_CurrentImpersonationLevel < RPC_C_IMP_LEVEL_IMPERSONATE )
+    {
+        //	Revert before we perform any operations
+        CoRevertToSelf () ;
 
-		hr = WBEM_E_ACCESS_DENIED;
-		return hr ;
-	}
+        hr = WBEM_E_ACCESS_DENIED;
+        return hr ;
+    }
 
     // The refresher being supplied by the caller is actually
     // one of our own refreshers, so a simple cast is convenient
     // so that we can access private members.
 
-	CRefresher *pOurRefresher = (CRefresher *) pRefresher;
+    CRefresher *pOurRefresher = (CRefresher *) pRefresher;
 
-	// Add the enumerator to the refresher  
-	// The ID is generated by AddEnum.
-	// ===================================
+    // Add the enumerator to the refresher
+    // The ID is generated by AddEnum.
+    // ===================================
 
-	hr = pOurRefresher->AddEnum(pHiPerfEnum, plId);
-	return hr; 
+    hr = pOurRefresher->AddEnum(pHiPerfEnum, plId);
+    return hr;
 }
 
-STDMETHODIMP CHiPerfProvider::StopRefreshing( 
+STDMETHODIMP CHiPerfProvider::StopRefreshing(
     /* [in] */ IWbemRefresher __RPC_FAR *pRefresher,
     /* [in] */ long lId,
     /* [in] */ long lFlags )
 //////////////////////////////////////////////////////////////////////
 //
 //  Called whenever a user wants to remove an object from a refresher.
-//     
+//
 //  Parameters:
-//		pRefresher			- The refresher object from which we are to 
+//		pRefresher			- The refresher object from which we are to
 //								remove the perf object.
 //		lId					- The ID of the object.
 //		lFlags				- Not used.
-//  
+//
 //////////////////////////////////////////////////////////////////////
 //ok
 {
-	HRESULT hRes = WBEM_NO_ERROR;
+    HRESULT hRes = WBEM_NO_ERROR;
 
-	//Impersonate the client
-	hRes = CoImpersonateClient () ;
-	if ( FAILED ( hRes ) && hRes != RPC_E_CALL_COMPLETE)
-	{
-		return hRes ;
-	}	
+    //Impersonate the client
+    hRes = CoImpersonateClient () ;
+    if ( FAILED ( hRes ) && hRes != RPC_E_CALL_COMPLETE)
+    {
+        return hRes ;
+    }
 
-	//	Check to see if call is at lower than RPC_C_IMP_LEVEL_IMPERSONATE level. If that's the case,
-	//  the provider will not be able to impersonate the client to access the protected resources.	
+    //	Check to see if call is at lower than RPC_C_IMP_LEVEL_IMPERSONATE level. If that's the case,
+    //  the provider will not be able to impersonate the client to access the protected resources.
 
-	DWORD t_CurrentImpersonationLevel = GetCurrentImpersonationLevel () ;
-	if ( t_CurrentImpersonationLevel < RPC_C_IMP_LEVEL_IMPERSONATE )
-	{
-		//	Revert before we perform any operations	
-		CoRevertToSelf () ;
+    DWORD t_CurrentImpersonationLevel = GetCurrentImpersonationLevel () ;
+    if ( t_CurrentImpersonationLevel < RPC_C_IMP_LEVEL_IMPERSONATE )
+    {
+        //	Revert before we perform any operations
+        CoRevertToSelf () ;
 
-		hRes = WBEM_E_ACCESS_DENIED;
-		return hRes ;
-	}
+        hRes = WBEM_E_ACCESS_DENIED;
+        return hRes ;
+    }
 
     // The refresher being supplied by the caller is actually
     // one of our own refreshers, so a simple cast is convenient
     // so that we can access private members.
-	// =========================================================
+    // =========================================================
 
     CRefresher *pOurRefresher = (CRefresher *) pRefresher;
 
-	// An ID that is less than MAX_ENUMERATORS is an enumerator ID.
-	// Everything else is an object ID
-	// ============================================================
+    // An ID that is less than MAX_ENUMERATORS is an enumerator ID.
+    // Everything else is an object ID
+    // ============================================================
 
-	if (lId < MAX_ENUMERATORS)
-		hRes = pOurRefresher->RemoveEnum(lId);
-	else
-		hRes = pOurRefresher->RemoveObject(lId);
+    if (lId < MAX_ENUMERATORS)
+        hRes = pOurRefresher->RemoveEnum(lId);
+    else
+        hRes = pOurRefresher->RemoveObject(lId);
 
-	return hRes;
+    return hRes;
 }
 
-STDMETHODIMP CHiPerfProvider::GetObjects( 
+STDMETHODIMP CHiPerfProvider::GetObjects(
     /* [in] */ IWbemServices* pNamespace,
-	/* [in] */ long lNumObjects,
-	/* [in,size_is(lNumObjects)] */ IWbemObjectAccess** apObj,
+    /* [in] */ long lNumObjects,
+    /* [in,size_is(lNumObjects)] */ IWbemObjectAccess** apObj,
     /* [in] */ long lFlags,
     /* [in] */ IWbemContext* pContext)
 //////////////////////////////////////////////////////////////////////
 //
-//  Called when a request is made to provide all instances currently 
+//  Called when a request is made to provide all instances currently
 //	being managed by the provider in the specified namespace.
-//     
+//
 //  Parameters:
-//		pNamespace		- A pointer to the relevant namespace.  
+//		pNamespace		- A pointer to the relevant namespace.
 //		lNumObjects		- The number of instances being returned.
 //		apObj			- The array of instances being returned.
 //		lFlags			- Reserved.
@@ -900,46 +900,46 @@ STDMETHODIMP CHiPerfProvider::GetObjects(
 //////////////////////////////////////////////////////////////////////
 //ok
 {
-	HRESULT hRes = WBEM_NO_ERROR;
+    HRESULT hRes = WBEM_NO_ERROR;
 
-	//Impersonate the client
-	hRes = CoImpersonateClient () ;
-	if ( FAILED ( hRes ) && hRes != RPC_E_CALL_COMPLETE)
-	{
-		return hRes ;
-	}	
+    //Impersonate the client
+    hRes = CoImpersonateClient () ;
+    if ( FAILED ( hRes ) && hRes != RPC_E_CALL_COMPLETE)
+    {
+        return hRes ;
+    }
 
-	//	Check to see if call is at lower than RPC_C_IMP_LEVEL_IMPERSONATE level. If that's the case,
-	//  the provider will not be able to impersonate the client to access the protected resources.	
+    //	Check to see if call is at lower than RPC_C_IMP_LEVEL_IMPERSONATE level. If that's the case,
+    //  the provider will not be able to impersonate the client to access the protected resources.
 
-	DWORD t_CurrentImpersonationLevel = GetCurrentImpersonationLevel () ;
-	if ( t_CurrentImpersonationLevel < RPC_C_IMP_LEVEL_IMPERSONATE )
-	{
-		//	Revert before we perform any operations	
-		CoRevertToSelf () ;
+    DWORD t_CurrentImpersonationLevel = GetCurrentImpersonationLevel () ;
+    if ( t_CurrentImpersonationLevel < RPC_C_IMP_LEVEL_IMPERSONATE )
+    {
+        //	Revert before we perform any operations
+        CoRevertToSelf () ;
 
-		hRes = WBEM_E_ACCESS_DENIED;
-		return hRes ;
-	}
+        hRes = WBEM_E_ACCESS_DENIED;
+        return hRes ;
+    }
 
-	int	nIndex = 0;
-	DWORD dwID = 0;
+    int	nIndex = 0;
+    DWORD dwID = 0;
 
-	IWbemObjectAccess*	pCurrObj;
+    IWbemObjectAccess*	pCurrObj;
 
-	// Cycle through the list of objects, updating each one
-	// ====================================================
+    // Cycle through the list of objects, updating each one
+    // ====================================================
 
-	for (nIndex = 0; nIndex < lNumObjects; nIndex++)
-	{
-		pCurrObj = apObj[nIndex];
+    for (nIndex = 0; nIndex < lNumObjects; nIndex++)
+    {
+        pCurrObj = apObj[nIndex];
 
-		hRes = m_pSampleDS->UpdateInstance(pCurrObj);
-		if (FAILED(hRes))
-			break;
-	}
+        hRes = m_pSampleDS->UpdateInstance(pCurrObj);
+        if (FAILED(hRes))
+            break;
+    }
 
-	return hRes;
+    return hRes;
 }
 
 
@@ -959,37 +959,37 @@ CRefresher::CRefresher(CHiPerfProvider* pProvider, CSampleDataSource* pDS) : m_l
 //////////////////////////////////////////////////////////////////////
 //ok
 {
-	int nIndex = 0;
+    int nIndex = 0;
 
-	// Retain a copy of the provider
-	// =============================
+    // Retain a copy of the provider
+    // =============================
 
-	m_pProvider = pProvider;
-	if (m_pProvider)
-		m_pProvider->AddRef();
+    m_pProvider = pProvider;
+    if (m_pProvider)
+        m_pProvider->AddRef();
 
-	// Initialize the instance map
-	// ===========================
+    // Initialize the instance map
+    // ===========================
 
-	for (nIndex = 0; nIndex < MAX_INSTANCES; nIndex++)
-		m_apInstMap[nIndex] = NULL;
+    for (nIndex = 0; nIndex < MAX_INSTANCES; nIndex++)
+        m_apInstMap[nIndex] = NULL;
 
-	// Initialize the instance cache
-	// =============================
+    // Initialize the instance cache
+    // =============================
 
-	for (nIndex = 0; nIndex < NUM_INSTANCES; nIndex++)
-		m_apInstances[nIndex] = NULL;
+    for (nIndex = 0; nIndex < NUM_INSTANCES; nIndex++)
+        m_apInstances[nIndex] = NULL;
 
-	// Initialize the enumerator cache
-	// ===============================
+    // Initialize the enumerator cache
+    // ===============================
 
-	for (nIndex = 0; nIndex < MAX_ENUMERATORS; nIndex++)
-		m_apEnumerator[nIndex] = NULL;
+    for (nIndex = 0; nIndex < MAX_ENUMERATORS; nIndex++)
+        m_apEnumerator[nIndex] = NULL;
 
-	// Increment the global COM object counter
-	// =======================================
+    // Increment the global COM object counter
+    // =======================================
 
-	InterlockedIncrement(&g_lObjects);
+    InterlockedIncrement(&g_lObjects);
 }
 
 CRefresher::~CRefresher()
@@ -1000,117 +1000,117 @@ CRefresher::~CRefresher()
 //////////////////////////////////////////////////////////////////////
 //ok
 {
-	int nIndex = 0;
+    int nIndex = 0;
 
-	// Delete the instance cache
-	// =========================
+    // Delete the instance cache
+    // =========================
 
-	for (nIndex = 0; nIndex < MAX_INSTANCES; nIndex++)
-	{
-		if (NULL != m_apInstMap[nIndex])
-			delete m_apInstMap[nIndex];
-	}
+    for (nIndex = 0; nIndex < MAX_INSTANCES; nIndex++)
+    {
+        if (NULL != m_apInstMap[nIndex])
+            delete m_apInstMap[nIndex];
+    }
 
     // Release the cached IWbemObjectAccess instances
-	// ==============================================
+    // ==============================================
 
     for (nIndex = 0; nIndex < NUM_INSTANCES; nIndex++)
     {
         if (NULL != m_apInstances[nIndex])
             m_apInstances[nIndex]->Release();
-    }            
+    }
 
-	// Release all of the enumerators
-	// ==============================
+    // Release all of the enumerators
+    // ==============================
 
-	for (nIndex = 0; nIndex < MAX_ENUMERATORS; nIndex++)
-	{
-		if (NULL != m_apEnumerator[nIndex])
-			m_apEnumerator[nIndex]->Release();
-	}
+    for (nIndex = 0; nIndex < MAX_ENUMERATORS; nIndex++)
+    {
+        if (NULL != m_apEnumerator[nIndex])
+            m_apEnumerator[nIndex]->Release();
+    }
 
-	// Release the provider
-	// ====================
+    // Release the provider
+    // ====================
 
-	if (m_pProvider)
-		m_pProvider->Release();
+    if (m_pProvider)
+        m_pProvider->Release();
 
-	// Decrement the global COM object counter
-	// =======================================
+    // Decrement the global COM object counter
+    // =======================================
 
-	InterlockedDecrement(&g_lObjects);
+    InterlockedDecrement(&g_lObjects);
 }
 
 DWORD CRefresher::Initialize(IWbemClassObject* pSampleClass)
 //////////////////////////////////////////////////////////////////////
 //
 //  Initializes the instances cache.
-//     
+//
 //  Parameters:
-//		pSampleClass	- A template of the WMI object from which we 
+//		pSampleClass	- A template of the WMI object from which we
 //							will create our instances
 //
 //////////////////////////////////////////////////////////////////////
 //ok
 {
-	DWORD dwRes = WBEM_NO_ERROR;
+    DWORD dwRes = WBEM_NO_ERROR;
 
-	int nIndex = 0;
+    int nIndex = 0;
 
-    // Precreate and initialize 5 instances of our sample class, and store 
-	// them in the m_apInstances array as IWbemObjectAccess pointers
-	// =====================================================================
+    // Precreate and initialize 5 instances of our sample class, and store
+    // them in the m_apInstances array as IWbemObjectAccess pointers
+    // =====================================================================
 
     for (DWORD dwIndex = 0; dwIndex < NUM_INSTANCES; dwIndex++)
     {
-		IWbemClassObject*	pClone = NULL;
-		IWbemObjectAccess*	pAccess = NULL;
+        IWbemClassObject*	pClone = NULL;
+        IWbemObjectAccess*	pAccess = NULL;
 
-		// Create the instance
-		// ===================
+        // Create the instance
+        // ===================
 
-		dwRes = pSampleClass->SpawnInstance(0, &pClone);
-		if (FAILED(dwRes))
-			return dwRes;
+        dwRes = pSampleClass->SpawnInstance(0, &pClone);
+        if (FAILED(dwRes))
+            return dwRes;
 
-		// Get the IWbemObjectAccess interface
-		// ===================================
+        // Get the IWbemObjectAccess interface
+        // ===================================
 
         dwRes = pClone->QueryInterface(IID_IWbemObjectAccess, (LPVOID *)&pAccess);
         pClone->Release();
 
-		if (FAILED(dwRes))
-			return dwRes;
+        if (FAILED(dwRes))
+            return dwRes;
 
-		// Set the ID
-		// ==========
+        // Set the ID
+        // ==========
 
-		WCHAR wszName[20];
-		StringCbPrintfW(wszName, sizeof(wszName), L"%i", dwIndex);
-		dwRes = pAccess->WritePropertyValue(g_hID, (long)(wcslen(wszName)+1)*sizeof(WCHAR), (byte *)wszName);
-		if (FAILED(dwRes))
-		{
-			pAccess->Release();
-			return dwRes;
-		}
+        WCHAR wszName[20];
+        StringCbPrintfW(wszName, sizeof(wszName), L"%i", dwIndex);
+        dwRes = pAccess->WritePropertyValue(g_hID, (long)(wcslen(wszName)+1)*sizeof(WCHAR), (byte *)wszName);
+        if (FAILED(dwRes))
+        {
+            pAccess->Release();
+            return dwRes;
+        }
 
-		// Initialize the counters
-		// =======================
+        // Initialize the counters
+        // =======================
 
-		dwRes = m_pDS->UpdateInstance(pAccess);
-		if (FAILED(dwRes))
-		{
-			pAccess->Release();
-			return dwRes;
-		}
+        dwRes = m_pDS->UpdateInstance(pAccess);
+        if (FAILED(dwRes))
+        {
+            pAccess->Release();
+            return dwRes;
+        }
 
-		// Add to the instance array (refcount == 1)
-		// =========================================
+        // Add to the instance array (refcount == 1)
+        // =========================================
 
         m_apInstances[dwIndex] = pAccess;
     }
 
-	return WBEM_NO_ERROR;
+    return WBEM_NO_ERROR;
 }
 
 DWORD CRefresher::AddObject(IWbemObjectAccess *pObj, IWbemObjectAccess **ppReturnObj, long *plId)
@@ -1121,7 +1121,7 @@ DWORD CRefresher::AddObject(IWbemObjectAccess *pObj, IWbemObjectAccess **ppRetur
 //
 //	All of the objects are maintained by the m_apInstances array.  This
 //	is set up during a call to Initialize.  Multiple additions of the same
-//	object to a refresher is legal, so to optimize the refresh, the 
+//	object to a refresher is legal, so to optimize the refresh, the
 //	same object is passed back but with a different ID.  The ID:object
 //	relationships are maintained by m_apInstMap.
 //
@@ -1132,72 +1132,72 @@ DWORD CRefresher::AddObject(IWbemObjectAccess *pObj, IWbemObjectAccess **ppRetur
 //////////////////////////////////////////////////////////////////////
 //ok
 {
-	DWORD	dwRes	= WBEM_NO_ERROR;
-	
-	DWORD	dwID	= 0;
-	int		nIndex	= 0;
-	bool	bDone	= false;
+    DWORD	dwRes	= WBEM_NO_ERROR;
 
-	if (NULL == pObj)
+    DWORD	dwID	= 0;
+    int		nIndex	= 0;
+    bool	bDone	= false;
+
+    if (NULL == pObj)
         return DWORD(WBEM_E_INVALID_PARAMETER);
 
-	// Grab the instance ID
-	// ====================
-	
-	WCHAR wszName[20];
-	long lNumBytes = 0;
-	dwRes = pObj->ReadPropertyValue(g_hID, sizeof(wszName), &lNumBytes, (byte *)wszName);
-	if (FAILED(dwRes))
-		return dwRes;
-	dwID = _wtoi(wszName);
+    // Grab the instance ID
+    // ====================
 
-	// Search the map array for an empty spot
-	// ======================================
+    WCHAR wszName[20];
+    long lNumBytes = 0;
+    dwRes = pObj->ReadPropertyValue(g_hID, sizeof(wszName), &lNumBytes, (byte *)wszName);
+    if (FAILED(dwRes))
+        return dwRes;
+    dwID = _wtoi(wszName);
 
-	for (nIndex = 0; (nIndex < MAX_INSTANCES) && !bDone; nIndex++)
-	{
-		if (NULL == m_apInstMap[nIndex])
-		{
-			// Create a new cache element
-			// ==========================
+    // Search the map array for an empty spot
+    // ======================================
 
-			CCacheMapEl* pEl = new CCacheMapEl(dwID);
-			if (pEl == NULL)
-				return DWORD(WBEM_E_OUT_OF_MEMORY);
+    for (nIndex = 0; (nIndex < MAX_INSTANCES) && !bDone; nIndex++)
+    {
+        if (NULL == m_apInstMap[nIndex])
+        {
+            // Create a new cache element
+            // ==========================
 
-			// Set the return parameters
-			// =========================
+            CCacheMapEl* pEl = new CCacheMapEl(dwID);
+            if (pEl == NULL)
+                return DWORD(WBEM_E_OUT_OF_MEMORY);
 
-			*plId = pEl->GetUID();
-			*ppReturnObj = m_apInstances[dwID];
-			(*ppReturnObj)->AddRef();
+            // Set the return parameters
+            // =========================
 
-			// Set the cache element
-			// =====================
+            *plId = pEl->GetUID();
+            *ppReturnObj = m_apInstances[dwID];
+            (*ppReturnObj)->AddRef();
 
-			m_apInstMap[nIndex] = pEl;
+            // Set the cache element
+            // =====================
 
-			bDone = true;
-		}
-	}
+            m_apInstMap[nIndex] = pEl;
 
-	// If array was full, report an error
-	// ==================================
+            bDone = true;
+        }
+    }
 
-	if (!bDone)
-		dwRes = DWORD(WBEM_E_OUT_OF_MEMORY);
+    // If array was full, report an error
+    // ==================================
 
-	return dwRes;
+    if (!bDone)
+        dwRes = DWORD(WBEM_E_OUT_OF_MEMORY);
+
+    return dwRes;
 }
 
 DWORD CRefresher::RemoveObject(long lId)
 //////////////////////////////////////////////////////////////////////
 //
-//  Removes an object from the refresher.  This is a private mechanism 
+//  Removes an object from the refresher.  This is a private mechanism
 //	used by CHiPerfProvider and not part of the COM interface.
 //
 //  Removes an object from the refresher by ID.   Use a simple linear
-//	search to locate the unique ID in the m_apInstMap.  Leave the 
+//	search to locate the unique ID in the m_apInstMap.  Leave the
 //	cache instance intact until the refrehser is destroyed.
 //
 //	Parameters:
@@ -1206,36 +1206,36 @@ DWORD CRefresher::RemoveObject(long lId)
 //////////////////////////////////////////////////////////////////////
 //ok
 {
-	DWORD	dwRes = DWORD(WBEM_E_NOT_FOUND);
+    DWORD	dwRes = DWORD(WBEM_E_NOT_FOUND);
 
-	int		nIndex = 0;
-	bool	bDone = false;
+    int		nIndex = 0;
+    bool	bDone = false;
 
-	// Loop through the map array looking of the ID
-	// ============================================
+    // Loop through the map array looking of the ID
+    // ============================================
 
-	for (nIndex = 0; (nIndex < MAX_INSTANCES) && !bDone; nIndex++)
-	{
-		CCacheMapEl* pEl = m_apInstMap[nIndex];
+    for (nIndex = 0; (nIndex < MAX_INSTANCES) && !bDone; nIndex++)
+    {
+        CCacheMapEl* pEl = m_apInstMap[nIndex];
 
-		if (NULL != pEl)
-		{
-			if (pEl->GetUID() == lId)
-			{
-				// Found!  So remove map element
-				// =============================
+        if (NULL != pEl)
+        {
+            if (pEl->GetUID() == lId)
+            {
+                // Found!  So remove map element
+                // =============================
 
-				delete pEl;
-				m_apInstMap[nIndex] = NULL;
+                delete pEl;
+                m_apInstMap[nIndex] = NULL;
 
-				dwRes = WBEM_NO_ERROR;
+                dwRes = WBEM_NO_ERROR;
 
-				break;
-			}
-		}
-	}
+                break;
+            }
+        }
+    }
 
-	return dwRes;
+    return dwRes;
 }
 
 DWORD CRefresher::AddEnum(IWbemHiPerfEnum *pHiPerfEnum, long *plId)
@@ -1247,11 +1247,11 @@ DWORD CRefresher::AddEnum(IWbemHiPerfEnum *pHiPerfEnum, long *plId)
 //  The ID we return for future identification is simply
 //  the array index.
 //
-//	Note that the the refresher uses an array of enumerators.  For a 
-//	hiperf provider that only supports one class, having more than one 
+//	Note that the the refresher uses an array of enumerators.  For a
+//	hiperf provider that only supports one class, having more than one
 //	enumerator does not really make sense since a single enumerator will
-//	manage all instances of a single class for a given refresher.  
-//	NUM_ENUMERATORS may be set to reflect the number of classes if the 
+//	manage all instances of a single class for a given refresher.
+//	NUM_ENUMERATORS may be set to reflect the number of classes if the
 //	proper class / enumerator management code is added.  The implementation
 //	is up to the provider.
 //
@@ -1262,49 +1262,49 @@ DWORD CRefresher::AddEnum(IWbemHiPerfEnum *pHiPerfEnum, long *plId)
 //////////////////////////////////////////////////////////////////////
 //ok
 {
-	DWORD dwRes = DWORD(WBEM_E_FAILED);
+    DWORD dwRes = DWORD(WBEM_E_FAILED);
 
-	if (NULL == pHiPerfEnum)
+    if (NULL == pHiPerfEnum)
         return DWORD(WBEM_E_INVALID_PARAMETER);
 
-	// Cycle through the enumerator array, and look for an empty slot
-	// ==============================================================
+    // Cycle through the enumerator array, and look for an empty slot
+    // ==============================================================
 
-	for (int nIndex = 0; nIndex < MAX_ENUMERATORS; nIndex++)
-	{
-		if (NULL == m_apEnumerator[nIndex])
-		{
-			// Add all the objects at once into the enumerator
-			// ===============================================
+    for (int nIndex = 0; nIndex < MAX_ENUMERATORS; nIndex++)
+    {
+        if (NULL == m_apEnumerator[nIndex])
+        {
+            // Add all the objects at once into the enumerator
+            // ===============================================
 
-			long alIDs[NUM_INSTANCES];
+            long alIDs[NUM_INSTANCES];
 
-			for ( int nInst = 0; nInst < NUM_INSTANCES; nInst++ )
-				alIDs[nInst] = nInst;
+            for ( int nInst = 0; nInst < NUM_INSTANCES; nInst++ )
+                alIDs[nInst] = nInst;
 
-			dwRes = pHiPerfEnum->AddObjects( 0L, NUM_INSTANCES, alIDs, m_apInstances );
-			if (FAILED(dwRes))
-				return dwRes;
+            dwRes = pHiPerfEnum->AddObjects( 0L, NUM_INSTANCES, alIDs, m_apInstances );
+            if (FAILED(dwRes))
+                return dwRes;
 
-			// Add the enumerator to the refresher (released by the refresher's destructor)
-			// ============================================================================
+            // Add the enumerator to the refresher (released by the refresher's destructor)
+            // ============================================================================
 
-			m_apEnumerator[nIndex] = pHiPerfEnum;
-			pHiPerfEnum->AddRef();
+            m_apEnumerator[nIndex] = pHiPerfEnum;
+            pHiPerfEnum->AddRef();
 
-			*plId = nIndex;
+            *plId = nIndex;
 
-			dwRes = WBEM_NO_ERROR;
-			break;
-		}
-	}
-	return dwRes;
+            dwRes = WBEM_NO_ERROR;
+            break;
+        }
+    }
+    return dwRes;
 }
 
 DWORD CRefresher::RemoveEnum(long lId)
 //////////////////////////////////////////////////////////////////////
 //
-//  Removes an enumerator from the refresher.  This is a private mechanism 
+//  Removes an enumerator from the refresher.  This is a private mechanism
 //	used by CHiPerfProvider and not part of the COM interface.
 //
 //  Removes an enumerator from the refresher by ID.   In our case, the ID
@@ -1317,20 +1317,20 @@ DWORD CRefresher::RemoveEnum(long lId)
 //////////////////////////////////////////////////////////////////////
 //ok
 {
-	// Verify the element
-	// ==================
+    // Verify the element
+    // ==================
 
-	if (NULL != m_apEnumerator[lId])
-	{
-		// And remove the enumerator
-		// =========================
+    if (NULL != m_apEnumerator[lId])
+    {
+        // And remove the enumerator
+        // =========================
 
-		m_apEnumerator[lId]->Release();
-		m_apEnumerator[lId] = NULL;
+        m_apEnumerator[lId]->Release();
+        m_apEnumerator[lId] = NULL;
 
-		return WBEM_NO_ERROR;
-	}
-	return DWORD(WBEM_E_FAILED);
+        return WBEM_NO_ERROR;
+    }
+    return DWORD(WBEM_E_FAILED);
 }
 
 STDMETHODIMP CRefresher::QueryInterface(REFIID riid, void** ppv)
@@ -1343,17 +1343,17 @@ STDMETHODIMP CRefresher::QueryInterface(REFIID riid, void** ppv)
 {
     if (riid == IID_IUnknown)
         *ppv = (LPVOID)(IUnknown*)this;
-	else if (riid == IID_IWbemRefresher)
-		*ppv = (LPVOID)(IWbemRefresher*)this;
+    else if (riid == IID_IWbemRefresher)
+        *ppv = (LPVOID)(IWbemRefresher*)this;
     else return E_NOINTERFACE;
 
-   	((IUnknown*)*ppv)->AddRef();
+    ((IUnknown*)*ppv)->AddRef();
     return S_OK;
 }
 
 STDMETHODIMP_(ULONG) CRefresher::AddRef()
 //////////////////////////////////////////////////////////////////////
-//	
+//
 //	Standard COM AddRef
 //
 //////////////////////////////////////////////////////////////////////
@@ -1380,13 +1380,13 @@ STDMETHODIMP_(ULONG) CRefresher::Release()
 STDMETHODIMP CRefresher::Refresh(/* [in] */ long lFlags)
 //////////////////////////////////////////////////////////////////////
 //
-//  Executed to refresh a set of instances bound to the particular 
+//  Executed to refresh a set of instances bound to the particular
 //  refresher.
 //
-//	In most situations the instance data, such as counter values and 
-//	the set of current instances within any existing enumerators, would 
-//	be updated whenever Refresh was called.  For this example, we are 
-//	going to or data source to update the counter data.  Since we are 
+//	In most situations the instance data, such as counter values and
+//	the set of current instances within any existing enumerators, would
+//	be updated whenever Refresh was called.  For this example, we are
+//	going to or data source to update the counter data.  Since we are
 //	using a fixed set of instances, we are not adding or removing anything
 //	from the enumerator.
 //
@@ -1397,49 +1397,49 @@ STDMETHODIMP CRefresher::Refresh(/* [in] */ long lFlags)
 //ok
 {
 
-	HRESULT	hRes = WBEM_NO_ERROR;
-	
-	//Impersonate the client
-	hRes = CoImpersonateClient () ;
-	if ( FAILED ( hRes ) && hRes != RPC_E_CALL_COMPLETE)
-	{
-		return hRes ;
-	}	
+    HRESULT	hRes = WBEM_NO_ERROR;
 
-	//	Check to see if call is at lower than RPC_C_IMP_LEVEL_IMPERSONATE level. If that's the case,
-	//  the provider will not be able to impersonate the client to access the protected resources.	
+    //Impersonate the client
+    hRes = CoImpersonateClient () ;
+    if ( FAILED ( hRes ) && hRes != RPC_E_CALL_COMPLETE)
+    {
+        return hRes ;
+    }
 
-	DWORD t_CurrentImpersonationLevel = GetCurrentImpersonationLevel () ;
-	if ( t_CurrentImpersonationLevel < RPC_C_IMP_LEVEL_IMPERSONATE )
-	{
-		//	Revert before we perform any operations	
-		CoRevertToSelf () ;
+    //	Check to see if call is at lower than RPC_C_IMP_LEVEL_IMPERSONATE level. If that's the case,
+    //  the provider will not be able to impersonate the client to access the protected resources.
 
-		hRes = WBEM_E_ACCESS_DENIED;
-		return hRes ;
-	}
+    DWORD t_CurrentImpersonationLevel = GetCurrentImpersonationLevel () ;
+    if ( t_CurrentImpersonationLevel < RPC_C_IMP_LEVEL_IMPERSONATE )
+    {
+        //	Revert before we perform any operations
+        CoRevertToSelf () ;
+
+        hRes = WBEM_E_ACCESS_DENIED;
+        return hRes ;
+    }
 
 
-	IWbemObjectAccess* pObj;
-	DWORD	dwVal = 0;
-	long	hCtr = 0;
+    IWbemObjectAccess* pObj;
+    DWORD	dwVal = 0;
+    long	hCtr = 0;
 
-	// A simple loop that iterates through all instances that have been
-	// added to the refresher, and updates their counter values
-	// ================================================================
+    // A simple loop that iterates through all instances that have been
+    // added to the refresher, and updates their counter values
+    // ================================================================
 
-	for (int nInst = 0; nInst < NUM_INSTANCES; nInst++)
-	{
-		pObj = m_apInstances[nInst];
-		if (NULL != pObj)
-		{
-			hRes = m_pDS->UpdateInstance(pObj);
-			if (FAILED(hRes))
-				break;
-		}
-	}
+    for (int nInst = 0; nInst < NUM_INSTANCES; nInst++)
+    {
+        pObj = m_apInstances[nInst];
+        if (NULL != pObj)
+        {
+            hRes = m_pDS->UpdateInstance(pObj);
+            if (FAILED(hRes))
+                break;
+        }
+    }
 
-	return hRes;
+    return hRes;
 }
 
 //////////////////////////////////////////////////////////////
@@ -1459,7 +1459,7 @@ CSampleDataSource::CSampleDataSource() : m_hThread(NULL)
 //////////////////////////////////////////////////////////////////////
 //ok
 {
-	m_hQuit = CreateEvent( NULL, TRUE, FALSE, NULL );
+    m_hQuit = CreateEvent( NULL, TRUE, FALSE, NULL );
 }
 
 CSampleDataSource::~CSampleDataSource()
@@ -1470,28 +1470,28 @@ CSampleDataSource::~CSampleDataSource()
 //////////////////////////////////////////////////////////////////////
 //ok
 {
-	if (NULL != m_hThread)
-	{
-		// Signal the thread to terminate
-		// ==============================
+    if (NULL != m_hThread)
+    {
+        // Signal the thread to terminate
+        // ==============================
 
-		SetEvent( m_hQuit );
+        SetEvent( m_hQuit );
 
-		DWORD dwRet = WaitForSingleObject( m_hThread, 60000 );
+        DWORD dwRet = WaitForSingleObject( m_hThread, 60000 );
 
-		switch ( dwRet )
-		{
-		case WAIT_OBJECT_0:
-			{
-			}break;
-		case WAIT_TIMEOUT:
-			{
-				// Something is wrong - handle appropriately
-			}break;
-		}
+        switch ( dwRet )
+        {
+        case WAIT_OBJECT_0:
+        {
+        } break;
+        case WAIT_TIMEOUT:
+        {
+            // Something is wrong - handle appropriately
+        } break;
+        }
 
-		m_hThread = NULL;
-	}
+        m_hThread = NULL;
+    }
 }
 
 DWORD CSampleDataSource::Initialize(IWbemClassObject* pSampleClass)
@@ -1500,8 +1500,8 @@ DWORD CSampleDataSource::Initialize(IWbemClassObject* pSampleClass)
 //	Initializes the data source.
 //
 //	Set the access handles for the properties of the WMI objects
-//	and create a thread that will independantly update the 
-//	counter values. 
+//	and create a thread that will independantly update the
+//	counter values.
 //
 //	Parameters:
 //		pSampleClass	- a template of the class for which
@@ -1510,25 +1510,25 @@ DWORD CSampleDataSource::Initialize(IWbemClassObject* pSampleClass)
 //////////////////////////////////////////////////////////////
 //ok
 {
-	DWORD dwRes = DWORD(WBEM_E_FAILED);
-	unsigned uThread = 0;
+    DWORD dwRes = DWORD(WBEM_E_FAILED);
+    unsigned uThread = 0;
 
-	// Set the handles for the object (valid for all instances)
-	// ========================================================
+    // Set the handles for the object (valid for all instances)
+    // ========================================================
 
-	dwRes = SetHandles(pSampleClass);
-	if (FAILED(dwRes))
-		return dwRes;
+    dwRes = SetHandles(pSampleClass);
+    if (FAILED(dwRes))
+        return dwRes;
 
-	// Create the simulation thread
-	// ============================
+    // Create the simulation thread
+    // ============================
 
-	m_hThread = (PVOID)_beginthreadex(NULL, 0, CSampleDataSource::ThreadEntry, this, 0, &uThread); 
+    m_hThread = (PVOID)_beginthreadex(NULL, 0, CSampleDataSource::ThreadEntry, this, 0, &uThread);
 
-	if (0 == m_hThread)
-		return DWORD(WBEM_E_FAILED);
+    if (0 == m_hThread)
+        return DWORD(WBEM_E_FAILED);
 
-	return WBEM_NO_ERROR;
+    return WBEM_NO_ERROR;
 }
 
 DWORD CSampleDataSource::SetHandles(IWbemClassObject* pSampleClass)
@@ -1537,10 +1537,10 @@ DWORD CSampleDataSource::SetHandles(IWbemClassObject* pSampleClass)
 //	Called by the initialization method.
 //
 //	Get the access handles for the well-known properties in
-//	the WMI object.  These handles are the same for all instances 
+//	the WMI object.  These handles are the same for all instances
 //	of the object.
 //
-//	If the method fails, the property handle values may be in 
+//	If the method fails, the property handle values may be in
 //	an indeterminite state.
 //
 //	Parameters:
@@ -1550,49 +1550,49 @@ DWORD CSampleDataSource::SetHandles(IWbemClassObject* pSampleClass)
 //////////////////////////////////////////////////////////////
 //ok
 {
-	DWORD dwRes = WBEM_NO_ERROR;
+    DWORD dwRes = WBEM_NO_ERROR;
 
-	IWbemObjectAccess *pAccess = NULL;
+    IWbemObjectAccess *pAccess = NULL;
     BSTR strPropName	= NULL;
 
     if (NULL == pSampleClass)
         return DWORD(WBEM_E_FAILED);
 
-	// Get the IWbemAccess interface to the class
-	// ==========================================
+    // Get the IWbemAccess interface to the class
+    // ==========================================
 
-	dwRes = pSampleClass->QueryInterface(IID_IWbemObjectAccess, (LPVOID *)&pAccess);
+    dwRes = pSampleClass->QueryInterface(IID_IWbemObjectAccess, (LPVOID *)&pAccess);
 
-	if (FAILED(dwRes))
-		return dwRes;
+    if (FAILED(dwRes))
+        return dwRes;
 
-	// Get the counter properties access handles
-	// =========================================
+    // Get the counter properties access handles
+    // =========================================
 
-	for (int i = ctr1; i < NumCtrs; i++)
-	{
-		strPropName = SysAllocString(g_aCounterProps[i].m_tcsPropertyName);    
-		if (!strPropName)
-		{
-			pAccess->Release();
-			return DWORD(WBEM_E_OUT_OF_MEMORY);
-		}
-			
+    for (int i = ctr1; i < NumCtrs; i++)
+    {
+        strPropName = SysAllocString(g_aCounterProps[i].m_tcsPropertyName);
+        if (!strPropName)
+        {
+            pAccess->Release();
+            return DWORD(WBEM_E_OUT_OF_MEMORY);
+        }
 
-		dwRes = pAccess->GetPropertyHandle(strPropName, 0, &m_alHandle[i]);
 
-		SysFreeString(strPropName);
+        dwRes = pAccess->GetPropertyHandle(strPropName, 0, &m_alHandle[i]);
 
-		if (FAILED(dwRes))
-		{
-			pAccess->Release();
-			return dwRes;
-		}
-	}
+        SysFreeString(strPropName);
 
-	pAccess->Release();
+        if (FAILED(dwRes))
+        {
+            pAccess->Release();
+            return dwRes;
+        }
+    }
 
-	return WBEM_NO_ERROR;
+    pAccess->Release();
+
+    return WBEM_NO_ERROR;
 }
 
 
@@ -1611,96 +1611,96 @@ DWORD CSampleDataSource::UpdateInstance(IWbemObjectAccess* pAccess)
 //////////////////////////////////////////////////////////////
 //ok
 {
-	DWORD dwRes = DWORD(WBEM_E_FAILED);
+    DWORD dwRes = DWORD(WBEM_E_FAILED);
 
-	DWORD dwID = 0;
+    DWORD dwID = 0;
 
-	// Get the ID of the object
-	// ========================
+    // Get the ID of the object
+    // ========================
 
-	WCHAR wszName[20];
-	long lNumBytes = 0;
-	dwRes = pAccess->ReadPropertyValue(g_hID, sizeof(wszName), &lNumBytes, (byte *)wszName);
-	if (FAILED(dwRes))
-		return dwRes;
-	dwID = _wtoi(wszName);
+    WCHAR wszName[20];
+    long lNumBytes = 0;
+    dwRes = pAccess->ReadPropertyValue(g_hID, sizeof(wszName), &lNumBytes, (byte *)wszName);
+    if (FAILED(dwRes))
+        return dwRes;
+    dwID = _wtoi(wszName);
 
-	// Get the counter data
-	// ====================
+    // Get the counter data
+    // ====================
 
-	CSampleInstance* pInst = &(m_aInstance[dwID]);
+    CSampleInstance* pInst = &(m_aInstance[dwID]);
 
-	// And set the counter properties
-	// ==============================
+    // And set the counter properties
+    // ==============================
 
-	pInst->Lock(true);
+    pInst->Lock(true);
 
-	for (int nProp = ctr1; nProp < NumCtrs; nProp++)
-	{
-		DWORD dwVal = 0;
-		dwRes = pInst->GetCounter(nProp, &dwVal);
-		if (FAILED(dwRes))
-			break;
-		dwRes = pAccess->WriteDWORD(m_alHandle[nProp], dwVal);
-		if (FAILED(dwRes))
-			break;
-	}
+    for (int nProp = ctr1; nProp < NumCtrs; nProp++)
+    {
+        DWORD dwVal = 0;
+        dwRes = pInst->GetCounter(nProp, &dwVal);
+        if (FAILED(dwRes))
+            break;
+        dwRes = pAccess->WriteDWORD(m_alHandle[nProp], dwVal);
+        if (FAILED(dwRes))
+            break;
+    }
 
-	pInst->Lock(false);
+    pInst->Lock(false);
 
-	return dwRes;
+    return dwRes;
 }
 
 DWORD CSampleDataSource::Simulate()
 //////////////////////////////////////////////////////////////
 //
-//	This will simulate real changes to the data set.  The 
-//	thread will periodically cycle through the instances 
-//	modifying their counter values.  The thread will be killed 
+//	This will simulate real changes to the data set.  The
+//	thread will periodically cycle through the instances
+//	modifying their counter values.  The thread will be killed
 //	by the calling thread.
 //
 //////////////////////////////////////////////////////////////
 //ok
 {
-	CSampleInstance* pCurrInst = NULL;
-	DWORD dwVal = 0;
+    CSampleInstance* pCurrInst = NULL;
+    DWORD dwVal = 0;
 
-	// Loop until the thread is killed
-	// ===============================
+    // Loop until the thread is killed
+    // ===============================
 
-	while ( WaitForSingleObject( m_hQuit, 0 ) == WAIT_TIMEOUT )
-	{
-		// Loop through the instances
-		// ==========================
+    while ( WaitForSingleObject( m_hQuit, 0 ) == WAIT_TIMEOUT )
+    {
+        // Loop through the instances
+        // ==========================
 
-		for (int nInst = 0; nInst < NUM_INSTANCES; nInst++)
-		{
-			// Get the current instance and lock it
-			// ====================================
+        for (int nInst = 0; nInst < NUM_INSTANCES; nInst++)
+        {
+            // Get the current instance and lock it
+            // ====================================
 
-			pCurrInst = &(m_aInstance[nInst]);
+            pCurrInst = &(m_aInstance[nInst]);
 
-			pCurrInst->Lock(true);
+            pCurrInst->Lock(true);
 
-			// Update all of the counters
-			// ==========================
+            // Update all of the counters
+            // ==========================
 
-			for (int nCtr = ctr1; nCtr < NumCtrs; nCtr++)
-			{
-				dwVal = GetTickCount() / (nCtr + 1);
-				pCurrInst->SetCounter(nCtr, dwVal);
-			}
+            for (int nCtr = ctr1; nCtr < NumCtrs; nCtr++)
+            {
+                dwVal = GetTickCount() / (nCtr + 1);
+                pCurrInst->SetCounter(nCtr, dwVal);
+            }
 
-			pCurrInst->Lock(false);
-		}
-		
-		// Wait a while
-		// ============
+            pCurrInst->Lock(false);
+        }
 
-		Sleep(100);
-	}
+        // Wait a while
+        // ============
 
-	return WBEM_NO_ERROR;
+        Sleep(100);
+    }
+
+    return WBEM_NO_ERROR;
 }
 
 unsigned CSampleDataSource::ThreadEntry(void* pArgs)
@@ -1709,17 +1709,17 @@ unsigned CSampleDataSource::ThreadEntry(void* pArgs)
 //	The entry point for the simulation.  Calls Simulate.
 //
 //	Parameters:
-//		pArgs	- contains the this pointer of the calling 
+//		pArgs	- contains the this pointer of the calling
 //					object
 //
 //////////////////////////////////////////////////////////////
 //ok
 {
-	CSampleDataSource* pThis = (CSampleDataSource*)pArgs;
+    CSampleDataSource* pThis = (CSampleDataSource*)pArgs;
 
-	pThis->Simulate();
+    pThis->Simulate();
 
-	return 0;
+    return 0;
 }
 
 //////////////////////////////////////////////////////////////
@@ -1738,7 +1738,7 @@ CSampleInstance::CSampleInstance()
 //////////////////////////////////////////////////////////////
 //ok
 {
-	InitializeCriticalSection(&CS);
+    InitializeCriticalSection(&CS);
 }
 
 CSampleInstance::CSampleInstance(const CSampleInstance &aInst)
@@ -1749,10 +1749,10 @@ CSampleInstance::CSampleInstance(const CSampleInstance &aInst)
 //////////////////////////////////////////////////////////////
 //ok
 {
-	InitializeCriticalSection(&CS);
+    InitializeCriticalSection(&CS);
 
-	for (int i = ctr1; i < NumCtrs; i++)
-		m_aCounter[i] = aInst.m_aCounter[i];
+    for (int i = ctr1; i < NumCtrs; i++)
+        m_aCounter[i] = aInst.m_aCounter[i];
 }
 
 CSampleInstance::~CSampleInstance()
@@ -1763,13 +1763,13 @@ CSampleInstance::~CSampleInstance()
 //////////////////////////////////////////////////////////////
 //ok
 {
-	DeleteCriticalSection(&CS);
+    DeleteCriticalSection(&CS);
 }
 
 DWORD CSampleInstance::Lock(bool bLock)
 //////////////////////////////////////////////////////////////
 //
-//	Locks or unlocks the instance.    
+//	Locks or unlocks the instance.
 //
 //	Parameters:
 //		bLock	- true = lock; false = unlock
@@ -1777,12 +1777,12 @@ DWORD CSampleInstance::Lock(bool bLock)
 //////////////////////////////////////////////////////////////
 //ok
 {
-	if (bLock)
-		EnterCriticalSection(&CS);
-	else
-		LeaveCriticalSection(&CS);
+    if (bLock)
+        EnterCriticalSection(&CS);
+    else
+        LeaveCriticalSection(&CS);
 
-	return WBEM_NO_ERROR;
+    return WBEM_NO_ERROR;
 }
 
 DWORD CSampleInstance::SetCounter(long lCtrIndex, DWORD dwVal)
@@ -1797,21 +1797,21 @@ DWORD CSampleInstance::SetCounter(long lCtrIndex, DWORD dwVal)
 //////////////////////////////////////////////////////////////
 //ok
 {
-	DWORD dwRes = DWORD(WBEM_E_FAILED);
+    DWORD dwRes = DWORD(WBEM_E_FAILED);
 
-	// Verify counter index
-	// ====================
+    // Verify counter index
+    // ====================
 
-	if ((lCtrIndex >= 0) && (lCtrIndex < NumCtrs))
-	{
-		// Update the counter value
-		// ========================
-		m_aCounter[lCtrIndex] = dwVal;
+    if ((lCtrIndex >= 0) && (lCtrIndex < NumCtrs))
+    {
+        // Update the counter value
+        // ========================
+        m_aCounter[lCtrIndex] = dwVal;
 
-		dwRes = WBEM_NO_ERROR;
-	}
+        dwRes = WBEM_NO_ERROR;
+    }
 
-	return dwRes;
+    return dwRes;
 }
 
 DWORD CSampleInstance::GetCounter(long lCtrIndex, DWORD* pdwVal)
@@ -1826,20 +1826,20 @@ DWORD CSampleInstance::GetCounter(long lCtrIndex, DWORD* pdwVal)
 //////////////////////////////////////////////////////////////
 //ok
 {
-	DWORD dwRes = DWORD(WBEM_E_FAILED);
-	
-	// Verify counter index
-	// ====================
+    DWORD dwRes = DWORD(WBEM_E_FAILED);
 
-	if ((lCtrIndex >= 0) && (lCtrIndex < NumCtrs))
-	{	
-		// Set return values
-		// =================
+    // Verify counter index
+    // ====================
 
-		*pdwVal = m_aCounter[lCtrIndex];
-		dwRes = WBEM_NO_ERROR;
-	}
+    if ((lCtrIndex >= 0) && (lCtrIndex < NumCtrs))
+    {
+        // Set return values
+        // =================
 
-	return dwRes;
+        *pdwVal = m_aCounter[lCtrIndex];
+        dwRes = WBEM_NO_ERROR;
+    }
+
+    return dwRes;
 }
 

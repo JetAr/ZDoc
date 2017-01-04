@@ -1,9 +1,9 @@
-//THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿//THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 //ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 //THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 //PARTICULAR PURPOSE.
 //
-//Copyright (C) Microsoft Corporation. All rights reserved 
+//Copyright (C) Microsoft Corporation. All rights reserved
 
 #pragma once
 
@@ -52,28 +52,28 @@ struct Property
  *****************************************************************************/
 MI_Result GetStorageSubsystem(
     MI_Session * session,
-	MI_Value * storageSubsystemName,
+    MI_Value * storageSubsystemName,
     MI_Instance ** outInstance);
 
 MI_Result CreateStoragePool(
     MI_Application * application,
     MI_Session * session,
     MI_Instance * inboundInstance,
-	MI_Value * poolFriendlyName,
+    MI_Value * poolFriendlyName,
     MI_Instance ** outInstance);
 
 MI_Result CreateVirtualDisk(
     MI_Application * application,
     MI_Session * session,
     MI_Instance * inboundInstance,
-	MI_Value * virtualDiskFriendlyName,
-	MI_Value * virtualDiskSize,
+    MI_Value * virtualDiskFriendlyName,
+    MI_Value * virtualDiskSize,
     MI_Instance ** outInstance);
 
 MI_Result InitializeDisk(
     MI_Application * application,
     MI_Session * session,
-	MI_Value * partitionType,
+    MI_Value * partitionType,
     MI_Instance * inboundInstance);
 
 MI_Result CreatePartitionOnDisk(
@@ -85,7 +85,7 @@ MI_Result CreatePartitionOnDisk(
 MI_Result FormatVolume(
     MI_Application * application,
     MI_Session * session,
-	MI_Value * filesystemType,
+    MI_Value * filesystemType,
     MI_Instance * inboundInstance);
 
 MI_Result FindTheInstanceOfClassWithProperty(
@@ -94,7 +94,7 @@ MI_Result FindTheInstanceOfClassWithProperty(
     const MI_Char * propName,
     const MI_Value * PropValue,
     MI_Instance ** pInstance
-    );
+);
 
 MI_Result GetAssociatorInstances(
     MI_Session * session,

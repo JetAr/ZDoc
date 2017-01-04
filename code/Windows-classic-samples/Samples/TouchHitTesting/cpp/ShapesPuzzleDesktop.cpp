@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -192,27 +192,27 @@ LRESULT CALLBACK WndProc(_In_ HWND hWnd, _In_ UINT msg, _In_ WPARAM wParam, _In_
     case WM_LBUTTONDOWN:
     case WM_LBUTTONUP:
     case WM_MOUSEMOVE:
+    {
+        if (msg == WM_MOUSEMOVE)
         {
-            if (msg == WM_MOUSEMOVE)
+            // Filter left button only
+            if  (LOWORD(wParam) != MK_LBUTTON)
             {
-                // Filter left button only
-                if  (LOWORD(wParam) != MK_LBUTTON)
-                {
-                    break;
-                }
+                break;
             }
-
-            // Create and process mouse event
-            INPUT_EVENT inputEvent;
-            inputEvent.pt.y = HIWORD(lParam);
-            inputEvent.pt.x = LOWORD(lParam);
-            inputEvent.eventSource = EVENT_SOURCE_MOUSE;
-            inputEvent.eventType = (msg == WM_LBUTTONDOWN) ? EVENT_TYPE_DOWN :
-                (msg == WM_MOUSEMOVE) ? EVENT_TYPE_MOVE : EVENT_TYPE_UP;
-            inputEvent.cursorId = CURSOR_ID_MOUSE;
-            g_driver->ProcessInputEvent(&inputEvent, 1);
         }
-        break;
+
+        // Create and process mouse event
+        INPUT_EVENT inputEvent;
+        inputEvent.pt.y = HIWORD(lParam);
+        inputEvent.pt.x = LOWORD(lParam);
+        inputEvent.eventSource = EVENT_SOURCE_MOUSE;
+        inputEvent.eventType = (msg == WM_LBUTTONDOWN) ? EVENT_TYPE_DOWN :
+                               (msg == WM_MOUSEMOVE) ? EVENT_TYPE_MOVE : EVENT_TYPE_UP;
+        inputEvent.cursorId = CURSOR_ID_MOUSE;
+        g_driver->ProcessInputEvent(&inputEvent, 1);
+    }
+    break;
 
     case WM_TOUCHHITTESTING:
         // Do smart Touch hit testing
@@ -221,24 +221,24 @@ LRESULT CALLBACK WndProc(_In_ HWND hWnd, _In_ UINT msg, _In_ WPARAM wParam, _In_
     case WM_POINTERDOWN:
     case WM_POINTERUPDATE:
     case WM_POINTERUP:
-        {
-            // Create and process pointer events
-            INPUT_EVENT inputEvent;
-            inputEvent.pt.y = HIWORD(lParam);
-            inputEvent.pt.x = LOWORD(lParam);
+    {
+        // Create and process pointer events
+        INPUT_EVENT inputEvent;
+        inputEvent.pt.y = HIWORD(lParam);
+        inputEvent.pt.x = LOWORD(lParam);
 
-            // Pointer position is in screen coordinates, convert to client coordinates
-            ScreenToClient(hWnd, &inputEvent.pt);
+        // Pointer position is in screen coordinates, convert to client coordinates
+        ScreenToClient(hWnd, &inputEvent.pt);
 
-            // Program works with any pointer input (touch, pen).
-            // But only touch input can initialize smart Touch hit testing.
-            inputEvent.eventSource = EVENT_SOURCE_POINTER;
-            inputEvent.eventType = (msg == WM_POINTERDOWN) ? EVENT_TYPE_DOWN :
-                (msg == WM_POINTERUPDATE) ? EVENT_TYPE_MOVE : EVENT_TYPE_UP;
-            inputEvent.cursorId = GET_POINTERID_WPARAM(wParam);
-            g_driver->ProcessInputEvent(&inputEvent, 1);
-        }
-        break;
+        // Program works with any pointer input (touch, pen).
+        // But only touch input can initialize smart Touch hit testing.
+        inputEvent.eventSource = EVENT_SOURCE_POINTER;
+        inputEvent.eventType = (msg == WM_POINTERDOWN) ? EVENT_TYPE_DOWN :
+                               (msg == WM_POINTERUPDATE) ? EVENT_TYPE_MOVE : EVENT_TYPE_UP;
+        inputEvent.cursorId = GET_POINTERID_WPARAM(wParam);
+        g_driver->ProcessInputEvent(&inputEvent, 1);
+    }
+    break;
 
     default:
         return DefWindowProc(hWnd, msg, wParam, lParam);

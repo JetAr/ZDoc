@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -22,7 +22,7 @@
  * call line_reset.
  *
  * Lines can be allocated on a list. If a null list handle is passed, the
- * line will be allocated using HeapAlloc(). 
+ * line will be allocated using HeapAlloc().
  *
  */
 
@@ -53,15 +53,20 @@ line_new(LPSTR text, int linelength, LPWSTR pwzText, int cwchText, UINT linenr, 
     int cch = 0;
 
     /* alloc a line. from the list if there is a list */
-    if (list) {
+    if (list)
+    {
         line = (LINE)List_NewLast(list, sizeof(struct fileline));
-        if (line == NULL) {
+        if (line == NULL)
+        {
             return(NULL);
         }
         line->flags = 0;
-    } else  {
+    }
+    else
+    {
         line = (LINE) HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(struct fileline));
-        if (line == NULL) {
+        if (line == NULL)
+        {
             return(NULL);
         }
         line->flags = LF_DISCARD;
@@ -76,14 +81,15 @@ line_new(LPSTR text, int linelength, LPWSTR pwzText, int cwchText, UINT linenr, 
         return NULL;
     }
     My_mbsncpy(line->text, text, linelength);
-    if (cch == 3) {
+    if (cch == 3)
+    {
         line->text[linelength++] = '\r';
         line->text[linelength++] = '\n';
     }
     line->text[linelength] = '\0';
 
     line->pwzText = 0;
-    if (pwzText) 
+    if (pwzText)
     {
         /* alloc space for the unicode text. remember the null character */
         /* also add cr/nl pair if absent for composite file */
@@ -94,7 +100,8 @@ line_new(LPSTR text, int linelength, LPWSTR pwzText, int cwchText, UINT linenr, 
             return NULL;
         }
         StringCchCopyNW(line->pwzText,cwchText+cch,pwzText, cwchText);
-        if (cch == 3) {
+        if (cch == 3)
+        {
             line->pwzText[cwchText++] = '\r';
             line->pwzText[cwchText++] = '\n';
         }
@@ -114,7 +121,8 @@ line_new(LPSTR text, int linelength, LPWSTR pwzText, int cwchText, UINT linenr, 
 void
 line_delete(LINE line)
 {
-    if (line == NULL) {
+    if (line == NULL)
+    {
         return;
     }
 
@@ -122,7 +130,8 @@ line_delete(LINE line)
     HeapFree(GetProcessHeap(), NULL, line->text);
 
     /* free up line itself only if not on list */
-    if (line->flags & LF_DISCARD) {
+    if (line->flags & LF_DISCARD)
+    {
         HeapFree(GetProcessHeap(), NULL, (LPSTR) line);
     }
 }
@@ -133,7 +142,8 @@ line_delete(LINE line)
 void
 line_reset(LINE line)
 {
-    if (line == NULL) {
+    if (line == NULL)
+    {
         return;
     }
 
@@ -147,7 +157,8 @@ line_reset(LINE line)
 LPSTR
 line_gettext(LINE line)
 {
-    if (line == NULL) {
+    if (line == NULL)
+    {
         return(NULL);
     }
 
@@ -158,7 +169,8 @@ line_gettext(LINE line)
 LPWSTR
 line_gettextW(LINE line)
 {
-    if (line == NULL) {
+    if (line == NULL)
+    {
         return(NULL);
     }
 
@@ -171,14 +183,18 @@ int line_gettextlen(LINE line)
     int sum = 0;
     LPSTR string = line->text;
 
-    while (*string != '\0') {
+    while (*string != '\0')
+    {
 
-        if (ignore_blanks) {
-            while (IS_BLANK(*string)) {
+        if (ignore_blanks)
+        {
+            while (IS_BLANK(*string))
+            {
                 string++;
             }
         }
-        if (IsDBCSLeadByte((BYTE)*string)) {
+        if (IsDBCSLeadByte((BYTE)*string))
+        {
             ++sum;
             ++string;
         }
@@ -201,15 +217,21 @@ line_gettabbedlength(LINE line, int tabstops)
     int length;
     LPSTR chp;
 
-    if (line == NULL) {
+    if (line == NULL)
+    {
         return(0);
     }
 
-    for (length = 0, chp = line->text; *chp != '\0'; chp++) {
-        if (*chp == '\t') {
+    for (length = 0, chp = line->text; *chp != '\0'; chp++)
+    {
+        if (*chp == '\t')
+        {
             length = (length + tabstops) / tabstops * tabstops;
-        } else {
-            if (IsDBCSLeadByte(*chp)) {
+        }
+        else
+        {
+            if (IsDBCSLeadByte(*chp))
+            {
                 chp++;
                 length++;
             }
@@ -224,11 +246,13 @@ line_gettabbedlength(LINE line, int tabstops)
 DWORD
 line_gethashcode(LINE line)
 {
-    if (line == NULL) {
+    if (line == NULL)
+    {
         return(0);
     }
 
-    if (! (line->flags & LF_HASHVALID)) {
+    if (! (line->flags & LF_HASHVALID))
+    {
         /* hashcode needs to be recalced */
         line->hash = hash_string(line->text, ignore_blanks);
         line->flags |= LF_HASHVALID;
@@ -243,7 +267,8 @@ line_gethashcode(LINE line)
 LINE
 line_getlink(LINE line)
 {
-    if (line == NULL) {
+    if (line == NULL)
+    {
         return(NULL);
     }
 
@@ -254,7 +279,8 @@ line_getlink(LINE line)
 UINT
 line_getlinenr(LINE line)
 {
-    if (line == NULL) {
+    if (line == NULL)
+    {
         return(0);
     }
 
@@ -270,13 +296,15 @@ line_compare(LINE line1, LINE line2)
 {
     LPSTR p1, p2;
 
-    if ((line1 == NULL) || (line2 == NULL)) {
+    if ((line1 == NULL) || (line2 == NULL))
+    {
         /* null line handles do not compare */
         return(FALSE);
     }
 
     /* check that the hashcodes match */
-    if (line_gethashcode(line1) != line_gethashcode(line2)) {
+    if (line_gethashcode(line1) != line_gethashcode(line2))
+    {
         return(FALSE);
     }
 
@@ -284,30 +312,40 @@ line_compare(LINE line1, LINE line2)
     /* note that this is coupled to gutils\utils.c in definition of blank */
     p1 = line_gettext(line1);
     p2 = line_gettext(line2);
-    do {
-        if (ignore_blanks) {
-            while (IS_BLANK(*p1)) {
+    do
+    {
+        if (ignore_blanks)
+        {
+            while (IS_BLANK(*p1))
+            {
                 p1 = CharNext(p1);
             }
-            while (IS_BLANK(*p2)) {
+            while (IS_BLANK(*p2))
+            {
                 p2 = CharNext(p2);
             }
         }
         if (IsDBCSLeadByte(*p1) && *(p1+1) != '\0'
-            &&  IsDBCSLeadByte(*p2) && *(p2+1) != '\0') {
-            if (*p1 != *p2 || *(p1+1) != *(p2+1)) {
+                &&  IsDBCSLeadByte(*p2) && *(p2+1) != '\0')
+        {
+            if (*p1 != *p2 || *(p1+1) != *(p2+1))
+            {
                 return(FALSE);
             }
             p1 += 2;
             p2 += 2;
-        } else {
-            if (*p1 != *p2) {
+        }
+        else
+        {
+            if (*p1 != *p2)
+            {
                 return(FALSE);
             }
             p1++;
             p2++;
         }
-    } while ( (*p1 != '\0') && (*p2 != '\0'));
+    }
+    while ( (*p1 != '\0') && (*p2 != '\0'));
 
     return(TRUE);
 }
@@ -321,19 +359,24 @@ line_compare(LINE line1, LINE line2)
 BOOL
 line_link(LINE line1, LINE line2)
 {
-    if ( (line1 == NULL) || (line2 == NULL)) {
+    if ( (line1 == NULL) || (line2 == NULL))
+    {
         return(FALSE);
     }
 
-    if ( (line1->link != NULL) || (line2->link != NULL)) {
+    if ( (line1->link != NULL) || (line2->link != NULL))
+    {
         return(FALSE);
     }
 
-    if (line_compare(line1, line2)) {
+    if (line_compare(line1, line2))
+    {
         line1->link = line2;
         line2->link = line1;
         return(TRUE);
-    } else {
+    }
+    else
+    {
         return(FALSE);
     }
 }

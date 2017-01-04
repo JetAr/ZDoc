@@ -1,4 +1,4 @@
-//// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿//// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 //// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 //// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 //// PARTICULAR PURPOSE.
@@ -11,7 +11,7 @@
 CSampleDesktopWindow::CSampleDesktopWindow()
 {
     // Set member variables to zero or NULL defaults.
-    m_visible = FALSE; 
+    m_visible = FALSE;
     m_occlusion = DWORD(0.0);
 }
 
@@ -25,16 +25,16 @@ CSampleDesktopWindow::~CSampleDesktopWindow()
 }
 
 // <summary>
-// These functions are used to initialize and configure the main 
-// application window and message pumps. 
+// These functions are used to initialize and configure the main
+// application window and message pumps.
 // </summary>
-HRESULT 
+HRESULT
 CSampleDesktopWindow::Initialize(
-    _In_    RECT bounds, 
+    _In_    RECT bounds,
     _In_    std::wstring title
-    )
+)
 {
-    // Create device resources required to render content. 
+    // Create device resources required to render content.
     m_deviceResources = std::make_shared<DeviceResources>();
     if (!m_deviceResources)
     {
@@ -43,18 +43,18 @@ CSampleDesktopWindow::Initialize(
     CreateDeviceIndependentResources();
     CreateDeviceResources();
 
-    // Create main application window. 
+    // Create main application window.
     m_hWnd = __super::Create(nullptr, bounds, title.c_str());
     if (!m_hWnd)
     {
         return HRESULT_FROM_WIN32(GetLastError());
     }
 
-    // Initialize member variables with default values. 
-    m_visible = TRUE; 
+    // Initialize member variables with default values.
+    m_visible = TRUE;
     m_occlusion = DWORD(0.0);
 
-    // Enable mouse to act as pointing device for this application. 
+    // Enable mouse to act as pointing device for this application.
     if(!EnableMouseInPointer(TRUE))
     {
         return HRESULT_FROM_WIN32(GetLastError());
@@ -64,10 +64,10 @@ CSampleDesktopWindow::Initialize(
 }
 
 // <summary>
-// This method checks the current DPI against what the application has stored. 
-// If the DPI has changed, update DPI for D2D resources. 
+// This method checks the current DPI against what the application has stored.
+// If the DPI has changed, update DPI for D2D resources.
 // </summary>
-void 
+void
 CSampleDesktopWindow::SetNewDpi(_In_ float newPerMonitorDpi)
 {
     if (m_deviceResources && m_deviceResources->GetDpi() != newPerMonitorDpi)
@@ -76,8 +76,8 @@ CSampleDesktopWindow::SetNewDpi(_In_ float newPerMonitorDpi)
     }
 }
 
-// Main message loop for application.  
-HRESULT 
+// Main message loop for application.
+HRESULT
 CSampleDesktopWindow::Run()
 {
     HRESULT hr = S_OK;
@@ -96,20 +96,21 @@ CSampleDesktopWindow::Run()
 
         while (PeekMessage(&message, nullptr, 0, 0, PM_REMOVE))
         {
-			TranslateMessage(&message);
+            TranslateMessage(&message);
 
             DispatchMessage(&message);
         }
-    } while (message.message != WM_QUIT);
+    }
+    while (message.message != WM_QUIT);
 
     return hr;
 }
 
 // <summary>
-// This method is called in response to message handlers and 
-// as part of the main message loop. 
+// This method is called in response to message handlers and
+// as part of the main message loop.
 // </summary>
-HRESULT 
+HRESULT
 CSampleDesktopWindow::Render()
 {
     HRESULT hr = S_OK;
@@ -117,10 +118,10 @@ CSampleDesktopWindow::Render()
 
     d2dContext->BeginDraw();
 
-    // Draw window background. 
+    // Draw window background.
     d2dContext->Clear(D2D1::ColorF(0.8764F, 0.8764F, 0.8882F));
 
-    // Draw client area as implemented by any derived classes.  
+    // Draw client area as implemented by any derived classes.
     Draw();
 
     hr = d2dContext->EndDraw();
@@ -149,54 +150,54 @@ CSampleDesktopWindow::Render()
 // These functions will be called as messages are processed by message map
 // defined in the Desktop Window class.
 // </summary>
-LRESULT 
+LRESULT
 CSampleDesktopWindow::OnCreate(
-    _In_ UINT, 
-    _In_ WPARAM, 
-    _In_ LPARAM lParam, 
+    _In_ UINT,
+    _In_ WPARAM,
+    _In_ LPARAM lParam,
     _Out_ BOOL &bHandled
-    )
+)
 {
     auto cs = reinterpret_cast<CREATESTRUCT *>(lParam);
 
     auto monitor = MonitorFromWindow(m_hWnd, MONITOR_DEFAULTTONEAREST);
-	UINT dpix;
-	UINT dpiy;
-	if (FAILED(GetDpiForMonitor(monitor, MONITOR_DPI_TYPE::MDT_EFFECTIVE_DPI, &dpix, &dpiy)))
-	{
-		dpix = 96;
-		dpiy = 96;
-	}
-	auto windowDpi = static_cast<float>(dpix);
-	// Store a reference to the hWnd so DirectX can render to this surface.
-	m_deviceResources->SetWindow(m_hWnd, windowDpi);
+    UINT dpix;
+    UINT dpiy;
+    if (FAILED(GetDpiForMonitor(monitor, MONITOR_DPI_TYPE::MDT_EFFECTIVE_DPI, &dpix, &dpiy)))
+    {
+        dpix = 96;
+        dpiy = 96;
+    }
+    auto windowDpi = static_cast<float>(dpix);
+    // Store a reference to the hWnd so DirectX can render to this surface.
+    m_deviceResources->SetWindow(m_hWnd, windowDpi);
 
     // Set styles needed to avoid drawing over any child or sibling windows.
     cs->style |= ( WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN | WS_CLIPSIBLINGS );
 
-    // Set styles required to avoid overdraw. 
+    // Set styles required to avoid overdraw.
     cs->dwExStyle |= ( WS_EX_LAYERED | WS_EX_NOREDIRECTIONBITMAP );
 
-    // Apply selected styles. 
+    // Apply selected styles.
     SetWindowLong(GWL_STYLE, cs->style);
     SetWindowLong(GWL_EXSTYLE, cs->dwExStyle);
     ASSERT(SetWindowPos(nullptr, 0, 0, 0, 0,
-        SWP_FRAMECHANGED | SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER));
+                        SWP_FRAMECHANGED | SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER));
 
     bHandled = TRUE;
     return 0;
 }
 
 //
-// Destroying this window will also quit the application. 
+// Destroying this window will also quit the application.
 //
-LRESULT 
+LRESULT
 CSampleDesktopWindow::OnDestroy(
-    _In_ UINT, 
-    _In_ WPARAM, 
-    _In_ LPARAM, 
+    _In_ UINT,
+    _In_ WPARAM,
+    _In_ LPARAM,
     _Out_ BOOL &bHandled
-    )
+)
 {
     PostQuitMessage(0);
 
@@ -210,18 +211,18 @@ CSampleDesktopWindow::OnWindowPosChanged(
     _In_ WPARAM,
     _In_ LPARAM lparam,
     _Out_ BOOL &bHandled
-    )
+)
 {
-	RECT clientRect;
-	auto windowPos = reinterpret_cast<WINDOWPOS *>(lparam);
-	GetClientRect(&clientRect);
-	if (!(windowPos->flags & SWP_NOSIZE))
+    RECT clientRect;
+    auto windowPos = reinterpret_cast<WINDOWPOS *>(lparam);
+    GetClientRect(&clientRect);
+    if (!(windowPos->flags & SWP_NOSIZE))
     {
-		DeviceResources::Size size;
-		size.Width = static_cast<float>(clientRect.right - clientRect.left) / (m_deviceResources->GetDpi() / 96.0F);
-		size.Height = static_cast<float>(clientRect.bottom - clientRect.top) / (m_deviceResources->GetDpi() / 96.0F);
-		m_deviceResources->SetLogicalSize(size);
-		Render();
+        DeviceResources::Size size;
+        size.Width = static_cast<float>(clientRect.right - clientRect.left) / (m_deviceResources->GetDpi() / 96.0F);
+        size.Height = static_cast<float>(clientRect.bottom - clientRect.top) / (m_deviceResources->GetDpi() / 96.0F);
+        m_deviceResources->SetLogicalSize(size);
+        Render();
     }
 
     bHandled = TRUE;
@@ -234,7 +235,7 @@ CSampleDesktopWindow::OnDisplayChange(
     _In_ WPARAM,
     _In_ LPARAM,
     _Out_ BOOL &bHandled
-    )
+)
 {
     Render();
     OnDisplayChange();
@@ -244,11 +245,11 @@ CSampleDesktopWindow::OnDisplayChange(
 
 LRESULT
 CSampleDesktopWindow::OnGetMinMaxInfo(
-    _In_ UINT, 
-    _In_ WPARAM, 
-    _In_ LPARAM lparam, 
+    _In_ UINT,
+    _In_ WPARAM,
+    _In_ LPARAM lparam,
     _Out_ BOOL &bHandled
-    )
+)
 {
     auto minMaxInfo = reinterpret_cast<MINMAXINFO *>(lparam) ;
 
@@ -259,13 +260,13 @@ CSampleDesktopWindow::OnGetMinMaxInfo(
 }
 
 
-LRESULT 
+LRESULT
 CSampleDesktopWindow::OnActivate(
-    _In_ UINT, 
-    _In_ WPARAM wparam, 
-    _In_ LPARAM, 
+    _In_ UINT,
+    _In_ WPARAM wparam,
+    _In_ LPARAM,
     _Out_ BOOL &bHandled
-    )
+)
 {
     m_visible = !HIWORD(wparam);
 
@@ -273,13 +274,13 @@ CSampleDesktopWindow::OnActivate(
     return 0;
 }
 
-LRESULT 
+LRESULT
 CSampleDesktopWindow::OnPowerBroadcast(
-    _In_ UINT, 
-    _In_ WPARAM, 
-    _In_ LPARAM lparam, 
+    _In_ UINT,
+    _In_ WPARAM,
+    _In_ LPARAM lparam,
     _Out_ BOOL &bHandled
-    )
+)
 {
     if (lparam > 0)
     {
@@ -301,13 +302,13 @@ CSampleDesktopWindow::OnPowerBroadcast(
     return TRUE;
 }
 
-LRESULT 
+LRESULT
 CSampleDesktopWindow::OnOcclusion(
-    _In_ UINT, 
-    _In_ WPARAM, 
-    _In_ LPARAM, 
+    _In_ UINT,
+    _In_ WPARAM,
+    _In_ LPARAM,
     _Out_ BOOL &bHandled
-    )
+)
 {
     ASSERT(m_occlusion);
 
@@ -322,13 +323,13 @@ CSampleDesktopWindow::OnOcclusion(
     return 0;
 }
 
-LRESULT 
+LRESULT
 CSampleDesktopWindow::OnPointerDown(
-    _In_ UINT, 
-    _In_ WPARAM wparam, 
-    _In_ LPARAM lparam, 
+    _In_ UINT,
+    _In_ WPARAM wparam,
+    _In_ LPARAM lparam,
     _Out_ BOOL &bHandled
-    )
+)
 {
     auto x = GET_X_LPARAM(lparam);
     auto y = GET_Y_LPARAM(lparam);
@@ -343,46 +344,46 @@ CSampleDesktopWindow::OnPointerDown(
     auto localy = static_cast<float>(pt.y) / (m_deviceResources->GetDpi() / 96.0F);
 
     // Call handler implemented by derived class for WindowPosChanging message.
-	OnPointerDown(localx, localy, GET_POINTERID_WPARAM(wparam));
+    OnPointerDown(localx, localy, GET_POINTERID_WPARAM(wparam));
 
     bHandled = TRUE;
     return 0;
 }
 
 LRESULT
-	CSampleDesktopWindow::OnPointerUpdate(
-	_In_ UINT,
-	_In_ WPARAM wparam,
-	_In_ LPARAM lparam,
-	_Out_ BOOL &bHandled
-	)
+CSampleDesktopWindow::OnPointerUpdate(
+    _In_ UINT,
+    _In_ WPARAM wparam,
+    _In_ LPARAM lparam,
+    _Out_ BOOL &bHandled
+)
 {
-	auto x = GET_X_LPARAM(lparam);
-	auto y = GET_Y_LPARAM(lparam);
+    auto x = GET_X_LPARAM(lparam);
+    auto y = GET_Y_LPARAM(lparam);
 
-	POINT pt;
-	pt.x = x;
-	pt.y = y;
+    POINT pt;
+    pt.x = x;
+    pt.y = y;
 
-	ScreenToClient(&pt);
+    ScreenToClient(&pt);
 
-	auto localx = static_cast<float>(pt.x) / (m_deviceResources->GetDpi() / 96.0F);
-	auto localy = static_cast<float>(pt.y) / (m_deviceResources->GetDpi() / 96.0F);
+    auto localx = static_cast<float>(pt.x) / (m_deviceResources->GetDpi() / 96.0F);
+    auto localy = static_cast<float>(pt.y) / (m_deviceResources->GetDpi() / 96.0F);
 
-	// Call handler implemented by derived class for WindowPosChanging message.
-	OnPointerUpdate(localx, localy, GET_POINTERID_WPARAM(wparam));
+    // Call handler implemented by derived class for WindowPosChanging message.
+    OnPointerUpdate(localx, localy, GET_POINTERID_WPARAM(wparam));
 
-	bHandled = TRUE;
-	return 0;
+    bHandled = TRUE;
+    return 0;
 }
 
-LRESULT 
+LRESULT
 CSampleDesktopWindow::OnPointerUp(
-    _In_ UINT, 
-    _In_ WPARAM wparam, 
-    _In_ LPARAM lparam, 
+    _In_ UINT,
+    _In_ WPARAM wparam,
+    _In_ LPARAM lparam,
     _Out_ BOOL &bHandled
-    )
+)
 {
     auto x = GET_X_LPARAM(lparam);
     auto y = GET_Y_LPARAM(lparam);
@@ -396,67 +397,67 @@ CSampleDesktopWindow::OnPointerUp(
     auto localX = static_cast<float>(pt.x) / (m_deviceResources->GetDpi() / 96.0F);
     auto localY = static_cast<float>(pt.y) / (m_deviceResources->GetDpi() / 96.0F);
 
-    // Call handler implemented by derived class for WindowPosChanging message. 
-	OnPointerUp(localX, localY, GET_POINTERID_WPARAM(wparam));
+    // Call handler implemented by derived class for WindowPosChanging message.
+    OnPointerUp(localX, localY, GET_POINTERID_WPARAM(wparam));
 
     bHandled = TRUE;
     return 0;
 }
 
 LRESULT CSampleDesktopWindow::OnPointerWheel(
-	_In_ UINT,
-	_In_ WPARAM wparam,
-	_In_ LPARAM lparam,
-	_Out_ BOOL &bHandled
-	)
+    _In_ UINT,
+    _In_ WPARAM wparam,
+    _In_ LPARAM lparam,
+    _Out_ BOOL &bHandled
+)
 {
-	// Call handler implemented by derived class for PointerWheel message. 
-	OnPointerWheel(GET_POINTERID_WPARAM(wparam));
+    // Call handler implemented by derived class for PointerWheel message.
+    OnPointerWheel(GET_POINTERID_WPARAM(wparam));
 
-	bHandled = TRUE;
-	return 0;
+    bHandled = TRUE;
+    return 0;
 }
 
 LRESULT CSampleDesktopWindow::OnPointerHWheel(
-	_In_ UINT,
-	_In_ WPARAM wparam,
-	_In_ LPARAM lparam,
-	_Out_ BOOL &bHandled
-	)
+    _In_ UINT,
+    _In_ WPARAM wparam,
+    _In_ LPARAM lparam,
+    _Out_ BOOL &bHandled
+)
 {
-	// Call handler implemented by derived class for PointerHWheel message. 
-	OnPointerHWheel(GET_POINTERID_WPARAM(wparam));
+    // Call handler implemented by derived class for PointerHWheel message.
+    OnPointerHWheel(GET_POINTERID_WPARAM(wparam));
 
-	bHandled = TRUE;
-	return 0;
+    bHandled = TRUE;
+    return 0;
 }
 
 
 LRESULT CSampleDesktopWindow::OnPointerCaptureChange(_In_ UINT, _In_ WPARAM wparam, _In_ LPARAM lparam, _Out_ BOOL &bHandled)
 {
-	// Call handler implemented by derived class for PointerCaptureChange message. 
-	OnPointerCaptureChange(GET_POINTERID_WPARAM(wparam));
-	bHandled = TRUE;
-	return 0;
+    // Call handler implemented by derived class for PointerCaptureChange message.
+    OnPointerCaptureChange(GET_POINTERID_WPARAM(wparam));
+    bHandled = TRUE;
+    return 0;
 }
 
 LRESULT CSampleDesktopWindow::OnTimerUpdate(_In_ UINT, _In_ WPARAM wparam, _In_ LPARAM lparam, _Out_ BOOL &bHandled)
 {
-	// Call handler implemented by derived class for TimerUpdate message.
-	OnTimerUpdate(wparam);
-	bHandled = TRUE;
-	return 0;
+    // Call handler implemented by derived class for TimerUpdate message.
+    OnTimerUpdate(wparam);
+    bHandled = TRUE;
+    return 0;
 }
 
-LRESULT 
+LRESULT
 CSampleDesktopWindow::OnEnterSizeMove(
-    _In_ UINT, 
-    _In_ WPARAM, 
-    _In_ LPARAM, 
+    _In_ UINT,
+    _In_ WPARAM,
+    _In_ LPARAM,
     _Out_ BOOL &bHandled
-    )
+)
 {
-    // Call handler implemented by derived class for WindowPosChanging message. 
+    // Call handler implemented by derived class for WindowPosChanging message.
     OnEnterSizeMove();
 
     bHandled = TRUE;
@@ -469,7 +470,7 @@ CSampleDesktopWindow::OnExitSizeMove(
     _In_ WPARAM,
     _In_ LPARAM,
     _Out_ BOOL &bHandled
-    )
+)
 {
     // Call handler implemented by derived class for WindowPosChanging message.
     OnExitSizeMove();
@@ -484,12 +485,12 @@ CSampleDesktopWindow::OnDpiChange(
     _In_ WPARAM wparam,
     _In_ LPARAM lparam,
     _Out_ BOOL &bHandled
-    )
+)
 {
     auto lprcNewScale = reinterpret_cast<LPRECT>(lparam);
 
-	// Call handler implemented by derived class for WM_DPICHANGED message.
-	OnDpiChange(LOWORD(wparam), lprcNewScale);
+    // Call handler implemented by derived class for WM_DPICHANGED message.
+    OnDpiChange(LOWORD(wparam), lprcNewScale);
 
     bHandled = TRUE;
     return 0;
@@ -497,32 +498,32 @@ CSampleDesktopWindow::OnDpiChange(
 
 RECT
 CSampleDesktopWindow::CalcWindowRectNewDpi(
-	_In_    RECT oldRect,
-	_In_    float oldDpi,
-	_In_    float newDpi
-	)
+    _In_    RECT oldRect,
+    _In_    float oldDpi,
+    _In_    float newDpi
+)
 {
-	float oldWidth = static_cast<float>(oldRect.right - oldRect.left);
-	float oldHeight = static_cast<float>(oldRect.bottom - oldRect.top);
+    float oldWidth = static_cast<float>(oldRect.right - oldRect.left);
+    float oldHeight = static_cast<float>(oldRect.bottom - oldRect.top);
 
-	int newWidth = static_cast<int>(oldWidth * newDpi / oldDpi);
-	int newHeight = static_cast<int>(oldHeight * newDpi / oldDpi);
+    int newWidth = static_cast<int>(oldWidth * newDpi / oldDpi);
+    int newHeight = static_cast<int>(oldHeight * newDpi / oldDpi);
 
-	RECT newRect = { oldRect.left, oldRect.top, newWidth, oldRect.top + newHeight };
-	return newRect;
+    RECT newRect = { oldRect.left, oldRect.top, newWidth, oldRect.top + newHeight };
+    return newRect;
 }
 
 float
 CSampleDesktopWindow::GetDpiForWindow()
 {
-	auto monitor = MonitorFromWindow(m_hWnd, MONITOR_DEFAULTTONEAREST);
+    auto monitor = MonitorFromWindow(m_hWnd, MONITOR_DEFAULTTONEAREST);
 
-	UINT dpix;
-	UINT dpiy;
-	if (FAILED(GetDpiForMonitor(monitor, MONITOR_DPI_TYPE::MDT_EFFECTIVE_DPI, &dpix, &dpiy)))
-	{
-		dpix = 96;
-		dpiy = 96;
-	}
-	return static_cast<float>(dpix) ;
+    UINT dpix;
+    UINT dpiy;
+    if (FAILED(GetDpiForMonitor(monitor, MONITOR_DPI_TYPE::MDT_EFFECTIVE_DPI, &dpix, &dpiy)))
+    {
+        dpix = 96;
+        dpiy = 96;
+    }
+    return static_cast<float>(dpix) ;
 }

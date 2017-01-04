@@ -1,4 +1,4 @@
-//*****************************************************************************
+﻿//*****************************************************************************
 //
 // Microsoft Windows Media
 // Copyright (C) Microsoft Corporation. All rights reserved.
@@ -39,13 +39,13 @@ int __cdecl _tmain( int argc, __in_ecount(argc) LPTSTR argv[] )
     // Initialize COM
     //
     hr = CoInitialize( NULL );
-	if( FAILED( hr ) )
-	{
+    if( FAILED( hr ) )
+    {
         printf( "CoInitialize() failed (hr=%#X).", hr );
-		return( -1 );
-	}
+        return( -1 );
+    }
 
-    do 
+    do
     {
         //
         // Use CReader to read from the input file
@@ -79,8 +79,8 @@ int __cdecl _tmain( int argc, __in_ecount(argc) LPTSTR argv[] )
 
     SAFE_RELEASE( pReader );
 
-	CoUninitialize();
-    
+    CoUninitialize();
+
     return( 0 );
 }
 
@@ -102,8 +102,8 @@ void Usage()
 HRESULT CommandLineParser( int argc, __in_ecount(argc) LPTSTR argv[], __out LPTSTR* ptszInput )
 {
     if( ( argc < 1 )        ||
-        ( NULL == argv )    ||
-        ( NULL == ptszInput ) )
+            ( NULL == argv )    ||
+            ( NULL == ptszInput ) )
     {
         return( E_INVALIDARG );
     }
@@ -111,7 +111,7 @@ HRESULT CommandLineParser( int argc, __in_ecount(argc) LPTSTR argv[], __out LPTS
     HRESULT hr          = S_OK;
     TCHAR*  ptszMode    = NULL;
 
-    *ptszInput = NULL;    
+    *ptszInput = NULL;
 
     for( int i = 1; i < argc; i++ )
     {

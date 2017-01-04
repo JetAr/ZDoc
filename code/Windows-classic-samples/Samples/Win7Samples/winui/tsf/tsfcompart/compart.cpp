@@ -1,4 +1,4 @@
-/**************************************************************************
+﻿/**************************************************************************
    THIS CODE AND INFORMATION IS PROVIDED 'AS IS' WITHOUT WARRANTY OF
    ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
    THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -11,7 +11,7 @@
 
    File:          Compart.cpp
 
-   Description:   
+   Description:
 
 **************************************************************************/
 
@@ -29,11 +29,11 @@
 	function prototypes
 **************************************************************************/
 
-INT_PTR CALLBACK DialogProc(HWND hWnd, 
-                            UINT uMessage, 
-                            WPARAM wParam, 
+INT_PTR CALLBACK DialogProc(HWND hWnd,
+                            UINT uMessage,
+                            WPARAM wParam,
                             LPARAM lParam);
-HRESULT CALLBACK MonitorCallback(   const GUID* pguidCompartment, 
+HRESULT CALLBACK MonitorCallback(   const GUID* pguidCompartment,
                                     BOOL fStatus,
                                     LPARAM lParam);
 
@@ -53,9 +53,9 @@ int WINAPI WinMain( HINSTANCE hInstance,
                     int nCmdShow)
 {
     CoInitialize(NULL);
-    
+
     DialogBox(hInstance, MAKEINTRESOURCE(IDD_DIALOG), NULL, DialogProc);
-    
+
     CoUninitialize();
 
     return 0;
@@ -67,9 +67,9 @@ int WINAPI WinMain( HINSTANCE hInstance,
 
 **************************************************************************/
 
-INT_PTR CALLBACK DialogProc(    HWND hWnd, 
-                                UINT uMessage, 
-                                WPARAM wParam, 
+INT_PTR CALLBACK DialogProc(    HWND hWnd,
+                                UINT uMessage,
+                                WPARAM wParam,
                                 LPARAM lParam)
 {
     static CCompartmentMonitor *s_pCompartmentMonitor;
@@ -81,7 +81,7 @@ INT_PTR CALLBACK DialogProc(    HWND hWnd,
         if(s_pCompartmentMonitor)
         {
             HRESULT hr;
-            
+
             hr = s_pCompartmentMonitor->Initialize(&GUID_COMPARTMENT_SPEECH_OPENCLOSE, MonitorCallback, (LPARAM)hWnd);
             if(FAILED(hr))
             {
@@ -99,7 +99,7 @@ INT_PTR CALLBACK DialogProc(    HWND hWnd,
             }
         }
         break;
-    
+
     case WM_COMMAND:
         switch(GET_WM_COMMAND_ID(wParam, lParam))
         {
@@ -108,7 +108,7 @@ INT_PTR CALLBACK DialogProc(    HWND hWnd,
             break;
         }
         break;
-    
+
     case WM_CLOSE:
         EndDialog(hWnd, 0);
         break;
@@ -132,12 +132,12 @@ INT_PTR CALLBACK DialogProc(    HWND hWnd,
 
 **************************************************************************/
 
-HRESULT CALLBACK MonitorCallback(   const GUID* pguidCompartment, 
-                                    BOOL fStatus, 
+HRESULT CALLBACK MonitorCallback(   const GUID* pguidCompartment,
+                                    BOOL fStatus,
                                     LPARAM lParam)
 {
     TCHAR   szSpeechStatus[MAX_PATH];
-    
+
     //get the status of the speech text service
     if(fStatus)
     {
@@ -147,9 +147,9 @@ HRESULT CALLBACK MonitorCallback(   const GUID* pguidCompartment,
     {
         _tcscpy_s(szSpeechStatus, ARRAYSIZE(szSpeechStatus), TEXT("Speech Is Inactive"));
     }
-    
+
     SetDlgItemText((HWND)lParam, IDC_TEXT, szSpeechStatus);
-    
+
     return S_OK;
 }
 

@@ -1,4 +1,4 @@
-#include "CHWMFT.h"
+﻿#include "CHWMFT.h"
 
 // Helper Macros
 #define SAFERELEASE(x) \
@@ -24,7 +24,8 @@ HRESULT CHWMFT::GetParameters(
 
         (*pdwFlags) = 0;
         (*pdwQueue) = m_dwDecodeWorkQueueID;
-    }while(false);
+    }
+    while(false);
 
     return hr;
 }
@@ -39,7 +40,7 @@ HRESULT CHWMFT::Invoke(
     ** the result and take appropriate
     ** action
     *********************************/
-    
+
     HRESULT hr = S_OK;
 
     do
@@ -49,7 +50,8 @@ HRESULT CHWMFT::Invoke(
             hr = E_POINTER;
             break;
         }
-    }while(false);
+    }
+    while(false);
 
     return hr;
 }

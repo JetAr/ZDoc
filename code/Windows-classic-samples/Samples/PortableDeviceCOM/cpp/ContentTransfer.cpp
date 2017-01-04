@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -76,7 +76,7 @@ HRESULT GetStringValue(
 HRESULT StreamCopy(
     _In_  IStream*    destStream,
     _In_  IStream*    sourceStream,
-          DWORD       transferSizeBytes,
+    DWORD       transferSizeBytes,
     _Out_ DWORD*      bytesWrittenOut)
 {
     *bytesWrittenOut = 0;
@@ -127,7 +127,8 @@ HRESULT StreamCopy(
                 wprintf(L"Read %u bytes from the source stream...Wrote %u bytes to the destination stream...\n", bytesRead, bytesWritten);
             }
 
-        } while (SUCCEEDED(hr) && (bytesRead > 0));
+        }
+        while (SUCCEEDED(hr) && (bytesRead > 0));
 
         // If we are successful, set bytesWrittenOut before exiting.
         if (SUCCEEDED(hr))
@@ -348,8 +349,8 @@ void DeleteContentFromDevice(
                 {
                     // Attempt to delete the object from the device
                     hr = content->Delete(PORTABLE_DEVICE_DELETE_NO_RECURSION,   // Deleting with no recursion
-                                            objectsToDelete.Get(),                 // Object(s) to delete
-                                            nullptr);                              // Object(s) that failed to delete (we are only deleting 1, so we can pass nullptr here)
+                                         objectsToDelete.Get(),                 // Object(s) to delete
+                                         nullptr);                              // Object(s) that failed to delete (we are only deleting 1, so we can pass nullptr here)
                     if (SUCCEEDED(hr))
                     {
                         // An S_OK return lets the caller know that the deletion was successful
@@ -469,8 +470,8 @@ void MoveContentAlreadyOnDevice(
                 {
                     // Attempt to move the object on the device
                     hr = content->Move(objectsToMove.Get(),       // Object(s) to move
-                                        destinationFolderObjectID, // Folder to move to
-                                        nullptr);                  // Object(s) that failed to delete (we are only moving 1, so we can pass nullptr here)
+                                       destinationFolderObjectID, // Folder to move to
+                                       nullptr);                  // Object(s) that failed to delete (we are only moving 1, so we can pass nullptr here)
                     if (SUCCEEDED(hr))
                     {
                         // An S_OK return lets the caller know that the deletion was successful
@@ -697,9 +698,9 @@ HRESULT GetRequiredPropertiesForContentType(
         {
             // Fill out required properties for ALL content types
             hr = GetRequiredPropertiesForAllContentTypes(objectPropertiesTemp.Get(),
-                                                         parentObjectID,
-                                                         filePath,
-                                                         fileStream);
+                    parentObjectID,
+                    filePath,
+                    fileStream);
             if (SUCCEEDED(hr))
             {
                 // Fill out required properties for specific content types.
@@ -814,10 +815,10 @@ void TransferContentToDevice(
             // Get the required properties needed to properly describe the data being
             // transferred to the device.
             hr = GetRequiredPropertiesForContentType(contentType,              // Content type of the data
-                                                     selection,                // Parent to transfer the data under
-                                                     filePath,                 // Full file path to the data file
-                                                     fileStream.Get(),         // Open IStream that contains the data
-                                                     &finalObjectProperties);  // Returned properties describing the data
+                    selection,                // Parent to transfer the data under
+                    filePath,                 // Full file path to the data file
+                    fileStream.Get(),         // Open IStream that contains the data
+                    &finalObjectProperties);  // Returned properties describing the data
             if (FAILED(hr))
             {
                 wprintf(L"! Failed to get required properties needed to transfer a file to the device, hr = 0x%lx\n", hr);
@@ -835,9 +836,9 @@ void TransferContentToDevice(
     if (SUCCEEDED(hr))
     {
         hr = content->CreateObjectWithPropertiesAndData(finalObjectProperties.Get(),    // Properties describing the object data
-                                                        &tempStream,                    // Returned object data stream (to transfer the data to)
-                                                        &optimalTransferSizeBytes,      // Returned optimal buffer size to use during transfer
-                                                        nullptr);
+                &tempStream,                    // Returned object data stream (to transfer the data to)
+                &optimalTransferSizeBytes,      // Returned optimal buffer size to use during transfer
+                nullptr);
 
         // Once we have a the IStream returned from CreateObjectWithPropertiesAndData,
         // QI for IPortableDeviceDataStream so we can use the additional methods
@@ -1271,7 +1272,7 @@ void TransferContactToDevice(
     if (SUCCEEDED(hr))
     {
         hr = GetRequiredPropertiesForPropertiesOnlyContact(selection,                // Parent to transfer the data under
-                                                           &finalObjectProperties);  // Returned properties describing the data
+                &finalObjectProperties);  // Returned properties describing the data
         if (FAILED(hr))
         {
             wprintf(L"! Failed to get required properties needed to transfer an image file to the device, hr = 0x%lx\n", hr);
@@ -1284,7 +1285,7 @@ void TransferContactToDevice(
     {
         PWSTR newlyCreatedObject = nullptr;
         hr = content->CreateObjectWithPropertiesOnly(finalObjectProperties.Get(),   // Properties describing the object data
-                                                     &newlyCreatedObject);
+                &newlyCreatedObject);
         if (SUCCEEDED(hr))
         {
             wprintf(L"The contact was transferred to the device.\nThe newly created object's ID is '%ws'\n", newlyCreatedObject);
@@ -1356,7 +1357,7 @@ void CreateFolderOnDevice(
     {
         PWSTR newlyCreatedObject = nullptr;
         hr = content->CreateObjectWithPropertiesOnly(finalObjectProperties.Get(), // Properties describing the object data
-                                                     &newlyCreatedObject);
+                &newlyCreatedObject);
         if (SUCCEEDED(hr))
         {
             wprintf(L"The folder was created on the device.\nThe newly created object's ID is '%ws'\n", newlyCreatedObject);
@@ -1450,7 +1451,7 @@ HRESULT GetPropertiesForUpdateData(
             *objectProperties = objectPropertiesTemp.Detach();
         }
     }
-    
+
     return hr;
 }
 
@@ -1485,7 +1486,7 @@ void UpdateContentOnDevice(
     if (SUCCEEDED(hr))
     {
         ComPtr<IPortableDeviceContent> content;
-    
+
         hr = device->Content(&content);
         if (FAILED(hr))
         {
@@ -1588,9 +1589,9 @@ void UpdateContentOnDevice(
     if (SUCCEEDED(hr))
     {
         hr = content2->UpdateObjectWithPropertiesAndData(selection,
-                                                         finalObjectProperties.Get(),   // Properties describing the object data
-                                                         &tempStream,                   // Returned object data stream (to transfer the data to)
-                                                         &optimalTransferSizeBytes);    // Returned optimal buffer size to use during transfer
+                finalObjectProperties.Get(),   // Properties describing the object data
+                &tempStream,                   // Returned object data stream (to transfer the data to)
+                &optimalTransferSizeBytes);    // Returned optimal buffer size to use during transfer
 
         // Once we have a the IStream returned from UpdateObjectWithPropertiesAndData,
         // QI for IPortableDeviceDataStream so we can use the additional methods

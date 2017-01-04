@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -28,11 +28,11 @@ public:
         IUIAnimationTransitionLibrary *pTransitionLibrary,
         UINT uThumbCount,
         CThumbnail *thumbs
-        );
+    );
 
     HRESULT Resize(
         D2D1_SIZE_F sizeClient
-        );
+    );
 
     HRESULT Arrange();
 
@@ -42,7 +42,7 @@ public:
 
     HRESULT Wave(
         UI_ANIMATION_SLOPE slope
-        );
+    );
 
 protected:
 
@@ -56,11 +56,11 @@ protected:
         UI_ANIMATION_SECONDS secondsLongestAcceptableDelay,
         UINT slideUpIndex,
         UINT slideDownIndex
-        );
+    );
 
     HRESULT ScheduleStoryboard(
         IUIAnimationStoryboard *pStoryboard
-        );
+    );
 
     // Animation objects
 
@@ -76,9 +76,9 @@ protected:
     // Current selection
 
     UINT m_iThumbSelected;
-    
+
     // Layout values
-    
+
     DOUBLE m_centerX;
     DOUBLE m_rowY;
 };

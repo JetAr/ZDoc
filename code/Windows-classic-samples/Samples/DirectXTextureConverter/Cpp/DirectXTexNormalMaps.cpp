@@ -1,6 +1,6 @@
-//-------------------------------------------------------------------------------------
+﻿//-------------------------------------------------------------------------------------
 // DirectXTexNormalMaps.cpp
-//  
+//
 // DirectX Texture Library - Normal map operations
 //
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
@@ -29,18 +29,22 @@ static inline float _EvaluateColor( _In_ FXMVECTOR val, _In_ DWORD flags )
     switch( flags & 0xf )
     {
     case 0:
-    case CNMAP_CHANNEL_RED:     return XMVectorGetX( val );
-    case CNMAP_CHANNEL_GREEN:   return XMVectorGetY( val );
-    case CNMAP_CHANNEL_BLUE:    return XMVectorGetZ( val );
-    case CNMAP_CHANNEL_ALPHA:   return XMVectorGetW( val );
+    case CNMAP_CHANNEL_RED:
+        return XMVectorGetX( val );
+    case CNMAP_CHANNEL_GREEN:
+        return XMVectorGetY( val );
+    case CNMAP_CHANNEL_BLUE:
+        return XMVectorGetZ( val );
+    case CNMAP_CHANNEL_ALPHA:
+        return XMVectorGetW( val );
 
     case CNMAP_CHANNEL_LUMINANCE:
-        {
-            XMVECTOR v = XMVectorMultiply( val, lScale );
-            XMStoreFloat4A( &f, v );
-            return f.x + f.y + f.z;
-        }
-        break;
+    {
+        XMVECTOR v = XMVectorMultiply( val, lScale );
+        XMStoreFloat4A( &f, v );
+        return f.x + f.y + f.z;
+    }
+    break;
 
     default:
         assert(false);
@@ -192,15 +196,23 @@ static HRESULT _ComputeNMap( _In_ const Image& srcImage, _In_ DWORD flags, _In_ 
                 float delta = 0.f;
                 float c = val1[x+1];
 
-                float t = val0[x] - c;  if ( t > 0.f ) delta += t;
-                t = val0[x+1]   - c;    if ( t > 0.f ) delta += t;
-                t = val0[x+2]   - c;    if ( t > 0.f ) delta += t;
-                t = val1[x]     - c;    if ( t > 0.f ) delta += t;
+                float t = val0[x] - c;
+                if ( t > 0.f ) delta += t;
+                t = val0[x+1]   - c;
+                if ( t > 0.f ) delta += t;
+                t = val0[x+2]   - c;
+                if ( t > 0.f ) delta += t;
+                t = val1[x]     - c;
+                if ( t > 0.f ) delta += t;
                 // Skip current pixel
-                t = val1[x+2]   - c;    if ( t > 0.f ) delta += t;
-                t = val2[x]     - c;    if ( t > 0.f ) delta += t;
-                t = val2[x+1]   - c;    if ( t > 0.f ) delta += t;
-                t = val2[x+2]   - c;    if ( t > 0.f ) delta += t;
+                t = val1[x+2]   - c;
+                if ( t > 0.f ) delta += t;
+                t = val2[x]     - c;
+                if ( t > 0.f ) delta += t;
+                t = val2[x+1]   - c;
+                if ( t > 0.f ) delta += t;
+                t = val2[x+2]   - c;
+                if ( t > 0.f ) delta += t;
 
                 // Average delta (divide by 8, scale by amplitude factor)
                 delta *= 0.125f * amplitude;
@@ -216,7 +228,7 @@ static HRESULT _ComputeNMap( _In_ const Image& srcImage, _In_ DWORD flags, _In_ 
             if ( convFlags & CONVF_UNORM )
             {
                 // 0.5f*normal + 0.5f -or- invert sign case: -0.5f*normal + 0.5f
-                XMVECTOR n1 = XMVectorMultiplyAdd( (flags & CNMAP_INVERT_SIGN) ? g_XMNegativeOneHalf : g_XMOneHalf, normal, g_XMOneHalf ); 
+                XMVECTOR n1 = XMVectorMultiplyAdd( (flags & CNMAP_INVERT_SIGN) ? g_XMNegativeOneHalf : g_XMOneHalf, normal, g_XMOneHalf );
                 *dptr++ = XMVectorSetW( n1, alpha );
             }
             else if ( flags & CNMAP_INVERT_SIGN )
@@ -249,7 +261,7 @@ static HRESULT _ComputeNMap( _In_ const Image& srcImage, _In_ DWORD flags, _In_ 
 //=====================================================================================
 // Entry points
 //=====================================================================================
-        
+
 //-------------------------------------------------------------------------------------
 // Generates a normal map from a height-map
 //-------------------------------------------------------------------------------------

@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -28,10 +28,10 @@ DWORD EnumerateSubscriptions()
     while( bRetVal )
     {
 
-        bRetVal = EcEnumNextSubscription( hEnumerator, 
-                                                         (DWORD) buffer.size(),
-                                                         (LPWSTR) &buffer[0], 
-                                                         &dwBufferSizeUsed);
+        bRetVal = EcEnumNextSubscription( hEnumerator,
+                                          (DWORD) buffer.size(),
+                                          (LPWSTR) &buffer[0],
+                                          &dwBufferSizeUsed);
 
         dwError = GetLastError();
 
@@ -41,26 +41,26 @@ DWORD EnumerateSubscriptions()
             buffer.resize(dwBufferSizeUsed);
 
             bRetVal = EcEnumNextSubscription( hEnumerator,
-                                                            (DWORD) buffer.size(),
-                                                            (LPWSTR) &buffer[0],
-                                                            &dwBufferSizeUsed);
+                                              (DWORD) buffer.size(),
+                                              (LPWSTR) &buffer[0],
+                                              &dwBufferSizeUsed);
             dwError = GetLastError();
         }
 
 
         if( !bRetVal && ERROR_NO_MORE_ITEMS == dwError)
-        { 
+        {
             dwError = ERROR_SUCCESS;
             break;
         }
 
-	 if (bRetVal && ERROR_SUCCESS != dwError)
-	 {
-	 	break;
-	 }	
-	 
-         wprintf(L"%s\n", (LPCWSTR) &buffer[0]);
-            
+        if (bRetVal && ERROR_SUCCESS != dwError)
+        {
+            break;
+        }
+
+        wprintf(L"%s\n", (LPCWSTR) &buffer[0]);
+
     }
 
     EcClose(hEnumerator);

@@ -1,4 +1,4 @@
-/* **************************************************************************
+﻿/* **************************************************************************
 
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
@@ -28,7 +28,8 @@ CAzAppGroup::~CAzAppGroup(void)
 {
 }
 
-CAzAppGroup::CAzAppGroup(IAzApplicationGroup *pNative,bool pisNew):CAzBase<IAzApplicationGroup>(pNative,pisNew){
+CAzAppGroup::CAzAppGroup(IAzApplicationGroup *pNative,bool pisNew):CAzBase<IAzApplicationGroup>(pNative,pisNew)
+{
 }
 
 
@@ -43,14 +44,15 @@ Arguments: Source App Group
 
 Return Value:
 
-    Returns success, appropriate failure value of the get/set methods done within 
+    Returns success, appropriate failure value of the get/set methods done within
     this method
 
 --*/
 
-HRESULT CAzAppGroup::CopyVersion2Constructs(CAzAppGroup &srcAppGroup) {
+HRESULT CAzAppGroup::CopyVersion2Constructs(CAzAppGroup &srcAppGroup)
+{
 
-    static unsigned int rgProperties[]={AZ_PROP_GROUP_BIZRULE,AZ_PROP_GROUP_BIZRULE_LANGUAGE,AZ_PROP_GROUP_BIZRULE_IMPORTED_PATH};
+    static unsigned int rgProperties[]= {AZ_PROP_GROUP_BIZRULE,AZ_PROP_GROUP_BIZRULE_LANGUAGE,AZ_PROP_GROUP_BIZRULE_IMPORTED_PATH};
 
     CComVariant cVVar;
 
@@ -59,13 +61,15 @@ HRESULT CAzAppGroup::CopyVersion2Constructs(CAzAppGroup &srcAppGroup) {
     if (!CAzGlobalOptions::m_bVersionTwo)
         goto lDone;
 
-    for (long i=0;i<3;i++) {
+    for (long i=0; i<3; i++)
+    {
 
         hr=srcAppGroup.m_native->GetProperty(rgProperties[i],CComVariant(), &cVVar);
 
         CAzLogging::Log(hr,_TEXT("Getting IAzApplicationGroup Property ID:"),COLE2T(srcAppGroup.getName()),rgProperties[i]);
 
-        if (SUCCEEDED(hr) && (SysStringByteLen(cVVar.bstrVal))!=0) {
+        if (SUCCEEDED(hr) && (SysStringByteLen(cVVar.bstrVal))!=0)
+        {
 
             hr=m_native->SetProperty(rgProperties[i],cVVar,CComVariant());
 
@@ -91,12 +95,13 @@ Arguments: Source App Group
 
 Return Value:
 
-    Returns success, appropriate failure value of the get/set methods done within 
+    Returns success, appropriate failure value of the get/set methods done within
     this method
 
 --*/
 
-HRESULT CAzAppGroup::Copy(CAzAppGroup &srcAppGroup) {
+HRESULT CAzAppGroup::Copy(CAzAppGroup &srcAppGroup)
+{
 
     CAzLogging::Entering(_TEXT("Copy"));
 
@@ -111,7 +116,8 @@ HRESULT CAzAppGroup::Copy(CAzAppGroup &srcAppGroup) {
 
     CAzLogging::Log(hr,_TEXT("Getting Description for App Group"),COLE2T(srcAppGroup.getName()));
 
-    if (SUCCEEDED(hr)) {
+    if (SUCCEEDED(hr))
+    {
 
         hr=m_native->put_Description(bstrData);
 
@@ -124,7 +130,8 @@ HRESULT CAzAppGroup::Copy(CAzAppGroup &srcAppGroup) {
 
     CAzLogging::Log(hr,_TEXT("Getting Type for App Group"),COLE2T(srcAppGroup.getName()));
 
-    if (SUCCEEDED(hr)) {
+    if (SUCCEEDED(hr))
+    {
 
         hr=m_native->put_Type(lType);
 
@@ -140,7 +147,8 @@ HRESULT CAzAppGroup::Copy(CAzAppGroup &srcAppGroup) {
     // THe length check is reqd below as adding an empty string
     // LDAP Query returns an error
 
-    if (SUCCEEDED(hr) && bstrData.Length()!=0) {
+    if (SUCCEEDED(hr) && bstrData.Length()!=0)
+    {
 
         hr=m_native->put_LdapQuery(bstrData);
 
@@ -149,20 +157,23 @@ HRESULT CAzAppGroup::Copy(CAzAppGroup &srcAppGroup) {
         bstrData.Empty();
     }
 
-    if (CAzGlobalOptions::m_bVersionTwo) {
+    if (CAzGlobalOptions::m_bVersionTwo)
+    {
 
-            hr = CopyVersion2Constructs(srcAppGroup);
+        hr = CopyVersion2Constructs(srcAppGroup);
 
-            CAzLogging::Log(hr,_TEXT("Copying bizrule properties for App Group"),COLE2T(srcAppGroup.getName()));
+        CAzLogging::Log(hr,_TEXT("Copying bizrule properties for App Group"),COLE2T(srcAppGroup.getName()));
     }
 
-    if (!CAzGlobalOptions::m_bIgnoreMembers) {
+    if (!CAzGlobalOptions::m_bIgnoreMembers)
+    {
 
         hr=srcAppGroup.m_native->get_Members(&cVVar);
 
         CAzLogging::Log(hr,_TEXT("Getting Members for App Group"),COLE2T(srcAppGroup.getName()));
 
-        if (SUCCEEDED(hr)) {
+        if (SUCCEEDED(hr))
+        {
 
             hr=InitializeUsingSafeArray(cVVar,&IAzApplicationGroup::AddMember);
 
@@ -175,7 +186,8 @@ HRESULT CAzAppGroup::Copy(CAzAppGroup &srcAppGroup) {
 
         CAzLogging::Log(hr,_TEXT("Getting Non Members for App Group"),COLE2T(srcAppGroup.getName()));
 
-        if (SUCCEEDED(hr)) {
+        if (SUCCEEDED(hr))
+        {
 
             hr=InitializeUsingSafeArray(cVVar,&IAzApplicationGroup::AddNonMember );
 
@@ -205,12 +217,13 @@ Arguments: Source App Group
 
 Return Value:
 
-    Returns success, appropriate failure value of the get/set methods done within 
+    Returns success, appropriate failure value of the get/set methods done within
     this method
 
 --*/
 
-HRESULT CAzAppGroup::CopyLinks(CAzAppGroup &srcAppGroup) {
+HRESULT CAzAppGroup::CopyLinks(CAzAppGroup &srcAppGroup)
+{
 
     CAzLogging::Entering(_TEXT("CopyLinks"));
 
@@ -222,7 +235,8 @@ HRESULT CAzAppGroup::CopyLinks(CAzAppGroup &srcAppGroup) {
 
     CAzLogging::Log(hr,_TEXT("Getting App Members for App Group"),COLE2T(srcAppGroup.getName()));
 
-    if (SUCCEEDED(hr)) {
+    if (SUCCEEDED(hr))
+    {
 
         hr=InitializeUsingSafeArray(cVVar,&IAzApplicationGroup::AddAppMember );
 
@@ -235,7 +249,8 @@ HRESULT CAzAppGroup::CopyLinks(CAzAppGroup &srcAppGroup) {
 
     CAzLogging::Log(hr,_TEXT("Getting App Non Members for App Group"),COLE2T(srcAppGroup.getName()));
 
-    if (SUCCEEDED(hr)) {
+    if (SUCCEEDED(hr))
+    {
 
         hr=InitializeUsingSafeArray(cVVar,&IAzApplicationGroup::AddAppNonMember );
 

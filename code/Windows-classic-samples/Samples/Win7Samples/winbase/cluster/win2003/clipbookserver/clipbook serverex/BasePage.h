@@ -1,4 +1,4 @@
-/////////////////////////////////////////////////////////////////////////////
+﻿/////////////////////////////////////////////////////////////////////////////
 //
 //  Copyright (c) 2003 <company name>
 //
@@ -75,14 +75,29 @@ protected:
     IDD                     m_iddWizardPage;
     IDS                     m_idsCaption;
 
-    CExtObject *            Peo( void ) const               { return m_peo; }
+    CExtObject *            Peo( void ) const
+    {
+        return m_peo;
+    }
 
-    IDD                     IddPropertyPage( void ) const   { return m_iddPropertyPage; }
-    IDD                     IddWizardPage( void ) const     { return m_iddWizardPage; }
-    IDS                     IdsCaption( void ) const        { return m_idsCaption; }
+    IDD                     IddPropertyPage( void ) const
+    {
+        return m_iddPropertyPage;
+    }
+    IDD                     IddWizardPage( void ) const
+    {
+        return m_iddWizardPage;
+    }
+    IDS                     IdsCaption( void ) const
+    {
+        return m_idsCaption;
+    }
 
 public:
-    HPROPSHEETPAGE          Hpage( void ) const             { return m_hpage; }
+    HPROPSHEETPAGE          Hpage( void ) const
+    {
+        return m_hpage;
+    }
 
     CLUADMEX_OBJECT_TYPE    Cot( void ) const
     {
@@ -107,7 +122,7 @@ public:
 
     // ClassWizard generate virtual function overrides
     //{{AFX_VIRTUAL(CBasePropertyPage)
-    public:
+public:
     virtual BOOL OnSetActive();
     virtual BOOL OnApply();
     virtual LRESULT OnWizardBack();
@@ -118,10 +133,10 @@ protected:
     //}}AFX_VIRTUAL
 
     virtual DWORD           ScParseUnknownProperty(
-                                  LPCWSTR                           pwszNameIn
-                                , const CLUSPROP_BUFFER_HELPER &    rvalueIn
-                                , size_t                            cbBufIn
-                                )
+        LPCWSTR                           pwszNameIn
+        , const CLUSPROP_BUFFER_HELPER &    rvalueIn
+        , size_t                            cbBufIn
+    )
     {
         UNREFERENCED_PARAMETER( pwszNameIn );
         UNREFERENCED_PARAMETER( rvalueIn );
@@ -134,8 +149,14 @@ protected:
     virtual BOOL            BBuildPropList( CClusPropList & rcplInout, BOOL fNoNewPropsIn = FALSE );
     virtual void            DisplaySetPropsError( DWORD scIn, UINT idsOperIn ) const;
 
-    virtual const CObjectProperty * Pprops( void ) const    { return NULL; }
-    virtual DWORD                   Cprops( void ) const    { return 0; }
+    virtual const CObjectProperty * Pprops( void ) const
+    {
+        return NULL;
+    }
+    virtual DWORD                   Cprops( void ) const
+    {
+        return 0;
+    }
 
 //
 //  Implementation
@@ -146,8 +167,14 @@ protected:
     BOOL                    m_bSaved;
     BOOL                    m_bDoDetach;
 
-    BOOL                    BBackPressed( void ) const      { return m_bBackPressed; }
-    BOOL                    BSaved( void ) const            { return m_bSaved; }
+    BOOL                    BBackPressed( void ) const
+    {
+        return m_bBackPressed;
+    }
+    BOOL                    BSaved( void ) const
+    {
+        return m_bSaved;
+    }
     void                    EnableNext( BOOL fEnableIn = TRUE );
     IWCWizardCallback *     PiWizardCallback( void ) const
     {
@@ -169,9 +196,9 @@ protected:
 
     DWORD                   ScParseProperties( CClusPropList & rcplIn );
     BOOL                    BSetPrivateProps(
-                                  BOOL fValidateOnlyIn = FALSE
-                                , BOOL fNoNewPropsIn = FALSE
-                                );
+        BOOL fValidateOnlyIn = FALSE
+                               , BOOL fNoNewPropsIn = FALSE
+    );
 
     //
     //  Generated message map functions

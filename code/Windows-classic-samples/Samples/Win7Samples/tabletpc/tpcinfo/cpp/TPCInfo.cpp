@@ -1,4 +1,4 @@
-//
+﻿//
 //  This is part of the Microsoft Tablet PC Platform SDK
 //  Copyright (C) 2002 Microsoft Corporation
 //  All rights reserved.
@@ -52,7 +52,8 @@
 // IDs of the dialog static controls
 #define NUM_CONTROLS    2
 const UINT  gc_uiCtrlId[NUM_CONTROLS][2] = {{IDC_CTL1_NAME, IDC_CTL1_VER},
-                                            {IDC_CTL2_NAME, IDC_CTL2_VER}};
+    {IDC_CTL2_NAME, IDC_CTL2_VER}
+};
 
 // ProgID's of the Tablet PC controls to check on
 LPCOLESTR gc_wszProgId[NUM_CONTROLS] = {L"InkEd.InkEdit", L"msinkaut.InkPicture"};
@@ -62,7 +63,7 @@ const WCHAR* gc_wszSpeechKey = L"Software\\Microsoft\\Speech\\Recognizers";
 
 // CLSID of the Text Services Framework's ThreadManager object
 const CLSID CLSID_TF_ThreadMgr =
-        { 0x529A9E6B,0x6587,0x4F23,{ 0xAB,0x9E,0x9C,0x7D,0x68,0x3E,0x3C,0x50 } };
+{ 0x529A9E6B,0x6587,0x4F23,{ 0xAB,0x9E,0x9C,0x7D,0x68,0x3E,0x3C,0x50 } };
 
 // A helper structure, used in the GetComponentInfo function
 typedef struct
@@ -98,7 +99,7 @@ BOOL GetComponentInfo(CLSID clsid, SInfo& info)
 
     // Format Registry Key string
     WCHAR wszKey[45] = L"CLSID\\";  // the key buffer should be large enough for a string
-                                    // like "CLSID\{xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx}"
+    // like "CLSID\{xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx}"
     // Convert CLSID to String
     UINT uPos = lstrlenW(wszKey);
     if (0 == StringFromGUID2(clsid, &wszKey[uPos], countof(wszKey) - uPos))
@@ -175,17 +176,17 @@ BOOL GetComponentInfo(CLSID clsid, SInfo& info)
                         const int MAX_SUBBLOCK = 40;
                         WCHAR wchSubBlock[MAX_SUBBLOCK];  // large enough for the string
                         StringCchPrintfExW(wchSubBlock,
-                                          MAX_SUBBLOCK,
-                                          NULL,
-                                          NULL,
-                                          STRSAFE_NULL_ON_FAILURE,
-                                          L"\\StringFileInfo\\%04x%04x\\FileVersion",
-                                          LOWORD(*pdwLang), HIWORD(*pdwLang));
+                                           MAX_SUBBLOCK,
+                                           NULL,
+                                           NULL,
+                                           STRSAFE_NULL_ON_FAILURE,
+                                           L"\\StringFileInfo\\%04x%04x\\FileVersion",
+                                           LOWORD(*pdwLang), HIWORD(*pdwLang));
 
                         WCHAR* pwchBuildVer = NULL;
                         if ((VerQueryValueW(pwchFileVerInfo, wchSubBlock,
                                             (void**)&pwchBuildVer, &cch) == TRUE)
-                            && (NULL != pwchBuildVer))
+                                && (NULL != pwchBuildVer))
                         {
                             // Format the version string
                             UINT iLen = (UINT)lstrlenW(info.wchVersion);
@@ -245,142 +246,142 @@ BOOL CALLBACK DlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM /* lParam */)
     BOOL bReturn = FALSE; // the value to return
     switch (uMsg)
     {
-        case WM_INITDIALOG:
+    case WM_INITDIALOG:
+    {
+        // Initialize the COM
+        if (FAILED(CoInitialize(NULL)))
         {
-            // Initialize the COM
-            if (FAILED(CoInitialize(NULL)))
-            {
-                MessageBoxW(NULL, L"Unable to initialize the COM library",
-                            gc_wszAppName, MB_OK | MB_ICONINFORMATION);
-                PostMessage(hwnd, WM_CLOSE, 0, 0);
-                break;
-            }
-
-            // Gather and show the information we're interested in
-
-            // Check out if Microsoft Tablet PC Platform components of the
-            // Microsoft Windows XP Professional Operating System are enabled
-            int bTabletPC = GetSystemMetrics(SM_TABLETPC);
-            SetDlgItemTextW(hwnd, IDC_TABLETPC,
-                            bTabletPC ? L"Available" : L"Not available");
-
-            // Get the version of the Text Services Framework components
-            SInfo info;
-            if (GetComponentInfo(CLSID_TF_ThreadMgr, info) == TRUE)
-            {
-                SetDlgItemTextW(hwnd, IDC_TSF, info.wchVersion);
-            }
-
-            // Find out the name and the version of the default handwriting recognizer
-            // Create the enumerator for the installed recognizers
-            IInkRecognizers* pIInkRecognizers = NULL;
-            HRESULT hr = CoCreateInstance(CLSID_InkRecognizers,
-                                          NULL,
-                                          CLSCTX_INPROC_SERVER,
-                                          IID_IInkRecognizers,
-                                          (void **)&pIInkRecognizers);
-            if (SUCCEEDED(hr))
-            {
-                IInkRecognizer* pIInkRecognizer = NULL;
-                // The first parameter is the language id, passing 0 means that the language
-                // id will be retrieved using the user default-locale identifier
-                hr = pIInkRecognizers->GetDefaultRecognizer(0, &pIInkRecognizer);
-                if (SUCCEEDED(hr))
-                {
-                    // Get the recognizer's friendly name
-                    BSTR bstr;
-                    if (SUCCEEDED(pIInkRecognizer->get_Name(&bstr)))
-                    {
-                        SetDlgItemTextW(hwnd, IDC_HWR_NAME, bstr);
-                        SysFreeString(bstr);
-                    }
-                    else
-                    {
-                        SetDlgItemTextW(hwnd, IDC_HWR_NAME, L"Failed");
-                    }
-                    // Get the recognizer's vendor info
-                    if (SUCCEEDED(pIInkRecognizer->get_Vendor(&bstr)))
-                    {
-                        SetDlgItemTextW(hwnd, IDC_HWR_VENDOR, bstr);
-                        SysFreeString(bstr);
-                    }
-                    else
-                    {
-                        SetDlgItemTextW(hwnd, IDC_HWR_VENDOR, L"Failed");
-                    }
-                    // Release it
-                    pIInkRecognizer->Release();
-                    pIInkRecognizer = NULL;
-                }
-                // Release the collection object
-                pIInkRecognizers->Release();
-                pIInkRecognizers = NULL;
-            }
-
-            // Find out the name and the version of the default speech recognizer
-
-            // Open key to find path of application
-            HKEY hkeySpeech;
-            if (RegOpenKeyExW(HKEY_LOCAL_MACHINE, gc_wszSpeechKey, 0, KEY_READ,
-                            &hkeySpeech) == ERROR_SUCCESS)
-            {
-                // Query value of key to get the name of the component
-                WCHAR wchValue[265];
-                ULONG cSize = sizeof(wchValue);
-                if (RegQueryValueExW(hkeySpeech, L"DefaultDefaultTokenId", NULL, NULL,
-                                    (BYTE*)wchValue, &cSize) == ERROR_SUCCESS)
-                {
-                    int ndx = lstrlenW(L"HKEY_LOCAL_MACHINE\\");
-                    int len = lstrlenW(wchValue);
-                    if (ndx < len
-                        && RegOpenKeyExW(HKEY_LOCAL_MACHINE, &wchValue[ndx], 0,
-                                         KEY_READ, &hkeySpeech) == ERROR_SUCCESS)
-                    {
-                        cSize = sizeof(wchValue);
-                        if (RegQueryValueExW(hkeySpeech, NULL, NULL, NULL,
-                                             (BYTE*)wchValue, &cSize) == ERROR_SUCCESS)
-                        {
-                            SetDlgItemTextW(hwnd, IDC_SPR_NAME, wchValue);
-                        }
-                    }
-                }
-            }
-
-            // Find out which of the controls are installed and show their version info
-            for (int i = 0, j = 0; i < NUM_CONTROLS; i++)
-            {
-                // Get the component info
-                CLSID clsid;
-                if (SUCCEEDED(CLSIDFromProgID(gc_wszProgId[i], &clsid))
-                    && GetComponentInfo(clsid, info) == TRUE)
-                {
-                    SetDlgItemTextW(hwnd, gc_uiCtrlId[j][0], info.wchName);
-                    SetDlgItemTextW(hwnd, gc_uiCtrlId[j][1], info.wchVersion);
-                    j++;
-                }
-            }
-
-            // Done with the COM
-            CoUninitialize();
-
+            MessageBoxW(NULL, L"Unable to initialize the COM library",
+                        gc_wszAppName, MB_OK | MB_ICONINFORMATION);
+            PostMessage(hwnd, WM_CLOSE, 0, 0);
             break;
         }
-        case WM_DESTROY:
 
-            PostQuitMessage(0);
-            break;
+        // Gather and show the information we're interested in
 
-        case WM_COMMAND:
-            switch (LOWORD(wParam))
+        // Check out if Microsoft Tablet PC Platform components of the
+        // Microsoft Windows XP Professional Operating System are enabled
+        int bTabletPC = GetSystemMetrics(SM_TABLETPC);
+        SetDlgItemTextW(hwnd, IDC_TABLETPC,
+                        bTabletPC ? L"Available" : L"Not available");
+
+        // Get the version of the Text Services Framework components
+        SInfo info;
+        if (GetComponentInfo(CLSID_TF_ThreadMgr, info) == TRUE)
+        {
+            SetDlgItemTextW(hwnd, IDC_TSF, info.wchVersion);
+        }
+
+        // Find out the name and the version of the default handwriting recognizer
+        // Create the enumerator for the installed recognizers
+        IInkRecognizers* pIInkRecognizers = NULL;
+        HRESULT hr = CoCreateInstance(CLSID_InkRecognizers,
+                                      NULL,
+                                      CLSCTX_INPROC_SERVER,
+                                      IID_IInkRecognizers,
+                                      (void **)&pIInkRecognizers);
+        if (SUCCEEDED(hr))
+        {
+            IInkRecognizer* pIInkRecognizer = NULL;
+            // The first parameter is the language id, passing 0 means that the language
+            // id will be retrieved using the user default-locale identifier
+            hr = pIInkRecognizers->GetDefaultRecognizer(0, &pIInkRecognizer);
+            if (SUCCEEDED(hr))
             {
-                case IDCLOSE:   // User clicked on the "Close" button in the dialog.
-                case IDCANCEL:  // User clicked the close button ([X]) in the caption
-                                // or pressed Alt+F4.
-                    DestroyWindow(hwnd);
-                    bReturn = TRUE;
-                    break;
+                // Get the recognizer's friendly name
+                BSTR bstr;
+                if (SUCCEEDED(pIInkRecognizer->get_Name(&bstr)))
+                {
+                    SetDlgItemTextW(hwnd, IDC_HWR_NAME, bstr);
+                    SysFreeString(bstr);
+                }
+                else
+                {
+                    SetDlgItemTextW(hwnd, IDC_HWR_NAME, L"Failed");
+                }
+                // Get the recognizer's vendor info
+                if (SUCCEEDED(pIInkRecognizer->get_Vendor(&bstr)))
+                {
+                    SetDlgItemTextW(hwnd, IDC_HWR_VENDOR, bstr);
+                    SysFreeString(bstr);
+                }
+                else
+                {
+                    SetDlgItemTextW(hwnd, IDC_HWR_VENDOR, L"Failed");
+                }
+                // Release it
+                pIInkRecognizer->Release();
+                pIInkRecognizer = NULL;
             }
+            // Release the collection object
+            pIInkRecognizers->Release();
+            pIInkRecognizers = NULL;
+        }
+
+        // Find out the name and the version of the default speech recognizer
+
+        // Open key to find path of application
+        HKEY hkeySpeech;
+        if (RegOpenKeyExW(HKEY_LOCAL_MACHINE, gc_wszSpeechKey, 0, KEY_READ,
+                          &hkeySpeech) == ERROR_SUCCESS)
+        {
+            // Query value of key to get the name of the component
+            WCHAR wchValue[265];
+            ULONG cSize = sizeof(wchValue);
+            if (RegQueryValueExW(hkeySpeech, L"DefaultDefaultTokenId", NULL, NULL,
+                                 (BYTE*)wchValue, &cSize) == ERROR_SUCCESS)
+            {
+                int ndx = lstrlenW(L"HKEY_LOCAL_MACHINE\\");
+                int len = lstrlenW(wchValue);
+                if (ndx < len
+                        && RegOpenKeyExW(HKEY_LOCAL_MACHINE, &wchValue[ndx], 0,
+                                         KEY_READ, &hkeySpeech) == ERROR_SUCCESS)
+                {
+                    cSize = sizeof(wchValue);
+                    if (RegQueryValueExW(hkeySpeech, NULL, NULL, NULL,
+                                         (BYTE*)wchValue, &cSize) == ERROR_SUCCESS)
+                    {
+                        SetDlgItemTextW(hwnd, IDC_SPR_NAME, wchValue);
+                    }
+                }
+            }
+        }
+
+        // Find out which of the controls are installed and show their version info
+        for (int i = 0, j = 0; i < NUM_CONTROLS; i++)
+        {
+            // Get the component info
+            CLSID clsid;
+            if (SUCCEEDED(CLSIDFromProgID(gc_wszProgId[i], &clsid))
+                    && GetComponentInfo(clsid, info) == TRUE)
+            {
+                SetDlgItemTextW(hwnd, gc_uiCtrlId[j][0], info.wchName);
+                SetDlgItemTextW(hwnd, gc_uiCtrlId[j][1], info.wchVersion);
+                j++;
+            }
+        }
+
+        // Done with the COM
+        CoUninitialize();
+
+        break;
+    }
+    case WM_DESTROY:
+
+        PostQuitMessage(0);
+        break;
+
+    case WM_COMMAND:
+        switch (LOWORD(wParam))
+        {
+        case IDCLOSE:   // User clicked on the "Close" button in the dialog.
+        case IDCANCEL:  // User clicked the close button ([X]) in the caption
+            // or pressed Alt+F4.
+            DestroyWindow(hwnd);
+            bReturn = TRUE;
             break;
+        }
+        break;
     }
 
     return bReturn;

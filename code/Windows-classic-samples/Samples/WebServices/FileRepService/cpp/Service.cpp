@@ -1,4 +1,4 @@
-// This is the main function of the executable hosting the service.
+﻿// This is the main function of the executable hosting the service.
 // It parses the command line and passes the parameters to the service.
 // From a Sapphire perspective there is not much to see here.
 
@@ -227,15 +227,15 @@ int __cdecl wmain(
     fileRep->Stop();
     wprintf(L"Shutdown complete.\n");
     exitCode = 0;
-    
+
     EXIT
-    
+
     if (fileRep != NULL)
     {
         delete fileRep;
         fileRep = NULL;
     }
-    
+
     return exitCode;
 }
 

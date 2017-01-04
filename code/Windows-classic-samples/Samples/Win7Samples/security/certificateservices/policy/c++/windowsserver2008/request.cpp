@@ -1,4 +1,4 @@
-//+--------------------------------------------------------------------------
+﻿//+--------------------------------------------------------------------------
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -26,7 +26,7 @@
 HRESULT
 ReqInitialize(
     IN ICertServerPolicy *
-	)
+)
 {
     HRESULT hr;
 
@@ -100,7 +100,7 @@ CRequestInstance::Initialize(
 
     VariantInit(&varValue);
     *pfEnableEnrolleeExtensions = TRUE
-		    ;
+                                  ;
 
     m_pPolicy = pPolicy;
     m_fCA = FALSE;
@@ -111,96 +111,96 @@ CRequestInstance::Initialize(
     m_dwTemplateMajorVersion = 0;
     m_dwTemplateMinorVersion = 0;
     hr = polGetCertificateExtension(
-			    pServer,
-			    TEXT(szOID_CERTIFICATE_TEMPLATE),
-			    PROPTYPE_BINARY,
-			    &varValue);
+             pServer,
+             TEXT(szOID_CERTIFICATE_TEMPLATE),
+             PROPTYPE_BINARY,
+             &varValue);
     _PrintIfErrorStr2(
-		hr,
-		"Policy:polGetCertificateExtension",
-		TEXT(szOID_CERTIFICATE_TEMPLATE),
-		CERTSRV_E_PROPERTY_EMPTY);
+        hr,
+        "Policy:polGetCertificateExtension",
+        TEXT(szOID_CERTIFICATE_TEMPLATE),
+        CERTSRV_E_PROPERTY_EMPTY);
     if (S_OK == hr)
     {
         // There was a cert type indicator.
         // varValue points to an encoded string
 
         if (VT_BSTR != varValue.vt)
-	{
-	    hr = E_INVALIDARG;
-	    _JumpError(hr, error, "Policy:varValue.vt");
-	}
+        {
+            hr = E_INVALIDARG;
+            _JumpError(hr, error, "Policy:varValue.vt");
+        }
         if (!ceDecodeObject(
-		    X509_ASN_ENCODING,
-		    X509_CERTIFICATE_TEMPLATE,
-		    (BYTE *) varValue.bstrVal,
-		    SysStringByteLen(varValue.bstrVal),
-		    FALSE,
-		    (VOID **) &pTemplate,
-		    &cbType))
+                    X509_ASN_ENCODING,
+                    X509_CERTIFICATE_TEMPLATE,
+                    (BYTE *) varValue.bstrVal,
+                    SysStringByteLen(varValue.bstrVal),
+                    FALSE,
+                    (VOID **) &pTemplate,
+                    &cbType))
         {
             hr = ceHLastError();
-	    _JumpError(hr, error, "Policy:ceDecodeObject");
+            _JumpError(hr, error, "Policy:ceDecodeObject");
         }
-	if (!ceConvertSzToBstr(&strTemplateObjId, pTemplate->pszObjId, -1))
-	{
+        if (!ceConvertSzToBstr(&strTemplateObjId, pTemplate->pszObjId, -1))
+        {
             hr = E_OUTOFMEMORY;
-	    _JumpError(hr, error, "Policy:ceConvertSzToBstr");
+            _JumpError(hr, error, "Policy:ceConvertSzToBstr");
         }
-	m_dwTemplateMajorVersion = pTemplate->dwMajorVersion;
-	m_dwTemplateMinorVersion = pTemplate->dwMinorVersion;
-	DBGPRINT((
-	    fDebug,
-	    pTemplate->fMinorVersion?
-		"Extension Template Info: %ws V%u.%u\n" :
-		"Extension Template Info: %ws V%u%\n",
-	    strTemplateObjId,
-	    m_dwTemplateMajorVersion,
-	    m_dwTemplateMinorVersion));
+        m_dwTemplateMajorVersion = pTemplate->dwMajorVersion;
+        m_dwTemplateMinorVersion = pTemplate->dwMinorVersion;
+        DBGPRINT((
+                     fDebug,
+                     pTemplate->fMinorVersion?
+                     "Extension Template Info: %ws V%u.%u\n" :
+                     "Extension Template Info: %ws V%u%\n",
+                     strTemplateObjId,
+                     m_dwTemplateMajorVersion,
+                     m_dwTemplateMinorVersion));
     }
     VariantClear(&varValue);
 
     // Retrieve template Name from the V1 cert template name extension
 
     hr = polGetCertificateExtension(
-			    pServer,
-			    TEXT(szOID_ENROLL_CERTTYPE_EXTENSION),
-			    PROPTYPE_BINARY,
-			    &varValue);
+             pServer,
+             TEXT(szOID_ENROLL_CERTTYPE_EXTENSION),
+             PROPTYPE_BINARY,
+             &varValue);
     _PrintIfErrorStr2(
-		hr,
-		"Policy:polGetCertificateExtension",
-		TEXT(szOID_ENROLL_CERTTYPE_EXTENSION),
-		CERTSRV_E_PROPERTY_EMPTY);
+        hr,
+        "Policy:polGetCertificateExtension",
+        TEXT(szOID_ENROLL_CERTTYPE_EXTENSION),
+        CERTSRV_E_PROPERTY_EMPTY);
     if (S_OK == hr)
     {
         // There was a cert type indicator.
         // varValue points to an encoded string
 
         if (VT_BSTR != varValue.vt)
-	{
-	    hr = E_INVALIDARG;
-	    _JumpError(hr, error, "Policy:varValue.vt");
-	}
+        {
+            hr = E_INVALIDARG;
+            _JumpError(hr, error, "Policy:varValue.vt");
+        }
         if (!ceDecodeObject(
-		    X509_ASN_ENCODING,
-		    X509_UNICODE_ANY_STRING,
-		    (BYTE *) varValue.bstrVal,
-		    SysStringByteLen(varValue.bstrVal),
-		    FALSE,
-		    (VOID **) &pName,
-		    &cbType))
+                    X509_ASN_ENCODING,
+                    X509_UNICODE_ANY_STRING,
+                    (BYTE *) varValue.bstrVal,
+                    SysStringByteLen(varValue.bstrVal),
+                    FALSE,
+                    (VOID **) &pName,
+                    &cbType))
         {
             hr = ceHLastError();
-	    _JumpError(hr, error, "Policy:ceDecodeObject");
+            _JumpError(hr, error, "Policy:ceDecodeObject");
         }
         strTemplateName = SysAllocString((WCHAR *) pName->Value.pbData);
         if (IsNullBStr(strTemplateName))
         {
             hr = E_OUTOFMEMORY;
-	    _JumpError(hr, error, "Policy:SysAllocString");
+            _JumpError(hr, error, "Policy:SysAllocString");
         }
-	DBGPRINT((fDebug, "Extension Template: %ws\n", strTemplateName));
+        DBGPRINT((fDebug, "Extension Template: %ws\n", strTemplateName));
     }
 
     fConflict = FALSE;
@@ -211,107 +211,107 @@ CRequestInstance::Initialize(
     hr = polGetRequestAttribute(pServer, wszPROPCERTTEMPLATE, &strTemplateRA);
     if (S_OK != hr)
     {
-	_PrintErrorStr2(
-		    hr,
-		    "Policy:polGetRequestAttribute",
-		    wszPROPCERTTEMPLATE,
-		    CERTSRV_E_PROPERTY_EMPTY);
-	hr = S_OK;
+        _PrintErrorStr2(
+            hr,
+            "Policy:polGetRequestAttribute",
+            wszPROPCERTTEMPLATE,
+            CERTSRV_E_PROPERTY_EMPTY);
+        hr = S_OK;
 
 
     }
     else
     {
-	DBGPRINT((fDebug, "Attribute Template: %ws\n", strTemplateRA));
-	if (!IsNullBStr(strTemplateObjId) &&
-	    !_TemplateNamesMatch(strTemplateObjId, strTemplateRA, &f))
-	{
-	    fConflict = TRUE;
-	    if (f)
-	    {
-		fTemplateMissing = TRUE;
-	    }
-	}
-	if (!IsNullBStr(strTemplateName) &&
-	    !_TemplateNamesMatch(strTemplateName, strTemplateRA, &f))
-	{
-	    fConflict = TRUE;
-	    if (f)
-	    {
-		fTemplateMissing = TRUE;
-	    }
-	}
-	hr = ceVerifyObjId(strTemplateRA);
-	fRAObjId = S_OK == hr;
+        DBGPRINT((fDebug, "Attribute Template: %ws\n", strTemplateRA));
+        if (!IsNullBStr(strTemplateObjId) &&
+                !_TemplateNamesMatch(strTemplateObjId, strTemplateRA, &f))
+        {
+            fConflict = TRUE;
+            if (f)
+            {
+                fTemplateMissing = TRUE;
+            }
+        }
+        if (!IsNullBStr(strTemplateName) &&
+                !_TemplateNamesMatch(strTemplateName, strTemplateRA, &f))
+        {
+            fConflict = TRUE;
+            if (f)
+            {
+                fTemplateMissing = TRUE;
+            }
+        }
+        hr = ceVerifyObjId(strTemplateRA);
+        fRAObjId = S_OK == hr;
     }
 
     if (!IsNullBStr(strTemplateObjId) &&
-	!IsNullBStr(strTemplateName) &&
-	!_TemplateNamesMatch(strTemplateObjId, strTemplateName, &f))
+            !IsNullBStr(strTemplateName) &&
+            !_TemplateNamesMatch(strTemplateObjId, strTemplateName, &f))
     {
-	fConflict = TRUE;
-	if (f)
-	{
-	    fTemplateMissing = TRUE;
-	}
+        fConflict = TRUE;
+        if (f)
+        {
+            fTemplateMissing = TRUE;
+        }
     }
 
     if (fConflict)
     {
-	hrTemplate = CERTSRV_E_TEMPLATE_CONFLICT;
-	if (!IsNullBStr(strTemplateObjId))
-	{
-	    _PrintErrorStr(
-			hrTemplate,
-			"Policy:Extension Template ObjId",
-			strTemplateObjId);
-	}
-	if (!IsNullBStr(strTemplateName))
-	{
-	    _PrintErrorStr(
-			hrTemplate,
-			"Policy:Extension Template Name",
-			strTemplateName);
-	}
-	if (!IsNullBStr(strTemplateRA))
-	{
-	    _PrintErrorStr(
-			hrTemplate,
-			"Policy:Attribute Template",
-			strTemplateRA);
-	}
+        hrTemplate = CERTSRV_E_TEMPLATE_CONFLICT;
+        if (!IsNullBStr(strTemplateObjId))
+        {
+            _PrintErrorStr(
+                hrTemplate,
+                "Policy:Extension Template ObjId",
+                strTemplateObjId);
+        }
+        if (!IsNullBStr(strTemplateName))
+        {
+            _PrintErrorStr(
+                hrTemplate,
+                "Policy:Extension Template Name",
+                strTemplateName);
+        }
+        if (!IsNullBStr(strTemplateRA))
+        {
+            _PrintErrorStr(
+                hrTemplate,
+                "Policy:Attribute Template",
+                strTemplateRA);
+        }
     }
 
     pwszTemplateName = strTemplateName;
     pwszTemplateObjId = strTemplateObjId;
     if (fRAObjId)
     {
-	if (NULL == pwszTemplateObjId)
-	{
-	    pwszTemplateObjId = strTemplateRA;
-	}
+        if (NULL == pwszTemplateObjId)
+        {
+            pwszTemplateObjId = strTemplateRA;
+        }
     }
     else
     {
-	if (NULL == pwszTemplateName)
-	{
-	    pwszTemplateName = strTemplateRA;
-	}
+        if (NULL == pwszTemplateName)
+        {
+            pwszTemplateName = strTemplateRA;
+        }
     }
 
 
     {
-	if (NULL != pwszTemplateName)
-	{
-	    for (i = 0; i < ARRAYSIZE(s_apwszCATypes); i++)
-	    {
-		if (0 == celstrcmpiL(s_apwszCATypes[i], pwszTemplateName))
-		{
-		    m_fCA = TRUE;
-		    break;
-		}
-	    }
-	}
+        if (NULL != pwszTemplateName)
+        {
+            for (i = 0; i < ARRAYSIZE(s_apwszCATypes); i++)
+            {
+                if (0 == celstrcmpiL(s_apwszCATypes[i], pwszTemplateName))
+                {
+                    m_fCA = TRUE;
+                    break;
+                }
+            }
+        }
     }
     hr = SetTemplateName(pServer, pwszTemplateName, pwszTemplateObjId);
     _JumpIfError(hr, error, "Policy:SetTemplateName");
@@ -325,7 +325,7 @@ CRequestInstance::Initialize(
 error:
     if (S_OK != hrTemplate)
     {
-	hr = hrTemplate;	// override secondary errors
+        hr = hrTemplate;	// override secondary errors
 
     }
     VariantClear(&varValue);
@@ -361,16 +361,16 @@ CRequestInstance::_TemplateNamesMatch(
 
     if (0 == celstrcmpiL(pwszTemplateName1, pwszTemplateName2))
     {
-	goto done;	// identical names
+        goto done;	// identical names
     }
 
     {
-	hr1 = ceVerifyObjId(pwszTemplateName1);
-	hr2 = ceVerifyObjId(pwszTemplateName2);
-	if ((S_OK == hr1) ^ (S_OK == hr2))
-	{
-	    goto done;
-	}
+        hr1 = ceVerifyObjId(pwszTemplateName1);
+        hr2 = ceVerifyObjId(pwszTemplateName2);
+        if ((S_OK == hr1) ^ (S_OK == hr2))
+        {
+            goto done;
+        }
     }
     fMatch = FALSE;
 
@@ -397,42 +397,42 @@ CRequestInstance::SetTemplateName(
 
     if (NULL != pwszTemplateName)
     {
-	m_strTemplateName = SysAllocString(pwszTemplateName);
-	if (IsNullBStr(m_strTemplateName))
-	{
-	    hr = E_OUTOFMEMORY;
-	    _JumpError(hr, error, "Policy:SysAllocString");
-	}
-	strTemplateName = m_strTemplateName;
+        m_strTemplateName = SysAllocString(pwszTemplateName);
+        if (IsNullBStr(m_strTemplateName))
+        {
+            hr = E_OUTOFMEMORY;
+            _JumpError(hr, error, "Policy:SysAllocString");
+        }
+        strTemplateName = m_strTemplateName;
     }
 
     if (NULL != pwszTemplateObjId)
     {
-	m_strTemplateObjId = SysAllocString(pwszTemplateObjId);
-	if (IsNullBStr(m_strTemplateObjId))
-	{
-	    hr = E_OUTOFMEMORY;
-	    _JumpError(hr, error, "Policy:SysAllocString");
-	}
-	strTemplateName = m_strTemplateObjId;
+        m_strTemplateObjId = SysAllocString(pwszTemplateObjId);
+        if (IsNullBStr(m_strTemplateObjId))
+        {
+            hr = E_OUTOFMEMORY;
+            _JumpError(hr, error, "Policy:SysAllocString");
+        }
+        strTemplateName = m_strTemplateObjId;
     }
 
     if (!IsNullBStr(strTemplateName))
     {
-	VARIANT var;
+        VARIANT var;
 
-	strProp = SysAllocString(wszPROPCERTIFICATETEMPLATE);
-	if (IsNullBStr(strProp))
-	{
-	    hr = E_OUTOFMEMORY;
-	    _JumpError(hr, error, "Policy:SysAllocString");
-	}
+        strProp = SysAllocString(wszPROPCERTIFICATETEMPLATE);
+        if (IsNullBStr(strProp))
+        {
+            hr = E_OUTOFMEMORY;
+            _JumpError(hr, error, "Policy:SysAllocString");
+        }
 
-	var.vt = VT_BSTR;
-	var.bstrVal = strTemplateName;
+        var.vt = VT_BSTR;
+        var.bstrVal = strTemplateName;
 
-	hr = pServer->SetCertificateProperty(strProp, PROPTYPE_STRING, &var);
-	_JumpIfError(hr, error, "Policy:SetCertificateProperty");
+        hr = pServer->SetCertificateProperty(strProp, PROPTYPE_STRING, &var);
+        _JumpIfError(hr, error, "Policy:SetCertificateProperty");
     }
     hr = S_OK;
 

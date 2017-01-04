@@ -1,4 +1,4 @@
-
+﻿
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -14,9 +14,9 @@
              filtering.  Properties in the singleton SystemSettings class
              instance are get/set to specify:
                 URL exemptions
-                Application exemptions (no filtering on any traffic to/from 
+                Application exemptions (no filtering on any traffic to/from
                  application)
-                Whether the in-box web content filter or a 3rd-party 
+                Whether the in-box web content filter or a 3rd-party
                  replacement filter is exclusive active filter
 
 
@@ -32,20 +32,20 @@
         WpcsWebExtensFilterGet() - passes back the current settings for
           the FilterID and FilterNamePath properties selecting the active
           web content filter
-        WpcsWebExtensFilterSet() - sets the FilterID and FilterNamePath 
+        WpcsWebExtensFilterSet() - sets the FilterID and FilterNamePath
           properties as specified for ownership of web content filtering
         WpcsWebExtensFilterReset() - resets the FilterID and FilterNamePath
-          properties to the defaults for the Windows Vista web content 
+          properties to the defaults for the Windows Vista web content
           filter selection as active
         CmdLineParse() - handles command line input
 
     COMMENTS:
-        1.  Third-party web content filters should respect the HTTP 
-            application and URL exemption lists.  
+        1.  Third-party web content filters should respect the HTTP
+            application and URL exemption lists.
         2.  Note that registration of a user interface link for a 3rd-
-            party web content filter is required.  This is accomplished as 
+            party web content filter is required.  This is accomplished as
             shown in the UIExtensibility sample.  Once registered, setting
-            the FilterID to the same GUID as for the UI link entry, and 
+            the FilterID to the same GUID as for the UI link entry, and
             setting a FilterNamePath, promotes the link from a generic UI
             extensibility link to the exclusive active web content filter
             position in the control panel.  It also disables the Windows
@@ -59,21 +59,21 @@
 HRESULT WpcsWebExtensExemptionsGet(IWbemServices* piWmiServices, OPERATION eOperation,
                                    DWORD* pdwNumExemptions, PWSTR** pppszExemptions);
 
-HRESULT WpcsWebExtensExemptionAdd(IWbemServices* piWmiServices, OPERATION eOperation, 
-                                 PCWSTR pcszExemption);
+HRESULT WpcsWebExtensExemptionAdd(IWbemServices* piWmiServices, OPERATION eOperation,
+                                  PCWSTR pcszExemption);
 
-HRESULT WpcsWebExtensExemptionDel(IWbemServices* piWmiServices, OPERATION eOperation, 
-                                 PCWSTR pcszExemption);
+HRESULT WpcsWebExtensExemptionDel(IWbemServices* piWmiServices, OPERATION eOperation,
+                                  PCWSTR pcszExemption);
 
 HRESULT WpcsWebExtensFilterGet(IWbemServices* piWmiServices, PWSTR* ppszFilterID,
-                              PWSTR* ppszFilterNamePath);
+                               PWSTR* ppszFilterNamePath);
 
 HRESULT WpcsWebExtensFilterSet(IWbemServices* piWmiServices, PCWSTR pcszFilterID,
-                              PCWSTR pcszFilterNamePath);
+                               PCWSTR pcszFilterNamePath);
 
 HRESULT WpcsWebExtensFilterReset(IWbemServices* piWmiServices);
 
-HRESULT CmdLineParse(int argc, WCHAR* argv[], OPERATION* peOperation, 
+HRESULT CmdLineParse(int argc, WCHAR* argv[], OPERATION* peOperation,
                      SUBOPERATION* peSubOperation, PCWSTR* ppcszExemption,
                      PCWSTR* ppcszFilterID, PCWSTR* ppcszFilterNamePath);
 
@@ -105,7 +105,7 @@ int __cdecl wmain(int argc, __in_ecount(argc) WCHAR* argv[])
     SUBOPERATION eSubOperation;
     PCWSTR pcszExemption, pcszFilterID, pcszFilterNamePath;
 
-    HRESULT hr = CmdLineParse(argc, argv, &eOperation, &eSubOperation, &pcszExemption, 
+    HRESULT hr = CmdLineParse(argc, argv, &eOperation, &eSubOperation, &pcszExemption,
                               &pcszFilterID, &pcszFilterNamePath);
     if (hr == E_INVALIDARG)
     {
@@ -137,132 +137,132 @@ int __cdecl wmain(int argc, __in_ecount(argc) WCHAR* argv[])
 
                 switch (eOperation)
                 {
-                    case OPERATION_HTTP:
-                    case OPERATION_URL:
+                case OPERATION_HTTP:
+                case OPERATION_URL:
 
-                        switch (eSubOperation)
+                    switch (eSubOperation)
+                    {
+                    case EXEMPTION_LIST:
+                        hr = WpcsWebExtensExemptionsGet(piWmiServices, eOperation,
+                                                        &dwNumExemptions, &ppszExemptions);
+                        if (FAILED(hr))
                         {
-                            case EXEMPTION_LIST:
-                                hr = WpcsWebExtensExemptionsGet(piWmiServices, eOperation, 
-                                                                &dwNumExemptions, &ppszExemptions);
-                                if (FAILED(hr))
-                                {
-                                    wprintf(L"Error:  WpcsWebExtensGet() failed, hr is %8x.\n", hr);
-                                }
-                                else
-                                {
-                                    // Print results
-                                    wprintf(L"Info:  Exemption List:\n");
-                                    for (DWORD i = 0; i < dwNumExemptions; i++)
-                                    {
-                                        wprintf(L"\t%3d:\t%s\n", i, ppszExemptions[i]);
-                                    }
-                                    wprintf(L"Info:  end of list.\n");
-                                }
+                            wprintf(L"Error:  WpcsWebExtensGet() failed, hr is %8x.\n", hr);
+                        }
+                        else
+                        {
+                            // Print results
+                            wprintf(L"Info:  Exemption List:\n");
+                            for (DWORD i = 0; i < dwNumExemptions; i++)
+                            {
+                                wprintf(L"\t%3d:\t%s\n", i, ppszExemptions[i]);
+                            }
+                            wprintf(L"Info:  end of list.\n");
+                        }
 
-                                // Clean up allocations from called function
-                                for (DWORD i = 0; i < dwNumExemptions; i++)
-                                {
-                                    if (ppszExemptions[i] != NULL)
-                                    {
-                                        delete[] ppszExemptions[i];
-                                        ppszExemptions[i] = NULL;
-                                    }
-                                }
-                                dwNumExemptions = 0;
-                                if (ppszExemptions)
-                                {
-                                    delete[] ppszExemptions;
-                                    ppszExemptions = NULL;
-                                }
-                                break;
-
-                            case EXEMPTION_ADD:
-                                hr = WpcsWebExtensExemptionAdd(piWmiServices, eOperation, 
-                                                               pcszExemption);
-                                if (FAILED(hr))
-                                {
-                                    wprintf(L"Error:  WpcsWebExtensAdd() failed, hr is %8x.\n", hr);
-                                }
-                                else
-                                {
-                                    wprintf(L"Info:  Exemption entry added.\n");
-                                }
-                                break;
-
-                            case EXEMPTION_DEL:
-                                hr = WpcsWebExtensExemptionDel(piWmiServices, eOperation, 
-                                                               pcszExemption);
-                                if (FAILED(hr))
-                                {
-                                    wprintf(L"Error:  WpcsWebExtensDel() failed, hr is %8x.\n", hr);
-                                }
-                                else
-                                {
-                                    wprintf(L"Info:  Exemption entry deleted.\n");
-                                }
-                                break;
+                        // Clean up allocations from called function
+                        for (DWORD i = 0; i < dwNumExemptions; i++)
+                        {
+                            if (ppszExemptions[i] != NULL)
+                            {
+                                delete[] ppszExemptions[i];
+                                ppszExemptions[i] = NULL;
+                            }
+                        }
+                        dwNumExemptions = 0;
+                        if (ppszExemptions)
+                        {
+                            delete[] ppszExemptions;
+                            ppszExemptions = NULL;
                         }
                         break;
-                    case OPERATION_FILTER:
-                    
-                        switch (eSubOperation)
+
+                    case EXEMPTION_ADD:
+                        hr = WpcsWebExtensExemptionAdd(piWmiServices, eOperation,
+                                                       pcszExemption);
+                        if (FAILED(hr))
                         {
-                            case ID_NAME_GET:
-                                PWSTR pszCurrentFilterID, pszCurrentFilterNamePath;
-                                hr = WpcsWebExtensFilterGet(piWmiServices, &pszCurrentFilterID, 
-                                                            &pszCurrentFilterNamePath);
-                                if (FAILED(hr))
-                                {
-                                    wprintf(L"Error:  WpcsWebFilterIDNameGet() failed, hr is %8x.\n", hr);
-                                }
-                                else
-                                {
-                                    // Print name and ID
-                                    wprintf(L"Info:  Web content filter:\n");
-                                    wprintf(L"Info:  \tID:  %s.\n", 
-                                             (pszCurrentFilterID == NULL) ? L"Invalid ID" : 
-                                              pszCurrentFilterID);
-                                    wprintf(L"Info:  \tName:  %s.\n",
-                                            (pszCurrentFilterNamePath == NULL) ? L"<NULL> (in-box filter)" : 
-                                             pszCurrentFilterNamePath);
-                                }
-
-                                // Clean up allocations from called function
-                                if (pszCurrentFilterID)
-                                {
-                                    delete[] pszCurrentFilterID;
-                                }
-                                if (pszCurrentFilterNamePath)
-                                {
-                                    delete[] pszCurrentFilterNamePath;
-                                }
-                                break;
-
-                            case ID_NAME_SET:
-								hr = WpcsWebExtensFilterSet(piWmiServices, pcszFilterID, pcszFilterNamePath);
-                                if (FAILED(hr))
-                                {
-                                    wprintf(L"Error:  WpcsWebFilterIDNameSet() failed, hr is %8x.\n", hr);
-                                }
-                                else
-                                {
-                                    wprintf(L"Info:  Filter ID and Name set.\n");
-                                }
-                                break;
-
-                            case ID_NAME_RESET:
-                                hr = WpcsWebExtensFilterReset(piWmiServices);
-                                if (FAILED(hr))
-                                {
-                                    wprintf(L"Error:  WpcsWebFilterIDNameReset() failed, hr is %8x.\n", hr);
-                                }
-                                else
-                                {
-                                    wprintf(L"Info:  Filter ownership reset.\n");
-                                }
-                                break;
+                            wprintf(L"Error:  WpcsWebExtensAdd() failed, hr is %8x.\n", hr);
                         }
+                        else
+                        {
+                            wprintf(L"Info:  Exemption entry added.\n");
+                        }
+                        break;
+
+                    case EXEMPTION_DEL:
+                        hr = WpcsWebExtensExemptionDel(piWmiServices, eOperation,
+                                                       pcszExemption);
+                        if (FAILED(hr))
+                        {
+                            wprintf(L"Error:  WpcsWebExtensDel() failed, hr is %8x.\n", hr);
+                        }
+                        else
+                        {
+                            wprintf(L"Info:  Exemption entry deleted.\n");
+                        }
+                        break;
+                    }
+                    break;
+                case OPERATION_FILTER:
+
+                    switch (eSubOperation)
+                    {
+                    case ID_NAME_GET:
+                        PWSTR pszCurrentFilterID, pszCurrentFilterNamePath;
+                        hr = WpcsWebExtensFilterGet(piWmiServices, &pszCurrentFilterID,
+                                                    &pszCurrentFilterNamePath);
+                        if (FAILED(hr))
+                        {
+                            wprintf(L"Error:  WpcsWebFilterIDNameGet() failed, hr is %8x.\n", hr);
+                        }
+                        else
+                        {
+                            // Print name and ID
+                            wprintf(L"Info:  Web content filter:\n");
+                            wprintf(L"Info:  \tID:  %s.\n",
+                                    (pszCurrentFilterID == NULL) ? L"Invalid ID" :
+                                    pszCurrentFilterID);
+                            wprintf(L"Info:  \tName:  %s.\n",
+                                    (pszCurrentFilterNamePath == NULL) ? L"<NULL> (in-box filter)" :
+                                    pszCurrentFilterNamePath);
+                        }
+
+                        // Clean up allocations from called function
+                        if (pszCurrentFilterID)
+                        {
+                            delete[] pszCurrentFilterID;
+                        }
+                        if (pszCurrentFilterNamePath)
+                        {
+                            delete[] pszCurrentFilterNamePath;
+                        }
+                        break;
+
+                    case ID_NAME_SET:
+                        hr = WpcsWebExtensFilterSet(piWmiServices, pcszFilterID, pcszFilterNamePath);
+                        if (FAILED(hr))
+                        {
+                            wprintf(L"Error:  WpcsWebFilterIDNameSet() failed, hr is %8x.\n", hr);
+                        }
+                        else
+                        {
+                            wprintf(L"Info:  Filter ID and Name set.\n");
+                        }
+                        break;
+
+                    case ID_NAME_RESET:
+                        hr = WpcsWebExtensFilterReset(piWmiServices);
+                        if (FAILED(hr))
+                        {
+                            wprintf(L"Error:  WpcsWebFilterIDNameReset() failed, hr is %8x.\n", hr);
+                        }
+                        else
+                        {
+                            wprintf(L"Info:  Filter ownership reset.\n");
+                        }
+                        break;
+                    }
                 }
 
                 // Cleanup
@@ -283,21 +283,21 @@ HRESULT WpcsWebExtensExemptionsGet(IWbemServices* piWmiServices, OPERATION eOper
 
     // Do basic parameter validation
     if (!piWmiServices || !pdwNumExemptions || !pppszExemptions ||
-        (eOperation != OPERATION_HTTP && eOperation != OPERATION_URL))
+            (eOperation != OPERATION_HTTP && eOperation != OPERATION_URL))
     {
         hr = E_INVALIDARG;
     }
     else
     {
         IWbemClassObject* piWmiSystemSettings;
-        hr = WpcuWmiObjectGet(piWmiServices, WPCS_WMI_SYSTEM_SETTINGS, 
-            &piWmiSystemSettings);
+        hr = WpcuWmiObjectGet(piWmiServices, WPCS_WMI_SYSTEM_SETTINGS,
+                              &piWmiSystemSettings);
         if (SUCCEEDED(hr))
         {
             PWSTR pcszProperty = (eOperation == OPERATION_HTTP) ? L"HTTPExemptionList" :
-                L"URLExemptionList";
-            hr = WpcuWmiStringArrayFromInstance(piWmiSystemSettings, pcszProperty, 
-                pdwNumExemptions, pppszExemptions);
+                                 L"URLExemptionList";
+            hr = WpcuWmiStringArrayFromInstance(piWmiSystemSettings, pcszProperty,
+                                                pdwNumExemptions, pppszExemptions);
             piWmiSystemSettings->Release();
         }
     }
@@ -307,24 +307,24 @@ HRESULT WpcsWebExtensExemptionsGet(IWbemServices* piWmiServices, OPERATION eOper
 }
 
 
-HRESULT WpcsWebExtensExemptionAdd(IWbemServices* piWmiServices, OPERATION eOperation, 
-                                 PCWSTR pcszExemption)
+HRESULT WpcsWebExtensExemptionAdd(IWbemServices* piWmiServices, OPERATION eOperation,
+                                  PCWSTR pcszExemption)
 {
     HRESULT hr = E_INVALIDARG;
 
     // Do basic parameter validation
     if (piWmiServices && pcszExemption &&
-        (eOperation == OPERATION_HTTP || eOperation == OPERATION_URL))
+            (eOperation == OPERATION_HTTP || eOperation == OPERATION_URL))
     {
-        // Get existing array.  If null, just put new.  Else, build new array 
+        // Get existing array.  If null, just put new.  Else, build new array
         // from original with added value and put
         DWORD dwNumElements = 0;
         PWSTR* ppszValue = NULL;
-        hr = WpcsWebExtensExemptionsGet(piWmiServices, eOperation, &dwNumElements, 
-                &ppszValue);
+        hr = WpcsWebExtensExemptionsGet(piWmiServices, eOperation, &dwNumElements,
+                                        &ppszValue);
         if (SUCCEEDED(hr))
         {
-            // Shallow copy existing array to new that is one larger, or create a 
+            // Shallow copy existing array to new that is one larger, or create a
             //  single entry array if no elements were originally present
             PCWSTR* ppcszNewValue = new PCWSTR[dwNumElements + 1];
             if (!ppcszNewValue)
@@ -339,21 +339,21 @@ HRESULT WpcsWebExtensExemptionAdd(IWbemServices* piWmiServices, OPERATION eOpera
                 }
                 // Write requested additional string as last element
                 ppcszNewValue[dwNumElements] = pcszExemption;
-                PCWSTR pcszProperty = (eOperation == OPERATION_HTTP) ? 
-                    L"HTTPExemptionList" : L"URLExemptionList";
+                PCWSTR pcszProperty = (eOperation == OPERATION_HTTP) ?
+                                      L"HTTPExemptionList" : L"URLExemptionList";
                 IWbemClassObject* piWmiSystemSettings = NULL;
-                hr = WpcuWmiObjectGet(piWmiServices, WPCS_WMI_SYSTEM_SETTINGS, 
-                    &piWmiSystemSettings);
+                hr = WpcuWmiObjectGet(piWmiServices, WPCS_WMI_SYSTEM_SETTINGS,
+                                      &piWmiSystemSettings);
                 if (SUCCEEDED(hr))
                 {
-                    hr = WpcuWmiInstancePutStringArray(piWmiSystemSettings, 
-                                                       pcszProperty, 
-                                                       dwNumElements + 1, 
+                    hr = WpcuWmiInstancePutStringArray(piWmiSystemSettings,
+                                                       pcszProperty,
+                                                       dwNumElements + 1,
                                                        ppcszNewValue);
                     if (SUCCEEDED(hr))
                     {
                         hr = piWmiServices->PutInstance(piWmiSystemSettings,
-                            WBEM_FLAG_UPDATE_ONLY, NULL, NULL);
+                                                        WBEM_FLAG_UPDATE_ONLY, NULL, NULL);
                     }
                     piWmiSystemSettings->Release();
                 }
@@ -380,20 +380,20 @@ HRESULT WpcsWebExtensExemptionAdd(IWbemServices* piWmiServices, OPERATION eOpera
 }
 
 
-HRESULT WpcsWebExtensExemptionDel(IWbemServices* piWmiServices, OPERATION eOperation, 
-                                 PCWSTR pcszExemption)
+HRESULT WpcsWebExtensExemptionDel(IWbemServices* piWmiServices, OPERATION eOperation,
+                                  PCWSTR pcszExemption)
 {
     HRESULT hr = E_INVALIDARG;
 
     if (piWmiServices && pcszExemption &&
-        (eOperation == OPERATION_HTTP || eOperation == OPERATION_URL))
+            (eOperation == OPERATION_HTTP || eOperation == OPERATION_URL))
     {
         // Get and walk through get array, find string match (case insensitive)
         // Build new put array without that entry, unless down to 0 -> put null variant
         DWORD dwNumElements = 0;
         PWSTR* ppszValue = NULL;
-        hr = WpcsWebExtensExemptionsGet(piWmiServices, eOperation, &dwNumElements, 
-            &ppszValue);
+        hr = WpcsWebExtensExemptionsGet(piWmiServices, eOperation, &dwNumElements,
+                                        &ppszValue);
         if (SUCCEEDED(hr))
         {
             BOOL fMatch = FALSE;
@@ -414,11 +414,11 @@ HRESULT WpcsWebExtensExemptionDel(IWbemServices* piWmiServices, OPERATION eOpera
             else
             {
                 // Prepare to write new array
-                PCWSTR pcszProperty = (eOperation == OPERATION_HTTP) ? 
-                    L"HTTPExemptionList" : L"URLExemptionList";
+                PCWSTR pcszProperty = (eOperation == OPERATION_HTTP) ?
+                                      L"HTTPExemptionList" : L"URLExemptionList";
                 IWbemClassObject* piWmiSystemSettings = NULL;
-                hr = WpcuWmiObjectGet(piWmiServices, WPCS_WMI_SYSTEM_SETTINGS, 
-                    &piWmiSystemSettings);
+                hr = WpcuWmiObjectGet(piWmiServices, WPCS_WMI_SYSTEM_SETTINGS,
+                                      &piWmiSystemSettings);
                 if (SUCCEEDED(hr))
                 {
                     if (dwNumElements > 1)
@@ -445,15 +445,15 @@ HRESULT WpcsWebExtensExemptionDel(IWbemServices* piWmiServices, OPERATION eOpera
                                 }
                             }
                             // Write array to instance
-                            hr = WpcuWmiInstancePutStringArray(piWmiSystemSettings, 
-                                                               pcszProperty, 
-                                                               dwNumElements - 1, 
+                            hr = WpcuWmiInstancePutStringArray(piWmiSystemSettings,
+                                                               pcszProperty,
+                                                               dwNumElements - 1,
                                                                ppcszNewValue);
                             if (SUCCEEDED(hr))
                             {
                                 hr = piWmiServices->PutInstance(piWmiSystemSettings,
-                                                                WBEM_FLAG_UPDATE_ONLY, 
-                                                                NULL, 
+                                                                WBEM_FLAG_UPDATE_ONLY,
+                                                                NULL,
                                                                 NULL);
                             }
                             delete[] ppcszNewValue;
@@ -466,8 +466,8 @@ HRESULT WpcsWebExtensExemptionDel(IWbemServices* piWmiServices, OPERATION eOpera
                         if (SUCCEEDED(hr))
                         {
                             hr = piWmiServices->PutInstance(piWmiSystemSettings,
-                                                            WBEM_FLAG_UPDATE_ONLY, 
-                                                            NULL, 
+                                                            WBEM_FLAG_UPDATE_ONLY,
+                                                            NULL,
                                                             NULL);
                         }
                     }
@@ -500,7 +500,7 @@ HRESULT WpcsWebExtensExemptionDel(IWbemServices* piWmiServices, OPERATION eOpera
 //  pointers be null
 // Calling code is responsible for freeing the ID and Name Path strings passed back
 HRESULT WpcsWebExtensFilterGet(IWbemServices* piWmiServices, PWSTR* ppszFilterID,
-                              PWSTR* ppszFilterNamePath)
+                               PWSTR* ppszFilterNamePath)
 {
     HRESULT hr = E_INVALIDARG;
 
@@ -508,16 +508,16 @@ HRESULT WpcsWebExtensFilterGet(IWbemServices* piWmiServices, PWSTR* ppszFilterID
     if (piWmiServices && ppszFilterID && ppszFilterNamePath)
     {
         IWbemClassObject* piWmiSystemSettings;
-        hr = WpcuWmiObjectGet(piWmiServices, WPCS_WMI_SYSTEM_SETTINGS, 
+        hr = WpcuWmiObjectGet(piWmiServices, WPCS_WMI_SYSTEM_SETTINGS,
                               &piWmiSystemSettings);
         if (SUCCEEDED(hr))
         {
-            hr = WpcuWmiStringFromInstance(piWmiSystemSettings, L"FilterID", 
-                ppszFilterID);
+            hr = WpcuWmiStringFromInstance(piWmiSystemSettings, L"FilterID",
+                                           ppszFilterID);
             if (SUCCEEDED(hr))
             {
-                hr = WpcuWmiStringFromInstance(piWmiSystemSettings, L"FilterName", 
-                    ppszFilterNamePath);
+                hr = WpcuWmiStringFromInstance(piWmiSystemSettings, L"FilterName",
+                                               ppszFilterNamePath);
             }
 
             piWmiSystemSettings->Release();
@@ -528,7 +528,7 @@ HRESULT WpcsWebExtensFilterGet(IWbemServices* piWmiServices, PWSTR* ppszFilterID
 }
 
 HRESULT WpcsWebExtensFilterSet(IWbemServices* piWmiServices, PCWSTR pcszFilterID,
-                              PCWSTR pcszFilterNamePath)
+                               PCWSTR pcszFilterNamePath)
 {
     HRESULT hr = E_INVALIDARG;
 
@@ -537,24 +537,24 @@ HRESULT WpcsWebExtensFilterSet(IWbemServices* piWmiServices, PCWSTR pcszFilterID
     if (piWmiServices && pcszFilterID && pcszFilterNamePath)
     {
         IWbemClassObject* piWmiSystemSettings;
-        hr = WpcuWmiObjectGet(piWmiServices, WPCS_WMI_SYSTEM_SETTINGS, 
+        hr = WpcuWmiObjectGet(piWmiServices, WPCS_WMI_SYSTEM_SETTINGS,
                               &piWmiSystemSettings);
         if (SUCCEEDED(hr))
         {
-            //  This property must always be written as a properly formatted 
+            //  This property must always be written as a properly formatted
             //   GUID for the instance update to be successful.  Note that Windows
-            //   Vista's content filter is signified by a zeroed GUID - 
+            //   Vista's content filter is signified by a zeroed GUID -
             //   {00000000-0000-0000-0000-000000000000}
-            hr = WpcuWmiInstancePutString(piWmiSystemSettings, L"FilterID", 
-                pcszFilterID);
+            hr = WpcuWmiInstancePutString(piWmiSystemSettings, L"FilterID",
+                                          pcszFilterID);
             if (SUCCEEDED(hr))
             {
-                hr = WpcuWmiInstancePutString(piWmiSystemSettings, 
-                    L"FilterName", pcszFilterNamePath);
+                hr = WpcuWmiInstancePutString(piWmiSystemSettings,
+                                              L"FilterName", pcszFilterNamePath);
                 if (SUCCEEDED(hr))
                 {
                     hr = piWmiServices->PutInstance(piWmiSystemSettings,
-                                        WBEM_FLAG_UPDATE_ONLY, NULL, NULL);
+                                                    WBEM_FLAG_UPDATE_ONLY, NULL, NULL);
                 }
             }
             piWmiSystemSettings->Release();
@@ -580,13 +580,13 @@ HRESULT WpcsWebExtensFilterReset(IWbemServices* piWmiServices)
             hr = WpcuWmiInstancePutNULLVariant(piWmiSystemSettings, L"FilterName");
             if (SUCCEEDED(hr))
             {
-                hr = WpcuWmiInstancePutString(piWmiSystemSettings, L"FilterID", 
+                hr = WpcuWmiInstancePutString(piWmiSystemSettings, L"FilterID",
                                               L"{00000000-0000-0000-0000-000000000000}");
                 if (SUCCEEDED(hr))
                 {
                     hr = piWmiServices->PutInstance(piWmiSystemSettings,
-                                                    WBEM_FLAG_UPDATE_ONLY, 
-                                                    NULL, 
+                                                    WBEM_FLAG_UPDATE_ONLY,
+                                                    NULL,
                                                     NULL);
                 }
             }
@@ -601,7 +601,7 @@ HRESULT WpcsWebExtensFilterReset(IWbemServices* piWmiServices)
 
 
 // Parse the command line
-HRESULT CmdLineParse(int argc, WCHAR* argv[], OPERATION* peOperation, 
+HRESULT CmdLineParse(int argc, WCHAR* argv[], OPERATION* peOperation,
                      SUBOPERATION* peSubOperation, PCWSTR* ppcszExemption,
                      PCWSTR* ppcszFilterID, PCWSTR* ppcszFilterNamePath)
 {
@@ -630,7 +630,7 @@ HRESULT CmdLineParse(int argc, WCHAR* argv[], OPERATION* peOperation,
             {
                 *peOperation = OPERATION_FILTER;
             }
-            else 
+            else
             {
                 peOperation = NULL;
             }
@@ -638,7 +638,7 @@ HRESULT CmdLineParse(int argc, WCHAR* argv[], OPERATION* peOperation,
             if (peOperation)
             {
                 if ((*peOperation == OPERATION_HTTP) ||
-                    (*peOperation == OPERATION_URL))
+                        (*peOperation == OPERATION_URL))
                 {
                     if (argc == 3)
                     {
@@ -669,7 +669,7 @@ HRESULT CmdLineParse(int argc, WCHAR* argv[], OPERATION* peOperation,
                 {
                     if (argc == 3)
                     {
-                         if (_wcsicmp(argv[2], L"get") == 0)
+                        if (_wcsicmp(argv[2], L"get") == 0)
                         {
                             *peSubOperation = ID_NAME_GET;
                             hr = S_OK;
@@ -685,15 +685,15 @@ HRESULT CmdLineParse(int argc, WCHAR* argv[], OPERATION* peOperation,
                         if (_wcsicmp(argv[2], L"set") == 0)
                         {
                             *peSubOperation = ID_NAME_SET;
-                    
+
                             for (int i = 3; i < argc; i++)
                             {
-                                if ((_wcsnicmp(argv[i], L"/g:", 3) == 0) || 
-                                    (_wcsnicmp(argv[i], L"-g:", 3) == 0))
+                                if ((_wcsnicmp(argv[i], L"/g:", 3) == 0) ||
+                                        (_wcsnicmp(argv[i], L"-g:", 3) == 0))
                                 {
                                     *ppcszFilterID = argv[i] + 3;
                                 }
-                                else if ((_wcsnicmp(argv[i], L"/n:", 3) == 0) || 
+                                else if ((_wcsnicmp(argv[i], L"/n:", 3) == 0) ||
                                          (_wcsnicmp(argv[i], L"-n:", 3) == 0))
                                 {
                                     *ppcszFilterNamePath = argv[i] + 3;

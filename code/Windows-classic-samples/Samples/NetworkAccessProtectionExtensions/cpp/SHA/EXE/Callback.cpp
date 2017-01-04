@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -38,7 +38,7 @@ Cleanup:
 
 
 // Constructor
-ShaCallback::ShaCallback() : 
+ShaCallback::ShaCallback() :
     m_pBinding(NULL),
     m_cRef(0)
 {
@@ -83,8 +83,8 @@ STDMETHODIMP ShaCallback::GetSoHRequest(
     if (FAILED(hr))
     {
         wprintf(L"\nShaCallback::GetSoHRequest: CreateOutputSoHConstructor() failed (error = 0x%08x)\n", hr);
-		pISohConstructor = NULL;
-		goto Cleanup;
+        pISohConstructor = NULL;
+        goto Cleanup;
     }
 
 
@@ -106,7 +106,7 @@ STDMETHODIMP ShaCallback::GetSoHRequest(
     if (FAILED(hr))
     {
         wprintf(L"\nShaCallback::GetSoHRequest(): SoHConstructor->GetSoH failed (error = 0x%08x)\n", hr);
-		pSohRequest = NULL;
+        pSohRequest = NULL;
         goto Cleanup;
     }
 
@@ -130,10 +130,10 @@ STDMETHODIMP ShaCallback::GetSoHRequest(
     }
 
 
-    Cleanup:
-        ReleaseObject(pISohConstructor);
-		::FreeSoH(pSohRequest);
-        return hr;
+Cleanup:
+    ReleaseObject(pISohConstructor);
+    ::FreeSoH(pSohRequest);
+    return hr;
 }
 
 
@@ -157,9 +157,9 @@ STDMETHODIMP ShaCallback::ProcessSoHResponse(
     // sanity check - ensure that the passed response pointer is not NULL
     if (!pResponse)
     {
-       hr = E_POINTER;
-       wprintf(L"\nShaCallback::ProcessSoHResponse  NULL INapSystemHealthAgentRequest pointer\n");
-       goto Cleanup;
+        hr = E_POINTER;
+        wprintf(L"\nShaCallback::ProcessSoHResponse  NULL INapSystemHealthAgentRequest pointer\n");
+        goto Cleanup;
     }
 
     //
@@ -168,10 +168,10 @@ STDMETHODIMP ShaCallback::ProcessSoHResponse(
     hr = pResponse->GetSoHResponse(&pSohResponse, &flags);
     if (FAILED(hr))
     {
-       // Couldn't get the response Log an error and return
-       wprintf(L"\nShaCallback::ProcessSoHResponse():pResponse->GetSoHResponse failed (error = 0x%08x)\n", hr);
-	   pSohResponse = NULL;
-       goto Cleanup;
+        // Couldn't get the response Log an error and return
+        wprintf(L"\nShaCallback::ProcessSoHResponse():pResponse->GetSoHResponse failed (error = 0x%08x)\n", hr);
+        pSohResponse = NULL;
+        goto Cleanup;
     }
 
     // Determine whether to attempt auto-remediation if fixes are needed
@@ -194,9 +194,9 @@ STDMETHODIMP ShaCallback::ProcessSoHResponse(
     hr = CreateInputSoHProcessor(pSohProcessor, systemHealthId, SOH_RESPONSE, pSohResponse);
     if (FAILED(hr))
     {
-       wprintf(L"\nShaCallback::ProcessSoHResponse: CreateInputSoHProcessor(): Couldn't create an SoH Parser object! (error %#x)\n", hr);
-	   pSohProcessor = NULL;
-       goto Cleanup;
+        wprintf(L"\nShaCallback::ProcessSoHResponse: CreateInputSoHProcessor(): Couldn't create an SoH Parser object! (error %#x)\n", hr);
+        pSohProcessor = NULL;
+        goto Cleanup;
     }
 
 
@@ -210,8 +210,8 @@ STDMETHODIMP ShaCallback::ProcessSoHResponse(
     hr = HandleSoHResponse(pSohProcessor, doFixup);
     if (FAILED(hr))
     {
-       wprintf(L" ShaCallback::ProcessSoHResponse():HandleSoHResponse failed (error = 0x%08x)\n", hr);
-       goto Cleanup;
+        wprintf(L" ShaCallback::ProcessSoHResponse():HandleSoHResponse failed (error = 0x%08x)\n", hr);
+        goto Cleanup;
     }
 
 
@@ -224,7 +224,7 @@ Cleanup:
 
 //
 // SDK Note:
-// This callback is used by the NAPAgent to notify SHAs that the system's NAP 
+// This callback is used by the NAPAgent to notify SHAs that the system's NAP
 // isolation state has changed.  If an SHA has activities to be done when state
 // changes, it could be triggered here
 // See MSDN for latest documentation on this function.
@@ -252,24 +252,24 @@ STDMETHODIMP ShaCallback::NotifySystemIsolationStateChange()
     hr = m_pBinding->GetSystemIsolationInfo(&pStatus, &unknownConnections);
     if (FAILED(hr))
     {
-       wprintf(L" ShaCallback::NotifySystemIsolationStateChange():m_pBinding->GetSystemIsolationInfo() failed (error = 0x%08x)\n",
-                   hr);
-	   pStatus = NULL;
-       goto Cleanup;
+        wprintf(L" ShaCallback::NotifySystemIsolationStateChange():m_pBinding->GetSystemIsolationInfo() failed (error = 0x%08x)\n",
+                hr);
+        pStatus = NULL;
+        goto Cleanup;
     }
 
     //
     // for this example, we'll just output the current state to the console
     //
     wprintf(L"System quar state = %d, prob time = %x %x, url = %s, any_connections_in_unknown_state? = %d\n",
-                 pStatus->isolationState,
-                 pStatus->probEndTime.dwHighDateTime, pStatus->probEndTime.dwLowDateTime,
-                 (pStatus->failureUrl.string == 0) ? 0 : pStatus->failureUrl.string,
-                 unknownConnections);
+            pStatus->isolationState,
+            pStatus->probEndTime.dwHighDateTime, pStatus->probEndTime.dwLowDateTime,
+            (pStatus->failureUrl.string == 0) ? 0 : pStatus->failureUrl.string,
+            unknownConnections);
 
-    Cleanup:
-        FreeIsolationInfo(pStatus);
-        return hr;
+Cleanup:
+    FreeIsolationInfo(pStatus);
+    return hr;
 }
 
 //
@@ -295,7 +295,7 @@ STDMETHODIMP ShaCallback::GetFixupInfo(
     hr = AllocFixupInfo(ppStatus, NUMBER_OF_HRESULTS);
     if (FAILED(hr))
     {
-       goto Cleanup;
+        goto Cleanup;
     }
 
     // Fill ppStatus
@@ -304,52 +304,52 @@ STDMETHODIMP ShaCallback::GetFixupInfo(
     // This is a simple example and only returns 1 result code
     switch (g_SdkShaHealthState)
     {
-        case NOFIXESNEEDED:
-                // In this example, this case will be hit when the client is healthy
-                wprintf(L"ShaCallback::GetFixupInfo: Returning HealthState of NOFIXESNEEDED");
-                (*ppStatus)->fixupMsgId = SDK_SAMPLE_GENERIC_FIXUP_SUCCESS_MSG_ID;
-                (*ppStatus)->percentage = 100;
-                (*ppStatus)->state = fixupStateSuccess;
-                break;
+    case NOFIXESNEEDED:
+        // In this example, this case will be hit when the client is healthy
+        wprintf(L"ShaCallback::GetFixupInfo: Returning HealthState of NOFIXESNEEDED");
+        (*ppStatus)->fixupMsgId = SDK_SAMPLE_GENERIC_FIXUP_SUCCESS_MSG_ID;
+        (*ppStatus)->percentage = 100;
+        (*ppStatus)->state = fixupStateSuccess;
+        break;
 
-        case FIXESINPROGRESS:
-                // In this example, this case will be hit when unhealthy, but only when the
-                //'auto-remediate' flag is passed back from the NAP Server
-                //
-                // SDK Note:
-                // The 'auto-remediate' flag indicates that the SHA should
-                // automatically attempt to fix the client's health state, if possible.
-                //
-                wprintf(L"ShaCallback::GetFixupInfo: Returning HealthState of FIXESINPROGRESS");
-               (*ppStatus)->fixupMsgId = SDK_SAMPLE_GENERIC_FIXUP_INPROGRESS_MSG_ID;
-               (*ppStatus)->percentage = 50;
-               (*ppStatus)->state = fixupStateInProgress;
-               break;
+    case FIXESINPROGRESS:
+        // In this example, this case will be hit when unhealthy, but only when the
+        //'auto-remediate' flag is passed back from the NAP Server
+        //
+        // SDK Note:
+        // The 'auto-remediate' flag indicates that the SHA should
+        // automatically attempt to fix the client's health state, if possible.
+        //
+        wprintf(L"ShaCallback::GetFixupInfo: Returning HealthState of FIXESINPROGRESS");
+        (*ppStatus)->fixupMsgId = SDK_SAMPLE_GENERIC_FIXUP_INPROGRESS_MSG_ID;
+        (*ppStatus)->percentage = 50;
+        (*ppStatus)->state = fixupStateInProgress;
+        break;
 
-        case FIXESNEEDED:
-        default:
-                // In this example, this case will be hit when unhealthy and 'auto-remediate'
-                // is NOT indicated by NAP Server
-                //
-                // SDK Note:
-                // The 'auto-remediate' flag indicates that the SHA should
-                // automatically attempt to fix the client's health state, if possible.  If it is NOT
-                // set, then the SHA should not update the client, but should leave it in its
-                // current state.
-                //
-                wprintf(L"ShaCallback::GetFixupInfo: Returning HealthState of FIXESNEEDED");
-               (*ppStatus)->fixupMsgId = SDK_SAMPLE_CLIENT_NOT_PATCHED_MSG_ID;
-               (*ppStatus)->percentage = percentageNotSupported;
-               (*ppStatus)->state = fixupStateCouldNotUpdate;
-                break;
+    case FIXESNEEDED:
+    default:
+        // In this example, this case will be hit when unhealthy and 'auto-remediate'
+        // is NOT indicated by NAP Server
+        //
+        // SDK Note:
+        // The 'auto-remediate' flag indicates that the SHA should
+        // automatically attempt to fix the client's health state, if possible.  If it is NOT
+        // set, then the SHA should not update the client, but should leave it in its
+        // current state.
+        //
+        wprintf(L"ShaCallback::GetFixupInfo: Returning HealthState of FIXESNEEDED");
+        (*ppStatus)->fixupMsgId = SDK_SAMPLE_CLIENT_NOT_PATCHED_MSG_ID;
+        (*ppStatus)->percentage = percentageNotSupported;
+        (*ppStatus)->state = fixupStateCouldNotUpdate;
+        break;
     }
-    
+
     (*ppStatus)->resultCodes.count = NUMBER_OF_HRESULTS;   // 1 HRESULT
     *((*ppStatus)->resultCodes.results) = S_OK;
 
 
-    Cleanup:
-        return hr;
+Cleanup:
+    return hr;
 }
 
 
@@ -395,7 +395,7 @@ HRESULT ShaCallback::FillSoHRequest(
     }
 
 
-   return hr;
+    return hr;
 }
 
 
@@ -428,8 +428,8 @@ HRESULT ShaCallback::HandleSoHResponse(
     }
 
     hr = pSohProcessor->FindNextAttribute(0,
-                                     sohAttributeTypeComplianceResultCodes,
-                                     &index);
+                                          sohAttributeTypeComplianceResultCodes,
+                                          &index);
     if (FAILED(hr))
     {
         // don't change our state if we can't read the SoH
@@ -443,9 +443,9 @@ HRESULT ShaCallback::HandleSoHResponse(
     {
         // don't change our state if we can't read the SoH
         wprintf(L"\nShaCallback::HandleSoHResponse(): GetAttribute failed (error = 0x%08x)\n", hr);
-		attrType = (SoHAttributeType) 0;
-		pAttrValue = NULL;
-		goto Cleanup;
+        attrType = (SoHAttributeType) 0;
+        pAttrValue = NULL;
+        goto Cleanup;
     }
 
     // for this sample, only reading 1 attribute
@@ -511,9 +511,9 @@ HRESULT ShaCallback::HandleSoHResponse(
     // what to display to the user in the NAP Status window.
     //
 
-    Cleanup:
-        FreeSoHAttributeValue(attrType,pAttrValue);
-        return hr;
+Cleanup:
+    FreeSoHAttributeValue(attrType,pAttrValue);
+    return hr;
 }
 
 
@@ -526,9 +526,9 @@ HRESULT ShaCallback::HandleSoHResponse(
 // See MSDN for latest documentation on this function.
 //
 STDMETHODIMP  ShaCallback::CompareSoHRequests(
-   /* in */ __RPC__in const SoHRequest* lhs,
-   /* in */ __RPC__in const SoHRequest* rhs,
-   /* out */ __RPC__out BOOL* isEqual)
+    /* in */ __RPC__in const SoHRequest* lhs,
+    /* in */ __RPC__in const SoHRequest* rhs,
+    /* out */ __RPC__out BOOL* isEqual)
 {
     HRESULT hr = S_OK;
     wprintf(L"\nShaCallback::CompareSoHRequests() called by NAPAgent\n");
@@ -547,7 +547,7 @@ STDMETHODIMP  ShaCallback::CompareSoHRequests(
     UNREFERENCED_PARAMETER(lhs);
     UNREFERENCED_PARAMETER(rhs);
     UNREFERENCED_PARAMETER(isEqual);
-    
+
     wprintf(L"ShaCallback::CompareSoHRequest: SHA does not support CompareSoHRequests API, so QA will compare bytes on its own\n");
     hr = E_NOTIMPL;
 
@@ -563,21 +563,21 @@ STDMETHODIMP  ShaCallback::CompareSoHRequests(
 // See MSDN for latest documentation on this function.
 //
 STDMETHODIMP  ShaCallback::NotifyOrphanedSoHRequest(
-   /* in */ __RPC__in const CorrelationId* correlationId)
+    /* in */ __RPC__in const CorrelationId* correlationId)
 {
-   HRESULT hr = S_OK;
+    HRESULT hr = S_OK;
 
-   wprintf(L"NapAgent notified about OrphanedSohRequest (no response received for previously generated SoHRequest)\n");
-   UNREFERENCED_PARAMETER(correlationId);
+    wprintf(L"NapAgent notified about OrphanedSohRequest (no response received for previously generated SoHRequest)\n");
+    UNREFERENCED_PARAMETER(correlationId);
 
-   return hr;
+    return hr;
 }
 
 
 // Implementation of IUnknown
 
 STDMETHODIMP ShaCallback::QueryInterface(
-    __RPC__in const IID& iid, 
+    __RPC__in const IID& iid,
     __RPC__out void** ppv)
 {
     if (iid == IID_IUnknown)

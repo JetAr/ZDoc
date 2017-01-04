@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -7,7 +7,7 @@
 //
 //
 //  Abstract:
-//      This module implements the TFunctionDiscoveryProvider class that 
+//      This module implements the TFunctionDiscoveryProvider class that
 //      implements the IFunctionDiscoveryProvider interface
 
 #include <stdafx.h>
@@ -18,20 +18,20 @@
 // Every profider must declare its own category name here.
 // This name much match with the entry that the provider's
 // installer will create in the registry to register the provider.
-// 
+//
 // TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO
-const WCHAR g_szProviderCategory[] = L"Provider\\Sample.FDProvider";  
+const WCHAR g_szProviderCategory[] = L"Provider\\Sample.FDProvider";
 
 // TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO
-// 
+//
 // Generate a new UUID to use here.
 //
 // SID_SampleProviderService is just used for demonstration purposes here.
-// a real provider will provide its own services IDs GUIS for services 
+// a real provider will provide its own services IDs GUIS for services
 // that it supports through QueryService
 //
 // TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO
-const GUID SID_SampleProviderService = { 0x3e6fe3cf, 0x98ab, 0x44c7, { 0xbf, 0xbc, 0xd1, 0x70, 0x12, 0x49, 0x34, 0xd1 } };  
+const GUID SID_SampleProviderService = { 0x3e6fe3cf, 0x98ab, 0x44c7, { 0xbf, 0xbc, 0xd1, 0x70, 0x12, 0x49, 0x34, 0xd1 } };
 
 // The maximum length that a notification queue to a client can grow to.
 // After this notifications for the client will be dropped.
@@ -64,7 +64,7 @@ TFunctionDiscoveryProvider::TFunctionDiscoveryProvider(
     m_hDiscoveryProtocolQuery(NULL)
 {
     ZeroMemory(&m_ClientNotifyEnvironment, sizeof(m_ClientNotifyEnvironment));
-    
+
     IncModuleCount();
 
     // Notify the exe host that a new provider was created
@@ -77,7 +77,7 @@ TFunctionDiscoveryProvider::TFunctionDiscoveryProvider(
 
 TFunctionDiscoveryProvider::~TFunctionDiscoveryProvider()
 {
-    // Call EndQuery because it may not have been called if the client was 
+    // Call EndQuery because it may not have been called if the client was
     // unexpectedly terminated.
     EndQuery();
 
@@ -126,7 +126,7 @@ STDMETHODIMP_(ULONG) TFunctionDiscoveryProvider::Release()
 }  // TFunctionDiscoveryProvider::Release
 
 STDMETHODIMP TFunctionDiscoveryProvider::QueryInterface(
-    REFIID riid, 
+    REFIID riid,
     __deref_out_opt void** ppv)
 {
     HRESULT hr = S_OK;
@@ -170,7 +170,7 @@ STDMETHODIMP TFunctionDiscoveryProvider::QueryInterface(
 // Begin IFunctionDiscoveryProvider
 //---------------------------------------------------------------------------
 
-STDMETHODIMP TFunctionDiscoveryProvider::Initialize( 
+STDMETHODIMP TFunctionDiscoveryProvider::Initialize(
     /* [in] */ __RPC__in_opt IFunctionDiscoveryProviderFactory* pIFunctionDiscoveryProviderFactory,
     /* [in] */ __RPC__in_opt IFunctionDiscoveryNotification* pIFunctionDiscoveryNotification,
     /* [in] */ LCID lcidUserDefault,
@@ -228,15 +228,15 @@ STDMETHODIMP TFunctionDiscoveryProvider::Initialize(
             hr =  E_INVALIDARG;
         }
     }
-    
+
     // Save the user's language
     m_lcidUserDefault = lcidUserDefault;
 
-    // Cache pIFunctionDiscoveryProviderFactory and pIFunctionDiscoveryProviderFactory 
+    // Cache pIFunctionDiscoveryProviderFactory and pIFunctionDiscoveryProviderFactory
     if (S_OK == hr)
     {
         m_CachedInterfaceLock.AcquireExclusive();
-    
+
         pIFunctionDiscoveryProviderFactory->AddRef();
         m_pIFunctionDiscoveryProviderFactory = pIFunctionDiscoveryProviderFactory;
         pIFunctionDiscoveryNotification->AddRef();
@@ -244,7 +244,7 @@ STDMETHODIMP TFunctionDiscoveryProvider::Initialize(
 
         m_CachedInterfaceLock.ReleaseExclusive();
     }
-   
+
     // Initialize the storage capabilities
     if (S_OK == hr)
     {
@@ -262,9 +262,9 @@ STDMETHODIMP TFunctionDiscoveryProvider::Initialize(
     if (S_OK == hr)
     {
         hr = pIFunctionDiscoveryNotification->OnEvent(
-            FD_EVENTID_PRIVATE,  // A private event, ignored by the client
-            0,  // FunDisc will supply the context to the client
-            g_szProviderCategory);
+                 FD_EVENTID_PRIVATE,  // A private event, ignored by the client
+                 0,  // FunDisc will supply the context to the client
+                 g_szProviderCategory);
     }
 
     if (S_OK != hr)
@@ -276,8 +276,8 @@ STDMETHODIMP TFunctionDiscoveryProvider::Initialize(
 
     return hr;
 }  // TFunctionDiscoveryProvider::Initialize
-    
-STDMETHODIMP TFunctionDiscoveryProvider::Query( 
+
+STDMETHODIMP TFunctionDiscoveryProvider::Query(
     /* [in] */ __RPC__in_opt IFunctionDiscoveryProviderQuery* pIFunctionDiscoveryProviderQuery,
     /* [out] */ __RPC__deref_out_opt IFunctionInstanceCollection** ppIFunctionInstanceCollection)
 {
@@ -316,8 +316,8 @@ STDMETHODIMP TFunctionDiscoveryProvider::Query(
     if (S_OK == hr)
     {
         hr = pIFunctionDiscoveryProviderQuery->IsSubcategoryQuery(
-            &isSubcategoryQuery, 
-            &pszSubCategory);
+                 &isSubcategoryQuery,
+                 &pszSubCategory);
     }
     if (S_OK == hr)
     {
@@ -327,18 +327,18 @@ STDMETHODIMP TFunctionDiscoveryProvider::Query(
         }
     }
 
-    /// 
+    ///
     /// Retieve the query constraints the the client specified
     ///
-    
+
     // Check if this is an instance query.
     // If it is, we'll save the Instance Id that we are querying for.
     // All providers should support querying for a specific instance
     if (S_OK == hr)
     {
         hr = pIFunctionDiscoveryProviderQuery->IsInstanceQuery(
-            &isInstanceQuery, 
-            &pszInstanceQueryId);
+                 &isInstanceQuery,
+                 &pszInstanceQueryId);
     }
 
     // Retrieve the constraint collection to check the rest of the constraints, if any
@@ -355,19 +355,19 @@ STDMETHODIMP TFunctionDiscoveryProvider::Query(
     // TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO
     //
     // The sample retrieves a constraint called DeviceCategory here.
-    // Implementers should retrieve their provider's constraints here and 
+    // Implementers should retrieve their provider's constraints here and
     // pass them to the discovery implementation.
-    // 
-    // TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO    
+    //
+    // TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO
     if (S_OK == hr)
     {
         // "DeviceCategory" is a custom constraint just for this provider
         hr = pIProviderQueryConstraintCollection->Get(
-            L"DeviceCategory", 
-            &pszDeviceCategory);
+                 L"DeviceCategory",
+                 &pszDeviceCategory);
         if (S_FALSE == hr)
         {
-            // Get will return S_FALSE if the constraint is not found.  
+            // Get will return S_FALSE if the constraint is not found.
             // If that's the case just continue.
             hr = S_OK;
         }
@@ -380,7 +380,7 @@ STDMETHODIMP TFunctionDiscoveryProvider::Query(
     //
     // Set up the threadpool environment for queuing callbacks to the client.
     //
-    
+
     // Initialize m_ClientNotifyEnvironment
     if (S_OK == hr)
     {
@@ -392,7 +392,7 @@ STDMETHODIMP TFunctionDiscoveryProvider::Query(
     if (S_OK == hr)
     {
         m_pThreadpool = TClientNotificationThreadpool::GetThreadpool();
-        
+
         if (!m_pThreadpool)
         {
             hr = HRESULT_FROM_WIN32(GetLastError());
@@ -406,14 +406,14 @@ STDMETHODIMP TFunctionDiscoveryProvider::Query(
             &m_ClientNotifyEnvironment,
             m_pThreadpool->GetPTP_POOL());
     }
-    
+
     if (S_OK == hr)
     {
         m_hClientNotifyWork = CreateThreadpoolWork(
-            &NotifyClientCallback,
-            this,  // Pass the provider as the context
-            &m_ClientNotifyEnvironment);
-        
+                                  &NotifyClientCallback,
+                                  this,  // Pass the provider as the context
+                                  &m_ClientNotifyEnvironment);
+
         if (!m_hClientNotifyWork)
         {
             hr = HRESULT_FROM_WIN32(GetLastError());
@@ -425,10 +425,10 @@ STDMETHODIMP TFunctionDiscoveryProvider::Query(
         m_DiscoveryProtocolQueryLock.AcquireExclusive();
 
         hr = StartDiscoveryQuery(
-            this,
-            pszDeviceCategory,
-            pszInstanceQueryId,
-            &m_hDiscoveryProtocolQuery);
+                 this,
+                 pszDeviceCategory,
+                 pszInstanceQueryId,
+                 &m_hDiscoveryProtocolQuery);
 
         m_DiscoveryProtocolQueryLock.ReleaseExclusive();
     }
@@ -471,10 +471,10 @@ STDMETHODIMP TFunctionDiscoveryProvider::EndQuery()
     // NOTE - NOTE - NOTE - NOTE - NOTE - NOTE - NOTE - NOTE - NOTE - NOTE
     //
     // It is important that EndQuery completes quickly without waiting for
-    // lengthy timeouts.  Any delay in EndQuery will be reflected in 
-    // calling applications such as Network Explorer when a user 
+    // lengthy timeouts.  Any delay in EndQuery will be reflected in
+    // calling applications such as Network Explorer when a user
     // refresh the UI.
-    // 
+    //
     // NOTE - NOTE - NOTE - NOTE - NOTE - NOTE - NOTE - NOTE - NOTE - NOTE
 
     HRESULT hr = S_OK;
@@ -484,7 +484,7 @@ STDMETHODIMP TFunctionDiscoveryProvider::EndQuery()
     // Delete all remaining work in the queue, but leave the first entry
     // because the work callback function may be using it.
     m_ClientNotificationQueueLock.AcquireExclusive();
-    
+
     while (m_ClientNotificationQueue.GetCount() > 1)
     {
         delete m_ClientNotificationQueue.RemoveTail();
@@ -492,7 +492,7 @@ STDMETHODIMP TFunctionDiscoveryProvider::EndQuery()
 
     m_ClientNotificationQueueLock.ReleaseExclusive();
 
-    // Wait for outstanding work to complete and 
+    // Wait for outstanding work to complete and
     // close the work.
     if (m_hClientNotifyWork)
     {
@@ -517,11 +517,11 @@ STDMETHODIMP TFunctionDiscoveryProvider::EndQuery()
     }
 
     assert(m_ClientNotificationQueue.IsEmpty());
- 
+
     return hr;
 }  // TFunctionDiscoveryProvider::EndQuery
 
-STDMETHODIMP TFunctionDiscoveryProvider::InstancePropertyStoreValidateAccess( 
+STDMETHODIMP TFunctionDiscoveryProvider::InstancePropertyStoreValidateAccess(
     /* [in] */ __RPC__in_opt IFunctionInstance* pIFunctionInstance,
     /* [in] */ INT_PTR iProviderInstanceContext,
     /* [in] */ const DWORD dwStgAccess)
@@ -544,10 +544,10 @@ STDMETHODIMP TFunctionDiscoveryProvider::InstancePropertyStoreValidateAccess(
         hr = E_NOTIMPL;
     }
 
-    return hr; 
+    return hr;
 }  // TFunctionDiscoveryProvider::InstancePropertyStoreValidateAccess
 
-STDMETHODIMP TFunctionDiscoveryProvider::InstancePropertyStoreOpen( 
+STDMETHODIMP TFunctionDiscoveryProvider::InstancePropertyStoreOpen(
     /* [in] */ __RPC__in_opt IFunctionInstance* pIFunctionInstance,
     /* [in] */ INT_PTR iProviderInstanceContext,
     /* [in] */ const DWORD dwStgAccess,
@@ -570,10 +570,10 @@ STDMETHODIMP TFunctionDiscoveryProvider::InstancePropertyStoreOpen(
         hr = E_NOTIMPL;
     }
 
-    return hr; 
+    return hr;
 }  // TFunctionDiscoveryProvider::InstancePropertyStoreOpen
 
-STDMETHODIMP TFunctionDiscoveryProvider::InstancePropertyStoreFlush( 
+STDMETHODIMP TFunctionDiscoveryProvider::InstancePropertyStoreFlush(
     /* [in] */ __RPC__in_opt IFunctionInstance* pIFunctionInstance,
     /* [in] */ INT_PTR iProviderInstanceContext)
 {
@@ -594,10 +594,10 @@ STDMETHODIMP TFunctionDiscoveryProvider::InstancePropertyStoreFlush(
         hr = E_NOTIMPL;
     }
 
-    return hr; 
+    return hr;
 }  // TFunctionDiscoveryProvider::InstancePropertyStoreFlush
 
-STDMETHODIMP TFunctionDiscoveryProvider::InstanceQueryService( 
+STDMETHODIMP TFunctionDiscoveryProvider::InstanceQueryService(
     /* [in] */ __RPC__in_opt IFunctionInstance* pIFunctionInstance,
     /* [in] */ INT_PTR iProviderInstanceContext,
     /* [in] */ __RPC__in REFGUID guidService,
@@ -638,8 +638,8 @@ STDMETHODIMP TFunctionDiscoveryProvider::InstanceQueryService(
                 // The client is querying the provider for child services.
                 // return a IFunctionInstanceCollection representing the child services.
                 hr = GetChildFunctionInstances(
-                    pIFunctionInstance,
-                    &pIFunctionInstanceCollection);
+                         pIFunctionInstance,
+                         &pIFunctionInstanceCollection);
 
                 if (S_OK == hr)
                 {
@@ -648,16 +648,16 @@ STDMETHODIMP TFunctionDiscoveryProvider::InstanceQueryService(
             }
             else
             {
-                // InstanceQueryService must return E_NOINTERFACE if the 
+                // InstanceQueryService must return E_NOINTERFACE if the
                 // requested interface is not supported.
                 hr = E_NOINTERFACE;
             }
         }
-        else if (SID_SampleProviderService == guidService) 
+        else if (SID_SampleProviderService == guidService)
         {
             // TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO
-            // 
-            // From demonstration purposes, the sample provider support creating 
+            //
+            // From demonstration purposes, the sample provider support creating
             // a IStream interface for the SID_SampleProviderService service.
             // A real provider would support its own services and Interfaces
             //
@@ -672,9 +672,9 @@ STDMETHODIMP TFunctionDiscoveryProvider::InstanceQueryService(
                 LPSTREAM pStream = NULL;
 
                 hr = CreateStreamOnHGlobal(
-                    NULL,
-                    TRUE,
-                    &pStream);
+                         NULL,
+                         TRUE,
+                         &pStream);
 
                 if (S_OK == hr)
                 {
@@ -683,14 +683,14 @@ STDMETHODIMP TFunctionDiscoveryProvider::InstanceQueryService(
             }
             else
             {
-                // InstanceQueryService must return E_NOINTERFACE if the 
+                // InstanceQueryService must return E_NOINTERFACE if the
                 // requested interface is not supported.
                 hr = E_NOINTERFACE;
             }
         }
         else
         {
-            // InstanceQueryService must return E_NOTIMPL if the 
+            // InstanceQueryService must return E_NOTIMPL if the
             // requested service is not supported.
             hr = E_NOTIMPL;
         }
@@ -699,12 +699,12 @@ STDMETHODIMP TFunctionDiscoveryProvider::InstanceQueryService(
     return hr;
 }  // TFunctionDiscoveryProvider::InstanceQueryService
 
-STDMETHODIMP TFunctionDiscoveryProvider::InstanceReleased( 
+STDMETHODIMP TFunctionDiscoveryProvider::InstanceReleased(
     /* [in] */ __RPC__in_opt IFunctionInstance* pIFunctionInstance,
     /* [in] */ INT_PTR iProviderInstanceContext)
 {
     HRESULT hr = S_OK;
-    
+
     if (pIFunctionInstance)
     {
         hr = m_FDProviderHelper.CoSetProxyBlanketWithThreadToken(pIFunctionInstance);
@@ -714,9 +714,9 @@ STDMETHODIMP TFunctionDiscoveryProvider::InstanceReleased(
         hr = E_INVALIDARG;
     }
 
-    // Instance release is called by Function Discovery whenever 
+    // Instance release is called by Function Discovery whenever
     // a function instance provided by the profider is released.
-    // This allows the provider to do any cleanup related to cacheing 
+    // This allows the provider to do any cleanup related to cacheing
     // that may be taking place in the provider.
 
     // The sample provider does not do caching.
@@ -728,27 +728,27 @@ STDMETHODIMP TFunctionDiscoveryProvider::InstanceReleased(
 //---------------------------------------------------------------------------
 
 //---------------------------------------------------------------------------
-// Begin Public methods 
+// Begin Public methods
 //---------------------------------------------------------------------------
 
 VOID TFunctionDiscoveryProvider::LogoffNotification(
-        DWORD hSessionId)
+    DWORD hSessionId)
 {
     BOOL fSessionIsForThisProvider = FALSE;
 
     sm_ProviderListLock.AcquireShared();
 
     for (
-         TList<TFunctionDiscoveryProvider>::TIterator pFunctionDiscoveryProvider = sm_ProviderList.Begin();
-         pFunctionDiscoveryProvider != sm_ProviderList.End();
-         pFunctionDiscoveryProvider = ++pFunctionDiscoveryProvider)
+        TList<TFunctionDiscoveryProvider>::TIterator pFunctionDiscoveryProvider = sm_ProviderList.Begin();
+        pFunctionDiscoveryProvider != sm_ProviderList.End();
+        pFunctionDiscoveryProvider = ++pFunctionDiscoveryProvider)
     {
         // Call m_FDProviderHelper.ReleaseToken for the session that has been logged off.
         // ReleaseToken will close the user token, if the token is for this session.
         // This is required when a session is logged off because the session will not end
         // until all tokens for the user has been closed.
         fSessionIsForThisProvider = pFunctionDiscoveryProvider->m_FDProviderHelper.ReleaseToken(hSessionId);
-        
+
         if (fSessionIsForThisProvider)
         {
             // If the session was for this provider then call ReleaseCachedInterfaces
@@ -803,8 +803,8 @@ HRESULT TFunctionDiscoveryProvider::SubmitNotifyClientOnUpdate(
 {
     HRESULT hr = S_OK;
     TClientNotificationWork* pClientNotificationWork = TClientNotificationWork::CreateClientOnUpdateWork(
-        QueryUpdateAction,
-        pFunctionInstanceInfo);
+                QueryUpdateAction,
+                pFunctionInstanceInfo);
 
     if (pClientNotificationWork)
     {
@@ -819,7 +819,7 @@ HRESULT TFunctionDiscoveryProvider::SubmitNotifyClientOnUpdate(
 }  // TFunctionDiscoveryProvider::SubmitNotifyClientOnUpdate
 
 //---------------------------------------------------------------------------
-// End Public methods 
+// End Public methods
 //---------------------------------------------------------------------------
 
 //---------------------------------------------------------------------------
@@ -829,7 +829,7 @@ HRESULT TFunctionDiscoveryProvider::SubmitNotifyClientOnUpdate(
 VOID TFunctionDiscoveryProvider::ReleaseCachedInterfaces()
 {
     m_CachedInterfaceLock.AcquireExclusive();
-    
+
     if (m_pIFunctionDiscoveryProviderFactory)
     {
         m_pIFunctionDiscoveryProviderFactory->Release();
@@ -858,8 +858,8 @@ VOID TFunctionDiscoveryProvider::StopDiscoveryProtocolQuery()
 }  // TFunctionDiscoveryProvider::StopDiscoveryProtocolQuery()
 
 HRESULT TFunctionDiscoveryProvider::GetChildFunctionInstances(
-        __in IFunctionInstance* pIFunctionInstance,
-        __deref_out IFunctionInstanceCollection** ppIFunctionInstanceCollection)
+    __in IFunctionInstance* pIFunctionInstance,
+    __deref_out IFunctionInstanceCollection** ppIFunctionInstanceCollection)
 {
     HRESULT hr = S_OK;
     IFunctionDiscoveryProviderFactory* pIFunctionDiscoveryProviderFactory = NULL;
@@ -899,7 +899,7 @@ HRESULT TFunctionDiscoveryProvider::GetChildFunctionInstances(
     //
     // If devices have child devices or services, create Function Insances
     // that represent them and add them to pFunctionInstanceCollection.
-    // 
+    //
     // TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO
 
 
@@ -922,7 +922,7 @@ HRESULT TFunctionDiscoveryProvider::GetChildFunctionInstances(
     {
         pIFunctionDiscoveryProviderFactory->Release();
     }
-    
+
     return hr;
 }  // TFunctionDiscoveryProvider::GetChildFunctionInstances
 
@@ -934,9 +934,9 @@ VOID TFunctionDiscoveryProvider::SubmitNotifyClientWork(
     // Add the work to the queue for the provider
     m_ClientNotificationQueueLock.AcquireExclusive();
 
-    // If the client notification queue is not fulldd the notification to the queue 
+    // If the client notification queue is not fulldd the notification to the queue
     // otherwise drop the notification.
-    // This check prevents the queue from growing unbounded if the rate of notifications 
+    // This check prevents the queue from growing unbounded if the rate of notifications
     // exceeds the client's ability to process them.
     if (m_ClientNotificationQueue.GetCount() < g_MaxClientNotificationQueueLength)
     {
@@ -961,7 +961,7 @@ VOID TFunctionDiscoveryProvider::SubmitNotifyClientWork(
         // Didn't queue the work so it needs to be deleted.
         delete pClientNotificationWork;
     }
-    
+
 }  // TFunctionDiscoveryProvider::SubmitNotifyClientWork
 
 HRESULT TFunctionDiscoveryProvider::NotifyClientOnErrorWorker(
@@ -990,9 +990,9 @@ HRESULT TFunctionDiscoveryProvider::NotifyClientOnErrorWorker(
     if (S_OK == hr)
     {
         hr = pIFunctionDiscoveryNotification->OnError(
-            hrVal,
-            0,  // FunDisc will supply the context to the client
-            g_szProviderCategory);
+                 hrVal,
+                 0,  // FunDisc will supply the context to the client
+                 g_szProviderCategory);
     }
 
     // Cleanup
@@ -1030,9 +1030,9 @@ HRESULT TFunctionDiscoveryProvider::NotifyClientOnEventWorker(
     if (S_OK == hr)
     {
         hr = pIFunctionDiscoveryNotification->OnEvent(
-            EventId,
-            0,  // FunDisc will supply the context to the client
-            g_szProviderCategory);
+                 EventId,
+                 0,  // FunDisc will supply the context to the client
+                 g_szProviderCategory);
     }
 
 
@@ -1059,7 +1059,7 @@ HRESULT TFunctionDiscoveryProvider::NotifyClientOnUpdateWorker(
     m_CachedInterfaceLock.AcquireShared();
 
     if (   m_pIFunctionDiscoveryProviderFactory
-        && m_pIFunctionDiscoveryNotification)
+            && m_pIFunctionDiscoveryNotification)
     {
         m_pIFunctionDiscoveryProviderFactory->AddRef();
         pIFunctionDiscoveryProviderFactory = m_pIFunctionDiscoveryProviderFactory;
@@ -1097,12 +1097,12 @@ HRESULT TFunctionDiscoveryProvider::NotifyClientOnUpdateWorker(
     if (S_OK == hr)
     {
         hr = pIFunctionDiscoveryProviderFactory->CreateInstance(
-            NULL,  // No SubCategory
-            pFunctionInstanceInfo->GetFunctionInstanceId(),
-            NULL,
-            pClientPropertyStore,
-            this,
-            &pIFunctionInstance);
+                 NULL,  // No SubCategory
+                 pFunctionInstanceInfo->GetFunctionInstanceId(),
+                 NULL,
+                 pClientPropertyStore,
+                 this,
+                 &pIFunctionInstance);
     }
     // Set proxy security blanket for pIFunctionInstance to ensure that the provider can call the client interface
     if (S_OK == hr)
@@ -1114,9 +1114,9 @@ HRESULT TFunctionDiscoveryProvider::NotifyClientOnUpdateWorker(
     if (S_OK == hr)
     {
         hr = pIFunctionDiscoveryNotification->OnUpdate(
-            eQueryUpdateAction,
-            0,  // FunDisc will supply the context to the client
-            pIFunctionInstance);
+                 eQueryUpdateAction,
+                 0,  // FunDisc will supply the context to the client
+                 pIFunctionInstance);
     }
 
     // Cleanup
@@ -1155,7 +1155,7 @@ VOID CALLBACK TFunctionDiscoveryProvider::NotifyClientCallback(
     if (S_OK == hr)
     {
         // Get the next work item from the queue, but leave it in the queue
-        // to prevent SubmitNotifyClientWork from posting new work before 
+        // to prevent SubmitNotifyClientWork from posting new work before
         // NotifyClientOnUpdateWorker has completed the notification call
         pFunctionDiscoveryProvider->m_ClientNotificationQueueLock.AcquireExclusive();
 
@@ -1174,17 +1174,17 @@ VOID CALLBACK TFunctionDiscoveryProvider::NotifyClientCallback(
             break;
         case OnUpdate:
             hr = pFunctionDiscoveryProvider->NotifyClientOnUpdateWorker(
-                pClientNotificationWork->WorkData.OnUpdateWork.QueryUpdateAction,
-                pClientNotificationWork->WorkData.OnUpdateWork.pFunctionInstanceInfo);
+                     pClientNotificationWork->WorkData.OnUpdateWork.QueryUpdateAction,
+                     pClientNotificationWork->WorkData.OnUpdateWork.pFunctionInstanceInfo);
 
             break;
         }
 
         if (   (HRESULT_FROM_WIN32(RPC_S_SERVER_UNAVAILABLE) != hr)
-            && (HRESULT_FROM_WIN32(RPC_E_DISCONNECTED) != hr))
+                && (HRESULT_FROM_WIN32(RPC_E_DISCONNECTED) != hr))
         {
             // The notification was delivered.
-            
+
             pFunctionDiscoveryProvider->m_ClientNotificationQueueLock.AcquireExclusive();
 
             // Remove it from the queue.
@@ -1214,7 +1214,7 @@ VOID CALLBACK TFunctionDiscoveryProvider::NotifyClientCallback(
         else
         {
             // Calls to the client are no longer possible.
-            // Clean up resources associated with this provider that 
+            // Clean up resources associated with this provider that
             // are not threadpool related.
 
             pFunctionDiscoveryProvider->ReleaseCachedInterfaces();
@@ -1223,7 +1223,7 @@ VOID CALLBACK TFunctionDiscoveryProvider::NotifyClientCallback(
 
             // Clean up all outstanding notifications.
             pFunctionDiscoveryProvider->m_ClientNotificationQueueLock.AcquireExclusive();
-            
+
             while (!pFunctionDiscoveryProvider->m_ClientNotificationQueue.IsEmpty())
             {
                 delete pFunctionDiscoveryProvider->m_ClientNotificationQueue.RemoveHead();
@@ -1232,10 +1232,10 @@ VOID CALLBACK TFunctionDiscoveryProvider::NotifyClientCallback(
             pFunctionDiscoveryProvider->m_ClientNotificationQueueLock.ReleaseExclusive();
         }
 
-        // Thread pool threads must restore the thread state 
+        // Thread pool threads must restore the thread state
         CoUninitialize();
     }
-    // else 
+    // else
     // Failure of COM to initialize on the thread should not happen
     // It means that someone else failed to clean up COM on the threadpool thread.
     // There is no way to recover if this should happen.

@@ -1,4 +1,4 @@
-//*****************************************************************************
+﻿//*****************************************************************************
 //
 // Microsoft Windows Media
 // Copyright (C) Microsoft Corporation. All rights reserved.
@@ -45,7 +45,7 @@ int  __cdecl _tmain( int argc, __in_ecount(argc) LPTSTR argv[] )
         return hr;
     }
 
-#ifndef UNICODE 
+#ifndef UNICODE
     WCHAR* pwszInput = NULL;
 
     hr = ConvertStrToUnicode( ptszInput, &pwszInput );
@@ -56,13 +56,13 @@ int  __cdecl _tmain( int argc, __in_ecount(argc) LPTSTR argv[] )
 #endif // UNICODE
 
     hr = CoInitialize( NULL );
-	if( FAILED( hr ) )
-	{
-		_tprintf( _T( "CoInitialize failed" ) ) ;
-		return( 1 );
-	}
+    if( FAILED( hr ) )
+    {
+        _tprintf( _T( "CoInitialize failed" ) ) ;
+        return( 1 );
+    }
 
-    do 
+    do
     {
         pLicenseViewer = new CLicenseViewer();
         if ( pLicenseViewer == NULL )
@@ -74,7 +74,7 @@ int  __cdecl _tmain( int argc, __in_ecount(argc) LPTSTR argv[] )
         //
         // Open the file
         //
-#ifndef UNICODE 
+#ifndef UNICODE
         hr = pLicenseViewer->Open( pwszInput );
 #else
         hr = pLicenseViewer->Open( ptszInput );
@@ -84,7 +84,7 @@ int  __cdecl _tmain( int argc, __in_ecount(argc) LPTSTR argv[] )
             _tprintf( _T( "License viewer failed to open the file. hr = 0x%08lX\n" ), hr );
             break;
         }
-        
+
         //
         // Print out the DRM info for the file
         //
@@ -94,7 +94,7 @@ int  __cdecl _tmain( int argc, __in_ecount(argc) LPTSTR argv[] )
             _tprintf( _T( "License viewer failed to ShowRights hr = 0x%08lX\n" ), hr );
             break;
         }
-        
+
         //
         // Close the file
         //
@@ -103,7 +103,7 @@ int  __cdecl _tmain( int argc, __in_ecount(argc) LPTSTR argv[] )
         {
             break;
         }
-        
+
         //
         // Free the license viewer member variables, so that the reader will release
         // its reference count on the license viewer.  Otherwise the license viewer
@@ -122,11 +122,11 @@ int  __cdecl _tmain( int argc, __in_ecount(argc) LPTSTR argv[] )
     //
     SAFE_RELEASE( pLicenseViewer );
 
-#ifndef UNICODE 
+#ifndef UNICODE
     SAFE_ARRAYDELETE( pwszInput );
 #endif
 
-	CoUninitialize( );
+    CoUninitialize( );
 
     return 0;
 }
@@ -137,9 +137,9 @@ int  __cdecl _tmain( int argc, __in_ecount(argc) LPTSTR argv[] )
 //------------------------------------------------------------------------------
 void Usage()
 {
-   _tprintf( _T( "drmshow -i <infile>\n" ) );
-   _tprintf( _T( "\tinfile\t = ASF file name\n" ) );
-   _tprintf( _T( "\n" ) );
+    _tprintf( _T( "drmshow -i <infile>\n" ) );
+    _tprintf( _T( "\tinfile\t = ASF file name\n" ) );
+    _tprintf( _T( "\n" ) );
 
 }
 
@@ -153,7 +153,7 @@ HRESULT ConvertStrToUnicode( LPCTSTR    ptszInput, __out LPWSTR* pwszInput )
 {
     HRESULT hr = S_OK;
     int nSizeCount = 0;
-    
+
     if ( NULL == ptszInput || NULL == pwszInput)
     {
         return( E_INVALIDARG );
@@ -182,7 +182,7 @@ HRESULT ConvertStrToUnicode( LPCTSTR    ptszInput, __out LPWSTR* pwszInput )
         _tprintf( _T( "Internal error %lu\n" ), GetLastError() );
         SAFE_ARRAYDELETE( *pwszInput );
         return ( E_UNEXPECTED );
-    }        
+    }
 
     return( hr );
 }
@@ -196,7 +196,7 @@ HRESULT CommandLineParser( int argc, __in_ecount(argc) LPTSTR argv[], __out LPTS
 {
     TCHAR*    ptszMode    = NULL;
     HRESULT hr            = S_OK;
-    *ptszInput            = NULL;    
+    *ptszInput            = NULL;
 
 
     if ( argc < 1 || NULL == argv || NULL == ptszInput)

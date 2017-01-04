@@ -1,4 +1,4 @@
-/*++
+﻿/*++
  Copyright (c) 2002 - 2002 Microsoft Corporation.  All Rights Reserved.
 
  THIS CODE AND INFORMATION IS PROVIDED "AS-IS" WITHOUT WARRANTY OF
@@ -31,7 +31,7 @@
         (resp)->StatusCode = (status);                                      \
         (resp)->pReason = (reason);                                         \
         (resp)->ReasonLength = (USHORT) strlen(reason);                     \
-    } 
+    }
 
 
 
@@ -40,7 +40,7 @@
         (Response).Headers.KnownHeaders[(HeaderId)].pRawValue = (RawValue); \
         (Response).Headers.KnownHeaders[(HeaderId)].RawValueLength =        \
             (USHORT) strlen(RawValue);                                      \
-    } 
+    }
 
 
 
@@ -52,33 +52,56 @@
 PCSTR
 MapSecurityErrorToString(
     IN SECURITY_STATUS Error
-    )
+)
 {
-    switch(Error) {
+    switch(Error)
+    {
 
-    case SEC_E_OK                           : return "SEC_E_OK";
-    case SEC_E_INSUFFICIENT_MEMORY          : return "SEC_E_INSUFFICIENT_MEMORY";
-    case SEC_E_INVALID_HANDLE               : return "SEC_E_INVALID_HANDLE";
-    case SEC_E_UNSUPPORTED_FUNCTION         : return "SEC_E_UNSUPPORTED_FUNCTION";
-    case SEC_E_TARGET_UNKNOWN               : return "SEC_E_TARGET_UNKNOWN";
-    case SEC_E_INTERNAL_ERROR               : return "SEC_E_INTERNAL_ERROR";
-    case SEC_E_SECPKG_NOT_FOUND             : return "SEC_E_SECPKG_NOT_FOUND";
-    case SEC_E_NOT_OWNER                    : return "SEC_E_NOT_OWNER";
-    case SEC_E_CANNOT_INSTALL               : return "SEC_E_CANNOT_INSTALL";
-    case SEC_E_INVALID_TOKEN                : return "SEC_E_INVALID_TOKEN";
-    case SEC_E_CANNOT_PACK                  : return "SEC_E_CANNOT_PACK";
-    case SEC_E_QOP_NOT_SUPPORTED            : return "SEC_E_QOP_NOT_SUPPORTED";
-    case SEC_E_NO_IMPERSONATION             : return "SEC_E_NO_IMPERSONATION";
-    case SEC_E_LOGON_DENIED                 : return "SEC_E_LOGON_DENIED";
-    case SEC_E_UNKNOWN_CREDENTIALS          : return "SEC_E_UNKNOWN_CREDENTIALS";
-    case SEC_E_NO_CREDENTIALS               : return "SEC_E_NO_CREDENTIALS";
-    case SEC_E_MESSAGE_ALTERED              : return "SEC_E_MESSAGE_ALTERED";
-    case SEC_E_OUT_OF_SEQUENCE              : return "SEC_E_OUT_OF_SEQUENCE";
-    case SEC_E_NO_AUTHENTICATING_AUTHORITY  : return "SEC_E_NO_AUTHENTICATING_AUTHORITY";
-    case SEC_E_BAD_PKGID                    : return "SEC_E_BAD_PKGID";
-    case SEC_E_TIME_SKEW                    : return "SEC_E_TIME_SKEW";
+    case SEC_E_OK                           :
+        return "SEC_E_OK";
+    case SEC_E_INSUFFICIENT_MEMORY          :
+        return "SEC_E_INSUFFICIENT_MEMORY";
+    case SEC_E_INVALID_HANDLE               :
+        return "SEC_E_INVALID_HANDLE";
+    case SEC_E_UNSUPPORTED_FUNCTION         :
+        return "SEC_E_UNSUPPORTED_FUNCTION";
+    case SEC_E_TARGET_UNKNOWN               :
+        return "SEC_E_TARGET_UNKNOWN";
+    case SEC_E_INTERNAL_ERROR               :
+        return "SEC_E_INTERNAL_ERROR";
+    case SEC_E_SECPKG_NOT_FOUND             :
+        return "SEC_E_SECPKG_NOT_FOUND";
+    case SEC_E_NOT_OWNER                    :
+        return "SEC_E_NOT_OWNER";
+    case SEC_E_CANNOT_INSTALL               :
+        return "SEC_E_CANNOT_INSTALL";
+    case SEC_E_INVALID_TOKEN                :
+        return "SEC_E_INVALID_TOKEN";
+    case SEC_E_CANNOT_PACK                  :
+        return "SEC_E_CANNOT_PACK";
+    case SEC_E_QOP_NOT_SUPPORTED            :
+        return "SEC_E_QOP_NOT_SUPPORTED";
+    case SEC_E_NO_IMPERSONATION             :
+        return "SEC_E_NO_IMPERSONATION";
+    case SEC_E_LOGON_DENIED                 :
+        return "SEC_E_LOGON_DENIED";
+    case SEC_E_UNKNOWN_CREDENTIALS          :
+        return "SEC_E_UNKNOWN_CREDENTIALS";
+    case SEC_E_NO_CREDENTIALS               :
+        return "SEC_E_NO_CREDENTIALS";
+    case SEC_E_MESSAGE_ALTERED              :
+        return "SEC_E_MESSAGE_ALTERED";
+    case SEC_E_OUT_OF_SEQUENCE              :
+        return "SEC_E_OUT_OF_SEQUENCE";
+    case SEC_E_NO_AUTHENTICATING_AUTHORITY  :
+        return "SEC_E_NO_AUTHENTICATING_AUTHORITY";
+    case SEC_E_BAD_PKGID                    :
+        return "SEC_E_BAD_PKGID";
+    case SEC_E_TIME_SKEW                    :
+        return "SEC_E_TIME_SKEW";
 
-    default                                 : return "SEC_E_ERROR";
+    default                                 :
+        return "SEC_E_ERROR";
     }
 }
 
@@ -88,7 +111,7 @@ MapSecurityErrorToString(
 DWORD
 DoReceiveRequests(
     IN HANDLE hReqQueue
-    );
+);
 
 DWORD
 SendHttpResponse(
@@ -98,43 +121,43 @@ SendHttpResponse(
     IN USHORT StatusCode,
     __in IN PSTR pReason,
     __in_opt IN PSTR pEntityString
-    );
+);
 
 DWORD
 Send401HttpResponse(
     IN HANDLE hReqQueue,
     IN PHTTP_REQUEST pRequest,
     __in_opt IN PSTR pEntityString
-    );
+);
 
 DWORD
 SendHttpPostResponse(
     IN HANDLE hReqQueue,
     IN PHTTP_REQUEST pRequest
-    );
+);
 
 HTTP_REQUEST_AUTH_INFO *
 GetAuthInfo(
     IN PHTTP_REQUEST pRequest
-    );
+);
 
 DWORD
 HandleAuthRequest(
     IN  PHTTP_REQUEST_AUTH_INFO pAuthInfo,
     IN HANDLE hReqQueue,
     PHTTP_REQUEST pRequest
-    );
+);
 
 DWORD
 UseSerializedContext(
     IN  PHTTP_REQUEST_AUTH_INFO pAuthInfo,
     IN OUT PCtxtHandle phContext
-    );
+);
 
 DWORD
 UseAccessToken(
     IN  PHTTP_REQUEST_AUTH_INFO pAuthInfo
-    );
+);
 
 /***************************************************************************++
 
@@ -154,7 +177,7 @@ __cdecl
 wmain(
     int argc,
     __in_ecount(argc) wchar_t * argv[]
-    )
+)
 {
     ULONG           retCode;
     int i;
@@ -177,12 +200,12 @@ wmain(
     //
     // Initialize HTTP APIs.
     //
-    
+
     retCode = HttpInitialize(
-                HttpApiVersion,
-                HTTP_INITIALIZE_SERVER,    // Flags
-                NULL                       // Reserved
-                );
+                  HttpApiVersion,
+                  HTTP_INITIALIZE_SERVER,    // Flags
+                  NULL                       // Reserved
+              );
 
     if (retCode != NO_ERROR)
     {
@@ -212,8 +235,8 @@ wmain(
     // Create UrlGroup handle
     //
 
-    retCode = HttpCreateUrlGroup(ssID,  
-                                 &urlGroupId, 
+    retCode = HttpCreateUrlGroup(ssID,
+                                 &urlGroupId,
                                  0);
 
 
@@ -223,7 +246,7 @@ wmain(
         urlGroupId = HTTP_NULL_ID;
         goto CleanUp;
     }
-    
+
     //
     // Create a request queue handle
     //
@@ -247,7 +270,7 @@ wmain(
     BindingProperty.Flags.Present = 1;// Specifies that the property is present on UrlGroup
     BindingProperty.RequestQueueHandle = hReqQueue;
 
-    
+
     //
     // Bind the request queue to UrlGroup
     //
@@ -271,7 +294,7 @@ wmain(
 
     Config.Flags.Present = 1;
     Config.AuthSchemes = HTTP_AUTH_ENABLE_NTLM | HTTP_AUTH_ENABLE_NEGOTIATE,
-    Config.ReceiveMutualAuth = FALSE;
+           Config.ReceiveMutualAuth = FALSE;
     Config.ReceiveContextHandle = TRUE;
     Config.DisableNTLMCredentialCaching = TRUE;
 
@@ -298,8 +321,8 @@ wmain(
     for (i = 1; i < argc; i++)
     {
         wprintf(
-          L"we are listening for requests on the following url: %s\n",
-          argv[i]);
+            L"we are listening for requests on the following url: %s\n",
+            argv[i]);
 
 
         retCode = HttpAddUrlToUrlGroup(urlGroupId,
@@ -325,17 +348,17 @@ CleanUp:
     // HTTP_URL_FLAG_REMOVE_ALL flag allows us to remove
     // all the URLs registered on URL Group at once
     //
-    if (!HTTP_IS_NULL_ID(&urlGroupId)) 
+    if (!HTTP_IS_NULL_ID(&urlGroupId))
     {
 
         retCode = HttpRemoveUrlFromUrlGroup(urlGroupId,
                                             NULL,
                                             HTTP_URL_FLAG_REMOVE_ALL);
 
-       if (retCode != NO_ERROR)
-       {
-           wprintf(L"HttpRemoveUrl failed with %lu \n", retCode);
-       }
+        if (retCode != NO_ERROR)
+        {
+            wprintf(L"HttpRemoveUrl failed with %lu \n", retCode);
+        }
 
     }
 
@@ -343,14 +366,14 @@ CleanUp:
     // Close the Url Group
     //
 
-    if (!HTTP_IS_NULL_ID(&urlGroupId)) 
+    if (!HTTP_IS_NULL_ID(&urlGroupId))
     {
         retCode = HttpCloseUrlGroup(urlGroupId);
 
-       if (retCode != NO_ERROR)
-       {
-           wprintf(L"HttpCloseUrlGroup failed with %lu \n", retCode);
-       }
+        if (retCode != NO_ERROR)
+        {
+            wprintf(L"HttpCloseUrlGroup failed with %lu \n", retCode);
+        }
 
     }
 
@@ -358,15 +381,15 @@ CleanUp:
     //
     // Close the serversession
     //
-    
-    if (!HTTP_IS_NULL_ID(&ssID)) 
+
+    if (!HTTP_IS_NULL_ID(&ssID))
     {
         retCode = HttpCloseServerSession(ssID);
 
-       if (retCode != NO_ERROR)
-       {
-           wprintf(L"HttpCloseServerSession failed with %lu \n", retCode);
-       }
+        if (retCode != NO_ERROR)
+        {
+            wprintf(L"HttpCloseServerSession failed with %lu \n", retCode);
+        }
 
     }
 
@@ -378,10 +401,10 @@ CleanUp:
     {
         retCode = HttpCloseRequestQueue(hReqQueue);
 
-       if (retCode != NO_ERROR)
-       {
-           wprintf(L"HttpCloseRequestQueue failed with %lu \n", retCode);
-       }
+        if (retCode != NO_ERROR)
+        {
+            wprintf(L"HttpCloseRequestQueue failed with %lu \n", retCode);
+        }
     }
 
     //
@@ -408,7 +431,7 @@ Return Value:
 DWORD
 DoReceiveRequests(
     IN HANDLE hReqQueue
-    )
+)
 {
     ULONG              result;
     HTTP_REQUEST_ID    requestId;
@@ -442,14 +465,14 @@ DoReceiveRequests(
         RtlZeroMemory(pRequest, RequestBufferLength);
 
         result = HttpReceiveHttpRequest(
-                    hReqQueue,          // Req Queue
-                    requestId,          // Req ID
-                    0,                  // Flags
-                    pRequest,           // HTTP request buffer
-                    RequestBufferLength,// req buffer length
-                    &bytesRead,         // bytes received
-                    NULL                // LPOVERLAPPED
-                    );
+                     hReqQueue,          // Req Queue
+                     requestId,          // Req ID
+                     0,                  // Flags
+                     pRequest,           // HTTP request buffer
+                     RequestBufferLength,// req buffer length
+                     &bytesRead,         // bytes received
+                     NULL                // LPOVERLAPPED
+                 );
 
         if(NO_ERROR == result)
         {
@@ -469,18 +492,18 @@ DoReceiveRequests(
             //
             //Handle Authentication
             //
-            
+
             result = HandleAuthRequest(
-                            pAuthInfo,
-                            hReqQueue,
-                            pRequest);
+                         pAuthInfo,
+                         hReqQueue,
+                         pRequest);
 
             if (NO_ERROR != result)
             {
                 wprintf(L"HandleAuthRequest failed %d\n", result);
             }
 
-            
+
             //
             // Reset the Request ID so that we pick up the next request.
             //
@@ -511,13 +534,13 @@ DoReceiveRequests(
                 wprintf(L"Send 503 Service Unavailable\n");
 
                 SendHttpResponse(
-                                hReqQueue,
-                                pRequest,
-                                HTTP_SEND_RESPONSE_FLAG_DISCONNECT,
-                                503,
-                                "Unavailable",
-                                "Resource Unavailable\n"
-                                );
+                    hReqQueue,
+                    pRequest,
+                    HTTP_SEND_RESPONSE_FLAG_DISCONNECT,
+                    503,
+                    "Unavailable",
+                    "Resource Unavailable\n"
+                );
 
                 result = ERROR_NOT_ENOUGH_MEMORY;
                 break;
@@ -574,7 +597,7 @@ SendHttpResponse(
     IN USHORT StatusCode,
     __in IN PSTR pReason,
     __in_opt IN PSTR pEntityString
-    )
+)
 {
     HTTP_RESPONSE   response;
     HTTP_DATA_CHUNK dataChunk;
@@ -610,17 +633,17 @@ SendHttpResponse(
     //
 
     result = HttpSendHttpResponse(
-                    hReqQueue,           // ReqQueueHandle
-                    pRequest->RequestId, // Request ID
-                    Flags,                   // Flags
-                    &response,           // HTTP response
-                    NULL,                // pReserved1
-                    &bytesSent,          // bytes sent   (OPTIONAL)
-                    NULL,                // pReserved2   (must be NULL)
-                    0,                   // Reserved3    (must be 0)
-                    NULL,                // LPOVERLAPPED (OPTIONAL)
-                    NULL                 // pReserved4   (must be NULL)
-                    );
+                 hReqQueue,           // ReqQueueHandle
+                 pRequest->RequestId, // Request ID
+                 Flags,                   // Flags
+                 &response,           // HTTP response
+                 NULL,                // pReserved1
+                 &bytesSent,          // bytes sent   (OPTIONAL)
+                 NULL,                // pReserved2   (must be NULL)
+                 0,                   // Reserved3    (must be 0)
+                 NULL,                // LPOVERLAPPED (OPTIONAL)
+                 NULL                 // pReserved4   (must be NULL)
+             );
 
     if(result != NO_ERROR)
     {
@@ -637,48 +660,48 @@ BOOL AddMultipleKnownHeader(
     IN PHTTP_KNOWN_HEADER pkHeaders,
     IN USHORT numEntries,
     IN ULONG flags
-    )
+)
 {
     PHTTP_MULTIPLE_KNOWN_HEADERS pHeader = NULL;
     PHTTP_RESPONSE_INFO pResponseInfo = NULL;
-    
+
     pHeader = ALLOC_MEM(sizeof(HTTP_MULTIPLE_KNOWN_HEADERS) );
     if(!pHeader)
         return FALSE;
-    
+
     ZeroMemory(pHeader, sizeof(HTTP_MULTIPLE_KNOWN_HEADERS));
-    pHeader->HeaderId = HeaderId; 
-    pHeader->KnownHeaderCount = numEntries;  
-    pHeader->Flags = flags; 
-    pHeader->KnownHeaders = pkHeaders; 
+    pHeader->HeaderId = HeaderId;
+    pHeader->KnownHeaderCount = numEntries;
+    pHeader->Flags = flags;
+    pHeader->KnownHeaders = pkHeaders;
 
     pResponseInfo = ALLOC_MEM(sizeof(HTTP_RESPONSE_INFO));
     if(!pResponseInfo)
         return FALSE;
 
     ZeroMemory(pResponseInfo, sizeof(HTTP_RESPONSE_INFO));
-    pResponseInfo->Type = HttpResponseInfoTypeMultipleKnownHeaders;  
-    pResponseInfo->Length = sizeof(HTTP_MULTIPLE_KNOWN_HEADERS);  
-    pResponseInfo->pInfo = pHeader;  
+    pResponseInfo->Type = HttpResponseInfoTypeMultipleKnownHeaders;
+    pResponseInfo->Length = sizeof(HTTP_MULTIPLE_KNOWN_HEADERS);
+    pResponseInfo->pInfo = pHeader;
 
-    pResponse->ResponseInfoCount = 1; 
-    pResponse->pResponseInfo = pResponseInfo; 
+    pResponse->ResponseInfoCount = 1;
+    pResponse->pResponseInfo = pResponseInfo;
 
     return TRUE;
 }
 
 void CleanupMultipleKnownHeader(
     IN PHTTP_RESPONSE pResponse
-    )
+)
 {
     if(pResponse->pResponseInfo->pInfo)
         FREE_MEM(pResponse->pResponseInfo->pInfo);
 
     if(pResponse->pResponseInfo)
         FREE_MEM(pResponse->pResponseInfo);
-    
+
 }
-   
+
 
 /***************************************************************************++
 
@@ -699,7 +722,7 @@ Send401HttpResponse(
     IN HANDLE hReqQueue,
     IN PHTTP_REQUEST pRequest,
     __in_opt IN PSTR pEntityString
-    )
+)
 {
     HTTP_RESPONSE   response;
     HTTP_DATA_CHUNK dataChunk;
@@ -714,9 +737,9 @@ Send401HttpResponse(
 
     //
     //We will use Multiple Known Headers
-    // to send schemes 
+    // to send schemes
     //
-    
+
     kHeaders[0].pRawValue = "NTLM";
     kHeaders[0].RawValueLength = (USHORT)strlen("NTLM");
 
@@ -728,12 +751,12 @@ Send401HttpResponse(
     // Add a known header.
     //
     result = AddMultipleKnownHeader(
-                                    &response,
-                                    HttpHeaderWwwAuthenticate , 
-                                    kHeaders, 
-                                    NUM_SCHEMES, 
-                                    0
-                                   );
+                 &response,
+                 HttpHeaderWwwAuthenticate,
+                 kHeaders,
+                 NUM_SCHEMES,
+                 0
+             );
 
 
     if(!result)
@@ -742,13 +765,13 @@ Send401HttpResponse(
         wprintf(L"Send 503 Service Unavailable\n");
 
         SendHttpResponse(
-                         hReqQueue,
-                         pRequest,
-                         HTTP_SEND_RESPONSE_FLAG_DISCONNECT,
-                         503,
-                         "Unavailable",
-                         "Resource Unavailable\n"
-                        );
+            hReqQueue,
+            pRequest,
+            HTTP_SEND_RESPONSE_FLAG_DISCONNECT,
+            503,
+            "Unavailable",
+            "Resource Unavailable\n"
+        );
 
         goto END;
     }
@@ -772,17 +795,17 @@ Send401HttpResponse(
     //
 
     result = HttpSendHttpResponse(
-                    hReqQueue,           // ReqQueueHandle
-                    pRequest->RequestId, // Request ID
-                    0,                   // Flags
-                    &response,           // HTTP response
-                    NULL,                // pReserved1
-                    &bytesSent,          // bytes sent   (OPTIONAL)
-                    NULL,                // pReserved2   (must be NULL)
-                    0,                   // Reserved3    (must be 0)
-                    NULL,                // LPOVERLAPPED (OPTIONAL)
-                    NULL                 // pReserved4   (must be NULL)
-                    );
+                 hReqQueue,           // ReqQueueHandle
+                 pRequest->RequestId, // Request ID
+                 0,                   // Flags
+                 &response,           // HTTP response
+                 NULL,                // pReserved1
+                 &bytesSent,          // bytes sent   (OPTIONAL)
+                 NULL,                // pReserved2   (must be NULL)
+                 0,                   // Reserved3    (must be 0)
+                 NULL,                // LPOVERLAPPED (OPTIONAL)
+                 NULL                 // pReserved4   (must be NULL)
+             );
 
     if(result != NO_ERROR)
     {
@@ -815,7 +838,7 @@ DWORD
 SendHttpPostResponse(
     IN HANDLE hReqQueue,
     IN PHTTP_REQUEST pRequest
-    )
+)
 {
     HTTP_RESPONSE   response;
     DWORD           result;
@@ -830,7 +853,7 @@ SendHttpPostResponse(
     CHAR            szContentLength[MAX_ULONG_STR];
     HTTP_DATA_CHUNK dataChunk;
     ULONG           TotalBytesRead = 0;
-    
+
     hTempFile  = INVALID_HANDLE_VALUE;
 
     //
@@ -868,10 +891,10 @@ SendHttpPostResponse(
         //
 
         if(GetTempFileName(
-                L".",
-                L"New",
-                0,
-                szTempName
+                    L".",
+                    L"New",
+                    0,
+                    szTempName
                 ) == 0)
         {
             result = GetLastError();
@@ -887,7 +910,7 @@ SendHttpPostResponse(
                         CREATE_ALWAYS,                 // overrwrite existing
                         FILE_ATTRIBUTE_NORMAL,         // normal file.
                         NULL
-                        );
+                    );
 
         if(hTempFile == INVALID_HANDLE_VALUE)
         {
@@ -903,150 +926,151 @@ SendHttpPostResponse(
             //
             BytesRead = 0;
             result = HttpReceiveRequestEntityBody(
-                        hReqQueue,
-                        pRequest->RequestId,
-                        0,
-                        pEntityBuffer,
-                        EntityBufferLength,
-                        &BytesRead,
-                        NULL
-                        );
+                         hReqQueue,
+                         pRequest->RequestId,
+                         0,
+                         pEntityBuffer,
+                         EntityBufferLength,
+                         &BytesRead,
+                         NULL
+                     );
 
             switch(result)
             {
-                case NO_ERROR:
+            case NO_ERROR:
 
-                    if(BytesRead != 0)
-                    {
-                        TotalBytesRead += BytesRead;
-                        WriteFile(
-                                hTempFile,
-                                pEntityBuffer,
-                                BytesRead,
-                                &TempFileBytesWritten,
-                                NULL
-                                );
-                    }
-                    break;
+                if(BytesRead != 0)
+                {
+                    TotalBytesRead += BytesRead;
+                    WriteFile(
+                        hTempFile,
+                        pEntityBuffer,
+                        BytesRead,
+                        &TempFileBytesWritten,
+                        NULL
+                    );
+                }
+                break;
 
-                case ERROR_HANDLE_EOF:
+            case ERROR_HANDLE_EOF:
 
-                    //
-                    // We have read the last request entity body. We can send
-                    // back a response.
-                    //
-                    // To illustrate entity sends via
-                    // HttpSendResponseEntityBody, we will send the response
-                    // over multiple calls. This is achieved by passing the
-                    // HTTP_SEND_RESPONSE_FLAG_MORE_DATA flag.
+                //
+                // We have read the last request entity body. We can send
+                // back a response.
+                //
+                // To illustrate entity sends via
+                // HttpSendResponseEntityBody, we will send the response
+                // over multiple calls. This is achieved by passing the
+                // HTTP_SEND_RESPONSE_FLAG_MORE_DATA flag.
 
-                    if(BytesRead != 0)
-                    {
-                        TotalBytesRead += BytesRead;
-                        WriteFile(
-                                hTempFile,
-                                pEntityBuffer,
-                                BytesRead,
-                                &TempFileBytesWritten,
-                                NULL
-                                );
-                    }
+                if(BytesRead != 0)
+                {
+                    TotalBytesRead += BytesRead;
+                    WriteFile(
+                        hTempFile,
+                        pEntityBuffer,
+                        BytesRead,
+                        &TempFileBytesWritten,
+                        NULL
+                    );
+                }
 
-                    //
-                    // Since we are sending the response over multiple API
-                    // calls, we have to add a content-length.
-                    //
-                    // Alternatively, we could have sent using chunked transfer
-                    // encoding, by passing "Transfer-Encoding: Chunked".
-                    //
+                //
+                // Since we are sending the response over multiple API
+                // calls, we have to add a content-length.
+                //
+                // Alternatively, we could have sent using chunked transfer
+                // encoding, by passing "Transfer-Encoding: Chunked".
+                //
 
-                    // NOTE: Since we are accumulating the TotalBytesRead in
-                    //       a ULONG, this will not work for entity bodies that
-                    //       are larger than 4 GB. For supporting large entity
-                    //       bodies, we would have to use a ULONGLONG.
-                    //
+                // NOTE: Since we are accumulating the TotalBytesRead in
+                //       a ULONG, this will not work for entity bodies that
+                //       are larger than 4 GB. For supporting large entity
+                //       bodies, we would have to use a ULONGLONG.
+                //
 
-                    StringCchPrintfA(
-                            szContentLength,
-                            sizeof(szContentLength),
-                            "%lu",
-                            TotalBytesRead
-                            );
+                StringCchPrintfA(
+                    szContentLength,
+                    sizeof(szContentLength),
+                    "%lu",
+                    TotalBytesRead
+                );
 
-                    ADD_KNOWN_HEADER(
-                            response,
-                            HttpHeaderContentLength,
-                            szContentLength
-                            );
+                ADD_KNOWN_HEADER(
+                    response,
+                    HttpHeaderContentLength,
+                    szContentLength
+                );
 
-                    result =
-                        HttpSendHttpResponse(
-                               hReqQueue,           // ReqQueueHandle
-                               pRequest->RequestId, // Request ID
-                               HTTP_SEND_RESPONSE_FLAG_MORE_DATA,
-                               &response,           // HTTP response
-                               NULL,                // pReserved1
-                               &bytesSent,          // bytes sent (optional)
-                               NULL,                // pReserved2
-                               0,                   // Reserved3
-                               NULL,                // LPOVERLAPPED
-                               NULL                 // pReserved4
-                               );
+                result =
+                    HttpSendHttpResponse(
+                        hReqQueue,           // ReqQueueHandle
+                        pRequest->RequestId, // Request ID
+                        HTTP_SEND_RESPONSE_FLAG_MORE_DATA,
+                        &response,           // HTTP response
+                        NULL,                // pReserved1
+                        &bytesSent,          // bytes sent (optional)
+                        NULL,                // pReserved2
+                        0,                   // Reserved3
+                        NULL,                // LPOVERLAPPED
+                        NULL                 // pReserved4
+                    );
 
-                    if(result != NO_ERROR)
-                    {
-                        wprintf(L"HttpSendHttpResponse failed with %lu \n",
-                                result);
-                        goto Done;
-                    }
-
-                    //
-                    // Send entity body from a file handle.
-                    //
-                    dataChunk.DataChunkType =
-                        HttpDataChunkFromFileHandle;
-
-                    dataChunk.FromFileHandle.
-                        ByteRange.StartingOffset.QuadPart = 0;
-
-                    dataChunk.FromFileHandle.
-                        ByteRange.Length.QuadPart = HTTP_BYTE_RANGE_TO_EOF;
-
-                    dataChunk.FromFileHandle.FileHandle = hTempFile;
-
-                    result = HttpSendResponseEntityBody(
-                                hReqQueue,
-                                pRequest->RequestId,
-                                0,                    // This is the last send.
-                                1,                    // Entity Chunk Count.
-                                &dataChunk,
-                                NULL,
-                                NULL,
-                                0,
-                                NULL,
-                                NULL
-                                );
-
-                    if(result != NO_ERROR)
-                    {
-                        wprintf(
-                           L"HttpSendResponseEntityBody failed with %lu \n",
-                           result
-                           );
-                    }
-
-                    goto Done;
-
-                    break;
-
-
-                default:
-                    wprintf(L"HttpReceiveRequestEntityBody failed with %lu \n",
+                if(result != NO_ERROR)
+                {
+                    wprintf(L"HttpSendHttpResponse failed with %lu \n",
                             result);
                     goto Done;
+                }
+
+                //
+                // Send entity body from a file handle.
+                //
+                dataChunk.DataChunkType =
+                    HttpDataChunkFromFileHandle;
+
+                dataChunk.FromFileHandle.
+                ByteRange.StartingOffset.QuadPart = 0;
+
+                dataChunk.FromFileHandle.
+                ByteRange.Length.QuadPart = HTTP_BYTE_RANGE_TO_EOF;
+
+                dataChunk.FromFileHandle.FileHandle = hTempFile;
+
+                result = HttpSendResponseEntityBody(
+                             hReqQueue,
+                             pRequest->RequestId,
+                             0,                    // This is the last send.
+                             1,                    // Entity Chunk Count.
+                             &dataChunk,
+                             NULL,
+                             NULL,
+                             0,
+                             NULL,
+                             NULL
+                         );
+
+                if(result != NO_ERROR)
+                {
+                    wprintf(
+                        L"HttpSendResponseEntityBody failed with %lu \n",
+                        result
+                    );
+                }
+
+                goto Done;
+
+                break;
+
+
+            default:
+                wprintf(L"HttpReceiveRequestEntityBody failed with %lu \n",
+                        result);
+                goto Done;
             }
 
-        } while(TRUE);
+        }
+        while(TRUE);
     }
     else
     {
@@ -1054,17 +1078,17 @@ SendHttpPostResponse(
         //
 
         result = HttpSendHttpResponse(
-                   hReqQueue,           // ReqQueueHandle
-                   pRequest->RequestId, // Request ID
-                   0,
-                   &response,           // HTTP response
-                   NULL,                // pReserved1
-                   &bytesSent,          // bytes sent (optional)
-                   NULL,                // pReserved2
-                   0,                   // Reserved3
-                   NULL,                // LPOVERLAPPED
-                   NULL                 // pReserved4
-                   );
+                     hReqQueue,           // ReqQueueHandle
+                     pRequest->RequestId, // Request ID
+                     0,
+                     &response,           // HTTP response
+                     NULL,                // pReserved1
+                     &bytesSent,          // bytes sent (optional)
+                     NULL,                // pReserved2
+                     0,                   // Reserved3
+                     NULL,                // LPOVERLAPPED
+                     NULL                 // pReserved4
+                 );
 
         if(result != NO_ERROR)
         {
@@ -1105,7 +1129,7 @@ Return Value:
 HTTP_REQUEST_AUTH_INFO *
 GetAuthInfo(
     IN PHTTP_REQUEST pRequest
-    )
+)
 {
     HTTP_REQUEST_AUTH_INFO *pAuthInfo = NULL;
 
@@ -1119,7 +1143,7 @@ GetAuthInfo(
         //
 
         for(index = 0; index < pRequest->RequestInfoCount; index++)
-        {           
+        {
             if ((pRequest->pRequestInfo[index]).InfoType == HttpRequestInfoTypeAuth)
             {
                 pAuthInfo = (PHTTP_REQUEST_AUTH_INFO) (pRequest->pRequestInfo[index]).pInfo;
@@ -1128,7 +1152,8 @@ GetAuthInfo(
             }
         }
     }
-    else {
+    else
+    {
         wprintf(L"Did not get any Request Info Count!\n");
         goto fail_return;
     }
@@ -1156,7 +1181,7 @@ HandleAuthRequest(
     IN PHTTP_REQUEST_AUTH_INFO pAuthInfo,
     IN HANDLE hReqQueue,
     IN PHTTP_REQUEST pRequest
-    )
+)
 {
     ULONG  result;
     CtxtHandle hContext;
@@ -1167,116 +1192,117 @@ HandleAuthRequest(
     // Look at the status first...
     //
 
-    switch (pAuthInfo->AuthStatus) {
+    switch (pAuthInfo->AuthStatus)
+    {
 
-        case HttpAuthStatusSuccess:
+    case HttpAuthStatusSuccess:
 
-            //
-            // Use the serialized context (if need to).
-            //
+        //
+        // Use the serialized context (if need to).
+        //
 
-            result = UseSerializedContext(pAuthInfo, &hContext);
+        result = UseSerializedContext(pAuthInfo, &hContext);
 
-            if(NO_ERROR != result)
-            {				
-                wprintf(L"UseSerializedContext failed %d?!\n", result);
-                return result;
-            }
+        if(NO_ERROR != result)
+        {
+            wprintf(L"UseSerializedContext failed %d?!\n", result);
+            return result;
+        }
 
-            //
-            // Use the access token.
-            //
+        //
+        // Use the access token.
+        //
 
-            result = UseAccessToken(pAuthInfo);
+        result = UseAccessToken(pAuthInfo);
 
-            if(NO_ERROR != result)
-            {
-                wprintf(L"UseAccessToken failed %d?!\n", result);
-                secStatus = DeleteSecurityContext(&hContext);
-                if(SEC_E_OK != secStatus)
-                {
-                    wprintf(L"delete security context failed %d?!\n", secStatus);
-                }
-                return result;
-            }
-
-            //
-            // Done with the token so let it go.
-            //
-
-            CloseHandle(pAuthInfo->AccessToken);
-
+        if(NO_ERROR != result)
+        {
+            wprintf(L"UseAccessToken failed %d?!\n", result);
             secStatus = DeleteSecurityContext(&hContext);
             if(SEC_E_OK != secStatus)
             {
-                wprintf(L"deleting the security context failed %d?!\n", secStatus);
+                wprintf(L"delete security context failed %d?!\n", secStatus);
             }
+            return result;
+        }
 
-            wprintf(L"Send 200 OK\n");
+        //
+        // Done with the token so let it go.
+        //
 
-            result = SendHttpResponse(
-                hReqQueue,
-                pRequest,
-                0,
-                200,
-                "200 OK",
-                "Authentication Successful\n"
-                );
+        CloseHandle(pAuthInfo->AccessToken);
 
-            if(NO_ERROR != result)
-            {
-                wprintf(L"Failed to send 200 OK Response\n");
-                return result;
-            }        
+        secStatus = DeleteSecurityContext(&hContext);
+        if(SEC_E_OK != secStatus)
+        {
+            wprintf(L"deleting the security context failed %d?!\n", secStatus);
+        }
 
-            break;
+        wprintf(L"Send 200 OK\n");
 
-        case HttpAuthStatusNotAuthenticated : 
+        result = SendHttpResponse(
+                     hReqQueue,
+                     pRequest,
+                     0,
+                     200,
+                     "200 OK",
+                     "Authentication Successful\n"
+                 );
 
-            wprintf(L"Send 401 Response\n");
+        if(NO_ERROR != result)
+        {
+            wprintf(L"Failed to send 200 OK Response\n");
+            return result;
+        }
 
-            result = Send401HttpResponse(
-                hReqQueue,
-                pRequest,
-                "Send Credentials\n"
-                );
+        break;
 
-            if(NO_ERROR != result)
-            {
-                wprintf(L"Failed to send 401 Response\n");
-                return result;
-            }        
+    case HttpAuthStatusNotAuthenticated :
 
-            break;
+        wprintf(L"Send 401 Response\n");
 
-        case HttpAuthStatusFailure :
-            
-            ErrorStr = MapSecurityErrorToString(pAuthInfo->SecStatus);
-            wprintf(L"Authentication failed with error %hS\n", ErrorStr);
+        result = Send401HttpResponse(
+                     hReqQueue,
+                     pRequest,
+                     "Send Credentials\n"
+                 );
 
-            //
-            //Send back 401
-            //
-            wprintf(L"Send 401 Response\n");
+        if(NO_ERROR != result)
+        {
+            wprintf(L"Failed to send 401 Response\n");
+            return result;
+        }
 
-            result = Send401HttpResponse(
-                hReqQueue,
-                pRequest,
-                "Send Credentials\n"
-                );
+        break;
 
-            if(NO_ERROR != result)
-            {
-                wprintf(L"Failed to send 401 Response\n");
-                return result;
-            }
+    case HttpAuthStatusFailure :
 
-            break;
+        ErrorStr = MapSecurityErrorToString(pAuthInfo->SecStatus);
+        wprintf(L"Authentication failed with error %hS\n", ErrorStr);
 
-        default :
+        //
+        //Send back 401
+        //
+        wprintf(L"Send 401 Response\n");
 
-            wprintf(L"Bogus AuthStatus %d\n",pAuthInfo->AuthStatus);
-            return ERROR_INVALID_DATA;
+        result = Send401HttpResponse(
+                     hReqQueue,
+                     pRequest,
+                     "Send Credentials\n"
+                 );
+
+        if(NO_ERROR != result)
+        {
+            wprintf(L"Failed to send 401 Response\n");
+            return result;
+        }
+
+        break;
+
+    default :
+
+        wprintf(L"Bogus AuthStatus %d\n",pAuthInfo->AuthStatus);
+        return ERROR_INVALID_DATA;
     }
 
     return result;
@@ -1299,7 +1325,7 @@ DWORD
 UseSerializedContext(
     IN  PHTTP_REQUEST_AUTH_INFO pAuthInfo,
     IN OUT PCtxtHandle phContext
-    )
+)
 {
 
     SECURITY_STATUS SecStatus;
@@ -1316,12 +1342,13 @@ UseSerializedContext(
     SecInvalidateHandle(phContext);
 
     SecStatus = ImportSecurityContext(
-                                      pAuthInfo->pPackageName,
-                                      &SecBuffer,
-                                      NULL,
-                                      phContext);
-    
-    if (SecStatus != SEC_E_OK) {
+                    pAuthInfo->pPackageName,
+                    &SecBuffer,
+                    NULL,
+                    phContext);
+
+    if (SecStatus != SEC_E_OK)
+    {
 
         wprintf(L"importing security context failed with %d\n",SecStatus);
         return ERROR_INVALID_DATA;
@@ -1346,12 +1373,12 @@ Return Value:
 DWORD
 UseAccessToken(
     IN  PHTTP_REQUEST_AUTH_INFO pAuthInfo
-    )
+)
 {
     DWORD Error = NO_ERROR;
     WCHAR UserName[MAX_USERNAME_LENGTH];
     ULONG UserNameLen = MAX_USERNAME_LENGTH;
-    
+
     //
     // Impersonate the client
     //
@@ -1361,7 +1388,7 @@ UseAccessToken(
         Error = GetLastError();
         wprintf(L"Failed to impersonate user! with error %d\n",Error);
         return Error;
-     }
+    }
 
     //
     // Generate response based on the identity of the user.
@@ -1377,14 +1404,14 @@ UseAccessToken(
             pAuthInfo->AuthType,
             Error);
 
-         goto revert;
+        goto revert;
     }
 
-    wprintf(L"Impersonating user:%s\n", 
+    wprintf(L"Impersonating user:%s\n",
             UserName);
 
 revert:
-    
+
     if ( FALSE == RevertToSelf() )
     {
         Error = GetLastError();
@@ -1394,5 +1421,5 @@ revert:
     }
 
 
-     return Error;
+    return Error;
 }

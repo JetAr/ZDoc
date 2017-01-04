@@ -1,10 +1,10 @@
-//-----------------------------------------------------------------------------
+﻿//-----------------------------------------------------------------------------
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
 //
-// Copyright � Microsoft Corporation.  All rights reserved.
+// Copyright © Microsoft Corporation.  All rights reserved.
 //
 // Module:
 //        AmbientLightAwareDlg.cpp
@@ -12,7 +12,7 @@
 // Description:
 //        Dialog for Ambient Light Aware SDK Sample
 //
-// Comments: 
+// Comments:
 //        Standard vc++ dialog created by VS 2005 wizard.
 //
 //-----------------------------------------------------------------------------
@@ -30,7 +30,7 @@
 
 // Wizard generated constructor
 CAmbientLightAwareDlg::CAmbientLightAwareDlg(CWnd* pParent /*=NULL*/)
-: CDialog(CAmbientLightAwareDlg::IDD, pParent)
+    : CDialog(CAmbientLightAwareDlg::IDD, pParent)
 {
     m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
     m_pSensorManagerEvents = NULL;
@@ -215,7 +215,7 @@ HRESULT CAmbientLightAwareDlg::InitAmbientLightAware()
 //        to change the font size to be optimized for the current brightness
 //        (lux).
 //
-//        This sample is not meant to be an ideal implementation, but just 
+//        This sample is not meant to be an ideal implementation, but just
 //        showing how sensor data can be collected and processed.
 //
 // Parameters:

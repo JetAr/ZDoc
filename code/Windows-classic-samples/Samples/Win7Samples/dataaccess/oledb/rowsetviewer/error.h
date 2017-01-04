@@ -1,4 +1,4 @@
-//-----------------------------------------------------------------------------
+﻿//-----------------------------------------------------------------------------
 // Microsoft OLE DB RowsetViewer
 // Copyright (C) 1994 - 1999 By Microsoft Corporation.
 //
@@ -24,26 +24,26 @@
 ///////////////////////////////////////////////////////////////
 typedef struct _NAMEMAP
 {
-	CHAR*		pszName;	// Name
-	LONG		lItem;		// Item
+    CHAR*		pszName;	// Name
+    LONG		lItem;		// Item
 } NAMEMAP;
 
 typedef struct _WIDENAMEMAP
 {
-	WCHAR*		pwszName;	// Name
-	LONG		lItem;		// Item
+    WCHAR*		pwszName;	// Name
+    LONG		lItem;		// Item
 } WIDENAMEMAP;
 
 typedef struct _WIDEGUIDMAP
 {
-	WCHAR*			pwszName;	// Name
-	const GUID*		pGuid;		// Guid
+    WCHAR*			pwszName;	// Name
+    const GUID*		pGuid;		// Guid
 } WIDEGUIDMAP;
 
 typedef struct _WIDEDBIDMAP
 {
-	WCHAR*			pwszName;	// Name
-	const DBID*		pDBID;		// DBID
+    WCHAR*			pwszName;	// Name
+    const DBID*		pDBID;		// DBID
 } WIDEDBIDMAP;
 
 
@@ -53,18 +53,18 @@ typedef struct _WIDEDBIDMAP
 ////////////////////////////////////////////////////////////////////////////
 enum ERRORPOST
 {
-	EP_ERRORINFO_ALWAYS		= 0x00000002,
-	EP_ERRORINFO_FAILURE	= 0x00000004,
-	EP_ERRORINFO_NEVER		= 0x00000008,
+    EP_ERRORINFO_ALWAYS		= 0x00000002,
+    EP_ERRORINFO_FAILURE	= 0x00000004,
+    EP_ERRORINFO_NEVER		= 0x00000008,
 
-	EP_HRESULT_ALWAYS		= 0x00000010,
-	EP_HRESULT_NOERRORINFO	= 0x00000020,
-	EP_HRESULT_NEVER		= 0x00000040,
-	EP_HRESULT_FAILURE		= 0x00000080,
+    EP_HRESULT_ALWAYS		= 0x00000010,
+    EP_HRESULT_NOERRORINFO	= 0x00000020,
+    EP_HRESULT_NEVER		= 0x00000040,
+    EP_HRESULT_FAILURE		= 0x00000080,
 
-	EP_REFCOUNT_FAILURE		= 0x00000100,
-	EP_IMALLOC_SPY			= 0x00001000,
-	EP_IMALLOC_ALLOCS		= 0x00002000
+    EP_REFCOUNT_FAILURE		= 0x00000100,
+    EP_IMALLOC_SPY			= 0x00001000,
+    EP_IMALLOC_ALLOCS		= 0x00002000
 };
 
 extern DWORD g_dwErrorPost;
@@ -147,7 +147,7 @@ extern const WIDEGUIDMAP	g_rgPropSetMaps[];
 
 extern const ULONG			g_cVariantTypes;
 extern const WIDENAMEMAP	g_rgVariantTypes[];
-			 
+
 extern const WIDENAMEMAP	g_rgIsoLevels[];
 extern const ULONG			g_cIsoLevels;
 

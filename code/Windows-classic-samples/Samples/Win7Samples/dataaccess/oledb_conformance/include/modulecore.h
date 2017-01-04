@@ -1,4 +1,4 @@
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+﻿/* this ALWAYS GENERATED file contains the definitions for the interfaces */
 
 
 /* File created by MIDL compiler version 5.01.0164 */
@@ -6,7 +6,7 @@
  */
 /* Compiler settings for ModuleCore.idl:
     Os (OptLev=s), W1, Zp8, env=Win32, ms_ext, c_ext
-    error checks: allocation ref bounds_check enum stub_data 
+    error checks: allocation ref bounds_check enum stub_data
 */
 //@@MIDL_FILE_HEADING(  )
 
@@ -32,10 +32,10 @@
 #define __ModuleCore_h__
 
 #ifdef __cplusplus
-extern "C"{
-#endif 
+extern "C" {
+#endif
 
-/* Forward Declarations */ 
+/* Forward Declarations */
 
 #ifndef __IError_FWD_DEFINED__
 #define __IError_FWD_DEFINED__
@@ -113,32 +113,34 @@ typedef interface ITestModule ITestModule;
 #include "unknwn.h"
 
 void __RPC_FAR * __RPC_USER MIDL_user_allocate(size_t);
-void __RPC_USER MIDL_user_free( void __RPC_FAR * ); 
+void __RPC_USER MIDL_user_free( void __RPC_FAR * );
 
 /* interface __MIDL_itf_ModuleCore_0000 */
-/* [local] */ 
+/* [local] */
 
-typedef 
+typedef
 enum tagVARIATION_STATUS
-    {	eVariationStatusFailed	= 0,
-	eVariationStatusPassed	= eVariationStatusFailed + 1,
-	eVariationStatusNotRun	= eVariationStatusPassed + 1,
-	eVariationStatusNonExistent	= eVariationStatusNotRun + 1,
-	eVariationStatusUnknown	= eVariationStatusNonExistent + 1,
-	eVariationStatusTimedOut	= eVariationStatusUnknown + 1,
-	eVariationStatusConformanceWarning	= eVariationStatusTimedOut + 1,
-	eVariationStatusException	= eVariationStatusConformanceWarning + 1,
-	eVariationStatusAborted	= eVariationStatusException + 1
-    }	VARIATION_STATUS;
+{
+    eVariationStatusFailed	= 0,
+    eVariationStatusPassed	= eVariationStatusFailed + 1,
+    eVariationStatusNotRun	= eVariationStatusPassed + 1,
+    eVariationStatusNonExistent	= eVariationStatusNotRun + 1,
+    eVariationStatusUnknown	= eVariationStatusNonExistent + 1,
+    eVariationStatusTimedOut	= eVariationStatusUnknown + 1,
+    eVariationStatusConformanceWarning	= eVariationStatusTimedOut + 1,
+    eVariationStatusException	= eVariationStatusConformanceWarning + 1,
+    eVariationStatusAborted	= eVariationStatusException + 1
+}	VARIATION_STATUS;
 
-typedef 
+typedef
 enum tagERRORLEVEL
-    {	HR_STRICT	= 0,
-	HR_OPTIONAL	= HR_STRICT + 1,
-	HR_SUCCEED	= HR_OPTIONAL + 1,
-	HR_FAIL	= HR_SUCCEED + 1,
-	HR_WARNING	= HR_FAIL + 1
-    }	ERRORLEVEL;
+{
+    HR_STRICT	= 0,
+    HR_OPTIONAL	= HR_STRICT + 1,
+    HR_SUCCEED	= HR_OPTIONAL + 1,
+    HR_FAIL	= HR_SUCCEED + 1,
+    HR_WARNING	= HR_FAIL + 1
+}	ERRORLEVEL;
 
 
 
@@ -149,201 +151,202 @@ extern RPC_IF_HANDLE __MIDL_itf_ModuleCore_0000_v0_0_s_ifspec;
 #define __IError_INTERFACE_DEFINED__
 
 /* interface IError */
-/* [helpstring][oleautomation][uuid][object] */ 
+/* [helpstring][oleautomation][uuid][object] */
 
 
 EXTERN_C const IID IID_IError;
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
-    
-    MIDL_INTERFACE("A0C3FEC1-8FBB-11d0-98CE-444553540000")
-    IError : public IUnknown
-    {
-    public:
-        virtual HRESULT STDMETHODCALLTYPE GetErrorLevel( 
-            /* [retval][out] */ ERRORLEVEL __RPC_FAR *pErrorLevel) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE SetErrorLevel( 
-            /* [in] */ ERRORLEVEL ErrorLevel) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE GetActualHr( 
-            /* [retval][out] */ LONG __RPC_FAR *phrActual) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE Validate( 
-            /* [in] */ LONG hrActual,
-            /* [in] */ BSTR bstrFileName,
-            /* [in] */ LONG lLineNo,
-            /* [in] */ LONG hrExpected,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pfResult) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE Compare( 
-            /* [in] */ VARIANT_BOOL fWereEqual,
-            /* [in] */ BSTR bstrFileName,
-            /* [in] */ LONG lLineNo,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pfWereEqual) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE LogExpectedHr( 
-            /* [in] */ LONG hrExpected) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE LogReceivedHr( 
-            /* [in] */ LONG hrReceived,
-            /* [in] */ BSTR bstrFileName,
-            /* [in] */ LONG lLineNo) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE ResetModErrors( void) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE ResetCaseErrors( void) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE ResetVarErrors( void) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE ResetModWarnings( void) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE ResetCaseWarnings( void) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE ResetVarWarnings( void) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE GetModErrors( 
-            /* [retval][out] */ LONG __RPC_FAR *plModErrors) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE GetCaseErrors( 
-            /* [retval][out] */ LONG __RPC_FAR *plCaseErrors) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE GetVarErrors( 
-            /* [retval][out] */ LONG __RPC_FAR *plVarErrors) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE GetModWarnings( 
-            /* [retval][out] */ LONG __RPC_FAR *plModWarnings) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE GetCaseWarnings( 
-            /* [retval][out] */ LONG __RPC_FAR *plCaseWarnings) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE GetVarWarnings( 
-            /* [retval][out] */ LONG __RPC_FAR *plVarWarnings) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE Increment( void) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE Transmit( 
-            /* [in] */ BSTR bstrTextString) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE Initialize( void) = 0;
-        
-    };
-    
+
+MIDL_INTERFACE("A0C3FEC1-8FBB-11d0-98CE-444553540000")
+IError :
+public IUnknown
+{
+public:
+    virtual HRESULT STDMETHODCALLTYPE GetErrorLevel(
+        /* [retval][out] */ ERRORLEVEL __RPC_FAR *pErrorLevel) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE SetErrorLevel(
+        /* [in] */ ERRORLEVEL ErrorLevel) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetActualHr(
+        /* [retval][out] */ LONG __RPC_FAR *phrActual) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE Validate(
+        /* [in] */ LONG hrActual,
+        /* [in] */ BSTR bstrFileName,
+        /* [in] */ LONG lLineNo,
+        /* [in] */ LONG hrExpected,
+        /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pfResult) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE Compare(
+        /* [in] */ VARIANT_BOOL fWereEqual,
+        /* [in] */ BSTR bstrFileName,
+        /* [in] */ LONG lLineNo,
+        /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pfWereEqual) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE LogExpectedHr(
+        /* [in] */ LONG hrExpected) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE LogReceivedHr(
+        /* [in] */ LONG hrReceived,
+        /* [in] */ BSTR bstrFileName,
+        /* [in] */ LONG lLineNo) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE ResetModErrors( void) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE ResetCaseErrors( void) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE ResetVarErrors( void) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE ResetModWarnings( void) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE ResetCaseWarnings( void) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE ResetVarWarnings( void) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetModErrors(
+        /* [retval][out] */ LONG __RPC_FAR *plModErrors) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetCaseErrors(
+        /* [retval][out] */ LONG __RPC_FAR *plCaseErrors) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetVarErrors(
+        /* [retval][out] */ LONG __RPC_FAR *plVarErrors) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetModWarnings(
+        /* [retval][out] */ LONG __RPC_FAR *plModWarnings) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetCaseWarnings(
+        /* [retval][out] */ LONG __RPC_FAR *plCaseWarnings) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetVarWarnings(
+        /* [retval][out] */ LONG __RPC_FAR *plVarWarnings) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE Increment( void) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE Transmit(
+        /* [in] */ BSTR bstrTextString) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE Initialize( void) = 0;
+
+};
+
 #else 	/* C style interface */
 
-    typedef struct IErrorVtbl
-    {
-        BEGIN_INTERFACE
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IError __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
-        
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IError __RPC_FAR * This);
-        
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IError __RPC_FAR * This);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetErrorLevel )( 
-            IError __RPC_FAR * This,
-            /* [retval][out] */ ERRORLEVEL __RPC_FAR *pErrorLevel);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetErrorLevel )( 
-            IError __RPC_FAR * This,
-            /* [in] */ ERRORLEVEL ErrorLevel);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetActualHr )( 
-            IError __RPC_FAR * This,
-            /* [retval][out] */ LONG __RPC_FAR *phrActual);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Validate )( 
-            IError __RPC_FAR * This,
-            /* [in] */ LONG hrActual,
-            /* [in] */ BSTR bstrFileName,
-            /* [in] */ LONG lLineNo,
-            /* [in] */ LONG hrExpected,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pfResult);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Compare )( 
-            IError __RPC_FAR * This,
-            /* [in] */ VARIANT_BOOL fWereEqual,
-            /* [in] */ BSTR bstrFileName,
-            /* [in] */ LONG lLineNo,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pfWereEqual);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *LogExpectedHr )( 
-            IError __RPC_FAR * This,
-            /* [in] */ LONG hrExpected);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *LogReceivedHr )( 
-            IError __RPC_FAR * This,
-            /* [in] */ LONG hrReceived,
-            /* [in] */ BSTR bstrFileName,
-            /* [in] */ LONG lLineNo);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ResetModErrors )( 
-            IError __RPC_FAR * This);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ResetCaseErrors )( 
-            IError __RPC_FAR * This);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ResetVarErrors )( 
-            IError __RPC_FAR * This);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ResetModWarnings )( 
-            IError __RPC_FAR * This);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ResetCaseWarnings )( 
-            IError __RPC_FAR * This);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ResetVarWarnings )( 
-            IError __RPC_FAR * This);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetModErrors )( 
-            IError __RPC_FAR * This,
-            /* [retval][out] */ LONG __RPC_FAR *plModErrors);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetCaseErrors )( 
-            IError __RPC_FAR * This,
-            /* [retval][out] */ LONG __RPC_FAR *plCaseErrors);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetVarErrors )( 
-            IError __RPC_FAR * This,
-            /* [retval][out] */ LONG __RPC_FAR *plVarErrors);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetModWarnings )( 
-            IError __RPC_FAR * This,
-            /* [retval][out] */ LONG __RPC_FAR *plModWarnings);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetCaseWarnings )( 
-            IError __RPC_FAR * This,
-            /* [retval][out] */ LONG __RPC_FAR *plCaseWarnings);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetVarWarnings )( 
-            IError __RPC_FAR * This,
-            /* [retval][out] */ LONG __RPC_FAR *plVarWarnings);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Increment )( 
-            IError __RPC_FAR * This);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Transmit )( 
-            IError __RPC_FAR * This,
-            /* [in] */ BSTR bstrTextString);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Initialize )( 
-            IError __RPC_FAR * This);
-        
-        END_INTERFACE
-    } IErrorVtbl;
+typedef struct IErrorVtbl
+{
+    BEGIN_INTERFACE
 
-    interface IError
-    {
-        CONST_VTBL struct IErrorVtbl __RPC_FAR *lpVtbl;
-    };
+    HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )(
+        IError __RPC_FAR * This,
+        /* [in] */ REFIID riid,
+        /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
 
-    
+    ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )(
+        IError __RPC_FAR * This);
+
+    ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )(
+        IError __RPC_FAR * This);
+
+    HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetErrorLevel )(
+        IError __RPC_FAR * This,
+        /* [retval][out] */ ERRORLEVEL __RPC_FAR *pErrorLevel);
+
+    HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetErrorLevel )(
+        IError __RPC_FAR * This,
+        /* [in] */ ERRORLEVEL ErrorLevel);
+
+    HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetActualHr )(
+        IError __RPC_FAR * This,
+        /* [retval][out] */ LONG __RPC_FAR *phrActual);
+
+    HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Validate )(
+        IError __RPC_FAR * This,
+        /* [in] */ LONG hrActual,
+        /* [in] */ BSTR bstrFileName,
+        /* [in] */ LONG lLineNo,
+        /* [in] */ LONG hrExpected,
+        /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pfResult);
+
+    HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Compare )(
+        IError __RPC_FAR * This,
+        /* [in] */ VARIANT_BOOL fWereEqual,
+        /* [in] */ BSTR bstrFileName,
+        /* [in] */ LONG lLineNo,
+        /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pfWereEqual);
+
+    HRESULT ( STDMETHODCALLTYPE __RPC_FAR *LogExpectedHr )(
+        IError __RPC_FAR * This,
+        /* [in] */ LONG hrExpected);
+
+    HRESULT ( STDMETHODCALLTYPE __RPC_FAR *LogReceivedHr )(
+        IError __RPC_FAR * This,
+        /* [in] */ LONG hrReceived,
+        /* [in] */ BSTR bstrFileName,
+        /* [in] */ LONG lLineNo);
+
+    HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ResetModErrors )(
+        IError __RPC_FAR * This);
+
+    HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ResetCaseErrors )(
+        IError __RPC_FAR * This);
+
+    HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ResetVarErrors )(
+        IError __RPC_FAR * This);
+
+    HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ResetModWarnings )(
+        IError __RPC_FAR * This);
+
+    HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ResetCaseWarnings )(
+        IError __RPC_FAR * This);
+
+    HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ResetVarWarnings )(
+        IError __RPC_FAR * This);
+
+    HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetModErrors )(
+        IError __RPC_FAR * This,
+        /* [retval][out] */ LONG __RPC_FAR *plModErrors);
+
+    HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetCaseErrors )(
+        IError __RPC_FAR * This,
+        /* [retval][out] */ LONG __RPC_FAR *plCaseErrors);
+
+    HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetVarErrors )(
+        IError __RPC_FAR * This,
+        /* [retval][out] */ LONG __RPC_FAR *plVarErrors);
+
+    HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetModWarnings )(
+        IError __RPC_FAR * This,
+        /* [retval][out] */ LONG __RPC_FAR *plModWarnings);
+
+    HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetCaseWarnings )(
+        IError __RPC_FAR * This,
+        /* [retval][out] */ LONG __RPC_FAR *plCaseWarnings);
+
+    HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetVarWarnings )(
+        IError __RPC_FAR * This,
+        /* [retval][out] */ LONG __RPC_FAR *plVarWarnings);
+
+    HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Increment )(
+        IError __RPC_FAR * This);
+
+    HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Transmit )(
+        IError __RPC_FAR * This,
+        /* [in] */ BSTR bstrTextString);
+
+    HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Initialize )(
+        IError __RPC_FAR * This);
+
+    END_INTERFACE
+} IErrorVtbl;
+
+interface IError
+{
+    CONST_VTBL struct IErrorVtbl __RPC_FAR *lpVtbl;
+};
+
+
 
 #ifdef COBJMACROS
 
@@ -431,7 +434,7 @@ EXTERN_C const IID IID_IError;
 
 
 
-HRESULT STDMETHODCALLTYPE IError_GetErrorLevel_Proxy( 
+HRESULT STDMETHODCALLTYPE IError_GetErrorLevel_Proxy(
     IError __RPC_FAR * This,
     /* [retval][out] */ ERRORLEVEL __RPC_FAR *pErrorLevel);
 
@@ -443,7 +446,7 @@ void __RPC_STUB IError_GetErrorLevel_Stub(
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE IError_SetErrorLevel_Proxy( 
+HRESULT STDMETHODCALLTYPE IError_SetErrorLevel_Proxy(
     IError __RPC_FAR * This,
     /* [in] */ ERRORLEVEL ErrorLevel);
 
@@ -455,7 +458,7 @@ void __RPC_STUB IError_SetErrorLevel_Stub(
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE IError_GetActualHr_Proxy( 
+HRESULT STDMETHODCALLTYPE IError_GetActualHr_Proxy(
     IError __RPC_FAR * This,
     /* [retval][out] */ LONG __RPC_FAR *phrActual);
 
@@ -467,7 +470,7 @@ void __RPC_STUB IError_GetActualHr_Stub(
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE IError_Validate_Proxy( 
+HRESULT STDMETHODCALLTYPE IError_Validate_Proxy(
     IError __RPC_FAR * This,
     /* [in] */ LONG hrActual,
     /* [in] */ BSTR bstrFileName,
@@ -483,7 +486,7 @@ void __RPC_STUB IError_Validate_Stub(
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE IError_Compare_Proxy( 
+HRESULT STDMETHODCALLTYPE IError_Compare_Proxy(
     IError __RPC_FAR * This,
     /* [in] */ VARIANT_BOOL fWereEqual,
     /* [in] */ BSTR bstrFileName,
@@ -498,7 +501,7 @@ void __RPC_STUB IError_Compare_Stub(
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE IError_LogExpectedHr_Proxy( 
+HRESULT STDMETHODCALLTYPE IError_LogExpectedHr_Proxy(
     IError __RPC_FAR * This,
     /* [in] */ LONG hrExpected);
 
@@ -510,7 +513,7 @@ void __RPC_STUB IError_LogExpectedHr_Stub(
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE IError_LogReceivedHr_Proxy( 
+HRESULT STDMETHODCALLTYPE IError_LogReceivedHr_Proxy(
     IError __RPC_FAR * This,
     /* [in] */ LONG hrReceived,
     /* [in] */ BSTR bstrFileName,
@@ -524,7 +527,7 @@ void __RPC_STUB IError_LogReceivedHr_Stub(
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE IError_ResetModErrors_Proxy( 
+HRESULT STDMETHODCALLTYPE IError_ResetModErrors_Proxy(
     IError __RPC_FAR * This);
 
 
@@ -535,7 +538,7 @@ void __RPC_STUB IError_ResetModErrors_Stub(
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE IError_ResetCaseErrors_Proxy( 
+HRESULT STDMETHODCALLTYPE IError_ResetCaseErrors_Proxy(
     IError __RPC_FAR * This);
 
 
@@ -546,7 +549,7 @@ void __RPC_STUB IError_ResetCaseErrors_Stub(
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE IError_ResetVarErrors_Proxy( 
+HRESULT STDMETHODCALLTYPE IError_ResetVarErrors_Proxy(
     IError __RPC_FAR * This);
 
 
@@ -557,7 +560,7 @@ void __RPC_STUB IError_ResetVarErrors_Stub(
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE IError_ResetModWarnings_Proxy( 
+HRESULT STDMETHODCALLTYPE IError_ResetModWarnings_Proxy(
     IError __RPC_FAR * This);
 
 
@@ -568,7 +571,7 @@ void __RPC_STUB IError_ResetModWarnings_Stub(
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE IError_ResetCaseWarnings_Proxy( 
+HRESULT STDMETHODCALLTYPE IError_ResetCaseWarnings_Proxy(
     IError __RPC_FAR * This);
 
 
@@ -579,7 +582,7 @@ void __RPC_STUB IError_ResetCaseWarnings_Stub(
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE IError_ResetVarWarnings_Proxy( 
+HRESULT STDMETHODCALLTYPE IError_ResetVarWarnings_Proxy(
     IError __RPC_FAR * This);
 
 
@@ -590,7 +593,7 @@ void __RPC_STUB IError_ResetVarWarnings_Stub(
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE IError_GetModErrors_Proxy( 
+HRESULT STDMETHODCALLTYPE IError_GetModErrors_Proxy(
     IError __RPC_FAR * This,
     /* [retval][out] */ LONG __RPC_FAR *plModErrors);
 
@@ -602,7 +605,7 @@ void __RPC_STUB IError_GetModErrors_Stub(
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE IError_GetCaseErrors_Proxy( 
+HRESULT STDMETHODCALLTYPE IError_GetCaseErrors_Proxy(
     IError __RPC_FAR * This,
     /* [retval][out] */ LONG __RPC_FAR *plCaseErrors);
 
@@ -614,7 +617,7 @@ void __RPC_STUB IError_GetCaseErrors_Stub(
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE IError_GetVarErrors_Proxy( 
+HRESULT STDMETHODCALLTYPE IError_GetVarErrors_Proxy(
     IError __RPC_FAR * This,
     /* [retval][out] */ LONG __RPC_FAR *plVarErrors);
 
@@ -626,7 +629,7 @@ void __RPC_STUB IError_GetVarErrors_Stub(
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE IError_GetModWarnings_Proxy( 
+HRESULT STDMETHODCALLTYPE IError_GetModWarnings_Proxy(
     IError __RPC_FAR * This,
     /* [retval][out] */ LONG __RPC_FAR *plModWarnings);
 
@@ -638,7 +641,7 @@ void __RPC_STUB IError_GetModWarnings_Stub(
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE IError_GetCaseWarnings_Proxy( 
+HRESULT STDMETHODCALLTYPE IError_GetCaseWarnings_Proxy(
     IError __RPC_FAR * This,
     /* [retval][out] */ LONG __RPC_FAR *plCaseWarnings);
 
@@ -650,7 +653,7 @@ void __RPC_STUB IError_GetCaseWarnings_Stub(
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE IError_GetVarWarnings_Proxy( 
+HRESULT STDMETHODCALLTYPE IError_GetVarWarnings_Proxy(
     IError __RPC_FAR * This,
     /* [retval][out] */ LONG __RPC_FAR *plVarWarnings);
 
@@ -662,7 +665,7 @@ void __RPC_STUB IError_GetVarWarnings_Stub(
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE IError_Increment_Proxy( 
+HRESULT STDMETHODCALLTYPE IError_Increment_Proxy(
     IError __RPC_FAR * This);
 
 
@@ -673,7 +676,7 @@ void __RPC_STUB IError_Increment_Stub(
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE IError_Transmit_Proxy( 
+HRESULT STDMETHODCALLTYPE IError_Transmit_Proxy(
     IError __RPC_FAR * This,
     /* [in] */ BSTR bstrTextString);
 
@@ -685,7 +688,7 @@ void __RPC_STUB IError_Transmit_Stub(
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE IError_Initialize_Proxy( 
+HRESULT STDMETHODCALLTYPE IError_Initialize_Proxy(
     IError __RPC_FAR * This);
 
 
@@ -701,14 +704,15 @@ void __RPC_STUB IError_Initialize_Stub(
 
 
 /* interface __MIDL_itf_ModuleCore_0009 */
-/* [local] */ 
+/* [local] */
 
-typedef 
+typedef
 enum tagCONSOLEFLAGS
-    {	CONSOLE_RAW	= 0,
-	CONSOLE_TEXT	= 0x1,
-	CONSOLE_XML	= 0x2 | CONSOLE_TEXT
-    }	CONSOLEFLAGS;
+{
+    CONSOLE_RAW	= 0,
+    CONSOLE_TEXT	= 0x1,
+    CONSOLE_XML	= 0x2 | CONSOLE_TEXT
+}	CONSOLEFLAGS;
 
 
 
@@ -719,80 +723,81 @@ extern RPC_IF_HANDLE __MIDL_itf_ModuleCore_0009_v0_0_s_ifspec;
 #define __ITestConsole_INTERFACE_DEFINED__
 
 /* interface ITestConsole */
-/* [helpstring][oleautomation][uuid][object] */ 
+/* [helpstring][oleautomation][uuid][object] */
 
 
 EXTERN_C const IID IID_ITestConsole;
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
-    
-    MIDL_INTERFACE("F2B528DD-15AC-41d4-B582-C0DAA1322CE3")
-    ITestConsole : public IUnknown
-    {
-    public:
-        virtual HRESULT STDMETHODCALLTYPE Log( 
-            /* [in] */ BSTR bstrActual,
-            /* [in] */ BSTR bstrExpected,
-            /* [in] */ BSTR bstrSource,
-            /* [in] */ BSTR bstrMessage,
-            /* [in] */ BSTR bstrDetails,
-            /* [in] */ CONSOLEFLAGS flags,
-            /* [in] */ BSTR bstrFilename,
-            /* [in] */ LONG iline) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE Write( 
-            /* [in] */ CONSOLEFLAGS flags,
-            /* [in] */ BSTR bstrString) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE WriteLine( void) = 0;
-        
-    };
-    
+
+MIDL_INTERFACE("F2B528DD-15AC-41d4-B582-C0DAA1322CE3")
+ITestConsole :
+public IUnknown
+{
+public:
+    virtual HRESULT STDMETHODCALLTYPE Log(
+        /* [in] */ BSTR bstrActual,
+        /* [in] */ BSTR bstrExpected,
+        /* [in] */ BSTR bstrSource,
+        /* [in] */ BSTR bstrMessage,
+        /* [in] */ BSTR bstrDetails,
+        /* [in] */ CONSOLEFLAGS flags,
+        /* [in] */ BSTR bstrFilename,
+        /* [in] */ LONG iline) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE Write(
+        /* [in] */ CONSOLEFLAGS flags,
+        /* [in] */ BSTR bstrString) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE WriteLine( void) = 0;
+
+};
+
 #else 	/* C style interface */
 
-    typedef struct ITestConsoleVtbl
-    {
-        BEGIN_INTERFACE
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            ITestConsole __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
-        
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            ITestConsole __RPC_FAR * This);
-        
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            ITestConsole __RPC_FAR * This);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Log )( 
-            ITestConsole __RPC_FAR * This,
-            /* [in] */ BSTR bstrActual,
-            /* [in] */ BSTR bstrExpected,
-            /* [in] */ BSTR bstrSource,
-            /* [in] */ BSTR bstrMessage,
-            /* [in] */ BSTR bstrDetails,
-            /* [in] */ CONSOLEFLAGS flags,
-            /* [in] */ BSTR bstrFilename,
-            /* [in] */ LONG iline);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Write )( 
-            ITestConsole __RPC_FAR * This,
-            /* [in] */ CONSOLEFLAGS flags,
-            /* [in] */ BSTR bstrString);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *WriteLine )( 
-            ITestConsole __RPC_FAR * This);
-        
-        END_INTERFACE
-    } ITestConsoleVtbl;
+typedef struct ITestConsoleVtbl
+{
+    BEGIN_INTERFACE
 
-    interface ITestConsole
-    {
-        CONST_VTBL struct ITestConsoleVtbl __RPC_FAR *lpVtbl;
-    };
+    HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )(
+        ITestConsole __RPC_FAR * This,
+        /* [in] */ REFIID riid,
+        /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
 
-    
+    ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )(
+        ITestConsole __RPC_FAR * This);
+
+    ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )(
+        ITestConsole __RPC_FAR * This);
+
+    HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Log )(
+        ITestConsole __RPC_FAR * This,
+        /* [in] */ BSTR bstrActual,
+        /* [in] */ BSTR bstrExpected,
+        /* [in] */ BSTR bstrSource,
+        /* [in] */ BSTR bstrMessage,
+        /* [in] */ BSTR bstrDetails,
+        /* [in] */ CONSOLEFLAGS flags,
+        /* [in] */ BSTR bstrFilename,
+        /* [in] */ LONG iline);
+
+    HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Write )(
+        ITestConsole __RPC_FAR * This,
+        /* [in] */ CONSOLEFLAGS flags,
+        /* [in] */ BSTR bstrString);
+
+    HRESULT ( STDMETHODCALLTYPE __RPC_FAR *WriteLine )(
+        ITestConsole __RPC_FAR * This);
+
+    END_INTERFACE
+} ITestConsoleVtbl;
+
+interface ITestConsole
+{
+    CONST_VTBL struct ITestConsoleVtbl __RPC_FAR *lpVtbl;
+};
+
+
 
 #ifdef COBJMACROS
 
@@ -823,7 +828,7 @@ EXTERN_C const IID IID_ITestConsole;
 
 
 
-HRESULT STDMETHODCALLTYPE ITestConsole_Log_Proxy( 
+HRESULT STDMETHODCALLTYPE ITestConsole_Log_Proxy(
     ITestConsole __RPC_FAR * This,
     /* [in] */ BSTR bstrActual,
     /* [in] */ BSTR bstrExpected,
@@ -842,7 +847,7 @@ void __RPC_STUB ITestConsole_Log_Stub(
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE ITestConsole_Write_Proxy( 
+HRESULT STDMETHODCALLTYPE ITestConsole_Write_Proxy(
     ITestConsole __RPC_FAR * This,
     /* [in] */ CONSOLEFLAGS flags,
     /* [in] */ BSTR bstrString);
@@ -855,7 +860,7 @@ void __RPC_STUB ITestConsole_Write_Stub(
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE ITestConsole_WriteLine_Proxy( 
+HRESULT STDMETHODCALLTYPE ITestConsole_WriteLine_Proxy(
     ITestConsole __RPC_FAR * This);
 
 
@@ -874,129 +879,130 @@ void __RPC_STUB ITestConsole_WriteLine_Stub(
 #define __IProviderInfo_INTERFACE_DEFINED__
 
 /* interface IProviderInfo */
-/* [oleautomation][helpstring][uuid][object] */ 
+/* [oleautomation][helpstring][uuid][object] */
 
 
 EXTERN_C const IID IID_IProviderInfo;
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
-    
-    MIDL_INTERFACE("A0C3FEC2-8FBB-11d0-98CE-444553540000")
-    IProviderInfo : public IUnknown
-    {
-    public:
-        virtual HRESULT STDMETHODCALLTYPE GetName( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrProviderName) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE SetName( 
-            /* [in] */ BSTR bstrProviderName) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE GetFriendlyName( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrFriendlyName) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE SetFriendlyName( 
-            /* [in] */ BSTR bstrFriendlyName) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE GetInitString( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrInitString) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE SetInitString( 
-            /* [in] */ BSTR bstrInitString) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE GetMachineName( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrMachineName) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE SetMachineName( 
-            /* [in] */ BSTR bstrMachineName) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE GetCLSID( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrCLSID) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE SetCLSID( 
-            /* [in] */ BSTR bstrCLSID) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE GetCLSCTX( 
-            /* [retval][out] */ LONG __RPC_FAR *pClsCtx) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE SetCLSCTX( 
-            /* [in] */ LONG ClsCtx) = 0;
-        
-    };
-    
+
+MIDL_INTERFACE("A0C3FEC2-8FBB-11d0-98CE-444553540000")
+IProviderInfo :
+public IUnknown
+{
+public:
+    virtual HRESULT STDMETHODCALLTYPE GetName(
+        /* [retval][out] */ BSTR __RPC_FAR *pbstrProviderName) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE SetName(
+        /* [in] */ BSTR bstrProviderName) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetFriendlyName(
+        /* [retval][out] */ BSTR __RPC_FAR *pbstrFriendlyName) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE SetFriendlyName(
+        /* [in] */ BSTR bstrFriendlyName) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetInitString(
+        /* [retval][out] */ BSTR __RPC_FAR *pbstrInitString) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE SetInitString(
+        /* [in] */ BSTR bstrInitString) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetMachineName(
+        /* [retval][out] */ BSTR __RPC_FAR *pbstrMachineName) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE SetMachineName(
+        /* [in] */ BSTR bstrMachineName) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetCLSID(
+        /* [retval][out] */ BSTR __RPC_FAR *pbstrCLSID) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE SetCLSID(
+        /* [in] */ BSTR bstrCLSID) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetCLSCTX(
+        /* [retval][out] */ LONG __RPC_FAR *pClsCtx) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE SetCLSCTX(
+        /* [in] */ LONG ClsCtx) = 0;
+
+};
+
 #else 	/* C style interface */
 
-    typedef struct IProviderInfoVtbl
-    {
-        BEGIN_INTERFACE
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IProviderInfo __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
-        
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IProviderInfo __RPC_FAR * This);
-        
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IProviderInfo __RPC_FAR * This);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetName )( 
-            IProviderInfo __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrProviderName);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetName )( 
-            IProviderInfo __RPC_FAR * This,
-            /* [in] */ BSTR bstrProviderName);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetFriendlyName )( 
-            IProviderInfo __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrFriendlyName);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetFriendlyName )( 
-            IProviderInfo __RPC_FAR * This,
-            /* [in] */ BSTR bstrFriendlyName);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetInitString )( 
-            IProviderInfo __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrInitString);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetInitString )( 
-            IProviderInfo __RPC_FAR * This,
-            /* [in] */ BSTR bstrInitString);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetMachineName )( 
-            IProviderInfo __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrMachineName);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetMachineName )( 
-            IProviderInfo __RPC_FAR * This,
-            /* [in] */ BSTR bstrMachineName);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetCLSID )( 
-            IProviderInfo __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrCLSID);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetCLSID )( 
-            IProviderInfo __RPC_FAR * This,
-            /* [in] */ BSTR bstrCLSID);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetCLSCTX )( 
-            IProviderInfo __RPC_FAR * This,
-            /* [retval][out] */ LONG __RPC_FAR *pClsCtx);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetCLSCTX )( 
-            IProviderInfo __RPC_FAR * This,
-            /* [in] */ LONG ClsCtx);
-        
-        END_INTERFACE
-    } IProviderInfoVtbl;
+typedef struct IProviderInfoVtbl
+{
+    BEGIN_INTERFACE
 
-    interface IProviderInfo
-    {
-        CONST_VTBL struct IProviderInfoVtbl __RPC_FAR *lpVtbl;
-    };
+    HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )(
+        IProviderInfo __RPC_FAR * This,
+        /* [in] */ REFIID riid,
+        /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
 
-    
+    ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )(
+        IProviderInfo __RPC_FAR * This);
+
+    ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )(
+        IProviderInfo __RPC_FAR * This);
+
+    HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetName )(
+        IProviderInfo __RPC_FAR * This,
+        /* [retval][out] */ BSTR __RPC_FAR *pbstrProviderName);
+
+    HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetName )(
+        IProviderInfo __RPC_FAR * This,
+        /* [in] */ BSTR bstrProviderName);
+
+    HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetFriendlyName )(
+        IProviderInfo __RPC_FAR * This,
+        /* [retval][out] */ BSTR __RPC_FAR *pbstrFriendlyName);
+
+    HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetFriendlyName )(
+        IProviderInfo __RPC_FAR * This,
+        /* [in] */ BSTR bstrFriendlyName);
+
+    HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetInitString )(
+        IProviderInfo __RPC_FAR * This,
+        /* [retval][out] */ BSTR __RPC_FAR *pbstrInitString);
+
+    HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetInitString )(
+        IProviderInfo __RPC_FAR * This,
+        /* [in] */ BSTR bstrInitString);
+
+    HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetMachineName )(
+        IProviderInfo __RPC_FAR * This,
+        /* [retval][out] */ BSTR __RPC_FAR *pbstrMachineName);
+
+    HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetMachineName )(
+        IProviderInfo __RPC_FAR * This,
+        /* [in] */ BSTR bstrMachineName);
+
+    HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetCLSID )(
+        IProviderInfo __RPC_FAR * This,
+        /* [retval][out] */ BSTR __RPC_FAR *pbstrCLSID);
+
+    HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetCLSID )(
+        IProviderInfo __RPC_FAR * This,
+        /* [in] */ BSTR bstrCLSID);
+
+    HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetCLSCTX )(
+        IProviderInfo __RPC_FAR * This,
+        /* [retval][out] */ LONG __RPC_FAR *pClsCtx);
+
+    HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetCLSCTX )(
+        IProviderInfo __RPC_FAR * This,
+        /* [in] */ LONG ClsCtx);
+
+    END_INTERFACE
+} IProviderInfoVtbl;
+
+interface IProviderInfo
+{
+    CONST_VTBL struct IProviderInfoVtbl __RPC_FAR *lpVtbl;
+};
+
+
 
 #ifdef COBJMACROS
 
@@ -1054,7 +1060,7 @@ EXTERN_C const IID IID_IProviderInfo;
 
 
 
-HRESULT STDMETHODCALLTYPE IProviderInfo_GetName_Proxy( 
+HRESULT STDMETHODCALLTYPE IProviderInfo_GetName_Proxy(
     IProviderInfo __RPC_FAR * This,
     /* [retval][out] */ BSTR __RPC_FAR *pbstrProviderName);
 
@@ -1066,7 +1072,7 @@ void __RPC_STUB IProviderInfo_GetName_Stub(
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE IProviderInfo_SetName_Proxy( 
+HRESULT STDMETHODCALLTYPE IProviderInfo_SetName_Proxy(
     IProviderInfo __RPC_FAR * This,
     /* [in] */ BSTR bstrProviderName);
 
@@ -1078,7 +1084,7 @@ void __RPC_STUB IProviderInfo_SetName_Stub(
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE IProviderInfo_GetFriendlyName_Proxy( 
+HRESULT STDMETHODCALLTYPE IProviderInfo_GetFriendlyName_Proxy(
     IProviderInfo __RPC_FAR * This,
     /* [retval][out] */ BSTR __RPC_FAR *pbstrFriendlyName);
 
@@ -1090,7 +1096,7 @@ void __RPC_STUB IProviderInfo_GetFriendlyName_Stub(
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE IProviderInfo_SetFriendlyName_Proxy( 
+HRESULT STDMETHODCALLTYPE IProviderInfo_SetFriendlyName_Proxy(
     IProviderInfo __RPC_FAR * This,
     /* [in] */ BSTR bstrFriendlyName);
 
@@ -1102,7 +1108,7 @@ void __RPC_STUB IProviderInfo_SetFriendlyName_Stub(
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE IProviderInfo_GetInitString_Proxy( 
+HRESULT STDMETHODCALLTYPE IProviderInfo_GetInitString_Proxy(
     IProviderInfo __RPC_FAR * This,
     /* [retval][out] */ BSTR __RPC_FAR *pbstrInitString);
 
@@ -1114,7 +1120,7 @@ void __RPC_STUB IProviderInfo_GetInitString_Stub(
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE IProviderInfo_SetInitString_Proxy( 
+HRESULT STDMETHODCALLTYPE IProviderInfo_SetInitString_Proxy(
     IProviderInfo __RPC_FAR * This,
     /* [in] */ BSTR bstrInitString);
 
@@ -1126,7 +1132,7 @@ void __RPC_STUB IProviderInfo_SetInitString_Stub(
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE IProviderInfo_GetMachineName_Proxy( 
+HRESULT STDMETHODCALLTYPE IProviderInfo_GetMachineName_Proxy(
     IProviderInfo __RPC_FAR * This,
     /* [retval][out] */ BSTR __RPC_FAR *pbstrMachineName);
 
@@ -1138,7 +1144,7 @@ void __RPC_STUB IProviderInfo_GetMachineName_Stub(
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE IProviderInfo_SetMachineName_Proxy( 
+HRESULT STDMETHODCALLTYPE IProviderInfo_SetMachineName_Proxy(
     IProviderInfo __RPC_FAR * This,
     /* [in] */ BSTR bstrMachineName);
 
@@ -1150,7 +1156,7 @@ void __RPC_STUB IProviderInfo_SetMachineName_Stub(
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE IProviderInfo_GetCLSID_Proxy( 
+HRESULT STDMETHODCALLTYPE IProviderInfo_GetCLSID_Proxy(
     IProviderInfo __RPC_FAR * This,
     /* [retval][out] */ BSTR __RPC_FAR *pbstrCLSID);
 
@@ -1162,7 +1168,7 @@ void __RPC_STUB IProviderInfo_GetCLSID_Stub(
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE IProviderInfo_SetCLSID_Proxy( 
+HRESULT STDMETHODCALLTYPE IProviderInfo_SetCLSID_Proxy(
     IProviderInfo __RPC_FAR * This,
     /* [in] */ BSTR bstrCLSID);
 
@@ -1174,7 +1180,7 @@ void __RPC_STUB IProviderInfo_SetCLSID_Stub(
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE IProviderInfo_GetCLSCTX_Proxy( 
+HRESULT STDMETHODCALLTYPE IProviderInfo_GetCLSCTX_Proxy(
     IProviderInfo __RPC_FAR * This,
     /* [retval][out] */ LONG __RPC_FAR *pClsCtx);
 
@@ -1186,7 +1192,7 @@ void __RPC_STUB IProviderInfo_GetCLSCTX_Stub(
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE IProviderInfo_SetCLSCTX_Proxy( 
+HRESULT STDMETHODCALLTYPE IProviderInfo_SetCLSCTX_Proxy(
     IProviderInfo __RPC_FAR * This,
     /* [in] */ LONG ClsCtx);
 
@@ -1206,100 +1212,101 @@ void __RPC_STUB IProviderInfo_SetCLSCTX_Stub(
 #define __IAliasInfo_INTERFACE_DEFINED__
 
 /* interface IAliasInfo */
-/* [oleautomation][helpstring][uuid][object] */ 
+/* [oleautomation][helpstring][uuid][object] */
 
 
 EXTERN_C const IID IID_IAliasInfo;
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
-    
-    MIDL_INTERFACE("34ADBB62-E4AD-41e4-AC6B-5ED539CD63D6")
-    IAliasInfo : public IProviderInfo
-    {
-    public:
-        virtual HRESULT STDMETHODCALLTYPE GetCommandLine( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrCmdLine) = 0;
-        
-    };
-    
+
+MIDL_INTERFACE("34ADBB62-E4AD-41e4-AC6B-5ED539CD63D6")
+IAliasInfo :
+public IProviderInfo
+{
+public:
+    virtual HRESULT STDMETHODCALLTYPE GetCommandLine(
+        /* [retval][out] */ BSTR __RPC_FAR *pbstrCmdLine) = 0;
+
+};
+
 #else 	/* C style interface */
 
-    typedef struct IAliasInfoVtbl
-    {
-        BEGIN_INTERFACE
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IAliasInfo __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
-        
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IAliasInfo __RPC_FAR * This);
-        
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IAliasInfo __RPC_FAR * This);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetName )( 
-            IAliasInfo __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrProviderName);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetName )( 
-            IAliasInfo __RPC_FAR * This,
-            /* [in] */ BSTR bstrProviderName);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetFriendlyName )( 
-            IAliasInfo __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrFriendlyName);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetFriendlyName )( 
-            IAliasInfo __RPC_FAR * This,
-            /* [in] */ BSTR bstrFriendlyName);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetInitString )( 
-            IAliasInfo __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrInitString);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetInitString )( 
-            IAliasInfo __RPC_FAR * This,
-            /* [in] */ BSTR bstrInitString);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetMachineName )( 
-            IAliasInfo __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrMachineName);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetMachineName )( 
-            IAliasInfo __RPC_FAR * This,
-            /* [in] */ BSTR bstrMachineName);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetCLSID )( 
-            IAliasInfo __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrCLSID);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetCLSID )( 
-            IAliasInfo __RPC_FAR * This,
-            /* [in] */ BSTR bstrCLSID);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetCLSCTX )( 
-            IAliasInfo __RPC_FAR * This,
-            /* [retval][out] */ LONG __RPC_FAR *pClsCtx);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetCLSCTX )( 
-            IAliasInfo __RPC_FAR * This,
-            /* [in] */ LONG ClsCtx);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetCommandLine )( 
-            IAliasInfo __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrCmdLine);
-        
-        END_INTERFACE
-    } IAliasInfoVtbl;
+typedef struct IAliasInfoVtbl
+{
+    BEGIN_INTERFACE
 
-    interface IAliasInfo
-    {
-        CONST_VTBL struct IAliasInfoVtbl __RPC_FAR *lpVtbl;
-    };
+    HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )(
+        IAliasInfo __RPC_FAR * This,
+        /* [in] */ REFIID riid,
+        /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
 
-    
+    ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )(
+        IAliasInfo __RPC_FAR * This);
+
+    ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )(
+        IAliasInfo __RPC_FAR * This);
+
+    HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetName )(
+        IAliasInfo __RPC_FAR * This,
+        /* [retval][out] */ BSTR __RPC_FAR *pbstrProviderName);
+
+    HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetName )(
+        IAliasInfo __RPC_FAR * This,
+        /* [in] */ BSTR bstrProviderName);
+
+    HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetFriendlyName )(
+        IAliasInfo __RPC_FAR * This,
+        /* [retval][out] */ BSTR __RPC_FAR *pbstrFriendlyName);
+
+    HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetFriendlyName )(
+        IAliasInfo __RPC_FAR * This,
+        /* [in] */ BSTR bstrFriendlyName);
+
+    HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetInitString )(
+        IAliasInfo __RPC_FAR * This,
+        /* [retval][out] */ BSTR __RPC_FAR *pbstrInitString);
+
+    HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetInitString )(
+        IAliasInfo __RPC_FAR * This,
+        /* [in] */ BSTR bstrInitString);
+
+    HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetMachineName )(
+        IAliasInfo __RPC_FAR * This,
+        /* [retval][out] */ BSTR __RPC_FAR *pbstrMachineName);
+
+    HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetMachineName )(
+        IAliasInfo __RPC_FAR * This,
+        /* [in] */ BSTR bstrMachineName);
+
+    HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetCLSID )(
+        IAliasInfo __RPC_FAR * This,
+        /* [retval][out] */ BSTR __RPC_FAR *pbstrCLSID);
+
+    HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetCLSID )(
+        IAliasInfo __RPC_FAR * This,
+        /* [in] */ BSTR bstrCLSID);
+
+    HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetCLSCTX )(
+        IAliasInfo __RPC_FAR * This,
+        /* [retval][out] */ LONG __RPC_FAR *pClsCtx);
+
+    HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetCLSCTX )(
+        IAliasInfo __RPC_FAR * This,
+        /* [in] */ LONG ClsCtx);
+
+    HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetCommandLine )(
+        IAliasInfo __RPC_FAR * This,
+        /* [retval][out] */ BSTR __RPC_FAR *pbstrCmdLine);
+
+    END_INTERFACE
+} IAliasInfoVtbl;
+
+interface IAliasInfo
+{
+    CONST_VTBL struct IAliasInfoVtbl __RPC_FAR *lpVtbl;
+};
+
+
 
 #ifdef COBJMACROS
 
@@ -1361,7 +1368,7 @@ EXTERN_C const IID IID_IAliasInfo;
 
 
 
-HRESULT STDMETHODCALLTYPE IAliasInfo_GetCommandLine_Proxy( 
+HRESULT STDMETHODCALLTYPE IAliasInfo_GetCommandLine_Proxy(
     IAliasInfo __RPC_FAR * This,
     /* [retval][out] */ BSTR __RPC_FAR *pbstrCmdLine);
 
@@ -1382,7 +1389,7 @@ void __RPC_STUB IAliasInfo_GetCommandLine_Stub(
 #define __ModuleBase_LIBRARY_DEFINED__
 
 /* library ModuleBase */
-/* [version][helpstring][uuid] */ 
+/* [version][helpstring][uuid] */
 
 
 
@@ -1397,126 +1404,127 @@ EXTERN_C const IID LIBID_ModuleBase;
 #define __ITestCases_INTERFACE_DEFINED__
 
 /* interface ITestCases */
-/* [helpstring][oleautomation][uuid][object] */ 
+/* [helpstring][oleautomation][uuid][object] */
 
 
 EXTERN_C const IID IID_ITestCases;
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
-    
-    MIDL_INTERFACE("A0C3FEC3-8FBB-11d0-98CE-444553540000")
-    ITestCases : public IUnknown
-    {
-    public:
-        virtual HRESULT STDMETHODCALLTYPE GetName( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrCaseName) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE GetDescription( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrCaseDescription) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE SyncProviderInterface( void) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE GetProviderInterface( 
-            /* [retval][out] */ IProviderInfo __RPC_FAR *__RPC_FAR *ppProvInfo) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE GetOwningITestModule( 
-            /* [retval][out] */ ITestModule __RPC_FAR *__RPC_FAR *ppTestModule) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE Init( 
-            /* [retval][out] */ LONG __RPC_FAR *plResult) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE Terminate( 
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pfResult) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE GetVariationCount( 
-            /* [retval][out] */ LONG __RPC_FAR *plVariationCount) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE ExecuteVariation( 
-            /* [in] */ LONG lIndex,
-            /* [retval][out] */ VARIATION_STATUS __RPC_FAR *pResult) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE GetVariationID( 
-            /* [in] */ LONG lIndex,
-            /* [retval][out] */ LONG __RPC_FAR *plID) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE GetVariationDesc( 
-            /* [in] */ LONG lIndex,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrDescription) = 0;
-        
-    };
-    
+
+MIDL_INTERFACE("A0C3FEC3-8FBB-11d0-98CE-444553540000")
+ITestCases :
+public IUnknown
+{
+public:
+    virtual HRESULT STDMETHODCALLTYPE GetName(
+        /* [retval][out] */ BSTR __RPC_FAR *pbstrCaseName) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetDescription(
+        /* [retval][out] */ BSTR __RPC_FAR *pbstrCaseDescription) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE SyncProviderInterface( void) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetProviderInterface(
+        /* [retval][out] */ IProviderInfo __RPC_FAR *__RPC_FAR *ppProvInfo) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetOwningITestModule(
+        /* [retval][out] */ ITestModule __RPC_FAR *__RPC_FAR *ppTestModule) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE Init(
+        /* [retval][out] */ LONG __RPC_FAR *plResult) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE Terminate(
+        /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pfResult) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetVariationCount(
+        /* [retval][out] */ LONG __RPC_FAR *plVariationCount) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE ExecuteVariation(
+        /* [in] */ LONG lIndex,
+        /* [retval][out] */ VARIATION_STATUS __RPC_FAR *pResult) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetVariationID(
+        /* [in] */ LONG lIndex,
+        /* [retval][out] */ LONG __RPC_FAR *plID) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetVariationDesc(
+        /* [in] */ LONG lIndex,
+        /* [retval][out] */ BSTR __RPC_FAR *pbstrDescription) = 0;
+
+};
+
 #else 	/* C style interface */
 
-    typedef struct ITestCasesVtbl
-    {
-        BEGIN_INTERFACE
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            ITestCases __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
-        
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            ITestCases __RPC_FAR * This);
-        
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            ITestCases __RPC_FAR * This);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetName )( 
-            ITestCases __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrCaseName);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetDescription )( 
-            ITestCases __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrCaseDescription);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SyncProviderInterface )( 
-            ITestCases __RPC_FAR * This);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetProviderInterface )( 
-            ITestCases __RPC_FAR * This,
-            /* [retval][out] */ IProviderInfo __RPC_FAR *__RPC_FAR *ppProvInfo);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetOwningITestModule )( 
-            ITestCases __RPC_FAR * This,
-            /* [retval][out] */ ITestModule __RPC_FAR *__RPC_FAR *ppTestModule);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Init )( 
-            ITestCases __RPC_FAR * This,
-            /* [retval][out] */ LONG __RPC_FAR *plResult);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Terminate )( 
-            ITestCases __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pfResult);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetVariationCount )( 
-            ITestCases __RPC_FAR * This,
-            /* [retval][out] */ LONG __RPC_FAR *plVariationCount);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ExecuteVariation )( 
-            ITestCases __RPC_FAR * This,
-            /* [in] */ LONG lIndex,
-            /* [retval][out] */ VARIATION_STATUS __RPC_FAR *pResult);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetVariationID )( 
-            ITestCases __RPC_FAR * This,
-            /* [in] */ LONG lIndex,
-            /* [retval][out] */ LONG __RPC_FAR *plID);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetVariationDesc )( 
-            ITestCases __RPC_FAR * This,
-            /* [in] */ LONG lIndex,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrDescription);
-        
-        END_INTERFACE
-    } ITestCasesVtbl;
+typedef struct ITestCasesVtbl
+{
+    BEGIN_INTERFACE
 
-    interface ITestCases
-    {
-        CONST_VTBL struct ITestCasesVtbl __RPC_FAR *lpVtbl;
-    };
+    HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )(
+        ITestCases __RPC_FAR * This,
+        /* [in] */ REFIID riid,
+        /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
 
-    
+    ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )(
+        ITestCases __RPC_FAR * This);
+
+    ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )(
+        ITestCases __RPC_FAR * This);
+
+    HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetName )(
+        ITestCases __RPC_FAR * This,
+        /* [retval][out] */ BSTR __RPC_FAR *pbstrCaseName);
+
+    HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetDescription )(
+        ITestCases __RPC_FAR * This,
+        /* [retval][out] */ BSTR __RPC_FAR *pbstrCaseDescription);
+
+    HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SyncProviderInterface )(
+        ITestCases __RPC_FAR * This);
+
+    HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetProviderInterface )(
+        ITestCases __RPC_FAR * This,
+        /* [retval][out] */ IProviderInfo __RPC_FAR *__RPC_FAR *ppProvInfo);
+
+    HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetOwningITestModule )(
+        ITestCases __RPC_FAR * This,
+        /* [retval][out] */ ITestModule __RPC_FAR *__RPC_FAR *ppTestModule);
+
+    HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Init )(
+        ITestCases __RPC_FAR * This,
+        /* [retval][out] */ LONG __RPC_FAR *plResult);
+
+    HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Terminate )(
+        ITestCases __RPC_FAR * This,
+        /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pfResult);
+
+    HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetVariationCount )(
+        ITestCases __RPC_FAR * This,
+        /* [retval][out] */ LONG __RPC_FAR *plVariationCount);
+
+    HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ExecuteVariation )(
+        ITestCases __RPC_FAR * This,
+        /* [in] */ LONG lIndex,
+        /* [retval][out] */ VARIATION_STATUS __RPC_FAR *pResult);
+
+    HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetVariationID )(
+        ITestCases __RPC_FAR * This,
+        /* [in] */ LONG lIndex,
+        /* [retval][out] */ LONG __RPC_FAR *plID);
+
+    HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetVariationDesc )(
+        ITestCases __RPC_FAR * This,
+        /* [in] */ LONG lIndex,
+        /* [retval][out] */ BSTR __RPC_FAR *pbstrDescription);
+
+    END_INTERFACE
+} ITestCasesVtbl;
+
+interface ITestCases
+{
+    CONST_VTBL struct ITestCasesVtbl __RPC_FAR *lpVtbl;
+};
+
+
 
 #ifdef COBJMACROS
 
@@ -1571,7 +1579,7 @@ EXTERN_C const IID IID_ITestCases;
 
 
 
-HRESULT STDMETHODCALLTYPE ITestCases_GetName_Proxy( 
+HRESULT STDMETHODCALLTYPE ITestCases_GetName_Proxy(
     ITestCases __RPC_FAR * This,
     /* [retval][out] */ BSTR __RPC_FAR *pbstrCaseName);
 
@@ -1583,7 +1591,7 @@ void __RPC_STUB ITestCases_GetName_Stub(
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE ITestCases_GetDescription_Proxy( 
+HRESULT STDMETHODCALLTYPE ITestCases_GetDescription_Proxy(
     ITestCases __RPC_FAR * This,
     /* [retval][out] */ BSTR __RPC_FAR *pbstrCaseDescription);
 
@@ -1595,7 +1603,7 @@ void __RPC_STUB ITestCases_GetDescription_Stub(
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE ITestCases_SyncProviderInterface_Proxy( 
+HRESULT STDMETHODCALLTYPE ITestCases_SyncProviderInterface_Proxy(
     ITestCases __RPC_FAR * This);
 
 
@@ -1606,7 +1614,7 @@ void __RPC_STUB ITestCases_SyncProviderInterface_Stub(
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE ITestCases_GetProviderInterface_Proxy( 
+HRESULT STDMETHODCALLTYPE ITestCases_GetProviderInterface_Proxy(
     ITestCases __RPC_FAR * This,
     /* [retval][out] */ IProviderInfo __RPC_FAR *__RPC_FAR *ppProvInfo);
 
@@ -1618,7 +1626,7 @@ void __RPC_STUB ITestCases_GetProviderInterface_Stub(
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE ITestCases_GetOwningITestModule_Proxy( 
+HRESULT STDMETHODCALLTYPE ITestCases_GetOwningITestModule_Proxy(
     ITestCases __RPC_FAR * This,
     /* [retval][out] */ ITestModule __RPC_FAR *__RPC_FAR *ppTestModule);
 
@@ -1630,7 +1638,7 @@ void __RPC_STUB ITestCases_GetOwningITestModule_Stub(
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE ITestCases_Init_Proxy( 
+HRESULT STDMETHODCALLTYPE ITestCases_Init_Proxy(
     ITestCases __RPC_FAR * This,
     /* [retval][out] */ LONG __RPC_FAR *plResult);
 
@@ -1642,7 +1650,7 @@ void __RPC_STUB ITestCases_Init_Stub(
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE ITestCases_Terminate_Proxy( 
+HRESULT STDMETHODCALLTYPE ITestCases_Terminate_Proxy(
     ITestCases __RPC_FAR * This,
     /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pfResult);
 
@@ -1654,7 +1662,7 @@ void __RPC_STUB ITestCases_Terminate_Stub(
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE ITestCases_GetVariationCount_Proxy( 
+HRESULT STDMETHODCALLTYPE ITestCases_GetVariationCount_Proxy(
     ITestCases __RPC_FAR * This,
     /* [retval][out] */ LONG __RPC_FAR *plVariationCount);
 
@@ -1666,7 +1674,7 @@ void __RPC_STUB ITestCases_GetVariationCount_Stub(
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE ITestCases_ExecuteVariation_Proxy( 
+HRESULT STDMETHODCALLTYPE ITestCases_ExecuteVariation_Proxy(
     ITestCases __RPC_FAR * This,
     /* [in] */ LONG lIndex,
     /* [retval][out] */ VARIATION_STATUS __RPC_FAR *pResult);
@@ -1679,7 +1687,7 @@ void __RPC_STUB ITestCases_ExecuteVariation_Stub(
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE ITestCases_GetVariationID_Proxy( 
+HRESULT STDMETHODCALLTYPE ITestCases_GetVariationID_Proxy(
     ITestCases __RPC_FAR * This,
     /* [in] */ LONG lIndex,
     /* [retval][out] */ LONG __RPC_FAR *plID);
@@ -1692,7 +1700,7 @@ void __RPC_STUB ITestCases_GetVariationID_Stub(
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE ITestCases_GetVariationDesc_Proxy( 
+HRESULT STDMETHODCALLTYPE ITestCases_GetVariationDesc_Proxy(
     ITestCases __RPC_FAR * This,
     /* [in] */ LONG lIndex,
     /* [retval][out] */ BSTR __RPC_FAR *pbstrDescription);
@@ -1713,138 +1721,139 @@ void __RPC_STUB ITestCases_GetVariationDesc_Stub(
 #define __ITestModule_INTERFACE_DEFINED__
 
 /* interface ITestModule */
-/* [helpstring][oleautomation][uuid][object] */ 
+/* [helpstring][oleautomation][uuid][object] */
 
 
 EXTERN_C const IID IID_ITestModule;
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
-    
-    MIDL_INTERFACE("A0C3FEC4-8FBB-11d0-98CE-444553540000")
-    ITestModule : public IUnknown
-    {
-    public:
-        virtual HRESULT STDMETHODCALLTYPE GetName( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrName) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE GetDescription( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrDescription) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE GetOwnerName( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrOwner) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE GetCLSID( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrCLSID) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE GetVersion( 
-            /* [retval][out] */ LONG __RPC_FAR *plVersion) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE SetProviderInterface( 
-            /* [in] */ IProviderInfo __RPC_FAR *pProvInfo) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE GetProviderInterface( 
-            /* [retval][out] */ IProviderInfo __RPC_FAR *__RPC_FAR *ppProvInfo) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE SetErrorInterface( 
-            /* [in] */ IError __RPC_FAR *pIError) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE GetErrorInterface( 
-            /* [retval][out] */ IError __RPC_FAR *__RPC_FAR *ppIError) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE Init( 
-            /* [retval][out] */ LONG __RPC_FAR *plResult) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE Terminate( 
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pfResult) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE GetCaseCount( 
-            /* [retval][out] */ LONG __RPC_FAR *plCaseCount) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE GetCase( 
-            /* [in] */ LONG lIndex,
-            /* [retval][out] */ ITestCases __RPC_FAR *__RPC_FAR *ppITestCases) = 0;
-        
-    };
-    
+
+MIDL_INTERFACE("A0C3FEC4-8FBB-11d0-98CE-444553540000")
+ITestModule :
+public IUnknown
+{
+public:
+    virtual HRESULT STDMETHODCALLTYPE GetName(
+        /* [retval][out] */ BSTR __RPC_FAR *pbstrName) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetDescription(
+        /* [retval][out] */ BSTR __RPC_FAR *pbstrDescription) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetOwnerName(
+        /* [retval][out] */ BSTR __RPC_FAR *pbstrOwner) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetCLSID(
+        /* [retval][out] */ BSTR __RPC_FAR *pbstrCLSID) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetVersion(
+        /* [retval][out] */ LONG __RPC_FAR *plVersion) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE SetProviderInterface(
+        /* [in] */ IProviderInfo __RPC_FAR *pProvInfo) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetProviderInterface(
+        /* [retval][out] */ IProviderInfo __RPC_FAR *__RPC_FAR *ppProvInfo) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE SetErrorInterface(
+        /* [in] */ IError __RPC_FAR *pIError) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetErrorInterface(
+        /* [retval][out] */ IError __RPC_FAR *__RPC_FAR *ppIError) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE Init(
+        /* [retval][out] */ LONG __RPC_FAR *plResult) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE Terminate(
+        /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pfResult) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetCaseCount(
+        /* [retval][out] */ LONG __RPC_FAR *plCaseCount) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetCase(
+        /* [in] */ LONG lIndex,
+        /* [retval][out] */ ITestCases __RPC_FAR *__RPC_FAR *ppITestCases) = 0;
+
+};
+
 #else 	/* C style interface */
 
-    typedef struct ITestModuleVtbl
-    {
-        BEGIN_INTERFACE
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            ITestModule __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
-        
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            ITestModule __RPC_FAR * This);
-        
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            ITestModule __RPC_FAR * This);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetName )( 
-            ITestModule __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrName);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetDescription )( 
-            ITestModule __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrDescription);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetOwnerName )( 
-            ITestModule __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrOwner);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetCLSID )( 
-            ITestModule __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrCLSID);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetVersion )( 
-            ITestModule __RPC_FAR * This,
-            /* [retval][out] */ LONG __RPC_FAR *plVersion);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetProviderInterface )( 
-            ITestModule __RPC_FAR * This,
-            /* [in] */ IProviderInfo __RPC_FAR *pProvInfo);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetProviderInterface )( 
-            ITestModule __RPC_FAR * This,
-            /* [retval][out] */ IProviderInfo __RPC_FAR *__RPC_FAR *ppProvInfo);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetErrorInterface )( 
-            ITestModule __RPC_FAR * This,
-            /* [in] */ IError __RPC_FAR *pIError);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetErrorInterface )( 
-            ITestModule __RPC_FAR * This,
-            /* [retval][out] */ IError __RPC_FAR *__RPC_FAR *ppIError);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Init )( 
-            ITestModule __RPC_FAR * This,
-            /* [retval][out] */ LONG __RPC_FAR *plResult);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Terminate )( 
-            ITestModule __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pfResult);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetCaseCount )( 
-            ITestModule __RPC_FAR * This,
-            /* [retval][out] */ LONG __RPC_FAR *plCaseCount);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetCase )( 
-            ITestModule __RPC_FAR * This,
-            /* [in] */ LONG lIndex,
-            /* [retval][out] */ ITestCases __RPC_FAR *__RPC_FAR *ppITestCases);
-        
-        END_INTERFACE
-    } ITestModuleVtbl;
+typedef struct ITestModuleVtbl
+{
+    BEGIN_INTERFACE
 
-    interface ITestModule
-    {
-        CONST_VTBL struct ITestModuleVtbl __RPC_FAR *lpVtbl;
-    };
+    HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )(
+        ITestModule __RPC_FAR * This,
+        /* [in] */ REFIID riid,
+        /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
 
-    
+    ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )(
+        ITestModule __RPC_FAR * This);
+
+    ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )(
+        ITestModule __RPC_FAR * This);
+
+    HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetName )(
+        ITestModule __RPC_FAR * This,
+        /* [retval][out] */ BSTR __RPC_FAR *pbstrName);
+
+    HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetDescription )(
+        ITestModule __RPC_FAR * This,
+        /* [retval][out] */ BSTR __RPC_FAR *pbstrDescription);
+
+    HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetOwnerName )(
+        ITestModule __RPC_FAR * This,
+        /* [retval][out] */ BSTR __RPC_FAR *pbstrOwner);
+
+    HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetCLSID )(
+        ITestModule __RPC_FAR * This,
+        /* [retval][out] */ BSTR __RPC_FAR *pbstrCLSID);
+
+    HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetVersion )(
+        ITestModule __RPC_FAR * This,
+        /* [retval][out] */ LONG __RPC_FAR *plVersion);
+
+    HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetProviderInterface )(
+        ITestModule __RPC_FAR * This,
+        /* [in] */ IProviderInfo __RPC_FAR *pProvInfo);
+
+    HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetProviderInterface )(
+        ITestModule __RPC_FAR * This,
+        /* [retval][out] */ IProviderInfo __RPC_FAR *__RPC_FAR *ppProvInfo);
+
+    HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetErrorInterface )(
+        ITestModule __RPC_FAR * This,
+        /* [in] */ IError __RPC_FAR *pIError);
+
+    HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetErrorInterface )(
+        ITestModule __RPC_FAR * This,
+        /* [retval][out] */ IError __RPC_FAR *__RPC_FAR *ppIError);
+
+    HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Init )(
+        ITestModule __RPC_FAR * This,
+        /* [retval][out] */ LONG __RPC_FAR *plResult);
+
+    HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Terminate )(
+        ITestModule __RPC_FAR * This,
+        /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pfResult);
+
+    HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetCaseCount )(
+        ITestModule __RPC_FAR * This,
+        /* [retval][out] */ LONG __RPC_FAR *plCaseCount);
+
+    HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetCase )(
+        ITestModule __RPC_FAR * This,
+        /* [in] */ LONG lIndex,
+        /* [retval][out] */ ITestCases __RPC_FAR *__RPC_FAR *ppITestCases);
+
+    END_INTERFACE
+} ITestModuleVtbl;
+
+interface ITestModule
+{
+    CONST_VTBL struct ITestModuleVtbl __RPC_FAR *lpVtbl;
+};
+
+
 
 #ifdef COBJMACROS
 
@@ -1905,7 +1914,7 @@ EXTERN_C const IID IID_ITestModule;
 
 
 
-HRESULT STDMETHODCALLTYPE ITestModule_GetName_Proxy( 
+HRESULT STDMETHODCALLTYPE ITestModule_GetName_Proxy(
     ITestModule __RPC_FAR * This,
     /* [retval][out] */ BSTR __RPC_FAR *pbstrName);
 
@@ -1917,7 +1926,7 @@ void __RPC_STUB ITestModule_GetName_Stub(
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE ITestModule_GetDescription_Proxy( 
+HRESULT STDMETHODCALLTYPE ITestModule_GetDescription_Proxy(
     ITestModule __RPC_FAR * This,
     /* [retval][out] */ BSTR __RPC_FAR *pbstrDescription);
 
@@ -1929,7 +1938,7 @@ void __RPC_STUB ITestModule_GetDescription_Stub(
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE ITestModule_GetOwnerName_Proxy( 
+HRESULT STDMETHODCALLTYPE ITestModule_GetOwnerName_Proxy(
     ITestModule __RPC_FAR * This,
     /* [retval][out] */ BSTR __RPC_FAR *pbstrOwner);
 
@@ -1941,7 +1950,7 @@ void __RPC_STUB ITestModule_GetOwnerName_Stub(
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE ITestModule_GetCLSID_Proxy( 
+HRESULT STDMETHODCALLTYPE ITestModule_GetCLSID_Proxy(
     ITestModule __RPC_FAR * This,
     /* [retval][out] */ BSTR __RPC_FAR *pbstrCLSID);
 
@@ -1953,7 +1962,7 @@ void __RPC_STUB ITestModule_GetCLSID_Stub(
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE ITestModule_GetVersion_Proxy( 
+HRESULT STDMETHODCALLTYPE ITestModule_GetVersion_Proxy(
     ITestModule __RPC_FAR * This,
     /* [retval][out] */ LONG __RPC_FAR *plVersion);
 
@@ -1965,7 +1974,7 @@ void __RPC_STUB ITestModule_GetVersion_Stub(
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE ITestModule_SetProviderInterface_Proxy( 
+HRESULT STDMETHODCALLTYPE ITestModule_SetProviderInterface_Proxy(
     ITestModule __RPC_FAR * This,
     /* [in] */ IProviderInfo __RPC_FAR *pProvInfo);
 
@@ -1977,7 +1986,7 @@ void __RPC_STUB ITestModule_SetProviderInterface_Stub(
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE ITestModule_GetProviderInterface_Proxy( 
+HRESULT STDMETHODCALLTYPE ITestModule_GetProviderInterface_Proxy(
     ITestModule __RPC_FAR * This,
     /* [retval][out] */ IProviderInfo __RPC_FAR *__RPC_FAR *ppProvInfo);
 
@@ -1989,7 +1998,7 @@ void __RPC_STUB ITestModule_GetProviderInterface_Stub(
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE ITestModule_SetErrorInterface_Proxy( 
+HRESULT STDMETHODCALLTYPE ITestModule_SetErrorInterface_Proxy(
     ITestModule __RPC_FAR * This,
     /* [in] */ IError __RPC_FAR *pIError);
 
@@ -2001,7 +2010,7 @@ void __RPC_STUB ITestModule_SetErrorInterface_Stub(
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE ITestModule_GetErrorInterface_Proxy( 
+HRESULT STDMETHODCALLTYPE ITestModule_GetErrorInterface_Proxy(
     ITestModule __RPC_FAR * This,
     /* [retval][out] */ IError __RPC_FAR *__RPC_FAR *ppIError);
 
@@ -2013,7 +2022,7 @@ void __RPC_STUB ITestModule_GetErrorInterface_Stub(
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE ITestModule_Init_Proxy( 
+HRESULT STDMETHODCALLTYPE ITestModule_Init_Proxy(
     ITestModule __RPC_FAR * This,
     /* [retval][out] */ LONG __RPC_FAR *plResult);
 
@@ -2025,7 +2034,7 @@ void __RPC_STUB ITestModule_Init_Stub(
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE ITestModule_Terminate_Proxy( 
+HRESULT STDMETHODCALLTYPE ITestModule_Terminate_Proxy(
     ITestModule __RPC_FAR * This,
     /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pfResult);
 
@@ -2037,7 +2046,7 @@ void __RPC_STUB ITestModule_Terminate_Stub(
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE ITestModule_GetCaseCount_Proxy( 
+HRESULT STDMETHODCALLTYPE ITestModule_GetCaseCount_Proxy(
     ITestModule __RPC_FAR * This,
     /* [retval][out] */ LONG __RPC_FAR *plCaseCount);
 
@@ -2049,7 +2058,7 @@ void __RPC_STUB ITestModule_GetCaseCount_Stub(
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE ITestModule_GetCase_Proxy( 
+HRESULT STDMETHODCALLTYPE ITestModule_GetCase_Proxy(
     ITestModule __RPC_FAR * This,
     /* [in] */ LONG lIndex,
     /* [retval][out] */ ITestCases __RPC_FAR *__RPC_FAR *ppITestCases);
@@ -2068,7 +2077,7 @@ void __RPC_STUB ITestModule_GetCase_Stub(
 #endif /* __ModuleBase_LIBRARY_DEFINED__ */
 
 /* interface __MIDL_itf_ModuleCore_0012 */
-/* [local] */ 
+/* [local] */
 
 
 
@@ -2078,10 +2087,10 @@ extern RPC_IF_HANDLE __MIDL_itf_ModuleCore_0012_v0_0_s_ifspec;
 
 /* Additional Prototypes for ALL interfaces */
 
-unsigned long             __RPC_USER  BSTR_UserSize(     unsigned long __RPC_FAR *, unsigned long            , BSTR __RPC_FAR * ); 
-unsigned char __RPC_FAR * __RPC_USER  BSTR_UserMarshal(  unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, BSTR __RPC_FAR * ); 
-unsigned char __RPC_FAR * __RPC_USER  BSTR_UserUnmarshal(unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, BSTR __RPC_FAR * ); 
-void                      __RPC_USER  BSTR_UserFree(     unsigned long __RPC_FAR *, BSTR __RPC_FAR * ); 
+unsigned long             __RPC_USER  BSTR_UserSize(     unsigned long __RPC_FAR *, unsigned long, BSTR __RPC_FAR * );
+unsigned char __RPC_FAR * __RPC_USER  BSTR_UserMarshal(  unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, BSTR __RPC_FAR * );
+unsigned char __RPC_FAR * __RPC_USER  BSTR_UserUnmarshal(unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, BSTR __RPC_FAR * );
+void                      __RPC_USER  BSTR_UserFree(     unsigned long __RPC_FAR *, BSTR __RPC_FAR * );
 
 /* end of Additional Prototypes */
 

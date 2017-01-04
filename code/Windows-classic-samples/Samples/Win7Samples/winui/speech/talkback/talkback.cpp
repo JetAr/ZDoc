@@ -1,9 +1,9 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
 //
-// Copyright � Microsoft Corporation. All rights reserved
+// Copyright © Microsoft Corporation. All rights reserved
 
 #include <windows.h>
 #include <sapi.h>
@@ -15,11 +15,11 @@
 inline HRESULT BlockForResult(ISpRecoContext * pRecoCtxt, ISpRecoResult ** ppResult)
 {
     HRESULT hr = S_OK;
-	CSpEvent event;
+    CSpEvent event;
 
     while (SUCCEEDED(hr) &&
-           SUCCEEDED(hr = event.GetFrom(pRecoCtxt)) &&
-           hr == S_FALSE)
+            SUCCEEDED(hr = event.GetFrom(pRecoCtxt)) &&
+            hr == S_FALSE)
     {
         hr = pRecoCtxt->WaitForNotifyEvent(INFINITE);
     }
@@ -36,23 +36,23 @@ inline HRESULT BlockForResult(ISpRecoContext * pRecoCtxt, ISpRecoResult ** ppRes
 const WCHAR * StopWord()
 {
     const WCHAR * pchStop;
-    
+
     LANGID LangId = ::SpGetUserDefaultUILanguage();
 
     switch (LangId)
     {
-        case MAKELANGID(LANG_JAPANESE, SUBLANG_DEFAULT):
-            pchStop = L"\x7d42\x4e86\\\x30b7\x30e5\x30fc\x30ea\x30e7\x30fc/\x3057\x3085\x3046\x308a\x3087\x3046";;
-            break;
+    case MAKELANGID(LANG_JAPANESE, SUBLANG_DEFAULT):
+        pchStop = L"\x7d42\x4e86\\\x30b7\x30e5\x30fc\x30ea\x30e7\x30fc/\x3057\x3085\x3046\x308a\x3087\x3046";;
+        break;
 
-        default:
-            pchStop = L"Stop";
-            break;
+    default:
+        pchStop = L"Stop";
+        break;
     }
 
     return pchStop;
 }
-            
+
 int main(int argc, __in_ecount(argc) char* argv[])
 {
     HRESULT hr = E_FAIL;
@@ -75,7 +75,7 @@ int main(int argc, __in_ecount(argc) char* argv[])
             {
                 fReplay = false;
                 continue;
-            }       
+            }
             printf ("Usage: %s [-noTTS] [-noReplay] \n", argv[0]);
             return hr;
         }
@@ -92,14 +92,14 @@ int main(int argc, __in_ecount(argc) char* argv[])
             {
                 hr = cpRecoCtxt->GetVoice(&cpVoice);
             }
-           
+
             if (cpRecoCtxt && cpVoice &&
-                SUCCEEDED(hr = cpRecoCtxt->SetNotifyWin32Event()) &&
-                SUCCEEDED(hr = cpRecoCtxt->SetInterest(SPFEI(SPEI_RECOGNITION), SPFEI(SPEI_RECOGNITION))) &&
-                SUCCEEDED(hr = cpRecoCtxt->SetAudioOptions(SPAO_RETAIN_AUDIO, NULL, NULL)) &&
-                SUCCEEDED(hr = cpRecoCtxt->CreateGrammar(0, &cpGrammar)) &&
-                SUCCEEDED(hr = cpGrammar->LoadDictation(NULL, SPLO_STATIC)) &&
-                SUCCEEDED(hr = cpGrammar->SetDictationState(SPRS_ACTIVE)))
+                    SUCCEEDED(hr = cpRecoCtxt->SetNotifyWin32Event()) &&
+                    SUCCEEDED(hr = cpRecoCtxt->SetInterest(SPFEI(SPEI_RECOGNITION), SPFEI(SPEI_RECOGNITION))) &&
+                    SUCCEEDED(hr = cpRecoCtxt->SetAudioOptions(SPAO_RETAIN_AUDIO, NULL, NULL)) &&
+                    SUCCEEDED(hr = cpRecoCtxt->CreateGrammar(0, &cpGrammar)) &&
+                    SUCCEEDED(hr = cpGrammar->LoadDictation(NULL, SPLO_STATIC)) &&
+                    SUCCEEDED(hr = cpGrammar->SetDictationState(SPRS_ACTIVE)))
             {
                 const WCHAR * const pchStop = StopWord();
                 CComPtr<ISpRecoResult> cpResult;
@@ -112,7 +112,7 @@ int main(int argc, __in_ecount(argc) char* argv[])
 
                     CSpDynamicString dstrText;
 
-                    if (SUCCEEDED(cpResult->GetText(SP_GETWHOLEPHRASE, SP_GETWHOLEPHRASE, 
+                    if (SUCCEEDED(cpResult->GetText(SP_GETWHOLEPHRASE, SP_GETWHOLEPHRASE,
                                                     TRUE, &dstrText, NULL)))
                     {
                         printf("I heard:  %s\n", (LPSTR)CW2A(dstrText));
@@ -130,17 +130,17 @@ int main(int argc, __in_ecount(argc) char* argv[])
                             else
                                 printf ("\twhen you said...\n");
                             cpResult->SpeakAudio(NULL, 0, NULL, NULL);
-                       }
+                        }
 
-                       cpResult.Release();
+                        cpResult.Release();
                     }
                     if (_wcsicmp(dstrText, pchStop) == 0)
                     {
                         break;
                     }
-                    
+
                     cpGrammar->SetDictationState( SPRS_ACTIVE );
-                } 
+                }
             }
         }
         ::CoUninitialize();

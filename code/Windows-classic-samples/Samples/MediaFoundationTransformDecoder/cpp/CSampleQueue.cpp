@@ -1,4 +1,4 @@
-#include "CSampleQueue.h"
+﻿#include "CSampleQueue.h"
 #include "CAutoLock.h"
 #include "CHWMFT.h"
 #include "CHWMFT_DebugLogger.h"
@@ -59,7 +59,8 @@ HRESULT CSampleQueue::Create(
 
         (*ppQueue) = pNewQueue;
         (*ppQueue)->AddRef();
-    }while(false);
+    }
+    while(false);
 
     SAFERELEASE(pNewQueue);
 
@@ -97,7 +98,8 @@ HRESULT CSampleQueue::QueryInterface(
         }
 
         AddRef();
-    }while(false);
+    }
+    while(false);
 
     return hr;
 }
@@ -105,7 +107,7 @@ HRESULT CSampleQueue::QueryInterface(
 ULONG CSampleQueue::Release(void)
 {
     ULONG   ulRef = 0;
-    
+
     if(m_ulRef > 0)
     {
         ulRef = InterlockedDecrement(&m_ulRef);
@@ -177,7 +179,8 @@ HRESULT CSampleQueue::AddSample(
                 TraceString(CHMFTTracing::TRACE_INFORMATION, L"%S(): Sample @%p added to back of Queue @%p",  __FUNCTION__, pSample, this);
             }
         }
-    }while(false);
+    }
+    while(false);
 
     if(FAILED(hr))
     {
@@ -188,7 +191,7 @@ HRESULT CSampleQueue::AddSample(
 
     return hr;
 }
- 
+
 HRESULT CSampleQueue::GetNextSample(
     IMFSample** ppSample)
 {
@@ -214,7 +217,7 @@ HRESULT CSampleQueue::GetNextSample(
                 hr = S_FALSE;
                 break;
             }
-            
+
             pCurrentNode = m_pHead;
 
             (*ppSample) = pCurrentNode->pSample;
@@ -234,7 +237,8 @@ HRESULT CSampleQueue::GetNextSample(
                 TraceString(CHMFTTracing::TRACE_INFORMATION, L"%S(): Queue @%p is not empty",  __FUNCTION__, this);
             }
         }
-    }while(false);
+    }
+    while(false);
 
     SAFEDELETE(pCurrentNode);
 
@@ -260,7 +264,8 @@ HRESULT CSampleQueue::RemoveAllSamples(void)
         }
 
         m_pTail = NULL;
-    }while(false);
+    }
+    while(false);
 
     return hr;
 }
@@ -276,7 +281,8 @@ HRESULT CSampleQueue::MarkerNextSample(
 
         m_pulMarkerID   = pulID;
         m_bAddMarker    = TRUE;
-    }while(false);
+    }
+    while(false);
 
     return hr;
 }

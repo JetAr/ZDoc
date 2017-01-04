@@ -1,4 +1,4 @@
-//+--------------------------------------------------------------------------
+﻿//+--------------------------------------------------------------------------
 //
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
@@ -42,7 +42,7 @@
 //----------------------------------------------------------------------------
 HRESULT
 IWcsDemo::LoadsRGBImage(
-   __deref_out_bcount(*pcbBitmapData) BYTE **ppaBitmapData,
+    __deref_out_bcount(*pcbBitmapData) BYTE **ppaBitmapData,
     // Will contain the pointer to the data buffer, caller must not free
     __out DWORD *pcbBitmapData,
     // Size of data buffer returned
@@ -54,11 +54,11 @@ IWcsDemo::LoadsRGBImage(
     // Image horizontal resolution
     __out DWORD *pdwVerticalResolution
     // Image vertical resolution
-    )
+)
 {
     HRESULT hr = S_OK;
     if (!ppaBitmapData || !pcbBitmapData || !pdwWidth ||
-         !pdwHeight || !pdwHorizontalResolution || !pdwVerticalResolution)
+            !pdwHeight || !pdwHorizontalResolution || !pdwVerticalResolution)
     {
         return E_INVALIDARG;
     }
@@ -135,9 +135,9 @@ IWcsDemo::LoadsRGBImage(
         //
         pBitmapInfoHeader = (BITMAPINFOHEADER*) (((PBYTE)pBitmapFileHeader)+sizeof(BITMAPFILEHEADER));
         if ((BFT_BITMAP != pBitmapFileHeader->bfType) ||
-             (sizeof(BITMAPINFOHEADER) != pBitmapInfoHeader->biSize) ||
-              (24 != pBitmapInfoHeader->biBitCount) ||
-               (BI_RGB != pBitmapInfoHeader->biCompression) ||
+                (sizeof(BITMAPINFOHEADER) != pBitmapInfoHeader->biSize) ||
+                (24 != pBitmapInfoHeader->biBitCount) ||
+                (BI_RGB != pBitmapInfoHeader->biCompression) ||
                 (0 != pBitmapInfoHeader->biClrUsed))
         {
             hr = E_UNEXPECTED;
@@ -196,7 +196,7 @@ IWcsDemo::SaveImage(
     // Filename to write to disk
     __in SampleBitmapType BitmapType,
     // Bitmap data type
-     __in_bcount(cbBitmapData) BYTE *paBitmapData,
+    __in_bcount(cbBitmapData) BYTE *paBitmapData,
     // Bitmap data
     __in DWORD cbBitmapData,
     // Size in bytes of Bitmap Data
@@ -208,7 +208,7 @@ IWcsDemo::SaveImage(
     // Image horizontal resolution
     __in DWORD dwVerticalResolution
     // Image vertical resolution
-    )
+)
 {
     HRESULT hr = S_OK;
     if (!pwszImageFilename || !paBitmapData)
@@ -222,13 +222,13 @@ IWcsDemo::SaveImage(
     }
 
     HANDLE hFile = CreateFile(
-                        pwszImageFilename,
-                        GENERIC_WRITE,
-                        FILE_SHARE_READ,
-                        NULL,
-                        CREATE_ALWAYS,
-                        FILE_ATTRIBUTE_NORMAL,
-                        NULL);
+                       pwszImageFilename,
+                       GENERIC_WRITE,
+                       FILE_SHARE_READ,
+                       NULL,
+                       CREATE_ALWAYS,
+                       FILE_ATTRIBUTE_NORMAL,
+                       NULL);
     if (INVALID_HANDLE_VALUE == hFile)
     {
         hr = HRESULTFromLastError();
@@ -263,10 +263,10 @@ IWcsDemo::SaveImage(
         // Write the bitmap header data
         //
         if (!WriteFile(hFile,
-             (LPCVOID)&BasicBitmapFileHeader,
-              sizeof(BITMAPFILEHEADER),
-               &dwWrite,
-                NULL))
+                       (LPCVOID)&BasicBitmapFileHeader,
+                       sizeof(BITMAPFILEHEADER),
+                       &dwWrite,
+                       NULL))
         {
             hr = HRESULTFromLastError();
         }
@@ -280,10 +280,10 @@ IWcsDemo::SaveImage(
             // Write the Bitmap Info header data
             //
             if (!WriteFile(hFile,
-                 (LPCVOID)&BasicBitmapInfoHeader,
-                  sizeof(BITMAPINFOHEADER),
-                   &dwWrite,
-                    NULL))
+                           (LPCVOID)&BasicBitmapInfoHeader,
+                           sizeof(BITMAPINFOHEADER),
+                           &dwWrite,
+                           NULL))
             {
                 hr = HRESULTFromLastError();
             }
@@ -298,10 +298,10 @@ IWcsDemo::SaveImage(
             // Write Bitmap bits.
             //
             if (!WriteFile(hFile,
-                 paBitmapData,
-                  cbBitmapData,
-                   &dwWrite,
-                    NULL))
+                           paBitmapData,
+                           cbBitmapData,
+                           &dwWrite,
+                           NULL))
             {
                 hr = HRESULTFromLastError();
             }
@@ -332,11 +332,11 @@ HRESULT
 IWcsDemo::SavePixelData(
     __in PCWSTR pwszFilename,
     // Filename to write to disk
-     __in_bcount(cbData) BYTE *paData,
+    __in_bcount(cbData) BYTE *paData,
     // Data to write
     __in DWORD cbData
     // Size in bytes of Data
-    )
+)
 {
     HRESULT hr = S_OK;
     if (!pwszFilename || !paData)
@@ -345,13 +345,13 @@ IWcsDemo::SavePixelData(
     }
 
     HANDLE hFile = CreateFile(
-                        pwszFilename,
-                        GENERIC_WRITE,
-                        FILE_SHARE_READ,
-                        NULL,
-                        CREATE_ALWAYS,
-                        FILE_ATTRIBUTE_NORMAL,
-                        NULL);
+                       pwszFilename,
+                       GENERIC_WRITE,
+                       FILE_SHARE_READ,
+                       NULL,
+                       CREATE_ALWAYS,
+                       FILE_ATTRIBUTE_NORMAL,
+                       NULL);
     if (INVALID_HANDLE_VALUE == hFile)
     {
         hr = HRESULTFromLastError();
@@ -363,10 +363,10 @@ IWcsDemo::SavePixelData(
         //
         DWORD dwWrite = 0;
         if (!WriteFile(hFile,
-              paData,
-              cbData,
-               &dwWrite,
-                NULL))
+                       paData,
+                       cbData,
+                       &dwWrite,
+                       NULL))
         {
             hr = HRESULTFromLastError();
         }
@@ -402,7 +402,7 @@ HRESULT IWcsDemo::GetProfileFromResource(
     // Which type of profile to load
     __out PROFILE *pProfile
     // PROFILE structure built
-    )
+)
 {
     HRESULT hr = S_OK;
     if (!pProfile)
@@ -417,26 +417,26 @@ HRESULT IWcsDemo::GetProfileFromResource(
     HGLOBAL hResource = NULL;
     switch (ProfileID)
     {
+    //
+    // Resolve the resource name
+    //
+    case SampleGmmpWithPlugin:
+        pwszResourceName = MAKEINTRESOURCE(IDR_PROFILE_SAMPLEGMMPWITHPLUGIN);
+        break;
+    case SampleRGBPrinter:
+        pwszResourceName = MAKEINTRESOURCE(IDR_PROFILE_SAMPLERGBPRINTER);
+        break;
+    case SampleCMYKPrinter:
+        pwszResourceName = MAKEINTRESOURCE(IDR_PROFILE_SAMPLECMYKPRINTER);
+        break;
+    case SampleCRTProfileWithPlugin:
+        pwszResourceName = MAKEINTRESOURCE(IDR_PROFILE_SAMPLECRTPROFILEWITHPLUGIN);
+        break;
+    default:
         //
-        // Resolve the resource name
+        // This is not a known profile type
         //
-        case SampleGmmpWithPlugin:
-            pwszResourceName = MAKEINTRESOURCE(IDR_PROFILE_SAMPLEGMMPWITHPLUGIN);
-            break;
-        case SampleRGBPrinter:
-            pwszResourceName = MAKEINTRESOURCE(IDR_PROFILE_SAMPLERGBPRINTER);
-            break;
-        case SampleCMYKPrinter:
-            pwszResourceName = MAKEINTRESOURCE(IDR_PROFILE_SAMPLECMYKPRINTER);
-            break;
-        case SampleCRTProfileWithPlugin:
-            pwszResourceName = MAKEINTRESOURCE(IDR_PROFILE_SAMPLECRTPROFILEWITHPLUGIN);
-            break;
-        default:
-            //
-            // This is not a known profile type
-            //
-            hr = E_INVALIDARG;
+        hr = E_INVALIDARG;
     }
     if (SUCCEEDED(hr))
     {
@@ -447,7 +447,7 @@ HRESULT IWcsDemo::GetProfileFromResource(
         if (!hFind)
         {
             hr = HRESULTFromLastError();
-         }
+        }
         if (SUCCEEDED(hr))
         {
             hResource = LoadResource(NULL, hFind);
@@ -495,7 +495,7 @@ PPROFILE IWcsDemo::GetD50CAMP()
 {
     static WCHAR wszD50Profile[] = L"D50.camp";
     static PROFILE D50ViewingConditionProfile = { PROFILE_FILENAME, wszD50Profile, sizeof(wszD50Profile) };
-    
+
     return &D50ViewingConditionProfile;
 
 }
@@ -513,7 +513,7 @@ PPROFILE IWcsDemo::GetD65CAMP()
 {
     static WCHAR wszD65Profile[] = L"D65.camp";
     static PROFILE D65ViewingConditionProfile = { PROFILE_FILENAME, wszD65Profile, sizeof(wszD65Profile) };
-    
+
     return &D65ViewingConditionProfile;
 }
 
@@ -642,13 +642,13 @@ CTransformCreationDemo::DemonstrateSystemGmmp()
         // that will determine which GMMP is used.
         //
         hOutputProfile = WcsOpenColorProfile(
-                            &OutputProfile,
-                            GetD50CAMP(), // Use CAMPs designed for the device, viewing conditions, and task
-                            &SystemPhotoGmmpProfile,
-                            PROFILE_READ,
-                            FILE_SHARE_READ,
-                            OPEN_EXISTING,
-                            0);
+                             &OutputProfile,
+                             GetD50CAMP(), // Use CAMPs designed for the device, viewing conditions, and task
+                             &SystemPhotoGmmpProfile,
+                             PROFILE_READ,
+                             FILE_SHARE_READ,
+                             OPEN_EXISTING,
+                             0);
         if (!hOutputProfile)
         {
             hr = HRESULTFromLastError();
@@ -683,12 +683,12 @@ CTransformCreationDemo::DemonstrateSystemGmmp()
         //
         HPROFILE hProfileList[2] = {hInputProfile, hOutputProfile};
         hTransform = CreateMultiProfileTransform(
-                        hProfileList,
-                        2,
-                        &dwIntent,
-                        1,
-                        NORMAL_MODE,
-                        INDEX_DONT_CARE);
+                         hProfileList,
+                         2,
+                         &dwIntent,
+                         1,
+                         NORMAL_MODE,
+                         INDEX_DONT_CARE);
         if (!hTransform)
         {
             hr = HRESULTFromLastError();
@@ -700,8 +700,8 @@ CTransformCreationDemo::DemonstrateSystemGmmp()
         // Now do a simple translation and write the results to disk
         //
         hr = TranslateAndOutputRGBImage(
-                        hTransform,
-                        pwszFilenameOfResult);
+                 hTransform,
+                 pwszFilenameOfResult);
     }
 
     //
@@ -795,13 +795,13 @@ CTransformCreationDemo::DemonstrateCustomPluginProfiles()
         // that will determine which GMMP is used.
         //
         hOutputProfile = WcsOpenColorProfile(
-                            &OutputProfile,
-                            GetD50CAMP(), // Use CAMPs designed for the device, viewing conditions, and task
-                            &PluginGmmpProfile,
-                            PROFILE_READ,
-                            FILE_SHARE_READ,
-                            OPEN_EXISTING,
-                            0);
+                             &OutputProfile,
+                             GetD50CAMP(), // Use CAMPs designed for the device, viewing conditions, and task
+                             &PluginGmmpProfile,
+                             PROFILE_READ,
+                             FILE_SHARE_READ,
+                             OPEN_EXISTING,
+                             0);
         if (!hOutputProfile)
         {
             hr = HRESULTFromLastError();
@@ -836,12 +836,12 @@ CTransformCreationDemo::DemonstrateCustomPluginProfiles()
         //
         HPROFILE hProfileList[2] = {hInputProfile, hOutputProfile};
         hTransform = CreateMultiProfileTransform(
-                        hProfileList,
-                        2,
-                        &dwIntent,
-                        1,
-                        NORMAL_MODE,
-                        INDEX_DONT_CARE);
+                         hProfileList,
+                         2,
+                         &dwIntent,
+                         1,
+                         NORMAL_MODE,
+                         INDEX_DONT_CARE);
         if (!hTransform)
         {
             hr = HRESULTFromLastError();
@@ -853,8 +853,8 @@ CTransformCreationDemo::DemonstrateCustomPluginProfiles()
         // Now do a simple translation and write the results to disk
         //
         hr = TranslateAndOutputRGBImage(
-                hTransform,
-                pwszFilenameOfResult);
+                 hTransform,
+                 pwszFilenameOfResult);
     }
 
     //
@@ -940,13 +940,13 @@ CTransformCreationDemo::DemonstrateSystemDefaultIntent()
         // (again with the GMMP not being used later).
         //
         hOutputProfile = WcsOpenColorProfile(
-                            &OutputProfile,
-                            GetD50CAMP(), // Use CAMPs designed for the device, viewing conditions, and task
-                            NULL,
-                            PROFILE_READ,
-                            FILE_SHARE_READ,
-                            OPEN_EXISTING,
-                            0);
+                             &OutputProfile,
+                             GetD50CAMP(), // Use CAMPs designed for the device, viewing conditions, and task
+                             NULL,
+                             PROFILE_READ,
+                             FILE_SHARE_READ,
+                             OPEN_EXISTING,
+                             0);
         if (!hOutputProfile)
         {
             hr = HRESULTFromLastError();
@@ -973,7 +973,7 @@ CTransformCreationDemo::DemonstrateSystemDefaultIntent()
         //
         DWORD dwSystemDefaultRenderingIntent = 0;
         if (!WcsGetDefaultRenderingIntent(WCS_PROFILE_MANAGEMENT_SCOPE_CURRENT_USER,
-                        &dwSystemDefaultRenderingIntent))
+                                          &dwSystemDefaultRenderingIntent))
         {
             hr = HRESULTFromLastError();
         }
@@ -987,12 +987,12 @@ CTransformCreationDemo::DemonstrateSystemDefaultIntent()
         if (SUCCEEDED(hr))
         {
             hTransform = CreateMultiProfileTransform(
-                            hProfileList,
-                            2,
-                            &dwSystemDefaultRenderingIntent,
-                            1,
-                            NORMAL_MODE,
-                            INDEX_DONT_CARE);
+                             hProfileList,
+                             2,
+                             &dwSystemDefaultRenderingIntent,
+                             1,
+                             NORMAL_MODE,
+                             INDEX_DONT_CARE);
             if (!hTransform)
             {
                 hr = HRESULTFromLastError();
@@ -1005,8 +1005,8 @@ CTransformCreationDemo::DemonstrateSystemDefaultIntent()
         // Now do a simple translation and write the results to disk
         //
         hr = TranslateAndOutputRGBImage(
-                        hTransform,
-                        pwszFilenameOfResult);
+                 hTransform,
+                 pwszFilenameOfResult);
     }
 
     //
@@ -1093,13 +1093,13 @@ HRESULT CTransformCreationDemo::DemonstrateIccWcsMixedMode()
         // GMMP (again with the GMMP not being used later).
         //
         hOutputProfile = WcsOpenColorProfile(
-                            &OutputProfile,
-                            GetD50CAMP(), // Use CAMPs designed for the device, viewing conditions, and task
-                            NULL,
-                            PROFILE_READ,
-                            FILE_SHARE_READ,
-                            OPEN_EXISTING,
-                            0);
+                             &OutputProfile,
+                             GetD50CAMP(), // Use CAMPs designed for the device, viewing conditions, and task
+                             NULL,
+                             PROFILE_READ,
+                             FILE_SHARE_READ,
+                             OPEN_EXISTING,
+                             0);
         if (!hOutputProfile)
         {
             hr = HRESULTFromLastError();
@@ -1132,12 +1132,12 @@ HRESULT CTransformCreationDemo::DemonstrateIccWcsMixedMode()
         //
         HPROFILE hProfileList[2] = {hInputProfile, hOutputProfile};
         hTransform = CreateMultiProfileTransform(
-                            hProfileList,
-                            2,
-                            &dwIntent,
-                            1,
-                            NORMAL_MODE,
-                            INDEX_DONT_CARE);
+                         hProfileList,
+                         2,
+                         &dwIntent,
+                         1,
+                         NORMAL_MODE,
+                         INDEX_DONT_CARE);
         if (!hTransform)
         {
             hr = HRESULTFromLastError();
@@ -1149,8 +1149,8 @@ HRESULT CTransformCreationDemo::DemonstrateIccWcsMixedMode()
         // Now do a simple translation and write the results to disk
         //
         hr = TranslateAndOutputRGBImage(
-                            hTransform,
-                            pwszFilenameOfResult);
+                 hTransform,
+                 pwszFilenameOfResult);
     }
 
     //
@@ -1224,10 +1224,10 @@ CTransformCreationDemo::DemonstrateIccOnlyWcsTransform()
         // intents will not be used.
         //
         hProfile = OpenColorProfile(
-                            &sRGBProfile,
-                            PROFILE_READ,
-                            FILE_SHARE_READ,
-                            OPEN_EXISTING);
+                       &sRGBProfile,
+                       PROFILE_READ,
+                       FILE_SHARE_READ,
+                       OPEN_EXISTING);
         if (!hProfile)
         {
             hr = HRESULTFromLastError();
@@ -1264,12 +1264,12 @@ CTransformCreationDemo::DemonstrateIccOnlyWcsTransform()
         //
         HPROFILE hProfileList[2] = {hProfile, hProfile};
         hTransform = CreateMultiProfileTransform(
-                        hProfileList,
-                        2,
-                        &dwIntent,
-                        1,
-                        WCS_ALWAYS | NORMAL_MODE,
-                        INDEX_DONT_CARE);
+                         hProfileList,
+                         2,
+                         &dwIntent,
+                         1,
+                         WCS_ALWAYS | NORMAL_MODE,
+                         INDEX_DONT_CARE);
         if (!hTransform)
         {
             hr = HRESULTFromLastError();
@@ -1281,8 +1281,8 @@ CTransformCreationDemo::DemonstrateIccOnlyWcsTransform()
         // Now do a simple translation and write the results to disk
         //
         hr = TranslateAndOutputRGBImage(
-                hTransform,
-                pwszFilenameOfResult);
+                 hTransform,
+                 pwszFilenameOfResult);
     }
 
     //
@@ -1308,7 +1308,7 @@ HRESULT
 CTransformCreationDemo::TranslateAndOutputRGBImage(
     __in HTRANSFORM hTransform,
     __in PCWSTR pwszOutputFilename
-    )
+)
 {
     HRESULT hr = S_OK;
     if (!hTransform || !pwszOutputFilename)
@@ -1324,12 +1324,12 @@ CTransformCreationDemo::TranslateAndOutputRGBImage(
     DWORD dwVerticalResolution = 0;
 
     hr = LoadsRGBImage(
-                &paBitmapData,
-                &cbBitmapData,
-                &dwWidth,
-                &dwHeight,
-                &dwHorizontalResolution,
-                &dwVerticalResolution);
+             &paBitmapData,
+             &cbBitmapData,
+             &dwWidth,
+             &dwHeight,
+             &dwHorizontalResolution,
+             &dwVerticalResolution);
 
     BYTE *paOutputBitmapData = NULL;
     if (SUCCEEDED(hr))
@@ -1343,17 +1343,17 @@ CTransformCreationDemo::TranslateAndOutputRGBImage(
     if (SUCCEEDED(hr))
     {
         if (!TranslateBitmapBits(
-                hTransform,
-                paBitmapData,
-                BM_RGBTRIPLETS,
-                dwWidth,
-                dwHeight,
-                0,
-                paOutputBitmapData,
-                BM_RGBTRIPLETS,
-                0,
-                NULL,
-                0))
+                    hTransform,
+                    paBitmapData,
+                    BM_RGBTRIPLETS,
+                    dwWidth,
+                    dwHeight,
+                    0,
+                    paOutputBitmapData,
+                    BM_RGBTRIPLETS,
+                    0,
+                    NULL,
+                    0))
         {
             hr = HRESULTFromLastError();
         }
@@ -1362,14 +1362,14 @@ CTransformCreationDemo::TranslateAndOutputRGBImage(
     if (SUCCEEDED(hr))
     {
         hr = SaveImage(
-                pwszOutputFilename,
-                BasicRGBTripletBitmap,
-                paOutputBitmapData,
-                cbBitmapData,
-                dwWidth,
-                dwHeight,
-                dwHorizontalResolution,
-                dwVerticalResolution);
+                 pwszOutputFilename,
+                 BasicRGBTripletBitmap,
+                 paOutputBitmapData,
+                 cbBitmapData,
+                 dwWidth,
+                 dwHeight,
+                 dwHorizontalResolution,
+                 dwVerticalResolution);
     }
 
     //
@@ -1424,11 +1424,11 @@ CTranslationDemo::DemonstrateS2Dot13BitmapTranslation()
     //
     HTRANSFORM hTransform = NULL;
     hr = BuildBasicTransform(
-                    SampleCRTProfileWithPlugin,
-                    GetD65CAMP(), // Use CAMPs designed for the device, viewing conditions, and task
-                    SampleRGBPrinter,
-                    GetD50CAMP(), // Use CAMPs designed for the device, viewing conditions, and task
-                    &hTransform);
+             SampleCRTProfileWithPlugin,
+             GetD65CAMP(), // Use CAMPs designed for the device, viewing conditions, and task
+             SampleRGBPrinter,
+             GetD50CAMP(), // Use CAMPs designed for the device, viewing conditions, and task
+             &hTransform);
     if (SUCCEEDED(hr))
     {
         //
@@ -1443,12 +1443,12 @@ CTranslationDemo::DemonstrateS2Dot13BitmapTranslation()
         DWORD dwVerticalResolution = 0;
 
         hr = LoadsRGBImage(
-                    &paBitmapData,
-                    &cbBitmapData,
-                    &dwWidth,
-                    &dwHeight,
-                    &dwHorizontalResolution,
-                    &dwVerticalResolution);
+                 &paBitmapData,
+                 &cbBitmapData,
+                 &dwWidth,
+                 &dwHeight,
+                 &dwHorizontalResolution,
+                 &dwVerticalResolution);
         if (SUCCEEDED(hr))
         {
             //
@@ -1473,17 +1473,17 @@ CTranslationDemo::DemonstrateS2Dot13BitmapTranslation()
             if (SUCCEEDED(hr))
             {
                 if (!TranslateBitmapBits(
-                        hTransform,
-                        paBitmapData,
-                        BM_RGBTRIPLETS,
-                        dwWidth,
-                        dwHeight,
-                        0,
-                        paOutputBitmapData,
-                        BM_S2DOT13FIXED_scRGB,
-                        0,
-                        NULL,
-                        0))
+                            hTransform,
+                            paBitmapData,
+                            BM_RGBTRIPLETS,
+                            dwWidth,
+                            dwHeight,
+                            0,
+                            paOutputBitmapData,
+                            BM_S2DOT13FIXED_scRGB,
+                            0,
+                            NULL,
+                            0))
                 {
                     hr = HRESULTFromLastError();
                 }
@@ -1526,11 +1526,11 @@ CTranslationDemo::DemonstrateFloatColorTranslation()
     //
     HTRANSFORM hTransform = NULL;
     hr = BuildBasicTransform(
-                        SampleCRTProfileWithPlugin,
-                        GetD65CAMP(), // Use CAMPs designed for the device, viewing conditions, and task
-                        SampleCMYKPrinter,
-                        GetD50CAMP(), // Use CAMPs designed for the device, viewing conditions, and task
-                        &hTransform);
+             SampleCRTProfileWithPlugin,
+             GetD65CAMP(), // Use CAMPs designed for the device, viewing conditions, and task
+             SampleCMYKPrinter,
+             GetD50CAMP(), // Use CAMPs designed for the device, viewing conditions, and task
+             &hTransform);
     if (SUCCEEDED(hr))
     {
         BYTE *paBitmapData = NULL;
@@ -1541,12 +1541,12 @@ CTranslationDemo::DemonstrateFloatColorTranslation()
         DWORD dwVerticalResolution = 0;
 
         hr = LoadsRGBImage(
-                    &paBitmapData,
-                    &cbBitmapData,
-                    &dwWidth,
-                    &dwHeight,
-                    &dwHorizontalResolution,
-                    &dwVerticalResolution);
+                 &paBitmapData,
+                 &cbBitmapData,
+                 &dwWidth,
+                 &dwHeight,
+                 &dwHorizontalResolution,
+                 &dwVerticalResolution);
         //
         // For demonstration:
         // 1. From the bitmap, build an array of COLOR_BYTE values suitable for use in WcsTranslateColors
@@ -1580,7 +1580,7 @@ CTranslationDemo::DemonstrateFloatColorTranslation()
         {
             //
             // Since the image is known to be in BM_RGBTRIPLETS format, it is possible to
-            // directly copy the BYTE color values after re-ordering, since 3-channel COLOR_BYTE 
+            // directly copy the BYTE color values after re-ordering, since 3-channel COLOR_BYTE
             // data is ordered as RGB in memory, and BM_RGBTRIPLETS data is ordered as BGR.
             BYTE *pCurrentColorBufferPosition = paInputColorData;
             BYTE *pCurrentBitmapBufferPosition = paBitmapData;
@@ -1635,26 +1635,26 @@ CTranslationDemo::DemonstrateFloatColorTranslation()
             if (SUCCEEDED(hr))
             {
                 if (!WcsTranslateColors(
-                                    hTransform,
-                                    // Handle to the transform to use
-                                    dwNumColors,
-                                    // Total number of pixels to translate
-                                    dwNumRGBChannels,
-                                    // Number of input channels
-                                    COLOR_BYTE,
-                                    // Color format of input array
-                                    dwInputSize,
-                                    // Size in bytes of the input array
-                                    paInputColorData,
-                                    // The input color array
-                                    dwNumCmykChannels,
-                                    // Number of Output channels
-                                    (COLORDATATYPE) COLOR_FLOAT,
-                                    // Color format of the output array
-                                    dwOutputSize,
-                                    // Size in bytes of the output array
-                                    paOutputColorData))
-                                    // The output color array
+                            hTransform,
+                            // Handle to the transform to use
+                            dwNumColors,
+                            // Total number of pixels to translate
+                            dwNumRGBChannels,
+                            // Number of input channels
+                            COLOR_BYTE,
+                            // Color format of input array
+                            dwInputSize,
+                            // Size in bytes of the input array
+                            paInputColorData,
+                            // The input color array
+                            dwNumCmykChannels,
+                            // Number of Output channels
+                            (COLORDATATYPE) COLOR_FLOAT,
+                            // Color format of the output array
+                            dwOutputSize,
+                            // Size in bytes of the output array
+                            paOutputColorData))
+                    // The output color array
                 {
                     hr = HRESULTFromLastError();
                 }
@@ -1694,7 +1694,7 @@ CTranslationDemo::BuildBasicTransform(
     __in ResourceProfileType OutputProfileType,
     __in PPROFILE OutputViewingConditionsProfile,
     __deref_out HTRANSFORM *phTransform
-    )
+)
 {
     HRESULT hr = S_OK;
     if (!phTransform)
@@ -1742,13 +1742,13 @@ CTranslationDemo::BuildBasicTransform(
     if (SUCCEEDED(hr))
     {
         hOutputProfile = WcsOpenColorProfile(
-                            &OutputProfile,
-                            OutputViewingConditionsProfile,
-                            &SystemPhotoGmmpProfile,
-                            PROFILE_READ,
-                            FILE_SHARE_READ,
-                            OPEN_EXISTING,
-                            0);
+                             &OutputProfile,
+                             OutputViewingConditionsProfile,
+                             &SystemPhotoGmmpProfile,
+                             PROFILE_READ,
+                             FILE_SHARE_READ,
+                             OPEN_EXISTING,
+                             0);
         if (!hOutputProfile)
         {
             hr = HRESULTFromLastError();
@@ -1771,12 +1771,12 @@ CTranslationDemo::BuildBasicTransform(
         //
         DWORD dwIntent = (DWORD) -1;
         *phTransform = CreateMultiProfileTransform(
-                        hProfileList,
-                        2,
-                        &dwIntent,
-                        1,
-                        NORMAL_MODE,
-                        INDEX_DONT_CARE);
+                           hProfileList,
+                           2,
+                           &dwIntent,
+                           1,
+                           NORMAL_MODE,
+                           INDEX_DONT_CARE);
         if (!*phTransform)
         {
             hr = HRESULTFromLastError();

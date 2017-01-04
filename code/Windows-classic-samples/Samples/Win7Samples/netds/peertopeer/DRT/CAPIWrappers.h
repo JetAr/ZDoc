@@ -1,4 +1,4 @@
-// CAPIWrappers.h - Security items for CAPIWrappers
+﻿// CAPIWrappers.h - Security items for CAPIWrappers
 
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
@@ -28,16 +28,16 @@
 #define SHA1_LENGTH_IN_CHARS                SHA1_LENGTH * 2     // two chars per byte
 #define MD5_LENGTH                          16
 
-HRESULT ReadCertFromFile(LPCWSTR pwzFileName, 
-                         CERT_CONTEXT** ppCert, 
+HRESULT ReadCertFromFile(LPCWSTR pwzFileName,
+                         CERT_CONTEXT** ppCert,
                          HCRYPTPROV* phCryptProv
-                         );
+                        );
 
-HRESULT MakeCert(LPCWSTR pwzLocalCertFileName, 
-                 LPCWSTR pwzLocalCertName, 
-                 LPCWSTR pwzIssuerCertFileName, 
+HRESULT MakeCert(LPCWSTR pwzLocalCertFileName,
+                 LPCWSTR pwzLocalCertName,
+                 LPCWSTR pwzIssuerCertFileName,
                  LPCWSTR pwzIssuerCertName
-                 );
+                );
 
 //******************************************************************************
 //
@@ -61,9 +61,18 @@ public:
             CertFreeCertificateContext(p);
         }
     }
-    CERT_CONTEXT** operator&(){return &p;}
-    CERT_CONTEXT* operator->(){ return p; }
-    operator CERT_CONTEXT*(){return p;}
+    CERT_CONTEXT** operator&()
+    {
+        return &p;
+    }
+    CERT_CONTEXT* operator->()
+    {
+        return p;
+    }
+    operator CERT_CONTEXT*()
+    {
+        return p;
+    }
 
     void operator=(CERT_CONTEXT* ptr)
     {
@@ -97,8 +106,14 @@ public:
             CertCloseStore(h, 0);
         }
     }
-    HCERTSTORE* operator&(){return &h;}
-    operator HCERTSTORE(){return h;}
+    HCERTSTORE* operator&()
+    {
+        return &h;
+    }
+    operator HCERTSTORE()
+    {
+        return h;
+    }
 
     void operator=(HCERTSTORE handle)
     {
@@ -133,8 +148,14 @@ public:
             CryptReleaseContext(_h, 0);
         }
     }
-    HCRYPTPROV* operator&(){return &_h;}
-    operator HCRYPTPROV(){return _h;}
+    HCRYPTPROV* operator&()
+    {
+        return &_h;
+    }
+    operator HCRYPTPROV()
+    {
+        return _h;
+    }
 
     void operator=(HCRYPTPROV h)
     {

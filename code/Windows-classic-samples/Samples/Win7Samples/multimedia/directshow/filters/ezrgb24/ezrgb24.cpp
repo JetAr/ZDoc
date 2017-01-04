@@ -1,4 +1,4 @@
-//------------------------------------------------------------------------------
+﻿//------------------------------------------------------------------------------
 // File: EZRGB24.cpp
 //
 // Desc: DirectShow sample code - special effects image filter.
@@ -92,25 +92,27 @@ const AMOVIESETUP_MEDIATYPE sudPinTypes =
 
 const AMOVIESETUP_PIN sudpPins[] =
 {
-    { L"Input",             // Pins string name
-      FALSE,                // Is it rendered
-      FALSE,                // Is it an output
-      FALSE,                // Are we allowed none
-      FALSE,                // And allowed many
-      &CLSID_NULL,          // Connects to filter
-      NULL,                 // Connects to pin
-      1,                    // Number of types
-      &sudPinTypes          // Pin information
+    {
+        L"Input",             // Pins string name
+        FALSE,                // Is it rendered
+        FALSE,                // Is it an output
+        FALSE,                // Are we allowed none
+        FALSE,                // And allowed many
+        &CLSID_NULL,          // Connects to filter
+        NULL,                 // Connects to pin
+        1,                    // Number of types
+        &sudPinTypes          // Pin information
     },
-    { L"Output",            // Pins string name
-      FALSE,                // Is it rendered
-      TRUE,                 // Is it an output
-      FALSE,                // Are we allowed none
-      FALSE,                // And allowed many
-      &CLSID_NULL,          // Connects to filter
-      NULL,                 // Connects to pin
-      1,                    // Number of types
-      &sudPinTypes          // Pin information
+    {
+        L"Output",            // Pins string name
+        FALSE,                // Is it rendered
+        TRUE,                 // Is it an output
+        FALSE,                // Are we allowed none
+        FALSE,                // And allowed many
+        &CLSID_NULL,          // Connects to filter
+        NULL,                 // Connects to pin
+        1,                    // Number of types
+        &sudPinTypes          // Pin information
     }
 };
 
@@ -128,23 +130,28 @@ const AMOVIESETUP_FILTER sudEZrgb24 =
 // provides the link between the OLE entry point in the DLL and an object
 // being created. The class factory will call the static CreateInstance
 
-CFactoryTemplate g_Templates[] = {
-    { L"Image Effects"
-    , &CLSID_EZrgb24
-    , CEZrgb24::CreateInstance
-    , NULL
-    , &sudEZrgb24 }
-  ,
-    { L"Special Effects"
-    , &CLSID_EZrgb24PropertyPage
-    , CEZrgb24Properties::CreateInstance }
+CFactoryTemplate g_Templates[] =
+{
+    {
+        L"Image Effects"
+        , &CLSID_EZrgb24
+        , CEZrgb24::CreateInstance
+        , NULL
+        , &sudEZrgb24
+    }
+    ,
+    {
+        L"Special Effects"
+        , &CLSID_EZrgb24PropertyPage
+        , CEZrgb24Properties::CreateInstance
+    }
 };
 int g_cTemplates = sizeof(g_Templates) / sizeof(g_Templates[0]);
 
 
 ////////////////////////////////////////////////////////////////////////
 //
-// Exported entry points for registration and unregistration 
+// Exported entry points for registration and unregistration
 // (in this case they only call through to default implementations).
 //
 ////////////////////////////////////////////////////////////////////////
@@ -176,11 +183,11 @@ STDAPI DllUnregisterServer()
 //
 extern "C" BOOL WINAPI DllEntryPoint(HINSTANCE, ULONG, LPVOID);
 
-BOOL APIENTRY DllMain(HANDLE hModule, 
-                      DWORD  dwReason, 
+BOOL APIENTRY DllMain(HANDLE hModule,
+                      DWORD  dwReason,
                       LPVOID lpReserved)
 {
-	return DllEntryPoint((HINSTANCE)(hModule), dwReason, lpReserved);
+    return DllEntryPoint((HINSTANCE)(hModule), dwReason, lpReserved);
 }
 
 
@@ -214,10 +221,11 @@ CEZrgb24::CEZrgb24(TCHAR *tszName,
 CUnknown *CEZrgb24::CreateInstance(LPUNKNOWN punk, HRESULT *phr)
 {
     ASSERT(phr);
-    
+
     CEZrgb24 *pNewObject = new CEZrgb24(NAME("Image Effects"), punk, phr);
 
-    if (pNewObject == NULL) {
+    if (pNewObject == NULL)
+    {
         if (phr)
             *phr = E_OUTOFMEMORY;
     }
@@ -235,13 +243,18 @@ STDMETHODIMP CEZrgb24::NonDelegatingQueryInterface(REFIID riid, void **ppv)
 {
     CheckPointer(ppv,E_POINTER);
 
-    if (riid == IID_IIPEffect) {
+    if (riid == IID_IIPEffect)
+    {
         return GetInterface((IIPEffect *) this, ppv);
 
-    } else if (riid == IID_ISpecifyPropertyPages) {
+    }
+    else if (riid == IID_ISpecifyPropertyPages)
+    {
         return GetInterface((ISpecifyPropertyPages *) this, ppv);
 
-    } else {
+    }
+    else
+    {
         return CTransformFilter::NonDelegatingQueryInterface(riid, ppv);
     }
 
@@ -263,13 +276,14 @@ STDMETHODIMP CEZrgb24::NonDelegatingQueryInterface(REFIID riid, void **ppv)
 //
 HRESULT CEZrgb24::Transform(IMediaSample *pIn, IMediaSample *pOut)
 {
-    CheckPointer(pIn,E_POINTER);   
-    CheckPointer(pOut,E_POINTER);   
+    CheckPointer(pIn,E_POINTER);
+    CheckPointer(pOut,E_POINTER);
 
     // Copy the properties across
 
     HRESULT hr = Copy(pIn, pOut);
-    if (FAILED(hr)) {
+    if (FAILED(hr))
+    {
         return hr;
     }
 
@@ -278,9 +292,9 @@ HRESULT CEZrgb24::Transform(IMediaSample *pIn, IMediaSample *pOut)
     CRefTime tStart, tStop ;
     hr = pIn->GetTime((REFERENCE_TIME *) &tStart, (REFERENCE_TIME *) &tStop);
 
-    if (tStart >= m_effectStartTime) 
+    if (tStart >= m_effectStartTime)
     {
-        if (tStop <= (m_effectStartTime + m_effectTime)) 
+        if (tStop <= (m_effectStartTime + m_effectTime))
         {
             return Transform(pOut);
         }
@@ -298,8 +312,8 @@ HRESULT CEZrgb24::Transform(IMediaSample *pIn, IMediaSample *pOut)
 //
 HRESULT CEZrgb24::Copy(IMediaSample *pSource, IMediaSample *pDest) const
 {
-    CheckPointer(pSource,E_POINTER);   
-    CheckPointer(pDest,E_POINTER);   
+    CheckPointer(pSource,E_POINTER);
+    CheckPointer(pDest,E_POINTER);
 
     // Copy the sample data
 
@@ -319,25 +333,30 @@ HRESULT CEZrgb24::Copy(IMediaSample *pSource, IMediaSample *pDest) const
     // Copy the sample times
 
     REFERENCE_TIME TimeStart, TimeEnd;
-    if (NOERROR == pSource->GetTime(&TimeStart, &TimeEnd)) {
+    if (NOERROR == pSource->GetTime(&TimeStart, &TimeEnd))
+    {
         pDest->SetTime(&TimeStart, &TimeEnd);
     }
 
     LONGLONG MediaStart, MediaEnd;
-    if (pSource->GetMediaTime(&MediaStart,&MediaEnd) == NOERROR) {
+    if (pSource->GetMediaTime(&MediaStart,&MediaEnd) == NOERROR)
+    {
         pDest->SetMediaTime(&MediaStart,&MediaEnd);
     }
 
     // Copy the Sync point property
 
     HRESULT hr = pSource->IsSyncPoint();
-    if (hr == S_OK) {
+    if (hr == S_OK)
+    {
         pDest->SetSyncPoint(TRUE);
     }
-    else if (hr == S_FALSE) {
+    else if (hr == S_FALSE)
+    {
         pDest->SetSyncPoint(FALSE);
     }
-    else {  // an unexpected error has occured...
+    else    // an unexpected error has occured...
+    {
         return E_UNEXPECTED;
     }
 
@@ -351,26 +370,32 @@ HRESULT CEZrgb24::Copy(IMediaSample *pSource, IMediaSample *pDest) const
     // Copy the preroll property
 
     hr = pSource->IsPreroll();
-    if (hr == S_OK) {
+    if (hr == S_OK)
+    {
         pDest->SetPreroll(TRUE);
     }
-    else if (hr == S_FALSE) {
+    else if (hr == S_FALSE)
+    {
         pDest->SetPreroll(FALSE);
     }
-    else {  // an unexpected error has occured...
+    else    // an unexpected error has occured...
+    {
         return E_UNEXPECTED;
     }
 
     // Copy the discontinuity property
 
     hr = pSource->IsDiscontinuity();
-    if (hr == S_OK) {
-    pDest->SetDiscontinuity(TRUE);
+    if (hr == S_OK)
+    {
+        pDest->SetDiscontinuity(TRUE);
     }
-    else if (hr == S_FALSE) {
+    else if (hr == S_FALSE)
+    {
         pDest->SetDiscontinuity(FALSE);
     }
-    else {  // an unexpected error has occured...
+    else    // an unexpected error has occured...
+    {
         return E_UNEXPECTED;
     }
 
@@ -417,126 +442,137 @@ HRESULT CEZrgb24::Transform(IMediaSample *pMediaSample)
 
     switch (m_effect)
     {
-        case IDC_NONE: break;
+    case IDC_NONE:
+        break;
 
-        // Zero out the green and blue components to leave only the red
-        // so acting as a filter - for better visual results, compute a
-        // greyscale value for the pixel and make that the red component
+    // Zero out the green and blue components to leave only the red
+    // so acting as a filter - for better visual results, compute a
+    // greyscale value for the pixel and make that the red component
 
-        case IDC_RED:
-                        
-            prgb = (RGBTRIPLE*) pData;
-            for (iPixel=0; iPixel < numPixels; iPixel++, prgb++) {
-                prgb->rgbtGreen = 0;
-                prgb->rgbtBlue = 0;
-            }
-            break;
-    
-        case IDC_GREEN:
+    case IDC_RED:
 
-            prgb = (RGBTRIPLE*) pData;
-            for (iPixel=0; iPixel < numPixels; iPixel++, prgb++) {
-                prgb->rgbtRed = 0;
-                prgb->rgbtBlue = 0;
-            }
-            break;
+        prgb = (RGBTRIPLE*) pData;
+        for (iPixel=0; iPixel < numPixels; iPixel++, prgb++)
+        {
+            prgb->rgbtGreen = 0;
+            prgb->rgbtBlue = 0;
+        }
+        break;
 
-        case IDC_BLUE:
-            prgb = (RGBTRIPLE*) pData;
-            for (iPixel=0; iPixel < numPixels; iPixel++, prgb++) {
-                prgb->rgbtRed = 0;
-                prgb->rgbtGreen = 0;
-            }
-            break;
+    case IDC_GREEN:
 
-        // Bitwise shift each component to the right by 1
-        // this results in the image getting much darker
+        prgb = (RGBTRIPLE*) pData;
+        for (iPixel=0; iPixel < numPixels; iPixel++, prgb++)
+        {
+            prgb->rgbtRed = 0;
+            prgb->rgbtBlue = 0;
+        }
+        break;
 
-        case IDC_DARKEN:
-                        
-            prgb = (RGBTRIPLE*) pData;
-            for (iPixel=0; iPixel < numPixels; iPixel++, prgb++) {
-                prgb->rgbtRed   = (BYTE) (prgb->rgbtRed >> 1);
-                prgb->rgbtGreen = (BYTE) (prgb->rgbtGreen >> 1);
-                prgb->rgbtBlue  = (BYTE) (prgb->rgbtBlue >> 1);
-            }
-            break;
+    case IDC_BLUE:
+        prgb = (RGBTRIPLE*) pData;
+        for (iPixel=0; iPixel < numPixels; iPixel++, prgb++)
+        {
+            prgb->rgbtRed = 0;
+            prgb->rgbtGreen = 0;
+        }
+        break;
 
-        // Toggle each bit - this gives a sort of X-ray effect
+    // Bitwise shift each component to the right by 1
+    // this results in the image getting much darker
 
-        case IDC_XOR:   
-            prgb = (RGBTRIPLE*) pData;
-            for (iPixel=0; iPixel < numPixels; iPixel++, prgb++) {
-                prgb->rgbtRed   = (BYTE) (prgb->rgbtRed ^ 0xff);
-                prgb->rgbtGreen = (BYTE) (prgb->rgbtGreen ^ 0xff);
-                prgb->rgbtBlue  = (BYTE) (prgb->rgbtBlue ^ 0xff);
-            }
-            break;
+    case IDC_DARKEN:
 
-        // Zero out the five LSB per each component
+        prgb = (RGBTRIPLE*) pData;
+        for (iPixel=0; iPixel < numPixels; iPixel++, prgb++)
+        {
+            prgb->rgbtRed   = (BYTE) (prgb->rgbtRed >> 1);
+            prgb->rgbtGreen = (BYTE) (prgb->rgbtGreen >> 1);
+            prgb->rgbtBlue  = (BYTE) (prgb->rgbtBlue >> 1);
+        }
+        break;
 
-        case IDC_POSTERIZE:
-            prgb = (RGBTRIPLE*) pData;
-            for (iPixel=0; iPixel < numPixels; iPixel++, prgb++) {
-                prgb->rgbtRed   = (BYTE) (prgb->rgbtRed & 0xe0);
-                prgb->rgbtGreen = (BYTE) (prgb->rgbtGreen & 0xe0);
-                prgb->rgbtBlue  = (BYTE) (prgb->rgbtBlue & 0xe0);
-            }
-            break;
+    // Toggle each bit - this gives a sort of X-ray effect
 
-        // Take pixel and its neighbor two pixels to the right and average
-        // then out - this blurs them and produces a subtle motion effect
+    case IDC_XOR:
+        prgb = (RGBTRIPLE*) pData;
+        for (iPixel=0; iPixel < numPixels; iPixel++, prgb++)
+        {
+            prgb->rgbtRed   = (BYTE) (prgb->rgbtRed ^ 0xff);
+            prgb->rgbtGreen = (BYTE) (prgb->rgbtGreen ^ 0xff);
+            prgb->rgbtBlue  = (BYTE) (prgb->rgbtBlue ^ 0xff);
+        }
+        break;
 
-        case IDC_BLUR:
-            prgb = (RGBTRIPLE*) pData;
-            for (y = 0 ; y < pvi->bmiHeader.biHeight; y++) {
-                for (x = 2 ; x < pvi->bmiHeader.biWidth; x++,prgb++) {
-                    prgb->rgbtRed   = (BYTE) ((prgb->rgbtRed + prgb[2].rgbtRed) >> 1);
-                    prgb->rgbtGreen = (BYTE) ((prgb->rgbtGreen + prgb[2].rgbtGreen) >> 1);
-                    prgb->rgbtBlue  = (BYTE) ((prgb->rgbtBlue + prgb[2].rgbtBlue) >> 1);
-                }
-                prgb +=2;
-            }
-            break;
+    // Zero out the five LSB per each component
 
-        // An excellent greyscale calculation is:
-        //      grey = (30 * red + 59 * green + 11 * blue) / 100
-        // This is a bit too slow so a faster calculation is:
-        //      grey = (red + green) / 2
+    case IDC_POSTERIZE:
+        prgb = (RGBTRIPLE*) pData;
+        for (iPixel=0; iPixel < numPixels; iPixel++, prgb++)
+        {
+            prgb->rgbtRed   = (BYTE) (prgb->rgbtRed & 0xe0);
+            prgb->rgbtGreen = (BYTE) (prgb->rgbtGreen & 0xe0);
+            prgb->rgbtBlue  = (BYTE) (prgb->rgbtBlue & 0xe0);
+        }
+        break;
 
-        case IDC_GREY:  
-            prgb = (RGBTRIPLE*) pData;
-            for (iPixel=0; iPixel < numPixels ; iPixel++, prgb++) {
-                grey = (prgb->rgbtRed + prgb->rgbtGreen) >> 1;
-                prgb->rgbtRed = prgb->rgbtGreen = prgb->rgbtBlue = (BYTE) grey;
-            }
-            break;
+    // Take pixel and its neighbor two pixels to the right and average
+    // then out - this blurs them and produces a subtle motion effect
 
-        // Really sleazy emboss - rather than using a nice 3x3 convulution
-        // matrix, we compare the greyscale values of two neighbours. If
-        // they are not different, then a mid grey (128, 128, 128) is
-        // supplied.  Large differences get father away from the mid grey
-
-        case IDC_EMBOSS:
-            prgb = (RGBTRIPLE*) pData;
-            for (y = 0 ; y < pvi->bmiHeader.biHeight; y++) 
+    case IDC_BLUR:
+        prgb = (RGBTRIPLE*) pData;
+        for (y = 0 ; y < pvi->bmiHeader.biHeight; y++)
+        {
+            for (x = 2 ; x < pvi->bmiHeader.biWidth; x++,prgb++)
             {
-                grey2 = (prgb->rgbtRed + prgb->rgbtGreen) >> 1;
-                prgb->rgbtRed = prgb->rgbtGreen = prgb->rgbtBlue = (BYTE) 128;
-                prgb++;
+                prgb->rgbtRed   = (BYTE) ((prgb->rgbtRed + prgb[2].rgbtRed) >> 1);
+                prgb->rgbtGreen = (BYTE) ((prgb->rgbtGreen + prgb[2].rgbtGreen) >> 1);
+                prgb->rgbtBlue  = (BYTE) ((prgb->rgbtBlue + prgb[2].rgbtBlue) >> 1);
+            }
+            prgb +=2;
+        }
+        break;
 
-                for (x = 1 ; x < pvi->bmiHeader.biWidth; x++) {
-                    grey = (prgb->rgbtRed + prgb->rgbtGreen) >> 1;
-                    temp = grey - grey2;
-                    if (temp > 127) temp = 127;
-                    if (temp < -127) temp = -127;
-                    temp += 128;
-                    prgb->rgbtRed = prgb->rgbtGreen = prgb->rgbtBlue = (BYTE) temp;
-                    grey2 = grey;
-                    prgb++;
-                }
-            }   
-            break;
+    // An excellent greyscale calculation is:
+    //      grey = (30 * red + 59 * green + 11 * blue) / 100
+    // This is a bit too slow so a faster calculation is:
+    //      grey = (red + green) / 2
+
+    case IDC_GREY:
+        prgb = (RGBTRIPLE*) pData;
+        for (iPixel=0; iPixel < numPixels ; iPixel++, prgb++)
+        {
+            grey = (prgb->rgbtRed + prgb->rgbtGreen) >> 1;
+            prgb->rgbtRed = prgb->rgbtGreen = prgb->rgbtBlue = (BYTE) grey;
+        }
+        break;
+
+    // Really sleazy emboss - rather than using a nice 3x3 convulution
+    // matrix, we compare the greyscale values of two neighbours. If
+    // they are not different, then a mid grey (128, 128, 128) is
+    // supplied.  Large differences get father away from the mid grey
+
+    case IDC_EMBOSS:
+        prgb = (RGBTRIPLE*) pData;
+        for (y = 0 ; y < pvi->bmiHeader.biHeight; y++)
+        {
+            grey2 = (prgb->rgbtRed + prgb->rgbtGreen) >> 1;
+            prgb->rgbtRed = prgb->rgbtGreen = prgb->rgbtBlue = (BYTE) 128;
+            prgb++;
+
+            for (x = 1 ; x < pvi->bmiHeader.biWidth; x++)
+            {
+                grey = (prgb->rgbtRed + prgb->rgbtGreen) >> 1;
+                temp = grey - grey2;
+                if (temp > 127) temp = 127;
+                if (temp < -127) temp = -127;
+                temp += 128;
+                prgb->rgbtRed = prgb->rgbtGreen = prgb->rgbtBlue = (BYTE) temp;
+                grey2 = grey;
+                prgb++;
+            }
+        }
+        break;
     }
 
     return NOERROR;
@@ -552,13 +588,15 @@ HRESULT CEZrgb24::CheckInputType(const CMediaType *mtIn)
 
     // check this is a VIDEOINFOHEADER type
 
-    if (*mtIn->FormatType() != FORMAT_VideoInfo) {
+    if (*mtIn->FormatType() != FORMAT_VideoInfo)
+    {
         return E_INVALIDARG;
     }
 
     // Can we transform this type
 
-    if (CanPerformEZrgb24(mtIn)) {
+    if (CanPerformEZrgb24(mtIn))
+    {
         return NOERROR;
     }
     return E_FAIL;
@@ -575,9 +613,9 @@ HRESULT CEZrgb24::CheckTransform(const CMediaType *mtIn, const CMediaType *mtOut
     CheckPointer(mtIn,E_POINTER);
     CheckPointer(mtOut,E_POINTER);
 
-    if (CanPerformEZrgb24(mtIn)) 
+    if (CanPerformEZrgb24(mtIn))
     {
-        if (*mtIn == *mtOut) 
+        if (*mtIn == *mtOut)
         {
             return NOERROR;
         }
@@ -598,7 +636,8 @@ HRESULT CEZrgb24::DecideBufferSize(IMemAllocator *pAlloc,ALLOCATOR_PROPERTIES *p
 {
     // Is the input pin connected
 
-    if (m_pInput->IsConnected() == FALSE) {
+    if (m_pInput->IsConnected() == FALSE)
+    {
         return E_UNEXPECTED;
     }
 
@@ -616,15 +655,17 @@ HRESULT CEZrgb24::DecideBufferSize(IMemAllocator *pAlloc,ALLOCATOR_PROPERTIES *p
 
     ALLOCATOR_PROPERTIES Actual;
     hr = pAlloc->SetProperties(pProperties,&Actual);
-    if (FAILED(hr)) {
+    if (FAILED(hr))
+    {
         return hr;
     }
 
     ASSERT( Actual.cBuffers == 1 );
 
     if (pProperties->cBuffers > Actual.cBuffers ||
-            pProperties->cbBuffer > Actual.cbBuffer) {
-                return E_FAIL;
+            pProperties->cbBuffer > Actual.cbBuffer)
+    {
+        return E_FAIL;
     }
     return NOERROR;
 
@@ -641,19 +682,22 @@ HRESULT CEZrgb24::GetMediaType(int iPosition, CMediaType *pMediaType)
 {
     // Is the input pin connected
 
-    if (m_pInput->IsConnected() == FALSE) {
+    if (m_pInput->IsConnected() == FALSE)
+    {
         return E_UNEXPECTED;
     }
 
     // This should never happen
 
-    if (iPosition < 0) {
+    if (iPosition < 0)
+    {
         return E_INVALIDARG;
     }
 
     // Do we have more items to offer
 
-    if (iPosition > 0) {
+    if (iPosition > 0)
+    {
         return VFW_S_NO_MORE_ITEMS;
     }
 
@@ -674,9 +718,9 @@ BOOL CEZrgb24::CanPerformEZrgb24(const CMediaType *pMediaType) const
 {
     CheckPointer(pMediaType,FALSE);
 
-    if (IsEqualGUID(*pMediaType->Type(), MEDIATYPE_Video)) 
+    if (IsEqualGUID(*pMediaType->Type(), MEDIATYPE_Video))
     {
-        if (IsEqualGUID(*pMediaType->Subtype(), MEDIASUBTYPE_RGB24)) 
+        if (IsEqualGUID(*pMediaType->Subtype(), MEDIASUBTYPE_RGB24))
         {
             VIDEOINFOHEADER *pvi = (VIDEOINFOHEADER *) pMediaType->Format();
             return (pvi->bmiHeader.biBitCount == 24);
@@ -754,7 +798,8 @@ STDMETHODIMP CEZrgb24::GetPages(CAUUID *pPages)
 
     pPages->cElems = 1;
     pPages->pElems = (GUID *) CoTaskMemAlloc(sizeof(GUID));
-    if (pPages->pElems == NULL) {
+    if (pPages->pElems == NULL)
+    {
         return E_OUTOFMEMORY;
     }
 

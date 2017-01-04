@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -32,7 +32,7 @@ CperOpenWheaLogQuery (
     __in_opt PWSTR Password,
     __in_opt PWSTR FileName,
     __out EVT_HANDLE *Session
-    );
+);
 
 /*++
 
@@ -75,7 +75,7 @@ CperGetNextWheaLogEntry (
     __out_bcount_part_opt(BufferSize, *ReturnedSize) PWHEA_ERROR_RECORD Record,
     __in DWORD BufferSize,
     __out DWORD *ReturnedSize
-    );
+);
 
 /*++
 
@@ -112,7 +112,7 @@ Return Value:
 BOOL
 CperIsValidErrorRecordSignature (
     __in PWHEA_ERROR_RECORD Record
-    );
+);
 
 /*++
 
@@ -139,7 +139,7 @@ CperGetFirstSection (
     __out ULONG *Context,
     __out PWHEA_ERROR_RECORD_SECTION_DESCRIPTOR *SectionDescriptor,
     __out_opt PVOID *SectionData
-    );
+);
 
 /*++
 
@@ -176,7 +176,7 @@ CperGetNextSection (
     __inout ULONG *Context,
     __out PWHEA_ERROR_RECORD_SECTION_DESCRIPTOR *SectionDescriptor,
     __out_opt PVOID *SectionData
-    );
+);
 
 /*++
 
@@ -212,7 +212,7 @@ CperFindPrimarySection (
     __in PWHEA_ERROR_RECORD Record,
     __out PWHEA_ERROR_RECORD_SECTION_DESCRIPTOR *SectionDescriptor,
     __out PVOID *SectionData
-    );
+);
 
 /*++
 
@@ -247,7 +247,7 @@ CperFindSection (
     __in const GUID *SectionType,
     __out PWHEA_ERROR_RECORD_SECTION_DESCRIPTOR *SectionDescriptor,
     __out PVOID *SectionData
-    );
+);
 
 /*++
 

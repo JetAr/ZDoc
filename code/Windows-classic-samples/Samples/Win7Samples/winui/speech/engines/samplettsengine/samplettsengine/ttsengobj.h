@@ -1,9 +1,9 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
 //
-// Copyright � Microsoft Corporation. All rights reserved
+// Copyright © Microsoft Corporation. All rights reserved
 
 /******************************************************************************
 * TtsEngObj.h *
@@ -44,11 +44,17 @@
 */
 class CSentItem
 {
-  public:
-    CSentItem() { memset( this, 0, sizeof(*this) ); }
-    CSentItem( CSentItem& Other ) { memcpy( this, &Other, sizeof( Other ) ); }
+public:
+    CSentItem()
+    {
+        memset( this, 0, sizeof(*this) );
+    }
+    CSentItem( CSentItem& Other )
+    {
+        memcpy( this, &Other, sizeof( Other ) );
+    }
 
-  /*--- Data members ---*/
+    /*--- Data members ---*/
     const SPVSTATE* pXmlState;
     LPCWSTR         pItem;
     ULONG           ulItemLen;
@@ -60,34 +66,36 @@ typedef CSPList<CSentItem,CSentItem&> CItemList;
 
 /*** CTTSEngObj COM object ********************************
 */
-class ATL_NO_VTABLE CTTSEngObj : 
-	public CComObjectRootEx<CComMultiThreadModel>,
-	public CComCoClass<CTTSEngObj, &CLSID_SampleTTSEngine>,
-	public ISpTTSEngine,
+class ATL_NO_VTABLE CTTSEngObj :
+    public CComObjectRootEx<CComMultiThreadModel>,
+    public CComCoClass<CTTSEngObj, &CLSID_SampleTTSEngine>,
+    public ISpTTSEngine,
     public ISpObjectWithToken
 {
-  /*=== ATL Setup ===*/
-  public:
+    /*=== ATL Setup ===*/
+public:
     DECLARE_REGISTRY_RESOURCEID(IDR_SAMPLETTSENGINE)
     DECLARE_PROTECT_FINAL_CONSTRUCT()
 
     BEGIN_COM_MAP(CTTSEngObj)
-	    COM_INTERFACE_ENTRY(ISpTTSEngine)
-	    COM_INTERFACE_ENTRY(ISpObjectWithToken)
+    COM_INTERFACE_ENTRY(ISpTTSEngine)
+    COM_INTERFACE_ENTRY(ISpObjectWithToken)
     END_COM_MAP()
 
-  /*=== Methods =======*/
-  public:
+    /*=== Methods =======*/
+public:
     /*--- Constructors/Destructors ---*/
     HRESULT FinalConstruct();
     void FinalRelease();
 
-  /*=== Interfaces ====*/
-  public:
+    /*=== Interfaces ====*/
+public:
     //--- ISpObjectWithToken ----------------------------------
     STDMETHODIMP SetObjectToken( ISpObjectToken * pToken );
     STDMETHODIMP GetObjectToken( ISpObjectToken ** ppToken )
-        { return SpGenericGetObjectToken( ppToken, m_cpToken ); }
+    {
+        return SpGenericGetObjectToken( ppToken, m_cpToken );
+    }
 
 
     //--- ISpTTSEngine --------------------------------------------
@@ -98,15 +106,15 @@ class ATL_NO_VTABLE CTTSEngObj :
                                 GUID * pDesiredFormatId, WAVEFORMATEX ** ppCoMemDesiredWaveFormatEx );
 
 
-  private:
+private:
     /*--- Non interface methods ---*/
     HRESULT MapFile(const WCHAR * pszTokenValName, HANDLE * phMapping, void ** ppvData );
     HRESULT GetNextSentence( CItemList& ItemList );
     BOOL    AddNextSentItem( CItemList& ItemList );
     HRESULT OutputSentence( CItemList& ItemList, ISpTTSEngineSite* pOutputSite );
 
-  /*=== Member Data ===*/
-  private:
+    /*=== Member Data ===*/
+private:
     CComPtr<ISpObjectToken> m_cpToken;
     HANDLE                  m_hVoiceData;
     void*                   m_pVoiceData;

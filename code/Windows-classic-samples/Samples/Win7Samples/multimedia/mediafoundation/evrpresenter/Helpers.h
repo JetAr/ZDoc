@@ -1,7 +1,7 @@
-//////////////////////////////////////////////////////////////////////////
+﻿//////////////////////////////////////////////////////////////////////////
 //
 // Helpers.cpp : Miscellaneous helpers.
-// 
+//
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -20,7 +20,7 @@
 // Manages a list of allocated samples.
 //-----------------------------------------------------------------------------
 
-class SamplePool 
+class SamplePool
 {
 public:
     SamplePool();
@@ -28,9 +28,9 @@ public:
 
     HRESULT Initialize(VideoSampleList& samples);
     HRESULT Clear();
-   
+
     HRESULT GetSample(IMFSample **ppSample);    // Does not block.
-    HRESULT ReturnSample(IMFSample *pSample);   
+    HRESULT ReturnSample(IMFSample *pSample);
     BOOL    AreSamplesPending();
 
 private:
@@ -49,7 +49,7 @@ private:
 //
 // T: COM interface type.
 //
-// This class is used by the scheduler. 
+// This class is used by the scheduler.
 //
 // Note: This class uses a critical section to protect the state of the queue.
 // With a little work, the scheduler could probably use a lock-free queue.
@@ -84,7 +84,7 @@ public:
         return m_list.InsertFront(p);
     }
 
-    void Clear() 
+    void Clear()
     {
         AutoLock lock(m_lock);
         m_list.Clear();
@@ -92,7 +92,7 @@ public:
 
 
 private:
-    CritSec         m_lock; 
+    CritSec         m_lock;
     ComPtrList<T>   m_list;
 };
 

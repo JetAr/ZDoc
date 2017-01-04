@@ -1,4 +1,4 @@
-//
+﻿//
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -30,7 +30,7 @@ Environment:
 #include <stdlib.h>
 
 //
-// Disable the nonstandard extension used struct in winevt.h since 
+// Disable the nonstandard extension used struct in winevt.h since
 // winevt.h assume the users are CPP file intead of C file.
 //
 
@@ -39,7 +39,7 @@ Environment:
 ULONG
 EnumerateChannels (
     VOID
-    )
+)
 
 /*++
 
@@ -70,7 +70,8 @@ Return Value:
     //
 
     ChannelEnum = EvtOpenChannelEnum(NULL, 0);
-    if (ChannelEnum == NULL) {
+    if (ChannelEnum == NULL)
+    {
         return GetLastError();
     }
 
@@ -78,17 +79,20 @@ Return Value:
     BufferLength = 0;
     BufferLengthNeeded = 0;
 
-    do {
+    do
+    {
 
         //
         // Expand the buffer size if needed.
         //
 
-        if (BufferLengthNeeded > BufferLength) {
+        if (BufferLengthNeeded > BufferLength)
+        {
             free(Buffer);
             BufferLength = BufferLengthNeeded;
             Buffer = malloc(BufferLength * sizeof(WCHAR));
-            if (Buffer == NULL) {
+            if (Buffer == NULL)
+            {
                 Status = ERROR_OUTOFMEMORY;
                 break;
             }
@@ -101,15 +105,19 @@ Return Value:
         if (EvtNextChannelPath(ChannelEnum,
                                BufferLength,
                                Buffer,
-                               &BufferLengthNeeded) == FALSE) {
+                               &BufferLengthNeeded) == FALSE)
+        {
             Status = GetLastError();
-        } else {
+        }
+        else
+        {
             Status = ERROR_SUCCESS;
             wprintf(L"%s\n", Buffer);
         }
 
-    } while ((Status == ERROR_SUCCESS) || 
-             (Status == ERROR_INSUFFICIENT_BUFFER));
+    }
+    while ((Status == ERROR_SUCCESS) ||
+            (Status == ERROR_INSUFFICIENT_BUFFER));
 
     //
     // Free all resources associated with channel enumeration.
@@ -124,7 +132,8 @@ Return Value:
     // iterated through all the channels and thus succeeded.
     //
 
-    if (Status == ERROR_NO_MORE_ITEMS) {
+    if (Status == ERROR_NO_MORE_ITEMS)
+    {
         Status = ERROR_SUCCESS;
     }
 
@@ -135,7 +144,7 @@ ULONG
 QueryEvents (
     __in PCWSTR Channel,
     __in PCWSTR XPath
-    )
+)
 
 /*++
 
@@ -170,7 +179,8 @@ Return Value:
     //
 
     Query = EvtQuery(NULL, Channel, XPath, EvtQueryChannelPath);
-    if (Query == NULL) {
+    if (Query == NULL)
+    {
         return GetLastError();
     }
 
@@ -182,14 +192,18 @@ Return Value:
     BufferSize = 0;
     BufferSizeNeeded = 0;
 
-    while (EvtNext(Query, 1, &Event, INFINITE, 0, &Count) != FALSE) {
+    while (EvtNext(Query, 1, &Event, INFINITE, 0, &Count) != FALSE)
+    {
 
-        do {
-            if (BufferSizeNeeded > BufferSize) {
+        do
+        {
+            if (BufferSizeNeeded > BufferSize)
+            {
                 free(Buffer);
                 BufferSize = BufferSizeNeeded;
                 Buffer = malloc(BufferSize);
-                if (Buffer == NULL) {
+                if (Buffer == NULL)
+                {
                     Status = ERROR_OUTOFMEMORY;
                     BufferSize = 0;
                     break;
@@ -202,20 +216,27 @@ Return Value:
                           BufferSize,
                           Buffer,
                           &BufferSizeNeeded,
-                          &Count) != FALSE) {
+                          &Count) != FALSE)
+            {
                 Status = ERROR_SUCCESS;
-            } else {
+            }
+            else
+            {
                 Status = GetLastError();
             }
-        } while (Status == ERROR_INSUFFICIENT_BUFFER);
+        }
+        while (Status == ERROR_INSUFFICIENT_BUFFER);
 
         //
         // Display either the event xml or an error message.
         //
 
-        if (Status == ERROR_SUCCESS) {
+        if (Status == ERROR_SUCCESS)
+        {
             wprintf(L"%s\n", Buffer);
-        } else {
+        }
+        else
+        {
             wprintf(L"Error rendering event.\n");
         }
 
@@ -226,9 +247,10 @@ Return Value:
     // When EvtNextChannelPath returns ERROR_NO_MORE_ITEMS, we have actually
     // iterated through all matching events and thus succeeded.
     //
- 
+
     Status = GetLastError();
-    if (Status == ERROR_NO_MORE_ITEMS) {
+    if (Status == ERROR_NO_MORE_ITEMS)
+    {
         Status = ERROR_SUCCESS;
     }
 
@@ -245,7 +267,7 @@ Return Value:
 ULONG
 DisplayHelp (
     VOID
-    )
+)
 
 /*++
 
@@ -275,7 +297,7 @@ int __cdecl
 wmain (
     __in int argc,
     __in_ecount(argc) WCHAR ** argv
-    )
+)
 
 /*++
 
@@ -306,7 +328,8 @@ Return Value:
     // Call the appropriate worker routine based on the number of args.
     //
 
-    switch (argc) {
+    switch (argc)
+    {
     case 1:
         Status = EnumerateChannels();
         break;
@@ -317,9 +340,12 @@ Return Value:
 
     case 2:
         if ((wcscmp(argv[1], L"/?") == 0) ||
-            (wcscmp(argv[1], L"-?") == 0)) {
+                (wcscmp(argv[1], L"-?") == 0))
+        {
             Status = DisplayHelp();
-        } else {
+        }
+        else
+        {
             Status = QueryEvents(argv[1], Xpath);
         }
         break;
@@ -332,7 +358,8 @@ Return Value:
     // Let the user know if an error occurred.
     //
 
-    if (Status != ERROR_SUCCESS) {
+    if (Status != ERROR_SUCCESS)
+    {
         wprintf(L"Error: %u\n", Status);
     }
 

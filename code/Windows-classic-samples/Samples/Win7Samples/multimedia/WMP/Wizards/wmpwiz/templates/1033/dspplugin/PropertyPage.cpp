@@ -1,4 +1,4 @@
-/////////////////////////////////////////////////////////////////////////////
+﻿/////////////////////////////////////////////////////////////////////////////
 //
 // C[!output Safe_root]PropPage.cpp : Implementation of the property page for C[!output Safe_root]
 //
@@ -67,11 +67,11 @@ STDMETHODIMP C[!output Safe_root]PropPage::Apply(void)
     double  fScaleFactor = 1.0;
 
     GetDlgItemText(IDC_SCALEFACTOR, wszStr, sizeof(wszStr) / sizeof(wszStr[0]));
-    swscanf_s(wszStr, L"%lf", &fScaleFactor);    
+    swscanf_s(wszStr, L"%lf", &fScaleFactor);
 
     // make sure scale factor is valid
     if ((fScaleFactor < 0.0) ||
-        (fScaleFactor > 1.0))
+            (fScaleFactor > 1.0))
     {
         if (::LoadString(_Module.GetResourceInstance(), IDS_SCALERANGEERROR, wszStr, sizeof(wszStr) / sizeof(wszStr[0])))
         {
@@ -88,22 +88,22 @@ STDMETHODIMP C[!output Safe_root]PropPage::Apply(void)
     lResult = key.Create(HKEY_CURRENT_USER, kwszPrefsRegKey);
     if (ERROR_SUCCESS == lResult)
     {
-[!if VSNET]
+        [!if VSNET]
         DWORD dwValue = (DWORD) (fScaleFactor * 65536);
         lResult = key.SetValue(kwszPrefsScaleFactor, REG_DWORD, &dwValue, sizeof(dwValue));
-[!else]
+        [!else]
         lResult = key.SetValue((DWORD) (fScaleFactor * 65536), kwszPrefsScaleFactor );
-[!endif]
+        [!endif]
     }
 
     // update the plug-in
     if (m_sp[!output Safe_root])
     {
         m_sp[!output Safe_root]->put_scale(fScaleFactor);
-    }   
+    }
 
     m_bDirty = FALSE; // Tell the property page to disable Apply.
-    
+
     return S_OK;
 }
 
@@ -111,10 +111,11 @@ STDMETHODIMP C[!output Safe_root]PropPage::Apply(void)
 // C[!output Safe_root]Prop::OnChangeScale
 //
 
-LRESULT C[!output Safe_root]PropPage::OnChangeScale(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled){
+LRESULT C[!output Safe_root]PropPage::OnChangeScale(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
+{
 
     SetDirty(TRUE); // Enable Apply.
-    
+
     return 0;
 }
 
@@ -130,7 +131,7 @@ LRESULT C[!output Safe_root]PropPage::OnInitDialog(UINT uMsg, WPARAM wParam, LPA
     if (m_sp[!output Safe_root])
     {
         m_sp[!output Safe_root]->get_scale(&fScaleFactor);
-    }   
+    }
     else // otherwise read scale factor from registry
     {
         CRegKey key;
@@ -140,13 +141,13 @@ LRESULT C[!output Safe_root]PropPage::OnInitDialog(UINT uMsg, WPARAM wParam, LPA
         if (ERROR_SUCCESS == lResult)
         {
             DWORD   dwValue = 0;
-[!if VSNET]
+            [!if VSNET]
             DWORD dwType = 0;
             ULONG uLength = sizeof(dwValue);
             lResult = key.QueryValue(kwszPrefsScaleFactor, &dwType, &dwValue, &uLength);
-[!else]
+            [!else]
             lResult = key.QueryValue(dwValue, kwszPrefsScaleFactor );
-[!endif]
+            [!endif]
 
             if (ERROR_SUCCESS == lResult)
             {
@@ -157,7 +158,7 @@ LRESULT C[!output Safe_root]PropPage::OnInitDialog(UINT uMsg, WPARAM wParam, LPA
 
     WCHAR   wszStr[MAXSTRING];
 
-    swprintf_s(wszStr, L"%0.2f", fScaleFactor);  
+    swprintf_s(wszStr, L"%0.2f", fScaleFactor);
     SetDlgItemText(IDC_SCALEFACTOR, wszStr);
 
     return 0;

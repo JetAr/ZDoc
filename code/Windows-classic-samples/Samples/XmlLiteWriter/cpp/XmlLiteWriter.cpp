@@ -1,12 +1,12 @@
-//-----------------------------------------------------------------------
+﻿//-----------------------------------------------------------------------
 // This file is part of the Windows SDK Code Samples.
-// 
+//
 // Copyright (C) Microsoft Corporation.  All rights reserved.
-// 
+//
 // This source code is intended only as a supplement to Microsoft
 // Development Tools and/or on-line documentation.  See these other
 // materials for detailed information regarding Microsoft code samples.
-// 
+//
 // THIS CODE AND INFORMATION ARE PROVIDED AS IS WITHOUT WARRANTY OF ANY
 // KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
 // IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -76,7 +76,7 @@ int __cdecl wmain(int argc, _In_reads_(argc) WCHAR* argv[])
     }
 
     if (FAILED(hr = pWriter->WriteProcessingInstruction(L"xml-stylesheet",
-        L"href=\"mystyle.css\" title=\"Compact\" type=\"text/css\"")))
+                    L"href=\"mystyle.css\" title=\"Compact\" type=\"text/css\"")))
     {
         wprintf(L"Error, Method: WriteProcessingInstruction, error is %08.8lx", hr);
         HR(hr);
@@ -94,13 +94,13 @@ int __cdecl wmain(int argc, _In_reads_(argc) WCHAR* argv[])
         HR(hr);
     }
     if (FAILED(hr = pWriter->WriteAttributeString(NULL, L"myAttr", NULL,
-                                                  L"1234")))
+                    L"1234")))
     {
         wprintf(L"Error, Method: WriteAttributeString, error is %08.8lx", hr);
         HR(hr);
     }
     if (FAILED(hr = pWriter->WriteString(
-               L"Markup is <escaped> for this string")))
+                        L"Markup is <escaped> for this string")))
     {
         wprintf(L"Error, Method: WriteString, error is %08.8lx", hr);
         HR(hr);

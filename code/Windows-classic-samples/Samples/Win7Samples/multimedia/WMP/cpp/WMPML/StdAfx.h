@@ -1,4 +1,4 @@
-//
+﻿//
 // Copyright (c) Microsoft Corporation. All rights reserved.
 //
 // stdafx.h : include file for standard system include files,

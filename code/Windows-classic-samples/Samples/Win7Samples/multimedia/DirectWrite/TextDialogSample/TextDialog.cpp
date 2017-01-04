@@ -1,24 +1,24 @@
-
+﻿
 /************************************************************************
  *
  * File: TextDialog.cpp
  *
- * Description: 
- * 
- * 
+ * Description:
+ *
+ *
  *  This file is part of the Microsoft Windows SDK Code Samples.
- * 
+ *
  *  Copyright (C) Microsoft Corporation.  All rights reserved.
- * 
+ *
  * This source code is intended only as a supplement to Microsoft
  * Development Tools and/or on-line documentation.  See these other
  * materials for detailed information regarding Microsoft code samples.
- * 
+ *
  * THIS CODE AND INFORMATION ARE PROVIDED AS IS WITHOUT WARRANTY OF ANY
  * KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
  * PARTICULAR PURPOSE.
- * 
+ *
  ************************************************************************/
 
 #include "TextDialogSample.h"
@@ -88,7 +88,7 @@ HRESULT TextDialog::Initialize(HWND hwnd)
     HRESULT hr = S_OK;
 
     hwnd_ = hwnd;
-    
+
     // Set family name to Gabriola.
     const wchar_t defaultText [] = L"Gabriola";
     wszFontFamily_ = new (std::nothrow) wchar_t[ARRAYSIZE(defaultText)];
@@ -97,7 +97,7 @@ HRESULT TextDialog::Initialize(HWND hwnd)
     {
         hr = E_OUTOFMEMORY;
     }
-   
+
     wcscpy_s(wszFontFamily_, ARRAYSIZE(defaultText), defaultText);
 
 
@@ -110,7 +110,7 @@ HRESULT TextDialog::Initialize(HWND hwnd)
     if (SUCCEEDED(hr))
     {
         hr = CreateDeviceIndependentResources(
-            );
+             );
     }
 
     return hr;
@@ -135,18 +135,18 @@ HRESULT TextDialog::CreateDeviceIndependentResources()
 
     // Create Direct2D factory.
     hr = D2D1CreateFactory(
-        D2D1_FACTORY_TYPE_SINGLE_THREADED,
-        &pD2DFactory_
-        );
+             D2D1_FACTORY_TYPE_SINGLE_THREADED,
+             &pD2DFactory_
+         );
 
     // Create a shared DirectWrite factory.
     if (SUCCEEDED(hr))
     {
         hr = DWriteCreateFactory(
-            DWRITE_FACTORY_TYPE_SHARED,
-            __uuidof(IDWriteFactory),
-            reinterpret_cast<IUnknown**>(&pDWriteFactory_)
-            );
+                 DWRITE_FACTORY_TYPE_SHARED,
+                 __uuidof(IDWriteFactory),
+                 reinterpret_cast<IUnknown**>(&pDWriteFactory_)
+             );
     }
 
     return hr;
@@ -171,34 +171,34 @@ HRESULT TextDialog::CreateDeviceResources()
     GetClientRect(
         hwnd_,
         &rc
-        );
+    );
 
     D2D1_SIZE_U size = D2D1::SizeU(
-        rc.right - rc.left,
-        rc.bottom - rc.top
-    );
+                           rc.right - rc.left,
+                           rc.bottom - rc.top
+                       );
 
     if (!pRT_)
     {
         // Create a Direct2D render target.
         hr = pD2DFactory_->CreateHwndRenderTarget(
-            D2D1::RenderTargetProperties(),
-            D2D1::HwndRenderTargetProperties(
-                hwnd_,
-                size
-                ),
-            &pRT_
-            );
+                 D2D1::RenderTargetProperties(),
+                 D2D1::HwndRenderTargetProperties(
+                     hwnd_,
+                     size
+                 ),
+                 &pRT_
+             );
 
         // Create a black brush.
         if (SUCCEEDED(hr))
         {
             hr = pRT_->CreateSolidColorBrush(
-                D2D1::ColorF(
-                D2D1::ColorF::Black
-                ),
-                &pBlackBrush_
-                );
+                     D2D1::ColorF(
+                         D2D1::ColorF::Black
+                     ),
+                     &pBlackBrush_
+                 );
         }
     }
 
@@ -237,18 +237,18 @@ HRESULT TextDialog::DrawText()
     GetClientRect(
         hwnd_,
         &rc
-        );
+    );
 
     D2D1_POINT_2F origin = D2D1::Point2F(
-        static_cast<FLOAT>(rc.top / dpiScaleY_),
-        static_cast<FLOAT>(rc.left / dpiScaleX_)
-        );
+                               static_cast<FLOAT>(rc.top / dpiScaleY_),
+                               static_cast<FLOAT>(rc.left / dpiScaleX_)
+                           );
 
     pRT_->DrawTextLayout(
         origin,
         pTextLayout_,
         pBlackBrush_
-        );
+    );
 
 
     return S_OK;
@@ -291,7 +291,7 @@ HRESULT TextDialog::DrawD2DContent()
         if (SUCCEEDED(hr))
         {
             hr = pRT_->EndDraw(
-                );
+                 );
         }
     }
 
@@ -357,7 +357,7 @@ HRESULT TextDialog::SetFontSize(float size)
 {
     HRESULT hr;
     DWRITE_TEXT_RANGE textRange = {0, cTextLength_};
-    
+
     hr = pTextLayout_->SetFontSize(size, textRange);
 
     if (SUCCEEDED(hr))
@@ -388,7 +388,7 @@ HRESULT TextDialog::SetFontSize(float size)
 HRESULT TextDialog::SetText(wchar_t *text)
 {
     HRESULT hr;
-    
+
     // Store the text for later.
     cTextLength_ = (UINT32) wcslen(text);
 
@@ -408,15 +408,15 @@ HRESULT TextDialog::SetText(wchar_t *text)
 
     // Create a text format.
     hr = pDWriteFactory_->CreateTextFormat(
-            wszFontFamily_,              // Font family name.
-            NULL,                        // Font collection (NULL sets it to use the system font collection).
-            weight_,
-            style_,
-            DWRITE_FONT_STRETCH_NORMAL,
-            fontSize_,
-            L"en-us",
-            &pTextFormat_
-            );
+             wszFontFamily_,              // Font family name.
+             NULL,                        // Font collection (NULL sets it to use the system font collection).
+             weight_,
+             style_,
+             DWRITE_FONT_STRETCH_NORMAL,
+             fontSize_,
+             L"en-us",
+             &pTextFormat_
+         );
 
     // Center align (horizontally) the text.
     if (SUCCEEDED(hr))
@@ -432,18 +432,18 @@ HRESULT TextDialog::SetText(wchar_t *text)
 
     // Release any existing layout object.
     SafeRelease(&pTextLayout_);
-    
+
     // Create a text layout using the text format.
     if (SUCCEEDED(hr))
     {
         hr = pDWriteFactory_->CreateTextLayout(
-            wszText_,      // The string to be laid out and formatted.
-            cTextLength_,  // The length of the string.
-            pTextFormat_,  // The text format to apply to the string (contains font information, etc).
-            680.0f,         // The width of the layout box.
-            260.0f,         // The height of the layout box.
-            &pTextLayout_  // The IDWriteTextLayout interface pointer.
-            );
+                 wszText_,      // The string to be laid out and formatted.
+                 cTextLength_,  // The length of the string.
+                 pTextFormat_,  // The text format to apply to the string (contains font information, etc).
+                 680.0f,         // The width of the layout box.
+                 260.0f,         // The height of the layout box.
+                 &pTextLayout_  // The IDWriteTextLayout interface pointer.
+             );
     }
 
     // The following code sets the typography for the text layout.
@@ -462,7 +462,8 @@ HRESULT TextDialog::SetText(wchar_t *text)
 
     // Set the stylistic set.
     DWRITE_FONT_FEATURE fontFeature = {DWRITE_FONT_FEATURE_TAG_STYLISTIC_SET_7,
-                                       1};
+                                       1
+                                      };
     if (SUCCEEDED(hr))
     {
         hr = pTypography->AddFontFeature(fontFeature);
@@ -470,7 +471,8 @@ HRESULT TextDialog::SetText(wchar_t *text)
 
     // Set the typography for the entire string.
     DWRITE_TEXT_RANGE textRange = {0,
-                                   cTextLength_};
+                                   cTextLength_
+                                  };
 
     if (SUCCEEDED(hr))
     {
@@ -608,7 +610,7 @@ HRESULT TextDialog::SetBold(bool bold)
     {
         weight_ = DWRITE_FONT_WEIGHT_NORMAL;
     }
-    
+
     // Set the font weight.
     hr = pTextLayout_->SetFontWeight(weight_, textRange);
 
@@ -644,7 +646,7 @@ HRESULT TextDialog::SetItalic(bool italic)
     {
         style_ = DWRITE_FONT_STYLE_NORMAL;
     }
-    
+
     // Set the font style.
     hr = pTextLayout_->SetFontStyle(style_, textRange);
 

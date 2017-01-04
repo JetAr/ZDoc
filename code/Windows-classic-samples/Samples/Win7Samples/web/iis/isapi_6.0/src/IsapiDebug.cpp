@@ -1,4 +1,4 @@
-/*++
+﻿/*++
 
 Copyright (c) 2003  Microsoft Corporation
 
@@ -25,7 +25,7 @@ VOID
 WriteDebugArgs(
     CHAR *  szFormat,
     va_list args
-    );
+);
 
 //
 // Function implementations
@@ -36,7 +36,7 @@ IsapiAssert(
     CHAR *  szExpr,
     CHAR *  szFile,
     DWORD   dwLine
-    )
+)
 /*++
 
 Purpose:
@@ -64,7 +64,7 @@ Returns:
     args = (va_list)&szExpr;
 
     WriteDebugArgs( "ISAPIASSERT Failed:  \"%s\", File=\"%s\", Line=%d.\r\n",
-                args );
+                    args );
 
     va_end( args );
 
@@ -75,7 +75,7 @@ VOID
 WriteDebug(
     CHAR *  szFormat,
     ...
-    )
+)
 /*++
 
 Purpose:
@@ -107,7 +107,7 @@ VOID
 WriteDebugArgs(
     CHAR *  szFormat,
     va_list args
-    )
+)
 /*++
 
 Purpose:
@@ -134,9 +134,9 @@ Returns:
     //
 
     nWritten = _snprintf_s( szOutput, sizeof(szOutput),
-                          MAX_DEBUG_OUTPUT,
-                          "[%s.dll] ",
-                          g_szModuleName );
+                            MAX_DEBUG_OUTPUT,
+                            "[%s.dll] ",
+                            g_szModuleName );
 
     if ( nWritten == -1 )
     {
@@ -152,10 +152,10 @@ Returns:
     //
 
     nWritten = _vsnprintf_s( szOutput + nWritten,
-							sizeof(szOutput) - nWritten,
-                           MAX_DEBUG_OUTPUT - nWritten,
-                           szFormat,
-                           args );
+                             sizeof(szOutput) - nWritten,
+                             MAX_DEBUG_OUTPUT - nWritten,
+                             szFormat,
+                             args );
 
     //
     // If we overran the buffer, truncate the data

@@ -1,4 +1,4 @@
-/**************************************************************************
+﻿/**************************************************************************
    THIS CODE AND INFORMATION IS PROVIDED 'AS IS' WITHOUT WARRANTY OF
    ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
    THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -38,18 +38,18 @@ void CTSFEditWnd::_SaveToFile(LPTSTR pszFile)
     {
         HANDLE  hFile;
 
-        hFile = CreateFile( pszFile, 
+        hFile = CreateFile( pszFile,
                             GENERIC_WRITE,
                             0,
                             NULL,
                             CREATE_ALWAYS,
                             FILE_ATTRIBUTE_NORMAL,
                             NULL);
-        
+
         if(INVALID_HANDLE_VALUE != hFile)
         {
             IStream *pStream;
-            
+
             //create a stream on global memory
             if(SUCCEEDED(CreateStreamOnHGlobal(NULL, TRUE, &pStream)))
             {
@@ -60,11 +60,11 @@ void CTSFEditWnd::_SaveToFile(LPTSTR pszFile)
                 //initialize the file
                 SetFilePointer(hFile, 0, NULL, FILE_BEGIN);
                 SetEndOfFile(hFile);
-                
+
                 //set the stream pointer to the start of the stream
                 li.QuadPart = 0;
                 pStream->Seek(li, STREAM_SEEK_SET, NULL);
-                
+
                 //write the contents of the stream to the file
                 BYTE    buffer[BLOCK_SIZE];
                 ULONG   uRead;
@@ -75,9 +75,9 @@ void CTSFEditWnd::_SaveToFile(LPTSTR pszFile)
                 while(uRead > 0)
                 {
                     DWORD   dwWritten;
-                    
+
                     WriteFile(hFile, buffer, uRead, &dwWritten, NULL);
-                    
+
                     uRead = 0;
                     hr = pStream->Read(buffer, BLOCK_SIZE, &uRead);
                 }
@@ -101,7 +101,7 @@ void CTSFEditWnd::_Save(IStream *pStream)
     if(pStream)
     {
         HRESULT hr;
-        
+
         //write the plain UNICODE text into the stream
         LPWSTR          pwsz;
         LONG            cch;
@@ -112,7 +112,7 @@ void CTSFEditWnd::_Save(IStream *pStream)
         //set the stream pointer to the start of the stream
         li.QuadPart = 0;
         pStream->Seek(li, STREAM_SEEK_SET, NULL);
-        
+
         //get the text
         if(SUCCEEDED(_GetText(&pwsz, &cch)))
         {
@@ -156,13 +156,13 @@ void CTSFEditWnd::_Save(IStream *pStream)
                                 //reset the temporary stream's pointer
                                 li.QuadPart = 0;
                                 pTempStream->Seek(li, STREAM_SEEK_SET, NULL);
-                                
+
                                 //get the property header and data for the range
                                 hr = m_pServices->Serialize(pProp, pRange, &PropHeader, pTempStream);
 
                                 /*
-                                Write the property header into the primary stream. 
-                                The header also contains the size of the property 
+                                Write the property header into the primary stream.
+                                The header also contains the size of the property
                                 data.
                                 */
                                 hr = pStream->Write(&PropHeader, sizeof(TF_PERSISTENT_PROPERTY_HEADER_ACP), &uWritten);
@@ -179,16 +179,16 @@ void CTSFEditWnd::_Save(IStream *pStream)
 
                                 pRange->Release();
                             }
-                            
+
                             pTempStream->Release();
                         }
-                        
+
                         pEnumRanges->Release();
                     }
-                    
+
                     pProp->Release();
                 }
-                
+
                 pEnumProps->Release();
             }
 
@@ -211,18 +211,18 @@ void CTSFEditWnd::_LoadFromFile(LPTSTR pszFile)
     {
         HANDLE  hFile;
 
-        hFile = CreateFile( pszFile, 
+        hFile = CreateFile( pszFile,
                             GENERIC_READ,
                             0,
                             NULL,
                             OPEN_EXISTING,
                             FILE_ATTRIBUTE_NORMAL,
                             NULL);
-        
+
         if(INVALID_HANDLE_VALUE != hFile)
         {
             IStream *pStream;
-            
+
             //create a stream on global memory
             if(SUCCEEDED(CreateStreamOnHGlobal(NULL, TRUE, &pStream)))
             {
@@ -232,7 +232,7 @@ void CTSFEditWnd::_LoadFromFile(LPTSTR pszFile)
                 //set the stream pointer to the start of the stream
                 li.QuadPart = 0;
                 pStream->Seek(li, STREAM_SEEK_SET, NULL);
-                
+
                 //write the contents of the stream to the file
                 BYTE    buffer[BLOCK_SIZE];
                 ULONG   uRead;
@@ -245,7 +245,7 @@ void CTSFEditWnd::_LoadFromFile(LPTSTR pszFile)
                     ULONG   uWritten;
 
                     hr = pStream->Write(buffer, uRead, &uWritten);
-                    
+
                     uRead = 0;
                     ReadFile(hFile, buffer, BLOCK_SIZE, &uRead, NULL);
                 }
@@ -295,7 +295,7 @@ void CTSFEditWnd::_Load(IStream *pStream)
     if(SUCCEEDED(hr) && (sizeof(ULONG) == uRead))
     {
         LPWSTR  pwsz;
-        
+
         //allocate a buffer for the text plus one NULL character
         pwsz = (LPWSTR)GlobalAlloc(GPTR, uSize + sizeof(WCHAR));
         if(NULL != pwsz)
@@ -305,7 +305,7 @@ void CTSFEditWnd::_Load(IStream *pStream)
             if(SUCCEEDED(hr) && (uSize == uRead))
             {
                 TF_PERSISTENT_PROPERTY_HEADER_ACP   PropHeader;
-                
+
                 //put the text into the edit control, but don't send a change notification
                 BOOL    fOldNotify = m_fNotify;
                 m_fNotify = FALSE;
@@ -313,13 +313,13 @@ void CTSFEditWnd::_Load(IStream *pStream)
                 m_fNotify = fOldNotify;
 
                 /*
-                Read each property header and property data from the stream. The 
-                list of properties is terminated by a TF_PERSISTENT_PROPERTY_HEADER_ACP 
+                Read each property header and property data from the stream. The
+                list of properties is terminated by a TF_PERSISTENT_PROPERTY_HEADER_ACP
                 structure with a cb member of zero.
                 */
                 hr = pStream->Read(&PropHeader, sizeof(TF_PERSISTENT_PROPERTY_HEADER_ACP), &uRead);
-                while(  SUCCEEDED(hr) && 
-                        (sizeof(TF_PERSISTENT_PROPERTY_HEADER_ACP) == uRead) && 
+                while(  SUCCEEDED(hr) &&
+                        (sizeof(TF_PERSISTENT_PROPERTY_HEADER_ACP) == uRead) &&
                         (0 != PropHeader.cb))
                 {
                     ITfProperty *pProp;
@@ -328,8 +328,8 @@ void CTSFEditWnd::_Load(IStream *pStream)
                     if(SUCCEEDED(hr))
                     {
                         /*
-                        Have TSF read the property data from the stream. This call 
-                        will request a read lock, so make sure it can be granted 
+                        Have TSF read the property data from the stream. This call
+                        will request a read lock, so make sure it can be granted
                         or else this method will fail.
                         */
                         CTSFPersistentPropertyLoader *pLoader = new CTSFPersistentPropertyLoader(&PropHeader, pStream);
@@ -341,7 +341,7 @@ void CTSFEditWnd::_Load(IStream *pStream)
                     hr = pStream->Read(&PropHeader, sizeof(TF_PERSISTENT_PROPERTY_HEADER_ACP), &uRead);
                 }
             }
-            
+
             GlobalFree(pwsz);
         }
     }

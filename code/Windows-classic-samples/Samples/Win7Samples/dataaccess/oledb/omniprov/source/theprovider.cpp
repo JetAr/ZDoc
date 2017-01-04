@@ -1,8 +1,8 @@
-// TheProvider.cpp : Implementation of DLL Exports.
+﻿// TheProvider.cpp : Implementation of DLL Exports.
 
 
 // Note: Proxy/Stub Information
-//      To build a separate proxy/stub DLL, 
+//      To build a separate proxy/stub DLL,
 //      run nmake -f TheProviderps.mk in the project directory.
 
 #include "stdafx.h"

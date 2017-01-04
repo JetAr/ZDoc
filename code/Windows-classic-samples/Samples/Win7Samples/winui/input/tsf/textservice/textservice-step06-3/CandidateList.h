@@ -1,4 +1,4 @@
-//////////////////////////////////////////////////////////////////////
+﻿//////////////////////////////////////////////////////////////////////
 //
 //  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 //  ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED
@@ -19,7 +19,7 @@
 class CCandidateWindow;
 
 class CCandidateList : public ITfContextKeyEventSink,
-                       public ITfTextLayoutSink
+    public ITfTextLayoutSink
 {
 public:
     CCandidateList(CTextService *pTextService);

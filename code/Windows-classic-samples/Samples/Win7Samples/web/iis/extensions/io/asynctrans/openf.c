@@ -1,4 +1,4 @@
-/* Copyright (c) 1995-2002 Microsoft Corporation
+﻿/* Copyright (c) 1995-2002 Microsoft Corporation
 
 	Module Name:
 
@@ -13,13 +13,14 @@
 
 /* internal data structure for maintaining the list of open file handles. */
 
-typedef struct _OPEN_FILE {
+typedef struct _OPEN_FILE
+{
 
-	HANDLE  hFile;
-	struct _OPEN_FILE * pNext;
-	LONG    nHits;
-	LONG    nRefs;
-	CHAR    rgchFile[MAX_PATH + 1];
+    HANDLE  hFile;
+    struct _OPEN_FILE * pNext;
+    LONG    nHits;
+    LONG    nRefs;
+    CHAR    rgchFile[MAX_PATH + 1];
 
 } OPEN_FILE, *LPOPEN_FILE;
 
@@ -33,35 +34,36 @@ DWORD  g_dwCreateFileFlags = (FILE_FLAG_SEQUENTIAL_SCAN | FILE_FLAG_OVERLAPPED);
 
 VOID InitFileHandleCache(VOID)
 {
-	InitializeCriticalSection(&g_csOpenFiles);
+    InitializeCriticalSection(&g_csOpenFiles);
 }
 
 DWORD CleanupFileHandleCache(VOID)
 {
-	LPOPEN_FILE  pFileScan;
+    LPOPEN_FILE  pFileScan;
 
-	while (g_pOpenFiles != NULL) {
+    while (g_pOpenFiles != NULL)
+    {
 
-		pFileScan = g_pOpenFiles;
+        pFileScan = g_pOpenFiles;
 
-		g_pOpenFiles = g_pOpenFiles->pNext;
+        g_pOpenFiles = g_pOpenFiles->pNext;
 
-		if (pFileScan->hFile != INVALID_HANDLE_VALUE)
-			CloseHandle( pFileScan->hFile);
+        if (pFileScan->hFile != INVALID_HANDLE_VALUE)
+            CloseHandle( pFileScan->hFile);
 
-		LocalFree(pFileScan);
-	}
+        LocalFree(pFileScan);
+    }
 
-	DeleteCriticalSection(&g_csOpenFiles);
+    DeleteCriticalSection(&g_csOpenFiles);
 
-	return NO_ERROR;
+    return NO_ERROR;
 }
 
 /*
 	Description:
 
-		This function opens the file specified in the 'pszFile'. 
-		If the file name starts with a '/' we use the ECB to map 
+		This function opens the file specified in the 'pszFile'.
+		If the file name starts with a '/' we use the ECB to map
 		the given path into a physical file path.
 
 	Arguments:
@@ -76,143 +78,157 @@ DWORD CleanupFileHandleCache(VOID)
 
 HANDLE FcOpenFile(IN EXTENSION_CONTROL_BLOCK *pecb, IN LPCSTR pszFile)
 {
-	LPOPEN_FILE pFileScan;
-	HANDLE hFile = INVALID_HANDLE_VALUE;
+    LPOPEN_FILE pFileScan;
+    HANDLE hFile = INVALID_HANDLE_VALUE;
 
-	EnterCriticalSection(&g_csOpenFiles);
+    EnterCriticalSection(&g_csOpenFiles);
 
-	for (pFileScan =  g_pOpenFiles; NULL != pFileScan; pFileScan = pFileScan->pNext) {
+    for (pFileScan =  g_pOpenFiles; NULL != pFileScan; pFileScan = pFileScan->pNext)
+    {
 
-		if (0 == lstrcmpi(pFileScan->rgchFile, pszFile)) {
+        if (0 == lstrcmpi(pFileScan->rgchFile, pszFile))
+        {
 
-			/* there is a file match. */
+            /* there is a file match. */
 
-			break;
-		}
-	}
+            break;
+        }
+    }
 
-	if (NULL == pFileScan) {
+    if (NULL == pFileScan)
+    {
 
-		/* File was not found. Create a new file handle */
+        /* File was not found. Create a new file handle */
 
-		CHAR rgchFileName[ MAX_PATH]; /* local copy */
-		LPCSTR pszInputPath = pszFile;
-	  
-		strncpy_s(rgchFileName, sizeof(rgchFileName), pszFile, MAX_PATH);
+        CHAR rgchFileName[ MAX_PATH]; /* local copy */
+        LPCSTR pszInputPath = pszFile;
 
-		if (*pszFile == '/') { 
+        strncpy_s(rgchFileName, sizeof(rgchFileName), pszFile, MAX_PATH);
 
-			DWORD cbSize = sizeof(rgchFileName);
-			BOOL fRet;
+        if (*pszFile == '/')
+        {
 
-			/* reset the file pointer, so subsequent use will fail */
+            DWORD cbSize = sizeof(rgchFileName);
+            BOOL fRet;
 
-			pszFile = NULL;
+            /* reset the file pointer, so subsequent use will fail */
 
-			/* Using the ECB map the Virtual path to the Physical path */
+            pszFile = NULL;
 
-			fRet = pecb->ServerSupportFunction(pecb->ConnID, HSE_REQ_MAP_URL_TO_PATH, rgchFileName, &cbSize, NULL);
-	    
-			if (fRet) {
+            /* Using the ECB map the Virtual path to the Physical path */
 
-					/* we got the mapping. Use it. */
+            fRet = pecb->ServerSupportFunction(pecb->ConnID, HSE_REQ_MAP_URL_TO_PATH, rgchFileName, &cbSize, NULL);
 
-					pszFile = rgchFileName;
-			}
-		}   
+            if (fRet)
+            {
 
-		if (NULL != pszFile) {
+                /* we got the mapping. Use it. */
 
-			pFileScan = LocalAlloc(LPTR, sizeof(*pFileScan));
+                pszFile = rgchFileName;
+            }
+        }
 
-			if (NULL != pFileScan) {
-	        
-				SECURITY_ATTRIBUTES sa;
-	      
-				sa.nLength = sizeof(sa);
-				sa.lpSecurityDescriptor = NULL;
-				sa.bInheritHandle = FALSE;
-	      
-				pFileScan->hFile = CreateFile(pszFile, GENERIC_READ, g_dwCreateFileShareMode, &sa, OPEN_EXISTING, g_dwCreateFileFlags, NULL);
-	      
-				if (INVALID_HANDLE_VALUE == pFileScan->hFile) {
-	          
-					LocalFree(pFileScan);
+        if (NULL != pszFile)
+        {
 
-					pFileScan = NULL;
+            pFileScan = LocalAlloc(LPTR, sizeof(*pFileScan));
 
-				} else {
-	          
-					/* insert this into the list at the top */
+            if (NULL != pFileScan)
+            {
 
-					strncpy_s(pFileScan->rgchFile, sizeof(pFileScan->rgchFile), pszInputPath, MAX_PATH);
+                SECURITY_ATTRIBUTES sa;
 
-					pFileScan->pNext = g_pOpenFiles;
+                sa.nLength = sizeof(sa);
+                sa.lpSecurityDescriptor = NULL;
+                sa.bInheritHandle = FALSE;
 
-					g_pOpenFiles = pFileScan;
+                pFileScan->hFile = CreateFile(pszFile, GENERIC_READ, g_dwCreateFileShareMode, &sa, OPEN_EXISTING, g_dwCreateFileFlags, NULL);
 
-					pFileScan->nRefs = 1;
-					pFileScan->nHits = 0;
-				}
-			}
-		}
-	}
+                if (INVALID_HANDLE_VALUE == pFileScan->hFile)
+                {
 
-	if (NULL != pFileScan) {
+                    LocalFree(pFileScan);
 
-		hFile = pFileScan->hFile;
+                    pFileScan = NULL;
 
-		pFileScan->nHits++;
-		pFileScan->nRefs++;
-	}
+                }
+                else
+                {
 
-	LeaveCriticalSection(&g_csOpenFiles);
+                    /* insert this into the list at the top */
 
-	return hFile;
+                    strncpy_s(pFileScan->rgchFile, sizeof(pFileScan->rgchFile), pszInputPath, MAX_PATH);
+
+                    pFileScan->pNext = g_pOpenFiles;
+
+                    g_pOpenFiles = pFileScan;
+
+                    pFileScan->nRefs = 1;
+                    pFileScan->nHits = 0;
+                }
+            }
+        }
+    }
+
+    if (NULL != pFileScan)
+    {
+
+        hFile = pFileScan->hFile;
+
+        pFileScan->nHits++;
+        pFileScan->nRefs++;
+    }
+
+    LeaveCriticalSection(&g_csOpenFiles);
+
+    return hFile;
 }
 
 DWORD FcCloseFile(IN HANDLE hFile)
 {
-	LPOPEN_FILE pFileScan;
-	DWORD dwError = NO_ERROR;
+    LPOPEN_FILE pFileScan;
+    DWORD dwError = NO_ERROR;
 
-	EnterCriticalSection(&g_csOpenFiles);
+    EnterCriticalSection(&g_csOpenFiles);
 
-	/* Look for the handle and decrement the ref count. */
+    /* Look for the handle and decrement the ref count. */
 
-	for (pFileScan = g_pOpenFiles; NULL != pFileScan; pFileScan = pFileScan->pNext) {
+    for (pFileScan = g_pOpenFiles; NULL != pFileScan; pFileScan = pFileScan->pNext)
+    {
 
-		if ( hFile == pFileScan->hFile) {
+        if ( hFile == pFileScan->hFile)
+        {
 
-			/*  there is a file match. */
+            /*  there is a file match. */
 
-			pFileScan->nRefs--;
+            pFileScan->nRefs--;
 
-			/* 
-				Note: This is example code. Do not use for production, as there 
-				is no freeing of the file when Ref hits 0  
-			*/
+            /*
+            	Note: This is example code. Do not use for production, as there
+            	is no freeing of the file when Ref hits 0
+            */
 
-			break;
-		}
-	}
+            break;
+        }
+    }
 
-	if (NULL == pFileScan) {
+    if (NULL == pFileScan)
+    {
 
-		/* file handle not found */
+        /* file handle not found */
 
-		dwError = (ERROR_INVALID_HANDLE);
-	}
+        dwError = (ERROR_INVALID_HANDLE);
+    }
 
-	LeaveCriticalSection(&g_csOpenFiles);
+    LeaveCriticalSection(&g_csOpenFiles);
 
-	return dwError;
+    return dwError;
 }
 
 /*
 	Description:
 
-		Reads contents of file [hFile] from the specified offset in the overlapped 
+		Reads contents of file [hFile] from the specified offset in the overlapped
 		structure. The contents are read into the buffer supplied.
 
 	Arguments:
@@ -221,7 +237,7 @@ DWORD FcCloseFile(IN HANDLE hFile)
 		pchBuffer    - pointer to the buffer into which the data is to be read
 		dwBufferSize - DWORD containing the max size of the buffer supplied
 		pcbRead      - number of bytes read from the file
-		pov          - pointer to an overlapped structure that contains the 
+		pov          - pointer to an overlapped structure that contains the
 										offset from where to read the contents. The
 										overlapped structure also is used for Overlapped
 										IO in NT.
@@ -238,24 +254,25 @@ DWORD FcCloseFile(IN HANDLE hFile)
 
 BOOL FcReadFromFile(IN HANDLE hFile, OUT CHAR *pchBuffer, IN DWORD dwBufferSize, OUT LPDWORD pcbRead, IN OUT LPOVERLAPPED pov)
 {
-	BOOL fRet = TRUE;
+    BOOL fRet = TRUE;
 
-	*pcbRead = 0;
-        
-	ResetEvent(pov->hEvent);
+    *pcbRead = 0;
 
-	/* read data from file */
+    ResetEvent(pov->hEvent);
 
-	if (!ReadFile(hFile, pchBuffer, dwBufferSize, pcbRead, pov)) {
-		    
-		DWORD err = GetLastError();
-		    
-		if ((err != ERROR_IO_PENDING) || !GetOverlappedResult(hFile, pov, pcbRead, TRUE))
-			fRet = FALSE;
-	}
+    /* read data from file */
 
-	if (fRet)
-		pov->Offset += *pcbRead;
+    if (!ReadFile(hFile, pchBuffer, dwBufferSize, pcbRead, pov))
+    {
 
-	return fRet;
+        DWORD err = GetLastError();
+
+        if ((err != ERROR_IO_PENDING) || !GetOverlappedResult(hFile, pov, pcbRead, TRUE))
+            fRet = FALSE;
+    }
+
+    if (fRet)
+        pov->Offset += *pcbRead;
+
+    return fRet;
 }

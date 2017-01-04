@@ -1,4 +1,4 @@
-/*++
+﻿/*++
 
 Copyright (c) 2003  Microsoft Corporation
 
@@ -40,30 +40,30 @@ public:
 
     ISAPI_REQUEST(
         EXTENSION_CONTROL_BLOCK *   pEcb
-        );
+    );
 
     virtual
     ~ISAPI_REQUEST(
         VOID
-        );
+    );
 
     BOOL
     SyncSendStatusAndHeaders(
         CHAR *  szStatus = NULL,
         CHAR *  szHeaders = NULL
-        );
+    );
 
     BOOL
     SyncWriteClientArgs(
         CHAR *  szFormat,
         va_list args
-        );
+    );
 
     BOOL
     SyncWriteClientString(
         CHAR *  szFormat,
         ...
-        );
+    );
 
     BOOL
     SyncWriteCompleteResponse(
@@ -71,103 +71,103 @@ public:
         CHAR *  szHeaders,
         CHAR *  szFormat,
         ...
-        );
+    );
 
     BOOL
     GetServerVariable(
         CHAR *          szVariable,
         ISAPI_STRING *  pIsapiString
-        );
+    );
 
     BOOL
     GetServerVariable(
         CHAR *  szVariable,
         ISAPI_STRINGW * pIsapiStringW
-        );
+    );
 
     BOOL
     ReadAllEntity(
         ISAPI_BUFFER *  pBuffer
-        );
+    );
 
     BOOL
     SetBufferedResponseStatus(
         CHAR *  szStatus
-        );
+    );
 
     BOOL
     AddHeaderToBufferedResponse(
         CHAR *  szName,
         CHAR *  szValue
-        );
+    );
 
     BOOL
     PrintfToResponseBuffer(
         CHAR *  szFormat,
         ...
-        );
+    );
 
     BOOL
     AddDataToResponseBuffer(
         VOID *  pData,
         DWORD   cbData
-        );
+    );
 
     BOOL
     AsyncTransmitBufferedResponse(
         PFN_HSE_IO_COMPLETION   pfnCompletion,
         DWORD                   dwExpireSeconds = NO_EXPIRATION
-        );
+    );
 
     DWORD
     QueryMaxSyncWriteSize(
         VOID
-        );
+    );
 
     VOID
     SetMaxSyncWriteSize(
         DWORD   dwMaxSyncWriteSize
-        );
+    );
 
     DWORD
     QueryMaxResponseBufferSize(
         VOID
-        );
+    );
 
     VOID
     SetMaxResponseBufferSize(
         DWORD   dwMaxResponseBufferSize
-        );
+    );
 
     EXTENSION_CONTROL_BLOCK *
     QueryEcb(
         VOID
-        );
+    );
 
     DWORD
     QueryIISMajorVersion(
         VOID
-        );
+    );
 
     DWORD
     QueryIISMinorVersion(
         VOID
-        );
+    );
 
     BOOL
     QueryIsClientConnected(
         VOID
-        );
+    );
 
     BOOL
     UnimpersonateClient(
         VOID
-        );
+    );
 
     BOOL
     ImpersonateClient(
         VOID
-        );
+    );
 
 private:
 
@@ -186,28 +186,28 @@ private:
     BOOL
     AsyncSendResponseIIS4(
         PFN_HSE_IO_COMPLETION   pfnCompletion
-        );
+    );
 
     BOOL
     AsyncSendResponseIIS5(
         PFN_HSE_IO_COMPLETION   pfnCompletion
-        );
+    );
 
     BOOL
     AsyncSendResponseIIS6(
         PFN_HSE_IO_COMPLETION   pfcCompletion,
         BOOL                    fCacheResponse
-        );
+    );
 
     DWORD
     QueryOsMajorVersion(
         VOID
-        );
+    );
 };
 
 DWORD
 SyncSendGenericServerError(
     EXTENSION_CONTROL_BLOCK *   pecb
-    );
+);
 
 #endif  // _isapirequest_h

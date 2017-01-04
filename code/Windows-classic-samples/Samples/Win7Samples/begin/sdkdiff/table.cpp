@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -80,11 +80,11 @@ gtab_deltools(void)
 
 LRESULT
 gtab_wndproc(
-            HWND hwnd,
-            UINT msg,
-            WPARAM wParam,
-            LPARAM lParam
-            )
+    HWND hwnd,
+    UINT msg,
+    WPARAM wParam,
+    LPARAM lParam
+)
 {
     CREATESTRUCT FAR * csp;
     HWND hOwner;
@@ -93,276 +93,313 @@ gtab_wndproc(
     long oldtop;
     long change;
 
-    switch (msg) {
+    switch (msg)
+    {
 
-        case WM_CREATE:
-            /* create window. set the wnd extra bytes to
-             * contain the owner window and a null table.
-             * Owner window is either in lParam or the parent.
-             * Then wait for TM_NEWID.
-             */
-            csp = (CREATESTRUCT FAR *) lParam;
-            if (csp->lpCreateParams == NULL) {
-                hOwner = GetParent(hwnd);
-            } else {
-                hOwner = (HWND) csp->lpCreateParams;
-            }
-            ptab = NULL;
+    case WM_CREATE:
+        /* create window. set the wnd extra bytes to
+         * contain the owner window and a null table.
+         * Owner window is either in lParam or the parent.
+         * Then wait for TM_NEWID.
+         */
+        csp = (CREATESTRUCT FAR *) lParam;
+        if (csp->lpCreateParams == NULL)
+        {
+            hOwner = GetParent(hwnd);
+        }
+        else
+        {
+            hOwner = (HWND) csp->lpCreateParams;
+        }
+        ptab = NULL;
 
+        SetWindowLongPtr(hwnd, WL_TABLE, (LONG_PTR) ptab);
+        SetWindowLongPtr(hwnd, WW_OWNER, (LONG_PTR) hOwner);
+
+        SetScrollRange(hwnd, SB_VERT, 0, 0, TRUE);
+        SetScrollRange(hwnd, SB_HORZ, 0, 0, TRUE);
+        break;
+
+    case TM_NEWID:
+        /* complete change of table.
+         * close old table, discard memory and
+         * build new table
+         */
+        ptab = (lpTable) GetWindowLongPtr(hwnd, WL_TABLE);
+        if (ptab != NULL)
+        {
+            gtab_sendtq(hwnd, TQ_CLOSE, ptab->hdr.id);
+            gtab_deltable(hwnd, ptab);
+            SetCursor((HCURSOR)hNormCurs);
+            SetWindowLongPtr(hwnd, WL_TABLE, 0);
+        }
+        if ( (ptab = gtab_buildtable(hwnd, (DWORD_PTR)lParam)) != NULL)
+        {
             SetWindowLongPtr(hwnd, WL_TABLE, (LONG_PTR) ptab);
-            SetWindowLongPtr(hwnd, WW_OWNER, (LONG_PTR) hOwner);
-
+            gtab_setsize(hwnd, ptab);
+        }
+        else
+        {
             SetScrollRange(hwnd, SB_VERT, 0, 0, TRUE);
             SetScrollRange(hwnd, SB_HORZ, 0, 0, TRUE);
-            break;
+        }
+        InvalidateRect(hwnd, NULL, TRUE);
+        break;
 
-        case TM_NEWID:
-            /* complete change of table.
-             * close old table, discard memory and
-             * build new table
-             */
-            ptab = (lpTable) GetWindowLongPtr(hwnd, WL_TABLE);
-            if (ptab != NULL) {
-                gtab_sendtq(hwnd, TQ_CLOSE, ptab->hdr.id);
-                gtab_deltable(hwnd, ptab);
-                SetCursor((HCURSOR)hNormCurs);
-                SetWindowLongPtr(hwnd, WL_TABLE, 0);
+    case TM_NEWLAYOUT:
+        /* change of layout but for same id. no TQ_CLOSE,
+         * but otherwise same as TM_NEWID
+         */
+        ptab = (lpTable) GetWindowLongPtr(hwnd, WL_TABLE);
+        if (ptab != NULL)
+        {
+            gtab_deltable(hwnd, ptab);
+            SetCursor((HCURSOR)hNormCurs);
+            SetWindowLongPtr(hwnd, WL_TABLE, 0);
+        }
+        if ( (ptab = gtab_buildtable(hwnd, (DWORD_PTR)lParam)) != NULL)
+        {
+            SetWindowLongPtr(hwnd, WL_TABLE, (LONG_PTR) ptab);
+            gtab_setsize(hwnd, ptab);
+        }
+        else
+        {
+            SetScrollRange(hwnd, SB_VERT, 0, 0, TRUE);
+            SetScrollRange(hwnd, SB_HORZ, 0, 0, TRUE);
+        }
+        InvalidateRect(hwnd, NULL, TRUE);
+        break;
+
+    case TM_REFRESH:
+        /* data in table has changed. nrows may have
+         * changed. ncols and col types have not changed
+         */
+        ptab = (lpTable) GetWindowLongPtr(hwnd, WL_TABLE);
+        if (ptab != NULL)
+        {
+            gtab_newsize(hwnd, ptab);
+            gtab_sendtq(hwnd, TQ_SHOWWHITESPACE, (LPARAM) &ptab->show_whitespace);
+        }
+        InvalidateRect(hwnd, NULL, TRUE);
+        break;
+
+    case TM_SELECT:
+        ptab = (lpTable) GetWindowLongPtr(hwnd, WL_TABLE);
+        if (ptab != NULL)
+        {
+            pselect = (lpTableSelection) lParam;
+
+            gtab_select(hwnd, ptab, pselect->startrow,
+                        pselect->startcell,
+                        pselect->nrows,
+                        pselect->ncells,
+                        TRUE);
+            gtab_showsel_middle(hwnd, ptab, pselect->dyRowsFromTop);
+        }
+        break;
+
+    case TM_GETSELECTION:
+        ptab = (lpTable) GetWindowLongPtr(hwnd, WL_TABLE);
+        if (ptab != NULL)
+        {
+            pselect = (lpTableSelection) lParam;
+
+            *pselect = ptab->select;
+        }
+        break;
+
+    case TM_PRINT:
+        ptab = (lpTable) GetWindowLongPtr(hwnd, WL_TABLE);
+        if (ptab != NULL)
+        {
+            return gtab_print(hwnd, ptab, (lpPrintContext) lParam);
+        }
+        return FALSE;
+
+    case TM_SETTABWIDTH:
+        ptab = (lpTable) GetWindowLongPtr(hwnd, WL_TABLE);
+        if (!ptab)
+            return 0;
+        ptab->tabchars = (int)lParam;
+        InvalidateRect(hwnd, NULL, FALSE);
+        break;
+
+    case TM_TOPROW:
+
+        /* return top row. if wParam is TRUE, set lParam
+         * as the new toprow
+         */
+        ptab = (lpTable) GetWindowLongPtr(hwnd, WL_TABLE);
+        if (ptab == NULL)
+        {
+            return(0);
+        }
+        oldtop = ptab->toprow;
+        if ((wParam) && (lParam < ptab->hdr.nrows))
+        {
+            change = (long)lParam - ptab->toprow;
+            change -= ptab->hdr.fixedrows;
+            gtab_dovscroll(hwnd, ptab, change);
+        }
+        return(oldtop);
+
+    case TM_ENDROW:
+        /* return the last visible row in the window */
+        ptab = (lpTable) GetWindowLongPtr(hwnd, WL_TABLE);
+        if (ptab == NULL)
+        {
+            return(0);
+        }
+        return(ptab->nlines + ptab->toprow - 1);
+
+
+    case TM_APPEND:
+        /* new rows have been added to the end of the
+         * table, but the rest of the table has not
+         * been changed. Update without forcing redraw of
+         * everything.
+         * lParam contains the new total nr of rows
+         */
+        ptab = (lpTable) GetWindowLongPtr(hwnd, WL_TABLE);
+        if (ptab != NULL)
+        {
+            gtab_append(hwnd, ptab, (int) wParam, (DWORD_PTR)lParam);
+            return(TRUE);
+        }
+        break;
+
+    case WM_SIZE:
+        ptab = (lpTable) GetWindowLongPtr(hwnd, WL_TABLE);
+        if (ptab != NULL)
+        {
+            gtab_setsize(hwnd, ptab);
+        }
+        break;
+
+    case WM_ERASEBKGND:
+        return TRUE;
+
+    case WM_DESTROY:
+        ptab = (lpTable) GetWindowLongPtr(hwnd, WL_TABLE);
+        if (ptab != NULL)
+        {
+            gtab_sendtq(hwnd, TQ_CLOSE, ptab->hdr.id);
+            gtab_deltable(hwnd, ptab);
+        }
+        break;
+
+    case WM_SYSCOLORCHANGE:
+        InvalidateRect(hwnd, NULL, TRUE);
+        break;
+
+    case WM_PAINT:
+        gtab_paint(hwnd);
+        break;
+
+    case WM_HSCROLL:
+        ptab = (lpTable) GetWindowLongPtr(hwnd, WL_TABLE);
+        if (ptab != NULL)
+        {
+            gtab_msg_hscroll(hwnd, ptab,
+                             GET_SCROLL_OPCODE(wParam, lParam),
+                             GET_SCROLL_POS(wParam, lParam));
+        }
+        break;
+
+    case WM_VSCROLL:
+        ptab = (lpTable) GetWindowLongPtr(hwnd, WL_TABLE);
+        if (ptab != NULL)
+        {
+            gtab_msg_vscroll(hwnd, ptab,
+                             GET_SCROLL_OPCODE(wParam, lParam),
+                             GET_SCROLL_POS(wParam, lParam));
+        }
+        break;
+
+    case WM_MOUSEMOVE:
+        ptab = (lpTable) GetWindowLongPtr(hwnd, WL_TABLE);
+        if (ptab != NULL)
+        {
+            gtab_move(hwnd, ptab, (int)(short)LOWORD(lParam), (int)(short)HIWORD(lParam));
+        }
+        else
+        {
+            SetCursor((HCURSOR)hNormCurs);
+        }
+        break;
+
+    case WM_LBUTTONDOWN:
+        ptab = (lpTable) GetWindowLongPtr(hwnd, WL_TABLE);
+        if (ptab != NULL)
+        {
+            gtab_press(hwnd, ptab, (int)(short)LOWORD(lParam), (int)(short)HIWORD(lParam));
+        }
+        break;
+
+    case WM_RBUTTONDOWN:
+        ptab = (lpTable) GetWindowLongPtr(hwnd, WL_TABLE);
+        if (ptab != NULL)
+        {
+            gtab_rightclick(hwnd, ptab, (int)(short)LOWORD(lParam), (int)(short)HIWORD(lParam));
+        }
+        break;
+
+    case WM_LBUTTONUP:
+        ptab = (lpTable) GetWindowLongPtr(hwnd, WL_TABLE);
+        if (ptab != NULL)
+        {
+            gtab_release(hwnd, ptab,
+                         (int)(short)LOWORD(lParam), (int)(short)HIWORD(lParam));
+        }
+        break;
+
+    case WM_LBUTTONDBLCLK:
+        ptab = (lpTable) GetWindowLongPtr(hwnd, WL_TABLE);
+        if (ptab != NULL)
+        {
+            gtab_dblclick(hwnd, ptab,
+                          (int)(short)LOWORD(lParam), (int)(short)HIWORD(lParam));
+        }
+        break;
+
+    case WM_KEYDOWN:
+        /* handle key presses for cursor movement about
+         * the table, and return/space for selection.
+         * Any key we don't handle is passed to the owner window
+         * for him to handle.
+         * The table window should have the focus
+         */
+        ptab = (lpTable) GetWindowLongPtr(hwnd, WL_TABLE);
+        if (ptab != NULL)
+        {
+            if (gtab_key(hwnd, ptab, (int)wParam) != 0)
+            {
+                hOwner = (HWND) GetWindowLongPtr(hwnd, WW_OWNER);
+                return(SendMessage(hOwner, WM_KEYDOWN, wParam, lParam));
             }
-            if ( (ptab = gtab_buildtable(hwnd, (DWORD_PTR)lParam)) != NULL) {
-                SetWindowLongPtr(hwnd, WL_TABLE, (LONG_PTR) ptab);
-                gtab_setsize(hwnd, ptab);
-            } else {
-                SetScrollRange(hwnd, SB_VERT, 0, 0, TRUE);
-                SetScrollRange(hwnd, SB_HORZ, 0, 0, TRUE);
-            }
-            InvalidateRect(hwnd, NULL, TRUE);
-            break;
-
-        case TM_NEWLAYOUT:
-            /* change of layout but for same id. no TQ_CLOSE,
-             * but otherwise same as TM_NEWID
-             */
-            ptab = (lpTable) GetWindowLongPtr(hwnd, WL_TABLE);
-            if (ptab != NULL) {
-                gtab_deltable(hwnd, ptab);
-                SetCursor((HCURSOR)hNormCurs);
-                SetWindowLongPtr(hwnd, WL_TABLE, 0);
-            }
-            if ( (ptab = gtab_buildtable(hwnd, (DWORD_PTR)lParam)) != NULL) {
-                SetWindowLongPtr(hwnd, WL_TABLE, (LONG_PTR) ptab);
-                gtab_setsize(hwnd, ptab);
-            } else {
-                SetScrollRange(hwnd, SB_VERT, 0, 0, TRUE);
-                SetScrollRange(hwnd, SB_HORZ, 0, 0, TRUE);
-            }
-            InvalidateRect(hwnd, NULL, TRUE);
-            break;
-
-        case TM_REFRESH:
-            /* data in table has changed. nrows may have
-             * changed. ncols and col types have not changed
-             */
-            ptab = (lpTable) GetWindowLongPtr(hwnd, WL_TABLE);
-            if (ptab != NULL) {
-                gtab_newsize(hwnd, ptab);
-                gtab_sendtq(hwnd, TQ_SHOWWHITESPACE, (LPARAM) &ptab->show_whitespace);
-            }
-            InvalidateRect(hwnd, NULL, TRUE);
-            break;
-
-        case TM_SELECT:
-            ptab = (lpTable) GetWindowLongPtr(hwnd, WL_TABLE);
-            if (ptab != NULL) {
-                pselect = (lpTableSelection) lParam;
-
-                gtab_select(hwnd, ptab, pselect->startrow,
-                            pselect->startcell,
-                            pselect->nrows,
-                            pselect->ncells,
-                            TRUE);
-                gtab_showsel_middle(hwnd, ptab, pselect->dyRowsFromTop);
-            }
-            break;
-
-        case TM_GETSELECTION:
-            ptab = (lpTable) GetWindowLongPtr(hwnd, WL_TABLE);
-            if (ptab != NULL) {
-                pselect = (lpTableSelection) lParam;
-
-                *pselect = ptab->select;
-            }
-            break;
-
-        case TM_PRINT:
-            ptab = (lpTable) GetWindowLongPtr(hwnd, WL_TABLE);
-            if (ptab != NULL) {
-                return gtab_print(hwnd, ptab, (lpPrintContext) lParam);
-            }
-            return FALSE;
-
-        case TM_SETTABWIDTH:
-            ptab = (lpTable) GetWindowLongPtr(hwnd, WL_TABLE);
-            if (!ptab)
-                return 0;
-            ptab->tabchars = (int)lParam;
-            InvalidateRect(hwnd, NULL, FALSE);
-            break;
-
-        case TM_TOPROW:
-
-            /* return top row. if wParam is TRUE, set lParam
-             * as the new toprow
-             */
-            ptab = (lpTable) GetWindowLongPtr(hwnd, WL_TABLE);
-            if (ptab == NULL) {
+            else
+            {
                 return(0);
             }
-            oldtop = ptab->toprow;
-            if ((wParam) && (lParam < ptab->hdr.nrows)) {
-                change = (long)lParam - ptab->toprow;
-                change -= ptab->hdr.fixedrows;
-                gtab_dovscroll(hwnd, ptab, change);
-            }
-            return(oldtop);
-
-        case TM_ENDROW:
-            /* return the last visible row in the window */
-            ptab = (lpTable) GetWindowLongPtr(hwnd, WL_TABLE);
-            if (ptab == NULL) {
-                return(0);
-            }
-            return(ptab->nlines + ptab->toprow - 1);
-
-
-        case TM_APPEND:
-            /* new rows have been added to the end of the
-             * table, but the rest of the table has not
-             * been changed. Update without forcing redraw of
-             * everything.
-             * lParam contains the new total nr of rows
-             */
-            ptab = (lpTable) GetWindowLongPtr(hwnd, WL_TABLE);
-            if (ptab != NULL) {
-                gtab_append(hwnd, ptab, (int) wParam, (DWORD_PTR)lParam);
-                return(TRUE);
-            }
-            break;
-
-        case WM_SIZE:
-            ptab = (lpTable) GetWindowLongPtr(hwnd, WL_TABLE);
-            if (ptab != NULL) {
-                gtab_setsize(hwnd, ptab);
-            }
-            break;
-
-        case WM_ERASEBKGND:
-            return TRUE;
-
-        case WM_DESTROY:
-            ptab = (lpTable) GetWindowLongPtr(hwnd, WL_TABLE);
-            if (ptab != NULL) {
-                gtab_sendtq(hwnd, TQ_CLOSE, ptab->hdr.id);
-                gtab_deltable(hwnd, ptab);
-            }
-            break;
-
-        case WM_SYSCOLORCHANGE:
-            InvalidateRect(hwnd, NULL, TRUE);
-            break;
-
-        case WM_PAINT:
-            gtab_paint(hwnd);
-            break;
-
-        case WM_HSCROLL:
-            ptab = (lpTable) GetWindowLongPtr(hwnd, WL_TABLE);
-            if (ptab != NULL) {
-                gtab_msg_hscroll(hwnd, ptab,
-                                 GET_SCROLL_OPCODE(wParam, lParam),
-                                 GET_SCROLL_POS(wParam, lParam));
-            }
-            break;
-
-        case WM_VSCROLL:
-            ptab = (lpTable) GetWindowLongPtr(hwnd, WL_TABLE);
-            if (ptab != NULL) {
-                gtab_msg_vscroll(hwnd, ptab,
-                                 GET_SCROLL_OPCODE(wParam, lParam),
-                                 GET_SCROLL_POS(wParam, lParam));
-            }
-            break;
-
-        case WM_MOUSEMOVE:
-            ptab = (lpTable) GetWindowLongPtr(hwnd, WL_TABLE);
-            if (ptab != NULL) {
-                gtab_move(hwnd, ptab, (int)(short)LOWORD(lParam), (int)(short)HIWORD(lParam));
-            } else {
-                SetCursor((HCURSOR)hNormCurs);
-            }
-            break;
-
-        case WM_LBUTTONDOWN:
-            ptab = (lpTable) GetWindowLongPtr(hwnd, WL_TABLE);
-            if (ptab != NULL) {
-                gtab_press(hwnd, ptab, (int)(short)LOWORD(lParam), (int)(short)HIWORD(lParam));
-            }
-            break;
-
-        case WM_RBUTTONDOWN:
-            ptab = (lpTable) GetWindowLongPtr(hwnd, WL_TABLE);
-            if (ptab != NULL) {
-                gtab_rightclick(hwnd, ptab, (int)(short)LOWORD(lParam), (int)(short)HIWORD(lParam));
-            }
-            break;
-
-        case WM_LBUTTONUP:
-            ptab = (lpTable) GetWindowLongPtr(hwnd, WL_TABLE);
-            if (ptab != NULL) {
-                gtab_release(hwnd, ptab,
-                             (int)(short)LOWORD(lParam), (int)(short)HIWORD(lParam));
-            }
-            break;
-
-        case WM_LBUTTONDBLCLK:
-            ptab = (lpTable) GetWindowLongPtr(hwnd, WL_TABLE);
-            if (ptab != NULL) {
-                gtab_dblclick(hwnd, ptab,
-                              (int)(short)LOWORD(lParam), (int)(short)HIWORD(lParam));
-            }
-            break;
-
-        case WM_KEYDOWN:
-            /* handle key presses for cursor movement about
-             * the table, and return/space for selection.
-             * Any key we don't handle is passed to the owner window
-             * for him to handle.
-             * The table window should have the focus
-             */
-            ptab = (lpTable) GetWindowLongPtr(hwnd, WL_TABLE);
-            if (ptab != NULL) {
-                if (gtab_key(hwnd, ptab, (int)wParam) != 0) {
-                    hOwner = (HWND) GetWindowLongPtr(hwnd, WW_OWNER);
-                    return(SendMessage(hOwner, WM_KEYDOWN, wParam, lParam));
-                } else {
-                    return(0);
-                }
-            }
-            break;
+        }
+        break;
 
 #ifdef WM_MOUSEWHEEL
-        case WM_MOUSEWHEEL:
-            ptab = (lpTable)GetWindowLongPtr(hwnd, WL_TABLE);
-            if (ptab != NULL) {
-                if (gtab_mousewheel(hwnd,ptab, LOWORD(wParam), (short)HIWORD(wParam))) {
-                    hOwner = (HWND)GetWindowLongPtr(hwnd, WW_OWNER);
-                    return SendMessage(hOwner, WM_MOUSEWHEEL, wParam, lParam);
-                }
+    case WM_MOUSEWHEEL:
+        ptab = (lpTable)GetWindowLongPtr(hwnd, WL_TABLE);
+        if (ptab != NULL)
+        {
+            if (gtab_mousewheel(hwnd,ptab, LOWORD(wParam), (short)HIWORD(wParam)))
+            {
+                hOwner = (HWND)GetWindowLongPtr(hwnd, WW_OWNER);
+                return SendMessage(hOwner, WM_MOUSEWHEEL, wParam, lParam);
             }
-            break;
+        }
+        break;
 #endif
 
-        default:
-            return(DefWindowProc(hwnd, msg, wParam, lParam));
+    default:
+        return(DefWindowProc(hwnd, msg, wParam, lParam));
     }
     return(TRUE);
 }
@@ -373,10 +410,10 @@ gtab_wndproc(
  */
 INT_PTR
 gtab_sendtq(
-           HWND hwnd,
-           UINT cmd,
-           LPARAM lParam
-           )
+    HWND hwnd,
+    UINT cmd,
+    LPARAM lParam
+)
 {
     HWND hOwner;
 
@@ -391,8 +428,8 @@ gtab_sendtq(
  */
 void
 gtab_freelinedata(
-                 lpTable ptab
-                 )
+    lpTable ptab
+)
 {
     int i, j, ncols;
     lpCellData cd;
@@ -401,16 +438,18 @@ gtab_freelinedata(
     ncols = ptab->hdr.ncols;
 
     /* for each line */
-    for (i = 0; i < ptab->nlines; i++) {
+    for (i = 0; i < ptab->nlines; i++)
+    {
         /* for each cell */
-        for (j = 0; j < ncols; j++) {
+        for (j = 0; j < ncols; j++)
+        {
             /* free up the actual text space */
             cd = &ptab->pdata[i].pdata[j];
             HeapFree(GetProcessHeap(), NULL, cd->ptext);
             HeapFree(GetProcessHeap(), NULL, cd->pwzText);
         }
         /* dealloc array of CellData */
-        HeapFree(GetProcessHeap(), NULL, ptab->pdata[i].pdata);                
+        HeapFree(GetProcessHeap(), NULL, ptab->pdata[i].pdata);
     }
     /* de-alloc array of linedatas */
     HeapFree(GetProcessHeap(), NULL, ptab->pdata);
@@ -422,35 +461,41 @@ gtab_freelinedata(
  */
 BOOL
 gtab_alloclinedata(
-                  HWND hwnd,
-                  lpTable ptab
-                  )
+    HWND hwnd,
+    lpTable ptab
+)
 {
     lpLineData pline;
     lpCellData cd;
     int i, j;
 
     ptab->pdata = (lpLineData) HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY,
-                                        sizeof(LineData) * ptab->nlines);
-    if (ptab->pdata == NULL) {
+                                         sizeof(LineData) * ptab->nlines);
+    if (ptab->pdata == NULL)
+    {
         return(FALSE);
     }
-    for (i = 0; i < ptab->nlines; i++) {
+    for (i = 0; i < ptab->nlines; i++)
+    {
         pline = &ptab->pdata[i];
         pline->linepos.size = ptab->rowheight;
         pline->pdata = (lpCellData) HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY,
-                                             sizeof(CellData) * ptab->hdr.ncols);
-        if (pline->pdata == NULL) {
+                                              sizeof(CellData) * ptab->hdr.ncols);
+        if (pline->pdata == NULL)
+        {
             return(FALSE);
         }
-        for (j = 0; j < ptab->hdr.ncols; j++) {
+        for (j = 0; j < ptab->hdr.ncols; j++)
+        {
             cd = &pline->pdata[j];
             cd->props.valid = 0;
             cd->flags = 0;
             cd->nchars = ptab->pcolhdr[j].nchars;
-            if (cd->nchars > 0) {
+            if (cd->nchars > 0)
+            {
                 cd->ptext = (char*)HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, cd->nchars);
-                if (cd->ptext == NULL) {
+                if (cd->ptext == NULL)
+                {
                     return(FALSE);
                 }
                 cd->pwzText = 0;
@@ -465,24 +510,28 @@ gtab_alloclinedata(
  */
 void
 gtab_deltable(
-             HWND hwnd,
-             lpTable ptab
-             )
+    HWND hwnd,
+    lpTable ptab
+)
 {
     int ncols;
 
-    if (ptab == NULL) {
+    if (ptab == NULL)
+    {
         return;
     }
     ncols = ptab->hdr.ncols;
 
-    if (ptab->pcolhdr != NULL) {
+    if (ptab->pcolhdr != NULL)
+    {
         HeapFree(GetProcessHeap(), NULL, ptab->pcolhdr);
     }
-    if (ptab->pcellpos != NULL) {
+    if (ptab->pcellpos != NULL)
+    {
         HeapFree(GetProcessHeap(), NULL, ptab->pcellpos);
     }
-    if (ptab->pdata != NULL) {
+    if (ptab->pdata != NULL)
+    {
         gtab_freelinedata(ptab);
     }
     HeapFree(GetProcessHeap(), NULL, ptab);
@@ -496,26 +545,29 @@ gtab_deltable(
  */
 lpTable
 gtab_buildtable(
-               HWND hwnd,
-               DWORD_PTR id
-               )
+    HWND hwnd,
+    DWORD_PTR id
+)
 {
     lpTable ptab;
     int ncols, i;
     ColPropsList cplist;
 
     ptab = (lpTable) HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(Table));
-    if (ptab == NULL) {
+    if (ptab == NULL)
+    {
         return(NULL);
     }
 
     // get the tab width. most clients will not support this
-    if (gtab_sendtq(hwnd, TQ_TABS, (LPARAM) &ptab->tabchars) == FALSE) {
+    if (gtab_sendtq(hwnd, TQ_TABS, (LPARAM) &ptab->tabchars) == FALSE)
+    {
         ptab->tabchars = TABWIDTH_DEFAULT;
     }
 
     // get the show whitespace value
-    if (gtab_sendtq(hwnd, TQ_SHOWWHITESPACE, (LPARAM) &ptab->show_whitespace) == FALSE) {
+    if (gtab_sendtq(hwnd, TQ_SHOWWHITESPACE, (LPARAM) &ptab->show_whitespace) == FALSE)
+    {
         ptab->show_whitespace = FALSE;
     }
 
@@ -523,19 +575,22 @@ gtab_buildtable(
     ptab->hdr.id = id;
     ptab->hdr.props.valid = 0;
     ptab->hdr.sendscroll = FALSE;
-    if (gtab_sendtq(hwnd, TQ_GETSIZE, (LPARAM) &ptab->hdr) == FALSE) {
+    if (gtab_sendtq(hwnd, TQ_GETSIZE, (LPARAM) &ptab->hdr) == FALSE)
+    {
         return(NULL);
     }
 
     ncols = ptab->hdr.ncols;
     ptab->pcolhdr = (lpColProps) HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(ColProps) * ncols);
-    if (ptab->pcolhdr == NULL) {
+    if (ptab->pcolhdr == NULL)
+    {
         /* should prob send TQ_CLOSE at this point */
         return(NULL);
     }
 
     /* init col properties to default */
-    for (i=0; i < ncols; i++) {
+    for (i=0; i < ncols; i++)
+    {
         ptab->pcolhdr[i].props.valid = 0;
         ptab->pcolhdr[i].nchars = 0;
     }
@@ -548,7 +603,8 @@ gtab_buildtable(
 
     /* init remaining fields */
     ptab->pcellpos = (lpCellPos) HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(CellPos) * ncols);
-    if (ptab->pcellpos == NULL) {
+    if (ptab->pcellpos == NULL)
+    {
         return(NULL);
     }
 
@@ -582,9 +638,9 @@ gtab_buildtable(
  */
 void
 gtab_setsize(
-            HWND hwnd,
-            lpTable ptab
-            )
+    HWND hwnd,
+    lpTable ptab
+)
 {
     RECT rc;
     int nlines;
@@ -600,10 +656,12 @@ gtab_setsize(
     nlines += 1;
 
     /* alloc space for nlines of data - if nlines has changed */
-    if (nlines != ptab->nlines) {
+    if (nlines != ptab->nlines)
+    {
         gtab_freelinedata(ptab);
         ptab->nlines = nlines;
-        if (!gtab_alloclinedata(hwnd, ptab)) {
+        if (!gtab_alloclinedata(hwnd, ptab))
+        {
             ptab->nlines = 0;
             return;
         }
@@ -616,19 +674,25 @@ gtab_setsize(
     /* set scroll vertical range */
     si.nMax = ptab->hdr.nrows;
     si.nPage = ptab->nlines;
-    if (si.nMax < 0) {
+    if (si.nMax < 0)
+    {
         si.nMax = 0;
         change =  -(ptab->toprow);
-    } else if (ptab->toprow > si.nMax) {
+    }
+    else if (ptab->toprow > si.nMax)
+    {
         change = si.nMax - ptab->toprow;
-    } else {
+    }
+    else
+    {
         change = 0;
     }
     /* the scroll range must be 16-bits for Win3
      * scale until this is true
      */
     ptab->scrollscale = 1;
-    while (si.nMax > 32766) {
+    while (si.nMax > 32766)
+    {
         ptab->scrollscale *= 16;
         si.nMax /= 16;
         si.nPage /= 16;
@@ -642,12 +706,17 @@ gtab_setsize(
     /* set horz scroll range */
     si.nMax = ptab->rowwidth;
     si.nPage = ptab->winwidth;
-    if (si.nMax < 0) {
+    if (si.nMax < 0)
+    {
         si.nMax = 0;
         change = -(ptab->scroll_dx);
-    } else if (ptab->scroll_dx > si.nMax) {
+    }
+    else if (ptab->scroll_dx > si.nMax)
+    {
         change = si.nMax - ptab->scroll_dx;
-    } else {
+    }
+    else
+    {
         change = 0;
     }
     /* horz scroll range will always be < 16 bits */
@@ -661,9 +730,9 @@ gtab_setsize(
  */
 void
 gtab_calcwidths(
-               HWND hwnd,
-               lpTable ptab
-               )
+    HWND hwnd,
+    lpTable ptab
+)
 {
     int i, cxtotal, cx, ave;
     TEXTMETRIC tm = {0};
@@ -679,11 +748,13 @@ gtab_calcwidths(
     {
         GetTextMetrics(hdc, &tm);
         ptab->rowheight = tm.tmHeight + tm.tmExternalLeading;
-        if (hdrprops->valid & P_FONT) {
+        if (hdrprops->valid & P_FONT)
+        {
             hfont = (HFONT)SelectObject(hdc, hdrprops->hFont);
         }
         GetTextMetrics(hdc, &tm);
-        if (hdrprops->valid & P_FONT) {
+        if (hdrprops->valid & P_FONT)
+        {
             SelectObject(hdc, hfont);
         }
         ReleaseDC(hwnd, hdc);
@@ -699,7 +770,8 @@ gtab_calcwidths(
     /* get width and height of average character */
     ptab->avewidth = tm.tmAveCharWidth;
     if (tm.tmHeight + tm.tmExternalLeading < ptab->rowheight - 2 ||
-        tm.tmHeight + tm.tmExternalLeading > ptab->rowheight) {
+            tm.tmHeight + tm.tmExternalLeading > ptab->rowheight)
+    {
         // make sure that the default FixedSys (and anything of similar size)
         // doesn't vertically clip the System font used for line numbers,
         // filenames, etc.
@@ -709,7 +781,8 @@ gtab_calcwidths(
         else
             ptab->rowheight++;
     }
-    if (hdrprops->valid & P_HEIGHT) {
+    if (hdrprops->valid & P_HEIGHT)
+    {
         ptab->rowheight = hdrprops->height;
     }
 
@@ -717,16 +790,23 @@ gtab_calcwidths(
      * based on ave width * nr chars, unless P_WIDTH set
      */
     cxtotal = 0;
-    for (i = 0; i < ptab->hdr.ncols; i++) {
+    for (i = 0; i < ptab->hdr.ncols; i++)
+    {
         cellprops = &ptab->pcolhdr[i].props;
 
-        if (cellprops->valid & P_WIDTH) {
+        if (cellprops->valid & P_WIDTH)
+        {
             cx = cellprops->width;
-        } else if (hdrprops->valid & P_WIDTH) {
+        }
+        else if (hdrprops->valid & P_WIDTH)
+        {
             cx = hdrprops->width;
-        } else {
+        }
+        else
+        {
 
-            if (cellprops->valid & P_FONT) {
+            if (cellprops->valid & P_FONT)
+            {
                 hdc = GetDC(hwnd);
                 if (hdc)
                 {
@@ -737,8 +817,10 @@ gtab_calcwidths(
                     ave = tmcol.tmAveCharWidth;
                 }
                 else
-                    ave = 5;       
-            } else {
+                    ave = 5;
+            }
+            else
+            {
                 ave = ptab->avewidth;
             }
             /* ave width * nchars */
@@ -758,16 +840,17 @@ gtab_calcwidths(
  */
 void
 gtab_newsize(
-            HWND hwnd,
-            lpTable ptab
-            )
+    HWND hwnd,
+    lpTable ptab
+)
 {
     TableHdr hdr;
 
     /* get new row count */
     hdr = ptab->hdr;
     gtab_sendtq(hwnd, TQ_GETSIZE, (LPARAM) &hdr);
-    if (hdr.nrows != ptab->hdr.nrows) {
+    if (hdr.nrows != ptab->hdr.nrows)
+    {
         ptab->hdr.nrows = hdr.nrows;
         gtab_setsize(hwnd, ptab);
     }
@@ -779,16 +862,18 @@ gtab_newsize(
 
 void
 gtab_invallines(
-               HWND hwnd,
-               lpTable ptab,
-               int start,
-               int count
-               )
+    HWND hwnd,
+    lpTable ptab,
+    int start,
+    int count
+)
 {
     int i, j;
 
-    for (i = start; i < start + count; i++) {
-        for (j = 0; j < ptab->hdr.ncols; j++) {
+    for (i = start; i < start + count; i++)
+    {
+        for (j = 0; j < ptab->hdr.ncols; j++)
+        {
             ptab->pdata[i].pdata[j].flags = 0;
         }
     }
@@ -801,11 +886,11 @@ gtab_invallines(
  */
 void
 gtab_append(
-           HWND hwnd,
-           lpTable ptab,
-           int rows,
-           DWORD_PTR id
-           )
+    HWND hwnd,
+    lpTable ptab,
+    int rows,
+    DWORD_PTR id
+)
 {
     long oldrows;
     int line, nupdates;
@@ -824,7 +909,8 @@ gtab_append(
 
     /* check that the new nr of rows is not smaller.
      */
-    if (oldrows >= rows) {
+    if (oldrows >= rows)
+    {
         return;
     }
 
@@ -837,13 +923,15 @@ gtab_append(
     /* set the vertical scroll range */
     si.nMax = rows;
     si.nPage = ptab->nlines;
-    if (si.nMax < 0) {
+    if (si.nMax < 0)
+    {
         si.nMax = 0;
     }
 
     /* force the scroll range into 16-bits for win 3.1 */
     ptab->scrollscale = 1;
-    while (si.nMax > 32766) {
+    while (si.nMax > 32766)
+    {
         ptab->scrollscale *= 16;
         si.nMax /= 16;
         si.nPage /= 16;
@@ -853,7 +941,8 @@ gtab_append(
 
     /* now set the scroll bar range and position */
     SetScrollInfo(hwnd, SB_VERT, &si, TRUE);
-    if (si.nMax > 0) {
+    if (si.nMax > 0)
+    {
         SetScrollPos(hwnd, SB_VERT,
                      (int) (ptab->toprow / ptab->scrollscale), TRUE);
     }
@@ -862,7 +951,8 @@ gtab_append(
      * screen line the start of the new section is at
      */
     line = gtab_rowtoline(hwnd, ptab, oldrows);
-    if (line == -1) {
+    if (line == -1)
+    {
         /* not visible -> no more to do */
         return;
     }

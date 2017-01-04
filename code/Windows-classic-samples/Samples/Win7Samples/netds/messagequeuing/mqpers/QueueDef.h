@@ -1,4 +1,4 @@
-//
+﻿//
 // Defines the queue label and path
 //
 #define STR_QUEUE_NAME	L".\\IStreamTest"
@@ -17,8 +17,15 @@ void dump_com_error(_com_error &e)
 }
 
 
-struct InitOle {
-    InitOle() { CoInitialize(NULL); }   // Initialize Component Object Model(COM) library
-    ~InitOle() { CoUninitialize(); }	// Uninitialize Component Object Model(COM) library
+struct InitOle
+{
+    InitOle()
+    {
+        CoInitialize(NULL);    // Initialize Component Object Model(COM) library
+    }
+    ~InitOle()
+    {
+        CoUninitialize();    // Uninitialize Component Object Model(COM) library
+    }
 };
 

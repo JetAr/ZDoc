@@ -1,12 +1,12 @@
-//-----------------------------------------------------------------------
+﻿//-----------------------------------------------------------------------
 // This file is part of the Windows SDK Code Samples.
-// 
+//
 // Copyright (C) Microsoft Corporation.  All rights reserved.
-// 
+//
 // This source code is intended only as a supplement to Microsoft
 // Development Tools and/or on-line documentation.  See these other
 // materials for detailed information regarding Microsoft code samples.
-// 
+//
 // THIS CODE AND INFORMATION ARE PROVIDED AS IS WITHOUT WARRANTY OF ANY
 // KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
 // IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -42,9 +42,9 @@ public:
         m_cref = 1;
     }
     // Destructor
-	virtual ~DateXmlResolver() {}
+    virtual ~DateXmlResolver() {}
 
-  // IUnknown interface
+    // IUnknown interface
     virtual HRESULT STDMETHODCALLTYPE QueryInterface(REFIID riid, __RPC__deref_out _Result_nullonfailure_ void __RPC_FAR *__RPC_FAR *ppvObject)
     {
         if (ppvObject == NULL)
@@ -54,7 +54,7 @@ public:
         (*ppvObject) = NULL;
 
         if (riid == __uuidof(IUnknown) ||
-            riid == __uuidof(IXmlResolver))
+                riid == __uuidof(IXmlResolver))
         {
             *ppvObject = static_cast<IXmlResolver *>(this);
         }
@@ -83,11 +83,11 @@ public:
         return cref;
     }
 
-  // IXmlResolver interface
+    // IXmlResolver interface
     virtual HRESULT STDMETHODCALLTYPE ResolveUri(_In_opt_ LPCWSTR,
-        _In_opt_ LPCWSTR ,
-        _In_opt_ LPCWSTR  pwszSystemIdentifier,
-        _Out_ IUnknown ** ppResolvedInput)
+            _In_opt_ LPCWSTR,
+            _In_opt_ LPCWSTR  pwszSystemIdentifier,
+            _Out_ IUnknown ** ppResolvedInput)
     {
         IStream *pstream = NULL;
         HRESULT hr;
@@ -215,7 +215,7 @@ int __cdecl wmain(int argc, _In_reads_(argc) WCHAR* argv[])
     const WCHAR* pwszLocalName;
     const WCHAR* pwszValue;
     UINT cwchPrefix;
-	DateXmlResolver* pXMLResolver = NULL; 
+    DateXmlResolver* pXMLResolver = NULL;
 
     if (argc != 2)
     {
@@ -223,7 +223,7 @@ int __cdecl wmain(int argc, _In_reads_(argc) WCHAR* argv[])
         return 0;
     }
 
-    #pragma warning(suppress: 28197)   //pXMLResolver will be deleted by SAFE_RELEASE(pXMLResolver) below
+#pragma warning(suppress: 28197)   //pXMLResolver will be deleted by SAFE_RELEASE(pXMLResolver) below
     pXMLResolver = new DateXmlResolver();
     //Open read-only input stream
     if (FAILED(hr = SHCreateStreamOnFile(argv[1], STGM_READ, &pFileStream)))
@@ -237,14 +237,14 @@ int __cdecl wmain(int argc, _In_reads_(argc) WCHAR* argv[])
         wprintf(L"Error creating xml reader, error is %08.8lx", hr);
         HR(hr);
     }
-   
+
     if (FAILED(hr = pReader->SetProperty(XmlReaderProperty_DtdProcessing, DtdProcessing_Parse)))
     {
         wprintf(L"Error setting XmlReaderProperty_DtdProcessing, error is %08.8lx", hr);
         HR(hr);
     }
 
-	 if (FAILED(hr = pReader->SetProperty(XmlReaderProperty_XmlResolver, (LONG_PTR)pXMLResolver)))
+    if (FAILED(hr = pReader->SetProperty(XmlReaderProperty_XmlResolver, (LONG_PTR)pXMLResolver)))
     {
         wprintf(L"Error setting XmlReaderProperty_XmlResolver, error is %08.8lx", hr);
         HR(hr);

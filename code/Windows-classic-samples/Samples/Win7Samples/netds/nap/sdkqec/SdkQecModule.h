@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 
@@ -32,7 +32,7 @@ static const wchar_t  QEC_VENDOR_NAME[] = L"Microsoft";
 static const UINT32 NapSdkQecId = 0x000137F1;
 
 // CLSID_INFO is assigned a dummy value since INapComponentInfo interface
-// is not implemented for the SDK QEC sample 
+// is not implemented for the SDK QEC sample
 static const GUID CLSID_INFO =
 { 0x00000000, 0x0000, 0x0000, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01 };
 

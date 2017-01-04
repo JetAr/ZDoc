@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -13,7 +13,7 @@
 #define _USE_MATH_DEFINES
 #include <math.h>
 
-// Attract interpolator 
+// Attract interpolator
 
 class CAttractInterpolator :
     public CUIAnimationInterpolatorBase<CAttractInterpolator>
@@ -23,7 +23,7 @@ public:
     // IUIAnimationInterpolator
 
     // Sets the interpolator's initial value and velocity
-    
+
     IFACEMETHODIMP
     SetInitialValueAndVelocity
     (
@@ -38,7 +38,7 @@ public:
 
         m_duration =
             (-m_initialVelocity + (m_acceleration < 0.0 ? -1.0 : 1.0) *
-                sqrt((m_initialVelocity * m_initialVelocity) + (2.0 * m_acceleration * (m_finalValue - m_initialValue))))
+             sqrt((m_initialVelocity * m_initialVelocity) + (2.0 * m_acceleration * (m_finalValue - m_initialValue))))
             / m_acceleration;
 
         return S_OK;
@@ -54,7 +54,7 @@ public:
     {
         // This should not be called, since no duration dependencies were declared
 
-        return E_FAIL;            
+        return E_FAIL;
     }
 
     // Gets the interpolator's duration
@@ -64,9 +64,9 @@ public:
     (
         UI_ANIMATION_SECONDS *pDuration                             // The interpolator duration
     )
-    {   
+    {
         *pDuration = m_duration;
-    
+
         return S_OK;
     }
 
@@ -77,9 +77,9 @@ public:
     (
         DOUBLE *pValue                                              // The final value
     )
-    {        
+    {
         *pValue = m_finalValue;
-        
+
         return S_OK;
     }
 
@@ -123,7 +123,7 @@ public:
     {
         // The final value of the interpolator is not affected by the initial value or velocity, but
         // the intermediate values, final velocity and duration all are affected
-    
+
         *pDependenciesInitialValue =
             UI_ANIMATION_DEPENDENCY_INTERMEDIATE_VALUES |
             UI_ANIMATION_DEPENDENCY_FINAL_VELOCITY |
@@ -135,9 +135,9 @@ public:
             UI_ANIMATION_DEPENDENCY_DURATION;
 
         // This interpolator does not have a duration parameter, so SetDuration should not be called on it
-        
+
         *pDependenciesDuration = UI_ANIMATION_DEPENDENCY_NONE;
-        
+
         return S_OK;
     }
 
@@ -148,17 +148,17 @@ public:
         DOUBLE finalValue,                                          // The final value this transition leads to when applied to an animation variable
         DOUBLE acceleration,                                        // The rate of change of the velocity
         IUIAnimationTransition **ppTransition                       // The new attract transition
-        )
+    )
     {
         if (acceleration == 0.0)
         {
             return E_INVALIDARG;
         }
-    
+
         IUIAnimationInterpolator *pInterpolator;
         CAttractInterpolator *pAttractInterpolator;
         CreateInstance(&pInterpolator, &pAttractInterpolator);
-        
+
         pAttractInterpolator->m_absoluteAcceleration = fabs(acceleration);
         pAttractInterpolator->m_finalValue = finalValue;
 
@@ -166,15 +166,15 @@ public:
 
         return hr;
     }
-    
+
 protected:
 
     CAttractInterpolator()
-      : m_initialValue(0.0),
-        m_finalValue(0.0),
-        m_initialVelocity(0.0),
-        m_absoluteAcceleration(0.0),
-        m_acceleration(0.0)
+        : m_initialValue(0.0),
+          m_finalValue(0.0),
+          m_initialVelocity(0.0),
+          m_absoluteAcceleration(0.0),
+          m_acceleration(0.0)
     {
     }
 

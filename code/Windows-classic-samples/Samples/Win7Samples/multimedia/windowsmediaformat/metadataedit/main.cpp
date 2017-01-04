@@ -1,4 +1,4 @@
-//******************************************************************************
+﻿//******************************************************************************
 //
 // Microsoft Windows Media
 // Copyright ( C) Microsoft Corporation. All rights reserved.
@@ -55,13 +55,13 @@
 // Name: EditorOpenFile()
 // Desc: Creates metadata editor, opens file, and gets header info interface.
 //------------------------------------------------------------------------------
-HRESULT EditorOpenFile( __in LPWSTR pwszInFile, 
+HRESULT EditorOpenFile( __in LPWSTR pwszInFile,
                         IWMMetadataEditor ** ppEditor,
-                        IWMHeaderInfo ** ppHeaderInfo, 
+                        IWMHeaderInfo ** ppHeaderInfo,
                         IWMHeaderInfo3 ** ppHeaderInfo3 )
 {
     if( ( NULL == pwszInFile ) ||
-        ( NULL == ppEditor ) )
+            ( NULL == ppEditor ) )
     {
         return( E_INVALIDARG );
     }
@@ -80,14 +80,14 @@ HRESULT EditorOpenFile( __in LPWSTR pwszInFile,
         hr = ( *ppEditor )->Open( pwszInFile );
         if( FAILED ( hr ) )
         {
-            _tprintf( _T( "Could not open the file %ws ( hr=0x%08x ).\n" ), 
-                pwszInFile, hr );
+            _tprintf( _T( "Could not open the file %ws ( hr=0x%08x ).\n" ),
+                      pwszInFile, hr );
             break;
         }
 
         if( NULL != ppHeaderInfo )
         {
-            hr = ( *ppEditor )->QueryInterface( IID_IWMHeaderInfo, 
+            hr = ( *ppEditor )->QueryInterface( IID_IWMHeaderInfo,
                                                 (void **)ppHeaderInfo );
             if( FAILED( hr ) )
             {
@@ -98,7 +98,7 @@ HRESULT EditorOpenFile( __in LPWSTR pwszInFile,
 
         if( NULL != ppHeaderInfo3 )
         {
-            hr = ( *ppEditor )->QueryInterface( IID_IWMHeaderInfo3, 
+            hr = ( *ppEditor )->QueryInterface( IID_IWMHeaderInfo3,
                                                 (void **)ppHeaderInfo3 );
             if( FAILED( hr ) )
             {
@@ -116,15 +116,15 @@ HRESULT EditorOpenFile( __in LPWSTR pwszInFile,
 // Name: ModifyAttrib()
 // Desc: Changes the value of the specified attribute.
 //------------------------------------------------------------------------------
-HRESULT ModifyAttrib( __in LPWSTR pwszInFile, 
-                      WORD wStreamNum, 
-                      WORD wAttribIndex, 
-                      WORD wAttribType, 
-                      __in LPWSTR pwszAttribValue, 
+HRESULT ModifyAttrib( __in LPWSTR pwszInFile,
+                      WORD wStreamNum,
+                      WORD wAttribIndex,
+                      WORD wAttribType,
+                      __in LPWSTR pwszAttribValue,
                       WORD wLangIndex )
 {
     if( ( NULL == pwszInFile ) ||
-        ( NULL == pwszAttribValue ) )
+            ( NULL == pwszAttribValue ) )
     {
         return( E_INVALIDARG );
     }
@@ -152,26 +152,26 @@ HRESULT ModifyAttrib( __in LPWSTR pwszInFile,
         switch(AttribDataType )
         {
         case WMT_TYPE_DWORD:
-            dwAttribValue = _wtoi( pwszAttribValue );                               
+            dwAttribValue = _wtoi( pwszAttribValue );
             dwAttribValueLen = sizeof( DWORD );
             pbAttribValue = (BYTE *)&dwAttribValue;
 
             break;
 
         case WMT_TYPE_WORD:
-            wAttribValue = (WORD)_wtoi( pwszAttribValue );                                
+            wAttribValue = (WORD)_wtoi( pwszAttribValue );
             dwAttribValueLen = sizeof(WORD);
             pbAttribValue = (BYTE *)&wAttribValue;
 
             break;
 
         case WMT_TYPE_QWORD:
-            qwAttribValue = _wtoi64( pwszAttribValue );                             
+            qwAttribValue = _wtoi64( pwszAttribValue );
             dwAttribValueLen = sizeof(QWORD );
             pbAttribValue = (BYTE *)&qwAttribValue;
 
             break;
-                    
+
         case WMT_TYPE_STRING:
             dwAttribValueLen = ( wcslen( pwszAttribValue ) + 1 ) * sizeof( WCHAR );
             pbAttribValue = (BYTE *)pwszAttribValue;
@@ -179,7 +179,7 @@ HRESULT ModifyAttrib( __in LPWSTR pwszInFile,
             break;
 
         case WMT_TYPE_BOOL:
-            fAttribValue = (BOOL)_wtoi( pwszAttribValue );                              
+            fAttribValue = (BOOL)_wtoi( pwszAttribValue );
             dwAttribValueLen = sizeof(BOOL);
             pbAttribValue = (BYTE *)&fAttribValue;
 
@@ -193,35 +193,35 @@ HRESULT ModifyAttrib( __in LPWSTR pwszInFile,
 
         hr = pHeaderInfo3->ModifyAttribute( wStreamNum,
                                             wAttribIndex,
-                                            AttribDataType, 
+                                            AttribDataType,
                                             wLangIndex,
                                             pbAttribValue,
                                             dwAttribValueLen );
         if( FAILED( hr ) )
         {
-            _tprintf( _T( "ModifyAttribute failed for Attribute index = %d ( hr=0x%08x ).\n" ), 
-                wAttribIndex, hr );
+            _tprintf( _T( "ModifyAttribute failed for Attribute index = %d ( hr=0x%08x ).\n" ),
+                      wAttribIndex, hr );
             break;
         }
 
         hr = pEditor->Flush();
         if( FAILED( hr ) )
         {
-            _tprintf( _T( "Could not flush the file %ws ( hr=0x%08x ).\n" ), 
-                pwszInFile, hr );
+            _tprintf( _T( "Could not flush the file %ws ( hr=0x%08x ).\n" ),
+                      pwszInFile, hr );
             break;
         }
 
         hr = pEditor->Close();
         if( FAILED( hr ) )
         {
-            _tprintf( _T( "Could not close the file %ws ( hr=0x%08x ).\n" ), 
-                pwszInFile, hr );
+            _tprintf( _T( "Could not close the file %ws ( hr=0x%08x ).\n" ),
+                      pwszInFile, hr );
             break;
         }
     }
     while( FALSE );
-    
+
     SAFE_RELEASE( pHeaderInfo3 );
     SAFE_RELEASE( pEditor );
 
@@ -232,16 +232,16 @@ HRESULT ModifyAttrib( __in LPWSTR pwszInFile,
 // Name: AddAttrib()
 // Desc: Adds an attribute by using IWMHeaderInfo3::AddAttribute.
 //------------------------------------------------------------------------------
-HRESULT AddAttrib( __in LPWSTR pwszInFile, 
-                   WORD wStreamNum, 
-                   __in LPWSTR pwszAttribName, 
-                   WORD wAttribType, 
-                   __in LPWSTR pwszAttribValue, 
+HRESULT AddAttrib( __in LPWSTR pwszInFile,
+                   WORD wStreamNum,
+                   __in LPWSTR pwszAttribName,
+                   WORD wAttribType,
+                   __in LPWSTR pwszAttribValue,
                    WORD wLangIndex )
 {
     if( ( NULL == pwszInFile ) ||
-        ( NULL == pwszAttribName ) ||
-        ( NULL == pwszAttribValue ) )
+            ( NULL == pwszAttribName ) ||
+            ( NULL == pwszAttribValue ) )
     {
         return( E_INVALIDARG );
     }
@@ -272,26 +272,26 @@ HRESULT AddAttrib( __in LPWSTR pwszInFile,
         switch( AttribDataType )
         {
         case WMT_TYPE_DWORD:
-            dwAttribValue = _wtoi( pwszAttribValue );                               
+            dwAttribValue = _wtoi( pwszAttribValue );
             dwAttribValueLen = sizeof( DWORD );
             pbAttribValue = (BYTE *)&dwAttribValue;
 
             break;
 
         case WMT_TYPE_WORD:
-            wAttribValue = (WORD)_wtoi( pwszAttribValue );                                
+            wAttribValue = (WORD)_wtoi( pwszAttribValue );
             dwAttribValueLen = sizeof(WORD);
             pbAttribValue = (BYTE *)&wAttribValue;
 
             break;
 
         case WMT_TYPE_QWORD:
-            qwAttribValue = _wtoi64( pwszAttribValue );                             
+            qwAttribValue = _wtoi64( pwszAttribValue );
             dwAttribValueLen = sizeof(QWORD );
             pbAttribValue = (BYTE *)&qwAttribValue;
 
             break;
-                    
+
         case WMT_TYPE_STRING:
             dwAttribValueLen = ( wcslen( pwszAttribValue ) + 1 )* sizeof( WCHAR );
             pbAttribValue = (BYTE *)pwszAttribValue;
@@ -299,7 +299,7 @@ HRESULT AddAttrib( __in LPWSTR pwszInFile,
             break;
 
         case WMT_TYPE_BOOL:
-            fAttribValue = (BOOL)_wtoi( pwszAttribValue );                              
+            fAttribValue = (BOOL)_wtoi( pwszAttribValue );
             dwAttribValueLen = sizeof(BOOL);
             pbAttribValue = (BYTE *)&fAttribValue;
 
@@ -314,35 +314,35 @@ HRESULT AddAttrib( __in LPWSTR pwszInFile,
         hr = pHeaderInfo3->AddAttribute( wStreamNum,
                                          pwszAttribName,
                                          NULL,
-                                         AttribDataType, 
+                                         AttribDataType,
                                          wLangIndex,
                                          pbAttribValue,
                                          dwAttribValueLen );
         if( FAILED( hr ) )
         {
-            _tprintf( _T( "AddAttribute failed for Attribute name %ws ( hr=0x%08x ).\n" ), 
-                pwszAttribName, hr );
+            _tprintf( _T( "AddAttribute failed for Attribute name %ws ( hr=0x%08x ).\n" ),
+                      pwszAttribName, hr );
             break;
         }
 
         hr = pEditor->Flush();
         if( FAILED( hr ) )
         {
-            _tprintf( _T( "Could not flush the file %ws ( hr=0x%08x ).\n" ), 
-                pwszInFile, hr );
+            _tprintf( _T( "Could not flush the file %ws ( hr=0x%08x ).\n" ),
+                      pwszInFile, hr );
             break;
         }
 
         hr = pEditor->Close();
         if( FAILED( hr ) )
         {
-            _tprintf( _T( "Could not close the file %ws ( hr=0x%08x ).\n" ), 
-                pwszInFile, hr );
+            _tprintf( _T( "Could not close the file %ws ( hr=0x%08x ).\n" ),
+                      pwszInFile, hr );
             break;
         }
     }
     while( FALSE );
-    
+
     SAFE_RELEASE( pHeaderInfo3 );
     SAFE_RELEASE( pEditor );
 
@@ -353,15 +353,15 @@ HRESULT AddAttrib( __in LPWSTR pwszInFile,
 // Name: SetAttrib()
 // Desc: Adds an attribute by using IWMHeaderInfo::SetAttribute.
 //------------------------------------------------------------------------------
-HRESULT SetAttrib( __in LPWSTR pwszInFile, 
-                   WORD wStreamNum, 
-                   __in LPWSTR pwszAttribName, 
-                   WORD wAttribType, 
+HRESULT SetAttrib( __in LPWSTR pwszInFile,
+                   WORD wStreamNum,
+                   __in LPWSTR pwszAttribName,
+                   WORD wAttribType,
                    __in LPWSTR pwszAttribValue )
 {
     if( ( NULL == pwszInFile ) ||
-        ( NULL == pwszAttribName ) ||
-        ( NULL == pwszAttribValue ) )
+            ( NULL == pwszAttribName ) ||
+            ( NULL == pwszAttribValue ) )
     {
         return( E_INVALIDARG );
     }
@@ -392,26 +392,26 @@ HRESULT SetAttrib( __in LPWSTR pwszInFile,
         switch( AttribDataType )
         {
         case WMT_TYPE_DWORD:
-            dwAttribValue = _wtoi( pwszAttribValue );                               
+            dwAttribValue = _wtoi( pwszAttribValue );
             wAttribValueLen = sizeof( DWORD );
             pbAttribValue = (BYTE *)&dwAttribValue;
 
             break;
 
         case WMT_TYPE_WORD:
-            wAttribValue = (WORD)_wtoi( pwszAttribValue );                                
+            wAttribValue = (WORD)_wtoi( pwszAttribValue );
             wAttribValueLen = sizeof(WORD);
             pbAttribValue = (BYTE *)&wAttribValue;
 
             break;
 
         case WMT_TYPE_QWORD:
-            qwAttribValue = _wtoi64( pwszAttribValue );                             
+            qwAttribValue = _wtoi64( pwszAttribValue );
             wAttribValueLen = sizeof(QWORD );
             pbAttribValue = (BYTE *)&qwAttribValue;
 
             break;
-                    
+
         case WMT_TYPE_STRING:
             wAttribValueLen = ( wcslen( pwszAttribValue ) + 1 )* sizeof( WCHAR );
             pbAttribValue = (BYTE *)pwszAttribValue;
@@ -419,7 +419,7 @@ HRESULT SetAttrib( __in LPWSTR pwszInFile,
             break;
 
         case WMT_TYPE_BOOL:
-            fAttribValue = (BOOL)_wtoi( pwszAttribValue );                              
+            fAttribValue = (BOOL)_wtoi( pwszAttribValue );
             wAttribValueLen = sizeof(BOOL);
             pbAttribValue = (BYTE *)&fAttribValue;
 
@@ -433,34 +433,34 @@ HRESULT SetAttrib( __in LPWSTR pwszInFile,
 
         hr = pHeaderInfo->SetAttribute( wStreamNum,
                                         pwszAttribName,
-                                        AttribDataType,                                        
+                                        AttribDataType,
                                         pbAttribValue,
                                         wAttribValueLen );
         if( FAILED( hr ) )
         {
-            _tprintf( _T( "SetAttribute failed for Attribute name %ws ( hr=0x%08x ).\n" ), 
-                pwszAttribName, hr );
+            _tprintf( _T( "SetAttribute failed for Attribute name %ws ( hr=0x%08x ).\n" ),
+                      pwszAttribName, hr );
             break;
         }
 
         hr = pEditor->Flush();
         if( FAILED( hr ) )
         {
-            _tprintf( _T( "Could not flush the file %ws ( hr=0x%08x ).\n" ), 
-                pwszInFile, hr );
+            _tprintf( _T( "Could not flush the file %ws ( hr=0x%08x ).\n" ),
+                      pwszInFile, hr );
             break;
         }
 
         hr = pEditor->Close();
         if( FAILED( hr ) )
         {
-            _tprintf( _T( "Could not close the file %ws ( hr=0x%08x ).\n" ), 
-                pwszInFile, hr );
+            _tprintf( _T( "Could not close the file %ws ( hr=0x%08x ).\n" ),
+                      pwszInFile, hr );
             break;
         }
     }
     while( FALSE );
-    
+
     SAFE_RELEASE( pHeaderInfo );
     SAFE_RELEASE( pEditor );
 
@@ -500,15 +500,15 @@ HRESULT PrintAttribute( WORD wIndex,
     // Make the data type string
     //
     WCHAR * pwszType = L"Unknown";
-    WCHAR * pTypes[] = 
-    { 
-        L"DWORD", 
-        L"STRING", 
-        L"BINARY", 
-        L"BOOL", 
-        L"QWORD", 
-        L"WORD", 
-        L"GUID" 
+    WCHAR * pTypes[] =
+    {
+        L"DWORD",
+        L"STRING",
+        L"BINARY",
+        L"BOOL",
+        L"QWORD",
+        L"WORD",
+        L"GUID"
     };
 
     if( ( sizeof( pTypes ) / sizeof( pTypes[0] ) ) > AttribDataType )
@@ -592,8 +592,8 @@ HRESULT PrintAttribute( WORD wIndex,
     // DWORD
     //
     case WMT_TYPE_DWORD:
-        StringCbPrintfW( wszNum, sizeof(wszNum), L"%ld, 0x%08lx", 
-            ( (DWORD *)pbValue )[0], ( (DWORD *)pbValue )[0] );
+        StringCbPrintfW( wszNum, sizeof(wszNum), L"%ld, 0x%08lx",
+                         ( (DWORD *)pbValue )[0], ( (DWORD *)pbValue )[0] );
         StringCbCatW( pwszValue, sizeof( pwszValue ), wszNum );
         break;
 
@@ -604,7 +604,7 @@ HRESULT PrintAttribute( WORD wIndex,
         _ui64tow_s( *( (QWORD* )pbValue ), wszNum, sizeof(wszNum) / sizeof(wszNum[0]), 10 );
         StringCbCatW( pwszValue, sizeof( pwszValue ), wszNum );
         StringCbPrintfW( wszNum, sizeof( wszNum ), L", 0x%08lx%08lx",
-            ( (DWORD *)pbValue )[1], ( (DWORD *)pbValue )[0] );
+                         ( (DWORD *)pbValue )[1], ( (DWORD *)pbValue )[0] );
         StringCbCatW( pwszValue, sizeof( pwszValue ), wszNum );
         break;
 
@@ -613,7 +613,7 @@ HRESULT PrintAttribute( WORD wIndex,
     //
     case WMT_TYPE_WORD:
         StringCbPrintfW( wszNum, sizeof( wszNum ), L"%d, 0x%04x",
-            ( ( WORD* )pbValue )[0], ( ( WORD* )pbValue )[0] );
+                         ( ( WORD* )pbValue )[0], ( ( WORD* )pbValue )[0] );
         StringCbCatW( pwszValue, sizeof( pwszValue ), wszNum );
         break;
 
@@ -629,15 +629,15 @@ HRESULT PrintAttribute( WORD wIndex,
 
     default:
         StringCbPrintfW( pwszValue, sizeof( pwszValue ), L"Bad data type (%hu): value not displayed",
-            AttribDataType );
+                         AttribDataType );
         break;
     }
 
     //
     // Dump the string to the screen.
     //
-     _tprintf( _T( "* %3u  %-25ls %3hu  %3hu  %7ls  %ls\n" ), 
-         wIndex, wszName, wStream, wLangID, pwszType, pwszValue );
+    _tprintf( _T( "* %3u  %-25ls %3hu  %3hu  %7ls  %ls\n" ),
+              wIndex, wszName, wStream, wLangID, pwszType, pwszValue );
 
     return( S_OK );
 }
@@ -646,12 +646,12 @@ HRESULT PrintAttribute( WORD wIndex,
 // Name: DeleteAttrib()
 // Desc: Delete the specified attribute.
 //------------------------------------------------------------------------------
-HRESULT DeleteAttrib( __in LPWSTR pwszInFile, 
-                      WORD wStreamNum, 
+HRESULT DeleteAttrib( __in LPWSTR pwszInFile,
+                      WORD wStreamNum,
                       WORD wAttribIndex )
 {
     HRESULT hr = S_OK;
-        
+
     IWMMetadataEditor   * pEditor       = NULL;
     IWMHeaderInfo3      * pHeaderInfo3  = NULL;
 
@@ -666,29 +666,29 @@ HRESULT DeleteAttrib( __in LPWSTR pwszInFile,
         hr = pHeaderInfo3->DeleteAttribute( wStreamNum, wAttribIndex );
         if( FAILED( hr ) )
         {
-            _tprintf( _T( "DeleteAttribute failed for stream = %d and index = %d ( hr=0x%08x ).\n" ), 
-                wStreamNum, wAttribIndex, hr );
+            _tprintf( _T( "DeleteAttribute failed for stream = %d and index = %d ( hr=0x%08x ).\n" ),
+                      wStreamNum, wAttribIndex, hr );
             break;
         }
 
         hr = pEditor->Flush();
         if( FAILED( hr ) )
         {
-            _tprintf( _T( "Could not flush the file %ws ( hr=0x%08x ).\n" ), 
-                pwszInFile, hr );
+            _tprintf( _T( "Could not flush the file %ws ( hr=0x%08x ).\n" ),
+                      pwszInFile, hr );
             break;
         }
 
         hr = pEditor->Close();
         if( FAILED( hr ) )
         {
-            _tprintf( _T( "Could not close the file %ws ( hr=0x%08x ).\n" ), 
-                pwszInFile, hr );
+            _tprintf( _T( "Could not close the file %ws ( hr=0x%08x ).\n" ),
+                      pwszInFile, hr );
             break;
         }
     }
     while( FALSE );
-    
+
     SAFE_RELEASE( pHeaderInfo3 );
     SAFE_RELEASE( pEditor );
 
@@ -737,13 +737,13 @@ HRESULT ShowAttributes3( __in LPWSTR pwszInFile, WORD wStreamNum )
             SAFE_ARRAYDELETE( pbAttribValue );
 
             hr = pHeaderInfo3->GetAttributeByIndexEx( wStreamNum,
-                                                      wAttribIndex,
-                                                      pwszAttribName,
-                                                      &wAttribNameLen,
-                                                      &wAttribType,
-                                                      &wLanguageIndex,
-                                                      pbAttribValue,
-                                                      &dwAttribValueLen );
+                    wAttribIndex,
+                    pwszAttribName,
+                    &wAttribNameLen,
+                    &wAttribType,
+                    &wLanguageIndex,
+                    pbAttribValue,
+                    &dwAttribValueLen );
             if(FAILED( hr ) )
             {
                 _tprintf( _T( "GetAttributeByIndexEx failed for index = %d ( hr=0x%08x ).\n" ), wAttribIndex, hr );
@@ -765,17 +765,17 @@ HRESULT ShowAttributes3( __in LPWSTR pwszInFile, WORD wStreamNum )
             }
 
             hr = pHeaderInfo3->GetAttributeByIndexEx( wStreamNum,
-                                                      wAttribIndex,
-                                                      pwszAttribName,
-                                                      &wAttribNameLen,
-                                                      &wAttribType,
-                                                      &wLanguageIndex,
-                                                      pbAttribValue,
-                                                      &dwAttribValueLen );
+                    wAttribIndex,
+                    pwszAttribName,
+                    &wAttribNameLen,
+                    &wAttribType,
+                    &wLanguageIndex,
+                    pbAttribValue,
+                    &dwAttribValueLen );
             if(FAILED( hr ) )
             {
-                _tprintf( _T( "GetAttributeByIndexEx failed for index = %d ( hr=0x%08x ).\n" ), 
-                    wAttribIndex, hr );
+                _tprintf( _T( "GetAttributeByIndexEx failed for index = %d ( hr=0x%08x ).\n" ),
+                          wAttribIndex, hr );
                 break;
             }
 
@@ -841,8 +841,8 @@ HRESULT ShowAttributes( __in LPWSTR pwszInFile, WORD wStreamNum )
         hr = pHeaderInfo->GetAttributeCount( wStreamNum, &wAttributeCount );
         if(FAILED( hr ) )
         {
-            _tprintf( _T( "GetAttributeCount failed for stream = %d ( hr=0x%08x ).\n" ), 
-                wStreamNum, hr );
+            _tprintf( _T( "GetAttributeCount failed for stream = %d ( hr=0x%08x ).\n" ),
+                      wStreamNum, hr );
             break;
         }
 
@@ -862,8 +862,8 @@ HRESULT ShowAttributes( __in LPWSTR pwszInFile, WORD wStreamNum )
                                                    &wAttribValueLen );
             if( FAILED( hr ) )
             {
-                _tprintf( _T( "GetAttributeByIndex failed for index = %d ( hr=0x%08x ).\n" ), 
-                    wAttribIndex, hr );
+                _tprintf( _T( "GetAttributeByIndex failed for index = %d ( hr=0x%08x ).\n" ),
+                          wAttribIndex, hr );
                 break;
             }
 
@@ -890,24 +890,24 @@ HRESULT ShowAttributes( __in LPWSTR pwszInFile, WORD wStreamNum )
                                                    &wAttribValueLen );
             if( FAILED( hr ) )
             {
-                _tprintf( _T( "GetAttributeByIndex failed for index = %d ( hr=0x%08x ).\n" ), 
-                    wAttribIndex, hr );
+                _tprintf( _T( "GetAttributeByIndex failed for index = %d ( hr=0x%08x ).\n" ),
+                          wAttribIndex, hr );
                 break;
             }
 
-            hr = PrintAttribute( wAttribIndex, 
-                                 wStreamNum, 
-                                 pwszAttribName, 
-                                 wAttribType, 
-                                 0, 
-                                 pbAttribValue, 
+            hr = PrintAttribute( wAttribIndex,
+                                 wStreamNum,
+                                 pwszAttribName,
+                                 wAttribType,
+                                 0,
+                                 pbAttribValue,
                                  wAttribValueLen );
             if( FAILED( hr ) )
             {
                 break;
             }
         }
-        
+
         hr = pEditor->Close();
         if( FAILED( hr ) )
         {
@@ -916,7 +916,7 @@ HRESULT ShowAttributes( __in LPWSTR pwszInFile, WORD wStreamNum )
         }
     }
     while( FALSE );
-    
+
     SAFE_RELEASE( pHeaderInfo );
     SAFE_RELEASE( pEditor );
 
@@ -970,7 +970,7 @@ HRESULT ConvertMBtoWC( LPCTSTR ptszInString, __out LPWSTR *ppwszOutString )
         }
     }
     while( FALSE );
-    
+
     if( FAILED( hr ) )
     {
         SAFE_ARRAYDELETE( *ppwszOutString );
@@ -1145,7 +1145,7 @@ int __cdecl _tmain( int argc, __in_ecount(argc) LPTSTR argv[] )
             ptszAttribValue = (LPTSTR)argv[6];
 
             wStreamNum = (WORD)_ttoi( argv[3] );
-            wAttribType = (WORD)_ttoi( argv[5] ); 
+            wAttribType = (WORD)_ttoi( argv[5] );
 
 #ifndef UNICODE
             hr = ConvertMBtoWC( ptszAttribName, &pwszAttribName );
@@ -1153,23 +1153,23 @@ int __cdecl _tmain( int argc, __in_ecount(argc) LPTSTR argv[] )
             {
                 break;
             }
-            
+
             hr = ConvertMBtoWC( ptszAttribValue, &pwszAttribValue );
             if( FAILED( hr ) )
             {
                 break;
             }
-            
-            hr = SetAttrib( pwszInFile, 
-                            wStreamNum, 
-                            pwszAttribName, 
-                            wAttribType, 
+
+            hr = SetAttrib( pwszInFile,
+                            wStreamNum,
+                            pwszAttribName,
+                            wAttribType,
                             pwszAttribValue );
 #else
-            hr = SetAttrib( ptszInFile, 
-                            wStreamNum, 
-                            ptszAttribName, 
-                            wAttribType, 
+            hr = SetAttrib( ptszInFile,
+                            wStreamNum,
+                            ptszAttribName,
+                            wAttribType,
                             ptszAttribValue );
 #endif
 
@@ -1201,25 +1201,25 @@ int __cdecl _tmain( int argc, __in_ecount(argc) LPTSTR argv[] )
             {
                 break;
             }
-            
+
             hr = ConvertMBtoWC( ptszAttribValue, &pwszAttribValue );
             if( FAILED( hr ) )
             {
                 break;
             }
-            
-            hr = AddAttrib( pwszInFile, 
-                            wStreamNum, 
-                            pwszAttribName, 
-                            wAttribType, 
-                            pwszAttribValue, 
+
+            hr = AddAttrib( pwszInFile,
+                            wStreamNum,
+                            pwszAttribName,
+                            wAttribType,
+                            pwszAttribValue,
                             wLangIndex );
 #else
-            hr = AddAttrib( ptszInFile, 
-                            wStreamNum, 
-                            ptszAttribName, 
-                            wAttribType, 
-                            ptszAttribValue, 
+            hr = AddAttrib( ptszInFile,
+                            wStreamNum,
+                            ptszAttribName,
+                            wAttribType,
+                            ptszAttribValue,
                             wLangIndex );
 #endif
 
@@ -1241,7 +1241,7 @@ int __cdecl _tmain( int argc, __in_ecount(argc) LPTSTR argv[] )
 
             wStreamNum = (WORD)_ttoi( argv[3] );
             wAttribIndex = (WORD)_ttoi( argv[4] );
-            wAttribType = (WORD)_ttoi( argv[5] );         
+            wAttribType = (WORD)_ttoi( argv[5] );
             wLangIndex = (WORD)_ttoi( argv[7] );
 
 #ifndef UNICODE
@@ -1250,19 +1250,19 @@ int __cdecl _tmain( int argc, __in_ecount(argc) LPTSTR argv[] )
             {
                 break;
             }
-            
-            hr = ModifyAttrib( pwszInFile, 
-                               wStreamNum, 
-                               wAttribIndex, 
-                               wAttribType, 
-                               pwszAttribValue, 
+
+            hr = ModifyAttrib( pwszInFile,
+                               wStreamNum,
+                               wAttribIndex,
+                               wAttribType,
+                               pwszAttribValue,
                                wLangIndex );
 #else
-            hr = ModifyAttrib( ptszInFile, 
-                               wStreamNum, 
-                               wAttribIndex, 
-                               wAttribType, 
-                               ptszAttribValue, 
+            hr = ModifyAttrib( ptszInFile,
+                               wStreamNum,
+                               wAttribIndex,
+                               wAttribType,
+                               ptszAttribValue,
                                wLangIndex );
 #endif
 

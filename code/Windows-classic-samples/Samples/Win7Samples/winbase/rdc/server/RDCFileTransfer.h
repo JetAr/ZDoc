@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -16,47 +16,47 @@
 // CRdcFileTransfer
 /*
     Implement the main (only at the moment) COM interface.
- 
+
     This interface allows the client to open files, then
     read the signature and file data from them.
- 
+
     RdcOpenFile() returns an "RdcfileHandle" which must be
     used when calling ReadData() and Close(). This allows the client
     to have several files open at a time using only one RdcFileTransfer object.
- 
- 
+
+
     RdcFileOpen() prepares for signature generation (or validation
     of existing signature files).
     Actual signature generation is delayed until ReadData() is used to
     try to read the signatures. This design allows for the signature generation
     to be done in a seperate thread - started by RdcOpenFile().
- 
+
     LIMITATIONS:
         The signature files are *ALWAYS* created as "filename_%d.sig" in the same
         directory as the file being transferred. The signature files do not get deleted.
- 
+
         The signature files are *NOT* checked for integrity. If for some reason, the
         signature files are corrupted in anyway, this server will not detect this
         problem.  The sample should write a custom header after the signatures are
         generated to be used as a check to ensure integrity.
- 
+
         Also, the filedates of the signature files should be checked.
- 
+
         Individual RdcFileHandles are not thread safe -- do not try to issue multiple
         reads against a single filehandle from different threads.
- 
- 
+
+
         This RDC SDK COM server cannot be marshalled - therefore it must be
         run inproc, and in the same apartment.
         (The client app must use CoInitializeEx(0, COINIT_MULTITHREADED).
- 
+
  */
 class RdcFileHandleImpl;
 
 class ATL_NO_VTABLE CRdcFileTransfer :
-            public CComObjectRootEx<CComMultiThreadModel>,
-            public CComCoClass<CRdcFileTransfer, &CLSID_RdcFileTransfer>,
-            public IRdcFileTransfer
+    public CComObjectRootEx<CComMultiThreadModel>,
+    public CComCoClass<CRdcFileTransfer, &CLSID_RdcFileTransfer>,
+    public IRdcFileTransfer
 {
 public:
     CRdcFileTransfer()

@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -16,7 +16,7 @@
 //
 // This sample demonstrates how to mirror a VHD or VHDX to a new location. The VHD or VHDX in the
 // new location will be part of the active virtual disk chain once the operation completes
-// successfully. The old files are not deleted after the operation completes.  
+// successfully. The old files are not deleted after the operation completes.
 //
 
 DWORD
@@ -46,7 +46,7 @@ SampleMirrorVirtualDisk(
     // Specify UNKNOWN for both device and vendor so the system will use the
     // file extension to determine the correct VHD format.
     //
-    
+
     storageType.DeviceId = VIRTUAL_STORAGE_TYPE_DEVICE_UNKNOWN;
     storageType.VendorId = VIRTUAL_STORAGE_TYPE_VENDOR_UNKNOWN;
 
@@ -58,17 +58,17 @@ SampleMirrorVirtualDisk(
     // VIRTUAL_DISK_ACCESS_NONE is the only acceptable access mask for V2 handle opens.
     // OPEN_VIRTUAL_DISK_FLAG_NONE bypasses any special handling of the open.
     //
-    
+
     memset(&openParameters, 0, sizeof(openParameters));
     openParameters.Version = OPEN_VIRTUAL_DISK_VERSION_2;
 
     opStatus = OpenVirtualDisk(
-        &storageType,
-        SourcePath,
-        VIRTUAL_DISK_ACCESS_NONE,
-        OPEN_VIRTUAL_DISK_FLAG_NONE,
-        &openParameters,
-        &vhdHandle);
+                   &storageType,
+                   SourcePath,
+                   VIRTUAL_DISK_ACCESS_NONE,
+                   OPEN_VIRTUAL_DISK_FLAG_NONE,
+                   &openParameters,
+                   &vhdHandle);
 
     if (opStatus != ERROR_SUCCESS)
     {
@@ -81,17 +81,17 @@ SampleMirrorVirtualDisk(
     // MIRROR_VIRTUAL_DISK_VERSION_1 is the only version of the parameters currently supported.
     // MIRROR_VIRTUAL_DISK_FLAG_NONE forces the creation of a new file.
     //
-    
+
     memset(&mirrorParameters, 0, sizeof(MIRROR_VIRTUAL_DISK_PARAMETERS));
     mirrorParameters.Version = MIRROR_VIRTUAL_DISK_VERSION_1;
     mirrorParameters.Version1.MirrorVirtualDiskPath = DestinationPath;
 
     opStatus = MirrorVirtualDisk(
-        vhdHandle,
-        MIRROR_VIRTUAL_DISK_FLAG_NONE,
-        &mirrorParameters,
-        &overlapped
-        );
+                   vhdHandle,
+                   MIRROR_VIRTUAL_DISK_FLAG_NONE,
+                   &mirrorParameters,
+                   &overlapped
+               );
 
     if ((opStatus == ERROR_SUCCESS) || (opStatus == ERROR_IO_PENDING))
     {
@@ -101,11 +101,11 @@ SampleMirrorVirtualDisk(
         // Every subsequent write will be forward to both the source and destination until the
         // mirror is broken.
         //
-        
+
         for (;;)
         {
             memset(&progress, 0, sizeof(progress));
-            
+
             opStatus = GetVirtualDiskOperationProgress(vhdHandle, &overlapped, &progress);
             if (opStatus != ERROR_SUCCESS)
             {
@@ -123,13 +123,14 @@ SampleMirrorVirtualDisk(
             else
             {
                 //
-                // Any status other than ERROR_IO_PENDING indicates the mirror failed.
+                //
+                Any status other than ERROR_IO_PENDING indicates the mirror failed.
                 //
                 goto Cleanup;
             }
-        
+
             Sleep(1000);
-        }        
+        }
     }
     else
     {
@@ -147,12 +148,12 @@ SampleMirrorVirtualDisk(
     {
         goto Cleanup;
     }
-    else 
-    {        
+    else
+    {
         for (;;)
         {
             memset(&progress, 0, sizeof(progress));
-            
+
             opStatus = GetVirtualDiskOperationProgress(vhdHandle, &overlapped, &progress);
             if (opStatus != ERROR_SUCCESS)
             {
@@ -171,7 +172,7 @@ SampleMirrorVirtualDisk(
 
             Sleep(1000);
         }
-    }    
+    }
 
 Cleanup:
 
@@ -183,7 +184,7 @@ Cleanup:
     {
         wprintf(L"error = %u\n", opStatus);
     }
-    
+
     if (vhdHandle != INVALID_HANDLE_VALUE)
     {
         CloseHandle(vhdHandle);
@@ -195,4 +196,4 @@ Cleanup:
     }
 
     return opStatus;
- }
+}

@@ -1,4 +1,4 @@
-//
+﻿//
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -34,17 +34,17 @@ wmain(
 
     switch (g_dwAction)
     {
-        // Enumerate all cache containers and delete option.
+    // Enumerate all cache containers and delete option.
     case(CACHESAMPLE_ACTION_ENUM_ALL | CACHESAMPLE_ACTION_DELETE):
         ClearCache();
         break;
 
-        // Get entry details on a particular URL
+    // Get entry details on a particular URL
     case(CACHESAMPLE_ACTION_DETAIL):
         GetEntryDetail();
         break;
 
-        // Enumerate entries from a particular containers.
+    // Enumerate entries from a particular containers.
     default:
         EnumerateCache();
         break;
@@ -140,7 +140,7 @@ Return Value:
 
         switch (argv[i][1])
         {
-            // Enumerate entries in all the fix containers.
+        // Enumerate entries in all the fix containers.
         case L'a':
             // This must be the 1st and only option.
             if (i > 1)
@@ -152,7 +152,7 @@ Return Value:
             break;
 
 
-            // Enumerate entries in the content container.
+        // Enumerate entries in the content container.
         case L'c':
             // This must be the 1st option.
             if (i > 1)
@@ -163,7 +163,7 @@ Return Value:
             g_dwAction |= CACHESAMPLE_ACTION_ENUM_CONTENT;
             break;
 
-            // Delete option for found entries.
+        // Delete option for found entries.
         case L'd':
             // Don't allow -d option as the first option.
             // If it is the first option, print usage block
@@ -176,7 +176,7 @@ Return Value:
             g_dwAction |= CACHESAMPLE_ACTION_DELETE;
             break;
 
-            // Get entry detail on a particular cached URL.
+        // Get entry detail on a particular cached URL.
         case L'e':
             // This option must be the first option.
             // And it must have a URL param ONLY.
@@ -199,7 +199,7 @@ Return Value:
             g_dwAction |= CACHESAMPLE_ACTION_DETAIL;
             break;
 
-            // Enumerate history entries only.
+        // Enumerate history entries only.
         case L'h':
             // This must be the 1st option.
             if (i > 1)
@@ -210,7 +210,7 @@ Return Value:
             g_dwAction |= CACHESAMPLE_ACTION_ENUM_HISTORY;
             break;
 
-            // Enumerate entries in the cookie container.
+        // Enumerate entries in the cookie container.
         case L'k':
             // This must be the 1st option.
             if (i > 1)
@@ -221,7 +221,7 @@ Return Value:
             g_dwAction |= CACHESAMPLE_ACTION_ENUM_COOKIE;
             break;
 
-            // Display usage block.
+        // Display usage block.
         case L'?':
             // This must be the 1st option.
             if (i > 1)
@@ -232,7 +232,7 @@ Return Value:
             PrintUsageBlock();
             exit(0);
 
-            // Unknown option print the usage block.
+        // Unknown option print the usage block.
         default:
             wprintf(L"Unknown option: %s\n\n", argv[i]);
             goto done;
@@ -330,7 +330,7 @@ Return Value:
 
         switch (dwErr)
         {
-			// msdn states ERROR_NO_MORE_FILES which is wrong. Doc bug!
+        // msdn states ERROR_NO_MORE_FILES which is wrong. Doc bug!
         case ERROR_NO_MORE_ITEMS:
         case ERROR_FILE_NOT_FOUND:
             // No more items and we are done.
@@ -355,7 +355,7 @@ Return Value:
         // FindNextUrlCacheGroup
         // Delete the cache group and flush
         // all entries tag to this group.
-		wprintf(L"\t Deleting cache group ID: %d\n", gID);
+        wprintf(L"\t Deleting cache group ID: %d\n", gID);
         if (!DeleteUrlCacheGroup(gID,                                // ID of the cache group to be released.
                                  CACHEGROUP_FLAG_FLUSHURL_ONDELETE,  // delete all of the cache entries associated with this group, unless the entry belongs to another group.
                                  NULL))                              // Reserved. Must be NULL
@@ -456,10 +456,10 @@ Return Value:
         g_lpszSearchPattern = CONTENT;
         break;
 
-	// Unknown search pattern.
-	default:
-		wprintf(L"Unknown search pattern: 0x%x\n\n", g_dwAction & CACHESAMPLE_ACTION_ENUM_MASK);
-		goto cleanup;
+    // Unknown search pattern.
+    default:
+        wprintf(L"Unknown search pattern: 0x%x\n\n", g_dwAction & CACHESAMPLE_ACTION_ENUM_MASK);
+        goto cleanup;
     }
 
     // 1st call FindFirstUrlCacheEntryEx with a NULL pointer
@@ -480,12 +480,12 @@ Return Value:
 
         switch (dwErr)
         {
-            // We are done no need to enumerate further.
+        // We are done no need to enumerate further.
         case ERROR_NO_MORE_ITEMS:
             wprintf(L"There are no more entries.\n");
             goto cleanup;
 
-            // Insufficient buffer.  Allocate the correct buffer.
+        // Insufficient buffer.  Allocate the correct buffer.
         case ERROR_INSUFFICIENT_BUFFER:
             lpCacheEntryInfo = (LPINTERNET_CACHE_ENTRY_INFO)
                                Malloc(cbCacheInfoSize);
@@ -502,7 +502,7 @@ Return Value:
             lpCacheEntryInfo->dwStructSize = cbCacheInfoSize;
             break;
 
-            // Some other errors encountered.  This is treated as fatal.
+        // Some other errors encountered.  This is treated as fatal.
         default:
             LogInetError(dwErr, L"FindFirstUrlCacheEntryEx");
             goto cleanup;
@@ -615,8 +615,8 @@ Return Value:
                 lpCacheEntryInfo->dwStructSize = cbCacheInfoSize;
                 continue;
 
-                // Something else happened.
-                // This is considered non recoverable.
+            // Something else happened.
+            // This is considered non recoverable.
             default:
                 LogInetError(dwErr, L"FindNextUrlCacheEntryEx");
                 goto cleanup;
@@ -807,8 +807,8 @@ Return Value:
 
 VOID
 LogInetError(
-	DWORD err,
-	LPCWSTR str
+    DWORD err,
+    LPCWSTR str
 )
 /*++
 
@@ -835,12 +835,12 @@ Return Value:
     ZeroMemory(msgBuffer, ERR_MSG_LEN);
 
     dwResult = FormatMessage(FORMAT_MESSAGE_FROM_HMODULE,
-                          GetModuleHandle(L"wininet.dll"),
-                          err,
-                          MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
-                          msgBuffer,
-                          ERR_MSG_LEN,
-                          NULL);
+                             GetModuleHandle(L"wininet.dll"),
+                             err,
+                             MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
+                             msgBuffer,
+                             ERR_MSG_LEN,
+                             NULL);
 
     if (dwResult)
     {
@@ -857,8 +857,8 @@ Return Value:
 
 VOID
 LogSysError(
-	DWORD err,
-	LPCWSTR str
+    DWORD err,
+    LPCWSTR str
 )
 /*++
 
@@ -885,12 +885,12 @@ Return Value:
     ZeroMemory(msgBuffer, ERR_MSG_LEN);
 
     dwResult = FormatMessage(FORMAT_MESSAGE_FROM_SYSTEM,
-						  NULL,
-						  err,
-                          MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
-                          msgBuffer,
-                          ERR_MSG_LEN,
-                          NULL);
+                             NULL,
+                             err,
+                             MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
+                             msgBuffer,
+                             ERR_MSG_LEN,
+                             NULL);
 
     if (dwResult)
     {

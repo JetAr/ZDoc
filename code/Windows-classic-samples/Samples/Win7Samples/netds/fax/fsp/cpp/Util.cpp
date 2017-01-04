@@ -1,4 +1,4 @@
-//==========================================================================
+﻿//==========================================================================
 //
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
@@ -32,72 +32,76 @@
 
 BOOL
 OpenLogFile(
-                BOOL    bLoggingEnabled,
-                LPWSTR  lpszLoggingDirectory
-           )
+    BOOL    bLoggingEnabled,
+    LPWSTR  lpszLoggingDirectory
+)
 {
-        // szLoggingFilename is the logging file name
-        WCHAR  szLoggingFilename[MAX_PATH]={0};
-        // cUnicodeBOM is the Unicode BOM
-        WCHAR  cUnicodeBOM = 0xFEFF;
-        DWORD  dwSize;
-        HRESULT hr = S_OK;
-        BOOL bRetVal = FALSE;
+    // szLoggingFilename is the logging file name
+    WCHAR  szLoggingFilename[MAX_PATH]= {0};
+    // cUnicodeBOM is the Unicode BOM
+    WCHAR  cUnicodeBOM = 0xFEFF;
+    DWORD  dwSize;
+    HRESULT hr = S_OK;
+    BOOL bRetVal = FALSE;
 
-        if (bLoggingEnabled == TRUE) {
-                // Set the logging file name
-                if (wcslen(lpszLoggingDirectory) >= (sizeof(szLoggingFilename)/sizeof(szLoggingFilename[0]) - 2 - wcslen(NEWFSP_LOG_FILE))) { 
-                        // directory path is too long, consider changing szLoggingFilename size
-                        return FALSE;
-                }
-                hr = StringCchCopy(szLoggingFilename,MAX_PATH,lpszLoggingDirectory );
-                if(hr != S_OK)
-                {
-                        WriteDebugString( L"StringCchCopy failed, hr = 0x%x for szLoggingFilename", hr );
-                        bRetVal = FALSE;
-                        goto Exit;
-                }
-                hr = StringCchCat(szLoggingFilename,MAX_PATH,L"\\" );
-                if(hr != S_OK)
-                {
-                        WriteDebugString( L"StringCchCat failed, hr = 0x%x for szLoggingFilename", hr );
-                        bRetVal = FALSE;
-                        goto Exit;
-                }
-                hr = StringCchCat(szLoggingFilename,MAX_PATH,NEWFSP_LOG_FILE );
-                if(hr != S_OK)
-                {
-                        WriteDebugString( L"StringCchCat failed, hr = 0x%x for szLoggingFilename", hr );
-                        bRetVal = FALSE;
-                        goto Exit;
-                }
+    if (bLoggingEnabled == TRUE)
+    {
+        // Set the logging file name
+        if (wcslen(lpszLoggingDirectory) >= (sizeof(szLoggingFilename)/sizeof(szLoggingFilename[0]) - 2 - wcslen(NEWFSP_LOG_FILE)))
+        {
+            // directory path is too long, consider changing szLoggingFilename size
+            return FALSE;
+        }
+        hr = StringCchCopy(szLoggingFilename,MAX_PATH,lpszLoggingDirectory );
+        if(hr != S_OK)
+        {
+            WriteDebugString( L"StringCchCopy failed, hr = 0x%x for szLoggingFilename", hr );
+            bRetVal = FALSE;
+            goto Exit;
+        }
+        hr = StringCchCat(szLoggingFilename,MAX_PATH,L"\\" );
+        if(hr != S_OK)
+        {
+            WriteDebugString( L"StringCchCat failed, hr = 0x%x for szLoggingFilename", hr );
+            bRetVal = FALSE;
+            goto Exit;
+        }
+        hr = StringCchCat(szLoggingFilename,MAX_PATH,NEWFSP_LOG_FILE );
+        if(hr != S_OK)
+        {
+            WriteDebugString( L"StringCchCat failed, hr = 0x%x for szLoggingFilename", hr );
+            bRetVal = FALSE;
+            goto Exit;
+        }
 
-                // Create the new log file
-                g_hLogFile = CreateFile(szLoggingFilename,
+        // Create the new log file
+        g_hLogFile = CreateFile(szLoggingFilename,
                                 GENERIC_WRITE,
                                 FILE_SHARE_READ,
                                 NULL,
                                 CREATE_ALWAYS,
                                 FILE_ATTRIBUTE_NORMAL,
                                 NULL);
-                if (g_hLogFile == INVALID_HANDLE_VALUE) {
-                        goto Exit;
-                }
+        if (g_hLogFile == INVALID_HANDLE_VALUE)
+        {
+            goto Exit;
+        }
 
-                // Write the Unicode BOM to the log file
-                WriteFile(g_hLogFile,
-                                &cUnicodeBOM,
-                                sizeof(WCHAR),
-                                &dwSize,
-                                NULL);
-                bRetVal = TRUE;
-        }
-        else {
-                g_hLogFile = INVALID_HANDLE_VALUE;
-        }
+        // Write the Unicode BOM to the log file
+        WriteFile(g_hLogFile,
+                  &cUnicodeBOM,
+                  sizeof(WCHAR),
+                  &dwSize,
+                  NULL);
+        bRetVal = TRUE;
+    }
+    else
+    {
+        g_hLogFile = INVALID_HANDLE_VALUE;
+    }
 
 Exit:
-        return bRetVal;
+    return bRetVal;
 }
 
 //+---------------------------------------------------------------------------
@@ -114,10 +118,11 @@ Exit:
 
 VOID CloseLogFile()
 {
-        if (g_hLogFile != INVALID_HANDLE_VALUE) {
-                CloseHandle(g_hLogFile);
-                g_hLogFile = INVALID_HANDLE_VALUE;
-        }
+    if (g_hLogFile != INVALID_HANDLE_VALUE)
+    {
+        CloseHandle(g_hLogFile);
+        g_hLogFile = INVALID_HANDLE_VALUE;
+    }
 }
 
 //+---------------------------------------------------------------------------
@@ -131,60 +136,61 @@ VOID CloseLogFile()
 //  Returns:     None
 //
 //----------------------------------------------------------------------------
-VOID WriteDebugString( LPWSTR  lpszFormatString, ... )     
+VOID WriteDebugString( LPWSTR  lpszFormatString, ... )
 {
-        va_list     varg_ptr = NULL;
-        SYSTEMTIME  SystemTime;
-        HRESULT hr = S_OK;
-        BOOL bRetVal = FALSE;
-        // szOutputString is the output string
-        WCHAR       szOutputString[1024] = {0};
-        DWORD       cb;
+    va_list     varg_ptr = NULL;
+    SYSTEMTIME  SystemTime;
+    HRESULT hr = S_OK;
+    BOOL bRetVal = FALSE;
+    // szOutputString is the output string
+    WCHAR       szOutputString[1024] = {0};
+    DWORD       cb;
 
-        // Initialize the buffer
-        ZeroMemory(szOutputString, sizeof(szOutputString));
+    // Initialize the buffer
+    ZeroMemory(szOutputString, sizeof(szOutputString));
 
-        // Get the current time
-        GetLocalTime(&SystemTime);
-        hr = StringCchPrintf(szOutputString,1024,  L"%02d.%02d.%04d@%02d:%02d:%02d.%03d:\n", 
-                        SystemTime.wMonth,
-                        SystemTime.wDay,
-                        SystemTime.wYear,
-                        SystemTime.wHour,
-                        SystemTime.wMinute,
-                        SystemTime.wSecond, 
-                        SystemTime.wMilliseconds);
-        if(hr != S_OK)
-        {
-                WriteDebugString( L"StringCchPrintf failed, hr = 0x%x for szOutputString", hr );                
-                goto Exit;
-        }       
-        cb = lstrlen(szOutputString);
+    // Get the current time
+    GetLocalTime(&SystemTime);
+    hr = StringCchPrintf(szOutputString,1024,  L"%02d.%02d.%04d@%02d:%02d:%02d.%03d:\n",
+                         SystemTime.wMonth,
+                         SystemTime.wDay,
+                         SystemTime.wYear,
+                         SystemTime.wHour,
+                         SystemTime.wMinute,
+                         SystemTime.wSecond,
+                         SystemTime.wMilliseconds);
+    if(hr != S_OK)
+    {
+        WriteDebugString( L"StringCchPrintf failed, hr = 0x%x for szOutputString", hr );
+        goto Exit;
+    }
+    cb = lstrlen(szOutputString);
 
-        va_start(varg_ptr, lpszFormatString);
-        hr = StringCchVPrintf(&szOutputString[cb],(sizeof(szOutputString)/sizeof(szOutputString[0])) - cb -1,
-                        lpszFormatString,
-                        varg_ptr); 
-        if(hr != S_OK)
-        {
-                WriteDebugString( L"StringCchVPrintf failed, hr = 0x%x for szOutputString", hr );                
-                goto Exit;
-        }
+    va_start(varg_ptr, lpszFormatString);
+    hr = StringCchVPrintf(&szOutputString[cb],(sizeof(szOutputString)/sizeof(szOutputString[0])) - cb -1,
+                          lpszFormatString,
+                          varg_ptr);
+    if(hr != S_OK)
+    {
+        WriteDebugString( L"StringCchVPrintf failed, hr = 0x%x for szOutputString", hr );
+        goto Exit;
+    }
 
-        // Write the string to the debugger
-        OutputDebugString(szOutputString);
-        if (g_hLogFile != INVALID_HANDLE_VALUE) {
-                // Write the string to the log file
-                WriteFile(g_hLogFile,
-                                szOutputString,
-                                lstrlen(szOutputString) * sizeof(WCHAR),
-                                &cb,
-                                NULL);
-        }
+    // Write the string to the debugger
+    OutputDebugString(szOutputString);
+    if (g_hLogFile != INVALID_HANDLE_VALUE)
+    {
+        // Write the string to the log file
+        WriteFile(g_hLogFile,
+                  szOutputString,
+                  lstrlen(szOutputString) * sizeof(WCHAR),
+                  &cb,
+                  NULL);
+    }
 
 Exit:
-        if(varg_ptr)
-                va_end(varg_ptr);
+    if(varg_ptr)
+        va_end(varg_ptr);
 }
 
 //+---------------------------------------------------------------------------
@@ -204,39 +210,40 @@ Exit:
 
 VOID
 PostJobStatus(
-                HANDLE     CompletionPort,
-                ULONG_PTR  CompletionKey,
-                DWORD      StatusId,
-                DWORD      ErrorCode
-             )
+    HANDLE     CompletionPort,
+    ULONG_PTR  CompletionKey,
+    DWORD      StatusId,
+    DWORD      ErrorCode
+)
 {
-        // pFaxDevStatus is a pointer to the completion packet
-        PFAX_DEV_STATUS  pFaxDevStatus;
+    // pFaxDevStatus is a pointer to the completion packet
+    PFAX_DEV_STATUS  pFaxDevStatus;
 
-        // Allocate a block of memory for the completion packet
-        pFaxDevStatus = (PFAX_DEV_STATUS) MemAllocMacro(sizeof(FAX_DEV_STATUS));
-        if (pFaxDevStatus != NULL) {
-                // Set the completion packet's structure size
-                pFaxDevStatus->SizeOfStruct = sizeof(FAX_DEV_STATUS);
-                // Copy the completion packet's fax status identifier
-                pFaxDevStatus->StatusId = StatusId;
-                // Set the completion packet's string resource identifier to 0
-                pFaxDevStatus->StringId = 0;
-                // Set the completion packet's current page number to 0
-                pFaxDevStatus->PageCount = 0;
-                // Set the completion packet's remote fax device identifier to NULL
-                pFaxDevStatus->CSI = NULL;
-                // Set the completion packet's calling fax device identifier to NULL
-                pFaxDevStatus->CallerId = NULL;
-                // Set the completion packet's routing string to NULL
-                pFaxDevStatus->RoutingInfo = NULL;
-                // Copy the completion packet's Win32 error code
-                pFaxDevStatus->ErrorCode = ErrorCode;
+    // Allocate a block of memory for the completion packet
+    pFaxDevStatus = (PFAX_DEV_STATUS) MemAllocMacro(sizeof(FAX_DEV_STATUS));
+    if (pFaxDevStatus != NULL)
+    {
+        // Set the completion packet's structure size
+        pFaxDevStatus->SizeOfStruct = sizeof(FAX_DEV_STATUS);
+        // Copy the completion packet's fax status identifier
+        pFaxDevStatus->StatusId = StatusId;
+        // Set the completion packet's string resource identifier to 0
+        pFaxDevStatus->StringId = 0;
+        // Set the completion packet's current page number to 0
+        pFaxDevStatus->PageCount = 0;
+        // Set the completion packet's remote fax device identifier to NULL
+        pFaxDevStatus->CSI = NULL;
+        // Set the completion packet's calling fax device identifier to NULL
+        pFaxDevStatus->CallerId = NULL;
+        // Set the completion packet's routing string to NULL
+        pFaxDevStatus->RoutingInfo = NULL;
+        // Copy the completion packet's Win32 error code
+        pFaxDevStatus->ErrorCode = ErrorCode;
 
-                // Post the completion packet
-                PostQueuedCompletionStatus( CompletionPort,
-                                sizeof(FAX_DEV_STATUS),
-                                CompletionKey,
-                                (LPOVERLAPPED) pFaxDevStatus);
-        }
+        // Post the completion packet
+        PostQueuedCompletionStatus( CompletionPort,
+                                    sizeof(FAX_DEV_STATUS),
+                                    CompletionKey,
+                                    (LPOVERLAPPED) pFaxDevStatus);
+    }
 }

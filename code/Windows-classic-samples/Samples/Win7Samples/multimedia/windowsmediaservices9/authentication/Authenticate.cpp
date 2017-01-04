@@ -1,4 +1,4 @@
-//+-------------------------------------------------------------------------
+﻿//+-------------------------------------------------------------------------
 //
 //  Microsoft Windows Media Technologies
 //  Copyright (C) Microsoft Corporation. All rights reserved.
@@ -12,7 +12,7 @@
 
 
 // Note: Proxy/Stub Information
-//      To build a separate proxy/stub DLL, 
+//      To build a separate proxy/stub DLL,
 //      run nmake -f Authenticateps.mk in the project directory.
 
 #include "stdafx.h"

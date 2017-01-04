@@ -1,4 +1,4 @@
-//// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿//// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 //// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 //// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 //// PARTICULAR PURPOSE.
@@ -62,8 +62,8 @@ void CSampleCustomColorFontButton::CreateDeviceIndependentResources(const std::s
             m_size,
             L"en-us",
             &m_textFormat
-            )
-        );
+        )
+    );
 
     ComPtr<IDWriteTextFormat1> textFormat;
 
@@ -105,8 +105,8 @@ void CSampleCustomColorFontButton::DoDraw()
                 m_size * m_text.length() * 2.0f,
                 m_size * 2.0f,
                 &m_textLayout
-                )
-            );
+            )
+        );
 
         // Set the rectangle of the button to tightly contain the text.
         DWRITE_TEXT_METRICS metrics = { 0 };
@@ -126,21 +126,21 @@ void CSampleCustomColorFontButton::DoDraw()
             m_textLayout.Get(),
             m_blackBrush.Get(),
             D2D1_DRAW_TEXT_OPTIONS::D2D1_DRAW_TEXT_OPTIONS_CLIP | D2D1_DRAW_TEXT_OPTIONS::D2D1_DRAW_TEXT_OPTIONS_ENABLE_COLOR_FONT
-            );
+        );
     }
     else
     {
         context->FillRectangle(
             D2D1::RectF(m_left, m_top, m_left + m_width, m_top + m_height),
             m_defaultBrush.Get()
-            );
+        );
 
         context->DrawTextLayout(
             Point2F(m_left + 3.0f, m_top + 3.0F),
             m_textLayout.Get(),
             m_blackBrush.Get(),
             D2D1_DRAW_TEXT_OPTIONS::D2D1_DRAW_TEXT_OPTIONS_CLIP | D2D1_DRAW_TEXT_OPTIONS::D2D1_DRAW_TEXT_OPTIONS_ENABLE_COLOR_FONT
-            );
+        );
     }
 }
 

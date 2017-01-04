@@ -1,4 +1,4 @@
-/////////////////////////////////////////////////////////////////////////////
+﻿/////////////////////////////////////////////////////////////////////////////
 //
 //  Copyright (c) 2003 <company name>
 //
@@ -97,15 +97,21 @@ protected:
 // Overrides
     // ClassWizard generate virtual function overrides
     //{{AFX_VIRTUAL(CFileShareSampleParamsPage)
-    public:
+public:
     virtual BOOL OnSetActive();
-    protected:
+protected:
     virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
     //}}AFX_VIRTUAL
 
 protected:
-    virtual const CObjectProperty * Pprops( void ) const    { return m_rgProps; }
-    virtual DWORD                   Cprops( void ) const    { return sizeof( m_rgProps ) / sizeof( CObjectProperty ); }
+    virtual const CObjectProperty * Pprops( void ) const
+    {
+        return m_rgProps;
+    }
+    virtual DWORD                   Cprops( void ) const
+    {
+        return sizeof( m_rgProps ) / sizeof( CObjectProperty );
+    }
 
 //
 //  Implementation

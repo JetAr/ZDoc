@@ -1,4 +1,4 @@
-//------------------------------------------------------------------------------
+﻿//------------------------------------------------------------------------------
 // File: PlaneScene.h
 //
 // Desc: DirectShow sample code - interface for the CPlaneScene class
@@ -24,7 +24,7 @@
 const int NUM_VERTICES = 4;
 
 
-class CPlaneScene  
+class CPlaneScene
 {
 public:
 
@@ -42,12 +42,15 @@ private:
 
     struct CUSTOMVERTEX
     {
-        struct Position {
-            Position() : 
-                x(0.0f),y(0.0f),z(0.0f) {            
+        struct Position
+        {
+            Position() :
+                x(0.0f),y(0.0f),z(0.0f)
+            {
             };
             Position(float x_, float y_, float z_) :
-                x(x_),y(y_),z(z_) {
+                x(x_),y(y_),z(z_)
+            {
             };
             float x,y,z;
         };

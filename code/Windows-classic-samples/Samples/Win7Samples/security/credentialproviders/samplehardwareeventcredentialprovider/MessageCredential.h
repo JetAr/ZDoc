@@ -1,4 +1,4 @@
-//
+﻿//
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -20,13 +20,13 @@
 
 class CMessageCredential : public ICredentialProviderCredential
 {
-    public:
+public:
     // IUnknown
     IFACEMETHODIMP_(ULONG) AddRef()
     {
         return ++_cRef;
     }
-    
+
     IFACEMETHODIMP_(ULONG) Release()
     {
         LONG cRef = --_cRef;
@@ -46,7 +46,7 @@ class CMessageCredential : public ICredentialProviderCredential
         };
         return QISearch(this, qit, riid, ppv);
     }
-  public:
+public:
     // ICredentialProviderCredential
     IFACEMETHODIMP Advise(__in ICredentialProviderCredentialEvents* pcpce);
     IFACEMETHODIMP UnAdvise();
@@ -70,16 +70,16 @@ class CMessageCredential : public ICredentialProviderCredential
     IFACEMETHODIMP SetComboBoxSelectedValue(__in DWORD dwFieldID, __in DWORD dwSelectedItem);
     IFACEMETHODIMP CommandLinkClicked(__in DWORD dwFieldID);
 
-    IFACEMETHODIMP GetSerialization(__out CREDENTIAL_PROVIDER_GET_SERIALIZATION_RESPONSE* pcpgsr, 
-                                    __out CREDENTIAL_PROVIDER_CREDENTIAL_SERIALIZATION* pcpcs, 
-                                    __deref_out_opt PWSTR* ppwszOptionalStatusText, 
+    IFACEMETHODIMP GetSerialization(__out CREDENTIAL_PROVIDER_GET_SERIALIZATION_RESPONSE* pcpgsr,
+                                    __out CREDENTIAL_PROVIDER_CREDENTIAL_SERIALIZATION* pcpcs,
+                                    __deref_out_opt PWSTR* ppwszOptionalStatusText,
                                     __out CREDENTIAL_PROVIDER_STATUS_ICON* pcpsiOptionalStatusIcon);
-    IFACEMETHODIMP ReportResult(__in NTSTATUS ntsStatus, 
+    IFACEMETHODIMP ReportResult(__in NTSTATUS ntsStatus,
                                 __in NTSTATUS ntsSubstatus,
-                                __deref_out_opt PWSTR* ppwszOptionalStatusText, 
+                                __deref_out_opt PWSTR* ppwszOptionalStatusText,
                                 __out CREDENTIAL_PROVIDER_STATUS_ICON* pcpsiOptionalStatusIcon);
 
-  public:
+public:
     HRESULT Initialize(__in const CREDENTIAL_PROVIDER_FIELD_DESCRIPTOR* rgcpfd,
                        __in const FIELD_STATE_PAIR* rgfsp,
                        __in PWSTR szMessage);
@@ -87,22 +87,22 @@ class CMessageCredential : public ICredentialProviderCredential
 
     virtual ~CMessageCredential();
 
-  private:
+private:
     LONG                                    _cRef;
-    
-    CREDENTIAL_PROVIDER_FIELD_DESCRIPTOR    _rgCredProvFieldDescriptors[SMFI_NUM_FIELDS];   // An array holding the 
-                                                                                            // type and name of each 
-                                                                                            // field in the tile.
-    
-    FIELD_STATE_PAIR                        _rgFieldStatePairs[SMFI_NUM_FIELDS];            // An array holding the 
-                                                                                            // state of each field in 
-                                                                                            // the tile.
 
-    PWSTR                                   _rgFieldStrings[SMFI_NUM_FIELDS];               // An array holding the 
-                                                                                            // string value of each 
-                                                                                            // field. This is different 
-                                                                                            // from the name of the 
-                                                                                            // field held in 
-                                                                                            // _rgCredProvFieldDescriptors.
+    CREDENTIAL_PROVIDER_FIELD_DESCRIPTOR    _rgCredProvFieldDescriptors[SMFI_NUM_FIELDS];   // An array holding the
+    // type and name of each
+    // field in the tile.
+
+    FIELD_STATE_PAIR                        _rgFieldStatePairs[SMFI_NUM_FIELDS];            // An array holding the
+    // state of each field in
+    // the tile.
+
+    PWSTR                                   _rgFieldStrings[SMFI_NUM_FIELDS];               // An array holding the
+    // string value of each
+    // field. This is different
+    // from the name of the
+    // field held in
+    // _rgCredProvFieldDescriptors.
 
 };

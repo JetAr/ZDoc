@@ -1,11 +1,11 @@
-#pragma once
+﻿#pragma once
 
 // The following macros define the minimum required platform.  The minimum required platform
-// is the earliest version of Windows, Internet Explorer etc. that has the necessary features to run 
-// your application.  The macros work by enabling all features available on platform versions up to and 
+// is the earliest version of Windows, Internet Explorer etc. that has the necessary features to run
+// your application.  The macros work by enabling all features available on platform versions up to and
 // including the version specified.
 
-// This file has been updated with the values found in WinSDKVer.h.  In order to target earlier 
+// This file has been updated with the values found in WinSDKVer.h.  In order to target earlier
 // platforms, change the the following values to the targeted platform.
 
 #ifndef WINVER

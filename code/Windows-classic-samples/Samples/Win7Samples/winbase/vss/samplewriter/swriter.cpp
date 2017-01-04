@@ -1,4 +1,4 @@
-/*
+﻿/*
     Copyright (c) 2009 Microsoft Corporation
 
     Module Name:
@@ -25,7 +25,7 @@
 
 // GUID uniquely identifying the Writer
 static const VSS_ID SampleWriterId =
-    { 0x079462f2, 0x1079, 0x48dd, { 0xb3, 0xfb, 0xcc, 0xb2, 0xf2, 0x93, 0x4e, 0xc0 } };
+{ 0x079462f2, 0x1079, 0x48dd, { 0xb3, 0xfb, 0xcc, 0xb2, 0xf2, 0x93, 0x4e, 0xc0 } };
 
 // Name describing the Writer
 static const WCHAR  g_wszSampleWriterName[] = L"Sample Writer";
@@ -277,10 +277,10 @@ STDMETHODIMP SampleWriter::Initialize()
     wprintf(L"    SampleWriter::Initialize called\n");
 
     hr = CVssWriter::Initialize(
-        SampleWriterId,         // ID
-        g_wszSampleWriterName,  // name
-        VSS_UT_USERDATA,        // usage type
-        VSS_ST_OTHER);          // source type
+             SampleWriterId,         // ID
+             g_wszSampleWriterName,  // name
+             VSS_UT_USERDATA,        // usage type
+             VSS_ST_OTHER);          // source type
 
     if (FAILED(hr))
     {
@@ -338,13 +338,13 @@ STDMETHODIMP_(bool) SampleWriter::CreateAccountName(
 
     // First call should fail and just return the required buffer sizes
     bResult = LookupAccountSidW(
-        NULL,
-        pSid,
-        NULL,
-        &cchUserNameLength,
-        NULL,
-        &cchDomainLength,
-        &eSidNameUse);
+                  NULL,
+                  pSid,
+                  NULL,
+                  &cchUserNameLength,
+                  NULL,
+                  &cchDomainLength,
+                  &eSidNameUse);
 
     if (bResult != FALSE)
     {
@@ -374,13 +374,13 @@ STDMETHODIMP_(bool) SampleWriter::CreateAccountName(
 
     // Look for the account and domain names
     bResult = LookupAccountSidW(
-        NULL,
-        pSid,
-        wszUserName,
-        &cchUserNameLength,
-        wszDomain,
-        &cchDomainLength,
-        &eSidNameUse);
+                  NULL,
+                  pSid,
+                  wszUserName,
+                  &cchUserNameLength,
+                  wszDomain,
+                  &cchDomainLength,
+                  &eSidNameUse);
 
     // Should not fail since buffers were of a right size
     if (bResult == FALSE)
@@ -452,16 +452,16 @@ STDMETHODIMP_(bool) SampleWriter::AddComponent(
 
     // Add root component for this user profile
     hr = pMetadata->AddComponent(
-        VSS_CT_FILEGROUP,   // component type
-        NULL,               // logical path
-        wszProfile,         // component name
-        wszProfile,         // user friendly caption
-        NULL,
-        0,
-        false,
-        false,
-        true,               // selectable
-        true);              // selectable for restore
+             VSS_CT_FILEGROUP,   // component type
+             NULL,               // logical path
+             wszProfile,         // component name
+             wszProfile,         // user friendly caption
+             NULL,
+             0,
+             false,
+             false,
+             true,               // selectable
+             true);              // selectable for restore
 
     // Cycle through all the data this Writer cares to protect
     for (i = 0; SUCCEEDED(hr) && (wcscmp(g_sctAll[i].wszComponent, L"") != 0); ++i)
@@ -503,16 +503,16 @@ STDMETHODIMP_(bool) SampleWriter::AddComponent(
             // name of the parent component
             //
             hr = pMetadata->AddComponent(
-                VSS_CT_FILEGROUP,                   // component type
-                wszProfile,                         // logical path
-                g_sctAll[i].wszComponent,           // component name
-                g_sctAll[i].wszComponentCaption,    // user friendly caption
-                NULL,
-                0,
-                false,
-                false,
-                true,                               // selectable
-                true);                              // selectable for restore
+                     VSS_CT_FILEGROUP,                   // component type
+                     wszProfile,                         // logical path
+                     g_sctAll[i].wszComponent,           // component name
+                     g_sctAll[i].wszComponentCaption,    // user friendly caption
+                     NULL,
+                     0,
+                     false,
+                     false,
+                     true,                               // selectable
+                     true);                              // selectable for restore
 
             //
             // Preserve most recent component name if component creation succeeded
@@ -539,12 +539,12 @@ STDMETHODIMP_(bool) SampleWriter::AddComponent(
             // call should match path and name provided to the AddComponent call
             //
             hr = pMetadata->AddFilesToFileGroup(
-                wszProfile,                         // logical path
-                g_sctAll[i].wszComponent,           // component name
-                wszPath,                            // directory containing files
-                g_sctAll[i].wszFileGroupMask,       // files mask
-                true,                               // recursive
-                NULL);
+                     wszProfile,                         // logical path
+                     g_sctAll[i].wszComponent,           // component name
+                     wszPath,                            // directory containing files
+                     g_sctAll[i].wszFileGroupMask,       // files mask
+                     true,                               // recursive
+                     NULL);
 
             // Make sure documents are not being overwritten during restore
             if (SUCCEEDED(hr))
@@ -589,10 +589,10 @@ STDMETHODIMP_(bool) SampleWriter::AddComponent(
                 //      directory structure is being restored to)
                 //
                 hr = pMetadata->AddAlternateLocationMapping(
-                    wszPath,                        // directory containing files
-                    g_sctAll[i].wszFileGroupMask,   // files mask
-                    true,                           // recursive
-                    wszAlternatePath);
+                         wszPath,                        // directory containing files
+                         g_sctAll[i].wszFileGroupMask,   // files mask
+                         true,                           // recursive
+                         wszAlternatePath);
             }
         }
     }
@@ -646,20 +646,20 @@ STDMETHODIMP_(bool) SampleWriter::AddComponentForUserProfile(
         EXIT_ON_FAILURE(L"ConcatenateWithBackslash call");
 
     if (ERROR_SUCCESS != RegOpenKeyEx(
-        HKEY_LOCAL_MACHINE,
-        wszKeyName,
-        0,
-        KEY_READ,
-        &hkeyProfile))
+                HKEY_LOCAL_MACHINE,
+                wszKeyName,
+                0,
+                KEY_READ,
+                &hkeyProfile))
         EXIT_ON_FAILURE(L"RegOpenKeyEx call");
 
     lStatus = RegQueryValueExW(
-        hkeyProfile,
-        L"Flags",
-        NULL,
-        NULL,
-        (LPBYTE)&dwProfileFlags,
-        &dwSize);
+                  hkeyProfile,
+                  L"Flags",
+                  NULL,
+                  NULL,
+                  (LPBYTE)&dwProfileFlags,
+                  &dwSize);
 
     // Skip atypical profiles and keys without flags value
     if ((dwProfileFlags != 0) || (lStatus != ERROR_SUCCESS))
@@ -680,12 +680,12 @@ STDMETHODIMP_(bool) SampleWriter::AddComponentForUserProfile(
     {
         dwSize = (cchProfilePathLength - 1) * sizeof(WCHAR);
         lStatus = RegQueryValueExW(
-            hkeyProfile,
-            L"ProfileImagePath",
-            NULL,
-            NULL,
-            (LPBYTE)wszProfilePath,
-            &dwSize);
+                      hkeyProfile,
+                      L"ProfileImagePath",
+                      NULL,
+                      NULL,
+                      (LPBYTE)wszProfilePath,
+                      &dwSize);
 
         // Resize the buffer to accommodate the data
         if (lStatus == ERROR_MORE_DATA)
@@ -696,7 +696,8 @@ STDMETHODIMP_(bool) SampleWriter::AddComponentForUserProfile(
                 EXIT_ON_FAILURE(L"realloc call");
             ZeroMemory(wszProfilePath, cchProfilePathLength * sizeof(WCHAR));
         }
-    } while(lStatus == ERROR_MORE_DATA);
+    }
+    while(lStatus == ERROR_MORE_DATA);
 
     if (lStatus != ERROR_SUCCESS)
         EXIT_ON_FAILURE(L"first RegQueryValueExW call");
@@ -718,12 +719,12 @@ STDMETHODIMP_(bool) SampleWriter::AddComponentForUserProfile(
     // Get SID for the account using this profile
     //
     if (ERROR_SUCCESS != RegQueryValueExW(
-        hkeyProfile,
-        L"Sid",
-        NULL,
-        NULL,
-        NULL,
-        &dwSize))
+                hkeyProfile,
+                L"Sid",
+                NULL,
+                NULL,
+                NULL,
+                &dwSize))
     {
         // Some keys have no Sid value - those are not interesting to us
         bResult = true;
@@ -736,12 +737,12 @@ STDMETHODIMP_(bool) SampleWriter::AddComponentForUserProfile(
         EXIT_ON_FAILURE(L"LocalAlloc call");
 
     if (ERROR_SUCCESS != RegQueryValueExW(
-        hkeyProfile,
-        L"Sid",
-        NULL,
-        NULL,
-        (LPBYTE)pSid,
-        &dwSize))
+                hkeyProfile,
+                L"Sid",
+                NULL,
+                NULL,
+                (LPBYTE)pSid,
+                &dwSize))
         EXIT_ON_FAILURE(L"third RegQueryValueExW call");
 
     //
@@ -816,11 +817,11 @@ STDMETHODIMP_(bool) SampleWriter::AddComponents(
 
     // Open the profile list
     lStatus = RegOpenKeyExW(
-        HKEY_LOCAL_MACHINE,
-        g_wszProfileList,
-        0,
-        KEY_READ,
-        &hkeyProfiles);
+                  HKEY_LOCAL_MACHINE,
+                  g_wszProfileList,
+                  0,
+                  KEY_READ,
+                  &hkeyProfiles);
 
     if (lStatus != ERROR_SUCCESS)
         EXIT_ON_FAILURE(L"RegOpenKeyExW call");
@@ -849,7 +850,8 @@ STDMETHODIMP_(bool) SampleWriter::AddComponents(
                     EXIT_ON_FAILURE(L"realloc call");
                 ZeroMemory(wszKeyName, cchKeyNameLength * sizeof(WCHAR));
             }
-        } while(lStatus == ERROR_MORE_DATA);
+        }
+        while(lStatus == ERROR_MORE_DATA);
 
 
         // Exit 'for' loop if done
@@ -908,11 +910,11 @@ STDMETHODIMP_(bool) SampleWriter::OnIdentify(
     // to detail alternate restore locations
     //
     hr = pMetadata->SetRestoreMethod(
-        VSS_RME_RESTORE_TO_ALTERNATE_LOCATION,
-        NULL,
-        NULL,
-        VSS_WRE_ALWAYS,
-        false);
+             VSS_RME_RESTORE_TO_ALTERNATE_LOCATION,
+             NULL,
+             NULL,
+             VSS_WRE_ALWAYS,
+             false);
 
     if (FAILED(hr))
         EXIT_ON_FAILURE(L"SetRestoreMethod call");
@@ -1316,7 +1318,7 @@ bool STDMETHODCALLTYPE SampleWriter::OnPostRestore(
             // the type of information they contain
             //
             if ((_wcsicmp(queue->GetComponentName(), OLE2T(bstrComponentName)) == 0) ||
-                (_wcsicmp(queue->GetComponentPath(), OLE2T(bstrComponentName)) == 0))
+                    (_wcsicmp(queue->GetComponentPath(), OLE2T(bstrComponentName)) == 0))
             {
                 wprintf(
                     L"    (*) Files in the directory: %s\\%s\n",

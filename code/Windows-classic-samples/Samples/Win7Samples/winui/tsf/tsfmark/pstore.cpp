@@ -1,4 +1,4 @@
-//
+﻿//
 // pstore.cpp
 //
 // CCustomPropertyStore implementation, ITfPropertyStore example.
@@ -48,7 +48,7 @@ STDAPI CCustomPropertyStore::QueryInterface(REFIID riid, void **ppvObj)
     *ppvObj = NULL;
 
     if (IsEqualIID(riid, IID_IUnknown) ||
-        IsEqualIID(riid, IID_ITfPropertyStore))
+            IsEqualIID(riid, IID_ITfPropertyStore))
     {
         *ppvObj = (ITfPropertyStore *)this;
     }

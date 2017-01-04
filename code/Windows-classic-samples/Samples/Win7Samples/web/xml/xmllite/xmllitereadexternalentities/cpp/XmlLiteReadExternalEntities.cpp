@@ -1,12 +1,12 @@
-//-----------------------------------------------------------------------
+﻿//-----------------------------------------------------------------------
 // This file is part of the Windows SDK Code Samples.
-// 
+//
 // Copyright (C) Microsoft Corporation.  All rights reserved.
-// 
+//
 // This source code is intended only as a supplement to Microsoft
 // Development Tools and/or on-line documentation.  See these other
 // materials for detailed information regarding Microsoft code samples.
-// 
+//
 // THIS CODE AND INFORMATION ARE PROVIDED AS IS WITHOUT WARRANTY OF ANY
 // KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
 // IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -28,9 +28,9 @@ public:
         m_cref = 1;
     }
     // Destructor
-	virtual ~DateXmlResolver() {}
+    virtual ~DateXmlResolver() {}
 
-  // IUnknown interface
+    // IUnknown interface
     virtual HRESULT STDMETHODCALLTYPE QueryInterface(REFIID riid, void ** ppvObject)
     {
         if (ppvObject == NULL)
@@ -39,7 +39,7 @@ public:
         }
 
         if (riid == __uuidof(IUnknown) ||
-            riid == __uuidof(IXmlResolver))
+                riid == __uuidof(IXmlResolver))
         {
             *ppvObject = static_cast<IXmlResolver *>(this);
         }
@@ -68,11 +68,11 @@ public:
         return cref;
     }
 
-  // IXmlResolver interface
+    // IXmlResolver interface
     virtual HRESULT STDMETHODCALLTYPE ResolveUri(const WCHAR * pwszBaseUri,
-        const WCHAR * pwszPublicIdentifier,
-        const WCHAR * pwszSystemIdentifier,
-        IUnknown ** ppResolvedInput)
+            const WCHAR * pwszPublicIdentifier,
+            const WCHAR * pwszSystemIdentifier,
+            IUnknown ** ppResolvedInput)
     {
         IStream *pstream = NULL;
         HRESULT hr;
@@ -200,7 +200,7 @@ int _tmain(int argc, WCHAR* argv[])
     const WCHAR* pwszLocalName;
     const WCHAR* pwszValue;
     UINT cwchPrefix;
-	DateXmlResolver* pXMLResolver = new DateXmlResolver();
+    DateXmlResolver* pXMLResolver = new DateXmlResolver();
 
     if (argc != 2)
     {
@@ -220,14 +220,14 @@ int _tmain(int argc, WCHAR* argv[])
         wprintf(L"Error creating xml reader, error is %08.8lx", hr);
         return -1;
     }
-   
+
     if (FAILED(hr = pReader->SetProperty(XmlReaderProperty_DtdProcessing, DtdProcessing_Parse)))
     {
         wprintf(L"Error setting XmlReaderProperty_DtdProcessing, error is %08.8lx", hr);
         return -1;
     }
 
-	 if (FAILED(hr = pReader->SetProperty(XmlReaderProperty_XmlResolver, (LONG_PTR)pXMLResolver)))
+    if (FAILED(hr = pReader->SetProperty(XmlReaderProperty_XmlResolver, (LONG_PTR)pXMLResolver)))
     {
         wprintf(L"Error setting XmlReaderProperty_XmlResolver, error is %08.8lx", hr);
         return -1;
@@ -336,6 +336,6 @@ int _tmain(int argc, WCHAR* argv[])
             break;
         }
     }
-	pXMLResolver->Release();
+    pXMLResolver->Release();
     return 0;
 }

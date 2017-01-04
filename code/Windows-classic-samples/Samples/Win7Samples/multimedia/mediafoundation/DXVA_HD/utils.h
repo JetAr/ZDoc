@@ -1,5 +1,5 @@
-//////////////////////////////////////////////////////////////////////
-// 
+﻿//////////////////////////////////////////////////////////////////////
+//
 // Miscellaneous helper classes.
 //
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
@@ -30,17 +30,17 @@ template <class T> void SafeRelease(T **ppT)
 
 typedef HRESULT (WINAPI * PFNDWMISCOMPOSITIONENABLED)(
     __out BOOL* pfEnabled
-    );
+);
 
 typedef HRESULT (WINAPI * PFNDWMGETCOMPOSITIONTIMINGINFO)(
     __in HWND hwnd,
     __out DWM_TIMING_INFO* pTimingInfo
-    );
+);
 
 typedef HRESULT (WINAPI * PFNDWMSETPRESENTPARAMETERS)(
     __in HWND hwnd,
     __inout DWM_PRESENT_PARAMETERS* pPresentParams
-    );
+);
 
 
 //-------------------------------------------------------------------
@@ -61,9 +61,9 @@ class Timer
 
 public:
 
-    Timer() : 
-        m_hTimer(NULL), 
-        m_bBeginPeriod(FALSE), 
+    Timer() :
+        m_hTimer(NULL),
+        m_bBeginPeriod(FALSE),
         m_StartSysTime(0),
         m_lPeriodMsec(0),
         m_PreviousTime(0)
@@ -88,13 +88,13 @@ public:
         LARGE_INTEGER li = {0};
 
         if (!SetWaitableTimer(
-            m_hTimer,
-            &li,
-            lPeriodMsec,
-            NULL,
-            NULL,
-            FALSE
-            ))
+                    m_hTimer,
+                    &li,
+                    lPeriodMsec,
+                    NULL,
+                    NULL,
+                    FALSE
+                ))
         {
             DBGMSG(L"SetWaitableTimer failed with error %d.\n", GetLastError());
             return FALSE;
@@ -160,7 +160,7 @@ public:
 struct DwmHelper
 {
     HMODULE hDwmApiDLL;
-    
+
     PFNDWMISCOMPOSITIONENABLED      pfnDwmIsCompositionEnabled;
     PFNDWMGETCOMPOSITIONTIMINGINFO  pfnDwmGetCompositionTimingInfo;
     PFNDWMSETPRESENTPARAMETERS      pfnDwmSetPresentParameters;

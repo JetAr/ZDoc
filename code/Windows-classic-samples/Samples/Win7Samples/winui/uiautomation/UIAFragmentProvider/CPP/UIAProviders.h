@@ -1,20 +1,20 @@
-/*************************************************************************************************
+﻿/*************************************************************************************************
 * Description: Declarations for the sample UI Autoamtion provider implementations.
-* 
+*
 * See EntryPoint.cpp for a full description of this sample.
-*   
+*
 *
 *  Copyright (C) Microsoft Corporation.  All rights reserved.
-* 
+*
 * This source code is intended only as a supplement to Microsoft
 * Development Tools and/or on-line documentation.  See these other
 * materials for detailed information regarding Microsoft code samples.
-* 
+*
 * THIS CODE AND INFORMATION ARE PROVIDED AS IS WITHOUT WARRANTY OF ANY
 * KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
 * IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 * PARTICULAR PURPOSE.
-* 
+*
 *************************************************************************************************/
 #pragma once
 
@@ -44,9 +44,9 @@ typedef struct UiaIdentifiers
     EVENTID       ElementSelectedEvent;
 } UiaIds;
 
-class ListProvider : public IRawElementProviderSimple, 
-    public IRawElementProviderFragment, 
-    public IRawElementProviderFragmentRoot, 
+class ListProvider : public IRawElementProviderSimple,
+    public IRawElementProviderFragment,
+    public IRawElementProviderFragmentRoot,
     public ISelectionProvider
 {
 public:
@@ -97,14 +97,14 @@ private:
     CustomListControl* m_pControl;
 };
 
-class ListItemProvider : public IRawElementProviderSimple, 
-    public IRawElementProviderFragment, 
+class ListItemProvider : public IRawElementProviderSimple,
+    public IRawElementProviderFragment,
     public ISelectionItemProvider
 {
 public:
 
     // Constructor / destructor
-    ListItemProvider(CustomListItem* pControl); 
+    ListItemProvider(CustomListItem* pControl);
 
     // IUnknown methods
     IFACEMETHODIMP_(ULONG) AddRef();

@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -15,7 +15,7 @@
 //
 
 // {0F11B914-F461-4785-877C-482AB481CF7A}
-static const GUID ALARM_CLIENT_APPLICATION_ID = 
+static const GUID ALARM_CLIENT_APPLICATION_ID =
 { 0xf11b914, 0xf461, 0x4785, { 0x87, 0x7c, 0x48, 0x2a, 0xb4, 0x81, 0xcf, 0x7a } };
 
 
@@ -127,7 +127,7 @@ void CAlarmClient::ShowNotification(Alarm* pAlarm)
                              pAlarm->m_time.wHour,
                              pAlarm->m_time.wMinute);
         if (SUCCEEDED(hr))
-        {           
+        {
             hr = m_pNotification->put_Message(wszMsg);
             if (FAILED(hr))
             {
@@ -174,14 +174,14 @@ void CAlarmClient::ShowNotification(Alarm* pAlarm)
             m_pNotificationMgr->Show(m_pNotification);
 
             ::MessageBox(NULL, wszMsg, L"Alarm went off!", MB_OK);
-            
+
             m_pNotificationMgr->Revoke(pAlarm->m_notificationId);
         }
     }
 }
 
 DWORD WINAPI CAlarmClient::TimeMonitor(LPVOID lpParam)
-{    
+{
     Alarm* pAlarm = (Alarm*)lpParam;
 
     if (NULL == pAlarm)
@@ -215,18 +215,18 @@ DWORD WINAPI CAlarmClient::TimeMonitor(LPVOID lpParam)
         }
         else
         {
-            Sleep(1000);        
+            Sleep(1000);
         }
     }
-    
+
     return 0;
 }
 
 void CAlarmClient::StartAlarmThread(Alarm* pAlarm)
 {
-    HANDLE hThread = ::CreateThread(NULL, 
-                                    0, 
-                                    this->TimeMonitor, 
+    HANDLE hThread = ::CreateThread(NULL,
+                                    0,
+                                    this->TimeMonitor,
                                     pAlarm,
                                     0,
                                     NULL);
@@ -237,17 +237,17 @@ void CAlarmClient::StartAlarmThread(Alarm* pAlarm)
         // Failed to start alarm thread
         //
     }
-    
+
 }
 
 void CAlarmClient::CreateNotification()
 {
     if (NULL != m_pSession &&
-        NULL == m_pNotificationMgr)
+            NULL == m_pNotificationMgr)
     {
         HRESULT hr = ::CoCreateInstance(CLSID_SideShowNotification,
                                         NULL,
-                                        CLSCTX_INPROC_SERVER, 
+                                        CLSCTX_INPROC_SERVER,
                                         IID_PPV_ARGS(&m_pNotification));
 
         if (FAILED(hr))
@@ -285,13 +285,13 @@ void CAlarmClient::CreateNotification()
                 // Registry data is missing.
                 //
             }
-            else 
+            else
             {
                 //
                 // ISideShowSession::RegisterNotifications failed.
                 //
             }
-        }       
+        }
     }
 }
 
@@ -303,8 +303,8 @@ void CAlarmClient::Register()
     //
     HRESULT hr = S_OK;
 
-    if (NULL == m_pSession && 
-        NULL == m_pContentMgr)
+    if (NULL == m_pSession &&
+            NULL == m_pContentMgr)
     {
         hr = ::CoCreateInstance(CLSID_SideShowSession,
                                 NULL,
@@ -340,13 +340,13 @@ void CAlarmClient::Register()
                 // Have you added the proper information to the registry for this application?
                 //
             }
-            else 
+            else
             {
                 //
                 // ISideShowSession::RegisterContent failed
                 //
             }
-        }       
+        }
     }
     else
     {
@@ -383,7 +383,7 @@ void CAlarmClient::Unregister()
     }
 
     if (NULL != m_pSession)
-    {       
+    {
         m_pSession->Release();
         m_pSession = NULL;
     }
@@ -401,7 +401,7 @@ void CAlarmClient::AddContent()
         {
             m_pContent = new CAlarmContent();
         }
-        
+
         HRESULT hr = m_pContentMgr->Add(m_pContent);
 
         if (SUCCEEDED(hr))
@@ -436,5 +436,5 @@ void CAlarmClient::RemoveAllContent()
             // Failed to remove content.
             //
         }
-    }  
+    }
 }

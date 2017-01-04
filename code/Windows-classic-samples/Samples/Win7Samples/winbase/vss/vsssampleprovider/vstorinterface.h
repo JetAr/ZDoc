@@ -1,4 +1,4 @@
-/*++
+﻿/*++
 
 Copyright (c) Microsoft Corporation. All rights reserved.
 
@@ -8,7 +8,7 @@ Module Name:
 
 Abstract:
 
-    Declaration of interfaces for utilizing VirtualStorage 
+    Declaration of interfaces for utilizing VirtualStorage
     driver.
 
 --*/
@@ -17,7 +17,7 @@ Abstract:
 #define _VSTORINTERFACE_H_
 
 
-typedef enum 
+typedef enum
 {
     VIRTUAL_NONE = 0,
     VIRTUAL_CDROM,
@@ -79,59 +79,59 @@ public:
     {
         ULONG  DeviceType;
         ULONG  DeviceNumber;
-    }STORAGE_INFORMATION;
-    
+    } STORAGE_INFORMATION;
+
     VirtualBus();
     ~VirtualBus();
 
     bool  IsValid();
 
-    HRESULT 
+    HRESULT
     QueryVersion(
         __out VIRTUAL_STORAGE_VERSION_INFORMATION&);
-        
-    HRESULT 
+
+    HRESULT
     CreateDriveEx(
         __in PNEW_VIRTUAL_DRIVE_DESCRIPTION  pDriveDesc,
         __out VIRTUAL_DRIVE_INFORMATION&  infoDrive);
-        
-    HRESULT 
+
+    HRESULT
     RemoveDrive(
         __in const GUID& guidDrive,
         __in bool bSurprise = false);
 
-    HRESULT 
+    HRESULT
     QueryMountedImage(
         __in const GUID& guidDrive,
         __out_ecount(DWORD) LPWSTR strImage,
         __in DWORD dwChars);
 
-    HRESULT 
+    HRESULT
     QueryDriveInterface(
         __in const GUID& guidDrive,
         __out_ecount(DWORD) LPWSTR strInterface,
         __in DWORD dwChars);
-    
-    HRESULT 
+
+    HRESULT
     QueryStorageInformation(
         __in const GUID& guidDrive,
         __out STORAGE_INFORMATION& infoStorage);
 
-    HRESULT 
+    HRESULT
     QueryStorageInformation(
         __in LPCWSTR strInterface,
         __out STORAGE_INFORMATION& infoStorage);
 
-    HRESULT 
+    HRESULT
     QueryStorageInformation(
         __in HANDLE hDrive,
         __out STORAGE_INFORMATION& infoStorage);
 
-    HRESULT 
-	ReSync(
-		__in const GUID& guidDrive,
-		__out LPCWSTR lpwstrSourceLun);
-    
+    HRESULT
+    ReSync(
+        __in const GUID& guidDrive,
+        __out LPCWSTR lpwstrSourceLun);
+
 private:
 
     HRESULT Open();

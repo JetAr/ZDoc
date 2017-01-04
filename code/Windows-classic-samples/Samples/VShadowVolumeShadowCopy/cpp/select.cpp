@@ -1,14 +1,14 @@
-/////////////////////////////////////////////////////////////////////////
-// Copyright © Microsoft Corporation. All rights reserved.
-// 
-//  This file may contain preliminary information or inaccuracies, 
-//  and may not correctly represent any associated Microsoft 
-//  Product as commercially released. All Materials are provided entirely 
-//  ìAS IS.î To the extent permitted by law, MICROSOFT MAKES NO 
-//  WARRANTY OF ANY KIND, DISCLAIMS ALL EXPRESS, IMPLIED AND STATUTORY 
-//  WARRANTIES, AND ASSUMES NO LIABILITY TO YOU FOR ANY DAMAGES OF 
-//  ANY TYPE IN CONNECTION WITH THESE MATERIALS OR ANY INTELLECTUAL PROPERTY IN THEM. 
-// 
+Ôªø/////////////////////////////////////////////////////////////////////////
+// Copyright ¬© Microsoft Corporation. All rights reserved.
+//
+//  This file may contain preliminary information or inaccuracies,
+//  and may not correctly represent any associated Microsoft
+//  Product as commercially released. All Materials are provided entirely
+//  ‚ÄúAS IS.‚Äù To the extent permitted by law, MICROSOFT MAKES NO
+//  WARRANTY OF ANY KIND, DISCLAIMS ALL EXPRESS, IMPLIED AND STATUTORY
+//  WARRANTIES, AND ASSUMES NO LIABILITY TO YOU FOR ANY DAMAGES OF
+//  ANY TYPE IN CONNECTION WITH THESE MATERIALS OR ANY INTELLECTUAL PROPERTY IN THEM.
+//
 
 
 // Main header
@@ -21,13 +21,13 @@
 //
 
 
-// Select the maximum number of components such that their 
+// Select the maximum number of components such that their
 // file descriptors are pointing only to volumes to be shadow copied
 void VssClient::SelectComponentsForBackup(
-        vector<wstring> shadowSourceVolumes, 
-        vector<wstring> excludedWriterAndComponentList,
-        vector<wstring> includedWriterAndComponentList
-        )
+    vector<wstring> shadowSourceVolumes,
+    vector<wstring> excludedWriterAndComponentList,
+    vector<wstring> includedWriterAndComponentList
+)
 {
     FunctionTracer ft(DBG_INFO);
 
@@ -66,12 +66,12 @@ void VssClient::SelectComponentsForBackup(
 }
 
 
-// Select the maximum number of components such that their 
+// Select the maximum number of components such that their
 // file descriptors are pointing only to volumes to be shadow copied
 void VssClient::SelectComponentsForRestore(
-        vector<wstring> excludedWriterAndComponentList,
-        vector<wstring> includedWriterAndComponentList
-        )
+    vector<wstring> excludedWriterAndComponentList,
+    vector<wstring> includedWriterAndComponentList
+)
 {
     FunctionTracer ft(DBG_INFO);
 
@@ -108,17 +108,17 @@ void VssClient::DiscoverDirectlyExcludedComponents(
 
     ft.WriteLine(L"Discover directly excluded components ...");
 
-    // Discover components that should be excluded from the shadow set 
-    // This means components that have at least one File Descriptor requiring 
-    // volumes not in the shadow set. 
+    // Discover components that should be excluded from the shadow set
+    // This means components that have at least one File Descriptor requiring
+    // volumes not in the shadow set.
     for (unsigned iWriter = 0; iWriter < writerList.size(); iWriter++)
     {
         VssWriter & writer = writerList[iWriter];
 
         // Check if the writer is excluded
-        if (FindStringInList(writer.name, excludedWriterAndComponentList) || 
-            FindStringInList(writer.id, excludedWriterAndComponentList) ||
-            FindStringInList(writer.instanceId, excludedWriterAndComponentList))
+        if (FindStringInList(writer.name, excludedWriterAndComponentList) ||
+                FindStringInList(writer.id, excludedWriterAndComponentList) ||
+                FindStringInList(writer.instanceId, excludedWriterAndComponentList))
         {
             writer.isExcluded = true;
             continue;
@@ -127,7 +127,7 @@ void VssClient::DiscoverDirectlyExcludedComponents(
         // Check if the component is excluded
         for (unsigned iComponent = 0; iComponent < writer.components.size(); iComponent++)
         {
-            VssComponent & component = writer.components[iComponent]; 
+            VssComponent & component = writer.components[iComponent];
 
             // Check to see if this component is explicitly excluded
 
@@ -138,12 +138,12 @@ void VssClient::DiscoverDirectlyExcludedComponents(
             wstring componentPathWithWriterIID = writer.instanceId + L":" + component.fullPath;
 
             // Check to see if this component is explicitly excluded
-            if (FindStringInList(componentPathWithWriterName, excludedWriterAndComponentList) || 
-                FindStringInList(componentPathWithWriterID, excludedWriterAndComponentList) ||
-                FindStringInList(componentPathWithWriterIID, excludedWriterAndComponentList))
+            if (FindStringInList(componentPathWithWriterName, excludedWriterAndComponentList) ||
+                    FindStringInList(componentPathWithWriterID, excludedWriterAndComponentList) ||
+                    FindStringInList(componentPathWithWriterIID, excludedWriterAndComponentList))
             {
                 ft.WriteLine(L"- Component '%s' from writer '%s' is explicitly excluded from backup ",
-                    component.fullPath.c_str(), writer.name.c_str());
+                             component.fullPath.c_str(), writer.name.c_str());
 
                 component.isExcluded = true;
                 continue;
@@ -154,7 +154,7 @@ void VssClient::DiscoverDirectlyExcludedComponents(
         bool nonExcludedComponents = false;
         for (unsigned i = 0; i < writer.components.size(); i++)
         {
-            VssComponent & component = writer.components[i]; 
+            VssComponent & component = writer.components[i];
 
             if (!component.isExcluded)
                 nonExcludedComponents = true;
@@ -204,9 +204,9 @@ void VssClient::DiscoverNonShadowedExcludedComponents(
 
     ft.WriteLine(L"Discover components that reside outside the shadow set ...");
 
-    // Discover components that should be excluded from the shadow set 
-    // This means components that have at least one File Descriptor requiring 
-    // volumes not in the shadow set. 
+    // Discover components that should be excluded from the shadow set
+    // This means components that have at least one File Descriptor requiring
+    // volumes not in the shadow set.
     for (unsigned iWriter = 0; iWriter < m_writerList.size(); iWriter++)
     {
         VssWriter & writer = m_writerList[iWriter];
@@ -218,7 +218,7 @@ void VssClient::DiscoverNonShadowedExcludedComponents(
         // Check if the component is excluded
         for (unsigned iComponent = 0; iComponent < writer.components.size(); iComponent++)
         {
-            VssComponent & component = writer.components[iComponent]; 
+            VssComponent & component = writer.components[iComponent];
 
             // Check to see if this component is explicitly excluded
             if (component.isExcluded)
@@ -232,8 +232,8 @@ void VssClient::DiscoverNonShadowedExcludedComponents(
                 {
                     wstring wsUniquePath(MAX_PATH, L'\0');
                     ClusterGetVolumeNameForVolumeMountPoint(component.affectedVolumes[iVol].c_str(),
-                        WString2Buffer(wsUniquePath),
-                        (DWORD)wsUniquePath.length());
+                                                            WString2Buffer(wsUniquePath),
+                                                            (DWORD)wsUniquePath.length());
 
                     component.affectedVolumes[iVol] = wsUniquePath;
                 }
@@ -266,9 +266,9 @@ void VssClient::DiscoverAllExcludedComponents()
 
     ft.WriteLine(L"Discover all excluded components ...");
 
-    // Discover components that should be excluded from the shadow set 
-    // This means components that have at least one File Descriptor requiring 
-    // volumes not in the shadow set. 
+    // Discover components that should be excluded from the shadow set
+    // This means components that have at least one File Descriptor requiring
+    // volumes not in the shadow set.
     for (unsigned iWriter = 0; iWriter < m_writerList.size(); iWriter++)
     {
         VssWriter & writer = m_writerList[iWriter];
@@ -278,7 +278,7 @@ void VssClient::DiscoverAllExcludedComponents()
         // Enumerate all components
         for (unsigned i = 0; i < writer.components.size(); i++)
         {
-            VssComponent & component = writer.components[i]; 
+            VssComponent & component = writer.components[i];
 
             // Check if this component has any excluded children
             // If yes, deselect it
@@ -288,11 +288,11 @@ void VssClient::DiscoverAllExcludedComponents()
                 if (component.IsAncestorOf(descendent) && descendent.isExcluded)
                 {
                     ft.WriteLine(L"- Component '%s' from writer '%s' is excluded from backup "
-                        L"(it has an excluded descendent: '%s')",
-                        component.fullPath.c_str(), writer.name.c_str(), descendent.name.c_str());
+                                 L"(it has an excluded descendent: '%s')",
+                                 component.fullPath.c_str(), writer.name.c_str(), descendent.name.c_str());
 
-                    component.isExcluded = true; 
-                    break; 
+                    component.isExcluded = true;
+                    break;
                 }
             }
         }
@@ -317,13 +317,13 @@ void VssClient::DiscoverExcludedWriters()
             continue;
 
         // Discover if we have any:
-        // - non-excluded selectable components 
+        // - non-excluded selectable components
         // - or non-excluded top-level non-selectable components
         // If we have none, then the whole writer must be excluded from the backup
         writer.isExcluded = true;
         for (unsigned i = 0; i < writer.components.size(); i++)
         {
-            VssComponent & component = writer.components[i]; 
+            VssComponent & component = writer.components[i];
             if (component.CanBeExplicitlyIncluded())
             {
                 writer.isExcluded = false;
@@ -339,17 +339,17 @@ void VssClient::DiscoverExcludedWriters()
             continue;
         }
 
-        // Now, discover if we have any top-level excluded non-selectable component 
+        // Now, discover if we have any top-level excluded non-selectable component
         // If this is true, then the whole writer must be excluded from the backup
         for (unsigned i = 0; i < writer.components.size(); i++)
         {
-            VssComponent & component = writer.components[i]; 
+            VssComponent & component = writer.components[i];
 
             if (component.isTopLevel && !component.isSelectable && component.isExcluded)
             {
                 ft.WriteLine(L"- The writer '%s' is now entirely excluded from the backup:", writer.name.c_str());
                 ft.WriteLine(L"  (the top-level non-selectable component '%s' is an excluded component)",
-                    component.fullPath.c_str());
+                             component.fullPath.c_str());
                 writer.isExcluded = true;
                 break;
             }
@@ -360,8 +360,8 @@ void VssClient::DiscoverExcludedWriters()
 
 
 
-// Discover the components that should be explicitly included 
-// These are any included top components 
+// Discover the components that should be explicitly included
+// These are any included top components
 void VssClient::DiscoverExplicitelyIncludedComponents()
 {
     FunctionTracer ft(DBG_INFO);
@@ -378,7 +378,7 @@ void VssClient::DiscoverExplicitelyIncludedComponents()
         // Compute the roots of included components
         for (unsigned i = 0; i < writer.components.size(); i++)
         {
-            VssComponent & component = writer.components[i]; 
+            VssComponent & component = writer.components[i];
 
             if (!component.CanBeExplicitlyIncluded())
                 continue;
@@ -390,10 +390,10 @@ void VssClient::DiscoverExplicitelyIncludedComponents()
                 VssComponent & ancestor = writer.components[j];
                 if (ancestor.IsAncestorOf(component) && ancestor.CanBeExplicitlyIncluded())
                 {
-                    // This cannot be explicitely included since we have another 
+                    // This cannot be explicitely included since we have another
                     // ancestor that that must be (implictely or explicitely) included
-                    component.isExplicitlyIncluded = false; 
-                    break; 
+                    component.isExplicitlyIncluded = false;
+                    break;
                 }
             }
         }
@@ -405,7 +405,7 @@ void VssClient::DiscoverExplicitelyIncludedComponents()
 void VssClient::VerifyExplicitelyIncludedComponent(
     wstring includedComponent,
     vector<VssWriter> & writerList
-    )
+)
 {
     FunctionTracer ft(DBG_INFO);
 
@@ -420,10 +420,10 @@ void VssClient::VerifyExplicitelyIncludedComponent(
         if (writer.isExcluded)
             continue;
 
-        // Find the associated component 
+        // Find the associated component
         for (unsigned j = 0; j < writer.components.size(); j++)
         {
-            VssComponent & component = writer.components[j]; 
+            VssComponent & component = writer.components[j];
 
             // Ignore explicitly excluded components
             if (component.isExcluded)
@@ -436,12 +436,12 @@ void VssClient::VerifyExplicitelyIncludedComponent(
             wstring componentPathWithWriterIID = writer.instanceId + L":" + component.fullPath;
 
             // Check to see if this component is (implicitly or explicitly) included
-            if (IsEqual(componentPathWithWriterName, includedComponent) || 
-                IsEqual(componentPathWithWriterID, includedComponent) ||
-                IsEqual(componentPathWithWriterIID, includedComponent))
+            if (IsEqual(componentPathWithWriterName, includedComponent) ||
+                    IsEqual(componentPathWithWriterID, includedComponent) ||
+                    IsEqual(componentPathWithWriterIID, includedComponent))
             {
-                ft.Trace(DBG_INFO, L"- Found component '%s' from writer '%s'", 
-                    component.fullPath.c_str(), writer.name.c_str());
+                ft.Trace(DBG_INFO, L"- Found component '%s' from writer '%s'",
+                         component.fullPath.c_str(), writer.name.c_str());
 
                 // If we are during restore, we just found our component
                 if (m_bDuringRestore)
@@ -494,7 +494,7 @@ void VssClient::VerifyExplicitelyIncludedComponent(
 void VssClient::VerifyExplicitelyIncludedWriter(
     wstring writerName,
     vector<VssWriter> & writerList
-    )
+)
 {
     FunctionTracer ft(DBG_INFO);
 
@@ -510,9 +510,9 @@ void VssClient::VerifyExplicitelyIncludedWriter(
             continue;
 
         // Check if we found the writer
-        if (IsEqual(writerName, writer.name) 
-            || IsEqual(writerName, writer.id) 
-            || IsEqual(writerName, writer.instanceId))
+        if (IsEqual(writerName, writer.name)
+                || IsEqual(writerName, writer.id)
+                || IsEqual(writerName, writer.instanceId))
         {
             if (writer.isExcluded)
             {
@@ -525,7 +525,7 @@ void VssClient::VerifyExplicitelyIncludedWriter(
             // Make sure all its associated components are selected
             for (unsigned j = 0; j < writer.components.size(); j++)
             {
-                VssComponent & component = writer.components[j]; 
+                VssComponent & component = writer.components[j];
 
                 if (component.isExcluded)
                 {
@@ -538,7 +538,7 @@ void VssClient::VerifyExplicitelyIncludedWriter(
             }
 
             ft.WriteLine(L"   - All components from writer \"%s\" are selected", writerName.c_str());
-            return; 
+            return;
         }
     }
 
@@ -550,8 +550,8 @@ void VssClient::VerifyExplicitelyIncludedWriter(
 
 
 
-// Discover the components that should be explicitly included 
-// These are any included top components 
+// Discover the components that should be explicitly included
+// These are any included top components
 void VssClient::SelectExplicitelyIncludedComponents()
 {
     FunctionTracer ft(DBG_INFO);
@@ -570,7 +570,7 @@ void VssClient::SelectExplicitelyIncludedComponents()
         // Compute the roots of included components
         for (unsigned i = 0; i < writer.components.size(); i++)
         {
-            VssComponent & component = writer.components[i]; 
+            VssComponent & component = writer.components[i];
 
             if (!component.isExplicitlyIncluded)
                 continue;
@@ -579,11 +579,11 @@ void VssClient::SelectExplicitelyIncludedComponents()
 
             // Add the component
             CHECK_COM(m_pVssObject->AddComponent(
-                WString2Guid(writer.instanceId),
-                WString2Guid(writer.id),
-                component.type,
-                component.logicalPath.c_str(),
-                component.name.c_str()));
+                          WString2Guid(writer.instanceId),
+                          WString2Guid(writer.id),
+                          component.type,
+                          component.logicalPath.c_str(),
+                          component.name.c_str()));
         }
     }
 }
@@ -610,7 +610,7 @@ void VssClient::SelectNonexcludedComponentsForRestore()
         // Compute the roots of included components
         for (unsigned i = 0; i < writer.components.size(); i++)
         {
-            VssComponent & component = writer.components[i]; 
+            VssComponent & component = writer.components[i];
 
             // Do not select excluded components
             if (component.isExcluded)
@@ -620,11 +620,11 @@ void VssClient::SelectNonexcludedComponentsForRestore()
 
             // Select the component for restore
             CHECK_COM(m_pVssObject->SetSelectedForRestore(
-                WString2Guid(writer.id),
-                component.type,
-                component.logicalPath.c_str(),
-                component.name.c_str(),
-                true));
+                          WString2Guid(writer.id),
+                          component.type,
+                          component.logicalPath.c_str(),
+                          component.name.c_str(),
+                          true));
         }
     }
 }
@@ -658,7 +658,7 @@ void VssClient::SetFileRestoreStatus(bool bSuccesfullyRestored)
         // Compute the roots of included components
         for (unsigned i = 0; i < writer.components.size(); i++)
         {
-            VssComponent & component = writer.components[i]; 
+            VssComponent & component = writer.components[i];
 
             // Do not select excluded components
             if (component.isExcluded)
@@ -668,12 +668,12 @@ void VssClient::SetFileRestoreStatus(bool bSuccesfullyRestored)
 
             // Select the component for restore
             CHECK_COM(m_pVssObject->SetFileRestoreStatus(
-                WString2Guid(writer.id),
-                component.type,
-                component.logicalPath.c_str(),
-                component.name.c_str(),
-                restoreStatus)
-                );
+                          WString2Guid(writer.id),
+                          component.type,
+                          component.logicalPath.c_str(),
+                          component.name.c_str(),
+                          restoreStatus)
+                     );
         }
     }
 }
@@ -704,7 +704,7 @@ void VssClient::CheckSelectedWriterStatus()
 
     // Gather writer status to detect potential errors
     GatherWriterStatus();
-    
+
     // Gets the number of writers in the gathered status info
     // (WARNING: GatherWriterStatus must be called before)
     unsigned cWriters = 0;
@@ -721,11 +721,11 @@ void VssClient::CheckSelectedWriterStatus()
 
         // Get writer status
         CHECK_COM(m_pVssObject->GetWriterStatus(iWriter,
-                             &idInstance,
-                             &idWriter,
-                             &bstrWriterName,
-                             &eWriterStatus,
-                             &hrWriterFailure));
+                                                &idInstance,
+                                                &idWriter,
+                                                &bstrWriterName,
+                                                &eWriterStatus,
+                                                &hrWriterFailure));
 
         // If the writer is not selected, just continue
         if (!IsWriterSelected(idInstance))
@@ -734,37 +734,37 @@ void VssClient::CheckSelectedWriterStatus()
         // If the writer is in non-stable state, break
         switch(eWriterStatus)
         {
-            case VSS_WS_FAILED_AT_IDENTIFY:
-            case VSS_WS_FAILED_AT_PREPARE_BACKUP:
-            case VSS_WS_FAILED_AT_PREPARE_SNAPSHOT:
-            case VSS_WS_FAILED_AT_FREEZE:
-            case VSS_WS_FAILED_AT_THAW:
-            case VSS_WS_FAILED_AT_POST_SNAPSHOT:
-            case VSS_WS_FAILED_AT_BACKUP_COMPLETE:
-            case VSS_WS_FAILED_AT_PRE_RESTORE:
-            case VSS_WS_FAILED_AT_POST_RESTORE:
+        case VSS_WS_FAILED_AT_IDENTIFY:
+        case VSS_WS_FAILED_AT_PREPARE_BACKUP:
+        case VSS_WS_FAILED_AT_PREPARE_SNAPSHOT:
+        case VSS_WS_FAILED_AT_FREEZE:
+        case VSS_WS_FAILED_AT_THAW:
+        case VSS_WS_FAILED_AT_POST_SNAPSHOT:
+        case VSS_WS_FAILED_AT_BACKUP_COMPLETE:
+        case VSS_WS_FAILED_AT_PRE_RESTORE:
+        case VSS_WS_FAILED_AT_POST_RESTORE:
 #ifdef VSS_SERVER
-            case VSS_WS_FAILED_AT_BACKUPSHUTDOWN:
+        case VSS_WS_FAILED_AT_BACKUPSHUTDOWN:
 #endif
-                break;
+            break;
 
-            default:
-                continue;
+        default:
+            continue;
         }
 
         // Print writer status
         ft.WriteLine(L"\n"
-            L"ERROR: Selected writer '%s' is in failed state!\n"
-            L"   - Status: %d (%s)\n" 
-            L"   - Writer Failure code: 0x%08lx (%s)\n" 
-            L"   - Writer ID: " WSTR_GUID_FMT L"\n"
-            L"   - Instance ID: " WSTR_GUID_FMT L"\n",
-            (PWCHAR)bstrWriterName,
-            eWriterStatus, GetStringFromWriterStatus(eWriterStatus).c_str(), 
-            hrWriterFailure,FunctionTracer::HResult2String(hrWriterFailure).c_str(),
-            GUID_PRINTF_ARG(idWriter),
-            GUID_PRINTF_ARG(idInstance)
-            );
+                     L"ERROR: Selected writer '%s' is in failed state!\n"
+                     L"   - Status: %d (%s)\n"
+                     L"   - Writer Failure code: 0x%08lx (%s)\n"
+                     L"   - Writer ID: " WSTR_GUID_FMT L"\n"
+                     L"   - Instance ID: " WSTR_GUID_FMT L"\n",
+                     (PWCHAR)bstrWriterName,
+                     eWriterStatus, GetStringFromWriterStatus(eWriterStatus).c_str(),
+                     hrWriterFailure,FunctionTracer::HResult2String(hrWriterFailure).c_str(),
+                     GUID_PRINTF_ARG(idWriter),
+                     GUID_PRINTF_ARG(idInstance)
+                    );
 
         // Stop here
         throw(E_UNEXPECTED);

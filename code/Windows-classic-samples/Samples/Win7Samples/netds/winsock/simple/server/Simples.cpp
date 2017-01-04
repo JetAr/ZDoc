@@ -1,4 +1,4 @@
-/******************************************************************************\
+﻿/******************************************************************************\
 * simples.c - Simple TCP/UDP server using Winsock 1.1
 *       This is a part of the Microsoft Source Code Samples.
 *       Copyright 1996 - 2000 Microsoft Corporation.
@@ -9,8 +9,8 @@
 *       Microsoft samples programs.
 \******************************************************************************/
 #ifdef _IA64_
-    #pragma warning(disable:4127)
-#endif 
+#pragma warning(disable:4127)
+#endif
 
 #ifndef WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN
@@ -30,13 +30,13 @@
 // Function prototype
 DWORD WINAPI ServerThread(LPVOID lpParam);
 
-// 
+//
 // Function: Usage
 //
 // Description:
 //     Print usage information to the console and exits.
 //
-void Usage(char *progname) 
+void Usage(char *progname)
 {
     fprintf(stderr,"Usage\n%s -p [protocol] -e [endpoint] -i [interface] [-4] [-6]\n"
             "Where:\n"
@@ -67,28 +67,28 @@ void Usage(char *progname)
 //    source. The main thread waits until all child threads have terminated at which
 //    point it cleans up all resources and exits.
 //
-int __cdecl main(int argc, char **argv) 
+int __cdecl main(int argc, char **argv)
 {
-    struct addrinfo  hints, 
-    *results = NULL,
-    *addrptr = NULL;
+    struct addrinfo  hints,
+               *results = NULL,
+                *addrptr = NULL;
     WSADATA     wsaData;
     SOCKET     *server_sockets = NULL;
     HANDLE     *server_threads = NULL;
     char        hoststr[NI_MAXHOST],
-    servstr[NI_MAXSERV];
+                servstr[NI_MAXSERV];
     char       *interface = NULL,
-    *port = DEFAULT_PORT;
+                *port = DEFAULT_PORT;
     int         socket_type = DEFAULT_PROTO,
-    address_family = AF_UNSPEC,     // Default to any (IPv4 or IPv6)
-    socket_count = 0,
-    retval,
-    i;
+                address_family = AF_UNSPEC,     // Default to any (IPv4 or IPv6)
+                socket_count = 0,
+                retval,
+                i;
 
     /* Parse arguments */
     if (argc >1)
     {
-        for (i=1;i <argc;i++)
+        for (i=1; i <argc; i++)
         {
             if ( (strlen(argv[i]) == 2) && ( (argv[i][0] == '-') || (argv[i][0] == '/') ) )
             {
@@ -175,10 +175,10 @@ int __cdecl main(int argc, char **argv)
 
     // Allocate space for the server sockets
     server_sockets = (SOCKET *)HeapAlloc(
-                                        GetProcessHeap(), 
-                                        HEAP_ZERO_MEMORY, 
-                                        sizeof(SOCKET) * socket_count
-                                        );
+                         GetProcessHeap(),
+                         HEAP_ZERO_MEMORY,
+                         sizeof(SOCKET) * socket_count
+                     );
     if (server_sockets == NULL)
     {
         fprintf(stderr, "HeapAlloc failed: %d\n", GetLastError());
@@ -186,7 +186,7 @@ int __cdecl main(int argc, char **argv)
     }
 
     // Initialize the socket array first
-    for (i=0; i < socket_count ;i++)
+    for (i=0; i < socket_count ; i++)
         server_sockets[i] = INVALID_SOCKET;
 
     // Create the server sockets - one for each address returned
@@ -196,10 +196,10 @@ int __cdecl main(int argc, char **argv)
     {
         // Create the socket according to the parameters returned
         server_sockets[socket_count] = socket(
-                                             addrptr->ai_family, 
-                                             addrptr->ai_socktype, 
-                                             addrptr->ai_protocol
-                                             );
+                                           addrptr->ai_family,
+                                           addrptr->ai_socktype,
+                                           addrptr->ai_protocol
+                                       );
         if (server_sockets[socket_count] == INVALID_SOCKET)
         {
             fprintf(stderr, "socket failed: %d\n", WSAGetLastError());
@@ -221,9 +221,9 @@ int __cdecl main(int argc, char **argv)
         if (addrptr->ai_socktype == SOCK_STREAM)
         {
             retval = listen(
-                           server_sockets[socket_count],
-                           7
-                           );
+                         server_sockets[socket_count],
+                         7
+                     );
             if (retval == SOCKET_ERROR)
             {
                 fprintf(stderr, "listen failed: %d\n", WSAGetLastError());
@@ -233,14 +233,14 @@ int __cdecl main(int argc, char **argv)
 
         // Print the address this socket is bound to
         retval = getnameinfo(
-                            addrptr->ai_addr,
-                            (socklen_t)addrptr->ai_addrlen,
-                            hoststr,
-                            NI_MAXHOST,
-                            servstr,
-                            NI_MAXSERV,
-                            NI_NUMERICHOST | NI_NUMERICSERV
-                            );
+                     addrptr->ai_addr,
+                     (socklen_t)addrptr->ai_addrlen,
+                     hoststr,
+                     NI_MAXHOST,
+                     servstr,
+                     NI_MAXSERV,
+                     NI_NUMERICHOST | NI_NUMERICSERV
+                 );
         if (retval != 0)
         {
             fprintf(stderr, "getnameinfo failed: %d\n", retval);
@@ -259,10 +259,10 @@ int __cdecl main(int argc, char **argv)
 
     // We need a server thread per socket so allocate space for the thread handle
     server_threads = (HANDLE *)HeapAlloc(
-                                        GetProcessHeap(),
-                                        HEAP_ZERO_MEMORY,
-                                        sizeof(HANDLE) * socket_count
-                                        );
+                         GetProcessHeap(),
+                         HEAP_ZERO_MEMORY,
+                         sizeof(HANDLE) * socket_count
+                     );
     if (server_threads == NULL)
     {
         fprintf(stderr, "HeapAlloc failed: %d\n", GetLastError());
@@ -270,16 +270,16 @@ int __cdecl main(int argc, char **argv)
     }
 
     // Create a thread for each address family which will handle that socket
-    for (i=0; i < socket_count ;i++)
+    for (i=0; i < socket_count ; i++)
     {
         server_threads[i] = CreateThread(
-                                        NULL,
-                                        0,
-                                        ServerThread,
-                                        (LPVOID)server_sockets[i],
-                                        0,
-                                        NULL
-                                        );
+                                NULL,
+                                0,
+                                ServerThread,
+                                (LPVOID)server_sockets[i],
+                                0,
+                                NULL
+                            );
         if (server_threads[i] == NULL)
         {
             fprintf(stderr, "CreateThread failed: %d\n", GetLastError());
@@ -289,18 +289,18 @@ int __cdecl main(int argc, char **argv)
 
     // Wait until the threads exit, then cleanup
     retval = WaitForMultipleObjects(
-                                   socket_count,
-                                   server_threads,
-                                   TRUE,
-                                   INFINITE
-                                   );
+                 socket_count,
+                 server_threads,
+                 TRUE,
+                 INFINITE
+             );
     if ((retval == WAIT_FAILED) || (retval == WAIT_TIMEOUT))
     {
         fprintf(stderr, "WaitForMultipleObjects failed: %d\n", GetLastError());
         goto cleanup;
     }
 
-    cleanup:
+cleanup:
 
     if (results != NULL)
     {
@@ -311,7 +311,7 @@ int __cdecl main(int argc, char **argv)
     // Release socket resources
     if (server_sockets != NULL)
     {
-        for (i=0; i < socket_count ;i++)
+        for (i=0; i < socket_count ; i++)
         {
             if (server_sockets[i] != INVALID_SOCKET)
                 closesocket(server_sockets[i]);
@@ -326,7 +326,7 @@ int __cdecl main(int argc, char **argv)
     // Release thread resources
     if (server_threads != NULL)
     {
-        for (i=0; i < socket_count ;i++)
+        for (i=0; i < socket_count ; i++)
         {
             if (server_threads[i] != NULL)
                 CloseHandle(server_threads[i]);
@@ -354,15 +354,15 @@ int __cdecl main(int argc, char **argv)
 DWORD WINAPI ServerThread(LPVOID lpParam)
 {
     SOCKET           s,                     // Server socket
-    sc = INVALID_SOCKET;   // Client socket (TCP)
+                     sc = INVALID_SOCKET;   // Client socket (TCP)
     SOCKADDR_STORAGE from;
     char             Buffer[DEFAULT_BUFFER_LEN],
-    servstr[NI_MAXSERV],
-    hoststr[NI_MAXHOST];
+                     servstr[NI_MAXSERV],
+                     hoststr[NI_MAXHOST];
     int              socket_type,
-    retval,
-    fromlen,
-    bytecount;
+                     retval,
+                     fromlen,
+                     bytecount;
 
     // Retrieve the socket handle
     s = (SOCKET) lpParam;
@@ -438,14 +438,14 @@ DWORD WINAPI ServerThread(LPVOID lpParam)
 
                 // Display the client's address
                 retval = getnameinfo(
-                                    (SOCKADDR *)&from,
-                                    fromlen,
-                                    hoststr,
-                                    NI_MAXHOST,
-                                    servstr,
-                                    NI_MAXSERV,
-                                    NI_NUMERICHOST | NI_NUMERICSERV
-                                    );
+                             (SOCKADDR *)&from,
+                             fromlen,
+                             hoststr,
+                             NI_MAXHOST,
+                             servstr,
+                             NI_MAXSERV,
+                             NI_NUMERICHOST | NI_NUMERICSERV
+                         );
                 if (retval != 0)
                 {
                     fprintf(stderr, "getnameinfo failed: %d\n", retval);
@@ -483,14 +483,14 @@ DWORD WINAPI ServerThread(LPVOID lpParam)
             // Display the source of the datagram
             //
             retval = getnameinfo(
-                                (SOCKADDR *)&from,
-                                fromlen,
-                                hoststr,
-                                NI_MAXHOST,
-                                servstr,
-                                NI_MAXSERV,
-                                NI_NUMERICHOST | NI_NUMERICSERV
-                                );
+                         (SOCKADDR *)&from,
+                         fromlen,
+                         hoststr,
+                         NI_MAXHOST,
+                         servstr,
+                         NI_MAXSERV,
+                         NI_NUMERICHOST | NI_NUMERICSERV
+                     );
             if (retval != 0)
             {
                 fprintf(stderr, "getnameinfo failed: %d\n", retval);
@@ -516,7 +516,7 @@ DWORD WINAPI ServerThread(LPVOID lpParam)
 
     }
 
-    cleanup:
+cleanup:
 
     // Close the client connection if present
     if (sc != INVALID_SOCKET)
