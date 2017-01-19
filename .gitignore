@@ -42,7 +42,7 @@
 *.pdb
 *.ipdb
 *.suo
-*.htm
+#*.htm
 *.idb
 #*.manifest
 *.res
