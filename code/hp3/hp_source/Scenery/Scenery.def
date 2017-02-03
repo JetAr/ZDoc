@@ -1,0 +1,8 @@
+LIBRARY   SCENERY BASE=0x11000000
+HEAPSIZE  1024
+EXPORTS
+		  DllMain
+		  sceneryTerm		@1
+		  sceneryIcon		@2
+		  sceneryInit		@3
+		  getSceneryIcon	@4

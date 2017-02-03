@@ -1,0 +1,4 @@
+
+//	Orrery data resource
+
+ORBITS ORRERYDATA MOVEABLE PURE "Bindata/Orrdata.bin"

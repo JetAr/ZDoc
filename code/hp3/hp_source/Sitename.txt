@@ -1,0 +1,1410 @@
+;
+;   Format of the site name database:
+;
+;   Column      Meaning
+;
+;      1        Sign of latitude, "+" if North, "-" if South
+;     2-7       Latitude in decimal degrees * 10000.  For example,
+;                 414975 means 41.4975 degrees.
+;      8        Blank
+;      9        Sign of longitude, "+" if West, "-" if East
+;    10-16      Longitude in decimal degrees * 10000.  For example,
+;                 1181447 means 118.1447 degrees.
+;     17        Blank
+;    18-End     Place name.  If the first character of the place
+;                 name is "+", this is a "major site" which is a
+;                 candidate place for the "Nearest city" search.
+;                 Otherwise the place simply appears in the list
+;                 of site names available for explicit selection.
+;
+;   Note that the latitudes and longitudes in this database
+;   are given in *decimal degrees*.  If you're adding new
+;   locations from a source that gives degrees, minutes, and
+;   seconds, be sure to convert to decimal degrees!
+;
++395117 +0761617 Aberdeen MD
++052000 +0045000 +Abidjan Ivory Coast
++324650 +0997133 Abilene TX
++175000 +0998000 +Acapulco Mexico
++060000 +0002000 +Accra Ghana
++090000 -0380000 +Addis Ababa Ethiopia
+-349333 -1386000 +Adelaide Australia
++126000 -0450000 +Aden Yemen
++410833 +0815122 Akron OH
++290000 -0480000 +Al Kuwait Kuwait
++377633 +1222433 Alameda CA
++329000 +1059567 Alamogordo NM
++315750 +0841583 Albany GA
++426503 +0737503 +Albany NY
++446333 +1230983 Albany OR
++350836 +1066514 +Albuquerque NM
++313017 +0924533 Alexandria LA
++388033 +0770500 Alexandria VA
++367000 -0030000 +Algiers Algeria
++341400 +1181067 Alhambra CA
+-237000 -1338667 Alice Springs Australia
++330117 +0812917 Allendale SC
++406030 +0754683 Allentown PA
++470000 -0020000 Allouis France
++315367 +0825083 Alma  GA
++405153 +0784008 Altoona PA
++352075 +1018344 Amarillo TX
++420317 +0936167 +Ames IA
++319000 -0359000 +Amman Jordan
++524000 -0050000 +Amsterdam Netherlands
++461283 +1129533 Anaconda MT
++338350 +1179133 Anaheim CA
++611667 +1499833 +Anchorage AK
++401667 +0856850 Anderson IN
++345100 +0826550 Anderson SC
++426000 -0015000 Andorra Andorra
+-122000 -0443000 +Anjouan Island
++400000 -0330000 +Ankara Turkey
++422831 +0837478 Ann Arbor MI
++389733 +0764950 Annapolis MD
+-190000 -0475000 +Antananarivo Madagascar
++171420 +0617930 +Antigua Island
++442617 +0884200 Appleton WI
++420883 +0879800 Arlington Heights IL
++424150 +0711517 Arlington MA
++327367 +0971133 Arlington TX
++398000 +1050783 Arvada CO
+-060920 +0144020 +Ascension Island
++355950 +0825572 +Asheville NC
++384767 +0826397 Ashland KY
++461617 +1238783 Astoria  OR
+-252000 +0574000 +Asuncion Paraguay
++339567 +0833833 Athens GA
++379666 -0237333 +Athens Greece
++337528 +0843936 +Atlanta GA
++393589 +0744314 Atlantic City NJ
++444467 +0834017 Au Sable  MI
++326067 +0854833 Auburn AL
+-368500 -1747667 +Auckland New Zealand
++440967 +0702283 Auburn ME
++334722 +0819667 Augusta GA
++443147 +0697747 +Augusta ME
++397400 +1048683 Aurora CO
++417550 +0883133 Aurora IL
++436700 +0929333 Austin  MN
++302692 +0977436 +Austin TX
++437833 +0829833 Bad Axe  MI
++332000 -0442000 +Baghdad Iraq
++448400 +1178067 Baker  OR
++353750 +1190217 Bakersfield CA
++340700 +1179583 Baldwin Park CA
+-375667 -1438500 Ballarat Australia
++392905 +0766125 +Baltimore MD
++130000 +0080000 +Bamako Mali
++132000 -1005000 +Bangkok Thailand
++448036 +0687717 +Bangor ME
++040000 -0180000 +Bangui Central African Rep.
++130000 +0170000 +Banjul Gambia
++441983 +0725017 Barre VT
++367450 +0959767 Bartlesville OK
++304494 +0911833 +Baton Rouge LA
++423161 +0851800 Battle Creek MI
++436011 +0838875 Bay City MI
++406667 +0741200 Bayonne NJ
++297183 +0949767 Baytown TX
++300889 +0941025 Beaumont TX
++454883 +1228067 Beaverton OR
++377767 +0811900 Beckley WV
++399000 -1160000 +Beijing China
++339000 -0355000 +Beirut Lebanon
++546000 +0060000 +Belfast N. Ireland
++448000 -0206000 +Belgrade Yugoslavia
++175000 +0882000 Belize City Belize
++476167 +1222000 Bellevue WA
++338900 +1181417 Bellflower CA
++487505 +1224767 Bellingham WA
++172500 +0887667 +Belmopan Belize
++475767 +0950250 Bemidji  MN
++428800 +0731967 Bennington VT
++345650 +0925867 Benton AR
++421283 +0864283 Benton Harbor  MI
++378694 +1222714 Berkeley CA
++525300 -0134200 +Berlin Germany
++469000 -0075000 +Bern Switzerland
++607917 +1617500 Bethel AK
++406211 +0753761 Bethlehem PA
++434917 +0704633 Biddeford ME
++457833 +1085011 +Billings MT
++303967 +0888833 Biloxi MS
++421008 +0759131 Binghamton NY
++335169 +0868100 +Birmingham AL
++256717 +0801783 Biscayne Bay  FL
++373833 +1183667 Bishop  CA
++468064 +1007881 +Bismarck ND
++120000 +0160000 +Bissau Guinea-Bissau
++407950 +0742000 Bloomfield NJ
++404817 +0889933 Bloomington IL
++391650 +0865317 Bloomington IN
++448250 +0932750 Bloomington MN
++332833 +0963650 Blue Ridge  TX
++372667 +0812233 Bluefield WV
++335967 +1147433 Blythe  CA
++263500 +0800867 +Boca Raton FL
++046000 +0740000 +Bogota Colombia
++436186 +1161994 +Boise ID
++508000 -0071000 +Bonn Germany
++407267 +1137567 Bonneville  UT
++358067 +1013817 Borger  TX
++423567 +0710569 +Boston MA
++400133 +1052800 +Boulder CO
++408850 +1118800 Bountiful UT
++390067 +0767817 Bowie MD
++369883 +0864508 Bowling Green KY
++382300 +0856650 Bowman  KY
++456817 +1110383 +Bozeman MT
++463483 +0940250 Brainerd  MN
++431000 +0802666 +Brantford Canada
+-160000 +0480000 +Brasilia Brazil
+-040000 -0150000 +Brazzaville Congo
++332383 +0977667 Bridgeport  TX
++411803 +0731894 +Bridgeport CT
++131000 +0590000 +Bridgetown Barbados
+-274667 -1530167 +Brisbane Australia
++416733 +0729500 Bristol CT
++365933 +0821767 Bristol TN
++420839 +0710236 Brockton MA
++360500 +0957950 Broken Arrow OK
++443100 +0967933 Brookings SD
++423317 +0711217 Brookline MA
++451000 +0933750 Brooklyn Park MN
++396733 +0757200 Brookside Park DE
++332400 +0872500 Brookwood  AL
+-179667 -1222333 Broome Australia
++259019 +0974994 Brownsville TX
++439067 +0699633 Brunswick ME
++508000 -0045000 +Brussels Belgium
++376900 +1123033 Bryce Canyon  UT
++444000 -0261000 +Bucharest Romania
++406167 +0830633 Buckeye  OH
++477000 -0190000 +Budapest Hungary
++338717 +1179967 Buena Park CA
+-348000 +0580000 +Buenos Aires Argentina
++428811 +0788725 +Buffalo NY
+-030000 -0295000 +Bujumbura Burundi
++341817 +1183117 Burbank CA
++426900 +0883017 Burbun  WI
++425800 +1138650 Burley  ID
++433166 +0798000 +Burlington Canada
++408100 +0912333 Burlington IA
++360967 +0794333 Burlington NC
++444786 +0732128 Burlington VT
++382717 +0944883 Butler  MO
++460183 +1125364 Butte MT
++221000 +1100000 +Cabo San Lucas Mexico
++323450 +0869917 Cahaba  AL
+-169167 -1457667 Cairns Australia
++312683 +0857267 Cairns  AL
++300000 -0320000 +Cairo Egypt
++381500 +1205667 Calaveras County CA
++436650 +1166867 Caldwell ID
++510333 +1140500 +Calgary Canada
++342133 +1190933 Camarillo  CA
++423669 +0711061 Cambridge MA
++385700 +0760783 Cambridge MD
++399447 +0751205 Camden NJ
++279000 +0157000 +Canary Islands
+-352833 -1492167 +Canberra Australia
++407972 +0813769 Canton OH
++373100 +0895333 Cape Girardeau MO
++110000 +0670000 +Caracas Venezuela
++396033 +1107533 Carbon(Price)  UT
++322567 +1042250 Carlsbad  NM
+-248833 -1136667 Carnarvon Australia
++338067 +1182833 Carson CA
++391600 +1197600 Carson City NV
++328800 +1117483 Casa Grande AZ
++428467 +1063133 Casper WY
++048000 +0525000 +Cayenne French Guiana
++302133 +0818917 Cecil  FL
++377867 +1130667 Cedar City  UT
++425250 +0924517 Cedar Falls IA
++419669 +0916647 Cedar Rapids IA
++299217 +0992133 Center Point  TX
++374983 +0872633 Central City  KY
++407900 +0732000 Central Islip NY
++338350 +1180833 Cerritos CA
++425583 +1033117 Chadron  NE
++401180 +0882467 Champaign IL
++376267 +0955933 Chanute  KS
++359347 +0790672 +Chapel Hill NC
++415167 +0811633 Chardon  OH
++327764 +0799314 +Charleston SC
++383503 +0816311 +Charleston WV
++352289 +0808458 +Charlotte NC
++350447 +0853089 +Chattanooga TN
++417550 +1075817 Cherokee  WY
++368250 +0762833 Chesapeake VA
++346500 +0802750 Chesterfield  SC
++411358 +1048186 +Cheyenne WY
++418744 +0876394 +Chicago IL
++397833 +1218500 Chico  CA
++421400 +0726117 Chicopee MA
++343683 +1002883 Childress  TX
+-425333 -1726333 +Christchurch New Zealand
++326433 +1170833 Chula Vista CA
++587500 +0941666 +Churchill Canada
++418500 +0877450 Cicero IL
++391019 +0845097 +Cincinnati OH
++433750 +0723367 Claremont NH
++392800 +0803483 Clarksburg WV
++341983 +0905750 Clarksdale MS
++365267 +0873483 Clarksville TN
++398050 +0754533 Claymont DE
++279667 +0827983 Clearwater FL
++414975 +0816972 +Cleveland OH
++351583 +0848767 Cleveland TN
++408833 +0741467 Clifton NJ
++418433 +0901933 Clinton IA
++344017 +1032050 Clovis NM
++320333 +1097583 Cochise  AZ
++446200 +1089633 +Cody  WY
++477733 +1168200 +Coeur D'Alene  ID
++389867 +0769350 College Park MD
++306050 +0964200 College Station  TX
++261533 +0817783 Collier County  FL
++070000 -0799000 +Colombo Sri Lanka
++388353 +1048211 Colorado Springs CO
++389508 +0923294 Columbia MO
++340005 +0810333 Columbia SC
++356150 +0870367 Columbia TN
++318183 +1075733 Columbus NM
++324686 +0849900 Columbus GA
++334983 +0884167 Columbus MS
++424250 +0973600 Columbus NE
++399630 +0830047 +Columbus OH
+-122000 -0443000 +Comoros Islands
++338950 +1182258 Compton CA
++095000 +0135000 +Conakry Guinea
++379750 +1220300 Concord CA
++432061 +0715403 +Concord NH
++560000 -0108000 +Copenhagen Denmark
++460333 +1127467 Coppertown  MT
++277975 +0973958 +Corpus Christi TX
++445667 +1232700 Corvallis OR
++336400 +1179183 Costa Mesa CA
++284617 +0991183 Cotulla  TX
++412617 +0958650 +Council Bluffs IA
++390867 +0845117 Covington KY
++417833 +0714383 Cranston RI
++440000 +1064350 Crazy Woman  WY
++417833 +1242333 +Crescent City  CA
++308267 +0866800 Crestview  FL
++295983 +0830483 Cross City  FL
++396500 +0787633 Cumberland MD
++414833 +0996900 Custer County  NE
++485650 +1123417 Cut Bank  MT
++233000 -0905000 +Dacca Bengladesh
++301900 +0946450 Daisetta  TX
++145000 +0170000 +Dakar Senegal
++327858 +0967936 +Dallas TX
++377017 +1224617 Daly City CA
++335000 -0363000 +Damascus Syria
++413933 +0734572 Danbury CT
++365917 +0793842 Danville VA
+-075000 -0390000 +Dar Es Salaam Tanzania
++450883 +0944533 Darwin  MN
+-124500 -1308333 +Darwin Australia
++415219 +0905758 Davenport IA
++356633 +0953683 Davis  OK
++321600 +1108800 Davis-Monthan AFB AZ
++640500 +1294333 +Dawson Canada
++397589 +0841953 Dayton OH
++292122 +0810194 Daytona Beach FL
++423250 +0832917 Dearborn Heights MI
++423233 +0831750 Dearborn MI
++398450 +0889464 Decataur IL
++346483 +0869400 Decatur  AL
++293600 +1008200 Del Rio TX
++435517 +0897633 Dells  WI
++393017 +1125050 Delta  UT
++322767 +1076050 Deming  NM
++332200 +0971367 Denton TX
++397494 +1049894 +Denver CO
++428817 +0713233 Derry NH
++415872 +0936167 +Des Moines IA
++420433 +0878700 Des Plaines IL
++468250 +0958817 Detroit Lakes  MN
++423300 +0830492 +Detroit MI
++481100 +0988633 Devils Lake ND
++468800 +1027883 Dickinson ND
++294700 +0950400 Dickinson TX
++452483 +1125467 Dillon  MT
++115000 -0430000 +Djibouti Djibouti
++377547 +1000192 +Dodge City KS
++370233 +0928767 Dogwood  MO
++426767 +1052250 Douglas  WY
++378083 +1089300 Dove Creek  CO
++391333 +0755500 +Dover DE
++431917 +0708800 Dover NH
++339350 +1181250 Downey CA
++325400 +0937417 Downtown  LA
++360433 +0941967 Drake  AR
++347033 +1124800 Drake Prescott  AZ
++466367 +1131850 Drummond  MT
++325600 +0828333 Dublin  GA
++532000 +0061000 +Dublin Ireland
++440883 +1122083 Dubois  ID
++425033 +0906750 Dubuque IA
++467822 +0921067 +Duluth MN
+-668000 -1400000 +Dumont D'Urville
++343850 +0979167 Duncan  OK
+-458833 -1705000 Dunedin New Zealand
++438283 +1103350 Dunoir  WY
++450783 +1017150 Dupree  SD
++360000 +0789125 Durham NC
++296633 +0963167 Eagle Lake  TX
++613217 +1495667 Eagle River AK
++427350 +0844833 East Lansing MI
++407633 +0742100 East Orange NJ
++336767 +0844433 East Point GA
++386217 +0901550 East St. Louis IL
++314183 +0893383 Eaton  MS
++448133 +0914950 +Eau Claire WI
++448833 +0933500 Edina MN
++559500 +0031000 +Edinburgh Scotland
++334567 +0808600 Edisto  SC
++356533 +0974817 Edmond OK
++535500 +1134833 +Edmunton Canada
++390717 +0885383 Effingham  IL
++303933 +0865383 Eglin AFB  FL
++327950 +1169600 El Cajon CA
++332067 +0926667 El Dorado AR
++340667 +1180250 El Monte CA
++317600 +1064864 +El Paso TX
++336833 +1177333 El Toro  CA
++344183 +0827850 Electric City  SC
++420383 +0882900 Elgin IL
++406619 +0742164 Elizabeth NJ
++408300 +1157600 +Elko NV
++470250 +1204567 Ellensburg  WA
++296067 +0951600 Ellington  TX
++324000 +0935950 Elm Grove  LA
++421117 +0929100 Elmwood  IA
++397400 +0755900 Elsmere DE
++478217 +0918300 Ely  MN
++413650 +0821100 Elyria OH
++382917 +0961383 Emporia  KS
++396533 +1049850 Englewood CO
++363950 +0978750 Enid OK
++312967 +0859033 Enterprize  AL
++473783 +1194233 Ephrata  WA
++421208 +0800825 Erie PA
++457233 +0870900 Escanaba  MI
++331167 +1170850 Escondido CA
++314467 +0923217 Esler  LA
++444883 +0731117 Essex Junction VT
++434100 +0947383 Estherville  IA
++415700 +0815367 Euclid OH
++319500 +0851300 Eufaula  AL
++440544 +1230917 +Eugene OR
++420433 +0876767 Evanston IL
++379722 +0875725 Evansville IN
++474250 +0925017 Eveleth  MN
++479800 +1222000 Everett WA
++213350 +1580433 Ewa HI
++648000 +1478500 +Fairbanks AK
++382500 +1220417 Fairfield CA
++411417 +0732633 Fairfield CT
++436467 +0944217 Fairmont  MN
++394833 +0801433 Fairmont WV
++417017 +0711550 Fall River MA
++437683 +0878483 Falls  WI
++468750 +0967883 +Fargo ND
++446317 +0931817 Farmington  MN
++376733 +0902333 Farmington  MO
++367333 +1082033 Farmington NM
++360667 +0941600 Fayetteville AR
++350550 +0788767 Fayetteville NC
++462900 +0961567 Fergus Falls  MN
++351933 +1116517 Flagstaff AZ
++430217 +0836833 Flint MI
++363000 +0924583 Flippin  AR
++341967 +0797683 Florence SC
++387967 +0904900 Florissant MO
++448250 +0934567 Flying Cloud  MN
++386950 +0909717 Foristell  MO
++377417 +0921383 Forney  MO
++413783 +1104233 Fort Bridger  WY
++405800 +1050833 Fort Collins CO
++145400 +0610000 +Fort-de-France Martinique
++426117 +0942950 Fort Dodge  IA
++414500 +1228000 Fort Jones  CA
++379067 +0859733 +Fort Knox  KY
++261200 +0801367 +Fort Lauderdale FL
++349883 +0809550 Fort Mill  SC
++265883 +0818667 Fort Myers  FL
++389700 +0968600 Fort Riley  KS
++353850 +0944183 Fort Smith AR
++308100 +1028600 Fort Stockton TX
++410725 +0851405 +Fort Wayne IN
++327486 +0973289 +Fort Worth TX
++406667 +1242333 Fortuna  CA
++337000 +1179600 Fountain Valley CA
++422733 +0714150 Framingham MA
++382000 +0848617 Frankfort KY
++320750 +0955300 Frankston  TX
++394150 +0774167 Frederick MD
++081000 +0128000 +Freetown Sierra Leone
++375350 +1219567 Fremont CA
++414400 +0964950 Fremont NE
++367367 +1197697 +Fresno CA
++371000 +1196000 Friant  CA
++338750 +1179250 Fullerton CA
+-230000 -0255000 +Gaborone Botswana
++340158 +0860114 Gadsden AL
++363433 +0998800 Gage  OK
++296420 +0823200 Gainesville FL
++391400 +0771983 Gaithersburg MD
++355250 +1087417 Gallup NM
++293028 +0947953 +Galveston TX
++379183 +1007250 Garden City  KS
++337750 +1179133 Garden Grove CA
++425467 +0720583 Gardner  MA
++329083 +0966367 Garland TX
++416033 +0873386 Gary IN
++352650 +0811817 Gastonia NC
++345317 +1200900 Gaviota  CA
++450133 +0847033 Gaylord  MI
+-381667 -1443500 Geelong Australia
++060000 +0580000 +Georgetown Guyana
+-287667 -1146167 Geraldton Australia
++442933 +1055017 Gillette WY
++482150 +1066250 Glasgow  MT
++335383 +1121817 Glendale AZ
++341417 +1182467 Glendale CA
++359217 +0959683 Glenpool  OK
++640000 +0510000 +Godthab Greenland
++393883 +1016917 Goodland  KS
++451450 +0933733 Gopher  MN
++436667 +0704667 Gorham ME
++359517 +0899400 Gosnell  AR
++358333 +0874517 Graham  TN
++341833 +1185000 Granada Hills CA
++266540 +0789330 +Grand Bahama Island
++359600 +1121450 Grand Canyon  AZ
++479200 +0970450 +Grand Forks ND
++409217 +0983533 Grand Island NE
++390600 +1087917 Grand Junction  CO
++327483 +0969950 Grand Prairie TX
++471633 +0934900 Grand Rapids  MN
++429675 +0856703 +Grand Rapids MI
++338133 +0787250 Grand Strand  SC
++214330 +0711460 +Grand Turk Island
+-118000 -0432000 +Grande Comore
++457700 +0926750 Grantsburg  WI
++310333 +0978133 Gray  TX
++475017 +1112850 Great Falls MT
++404183 +1046933 Greeley CO
++445133 +0880139 +Green Bay WI
++415267 +1094683 Green River WY
++310983 +0884867 Greene County  MS
++360714 +0797903 Greensboro NC
++305517 +0837833 Greenville  FL
++334067 +0910600 Greenville MS
++348472 +0824003 Greenville SC
++410283 +0736250 Greenwich CT
++342517 +0821550 Greenwood  SC
++335167 +0901817 Greenwood MS
++341933 +0821650 Greenwood SC
++324183 +0947533 Gregg County  TX
++455000 +1224300 Gresham OR
++406450 +0861517 Grissom  IN
++413300 +0720467 Groton CT
++359533 +1205200 Guadalupe  CA
++149000 +0909000 +Guatemala Guatemala
++435500 +0802500 +Guelph Canada
++303678 +0890933 Gulfport MS
++384517 +1070383 Gunnison County  CO
++337783 +1003350 Guthrie  TX
++396450 +0777200 Hagerstown MD
++442050 +0933700 Halfway  MN
++446500 +0635666 +Halifax Canada
++391133 +0921283 Hallsville  MO
++413850 +0729033 Hamden CT
++341950 +0880133 Hamilton  AL
++322800 +0647600 +Hamilton Bermuda
++432600 +0798666 +Hamilton Canada
+-377833 -1752833 Hamilton New Zealand
++393997 +0845630 Hamilton OH
++305200 +0904167 Hammond  LA
++416300 +0875050 Hammond IN
++370250 +0763417 Hampton VA
++313733 +0856533 Hanchey  AL
++387167 +1207500 Hangtown  CA
++384167 +1106983 Hanksville  UT
++210000 -1060000 +Hanoi Vietnam
+-180000 -0310000 +Harare Zimbabwe
++262917 +0977933 Harlingen  TX
++349433 +0839150 Harris  GA
++402619 +0768830 Harrisburg PA
++363183 +0932133 Harrison  AR
++417700 +0726803 Hartford CT
++298500 +0900033 Harvey  LA
++406050 +0984300 Hastings  NE
++405900 +0983867 Hastings NE
++313267 +0892883 Hattiesburg MS
++231300 +0823600 +Havana Cuba
++485500 +1096850 Havre MT
++339167 +1183517 Hawthorne CA
++404533 +1009233 Hayes Center  NE
++388483 +0992767 Hays  KS
++460183 +0914467 Hayward  WI
++376650 +1220767 Hayward CA
++465925 +1120400 +Helena MT
++605000 -0249000 +Helsinki Finland
++378367 +0875867 Henderson KY
++360367 +1149800 Henderson NV
++363050 +0866200 Hendersonville TN
++258283 +0802833 Hialeah FL
++473017 +0927033 Hibbing  MN
++390733 +0936783 Higginsville  MO
++359517 +0800050 High Point NC
++392583 +1002250 Hill City  KS
++455200 +1229867 Hillsboro OR
++197250 +1550900 Hilo HI
++357817 +0849783 Hinch Mountain  TN
+-428833 -1473167 +Hobart Australia
++348667 +0990633 Hobart  OK
++327000 +1031317 Hobbs NM
++110000 -1070000 +Ho-Chi-Minh (Saigon) Vietnam
++328617 +1061083 Holloman AFB  NM
++341250 +1183367 Hollywood CA
++260100 +0801500 Hollywood FL
++422081 +0726100 Holyoke MA
++337767 +1171850 Homeland  March  CA
++213061 +1578597 +Honolulu HI
++455933 +1226050 Hood  OR
++368617 +0874717 Hopkinsville KY
++469467 +1241483 Hoquiam  WA
++344783 +0930900 Hot Springs  AR
++471667 +0884817 +Houghton  MI
++443583 +0846650 Houghton Lake  MI
++297572 +0953603 Houston TX
++315683 +1053750 Hudspeth  TX
++299567 +0953450 Humble  TX
++345200 +0992750 Humphreys  OK
++320117 +0811417 Hunter  GA
++382500 +0869567 Huntingburg  IN
++336683 +1180833 Huntington Beach CA
++384200 +0824425 Huntington WV
++347317 +0865867 Huntsville AL
++443600 +0982183 Huron SD
++380817 +0979283 Hutchinson KS
++321400 +1011233 Hyman  TX
++434917 +1120333 +Idaho Falls ID
+-201000 -0577000 +Ile Maurice
++390933 +0944167 Independence MO
++397686 +0861628 +Indianapolis IN
++299567 +0965617 Industry  TX
++339600 +1183500 Inglewood CA
++485667 +0934050 +International Falls  MN
++416603 +0915314 Iowa City IA
++458167 +0881117 Iron Mountain  MI
++465317 +0901250 Ironwood  MI
++336750 +1177600 Irvine CA
++328133 +0969367 Irving TX
++407267 +0742250 Irvington NJ
++340000 -0730000 +Islamabad Pakistan
++355983 +0883583 Jacks Creek  TN
++436083 +1107333 +Jackson  WY
++422600 +0844583 Jackson Co  MI
++422453 +0844061 Jackson MI
++322989 +0901850 +Jackson MS
++356167 +0888133 Jackson TN
++348650 +0921117 Jacksonville AR
++303289 +0816617 +Jacksonville FL
+-060000 -1070000 +Jakarta Indonesia
++469050 +0987050 Jamestown ND
++426817 +0890200 Janesville WI
++417600 +0807483 Jefferson  OH
++385167 +0922167 Jefferson City MO
++407305 +0740656 Jersey City NJ
++317800 -0352200 +Jerusalem Israel
+-261666 -0280333 +Johannesburg South Africa
++363183 +0823533 Johnson City TN
++388400 +0947367 Johnson County  KS
++403264 +0789175 Johnstown PA
++415267 +0880800 Joilet IL
++358367 +0907067 Jonesboro AR
++370933 +0945117 Joplin MO
++305983 +0998167 Junction  TX
++583033 +1344083 +Juneau AK
++463650 +0873900 K.I.Sawyer AFB  MI
++345000 -0690000 +Kabul Afganistan
++422914 +0855872 Kalamazoo MI
++481950 +1143133 Kalispell MT
++002000 -0330000 +Kampala Uganda
++200017 +1556733 Kamuela  HI
++410750 +0878500 Kankakee  IL
++391178 +0946400 Kansas City KS
++390822 +0945889 +Kansas City MO
++485000 -0462500 +Kapustin Yar  USSR
++275000 -0855000 +Katmandu Nepal
++196583 +1560283 Keahole  HI
++406983 +0990833 Kearney NE
++429333 +0712800 Keene NH
++295567 +0986467 Kelly  TX
++605500 +1512667 +Kenai AK
++434250 +0706133 Kennebunkport  ME
++286100 +0806920 Kennedy Space Center
++299833 +0902417 Kenner LA
++425953 +0878364 Kenosha WI
+-490000 -0690000 +Kerguelen Islands
++553417 +1316467 +Ketchikan AK
++396867 +0841700 Kettering OH
++323667 +0884583 Kewanee  MS
++245850 +0818000 +Key West  FL
++155000 -0325000 +Khartoum Sudan
+-020000 -0302000 +Kigali Rwanda
++446483 +1197100 Kimberly  OR
++358050 +0980033 Kingfisher  OK
++365450 +0825433 Kingsport TN
++180000 +0769000 +Kingston Jamaica
+-055000 -0155000 +Kinshasa Zaire
++401350 +0925917 Kirksville  MO
++421533 +1217267 Klamath Falls  OR
++357967 +0784392 Knightdale NC
++359608 +0839186 Knoxville TN
++577883 +1524033 +Kodiak AK
++212683 +1577050 Koko Head  HI
++405283 +0860583 Kokomo  IN
++030000 -1020000 +Kuala Lumpur Malaysia
++438000 +0912450 La Crosse WI
++330483 +0852067 La Grange  GA
++327683 +1170417 La Mesa CA
+-165000 +0680000 +La Paz Bolivia
++268283 +0813917 LaBelle  FL
++435267 +0714700 Laconia NH
++404197 +0868942 Lafayette IN
++302250 +0920200 Lafayette LA
++070000 -0030000 +Lagos Nigeria
++302283 +0932167 Lake Charles LA
++279867 +0820133 Lakeland  FL
++424933 +1205067 Lakeview  OR
++339500 +1181367 Lakewood CA
++397400 +1050783 Lakewood CO
++414867 +0818033 Lakewood OH
++405967 +0939667 Lamoni  IA
++311850 +0981417 Lampasas  TX
++207683 +1569717 Lanai  HI
++400403 +0763080 Lancaster PA
++428350 +1087333 Lander WY
++427336 +0845542 Lansing MI
++413117 +1055850 Laramie WY
++275061 +0995083 Laredo TX
++279183 +0827900 Largo FL
++323117 +1067783 Las Cruces NM
++279000 +0157000 +Las Palmas Spain
++361722 +1151436 +Las Vegas NV
++293600 +1007717 Laughlin  TX
++316883 +0891333 Laurel MS
++389633 +0952383 Lawrence KS
++427044 +0711689 Lawrence MA
++346117 +0984117 Lawton OK
++410617 +1119633 Layton UT
++393117 +0949133 Leavenworth KS
++436283 +0723050 Lebanon  NH
++291750 +0901033 Leeville  LA
++311233 +0959683 Leona  TX
++464117 +1170200 Lewiston ID
++440967 +0702183 Lewiston ME
++470533 +1096050 Lewistown  MT
++380472 +0844961 Lexington KY
++370450 +1009700 Liberal  KS
++005000 -0095000 +Libreville Gabon
++219800 +1593750 Lihue HI
+-140000 -0340000 +Lilongwe Malawi
++407430 +0841055 Lima OH
+-120000 +0770000 +Lima Peru
++408164 +0967042 Lincoln NE
++388000 +0091000 +Lisbon Portugal
++347450 +0922769 +Little Rock AR
++365850 +0851667 Livingston  TN
++456633 +1105633 Livingston MT
++423833 +0833750 Livonia MI
++307967 +0987867 Llano  TX
++417400 +1118283 Logan UT
++065000 -0015000 +Lome Togo
++370333 +0841100 London  KY
++515000 +0000000 +London UK
++432950 +0901333 Lone Rock  WI
++337706 +1181883 Long Beach CA
++324917 +0947333 Longview TX
++414680 +0821803 Lorain OH
++340542 +1182411 +Los Angeles CA
++416833 +0813950 Lost Nation  OH
++382464 +0857636 Louisville KY
++328483 +0968617 Love  TX
++347033 +1124800 Love Field  AZ
++426403 +0713205 Lowell MA
+-090000 -0135000 +Luanda Angola
++335847 +1018425 +Lubbock TX
++413633 +1138400 Lucin  UT
++311617 +0947167 Lufkin  TX
+-150000 -0290000 +Lusaka Zambia
++496000 -0062000 +Luxembourg Luxembourg
++374150 +0791433 Lynchburg VA
++424633 +0709483 Lynn MA
++396533 +0924817 Macon  MO
++328367 +0836267 Macon GA
++440067 +0971133 Madison SD
++430730 +0893819 +Madison WI
++405000 +0038000 +Madrid Spain
++030000 -0084000 +Malabo Equatorial Guinea
++422000 +1124500 Malad City  ID
++365550 +0899117 Malden  MO
++424233 +0710667 Malden MA
++045000 -0730000 +Male Maldive Islands
++120000 +0865000 +Managua Nicaragua
++260000 -0510000 +Manama Bahrain
++417833 +0725233 Manchester CT
++429911 +0714614 Manchester NH
++468267 +1008950 Mandan ND
++391833 +0965750 Manhattan KS
++442717 +0862300 Manistee  MI
++441283 +0876800 Manitowoc  WI
++398067 +0982600 Mankato  KS
++442200 +0939117 Mankato  MN
++407567 +0825167 Mansfield OH
++378333 +1211700 Manteca  CA
++375900 +0917883 Maples  MO
+-260000 -0320000 +Maputo Mozambique
++410150 +0836650 Marathon  OH
++302983 +1039550 Marfa  TX
++307867 +0851250 Marianna  FL
++339500 +0845467 Marietta GA
++404933 +0856800 Marion  IN
++465283 +0875850 +Marquette  MI
++444483 +0958250 Marshall  MN
++325500 +0943833 Marshall TX
++413933 +0706167 Martha's Vineyard MA
++145400 +0610000 Martinique
++391000 +1215667 Marysville  CA
++430950 +0933300 Mason City  IA
++209017 +1564350 Maui  HI
+-260000 -0325000 +Mbabane Swaziland
++348500 +0957817 McAlester  OK
++262033 +0982300 Mcallen TX
++447667 +1162050 McCall  ID
++471483 +1224733 McChord  WA
++402033 +1005933 McCook  NE
++395950 +0842233 McGuire  OH
++356033 +0889100 McKellar  TN
+-778000 -1670000 +McMurdo Station Antarctica
++354850 +1190967 Meadows Field  CA
++424183 +0711067 Medford MA
++423233 +1228667 Medford OR
++418450 +1060033 Medicine Bow  WY
++281050 +0806350 Melbourne  FL
+-378167 -1449667 +Melbourne Australia
++351461 +0900536 +Memphis TN
++390500 +1232667 Mendocino  CA
++451800 +0876467 Menominee  MI
++372167 +1204000 Merced  CA
++415350 +0727917 Meriden CT
++323667 +0887000 Meridian MS
++428183 +0708117 Merrimack NH
++284300 +0807500 Merritt Island FL
++334150 +1118283 Mesa AZ
++327650 +0965967 Mesquite TX
++194333 +0991166 +Mexico City Mexico
+-265800 -0282000 Meyerton South Africa
++257883 +0801300 Miami Beach FL
++257769 +0801922 +Miami FL
++319950 +1020783 Midland TX
++394300 +0838017 Midwest  OH
++354500 +0973917 Midwest City OK
++463817 +1059533 Miles City  MT
++383600 +1130117 Milford  UT
++412250 +0730600 Milford CT
++327267 +0979967 Millsap  TX
++430386 +0879042 +Milwaukee WI
++449825 +0932619 +Minneapolis MN
++449400 +0934433 Minnetonka MN
++482383 +1012967 Minot ND
++468617 +1140083 Missoula MT
++435433 +0980250 Mitchell SD
++387567 +1097483 Moab  UT
++306933 +0880425 Mobile AL
++376433 +1210017 Modesto CA
++020000 -0450000 +Mogadiscio Somalia
++415086 +0905136 Moline IL
++211417 +1571700 Molokai  HI
++325000 +0921167 Monroe LA
++314600 +0873533 Monroeville  AL
++067000 +0108000 +Monrovia Liberia
++438000 -0075000 Monte Carlo Monaco
++340000 +1181000 Montebello CA
++340617 +1181267 Monterey Park CA
++449733 +0957117 Montevideo  MN
+-349000 +0562000 +Montevideo Uruguay
++323758 +0863086 Montgomery AL
++335617 +0917150 Monticello  AR
++442600 +0725780 Montpelier VT
++455000 +0736000 +Montreal Canada
++353367 +0974883 Moore OK
++296983 +0912067 Morgan City LA
++396317 +0799533 Morgantown WV
+-118000 -0432000 +Moroni Comoros Islands
++455667 +0959683 Morris  MN
++352517 +1207583 Morro Bay  CA
++467333 +1170000 Moscow ID
++557500 -0377000 +Moscow Russia
++472117 +1193150 Moses Lake  WA
++310817 +0838050 Moultrie  GA
++436233 +0847450 Mount Pleasant  MI
++409100 +0738250 Mount Vernon NY
++334983 +0867533 Mountain Brook AL
++429817 +1157733 Mountain Home  ID
++373883 +1220800 Mountain View CA
++474567 +1156450 Mullan Pass  ID
++401911 +0853878 Muncie IN
++358483 +0863917 Murfreesboro TN
++406600 +1118867 Murray UT
++347067 +0874917 Muscle Shoals  AL
++431700 +0860400 Muskegon  MI
++357450 +0953667 Muskogee OK
++337166 +0789000 Myrtle Beach SC
++378933 +0862450 Mystic  KY
++401450 +1101267 Myton  UT
++120000 -0160000 +N'Djamena Chad
+-020000 -0360000 +Nairobi Kenya
++435733 +1165619 Nampa ID
++383000 +1222900 Napa CA
++390950 +0941283 Napoleon  MO
++361592 +0867819 +Nashville TN
++315633 +0913917 Natchez MS
++389206 +0770657 Naval Observatory USA
++302883 +0960583 Navasota  TX
++347667 +1144667 Needles  CA
++368417 +0944350 Neosho  MO
++465900 -0065600 Neuchâtel Switzerland
++416369 +0709281 New Bedford MA
++416689 +0727831 New Britain CT
+-329333 -1517667 Newcastle Australia
++396633 +0755617 New Castle DE
++286333 -0772000 +New Delhi India
++413069 +0729250 New Haven CT
++376317 +0856767 New Hope  KY
++300117 +0918233 New Iberia LA
++299480 +0900694 +New Orleans LA
++409083 +0737817 New Rochelle NY
++407517 +0739942 +New York NY
++396833 +0757583 Newark DE
++407372 +0741719 Newark NJ
++453533 +1229767 Newberg  OR
++463133 +0854650 Newberry  MI
++438800 +1043083 Newcastle  WY
++381583 +0829100 Newcombe  KY
++402300 +0814767 Newcomerstown  OH
++319517 +1062717 Newman  TX
++445750 +1240600 Newport  OR
++336200 +1179267 Newport Beach CA
++390883 +0844950 Newport KY
++369767 +0764183 Newport News VA
++414817 +0713167 Newport RI
++417833 +0931083 Newton  IA
++423483 +0711900 Newton MA
++430928 +0790572 Niagara Falls NY
++140000 -0030000 +Niamey Niger
++350000 -0332000 +Nicosia Cyprus
++439117 +0914667 Nodine  MN
++314150 +1108483 Nogales Tucson  AZ
++645000 +1654167 +Nome AK
++420283 +0974167 Norfolk NE
++368528 +0762892 +Norfolk VA
++352167 +0974400 Norman OK
++434150 +1241667 North Bend  OR
++328850 +0800000 North Charleston SC
++341333 +1184167 North Hollywood CA
++362033 +1151117 North Las Vegas NV
++347550 +0922667 North Little Rock AR
++770000 +1025000 +North Magnetic Pole
++900000 +0000000 +North Pole
++411383 +1007617 North Platte NE
++339017 +1180800 Norwalk CA
++411233 +0733650 Norwalk CT
++180000 +0157000 +Nouakchott Mauritania
+-218000 -1669000 +Noumea New Caledonia
++424700 +0986867 O'Neill  NE
++418817 +0877750 Oak Park IL
++360117 +0842667 Oak Ridge TN
++378008 +1222650 Oakland CA
++291767 +0822267 Ocala  FL
++331983 +1173767 Oceanside CA
++318583 +1023750 Odessa TX
++412253 +1119725 Ogden UT
++354739 +0975178 +Oklahoma City OK
++356933 +0958650 Okmulgee  OK
++388850 +0948217 Olathe KS
++470333 +1229667 +Olympia WA
++412617 +0959372 Omaha NE
++340617 +1176500 Ontario CA
++326483 +0853850 Opelika AL
++337867 +1178500 Orange CA
++403117 +1117000 Orem UT
++285450 +0813772 Orlando FL
++293033 +0811133 Ormond Beach  FL
++440217 +0885450 Oshkosh WI
++599000 -0110000 +Oslo Norway
++371567 +0952033 Oswego  KS
++454000 +0757500 +Ottawa Canada
++410283 +0923250 Ottumwa  IA
++125000 +0020000 +Ouagadougou Burkina Faso
++389700 +0946667 Overland Park KS
++377683 +0871133 Owensboro KY
++342050 +1191750 Oxnard CA
++327333 +1171667 Pacific Beach CA
++370869 +0885989 Paducah KY
+-140000 +1705000 +Pago Pago American Samoa
++267817 +0806917 Pahokee  FL
++479033 +1222867 Paine  WA
++287633 +0963067 Palacios  TX
++266800 +0800867 Palm Beach  FL
++374417 +1221633 Palo Alto CA
++302167 +0856817 Panama City  FL
++090000 +0790000 +Panama City Panama
+-175000 +1495000 Papeete French Polynesia
++361000 +1151167 Paradise NV
++055000 +0555000 +Paramaribo Surinam
++335417 +0954483 Paris  TX
++488400 -0023400 +Paris France
++468983 +0950700 Park Rapids  MN
++392667 +0815583 Parkersburg WV
++413850 +0817117 Parma OH
++341456 +1181447 Pasadena CA
++297133 +0952117 Pasadena TX
++303533 +0885467 Pascagoula MS
++462633 +1191150 Pasco  WA
++356733 +1206267 Paso Robles  CA
++409169 +0741725 Paterson NJ
++402000 +0962067 Pawnee City  NE
++418783 +0713833 Pawtucket RI
++356250 +1135433 Peach Springs  AZ
++432567 +0827183 Peck  MI
++314700 +1035750 Pecos  TX
++456300 +0846633 Pellston  MI
++488700 +0971167 Pembina  ND
++456983 +1189383 Pendleton  OR
++304142 +0872155 Pensacola FL
++406950 +0895925 Peoria IL
+-319500 -1158500 +Perth Australia
++324633 +0850033 Phenix City AL
++399494 +0751558 +Philadelphia PA
++440583 +1016633 Philip  SD
++115000 -1050000 +Phnom Penh Cambodia
++334500 +1120600 Phoenix AZ
++305250 +0896783 Picayune MS
++340000 +1180833 Pico Rivera CA
++443717 +1003483 +Pierre SD
++342233 +0920167 Pine Bluff AR
++325283 +1053050 Pinon  NM
++367467 +0971600 Pioneer  OK
++404386 +0800000 +Pittsburgh PA
++424480 +0732539 Pittsfield MA
++340867 +1017900 Plainview  TX
++330200 +0967000 Plano TX
++630000 -0402500 +Plesetsk Russia
++428733 +1124500 Pocatello ID
++379283 +0877617 Pocket City  IN
++326167 +1169833 Poggi  CA
++340617 +1177500 Pomona CA
++262333 +0801250 Pompano Beach FL
++426367 +0832917 Pontiac MI
++298750 +0939375 Port Arthur TX
++184000 +0723000 +Port Au Prince Haiti
++413700 +0911433 Port City  IA
+-201000 -0577000 +Port Louis Mauritius
+-095000 -1474000 +Port Moresby Papua New Guinea
++359133 +1190200 Porterville  CA
++436592 +0702553 Portland ME
++455183 +1226764 +Portland OR
++070000 -0025000 +Porto Novo Benin
++430750 +0707567 Portsmouth NH
++368353 +0763039 Portsmouth VA
++501000 -0145000 +Prague Czechoslovakia
++345467 +1124717 Prescott AZ
+-250000 -0280000 Pretoria South Africa
++418255 +0714114 +Providence RI
++402350 +1116567 Provo UT
++382714 +1046092 Pueblo CO
++466750 +1172233 Pullman  WA
++269167 +0819917 Punta Gorda  FL
++390000 -1258000 +Pyongyang Korea
++468166 +0712000 +Quebec Canada
++148000 -1210000 +Quezon Philippines
++422517 +0710017 Quincy MA
++328800 +0953667 Quitman  TX
+-005000 +0785000 +Quito Ecuador
++340000 +0068000 +Rabat Morocco
++427303 +0877867 Racine WI
++379750 +0808067 Rainelle  WV
++357772 +0786392 +Raleigh NC
++337675 +1184033 Rancho Palos Verdes CA
++170000 -0960000 +Rangoon Burma
++440800 +1032283 +Rapid City SD
++417900 +1072383 Rawlins WY
++362467 +0941217 Razorback  AR
++394400 +1068950 Read Table(Eagle) CO
++403358 +0759278 Reading PA
++401000 +1222333 Red Bluff  CA
++405050 +1222900 +Redding  CA
++442533 +1213017 Redmond  OR
++338267 +1183867 Redondo Beach CA
++374667 +1222500 Redwood City CA
++444667 +0951283 Redwood Falls  MN
++395242 +1198111 +Reno NV
++342000 +1185333 Reseda CA
+-210000 -0556000 +Reunion Island
++438233 +1117850 Rexburg ID
++640000 +0220000 +Reykjavik Iceland
++456333 +0894583 Rhinelander  WI
++346800 +0946083 Rich Mountain  OK
++329533 +0967250 Richardson TX
++397550 +0848383 Richmond IN
++379367 +1223467 Richmond CA
++375375 +0774358 Richmond VA
+-228953 +0432228 +Rio De Janeiro Brazil
++391200 +0945967 Riverside  MO
++339800 +1173650 Riverside CA
++430250 +1083850 Riverton WY
++248000 -0470000 +Riyadh Saudi Arabia
++372703 +0799455 Roanoke VA
++390183 +0876483 Robinson  IL
++440225 +0924675 Rochester MN
++433033 +0709750 Rochester NH
++431614 +0776058 Rochester NY
+-233667 -1505333 Rockhampton Australia
++349283 +0810233 Rock Hill SC
++415850 +1092250 Rock Springs WY
++347967 +0866333 Rocket  AL
++422686 +0890967 Rockford IL
++300150 +1003000 Rocksprings  TX
++390833 +0771433 Rockville MD
++341617 +0851200 Rome  GA
++425900 +1178667 Rome  OR
++418833 -0125000 +Rome Italy
++488550 +0956950 Roseau  MN
++431833 +1233517 Roseburg  OR
++425033 +0829367 Roseville MI
++333367 +1046200 Roswell  NM
++333950 +1045267 Roswell NM
++425067 +0831467 Royal Oak MI
++324650 +0926083 Ruston  LA
++325250 +0926383 Ruston LA
++436083 +0729717 Rutland VT
++296867 +0940383 Sabine Pass  TX
++459000 +0643000 Sackville Canada
++435000 +0704433 Saco ME
++385825 +1214947 +Sacramento CA
++434311 +0839347 Saginaw MI
++370917 +1135967 Saint George  UT
++424083 +0835950 Salem  MI
++427000 +0712500 Salem NH
++449300 +1230200 Salem OR
++388350 +0976083 Salina KS
++366700 +1216517 Salinas CA
++450217 +1140833 Salmon  ID
++317483 +1050867 Salt Flat  TX
++407564 +1118905 +Salt Lake City UT
++384850 +0880850 Samsville  IL
++314608 +1004342 San Angelo TX
++294269 +0984850 +San Antonio TX
++341083 +1172911 San Bernardino CA
++327147 +1171558 San Diego CA
++376183 +1223733 +San Francisco CA
++373378 +1218900 San Jose CA
++100000 +0844000 +San Jose Costa Rica
++184500 +0660666 +San Juan Puerto Rico
++377250 +1221550 San Leandro CA
++375633 +1223233 San Mateo CA
++375933 +1225183 San Pedro CA
++135000 +0890000 +San Salvador El Salvador
++155000 -0440000 +San'a Yemen
++301600 +1024100 Sanderson TX
++414350 +0826550 Sandusky  OH
++434417 +0707767 Sanford ME
++352517 +1207583 San Luis Obispo  CA
++337633 +1178650 Santa Ana CA
++344217 +1196986 Santa Barbara CA
++373450 +1219467 Santa Clara CA
++356864 +1059361 +Santa Fe NM
++340133 +1184850 Santa Monica CA
++384400 +1227150 Santa Rosa CA
+-332000 +0720000 +Santiago Chile
++184000 +0699000 +Santo Domingo Dominican Republic
++273367 +0825317 Sarasota FL
++304717 +0873367 Saufley  FL
++464117 +0843150 +Sault Sainte Marie  MI
++320783 +0810936 +Savannah GA
++353450 +0996350 Sayre  OK
++420400 +0880800 Schaumburg IL
++428117 +0739283 Schenectady NY
++292683 +0948683 Scholes  TX
++459767 +0861733 Schoolcraft Co  MI
++418950 +1034817 Scottsbluff  NE
++334883 +1119267 Scottsdale AZ
++414089 +0756628 Scranton PA
++324650 +0963367 Scurry  TX
++386417 +0756117 Seaford DE
++411200 +1017767 Searle  NE
++476089 +1223367 +Seattle WA
++324167 +0870233 Selma AL
++376000 -1275000 +Seoul South Korea
++390133 +0947150 Shawnee KS
++437600 +0877483 Sheboygan WI
++408817 +0826617 Shelby OH
++355617 +0864400 Shelbyville  TN
+-363833 -1454000 Shepparton Australia
++447967 +1069617 Sheridan WY
++325128 +0937494 Shreveport LA
++410967 +1029833 Sidney  NE
++326383 +1081600 Silver City  NM
++342683 +1187783 Simi Valley CA
++020000 -1040000 +Singapore Singapore
++424961 +0964083 Sioux City IA
++435430 +0967264 Sioux Falls SD
++417867 +1224633 Siskiyou County  CA
++420433 +0877467 Skokie IL
++302750 +0898017 Slidell LA
++393028 +0756067 Smyrna DE
++357900 +0830533 Snowbird  TN
++343383 +1068200 Socorro  NM
++428000 -0233000 +Sofia Bulgaria
++423875 +0711019 Somerville MA
++416758 +0862503 South Bend IN
++339550 +1182050 South Gate CA
++219033 +1595317 South Kauai  HI
+-690000 -1430000 +South Magnetic Pole
+-900000 +0000000 +South Pole
++436350 +0702500 South Portland ME
++424750 +0832767 Southfield MI
++495000 -0695000 +Soyuz Landing Zone USS
++395383 +1197533 Sparks NV
++349508 +0819350 Spartanburg SC
++611883 +1499167 Spenard AK
++431633 +0951933 Spencer  IA
++476589 +1174258 +Spokane WA
++398917 +0896250 Springfield IL
++421058 +0725922 Springfield MA
++372175 +0932922 Springfield MO
++399272 +0838080 Springfield OH
++440500 +1230200 Springfield OR
++432967 +0724817 Springfield VT
++449500 +0931000 St. Paul MN
++387867 +0904800 St. Charles MO
++424967 +0828867 St. Clair Shores MI
++455667 +0941733 St. Cloud MN
++397658 +0948506 St. Joseph MO
++386292 +0902061 St. Louis MO
++449433 +0933500 St. Louis Park MN
++449553 +0931019 St. Paul MN
++277717 +0826386 +St. Petersburg FL
++299583 +0813383 +St. Augustine  FL
++410525 +0735400 Stamford CT
+-520000 +0580000 +Stanley Falkland Islands
++405833 +0741500 Staten Island NY
++425833 +0830167 Sterling Heights MI
++403617 +0806147 Steubenville OH
++445433 +0895300 Stevens Point  WI
++362250 +0970817 Stillwater  OK
++292583 +0984433 Stinson  TX
++590000 -0180000 +Stockholm Sweden
++379583 +1212878 Stockton CA
++302067 +0987050 Stonewall  TX
++412000 +0731333 Stratford CT
++371700 +0970400 Strother  KS
++367283 +0765800 Suffolk VA
++331983 +0955417 Sulphur Springs  TX
++339183 +0803467 Sumter SC
++373767 +1220333 Sunnyvale CA
++380400 +0926033 Sunshine  MO
++467206 +0921019 Superior WI
+-180000 -1780000 +Suva Fiji
++326050 +0823667 Swainsboro  GA
+-338833 -1512167 +Sydney Australia
++430511 +0761539 Syracuse NY
++472497 +1224375 Tacoma WA
+-175000 +1495000 +Tahiti
++249000 -1220000 +Taipei Taiwan
++335750 +0860433 Talladega  AL
++304450 +0842817 +Tallahassee FL
++279494 +0824569 Tampa FL
++366083 +1059050 Taos  NM
++483000 +1246250 Tatoosh  WA
++305050 +0825533 Taylor  FL
++422250 +0832683 Taylor MI
++140000 +0875000 +Tegucigalpa Honduras
++355000 -0520000 +Tehran Iran
++417600 +0961783 Tekamah  NE
++334150 +1119283 Tempe AZ
++312100 +0974250 Temple  TX
++284000 +0166000 +Teneriffe Island
+-550000 +0700000 +Tierra Del Fuego S. America
++394675 +0874072 Terre Haute IN
++334300 +0940417 Texarkana AR
++334300 +0940417 Texarkana TX
++344933 +1028317 Texico  NM
++457133 +1211000 The Dalles  OR
++419817 +1007183 Thedford  NE
++336283 +1161600 Thermal  CA
++297950 +0908067 Thibodaux LA
++480700 +0961867 Thief River Falls  MN
++275000 -0895000 +Thimbu Bhutan
++398633 +1049650 Thornton CO
++341717 +1188400 Thousand Oaks CA
++285050 +0981517 Three Rivers  TX
++775000 +0655000 +Thule Greenland
++296633 +0908283 Tibby  LA
++389717 +0923650 Tiger  MO
++354000 +0973783 Tinker  OK
++412000 -0199000 +Tirana Albania
++346950 +0832983 Toccoa  GA
++357500 -1395833 +Tokyo Japan
++416539 +0835442 Toledo OH
++380300 +1170333 Tonopah NV
++390544 +0956730 +Topeka KS
++437000 +0794000 +Toronto Canada
++338250 +1183083 Torrance CA
+-192667 -1468167 Townsville Australia
++446683 +0855500 Traverse City  MI
++383500 +1218167 Travis  CA
++402206 +0747703 Trenton NJ
++295467 +0947467 Trinity  TX
++330000 -0130000 +Tripoli Libya
++318633 +0860117 Troy  AL
++426100 +0831500 Troy MI
++427292 +0736828 Troy NY
++332817 +1072800 +Truth or Consequences NM
++361217 +1112683 Tuba City AZ
++322208 +1109689 Tucson AZ
++351817 +1035983 Tucumcari  NM
++361533 +0959928 +Tulsa OK
++370000 -0100000 +Tunis Tunisia
++342233 +0887967 Tupelo  MS
++332050 +0875667 Tuscaloosa AL
++322350 +0998167 Tuscola  TX
++324850 +0856700 Tuskegee  AL
++341117 +1157700 Twentynine Palms  CA
++425617 +1144700 Twin Falls ID
++323450 +0953017 Tyler TX
++461090 -0639580 Tyuratam (Proton) CIS
++460160 -0635730 +Tyuratam (Soyuz) CIS
++470000 -1060000 +Ulan Bator Mongolia
++407533 +0740383 Union City NJ
++386600 +0903333 University City MO
++202033 +1558467 Upolu Point  HI
++401117 +0882017 Urbana IL
++431033 +0752258 Utica NY
++308317 +0832783 Valdosta GA
++381100 +1222500 Vallejo CA
++359000 -0145000 +Valletta Malta
++341833 +1183667 Van Nuys CA
++334750 +0804483 Vance  SC
++456250 +1226700 Vancouver WA
++339000 +1184417 Venice CA
++342833 +1193000 Ventura CA
++427800 +0969283 Vermillion SD
++403783 +1094933 Vernal  UT
++276783 +0804900 Vero Beach  FL
++381533 +0917067 Vichy  MO
++323483 +0908783 Vicksburg MS
++289000 +0969783 Victoria  TX
++225000 -1140000 +Victoria Hong Kong
+-060000 -0520000 +Victoria Seychelles
++288050 +0970050 Victoria TX
++322133 +0834967 Vienna  GA
++482000 -0162000 +Vienna Austria
++190000 -1030000 +Vientiane Laos
++394867 +0750267 Vineland NJ
++368467 +0759750 Virginia Beach VA
++363350 +1192967 Visalia CA
++336700 +0869000 Vulcan  AL
++315533 +0971333 +Waco TX
++215000 +1580333 Wahiawa HI
++460689 +1183400 +Walla Walla WA
++384300 +0753600 Wallops Island VA
++379017 +1220583 Walnut Creek CA
++423733 +0712367 Waltham MA
++326167 +0836017 Warner Robins GA
++425083 +0830267 Warren MI
++412367 +0808083 Warren OH
++522500 -0210000 +Warsaw Poland
++417017 +0714583 Warwick RI
++388975 +0770092 Washington DC
++415536 +0730419 Waterbury CT
++425567 +0923983 Waterloo  IA
++424944 +0923389 Waterloo IA
++449017 +0971133 Watertown SD
++423583 +0878333 Waukegan IL
++430022 +0882367 Waukesha WI
++432800 +0915367 Waukon  IA
++448467 +0895867 Wausau  WI
++430517 +0880067 Wauwatasa WI
++312700 +0825567 Waycross  GA
++404050 +0805883 Weirton WV
+-412833 -1747667 +Wellington New Zealand
++474000 +1202100 Wenatchee  WA
++430083 +0880067 West Allis WI
++434217 +0881250 West Bend WI
++340717 +1179094 West Corina CA
++468717 +0969033 West Fargo ND
++417500 +0727400 West Hartford CT
++412833 +0729533 West Haven CT
++351467 +0901767 West Memphis AR
++267167 +0800533 West Palm Beach FL
++417083 +0715250 West Warwick RI
++436767 +0703633 Westbrook ME
++422967 +0833867 Westland MI
++337750 +1179933 Westminster CA
++398300 +1050333 Westminster CO
++422217 +0709650 Weymouth MA
++400675 +0807222 Wheeling WV
++435750 +0857167 White Cloud  MI
++296633 +0923733 White Lake  LA
++410333 +0737633 White Plains NY
++458617 +1121683 Whitehall  MT
++377633 +0803017 White Sulphur Springs WV
++339667 +1180417 Whittier CA
++339094 +0984911 Wichita Falls TX
++376917 +0973378 +Wichita KS
++435933 +1189533 Wildhorse  OR
++355333 +0976467 Wiley Post  OK
++412422 +0758880 Wilkes-Barre PA
++353583 +0976083 Will Rogers  OK
++390667 +1220333 Williams  CA
++377550 +0890117 Williamson-Marion IL
++481483 +1036217 Williston ND
++451183 +0950900 Willmar  MN
++422367 +0835250 Willow Run  MI
++397461 +0755475 +Wilmington DE
++342300 +0779400 Wilmington NC
+-220000 -0180000 +Windhoek Namibia
++318750 +1032433 Wink  TX
++434883 +0997617 Winner  SD
++440767 +0917050 Winona  MN
++350617 +1107950 Winslow Prescott  AZ
++360978 +0802450 +Winston-Salem NC
++312850 +0854317 Wiregrass  AL
++413750 +0983533 Wolbach  NE
++412467 +0854967 Wolf Lake  IN
++363733 +0977883 Woodring  OK
++422603 +0718047 Worcester MA
++439650 +1079500 Worland  WY
++436467 +0955817 Worthington  MN
++428967 +0857067 Wyoming MI
++465950 +1205133 +Yakima WA
++428750 +0973900 Yankton SD
++395267 +0829783 Yellow Bud  OH
++409319 +0738983 Yonkers NY
++386433 +0829783 York  KY
++399597 +0767267 York PA
++410992 +0806505 Youngstown OH
++327150 +1146233 +Yuma AZ
++399383 +0820083 Zanesville OH
++349650 +1091533 Zuni  NM

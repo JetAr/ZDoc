@@ -1,0 +1,517 @@
+;
+;	Deep sky object database
+;
+76.725,-7.21667,0.3,IC2118,,DN,180x60,Eri,,spec:cB8ep-illum by Rigel
+56.75,24.11667,1.2,M45,M45,OC,110,Tau,*,nmber: 130 - The Pleiades
+247.3,-26.45,1.2,IC4606,,DN,85x80,Sco,,spec:cM1 - around Antares
+84.05,-1.2,1.8,NGC1990,,DN,50x50,Ori,*,spec:BOe - around Eps Ori
+85.175,-2.45,1.9,NGC2024,,DN,30x30,Ori,!,s:BOne-cmplx inner detail
+85.25,-2.4,2.1,IC434,,DN,60x10,Ori,!!,"s:BOne-B33, Horsehead Neb"
+306.975,40,2.3,IC1318,,DN,45x25,Cyg,,spectrum: cF8p
+14.175,61.06667,2.5,IC59,,DN,10x5,Cas,,spectrum: B0ne
+116.35,-37.9667,2.8,NGC2451,,OC,45,Pup,,number: 40
+83.85,-5.45,2.9,NGC1976,M42,DN,66x60,Ori,!!!,Great Orion Nebula
+166.6,-58.6667,3,NGC3532,,OC,55,Car,!,number: 150 - fine object
+130.025,19.98333,3.1,NGC2632,M44,OC,95,Cnc,!!,Praesepe - Beehive Clustr
+268.475,-34.8167,3.3,NGC6475,M7,OC,80,Sco,!!,nmbr:80-fine naked-eye OC
+324.775,57.5,3.5,IC1396,,OC,50,Cep,,number: 50
+201.7,-47.4833,3.7,NGC5139,,GC,23,Cen,!!!,VIII - Omega Centauri
+119.575,-60.8667,3.8,NGC2516,,OC,30,Car,*,number: 80
+100.275,9.883333,3.9,NGC2264,,OC,20,Mon,*,Xmas Tree near Cone Neb.
+60.175,36.61667,4.1,NGC1499,,DN,145x40,Per,*,sp: O7n - California Neb.
+109.7,-24.95,4.1,NGC2362,,OC,8,CMa,*,nmbr: 60 - striking clstr
+265.025,-32.2167,4.2,NGC6405,M6,OC,15,Sco,!!,n: 80 - Butterfly Cluster
+56.575,23.93333,4.3,IC349,,DN,30x30,Tau,,spec:B5ne - around Merope
+34.75,57.15,4.4,NGC869,,OC,30,Per,!!,n:200-half Double Cluster
+6.025,-72.0833,4.5,NGC104,,GC,23,Tuc,!!!,III (47 Tuc)- splendid GC
+114.15,-14.5,4.5,NGC2422,M47,OC,30,Pup,*,number: 30
+279.75,5.45,4.5,IC4756,,OC,70,Ser,*,number: 80
+83.875,-4.86667,4.6,NGC1977,,DN,40x25,Ori,!,
+101.75,-20.7333,4.6,NGC2287,M41,OC,38,CMa,*,number: 80
+271.2,-24.3333,4.6,NGC6530,,OC,10,Sgr,*,nmbr: 25 - in M8 (Lagoon)
+274.225,-18.4833,4.6,NGC6603,M24,OC,4,Sgr,*,number: 50 - star cloud
+276.925,6.566667,4.6,NGC6633,,OC,20,Oph,*,number: 30
+323.05,48.43333,4.6,NGC7092,M39,OC,32,Cyg,*,number: 30
+246.4,-23.4333,4.6,IC4604,,DN,140x70,Oph,,spec: B5n -around Rho Oph
+277.9,-19.25,4.6,IC4725,M25,OC,32,Sgr,*,number: 30 - open cloud
+35.6,57.11667,4.7,NGC884,,OC,30,Per,!!,n:150-half Double Cluster
+100.225,9.9,4.7,NGC2264,,DN,60x30,Mon,*,spectrum: O7n-Cone Nebula
+122.675,-49.2667,4.7,NGC2547,,OC,20,Vel,,number: 80
+10.675,41.26667,4.8,NGC224,M31,SG,160x40,And,!!!,Sb - Andromeda Galaxy
+98.1,4.866667,4.8,NGC2244,,OC,24,Mon,*,number: 16 - in Rosette
+84.625,-7.08333,4.9,IC430,,DN,11x11,Ori,,spectrum: A3
+247.55,-25.1,4.9,IC4605,,DN,30,Sco,,spec:B3n - around 22 Sco
+160.95,-59.8667,5,NGC3372,,DN,85x80,Car,!,Eta Car & Keyhole Nebula
+279.1,-23.9,5.1,NGC6656,M22,GC,17.3,Sgr,!!,VII - one of finest GCs
+92.225,24.33333,5.3,NGC2168,M35,OC,28,Gem,*,number: 200
+102.325,41.06667,5.4,NGC2281,,OC,15,Aur,,number: 30
+256.2,-37.9,5.4,NGC6281,,OC,8,Sco,,number: 25 - triangular
+83.825,-5.38333,5.4,GC6931,,DS,"19""      ",Ori,*,7+v+7+5+7+7 - Trapezium
+40.5,42.78333,5.5,NGC1039,M34,OC,35,Per,*,number: 60
+263.7,-32.5667,5.5,NGC6383,,OC,5,Sco,,number: 40
+269.2,-19.0167,5.5,NGC6494,M23,OC,27,Sgr,*,number: 150
+88.1,32.55,5.6,NGC2099,M37,OC,24,Aur,!,number: 150
+301.475,35.78333,5.6,NGC6871,,OC,20,Cyg,,number: 15
+324.775,57.5,5.6,IC1396,,DN,165x135,Cep,,spectrum: O6n
+29.45,37.68333,5.7,NGC752,,OC,45,And,*,number: 60 - large area
+61.925,62.33333,5.7,NGC1502,,OC,8,Cam,,number: 45
+118.075,-38.55,5.7,NGC2477,,OC,27,Pup,!,number: 300 - globular?
+265.175,-53.6667,5.7,NGC6397,,GC,19,Ara,*,IX - possibly nearest GC
+102.95,0.466667,5.8,NGC2301,,OC,12,Mon,,number: 80
+123.45,-5.8,5.8,NGC2548,M48,OC,54,Hya,*,number: 80
+229.65,2.083333,5.8,NGC5904,M5,GC,17,Ser,!!,V - superb cluster
+282.775,-6.26667,5.8,NGC6705,M11,OC,14,Sct,!,n:200 - Wild Duck Cluster
+92.1,13.95,5.9,NGC2169,,OC,7,Ori,,number: 30
+105.8,-8.33333,5.9,NGC2323,M50,OC,10.0x5.5,Mon,*,number: 80
+245.9,-26.5333,5.9,NGC6121,M4,GC,26,Sco,*,IX
+250.425,36.46667,5.9,NGC6205,M13,GC,10,Her,!!,V - Hercules Cluster
+271.15,-22.5,5.9,NGC6531,M21,OC,13,Sgr,*,number: 70 - M20 in field
+75.9,23.81667,6,NGC1746,,OC,45,Tau,,number: 20
+84.025,34.13333,6,NGC1960,M36,OC,12,Aur,*,number: 60
+253.5,-41.8,6,NGC6231,,OC,15,Sco,!,number: 100+
+314.7,44.33333,6,NGC7000,,DN,120x100,Cyg,*,spec: cA2e- North America
+79.05,34.26667,6,IC405,,DN,18x30,Aur,*,s:O9p - Flaming Star Neb.
+38.35,61.43333,6,IC1805,,DN,50x44,Cas,,spectrum: B0
+115.45,-14.8167,6.1,NGC2437,M46,OC,27,Pup,!,n:100 - NGC 2438 in field
+63.85,51.23333,6.2,NGC1528,,OC,25,Per,*,number: 40
+65.225,50.25,6.2,NGC1545,,OC,18,Per,,number: 20
+116.15,-23.8667,6.2,NGC2447,M93,OC,22,Pup,*,number: 80
+23.475,30.65,6.3,NGC598,M33,SG,60x35,Tri,!!,Sc - Pinwheel Galaxy
+71.5,19.06667,6.3,NGC1647,,OC,45,Tau,*,number: 200
+138,-64.8667,6.3,NGC2808,,GC,7,Car,!,I
+308.65,28.3,6.3,NGC6940,,OC,31,Vul,*,number: 60
+19.775,58.33333,6.4,NGC457,,OC,13,Cas,*,number: 80
+82.175,35.83333,6.4,NGC1912,M38,OC,21,Aur,*,number: 100
+205.55,28.38333,6.4,NGC5272,M3,GC,16,CVn,!!!,VI - superb object
+274.7,-13.7833,6.4,NGC6611,M16,DN,25,Ser,!!,neb & clust- Eagle Nebula
+322.5,12.16667,6.4,NGC7078,M15,GC,7.4,Peg,!,IV - fine object
+333.825,49.88333,6.4,NGC7243,,OC,21,Lac,,number: 40
+7.475,60.23333,6.5,NGC129,,OC,21,Cas,,number: 35
+26.025,61.88333,6.5,NGC654,,OC,5,Cas,,nmbr:50 -NGC 663 in field
+108.575,-25.7333,6.5,NGC2354,,OC,20,CMa,,number: 100
+259.275,43.13333,6.5,NGC6341,M92,GC,8.3,Her,*,IV
+323.375,-0.81667,6.5,NGC7089,M2,GC,13,Aqr,!!,II
+337.4,-20.8,6.5,NGC7293,,PN,900x720,Aqr,!,cnt str:13 - Helix Nebula
+38.175,61.45,6.5,IC1805,,OC,22,Cas,,number: 40
+251.8,-1.95,6.6,NGC6218,M12,GC,9.3,Oph,!!,IX
+254.275,-4.1,6.6,NGC6254,M10,GC,8.2,Oph,!,VII
+255.3,-30.1167,6.6,NGC6266,M62,GC,4.3,Oph,*,IV - Burnham's under Sco
+272,-43.7,6.6,NGC6541,,GC,6.3,CrA,,III
+305.975,38.53333,6.6,NGC6913,M29,OC,7,Cyg,*,number: 50
+52.9,37.33333,6.7,NGC1342,,OC,15,Per,,number: 40
+92.45,20.31667,6.7,NGC2175,,OC,18,Ori,,number: 60
+282.875,10.35,6.7,NGC6709,,OC,13,Aql,*,number: 40
+331.3,46.5,6.7,NGC7209,,OC,25,Lac,,number: 25
+359.25,56.73333,6.7,NGC7789,,OC,16,Cas,*,number: 300
+154.4,-46.4167,6.8,NGC3201,,GC,7.7,Vel,,X - loose structured GC
+270.95,-24.3833,6.8,NGC6523,M8,DN,80x40,Sgr,!!!,spec: O7e - Lagoon Nebula
+294.55,46.56667,6.8,NGC6811,,OC,13,Cyg,,number: 70
+315.45,68.2,6.8,NGC7023,,DN,18x18,Cep,*,spec:B5e -cmplx structure
+83.9,-5.26667,6.9,NGC1982,M43,DN,20x15,Ori,*,detached portion of M42
+114.275,13.86667,6.9,NGC2423,,OC,20,Pup,,number: 40
+115.2,-31.65,6.9,NGC2439,,OC,10,Pup,,number: 80
+122.675,-12.8333,6.9,NGC2539,,OC,21,Pup,,number: 50
+132.6,11.81667,6.9,NGC2682,M67,OC,30,Cnc,!,nmbr:200 - interesting OC
+148.9,69.06667,6.9,NGC3031,M81,SG,18x10,UMa,!,Sb - fine spiral
+264.075,-44.7333,6.9,NGC6388,,GC,3.4,Sco,,III
+274.975,-17.1333,6.9,NGC6613,M18,OC,9,Sgr,*,number: 20
+276.125,-24.8667,6.9,NGC6626,M28,GC,6,Sgr,!,IV
+350.175,61.2,6.9,NGC7635,,DN,205x180,Cas,*,spec: B2 - Bubble Nebula
+351.05,61.58333,6.9,NGC7654,M52,OC,13,Cas,*,number: 100
+10.85,61.78333,7,NGC225,,OC,12,Cas,,nmber: 15 - W-shape group
+80.05,39.35,7,NGC1857,,OC,6,Aur,,number: 45
+124.725,-29.7333,7,NGC2571,,OC,13,Pup,,number: 30
+201.375,-43.0167,7,NGC5128,,IG,10x8,Cen,!!,S0/pec - Centaurus A
+295,-30.9667,7,NGC6809,M55,GC,15,Sgr,*,XI
+312.7,44.35,7,IC5067,,DN,85x75,Cyg,,spec: cA2e - Pelican Neb.
+11.9,-25.2833,7.1,NGC253,,SG,22x6,Scl,!!,Scp - Sculptor Galaxy
+26.5,61.25,7.1,NGC663,,OC,16,Cas,*,number: 80
+108.65,-10.3,7.1,NGC2353,,OC,20,Mon,,number: 30
+236.525,-37.7833,7.1,NGC5986,,GC,3.7,Lup,,VII
+106.275,-10.7,7.1,IC2177,,DN,85x25,Mon,,spectrum: Bop
+106.65,-10.0833,7.2,NGC2335,,OC,12,Mon,,number: 35
+109.45,-15.6167,7.2,NGC2360,,OC,13,CMa,*,number: 80
+244.25,-22.9833,7.2,NGC6093,M80,GC,3.3,Sco,*,II -incl Nova T Sco(1860)
+255.65,-26.2667,7.2,NGC6273,M19,GC,4.3,Oph,*,VIII
+47.95,63.25,7.2,H1,,OC,23,Cas,,number: 30 - Tr 3
+78.525,-40.05,7.3,NGC1851,,GC,5.3,Col,,II - X-ray source
+118.725,-24.3,7.3,NGC2482,,OC,12,Pup,,number: 40
+284.9,-36.6333,7.3,NGC6723,,GC,5.8,Sgr,,VII - near CrA border
+295.325,40.18333,7.3,NGC6819,,OC,5,Cyg,,n: 150 - Foxhead Cluster
+23.3,60.7,7.4,NGC581,M103,OC,5,Cas,*,nmbr: 25 -arrowhead shape
+124.65,-30.6333,7.4,NGC2567,,OC,10,Pup,,number: 40
+267.55,-37.05,7.4,NGC6441,,GC,2.3,Sco,,III
+305.775,40.78333,7.4,NGC6910,,OC,8,Cyg,,number: 50
+72.775,43.7,7.5,NGC1664,,OC,18,Aur,,number: 40
+80.675,33.4,7.5,NGC1893,,OC,12,Aur,,nmbr: 60 - crescent shape
+101.9,-3.16667,7.5,NGC2286,,OC,15,Mon,,number: 50
+275.2,-16.1833,7.5,NGC6618,M17,DN,46x37,Sgr,!!,Swan or Omega Nebula
+286.95,4.233333,7.5,NGC6755,,OC,15,Aql,,number: 100
+325.1,-23.1833,7.5,NGC7099,M30,GC,5.7,Cap,!,V
+95.1,23.26667,7.5,IC444,,DN,8x4,Gem,,spectrum: B9
+92.425,20.5,7.6,NGC2174,,DN,40x30,Ori,,spec:O6e - around NGC2175
+120.05,-10.7833,7.6,NGC2506,,OC,7,Mon,*,number: 150
+264.4,-3.25,7.6,NGC6402,M14,GC,3,Oph,*,
+270.85,-27.9,7.6,NGC6520,,OC,5,Sgr,*,nmbr:25+ - B86 on W edge
+299.9,22.71667,7.6,NGC6853,M27,PN,8x4,Vul,!!,Dumbbell Nebula
+274.45,-19.6667,7.6,IC1284,,DN,16x15,Sgr,,spectrum: B5
+198.225,18.16667,7.7,NGC5024,M53,GC,3.3,Com,*,V
+210.8,54.35,7.7,NGC5457,M101,SG,22x20,UMa,*,Sc-splendid large face-on
+277.85,-32.35,7.7,NGC6637,M69,GC,2.5,Sgr,*,V
+283.775,-30.4833,7.7,NGC6715,M54,GC,6,Sgr,*,III
+298.275,18.33333,7.7,H20,,OC,7,Sge,,number: 15
+3.725,-39.1833,7.8,NGC55,,SG,25x3,Scl,!,SBp or Ir
+13.2,56.6,7.8,NGC281,,DN,23x27,Cas,*,spectrum: O5e
+85.4,-2.23333,7.8,NGC2023,,DN,10x10,Ori,,spectrum: B2
+279.175,-8.21667,7.8,NGC6664,,OC,16,Sct,,n:50 - Alpha Sct in field
+307.85,60.63333,7.8,NGC6939,,OC,8,Cep,*,number: 80
+26.05,60.7,7.9,NGC659,,OC,5,Cas,,nmbr:40 -NGC 663 in field
+78.025,16.7,7.9,NGC1817,,OC,15,Tau,,number: 60
+119.05,-30.0667,7.9,NGC2489,,OC,8,Pup,,number: 45
+259.8,-18.5167,7.9,NGC6333,M9,GC,2.4,Oph,*,VIII
+297.75,23.06667,7.9,NGC6830,,OC,12,Vul,,number: 20
+111.775,13.58333,8,NGC2395,,OC,12,Gem,,number: 30
+281.3,-9.4,8,NGC6694,M26,OC,15,Sct,*,number: 30
+311.425,30.71667,8,NGC6960,,DN,70x6,Cyg,!!,SNR - Veil Nebula (west)
+314.1,31.71667,8,NGC6992,,DN,60x8,Cyg,!!,SNR - Veil Nebula (east)
+85.225,-2.46667,8,B33,,DK,6x4,Ori,!!,opacty:4-Horsehead Nebula
+260.875,-23.6333,8,B72,,DK,30x3,Oph,*,opacity:6 - S-shape
+270.65,-27.8333,8,B86,,DK,4.5x3.0,Sgr,!,opcty:5 -next to NGC 6520
+273.875,-18.1833,8,B92,,DK,12x6,Sgr,,opacity:6 - near M24
+286.525,-6.83333,8,B133,,DK,10x3,Aql,*,opacity:6 - on Sct cloud
+295.175,10.95,8,B143,,DK,30,Aql,*,opacity:6 - C-shaped
+11.1,85.33333,8.1,NGC188,,OC,15,Cep,*,nmbr:120 - oldest cluster
+13.2,-26.5833,8.1,NGC288,,GC,10,Scl,,X - loose structure
+248.125,-13.05,8.1,NGC6171,M107,GC,2.2,Oph,,X
+280.8,-32.3,8.1,NGC6681,M70,GC,4,Sgr,*,V
+346.3,60.25,8.1,IC1470,,PN,70x45,Cep,,central star mag: 11.9
+82,35.31667,8.2,NGC1907,,OC,7,Aur,,number: 30
+83.625,22.01667,8.2,NGC1952,M1,PN,6x4,Tau,!!,SNR (1054) - Crab Nebula
+151.925,-40.4333,8.2,NGC3132,,PN,84x53,Vel,!,cnt str:10 - Eight-Burst
+189.875,-26.75,8.2,NGC4590,M68,GC,2.8,Hya,*,X
+192.725,41.11667,8.2,NGC4736,M94,SG,5.0x3.5,CVn,*,Sbp
+204.25,-29.8667,8.2,NGC5236,M83,SG,10x8,Hya,!,Sc
+257.55,-26.5833,8.2,NGC6293,,GC,1.9,Oph,,IV
+261.375,-48.4167,8.2,NGC6352,,GC,2.5,Ara,,XI
+283.275,-8.7,8.2,NGC6712,,GC,2.1,Sct,,IX
+112.3,20.91667,8.3,NGC2392,,PN,47x43,Gem,*,cnt str:10.5 - Eskimo Neb
+114.625,21.56667,8.3,NGC2420,,OC,10,Gem,*,number: 100
+114.075,-20.6167,8.3,NGC2421,,OC,10,Pup,,number: 70
+129.325,-29.95,8.3,NGC2627,,OC,11,Pyx,,number: 60
+184.75,47.3,8.3,NGC4258,M106,SG,18.2x7.0,CVn,!,Sbp
+190,-11.6167,8.3,NGC4594,M104,SG,7.0x1.5,Vir,!,Sb - Sombrero Galaxy
+275.925,-30.3667,8.3,NGC6624,,GC,2,Sgr,,VI - X-ray source
+289.15,30.18333,8.3,NGC6779,M56,GC,1.8,Lyr,*,X
+298.45,18.78333,8.3,NGC6838,M71,GC,6.1,Sge,*,class not certain
+48.675,47.25,8.4,NGC1245,,OC,10,Per,*,number: 200
+48.075,-55.2167,8.4,NGC1261,,GC,2,Hor,,II
+81.125,-24.55,8.4,NGC1904,M79,GC,3.2,Lep,*,V
+114.225,65.6,8.4,NGC2403,,SG,16.8x10,Cam,!,Sc - well resolved spiral
+148.95,69.68333,8.4,NGC3034,M82,IG,8x3,UMa,!,Pec - fine pair with M81
+187.45,8,8.4,NGC4472,M49,EG,4.0x3.4,Vir,*,E4
+202.475,47.2,8.4,NGC5194,M51,SG,10.0x5.5,CVn,!!,Sc - Whirlpool Galaxy
+258.625,-29.4667,8.4,NGC6304,,GC,1.6,Oph,,VI
+260.9,-17.8167,8.4,NGC6356,,GC,1.7,Oph,,II
+316.05,-11.3667,8.4,NGC7009,,PN,44x26,Aqr,!,cnt str:12- Saturn Nebula
+322.625,51.58333,8.4,NGC7086,,OC,9,Cyg,,number: 50
+106.05,1.05,8.48,NGC2324,,OC,8,Mon,,number: 70
+11.75,-11.8833,8.5,NGC246,,PN,240x210,Cet,*,central star mag: 11.3
+194.175,21.68333,8.5,NGC4826,M64,SG,7.8x1.5,Com,!,Sb - Black-Eye Galaxy
+229.35,-21.0167,8.5,NGC5897,,GC,7.3,Lib,*,XI
+359.6,61.21667,8.5,NGC7790,,OC,17,Cas,,number: 40
+88.475,0.4,8.6,NGC2112,,OC,11,Ori,,number: 50
+91.875,24.1,8.6,NGC2158,,OC,5,Gem,*,nmbr: 40 - on edge of M35
+95.25,-7.28333,8.6,NGC2215,,OC,11,Mon,,number: 20
+156.2,-18.6333,8.6,NGC3242,,PN,40x35,Hya,*,Ghost of Jupiter/Eye Neb.
+187.7,12.4,8.6,NGC4486,M87,EG,3x3,Vir,*,E1 - X-ray & radio source
+198.95,42.03333,8.6,NGC5055,M63,SG,10x5,CVn,*,Sb - Sunflower Nebula
+301.525,-21.9167,8.6,NGC6864,M75,GC,1.9,Sgr,*,I - near Cap border
+56.15,32.15,8.6,IC348,,DN,120x60,Per,,sp:A1 - around Omicr Per
+10.675,40.86667,8.7,NGC221,M32,EG,3.6x3.1,And,*,E0 - companion of M31
+13.725,-37.6833,8.7,NGC300,,SG,20x10,Scl,*,"S - S-shape, loose struct"
+190.925,11.55,8.8,NGC4649,M60,EG,3.0x2.5,Vir,*,E1 - NGC 4647 in field
+269.65,66.63333,8.8,NGC6543,,PN,22x16,Dra,*,cnt str m:11.4 - bluish
+277.975,-23.4833,8.8,NGC6642,,GC,2,Sgr,,V? - 1 deg WNW of M22
+296.2,50.51667,8.8,NGC6826,,PN,27x24,Cyg,,"cnt str: 10.8 -""Blinking"""
+11.775,-20.7667,8.9,NGC247,,SG,18.2x4.5,Cet,*,S
+40.675,-0.01667,8.9,NGC1068,M77,SG,6x5,Cet,*,Sbp - Seyfert glx.(3C 71)
+50.675,-37.2,8.9,NGC1316,,SG,3.5x2.5,For,*,S(B)0p - radio source
+143.05,21.5,8.9,NGC2903,,SG,11.0x4.6,Leo,*,Sb - many-armed spiral
+166.45,-0.03333,8.9,NGC3521,,SG,6x4,Leo,*,Sb - multi-arm spiral
+260.125,-35.7167,8.9,NGC6334,,DN,30,Sco,*,"s:A0-curious,complex neby"
+265.2,-36.95,8.9,NGC6400,,OC,8,Sco,,number: 60
+278.95,-32.9833,8.9,NGC6652,,GC,1.7,Sgr,,VI
+308.55,7.4,8.9,NGC6934,,GC,1.5,Del,,VIII
+308.7,60.15,8.9,NGC6946,,SG,9.0x7.5,Cep,*,Sc - one of nearest SGs
+351.475,42.55,8.9,NGC7662,,PN,32x28,And,*,cent str m:13 -blue/green
+170.05,12.98333,9,NGC3627,M66,SG,8.0x2.5,Leo,*,"Sb -M65, NGC3628 in field"
+226,-33.0667,9,NGC5824,,GC,1,Lup,,I
+256.125,-24.7667,9,NGC6284,,GC,1.5,Oph,,IX
+259.15,-28.1333,9,NGC6316,,GC,1.1,Oph,,III
+270.65,-23.0333,9,NGC6514,M20,DN,29x27,Sgr,!!,spec: O7 - Trifid Nebula
+273.025,6.85,9,NGC6572,,PN,16x13,Oph,,cnt str 12.0-blu/grn disc
+314.725,-12.6333,9,NGC6994,M73,OC,2.8,Aqr,*,asterism of 4 stars
+7.8,63.36667,9.1,NGC133,,OC,7,Cas,,number: 5
+125.875,-29.5,9.1,NGC2587,,OC,9,Pup,,number: 40
+161.7,11.81667,9.1,NGC3368,M96,SG,5x4,Leo,*,Sbp - pair with M95
+211.375,28.53333,9.1,NGC5466,,GC,5,Boo,,XII
+246.825,-26.0333,9.1,NGC6144,,GC,3.3,Sco,,XI
+287.8,1.033333,9.1,NGC6760,,GC,1.9,Aql,,IX
+303,26.48333,9.1,NGC6885,,OC,7,Vul,,number: 35
+359.45,-32.5833,9.1,NGC7793,,SG,6x4,Scl,!,"Sd - large oval, loose SG"
+185.6,58.08333,9.1,WNC4,M40,DS,"50""",UMa,*,"Winnnecke 4 - sep. 50"""
+24.175,15.78333,9.2,NGC628,M74,SG,9.0x9.0,Psc,*,Sc - fine face-on spiral
+93.45,12.8,9.2,NGC2194,,OC,10,Ori,*,number: 80
+118.125,-26.4,9.2,NGC2467,,DN,4x4,Pup,,spectrum: B
+130.85,-32.65,9.2,NGC2658,,OC,12,Pyx,,number: 80
+151.3,-7.71667,9.2,NGC3115,,EG,4.0x1.2,Sex,*,E6 - Spindle Nebula
+161.95,12.58333,9.2,NGC3379,M105,EG,2.2x2.0,Leo,,"E1 -group with 3384, 3389"
+186.55,12.95,9.2,NGC4406,M86,EG,3x2,Vir,*,E3 - center Virgo Cluster
+192.6,25.5,9.2,NGC4725,,SG,10.0x5.5,Com,*,SBb
+196.35,-49.4667,9.2,NGC4945,,SG,11.5x2.0,Cen,*,SBc - edge-on
+274.65,-52.2167,9.2,NGC6584,,GC,2.5,Tel,,VIII
+277.725,-25.5,9.2,NGC6638,,GC,1.4,Sgr,,VI
+41.575,-30.2833,9.3,NGC1097,,SG,9.0x5.5,For,*,S(B)b
+63.55,-12.7333,9.3,NGC1535,,PN,20x17,Eri,,cnt str:11.8 - pale blue
+120.175,-19.0667,9.3,NGC2509,,OC,8,Pup,,number: 70
+140.5,50.96667,9.3,NGC2841,,SG,6.4x2.4,UMa,*,Sb - symmetrical whorls
+169.725,13.08333,9.3,NGC3623,M65,SG,8.0x2.5,Leo,*,"Sb -M66, NGC3628 in field"
+186.275,12.88333,9.3,NGC4374,M84,EG,2.0x1.8,Vir,*,E1 - center Virgo Cluster
+186.35,18.18333,9.3,NGC4382,M85,EG,2.1x1.7,Com,*,Ep
+190.525,32.53333,9.3,NGC4631,,SG,12.6x1.4,CVn,!,Sc - edge-on
+192.15,-5.8,9.3,NGC4697,,EG,2.5x1.3,Vir,,E4
+283.4,33.03333,9.3,NGC6720,M57,PN,1.3x1,Lyr,!!,cnt str:15 - Ring Nebula
+10.1,41.68333,9.4,NGC205,M110,EG,8.0x3.0,And,,E6 - companion of M31
+65.45,19.53333,9.4,NGC1554,,DN,,Tau,,spec: Gpe-Hind's Variable
+65.45,19.53333,9.4,NGC1555,,DN,,Tau,*,spec:dG5e-Hind's Variable
+90.775,10.43333,9.4,NGC2141,,OC,10,Ori,,number: 100
+102.25,-36,9.4,NGC2298,,GC,1.8,Pup,,VI
+185.725,15.81667,9.4,NGC4321,M100,SG,5.3x4.5,Com,!,Sc - fine spiral
+187.05,44.1,9.4,NGC4449,,IG,4.1x3.4,CVn,*,Ir - rectangular shape
+313.375,-12.5333,9.4,NGC6981,M72,GC,2,Aqr,*,IX
+40.1,39.06667,9.5,NGC1023,,EG,4.0x1.2,Per,,E7p - lens shape
+53.4,-36.1333,9.5,NGC1365,,SG,8.0x3.5,For,*,SB
+170.075,13.6,9.5,NGC3628,,SG,12.0x1.5,Leo,,Sb - edge-on
+188,14.41667,9.5,NGC4501,M88,SG,5.5x2.4,Com,*,Sb - multiple-arm spiral
+189.2,13.16667,9.5,NGC4569,M90,SG,7.0x2.5,Vir,*,Sb - well formed oval
+255.6,-39.7333,9.5,NGC6268,,OC,6,Sco,,number: 30
+271.2,-30.05,9.5,NGC6528,,GC,0.5,Sgr,,V - NGC 6522 in field
+339.275,34.41667,9.5,NGC7331,,SG,10.0x2.3,Peg,*,Sb - similar to Milky Way
+188.5,7.7,9.6,NGC4526,,EG,3.3x1.0,Vir,,"E7 - lenticular, edge-on"
+189.075,25.98333,9.6,NGC4565,,SG,14.4x1.2,Com,!,Sb - superb edge-on
+190.7,2.683333,9.6,NGC4636,,EG,1.4x1.3,Vir,,E1
+192.25,-8.66667,9.6,NGC4699,,SG,3x2,Vir,,Sa
+202.5,47.26667,9.6,NGC5195,,IG,2.0x1.5,CVn,*,Pec - connected to M51
+217.4,-5.98333,9.6,NGC5634,,GC,4,Vir,,IV - 10m star on E edge
+54.725,-26.3333,9.7,NGC1398,,SG,4.5x3.8,For,*,SBb
+133.175,33.41667,9.7,NGC2683,,SG,8.0x1.3,Lyn,,Sb - edge-on
+161,11.7,9.7,NGC3351,M95,SG,6.1x3.9,Leo,*,S(B)b - theta structure
+183.9,36.33333,9.7,NGC4214,,IG,6.6x5.8,CVn,,Ir -possible early barred
+184.175,69.46667,9.7,NGC4236,,SG,22x5,Dra,,SB -large loose structure
+185.475,4.466667,9.7,NGC4303,M61,SG,5.7x5.5,Vir,*,Sc - large face-on spiral
+200.5,-36.6333,9.7,NGC5102,,SG,6.0x2.5,Cen,,S0
+251.125,23.81667,9.7,NGC6210,,PN,20x13,Her,,cnt str m: 12.5 - bluish
+326,53.71667,9.7,NGC7128,,OC,3.1,Cyg,,number: 35
+100.8,26.96667,9.8,NGC2266,,OC,7,Gem,*,number: 50
+154.575,41.41667,9.8,NGC3184,,SG,5.6x5.6,UMa,,Sc -face on/Mu UMa in fld
+178.225,36.98333,9.8,NGC3941,,EG,1.8x1.2,UMa,,E3
+179.4,53.38333,9.8,NGC3992,M109,SG,6.2x3.5,UMa,,SBb -barred spiral galaxy
+184.7,14.41667,9.8,NGC4254,M99,SG,4.6x3.9,Com,!,Sc
+187.65,41.63333,9.8,NGC4490,,SG,5.6x2.1,CVn,,Sc - Cocoon Galaxy
+188.575,8.2,9.8,NGC4535,,SG,6x4,Vir,,S(B)c - fine S-shaped SG
+188.925,12.55,9.8,NGC4552,M89,EG,2x2,Vir,*,"E0 - bright, round"
+189.425,11.81667,9.8,NGC4579,M58,SG,4.0x3.5,Vir,*,Sb - fine compact spiral
+190.5,11.65,9.8,NGC4621,M59,EG,2.0x1.8,Vir,*,E3
+197.725,37.05,9.8,NGC5005,,SG,4.4x1.7,CVn,*,Sb
+199.1,17.7,9.8,NGC5053,,GC,3.5,Com,,XI
+47.45,-20.5833,9.9,NGC1232,,SG,7.0x5.5,Eri,,Sc - fine many-arm spiral
+54.625,-35.45,9.9,NGC1399,,EG,1.4x1.4,For,,E1p
+86.575,0,9.9,NGC2064,,DN,11x2,Ori,,
+150.825,68.73333,9.9,NGC3077,,EG,2.3x1.9,UMa,*,E2p - member M81 group
+169.575,-32.8167,9.9,NGC3621,,SG,5x2,Hya,,Sc - coarse structure
+187.85,25.78333,9.9,NGC4494,,EG,1.3x1.2,Com,,E1
+193.1,-1.2,9.9,NGC4753,,IG,2.8x2.0,Vir,,Pec
+296,-14.15,9.9,NGC6818,,PN,22x15,Sgr,,cnt str:15 -greenish disc
+89.075,46.11667,9.9,IC2149,,PN,15x10,Aur,,central star mag: 14.0
+23.575,-29.4167,10,NGC613,,SG,4x2,Scl,,SBc - fine many-armed SG
+35.65,42.35,10,NGC891,,SG,12x1,And,*,Sb - edge-on
+99.8,8.733333,10,NGC2261,,DN,2,Mon,!,spec:Bp-Hubble's Variable
+137.9,60.03333,10,NGC2768,,EG,1.6x0.8,UMa,,E5
+160.875,24.91667,10,NGC3344,,SG,6.0x5.1,LMi,,Sc - fine face-on spiral
+168.325,-26.75,10,NGC3585,,EG,1.5x0.8,Hya,,E5
+169.225,18.05,10,NGC3607,,EG,1.7x1.5,Leo,,E1
+183.975,13.15,10,NGC4216,,SG,7.4x0.9,Vir,*,"Sb - long streak, edge-on"
+207.325,60.2,10,NGC5322,,EG,1.4x1.1,UMa,,E2
+226.625,55.76667,10,NGC5866,,EG,2.8x1.0,Dra,,"E6p - edge-on, dust band"
+246.925,-38.85,10,NGC6139,,GC,1.3,Sco,,II
+258.425,-37.1,10,NGC6302,,PN,50,Sco,,"fig-8 shape, Bug Nebula"
+296.225,-14.8,10,NGC6822,,IG,10x9,Sgr,*,Ir - Barnard's Galaxy
+45.8,60.48333,10,IC1871,,DN,4,Cas,,spectrum: AOe
+328.375,47.26667,10,IC5146,,DN,12x12,Cyg,,spectrum: B1 - Cocoon Neb
+7.6,-33.25,10.1,NGC134,,SG,5x1,Scl,,S(B)b - edge-on
+133.9,78.21667,10.1,NGC2655,,SG,5.0x3.4,Cam,,Sa - diffuse arms
+162.075,12.63333,10.1,NGC3384,,EG,4.4x1.4,Leo,,E7
+167.875,55.66667,10.1,NGC3556,M108,SG,7.7x1.3,UMa,*,Sc - edge-on/M97 in field
+177.75,-28.8,10.1,NGC3923,,EG,2.0x1.2,Hya,,E3
+178.45,52.33333,10.1,NGC3953,,SG,6.0x2.8,UMa,,Sb - fine multiple arm SG
+183.45,14.9,10.1,NGC4192,M98,SG,8.4x1.9,Com,*,"Sb-knotty, bright spindle"
+186.95,13.01667,10.1,NGC4438,,SG,4.0x1.5,Vir,,Sap-long angular filamnts
+187.125,17.08333,10.1,NGC4450,,SG,3.0x2.5,Com,,Sb
+198.35,36.6,10.1,NGC5033,,SG,9.9x4.8,CVn,,Sb
+3.25,72.53333,10.2,NGC40,,PN,60x40,Cep,,central star mag: 11.4
+28.25,-13.7333,10.2,NGC720,,EG,1.6x1.1,Cet,,E3
+76.3,-37.9833,10.2,NGC1792,,SG,3x1,Col,,Sb
+146.825,67.91667,10.2,NGC2976,,SG,3.5x1.3,UMa,*,Scp-spiral pattern uncrtn
+161.925,13.98333,10.2,NGC3377,,EG,1.9x1.0,Leo,,E5
+184.375,37.81667,10.2,NGC4244,,SG,14.5x1.0,CVn,*,S - narrow streak/edge-on
+184.525,28.16667,10.2,NGC4251,,SG,2.3x0.8,Com,,Sa - lens shape
+186.45,33.55,10.2,NGC4395,,SG,10x8,CVn,,"S - 3-branch, loose SG"
+186.85,11.11667,10.2,NGC4429,,SG,3.3x1.0,Vir,,S0 - oval with outer ring
+187.45,13.43333,10.2,NGC4473,,EG,1.6x0.9,Com,,E4
+188.85,14.5,10.2,NGC4548,M91,SG,3.7x3.2,Com,*,SBb- barred spiral galaxy
+193.225,11.23333,10.2,NGC4762,,SG,3.7x0.4,Vir,,"SB0- edge-on,thick streak"
+204.375,8.883333,10.2,NGC5248,,SG,6.1x4.4,Boo,*,Sc
+209.025,5.25,10.2,NGC5363,,EG,1.7x1.5,Vir,,Ep - pair with NGC 5364
+219.9,-26.5333,10.2,NGC5694,,GC,2,Hya,*,VII - one of most distant
+226.625,1.6,10.2,NGC5846,,EG,0.9x0.9,Vir,,E0 - pair with NGC 5850
+267.35,70.15,10.2,NGC6503,,SG,4.5x1.0,Dra,,Sb
+331.975,31.36667,10.2,NGC7217,,SG,2.6x2.3,Peg,*,Sb
+20.45,5.25,10.3,NGC488,,SG,3.5x3.0,Psc,*,Sb - delicate spiral
+51.575,-21.3333,10.3,NGC1332,,EG,3.4x1.0,Eri,,E7
+133.375,51.31667,10.3,NGC2681,,SG,2.8x2.5,UMa,,"Sa-cmpct cntr,dstnct arms"
+137.575,7.033333,10.3,NGC2775,,SG,2.3x1.9,Cnc,,Sa
+165.1,28.96667,10.3,NGC3486,,SG,5.5x4.2,LMi,,Sc - fine multiple-arm SG
+180.8,44.53333,10.3,NGC4051,,SG,4.2x3.0,UMa,,Sc - thick spiral arms
+184.85,5.816667,10.3,NGC4261,,EG,2.0x1.7,Vir,,E2
+185.025,29.28333,10.3,NGC4278,,EG,1.4x1.3,Com,,E1 - NGC 4283 in field
+186.6,31.21667,10.3,NGC4414,,SG,3.2x1.5,Com,,Sc
+188.875,-3.8,10.3,NGC4546,,EG,1.8x0.8,Vir,,E6
+8.7,-8.4,10.4,NGC157,,SG,2.8x2.1,Cet,*,Sc
+114.525,38.88333,10.4,NGC2419,,GC,1.7,Lyn,*,II - most distant GC
+128.35,-22.9667,10.4,NGC2613,,SG,6.4x1.5,Pyx,,Sb - edge-on
+170.25,53.16667,10.4,NGC3631,,SG,4.3x3.2,UMa,,Sc -bright face-on spiral
+173.325,47.03333,10.4,NGC3726,,SG,5.0x3.4,UMa,,Sc - well defined spiral
+187.5,13.63333,10.4,NGC4477,,SG,2.5x2.0,Com,,S(B)a
+188.625,2.183333,10.4,NGC4536,,SG,7x2,Vir,,Sc - highly tilted
+191,32.16667,10.4,NGC4656,,SG,19.5x2.0,CVn,*,Sc -interacting w/NGC4657
+194.825,-15.0333,10.4,NGC4856,,SG,2.5x0.7,Vir,,S(B)a
+228.975,56.31667,10.4,NGC5907,,SG,11.0x0.6,Dra,*,"Sb - long, thin streak"
+316.775,42.23333,10.4,NGC7027,,PN,18x11,Cyg,,cnt str m:17.1 - blu/grn
+86.675,0.05,10.5,NGC2068,M78,DN,8x6,Ori,*,spec: B8 - comet shaped
+147.6,72.28333,10.5,NGC2985,,SG,4x3,UMa,,Sb - fine spiral whorls
+173.15,53.06667,10.5,NGC3718,,SG,3x3,UMa,,SBap - central dust lane
+181.4,50.55,10.5,NGC4088,,SG,4.5x1.4,UMa,,Sc - NGC 4085 in field
+196.45,-8.01667,10.5,NGC4958,,EG,1.7x0.7,Vir,,E6 - edge-on lenticular
+215.075,3.933333,10.5,NGC5566,,SG,5.8x1.3,Vir,,Sb - 2 faint glx in field
+0.825,16.15,10.5,NGC7814,,SG,1x5,Peg,*,Sb - edge-on/dust lane
+21.2,9.533333,10.6,NGC524,,EG,1.8x1.7,Psc,,E1
+36.825,33.58333,10.6,NGC925,,SG,9.4x4.0,Tri,,S(B)c - coarse spiral
+41.5,-7.58333,10.6,NGC1084,,SG,2.1x1.1,Eri,,Sc
+55.05,-18.5833,10.6,NGC1407,,EG,1.1x1.1,Eri,,E0
+146.4,-31.1833,10.6,NGC2997,,SG,6x5,Ant,!,Sc
+150.5,55.68333,10.6,NGC3079,,SG,8x1,UMa,,"Sb - edge-on, long streak"
+162.725,13.41667,10.6,NGC3412,,EG,2.4x1.1,Leo,,E5
+171.525,43.58333,10.6,NGC3675,,SG,3.5x1.3,UMa,,Sb - elongated N-S
+178.3,60.68333,10.6,NGC3945,,SG,5.2x2.2,UMa,,SBa - outer ring
+178.675,-13.9667,10.6,NGC3962,,EG,1.1x0.9,Crt,,E2
+180.35,61.9,10.6,NGC4036,,EG,2.4x0.9,UMa,,E6 - spindle-shaped
+190.825,1.983333,10.6,NGC4643,,SG,1.5x0.9,Vir,,SBa - projecting ansae
+193.075,11.31667,10.6,NGC4754,,SG,2.5x1.0,Vir,,SB0 - pair with NGC 4762
+221.225,1.95,10.6,NGC5746,,SG,6.2x0.8,Vir,,Sb - edge-on w/dust band
+276.425,-23.2,10.6,NGC6629,,PN,16x14,Sgr,,central star mag: 13.6
+315.375,16.18333,10.6,NGC7006,,GC,1.1,Del,*,I - very remote GC
+215.6,-44.15,10.6,IC4406,,PN,100x37,Lup,,central star mag: 14.7
+17.35,35.71667,10.7,NGC404,,EG,1.3x1.3,And,,E0
+36.9,-1.15,10.7,NGC936,,SG,3.3x2.5,Cet,,SBa - thick central bar
+141.075,34.51667,10.7,NGC2859,,SG,4.4x3.5,LMi,,SBa - faint outer ring
+179.85,50.96667,10.7,NGC4026,,EG,3.6x0.7,UMa,,E8 - edge-on/lens-shaped
+180.475,-18.8667,10.7,NGC4038,,SG,2.5x2.5,Crv,*,Sc - Ringtail Galaxy
+354.975,-12.3,10.7,NGC7727,,SG,2.7,Aqr,,S - faint outer arms
+22.825,-6.86667,10.8,NGC584,,EG,1.6x1.0,Cet,,E4
+26.975,27.43333,10.8,NGC672,,SG,4.5x1.7,Tri,,SBc - coarse spiral
+32.1,11,10.8,NGC821,,EG,1.2x0.9,Ari,,E2
+62.3,30.78333,10.8,NGC1514,,PN,120x90,Tau,*,central star mag: 9.7
+139.825,69.2,10.8,NGC2787,,SG,2.0x1.3,UMa,,Sap
+175.25,11.46667,10.8,NGC3810,,SG,3.6x2.5,Leo,,Sc
+181.775,43.06667,10.8,NGC4111,,EG,3.3x0.6,UMa,,E7/S0-lenticulr or edgeon
+184.95,29.61667,10.8,NGC4274,,SG,6.7x1.3,Com,*,Sb/Saturn-like inner ring
+185.65,29.88333,10.8,NGC4314,,SG,3.1x2.9,Com,,SBa - faint outer arms
+186.125,-18.8,10.8,NGC4361,,PN,81,Crv,,central star mag: 12.8
+191.275,-0.46667,10.8,NGC4666,,SG,3.8x0.8,Vir,,Sc - NGC 4668 in field
+199.725,-21.0333,10.8,NGC5068,,SG,6.0x5.5,Vir,,SBc - coarse spiral
+13.025,47.55,10.9,NGC278,,EG,1.3x1.3,Cas,*,E0p - very compact spiral
+29.825,19.01667,10.9,NGC772,,SG,5x3,Ari,,Sb - strong arm NW side
+154.225,73.4,10.9,NGC3147,,SG,3.0x2.3,Dra,*,Sb
+159.675,53.5,10.9,NGC3310,,SG,3.0x2.0,UMa,,S(B)bp
+170.025,18.35,10.9,NGC3626,,SG,1.6x1.1,Leo,,Sb  (NGC 3622)
+176.525,47.5,10.9,NGC3877,,SG,4.4x0.8,UMa,,Sb - edge-on
+186.925,13.08333,10.9,NGC4435,,EG,1.3x0.8,Vir,,E4 - pair with NGC 4438
+187.25,13.98333,10.9,NGC4459,,EG,1.2x1.0,Com,,E2 - internal dust ring
+243.05,12.06667,10.9,IC4593,,PN,15x11,Ser,,central star mag: 11.3
+41.6,-0.5,11,NGC1087,,SG,2.3x1.3,Cet,,"Sc - course, compact arms"
+145.65,58.85,11,NGC2950,,SG,1.3x0.9,UMa,,Sap
+177.15,48.71667,11,NGC3893,,SG,3.7x1.9,UMa,,Sc
+178.425,47.86667,11,NGC3949,,SG,2.3x1.1,UMa,,Sb
+182.4,42.53333,11,NGC4143,,EG,1.4x0.9,CVn,,E4
+186.125,7.316667,11,NGC4365,,EG,2.0x1.3,Vir,,E2
+191.125,11.18333,11,NGC4660,,EG,1.3x0.6,Vir,,E5
+197.425,-7.83333,11,NGC4995,,SG,2.2x1.5,Vir,,Sb - dense spiral
+198.85,-16.3833,11,NGC5044,,EG,0.9x0.9,Vir,,E0 - NGC 5037 in field
+165.8,27.96667,11.1,NGC3504,,SG,2.0x1.8,LMi,,Sb
+180.55,62.13333,11.1,NGC4041,,SG,2.4x1.8,UMa,,Sc - NGC 4036 in field
+193.65,46.53333,11.1,NGC4800,,SG,1.2x1.0,CVn,,Sb
+234.675,59.35,11.1,NGC5982,,EG,1.2x0.8,Dra,,E3p
+354.725,-12.9667,11.1,NGC7723,,SG,3.6x2.6,Aqr,,Sb
+40.275,-8.25,11.2,NGC1052,,EG,1.3x1.0,Cet,,E2
+170.425,20.16667,11.2,NGC3646,,SG,3.2x1.9,Leo,,Sc
+180.1,-1.1,11.2,NGC4030,,SG,3.1x2.2,Vir,,Sc - fine face-on spiral
+182.025,65.18333,11.2,NGC4125,,EG,2.2x1.1,Dra,,E5p
+193.6,-10.5333,11.2,NGC4781,,SG,2.3x1.1,Vir,,Sc - coarse spiral
+209.075,47.23333,11.2,NGC5377,,SG,3.0x0.6,CVn,,Sap - outer ring
+29.925,-5.96667,11.3,NGC779,,SG,3.7x0.9,Cet,,Sb - edge-on
+54.625,-23.0333,11.3,NGC1395,,EG,2.1x1.4,Eri,,E3
+115.45,-14.7333,11.3,NGC2438,,PN,65,Pup,,cnt str:16.8-M46 in field
+145.725,31.85,11.3,NGC2964,,SG,2.2x1.1,Leo,,Sc
+39.625,-6.66667,11.4,NGC1022,,SG,1.8x1.4,Cet,,Sb - compact spiral
+173.45,53.13333,11.4,NGC3729,,SG,1.8x1.3,UMa,,SBp - NGC 3718 in field
+210.85,-6.03333,11.4,NGC5427,,SG,2.0x1.6,Vir,,"Sc - pair w/5426, face-on"
+223.5,3.55,11.4,NGC5775,,SG,3.6x0.5,Vir,,Sb - edge-on
+290.8,1.516667,11.4,NGC6790,,PN,2,Aql,,cent str m:18 - stellar
+292.825,10.05,11.4,NGC6803,,PN,5,Aql,,cent str m:14.1 - stellar
+303.8,12.7,11.4,NGC6891,,PN,15x7,Del,,central star mag: 11.6
+305.05,16.75,11.4,IC4997,,PN,2,Sge,,cnt str m:13.7v - stellar
+23.225,-7.03333,11.5,NGC596,,EG,1.5x1.2,Cet,,E2
+195.15,2.5,11.5,NGC4900,,SG,1.7x1.5,Vir,,Sc - compact spiral
+193.45,-6.61667,11.6,NGC4775,,SG,1.7x1.6,Vir,,Sc - compact face-on
+9.75,48.33333,11.7,NGC185,,EG,3.5x2.8,Cas,*,E0 - companion to M31
+136.9,60.48333,11.7,NGC2742,,SG,2.5x1.0,UMa,,Sc
+147.15,33.41667,11.7,NGC3003,,SG,5.0x0.9,LMi,!,S(B)c - edge-on
+147.75,33.55,11.7,NGC3021,,SG,1.1x0.5,LMi,,Sb
+345.025,15.98333,11.7,NGC7448,,SG,2x1,Peg,,Sc
+348.675,4.533333,11.7,NGC7541,,SG,2.9x0.9,Psc,,Sc
+63.025,-32.8667,11.8,NGC1532,,SG,5.0x1.0,Eri,,Sb - edge-on
+162.125,12.53333,11.8,NGC3389,,SG,2.3x1.0,Leo,,Sc
+74.225,-4.86667,11.9,NGC1700,,EG,0.9x0.8,Eri,,E1
+165.85,-23.0833,11.9,NGC3511,,SG,4.6x2.0,Crt,,Sc
+305.6,20.11667,11.9,NGC6905,,PN,44x37,Del,,cnt str m:14.2 - bluish
+168.7,55.01667,12,NGC3587,M97,PN,3.4x3.0,UMa,!,cnt str m:14 - Owl Nebula
+181.675,-29.7667,12,NGC4105,,EG,1.5x1.5,Hya,,E2 -interacting with 4106
+302.625,16.91667,12.1,NGC6879,,PN,5,Sge,,cent str m:15.2 - stellar
+25.6,51.56667,12.2,NGC650,M76,PN,140x70,Per,*,cnt str:17-Little Dumbell
+303.175,19.98333,12.2,NGC6886,,PN,9x6,Sge,,central star mag: 16.6
+241.1,40.68333,12.3,NGC6058,,PN,25x20,Her,,central star mag: 13.8
+255.4,-21.8333,12.3,IC4634,,PN,20x9,Oph,,central star mag: 17.4
+56.875,35.05,12.4,IC351,,PN,8x6,Per,,central star mag: 14.8
+281.45,-33.35,12.5,IC4776,,PN,8x6,Sgr,,central star mag: 15.6
+316.575,46.18333,12.7,NGC7026,,PN,25x5,Cyg,,central star mag: 14.8
+187.275,2.05,12.8,3C273,,QS,"1""       ",Vir,*,LY in millions - Quasar
+262.325,-23.7667,12.9,NGC6369,,PN,28,Oph,,cnt str 16.6-perfect ring
+111.4,29.48333,13,NGC2371,,PN,50x30,Gem,,cnt str:15.5 - double neb
+267.3,-20.0167,13.2,NGC6445,,PN,38x29,Sgr,,cnt str:19 -6440 in field
+61.75,60.91667,13.3,NGC1501,,PN,56x48,Cam,*,cent str m:13.4-blue disk
+228.2,-38.1333,13.3,NGC5873,,PN,3,Lup,,central star mag: 13.6
+128.35,-16.15,13.6,NGC2610,,PN,38x31,Hya,,central star mag: 15.7v
+298.75,29.28333,13.6,NGC6842,,PN,50x45,Vul,,central star mag: 14.1
+304.1,30.56667,14.4,NGC6894,,PN,44,Cyg,,cnt str m:17 - ring-shape
+275.725,-26.8167,15,NGC6620,,PN,5,Sgr,,cnt str m: 15.8 - stellar
+98.075,5.05,15,NGC2237,,DN,80x60,Mon,*,spec: O6 - Rosette Nebula

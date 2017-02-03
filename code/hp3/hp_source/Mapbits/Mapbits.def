@@ -1,0 +1,7 @@
+LIBRARY   MAPBITS  BASE=0x12000000
+HEAPSIZE  1024
+EXPORTS
+		  DllMain
+		  mapbitsCount		@1
+		  mapbitsGetDesc	@2
+		  mapbitsGetBitMap	@3

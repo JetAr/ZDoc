@@ -1,0 +1,24 @@
+
+HEAPSIZE        4096
+EXPORTS
+        WndProc          		@1
+        About            		@2
+        SetJdate         		@3
+        SetUtime         		@4
+        SattrackDlg		 		@5
+        SunMoonDlg		 		@6
+        SatIconDlg		 		@7
+        WrapperCallback	 		@8
+        SatViewDlg		 		@9
+        planetDlg		 		@10
+        SetObserverLocation		@11
+        SkyWndProc				@12
+        TelescopeDlg			@13
+        ObjectCatDlg			@14
+        TelOptsDlg				@15
+        HorizonDlg				@17
+        HorOptsDlg				@18
+        editReturn				@19
+        editTabReturn			@20
+
+

@@ -1,0 +1,102 @@
+;
+;	Sky Atlas 2000.0 chart boundaries
+;
+;	Chart numbers are plotted at the centre of each
+;	chart region.
+;
+,Right ascension,Declination,(Type),(Label)
+;	+50 parallel
+,0h,50d,c3;mv
+,0h,50d,ct
+;	+50 - +90 meridians	
+,0h,50d,mv
+,0h,90d,lt
+,8h,50d,mv
+,8h,90d,lt
+,16h,50d,mv
+,16h,90d,lt
+,4h,70°,,'1'|-1
+,12h,70°,,'2'|-1
+,20h,70°,,'3'|-1
+;	+20 - +50 meridians
+,0h,50d,mv
+,0h,20d,lt
+,2h,35°,,'4'|-1
+,4h,50d,mv
+,4h,20d,lt
+,6h,35°,,'5'|-1
+,8h,50d,mv
+,8h,20d,lt
+,10h,35°,,'6'|-1
+,12h,50d,mv
+,12h,20d,lt
+,14h,35°,,'7'|-1
+,16h,50d,mv
+,16h,20d,lt
+,18h,35°,,'8'|-1
+,20h,50d,mv
+,20h,20d,lt
+,22h,35°,,'9'|-1
+;	+20 parallel
+,0h,20d,mv
+,0h,20d,ct
+;	-20 parallel
+,0h,-20d,mv
+,0h,-20d,ct
+;	-20 - +20 meridians
+,0h,20d,mv
+,0h,-20d,lt
+,1h30m,0d,,'10'|-1
+,3h,20d,mv
+,3h,-20d,lt
+,4h30m,0d,,'11'|-1
+,6h,20d,mv
+,6h,-20d,lt
+,7h30m,0d,,'12'|-1
+,9h,20d,mv
+,9h,-20d,lt
+,10h30m,0d,,'13'|-1
+,12h,20d,mv
+,12h,-20d,lt
+,13h30m,0d,,'14'|-1
+,15h,20d,mv
+,15h,-20d,lt
+,16h30m,0d,,'15'|-1
+,18h,20d,mv
+,18h,-20d,lt
+,19h30m,0d,,'16'|-1
+,21h,20d,mv
+,21h,-20d,lt
+,22h30m,0d,,'17'|-1
+;	-50 parallel
+,0h,-50d,mv
+,0h,-50d,ct
+;	-50 - -20 parallels
+,0h,-50d,mv
+,0h,-20d,lt
+,2h,-35°,,'18'|-1
+,4h,-50d,mv
+,4h,-20d,lt
+,6h,-35°,,'19'|-1
+,8h,-50d,mv
+,8h,-20d,lt
+,10h,-35°,,'20'|-1
+,12h,-50d,mv
+,12h,-20d,lt
+,14h,-35°,,'21'|-1
+,16h,-50d,mv
+,16h,-20d,lt
+,18h,-35°,,'22'|-1
+,20h,-50d,mv
+,20h,-20d,lt
+,22h,-35°,,'23'|-1
+;	-50 - -90 meridians
+,0h,-50d,mv
+,0h,-90d,lt
+,8h,-50d,mv
+,8h,-90d,lt
+,16h,-50d,mv
+,16h,-90d,lt
+,4h,-70°,,'24'|-1
+,12h,-70°,,'25'|-1
+,20h,-70°,,'26'|-1

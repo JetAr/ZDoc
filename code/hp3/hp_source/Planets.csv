@@ -1,0 +1,16 @@
+;
+;   Solar system information
+;
+Name,(Image),(Sound),Diameter (km),Rotation period,Polar inclination,Earth masses,Density,Escape velocity,Surface gravity,Magnitude (opp.),Albedo
+;
+Sun,Sun,,1392000,25.380 days,7° 15',332946,1.409,617.5 km/sec,27.9,-26.8,Luminous
+Mercury,Mercury,,4880,58.65 days,0°,0.055,5.5,4.3 km/sec,0.38,0,0.06
+Venus,Venus,,12100,243.01 days (Retrograde),-2°,0.815,5.25,10.36 km/sec,0.9032,-4.4,0.76
+Earth,a17earth,,12756,23.9345 hours,23.45°,1,5.517,11.18 km/sec,1,-,0.36
+Moon,fullmoon,moonstep,3476,27.322 days,1° 21',0.0203,3.342,2.38 km/sec,0.1653,-12.7,0.07
+Mars,Mars,,6790,24.6229 hours,23.98°,0.1074,3.94,5.03 km/sec,0.3799,-2,0.16
+Jupiter,Jupiter,,142200,9.841 hours,3.08°,317.89,1.33,60.22 km/sec,2.643,-2.6,0.73
+Saturn,Saturn,,119300,10.233 hours,29°,95.17,0.706,36.25 km/sec,1.159,0.7,0.76
+Uranus,Uranus,,47100,15.5 hours (Retrograde),97.92°,14.54,1.19,21.22 km/sec,1.11,5.5,0.93
+Neptune,Neptune,,49500,15.8 hours,28.8°,17.23,1.66,23.6 km/sec,1.12,7.8,0.84
+Pluto,Pluto,,2300,6.3874 hours,?,0.0017,0.6-1.7?,5.3? km/sec,0.44?,14.9,0.14

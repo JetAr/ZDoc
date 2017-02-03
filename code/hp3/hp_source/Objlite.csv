@@ -1,0 +1,45 @@
+;
+;       Object database
+;
+;       Special database type codes:
+;
+;       1       Asteroids
+;       2       Comets
+;       3       Databases containing Right ascension and declination fields eligible
+;               both for selection to aim the telescope and for finding objects from
+;               the telescope.  All databases are searched when the user right clicks
+;               (no keyboard modifiers) on an object.
+;       4       Solar system objects
+;       5       Databases containing Right ascension and declination fields eligible
+;               only for selection to aim the telescope (not for finding).
+;       6       Databases containing Right ascension and declination fields eligible
+;               both for selection to aim the telescope and for finding objects from
+;               the telescope or horizon when the user right clicks with the SHIFT
+;               key down.
+;       7       Databases containing Right ascension and declination fields eligible
+;               both for selection to aim the telescope and for finding objects from
+;               the telescope or horizon when the user right clicks with the CONTROL
+;               key down.
+;       8       Databases containing Right ascension and declination fields eligible
+;               both for selection to aim the telescope and for finding objects from
+;               the telescope or horizon when the user right clicks with the SHIFT
+;               and CONTROL keys down.
+;       9       Databases containing Right ascension and declination fields eligible
+;               both for selection to aim the telescope and for finding objects from
+;               the telescope or horizon when the user right clicks but only if the
+;                               database is currently selected as the Charted user catalogue.
+;
+Solar system objects,planets.csv,4
+Comets: periodic,comets.csv,2
+Constellation names,constel.csv,5
+Named stars,starname.csv,3
+Navigation stars,navstar.csv,3
+Asteroid names,asteroid.csv,1
+Messier objects,messier.csv,3
+Deep sky objects,deepsky.csv,3
+Meteor showers,meteor.csv,5
+3C radio sources,3c.csv,9
+Sky Atlas 2000.0,skyatl2k.csv,6
+Uranometria 2000.0,u2000.csv,7
+Palomar Sky Survey,poss.csv,8
+Sky Atlas 2000 bounds,sc2kbnd.csv,5

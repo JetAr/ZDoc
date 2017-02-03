@@ -1,0 +1,1151 @@
+// Microsoft Visual C++ generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "Sunclock.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// English (U.S.) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+#ifdef _WIN32
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#pragma code_page(1252)
+#endif //_WIN32
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDR_SUN                 ICON                    "Icons/Sun.ico"
+_SUNCLOCK               ICON                    "Icons/Earth5.ico"
+EARTHIMG                ICON                    "Icons/Earthimg.ico"
+EARTH1IM                ICON                    "Icons/Earth1.ico"
+EARTH2IM                ICON                    "Icons/Earth3.ico"
+EARTH3IM                ICON                    "Icons/Sunclock.ico"
+EARTH4IM                ICON                    "Icons/Earth4.ico"
+SATIA                   ICON                    "Icons/Satia.ico"
+SATIB                   ICON                    "Icons/Satib.icO"
+SATIC                   ICON                    "Icons/Satic.ico"
+SATID                   ICON                    "Icons/Satid.ico"
+SATIE                   ICON                    "Icons/Satie.ico"
+SATIF                   ICON                    "Icons/Satif.ico"
+SATIG                   ICON                    "Icons/Satig.ico"
+SATIH                   ICON                    "Icons/Satih.ico"
+SATII                   ICON                    "Icons/Satii.icO"
+SATIJ                   ICON                    "Icons/Satij.ico"
+SKY                     ICON                    "Icons/Sky.ico"
+IDR_STAR1               ICON                    "Icons/Star1.ico"
+IDR_STAR2               ICON                    "Icons/Star2.ico"
+IDR_STAR3               ICON                    "Icons/Star3.ico"
+IDR_STAR4               ICON                    "Icons/Star4.ico"
+IDR_STAR5               ICON                    "Icons/Star5.ico"
+IDR_STAR6               ICON                    "Icons/Star6.ico"
+IDR_STAR7               ICON                    "Icons/Star7.ico"
+IDR_STAR8               ICON                    "Icons/Star8.ico"
+IDR_STAR9               ICON                    "Icons/Star9.ico"
+IDR_MERCURY             ICON                    "Icons/Mercury.ico"
+IDR_VENUS               ICON                    "Icons/Venus.ico"
+IDR_EARTH               ICON                    "Icons/Eart.ico"
+IDR_MARS                ICON                    "Icons/Mars.ico"
+IDR_JUPITER             ICON                    "Icons/Jupiter.ico"
+IDR_SATURN              ICON                    "Icons/Saturn.ico"
+IDR_URANUS              ICON                    "Icons/Uranus.ico"
+IDR_NEPTUNE             ICON                    "Icons/Neptune.ico"
+IDR_PLUTO               ICON                    "Icons/Pluto.ico"
+IDR_ASTEROID            ICON                    "Icons/Asteroid.ico"
+IDR_COMET               ICON                    "Icons/Comet.ico"
+IDR_DEEPEG              ICON                    "Icons/Deepeg.ico"
+IDR_DEEPSG              ICON                    "Icons/Deepsg.ico"
+IDR_DEEPOC              ICON                    "Icons/Deepoc.ico"
+IDR_DEEPGC              ICON                    "Icons/Deepgc.ico"
+IDR_DEEPDN              ICON                    "Icons/Deepdn.ico"
+IDR_DEEPPN              ICON                    "Icons/Deeppn.ico"
+IDR_DEEPQS              ICON                    "Icons/Deepqs.ico"
+IDR_DEEPDS              ICON                    "Icons/Deepds.ico"
+IDR_DEEPDK              ICON                    "Icons/Deepdk.ico"
+IDR_DEEPIG              ICON                    "Icons/Deepig.ico"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Cursor
+//
+
+SKY                     CURSOR                  "Cursors/Sky.cur"
+XHAIRS                  CURSOR                  "Cursors/Xhairs.cur"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Menu
+//
+
+HPLANET MENU 
+BEGIN
+    POPUP "&File"
+    BEGIN
+        MENUITEM "E&xit\aAlt+F4",               IDM_F_EXIT
+        MENUITEM SEPARATOR
+        MENUITEM "&Save settings",              IDM_F_SAVESETTINGS
+        MENUITEM "&Default settings",           IDM_F_DEFSETTINGS
+    END
+    POPUP "&Edit"
+    BEGIN
+        MENUITEM "&Copy\aCtrl+C",               IDM_F_COPY
+        MENUITEM SEPARATOR
+        MENUITEM "Set &Universal time...",      IDM_F_SETUTIME
+        MENUITEM "Set &Julian date...",         IDM_F_SETJDATE
+        MENUITEM SEPARATOR
+        MENUITEM "Set &Observer's location...", IDM_F_SETOBSLOC
+        MENUITEM SEPARATOR
+        MENUITEM "Cuckoo C&lock",               IDM_F_CUCKOO
+    END
+    POPUP "&Display"
+    BEGIN
+        MENUITEM "&Sun/Moon info...",           IDM_F_SUNMOON
+        MENUITEM "Show &Moon\aCtrl+M",          IDM_F_SHOWMOON
+        MENUITEM "&Planetary positions...",     IDM_F_PLANPAN
+        MENUITEM "&Orrery...",                  IDM_F_ORRERY
+        MENUITEM "S&ky...",                     IDM_F_SKY
+        MENUITEM "Object &catalogue...",        IDM_F_OBJCAT
+        POPUP "&View Earth from"
+        BEGIN
+            MENUITEM "Sun (&Day side)...",          IDM_F_DAYVIEW
+            MENUITEM "&Moon...",                    IDM_F_MOONVIEW
+            MENUITEM "&Satellite...",               IDM_F_SATVIEW1
+            MENUITEM "&Night side...",              IDM_F_NIGHTVIEW
+            MENUITEM "&Above observatory...",       IDM_F_VFOBSLOC
+            MENUITEM SEPARATOR
+            POPUP "&View from window"
+            BEGIN
+                MENUITEM "&Earth image",                IDM_F_TEXTUREVIEW
+                MENUITEM "&Map",                        IDM_F_VECTORVIEW
+            END
+        END
+        MENUITEM SEPARATOR
+        POPUP "Map &window"
+        BEGIN
+            MENUITEM "&Monochrome",                 IDM_F_DISPMONO
+            MENUITEM "&16 Colour",                  IDM_F_DISPC16
+            MENUITEM "G&rey Scale",                 IDM_F_DISPGREY
+            MENUITEM "Full &Colour",                IDM_F_DISPC256
+        END
+        POPUP "Map im&age"
+        BEGIN
+            MENUITEM "Place holder",                IDM_F_IMAGE_POP
+        END
+    END
+    POPUP "&Animate"
+    BEGIN
+        MENUITEM "&Animate",                    IDM_F_TESTMODE
+        MENUITEM "&Stop",                       IDM_F_STOP
+        MENUITEM SEPARATOR
+        POPUP "&Time step"
+        BEGIN
+            MENUITEM "&Minute",                     IDM_F_ANIMIN
+            MENUITEM "&Hour",                       IDM_F_ANIHOUR
+            MENUITEM "&Day",                        IDM_F_ANIDAY
+            MENUITEM "&Week",                       IDM_F_ANIWEEK
+            MENUITEM "M&onth",                      IDM_F_ANIMONTH
+            MENUITEM "&Year",                       IDM_F_ANIYEAR
+            MENUITEM "D&ecade",                     IDM_F_ANIDECADE
+            MENUITEM "&Century",                    IDM_F_ANICENTURY
+            MENUITEM "M&illennium",                 IDM_F_ANIMILL
+            MENUITEM SEPARATOR
+            MENUITEM "&Sidereal day",               IDM_F_ANISDAY
+            MENUITEM "Sidereal yea&r",              IDM_F_ANISYEAR
+        END
+        POPUP "&Direction"
+        BEGIN
+            MENUITEM "&Forward",                    IDM_F_ANIFWD
+            MENUITEM "&Backward",                   IDM_F_ANIBACK
+        END
+        POPUP "S&peed"
+        BEGIN
+            MENUITEM "&Fast",                       IDM_F_ANISFAST
+            MENUITEM "&Medium",                     IDM_F_ANISMED
+            MENUITEM "&Slow",                       IDM_F_ANISSLOW
+        END
+    END
+    POPUP "&Satellite"
+    BEGIN
+        MENUITEM "&Track satellite...",         IDM_F_SATTRACK
+        MENUITEM SEPARATOR
+        MENUITEM "Satellite &database...",      IDM_F_SATDBASE
+        MENUITEM "Change satellite &icon...",   IDM_F_SATICON
+    END
+    POPUP "&Help"
+    BEGIN
+        MENUITEM "&Contents\aF1",               IDM_F_HELPCONT
+        MENUITEM "&Search for Help on...",      IDM_F_HELPSEARCH
+        MENUITEM "&How to Use Help",            IDM_F_HELPHOW
+        MENUITEM SEPARATOR
+        MENUITEM "&About Home Planet...",       IDM_F_ABOUT
+    END
+END
+
+SKY MENU 
+BEGIN
+    POPUP "&File"
+    BEGIN
+        MENUITEM "&Close",                      IDM_F_EXIT
+    END
+    POPUP "&Edit"
+    BEGIN
+        MENUITEM "&Copy",                       IDM_F_COPY
+    END
+    POPUP "&Display"
+    BEGIN
+        MENUITEM "&Telescope...",               IDM_S_SCOPE
+        MENUITEM "&Horizon...",                 IDM_S_HORIZON
+        MENUITEM "&Object catalogue...",        IDM_F_OBJCAT
+        MENUITEM SEPARATOR
+        MENUITEM "&Ecliptic, equator, poles",   IDM_S_COORDS
+        MENUITEM SEPARATOR
+        MENUITEM "&Constellations",             IDM_S_CONSTELL
+        MENUITEM "Constellation &boundaries",   IDM_S_CONBOUNDS
+        MENUITEM "Constellation &names",        IDM_S_CONNAMES
+        MENUITEM "&Align constellation names",  IDM_S_CONALIGN
+        MENUITEM SEPARATOR
+        MENUITEM "Solar system &objects",       IDM_S_PLANETS
+        MENUITEM "&Star names",                 IDM_S_STARNAMES
+        MENUITEM "Star &Bayer/Flamsteed codes", IDM_S_BFLAM
+        MENUITEM "&Deep sky objects",           IDM_S_DEEPSKY
+        MENUITEM SEPARATOR
+        POPUP "Star &quality"
+        BEGIN
+            MENUITEM "&Low (fast display)",         IDM_S_STARSLOW
+            MENUITEM "&Medium (normal display)",    IDM_S_STARSMED
+            MENUITEM "&High (slow display)",        IDM_S_STARSHIGH
+        END
+        MENUITEM "Star c&olours",               IDM_S_STARCOL
+        POPUP "Star &catalogue"
+        BEGIN
+            MENUITEM "&Yale Bright Star catalogue", IDM_S_YALE
+            MENUITEM "&SAO Star Catalogue",         IDM_S_SAO
+        END
+    END
+    POPUP "&Help"
+    BEGIN
+        MENUITEM "Help on &Sky window...",      IDM_HELP
+    END
+    POPUP "&Calculation"
+    BEGIN
+        POPUP "&Precession"
+        BEGIN
+            MENUITEM "&Automatic (±25 years)",      2300
+            MENUITEM "A&lways",                     2301
+            MENUITEM "&Never",                      2302
+        END
+    END
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// MAPVECTORS
+//
+
+MAPDATA                 MAPVECTORS              "Bindata/Mapdata.bin"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Accelerator
+//
+
+HPLANET ACCELERATORS 
+BEGIN
+    VK_F1,          IDM_F_HELPCONT,         VIRTKEY 
+    VK_F4,          IDM_F_EXIT,             VIRTKEY, ALT
+    "^C",           IDM_F_COPY,             ASCII   
+    "^M",           IDM_F_SHOWMOON,         ASCII   
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Bitmap
+//
+
+COLOURMOON              BITMAP                  "Icons/Colmoon.bmp"
+MOONICON                BITMAP                  "Icons/Cmicon.bmp"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// WAVE
+//
+
+CUCKOO                  WAVE                    "Waves/Cuckoo.wav"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// STARCAT
+//
+
+SCOLOUR STARCAT 
+BEGIN
+    0xffff, 0x9fff, 0xffba, 0xba9f, 0x9fff, 0xffba, 0xc5ab, 0xb2ff, 0xffcb, 
+    0xcbb2, 0xb6ff, 0xffcf, 0xcfb6, 0xb6ff, 0xffcf, 0xcfb6, 0xb6ff, 0xffcf, 
+    0x957c, 0x7cff, 0xff95, 0x987f, 0x82ff, 0xff9b, 0x9f85, 0x85ff, 0xff9f, 
+    0xa389, 0x89ff, 0xffa3, 0xa389, 0x94ff, 0xffae, 0xb59a, 0xfffe, 0x55b5, 
+    0xb5ff, 0xff55, 0x55b5, 0x59ff, 0xc81c, 0xffdf, 0xdfc8, 0xc8ff, 0xffdf, 
+    0xe5cf, 0xcfff, 0xffe5, 0xe5cf, 0xd4ff, 0xffe9, 0xe9d4, 0xd4ff, 0xffe9, 
+    0xf6e3, 0xe3ff, 0xfff6, 0xfceb, 0xebff, 0xfffc, 0xfceb, 0xebff, 0xfffc, 
+    0xfceb, 0xebff, 0xfffc, 0xfff3, 0xf3f2, 0xf2ff, 0xfff3, 0xf3f2, 0xf2ff, 
+    0xfff3, 0xf9f2, 0xe3ff, 0xfff9, 0xf9e3, 0xe3ff, 0xfdfe, 0xfed4, 0xd4fd, 
+    0xfdfe, 0xfed4, 0xbbf3, 0xf3fe, 0xfebb, 0xbbf3, 0xe0ff, 0xff94, 0x94e0, 
+    0xd0ff, 0xff7a, 0x69c5, 0xb7ff, 0xfe59, 0x49a8, 0x97ff, 0xff3b, 0x2e85, 
+    0x85ff, 0xff2e, 0x84d7, 0xb5ff, 0xff55, 0x55b5, 0xb5ff, 0xff55, 0x84d7, 
+    0xd7ff, 0x7984, 0xff91, 0x9179, 0x79ff, 0xff91, 0x9179, 0x79ff, 0xff91, 
+    0x9179, 0xffff, 0x1a50, 0xafff, 0xff4f, 0x4faf, 0xafff, 0xff4f, 0x4faf, 
+    0xe0ff, 0xff94, 0x1a50, 0xd7ff, 0xff84, 0x1a50, 0x9179, "\377" 
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDC_ABOUT DIALOGEX 126, 30, 167, 146
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_VISIBLE | WS_CAPTION | 
+    WS_SYSMENU
+CAPTION "About Home Planet"
+FONT 8, "Helv", 0, 0, 0x0
+BEGIN
+    CTEXT           "Home Planet for Windows",IDC_STATIC,9,7,149,8
+    CTEXT           "by John Walker",IDC_STATIC,9,60,149,8
+    PUSHBUTTON      "OK",IDOK,63,121,40,14
+    CTEXT           "This software is in the public domain.",IDC_STATIC,9,96,
+                    149,8
+    CTEXT           "Enjoy it and give copies to your friends!",IDC_STATIC,9,
+                    104,149,8
+    ICON            "_sunclock",IDC_STATIC,75,32,20,20
+    CTEXT           "Release 3.3a -- September 2006",IDC_STATIC,6,15,149,8
+    CTEXT           "WWW home page:",IDC_STATIC,9,76,149,8
+    CTEXT           "http://www.fourmilab.ch/",IDC_STATIC,9,84,149,8
+END
+
+IDC_JDATE DIALOG  65, 33, 199, 96
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_VISIBLE | WS_CAPTION | 
+    WS_SYSMENU
+CAPTION "Set Julian Date"
+FONT 8, "Helv"
+BEGIN
+    EDITTEXT        IDC_J_JDATE,72,11,90,12,ES_AUTOHSCROLL
+    PUSHBUTTON      "OK",IDOK,9,71,40,14
+    PUSHBUTTON      "Cancel",IDCANCEL,56,71,40,14
+    PUSHBUTTON      "&Now",IDC_J_NOW,103,71,40,14
+    PUSHBUTTON      "&Help",IDC_J_HELP,150,71,40,14
+    LTEXT           "Julian date:",IDC_STATIC,32,13,40,8
+    LTEXT           "22:47:19 23 September 1992",IDC_J_UTIME,39,44,117,8
+    GROUPBOX        "Universal time",IDC_STATIC,28,32,134,28
+END
+
+IDC_SETUTIME DIALOG  53, 30, 218, 157
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_VISIBLE | WS_CAPTION | 
+    WS_SYSMENU
+CAPTION "Set Universal Time"
+FONT 8, "Helv"
+BEGIN
+    EDITTEXT        IDC_U_YEAR,25,29,32,12,ES_AUTOHSCROLL
+    COMBOBOX        IDC_U_MONTH,71,29,77,98,CBS_DROPDOWNLIST | WS_VSCROLL | 
+                    WS_TABSTOP
+    EDITTEXT        IDC_U_DAY,161,29,32,12,ES_AUTOHSCROLL
+    EDITTEXT        IDC_U_HOUR,51,63,32,12,ES_AUTOHSCROLL
+    EDITTEXT        IDC_U_MINUTE,89,63,32,12,ES_AUTOHSCROLL
+    EDITTEXT        IDC_U_SECOND,127,63,32,12,ES_AUTOHSCROLL
+    PUSHBUTTON      "OK",IDOK,12,133,40,14
+    PUSHBUTTON      "Cancel",IDCANCEL,63,133,40,14
+    PUSHBUTTON      "&Now",IDC_U_NOW,114,133,40,14
+    PUSHBUTTON      "&Help",IDC_U_HELP,165,133,40,14
+    LTEXT           "244466622.12345",IDC_U_JDATE,55,105,117,8
+    GROUPBOX        "Julian date",6002,44,93,134,28
+    LTEXT           "Hour",6008,59,52,17,8
+    LTEXT           "Minute",6009,94,52,23,8
+    LTEXT           "Second",6010,130,52,26,8
+    LTEXT           "Year",6011,33,19,16,8
+    LTEXT           "Month",6012,98,19,22,8
+    LTEXT           "Day",6013,170,19,14,8
+    GROUPBOX        "Universal time",6014,11,8,191,76
+END
+
+IDC_SATTRACK DIALOGEX 73, 22, 260, 183
+STYLE DS_SETFONT | WS_POPUP | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CAPTION | 
+    WS_SYSMENU
+EXSTYLE WS_EX_TOOLWINDOW
+CAPTION "Home Planet: Track Satellite"
+FONT 8, "MS Sans Serif", 0, 0, 0x1
+BEGIN
+    LISTBOX         ST_LIST,15,10,119,137,WS_VSCROLL | WS_TABSTOP
+    LTEXT           "Satellite:",102,166,14,30,8
+    LTEXT           "Launch year:",103,152,22,44,8
+    LTEXT           "Launch number:",104,142,30,54,8
+    LTEXT           "Piece:",105,174,38,22,8
+    LTEXT           "Inclination:",106,158,46,38,8
+    LTEXT           "Eccentricity:",107,154,54,42,8
+    LTEXT           "Rev/day:",108,164,62,32,8
+    LTEXT           "Latitude:",109,166,90,30,8
+    LTEXT           "Longitude:",110,160,98,36,8
+    LTEXT           "Altitude:",111,168,106,28,8
+    LTEXT           "Orbit number:",112,151,114,45,8
+    LTEXT           "Eclipsed:",113,165,122,31,8
+    PUSHBUTTON      "Close",IDOK,110,157,40,14
+    LTEXT           "Kaputnik",ST_SAT,199,14,61,8
+    LTEXT           "1957",ST_LYEAR,199,22,61,8
+    LTEXT           "2",ST_LNO,199,30,61,8
+    LTEXT           "-1",ST_PIECE,199,38,61,8
+    LTEXT           "38.2",ST_INC,199,46,61,8
+    LTEXT           "33",ST_ECCENT,199,54,61,8
+    LTEXT           "0",ST_REVDAY,199,62,61,8
+    LTEXT           "38.2",ST_LAT,199,90,61,8
+    LTEXT           "106.2",ST_LON,199,98,61,8
+    LTEXT           "-.1",ST_ALT,199,106,61,8
+    LTEXT           "0",ST_ORBNO,199,114,61,8
+    LTEXT           "Yup",ST_ECLIPSE,199,122,61,8
+    PUSHBUTTON      "&Help",ST_C_HELP,166,157,40,14
+    PUSHBUTTON      "&Track",ST_C_TRACK,54,157,40,14
+END
+
+IDC_SATICON DIALOG  70, 22, 206, 143
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_VISIBLE | WS_CAPTION | 
+    WS_SYSMENU
+CAPTION "Choose Satellite Icon"
+FONT 8, "MS Sans Serif"
+BEGIN
+    CONTROL         "",IDC_SI_BUTTONS,"Button",BS_AUTORADIOBUTTON,20,12,12,
+                    10
+    CONTROL         "",3802,"Button",BS_AUTORADIOBUTTON,20,31,12,10
+    CONTROL         "",3803,"Button",BS_AUTORADIOBUTTON,20,51,12,10
+    CONTROL         "",3804,"Button",BS_AUTORADIOBUTTON,20,71,12,10
+    CONTROL         "",3805,"Button",BS_AUTORADIOBUTTON,142,11,12,10
+    CONTROL         "",3806,"Button",BS_AUTORADIOBUTTON,142,31,12,10
+    CONTROL         "",3807,"Button",BS_AUTORADIOBUTTON,142,51,12,10
+    CONTROL         "",3808,"Button",BS_AUTORADIOBUTTON,142,71,12,10
+    ICON            "satib",3901,40,26,18,20
+    ICON            "satic",3902,40,46,18,20
+    ICON            "satid",3903,40,66,18,20
+    ICON            "satie",3904,162,6,18,20
+    ICON            "satif",3905,162,26,18,20
+    ICON            "satig",3906,162,46,18,20
+    ICON            "satih",3907,162,66,18,20
+    ICON            "satia",3850,40,6,18,20
+    PUSHBUTTON      "OK",IDOK,27,118,40,14
+    PUSHBUTTON      "Cancel",IDCANCEL,83,118,40,14
+    ICON            "satii",3908,40,86,18,20
+    ICON            "satij",3909,162,86,18,20
+    CONTROL         "",3809,"Button",BS_AUTORADIOBUTTON,20,91,12,10
+    CONTROL         "",3810,"Button",BS_AUTORADIOBUTTON,142,91,12,10
+    PUSHBUTTON      "&Help",IDC_SI_HELP,139,118,40,14
+END
+
+IDC_SUNMOON DIALOGEX 32, 20, 260, 176
+STYLE DS_SETFONT | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
+EXSTYLE WS_EX_TOOLWINDOW
+CAPTION "Home Planet: Sun and Moon Information"
+FONT 8, "MS Sans Serif", 0, 0, 0x1
+BEGIN
+    LTEXT           "Julian date:",101,15,10,39,8
+    LTEXT           "Universal time:",102,15,18,50,8
+    LTEXT           "Local time:",SMI_LTL,15,26,37,8
+    LTEXT           "Age of Moon:",104,15,42,45,8
+    LTEXT           "Moon phase:",105,15,50,43,8
+    LTEXT           "Moon's distance:",106,15,58,56,8
+    LTEXT           "Moon subtends:",107,15,66,53,8
+    LTEXT           "Sun's distance:",108,15,84,51,8
+    LTEXT           "Sun subtends:",109,15,92,48,8
+    LTEXT           "Last new moon:",110,15,109,52,8
+    LTEXT           "First quarter:",111,15,117,43,8
+    LTEXT           "Full moon:",112,15,125,35,8
+    LTEXT           "Last quarter:",113,15,133,43,8
+    LTEXT           "Next new moon:",114,15,141,54,8
+    LTEXT           "2448921.54212",SMI_JD,73,10,116,8
+    LTEXT           "13:00:51 25 September 1992",SMI_UT,73,18,127,8
+    LTEXT           "14:00:51 25 September 1992",SMI_LT,73,26,129,8
+    LTEXT           "29 days, 22 hours, 55 minutes",SMI_AOM,73,42,129,8
+    LTEXT           "55% (0% = New, 100% = Full)",SMI_PHASE,73,50,131,8
+    LTEXT           "372199 kilometres, 58.3 Earth radii",SMI_MDIST,73,58,
+                    132,8
+    LTEXT           "0.5352 degrees.",SMI_MSUBT,73,66,114,8
+    LTEXT           "148715354 kilometres, 0.994 astronomical units.",
+                    SMI_SDIST,73,84,184,8
+    LTEXT           "0.5363 degrees.",SMI_SSUBT,74,92,157,8
+    LTEXT           "10:40 UTC 26 September 1992",SMI_PH1,73,109,112,8
+    LTEXT           "10:40 UTC 26 September 1992",SMI_PH2,73,117,114,8
+    LTEXT           "10:40 UTC 26 September 1992",SMI_PH3,73,125,114,8
+    LTEXT           "10:40 UTC 26 September 1992",SMI_PH4,73,133,114,8
+    LTEXT           "10:40 UTC 26 September 1992",SMI_PH5,73,141,112,8
+    LTEXT           "Lunation:",129,187,109,32,8
+    LTEXT           "Lunation:",130,187,141,32,8
+    LTEXT           "1200",SMI_LU1,221,109,35,8
+    LTEXT           "1200",SMI_LU2,221,141,38,8
+    CONTROL         "",SMI_MOON,"Static",SS_BITMAP | SS_REALSIZEIMAGE,209,10,
+                    46,47
+    PUSHBUTTON      "Close",IDOK,82,156,40,14
+    PUSHBUTTON      "&Help",SMI_HELP,138,156,40,14
+END
+
+IDC_SATVIEW DIALOGEX 103, 19, 149, 199
+STYLE DS_SETFONT | WS_POPUP | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CAPTION | 
+    WS_SYSMENU | WS_THICKFRAME
+EXSTYLE WS_EX_TOOLWINDOW
+CAPTION "Satellite View"
+FONT 8, "MS Sans Serif", 0, 0, 0x1
+BEGIN
+    PUSHBUTTON      "&Close",IDOK,26,175,40,14
+    PUSHBUTTON      "&Help",IDC_SV_HELP,82,175,40,14
+    CONTROL         "",IDC_SV_IMAGE,"Static",SS_GRAYFRAME,12,7,128,128
+    CTEXT           "",IDC_SV_POSITION,0,146,149,8
+    CHECKBOX        "Show day and night",IDC_SV_SHOWTERM,38,158,77,10,NOT 
+                    WS_VISIBLE
+END
+
+IDC_PLANPOS DIALOGEX 26, 20, 315, 193
+STYLE DS_SETFONT | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
+EXSTYLE WS_EX_TOOLWINDOW
+FONT 8, "MS Sans Serif", 0, 0, 0x1
+BEGIN
+    LTEXT           "Sun",6701,11,25,20,13
+    LTEXT           "Mercury",6702,11,38,27,13
+    LTEXT           "Venus",6703,11,51,22,13
+    LTEXT           "Mars",6704,11,76,17,13
+    LTEXT           "Jupiter",6705,11,89,23,13
+    LTEXT           "Saturn",6706,11,102,23,13
+    LTEXT           "Uranus",6707,11,115,24,13
+    LTEXT           "Neptune",6708,11,128,29,13
+    LTEXT           "Right",6709,66,5,19,8
+    LTEXT           "ascension",6710,58,13,34,8
+    LTEXT           "Declination",6711,103,13,38,8
+    LTEXT           "Altitude",6712,199,13,26,8
+    LTEXT           "Azimuth",6714,241,13,27,8
+    PUSHBUTTON      "Close",IDOK,109,169,40,14
+    PUSHBUTTON      "Help",IDM_PL_HELP,165,169,40,14
+    LTEXT           "-333.4444",IDM_PL_RA,58,25,46,8
+    RTEXT           "-333.4444",IDM_PL_DEC,105,25,34,8
+    RTEXT           "-333.4444",IDM_PL_ALT,195,25,34,8
+    RTEXT           "-333.4444",IDM_PL_AZ,237,25,34,8
+    LTEXT           "-333.4444",6601,58,38,46,8
+    RTEXT           "-333.4444",6621,105,38,34,8
+    RTEXT           "-333.4444",6661,195,38,34,8
+    RTEXT           "-333.4444",6681,237,38,34,8
+    LTEXT           "-333.4444",6602,58,51,46,8
+    RTEXT           "-333.4444",6622,105,51,34,8
+    RTEXT           "-333.4444",6662,195,51,34,8
+    RTEXT           "-333.4444",6682,237,51,34,8
+    LTEXT           "-333.4444",6604,58,76,46,8
+    RTEXT           "-333.4444",6624,105,76,34,8
+    RTEXT           "-333.4444",6664,195,76,34,8
+    RTEXT           "-333.4444",6684,237,76,34,8
+    LTEXT           "-333.4444",6605,58,89,46,8
+    RTEXT           "-333.4444",6625,105,89,34,8
+    RTEXT           "-333.4444",6665,195,89,34,8
+    RTEXT           "-333.4444",6685,237,89,34,8
+    LTEXT           "-333.4444",6606,58,102,46,8
+    RTEXT           "-333.4444",6626,105,102,34,8
+    RTEXT           "-333.4444",6666,195,102,34,8
+    RTEXT           "-333.4444",6686,237,102,34,8
+    LTEXT           "-333.4444",6607,58,115,46,8
+    RTEXT           "-333.4444",6627,105,115,34,8
+    RTEXT           "-333.4444",6667,195,115,34,8
+    RTEXT           "-333.4444",6687,237,115,34,8
+    LTEXT           "-333.4444",6608,58,128,46,8
+    RTEXT           "-333.4444",6628,105,128,34,8
+    RTEXT           "-333.4444",6668,195,128,34,8
+    RTEXT           "-333.4444",6688,237,128,34,8
+    LTEXT           "Setting",IDM_PL_UPSET,278,25,30,8
+    LTEXT           "Setting",6751,278,38,30,8
+    LTEXT           "Setting",6752,278,51,30,8
+    LTEXT           "Setting",6754,278,76,30,8
+    LTEXT           "Setting",6755,278,89,30,8
+    LTEXT           "Setting",6756,278,102,30,8
+    LTEXT           "Setting",6757,278,115,30,8
+    LTEXT           "Setting",6758,278,128,30,8
+    LTEXT           "Pluto",IDM_PL_PLUTO,11,141,26,13
+    LTEXT           "-333.4444",6609,58,141,46,8
+    RTEXT           "-333.4444",6629,105,141,34,8
+    RTEXT           "-333.4444",6669,195,141,34,8
+    RTEXT           "-333.4444",6689,237,141,34,8
+    LTEXT           "Setting",6759,278,141,30,8
+    LTEXT           "(AU)",6727,166,13,16,8
+    RTEXT           "-333.4444",IDM_PL_DIST,152,25,34,8
+    RTEXT           "-333.4444",6641,152,38,34,8
+    RTEXT           "-333.4444",6642,152,51,34,8
+    RTEXT           "-333.4444",6644,152,76,34,8
+    RTEXT           "-333.4444",6645,152,89,34,8
+    RTEXT           "-333.4444",6646,152,102,34,8
+    RTEXT           "-333.4444",6647,152,115,34,8
+    RTEXT           "-333.4444",6648,152,128,34,8
+    RTEXT           "-333.4444",6649,152,141,34,8
+    LTEXT           "Distance",6737,160,5,30,8
+    LTEXT           "Moon",6713,11,64,22,13
+    LTEXT           "-333.4444",6603,58,64,46,8
+    RTEXT           "-333.4444",6623,105,64,34,8
+    RTEXT           "-333.4444",6663,195,64,34,8
+    RTEXT           "-333.4444",6683,237,64,34,8
+    LTEXT           "Setting",6753,278,64,30,8
+    RTEXT           "-333.4444",6643,152,64,34,8
+    LTEXT           "999 Asteroid",IDM_PL_ASTEROID,11,154,46,26
+    LTEXT           "-333.4444",6610,58,154,46,8
+    RTEXT           "-333.4444",6630,105,154,34,8
+    RTEXT           "-333.4444",6670,195,154,34,8
+    RTEXT           "-333.4444",6690,237,154,34,8
+    LTEXT           "Setting",6760,278,154,30,8
+    RTEXT           "-333.4444",6650,152,154,34,8
+END
+
+IDC_OBSLOC DIALOG  6, 17, 311, 158
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_VISIBLE | WS_CAPTION | 
+    WS_SYSMENU
+CAPTION "Observer's Location"
+FONT 8, "MS Sans Serif"
+BEGIN
+    EDITTEXT        IDM_OL_LATDEG,15,29,32,12,ES_AUTOHSCROLL
+    EDITTEXT        IDM_OL_LATMIN,53,29,32,12,ES_AUTOHSCROLL
+    EDITTEXT        IDM_OL_LATSEC,91,29,32,12,ES_AUTOHSCROLL
+    GROUPBOX        "Latitude",3409,3,7,180,40
+    LTEXT           "Degrees",3410,17,18,28,8
+    LTEXT           "Minutes",3411,56,18,27,8
+    LTEXT           "Seconds",3412,92,18,30,8
+    EDITTEXT        IDM_OL_LONDEG,15,81,32,12,ES_AUTOHSCROLL
+    EDITTEXT        IDM_OL_LONMIN,53,81,32,12,ES_AUTOHSCROLL
+    EDITTEXT        IDM_OL_LONSEC,91,81,32,12,ES_AUTOHSCROLL
+    GROUPBOX        "Longitude",3414,3,59,180,40
+    LTEXT           "Degrees",3415,17,70,28,8
+    LTEXT           "Minutes",3416,56,70,27,8
+    LTEXT           "Seconds",3417,92,70,30,8
+    PUSHBUTTON      "OK",IDOK,70,138,40,14
+    PUSHBUTTON      "Cancel",IDCANCEL,126,138,40,14
+    PUSHBUTTON      "&Help",IDM_OL_HELP,182,138,40,14
+    COMBOBOX        IDM_OL_SITENAME,193,16,115,101,CBS_SIMPLE | 
+                    CBS_AUTOHSCROLL | WS_VSCROLL | WS_TABSTOP
+    LTEXT           "Site name",3413,197,7,34,8
+    COMBOBOX        IDM_OL_NORS,129,29,49,37,CBS_DROPDOWNLIST | WS_TABSTOP
+    COMBOBOX        IDM_OL_EORW,129,81,49,37,CBS_DROPDOWNLIST | WS_TABSTOP
+    PUSHBUTTON      "&Pick on map",IDM_OL_PICK,19,106,68,20
+    PUSHBUTTON      "Nearest big &city",IDM_OL_CLOSECITY,93,106,68,20
+END
+
+IDC_TELESCOPE DIALOGEX 65, 38, 326, 245
+STYLE DS_SETFONT | WS_MAXIMIZEBOX | WS_VISIBLE | WS_CAPTION | WS_SYSMENU | 
+    WS_THICKFRAME
+EXSTYLE WS_EX_TOOLWINDOW
+CAPTION "Telescope"
+FONT 8, "MS Sans Serif", 0, 0, 0x1
+BEGIN
+    EDITTEXT        IDC_TE_RA,6,27,66,12,ES_AUTOHSCROLL
+    EDITTEXT        IDC_TE_DEC,7,52,64,12,ES_AUTOHSCROLL
+    EDITTEXT        IDC_TE_POWER,6,102,64,12,ES_AUTOHSCROLL
+    EDITTEXT        IDC_TE_FOV,6,127,63,12,ES_AUTOHSCROLL
+    EDITTEXT        IDC_TE_LIMAG,6,152,63,12,ES_AUTOHSCROLL
+    PUSHBUTTON      "&Options...",IDC_TE_OPTIONS,14,188,40,14
+    PUSHBUTTON      "&Help",IDC_TE_HELP,14,205,40,14
+    PUSHBUTTON      "Close",IDCANCEL,14,222,40,14
+    SCROLLBAR       IDC_TE_VSCROLL,313,3,10,224,SBS_VERT
+    SCROLLBAR       IDC_TE_HSCROLL,86,230,224,10
+    CONTROL         "",IDC_TE_PANEL,"Static",SS_BLACKFRAME,86,3,224,224
+    GROUPBOX        "Aim point",3205,2,3,74,68
+    LTEXT           "Right ascension:",3206,5,17,64,8
+    LTEXT           "Declination:",3208,6,41,52,8
+    GROUPBOX        "Magnification",3210,3,79,73,89
+    LTEXT           "Power:",3211,6,92,30,8
+    LTEXT           "Field of view:",3213,7,117,45,8
+    LTEXT           "Limiting magnitude:",3214,6,142,64,8
+END
+
+IDC_OBJCAT DIALOGEX 41, 36, 353, 189
+STYLE DS_SETFONT | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU | 
+    WS_THICKFRAME
+EXSTYLE WS_EX_TOOLWINDOW
+CAPTION "Object Catalogue"
+FONT 8, "MS Sans Serif", 0, 0, 0x1
+BEGIN
+    COMBOBOX        IDC_OC_CATEGORY,45,4,84,180,CBS_DROPDOWNLIST | 
+                    WS_VSCROLL | WS_TABSTOP
+    COMBOBOX        IDC_OC_OBJNAME,9,30,158,138,CBS_DROPDOWNLIST | 
+                    WS_VSCROLL | WS_TABSTOP
+    PUSHBUTTON      "Close",IDOK,20,171,40,14
+    PUSHBUTTON      "&Select",IDC_OC_AIM,66,171,40,14,WS_DISABLED
+    PUSHBUTTON      "&Help",IDC_OC_HELP,112,171,40,14
+    CONTROL         "Chart",IDC_OC_PLOT,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,136,5,34,10
+    LTEXT           "Category:",7102,9,6,32,8
+    LTEXT           "Object:",7103,9,20,25,8
+    CONTROL         "",IDC_OC_IMAGE,"Static",SS_BLACKFRAME,174,6,175,179
+    EDITTEXT        IDC_OC_DBINFO,9,47,158,118,ES_MULTILINE | ES_AUTOVSCROLL | 
+                    ES_AUTOHSCROLL | ES_READONLY
+END
+
+IDC_ORRERY DIALOGEX 78, 44, 260, 228
+STYLE DS_SETFONT | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_THICKFRAME
+EXSTYLE WS_EX_TOOLWINDOW
+CAPTION "Orrery"
+FONT 8, "MS Sans Serif", 0, 0, 0x1
+BEGIN
+    CONTROL         "",IDC_OR_IMAGE,"Static",SS_BLACKFRAME,56,6,186,194
+    PUSHBUTTON      "Close",IDOK,7,184,40,14
+    PUSHBUTTON      "&Help",IDC_OR_HELP,7,201,40,14
+    SCROLLBAR       IDC_OR_VSCROLL,247,6,10,194,SBS_VERT
+    SCROLLBAR       IDC_OR_HSCROLL,56,205,186,10
+    GROUPBOX        "Planets",3905,4,3,48,40
+    CONTROL         "All",IDC_OR_ALLPLAN,"Button",BS_AUTORADIOBUTTON,9,16,21,
+                    10
+    CONTROL         "Inner",IDC_OR_INNER,"Button",BS_AUTORADIOBUTTON,9,27,30,
+                    10
+    GROUPBOX        "Viewpoint",3908,4,52,48,54
+    LTEXT           "Longitude",3909,11,64,34,8
+    CTEXT           "Latitude",3911,11,84,34,8
+    GROUPBOX        "Scale",3913,3,114,48,49
+    CONTROL         "Real",IDC_OR_REAL,"Button",BS_AUTORADIOBUTTON,9,126,28,
+                    10
+    CONTROL         "Log",IDC_OR_LOG,"Button",BS_AUTORADIOBUTTON,9,136,25,10
+    CONTROL         "Equal",IDC_OR_EQUAL,"Button",BS_AUTORADIOBUTTON,9,146,
+                    31,10
+    CTEXT           "0",IDC_OR_LONG,11,72,36,8
+    CTEXT           "90",IDC_OR_LAT,11,92,36,8
+END
+
+IDC_TELOPTS DIALOG  71, 35, 232, 161
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_VISIBLE | WS_CAPTION | 
+    WS_SYSMENU
+CAPTION "Telescope Options"
+FONT 8, "MS Sans Serif"
+BEGIN
+    PUSHBUTTON      "OK",IDOK,40,141,40,14
+    PUSHBUTTON      "Cancel",IDCANCEL,96,141,40,14
+    PUSHBUTTON      "&Help",IDC_TO_HELP,152,141,40,14
+    CONTROL         "Outlines",IDC_TO_CONOUTL,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,16,15,39,10
+    CONTROL         "Boundaries",IDC_TO_CONBOUND,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,16,25,49,10
+    CONTROL         "Names",IDC_TO_CONNAMES,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,16,35,40,10
+    CONTROL         "Show name",IDC_TO_SHOWNAME,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,132,25,50,10
+    EDITTEXT        IDC_TO_NAMEMAGL,188,31,25,12,ES_AUTOHSCROLL
+    CONTROL         "Show codes",IDC_TO_SHOWBFLAM,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,131,65,50,10
+    EDITTEXT        IDC_TO_BFLAMAG,187,71,25,12,ES_AUTOHSCROLL
+    CONTROL         "Show magnitudes",IDC_TO_SHOWMAG,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,131,104,71,10
+    EDITTEXT        IDC_TO_MINMAG,188,116,22,12,ES_AUTOHSCROLL
+    EDITTEXT        IDC_TO_MAXMAG,144,116,22,12,ES_AUTOHSCROLL
+    CONTROL         "Show objects",IDC_TO_SHOWDEEP,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,14,69,56,10
+    EDITTEXT        IDC_TO_DEEPMAG,70,75,25,12,ES_AUTOHSCROLL
+    CONTROL         "South up",IDC_TO_SOUTHUP,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,7,100,49,10
+    CONTROL         "Show ecliptic, equator, poles",IDC_TO_COORDS,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,7,110,109,10
+    CONTROL         "Show solar system objects",IDC_TO_SSOBJ,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,7,120,98,10
+    GROUPBOX        "Constellations",5402,7,4,76,45
+    GROUPBOX        "Star labels",5406,117,4,107,132
+    GROUPBOX        "Names",5409,125,13,93,37
+    LTEXT           "Magnitude limit",5412,132,35,50,8
+    GROUPBOX        "Bayer/Flamsteed codes",5414,124,53,93,37
+    LTEXT           "Magnitude limit",5416,131,75,50,8
+    GROUPBOX        "Deep sky objects",5408,7,57,93,37
+    LTEXT           "Magnitude limit",5418,14,79,50,8
+    GROUPBOX        "Magnitudes",5422,123,93,93,40
+    RTEXT           "Min",IDC_STATIC,170,118,16,8
+    RTEXT           "Max",IDC_STATIC,126,118,16,8
+END
+
+IDC_HORIZON DIALOGEX 65, 38, 316, 244
+STYLE DS_SETFONT | WS_MAXIMIZEBOX | WS_VISIBLE | WS_CAPTION | WS_SYSMENU | 
+    WS_THICKFRAME
+EXSTYLE WS_EX_TOOLWINDOW
+CAPTION "Horizon View"
+FONT 8, "MS Sans Serif", 0, 0, 0x1
+BEGIN
+    PUSHBUTTON      "Close",IDCANCEL,14,222,40,14
+    COMBOBOX        IDC_HO_CARDINAL,7,27,64,153,CBS_DROPDOWNLIST | 
+                    WS_VSCROLL | WS_TABSTOP
+    EDITTEXT        IDC_HO_DEGREES,7,52,64,12,ES_AUTOHSCROLL | WS_GROUP
+    EDITTEXT        IDC_HO_FOV,7,91,63,12,ES_AUTOHSCROLL | WS_GROUP
+    EDITTEXT        IDC_HO_LIMAG,7,116,63,12,ES_AUTOHSCROLL | WS_GROUP
+    PUSHBUTTON      "&Options...",IDC_HO_OPTIONS,14,188,40,14
+    PUSHBUTTON      "&Help",IDC_HO_HELP,14,205,40,14
+    SCROLLBAR       IDC_HO_HSCROLL,86,230,224,10
+    CONTROL         "",IDC_HO_PANEL,"Static",SS_BLACKFRAME,86,3,224,224
+    GROUPBOX        "Viewing direction",IDC_STATIC,2,3,74,68
+    LTEXT           "Cardinal points:",IDC_STATIC,6,17,64,8
+    LTEXT           "Degrees:",IDC_STATIC,6,41,62,8
+    LTEXT           "Field of view:",IDC_STATIC,6,81,56,8
+    LTEXT           "Limiting magnitude:",IDC_STATIC,6,106,68,8
+END
+
+IDC_HOROPTS DIALOG  71, 35, 232, 179
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_VISIBLE | WS_CAPTION | 
+    WS_SYSMENU
+CAPTION "Horizon View Options"
+FONT 8, "MS Sans Serif"
+BEGIN
+    PUSHBUTTON      "OK",IDOK,40,155,40,14
+    PUSHBUTTON      "Cancel",IDCANCEL,96,155,40,14
+    PUSHBUTTON      "&Help",IDC_TO_HELP,152,155,40,14
+    CONTROL         "Outlines",IDC_TO_CONOUTL,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,16,20,39,10
+    CONTROL         "Boundaries",IDC_TO_CONBOUND,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,16,30,49,10
+    CONTROL         "Names",IDC_TO_CONNAMES,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,16,40,40,10
+    CONTROL         "Show name",IDC_TO_SHOWNAME,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,132,30,50,10
+    EDITTEXT        IDC_TO_NAMEMAGL,188,36,25,12,ES_AUTOHSCROLL
+    CONTROL         "Show codes",IDC_TO_SHOWBFLAM,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,131,73,50,10
+    EDITTEXT        IDC_TO_BFLAMAG,187,79,25,12,ES_AUTOHSCROLL
+    CONTROL         "Show objects",IDC_TO_SHOWDEEP,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,14,74,56,10
+    EDITTEXT        IDC_TO_DEEPMAG,70,80,25,12,ES_AUTOHSCROLL
+    CONTROL         "Draw terrain",IDC_HO_TERRHOR,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,14,114,55,10
+    EDITTEXT        IDC_HO_TERROUGH,69,120,25,12,ES_AUTOHSCROLL
+    CONTROL         "Scenery",IDC_HO_SCENERY,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,14,132,43,10
+    CONTROL         "Show ecliptic, equator, poles",IDC_TO_COORDS,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,114,110,107,10
+    CONTROL         "Show solar system objects",IDC_TO_SSOBJ,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,114,120,98,10
+    GROUPBOX        "Constellations",IDC_STATIC,7,9,76,45
+    GROUPBOX        "Star labels",IDC_STATIC,112,9,112,96
+    GROUPBOX        "Names",IDC_STATIC,125,18,93,37
+    LTEXT           "Magnitude limit",IDC_STATIC,132,40,50,8
+    GROUPBOX        "Bayer/Flamsteed codes",IDC_STATIC,124,61,93,37
+    LTEXT           "Magnitude limit",IDC_STATIC,131,83,50,8
+    GROUPBOX        "Deep sky objects",IDC_STATIC,7,62,93,37
+    LTEXT           "Magnitude limit",IDC_STATIC,14,84,50,8
+    GROUPBOX        "Terrain",IDC_STATIC,8,104,93,41
+    RTEXT           "Roughness",IDC_STATIC,24,124,41,8
+END
+
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE 
+BEGIN
+    "#include ""Sunclock.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE 
+BEGIN
+    "#include ""Orrdata.rc""\r\n"
+    "#include ""Settings.rc""\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Version
+//
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION 3,3,0,1
+ PRODUCTVERSION 3,3,0,1
+ FILEFLAGSMASK 0x3fL
+#ifdef _DEBUG
+ FILEFLAGS 0x1L
+#else
+ FILEFLAGS 0x0L
+#endif
+ FILEOS 0x4L
+ FILETYPE 0x1L
+ FILESUBTYPE 0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "040904b0"
+        BEGIN
+            VALUE "CompanyName", "www.fourmilab.ch"
+            VALUE "FileDescription", "Home Planet"
+            VALUE "FileVersion", "3, 3, 0, 1"
+            VALUE "InternalName", "Home Planet"
+            VALUE "LegalCopyright", "This software is in the public domain."
+            VALUE "OriginalFilename", "HomePlanet.exe"
+            VALUE "ProductName", "Hone Planet"
+            VALUE "ProductVersion", "3, 3, 0, 1"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x409, 1200
+    END
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE 
+BEGIN
+    IDS_ERR_REGISTER_CLASS  "Error registering window class"
+    IDS_ERR_CREATE_WINDOW   "Window creation failed!"
+    IDS_ERR_IERR            "Home Planet: Internal Error"
+    IDS_ERR_MEMOBJCAT       "Out of memory.  Not all objects in database can be displayed."
+    IDS_ERR_SATELEM         "Satellite elements for %s incorrect or obsolete.  Satellite has re-entered."
+END
+
+STRINGTABLE 
+BEGIN
+    IDS_DAY_NAMES           "Sun"
+    17                      "Mon"
+    18                      "Tue"
+    19                      "Wed"
+    20                      "Thu"
+    21                      "Fri"
+    22                      "Sat"
+END
+
+STRINGTABLE 
+BEGIN
+    IDS_MONTH_NAMES         "January"
+    49                      "February"
+    50                      "March"
+    51                      "April"
+    52                      "May"
+    53                      "June"
+    54                      "July"
+    55                      "August"
+    56                      "September"
+    57                      "October"
+    58                      "November"
+    59                      "December"
+END
+
+STRINGTABLE 
+BEGIN
+    IDS_FORMATS             "%02d%s%02d%s%02d"
+    201                     "%d%s%02d%s%02d %s"
+    202                     "%.5f"
+    203                     "%s %ld%s%02d%s%02ld"
+    204                     "%s %s %s   %s   %s UTC %s"
+    205                     "%s %s UTC %s"
+    206                     "%02d:%02d:%02d %2d %s %ld"
+    207                     "%s %s"
+END
+
+STRINGTABLE 
+BEGIN
+    208                     "%sZ %s"
+    209                     "%02d%s%02d"
+    210                     "%d%s%02d %s"
+    211                     "%d%s%d%"
+    212                     "%.5f"
+    213                     "%02d:%02d:%02d %2d %s %ld"
+    214                     "%02d:%02d:%02d %2d %s %d"
+    215                     "%d %s, %d %s, %d %s."
+    216                     "%d%%   (0%% = New, 100%% = Full)"
+    217                     "%ld kilometres, %.1f Earth radii."
+    218                     "%.4f degrees."
+    219                     "%.0f kilometres, %.3f astronomical units."
+    220                     "%.4f degrees."
+    221                     "%d"
+    222                     "%02d:%02d UTC %2d %s %ld"
+    223                     "View from %s"
+END
+
+STRINGTABLE 
+BEGIN
+    224                     "Satellite view"
+    225                     "%.2f° %c %.2f° %c %.2f km"
+    226                     "Day Side (View from Sun)"
+    227                     "Night Side"
+    228                     "Earth from Moon"
+    229                     "%.3f"
+    230                     "%.1f ER"
+    231                     "Home Planet: Positions for %s"
+    232                     "Sky above %s"
+    233                     "%.3g"
+    234                     "%dh %dm %.2fs"
+    235                     "%lf%c%lf%c%lf"
+    236                     "%3s,%u,%d,%u,%d"
+    237                     "Orrery%s%s"
+    238                     "%c%d° %02.1f'"
+    239                     "%d,%u,%d"
+END
+
+STRINGTABLE 
+BEGIN
+    240                     "%d,%u,%s"
+    241                     "%lf%c%lf%c%lf%c%s"
+    242                     "%dh"
+    243                     "%d°"
+    244                     "(invalid)"
+    245                     "%g"
+    246                     "Horizon at %s"
+    247                     "%.2f° %c %.2f° %c"
+    248                     "View above %s"
+END
+
+STRINGTABLE 
+BEGIN
+    IDS_UP                  "Up"
+    IDS_SET                 "Set"
+    IDS_RISING              "Rising"
+    IDS_SETTING             "Setting"
+    IDS_NORTH               "North"
+    IDS_SOUTH               "South"
+    IDS_EAST                "East"
+    IDS_WEST                "West"
+    IDS_TRANSIT             "Transit"
+    IDS_NEED_SITENAME       "Please enter the name of your observing site."
+END
+
+STRINGTABLE 
+BEGIN
+    IDS_MINUTE              "minute"
+    IDS_MINUTES             "minutes"
+    IDS_HOUR                "hour"
+    IDS_HOURS               "hours"
+    IDS_DAY                 "day"
+    IDS_DAYS                "days"
+    IDS_NONE                "-none-"
+    IDS_APPNAME             "Home Planet"
+    IDS_HELPFILE            "Hplanet.hlp"
+    IDS_HELPHELP            "Winhelp.hlp"
+    IDS_IMAGE_DIRECTORY     "Images/"
+    IDS_ALIAS_FILENAME      "Alias.csv"
+    IDS_OBJCAT_FILENAME     "Objects.csv"
+    IDS_CONLINE_FILENAME    "Conlines.csv"
+    IDS_SAT_DEFDB           "Satelite.sat"
+    IDS_SAT_FILTER          "Satellites (*.sat)|*.sat|All files (*.*)|*.*|"
+END
+
+STRINGTABLE 
+BEGIN
+    IDS_SAT_TITLE           "Open Satellite Database File"
+    IDS_HELP_ON_UTC         "universal time, setting"
+    IDS_HELP_ON_JDATE       "Julian date, setting"
+    IDS_HELP_ON_SATICON     "satellite icon"
+    IDS_HELP_ON_SATRACK     "satellite tracking"
+    IDS_HELP_ON_SATDBASE    "satellite database"
+    IDS_HELP_ON_SUNMOON     "Sun/Moon information panel"
+    IDS_HELP_ON_SATVIEW     "satellite, view from"
+    IDS_HELP_ON_TIMEZONE    "TZ environment variable"
+END
+
+STRINGTABLE 
+BEGIN
+    IDS_CONBOUND_FILENAME   "Cbounds.csv"
+    IDS_CNAMES_FILENAME     "Cnames.csv"
+    IDS_GREEK_FONTNAME      "Symbol"
+    IDS_DEEP_CODES          "EGSGOCGCDNPNQSDSDKIG"
+    IDS_DEEP_FILENAME       "Deepobj.csv"
+    IDS_OC_RA               "Right ascension"
+    IDS_OC_DEC              "Declination"
+    IDS_OC_IMAGE            "(Image)"
+    IDS_OC_SOUND            "(Sound)"
+    IDS_SOUND_DIRECTORY     "Sounds/"
+    IDS_IMAGE_DEFAULT       "Hplanet.bmp"
+    idsInsuffSkyMemory      "Insuffcient memory to display sky map."
+    idsInsuffTelMemory      "Insuffcient memory to display telescope view."
+    idsInsuffHorMemory      "Insuffcient memory to display horizon view."
+    IDS_OC_TYPE             "(Type)"
+    IDS_OC_LABEL            "(Label)"
+END
+
+STRINGTABLE 
+BEGIN
+    IDS_HELP_ON_PLANETS     "planet position panel"
+    IDS_HELP_ON_OBSLOC      "observing site, setting"
+    IDS_HELP_ON_SKY         "sky map"
+    IDS_HELP_ON_SCOPE       "telescope"
+    IDS_HELP_ON_OBJCAT      "object catalogue"
+    IDS_HELP_ON_ORRERY      "orrery"
+    IDS_HELP_ON_TELOPTS     "telescope, options"
+    IDS_HELP_ON_HORIZON     "horizon view"
+    IDS_HELP_ON_HOROPTS     "horizon view, options"
+END
+
+STRINGTABLE 
+BEGIN
+    IDS_CARDINAL_POINTS     "North"
+    301                     "      NNE"
+    302                     "  Northeast"
+    303                     "      ENE"
+END
+
+STRINGTABLE 
+BEGIN
+    304                     "East"
+    305                     "       ESE"
+    306                     "  Southeast"
+    307                     "      SSE"
+    308                     "South"
+    309                     "      SSW"
+    310                     "  Southwest"
+    311                     "       WSW"
+    312                     "West"
+    313                     "       WNW"
+    314                     "  Northwest"
+    315                     "      NNW"
+END
+
+STRINGTABLE 
+BEGIN
+    IDS_CARDINAL_ABBR       "N"
+    321                     "NNE"
+    322                     "NE"
+    323                     "ENE"
+    324                     "E"
+    325                     "ESE"
+    326                     "SE"
+    327                     "SSE"
+    328                     "S"
+    329                     "SSW"
+    330                     "SW"
+    331                     "WSW"
+    332                     "W"
+    333                     "WNW"
+    334                     "NW"
+    335                     "NNW"
+END
+
+STRINGTABLE 
+BEGIN
+    IDS_STARMAPLIB          "Starmaps.dll"
+    IDS_REGISTRY_SECTION    "Software\\Fourmilab.ch\\"
+END
+
+#endif    // English (U.S.) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+#include "Orrdata.rc"
+#include "Settings.rc"
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

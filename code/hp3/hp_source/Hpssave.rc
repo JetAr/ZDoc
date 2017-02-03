@@ -1,0 +1,170 @@
+// Microsoft Visual C++ generated resource script.
+//
+#include "Hpssave.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#define ScreenSaver
+#include "Sunclock.h"
+#include <scrnsave.h>
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// English (U.S.) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+#ifdef _WIN32
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#pragma code_page(1252)
+#endif //_WIN32
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+ID_APP                  ICON                    "Icons/Hpssave.ico"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// MAPVECTORS
+//
+
+MAPDATA                 MAPVECTORS              "Bindata/Mapdata.bin"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Bitmap
+//
+
+EARTH                   BITMAP                  "Mapbits/Nasa2k.bmp"
+MOONICON                BITMAP                  "Icons/Cmicon.bmp"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+DLG_SCRNSAVECONFIGURE DIALOGEX 34, 32, 177, 130
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_VISIBLE | WS_CAPTION | 
+    WS_SYSMENU
+CAPTION "Home Planet Screen Saver"
+FONT 8, "Helv", 0, 0, 0x0
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,40,109,40,14,WS_GROUP
+    PUSHBUTTON      "Cancel",IDCANCEL,96,109,40,14
+    CONTROL         "Show &moon",ID_SHOWMOON,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,62,87,99,10
+    CTEXT           "Home Planet Screen Saver\nVersion 3.3a\n\nby John Walker\nhttp://www.fourmilab.ch/\n\nFor information and updates visit:\nhttp://www.fourmilab.ch/homeplanet/",
+                    IDC_STATIC,6,10,165,70
+END
+
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE 
+BEGIN
+    "Hpssave.h\0"
+END
+
+2 TEXTINCLUDE 
+BEGIN
+    "#define ScreenSaver\r\n"
+    "#include ""Sunclock.h""\r\n"
+    "#include <scrnsave.h>\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE 
+BEGIN
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE 
+BEGIN
+    1                       "Home Planet"
+    IDS_ERR_CREATE_WINDOW   "Window creation failed!"
+    IDS_ERR_REGISTER_CLASS  "Error registering window class"
+    IDS_ERR_IERR            "Home Planet: Internal Error"
+    IDS_ERR_MEMOBJCAT       "Out of memory.  Not all objects in database can be displayed."
+END
+
+STRINGTABLE 
+BEGIN
+    IDS_DAY_NAMES           "Sunday"
+    17                      "Monday"
+    18                      "Tuesday"
+    19                      "Wednesday"
+    20                      "Thursday"
+    21                      "Friday"
+    22                      "Saturday"
+END
+
+STRINGTABLE 
+BEGIN
+    IDS_FORMATS             "%02d%s%02d%s%02d"
+    201                     "%d%s%02d%s%02d %s"
+    202                     "%.5f"
+    203                     "%s %ld%s%02d%s%02ld"
+    204                     "%s %s %s       Home Planet%s%s     %s UTC %s"
+    205                     "Home Planet:%s %s UTC %s"
+    206                     "%02d:%02d:%02d %2d %s %ld"
+    207                     "%s %s"
+END
+
+STRINGTABLE 
+BEGIN
+    208                     "%sZ %s"
+    209                     "%02d%s%02d"
+    210                     "d%s%02d %s"
+    211                     "%d%s%d%"
+END
+
+STRINGTABLE 
+BEGIN
+    239                     "%d,%u,%d"
+END
+
+STRINGTABLE 
+BEGIN
+    240                     "%d,%u,%s"
+    241                     "%lf%c%lf%c%lf%c%s"
+    242                     "%dh"
+    243                     "%d°"
+END
+
+STRINGTABLE 
+BEGIN
+    idsScreenSaver          "ScreenSaver"
+    idsAppName              "Screen Saver.Home Planet"
+END
+
+STRINGTABLE 
+BEGIN
+    idsNoHelpMemory         "Not enough memory to start Help.\n\nQuit one or more applications to increase available memory, and then try again."
+    idsHelpFile             "control.hlp"
+END
+
+#endif    // English (U.S.) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
