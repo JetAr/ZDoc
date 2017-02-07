@@ -1,0 +1,312 @@
+//Microsoft Developer Studio generated resource script.
+//
+#include "resource.h"
+
+// Generated Help ID header file
+#define APSTUDIO_HIDDEN_SYMBOLS
+#include "resource.hm"
+#undef APSTUDIO_HIDDEN_SYMBOLS
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "afxres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// English (U.S.) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+#ifdef _WIN32
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#pragma code_page(1252)
+#endif //_WIN32
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_MIDIPLAYER_DIALOG DIALOGEX 0, 0, 348, 98
+STYLE DS_CENTER | WS_MINIMIZEBOX | WS_POPUP | WS_VISIBLE | WS_CAPTION | 
+    WS_SYSMENU
+EXSTYLE WS_EX_APPWINDOW
+CAPTION "MidiPlayer"
+FONT 8, "MS Sans Serif"
+BEGIN
+    PUSHBUTTON      "",IDC_PLAY,118,6,35,14,BS_ICON,WS_EX_STATICEDGE
+    PUSHBUTTON      "",IDC_STOP,160,6,35,14,BS_ICON,WS_EX_STATICEDGE
+    PUSHBUTTON      "",IDC_PAUSE,118,24,36,14,BS_ICON,WS_EX_STATICEDGE
+    PUSHBUTTON      "",IDC_REPLAY,160,24,36,14,BS_ICON,WS_EX_STATICEDGE
+    PUSHBUTTON      "",IDC_BACKWARD,118,41,36,14,BS_ICON,WS_EX_STATICEDGE
+    PUSHBUTTON      "",IDC_FORWARD,160,41,36,14,BS_ICON,WS_EX_STATICEDGE
+    PUSHBUTTON      "",IDC_OPEN,118,79,36,14,BS_ICON,WS_EX_STATICEDGE
+    PUSHBUTTON      "",IDC_ABOUT,159,79,36,14,BS_ICON,WS_EX_STATICEDGE
+    GROUPBOX        "3D Software Synth",IDC_STATIC,202,4,137,51
+    CONTROL         "Slider1",IDC_X,"msctls_trackbar32",TBS_VERT | 
+                    TBS_NOTICKS | WS_TABSTOP,222,11,12,39
+    CONTROL         "Slider2",IDC_Y,"msctls_trackbar32",TBS_VERT | 
+                    TBS_NOTICKS | WS_TABSTOP,264,11,12,39
+    CONTROL         "Slider3",IDC_Z,"msctls_trackbar32",TBS_VERT | 
+                    TBS_NOTICKS | WS_TABSTOP,308,11,12,39
+    CONTROL         "Slider4",IDC_VOLUME,"msctls_trackbar32",TBS_BOTH | 
+                    TBS_NOTICKS | WS_TABSTOP,201,63,136,12,0,HIDC_VOLUME
+    COMBOBOX        IDC_PORTS,3,79,108,88,CBS_DROPDOWNLIST | WS_VSCROLL | 
+                    WS_TABSTOP
+    LTEXT           "Selected port",IDC_STATIC,3,71,92,8
+    LTEXT           "- x",IDC_STATIC,233,11,15,12
+    LTEXT           "+ x",IDC_STATIC,233,37,18,15
+    LTEXT           "0",IDC_COUNTER_X,235,25,12,8
+    LTEXT           "- y",IDC_STATIC,278,11,14,12
+    LTEXT           "+ y",IDC_STATIC,277,37,13,13
+    LTEXT           "0",IDC_COUNTER_Y,278,25,15,9
+    LTEXT           "- z",IDC_STATIC,321,10,14,16
+    LTEXT           "+ z",IDC_STATIC,320,40,16,13
+    LTEXT           "0",IDC_COUNTER_Z,321,25,14,10
+    CHECKBOX        "3D",IDC_3D,118,60,36,14,BS_PUSHLIKE,WS_EX_STATICEDGE
+    CHECKBOX        "Reverb",IDC_REVERB,160,60,36,14,BS_PUSHLIKE,
+                    WS_EX_STATICEDGE
+    CONTROL         "Slider1",IDC_TEMPO,"msctls_trackbar32",TBS_AUTOTICKS | 
+                    WS_TABSTOP,201,81,136,12
+    LTEXT           "Volume",IDC_STATIC,204,56,36,8
+    LTEXT           "Tempo",IDC_STATIC,206,74,27,8
+    CONTROL         "Progress2",IDC_PROGRESS,"msctls_progress32",PBS_SMOOTH,
+                    3,60,108,10
+    CONTROL         "",IDC_STATIC,"Static",SS_BLACKFRAME | SS_SUNKEN | 
+                    WS_BORDER,3,7,108,50,WS_EX_CLIENTEDGE | WS_EX_STATICEDGE
+    CHECKBOX        "",IDC_CHECK_CENTERX,210,24,9,9
+    CHECKBOX        "",IDC_CHECK_CENTERY,251,24,9,9
+    CHECKBOX        "",IDC_CHECK_CENTERZ,295,26,9,8
+END
+
+
+#ifndef _MAC
+/////////////////////////////////////////////////////////////////////////////
+//
+// Version
+//
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION 1,0,0,1
+ PRODUCTVERSION 1,0,0,1
+ FILEFLAGSMASK 0x3fL
+#ifdef _DEBUG
+ FILEFLAGS 0x1L
+#else
+ FILEFLAGS 0x0L
+#endif
+ FILEOS 0x4L
+ FILETYPE 0x1L
+ FILESUBTYPE 0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "040904b0"
+        BEGIN
+            VALUE "Comments", "\0"
+            VALUE "CompanyName", "\0"
+            VALUE "FileDescription", "MidiPlayer MFC Application\0"
+            VALUE "FileVersion", "1, 0, 0, 1\0"
+            VALUE "InternalName", "MidiPlayer\0"
+            VALUE "LegalCopyright", "Copyright (C) 2001\0"
+            VALUE "LegalTrademarks", "\0"
+            VALUE "OriginalFilename", "MidiPlayer.EXE\0"
+            VALUE "PrivateBuild", "\0"
+            VALUE "ProductName", "MidiPlayer Application\0"
+            VALUE "ProductVersion", "1, 0, 0, 1\0"
+            VALUE "SpecialBuild", "\0"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x409, 1200
+    END
+END
+
+#endif    // !_MAC
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO DISCARDABLE 
+BEGIN
+    IDD_MIDIPLAYER_DIALOG, DIALOG
+    BEGIN
+        LEFTMARGIN, 3
+        RIGHTMARGIN, 347
+        BOTTOMMARGIN, 94
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+#endif    // English (U.S.) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+/////////////////////////////////////////////////////////////////////////////
+// Spanish (Castilian) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ESP)
+#ifdef _WIN32
+LANGUAGE LANG_SPANISH, SUBLANG_SPANISH
+#pragma code_page(1252)
+#endif //_WIN32
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDI_ICON1               ICON    DISCARDABLE     "res\\open.ico"
+IDI_ICON4               ICON    DISCARDABLE     "res\\info.ico"
+#endif    // Spanish (Castilian) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+/////////////////////////////////////////////////////////////////////////////
+// Spanish (Modern) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ESN)
+#ifdef _WIN32
+LANGUAGE LANG_SPANISH, SUBLANG_SPANISH_MODERN
+#pragma code_page(1252)
+#endif //_WIN32
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_ABOUT DIALOGEX 0, 0, 275, 126
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "About Midi Player "
+FONT 8, "MS Sans Serif"
+BEGIN
+    CONTROL         152,IDC_IMAGE,"Static",SS_BITMAP,20,65,243,50,
+                    WS_EX_TRANSPARENT
+    GROUPBOX        "",IDC_STATIC,7,7,261,113
+    LTEXT           "Programmed by:",IDC_STATIC,20,16,94,8
+    LTEXT           "Carlos Jiménez de Parga",IDC_STATIC,26,26,81,8
+    LTEXT           "Special thanks to:",IDC_STATIC,135,15,81,8
+    LTEXT           "Alex Chmut (for the CVolume class)",IDC_STATIC,144,25,
+                    110,8
+    LTEXT           "and ",IDC_STATIC,144,38,14,8
+    LTEXT           "Last build: 5/6/2003",IDC_STATIC,26,38,66,8
+    LTEXT           "Version: 2.0.7",IDC_STATIC,27,51,44,8
+    LTEXT           "The Code Project",IDC_STATIC_LINK,162,38,87,9,SS_NOTIFY
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO DISCARDABLE 
+BEGIN
+    IDD_ABOUT, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 268
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 119
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDR_MAINFRAME           ICON    DISCARDABLE     "res\\Midi.ico"
+IDI_ICON2               ICON    DISCARDABLE     "res\\forward.ico"
+IDI_ICON5               ICON    DISCARDABLE     "res\\backward.ico"
+IDI_ICON6               ICON    DISCARDABLE     "res\\replay.ico"
+IDI_ICON7               ICON    DISCARDABLE     "res\\stop.ico"
+IDI_ICON8               ICON    DISCARDABLE     "res\\play.ico"
+IDI_ICON3               ICON    DISCARDABLE     "res\\pause.ico"
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "#include ""afxres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "#define _AFX_NO_SPLITTER_RESOURCES\r\n"
+    "#define _AFX_NO_OLE_RESOURCES\r\n"
+    "#define _AFX_NO_TRACKER_RESOURCES\r\n"
+    "#define _AFX_NO_PROPERTY_RESOURCES\r\n"
+    "\r\n"
+    "#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)\r\n"
+    "#ifdef _WIN32\r\n"
+    "LANGUAGE 9, 1\r\n"
+    "#pragma code_page(1252)\r\n"
+    "#endif //_WIN32\r\n"
+    "#include ""afxres.rc""         // Standard components\r\n"
+    "#endif\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Bitmap
+//
+
+IDB_BITMAP1             BITMAP  DISCARDABLE     "res\\logo.BMP"
+#endif    // Spanish (Modern) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+#define _AFX_NO_SPLITTER_RESOURCES
+#define _AFX_NO_OLE_RESOURCES
+#define _AFX_NO_TRACKER_RESOURCES
+#define _AFX_NO_PROPERTY_RESOURCES
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+#ifdef _WIN32
+LANGUAGE 9, 1
+#pragma code_page(1252)
+#endif //_WIN32
+#include "afxres.rc"         // Standard components
+#endif
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

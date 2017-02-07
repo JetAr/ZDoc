@@ -1,0 +1,4 @@
+// Microsoft Developer Studio generated Help ID include file.
+// Used by MidiPlayer.rc
+//
+#define HIDC_VOLUME                     0x806603f7    // IDD_MIDIPLAYER_DIALOG [English (U.S.)]

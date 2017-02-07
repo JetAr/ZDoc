@@ -1,0 +1,351 @@
+﻿CMIDIMusic Documentation
+------------------------
+A Class to perform Midi music playback through DirectX 8.0 and 9.0
+Code Project article. http://www.codeproject.com
+
+State of library: Release 1.6
+Last release date: 28/12/2010
+Compiler: Visual C++ 7.0 
+Operating System: Microsoft Windows XP (SP3)
+Programmed and tested by Carlos Jiménez de Parga
+Copyright (c) Carlos Jiménez de Parga
+
+
+The description of the class member functions is shown hereby:
+
+HRESULT Initialize(BOOL b3DPosition)
+	
+	-Initializes DirectMusic with 3D audio activation.
+	-if b3DPosition is TRUE and an external or harware port is selected
+	 only the microsoft software synthesizer will be activated.	 
+	
+HRESULT PortEnumeration(DWORD dwIndex,LPINFOPORT lpInfoPort)
+	
+	-Enumerates the midi ports (internal and external).
+	-See page footer for more information.
+		
+HRESULT SelectPort(LPINFOPORT InfoPort)
+	
+	-Selects a port, supplied as struct type
+
+HRESULT LoadMidiFromFile(LPCSTR szMidi);
+	
+	-Loads a resource from a file.
+	-Available formats are:
+		 1) .mid .rmi (all modes)  	 
+
+HRESULT LoadMidiFromResource(TCHAR *strResource,TCHAR *strResourceType);
+	
+	-Loads a media sequence from a resource.
+
+HRESULT Play(); 
+	
+	-Plays a file. After playing it, it is necessary to call Stop() in order to
+ 	 to set the DirectMusic segment to the start.	
+
+HRESULT Pause();
+	
+	-Pauses the segment.
+	
+HRESULT Resume();
+
+	-Resumes the segment playback.
+
+HRESULT IsPlaying();
+	
+	-Finds out if there is audio output in the speakers.
+
+HRESULT SetRepeat(BOOL bRepeat);
+
+	-Repeats the segment ad infinitum if parameter is set true.
+	-This function will be ignored in playback time. Do as follows:
+	
+	Play(); //Plays the segment
+	.
+	.
+	.
+	Stop(); // Stops the segment
+	
+	SetRepeat(TRUE); // Repeats the segment ad infinitum until Stop() is called.
+
+
+HRESULT Stop();
+
+	-Stops audio playback.
+
+HRESULT GetLength(MUSIC_TIME *mtMusicTime); 
+
+	-Returns the total ticks or segment length
+	-It is necessary to declare a MUSIC_TIME variable of DirectX type.
+	-MUSIC_TIME is a 32-bit value; it is relative to the tempo.
+	-This value is incremented when the performance starts the playback.
+	-MUSIC_TIME is incremented 768 time units per quarter of note.
+
+HRESULT GetSeek(MUSIC_TIME *mtMusicTime);
+	
+	-Gets the playback position in ticks. 
+
+HRESULT Seek(MUSIC_TIME mtMusicTime);
+
+	-Sets the segment pointer to a specific MUSIC_TIME
+	
+HRESULT GetTicks(MUSIC_TIME *mtMusicTime);
+
+	-Same as GetSeek
+
+HRESULT GetReferenceTime(REFERENCE_TIME *rtReferenceTime);
+
+	-Gets the segment reference time. 
+	-It is 64-bit value returned by the master clock.Is incremented every 100 ns.
+
+HRESULT SetPosition(D3DVALUE x,D3DVALUE y,D3DVALUE z);
+
+	-Sets the position the source of 3D Audio.
+
+HRESULT GetPosition(D3DVALUE *x,D3DVALUE *y,D3DVALUE *z);
+
+	-Gets the space position of audio. 
+
+HRESULT SetVelocity(D3DVALUE x,D3DVALUE y,D3DVALUE z);
+	
+	-Sets the velocity of audio.
+
+HRESULT SetMode(DWORD dwMode);
+
+	- Sets the operation mode for 3-D sound processing.
+	- See below.	
+
+HRESULT SetMaxDistance(D3DVALUE flMaxDistance);
+	
+	- Sets the maximum distance value.
+
+HRESULT SetMinDistance(D3DVALUE flMinDistance);
+
+	- Sets the minimum distance value.
+
+HRESULT SetConeOrientation(D3DVALUE x,D3DVALUE y,D3DVALUE z);
+	
+	-Sets the orientation of the sound projection cone for the sound buffer. 
+	 This method has no effect unless the cone angle and cone volume factor have also been set.
+
+HRESULT GetConeOrientation(D3DVALUE *x,D3DVALUE *y,D3DVALUE *z);
+	
+	-Retrieves the orientation of the sound projection cone for the sound buffer.
+
+HRESULT SetConeAngles(DWORD dwInsideConeAngle,DWORD dwOutsideConeAngle);
+
+	-Sets the inside and outside angles of the sound projection cone for the sound buffer.
+
+HRESULT GetConeAngles(LPDWORD dwInsideConeAngle,LPDWORD dwOutsideConeAngle);
+
+	-Retrieves the inside and outside angles of the sound projection cone for the sound buffer.
+
+HRESULT SetConeOutsideVolume(LONG lConeOutsideVolume);
+
+	-Sets the cone outside volume for the sound buffer.
+
+HRESULT GetConeOutsideVolume(LPLONG plConeOutsideVolume)
+
+	-Retrieves the cone outside volume. 
+
+HRESULT SetMasterVolume(long nVolume);
+
+	- Sets the master volume for the software synthesizer.
+	- The values must fall in the range:
+		
+		MIN_VOLUME_RANGE
+		MAX_VOLUME_RANGE 
+	
+HRESULT SetMasterTempo(float fTempo);
+	
+	- Sets the tempo. 
+	- Valid for any midi port.
+	- The values must fall in the range:
+	
+		MIN_MASTER_TEMPO 
+	 	MAX_MASTER_TEMPO 
+
+
+HRESULT SetEffect(BOOL bActivate,int nEffect);
+
+	-Sets audio effects, for the software sinthesizer without 3D.	
+	-Allowed values are:
+
+		SET_REVERB 
+	        SET_CHORUS 
+
+-------------------------------------------------------------------------------------------
+INFOPORT STRUCTURE 
+
+DMUS_PORTCAPS
+Contains information about a port enumerated by a call to the 
+IDirectMusic8::EnumPort method. The structure is also used to return information through
+the IDirectMusicPort8::GetCaps method.
+
+typedef struct INFOPORT {
+   char szPortDescription[DMUS_MAX_DESCRIPTION*2];
+   DWORD dwFlags;
+   DWORD dwClass;
+   DWORD dwType;
+   DWORD dwMaxAudioChannels;
+   DWORD dwMaxVoices;
+   DWORD dwMaxChannelGroups ;
+   DWORD dwEffectFlags;
+   GUID guidSynthGUID;
+} *LPINFOPORT;
+
+	
+szPortDescription: String description of the port. (ANSI chars)
+
+dwFlags: Port characteristics
+
+	DMUS_PC_AUDIOPATH 
+	Multiple outputs can be connected to DirectSound for audiopaths. 
+	
+	DMUS_PC_DIRECTSOUND 
+	The port supports streaming wave data to DirectSound. 
+
+	DMUS_PC_DLS 
+	The port supports DLS Level 1 sample collections. 
+
+	DMUS_PC_DLS2 
+	The port supports DLS Level 2 sample collections. 
+
+	DMUS_PC_EXTERNAL 
+	The port connects to devices outside the host 
+	for example, devices connected over an external MIDI port such as the MPU-401. 
+
+	DMUS_PC_GMINHARDWARE 
+	The synthesizer has its own GM instrument set, 
+	so GM instruments do not need to be downloaded. 
+
+	DMUS_PC_GSINHARDWARE 
+	This port contains the Roland GS sound set in hardware. 
+
+	DMUS_PC_MEMORYSIZEFIXED 
+	Memory available for DLS instruments cannot be adjusted. 
+
+	DMUS_PC_SHAREABLE 
+	More than one port can be created that uses the same range of channel 
+	groups on the device. Unless this bit is set, the port can be opened only 
+	in exclusive mode. In exclusive mode, an attempt to create a port fails 
+	unless free channel groups are available to assign to the create request. 
+
+	DMUS_PC_SOFTWARESYNTH 
+	The port is a software synthesizer. 
+
+	DMUS_PC_WAVE 
+	Streaming and one-shot waves are supported. 
+
+	DMUS_PC_XGINHARDWARE 
+	The port contains the Yamaha XG extensions in hardware
+
+dwClass:
+
+	DMUS_PC_INPUTCLASS 
+	Input port. 
+	
+	DMUS_PC_OUTPUTCLASS 
+	Output port. 
+
+dwType:
+
+	DMUS_PORT_WINMM_DRIVER 
+	Windows multimedia driver. 
+
+	DMUS_PORT_USER_MODE_SYNTH 
+	User-mode synthesizer. 
+
+	DMUS_PORT_KERNEL_MODE 
+	WDM driver. 
+
+
+dwMaxAudioChannels:
+	Maximum number of audio channels that can be rendered by the port.
+	The value can be -1 if the driver does not support returning this parameter. 
+
+dwMaxVoices:
+	Maximum number of voices that can be allocated when this port is opened. T
+	he value can be -1 if the driver does not support returning this parameter. 
+
+
+dwMaxChannelGroups:
+	Maximum number of audio channels that can be rendered by the port. 
+	The value can be -1 if the driver does not support returning this parameter. 
+
+dwEffectFlags:
+
+	DMUS_EFFECT_NONE 
+	No effects are supported. 
+	DMUS_EFFECT_REVERB 
+	The port supports reverb. 
+	DMUS_EFFECT_CHORUS 
+	The port supports chorus. 
+
+guidSynthGUID;
+	Identifier of the port. 
+	This value can be passed to the IDirectMusic8::CreatePort method to get 
+	an IDirectMusicPort8 interface for the port. 
+
+----------------------------------------------------------------------------------------
+SETMODE FUNCTION.
+
+	DS3DMODE_DISABLE 
+	Processing of 3-D sound is disabled. 
+	The sound seems to originate from the center of the listener's head. 
+
+	DS3DMODE_HEADRELATIVE 
+	Sound parameters (position, velocity, and orientation) are relative 
+	to the listener's parameters.In this mode, the absolute parameters of the sound 
+	are updated automatically as the listener's parameters change, 
+	so that the relative parameters remain constant. 
+
+	DS3DMODE_NORMAL 
+	Normal processing. This is the default mode. 
+
+------------------------------------------- EXAMPLE -----------------------------------
+
+void CPlayerDlg::OnButton_Start() 	
+{
+	DWORD dwcount; // Counter variable to enumerate the midi ports 
+	INFOPORT Info; // INFOPORT structure to store port information 
+	BOOL bSelected;
+
+	CMidiMusic *pMidi; 	// Pointer to a CMidiMusic object type 
+	pMidi=new CMidiMusic; 	// Allocate it  	
+	pMidi->Initialize(FALSE);// Initialize without 3D positioning
+	
+	dwcount=0;
+	bSelected=FALSE;
+	
+	 // Port enumeration  phase 
+	 // It is necessary to supply a port counter 
+	while (pMidi->PortEnumeration(dwcount,&Info)==S_OK)
+	{
+		// Ensure it is an output hardware device
+		if (Info.dwClass==DMUS_PC_OUTPUTCLASS) 
+		{
+			if (!((Info.dwFlags & DMUS_PC_SOFTWARESYNTH) || bSelected))
+			{
+				// Select the enumerated port 
+				pMidi->SelectPort(&Info);
+				bSelected=TRUE;
+			}
+		}
+	
+	dwcount++;  // It is necessary
+	}
+
+	 // Read the MIDI file 
+	pMidi->LoadMidiFromFile("c:\\music\\song_004.mid");
+	 // Play the file
+	pMidi->Play();
+	AfxMessageBox("Playing...");
+	 // Stop it
+	pMidi->Stop();
+	 //Important!: Delete the dinamic variable in order to call the destructor 
+	 //which call the DirectMusic releases interfaces
+	
+	delete pMidi;
+}
+
