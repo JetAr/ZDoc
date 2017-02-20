@@ -89,3 +89,4 @@ CMakeFiles/*
 netstackdump*
 
 **/logs/
+avplayer.log

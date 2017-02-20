@@ -1406,6 +1406,7 @@ void* audio_dec_thrd(void *param)
     for (; !play->m_abort;)
     {
         av_init_packet(&pkt);
+		//z 2017-02-20 进入 paused 状态，那么声音解码就不再进行了，等待直到状态发生改变。
         while (play->m_play_status == paused && !play->m_abort)
             Sleep(10);
         ret = get_queue(&play->m_audio_q, &pkt);
@@ -1532,6 +1533,7 @@ void* video_dec_thrd(void *param)
     for (; !play->m_abort;)
     {
         av_init_packet(&pkt);
+		//z 2017-02-20 paused，那么视频解码就不再进行。
         while (play->m_play_status == paused && !play->m_abort)
             Sleep(10);
         //z 从接收到的 video packet 中获取一个包
@@ -1728,6 +1730,7 @@ void* audio_render_thrd(void *param)
     while (!play->m_abort)
     {
         //z OutputDebugStringA("audio_render_thrd");
+		//z 2017-02-20 在暂停播放时，声音会由于停止解码了，无包可获取，就一直等待，而陷在 get_queue 中。
         ret = get_queue(&play->m_audio_dq, &audio_frame);
         if (audio_frame.data[0] == flush_frm.data[0])
             continue;
@@ -2025,6 +2028,7 @@ void* video_render_thrd(void *param)
             play->m_rendering = 0;
 
             /* 如果处于暂停状态, 则直接渲染窗口, 以免黑屏. */
+			//z 2017-02-20 进入 paused 状态，则一直执行这一句，即循环渲染最后一个视频帧，直至状态发生变化
             while (play->m_play_status == paused && inited == 1 && play->m_vo_ctx && !play->m_abort)
             {
                 play->m_vo_ctx->render_one_frame(play->m_vo_ctx, &video_frame, play->m_video_ctx->pix_fmt, av_curr_play_time(play));
