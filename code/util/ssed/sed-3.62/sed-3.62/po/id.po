@@ -1,0 +1,618 @@
+# translation of sed-4.0.9.id.po to Indonesian
+# sed 4.0.9 (Indonesian)
+# Copyright (C) 1999, 2000, 2001, 2003, 2004 Free Software Foundation, Inc.
+# Tedi Heriyanto <tedi_h@gmx.net>, 2002, 2003, 2004.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: sed 4.0.9\n"
+"POT-Creation-Date: 2004-11-11 16:32+0100\n"
+"PO-Revision-Date: 2004-04-27 14:56+0700\n"
+"Last-Translator: Tedi Heriyanto <tedi_h@gmx.net>\n"
+"Language-Team: Indonesian <translation-team-id@lists.sourceforge.net>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: \n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: KBabel 1.3\n"
+
+#: pcre/pcregrep.c:130
+#, c-format
+msgid "Usage: pcregrep [-bepchilnsvx] pattern [file] ...\n"
+msgstr ""
+
+#: pcre/pcregrep.c:212
+#, fuzzy, c-format
+msgid "pcregrep: unknown option %c\n"
+msgstr "Opsion tidak dikenal bagi `s'"
+
+#: pcre/pcregrep.c:239
+#, c-format
+msgid "pcregrep: error in regex at offset %d: %s\n"
+msgstr ""
+
+#: pcre/pcregrep.c:248
+#, c-format
+msgid "pcregrep: error while studing regex: %s\n"
+msgstr ""
+
+#: pcre/pcregrep.c:268
+#, fuzzy, c-format
+msgid "pcregrep: failed to open %s: %s\n"
+msgstr "kesalahan pembacaan pada %s: %s"
+
+#: pcre/regexp.c:48
+msgid "\\ at end of pattern"
+msgstr ""
+
+#: pcre/regexp.c:49
+msgid "\\c at end of pattern"
+msgstr ""
+
+#: pcre/regexp.c:50
+msgid "unrecognized character follows \\"
+msgstr ""
+
+#: pcre/regexp.c:51
+msgid "numbers out of order in {} quantifier"
+msgstr ""
+
+#: pcre/regexp.c:52
+msgid "number too big in {} quantifier"
+msgstr ""
+
+#: pcre/regexp.c:53 pcre/regexp.c:130
+msgid "missing terminating ] for character class"
+msgstr ""
+
+#: pcre/regexp.c:54
+#, fuzzy
+msgid "invalid escape sequence in character class"
+msgstr "Nama kelas karakter tidak valid"
+
+#: pcre/regexp.c:55 pcre/regexp.c:136
+msgid "range out of order in character class"
+msgstr ""
+
+#: pcre/regexp.c:56 pcre/regexp.c:128
+msgid "nothing to repeat"
+msgstr ""
+
+#: pcre/regexp.c:57
+msgid "operand of unlimited repeat could match the empty string"
+msgstr ""
+
+#: pcre/regexp.c:58
+msgid "internal error: unexpected repeat"
+msgstr ""
+
+#: pcre/regexp.c:59
+msgid "unrecognized character after (?"
+msgstr ""
+
+#: pcre/regexp.c:60
+msgid "unused error"
+msgstr ""
+
+#: pcre/regexp.c:61 pcre/regexp.c:129
+#, fuzzy
+msgid "unmatched braces"
+msgstr "`{' tidak sesuai"
+
+#: pcre/regexp.c:62 pcre/regexp.c:139
+msgid "back reference to non-existent subpattern"
+msgstr ""
+
+#: pcre/regexp.c:63
+msgid "erroffset passed as NULL"
+msgstr ""
+
+#: pcre/regexp.c:64
+#, fuzzy
+msgid "unknown option bit(s) set"
+msgstr "Opsion tidak dikenal bagi `s'"
+
+#: pcre/regexp.c:65
+#, fuzzy
+msgid "missing ) after comment"
+msgstr "Perintah hilang"
+
+#: pcre/regexp.c:66
+msgid "parentheses nested too deeply"
+msgstr ""
+
+#: pcre/regexp.c:67 pcre/regexp.c:137
+#, fuzzy
+msgid "regular expression too large"
+msgstr "Reguler ekspresi terlalu besar"
+
+#: pcre/regexp.c:68 pcre/regexp.c:138
+msgid "failed to get memory"
+msgstr ""
+
+#: pcre/regexp.c:69 pcre/regexp.c:135
+msgid "unmatched parentheses"
+msgstr ""
+
+#: pcre/regexp.c:70
+msgid "internal error: code overflow"
+msgstr ""
+
+#: pcre/regexp.c:71
+msgid "unrecognized character after (?<"
+msgstr ""
+
+#: pcre/regexp.c:72
+msgid "lookbehind assertion is not fixed length"
+msgstr ""
+
+#: pcre/regexp.c:73
+msgid "malformed number after (?("
+msgstr ""
+
+#: pcre/regexp.c:74
+msgid "conditional group contains more than two branches"
+msgstr ""
+
+#: pcre/regexp.c:75
+msgid "assertion expected after (?("
+msgstr ""
+
+#: pcre/regexp.c:76
+msgid "(?p must be followed by )"
+msgstr ""
+
+#: pcre/regexp.c:77 pcre/regexp.c:132
+msgid "unknown POSIX class name"
+msgstr ""
+
+#: pcre/regexp.c:78
+#, fuzzy
+msgid "POSIX collating elements are not supported"
+msgstr "option `e' tidak didukung"
+
+#: pcre/regexp.c:79
+msgid "bad condition (?(0)"
+msgstr ""
+
+#: pcre/regexp.c:125
+msgid "internal error"
+msgstr ""
+
+#: pcre/regexp.c:126
+#, fuzzy
+msgid "invalid repeat counts in {}"
+msgstr "Isi \\{\\} tidak valid"
+
+#: pcre/regexp.c:127
+msgid "pattern error"
+msgstr ""
+
+#: pcre/regexp.c:131
+msgid "bad collating element"
+msgstr ""
+
+#: pcre/regexp.c:133
+msgid "bad escape sequence"
+msgstr ""
+
+#: pcre/regexp.c:134
+msgid "empty expression"
+msgstr ""
+
+#: pcre/regexp.c:140
+msgid "bad argument"
+msgstr ""
+
+#: pcre/regexp.c:141
+msgid "match failed"
+msgstr ""
+
+#: pcre/regexp.c:182
+msgid "unknown error code"
+msgstr ""
+
+#: pcre/regexp.c:184
+#, c-format
+msgid "%s at offset %-6d"
+msgstr ""
+
+#: sed/compile.c:162
+#, fuzzy
+msgid "multiple `!'s"
+msgstr "`!' ganda"
+
+#: sed/compile.c:163
+#, fuzzy
+msgid "unexpected `,'"
+msgstr "`,' tidak diharapkan"
+
+#: sed/compile.c:164
+#, fuzzy
+msgid "invalid usage of +N or ~N as first address"
+msgstr "Tidak dapat menggunakan +N atau ~N sebagai alamat pertama"
+
+#: sed/compile.c:165
+#, fuzzy
+msgid "unmatched `{'"
+msgstr "`{' tidak sesuai"
+
+#: sed/compile.c:166
+#, fuzzy
+msgid "unexpected `}'"
+msgstr "`}' tidak diharapkan"
+
+#: sed/compile.c:167
+#, fuzzy
+msgid "extra characters after command"
+msgstr "Karakter tambahan setelah perintah"
+
+#: sed/compile.c:168
+#, fuzzy
+msgid "expected \\ after `a', `c' or `i'"
+msgstr "Diharapkan \\ setelah `a', `c' atau `i'"
+
+#: sed/compile.c:169
+msgid "`}' doesn't want any addresses"
+msgstr "`}' tidak menginginkan alamat"
+
+#: sed/compile.c:170
+msgid ": doesn't want any addresses"
+msgstr ": tidak menginginkan alamat"
+
+#: sed/compile.c:171
+#, fuzzy
+msgid "comments don't accept any addresses"
+msgstr "Komentar tidak menerima alamat"
+
+#: sed/compile.c:172
+#, fuzzy
+msgid "missing command"
+msgstr "Perintah hilang"
+
+#: sed/compile.c:173
+#, fuzzy
+msgid "command only uses one address"
+msgstr "Perintah hanya menggunakan satu alamat"
+
+#: sed/compile.c:174
+#, fuzzy
+msgid "unterminated address regex"
+msgstr "Alamat regex yang tidak selesai"
+
+#: sed/compile.c:175
+#, fuzzy
+msgid "unterminated `s' command"
+msgstr "Perintah `s' tidak selesai"
+
+#: sed/compile.c:176
+#, fuzzy
+msgid "unterminated `y' command"
+msgstr "Perintah `y' tidak selesai"
+
+#: sed/compile.c:177
+#, fuzzy
+msgid "unknown option to `s'"
+msgstr "Opsion tidak dikenal bagi `s'"
+
+#: sed/compile.c:178
+msgid "multiple `p' options to `s' command"
+msgstr "opsion `p' ganda bagi perintah `s'"
+
+#: sed/compile.c:179
+msgid "multiple `g' options to `s' command"
+msgstr "opsion `g' ganda bagi perintah `s'"
+
+#: sed/compile.c:180
+msgid "multiple number options to `s' command"
+msgstr "opsion beragam untuk perintah `s'"
+
+#: sed/compile.c:181
+msgid "number option to `s' command may not be zero"
+msgstr "opsion angka untuk perintah `s' tidak boleh nol"
+
+#: sed/compile.c:182
+#, fuzzy
+msgid "strings for `y' command are different lengths"
+msgstr "string untuk perintah y dalam panjang yang berbeda"
+
+#: sed/compile.c:183
+msgid "delimiter character is not a single-byte character"
+msgstr ""
+
+#: sed/compile.c:184
+msgid "expected newer version of sed"
+msgstr "mengharapkan versi baru sed"
+
+#: sed/compile.c:185
+#, fuzzy
+msgid "invalid usage of line address 0"
+msgstr "Penggunaan modifier alamat yang tidak valid"
+
+#: sed/compile.c:186
+#, fuzzy, c-format
+msgid "unknown command: `%c'"
+msgstr "Perintah tidak dikenal:"
+
+#: sed/compile.c:209
+#, c-format
+msgid "%s: file %s line %lu: %s\n"
+msgstr "%s: file %s baris %lu: %s\n"
+
+#: sed/compile.c:212
+#, c-format
+msgid "%s: -e expression #%lu, char %lu: %s\n"
+msgstr "%s: -e ekspresi #%lu, char %lu: %s\n"
+
+#: sed/compile.c:1644
+#, fuzzy, c-format
+msgid "can't find label for jump to `%s'"
+msgstr "Tidak dapat menemukan label untuk melompat ke `%s'"
+
+#: sed/execute.c:649
+#, c-format
+msgid "%s: can't read %s: %s\n"
+msgstr "%s: tidak dapat membaca %s: %s\n"
+
+#: sed/execute.c:672
+#, fuzzy, c-format
+msgid "couldn't edit %s: is a terminal"
+msgstr "Tidak dapat membuka file %s %s"
+
+#: sed/execute.c:676
+#, c-format
+msgid "couldn't edit %s: not a regular file"
+msgstr ""
+
+#: lib/utils.c:196 sed/execute.c:683
+#, fuzzy, c-format
+msgid "couldn't open temporary file %s: %s"
+msgstr "Tidak dapat membuka file temporer %s %s"
+
+#: sed/execute.c:1207 sed/execute.c:1388
+msgid "error in subprocess"
+msgstr "kesalahan dalam subproses"
+
+#: sed/execute.c:1209
+msgid "option `e' not supported"
+msgstr "option `e' tidak didukung"
+
+#: sed/execute.c:1390
+msgid "`e' command not supported"
+msgstr "perintah `e' tidak didukung"
+
+#: sed/regexp.c:39
+#, fuzzy
+msgid "no previous regular expression"
+msgstr "Tidak ada reguler ekspresi sebelumnya"
+
+#: sed/regexp.c:40
+#, fuzzy
+msgid "cannot specify modifiers on empty regexp"
+msgstr "Tidak dapat menspesifikasikan modified pada regexp kosong"
+
+#: sed/regexp.c:134
+#, fuzzy, c-format
+msgid "invalid reference \\%d on `s' command's RHS"
+msgstr "Referensi tidak valid \\%d pada perintah `s' RHS"
+
+#: sed/sed.c:93
+msgid ""
+"  -R, --regexp-perl\n"
+"                 use Perl 5's regular expressions syntax in the script.\n"
+msgstr ""
+"  -R, --regexp-perl\n"
+"                 gunakan sintaks reguler ekspresi Perl 5 dalam skrip.\n"
+
+#: sed/sed.c:98
+#, c-format
+msgid ""
+"Usage: %s [OPTION]... {script-only-if-no-other-script} [input-file]...\n"
+"\n"
+msgstr ""
+
+#: sed/sed.c:102
+#, c-format
+msgid ""
+"  -n, --quiet, --silent\n"
+"                 suppress automatic printing of pattern space\n"
+msgstr ""
+
+#: sed/sed.c:104
+#, c-format
+msgid ""
+"  -e script, --expression=script\n"
+"                 add the script to the commands to be executed\n"
+msgstr ""
+
+#: sed/sed.c:106
+#, c-format
+msgid ""
+"  -f script-file, --file=script-file\n"
+"                 add the contents of script-file to the commands to be "
+"executed\n"
+msgstr ""
+
+#: sed/sed.c:108
+#, c-format
+msgid ""
+"  -i[SUFFIX], --in-place[=SUFFIX]\n"
+"                 edit files in place (makes backup if extension supplied)\n"
+msgstr ""
+
+#: sed/sed.c:110
+#, c-format
+msgid ""
+"  -l N, --line-length=N\n"
+"                 specify the desired line-wrap length for the `l' command\n"
+msgstr ""
+
+#: sed/sed.c:112
+#, c-format
+msgid ""
+"  --posix\n"
+"                 disable all GNU extensions.\n"
+msgstr ""
+
+#: sed/sed.c:114
+#, fuzzy, c-format
+msgid ""
+"  -r, --regexp-extended\n"
+"                 use extended regular expressions in the script.\n"
+msgstr ""
+"  -R, --regexp-perl\n"
+"                 gunakan sintaks reguler ekspresi Perl 5 dalam skrip.\n"
+
+#: sed/sed.c:117
+#, c-format
+msgid ""
+"  -s, --separate\n"
+"                 consider files as separate rather than as a single "
+"continuous\n"
+"                 long stream.\n"
+msgstr ""
+
+#: sed/sed.c:120
+#, c-format
+msgid ""
+"  -u, --unbuffered\n"
+"                 load minimal amounts of data from the input files and "
+"flush\n"
+"                 the output buffers more often\n"
+msgstr ""
+
+#: sed/sed.c:123
+#, c-format
+msgid "      --help     display this help and exit\n"
+msgstr ""
+
+#: sed/sed.c:124
+#, c-format
+msgid "      --version  output version information and exit\n"
+msgstr ""
+
+#: sed/sed.c:125
+#, c-format
+msgid ""
+"\n"
+"If no -e, --expression, -f, or --file option is given, then the first\n"
+"non-option argument is taken as the sed script to interpret.  All\n"
+"remaining arguments are names of input files; if no input files are\n"
+"specified, then the standard input is read.\n"
+"\n"
+msgstr ""
+
+#: sed/sed.c:131
+#, c-format
+msgid ""
+"E-mail bug reports to: %s .\n"
+"Be sure to include the word ``%s'' somewhere in the ``Subject:'' field.\n"
+msgstr ""
+"Email laporan kesalahan ke: %s \n"
+"Pastikan untuk menyertakan kata \"%s\" di field \"Subject:\".\n"
+
+#: sed/sed.c:268
+#, c-format
+msgid "super-sed version %s\n"
+msgstr "super-sed versi %s\n"
+
+#: sed/sed.c:269
+#, fuzzy, c-format
+msgid ""
+"based on GNU sed version %s\n"
+"\n"
+msgstr ""
+"berdasarkan pada GNU sed versi 3.02.80\n"
+"\n"
+
+#: sed/sed.c:271
+#, c-format
+msgid "GNU sed version %s\n"
+msgstr "GNU sed versi %s\n"
+
+#: sed/sed.c:273
+#, c-format
+msgid ""
+"%s\n"
+"This is free software; see the source for copying conditions.  There is NO\n"
+"warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE,\n"
+"to the extent permitted by law.\n"
+msgstr ""
+"%s\n"
+"This is free software; see the source for copying conditions.  There is NO\n"
+"warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE,\n"
+"to the extent permitted by law.\n"
+
+#: lib/utils.c:98 lib/utils.c:336
+#, fuzzy, c-format
+msgid "cannot remove %s: %s"
+msgstr "%s: tidak dapat membaca %s: %s\n"
+
+#: lib/utils.c:143
+#, fuzzy, c-format
+msgid "couldn't open file %s: %s"
+msgstr "Tidak dapat membuka file %s %s"
+
+#: lib/utils.c:220
+#, c-format
+msgid "couldn't write %d item to %s: %s"
+msgid_plural "couldn't write %d items to %s: %s"
+msgstr[0] "tidak dapat menulis %d item ke %s: %s"
+msgstr[1] "tidak dapat menulis %d item ke %s: %s"
+
+#: lib/utils.c:235 lib/utils.c:251
+#, c-format
+msgid "read error on %s: %s"
+msgstr "kesalahan pembacaan pada %s: %s"
+
+#: lib/utils.c:341
+#, fuzzy, c-format
+msgid "cannot rename %s: %s"
+msgstr "%s: tidak dapat membaca %s: %s\n"
+
+#~ msgid "Success"
+#~ msgstr "Sukses"
+
+#~ msgid "No match"
+#~ msgstr "Tidak cocok"
+
+#~ msgid "Invalid regular expression"
+#~ msgstr "Reguler ekspresi tidak valid"
+
+#~ msgid "Invalid collation character"
+#~ msgstr "Karakter kolasi tidak valid"
+
+#~ msgid "Trailing backslash"
+#~ msgstr "Trailing backslash"
+
+#~ msgid "Invalid back reference"
+#~ msgstr "Referensi balik tidak valid"
+
+#~ msgid "Unmatched [ or [^"
+#~ msgstr "[ atau [^ tidak sesuai"
+
+#~ msgid "Unmatched ( or \\("
+#~ msgstr "( atau \\( tidak sesuai"
+
+#~ msgid "Unmatched \\{"
+#~ msgstr "\\{ tidak sesuai"
+
+#~ msgid "Invalid range end"
+#~ msgstr "Akhir batas tidak valid"
+
+#~ msgid "Memory exhausted"
+#~ msgstr "Memori habis"
+
+#~ msgid "Invalid preceding regular expression"
+#~ msgstr "Reguler ekspresi sebelumnya tidak valid"
+
+#~ msgid "Premature end of regular expression"
+#~ msgstr "Akhir reguler ekspresi prematur"
+
+#~ msgid "Unmatched ) or \\)"
+#~ msgstr ") atau \\) tidak sesuai"
+
+#~ msgid "No previous regular expression"
+#~ msgstr "Tidak ada reguler ekspresi sebelumnya"

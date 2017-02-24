@@ -1,0 +1,10 @@
+http://sed.sourceforge.net/grabbag/ssed/
+
+super sed
+
+my own enhanced version of sed
+Super-sed is a heavily enhanced version of sed that I wrote. The current version is 3.62. The win32 executable has been kindly provided by Laurent Vogel; it does not require any support library. You can download it from here as:
+
+Source code in .tar.gz format (835k)
+Binary Win32 executable, zipped (43k)
+Updated 11 Feb 2005

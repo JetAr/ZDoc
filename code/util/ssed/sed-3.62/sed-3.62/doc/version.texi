@@ -1,0 +1,4 @@
+@set UPDATED 26 December 2004
+@set UPDATED-MONTH December 2004
+@set EDITION 3.62
+@set VERSION 3.62

@@ -1,0 +1,3613 @@
+This is ../../doc/sed.info, produced by makeinfo version 4.6 from
+../../doc/sed.texi.
+
+INFO-DIR-SECTION Text creation and manipulation
+START-INFO-DIR-ENTRY
+* sed: (sed).                   Stream EDitor.
+
+END-INFO-DIR-ENTRY
+
+This file documents version 3.62 of `super-sed', a stream editor.
+
+   Copyright (C) 1998, 1999, 2001, 2002, 2003, 2004 Free Software
+Foundation, Inc.
+
+   This document is released under the terms of the GNU Free
+Documentation License as published by the Free Software Foundation;
+either version 1.1, or (at your option) any later version.
+
+   You should have received a copy of the GNU Free Documentation
+License along with `super-sed'; see the file `COPYING.DOC'.  If not,
+write to the Free Software Foundation, 59 Temple Place - Suite 330,
+Boston, MA 02111-1307, USA.
+
+   There are no Cover Texts and no Invariant Sections; this text, along
+with its equivalent in the printed manual, constitutes the Title Page.
+
+File: sed.info,  Node: Top,  Next: Introduction,  Up: (dir)
+
+
+
+This file documents version 3.62 of `super-sed', a stream editor.
+
+   Copyright (C) 1998, 1999, 2001, 2002, 2003, 2004 Free Software
+Foundation, Inc.
+
+   This document is released under the terms of the GNU Free
+Documentation License as published by the Free Software Foundation;
+either version 1.1, or (at your option) any later version.
+
+   You should have received a copy of the GNU Free Documentation
+License along with `super-sed'; see the file `COPYING.DOC'.  If not,
+write to the Free Software Foundation, 59 Temple Place - Suite 330,
+Boston, MA 02111-1307, USA.
+
+   There are no Cover Texts and no Invariant Sections; this text, along
+with its equivalent in the printed manual, constitutes the Title Page.
+* Menu:
+
+* Introduction::               Introduction
+* Invoking sed::               Invocation
+* sed Programs::               `sed' programs
+* Examples::                   Some sample scripts
+* Limitations::                Limitations and (non-)limitations of `super-sed'
+* Other Resources::            Other resources for learning about `sed'
+* Reporting Bugs::             Reporting bugs
+
+* Extended regexps::           `egrep'-style regular expressions
+
+* Perl regexps::               Perl-style regular expressions
+
+* Concept Index::              A menu with all the topics in this manual.
+* Command and Option Index::   A menu with all `sed' commands and
+                               command-line options.
+
+--- The detailed node listing ---
+
+sed Programs:
+* Execution Cycle::                 How `sed' works
+* Addresses::                       Selecting lines with `sed'
+* Regular Expressions::             Overview of regular expression syntax
+* Common Commands::                 Often used commands
+* The "s" Command::                 `sed''s Swiss Army Knife
+* Other Commands::                  Less frequently used commands
+* Programming Commands::            Commands for `sed' gurus
+* Extended Commands::               Commands specific of `super-sed'
+* Escapes::                         Specifying special characters
+
+Examples:
+* Centering lines::
+* Increment a number::
+* Rename files to lower case::
+* Print bash environment::
+* Reverse chars of lines::
+* tac::                             Reverse lines of files
+* cat -n::                          Numbering lines
+* cat -b::                          Numbering non-blank lines
+* wc -c::                           Counting chars
+* wc -w::                           Counting words
+* wc -l::                           Counting lines
+* head::                            Printing the first lines
+* tail::                            Printing the last lines
+* uniq::                            Make duplicate lines unique
+* uniq -d::                         Print duplicated lines of input
+* uniq -u::                         Remove all duplicated lines
+* cat -s::                          Squeezing blank lines
+
+
+Perl regexps::                      Perl-style regular expressions
+* Backslash::                       Introduces special sequences
+* Circumflex/dollar sign/period::   Behave specially with regard to new lines
+* Square brackets::                 Are a bit different in strange cases
+* Options setting::                 Toggle modifiers in the middle of a regexp
+* Non-capturing subpatterns::       Are not counted when backreferencing
+* Repetition::                      Allows for non-greedy matching
+* Backreferences::                  Allows for more than 10 back references
+* Assertions::                      Allows for complex look ahead matches
+* Non-backtracking subpatterns::    Often gives more performance
+* Conditional subpatterns::         Allows if/then/else branches
+* Recursive patterns::              For example to match parentheses
+* Comments::                        Because things can get complex...
+
+
+File: sed.info,  Node: Introduction,  Next: Invoking sed,  Prev: Top,  Up: Top
+
+Introduction
+************
+
+`sed' is a stream editor.  A stream editor is used to perform basic text
+transformations on an input stream (a file or input from a pipeline).
+While in some ways similar to an editor which permits scripted edits
+(such as `ed'), `sed' works by making only one pass over the input(s),
+and is consequently more efficient.  But it is `sed''s ability to
+filter text in a pipeline which particularly distinguishes it from
+other types of editors.
+
+
+File: sed.info,  Node: Invoking sed,  Next: sed Programs,  Prev: Introduction,  Up: Top
+
+Invocation
+**********
+
+Normally `sed' is invoked like this:
+
+     sed SCRIPT INPUTFILE...
+
+   The full format for invoking `sed' is:
+
+     sed OPTIONS... [SCRIPT] [INPUTFILE...]
+
+   If you do not specify INPUTFILE, or if INPUTFILE is `-', `sed'
+filters the contents of the standard input.  The SCRIPT is actually the
+first non-option parameter, which `sed' specially considers a script
+and not an input file if (and only if) none of the other OPTIONS
+specifies a script to be executed, that is if neither of the `-e' and
+`-f' options is specified.
+
+   `sed' may be invoked with the following command-line options:
+
+`--version'
+     Print out the version of `sed' that is being run and a copyright
+     notice, then exit.
+
+`--help'
+     Print a usage message briefly summarizing these command-line
+     options and the bug-reporting address, then exit.
+
+`-n'
+`--quiet'
+`--silent'
+     By default, `sed' prints out the pattern space at the end of each
+     cycle through the script.  These options disable this automatic
+     printing, and `sed' only produces output when explicitly told to
+     via the `p' command.
+
+`-i[SUFFIX]'
+`--in-place[=SUFFIX]'
+     This option specifies that files are to be edited in-place.
+     `super-sed' does this by creating a temporary file and sending
+     output to this file rather than to the standard output.(1).
+
+     This option implies `-s'.
+
+     When the end of the file is reached, the temporary file is renamed
+     to the output file's original name.  The extension, if supplied,
+     is used to modify the name of the old file before renaming the
+     temporary file, thereby making a backup copy(2)).
+
+     This rule is followed: if the extension doesn't contain a `*',
+     then it is appended to the end of the current filename as a
+     suffix; if the extension does contain one or more `*' characters,
+     then _each_ asterisk is replaced with the current filename.  This
+     allows you to add a prefix to the backup file, instead of (or in
+     addition to) a suffix, or even to place backup copies of the
+     original files into another directory (provided the directory
+     already exists).
+
+     If no extension is supplied, the original file is overwritten
+     without making a backup.
+
+`-l N'
+`--line-length=N'
+     Specify the default line-wrap length for the `l' command.  A
+     length of 0 (zero) means to never wrap long lines.  If not
+     specified, it is taken to be 70.
+
+`--posix'
+     `super-sed' includes several extensions to POSIX sed.  In order to
+     simplify writing portable scripts, this option disables all the
+     extensions that this manual documents, including additional
+     commands.  Most of the extensions accept `sed' programs that are
+     outside the syntax mandated by POSIX, but some of them (such as
+     the behavior of the `N' command described in *note Reporting
+     Bugs::) actually violate the standard.  If you want to disable
+     only the latter kind of extension, you can set the
+     `POSIXLY_CORRECT' variable to a non-empty value.
+
+`-r'
+`--regexp-extended'
+     Use extended regular expressions rather than basic regular
+     expressions.  Extended regexps are those that `egrep' accepts;
+     they can be clearer because they usually have less backslashes,
+     but are a GNU extension and hence scripts that use them are not
+     portable.  *Note Extended regular expressions: Extended regexps.
+
+`-R'
+`--regexp-perl'
+     Use Perl-style regular expressions rather than basic regular
+     expressions.  Perl-style regexps are extremely powerful but are a
+     `super-sed' extension and hence scripts that use it are not
+     portable.  *Note Perl-style regular expressions: Perl regexps.
+
+`-s'
+`--separate'
+     By default, `sed' will consider the files specified on the command
+     line as a single continuous long stream.  This `super-sed'
+     extension allows the user to consider them as separate files:
+     range addresses (such as `/abc/,/def/') are not allowed to span
+     several files, line numbers are relative to the start of each
+     file, `$' refers to the last line of each file, and files invoked
+     from the `R' commands are rewound at the start of each file.
+
+`-u'
+`--unbuffered'
+     Buffer both input and output as minimally as practical.  (This is
+     particularly useful if the input is coming from the likes of `tail
+     -f', and you wish to see the transformed output as soon as
+     possible.)
+
+`-e SCRIPT'
+`--expression=SCRIPT'
+     Add the commands in SCRIPT to the set of commands to be run while
+     processing the input.
+
+`-f SCRIPT-FILE'
+`--file=SCRIPT-FILE'
+     Add the commands contained in the file SCRIPT-FILE to the set of
+     commands to be run while processing the input.
+
+
+   If no `-e', `-f', `--expression', or `--file' options are given on
+the command-line, then the first non-option argument on the command
+line is taken to be the SCRIPT to be executed.
+
+   If any command-line parameters remain after processing the above,
+these parameters are interpreted as the names of input files to be
+processed.  A file name of `-' refers to the standard input stream.
+The standard input will be processed if no file names are specified.
+
+   ---------- Footnotes ----------
+
+   (1) This applies to commands such as `=', `a', `c', `i', `l', `p'.
+You can still write to the standard output by using the `w' or `W'
+commands together with the `/dev/stdout' special file
+
+   (2) Note that `super-sed' creates the backup     file whether or not
+any output is actually changed.
+
+
+File: sed.info,  Node: sed Programs,  Next: Examples,  Prev: Invoking sed,  Up: Top
+
+`sed' Programs
+**************
+
+A `sed' program consists of one or more `sed' commands, passed in by
+one or more of the `-e', `-f', `--expression', and `--file' options, or
+the first non-option argument if zero of these options are used.  This
+document will refer to "the" `sed' script; this is understood to mean
+the in-order catenation of all of the SCRIPTs and SCRIPT-FILEs passed
+in.
+
+   Each `sed' command consists of an optional address or address range,
+followed by a one-character command name and any additional
+command-specific code.
+
+* Menu:
+
+* Execution Cycle::          How `sed' works
+* Addresses::                Selecting lines with `sed'
+* Regular Expressions::      Overview of regular expression syntax
+* Common Commands::          Often used commands
+* The "s" Command::          `sed''s Swiss Army Knife
+* Other Commands::           Less frequently used commands
+* Programming Commands::     Commands for `sed' gurus
+* Extended Commands::        Commands specific of `super-sed'
+* Escapes::                  Specifying special characters
+
+
+File: sed.info,  Node: Execution Cycle,  Next: Addresses,  Up: sed Programs
+
+How `sed' Works
+===============
+
+`sed' maintains two data buffers: the active _pattern_ space, and the
+auxiliary _hold_ space. Both are initially empty.
+
+   `sed' operates by performing the following cycle on each lines of
+input: first, `sed' reads one line from the input stream, removes any
+trailing newline, and places it in the pattern space.  Then commands
+are executed; each command can have an address associated to it:
+addresses are a kind of condition code, and a command is only executed
+if the condition is verified before the command is to be executed.
+
+   When the end of the script is reached, unless the `-n' option is in
+use, the contents of pattern space are printed out to the output
+stream, adding back the trailing newline if it was removed.(1) Then the
+next cycle starts for the next input line.
+
+   Unless special commands (like `D') are used, the pattern space is
+deleted between two cycles. The hold space, on the other hand, keeps
+its data between cycles (see commands `h', `H', `x', `g', `G' to move
+data between both buffers).
+
+   ---------- Footnotes ----------
+
+   (1) Actually,   if `sed' prints a line without the terminating
+newline, it will   nevertheless print the missing newline as soon as
+more text is sent to   the same output stream, which gives the "least
+expected surprise"   even though it does not make commands like `sed -n
+p' exactly   identical to `cat'.
+
+
+File: sed.info,  Node: Addresses,  Next: Regular Expressions,  Prev: Execution Cycle,  Up: sed Programs
+
+Selecting lines with `sed'
+==========================
+
+Addresses in a `sed' script can be in any of the following forms:
+`NUMBER'
+     Specifying a line number will match only that line in the input.
+     (Note that `sed' counts lines continuously across all input files
+     unless `-i' or `-s' options are specified.)
+
+`FIRST~STEP'
+     This GNU extension matches every STEPth line starting with line
+     FIRST.  In particular, lines will be selected when there exists a
+     non-negative N such that the current line-number equals FIRST + (N
+     * STEP).  Thus, to select the odd-numbered lines, one would use
+     `1~2'; to pick every third line starting with the second, `2~3'
+     would be used; to pick every fifth line starting with the tenth,
+     use `10~5'; and `50~0' is just an obscure way of saying `50'.
+
+`$'
+     This address matches the last line of the last file of input, or
+     the last line of each file when the `-i' or `-s' options are
+     specified.
+
+`/REGEXP/'
+     This will select any line which matches the regular expression
+     REGEXP.  If REGEXP itself includes any `/' characters, each must
+     be escaped by a backslash (`\').
+
+     The empty regular expression `//' repeats the last regular
+     expression match (the same holds if the empty regular expression is
+     passed to the `s' command).  Note that modifiers to regular
+     expressions are evaluated when the regular expression is compiled,
+     thus it is invalid to specify them together with the empty regular
+     expression.
+
+`\%REGEXP%'
+     (The `%' may be replaced by any other single character.)
+
+     This also matches the regular expression REGEXP, but allows one to
+     use a different delimiter than `/'.  This is particularly useful
+     if the REGEXP itself contains a lot of slashes, since it avoids
+     the tedious escaping of every `/'.  If REGEXP itself includes any
+     delimiter characters, each must be escaped by a backslash (`\').
+
+`/REGEXP/I'
+`\%REGEXP%I'
+     The `I' modifier to regular-expression matching is a GNU extension
+     which causes the REGEXP to be matched in a case-insensitive manner.
+
+`/REGEXP/M'
+`\%REGEXP%M'
+     The `M' modifier to regular-expression matching is a `super-sed'
+     extension which causes `^' and `$' to match respectively (in
+     addition to the normal behavior) the empty string after a newline,
+     and the empty string before a newline.  There are special character
+     sequences (`\A' and `\Z' in Perl mode, `\`' and `\'' in basic or
+     extended regular expression modes) which always match the
+     beginning or the end of the buffer.  `M' stands for `multi-line'.
+
+`/REGEXP/S'
+`\%REGEXP%S'
+     The `S' modifier to regular-expression matching is only valid in
+     Perl mode and specifies that the dot character (`.') will match
+     the newline character too.  `S' stands for `single-line'.
+
+`/REGEXP/X'
+`\%REGEXP%X'
+     The `X' modifier to regular-expression matching is also valid in
+     Perl mode only.  If it is used, whitespace in the pattern (other
+     than in a character class) and characters between a `#' outside a
+     character class and the next newline character are ignored. An
+     escaping backslash can be used to include a whitespace or `#'
+     character as part of the pattern.
+
+   If no addresses are given, then all lines are matched; if one
+address is given, then only lines matching that address are matched.
+
+   An address range can be specified by specifying two addresses
+separated by a comma (`,').  An address range matches lines starting
+from where the first address matches, and continues until the second
+address matches (inclusively).
+
+   If the second address is a REGEXP, then checking for the ending
+match will start with the line _following_ the line which matched the
+first address: a range will always span at least two lines (except of
+course if the input stream ends).
+
+   If the second address is a NUMBER less than (or equal to) the line
+matching the first address, then only the one line is matched.
+
+   `super-sed' also supports some special two-address forms; all these
+are GNU extensions:
+`0,/REGEXP/'
+     A line number of `0' can be used in an address specification like
+     `0,/REGEXP/' so that `sed' will try to match REGEXP in the first
+     input line too.  In other words, `0,/REGEXP/' is similar to
+     `1,/REGEXP/', except that if ADDR2 matches the very first line of
+     input the `0,/REGEXP/' form will consider it to end the range,
+     whereas the `1,/REGEXP/' form will match the beginning of its
+     range and hence make the range span up to the _second_ occurrence
+     of the regular expression.
+
+     Note that this is the only place where the `0' address makes
+     sense; there is no 0-th line and commands which are given the `0'
+     address in any other way will give an error.
+
+`ADDR1,+N'
+     Matches ADDR1 and the N lines following ADDR1.
+
+`ADDR1,~N'
+     Matches ADDR1 and the lines following ADDR1 until the next line
+     whose input line number is a multiple of N.
+
+   Appending the `!' character to the end of an address specification
+negates the sense of the match.  That is, if the `!' character follows
+an address range, then only lines which do _not_ match the address range
+will be selected.  This also works for singleton addresses, and,
+perhaps perversely, for the null address.
+
+
+File: sed.info,  Node: Regular Expressions,  Next: Common Commands,  Prev: Addresses,  Up: sed Programs
+
+Overview of Regular Expression Syntax
+=====================================
+
+To know how to use `sed', people should understand regular expressions
+("regexp" for short).  A regular expression is a pattern that is
+matched against a subject string from left to right.  Most characters
+are "ordinary": they stand for themselves in a pattern, and match the
+corresponding characters in the subject.  As a trivial example, the
+pattern
+
+          The quick brown fox
+
+matches a portion of a subject string that is identical to itself.  The
+power of regular expressions comes from the ability to include
+alternatives and repetitions in the pattern.  These are encoded in the
+pattern by the use of "special characters", which do not stand for
+themselves but instead are interpreted in some special way.  Here is a
+brief description of regular expression syntax as used in `sed'.
+
+`CHAR'
+     A single ordinary character matches itself.
+
+`*'
+     Matches a sequence of zero or more instances of matches for the
+     preceding regular expression, which must be an ordinary character,
+     a special character preceded by `\', a `.', a grouped regexp (see
+     below), or a bracket expression.  As a GNU extension, a postfixed
+     regular expression can also be followed by `*'; for example, `a**'
+     is equivalent to `a*'.  POSIX 1003.1-2001 says that `*' stands for
+     itself when it appears at the start of a regular expression or
+     subexpression, but many nonGNU implementations do not support this
+     and portable scripts should instead use `\*' in these contexts.
+
+`\+'
+     As `*', but matches one or more.  It is a GNU extension.
+
+`\?'
+     As `*', but only matches zero or one.  It is a GNU extension.
+
+`\{I\}'
+     As `*', but matches exactly I sequences (I is a decimal integer;
+     for portability, keep it between 0 and 255 inclusive).
+
+`\{I,J\}'
+     Matches between I and J, inclusive, sequences.
+
+`\{I,\}'
+     Matches more than or equal to I sequences.
+
+`\(REGEXP\)'
+     Groups the inner REGEXP as a whole, this is used to:
+
+        * Apply postfix operators, like `\(abcd\)*': this will search
+          for zero or more whole sequences of `abcd', while `abcd*'
+          would search for `abc' followed by zero or more occurrences
+          of `d'.  Note that support for `\(abcd\)*' is required by
+          POSIX 1003.1-2001, but many non-GNU implementations do not
+          support it and hence it is not universally portable.
+
+        * Use back references (see below).
+
+`.'
+     Matches any character, including newline.
+
+`^'
+     Matches the null string at beginning of line, i.e. what appears
+     after the circumflex must appear at the beginning of line.
+     `^#include' will match only lines where `#include' is the first
+     thing on line--if there are spaces before, for example, the match
+     fails.  `^' acts as a special character only at the beginning of
+     the regular expression or subexpression (that is, after `\(' or
+     `\|').  Portable scripts should avoid `^' at the beginning of a
+     subexpression, though, as POSIX allows implementations that treat
+     `^' as an ordinary character in that context.
+
+`$'
+     It is the same as `^', but refers to end of line.  `$' also acts
+     as a special character only at the end of the regular expression
+     or subexpression (that is, before `\)' or `\|'), and its use at
+     the end of a subexpression is not portable.
+
+`[LIST]'
+`[^LIST]'
+     Matches any single character in LIST: for example, `[aeiou]'
+     matches all vowels.  A list may include sequences like
+     `CHAR1-CHAR2', which matches any character between (inclusive)
+     CHAR1 and CHAR2.
+
+     A leading `^' reverses the meaning of LIST, so that it matches any
+     single character _not_ in LIST.  To include `]' in the list, make
+     it the first character (after the `^' if needed), to include `-'
+     in the list, make it the first or last; to include `^' put it
+     after the first character.
+
+     The characters `$', `*', `.', `[', and `\' are normally not
+     special within LIST.  For example, `[\*]' matches either `\' or
+     `*', because the `\' is not special here.  However, strings like
+     `[.ch.]', `[=a=]', and `[:space:]' are special within LIST and
+     represent collating symbols, equivalence classes, and character
+     classes, respectively, and `[' is therefore special within LIST
+     when it is followed by `.', `=', or `:'.  Also, when not in
+     `POSIXLY_CORRECT' mode, special escapes like `\n' and `\t' are
+     recognized within LIST.  *Note Escapes::.
+
+`REGEXP1\|REGEXP2'
+     Matches either REGEXP1 or REGEXP2.  Use parentheses to use complex
+     alternative regular expressions.  The matching process tries each
+     alternative in turn, from left to right, and the first one that
+     succeeds is used.  It is a GNU extension.
+
+`REGEXP1REGEXP2'
+     Matches the concatenation of REGEXP1 and REGEXP2.  Concatenation
+     binds more tightly than `\|', `^', and `$', but less tightly than
+     the other regular expression operators.
+
+`\DIGIT'
+     Matches the DIGIT-th `\(...\)' parenthesized subexpression in the
+     regular expression.  This is called a "back reference".
+     Subexpressions are implicity numbered by counting occurrences of
+     `\(' left-to-right.
+
+`\n'
+     Matches the newline character.
+
+`\CHAR'
+     Matches CHAR, where CHAR is one of `$', `*', `.', `[', `\', or `^'.
+     Note that the only C-like backslash sequences that you can
+     portably assume to be interpreted are `\n' and `\\'; in particular
+     `\t' is not portable, and matches a `t' under most implementations
+     of `sed', rather than a tab character.
+
+
+   Note that the regular expression matcher is greedy, i.e., matches
+are attempted from left to right and, if two or more matches are
+possible starting at the same character, it selects the longest.
+
+Examples:
+`abcdef'
+     Matches `abcdef'.
+
+`a*b'
+     Matches zero or more `a's followed by a single `b'.  For example,
+     `b' or `aaaaab'.
+
+`a\?b'
+     Matches `b' or `ab'.
+
+`a\+b\+'
+     Matches one or more `a's followed by one or more `b's: `ab' is the
+     shortest possible match, but other examples are `aaaab' or
+     `abbbbb' or `aaaaaabbbbbbb'.
+
+`.*'
+`.\+'
+     These two both match all the characters in a string; however, the
+     first matches every string (including the empty string), while the
+     second matches only strings containing at least one character.
+
+`^main.*(.*)'
+     his matches a string starting with `main', followed by an opening
+     and closing parenthesis.  The `n', `(' and `)' need not be
+     adjacent.
+
+`^#'
+     This matches a string beginning with `#'.
+
+`\\$'
+     This matches a string ending with a single backslash.  The regexp
+     contains two backslashes for escaping.
+
+`\$'
+     Instead, this matches a string consisting of a single dollar sign,
+     because it is escaped.
+
+`[a-zA-Z0-9]'
+     In the C locale, this matches any ASCII letters or digits.
+
+`[^ tab]\+'
+     (Here `tab' stands for a single tab character.)  This matches a
+     string of one or more characters, none of which is a space or a
+     tab.  Usually this means a word.
+
+`^\(.*\)\n\1$'
+     This matches a string consisting of two equal substrings separated
+     by a newline.
+
+`.\{9\}A$'
+     This matches nine characters followed by an `A'.
+
+`^.\{15\}A'
+     This matches the start of a string that contains 16 characters,
+     the last of which is an `A'.
+
+
+
+File: sed.info,  Node: Common Commands,  Next: The "s" Command,  Prev: Regular Expressions,  Up: sed Programs
+
+Often-Used Commands
+===================
+
+If you use `sed' at all, you will quite likely want to know these
+commands.
+
+`#'
+     [No addresses allowed.]
+
+     The `#' character begins a comment; the comment continues until
+     the next newline.
+
+     If you are concerned about portability, be aware that some
+     implementations of `sed' (which are not POSIX conformant) may only
+     support a single one-line comment, and then only when the very
+     first character of the script is a `#'.
+
+     Warning: if the first two characters of the `sed' script are `#n',
+     then the `-n' (no-autoprint) option is forced.  If you want to put
+     a comment in the first line of your script and that comment begins
+     with the letter `n' and you do not want this behavior, then be
+     sure to either use a capital `N', or place at least one space
+     before the `n'.
+
+`q [EXIT-CODE]'
+     This command only accepts a single address.
+
+     Exit `sed' without processing any more commands or input.  Note
+     that the current pattern space is printed if auto-print is not
+     disabled with the `-n' options.  The ability to return an exit
+     code from the `sed' script is a `super-sed' extension.
+
+`d'
+     Delete the pattern space; immediately start next cycle.
+
+`p'
+     Print out the pattern space (to the standard output).  This
+     command is usually only used in conjunction with the `-n'
+     command-line option.
+
+`n'
+     If auto-print is not disabled, print the pattern space, then,
+     regardless, replace the pattern space with the next line of input.
+     If there is no more input then `sed' exits without processing any
+     more commands.
+
+`{ COMMANDS }'
+     A group of commands may be enclosed between `{' and `}' characters.
+     This is particularly useful when you want a group of commands to
+     be triggered by a single address (or address-range) match.
+
+
+
+File: sed.info,  Node: The "s" Command,  Next: Other Commands,  Prev: Common Commands,  Up: sed Programs
+
+The `s' Command
+===============
+
+The syntax of the `s' (as in substitute) command is
+`s/REGEXP/REPLACEMENT/FLAGS'.  The `/' characters may be uniformly
+replaced by any other single character within any given `s' command.
+The `/' character (or whatever other character is used in its stead)
+can appear in the REGEXP or REPLACEMENT only if it is preceded by a `\'
+character.
+
+   The `s' command is probably the most important in `sed' and has a
+lot of different options.  Its basic concept is simple: the `s' command
+attempts to match the pattern space against the supplied REGEXP; if the
+match is successful, then that portion of the pattern space which was
+matched is replaced with REPLACEMENT.
+
+   The REPLACEMENT can contain `\N' (N being a number from 1 to 9,
+inclusive) references, which refer to the portion of the match which is
+contained between the Nth `\(' and its matching `\)'.  Also, the
+REPLACEMENT can contain unescaped `&' characters which reference the
+whole matched portion of the pattern space.  Finally, as a `super-sed'
+extension, you can include a special sequence made of a backslash and
+one of the letters `L', `l', `U', `u', or `E'.  The meaning is as
+follows:
+
+`\L'
+     Turn the replacement to lowercase until a `\U' or `\E' is found,
+
+`\l'
+     Turn the next character to lowercase,
+
+`\U'
+     Turn the replacement to uppercase until a `\L' or `\E' is found,
+
+`\u'
+     Turn the next character to uppercase,
+
+`\E'
+     Stop case conversion started by `\L' or `\U'.
+
+   To include a literal `\', `&', or newline in the final replacement,
+be sure to precede the desired `\', `&', or newline in the REPLACEMENT
+with a `\'.
+
+   The `s' command can be followed by zero or more of the following
+FLAGS:
+
+`g'
+     Apply the replacement to _all_ matches to the REGEXP, not just the
+     first.
+
+`NUMBER'
+     Only replace the NUMBERth match of the REGEXP.
+
+     Note: the POSIX standard does not specify what should happen when
+     you mix the `g' and NUMBER modifiers, and currently there is no
+     widely agreed upon meaning across `sed' implementations.  For
+     `super-sed', the interaction is defined to be: ignore matches
+     before the NUMBERth, and then match and replace all matches from
+     the NUMBERth on.
+
+`p'
+     If the substitution was made, then print the new pattern space.
+
+     Note: when both the `p' and `e' options are specified, the
+     relative ordering of the two produces very different results.  In
+     general, `ep' (evaluate then print) is what you want, but
+     operating the other way round can be useful for debugging.  For
+     this reason, the current version of `super-sed' interprets
+     specially the presence of `p' options both before and after `e',
+     printing the pattern space before and after evaluation, while in
+     general flags for the `s' command show their effect just once.
+     This behavior, although documented, might change in future
+     versions.
+
+`w FILE-NAME'
+     If the substitution was made, then write out the result to the
+     named file.  As a `super-sed' extension, two special values of
+     FILE-NAME are supported: `/dev/stderr', which writes the result to
+     the standard error, and `/dev/stdout', which writes to the standard
+     output.(1)
+
+`e'
+     This command allows one to pipe input from a shell command into
+     pattern space.  If a substitution was made, the command that is
+     found in pattern space is executed and pattern space is replaced
+     with its output.  A trailing newline is suppressed; results are
+     undefined if the command to be executed contains a NUL character.
+     This is a `super-sed' extension.
+
+`I'
+`i'
+     The `I' modifier to regular-expression matching is a GNU extension
+     which makes `sed' match REGEXP in a case-insensitive manner.
+
+`M'
+`m'
+     The `M' modifier to regular-expression matching is a `super-sed'
+     extension which causes `^' and `$' to match respectively (in
+     addition to the normal behavior) the empty string after a newline,
+     and the empty string before a newline.  There are special character
+     sequences (`\A' and `\Z' in Perl mode, `\`' and `\'' in basic or
+     extended regular expression modes) which always match the
+     beginning or the end of the buffer.  `M' stands for `multi-line'.
+
+`S'
+`s'
+     The `S' modifier to regular-expression matching is only valid in
+     Perl mode and specifies that the dot character (`.') will match
+     the newline character too.  `S' stands for `single-line'.
+
+`X'
+`x'
+     The `X' modifier to regular-expression matching is also valid in
+     Perl mode only.  If it is used, whitespace in the pattern (other
+     than in a character class) and characters between a `#' outside a
+     character class and the next newline character are ignored. An
+     escaping backslash can be used to include a whitespace or `#'
+     character as part of the pattern.
+
+   ---------- Footnotes ----------
+
+   (1) This is equivalent to `p' unless the `-i' option is being used.
+
+
+File: sed.info,  Node: Other Commands,  Next: Programming Commands,  Prev: The "s" Command,  Up: sed Programs
+
+Less Frequently-Used Commands
+=============================
+
+Though perhaps less frequently used than those in the previous section,
+some very small yet useful `sed' scripts can be built with these
+commands.
+
+`y/SOURCE-CHARS/DEST-CHARS/'
+     (The `/' characters may be uniformly replaced by any other single
+     character within any given `y' command.)
+
+     Transliterate any characters in the pattern space which match any
+     of the SOURCE-CHARS with the corresponding character in DEST-CHARS.
+
+     Instances of the `/' (or whatever other character is used in its
+     stead), `\', or newlines can appear in the SOURCE-CHARS or
+     DEST-CHARS lists, provide that each instance is escaped by a `\'.
+     The SOURCE-CHARS and DEST-CHARS lists _must_ contain the same
+     number of characters (after de-escaping).
+
+`a\'
+`TEXT'
+     As a GNU extension, this command accepts two addresses.
+
+     Queue the lines of text which follow this command (each but the
+     last ending with a `\', which are removed from the output) to be
+     output at the end of the current cycle, or when the next input
+     line is read.
+
+     Escape sequences in TEXT are processed, so you should use `\\' in
+     TEXT to print a single backslash.
+
+     As a GNU extension, if between the `a' and the newline there is
+     other than a whitespace-`\' sequence, then the text of this line,
+     starting at the first non-whitespace character after the `a', is
+     taken as the first line of the TEXT block.  (This enables a
+     simplification in scripting a one-line add.)  This extension also
+     works with the `i' and `c' commands.
+
+`i\'
+`TEXT'
+     As a GNU extension, this command accepts two addresses.
+
+     Immediately output the lines of text which follow this command
+     (each but the last ending with a `\', which are removed from the
+     output).
+
+`c\'
+`TEXT'
+     Delete the lines matching the address or address-range, and output
+     the lines of text which follow this command (each but the last
+     ending with a `\', which are removed from the output) in place of
+     the last line (or in place of each line, if no addresses were
+     specified).  A new cycle is started after this command is done,
+     since the pattern space will have been deleted.
+
+`='
+     As a GNU extension, this command accepts two addresses.
+
+     Print out the current input line number (with a trailing newline).
+
+`l N'
+     Print the pattern space in an unambiguous form: non-printable
+     characters (and the `\' character) are printed in C-style escaped
+     form; long lines are split, with a trailing `\' character to
+     indicate the split; the end of each line is marked with a `$'.
+
+     N specifies the desired line-wrap length; a length of 0 (zero)
+     means to never wrap long lines.  If omitted, the default as
+     specified on the command line is used.  The N parameter is a
+     `super-sed' extension.
+
+`r FILENAME'
+     As a GNU extension, this command accepts two addresses.
+
+     Queue the contents of FILENAME to be read and inserted into the
+     output stream at the end of the current cycle, or when the next
+     input line is read.  Note that if FILENAME cannot be read, it is
+     treated as if it were an empty file, without any error indication.
+
+     As a `super-sed' extension, the special value `/dev/stdin' is
+     supported for the file name, which reads the contents of the
+     standard input.
+
+`w FILENAME'
+     Write the pattern space to FILENAME.  As a `super-sed' extension,
+     two special values of FILE-NAME are supported: `/dev/stderr',
+     which writes the result to the standard error, and `/dev/stdout',
+     which writes to the standard output.(1)
+
+     The file will be created (or truncated) before the first input
+     line is read; all `w' commands (including instances of `w' flag on
+     successful `s' commands) which refer to the same FILENAME are
+     output without closing and reopening the file.
+
+`D'
+     Delete text in the pattern space up to the first newline.  If any
+     text is left, restart cycle with the resultant pattern space
+     (without reading a new line of input), otherwise start a normal
+     new cycle.
+
+`N'
+     Add a newline to the pattern space, then append the next line of
+     input to the pattern space.  If there is no more input then `sed'
+     exits without processing any more commands.
+
+`P'
+     Print out the portion of the pattern space up to the first newline.
+
+`h'
+     Replace the contents of the hold space with the contents of the
+     pattern space.
+
+`H'
+     Append a newline to the contents of the hold space, and then
+     append the contents of the pattern space to that of the hold space.
+
+`g'
+     Replace the contents of the pattern space with the contents of the
+     hold space.
+
+`G'
+     Append a newline to the contents of the pattern space, and then
+     append the contents of the hold space to that of the pattern space.
+
+`x'
+     Exchange the contents of the hold and pattern spaces.
+
+
+   ---------- Footnotes ----------
+
+   (1) This is equivalent to `p' unless the `-i' option is being used.
+
+
+File: sed.info,  Node: Programming Commands,  Next: Extended Commands,  Prev: Other Commands,  Up: sed Programs
+
+Commands for `sed' gurus
+========================
+
+In most cases, use of these commands indicates that you are probably
+better off programming in something like `awk' or Perl.  But
+occasionally one is committed to sticking with `sed', and these
+commands can enable one to write quite convoluted scripts.
+
+`: LABEL'
+     [No addresses allowed.]
+
+     Specify the location of LABEL for branch commands.  In all other
+     respects, a no-op.
+
+`b LABEL'
+     Unconditionally branch to LABEL.  The LABEL may be omitted, in
+     which case the next cycle is started.
+
+`t LABEL'
+     Branch to LABEL only if there has been a successful `s'ubstitution
+     since the last input line was read or conditional branch was taken.
+     The LABEL may be omitted, in which case the next cycle is started.
+
+
+
+File: sed.info,  Node: Extended Commands,  Next: Escapes,  Prev: Programming Commands,  Up: sed Programs
+
+Commands Specific to `super-sed'
+================================
+
+These commands are specific to `super-sed', so you must use them with
+care and only when you are sure that hindering portability is not evil.
+They allow you to check for `super-sed' extensions or to do tasks that
+are required quite often, yet are unsupported by standard `sed's.
+
+`e [COMMAND]'
+     This command allows one to pipe input from a shell command into
+     pattern space.  Without parameters, the `e' command executes the
+     command that is found in pattern space and replaces the pattern
+     space with the output; a trailing newline is suppressed.
+
+     If a parameter is specified, instead, the `e' command interprets
+     it as a command and sends its output to the output stream (like
+     `r' does).  The command can run across multiple lines, all but the
+     last ending with a back-slash.
+
+     In both cases, the results are undefined if the command to be
+     executed contains a NUL character.
+
+`L N'
+     This `super-sed' extension fills and joins lines in pattern space
+     to produce output lines of (at most) N characters, like `fmt'
+     does; if N is omitted, the default as specified on the command
+     line is used.  This command is considered a failed experiment and
+     unless there is enough request (which seems unlikely) will be
+     removed in future versions.
+
+`Q [EXIT-CODE]'
+     This command only accepts a single address.
+
+     This command is the same as `q', but will not print the contents
+     of pattern space.  Like `q', it provides the ability to return an
+     exit code to the caller.
+
+     This command can be useful because the only alternative ways to
+     accomplish this apparently trivial function are to use the `-n'
+     option (which can unnecessarily complicate your script) or
+     resorting to the following snippet, which wastes time by reading
+     the whole file without any visible effect:
+
+          :eat
+          $d       Quit silently on the last line
+          N        Read another line, silently
+          g        Overwrite pattern space each time to save memory
+          b eat
+
+`R FILENAME'
+     Queue a line of FILENAME to be read and inserted into the output
+     stream at the end of the current cycle, or when the next input
+     line is read.  Note that if FILENAME cannot be read, or if its end
+     is reached, no line is appended, without any error indication.
+
+     As with the `r' command, the special value `/dev/stdin' is
+     supported for the file name, which reads a line from the standard
+     input.
+
+`T LABEL'
+     Branch to LABEL only if there have been no successful
+     `s'ubstitutions since the last input line was read or conditional
+     branch was taken. The LABEL may be omitted, in which case the next
+     cycle is started.
+
+`v VERSION'
+     This command does nothing, but makes `sed' fail if `super-sed'
+     extensions are not supported, simply because other versions of
+     `sed' do not implement it.  In addition, you can specify the
+     version of `sed' that your script requires, such as `4.0.5'.  The
+     default is `4.0' because that is the first version that
+     implemented this command.
+
+     This command enables all ssed extensions even if `POSIXLY_CORRECT'
+     is set in the environment.
+
+`W FILENAME'
+     Write to the given filename the portion of the pattern space up to
+     the first newline.  Everything said under the `w' command about
+     file handling holds here too.
+
+
+File: sed.info,  Node: Escapes,  Prev: Extended Commands,  Up: sed Programs
+
+GNU Extensions for Escapes in Regular Expressions
+=================================================
+
+Until this chapter, we have only encountered escapes of the form `\^',
+which tell `sed' not to interpret the circumflex as a special
+character, but rather to take it literally.  For example, `\*' matches
+a single asterisk rather than zero or more backslashes.
+
+   This chapter introduces another kind of escape(1)--that is, escapes
+that are applied to a character or sequence of characters that
+ordinarily are taken literally, and that `sed' replaces with a special
+character.  This provides a way of encoding non-printable characters in
+patterns in a visible manner.  There is no restriction on the
+appearance of non-printing characters in a `sed' script but when a
+script is being prepared in the shell or by text editing, it is usually
+easier to use one of the following escape sequences than the binary
+character it represents:
+
+   The list of these escapes is:
+
+`\a'
+     Produces or matches a BEL character, that is an "alert" (ASCII 7).
+
+`\f'
+     Produces or matches a form feed (ASCII 12).
+
+`\n'
+     Produces or matches a newline (ASCII 10).
+
+`\r'
+     Produces or matches a carriage return (ASCII 13).
+
+`\t'
+     Produces or matches a horizontal tab (ASCII 9).
+
+`\v'
+     Produces or matches a so called "vertical tab" (ASCII 11).
+
+`\cX'
+     Produces or matches `CONTROL-X', where X is any character.  The
+     precise effect of `\cX' is as follows: if X is a lower case
+     letter, it is converted to upper case.  Then bit 6 of the
+     character (hex 40) is inverted.  Thus `\cz' becomes hex 1A, but
+     `\c{' becomes hex 3B, while `\c;' becomes hex 7B.
+
+`\dXXX'
+     Produces or matches a character whose decimal ASCII value is XXX.
+
+`\oXXX'
+
+`\XXX'
+     Produces or matches a character whose octal ASCII value is XXX.
+     The syntax without the `o' is active in Perl mode, while the one
+     with the `o' is active in the normal or extended POSIX regular
+     expression modes.
+
+`\xXX'
+     Produces or matches a character whose hexadecimal ASCII value is
+     XX.
+
+   `\b' (backspace) was omitted because of the conflict with the
+existing "word boundary" meaning.
+
+   Other escapes match a particular character class and are valid only
+in regular expressions:
+
+`\w'
+     Matches any "word" character.  A "word" character is any letter or
+     digit or the underscore character.
+
+`\W'
+     Matches any "non-word" character.
+
+`\b'
+     Matches a word boundary; that is it matches if the character to
+     the left is a "word" character and the character to the right is a
+     "non-word" character, or vice-versa.
+
+`\B'
+     Matches everywhere but on a word boundary; that is it matches if
+     the character to the left and the character to the right are
+     either both "word" characters or both "non-word" characters.
+
+`\`'
+     Matches only at the start of pattern space.  This is different
+     from `^' in multi-line mode.
+
+`\''
+     Matches only at the end of pattern space.  This is different from
+     `$' in multi-line mode.
+
+`\G'
+     Match only at the start of pattern space or, when doing a global
+     substitution using the `s///g' command and option, at the
+     end-of-match position of the prior match.  For example,
+     `s/\Ga/Z/g' will change an initial run of `a's to a run of `Z's
+
+   ---------- Footnotes ----------
+
+   (1) All the escapes introduced here are GNU extensions, with the
+exception of `\n'.  In basic regular expression mode, setting
+`POSIXLY_CORRECT' disables them inside bracket expressions.
+
+
+File: sed.info,  Node: Examples,  Next: Limitations,  Prev: sed Programs,  Up: Top
+
+Some Sample Scripts
+*******************
+
+Here are some `sed' scripts to guide you in the art of mastering `sed'.
+
+* Menu:
+
+Some exotic examples:
+* Centering lines::
+* Increment a number::
+* Rename files to lower case::
+* Print bash environment::
+* Reverse chars of lines::
+
+Emulating standard utilities:
+* tac::                             Reverse lines of files
+* cat -n::                          Numbering lines
+* cat -b::                          Numbering non-blank lines
+* wc -c::                           Counting chars
+* wc -w::                           Counting words
+* wc -l::                           Counting lines
+* head::                            Printing the first lines
+* tail::                            Printing the last lines
+* uniq::                            Make duplicate lines unique
+* uniq -d::                         Print duplicated lines of input
+* uniq -u::                         Remove all duplicated lines
+* cat -s::                          Squeezing blank lines
+
+
+File: sed.info,  Node: Centering lines,  Next: Increment a number,  Up: Examples
+
+Centering Lines
+===============
+
+This script centers all lines of a file on a 80 columns width.  To
+change that width, the number in `\{...\}' must be replaced, and the
+number of added spaces also must be changed.
+
+   Note how the buffer commands are used to separate parts in the
+regular expressions to be matched--this is a common technique.
+
+     #!/usr/bin/sed -f
+     
+     # Put 80 spaces in the buffer
+     1 {
+       x
+       s/^$/          /
+       s/^.*$/&&&&&&&&/
+       x
+     }
+     
+     # del leading and trailing spaces
+     y/tab/ /
+     s/^ *//
+     s/ *$//
+     
+     # add a newline and 80 spaces to end of line
+     G
+     
+     # keep first 81 chars (80 + a newline)
+     s/^\(.\{81\}\).*$/\1/
+     
+     # \2 matches half of the spaces, which are moved to the beginning
+     s/^\(.*\)\n\(.*\)\2/\2\1/
+
+
+File: sed.info,  Node: Increment a number,  Next: Rename files to lower case,  Prev: Centering lines,  Up: Examples
+
+Increment a Number
+==================
+
+This script is one of a few that demonstrate how to do arithmetic in
+`sed'.  This is indeed possible,(1) but must be done manually.
+
+   To increment one number you just add 1 to last digit, replacing it
+by the following digit.  There is one exception: when the digit is a
+nine the previous digits must be also incremented until you don't have
+a nine.
+
+   This solution by Bruno Haible is very clever and smart because it
+uses a single buffer; if you don't have this limitation, the algorithm
+used in *Note Numbering lines: cat -n, is faster.  It works by
+replacing trailing nines with an underscore, then using multiple `s'
+commands to increment the last digit, and then again substituting
+underscores with zeros.
+
+     #!/usr/bin/sed -f
+     
+     /[^0-9]/ d
+     
+     # replace all leading 9s by _ (any other character except digits, could
+     # be used)
+     :d
+     s/9\(_*\)$/_\1/
+     td
+     
+     # incr last digit only.  The first line adds a most-significant
+     # digit of 1 if we have to add a digit.
+     #
+     # The `tn' commands are not necessary, but make the thing
+     # faster
+     
+     s/^\(_*\)$/1\1/; tn
+     s/8\(_*\)$/9\1/; tn
+     s/7\(_*\)$/8\1/; tn
+     s/6\(_*\)$/7\1/; tn
+     s/5\(_*\)$/6\1/; tn
+     s/4\(_*\)$/5\1/; tn
+     s/3\(_*\)$/4\1/; tn
+     s/2\(_*\)$/3\1/; tn
+     s/1\(_*\)$/2\1/; tn
+     s/0\(_*\)$/1\1/; tn
+     
+     :n
+     y/_/0/
+
+   ---------- Footnotes ----------
+
+   (1) `sed' guru Greg Ubben wrote an implementation of the `dc' RPN
+calculator!  It is distributed together with sed.
+
+
+File: sed.info,  Node: Rename files to lower case,  Next: Print bash environment,  Prev: Increment a number,  Up: Examples
+
+Rename Files to Lower Case
+==========================
+
+This is a pretty strange use of `sed'.  We transform text, and
+transform it to be shell commands, then just feed them to shell.  Don't
+worry, even worse hacks are done when using `sed'; I have seen a script
+converting the output of `date' into a `bc' program!
+
+   The main body of this is the `sed' script, which remaps the name
+from lower to upper (or vice-versa) and even checks out if the remapped
+name is the same as the original name.  Note how the script is
+parameterized using shell variables and proper quoting.
+
+     #! /bin/sh
+     # rename files to lower/upper case...
+     #
+     # usage:
+     #    move-to-lower *
+     #    move-to-upper *
+     # or
+     #    move-to-lower -R .
+     #    move-to-upper -R .
+     #
+     
+     help()
+     {
+     	cat << eof
+     Usage: $0 [-n] [-r] [-h] files...
+     
+     -n      do nothing, only see what would be done
+     -R      recursive (use find)
+     -h      this message
+     files   files to remap to lower case
+     
+     Examples:
+            $0 -n *        (see if everything is ok, then...)
+            $0 *
+     
+            $0 -R .
+     
+     eof
+     }
+     
+     apply_cmd='sh'
+     finder='echo "$@" | tr " " "\n"'
+     files_only=
+     
+     while :
+     do
+         case "$1" in
+             -n) apply_cmd='cat' ;;
+             -R) finder='find "$@" -type f';;
+             -h) help ; exit 1 ;;
+             *) break ;;
+         esac
+         shift
+     done
+     
+     if [ -z "$1" ]; then
+             echo Usage: $0 [-h] [-n] [-r] files...
+             exit 1
+     fi
+     
+     LOWER='abcdefghijklmnopqrstuvwxyz'
+     UPPER='ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+     
+     case `basename $0` in
+             *upper*) TO=$UPPER; FROM=$LOWER ;;
+             *)       FROM=$UPPER; TO=$LOWER ;;
+     esac
+     
+     eval $finder | sed -n '
+     
+     # remove all trailing slashes
+     s/\/*$//
+     
+     # add ./ if there is no path, only a filename
+     /\//! s/^/.\//
+     
+     # save path+filename
+     h
+     
+     # remove path
+     s/.*\///
+     
+     # do conversion only on filename
+     y/'$FROM'/'$TO'/
+     
+     # now line contains original path+file, while
+     # hold space contains the new filename
+     x
+     
+     # add converted file name to line, which now contains
+     # path/file-name\nconverted-file-name
+     G
+     
+     # check if converted file name is equal to original file name,
+     # if it is, do not print nothing
+     /^.*\/\(.*\)\n\1/b
+     
+     # now, transform path/fromfile\n, into
+     # mv path/fromfile path/tofile and print it
+     s/^\(.*\/\)\(.*\)\n\(.*\)$/mv \1\2 \1\3/p
+     
+     ' | $apply_cmd
+
+
+File: sed.info,  Node: Print bash environment,  Next: Reverse chars of lines,  Prev: Rename files to lower case,  Up: Examples
+
+Print `bash' Environment
+========================
+
+This script strips the definition of the shell functions from the
+output of the `set' Bourne-shell command.
+
+     #!/bin/sh
+     
+     set | sed -n '
+     :x
+     
+     # if no occurrence of "=()" print and load next line
+     /=()/! { p; b; }
+     / () $/! { p; b; }
+     
+     # possible start of functions section
+     # save the line in case this is a var like FOO="() "
+     h
+     
+     # if the next line has a brace, we quit because
+     # nothing comes after functions
+     n
+     /^{/ q
+     
+     # print the old line
+     x; p
+     
+     # work on the new line now
+     x; bx
+     '
+
+
+File: sed.info,  Node: Reverse chars of lines,  Next: tac,  Prev: Print bash environment,  Up: Examples
+
+Reverse Characters of Lines
+===========================
+
+This script can be used to reverse the position of characters in lines.
+The technique moves two characters at a time, hence it is faster than
+more intuitive implementations.
+
+   Note the `tx' command before the definition of the label.  This is
+often needed to reset the flag that is tested by the `t' command.
+
+   Imaginative readers will find uses for this script.  An example is
+reversing the output of `banner'.(1)
+
+     #!/usr/bin/sed -f
+     
+     /../! b
+     
+     # Reverse a line.  Begin embedding the line between two newlines
+     s/^.*$/\
+     &\
+     /
+     
+     # Move first character at the end.  The regexp matches until
+     # there are zero or one characters between the markers
+     tx
+     :x
+     s/\(\n.\)\(.*\)\(.\n\)/\3\2\1/
+     tx
+     
+     # Remove the newline markers
+     s/\n//g
+
+   ---------- Footnotes ----------
+
+   (1) This requires another script to pad the output of banner; for
+example
+
+     #! /bin/sh
+     
+     banner -w $1 $2 $3 $4 |
+       sed -e :a -e '/^.\{0,'$1'\}$/ { s/$/ /; ba; }' |
+       ~/sedscripts/reverseline.sed
+
+
+File: sed.info,  Node: tac,  Next: cat -n,  Prev: Reverse chars of lines,  Up: Examples
+
+Reverse Lines of Files
+======================
+
+This one begins a series of totally useless (yet interesting) scripts
+emulating various Unix commands.  This, in particular, is a `tac'
+workalike.
+
+   Note that on implementations other than GNU `sed' and `super-sed'
+this script might easily overflow internal buffers.
+
+     #!/usr/bin/sed -nf
+     
+     # reverse all lines of input, i.e. first line became last, ...
+     
+     # from the second line, the buffer (which contains all previous lines)
+     # is *appended* to current line, so, the order will be reversed
+     1! G
+     
+     # on the last line we're done -- print everything
+     $ p
+     
+     # store everything on the buffer again
+     h
+
+
+File: sed.info,  Node: cat -n,  Next: cat -b,  Prev: tac,  Up: Examples
+
+Numbering Lines
+===============
+
+This script replaces `cat -n'; in fact it formats its output exactly
+like GNU `cat' does.
+
+   Of course this is completely useless and for two reasons:  first,
+because somebody else did it in C, second, because the following
+Bourne-shell script could be used for the same purpose and would be
+much faster:
+
+     #! /bin/sh
+     sed -e "=" $@ | sed -e '
+       s/^/      /
+       N
+       s/^ *\(......\)\n/\1  /
+     '
+
+   It uses `sed' to print the line number, then groups lines two by two
+using `N'.  Of course, this script does not teach as much as the one
+presented below.
+
+   The algorithm used for incrementing uses both buffers, so the line
+is printed as soon as possible and then discarded.  The number is split
+so that changing digits go in a buffer and unchanged ones go in the
+other; the changed digits are modified in a single step (using a `y'
+command).  The line number for the next line is then composed and
+stored in the hold space, to be used in the next iteration.
+
+     #!/usr/bin/sed -nf
+     
+     # Prime the pump on the first line
+     x
+     /^$/ s/^.*$/1/
+     
+     # Add the correct line number before the pattern
+     G
+     h
+     
+     # Format it and print it
+     s/^/      /
+     s/^ *\(......\)\n/\1  /p
+     
+     # Get the line number from hold space; add a zero
+     # if we're going to add a digit on the next line
+     g
+     s/\n.*$//
+     /^9*$/ s/^/0/
+     
+     # separate changing/unchanged digits with an x
+     s/.9*$/x&/
+     
+     # keep changing digits in hold space
+     h
+     s/^.*x//
+     y/0123456789/1234567890/
+     x
+     
+     # keep unchanged digits in pattern space
+     s/x.*$//
+     
+     # compose the new number, remove the newline implicitly added by G
+     G
+     s/\n//
+     h
+
+
+File: sed.info,  Node: cat -b,  Next: wc -c,  Prev: cat -n,  Up: Examples
+
+Numbering Non-blank Lines
+=========================
+
+Emulating `cat -b' is almost the same as `cat -n'--we only have to
+select which lines are to be numbered and which are not.
+
+   The part that is common to this script and the previous one is not
+commented to show how important it is to comment `sed' scripts
+properly...
+
+     #!/usr/bin/sed -nf
+     
+     /^$/ {
+       p
+       b
+     }
+     
+     # Same as cat -n from now
+     x
+     /^$/ s/^.*$/1/
+     G
+     h
+     s/^/      /
+     s/^ *\(......\)\n/\1  /p
+     x
+     s/\n.*$//
+     /^9*$/ s/^/0/
+     s/.9*$/x&/
+     h
+     s/^.*x//
+     y/0123456789/1234567890/
+     x
+     s/x.*$//
+     G
+     s/\n//
+     h
+
+
+File: sed.info,  Node: wc -c,  Next: wc -w,  Prev: cat -b,  Up: Examples
+
+Counting Characters
+===================
+
+This script shows another way to do arithmetic with `sed'.  In this
+case we have to add possibly large numbers, so implementing this by
+successive increments would not be feasible (and possibly even more
+complicated to contrive than this script).
+
+   The approach is to map numbers to letters, kind of an abacus
+implemented with `sed'.  `a's are units, `b's are tenths and so on: we
+simply add the number of characters on the current line as units, and
+then propagate the carry to tenths, hundredths, and so on.
+
+   As usual, running totals are kept in hold space.
+
+   On the last line, we convert the abacus form back to decimal.  For
+the sake of variety, this is done with a loop rather than with some 80
+`s' commands(1): first we convert units, removing `a's from the number;
+then we rotate letters so that tenths become `a's, and so on until no
+more letters remain.
+
+     #!/usr/bin/sed -nf
+     
+     # Add n+1 a's to hold space (+1 is for the newline)
+     s/./a/g
+     H
+     x
+     s/\n/a/
+     
+     # Do the carry.  The t's and b's are not necessary,
+     # but they do speed up the thing
+     t a
+     : a;  s/aaaaaaaaaa/b/g; t b; b done
+     : b;  s/bbbbbbbbbb/c/g; t c; b done
+     : c;  s/cccccccccc/d/g; t d; b done
+     : d;  s/dddddddddd/e/g; t e; b done
+     : e;  s/eeeeeeeeee/f/g; t f; b done
+     : f;  s/ffffffffff/g/g; t g; b done
+     : g;  s/gggggggggg/h/g; t h; b done
+     : h;  s/hhhhhhhhhh//g
+     
+     : done
+     $! {
+       h
+       b
+     }
+     
+     # On the last line, convert back to decimal
+     
+     : loop
+     /a/! s/[b-h]*/&0/
+     s/aaaaaaaaa/9/
+     s/aaaaaaaa/8/
+     s/aaaaaaa/7/
+     s/aaaaaa/6/
+     s/aaaaa/5/
+     s/aaaa/4/
+     s/aaa/3/
+     s/aa/2/
+     s/a/1/
+     
+     : next
+     y/bcdefgh/abcdefg/
+     /[a-h]/ b loop
+     p
+
+   ---------- Footnotes ----------
+
+   (1) Some implementations have a limit of 199 commands per script
+
+
+File: sed.info,  Node: wc -w,  Next: wc -l,  Prev: wc -c,  Up: Examples
+
+Counting Words
+==============
+
+This script is almost the same as the previous one, once each of the
+words on the line is converted to a single `a' (in the previous script
+each letter was changed to an `a').
+
+   It is interesting that real `wc' programs have optimized loops for
+`wc -c', so they are much slower at counting words rather than
+characters.  This script's bottleneck, instead, is arithmetic, and
+hence the word-counting one is faster (it has to manage smaller
+numbers).
+
+   Again, the common parts are not commented to show the importance of
+commenting `sed' scripts.
+
+     #!/usr/bin/sed -nf
+     
+     # Convert words to a's
+     s/[ tab][ tab]*/ /g
+     s/^/ /
+     s/ [^ ][^ ]*/a /g
+     s/ //g
+     
+     # Append them to hold space
+     H
+     x
+     s/\n//
+     
+     # From here on it is the same as in wc -c.
+     /aaaaaaaaaa/! bx;   s/aaaaaaaaaa/b/g
+     /bbbbbbbbbb/! bx;   s/bbbbbbbbbb/c/g
+     /cccccccccc/! bx;   s/cccccccccc/d/g
+     /dddddddddd/! bx;   s/dddddddddd/e/g
+     /eeeeeeeeee/! bx;   s/eeeeeeeeee/f/g
+     /ffffffffff/! bx;   s/ffffffffff/g/g
+     /gggggggggg/! bx;   s/gggggggggg/h/g
+     s/hhhhhhhhhh//g
+     :x
+     $! { h; b; }
+     :y
+     /a/! s/[b-h]*/&0/
+     s/aaaaaaaaa/9/
+     s/aaaaaaaa/8/
+     s/aaaaaaa/7/
+     s/aaaaaa/6/
+     s/aaaaa/5/
+     s/aaaa/4/
+     s/aaa/3/
+     s/aa/2/
+     s/a/1/
+     y/bcdefgh/abcdefg/
+     /[a-h]/ by
+     p
+
+
+File: sed.info,  Node: wc -l,  Next: head,  Prev: wc -w,  Up: Examples
+
+Counting Lines
+==============
+
+No strange things are done now, because `sed' gives us `wc -l'
+functionality for free!!! Look:
+
+     #!/usr/bin/sed -nf
+     $=
+
+
+File: sed.info,  Node: head,  Next: tail,  Prev: wc -l,  Up: Examples
+
+Printing the First Lines
+========================
+
+This script is probably the simplest useful `sed' script.  It displays
+the first 10 lines of input; the number of displayed lines is right
+before the `q' command.
+
+     #!/usr/bin/sed -f
+     10q
+
+
+File: sed.info,  Node: tail,  Next: uniq,  Prev: head,  Up: Examples
+
+Printing the Last Lines
+=======================
+
+Printing the last N lines rather than the first is more complex but
+indeed possible.  N is encoded in the second line, before the bang
+character.
+
+   This script is similar to the `tac' script in that it keeps the
+final output in the hold space and prints it at the end:
+
+     #!/usr/bin/sed -nf
+     
+     1! {; H; g; }
+     1,10 !s/[^\n]*\n//
+     $p
+     h
+
+   Mainly, the scripts keeps a window of 10 lines and slides it by
+adding a line and deleting the oldest (the substitution command on the
+second line works like a `D' command but does not restart the loop).
+
+   The "sliding window" technique is a very powerful way to write
+efficient and complex `sed' scripts, because commands like `P' would
+require a lot of work if implemented manually.
+
+   To introduce the technique, which is fully demonstrated in the rest
+of this chapter and is based on the `N', `P' and `D' commands, here is
+an implementation of `tail' using a simple "sliding window."
+
+   This looks complicated but in fact the working is the same as the
+last script: after we have kicked in the appropriate number of lines,
+however, we stop using the hold space to keep inter-line state, and
+instead use `N' and `D' to slide pattern space by one line:
+
+     #!/usr/bin/sed -f
+     
+     1h
+     2,10 {; H; g; }
+     $q
+     1,9d
+     N
+     D
+
+
+File: sed.info,  Node: uniq,  Next: uniq -d,  Prev: tail,  Up: Examples
+
+Make Duplicate Lines Unique
+===========================
+
+This is an example of the art of using the `N', `P' and `D' commands,
+probably the most difficult to master.
+
+     #!/usr/bin/sed -f
+     h
+     
+     :b
+     # On the last line, print and exit
+     $b
+     N
+     /^\(.*\)\n\1$/ {
+         # The two lines are identical.  Undo the effect of
+         # the n command.
+         g
+         bb
+     }
+     
+     # If the `N' command had added the last line, print and exit
+     $b
+     
+     # The lines are different; print the first and go
+     # back working on the second.
+     P
+     D
+
+   As you can see, we mantain a 2-line window using `P' and `D'.  This
+technique is often used in advanced `sed' scripts.
+
+
+File: sed.info,  Node: uniq -d,  Next: uniq -u,  Prev: uniq,  Up: Examples
+
+Print Duplicated Lines of Input
+===============================
+
+This script prints only duplicated lines, like `uniq -d'.
+
+     #!/usr/bin/sed -nf
+     
+     $b
+     N
+     /^\(.*\)\n\1$/ {
+         # Print the first of the duplicated lines
+         s/.*\n//
+         p
+     
+         # Loop until we get a different line
+         :b
+         $b
+         N
+         /^\(.*\)\n\1$/ {
+             s/.*\n//
+             bb
+         }
+     }
+     
+     # The last line cannot be followed by duplicates
+     $b
+     
+     # Found a different one.  Leave it alone in the pattern space
+     # and go back to the top, hunting its duplicates
+     D
+
+
+File: sed.info,  Node: uniq -u,  Next: cat -s,  Prev: uniq -d,  Up: Examples
+
+Remove All Duplicated Lines
+===========================
+
+This script prints only unique lines, like `uniq -u'.
+
+     #!/usr/bin/sed -f
+     
+     # Search for a duplicate line --- until that, print what you find.
+     $b
+     N
+     /^\(.*\)\n\1$/ ! {
+         P
+         D
+     }
+     
+     :c
+     # Got two equal lines in pattern space.  At the
+     # end of the file we simply exit
+     $d
+     
+     # Else, we keep reading lines with `N' until we
+     # find a different one
+     s/.*\n//
+     N
+     /^\(.*\)\n\1$/ {
+         bc
+     }
+     
+     # Remove the last instance of the duplicate line
+     # and go back to the top
+     D
+
+
+File: sed.info,  Node: cat -s,  Prev: uniq -u,  Up: Examples
+
+Squeezing Blank Lines
+=====================
+
+As a final example, here are three scripts, of increasing complexity
+and speed, that implement the same function as `cat -s', that is
+squeezing blank lines.
+
+   The first leaves a blank line at the beginning and end if there are
+some already.
+
+     #!/usr/bin/sed -f
+     
+     # on empty lines, join with next
+     # Note there is a star in the regexp
+     :x
+     /^\n*$/ {
+     N
+     bx
+     }
+     
+     # now, squeeze all '\n', this can be also done by:
+     # s/^\(\n\)*/\1/
+     s/\n*/\
+     /
+
+   This one is a bit more complex and removes all empty lines at the
+beginning.  It does leave a single blank line at end if one was there.
+
+     #!/usr/bin/sed -f
+     
+     # delete all leading empty lines
+     1,/^./{
+     /./!d
+     }
+     
+     # on an empty line we remove it and all the following
+     # empty lines, but one
+     :x
+     /./!{
+     N
+     s/^\n$//
+     tx
+     }
+
+   This removes leading and trailing blank lines.  It is also the
+fastest.  Note that loops are completely done with `n' and `b', without
+exploting the fact that `sed' cycles back to the top of the script
+automatically at the end of a line.
+
+     #!/usr/bin/sed -nf
+     
+     # delete all (leading) blanks
+     /./!d
+     
+     # get here: so there is a non empty
+     :x
+     # print it
+     p
+     # get next
+     n
+     # got chars? print it again, etc...
+     /./bx
+     
+     # no, don't have chars: got an empty line
+     :z
+     # get next, if last line we finish here so no trailing
+     # empty lines are written
+     n
+     # also empty? then ignore it, and get next... this will
+     # remove ALL empty lines
+     /./!bz
+     
+     # all empty lines were deleted/ignored, but we have a non empty.  As
+     # what we want to do is to squeeze, insert a blank line artificially
+     i\
+     
+     bx
+
+
+File: sed.info,  Node: Limitations,  Next: Other Resources,  Prev: Examples,  Up: Top
+
+`super-sed''s Limitations and Non-limitations
+*********************************************
+
+For those who want to write portable `sed' scripts, be aware that some
+implementations have been known to limit line lengths (for the pattern
+and hold spaces) to be no more than 4000 bytes.  The POSIX standard
+specifies that conforming `sed' implementations shall support at least
+8192 byte line lengths.  `super-sed' has no built-in limit on line
+length; as long as it can `malloc()' more (virtual) memory, you can
+feed or construct lines as long as you like.
+
+   However, recursion is used to handle subpatterns and indefinite
+repetition.  This means that the available stack space may limit the
+size of the buffer that can be processed by certain patterns.
+
+   There are some size limitations in the regular expression matcher
+but it is hoped that they will never in practice be relevant.  The
+maximum length of a compiled pattern is 65539 (sic) bytes.  All values
+in repeating quantifiers must be less than 65536.  The maximum nesting
+depth of all parenthesized subpatterns, including capturing and
+non-capturing subpatterns(1), assertions, and other types of
+subpattern, is 200.
+
+   Also, `super-sed' recognizes the POSIX syntax `[.CH.]' and `[=CH=]'
+where CH is a "collating element", but these are not supported, and an
+error is given if they are encountered.
+
+   Here are a few distinctions between the real Perl-style regular
+expressions and those that `-R' recognizes.
+
+  1. Lookahead assertions do not allow repeat quantifiers after them
+     Perl permits them, but they do not mean what you might think. For
+     example, `(?!a){3}' does not assert that the next three characters
+     are not `a'. It just asserts three times that the next character
+     is not `a' -- a waste of time and nothing else.
+
+  2. Capturing subpatterns that occur inside  negative  lookahead head
+     assertions  are  counted,  but  their  entries are counted as
+     empty in the second half of an `s' command.  Perl sets its
+     numerical variables from any such patterns that are matched before
+     the assertion fails to match something (thereby succeeding), but
+     only if the negative lookahead assertion contains just one branch.
+
+  3. The following Perl escape sequences are not supported: `\l', `\u',
+     `\L', `\U', `\E', `\Q'. In fact these are implemented by Perl's
+     general string-handling and are not part of its pattern matching
+     engine.
+
+  4. The Perl `\G' assertion is not supported as it is not relevant to
+     single pattern matches.
+
+  5. Fairly obviously, `super-sed' does not support the `(?{code})' and
+     `(?p{code})' constructions. However, there is some experimental
+     support for recursive patterns using the non-Perl item `(?R)'.
+
+  6. There are at the time of writing some oddities in Perl 5.005_02
+     concerned with the settings of captured strings when part of a
+     pattern is repeated. For example, matching `aba' against the
+     pattern `/^(a(b)?)+$/' sets `$2'(2) to the value `b', but matching
+     `aabbaa' against `/^(aa(bb)?)+$/' leaves `$2' unset.  However, if
+     the pattern is changed to `/^(aa(b(b))?)+$/' then `$2' (and `$3')
+     are set.  In Perl 5.004 `$2' is set in both cases, and that is also
+     true of `super-sed'.
+
+  7. Another as yet unresolved discrepancy is that in Perl 5.005_02 the
+     pattern `/^(a)?(?(1)a|b)+$/' matches the string `a', whereas in
+     `super-sed' it does not.  However, in both Perl and `super-sed'
+     `/^(a)?a/' matched against `a' leaves $1 unset.
+
+   ---------- Footnotes ----------
+
+   (1) The distinction is meaningful when referring to Perl-style
+regular expressions.
+
+   (2) `$2' would be `\2' in `super-sed'.
+
+
+File: sed.info,  Node: Other Resources,  Next: Reporting Bugs,  Prev: Limitations,  Up: Top
+
+Other Resources for Learning About `sed'
+****************************************
+
+In addition to several books that have been written about `sed' (either
+specifically or as chapters in books which discuss shell programming),
+one can find out more about `sed' (including suggestions of a few
+books) from the FAQ for the `sed-users' mailing list, available from
+any of:
+      `http://www.student.northpark.edu/pemente/sed/sedfaq.html'
+      `http://sed.sf.net/grabbag/tutorials/sedfaq.html'
+
+   Also of interest are
+`http://www.student.northpark.edu/pemente/sed/index.htm' and
+`http://sed.sf.net/grabbag', which include `sed' tutorials and other
+`sed'-related goodies.
+
+   The `sed-users' mailing list itself maintained by Sven Guckes.  To
+subscribe, visit `http://groups.yahoo.com' and search for the
+`sed-users' mailing list.
+
+
+File: sed.info,  Node: Reporting Bugs,  Next: Extended regexps,  Prev: Other Resources,  Up: Top
+
+Reporting Bugs
+**************
+
+Email bug reports to <bonzini@gnu.org>.  Be sure to include the word
+"sed" somewhere in the `Subject:' field.  Also, please include the
+output of `sed --version' in the body of your report if at all possible.
+
+   Please do not send a bug report like this:
+
+     while building frobme-1.3.4
+     $ configure
+     error--> sed: file sedscr line 1: Unknown option to 's'
+
+   If `super-sed' doesn't configure your favorite package, take a few
+extra minutes to identify the specific problem and make a stand-alone
+test case.  Unlike other programs such as C compilers, making such test
+cases for `sed' is quite simple.
+
+   A stand-alone test case includes all the data necessary to perform
+the test, and the specific invocation of `sed' that causes the problem.
+The smaller a stand-alone test case is, the better.  A test case should
+not involve something as far removed from `sed' as "try to configure
+frobme-1.3.4".  Yes, that is in principle enough information to look
+for the bug, but that is not a very practical prospect.
+
+   Here are a few commonly reported bugs that are not bugs.
+
+`N' command on the last line
+     Most versions of `sed' exit without printing anything when the `N'
+     command is issued on the last line of a file.  `super-sed' prints
+     pattern space before exiting unless of course the `-n' command
+     switch has been specified.  This choice is by design.
+
+     For example, the behavior of
+          sed N foo bar
+
+     would depend on whether foo has an even or an odd number of
+     lines(1).  Or, when writing a script to read the next few lines
+     following a pattern match, traditional implementations of `sed'
+     would force you to write something like
+          /foo/{ $!N; $!N; $!N; $!N; $!N; $!N; $!N; $!N; $!N }
+
+     instead of just
+          /foo/{ N;N;N;N;N;N;N;N;N; }
+
+     In any case, the simplest workaround is to use `$d;N' in scripts
+     that rely on the traditional behavior, or to set the
+     `POSIXLY_CORRECT' variable to a non-empty value.
+
+Regex syntax clashes (problems with backslashes)
+     `sed' uses the POSIX basic regular expression syntax.  According to
+     the standard, the meaning of some escape sequences is undefined in
+     this syntax;  notable in the case of `sed' are `\|', `\+', `\?',
+     `\`', `\'', `\<', `\>', `\b', `\B', `\w', and `\W'.
+
+     As in all GNU programs that use POSIX basic regular expressions,
+     `sed' interprets these escape sequences as special characters.
+     So, `x\+' matches one or more occurrences of `x'.  `abc\|def'
+     matches either `abc' or `def'.
+
+     This syntax may cause problems when running scripts written for
+     other `sed's.  Some `sed' programs have been written with the
+     assumption that `\|' and `\+' match the literal characters `|' and
+     `+'.  Such scripts must be modified by removing the spurious
+     backslashes if they are to be used with modern implementations of
+     `sed', like `super-sed' or GNU `sed'.
+
+     On the other hand, some scripts use s|abc\|def||g to remove
+     occurrences of _either_ `abc' or `def'.  While this worked until
+     `sed' 4.0.x, newer versions interpret this as removing the string
+     `abc|def'.  This is again undefined behavior according to POSIX,
+     and this interpretation is arguably more robust: older `sed's, for
+     example, required that the regex matcher parsed `\/' as `/' in the
+     common case of escaping a slash, which is again undefined
+     behavior; the new behavior avoids this, and this is good because
+     the regex matcher is only partially under our control.
+
+     In addition, this version of `sed' supports several escape
+     characters (some of which are multi-character) to insert
+     non-printable characters in scripts (`\a', `\c', `\d', `\o', `\r',
+     `\t', `\v', `\x').  These can cause similar problems with scripts
+     written for other `sed's.
+
+`-i' clobbers read-only files
+     In short, `sed -i' will let you delete the contents of a read-only
+     file, and in general the `-i' option (*note Invocation: Invoking
+     sed.) lets you clobber protected files.  This is not a bug, but
+     rather a consequence of how the Unix filesystem works.
+
+     The permissions on a file say what can happen to the data in that
+     file, while the permissions on a directory say what can happen to
+     the list of files in that directory.  `sed -i' will not ever open
+     for writing  a file that is already on disk.  Rather, it will work
+     on a temporary file that is finally renamed to the original name:
+     if you rename or delete files, you're actually modifying the
+     contents of the directory, so the operation depends on the
+     permissions of the directory, not of the file.  For this same
+     reason, `sed' does not let you use `-i' on a writeable file in a
+     read-only directory (but unbelievably nobody reports that as a
+     bug...).
+
+`0a' does not work (gives an error)
+     There is no line 0.  0 is a special address that is only used to
+     treat addresses like `0,/RE/' as active when the script starts: if
+     you write `1,/abc/d' and the first line includes the word `abc',
+     then that match would be ignored because address ranges must span
+     at least two lines (barring the end of the file); but what you
+     probably wanted is to delete every line up to the first one
+     including `abc', and this is obtained with `0,/abc/d'.
+
+
+   ---------- Footnotes ----------
+
+   (1) which is the actual "bug" that prompted the change in behavior
+
+
+File: sed.info,  Node: Extended regexps,  Next: Perl regexps,  Prev: Reporting Bugs,  Up: Top
+
+Extended regular expressions
+****************************
+
+The only difference between basic and extended regular expressions is in
+the behavior of a few characters: `?', `+', parentheses, and braces
+(`{}').  While basic regular expressions require these to be escaped if
+you want them to behave as special characters, when using extended
+regular expressions you must escape them if you want them _to match a
+literal character_.
+
+Examples:
+`abc?'
+     becomes `abc\?' when using extended regular expressions.  It
+     matches the literal string `abc?'.
+
+`c\+'
+     becomes `c+' when using extended regular expressions.  It matches
+     one or more `c's.
+
+`a\{3,\}'
+     becomes `a{3,}' when using extended regular expressions.  It
+     matches three or more `a's.
+
+`\(abc\)\{2,3\}'
+     becomes `(abc){2,3}' when using extended regular expressions.  It
+     matches either `abcabc' or `abcabcabc'.
+
+`\(abc*\)\1'
+     becomes `(abc*)\1' when using extended regular expressions.
+     Backreferences must still be escaped when using extended regular
+     expressions.
+
+
+File: sed.info,  Node: Perl regexps,  Next: Concept Index,  Prev: Extended regexps,  Up: Top
+
+Perl-style regular expressions
+******************************
+
+_This part is taken from the `pcre.txt' file distributed together with
+the free PCRE regular expression matcher; it was written by Philip
+Hazel._
+
+   Perl introduced several extensions to regular expressions, some of
+them incompatible with the syntax of regular expressions accepted by
+Emacs and other GNU tools (whose matcher was based on the Emacs
+matcher).  `super-sed' implements both kinds of extensions.
+
+* Menu:
+
+Other extensions can be roughly subdivided in two categories
+On one hand Perl introduces several more escaped sequences
+(that is, sequences introduced by a backslash).  On the other
+hand, it specifies that if a question mark follows an open
+parentheses it should give a special meaning to the parenthesized
+group.
+
+* Backslash::                       Introduces special sequences
+* Circumflex/dollar sign/period::   Behave specially with regard to new lines
+* Square brackets::                 Are a bit different in strange cases
+* Options setting::                 Toggle modifiers in the middle of a regexp
+* Non-capturing subpatterns::       Are not counted when backreferencing
+* Repetition::                      Allows for non-greedy matching
+* Backreferences::                  Allows for more than 10 back references
+* Assertions::                      Allows for complex look ahead matches
+* Non-backtracking subpatterns::    Often gives more performance
+* Conditional subpatterns::         Allows if/then/else branches
+* Recursive patterns::              For example to match parentheses
+* Comments::                        Because things can get complex...
+
+
+File: sed.info,  Node: Backslash,  Next: Circumflex/dollar sign/period,  Up: Perl regexps
+
+Backslash
+=========
+
+There are a few difference in the handling of backslashed sequences in
+Perl mode.
+
+   First of all, there are no `\o' and `\d' sequences.  ASCII values
+for characters can be specified in octal with a `\XXX' sequence, where
+XXX is a sequence of up to three octal digits.  If the first digit is a
+zero, the treatment of the sequence is straightforward; just note that
+if the character that follows the escaped digit is itself an octal
+digit, you have to supply three octal digits for XXX.  For example
+`\07' is a BEL character rather than a NUL and a literal `7' (this
+sequence is instead represented by `\0007').
+
+   The handling of a backslash followed by a digit other than 0 is
+complicated.  Outside a character class, `sed' reads it and any
+following digits as a decimal number. If the number is less than 10, or
+if there have been at least that many previous capturing left
+parentheses in the expression, the entire sequence is taken as a back
+reference. A description of how this works is given later, following
+the discussion of parenthesized subpatterns.
+
+   Inside a character class, or if the decimal number is greater than 9
+and there have not been that many capturing subpatterns, `sed' re-reads
+up to three octal digits following the backslash, and generates a
+single byte from the least significant 8 bits of the value. Any
+subsequent digits stand for themselves.  For example:
+
+          \040  is another way of writing a space
+          \40   is the same, provided there are fewer than 40
+                previous capturing subpatterns
+          \7    is always a back reference
+          \011  is always a tab
+          \11   might be a back reference, or another way of
+                writing a tab
+          \0113 is a tab followed by the character `3'
+          \113  is the character with octal code 113 (since there
+                can be no more than 99 back references)
+          \377  is a byte consisting entirely of 1 bits (ASCII 255)
+          \81   is either a back reference, or a binary zero
+                followed by the two characters `81'
+
+   Note that octal values of 100 or greater must not be introduced
+duced by a leading zero, because no more than three octal digits are
+ever read.
+
+   All the sequences that define a single byte value can be used both
+inside and outside character classes. In addition, inside a character
+class, the sequence `\b' is interpreted as the backspace character (hex
+08). Outside a character class it has a different meaning (see below).
+
+   In addition, there are four additional escapes specifying generic
+character classes (like `\w' and `\W' do):
+
+`\d'
+     Matches any decimal digit
+
+`\D'
+     Matches any character that is not a decimal digit
+
+   In Perl mode, these character type sequences can appear both inside
+and outside character classes. Instead, in POSIX mode these sequences
+(as well as `\w' and `\W') are treated as two literal characters (a
+backslash and a letter) inside square brackets.
+
+   Escaped sequences specifying assertions are also different in Perl
+mode.  An assertion specifies a condition that has to be met at a
+particular point in a match, without consuming any characters from the
+subject string. The use of subpatterns for more complicated assertions
+is described below.  The backslashed assertions are
+
+`\b'
+     Asserts that the point is at a word boundary.  A word boundary is
+     a position in the subject string where the current character and
+     the previous character do not both match `\w' or `\W' (i.e. one
+     matches `\w' and the other matches `\W'), or the start or end of
+     the string if the first or last character matches `\w',
+     respectively.
+
+`\B'
+     Asserts that the point is not at a word boundary.
+
+`\A'
+     Asserts the matcher is at the start of pattern space (independent
+     of multiline mode).
+
+`\Z'
+     Asserts the matcher is at the end of pattern space, or at a
+     newline before the end of pattern space (independent of multiline
+     mode)
+
+`\z'
+     Asserts the matcher is at the end of pattern space (independent of
+     multiline mode)
+
+   These assertions may not appear in character classes (but note that
+`\b' has a different meaning, namely the backspace character, inside a
+character class).  Note that Perl mode does not support directly
+assertions for the beginning and the end of word; the GNU extensions
+`\<' and `\>' achieve this purpose in POSIX mode instead.
+
+   The `\A', `\Z', and `\z' assertions differ from the traditional
+circumflex and dollar sign (described below) in that they only ever
+match at the very start and end of the subject string, whatever options
+are set; in particular `\A' and `\z' are the same as the GNU extensions
+`\`' and `\'' that are active in POSIX mode.
+
+
+File: sed.info,  Node: Circumflex/dollar sign/period,  Next: Square brackets,  Prev: Backslash,  Up: Perl regexps
+
+Circumflex, dollar sign, period
+===============================
+
+Outside a character class, in the default matching mode, the circumflex
+character is an assertion which is true only if the current matching
+point is at the start of the subject string.  Inside a character class,
+the circumflex has an entirely different meaning (see below).
+
+   The circumflex need not be the first character of the pattern if a
+number of alternatives are involved, but it should be the first thing
+in each alternative in which it appears if the pattern is ever to match
+that branch. If all possible alternatives, start with a circumflex,
+that is, if the pattern is constrained to match only at the start of
+the subject, it is said to be an "anchored" pattern. (There are also
+other constructs structs that can cause a pattern to be anchored.)
+
+   A dollar sign is an assertion which is true only if the current
+matching point is at the end of the subject string, or immediately
+before a newline character that is the last character in the string (by
+default).  A dollar sign need not be the last character of the pattern
+if a number of alternatives are involved, but it should be the last
+item in any branch in which it appears.  A dollar sign has no special
+meaning in a character class.
+
+   The meanings of the circumflex and dollar sign characters are
+changed if the `M' modifier option is used. When this is the case, they
+match immediately after and immediately before an internal `\n'
+character, respectively, in addition to matching at the start and end
+of the subject string.  For example, the pattern `/^abc$/' matches the
+subject string `def\nabc' in multiline mode, but not otherwise.
+Consequently, patterns that are anchored in single line mode because
+all branches start with `^' are not anchored in multiline mode.
+
+   Note that the sequences `\A', `\Z', and `\z' can be used to match
+the start and end of the subject in both modes, and if all branches of
+a pattern start with `\A' is it always anchored, whether the `M'
+modifier is set or not.
+
+   Outside a character class, a dot in the pattern matches any one
+character in the subject, including a non-printing character, but not
+(by default) newline.  If the `S' modifier is used, dots match newlines
+as well.  Actually, the handling of dot is entirely independent of the
+handling of circumflex and dollar sign, the only relationship being
+that they both involve newline characters. Dot has no special meaning
+in a character class.
+
+
+File: sed.info,  Node: Square brackets,  Next: Options setting,  Prev: Circumflex/dollar sign/period,  Up: Perl regexps
+
+Square brackets
+===============
+
+An opening square bracket introduces a character class, terminated by a
+closing square bracket.  A closing square bracket on its own is not
+special.  If a closing square bracket is required as a member of the
+class, it should be the first data character in the class (after an
+initial circumflex, if present) or escaped with a backslash.
+
+   A character class matches a single character in the subject; the
+character must be in the set of characters defined by the class, unless
+the first character in the class is a circumflex, in which case the
+subject character must not be in the set defined by the class. If a
+circumflex is actually required as a member of the class, ensure it is
+not the first character, or escape it with a backslash.
+
+   For example, the character class [aeiou] matches any lower case
+vowel, while [^aeiou] matches any character that is not a lower case
+vowel. Note that a circumflex is just a convenient venient notation for
+specifying the characters which are in the class by enumerating those
+that are not. It is not an assertion: it still consumes a character
+from the subject string, and fails if the current pointer is at the end
+of the string.
+
+   When caseless matching is set, any letters in a class represent both
+their upper case and lower case versions, so for example, a caseless
+`[aeiou]' matches uppercase and lowercase `A's, and a caseless
+`[^aeiou]' does not match `A', whereas a case-sensitive version would.
+
+   The newline character is never treated in any special way in
+character classes, whatever the setting of the `S' and `M' options
+(modifiers) is.  A class such as `[^a]' will always match a newline.
+
+   The minus (hyphen) character can be used to specify a range of
+characters in a character class.  For example, `[d-m]' matches any
+letter between d and m, inclusive.  If a minus character is required in
+a class, it must be escaped with a backslash or appear in a position
+where it cannot be interpreted as indicating a range, typically as the
+first or last character in the class.
+
+   It is not possible to have the literal character `]' as the end
+character of a range.  A pattern such as `[W-]46]' is interpreted as a
+class of two characters (`W' and `-') followed by a literal string
+`46]', so it would match `W46]' or `-46]'. However, if the `]' is
+escaped with a backslash it is interpreted as the end of range, so
+`[W-\]46]' is interpreted as a single class containing a range followed
+by two separate characters. The octal or hexadecimal representation of
+`]' can also be used to end a range.
+
+   Ranges operate in ASCII collating sequence. They can also be used
+for characters specified numerically, for example `[\000-\037]'. If a
+range that includes letters is used when caseless matching is set, it
+matches the letters in either case. For example, a caseless `[W-c]' is
+equivalent to `[][\^_`wxyzabc]', matched caselessly, and if character
+tables for the French locale are in use, `[\xc8-\xcb]' matches accented
+E characters in both cases.
+
+   Unlike in POSIX mode, the character types `\d', `\D', `\s', `\S',
+`\w', and `\W' may also appear in a character class, and add the
+characters that they match to the class. For example, `[\dABCDEF]'
+matches any hexadecimal digit.  A circumflex can conveniently be used
+with the upper case character types to specify a more restricted set of
+characters than the matching lower case type.  For example, the class
+`[^\W_]' matches any letter or digit, but not underscore.
+
+   All non-alphameric characters other than `\', `-', `^' (at the
+start) and the terminating `]' are non-special in character classes,
+but it does no harm if they are escaped.
+
+   Perl 5.6 supports the POSIX notation for character classes, which
+uses names enclosed by `[:' and `:]' within the enclosing square
+brackets, and `super-sed' supports this notation as well.  For example,
+
+          [01[:alpha:]%]
+
+matches `0', `1', any alphabetic character, or `%'.  The supported
+class names are
+
+`alnum'
+     Matches letters and digits
+
+`alpha'
+     Matches letters
+
+`ascii'
+     Matches character codes 0 - 127
+
+`cntrl'
+     Matches control characters
+
+`digit'
+     Matches decimal digits (same as \d)
+
+`graph'
+     Matches printing characters, excluding space
+
+`lower'
+     Matches lower case letters
+
+`print'
+     Matches printing characters, including space
+
+`punct'
+     Matches printing characters, excluding letters and digits
+
+`space'
+     Matches white space (same as \s)
+
+`upper'
+     Matches upper case letters
+
+`word'
+     Matches "word" characters (same as \w)
+
+`xdigit'
+     Matches hexadecimal digits
+
+   The names `ascii' and `word' are extensions valid only in Perl mode.
+Another Perl extension is negation, which is indicated by a circumflex
+character after the colon. For example,
+
+          [12[:^digit:]]
+
+matches `1', `2', or any non-digit.
+
+
+File: sed.info,  Node: Options setting,  Next: Non-capturing subpatterns,  Prev: Square brackets,  Up: Perl regexps
+
+Options setting
+===============
+
+The settings of the `I', `M', `S', `X' modifiers can be changed from
+within the pattern by a sequence of Perl option letters enclosed
+between `(?' and `)'. The option letters must be lowercase.
+
+   For example, `(?im)' sets caseless, multiline matching. It is also
+possible to unset these options by preceding the letter with a hyphen;
+you can also have combined settings and unsettings: `(?im-sx)' sets
+caseless and multiline matching, while unsets single line matching (for
+dots) and extended whitespace interpretation.  If a letter appears both
+before and after the hyphen, the option is unset.
+
+   The scope of these option changes depends on where in the pattern
+the setting occurs. For settings that are outside any subpattern
+(defined below), the effect is the same as if the options were set or
+unset at the start of matching. The following patterns all behave in
+exactly the same way:
+
+          (?i)abc
+          a(?i)bc
+          ab(?i)c
+          abc(?i)
+
+   which in turn is the same as specifying the pattern abc with the `I'
+modifier.  In other words, "top level" settings apply to the whole
+pattern (unless there are other changes inside subpatterns). If there
+is more than one setting of the same option at top level, the rightmost
+setting is used.
+
+   If an option change occurs inside a subpattern, the effect is
+different.  This is a change of behaviour in Perl 5.005.  An option
+change inside a subpattern affects only that part of the subpattern
+_that follows_ it, so
+
+          (a(?i)b)c
+
+matches abc and aBc and no other  strings  (assuming case-sensitive
+matching is used).  By this means, options can be made to have
+different settings in different parts of the pattern.  Any changes made
+in one alternative do carry on into subsequent branches within the same
+subpattern.  For example,
+
+          (a(?i)b|c)
+
+matches `ab', `aB', `c', and `C', even though when matching `C' the
+first branch is abandoned before the option setting.  This is because
+the effects of option settings happen at compile time. There would be
+some very weird behaviour otherwise.
+
+
+File: sed.info,  Node: Non-capturing subpatterns,  Next: Repetition,  Prev: Options setting,  Up: Perl regexps
+
+Non-capturing subpatterns
+=========================
+
+Marking part of a pattern as a subpattern does two things.  On one
+hand, it localizes a set of alternatives; on the other hand, it sets up
+the subpattern as a capturing subpattern (as defined above).  The
+subpattern can be backreferenced and referenced in the right side of
+`s' commands.
+
+   For example, if the string `the red king' is matched against the
+pattern
+
+          the ((red|white) (king|queen))
+
+the captured substrings are `red king', `red', and `king', and are
+numbered 1, 2, and 3.
+
+   The fact that plain parentheses fulfil two functions is not always
+helpful.  There are often times when a grouping subpattern is required
+without a capturing requirement.  If an opening parenthesis is followed
+by `?:', the subpattern does not do any capturing, and is not counted
+when computing the number of any subsequent capturing subpatterns. For
+example, if the string `the white queen' is matched against the pattern
+
+          the ((?:red|white) (king|queen))
+
+the captured substrings are `white queen' and `queen', and are numbered
+1 and 2. The maximum number of captured substrings is 99, while the
+maximum number of all subpatterns, both capturing and non-capturing, is
+200.
+
+   As a convenient shorthand, if any option settings are equired at the
+start of a non-capturing subpattern, the option letters may appear
+between the `?' and the `:'.  Thus the two patterns
+
+        (?i:saturday|sunday)
+        (?:(?i)saturday|sunday)
+
+match exactly the same set of strings.  Because alternative branches
+are tried from left to right, and options are not reset until the end
+of the subpattern is reached, an option setting in one branch does
+affect subsequent branches, so the above patterns match `SUNDAY' as
+well as `Saturday'.
+
+
+File: sed.info,  Node: Repetition,  Next: Backreferences,  Prev: Non-capturing subpatterns,  Up: Perl regexps
+
+Repetition
+==========
+
+Repetition is specified by quantifiers, which can follow any of the
+following items:
+
+   * a single character, possibly escaped
+
+   * the `.' special character
+
+   * a character class
+
+   * a back reference (see next section)
+
+   * a parenthesized subpattern (unless it is an assertion; *note
+     Assertions::)
+
+   The general repetition quantifier specifies a minimum and maximum
+number of permitted matches, by giving the two numbers in curly
+brackets (braces), separated by a comma.  The numbers must be less than
+65536, and the first must be less than or equal to the second. For
+example:
+
+          z{2,4}
+
+matches `zz', `zzz', or `zzzz'. A closing brace on its own is not a
+special character. If the second number is omitted, but the comma is
+present, there is no upper limit; if the second number and the comma
+are both omitted, the quantifier specifies an exact number of required
+matches. Thus
+
+          [aeiou]{3,}
+
+matches at least 3 successive vowels, but may match many more, while
+
+          \d{8}
+
+matches exactly 8 digits.  An opening curly bracket that appears in a
+position where a quantifier is not allowed, or one that does not match
+the syntax of a quantifier, is taken as a literal character. For
+example, {,6} is not a quantifier, but a literal string of four
+characters.(1)
+
+   The quantifier `{0}' is permitted, causing the expression to behave
+as if the previous item and the quantifier were not present.
+
+   For convenience (and historical compatibility) the three most common
+quantifiers have single-character abbreviations:
+
+`*'
+     is equivalent to {0,}
+
+`+'
+     is equivalent to {1,}
+
+`?'
+     is equivalent to {0,1}
+
+   It is possible to construct infinite loops by following a subpattern
+that can match no characters with a quantifier that has no upper limit,
+for example:
+
+          (a?)*
+
+   Earlier versions of Perl used to give an error at compile time for
+such patterns. However, because there are cases where this can be
+useful, such patterns are now accepted, but if any repetition of the
+subpattern does in fact match no characters, the loop is forcibly
+broken.
+
+   By default, the quantifiers are "greedy" like in POSIX mode, that
+is, they match as much as possible (up to the maximum number of
+permitted times), without causing the rest of the pattern to fail. The
+classic example of where this gives problems is in trying to match
+comments in C programs. These appear between the sequences `/*' and
+`*/' and within the sequence, individual `*' and `/' characters may
+appear. An attempt to match C comments by applying the pattern
+
+          /\*.*\*/
+
+to the string
+
+          /* first command */ not comment /* second comment */
+
+fails, because it matches the entire string owing to the greediness of
+the `.*' item.
+
+   However, if a quantifier is followed by a question mark, it ceases
+to be greedy, and instead matches the minimum number of times possible,
+so the pattern `/\*.*?\*/' does the right thing with the C comments.
+The meaning of the various quantifiers is not otherwise changed, just
+the preferred number of matches.  Do not confuse this use of question
+mark with its use as a quantifier in its own right.  Because it has two
+uses, it can sometimes appear doubled, as in
+
+          \d??\d
+
+   which matches one digit by preference, but can match two if that is
+the only way the rest of the pattern matches.
+
+   Note that greediness does not matter when specifying addresses, but
+can be nevertheless used to improve performance.
+
+   When a parenthesized subpattern is quantified with a minimum repeat
+count that is greater than 1 or with a limited maximum, more store is
+required for the compiled pattern, in proportion to the size of the
+minimum or maximum.
+
+   If a pattern starts with `.*' or `.{0,}' and the `S' modifier is
+used, the pattern is implicitly anchored, because whatever follows will
+be tried against every character position in the subject string, so
+there is no point in retrying the overall match at any position after
+the first.  PCRE treats such a pattern as though it were preceded by \A.
+
+   When a capturing subpattern is repeated, the value captured is the
+substring that matched the final iteration. For example, after
+
+          (tweedle[dume]{3}\s*)+
+
+has matched `tweedledum tweedledee' the value of the captured substring
+is `tweedledee'.  However, if there are nested capturing subpatterns,
+the corresponding captured values may have been set in previous
+iterations. For example, after
+
+          /(a|(b))+/
+
+   matches `aba', the value of the second captured substring is `b'.
+
+   ---------- Footnotes ----------
+
+   (1) It raises an error if `-R' is not used.
+
+
+File: sed.info,  Node: Backreferences,  Next: Assertions,  Prev: Repetition,  Up: Perl regexps
+
+Backreferences
+==============
+
+Outside a character class, a backslash followed by a digit greater than
+0 (and possibly further digits) is a back reference to a capturing
+subpattern earlier (i.e.  to its left) in the pattern, provided there
+have been that many previous capturing left parentheses.
+
+   However, if the decimal number following the backslash is less than
+10, it is always taken as a back reference, and causes an error only if
+there are not that many capturing left parentheses in the entire
+pattern. In other words, the parentheses that are referenced need not
+be to the left of the reference for numbers less than 10. *Note
+Backslash:: for further details of the handling of digits following a
+backslash.
+
+   A back reference matches whatever actually matched the capturing
+subpattern in the current subject string, rather than anything matching
+the subpattern itself. So the pattern
+
+          (sens|respons)e and \1ibility
+
+matches `sense and sensibility' and `response and responsibility', but
+not `sense and responsibility'. If caseful matching is in force at the
+time of the back reference, the case of letters is relevant. For
+example,
+
+          ((?i)blah)\s+\1
+
+matches `blah blah' and `Blah Blah', but not `BLAH blah', even though
+the original capturing subpattern is matched caselessly.
+
+   There may be more than one back reference to the same subpattern.
+Also, if a subpattern has not actually been used in a particular match,
+any back references to it always fail. For example, the pattern
+
+          (a|(bc))\2
+
+always fails if it starts to match `a' rather than `bc'.  Because there
+may be up to 99 back references, all digits following the backslash are
+taken as part of a potential back reference number; this is different
+from what happens in POSIX mode. If the pattern continues with a digit
+character, some delimiter must be used to terminate the back reference.
+If the `X' modifier option is set, this can be whitespace.  Otherwise
+an empty comment can be used, or the following character can be
+expressed in hexadecimal or octal.
+
+   A back reference that occurs inside the parentheses to which it
+refers fails when the subpattern is first used, so, for example,
+`(a\1)' never matches.  However, such references can be useful inside
+repeated subpatterns. For example, the pattern
+
+          (a|b\1)+
+
+matches any number of `a's and also `aba', `ababbaa', etc. At each
+iteration of the subpattern, the back reference matches the character
+string corresponding to the previous iteration.  In order for this to
+work, the pattern must be such that the first iteration does not need
+to match the back reference.  This can be done using alternation, as in
+the example above, or by a quantifier with a minimum of zero.
+
+
+File: sed.info,  Node: Assertions,  Next: Non-backtracking subpatterns,  Prev: Backreferences,  Up: Perl regexps
+
+Assertions
+==========
+
+An assertion is a test on the characters following or preceding the
+current matching point that does not actually consume any characters.
+The simple assertions coded as `\b', `\B', `\A', `\Z', `\z', `^' and `$'
+are described above. More complicated assertions are coded as
+subpatterns.  There are two kinds: those that look ahead of the current
+position in the subject string, and those that look behind it.
+
+   An assertion subpattern is matched in the normal way, except that it
+does not cause the current matching position to be changed. Lookahead
+assertions start with `(?=' for positive assertions and `(?!' for
+negative assertions. For example,
+
+          \w+(?=;)
+
+matches a word followed by a semicolon, but does not include the
+semicolon in the match, and
+
+          foo(?!bar)
+
+matches any occurrence of `foo' that is not followed by `bar'.
+
+   Note that the apparently similar pattern
+
+          (?!foo)bar
+
+finds any occurrence of `bar' even if it is preceded by `foo', because
+the assertion `(?!foo)' is always true when the next three characters
+are `bar'. A lookbehind assertion is needed to achieve this effect.
+Lookbehind assertions start with `(?<=' for positive assertions and
+`(?<!' for negative assertions. So,
+
+          (?<!foo)bar
+
+   achieves the required effect of finding an occurrence of `bar' that
+is not preceded by `foo'. The contents of a lookbehind assertion are
+restricted such that all the strings it matches must have a fixed
+length.  However, if there are several alternatives, they do not all
+have to have the same fixed length.  This is an extension compared with
+Perl 5.005, which requires all branches to match the same length of
+string. Thus
+
+          (?<=dogs|cats|)
+
+is permitted, but the apparently equivalent regular expression
+
+          (?<!dogs?|cats?)
+
+causes an error at compile time. Branches that match different length
+strings are permitted only at the top level of a lookbehind assertion:
+an assertion such as
+
+          (?<=ab(c|de))
+
+is not permitted, because its single top-level branch can match two
+different lengths, but it is acceptable if rewritten to use two
+top-level branches:
+
+          (?<=abc|abde)
+
+   All this is required because lookbehind assertions simply move the
+current position back by the alternative's fixed width and then try to
+match.  If there are insufficient characters before the current
+position, the match is deemed to fail.  Lookbehinds, in conjunction with
+non-backtracking subpatterns can be particularly useful for matching at
+the ends of strings; an example is given at the end of the section on
+non-backtracking subpatterns.
+
+   Several assertions (of any sort) may occur in succession.  For
+example,
+
+          (?<=\d{3})(?<!999)foo
+
+matches `foo' preceded by three digits that are not `999'.  Notice that
+each of the assertions is applied independently at the same point in
+the subject string. First there is a check that the previous three
+characters are all digits, and then there is a check that the same
+three characters are not `999'.  This pattern does not match `foo'
+preceded by six characters, the first of which are digits and the last
+three of which are not `999'.  For example, it doesn't match
+`123abcfoo'. A pattern to do that is
+
+          (?<=\d{3}...)(?<!999)foo
+
+This time the first assertion looks at the preceding six characters,
+checking that the first three are digits, and then the second assertion
+checks that the preceding three characters are not `999'.  Actually,
+assertions can be nested in any combination, so one can write this as
+
+          (?<=\d{3}(?!999)...)foo
+
+   or
+
+          (?<=\d{3}...(?<!999))foo
+
+both of which might be considered more readable.
+
+   Assertion subpatterns are not capturing subpatterns, and may not be
+repeated, because it makes no sense to assert the same thing several
+times. If any kind of assertion contains capturing subpatterns within
+it, these are counted for the purposes of numbering the capturing
+subpatterns in the whole pattern.  However, substring capturing is
+carried out only for positive assertions, because it does not make
+sense for negative assertions.
+
+   Assertions count towards the maximum of 200 parenthesized
+subpatterns.
+
+
+File: sed.info,  Node: Non-backtracking subpatterns,  Next: Conditional subpatterns,  Prev: Assertions,  Up: Perl regexps
+
+Non-backtracking subpatterns
+============================
+
+With both maximizing and minimizing repetition, failure of what follows
+normally causes the repeated item to be evaluated again to see if a
+different number of repeats allows the rest of the pattern to match.
+Sometimes it is useful to prevent this, either to change the nature of
+the match, or to cause it fail earlier than it otherwise might, when the
+author of the pattern knows there is no point in carrying on.
+
+   Consider, for example, the pattern `\d+foo' when applied to the
+subject line
+
+          123456bar
+
+   After matching all 6 digits and then failing to match `foo', the
+normal action of the matcher is to try again with only 5 digits
+matching the `\d+' item, and then with 4, and so on, before ultimately
+failing. Non-backtracking subpatterns provide the means for specifying
+that once a portion of the pattern has matched, it is not to be
+re-evaluated in this way, so the matcher would give up immediately on
+failing to match `foo' the first time.  The notation is another kind of
+special parenthesis, starting with `(?>' as in this example:
+
+          (?>\d+)bar
+
+   This kind of parenthesis "locks up" the part of the pattern it
+contains once it has matched, and a failure further into the pattern is
+prevented from backtracking into it.  Backtracking past it to previous
+items, however, works as normal.
+
+   Non-backtracking subpatterns are not capturing subpatterns.  Simple
+cases such as the above example can be thought of as a maximizing
+repeat that must swallow everything it can.  So, while both `\d+' and
+`\d+?' are prepared to adjust the number of digits they match in order
+to make the rest of the pattern match, `(?>\d+)' can only match an
+entire sequence of digits.
+
+   This construction can of course contain arbitrarily complicated
+subpatterns, and it can be nested.
+
+   Non-backtracking subpatterns can be used in conjunction with
+look-behind assertions to specify efficient matching at the end of the
+subject string. Consider a simple pattern such as
+
+          abcd$
+
+when applied to a long string which does not match.  Because matching
+proceeds from left to right, `sed' will look for each `a' in the
+subject and then see if what follows matches the rest of the pattern.
+If the pattern is specified as
+
+          ^.*abcd$
+
+the initial `.*' matches the entire string at first, but when this
+fails (because there is no following `a'), it backtracks to match all
+but the last character, then all but the last two characters, and so
+on. Once again the search for `a' covers the entire string, from right
+to left, so we are no better off. However, if the pattern is written as
+
+          ^(?>.*)(?<=abcd)
+
+   there can be no backtracking for the .* item; it can match only the
+entire string. The subsequent lookbehind assertion does a single test
+on the last four characters. If it fails, the match fails immediately.
+For long strings, this approach makes a significant difference to the
+processing time.
+
+   When a pattern contains an unlimited repeat inside a subpattern that
+can itself be repeated an unlimited number of times, the use of a
+once-only subpattern is the only way to avoid some failing matches
+taking a very long time indeed.(1)
+
+   The pattern
+
+          (\D+|<\d+>)*[!?]
+
+   ([^0-9<]+<(\d+>)?)*[!?]
+
+matches an unlimited number of substrings that either consist of
+non-digits, or digits enclosed in angular brackets, followed by an
+exclamation or question mark. When it matches, it runs quickly.
+However, if it is applied to
+
+          aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+
+it takes a long time before reporting failure.  This is because the
+string can be divided between the two repeats in a large number of
+ways, and all have to be tried.(2)
+
+   If the pattern is changed to
+
+          ((?>\D+)|<\d+>)*[!?]
+
+   sequences of non-digits cannot be broken, and failure happens
+quickly.
+
+   ---------- Footnotes ----------
+
+   (1) Actually, the matcher embedded in `super-sed'     tries to do
+something for this in the simplest cases,     like `([^b]*b)*'.  These
+cases are actually quite     common: they happen for example in a
+regular expression     like `\/\*([^*]*\*)*\/' which matches C comments.
+
+   (2) The example used `[!?]' rather than a single character at the
+end, because both `super-sed' and Perl have an optimization that allows
+for fast failure when a single character is used. They remember the
+last single character that is required for a match, and fail early if
+it is not present in the string.
+
+
+File: sed.info,  Node: Conditional subpatterns,  Next: Recursive patterns,  Prev: Non-backtracking subpatterns,  Up: Perl regexps
+
+Conditional subpatterns
+=======================
+
+It is possible to cause the matching process to obey a subpattern
+conditionally or to choose between two alternative subpatterns,
+depending on the result of an assertion, or whether a previous
+capturing subpattern matched or not. The two possible forms of
+conditional subpattern are
+
+          (?(CONDITION)YES-PATTERN)
+          (?(CONDITION)YES-PATTERN|NO-PATTERN)
+
+   If the condition is satisfied, the yes-pattern is used; otherwise
+the no-pattern (if present) is used. If there are more than two
+alternatives in the subpattern, a compile-time error occurs.
+
+   There are two kinds of condition. If the text between the
+parentheses consists of a sequence of digits, the condition is
+satisfied if the capturing subpattern of that number has previously
+matched.  The number must be greater than zero.  Consider the following
+pattern, which contains non-significant white space to make it more
+readable (assume the `X' modifier) and to divide it into three parts
+for ease of discussion:
+
+          ( \( )?   [^()]+   (?(1) \) )
+
+   The first part matches an optional opening parenthesis, and if that
+character is present, sets it as the first captured substring. The
+second part matches one or more characters that are not parentheses.
+The third part is a conditional subpattern that tests whether the first
+set of parentheses matched or not.  If they did, that is, if subject
+started with an opening parenthesis, the condition is true, and so the
+yes-pattern is executed and a closing parenthesis is required.
+Otherwise, since no-pattern is not present, the subpattern matches
+nothing.  In other words, this pattern matches a sequence of
+non-parentheses, optionally enclosed in parentheses.
+
+   If the condition is not a sequence of digits, it must be an
+assertion.  This may be a positive or negative lookahead or lookbehind
+assertion. Consider this pattern, again containing non-significant
+white space, and with the two alternatives on the second line:
+
+          (?(?=...[a-z])
+             \d\d-[a-z]{3}-\d\d |
+             \d\d-\d\d-\d\d )
+
+   The condition is a positive lookahead assertion that matches a
+letter that is three characters away from the current point.  If a
+letter is found, the subject is matched against the first alternative
+`DD-AAA-DD' (where AAA are letters and DD are digits); otherwise it is
+matched against the second alternative, `DD-DD-DD'.
+
+
+File: sed.info,  Node: Recursive patterns,  Next: Comments,  Prev: Conditional subpatterns,  Up: Perl regexps
+
+Recursive patterns
+==================
+
+Consider the problem of matching a string in parentheses, allowing for
+unlimited nested parentheses. Without the use of recursion, the best
+that can be done is to use a pattern that matches up to some fixed
+depth of nesting. It is not possible to handle an arbitrary nesting
+depth. Perl 5.6 has provided an experimental facility that allows
+regular expressions to recurse (amongst other things). It does this by
+interpolating Perl code in the expression at run time, and the code can
+refer to the expression itself. A Perl pattern tern to solve the
+parentheses problem can be created like this:
+
+          $re = qr{\( (?: (?>[^()]+) | (?p{$re}) )* \)}x;
+
+   The `(?p{...})' item interpolates Perl code at run time, and in this
+case refers recursively to the pattern in which it appears. Obviously,
+`sed' cannot support the interpolation of Perl code.  Instead, the
+special item `(?R)' is provided for the specific case of recursion.
+This pattern solves the parentheses problem (assume the `X' modifier
+option is used so that white space is ignored):
+
+          \( ( (?>[^()]+) | (?R) )* \)
+
+   First it matches an opening parenthesis. Then it matches any number
+of substrings which can either be a sequence of non-parentheses, or a
+recursive match of the pattern itself (i.e. a correctly parenthesized
+substring). Finally there is a closing parenthesis.
+
+   This particular example pattern contains nested unlimited repeats,
+and so the use of a non-backtracking subpattern for matching strings of
+non-parentheses is important when applying the pattern to strings that
+do not match. For example, when it is applied to
+
+          (aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa()
+
+   it yields a "no match" response quickly. However, if a standard
+backtracking subpattern is not used, the match runs for a very long
+time indeed because there are so many different ways the `+' and `*'
+repeats can carve up the subject, and all have to be tested before
+failure can be reported.
+
+   The values set for any capturing subpatterns are those from the
+outermost level of the recursion at which the subpattern value is set.
+If the pattern above is matched against
+
+          (ab(cd)ef)
+
+the value for the capturing parentheses is `ef', which is the last
+value taken on at the top level.
+
+
+File: sed.info,  Node: Comments,  Prev: Recursive patterns,  Up: Perl regexps
+
+Comments
+========
+
+The sequence (?# marks the start of a comment which continues ues up to
+the next closing parenthesis. Nested parentheses are not permitted. The
+characters that make up a comment play no part in the pattern matching
+at all.
+
+   If the `X' modifier option is used, an unescaped `#' character
+outside a character class introduces a comment that continues up to the
+next newline character in the pattern.
+
+
+File: sed.info,  Node: Concept Index,  Next: Command and Option Index,  Prev: Perl regexps,  Up: Top
+
+Concept Index
+*************
+
+This is a general index of all issues discussed in this manual, with the
+exception of the `sed' commands and command-line options.
+
+* Menu:
+
+* Additional reading about sed:          Other Resources.
+* ADDR1,+N:                              Addresses.
+* ADDR1,~N:                              Addresses.
+* Address, as a regular expression:      Addresses.
+* Address, last line:                    Addresses.
+* Address, numeric:                      Addresses.
+* Addresses, in sed scripts:             Addresses.
+* Append hold space to pattern space:    Other Commands.
+* Append next input line to pattern space: Other Commands.
+* Append pattern space to hold space:    Other Commands.
+* Appending text after a line:           Other Commands.
+* Backreferences, in regular expressions: The "s" Command.
+* Branch to a label, if s/// failed:     Extended Commands.
+* Branch to a label, if s/// succeeded:  Programming Commands.
+* Branch to a label, unconditionally:    Programming Commands.
+* Buffer spaces, pattern and hold:       Execution Cycle.
+* Bugs, reporting:                       Reporting Bugs.
+* Case-insensitive matching:             The "s" Command.
+* Caveat -- #n on first line:            Common Commands.
+* Command groups:                        Common Commands.
+* Comments, in scripts:                  Common Commands.
+* Conditional branch <1>:                Extended Commands.
+* Conditional branch:                    Programming Commands.
+* Copy hold space into pattern space:    Other Commands.
+* Copy pattern space into hold space:    Other Commands.
+* Delete first line from pattern space:  Other Commands.
+* Disabling autoprint, from command line: Invoking sed.
+* empty regular expression:              Addresses.
+* Evaluate Bourne-shell commands:        Extended Commands.
+* Evaluate Bourne-shell commands, after substitution: The "s" Command.
+* Exchange hold space with pattern space: Other Commands.
+* Excluding lines:                       Addresses.
+* Extended regular expressions, choosing: Invoking sed.
+* Extended regular expressions, syntax:  Extended regexps.
+* Files to be processed as input:        Invoking sed.
+* Flow of control in scripts:            Programming Commands.
+* Global substitution:                   The "s" Command.
+* GNU extensions, 0 address:             Addresses.
+* GNU extensions, 0,ADDR2 addressing:    Addresses.
+* GNU extensions, ADDR1,+N addressing:   Addresses.
+* GNU extensions, ADDR1,~N addressing:   Addresses.
+* GNU extensions, extended regular expressions: Invoking sed.
+* GNU extensions, g and NUMBER modifier interaction in s command: The "s" Command.
+* GNU extensions, I modifier <1>:        Addresses.
+* GNU extensions, I modifier:            The "s" Command.
+* GNU extensions, N~M addresses:         Addresses.
+* GNU extensions, special escapes <1>:   Escapes.
+* GNU extensions, special escapes:       Reporting Bugs.
+* GNU extensions, special two-address forms: Addresses.
+* GNU extensions, to basic regular expressions <1>: Regular Expressions.
+* GNU extensions, to basic regular expressions <2>: Reporting Bugs.
+* GNU extensions, to basic regular expressions: Regular Expressions.
+* GNU extensions, unlimited line length: Limitations.
+* Goto, in scripts:                      Programming Commands.
+* Greedy regular expression matching <1>: Repetition.
+* Greedy regular expression matching:    Regular Expressions.
+* Grouping commands:                     Common Commands.
+* Hold space, appending from pattern space: Other Commands.
+* Hold space, appending to pattern space: Other Commands.
+* Hold space, copy into pattern space:   Other Commands.
+* Hold space, copying pattern space into: Other Commands.
+* Hold space, definition:                Execution Cycle.
+* Hold space, exchange with pattern space: Other Commands.
+* In-place editing:                      Reporting Bugs.
+* In-place editing, activating:          Invoking sed.
+* In-place editing, Perl-style backup file names: Invoking sed.
+* Inserting text before a line:          Other Commands.
+* Labels, in scripts:                    Programming Commands.
+* Last line, selecting:                  Addresses.
+* Line length, setting <1>:              Other Commands.
+* Line length, setting:                  Invoking sed.
+* Line number, printing:                 Other Commands.
+* Line selection:                        Addresses.
+* Line, selecting by number:             Addresses.
+* Line, selecting by regular expression match: Addresses.
+* Line, selecting last:                  Addresses.
+* List pattern space:                    Other Commands.
+* Mixing g and NUMBER modifiers in the s command: The "s" Command.
+* Next input line, append to pattern space: Other Commands.
+* Next input line, replace pattern space with: Common Commands.
+* Non-bugs, in-place editing:            Reporting Bugs.
+* Non-bugs, N command on the last line:  Reporting Bugs.
+* Non-bugs, regex syntax clashes:        Reporting Bugs.
+* Parenthesized substrings:              The "s" Command.
+* Pattern space, definition:             Execution Cycle.
+* Perl-style regular expressions, asserting subpatterns: Assertions.
+* Perl-style regular expressions, assertions <1>: Assertions.
+* Perl-style regular expressions, assertions: Backslash.
+* Perl-style regular expressions, backreferences <1>: Backreferences.
+* Perl-style regular expressions, backreferences: Backslash.
+* Perl-style regular expressions, case-insensitive <1>: Square brackets.
+* Perl-style regular expressions, case-insensitive <2>: Options setting.
+* Perl-style regular expressions, case-insensitive <3>: Addresses.
+* Perl-style regular expressions, case-insensitive: The "s" Command.
+* Perl-style regular expressions, character classes <1>: Square brackets.
+* Perl-style regular expressions, character classes: Backslash.
+* Perl-style regular expressions, choosing: Invoking sed.
+* Perl-style regular expressions, comments: Comments.
+* Perl-style regular expressions, conditional subpatterns: Conditional subpatterns.
+* Perl-style regular expressions, escaped sequences: Backslash.
+* Perl-style regular expressions, extended <1>: Comments.
+* Perl-style regular expressions, extended <2>: Options setting.
+* Perl-style regular expressions, extended <3>: The "s" Command.
+* Perl-style regular expressions, extended: Addresses.
+* Perl-style regular expressions, lookahead subpatterns <1>: Conditional subpatterns.
+* Perl-style regular expressions, lookahead subpatterns: Assertions.
+* Perl-style regular expressions, lookbehind subpatterns <1>: Assertions.
+* Perl-style regular expressions, lookbehind subpatterns: Non-backtracking subpatterns.
+* Perl-style regular expressions, multiline <1>: Options setting.
+* Perl-style regular expressions, multiline <2>: Circumflex/dollar sign/period.
+* Perl-style regular expressions, multiline <3>: Square brackets.
+* Perl-style regular expressions, multiline <4>: Addresses.
+* Perl-style regular expressions, multiline: The "s" Command.
+* Perl-style regular expressions, newlines: Circumflex/dollar sign/period.
+* Perl-style regular expressions, non-backtracking subpatterns: Non-backtracking subpatterns.
+* Perl-style regular expressions, non-capturing subpatterns: Non-capturing subpatterns.
+* Perl-style regular expressions, recursion: Recursive patterns.
+* Perl-style regular expressions, recursive patterns: Recursive patterns.
+* Perl-style regular expressions, repetitions: Repetition.
+* Perl-style regular expressions, single line <1>: The "s" Command.
+* Perl-style regular expressions, single line <2>: Repetition.
+* Perl-style regular expressions, single line <3>: Options setting.
+* Perl-style regular expressions, single line <4>: Square brackets.
+* Perl-style regular expressions, single line <5>: Circumflex/dollar sign/period.
+* Perl-style regular expressions, single line: Addresses.
+* Perl-style regular expressions, stingy repetitions: Repetition.
+* Perl-style regular expressions, syntax: Perl regexps.
+* Perl-style regular expressions, toggling options: Options setting.
+* Portability, comments:                 Common Commands.
+* Portability, line length limitations:  Limitations.
+* Portability, N command on the last line: Reporting Bugs.
+* POSIXLY_CORRECT behavior, bracket expressions: Regular Expressions.
+* POSIXLY_CORRECT behavior, enabling:    Invoking sed.
+* POSIXLY_CORRECT behavior, escapes:     Escapes.
+* POSIXLY_CORRECT behavior, N command:   Reporting Bugs.
+* Print first line from pattern space:   Other Commands.
+* Printing line number:                  Other Commands.
+* Printing text unambiguously:           Other Commands.
+* Quitting <1>:                          Extended Commands.
+* Quitting:                              Common Commands.
+* Range of lines:                        Addresses.
+* Range with start address of zero:      Addresses.
+* Read next input line:                  Common Commands.
+* Read text from a file <1>:             Extended Commands.
+* Read text from a file:                 Other Commands.
+* Reformat pattern space:                Extended Commands.
+* Reformatting paragraphs:               Extended Commands.
+* Replace hold space with copy of pattern space: Other Commands.
+* Replace pattern space with copy of hold space: Other Commands.
+* Replacing all text matching regexp in a line: The "s" Command.
+* Replacing only Nth match of regexp in a line: The "s" Command.
+* Replacing selected lines with other text: Other Commands.
+* Requiring super-sed:                   Extended Commands.
+* Script structure:                      sed Programs.
+* Script, from a file:                   Invoking sed.
+* Script, from command line:             Invoking sed.
+* sed program structure:                 sed Programs.
+* Selecting lines to process:            Addresses.
+* Selecting non-matching lines:          Addresses.
+* Several lines, selecting:              Addresses.
+* Slash character, in regular expressions: Addresses.
+* Spaces, pattern and hold:              Execution Cycle.
+* Special addressing forms:              Addresses.
+* ssed extensions, /dev/stderr file <1>: Other Commands.
+* ssed extensions, /dev/stderr file:     The "s" Command.
+* ssed extensions, /dev/stdin file <1>:  Other Commands.
+* ssed extensions, /dev/stdin file:      Extended Commands.
+* ssed extensions, /dev/stdout file <1>: Invoking sed.
+* ssed extensions, /dev/stdout file <2>: Other Commands.
+* ssed extensions, /dev/stdout file:     The "s" Command.
+* ssed extensions, branch if s/// failed: Extended Commands.
+* ssed extensions, case modifiers in s commands: The "s" Command.
+* ssed extensions, checking for their presence: Extended Commands.
+* ssed extensions, disabling:            Invoking sed.
+* ssed extensions, evaluating Bourne-shell commands <1>: The "s" Command.
+* ssed extensions, evaluating Bourne-shell commands: Extended Commands.
+* ssed extensions, in-place editing <1>: Reporting Bugs.
+* ssed extensions, in-place editing:     Invoking sed.
+* ssed extensions, L command:            Extended Commands.
+* ssed extensions, M modifier <1>:       Addresses.
+* ssed extensions, M modifier:           The "s" Command.
+* ssed extensions, modifiers and the empty regular expression: Addresses.
+* ssed extensions, Perl-style regular expressions: Invoking sed.
+* ssed extensions, quitting silently:    Extended Commands.
+* ssed extensions, R command:            Extended Commands.
+* ssed extensions, reading a file a line at a time: Extended Commands.
+* ssed extensions, reformatting paragraphs: Extended Commands.
+* ssed extensions, returning an exit code <1>: Extended Commands.
+* ssed extensions, returning an exit code: Common Commands.
+* ssed extensions, S modifier <1>:       The "s" Command.
+* ssed extensions, S modifier:           Addresses.
+* ssed extensions, setting line length:  Other Commands.
+* ssed extensions, subprocesses <1>:     Extended Commands.
+* ssed extensions, subprocesses:         The "s" Command.
+* ssed extensions, two addresses supported by most commands: Other Commands.
+* ssed extensions, writing first line to a file: Extended Commands.
+* ssed extensions, X modifier <1>:       The "s" Command.
+* ssed extensions, X modifier:           Addresses.
+* Standard input, processing as input:   Invoking sed.
+* Stream editor:                         Introduction.
+* Subprocesses <1>:                      Extended Commands.
+* Subprocesses:                          The "s" Command.
+* Substitution of text, options:         The "s" Command.
+* Text, appending:                       Other Commands.
+* Text, deleting:                        Common Commands.
+* Text, insertion:                       Other Commands.
+* Text, printing:                        Common Commands.
+* Text, printing after substitution:     The "s" Command.
+* Text, writing to a file after substitution: The "s" Command.
+* Transliteration:                       Other Commands.
+* Unbuffered I/O, choosing:              Invoking sed.
+* Usage summary, printing:               Invoking sed.
+* Version, printing:                     Invoking sed.
+* Working on separate files:             Invoking sed.
+* Write first line to a file:            Extended Commands.
+* Write to a file:                       Other Commands.
+* Zero, as range start address:          Addresses.
+
+
+File: sed.info,  Node: Command and Option Index,  Prev: Concept Index,  Up: Top
+
+Command and Option Index
+************************
+
+This is an alphabetical list of all `sed' commands and command-line
+options.
+
+* Menu:
+
+* # (comments):                          Common Commands.
+* --expression:                          Invoking sed.
+* --file:                                Invoking sed.
+* --help:                                Invoking sed.
+* --in-place:                            Invoking sed.
+* --line-length:                         Invoking sed.
+* --quiet:                               Invoking sed.
+* --regexp-extended:                     Invoking sed.
+* --regexp-perl:                         Invoking sed.
+* --silent:                              Invoking sed.
+* --unbuffered:                          Invoking sed.
+* --version:                             Invoking sed.
+* -e:                                    Invoking sed.
+* -f:                                    Invoking sed.
+* -i:                                    Invoking sed.
+* -l:                                    Invoking sed.
+* -n:                                    Invoking sed.
+* -n, forcing from within a script:      Common Commands.
+* -R:                                    Invoking sed.
+* -r:                                    Invoking sed.
+* -u:                                    Invoking sed.
+* : (label) command:                     Programming Commands.
+* = (print line number) command:         Other Commands.
+* a (append text lines) command:         Other Commands.
+* b (branch) command:                    Programming Commands.
+* c (change to text lines) command:      Other Commands.
+* D (delete first line) command:         Other Commands.
+* d (delete) command:                    Common Commands.
+* e (evaluate) command:                  Extended Commands.
+* G (appending Get) command:             Other Commands.
+* g (get) command:                       Other Commands.
+* H (append Hold) command:               Other Commands.
+* h (hold) command:                      Other Commands.
+* i (insert text lines) command:         Other Commands.
+* L (fLow paragraphs) command:           Extended Commands.
+* l (list unambiguously) command:        Other Commands.
+* N (append Next line) command:          Other Commands.
+* n (next-line) command:                 Common Commands.
+* P (print first line) command:          Other Commands.
+* p (print) command:                     Common Commands.
+* q (quit) command:                      Common Commands.
+* Q (silent Quit) command:               Extended Commands.
+* r (read file) command:                 Other Commands.
+* R (read line) command:                 Extended Commands.
+* s command, option flags:               The "s" Command.
+* T (test and branch if failed) command: Extended Commands.
+* t (test and branch if successful) command: Programming Commands.
+* v (version) command:                   Extended Commands.
+* w (write file) command:                Other Commands.
+* W (write first line) command:          Extended Commands.
+* x (eXchange) command:                  Other Commands.
+* y (transliterate) command:             Other Commands.
+* {} command grouping:                   Common Commands.
+
+
+
+Tag Table:
+Node: Top938
+Node: Introduction4812
+Node: Invoking sed5362
+Ref: Invoking sed-Footnote-110682
+Ref: Invoking sed-Footnote-210874
+Node: sed Programs10979
+Node: Execution Cycle12125
+Ref: Execution Cycle-Footnote-113295
+Node: Addresses13606
+Node: Regular Expressions19063
+Node: Common Commands26609
+Node: The "s" Command28606
+Ref: The "s" Command-Footnote-133634
+Node: Other Commands33706
+Ref: Other Commands-Footnote-138846
+Node: Programming Commands38918
+Node: Extended Commands39824
+Node: Escapes43409
+Ref: Escapes-Footnote-146849
+Node: Examples47040
+Node: Centering lines48132
+Node: Increment a number49041
+Ref: Increment a number-Footnote-150618
+Node: Rename files to lower case50738
+Node: Print bash environment53527
+Node: Reverse chars of lines54304
+Ref: Reverse chars of lines-Footnote-155317
+Node: tac55539
+Node: cat -n56334
+Node: cat -b58188
+Node: wc -c58937
+Ref: wc -c-Footnote-160875
+Node: wc -w60944
+Node: wc -l62413
+Node: head62647
+Node: tail62968
+Node: uniq64404
+Node: uniq -d65197
+Node: uniq -u65918
+Node: cat -s66639
+Node: Limitations68549
+Ref: Limitations-Footnote-172217
+Ref: Limitations-Footnote-272305
+Node: Other Resources72348
+Node: Reporting Bugs73271
+Ref: Reporting Bugs-Footnote-178827
+Node: Extended regexps78898
+Node: Perl regexps80061
+Node: Backslash81810
+Node: Circumflex/dollar sign/period86673
+Node: Square brackets89274
+Node: Options setting94272
+Node: Non-capturing subpatterns96506
+Node: Repetition98409
+Ref: Repetition-Footnote-1103152
+Node: Backreferences103200
+Node: Assertions106049
+Node: Non-backtracking subpatterns110392
+Ref: Non-backtracking subpatterns-Footnote-1114465
+Ref: Non-backtracking subpatterns-Footnote-2114745
+Node: Conditional subpatterns115058
+Node: Recursive patterns117616
+Node: Comments120053
+Node: Concept Index120555
+Node: Command and Option Index133929
+
+End Tag Table

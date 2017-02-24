@@ -1,0 +1,574 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: ssed 3.46\n"
+"POT-Creation-Date: 2004-11-11 16:32+0100\n"
+"PO-Revision-Date: 2000-12-21 12:44+0100\n"
+"Last-Translator: Paolo Bonzini <bonzini@gnu.org>\n"
+"Language-Team: Italian <it@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8-bit\n"
+"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: \n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: pcre/pcregrep.c:130
+#, c-format
+msgid "Usage: pcregrep [-bepchilnsvx] pattern [file] ...\n"
+msgstr "Utilizzo: pcregrep [-bepchilnsvx] pattern [file] ...\n"
+
+#: pcre/pcregrep.c:212
+#, c-format
+msgid "pcregrep: unknown option %c\n"
+msgstr "pcregrep: opzione %c sconosciuta\n"
+
+#: pcre/pcregrep.c:239
+#, c-format
+msgid "pcregrep: error in regex at offset %d: %s\n"
+msgstr "pcregrep: errore nell'espressione alla posizione %d: %s\n"
+
+#: pcre/pcregrep.c:248
+#, c-format
+msgid "pcregrep: error while studing regex: %s\n"
+msgstr "pcregrep: errore nell'analisi dell'espressione: %s\n"
+
+#: pcre/pcregrep.c:268
+#, c-format
+msgid "pcregrep: failed to open %s: %s\n"
+msgstr "pcregrep: impossibile aprire %s: %s\n"
+
+#: pcre/regexp.c:48
+msgid "\\ at end of pattern"
+msgstr "\\ alla fine dell'espressione"
+
+#: pcre/regexp.c:49
+msgid "\\c at end of pattern"
+msgstr "\\c alla fine dell'espressione"
+
+#: pcre/regexp.c:50
+msgid "unrecognized character follows \\"
+msgstr "carattere non riconosciuto dopo \\"
+
+#: pcre/regexp.c:51
+msgid "numbers out of order in {} quantifier"
+msgstr "i numeri dentro le graffe non sono in ordine"
+
+#: pcre/regexp.c:52
+msgid "number too big in {} quantifier"
+msgstr "un numero dentro le graffe e' troppo grande"
+
+#: pcre/regexp.c:53 pcre/regexp.c:130
+msgid "missing terminating ] for character class"
+msgstr "manca una quadra chiusa"
+
+#: pcre/regexp.c:54
+msgid "invalid escape sequence in character class"
+msgstr "sequenza di escape non valida tra parentesi quadre"
+
+#: pcre/regexp.c:55 pcre/regexp.c:136
+msgid "range out of order in character class"
+msgstr "intervallo di caratteri non valido tra parentesi quadre"
+
+#: pcre/regexp.c:56 pcre/regexp.c:128
+msgid "nothing to repeat"
+msgstr "operatore di ripetizione al posto sbagliato"
+
+#: pcre/regexp.c:57
+msgid "operand of unlimited repeat could match the empty string"
+msgstr "un atomo ripetibile indefinitamente potrebbe essere vuoto"
+
+#: pcre/regexp.c:58
+msgid "internal error: unexpected repeat"
+msgstr "errore interno: comando di ripetizione inatteso"
+
+#: pcre/regexp.c:59
+msgid "unrecognized character after (?"
+msgstr "carattere non riconosciuto dopo (?"
+
+#: pcre/regexp.c:60
+msgid "unused error"
+msgstr "errore inutilizzato"
+
+#: pcre/regexp.c:61 pcre/regexp.c:129
+msgid "unmatched braces"
+msgstr "manca una graffa chiusa"
+
+#: pcre/regexp.c:62 pcre/regexp.c:139
+msgid "back reference to non-existent subpattern"
+msgstr "riferimento all'indietro non valido (subpattern inesistente)"
+
+#: pcre/regexp.c:63
+msgid "erroffset passed as NULL"
+msgstr "il parametro erroffset e' NULL"
+
+#: pcre/regexp.c:64
+msgid "unknown option bit(s) set"
+msgstr "sono impostati dei bit di opzione sconosciuti"
+
+#: pcre/regexp.c:65
+msgid "missing ) after comment"
+msgstr "manca una parentesi di chiusura di un commento"
+
+#: pcre/regexp.c:66
+msgid "parentheses nested too deeply"
+msgstr "parentesi troppo annidate"
+
+#: pcre/regexp.c:67 pcre/regexp.c:137
+msgid "regular expression too large"
+msgstr "espressione troppo grande"
+
+#: pcre/regexp.c:68 pcre/regexp.c:138
+msgid "failed to get memory"
+msgstr "memoria esaurita"
+
+#: pcre/regexp.c:69 pcre/regexp.c:135
+msgid "unmatched parentheses"
+msgstr "manca una parentesi chiusa"
+
+#: pcre/regexp.c:70
+msgid "internal error: code overflow"
+msgstr "errore interno di compilazione"
+
+#: pcre/regexp.c:71
+msgid "unrecognized character after (?<"
+msgstr "carattere non riconosciuto dopo (?<"
+
+#: pcre/regexp.c:72
+msgid "lookbehind assertion is not fixed length"
+msgstr "i controlli all'indietro devono avere lunghezza fissa"
+
+#: pcre/regexp.c:73
+msgid "malformed number after (?("
+msgstr "numero non valido dopo (?("
+
+#: pcre/regexp.c:74
+msgid "conditional group contains more than two branches"
+msgstr "piu' di due divisioni in un gruppo condizionale"
+
+#: pcre/regexp.c:75
+msgid "assertion expected after (?("
+msgstr "atteso numero associato a una condizione dopo (?("
+
+#: pcre/regexp.c:76
+msgid "(?p must be followed by )"
+msgstr "(?p non seguito da )"
+
+#: pcre/regexp.c:77 pcre/regexp.c:132
+msgid "unknown POSIX class name"
+msgstr "nome POSIX di classe di caratteri sconosciuto"
+
+#: pcre/regexp.c:78
+msgid "POSIX collating elements are not supported"
+msgstr "le specifiche di caratteri speciali non sono supportate"
+
+#: pcre/regexp.c:79
+msgid "bad condition (?(0)"
+msgstr "condizione (?(0) non valida"
+
+#: pcre/regexp.c:125
+msgid "internal error"
+msgstr "errore interno"
+
+#: pcre/regexp.c:126
+msgid "invalid repeat counts in {}"
+msgstr "numero di ripetizioni specificato tra graffe non valido"
+
+#: pcre/regexp.c:127
+msgid "pattern error"
+msgstr "errore nell'espressione regolare"
+
+#: pcre/regexp.c:131
+msgid "bad collating element"
+msgstr "specifica di caratteri speciali non valida"
+
+#: pcre/regexp.c:133
+msgid "bad escape sequence"
+msgstr "sequenza di escape non valida"
+
+#: pcre/regexp.c:134
+msgid "empty expression"
+msgstr "l'espressione regolare non e' valida"
+
+#: pcre/regexp.c:140
+msgid "bad argument"
+msgstr "argomento non valido"
+
+#: pcre/regexp.c:141
+msgid "match failed"
+msgstr "espressione non trovata"
+
+#: pcre/regexp.c:182
+msgid "unknown error code"
+msgstr "errore sconosciuto"
+
+#: pcre/regexp.c:184
+#, c-format
+msgid "%s at offset %-6d"
+msgstr "%s alla posizione %-6d"
+
+#: sed/compile.c:162
+msgid "multiple `!'s"
+msgstr "`!' multipli"
+
+#: sed/compile.c:163
+msgid "unexpected `,'"
+msgstr "`,' inattesa"
+
+#: sed/compile.c:164
+msgid "invalid usage of +N or ~N as first address"
+msgstr "Impossibile usare +N o ~N come primo indirizzo"
+
+#: sed/compile.c:165
+msgid "unmatched `{'"
+msgstr "`{' non bilanciata"
+
+#: sed/compile.c:166
+msgid "unexpected `}'"
+msgstr "`}' inattesa"
+
+#: sed/compile.c:167
+msgid "extra characters after command"
+msgstr "ci sono altri caratteri dopo il comando"
+
+#: sed/compile.c:168
+msgid "expected \\ after `a', `c' or `i'"
+msgstr "atteso \\ dopo `a', `c' o `i'"
+
+#: sed/compile.c:169
+msgid "`}' doesn't want any addresses"
+msgstr "`}' non accetta indirizzi"
+
+#: sed/compile.c:170
+msgid ": doesn't want any addresses"
+msgstr ": non accetta indirizzi"
+
+#: sed/compile.c:171
+msgid "comments don't accept any addresses"
+msgstr "i commenti non accettano indirizzi"
+
+#: sed/compile.c:172
+msgid "missing command"
+msgstr "manca il comando"
+
+#: sed/compile.c:173
+msgid "command only uses one address"
+msgstr "il comando usa solo un indirizzo"
+
+#: sed/compile.c:174
+msgid "unterminated address regex"
+msgstr "indirizzo della regex non terminato"
+
+#: sed/compile.c:175
+msgid "unterminated `s' command"
+msgstr "comando `s' non terminato"
+
+#: sed/compile.c:176
+msgid "unterminated `y' command"
+msgstr "comando `y' non terminato"
+
+#: sed/compile.c:177
+msgid "unknown option to `s'"
+msgstr "opzione di `s' sconosciuta"
+
+#: sed/compile.c:178
+msgid "multiple `p' options to `s' command"
+msgstr "opzioni `p' multiple al comando `s'"
+
+#: sed/compile.c:179
+msgid "multiple `g' options to `s' command"
+msgstr "opzioni `g' multiple al comando `s'"
+
+#: sed/compile.c:180
+msgid "multiple number options to `s' command"
+msgstr "opzioni numeriche multiple al comando `s'"
+
+#: sed/compile.c:181
+msgid "number option to `s' command may not be zero"
+msgstr "l'opzione numerica del comando `s' non può essere zero"
+
+#: sed/compile.c:182
+msgid "strings for `y' command are different lengths"
+msgstr "le stringhe per i comandi `y' hanno lunghezze diverse"
+
+#: sed/compile.c:183
+msgid "delimiter character is not a single-byte character"
+msgstr "il carattere delimitatore è multi-byte"
+
+#: sed/compile.c:184
+msgid "expected newer version of sed"
+msgstr "attesa una versione piu' recente di sed"
+
+#: sed/compile.c:185
+msgid "invalid usage of line address 0"
+msgstr "uso non valido della linea 0"
+
+#: sed/compile.c:186
+#, c-format
+msgid "unknown command: `%c'"
+msgstr "comando sconosciuto: `%c'"
+
+#: sed/compile.c:209
+#, c-format
+msgid "%s: file %s line %lu: %s\n"
+msgstr "%s: file %s riga %lu: %s\n"
+
+#: sed/compile.c:212
+#, c-format
+msgid "%s: -e expression #%lu, char %lu: %s\n"
+msgstr "%s: espressione -e #%lu, carattere %lu: %s\n"
+
+#: sed/compile.c:1644
+#, c-format
+msgid "can't find label for jump to `%s'"
+msgstr "impossibile trovare un'etichetta per il salto a `%s'"
+
+#: sed/execute.c:649
+#, c-format
+msgid "%s: can't read %s: %s\n"
+msgstr "%s: impossibile leggere %s: %s\n"
+
+#: sed/execute.c:672
+#, c-format
+msgid "couldn't edit %s: is a terminal"
+msgstr "impossibile modificare il file %s: è un terminale"
+
+#: sed/execute.c:676
+#, c-format
+msgid "couldn't edit %s: not a regular file"
+msgstr "impossibile modificare il file %s: non è un file regolare"
+
+#: lib/utils.c:196 sed/execute.c:683
+#, c-format
+msgid "couldn't open temporary file %s: %s"
+msgstr "impossibile aprire il file temporaneo %s: %s"
+
+#: sed/execute.c:1207 sed/execute.c:1388
+msgid "error in subprocess"
+msgstr "errore in un sottoprocesso"
+
+#: sed/execute.c:1209
+msgid "option `e' not supported"
+msgstr "opzione `e' non supportata"
+
+#: sed/execute.c:1390
+msgid "`e' command not supported"
+msgstr "comando `e' non supportato"
+
+#: sed/regexp.c:39
+msgid "no previous regular expression"
+msgstr "occorre un'espressione regolare precedente"
+
+#: sed/regexp.c:40
+msgid "cannot specify modifiers on empty regexp"
+msgstr "non è possibile specificare dei modificatori per l'espressione vuota"
+
+#: sed/regexp.c:134
+#, c-format
+msgid "invalid reference \\%d on `s' command's RHS"
+msgstr "riferimento non valido \\%d nel secondo membro del comando `s'"
+
+#: sed/sed.c:93
+msgid ""
+"  -R, --regexp-perl\n"
+"                 use Perl 5's regular expressions syntax in the script.\n"
+msgstr ""
+"  -R, --regexp-perl\n"
+"                 usa la sintassi Perl 5 per le espressioni regolari\n"
+
+#: sed/sed.c:98
+#, c-format
+msgid ""
+"Usage: %s [OPTION]... {script-only-if-no-other-script} [input-file]...\n"
+"\n"
+msgstr ""
+"Utilizzo: %s [OPZIONE]... {script-se-nessun-altro-specificato} [input-"
+"file]...\n"
+"\n"
+
+#: sed/sed.c:102
+#, c-format
+msgid ""
+"  -n, --quiet, --silent\n"
+"                 suppress automatic printing of pattern space\n"
+msgstr ""
+"  -n, --quiet, --silent\n"
+"                 sopprime la stampa automatica del pattern space\n"
+
+#: sed/sed.c:104
+#, c-format
+msgid ""
+"  -e script, --expression=script\n"
+"                 add the script to the commands to be executed\n"
+msgstr ""
+"  -e script, --expression=script\n"
+"                 aggiunge lo script ai comandi da eseguire\n"
+
+#: sed/sed.c:106
+#, c-format
+msgid ""
+"  -f script-file, --file=script-file\n"
+"                 add the contents of script-file to the commands to be "
+"executed\n"
+msgstr ""
+"  -f script-file, --file=file-script\n"
+"                 aggiunge il contenuto di file-script ai comandi da "
+"eseguire\n"
+
+#: sed/sed.c:108
+#, c-format
+msgid ""
+"  -i[SUFFIX], --in-place[=SUFFIX]\n"
+"                 edit files in place (makes backup if extension supplied)\n"
+msgstr ""
+"  -i[SUFFIX], --in-place[=SUFFIX]\n"
+"                 scrive il risultato sul file originale (facendo una copia\n"
+"                 se è fornita un'estensione)\n"
+
+#: sed/sed.c:110
+#, c-format
+msgid ""
+"  -l N, --line-length=N\n"
+"                 specify the desired line-wrap length for the `l' command\n"
+msgstr ""
+"  -l N, --line-length=N\n"
+"                 specifica la lunghezza delle linee generate dal comando "
+"`l'\n"
+
+#: sed/sed.c:112
+#, c-format
+msgid ""
+"  --posix\n"
+"                 disable all GNU extensions.\n"
+msgstr ""
+"  --posix\n"
+"                 disabilita tutte le estensioni GNU.\n"
+
+#: sed/sed.c:114
+#, c-format
+msgid ""
+"  -r, --regexp-extended\n"
+"                 use extended regular expressions in the script.\n"
+msgstr ""
+"  -r, --regexp-extended\n"
+"                 usa la sintassi di `egrep' per le espressioni regolari\n"
+
+#: sed/sed.c:117
+#, c-format
+msgid ""
+"  -s, --separate\n"
+"                 consider files as separate rather than as a single "
+"continuous\n"
+"                 long stream.\n"
+msgstr ""
+"  -s, --separate\n"
+"                 considera i file di input come separati invece che come un\n"
+"                 unico file lungo.\n"
+
+#: sed/sed.c:120
+#, c-format
+msgid ""
+"  -u, --unbuffered\n"
+"                 load minimal amounts of data from the input files and "
+"flush\n"
+"                 the output buffers more often\n"
+msgstr ""
+"  -u, --unbuffered\n"
+"                 carica e visualizza i dati una a pezzetti piu' piccoli\n"
+
+#: sed/sed.c:123
+#, c-format
+msgid "      --help     display this help and exit\n"
+msgstr "      --help     mostra questo aiuto ed esce\n"
+
+#: sed/sed.c:124
+#, c-format
+msgid "      --version  output version information and exit\n"
+msgstr "      --version  stampa le informazioni sulla versione ed esce\n"
+
+#: sed/sed.c:125
+#, c-format
+msgid ""
+"\n"
+"If no -e, --expression, -f, or --file option is given, then the first\n"
+"non-option argument is taken as the sed script to interpret.  All\n"
+"remaining arguments are names of input files; if no input files are\n"
+"specified, then the standard input is read.\n"
+"\n"
+msgstr ""
+"\n"
+"Se non è usata nessuna delle opzioni -e, --expression, -f o --file allora "
+"il\n"
+"primo argomento che non è una opzione sarà usato come lo script sed da\n"
+"interpretare. Tutti gli argomenti rimanenti sono nomi di file di input; se "
+"non\n"
+"sono specificati file di input sarà letto lo standard input.\n"
+"\n"
+
+#: sed/sed.c:131
+#, c-format
+msgid ""
+"E-mail bug reports to: %s .\n"
+"Be sure to include the word ``%s'' somewhere in the ``Subject:'' field.\n"
+msgstr ""
+"Segnalare eventuali bug a: %s .\n"
+"Assicurarsi di includere la parola ``%s'' nell'oggetto del messaggio.\n"
+
+#: sed/sed.c:268
+#, c-format
+msgid "super-sed version %s\n"
+msgstr "super-sed versione %s\n"
+
+#: sed/sed.c:269
+#, c-format
+msgid ""
+"based on GNU sed version %s\n"
+"\n"
+msgstr ""
+"basato su GNU sed versione %s\n"
+"\n"
+
+#: sed/sed.c:271
+#, c-format
+msgid "GNU sed version %s\n"
+msgstr "GNU sed versione %s\n"
+
+#: sed/sed.c:273
+#, c-format
+msgid ""
+"%s\n"
+"This is free software; see the source for copying conditions.  There is NO\n"
+"warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE,\n"
+"to the extent permitted by law.\n"
+msgstr ""
+"%s\n"
+"Questo è software libero; si veda il sorgente per le condizioni di "
+"copiatura.\n"
+"NON c'è garanzia; neppure di COMMERCIABILITA' o IDONEITA' AD UN PARTICOLARE\n"
+"SCOPO, nei limiti permessi dalla legge.\n"
+
+#: lib/utils.c:98 lib/utils.c:336
+#, c-format
+msgid "cannot remove %s: %s"
+msgstr "impossibile eliminare %s: %s"
+
+#: lib/utils.c:143
+#, c-format
+msgid "couldn't open file %s: %s"
+msgstr "impossibile aprire il file %s: %s"
+
+#: lib/utils.c:220
+#, c-format
+msgid "couldn't write %d item to %s: %s"
+msgid_plural "couldn't write %d items to %s: %s"
+msgstr[0] "impossibile scrivere %d elemento su %s: %s"
+msgstr[1] "impossibile scrivere %d elementi su %s: %s"
+
+#: lib/utils.c:235 lib/utils.c:251
+#, c-format
+msgid "read error on %s: %s"
+msgstr "errore di lettura su %s: %s"
+
+#: lib/utils.c:341
+#, c-format
+msgid "cannot rename %s: %s"
+msgstr "impossibile rinominare %s: %s"
