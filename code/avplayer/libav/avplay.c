@@ -1836,7 +1836,8 @@ void* video_render_thrd(void *param)
     double diff_sum = 0;
     double avg_diff = 0.0f;
 
-	char buf[1024] = {0};
+	//z vc2005中，c文件中定义新的变量须放置到函数头。后续版本的c不详。
+	char sz_time_diff_info[256] = {0};
 
     while (!play->m_abort)
     {
@@ -1966,13 +1967,13 @@ void* video_render_thrd(void *param)
 				//z 码率
                 if (diff < 1000)
                 {
-                    frame_num++;
-                    diff_sum += fabs(diff);
-                    avg_diff = (double)diff_sum / frame_num;
+					frame_num++;
+					diff_sum += fabs(diff);
+					avg_diff = (double)diff_sum / frame_num;
 				}
 				
-                sprintf(buf,"%7.3f A-V: %7.3f A: %7.3f V: %7.3f FR: %d/fps, VB: %d/kbps\r",master_clock(play), diff, audio_clock(play), video_clock(play), play->m_real_frame_rate, play->m_real_bit_rate);
-                OutputDebugStringA(buf);
+                sprintf(sz_time_diff_info,"%7.3f A-V: %7.3f A: %7.3f V: %7.3f FR: %d/fps, VB: %d/kbps\r",master_clock(play), diff, audio_clock(play), video_clock(play), play->m_real_frame_rate, play->m_real_bit_rate);
+                OutputDebugStringA(sz_time_diff_info);
 
                 printf("%7.3f A-V: %7.3f A: %7.3f V: %7.3f FR: %d/fps, VB: %d/kbps\r",
                        master_clock(play), diff, audio_clock(play), video_clock(play), play->m_real_frame_rate, play->m_real_bit_rate);

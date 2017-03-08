@@ -153,7 +153,9 @@ typedef struct avplay
     double m_frame_last_dropped_pts;
     double m_frame_last_returned_time;
     int64_t m_frame_last_dropped_pos;
+	//z 当前未使用
     int64_t m_video_current_pos;
+	//z 记录丢帧的事情
     int m_drop_frame_num;
 
     /* seek实现. */
