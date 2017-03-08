@@ -1836,6 +1836,8 @@ void* video_render_thrd(void *param)
     double diff_sum = 0;
     double avg_diff = 0.0f;
 
+	char buf[1024] = {0};
+
     while (!play->m_abort)
     {
         /* 如果视频队列为空 */
@@ -1957,25 +1959,23 @@ void* video_render_thrd(void *param)
                     }
                 }
 
+				//z master_clock	播放时长
+				//z audio_clock		音频时长
+				//z video_clock		视频时长
+				//z 帧率
+				//z 码率
                 if (diff < 1000)
                 {
                     frame_num++;
                     diff_sum += fabs(diff);
                     avg_diff = (double)diff_sum / frame_num;
 				}
-                //z master_clock	播放时长
-                //z audio_clock		音频时长
-                //z video_clock		视频时长
-                //z 帧率
-                //z 码率
-				/*
-                char szBuff[1024];
-                sprintf(szBuff,"%7.3f A-V: %7.3f A: %7.3f V: %7.3f FR: %d/fps, VB: %d/kbps\r",master_clock(play), diff, audio_clock(play), video_clock(play), play->m_real_frame_rate, play->m_real_bit_rate);
-                OutputDebugStringA(szBuff);
+				
+                sprintf(buf,"%7.3f A-V: %7.3f A: %7.3f V: %7.3f FR: %d/fps, VB: %d/kbps\r",master_clock(play), diff, audio_clock(play), video_clock(play), play->m_real_frame_rate, play->m_real_bit_rate);
+                OutputDebugStringA(buf);
 
                 printf("%7.3f A-V: %7.3f A: %7.3f V: %7.3f FR: %d/fps, VB: %d/kbps\r",
                        master_clock(play), diff, audio_clock(play), video_clock(play), play->m_real_frame_rate, play->m_real_bit_rate);
-					   */
 
                 /*	在这里计算帧率.	*/
                 if (play->m_enable_calc_frame_rate)

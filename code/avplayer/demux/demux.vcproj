@@ -119,7 +119,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="..\third_party\ffmpeg\include;..\third_party\include;..\libav;..\source"
+				AdditionalIncludeDirectories="D:\3rd_Lib\boost_1_61_0-bin-msvc-all-32-64\boost_1_61_0;..\third_party\ffmpeg\include;..\third_party\include;..\libav;..\source"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;_CRT_SECURE_NO_WARNINGS;DEMUX_EXPORTS"
 				RuntimeLibrary="0"
 				UsePrecompiledHeader="0"
@@ -141,7 +141,7 @@
 				Name="VCLinkerTool"
 				AdditionalDependencies="avutil.lib avformat.lib"
 				LinkIncremental="1"
-				AdditionalLibraryDirectories="..\third_party\ffmpeg\lib"
+				AdditionalLibraryDirectories="D:\3rd_Lib\boost_1_61_0-bin-msvc-all-32-64\boost_1_61_0\lib32-msvc-8.0;..\third_party\ffmpeg\lib"
 				GenerateDebugInformation="true"
 				SubSystem="2"
 				OptimizeReferences="2"

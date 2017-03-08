@@ -118,7 +118,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="..\third_party\ffmpeg\include;..\third_party\include;..\libav"
+				AdditionalIncludeDirectories="E:\MyDoc\SvnRoot\avplayer\third_party\dxsdk9.0\DXSDK\Include;..\third_party\ffmpeg\include;..\third_party\include;..\libav;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;VIDEO_EXPORTS"
 				RuntimeLibrary="0"
 				UsePrecompiledHeader="0"
@@ -139,7 +139,7 @@
 				Name="VCLinkerTool"
 				AdditionalDependencies="winmm.lib opengl32.lib glu32.lib ddraw.lib dxguid.lib d3d9.lib swscale.lib avutil.lib avcodec.lib"
 				LinkIncremental="1"
-				AdditionalLibraryDirectories="..\third_party\ffmpeg\lib"
+				AdditionalLibraryDirectories="..\third_party\ffmpeg\lib;E:\MyDoc\SvnRoot\avplayer\third_party\dxsdk9.0\DXSDK\Lib"
 				GenerateDebugInformation="true"
 				SubSystem="2"
 				OptimizeReferences="2"
