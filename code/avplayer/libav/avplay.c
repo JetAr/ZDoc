@@ -145,6 +145,7 @@ queue_init(av_queue *q)
     pthread_mutex_init(&q->m_mutex, NULL);
     pthread_cond_init(&q->m_cond, NULL);
 
+	//z 初始化，在 queue 中加入 flush pkt/frame 
     if (q->m_type == QUEUE_PACKET)
         put_queue(q, (void*) &flush_pkt);
     else if (q->m_type == QUEUE_AVFRAME)
@@ -164,7 +165,7 @@ void queue_flush(av_queue *q)
     {
         AVPacketList *pkt, *pkt1;
         pthread_mutex_lock(&q->m_mutex);
-        //z 清空链表
+        //z 清空链表。包括 flush 都释放掉
         for (pkt = q->m_first_pkt; pkt != NULL; pkt = pkt1)
         {
             pkt1 = pkt->next;
@@ -890,6 +891,7 @@ void av_stop(avplay *play)
     /* 先等线程退出, 再释放资源. */
     wait_for_threads(play);
 
+	//z 释放队列信息
     queue_end(&play->m_audio_q);
     queue_end(&play->m_video_q);
     queue_end(&play->m_audio_dq);
@@ -956,6 +958,8 @@ void av_seek(avplay *play, double fact)
     if (play->m_seeking == SEEKING_FLAG ||
             (play->m_seeking > NOSEEKING_FLAG && play->m_seek_req))
     {
+		//z 注意 m_seeking 的值会有多个模式？
+		//z 可能的值有 seeking_flag， noseeking_flag，以及可能会存放百分比
         play->m_seeking = fact * 1000;
         return ;
     }
@@ -964,8 +968,10 @@ void av_seek(avplay *play, double fact)
     if (play->m_format_ctx->duration <= 0)
     {
         uint64_t size = avio_size(play->m_format_ctx->pb);
+		//z m_seek_req == 0 ，无seek请求。
         if (!play->m_seek_req)
         {
+			//z 设置为1说明有seek请求
             play->m_seek_req = 1;
             play->m_seeking = SEEKING_FLAG;
             play->m_seek_pos = fact * size;
@@ -1123,7 +1129,9 @@ double audio_clock(avplay *play)
     pts = play->m_audio_clock;
     hw_buf_size = play->m_audio_buf_size - play->m_audio_buf_index;
     bytes_per_sec = 0;
+	//z 如果有音频流
     if (play->m_audio_st)
+		//z 每秒播放的音频字节数
         bytes_per_sec = play->m_audio_st->codec->sample_rate * 2
                         * FFMIN(play->m_audio_st->codec->channels, 2); /* 固定为2通道.	*/
 
@@ -1131,6 +1139,7 @@ double audio_clock(avplay *play)
     if (fabs(play->m_audio_current_pts_drift) <= 1.0e-6)
     {
         //z 如果起始值大于某个值，开始播放时的值。
+		//z m_start_time，在播放单个文件时，默认为0。
         if (fabs(play->m_start_time) > 1.0e-6)
             play->m_audio_current_pts_drift = pts - play->m_audio_current_pts_last;
         else
@@ -1158,11 +1167,13 @@ double external_clock(avplay *play)
     return play->m_external_clock + ((ti - play->m_external_clock_time) * 1e-6);
 }
 
+//z 主时钟
 static
 double master_clock(avplay *play)
 {
     double val;
 
+	//z 同步到视频
     if (play->m_av_sync_type == AV_SYNC_VIDEO_MASTER)
     {
         if (play->m_video_st)
@@ -1170,13 +1181,17 @@ double master_clock(avplay *play)
         else
             val = audio_clock(play);
     }
+	//z 同步到音频，默认
     else if (play->m_av_sync_type == AV_SYNC_AUDIO_MASTER)
     {
+		//z 如果有音频，则使用音频时钟
         if (play->m_audio_st)
             val = audio_clock(play);
+		//z 否则使用视频时钟
         else
             val = video_clock(play);
     }
+	//z 同步到外部时钟
     else
     {
         val = external_clock(play);
@@ -1214,13 +1229,16 @@ void* read_pkt_thrd(void *param)
     int last_paused = play->m_play_status;
     AVStream *stream = NULL;
 
-    // 起始时间不等于0, 则先seek至指定时间.
+    // 起始时间不等于0, 则先seek至指定时间
+	//z 比如，可以在打开文件时指定起始播放位置
     if (fabs(play->m_start_time) > 1.0e-6)
     {
         av_seek(play, play->m_start_time);
     }
-
+	
+	//z buffer 占用百分比
     play->m_buffering = 0.0f;
+	//z 计算码率
     play->m_real_bit_rate = 0;
 
     for (; !play->m_abort;)
@@ -1242,7 +1260,7 @@ void* read_pkt_thrd(void *param)
         if (play->m_seeking > NOSEEKING_FLAG)
             av_seek(play, (double)play->m_seeking / 1000.0f);
 
-        //z 如果发生了 seek 请求
+        //z 如果发生了 seek 请求，在此处理 seek 请求
         //z 目前不处理此部分，略过
         if (play->m_seek_req)
         {
@@ -1271,12 +1289,16 @@ void* read_pkt_thrd(void *param)
             //z 清空队列
             if (play->m_audio_index >= 0)
             {
+				//z 清空队列
                 queue_flush(&play->m_audio_q);
+				//z 放入 flush_pkt
                 put_queue(&play->m_audio_q, &flush_pkt);
             }
             if (play->m_video_index >= 0)
             {
+				//z 清空队列
                 queue_flush(&play->m_video_q);
+				//z 放入 flush_pkt
                 put_queue(&play->m_video_q, &flush_pkt);
             }
             play->m_pkt_buffer_size = 0;
@@ -1457,6 +1479,7 @@ void* audio_dec_thrd(void *param)
                     printf("Audio error while decoding one frame!!!\n");
                     break;
                 }
+
                 pkt2.size -= ret;
                 pkt2.data += ret;
 
@@ -1536,8 +1559,10 @@ void* video_dec_thrd(void *param)
 		//z 2017-02-20 paused，那么视频解码就不再进行。
         while (play->m_play_status == paused && !play->m_abort)
             Sleep(10);
+
         //z 从接收到的 video packet 中获取一个包
         ret = get_queue(&play->m_video_q, (AVPacket*) &pkt);
+
         //z 里面有包
         if (ret != -1)
         {
@@ -1874,6 +1899,7 @@ void* video_render_thrd(void *param)
                 else
                     play->m_play_status = playing;
             }
+			
 
             if (video_frame.data[0] == flush_frm.data[0])
                 continue;

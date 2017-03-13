@@ -103,6 +103,7 @@ typedef struct avplay
     /* 音视频队列.	*/
     av_queue m_audio_q;
     av_queue m_video_q;
+	//z 解码后的 a、v frame 的队列
     av_queue m_audio_dq;
     av_queue m_video_dq;
 
@@ -127,7 +128,9 @@ typedef struct avplay
     int m_video_index;
 
     /* 读取数据包占用缓冲大小.	*/
+	//z 从文件读出的 pkt 大小之和，解码后（变成frame）减去相应大小
     long volatile m_pkt_buffer_size;
+	//z mutex，用于对上述变量进行变更
     pthread_mutex_t m_buf_size_mtx;
 
     /* 同步类型. */
@@ -149,10 +152,12 @@ typedef struct avplay
     double m_frame_last_pts;
     double m_frame_last_duration;
     double m_frame_last_delay;
-    double m_frame_last_filter_delay;
     double m_frame_last_dropped_pts;
     double m_frame_last_returned_time;
     int64_t m_frame_last_dropped_pos;
+
+	//z 未使用？
+	double m_frame_last_filter_delay;
 	//z 当前未使用
     int64_t m_video_current_pos;
 	//z 记录丢帧的事情
@@ -192,7 +197,7 @@ typedef struct avplay
     /* 当前音频已经播放buffer的位置.	*/
     uint32_t m_audio_buf_index;
     //z 只是声明了，没有用到。
-    int32_t m_audio_write_buf_size;
+    //z int32_t m_audio_write_buf_size;
     double m_audio_current_pts_drift;
     double m_audio_current_pts_last;
 
@@ -323,6 +328,7 @@ EXPORT_API void av_resume(avplay *play);
  * @param fact at time, percent of duration.
  * @This function does not return a value.
  */
+//z fact，占影片的百分比
 EXPORT_API void av_seek(avplay *play, double fact);
 
 /* Set audio volume.
