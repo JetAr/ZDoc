@@ -137,6 +137,8 @@ void play_thread(void *param)
 {
 	avplayer *play = (avplayer*)param;
 	play->play();
+	//z 等待播放完成
 	play->wait_for_completion();
+	//z 释放 player/source 资源
 	play->close();
 }

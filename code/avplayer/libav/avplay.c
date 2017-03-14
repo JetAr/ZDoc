@@ -1327,13 +1327,19 @@ void* read_pkt_thrd(void *param)
         //z 从source读入一个 packet
         //z 读入一个 packet
         ret = av_read_frame(play->m_format_ctx, &packet);
+
         if (ret < 0)
         {
+			//z eof
             if (play->m_video_q.m_size == 0 &&
                     play->m_audio_q.m_size == 0 &&
                     play->m_video_dq.m_size == 0 &&
                     play->m_audio_dq.m_size == 0)
+			{
+				//z 设置状态为播放完毕。
                 play->m_play_status = completed;
+			}
+
             Sleep(100);
             continue;
         }
@@ -1567,7 +1573,8 @@ void* video_dec_thrd(void *param)
         if (ret != -1)
         {
             //z seek 的情况暂不考虑
-            //z 发生这种情况是因为 seek 了
+            //z 发生这种情况是因为 seek；
+			//z 17-03-14 开始播放时也会出现此种状况
             if (pkt.data == flush_pkt.data)
             {
                 AVFrameList* lst = NULL;
@@ -1580,6 +1587,7 @@ void* video_dec_thrd(void *param)
                     Sleep(1);
 
                 pthread_mutex_lock(&play->m_video_dq.m_mutex);
+				//z 如果解码队列中有数据，将队列中的数据设置为skip
                 lst = (AVFrameList*)play->m_video_dq.m_first_pkt;
                 for (; lst != NULL; lst = lst->next)
                     lst->pkt.type = 1; /* type为1表示skip. */
@@ -1625,7 +1633,6 @@ void* video_dec_thrd(void *param)
                 /*
                  * 复制帧, 并输出为PIX_FMT_YUV420P.
                  */
-
                 video_copy(play, &avcopy, avframe);
 
                 /*
@@ -1712,11 +1719,11 @@ void* video_dec_thrd(void *param)
                  * m_video_clock加上该帧延迟时长,
                  * m_video_clock是估算出来的下一帧的pts.
                  */
-                play->m_video_clock += frame_delay;
+				play->m_video_clock += frame_delay;
 
-                /*
-                 * 防止内存过大.
-                 */
+				/*
+				 * 防止内存过大.
+				 */
                 chk_queue(play, &play->m_video_dq, AVDECODE_BUFFER_SIZE);
 
                 /* 保存frame_delay为该帧的duration, 保存到.pts字段中. */
@@ -1786,7 +1793,7 @@ void* audio_render_thrd(void *param)
                 break;
             }
 
-            //z 如果 type 为 1，那么会 skip
+            //z 如果 type 为 1，那么会 skip，不再播放
             if (audio_frame.type == 1)
             {
                 av_free(audio_frame.data[0]);
