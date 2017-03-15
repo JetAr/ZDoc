@@ -1649,7 +1649,7 @@ void* video_dec_thrd(void *param)
                     pts1 = 0;
                 pts = pts1;
 
-                /* 如果以音频同步为主, 则在此判断是否进行丢包. */
+				/* 如果以音频同步为主, 则在此判断是否进行丢包. */
                 if ((play->m_audio_st) &&
                         ((play->m_av_sync_type == AV_SYNC_AUDIO_MASTER && play->m_audio_st)
                          || play->m_av_sync_type == AV_SYNC_EXTERNAL_CLOCK))
