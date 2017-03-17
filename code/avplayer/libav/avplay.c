@@ -964,16 +964,19 @@ void av_seek(avplay *play, double fact)
         return ;
     }
 
-    /* 正常情况下的seek. */
+	/* 正常情况下的seek. */
+	//z 没有 duration，文件时长未知
     if (play->m_format_ctx->duration <= 0)
     {
         uint64_t size = avio_size(play->m_format_ctx->pb);
+
 		//z m_seek_req == 0 ，无seek请求。
         if (!play->m_seek_req)
         {
 			//z 设置为1说明有seek请求
             play->m_seek_req = 1;
             play->m_seeking = SEEKING_FLAG;
+			//z seek 的目标位置
             play->m_seek_pos = fact * size;
             play->m_seek_rel = 0;
             play->m_seek_flags &= ~AVSEEK_FLAG_BYTE;

@@ -166,13 +166,15 @@ typedef struct avplay
     /* seek实现. */
     int m_read_pause_return;
     int m_seek_req;
+
+	//z 在seek设置了；实际实现的时候只实现了 AVSEEK_FLAG_BYTE 
     int m_seek_flags;
     int64_t m_seek_pos;
     int64_t m_seek_rel;
     int m_seek_by_bytes;
     int m_seeking;
 
-    /* 最后一个解码帧的pts, 解码帧缓冲大小为2, 也就是当前播放帧的下一帧.	*/
+	/* 最后一个解码帧的pts, 解码帧缓冲大小为2, 也就是当前播放帧的下一帧.	*/
     double m_audio_clock;
     double m_video_clock;
     double m_external_clock;
