@@ -956,6 +956,7 @@ void av_seek(avplay *play, double fact)
 
     /* 正在seek中, 只保存当前sec, 在seek完成后, 再seek. */
     if (play->m_seeking == SEEKING_FLAG ||
+	//z play->m_seeking 值 > 0，是将 fact 的值赋给它了。
             (play->m_seeking > NOSEEKING_FLAG && play->m_seek_req))
     {
 		//z 注意 m_seeking 的值会有多个模式？
@@ -968,6 +969,7 @@ void av_seek(avplay *play, double fact)
 	//z 没有 duration，文件时长未知
     if (play->m_format_ctx->duration <= 0)
     {
+		//z 如果时间未知；则使用文件大小
         uint64_t size = avio_size(play->m_format_ctx->pb);
 
 		//z m_seek_req == 0 ，无seek请求。
@@ -980,6 +982,7 @@ void av_seek(avplay *play, double fact)
             play->m_seek_pos = fact * size;
             play->m_seek_rel = 0;
             play->m_seek_flags &= ~AVSEEK_FLAG_BYTE;
+			//z 标记，说明使用的是大小。
             play->m_seek_flags |= AVSEEK_FLAG_BYTE;
         }
     }
@@ -1267,12 +1270,14 @@ void* read_pkt_thrd(void *param)
         //z 目前不处理此部分，略过
         if (play->m_seek_req)
         {
+			//z 设置目标
             int64_t seek_target = play->m_seek_pos * AV_TIME_BASE;
             int64_t seek_min    = /*play->m_seek_rel > 0 ? seek_target - play->m_seek_rel + 2:*/ INT64_MIN;
             int64_t seek_max    = /*play->m_seek_rel < 0 ? seek_target - play->m_seek_rel - 2:*/ INT64_MAX;
             int seek_flags = 0 & (~AVSEEK_FLAG_BYTE);
             int ns, hh, mm, ss;
             int tns, thh, tmm, tss;
+			//z 看起来还是使用的是时间
             double frac = (double)play->m_seek_pos / ((double)play->m_format_ctx->duration / AV_TIME_BASE);
 
             tns = play->m_format_ctx->duration / AV_TIME_BASE;
@@ -1285,6 +1290,7 @@ void* read_pkt_thrd(void *param)
             mm = (ns % 3600) / 60.0f;
             ss = ns % 60;
 
+			//z 使用的是时间
             seek_target = frac * play->m_format_ctx->duration;
             if (play->m_format_ctx->start_time != AV_NOPTS_VALUE)
                 seek_target += play->m_format_ctx->start_time;
@@ -1312,17 +1318,21 @@ void* read_pkt_thrd(void *param)
                 fprintf(stderr, "%s: error while seeking\n", play->m_format_ctx->filename);
             }
 
+			//z 计算 hh，mm，ss，thh，tmm以及tss，用于输出调试信息。
             printf("Seek to %2.0f%% (%02d:%02d:%02d) of total duration (%02d:%02d:%02d)\n",
                    frac * 100, hh, mm, ss, thh, tmm, tss);
 
             play->m_seek_req = 0;
         }
 
-        /* 缓冲读满, 在这休眠让出cpu. */
+		/* 缓冲读满, 在这休眠让出cpu. */
         //z 缓冲区大小为 5M
         //z 防止读入太多太快。至多只读入这个大小。
+		//z 如果进行了 seek 请求；就跳出循环。
         while (play->m_pkt_buffer_size > MAX_PKT_BUFFER_SIZE && !play->m_abort && !play->m_seek_req)
             Sleep(32);
+
+		//z 是否终止请求
         if (play->m_abort)
             break;
 
@@ -1370,6 +1380,7 @@ void* read_pkt_thrd(void *param)
             /* 计算时间是否足够一秒钟. */
             if (play->m_last_vb_time == 0)
                 play->m_last_vb_time = av_gettime() / 1000000.0f;
+			
             current_time = av_gettime() / 1000000.0f;
             if (current_time - play->m_last_vb_time >= 1)
             {

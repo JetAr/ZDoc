@@ -18,7 +18,7 @@ typedef struct ngx_listening_s  ngx_listening_t;
 //³õÊ¼»¯¸³ÖµµÈ¿ÉÒÔ²Î¿¼ngx_event_process_init
 //ngx_listening_t½á¹¹Ìå´ú±í×ÅNginx·şÎñÆ÷¼àÌıµÄÒ»¸ö¶Ë¿Ú
 //Êµ¼ÊÉÏÕâĞ©ngx_listening_s½á¹¹ÌåÊÇ´Ó cycle->listening.eltsÖĞÀ´µÄ£¬¼ûngx_event_process_init
-struct ngx_listening_s { //³õÊ¼»¯¼°¸³Öµ¼ûngx_http_add_listening
+struct ngx_listening_s { //³õÊ¼»¯¼°¸³Öµ¼ûngx_http_add_listening    ÈÈÉı¼¶nginxµÄÊ±ºò£¬¼Ì³ĞÔ´master listen fdÔÚngx_set_inherited_sockets
     ngx_socket_t        fd; //socketÌ×½Ó×Ö¾ä±ú   //¸³Öµ¼ûngx_open_listening_sockets
 
     struct sockaddr    *sockaddr; //¼àÌısockaddrµØÖ·
@@ -46,7 +46,7 @@ struct ngx_listening_s { //³õÊ¼»¯¼°¸³Öµ¼ûngx_http_add_listening
     ngx_connection_handler_pt   handler; //¸³ÖµÎªngx_http_init_connection£¬¼ûngx_http_add_listening¡£¸ÃhandlerÔÚngx_event_acceptÖĞÖ´ĞĞ
     /*
     Êµ¼ÊÉÏ¿ò¼Ü²¢²»Ê¹ÓÃserversÖ¸Õë£¬Ëü¸ü¶àÊÇ×÷ÎªÒ»¸ö±£ÁôÖ¸Õë£¬Ä¿Ç°Ö÷ÒªÓÃÓÚHTTP»òÕßmailµÈÄ£¿é£¬ÓÃÓÚ±£´æµ±Ç°¼àÌı¶Ë¿Ú¶ÔÓ¦×ÅµÄËùÓĞÖ÷»úÃû
-    */ //lsopt.bind = 1;ÕâÀïÃæ´æµÄÊÇbindÎª1µÄÅäÖÃ²Å»áÓĞ´´½¨ngx_http_port_t
+    */ 
     void               *servers;  /* array of ngx_http_in_addr_t  ngx_http_port_t, for example */ //¸³Öµ¼ûngx_http_init_listening£¬Ö¸Ïòngx_http_port_t½á¹¹
 
     //logºÍlogp¶¼ÊÇ¿ÉÓÃµÄÈÕÖ¾¶ÔÏóµÄÖ¸Õë
@@ -89,8 +89,9 @@ struct ngx_listening_s { //³õÊ¼»¯¼°¸³Öµ¼ûngx_http_add_listening
     //±íÊ¾ÊÇ·ñÒÑ¾­°ó¶¨¡£Êµ¼ÊÉÏÄ¿Ç°¸Ã±êÖ¾Î»Ã»ÓĞÊ¹ÓÃ
     unsigned            bound:1;       /* already bound */
     /* ±íÊ¾µ±Ç°¼àÌı¾ä±úÊÇ·ñÀ´×ÔÇ°Ò»¸ö½ø³Ì£¨ÈçÉı¼¶Nginx³ÌĞò£©£¬Èç¹ûÎª1£¬Ôò±íÊ¾À´×ÔÇ°Ò»¸ö½ø³Ì¡£Ò»°ã»á±£ÁôÖ®Ç°ÒÑ¾­ÉèÖÃºÃµÄÌ×½Ó×Ö£¬²»×ö¸Ä±ä */
-    unsigned            inherited:1;   /* inherited from previous process */
+    unsigned            inherited:1;   /* inherited from previous process */ //ËµÃ÷ÊÇÈÈÉı¼¶¹ı³Ì
     unsigned            nonblocking_accept:1;  //Ä¿Ç°Î´Ê¹ÓÃ
+    //lsopt.bind = 1;ÕâÀïÃæ´æµÄÊÇbindÎª1µÄÅäÖÃ²Å»áÓĞ´´½¨ngx_http_port_t
     unsigned            listen:1; //±êÖ¾Î»£¬Îª1Ê±±íÊ¾µ±Ç°½á¹¹Ìå¶ÔÓ¦µÄÌ×½Ó×ÖÒÑ¾­¼àÌı  ¸³Öµ¼ûngx_open_listening_sockets
     unsigned            nonblocking:1;//±íËØÌ×½Ó×ÖÊÇ·ñ×èÈû£¬Ä¿Ç°¸Ã±êÖ¾Î»Ã»ÓĞÒâÒå
     unsigned            shared:1;    /* shared between threads or processes */ //Ä¿Ç°¸Ã±êÖ¾Î»Ã»ÓĞÒâÒå
@@ -198,6 +199,8 @@ typedef enum {
 #define NGX_LOWLEVEL_BUFFERED  0x0f
 #define NGX_SSL_BUFFERED       0x01
 #define NGX_SPDY_BUFFERED      0x02
+#define NGX_HTTP_V2_BUFFERED   0x02
+
 /*
 NginxÖĞ¶¨ÒåÁË»ù±¾µÄÊı¾İ½á¹¹ngx_connection_tÀ´±íÊ¾Á¬½Ó£¬Õâ¸öÁ¬½Ó±íÊ¾ÊÇ¿Í»§¶ËÖ÷¶¯·¢ÆğµÄ¡¢Nginx·şÎñÆ÷±»¶¯½ÓÊÜµÄTCPÁ¬½Ó£¬ÎÒÃÇ¿ÉÒÔ¼òµ¥³Æ
 ÆäÎª±»¶¯Á¬½Ó¡£Í¬Ê±£¬ÔÚÓĞĞ©ÇëÇóµÄ´¦Àí¹ı³ÌÖĞ£¬Nginx»áÊÔÍ¼Ö÷¶¯ÏòÆäËûÉÏÓÎ·şÎñÆ÷½¨Á¢Á¬½Ó£¬²¢ÒÔ´ËÁ¬½ÓÓëÉÏÓÎ·şÎñÆ÷Í¨ĞÅ£¬Òò´Ë£¬ÕâÑùµÄ
@@ -220,38 +223,41 @@ NginxÖĞ¶¨ÒåÁË»ù±¾µÄÊı¾İ½á¹¹ngx_connection_tÀ´±íÊ¾Á¬½Ó£¬Õâ¸öÁ¬½Ó±íÊ¾ÊÇ¿Í»§¶ËÖ÷¶¯·
 ©§(ngx_connection_t)                    ©§                            ©§                                      ©§
 ©»©¥©¥©¥©¥©¥©¥©¥©¥©¥©¥©¥©¥©¥©¥©¥©¥©¥©¥©¥©ß©¥©¥©¥©¥©¥©¥©¥©¥©¥©¥©¥©¥©¥©¥©ß©¥©¥©¥©¥©¥©¥©¥©¥©¥©¥©¥©¥©¥©¥©¥©¥©¥©¥©¥©¿
 */
+/*Ò»¸öngx_connection_s¶ÔÓ¦Ò»¸öngx_event_s readºÍÒ»¸öngx_event_s write,ÆäÖĞÊÂ¼şµÄfdÊÇ´Óngx_connection_s->fd»ñÈ¡£¬ËûÃÇ
+ÔÚngx_worker_process_init->ngx_event_process_initÖĞ¹ØÁªÆğÀ´ */
 //ngx_event_tÊÂ¼şºÍngx_connection_tÁ¬½ÓÊÇ´¦ÀíTCPÁ¬½ÓµÄ»ù´¡Êı¾İ½á¹¹, Í¨¹ıngx_get_connection´ÓÁ¬½Ó³ØÖĞ»ñÈ¡Ò»¸öngx_connection_s½á¹¹£¬
+//±»¶¯Á¬½Ó(¿Í»§¶ËÁ¬½Ónginx)¶ÔÓ¦µÄÊı¾İ½á¹¹ÊÇngx_connection_s£¬Ö÷¶¯Á¬½Ó(nginxÁ¬½Óºó¶Ë·şÎñÆ÷)¶ÔÓ¦µÄÊı¾İ½á¹¹ÊÇngx_peer_connection_s
 struct ngx_connection_s {  //cycle->read_eventsºÍcycle->write_eventsÕâÁ½¸öÊı×é´æ·ÅµÄÊÇngx_event_s,ËûÃÇÊÇ¶ÔÓ¦µÄ£¬¼ûngx_event_process_init
     /*
     Á¬½ÓÎ´Ê¹ÓÃÊ±£¬data³ÉÔ±ÓÃÓÚ³äµ±Á¬½Ó³ØÖĞ¿ÕÏĞÁ¬½ÓÁ´±íÖĞµÄnextÖ¸Õë(ngx_event_process_init)¡£µ±Á¬½Ó±»Ê¹ÓÃÊ±£¬dataµÄÒâÒåÓÉÊ¹ÓÃËüµÄNginxÄ£¿é¶ø¶¨£¬
     ÈçÔÚHTTP¿ò¼ÜÖĞ£¬dataÖ¸Ïòngx_http_request_tÇëÇó
 
-    //ÔÚ·şÎñÆ÷¶Ëaccept¿Í»§¶ËÁ¬½Ó³É¹¦(ngx_event_accept)ºó£¬»áÍ¨¹ıngx_get_connection´ÓÁ¬½Ó³Ø»ñÈ¡Ò»¸öngx_connection_t½á¹¹£¬Ò²¾ÍÊÇÃ¿¸ö¿Í»§¶ËÁ¬½Ó¶ÔÓÚÒ»¸öngx_connection_t½á¹¹£¬
-    //²¢ÇÒÎªÆä·ÖÅäÒ»¸öngx_http_connection_t½á¹¹£¬ngx_connection_t->data = ngx_http_connection_t£¬¼ûngx_http_init_connection
+    ÔÚ·şÎñÆ÷¶Ëaccept¿Í»§¶ËÁ¬½Ó³É¹¦(ngx_event_accept)ºó£¬»áÍ¨¹ıngx_get_connection´ÓÁ¬½Ó³Ø»ñÈ¡Ò»¸öngx_connection_t½á¹¹£¬Ò²¾ÍÊÇÃ¿¸ö¿Í»§¶ËÁ¬½Ó¶ÔÓÚÒ»¸öngx_connection_t½á¹¹£¬
+    ²¢ÇÒÎªÆä·ÖÅäÒ»¸öngx_http_connection_t½á¹¹£¬ngx_connection_t->data = ngx_http_connection_t£¬¼ûngx_http_init_connection
      */ 
+ 
  /*
- ÔÚliten£¬accep(ngx_event_accept)½ÓÊÕµ½ĞÂµÄ¿Í»§¶ËÁ¬½ÓµÄÊ±ºò:ÕâÀïÃæ´æ´¢ÓĞ¿Í»§¶Ë½¨Á¢Á¬½Ó¹ıÀ´ºó(ngx_http_connection_t)£¬±¾¶Ë½ÓÊÕÁ¬½ÓµÄserver{}ËùÔÚ
- server_nameÅäÖÃĞÅÏ¢ÒÔ¼°¸Ãip:port¶ÔÓ¦µÄÉÏÏÂÎÄĞÅÏ¢´æÔÚ×Å¸öÀïÃæµ±½¨Á¢Á¬½Óºó¿ª±Ùngx_http_connection_t½á¹¹£¬ÕâÀïÃæ´æ´¢¸Ã·şÎñÆ÷¶Ë
- ip:portËùÔÚserver{}ÉÏÏÂÎÄÅäÖÃĞÅÏ¢£¬ºÍserver_nameĞÅÏ¢µÈ£¬È»ºóÈÃngx_connection_t->dataÖ¸Ïò¸Ã½á¹¹£¬ÕâÑù¾Í¿ÉÒÔÍ¨¹ıngx_connection_t->data
- »ñÈ¡µ½·şÎñÆ÷¶ËµÄserv loc µÈÅäÖÃĞÅÏ¢ÒÔ¼°¸Ãserver{}ÖĞµÄserver_nameĞÅÏ¢¼ûngx_http_init_connection
-
- µ±½ÓÊÕµ½¿Í»§¶ËµÄµÚÒ»¸öÇëÇóÊı¾İµÄÊ±ºò£¬ÔÚngx_http_wait_request_handlerÖĞ»áÖØĞÂÈÃdataÖ¸ÏòĞÂ´´½¨µÄngx_http_request_t½á¹¹£¬Ö®Ç°dataÖ¸ÏòµÄ
- ngx_http_connection_t½á¹¹£¬´ÓĞÂÓÃngx_http_request_t->connectionÖ¸Ïò¸Ãngx_http_connection_t
- */  //ÉÏ²ã¸¸ÇëÇórµÄdataÖ¸ÏòµÚÒ»¸örÏÂ²ãµÄ×ÓÇëÇó£¬ÀıÈçµÚ¶ş²ãµÄr->connection->dataÖ¸ÏòÆäµÚÈı²ãµÄµÚÒ»¸ö´´½¨µÄ×ÓÇëÇór£¬c->data = sr¼ûngx_http_subrequest
-    void               *data;//listen¹ı³ÌÖĞ£¬Ö¸ÏòÔ­Ê¼ÇëÇóngx_http_connection_t(ngx_http_init_connection)  
-//Èç¹ûÊÇÎÄ¼şÒì²½i/oÖĞµÄngx_event_aio_t£¬ÔòËüÀ´×Ôngx_event_aio_t->ngx_event_t(Ö»ÓĞ¶Á),Èç¹ûÊÇÍøÂçÊÂ¼şÖĞµÄevent,ÔòÎªngx_connection_sÖĞµÄevent(°üÀ¨¶ÁºÍĞ´)
-    ngx_event_t        *read;//Á¬½Ó¶ÔÓ¦µÄ¶ÁÊÂ¼ş   ¸³ÖµÔÚngx_event_process_init
-    ngx_event_t        *write; //Á¬½Ó¶ÔÓ¦µÄĞ´ÊÂ¼ş  ¸³ÖµÔÚngx_event_process_init  Ò»°ãÔÚngx_handle_write_eventÖĞÌí¼ÓĞ©ÊÂ¼ş
+    ÔÚ×ÓÇëÇó´¦Àí¹ı³ÌÖĞ£¬ÉÏ²ã¸¸ÇëÇórµÄdataÖ¸ÏòµÚÒ»¸örÏÂ²ãµÄ×ÓÇëÇó£¬ÀıÈçµÚ¶ş²ãµÄr->connection->dataÖ¸ÏòÆäµÚÈı²ãµÄµÚÒ»¸ö
+ ´´½¨µÄ×ÓÇëÇór£¬c->data = sr¼ûngx_http_subrequest,ÔÚsubrequestÍù¿Í»§¶Ë·¢ËÍÊı¾İµÄÊ±ºò£¬Ö»ÓĞdataÖ¸ÏòµÄ½Úµã¿ÉÒÔÏÈ·¢ËÍ³öÈ¥
+    listen¹ı³ÌÖĞ£¬Ö¸ÏòÔ­Ê¼ÇëÇóngx_http_connection_t(ngx_http_init_connection ngx_http_ssl_handshake),½ÓÊÕµ½¿Í»§¶ËÊı¾İºóÖ¸Ïòngx_http_request_t(ngx_http_wait_request_handler)
+    http2Ğ­ÒéµÄ¹ı³ÌÖĞ£¬ÔÚngx_http_v2_connection_t(ngx_http_v2_init)
+ */
+    void               *data; /* Èç¹ûÊÇsubrequest£¬Ôòdata×îÖÕÖ¸Ïò×îÏÂ²ã×ÓÇëÇór,¼ûngx_http_subrequest */
+    //Èç¹ûÊÇÎÄ¼şÒì²½i/oÖĞµÄngx_event_aio_t£¬ÔòËüÀ´×Ôngx_event_aio_t->ngx_event_t(Ö»ÓĞ¶Á),Èç¹ûÊÇÍøÂçÊÂ¼şÖĞµÄevent,ÔòÎªngx_connection_sÖĞµÄevent(°üÀ¨¶ÁºÍĞ´)
+    ngx_event_t        *read;//Á¬½Ó¶ÔÓ¦µÄ¶ÁÊÂ¼ş   ¸³ÖµÔÚngx_event_process_init£¬¿Õ¼äÊÇ´Óngx_cycle_t->read_event³Ø×ÓÖĞ»ñÈ¡µÄ
+    ngx_event_t        *write; //Á¬½Ó¶ÔÓ¦µÄĞ´ÊÂ¼ş  ¸³ÖµÔÚngx_event_process_init Ò»°ãÔÚngx_handle_write_eventÖĞÌí¼ÓĞ©ÊÂ¼ş£¬¿Õ¼äÊÇ´Óngx_cycle_t->read_event³Ø×ÓÖĞ»ñÈ¡µÄ
 
     ngx_socket_t        fd;//Ì×½Ó×Ö¾ä±ú
-
+    /* Èç¹ûÆôÓÃÁËssl,Ôò·¢ËÍºÍ½ÓÊÕÊı¾İÔÚngx_ssl_recv ngx_ssl_write ngx_ssl_recv_chain ngx_ssl_send_chain */
     //·şÎñ¶ËÍ¨¹ıngx_http_wait_request_handler¶ÁÈ¡Êı¾İ
     ngx_recv_pt         recv; //Ö±½Ó½ÓÊÕÍøÂç×Ö·ûÁ÷µÄ·½·¨  ¼ûngx_event_accept»òÕßngx_http_upstream_connect   ¸³ÖµÎªngx_os_io  ÔÚ½ÓÊÕµ½¿Í»§¶ËÁ¬½Ó»òÕßÏòÉÏÓÎ·şÎñÆ÷·¢ÆğÁ¬½Óºó¸³Öµ
     ngx_send_pt         send; //Ö±½Ó·¢ËÍÍøÂç×Ö·ûÁ÷µÄ·½·¨  ¼ûngx_event_accept»òÕßngx_http_upstream_connect   ¸³ÖµÎªngx_os_io  ÔÚ½ÓÊÕµ½¿Í»§¶ËÁ¬½Ó»òÕßÏòÉÏÓÎ·şÎñÆ÷·¢ÆğÁ¬½Óºó¸³Öµ
 
+    /* Èç¹ûÆôÓÃÁËssl,Ôò·¢ËÍºÍ½ÓÊÕÊı¾İÔÚngx_ssl_recv ngx_ssl_write ngx_ssl_recv_chain ngx_ssl_send_chain */
     //ÒÔngx_chain_tÁ´±íÎª²ÎÊıÀ´½ÓÊÕÍøÂç×Ö·ûÁ÷µÄ·½·¨  ngx_recv_chain
     ngx_recv_chain_pt   recv_chain;  //¸³Öµ¼ûngx_event_accept     ngx_event_pipe_read_upstreamÖĞÖ´ĞĞ
     //ÒÔngx_chain_tÁ´±íÎª²ÎÊıÀ´·¢ËÍÍøÂç×Ö·ûÁ÷µÄ·½·¨    ngx_send_chain
+    //µ±http2Í·²¿Ö¡·¢ËÍµÄÊ±ºò£¬»áÔÚngx_http_v2_header_filter°Ñngx_http_v2_send_chain.send_chain=ngx_http_v2_send_chain
     ngx_send_chain_pt   send_chain; //¸³Öµ¼ûngx_event_accept   ngx_http_write_filterºÍngx_chain_writerÖĞÖ´ĞĞ
 
     //Õâ¸öÁ¬½Ó¶ÔÓ¦µÄngx_listening_t¼àÌı¶ÔÏó,Í¨¹ılistenÅäÖÃÏîÅäÖÃ£¬´ËÁ¬½ÓÓÉlistening¼àÌı¶Ë¿ÚµÄÊÂ¼ş½¨Á¢,¸³ÖµÔÚngx_event_process_init
@@ -264,7 +270,7 @@ struct ngx_connection_s {  //cycle->read_eventsºÍcycle->write_eventsÕâÁ½¸öÊı×é´æ
 
     /*
     ÄÚ´æ³Ø¡£Ò»°ãÔÚaccept -¸öĞÂÁ¬½ÓÊ±£¬»á´´½¨Ò»¸öÄÚ´æ³Ø£¬¶øÔÚÕâ¸öÁ¬½Ó½áÊøÊ±»áÏú»ÙÄÚ´æ³Ø¡£×¢Òâ£¬ÕâÀïËùËµµÄÁ¬½ÓÊÇÖ¸³É¹¦½¨Á¢µÄ
-    TCPÁ¬½Ó£¬ËùÓĞµÄngx_connection_t½á¹¹Ìå¶¼ÊÇÔ¤·ÖÅäµÄ¡£Õâ¸öÄÚ´æ³ØµÄ´óĞ¡½«ÓÉÉÏÃæµÄlistening¼àÌı¶ÔÏóÖĞµÄpool_size³ÉÔ±¾ö¶¨
+    TCPÁ¬½Ó£¬ËùÓĞµÄngx_connection_t½á¹¹Ìå¶¼ÊÇÔ¤·ÖÅäµÄ¡£Õâ¸öÄÚ´æ³ØµÄ´óĞ¡½«ÓÉlistening¼àÌı¶ÔÏóÖĞµÄpool_size³ÉÔ±¾ö¶¨
      */
     ngx_pool_t         *pool; //ÔÚaccept·µ»Ø³É¹¦ºó´´½¨poll,¼ûngx_event_accept£¬ Á¬½ÓÉÏÓÎ·şÎñÇøµÄÊ±ºòÔÚngx_http_upstream_connect´´½¨
 
@@ -275,7 +281,7 @@ struct ngx_connection_s {  //cycle->read_eventsºÍcycle->write_eventsÕâÁ½¸öÊı×é´æ
     ngx_str_t           proxy_protocol_addr;
 
 #if (NGX_SSL)
-    ngx_ssl_connection_t  *ssl;
+    ngx_ssl_connection_t  *ssl; //¸³Öµ¼ûngx_ssl_create_connection
 #endif
 
     //±¾»úµÄ¼àÌı¶Ë¿Ú¶ÔÓ¦µÄsockaddr½á¹¹Ìå£¬Ò²¾ÍÊÇlistening¼àÌı¶ÔÏóÖĞµÄsockaddr³ÉÔ±

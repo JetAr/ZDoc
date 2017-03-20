@@ -9,7 +9,12 @@
 #include <ngx_core.h>
 #include <ngx_http.h>
 
-
+/*
+size = offsetof(ngx_rbtree_node_t, color)
+           + offsetof(ngx_http_limit_req_node_t, data)
+           + key->len;
+红黑树分配空间大小，见ngx_http_limit_req_lookup
+*/
 typedef struct {
     u_char                       color;
     u_char                       dummy;
@@ -20,22 +25,23 @@ typedef struct {
     ngx_uint_t                   excess;
     ngx_uint_t                   count;
     u_char                       data[1];
-} ngx_http_limit_req_node_t;
+} ngx_http_limit_req_node_t; //用于限速的该客户端一些状态存入这里面，例如该客户端当前的excess等，通过红黑树管理
 
 
-typedef struct {
+typedef struct { //所有客户端请求的限速处理，可以参考ngx_http_limit_req_lookup，每个客户端对应一个红黑树节点，用与存储每次请求后用于限速的各种临时信息
     ngx_rbtree_t                  rbtree;
     ngx_rbtree_node_t             sentinel;
     ngx_queue_t                   queue;
 } ngx_http_limit_req_shctx_t;
 
 
-typedef struct {
+typedef struct { //创建空间和赋值见ngx_http_limit_req_init_zone
     ngx_http_limit_req_shctx_t  *sh;
-    ngx_slab_pool_t             *shpool;
+    ngx_slab_pool_t             *shpool; //用来管理limit req zone的共享内存块
     /* integer value, 1 corresponds to 0.001 r/s */
-    ngx_uint_t                   rate;
-    ngx_http_complex_value_t     key;
+    ngx_uint_t                   rate; //rate实际上扩大了1000倍，例如1r/s，则这里为1000
+    //limit_req_zone  $binary_remote_addr  zone=req_one:10m rate=3000r/s;中的$binary_remote_addr对应的客户端地址
+    ngx_http_complex_value_t     key; 
     ngx_http_limit_req_node_t   *node;
 } ngx_http_limit_req_ctx_t;
 
@@ -43,13 +49,13 @@ typedef struct {
 typedef struct {
     ngx_shm_zone_t              *shm_zone;
     /* integer value, 1 corresponds to 0.001 r/s */
-    ngx_uint_t                   burst;
+    ngx_uint_t                   burst; //实际扩大1000倍，如果配置捅大小为1，这里为1000
     ngx_uint_t                   nodelay; /* unsigned  nodelay:1 */
 } ngx_http_limit_req_limit_t;
 
 
 typedef struct {
-    ngx_array_t                  limits;
+    ngx_array_t                  limits; //成员类型ngx_http_limit_req_limit_t
     ngx_uint_t                   limit_log_level;
     ngx_uint_t                   delay_log_level;
     ngx_uint_t                   status_code;
@@ -133,7 +139,7 @@ server {
 如果不希望超过的请求被延迟，可以用nodelay参数： 
 limit_req zone=one burst=5 nodelay;
 */
-    { ngx_string("limit_req"),
+    { ngx_string("limit_req"), //limit_rate限制包体的发送速度，limit_req限制连接请求连理速度
       NGX_HTTP_MAIN_CONF|NGX_HTTP_SRV_CONF|NGX_HTTP_LOC_CONF|NGX_CONF_TAKE123,
       ngx_http_limit_req,
       NGX_HTTP_LOC_CONF_OFFSET,
@@ -176,7 +182,7 @@ static ngx_http_module_t  ngx_http_limit_req_module_ctx = {
     ngx_http_limit_req_merge_conf          /* merge location configuration */
 };
 
-
+//参考https://my.oschina.net/kone/blog/88713
 ngx_module_t  ngx_http_limit_req_module = {
     NGX_MODULE_V1,
     &ngx_http_limit_req_module_ctx,        /* module context */
@@ -191,7 +197,6 @@ ngx_module_t  ngx_http_limit_req_module = {
     NULL,                                  /* exit master */
     NGX_MODULE_V1_PADDING
 };
-
 
 static ngx_int_t
 ngx_http_limit_req_handler(ngx_http_request_t *r)
@@ -441,6 +446,47 @@ ngx_http_limit_req_lookup(ngx_http_limit_req_limit_t *limit, ngx_uint_t hash,
 
             ms = (ngx_msec_int_t) (now - lr->last);
 
+            /*  https://my.oschina.net/kone/blog/88713
+            假设设置rate为500，则rate=500000  配置burst为10，则burst值为10000
+            假设1ms一个请求，则excess取值为
+            第几个请求        excess值           lr->excess值  是否更新lr->last   是否超过burst阈值
+              1                 0-500+1000=500         500             是           否    
+              2                 500-500+1000=1000      1000            是           否
+              3                 1000-500+1000=1500     1500            是           否
+              ...............
+              10                9500-500+1000=10000    10000           是           否
+              11                10000-500+1000=10500   10000           否           是   最后excess没有保存，还是保存上次的，所以还是10000
+              12                10000-2*500+1000=10000 10000           是           否
+              13                10000-2*500+1000=10500 10000           否           是
+              14                10000-2*500+1000=10000 10000           是           否
+              ..............
+              后面循环每隔2ms满足条件
+
+
+
+
+
+            该算法的核心是:有一个桶，他最多容纳MAX令牌，我们往该桶中扔令牌，如果桶中令牌达到了max，则不能往里面扔了，就会拒绝接收该令牌，
+            同时每隔1ms会从令牌桶中淘汰掉部分令牌。然后就可以继续扔令牌进去了
+
+            这个算法应该属于漏桶算法:
+            假设配置限速rate大小为10000每秒，burst业务10000每秒，配置worker工作进程就为1，则令牌桶允许最大容量令牌数为10000 * 1000，同时每毫秒自动从令牌桶中删除的
+            令牌数为10000。如果在1秒钟时间段的第500ms的时候，已经接受了10000个连接，则令牌桶中令牌数为：10000 * 1000-500 * 1000，也就是令牌
+            桶还可以扔500 * 1000个令牌才能达到最大容量，这样下一个1ms(也就是500ms到501ms这1ms内)可以接受500个请求。501ms到后，又会删除10000个
+            令牌，又可以接收10个请求，依次继续循环下去。
+
+            实际运行的请求数为rate+burst 
+            之前的理解有误，可以参考这里:https://github.com/alibaba/tengine/issues/855
+            */
+            /* 
+            lr->excess:桶中的令牌总数
+            ctx->rate * ngx_abs(ms) / 1000:每隔1ms从令牌桶中自动清除的令牌数
+            +1000 : 表示每来一个请求，就向令牌桶中添加1000个令牌，因为1个请求对应1000个令牌
+
+            ???????
+            如果rate=10000,burst=1,如果高流量过来，则1ms只允许过一个请求，1分钟才1000个，如果rate大于1000，
+            则if ((ngx_uint_t) excess > limit->burst) 是不是应该改为if ((ngx_uint_t) excess > ctx->rate / 1000) {
+            */
             excess = lr->excess - ctx->rate * ngx_abs(ms) / 1000 + 1000;
 
             if (excess < 0) {
@@ -449,6 +495,7 @@ ngx_http_limit_req_lookup(ngx_http_limit_req_limit_t *limit, ngx_uint_t hash,
 
             *ep = excess;
 
+            
             if ((ngx_uint_t) excess > limit->burst) {
                 return NGX_BUSY;
             }
@@ -653,7 +700,10 @@ ngx_http_limit_req_expire(ngx_http_limit_req_ctx_t *ctx, ngx_uint_t n)
     }
 }
 
-
+/*
+shm_zone->init = ngx_http_limit_req_init_zone;
+shm_zone->data = ctx; //ngx_http_limit_req_init_zone的data参数
+*/
 static ngx_int_t
 ngx_http_limit_req_init_zone(ngx_shm_zone_t *shm_zone, void *data)
 {
@@ -873,7 +923,7 @@ ngx_http_limit_req_zone(ngx_conf_t *cf, ngx_command_t *cmd, void *conf)
         return NGX_CONF_ERROR;
     }
 
-    ctx->rate = rate * 1000 / scale;
+    ctx->rate = rate * 1000 / scale; //默认1000r/s
 
     shm_zone = ngx_shared_memory_add(cf, &name, size,
                                      &ngx_http_limit_req_module);
@@ -980,7 +1030,7 @@ ngx_http_limit_req(ngx_conf_t *cf, ngx_command_t *cmd, void *conf)
     if (limit == NULL) {
         return NGX_CONF_ERROR;
     }
-
+    
     limit->shm_zone = shm_zone;
     limit->burst = burst * 1000;
     limit->nodelay = nodelay;

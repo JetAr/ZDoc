@@ -385,7 +385,7 @@ ngx_open_listening_sockets(ngx_cycle_t *cycle)
 
     /* TODO: configurable try number */
 
-    for (tries = 5; tries; tries--) { //bind和listen最多从实5次
+    for (tries = 5; tries; tries--) { //bind和listen最多重试5次
         failed = 0;
 
         /* for each listening socket */
@@ -406,7 +406,7 @@ ngx_open_listening_sockets(ngx_cycle_t *cycle)
                  * to multiple sockets with SO_REUSEPORT, we have to set
                  * SO_REUSEPORT on the old socket before opening new ones
                  */
-
+                
                 int  reuseport = 1;
 
                 if (setsockopt(ls[i].fd, SOL_SOCKET, SO_REUSEPORT,
@@ -422,7 +422,7 @@ ngx_open_listening_sockets(ngx_cycle_t *cycle)
             }
 #endif
 
-            if (ls[i].fd != (ngx_socket_t) -1) {
+            if (ls[i].fd != (ngx_socket_t) -1) { //例如热升级的时候，fd是通过NGINX环境变量继承过来的，这里fd大于0
                 continue;
             }
 
@@ -1164,8 +1164,8 @@ ngx_close_connection(ngx_connection_t *c)
 
         /* we use ngx_cycle->log because c->log was in c->pool */
         //由于c已经在前面释放了，因此不能再用C->log了
-        ngx_log_error(level, ngx_cycle->log, err,
-                      ngx_close_socket_n " %d failed", fd);
+        
+        ngx_log_error(level, ngx_cycle->log, err, ngx_close_socket_n " %d failed", fd);
     }
 }
 

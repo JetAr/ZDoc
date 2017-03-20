@@ -123,8 +123,8 @@ deferred, ipv6only, or so_keepalive parameters are used then for a given address
 */
     unsigned                   ssl:1;
 #endif
-#if (NGX_HTTP_SPDY)
-    unsigned                   spdy:1;
+#if (NGX_HTTP_V2)
+    unsigned                   http2:1; //listen是否启用http2配置，例如listen 443 ssl http2;
 #endif
 #if (NGX_HAVE_INET6 && defined IPV6_V6ONLY)
     unsigned                   ipv6only:1;
@@ -133,7 +133,7 @@ deferred, ipv6only, or so_keepalive parameters are used then for a given address
     unsigned                   reuseport:1; //端口复用
 #endif
     unsigned                   so_keepalive:2; //listen配置项带上so_keepalive参数时置1，见ngx_http_core_listen 打开取值1 off关闭取值2
-    unsigned                   proxy_protocol:1; //见ngx_http_core_listen 
+    unsigned                   proxy_protocol:1; //见ngx_http_core_listen   配置类似listen ip:port  proxy_protocol的时候置1
 
     int                        backlog;
     int                        rcvbuf;
@@ -246,13 +246,14 @@ NGX_HTTP_FIND_CONFIG_PHASE、NGX_HTTP_POSTREWRITE_PHASE、NGX_HTTP_POST_ACCESS_PHA
 加入自己的ngx_http_handler_pt方法处理用户请求,但是他们的会占用cmcf->phase_engine.handlers[]数组中的一个成员，见ngx_http_init_phase_handlers
 */
 typedef enum { //各个阶段的http框架check函数见ngx_http_init_phase_handlers           //所有阶段的checker在ngx_http_core_run_phases中调用
-    //在接收到完整的HTTP头部后处理的HTTP阶段 
+    //在接收到完整的HTTP头部后处理的HTTP阶段   主要是获取客户端真实IP，因为客户端到nginx可能通过了vanish等缓存，
+    //ngx_http_realip_module(ngx_http_realip_init->ngx_http_realip_handler)
     NGX_HTTP_POST_READ_PHASE = 0, //该阶段方法有:ngx_http_realip_handler  POST有"在....后"的意思，POST_READ应该就是在解析完请求行和头部行后
 
 
 
     /*在还没有查询到URI匹配的location前，这时rewrite重写URL也作为一个独立的HTTP阶段   Server内请求地址重写阶段 */
-    NGX_HTTP_SERVER_REWRITE_PHASE, //该阶段handler方法有:ngx_http_rewrite_handler 
+    NGX_HTTP_SERVER_REWRITE_PHASE, //该阶段handler方法有:ngx_http_rewrite_module(ngx_http_rewrite_init->ngx_http_rewrite_handler) 
 
     /*根据URI寻找匹配的location，这个阶段通常由ngx_http_core_module模块实现，不建议其他HTTP模块重新定义这一阶段的行为*/
     NGX_HTTP_FIND_CONFIG_PHASE,//该阶段handler方法有:无，不允许用户添加hander方法在该阶段  该阶段完成的是Nginx的特定任务，即进行Location定位
@@ -331,7 +332,7 @@ struct ngx_http_phase_handler_s { //ngx_http_phase_engine_t结构体就是所有ngx_htt
 ┏━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━┓
 ┃    阶段名称                  ┃    checker方法                   ┃
 ┏━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━┓
-┃   NGX_HTTP_POST_READ_PHASE   ┃    ngx_http_core_generic_phase   ┃
+┃   NGX_HTTP_POST_READ_PHASE   ┃ngx_http_core_generic_phase       ┃
 ┣━━━━━━━━━━━━━━━╋━━━━━━━━━━━━━━━━━┫
 ┃NGX HTTP SERVER REWRITE PHASE ┃ngx_http_core_rewrite_phase       ┃
 ┣━━━━━━━━━━━━━━━╋━━━━━━━━━━━━━━━━━┫
@@ -358,6 +359,7 @@ struct ngx_http_phase_handler_s { //ngx_http_phase_engine_t结构体就是所有ngx_htt
      //ngx_http_phases阶段中的每一个阶段都有对应的checker函数，通过该checker函数来执行各自对应的。该checker函数在ngx_http_core_run_phases中执行
     ngx_http_phase_handler_pt  checker; //各个阶段的初始化赋值在ngx_http_init_phase_handlers中的checker函数中执行各自的handler方法,cheker是http框架函数，handler是对应的用户具体模块函数
 //除ngx_http_core module模块以外的HTTP模块，只能通过定义handler方法才能介入某一个HTTP处理阶段以处理请求
+//ngx_http_init_phase_handlers中ngx_http_phase_handler_s->handle指向了ngx_http_phase_t->handlers[i]
     ngx_http_handler_pt        handler; //只有在checker方法中才会去调用handler方法,见ngx_http_core_run_phases
 /*
 将要执行的下一个HTTP处理阶段的序号
@@ -400,10 +402,19 @@ typedef struct { //ngx_http_phase_engine_t结构体是保存在全局的ngx_http_core_main
 typedef struct { //存储在ngx_http_core_main_conf_t->phases[]
     //handlers动态数组保存着每一个HTTP模块初始化时添加到当前阶段的处理方法
     ////注意:每一个阶段中最后加入到handlers[]中的会首先添加到cmcf->phase_engine.handlers, 见ngx_http_init_phase_handlers
-    ngx_array_t                handlers; //数组中存储的是ngx_http_handler_pt   ngx_http_init_phase_handlers
-} ngx_http_phase_t;
+    //各个模块通过postconfiguration()接口加入到各自阶段的该数组中，例如参考ngx_http_realip_init
+    ngx_array_t                handlers; //数组中存储的是ngx_http_handler_pt   ngx_http_init_phase_handlers中ngx_http_phase_handler_s->handle指向了ngx_http_phase_t->handlers[i]
+} ngx_http_phase_t; 
 
-//参考:http://tech.uc.cn/?p=300
+/*ngx_http_core_main_conf_t(ngx_http_core_create_main_conf中创建) ngx_http_core_srv_conf_t(ngx_http_core_create_srv_conf创建)  
+ngx_http_core_loc_conf_s(ngx_http_core_create_loc_conf创建) */
+/*
+图形化参考:深入理解NGINX中的图9-2(P302)  图10-1(P353) 图10-1(P356) 图10-1(P359)  图4-2(P145)
+
+ngx_http_conf_ctx_t、ngx_http_core_main_conf_t、ngx_http_core_srv_conf_t、ngx_http_core_loc_conf_s和ngx_cycle_s->conf_ctx的关系见:
+Nginx的http配置结构体的组织结构:http://tech.uc.cn/?p=300
+*/ 
+
 typedef struct {//初始化赋值参考ngx_http_core_module_ctx
 /*
 servers动态数组中的每一个元素都是一个指针，它指向用于表示server块的ngx_http_core_srv_conf_t结构体的地址（属于ngx_http_core_module模块）。
@@ -585,6 +596,15 @@ proxy_pass http://fetch;
 )
 */
 
+/*ngx_http_core_main_conf_t(ngx_http_core_create_main_conf中创建) ngx_http_core_srv_conf_t(ngx_http_core_create_srv_conf创建)  
+ngx_http_core_loc_conf_s(ngx_http_core_create_loc_conf创建) */
+
+/*
+图形化参考:深入理解NGINX中的图9-2(P302)  图10-1(P353) 图10-1(P356) 图10-1(P359)  图4-2(P145)
+
+ngx_http_conf_ctx_t、ngx_http_core_main_conf_t、ngx_http_core_srv_conf_t、ngx_http_core_loc_conf_s和ngx_cycle_s->conf_ctx的关系见:
+Nginx的http配置结构体的组织结构:http://tech.uc.cn/?p=300
+*/ 
 typedef struct {
     /*
 用于设置监听socket的指令主要有两个：server_name和listen。server_name指令用于实现虚拟主机的功能，会设置每个server块的虚拟主机名，
@@ -612,7 +632,7 @@ typedef struct {
     size_t                      request_pool_size; //默认4096，见ngx_http_core_merge_srv_conf
     size_t                      client_header_buffer_size;
 
-    //client_header_timeout为读取客户端数据时默认分配的空间，如果该空间不够存储http头部行和请求行，则会调用large_client_header_buffers
+    //client_header_buffer_size为读取客户端数据时默认分配的空间，如果该空间不够存储http头部行和请求行，则会调用large_client_header_buffers
     //从新分配空间，并把之前的空间内容拷贝到新空间中，所以，这意味着可变长度的HTTP请求行加上HTTP头部的长度总和不能超过large_client_ header_
     //buffers指定的字节数，否则Nginx将会报错。
     ngx_bufs_t                  large_client_header_buffers; 
@@ -620,8 +640,8 @@ typedef struct {
     //发请求过来，隔了client_header_timeout时间后还没有新请求过来，这会关闭连接
     //注意，在解析到完整的头部行和请求行后，会在ngx_http_process_request中会把读事件超时定时器删除
     ngx_msec_t                  client_header_timeout; //默认60秒，如果不设置的话      注意和上面的large_client_header_buffers配合解释
-
-    ngx_flag_t                  ignore_invalid_headers;
+    
+    ngx_flag_t                  ignore_invalid_headers; //默认为1
     ngx_flag_t                  merge_slashes;
     ngx_flag_t                  underscores_in_headers; //HTTP头部是否允许下画线, 见ngx_http_parse_header_line
 
@@ -688,10 +708,10 @@ struct ngx_http_addr_conf_s {//创建空间赋值在ngx_http_add_addrs。 该结构体是ngx_
     ngx_http_virtual_names_t  *virtual_names; //创建空间赋值在ngx_http_add_addrs
 
 #if (NGX_HTTP_SSL)
-    unsigned                   ssl:1;
+    unsigned                   ssl:1; //listen配置是否启用ssl认证
 #endif
-#if (NGX_HTTP_SPDY)
-    unsigned                   spdy:1;
+#if (NGX_HTTP_V2)
+    unsigned                   http2:1;
 #endif
     unsigned                   proxy_protocol:1;
 };
@@ -919,7 +939,16 @@ location @fetch(
 proxy_pass http://fetch;
 )
 */
-//拆分过程见ngx_http_init_locations
+/*ngx_http_core_main_conf_t(ngx_http_core_create_main_conf中创建) ngx_http_core_srv_conf_t(ngx_http_core_create_srv_conf创建)  
+ngx_http_core_loc_conf_s(ngx_http_core_create_loc_conf创建) */
+
+/*
+图形化参考:深入理解NGINX中的图9-2(P302)  图10-1(P353) 图10-1(P356) 图10-1(P359)  图4-2(P145)
+
+ngx_http_conf_ctx_t、ngx_http_core_main_conf_t、ngx_http_core_srv_conf_t、ngx_http_core_loc_conf_s和ngx_cycle_s->conf_ctx的关系见:
+Nginx的http配置结构体的组织结构:http://tech.uc.cn/?p=300
+*/ 
+
 //参考ngx_http_core_location
 struct ngx_http_core_loc_conf_s {
     //ngx_http_add_location中把精确匹配 正则表达式 name  noname配置以外的其他配置都算做前缀匹配  例如//location ^~  xxx{}      location /XXX {}

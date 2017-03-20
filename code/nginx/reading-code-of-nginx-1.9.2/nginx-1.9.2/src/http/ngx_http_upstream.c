@@ -636,7 +636,8 @@ ngx_http_upstream_create(ngx_http_request_t *r)//´´½¨Ò»¸öngx_http_upstream_t½á¹¹
     7)ÎÞÂÛÁ¬½ÓÊÇ·ñ½¨Á¢³É¹¦£¬¸ºÔð½¨Á¢Á¬½ÓµÄconnect·½·¨¶¼»áÁ¢¿Ì·µ»Ø¡£
 */
 //ngx_http_upstream_init·½·¨½«»á¸ù¾Ýngx_http_upstream_conf_tÖÐµÄ³ÉÔ±³õÊ¼»¯upstream£¬Í¬Ê±»á¿ªÊ¼Á¬½ÓÉÏÓÎ·þÎñÆ÷£¬ÒÔ´ËÕ¹¿ªÕû¸öupstream´¦ÀíÁ÷³Ì
-void ngx_http_upstream_init(ngx_http_request_t *r) //ÔÚ¶ÁÈ¡Íêä¯ÀÀÆ÷·¢ËÍÀ´µÄÇëÇóÍ·²¿×Ö¶Îºó£¬»áÍ¨¹ýproxy fastcgiµÈÄ£¿é¶ÁÈ¡°üÌå£¬¶ÁÈ¡ÍêºóÖ´ÐÐ¸Ãº¯Êý
+void ngx_http_upstream_init(ngx_http_request_t *r) 
+//ÔÚ¶ÁÈ¡Íêä¯ÀÀÆ÷·¢ËÍÀ´µÄÇëÇóÍ·²¿×Ö¶Îºó£¬»áÍ¨¹ýproxy fastcgiµÈÄ£¿é¶ÁÈ¡°üÌå£¬¶ÁÈ¡ÍêºóÖ´ÐÐ¸Ãº¯Êý£¬ÀýÈçngx_http_read_client_request_body(r, ngx_http_upstream_init);
 {
     ngx_connection_t     *c;
 
@@ -645,8 +646,8 @@ void ngx_http_upstream_init(ngx_http_request_t *r) //ÔÚ¶ÁÈ¡Íêä¯ÀÀÆ÷·¢ËÍÀ´µÄÇëÇóÍ
     ngx_log_debug1(NGX_LOG_DEBUG_HTTP, c->log, 0,
                    "http init upstream, client timer: %d", c->read->timer_set);
 
-#if (NGX_HTTP_SPDY)
-    if (r->spdy_stream) {
+#if (NGX_HTTP_V2)
+    if (r->stream) {
         ngx_http_upstream_init_request(r);
         return;
     }
@@ -855,14 +856,12 @@ ngx_http_upstream_init_request(ngx_http_request_t *r)
     */
     if (u->resolved == NULL) {//ÉÏÓÎµÄIPµØÖ·ÊÇ·ñ±»½âÎö¹ý£¬ngx_http_fastcgi_handlerµ÷ÓÃngx_http_fastcgi_eval»á½âÎö¡£ ÎªNULLËµÃ÷Ã»ÓÐ½âÎö¹ý£¬Ò²¾ÍÊÇfastcgi_pas xxxÖÐµÄxxx²ÎÊýÃ»ÓÐ±äÁ¿
         uscf = u->conf->upstream; //upstream¸³ÖµÔÚngx_http_fastcgi_pass
-        printf("yang test ............. resoleved NULL\n");
     } else { //fastcgi_pass xxxµÄxxxÖÐÓÐ±äÁ¿£¬ËµÃ÷ºó¶Ë·þÎñÆ÷ÊÇ»á¸ù¾ÝÇëÇó¶¯Ì¬±ä»¯µÄ£¬²Î¿¼ngx_http_fastcgi_handler
 
 #if (NGX_HTTP_SSL)
         u->ssl_name = u->resolved->host;
 #endif
     //ngx_http_fastcgi_handler »áµ÷ÓÃ ngx_http_fastcgi_evalº¯Êý£¬½øÐÐfastcgi_pass ºóÃæµÄURLµÄ¼òÎö£¬½âÎö³öunixÓò£¬»òÕßsocket.
-         printf("yang test ............. resoleved NO NULL, host:%s\n", u->resolved->host.data);
         // Èç¹ûÒÑ¾­ÊÇipµØÖ·¸ñÊ½ÁË£¬¾Í²»ÐèÒªÔÙ½øÐÐ½âÎö
         if (u->resolved->sockaddr) {//Èç¹ûµØÖ·ÒÑ¾­±»resolve¹ýÁË£¬ÎÒIPµØÖ·£¬´ËÊ±´´½¨round robin peer¾ÍÐÐ
 
@@ -1498,8 +1497,8 @@ ngx_http_upstream_check_broken_connection(ngx_http_request_t *r,
         return;
     }
 
-#if (NGX_HTTP_SPDY)
-    if (r->spdy_stream) {
+#if (NGX_HTTP_V2)
+    if (r->stream) {
         return;
     }
 #endif
@@ -2445,6 +2444,7 @@ ngx_http_upstream_send_request_handler(ngx_http_request_t *r,
     ngx_log_debug0(NGX_LOG_DEBUG_HTTP, r->connection->log, 0,
                    "http upstream send request handler");
 
+    //±íÊ¾ÏòÉÏÓÎ·þÎñÆ÷·¢ËÍµÄÇëÇóÒÑ¾­³¬Ê±
     if (c->write->timedout) { //¸Ã¶¨Ê±Æ÷ÔÚngx_http_upstream_send_requestÌí¼ÓµÄ
         ngx_http_upstream_next(r, u, NGX_HTTP_UPSTREAM_FT_TIMEOUT);
         return;
@@ -2458,7 +2458,7 @@ ngx_http_upstream_send_request_handler(ngx_http_request_t *r,
     }
 
 #endif
-
+    //±íÊ¾ÉÏÓÎ·þÎñÆ÷µÄÏìÓ¦ÐèÒªÖ±½Ó×ª·¢¸ø¿Í»§¶Ë£¬²¢ÇÒ´ËÊ±ÒÑ¾­°ÑÏìÓ¦Í··¢ËÍ¸ø¿Í»§¶ËÁË
     if (u->header_sent) { //¶¼ÒÑ¾­ÊÕµ½ºó¶ËµÄÊý¾Ý²¢ÇÒ·¢ËÍ¸ø¿Í»§¶Ëä¯ÀÀÆ÷ÁË£¬ËµÃ÷²»»áÔÙÏëºó¶ËÐ´Êý¾Ý£¬
         u->write_event_handler = ngx_http_upstream_dummy_handler;
 
@@ -4710,7 +4710,7 @@ ngx_http_upstream_finalize_request(ngx_http_request_t *r,
         rc = ngx_http_send_special(r, NGX_HTTP_FLUSH);
     }
 
-    ngx_http_finalize_request(r, rc);
+    ngx_http_finalize_request(r, rc); //ngx_http_upstream_finalize_request->ngx_http_finalize_request
 }
 
 

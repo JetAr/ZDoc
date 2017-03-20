@@ -72,8 +72,6 @@ ngx_uint_t   ngx_http_max_module; //二级模块类型http模块个数，见ngx_http_block  
 当执行ngx_http_send_header发送HTTP头部时，就从ngx_http_top_header_filter指针开始遍历所有的HTTP头部过滤模块，
 而在执行ngx_http_output_filter发送HTTP包体时，就从ngx_http_top_body_filter指针开始遍历所有的HTTP包体过滤模块
 */
-//处理流程ngx_http_send_header中执行ngx_http_myfilter_header_filter，然后在ngx_http_myfilter_header_filter中执行下一个filter，也就是
-//ngx_http_next_header_filter中存储之前的filter，这样依次循环下去，那么所有的filter函数都会得到执行
 
 //包体通过ngx_http_output_filter循环发送
 
@@ -199,7 +197,7 @@ cf空间始终在一个地方，就是ngx_init_cycle中的conf，使用中只是简单的修改conf中的ct
 static char *
 ngx_http_block(ngx_conf_t *cf, ngx_command_t *cmd, void *conf) 
 //这里的cf是从ngx_conf_handler里面的if (cmd->type & NGX_DIRECT_CONF)判断里面确定了该cf为
-{
+{//图形化参考:深入理解NGINX中的图9-2  图10-1  图4-2，结合图看,并可以配合http://tech.uc.cn/?p=300看
     char                        *rv;
     ngx_uint_t                   mi, m, s;
     ngx_conf_t                   pcf;
@@ -217,7 +215,7 @@ ngx_http_block(ngx_conf_t *cf, ngx_command_t *cmd, void *conf)
 
 //conf为ngx_conf_handler中的conf = confp[ngx_modules[i]->ctx_index];也就是conf指向的是ngx_cycle_s->conf_ctx[]，
 //所以对conf赋值就是对ngx_cycle_s中的conf_ctx赋值
-    *(ngx_http_conf_ctx_t **) conf = ctx; 
+    *(ngx_http_conf_ctx_t **) conf = ctx; //图形化参考:深入理解NGINX中的图9-2  图10-1  图4-2，结合图看,并可以配合http://tech.uc.cn/?p=300看
 
     /* count the number of the http modules and set up their indices */
 
@@ -618,7 +616,7 @@ ngx_http_init_phase_handlers(ngx_conf_t *cf, ngx_http_core_main_conf_t *cmcf)
 
         switch (i) { //所有阶段的checker在ngx_http_core_run_phases中调用
         /*
-        NGX__HTTP_SERVERREWRITEPHASE阶段，和第3阶段NGXHTTPREWRITE_PHASE都属于地址重写，也都是针对rewrite模块而设定的阶段，前
+        NGX_HTTP_SERVERREWRITEPHASE阶段，和第3阶段NGXHTTPREWRITE_PHASE都属于地址重写，也都是针对rewrite模块而设定的阶段，前
         者用于server上下文里的地址重写，而后者用于location上下文里的地址重写。为什么要设置两个地址重写阶段，原因在于rewrite模块
         的相关指令（比如rewrite、if、set等）既可用于server上下文．又可用于location上下文。在客户端请求被Nginx接收后，首先做server
         查找与定位，在定位到server（如果没查找到就是默认server）后执行NGXHTTP_SERVER_REWRITEPHASE阶段上的回调函数，然后再进入到下
@@ -1767,8 +1765,8 @@ ngx_http_add_addresses(ngx_conf_t *cf, ngx_http_core_srv_conf_t *cscf,
 #if (NGX_HTTP_SSL)
     ngx_uint_t             ssl;
 #endif
-#if (NGX_HTTP_SPDY)
-    ngx_uint_t             spdy;
+#if (NGX_HTTP_V2)
+    ngx_uint_t             http2;
 #endif
 
     /*
@@ -1829,8 +1827,8 @@ ngx_http_add_addresses(ngx_conf_t *cf, ngx_http_core_srv_conf_t *cscf,
 #if (NGX_HTTP_SSL)
         ssl = lsopt->ssl || addr[i].opt.ssl;
 #endif
-#if (NGX_HTTP_SPDY)
-        spdy = lsopt->spdy || addr[i].opt.spdy;
+#if (NGX_HTTP_V2)
+        http2 = lsopt->http2 || addr[i].opt.http2;
 #endif
 
         if (lsopt->set) {
@@ -1866,8 +1864,8 @@ ngx_http_add_addresses(ngx_conf_t *cf, ngx_http_core_srv_conf_t *cscf,
 #if (NGX_HTTP_SSL)
         addr[i].opt.ssl = ssl;
 #endif
-#if (NGX_HTTP_SPDY)
-        addr[i].opt.spdy = spdy;
+#if (NGX_HTTP_V2)
+        addr[i].opt.http2 = http2;
 #endif
 
         return NGX_OK;
@@ -1900,14 +1898,17 @@ ngx_http_add_address(ngx_conf_t *cf, ngx_http_core_srv_conf_t *cscf,
         }
     }
 
-#if (NGX_HTTP_SPDY && NGX_HTTP_SSL                                            \
+#if (NGX_HTTP_V2 && NGX_HTTP_SSL                                              \
      && !defined TLSEXT_TYPE_application_layer_protocol_negotiation           \
      && !defined TLSEXT_TYPE_next_proto_neg)
-    if (lsopt->spdy && lsopt->ssl) {
+
+    if (lsopt->http2 && lsopt->ssl) {
         ngx_conf_log_error(NGX_LOG_WARN, cf, 0,
-                           "nginx was built without OpenSSL ALPN or NPN "
-                           "support, SPDY is not enabled for %s", lsopt->addr);
+                           "nginx was built with OpenSSL that lacks ALPN "
+                           "and NPN support, HTTP/2 is not enabled for %s",
+                           lsopt->addr);
     }
+
 #endif
 
     addr = ngx_array_push(&port->addrs);
@@ -2430,8 +2431,8 @@ ngx_http_add_addrs(ngx_conf_t *cf, ngx_http_port_t *hport,
 #if (NGX_HTTP_SSL)
         addrs[i].conf.ssl = addr[i].opt.ssl;
 #endif
-#if (NGX_HTTP_SPDY)
-        addrs[i].conf.spdy = addr[i].opt.spdy;
+#if (NGX_HTTP_V2)
+        addrs[i].conf.http2 = addr[i].opt.http2;
 #endif
         addrs[i].conf.proxy_protocol = addr[i].opt.proxy_protocol;
 
@@ -2497,8 +2498,8 @@ ngx_http_add_addrs6(ngx_conf_t *cf, ngx_http_port_t *hport,
 #if (NGX_HTTP_SSL)
         addrs6[i].conf.ssl = addr[i].opt.ssl;
 #endif
-#if (NGX_HTTP_SPDY)
-        addrs6[i].conf.spdy = addr[i].opt.spdy;
+#if (NGX_HTTP_V2)
+        addrs6[i].conf.http2 = addr[i].opt.http2;
 #endif
 
         if (addr[i].hash.buckets == NULL

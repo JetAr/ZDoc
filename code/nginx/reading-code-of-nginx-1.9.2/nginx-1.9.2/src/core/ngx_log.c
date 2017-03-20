@@ -90,7 +90,8 @@ static ngx_str_t err_levels[] = { //¶ÔÓ¦ÈÕÖ¾¼¶±ðNGX_LOG_STDERR--NGX_LOG_DEBUG£¬²
     ngx_string("debug")
 };
 
-static const char *debug_levels[] = { //¶ÔÓ¦Î»Í¼NGX_LOG_DEBUG_FIRST---NGX_LOG_DEBUG_LAST  ²Î¿¼ngx_log_set_levels
+//debug_levels´ú±íµÄÊÇÈÕÖ¾ÀàÐÍ     err_levels´ú±íµÄÊÇÈÕÖ¾¼¶±ð  
+static const char *debug_levels[] = { //¶ÔÓ¦Î»Í¼NGX_LOG_DEBUG_CORE---NGX_LOG_DEBUG_LAST  ²Î¿¼ngx_log_set_levels
     "debug_core", "debug_alloc", "debug_mutex", "debug_event",
     "debug_http", "debug_mail", "debug_mysql", "debug_stream"
 };
@@ -222,7 +223,7 @@ ngx_log_error_core(ngx_uint_t level, ngx_log_t *log, const char* filename, int l
     p = ngx_cpymem(errstr, ngx_cached_err_log_time.data,
                    ngx_cached_err_log_time.len);
 
-    snprintf(filebuf, sizeof(filebuf), "[%35s, %5d]", filename, lineno);
+    snprintf(filebuf, sizeof(filebuf), "[%40s, %5d]", filename, lineno);
 
     p = ngx_slprintf(p, last, "%s ", filebuf);  
     

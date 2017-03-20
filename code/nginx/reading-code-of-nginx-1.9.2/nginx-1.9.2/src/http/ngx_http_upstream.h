@@ -499,12 +499,12 @@ struct ngx_http_upstream_s { //¸Ã½á¹¹ÖĞµÄ²¿·Ö³ÉÔ±ÊÇ´Óupstream{}ÖĞµÄÏà¹ØÅäÖÃÀïÃæ(
     ////buffering·½Ê½£¬·Ç×ÓÇëÇó£¬ºó¶ËÍ·²¿ĞÅÏ¢ÒÑ¾­¶ÁÈ¡Íê±ÏÁË£¬Èç¹ûºó¶Ë»¹ÓĞ°üÌåĞèÒª·¢ËÍ£¬Ôò±¾¶ËÍ¨¹ıngx_http_upstream_process_upstream¸Ã·½Ê½¶ÁÈ¡
     //·Çbuffering·½Ê½£¬·Ç×ÓÇëÇó£¬ºó¶ËÍ·²¿ĞÅÏ¢ÒÑ¾­¶ÁÈ¡Íê±ÏÁË£¬Èç¹ûºó¶Ë»¹ÓĞ°üÌåĞèÒª·¢ËÍ£¬Ôò±¾¶ËÍ¨¹ıngx_http_upstream_process_non_buffered_upstream¶ÁÈ¡
     //Èç¹ûÓĞ×ÓÇëÇó£¬ºó¶ËÍ·²¿ĞÅÏ¢ÒÑ¾­¶ÁÈ¡Íê±ÏÁË£¬Èç¹ûºó¶Ë»¹ÓĞ°üÌåĞèÒª·¢ËÍ£¬Ôò±¾¶ËÍ¨¹ıngx_http_upstream_process_body_in_memory¶ÁÈ¡
-    ngx_http_upstream_handler_pt     read_event_handler; //ngx_http_upstream_process_header
+    ngx_http_upstream_handler_pt     read_event_handler; //ngx_http_upstream_process_header  ngx_http_upstream_handlerÖĞÖ´ĞĞ
     //´¦ÀíĞ´ÊÂ¼şµÄ»Øµ÷·½·¨£¬Ã¿Ò»¸ö½×¶Î¶¼ÓĞ²»Í¬µÄwrite event handler  
     //×¢Òângx_http_upstream_tºÍngx_http_request_t¶¼ÓĞ¸Ã³ÉÔ± ·Ö±ğÔÚngx_http_request_handlerºÍngx_http_upstream_handlerÖĞÖ´ĞĞ
     ngx_http_upstream_handler_pt     write_event_handler; //ngx_http_upstream_send_request_handlerÓÃ»§Ïòºó¶Ë·¢ËÍ°üÌåÊ±£¬Ò»´Î·¢ËÍÃ»ÍêÍê³É£¬ÔÙ´Î³ö·¢epoll writeµÄÊ±ºòµ÷ÓÃ
 
-    //±íÊ¾Ö÷¶¯ÏòÉÏÓÎ·şÎñÆ÷·¢ÆğµÄÁ¬½Ó¡£ 
+    //±íÊ¾Ö÷¶¯ÏòÉÏÓÎ·şÎñÆ÷·¢ÆğµÄÁ¬½Ó¡£ Á¬½ÓµÄfd±£´æÔÚpeer->connectionÀïÃæ
     ngx_peer_connection_t            peer;//³õÊ¼¸³Öµ¼ûngx_http_upstream_connect->ngx_event_connect_peer(&u->peer);
 
     /*
@@ -516,7 +516,7 @@ struct ngx_http_upstream_s { //¸Ã½á¹¹ÖĞµÄ²¿·Ö³ÉÔ±ÊÇ´Óupstream{}ÖĞµÄÏà¹ØÅäÖÃÀïÃæ(
 
     /* request_bufs¾ö¶¨·¢ËÍÊ²Ã´ÑùµÄÇëÇó¸øÉÏÓÎ·şÎñÆ÷£¬ÔÚÊµÏÖcreate_request·½·¨Ê±ĞèÒªÉèÖÃËü 
     request_bufsÒÔÁ´±íµÄ·½Ê½°Ñngx_buf_t»º³åÇøÁ´½ÓÆğÀ´£¬Ëü±íÊ¾ËùÓĞĞèÒª·¢ËÍµ½ÉÏÓÎ·şÎñÆ÷µÄÇëÇóÄÚÈİ¡£
-    ËùÒÔ£¬HTTPÄ£¿éÊµÏÖµÄcreate_request»Øµ÷·½·¨¾ÍÔÚÓÚ¹¹Ôìreque st_bufgÁ´±í
+    ËùÒÔ£¬HTTPÄ£¿éÊµÏÖµÄcreate_request»Øµ÷·½·¨¾ÍÔÚÓÚ¹¹Ôìrequest_bufgÁ´±í
     */ /* ÕâÉÏÃæµÄfastcgi_param²ÎÊıºÍ¿Í»§¶ËÇëÇóÍ·key¹«ÓÃÒ»¸öcl£¬¿Í»§¶Ë°üÌåÁíÍâÕ¼ÓÃÒ»¸ö»òÕß¶à¸öcl£¬ËûÃÇÍ¨¹ınextÁ¬½ÓÔÚÒ»Æğ£¬×îÖÕÇ°²¿Á¬½Óµ½u->request_bufs
         ËùÓĞĞèÒª·¢Íùºó¶ËµÄÊı¾İ¾ÍÔÚu->request_bufsÖĞÁË£¬·¢ËÍµÄÊ±ºò´ÓÀïÃæÈ¡³öÀ´¼´¿É£¬²Î¿¼ngx_http_fastcgi_create_request*/
     /*
@@ -710,13 +710,14 @@ process_header»Øµ÷·½·¨process_headerÊÇÓÃÓÚ½âÎöÉÏÓÎ·şÎñÆ÷·µ»ØµÄ»ùÓÚTCPµÄÏìÓ¦Í·²¿µ
 /*
 ½âÎöÉÏÓÎ·şÎñÆ÷·µ»ØÏìÓ¦µÄ°üÍ·£¬·µ»ØNGX_AGAIN±íÊ¾°üÍ·»¹Ã»ÓĞ½ÓÊÕÍêÕû£¬·µ»ØNGX_HTTP_UPSTREAM_INVALID_HEADER±íÊ¾°üÍ·²»ºÏ·¨£¬·µ»Ø
 NGX ERROR±íÊ¾³öÏÖ´íÎó£¬·µ»ØNGX_OK±íÊ¾½âÎöµ½ÍêÕûµÄ°üÍ·
-*/ //ngx_http_fastcgi_process_header  ngx_http_proxy_process_status_line->ngx_http_proxy_process_status_line(ngx_http_XXX_process_header) //ÔÚngx_http_upstream_process_headerÖĞÖ´ĞĞ
+*/ //ngx_http_fastcgi_process_header  ngx_http_proxy_process_status_line->ngx_http_proxy_process_status_line(ngx_http_XXX_process_header) 
+//ÔÚngx_http_upstream_process_headerÖĞÖ´ĞĞ
     ngx_int_t                      (*process_header)(ngx_http_request_t *r); //´¦ÀíÉÏÓÎ·şÎñÆ÷»Ø¸´µÄµÚÒ»¸öbit£¬Ê±³£ÊÇ±£´æÒ»¸öÖ¸ÏòÉÏÓÎ»Ø¸´¸ºÔØµÄÖ¸Õë
     void                           (*abort_request)(ngx_http_request_t *r);//ÔÚ¿Í»§¶Ë·ÅÆúÇëÇóµÄÊ±ºò±»µ÷ÓÃ ngx_http_XXX_abort_request
    
 /*
 µ±µ÷ÓÃngx_http_upstream_initÆô¶¯upstream»úÖÆºó£¬ÔÚ¸÷ÖÖÔ­Òò£¨ÎŞÂÛ³É¹¦»¹ÊÇÊ§°Ü£©µ¼ÖÂ¸ÃÇëÇó±»Ïú»ÙÇ°¶¼»áµ÷ÓÃfinalize_request·½
-·¨£¨²Î¼ûÍ¼5-1£©¡£ÔÚfinalize_request·½·¨ÖĞ¿ÉÒÔ²»×öÈÎºÎÊÂÇé£¬µ«±ØĞëÊµÏÖfinalize_request·½·¨£¬·ñÔòNginx»á³öÏÖ¿ÕÖ¸Õëµ÷ÓÃµÄÑÏÖØ´íÎó¡£
+·¨¡£ÔÚfinalize_request·½·¨ÖĞ¿ÉÒÔ²»×öÈÎºÎÊÂÇé£¬µ«±ØĞëÊµÏÖfinalize_request·½·¨£¬·ñÔòNginx»á³öÏÖ¿ÕÖ¸Õëµ÷ÓÃµÄÑÏÖØ´íÎó¡£
 
 µ±ÇëÇó½áÊøÊ±£¬½«»á»Øµ÷finalize_request·½·¨£¬Èç¹ûÎÒÃÇÏ£Íû´ËÊ±ÊÍ·Å×ÊÔ´£¬Èç´ò¿ª
 µÄ¾ä±úµÈ£¬£®ÄÇÃ´¿ÉÒÔ°ÑÕâÑùµÄ´úÂëÌí¼Óµ½finalize_request·½·¨ÖĞ¡£±¾ÀıÖĞ¶¨ÒåÁËmytest_
@@ -729,7 +730,7 @@ upstream_finalize_request·½·¨£¬ÓÉÓÚÎÒÃÇÃ»ÓĞÈÎºÎĞèÒªÊÍ·ÅµÄ×ÊÔ´£¬ËùÒÔ¸Ã·½·¨Ã»ÓĞÍê³
 ÔÚÖØ¶¨ÏòURL½×¶Î£¬Èç¹ûÊµÏÖÁËrewrite_redirect»Øµ÷·½·¨£¬ÄÇÃ´ÕâÊ±»áµ÷ÓÃrewrite_redirect¡£
 ¿ÉÒÔ²é¿´upstreamÄ£¿éµÄngx_http_upstream_rewrite_location·½·¨¡£Èç¹ûupstreamÄ£¿é½ÓÊÕµ½ÍêÕûµÄÉÏÓÎÏìÓ¦Í·²¿£¬
 ¶øÇÒÓÉHTTPÄ£¿éµÄprocess_header»Øµ÷·½·¨½«½âÎö³öµÄ¶ÔÓ¦ÓÚLocationµÄÍ·²¿ÉèÖÃµ½ÁËngx_http_upstream_tÖĞµÄheaders in³ÉÔ±Ê±£¬
-ngx_http_upstream_process_headers·½·¨½«»á×îÖÕµ÷ÓÃrewrite¡ªredirect·½·¨
+ngx_http_upstream_process_headers·½·¨½«»á×îÖÕµ÷ÓÃrewrite_redirect·½·¨
 Òò´Ë£¬rewrite_ redirectµÄÊ¹ÓÃ³¡¾°±È½ÏÉÙ£¬ËüÖ÷ÒªÓ¦ÓÃÓÚHTTP·´Ïò´úÀíÄ£òÌ(ngx_http_proxy_module)¡£ ¸³ÖµÎªngx_http_proxy_rewrite_redirect
 */ 
 //ÔÚÉÏÓÎ·µ»ØµÄÏìÓ¦³öÏÖLocation»òÕßRefreshÍ·²¿±íÊ¾ÖØ¶¨ÏòÊ±£¬»áÍ¨ÓØngx_http_upstream_process_headers·½·¨µ÷ÓÃµ½¿ÉÓÉHTTPÄ£¿éÊµÏÖµÄrewrite redirect·½·¨
@@ -789,6 +790,9 @@ ngx_http_upstream_process_headers·½·¨½«»á×îÖÕµ÷ÓÃrewrite¡ªredirect·½·¨
     /*
      Èç¹û¿ªÆô»º³å£¬ÄÇÃ´Nginx½«¾¡¿ÉÄÜ¶àµØ¶ÁÈ¡ºó¶Ë·şÎñÆ÷µÄÏìÓ¦Êı¾İ£¬µÈ´ïµ½Ò»¶¨Á¿£¨±ÈÈçbufferÂú£©ÔÙ´«ËÍ¸ø×îÖÕ¿Í»§¶Ë¡£Èç¹û¹Ø±Õ£¬
      ÄÇÃ´Nginx¶ÔÊı¾İµÄÖĞ×ª¾ÍÊÇÒ»¸öÍ¬²½µÄ¹ı³Ì£¬¼´´Óºó¶Ë·şÎñÆ÷½ÓÊÕµ½ÏìÓ¦Êı¾İ¾ÍÁ¢¼´½«Æä·¢ËÍ¸ø¿Í»§¶Ë¡£
+
+     buffering±êÖ¾Î»Îª1Ê±£¬½«¿ªÆô¸ü¶àµÄÄÚ´æºÍ´ÅÅÌÎÄ¼şÓÃÓÚ»º´æÉÏÓÎµÄÏìÓ¦°üÌå£¬ÕâÒâÎ¶ÉÏÓÎÍøËÙ¸ü¿ì£»µ±buffering
+     Îª0Ê±£¬½«Ê¹ÓÃ¹Ì¶¨´óĞ¡µÄ»º³åÇø£¨¾ÍÊÇÉÏÃæ½éÉÜµÄbuffer»º³åÇø£©À´×ª·¢ÏìÓ¦°üÌå¡£
      */ //buffering·½Ê½ºÍ·Çbuffering·½Ê½ÔÚº¯Êıngx_http_upstream_send_response·Ö²æ
       //¼ûxxx_bufferingÈçfastcgi_buffering  proxy_buffering  ÊÇ·ñ»º´æºó¶Ë·şÎñÆ÷Ó¦´ğ»ØÀ´µÄ°üÌå
     unsigned                         buffering:1; //ÏòÏÂÓÎ×ª·¢ÉÏÓÎµÄÏìÓ¦°üÌåÊ±£¬ÊÇ·ñ¿ªÆô¸ü´óµÄÄÚ´æ¼°ÁÙÊ±´ÅÅÌÎÄ¼şÓÃÓÚ»º´æÀ´²»¼°·¢ËÍµ½ÏÂÓÎµÄÏìÓ¦

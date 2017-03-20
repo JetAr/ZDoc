@@ -316,20 +316,26 @@ static ngx_str_t ngx_http_ssl_sess_id_ctx = ngx_string("HTTP");
 
 #ifdef TLSEXT_TYPE_application_layer_protocol_negotiation
 
+/*
+2017/03/08 15:24:45[                ngx_http_ssl_alpn_select,   341]  [debug] 2794#2794: *2 SSL ALPN supported by client: h2
+2017/03/08 15:24:45[                ngx_http_ssl_alpn_select,   341]  [debug] 2794#2794: *2 SSL ALPN supported by client: spdy/3.1
+2017/03/08 15:24:45[                ngx_http_ssl_alpn_select,   341]  [debug] 2794#2794: *2 SSL ALPN supported by client: http/1.1
+2017/03/08 15:24:45[                ngx_http_ssl_alpn_select,   368]  [debug] 2794#2794: *2 SSL ALPN selected: h2
+*/ /* 确定客户端和nginx采用什么协议进行通信 */ 
 static int
 ngx_http_ssl_alpn_select(ngx_ssl_conn_t *ssl_conn, const unsigned char **out,
     unsigned char *outlen, const unsigned char *in, unsigned int inlen,
     void *arg)
-{
+{/* ngx_ssl_handshake中执行该函数 */
     unsigned int            srvlen;
     unsigned char          *srv;
 #if (NGX_DEBUG)
     unsigned int            i;
 #endif
-#if (NGX_HTTP_SPDY)
+#if (NGX_HTTP_V2)
     ngx_http_connection_t  *hc;
 #endif
-#if (NGX_HTTP_SPDY || NGX_DEBUG)
+#if (NGX_HTTP_V2 || NGX_DEBUG)
     ngx_connection_t       *c;
 
     c = ngx_ssl_get_connection(ssl_conn);
@@ -342,12 +348,13 @@ ngx_http_ssl_alpn_select(ngx_ssl_conn_t *ssl_conn, const unsigned char **out,
     }
 #endif
 
-#if (NGX_HTTP_SPDY)
+#if (NGX_HTTP_V2)
     hc = c->data;
 
-    if (hc->addr_conf->spdy) {
-        srv = (unsigned char *) NGX_SPDY_NPN_ADVERTISE NGX_HTTP_NPN_ADVERTISE;
-        srvlen = sizeof(NGX_SPDY_NPN_ADVERTISE NGX_HTTP_NPN_ADVERTISE) - 1;
+    if (hc->addr_conf->http2) {
+        srv =
+           (unsigned char *) NGX_HTTP_V2_ALPN_ADVERTISE NGX_HTTP_NPN_ADVERTISE;
+        srvlen = sizeof(NGX_HTTP_V2_ALPN_ADVERTISE NGX_HTTP_NPN_ADVERTISE) - 1;
 
     } else
 #endif
@@ -366,6 +373,7 @@ ngx_http_ssl_alpn_select(ngx_ssl_conn_t *ssl_conn, const unsigned char **out,
     ngx_log_debug2(NGX_LOG_DEBUG_HTTP, c->log, 0,
                    "SSL ALPN selected: %*s", *outlen, *out);
 
+    //define SSL_TLSEXT_ERR_OK 0
     return SSL_TLSEXT_ERR_OK;
 }
 
@@ -378,22 +386,23 @@ static int
 ngx_http_ssl_npn_advertised(ngx_ssl_conn_t *ssl_conn,
     const unsigned char **out, unsigned int *outlen, void *arg)
 {
-#if (NGX_HTTP_SPDY || NGX_DEBUG)
+#if (NGX_HTTP_V2 || NGX_DEBUG)
     ngx_connection_t  *c;
 
     c = ngx_ssl_get_connection(ssl_conn);
     ngx_log_debug0(NGX_LOG_DEBUG_HTTP, c->log, 0, "SSL NPN advertised");
 #endif
 
-#if (NGX_HTTP_SPDY)
+#if (NGX_HTTP_V2)
     {
     ngx_http_connection_t  *hc;
 
     hc = c->data;
 
-    if (hc->addr_conf->spdy) {
-        *out = (unsigned char *) NGX_SPDY_NPN_ADVERTISE NGX_HTTP_NPN_ADVERTISE;
-        *outlen = sizeof(NGX_SPDY_NPN_ADVERTISE NGX_HTTP_NPN_ADVERTISE) - 1;
+    if (hc->addr_conf->http2) {
+        *out =
+            (unsigned char *) NGX_HTTP_V2_NPN_ADVERTISE NGX_HTTP_NPN_ADVERTISE;
+        *outlen = sizeof(NGX_HTTP_V2_NPN_ADVERTISE NGX_HTTP_NPN_ADVERTISE) - 1;
 
         return SSL_TLSEXT_ERR_OK;
     }

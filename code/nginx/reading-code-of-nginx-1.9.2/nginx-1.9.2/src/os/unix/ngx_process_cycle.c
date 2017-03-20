@@ -28,7 +28,7 @@ static void ngx_cache_manager_process_handler(ngx_event_t *ev);
 static void ngx_cache_loader_process_handler(ngx_event_t *ev);
 
 //如果是第一次加载，则满足ngx_is_init_cycle。如果是reload热启动，则原来的nginx进程的ngx_process == NGX_PROCESS_MASTER
-ngx_uint_t    ngx_process;
+ngx_uint_t    ngx_process;//不赋初值，默认0，也就是NGX_PROCESS_SINGLE
 ngx_uint_t    ngx_worker;
 ngx_pid_t     ngx_pid;//ngx_pid = ngx_getpid(); 在子进程中为子进程pid，在master中为master的pid
 
@@ -201,7 +201,7 @@ ngx_uint_t    ngx_exiting; //ngx_exiting标志位仅由ngx_worker_process_cycle方法在
 sig_atomic_t  ngx_reconfigure;//nginx -s reload会触发该新号
 sig_atomic_t  ngx_reopen; //当接收到USRI信号时，ngx_reopen标志位会设为1，这是在告诉Nginx需要重新打开文件（如切换日志文件时）
 
-sig_atomic_t  ngx_change_binary; //平滑升级到新版本的Nginx程序
+sig_atomic_t  ngx_change_binary; //平滑升级到新版本的Nginx程序，热升级
 ngx_pid_t     ngx_new_binary;//进行热代码替换，这里是调用execve来执行新的代码。 这个是在ngx_change_binary的基础上获取值
 ngx_uint_t    ngx_inherited;
 ngx_uint_t    ngx_daemonized;
@@ -585,6 +585,9 @@ ngx_noaccept，决定执行不同的分支流程，并循环执行（注意，每次一个循环执行完毕后进
     }
 }
 
+/*
+如果hginx.conf中配置为单进程工作模式，这时将会调用ngx_single_process_cycle方法进入单迸程工作模式。
+*/
 void
 ngx_single_process_cycle(ngx_cycle_t *cycle)
 {
@@ -657,7 +660,6 @@ ngx_start_worker_processes(ngx_cycle_t *cycle, ngx_int_t n, ngx_int_t type)
     /*
     由master进程按照配置文件中worker进程的数目，启动这些子进程（也就是调用表8-2中的ngx_start_worker_processes方法）。
     */
-    printf("yang test worker:%d\r\n", (int)n);
     for (i = 0; i < n; i++) { //n为nginx.conf worker_processes中配置的进程数
 /*
                                  |----------(ngx_worker_process_cycle->ngx_worker_process_init)
@@ -818,8 +820,8 @@ NGX_PROCESS_JUST_RESPAWN标识最终会在ngx_spawn_process()创建worker进程时，将ngx_p
 ngx_signal_worker_processes(cycle, ngx_signal_value(NGX_SHUTDOWN_SIGNAL));  
 以此关闭旧的worker进程。进入该函数，你会发现它也是循环向所有worker进程发送信号，所以它会先把旧worker进程关闭，然后再管理新的worker进程。
 */
-static void
-ngx_signal_worker_processes(ngx_cycle_t *cycle, int signo)
+static void     //ngx_reap_children和ngx_signal_worker_processes对应
+ngx_signal_worker_processes(ngx_cycle_t *cycle, int signo) //向进程发送signo信号
 {
     ngx_int_t      i;
     ngx_err_t      err;
@@ -921,7 +923,7 @@ ngx_signal_worker_processes(ngx_cycle_t *cycle, int signo)
 
 ///这个里面处理退出的子进程(有的worker异常退出，这时我们就需要重启这个worker )，如果所有子进程都退出则会返回0. 
 static ngx_uint_t
-ngx_reap_children(ngx_cycle_t *cycle)
+ngx_reap_children(ngx_cycle_t *cycle) //ngx_reap_children和ngx_signal_worker_processes对应
 {
     ngx_int_t         i, n;
     ngx_uint_t        live;

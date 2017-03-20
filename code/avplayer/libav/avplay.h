@@ -101,10 +101,14 @@ typedef struct avplay
     AVFormatContext *m_format_ctx;
 
     /* 音视频队列.	*/
+	//z a pkt
     av_queue m_audio_q;
+	//z v pkt
     av_queue m_video_q;
 	//z 解码后的 a、v frame 的队列
+	//z a frame
     av_queue m_audio_dq;
+	//z v frame
     av_queue m_video_dq;
 
     /* 各解码渲染线程.	*/

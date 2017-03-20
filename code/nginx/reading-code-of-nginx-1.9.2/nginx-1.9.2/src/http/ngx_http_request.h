@@ -27,8 +27,19 @@ HTTP 1.0¼°HTTP0.9¹æ¶¨ä¯ÀÀÆ÷Óë·şÎñÆ÷Ö»±£³Ö¶ÌÔİµÄÁ¬½Ó£¬ä¯ÀÀÆ÷µÄÃ¿´ÎÇëÇó¶¼ĞèÒªÓë·şÎ
 #define NGX_HTTP_VERSION_9                 9    //HTTP 0/9
 #define NGX_HTTP_VERSION_10                1000 //HTTP 1/0
 #define NGX_HTTP_VERSION_11                1001 //HTTP 1/1
+#define NGX_HTTP_VERSION_20                2000
 
 /*
+HTTP PUT·½·¨ºÍPOST·½·¨µÄÇø±ğ
+    ÕâÁ½¸ö·½·¨¿´ÆğÀ´¶¼ÊÇ½²Ò»¸ö×ÊÔ´¸½¼Óµ½·şÎñÆ÷¶ËµÄÇëÇó£¬µ«ÆäÊµÊÇ²»Ò»ÑùµÄ¡£Ò»Ğ©ÏÁÕ­µÄÒâ¼ûÈÏÎª£¬POST·½·¨ÓÃÀ´´´½¨×ÊÔ´£¬
+¶øPUT·½·¨ÔòÓÃÀ´¸üĞÂ×ÊÔ´¡£Õâ¸öËµ·¨±¾ÉíÃ»ÓĞÎÊÌâ£¬µ«ÊÇ²¢Ã»ÓĞ´Ó¸ù±¾ÉÏ½âÊÍÁË¶şÕßµÄÇø±ğ¡£ÊÂÊµÉÏ£¬ËüÃÇ×î¸ù±¾µÄÇø±ğ¾ÍÊÇ£º
+POST·½·¨²»ÊÇÃİµÈµÄ£¬¶øPUT·½·¨ÔòÓĞÃİµÈĞÔ¡£ÄÇÕâÓÖÑÜÉú³öÒ»¸öÎÊÌâ£¬Ê²Ã´ÊÇÃİµÈ£¿
+    ÃİµÈ£¨idempotent¡¢idempotence£©ÊÇÒ»¸ö³éÏó´úÊıµÄ¸ÅÄî¡£ÔÚ¼ÆËã»úÖĞ£¬¿ÉÒÔÕâÃ´Àí½â£¬Ò»¸öÃİµÈ²Ù×÷µÄÌØµã¾ÍÊÇÆäÈÎÒâ¶à´Î
+Ö´ĞĞËù²úÉúµÄÓ°Ïì¾ùÓëÒÀ´ÎÒ»´ÎÖ´ĞĞµÄÓ°ÏìÏàÍ¬¡£
+    POSTÔÚÇëÇóµÄÊ±ºò£¬·şÎñÆ÷»áÃ¿´Î¶¼´´½¨Ò»¸öÎÄ¼ş£¬µ«ÊÇÔÚPUT·½·¨µÄÊ±ºòÖ»ÊÇ¼òµ¥µØ¸üĞÂ£¬¶ø²»ÊÇÈ¥ÖØĞÂ´´½¨¡£Òò´ËPUTÊÇÃİµÈµÄ¡£
+
+
+
 ¶ÔÓ¦¿Í»§¶ËÇëÇóĞĞÖĞµÄÇëÇó·½·¨:
 ÇëÇó·½·¨£¨ËùÓĞ·½·¨È«Îª´óĞ´£©ÓĞ¶àÖÖ£¬¸÷¸ö·½·¨µÄ½âÊÍÈçÏÂ£º
 GET     ÇëÇó»ñÈ¡Request-URIËù±êÊ¶µÄ×ÊÔ´
@@ -347,14 +358,14 @@ Nginx»áÒ»Ö±ÈÏÎªÓĞHTTPÄ£¿é»¹ĞèÒª´¦ÀíÕâ¸öÇëÇó£¬±ØĞëµÈ´ıHTTPÄ£¿é½«µÍ4Î»È«ÖÃÎª0²Å»áÕ
 
 typedef enum {
     NGX_HTTP_INITING_REQUEST_STATE = 0,
-    NGX_HTTP_READING_REQUEST_STATE,
-    NGX_HTTP_PROCESS_REQUEST_STATE,
+    NGX_HTTP_READING_REQUEST_STATE,   /* ngx_http_create_requestÖĞ¸³Öµ */
+    NGX_HTTP_PROCESS_REQUEST_STATE, /* ½âÎöÍæÍ·²¿ĞĞºóÔÚngx_http_process_request_headersÖĞ¸³Öµ */
 
     NGX_HTTP_CONNECT_UPSTREAM_STATE,
     NGX_HTTP_WRITING_UPSTREAM_STATE,
     NGX_HTTP_READING_UPSTREAM_STATE,
 
-    NGX_HTTP_WRITING_REQUEST_STATE,
+    NGX_HTTP_WRITING_REQUEST_STATE, /* ngx_http_set_write_handler */
     NGX_HTTP_LINGERING_CLOSE_STATE,
     NGX_HTTP_KEEPALIVE_STATE
 } ngx_http_state_e;
@@ -362,10 +373,12 @@ typedef enum {
 
 typedef struct { //¼ûngx_http_headers_in
     ngx_str_t                         name; //Æ¥ÅäÍ·²¿ĞĞname:valueÖĞµÄname£¬¼ûngx_http_process_request_headers
+    //offset¼´ngx_http_headers_inÖĞ³ÉÔ±µÄ¶ÔÓ¦offset(ÈçÇëÇóĞĞ´øÓĞhost£¬Ôòoffset=offsetof(ngx_http_headers_in_t, host))
     ngx_uint_t                        offset;
     //handlerµÄÈı¸ö²ÎÊı·Ö±ğÎª(r, h, hh->offset):rÎª¶ÔÓ¦µÄÁ¬½ÓÇëÇó£¬h´æ´¢ÎªÍ·²¿ĞĞkey:value(Èç:Content-Type: text/html)Öµ£¬
     //hh->offset¼´ngx_http_headers_inÖĞ³ÉÔ±µÄ¶ÔÓ¦offset(ÈçÇëÇóĞĞ´øÓĞhost£¬Ôòoffset=offsetof(ngx_http_headers_in_t, host))
-    ngx_http_header_handler_pt        handler; //ngx_http_process_request_headersÖĞÖ´ĞĞ 
+    ngx_http_header_handler_pt        handler; //¸÷¸öÍ·²¿¶ÔÓ¦µÄhandler¼ûngx_http_headers_in
+    //ngx_http_process_request_headers ngx_http_v2_state_process_header ngx_http_v2_parse_authority ngx_http_v2_parse_authorityÖĞÖ´ĞĞ 
 } ngx_http_header_t;
 
 
@@ -373,6 +386,127 @@ typedef struct {
     ngx_str_t                         name;
     ngx_uint_t                        offset;
 } ngx_http_header_out_t;
+
+/*
+  HTTP Í·²¿½âÊÍ
+ 
+ 1. Accept£º¸æËßWEB·şÎñÆ÷×Ô¼º½ÓÊÜÊ²Ã´½éÖÊÀàĞÍ£¬* / * ±íÊ¾ÈÎºÎÀàĞÍ£¬type/ * ±íÊ¾¸ÃÀàĞÍÏÂµÄËùÓĞ×ÓÀàĞÍ£¬type/sub-type¡£
+  
+ 2. Accept-Charset£º   ä¯ÀÀÆ÷ÉêÃ÷×Ô¼º½ÓÊÕµÄ×Ö·û¼¯
+    Accept-Encoding£º  ä¯ÀÀÆ÷ÉêÃ÷×Ô¼º½ÓÊÕµÄ±àÂë·½·¨£¬Í¨³£Ö¸¶¨Ñ¹Ëõ·½·¨£¬ÊÇ·ñÖ§³ÖÑ¹Ëõ£¬Ö§³ÖÊ²Ã´Ñ¹Ëõ·½·¨  £¨gzip£¬deflate£©
+    Accept-Language£º£ºä¯ÀÀÆ÷ÉêÃ÷×Ô¼º½ÓÊÕµÄÓïÑÔÓïÑÔ¸ú×Ö·û¼¯µÄÇø±ğ£ºÖĞÎÄÊÇÓïÑÔ£¬ÖĞÎÄÓĞ¶àÖÖ×Ö·û¼¯£¬±ÈÈçbig5£¬gb2312£¬gbkµÈµÈ¡£
+  
+ 3. Accept-Ranges£ºWEB·şÎñÆ÷±íÃ÷×Ô¼ºÊÇ·ñ½ÓÊÜ»ñÈ¡ÆäÄ³¸öÊµÌåµÄÒ»²¿·Ö£¨±ÈÈçÎÄ¼şµÄÒ»²¿·Ö£©µÄÇëÇó¡£bytes£º±íÊ¾½ÓÊÜ£¬none£º±íÊ¾²»½ÓÊÜ¡£
+  
+ 4. Age£ºµ±´úÀí·şÎñÆ÷ÓÃ×Ô¼º»º´æµÄÊµÌåÈ¥ÏìÓ¦ÇëÇóÊ±£¬ÓÃ¸ÃÍ·²¿±íÃ÷¸ÃÊµÌå´Ó²úÉúµ½ÏÖÔÚ¾­¹ı¶à³¤Ê±¼äÁË¡£
+  
+ 5. Authorization£ºµ±¿Í»§¶Ë½ÓÊÕµ½À´×ÔWEB·şÎñÆ÷µÄ WWW-Authenticate ÏìÓ¦Ê±£¬¸ÃÍ·²¿À´»ØÓ¦×Ô¼ºµÄÉí·İÑéÖ¤ĞÅÏ¢¸øWEB·şÎñÆ÷¡£
+  
+ 6. Cache-Control£ºÇëÇó£ºno-cache£¨²»Òª»º´æµÄÊµÌå£¬ÒªÇóÏÖÔÚ´ÓWEB·şÎñÆ÷È¥È¡£©
+                          max-age£º£¨Ö»½ÓÊÜ Age ÖµĞ¡ÓÚ max-age Öµ£¬²¢ÇÒÃ»ÓĞ¹ıÆÚµÄ¶ÔÏó£©
+                          max-stale£º£¨¿ÉÒÔ½ÓÊÜ¹ıÈ¥µÄ¶ÔÏó£¬µ«ÊÇ¹ıÆÚÊ±¼ä±ØĞëĞ¡ÓÚ 
+                                             max-stale Öµ£©
+                          min-fresh£º£¨½ÓÊÜÆäĞÂÏÊÉúÃüÆÚ´óÓÚÆäµ±Ç° Age ¸ú min-fresh ÖµÖ®ºÍµÄ»º´æ¶ÔÏó£©
+                   ÏìÓ¦£ºpublic(¿ÉÒÔÓÃ Cached ÄÚÈİ»ØÓ¦ÈÎºÎÓÃ»§)
+                           private£¨Ö»ÄÜÓÃ»º´æÄÚÈİ»ØÓ¦ÏÈÇ°ÇëÇó¸ÃÄÚÈİµÄÄÇ¸öÓÃ»§£©
+                           no-cache£¨¿ÉÒÔ»º´æ£¬µ«ÊÇÖ»ÓĞÔÚ¸úWEB·şÎñÆ÷ÑéÖ¤ÁËÆäÓĞĞ§ºó£¬²ÅÄÜ·µ»Ø¸ø¿Í»§¶Ë£©
+                           max-age£º£¨±¾ÏìÓ¦°üº¬µÄ¶ÔÏóµÄ¹ıÆÚÊ±¼ä£©
+                           ALL:  no-store£¨²»ÔÊĞí»º´æ£©
+  
+ 7. Connection£ºÇëÇó£ºclose£¨¸æËßWEB·şÎñÆ÷»òÕß´úÀí·şÎñÆ÷£¬ÔÚÍê³É±¾´ÎÇëÇóµÄÏìÓ¦
+                                                   ºó£¬¶Ï¿ªÁ¬½Ó£¬²»ÒªµÈ´ı±¾´ÎÁ¬½ÓµÄºóĞøÇëÇóÁË£©¡£
+                                  keepalive£¨¸æËßWEB·şÎñÆ÷»òÕß´úÀí·şÎñÆ÷£¬ÔÚÍê³É±¾´ÎÇëÇóµÄ
+                                                          ÏìÓ¦ºó£¬±£³ÖÁ¬½Ó£¬µÈ´ı±¾´ÎÁ¬½ÓµÄºóĞøÇëÇó£©¡£
+                        ÏìÓ¦£ºclose£¨Á¬½ÓÒÑ¾­¹Ø±Õ£©¡£
+                                  keepalive£¨Á¬½Ó±£³Ö×Å£¬ÔÚµÈ´ı±¾´ÎÁ¬½ÓµÄºóĞøÇëÇó£©¡£
+    Keep-Alive£ºÈç¹ûä¯ÀÀÆ÷ÇëÇó±£³ÖÁ¬½Ó£¬Ôò¸ÃÍ·²¿±íÃ÷Ï£Íû WEB ·şÎñÆ÷±£³Ö
+                       Á¬½Ó¶à³¤Ê±¼ä£¨Ãë£©¡£
+                       ÀıÈç£ºKeep-Alive£º300
+  
+ 8. Content-Encoding£ºWEB·şÎñÆ÷±íÃ÷×Ô¼ºÊ¹ÓÃÁËÊ²Ã´Ñ¹Ëõ·½·¨£¨gzip£¬deflate£©Ñ¹ËõÏìÓ¦ÖĞµÄ¶ÔÏó¡£ 
+                                  ÀıÈç£ºContent-Encoding£ºgzip                   
+    Content-Language£ºWEB ·şÎñÆ÷¸æËßä¯ÀÀÆ÷×Ô¼ºÏìÓ¦µÄ¶ÔÏóµÄÓïÑÔ¡£
+    Content-Length£º    WEB ·şÎñÆ÷¸æËßä¯ÀÀÆ÷×Ô¼ºÏìÓ¦µÄ¶ÔÏóµÄ³¤¶È¡£
+                                 ÀıÈç£ºContent-Length: 26012
+    Content-Range£º    WEB ·şÎñÆ÷±íÃ÷¸ÃÏìÓ¦°üº¬µÄ²¿·Ö¶ÔÏóÎªÕû¸ö¶ÔÏóµÄÄÄ¸ö²¿·Ö¡£
+                                 ÀıÈç£ºContent-Range: bytes 21010-47021/47022
+    Content-Type£º      WEB ·şÎñÆ÷¸æËßä¯ÀÀÆ÷×Ô¼ºÏìÓ¦µÄ¶ÔÏóµÄÀàĞÍ¡£
+                                 ÀıÈç£ºContent-Type£ºapplication/xml
+  
+ 9. ETag£º¾ÍÊÇÒ»¸ö¶ÔÏó£¨±ÈÈçURL£©µÄ±êÖ¾Öµ£¬¾ÍÒ»¸ö¶ÔÏó¶øÑÔ£¬±ÈÈçÒ»¸ö html ÎÄ¼ş£¬
+               Èç¹û±»ĞŞ¸ÄÁË£¬Æä Etag Ò²»á±ğĞŞ¸Ä£¬ ËùÒÔ£¬ETag µÄ×÷ÓÃ¸ú Last-Modified µÄ
+               ×÷ÓÃ²î²»¶à£¬Ö÷Òª¹© WEB ·şÎñÆ÷ ÅĞ¶ÏÒ»¸ö¶ÔÏóÊÇ·ñ¸Ä±äÁË¡£
+               ±ÈÈçÇ°Ò»´ÎÇëÇóÄ³¸ö html ÎÄ¼şÊ±£¬»ñµÃÁËÆä ETag£¬µ±Õâ´ÎÓÖÇëÇóÕâ¸öÎÄ¼şÊ±£¬ 
+               ä¯ÀÀÆ÷¾Í»á°ÑÏÈÇ°»ñµÃµÄ ETag Öµ·¢ËÍ¸ø  WEB ·şÎñÆ÷£¬È»ºó WEB ·şÎñÆ÷
+               »á°ÑÕâ¸ö ETag ¸ú¸ÃÎÄ¼şµÄµ±Ç° ETag ½øĞĞ¶Ô±È£¬È»ºó¾ÍÖªµÀÕâ¸öÎÄ¼ş
+               ÓĞÃ»ÓĞ¸Ä±äÁË¡£
+          
+ 10. Expired£ºWEB·şÎñÆ÷±íÃ÷¸ÃÊµÌå½«ÔÚÊ²Ã´Ê±ºò¹ıÆÚ£¬¶ÔÓÚ¹ıÆÚÁËµÄ¶ÔÏó£¬Ö»ÓĞÔÚ
+              ¸úWEB·şÎñÆ÷ÑéÖ¤ÁËÆäÓĞĞ§ĞÔºó£¬²ÅÄÜÓÃÀ´ÏìÓ¦¿Í»§ÇëÇó¡£ÊÇ HTTP/1.0 µÄÍ·²¿¡£
+              ÀıÈç£ºExpires£ºSat, 23 May 2009 10:02:12 GMT
+  
+ 11. Host£º¿Í»§¶ËÖ¸¶¨×Ô¼ºÏë·ÃÎÊµÄWEB·şÎñÆ÷µÄÓòÃû/IP µØÖ·ºÍ¶Ë¿ÚºÅ¡£
+                 ÀıÈç£ºHost£ºrss.sina.com.cn
+  
+ 12. If-Match£ºÈç¹û¶ÔÏóµÄ ETag Ã»ÓĞ¸Ä±ä£¬ÆäÊµÒ²¾ÍÒâÎ¶Öø¶ÔÏóÃ»ÓĞ¸Ä±ä£¬²ÅÖ´ĞĞÇëÇóµÄ¶¯×÷¡£
+     If-None-Match£ºÈç¹û¶ÔÏóµÄ ETag ¸Ä±äÁË£¬ÆäÊµÒ²¾ÍÒâÎ¶Öø¶ÔÏóÒ²¸Ä±äÁË£¬²ÅÖ´ĞĞÇëÇóµÄ¶¯×÷¡£
+  
+ 13. If-Modified-Since£ºÈç¹ûÇëÇóµÄ¶ÔÏóÔÚ¸ÃÍ·²¿Ö¸¶¨µÄÊ±¼äÖ®ºóĞŞ¸ÄÁË£¬²ÅÖ´ĞĞÇëÇó
+                        µÄ¶¯×÷£¨±ÈÈç·µ»Ø¶ÔÏó£©£¬·ñÔò·µ»Ø´úÂë304£¬¸æËßä¯ÀÀÆ÷¸Ã¶ÔÏóÃ»ÓĞĞŞ¸Ä¡£
+                        ÀıÈç£ºIf-Modified-Since£ºThu, 10 Apr 2008 09:14:42 GMT
+     If-Unmodified-Since£ºÈç¹ûÇëÇóµÄ¶ÔÏóÔÚ¸ÃÍ·²¿Ö¸¶¨µÄÊ±¼äÖ®ºóÃ»ĞŞ¸Ä¹ı£¬²ÅÖ´ĞĞÇëÇóµÄ¶¯×÷£¨±ÈÈç·µ»Ø¶ÔÏó£©¡£
+  
+ 14. If-Range£ºä¯ÀÀÆ÷¸æËß WEB ·şÎñÆ÷£¬Èç¹ûÎÒÇëÇóµÄ¶ÔÏóÃ»ÓĞ¸Ä±ä£¬¾Í°ÑÎÒÈ±ÉÙµÄ²¿·Ö
+                ¸øÎÒ£¬Èç¹û¶ÔÏó¸Ä±äÁË£¬¾Í°ÑÕû¸ö¶ÔÏó¸øÎÒ¡£ ä¯ÀÀÆ÷Í¨¹ı·¢ËÍÇëÇó¶ÔÏóµÄ 
+                ETag »òÕß ×Ô¼ºËùÖªµÀµÄ×îºóĞŞ¸ÄÊ±¼ä¸ø WEB ·şÎñÆ÷£¬ÈÃÆäÅĞ¶Ï¶ÔÏóÊÇ·ñ
+                ¸Ä±äÁË¡£×ÜÊÇ¸ú Range Í·²¿Ò»ÆğÊ¹ÓÃ¡£
+  
+ 15. Last-Modified£ºWEB ·şÎñÆ÷ÈÏÎª¶ÔÏóµÄ×îºóĞŞ¸ÄÊ±¼ä£¬±ÈÈçÎÄ¼şµÄ×îºóĞŞ¸ÄÊ±¼ä£¬
+                    ¶¯Ì¬Ò³ÃæµÄ×îºó²úÉúÊ±¼äµÈµÈ¡£ÀıÈç£ºLast-Modified£ºTue, 06 May 2008 02:42:43 GMT
+  
+ 16. Location£ºWEB ·şÎñÆ÷¸æËßä¯ÀÀÆ÷£¬ÊÔÍ¼·ÃÎÊµÄ¶ÔÏóÒÑ¾­±»ÒÆµ½±ğµÄÎ»ÖÃÁË£¬µ½¸ÃÍ·²¿Ö¸¶¨µÄÎ»ÖÃÈ¥È¡¡£
+                         ÀıÈç£ºLocation£ºhttp://i0.sinaimg.cn/dy/deco/2008/0528/sinahome_0803_ws_005_text_0.gif
+  
+ 17. Pramga£ºÖ÷ÒªÊ¹ÓÃ Pramga: no-cache£¬Ïàµ±ÓÚ Cache-Control£º no-cache¡£ÀıÈç£ºPragma£ºno-cache
+  
+ 18. Proxy-Authenticate£º ´úÀí·şÎñÆ÷ÏìÓ¦ä¯ÀÀÆ÷£¬ÒªÇóÆäÌá¹©´úÀíÉí·İÑéÖ¤ĞÅÏ¢¡£
+       Proxy-Authorization£ºä¯ÀÀÆ÷ÏìÓ¦´úÀí·şÎñÆ÷µÄÉí·İÑéÖ¤ÇëÇó£¬Ìá¹©×Ô¼ºµÄÉí·İĞÅÏ¢¡£
+  
+ 19. Range£ºä¯ÀÀÆ÷£¨±ÈÈç Flashget ¶àÏß³ÌÏÂÔØÊ±£©¸æËß WEB ·şÎñÆ÷×Ô¼ºÏëÈ¡¶ÔÏóµÄÄÄ²¿·Ö¡£
+                     ÀıÈç£ºRange: bytes=1173546-
+  
+ 20. Referer£ºä¯ÀÀÆ÷Ïò WEB ·şÎñÆ÷±íÃ÷×Ô¼ºÊÇ´ÓÄÄ¸ö ÍøÒ³/URL »ñµÃ/µã»÷ µ±Ç°ÇëÇóÖĞµÄÍøÖ·/URL¡£
+                    ÀıÈç£ºReferer£ºhttp://www.sina.com/
+  
+ 21. Server: WEB ·şÎñÆ÷±íÃ÷×Ô¼ºÊÇÊ²Ã´Èí¼ş¼°°æ±¾µÈĞÅÏ¢¡£ÀıÈç£ºServer£ºApache/2.0.61 (Unix)
+  
+ 22. User-Agent: ä¯ÀÀÆ÷±íÃ÷×Ô¼ºµÄÉí·İ£¨ÊÇÄÄÖÖä¯ÀÀÆ÷£©¡£
+                         ÀıÈç£ºUser-Agent£ºMozilla/5.0 (Windows; U; Windows NT 5.1; zh-CN;   
+                                   rv:1.8.1.14) Gecko/20080404 Firefox/2.0.0.14
+  
+ 23. Transfer-Encoding: WEB ·şÎñÆ÷±íÃ÷×Ô¼º¶Ô±¾ÏìÓ¦ÏûÏ¢Ìå£¨²»ÊÇÏûÏ¢ÌåÀïÃæµÄ¶ÔÏó£©×÷ÁËÔõÑùµÄ±àÂë£¬±ÈÈçÊÇ·ñ·Ö¿é£¨chunked£©¡£
+                        ÀıÈç£ºTransfer-Encoding: chunked
+  
+ 24. Vary: WEB·şÎñÆ÷ÓÃ¸ÃÍ·²¿µÄÄÚÈİ¸æËß Cache ·şÎñÆ÷£¬ÔÚÊ²Ã´Ìõ¼şÏÂ²ÅÄÜÓÃ±¾ÏìÓ¦
+                  Ëù·µ»ØµÄ¶ÔÏóÏìÓ¦ºóĞøµÄÇëÇó¡£
+                  ¼ÙÈçÔ´WEB·şÎñÆ÷ÔÚ½Óµ½µÚÒ»¸öÇëÇóÏûÏ¢Ê±£¬ÆäÏìÓ¦ÏûÏ¢µÄÍ·²¿Îª£º
+                  Content-Encoding: gzip; Vary: Content-Encoding  ÄÇÃ´ Cache ·şÎñÆ÷»á·ÖÎöºóĞø
+                  ÇëÇóÏûÏ¢µÄÍ·²¿£¬¼ì²éÆä Accept-Encoding£¬ÊÇ·ñ¸úÏÈÇ°ÏìÓ¦µÄ Vary Í·²¿Öµ
+                  Ò»ÖÂ£¬¼´ÊÇ·ñÊ¹ÓÃÏàÍ¬µÄÄÚÈİ±àÂë·½·¨£¬ÕâÑù¾Í¿ÉÒÔ·ÀÖ¹ Cache ·şÎñÆ÷ÓÃ×Ô¼º
+                  Cache ÀïÃæÑ¹ËõºóµÄÊµÌåÏìÓ¦¸ø²»¾ß±¸½âÑ¹ÄÜÁ¦µÄä¯ÀÀÆ÷¡£
+                  ÀıÈç£ºVary£ºAccept-Encoding
+  
+ 25. Via£º ÁĞ³ö´Ó¿Í»§¶Ëµ½ OCS »òÕßÏà·´·½ÏòµÄÏìÓ¦¾­¹ıÁËÄÄĞ©´úÀí·şÎñÆ÷£¬ËûÃÇÓÃ
+         Ê²Ã´Ğ­Òé£¨ºÍ°æ±¾£©·¢ËÍµÄÇëÇó¡£µ±¿Í»§¶ËÇëÇóµ½´ïµÚÒ»¸ö´úÀí·şÎñÆ÷Ê±£¬¸Ã·şÎñÆ÷»áÔÚ×Ô¼º·¢³öµÄÇëÇóÀïÃæ
+         Ìí¼Ó Via Í·²¿£¬²¢ÌîÉÏ×Ô¼ºµÄÏà¹ØĞÅÏ¢£¬µ±ÏÂÒ»¸ö´úÀí·şÎñÆ÷ ÊÕµ½µÚÒ»¸ö´úÀí·şÎñÆ÷µÄÇëÇóÊ±£¬»áÔÚ×Ô¼º·¢
+         ³öµÄÇëÇóÀïÃæ¸´ÖÆÇ°Ò»¸ö´úÀí·şÎñÆ÷µÄÇëÇóµÄViaÍ·²¿£¬²¢°Ñ×Ô¼ºµÄÏà¹ØĞÅÏ¢¼Óµ½ºóÃæ£¬ ÒÔ´ËÀàÍÆ£¬µ± OCS 
+         ÊÕµ½×îºóÒ»¸ö´úÀí·şÎñÆ÷µÄÇëÇóÊ±£¬¼ì²é Via Í·²¿£¬¾ÍÖªµÀ¸ÃÇëÇóËù¾­¹ıµÄÂ·ÓÉ¡£
+         ÀıÈç£ºVia£º1.0 236-81.D07071953.sina.com.cn:80 (squid/2.6.STABLE13)
+
+*/
+/*
+³£ÓÃµÄHTTPÍ·²¿ĞÅÏ¢¿ÉÒÔÍ¨¹ır->headers_in»ñÈ¡£¬²»³£ÓÃµÄHTTPÍ·²¿ÔòĞèÒª±éÀúr->headers_in.headersÀ´±éÀú»ñÈ¡
+*/
 
 //ÀàĞÍµÄheaders_inÔò´æ´¢ÒÑ¾­½âÎö¹ıµÄHTTPÍ·²¿¡£ÏÂÃæ½éÉÜngx_http_headers_in_t½á¹¹ÌåÖĞµÄ³ÉÔ±¡£ ngx_http_request_sÇëÇóÄÚÈİÖĞ°üº¬¸Ã½á¹¹
 //²Î¿¼ngx_http_headers_in£¬Í¨¹ı¸ÃÊı×éÖĞµÄ»Øµ÷handerÀ´´æ´¢½âÎöµ½µÄÇëÇóĞĞname:valueÖĞµÄvalueµ½headers_inµÄÏìÓ¦³ÉÔ±ÖĞ£¬¼ûngx_http_process_request_headers
@@ -422,128 +556,12 @@ typedef struct {
     
     ¶ÔÓÚ³£¼ûµÄHTTPÍ·²¿£¬Ö±½Ó»ñÈ¡r->headers_inÖĞÒÑ¾­ÓÉHTTP¿ò¼Ü½âÎö¹ıµÄ³ÉÔ±¼´¿É£¬¶ø¶ÔÓÚ²»³£¼ûµÄHTTPÍ·²¿£¬ĞèÒª±éÀúr->headers_in.headersÁ´±í²ÅÄÜ»ñµÃ¡£
 */
-
+    /*³£ÓÃµÄHTTPÍ·²¿ĞÅÏ¢¿ÉÒÔÍ¨¹ır->headers_in»ñÈ¡£¬²»³£ÓÃµÄHTTPÍ·²¿ÔòĞèÒª±éÀúr->headers_in.headersÀ´±éÀú»ñÈ¡*/
     /*ËùÓĞ½âÎö¹ıµÄHTTPÍ·²¿¶¼ÔÚheadersÁ´±íÖĞ£¬¿ÉÒÔÊ¹ÓÃ±éÀúÁ´±íµÄ·½·¨À´»ñÈ¡ËùÓĞµÄHTTPÍ·²¿¡£×¢Òâ£¬ÕâÀïheadersÁ´±íµÄ
     Ã¿Ò»¸öÔªËØ¶¼ÊÇngx_table_elt_t³ÉÔ±*/ //´Óngx_http_headers_in»ñÈ¡±äÁ¿ºó´æ´¢µ½¸ÃÁ´±íÖĞ£¬Á´±íÖĞµÄ³ÉÔ±¾ÍÊÇÏÂÃæµÄ¸÷¸öngx_table_elt_t³ÉÔ±
+    //HTTP2µÄÏà¹ØÍ·²¿¸³Öµ¼ûngx_http_v2_state_process_header
     ngx_list_t                        headers; //ÔÚngx_http_process_request_line³õÊ¼»¯list¿Õ¼ä  ngx_http_process_request_headersÖĞ´æ´¢½âÎöµ½µÄÇëÇóĞĞvalueºÍkey
 
-    /*
-      HTTP Í·²¿½âÊÍ
-     
-     1. Accept£º¸æËßWEB·şÎñÆ÷×Ô¼º½ÓÊÜÊ²Ã´½éÖÊÀàĞÍ£¬* / * ±íÊ¾ÈÎºÎÀàĞÍ£¬type/ * ±íÊ¾¸ÃÀàĞÍÏÂµÄËùÓĞ×ÓÀàĞÍ£¬type/sub-type¡£
-      
-     2. Accept-Charset£º   ä¯ÀÀÆ÷ÉêÃ÷×Ô¼º½ÓÊÕµÄ×Ö·û¼¯
-        Accept-Encoding£º  ä¯ÀÀÆ÷ÉêÃ÷×Ô¼º½ÓÊÕµÄ±àÂë·½·¨£¬Í¨³£Ö¸¶¨Ñ¹Ëõ·½·¨£¬ÊÇ·ñÖ§³ÖÑ¹Ëõ£¬Ö§³ÖÊ²Ã´Ñ¹Ëõ·½·¨  £¨gzip£¬deflate£©
-        Accept-Language£º£ºä¯ÀÀÆ÷ÉêÃ÷×Ô¼º½ÓÊÕµÄÓïÑÔÓïÑÔ¸ú×Ö·û¼¯µÄÇø±ğ£ºÖĞÎÄÊÇÓïÑÔ£¬ÖĞÎÄÓĞ¶àÖÖ×Ö·û¼¯£¬±ÈÈçbig5£¬gb2312£¬gbkµÈµÈ¡£
-      
-     3. Accept-Ranges£ºWEB·şÎñÆ÷±íÃ÷×Ô¼ºÊÇ·ñ½ÓÊÜ»ñÈ¡ÆäÄ³¸öÊµÌåµÄÒ»²¿·Ö£¨±ÈÈçÎÄ¼şµÄÒ»²¿·Ö£©µÄÇëÇó¡£bytes£º±íÊ¾½ÓÊÜ£¬none£º±íÊ¾²»½ÓÊÜ¡£
-      
-     4. Age£ºµ±´úÀí·şÎñÆ÷ÓÃ×Ô¼º»º´æµÄÊµÌåÈ¥ÏìÓ¦ÇëÇóÊ±£¬ÓÃ¸ÃÍ·²¿±íÃ÷¸ÃÊµÌå´Ó²úÉúµ½ÏÖÔÚ¾­¹ı¶à³¤Ê±¼äÁË¡£
-      
-     5. Authorization£ºµ±¿Í»§¶Ë½ÓÊÕµ½À´×ÔWEB·şÎñÆ÷µÄ WWW-Authenticate ÏìÓ¦Ê±£¬¸ÃÍ·²¿À´»ØÓ¦×Ô¼ºµÄÉí·İÑéÖ¤ĞÅÏ¢¸øWEB·şÎñÆ÷¡£
-      
-     6. Cache-Control£ºÇëÇó£ºno-cache£¨²»Òª»º´æµÄÊµÌå£¬ÒªÇóÏÖÔÚ´ÓWEB·şÎñÆ÷È¥È¡£©
-                              max-age£º£¨Ö»½ÓÊÜ Age ÖµĞ¡ÓÚ max-age Öµ£¬²¢ÇÒÃ»ÓĞ¹ıÆÚµÄ¶ÔÏó£©
-                              max-stale£º£¨¿ÉÒÔ½ÓÊÜ¹ıÈ¥µÄ¶ÔÏó£¬µ«ÊÇ¹ıÆÚÊ±¼ä±ØĞëĞ¡ÓÚ 
-                                                 max-stale Öµ£©
-                              min-fresh£º£¨½ÓÊÜÆäĞÂÏÊÉúÃüÆÚ´óÓÚÆäµ±Ç° Age ¸ú min-fresh ÖµÖ®ºÍµÄ»º´æ¶ÔÏó£©
-                       ÏìÓ¦£ºpublic(¿ÉÒÔÓÃ Cached ÄÚÈİ»ØÓ¦ÈÎºÎÓÃ»§)
-                               private£¨Ö»ÄÜÓÃ»º´æÄÚÈİ»ØÓ¦ÏÈÇ°ÇëÇó¸ÃÄÚÈİµÄÄÇ¸öÓÃ»§£©
-                               no-cache£¨¿ÉÒÔ»º´æ£¬µ«ÊÇÖ»ÓĞÔÚ¸úWEB·şÎñÆ÷ÑéÖ¤ÁËÆäÓĞĞ§ºó£¬²ÅÄÜ·µ»Ø¸ø¿Í»§¶Ë£©
-                               max-age£º£¨±¾ÏìÓ¦°üº¬µÄ¶ÔÏóµÄ¹ıÆÚÊ±¼ä£©
-                               ALL:  no-store£¨²»ÔÊĞí»º´æ£©
-      
-     7. Connection£ºÇëÇó£ºclose£¨¸æËßWEB·şÎñÆ÷»òÕß´úÀí·şÎñÆ÷£¬ÔÚÍê³É±¾´ÎÇëÇóµÄÏìÓ¦
-                                                       ºó£¬¶Ï¿ªÁ¬½Ó£¬²»ÒªµÈ´ı±¾´ÎÁ¬½ÓµÄºóĞøÇëÇóÁË£©¡£
-                                      keepalive£¨¸æËßWEB·şÎñÆ÷»òÕß´úÀí·şÎñÆ÷£¬ÔÚÍê³É±¾´ÎÇëÇóµÄ
-                                                              ÏìÓ¦ºó£¬±£³ÖÁ¬½Ó£¬µÈ´ı±¾´ÎÁ¬½ÓµÄºóĞøÇëÇó£©¡£
-                            ÏìÓ¦£ºclose£¨Á¬½ÓÒÑ¾­¹Ø±Õ£©¡£
-                                      keepalive£¨Á¬½Ó±£³Ö×Å£¬ÔÚµÈ´ı±¾´ÎÁ¬½ÓµÄºóĞøÇëÇó£©¡£
-        Keep-Alive£ºÈç¹ûä¯ÀÀÆ÷ÇëÇó±£³ÖÁ¬½Ó£¬Ôò¸ÃÍ·²¿±íÃ÷Ï£Íû WEB ·şÎñÆ÷±£³Ö
-                           Á¬½Ó¶à³¤Ê±¼ä£¨Ãë£©¡£
-                           ÀıÈç£ºKeep-Alive£º300
-      
-     8. Content-Encoding£ºWEB·şÎñÆ÷±íÃ÷×Ô¼ºÊ¹ÓÃÁËÊ²Ã´Ñ¹Ëõ·½·¨£¨gzip£¬deflate£©Ñ¹ËõÏìÓ¦ÖĞµÄ¶ÔÏó¡£ 
-                                      ÀıÈç£ºContent-Encoding£ºgzip                   
-        Content-Language£ºWEB ·şÎñÆ÷¸æËßä¯ÀÀÆ÷×Ô¼ºÏìÓ¦µÄ¶ÔÏóµÄÓïÑÔ¡£
-        Content-Length£º    WEB ·şÎñÆ÷¸æËßä¯ÀÀÆ÷×Ô¼ºÏìÓ¦µÄ¶ÔÏóµÄ³¤¶È¡£
-                                     ÀıÈç£ºContent-Length: 26012
-        Content-Range£º    WEB ·şÎñÆ÷±íÃ÷¸ÃÏìÓ¦°üº¬µÄ²¿·Ö¶ÔÏóÎªÕû¸ö¶ÔÏóµÄÄÄ¸ö²¿·Ö¡£
-                                     ÀıÈç£ºContent-Range: bytes 21010-47021/47022
-        Content-Type£º      WEB ·şÎñÆ÷¸æËßä¯ÀÀÆ÷×Ô¼ºÏìÓ¦µÄ¶ÔÏóµÄÀàĞÍ¡£
-                                     ÀıÈç£ºContent-Type£ºapplication/xml
-      
-     9. ETag£º¾ÍÊÇÒ»¸ö¶ÔÏó£¨±ÈÈçURL£©µÄ±êÖ¾Öµ£¬¾ÍÒ»¸ö¶ÔÏó¶øÑÔ£¬±ÈÈçÒ»¸ö html ÎÄ¼ş£¬
-                   Èç¹û±»ĞŞ¸ÄÁË£¬Æä Etag Ò²»á±ğĞŞ¸Ä£¬ ËùÒÔ£¬ETag µÄ×÷ÓÃ¸ú Last-Modified µÄ
-                   ×÷ÓÃ²î²»¶à£¬Ö÷Òª¹© WEB ·şÎñÆ÷ ÅĞ¶ÏÒ»¸ö¶ÔÏóÊÇ·ñ¸Ä±äÁË¡£
-                   ±ÈÈçÇ°Ò»´ÎÇëÇóÄ³¸ö html ÎÄ¼şÊ±£¬»ñµÃÁËÆä ETag£¬µ±Õâ´ÎÓÖÇëÇóÕâ¸öÎÄ¼şÊ±£¬ 
-                   ä¯ÀÀÆ÷¾Í»á°ÑÏÈÇ°»ñµÃµÄ ETag Öµ·¢ËÍ¸ø  WEB ·şÎñÆ÷£¬È»ºó WEB ·şÎñÆ÷
-                   »á°ÑÕâ¸ö ETag ¸ú¸ÃÎÄ¼şµÄµ±Ç° ETag ½øĞĞ¶Ô±È£¬È»ºó¾ÍÖªµÀÕâ¸öÎÄ¼ş
-                   ÓĞÃ»ÓĞ¸Ä±äÁË¡£
-              
-     10. Expired£ºWEB·şÎñÆ÷±íÃ÷¸ÃÊµÌå½«ÔÚÊ²Ã´Ê±ºò¹ıÆÚ£¬¶ÔÓÚ¹ıÆÚÁËµÄ¶ÔÏó£¬Ö»ÓĞÔÚ
-                  ¸úWEB·şÎñÆ÷ÑéÖ¤ÁËÆäÓĞĞ§ĞÔºó£¬²ÅÄÜÓÃÀ´ÏìÓ¦¿Í»§ÇëÇó¡£ÊÇ HTTP/1.0 µÄÍ·²¿¡£
-                  ÀıÈç£ºExpires£ºSat, 23 May 2009 10:02:12 GMT
-      
-     11. Host£º¿Í»§¶ËÖ¸¶¨×Ô¼ºÏë·ÃÎÊµÄWEB·şÎñÆ÷µÄÓòÃû/IP µØÖ·ºÍ¶Ë¿ÚºÅ¡£
-                     ÀıÈç£ºHost£ºrss.sina.com.cn
-      
-     12. If-Match£ºÈç¹û¶ÔÏóµÄ ETag Ã»ÓĞ¸Ä±ä£¬ÆäÊµÒ²¾ÍÒâÎ¶Öø¶ÔÏóÃ»ÓĞ¸Ä±ä£¬²ÅÖ´ĞĞÇëÇóµÄ¶¯×÷¡£
-         If-None-Match£ºÈç¹û¶ÔÏóµÄ ETag ¸Ä±äÁË£¬ÆäÊµÒ²¾ÍÒâÎ¶Öø¶ÔÏóÒ²¸Ä±äÁË£¬²ÅÖ´ĞĞÇëÇóµÄ¶¯×÷¡£
-      
-     13. If-Modified-Since£ºÈç¹ûÇëÇóµÄ¶ÔÏóÔÚ¸ÃÍ·²¿Ö¸¶¨µÄÊ±¼äÖ®ºóĞŞ¸ÄÁË£¬²ÅÖ´ĞĞÇëÇó
-                            µÄ¶¯×÷£¨±ÈÈç·µ»Ø¶ÔÏó£©£¬·ñÔò·µ»Ø´úÂë304£¬¸æËßä¯ÀÀÆ÷¸Ã¶ÔÏóÃ»ÓĞĞŞ¸Ä¡£
-                            ÀıÈç£ºIf-Modified-Since£ºThu, 10 Apr 2008 09:14:42 GMT
-         If-Unmodified-Since£ºÈç¹ûÇëÇóµÄ¶ÔÏóÔÚ¸ÃÍ·²¿Ö¸¶¨µÄÊ±¼äÖ®ºóÃ»ĞŞ¸Ä¹ı£¬²ÅÖ´ĞĞÇëÇóµÄ¶¯×÷£¨±ÈÈç·µ»Ø¶ÔÏó£©¡£
-      
-     14. If-Range£ºä¯ÀÀÆ÷¸æËß WEB ·şÎñÆ÷£¬Èç¹ûÎÒÇëÇóµÄ¶ÔÏóÃ»ÓĞ¸Ä±ä£¬¾Í°ÑÎÒÈ±ÉÙµÄ²¿·Ö
-                    ¸øÎÒ£¬Èç¹û¶ÔÏó¸Ä±äÁË£¬¾Í°ÑÕû¸ö¶ÔÏó¸øÎÒ¡£ ä¯ÀÀÆ÷Í¨¹ı·¢ËÍÇëÇó¶ÔÏóµÄ 
-                    ETag »òÕß ×Ô¼ºËùÖªµÀµÄ×îºóĞŞ¸ÄÊ±¼ä¸ø WEB ·şÎñÆ÷£¬ÈÃÆäÅĞ¶Ï¶ÔÏóÊÇ·ñ
-                    ¸Ä±äÁË¡£×ÜÊÇ¸ú Range Í·²¿Ò»ÆğÊ¹ÓÃ¡£
-      
-     15. Last-Modified£ºWEB ·şÎñÆ÷ÈÏÎª¶ÔÏóµÄ×îºóĞŞ¸ÄÊ±¼ä£¬±ÈÈçÎÄ¼şµÄ×îºóĞŞ¸ÄÊ±¼ä£¬
-                        ¶¯Ì¬Ò³ÃæµÄ×îºó²úÉúÊ±¼äµÈµÈ¡£ÀıÈç£ºLast-Modified£ºTue, 06 May 2008 02:42:43 GMT
-      
-     16. Location£ºWEB ·şÎñÆ÷¸æËßä¯ÀÀÆ÷£¬ÊÔÍ¼·ÃÎÊµÄ¶ÔÏóÒÑ¾­±»ÒÆµ½±ğµÄÎ»ÖÃÁË£¬µ½¸ÃÍ·²¿Ö¸¶¨µÄÎ»ÖÃÈ¥È¡¡£
-                             ÀıÈç£ºLocation£ºhttp://i0.sinaimg.cn/dy/deco/2008/0528/sinahome_0803_ws_005_text_0.gif
-      
-     17. Pramga£ºÖ÷ÒªÊ¹ÓÃ Pramga: no-cache£¬Ïàµ±ÓÚ Cache-Control£º no-cache¡£ÀıÈç£ºPragma£ºno-cache
-      
-     18. Proxy-Authenticate£º ´úÀí·şÎñÆ÷ÏìÓ¦ä¯ÀÀÆ÷£¬ÒªÇóÆäÌá¹©´úÀíÉí·İÑéÖ¤ĞÅÏ¢¡£
-           Proxy-Authorization£ºä¯ÀÀÆ÷ÏìÓ¦´úÀí·şÎñÆ÷µÄÉí·İÑéÖ¤ÇëÇó£¬Ìá¹©×Ô¼ºµÄÉí·İĞÅÏ¢¡£
-      
-     19. Range£ºä¯ÀÀÆ÷£¨±ÈÈç Flashget ¶àÏß³ÌÏÂÔØÊ±£©¸æËß WEB ·şÎñÆ÷×Ô¼ºÏëÈ¡¶ÔÏóµÄÄÄ²¿·Ö¡£
-                         ÀıÈç£ºRange: bytes=1173546-
-      
-     20. Referer£ºä¯ÀÀÆ÷Ïò WEB ·şÎñÆ÷±íÃ÷×Ô¼ºÊÇ´ÓÄÄ¸ö ÍøÒ³/URL »ñµÃ/µã»÷ µ±Ç°ÇëÇóÖĞµÄÍøÖ·/URL¡£
-                        ÀıÈç£ºReferer£ºhttp://www.sina.com/
-      
-     21. Server: WEB ·şÎñÆ÷±íÃ÷×Ô¼ºÊÇÊ²Ã´Èí¼ş¼°°æ±¾µÈĞÅÏ¢¡£ÀıÈç£ºServer£ºApache/2.0.61 (Unix)
-      
-     22. User-Agent: ä¯ÀÀÆ÷±íÃ÷×Ô¼ºµÄÉí·İ£¨ÊÇÄÄÖÖä¯ÀÀÆ÷£©¡£
-                             ÀıÈç£ºUser-Agent£ºMozilla/5.0 (Windows; U; Windows NT 5.1; zh-CN;   
-                                       rv:1.8.1.14) Gecko/20080404 Firefox/2.0.0.14
-      
-     23. Transfer-Encoding: WEB ·şÎñÆ÷±íÃ÷×Ô¼º¶Ô±¾ÏìÓ¦ÏûÏ¢Ìå£¨²»ÊÇÏûÏ¢ÌåÀïÃæµÄ¶ÔÏó£©×÷ÁËÔõÑùµÄ±àÂë£¬±ÈÈçÊÇ·ñ·Ö¿é£¨chunked£©¡£
-                            ÀıÈç£ºTransfer-Encoding: chunked
-      
-     24. Vary: WEB·şÎñÆ÷ÓÃ¸ÃÍ·²¿µÄÄÚÈİ¸æËß Cache ·şÎñÆ÷£¬ÔÚÊ²Ã´Ìõ¼şÏÂ²ÅÄÜÓÃ±¾ÏìÓ¦
-                      Ëù·µ»ØµÄ¶ÔÏóÏìÓ¦ºóĞøµÄÇëÇó¡£
-                      ¼ÙÈçÔ´WEB·şÎñÆ÷ÔÚ½Óµ½µÚÒ»¸öÇëÇóÏûÏ¢Ê±£¬ÆäÏìÓ¦ÏûÏ¢µÄÍ·²¿Îª£º
-                      Content-Encoding: gzip; Vary: Content-Encoding  ÄÇÃ´ Cache ·şÎñÆ÷»á·ÖÎöºóĞø
-                      ÇëÇóÏûÏ¢µÄÍ·²¿£¬¼ì²éÆä Accept-Encoding£¬ÊÇ·ñ¸úÏÈÇ°ÏìÓ¦µÄ Vary Í·²¿Öµ
-                      Ò»ÖÂ£¬¼´ÊÇ·ñÊ¹ÓÃÏàÍ¬µÄÄÚÈİ±àÂë·½·¨£¬ÕâÑù¾Í¿ÉÒÔ·ÀÖ¹ Cache ·şÎñÆ÷ÓÃ×Ô¼º
-                      Cache ÀïÃæÑ¹ËõºóµÄÊµÌåÏìÓ¦¸ø²»¾ß±¸½âÑ¹ÄÜÁ¦µÄä¯ÀÀÆ÷¡£
-                      ÀıÈç£ºVary£ºAccept-Encoding
-      
-     25. Via£º ÁĞ³ö´Ó¿Í»§¶Ëµ½ OCS »òÕßÏà·´·½ÏòµÄÏìÓ¦¾­¹ıÁËÄÄĞ©´úÀí·şÎñÆ÷£¬ËûÃÇÓÃ
-             Ê²Ã´Ğ­Òé£¨ºÍ°æ±¾£©·¢ËÍµÄÇëÇó¡£µ±¿Í»§¶ËÇëÇóµ½´ïµÚÒ»¸ö´úÀí·şÎñÆ÷Ê±£¬¸Ã·şÎñÆ÷»áÔÚ×Ô¼º·¢³öµÄÇëÇóÀïÃæ
-             Ìí¼Ó Via Í·²¿£¬²¢ÌîÉÏ×Ô¼ºµÄÏà¹ØĞÅÏ¢£¬µ±ÏÂÒ»¸ö´úÀí·şÎñÆ÷ ÊÕµ½µÚÒ»¸ö´úÀí·şÎñÆ÷µÄÇëÇóÊ±£¬»áÔÚ×Ô¼º·¢
-             ³öµÄÇëÇóÀïÃæ¸´ÖÆÇ°Ò»¸ö´úÀí·şÎñÆ÷µÄÇëÇóµÄViaÍ·²¿£¬²¢°Ñ×Ô¼ºµÄÏà¹ØĞÅÏ¢¼Óµ½ºóÃæ£¬ ÒÔ´ËÀàÍÆ£¬µ± OCS 
-             ÊÕµ½×îºóÒ»¸ö´úÀí·şÎñÆ÷µÄÇëÇóÊ±£¬¼ì²é Via Í·²¿£¬¾ÍÖªµÀ¸ÃÇëÇóËù¾­¹ıµÄÂ·ÓÉ¡£
-             ÀıÈç£ºVia£º1.0 236-81.D07071953.sina.com.cn:80 (squid/2.6.STABLE13)
-
-    */
     /*ÒÔÏÂÃ¿¸öngx_table_elt_t³ÉÔ±¶¼ÊÇRFC1616¹æ·¶ÖĞ¶¨ÒåµÄHTTPÍ·²¿£¬ ËüÃÇÊµ¼Ê¶¼Ö¸ÏòheadersÁ´±íÖĞµÄÏàÓ¦³ÉÔ±¡£×¢Òâ£¬
     µ±ËüÃÇÎªNULL¿ÕÖ¸ÕëÊ±£¬±íÊ¾Ã»ÓĞ½âÎöµ½ÏàÓ¦µÄHTTPÍ·²¿*/ //serverºÍhostÖ¸ÏòÄÚÈİÒ»Ñù£¬¶¼ÊÇÍ·²¿ÖĞĞ¯´øµÄhostÍ·²¿
     ngx_table_elt_t                  *host; //http1.0ÒÔÉÏ±ØĞë´øÉÏhostÍ·²¿ĞĞ£¬¼ûngx_http_process_request_header
@@ -613,7 +631,7 @@ ETagsºÍIf-None-MatchµÄ¹¤×÷Ô­ÀíÊÇÔÚHTTPResponseÖĞÌí¼ÓETagsĞÅÏ¢¡£µ±¿Í»§¶ËÔÙ´ÎÇëÇó¸
     ngx_table_elt_t                  *date;
 #endif
 
-    /* userºÍpasswdÊÇÖ»ÓĞngx_http_auth_basic_module²Å»áÓÃµ½µÄ³ÉÔ±£¬ÕâÀï¿ÉÒÔºöÂÔ */
+    /* userºÍpasswdÊÇÖ»ÓĞngx_http_auth_basic_module²Å»áÓÃµ½µÄ³ÉÔ± */
     ngx_str_t                         user;
     ngx_str_t                         passwd;
 
@@ -698,7 +716,9 @@ ngx_http_send_header·½·¨Ö´ĞĞºó½«Æä·µ»ØÖµreturn¼´¿É£©¡£
 ×¢Òâ¡¡ngx_http_send_header·½·¨»áÊ×ÏÈµ÷ÓÃËùÓĞµÄHTTP¹ıÂËÄ£¿é¹²Í¬´¦Àíheaders_outÖĞ¶¨ÒåµÄHTTPÏìÓ¦Í·²¿£¬È«²¿´¦ÀíÍê
 ±Ïºó²Å»áĞòÁĞ»¯ÎªTCP×Ö·ûÁ÷·¢ËÍµ½¿Í»§¶Ë£¬
 */
-typedef struct { //°üº¬ÔÚngx_http_request_s½á¹¹ÖĞ
+typedef struct { //°üº¬ÔÚngx_http_request_s½á¹¹headers_outÖĞ,ngx_http_send_headerÖĞ°ÑHTTPÍ·²¿·¢³ö
+    /*³£ÓÃµÄHTTPÍ·²¿ĞÅÏ¢¿ÉÒÔÍ¨¹ır->headers_in»ñÈ¡£¬²»³£ÓÃµÄHTTPÍ·²¿ÔòĞèÒª±éÀúr->headers_in.headersÀ´±éÀú»ñÈ¡*/ 
+    //Ê¹ÓÃ²éÕÒ·½·¨¿ÉÒÔ²Î¿¼headers_in
     //Èç¹ûÁ¬½ÓÁËºó¶Ë(ÀıÈçfastcgiµ½PHP·şÎñÆ÷),ÀïÃæ´æ´¢µÄÊÇºó¶Ë·şÎñÆ÷·µ»ØµÄÒ»ĞĞÒ»ĞĞµÄÍ·²¿ĞĞĞÅÏ¢,¸³ÖµÔÚngx_http_upstream_process_headers->ngx_http_upstream_copy_header_line
     ngx_list_t                        headers;//´ı·¢ËÍµÄHTTPÍ·²¿Á´±í£¬Óëheaders_inÖĞµÄheaders³ÉÔ±ÀàËÆ  
 
@@ -862,8 +882,8 @@ typedef struct { //°üº¬ÔÚngx_http_request_s½á¹¹ÖĞ
     ngx_uint_t                        content_type_hash;
     //cache_control´Ù·¢Ìõ¼şÊÇexpiresÅäÖÃ»òÕßadd_head cache_control valueÅäÖÃ£¬¼ûngx_http_set_expires £¬Í·²¿ĞĞÔÚngx_http_set_expires½øĞĞ´´½¨¿Õ¼äÒÔ¼°Í·²¿ĞĞ×é×°
     ngx_array_t                       cache_control;
-    /*ÔÚÕâÀïÖ¸¶¨¹ıcontent_length_nºó£¬²»ÓÃÔÙ´Îµ½ngx_table_elt_t *content_ lengthÖĞÉèÖÃÏìÓ¦³¤¶È*/
-    off_t                             content_length_n; //Õâ¸ö±êÊ¾Ó¦´ğÌåµÄ³¤¶È
+    /*ÔÚÕâÀïÖ¸¶¨¹ıcontent_length_nºó£¬²»ÓÃÔÙ´Îµ½ngx_table_elt_t *content_lengthÖĞÉèÖÃÏìÓ¦³¤¶È*/
+    off_t                             content_length_n; //Õâ¸ö±êÊ¾Ó¦´ğÌåµÄ³¤¶È  ²»°üÀ¨Í·²¿ĞĞ³¤¶È£¬Ö»°üº¬ÏûÏ¢Ìå³¤¶È
     time_t                            date_time;
 
     //Êµ¼ÊÉÏ¸ÃÊ±¼äÊÇÍ¨¹ıngx_open_and_stat_file->stat»ñÈ¡µÄÎÄ¼ş×î½üĞŞ¸ÄµÄÊ±¼ä£¬¿Í»§¶ËÃ¿´ÎÇëÇó¶¼»á´ÓĞÂÍ¨¹ıstat»ñÈ¡£¬Èç¹û¿Í»§¶ËµÚÒ»´ÎÇëÇó¸ÃÎÄ¼şºÍµÚ¶ş´ÎÇëÇó¸ÃÎÄ¼ş¹ı³ÌÖĞĞŞ¸ÄÁË¸ÃÎÄ¼ş£¬Ôò
@@ -934,9 +954,10 @@ typedef struct {  //»ñÈ¡ÇëÇó¶ÔÓ¦µÄserver¿éĞÅÏ¢£¬server_nameĞÅÏ¢¿ÉÒÔ²Î¿¼ngx_http_
     ngx_buf_t                       **free;
     ngx_int_t                         nfree;
 
-#if (NGX_HTTP_SSL)
-    unsigned                          ssl:1;
-#endif
+#if (NGX_HTTP_SSL) /* ¿ÉÒÔÍ¨¹ılisten xxx ssl»òÕßssl onÆôÓÃssl */
+    unsigned                          ssl:1; //listenÅäÖÃµÄÊ±ºòÆôÓÃssl»òÕßÆôÓÃsslÄ£¿éµÄssl onÅäÖÃµÄÊ±ºòÖÃ1
+#endif 
+    //¼ûngx_http_core_listen   ÅäÖÃÀàËÆlisten ip:port  proxy_protocolµÄÊ±ºòÖÃ1   proxy protocolÆôÓÃ£¬±íÊ¾Ö±½Ó°ÑÁ÷Á¿×ª·¢µ½ºó¶Ë£¬nginx²»ÓÃ×öÈÎºÎ´¦Àí,¾ÍºÍHAPROXY¹¦ÄÜÀàËÆ
     unsigned                          proxy_protocol:1; //listenÅäÖÃÏîÖĞÊÇ·ñĞ¯´ø¸Ã²ÎÊı
 } ngx_http_connection_t;
 
@@ -966,38 +987,31 @@ typedef ngx_int_t (*ngx_http_post_subrequest_pt)(ngx_http_request_t *r,
 
 /*
 ÔÚÉú³Éngx_http_post_subrequest_t½á¹¹ÌåÊ±£¬¿ÉÒÔ°ÑÈÎÒâÊı¾İ¸³¸øÕâÀïµÄdataÖ¸Õë£¬ngx_http_post_subrequest_pt»Øµ÷·½·¨Ö´ĞĞÊ±µÄ
-data²ÎÊı¾ÍÊÇngx_http_po st_subrequest_t½á¹¹ÌåÖĞµÄdata³ÉÔ±Ö¸Õë¡£
-    ngx_http_post_subrequest_pt»Øµ÷·½·¨ÖĞµÄrc²ÎÊıÊÇ×ÓÇëÇóÔÚ½áÊøÊ±µÄ×´Ì¬£¬ËüµÄÈ¡ÖµÔòÊÇÖ´ĞĞngx_http_finalize_requestÏú»ÙÇë
-ÇóÊ±´«µİµÄrc²ÎÊı£¨¶ÔÓÚ±¾ÀıÀ´Ëµ£¬ÓÉÓÚ×ÓÇëÇóÊ¹ÓÃ·´Ïò´úÀíÄ£¿é·ÃÎÊÉÏÓÎHTTP·şÎñÆ÷£¬ËùÒÔrc´ËÊ±ÊÇHTTPÏìÓ¦Âë¡£ÀıÈç£¬ÔÚÕı³£Çé¿ö
-ÏÂ£¬rc»áÊÇ200£©¡£
+data²ÎÊı¾ÍÊÇngx_http_post_subrequest_t½á¹¹ÌåÖĞµÄdata³ÉÔ±Ö¸Õë¡£
+
+ngx_http_post_subrequest_pt»Øµ÷·½·¨ÖĞµÄrc²ÎÊıÊÇ×ÓÇëÇóÔÚ½áÊøÊ±µÄ×´Ì¬£¬ËüµÄÈ¡ÖµÔòÊÇÖ´ĞĞngx_http_finalize_requestÏú»ÙÇëÇóÊ±´«µİµÄrc²ÎÊı
 */
-typedef struct {
+typedef struct { //Ò»¸ö×ÓÇëÇó½áÊøÊ±¶ÔÓ¦µÄ»Øµ÷
     ngx_http_post_subrequest_pt       handler; //ÔÚº¯Êıngx_http_finalize_requestÖĞÖ´ĞĞ  Ò»°ãÓÃÀ´·¢ËÍÊı¾İµ½¿Í»§¶Ë
     void                             *data;//dataÎª´«µİ¸øhandlerµÄ¶îÍâ²ÎÊı
 } ngx_http_post_subrequest_t;
 
-
 typedef struct ngx_http_postponed_request_s  ngx_http_postponed_request_t;
 /*
-µ±ÅÉÉúÒ»¸ö×ÓÇëÇó·ÃÎÊµÚÈı·½·şÎñ¸½£¬Èç¹ûÖ»ÊÇÏ£Íû½ÓÊÕµ½ÍêÕûµÄÏìÓ¦ºóÔÚNginxÖĞ½âÎö¡¢´¦Àí£¬ÄÇÃ´ÕâÀï¾Í²»ĞèÒªpostponeÄ£¿é£»
-Èç¹ûÔ­Ê¼ÇëÇóÅÉÉú³öĞí¶à×ÓÇëÇó£¬²¢ÇÒÏ£Íû½«ËùÓĞ×ÓÇëÇóµÄÏìÓ¦ÒÀ´Î×ª·¢¸ø¿Í»§¶Ë£¬µ±È»£¬ÕâÀïµÄ¡°ÒÀ´Î¡±¾ÍÊÇ°´ÕÕ´´½¨
-×ÓÇëÇóµÄË³ĞòÀ´·¢ËÍÏìÓ¦£¬ÕâÊ±£¬postponeÄ£¿é¾ÍÓĞÁË¡°ÓÃÎäÖ®µØ¡±¡£NginxÖĞµÄËùÓĞÇëÇó¶¼ÊÇÒì²½Ö´ĞĞµÄ£¬ºó´´½¨µÄ×ÓÇëÇó¿ÉÄÜÓÅÏÈÖ´ĞĞ£¬ÕâÑù
-×ª·¢µ½¿Í»§¶ËµÄÏìÓ¦¾Í»á²úÉú»ìÂÒ¡£¶øpostponeÄ£¿é»áÇ¿ÖÆµØ°Ñ´ı×ª·¢µÄÏìÓ¦°üÌå·ÅÔÚÒ»¸öÁ´±íÖĞ·¢ËÍ£¬Ö»ÓĞÓÅÏÈ×ª·¢µÄ×ÓÇëÇó½áÊøºó²Å»á¿ªÊ¼
-×ª·¢ÏÂÒ»¸ö×ÓÇëÇóÖĞµÄÏìÓ¦¡£ÏÂÃæ½éÉÜÒ»ÏÂËüÊÇÈçºÎÊµÏÖµÄ¡£Ã¿¸öÇëÇóµÄngx_http_request_t½á¹¹ÌåÖĞ¶¼ÓĞÒ»¸öpostponed³ÉÔ±£º
-
-
-´ÓÉÏÊö´úÂë¿ÉÒÔ¿´³ö£¬¶à¸öngx_http_postponed_request_tÖ®¼äÊ¹ÓÃnextÖ¸ÕëÁ¬½Ó³ÉÒ»¸öµ¥ÏòÁ´±í¡£ngx_http_postponed_request_tÖĞ
+    ¶à¸öngx_http_postponed_request_tÖ®¼äÊ¹ÓÃnextÖ¸ÕëÁ¬½Ó³ÉÒ»¸öµ¥ÏòÁ´±í¡£ngx_http_postponed_request_tÖĞ
 µÄout³ÉÔ±ÊÇngx_chain_t½á¹¹£¬ËüÖ¸ÏòµÄÊÇÀ´×ÔÉÏÓÎµÄ¡¢½«Òª×ª·¢¸øÏÂÓÎµÄÏìÓ¦°üÌå¡£
     Ã¿µ±Ê¹ÓÃngx_http_output_filter·½·¨£¨·´Ïò´úÀíÄ£¿éÒ²Ê¹ÓÃ¸Ã·½·¨×ª·¢ÏìÓ¦£©ÏòÏÂÓÎêÀ¿Í»§¶Ë·¢ËÍÏìÓ¦°üÌåÊ±£¬¶¼»áµ÷ÓÃµ½
 ngx_http_postpone_filter_module¹ıÂËÄ£¿é´¦ÀíÕâ¶ÎÒª·¢ËÍµÄ°üÌå¡£
-*/ //ngx_http_request_sÖĞµÄpostponedÎª¸Ã½á¹¹ÀàĞÍ        
+*/ 
+
+//ngx_http_request_sÖĞµÄpostponedÎª¸Ã½á¹¹ÀàĞÍ        
 //ngx_http_subrequestÖĞ´´½¨ngx_http_postponed_request_s¿Õ¼ä,Í¨¹ı¸Ã½á¹¹µÄnext³ÉÔ±°Ñ×ÓÇëÇó¹ÒÔØÔÚÆä¸¸ÇëÇóµÄpostponedÁ´±íµÄ¶ÓÎ² 
 //¸Ã½á¹¹¿ÉÒÔ±íÊ¾×ÓÇëÇóĞÅÏ¢£¬Í¨¹ırequestÖ¸Ïò¶ÔÓ¦µÄ×ÓÇëÇó£¬Ò²¿ÉÒÔ±íÊ¾µ¥´¿µÄÊı¾İĞÅÏ¢inÁ´±í£¬¼ûngx_http_postpone_filter_add
 struct ngx_http_postponed_request_s { //²Î¿¼ngx_http_postpone_filter·½·¨ 
     //Èç¹ûÍ¨¹ıngx_http_postpone_filter_addÌí¼ÓInÁ´Êı¾İ£¬ÔòrequestÎªNULL
-    ngx_http_request_t               *request; //ngx_http_subrequest´´½¨subrequestµÄÊ±ºò£¬requestÖ¸Ïò×ÓÇëÇór,
-    ngx_chain_t                      *out;//out³ÉÔ±ÊÇngx_chain_t½á¹¹£¬ËüÖ¸ÏòµÄÊÇÀ´×ÔÉÏÓÎµÄ¡¢½«Òª×ª·¢¸øÏÂÓÎµÄÏìÓ¦°üÌå¡£
-    ngx_http_postponed_request_t     *next;
+    ngx_http_request_t               *request; //ngx_http_subrequest´´½¨subrequestµÄÊ±ºò£¬request±£´æ×ÓÇëÇó
+    ngx_chain_t                      *out;//out³ÉÔ±ÊÇngx_chain_t½á¹¹£¬ËüÖ¸ÏòµÄÊÇÀ´×ÔÉÏÓÎµÄ¡¢½«Òª×ª·¢¸øÏÂÓÎµÄÏìÓ¦°üÌå¡£¸ÃÇëÇó×Ô¼º²úÉúµÄÊı¾İ
+    ngx_http_postponed_request_t     *next; //Í¬Ò»¸ö¸¸ÇëÇóÏÂ´´½¨¶à¸ö×ÓÇëÇóµÄÊ±ºò£¬Í¨¹ı¸ÃnextÁ¬½ÓÆğÀ´
 };
 
 
@@ -1085,6 +1099,8 @@ NGX_HTTP_CONTENT_PHASE½×¶ÎÓëÆäËû½×¶Î¶¼²»ÏàÍ¬µÄÊÇ£¬ËüÏòHTTPÄ£¿éÌá¹©ÁËÁ½ÖÖ½éÈë¸Ã½×
 ngx_http_handler_pt·½·¨ÉèÖÃµ½locationÏà¹ØµÄngx_http_core_loc_conf_t½á¹¹ÌåµÄhandlerÖ¸ÕëÖĞ£¬ÕâÕıÊÇµÚ3ÕÂÖĞmytestÀı×ÓµÄÓÃ·¨¡£
 */ //CONTENT_PHASE½×¶ÎµÄ´¦Àí»Øµ÷º¯Êıngx_http_handler_pt±È½ÏÌØÊâ£¬¼ûngx_http_core_content_phase 
 typedef ngx_int_t (*ngx_http_handler_pt)(ngx_http_request_t *r); //²ÎÊır°üº¬ÁËÄÄĞ©NginxÒÑ¾­½âÎöÍêµÄÓÃ»§ÇëÇóĞÅÏ¢
+
+/* ×¢Òângx_http_event_handler_ptºÍngx_event_handler_ptµÄÇø±ğ */
 typedef void (*ngx_http_event_handler_pt)(ngx_http_request_t *r);
 
 /*
@@ -1112,18 +1128,23 @@ ngx_variable_value_tÕâÁ½¸ö½á¹¹µÄ¹ØÏµºÜÃÜÇĞ£¬Ò»¸öËùÎ½±äÁ¿£¬Ò»¸öËùÎ½±äÁ¿Öµ
 ¿ÉÒÔ·ÃÎÊÒ»¸öÉÏÓÎ·şÎñÆ÷£¬ÕâĞ©×ÓÇëÇóµÄ½á¹û×éºÏÆğÀ´¾Í¿ÉÒÔÊ¹À´×Ô¿Í»§¶ËµÄÇëÇó´¦Àí¸´ÔÓµÄÒµÎñ¡£
 */
 //ngx_http_parse_request_line½âÎöÇëÇóĞĞ£¬ ngx_http_process_request_headers½âÎöÍ·²¿ĞĞ(ÇëÇóÍ·²¿)
+//ÇëÇóµÄËùÓĞĞÅÏ¢¶¼¿ÉÒÔ¶¼¿ÉÒÔÔÚngx_http_request_s½á¹¹»ñÈ¡µ½
 struct ngx_http_request_s { //µ±½ÓÊÕµ½¿Í»§¶ËÇëÇóÊı¾İºó£¬µ÷ÓÃngx_http_create_requestÖĞ´´½¨²¢¸³Öµ
     uint32_t                          signature;         /* "HTTP" */ 
 
-    //ÔÚ½ÓÊÕµ½¿Í»§¶ËÊı¾İºó£¬»á´´½¨Ò»¸öngx_http_request_s£¬Æäconnection³ÉÔ±Ö¸Ïò¶ÔÓ¦µÄaccept³É¹¦ºó»ñÈ¡µ½µÄÁ¬½ÓĞÅÏ¢ngx_connection_t£¬¼ûngx_http_create_request
-    ngx_connection_t                 *connection; //Õâ¸öÇëÇó¶ÔÓ¦µÄ¿Í»§¶ËÁ¬½Ó  Èç¹û¸ÃrÊÇ×ÓÇëÇó£¬Æğconnection³ÉÔ±Ö¸Ïò¶¥²ãroot¸¸ÇëÇóµÄngx_connection_t
+    /*
+        ÔÚ½ÓÊÕµ½¿Í»§¶ËÊı¾İºó£¬»á´´½¨Ò»¸öngx_http_request_s£¬Æäconnection³ÉÔ±Ö¸Ïò¶ÔÓ¦µÄaccept³É¹¦ºó»ñÈ¡µ½µÄÁ¬½ÓĞÅÏ¢
+    ngx_connection_t£¬¼ûngx_http_create_request
+        Õâ¸öÇëÇó¶ÔÓ¦µÄ¿Í»§¶ËÁ¬½Ó  Èç¹û¸ÃrÊÇ×ÓÇëÇó£¬Æäconnection³ÉÔ±Ö¸Ïò¶¥²ãroot¸¸ÇëÇóµÄngx_connection_t£¬ÒòÎªËüÃÇ¶¼ÊÇ¶ÔÓ¦µÄÍ¬Ò»¸ö¿Í»§¶ËÁ¬½Ó,¼ûngx_http_subrequest
+    */
+    ngx_connection_t                 *connection; 
 
     /*
     ctxÓëngx_http_conf_ctxt½á¹¹µÄ3¸öÊı×é³ÉÔ±·Ç³£ÏàËÆ£¬ËüÃÇ¶¼
-    ±íÊ¾Ö¸ÏòvoidÊõÖ¸ÕëµÄÊı×é¡£HTTP¿ò¼Ü¾ÍÊÇÔÚctxÊı×éÖĞ±£´æËùÓĞHTTPÄ£¿éÉÏÏÂÎÄ½á¹¹ÌåµÄÖ¸ÕëµÄ,ËùÓĞÄ£¿éµÄÇëÇóÉÏÏÂÎÄ¿Õ¼äÔÚ
+    ±íÊ¾Ö¸ÏòvoidÖ¸ÕëµÄÊı×é¡£HTTP¿ò¼Ü¾ÍÊÇÔÚctxÊı×éÖĞ±£´æËùÓĞHTTPÄ£¿éÉÏÏÂÎÄ½á¹¹ÌåµÄÖ¸ÕëµÄ,ËùÓĞÄ£¿éµÄÇëÇóÉÏÏÂÎÄ¿Õ¼äÔÚ
     ngx_http_create_requestÖĞ´´½¨¡£»ñÈ¡ºÍÉèÖÃ·Ö±ğÔÚngx_http_get_module_ctxºÍngx_http_set_ctx£¬ÎªÃ¿¸öÇëÇó´´½¨ngx_http_request_sµÄÊ±ºò
     ¶¼»áÎª¸ÃÇëÇóµÄctx[]ÎªËùÓĞµÄÄ£¿é´´½¨Ò»¸öÖ¸Õë£¬Ò²¾ÍÊÇÃ¿¸öÄ£¿éÔÚngx_http_request_sÖĞÓĞÒ»¸öctx
-    */ //ÔÚÓ¦´ğÍêºó£¬ÔÚngx_http_filter_finalize_request»á°ÑctxÖ¸ÏòµÄ¿Õ¼äÈ«²¿Çå0
+    */ //ÔÚÓ¦´ğÍêºó£¬ÔÚngx_http_filter_finalize_request»á°ÑctxÖ¸ÏòµÄ¿Õ¼äÈ«²¿Çå0  ²Î¿¼4.5½Ú 
     void                            **ctx; //Ö¸Ïò´æ·ÅËùÓĞHTTPÄ£¿éµÄÉÏÏÂÎÄ½á¹¹ÌåµÄÖ¸ÕëÊı×é,Êµ¼ÊÉÏ·¢ËÍ¸ø¿Í»§¶ËµÄÓ¦´ğÍê³Éºó£¬»á°ÑctxÈ«²¿ÖÃ0
     /*
     µ±¿Í»§¶Ë½¨Á¢Á¬½Óºó£¬²¢·¢ËÍÇëÇóÊı¾İ¹ıÀ´ºó£¬ÔÚngx_http_create_requestÖĞ´Óngx_http_connection_t->conf_ctx»ñÈ¡ÕâÈı¸öÖµ£¬Ò²¾ÍÊÇ¸ù¾İ¿Í»§¶ËÁ¬½Ó
@@ -1156,10 +1177,10 @@ struct ngx_http_request_s { //µ±½ÓÊÕµ½¿Í»§¶ËÇëÇóÊı¾İºó£¬µ÷ÓÃngx_http_create_requ
      //ÔÚ¶ÁÈ¡¿Í»§¶ËÀ´µÄ°üÌåÊ±£¬¸³ÖµÎªngx_http_read_client_request_body_handler
      ¶ªÆú¿Í»§¶ËµÄ°üÌåÊ±£¬¸³ÖµÎªngx_http_discarded_request_body_handler
      */ //×¢Òângx_http_upstream_tºÍngx_http_request_t¶¼ÓĞ¸Ã³ÉÔ± ·Ö±ğÔÚngx_http_request_handlerºÍngx_http_upstream_handlerÖĞÖ´ĞĞ
-    ngx_http_event_handler_pt         read_event_handler; //ngx_http_request_handlerº¯ÊıÖĞÖ´ĞĞ
+    ngx_http_event_handler_pt         read_event_handler;  
 
     /* Óëread_event_handler»Øµ÷·½·¨ÀàËÆ£¬Èç¹ûngx_http_request_handler·½·¨ÅĞ¶Ïµ±Ç°ÊÂ¼şÊÇ¿ÉĞ´ÊÂ¼ş£¬Ôòµ÷ÓÃwrite_event_handler´¦ÀíÇëÇó */
-    /*ÇëÇóĞĞºÍÇëÇóÍ·²¿½âÎöÍê³Éºó£¬»áÔÚngx_http_handlerÖĞ¸³ÖµÎªngx_http_core_run_phases
+    /*ÇëÇóĞĞºÍÇëÇóÍ·²¿½âÎöÍê³Éºó£¬»áÔÚngx_http_handlerÖĞ¸³ÖµÎªngx_http_core_run_phases   ×ÓÇëÇóµÄµÄhandlerÎªngx_http_handler
        µ±·¢ËÍÏìÓ¦µÄÊ±ºò£¬Èç¹ûÒ»´ÎÃ»ÓĞ·¢ËÍÍê£¬ÔòÉèÔÚÎªngx_http_writer
      */ //×¢Òângx_http_upstream_tºÍngx_http_request_t¶¼ÓĞ¸Ã³ÉÔ± ·Ö±ğÔÚngx_http_request_handlerºÍngx_http_upstream_handlerÖĞÖ´ĞĞ
      //Èç¹û²ÉÓÃbuffer·½Ê½»º´æºó¶Ë°üÌå£¬ÔòÔÚ·¢ËÍ°üÌå¸ø¿Í»§¶Ëä¯ÀÀÆ÷µÄÊ±ºò£¬»á°Ñ¿Í»§¶ËÁ¬½ÓµÄwrite_e_handÖÃÎªngx_http_upstream_process_downstream
@@ -1183,10 +1204,12 @@ struct ngx_http_request_s { //µ±½ÓÊÕµ½¿Í»§¶ËÇëÇóÊı¾İºó£¬µ÷ÓÃngx_http_create_requ
     Ã»ÓĞ¹Ø±Õ£¬ÕâÊ±ÇëÇóµÄÄÚ´æ³Ø»áÏú»Ù£¬µ«ngx_connection_tµÄÄÚ´æ³Ø²¢²»»áÏú»Ù
      */
     ngx_pool_t                       *pool;
-    //ÆäÖĞ£¬header_inÖ¸ÏòNginxÊÕµ½µÄÎ´¾­½âÎöµÄHTTPÍ·²¿£¬ÕâÀïÔİ²»¹Ø×¢Ëü£¨ÔÚµÚ11ÕÂÖĞ¿ÉÒÔ¿´µ½£¬header_in¾ÍÊÇ½ÓÊÕHTTPÍ·²¿µÄ»º³åÇø£©¡£ header_in´æ·ÅÇëÇóĞĞ£¬åHeaders_in´æ·ÅÍ·²¿ĞĞ
+    //ÆäÖĞ£¬header_inÖ¸ÏòNginxÊÕµ½µÄÎ´¾­½âÎöµÄHTTPÍ·²¿£¬ÕâÀïÔİ²»¹Ø×¢Ëü£¨header_in¾ÍÊÇ½ÓÊÕHTTPÍ·²¿µÄ»º³åÇø£©¡£ header_in´æ·ÅÇëÇóĞĞ£¬headers_in´æ·ÅÍ·²¿ĞĞ
     //ÇëÇóĞĞºÍÇëÇóÍ·²¿ÄÚÈİ¶¼ÔÚ¸ÃbufferÖĞ
     ngx_buf_t                        *header_in;//ÓÃÓÚ½ÓÊÕHTTPÇëÇóÄÚÈİµÄ»º³åÇø£¬Ö÷ÒªÓÃÓÚ½ÓÊÕHTTPÍ·²¿£¬¸ÃÖ¸ÕëÖ¸Ïòngx_connection_t->buffer
-    //ÀàĞÍµÄheaders_inÔò´æ´¢ÒÑ¾­½âÎö¹ıµÄHTTPÍ·²¿¡£ÏÂÃæ½éÉÜngx_http_headers_in_t½á¹¹ÌåÖĞµÄ³ÉÔ±¡£
+
+    //ÀàĞÍµÄheaders_inÔò´æ´¢ÒÑ¾­½âÎö¹ıµÄHTTPÍ·²¿¡£
+    /*³£ÓÃµÄHTTPÍ·²¿ĞÅÏ¢¿ÉÒÔÍ¨¹ır->headers_in»ñÈ¡£¬²»³£ÓÃµÄHTTPÍ·²¿ÔòĞèÒª±éÀúr->headers_in.headersÀ´±éÀú»ñÈ¡*/
 /*
  ngx_http_process_request_headers·½·¨ÔÚ½ÓÊÕ¡¢½âÎöÍêHTTPÇëÇóµÄÍ·²¿ºó£¬»á°Ñ½âÎöÍêµÄÃ¿Ò»¸öHTTPÍ·²¿¼ÓÈëµ½headers_inµÄheadersÁ´±íÖĞ£¬Í¬Ê±»á¹¹Ôìheaders_inÖĞµÄÆäËû³ÉÔ±
  */ //²Î¿¼ngx_http_headers_in£¬Í¨¹ı¸ÃÊı×éÖĞµÄ»Øµ÷handerÀ´´æ´¢½âÎöµ½µÄÇëÇóĞĞname:valueÖĞµÄvalueµ½headers_inµÄÏìÓ¦³ÉÔ±ÖĞ£¬¼ûngx_http_process_request_headers
@@ -1222,6 +1245,7 @@ r->request_body->temp_file->file.nameÖĞ»ñÈ¡Nginx½ÓÊÕµ½µÄÇëÇó°üÌåËùÔÚÎÄ¼şµÄÃû³Æ£¨
 ×¢Òâ¡¡NginxÖĞ¶ÔÄÚ´æµÄ¿ØÖÆÏàµ±ÑÏ¸ñ£¬ÎªÁË±ÜÃâ²»±ØÒªµÄÄÚ´æ¿ªÏú£¬Ğí¶àĞèÒªÓÃµ½µÄ³ÉÔ±¶¼²»ÊÇÖØĞÂ·ÖÅäÄÚ´æºó´æ´¢µÄ£¬¶øÊÇÖ±½ÓÖ¸ÏòÓÃ»§ÇëÇóÖĞµÄÏàÓ¦µØÖ·¡£
 ÀıÈç£¬method_name.data¡¢request_startÕâÁ½¸öÖ¸ÕëÊµ¼ÊÖ¸ÏòµÄ¶¼ÊÇÍ¬Ò»¸öµØÖ·¡£¶øÇÒ£¬ÒòÎªËüÃÇÊÇ¼òµ¥µÄÄÚ´æÖ¸Õë£¬²»ÊÇÖ¸Ïò×Ö·û´®µÄÖ¸Õë£¬ËùÒÔ£¬ÔÚ´ó²¿·ÖÇé¿öÏÂ£¬¶¼²»ÄÜ½«ÕâĞ©u_char*Ö¸Õëµ±×ö×Ö·û´®Ê¹ÓÃ¡£
 */ //NGX_HTTP_GET | NGX_HTTP_HEADµÈ,ÎªNGX_HTTP_HEAD±íÊ¾Ö»ĞèÒª·¢ËÍHTTPÍ·²¿×Ö¶Î
+    /* HTTP2µÄmethod¸³Öµ¼ûngx_http_v2_parse_method */
     ngx_uint_t                        method; //¶ÔÓ¦¿Í»§¶ËÇëÇóÖĞÇëÇóĞĞµÄÇëÇó·½·¨GET¡¢POSµÈ£¬È¡Öµ¼ûNGX_HTTP_GET,Ò²¿ÉÒÔÓÃÏÂÃæµÄmethod_name½øĞĞ×Ö·û´®±È½Ï
 /*
 http_protocolÖ¸ÏòÓÃ»§ÇëÇóÖĞHTTPµÄÆğÊ¼µØÖ·¡£
@@ -1233,8 +1257,8 @@ http_versionÊÇNginx½âÎö¹ıµÄĞ­Òé°æ±¾£¬ËüµÄÈ¡Öµ·¶Î§ÈçÏÂ£º
 ×îºó£¬Ê¹ÓÃrequest_startºÍrequest_end¿ÉÒÔ»ñÈ¡Ô­Ê¼µÄÓÃ»§ÇëÇóĞĞ¡£
 */
     ngx_uint_t                        http_version;//http_versionÊÇNginx½âÎö¹ıµÄĞ­Òé°æ±¾£¬ËüµÄÈ¡Öµ·¶Î§ÈçÏÂ£º
-
-    ngx_str_t                         request_line; //ÇëÇóĞĞÄÚÈİ
+    /* Èç¹ûÊÇHTTP2£¬Ôò¸³Öµ¼ûngx_http_v2_construct_request_line */
+    ngx_str_t                         request_line; //ÇëÇóĞĞÄÚÈİ  
 
 
 /*
@@ -1283,6 +1307,7 @@ URL×Ö·û×ªÒå
 */
 //unparsed_uri±íÊ¾Ã»ÓĞ½øĞĞURL½âÂëµÄÔ­Ê¼ÇëÇó¡£ÀıÈç£¬µ±uriÎª¡°/a b¡±Ê±£¬unparsed_uriÊÇ¡°/a%20b¡±£¨¿Õ¸ñ×Ö·û×öÍê±àÂëºóÊÇ%20£©¡£
     ngx_str_t                         unparsed_uri;//²Î¿¼:ÎªÊ²Ã´Òª¶ÔURI½øĞĞ±àÂë:
+    /* HTTP2µÄmethod¸³Öµ¼ûngx_http_v2_parse_method£¬ÔÚ×éĞÂµÄHTTP2Í·²¿ĞĞºó£¬¸³Öµ¼ûngx_http_v2_construct_request_line */ 
     ngx_str_t                         method_name;//¼ûmethod   GET  POSTµÈ
     ngx_str_t                         http_protocol;//GET /sample.jsp HTTP/1.1  ÖĞµÄHTTP/1.1
 
@@ -1291,30 +1316,23 @@ URL×Ö·û×ªÒå
 /* ±íÊ¾ĞèÒª·¢ËÍ¸ø¿Í»§¶ËµÄHTTPÏìÓ¦¡£outÖĞ±£´æ×ÅÓÉheaders_outÖĞĞòÁĞ»¯ºóµÄ±íÊ¾HTTPÍ·²¿µÄTCPÁ÷¡£ÔÚµ÷ÓÃngx_http_output_filter·½·¨ºó£¬
 outÖĞ»¹»á±£´æ´ı·¢ËÍµÄHTTP°üÌå£¬ËüÊÇÊµÏÖÒì²½·¢ËÍHTTPÏìÓ¦µÄ¹Ø¼ü */
     ngx_chain_t                      *out;//ngx_http_write_filter°ÑinÖĞµÄÊı¾İÆ´½Óµ½outºóÃæ£¬È»ºóµ÷ÓÃwritev·¢ËÍ£¬Ã»ÓĞ·¢ËÍÍê
-/* µ±Ç°ÇëÇó¼È¿ÉÄÜÊÇÓÃ»§·¢À´µÄÇëÇó£¬Ò²¿ÉÄÜÊÇÅÉÉú³öµÄ×ÓÇëÇó£¬¶ømainÔò±êÊ¶Ò»ÏµÁĞÏà¹ØµÄÅÉÉú×ÓÇë
-ÇóµÄÔ­Ê¼ÇëÇó£¬ÎÒÃÇÒ»°ã¿ÉÍ¨¹ımainºÍµ±Ç°ÇëÇóµÄµØÖ·ÊÇ·ñÏàµÈÀ´ÅĞ¶Ïµ±Ç°ÇëÇóÊÇ·ñÎªÓÃ»§·¢À´µÄÔ­Ê¼ÇëÇó */
+    
+    /* µ±Ç°ÇëÇó¼È¿ÉÄÜÊÇÓÃ»§·¢À´µÄÇëÇó£¬Ò²¿ÉÄÜÊÇÅÉÉú³öµÄ×ÓÇëÇó£¬¶ømainÔò±êÊ¶Ò»ÏµÁĞÏà¹ØµÄÅÉÉú×ÓÇë
+    ÇóµÄÔ­Ê¼ÇëÇó£¬ÎÒÃÇÒ»°ã¿ÉÍ¨¹ımainºÍµ±Ç°ÇëÇóµÄµØÖ·ÊÇ·ñÏàµÈÀ´ÅĞ¶Ïµ±Ç°ÇëÇóÊÇ·ñÎªÓÃ»§·¢À´µÄÔ­Ê¼ÇëÇó */
+
     //main³ÉÔ±Ê¼ÖÕÖ¸ÏòÒ»ÏµÁĞÓĞÇ×Ôµ¹ØÏµµÄÇëÇóÖĞµÄÎ¨Ò»µÄÄÇ¸öÔ­Ê¼ÇëÇó,³õÊ¼¸³Öµ¼ûngx_http_create_request
-    //¿Í»§¶ËµÄ½¨Á¢Á¬½ÓµÄÊ±ºòr->main =r(ngx_http_create_request),Èç¹ûÊÇ´´½¨×ÓÇëÇó£¬sr->main = r->main(ngx_http_subrequest)×ÓÇëÇó->main=¸¸ÇëÇór
+    //¿Í»§¶ËµÄ½¨Á¢Á¬½ÓµÄÊ±ºòr->main =r(ngx_http_create_request),Èç¹ûÊÇ´´½¨×ÓÇëÇó£¬sr->main = r->main(ngx_http_subrequest)×ÓÇëÇó->main=×îÉÏ²ãµÄr
     /* Ö÷ÇëÇó±£´æÔÚmain×Ö¶ÎÖĞ£¬ÕâÀïÆäÊµ¾ÍÊÇ×îÉÏ²ã¸úÇëÇó£¬ÀıÈçµ±Ç°ÊÇËÄ²ã×ÓÇëÇó£¬ÔòmainÊ¼ÖÕÖ¸ÏòµÚÒ»²ã¸¸ÇëÇó£¬
         ¶ø²»ÊÇµÚÈı´Î¸¸ÇëÇó£¬parentÖ¸ÏòµÚÈı²ã¸¸ÇëÇó */  
-    ngx_http_request_t               *main;//¿ÉÒÔ²Î¿¼ngx_http_core_access_phase
-    ngx_http_request_t               *parent;//µ±Ç°ÇëÇóµÄ¸¸ÇëÇó¡£×¢Òâ£¬¸¸ÇëÇóÎ´±ØÊÇÔ­Ê¼ÇëÇó
+    ngx_http_request_t               *main; //¸³Öµ¼ûngx_http_subrequest
+    ngx_http_request_t               *parent;//µ±Ç°ÇëÇóµÄ¸¸ÇëÇó¡£×¢Òâ£¬¸¸ÇëÇóÎ´±ØÊÇÔ­Ê¼ÇëÇó ¸³Öµ¼ûngx_http_subrequest
 
-/*
-    µ±ÅÉÉúÒ»¸ö×ÓÇëÇó·ÃÎÊµÚÈı·½·şÎñ¸½£¬Èç¹ûÖ»ÊÇÏ£Íû½ÓÊÕµ½ÍêÕûµÄÏìÓ¦ºóÔÚNginxÖĞ½âÎö¡¢´¦Àí£¬ÄÇÃ´ÕâÀï¾Í²»ĞèÒªpostponeÄ£¿é£¬
-    Èç¹ûÔ­Ê¼ÇëÇóÅÉÉú³öĞí¶à×ÓÇëÇó£¬²¢ÇÒÏ£Íû½«ËùÓĞ×ÓÇëÇóµÄÏìÓ¦ÒÀ´Î×ª·¢¸ø¿Í»§¶Ë£¬µ±È»£¬ÕâÀïµÄ¡°ÒÀ´Î¡±¾ÍÊÇ°´ÕÕ´´½¨
-×ÓÇëÇóµÄË³ĞòÀ´·¢ËÍÏìÓ¦£¬ÕâÊ±£¬postponeÄ£¿é¾ÍÓĞÁË¡°ÓÃÎäÖ®µØ¡±¡£NginxÖĞµÄËùÓĞÇëÇó¶¼ÊÇÒì²½Ö´ĞĞµÄ£¬ºó´´½¨µÄ×ÓÇëÇó¿ÉÄÜÓÅÏÈÖ´ĞĞ£¬ÕâÑù
-×ª·¢µ½¿Í»§¶ËµÄÏìÓ¦¾Í»á²úÉú»ìÂÒ¡£¶øpostponeÄ£¿é»áÇ¿ÖÆµØ°Ñ´ı×ª·¢µÄÏìÓ¦°üÌå·ÅÔÚÒ»¸öÁ´±íÖĞ·¢ËÍ£¬Ö»ÓĞÓÅÏÈ×ª·¢µÄ×ÓÇëÇó½áÊøºó²Å»á¿ªÊ¼
-×ª·¢ÏÂÒ»¸ö×ÓÇëÇóÖĞµÄÏìÓ¦¡£ÏÂÃæ½éÉÜÒ»ÏÂËüÊÇÈçºÎÊµÏÖµÄ¡£Ã¿¸öÇëÇóµÄngx_http_request_t½á¹¹ÌåÖĞ¶¼ÓĞÒ»¸öpostponed³ÉÔ±£º
-
-    ´ÓÉÏÊö´úÂë¿ÉÒÔ¿´³ö£¬¶à¸öngx_http_postponed_request_tÖ®¼äÊ¹ÓÃnextÖ¸ÕëÁ¬½Ó³ÉÒ»¸öµ¥ÏòÁ´±í¡£ngx_http_postponed_request_tÖĞ
-µÄout³ÉÔ±ÊÇngx_chain_t½á¹¹£¬ËüÖ¸ÏòµÄÊÇÀ´×ÔÉÏÓÎµÄ¡¢½«Òª×ª·¢¸øÏÂÓÎµÄÏìÓ¦°üÌå¡£
-    Ã¿µ±Ê¹ÓÃngx_http_output_filter·½·¨£¨·´Ïò´úÀíÄ£¿éÒ²Ê¹ÓÃ¸Ã·½·¨×ª·¢ÏìÓ¦£©ÏòÏÂÓÎêÀ¿Í»§¶Ë·¢ËÍÏìÓ¦°üÌåÊ±£¬¶¼»áµ÷ÓÃµ½
-ngx_http_postpone_filter_module¹ıÂËÄ£¿é´¦ÀíÕâ¶ÎÒª·¢ËÍµÄ°üÌå¡£ÏÂÃæ¿´Ò»ÏÂ¹ıÂË°üÌåµÄngx_http_postpone_filter·½·¨
-*/ //ngx_http_subrequestÖĞ¸³Öµ£¬±íÊ¾¶ÔÓ¦µÄ×ÓÇëÇór£¬¸Ã½á¹¹¿ÉÒÔ±íÊ¾×ÓÇëÇóĞÅÏ¢£¬Í¨¹ırequestÖ¸Ïò¶ÔÓ¦µÄ×ÓÇëÇó£¬Ò²¿ÉÒÔ±íÊ¾µ¥´¿µÄÊı¾İĞÅÏ¢inÁ´±í£¬¼ûngx_http_postpone_filter_add
-    //postponedÉ¾³ıÔÚngx_http_finalize_request
+    //ngx_http_subrequestÖĞ¸³Öµ£¬±íÊ¾¶ÔÓ¦µÄ×ÓÇëÇór£¬¸Ã½á¹¹¿ÉÒÔ±íÊ¾×ÓÇëÇóĞÅÏ¢
+    //postponedÉ¾³ıÔÚngx_http_finalize_request     
+    //µ±¿Í»§¶ËÇëÇóĞèÒªÍ¨¹ı¶à¸ösubrequest·ÃÎÊºó¶ËµÄÊ±ºò£¬¾ÍĞèÒª¶ÔÕâ¶à¸öºó¶ËµÄÓ¦´ğ½øĞĞºÏÊÊµÄË³ĞòÕûÀí²ÅÄÜ·¢Íù¿Í»§¶Ë
     ngx_http_postponed_request_t     *postponed; //Óësubrequest×ÓÇëÇóÏà¹ØµÄ¹¦ÄÜ  postponedÖĞÊı¾İÒÀ´Î·¢ËÍ²Î¿¼ngx_http_postpone_filter·½·¨
     ngx_http_post_subrequest_t       *post_subrequest;/* ±£´æ»Øµ÷handler¼°Êı¾İ£¬ÔÚ×ÓÇëÇóÖ´ĞĞÍê£¬½«»áµ÷ÓÃ */  
+    
 /* ËùÓĞµÄ×ÓÇëÇó¶¼ÊÇÍ¨¹ıposted_requestsÕâ¸öµ¥Á´±íÀ´Á´½ÓÆğÀ´µÄ£¬Ö´ĞĞpost×ÓÇëÇóÊ±µ÷ÓÃµÄ
 ngx_http_run_posted_requests·½·¨¾ÍÊÇÍ¨¹ı±éÀú¸Ãµ¥Á´±íÀ´Ö´ĞĞ×ÓÇëÇóµÄ */ 
 //ngx_http_post_requestÖĞ´´½¨ngx_http_posted_request_t¿Õ¼ä  
@@ -1327,6 +1345,7 @@ ngx_http_run_posted_requests·½·¨¾ÍÊÇÍ¨¹ı±éÀú¸Ãµ¥Á´±íÀ´Ö´ĞĞ×ÓÇëÇóµÄ */
 *///phase_handlerÊµ¼ÊÉÏÊÇ¸Ã½×¶ÎµÄ´¦Àí·½·¨º¯ÊıÔÚngx_http_phase_engine_t->handlersÊı×éÖĞµÄÎ»ÖÃ
     ngx_int_t                         phase_handler; 
     //±íÊ¾NGX HTTP CONTENT PHASE½×¶ÎÌá¹©¸øHTTPÄ£¿é´¦ÀíÇëÇóµÄÒ»ÖÖ·½Ê½£¬content handlerÖ¸ÏòHTTPÄ£¿éÊµÏÖµÄÇëÇó´¦Àí·½·¨,ÔÚngx_http_core_content_phaseÖĞÖ´ĞĞ
+    //ngx_http_proxy_handler  ngx_http_redis2_handler  ngx_http_fastcgi_handlerµÈ
     ngx_http_handler_pt               content_handler; ////ÔÚngx_http_update_location_configÖĞ¸³Öµ¸ør->content_handler = clcf->handler;
 /*
     ÔÚNGX_HTTP_ACCESS_PHASE½×¶ÎĞèÒªÅĞ¶ÏÇëÇóÊÇ·ñ¾ßÓĞ·ÃÎÊÈ¨ÏŞÊ±£¬Í¨¹ıaccess_codeÀ´´«µİHTTPÄ£¿éµÄhandler»Øµ÷·½·¨µÄ·µ»ØÖµ£¬Èç¹ûaccess_codeÎª0£¬
@@ -1378,9 +1397,16 @@ ngx_http_run_posted_requests·½·¨¾ÍÊÇÍ¨¹ı±éÀú¸Ãµ¥Á´±íÀ´Ö´ĞĞ×ÓÇëÇóµÄ */
     //¸Ãngx_http_request_t»áÒ»Ö±ÓĞĞ§£¬³ı·Ç¹Ø±ÕÁ¬½Ó¡£Òò´Ë¸Ãº¯ÊıÖ»»áµ÷ÓÃÒ»´Î£¬Ò²¾ÍÊÇµÚÒ»¸ö¿Í»§¶ËÇëÇó±¨ÎÄ¹ıÀ´µÄÊ±ºò´´½¨£¬Ò»Ö±³ÖĞøµ½Á¬½Ó¹Ø±Õ
     //¸Ã½á¹¹´æ´¢ÁË·şÎñÆ÷¶Ë½ÓÊÕ¿Í»§¶ËÁ¬½ÓÊ±£¬·şÎñÆ÷¶ËËùÔÚµÄserver{]ÉÏÏÂÎÄctx  server_nameµÈÅäÖÃĞÅÏ¢
     ngx_http_connection_t            *http_connection; //´æ´¢ngx_connection_t->dataÖ¸ÏòµÄngx_http_connection_t£¬¼ûngx_http_create_request
+
 #if (NGX_HTTP_SPDY)
     ngx_http_spdy_stream_t           *spdy_stream;
 #endif
+
+    #if (NGX_HTTP_V2)
+        /* ¸³Öµ¼ûngx_http_v2_create_stream */
+        ngx_http_v2_stream_t             *stream;
+    #endif
+
 
     ngx_http_log_handler_pt           log_handler;
     //ÔÚÕâ¸öÇëÇóÖĞÈç¹û´ò¿ªÁËÄ³Ğ©×ÊÔ´£¬²¢ĞèÒªÔÚÇëÇó½áÊøÊ±ÊÍ·Å£¬ÄÇÃ´¶¼ĞèÒªÔÚ°Ñ¶¨ÒåµÄÊÍ·Å×ÊÔ´·½·¨Ìí¼Óµ½cleanup³ÉÔ±ÖĞ
@@ -1389,7 +1415,7 @@ ngx_http_run_posted_requests·½·¨¾ÍÊÇÍ¨¹ı±éÀú¸Ãµ¥Á´±íÀ´Ö´ĞĞ×ÓÇëÇóµÄ */
     ÓÃÒÔÔÚÇëÇó½áÊøÊ±ÊÍ·Å×ÊÔ´ */
     ngx_http_cleanup_t               *cleanup;
     //Ä¬ÈÏÖµr->subrequests = NGX_HTTP_MAX_SUBREQUESTS + 1;¼ûngx_http_create_request
-    unsigned                          subrequests:8; //¸Ãr×î¶àÓĞ¶àÉÙ¸ö×ÓÇëÇó
+    unsigned                          subrequests:8; //¸Ãr×î¶à»¹¿ÉÒÔ´¦Àí¶àÉÙ¸ö×ÓÇëÇó  
 
 /*
 ÔÚÔÄ¶ÁHTTP·´Ïò´úÀíÄ£¿é(ngx_http_proxy_module)Ô´´úÂëÊ±£¬»á·¢ÏÖËü²¢Ã»ÓĞµ÷ÓÃr->main->count++£¬ÆäÖĞproxyÄ£¿éÊÇÕâÑùÆô¶¯upstream»úÖÆµÄ£º
@@ -1434,7 +1460,7 @@ ngx_http_finalize_request·½·¨Ò»´Î£¬ÕâÊÇÕıÈ·µÄ¡£¶ÔÓÚmytestÄ£¿éÒ²Ò»Ñù£¬Îñ±ØÒª±£Ö¤¶
 
     /* URI with " " */
     unsigned                          space_in_uri:1; //uriÖĞÊÇ·ñ´øÓĞ¿Õ¸ñ
-
+    //Í·²¿Ö¡ÄÚÈİ²¿·ÖheaderºÏ·¨ĞÔ¼ì²é£¬¼ûngx_http_v2_validate_header
     unsigned                          invalid_header:1; //Í·²¿ĞĞ½âÎö²»ÕıÈ·£¬¼ûngx_http_parse_header_line
 
     unsigned                          add_uri_to_alias:1;
@@ -1461,7 +1487,7 @@ ngx_http_finalize_request·½·¨Ò»´Î£¬ÕâÊÇÕıÈ·µÄ¡£¶ÔÓÚmytestÄ£¿éÒ²Ò»Ñù£¬Îñ±ØÒª±£Ö¤¶
     unsigned                          request_body_in_clean_file:1;//"client_body_in_file_only clean"ÉèÖÃ
     unsigned                          request_body_file_group_access:1; //ÊÇ·ñÓĞ×éÈ¨ÏŞ£¬Èç¹ûÓĞÒ»°ãÎª0600
     unsigned                          request_body_file_log_level:3;
-    //Ä¬ÈÏÊÇÎª0µÄ±íÊ¾ĞèÒª»º´æ¿Í»§¶Ë°üÌå£¬Èç¹ûrequest_body_no_bufferingÎª1±íÊ¾²»ÓÃ»º´æ°üÌå£¬ÄÇÃ´request_body_in_file_onlyÒ²Îª0£¬ÒòÎª²»ÓÃ»º´æ°üÌå£¬ÄÇÃ´¾Í²»ÓÃĞ´µ½ÁÙÊ±ÎÄ¼şÖĞ
+    //Ä¬ÈÏÊÇÎª0µÄ±íÊ¾ĞèÒª»º´æ¿Í»§¶Ë°üÌå,¾ö¶¨ÊÇ·ñĞèÒª×ª·¢¿Í»§¶Ë°üÌåµ½ºó¶Ë£¬Èç¹ûrequest_body_no_bufferingÎª1±íÊ¾²»ÓÃ»º´æ°üÌå£¬ÄÇÃ´request_body_in_file_onlyÒ²Îª0£¬ÒòÎª²»ÓÃ»º´æ°üÌå£¬ÄÇÃ´¾Í²»ÓÃĞ´µ½ÁÙÊ±ÎÄ¼şÖĞ
     unsigned                          request_body_no_buffering:1; //ÊÇ·ñ»º´æHTTP°üÌå£¬Èç¹û²»»º´æ°üÌå£¬ºÍrequest_body_in_file_onlyÊÇ»¥³âµÄ£¬¼ûngx_http_read_client_request_body
 
     /*
@@ -1505,6 +1531,7 @@ ngx_http_finalize_request·½·¨Ò»´Î£¬ÕâÊÇÕıÈ·µÄ¡£¶ÔÓÚmytestÄ£¿éÒ²Ò»Ñù£¬Îñ±ØÒª±£Ö¤¶
     //Èç¹ûºó¶Ë´øÓĞTransfer-Encoding: chunked»áÖÃ1
     unsigned                          chunked:1; //chunk±àÂë·½Ê½×é°üÊµ¼Ê×é°ü¹ı³Ì²Î¿¼ngx_http_chunked_body_filter
     //µ±ÏÂÓÎµÄr->method == NGX_HTTP_HEADÇëÇó·½·¨Ö»ÇëÇóÍ·²¿ĞĞ£¬Ôò»áÔÚngx_http_header_filterÖĞÖÃ1
+    //HTTP2Í·²¿Ö¡·¢ËÍÔÚngx_http_v2_header_filterÖĞÖÃ1
     unsigned                          header_only:1; //±íÊ¾ÊÇ·ñÖ»ÓĞĞĞ¡¢Í·²¿£¬Ã»ÓĞ°üÌå  ngx_http_header_filterÖĞÖÃ1
     //ÔÚ1.0ÒÔÉÏ°æ±¾Ä¬ÈÏÊÇ³¤Á¬½Ó£¬1.0ÒÔÉÏ°æ±¾Ä¬ÈÏÖÃ1£¬Èç¹ûÔÚÇëÇóÍ·ÀïÃæÃ»ÓĞÉèÖÃÁ¬½Ó·½Ê½£¬¼ûngx_http_handler
     //±êÖ¾Î»£¬Îª1Ê±±íÊ¾µ±Ç°ÇëÇóÊÇkeepaliveÇëÇó  1³¤Á¬½Ó   0¶ÌÁ¬½Ó  ³¤Á¬½ÓÊ±¼äÍ¨¹ıÇëÇóÍ·²¿µÄKeep-Alive:ÉèÖÃ£¬²Î¿¼ngx_http_headers_in_t
@@ -1516,7 +1543,8 @@ ngx_http_finalize_request·½·¨Ò»´Î£¬ÕâÊÇÕıÈ·µÄ¡£¶ÔÓÚmytestÄ£¿éÒ²Ò»Ñù£¬Îñ±ØÒª±£Ö¤¶
     unsigned                          reading_body:1; //±ê¼Ç°üÌå»¹Ã»ÓĞ¶ÁÍê£¬ĞèÒª¼ÌĞø¶ÁÈ¡°üÌå£¬¼ûngx_http_read_client_request_body
 
     /* ÔÚÕâÒ»²½ÖèÖĞ£¬°Ñphase_handlerĞòºÅÉèÎªserver_rewrite_index£¬ÕâÒâÎ¶×ÅÎŞÂÛÖ®Ç°Ö´ĞĞµ½ÄÄÒ»¸ö½×¶Î£¬ÂíÉÏ¶¼ÒªÖØĞÂ´ÓNGX_HTTP_SERVER_REWRITE_PHASE
-½×¶Î¿ªÊ¼ÔÙ´ÎÖ´ĞĞ£¬ÕâÊÇNginxµÄÇëÇó¿ÉÒÔ·´¸´rewriteÖØ¶¨ÏòµÄ»ù´¡¡£¼ûngx_http_handler */ //ngx_http_internal_redirectÖÃ1
+½×¶Î¿ªÊ¼ÔÙ´ÎÖ´ĞĞ£¬ÕâÊÇNginxµÄÇëÇó¿ÉÒÔ·´¸´rewriteÖØ¶¨ÏòµÄ»ù´¡¡£¼ûngx_http_handler */ 
+//ngx_http_internal_redirectÖÃ1    ´´½¨×ÓÇëÇóµÄÊ±ºò£¬×ÓÇëÇóÒ²ÒªÖÃ1£¬¼ûngx_http_subrequest£¬ËùÓĞ×ÓÇëÇóĞèÒª×öÖØ¶¨Ïò
 //ÄÚ²¿ÖØ¶¨ÏòÊÇ´ÓNGX_HTTP_SERVER_REWRITE_PHASE´¦¼ÌĞøÖ´ĞĞ(ngx_http_internal_redirect)£¬¶øÖØĞÂrewriteÊÇ´ÓNGX_HTTP_FIND_CONFIG_PHASE´¦Ö´ĞĞ(ngx_http_core_post_rewrite_phase)
     unsigned                          internal:1;//t±êÖ¾Î»£¬Îª1Ê±±íÊ¾ÇëÇóµÄµ±Ç°×´Ì¬ÊÇÔÚ×öÄÚ²¿Ìø×ª£¬ 
     unsigned                          error_page:1; //Ä¬ÈÏ0£¬ÔÚngx_http_special_response_handlerÖĞ¿ÉÄÜÖÃ1
@@ -1531,13 +1559,13 @@ ngx_http_finalize_request·½·¨Ò»´Î£¬ÕâÊÇÕıÈ·µÄ¡£¶ÔÓÚmytestÄ£¿éÒ²Ò»Ñù£¬Îñ±ØÒª±£Ö¤¶
     unsigned                          root_tested:1;
     unsigned                          done:1;
     unsigned                          logged:1;
-
+    /* ngx_http_copy_filterÖĞ¸³Öµ */
     unsigned                          buffered:4;//±íÊ¾»º³åÖĞÊÇ·ñÓĞ´ı·¢ËÍÄÚÈİµÄ±êÖ¾Î»£¬²Î¿¼ngx_http_copy_filter
 
     unsigned                          main_filter_need_in_memory:1;
     unsigned                          filter_need_in_memory:1;
     unsigned                          filter_need_temporary:1;
-    unsigned                          allow_ranges:1;  //Ö§³Ö¶ÏµãĞø´«
+    unsigned                          allow_ranges:1;  //Ö§³Ö¶ÏµãĞø´« ²Î¿¼3.8.3½Ú
     unsigned                          single_range:1;
     //
     unsigned                          disable_not_modified:1; //r->disable_not_modified = !u->cacheable;Òò´ËÄ¬ÈÏÎª0
@@ -1573,11 +1601,11 @@ image/gif.image/jpeg,** Îªvalue²¿·Ö£¬header_start header_end·Ö±ğ¶ÔÓ¦valueµÄÍ·ºÍÎ
      * via ngx_http_ephemeral_t
      */
 
-//ngx_str_tÀàĞÍµÄuri³ÉÔ±Ö¸ÏòÓÃ»§ÇëÇóÖĞµÄURI¡£Í¬Àí£¬u_char*ÀàĞÍµÄuri_startºÍuri_endÒ²Óërequest_start¡¢method_endµÄÓÃ·¨ÏàËÆ£¬Î¨Ò»²»
+//ngx_str_tÀàĞÍµÄuri³ÉÔ±Ö¸ÏòÓÃ»§ÇëÇóÖĞµÄURI¡£Í¬Àí£¬u_char*ÀàĞÍµÄuri_startºÍuri_endÒ²Óërequest_start¡¢request_endµÄÓÃ·¨ÏàËÆ£¬Î¨Ò»²»
 //Í¬µÄÊÇ£¬method_endÖ¸Ïò·½·¨ÃûµÄ×îºóÒ»¸ö×Ö·û£¬¶øuri_endÖ¸ÏòURI½áÊøºóµÄÏÂÒ»¸öµØÖ·£¬Ò²¾ÍÊÇ×îºóÒ»¸ö×Ö·ûµÄÏÂÒ»¸ö×Ö·ûµØÖ·£¨HTTP¿ò¼ÜµÄĞĞÎª£©£¬
 //ÕâÊÇ´ó²¿·Öu_char*ÀàĞÍÖ¸Õë¶Ô¡°xxx_start¡±ºÍ¡°xxx_end¡±±äÁ¿µÄÓÃ·¨¡£
-    u_char                           *uri_start;
-    u_char                           *uri_end;
+    u_char                           *uri_start;//HTTP2µÄ¸³Öµ¼ûngx_http_v2_parse_path
+    u_char                           *uri_end;//HTTP2µÄ¸³Öµ¼ûngx_http_v2_parse_path
 
 /*
 ngx_str_tÀàĞÍµÄextern³ÉÔ±Ö¸ÏòÓÃ»§ÇëÇóµÄÎÄ¼şÀ©Õ¹Ãû¡£ÀıÈç£¬ÔÚ·ÃÎÊ¡°GET /a.txt HTTP/1.1¡±Ê±£¬externµÄÖµÊÇ{len = 3, data = "txt"}£¬
@@ -1588,11 +1616,12 @@ uri_extÖ¸ÕëÖ¸ÏòµÄµØÖ·Óëextern.dataÏàÍ¬¡£
     //"GET /aaaaaaaa?bbbb.txt HTTP/1.1"ÖĞµÄbbb.txt×Ö·û´®Í·Î»ÖÃ´¦
     u_char                           *args_start;//args_startÖ¸ÏòURL²ÎÊıµÄÆğÊ¼µØÖ·£¬ÅäºÏuri_endÊ¹ÓÃÒ²¿ÉÒÔ»ñµÃURL²ÎÊı¡£
 
-//request_startÓëmethod_endµÄÓÃ·¨Ò²ºÜ¼òµ¥£¬ÆäÖĞrequest_startÖ¸ÏòÓÃ»§ÇëÇóµÄÊ×µØÖ·£¬Í¬Ê±Ò²ÊÇ·½·¨ÃûµÄµØÖ·£¬method_endÖ¸Ïò·½·¨Ãû
-//µÄ×îºóÒ»¸ö×Ö·û£¨×¢Òâ£¬ÕâµãÓëÆäËûxxx_endÖ¸Õë²»Í¬£©¡£»ñÈ¡·½·¨ÃûÊ±¿ÉÒÔ´Órequest_start¿ªÊ¼Ïòºó±éÀú£¬Ö±µ½µØÖ·Óëmethod_endÏàÍ¬ÎªÖ¹£¬Õâ¶ÎÄÚ´æ´æ´¢×Å·½·¨Ãû¡£
+    /* Í¨¹ırequest_startºÍrequest_end¿ÉÒÔ»ñµÃÓÃ»§ÍêÕûµÄÇëÇóĞĞ */
     u_char                           *request_start; //ÇëÇóĞĞ¿ªÊ¼´¦
     u_char                           *request_end;  //ÇëÇóĞĞ½áÎ²´¦
     u_char                           *method_end;  //GET  POST×Ö·û´®½áÎ²´¦
+
+    //HTTP2µÄ¸³Öµ¼ûngx_http_v2_parse_scheme
     u_char                           *schema_start;
     u_char                           *schema_end;
     u_char                           *host_start;
