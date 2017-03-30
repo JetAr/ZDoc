@@ -1268,6 +1268,7 @@ void* read_pkt_thrd(void *param)
 
         //z 如果发生了 seek 请求，在此处理 seek 请求
         //z 目前不处理此部分，略过
+		//z 17-03-22 实际处理 seek 的就这一个部分；根据seek bar得到新的时间，设置后，在这里进行调整
         if (play->m_seek_req)
         {
 			//z 设置目标
@@ -1303,34 +1304,36 @@ void* read_pkt_thrd(void *param)
 				//z 放入 flush_pkt
                 put_queue(&play->m_audio_q, &flush_pkt);
             }
-            if (play->m_video_index >= 0)
-            {
-				//z 清空队列
-                queue_flush(&play->m_video_q);
-				//z 放入 flush_pkt
-                put_queue(&play->m_video_q, &flush_pkt);
-            }
-            play->m_pkt_buffer_size = 0;
 
-            ret = avformat_seek_file(play->m_format_ctx, -1, seek_min, seek_target, seek_max, seek_flags);
-            if (ret < 0)
-            {
-                fprintf(stderr, "%s: error while seeking\n", play->m_format_ctx->filename);
-            }
+			if (play->m_video_index >= 0)
+			{
+				//z 清空队列
+				queue_flush(&play->m_video_q);
+				//z 放入 flush_pkt
+				put_queue(&play->m_video_q, &flush_pkt);
+			}
+
+			play->m_pkt_buffer_size = 0;
+
+			ret = avformat_seek_file(play->m_format_ctx, -1, seek_min, seek_target, seek_max, seek_flags);
+			if (ret < 0)
+			{
+				fprintf(stderr, "%s: error while seeking\n", play->m_format_ctx->filename);
+			}
 
 			//z 计算 hh，mm，ss，thh，tmm以及tss，用于输出调试信息。
-            printf("Seek to %2.0f%% (%02d:%02d:%02d) of total duration (%02d:%02d:%02d)\n",
-                   frac * 100, hh, mm, ss, thh, tmm, tss);
+			printf("Seek to %2.0f%% (%02d:%02d:%02d) of total duration (%02d:%02d:%02d)\n",
+				frac * 100, hh, mm, ss, thh, tmm, tss);
 
-            play->m_seek_req = 0;
-        }
+			play->m_seek_req = 0;
+		}
 
 		/* 缓冲读满, 在这休眠让出cpu. */
-        //z 缓冲区大小为 5M
-        //z 防止读入太多太快。至多只读入这个大小。
+		//z 缓冲区大小为 5M
+		//z 防止读入太多太快。至多只读入这个大小。
 		//z 如果进行了 seek 请求；就跳出循环。
-        while (play->m_pkt_buffer_size > MAX_PKT_BUFFER_SIZE && !play->m_abort && !play->m_seek_req)
-            Sleep(32);
+		while (play->m_pkt_buffer_size > MAX_PKT_BUFFER_SIZE && !play->m_abort && !play->m_seek_req)
+			Sleep(32);
 
 		//z 是否终止请求
         if (play->m_abort)
