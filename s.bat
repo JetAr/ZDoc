@@ -10,7 +10,7 @@ set TMin=%time:~3,2%
 set TSed=%time:~6,2%
 set TMs=%TIME:~-2%
 
-set FileTime=%1.%TDate%.%THour%_%TMin%_%TSed%.%TMs%.K.MzM.T@WS.BG57IV3
+set FileTime=%1.%TDate%.%THour%_%TMin%_%TSed%.%TMs%.K.MzM.T
 
 REM echo +---------+---------+---------+---------+---------+---------+---------+---------+ >> History.txt
 REM echo %FileTime% >> History.txt
