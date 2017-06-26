@@ -1,0 +1,1 @@
+config:x86:x86_32:generic:linux:gcc 4.4.3 (Ubuntu 4.4.3-4ubuntu5):--disable-indevs --disable-outdevs --disable-encoders --disable-muxers --disable-ffmpeg --disable-ffprobe --disable-ffserver --disable-filters --disable-bsfs --disable-avdevice --disable-avfilter --disable-network --disable-hwaccels --disable-asm --disable-protocols --enable-protocol=file

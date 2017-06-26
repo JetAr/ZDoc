@@ -1,0 +1,45 @@
+
+ffmpeg-0.8 版本
+
+主要的修改：
+1：在avcodec.h avformat.h avutil.h swscale.h common.h 中添加config.h
+2：mem.h 中的align类宏定义移到config.h中
+3：config.h
+4: 属性页添加路径 ./libstdapi; ../; ./ 
+
+zlib.h问题
+\libavcodec\tscc.c
+\libavcodec\dxa.c
+\libavcodec\png.h
+\libavcodec\png.c
+\libavcodec\pngdec.c
+\libavcodec\zmbv.c
+\libavcodec\flashsv.c
+
+线程问题
+\libavcodec\pthread.c， \libavcodecw32thread.c 二选一操作
+
+文件包含问题
+修过\libavcodec/inverse.c，\libavutil/inverse.c 避免冲突
+
+#ifdef CONFIG_WIN32
+#include <sys/timeb.h>
+#else
+#include <sys/time.h>
+#endif
+
+int64_t av_gettime(void) 函数实现
+
+如if(ARCH_ARM)/if(CONFIG_VDPAU)这一类的宏判断，编译器处理不同，
+windows下需显式注释掉程序代码语句，相关代码注释比较分散，但不影响程序逻辑
+linux不需要，
+
+allcodecs.c
+allformats.c
+libavutil/internal.h {注释掉类似语句: #define fprintf please_use_av_log_instead_of_fprintf}
+
+ffplay.c || flags |= SDL_INIT_EVENTTHREAD; /* Not supported on Windows or Mac OS X */
+
+
+
+
