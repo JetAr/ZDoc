@@ -170,6 +170,11 @@ extern "C" __declspec(dllexport) LRESULT messageProc(UINT Message, WPARAM wParam
 
 extern "C" __declspec(dllexport) void beNotified(SCNotification *notifyCode)
 {
+	if (notifyCode->nmhdr.hwndFrom != nppData._nppHandle &&
+		notifyCode->nmhdr.hwndFrom != nppData._scintillaMainHandle &&
+		notifyCode->nmhdr.hwndFrom != nppData._scintillaSecondHandle)
+		return;
+
     switch (notifyCode->nmhdr.code)
     {
     case NPPN_FILEOPENED:
