@@ -8,6 +8,7 @@
 // Copyright (c) Microsoft Corp. All rights reserved.
 //-----------------------------------------------------------------------------
 #define STRICT
+#include <windows.h>
 #include <dmusicc.h>
 #include <dmusici.h>
 #include <dsound.h>

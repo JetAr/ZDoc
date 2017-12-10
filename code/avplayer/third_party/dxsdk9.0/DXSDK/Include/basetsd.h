@@ -49,6 +49,10 @@ typedef signed int LONG32, *PLONG32;
 typedef unsigned int ULONG32, *PULONG32;
 typedef unsigned int DWORD32, *PDWORD32;
 
+#ifndef POINTER_64
+#define POINTER_64 __ptr64
+#endif
+
 #if !defined(_W64)
 #if !defined(__midl) && (defined(_X86_) || defined(_M_IX86)) && _MSC_VER >= 1300
 #define _W64 __w64

@@ -5,6 +5,13 @@
 //
 // Copyright (c) 2000-2001 Microsoft Corporation. All rights reserved.
 //-----------------------------------------------------------------------------
+
+#ifndef POINTER_64
+#define POINTER_64 __ptr64
+#endif
+
+#define WINVER 0x0503
+
 #define STRICT
 #include <windows.h>
 #include <basetsd.h>
@@ -72,11 +79,13 @@ INT APIENTRY WinMain( HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR pCmdLine,
                          NULL, MainDlgProc );
 
     while( !bDone ) 
-    { 
+    {
+		// 在消息循环中同时等待 g_hDMusicMessageEvent 
         dwResult = MsgWaitForMultipleObjects( 1, &g_hDMusicMessageEvent, 
                                               FALSE, INFINITE, QS_ALLEVENTS );
         switch( dwResult )
         {
+			// 如果 directmusic 有事件发生
             case WAIT_OBJECT_0 + 0:
                 // g_hDPMessageEvent is signaled, so there are
                 // DirectPlay messages available
@@ -441,6 +450,7 @@ HRESULT ProcessDirectMusicMessages( HWND hDlg )
     // Get waiting notification message from the performance
     while( S_OK == pPerf->GetNotificationPMsg( &pPMsg ) )
     {
+		// 处理消息
         switch( pPMsg->dwNotificationOption )
         {
         case DMUS_NOTIFICATION_SEGEND:
