@@ -40,7 +40,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="D:\3rd_Lib\boost_1_61_0-bin-msvc-all-32-64\boost_1_61_0\;..\third_party\openssl\include;..\third_party\avhttp\include"
+				AdditionalIncludeDirectories="E:\MyDoc\Lib\boost_1_56_0;..\third_party\openssl\include;..\third_party\avhttp\include"
 				PreprocessorDefinitions="WIN32;_DEBUG;_LIB;_WIN32_WINNT=0x0501;BOOST_ASIO_DYN_LINK;AVHTTP_ENABLE_OPENSSL"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"

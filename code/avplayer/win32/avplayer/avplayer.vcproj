@@ -40,7 +40,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="D:\3rd_Lib\boost_1_61_0-bin-msvc-all-32-64\boost_1_61_0;../avcore"
+				AdditionalIncludeDirectories="E:\MyDoc\Lib\boost_1_56_0;../avcore"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"

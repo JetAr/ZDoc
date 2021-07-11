@@ -40,7 +40,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories=".;.\libtorrent;..\..\third_party\openssl\include;D:\3rd_Lib\boost_1_61_0-bin-msvc-all-32-64\boost_1_61_0"
+				AdditionalIncludeDirectories=".;.\libtorrent;..\..\third_party\openssl\include;E:\MyDoc\Lib\boost_1_56_0"
 				PreprocessorDefinitions="WIN32;_DEBUG;_LIB;_WIN32_WINNT=0x0501;WIN32_LEAN_AND_MEAN;_CRT_SECURE_NO_WARNINGS;BOOST_ASIO_ENABLE_CANCELIO;BOOST_ASIO_DYN_LINK;TORRENT_USE_OPENSSL"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"

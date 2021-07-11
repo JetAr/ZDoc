@@ -40,7 +40,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="D:\3rd_Lib\boost_1_61_0-bin-msvc-all-32-64\boost_1_61_0;..\third_party\ffmpeg\include;..\third_party\include;..\libyk;..\libtorrent\include;..\third_party\openssl\include;..\libav"
+				AdditionalIncludeDirectories="E:\MyDoc\Lib\boost_1_56_0;..\third_party\ffmpeg\include;..\third_party\include;..\libyk;..\libtorrent\include;..\third_party\openssl\include;..\libav"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;_WIN32_WINNT=0x0501;WIN32_LEAN_AND_MEAN;BOOST_ASIO_SEPARATE_COMPILATION;TORRENT_USE_OPENSSL;USE_TORRENT;USE_YK;SOURCE_EXPORTS"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -63,7 +63,7 @@
 				Name="VCLinkerTool"
 				AdditionalDependencies="ssleay32.lib libeay32.lib libpthreadGC2.a"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="D:\3rd_Lib\boost_1_61_0-bin-msvc-all-32-64\boost_1_61_0\lib32-msvc-8.0\;..\third_party\openssl\libs;..\third_party\ffmpeg\lib"
+				AdditionalLibraryDirectories="E:\MyDoc\Lib\boost_1_56_0\lib32-msvc-8.0\;..\third_party\openssl\libs;..\third_party\ffmpeg\lib"
 				GenerateDebugInformation="true"
 				SubSystem="1"
 				TargetMachine="1"
